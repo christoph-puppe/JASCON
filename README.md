@@ -1,3 +1,7 @@
+# Project Status and Disclaimer
+
+**Important Notice:** This project is **not** affiliated with or approved by the National Institute of Standards and Technology (NIST) or the OSCAL foundation.
+
 # JASCON
 
 **J**SON **A**ttestable **S**emantic **C**ompliance **O**bject-graph
