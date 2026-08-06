@@ -1,7 +1,7 @@
 {
  "$schema": "https://json-schema.org/draft/2020-12/schema",
  "$id": "https://ns.oscal.org/semantic-core/schema/1.0.0",
- "title": "OSCAL Semantic Core - normative kernel shapes (gate item 2)",
+ "title": "JASCON - normative kernel shapes (gate item 2)",
  "description": "The nine kernel types + Deviation sub-object + content manifest, field by field per Handbook Appendix A / spec Appendix A. Kernel shapes are CLOSED (unevaluatedProperties: false): an unknown top-level field is a validation error - facets are the extension surface (D10). Objects carry no type discriminator; a conformant object matches EXACTLY ONE of the nine type entry points (shape-disjointness is itself a conformance property, exercised by the conformance corpus).",
  "$defs": {
   "uri": {

@@ -1235,7 +1235,8 @@ refuted findings are recorded so they are not resurrected.
   requested mapping already ships verbatim — SKILL.md's description
   reads 'JASCON (… formerly "Semantic OSCAL" / "OSCAL Semantic
   Core")', which is the **only** occurrence of the old name under
-  `semantic-oscal/`; remaining `semantic-oscal`/schema-filename strings
+  `semantic-oscal/` (the folder itself renamed to `jascon/` post-1.0.0);
+  remaining `semantic-oscal`/schema-filename strings
   are machine identifiers retained by the title-block rule.
 
 **Report-internal errata (for the record):** the report's census table
@@ -1336,7 +1337,9 @@ body; the SKILL zip is the attachable artifact).
 `oscal-semantic-core`.** Namespace URIs, the attestation media type
 (`application/vnd.oscal-semantic-core.attestation+json` — inside every
 DSSE PAE), schema filenames and `$id`s, and the skill's machine name
-keep the working-title string. Rationale: identifiers are opaque
+keep the working-title string. *(The skill's machine name and folder
+were carved out of this list post-1.0.0 — see "Amendments — post-1.0.0
+(2026-08-06)"; the hashed identifiers below stand unchanged.)* Rationale: identifiers are opaque
 strings (D2) — their spelling carries no meaning by the kernel's own
 doctrine; the brand lives in prose and filenames of prose; migrating
 would churn every digest, every signature, and every pinned manifest in
@@ -1355,6 +1358,44 @@ the record shows the tag consciously preceded them. Also noted: the
 repository carries **no LICENSE file** — flagged to the author at
 release time; a license choice is the author's call and rides a
 follow-up commit.
+
+# Amendments — post-1.0.0 (2026-08-06): the skill folder follows the brand
+
+**Author decision: the skill directory and its skill name move to
+JASCON.** `semantic-oscal/` → `jascon/`, `SKILL_semantic-oscal.zip` →
+`SKILL_jascon.zip`, and SKILL.md's frontmatter `name: semantic-oscal` →
+`name: jascon` (heading and the two validator docstring titles follow).
+Every path reference in the repo — README, the release notes, the
+specification, the gate documents, `.agents/skills.json`, and the
+`$SKILL`/`SKILL` constants in `validate_core.ps1`, `validate_core.py`
+and `convert_cr26.py` — repointed in the same pass.
+
+**This narrows the v1.0.0 tag-time decision, it does not reverse it.**
+That entry listed "the skill's machine name" alongside namespace URIs,
+the media type, and schema `$id`s. The four are not the same kind of
+thing: a namespace URI, `application/vnd.oscal-semantic-core.attestation+json`
+and a schema `$id` are **inside the digested bytes** — PAE payloads,
+pinned manifests, signatures. A directory name and a skill invocation
+handle are **not inputs to any digest**; nothing verifiable depends on
+their spelling. The rule holds where it was load-bearing: *identifiers
+that are hashed do not move.* The skill handle was filed under it by
+proximity, not by consequence.
+**Customer.** The agent-facing surface answers to the name on the box;
+`/jascon` is what a reader of the README will type.
+**Simplicity.** The old→new mapping still ships verbatim in SKILL.md's
+description ("formerly 'Semantic OSCAL' / 'OSCAL Semantic Core'"), and
+Requirement 11 now states in-line *why* the schema filename, `$id`,
+namespace and media type keep the working-title string — the question a
+renamed folder invites, answered where it is asked.
+**Trade-off.** Anyone who installed the skill as `semantic-oscal/`
+re-installs under the new path; the 1.0.0 release notes now cite
+`jascon/` paths that the `v1.0.0` tag itself does not contain.
+
+**Unchanged, deliberately:** the kernel schema filename and `$id`
+(`oscal-semantic-core-1.0.0.schema.json`), `https://ns.oscal-semantic.org/core`,
+and the DSSE payload type. Both validators reproduce the pre-rename
+result byte-for-byte modulo the directory name; the rebuilt bundle
+carries the same 76 entries.
 
 ## The train, complete
 Name ✓ JASCON → P10 ✓ → P10b ✓ → fix pass ✓ → **`v1.0.0` tagged

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""OSCAL Semantic Core - gate-item-2 executable validator.
+"""JASCON - gate-item-2 executable validator.
 
 Runs, in order:
 1. CONFORMANCE CORPUS: JCS vectors (canonical form + empty-omission rule),
@@ -26,7 +26,7 @@ DECIMAL_RE = r"^(-?[1-9][0-9]*(\.[0-9]+)?|0(\.[0-9]+)?|-0\.[0-9]*[1-9][0-9]*)$"
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.normpath(os.path.join(HERE, "..", ".."))
-SKILL = os.path.join(ROOT, "semantic-oscal")
+SKILL = os.path.join(ROOT, "jascon")
 SCHEMA = json.load(open(os.path.join(SKILL, "schemas", "oscal-semantic-core-1.0.0.schema.json"), encoding="utf-8"))
 CONF = os.path.join(SKILL, "conformance")
 

@@ -465,7 +465,7 @@ def stub(path,fid,mods,props):
                   "additionalProperties":False}})
 def pin_stdlib(fn):
     import shutil as _sh
-    src=os.path.join(ROOT,"semantic-oscal","schemas","stdlib",fn)
+    src=os.path.join(ROOT,"jascon","schemas","stdlib",fn)
     w(f"schemas/{fn}",json.load(open(src,encoding="utf-8")))
 pin_stdlib("terminology-1.0.0.json")   # 26: stdlib pins are VERBATIM
 pin_stdlib("reporting-obligation-1.0.0.json")

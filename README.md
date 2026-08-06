@@ -69,7 +69,7 @@ side of that paradox:
 (**v1.0.0**, released 2026-07-22) with its companion
 [Decision Rationale Register](drafts/oscal-semantic-core-decision-rationale-register.md).
 
-Full argument with sources: [Chapter 1 — Why This Exists](semantic-oscal/references/ch01-why-this-exists.md).
+Full argument with sources: [Chapter 1 — Why This Exists](jascon/references/ch01-why-this-exists.md).
 
 ## The bet
 
@@ -98,7 +98,7 @@ measured customer needs · no more props · less need for bespoke JSON* — in t
 (22 decisions plus a public amendment log; rejected alternatives stay on the
 record).
 
-Start here: [Chapter 2 — The Core in One Hour](semantic-oscal/references/ch02-the-core-in-one-hour.md),
+Start here: [Chapter 2 — The Core in One Hour](jascon/references/ch02-the-core-in-one-hour.md),
 or the [one-file explainer](semantic-core-explainer-concept-files-workflow.md)
 if you prefer diagrams.
 
@@ -115,7 +115,7 @@ The project moves through evidence gates; nothing advances on narrative.
   modality lattice, parameters, tailoring law, attestation, facet
   enforcement, reference closure, lifecycle, authority tiers, DSSE
   verification, bundle composition, conditional-apply), and
-  [`validate_core.py`](semantic-oscal/scripts/validate_core.py) — which
+  [`validate_core.py`](jascon/scripts/validate_core.py) — which
   re-verifies **6,914 objects across all eleven bundles with both SHA-256
   digests each**, every object matching exactly one kernel shape. Current
   totals: 4,583 Requirements · 1,066 Sets · 1,008 Mappings · 5 Tailorings ·
@@ -146,10 +146,10 @@ The project moves through evidence gates; nothing advances on narrative.
   re-validated, incompatibility reported never silently picked), and
   **conditional-apply** (one predicate, one primitive, one leash). Plus the
   two economic claims, measured: the **weekend validator**
-  ([`validate_core.ps1`](semantic-oscal/scripts/validate_core.ps1) —
+  ([`validate_core.ps1`](jascon/scripts/validate_core.ps1) —
   PowerShell 5.1, zero installs, 157/157 vectors, ~30× smaller than
   compliance-trestle with crypto included) and the **bidirectional export**
-  ([`export_oscal.py`](semantic-oscal/scripts/export_oscal.py) — 10/10
+  ([`export_oscal.py`](jascon/scripts/export_oscal.py) — 10/10
   catalog bundles schema-valid against the official NIST 1.2.2 schema,
   5,886/5,886 objects round-trip digest-equal). Numbers:
   [`drafts/gate-4-measurement.md`](drafts/gate-4-measurement.md).
@@ -174,7 +174,7 @@ The project moves through evidence gates; nothing advances on narrative.
 Reproduce the whole verdict in one line (needs [uv](https://docs.astral.sh/uv/)):
 
 ```
-uv run --no-project --with jsonschema python semantic-oscal/scripts/validate_core.py
+uv run --no-project --with jsonschema python jascon/scripts/validate_core.py
 ```
 
 ### The corpus
@@ -287,22 +287,22 @@ reproduce.
 
 ## Install as a Claude skill
 
-[`semantic-oscal/`](semantic-oscal/) is an installable skill that guides an
+[`jascon/`](jascon/) is an installable skill that guides an
 agent through authoring, validating, and migrating JASCON content. Its
-[SKILL.md](semantic-oscal/SKILL.md) turns the 15 handbook chapters into 14
+[SKILL.md](jascon/SKILL.md) turns the 15 handbook chapters into 14
 numbered requirements, each with reference chapters and companion examples;
-it carries the worked example bundle in [`examples/`](semantic-oscal/examples/)
+it carries the worked example bundle in [`examples/`](jascon/examples/)
 (a self-consistent graph from a zero-facet minimum requirement through
 attestations with semantic digests), the converters in
-[`scripts/`](semantic-oscal/scripts/), the normative kernel schema, the seven
+[`scripts/`](jascon/scripts/), the normative kernel schema, the seven
 stdlib descriptors, and the conformance corpus.
 
 Install by copying the directory into your skills folder, or unpack
-`SKILL_semantic-oscal.zip`:
+`SKILL_jascon.zip`:
 
 ```
-~/.claude/skills/semantic-oscal/     # user-level
-.claude/skills/semantic-oscal/       # project-level
+~/.claude/skills/jascon/     # user-level
+.claude/skills/jascon/       # project-level
 ```
 
 ## Read the spec
@@ -328,7 +328,7 @@ Three rules govern the handbook, and you should hold it to them:
 
 ## Contributing
 
-Objections are the point — [Appendix F](semantic-oscal/references/appendix-f-objections.md)
+Objections are the point — [Appendix F](jascon/references/appendix-f-objections.md)
 is an adversarial FAQ, and review findings land in the v0.6 backlog with their
 diffs on the record. Items enter the backlog with counts and leave via a
 decision recorded in the register; an item that can neither be evidenced nor

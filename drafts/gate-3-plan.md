@@ -55,7 +55,7 @@ which already produces every leaf key-path + frequency:
 
 ```
 uv run python -c "import json,collections,sys; \
-sys.path.insert(0,'semantic-oscal/scripts'); import oscal_conv_lib as L; \
+sys.path.insert(0,'jascon/scripts'); import oscal_conv_lib as L; \
 c=collections.Counter(); L.inventory(json.load(open('sources/nist/…rev5-catalog.json',encoding='utf-8')),'', c); \
 [print(f'{n:6d}  {p}') for p,n in c.most_common()]"
 ```

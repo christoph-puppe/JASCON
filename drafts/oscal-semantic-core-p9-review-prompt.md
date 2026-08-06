@@ -92,7 +92,7 @@ and the closed log). The v0.6-cycle decisions amended the register
 divergence created by that sequencing.
 
 **Stage 2 — The handbook (the promise).**
-`semantic-oscal/references/`: ch01 (argument), ch02 (core), then the
+`jascon/references/`: ch01 (argument), ch02 (core), then the
 load-bearing mechanism chapters — ch03 identity/versions/lifecycle,
 ch05 sets/baselines, ch06 tailoring, ch07 facets, ch08 mappings, ch09
 inheritance, ch10 findings/deviations, ch11 integrity/attestation, ch12
@@ -103,20 +103,20 @@ the spec is the contract; the schemas are the delivery. Log every place
 a promise exceeds the contract or the contract exceeds the delivery.
 
 **Stage 3 — Executables against prose.**
-- `semantic-oscal/schemas/oscal-semantic-core-1.0.0.schema.json` and
+- `jascon/schemas/oscal-semantic-core-1.0.0.schema.json` and
   the stdlib descriptors, field-by-field against Appendix A and the
   spec's normative text for at least three object types chosen by risk
   (justify the choice).
-- `semantic-oscal/conformance/*.json`: recount the vectors; classify
+- `jascon/conformance/*.json`: recount the vectors; classify
   must-accept vs must-reject; list semantic areas with zero negative
   vectors — an all-positive area is untested, not proven.
-- `semantic-oscal/scripts/validate_core.py` and `oscal_conv_lib.py`:
+- `jascon/scripts/validate_core.py` and `oscal_conv_lib.py`:
   determine what "coverage" counts. Does 100 % leaf coverage measure
   lossless representation or successful extraction? What lands in
   residue/compat/annotation buckets, and do the coverage reports
   disclose it?
 - Run the validator if you can (`uv run --with jsonschema
-  semantic-oscal/scripts/validate_core.py`) and confirm the green
+  jascon/scripts/validate_core.py`) and confirm the green
   claim. Then construct at least three adversarial objects that are
   *meaningfully wrong but validate* — the project's own "valid and
   meaningless" corpse turned on the new kernel (candidates: modality
