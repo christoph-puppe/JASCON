@@ -1,5 +1,5 @@
 <#
-OSCAL Semantic Core - second-language reference validator (gate 4: the
+JASCON - second-language reference validator (gate 4: the
 weekend-validator acceptance test). PowerShell 5.1, ZERO installs - runs
 on a stock Windows box, the auditor's machine.
 
@@ -23,7 +23,7 @@ $ErrorActionPreference = "Stop"
 Add-Type -AssemblyName System.Numerics
 $HERE = Split-Path -Parent $MyInvocation.MyCommand.Path
 $ROOT = (Resolve-Path (Join-Path $HERE "..\..")).Path
-$SKILL = Join-Path $ROOT "semantic-oscal"
+$SKILL = Join-Path $ROOT "jascon"
 $CONF = Join-Path $SKILL "conformance"
 $INV = [System.Globalization.CultureInfo]::InvariantCulture
 

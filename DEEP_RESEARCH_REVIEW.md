@@ -5,7 +5,7 @@
 > (unmeasured by anyone). Its "93,259 values" is the pre-drop census total
 > — the 8-corpus total in its own table is 130,350. Do not quote these
 > numbers as project claims. Full adjudication:
-> `semantic-oscal/references/appendix-f-objections.md` §F.7.
+> `jascon/references/appendix-f-objections.md` §F.7.
 
 # Comprehensive Deep Research & Technical Review: Semantic OSCAL (v0.5 Specification)
 
@@ -94,7 +94,7 @@ Over **70% of legacy OSCAL prop instances** disappear with zero replacement cons
 
 ### 3. Cryptographic Integrity & Dual-Digest Model
 
-#### Dual-Digest Architecture ([semantic-oscal/references/ch11-integrity-attestation-airgaps.md](semantic-oscal/references/ch11-integrity-attestation-airgaps.md))
+#### Dual-Digest Architecture ([jascon/references/ch11-integrity-attestation-airgaps.md](jascon/references/ch11-integrity-attestation-airgaps.md))
 Legacy OSCAL digital signatures fail when transport tools strip non-normative metadata or format JSON. Semantic OSCAL introduces two distinct SHA-256 digest domains per object in `content-manifest.json`:
 1. `package-digest`: SHA-256 over raw delivered bytes (includes annotations and formatting).
 2. `semantic-digest`: SHA-256 over canonical **JCS** (RFC 8785) serialization of the object **excluding `annotations`**.
@@ -132,7 +132,7 @@ Legacy OSCAL digital signatures fail when transport tools strip non-normative me
 
 ### 4. Migration Path & Ecosystem Viability
 
-#### 3-Level Migration Guarantee Framework ([semantic-oscal/references/ch14-migration-playbooks.md](semantic-oscal/references/ch14-migration-playbooks.md))
+#### 3-Level Migration Guarantee Framework ([jascon/references/ch14-migration-playbooks.md](jascon/references/ch14-migration-playbooks.md))
 1. **Level 1: Native Mapping**: Direct 1-to-1 representation in kernel objects.
 2. **Level 2: Compatibility Facet**: Framework-specific properties preserved in registered compatibility facets with a clear deprecation clock.
 3. **Level 3: Opaque Preservation**: Preserved in `private:` annotations to prevent compliance math corruption while preserving raw data.
@@ -140,7 +140,7 @@ Legacy OSCAL digital signatures fail when transport tools strip non-normative me
 #### Bidirectional Migration & Export Feasibility
 - **Up-conversion**: 100.0% proven across 8 corpora representing catalogs, benchmarks, and bespoke JSON.
 - **Down-conversion**: Semantic Core objects compile back to syntactically valid OSCAL 1.2.2 JSON/XML for legacy regulatory submission while keeping Semantic Core as the single-source-of-truth graph.
-- **Profile Merge Semantics Gap**: Profiles depending on legacy OSCAL 1.x `use-first`/`combine` merge strategies must be resolved in 1.x *before* migration into Semantic Core ([ch14-migration-playbooks.md](semantic-oscal/references/ch14-migration-playbooks.md)).
+- **Profile Merge Semantics Gap**: Profiles depending on legacy OSCAL 1.x `use-first`/`combine` merge strategies must be resolved in 1.x *before* migration into Semantic Core ([ch14-migration-playbooks.md](jascon/references/ch14-migration-playbooks.md)).
 
 ---
 
@@ -192,7 +192,7 @@ Legacy OSCAL digital signatures fail when transport tools strip non-normative me
 - **Human-Readable Draft Formats**: Authors can write requirements using Markdown frontmatter or YAML local drafts that compile deterministically to JSON canonical objects.
 - **Identity-Addressed Resiliency**: Tailoring operations target global IDs (`requirement-ref` + `statement-id`) rather than fragile JSON pointers (RFC 6902). Upstream catalog reorderings never shatter downstream tailorings.
 
-#### Printable Rationale & Error Quality ([Ch 12.3](semantic-oscal/references/ch12-building-a-validator.md#L99-L105))
+#### Printable Rationale & Error Quality ([Ch 12.3](jascon/references/ch12-building-a-validator.md#L99-L105))
 - **Mandatory Rationale Output**: Every validation rule instantiation carries `{rule, target, rationale, message}`, and the human **rationale MUST print on failure**. Rules without printable rationales are non-conformant, eliminating the opaque error messages of 1.x legacy tools.
 
 ---
@@ -223,7 +223,7 @@ Legacy OSCAL digital signatures fail when transport tools strip non-normative me
 
 ### 10. AI Native / LLM Interoperability & Agentic Workflows
 
-#### Built-In AI Assistant Skill (`semantic-oscal/SKILL.md`)
+#### Built-In AI Assistant Skill (`jascon/SKILL.md`)
 - **Ready-to-Install Claude / Gemini Skill**: Includes an installable AI agent skill containing 14 numbered normative requirements, reference chapters, 18 self-consistent worked JSON bundle examples, and python conversion scripts.
 
 #### Hallucination Resistance & Agentic Precision

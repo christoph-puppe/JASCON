@@ -1,9 +1,9 @@
 ---
-name: semantic-oscal
+name: jascon
 description: Guidelines and requirements for authoring, validating, and migrating to JASCON (JSON Attestable Semantic Compliance Object-graph Notation, formerly "Semantic OSCAL" / "OSCAL Semantic Core").
 ---
 
-# Semantic OSCAL Skill Requirements
+# JASCON Skill Requirements
 
 When triggered, this skill guides the agent in applying the JASCON standard correctly. The chapters of the JASCON Handbook serve as the normative requirements for this skill.
 
@@ -63,7 +63,7 @@ You must strictly adhere to the guidelines detailed in the handbook chapters and
 ### Requirement 11: Validator Implementation
 - **Description:** Ensure structural validation, facet schema checking, and resolution conformance. Adhere to JCS (JSON Canonicalization Schema) and tailoring resolution logic. The normative kernel schema, stdlib facet descriptors, and conformance vectors ship with this skill and are the definitive contract.
 - **Reference Document:** [Chapter 12 — Building a Validator (The Weekend Chapter)](references/ch12-building-a-validator.md)
-- **Normative Artifacts:** [oscal-semantic-core-1.0.0.schema.json](schemas/oscal-semantic-core-1.0.0.schema.json) (kernel shapes, closed; shape-disjoint type inference), [schemas/stdlib/](schemas/stdlib/) (six facet descriptors with declared semantics), [conformance/](conformance/) (JCS, modality-lattice, parameter, tailoring, attestation vectors).
+- **Normative Artifacts:** [oscal-semantic-core-1.0.0.schema.json](schemas/oscal-semantic-core-1.0.0.schema.json) (kernel shapes, closed; shape-disjoint type inference). The schema filename, its `$id` (`https://ns.oscal.org/semantic-core/schema/1.0.0`), the D16 compatibility namespace `https://ns.oscal-semantic.org/core`, and the attestation media type `application/vnd.oscal-semantic-core.attestation+json` deliberately keep the working-title spelling: identifiers are opaque (D2), and re-spelling them would churn every digest and signature for zero semantic gain. Also normative: [schemas/stdlib/](schemas/stdlib/) (six facet descriptors with declared semantics), [conformance/](conformance/) (JCS, modality-lattice, parameter, tailoring, attestation vectors).
 - **Reference Implementation:** [validate_core.py](scripts/validate_core.py) — runs the conformance corpus and validates any bundle (schemas, digests, by-statement keys, `{param:}` bindings, manifest completeness).
 
 ### Requirement 12: Safe Consumption

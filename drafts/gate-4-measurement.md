@@ -76,7 +76,7 @@ independence of the second implementation is therefore limited to
 schema validator, no crypto library, and no line of code with the
 Python reference. What this measures: spec sufficiency and
 implementation burden. What it does not measure: a stranger's weekend.
-A third-party clean-room build against `semantic-oscal/conformance/`
+A third-party clean-room build against `jascon/conformance/`
 is the standing invitation, and the corpus is the referee.
 
 ## 4. The bidirectional export suite (down-conversion measured)
@@ -127,7 +127,7 @@ counted in every report, never silent.
 ## 5. Reproduce
 
 ```
-uv run --with jsonschema python semantic-oscal/scripts/validate_core.py
-uv run --with jsonschema --with regex python semantic-oscal/scripts/export_oscal.py
-powershell -ExecutionPolicy Bypass -File semantic-oscal/scripts/validate_core.ps1
+uv run --with jsonschema python jascon/scripts/validate_core.py
+uv run --with jsonschema --with regex python jascon/scripts/export_oscal.py
+powershell -ExecutionPolicy Bypass -File jascon/scripts/validate_core.ps1
 ```

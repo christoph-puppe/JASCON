@@ -705,13 +705,13 @@ replaces; NIST IR 8477 / OLIR (relationship semantics).
 2. Executable kernel + stdlib JSON Schemas; conformance corpus incl. JCS
    vectors (with empty-omission cases), modality-lattice cases,
    parameter-bounds cases, tailoring-conflict cases, bi-modal attestation
-   cases. **DELIVERED 2026-07-21:** `semantic-oscal/schemas/` (kernel
+   cases. **DELIVERED 2026-07-21:** `jascon/schemas/` (kernel
    schema, closed shapes, shape-disjoint type inference + six normative
    stdlib descriptors with the D10-rev-2 declarations) ·
-   `semantic-oscal/conformance/` (54 vectors across five families at first
+   `jascon/conformance/` (54 vectors across five families at first
    delivery; **129 across nine families at HEAD** after the P9 + v0.6-round-2
    + gate-3 additions — recompute via `validate_core.py`, backlog #28) ·
-   `semantic-oscal/scripts/validate_core.py` (the executable). Measured
+   `jascon/scripts/validate_core.py` (the executable). Measured
    result: all vectors pass; all 8 corpus bundles + the example bundle
    validate green — 5,478 object validations, both digests re-verified
    per object, by-statement keys and `{param:}` bindings checked, every

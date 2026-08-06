@@ -57,25 +57,25 @@ the point; bring more.
 |---|---|
 | Specification 1.0.0 | `drafts/oscal-semantic-core-specification-1.0.0.md` |
 | Decision Rationale Register (the full amendment journal) | `drafts/oscal-semantic-core-decision-rationale-register.md` |
-| Kernel JSON Schema (closed shapes, shape-disjoint inference) | `semantic-oscal/schemas/oscal-semantic-core-1.0.0.schema.json` |
-| Seven stdlib facet descriptors incl. the DSSE profile | `semantic-oscal/schemas/stdlib/` |
-| Conformance corpus (157 vectors, 12 families) | `semantic-oscal/conformance/` |
-| Both reference validators + export suite + converters | `semantic-oscal/scripts/` |
-| Handbook (15 chapters) + normative appendices A–G | `semantic-oscal/references/` |
+| Kernel JSON Schema (closed shapes, shape-disjoint inference) | `jascon/schemas/oscal-semantic-core-1.0.0.schema.json` |
+| Seven stdlib facet descriptors incl. the DSSE profile | `jascon/schemas/stdlib/` |
+| Conformance corpus (157 vectors, 12 families) | `jascon/conformance/` |
+| Both reference validators + export suite + converters | `jascon/scripts/` |
+| Handbook (15 chapters) + normative appendices A–G | `jascon/references/` |
 | Eleven converted corpora with computed coverage reports | `converted_examples/` |
 | The reader — zero-dependency browser/workbench/verifier (v1.7.1) | `one-page-apps/jascon-reader.html` |
-| Skill bundle (everything under `semantic-oscal/`, 76 entries) | `SKILL_semantic-oscal.zip` |
+| Skill bundle (everything under `jascon/`, 76 entries) | `SKILL_jascon.zip` |
 
 ## Verify it yourself
 
 ```
-uv run --with jsonschema python semantic-oscal/scripts/validate_core.py
-uv run --with jsonschema --with regex python semantic-oscal/scripts/export_oscal.py
-powershell -ExecutionPolicy Bypass -File semantic-oscal/scripts/validate_core.ps1
+uv run --with jsonschema python jascon/scripts/validate_core.py
+uv run --with jsonschema --with regex python jascon/scripts/export_oscal.py
+powershell -ExecutionPolicy Bypass -File jascon/scripts/validate_core.ps1
 ```
 
 The third line needs nothing installed at all. A third-party clean-room
-validator build against `semantic-oscal/conformance/` is the standing
+validator build against `jascon/conformance/` is the standing
 invitation — the corpus is the referee.
 
 ## Notes
