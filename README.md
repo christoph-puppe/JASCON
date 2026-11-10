@@ -39,6 +39,36 @@ chip is **derived from the data**, not asserted; every tailoring operation
 gets a before→after lattice verdict; weakening without a recorded Deviation is
 refused while you type.*
 
+## Unreleased on this branch: Risk as a tenth kernel type
+
+> **State 2026-11-10 — landed, reviewed, measured; not tagged.** Everything
+> below this section describes the released **1.0.0**. This branch adds
+> [CP-RISK-1](drafts/CP-RISK-1.md): a `Risk` kernel type — the ex-ante
+> record ISO/IEC 27001 6.1.2–6.1.3, BSI 200-3 and SP 800-30 all require —
+> so that a selected requirement can name the risk that justifies it, and
+> the Statement of Applicability becomes a computation
+> (`risk-coverage`) instead of a spreadsheet.
+>
+> - **Measured:** all 6,914 objects of the 1.0.0 corpus validate unchanged
+>   under the new schema; the conformance corpus is 200 vectors in 13
+>   families; the IFA lifecycle corpus now carries two real Risk objects
+>   (6,916 objects in eleven bundles, green in `validate_core.py`).
+> - **Corrected on the way in:** eight defects in the proposal's own
+>   implementation, each demonstrated failing first (CP §11.2) — and one
+>   in the 1.0.0 release itself: the corpus did not verify on a
+>   non-Windows clone (6,963 line-ending digest mismatches), fixed by
+>   [`.gitattributes`](.gitattributes) without re-spelling a digest.
+> - **Reported, not smoothed over:** OSCAL's risk data has no owner, no
+>   single level and no acceptance date, so the first Risk corpus cannot
+>   leave the `identified` state; and the coverage reports count source
+>   *paths*, not values that arrive — on the IFA corpus 122 content values
+>   do not (the other ten corpora are unmeasured).
+> - **Open, and blocking a release:** the version number (the released
+>   spec says kernel changes ride a *major*), and the PowerShell twin,
+>   whose port has not been executed. See the
+>   [backlog](drafts/oscal-semantic-core-v0.6-spec-feedback-backlog.md)
+>   #40–#47 and the register section "Amendments — CP-RISK-1".
+
 ## Why this exists
 
 OSCAL 1.x is *rigid where frameworks legitimately differ* and *contractless

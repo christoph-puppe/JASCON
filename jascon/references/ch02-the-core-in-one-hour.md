@@ -18,10 +18,10 @@ own material, know where each piece of it belongs: kernel field, set,
 tailoring, facet, annotation, or (most often, as Chapter 1's census
 showed) nowhere, because the mechanism it was imitating now exists.
 
-We will not tour nine types in the abstract. We will start with the
+We will not tour ten types in the abstract. We will start with the
 smallest real object in the corpus — an Australian control — and keep
 asking one question: *what does reality add next?* Each honest answer
-introduces exactly one type. By the end, all nine have appeared because
+introduces exactly one type. By the end, all ten have appeared because
 something measured demanded them, which is also how they got into the
 specification in the first place.
 

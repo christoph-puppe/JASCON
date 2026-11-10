@@ -150,7 +150,8 @@ CR26 artifacts/key-tests/examples shape} · `performer-ref` ● ·
 **Finding:** `assessment-ref` ● · `requirement-ref` ● ·
 `statement-ref` ○ · `state` ● code (C.3) · `risk-refs` ○ [URI] — the
 ex-post record points at the ex-ante Risk(s) it materialised against;
-landmark (assessor bundle → organisation register, 1.1.0) ·
+landmark (assessor bundle → organisation register, 1.1.0), but typed: a
+ref that resolves in-bundle must name a Risk (RISK-12) ·
 `actions` ○ [{description ●, due ○ {date | elapsed-duration |
 calendar-period}, status ●}] — computable deadlines
 (fail-closed without the named calendar) ·
@@ -179,20 +180,24 @@ Common fields (A.0) plus:
 | `owner-ref` | ● | URI | The risk owner (ISO 6.1.2 c 2). Landmark ref — a party, not a bundle object. |
 | `state` | ● | code (C.3c) | identified · assessed · treated · retired. |
 | `threat-refs` | ○ | [URI] | Threat catalog entries (G 0.x, ATT&CK techniques, 800-30 threat events). Landmark. |
-| `component-refs` | ○ | [URI] | The assets at risk — Components of this bundle. Closure-required. |
+| `component-refs` | ○ | [URI] | The assets at risk — Components of this bundle. Closure-required (RISK-7) and typed: each names a Component (RISK-12). |
 | `rating` | ○ | {level ●, scale-ref ●} | Inherent/current level on a named scale. **Required** once `state` ∈ assessed · treated (RISK-2). |
 | `residual-rating` | ○ | {level ●, scale-ref ●} | The level after treatment. |
 | `treatment` | ○ | code (C.10) | modify · retain · avoid · share. **Required** once treated (RISK-3). |
-| `treatments` | ○ | [{requirement-ref ●, statement-ids ○}] | **The ISO 6.1.3 b edge**: the controls determined for this risk, to the clause. requirement-ref closure-required (RISK-7); statement-ids must address the target (RISK-8). **Required** for `modify` (RISK-4). |
+| `treatments` | ○ | [{requirement-ref ●, statement-ids ○}] | **The ISO 6.1.3 b edge**: the controls determined for this risk, to the clause. requirement-ref closure-required (RISK-7) and typed — it names a Requirement, never a Set (RISK-12); statement-ids must address the target (RISK-8). **Required** for `modify` (RISK-4). |
 | `shared-with-ref` | ○ | URI | Who carries the shared risk. **Required** for `share` (RISK-5). |
 | `acceptance` | ○ | {approver-ref ●, date ●, rationale ●} | The owner's acceptance of the residual (ISO 6.1.3 f). **Required** for `retain` (RISK-6) and once treated (RISK-3). |
-| `review-due` | ○ | date \| elapsed-duration \| calendar-period | ISO 8.2 "at planned intervals" — the same computable union as `Finding.actions[].due`, fail-closed without the named calendar. |
+| `review-due` | ○ | date \| datetime \| elapsed-duration \| calendar-period | ISO 8.2 "at planned intervals". A point in time is `{type: date \| datetime, value}`; durations as in `Finding.actions[].due`, fail-closed without the named calendar. `datetime` is measured, not designed: OSCAL's `deadline` is date-time-with-timezone and both corpus deadlines are (IFA ×2). |
 
 **Shape-disjointness:** `scenario` + `owner-ref` occur in no other type.
 **Closure:** `treatments[].requirement-ref` and `component-refs` in-bundle
-(RISK-7); `owner-ref`, `threat-refs`, `shared-with-ref`, `approver-ref`,
-`scale-ref` landmark. **Evidence:** example bundle (1 Risk), 31 vectors;
-at scale pending the IFA re-run (A.12).
+(RISK-7) and typed (RISK-12); `owner-ref`, `threat-refs`,
+`shared-with-ref`, `approver-ref`, `scale-ref` landmark. **Liveness:** a
+Risk whose `state` is `retired` or whose `lifecycle` is `withdrawn`
+justifies nothing (B.1.9). **Evidence:** example bundle (1 Risk), 42
+vectors, and the IFA lifecycle corpus — 2 Risks converted from POA&M
+risks. That first corpus also measured what OSCAL cannot give this shape
+(A.12): no owner field, no single level, no dated acceptance.
 
 ## A.10 Sub-object: Deviation
 
@@ -226,3 +231,17 @@ predicate selects, excludes, set-field/replace-prose/relation/facet
 ops, uri/date/integer/decimal parameters, canonical-alias/replaces
 events, Assessment/Finding/Attestation at scale (example-bundle only).
 The gap list is Appendix E's and gate items 2–3's work order.
+
+**Risk (1.1.0), first corpus measurement — IFA re-run 2026-11-10.**
+*Exercised:* `scenario`, `owner-ref`, `state`, `component-refs`,
+`treatment` + `treatments` (×1), `review-due` (datetime ×2),
+`Finding.risk-refs` (×2), a `risk-adjustment` Deviation naming its Risk
+(×1). *Declared, not corpus-exercised:* `rating`, `residual-rating`,
+`acceptance`, `shared-with-ref`, `threat-refs`, and the states `assessed`,
+`treated`, `retired`. That list is not an accident of a small corpus: an
+OSCAL risk carries likelihood and impact but **no level** (so RISK-2 holds
+both risks at `identified`), **no owner** (derived from the imported SSP's
+`owner` role, declared in the coverage report) and **no acceptance date**
+(so the one `accept` response cannot become `retain` under RISK-6). The
+kernel shape and the fourth authority disagree on three required fields;
+the disagreement is recorded (backlog #43), not papered over.

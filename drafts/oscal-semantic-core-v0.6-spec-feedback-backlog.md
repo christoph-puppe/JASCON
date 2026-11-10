@@ -6,6 +6,26 @@ proposed disposition, and its source. This file is the input queue
 for the v0.6 specification revision; items leave it only via a
 decision recorded in the register.
 
+**THE BACKLOG IS OPEN AGAIN** (2026-11-10, the CP-RISK-1 landing —
+register "Amendments — CP-RISK-1"): landing the Risk change proposal in
+the repository filed **#40–#47**. Two need the author (#40, #43); one
+needs a Windows machine (#45); the rest are work. The eight review
+findings against the proposal itself (R-1…R-8) were closed in the same
+pass and never entered this file — `drafts/CP-RISK-1.md` §11.2.
+
+| # | Item | Evidence | Proposed disposition | Source |
+|---|---|---|---|---|
+| 40 | **The version number contradicts D22 rev 3** *(decision, blocks any tag)*. CP-RISK-1 ships "1.1.0, minor"; register D22 rev 3 and spec IV.8 say post-1.0 kernel promotion needs measured 2-of-3 **and a major version**. D22 test 1 counts census-corpus encodings; the proposal counts standards. | **Demonstrated** (the two sentences, verbatim, in the register section) · measured: all 6,914 1.0.0 objects validate under the new schema (the minor argument's premise holds) | Author decides: **(a)** release as 2.0.0, or **(b)** D22 rev 4 on the record — additions that keep every prior object valid ride a minor — plus what replaces the census test for a consumer-side type no national catalog can encode | CP-RISK-1 landing |
+| 41 | **Path coverage is not value arrival** *(Major, class c — affects the "lossless" headline)*. Coverage reports count source paths with a declared destination; values are not checked. | **Measured, IFA only**: 394/835 leaf values occur verbatim in the bundle; absent 194 identity + 120 document-metadata + **122 content (63 prose ≥ 40 chars)**; before the re-run 138 — 13 under `poam.risks[]`, incl. the response `type` prop. Other ten corpora: **unmeasured** (sources not in repo) | Wire `oscal_conv_lib.value_arrival()` into every converter's report; for each absent content path either carry it or declare it dropped with a reason; then re-word the "converted losslessly" sentences (README, spec Status) to what is measured | CP-RISK-1 landing, L-2 |
+| 42 | **Blobs are LF, digests are CRLF** *(Minor; residue of L-1)*. `.gitattributes eol=crlf` fixes clones, existing trees and archives; a consumer that bypasses checkout still mismatches. | Measured: `git show` blobs 0/15 (IFA); alternative (`-text` + CRLF blobs) 15/15, 6,975-file commit, pack +0.02 MiB | Decide whether any consumer reads blobs raw (reader deep links to raw URLs would); if so, take the one large commit on its own | CP-RISK-1 landing, L-1 |
+| 43 | **RISK-1/2/6 require what OSCAL data does not hold** *(decision)*. | **Measured** (IFA, the only Risk corpus): owner absent ×2 (derived from the SSP, declared) · level absent ×2 → both risks stuck at `identified` though analysed · acceptance date absent ×1 → `accept` cannot be written as `retain` | Author decides per rule: keep (the kernel is right to refuse; an OSCAL export of a register *should* show the gap), or relax for imported data (e.g. `rating` OR a pinned risk-analysis facet for `assessed`; `acceptance.date` optional). A second corpus (BSI 200-3 export) before deciding | CP-RISK-1 landing |
+| 44 | **Nothing in a bundle pins the kernel version** *(Minor, class b)*. A 1.0.0 tool meeting a Risk fails closed as "matches NO type" — no version in the message. The proposal's `manifest-version: "1.1"` was an undefined second spelling and was reverted. | Demonstrated: `contentManifest` shape has no such field; 11/11 corpus manifests, the converter library and the reader write `"1"` | Decide with #40: an optional kernel pin in the manifest (itself a closed-shape change) or a written rule that `manifest-version` tracks the kernel line | CP-RISK-1 landing |
+| 45 | **PowerShell twin: the CP-RISK-1 port has never run** *(blocks the two-implementation gate)*. Ported from the Python reference and the vectors without a PowerShell runtime. Also observed while porting, **unverified**: the twin keys objects in `[ordered]@{}`, which compares keys case-insensitively — two ids differing only in case would collide, where the Python reference keeps both (D2: string-compared). | Not executed. Static checks only (bracket balance, no `$var:` hazards) | Run `powershell -ExecutionPolicy Bypass -File jascon/scripts/validate_core.ps1`; expect `risk: 42 pass, 0 fail` and ALL GREEN; remove the two port guards; add a case-differing-ids reference vector to settle the observation | CP-RISK-1 landing |
+| 46 | **The example attestation binds nothing** *(Minor, class c)*. Its three `subject-semantic-digests` match no example object and its `content-manifest-digest` no manifest — since before 1.0.0. Separately: the IFA bundle lists its Attestation **inside** the content manifest, which D3.1 excludes by definition. | Measured: 3/3 subject digests unmatched (also against the 1.0.0 blobs) · `objects/attestation/ifa-ato.json` is a manifest entry | Make the example attestation real and have `validate_examples` hold it to it (attestation-binds on the example bundle); move the IFA attestation beside its manifest at the next converter touch. README caveat 6 now says what is true meanwhile | CP-RISK-1 landing, L-3 |
+| 47 | **Two smaller shape questions** *(Minor)*. (a) Tightening `Finding.actions[].due` to `#/$defs/due` is a breaking change under the proposal's own compatibility promise — it rides #40's major, not a converter re-run. (b) C.10 has four treatment options; OSCAL's response `type` prop allows seven — `contingency` and `none` have no code (D22 test 3, "one vocabulary without flattening"). | (a) argued; corpus would pass (3 Findings with actions) · (b) measured vocabulary: OSCAL metaschema lists 7; corpus instances of the two unmapped values: 0 | (a) with #40. (b) leave until an instance appears; it then stays in the facet and is counted | CP-RISK-1 landing |
+
+<details><summary>State of this file at the 1.0.0 release (2026-07-22) — kept as written</summary>
+
 **THE BACKLOG IS EMPTY AGAIN** (2026-07-22, the P10 fix pass — register
 "Amendments — the P10 fix pass"): the P10 review of the 1.0.0-rc.1 text
 filed **#29–#37** (4 Major · 4 Minor · 1 erratum; register "Amendments —
@@ -18,6 +38,8 @@ converter slug collision that had silently merged **239 ISM taxonomy
 sets** — recovered by re-conversion (corpus 6,675 → 6,914 objects).
 Every item that ever entered this file has left it through a register
 entry.
+
+</details>
 
 <details><summary>The P10/P10b rows as they stood (all eleven closed by the fix pass)</summary>
 

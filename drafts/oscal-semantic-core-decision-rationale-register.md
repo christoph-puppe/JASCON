@@ -1403,3 +1403,179 @@ Name ✓ JASCON → P10 ✓ → P10b ✓ → fix pass ✓ → **`v1.0.0` tagged
 and 157/157 vectors are green at the release commit. Post-1.0 work
 rides the pending queue (OSCAL mapping/profile exports, SSP-family
 lifecycle exports, the clean-room invitation).
+
+# Amendments — CP-RISK-1 (2026-11-10): Risk as the tenth kernel type — landed on a branch, NOT released
+
+**What this section is.** `drafts/CP-RISK-1.md` proposes Risk as a tenth
+kernel type (schema 1.1.0), written 2026-11-05 against the synced skill
+bundle, without sight of this register, the specification, the corpora
+or the PowerShell twin. On 2026-11-10 it was applied to the repository,
+reviewed adversarially, corrected, and measured against the first Risk
+corpus. This section records that landing. **Nothing is tagged**: one
+entry below is an open contradiction with D22 rev 3 that only the author
+can close, and the second implementation has not run. The backlog is
+open again (#40–#47).
+
+## The landing — what held (measured)
+The patch applied without a rejected hunk. Under the 1.1.0 schema **all
+6,914 objects of the 1.0.0 corpus match exactly one kernel shape — zero
+new failures in eleven bundles**; the proposal's compatibility claim is
+measured. Conformance after the landing: **200 vectors in 13 families**
+(risk 42: 16 object · 18 bundle · 8 transitions; lifecycle 36 → 37 by the
+tenth disjointness case); corpus **6,916 manifest-listed objects** (IFA
+15 → 17), ALL GREEN in `validate_core.py` on Linux.
+
+## L-1 — Package digests and line endings: the 1.0.0 corpus did not verify off Windows *(found on the way)*
+**Finding (measured).** On a fresh clone under Linux, the 1.0.0
+validator reports **6,963 failures, every one a digest-of-bytes
+mismatch** (6,914 objects + 49 pinned facet schemas); semantic digests:
+0 failures. The manifests digest CRLF bytes — the converters wrote in
+text mode on Windows — and git stored the blobs LF-normalised. Every
+file matches once `\r` is restored. "Reproduce the whole verdict in one
+line" was true on the machine that wrote it and on no other; a `git
+archive` of the 1.0.0 commit (what a ZIP download is) fails the same way.
+**Decision.** `.gitattributes` gives the bundle directories
+`text eol=crlf`, and the converters write that line ending explicitly
+(`oscal_conv_lib.BUNDLE_NEWLINE`) instead of inheriting the platform's.
+No published digest is re-spelled.
+**Verified.** Fresh clones under `core.autocrlf` true / false / input, an
+existing Windows-style tree that receives the change, and `git archive`:
+6,914/6,914 objects and 49/49 pins each. The converter claim is proven
+on the one corpus whose sources were at hand: `convert_ifa.py`, run on
+Linux from `usnistgov/oscal-content@9402f031`, reproduces the committed
+1.0.0 IFA bundle with zero diff.
+**Customer.** Anyone who is not the author. **Simplicity.** One
+attributes file; the two-digest design did its job — meaning verified
+throughout, only packaging differed — and the validator now says *why*
+on such a mismatch instead of printing 6,963 bare lines.
+**Trade-off / known limit.** The blobs stay LF, so a consumer that
+bypasses checkout (`git show`, raw blob URLs, a client that ignores eol
+attributes) still sees a package mismatch: 0/15 on the IFA bundle.
+Storing the CRLF bytes as blobs under `-text` cures that channel too
+(measured: 15/15; a 6,975-file commit; pack +0.02 MiB) and was not done
+because nothing in the repository reads blobs that way and the commit
+would bury the review. **Rejected:** re-digesting to LF — it re-spells
+6,963 published digests for zero semantic gain, the tag-time identifier
+rule applied to bytes. Backlog #42.
+**Also:** the skill's example bundle is pinned `eol=lf` (the bytes inside
+the skill zip), and its manifest — never verified by either validator —
+is now verified on every Python run. At 1.0.0 it could not have passed
+on any checkout: 8 of 12 package digests matched CRLF bytes, 4 matched LF.
+
+## CP-RISK-1 review — eight findings, all closed with vectors
+Each was demonstrated failing against the validator as proposed
+(the current `risk-vectors.json` under the 2026-11-05 validator: 33 pass,
+9 fail). Full table: `drafts/CP-RISK-1.md` §11.2. In one line each:
+**R-1** RISK-11 failed falsely under a predicate select — now "undecided"
+under an open selection · **R-2** a retired or withdrawn Risk justified
+its control for ever — only live Risks justify, the rest are `lapsed` ·
+**R-3** retiring a risk then dropping its control failed RISK-11
+permanently — the rule binds live Risks · **R-4** Set expansion stopped
+silently at depth 8 — any depth · **R-4b** RISK-11 was skipped on an
+empty selection — applies wherever a Tailoring exists · **R-5** Risk
+edges were untyped — **RISK-12** · **R-6** the proposal's `FAIL [RISK-n]`
+messages were not implemented and the vectors asserted jsonschema's
+wording — rule naming + the portable `expected-rule` · **R-7/R-8**
+B.1.9's failure format, a docstring, dead code.
+**Customer.** An ISO 27001 auditor asking "which controls rest on no
+risk?" must not be answered with a false failure (R-1, R-3) or a stale
+yes (R-2). **Simplicity.** One liveness predicate, one typing rule.
+**Trade-off.** Under a predicate select the primitive now says less
+(a lower bound, an "undecided") rather than more — deliberate: say, do
+not guess.
+
+## RISK-12 — a Risk edge is typed *(new rule)*
+**Decision.** `treatments[].requirement-ref` names a Requirement,
+`component-refs` name Components, and a `Finding.risk-refs` entry that
+resolves in-bundle names a Risk (it stays landmark: unresolved is legal).
+**Rationale.** Coverage joins on Requirement ids; a Set id in a treatment
+passed RISK-7 and resurfaced as a misleading RISK-11. The Mapping
+precedent (scopes bind if the endpoint is present) applied to the new
+edges. **Scope note.** The older closure rules (Implementation, Finding)
+still check resolution only, not target type — unchanged here, an
+observation for whoever next touches #16.
+
+## `due` — a point in time is `{type: date | datetime, value}` *(schema, pre-release)*
+**Decision.** The proposal's `#/$defs/due` spelled the date branch
+`{type: "date", date}`. Zero instances existed; the corpus already
+spells Finding action deadlines `{type: "datetime", value}` (×2), and
+OSCAL's `deadline` is date-time-with-timezone. The branch now accepts
+both kinds under the measured spelling; `Risk.review-due` uses it (×2).
+**Not done:** tightening `Finding.actions[].due` to this union — by the
+proposal's own compatibility promise that is a *breaking* change
+(backlog #47).
+
+## The IFA re-run — the first Risk corpus *(follow-up 2 of the handoff)*
+**Delivered.** POA&M risks → 2 Risk objects; Findings carry `risk-refs`;
+the `risk-adjustment` Deviation names its Risk (RISK-9 at corpus scale);
+the `risk@1` framework facet is retired in favour of a `risk-analysis@1`
+holding pen on the Risk; the response `type` prop — dropped by the 1.0.0
+conversion — is now the source of `treatment` (`mitigate` ×1, `accept`
+×1). 835/835 paths, bundle green, reader v1.7.2 shows them.
+**Measured, and it cuts against the proposal's fourth authority.** OSCAL's
+risk carries **no owner** (×2 — derived from the imported SSP's `owner`
+role, declared), **no level** (×2 — likelihood and impact only, so RISK-2
+holds both at `identified`) and **no dated acceptance** (×1 — so the one
+`accept` response cannot be written as `retain` under RISK-6; no date was
+invented). Of the six fields the proposal says four authorities share,
+OSCAL data supplies three. Whether RISK-2/RISK-6 are right to refuse or
+one notch too strict for imported data is backlog #43 — the corpus
+supplies the counts, not the verdict.
+**Source pin.** `usnistgov/oscal-content@9402f031` (2026-07-14), the
+state the 1.0.0 conversion fetched. Upstream changed the IFA files on
+2026-10-18/22; against current upstream the converter still maps
+919/919 paths, but adopting that is a separate measurement.
+
+## L-2 — Path coverage is not value arrival *(found on the way; OPEN, #41)*
+**Finding (measured, IFA only).** The coverage reports count source
+*paths* that match a rule with a declared destination. They do not check
+that the value got there. `oscal_conv_lib.value_arrival()` — added with
+this landing and printed in the IFA report — finds that of 835 source
+leaf values, 394 occur verbatim in the emitted objects; absent are 194
+identity values (uuids/hrefs, re-minted by design), 120
+document-metadata values, and **122 content values, 63 of them prose of
+40+ characters** (component and implementation descriptions,
+observation remarks, POA&M item descriptions, the assessment finding's
+own description). Before this re-run the count was 138: under
+`poam.risks[]` alone 13 content values had never arrived, the risk
+response type among them, while the report read "835 / 835, UNMAPPED 0".
+**What this does and does not say.** Some absences are deliberate
+transformations (a mapped code, a respelled id); the check cannot tell
+those from drops, which is why it lists paths instead of issuing a
+verdict. It does say that "converted losslessly, coverage computed
+rather than asserted" is established at path level only, for this corpus;
+the other ten are unmeasured (their sources are not in the repository).
+No headline number was changed here — that is the author's sentence to
+re-word once the other corpora are measured.
+
+## OPEN — the version number contradicts D22 rev 3 *(#40; author decision)*
+The proposal ships as "1.1.0, minor" on the argument that every
+1.0.0-valid object stays valid. This register says, at the 1.0.0-rc.1
+consolidation: *"Post-1.0, kernel promotion requires measured 2-of-3 and
+a major version under D3.5 governance"* (D22 rev 3), and the
+specification repeats it (IV.8: "kernel-shape changes ride major
+versions"). Two further points sharpen it: D22's first test asks for
+2-of-3 authority encodings **in the census corpus**, and the proposal's
+count is of standards, with the one corpus encoding (OSCAL) supplying
+half the record; and a 1.0.0 tool cannot read a 1.1.0 bundle that
+carries a Risk at all (closed shapes — it reports "matches NO type",
+with no version in the message, because nothing in a bundle pins the
+kernel version: #44).
+**Not decided here.** The two consistent outcomes: (a) the release is
+**2.0.0**; (b) **D22 rev 4** amends the rule on the record — e.g.
+"a kernel addition under which every previously valid object stays valid
+rides a minor; anything else a major" — and says what replaces the
+census test for a type no national catalog can encode (a risk register
+is consumer-side by nature). The schema file keeps the name the proposal
+gave it until then; no tag, no release notes.
+
+## State at the end of the landing
+Python reference: 200/200, eleven bundles, ALL GREEN. **PowerShell twin:
+ported, not executed** — no PowerShell runtime was available where the
+port was written; its header says so, the two new call sites are
+guarded, and until it runs green on Windows PowerShell 5.1 the risk
+family has one implementation (#45). Export suite: not re-run (its ten
+input bundles are byte-identical; the NIST schema it needs is not in the
+repository). Handbook, SKILL.md and the skill zip (78 entries) follow
+the landed state; the specification file is untouched — it is the
+released 1.0.0 text, and what replaces it waits on #40.
