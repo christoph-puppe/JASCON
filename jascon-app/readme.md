@@ -4,10 +4,10 @@ A set of browser pages for working with JASCON bundles. There is no server and
 no build step: the pages are HTML files that share one script and one
 stylesheet. A bundle you load stays in your browser.
 
-State: build 0.2.0. This build has the frame (the hub, the settings page and
-the shared core) and five tool pages: Browse, Tailor, Map, Implement and
-Assess. The pages for validation, OSCAL import and risk analysis are not
-built yet.
+State: build 0.3.0. This build has the frame (the hub, the settings page and
+the shared core) and six tool pages: Browse, Tailor, Map, Implement, Risk and
+Assess. The pages for validation and OSCAL import are not built yet, and the
+app does not call a model.
 
 ## Start
 
@@ -62,6 +62,7 @@ is saved to the set at once; the other open tools reload.
 | Tailor | Each Tailoring resolved: selection, operations with before and after, lattice verdict, derived tier | A Tailoring; the resolved requirements as a package of their own |
 | Map | The mappings as a table, with targets outside the set marked | A Mapping, also to a target outside the set |
 | Implement | Components and Implementation edges; whether the authorization an inherited edge names is found | Components, a system Component that lists them, Implementations |
+| Risk | The register with a heat map, the scales and their matrix, the coverage of the selected requirements, the risk catalogues | A Risk; a scale; the record of catalogue entries that do not apply |
 | Assess | Assessments, Findings by state, Attestations with a Full Match / Semantic Match / Tamper verdict | An Assessment with one Finding per requirement that is not satisfied; the state of a Finding |
 
 Clicking a reference opens the object in a drawer on the right; Escape closes
@@ -75,6 +76,64 @@ kind is refused; a second operation on one target is refused.
 Running the same check again in Assess overwrites its Assessment and removes
 a Finding that no longer applies while it is still open. A Finding that was
 moved on is kept.
+
+## Risk analysis
+
+The Risk tool has five views.
+
+**Register.** Every risk with its state, level, residual level, treatment and
+owner, and the number of rule errors it has. The heat map shows the risks on
+the grid of a level scale's matrix, for the current or the residual rating;
+a click on a cell lists its risks.
+
+**Risk.** The form for one risk. Below it stands what the rules say, and the
+risk is saved only when there is no error:
+
+- the kernel shape, with the rule named: an assessed risk needs a rating
+  (RISK-2), a treated one its option and its acceptance (RISK-3), the option
+  modify needs requirements (RISK-4), share needs a party (RISK-5), retain
+  needs an acceptance (RISK-6);
+- the references: a treatment names a requirement of the set and statements
+  that exist, a component at risk is a component, a Tailoring is a Tailoring
+  (RISK-7, 8, 12);
+- the scales: a level is one its scale defines (SCALE-2), and a treatment
+  must not name a requirement the Tailoring dropped (RISK-11);
+- a state moves forward only: identified, assessed, treated, retired.
+
+Where the level scale carries a matrix and likelihood and impact are chosen,
+the level is the matrix cell. Another level needs the box *depart from the
+matrix* and a reason; the reason is stored as the rating's
+`override-rationale`. Without it the rule SCALE-4 refuses the risk. The
+residual rating uses the same scales as the rating.
+
+**Scales and matrix.** A scale is a file the manifest pins, not an object. It
+lists its levels from lowest to highest. The scale of the combined level may
+carry a matrix over a likelihood scale and an impact scale, one level for
+every pair. Two starting sets can be added, as published or as a copy under
+your namespace: three levels each with a 3 x 3 matrix, and a set in the style
+of BSI 200-3 with a 4 x 4 matrix. Their level names and cells were written
+from memory of the methods they follow and were not checked against the
+standards; change them to your method.
+
+Changing a scale that risks use: the risks left on a level that no longer
+exists are listed before you save, and they stay wrong until you rate them
+again. A level that is renamed keeps its cells in the matrices that use the
+scale; a level that is removed loses them; a level that is added leaves the
+matrix incomplete until its cells are filled in.
+
+**Coverage.** For each Tailoring in force, or for every requirement when the
+set has no Tailoring: how many selected requirements are justified by a risk,
+pending (named only by a risk that is not yet assessed with an option
+chosen), lapsed (named only by a retired or withdrawn risk), or named by no
+risk. The switch *Require a risk basis* turns the unjustified ones into
+failures; without it they are a line of the report.
+
+**Risk catalogues.** The two catalogues the repository ships, office IT and
+industrial plant. Importing an entry copies it into a risk of your own with
+state identified and lifecycle draft, keeps the suggested requirements the
+selection contains and names the entry it came from. A risk that exists is
+never overwritten by an import. An entry that does not apply is recorded with
+its reason in `risk-catalogs/not-applicable.json` beside the manifest.
 
 ## Integrity
 
@@ -133,8 +192,16 @@ text in that language, the English text is shown, then whatever is there.
 
 - The app does not yet check the kernel rules as a whole. Ported from the
   Python validator and run against its conformance vectors are the modality
-  lattice, the parameter law, selection, tier and the state machines. A
-  bundle that loads here is not thereby valid; use the Python validator.
+  lattice, the parameter law, selection, tier, the state machines, schema
+  matching, reference closure, the kernel pin, the Risk rules with coverage
+  and the scale and matrix rules. Not ported: the operation law per tier,
+  facet payloads, conditional-apply, composition and signatures. A bundle
+  that loads here is not thereby valid; use the Python validator.
+- The Risk form covers one likelihood, one impact and a matrix. Impact per
+  dimension and other methods are not offered. The review date is a date or
+  a calendar period.
+- Risk catalogues other than the two shipped ones cannot be loaded.
+- The app does not call a model; there are no suggestions.
 - Predicate selects of a Tailoring are not evaluated; the selection is then
   shown as open and its count as a lower bound.
 - The Tailor page applies set-modality, set-parameter and replace-prose.
@@ -163,10 +230,27 @@ node jascon-app/tools/gen-docs.mjs
 ```
 
 The first runs the tests: every shipped bundle round-trips unchanged, an
-edited bundle passes the reference validator, every interface string has a
-German text, and the settings table above matches the code. The second lists
+edited bundle passes the reference validator, the ported rules pass the
+conformance vectors of their families, the catalogue import rebuilds the
+committed demo, every page starts in a browser without a script error, every
+interface string has a German text, and what is generated (the settings table
+above, `jascon-schema.js`, `jascon-presets.js`) matches its source. The second lists
 strings without a German text. The third rewrites the settings table from
 `JSC_CFG` in `jascon-core.js`.
+
+`jascon-schema.js` and `jascon-presets.js` are generated; after a change to
+the kernel schema, the shipped scales or the risk catalogues run:
+
+```bash
+node jascon-app/tools/gen-schema.mjs
+```
+
+```bash
+node jascon-app/tools/gen-presets.mjs
+```
+
+Bugs that reached a push are recorded in `ERRATA.md` with the test that now
+covers them.
 
 The part of `jascon-core.js` between `JSC-PURE-START` and `JSC-PURE-END`
 touches neither the DOM nor storage; the tests load it in node.

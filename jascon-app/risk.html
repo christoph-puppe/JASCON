@@ -1,0 +1,676 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Risk · JASCON App</title>
+<link rel="stylesheet" href="jascon-core.css">
+<script>try{var _t=localStorage.getItem("jsc:cfg:ui:theme")||"dark";if(_t!=="system")document.documentElement.setAttribute("data-theme",_t)}catch(e){}</script>
+<style>
+.heat { border-collapse: separate; border-spacing: 4px; font-size: 11.5px; }
+.heat th { font-family: var(--mono); font-size: 10px; font-weight: 500; color: var(--text-tertiary); padding: 2px 6px; text-align: center; }
+.heat th.row { text-align: right; }
+.heat td { min-width: 92px; height: 54px; border-radius: 8px; text-align: center; vertical-align: middle; padding: 4px 6px; border: 1px solid var(--border-1); }
+.heat td button { all: unset; cursor: pointer; display: block; width: 100%; }
+.heat td .n { font-family: var(--mono); font-size: 17px; font-weight: 600; display: block; }
+.heat td.picked { outline: 2px solid var(--accent); }
+.heat select { width: 100%; padding: 4px 6px; font-size: 11.5px; }
+.form { display: grid; grid-template-columns: 190px 1fr; gap: 8px 16px; align-items: start; }
+.form > label { padding-top: 7px; font-size: 12.5px; color: var(--text-secondary); }
+.form .wide { grid-column: 1 / -1; }
+.problems div { margin: 3px 0; font-size: 12px; }
+.levels td { padding: 3px 6px; }
+@media (max-width: 900px) { .form { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div id="app"><div id="mid">
+  <nav id="rail" aria-label="Views">
+    <div class="railgroup">
+      <div class="nano" data-i18n>Views</div>
+      <button class="navitem" data-view="register"><span class="glyph">△</span><span data-i18n>Register</span><span class="navcount" id="nc-risks"></span></button>
+      <button class="navitem" data-view="edit"><span class="glyph">✎</span><span data-i18n>Risk</span></button>
+      <button class="navitem" data-view="scales"><span class="glyph">≣</span><span data-i18n>Scales and matrix</span><span class="navcount" id="nc-scales"></span></button>
+      <button class="navitem" data-view="coverage"><span class="glyph">◔</span><span data-i18n>Coverage</span></button>
+      <button class="navitem" data-view="catalogue"><span class="glyph">▤</span><span data-i18n>Risk catalogues</span></button>
+    </div>
+    <div class="railgroup">
+      <p class="hint" data-i18n>A risk is a scenario with an owner. Once assessed it has a level on a scale you define; once treated it names its option, the requirements that carry it and who accepted what remains. A selected requirement is justified by the risks whose treatments name it.</p>
+    </div>
+  </nav>
+  <main id="main">
+    <section class="glass card" data-view="register"><h2><span class="glyph">△</span><span data-i18n>Register</span></h2><div id="register"></div></section>
+    <section class="glass card" data-view="edit"><h2><span class="glyph">✎</span><span data-i18n>Risk</span></h2><div id="edit"></div></section>
+    <section class="glass card" data-view="scales"><h2><span class="glyph">≣</span><span data-i18n>Scales and matrix</span></h2><div id="scales"></div></section>
+    <section class="glass card" data-view="coverage"><h2><span class="glyph">◔</span><span data-i18n>Coverage</span></h2><div id="coverage"></div></section>
+    <section class="glass card" data-view="catalogue"><h2><span class="glyph">▤</span><span data-i18n>Risk catalogues</span></h2><div id="catalogue"></div></section>
+  </main>
+</div></div>
+
+<script src="jascon-core.js"></script>
+<script src="jascon-schema.js"></script>
+<script src="jascon-rules.js"></script>
+<script src="jascon-riskcat.js"></script>
+<script src="jascon-presets.js"></script>
+<script src="jascon-view.js"></script>
+<script>
+"use strict";
+/* Risk analysis: the register, one risk, the scales with their matrix, the
+   coverage of the selected requirements, and the import of risk catalogues.
+
+   The page computes nothing of its own about a risk's validity. What is
+   wrong with a Risk is what jascon-rules.js says: the kernel shape (RISK-1
+   to 6 and 13, named), reference closure and typed edges (RISK-7, 8, 12),
+   the scale rules (SCALE-2 to 4) and RISK-11. A Risk is saved only when
+   none of these is an error; a note never blocks.
+
+   The level of a rating: where the level scale carries a matrix and both
+   inputs are chosen, the level is the matrix cell. Another level needs the
+   box "depart from the matrix" and a rationale, which becomes the rating's
+   override-rationale. The page never writes a level the matrix does not
+   give without one.
+
+   Scales are files the manifest pins, not objects. A scale may be changed
+   while risks use it; the risks left on a removed level are listed before
+   the change is saved, and they stay wrong until they are rated again.
+
+   The record of catalogue entries that do not apply is kept beside the
+   manifest as risk-catalogs/not-applicable.json; the kernel has no place for
+   it (backlog #54).
+
+   Not here: suggestions from a model, catalogues other than the two the
+   repository ships, impact per dimension, and any method other than a
+   likelihood-impact matrix. */
+jscI18n.add("de", {
+  "Risk": "Risiko", "Register": "Register", "Scales and matrix": "Skalen und Matrix", "Coverage": "Abdeckung", "Risk catalogues": "Risikokataloge",
+  "A risk is a scenario with an owner. Once assessed it has a level on a scale you define; once treated it names its option, the requirements that carry it and who accepted what remains. A selected requirement is justified by the risks whose treatments name it.":
+    "Ein Risiko ist ein Szenario mit einem Eigner. Bewertet hat es eine Stufe auf einer Skala, die Sie festlegen; behandelt nennt es seine Option, die Anforderungen, die sie tragen, und wer das Verbleibende akzeptiert hat. Eine ausgewählte Anforderung ist durch die Risiken begründet, deren Behandlung sie nennt.",
+  "New risk": "Neues Risiko", "This set holds no risk. Create one, or import a catalogue.": "Dieses Set enthält kein Risiko. Eines anlegen oder einen Katalog importieren.",
+  "risks": "Risiken", "with a problem": "mit einem Problem", "all": "alle", "Search label, title or scenario": "Label, Titel oder Szenario suchen",
+  "Label": "Label", "Title": "Titel", "State": "Zustand", "Level": "Stufe", "Residual": "Rest", "Treatment": "Behandlung", "Owner": "Eigner", "Problems": "Probleme",
+  "Heat map": "Heatmap", "on the scale": "auf der Skala", "current": "aktuell", "residual": "Rest", "likelihood": "Eintrittswahrscheinlichkeit", "impact": "Auswirkung",
+  "No level scale with a matrix is pinned in this set. Add one under Scales and matrix.": "In diesem Set ist keine Stufenskala mit Matrix gepinnt. Unter Skalen und Matrix eine hinzufügen.",
+  "Click a cell to list its risks. {n} risk(s) state no likelihood and impact on this scale and are not in the grid.": "Auf eine Zelle klicken, um ihre Risiken zu listen. {n} Risiko/Risiken nennen keine Eintrittswahrscheinlichkeit und Auswirkung auf dieser Skala und stehen nicht im Raster.",
+  "cell {l} / {i}": "Zelle {l} / {i}", "clear the cell filter": "Zellenfilter aufheben",
+  "Choose a risk in the register, or create a new one.": "Im Register ein Risiko wählen oder ein neues anlegen.",
+  "Identity": "Identität", "Version": "Version", "Lifecycle": "Lifecycle", "Language of the text": "Sprache des Textes", "Scenario": "Szenario",
+  "What could happen, to what, with which consequence.": "Was passieren könnte, woran, mit welcher Folge.", "Owner (party URI)": "Eigner (Party-URI)",
+  "Threats (one URI per line)": "Gefährdungen (eine URI je Zeile)", "Components at risk": "Betroffene Komponenten", "type to add a component": "tippen, um eine Komponente hinzuzufügen",
+  "Belongs to": "Gehört zu", "every Tailoring of the set": "jedem Tailoring des Sets", "Rating": "Bewertung", "Residual rating": "Restrisiko-Bewertung",
+  "Level scale": "Stufenskala", "(none)": "(keine)", "(not stated)": "(nicht angegeben)", "Likelihood": "Eintrittswahrscheinlichkeit", "Impact": "Auswirkung",
+  "the matrix gives": "die Matrix ergibt", "depart from the matrix": "von der Matrix abweichen", "Why this level and not the matrix cell? (needed)": "Warum diese Stufe und nicht die Matrixzelle? (nötig)",
+  "State a residual rating": "Restrisiko-Bewertung angeben", "on the same scales as the rating": "auf denselben Skalen wie die Bewertung",
+  "Likelihood scale": "Skala der Eintrittswahrscheinlichkeit", "Impact scale": "Skala der Auswirkung",
+  "Option": "Option", "(not decided)": "(nicht entschieden)", "Treated by": "Behandelt durch", "type to add a requirement": "tippen, um eine Anforderung hinzuzufügen",
+  "whole requirement": "ganze Anforderung", "Shared with (party URI)": "Geteilt mit (Party-URI)", "Acceptance": "Akzeptanz",
+  "Approver (party URI)": "Genehmigt von (Party-URI)", "Date": "Datum", "Rationale": "Begründung", "Review due": "Überprüfung fällig",
+  "no date": "kein Termin", "on a date": "an einem Datum", "every": "alle", "Calendar (URI)": "Kalender (URI)",
+  "What the rules say": "Was die Regeln sagen", "nothing to object": "nichts einzuwenden", "error": "Fehler", "note": "Hinweis",
+  "Save the risk": "Risiko speichern", "Delete the risk": "Risiko löschen", "Discard": "Verwerfen",
+  "An object with the id {id} exists already; choose another label.": "Ein Objekt mit der Id {id} gibt es schon; ein anderes Label wählen.",
+  "A label is needed; the id is built from it.": "Ein Label wird gebraucht; daraus entsteht die Id.",
+  "Delete the risk {label}? A finding or a deviation that names it keeps the reference.": "Risiko {label} löschen? Eine Feststellung oder Deviation, die es nennt, behält den Verweis.",
+  "state {from} may not move to {to}": "Zustand {from} darf nicht nach {to} wechseln",
+  "Scales in this set": "Skalen in diesem Set", "No scale is pinned in this set. Add a starting set below and change it to your method.": "In diesem Set ist keine Skala gepinnt. Unten einen Ausgangssatz hinzufügen und an die eigene Methode anpassen.",
+  "{n} levels": "{n} Stufen", "with matrix": "mit Matrix", "used by {n} risk(s)": "von {n} Risiko/Risiken benutzt", "Edit": "Bearbeiten", "Delete": "Löschen",
+  "Starting sets": "Ausgangssätze", "Three levels each, with a 3 x 3 matrix": "Je drei Stufen, mit 3 x 3-Matrix",
+  "In the style of BSI 200-3, with a 4 x 4 matrix": "Im Stil von BSI 200-3, mit 4 x 4-Matrix",
+  "Add as published": "Wie veröffentlicht hinzufügen", "Add as a copy under my namespace": "Als Kopie unter meinem Namensraum hinzufügen",
+  "The level names and cells of the starting sets were written from memory of the methods they follow and were not checked against the standards. Change them to your method.":
+    "Stufennamen und Zellen der Ausgangssätze wurden aus der Erinnerung an die Methoden geschrieben, denen sie folgen, und nicht gegen die Standards geprüft. Bitte an die eigene Methode anpassen.",
+  "added {n} scale(s)": "{n} Skala/Skalen hinzugefügt", "New scale": "Neue Skala",
+  "Scale": "Skala", "Id": "Id", "Description": "Beschreibung", "Levels, lowest first": "Stufen, niedrigste zuerst", "Code": "Code", "Label ({lang})": "Label ({lang})",
+  "up": "hoch", "down": "runter", "remove": "entfernen", "Add a level": "Stufe hinzufügen",
+  "This scale is the combined level of a likelihood and an impact (matrix)": "Diese Skala ist die Gesamtstufe aus Eintrittswahrscheinlichkeit und Auswirkung (Matrix)",
+  "Matrix: one level for every pair": "Matrix: eine Stufe für jedes Paar", "choose": "wählen",
+  "Choose the two scales the matrix combines.": "Die beiden Skalen wählen, die die Matrix kombiniert.",
+  "Save the scale": "Skala speichern", "Close": "Schließen", "Matrix": "Matrix",
+  "A change to a scale that is already pinned should get a new version: a pin names one exact version.": "Eine Änderung an einer bereits gepinnten Skala sollte eine neue Version bekommen: Ein Pin nennt genau eine Version.",
+  "{n} risk(s) would no longer agree with this scale. They are listed above and stay wrong until they are rated again. Save anyway?": "{n} Risiko/Risiken würden nicht mehr zu dieser Skala passen. Sie sind oben gelistet und bleiben falsch, bis sie neu bewertet sind. Trotzdem speichern?",
+  "Delete the scale {id}?": "Skala {id} löschen?", "scale saved: {id} {version}": "Skala gespeichert: {id} {version}",
+  "Require a risk basis for every selected requirement": "Für jede ausgewählte Anforderung eine Risikobegründung verlangen",
+  "Whether a requirement needs a risk that justifies it is your programme's policy. With the switch on, a selected requirement no risk justifies is a failure; with it off, it is a line of the report.":
+    "Ob eine Anforderung ein begründendes Risiko braucht, ist Sache Ihres Programms. Mit dem Schalter ist eine ausgewählte Anforderung ohne begründendes Risiko ein Fehler, ohne ihn eine Zeile des Berichts.",
+  "no Tailoring: every requirement is in play": "kein Tailoring: jede Anforderung gilt", "tier": "Stufe der Autorität", "selected": "ausgewählt",
+  "justified": "begründet", "pending": "ausstehend", "lapsed": "erloschen", "named by no risk": "von keinem Risiko genannt",
+  "open selection: a predicate select is not evaluated, the numbers are lower bounds": "offene Auswahl: ein Prädikat wird nicht ausgewertet, die Zahlen sind Untergrenzen",
+  "Justified: named by a risk that is published, assessed or treated, and has an option chosen. Pending: named only by a risk that is not that far. Lapsed: named only by a retired or withdrawn risk.":
+    "Begründet: genannt von einem Risiko, das veröffentlicht, bewertet oder behandelt ist und eine gewählte Option hat. Ausstehend: nur von einem Risiko genannt, das noch nicht so weit ist. Erloschen: nur von einem zurückgezogenen oder ausgemusterten Risiko genannt.",
+  "Not justified ({n})": "Nicht begründet ({n})", "first {n} shown": "die ersten {n} gezeigt", "Errors": "Fehler", "Notes": "Hinweise",
+  "FAIL: selected, justified by no risk": "FEHLER: ausgewählt, von keinem Risiko begründet",
+  "Catalogue": "Katalog", "Tailoring the imported risks belong to": "Tailoring, zu dem die importierten Risiken gehören",
+  "A catalogue entry is a ready-made scenario with the requirements that typically treat it. Importing copies it into a risk of your own: state identified, lifecycle draft, your owner. An imported risk justifies nothing until you assess it and choose an option.":
+    "Ein Katalogeintrag ist ein vorgefertigtes Szenario mit den Anforderungen, die es typischerweise behandeln. Der Import kopiert ihn in ein eigenes Risiko: Zustand identified, Lifecycle draft, Ihr Eigner. Ein importiertes Risiko begründet nichts, bis Sie es bewerten und eine Option wählen.",
+  "The suggestions of this catalogue name requirements of: {source}. Suggestions the selection does not contain are dropped.": "Die Vorschläge dieses Katalogs nennen Anforderungen aus: {source}. Vorschläge, die die Auswahl nicht enthält, entfallen.",
+  "Set a default risk owner in the settings, or enter one here.": "In den Einstellungen einen Standard-Risikoeigner setzen oder hier einen eintragen.",
+  "Entry": "Eintrag", "Category": "Kategorie", "Suggested": "Vorgeschlagen", "Status": "Status", "{k} of {n} in the selection": "{k} von {n} in der Auswahl",
+  "imported": "importiert", "not applicable": "nicht anwendbar", "gap": "Lücke", "Import": "Importieren", "why does it not apply?": "warum trifft es nicht zu?",
+  "Record as not applicable": "Als nicht anwendbar festhalten", "undo": "zurücknehmen", "Import every gap": "Alle Lücken importieren",
+  "entries": "Einträge", "gaps": "Lücken", "A reason is needed to record an entry as not applicable.": "Um einen Eintrag als nicht anwendbar festzuhalten, braucht es einen Grund.",
+  "imported {n} risk(s); {d} suggested treatment(s) dropped; {b} risk(s) without any treatment": "{n} Risiko/Risiken importiert; {d} vorgeschlagene Behandlung(en) entfallen; {b} Risiko/Risiken ohne Behandlung",
+  "import failed: {msg}": "Import fehlgeschlagen: {msg}",
+});
+
+const $ = id => document.getElementById(id);
+const V = jscView, esc = jscEsc;
+const NA_PATH = "risk-catalogs/not-applicable.json";
+const LIFECYCLES = ["draft", "active", "deprecated", "withdrawn"], STATES = ["identified", "assessed", "treated", "retired"];
+const TREATMENTS = ["modify", "retain", "avoid", "share"];
+const ui = V.draft("risk", () => ({ requireBasis: false, heatScale: "", heatWhich: "rating", catalog: "", catTailoring: "", owner: "" }));
+let G = jscSet.graph, SCALES = new Map(), E = null, editingExisting = false, editScale = null, cellFilter = null, listFilter = { state: "", q: "" }, naWhy = {};
+const risks = () => [...G.objects.values()].filter(r => r.type === "risk");
+const scaleTitle = sd => TT(sd.title) || V.last(sd.id);
+const levelLabel = (sd, code) => { const l = sd && sd.levels.find(x => x.level === code); return l ? (TT(l.label) || l.level) : code; };
+const opt = (value, text, current) => `<option value="${esc(value)}" ${value === current ? "selected" : ""}>${esc(text)}</option>`;
+const chip = (n, label, cls) => `<span class="chip"><b class="${cls || ""}">${esc(n)}</b>${esc(T(label))}</span>`;
+const lang = () => (E && E._lang) || jscI18n.contentLang();
+/* colour of level i of n: green at the bottom, amber in the middle, red at the top */
+function levelColor(i, n) {
+  const x = n > 1 ? i / (n - 1) : 0;
+  const mix = x <= 0.5 ? `var(--amber) ${Math.round(x * 200)}%, var(--green)` : `var(--red) ${Math.round((x - 0.5) * 200)}%, var(--amber)`;
+  return `color-mix(in oklab, color-mix(in oklab, ${mix}) 34%, transparent)`;
+}
+/* the scale rules for one risk, or for all of them */
+function scaleFindings(objs) { return jscScaleErrors(SCALES, objs); }
+async function problemsOfAll() {
+  const out = new Map(), add = (id, kind, msg) => out.set(id, [...(out.get(id) || []), { kind, msg }]);
+  const ids = risks().map(r => r.obj.id);
+  const mine = (list, kind) => list.forEach(m => { const id = ids.find(x => m.startsWith(x + ":")); if (id) add(id, kind, m); });
+  for (const r of risks()) { out.set(r.obj.id, []); jscShapeErrors("risk", r.obj).forEach(m => add(r.obj.id, "error", m)); }
+  mine(jscClosureErrors(G.objects), "error");
+  const sf = scaleFindings(G.objects), cov = await jscRiskCoverage(G.objects);
+  mine(sf.errors, "error"); mine(sf.notes, "note"); mine(cov.errors, "error");
+  return { byRisk: out, coverage: cov };
+}
+
+/* ====================== register ====================== */
+let ALL = { byRisk: new Map(), coverage: null };
+function heatHtml() {
+  const withMatrix = [...SCALES.values()].filter(sd => sd.matrix);
+  if (!withMatrix.length) return `<p class="hint">${esc(T("No level scale with a matrix is pinned in this set. Add one under Scales and matrix."))}</p>`;
+  const sd = SCALES.get(ui.data.heatScale) && SCALES.get(ui.data.heatScale).matrix ? SCALES.get(ui.data.heatScale) : withMatrix[0];
+  const ls = SCALES.get(sd.matrix["likelihood-scale"]), is = SCALES.get(sd.matrix["impact-scale"]), which = ui.data.heatWhich;
+  const count = new Map();
+  let outside = 0;
+  for (const r of risks()) {
+    const rt = r.obj[which];
+    if (!rt || rt["scale-ref"] !== sd.id || !rt.likelihood || !rt.impact) { outside++; continue; }
+    const k = rt.likelihood.level + "\n" + rt.impact.level;
+    count.set(k, (count.get(k) || 0) + 1);
+  }
+  const order = sd.levels.map(l => l.level);
+  const rows = [...ls.levels].reverse().map(l => `<tr><th class="row" scope="row">${esc(levelLabel(ls, l.level))}</th>${is.levels.map(i => {
+    const cell = jscMatrixCell(sd, l.level, i.level), n = count.get(l.level + "\n" + i.level) || 0;
+    const picked = cellFilter && cellFilter.l === l.level && cellFilter.i === i.level;
+    return `<td class="${picked ? "picked" : ""}" style="background:${levelColor(order.indexOf(cell), order.length)}">
+      <button type="button" data-cell-l="${esc(l.level)}" data-cell-i="${esc(i.level)}" aria-label="${esc(T("cell {l} / {i}", { l: l.level, i: i.level }))}: ${n}"><span class="n">${n || "·"}</span>${esc(levelLabel(sd, cell))}</button></td>`;
+  }).join("")}</tr>`).join("");
+  return `<div class="wbrow"><label for="heat-scale">${esc(T("on the scale"))}</label><select id="heat-scale">${withMatrix.map(x => opt(x.id, scaleTitle(x), sd.id)).join("")}</select>
+      <span class="seg"><button type="button" data-which="rating" class="${which === "rating" ? "on-inc" : ""}" aria-pressed="${which === "rating"}">${esc(T("current"))}</button><button type="button" data-which="residual-rating" class="${which !== "rating" ? "on-inc" : ""}" aria-pressed="${which !== "rating"}">${esc(T("residual"))}</button></span>
+      ${cellFilter ? `<button type="button" class="small" id="cell-clear">${esc(T("clear the cell filter"))}</button>` : ""}</div>
+    <table class="heat" role="grid"><tr><th></th>${is.levels.map(i => `<th scope="col">${esc(levelLabel(is, i.level))}</th>`).join("")}</tr>${rows}
+      <tr><th class="row">${esc(T("likelihood"))} ↑</th><th colspan="${is.levels.length}">${esc(T("impact"))} →</th></tr></table>
+    <p class="hint">${esc(T("Click a cell to list its risks. {n} risk(s) state no likelihood and impact on this scale and are not in the grid.", { n: outside }))}</p>`;
+}
+function renderRegister() {
+  const all = risks(), el = $("register");
+  $("nc-risks").textContent = all.length || "";
+  if (!all.length) { el.innerHTML = `<div class="wbrow"><button type="button" class="primary" id="new-risk">${esc(T("New risk"))}</button></div><div class="empty">${esc(T("This set holds no risk. Create one, or import a catalogue."))}</div>`; $("new-risk").addEventListener("click", newRisk); return; }
+  const byState = {}; all.forEach(r => { byState[r.obj.state] = (byState[r.obj.state] || 0) + 1; });
+  const bad = id => (ALL.byRisk.get(id) || []).filter(p => p.kind === "error").length;
+  const withProblem = all.filter(r => bad(r.obj.id)).length, q = listFilter.q.toLowerCase(), which = ui.data.heatWhich;
+  const shown = all.filter(r => (!listFilter.state || r.obj.state === listFilter.state) &&
+    (!cellFilter || ((r.obj[which] || {}).likelihood || {}).level === cellFilter.l && ((r.obj[which] || {}).impact || {}).level === cellFilter.i) &&
+    (!q || (r.obj.label || "").toLowerCase().includes(q) || TT(r.obj.title).toLowerCase().includes(q) || TT(r.obj.scenario).toLowerCase().includes(q)));
+  const lv = rt => (rt ? V.badge(levelLabel(SCALES.get(rt["scale-ref"]), rt.level), rt["scale-ref"]) : `<span class="hint">—</span>`);
+  el.innerHTML = `<div class="wbrow"><button type="button" class="primary" id="new-risk">${esc(T("New risk"))}</button>
+      ${chip(all.length, "risks")}${STATES.filter(s => byState[s]).map(s => `<span class="chip"><b>${byState[s]}</b>${esc(s)}</span>`).join("")}${chip(withProblem, "with a problem", withProblem ? "verdict-bad" : "")}</div>
+    <div class="nano sectionlabel">${esc(T("Heat map"))}</div>${heatHtml()}
+    <div class="filterrow" style="margin-top:12px"><button type="button" class="fpill ${listFilter.state ? "" : "on"}" data-state="">${esc(T("all"))}</button>
+      ${STATES.filter(s => byState[s]).map(s => `<button type="button" class="fpill ${listFilter.state === s ? "on" : ""}" data-state="${s}">${s} · ${byState[s]}</button>`).join("")}
+      <input type="search" id="risk-q" placeholder="${esc(T("Search label, title or scenario"))}" aria-label="${esc(T("Search label, title or scenario"))}" value="${esc(listFilter.q)}" style="max-width:300px"></div>
+    <table class="flat"><tr><th>${esc(T("Label"))}</th><th>${esc(T("Title"))}</th><th>${esc(T("State"))}</th><th>${esc(T("Level"))}</th><th>${esc(T("Residual"))}</th><th>${esc(T("Treatment"))}</th><th>${esc(T("Owner"))}</th><th>${esc(T("Problems"))}</th></tr>
+    ${shown.slice(0, 300).map(r => `<tr data-risk="${esc(r.obj.id)}" tabindex="0" style="cursor:pointer"><td class="mono">${esc(r.obj.label || V.last(r.obj.id))}</td><td>${esc(TT(r.obj.title))}</td>
+      <td>${V.badge(r.obj.state)}</td><td>${lv(r.obj.rating)}</td><td>${lv(r.obj["residual-rating"])}</td><td>${r.obj.treatment ? V.badge(r.obj.treatment) : ""}</td>
+      <td class="hint">${esc(V.last(r.obj["owner-ref"] || ""))}</td><td>${bad(r.obj.id) ? `<span class="verdict-bad">${bad(r.obj.id)}</span>` : ""}</td></tr>`).join("")}</table>`;
+  $("new-risk").addEventListener("click", newRisk);
+  el.querySelectorAll("[data-risk]").forEach(tr => { const go = () => openRisk(tr.dataset.risk); tr.addEventListener("click", go); tr.addEventListener("keydown", e => { if (e.key === "Enter") go(); }); });
+  el.querySelectorAll("[data-state]").forEach(b => b.addEventListener("click", () => { listFilter.state = b.dataset.state; renderRegister(); }));
+  let timer;
+  $("risk-q").addEventListener("input", e => { listFilter.q = e.target.value; clearTimeout(timer); timer = setTimeout(() => { renderRegister(); $("risk-q").focus(); }, 250); });
+  if ($("heat-scale")) $("heat-scale").addEventListener("change", e => { ui.data.heatScale = e.target.value; cellFilter = null; ui.save(); renderRegister(); });
+  el.querySelectorAll("[data-which]").forEach(b => b.addEventListener("click", () => { ui.data.heatWhich = b.dataset.which; cellFilter = null; ui.save(); renderRegister(); }));
+  el.querySelectorAll("[data-cell-l]").forEach(b => b.addEventListener("click", () => { cellFilter = { l: b.dataset.cellL, i: b.dataset.cellI }; renderRegister(); }));
+  if ($("cell-clear")) $("cell-clear").addEventListener("click", () => { cellFilter = null; renderRegister(); });
+}
+
+/* ====================== one risk ====================== */
+function newRisk() {
+  E = { id: "", version: "1", lifecycle: "draft", label: "", title: {}, scenario: {}, "owner-ref": jscCfg.get("org:owner"), state: "identified" };
+  editingExisting = false;
+  renderEdit(); jscPage.show("edit");
+}
+function openRisk(id) {
+  E = JSON.parse(JSON.stringify(G.objects.get(id).obj));
+  editingExisting = true;
+  E._residual = !!E["residual-rating"];
+  /* a stored level that is not the matrix cell is a departure the form must keep */
+  for (const key of ["rating", "residual-rating"]) {
+    const r = E[key];
+    if (!r || !r.likelihood || !r.impact) continue;
+    const cell = jscMatrixCell(SCALES.get(r["scale-ref"]), r.likelihood.level, r.impact.level);
+    if (cell !== undefined && r.level !== cell) r._depart = true;
+  }
+  renderEdit(); jscPage.show("edit");
+}
+/* The Risk the form stands for: the draft without what is empty, and with
+   the level a matrix gives where the form does not depart from it. */
+function built() {
+  const o = JSON.parse(JSON.stringify(E));
+  delete o._lang; delete o._residual;
+  if (!editingExisting) o.id = o.label.trim() ? jscSet.mintId("risk", o.label) : "";
+  const emptyText = t => !t || !Object.values(t).some(v => String(v).trim());
+  for (const k of ["title", "scenario"]) { for (const l of Object.keys(o[k] || {})) if (!String(o[k][l]).trim()) delete o[k][l]; if (emptyText(o[k]) && k === "title") delete o[k]; }
+  for (const key of ["rating", "residual-rating"]) {
+    const r = o[key];
+    if (!r || !r["scale-ref"] || (key === "residual-rating" && !E._residual)) { delete o[key]; continue; }
+    for (const part of ["likelihood", "impact"]) if (!r[part] || !r[part].level || !r[part]["scale-ref"]) delete r[part];
+    const cell = r.likelihood && r.impact ? jscMatrixCell(SCALES.get(r["scale-ref"]), r.likelihood.level, r.impact.level) : undefined;
+    if (cell !== undefined && !r._depart) r.level = cell;
+    if (!r._depart || cell === undefined || r.level === cell || emptyText(r["override-rationale"])) delete r["override-rationale"];
+    delete r._depart;
+    if (!r.level) delete o[key];
+  }
+  for (const k of ["threat-refs", "component-refs", "tailoring-refs", "treatments"]) if (!(o[k] || []).length) delete o[k];
+  for (const t of o.treatments || []) if (!(t["statement-ids"] || []).length) delete t["statement-ids"];
+  for (const k of ["treatment", "shared-with-ref", "label"]) if (!o[k]) delete o[k];
+  if (o.acceptance && !o.acceptance["approver-ref"] && !o.acceptance.date && emptyText(o.acceptance.rationale)) delete o.acceptance;
+  if (o["review-due"] && !o["review-due"].type) delete o["review-due"];
+  if (o["review-due"] && o["review-due"].type === "calendar-period") o["review-due"].num = Number(o["review-due"].num) || 0;
+  return o;
+}
+async function problemsOf(o) {
+  const out = [], push = (kind, msg) => out.push({ kind, msg });
+  if (!o.id) { push("error", T("A label is needed; the id is built from it.")); return out; }
+  if (!editingExisting && G.objects.has(o.id)) push("error", T("An object with the id {id} exists already; choose another label.", { id: o.id }));
+  const old = editingExisting && G.objects.get(o.id);
+  if (old && old.obj.state !== o.state && !jscCanMove("risk", old.obj.state, o.state)) push("error", T("state {from} may not move to {to}", { from: old.obj.state, to: o.state }));
+  const named = jscRiskRuleViolations(o);
+  named.forEach(([rule, what]) => push("error", `${rule}: ${what}. ${JSC_RISK_RULES[rule]}`));
+  // the schema says the rest; a missing required field that a rule already named is not said twice
+  jscShapeErrors("risk", o).filter(m => !(named.length && /is a required property/.test(m))).forEach(m => push("error", m));
+  const objs = new Map(G.objects); objs.set(o.id, { type: "risk", obj: o });
+  const mine = m => m.startsWith(o.id + ":");
+  jscClosureErrors(objs).filter(mine).forEach(m => push("error", m));
+  const sf = jscScaleErrors(SCALES, new Map([[o.id, { type: "risk", obj: o }]]));
+  sf.errors.forEach(m => push("error", m)); sf.notes.forEach(m => push("note", m));
+  const cov = await jscRiskCoverage(objs);
+  cov.errors.filter(mine).forEach(m => push("error", m)); cov.notes.filter(mine).forEach(m => push("note", m));
+  return out.map(p => ({ kind: p.kind, msg: p.msg.startsWith(o.id + ": ") ? p.msg.slice(o.id.length + 2) : p.msg }));
+}
+function ratingHtml(key) {
+  const r = E[key] || {}, sd = SCALES.get(r["scale-ref"]), mx = sd && sd.matrix, base = key === "rating" ? null : (E.rating || {});
+  const levelSel = (id, scale, current, any) => `<select id="${id}">${any ? opt("", T("(not stated)"), current || "") : ""}${(scale ? scale.levels : []).map(l => opt(l.level, TT(l.label) || l.level, current)).join("")}</select>`;
+  const scaleSel = (id, current) => `<select id="${id}">${opt("", T("(none)"), current || "")}${[...SCALES.values()].map(x => opt(x.id, scaleTitle(x), current)).join("")}</select>`;
+  const p = part => r[part] || {};
+  let html = "";
+  if (!base) html += `<label for="${key}-scale">${esc(T("Level scale"))}</label><div>${scaleSel(key + "-scale", r["scale-ref"])}</div>`;
+  if (!sd) return html;
+  const lScale = SCALES.get(mx ? mx["likelihood-scale"] : (base ? (base.likelihood || {})["scale-ref"] : p("likelihood")["scale-ref"]));
+  const iScale = SCALES.get(mx ? mx["impact-scale"] : (base ? (base.impact || {})["scale-ref"] : p("impact")["scale-ref"]));
+  if (!mx && !base) html += `<label for="${key}-lscale">${esc(T("Likelihood scale"))}</label><div>${scaleSel(key + "-lscale", p("likelihood")["scale-ref"])}</div>
+    <label for="${key}-iscale">${esc(T("Impact scale"))}</label><div>${scaleSel(key + "-iscale", p("impact")["scale-ref"])}</div>`;
+  if (lScale) html += `<label for="${key}-l">${esc(T("Likelihood"))}</label><div>${levelSel(key + "-l", lScale, p("likelihood").level, true)}</div>`;
+  if (iScale) html += `<label for="${key}-i">${esc(T("Impact"))}</label><div>${levelSel(key + "-i", iScale, p("impact").level, true)}</div>`;
+  const cell = mx ? jscMatrixCell(sd, p("likelihood").level, p("impact").level) : undefined;
+  if (cell !== undefined) {
+    html += `<label>${esc(T("Level"))}</label><div><span class="hint">${esc(T("the matrix gives"))}</span> ${V.badge(levelLabel(sd, cell))}
+      <label style="margin-left:12px"><input type="checkbox" id="${key}-depart" ${r._depart ? "checked" : ""}> ${esc(T("depart from the matrix"))}</label></div>`;
+    if (r._depart) html += `<label for="${key}-level">${esc(T("Level"))}</label><div>${levelSel(key + "-level", sd, r.level || cell)}</div>
+      <label for="${key}-why">${esc(T("Why this level and not the matrix cell? (needed)"))}</label><div><input type="text" id="${key}-why" value="${esc(jscText(r["override-rationale"], lang()))}"></div>`;
+  } else html += `<label for="${key}-level">${esc(T("Level"))}</label><div>${levelSel(key + "-level", sd, r.level, true)}</div>`;
+  return html;
+}
+async function renderEdit() {
+  const el = $("edit");
+  if (!E) { el.innerHTML = `<div class="empty">${esc(T("Choose a risk in the register, or create a new one."))}</div>`; return; }
+  const o = built(), probs = await problemsOf(o), errors = probs.filter(p => p.kind === "error").length;
+  const old = editingExisting && G.objects.get(E.id), L = lang();
+  const states = old ? [old.obj.state, ...JSC_NEXT.risk[old.obj.state]] : STATES;
+  const tailorings = [...G.objects.values()].filter(r => r.type === "tailoring");
+  const name = ref => (G.objects.has(ref) ? V.labelOf(G.objects.get(ref)) : V.last(ref));
+  const due = E["review-due"] || {};
+  const x = (attr, val) => `<span class="x" ${attr}="${esc(val)}" role="button" tabindex="0" aria-label="✕">✕</span>`;
+  el.innerHTML = `<div class="form">
+    <div class="nano wide">${esc(T("Identity"))}</div>
+    <label for="r-label">${esc(T("Label"))}</label><div><input type="text" id="r-label" value="${esc(E.label || "")}" ${editingExisting ? "disabled" : ""} style="max-width:260px"> <span class="mono hint">${esc(o.id)}</span></div>
+    <label for="r-version">${esc(T("Version"))}</label><div class="wbrow" style="margin:0"><input type="text" id="r-version" value="${esc(E.version)}" style="width:90px;min-width:90px">
+      <label for="r-lifecycle">${esc(T("Lifecycle"))}</label><select id="r-lifecycle">${LIFECYCLES.map(v => opt(v, v, E.lifecycle)).join("")}</select>
+      <label for="r-state">${esc(T("State"))}</label><select id="r-state">${states.map(v => opt(v, v, E.state)).join("")}</select>
+      <label for="r-lang">${esc(T("Language of the text"))}</label><input type="text" id="r-lang" value="${esc(L)}" style="width:60px;min-width:60px"></div>
+    <label for="r-title">${esc(T("Title"))}</label><div><input type="text" id="r-title" value="${esc((E.title || {})[L] || "")}"></div>
+    <label for="r-scenario">${esc(T("Scenario"))}</label><div><textarea id="r-scenario" placeholder="${esc(T("What could happen, to what, with which consequence."))}">${esc((E.scenario || {})[L] || "")}</textarea></div>
+    <label for="r-owner">${esc(T("Owner (party URI)"))}</label><div><input type="url" id="r-owner" value="${esc(E["owner-ref"] || "")}"></div>
+    <label for="r-threats">${esc(T("Threats (one URI per line)"))}</label><div><textarea id="r-threats" style="min-height:48px">${esc((E["threat-refs"] || []).join("\n"))}</textarea></div>
+    <label>${esc(T("Components at risk"))}</label><div>${V.pickerHtml("r-comp", T("type to add a component"))}<div>${(E["component-refs"] || []).map(c => `<span class="wbchip">⬡ ${esc(name(c))}${x("data-delcomp", c)}</span>`).join("")}</div></div>
+    ${tailorings.length ? `<label>${esc(T("Belongs to"))}</label><div>${tailorings.map(t => `<label style="margin-right:12px"><input type="checkbox" data-tref="${esc(t.obj.id)}" ${(E["tailoring-refs"] || []).includes(t.obj.id) ? "checked" : ""}> ${esc(V.labelOf(t))}</label>`).join("")}
+      ${(E["tailoring-refs"] || []).length ? "" : `<span class="hint">${esc(T("every Tailoring of the set"))}</span>`}</div>` : ""}
+    <div class="nano wide sectionlabel">${esc(T("Rating"))}</div>${ratingHtml("rating")}
+    ${E.rating && E.rating["scale-ref"] ? `<div class="nano wide sectionlabel">${esc(T("Residual rating"))}</div>
+      <label>${esc(T("Residual rating"))}</label><div><label><input type="checkbox" id="r-residual" ${E._residual ? "checked" : ""}> ${esc(T("State a residual rating"))}</label> <span class="hint">${esc(T("on the same scales as the rating"))}</span></div>
+      ${E._residual ? ratingHtml("residual-rating") : ""}` : ""}
+    <div class="nano wide sectionlabel">${esc(T("Treatment"))}</div>
+    <label for="r-treatment">${esc(T("Option"))}</label><div><select id="r-treatment">${opt("", T("(not decided)"), E.treatment || "")}${TREATMENTS.map(v => opt(v, v, E.treatment)).join("")}</select></div>
+    <label>${esc(T("Treated by"))}</label><div>${V.pickerHtml("r-treat", T("type to add a requirement"))}
+      ${(E.treatments || []).map((t, ti) => { const req = G.objects.get(t["requirement-ref"]);
+        return `<div class="stmt" style="margin:6px 0">◇ ${V.refLink(t["requirement-ref"], name(t["requirement-ref"]))} ${x("data-deltreat", ti)}
+          <div>${req && req.type === "requirement" ? req.obj.statements.map(s => `<label style="margin-right:10px"><input type="checkbox" data-treat="${ti}" data-stmt="${esc(s.id)}" ${(t["statement-ids"] || []).includes(s.id) ? "checked" : ""}> ${esc(s.id)}</label>`).join("") : ""}
+          ${(t["statement-ids"] || []).length ? "" : `<span class="hint">${esc(T("whole requirement"))}</span>`}</div></div>`; }).join("")}</div>
+    ${E.treatment === "share" ? `<label for="r-shared">${esc(T("Shared with (party URI)"))}</label><div><input type="url" id="r-shared" value="${esc(E["shared-with-ref"] || "")}"></div>` : ""}
+    <div class="nano wide sectionlabel">${esc(T("Acceptance"))}</div>
+    <label for="r-approver">${esc(T("Approver (party URI)"))}</label><div><input type="url" id="r-approver" value="${esc((E.acceptance || {})["approver-ref"] || "")}"></div>
+    <label for="r-accdate">${esc(T("Date"))}</label><div><input type="date" id="r-accdate" value="${esc((E.acceptance || {}).date || "")}"></div>
+    <label for="r-accwhy">${esc(T("Rationale"))}</label><div><input type="text" id="r-accwhy" value="${esc(jscText((E.acceptance || {}).rationale, L))}"></div>
+    <label for="r-due">${esc(T("Review due"))}</label><div class="wbrow" style="margin:0"><select id="r-due">${opt("", T("no date"), due.type || "")}${opt("date", T("on a date"), due.type)}${opt("calendar-period", T("every"), due.type)}</select>
+      ${due.type === "date" ? `<input type="date" id="r-duedate" value="${esc(due.value || "")}" aria-label="${esc(T("Date"))}">` : ""}
+      ${due.type === "calendar-period" ? `<input type="number" id="r-duenum" min="1" value="${esc(due.num || 12)}" style="width:80px" aria-label="num"><select id="r-dueunit" aria-label="unit">${JSC_CALENDAR_UNITS.map(u => opt(u, u, due.unit || "months")).join("")}</select>
+        <input type="url" id="r-duecal" placeholder="${esc(T("Calendar (URI)"))}" aria-label="${esc(T("Calendar (URI)"))}" value="${esc(due["calendar-ref"] || "")}" style="min-width:240px;flex:1">` : ""}</div>
+    <div class="nano wide sectionlabel">${esc(T("What the rules say"))}</div>
+    <div class="wide problems" role="status">${probs.map(p => `<div class="${p.kind === "error" ? "verdict-bad" : "hint"}">${p.kind === "error" ? "✗" : "·"} ${esc(T(p.kind))}: ${esc(p.msg)}</div>`).join("") || `<div class="verdict-ok">✓ ${esc(T("nothing to object"))}</div>`}</div>
+    <div class="wide wbrow"><button type="button" class="primary" id="r-save" ${errors ? "disabled" : ""}>${esc(T("Save the risk"))}</button>
+      <button type="button" id="r-discard">${esc(T("Discard"))}</button>${editingExisting ? `<button type="button" class="danger" id="r-delete">${esc(T("Delete the risk"))}</button>` : ""}</div></div>`;
+  V.wireRefs(el);
+  const again = () => renderEdit();
+  const on = (selector, event, fn) => el.querySelectorAll(selector).forEach(n => n.addEventListener(event, () => { fn(n); again(); }));
+  const text = (k, v) => { E[k] = { ...(E[k] || {}), [L]: v }; };
+  on("#r-label", "change", n => { E.label = n.value.trim(); });
+  on("#r-version", "change", n => { E.version = n.value.trim() || "1"; });
+  on("#r-lifecycle", "change", n => { E.lifecycle = n.value; });
+  on("#r-state", "change", n => { E.state = n.value; });
+  on("#r-lang", "change", n => { E._lang = n.value.trim() || jscI18n.contentLang(); });
+  on("#r-title", "change", n => text("title", n.value));
+  on("#r-scenario", "change", n => text("scenario", n.value));
+  on("#r-owner", "change", n => { E["owner-ref"] = n.value.trim(); });
+  on("#r-threats", "change", n => { E["threat-refs"] = n.value.split(/\s+/).filter(Boolean); });
+  V.wirePicker(el, "r-comp", ["component"], id => { E["component-refs"] = [...new Set([...(E["component-refs"] || []), id])]; again(); });
+  on("[data-delcomp]", "click", n => { E["component-refs"] = E["component-refs"].filter(c => c !== n.dataset.delcomp); });
+  on("[data-tref]", "change", n => { const s = new Set(E["tailoring-refs"] || []); n.checked ? s.add(n.dataset.tref) : s.delete(n.dataset.tref); E["tailoring-refs"] = [...s]; });
+  for (const key of ["rating", "residual-rating"]) {
+    const r = () => (E[key] = E[key] || {});
+    const part = (p, scaleId) => { r()[p] = r()[p] || {}; if (scaleId !== undefined) r()[p]["scale-ref"] = scaleId; return r()[p]; };
+    /* the scales of the inputs follow the matrix, or the rating for a residual */
+    const inputScale = p => { const sd = SCALES.get(r()["scale-ref"]), mx = sd && sd.matrix; return mx ? mx[p + "-scale"] : key === "rating" ? (r()[p] || {})["scale-ref"] : ((E.rating || {})[p] || {})["scale-ref"]; };
+    on(`#${key}-scale`, "change", n => { E[key] = n.value ? { "scale-ref": n.value } : undefined; if (key === "rating") { delete E["residual-rating"]; E._residual = false; } });
+    on(`#${key}-lscale`, "change", n => { if (n.value) part("likelihood", n.value).level = ""; else delete r().likelihood; });
+    on(`#${key}-iscale`, "change", n => { if (n.value) part("impact", n.value).level = ""; else delete r().impact; });
+    on(`#${key}-l`, "change", n => { part("likelihood", inputScale("likelihood")).level = n.value; });
+    on(`#${key}-i`, "change", n => { part("impact", inputScale("impact")).level = n.value; });
+    on(`#${key}-level`, "change", n => { r().level = n.value; });
+    on(`#${key}-depart`, "change", n => { r()._depart = n.checked; });
+    on(`#${key}-why`, "change", n => { r()["override-rationale"] = n.value.trim() ? { ...(r()["override-rationale"] || {}), [L]: n.value.trim() } : undefined; });
+  }
+  on("#r-residual", "change", n => { E._residual = n.checked; if (n.checked) E["residual-rating"] = { ...(E["residual-rating"] || {}), "scale-ref": E.rating["scale-ref"] }; });
+  on("#r-treatment", "change", n => { E.treatment = n.value; });
+  V.wirePicker(el, "r-treat", ["requirement"], id => { E.treatments = E.treatments || []; if (!E.treatments.some(t => t["requirement-ref"] === id)) E.treatments.push({ "requirement-ref": id }); again(); });
+  on("[data-deltreat]", "click", n => { E.treatments.splice(+n.dataset.deltreat, 1); });
+  on("[data-treat]", "change", n => { const t = E.treatments[+n.dataset.treat], s = new Set(t["statement-ids"] || []); n.checked ? s.add(n.dataset.stmt) : s.delete(n.dataset.stmt); t["statement-ids"] = [...s]; });
+  on("#r-shared", "change", n => { E["shared-with-ref"] = n.value.trim(); });
+  const acc = () => (E.acceptance = E.acceptance || {});
+  on("#r-approver", "change", n => { acc()["approver-ref"] = n.value.trim(); });
+  on("#r-accdate", "change", n => { acc().date = n.value; });
+  on("#r-accwhy", "change", n => { acc().rationale = n.value.trim() ? { ...(acc().rationale || {}), [L]: n.value.trim() } : undefined; });
+  on("#r-due", "change", n => { E["review-due"] = n.value === "date" ? { type: "date", value: "" } : n.value ? { type: "calendar-period", num: 12, unit: "months", "calendar-ref": "" } : undefined; });
+  on("#r-duedate", "change", n => { E["review-due"].value = n.value; });
+  on("#r-duenum", "change", n => { E["review-due"].num = n.value; });
+  on("#r-dueunit", "change", n => { E["review-due"].unit = n.value; });
+  on("#r-duecal", "change", n => { E["review-due"]["calendar-ref"] = n.value.trim(); });
+  $("r-discard").addEventListener("click", () => { E = null; renderEdit(); jscPage.show("register"); });
+  $("r-save").addEventListener("click", async () => {
+    const obj = built();
+    if ((await problemsOf(obj)).some(p => p.kind === "error")) { renderEdit(); return; }
+    await jscSet.saveObjects([obj]);
+    E = null;
+    await jscPage.refresh(); jscPage.show("register");
+  });
+  if ($("r-delete")) $("r-delete").addEventListener("click", async () => {
+    if (!confirm(T("Delete the risk {label}? A finding or a deviation that names it keeps the reference.", { label: E.label || E.id }))) return;
+    await jscSet.removeObjects([E.id]);
+    E = null;
+    await jscPage.refresh(); jscPage.show("register");
+  });
+}
+
+/* ====================== scales and matrix ====================== */
+const allScales = () => [...G.scales.values()].map(x => x.def);
+const usedBy = id => risks().filter(r => jscRiskLevels(r.obj).some(([, , ref]) => ref === id)).length;
+async function addPreset(set, copy) {
+  const ns = jscCfg.get("org:ns").replace(/\/+$/, "") + "/scale/";
+  const rename = new Map(set.scales.map(sd => [sd.id, copy ? ns + V.last(sd.id) : sd.id]));
+  for (const sd of set.scales) {
+    const mine = JSON.parse(JSON.stringify(sd));
+    mine.id = rename.get(sd.id);
+    if (mine.matrix) { mine.matrix["likelihood-scale"] = rename.get(mine.matrix["likelihood-scale"]); mine.matrix["impact-scale"] = rename.get(mine.matrix["impact-scale"]); }
+    if (!G.scales.has(mine.id)) await jscSet.saveScale(mine);   // a scale that is there already is the organisation's and is left alone
+  }
+  jscLog.ok(T("added {n} scale(s)", { n: set.scales.length }));
+  await jscPage.refresh();
+}
+function scaleEditorHtml() {
+  const S = editScale, L = jscI18n.contentLang(), others = allScales().filter(sd => sd.id !== S.id);
+  const ls = SCALES.get((S.matrix || {})["likelihood-scale"]), is = SCALES.get((S.matrix || {})["impact-scale"]);
+  const grid = S.matrix && ls && is ? `<div class="nano sectionlabel">${esc(T("Matrix: one level for every pair"))}</div>
+    <table class="heat"><tr><th></th>${is.levels.map(i => `<th scope="col">${esc(levelLabel(is, i.level))}</th>`).join("")}</tr>
+    ${[...ls.levels].reverse().map(l => `<tr><th class="row" scope="row">${esc(levelLabel(ls, l.level))}</th>${is.levels.map(i => {
+      const cur = ((S.matrix.cells || {})[l.level] || {})[i.level] || "", idx = S.levels.findIndex(x => x.level === cur);
+      return `<td style="background:${idx >= 0 ? levelColor(idx, S.levels.length) : "transparent"}"><select data-ml="${esc(l.level)}" data-mi="${esc(i.level)}" aria-label="${esc(T("cell {l} / {i}", { l: l.level, i: i.level }))}">
+        ${opt("", T("choose"), cur)}${S.levels.filter(x => x.level).map(x => opt(x.level, TT(x.label) || x.level, cur)).join("")}</select></td>`; }).join("")}</tr>`).join("")}
+    <tr><th class="row">${esc(T("likelihood"))} ↑</th><th colspan="${is.levels.length}">${esc(T("impact"))} →</th></tr></table>`
+    : S.matrix ? `<p class="hint">${esc(T("Choose the two scales the matrix combines."))}</p>` : "";
+  const check = jscCheckScales([...others, cleanScale(S)], G.objects);
+  const mine = m => m.startsWith(S.id + ":") || m.includes(S.id);
+  return `<div class="wb"><div class="nano" style="margin-bottom:8px">${esc(T("Scale"))}</div><div class="form">
+    <label for="s-id">${esc(T("Id"))}</label><div><input type="url" id="s-id" value="${esc(S.id)}" ${S._existing ? "disabled" : ""}></div>
+    <label for="s-version">${esc(T("Version"))}</label><div><input type="text" id="s-version" value="${esc(S.version)}" style="max-width:120px">
+      ${S._existing ? `<span class="hint">${esc(T("A change to a scale that is already pinned should get a new version: a pin names one exact version."))}</span>` : ""}</div>
+    <label for="s-title">${esc(T("Title"))}</label><div><input type="text" id="s-title" value="${esc((S.title || {})[L] || "")}"></div>
+    <label>${esc(T("Levels, lowest first"))}</label><div><table class="levels"><tr><th class="nano">${esc(T("Code"))}</th><th class="nano">${esc(T("Label ({lang})", { lang: L }))}</th><th></th></tr>
+      ${S.levels.map((l, i) => `<tr><td><input type="text" data-lcode="${i}" value="${esc(l.level)}" aria-label="${esc(T("Code"))}" style="width:170px"></td>
+        <td><input type="text" data-llabel="${i}" value="${esc((l.label || {})[L] || "")}" aria-label="${esc(T("Label ({lang})", { lang: L }))}" style="width:190px"></td>
+        <td><button type="button" class="small" data-lup="${i}" ${i ? "" : "disabled"}>${esc(T("down"))}</button> <button type="button" class="small" data-ldown="${i}" ${i < S.levels.length - 1 ? "" : "disabled"}>${esc(T("up"))}</button>
+          <button type="button" class="small danger" data-ldel="${i}">${esc(T("remove"))}</button></td></tr>`).join("")}</table>
+      <button type="button" class="small" id="s-addlevel">${esc(T("Add a level"))}</button></div>
+    <label>${esc(T("Matrix"))}</label><div><label><input type="checkbox" id="s-hasmatrix" ${S.matrix ? "checked" : ""}> ${esc(T("This scale is the combined level of a likelihood and an impact (matrix)"))}</label>
+      ${S.matrix ? `<div class="wbrow"><label for="s-ml">${esc(T("Likelihood scale"))}</label><select id="s-ml">${opt("", T("choose"), S.matrix["likelihood-scale"] || "")}${others.map(x => opt(x.id, scaleTitle(x), S.matrix["likelihood-scale"])).join("")}</select>
+        <label for="s-mi">${esc(T("Impact scale"))}</label><select id="s-mi">${opt("", T("choose"), S.matrix["impact-scale"] || "")}${others.map(x => opt(x.id, scaleTitle(x), S.matrix["impact-scale"])).join("")}</select></div>` : ""}${grid}</div>
+    <div class="nano wide sectionlabel">${esc(T("What the rules say"))}</div>
+    <div class="wide problems" role="status">${[...check.errors.filter(mine).map(m => `<div class="verdict-bad">✗ ${esc(m)}</div>`), ...check.notes.filter(mine).map(m => `<div class="hint">· ${esc(m)}</div>`)].join("") || `<div class="verdict-ok">✓ ${esc(T("nothing to object"))}</div>`}</div>
+    <div class="wide wbrow"><button type="button" class="primary" id="s-save">${esc(T("Save the scale"))}</button><button type="button" id="s-close">${esc(T("Close"))}</button></div></div></div>`;
+}
+/* The definition the editor stands for: no private fields, no empty labels,
+   and a matrix whose cells are exactly the pairs of the two scales' levels. */
+function cleanScale(S) {
+  const sd = { id: S.id.trim(), version: S.version.trim() };
+  for (const k of ["title", "description"]) if (S[k] && Object.values(S[k]).some(v => String(v).trim())) sd[k] = S[k];
+  sd.levels = S.levels.map(l => { const out = { level: l.level.trim() }; for (const k of ["label", "description"]) if (l[k] && Object.values(l[k]).some(v => String(v).trim())) out[k] = l[k]; return out; });
+  if (S.matrix) {
+    const ls = SCALES.get(S.matrix["likelihood-scale"]), is = SCALES.get(S.matrix["impact-scale"]), cells = {};
+    if (ls && is) for (const l of ls.levels) { cells[l.level] = {}; for (const i of is.levels) { const v = ((S.matrix.cells || {})[l.level] || {})[i.level]; if (v) cells[l.level][i.level] = v; } }
+    sd.matrix = { "likelihood-scale": S.matrix["likelihood-scale"] || "", "impact-scale": S.matrix["impact-scale"] || "", cells: ls && is ? cells : (S.matrix.cells || {}) };
+  }
+  return sd;
+}
+/* A matrix names the levels of the two scales it combines. When one of them
+   changes, the matrices that use it follow: a renamed level keeps its cells
+   under the new code, a removed level loses them. A level that was added has
+   no cells yet; the matrix is then incomplete and says so (SCALE-1) until it
+   is filled in. -> the other scales whose matrix changed, as new definitions */
+function followInMatrices(sd, others, renames) {
+  const codes = new Set(sd.levels.map(l => l.level)), out = [];
+  const rekey = map => Object.fromEntries(Object.entries(map).map(([k, v]) => [renames[k] || k, v]).filter(([k]) => codes.has(k)));
+  for (const other of others) {
+    if (!other.matrix) continue;
+    const m = JSON.parse(JSON.stringify(other));
+    if (m.matrix["likelihood-scale"] === sd.id) m.matrix.cells = rekey(m.matrix.cells);
+    if (m.matrix["impact-scale"] === sd.id) for (const k of Object.keys(m.matrix.cells)) m.matrix.cells[k] = rekey(m.matrix.cells[k]);
+    if (JSON.stringify(m) !== JSON.stringify(other)) out.push(m);
+  }
+  return out;
+}
+function renderScales() {
+  const el = $("scales"), all = [...G.scales.values()];
+  $("nc-scales").textContent = all.length || "";
+  const system = jscCheckScales(all.map(x => x.def), G.objects, new Map(all.filter(x => x.pin).map(x => [x.def.id, x.pin])));
+  const PRESET_TITLE = { "three-levels": N("Three levels each, with a 3 x 3 matrix"), "bsi-200-3-style": N("In the style of BSI 200-3, with a 4 x 4 matrix") };
+  el.innerHTML = `<div class="nano sectionlabel" style="margin-top:0">${esc(T("Scales in this set"))}</div>
+    ${all.map(x => `<div class="stmt"><b>${esc(scaleTitle(x.def))}</b> ${V.badge("v " + x.def.version)}${V.badge(T("{n} levels", { n: x.def.levels.length }))}${x.def.matrix ? V.badge(T("with matrix")) : ""}
+      <span class="hint">${esc(T("used by {n} risk(s)", { n: usedBy(x.def.id) }))}</span>
+      <button type="button" class="small" data-edit="${esc(x.def.id)}" style="float:right;margin-left:6px">${esc(T("Edit"))}</button>
+      <button type="button" class="small danger" data-del="${esc(x.def.id)}" style="float:right" ${usedBy(x.def.id) ? "disabled" : ""}>${esc(T("Delete"))}</button>
+      <div class="mono hint">${esc(x.def.id)}</div><div>${x.def.levels.map((l, i) => `<span class="badge" style="background:${levelColor(i, x.def.levels.length)}">${esc(TT(l.label) || l.level)}</span>`).join(" < ")}</div></div>`).join("")
+      || `<div class="empty">${esc(T("No scale is pinned in this set. Add a starting set below and change it to your method."))}</div>`}
+    ${system.errors.map(m => `<div class="verdict-bad">✗ ${esc(m)}</div>`).join("")}
+    <div class="wbrow"><button type="button" id="s-new">${esc(T("New scale"))}</button></div>
+    ${editScale ? scaleEditorHtml() : ""}
+    <div class="nano sectionlabel">${esc(T("Starting sets"))}</div>
+    <p class="hint" style="margin-bottom:8px">${esc(T("The level names and cells of the starting sets were written from memory of the methods they follow and were not checked against the standards. Change them to your method."))}</p>
+    ${JSC_PRESETS.scaleSets.map((set, i) => `<div class="stmt"><b>${esc(T(PRESET_TITLE[set.key] || set.key))}</b> <span class="hint mono">${esc(set.source)}</span>
+      <div class="hint">${set.scales.map(sd => esc(scaleTitle(sd) + ": " + sd.levels.map(l => l.level).join(" < "))).join("<br>")}</div>
+      <div class="wbrow"><button type="button" data-preset="${i}" data-copy="1" class="primary">${esc(T("Add as a copy under my namespace"))}</button><button type="button" data-preset="${i}">${esc(T("Add as published"))}</button></div></div>`).join("")}`;
+  const on = (selector, event, fn) => el.querySelectorAll(selector).forEach(n => n.addEventListener(event, () => fn(n)));
+  on("[data-preset]", "click", n => addPreset(JSC_PRESETS.scaleSets[+n.dataset.preset], !!n.dataset.copy));
+  on("[data-edit]", "click", n => { editScale = { ...JSON.parse(JSON.stringify(G.scales.get(n.dataset.edit).def)), _existing: true }; renderScales(); });
+  on("[data-del]", "click", async n => { if (!confirm(T("Delete the scale {id}?", { id: n.dataset.del }))) return; await jscSet.removeScale(n.dataset.del); editScale = null; await jscPage.refresh(); });
+  on("#s-new", "click", () => { editScale = { id: jscCfg.get("org:ns").replace(/\/+$/, "") + "/scale/", version: "1.0.0", title: {}, levels: [{ level: "" }, { level: "" }] }; renderScales(); });
+  if (!editScale) return;
+  const S = editScale, L = jscI18n.contentLang(), again = () => renderScales();
+  on("#s-id", "change", n => { S.id = n.value.trim(); again(); });
+  on("#s-version", "change", n => { S.version = n.value.trim(); again(); });
+  on("#s-title", "change", n => { S.title = { ...(S.title || {}), [L]: n.value }; again(); });
+  /* renaming a level renames it in the matrix cells of this scale too */
+  on("[data-lcode]", "change", n => {
+    const old = S.levels[+n.dataset.lcode].level, now = n.value.trim();
+    S.levels[+n.dataset.lcode].level = now;
+    if (S.matrix && old) for (const row of Object.values(S.matrix.cells || {})) for (const k of Object.keys(row)) if (row[k] === old) row[k] = now;
+    if (old && now && old !== now) {   // remembered from the code the scale was opened with, for the matrices that use this scale
+      S._renames = S._renames || {};
+      S._renames[Object.keys(S._renames).find(k => S._renames[k] === old) || old] = now;
+    }
+    again();
+  });
+  on("[data-llabel]", "change", n => { const l = S.levels[+n.dataset.llabel]; l.label = { ...(l.label || {}), [L]: n.value }; again(); });
+  const swap = (i, j) => { [S.levels[i], S.levels[j]] = [S.levels[j], S.levels[i]]; again(); };
+  on("[data-lup]", "click", n => swap(+n.dataset.lup, +n.dataset.lup - 1));
+  on("[data-ldown]", "click", n => swap(+n.dataset.ldown, +n.dataset.ldown + 1));
+  on("[data-ldel]", "click", n => { S.levels.splice(+n.dataset.ldel, 1); again(); });
+  on("#s-addlevel", "click", () => { S.levels.push({ level: "" }); again(); });
+  on("#s-hasmatrix", "change", n => { if (n.checked) S.matrix = { "likelihood-scale": "", "impact-scale": "", cells: {} }; else delete S.matrix; again(); });
+  on("#s-ml", "change", n => { S.matrix["likelihood-scale"] = n.value; again(); });
+  on("#s-mi", "change", n => { S.matrix["impact-scale"] = n.value; again(); });
+  on("[data-ml]", "change", n => { const c = (S.matrix.cells = S.matrix.cells || {}); (c[n.dataset.ml] = c[n.dataset.ml] || {})[n.dataset.mi] = n.value; again(); });
+  on("#s-close", "click", () => { editScale = null; again(); });
+  on("#s-save", "click", async () => {
+    const sd = cleanScale(S), others = allScales().filter(x => x.id !== sd.id);
+    const own = [...jscScaleDefinitionErrors(sd), ...jscMatrixErrors(new Map([...others, sd].map(x => [x.id, x]))).errors.filter(m => m.startsWith(sd.id + ":"))];
+    if (own.length) { again(); return; }   // the editor shows them; a definition that breaks SCALE-1 is not saved
+    const affected = jscScaleErrors(new Map([...others, sd].map(x => [x.id, x])), G.objects).errors.length;
+    if (affected && !confirm(T("{n} risk(s) would no longer agree with this scale. They are listed above and stay wrong until they are rated again. Save anyway?", { n: affected }))) return;
+    await jscSet.saveScale(sd);
+    for (const m of followInMatrices(sd, others, S._renames || {})) await jscSet.saveScale(m);
+    jscLog.ok(T("scale saved: {id} {version}", { id: sd.id, version: sd.version }));
+    editScale = null;
+    await jscPage.refresh();
+  });
+}
+
+/* ====================== coverage ====================== */
+function renderCoverage() {
+  const el = $("coverage"), cov = ALL.coverage;
+  if (!cov) { el.textContent = ""; return; }
+  const strict = ui.data.requireBasis, name = ref => (G.objects.has(ref) ? V.labelOf(G.objects.get(ref)) : ref);
+  const cards = Object.entries(cov.report.tailorings).map(([tid, r]) => {
+    const pending = Object.keys(r.pending).length, lapsed = Object.keys(r.lapsed).length, none = r.uncovered.length - pending - lapsed, cap = 120;
+    const why = q => (r.pending[q] ? T("pending") : r.lapsed[q] ? T("lapsed") : T("named by no risk"));
+    return `<div class="stmt"><b>${tid === JSC_NO_TAILORING ? esc(T("no Tailoring: every requirement is in play")) : V.refLink(tid, name(tid))}</b> ${tid === JSC_NO_TAILORING ? "" : V.badge(T("tier") + " " + r.tier)}
+      <div style="margin-top:8px">${chip(r.selected + (r["open-selection"] ? "+" : ""), "selected")}${chip(Object.keys(r.covered).length, "justified", "verdict-ok")}${chip(pending, "pending", pending ? "verdict-warn" : "")}
+        ${chip(lapsed, "lapsed", lapsed ? "verdict-warn" : "")}${chip(none, "named by no risk", none && strict ? "verdict-bad" : "")}</div>
+      ${r["open-selection"] ? `<p class="hint verdict-warn">${esc(T("open selection: a predicate select is not evaluated, the numbers are lower bounds"))}</p>` : ""}
+      ${r.uncovered.length ? `<details ${strict ? "open" : ""}><summary>${esc(T("Not justified ({n})", { n: r.uncovered.length }))}${r.uncovered.length > cap ? " · " + esc(T("first {n} shown", { n: cap })) : ""}</summary>
+        ${r.uncovered.slice(0, cap).map(q => `<div class="${strict ? "verdict-bad" : "hint"}">${strict ? esc(T("FAIL: selected, justified by no risk")) + " · " : ""}${V.refLink(q, name(q))} <span class="hint">${esc(why(q))}</span></div>`).join("")}</details>` : ""}</div>`;
+  }).join("");
+  el.innerHTML = `<div class="wbrow"><label><input type="checkbox" id="cov-strict" ${strict ? "checked" : ""}> ${esc(T("Require a risk basis for every selected requirement"))}</label></div>
+    <p class="hint" style="max-width:86ch;margin-bottom:10px">${esc(T("Whether a requirement needs a risk that justifies it is your programme's policy. With the switch on, a selected requirement no risk justifies is a failure; with it off, it is a line of the report."))}
+      ${esc(T("Justified: named by a risk that is published, assessed or treated, and has an option chosen. Pending: named only by a risk that is not that far. Lapsed: named only by a retired or withdrawn risk."))}</p>
+    ${cards}
+    ${cov.errors.length ? V.section(T("Errors"), cov.errors.map(m => `<div class="verdict-bad">✗ ${esc(m)}</div>`).join("")) : ""}
+    ${V.section(T("Notes"), [...cov.notes, ...jscRiskLinkNotes(G.objects)].slice(0, 60).map(m => `<div class="hint">· ${esc(m)}</div>`).join(""))}`;
+  V.wireRefs(el);
+  $("cov-strict").addEventListener("change", e => { ui.data.requireBasis = e.target.checked; ui.save(); renderCoverage(); });
+}
+
+/* ====================== catalogues ====================== */
+const notApplicable = () => { const f = G.aux.find(a => a.path === NA_PATH); try { return f ? JSON.parse(f.text) : {}; } catch (e) { return {}; } };
+function renderCatalogue() {
+  const el = $("catalogue"), d = ui.data;
+  const cat = JSC_PRESETS.catalogs.find(c => c.catalog.id === d.catalog) || JSC_PRESETS.catalogs[0];
+  const tailorings = [...G.objects.values()].filter(r => r.type === "tailoring" && r.obj.lifecycle !== "withdrawn");
+  const tid = tailorings.some(t => t.obj.id === d.catTailoring) ? d.catTailoring : (tailorings[0] ? tailorings[0].obj.id : "");
+  const owner = d.owner || jscCfg.get("org:owner"), na = notApplicable();
+  const sel = jscCatalogSelection(G.objects, tid || null), rows = jscCatalogCompleteness(cat.entries, G.objects, na);
+  const count = s => rows.filter(r => r.status === s).length;
+  const STATUS = { instantiated: [N("imported"), "verdict-ok"], "not-applicable": [N("not applicable"), "hint"], gap: [N("gap"), "verdict-warn"] };
+  el.innerHTML = `<p class="hint" style="max-width:86ch;margin-bottom:10px">${esc(T("A catalogue entry is a ready-made scenario with the requirements that typically treat it. Importing copies it into a risk of your own: state identified, lifecycle draft, your owner. An imported risk justifies nothing until you assess it and choose an option."))}</p>
+    <div class="wbrow"><label for="c-cat">${esc(T("Catalogue"))}</label><select id="c-cat">${JSC_PRESETS.catalogs.map(c => opt(c.catalog.id, `${TT(c.catalog.title)} (${c.catalog.version})`, cat.catalog.id)).join("")}</select>
+      ${tailorings.length ? `<label for="c-tail">${esc(T("Tailoring the imported risks belong to"))}</label><select id="c-tail">${tailorings.map(t => opt(t.obj.id, V.labelOf(t), tid)).join("")}</select>` : ""}
+      <label for="c-owner">${esc(T("Owner (party URI)"))}</label><input type="url" id="c-owner" value="${esc(owner)}" style="min-width:280px"></div>
+    <p class="hint">${esc(T("The suggestions of this catalogue name requirements of: {source}. Suggestions the selection does not contain are dropped.", { source: (cat.catalog["suggestion-source"] || {}).title || "?" }))}
+      ${sel.error ? `<span class="verdict-bad">${esc(sel.error)}</span>` : esc(sel.how + " (" + sel.selected.size + ")")}</p>
+    <div class="wbrow">${chip(rows.length, "entries")}${chip(count("instantiated"), "imported", "verdict-ok")}${chip(count("not-applicable"), "not applicable")}${chip(count("gap"), "gaps", count("gap") ? "verdict-warn" : "")}
+      <button type="button" class="primary" id="c-all" ${count("gap") && !sel.error ? "" : "disabled"}>${esc(T("Import every gap"))}</button><span class="verdict-bad" id="c-err" role="alert"></span></div>
+    <table class="flat"><tr><th>${esc(T("Entry"))}</th><th>${esc(T("Category"))}</th><th>${esc(T("Suggested"))}</th><th>${esc(T("Status"))}</th><th></th></tr>
+    ${rows.map(r => { const sug = r.entry["suggested-treatments"] || [], inSel = sug.filter(s => sel.selected.has(s["requirement-ref"])).length;
+      return `<tr><td><b class="mono">${esc(r.label)}</b> ${esc(TT(r.entry.title))}<div class="hint">${esc(TT(r.entry.scenario))}</div></td>
+        <td>${V.badge(r.entry.category)}<div class="hint">${esc((r.entry.impacts || []).join(", "))}</div></td>
+        <td class="hint">${esc(T("{k} of {n} in the selection", { k: inSel, n: sug.length }))}</td>
+        <td><span class="${STATUS[r.status][1]}">${esc(T(STATUS[r.status][0]))}</span>${r.risks.map(id => `<div>${V.refLink(id, V.last(id))}</div>`).join("")}${r.rationale ? `<div class="hint">${esc(r.rationale)}</div>` : ""}</td>
+        <td>${r.status === "gap" ? `<button type="button" class="small" data-import="${esc(r.entry.id)}" ${sel.error ? "disabled" : ""}>${esc(T("Import"))}</button>
+            <div class="wbrow" style="margin:4px 0 0"><input type="text" data-why="${esc(r.entry.id)}" placeholder="${esc(T("why does it not apply?"))}" aria-label="${esc(T("why does it not apply?"))}" value="${esc(naWhy[r.entry.id] || "")}" style="min-width:200px">
+            <button type="button" class="small" data-na="${esc(r.entry.id)}">${esc(T("Record as not applicable"))}</button></div>`
+          : r.status === "not-applicable" ? `<button type="button" class="small" data-undo="${esc(r.label)}" data-undoid="${esc(r.entry.id)}">${esc(T("undo"))}</button>` : ""}</td></tr>`; }).join("")}</table>`;
+  V.wireRefs(el);
+  const on = (selector, event, fn) => el.querySelectorAll(selector).forEach(n => n.addEventListener(event, () => fn(n)));
+  on("#c-cat", "change", n => { d.catalog = n.value; ui.save(); renderCatalogue(); });
+  on("#c-tail", "change", n => { d.catTailoring = n.value; ui.save(); renderCatalogue(); });
+  on("#c-owner", "change", n => { d.owner = n.value.trim(); ui.save(); });
+  on("[data-why]", "change", n => { naWhy[n.dataset.why] = n.value; });
+  const doImport = async only => {
+    const ownerNow = $("c-owner").value.trim();
+    if (!/^https?:\/\/./.test(ownerNow)) { $("c-err").textContent = T("Set a default risk owner in the settings, or enter one here."); return; }
+    const res = jscCatalogImport(cat.catalog, cat.entries, G.objects, { org: jscCfg.get("org:ns"), owner: ownerNow, tailoring: tid || null, notApplicable: na, only });
+    if (res.error) { jscLog.err(T("import failed: {msg}", { msg: res.error })); return; }
+    if (res.risks.length) await jscSet.saveObjects(res.risks);
+    jscLog.info(T("imported {n} risk(s); {d} suggested treatment(s) dropped; {b} risk(s) without any treatment", { n: res.risks.length,
+      d: Object.values(res.report["suggestions-out-of-scope"]).reduce((s, x) => s + x.length, 0), b: res.report["without-treatment"].length }));
+    await jscPage.refresh();
+  };
+  on("[data-import]", "click", n => doImport(new Set([n.dataset.import])));
+  on("#c-all", "click", () => doImport(new Set(rows.filter(r => r.status === "gap").map(r => r.entry.id))));
+  const saveNa = async next => { await jscSet.saveAux(NA_PATH, Object.keys(next).length ? jscSerialize(next) : ""); await jscPage.refresh(); };
+  on("[data-na]", "click", n => {
+    const why = (naWhy[n.dataset.na] || "").trim();
+    if (!why) { $("c-err").textContent = T("A reason is needed to record an entry as not applicable."); return; }
+    delete naWhy[n.dataset.na];
+    saveNa({ ...na, [n.dataset.na]: why });
+  });
+  on("[data-undo]", "click", n => { const next = { ...na }; delete next[n.dataset.undo]; delete next[n.dataset.undoid]; saveNa(next); });
+}
+
+jscPage.init({ tool: "risk", title: T("Risk"), onGraph: async g => {
+  G = g;
+  SCALES = jscMatrixErrors(new Map([...g.scales].map(([id, x]) => [id, x.def]))).usable;
+  ALL = await problemsOfAll();
+  if (E && editingExisting && !g.objects.has(E.id)) E = null;
+  renderRegister(); await renderEdit(); renderScales(); renderCoverage(); renderCatalogue();
+} });
+</script>
+</body>
+</html>

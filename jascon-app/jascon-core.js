@@ -36,7 +36,7 @@
 
 /* ==JSC-PURE-START== */
 
-const JSC_BUILD = "0.2.0";
+const JSC_BUILD = "0.3.0";
 const JSC_TOOL = "JASCON-App " + JSC_BUILD;
 /* The kernel this app writes, and the kernels it reads (KERNEL-2: a tool
    stops at a pin it does not implement and names both). */
@@ -700,6 +700,13 @@ const jscSet = {
   async removeScale(id) {
     const old = this.graph.scales.get(id);
     if (old) { await jscStore.remove(this.name, [old.path]); await this.load(); }
+  },
+  /* A file beside the manifest that is neither an object nor pinned (a
+     record the app keeps with the bundle). Empty text removes it. */
+  async saveAux(path, text) {
+    if (text) await jscStore.putMany(this.name, [{ path, text, kind: "aux", type: null, id: null, origin: "authored" }]);
+    else await jscStore.remove(this.name, [path]);
+    await this.load();
   },
   /* -> {name, bytes, verbatim, problems} : the set as a bundle ZIP */
   async exportZip() {

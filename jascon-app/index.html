@@ -133,6 +133,8 @@ const APPS = [
     desc: N("The crosswalk claims between requirements, and a workbench that writes one") },
   { id: "implement", file: "implement.html", glyph: "⬡", label: N("Implement"), types: ["component", "implementation"],
     desc: N("Components and implementation edges; build a system and attach requirements to its assets") },
+  { id: "risk", file: "risk.html", glyph: "△", label: N("Risk"), types: ["risk"],
+    desc: N("The risk register with its heat map, scales and matrix, coverage of the selected requirements, risk catalogues") },
   { id: "assess", file: "assess.html", glyph: "◉", label: N("Assess"), types: ["assessment", "finding", "attestation"],
     desc: N("Assessments, findings and attestations; run a check and write its result") },
 ];
@@ -145,7 +147,9 @@ if (typeof jscStore === "undefined") {
 
 jscI18n.add("de", {
   "Set": "Set", "Settings": "Einstellungen", "Home": "Übersicht",
-  "Browse": "Durchsehen", "Tailor": "Tailoring", "Map": "Mapping", "Implement": "Umsetzen", "Assess": "Prüfen",
+  "Browse": "Durchsehen", "Tailor": "Tailoring", "Map": "Mapping", "Implement": "Umsetzen", "Assess": "Prüfen", "Risk": "Risiko",
+  "The risk register with its heat map, scales and matrix, coverage of the selected requirements, risk catalogues":
+    "Das Risikoregister mit Heatmap, Skalen und Matrix, Abdeckung der ausgewählten Anforderungen, Risikokataloge",
   "The crosswalk claims between requirements, and a workbench that writes one": "Die Crosswalk-Aussagen zwischen Anforderungen und eine Werkbank, die eine schreibt",
   "Components and implementation edges; build a system and attach requirements to its assets": "Komponenten und Implementations-Kanten; ein System aufbauen und Anforderungen an seine Assets hängen",
   "Assessments, findings and attestations; run a check and write its result": "Assessments, Feststellungen und Attestationen; eine Prüfung durchführen und ihr Ergebnis schreiben",
