@@ -1603,6 +1603,9 @@
     },
     "impact": {
      "$ref": "#/$defs/riskLevel"
+    },
+    "override-rationale": {
+     "$ref": "#/$defs/text"
     }
    }
   },
@@ -1941,6 +1944,35 @@
        },
        "description": {
         "$ref": "#/$defs/text"
+       }
+      }
+     }
+    },
+    "matrix": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "likelihood-scale",
+      "impact-scale",
+      "cells"
+     ],
+     "properties": {
+      "likelihood-scale": {
+       "$ref": "#/$defs/uri"
+      },
+      "impact-scale": {
+       "$ref": "#/$defs/uri"
+      },
+      "cells": {
+       "type": "object",
+       "minProperties": 1,
+       "additionalProperties": {
+        "type": "object",
+        "minProperties": 1,
+        "additionalProperties": {
+         "type": "string",
+         "minLength": 1
+        }
        }
       }
      }

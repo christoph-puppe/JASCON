@@ -6,8 +6,8 @@
   "de": "Risikostufe, drei Stufen"
  },
  "description": {
-  "en": "A starting scale for the combined level. How likelihood and impact combine into it is your method and is not part of this file. Lowest first.",
-  "de": "Eine Ausgangsskala für die Gesamtstufe. Wie Eintrittswahrscheinlichkeit und Auswirkung zu ihr zusammengeführt werden, ist Ihre Methode und nicht Teil dieser Datei. Niedrigste zuerst."
+  "en": "A starting scale for the combined level, with a starting matrix over likelihood-3 and impact-3. Change the levels, the cells or both; the matrix must have one cell for every pair. Lowest first.",
+  "de": "Eine Ausgangsskala für die Gesamtstufe, mit einer Ausgangsmatrix über likelihood-3 und impact-3. Stufen, Zellen oder beides ändern; die Matrix braucht für jedes Paar genau eine Zelle. Niedrigste zuerst."
  },
  "levels": [
   {
@@ -43,5 +43,26 @@
     "en": "Treatment has priority; management decides."
    }
   }
- ]
+ ],
+ "matrix": {
+  "likelihood-scale": "https://github.com/christoph-puppe/JASCON/risk-catalogs/scale/likelihood-3",
+  "impact-scale": "https://github.com/christoph-puppe/JASCON/risk-catalogs/scale/impact-3",
+  "cells": {
+   "selten": {
+    "gering": "gering",
+    "mittel": "gering",
+    "hoch": "mittel"
+   },
+   "mittel": {
+    "gering": "gering",
+    "mittel": "mittel",
+    "hoch": "hoch"
+   },
+   "häufig": {
+    "gering": "mittel",
+    "mittel": "hoch",
+    "hoch": "hoch"
+   }
+  }
+ }
 }

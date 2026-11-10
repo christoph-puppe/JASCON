@@ -274,14 +274,21 @@ Skip the type half and the join below runs on a mis-aimed id and
 returns an empty answer without an error. Finally RISK-13's second
 half: `rating` and `residual-rating` carry the same `scale-ref`, and so
 do their `likelihood` and their `impact` where both sides have one. You
-never compute a level from the two; the matrix is not yours. What you
+never invent a way to combine the two; the matrix is the
+organisation's, and you only look it up (SCALE-4, below). What you
 do check, where the manifest pins a scale definition under `scales`: load
 it like a facet pin (file, digest, shape, id and version as pinned, no
 level twice — SCALE-1), then hold every level a Risk states on that
 scale to the listed levels (SCALE-2), and note a residual that sits
 above its counterpart in the list order (SCALE-3). An unpinned
-`scale-ref` is opaque; check nothing. `scale-vectors.json` has nine
-cases.
+`scale-ref` is opaque; check nothing. A level scale may carry a
+`matrix`: check once per bundle that its two scales are pinned and that
+every pair of their levels has exactly one cell holding one of the
+scale's own levels, and drop a matrix that fails. Then, for a rating
+that states both inputs on those two scales, look the cell up and
+compare (SCALE-4): unequal fails, unless the rating carries an
+`override-rationale`, which you report as a note. `scale-vectors.json`
+has eighteen cases.
 
 **Fourth, the join.** If the bundle carries no Tailoring at all,
 nothing was scoped out: take every Requirement in force as one implicit

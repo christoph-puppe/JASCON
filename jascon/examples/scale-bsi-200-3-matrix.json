@@ -38,5 +38,35 @@
     "en": "very high"
    }
   }
- ]
+ ],
+ "matrix": {
+  "likelihood-scale": "https://cso.example/scale/bsi-200-3-eintrittshaeufigkeit",
+  "impact-scale": "https://cso.example/scale/bsi-200-3-schadenshoehe",
+  "cells": {
+   "selten": {
+    "vernachlässigbar": "gering",
+    "begrenzt": "gering",
+    "beträchtlich": "mittel",
+    "existenzbedrohend": "mittel"
+   },
+   "mittel": {
+    "vernachlässigbar": "gering",
+    "begrenzt": "gering",
+    "beträchtlich": "mittel",
+    "existenzbedrohend": "hoch"
+   },
+   "häufig": {
+    "vernachlässigbar": "gering",
+    "begrenzt": "mittel",
+    "beträchtlich": "hoch",
+    "existenzbedrohend": "sehr hoch"
+   },
+   "sehr häufig": {
+    "vernachlässigbar": "gering",
+    "begrenzt": "hoch",
+    "beträchtlich": "sehr hoch",
+    "existenzbedrohend": "sehr hoch"
+   }
+  }
+ }
 }

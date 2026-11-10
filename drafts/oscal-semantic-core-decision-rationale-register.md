@@ -1965,3 +1965,35 @@ executed), `scale-vectors.json` (9 — the fifteenth family, corpus 249),
 three scales in the example bundle, three starting scales in
 `risk-catalogs/scales/` pinned by the catalogue demo.
 
+## Amendments — the matrix (2026-11-10)
+
+**Trigger.** The author: "Where does the matrix table itself live? The
+kernel deliberately leaves it out, PR #5 assigns it to a facet, and no
+such facet is registered. I planned a workspace file outside the manifest
+for the first version, which means it is neither digested nor attested."
+**Decision (D3.7, D23).** `matrix` is an optional member of the pinned
+definition of the level scale. SCALE-4: a rating that states both inputs
+states the level of their cell; a mismatch fails (author: "fail on
+mismatch"); `override-rationale` on the rating turns it into a note.
+**Correction on the record.** "The matrix is the facet's business" (D23
+as landed, Chapter 10, Appendix F) named a home that did not exist and
+could not: a facet attaches to an object. The sentences are replaced.
+**Customer.** The auditor who reads "hoch" beside "selten" and
+"begrenzt" and wants to know whether that is the organisation's method
+or a slip.
+**Simplicity.** No new pin list, no new reference field: the rating's
+`scale-ref` already names the file.
+**Rejected.** *A workspace file outside the manifest* — undigested,
+unattested, and free to change under an accepted risk. *A registered
+facet* — nothing to attach it to. *A note instead of a failure* — a
+register that contradicts its own table is wrong, not untidy. *A failure
+without escape* — an organisation that departs from the table for one
+risk would have to falsify an input.
+**Trade-off, accepted.** The validator now performs a lookup over
+kernel fields, where D23 used to say it computes nothing. It is the
+organisation's table, pinned by the organisation; the kernel defines no
+matrix. Methods that are more than a table stay facet material.
+**Shipped with it.** Schema, both validators (PowerShell by reading, not
+executed), 9 vectors (scale 18, corpus 258), a 4×4 matrix in the example
+bundle and a 3×3 starting matrix in `risk-catalogs/scales/`.
+
