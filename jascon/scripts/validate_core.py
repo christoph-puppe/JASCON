@@ -71,9 +71,23 @@ def closure_errors(objs):
         if t == "requirementSet":
             for m in o.get("members", []): need(oid, m["ref"], "member ref")
         elif t == "tailoring":
+            # a Tailoring edge is typed, like a Risk edge (RISK-12): a set-ref
+            # that resolves to anything but a RequirementSet selects nothing,
+            # silently - and an exclude that names neither a Requirement nor a
+            # Set removes nothing, silently
             for s in o.get("selects", []):
-                if "set-ref" in s: need(oid, s["set-ref"], "selects set-ref")
-            for e in o.get("excludes", []): need(oid, e["ref"], "excludes ref")
+                if "set-ref" in s:
+                    need(oid, s["set-ref"], "selects set-ref")
+                    tgt = objs.get(s["set-ref"])
+                    if tgt and tgt[0] != "requirementSet":
+                        errs.append(f"{oid}: selects set-ref resolves to a {tgt[0]}, not a RequirementSet: {s['set-ref']} "
+                                    f"(D13: a selection names a Set - chaining runs on the resolved package, never by reference)")
+            for e in o.get("excludes", []):
+                need(oid, e["ref"], "excludes ref")
+                tgt = objs.get(e["ref"])
+                if tgt and tgt[0] not in ("requirement", "requirementSet"):
+                    errs.append(f"{oid}: excludes ref resolves to a {tgt[0]}, neither a Requirement nor a RequirementSet: {e['ref']} "
+                                f"(D13: an exclusion scopes out requirements - one, or a Set's members)")
             for op in o.get("operations", []):
                 need(oid, op["requirement-ref"], "operation requirement-ref")
                 tgt = objs.get(op["requirement-ref"])
@@ -127,6 +141,19 @@ def closure_errors(objs):
                 if tgt and tgt[0] != "component":
                     errs.append(f"{oid}: component-refs entry resolves to a {tgt[0]}, not a Component: {cref} "
                                 f"(RISK-12: a Risk edge is typed - the asset at risk is a Component)")
+            # the Statement(s) of Applicability this risk's treatment belongs
+            # to: closure-required and typed, like the other join edges
+            for tref in o.get("tailoring-refs", []) or []:
+                need(oid, tref, "tailoring-refs (RISK-7)")
+                tgt = objs.get(tref)
+                if tgt and tgt[0] != "tailoring":
+                    errs.append(f"{oid}: tailoring-refs entry resolves to a {tgt[0]}, not a Tailoring: {tref} "
+                                f"(RISK-12: a Risk edge is typed - the scope of a treatment is a Tailoring)")
+            # RISK-13: levels compare within ONE scale and never across (D23)
+            ra, rr = o.get("rating"), o.get("residual-rating")
+            if ra and rr and ra.get("scale-ref") != rr.get("scale-ref"):
+                errs.append(f"{oid}: residual-rating is on {rr.get('scale-ref')}, rating on {ra.get('scale-ref')} "
+                            f"(RISK-13: {RISK_RULES['RISK-13']})")
             # owner-ref, threat-refs, shared-with-ref, acceptance.approver-ref,
             # rating.scale-ref are landmark (parties, threat catalogs, scales)
         elif t == "mapping":
@@ -330,7 +357,7 @@ OPTIONAL_CONTAINERS = {"aliases", "canonical-alias", "replaces", "relations", "f
                        "annotations", "parameters", "deviations", "excludes",
                        "source-scope", "target-scope", "evidence-refs", "statement-refs",
                        "capabilities", "authorizations", "actions", "choices",
-                       "threat-refs", "component-refs", "treatments", "risk-refs"}
+                       "threat-refs", "component-refs", "treatments", "risk-refs", "tailoring-refs"}
 REQUIRED_CONTAINERS = {"statements", "members", "selects", "operations", "subject-refs",
                        "satisfied-by", "subject-semantic-digests", "objects", "facet-schemas"}
 
@@ -871,6 +898,7 @@ RISK_RULES = {
     "RISK-4": "a modification with no controls is nothing (ISO/IEC 27001 6.1.3 b)",
     "RISK-5": "sharing names who carries it (ISO/IEC 27005 8.6; BSI 200-3 Transfer)",
     "RISK-6": "retention IS acceptance - no silent retention (ISO/IEC 27001 6.1.3 f)",
+    "RISK-13": "a residual level is what remains of a level - it presupposes a rating, on the same scale (D23: levels never compare across scales)",
 }
 def risk_rule_violations(o):
     """-> [(rule id, what is wrong)] for an object carrying the Risk
@@ -889,6 +917,7 @@ def risk_rule_violations(o):
     if tr == "modify" and "treatments" not in o: out.append(("RISK-4", "modify names no controls"))
     if tr == "share" and "shared-with-ref" not in o: out.append(("RISK-5", "share without shared-with-ref"))
     if tr == "retain" and "acceptance" not in o: out.append(("RISK-6", "retain without acceptance"))
+    if "residual-rating" in o and "rating" not in o: out.append(("RISK-13", "residual-rating without rating"))
     return out
 
 # ---------------- B.1.9 risk-coverage (CP-RISK-1) ----------------
@@ -899,16 +928,22 @@ def risk_is_live(r):
     ever grows: a control justified once would stay justified for ever."""
     return r.get("state") != "retired" and r.get("lifecycle") != "withdrawn"
 
-def _selected_requirements(tobj, objs, notes):
-    """Resolve a Tailoring's selection -> (requirement ids, open?).
-    set-refs are expanded through nested Sets to any depth (membership is a
-    DAG - D21; the seen-set makes a malformed cycle terminate, and
-    closure_errors reports it). A predicate select is resolved by the
-    tailoring engine, not here, so its presence makes the selection OPEN:
-    the returned ids are a lower bound and nothing may be concluded from a
-    requirement's absence."""
-    sel, seen = set(), set()
-    stack = [s["set-ref"] for s in tobj.get("selects", []) if "set-ref" in s]
+def risk_justifies(r):
+    """A Risk justifies a requirement once a treatment DECISION rests on an
+    ASSESSED risk: live, published (not `draft`), `state` assessed or
+    treated (so it has a level - RISK-2), and a `treatment` option chosen.
+    ISO/IEC 27001 6.1.3 a-b: controls are determined to implement the
+    treatment option chosen for an analysed risk. Without this a three-field
+    stub (scenario, owner, treatments) would satisfy --require-risk-basis
+    while RISK-2/3/6 stay strict on fields coverage never reads."""
+    return (risk_is_live(r) and r.get("lifecycle") != "draft"
+            and r.get("state") in ("assessed", "treated") and "treatment" in r)
+
+def _expand_refs(refs, objs):
+    """ids -> Requirement ids, through nested Sets to any depth (D21: a DAG;
+    the seen-set makes a malformed cycle terminate, closure_errors reports
+    it). A ref that is neither is closure_errors' failure, not ours."""
+    out, seen, stack = set(), set(), list(refs)
     while stack:
         sid = stack.pop()
         if sid in seen: continue
@@ -918,46 +953,77 @@ def _selected_requirements(tobj, objs, notes):
         if tgt[0] == "requirementSet":
             stack.extend(m["ref"] for m in tgt[1].get("members", []))
         elif tgt[0] == "requirement":
-            sel.add(sid)
+            out.add(sid)
+    return out
+
+def _selected_requirements(tobj, objs, notes):
+    """Resolve a Tailoring's selection -> (requirement ids, open?).
+    set-refs name Sets (typed in closure_errors) and are expanded to any
+    depth; an exclude names a Requirement or a Set, and a Set excludes its
+    members. A `withdrawn` Requirement is not in force: it is dropped from
+    the selection and said so. A predicate select is resolved by the
+    tailoring engine, not here, so its presence makes the selection OPEN:
+    the returned ids are a lower bound and nothing may be concluded from a
+    requirement's absence."""
+    sel = _expand_refs([s["set-ref"] for s in tobj.get("selects", [])
+                        if "set-ref" in s and (objs.get(s["set-ref"]) or ("",))[0] == "requirementSet"], objs)
     open_sel = any("set-ref" not in s for s in tobj.get("selects", []))
     if open_sel:
         notes.append(f"{tobj['id']}: predicate select not expanded by risk-coverage (engine-resolved) - "
                      f"the selection is a lower bound")
-    for e in tobj.get("excludes", []) or []:
-        sel.discard(e["ref"])
+    sel -= _expand_refs([e["ref"] for e in tobj.get("excludes", []) or []], objs)
+    gone = sorted(q for q in sel if objs[q][1].get("lifecycle") == "withdrawn")
+    if gone:
+        notes.append(f"{tobj['id']}: {len(gone)} selected requirement(s) are withdrawn and not counted "
+                     f"(first: {gone[0]})")
+        sel -= set(gone)
     return sel, open_sel
 
 def risk_coverage(objs, sdig_fn=None, envelopes=None, trusted=None):
-    """B.1.9: for each Tailoring, which selected requirements are named by a
-    Risk's treatments (justified), which are not (uncovered), which excludes
-    lack a rationale, and which treatments point at requirements NO Tailoring
-    selects (treatment-out-of-scope: the risk relies on a control the SoA
-    dropped). Returns (report, errors, notes). Uncovered is a REPORT line:
-    whether a control needs a risk basis is the program's policy (ISO 27001
-    6.1.3 d: yes; BSI 200-2 Basis-Anforderungen: justified by the baseline)."""
+    """B.1.9: for each Tailoring in force, which selected requirements are
+    justified by a Risk (covered), which are not (uncovered) and why not
+    (`pending`: named only by Risks without an assessed treatment decision;
+    `lapsed`: named only by retired / withdrawn Risks), which excludes lack
+    a rationale, and which treatments point at requirements the Tailoring(s)
+    they belong to do not select (treatment-out-of-scope, RISK-11).
+    A Risk's `tailoring-refs` scope it: it justifies, and is held to
+    RISK-11, only there; without them it applies to every Tailoring of the
+    bundle. Returns (report, errors, notes). Uncovered is a REPORT line:
+    whether a control needs a risk basis is the program's policy."""
     notes, errs = [], []
     risks = {oid: o for oid, (t, o) in objs.items() if t == "risk"}
-    treats = collections.defaultdict(set)          # requirement id -> {LIVE risk ids}
-    lapsed = collections.defaultdict(set)          # requirement id -> {retired / withdrawn risk ids}
-    for rid, r in risks.items():
-        for tr in r.get("treatments", []) or []:
-            (treats if risk_is_live(r) else lapsed)[tr["requirement-ref"]].add(rid)
+    tailorings = {oid: o for oid, (t, o) in objs.items() if t == "tailoring"}
+    in_force = sorted(tid for tid, o in tailorings.items() if o.get("lifecycle") != "withdrawn")
+    for tid in sorted(set(tailorings) - set(in_force)):
+        notes.append(f"{tid}: withdrawn - selects nothing and is not reported (a withdrawn Statement of "
+                     f"Applicability is history)")
+    def applies(r, tid):
+        scope = r.get("tailoring-refs")
+        return not scope or tid in scope
     report = {"tailorings": {}, "risks": len(risks), "treatment-out-of-scope": []}
-    all_selected, any_open, n_tailorings = set(), False, 0
-    for tid, (t, tobj) in sorted(objs.items()):
-        if t != "tailoring": continue
-        n_tailorings += 1
+    selections = {}
+    for tid in in_force:
+        tobj = tailorings[tid]
         tier = derive_tier(tobj, objs, sdig_fn or sdig, envelopes=envelopes, trusted=trusted)
         sel, open_sel = _selected_requirements(tobj, objs, notes)
-        any_open = any_open or open_sel
-        all_selected |= sel
+        selections[tid] = (sel, open_sel)
+        treats, pending, lapsed = (collections.defaultdict(set) for _ in range(3))
+        for rid, r in risks.items():
+            if not applies(r, tid): continue
+            bucket = treats if risk_justifies(r) else pending if risk_is_live(r) else lapsed
+            for tr in r.get("treatments", []) or []:
+                bucket[tr["requirement-ref"]].add(rid)
         covered = {q: sorted(treats[q]) for q in sorted(sel) if treats.get(q)}
         uncovered = sorted(q for q in sel if not treats.get(q))
-        lapsed_only = {q: sorted(lapsed[q]) for q in uncovered if lapsed.get(q)}
+        pending_only = {q: sorted(pending[q]) for q in uncovered if pending.get(q)}
+        lapsed_only = {q: sorted(lapsed[q]) for q in uncovered if lapsed.get(q) and not pending.get(q)}
         excl_no_rationale = [e["ref"] for e in tobj.get("excludes", []) or [] if not e.get("rationale")]
         report["tailorings"][tid] = {"tier": tier, "selected": len(sel), "open-selection": open_sel,
-                                     "covered": covered, "uncovered": uncovered, "lapsed": lapsed_only,
-                                     "excludes-without-rationale": excl_no_rationale}
+                                     "covered": covered, "uncovered": uncovered, "pending": pending_only,
+                                     "lapsed": lapsed_only, "excludes-without-rationale": excl_no_rationale}
+        for q, rids in pending_only.items():
+            notes.append(f"{tid}: selected {q} is named only by Risk(s) without an assessed treatment decision "
+                         f"{rids} - counted as uncovered (a risk justifies once it is assessed and its option chosen)")
         for q, rids in lapsed_only.items():
             notes.append(f"{tid}: selected {q} is named only by retired/withdrawn Risk(s) {rids} - "
                          f"counted as uncovered (C.3c: a retired risk justifies nothing)")
@@ -965,28 +1031,52 @@ def risk_coverage(objs, sdig_fn=None, envelopes=None, trusted=None):
             # ISO 27001 6.1.3 d: exclusion is justified or it is not a Statement of Applicability
             notes.append(f"{tid}: {len(excl_no_rationale)} exclude(s) without rationale at consumer tier "
                          f"(RISK-10, SHOULD: an SoA exclusion carries its justification)")
+    # RISK-14 (SHOULD): with more than one Tailoring in force an unscoped
+    # Risk justifies in each - a risk about system A would justify the
+    # control in system B's Statement of Applicability
+    if len(in_force) > 1:
+        for rid in sorted(risks):
+            r = risks[rid]
+            if risk_is_live(r) and r.get("treatments") and not r.get("tailoring-refs"):
+                notes.append(f"{rid}: no tailoring-refs in a bundle with {len(in_force)} Tailorings - its treatment "
+                             f"counts in each (RISK-14, SHOULD: a Risk names the Tailoring its treatment belongs to)")
     # RISK-11 binds LIVE risks only (a retired risk whose control later left
-    # the SoA is history, not a contradiction) and only where a Tailoring
-    # exists to disagree with. An unresolved or mistyped target is RISK-7/12's
-    # failure, not a second one here. With an open selection the question is
-    # undecidable from this side, so it is said and not guessed.
-    if n_tailorings:
-        for q, rids in sorted(treats.items()):
-            tgt = objs.get(q)
-            if q in all_selected or not tgt or tgt[0] != "requirement": continue
-            if any_open:
-                notes.append(f"{sorted(rids)[0]}: treatment names {q}, which no set-ref select reaches - "
-                             f"RISK-11 undecided: a predicate select in this bundle may select it")
-                continue
-            report["treatment-out-of-scope"].append({"requirement": q, "risks": sorted(rids)})
-            errs.append(f"{sorted(rids)[0]}: treatment names {q}, which no Tailoring in this bundle selects "
-                        f"(RISK-11: a risk cannot lean on a control the SoA dropped)")
+    # the SoA is history, not a contradiction), and is asked of the
+    # Tailorings the risk belongs to: its tailoring-refs, else all in force.
+    # An unresolved or mistyped target is RISK-7/12's failure, not a second
+    # one here. Where one of THOSE selections is open the question is
+    # undecidable from this side, so it is said and not guessed - an open
+    # Tailoring the risk does not belong to decides nothing.
+    out_of_scope, undecided = collections.defaultdict(set), collections.defaultdict(set)
+    if tailorings:
+        for rid, r in risks.items():
+            if not risk_is_live(r): continue
+            mine = [tid for tid in in_force if applies(r, tid)]
+            for tr in r.get("treatments", []) or []:
+                q = tr["requirement-ref"]
+                tgt = objs.get(q)
+                if not tgt or tgt[0] != "requirement": continue
+                if any(q in selections[tid][0] for tid in mine): continue
+                if tgt[1].get("lifecycle") != "withdrawn" and any(selections[tid][1] for tid in mine):
+                    undecided[q].add(rid)
+                else:
+                    out_of_scope[q].add(rid)
+    for q, rids in sorted(undecided.items()):
+        notes.append(f"{sorted(rids)[0]}: treatment names {q}, which no set-ref select reaches - "
+                     f"RISK-11 undecided: a predicate select of its Tailoring(s) may select it")
+    for q, rids in sorted(out_of_scope.items()):
+        report["treatment-out-of-scope"].append({"requirement": q, "risks": sorted(rids)})
+        why = ("which is withdrawn" if objs[q][1].get("lifecycle") == "withdrawn"
+               else "which no Tailoring in this bundle selects" if not any(risks[x].get("tailoring-refs") for x in rids)
+               else "which the Tailoring(s) it belongs to do not select")
+        errs.append(f"{sorted(rids)[0]}: treatment names {q}, {why} "
+                    f"(RISK-11: a risk cannot lean on a control the SoA dropped)")
     return report, errs, notes
 
 def risk_basis_fail(tid, q):
     """The normative B.1.9 failure, printed under the policy switch."""
     return (f"FAIL [risk-coverage] {tid}  selected {q}\n"
-            f"  named by no live Risk\n"
+            f"  justified by no Risk\n"
             f"  rationale: ISO/IEC 27001 6.1.3 d - inclusion in the Statement of "
             f"Applicability carries its justification")
 
@@ -1052,6 +1142,7 @@ def run_risk():
                 if sorted(got.get("uncovered", [])) != sorted(want.get("uncovered", [])): okc = False
                 if sorted(got.get("covered", {}).keys()) != sorted(want.get("covered", [])): okc = False
                 if "lapsed" in want and sorted(got.get("lapsed", {}).keys()) != sorted(want["lapsed"]): okc = False
+                if "pending" in want and sorted(got.get("pending", {}).keys()) != sorted(want["pending"]): okc = False
         if okc: ok("risk")
         else: fail("risk", f"{case['name']}: expected {case.get('expected-fails',0)} fails {case.get('expected-frags')} "
                            f"notes {case.get('expected-notes')} cov {exp}; got errs {[e[:80] for e in errs]} "
