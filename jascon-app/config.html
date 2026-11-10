@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Settings · JASCON App</title>
+<link rel="stylesheet" href="jascon-core.css">
+<script>try{var _t=localStorage.getItem("jsc:cfg:ui:theme")||"dark";if(_t!=="system")document.documentElement.setAttribute("data-theme",_t)}catch(e){}</script>
+<style>
+body { overflow: auto; }
+main { max-width: 860px; margin: 0 auto; padding: 22px 22px 60px; display: flex; flex-direction: column; gap: 16px; }
+header { display: flex; align-items: center; gap: 12px; }
+header .brand { font-weight: 700; font-size: 15px; } header .brand span { color: var(--accent); }
+.field { display: grid; grid-template-columns: 240px 1fr; gap: 6px 16px; align-items: start; padding: 10px 0; border-top: 1px solid var(--border-1); }
+.field:first-of-type { border-top: 0; }
+.field label { font-size: 13px; color: var(--text-primary); padding-top: 7px; }
+.field .key { display: block; font-family: var(--mono); font-size: 10px; color: var(--text-quiet); }
+.field select, .field input { width: 100%; }
+@media (max-width: 640px) { .field { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="brand">◈ JASCON <span>App</span></div>
+    <span class="pill on" data-i18n>Settings</span>
+    <div style="flex:1"></div>
+    <a class="btn small" href="index.html" data-i18n>Home</a>
+  </header>
+
+  <section class="glass card">
+    <h2><span class="glyph">⚙</span><span data-i18n>Settings</span></h2>
+    <p class="hint" data-i18n>Settings are kept in this browser (localStorage) and apply to every tool. They hold no secret. A change is saved as you make it.</p>
+    <div id="fields" style="margin-top:8px"></div>
+  </section>
+
+  <section class="glass card">
+    <h2><span class="glyph">▣</span><span data-i18n>Storage</span></h2>
+    <p class="hint" data-i18n>Sets are kept in this browser (IndexedDB "jascon-app"). Deleting a set here removes it from this browser only; an exported bundle is not touched.</p>
+    <table class="flat" id="sets" style="margin-top:10px"></table>
+  </section>
+</main>
+
+<script src="jascon-core.js"></script>
+<script>
+"use strict";
+/* Settings page. The form is generated from JSC_CFG, the one definition of
+   every setting in jascon-core.js; this page adds nothing of its own to it. */
+jscI18n.add("de", {
+  "Settings are kept in this browser (localStorage) and apply to every tool. They hold no secret. A change is saved as you make it.":
+    "Die Einstellungen liegen in diesem Browser (localStorage) und gelten für alle Werkzeuge. Sie enthalten kein Geheimnis. Eine Änderung wird sofort gespeichert.",
+  "Storage": "Speicher",
+  "Sets are kept in this browser (IndexedDB \"jascon-app\"). Deleting a set here removes it from this browser only; an exported bundle is not touched.":
+    "Sets liegen in diesem Browser (IndexedDB „jascon-app“). Ein hier gelöschtes Set verschwindet nur aus diesem Browser; ein exportiertes Bundle bleibt unberührt.",
+  "Language of the interface": "Sprache der Oberfläche", "Empty follows the browser.": "Leer folgt dem Browser.",
+  "Language of the content": "Sprache der Inhalte",
+  "BCP-47 tag picked from the language maps of a bundle, for example de. Empty follows the interface.":
+    "BCP-47-Kürzel, das aus den Sprachtabellen eines Bundles gewählt wird, zum Beispiel de. Leer folgt der Oberfläche.",
+  "Colour scheme": "Farbschema", "System follows the operating system.": "System folgt dem Betriebssystem.",
+  "Namespace for new objects": "Namensraum für neue Objekte",
+  "The URI under which this app mints ids, for example https://your.example. Use a name you control.":
+    "Die URI, unter der diese App Ids vergibt, zum Beispiel https://your.example. Einen Namen verwenden, den man selbst kontrolliert.",
+  "Default risk owner": "Standard-Risikoeigner",
+  "A party URI, for example https://your.example/party/ciso. Prefilled when a risk is created.":
+    "Eine Party-URI, zum Beispiel https://your.example/party/ciso. Wird beim Anlegen eines Risikos vorbelegt.",
+  "(follow the browser)": "(dem Browser folgen)", "Files": "Dateien", "active": "aktiv", "Delete": "Löschen",
+  "Delete set \"{set}\" with its {n} file(s)? This cannot be undone.": "Set „{set}“ mit {n} Datei(en) löschen? Das lässt sich nicht rückgängig machen.",
+});
+const $ = id => document.getElementById(id);
+
+function renderFields() {
+  const host = $("fields");
+  host.textContent = "";
+  for (const c of JSC_CFG) {
+    const row = document.createElement("div"); row.className = "field";
+    const label = document.createElement("label"); label.htmlFor = "cfg-" + c.key;
+    const key = document.createElement("span"); key.className = "key"; key.textContent = c.key;
+    label.append(T(c.label), key);
+    const right = document.createElement("div");
+    let input;
+    if (c.choices) {
+      input = document.createElement("select");
+      for (const v of c.choices) {
+        const o = document.createElement("option");
+        o.value = v; o.textContent = v === "" ? T("(follow the browser)") : (c.key === "ui:theme" ? T(v) : v);
+        input.appendChild(o);
+      }
+    } else {
+      input = document.createElement("input"); input.type = "text"; input.spellcheck = false; input.placeholder = c.def;
+    }
+    input.id = "cfg-" + c.key;
+    input.value = localStorage.getItem("jsc:cfg:" + c.key) ?? c.def;
+    input.addEventListener("change", () => {
+      const v = input.value.trim();
+      if (v === c.def) jscCfg.remove(c.key); else jscCfg.set(c.key, v);
+      if (c.key === "ui:theme") jscTheme.apply();
+      if (c.key === "ui:lang") location.reload();
+    });
+    const help = document.createElement("div"); help.className = "hint"; help.textContent = T(c.help);
+    right.append(input, help);
+    row.append(label, right);
+    host.appendChild(row);
+  }
+}
+async function renderSets() {
+  const sets = await jscStore.sets(), active = jscStore.activeSet(), table = $("sets");
+  table.textContent = "";
+  const head = table.insertRow();
+  [T("Set"), T("Files"), ""].forEach(h => { const th = document.createElement("th"); th.textContent = h; head.appendChild(th); });
+  for (const s of sets) {
+    const tr = table.insertRow();
+    tr.insertCell().textContent = s.name + (s.name === active ? ` (${T("active")})` : "");
+    tr.insertCell().textContent = String(s.count);
+    const del = document.createElement("button");
+    del.type = "button"; del.className = "small danger"; del.textContent = T("Delete"); del.disabled = !s.count;
+    del.addEventListener("click", async () => {
+      if (!confirm(T("Delete set \"{set}\" with its {n} file(s)? This cannot be undone.", { set: s.name, n: s.count }))) return;
+      await jscStore.removeSet(s.name);
+      renderSets();
+    });
+    tr.insertCell().appendChild(del);
+  }
+}
+jscI18n.apply();
+renderFields();
+renderSets();
+window.addEventListener("storage", e => { if (e.key && e.key.startsWith("jsc:cfg:store:")) renderSets(); });
+</script>
+</body>
+</html>

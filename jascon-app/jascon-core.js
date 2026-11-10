@@ -50,6 +50,27 @@ const JSC_TYPE_DIR = { requirement: "req", requirementSet: "set", tailoring: "ta
   assessment: "asmt", finding: "finding", attestation: "att" };
 const JSC_MANIFEST = "content-manifest.json";
 
+/* Marks a string for translation at a place where it is translated later
+   (a table of tools, say). tools/check-i18n.mjs reads N("…") like T("…"). */
+const N = s => s;
+
+/* ---------- configuration ----------
+   One definition of every setting. config.html renders its form from this
+   list and tools/gen-docs.mjs writes the readme table from it, so the three
+   cannot disagree. Values live in localStorage; none of them is a secret. */
+const JSC_CFG = [
+  { key: "ui:lang", def: "", choices: ["", "en", "de"],
+    label: N("Language of the interface"), help: N("Empty follows the browser.") },
+  { key: "ui:contentlang", def: "", choices: null,
+    label: N("Language of the content"), help: N("BCP-47 tag picked from the language maps of a bundle, for example de. Empty follows the interface.") },
+  { key: "ui:theme", def: "dark", choices: ["dark", "light", "system"],
+    label: N("Colour scheme"), help: N("System follows the operating system.") },
+  { key: "org:ns", def: "https://example.org/my", choices: null,
+    label: N("Namespace for new objects"), help: N("The URI under which this app mints ids, for example https://your.example. Use a name you control.") },
+  { key: "org:owner", def: "", choices: null,
+    label: N("Default risk owner"), help: N("A party URI, for example https://your.example/party/ciso. Prefilled when a risk is created.") },
+];
+
 const jscEsc = s => String(s ?? "").replace(/[&<>"']/g,
   c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const jscSlug = s => String(s || "").toLowerCase().replace(/[^a-z0-9]+/g, "-")
@@ -451,7 +472,7 @@ async function jscUnzip(bytes) {
 /* ==JSC-PURE-END== */
 
 if (typeof module !== "undefined" && module.exports) {
-  module.exports = { JSC_BUILD, JSC_TOOL, JSC_KERNEL, JSC_KERNEL_READS, JSC_TYPES, JSC_MANIFEST, JscKernelError,
+  module.exports = { JSC_CFG, N, JSC_BUILD, JSC_TOOL, JSC_KERNEL, JSC_KERNEL_READS, JSC_TYPES, JSC_MANIFEST, JscKernelError,
     jscEsc, jscSlug, jscText, jscInferType, jscIsScale, jscCanonical, jscSha256, jscSha256Js, jscUtf8,
     jscPackageDigest, jscSemanticDigest, jscSerialize, jscNormalizePaths, jscClassifyFiles, jscGraphFrom,
     jscTypeCounts, jscObjectPath, jscNeedsKernel2, jscBesideManifest, jscBuildBundle, jscVerify, jscCrc32, jscZip, jscUnzip, jscDecode };
@@ -464,23 +485,6 @@ if (typeof window !== "undefined") (() => {
 
 const PREFIX = "jsc:cfg:";
 
-/* ---------- configuration ----------
-   One definition of every setting. config.html renders its form from this
-   list and tools/gen-docs.mjs writes the README table from it, so the three
-   cannot disagree. Values live in localStorage; none of them is a secret. */
-const JSC_CFG = [
-  { key: "ui:lang", def: "", choices: ["", "en", "de"],
-    label: "Language of the interface", help: "Empty follows the browser." },
-  { key: "ui:contentlang", def: "", choices: null,
-    label: "Language of the content", help: "BCP-47 tag picked from the language maps of a bundle, e.g. de. Empty follows the interface." },
-  { key: "ui:theme", def: "dark", choices: ["dark", "light", "system"],
-    label: "Colour scheme", help: "" },
-  { key: "org:ns", def: "https://example.org/my", choices: null,
-    label: "Namespace for new objects", help: "The URI under which this app mints ids, e.g. https://your.example. Use a name you control." },
-  { key: "org:owner", def: "", choices: null,
-    label: "Default risk owner", help: "A party URI, e.g. https://your.example/party/ciso. Prefilled when a risk is created." },
-];
-window.JSC_CFG = JSC_CFG;
 const jscCfg = {
   get(key) {
     const v = localStorage.getItem(PREFIX + key);
@@ -494,9 +498,9 @@ const jscCfg = {
 window.jscCfg = jscCfg;
 
 /* ---------- languages ----------
-   The English text is the key: T("Open folder…") returns the German text when
-   the interface is German and a translation exists, the English text
-   otherwise. A missing translation therefore shows as English, never as a
+   The English text is the key: T called with an English text returns the
+   German text when the interface is German and a translation exists, the
+   English text otherwise. A missing translation therefore shows as English, never as a
    key. tools/check-i18n.mjs lists what is missing. {name} is replaced from
    the second argument. */
 const jscI18n = {
@@ -651,14 +655,18 @@ const jscSet = {
     this.graph = jscGraphFrom(await jscStore.files(this.name));
     return this.graph;
   },
-  /* Replaces the set's content with a bundle. -> {objects, problems} */
-  async importFiles(set, files) {
+  /* Puts files into a set as they arrived. With replace the set is emptied
+     first (a bundle); without, the files are added and a file of the same
+     path is overwritten (loose files). Classification runs before anything
+     is deleted, so a bundle that cannot be read leaves the set as it was.
+     -> {objects, files, problems} */
+  async importFiles(set, files, { replace }) {
     const norm = jscNormalizePaths(files);
     const { records, problems } = jscClassifyFiles(norm.files);
     if (norm.dropped) problems.push(`${norm.dropped} file(s) outside the bundle folder were ignored`);
-    await jscStore.removeSet(set);
+    if (replace) await jscStore.removeSet(set);
     await jscStore.putMany(set, records.map(r => ({ ...r, origin: "imported" })));
-    return { objects: records.filter(r => r.kind === "object").length, problems };
+    return { objects: records.filter(r => r.kind === "object").length, files: records.length, problems };
   },
   mintId(kind, name) { return jscCfg.get("org:ns").replace(/\/+$/, "") + "/" + kind + "/" + jscSlug(name); },
   async saveObjects(objs) {
