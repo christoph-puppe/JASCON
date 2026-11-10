@@ -1,0 +1,24 @@
+{
+  "id": "https://ns.oscal.org/stdlib/facet/assessment-criteria",
+  "version": "1.0.0",
+  "modifies-semantics": ["assessment"],
+  "note": "NORMATIVE (gate item 2). Declaration [assessment] confirmed by use (D.12 audit): tools that assess must understand or halt. Payload may be flat (per-object) or by-statement keyed where per-clause (D10 rev keying rule applies to the by-statement form). Absorbs documentation duties x966 (BSI/ISM), CR26 artifacts/examples/key-tests, CIS assessment-objectives, and the benchmark audit/remediation/method shape.",
+  "schema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object", "additionalProperties": false,
+    "properties": {
+      "by-statement": { "type": "object", "minProperties": 1,
+        "additionalProperties": { "type": "object" } },
+      "required-documentation": { "type": "array", "items": { "type": "string" } },
+      "required-artifacts": { "type": "array", "items": { "type": "string" } },
+      "default-artifacts": { "type": "object" },
+      "examples": { "type": "array", "items": { "type": "object" } },
+      "objectives": { "type": "array", "items": { "type": "object" } },
+      "audit": { "type": "object" },
+      "remediation": { "type": "object" },
+      "method": { "enum": ["automated", "manual"] },
+      "frequency": { "type": "string" },
+      "summary": { "type": "object" }
+    }
+  }
+}

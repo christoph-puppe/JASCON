@@ -10,9 +10,11 @@ have already carried 93,259 values.
 **Status convention.** The normative JSON Schemas shipped with gate
 item 2 (2026-07-21): `schemas/stdlib/` carries the six descriptors,
 `scripts/validate_core.py` is the executable, and the bundles'
-in-place stubs are superseded (re-pinning lands with the next
-converter run). Both converter-established shape conventions are now
-decided: (a) the `by-statement` keying pattern is **normative** (D10
+in-place stubs are superseded: the converters pin the descriptors
+verbatim (`Bundle.pin_stdlib`, converter rerun 2026-07-22), and the
+skill's example bundle, which kept a stub of `assessment-criteria`
+until 2026-11-10, does the same. Both converter-established shape
+conventions are now decided: (a) the `by-statement` keying pattern is **normative** (D10
 rev, backlog #7 — a payload key naming no statement of the host is a
 validation error); (b) glossary hosting on a Set — typically the
 corpus root — is **normative** (backlog #6, closed at gate 2; carrier
@@ -126,7 +128,10 @@ artifacts, examples, key tests. The KSI shape's home. **Declares:**
 from day one: tools that assess must understand or halt.
 **Payload:** `{required-documentation[]?, required-artifacts[]?,
 default-artifacts?, examples[]: {id, examples[], key-tests[]}?,
-summary?}` (by-statement keyed where per-clause).
+objectives[]?, audit?, remediation?, method?: automated|manual,
+frequency?, summary?}` (by-statement keyed where per-clause). The
+descriptor closes the shape. It types `summary` as an object; the
+example bundle carries a language map there (`{"en": "…"}`).
 **Field samples** — GS++ (REA.1.2): `{"required-documentation":
 ["Übungs- und Prüfplan"]}` · CR26 (SCN-TRF-TPR):
 ```json
