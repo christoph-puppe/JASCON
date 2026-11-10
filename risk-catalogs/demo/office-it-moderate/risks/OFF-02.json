@@ -59,10 +59,26 @@
  "treatment": "modify",
  "rating": {
   "level": "hoch",
-  "scale-ref": "https://org.example/scale/3x3"
+  "scale-ref": "https://org.example/scale/3x3",
+  "likelihood": {
+   "level": "mittel",
+   "scale-ref": "https://org.example/scale/likelihood"
+  },
+  "impact": {
+   "level": "hoch",
+   "scale-ref": "https://org.example/scale/impact"
+  }
  },
  "residual-rating": {
   "level": "mittel",
-  "scale-ref": "https://org.example/scale/3x3"
+  "scale-ref": "https://org.example/scale/3x3",
+  "likelihood": {
+   "level": "selten",
+   "scale-ref": "https://org.example/scale/likelihood"
+  },
+  "impact": {
+   "level": "hoch",
+   "scale-ref": "https://org.example/scale/impact"
+  }
  }
 }

@@ -22,11 +22,27 @@
  ],
  "rating": {
   "level": "hoch",
-  "scale-ref": "https://cso.example/scale/bsi-200-3-matrix"
+  "scale-ref": "https://cso.example/scale/bsi-200-3-matrix",
+  "likelihood": {
+   "level": "mittel",
+   "scale-ref": "https://cso.example/scale/bsi-200-3-eintrittshaeufigkeit"
+  },
+  "impact": {
+   "level": "existenzbedrohend",
+   "scale-ref": "https://cso.example/scale/bsi-200-3-schadenshoehe"
+  }
  },
  "residual-rating": {
   "level": "gering",
-  "scale-ref": "https://cso.example/scale/bsi-200-3-matrix"
+  "scale-ref": "https://cso.example/scale/bsi-200-3-matrix",
+  "likelihood": {
+   "level": "selten",
+   "scale-ref": "https://cso.example/scale/bsi-200-3-eintrittshaeufigkeit"
+  },
+  "impact": {
+   "level": "begrenzt",
+   "scale-ref": "https://cso.example/scale/bsi-200-3-schadenshoehe"
+  }
  },
  "treatment": "modify",
  "treatments": [

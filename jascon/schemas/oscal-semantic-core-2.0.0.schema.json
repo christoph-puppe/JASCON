@@ -1539,6 +1539,23 @@
     "share"
    ]
   },
+  "riskLevel": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "level",
+    "scale-ref"
+   ],
+   "properties": {
+    "level": {
+     "type": "string",
+     "minLength": 1
+    },
+    "scale-ref": {
+     "$ref": "#/$defs/uri"
+    }
+   }
+  },
   "riskRating": {
    "type": "object",
    "additionalProperties": false,
@@ -1553,6 +1570,12 @@
     },
     "scale-ref": {
      "$ref": "#/$defs/uri"
+    },
+    "likelihood": {
+     "$ref": "#/$defs/riskLevel"
+    },
+    "impact": {
+     "$ref": "#/$defs/riskLevel"
     }
    }
   },

@@ -272,7 +272,9 @@ although they live outside the Risk: a Tailoring's `set-ref` names a
 RequirementSet, and an `excludes` entry names a Requirement or a Set.
 Skip the type half and the join below runs on a mis-aimed id and
 returns an empty answer without an error. Finally RISK-13's second
-half: `rating` and `residual-rating` carry the same `scale-ref`.
+half: `rating` and `residual-rating` carry the same `scale-ref`, and so
+do their `likelihood` and their `impact` where both sides have one. You
+never compute a level from the two; the matrix is not yours.
 
 **Fourth, the join.** If the bundle carries no Tailoring at all,
 nothing was scoped out: take every Requirement in force as one implicit
@@ -334,7 +336,7 @@ holds no Risk, which exempts the emptiest register from the strictest
 policy. Skipping it when the bundle holds no Tailoring, as if an
 untailored catalogue had no controls in play.
 
-**What the corpus hands you:** `risk-vectors.json`, 67 cases. The
+**What the corpus hands you:** `risk-vectors.json`, 73 cases. The
 object vectors exercise typing and rule naming, the bundle vectors
 closure, the three buckets, scope and RISK-11, and eight transitions
 the state machine of C.3c. What it does not hand you is scale: the one

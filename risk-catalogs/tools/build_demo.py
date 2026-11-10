@@ -81,8 +81,14 @@ def main():
 
     # the organisation's own work, played here for two risks so that the
     # report has something in every column
-    decided = {"OFF-02": ("hoch", "mittel"), "OFF-04": ("hoch", "gering")}
-    scale = f"{ORG}/scale/3x3"
+    # label: (level, likelihood, impact) before and after treatment
+    decided = {"OFF-02": (("hoch", "mittel", "hoch"), ("mittel", "selten", "hoch")),
+               "OFF-04": (("hoch", "häufig", "mittel"), ("gering", "selten", "mittel"))}
+    scale, s_like, s_imp = f"{ORG}/scale/3x3", f"{ORG}/scale/likelihood", f"{ORG}/scale/impact"
+    def rated(level, likelihood, impact):
+        return {"level": level, "scale-ref": scale,
+                "likelihood": {"level": likelihood, "scale-ref": s_like},
+                "impact": {"level": impact, "scale-ref": s_imp}}
     committed = os.path.join(DEMO, "risks")
     if os.path.exists(committed): shutil.rmtree(committed)
     os.makedirs(committed)
@@ -92,10 +98,9 @@ def main():
         risk = json.load(open(os.path.join(risks_dir, fn), encoding="utf-8"))
         risk["component-refs"] = [component["id"]]
         if risk["label"] in decided:
-            level, residual = decided[risk["label"]]
+            before, after = decided[risk["label"]]
             risk.update({"lifecycle": "active", "state": "assessed", "treatment": "modify",
-                         "rating": {"level": level, "scale-ref": scale},
-                         "residual-rating": {"level": residual, "scale-ref": scale}})
+                         "rating": rated(*before), "residual-rating": rated(*after)})
         add(f"objects/risk/{fn}", risk)
         with open(os.path.join(committed, fn), "w", encoding="utf-8", newline="\n") as f:
             f.write(json.dumps(risk, indent=1, ensure_ascii=False) + "\n")
