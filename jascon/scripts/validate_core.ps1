@@ -11,7 +11,7 @@ digests, shape-disjoint type inference against the kernel JSON Schema
 modality lattice, reference closure, facet enforcement (fail-closed),
 tier derivation (Set-member resolution + DSSE verification mode with a
 dependency-free Ed25519 over System.Numerics.BigInteger), op-law duties,
-D3.5 composition, B.1.8 conditional-apply, and all 14 vector families.
+D3.5 composition, B.1.8 conditional-apply, and all 15 vector families.
 
 Kernel 2.0.0 (CP-RISK-1): Risk is the tenth kernel type - typed by the
 schema (RISK-1..6 are schema conditionals, named on failure by
@@ -1429,9 +1429,13 @@ function Kernel-Pin-Errors($manifest, $objs) {
         return ,$errs
     }
     $why = $null
+    $hasScales = $false
+    if (Is-Map $manifest) { foreach ($x in @($manifest['scales'])) { if ($null -ne $x) { $hasScales = $true } } }
+    if ($hasScales) { $why = 'the manifest pins scale definitions' }
     $ids = New-Object System.Collections.ArrayList
     foreach ($oid in $objs.Keys) { [void]$ids.Add([string]$oid) }
     foreach ($oid in (Sorted-Ordinal $ids)) {
+        if ($null -ne $why) { break }
         $t = $objs[$oid].t; $o = $objs[$oid].o
         if ($t -ceq 'risk') { $why = "$oid is a Risk"; break }
         $hasRefs = $false
@@ -1460,6 +1464,114 @@ function Run-Kernel {
             foreach ($e in $errs) { if ($e.Contains($frag)) { $hit = $true } }
             if (-not $hit) { $okc = $false } }
         if ($okc) { OK 'kernel' } else { FAIL 'kernel' "$($case['name']): expected $exp, got $(@($errs) -join ' ~ ')" }
+    }
+}
+
+# ---------------- pinned scale definitions (SCALE-1..3) ----------------
+# A scale is the organisation's own: how many levels and what they are
+# called. Its definition is a file the manifest pins by digest under
+# `scales`, levels listed lowest first. A scale-ref no pin answers stays a
+# landmark. PORTED BY READING, NOT EXECUTED - like the Risk port.
+function Scale-Definition-Errors($sd, $pin) {
+    $errs = New-Object System.Collections.ArrayList
+    $name = '?'
+    if ((Is-Map $sd) -and $sd.Contains('id')) { $name = [string]$sd['id'] }
+    if ($null -ne $pin) { $name = [string]$pin['path'] }
+    if (-not (Test-Schema $DEFS['scale'] $sd)) {
+        [void]$errs.Add("${name}: not a scale definition (SCALE-1)")
+        return ,$errs
+    }
+    $codes = New-Object System.Collections.ArrayList
+    $dup = New-Object System.Collections.ArrayList
+    foreach ($lv in @($sd['levels'])) {
+        $c = [string]$lv['level']
+        if ($codes -ccontains $c) { if ($dup -cnotcontains $c) { [void]$dup.Add($c) } } else { [void]$codes.Add($c) }
+    }
+    if ($dup.Count -gt 0) { [void]$errs.Add("${name}: level(s) $($dup -join ', ') listed twice - a level has one place in the order (SCALE-1)") }
+    if ($null -ne $pin) {
+        if (([string]$pin['id'] -cne [string]$sd['id']) -or ([string]$pin['exact-version'] -cne [string]$sd['version'])) {
+            [void]$errs.Add("${name}: pinned as $($pin['id']) $($pin['exact-version']), the file says $($sd['id']) $($sd['version']) (SCALE-1: the pin and the definition agree)") }
+    }
+    return ,$errs
+}
+# every level a Risk states: @{where; level; sref}
+function Risk-Levels($o) {
+    $out = New-Object System.Collections.ArrayList
+    foreach ($field in @('rating', 'residual-rating')) {
+        $r = $o[$field]
+        if (-not (Is-Map $r)) { continue }
+        [void]$out.Add(@{where = $field; level = [string]$r['level']; sref = [string]$r['scale-ref']})
+        foreach ($part in @('likelihood', 'impact')) {
+            $p = $r[$part]
+            if (Is-Map $p) { [void]$out.Add(@{where = "$field.$part"; level = [string]$p['level']; sref = [string]$p['scale-ref']}) }
+        }
+    }
+    return ,$out
+}
+# $scales: scale id -> definition. Returns @{errs; notes}.
+function Scale-Errors($scales, $objs) {
+    $errs = New-Object System.Collections.ArrayList
+    $notes = New-Object System.Collections.ArrayList
+    $order = @{}
+    foreach ($sid in $scales.Keys) {
+        $codes = New-Object System.Collections.ArrayList
+        foreach ($lv in @($scales[$sid]['levels'])) { [void]$codes.Add([string]$lv['level']) }
+        $order[[string]$sid] = $codes
+    }
+    $ids = New-Object System.Collections.ArrayList
+    foreach ($oid in $objs.Keys) { if ($objs[$oid].t -ceq 'risk') { [void]$ids.Add([string]$oid) } }
+    foreach ($oid in (Sorted-Ordinal $ids)) {
+        $seen = @{}
+        foreach ($x in (Risk-Levels $objs[$oid].o)) {
+            if (-not $order.ContainsKey($x.sref)) { continue }
+            $codes = $order[$x.sref]
+            $pos = -1
+            for ($i = 0; $i -lt $codes.Count; $i++) { if ($codes[$i] -ceq $x.level) { $pos = $i; break } }
+            if ($pos -lt 0) {
+                [void]$errs.Add("${oid}: $($x.where) level '$($x.level)' is not a level of $($x.sref) (its levels: $($codes -join ', ')) (SCALE-2: a level is one the scale defines)")
+            } else { $seen[$x.where] = @{pos = $pos; sref = $x.sref; level = $x.level} }
+        }
+        foreach ($part in @('', '.likelihood', '.impact')) {
+            $a = $seen["rating$part"]; $b = $seen["residual-rating$part"]
+            if (($null -ne $a) -and ($null -ne $b) -and ($a.sref -ceq $b.sref) -and ($b.pos -gt $a.pos)) {
+                $what = "residual$part"
+                if ($part -ceq '') { $what = 'residual level' }
+                [void]$notes.Add("${oid}: $what '$($b.level)' is above '$($a.level)' on $($a.sref) (SCALE-3, SHOULD: what remains after treatment is not more than what was there)")
+            }
+        }
+    }
+    return @{errs = $errs; notes = $notes}
+}
+function Run-Scale {
+    foreach ($case in (Load-Vectors 'scale-vectors.json')['vectors']) {
+        $errs = New-Object System.Collections.ArrayList
+        $scales = @{}
+        foreach ($sd in @($case['scales'])) {
+            if ($null -eq $sd) { continue }
+            $e = Scale-Definition-Errors $sd $null
+            foreach ($m in $e) { [void]$errs.Add($m) }
+            if ($e.Count -eq 0) { $scales[[string]$sd['id']] = $sd }
+        }
+        $objs = To-Objs $case['objects']
+        $se = Scale-Errors $scales $objs
+        foreach ($m in $se.errs) { [void]$errs.Add($m) }
+        $exp = 0
+        if ($case.Contains('expected-fails')) { $exp = $case['expected-fails'] }
+        $okc = (($errs.Count -eq $exp) -and ($objs.Count -eq @($case['objects']).Count))
+        foreach ($frag in @($case['expected-frags'])) {
+            if ($null -eq $frag) { continue }
+            $hit = $false
+            foreach ($m in $errs) { if ($m.Contains($frag)) { $hit = $true } }
+            if (-not $hit) { $okc = $false } }
+        $wantNotes = 0
+        foreach ($frag in @($case['expected-notes'])) {
+            if ($null -eq $frag) { continue }
+            $wantNotes++
+            $hit = $false
+            foreach ($m in $se.notes) { if ($m.Contains($frag)) { $hit = $true } }
+            if (-not $hit) { $okc = $false } }
+        if ($case.Contains('expected-notes') -and $wantNotes -eq 0 -and $se.notes.Count -gt 0) { $okc = $false }
+        if ($okc) { OK 'scale' } else { FAIL 'scale' "$($case['name']): expected $exp, got $(@($errs) -join ' ~ ') | notes: $(@($se.notes) -join ' ~ ')" }
     }
 }
 
@@ -1629,6 +1741,26 @@ function Validate-Bundle([string]$bdir) {
     try { foreach ($e in (Kernel-Pin-Errors $manifest $bundleObjs)) { FAIL $section $e } } catch {
         FAIL $section "kernel-version PORT ERROR (not yet executed on a real runtime - report this line): $($_.Exception.Message) @ line $($_.InvocationInfo.ScriptLineNumber)"
     }
+    # pinned scale definitions: SCALE-1 on each pin, SCALE-2/3 on the Risks
+    try {
+        $scaleDefs = @{}
+        foreach ($sp in @($manifest['scales'])) {
+            if ($null -eq $sp) { continue }
+            $sfp = Join-Path $bdir $sp['path']
+            if (-not (Test-Path $sfp)) { FAIL $section "$($sp['path']): pinned scale definition listed but missing"; continue }
+            $sraw = [System.IO.File]::ReadAllBytes($sfp)
+            if ((Sha256-Hex $sraw) -cne $sp['digest']) { FAIL $section "$($sp['path']): pinned scale definition digest mismatch" }
+            $sdef = Read-Json $sfp
+            $sde = Scale-Definition-Errors $sdef $sp
+            foreach ($e in $sde) { FAIL $section $e }
+            if ($sde.Count -eq 0) { $scaleDefs[[string]$sdef['id']] = $sdef }
+        }
+        $se = Scale-Errors $scaleDefs $bundleObjs
+        foreach ($e in $se.errs) { FAIL $section $e }
+        foreach ($n in $se.notes) { Write-Host "    note: $n" }
+    } catch {
+        FAIL $section "scale PORT ERROR (not yet executed on a real runtime - report this line): $($_.Exception.Message) @ line $($_.InvocationInfo.ScriptLineNumber)"
+    }
     # CP-RISK-1: B.1.9 risk-coverage report (+ RISK-11 errors), RISK-9/10 notes
     try {
         $rc = Risk-Coverage $bundleObjs $envelopes $TRUSTED
@@ -1685,8 +1817,11 @@ try { Run-Risk } catch {
 try { Run-Kernel } catch {
     FAIL 'kernel' "PORT ERROR (kernel-version pin not yet executed on a real runtime - report this line): $($_.Exception.Message) @ line $($_.InvocationInfo.ScriptLineNumber)"
 }
+try { Run-Scale } catch {
+    FAIL 'scale' "PORT ERROR (scale definitions not yet executed on a real runtime - report this line): $($_.Exception.Message) @ line $($_.InvocationInfo.ScriptLineNumber)"
+}
 $FAMILIES = @('jcs', 'modality', 'parameter', 'tailoring', 'attestation', 'facet',
-              'reference', 'lifecycle', 'tier', 'dsse', 'composition', 'conditional', 'risk', 'kernel')
+              'reference', 'lifecycle', 'tier', 'dsse', 'composition', 'conditional', 'risk', 'kernel', 'scale')
 foreach ($k in $FAMILIES) {
     $p = 0; if ($COUNTS.ContainsKey($k)) { $p = $COUNTS[$k] }
     $f = 0; if ($COUNTS.ContainsKey("${k}:FAIL")) { $f = $COUNTS["${k}:FAIL"] }

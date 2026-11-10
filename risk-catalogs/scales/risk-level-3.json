@@ -1,0 +1,47 @@
+{
+ "id": "https://github.com/christoph-puppe/JASCON/risk-catalogs/scale/risk-level-3",
+ "version": "0.1.0",
+ "title": {
+  "en": "Risk level, three levels",
+  "de": "Risikostufe, drei Stufen"
+ },
+ "description": {
+  "en": "A starting scale for the combined level. How likelihood and impact combine into it is your method and is not part of this file. Lowest first.",
+  "de": "Eine Ausgangsskala für die Gesamtstufe. Wie Eintrittswahrscheinlichkeit und Auswirkung zu ihr zusammengeführt werden, ist Ihre Methode und nicht Teil dieser Datei. Niedrigste zuerst."
+ },
+ "levels": [
+  {
+   "level": "gering",
+   "label": {
+    "de": "gering",
+    "en": "low"
+   },
+   "description": {
+    "de": "Wird getragen; Überprüfung im regulären Turnus.",
+    "en": "Carried; reviewed in the regular cycle."
+   }
+  },
+  {
+   "level": "mittel",
+   "label": {
+    "de": "mittel",
+    "en": "medium"
+   },
+   "description": {
+    "de": "Behandlung wird geplant und terminiert.",
+    "en": "Treatment is planned and scheduled."
+   }
+  },
+  {
+   "level": "hoch",
+   "label": {
+    "de": "hoch",
+    "en": "high"
+   },
+   "description": {
+    "de": "Behandlung hat Vorrang; die Leitung entscheidet.",
+    "en": "Treatment has priority; management decides."
+   }
+  }
+ ]
+}

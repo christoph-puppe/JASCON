@@ -106,6 +106,12 @@ reads (KERNEL-2). Before the pin, an older tool given a newer bundle
 reported "matches NO type" on the first object it could not read, with
 no version anywhere in the message.
 
+A second optional list arrived with it: `scales`, shaped like
+`facet-schemas`. Each entry pins the definition of a scale that the
+bundle's risks use — its levels in order, in the organisation's wording.
+The pin makes the definition part of the sealed bundle, so a reader
+offline knows that `hoch` is the third of four levels and not a typo.
+
 Three roles in one file. It is the **local resolution table** — every
 reference in the bundle resolves here, which is what makes sealed mode
 possible at all. It is the **integrity ledger** — both digests per

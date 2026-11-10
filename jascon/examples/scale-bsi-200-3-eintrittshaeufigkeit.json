@@ -1,0 +1,38 @@
+{
+ "id": "https://cso.example/scale/bsi-200-3-eintrittshaeufigkeit",
+ "version": "1.0.0",
+ "title": {
+  "en": "Likelihood",
+  "de": "Eintrittshäufigkeit"
+ },
+ "levels": [
+  {
+   "level": "selten",
+   "label": {
+    "de": "selten",
+    "en": "rare"
+   }
+  },
+  {
+   "level": "mittel",
+   "label": {
+    "de": "mittel",
+    "en": "medium"
+   }
+  },
+  {
+   "level": "häufig",
+   "label": {
+    "de": "häufig",
+    "en": "frequent"
+   }
+  },
+  {
+   "level": "sehr häufig",
+   "label": {
+    "de": "sehr häufig",
+    "en": "very frequent"
+   }
+  }
+ ]
+}
