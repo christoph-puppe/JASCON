@@ -12,19 +12,21 @@
    The argument `objs` is always a Map of id -> {type, obj}; a graph's
    `objects` map from jascon-core.js fits as it is.
 
-   Ported so far, each run against its vector family: the modality lattice
-   (B.1.6), the parameter law, Set expansion and a Tailoring's selection, the
-   tier of a Tailoring in structural mode, the resolution of a Tailoring's
-   operations, the state machines, relationship composition, schema matching
-   (which type an object is), reference closure with typed edges and the
-   acyclic Set graph, the kernel pin, the Risk rules RISK-1 to RISK-14 with
-   risk coverage, and the scale and matrix rules SCALE-1 to SCALE-4.
+   Ported, each run against its vector family: the canonical form's rule on
+   empty containers, the modality lattice (B.1.6), the parameter law, Set
+   expansion and a Tailoring's selection, the tier of a Tailoring in
+   structural mode, the operation law per tier, the resolution of a
+   Tailoring's operations, the state machines, relationship composition,
+   schema matching (which type an object is), the checks of one object,
+   reference closure with typed edges and the acyclic Set graph, the kernel
+   pin, facet payloads, the bi-modal attestation verdict, the Risk rules
+   RISK-1 to RISK-14 with risk coverage, and the scale and matrix rules
+   SCALE-1 to SCALE-4. jscCheckGraph runs them over a whole set.
 
-   Not yet ported: the operation law per tier, facet payloads,
-   conditional-apply, composition, DSSE verification, bi-modal attestation
-   verdicts as a vector family, and the checks of a whole bundle on disk.
-   Until they are, the Python validator is the only check that a bundle is
-   valid as a whole. tests/rules.test.mjs names the families still missing.
+   Not ported: conditional-apply, the composition of two bundles, and DSSE
+   signature verification. A set that passes here has not been checked for
+   those; the Python validator has them. tests/rules.test.mjs names the
+   vector families still missing.
 
    A page loads jascon-core.js, jascon-schema.js (generated from the kernel
    schema) and then this file. */
@@ -292,15 +294,18 @@ function jscTextify(o, lang) {
    ====================================================================
    The kernel has no type field: an object is of the type whose schema it
    matches, and it must match exactly one. This is a JSON Schema checker for
-   the keywords the kernel schema and the stdlib facets use, and no others:
-   $ref, type, const, enum, minLength, pattern, minimum, minItems, items,
-   required, minProperties, propertyNames, properties, additionalProperties,
-   allOf, anyOf, if/then/else and unevaluatedProperties. A schema that uses
-   another keyword is refused loudly instead of being half-checked.
+   the keywords the kernel schema and the stdlib facets use, plus the plain
+   bounds a pinned facet schema is likely to add: $ref, type, const, enum,
+   minLength, maxLength, pattern, minimum, maximum, minItems, maxItems,
+   uniqueItems, items, required, minProperties, maxProperties,
+   propertyNames, properties, additionalProperties, allOf, anyOf, oneOf, not,
+   if/then/else and unevaluatedProperties. A schema that uses another
+   keyword is refused loudly instead of being half-checked.
    -> { errors: [{path, keyword, message}], evaluated: Set of property names } */
 const JSC_SCHEMA_KEYWORDS = new Set(["$ref", "$schema", "$id", "$defs", "title", "description", "note", "type", "const", "enum",
-  "minLength", "pattern", "minimum", "minItems", "items", "required", "minProperties", "propertyNames", "properties",
-  "additionalProperties", "allOf", "anyOf", "if", "then", "else", "unevaluatedProperties", "contentEncoding"]);
+  "minLength", "maxLength", "pattern", "minimum", "maximum", "minItems", "maxItems", "uniqueItems", "items", "required",
+  "minProperties", "maxProperties", "propertyNames", "properties", "additionalProperties", "allOf", "anyOf", "oneOf", "not",
+  "if", "then", "else", "unevaluatedProperties", "contentEncoding"]);
 const jscRulesSchema = (typeof module !== "undefined" && module.exports) ? require("./jascon-schema.js") : { JSC_SCHEMA, JSC_STDLIB };
 const jscRegexCache = new Map();
 const jscRegex = p => { if (!jscRegexCache.has(p)) jscRegexCache.set(p, new RegExp(p)); return jscRegexCache.get(p); };
@@ -335,16 +340,21 @@ function jscSchemaCheck(schema, v, root, path = "") {
   if (schema.enum && !schema.enum.includes(v)) fail("enum", `is not one of ${JSON.stringify(schema.enum)}`);
   if (typeof v === "string") {
     if ("minLength" in schema && [...v].length < schema.minLength) fail("minLength", "is too short");
+    if ("maxLength" in schema && [...v].length > schema.maxLength) fail("maxLength", "is too long");
     if ("pattern" in schema && !jscRegex(schema.pattern).test(v)) fail("pattern", `does not match ${schema.pattern}`);
   }
   if (typeof v === "number" && "minimum" in schema && v < schema.minimum) fail("minimum", `is less than ${schema.minimum}`);
+  if (typeof v === "number" && "maximum" in schema && v > schema.maximum) fail("maximum", `is more than ${schema.maximum}`);
   if (Array.isArray(v)) {
     if ("minItems" in schema && v.length < schema.minItems) fail("minItems", `has fewer than ${schema.minItems} item(s)`);
+    if ("maxItems" in schema && v.length > schema.maxItems) fail("maxItems", `has more than ${schema.maxItems} item(s)`);
+    if (schema.uniqueItems && new Set(v.map(x => JSON.stringify(x))).size !== v.length) fail("uniqueItems", "has an item twice");
     if ("items" in schema) v.forEach((x, i) => errors.push(...sub(schema.items, x, `${path}/${i}`).errors));
   }
   if (jscIsPlainObject(v)) {
     for (const k of schema.required || []) if (!(k in v)) fail("required", `'${k}' is a required property`);
     if ("minProperties" in schema && Object.keys(v).length < schema.minProperties) fail("minProperties", "has too few properties");
+    if ("maxProperties" in schema && Object.keys(v).length > schema.maxProperties) fail("maxProperties", "has too many properties");
     if ("propertyNames" in schema) for (const k of Object.keys(v)) errors.push(...sub(schema.propertyNames, k, `${path}/${k}`).errors);
     const props = schema.properties || {};
     for (const k of Object.keys(props)) if (k in v) { errors.push(...sub(props[k], v[k], `${path}/${k}`).errors); evaluated.add(k); }
@@ -363,6 +373,12 @@ function jscSchemaCheck(schema, v, root, path = "") {
     if (!passing.length) fail("anyOf", "matches none of the allowed shapes");
     passing.forEach(r => r.evaluated.forEach(k => evaluated.add(k)));
   }
+  if (schema.oneOf) {
+    const passing = schema.oneOf.map(s => sub(s, v, path)).filter(r => !r.errors.length);
+    if (passing.length !== 1) fail("oneOf", `matches ${passing.length} of the shapes of which exactly one is allowed`);
+    passing.forEach(r => r.evaluated.forEach(k => evaluated.add(k)));
+  }
+  if ("not" in schema && !sub(schema.not, v, path).errors.length) fail("not", "matches a shape that is not allowed");
   if ("if" in schema) {
     const cond = sub(schema.if, v, path);
     if (!cond.errors.length) { cond.evaluated.forEach(k => evaluated.add(k)); if ("then" in schema) merge(sub(schema.then, v, path)); }
@@ -847,11 +863,217 @@ function jscCheckScales(definitions, objs, pins) {
   return { errors: [...errors, ...mx.errors, ...lv.errors], notes: lv.notes, scales: mx.usable };
 }
 
+
+/* ====================================================================
+   One object on its own
+   ==================================================================== */
+/* Optional containers must be absent, not empty (D3.3): an empty list and a
+   missing list would otherwise be two spellings of one meaning with two
+   semantic digests. -> the paths of the empty ones */
+const JSC_OPTIONAL_CONTAINERS = new Set(["aliases", "canonical-alias", "replaces", "relations", "facets", "annotations", "parameters",
+  "deviations", "excludes", "source-scope", "target-scope", "evidence-refs", "statement-refs", "capabilities", "authorizations",
+  "actions", "choices", "threat-refs", "component-refs", "treatments", "risk-refs", "tailoring-refs"]);
+function jscOptionalEmptyViolations(obj, path = "$") {
+  const out = [];
+  if (Array.isArray(obj)) obj.forEach((v, i) => out.push(...jscOptionalEmptyViolations(v, `${path}[${i}]`)));
+  else if (jscIsPlainObject(obj)) {
+    for (const [k, v] of Object.entries(obj)) {
+      if (JSC_OPTIONAL_CONTAINERS.has(k) && v !== null && typeof v === "object" && !Object.keys(v).length) out.push(`${path}.${k}`);
+      out.push(...jscOptionalEmptyViolations(v, `${path}.${k}`));
+    }
+  }
+  return out;
+}
+/* What is wrong with one object, without looking at any other.
+   -> { type: its one kernel type or null, errors: [string] } */
+function jscObjectErrors(obj) {
+  const matches = jscMatchTypes(obj), errors = [];
+  if (matches.length !== 1) {
+    let best = "";
+    if (!matches.length) {
+      /* the closest shape, by the number of things wrong with it, and its first complaint */
+      const counted = JSC_KERNEL_TYPES.map(t => [t, jscShapeErrors(t, obj)]).sort((a, b) => a[1].length - b[1].length)[0];
+      best = ` (closest ${counted[0]}: ${counted[1][0] || "?"})`;
+      if (jscIsPlainObject(obj) && ("scenario" in obj || "owner-ref" in obj)) {
+        best += jscRiskRuleViolations(obj).map(([rule, what]) => ` [${rule}] ${what} - ${JSC_RISK_RULES[rule]}`).join("");
+      }
+    }
+    return { type: null, errors: [`matches ${matches.length ? matches.join(" and ") : "NO type"}${best}`] };
+  }
+  const empty = jscOptionalEmptyViolations(obj);
+  if (empty.length) errors.push(`optional empty containers present: ${empty.join(", ")}`);
+  if (matches[0] === "requirement") {
+    const sids = new Set(obj.statements.map(s => s.id));
+    if (sids.size !== obj.statements.length) errors.push("duplicate statement ids (unique-within, B.1.3) — identity addressing becomes ambiguous");
+    for (const st of obj.statements) {
+      const declared = new Set((st.parameters || []).map(p => p.name));
+      for (const txt of Object.values(st.prose)) {
+        for (const m of (Array.isArray(txt) ? txt.join(" ") : txt).matchAll(/\{param:([^}]+)\}/g)) {
+          if (!declared.has(m[1])) errors.push(`unbound {param:${m[1]}} in statement ${st.id} (the 216 rule)`);
+        }
+      }
+    }
+    for (const [fid, payload] of Object.entries(obj.facets || {})) {
+      if (!jscIsPlainObject(payload) || !jscIsPlainObject(payload["by-statement"])) continue;
+      for (const sid of Object.keys(payload["by-statement"])) if (!sids.has(sid)) errors.push(`facet ${fid} by-statement key '${sid}' names no statement (D10 rev)`);
+    }
+  }
+  return { type: matches[0], errors };
+}
+
+/* ====================================================================
+   Facet payloads and the operation law
+   ==================================================================== */
+const jscFacetBase = key => String(key).replace(/@[^@]*$/, "");
+const jscIsPrivateFacet = key => String(key).startsWith("private:");
+/* stdlib facet id -> its descriptor */
+const JSC_STDLIB_BY_ID = new Map(jscRulesSchema.JSC_STDLIB.map(d => [d.id, d]));
+/* A facet payload is checked against the stdlib descriptor of its id, or
+   against the schema the bundle pins for it. A `private:` facet is not
+   checked by definition. Anything else is unregistered and fails closed.
+   items: [[label, object]]; pinned: Map(facet id without version -> schema). */
+function jscFacetErrors(items, pinned) {
+  const errs = [];
+  for (const [label, obj] of items) {
+    for (const [key, payload] of Object.entries((obj && obj.facets) || {})) {
+      const base = jscFacetBase(key);
+      if (jscIsPrivateFacet(key)) continue;
+      const schema = JSC_STDLIB_BY_ID.has(base) ? JSC_STDLIB_BY_ID.get(base).schema : pinned.get(base);
+      if (schema === undefined) { errs.push(`${label}: unregistered facet '${key}' — not stdlib, not pinned in the manifest, not private: (dangerous-by-default, D10)`); continue; }
+      let found;
+      try { found = jscSchemaCheck(schema, payload, schema).errors; }
+      catch (e) { errs.push(`${label}: facet '${key}' cannot be checked: ${e.message}`); continue; }
+      if (found.length) errs.push(`${label}: facet '${key}' payload violates its schema: ${found[0].message} @ ${found[0].path.replace(/^\//, "")}`);
+    }
+  }
+  return errs;
+}
+/* What an operation owes, by the tier of its Tailoring (D13, B.1.6). A
+   weakening needs a Deviation at consumer tier: a non-monotone change of
+   modality, a substantive change of prose, a parameter value outside its
+   declared space, the attaching or detaching of a facet that changes
+   semantics, the removal of a `required` relation. Wrong at any tier: two
+   operations on one target, a parameter value of the wrong kind, a facet
+   nobody registered. pinnedDecl: Map(facet id -> its modifies-semantics). */
+async function jscTailoringDutyErrors(objs, pinnedDecl) {
+  const errs = [], pd = pinnedDecl || new Map();
+  for (const [oid, { type, obj: tobj }] of objs) {
+    if (type !== "tailoring") continue;
+    const tier = await jscDeriveTier(tobj, objs), seen = new Set();
+    for (const op of tobj.operations || []) {
+      const key = jscTargetKey(op);
+      if (seen.has(key)) {
+        const named = [op["requirement-ref"], op["statement-id"], op.parameter, op.field, op.facet].filter(Boolean).map(x => `'${x}'`).join(", ");
+        errs.push(`${oid}: two operations address the same target [${named}] within one Tailoring (D13: override rides Tailoring-of-Tailoring chaining, never in-place; P10 #30)`);
+      }
+      seen.add(key);
+      const tgt = objs.get(op["requirement-ref"]);
+      const stmt = tgt && tgt.type === "requirement" ? tgt.obj.statements.find(s => s.id === op["statement-id"]) : null;
+      let duty = null;
+      if (op.op === "set-modality") {
+        if (stmt) { const v = jscModalityVerdict(stmt.modality, op.modality); if (v !== "monotone") duty = `non-monotone set-modality (${v})`; }
+      } else if (op.op === "replace-prose" && op.intent === "substantive") {
+        duty = "substantive replace-prose";
+      } else if (op.op === "attach-facet" || op.op === "detach-facet") {
+        const fid = String(op.facet || ""), base = jscFacetBase(fid);
+        if (!jscIsPrivateFacet(fid)) {
+          const decl = JSC_STDLIB_BY_ID.has(base) ? JSC_STDLIB_BY_ID.get(base)["modifies-semantics"] || [] : pd.get(base);
+          if (decl === undefined) errs.push(`${oid}: ${op.op} references facet '${fid}' that is neither stdlib, nor pinned in the manifest, nor private: (dangerous-by-default, D10; P10 #29)`);
+          else if (decl.length) duty = `${op.op} of a semantics-bearing facet [${decl.map(x => `'${x}'`).join(", ")}]`;
+        }
+      } else if (op.op === "set-parameter") {
+        const decl = stmt ? (stmt.parameters || []).find(p => p.name === op.parameter) : null;
+        if (decl) {
+          const verdict = jscParamCheck(decl, op.value);
+          if (verdict === "invalid") errs.push(`${oid}: set-parameter '${op.parameter}' value fails the declared type/bounds (D13; not Deviation-escapable)`);
+          else if (verdict === "deviation-required") duty = "out-of-bounds / against-tightening set-parameter";
+        }
+      } else if (op.op === "remove-relation") {
+        if (jscIsPlainObject(op.relation) && op.relation.type === "required") duty = "remove-relation of a `required` edge";
+      }
+      if (duty && !("deviation" in op) && !("deviation-ref" in op) && tier === "consumer") {
+        errs.push(`${oid}: ${duty} without a Deviation at consumer tier (derived tier: ${tier}; B.1.6/D13 rev 2)`);
+      }
+    }
+  }
+  return errs;
+}
+/* The verdict of an attestation over one subject: the meaning differs
+   (tamper), bytes and meaning are as signed (full-match), or the meaning is
+   intact and the bytes are not (semantic-match). */
+const jscAttestationVerdict = (signed, delivered) =>
+  delivered.semantic !== signed.semantic ? "tamper" : delivered.package === signed.package ? "full-match" : "semantic-match";
+
+/* ====================================================================
+   A whole set
+   ====================================================================
+   Everything this file can say about a loaded graph, in the order the
+   reference validator works: the manifest, each object, the digests, the
+   pinned files, references, the operation law, the kernel pin, the scales,
+   risk coverage, facet payloads. `verified` is the result of jscVerify.
+   -> { findings: [{ kind: "error"|"note", area, object: id or null, message }],
+        types: {type: count}, tiers: {tailoring id: tier}, coverage: report } */
+async function jscCheckGraph(g, verified) {
+  const findings = [], types = {};
+  const add = (kind, area, object, message) => findings.push({ kind, area, object, message });
+  const ids = [...g.objects.keys()];
+  /* a message of the reference validator starts with the object it is about */
+  const about = m => ids.find(id => m.startsWith(id + ":")) || null;
+  const strip = m => { const id = about(m); return id ? m.slice(id.length + 2) : m; };
+  const pass = (area, kind) => list => list.forEach(m => add(kind, area, about(m), strip(m)));
+
+  if (g.manifest) {
+    jscShapeErrors("contentManifest", g.manifest).slice(0, 5).forEach(m => add("error", "manifest", null, `manifest schema: ${m}`));
+    jscKernelPinErrors(g.manifest, g.objects).forEach(m => add("error", "manifest", null, m));
+  } else add("note", "manifest", null, "the set has no content manifest; digests and pins cannot be checked until it is exported");
+  g.problems.forEach(m => add("error", "files", null, m));
+
+  const objs = new Map();
+  for (const [id, r] of g.objects) {
+    const res = jscObjectErrors(r.obj);
+    res.errors.forEach(m => add("error", "object", id, m));
+    if (res.type) { objs.set(id, { type: res.type, obj: r.obj }); types[res.type] = (types[res.type] || 0) + 1; }
+    if (g.manifest && r.entry && r.entry.id !== r.obj.id) add("error", "manifest", id, "manifest id != object id");
+  }
+  if (verified) {
+    for (const [id, v] of verified.objects) {
+      const r = g.objects.get(id);
+      if (v === null) { if (!jscRulesBeside(r) && g.manifest) add(r.origin === "authored" ? "note" : "error", "digest", id, r.origin === "authored" ? "written in this app; not in the manifest until the set is exported" : "on disk but not in manifest"); continue; }
+      const edited = r.origin === "authored" ? " (edited in this app; the export writes a new manifest)" : "";
+      if (!v.pkg) add(edited ? "note" : "error", "digest", id, "package-digest mismatch" + edited);
+      if (!v.sem) add(edited ? "note" : "error", "digest", id, "semantic-digest mismatch" + edited);
+    }
+    verified.pins.filter(p => !p.ok).forEach(p => add("error", "digest", null, `${p.path}: pinned file digest mismatch`));
+    if (verified.counts.missing) add("error", "manifest", null, `${verified.counts.missing} object(s) listed but missing`);
+  }
+  pass("reference", "error")(jscClosureErrors(objs));
+  const pinnedSchemas = new Map(), pinnedDecl = new Map();
+  for (const f of g.facetSchemas) {
+    if (!f.def || !f.def.id) continue;
+    pinnedSchemas.set(f.def.id, f.def.schema || { type: "object" });
+    pinnedDecl.set(f.def.id, f.def["modifies-semantics"] || ["assessment", "tailoring", "selection", "rendering"]);   // a pin that omits it is dangerous by default
+    const std = JSC_STDLIB_BY_ID.get(f.def.id);
+    if (std && jscRulesCanonical(f.def.schema || {}) !== jscRulesCanonical(std.schema)) add("error", "facet", null, `${f.path}: pin of stdlib facet ${f.def.id} DIVERGES from the normative descriptor (D26)`);
+  }
+  pass("tailoring", "error")(await jscTailoringDutyErrors(objs, pinnedDecl));
+  const pins = new Map([...g.scales.values()].filter(x => x.pin).map(x => [x.def.id, x.pin]));
+  const sc = jscCheckScales([...g.scales.values()].map(x => x.def), objs, pins);
+  pass("scale", "error")(sc.errors); pass("scale", "note")(sc.notes);
+  const cov = await jscRiskCoverage(objs);
+  pass("risk", "error")(cov.errors); pass("risk", "note")([...cov.notes, ...jscRiskLinkNotes(objs)]);
+  pass("facet", "error")(jscFacetErrors([...objs].map(([id, r]) => [id, r.obj]), pinnedSchemas));
+  const tiers = {};
+  for (const [id, r] of objs) if (r.type === "tailoring") tiers[id] = await jscDeriveTier(r.obj, objs);
+  return { findings, types, tiers, coverage: cov.report };
+}
+const jscRulesBeside = r => r.type === "attestation" && !r.entry;
+
 if (typeof module !== "undefined" && module.exports) {
   module.exports = { JSC_MODALITIES, JSC_ELAPSED_UNITS, JSC_CALENDAR_UNITS, jscModalityVerdict, jscParamCheck,
     jscDecimalCompare, jscExpandRefs, jscSetParents, jscSelection, jscUriOrigin, jscDeriveTier, jscTargetKey,
     jscResolveTailoring, jscTextify, JSC_NEXT, jscCanMove, jscComposeRelationship,
     jscSchemaCheck, jscShapeErrors, jscMatchTypes, jscTypeOf, jscTypedObjects, JSC_KERNEL_TYPES, JSC_RISK_RULES, jscClosureErrors,
     jscKernelNeeded, jscKernelPinErrors, jscRiskRuleViolations, jscRiskIsLive, jscRiskJustifies, JSC_NO_TAILORING, jscRiskCoverage,
-    jscRiskLinkNotes, jscScaleDefinitionErrors, jscMatrixErrors, jscRiskLevels, jscMatrixCell, jscScaleErrors, jscCheckScales };
+    jscRiskLinkNotes, jscScaleDefinitionErrors, jscMatrixErrors, jscRiskLevels, jscMatrixCell, jscScaleErrors, jscCheckScales,
+    jscOptionalEmptyViolations, jscObjectErrors, jscFacetErrors, jscTailoringDutyErrors, jscAttestationVerdict, jscCheckGraph };
 }

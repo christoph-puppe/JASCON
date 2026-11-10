@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Validate · JASCON App</title>
+<link rel="stylesheet" href="jascon-core.css">
+<script>try{var _t=localStorage.getItem("jsc:cfg:ui:theme")||"dark";if(_t!=="system")document.documentElement.setAttribute("data-theme",_t)}catch(e){}</script>
+</head>
+<body>
+<div id="app"><div id="mid">
+  <nav id="rail" aria-label="Views">
+    <div class="railgroup">
+      <div class="nano" data-i18n>Views</div>
+      <button class="navitem" data-view="check"><span class="glyph">◐</span><span data-i18n>Check the set</span><span class="navcount" id="nc-errors"></span></button>
+      <button class="navitem" data-view="scope"><span class="glyph">?</span><span data-i18n>What is checked, and what is not</span></button>
+    </div>
+    <div class="railgroup">
+      <p class="hint" data-i18n>The check runs the kernel rules this app has ported from the reference validator. It is not the reference validator: three rule families are missing, and signatures are not verified.</p>
+    </div>
+  </nav>
+  <main id="main">
+    <section class="glass card" data-view="check">
+      <h2><span class="glyph">◐</span><span data-i18n>Check the set</span></h2>
+      <div class="wbrow"><button type="button" class="primary" id="run" data-i18n>Check the active set</button>
+        <button type="button" id="download" disabled data-i18n>Download the report (JSON)</button></div>
+      <div class="progress-track"><div class="progress-fill" id="bar"></div></div>
+      <div id="out" style="margin-top:12px"></div>
+    </section>
+    <section class="glass card" data-view="scope">
+      <h2><span class="glyph">?</span><span data-i18n>What is checked, and what is not</span></h2>
+      <div style="font-size:12.5px;color:var(--text-secondary);max-width:86ch;display:flex;flex-direction:column;gap:8px">
+        <p data-i18n>Checked, each rule ported from validate_core.py and run against its conformance vectors:</p>
+        <p data-i18n>The manifest: its shape, and that it pins the kernel its content needs. Every object: that it matches exactly one kernel type, that an optional list is absent instead of empty, that statement ids are unique, that every {param:} token is declared, that a facet keyed by statement names statements that exist.</p>
+        <p data-i18n>Integrity: both digests of every object and the digest of every pinned file against the manifest. An object edited in this app is reported as a note, because the export writes a new manifest.</p>
+        <p data-i18n>References: every reference that must resolve inside the bundle does, with the right type; Set membership has no cycle; a mapping's scope names statements that exist.</p>
+        <p data-i18n>Tailorings: two operations on one target; a weakening without a Deviation at consumer tier; a parameter value of the wrong kind. Facets: every payload against the standard descriptor or the pinned schema; an unregistered facet fails.</p>
+        <p data-i18n>Risks and scales: RISK-1 to RISK-14 with the coverage of the selected requirements, SCALE-1 to SCALE-4 with the matrix.</p>
+        <p class="verdict-warn" data-i18n>Not checked: conditional-apply instances, the composition of two bundles, and signatures (DSSE envelopes). The tier of a Tailoring is derived without verifying a signature. For these, and as the reference in every case of doubt, run jascon/scripts/validate_core.py on the exported bundle.</p>
+      </div>
+    </section>
+  </main>
+</div></div>
+
+<script src="jascon-core.js"></script>
+<script src="jascon-schema.js"></script>
+<script src="jascon-rules.js"></script>
+<script src="jascon-view.js"></script>
+<script>
+"use strict";
+/* Validate: runs jscCheckGraph over the active set and shows what it found.
+   The page adds no rule of its own; a finding is a sentence of
+   jascon-rules.js, which keeps the reference validator's wording. The scope
+   of the check, and what it leaves to the Python validator, is stated on the
+   page's second view and repeated above every result. */
+jscI18n.add("de", {
+  "Validate": "Validieren", "Check the set": "Set prüfen", "What is checked, and what is not": "Was geprüft wird, und was nicht",
+  "The check runs the kernel rules this app has ported from the reference validator. It is not the reference validator: three rule families are missing, and signatures are not verified.":
+    "Die Prüfung führt die Kernel-Regeln aus, die diese App vom Referenzvalidator portiert hat. Sie ist nicht der Referenzvalidator: Drei Regelfamilien fehlen, und Signaturen werden nicht geprüft.",
+  "Check the active set": "Aktives Set prüfen", "Download the report (JSON)": "Bericht herunterladen (JSON)",
+  "Checked, each rule ported from validate_core.py and run against its conformance vectors:": "Geprüft, jede Regel aus validate_core.py portiert und gegen ihre Konformitätsvektoren gelaufen:",
+  "The manifest: its shape, and that it pins the kernel its content needs. Every object: that it matches exactly one kernel type, that an optional list is absent instead of empty, that statement ids are unique, that every {param:} token is declared, that a facet keyed by statement names statements that exist.":
+    "Das Manifest: seine Form, und dass es den Kernel pinnt, den sein Inhalt braucht. Jedes Objekt: dass es auf genau einen Kernel-Typ passt, dass eine optionale Liste fehlt statt leer zu sein, dass Statement-Ids eindeutig sind, dass jedes {param:}-Token deklariert ist, dass ein nach Statement geschlüsseltes Facet Statements nennt, die es gibt.",
+  "Integrity: both digests of every object and the digest of every pinned file against the manifest. An object edited in this app is reported as a note, because the export writes a new manifest.":
+    "Integrität: beide Digests jedes Objekts und der Digest jeder gepinnten Datei gegen das Manifest. Ein in dieser App bearbeitetes Objekt wird als Hinweis gemeldet, weil der Export ein neues Manifest schreibt.",
+  "References: every reference that must resolve inside the bundle does, with the right type; Set membership has no cycle; a mapping's scope names statements that exist.":
+    "Verweise: Jeder Verweis, der im Bundle auflösen muss, tut das, mit dem richtigen Typ; die Set-Mitgliedschaft hat keinen Zyklus; der Scope eines Mappings nennt Statements, die es gibt.",
+  "Tailorings: two operations on one target; a weakening without a Deviation at consumer tier; a parameter value of the wrong kind. Facets: every payload against the standard descriptor or the pinned schema; an unregistered facet fails.":
+    "Tailorings: zwei Operationen auf ein Ziel; eine Abschwächung ohne Deviation auf Consumer-Stufe; ein Parameterwert der falschen Art. Facets: jede Nutzlast gegen den Standard-Deskriptor oder das gepinnte Schema; ein unregistriertes Facet fällt durch.",
+  "Risks and scales: RISK-1 to RISK-14 with the coverage of the selected requirements, SCALE-1 to SCALE-4 with the matrix.":
+    "Risiken und Skalen: RISK-1 bis RISK-14 mit der Abdeckung der ausgewählten Anforderungen, SCALE-1 bis SCALE-4 mit der Matrix.",
+  "Not checked: conditional-apply instances, the composition of two bundles, and signatures (DSSE envelopes). The tier of a Tailoring is derived without verifying a signature. For these, and as the reference in every case of doubt, run jascon/scripts/validate_core.py on the exported bundle.":
+    "Nicht geprüft: conditional-apply-Instanzen, die Komposition zweier Bundles und Signaturen (DSSE-Umschläge). Die Stufe eines Tailorings wird ohne Signaturprüfung abgeleitet. Dafür, und als Referenz in jedem Zweifelsfall, jascon/scripts/validate_core.py auf dem exportierten Bundle laufen lassen.",
+  "The set is empty; there is nothing to check.": "Das Set ist leer; es gibt nichts zu prüfen.",
+  "objects": "Objekte", "errors": "Fehler", "notes": "Hinweise", "typed": "typisiert",
+  "No error from the rules this app has ported. Conditional-apply, composition and signatures were not checked.": "Kein Fehler nach den Regeln, die diese App portiert hat. Conditional-apply, Komposition und Signaturen wurden nicht geprüft.",
+  "all": "alle", "Filter the findings": "Befunde filtern", "Kind": "Art", "Area": "Bereich", "Object": "Objekt", "Finding": "Befund",
+  "error": "Fehler", "note": "Hinweis", "and {n} more; narrow the filter": "und {n} weitere; Filter eingrenzen", "Tier of the Tailorings": "Stufe der Tailorings",
+  "checked set \"{set}\": {e} error(s), {n} note(s) in {ms} ms": "Set „{set}“ geprüft: {e} Fehler, {n} Hinweis(e) in {ms} ms",
+  "manifest": "Manifest", "files": "Dateien", "object": "Objekt", "digest": "Digest", "reference": "Verweis", "tailoring": "Tailoring", "scale": "Skala", "risk": "Risiko", "facet": "Facet",
+});
+
+const $ = id => document.getElementById(id);
+const V = jscView, esc = jscEsc;
+const AREAS = { manifest: N("manifest"), files: N("files"), object: N("object"), digest: N("digest"), reference: N("reference"),
+  tailoring: N("tailoring"), scale: N("scale"), risk: N("risk"), facet: N("facet") };
+let G = jscSet.graph, last = null, filter = { area: "", kind: "", q: "" };
+
+async function run() {
+  if (!G.objects.size && !G.scales.size) { $("out").innerHTML = `<div class="empty">${esc(T("The set is empty; there is nothing to check."))}</div>`; return; }
+  const bar = $("bar"), t0 = performance.now();
+  bar.classList.remove("done"); bar.style.width = "0%";
+  const verified = await jscVerify(G, (done, total) => { bar.style.width = Math.round(70 * done / total) + "%"; });
+  const res = await jscCheckGraph(G, G.manifest ? verified : null);
+  bar.style.width = "100%"; bar.classList.add("done");
+  last = { set: jscSet.name, tool: JSC_TOOL, "not-checked": ["conditional-apply", "composition", "signatures"], ...res };
+  const e = res.findings.filter(f => f.kind === "error").length, n = res.findings.length - e;
+  jscLog[e ? "warn" : "ok"](T("checked set \"{set}\": {e} error(s), {n} note(s) in {ms} ms", { set: jscSet.name, e, n, ms: Math.round(performance.now() - t0) }));
+  $("nc-errors").textContent = e || "";
+  $("download").disabled = false;
+  render();
+}
+function render() {
+  if (!last) return;
+  const all = last.findings, errors = all.filter(f => f.kind === "error").length, typed = Object.values(last.types).reduce((a, b) => a + b, 0);
+  const q = filter.q.toLowerCase(), cap = 400;
+  const shown = all.filter(f => (!filter.area || f.area === filter.area) && (!filter.kind || f.kind === filter.kind) &&
+    (!q || f.message.toLowerCase().includes(q) || (f.object || "").toLowerCase().includes(q)));
+  const byArea = {}; all.forEach(f => { byArea[f.area] = (byArea[f.area] || 0) + 1; });
+  const chip = (n, label, cls) => `<span class="chip"><b class="${cls || ""}">${esc(n)}</b>${esc(T(label))}</span>`;
+  $("out").innerHTML = `<div>${chip(G.objects.size, "objects")}${chip(typed, "typed", typed === G.objects.size ? "verdict-ok" : "verdict-bad")}
+      ${chip(errors, "errors", errors ? "verdict-bad" : "verdict-ok")}${chip(all.length - errors, "notes")}
+      ${JSC_TYPES.filter(t => last.types[t]).map(t => `<span class="chip"><b>${last.types[t]}</b>${esc(t)}</span>`).join("")}</div>
+    ${errors ? "" : `<p class="verdict-ok" style="margin:6px 0">✓ ${esc(T("No error from the rules this app has ported. Conditional-apply, composition and signatures were not checked."))}</p>`}
+    ${Object.keys(last.tiers).length ? V.section(T("Tier of the Tailorings"), Object.entries(last.tiers).map(([id, tier]) => `<div>${V.refLink(id, V.last(id))} ${V.badge(tier)}</div>`).join("")) : ""}
+    ${all.length ? `<div class="filterrow" style="margin-top:12px"><button type="button" class="fpill ${filter.area ? "" : "on"}" data-area="">${esc(T("all"))} · ${all.length}</button>
+        ${Object.entries(byArea).map(([a, n]) => `<button type="button" class="fpill ${filter.area === a ? "on" : ""}" data-area="${esc(a)}">${esc(T(AREAS[a] || a))} · ${n}</button>`).join("")}
+        <button type="button" class="fpill ${filter.kind === "error" ? "on" : ""}" data-kind="error">${esc(T("errors"))}</button>
+        <button type="button" class="fpill ${filter.kind === "note" ? "on" : ""}" data-kind="note">${esc(T("notes"))}</button>
+        <input type="search" id="q" placeholder="${esc(T("Filter the findings"))}" aria-label="${esc(T("Filter the findings"))}" value="${esc(filter.q)}" style="max-width:280px"></div>
+      <table class="flat"><tr><th>${esc(T("Kind"))}</th><th>${esc(T("Area"))}</th><th>${esc(T("Object"))}</th><th>${esc(T("Finding"))}</th></tr>
+      ${shown.slice(0, cap).map(f => `<tr><td class="${f.kind === "error" ? "verdict-bad" : "hint"}">${esc(T(f.kind))}</td><td>${esc(T(AREAS[f.area] || f.area))}</td>
+        <td class="mono" style="font-size:11px">${f.object ? V.refLink(f.object, V.last(f.object)) : ""}</td><td>${esc(f.message)}</td></tr>`).join("")}</table>
+      ${shown.length > cap ? `<div class="hint" style="padding:6px">${esc(T("and {n} more; narrow the filter", { n: shown.length - cap }))}</div>` : ""}` : ""}`;
+  V.wireRefs($("out"));
+  $("out").querySelectorAll("[data-area]").forEach(b => b.addEventListener("click", () => { filter.area = b.dataset.area; render(); }));
+  $("out").querySelectorAll("[data-kind]").forEach(b => b.addEventListener("click", () => { filter.kind = filter.kind === b.dataset.kind ? "" : b.dataset.kind; render(); }));
+  let timer;
+  if ($("q")) $("q").addEventListener("input", e => { filter.q = e.target.value; clearTimeout(timer); timer = setTimeout(() => { render(); $("q").focus(); }, 250); });
+}
+$("run").addEventListener("click", run);
+$("download").addEventListener("click", () => jscDownload(jscSlug(last.set) + "-check.json", jscSerialize(last), "application/json"));
+
+jscPage.init({ tool: "validate", title: T("Validate"), onGraph: g => { G = g; last = null; $("out").textContent = ""; $("download").disabled = true; $("nc-errors").textContent = ""; } });
+</script>
+</body>
+</html>
