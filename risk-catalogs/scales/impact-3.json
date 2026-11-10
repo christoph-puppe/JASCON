@@ -1,0 +1,47 @@
+{
+ "id": "https://github.com/christoph-puppe/JASCON/risk-catalogs/scale/impact-3",
+ "version": "0.1.0",
+ "title": {
+  "en": "Impact, three levels",
+  "de": "Auswirkung, drei Stufen"
+ },
+ "description": {
+  "en": "A starting scale. Copy it, change the wording, add or remove levels, give it your own id. Lowest first.",
+  "de": "Eine Ausgangsskala. Kopieren, Wortlaut ändern, Stufen ergänzen oder streichen, eine eigene id vergeben. Niedrigste zuerst."
+ },
+ "levels": [
+  {
+   "level": "gering",
+   "label": {
+    "de": "gering",
+    "en": "minor"
+   },
+   "description": {
+    "de": "Der Schaden ist begrenzt und aus dem laufenden Betrieb zu tragen.",
+    "en": "The damage is limited and absorbed in normal operation."
+   }
+  },
+  {
+   "level": "mittel",
+   "label": {
+    "de": "mittel",
+    "en": "serious"
+   },
+   "description": {
+    "de": "Der Schaden ist spürbar: Ausfall über Tage, Kunden betroffen, Meldepflicht möglich.",
+    "en": "The damage is felt: an outage of days, customers affected, a duty to report possible."
+   }
+  },
+  {
+   "level": "hoch",
+   "label": {
+    "de": "hoch",
+    "en": "severe"
+   },
+   "description": {
+    "de": "Der Schaden gefährdet den Fortbestand, die Sicherheit von Menschen oder zentrale Verträge.",
+    "en": "The damage endangers the organisation's survival, people's safety or central contracts."
+   }
+  }
+ ]
+}

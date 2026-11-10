@@ -330,6 +330,8 @@ commit `6b71647e` — 42 pass, 23 fail.
 
 | X-12 *(author, after the merge)* | **Likelihood and impact were facet-only.** "Think we need those." | Three standards and OSCAL's data name exactly these two inputs; §3 kept them out together with the computation. | `rating` and `residual-rating` may carry `likelihood` and `impact`, each `{level, scale-ref}`. RISK-13 extended to them. The matrix, CVSS, FAIR and impact per dimension stay in the facet. An OSCAL risk still cannot use them: they sit inside a rating, and it has no level. | `rating-with-likelihood-and-impact`, `likelihood-without-scale`, `rating-with-an-unknown-input`, `impact-with-a-dimension`, `residual-impact-on-another-scale`, `residual-carries-only-one-input` |
 
+| X-13 *(author, after the merge)* | **Scales were names without definitions.** "Likelihood should be editable, wording and how many levels; same for impact." | A `scale-ref` was a bare URI and a level a free string: a typo was a new level, and nobody could read how many levels a scale had. | Scale definitions as files the manifest pins under `scales` (not a kernel type): levels in order, the organisation's wording and number. SCALE-1 (the definition), SCALE-2 (a stated level is a defined one), SCALE-3 *(SHOULD)* (a residual is not above what it remains of). | `scale-vectors.json` ×9 |
+
 **Rule table after the review:** RISK-1…RISK-12 as in §11.2, with RISK-7
 and RISK-12 extended to `tailoring-refs` and RISK-11 asked per Tailoring;
 **RISK-13** — *`residual-rating` presupposes `rating`, on the same scale*;
@@ -337,9 +339,9 @@ and RISK-12 extended to `tailoring-refs` and RISK-11 asked per Tailoring;
 names the Tailoring its treatment belongs to*.
 
 **Vectors after the review:** 73 (27 object · 38 bundle · 8 transitions).
-Conformance corpus: **225 vectors, 13 families** (240 in 14 with the
-kernel-pin family, D3.6). Python reference
-validator: 240/240 and all shipped bundles, ALL GREEN.
+Conformance corpus: **225 vectors, 13 families** (249 in 15 with the
+kernel-pin and scale families, D3.6, D3.7). Python reference
+validator: 249/249 and all shipped bundles, ALL GREEN.
 
 **What the review did not settle.**
 

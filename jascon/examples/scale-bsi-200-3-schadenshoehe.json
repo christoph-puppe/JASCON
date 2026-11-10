@@ -1,0 +1,38 @@
+{
+ "id": "https://cso.example/scale/bsi-200-3-schadenshoehe",
+ "version": "1.0.0",
+ "title": {
+  "en": "Impact",
+  "de": "Schadenshöhe"
+ },
+ "levels": [
+  {
+   "level": "vernachlässigbar",
+   "label": {
+    "de": "vernachlässigbar",
+    "en": "negligible"
+   }
+  },
+  {
+   "level": "begrenzt",
+   "label": {
+    "de": "begrenzt",
+    "en": "limited"
+   }
+  },
+  {
+   "level": "beträchtlich",
+   "label": {
+    "de": "beträchtlich",
+    "en": "considerable"
+   }
+  },
+  {
+   "level": "existenzbedrohend",
+   "label": {
+    "de": "existenzbedrohend",
+    "en": "threatening the organisation's existence"
+   }
+  }
+ ]
+}
