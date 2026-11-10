@@ -1,6 +1,7 @@
-/* The two checks that keep the app's words in step with its code:
-   every interface string has a German text, and the settings table in
-   readme.md is the one generated from JSC_CFG. */
+/* The checks that keep what is generated or translated in step with its
+   source: every interface string has a German text, the settings table in
+   readme.md is the one generated from JSC_CFG, and jascon-schema.js is the
+   one generated from the kernel schema. */
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
@@ -8,6 +9,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { findMissing } from "../tools/check-i18n.mjs";
 import { render } from "../tools/gen-docs.mjs";
+import { render as renderSchema } from "../tools/gen-schema.mjs";
 
 const APP = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -20,4 +22,8 @@ test("every interface string has a German translation", () => {
 test("the settings table in readme.md is the generated one", () => {
   const readme = fs.readFileSync(path.join(APP, "readme.md"), "utf8");
   assert.equal(render(readme), readme, "run node jascon-app/tools/gen-docs.mjs");
+});
+
+test("jascon-schema.js is the one generated from jascon/schemas/", () => {
+  assert.equal(fs.readFileSync(path.join(APP, "jascon-schema.js"), "utf8"), renderSchema(), "run node jascon-app/tools/gen-schema.mjs");
 });
