@@ -33,6 +33,7 @@
       <button class="navitem" data-view="scales"><span class="glyph">≣</span><span data-i18n>Scales and matrix</span><span class="navcount" id="nc-scales"></span></button>
       <button class="navitem" data-view="coverage"><span class="glyph">◔</span><span data-i18n>Coverage</span></button>
       <button class="navitem" data-view="catalogue"><span class="glyph">▤</span><span data-i18n>Risk catalogues</span></button>
+      <button class="navitem" data-view="model"><span class="glyph">✧</span><span data-i18n>Suggestions</span></button>
     </div>
     <div class="railgroup">
       <p class="hint" data-i18n>A risk is a scenario with an owner. Once assessed it has a level on a scale you define; once treated it names its option, the requirements that carry it and who accepted what remains. A selected requirement is justified by the risks whose treatments name it.</p>
@@ -44,6 +45,7 @@
     <section class="glass card" data-view="scales"><h2><span class="glyph">≣</span><span data-i18n>Scales and matrix</span></h2><div id="scales"></div></section>
     <section class="glass card" data-view="coverage"><h2><span class="glyph">◔</span><span data-i18n>Coverage</span></h2><div id="coverage"></div></section>
     <section class="glass card" data-view="catalogue"><h2><span class="glyph">▤</span><span data-i18n>Risk catalogues</span></h2><div id="catalogue"></div></section>
+    <section class="glass card" data-view="model"><h2><span class="glyph">✧</span><span data-i18n>Suggestions from a model</span></h2><div id="model"></div></section>
   </main>
 </div></div>
 
@@ -53,6 +55,7 @@
 <script src="jascon-riskcat.js"></script>
 <script src="jascon-presets.js"></script>
 <script src="jascon-view.js"></script>
+<script src="jascon-ai.js"></script>
 <script>
 "use strict";
 /* Risk analysis: the register, one risk, the scales with their matrix, the
@@ -78,9 +81,11 @@
    manifest as risk-catalogs/not-applicable.json; the kernel has no place for
    it (backlog #54).
 
-   Not here: suggestions from a model, catalogues other than the two the
-   repository ships, impact per dimension, and any method other than a
-   likelihood-impact matrix. */
+   Suggestions from a language model are the last view and the only part of
+   the page that sends anything anywhere; see the comment above renderModel.
+
+   Not here: catalogues other than the two the repository ships, impact per
+   dimension, and any method other than a likelihood-impact matrix. */
 jscI18n.add("de", {
   "Risk": "Risiko", "Register": "Register", "Scales and matrix": "Skalen und Matrix", "Coverage": "Abdeckung", "Risk catalogues": "Risikokataloge",
   "A risk is a scenario with an owner. Once assessed it has a level on a scale you define; once treated it names its option, the requirements that carry it and who accepted what remains. A selected requirement is justified by the risks whose treatments name it.":
@@ -149,6 +154,32 @@ jscI18n.add("de", {
   "entries": "Einträge", "gaps": "Lücken", "A reason is needed to record an entry as not applicable.": "Um einen Eintrag als nicht anwendbar festzuhalten, braucht es einen Grund.",
   "imported {n} risk(s); {d} suggested treatment(s) dropped; {b} risk(s) without any treatment": "{n} Risiko/Risiken importiert; {d} vorgeschlagene Behandlung(en) entfallen; {b} Risiko/Risiken ohne Behandlung",
   "import failed: {msg}": "Import fehlgeschlagen: {msg}",
+  "Suggestions": "Vorschläge", "Suggestions from a model": "Vorschläge von einem Modell", "Suggest risks": "Risiken vorschlagen", "Suggest treatments": "Behandlungen vorschlagen", "Prompt": "Prompt",
+  "Everything else on this page is computed. Here a language model is asked for what no rule can compute: drafts of risks for a scope you describe, and which selected requirements act on a risk. An answer is a suggestion. The app checks it against what was sent, and nothing is written into the set until you take it. The text below is what leaves this browser, to the service you chose, when you press the button; nothing else does.":
+    "Alles andere auf dieser Seite ist berechnet. Hier wird ein Sprachmodell nach dem gefragt, was keine Regel berechnen kann: Entwürfe von Risiken für einen beschriebenen Geltungsbereich und welche ausgewählten Anforderungen auf ein Risiko wirken. Eine Antwort ist ein Vorschlag. Die App prüft sie gegen das Gesendete, und nichts wird ins Set geschrieben, bevor Sie es übernehmen. Der Text unten ist, was diesen Browser beim Klick auf den Knopf zum gewählten Dienst verlässt; sonst nichts.",
+  "Ask the model": "Modell fragen", "cancel": "abbrechen", "{calls} call(s), about {tokens} tokens, to {service}": "{calls} Aufruf(e), etwa {tokens} Tokens, an {service}",
+  "ask again, do not use kept answers": "neu fragen, aufbewahrte Antworten nicht verwenden", "What is sent": "Was gesendet wird",
+  "cancel requested; calls in flight are finished, no further call is started": "Abbruch angefordert; laufende Aufrufe werden beendet, kein weiterer wird gestartet",
+  "estimate: {calls} call(s), about {tokens} tokens. The service counted: {input} in ({cached} from its cache), {output} out, {thoughts} thinking, in {n} call(s).":
+    "Schätzung: {calls} Aufruf(e), etwa {tokens} Tokens. Der Dienst zählte: {input} Eingabe ({cached} aus seinem Cache), {output} Ausgabe, {thoughts} Denken, in {n} Aufruf(en).",
+  "suggest risks": "Risiken vorschlagen", "{n} draft(s) of risks; {d} dropped (empty or already in the register)": "{n} Risiko-Entwurf/Entwürfe; {d} verworfen (leer oder schon im Register)",
+  "suggest risks failed: {msg}": "Risiken vorschlagen fehlgeschlagen: {msg}",
+  "Describe the scope first; without a description and without components there is nothing to judge.": "Zuerst den Geltungsbereich beschreiben; ohne Beschreibung und ohne Komponenten gibt es nichts zu beurteilen.",
+  "Scope": "Geltungsbereich", "What is the system or organisation, who uses it, what does it process, what does it depend on? The components of the set are added.":
+    "Was ist das System oder die Organisation, wer nutzt es, was verarbeitet es, wovon hängt es ab? Die Komponenten des Sets werden ergänzt.",
+  "At most": "Höchstens", "rated on": "bewertet auf", "No level scale with a matrix is pinned; the drafts carry no rating.": "Keine Stufenskala mit Matrix gepinnt; die Entwürfe tragen keine Bewertung.",
+  "Drafts from {service}, {date}. A draft is not in the set until you take it.": "Entwürfe von {service}, {date}. Ein Entwurf ist erst im Set, wenn Sie ihn übernehmen.",
+  "taken": "übernommen", "Save as a draft risk": "Als Risiko-Entwurf speichern", "Open in the form": "Im Formular öffnen", "Dismiss": "Verwerfen", "Not shown: {list}": "Nicht gezeigt: {list}",
+  "{n} risk(s) in the register: {s} sent to the model, {k} left out (retired, of another Tailoring, or treated already); {c} call(s)":
+    "{n} Risiko/Risiken im Register: {s} an das Modell gesendet, {k} ausgelassen (ausgemustert, anderes Tailoring oder schon behandelt); {c} Aufruf(e)",
+  "cancelled": "abgebrochen", "treatments: {c} answer(s) kept from before, {s} call(s) sent, {f} failed": "Behandlungen: {c} Antwort(en) von vorher aufbewahrt, {s} Aufruf(e) gesendet, {f} fehlgeschlagen",
+  "The selection holds no requirement of this set.": "Die Auswahl enthält keine Anforderung dieses Sets.",
+  "No risk to ask about. Create or import risks first, or include the risks that have treatments.": "Kein Risiko, nach dem gefragt werden könnte. Zuerst Risiken anlegen oder importieren, oder die Risiken mit Behandlung einbeziehen.",
+  "Requirements selected by": "Anforderungen ausgewählt durch", "risks without a treatment": "Risiken ohne Behandlung", "every live risk": "jedes aktive Risiko",
+  "requirements per risk": "Anforderungen je Risiko", "candidate requirements": "Kandidaten-Anforderungen", "calls per risk": "Aufrufe je Risiko",
+  "{n} key(s) the model returned were not among those sent and were dropped": "{n} vom Modell genannte(r) Schlüssel war(en) nicht unter den gesendeten und wurde(n) verworfen",
+  "The model named no requirement that is not on the risk already.": "Das Modell hat keine Anforderung genannt, die nicht schon am Risiko steht.",
+  "Add the ticked to the risk": "Angekreuzte zum Risiko hinzufügen", "tick all": "alle ankreuzen",
 });
 
 const $ = id => document.getElementById(id);
@@ -664,12 +695,274 @@ function renderCatalogue() {
   on("[data-undo]", "click", n => { const next = { ...na }; delete next[n.dataset.undo]; delete next[n.dataset.undoid]; saveNa(next); });
 }
 
+/* ====================== suggestions from a model ======================
+   Two questions go to a model, and only when the user asks: drafts of risk
+   scenarios for a described scope (one call), and which selected
+   requirements act on a risk (one call per risk and slice of requirements,
+   several at a time). What is sent is built in jascon-ai.js from the set and
+   shown here before it is sent. What comes back is checked there against
+   what was sent and shown as a suggestion; a risk is written only by the
+   buttons below, and by the same rules as the form.
+
+   A run that stops half way loses nothing: every answer is kept as it
+   arrives (the draft store and the answer cache), and running again sends
+   only the calls that have no answer yet. */
+const AI_DEFAULTS = { context: "", count: 8, scale: "", owner: "", tailoring: "", scope: "untreated", max: 8, fresh: false, a: null, b: {} };
+/* the one object the view reads and writes; a draft stored by an earlier build gets the fields it lacks */
+const AIS = () => {
+  if (!ui.data.ai || Object.keys(AI_DEFAULTS).some(k => !(k in ui.data.ai))) ui.data.ai = { ...JSON.parse(JSON.stringify(AI_DEFAULTS)), ...(ui.data.ai || {}) };
+  return ui.data.ai;
+};
+const RUN = { which: null, done: 0, total: 0 };
+let aiBuilt = false;
+const clampInt = (v, min, max, def) => { const n = parseInt(v, 10); return Number.isFinite(n) ? Math.max(min, Math.min(max, n)) : def; };
+const usageLine = est => T("estimate: {calls} call(s), about {tokens} tokens. The service counted: {input} in ({cached} from its cache), {output} out, {thoughts} thinking, in {n} call(s).",
+  { calls: est.calls, tokens: est.tokens, input: jscAi.usage.input, cached: jscAi.usage.cached, output: jscAi.usage.output, thoughts: jscAi.usage.thoughts, n: jscAi.usage.calls });
+const runRow = (which, est, why) => {
+  const mine = RUN.which === which, busy = !!RUN.which;
+  return `<div class="wbrow"><button type="button" class="primary" id="ai-${which}-run" ${busy || why || !est.calls ? "disabled" : ""}>${esc(T("Ask the model"))}</button>
+      ${mine ? `<button type="button" class="danger" id="ai-${which}-cancel">■ ${esc(T("cancel"))}</button><progress max="${RUN.total}" value="${RUN.done}"></progress><span class="hint">${RUN.done}/${RUN.total}</span>` : ""}
+      <span class="hint">${esc(T("{calls} call(s), about {tokens} tokens, to {service}", { calls: est.calls, tokens: est.tokens, service: jscAi.label() + (jscAi.model() ? " / " + jscAi.model() : "") }))}</span>
+      <label><input type="checkbox" id="ai-${which}-fresh" ${AIS().fresh ? "checked" : ""}> ${esc(T("ask again, do not use kept answers"))}</label></div>
+    ${why ? `<p class="hint verdict-warn">${esc(why)}</p>` : ""}`;
+};
+const sentBox = which => `<details id="ai-${which}-sent"><summary>${esc(T("What is sent"))}</summary><pre style="white-space:pre-wrap;max-height:340px;overflow:auto;font-size:11.5px"></pre></details>`;
+function wireRun(which, firstPrompt, run) {
+  const box = $(`ai-${which}-sent`);
+  box.addEventListener("toggle", () => { if (box.open) box.querySelector("pre").textContent = firstPrompt(); });
+  $(`ai-${which}-run`).addEventListener("click", run);
+  $(`ai-${which}-fresh`).addEventListener("change", e => { AIS().fresh = e.target.checked; ui.save(); });
+  if ($(`ai-${which}-cancel`)) $(`ai-${which}-cancel`).addEventListener("click", () => { jscAi.cancel(); jscLog.warn(T("cancel requested; calls in flight are finished, no further call is started")); });
+}
+function beginRun(which, total) { RUN.which = which; RUN.done = 0; RUN.total = total; jscAi.resetCancel(); jscAi.resetUsage(); }
+function endRun(est) { RUN.which = null; if (jscAi.usage.calls) jscLog.info(usageLine(est)); renderModel(); }
+/* what would stop this Risk from being saved, by the rules the form uses */
+async function errorsOf(o) {
+  const objs = new Map(G.objects); objs.set(o.id, { type: "risk", obj: o });
+  const mine = m => m.startsWith(o.id + ":");
+  return [...jscRiskRuleViolations(o).map(([rule, what]) => `${rule}: ${what}`), ...jscShapeErrors("risk", o), ...jscClosureErrors(objs).filter(mine),
+    ...jscScaleErrors(SCALES, new Map([[o.id, { type: "risk", obj: o }]])).errors, ...(await jscRiskCoverage(objs)).errors.filter(mine)];
+}
+
+/* ---------- drafts of risks ---------- */
+function aInput() {
+  const d = AIS(), withMatrix = [...SCALES.values()].filter(sd => sd.matrix);
+  const sd = withMatrix.find(x => x.id === d.scale) || withMatrix[0] || null;
+  const lScale = sd ? SCALES.get(sd.matrix["likelihood-scale"]) : null, iScale = sd ? SCALES.get(sd.matrix["impact-scale"]) : null;
+  const components = [...G.objects.values()].filter(r => r.type === "component" && r.obj.lifecycle !== "withdrawn")
+    .map(r => ({ id: r.obj.id, label: r.obj.label || V.last(r.obj.id), title: r.obj.title, kind: r.obj.kind }));
+  const inp = jscAiRiskInput({ context: d.context, components, lScale, iScale, count: clampInt(d.count, 1, 30, 8), lang: jscI18n.contentLang(), text: TT,
+    risks: risks().map(r => ({ label: r.obj.label || V.last(r.obj.id), title: r.obj.title, scenario: r.obj.scenario })) });
+  return { ...inp, sd, lScale, iScale, withMatrix, prompt: jscAi.fill("risk-suggest", inp.vars) };
+}
+function riskFromDraft(dr, run) {
+  let label = jscSlug(dr.title).slice(0, 48), n = 1;
+  while (G.objects.has(jscSet.mintId("risk", label))) label = jscSlug(dr.title).slice(0, 44) + "-" + (++n);
+  const o = { id: "", version: "1", lifecycle: "draft", label, title: { [run.lang]: dr.title }, scenario: { [run.lang]: dr.scenario },
+    "owner-ref": AIS().owner || jscCfg.get("org:owner"), state: "identified" };
+  const comps = dr.components.filter(id => G.objects.has(id));
+  if (comps.length) o["component-refs"] = comps;
+  const sd = SCALES.get(run.scale), cell = sd && dr.likelihood && dr.impact ? jscMatrixCell(sd, dr.likelihood, dr.impact) : undefined;
+  if (cell !== undefined) o.rating = { level: cell, "scale-ref": sd.id, likelihood: { level: dr.likelihood, "scale-ref": sd.matrix["likelihood-scale"] },
+    impact: { level: dr.impact, "scale-ref": sd.matrix["impact-scale"] } };
+  /* where the text came from stays with the object; annotations are outside the semantic digest */
+  o.annotations = { "jascon-app": { "drafted-by": "model", service: run.by, on: run.at.slice(0, 10), ...(dr.reason ? { "model-reason": dr.reason } : {}) } };
+  return o;
+}
+async function runA() {
+  const d = AIS(), inp = aInput(), est = jscAiEstimate([inp.prompt]);
+  let cfg;
+  try { cfg = jscAi.cfgFor(inp.schema); } catch (e) { jscLog.err(e.message); return; }
+  beginRun("a", 1); renderModel();
+  try {
+    const { answer } = await jscAi.ask(inp.prompt, cfg, T("suggest risks"), jscAiRiskShape, d.fresh);
+    const res = jscAiRiskCheck(answer, { compKeys: inp.compKeys, lCodes: inp.lScale ? inp.lScale.levels.map(x => x.level) : [],
+      iCodes: inp.iScale ? inp.iScale.levels.map(x => x.level) : [], existingTitles: risks().map(r => TT(r.obj.title)) });
+    d.a = { at: new Date().toISOString(), by: `${cfg.backend}/${cfg.model}`, scale: inp.sd ? inp.sd.id : "", lang: jscI18n.contentLang(), risks: res.risks, dropped: res.dropped, error: "" };
+    jscLog.ok(T("{n} draft(s) of risks; {d} dropped (empty or already in the register)", { n: res.risks.length, d: res.dropped.length }));
+  } catch (e) {
+    d.a = { ...(d.a || { risks: [], dropped: [] }), error: e.message };
+    jscLog.err(T("suggest risks failed: {msg}", { msg: e.message }));
+  }
+  RUN.done = 1; ui.save(); endRun(est);
+}
+function renderA() {
+  const d = AIS(), inp = aInput(), est = jscAiEstimate([inp.prompt]), run = d.a;
+  const why = jscAi.missing() || (d.context.trim() || inp.compKeys.size ? "" : T("Describe the scope first; without a description and without components there is nothing to judge."));
+  const name = ref => (G.objects.has(ref) ? V.labelOf(G.objects.get(ref)) : V.last(ref));
+  const sdRun = run && SCALES.get(run.scale);
+  const rating = dr => {
+    if (!sdRun || !dr.likelihood || !dr.impact) return "";
+    const cell = jscMatrixCell(sdRun, dr.likelihood, dr.impact);
+    return `<div style="margin-top:4px">${esc(T("Likelihood"))} ${V.badge(levelLabel(SCALES.get(sdRun.matrix["likelihood-scale"]), dr.likelihood))} ${esc(T("Impact"))} ${V.badge(levelLabel(SCALES.get(sdRun.matrix["impact-scale"]), dr.impact))}
+      ${cell !== undefined ? `<span class="hint">${esc(T("the matrix gives"))}</span> ${V.badge(levelLabel(sdRun, cell))}` : ""}</div>`;
+  };
+  $("ai-a").innerHTML = `<div class="form">
+      <label for="ai-context">${esc(T("Scope"))}</label><div><textarea id="ai-context" style="min-height:110px" placeholder="${esc(T("What is the system or organisation, who uses it, what does it process, what does it depend on? The components of the set are added."))}">${esc(d.context)}</textarea></div>
+      <label for="ai-count">${esc(T("At most"))}</label><div class="wbrow" style="margin:0"><input type="number" id="ai-count" min="1" max="30" value="${esc(clampInt(d.count, 1, 30, 8))}" style="width:80px;min-width:80px"> <span class="hint">${esc(T("risks"))}</span>
+        ${inp.withMatrix.length ? `<label for="ai-scale">${esc(T("rated on"))}</label><select id="ai-scale">${inp.withMatrix.map(x => opt(x.id, scaleTitle(x), inp.sd.id)).join("")}</select>`
+          : `<span class="hint">${esc(T("No level scale with a matrix is pinned; the drafts carry no rating."))}</span>`}
+        <label for="ai-owner">${esc(T("Owner (party URI)"))}</label><input type="url" id="ai-owner" value="${esc(d.owner || jscCfg.get("org:owner"))}" style="min-width:260px"></div></div>
+    ${runRow("a", est, why)}${sentBox("a")}
+    ${run && run.error ? `<p class="verdict-bad" role="alert">✗ ${esc(run.error)}</p>` : ""}
+    ${run && run.risks.length ? `<p class="hint">${esc(T("Drafts from {service}, {date}. A draft is not in the set until you take it.", { service: run.by, date: run.at.slice(0, 10) }))}</p>` : ""}
+    ${run ? run.risks.map((dr, i) => `<div class="stmt" style="margin:8px 0"><b>${esc(dr.title)}</b>
+        <div>${esc(dr.scenario)}</div>${rating(dr)}
+        ${dr.components.length ? `<div>${dr.components.map(c => `<span class="wbchip">⬡ ${esc(name(c))}</span>`).join("")}</div>` : ""}
+        ${dr.reason ? `<div class="hint">${esc(dr.reason)}</div>` : ""}${dr.notes.map(m => `<div class="hint verdict-warn">· ${esc(m)}</div>`).join("")}
+        ${(dr.errors || []).map(m => `<div class="verdict-bad">✗ ${esc(m)}</div>`).join("")}
+        <div class="wbrow" style="margin:6px 0 0">${dr.taken ? `<span class="verdict-ok">✓ ${esc(T("taken"))}</span> ${V.refLink(dr.taken, V.last(dr.taken))}`
+          : `<button type="button" class="small primary" data-ai-save="${i}">${esc(T("Save as a draft risk"))}</button><button type="button" class="small" data-ai-form="${i}">${esc(T("Open in the form"))}</button>
+             <button type="button" class="small" data-ai-drop="${i}">${esc(T("Dismiss"))}</button>`}</div></div>`).join("") : ""}
+    ${run && run.dropped.length ? `<p class="hint">${esc(T("Not shown: {list}", { list: run.dropped.map(x => x.title).join("; ") }))}</p>` : ""}`;
+  V.wireRefs($("ai-a"));
+  const on = (selector, event, fn) => $("ai-a").querySelectorAll(selector).forEach(n => n.addEventListener(event, () => fn(n)));
+  on("#ai-context", "input", n => { d.context = n.value; ui.save(); });
+  on("#ai-context", "change", () => renderA());
+  on("#ai-count", "change", n => { d.count = clampInt(n.value, 1, 30, 8); ui.save(); renderA(); });
+  on("#ai-scale", "change", n => { d.scale = n.value; ui.save(); renderA(); });
+  on("#ai-owner", "change", n => { d.owner = n.value.trim(); ui.save(); });
+  wireRun("a", () => aInput().prompt, runA);
+  on("[data-ai-drop]", "click", n => { run.risks.splice(+n.dataset.aiDrop, 1); ui.save(); renderA(); });
+  on("[data-ai-form]", "click", n => {
+    E = riskFromDraft(run.risks[+n.dataset.aiForm], run); E._lang = run.lang; editingExisting = false;
+    renderEdit(); jscPage.show("edit");
+  });
+  on("[data-ai-save]", "click", async n => {
+    const dr = run.risks[+n.dataset.aiSave], o = riskFromDraft(dr, run);
+    o.id = jscSet.mintId("risk", o.label);
+    dr.errors = await errorsOf(o);
+    if (!dr.errors.length) { await jscSet.saveObjects([o]); dr.taken = o.id; }
+    ui.save();
+    if (dr.taken) await jscPage.refresh(); else renderA();
+  });
+}
+
+/* ---------- treatments for the risks of the register ---------- */
+function bInput() {
+  const d = AIS(), tailorings = [...G.objects.values()].filter(r => r.type === "tailoring" && r.obj.lifecycle !== "withdrawn");
+  const tid = tailorings.some(t => t.obj.id === d.tailoring) ? d.tailoring : (tailorings[0] ? tailorings[0].obj.id : "");
+  const sel = jscCatalogSelection(G.objects, tid || null);
+  const reqs = [...sel.selected].sort().map(id => G.objects.get(id)).filter(r => r && r.type === "requirement" && r.obj.lifecycle !== "withdrawn")
+    .map(r => ({ id: r.obj.id, label: r.obj.label || V.last(r.obj.id), title: r.obj.title, prose: (r.obj.statements || []).map(s => TT(s.prose)).join(" ") }));
+  /* resolved before any call: a retired or withdrawn risk, one that belongs to another Tailoring, and (by choice) one that has treatments */
+  const live = risks().filter(r => r.obj.state !== "retired" && r.obj.lifecycle !== "withdrawn" && (!tid || !(r.obj["tailoring-refs"] || []).length || r.obj["tailoring-refs"].includes(tid)));
+  const inScope = live.filter(r => d.scope === "all" || !(r.obj.treatments || []).length);
+  const slices = jscAiCandidates(reqs, jscAi.chunk(), TT), max = clampInt(d.max, 1, 30, 8), lang = jscI18n.contentLang();
+  /* one call per risk and slice. The prompt of a call is built when it is sent or shown; the size of the run is
+     summed from its parts, so that showing the estimate does not build every prompt. */
+  const calls = [];
+  for (const r of inScope) {
+    const riskText = jscAiRiskText({ label: r.obj.label || V.last(r.obj.id), title: r.obj.title, scenario: r.obj.scenario }, TT);
+    slices.forEach((slice, si) => calls.push({ risk: r.obj.id, slice, si, riskText }));
+  }
+  const promptOf = c => jscAi.fill("risk-treat", { candidates: c.slice.text, risk: c.riskText, max, lang });
+  const frame = jscAi.fill("risk-treat", { candidates: "", risk: "", max, lang }).length;
+  const chars = calls.reduce((sum, c) => sum + frame + c.slice.text.length + c.riskText.length, 0);
+  return { tailorings, tid, sel, reqs, live, inScope, slices, calls, promptOf, est: { calls: calls.length, chars, tokens: Math.ceil(chars / 4) } };
+}
+async function runB() {
+  const d = AIS(), inp = bInput(), est = inp.est;
+  let cfg;
+  try { cfg = jscAi.cfgFor(JSC_AI_TREAT_SCHEMA); } catch (e) { jscLog.err(e.message); return; }
+  jscLog.info(T("{n} risk(s) in the register: {s} sent to the model, {k} left out (retired, of another Tailoring, or treated already); {c} call(s)",
+    { n: risks().length, s: inp.inScope.length, k: risks().length - inp.inScope.length, c: inp.calls.length }));
+  const stamp = { by: `${cfg.backend}/${cfg.model}`, at: new Date().toISOString() };
+  for (const r of inp.inScope) d.b[r.obj.id] = { ...stamp, state: "pending", items: [], errors: [], unknown: 0 };
+  let cached = 0, failed = 0;
+  beginRun("b", inp.calls.length); renderModel();
+  const left = new Map(inp.inScope.map(r => [r.obj.id, inp.slices.length]));
+  const tasks = inp.calls.map(c => async () => {
+    const row = d.b[c.risk], already = new Set([...((G.objects.get(c.risk).obj.treatments || []).map(t => t["requirement-ref"])), ...row.items.map(x => x.id)]);
+    try {
+      const got = await jscAi.ask(inp.promptOf(c), cfg, `${V.last(c.risk)} ${c.si + 1}/${inp.slices.length}`, jscAiTreatShape, d.fresh);
+      const res = jscAiTreatCheck(got.answer, { keys: c.slice.keys, already });
+      if (got.cached) cached++;
+      row.items.push(...res.treatments); row.unknown += res.unknown;
+    } catch (e) { failed++; row.errors.push(e.message); }
+    left.set(c.risk, left.get(c.risk) - 1);
+    if (!left.get(c.risk)) row.state = row.errors.length ? "error" : "ok";
+    ui.save();   // kept as it arrives: a reload during the run loses no answer
+  });
+  await jscAi.core.runPool(tasks, jscAi.concurrency(), (done, total) => { RUN.done = done; RUN.total = total; renderB(); });
+  for (const r of inp.inScope) if (d.b[r.obj.id].state === "pending") { d.b[r.obj.id].state = "error"; d.b[r.obj.id].errors.push(T("cancelled")); }
+  jscLog[failed ? "warn" : "ok"](T("treatments: {c} answer(s) kept from before, {s} call(s) sent, {f} failed", { c: cached, s: inp.calls.length - cached - failed, f: failed }));
+  ui.save(); endRun(est);
+}
+function renderB() {
+  const d = AIS(), inp = bInput(), est = inp.est;
+  const why = jscAi.missing() || inp.sel.error || (!inp.reqs.length ? T("The selection holds no requirement of this set.") : !inp.inScope.length ? T("No risk to ask about. Create or import risks first, or include the risks that have treatments.") : "");
+  const name = ref => (G.objects.has(ref) ? V.labelOf(G.objects.get(ref)) : V.last(ref));
+  const rows = Object.entries(d.b).filter(([id]) => G.objects.has(id));
+  $("ai-b").innerHTML = `<div class="wbrow">
+      ${inp.tailorings.length ? `<label for="ai-tail">${esc(T("Requirements selected by"))}</label><select id="ai-tail">${inp.tailorings.map(t => opt(t.obj.id, V.labelOf(t), inp.tid)).join("")}</select>` : ""}
+      <span class="seg"><button type="button" data-ai-scope="untreated" class="${d.scope === "all" ? "" : "on-inc"}" aria-pressed="${d.scope !== "all"}">${esc(T("risks without a treatment"))}</button><button type="button" data-ai-scope="all" class="${d.scope === "all" ? "on-inc" : ""}" aria-pressed="${d.scope === "all"}">${esc(T("every live risk"))}</button></span>
+      <label for="ai-max">${esc(T("At most"))}</label><input type="number" id="ai-max" min="1" max="30" value="${esc(clampInt(d.max, 1, 30, 8))}" style="width:80px;min-width:80px"> <span class="hint">${esc(T("requirements per risk"))}</span></div>
+    <div class="wbrow">${chip(inp.inScope.length, "risks")}${chip(inp.reqs.length, "candidate requirements")}${inp.slices.length > 1 ? chip(inp.slices.length, "calls per risk") : ""}</div>
+    ${runRow("b", est, why)}${sentBox("b")}
+    ${rows.map(([id, row]) => `<div class="stmt" style="margin:8px 0" data-ai-row="${esc(id)}"><b>△ ${V.refLink(id, name(id))}</b> <span class="hint">${esc(TT(G.objects.get(id).obj.title))}</span>
+        ${row.state === "pending" ? V.badge(T("pending")) : ""}${row.errors.map(m => `<div class="verdict-bad">✗ ${esc(m)}</div>`).join("")}
+        ${row.unknown ? `<div class="hint verdict-warn">· ${esc(T("{n} key(s) the model returned were not among those sent and were dropped", { n: row.unknown }))}</div>` : ""}
+        ${row.items.map((x, i) => `<div><label><input type="checkbox" data-ai-pick="${i}" ${x.pick ? "checked" : ""}> ◇ ${esc(name(x.id))}</label> <span class="hint">${esc(TT((G.objects.get(x.id) || { obj: {} }).obj.title))}</span>
+          <div class="hint" style="margin-left:22px">${esc(x.reason)}</div></div>`).join("")}
+        ${row.state === "ok" && !row.items.length ? `<div class="hint">${esc(T("The model named no requirement that is not on the risk already."))}</div>` : ""}
+        ${(row.saveErrors || []).map(m => `<div class="verdict-bad">✗ ${esc(m)}</div>`).join("")}
+        ${row.items.length ? `<div class="wbrow" style="margin:6px 0 0"><button type="button" class="small primary" data-ai-add>${esc(T("Add the ticked to the risk"))}</button>
+          <button type="button" class="small" data-ai-all>${esc(T("tick all"))}</button><button type="button" class="small" data-ai-clear>${esc(T("Dismiss"))}</button></div>` : ""}</div>`).join("")}`;
+  V.wireRefs($("ai-b"));
+  const on = (selector, event, fn) => $("ai-b").querySelectorAll(selector).forEach(n => n.addEventListener(event, () => fn(n)));
+  const rowOf = n => d.b[n.closest("[data-ai-row]").dataset.aiRow], idOf = n => n.closest("[data-ai-row]").dataset.aiRow;
+  on("#ai-tail", "change", n => { d.tailoring = n.value; ui.save(); renderB(); });
+  on("[data-ai-scope]", "click", n => { d.scope = n.dataset.aiScope; ui.save(); renderB(); });
+  on("#ai-max", "change", n => { d.max = clampInt(n.value, 1, 30, 8); ui.save(); renderB(); });
+  wireRun("b", () => { const now = bInput(); return now.calls.length ? now.promptOf(now.calls[0]) : ""; }, runB);
+  on("[data-ai-pick]", "change", n => { rowOf(n).items[+n.dataset.aiPick].pick = n.checked; ui.save(); });
+  on("[data-ai-all]", "click", n => { rowOf(n).items.forEach(x => { x.pick = true; }); ui.save(); renderB(); });
+  on("[data-ai-clear]", "click", n => { delete d.b[idOf(n)]; ui.save(); renderB(); });
+  on("[data-ai-add]", "click", async n => {
+    const id = idOf(n), row = d.b[id], picked = row.items.filter(x => x.pick).map(x => x.id);
+    if (!picked.length) return;
+    const before = G.objects.get(id).obj, o = JSON.parse(JSON.stringify(before));
+    o.treatments = [...(o.treatments || []), ...picked.filter(q => !(o.treatments || []).some(t => t["requirement-ref"] === q)).map(q => ({ "requirement-ref": q }))];
+    const app = { ...((o.annotations || {})["jascon-app"] || {}) }, earlier = (app["treatments-suggested"] || {}).refs || [];
+    app["treatments-suggested"] = { by: row.by, on: row.at.slice(0, 10), refs: [...new Set([...earlier, ...picked])] };
+    o.annotations = { ...(o.annotations || {}), "jascon-app": app };
+    /* a fault the risk had before is not this change's; only a new one stops it */
+    const had = new Set(await errorsOf(before));
+    row.saveErrors = (await errorsOf(o)).filter(m => !had.has(m));
+    if (row.saveErrors.length) { ui.save(); renderB(); return; }
+    await jscSet.saveObjects([o]);
+    row.items = row.items.filter(x => !x.pick);
+    if (!row.items.length) delete d.b[id];
+    ui.save();
+    await jscPage.refresh();
+  });
+}
+function renderModel() {
+  if (!aiBuilt) {
+    aiBuilt = true;
+    $("model").innerHTML = `<p class="hint" style="max-width:86ch;margin-bottom:10px">${esc(T("Everything else on this page is computed. Here a language model is asked for what no rule can compute: drafts of risks for a scope you describe, and which selected requirements act on a risk. An answer is a suggestion. The app checks it against what was sent, and nothing is written into the set until you take it. The text below is what leaves this browser, to the service you chose, when you press the button; nothing else does."))}</p>
+      <div id="ai-access"></div>
+      <div class="nano sectionlabel">${esc(T("Suggest risks"))}</div><div id="ai-a"></div>
+      <details open style="margin-top:8px"><summary>${esc(T("Prompt"))}</summary><div id="ai-a-prompt"></div></details>
+      <div class="nano sectionlabel" style="margin-top:22px">${esc(T("Suggest treatments"))}</div><div id="ai-b"></div>
+      <details open style="margin-top:8px"><summary>${esc(T("Prompt"))}</summary><div id="ai-b-prompt"></div></details>`;
+    jscAi.accessPanel($("ai-access"));
+    jscAi.onKey(() => { if (!RUN.which) { renderA(); renderB(); } });
+    jscAi.promptEditor($("ai-a-prompt"), "risk-suggest");
+    jscAi.promptEditor($("ai-b-prompt"), "risk-treat");
+    $("ai-a-prompt").addEventListener("jsc:prompt", () => { if (!RUN.which) renderA(); });
+    $("ai-b-prompt").addEventListener("jsc:prompt", () => { if (!RUN.which) renderB(); });
+  }
+  renderA(); renderB();
+}
+
 jscPage.init({ tool: "risk", title: T("Risk"), onGraph: async g => {
   G = g;
   SCALES = jscMatrixErrors(new Map([...g.scales].map(([id, x]) => [id, x.def]))).usable;
   ALL = await problemsOfAll();
   if (E && editingExisting && !g.objects.has(E.id)) E = null;
-  renderRegister(); await renderEdit(); renderScales(); renderCoverage(); renderCatalogue();
+  renderRegister(); await renderEdit(); renderScales(); renderCoverage(); renderCatalogue(); renderModel();
 } });
 </script>
 </body>

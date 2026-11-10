@@ -38,11 +38,21 @@ and in `readme.md`; this file says only what is done and what is next.
   shipped bundles pass the whole-set check and the example folder shows the
   one D26 error the Python validator shows. `validate.html` on top of it.
 
+- The model access: `jascon-ai.js` (one client for Gemini, OpenRouter and an
+  own endpoint; the key in memory and relayed through the hub; editable
+  prompts; an answer cache), the settings and prompt editors in
+  `config.html`, and the view *Suggestions* of `risk.html` (drafts of risks,
+  treatments for the risks of the register). Driven in headless Chromium
+  against a simulated Gemini endpoint on SP 800-53 with the demo Tailoring;
+  the exported set gives `validate_core.py` 1043 pass, 0 fail. No real
+  service was called.
+
 ## Next
 
-- The AI layer (model client with the key in memory, prompts in the
-  settings, risk suggestions). The plan names it for the first version; it
-  is not built.
+- One real call per service with a key of the user's: the model ids in the
+  settings and the request shape were checked against a simulated service
+  only (the model documentation could not be reached from the build
+  environment).
 - The three vector families still missing: conditional, composition, dsse.
 - Let the pages type objects by schema at load (`jscTypeOf`) instead of by
   fields (`jscInferType`).
@@ -61,6 +71,7 @@ and in `readme.md`; this file says only what is done and what is next.
 
 ## Open
 
-- The AI layer the plan names for the first version is not built yet; it is
-  due with the first page that uses it (risk suggestions in step 5).
-- A key for a model must not be kept in browser storage; hold it in memory.
+- The settings page opens in the same tab from the hub, which clears the key
+  the hub holds. From a tool page it opens in a new tab and the key stays.
+- Suggestions exist on the Risk page only; a second model pass (a checker)
+  is not built.

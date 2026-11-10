@@ -128,7 +128,7 @@ button:hover, .btn:hover { background: var(--bg-elev-3); }
 button.primary { background: var(--accent); border-color: transparent; color: var(--on-accent); font-weight: 600; }
 button.primary:hover { filter: brightness(1.08); }
 button.danger:hover { border-color: var(--red); color: var(--red); }
-button.small { padding: 3px 10px; font-size: 11px; }
+button.small, a.btn.small { padding: 3px 10px; font-size: 11px; }
 button:disabled { opacity: .45; cursor: default; }
 button:focus-visible, .btn:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, .navitem:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 input[type=text], input[type=search], input[type=date], input[type=url], input[type=password], input[type=number], textarea, select {
@@ -245,7 +245,7 @@ svg text { font-family: var(--mono); }
 .wb { border: 1px solid var(--border-2); border-radius: 12px; padding: 14px 16px; margin-bottom: 16px; background: var(--accent-soft); }
 .wb .nano { color: var(--accent); }
 .wbrow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 8px 0; }
-.wbrow input[type=text], .wbrow select { width: auto; min-width: 120px; }
+.wbrow input[type=text], .wbrow input[type=password], .wbrow input[type=url], .wbrow input[type=number], .wbrow select { width: auto; min-width: 120px; }
 .picker { position: relative; flex: 1; min-width: 220px; }
 .sugg { position: absolute; top: 100%; left: 0; right: 0; z-index: 30; background: var(--bg-pop); border: 1px solid var(--border-2); border-radius: 9px; max-height: 240px; overflow-y: auto; box-shadow: 0 10px 30px oklch(0 0 0 / .35); }
 .sugg div { padding: 6px 10px; cursor: pointer; font-size: 12px; }

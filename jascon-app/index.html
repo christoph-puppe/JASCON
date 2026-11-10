@@ -50,6 +50,7 @@ iframe { width: 100%; height: 100%; border: 0; display: block; }
   <label for="set-select" data-i18n>Set</label>
   <select id="set-select" data-i18n-attr="title" title="The working bundle every tool reads and writes"></select>
   <div class="spacer"></div>
+  <button id="key-pill" type="button" class="hidden" data-i18n-attr="title" title="A key for a model service is held in the memory of this page. Click to forget it."></button>
   <button id="btn-theme" type="button"></button>
   <button id="btn-lang" type="button" data-i18n-attr="title" title="Switch the language of the interface"></button>
   <a class="btn" href="config.html" data-i18n>Settings</a>
@@ -150,7 +151,8 @@ if (typeof jscStore === "undefined") {
 }
 
 jscI18n.add("de", {
-  "Set": "Set", "Settings": "Einstellungen", "Home": "Übersicht",
+  "Set": "Set", "Settings": "Einstellungen", "Home": "Übersicht", "model key in memory": "Modell-Schlüssel im Speicher",
+  "A key for a model service is held in the memory of this page. Click to forget it.": "Ein Schlüssel für einen Modell-Dienst liegt im Speicher dieser Seite. Klicken, um ihn zu vergessen.",
   "Validate": "Validieren", "Check the active set against the kernel rules this app has ported": "Das aktive Set gegen die Kernel-Regeln prüfen, die diese App portiert hat",
   "Import": "Import", "Import an OSCAL catalog or profile; everything after it works on JASCON": "Einen OSCAL-Katalog oder ein OSCAL-Profil importieren; alles danach arbeitet auf JASCON",
   "Browse": "Durchsehen", "Tailor": "Tailoring", "Map": "Mapping", "Implement": "Umsetzen", "Assess": "Prüfen", "Risk": "Risiko",
@@ -477,6 +479,36 @@ async function loadHelp() {
     $("help").textContent = T("The help text (readme.md) could not be loaded here: {msg}. Open readme.md from the jascon-app folder.", { msg: e.message });
   }
 }
+
+/* ---------- the key of a model service ----------
+   A tool page that calls a model (jascon-ai.js) hands the key the user typed
+   to this window, so that it survives a change of tool; the next tool page
+   asks for it. It is held in this one variable and nowhere else: a reload of
+   the hub, or a visit to the settings page, clears it. Messages are taken
+   only from the hub's own frame and, when served over http(s), only from
+   the hub's own origin. */
+const aiKeys = Object.create(null);
+const frameOrigin = () => (location.protocol === "file:" ? "*" : location.origin);
+function syncKeyPill() {
+  const n = Object.keys(aiKeys).length;
+  $("key-pill").classList.toggle("hidden", !n);
+  $("key-pill").textContent = n ? "⚿ " + T("model key in memory") + " ✕" : "";
+}
+window.addEventListener("message", e => {
+  if (e.source !== frame.contentWindow || (location.protocol !== "file:" && e.origin !== location.origin)) return;
+  const d = e.data;
+  if (!d || d.jsc !== "ai-key") return;
+  if (d.op === "set" && typeof d.backend === "string" && typeof d.key === "string") {
+    if (d.key) aiKeys[d.backend] = d.key; else delete aiKeys[d.backend];
+    syncKeyPill();
+  }
+  if (d.op === "get") e.source.postMessage({ jsc: "ai-key", op: "keys", keys: { ...aiKeys } }, frameOrigin());
+});
+$("key-pill").addEventListener("click", () => {
+  for (const k of Object.keys(aiKeys)) delete aiKeys[k];
+  syncKeyPill();
+  if (frame.contentWindow) frame.contentWindow.postMessage({ jsc: "ai-key", op: "keys", keys: {} }, frameOrigin());
+});
 
 /* ---------- start ----------
    #<tool> selects a tool; #load=<bundle-url>&tool=<tool> loads a bundle into
