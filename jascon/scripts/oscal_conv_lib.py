@@ -11,8 +11,9 @@ import json, hashlib, os, re, copy, collections, shutil, time
 # digest the Windows spelling. The line ending is therefore explicit; it is
 # CRLF because re-spelling it would churn every published package digest for
 # zero semantic gain (the identifier rule, applied to bytes). .gitattributes
-# pins the same bytes on checkout. JSON never carries a raw newline inside a
-# string, so only structural line breaks are affected.
+# marks bundle files `-text`, so git stores and delivers exactly these bytes.
+# JSON never carries a raw newline inside a string, so only structural line
+# breaks are affected.
 BUNDLE_NEWLINE = "\r\n"
 
 def robust_rmtree(path, attempts=5):
