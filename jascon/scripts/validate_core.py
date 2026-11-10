@@ -928,6 +928,8 @@ def risk_is_live(r):
     ever grows: a control justified once would stay justified for ever."""
     return r.get("state") != "retired" and r.get("lifecycle") != "withdrawn"
 
+NO_TAILORING = "*"      # report key of the implicit selection: every Requirement of the bundle
+
 def risk_justifies(r):
     """A Risk justifies a requirement once a treatment DECISION rests on an
     ASSESSED risk: live, published (not `draft`), `state` assessed or
@@ -986,7 +988,8 @@ def risk_coverage(objs, sdig_fn=None, envelopes=None, trusted=None):
     `lapsed`: named only by retired / withdrawn Risks), which excludes lack
     a rationale, and which treatments point at requirements the Tailoring(s)
     they belong to do not select (treatment-out-of-scope, RISK-11).
-    A Risk's `tailoring-refs` scope it: it justifies, and is held to
+    A bundle with NO Tailoring has every Requirement in play (reported
+    under NO_TAILORING). A Risk's `tailoring-refs` scope it: it justifies, and is held to
     RISK-11, only there; without them it applies to every Tailoring of the
     bundle. Returns (report, errors, notes). Uncovered is a REPORT line:
     whether a control needs a risk basis is the program's policy."""
@@ -1002,10 +1005,21 @@ def risk_coverage(objs, sdig_fn=None, envelopes=None, trusted=None):
         return not scope or tid in scope
     report = {"tailorings": {}, "risks": len(risks), "treatment-out-of-scope": []}
     selections = {}
+    # No Tailoring at all: nothing was scoped out, so every Requirement of
+    # the bundle is in play - the catalogue applies as published. The
+    # implicit selection is reported under NO_TAILORING. (A bundle whose
+    # Tailorings are all WITHDRAWN is a different statement: there was a
+    # Statement of Applicability, and it is no longer in force.)
+    if not tailorings:
+        in_force = [NO_TAILORING]
     for tid in in_force:
-        tobj = tailorings[tid]
-        tier = derive_tier(tobj, objs, sdig_fn or sdig, envelopes=envelopes, trusted=trusted)
-        sel, open_sel = _selected_requirements(tobj, objs, notes)
+        if tid == NO_TAILORING:
+            tobj, tier, open_sel = {}, "none", False
+            sel = {q for q, (t, o) in objs.items() if t == "requirement" and o.get("lifecycle") != "withdrawn"}
+        else:
+            tobj = tailorings[tid]
+            tier = derive_tier(tobj, objs, sdig_fn or sdig, envelopes=envelopes, trusted=trusted)
+            sel, open_sel = _selected_requirements(tobj, objs, notes)
         selections[tid] = (sel, open_sel)
         treats, pending, lapsed = (collections.defaultdict(set) for _ in range(3))
         for rid, r in risks.items():
@@ -1021,11 +1035,12 @@ def risk_coverage(objs, sdig_fn=None, envelopes=None, trusted=None):
         report["tailorings"][tid] = {"tier": tier, "selected": len(sel), "open-selection": open_sel,
                                      "covered": covered, "uncovered": uncovered, "pending": pending_only,
                                      "lapsed": lapsed_only, "excludes-without-rationale": excl_no_rationale}
+        lab = "(no Tailoring)" if tid == NO_TAILORING else tid
         for q, rids in pending_only.items():
-            notes.append(f"{tid}: selected {q} is named only by Risk(s) without an assessed treatment decision "
+            notes.append(f"{lab}: selected {q} is named only by Risk(s) without an assessed treatment decision "
                          f"{rids} - counted as uncovered (a risk justifies once it is assessed and its option chosen)")
         for q, rids in lapsed_only.items():
-            notes.append(f"{tid}: selected {q} is named only by retired/withdrawn Risk(s) {rids} - "
+            notes.append(f"{lab}: selected {q} is named only by retired/withdrawn Risk(s) {rids} - "
                          f"counted as uncovered (C.3c: a retired risk justifies nothing)")
         if tier == "consumer" and excl_no_rationale:
             # ISO 27001 6.1.3 d: exclusion is justified or it is not a Statement of Applicability
@@ -1048,19 +1063,18 @@ def risk_coverage(objs, sdig_fn=None, envelopes=None, trusted=None):
     # undecidable from this side, so it is said and not guessed - an open
     # Tailoring the risk does not belong to decides nothing.
     out_of_scope, undecided = collections.defaultdict(set), collections.defaultdict(set)
-    if tailorings:
-        for rid, r in risks.items():
-            if not risk_is_live(r): continue
-            mine = [tid for tid in in_force if applies(r, tid)]
-            for tr in r.get("treatments", []) or []:
-                q = tr["requirement-ref"]
-                tgt = objs.get(q)
-                if not tgt or tgt[0] != "requirement": continue
-                if any(q in selections[tid][0] for tid in mine): continue
-                if tgt[1].get("lifecycle") != "withdrawn" and any(selections[tid][1] for tid in mine):
-                    undecided[q].add(rid)
-                else:
-                    out_of_scope[q].add(rid)
+    for rid, r in risks.items():
+        if not risk_is_live(r): continue
+        mine = [tid for tid in in_force if applies(r, tid)]
+        for tr in r.get("treatments", []) or []:
+            q = tr["requirement-ref"]
+            tgt = objs.get(q)
+            if not tgt or tgt[0] != "requirement": continue
+            if any(q in selections[tid][0] for tid in mine): continue
+            if tgt[1].get("lifecycle") != "withdrawn" and any(selections[tid][1] for tid in mine):
+                undecided[q].add(rid)
+            else:
+                out_of_scope[q].add(rid)
     for q, rids in sorted(undecided.items()):
         notes.append(f"{sorted(rids)[0]}: treatment names {q}, which no set-ref select reaches - "
                      f"RISK-11 undecided: a predicate select of its Tailoring(s) may select it")
@@ -1403,8 +1417,13 @@ def validate_bundle(bdir):
     cov, cerrs, cnotes = risk_coverage(bundle_objs, envelopes=envelopes, trusted=TRUSTED)
     for e in cerrs: fail(section, e)
     for n in cnotes + risk_link_notes(bundle_objs): print(f"    note: {n}")
-    if cov["risks"]:
+    # the report is printed where there is a register to report on; the
+    # policy switch applies regardless - a bundle with a Tailoring and NO
+    # Risk at all is the limiting case of "justified by no Risk", not an
+    # exemption from it
+    if cov["risks"] or REQUIRE_RISK_BASIS:
         for tid, r in cov["tailorings"].items():
+            if tid == NO_TAILORING: tid = "(no Tailoring: every requirement is in play)"
             print(f"    risk-coverage: {tid} [{r['tier']}] selected={r['selected']}"
                   f"{'+ (open: predicate select)' if r['open-selection'] else ''} "
                   f"justified={len(r['covered'])} uncovered={len(r['uncovered'])}")
