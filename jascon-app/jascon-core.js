@@ -36,7 +36,7 @@
 
 /* ==JSC-PURE-START== */
 
-const JSC_BUILD = "0.3.0";
+const JSC_BUILD = "0.4.0";
 const JSC_TOOL = "JASCON-App " + JSC_BUILD;
 /* The kernel this app writes, and the kernels it reads (KERNEL-2: a tool
    stops at a pin it does not implement and names both). */
@@ -313,9 +313,9 @@ function jscObjectPath(type, id, taken) {
    The manifest is computed from what is in the graph now. If it says the same
    as the manifest the bundle came with, that manifest leaves unchanged, text
    and all; otherwise the computed one is written. Either way a second export
-   of the same graph gives the same bytes. `provenance` adds lines to the
-   provenance of a bundle that has no manifest of its own (a resolved
-   package names the Tailoring it was resolved with).
+   of the same graph gives the same bytes. `provenance` is the provenance of
+   a bundle that has no manifest of its own (an imported catalog names its
+   source, a resolved package the Tailoring it was resolved with).
    -> { files: [{path, text}], manifest, verbatim, problems } */
 /* An attestation is listed only if the manifest it came with listed it;
    otherwise it travels beside the manifest (D3.1). */
@@ -353,7 +353,7 @@ async function jscBuildBundle(g, provenance) {
   if (kernel) manifest["kernel-version"] = kernel;
   manifest.provenance = g.manifest
     ? { ...(old.provenance || {}), "edited-with": JSC_TOOL }
-    : { source: "JASCON-App", converter: JSC_TOOL, ...(provenance || {}) };
+    : provenance ? { ...provenance, "written-with": JSC_TOOL } : { source: "JASCON-App", converter: JSC_TOOL };
   manifest.objects = objects;
   manifest["facet-schemas"] = facetPins;
   if (scalePins.length) manifest.scales = scalePins;
