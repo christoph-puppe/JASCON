@@ -5,6 +5,16 @@ UNMAPPED = 0 as the gate signal, computed coverage report, manifest
 with both digests. Every converter stays a thin corpus adapter."""
 import json, hashlib, os, re, copy, collections, shutil, time
 
+# Package digests are over DELIVERED BYTES (D3.1), so a converter must write
+# the same bytes on every OS. Text-mode writes do not: "\n" becomes CRLF on
+# Windows and stays LF elsewhere, and the manifests of the 1.0.0 corpus
+# digest the Windows spelling. The line ending is therefore explicit; it is
+# CRLF because re-spelling it would churn every published package digest for
+# zero semantic gain (the identifier rule, applied to bytes). .gitattributes
+# pins the same bytes on checkout. JSON never carries a raw newline inside a
+# string, so only structural line breaks are affected.
+BUNDLE_NEWLINE = "\r\n"
+
 def robust_rmtree(path, attempts=5):
     """shutil.rmtree with retries - Windows indexers/AV hold transient handles."""
     for i in range(attempts):
@@ -90,7 +100,7 @@ class Bundle:
     def _w(self, relpath, obj):
         p = os.path.join(self.out, relpath)
         os.makedirs(os.path.dirname(p), exist_ok=True)
-        with open(p, "w", encoding="utf-8") as f:
+        with open(p, "w", encoding="utf-8", newline=BUNDLE_NEWLINE) as f:
             json.dump(obj, f, indent=1, ensure_ascii=False); f.write("\n")
     def _sha(self, relpath):
         return "sha256:" + hashlib.sha256(open(os.path.join(self.out, relpath), "rb").read()).hexdigest()
