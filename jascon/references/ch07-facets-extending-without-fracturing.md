@@ -75,8 +75,11 @@ see it.
 A facet is a name plus a contract. The name is an IRI rooted in *your*
 domain — collision policy comes free with DNS — cited by objects at the
 major line (`…@1`) and pinned in every bundle's manifest to an **exact
-version and digest**. The contract is the descriptor you publish, and
-it has four load-bearing parts.
+version and digest**. For a stdlib facet the pinned file is the
+published descriptor itself: a pin under a stdlib id whose schema
+differs from the descriptor is a validation error (D26), so a bundle
+and the standard cannot say two things under one name. The contract is
+the descriptor you publish, and it has four load-bearing parts.
 
 **The schema** — plain JSON Schema 2020-12 for the payload. This is the
 sentence that retires the CSV era: *your vocabulary file becomes a

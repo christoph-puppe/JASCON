@@ -7,7 +7,9 @@
   ],
   "method": {
     "https://ns.oscal.org/stdlib/facet/assessment-criteria@1": {
-      "summary": "Document review of KONF.14.1 evidence duties; key test: rotation artifacts present."
+      "summary": {
+        "en": "Document review of KONF.14.1 evidence duties; key test: rotation artifacts present."
+      }
     }
   },
   "performer-ref": "https://assessor.example/party/lead-assessor",
