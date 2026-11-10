@@ -1548,7 +1548,7 @@ the other ten are unmeasured (their sources are not in the repository).
 No headline number was changed here — that is the author's sentence to
 re-word once the other corpora are measured.
 
-## OPEN — the version number contradicts D22 rev 3 *(#40; author decision)*
+## ~~OPEN~~ CLOSED the same day — the version number contradicts D22 rev 3 *(#40; decided: 2.0.0 — see "Amendments — the 2.0.0 decision")*
 The proposal ships as "1.1.0, minor" on the argument that every
 1.0.0-valid object stays valid. This register says, at the 1.0.0-rc.1
 consolidation: *"Post-1.0, kernel promotion requires measured 2-of-3 and
@@ -1579,3 +1579,64 @@ input bundles are byte-identical; the NIST schema it needs is not in the
 repository). Handbook, SKILL.md and the skill zip (78 entries) follow
 the landed state; the specification file is untouched — it is the
 released 1.0.0 text, and what replaces it waits on #40.
+
+# Amendments — the 2.0.0 decision (2026-11-10)
+
+## #40 CLOSED — the kernel that carries Risk is 2.0.0 *(author decision)*
+**Decision.** "v2" — the author, 2026-11-10, on being shown the
+contradiction recorded above. The release is **2.0.0**, a major version,
+as D22 rev 3 and specification IV.8 require. **D22 is not amended.**
+Schema file `oscal-semantic-core-2.0.0.schema.json`, `$id`
+`https://ns.oscal.org/semantic-core/schema/2.0.0`; the working label
+"1.1.0" was replaced in the schema, both validators, the vectors, the
+handbook, SKILL.md, the reader and the converter in one pass. It
+survives in the proposal's §1–§11 and in the landing record above, both
+kept as written.
+**A major by rule, a superset in fact (measured).** Nothing in 2.0.0
+invalidates 1.0.0 content: all 6,914 objects of the 1.0.0 corpus
+validate unchanged, so a 1.0.0 bundle is a 2.0.0 bundle. The reverse
+does not hold — a 1.0.0 tool meets a Risk and reports "matches NO type"
+— and that asymmetry is what a major number tells a consumer.
+**Customer.** A consumer who reads "2.0.0" upgrades the tool before the
+data. "1.1.0" on a closed-shape kernel would have promised a forward
+compatibility the format cannot give.
+**Simplicity.** The rule stands as written: no rev 4, no carve-out.
+**Trade-off.** A "2.0" sixteen weeks after 1.0.0.
+**What the major opens, and what this entry does NOT take.** The 1.0.0
+record tied two things to a major: (1) re-spelling the machine
+identifiers ("Revisit only with a D3.5 major version, should one ever
+exist") — **unchanged here**; `oscal-semantic-core` stays in namespace
+URIs, the media type and schema filenames until the author says
+otherwise; (2) tightening `Finding.actions[].due` (#47a) — **not
+taken**, so that the superset property stays true. Both windows are open
+until the tag.
+**Not yet a release.** No tag. Before one: the PowerShell twin must run
+(#45), #43 must be decided, and the specification needs its 2.0.0 text
+(D4's count, a decision entry for Risk, D14's primitive count, D15's
+matrix, IV.1/IV.6/IV.7) — deliberately not written before #43, which
+decides normative wording.
+
+## D22-applied — Risk and test 1: an exception on the record, not a pass *(#48 filed)*
+D22 rev 3 asks two things of a post-1.0 promotion: a major version — now
+met — and *measured 2-of-3*, independent authority encodings in the
+census corpus. Risk does not meet the second as written. **0 of the 3
+census corpora** (ISM, Grundschutz++, CR26) encode a risk record; the one
+corpus that does (IFA, OSCAL POA&M — not a census corpus) supplies three
+of the record's six fields. The promotion rests on the author's decision
+("kernel type, not facet" in the proposal, confirmed by "v2"), argued
+from three standards that prescribe the same record (ISO/IEC 27001 with
+27005, BSI-Standard 200-3, SP 800-30). Evidence tier, labeled as house
+rule 1 demands: **designed-for, with one partial measurement** — not
+*measured 2-of-3*. Tests 2 and 3 for the record: one shared computation
+— yes (`risk-coverage`); one vocabulary without flattening — the four
+options fit ISO and BSI one-to-one, OSCAL's seven do not (#47b).
+**Why an exception and not a quiet pass.** D22 says a promotion "that
+cannot show its three passes is rejected without further argument". This
+one was admitted by its author against test 1, for a reason the rule did
+not foresee: census authorities publish catalogs, and a risk register is
+consumer-side data that no catalog publisher ships — test 1 as worded
+can never be met by a consumer-side type, whatever the evidence. Whether
+D22 should carry a consumer-side clause with its own evidence bar is
+**#48**. Until that is decided this entry is the precedent, and it is
+exactly one.
+

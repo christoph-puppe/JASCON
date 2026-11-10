@@ -81,7 +81,7 @@ approved | withdrawn` — one machine, four historical prop-copies
 retired. Terminal states are terminal; re-litigation is a *new*
 Deviation with its own record.
 
-**C.3c Risk states** *(1.1.0)*: `identified → assessed → treated →
+**C.3c Risk states** *(2.0.0)*: `identified → assessed → treated →
 retired` — forward only, skipping allowed (RISK-2/3 make the skipped
 content mandatory anyway), `retired` terminal: a recurrence is a *new*
 Risk, the Finding `closed` rule applied once more. Dispositions are the
@@ -197,7 +197,7 @@ not-applicable`. **Assessment results (seed):** `satisfied ·
 not-satisfied · inconclusive` — with the same C.3 smallness rule:
 nuance belongs in Findings and evidence, not in result-code
 proliferation. Seed status, gate-item-3 lifecycle corpus confirms.
-**Risk treatment options** *(1.1.0)*: `modify · retain · avoid · share` —
+**Risk treatment options** *(2.0.0)*: `modify · retain · avoid · share` —
 adopted, not invented: ISO 31000 §6.5.2 / ISO 27005 §8.6, one-to-one with
 BSI 200-3 (Reduktion · Akzeptanz · Vermeidung · Transfer); SP 800-39's
 share and transfer both map to `share`. Each option binds a field

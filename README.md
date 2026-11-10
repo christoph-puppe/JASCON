@@ -39,7 +39,7 @@ chip is **derived from the data**, not asserted; every tailoring operation
 gets a before→after lattice verdict; weakening without a recorded Deviation is
 refused while you type.*
 
-## Unreleased on this branch: Risk as a tenth kernel type
+## Unreleased on this branch: JASCON 2.0.0 — Risk as a tenth kernel type
 
 > **State 2026-11-10 — landed, reviewed, measured; not tagged.** Everything
 > below this section describes the released **1.0.0**. This branch adds
@@ -63,11 +63,17 @@ refused while you type.*
 >   leave the `identified` state; and the coverage reports count source
 >   *paths*, not values that arrive — on the IFA corpus 122 content values
 >   do not (the other ten corpora are unmeasured).
-> - **Open, and blocking a release:** the version number (the released
->   spec says kernel changes ride a *major*), and the PowerShell twin,
->   whose port has not been executed. See the
+> - **Why 2.0.0:** the released spec says kernel-shape changes ride a
+>   *major* (D22 rev 3), and the author kept that rule. It is a major by
+>   rule and a superset in fact — every 1.0.0 bundle is a valid 2.0.0
+>   bundle; a 1.0.0 *tool* cannot read a bundle that carries a Risk.
+> - **Still blocking a release:** the PowerShell twin's port has not been
+>   executed, one rule question is open (how strict the Risk shape is
+>   toward imported OSCAL data), and the specification needs its 2.0.0
+>   text. See the
 >   [backlog](drafts/oscal-semantic-core-v0.6-spec-feedback-backlog.md)
->   #40–#47 and the register section "Amendments — CP-RISK-1".
+>   #41–#48 and the register sections "Amendments — CP-RISK-1" and
+>   "Amendments — the 2.0.0 decision".
 
 ## Why this exists
 

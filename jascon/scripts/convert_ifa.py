@@ -8,7 +8,7 @@ inheritance via inherited-from{component-ref, basis-ref}), Assessment (AR
 ConMon result, AP as method payload, observations as facet + landmark
 evidence URIs), Findings (POA&M risks -> states/actions/deviations), and an
 Attestation modeling the SSP's date-authorized ATO.
-CP-RISK-1 re-run (kernel 1.1.0, 2026-11-10): the POA&M risks are also
+CP-RISK-1 re-run (kernel 2.0.0, 2026-11-10): the POA&M risks are also
 emitted as Risk objects - the first corpus measurement of the tenth type.
 What OSCAL cannot give the Risk shape is REPORTED, never filled in: no
 owner field (derived from the imported SSP, declared), no single level
@@ -579,7 +579,7 @@ j = report(
     f"leveraged/leveraging SSP pair + component-definition example (usnistgov/oscal-content; "
     f"FICTIONAL example content by NIST). Census: `drafts/gate-3-census.md` §4.",
     [f"- Objects emitted: " + ", ".join(f"{v} {k}" for k, v in sorted(types.items())) +
-     f" - the five lifecycle types and the Risk type (kernel 1.1.0) at document scale, manifest with both digests.",
+     f" - the five lifecycle types and the Risk type (kernel 2.0.0) at document scale, manifest with both digests.",
      f"- Carried Requirements (closure): {', '.join(carried)} - byte-identical copies from the "
      f"US.SP800-53 bundle; an authorization package carries its baseline."],
     [f"- **SSP -> Component + Implementation**: by-component -> capability + satisfied-by; "
@@ -594,7 +594,7 @@ j = report(
      f"- **AR + AP -> one Assessment**: AP activities/steps ride Assessment.method "
      f"(assessment-plan@1 payload); result not-satisfied from the finding target; observations "
      f"(AR + POA&M, deduped by uuid) -> observations@1 facet + landmark evidence URIs.",
-     f"- **POA&M risks -> Risk objects (CP-RISK-1, kernel 1.1.0)**: statement -> `scenario`; "
+     f"- **POA&M risks -> Risk objects (CP-RISK-1, kernel 2.0.0)**: statement -> `scenario`; "
      f"deadline -> `review-due` (datetime - OSCAL's type is date-time-with-timezone); POA&M system-id -> "
      f"`component-refs`; response `type` prop -> `treatment` (observed: "
      f"{', '.join(f'{k} x{v}' for k, v in sorted(response_types.items())) or 'none'}); the AR finding's "

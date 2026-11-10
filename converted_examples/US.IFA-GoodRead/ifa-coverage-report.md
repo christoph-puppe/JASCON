@@ -7,7 +7,7 @@ Source: **OSCAL IFA GoodRead example set** (SSP v1.1.1 + AP + AR + POA&M) + leve
 - Source leaf values inventoried: **835**
 - Mapped (declared destination): **835**
 - **UNMAPPED: 0**  ->  coverage **100.0 %**
-- Objects emitted: 1 assessment, 1 attestation, 6 component, 2 finding, 3 impl, 2 req, 2 risk - the five lifecycle types and the Risk type (kernel 1.1.0) at document scale, manifest with both digests.
+- Objects emitted: 1 assessment, 1 attestation, 6 component, 2 finding, 3 impl, 2 req, 2 risk - the five lifecycle types and the Risk type (kernel 2.0.0) at document scale, manifest with both digests.
 - Carried Requirements (closure): https://ns.nist.gov/sp800-53/req/AC-6.1, https://ns.nist.gov/sp800-53/req/AC-2 - byte-identical copies from the US.SP800-53 bundle; an authorization package carries its baseline.
 
 ## Conversion rules (declared, counted)
@@ -16,7 +16,7 @@ Source: **OSCAL IFA GoodRead example set** (SSP v1.1.1 + AP + AR + POA&M) + leve
 - **date-authorized -> Component.authorizations + Attestation**: the ATO modeled as an attestation over {system Component, Implementation, AC-6.1} semantic digests; unsigned (envelope-ref absent) - signature verification is gate-4 (backlog #24).
 - **Leveraged/leveraging pair -> D5 inheritance**: consumer Implementation satisfied-by inherited-from{csp-iaas, auth-csp-iaas-2018} - basis-ref names the provider Component's authorization (edge-local closure enforced by the validator); provider export.provided -> capabilities, export.responsibilities -> customer-responsibilities.
 - **AR + AP -> one Assessment**: AP activities/steps ride Assessment.method (assessment-plan@1 payload); result not-satisfied from the finding target; observations (AR + POA&M, deduped by uuid) -> observations@1 facet + landmark evidence URIs.
-- **POA&M risks -> Risk objects (CP-RISK-1, kernel 1.1.0)**: statement -> `scenario`; deadline -> `review-due` (datetime - OSCAL's type is date-time-with-timezone); POA&M system-id -> `component-refs`; response `type` prop -> `treatment` (observed: accept x1, mitigate x1); the AR finding's related-risks edge -> `treatments[]` (RISK-2 is modified by AC-6.1). likelihood/impact, the source status and the response narrative -> risk-analysis@1 (the L2 holding pen for the parked stdlib facet).
+- **POA&M risks -> Risk objects (CP-RISK-1, kernel 2.0.0)**: statement -> `scenario`; deadline -> `review-due` (datetime - OSCAL's type is date-time-with-timezone); POA&M system-id -> `component-refs`; response `type` prop -> `treatment` (observed: accept x1, mitigate x1); the AR finding's related-risks edge -> `treatments[]` (RISK-2 is modified by AC-6.1). likelihood/impact, the source status and the response narrative -> risk-analysis@1 (the L2 holding pen for the parked stdlib facet).
 - **POA&M risks -> Findings**: RISK-2 (open + planned remediation) -> state in-remediation with actions[] (due = within-date-range.end); RISK-1 (status deviation-approved) -> approved `risk-adjustment` Deviation (rationale = mitigating factor, approver = the SCA division URI) whose `refs` name the Risk (RISK-9). Each Finding carries `risk-refs` to its Risk; the risk@1 framework facet is retired.
 - **Finding target `ac-6.1_obj`** is a 53A OBJECTIVE id - it addresses into the sp800-53a@1 facet of the carried AC-6.1 (kept in finding-target@1.target-objective-id; kernel statement-ref stays statement-scoped).
 - **Parties stay landmark** (#16, D22 0-of-3): performer/signer/approver are minted party URIs, no party objects.

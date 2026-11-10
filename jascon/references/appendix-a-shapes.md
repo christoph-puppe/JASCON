@@ -150,7 +150,7 @@ CR26 artifacts/key-tests/examples shape} · `performer-ref` ● ·
 **Finding:** `assessment-ref` ● · `requirement-ref` ● ·
 `statement-ref` ○ · `state` ● code (C.3) · `risk-refs` ○ [URI] — the
 ex-post record points at the ex-ante Risk(s) it materialised against;
-landmark (assessor bundle → organisation register, 1.1.0), but typed: a
+landmark (assessor bundle → organisation register, 2.0.0), but typed: a
 ref that resolves in-bundle must name a Risk (RISK-12) ·
 `actions` ○ [{description ●, due ○ {date | elapsed-duration |
 calendar-period}, status ●}] — computable deadlines
@@ -167,7 +167,7 @@ FedRAMP deviation props are its `type` values.
 | `rendering` | ● | {artifact-digest ●, media-type ●, template-ref{id,version,digest} ●, renderer ●} | *Paper* bound; templates are pinned TCB citizens; chrome-only annotation use is the renderer's law. |
 | `signer` ● · `timestamp` ● · `envelope-ref` ● | | | DSSE profile (stdlib); attestations live **beside** the manifest — nothing signed contains its own signature (D3). |
 
-## A.9b Risk *(kernel 1.1.0 — CP-RISK-1)*
+## A.9b Risk *(kernel 2.0.0 — CP-RISK-1)*
 
 The ex-ante record: why a requirement is in scope. Four authorities encode
 it with the same fields (ISO/IEC 27001 6.1.2–6.1.3 / 27005, BSI 200-3,
@@ -232,7 +232,7 @@ ops, uri/date/integer/decimal parameters, canonical-alias/replaces
 events, Assessment/Finding/Attestation at scale (example-bundle only).
 The gap list is Appendix E's and gate items 2–3's work order.
 
-**Risk (1.1.0), first corpus measurement — IFA re-run 2026-11-10.**
+**Risk (2.0.0), first corpus measurement — IFA re-run 2026-11-10.**
 *Exercised:* `scenario`, `owner-ref`, `state`, `component-refs`,
 `treatment` + `treatments` (×1), `review-due` (datetime ×2),
 `Finding.risk-refs` (×2), a `risk-adjustment` Deviation naming its Risk

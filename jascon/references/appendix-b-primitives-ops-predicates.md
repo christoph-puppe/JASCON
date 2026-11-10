@@ -213,7 +213,7 @@ FAIL [conditional-apply:<instance-id>] on <object-id>
 **Exercised:** declared; corpus instantiation is gate-item-2 work
 (the CR26 class-conditioned timeframes are the natural first cases).
 
-### B.1.9 `risk-coverage` *(1.1.0 — CP-RISK-1, the ninth primitive)*
+### B.1.9 `risk-coverage` *(2.0.0 — CP-RISK-1, the ninth primitive)*
 
 **What it computes:** for each Tailoring, the selected requirements
 (set-refs expanded through nested Sets to any depth, excludes removed)
@@ -364,7 +364,7 @@ evidence arrives, ships as a set version through the Chapter 15
 process, with counts, corpus cases, and two implementations. Until
 then, the honest inventory stands: **nine**, eight, and three — every
 one carrying the reason it exists, printed at the moment it says no.
-The ninth (`risk-coverage`, B.1.9) arrived that way in the 1.1.0 cycle:
+The ninth (`risk-coverage`, B.1.9) arrived that way in the 2.0.0 cycle:
 counts (CP-RISK-1 §2), corpus cases, one implementation green. The gate
 is still closed: the PowerShell twin carries the port but has not been
 executed against the vectors, and until it has, this primitive has one

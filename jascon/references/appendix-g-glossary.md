@@ -339,7 +339,7 @@ App. F Q23)
 
 **Risk** — the ex-ante record: a scenario with an owner, a state, a level
 on a named scale, a treatment decision and the requirements that carry
-it. Tenth kernel type (1.1.0). (Ch. 10 §10.6, App. A.9b)
+it. Tenth kernel type (2.0.0). (Ch. 10 §10.6, App. A.9b)
 
 **Risk owner** — the party accountable for a Risk and the signer of its
 `acceptance` (ISO/IEC 27001 6.1.2 c 2). (App. A.9b)

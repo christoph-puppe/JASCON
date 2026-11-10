@@ -386,7 +386,7 @@ const TYPES = {
   implementation:{ glyph:"◈", color:"oklch(0.75 0.18 145)", what:"The edge that says: this component satisfies this requirement, with responsibility split per clause and inheritance that names its authorization basis." },
   assessment:    { glyph:"◉", color:"oklch(0.65 0.2 25)",   what:"An assessment run: subjects, method, performer, result." },
   finding:       { glyph:"◉", color:"oklch(0.65 0.2 25)",   what:"A finding against a requirement (down to the statement), with states, deadline-bearing actions and Deviations as the audited escape." },
-  risk:          { glyph:"△", color:"oklch(0.78 0.14 25)", what:"The ex-ante record (kernel 1.1.0): a scenario with an owner, a state, a level on a named scale, a treatment decision and the requirements that carry it — why a control is in scope at all." },
+  risk:          { glyph:"△", color:"oklch(0.78 0.14 25)", what:"The ex-ante record (kernel 2.0.0): a scenario with an owner, a state, a level on a named scale, a treatment decision and the requirements that carry it — why a control is in scope at all." },
   attestation:   { glyph:"✦", color:"oklch(0.95 0.005 280)",what:"The signature layer: semantic digests of the subjects + the manifest digest + the pinned rendering — bi-modal verification (Full vs Semantic Match)." },
   manifest:      { glyph:"≡", color:"oklch(0.55 0.02 280)", what:"The sealed table of contents: every object with both digests, every facet schema pinned to an exact version and digest." },
 };
@@ -443,7 +443,7 @@ function inferType(o) {
   if ("component-ref" in o && "requirement-ref" in o && "responsibility" in o) return "implementation";
   if ("subject-refs" in o && "method" in o) return "assessment";
   if ("assessment-ref" in o && "state" in o) return "finding";
-  if ("scenario" in o && "owner-ref" in o) return "risk";   // kernel 1.1.0 (CP-RISK-1): the disjoint Risk signature
+  if ("scenario" in o && "owner-ref" in o) return "risk";   // kernel 2.0.0 (CP-RISK-1): the disjoint Risk signature
   if ("subject-semantic-digests" in o) return "attestation";
   if ("members" in o) return "requirementSet";
   return null;
