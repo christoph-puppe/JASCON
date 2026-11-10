@@ -1,5 +1,5 @@
 {
- "description": "Pinned scale definitions (kernel 2.0.0). A scale is a small definition file the content manifest pins by digest under `scales`, like a facet schema: id, version, and `levels` listed from lowest to highest, each a code with optional multilingual label and description. How many levels and what they are called is the organisation's choice. SCALE-1: a pinned definition has the scale shape, the id and version its pin states, and no level twice. SCALE-2: a level a Risk states on a pinned scale (rating, residual-rating, and the likelihood and impact inside each) is one of that scale's levels. SCALE-3 (SHOULD): a residual level is not above the level it remains of - noted. A scale-ref that no pin answers stays a landmark and its levels opaque. Each vector: the scale definitions as if pinned, the objects, the expected failures and notes.",
+ "description": "Pinned scale definitions (kernel 2.0.0). A scale is a small definition file the content manifest pins by digest under `scales`, like a facet schema: id, version, and `levels` listed from lowest to highest, each a code with optional multilingual label and description. How many levels and what they are called is the organisation's choice. SCALE-1: a pinned definition has the scale shape, the id and version its pin states, and no level twice. SCALE-2: a level a Risk states on a pinned scale (rating, residual-rating, and the likelihood and impact inside each) is one of that scale's levels. SCALE-3 (SHOULD): a residual level is not above the level it remains of - noted. A scale-ref that no pin answers stays a landmark and its levels opaque. The scale of the combined level MAY carry a `matrix`: the two scales it combines and one cell per pair of their levels. SCALE-4: a rating on such a scale that states both likelihood and impact states the level of their cell, or carries an `override-rationale` (then noted). Each vector: the scale definitions as if pinned, the objects, the expected failures and notes.",
  "vectors": [
   {
    "name": "own-wording-own-number-of-levels",
@@ -577,6 +577,792 @@
     "SCALE-1"
    ],
    "rule": "SCALE-1: a definition carries MAJOR.MINOR.PATCH - the manifest pins an exact version"
+  },
+  {
+   "name": "level-follows-from-the-matrix",
+   "scales": [
+    {
+     "id": "https://org.example/scale/likelihood",
+     "version": "1.0.0",
+     "levels": [
+      {
+       "level": "never"
+      },
+      {
+       "level": "sometimes"
+      },
+      {
+       "level": "often"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/scale/impact",
+     "version": "1.0.0",
+     "levels": [
+      {
+       "level": "minor"
+      },
+      {
+       "level": "serious"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/scale/risk",
+     "version": "1.0.0",
+     "levels": [
+      {
+       "level": "green"
+      },
+      {
+       "level": "amber"
+      },
+      {
+       "level": "red"
+      }
+     ],
+     "matrix": {
+      "likelihood-scale": "https://org.example/scale/likelihood",
+      "impact-scale": "https://org.example/scale/impact",
+      "cells": {
+       "never": {
+        "minor": "green",
+        "serious": "green"
+       },
+       "sometimes": {
+        "minor": "green",
+        "serious": "amber"
+       },
+       "often": {
+        "minor": "amber",
+        "serious": "red"
+       }
+      }
+     }
+    }
+   ],
+   "objects": [
+    {
+     "id": "https://org.example/risk/R-30",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Scenario 30."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "assessed",
+     "rating": {
+      "level": "red",
+      "scale-ref": "https://org.example/scale/risk",
+      "likelihood": {
+       "level": "often",
+       "scale-ref": "https://org.example/scale/likelihood"
+      },
+      "impact": {
+       "level": "serious",
+       "scale-ref": "https://org.example/scale/impact"
+      }
+     },
+     "residual-rating": {
+      "level": "green",
+      "scale-ref": "https://org.example/scale/risk",
+      "likelihood": {
+       "level": "never",
+       "scale-ref": "https://org.example/scale/likelihood"
+      },
+      "impact": {
+       "level": "serious",
+       "scale-ref": "https://org.example/scale/impact"
+      }
+     }
+    }
+   ],
+   "expected-fails": 0,
+   "expected-notes": [],
+   "rule": "SCALE-4: the level scale carries the matrix; a rating that states both inputs states the level of their cell - rating and residual alike"
+  },
+  {
+   "name": "level-contradicts-the-matrix",
+   "scales": [
+    {
+     "id": "https://org.example/scale/likelihood",
+     "version": "1.0.0",
+     "levels": [
+      {
+       "level": "never"
+      },
+      {
+       "level": "sometimes"
+      },
+      {
+       "level": "often"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/scale/impact",
+     "version": "1.0.0",
+     "levels": [
+      {
+       "level": "minor"
+      },
+      {
+       "level": "serious"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/scale/risk",
+     "version": "1.0.0",
+     "levels": [
+      {
+       "level": "green"
+      },
+      {
+       "level": "amber"
+      },
+      {
+       "level": "red"
+      }
+     ],
+     "matrix": {
+      "likelihood-scale": "https://org.example/scale/likelihood",
+      "impact-scale": "https://org.example/scale/impact",
+      "cells": {
+       "never": {
+        "minor": "green",
+        "serious": "green"
+       },
+       "sometimes": {
+        "minor": "green",
+        "serious": "amber"
+       },
+       "often": {
+        "minor": "amber",
+        "serious": "red"
+       }
+      }
+     }
+    }
+   ],
+   "objects": [
+    {
+     "id": "https://org.example/risk/R-31",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Scenario 31."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "assessed",
+     "rating": {
+      "level": "green",
+      "scale-ref": "https://org.example/scale/risk",
+      "likelihood": {
+       "level": "often",
+       "scale-ref": "https://org.example/scale/likelihood"
+      },
+      "impact": {
+       "level": "serious",
+       "scale-ref": "https://org.example/scale/impact"
+      }
+     }
+    }
+   ],
+   "expected-fails": 1,
+   "expected-frags": [
+    "SCALE-4",
+    "yields 'red'"
+   ],
+   "rule": "SCALE-4: a level that is not the matrix cell of its stated likelihood and impact fails"
+  },
+  {
+   "name": "residual-contradicts-the-matrix",
+   "scales": [
+    {
+     "id": "https://org.example/scale/likelihood",
+     "version": "1.0.0",
+     "levels": [
+      {
+       "level": "never"
+      },
+      {
+       "level": "sometimes"
+      },
+      {
+       "level": "often"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/scale/impact",
+     "version": "1.0.0",
+     "levels": [
+      {
+       "level": "minor"
+      },
+      {
+       "level": "serious"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/scale/risk",
+     "version": "1.0.0",
+     "levels": [
+      {
+       "level": "green"
+      },
+      {
+       "level": "amber"
+      },
+      {
+       "level": "red"
+      }
+     ],
+     "matrix": {
+      "likelihood-scale": "https://org.example/scale/likelihood",
+      "impact-scale": "https://org.example/scale/impact",
+      "cells": {
+       "never": {
+        "minor": "green",
+        "serious": "green"
+       },
+       "sometimes": {
+        "minor": "green",
+        "serious": "amber"
+       },
+       "often": {
+        "minor": "amber",
+        "serious": "red"
+       }
+      }
+     }
+    }
+   ],
+   "objects": [
+    {
+     "id": "https://org.example/risk/R-32",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Scenario 32."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "assessed",
+     "rating": {
+      "level": "red",
+      "scale-ref": "https://org.example/scale/risk",
+      "likelihood": {
+       "level": "often",
+       "scale-ref": "https://org.example/scale/likelihood"
+      },
+      "impact": {
+       "level": "serious",
+       "scale-ref": "https://org.example/scale/impact"
+      }
+     },
+     "residual-rating": {
+      "level": "green",
+      "scale-ref": "https://org.example/scale/risk",
+      "likelihood": {
+       "level": "often",
+       "scale-ref": "https://org.example/scale/likelihood"
+      },
+      "impact": {
+       "level": "serious",
+       "scale-ref": "https://org.example/scale/impact"
+      }
+     }
+    }
+   ],
+   "expected-fails": 1,
+   "expected-frags": [
+    "SCALE-4",
+    "residual-rating"
+   ],
+   "rule": "SCALE-4 binds the residual rating too - a residual 'green' with unchanged inputs is not what the table says"
+  },
+  {
+   "name": "override-with-a-rationale-is-noted",
+   "scales": [
+    {
+     "id": "https://org.example/scale/likelihood",
+     "version": "1.0.0",
+     "levels": [
+      {
+       "level": "never"
+      },
+      {
+       "level": "sometimes"
+      },
+      {
+       "level": "often"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/scale/impact",
+     "version": "1.0.0",
+     "levels": [
+      {
+       "level": "minor"
+      },
+      {
+       "level": "serious"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/scale/risk",
+     "version": "1.0.0",
+     "levels": [
+      {
+       "level": "green"
+      },
+      {
+       "level": "amber"
+      },
+      {
+       "level": "red"
+      }
+     ],
+     "matrix": {
+      "likelihood-scale": "https://org.example/scale/likelihood",
+      "impact-scale": "https://org.example/scale/impact",
+      "cells": {
+       "never": {
+        "minor": "green",
+        "serious": "green"
+       },
+       "sometimes": {
+        "minor": "green",
+        "serious": "amber"
+       },
+       "often": {
+        "minor": "amber",
+        "serious": "red"
+       }
+      }
+     }
+    }
+   ],
+   "objects": [
+    {
+     "id": "https://org.example/risk/R-33",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Scenario 33."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "assessed",
+     "rating": {
+      "level": "red",
+      "scale-ref": "https://org.example/scale/risk",
+      "likelihood": {
+       "level": "sometimes",
+       "scale-ref": "https://org.example/scale/likelihood"
+      },
+      "impact": {
+       "level": "serious",
+       "scale-ref": "https://org.example/scale/impact"
+      },
+      "override-rationale": {
+       "en": "A single supplier; no fallback exists."
+      }
+     }
+    }
+   ],
+   "expected-fails": 0,
+   "expected-notes": [
+    "SCALE-4",
+    "overridden with a rationale"
+   ],
+   "rule": "SCALE-4: the one honest way to depart from the table is to say why - override-rationale turns the failure into a note"
+  },
+  {
+   "name": "level-without-inputs-is-not-checked",
+   "scales": [
+    {
+     "id": "https://org.example/scale/likelihood",
+     "version": "1.0.0",
+     "levels": [
+      {
+       "level": "never"
+      },
+      {
+       "level": "sometimes"
+      },
+      {
+       "level": "often"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/scale/impact",
+     "version": "1.0.0",
+     "levels": [
+      {
+       "level": "minor"
+      },
+      {
+       "level": "serious"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/scale/risk",
+     "version": "1.0.0",
+     "levels": [
+      {
+       "level": "green"
+      },
+      {
+       "level": "amber"
+      },
+      {
+       "level": "red"
+      }
+     ],
+     "matrix": {
+      "likelihood-scale": "https://org.example/scale/likelihood",
+      "impact-scale": "https://org.example/scale/impact",
+      "cells": {
+       "never": {
+        "minor": "green",
+        "serious": "green"
+       },
+       "sometimes": {
+        "minor": "green",
+        "serious": "amber"
+       },
+       "often": {
+        "minor": "amber",
+        "serious": "red"
+       }
+      }
+     }
+    }
+   ],
+   "objects": [
+    {
+     "id": "https://org.example/risk/R-34",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Scenario 34."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "assessed",
+     "rating": {
+      "level": "amber",
+      "scale-ref": "https://org.example/scale/risk"
+     }
+    }
+   ],
+   "expected-fails": 0,
+   "expected-notes": [],
+   "rule": "SCALE-4 is asked only where both inputs are stated - a level alone is legal on a matrix scale"
+  },
+  {
+   "name": "inputs-on-other-scales-than-the-matrix",
+   "scales": [
+    {
+     "id": "https://org.example/scale/likelihood",
+     "version": "1.0.0",
+     "levels": [
+      {
+       "level": "never"
+      },
+      {
+       "level": "sometimes"
+      },
+      {
+       "level": "often"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/scale/impact",
+     "version": "1.0.0",
+     "levels": [
+      {
+       "level": "minor"
+      },
+      {
+       "level": "serious"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/scale/risk",
+     "version": "1.0.0",
+     "levels": [
+      {
+       "level": "green"
+      },
+      {
+       "level": "amber"
+      },
+      {
+       "level": "red"
+      }
+     ],
+     "matrix": {
+      "likelihood-scale": "https://org.example/scale/likelihood",
+      "impact-scale": "https://org.example/scale/impact",
+      "cells": {
+       "never": {
+        "minor": "green",
+        "serious": "green"
+       },
+       "sometimes": {
+        "minor": "green",
+        "serious": "amber"
+       },
+       "often": {
+        "minor": "amber",
+        "serious": "red"
+       }
+      }
+     }
+    }
+   ],
+   "objects": [
+    {
+     "id": "https://org.example/risk/R-36",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Scenario 36."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "assessed",
+     "rating": {
+      "level": "red",
+      "scale-ref": "https://org.example/scale/risk",
+      "likelihood": {
+       "level": "often",
+       "scale-ref": "https://org.example/scale/likelihood"
+      },
+      "impact": {
+       "level": "serious",
+       "scale-ref": "https://org.example/scale/euro"
+      }
+     }
+    }
+   ],
+   "expected-fails": 1,
+   "expected-frags": [
+    "SCALE-4",
+    "other scales"
+   ],
+   "rule": "SCALE-4: a level and its inputs belong to one method - inputs on scales the matrix does not combine are a wrong statement"
+  },
+  {
+   "name": "matrix-with-a-missing-cell",
+   "scales": [
+    {
+     "id": "https://org.example/scale/likelihood",
+     "version": "1.0.0",
+     "levels": [
+      {
+       "level": "never"
+      },
+      {
+       "level": "sometimes"
+      },
+      {
+       "level": "often"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/scale/impact",
+     "version": "1.0.0",
+     "levels": [
+      {
+       "level": "minor"
+      },
+      {
+       "level": "serious"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/scale/risk",
+     "version": "1.0.0",
+     "levels": [
+      {
+       "level": "green"
+      },
+      {
+       "level": "amber"
+      },
+      {
+       "level": "red"
+      }
+     ],
+     "matrix": {
+      "likelihood-scale": "https://org.example/scale/likelihood",
+      "impact-scale": "https://org.example/scale/impact",
+      "cells": {
+       "never": {
+        "minor": "green",
+        "serious": "green"
+       },
+       "sometimes": {
+        "minor": "green",
+        "serious": "amber"
+       },
+       "often": {
+        "minor": "amber"
+       }
+      }
+     }
+    }
+   ],
+   "objects": [],
+   "expected-fails": 1,
+   "expected-frags": [
+    "SCALE-1",
+    "no cell for impact"
+   ],
+   "rule": "SCALE-1: a matrix has exactly one cell for every pair of levels of its two scales"
+  },
+  {
+   "name": "matrix-cell-is-no-level",
+   "scales": [
+    {
+     "id": "https://org.example/scale/likelihood",
+     "version": "1.0.0",
+     "levels": [
+      {
+       "level": "never"
+      },
+      {
+       "level": "sometimes"
+      },
+      {
+       "level": "often"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/scale/impact",
+     "version": "1.0.0",
+     "levels": [
+      {
+       "level": "minor"
+      },
+      {
+       "level": "serious"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/scale/risk",
+     "version": "1.0.0",
+     "levels": [
+      {
+       "level": "green"
+      },
+      {
+       "level": "amber"
+      },
+      {
+       "level": "red"
+      }
+     ],
+     "matrix": {
+      "likelihood-scale": "https://org.example/scale/likelihood",
+      "impact-scale": "https://org.example/scale/impact",
+      "cells": {
+       "never": {
+        "minor": "green",
+        "serious": "green"
+       },
+       "sometimes": {
+        "minor": "green",
+        "serious": "amber"
+       },
+       "often": {
+        "minor": "amber",
+        "serious": "crimson"
+       }
+      }
+     }
+    }
+   ],
+   "objects": [],
+   "expected-fails": 1,
+   "expected-frags": [
+    "SCALE-1",
+    "crimson"
+   ],
+   "rule": "SCALE-1: every cell of a matrix is a level of the scale that carries it"
+  },
+  {
+   "name": "matrix-over-an-unpinned-scale",
+   "scales": [
+    {
+     "id": "https://org.example/scale/likelihood",
+     "version": "1.0.0",
+     "levels": [
+      {
+       "level": "never"
+      },
+      {
+       "level": "sometimes"
+      },
+      {
+       "level": "often"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/scale/risk",
+     "version": "1.0.0",
+     "levels": [
+      {
+       "level": "green"
+      },
+      {
+       "level": "amber"
+      },
+      {
+       "level": "red"
+      }
+     ],
+     "matrix": {
+      "likelihood-scale": "https://org.example/scale/likelihood",
+      "impact-scale": "https://org.example/scale/impact",
+      "cells": {
+       "never": {
+        "minor": "green",
+        "serious": "green"
+       },
+       "sometimes": {
+        "minor": "green",
+        "serious": "amber"
+       },
+       "often": {
+        "minor": "amber",
+        "serious": "red"
+       }
+      }
+     }
+    }
+   ],
+   "objects": [],
+   "expected-fails": 1,
+   "expected-frags": [
+    "SCALE-1",
+    "not pinned"
+   ],
+   "rule": "SCALE-1: a matrix names two scales pinned in the same bundle - otherwise its rows and columns cannot be checked"
   }
  ]
 }

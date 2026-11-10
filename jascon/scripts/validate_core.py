@@ -966,6 +966,39 @@ def scale_definition_errors(sd, pin=None):
                     f"{sd['id']} {sd['version']} (SCALE-1: the pin and the definition agree)")
     return errs
 
+def matrix_errors(scales):
+    """SCALE-1, second half: a scale that carries a `matrix` names the two
+    pinned scales it combines, has exactly one cell for every pair of their
+    levels, and every cell is one of its own levels. A matrix that fails is
+    reported and then ignored (SCALE-4 is not asked of a broken table)."""
+    errs = []
+    for sid in sorted(scales):
+        sd = scales[sid]; mx = sd.get("matrix")
+        if not mx: continue
+        mine = [lv["level"] for lv in sd["levels"]]
+        bad = []
+        ls, is_ = scales.get(mx["likelihood-scale"]), scales.get(mx["impact-scale"])
+        for role, ref, tgt in (("likelihood-scale", mx["likelihood-scale"], ls), ("impact-scale", mx["impact-scale"], is_)):
+            if tgt is None: bad.append(f"its {role} {ref} is not pinned in this bundle")
+        if not bad:
+            lk = [lv["level"] for lv in ls["levels"]]; ik = [lv["level"] for lv in is_["levels"]]
+            cells = mx["cells"]
+            extra = sorted(set(cells) - set(lk))
+            if extra: bad.append(f"rows {extra} are no levels of the likelihood scale")
+            for l in lk:
+                row = cells.get(l)
+                if row is None: bad.append(f"no row for likelihood '{l}'"); continue
+                miss = [i for i in ik if i not in row]; more = sorted(set(row) - set(ik))
+                if miss: bad.append(f"row '{l}' has no cell for impact {miss}")
+                if more: bad.append(f"row '{l}' has cells {more} that are no levels of the impact scale")
+                wrong = sorted({v for v in row.values() if v not in mine})
+                if wrong: bad.append(f"row '{l}' yields {wrong}, no level(s) of this scale")
+        if bad:
+            errs.append(f"{sid}: matrix is not usable: {'; '.join(bad[:4])} (SCALE-1: a matrix has one cell per "
+                        f"pair of levels of its two pinned scales, each cell a level of its own scale)")
+            sd.pop("matrix")
+    return errs
+
 def _risk_levels(o):
     """every level a Risk states: (where, level, scale-ref)"""
     for field in ("rating", "residual-rating"):
@@ -998,6 +1031,29 @@ def scale_errors(scales, objs):
             if a and b and a[1] == b[1] and b[0] > a[0]:
                 notes.append(f"{oid}: residual{part or ' level'} '{b[2]}' is above '{a[2]}' on {a[1]} "
                              f"(SCALE-3, SHOULD: what remains after treatment is not more than what was there)")
+        # SCALE-4: where the scale of a rating carries a matrix and the
+        # rating states both inputs, the level is the matrix cell - or the
+        # rating says why it is not
+        for field in ("rating", "residual-rating"):
+            r = o.get(field)
+            if not isinstance(r, dict): continue
+            mx = (scales.get(r.get("scale-ref")) or {}).get("matrix")
+            lk, im = r.get("likelihood"), r.get("impact")
+            if not mx or not (isinstance(lk, dict) and isinstance(im, dict)): continue
+            if lk.get("scale-ref") != mx["likelihood-scale"] or im.get("scale-ref") != mx["impact-scale"]:
+                errs.append(f"{oid}: {field} is on {r.get('scale-ref')}, whose matrix combines {mx['likelihood-scale']} "
+                            f"and {mx['impact-scale']}, but states its likelihood and impact on other scales "
+                            f"(SCALE-4: a level and its inputs belong to one method)")
+                continue
+            want = (mx["cells"].get(lk.get("level")) or {}).get(im.get("level"))
+            if want is None or r.get("level") == want: continue      # an undefined input level is SCALE-2's failure
+            said = (f"{oid}: {field} states '{r.get('level')}'; the matrix of {r.get('scale-ref')} yields '{want}' "
+                    f"for likelihood '{lk.get('level')}' and impact '{im.get('level')}'")
+            if r.get("override-rationale"):
+                notes.append(f"{said} - overridden with a rationale (SCALE-4)")
+            else:
+                errs.append(f"{said} (SCALE-4: a level follows from its matrix, or the rating carries an "
+                            f"override-rationale)")
     return errs, notes
 
 def load_scale_pins(bdir, manifest, section):
@@ -1017,6 +1073,7 @@ def load_scale_pins(bdir, manifest, section):
         errs = scale_definition_errors(sd, pin)
         for e in errs: fail(section, e)
         if not errs: scales[sd["id"]] = sd
+    for e in matrix_errors(scales): fail(section, e)
     return scales
 
 def run_scale():
@@ -1026,7 +1083,8 @@ def run_scale():
         for sd in case["scales"]:
             e = scale_definition_errors(sd)
             errs += e
-            if not e: scales[sd["id"]] = sd
+            if not e: scales[sd["id"]] = copy.deepcopy(sd)
+        errs += matrix_errors(scales)
         objs = {}
         for o in case["objects"]:
             t = inferType_single(o)

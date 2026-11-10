@@ -1494,6 +1494,48 @@ function Scale-Definition-Errors($sd, $pin) {
     }
     return ,$errs
 }
+function Scale-Codes($sd) {
+    $codes = New-Object System.Collections.ArrayList
+    foreach ($lv in @($sd['levels'])) { [void]$codes.Add([string]$lv['level']) }
+    return ,$codes
+}
+# SCALE-1, second half: a matrix names two pinned scales, has one cell per
+# pair of their levels, and every cell is a level of its own scale. A matrix
+# that fails is reported and then ignored (removed from the definition).
+function Matrix-Errors($scales) {
+    $errs = New-Object System.Collections.ArrayList
+    $sids = New-Object System.Collections.ArrayList
+    foreach ($sid in $scales.Keys) { [void]$sids.Add([string]$sid) }
+    foreach ($sid in (Sorted-Ordinal $sids)) {
+        $sd = $scales[$sid]
+        if (-not $sd.Contains('matrix')) { continue }
+        $mx = $sd['matrix']
+        $mine = Scale-Codes $sd
+        $bad = New-Object System.Collections.ArrayList
+        $lref = [string]$mx['likelihood-scale']; $iref = [string]$mx['impact-scale']
+        if (-not $scales.ContainsKey($lref)) { [void]$bad.Add("its likelihood-scale $lref is not pinned in this bundle") }
+        if (-not $scales.ContainsKey($iref)) { [void]$bad.Add("its impact-scale $iref is not pinned in this bundle") }
+        if ($bad.Count -eq 0) {
+            $lk = Scale-Codes $scales[$lref]; $ik = Scale-Codes $scales[$iref]
+            $cells = $mx['cells']
+            foreach ($k in @($cells.Keys)) { if ($lk -cnotcontains [string]$k) { [void]$bad.Add("row '$k' is no level of the likelihood scale") } }
+            foreach ($l in $lk) {
+                if (-not $cells.Contains($l)) { [void]$bad.Add("no row for likelihood '$l'"); continue }
+                $row = $cells[$l]
+                foreach ($i in $ik) { if (-not $row.Contains($i)) { [void]$bad.Add("row '$l' has no cell for impact '$i'") } }
+                foreach ($k in @($row.Keys)) {
+                    if ($ik -cnotcontains [string]$k) { [void]$bad.Add("row '$l' has a cell '$k' that is no level of the impact scale") }
+                    elseif ($mine -cnotcontains [string]$row[$k]) { [void]$bad.Add("row '$l' yields '$($row[$k])', no level of this scale") }
+                }
+            }
+        }
+        if ($bad.Count -gt 0) {
+            [void]$errs.Add("${sid}: matrix is not usable: $(@($bad | Select-Object -First 4) -join '; ') (SCALE-1: a matrix has one cell per pair of levels of its two pinned scales, each cell a level of its own scale)")
+            $sd.Remove('matrix')
+        }
+    }
+    return ,$errs
+}
 # every level a Risk states: @{where; level; sref}
 function Risk-Levels($o) {
     $out = New-Object System.Collections.ArrayList
@@ -1539,6 +1581,31 @@ function Scale-Errors($scales, $objs) {
                 [void]$notes.Add("${oid}: $what '$($b.level)' is above '$($a.level)' on $($a.sref) (SCALE-3, SHOULD: what remains after treatment is not more than what was there)")
             }
         }
+        # SCALE-4: on a scale that carries a matrix, a rating that states both
+        # inputs states the level of their cell - or says why it does not
+        $o = $objs[$oid].o
+        foreach ($field in @('rating', 'residual-rating')) {
+            $r = $o[$field]
+            if (-not (Is-Map $r)) { continue }
+            $rs = [string]$r['scale-ref']
+            if (-not $scales.ContainsKey($rs)) { continue }
+            if (-not $scales[$rs].Contains('matrix')) { continue }
+            $mx = $scales[$rs]['matrix']
+            $lk = $r['likelihood']; $im = $r['impact']
+            if (-not ((Is-Map $lk) -and (Is-Map $im))) { continue }
+            if (([string]$lk['scale-ref'] -cne [string]$mx['likelihood-scale']) -or ([string]$im['scale-ref'] -cne [string]$mx['impact-scale'])) {
+                [void]$errs.Add("${oid}: $field is on $rs, whose matrix combines $($mx['likelihood-scale']) and $($mx['impact-scale']), but states its likelihood and impact on other scales (SCALE-4: a level and its inputs belong to one method)")
+                continue
+            }
+            $ll = [string]$lk['level']; $il = [string]$im['level']
+            if (-not $mx['cells'].Contains($ll)) { continue }
+            if (-not $mx['cells'][$ll].Contains($il)) { continue }
+            $want = [string]$mx['cells'][$ll][$il]
+            if ([string]$r['level'] -ceq $want) { continue }
+            $said = "${oid}: $field states '$($r['level'])'; the matrix of $rs yields '$want' for likelihood '$ll' and impact '$il'"
+            if ($r.Contains('override-rationale')) { [void]$notes.Add("$said - overridden with a rationale (SCALE-4)") }
+            else { [void]$errs.Add("$said (SCALE-4: a level follows from its matrix, or the rating carries an override-rationale)") }
+        }
     }
     return @{errs = $errs; notes = $notes}
 }
@@ -1552,6 +1619,7 @@ function Run-Scale {
             foreach ($m in $e) { [void]$errs.Add($m) }
             if ($e.Count -eq 0) { $scales[[string]$sd['id']] = $sd }
         }
+        foreach ($m in (Matrix-Errors $scales)) { [void]$errs.Add($m) }
         $objs = To-Objs $case['objects']
         $se = Scale-Errors $scales $objs
         foreach ($m in $se.errs) { [void]$errs.Add($m) }
@@ -1755,6 +1823,7 @@ function Validate-Bundle([string]$bdir) {
             foreach ($e in $sde) { FAIL $section $e }
             if ($sde.Count -eq 0) { $scaleDefs[[string]$sdef['id']] = $sdef }
         }
+        foreach ($e in (Matrix-Errors $scaleDefs)) { FAIL $section $e }
         $se = Scale-Errors $scaleDefs $bundleObjs
         foreach ($e in $se.errs) { FAIL $section $e }
         foreach ($n in $se.notes) { Write-Host "    note: $n" }
