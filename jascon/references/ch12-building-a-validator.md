@@ -87,7 +87,10 @@ Requirement, because half the structural rules address them by id.
 ## 12.3 Saturday morning: the manifest walk
 
 The bundle is a directory (or archive) plus a content manifest, and
-the manifest is your world model. The walk: parse the manifest; for
+the manifest is your world model. The walk: parse the manifest; read
+`kernel-version` before anything else and stop if it names a kernel
+you do not implement, with the pinned version and your own in the
+message (KERNEL-2; absent means 1.0.0); for
 every listed object and rendering, verify the **package-digest**
 against the bytes (`digest-verified` — your first primitive, and your
 first passing corpus cases); build the path map `id@version → bytes`.
@@ -253,6 +256,11 @@ option and carries its owner's signature (ISO/IEC 27001 6.1.3 a, f)
 That function never accepts an object. The schema decides; the
 function explains. The vectors hold you to the id (`expected-rule`),
 never to a library's message text.
+
+One check belongs to the manifest walk and is triggered here: a bundle
+in which you have just typed a Risk, or a Finding with `risk-refs`,
+must pin `kernel-version` 2.0.0 (KERNEL-1). `kernel-vectors.json` has
+the nine cases.
 
 **Third, close and type the edges.** Four references on a Risk are
 closure-required and typed: `treatments[].requirement-ref` names a
