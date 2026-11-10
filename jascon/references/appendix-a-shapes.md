@@ -182,8 +182,8 @@ Common fields (A.0) plus:
 | `threat-refs` | ○ | [URI] | Threat catalog entries (G 0.x, ATT&CK techniques, 800-30 threat events). Landmark. |
 | `component-refs` | ○ | [URI] | The assets at risk — Components of this bundle. Closure-required (RISK-7) and typed: each names a Component (RISK-12). |
 | `tailoring-refs` | ○ | [URI] | The Statement(s) of Applicability this risk's treatment belongs to — Tailorings of this bundle. Closure-required (RISK-7), typed (RISK-12). Present: the Risk justifies, and is held to RISK-11, only there. Absent: it applies to every Tailoring of the bundle (noted where there is more than one — RISK-14). |
-| `rating` | ○ | {level ●, scale-ref ●, likelihood ○, impact ○} | Inherent/current level on a named scale. **Required** once `state` ∈ assessed · treated (RISK-2). `likelihood` and `impact` are each `{level ●, scale-ref ●}` — the two inputs ISO/IEC 27001 6.1.2 d, BSI 200-3 and SP 800-30 name; opaque like the level, never computed with. One impact; impact per dimension is the facet's. |
-| `residual-rating` | ○ | {level ●, scale-ref ●, likelihood ○, impact ○} | The level after treatment, with its own likelihood and impact. Presupposes `rating`, on the **same** `scale-ref`; a likelihood or impact carried on both sides names the same scale as its counterpart (RISK-13). |
+| `rating` | ○ | {level ●, scale-ref ●, likelihood ○, impact ○, override-rationale ○} | Inherent/current level on a named scale. **Required** once `state` ∈ assessed · treated (RISK-2). `likelihood` and `impact` are each `{level ●, scale-ref ●}` — the two inputs ISO/IEC 27001 6.1.2 d, BSI 200-3 and SP 800-30 name; opaque like the level. The kernel defines no way of combining them; where the level scale's pinned definition carries a matrix, the level is the matrix cell or the rating carries `override-rationale` (text) saying why not (SCALE-4). One impact; impact per dimension is the facet's. |
+| `residual-rating` | ○ | {level ●, scale-ref ●, likelihood ○, impact ○, override-rationale ○} | The level after treatment, with its own likelihood and impact. Presupposes `rating`, on the **same** `scale-ref`; a likelihood or impact carried on both sides names the same scale as its counterpart (RISK-13). |
 | `treatment` | ○ | code (C.10) | modify · retain · avoid · share. **Required** once treated (RISK-3). |
 | `treatments` | ○ | [{requirement-ref ●, statement-ids ○}] | **The ISO 6.1.3 b edge**: the controls determined for this risk, to the clause. requirement-ref closure-required (RISK-7) and typed — it names a Requirement, never a Set (RISK-12); statement-ids must address the target (RISK-8). **Required** for `modify` (RISK-4). |
 | `shared-with-ref` | ○ | URI | Who carries the shared risk. **Required** for `share` (RISK-5). |
@@ -236,8 +236,13 @@ levels and what they are called. SCALE-1: shape, id and version as
 pinned, no level twice. SCALE-2: a level a Risk states on a pinned scale
 (`rating`, `residual-rating`, and the `likelihood` and `impact` in each)
 is one the scale defines. SCALE-3 *(SHOULD)*: a residual is not above
-what it remains of. Unpinned `scale-ref`s stay landmark and opaque.
-Evidence: three scales in the example bundle, `scale-vectors.json` (9).
+what it remains of. `matrix` ○ — on the scale of the combined level only:
+{`likelihood-scale` ● URI, `impact-scale` ● URI, `cells` ● {likelihood
+level → {impact level → level}}}, one cell for every pair, both scales
+pinned in the same bundle (SCALE-1). SCALE-4: a rating on such a scale
+that states both inputs states the level of their cell; a mismatch
+fails unless the rating carries `override-rationale`. Unpinned `scale-ref`s stay landmark and opaque.
+Evidence: three scales in the example bundle, `scale-vectors.json` (18).
 
 ## A.12 What the three converters actually exercised
 

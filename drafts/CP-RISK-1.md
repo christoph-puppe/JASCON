@@ -332,6 +332,8 @@ commit `6b71647e` — 42 pass, 23 fail.
 
 | X-13 *(author, after the merge)* | **Scales were names without definitions.** "Likelihood should be editable, wording and how many levels; same for impact." | A `scale-ref` was a bare URI and a level a free string: a typo was a new level, and nobody could read how many levels a scale had. | Scale definitions as files the manifest pins under `scales` (not a kernel type): levels in order, the organisation's wording and number. SCALE-1 (the definition), SCALE-2 (a stated level is a defined one), SCALE-3 *(SHOULD)* (a residual is not above what it remains of). | `scale-vectors.json` ×9 |
 
+| X-14 *(author, after the merge)* | **The matrix had no home.** The kernel left it out, the text assigned it "to a facet", and no such facet is registered; a workspace file would have been neither digested nor attested. | A register stated a level, a likelihood and an impact that nothing could check against each other. | `matrix` in the pinned definition of the level scale. **SCALE-4**: a rating that states both inputs states the level of their cell; a mismatch fails ("fail on mismatch"), unless the rating carries `override-rationale`. | `scale-vectors.json`, the nine matrix cases |
+
 **Rule table after the review:** RISK-1…RISK-12 as in §11.2, with RISK-7
 and RISK-12 extended to `tailoring-refs` and RISK-11 asked per Tailoring;
 **RISK-13** — *`residual-rating` presupposes `rating`, on the same scale*;
@@ -339,9 +341,9 @@ and RISK-12 extended to `tailoring-refs` and RISK-11 asked per Tailoring;
 names the Tailoring its treatment belongs to*.
 
 **Vectors after the review:** 73 (27 object · 38 bundle · 8 transitions).
-Conformance corpus: **225 vectors, 13 families** (249 in 15 with the
+Conformance corpus: **225 vectors, 13 families** (258 in 15 with the
 kernel-pin and scale families, D3.6, D3.7). Python reference
-validator: 249/249 and all shipped bundles, ALL GREEN.
+validator: 258/258 and all shipped bundles, ALL GREEN.
 
 **What the review did not settle.**
 

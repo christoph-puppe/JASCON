@@ -220,13 +220,15 @@ The governing principle, quoted from the user directive that decided
 #8: **a tool that cannot handle a facet must stop working on that
 data** — fail-closed engages only when declarations are honest.
 
-**Parked (2.0.0, named exit):** `risk-analysis@1` — the matrix and
-method (method-ref), impact per dimension, characterizations, mitigating
+**Parked (2.0.0, named exit):** `risk-analysis@1` — the scoring method
+where it is more than a table (method-ref, CVSS, FAIR), impact per
+dimension, characterizations, mitigating
 factors: what Appendix F Q14 keeps out of the kernel now that the Risk
 *object* is kernel (A.9b) and its rating carries likelihood and impact as
 plain levels. Likelihood and impact *without* a combined level — what an
 OSCAL risk has — still belong here, because the kernel holds them only
-inside a rating.
+inside a rating. The plain likelihood-impact *matrix* is not facet
+material: it is part of the pinned definition of the level scale (A.11).
 First corpus, measured 2026-11-10: the IFA re-run retired the `risk@1`
 framework facet (it sat on Findings) and carries the same content on the
 two Risk objects as `ifa.gov/goodread/facet/risk-analysis@1` — the L2
