@@ -201,7 +201,7 @@ svg text{font-family:'JetBrains Mono',monospace}
     <div class="pill" id="pill-bundle">no bundle loaded</div>
     <div class="pill hidden" id="pill-verify"></div>
     <div style="flex:1"></div>
-    <div class="pill">v1.7.2 · build 2026-11-10</div>
+    <div class="pill">v1.7.3 · build 2026-11-10</div>
   </div>
 
   <div id="mid">
@@ -504,7 +504,7 @@ function sha256Fallback(bytes) {
 }
 
 /* ---------- loading ---------- */
-const READER_ID = "jascon-reader.html v1.7.2";
+const READER_ID = "jascon-reader.html v1.7.3";
 /* URL loading — works when this page and the bundle are served over http(s)
    (e.g. `python -m http.server` from the repo root); file:// blocks fetch by design. */
 async function loadFromUrl(input) {
@@ -1379,7 +1379,11 @@ function workspaceObjects() {
 }
 async function buildWorkspaceBundleFiles(objs, provenance) {
   const enc = new TextEncoder();
-  const files = []; const manifest = { "manifest-version": "1", provenance,
+  // backlog #44 / KERNEL-1: content beyond the 1.0.0 kernel (a Risk, or a
+  // Finding with risk-refs) names its kernel in the manifest
+  const needs2 = objs.some(o => (o && o.scenario && o["owner-ref"]) || (o && Array.isArray(o["risk-refs"]) && o["risk-refs"].length));
+  const files = []; const manifest = { "manifest-version": "1",
+    ...(needs2 ? { "kernel-version": "2.0.0" } : {}), provenance,
     objects: [], "facet-schemas": [] };
   const DIR = { requirement: "req", requirementSet: "set", tailoring: "tailoring",
     mapping: "map", component: "comp", implementation: "impl",

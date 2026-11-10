@@ -254,7 +254,7 @@ Each row was demonstrated failing against the validator as proposed, then fixed,
 
 ### 11.3 Claims in §1–§10 that do not hold
 
-1. **§7, the manifest pin** — struck in place. Nothing in a bundle pins the kernel version. The example manifest's `manifest-version: "1.1"` was reverted to `"1"`: it versions the manifest *format*, which did not change, and all eleven corpus manifests, the converter library and the reader write `"1"`. Whether a kernel pin should exist is backlog #44.
+1. **§7, the manifest pin** — struck in place. Nothing in a bundle pins the kernel version. The example manifest's `manifest-version: "1.1"` was reverted to `"1"`: it versions the manifest *format*, which did not change, and all eleven corpus manifests, the converter library and the reader write `"1"`. Whether a kernel pin should exist is backlog #44 — *decided and built the same day: `kernel-version`, specification D3.6.*
 2. **§7, "minor".** The released specification says otherwise, twice: D22 rev 3 — "Post-1.0, kernel promotion requires measured 2-of-3 and a **major** version under D3.5 governance"; IV.8 — "kernel-shape changes ride major versions". §7's argument (additive, every prior object stays valid) is a coherent definition of a minor and agrees with D3.5's own wording for facets, but it contradicts those two sentences, and D22's first test ("≥ 2 of 3 independent authority encodings *in the census corpus*") is not what §2 counts — §2 counts standards. This was the author's decision (backlog #40), and it is taken: **2.0.0, D22 unamended** — §12.
 3. **§2, "four authorities … agree on the shape."** True of ISO 27001/27005, BSI 200-3 and SP 800-30 as standards. Of OSCAL *as data* it is half true: the corpus (§11.4) shows three of the six record fields arriving (scenario, treatment option, treating controls) and three absent (owner, level, dated acceptance).
 4. **§8 item 4, tightening `Finding.actions[].due`** is described as "correct per A.8, deferred so no shipped bundle breaks". By §7's own promise it is a *breaking* change — a 1.0.0-valid Finding with any other `due` object would stop validating — so it belongs to the major-version decision, not to a converter re-run. Not done.
@@ -335,8 +335,9 @@ and RISK-12 extended to `tailoring-refs` and RISK-11 asked per Tailoring;
 names the Tailoring its treatment belongs to*.
 
 **Vectors after the review:** 67 (23 object · 36 bundle · 8 transitions).
-Conformance corpus: **225 vectors, 13 families**. Python reference
-validator: 225/225 and all shipped bundles, ALL GREEN.
+Conformance corpus: **225 vectors, 13 families** (234 in 14 with the
+kernel-pin family, D3.6). Python reference
+validator: 234/234 and all shipped bundles, ALL GREEN.
 
 **What the review did not settle.**
 

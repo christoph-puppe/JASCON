@@ -94,6 +94,18 @@ Every bundle carries one:
                     "digest": "sha256:…" } ] }
 ```
 
+One optional line sits beside `manifest-version` since 2.0.0:
+`"kernel-version": "2.0.0"`. `manifest-version` names the format of this
+file and is still `"1"`; `kernel-version` names the kernel the objects
+were written against. A bundle of 1.0.0 content leaves it out, which
+keeps every 1.0.0 manifest valid and every such bundle readable by a
+1.0.0 tool. A bundle that carries a Risk, or a Finding with `risk-refs`,
+must carry it (KERNEL-1), and a tool that meets a kernel it does not
+implement stops at the manifest and says which one it met and which it
+reads (KERNEL-2). Before the pin, an older tool given a newer bundle
+reported "matches NO type" on the first object it could not read, with
+no version anywhere in the message.
+
 Three roles in one file. It is the **local resolution table** — every
 reference in the bundle resolves here, which is what makes sealed mode
 possible at all. It is the **integrity ledger** — both digests per
