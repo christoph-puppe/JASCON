@@ -36,7 +36,7 @@
 
 /* ==JSC-PURE-START== */
 
-const JSC_BUILD = "0.5.0";
+const JSC_BUILD = "0.6.0";
 const JSC_TOOL = "JASCON-App " + JSC_BUILD;
 /* The kernel this app writes, and the kernels it reads (KERNEL-2: a tool
    stops at a pin it does not implement and names both). */
@@ -69,6 +69,26 @@ const JSC_CFG = [
     label: N("Namespace for new objects"), help: N("The URI under which this app mints ids, for example https://your.example. Use a name you control.") },
   { key: "org:owner", def: "", choices: null,
     label: N("Default risk owner"), help: N("A party URI, for example https://your.example/party/ciso. Prefilled when a risk is created.") },
+  /* Model access (jascon-ai.js). The key of a service is not a setting: it
+     is typed on the page that calls the model and held in memory only. */
+  { key: "ai:backend", def: "gemini", choices: ["gemini", "openrouter", "openai"],
+    label: N("Model service"), help: N("gemini is Google's API, openrouter is OpenRouter, openai is an endpoint of your own that speaks the OpenAI chat-completions protocol. No model is called until you type a key on a page that offers suggestions.") },
+  { key: "ai:model:gemini", def: "gemini-3.8-flash", choices: null,
+    label: N("Model at Google Gemini"), help: N("A model id of the Gemini API, for example gemini-3.8-flash, gemini-3.5-flash-lite or gemini-4-argon (no free tier). Check the id against Google's model list; ids are retired.") },
+  { key: "ai:model:openrouter", def: "", choices: null,
+    label: N("Model at OpenRouter"), help: N("A model slug in the form vendor/model. The model must support structured outputs.") },
+  { key: "ai:model:openai", def: "", choices: null,
+    label: N("Model at your own endpoint"), help: N("The model name your endpoint expects.") },
+  { key: "ai:base:openai", def: "", choices: null,
+    label: N("Base URL of your own endpoint"), help: N("For example https://llm.your.example/v1. The app calls /chat/completions under it and sends the key as a bearer token.") },
+  { key: "ai:thinking", def: "medium", choices: ["low", "medium", "high", "minimal"],
+    label: N("Thinking level"), help: N("Gemini only. minimal exists on gemini-3.6-flash and gemini-3.5-flash-lite; on every other model it is sent as low.") },
+  { key: "ai:retries", def: "2", choices: null,
+    label: N("Retries per call"), help: N("How often a call is repeated after a rate limit, a server error, a timeout or an answer of the wrong shape. 0 to 5.") },
+  { key: "ai:concurrency", def: "3", choices: null,
+    label: N("Calls at the same time"), help: N("1 to 8. Lower it when the service answers with rate limits.") },
+  { key: "ai:chunk", def: "400", choices: null,
+    label: N("Requirements per call"), help: N("How many candidate requirements one call carries when treatments are suggested. A larger selection is cut into several calls per risk. 20 to 2000.") },
 ];
 
 const jscEsc = s => String(s ?? "").replace(/[&<>"']/g,

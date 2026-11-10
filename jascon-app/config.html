@@ -35,6 +35,18 @@ header .brand { font-weight: 700; font-size: 15px; } header .brand span { color:
   </section>
 
   <section class="glass card">
+    <h2><span class="glyph">✧</span><span data-i18n>Model access</span></h2>
+    <p class="hint" data-i18n>The app works without a model. A page that offers suggestions calls the service chosen here, with the prompts below, once you type a key on that page. The key is not a setting and is not kept: it is held in memory and has to be typed again after a reload. What a call sends is shown on the page before it is sent.</p>
+    <div id="ai-fields" style="margin-top:8px"></div>
+  </section>
+
+  <section class="glass card">
+    <h2><span class="glyph">¶</span><span data-i18n>Prompts</span></h2>
+    <p class="hint" data-i18n>Every text the app sends to a model is one of these templates with its placeholders filled. An edit is saved as you type and applies to the next call.</p>
+    <div id="prompts" style="margin-top:8px;display:flex;flex-direction:column;gap:18px"></div>
+  </section>
+
+  <section class="glass card">
     <h2><span class="glyph">▣</span><span data-i18n>Storage</span></h2>
     <p class="hint" data-i18n>Sets are kept in this browser (IndexedDB "jascon-app"). Deleting a set here removes it from this browser only; an exported bundle is not touched.</p>
     <table class="flat" id="sets" style="margin-top:10px"></table>
@@ -42,6 +54,7 @@ header .brand { font-weight: 700; font-size: 15px; } header .brand span { color:
 </main>
 
 <script src="jascon-core.js"></script>
+<script src="jascon-ai.js"></script>
 <script>
 "use strict";
 /* Settings page. The form is generated from JSC_CFG, the one definition of
@@ -63,15 +76,43 @@ jscI18n.add("de", {
   "Default risk owner": "Standard-Risikoeigner",
   "A party URI, for example https://your.example/party/ciso. Prefilled when a risk is created.":
     "Eine Party-URI, zum Beispiel https://your.example/party/ciso. Wird beim Anlegen eines Risikos vorbelegt.",
+  "Model access": "Modellzugang", "Prompts": "Prompts",
+  "The app works without a model. A page that offers suggestions calls the service chosen here, with the prompts below, once you type a key on that page. The key is not a setting and is not kept: it is held in memory and has to be typed again after a reload. What a call sends is shown on the page before it is sent.":
+    "Die App arbeitet ohne Modell. Eine Seite, die Vorschläge anbietet, ruft den hier gewählten Dienst mit den Prompts unten auf, sobald auf dieser Seite ein Schlüssel eingegeben ist. Der Schlüssel ist keine Einstellung und wird nicht aufbewahrt: Er liegt im Speicher und muss nach einem Neuladen wieder eingegeben werden. Was ein Aufruf sendet, zeigt die Seite vor dem Senden.",
+  "Every text the app sends to a model is one of these templates with its placeholders filled. An edit is saved as you type and applies to the next call.":
+    "Jeder Text, den die App an ein Modell sendet, ist eine dieser Vorlagen mit gefüllten Platzhaltern. Eine Änderung wird beim Tippen gespeichert und gilt für den nächsten Aufruf.",
+  "Model service": "Modell-Dienst",
+  "gemini is Google's API, openrouter is OpenRouter, openai is an endpoint of your own that speaks the OpenAI chat-completions protocol. No model is called until you type a key on a page that offers suggestions.":
+    "gemini ist die API von Google, openrouter ist OpenRouter, openai ist ein eigener Endpunkt, der das Chat-Completions-Protokoll von OpenAI spricht. Kein Modell wird aufgerufen, bevor auf einer Seite mit Vorschlägen ein Schlüssel eingegeben ist.",
+  "Model at Google Gemini": "Modell bei Google Gemini",
+  "A model id of the Gemini API, for example gemini-3.8-flash, gemini-3.5-flash-lite or gemini-4-argon (no free tier). Check the id against Google's model list; ids are retired.":
+    "Eine Modell-Id der Gemini-API, zum Beispiel gemini-3.8-flash, gemini-3.5-flash-lite oder gemini-4-argon (ohne kostenlose Stufe). Die Id gegen Googles Modellliste prüfen; Ids werden abgeschaltet.",
+  "Model at OpenRouter": "Modell bei OpenRouter",
+  "A model slug in the form vendor/model. The model must support structured outputs.": "Ein Modell-Kürzel in der Form anbieter/modell. Das Modell muss strukturierte Ausgaben unterstützen.",
+  "Model at your own endpoint": "Modell am eigenen Endpunkt", "The model name your endpoint expects.": "Der Modellname, den der Endpunkt erwartet.",
+  "Base URL of your own endpoint": "Basis-URL des eigenen Endpunkts",
+  "For example https://llm.your.example/v1. The app calls /chat/completions under it and sends the key as a bearer token.":
+    "Zum Beispiel https://llm.your.example/v1. Die App ruft darunter /chat/completions auf und sendet den Schlüssel als Bearer-Token.",
+  "Thinking level": "Denkstufe",
+  "Gemini only. minimal exists on gemini-3.6-flash and gemini-3.5-flash-lite; on every other model it is sent as low.":
+    "Nur Gemini. minimal gibt es bei gemini-3.6-flash und gemini-3.5-flash-lite; bei jedem anderen Modell wird low gesendet.",
+  "Retries per call": "Wiederholungen je Aufruf",
+  "How often a call is repeated after a rate limit, a server error, a timeout or an answer of the wrong shape. 0 to 5.":
+    "Wie oft ein Aufruf nach einem Rate-Limit, einem Serverfehler, einem Timeout oder einer Antwort in falscher Form wiederholt wird. 0 bis 5.",
+  "Calls at the same time": "Gleichzeitige Aufrufe", "1 to 8. Lower it when the service answers with rate limits.": "1 bis 8. Senken, wenn der Dienst mit Rate-Limits antwortet.",
+  "Requirements per call": "Anforderungen je Aufruf",
+  "How many candidate requirements one call carries when treatments are suggested. A larger selection is cut into several calls per risk. 20 to 2000.":
+    "Wie viele Kandidaten-Anforderungen ein Aufruf trägt, wenn Behandlungen vorgeschlagen werden. Eine größere Auswahl wird in mehrere Aufrufe je Risiko geteilt. 20 bis 2000.",
   "(follow the browser)": "(dem Browser folgen)", "Files": "Dateien", "active": "aktiv", "Delete": "Löschen",
   "Delete set \"{set}\" with its {n} file(s)? This cannot be undone.": "Set „{set}“ mit {n} Datei(en) löschen? Das lässt sich nicht rückgängig machen.",
 });
 const $ = id => document.getElementById(id);
 
-function renderFields() {
-  const host = $("fields");
+/* Settings whose key starts with ai: are the model access and get a card
+   of their own; the list and the form code are the same. */
+function renderFields(host, list) {
   host.textContent = "";
-  for (const c of JSC_CFG) {
+  for (const c of list) {
     const row = document.createElement("div"); row.className = "field";
     const label = document.createElement("label"); label.htmlFor = "cfg-" + c.key;
     const key = document.createElement("span"); key.className = "key"; key.textContent = c.key;
@@ -122,7 +163,9 @@ async function renderSets() {
   }
 }
 jscI18n.apply();
-renderFields();
+renderFields($("fields"), JSC_CFG.filter(c => !c.key.startsWith("ai:")));
+renderFields($("ai-fields"), JSC_CFG.filter(c => c.key.startsWith("ai:")));
+for (const p of JSC_PROMPTS) { const box = document.createElement("div"); $("prompts").appendChild(box); jscAi.promptEditor(box, p.key); }
 renderSets();
 window.addEventListener("storage", e => { if (e.key && e.key.startsWith("jsc:cfg:store:")) renderSets(); });
 </script>

@@ -363,7 +363,8 @@ reproduce.
 [`jascon-app/`](jascon-app/) is the reader grown into a set of pages that
 share one core: a hub, and one page each to import OSCAL, browse, tailor,
 map, implement, analyse risk and assess. There is still no build step and no
-server, and a bundle you load stays in your browser.
+server, and a bundle you load stays in your browser unless you switch on the
+one view that asks a language model (below).
 
 - **Import** reads an OSCAL catalog or profile; everything after it works on
   JASCON. The BSI Grundschutz++ rules reproduce the shipped `DE.BSI` bundle
@@ -372,6 +373,10 @@ server, and a bundle you load stays in your browser.
   scales with their likelihood-impact matrix, the coverage of the selected
   requirements, and the import of the risk catalogues under
   [`risk-catalogs/`](risk-catalogs/).
+- The Risk page can ask a language model for drafts of risks and for the
+  requirements that treat a risk. It does so only after you type a key, shows
+  what it sends, keeps the key in memory only, and writes nothing into the
+  set until you take a suggestion.
 - What a page computes about validity comes from a port of
   `validate_core.py`, run against the conformance vectors. The port is not
   complete; [`jascon-app/readme.md`](jascon-app/readme.md) says which rule
