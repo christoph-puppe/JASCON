@@ -1,0 +1,43 @@
+{
+ "id": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-12",
+ "version": "0.1.0",
+ "lifecycle": "draft",
+ "label": "OFF-12",
+ "title": {
+  "en": "An IT service provider with admin access is compromised",
+  "de": "IT-Dienstleister mit Administratorzugang wird kompromittiert"
+ },
+ "scenario": {
+  "en": "A managed service provider administers the organisation's systems through remote tools and shared accounts. An attacker who compromises the provider uses those paths to reach every customer at once.",
+  "de": "Ein Dienstleister administriert die Systeme der Organisation über Fernwartungswerkzeuge und gemeinsam genutzte Konten. Ein Angreifer, der den Dienstleister kompromittiert, erreicht über diese Wege alle Kunden gleichzeitig."
+ },
+ "category": "third-party",
+ "impacts": [
+  "confidentiality",
+  "integrity",
+  "availability"
+ ],
+ "suggested-treatments": [
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SA-9"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SR-2"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SR-3"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SR-6"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-17"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-2"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AU-6"
+  }
+ ]
+}

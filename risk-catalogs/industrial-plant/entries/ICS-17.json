@@ -1,0 +1,39 @@
+{
+ "id": "https://github.com/christoph-puppe/JASCON/risk-catalogs/industrial-plant/entry/ICS-17",
+ "version": "0.1.0",
+ "lifecycle": "draft",
+ "label": "ICS-17",
+ "title": {
+  "en": "An attack on the plant network is not detected",
+  "de": "Angriff auf das Anlagennetz wird nicht erkannt"
+ },
+ "scenario": {
+  "en": "The plant network is not monitored and controllers keep no usable logs. An intruder explores the network and prepares a manipulation over weeks, and the first sign is the disturbance of the process.",
+  "de": "Das Anlagennetz wird nicht überwacht, und Steuerungen führen keine verwertbaren Protokolle. Ein Eindringling erkundet das Netz und bereitet über Wochen eine Manipulation vor, und das erste Anzeichen ist die Störung des Prozesses."
+ },
+ "category": "detection-response",
+ "impacts": [
+  "integrity",
+  "availability"
+ ],
+ "suggested-treatments": [
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SI-4"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AU-2"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AU-6"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AU-12"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/IR-5"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CA-7"
+  }
+ ]
+}

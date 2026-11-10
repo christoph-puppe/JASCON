@@ -1,0 +1,39 @@
+{
+ "id": "https://github.com/christoph-puppe/JASCON/risk-catalogs/industrial-plant/entry/ICS-04",
+ "version": "0.1.0",
+ "lifecycle": "draft",
+ "label": "ICS-04",
+ "title": {
+  "en": "A service laptop or USB stick carries malware into the plant",
+  "de": "Service-Notebook oder USB-Stick trägt Schadsoftware in die Anlage"
+ },
+ "scenario": {
+  "en": "An engineering laptop that is also used in other plants and on the internet, or a USB stick with a program update, is connected to the control network and infects engineering stations and operator panels.",
+  "de": "Ein Programmiergerät, das auch in anderen Werken und im Internet verwendet wird, oder ein USB-Stick mit einem Programmstand wird an das Steuerungsnetz angeschlossen und infiziert Engineering-Stationen und Bediengeräte."
+ },
+ "category": "malware",
+ "impacts": [
+  "integrity",
+  "availability"
+ ],
+ "suggested-treatments": [
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/MP-7"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/MA-3"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SI-3"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CM-7"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-19"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SC-7"
+  }
+ ]
+}

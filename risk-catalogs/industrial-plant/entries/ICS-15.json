@@ -1,0 +1,39 @@
+{
+ "id": "https://github.com/christoph-puppe/JASCON/risk-catalogs/industrial-plant/entry/ICS-15",
+ "version": "0.1.0",
+ "lifecycle": "draft",
+ "label": "ICS-15",
+ "title": {
+  "en": "A delivered component or machine contains malware or a hidden access",
+  "de": "Gelieferte Komponente oder Maschine enthält Schadsoftware oder einen versteckten Zugang"
+ },
+ "scenario": {
+  "en": "A new machine arrives with an infected operator PC, an undocumented remote access module or a service account the supplier never mentioned. It is connected to the plant network during commissioning.",
+  "de": "Eine neue Maschine wird mit infiziertem Bedien-PC, einem nicht dokumentierten Fernzugriffsmodul oder einem Servicekonto geliefert, das der Lieferant nie erwähnt hat. Bei der Inbetriebnahme wird sie ans Anlagennetz angeschlossen."
+ },
+ "category": "third-party",
+ "impacts": [
+  "integrity",
+  "availability"
+ ],
+ "suggested-treatments": [
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SR-3"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SR-11"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SA-4"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SI-7"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SR-5"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CM-8"
+  }
+ ]
+}

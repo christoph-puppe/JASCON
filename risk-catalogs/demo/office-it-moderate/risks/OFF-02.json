@@ -1,0 +1,68 @@
+{
+ "id": "https://org.example/risk/OFF-02",
+ "version": "1",
+ "lifecycle": "active",
+ "label": "OFF-02",
+ "title": {
+  "en": "Ransomware encrypts file servers and backups",
+  "de": "Ransomware verschlüsselt Dateiserver und Backups"
+ },
+ "scenario": {
+  "en": "Malware started on one workstation spreads with the user's rights, encrypts network shares and reaches the online backups. Work stops until systems are rebuilt, and the attacker threatens to publish copied data.",
+  "de": "Schadsoftware, die auf einem Arbeitsplatzrechner gestartet wurde, breitet sich mit den Rechten des Benutzers aus, verschlüsselt Netzlaufwerke und erreicht die online angebundenen Backups. Die Arbeit ruht, bis die Systeme neu aufgebaut sind, und der Angreifer droht mit der Veröffentlichung kopierter Daten."
+ },
+ "owner-ref": "https://org.example/party/ciso",
+ "state": "assessed",
+ "tailoring-refs": [
+  "https://org.example/tailoring/soa-office-it"
+ ],
+ "treatments": [
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CP-9"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CP-10"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SI-3"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-6"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CM-7"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/IR-4"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SC-7"
+  }
+ ],
+ "relations": [
+  {
+   "type": "https://github.com/christoph-puppe/JASCON/risk-catalogs/relation/instantiates",
+   "ref": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-02"
+  }
+ ],
+ "annotations": {
+  "imported-from": {
+   "entry": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-02",
+   "entry-version": "0.1.0",
+   "catalog": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it",
+   "catalog-version": "0.1.0"
+  }
+ },
+ "component-refs": [
+  "https://org.example/component/office-it"
+ ],
+ "treatment": "modify",
+ "rating": {
+  "level": "hoch",
+  "scale-ref": "https://org.example/scale/3x3"
+ },
+ "residual-rating": {
+  "level": "mittel",
+  "scale-ref": "https://org.example/scale/3x3"
+ }
+}

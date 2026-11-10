@@ -1,0 +1,35 @@
+{
+ "id": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-23",
+ "version": "0.1.0",
+ "lifecycle": "draft",
+ "label": "OFF-23",
+ "title": {
+  "en": "Confidential content is pasted into public AI services",
+  "de": "Vertrauliche Inhalte werden in öffentliche KI-Dienste kopiert"
+ },
+ "scenario": {
+  "en": "Employees paste contracts, source code or personal data into a public AI assistant to summarise or translate it. The content leaves the organisation's control and may be stored or reused by the provider.",
+  "de": "Beschäftigte kopieren Verträge, Quellcode oder personenbezogene Daten in einen öffentlichen KI-Assistenten, um sie zusammenfassen oder übersetzen zu lassen. Die Inhalte verlassen die Kontrolle der Organisation und können vom Anbieter gespeichert oder weiterverwendet werden."
+ },
+ "category": "data-exposure",
+ "impacts": [
+  "confidentiality"
+ ],
+ "suggested-treatments": [
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-20"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SA-9"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/PL-4"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AT-2"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-4"
+  }
+ ]
+}

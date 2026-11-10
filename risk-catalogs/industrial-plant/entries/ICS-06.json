@@ -1,0 +1,36 @@
+{
+ "id": "https://github.com/christoph-puppe/JASCON/risk-catalogs/industrial-plant/entry/ICS-06",
+ "version": "0.1.0",
+ "lifecycle": "draft",
+ "label": "ICS-06",
+ "title": {
+  "en": "No separation between office network and plant network",
+  "de": "Keine Trennung zwischen Büronetz und Anlagennetz"
+ },
+ "scenario": {
+  "en": "Office workstations and controllers are in the same network, or the firewall between them allows almost everything. Any compromise of office IT is also a compromise of the plant.",
+  "de": "Büroarbeitsplätze und Steuerungen befinden sich im selben Netz, oder die Firewall dazwischen lässt fast alles durch. Jede Kompromittierung der Büro-IT ist zugleich eine der Anlage."
+ },
+ "category": "network",
+ "impacts": [
+  "integrity",
+  "availability"
+ ],
+ "suggested-treatments": [
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SC-7"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-4"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SC-7.5"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CA-3"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CM-7"
+  }
+ ]
+}

@@ -1,0 +1,40 @@
+{
+ "id": "https://github.com/christoph-puppe/JASCON/risk-catalogs/industrial-plant/entry/ICS-18",
+ "version": "0.1.0",
+ "lifecycle": "draft",
+ "label": "ICS-18",
+ "title": {
+  "en": "Unauthorised access to control cabinets and field devices",
+  "de": "Unbefugter Zugang zu Schaltschränken und Feldgeräten"
+ },
+ "scenario": {
+  "en": "Control cabinets are unlocked, network ports in the hall are live, and outstations are unguarded. A contractor or intruder plugs a device into a switch, changes wiring or operates a local panel.",
+  "de": "Schaltschränke sind unverschlossen, Netzwerkdosen in der Halle sind aktiv, und Außenstationen sind unbewacht. Ein Fremdfirmenmitarbeiter oder Eindringling steckt ein Gerät an einen Switch, ändert die Verdrahtung oder bedient ein Vor-Ort-Panel."
+ },
+ "category": "physical",
+ "impacts": [
+  "integrity",
+  "availability",
+  "safety"
+ ],
+ "suggested-treatments": [
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/PE-3"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/PE-2"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/PE-4"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/PE-6"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/IA-3"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CM-7"
+  }
+ ]
+}

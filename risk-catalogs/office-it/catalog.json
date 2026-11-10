@@ -1,0 +1,117 @@
+{
+ "id": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it",
+ "version": "0.1.0",
+ "lifecycle": "draft",
+ "title": {
+  "en": "Typical risks of an office IT environment",
+  "de": "Typische Risiken einer Büro-IT"
+ },
+ "description": {
+  "en": "Ready-made risk scenarios for an organisation whose IT is workstations, mail, file and collaboration services, a few servers and cloud subscriptions. Each entry is a template: import it, give it an owner, assess it.",
+  "de": "Vorgefertigte Risikoszenarien für eine Organisation, deren IT aus Arbeitsplätzen, Mail-, Datei- und Kollaborationsdiensten, einigen Servern und Cloud-Abonnements besteht. Jeder Eintrag ist eine Vorlage: importieren, eine Eigentümerin benennen, bewerten."
+ },
+ "publisher-ref": "https://github.com/christoph-puppe",
+ "license": "Apache-2.0",
+ "suggestion-source": {
+  "title": "NIST SP 800-53 Rev 5.2.0",
+  "requirement-prefix": "https://ns.nist.gov/sp800-53/req/"
+ },
+ "members": [
+  {
+   "ref": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-01",
+   "sequence": 10
+  },
+  {
+   "ref": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-02",
+   "sequence": 20
+  },
+  {
+   "ref": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-03",
+   "sequence": 30
+  },
+  {
+   "ref": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-04",
+   "sequence": 40
+  },
+  {
+   "ref": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-05",
+   "sequence": 50
+  },
+  {
+   "ref": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-06",
+   "sequence": 60
+  },
+  {
+   "ref": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-07",
+   "sequence": 70
+  },
+  {
+   "ref": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-08",
+   "sequence": 80
+  },
+  {
+   "ref": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-09",
+   "sequence": 90
+  },
+  {
+   "ref": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-10",
+   "sequence": 100
+  },
+  {
+   "ref": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-11",
+   "sequence": 110
+  },
+  {
+   "ref": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-12",
+   "sequence": 120
+  },
+  {
+   "ref": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-13",
+   "sequence": 130
+  },
+  {
+   "ref": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-14",
+   "sequence": 140
+  },
+  {
+   "ref": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-15",
+   "sequence": 150
+  },
+  {
+   "ref": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-16",
+   "sequence": 160
+  },
+  {
+   "ref": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-17",
+   "sequence": 170
+  },
+  {
+   "ref": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-18",
+   "sequence": 180
+  },
+  {
+   "ref": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-19",
+   "sequence": 190
+  },
+  {
+   "ref": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-20",
+   "sequence": 200
+  },
+  {
+   "ref": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-21",
+   "sequence": 210
+  },
+  {
+   "ref": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-22",
+   "sequence": 220
+  },
+  {
+   "ref": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-23",
+   "sequence": 230
+  },
+  {
+   "ref": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-24",
+   "sequence": 240
+  }
+ ]
+}

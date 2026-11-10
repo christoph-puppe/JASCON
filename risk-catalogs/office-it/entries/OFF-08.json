@@ -1,0 +1,35 @@
+{
+ "id": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-08",
+ "version": "0.1.0",
+ "lifecycle": "draft",
+ "label": "OFF-08",
+ "title": {
+  "en": "Accounts of former staff stay active",
+  "de": "Konten ausgeschiedener Beschäftigter bleiben aktiv"
+ },
+ "scenario": {
+  "en": "A person leaves or changes role and the accounts, tokens and mail forwards are not removed. The former employee, or someone who obtains the credentials, still reaches internal data months later.",
+  "de": "Eine Person scheidet aus oder wechselt die Aufgabe, und Konten, Token und Mail-Weiterleitungen werden nicht entfernt. Die ehemalige Mitarbeiterin oder jemand, der die Zugangsdaten erlangt, erreicht noch Monate später interne Daten."
+ },
+ "category": "identity-access",
+ "impacts": [
+  "confidentiality"
+ ],
+ "suggested-treatments": [
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/PS-4"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/PS-5"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-2"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/IA-4"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-2.3"
+  }
+ ]
+}

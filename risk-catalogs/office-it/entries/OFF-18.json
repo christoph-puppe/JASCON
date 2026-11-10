@@ -1,0 +1,38 @@
+{
+ "id": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-18",
+ "version": "0.1.0",
+ "lifecycle": "draft",
+ "label": "OFF-18",
+ "title": {
+  "en": "An incident is handled without a plan",
+  "de": "Ein Vorfall wird ohne Plan bearbeitet"
+ },
+ "scenario": {
+  "en": "During an attack nobody knows who decides, whom to call, what may be switched off and what must be reported to authorities or customers. Evidence is destroyed, the outage lasts longer and deadlines are missed.",
+  "de": "Während eines Angriffs weiß niemand, wer entscheidet, wer anzurufen ist, was abgeschaltet werden darf und was Behörden oder Kunden zu melden ist. Spuren werden vernichtet, der Ausfall dauert länger, und Fristen verstreichen."
+ },
+ "category": "detection-response",
+ "impacts": [
+  "availability"
+ ],
+ "suggested-treatments": [
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/IR-8"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/IR-4"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/IR-2"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/IR-3"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/IR-6"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CP-2"
+  }
+ ]
+}

@@ -1,0 +1,40 @@
+{
+ "id": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-17",
+ "version": "0.1.0",
+ "lifecycle": "draft",
+ "label": "OFF-17",
+ "title": {
+  "en": "A compromise goes unnoticed for months",
+  "de": "Kompromittierung bleibt monatelang unbemerkt"
+ },
+ "scenario": {
+  "en": "Logs are not collected centrally, or nobody looks at them. An attacker reads mail, creates accounts and moves data out over a long period, and the organisation learns of it from a third party.",
+  "de": "Protokolle werden nicht zentral gesammelt, oder niemand sieht sie an. Ein Angreifer liest über lange Zeit E-Mails mit, legt Konten an und schleust Daten aus, und die Organisation erfährt davon durch Dritte."
+ },
+ "category": "detection-response",
+ "impacts": [
+  "confidentiality",
+  "integrity",
+  "availability"
+ ],
+ "suggested-treatments": [
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AU-2"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AU-6"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AU-12"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SI-4"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/IR-5"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CA-7"
+  }
+ ]
+}

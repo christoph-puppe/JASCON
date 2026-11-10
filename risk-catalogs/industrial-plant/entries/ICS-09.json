@@ -1,0 +1,38 @@
+{
+ "id": "https://github.com/christoph-puppe/JASCON/risk-catalogs/industrial-plant/entry/ICS-09",
+ "version": "0.1.0",
+ "lifecycle": "draft",
+ "label": "ICS-09",
+ "title": {
+  "en": "A safety function is bypassed, manipulated or fails",
+  "de": "Sicherheitsfunktion wird überbrückt, manipuliert oder fällt aus"
+ },
+ "scenario": {
+  "en": "A safety controller shares the network with the process control, or interlocks are bridged for maintenance and not restored. When the process leaves its safe range, the protective function does not act and people or the environment are harmed.",
+  "de": "Eine Sicherheitssteuerung teilt sich das Netz mit der Prozesssteuerung, oder Verriegelungen werden für die Instandhaltung überbrückt und nicht zurückgenommen. Verlässt der Prozess seinen sicheren Bereich, greift die Schutzfunktion nicht, und Menschen oder Umwelt kommen zu Schaden."
+ },
+ "category": "safety",
+ "impacts": [
+  "safety"
+ ],
+ "suggested-treatments": [
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SI-17"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CM-5"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-3"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CM-3"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SC-7"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/MA-2"
+  }
+ ]
+}

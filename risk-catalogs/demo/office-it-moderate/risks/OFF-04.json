@@ -1,0 +1,65 @@
+{
+ "id": "https://org.example/risk/OFF-04",
+ "version": "1",
+ "lifecycle": "active",
+ "label": "OFF-04",
+ "title": {
+  "en": "Remote access protected by a password alone",
+  "de": "Fernzugang nur mit Passwort geschützt"
+ },
+ "scenario": {
+  "en": "Remote access to mail, VPN or remote desktop needs only a user name and a password. A guessed, reused or leaked password is enough to work as that user from anywhere.",
+  "de": "Für den Fernzugriff auf Mail, VPN oder Remote Desktop genügen Benutzername und Passwort. Ein erratenes, mehrfach verwendetes oder geleaktes Passwort reicht aus, um von überall als dieser Benutzer zu arbeiten."
+ },
+ "owner-ref": "https://org.example/party/ciso",
+ "state": "assessed",
+ "tailoring-refs": [
+  "https://org.example/tailoring/soa-office-it"
+ ],
+ "treatments": [
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/IA-2"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/IA-2.1"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/IA-2.2"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/IA-5"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-17"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-7"
+  }
+ ],
+ "relations": [
+  {
+   "type": "https://github.com/christoph-puppe/JASCON/risk-catalogs/relation/instantiates",
+   "ref": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-04"
+  }
+ ],
+ "annotations": {
+  "imported-from": {
+   "entry": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-04",
+   "entry-version": "0.1.0",
+   "catalog": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it",
+   "catalog-version": "0.1.0"
+  }
+ },
+ "component-refs": [
+  "https://org.example/component/office-it"
+ ],
+ "treatment": "modify",
+ "rating": {
+  "level": "hoch",
+  "scale-ref": "https://org.example/scale/3x3"
+ },
+ "residual-rating": {
+  "level": "gering",
+  "scale-ref": "https://org.example/scale/3x3"
+ }
+}

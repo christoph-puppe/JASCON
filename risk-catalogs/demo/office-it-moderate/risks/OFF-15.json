@@ -1,0 +1,56 @@
+{
+ "id": "https://org.example/risk/OFF-15",
+ "version": "1",
+ "lifecycle": "draft",
+ "label": "OFF-15",
+ "title": {
+  "en": "Malware arrives by attachment, download or USB stick",
+  "de": "Schadsoftware gelangt über Anhang, Download oder USB-Stick ins Haus"
+ },
+ "scenario": {
+  "en": "A user opens an office document with active content, installs a tool from an unofficial site, or plugs in a found USB stick. Code runs on the workstation with the user's rights.",
+  "de": "Ein Benutzer öffnet ein Office-Dokument mit aktiven Inhalten, installiert ein Werkzeug von einer inoffiziellen Seite oder steckt einen gefundenen USB-Stick an. Auf dem Arbeitsplatzrechner läuft Code mit den Rechten des Benutzers."
+ },
+ "owner-ref": "https://org.example/party/ciso",
+ "state": "identified",
+ "tailoring-refs": [
+  "https://org.example/tailoring/soa-office-it"
+ ],
+ "treatments": [
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SI-3"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SI-8"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/MP-7"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CM-7"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CM-7.5"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CM-11"
+  }
+ ],
+ "relations": [
+  {
+   "type": "https://github.com/christoph-puppe/JASCON/risk-catalogs/relation/instantiates",
+   "ref": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-15"
+  }
+ ],
+ "annotations": {
+  "imported-from": {
+   "entry": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-15",
+   "entry-version": "0.1.0",
+   "catalog": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it",
+   "catalog-version": "0.1.0"
+  }
+ },
+ "component-refs": [
+  "https://org.example/component/office-it"
+ ]
+}

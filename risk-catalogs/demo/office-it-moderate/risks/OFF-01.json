@@ -1,0 +1,56 @@
+{
+ "id": "https://org.example/risk/OFF-01",
+ "version": "1",
+ "lifecycle": "draft",
+ "label": "OFF-01",
+ "title": {
+  "en": "Phishing leads to stolen credentials",
+  "de": "Phishing führt zu gestohlenen Zugangsdaten"
+ },
+ "scenario": {
+  "en": "An employee enters their password on a forged login page reached through an email. The attacker signs in to mail and file services as that employee and reads, forwards or deletes data.",
+  "de": "Eine Mitarbeiterin gibt ihr Passwort auf einer gefälschten Anmeldeseite ein, die sie über eine E-Mail erreicht hat. Der Angreifer meldet sich in ihrem Namen an Mail- und Dateidiensten an und liest, leitet weiter oder löscht Daten."
+ },
+ "owner-ref": "https://org.example/party/ciso",
+ "state": "identified",
+ "tailoring-refs": [
+  "https://org.example/tailoring/soa-office-it"
+ ],
+ "treatments": [
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AT-2"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/IA-2"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/IA-2.1"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/IA-2.2"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SI-8"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-7"
+  }
+ ],
+ "relations": [
+  {
+   "type": "https://github.com/christoph-puppe/JASCON/risk-catalogs/relation/instantiates",
+   "ref": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-01"
+  }
+ ],
+ "annotations": {
+  "imported-from": {
+   "entry": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-01",
+   "entry-version": "0.1.0",
+   "catalog": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it",
+   "catalog-version": "0.1.0"
+  }
+ },
+ "component-refs": [
+  "https://org.example/component/office-it"
+ ]
+}

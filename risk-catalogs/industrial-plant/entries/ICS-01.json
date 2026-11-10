@@ -1,0 +1,38 @@
+{
+ "id": "https://github.com/christoph-puppe/JASCON/risk-catalogs/industrial-plant/entry/ICS-01",
+ "version": "0.1.0",
+ "lifecycle": "draft",
+ "label": "ICS-01",
+ "title": {
+  "en": "Ransomware in the office network stops production",
+  "de": "Ransomware im Büronetz legt die Produktion still"
+ },
+ "scenario": {
+  "en": "Ransomware spreads from office IT into the plant network, or hits the systems production depends on, such as order management and recipe servers. The lines are stopped, either by the malware or as a precaution.",
+  "de": "Ransomware breitet sich aus der Büro-IT ins Anlagennetz aus oder trifft die Systeme, von denen die Produktion abhängt, etwa Auftragssteuerung und Rezeptserver. Die Linien stehen, durch die Schadsoftware selbst oder vorsorglich."
+ },
+ "category": "malware",
+ "impacts": [
+  "availability"
+ ],
+ "suggested-treatments": [
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SC-7"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-4"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CP-2"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CP-9"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CP-10"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/IR-4"
+  }
+ ]
+}

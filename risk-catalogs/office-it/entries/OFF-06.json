@@ -1,0 +1,35 @@
+{
+ "id": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-06",
+ "version": "0.1.0",
+ "lifecycle": "draft",
+ "label": "OFF-06",
+ "title": {
+  "en": "Lost or stolen laptop or phone with readable data",
+  "de": "Verlorenes oder gestohlenes Notebook oder Smartphone mit lesbaren Daten"
+ },
+ "scenario": {
+  "en": "A device is left on a train or stolen from a car. Its storage is not encrypted or the device is unlocked, so customer data, mail and stored credentials are readable by whoever holds it.",
+  "de": "Ein Gerät bleibt im Zug liegen oder wird aus dem Auto gestohlen. Der Datenträger ist nicht verschlüsselt oder das Gerät ist entsperrt, sodass Kundendaten, E-Mails und gespeicherte Zugangsdaten für den Finder lesbar sind."
+ },
+ "category": "data-exposure",
+ "impacts": [
+  "confidentiality"
+ ],
+ "suggested-treatments": [
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SC-28"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-19"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CM-8"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/MP-5"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/IR-6"
+  }
+ ]
+}
