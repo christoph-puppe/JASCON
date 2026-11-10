@@ -18,12 +18,12 @@ consistent package — the same running story the Handbook tells
 | 4 | Mapping | `mapping-konf-ism.json` | third-party crosswalk with statement scope, honest `supports`, provenance |
 | 5 | Component | `component-paas.json`, `component-acme-saas.json` | identified `authorizations[]`; members + capabilities |
 | 6 | Implementation | `implementation-acme-konf.json` | per-clause `statement-refs`, shared responsibility, capability + `inherited-from` with **basis-ref → authorization id** |
-| 7 | Assessment | `assessment-2026q3.json` | facet-typed method (stdlib stub), subjects, result |
+| 7 | Assessment | `assessment-2026q3.json` | facet-typed method (stdlib `assessment-criteria@1`), subjects, result |
 | 8 | Finding | `finding-017.json` | statement-scoped finding, calendar-aware action, **Deviation sub-object** (false-positive, approved) |
 | 10 | Risk | `risk-acme-kms-key-rotation.json` | treated Risk on a BSI 200-3 scale, G 0.x threat refs, **treats KONF.14.1 s2** (the clause finding 017 is against — which now carries `risk-refs`), CISO acceptance of the residual, 12-month calendar review; `risk-coverage` on this bundle: 3 selected, 1 justified, 2 uncovered |
 | 9 | Attestation | `attestation-acme-2026.json` | subject **semantic** digests, content-manifest binding, rendering block — *beside* the manifest, never inside |
 | — | Content manifest | `content-manifest.json` | both digests per object, exact-pinned facet schemas, rendering digest |
-| — | Facet descriptors | `gspp-taxonomy-1.0.0.json`, `assessment-criteria-1.0.0-stub.json` | custom facet descriptors and stubs |
+| — | Facet descriptors | `gspp-taxonomy-1.0.0.json`, `assessment-criteria-1.0.0.json` | a custom facet descriptor, and a stdlib descriptor pinned **verbatim** (D26) |
 | — | Rendering (L4) | `authorization-summary.md` | the "document as view", digest-bound by the attestation |
 
 ## Self-consistency properties (deliberate)
@@ -69,8 +69,18 @@ consistent package — the same running story the Handbook tells
    values are *representable* here but not *computable* — a conformant
    tool asked to do date arithmetic must fail closed (Handbook §10.4).
    This is pedagogy, not an omission.
-5. **`assessment-criteria` schema is a stub**; the normative stdlib
-   schema ships with the v0.6 gate.
+5. **`assessment-criteria` is pinned verbatim.**
+   `assessment-criteria-1.0.0.json` is a byte copy of the normative
+   descriptor `schemas/stdlib/assessment-criteria-1.0.0.json`: a pin of a
+   stdlib facet id is the descriptor, nothing else (D26). *Correction
+   (2026-11-10):* until then this folder pinned an illustrative stub
+   under the stdlib id, announced as a placeholder "until the v0.6 gate".
+   The normative schema has since shipped (`schemas/stdlib/`), the stub
+   stayed, and its schema differed from the descriptor. `validate_core.py jascon/examples`
+   failed it; the default run did not, because the example pass checked
+   only the pin's digest. Both now load pins with one function. The
+   assessment's `summary` became a language map with it: the normative
+   schema types `summary` as an object, the stub had typed it as a string.
 6. **The attestation is illustrative end to end.** Its
    `template-ref.digest` is a marked placeholder, the DSSE **envelope is
    out of scope** (`envelope-ref` points at a path not included), and —

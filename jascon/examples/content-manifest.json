@@ -75,8 +75,8 @@
   {
    "id": "https://assessor.example/assessment/2026-q3-acme",
    "version": "1",
-   "package-digest": "sha256:c10272bb3d6a7500dd121a8620cf3185ccde0142017ecfef1c76053477b40561",
-   "semantic-digest": "sha256:2d98311075be5aaf9e7179ea516e5d23924c25f5cdd4c69dd6cb7a075ddd5fac",
+   "package-digest": "sha256:fbc1babdb6ded1ee2c60b536456c7f7fbbed2be358e8922647fb38948e68979d",
+   "semantic-digest": "sha256:637044bb6cc9cd70c68523151aaa4be2736699af5578451804be074929e35a92",
    "path": "assessment-2026q3.json"
   },
   {
@@ -104,8 +104,8 @@
   {
    "id": "https://ns.oscal.org/stdlib/facet/assessment-criteria",
    "exact-version": "1.0.0",
-   "digest": "sha256:51a28023f41f84693bee32cae02450974d4356fc41e90c6527d9211b8706e1bb",
-   "path": "assessment-criteria-1.0.0-stub.json"
+   "digest": "sha256:dc1e0cdd9106cd391ceb54a64c560cba2f573318d65887c7a8c378cad7d24bd3",
+   "path": "assessment-criteria-1.0.0.json"
   }
  ],
  "renderings": [
