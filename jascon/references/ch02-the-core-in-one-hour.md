@@ -215,9 +215,24 @@ and "what the AO signed" can never quietly diverge again. The mechanics
 package proven* from *compliance content proven, packaging altered*) get
 their own chapter (11); for the hour, know that the object exists and why.
 
-That is nine: **Requirement, RequirementSet, Tailoring, Mapping** on the
+**Risk.** Everything above answers *what is required, what is in place,
+what was found*. An ISMS asks one question before all of those: *why is
+this requirement in scope at all?* ISO/IEC 27001 answers it with a risk
+owner, a treatment decision and a Statement of Applicability; BSI-Standard
+200-3 and NIST SP 800-30 answer it the same way under other names. A Risk
+records that answer as data: a `scenario`, an `owner-ref`, a `state`, a
+`rating` as an opaque level on a named scale, a `treatment` from four codes
+the standards share verbatim, and `treatments[]` — the requirements, to the
+clause, that carry the decision. Scoring methodology stays in facets; the
+fact that this control exists *because of* that risk is kernel. A Finding
+may point back with `risk-refs`; a `risk-adjustment` Deviation names the
+Risk it accepts. The Statement of Applicability is then a computation
+(`risk-coverage`, B.1.9), not a spreadsheet (Ch. 10 §10.6).
+
+That is ten: **Requirement, RequirementSet, Tailoring, Mapping** on the
 content side; **Component, Implementation, Assessment, Finding** on the
-system side; **Attestation** bonding the two worlds to paper.
+system side; **Risk** on the organisation's side between the two, saying
+why the content is in scope; **Attestation** bonding all of it to paper.
 
 ```
             CONTENT                      SYSTEMS

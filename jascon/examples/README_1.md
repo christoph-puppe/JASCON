@@ -6,7 +6,7 @@ type**, wired together as a single, closed, cross-referentially
 consistent package — the same running story the Handbook tells
 (KONF.14.1, the Acme SaaS on a PaaS, finding 017).
 
-## Coverage: the nine types + sub-objects + bundle artifacts
+## Coverage: the ten types + sub-objects + bundle artifacts
 
 | # | Type | File | Demonstrates |
 |---|---|---|---|
@@ -20,6 +20,7 @@ consistent package — the same running story the Handbook tells
 | 6 | Implementation | `implementation-acme-konf.json` | per-clause `statement-refs`, shared responsibility, capability + `inherited-from` with **basis-ref → authorization id** |
 | 7 | Assessment | `assessment-2026q3.json` | facet-typed method (stdlib stub), subjects, result |
 | 8 | Finding | `finding-017.json` | statement-scoped finding, calendar-aware action, **Deviation sub-object** (false-positive, approved) |
+| 10 | Risk | `risk-acme-kms-key-rotation.json` | treated Risk on a BSI 200-3 scale, G 0.x threat refs, **treats KONF.14.1 s2** (the clause finding 017 is against — which now carries `risk-refs`), CISO acceptance of the residual, 12-month calendar review; `risk-coverage` on this bundle: 3 selected, 1 justified, 2 uncovered |
 | 9 | Attestation | `attestation-acme-2026.json` | subject **semantic** digests, content-manifest binding, rendering block — *beside* the manifest, never inside |
 | — | Content manifest | `content-manifest.json` | both digests per object, exact-pinned facet schemas, rendering digest |
 | — | Facet descriptors | `gspp-taxonomy-1.0.0.json`, `assessment-criteria-1.0.0-stub.json` | custom facet descriptors and stubs |

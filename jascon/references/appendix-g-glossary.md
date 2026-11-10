@@ -337,6 +337,17 @@ interleaved by sequence; clause-level attachment by reference.
 What profile resolution produced, the shadow Set *is*. (Ch. 6.A,
 App. F Q23)
 
+**Risk** — the ex-ante record: a scenario with an owner, a state, a level
+on a named scale, a treatment decision and the requirements that carry
+it. Tenth kernel type (1.1.0). (Ch. 10 §10.6, App. A.9b)
+
+**Risk owner** — the party accountable for a Risk and the signer of its
+`acceptance` (ISO/IEC 27001 6.1.2 c 2). (App. A.9b)
+
+**risk-coverage** — the ninth primitive: which selected requirements are
+justified by a Risk, which are not; the Statement of Applicability as a
+computation. (App. B.1.9)
+
 **Statement** — the identified clause: id, modality, parties,
 parameters, prose. The shared fine-grained address of the whole
 model. (Ch. 4)

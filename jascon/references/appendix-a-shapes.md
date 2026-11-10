@@ -1,7 +1,7 @@
 # The JASCON Handbook
 # Appendix A — Shapes Reference
 
-**Purpose:** the nine types, two sub-objects, and bundle artifacts,
+**Purpose:** the ten types, two sub-objects, and bundle artifacts,
 field by field — with the evidence column that makes this appendix
 different from a schema dump: which measured corpus reality each field
 answers to. Counts cite the three-authority census and the gate-item-1
@@ -148,7 +148,9 @@ CR26 artifacts/key-tests/examples shape} · `performer-ref` ● ·
 `time` ● · `result` ● code · `evidence-refs` ○.
 
 **Finding:** `assessment-ref` ● · `requirement-ref` ● ·
-`statement-ref` ○ · `state` ● code (C.3) ·
+`statement-ref` ○ · `state` ● code (C.3) · `risk-refs` ○ [URI] — the
+ex-post record points at the ex-ante Risk(s) it materialised against;
+landmark (assessor bundle → organisation register, 1.1.0) ·
 `actions` ○ [{description ●, due ○ {date | elapsed-duration |
 calendar-period}, status ●}] — computable deadlines
 (fail-closed without the named calendar) ·
@@ -163,6 +165,34 @@ FedRAMP deviation props are its `type` values.
 | `content-manifest-digest` | ● | digest | *Package state* bound — enables bi-modal verification (Full vs Semantic Match). |
 | `rendering` | ● | {artifact-digest ●, media-type ●, template-ref{id,version,digest} ●, renderer ●} | *Paper* bound; templates are pinned TCB citizens; chrome-only annotation use is the renderer's law. |
 | `signer` ● · `timestamp` ● · `envelope-ref` ● | | | DSSE profile (stdlib); attestations live **beside** the manifest — nothing signed contains its own signature (D3). |
+
+## A.9b Risk *(kernel 1.1.0 — CP-RISK-1)*
+
+The ex-ante record: why a requirement is in scope. Four authorities encode
+it with the same fields (ISO/IEC 27001 6.1.2–6.1.3 / 27005, BSI 200-3,
+SP 800-30, OSCAL AR/POA&M `risk`); the *scales* differ and stay in facets.
+Common fields (A.0) plus:
+
+| Field | | Type | Meaning & evidence |
+|---|---|---|---|
+| `scenario` | ● | text | The risk statement — event and consequence (ISO 27005 event-based; BSI 200-3 Gefährdung am Zielobjekt). Multilingual like every normative text. |
+| `owner-ref` | ● | URI | The risk owner (ISO 6.1.2 c 2). Landmark ref — a party, not a bundle object. |
+| `state` | ● | code (C.3c) | identified · assessed · treated · retired. |
+| `threat-refs` | ○ | [URI] | Threat catalog entries (G 0.x, ATT&CK techniques, 800-30 threat events). Landmark. |
+| `component-refs` | ○ | [URI] | The assets at risk — Components of this bundle. Closure-required. |
+| `rating` | ○ | {level ●, scale-ref ●} | Inherent/current level on a named scale. **Required** once `state` ∈ assessed · treated (RISK-2). |
+| `residual-rating` | ○ | {level ●, scale-ref ●} | The level after treatment. |
+| `treatment` | ○ | code (C.10) | modify · retain · avoid · share. **Required** once treated (RISK-3). |
+| `treatments` | ○ | [{requirement-ref ●, statement-ids ○}] | **The ISO 6.1.3 b edge**: the controls determined for this risk, to the clause. requirement-ref closure-required (RISK-7); statement-ids must address the target (RISK-8). **Required** for `modify` (RISK-4). |
+| `shared-with-ref` | ○ | URI | Who carries the shared risk. **Required** for `share` (RISK-5). |
+| `acceptance` | ○ | {approver-ref ●, date ●, rationale ●} | The owner's acceptance of the residual (ISO 6.1.3 f). **Required** for `retain` (RISK-6) and once treated (RISK-3). |
+| `review-due` | ○ | date \| elapsed-duration \| calendar-period | ISO 8.2 "at planned intervals" — the same computable union as `Finding.actions[].due`, fail-closed without the named calendar. |
+
+**Shape-disjointness:** `scenario` + `owner-ref` occur in no other type.
+**Closure:** `treatments[].requirement-ref` and `component-refs` in-bundle
+(RISK-7); `owner-ref`, `threat-refs`, `shared-with-ref`, `approver-ref`,
+`scale-ref` landmark. **Evidence:** example bundle (1 Risk), 31 vectors;
+at scale pending the IFA re-run (A.12).
 
 ## A.10 Sub-object: Deviation
 

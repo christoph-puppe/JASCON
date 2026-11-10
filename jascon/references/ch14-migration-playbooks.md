@@ -131,6 +131,17 @@ UUID-plumbing cluster (party-uuid, import-profile, attachment
 hashes) dies into L0 references and the content manifest: Level 1 by
 deletion.
 
+**Risk (1.1.0 — CP-RISK-1).** OSCAL 1.x `assessment-results`/`poam`
+`risks[]` become **Risk** objects: `risk-status` → `state`, `statement` →
+`scenario`, `deadline` → `review-due`, `threat-ids` → `threat-refs`;
+`remediations` stay `Finding.actions[]`; `related-observations` ride the
+Finding's evidence; the Finding gains `risk-refs`. `characterizations` and
+`mitigating-factors` go to the parked `risk-analysis@1` facet (L2 holding
+pen until measured). OSCAL's `deviation-approved` risk status splits into
+two records — `Risk.acceptance` (the owner) and a `risk-adjustment`
+Deviation naming the Risk (the implementer) — because it fused two acts by
+two roles and lost the owner.
+
 ## 14.4 Playbook: CR26 and other bespoke JSON
 
 The American corpus converts almost by table lookup, because

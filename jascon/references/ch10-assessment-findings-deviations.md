@@ -95,7 +95,7 @@ with the requirement.
   "requirement-ref": "https://ns.bsi.bund.de/gspp/req/KONF.14.1",
   "statement-ref": "s2",
   "state": "open",
-  "risk": { "…risk facet…": {} },
+  "risk-refs": [ "https://cso.example/risk/R-2026-007" ],
   "actions": [
     { "description": "Provide key-rotation runbook and rotation evidence",
       "due": { "type": "calendar-period", "num": 20, "unit": "bizdays",
@@ -107,9 +107,11 @@ Three fields carry the chapter's weight. **`statement-ref`** is
 clause-precision paying off a third time (after tailoring and shared
 responsibility): the finding is against *statement s2* — the customer's
 key-rotation clause — not smeared across a requirement whose s1 passed
-cleanly. **`risk`** is a facet on purpose: CVSS, national risk
-matrices, house scales — the kernel stays agnostic and lets your risk
-model arrive under contract, exactly like assessment methods. And
+cleanly. **`risk-refs`** closes the loop the old POA&M never could: the
+finding points at the Risk it materialised against (§10.6), and that Risk
+points at the clause that was supposed to treat it — the same `s2`. Risk
+*scoring* stays a facet: CVSS, national matrices, house scales arrive
+under contract, exactly like assessment methods. And
 **`actions[]`** is the old POA&M reduced to its load-bearing atoms —
 description, due, status. The *historical* record shows how overdue
 that reduction was: the Rev4-era registry carried a whole cluster of
@@ -190,7 +192,33 @@ actually competent to approve this class of weakness; and do the
 > only question is whether it is typed, queryable, and attached where
 > the weakness lives, or reconstructed from inboxes at audit time.
 
-## 10.6 Worked: one finding, end to end
+## 10.6 Risk: the record that comes first
+
+Chapters 6, 9 and 10 so far run in the direction an auditor reads: requirement → implementation → assessment → finding → deviation. An ISMS is written in the other direction, and ISO/IEC 27001 is explicit about the order: identify risks and their owners (6.1.2 c), analyse and evaluate them (6.1.2 d–e), choose a treatment option (6.1.3 a), determine *all* controls necessary (6.1.3 b), compare with Annex A, write the Statement of Applicability with a justification for every inclusion and exclusion (6.1.3 d), obtain the owners' acceptance of the residual (6.1.3 f). BSI-Standard 200-3 is the same procedure with German names — Gefährdungsübersicht, Risikoeinstufung, Risikobehandlung, Konsolidierung — and the same four treatment options. OSCAL 1.x had a `risk` only where an assessor found one; usnistgov/OSCAL #2292 records why that cannot represent an ISO 27001 catalog. The Risk type (App. A.9b) is the missing first record.
+
+```json
+{ "id": "https://cso.example/risk/R-2026-007",
+  "scenario": { "en": "A KMS key compromised through an export path stays valid for years because keys are never rotated; every tenant record encrypted under it is exposed retroactively." },
+  "owner-ref": "https://cso.example/party/ciso",
+  "state": "treated",
+  "threat-refs": [ "https://ns.bsi.bund.de/gspp/threat/G-0.19" ],
+  "component-refs": [ "https://cso.example/component/acme-saas" ],
+  "rating": { "level": "hoch", "scale-ref": "https://cso.example/scale/bsi-200-3-matrix" },
+  "residual-rating": { "level": "gering", "scale-ref": "https://cso.example/scale/bsi-200-3-matrix" },
+  "treatment": "modify",
+  "treatments": [ { "requirement-ref": "https://ns.bsi.bund.de/gspp/req/KONF.14.1", "statement-ids": ["s2"] } ],
+  "acceptance": { "approver-ref": "https://cso.example/party/ciso", "date": "2026-11-05",
+                  "rationale": { "en": "Monthly rotation brings the residual to 'gering', within appetite." } },
+  "review-due": { "type": "calendar-period", "num": 12, "unit": "months", "calendar-ref": "https://cso.example/calendar/isms" } }
+```
+
+Four fields carry the chapter's weight. **`treatments[].statement-ids`** is clause precision paying off a fourth time: the risk is treated by *s2*, the customer's rotation clause, and the Implementation (Ch. 9) says s1 is the provider's — so the SoA, the responsibility matrix and the risk register agree to the clause without anyone reconciling three documents. **`rating.scale-ref`** keeps Appendix F Q14's promise: the kernel carries a level and the identity of the scale it is on, and refuses to compare across scales; how `hoch` was computed is the facet's business. **`acceptance`** is the owner's signature on the residual — required the moment the risk is `treated` or `retain`ed, because silent retention is the oldest ISMS defect and a required field is the cheapest cure. **`treatment`** is the one code system two authorities publish verbatim: ISO 31000's avoid · modify · share · retain and 200-3's Vermeidung · Reduktion · Transfer · Akzeptanz are the same four words.
+
+What this makes computable is the sentence every ISO 27001 auditor asks and every ISMS answers with a spreadsheet: *which selected controls rest on no risk?* The `risk-coverage` primitive (B.1.9) resolves each Tailoring's selection and lists, per requirement, the Risks whose treatments name it. Run on this book's example bundle it reports: three selected, one justified (KONF.14.1 by R-2026-007), two uncovered (ISM-1234, IEC-CSO-IIR). Whether *uncovered* is an error is the program's policy — ISO says yes for every SoA row, BSI says the baseline justifies itself — so the primitive reports and the policy switch (`--require-risk-basis`) decides.
+
+> **Don't** encode risk acceptance as a Deviation, and don't encode a weakened requirement as a Risk. They are two acts by two roles: the owner accepts a residual (`Risk.acceptance`); an implementer weakens a clause because of it (`Deviation` of type `risk-adjustment`, which SHOULD name the Risk in `refs` — RISK-9). The corpse this honours is OSCAL's `deviation-approved` risk status, which fused the two into one state and lost the owner.
+
+## 10.7 Worked: one finding, end to end
 
 The SaaS from Chapter 9, under a criteria-driven assessment. The
 transport-encryption requirement's clause s1 (provider encrypts)
@@ -211,7 +239,7 @@ fix.
 Three objects, one story, every step citable by id — and not one email
 thread subpoenaed.
 
-## 10.7 Where this leaves you
+## 10.8 Where this leaves you
 
 The chain is built (9), tested, and honest about its gaps (10). What
 nothing so far explains is why anyone *outside* your organization

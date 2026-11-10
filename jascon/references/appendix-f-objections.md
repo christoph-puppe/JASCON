@@ -153,12 +153,7 @@ encode as data. BPM engines exist; this is their input, not their
 competitor.
 
 **Q14. Where's risk modeling — likelihood, impact, scoring?**
-In facets, where legitimate methodological diversity belongs.
-`security-objectives@1` carries the ratings authorities actually
-ship (measured: C/I/A/Auth ×4,494); scoring *methodologies* differ
-by framework and by fashion, which is the exact profile of a facet
-and the exact anti-profile of a kernel field. `privacy-assessment@1`
-is parked for the same discipline: no facet designed from memory.
+Scoring is in facets; the risk is in the kernel (1.1.0). The split is the measured one: four authorities (ISO 27001/27005, BSI 200-3, SP 800-30, OSCAL's own AR/POA&M) encode *the same* risk record — owner, scenario, level, treatment option, treating controls, residual acceptance — and *different* ways of computing the level. The record is a kernel type (A.9b) so that a selected requirement can name the risk that justifies it (ISO 6.1.3 b/d — the question OSCAL #2292 found unanswerable in 1.x); the computation is a facet (`risk-analysis@1`, parked until measured) so that CVSS, FAIR and the 4×4 matrix coexist under contract. `rating` carries only a level on a named scale and compares nothing across scales. `privacy-assessment@1` stays parked for the same discipline.
 
 **Q15. Statements without mandatory grammar are just prose with
 extra steps.**
