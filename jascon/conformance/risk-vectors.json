@@ -542,6 +542,130 @@
    "expected": "invalid",
    "expected-rule": "RISK-13",
    "rule": "RISK-13: a residual level presupposes a rating"
+  },
+  {
+   "name": "rating-with-likelihood-and-impact",
+   "object": {
+    "id": "https://org.example/risk/R-20",
+    "version": "1",
+    "lifecycle": "active",
+    "scenario": {
+     "en": "Scenario 20."
+    },
+    "owner-ref": "https://org.example/party/ciso",
+    "state": "assessed",
+    "rating": {
+     "level": "hoch",
+     "scale-ref": "https://org.example/scale/4x4",
+     "likelihood": {
+      "level": "selten",
+      "scale-ref": "https://org.example/scale/likelihood"
+     },
+     "impact": {
+      "level": "beträchtlich",
+      "scale-ref": "https://org.example/scale/impact"
+     }
+    },
+    "residual-rating": {
+     "level": "gering",
+     "scale-ref": "https://org.example/scale/4x4",
+     "likelihood": {
+      "level": "sehr selten",
+      "scale-ref": "https://org.example/scale/likelihood"
+     },
+     "impact": {
+      "level": "beträchtlich",
+      "scale-ref": "https://org.example/scale/impact"
+     }
+    }
+   },
+   "expected": "valid",
+   "rule": "A.9b: rating and residual-rating MAY carry likelihood and impact, each an opaque level on a named scale - the two inputs ISO/IEC 27001 6.1.2 d, BSI 200-3 and SP 800-30 all name"
+  },
+  {
+   "name": "likelihood-without-scale",
+   "object": {
+    "id": "https://org.example/risk/R-21",
+    "version": "1",
+    "lifecycle": "active",
+    "scenario": {
+     "en": "Scenario 21."
+    },
+    "owner-ref": "https://org.example/party/ciso",
+    "state": "assessed",
+    "rating": {
+     "level": "hoch",
+     "scale-ref": "https://org.example/scale/4x4",
+     "likelihood": {
+      "level": "selten"
+     },
+     "impact": {
+      "level": "beträchtlich",
+      "scale-ref": "https://org.example/scale/impact"
+     }
+    }
+   },
+   "expected": "invalid",
+   "rule": "A.9b: a likelihood is a level ON A NAMED SCALE, like every level in the kernel"
+  },
+  {
+   "name": "rating-with-an-unknown-input",
+   "object": {
+    "id": "https://org.example/risk/R-22",
+    "version": "1",
+    "lifecycle": "active",
+    "scenario": {
+     "en": "Scenario 22."
+    },
+    "owner-ref": "https://org.example/party/ciso",
+    "state": "assessed",
+    "rating": {
+     "level": "hoch",
+     "scale-ref": "https://org.example/scale/4x4",
+     "likelihood": {
+      "level": "selten",
+      "scale-ref": "https://org.example/scale/likelihood"
+     },
+     "impact": {
+      "level": "beträchtlich",
+      "scale-ref": "https://org.example/scale/impact"
+     },
+     "probability": {
+      "level": "0.2",
+      "scale-ref": "https://org.example/scale/likelihood"
+     }
+    }
+   },
+   "expected": "invalid",
+   "rule": "A.9b: rating is a closed shape - likelihood and impact are the two kernel inputs; anything else (probability, exposure, a CVSS vector) is the facet's"
+  },
+  {
+   "name": "impact-with-a-dimension",
+   "object": {
+    "id": "https://org.example/risk/R-23",
+    "version": "1",
+    "lifecycle": "active",
+    "scenario": {
+     "en": "Scenario 23."
+    },
+    "owner-ref": "https://org.example/party/ciso",
+    "state": "assessed",
+    "rating": {
+     "level": "hoch",
+     "scale-ref": "https://org.example/scale/4x4",
+     "likelihood": {
+      "level": "selten",
+      "scale-ref": "https://org.example/scale/likelihood"
+     },
+     "impact": {
+      "level": "hoch",
+      "scale-ref": "https://org.example/scale/impact",
+      "dimension": "safety"
+     }
+    }
+   },
+   "expected": "invalid",
+   "rule": "A.9b: one impact per rating - impact per dimension (confidentiality, integrity, availability, safety) stays in the facet"
   }
  ],
  "bundle-vectors": [
@@ -4418,6 +4542,122 @@
     "which is withdrawn"
    ],
    "rule": "RISK-11 without a Tailoring: everything in force is in play, so the only way to lean on a control that is not is to name a withdrawn one"
+  },
+  {
+   "name": "residual-impact-on-another-scale",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Requirement 1."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/risk/R-24",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Scenario 20."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "assessed",
+     "rating": {
+      "level": "hoch",
+      "scale-ref": "https://org.example/scale/4x4",
+      "likelihood": {
+       "level": "selten",
+       "scale-ref": "https://org.example/scale/likelihood"
+      },
+      "impact": {
+       "level": "beträchtlich",
+       "scale-ref": "https://org.example/scale/impact"
+      }
+     },
+     "residual-rating": {
+      "level": "gering",
+      "scale-ref": "https://org.example/scale/4x4",
+      "likelihood": {
+       "level": "sehr selten",
+       "scale-ref": "https://org.example/scale/likelihood"
+      },
+      "impact": {
+       "level": "beträchtlich",
+       "scale-ref": "https://org.example/scale/euro"
+      }
+     }
+    }
+   ],
+   "expected-fails": 1,
+   "expected-frags": [
+    "RISK-13",
+    "impact"
+   ],
+   "rule": "RISK-13 extends to the inputs: residual impact sits on the impact scale of the rating, residual likelihood on its likelihood scale"
+  },
+  {
+   "name": "residual-carries-only-one-input",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Requirement 1."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/risk/R-25",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Scenario 20."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "assessed",
+     "rating": {
+      "level": "hoch",
+      "scale-ref": "https://org.example/scale/4x4",
+      "likelihood": {
+       "level": "selten",
+       "scale-ref": "https://org.example/scale/likelihood"
+      },
+      "impact": {
+       "level": "beträchtlich",
+       "scale-ref": "https://org.example/scale/impact"
+      }
+     },
+     "residual-rating": {
+      "level": "gering",
+      "scale-ref": "https://org.example/scale/4x4",
+      "impact": {
+       "level": "beträchtlich",
+       "scale-ref": "https://org.example/scale/impact"
+      }
+     }
+    }
+   ],
+   "expected-fails": 0,
+   "rule": "RISK-13 compares what both sides carry - a residual that restates only the impact is legal"
   }
  ],
  "risk-transitions": [

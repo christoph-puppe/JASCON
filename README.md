@@ -13,7 +13,7 @@ contact with real catalogs before it may stay.**
 
 This repository is a working design study, not a slide deck. It contains a
 draft specification with a public decision register, an **executable kernel
-schema** with a **157-vector conformance corpus** (234 in 14 families on `main`) and *two* reference
+schema** with a **157-vector conformance corpus** (240 in 14 families on `main`) and *two* reference
 validators — Python, and a **zero-dependency PowerShell 5.1 twin that runs
 on a stock Windows box** (the weekend-validator claim, measured: ~30×
 smaller than the OSCAL 1.x toolchain, crypto engines included) —
@@ -56,7 +56,7 @@ requirements and mints real objects.*
 > (`risk-coverage`) instead of a spreadsheet.
 >
 > - **Measured:** all 6,914 objects of the 1.0.0 corpus validate unchanged
->   under the new schema; the conformance corpus is 234 vectors in 14
+>   under the new schema; the conformance corpus is 240 vectors in 14
 >   families; the IFA lifecycle corpus now carries two real Risk objects
 >   (6,916 objects in eleven bundles, green in `validate_core.py`).
 > - **Corrected on the way in:** eight defects in the proposal's own
