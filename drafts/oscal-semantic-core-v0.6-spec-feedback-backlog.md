@@ -12,8 +12,8 @@ the repository filed **#40–#47**; the author's answers of the same day
 closed **#40** (the release is **2.0.0** — register "Amendments — the
 2.0.0 decision"), deferred #42, and added **#48 · #49**; the corpus
 licence review closed **#49** and left **#50**; **#42** was then done
-on the author's word. Open: #41, #43–#48, #50.
-Three need the author (#43, #48, #50); one needs a Windows machine
+on the author's word, and **#43** decided ("keep"). Open: #41, #44–#48,
+#50. Two need the author (#48, #50); one needs a Windows machine
 (#45); the rest are work. The eight review findings against the proposal
 itself (R-1…R-8) were closed in the landing pass and never entered this
 file — `drafts/CP-RISK-1.md` §11.2.
@@ -21,7 +21,6 @@ file — `drafts/CP-RISK-1.md` §11.2.
 | # | Item | Evidence | Proposed disposition | Source |
 |---|---|---|---|---|
 | 41 | **Path coverage is not value arrival** *(Major, class c — affects the "lossless" headline)*. Coverage reports count source paths with a declared destination; values are not checked. | **Measured, IFA only**: 394/835 leaf values occur verbatim in the bundle; absent 194 identity + 120 document-metadata + **122 content (63 prose ≥ 40 chars)**; before the re-run 138 — 13 under `poam.risks[]`, incl. the response `type` prop. Other ten corpora: **unmeasured** (sources not in repo) | Wire `oscal_conv_lib.value_arrival()` into every converter's report; for each absent content path either carry it or declare it dropped with a reason; then re-word the "converted losslessly" sentences (README, spec Status) to what is measured | CP-RISK-1 landing, L-2 |
-| 43 | **RISK-1/2/6 require what OSCAL data does not hold** *(decision)*. | **Measured** (IFA, the only Risk corpus): owner absent ×2 (derived from the SSP, declared) · level absent ×2 → both risks stuck at `identified` though analysed · acceptance date absent ×1 → `accept` cannot be written as `retain` | Author decides per rule: keep (the kernel is right to refuse; an OSCAL export of a register *should* show the gap), or relax for imported data (e.g. `rating` OR a pinned risk-analysis facet for `assessed`; `acceptance.date` optional). A second corpus (BSI 200-3 export) before deciding | CP-RISK-1 landing |
 | 44 | **Nothing in a bundle pins the kernel version** *(Minor, class b)*. A 1.0.0 tool meeting a Risk fails closed as "matches NO type" — no version in the message. The proposal's `manifest-version: "1.1"` was an undefined second spelling and was reverted. | Demonstrated: `contentManifest` shape has no such field; 11/11 corpus manifests, the converter library and the reader write `"1"` | Open on its own now that #40 is closed. 2.0.0 is the natural window: an optional kernel pin in the manifest (itself a closed-shape change) or a written rule that `manifest-version` tracks the kernel line. Decide before the tag | CP-RISK-1 landing |
 | 45 | **PowerShell twin: the CP-RISK-1 port has never run** *(blocks the two-implementation gate)*. Ported from the Python reference and the vectors without a PowerShell runtime. Also observed while porting, **unverified**: the twin keys objects in `[ordered]@{}`, which compares keys case-insensitively — two ids differing only in case would collide, where the Python reference keeps both (D2: string-compared). | Not executed. Static checks only (bracket balance, no `$var:` hazards) | Run `powershell -ExecutionPolicy Bypass -File jascon/scripts/validate_core.ps1`; expect `risk: 42 pass, 0 fail` and ALL GREEN; remove the two port guards; add a case-differing-ids reference vector to settle the observation | CP-RISK-1 landing |
 | 46 | **The example attestation binds nothing** *(Minor, class c)*. Its three `subject-semantic-digests` match no example object and its `content-manifest-digest` no manifest — since before 1.0.0. Separately: the IFA bundle lists its Attestation **inside** the content manifest, which D3.1 excludes by definition. | Measured: 3/3 subject digests unmatched (also against the 1.0.0 blobs) · `objects/attestation/ifa-ato.json` is a manifest entry | Make the example attestation real and have `validate_examples` hold it to it (attestation-binds on the example bundle); move the IFA attestation beside its manifest at the next converter touch. README caveat 6 now says what is true meanwhile | CP-RISK-1 landing, L-3 |
@@ -45,6 +44,9 @@ coverage reports stay. Five bundles ship. Residue: #50.
 **#42** → the blobs are the digested bytes (register "Amendments — raw
 blobs"): bundle files are `-text` and stored CRLF, so raw blob access
 verifies too — 4,527 / 4,527 staged blobs match their manifest digests.
+**#43** → the Risk rules stay as written (register "Amendments — the Risk
+rules stay"): no relaxation for imported OSCAL data; an import that lacks
+owner, level or dated acceptance stays `identified` and says so.
 
 <details><summary>State of this file at the 1.0.0 release (2026-07-22) — kept as written</summary>
 

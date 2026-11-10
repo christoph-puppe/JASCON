@@ -244,4 +244,7 @@ both risks at `identified`), **no owner** (derived from the imported SSP's
 `owner` role, declared in the coverage report) and **no acceptance date**
 (so the one `accept` response cannot become `retain` under RISK-6). The
 kernel shape and the fourth authority disagree on three required fields;
-the disagreement is recorded (backlog #43), not papered over.
+the disagreement was put to the author and decided on 2026-11-10: **the
+rules stay** (specification D23). `assessed` always means "has a level",
+`retain` always means "has a dated, attributed acceptance"; an import that
+cannot say so stays `identified`, with its source status in a facet.

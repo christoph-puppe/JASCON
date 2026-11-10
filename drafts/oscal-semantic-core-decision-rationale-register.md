@@ -1737,3 +1737,69 @@ delivered bytes are stored bytes.
 `^M`. Taken after the licence review on purpose, so that only bundles
 that stay were rewritten.
 
+## FedRAMP-CR26 — removed as the doubtful case, in a commit of its own
+**Decision.** By the author's rule the FedRAMP bundle goes too. The table
+above kept it "on the statutory basis"; this entry takes that back, and
+says why the two readings differ.
+**For keeping.** It is a publication of a U.S. federal program, and 17
+U.S.C. § 105 withholds U.S. copyright from works of the U.S. Government.
+The repository's README invites readers to "read, analyze, and integrate"
+the dataset.
+**For removing.** § 105 is a statute about the United States, not a
+statement by the publisher. NIST adds a CC0 dedication precisely because
+§ 105 does not reach the rest of the world; FedRAMP's repository has no
+licence file at all, and this repository is published from Germany.
+"Integrate" is a description of use, not a grant. fedramp.gov and gsa.gov
+could not be reached from the review session, so no site-level statement
+was read. The rule says: in doubt, remove.
+**Cost, stated.** CR26 is one of the three census corpora, the only
+shipped corpus with Tailorings (5) and — after the CIS removals — the only
+one with Mappings (373). With it gone, **no shipped corpus exercises
+Tailoring or Mapping at scale**; the example bundle and the vectors still
+do. The README's opening screenshot and its deep link showed CR26; both
+now show the IFA lifecycle corpus. The tree holds **five bundles, 3,715
+objects**.
+**Reversible on purpose.** The removal is one commit touching nothing
+else. If FedRAMP states a licence, or the author judges § 105 sufficient,
+`git revert` of that commit restores the bundle (as CRLF blobs — the
+raw-blob fix was applied before the removal for exactly this reason), its
+export, the screenshot and the link.
+
+# Amendments — the Risk rules stay (2026-11-10)
+
+## #43 CLOSED — RISK-1, RISK-2, RISK-3 and RISK-6 are kept as written *(author decision: "keep")*
+**The question.** The first Risk corpus (IFA, OSCAL POA&M) showed that
+OSCAL's risk data has no owner field, no single level (likelihood and
+impact only) and no dated acceptance. Under the rules both risks stay
+`identified` although both were analysed, and the one formally accepted
+risk cannot be written as `retain`. Keep the rules, or relax them for
+imported data?
+**Decision.** Keep. Every Risk has an owner (RISK-1); `assessed` and
+`treated` require a `rating` (RISK-2); `treated` and `retain` require an
+`acceptance` with approver, date and rationale (RISK-3, RISK-6). No
+import-only variant, no facet-in-place-of-a-field.
+**Customer.** The auditor the type was built for. A state that sometimes
+means "has a level" is a state that has to be re-checked every time; the
+ISO 27001 clauses behind the rules (6.1.2 c, 6.1.2 d–e, 6.1.3 f) are the
+reason the record is kernel at all.
+**Simplicity.** One meaning per state, for every bundle, readable without
+opening a facet — and no kernel rule that depends on a facet's content
+(the layering D10 exists to protect).
+**Reasons recorded with the decision.** (1) Asymmetry: loosening a rule
+later never invalidates data already written; tightening one later would.
+Start strict. (2) Evidence: one fictional example with two risks is a
+measurement, not a population; a second corpus (a BSI 200-3 export —
+BSI's own `Risikomanagement` catalogue now sits in the
+Stand-der-Technik-Bibliothek repository — or a real POA&M) comes before
+any change. (3) Nothing is lost: the source status, likelihood, impact
+and the response narrative ride verbatim in the `risk-analysis@1` holding
+pen.
+**Trade-off, accepted.** An OSCAL import looks less mature than it is
+until someone adds the level and the acceptance natively. That is the
+converter reporting a gap in the source, not repairing it — house rule,
+applied to the fourth authority.
+**Follow-on.** With this decided the 2.0.0 specification text was written
+as a release candidate
+(`drafts/oscal-semantic-core-specification-2.0.0-rc.1.md`): D23 carries
+Risk, the rules and this decision.
+
