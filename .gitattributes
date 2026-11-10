@@ -1,29 +1,26 @@
 # Package digests are computed over DELIVERED BYTES (spec D3.1), so git must
-# hand every platform the same bytes it handed the machine that digested them.
+# hand every consumer the same bytes it handed the machine that digested them.
 #
 # The corpus bundles were written on Windows in text mode: their manifests
-# digest CRLF bytes, while git stored the blobs LF-normalised (autocrlf).
-# Without this file a clone on Linux/macOS - or any checkout with
-# core.autocrlf=false/input - fails every package digest (6,914 objects +
-# 49 pinned facet schemas at 1.0.0; semantic digests are unaffected, which
-# is the two-digest design working, but the validator rightly reports the
-# package mismatch). `eol=crlf` reproduces the digested bytes on checkout
-# without re-spelling a single published digest. The converters write
-# these bytes explicitly (oscal_conv_lib.BUNDLE_NEWLINE), so a re-run is
-# byte-identical on every OS.
+# digest CRLF bytes. Git used to store those files LF-normalised (autocrlf),
+# so a clone on Linux/macOS - or any checkout with core.autocrlf=false/input -
+# failed every package digest (6,914 objects + 49 pinned facet schemas at
+# 1.0.0; semantic digests were unaffected, which is the two-digest design
+# working, but the validator rightly reports the package mismatch).
 #
-# Measured (2026-11-10, register "Amendments - CP-RISK-1", finding L-1):
-# fresh clones under core.autocrlf=true/false/input, an existing
-# Windows-style tree receiving this file, and `git archive` (what a ZIP
-# download is built from) all verify 6,914/6,914 objects + 49/49 pins.
-# KNOWN LIMIT: the blobs themselves stay LF, so a consumer that bypasses
-# checkout (raw blob URLs, `git show`, a client that ignores eol
-# attributes) still sees a package mismatch with a semantic match. The
-# cure for that channel is storing the CRLF bytes as blobs under `-text`
-# (measured: a 6,975-file commit, pack +0.02 MiB) - not done here because
-# nothing in the repository reads blobs that way and the commit would bury
-# every other change under review. Backlog #42.
-converted_examples/*/*-core-bundle/** text eol=crlf
+# The rule now: bundle files are `-text`. Git never converts them, and the
+# blobs ARE the digested bytes (CRLF). Every channel therefore delivers the
+# same bytes - checkout under any core.autocrlf setting, `git archive`, and
+# raw blob access (`git show`, raw URLs, clients that ignore attributes).
+# No published digest was re-spelled. The converters write these bytes
+# explicitly (oscal_conv_lib.BUNDLE_NEWLINE), so a re-run is byte-identical
+# on every OS.
+#
+# History (register "Amendments - CP-RISK-1" L-1, and "... - raw blobs"):
+# the first fix was `text eol=crlf`, which repaired checkouts and archives
+# but left the blobs LF, so raw blob access still mismatched (0/15 on the
+# IFA bundle). Storing the digested bytes closed that channel (backlog #42).
+converted_examples/*/*-core-bundle/** -text
 
 # The skill's example bundle ships inside SKILL_jascon.zip with LF bytes;
 # its content-manifest digests those. Keep them LF on Windows checkouts too.

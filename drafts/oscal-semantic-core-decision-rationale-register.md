@@ -1713,3 +1713,27 @@ corpus (which also shows the Risk type). The reader's Assess view printed
 on `main`. Taking them out of the tree stops this branch from publishing
 them going forward; it does not unpublish what is already public.
 
+# Amendments — raw blobs (2026-11-10)
+
+## #42 CLOSED — the blobs are the digested bytes *(author: "do it")*
+**Decision.** Bundle files are `-text`: git never converts them, and the
+blobs hold exactly the bytes the manifests digest (CRLF). The
+`text eol=crlf` rule of L-1 is replaced; no digest is re-spelled.
+**Why.** L-1 repaired every channel that goes through a checkout and left
+one that does not: a consumer reading blobs directly — `git show`, a raw
+URL, a client that ignores eol attributes — still received LF bytes and a
+package mismatch (measured then: 0 of 15 on the IFA bundle).
+**Scope.** The six bundles then in the tree: 4,533 files (4,527 objects
+and pinned schemas + 6 manifests), one commit, whitespace-only.
+**Verified.** Staged blobs against manifest digests: 4,527 / 4,527. Then,
+from the commit: fresh clones under `core.autocrlf` true / false / input,
+an existing Windows-style tree that receives the commit, `git archive`,
+and raw blob reads — every channel verifies every object.
+**Customer.** A reader deep-linked at a raw URL, a mirror, a CI cache —
+anyone who never ran `git checkout`.
+**Simplicity.** One rule, and the one the two-digest design implies:
+delivered bytes are stored bytes.
+**Trade-off.** One large mechanical commit; diffs of bundle files show
+`^M`. Taken after the licence review on purpose, so that only bundles
+that stay were rewritten.
+
