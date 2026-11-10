@@ -30,7 +30,7 @@ list of things you will **not** build. No bespoke meta-language parser
 — the schemas are plain JSON Schema 2020-12. No profile-resolution
 algebra with merge strategies — global identity deleted the problem.
 No three synchronized serializations — there is one. No
-Schematron-class rule engine — there are eight primitives, five of
+Schematron-class rule engine — there are nine primitives, five of
 which are structural and yours this weekend. The old world's
 implementation cliff is what produced its validator monoculture —
 every constraint dispute bottlenecked on one team, every consumer
@@ -224,7 +224,119 @@ a fresh manifest and provenance naming the Tailoring. The corpus
 hands you the adversarial cases by name: bounds violations, same-
 target conflicts, lattice edges, chained overrides.
 
-## 12.7 The harness, and the honest numbers
+## 12.7 A third sitting: Risk and the coverage join *(2.0.0)*
+
+Risk is the tenth type and `risk-coverage` the ninth primitive (D23,
+Appendix A.9b, B.1.9). Together they are an evening, on one condition:
+the tailoring resolver of 12.6 already expands a selection. Build in
+this order, because each step is the precondition of the next.
+
+**First, type it.** The Risk shape is one more entry point for the
+schema walk of 12.2, and it is the first that leans on conditionals:
+RISK-2 to RISK-6 and the first half of RISK-13 are `if`/`then` pairs.
+If your schema library, or your hand-written subset interpreter, has
+not needed `if`, `then` and `const` so far, it needs them now. The
+date formats are `pattern`s, the duration count is `integer` with
+`minimum`.
+
+**Second, name the rule.** A schema says no; it does not say which
+rule said it. Keep a table from rule id to rationale and a function
+that mirrors the conditionals one to one, and print both whenever an
+object carries the Risk signature (`scenario` or `owner-ref`) and
+matches no type:
+
+```
+FAIL [RISK-3] treated without acceptance - a treated risk names its
+option and carries its owner's signature (ISO/IEC 27001 6.1.3 a, f)
+```
+
+That function never accepts an object. The schema decides; the
+function explains. The vectors hold you to the id (`expected-rule`),
+never to a library's message text.
+
+**Third, close and type the edges.** Four references on a Risk are
+closure-required and typed: `treatments[].requirement-ref` names a
+Requirement, `component-refs` name Components, `tailoring-refs` name
+Tailorings (RISK-7, RISK-12), and every `statement-ids` entry names a
+statement of its target (RISK-8). `Finding.risk-refs` is landmark, but
+a target that does resolve must be a Risk. Two more checks belong here
+although they live outside the Risk: a Tailoring's `set-ref` names a
+RequirementSet, and an `excludes` entry names a Requirement or a Set.
+Skip the type half and the join below runs on a mis-aimed id and
+returns an empty answer without an error. Finally RISK-13's second
+half: `rating` and `residual-rating` carry the same `scale-ref`.
+
+**Fourth, the join.** If the bundle carries no Tailoring at all,
+nothing was scoped out: take every Requirement in force as one implicit
+selection and go to step 5. Otherwise, for every Tailoring whose
+`lifecycle` is not `withdrawn`:
+
+1. Expand the `set-ref` selects through nested Sets to any depth, with
+   a seen-set, so that a malformed cycle terminates. A fixed depth
+   limit loses requirements silently.
+2. Expand the excludes the same way and subtract them.
+3. Drop requirements whose `lifecycle` is `withdrawn`, and say so.
+4. Mark the selection *open* if any select is a predicate. This
+   primitive does not evaluate predicates; the resolver does. An open
+   selection is a lower bound.
+5. Take the Risks that belong to this Tailoring: those whose
+   `tailoring-refs` name it, and those that carry none.
+6. Sort each of them into one of three buckets by one test each.
+   *Justifies:* not retired, `lifecycle` neither `withdrawn` nor
+   `draft`, `state` assessed or treated, a `treatment` present.
+   *Pending:* live, and short of that. *Lapsed:* retired or withdrawn.
+7. A selected requirement named by a justifying Risk is `covered`.
+   Every other selected requirement is `uncovered`; if a pending Risk
+   names it, list it under `pending` as well, else if a lapsed one
+   does, under `lapsed`.
+
+**Fifth, RISK-11.** For every live Risk and every requirement its
+treatments name: is the requirement in the selection of at least one
+Tailoring the Risk belongs to? If it is, done. If the requirement is
+withdrawn, fail. If one of those Tailorings is open, report
+*undecided* and do not fail. Otherwise fail. The rule is asked in
+every bundle, including the one in which everything was excluded and
+the one whose only Tailoring is withdrawn; without any Tailoring only a
+withdrawn requirement can fail it.
+
+**Sixth, the verdict.** `uncovered` is a report line. Offer the
+program's policy as a switch, and under the switch print the one
+normative failure per uncovered requirement:
+
+```
+FAIL [risk-coverage] <tailoring>  selected <requirement>
+  justified by no Risk
+  rationale: ISO/IEC 27001 6.1.3 d - inclusion in the Statement of
+  Applicability carries its justification
+```
+
+The switch applies to every Tailoring at every tier, and to the bundle
+that carries no Risk at all: an empty register fails for every selected
+requirement.
+
+**The traps, each one a defect the reference validators shipped and a
+vector now pins.** Counting every live Risk as a justification, so
+that a three-field stub satisfies the switch. Joining bundle-wide, so
+that a risk about one system justifies the control in another system's
+Statement of Applicability. Letting a retired Risk justify for ever.
+Failing RISK-11 under an open selection, a hard verdict from knowledge
+the primitive does not have. Letting one open Tailoring anywhere make
+the rule undecided for every Risk. Skipping the report when the bundle
+holds no Risk, which exempts the emptiest register from the strictest
+policy. Skipping it when the bundle holds no Tailoring, as if an
+untailored catalogue had no controls in play.
+
+**What the corpus hands you:** `risk-vectors.json`, 67 cases. The
+object vectors exercise typing and rule naming, the bundle vectors
+closure, the three buckets, scope and RISK-11, and eight transitions
+the state machine of C.3c. What it does not hand you is scale: the one
+converted corpus with Risks holds two of them and no Tailoring, so
+your join will meet its first real Statement of Applicability in your
+own data. The reference implementation of this section is about 160
+lines of Python, the closure checks aside; the PowerShell twin carries the same logic and, at
+this writing, has not been run against the vectors.
+
+## 12.8 The harness, and the honest numbers
 
 The specification converted "weekend validator" from slogan to
 **acceptance test**, and the harness is its instrument: two
@@ -237,9 +349,15 @@ of the specification's final version is gated on two independent
 implementations agreeing with the corpus — the CommonMark discipline,
 adopted whole.
 
-Until the v0.6 gate runs, every number this chapter implies is
-**designed-for** — and the margin where the measured LoC and hours
-will sit stays honestly empty. The harness is how the project keeps
+The harness ran in July 2026 (specification IV.5). The measured
+numbers at 1.0.0:
+994 non-blank, non-comment lines of Python plus one schema library,
+1,163 lines of dependency-free PowerShell 5.1, both green on the same
+157 vectors, against 30,905 lines for the OSCAL 1.x toolchain it was
+compared with, which also authors and resolves and therefore does
+more. Three things are not measured: the hours of a fresh contributor,
+an implementation by someone other than the author, and the size of
+both validators since Risk was added. The harness is how the project keeps
 itself honest; running it yourself is how you keep the project
 honest. Both are the point.
 

@@ -215,6 +215,12 @@ FAIL [conditional-apply:<instance-id>] on <object-id>
 
 ### B.1.9 `risk-coverage` *(2.0.0 — CP-RISK-1, the ninth primitive)*
 
+**No Tailoring, no scoping.** A bundle that carries no Tailoring at all
+has scoped nothing out: every Requirement in force is in play, and the
+primitive reports that implicit selection under the key `*`. A bundle
+whose Tailorings are all `withdrawn` is a different statement — there was
+a Statement of Applicability and it is no longer in force — and selects
+nothing.
 **What it computes:** for each Tailoring **in force** (`lifecycle` ≠
 `withdrawn`), the selected requirements — set-refs expanded through nested
 Sets to any depth, excludes removed (an exclude that names a Set removes
@@ -246,10 +252,14 @@ engine, not by this primitive, so a Tailoring that carries one has an
 concluded from a requirement's absence.
 **Verdict:** a report by default — `uncovered` fails only under the
 program's policy (`--require-risk-basis`; ISO 27001 6.1.3 d says every
-SoA row, BSI 200-2 says the baseline justifies itself).
+SoA row, BSI 200-2 says the baseline justifies itself). Under the switch
+a bundle that carries a Tailoring and no Risk at all fails for every
+selected requirement — the empty register is the limiting case, not an
+exemption.
 `treatment-out-of-scope` fails (RISK-11: a live Risk leans on a control
-the SoA dropped) wherever the bundle has a Tailoring to disagree with —
-including the case where everything was excluded, where the only
+the SoA dropped) in every bundle — without a Tailoring only a withdrawn
+Requirement can be out of play —, including the case where everything was
+excluded, where the only
 Tailoring is withdrawn, and where the named Requirement is withdrawn. The
 rule is asked of the Tailorings the Risk belongs to; where one of *those*
 has an open selection it is reported as *undecided*, never guessed — an
@@ -264,7 +274,7 @@ FAIL [risk-coverage] <tailoring>  selected <req>
   rationale: ISO/IEC 27001 6.1.3 d — inclusion in the Statement of
   Applicability carries its justification
 ```
-**Exercised:** `risk-vectors.json` (34 bundle vectors); the example bundle
+**Exercised:** `risk-vectors.json` (36 bundle vectors); the example bundle
 (3 selected, 1 justified, 2 uncovered). Not yet at corpus scale: the one
 corpus with Risks (IFA) carries no Tailoring, and no corpus Tailoring
 carries excludes or predicate selects.
