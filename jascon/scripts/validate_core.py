@@ -14,11 +14,12 @@ Runs, in order:
    rule), optional-empty-container rule (D3.3), manifest completeness +
    both digests re-verified per object.
 3. RISK (CP-RISK-1, kernel 1.1.0): Risk is the tenth kernel type; the
-   schema carries RISK-2..6 as conditionals, this file adds the closure
-   rules (RISK-7/8), the state machine (C.3c), the Deviation link note
-   (RISK-9) and the risk-coverage primitive (B.1.9): for every consumer
-   Tailoring, which selected requirement is justified by NO Risk - the
-   ISO/IEC 27001 6.1.3 d question, computed instead of audited by hand.
+   schema carries RISK-1..6 (named on failure by risk_rule_violations),
+   this file adds the closure rules (RISK-7/8), typed Risk edges
+   (RISK-12), the state machine (C.3c), the Deviation link note (RISK-9)
+   and the risk-coverage primitive (B.1.9): for every Tailoring, which
+   selected requirement is justified by NO live Risk - the ISO/IEC 27001
+   6.1.3 d question, computed instead of audited by hand.
    `--require-risk-basis` turns uncovered selections into failures.
 
 Exit 0 = all green. Usage: uv run --with jsonschema validate_core.py [bundle-dir ...]
@@ -94,14 +95,26 @@ def closure_errors(objs):
             need(oid, o["assessment-ref"], "assessment-ref")
             need(oid, o["requirement-ref"], "requirement-ref")
             # risk-refs are LANDMARK: the assessor's Finding points into the
-            # organisation's risk register, which normally lives in another bundle
+            # organisation's risk register, which normally lives in another
+            # bundle. Like a Mapping endpoint, the edge binds IF the target is
+            # present: an in-bundle target must be a Risk (RISK-12)
+            for rr in o.get("risk-refs", []) or []:
+                tgt = objs.get(rr)
+                if tgt and tgt[0] != "risk":
+                    errs.append(f"{oid}: risk-refs entry resolves in-bundle to a {tgt[0]}, not a Risk: {rr} "
+                                f"(RISK-12: a Risk edge is typed - a mis-aimed ref is a wrong statement, not a loose one)")
         elif t == "risk":
             # RISK-7: the controls a risk leans on are the organisation's own
             # selected requirements - closure-required like Implementation.requirement-ref
             for tr in o.get("treatments", []) or []:
                 need(oid, tr["requirement-ref"], "treatments requirement-ref (RISK-7)")
                 tgt = objs.get(tr["requirement-ref"])
-                if tgt and tgt[0] == "requirement":
+                if tgt and tgt[0] != "requirement":
+                    # RISK-12: without the type check a Set id here passes RISK-7 and
+                    # surfaces as a misleading RISK-11 ("no Tailoring selects <set>")
+                    errs.append(f"{oid}: treatments requirement-ref resolves to a {tgt[0]}, not a Requirement: "
+                                f"{tr['requirement-ref']} (RISK-12: a Risk edge is typed - coverage joins on Requirement ids)")
+                elif tgt:
                     sids = {st["id"] for st in tgt[1]["statements"]}
                     for sid in tr.get("statement-ids", []) or []:
                         if sid not in sids:
@@ -110,6 +123,10 @@ def closure_errors(objs):
             # RISK-7b: the assets at risk are Components of this bundle
             for cref in o.get("component-refs", []) or []:
                 need(oid, cref, "component-refs (RISK-7)")
+                tgt = objs.get(cref)
+                if tgt and tgt[0] != "component":
+                    errs.append(f"{oid}: component-refs entry resolves to a {tgt[0]}, not a Component: {cref} "
+                                f"(RISK-12: a Risk edge is typed - the asset at risk is a Component)")
             # owner-ref, threat-refs, shared-with-ref, acceptance.approver-ref,
             # rating.scale-ref are landmark (parties, threat catalogs, scales)
         elif t == "mapping":
@@ -839,27 +856,76 @@ def run_composition():
         else: fail("composition", f"{case['name']}: expected {exp}/{case.get('expected-resolutions')}, "
                                   f"got {[e[:80] for e in errs]}/{res}")
 
+# ---------------- RISK-1..6: the schema enforces, this names (CP-RISK-1) ----------------
+# The six shape rules are JSON-Schema conditionals, so ANY schema validator
+# refuses the object. A schema verdict is a bare "no" (or one library's
+# wording of it); Chapter 15.4 wants the machine id and the rationale to
+# print on failure, and a second implementation needs something it can be
+# held to that is not jsonschema's message text. This table is that: rule
+# id -> (what it refuses, why). risk-vectors.json pins both layers per case
+# - the schema says invalid AND this function names the expected rule.
+RISK_RULES = {
+    "RISK-1": "a risk without an owner is a worry, not a managed risk (ISO/IEC 27001 6.1.2 c 2)",
+    "RISK-2": "an assessed risk has a level on a named scale (ISO/IEC 27001 6.1.2 d-e; BSI 200-3 Risikoeinstufung; SP 800-30)",
+    "RISK-3": "a treated risk names its option and carries its owner's signature (ISO/IEC 27001 6.1.3 a, f)",
+    "RISK-4": "a modification with no controls is nothing (ISO/IEC 27001 6.1.3 b)",
+    "RISK-5": "sharing names who carries it (ISO/IEC 27005 8.6; BSI 200-3 Transfer)",
+    "RISK-6": "retention IS acceptance - no silent retention (ISO/IEC 27001 6.1.3 f)",
+}
+def risk_rule_violations(o):
+    """-> [(rule id, what is wrong)] for an object carrying the Risk
+    signature. Mirrors the schema conditionals one-to-one; never used to
+    ACCEPT an object (the schema decides), only to explain a refusal."""
+    out = []
+    if not isinstance(o, dict): return out
+    miss = [k for k in ("scenario", "owner-ref", "state") if k not in o]
+    if miss: out.append(("RISK-1", f"missing {', '.join(miss)}"))
+    st, tr = o.get("state"), o.get("treatment")
+    if st in ("assessed", "treated") and "rating" not in o:
+        out.append(("RISK-2", f"state={st} without rating"))
+    if st == "treated":
+        miss = [k for k in ("treatment", "acceptance") if k not in o]
+        if miss: out.append(("RISK-3", f"treated without {' and '.join(miss)}"))
+    if tr == "modify" and "treatments" not in o: out.append(("RISK-4", "modify names no controls"))
+    if tr == "share" and "shared-with-ref" not in o: out.append(("RISK-5", "share without shared-with-ref"))
+    if tr == "retain" and "acceptance" not in o: out.append(("RISK-6", "retain without acceptance"))
+    return out
+
 # ---------------- B.1.9 risk-coverage (CP-RISK-1) ----------------
+def risk_is_live(r):
+    """A Risk justifies a control only while it is being managed. `retired`
+    is terminal (C.3c) and lifecycle `withdrawn` unpublishes the object;
+    either way the justification has lapsed. Without this, coverage only
+    ever grows: a control justified once would stay justified for ever."""
+    return r.get("state") != "retired" and r.get("lifecycle") != "withdrawn"
+
 def _selected_requirements(tobj, objs, notes):
-    """Resolve a Tailoring's selection to requirement ids (set-refs expanded
-    through nested Sets; predicates are noted and skipped - selection by
-    predicate is resolved by the tailoring engine, not here)."""
+    """Resolve a Tailoring's selection -> (requirement ids, open?).
+    set-refs are expanded through nested Sets to any depth (membership is a
+    DAG - D21; the seen-set makes a malformed cycle terminate, and
+    closure_errors reports it). A predicate select is resolved by the
+    tailoring engine, not here, so its presence makes the selection OPEN:
+    the returned ids are a lower bound and nothing may be concluded from a
+    requirement's absence."""
     sel, seen = set(), set()
-    def walk(sid, depth=0):
-        if sid in seen or depth > 8: return
+    stack = [s["set-ref"] for s in tobj.get("selects", []) if "set-ref" in s]
+    while stack:
+        sid = stack.pop()
+        if sid in seen: continue
         seen.add(sid)
         tgt = objs.get(sid)
-        if not tgt: return
+        if not tgt: continue
         if tgt[0] == "requirementSet":
-            for m in tgt[1].get("members", []): walk(m["ref"], depth + 1)
+            stack.extend(m["ref"] for m in tgt[1].get("members", []))
         elif tgt[0] == "requirement":
             sel.add(sid)
-    for s in tobj.get("selects", []):
-        if "set-ref" in s: walk(s["set-ref"])
-        else: notes.append(f"{tobj['id']}: predicate select not expanded by risk-coverage (engine-resolved)")
+    open_sel = any("set-ref" not in s for s in tobj.get("selects", []))
+    if open_sel:
+        notes.append(f"{tobj['id']}: predicate select not expanded by risk-coverage (engine-resolved) - "
+                     f"the selection is a lower bound")
     for e in tobj.get("excludes", []) or []:
         sel.discard(e["ref"])
-    return sel
+    return sel, open_sel
 
 def risk_coverage(objs, sdig_fn=None, envelopes=None, trusted=None):
     """B.1.9: for each Tailoring, which selected requirements are named by a
@@ -871,33 +937,58 @@ def risk_coverage(objs, sdig_fn=None, envelopes=None, trusted=None):
     6.1.3 d: yes; BSI 200-2 Basis-Anforderungen: justified by the baseline)."""
     notes, errs = [], []
     risks = {oid: o for oid, (t, o) in objs.items() if t == "risk"}
-    treats = collections.defaultdict(set)          # requirement id -> {risk ids}
+    treats = collections.defaultdict(set)          # requirement id -> {LIVE risk ids}
+    lapsed = collections.defaultdict(set)          # requirement id -> {retired / withdrawn risk ids}
     for rid, r in risks.items():
         for tr in r.get("treatments", []) or []:
-            treats[tr["requirement-ref"]].add(rid)
+            (treats if risk_is_live(r) else lapsed)[tr["requirement-ref"]].add(rid)
     report = {"tailorings": {}, "risks": len(risks), "treatment-out-of-scope": []}
-    all_selected = set()
+    all_selected, any_open, n_tailorings = set(), False, 0
     for tid, (t, tobj) in sorted(objs.items()):
         if t != "tailoring": continue
+        n_tailorings += 1
         tier = derive_tier(tobj, objs, sdig_fn or sdig, envelopes=envelopes, trusted=trusted)
-        sel = _selected_requirements(tobj, objs, notes)
+        sel, open_sel = _selected_requirements(tobj, objs, notes)
+        any_open = any_open or open_sel
         all_selected |= sel
         covered = {q: sorted(treats[q]) for q in sorted(sel) if treats.get(q)}
         uncovered = sorted(q for q in sel if not treats.get(q))
+        lapsed_only = {q: sorted(lapsed[q]) for q in uncovered if lapsed.get(q)}
         excl_no_rationale = [e["ref"] for e in tobj.get("excludes", []) or [] if not e.get("rationale")]
-        report["tailorings"][tid] = {"tier": tier, "selected": len(sel), "covered": covered,
-                                     "uncovered": uncovered, "excludes-without-rationale": excl_no_rationale}
+        report["tailorings"][tid] = {"tier": tier, "selected": len(sel), "open-selection": open_sel,
+                                     "covered": covered, "uncovered": uncovered, "lapsed": lapsed_only,
+                                     "excludes-without-rationale": excl_no_rationale}
+        for q, rids in lapsed_only.items():
+            notes.append(f"{tid}: selected {q} is named only by retired/withdrawn Risk(s) {rids} - "
+                         f"counted as uncovered (C.3c: a retired risk justifies nothing)")
         if tier == "consumer" and excl_no_rationale:
             # ISO 27001 6.1.3 d: exclusion is justified or it is not a Statement of Applicability
             notes.append(f"{tid}: {len(excl_no_rationale)} exclude(s) without rationale at consumer tier "
                          f"(RISK-10, SHOULD: an SoA exclusion carries its justification)")
-    if risks and all_selected:
+    # RISK-11 binds LIVE risks only (a retired risk whose control later left
+    # the SoA is history, not a contradiction) and only where a Tailoring
+    # exists to disagree with. An unresolved or mistyped target is RISK-7/12's
+    # failure, not a second one here. With an open selection the question is
+    # undecidable from this side, so it is said and not guessed.
+    if n_tailorings:
         for q, rids in sorted(treats.items()):
-            if q not in all_selected and q in objs:
-                report["treatment-out-of-scope"].append({"requirement": q, "risks": sorted(rids)})
-                errs.append(f"{sorted(rids)[0]}: treatment names {q}, which no Tailoring in this bundle selects "
-                            f"(RISK-11: a risk cannot lean on a control the SoA dropped)")
+            tgt = objs.get(q)
+            if q in all_selected or not tgt or tgt[0] != "requirement": continue
+            if any_open:
+                notes.append(f"{sorted(rids)[0]}: treatment names {q}, which no set-ref select reaches - "
+                             f"RISK-11 undecided: a predicate select in this bundle may select it")
+                continue
+            report["treatment-out-of-scope"].append({"requirement": q, "risks": sorted(rids)})
+            errs.append(f"{sorted(rids)[0]}: treatment names {q}, which no Tailoring in this bundle selects "
+                        f"(RISK-11: a risk cannot lean on a control the SoA dropped)")
     return report, errs, notes
+
+def risk_basis_fail(tid, q):
+    """The normative B.1.9 failure, printed under the policy switch."""
+    return (f"FAIL [risk-coverage] {tid}  selected {q}\n"
+            f"  named by no live Risk\n"
+            f"  rationale: ISO/IEC 27001 6.1.3 d - inclusion in the Statement of "
+            f"Applicability carries its justification")
 
 def risk_link_notes(objs):
     """RISK-9 (SHOULD): a `risk-adjustment` Deviation references the Risk it
@@ -924,15 +1015,22 @@ def run_risk():
     for case in v["object-vectors"]:
         o = case["object"]
         m = [t for t in TYPES if VALIDATORS[t].is_valid(o)]
+        viol = [rid for rid, _ in risk_rule_violations(o)]
         if case["expected"] == "valid":
-            okc = m == ["risk"]
+            okc = m == ["risk"] and not viol          # the two layers agree on "valid"
         else:
             okc = m == []
+            # expected-rule is the portable assertion (every implementation
+            # names the rule); expected-frag is advisory - it checks that THIS
+            # schema library's diagnostic mentions the offending field
+            if okc and case.get("expected-rule"):
+                okc = case["expected-rule"] in viol
             if okc and case.get("expected-frag"):
-                e = next(iter(VALIDATORS["risk"].iter_errors(o)), None)
-                okc = e is not None and case["expected-frag"] in (e.message + "/" + "/".join(map(str, e.absolute_path)))
+                okc = any(case["expected-frag"] in (e.message + "/" + "/".join(map(str, e.absolute_path)))
+                          for e in VALIDATORS["risk"].iter_errors(o))
         if okc: ok("risk")
-        else: fail("risk", f"{case['name']}: expected {case['expected']} {case.get('expected-frag','')}, matched {m}")
+        else: fail("risk", f"{case['name']}: expected {case['expected']} {case.get('expected-rule', '')} "
+                           f"{case.get('expected-frag', '')}, matched {m}, rules named {viol}")
     for case in v["bundle-vectors"]:
         objs = {}
         for o in case["objects"]:
@@ -953,6 +1051,7 @@ def run_risk():
                 got = rep_["tailorings"].get(tid, {})
                 if sorted(got.get("uncovered", [])) != sorted(want.get("uncovered", [])): okc = False
                 if sorted(got.get("covered", {}).keys()) != sorted(want.get("covered", [])): okc = False
+                if "lapsed" in want and sorted(got.get("lapsed", {}).keys()) != sorted(want["lapsed"]): okc = False
         if okc: ok("risk")
         else: fail("risk", f"{case['name']}: expected {case.get('expected-fails',0)} fails {case.get('expected-frags')} "
                            f"notes {case.get('expected-notes')} cov {exp}; got errs {[e[:80] for e in errs]} "
@@ -1013,10 +1112,6 @@ def run_lifecycle():
         got = case["to"] in FIND_NEXT[case["from"]]
         if got == case["valid"]: ok("lifecycle")
         else: fail("lifecycle", f"finding {case['from']}->{case['to']}: expected valid={case['valid']}")
-    for case in v.get("risk-transitions", []):
-        got = case["to"] in RISK_NEXT[case["from"]]
-        if got == case["valid"]: ok("lifecycle")
-        else: fail("lifecycle", f"risk {case['from']}->{case['to']}: expected valid={case['valid']}")
     for case in v["identity-events"]:
         allowed = case["record"] == "canonical-alias"
         want = case["substitution"] == "allowed"
@@ -1069,6 +1164,20 @@ def run_lifecycle():
 # ---------------- 2) bundle validation ----------------
 PARAM_TOKEN = re.compile(r"\{param:([^}]+)\}")
 
+def pkg_digest(raw):
+    return "sha256:" + hashlib.sha256(raw).hexdigest()
+
+def eol_hint(raw, want):
+    """A package digest is over delivered BYTES (D3.1), so a checkout that
+    re-spells line endings fails it - correctly. The verdict stands; this
+    only names the cause, because 6,963 bare 'package-digest mismatch'
+    lines (the 1.0.0 corpus on any non-Windows clone) explain nothing."""
+    if b"\r\n" in raw and pkg_digest(raw.replace(b"\r\n", b"\n")) == want:
+        return " - the bytes differ ONLY in line endings: CRLF on disk, LF digested (re-checkout the path; see .gitattributes)"
+    if b"\r\n" not in raw and pkg_digest(raw.replace(b"\n", b"\r\n")) == want:
+        return " - the bytes differ ONLY in line endings: LF on disk, CRLF digested (re-checkout the path; see .gitattributes)"
+    return ""
+
 def infer_type(obj):
     matches = [t for t in TYPES if VALIDATORS[t].is_valid(obj)]
     return matches
@@ -1083,6 +1192,10 @@ def validate_object(section, path, obj):
             t0 = min(guess, key=guess.get)
             e0 = next(iter(VALIDATORS[t0].iter_errors(obj)), None)
             best = f" (closest {t0}: {e0.message[:110] if e0 else '?'} @ {'/'.join(map(str, e0.absolute_path)) if e0 else ''})"
+            if isinstance(obj, dict) and ("scenario" in obj or "owner-ref" in obj):
+                # the Risk signature: name the violated rule and print its why
+                best += "".join(f"\n      FAIL [{rid}] {what} - {RISK_RULES[rid]}"
+                                for rid, what in risk_rule_violations(obj))
         fail(section, f"{path}: matches {matches or 'NO type'}{best}")
         return None
     ok(section)
@@ -1126,8 +1239,8 @@ def validate_bundle(bdir):
         if not os.path.exists(fp):
             fail(section, f"{rel}: listed but missing"); continue
         raw = open(fp, "rb").read()
-        if "sha256:" + hashlib.sha256(raw).hexdigest() != entry["package-digest"]:
-            fail(section, f"{rel}: package-digest mismatch")
+        if pkg_digest(raw) != entry["package-digest"]:
+            fail(section, f"{rel}: package-digest mismatch{eol_hint(raw, entry['package-digest'])}")
         obj = json.loads(raw.decode("utf-8"))
         if sdig(obj) != entry["semantic-digest"]:
             fail(section, f"{rel}: semantic-digest mismatch")
@@ -1148,8 +1261,8 @@ def validate_bundle(bdir):
         if not os.path.exists(fp):
             fail(section, f"{fe['path']}: pinned facet schema listed but missing"); continue
         raw = open(fp, "rb").read()
-        if "sha256:" + hashlib.sha256(raw).hexdigest() != fe["digest"]:
-            fail(section, f"{fe['path']}: pinned facet schema digest mismatch")
+        if pkg_digest(raw) != fe["digest"]:
+            fail(section, f"{fe['path']}: pinned facet schema digest mismatch{eol_hint(raw, fe['digest'])}")
         try:
             sd = json.loads(raw.decode("utf-8"))
             pinned[sd["id"]] = REGISTRY(sd.get("schema", {"type": "object"}))
@@ -1201,11 +1314,11 @@ def validate_bundle(bdir):
     for n in cnotes + risk_link_notes(bundle_objs): print(f"    note: {n}")
     if cov["risks"]:
         for tid, r in cov["tailorings"].items():
-            print(f"    risk-coverage: {tid} [{r['tier']}] selected={r['selected']} "
+            print(f"    risk-coverage: {tid} [{r['tier']}] selected={r['selected']}"
+                  f"{'+ (open: predicate select)' if r['open-selection'] else ''} "
                   f"justified={len(r['covered'])} uncovered={len(r['uncovered'])}")
             for q in r["uncovered"]:
-                msg = f"{tid}: selected {q} is named by no Risk (B.1.9 uncovered; ISO 27001 6.1.3 d)"
-                if REQUIRE_RISK_BASIS: fail(section, msg)
+                if REQUIRE_RISK_BASIS: fail(section, risk_basis_fail(tid, q))
                 else: print(f"      uncovered: {q}")
     for e in facet_errors([(oid, o) for oid, (t, o) in bundle_objs.items()], pinned):
         fail(section, e)
@@ -1237,24 +1350,54 @@ def validate_examples():
     section = "skill-examples"
     typec = collections.Counter()
     exobjs = {}
+    # The example manifest is checked like any other (it was not, and at
+    # 1.0.0 its package digests were a mix of CRLF and LF spellings - 8 of
+    # 12 failed on an LF tree, the other 4 on a CRLF tree, unnoticed).
+    # Attestations live BESIDE the manifest (D3.1) and are not listed.
+    manifest = json.load(open(os.path.join(exdir, "content-manifest.json"), encoding="utf-8"))
+    if VALIDATORS["contentManifest"].is_valid(manifest): ok(section)
+    else: fail(section, "content-manifest.json: manifest schema violation")
+    listed = {e["path"]: e for e in manifest.get("objects", [])}
+    pins = {fe["path"]: fe for fe in manifest.get("facet-schemas", [])}
+    for rel, fe in pins.items():
+        fp = os.path.join(exdir, rel)
+        if not os.path.exists(fp): fail(section, f"{rel}: pinned facet schema listed but missing"); continue
+        raw = open(fp, "rb").read()
+        if pkg_digest(raw) != fe["digest"]:
+            fail(section, f"{rel}: pinned facet schema digest mismatch{eol_hint(raw, fe['digest'])}")
+    for rel in sorted(set(listed) - set(os.listdir(exdir))):
+        fail(section, f"{rel}: listed but missing")
     for fn in sorted(os.listdir(exdir)):
-        if not fn.endswith(".json") or "manifest" in fn or "stub" in fn or fn.startswith(("gspp-taxonomy",)):
+        if not fn.endswith(".json") or fn == "content-manifest.json" or fn in pins:
             continue
-        obj = json.load(open(os.path.join(exdir, fn), encoding="utf-8"))
+        raw = open(os.path.join(exdir, fn), "rb").read()
+        obj = json.loads(raw.decode("utf-8"))
         t = validate_object(section, fn, obj)
         if t:
             typec[t] += 1
             exobjs[obj["id"]] = (t, obj)
+        entry = listed.get(fn)
+        if entry is None:
+            if t != "attestation":
+                fail(section, f"{fn}: on disk but not in manifest")
+            continue
+        if pkg_digest(raw) != entry["package-digest"]:
+            fail(section, f"{fn}: package-digest mismatch{eol_hint(raw, entry['package-digest'])}")
+        if sdig(obj) != entry["semantic-digest"]:
+            fail(section, f"{fn}: semantic-digest mismatch")
+        if obj.get("id") != entry["id"]:
+            fail(section, f"{fn}: manifest id != object id")
     for e in closure_errors(exobjs): fail(section, e)
     cov, cerrs, cnotes = risk_coverage(exobjs)
     for e in cerrs: fail(section, e)
     for n in cnotes + risk_link_notes(exobjs): print(f"    note: {n}")
     for tid, r in cov["tailorings"].items():
-        print(f"    risk-coverage: {tid} [{r['tier']}] selected={r['selected']} "
+        print(f"    risk-coverage: {tid} [{r['tier']}] selected={r['selected']}"
+              f"{'+ (open: predicate select)' if r['open-selection'] else ''} "
               f"justified={len(r['covered'])} uncovered={r['uncovered']}")
         if REQUIRE_RISK_BASIS:
             for q in r["uncovered"]:
-                fail(section, f"{tid}: selected {q} is named by no Risk (B.1.9 uncovered; ISO 27001 6.1.3 d)")
+                fail(section, risk_basis_fail(tid, q))
     return typec
 
 # ---------------- run ----------------

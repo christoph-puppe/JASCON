@@ -1559,13 +1559,16 @@
      "additionalProperties": false,
      "required": [
       "type",
-      "date"
+      "value"
      ],
      "properties": {
       "type": {
-       "const": "date"
+       "enum": [
+        "date",
+        "datetime"
+       ]
       },
-      "date": {
+      "value": {
        "type": "string",
        "minLength": 1
       }
