@@ -4,9 +4,10 @@ A set of browser pages for working with JASCON bundles. There is no server and
 no build step: the pages are HTML files that share one script and one
 stylesheet. A bundle you load stays in your browser.
 
-State: build 0.1.0. This build has the frame (the hub, the settings page and
-the shared core). The tool pages are added one by one and appear as tabs in
-the hub when they exist.
+State: build 0.2.0. This build has the frame (the hub, the settings page and
+the shared core) and five tool pages: Browse, Tailor, Map, Implement and
+Assess. The pages for validation, OSCAL import and risk analysis are not
+built yet.
 
 ## Start
 
@@ -49,6 +50,31 @@ A link can load a bundle and open a tool:
 A bundle whose manifest pins a kernel version this app does not implement is
 not loaded; the message names the pinned version and the versions the app
 reads (1.0.0 and 2.0.0).
+
+## The tools
+
+Each tool is a tab in the hub and works on the active set. What a tool writes
+is saved to the set at once; the other open tools reload.
+
+| Tool | Shows | Writes |
+|---|---|---|
+| Browse | The catalogue as a tree of Sets, every object with type filters and with the filters found in the loaded requirements, statistics | A Requirement (every `{param:}` token is declared as a parameter), a Set |
+| Tailor | Each Tailoring resolved: selection, operations with before and after, lattice verdict, derived tier | A Tailoring; the resolved requirements as a package of their own |
+| Map | The mappings as a table, with targets outside the set marked | A Mapping, also to a target outside the set |
+| Implement | Components and Implementation edges; whether the authorization an inherited edge names is found | Components, a system Component that lists them, Implementations |
+| Assess | Assessments, Findings by state, Attestations with a Full Match / Semantic Match / Tamper verdict | An Assessment with one Finding per requirement that is not satisfied; the state of a Finding |
+
+Clicking a reference opens the object in a drawer on the right; Escape closes
+it.
+
+What the Tailor page enforces while a Tailoring is written: an easing of a
+modality, a parameter value outside its declared space and a substantive
+change of prose each need a Deviation with a rationale; a value of the wrong
+kind is refused; a second operation on one target is refused.
+
+Running the same check again in Assess overwrites its Assessment and removes
+a Finding that no longer applies while it is still open. A Finding that was
+moved on is kept.
 
 ## Integrity
 
@@ -105,8 +131,17 @@ text in that language, the English text is shown, then whatever is there.
 
 ## Limits of this build
 
-- The app does not yet check the kernel rules. A bundle that loads here is
-  not thereby valid; use the Python validator.
+- The app does not yet check the kernel rules as a whole. Ported from the
+  Python validator and run against its conformance vectors are the modality
+  lattice, the parameter law, selection, tier and the state machines. A
+  bundle that loads here is not thereby valid; use the Python validator.
+- Predicate selects of a Tailoring are not evaluated; the selection is then
+  shown as open and its count as a lower bound.
+- The Tailor page applies set-modality, set-parameter and replace-prose.
+  Other operations are shown, and a resolution that contains one is reported
+  as incomplete.
+- The Implement workbench does not write inherited edges.
+- Signatures of attestations are not verified.
 - The type of an object is recognised by its fields, not by matching it
   against the kernel schema.
 - Files other than text (images, PDF) in a bundle folder are not stored and

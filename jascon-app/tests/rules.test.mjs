@@ -53,6 +53,23 @@ test("tier: the derived tier of every vector (structural mode)", async () => {
   }
 });
 
+test("state machines: the Finding, Deviation and Risk transition vectors", () => {
+  const life = vectors("lifecycle");
+  for (const c of life["finding-transitions"]) assert.equal(rules.jscCanMove("finding", c.from, c.to), c.valid, `finding ${c.from} -> ${c.to}`);
+  for (const c of life["deviation-transitions"]) assert.equal(rules.jscCanMove("deviation", c.from, c.to), c.valid, `deviation ${c.from} -> ${c.to}`);
+  const risk = vectors("risk")["risk-transitions"];
+  assert.equal(risk.length, 8);
+  for (const c of risk) assert.equal(rules.jscCanMove("risk", c.from, c.to), c.valid, `risk ${c.from} -> ${c.to}`);
+});
+
+test("relationship composition never claims more than the vectors allow", () => {
+  for (const c of vectors("lifecycle")["relationship-composition"]) {
+    const got = rules.jscComposeRelationship(c.a, c.b);
+    // floor semantics, as in the Python runner: the composed claim is never stronger than expected
+    assert.ok(got === c.composed || (c.composed === "supports" && ["supports", "intersects"].includes(got)), `${c.a} + ${c.b}: ${got}`);
+  }
+});
+
 test("decimal comparison is exact beyond what a float holds", () => {
   assert.equal(rules.jscDecimalCompare("9007199254740993", "9007199254740992"), 1);
   assert.equal(rules.jscDecimalCompare("1.50", "1.5"), 0);

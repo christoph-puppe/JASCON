@@ -9,21 +9,29 @@ and in `readme.md`; this file says only what is done and what is next.
 - Step 1: `jascon-core.js` and `.css`, the hub `index.html`, `config.html`,
   translation check and generated settings table. Checked in headless
   Chromium against the IFA bundle.
-- Step 2, first part: `jascon-rules.js` with the modality lattice, the
-  parameter law, selection, tier and Tailoring resolution, ported from
-  `validate_core.py` and run against the modality, parameter and tier vectors.
+- Step 2: `jascon-rules.js` (modality lattice, parameter law, selection, tier,
+  Tailoring resolution, state machines; run against the vectors),
+  `jascon-view.js` (object rendering shared by the tool pages), and the pages
+  `browse.html`, `tailor.html`, `map.html`, `implement.html`, `assess.html`.
+  Each was driven in headless Chromium and its output checked with
+  `validate_core.py`.
 
 ## Next
 
-- Step 2: `jascon-view.js` (object rendering shared by the tool pages), then
-  `browse.html`, `tailor.html`, `map.html`, `implement.html`, `assess.html`
-  from `one-page-apps/jascon-reader.html`. Each page is added to `APPS` in
-  `index.html` when it exists.
-- Step 3: the rest of the validator in `jascon-rules.js`; `tests/rules.test.mjs`
-  names the vector families that are not ported yet. Then `validate.html`.
+- Step 5 before step 3, because the risk page is the first requirement: port
+  the Risk rules, the scale and matrix rules and risk coverage into
+  `jascon-rules.js` (vector families `risk` and `scale`), then `risk.html`
+  (register, form, scales with the matrix, heat map, coverage, catalogue import).
 - Step 4: `import.html` (OSCAL catalog, then profile).
-- Step 5: `risk.html` (register, scales with the matrix, coverage, catalogue import).
-- Step 6: docs, README links, reader frozen.
+- Step 3: the rest of the validator; `tests/rules.test.mjs` names the vector
+  families that are not ported yet. Then `validate.html`.
+- Step 6: docs, README links of the repository, reader frozen.
+
+## Found on the way (not fixed here)
+
+- `jascon/examples` checked as a bundle fails D26: the stub pin of the stdlib
+  assessment-criteria facet differs from the normative descriptor.
+- The IFA bundle's attestation carries a stale digest for `system1234`.
 
 ## Open
 

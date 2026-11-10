@@ -15,7 +15,8 @@
 
    Ported so far: the modality lattice (B.1.6), the parameter law, Set
    expansion and a Tailoring's selection, the tier of a Tailoring in
-   structural mode, and the resolution of a Tailoring's operations. Not yet
+   structural mode, the resolution of a Tailoring's operations, the state
+   machines of Finding, Deviation and Risk, and relationship composition. Not yet
    ported: schema matching, reference closure, the operation law per tier,
    facet payloads, conditional-apply, composition, DSSE verification, the Risk
    rules, risk coverage and the scale rules. Until they are, the Python
@@ -242,6 +243,28 @@ function jscResolveTailoring(tobj, objs) {
   return { selected, open, resolved, touched, errors, notes };
 }
 
+/* ---------- state machines (C.3) ----------
+   A state moves only along these edges. Terminal states are terminal: a
+   closed Finding that recurs is a new Finding, a decided Deviation that is
+   reopened is a new Deviation, a retired Risk stays retired. A Risk may skip
+   forward (identified to treated), never back. */
+const JSC_NEXT = {
+  finding: { open: ["in-remediation", "closed"], "in-remediation": ["closed"], closed: [] },
+  deviation: { investigating: ["pending", "withdrawn"], pending: ["approved", "withdrawn"], approved: [], withdrawn: [] },
+  risk: { identified: ["assessed", "treated", "retired"], assessed: ["treated", "retired"], treated: ["retired"], retired: [] },
+};
+const jscCanMove = (machine, from, to) => ((JSC_NEXT[machine] || {})[from] || []).includes(to);
+
+/* Composing two mapping relationships along a chain (C.5), at the
+   conformance floor: only equal chains at full strength, everything else
+   degrades to supports, and supplements does not chain at all (null). */
+function jscComposeRelationship(a, b) {
+  if (a === "supplements" || b === "supplements") return null;
+  if (a === "equal") return b;
+  if (b === "equal") return a === "supports" ? a : "supports";
+  return "supports";
+}
+
 /* ---------- authoring helper ----------
    Kernel prose is a language map. A page collects plain strings; this wraps
    the fields that are text in the kernel into {lang: string}, in place. */
@@ -260,5 +283,5 @@ function jscTextify(o, lang) {
 if (typeof module !== "undefined" && module.exports) {
   module.exports = { JSC_MODALITIES, JSC_ELAPSED_UNITS, JSC_CALENDAR_UNITS, jscModalityVerdict, jscParamCheck,
     jscDecimalCompare, jscExpandRefs, jscSetParents, jscSelection, jscUriOrigin, jscDeriveTier, jscTargetKey,
-    jscResolveTailoring, jscTextify };
+    jscResolveTailoring, jscTextify, JSC_NEXT, jscCanMove, jscComposeRelationship };
 }

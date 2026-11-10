@@ -129,6 +129,12 @@ const APPS = [
     desc: N("The catalogue as a tree, every object with filters, statistics; write requirements and sets") },
   { id: "tailor", file: "tailor.html", glyph: "◬", label: N("Tailor"), types: ["tailoring"],
     desc: N("Resolve the Tailorings of the set and write a new one, with the weakening law enforced") },
+  { id: "map", file: "map.html", glyph: "⇄", label: N("Map"), types: ["mapping"],
+    desc: N("The crosswalk claims between requirements, and a workbench that writes one") },
+  { id: "implement", file: "implement.html", glyph: "⬡", label: N("Implement"), types: ["component", "implementation"],
+    desc: N("Components and implementation edges; build a system and attach requirements to its assets") },
+  { id: "assess", file: "assess.html", glyph: "◉", label: N("Assess"), types: ["assessment", "finding", "attestation"],
+    desc: N("Assessments, findings and attestations; run a check and write its result") },
 ];
 
 const $ = id => document.getElementById(id);
@@ -139,7 +145,10 @@ if (typeof jscStore === "undefined") {
 
 jscI18n.add("de", {
   "Set": "Set", "Settings": "Einstellungen", "Home": "Übersicht",
-  "Browse": "Durchsehen", "Tailor": "Tailoring",
+  "Browse": "Durchsehen", "Tailor": "Tailoring", "Map": "Mapping", "Implement": "Umsetzen", "Assess": "Prüfen",
+  "The crosswalk claims between requirements, and a workbench that writes one": "Die Crosswalk-Aussagen zwischen Anforderungen und eine Werkbank, die eine schreibt",
+  "Components and implementation edges; build a system and attach requirements to its assets": "Komponenten und Implementations-Kanten; ein System aufbauen und Anforderungen an seine Assets hängen",
+  "Assessments, findings and attestations; run a check and write its result": "Assessments, Feststellungen und Attestationen; eine Prüfung durchführen und ihr Ergebnis schreiben",
   "Resolve the Tailorings of the set and write a new one, with the weakening law enforced":
     "Die Tailorings des Sets auflösen und ein neues schreiben, mit durchgesetztem Abschwächungsgesetz",
   "The catalogue as a tree, every object with filters, statistics; write requirements and sets":
@@ -461,15 +470,19 @@ async function loadHelp() {
 
 /* ---------- start ----------
    #<tool> selects a tool; #load=<bundle-url>&tool=<tool> loads a bundle into
-   the active set first, so a link can reproduce a view. */
+   the active set first, so a link can reproduce a view. The same happens
+   when the address changes while the page is open. */
+async function route() {
+  const hash = location.hash.slice(1), params = new URLSearchParams(hash.includes("=") ? hash : "");
+  if (params.get("load")) await loadUrl(params.get("load")); else await refresh();
+  select(params.get("tool") || (hash.includes("=") ? "home" : hash) || "home", false);
+}
 (async () => {
   buildTabs();
   jscI18n.apply();
   syncHeader();
-  const hash = location.hash.slice(1), params = new URLSearchParams(hash.includes("=") ? hash : "");
-  if (params.get("load")) await loadUrl(params.get("load")); else await refresh();
-  select(params.get("tool") || (hash.includes("=") ? "home" : hash) || "home", false);
-  window.addEventListener("hashchange", () => select(location.hash.slice(1), false));
+  await route();
+  window.addEventListener("hashchange", route);
   /* a tool in the iframe, or another tab, wrote to the store */
   window.addEventListener("storage", e => {
     if (e.key && e.key.startsWith("jsc:cfg:store:")) refresh();

@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Assess · JASCON App</title>
+<link rel="stylesheet" href="jascon-core.css">
+<script>try{var _t=localStorage.getItem("jsc:cfg:ui:theme")||"dark";if(_t!=="system")document.documentElement.setAttribute("data-theme",_t)}catch(e){}</script>
+<style>
+.kanban { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.kanban .col { border: 1px solid var(--border-1); border-radius: 10px; padding: 10px; background: var(--bg-elev-1); }
+@media (max-width: 1000px) { .kanban { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div id="app"><div id="mid">
+  <nav id="rail" aria-label="Views">
+    <div class="railgroup">
+      <div class="nano" data-i18n>Views</div>
+      <button class="navitem" data-view="board"><span class="glyph">◉</span><span data-i18n>Results and findings</span><span class="navcount" id="nc-findings"></span></button>
+      <button class="navitem" data-view="check"><span class="glyph">✎</span><span data-i18n>Run a check</span></button>
+    </div>
+    <div class="railgroup">
+      <p class="hint" data-i18n>An assessment records what was checked, how, by whom and with what result. A finding is raised against a requirement. A closed finding stays closed; a recurrence is a new finding.</p>
+    </div>
+  </nav>
+  <main id="main">
+    <section class="glass card" data-view="board">
+      <h2><span class="glyph">◉</span><span data-i18n>Results and findings</span></h2>
+      <div id="board"></div>
+    </section>
+    <section class="glass card" data-view="check">
+      <h2><span class="glyph">✎</span><span data-i18n>Run a check</span></h2>
+      <div id="check"></div>
+    </section>
+  </main>
+</div></div>
+
+<script src="jascon-core.js"></script>
+<script src="jascon-rules.js"></script>
+<script src="jascon-view.js"></script>
+<script>
+"use strict";
+/* Assess: the Assessments, Findings and Attestations of the set, and a
+   workbench that runs a manual check and writes its result.
+
+   Running the same check again converges: the Assessment's id comes from the
+   label of the check and each Finding's id from that label and the
+   requirement, so a second run overwrites its objects, and a Finding whose
+   requirement is no longer "not satisfied" is removed again while it is
+   still open. A Finding somebody already moved on is kept and said so.
+
+   An attestation is verified in two modes, as in the reader: Full Match (the
+   manifest is byte for byte the one that was signed), Semantic Match (the
+   meaning of every subject is intact, the package was repackaged), Tamper (a
+   subject's meaning changed). Signatures are not verified in this app.
+   Derives from the assess stage of the bundle reader. */
+jscI18n.add("de", {
+  "Assess": "Prüfen", "Results and findings": "Ergebnisse und Feststellungen", "Run a check": "Prüfung durchführen",
+  "An assessment records what was checked, how, by whom and with what result. A finding is raised against a requirement. A closed finding stays closed; a recurrence is a new finding.":
+    "Ein Assessment hält fest, was geprüft wurde, wie, von wem und mit welchem Ergebnis. Eine Feststellung richtet sich gegen eine Anforderung. Eine geschlossene Feststellung bleibt geschlossen; ein Wiederauftreten ist eine neue Feststellung.",
+  "This set holds no assessment, finding or attestation. Run a check in the other view.": "Dieses Set enthält weder Assessment noch Feststellung noch Attestation. In der anderen Ansicht eine Prüfung durchführen.",
+  "Assessments ({n})": "Assessments ({n})", "Findings ({n})": "Feststellungen ({n})", "Attestations ({n})": "Attestationen ({n})",
+  "by {who}": "von {who}", "{n} subjects": "{n} Gegenstände", "against": "gegen", "Deviation": "Deviation", "due": "fällig",
+  "move to {state}": "nach {state} verschieben", "names risks": "nennt Risiken",
+  "signer {who}": "Unterzeichner {who}", "Verify": "Prüfen",
+  "Full Match: bytes and meaning as signed": "Full Match: Bytes und Bedeutung wie signiert",
+  "Semantic Match: the meaning is intact, the package was repackaged": "Semantic Match: Die Bedeutung ist intakt, das Paket wurde umgepackt",
+  "Semantic Match of the subjects; the manifest digest cannot be compared here": "Semantic Match der Gegenstände; der Manifest-Digest lässt sich hier nicht vergleichen",
+  "Tamper: the meaning of a subject changed after signing": "Tamper: Die Bedeutung eines Gegenstands hat sich nach dem Signieren geändert",
+  "Unknown: the subjects are not in this set": "Unbekannt: Die Gegenstände sind nicht in diesem Set",
+  "subjects: {ok} intact, {bad} changed, {unknown} not in this set; signatures are not verified": "Gegenstände: {ok} intakt, {bad} geändert, {unknown} nicht in diesem Set; Signaturen werden nicht geprüft",
+  "Label of the check": "Bezeichnung der Prüfung", "Scope": "Umfang", "Performer": "Prüfer", "filter": "Filter",
+  "every requirement with an implementation ({n})": "jede Anforderung mit einer Implementation ({n})",
+  "Tailoring {name} ({n} selected)": "Tailoring {name} ({n} ausgewählt)", "Set {name}": "Set {name}", "all {n} requirements": "alle {n} Anforderungen",
+  "checked": "geprüft", "satisfied": "erfüllt", "not satisfied": "nicht erfüllt", "inconclusive": "nicht eindeutig",
+  "Mark the rest satisfied": "Rest als erfüllt markieren", "Reset the answers": "Antworten zurücksetzen",
+  "Requirement": "Anforderung", "Modality": "Modalität", "Verdict": "Urteil", "Note": "Notiz", "note": "Notiz",
+  "and {n} more; use the filter": "und {n} weitere; den Filter benutzen",
+  "Write the assessment and its findings": "Assessment und Feststellungen schreiben",
+  "One finding per requirement that is not satisfied. The result of the assessment is not-satisfied if any requirement is, inconclusive if any is inconclusive or unanswered, satisfied otherwise.":
+    "Eine Feststellung je nicht erfüllter Anforderung. Das Ergebnis des Assessments ist not-satisfied, wenn eine Anforderung es ist, inconclusive, wenn eine nicht eindeutig oder unbeantwortet ist, sonst satisfied.",
+  "This set holds no requirement to check.": "Dieses Set enthält keine Anforderung, die geprüft werden könnte.",
+  "Answer at least one requirement first.": "Zuerst mindestens eine Anforderung beantworten.",
+  "assessment {id}: {result}, {n} finding(s)": "Assessment {id}: {result}, {n} Feststellung(en)",
+  "kept {n} finding(s) of an earlier run that were already moved on": "{n} Feststellung(en) eines früheren Laufs behalten, die schon weiterbearbeitet wurden",
+  "Remediate: {title}": "Beheben: {title}",
+});
+
+const $ = id => document.getElementById(id);
+const V = jscView, esc = jscEsc;
+const RESULTS = ["satisfied", "not-satisfied", "inconclusive"];
+const RESULT_COLOR = { satisfied: "var(--green)", "not-satisfied": "var(--red)", inconclusive: "var(--amber)" };
+const RESULT_LABEL = { satisfied: N("satisfied"), "not-satisfied": N("not satisfied"), inconclusive: N("inconclusive") };
+const draft = V.draft("assess", () => ({ label: "check-" + jscToday(), scope: "", performer: "assessor", results: {}, q: "" }));
+let G = jscSet.graph;
+const ofType = t => [...G.objects.values()].filter(r => r.type === t);
+const name = ref => (G.objects.has(ref) ? V.labelOf(G.objects.get(ref)) : V.last(ref));
+
+/* ---------- board ---------- */
+function renderBoard() {
+  const asmts = ofType("assessment"), finds = ofType("finding"), atts = ofType("attestation");
+  $("nc-findings").textContent = finds.length || "";
+  if (!asmts.length && !finds.length && !atts.length) { $("board").innerHTML = `<div class="empty">${esc(T("This set holds no assessment, finding or attestation. Run a check in the other view."))}</div>`; return; }
+  const aCards = asmts.map(a => `<div class="stmt"><span class="badge" style="border-color:${RESULT_COLOR[a.obj.result] || "var(--border-2)"};color:${RESULT_COLOR[a.obj.result] || "inherit"}">${esc(a.obj.result)}</span>
+    <b>${V.refLink(a.obj.id, V.titleOf(a))}</b> <span class="hint">${esc(T("by {who}", { who: V.last(a.obj["performer-ref"] || "") }))} · ${esc(a.obj.time || "")} · ${esc(T("{n} subjects", { n: (a.obj["subject-refs"] || []).length }))}</span></div>`).join("");
+  const cols = { open: [], "in-remediation": [], closed: [] };
+  finds.forEach(f => (cols[f.obj.state] || (cols[f.obj.state] = [])).push(f));
+  const kanban = `<div class="kanban">${Object.entries(cols).map(([st, list]) => `<div class="col"><div class="nano" style="margin-bottom:6px">${esc(st)} · ${list.length}</div>
+    ${list.slice(0, 150).map(f => `<div class="stmt" style="margin:6px 0"><b>${V.refLink(f.obj.id, V.labelOf(f))}</b>
+      <div class="hint">${esc(T("against"))} ${V.refLink(f.obj["requirement-ref"], name(f.obj["requirement-ref"]))} ${f.obj["statement-ref"] ? V.badge(f.obj["statement-ref"]) : ""}</div>
+      ${(f.obj.actions || []).map(ac => `<div class="hint">▸ ${esc(TT(ac.description))} ${ac.due ? V.badge(T("due") + " " + (ac.due.value || `${ac.due.num} ${ac.due.unit}`)) : ""} ${V.badge(ac.status)}</div>`).join("")}
+      ${(f.obj.deviations || []).map(d => `<div class="hint verdict-warn">⚑ ${esc(T("Deviation"))}: ${esc(d.type)} · ${esc(d.state)}</div>`).join("")}
+      ${(f.obj["risk-refs"] || []).length ? `<div class="hint">△ ${esc(T("names risks"))}: ${f.obj["risk-refs"].map(r => V.refLink(r, name(r))).join(", ")}</div>` : ""}
+      <div style="margin-top:6px">${JSC_NEXT.finding[f.obj.state].map(to => `<button type="button" class="small" data-move="${esc(f.obj.id)}" data-to="${to}">${esc(T("move to {state}", { state: to }))}</button>`).join(" ")}</div></div>`).join("")}</div>`).join("")}</div>`;
+  const attCards = atts.map(a => `<div class="stmt">${V.typeBadge("attestation")} <b>${V.refLink(a.obj.id, V.titleOf(a))}</b>
+    <span class="hint">${esc(T("signer {who}", { who: V.last(a.obj.signer || "") }))} · ${esc(a.obj.timestamp || "")}</span>
+    <div style="margin-top:6px" data-att-out="${esc(a.obj.id)}"><button type="button" class="primary" data-att="${esc(a.obj.id)}">${esc(T("Verify"))}</button></div></div>`).join("");
+  $("board").innerHTML = (asmts.length ? V.section(T("Assessments ({n})", { n: asmts.length }), aCards) : "") +
+    (finds.length ? V.section(T("Findings ({n})", { n: finds.length }), kanban) : "") + (atts.length ? V.section(T("Attestations ({n})", { n: atts.length }), attCards) : "");
+  V.wireRefs($("board"));
+  $("board").querySelectorAll("[data-move]").forEach(b => b.addEventListener("click", async () => {
+    const f = G.objects.get(b.dataset.move);
+    if (!jscCanMove("finding", f.obj.state, b.dataset.to)) return;
+    await jscSet.saveObjects([{ ...f.obj, state: b.dataset.to }]);
+    await jscPage.refresh();
+  }));
+  $("board").querySelectorAll("[data-att]").forEach(b => b.addEventListener("click", () => verifyAttestation(b.dataset.att)));
+}
+async function verifyAttestation(id) {
+  const a = G.objects.get(id).obj, out = $("board").querySelector(`[data-att-out="${CSS.escape(id)}"]`);
+  let ok = 0, bad = 0, unknown = 0;
+  for (const s of a["subject-semantic-digests"] || []) {
+    const target = s && typeof s === "object" ? G.objects.get(s.id) : null;
+    if (!target) { unknown++; continue; }
+    (await jscSemanticDigest(target.obj)) === s["semantic-digest"] ? ok++ : bad++;
+  }
+  // the manifest digest binds the bytes of the manifest the bundle came with
+  const manifest = a["content-manifest-digest"] && G.manifestText ? (await jscPackageDigest(G.manifestText)) === a["content-manifest-digest"] : null;
+  const [verdict, cls] = bad ? [N("Tamper: the meaning of a subject changed after signing"), "verdict-bad"]
+    : unknown && !ok ? [N("Unknown: the subjects are not in this set"), "hint"]
+    : manifest === true ? [N("Full Match: bytes and meaning as signed"), "verdict-ok"]
+    : manifest === false ? [N("Semantic Match: the meaning is intact, the package was repackaged"), "verdict-warn"]
+    : [N("Semantic Match of the subjects; the manifest digest cannot be compared here"), "verdict-warn"];
+  out.innerHTML = `<span class="${cls}" style="font-weight:600">${esc(T(verdict))}</span>
+    <div class="hint">${esc(T("subjects: {ok} intact, {bad} changed, {unknown} not in this set; signatures are not verified", { ok, bad, unknown }))}</div>`;
+  jscLog[bad ? "err" : "ok"](`${id}: ${T(verdict)}`);
+}
+
+/* ---------- check ---------- */
+/* What can be checked: [{key, label, reqs()}], the widest scope last. */
+function scopes() {
+  const out = [], reqs = G.order.filter(id => G.objects.get(id).type === "requirement");
+  const impl = [...new Set(ofType("implementation").map(i => i.obj["requirement-ref"]))].filter(id => G.objects.has(id));
+  if (impl.length) out.push({ key: "impl", label: T("every requirement with an implementation ({n})", { n: impl.length }), reqs: () => impl });
+  for (const t of ofType("tailoring")) {
+    const sel = jscSelection(t.obj, G.objects).selected;
+    out.push({ key: t.obj.id, label: T("Tailoring {name} ({n} selected)", { name: V.labelOf(t), n: sel.size }), reqs: () => G.order.filter(id => sel.has(id)) });
+  }
+  const parents = jscSetParents(G.objects);
+  for (const s of ofType("requirementSet")) {
+    if (!parents.has(s.obj.id)) out.push({ key: s.obj.id, label: T("Set {name}", { name: V.titleOf(s) }), reqs: () => { const m = jscExpandRefs([s.obj.id], G.objects); return G.order.filter(id => m.has(id)); } });
+  }
+  out.push({ key: "all", label: T("all {n} requirements", { n: reqs.length }), reqs: () => reqs });
+  return out;
+}
+function tally(reqs) {
+  const c = { satisfied: 0, "not-satisfied": 0, inconclusive: 0 }, res = draft.data.results;
+  reqs.forEach(id => { const r = (res[id] || {}).result; if (r) c[r]++; });
+  return c;
+}
+function renderCheck() {
+  const d = draft.data, el = $("check"), all = scopes();
+  if (!G.order.some(id => G.objects.get(id).type === "requirement")) { el.innerHTML = `<div class="empty">${esc(T("This set holds no requirement to check."))}</div>`; return; }
+  const cur = all.find(s => s.key === d.scope) || all[all.length - 1], reqs = cur.reqs(), q = d.q.toLowerCase(), cap = 250;
+  const shown = reqs.filter(id => !q || id.toLowerCase().includes(q) || V.labelOf(G.objects.get(id)).toLowerCase().includes(q) || TT(G.objects.get(id).obj.title).toLowerCase().includes(q));
+  const c = tally(reqs), answered = c.satisfied + c["not-satisfied"] + c.inconclusive;
+  const rows = shown.slice(0, cap).map(id => {
+    const r = G.objects.get(id), res = (d.results[id] || {}).result;
+    return `<tr><td style="width:38%">${V.refLink(id, V.labelOf(r))}<div class="hint">${esc(TT(r.obj.title).slice(0, 90))}</div></td>
+      <td>${r.obj.statements.slice(0, 2).map(s => V.modBadge(s.modality)).join("")}</td>
+      <td><span class="seg" role="group">${RESULTS.map(x => `<button type="button" data-answer="${esc(id)}" data-result="${x}" aria-pressed="${res === x}" class="${res === x ? { satisfied: "on-sat", "not-satisfied": "on-not", inconclusive: "on-inc" }[x] : ""}">${esc(T(RESULT_LABEL[x]))}</button>`).join("")}</span></td>
+      <td><input type="text" data-note="${esc(id)}" placeholder="${esc(T("note"))}" aria-label="${esc(T("Note"))}" value="${esc((d.results[id] || {}).note || "")}" style="min-width:140px"></td></tr>`;
+  }).join("");
+  el.innerHTML = `<div class="wb">
+    <div class="wbrow"><label for="a-label">${esc(T("Label of the check"))}</label><input type="text" id="a-label" value="${esc(d.label)}" style="width:170px">
+      <label for="a-scope">${esc(T("Scope"))}</label><select id="a-scope" style="max-width:380px">${all.map(s => `<option value="${esc(s.key)}" ${s.key === cur.key ? "selected" : ""}>${esc(s.label)}</option>`).join("")}</select>
+      <label for="a-perf">${esc(T("Performer"))}</label><input type="text" id="a-perf" value="${esc(d.performer)}" style="width:130px">
+      <input type="search" id="a-q" placeholder="${esc(T("filter"))}" aria-label="${esc(T("filter"))}" value="${esc(d.q)}" style="width:150px"></div>
+    <div class="wbrow"><span class="chip"><b>${answered}/${reqs.length}</b>${esc(T("checked"))}</span>
+      ${RESULTS.map(x => `<span class="chip" style="color:${RESULT_COLOR[x]}"><b>${c[x]}</b>${esc(T(RESULT_LABEL[x]))}</span>`).join("")}
+      <button type="button" id="a-rest">${esc(T("Mark the rest satisfied"))}</button><button type="button" id="a-reset">${esc(T("Reset the answers"))}</button></div>
+    <table class="flat"><tr><th>${esc(T("Requirement"))}</th><th>${esc(T("Modality"))}</th><th>${esc(T("Verdict"))}</th><th>${esc(T("Note"))}</th></tr>${rows}</table>
+    ${shown.length > cap ? `<div class="hint" style="padding:6px">${esc(T("and {n} more; use the filter", { n: shown.length - cap }))}</div>` : ""}
+    <div class="wbrow" style="border-top:1px solid var(--border-1);padding-top:10px"><button type="button" class="primary" id="a-write">${esc(T("Write the assessment and its findings"))}</button>
+      <span class="verdict-bad" id="a-err" role="alert"></span></div>
+    <p class="hint">${esc(T("One finding per requirement that is not satisfied. The result of the assessment is not-satisfied if any requirement is, inconclusive if any is inconclusive or unanswered, satisfied otherwise."))}</p></div>`;
+  V.wireRefs(el);
+  const again = () => { draft.save(); renderCheck(); };
+  el.querySelector("#a-label").addEventListener("change", e => { d.label = e.target.value.trim() || d.label; draft.save(); });
+  el.querySelector("#a-scope").addEventListener("change", e => { d.scope = e.target.value; again(); });
+  el.querySelector("#a-perf").addEventListener("change", e => { d.performer = e.target.value; draft.save(); });
+  let timer;
+  el.querySelector("#a-q").addEventListener("input", e => { d.q = e.target.value; clearTimeout(timer); timer = setTimeout(() => { again(); $("a-q").focus(); }, 300); });
+  el.querySelectorAll("[data-answer]").forEach(b => b.addEventListener("click", () => {
+    const id = b.dataset.answer, old = d.results[id] || {};
+    d.results[id] = { ...old, result: old.result === b.dataset.result ? null : b.dataset.result };
+    again();
+  }));
+  el.querySelectorAll("[data-note]").forEach(n => n.addEventListener("change", () => { d.results[n.dataset.note] = { ...(d.results[n.dataset.note] || {}), note: n.value }; draft.save(); }));
+  el.querySelector("#a-rest").addEventListener("click", () => { reqs.forEach(id => { if (!(d.results[id] || {}).result) d.results[id] = { ...(d.results[id] || {}), result: "satisfied" }; }); again(); });
+  el.querySelector("#a-reset").addEventListener("click", () => { d.results = {}; again(); });
+  el.querySelector("#a-write").addEventListener("click", () => writeCheck(cur, reqs));
+}
+async function writeCheck(scope, reqs) {
+  const d = draft.data, c = tally(reqs), lang = jscI18n.contentLang();
+  if (!(c.satisfied + c["not-satisfied"] + c.inconclusive)) { $("a-err").textContent = T("Answer at least one requirement first."); return; }
+  const result = c["not-satisfied"] ? "not-satisfied" : (c.inconclusive || c.satisfied < reqs.length) ? "inconclusive" : "satisfied";
+  const asmtId = jscSet.mintId("asmt", d.label);
+  const asmt = { id: asmtId, version: "1", lifecycle: "draft", title: { [lang]: `${d.label}: ${scope.label}` }, "subject-refs": reqs,
+    method: { kind: "manual-check", tool: JSC_TOOL }, "performer-ref": jscSet.mintId("party", d.performer || "assessor"),
+    time: new Date().toISOString(), result };
+  const failed = reqs.filter(id => (d.results[id] || {}).result === "not-satisfied");
+  const findingId = rid => jscSet.mintId("finding", d.label + "-" + V.last(rid));
+  /* a Finding of this check that somebody already moved on is not rewritten */
+  const untouched = rid => { const old = G.objects.get(findingId(rid)); return !old || old.obj.state === "open"; };
+  const findings = failed.filter(untouched).map(rid => {
+    const r = G.objects.get(rid), note = (d.results[rid] || {}).note;
+    return { id: findingId(rid), version: "1", label: "F-" + V.labelOf(r), lifecycle: "draft", "assessment-ref": asmtId, "requirement-ref": rid, state: "open",
+      actions: [{ description: { [lang]: T("Remediate: {title}", { title: V.titleOf(r) }) + (note ? " (" + note + ")" : "") }, status: "planned" }] };
+  });
+  const keep = new Set(failed.map(findingId));
+  const stale = ofType("finding").filter(f => f.obj["assessment-ref"] === asmtId && !keep.has(f.obj.id) && f.obj.state === "open").map(f => f.obj.id);
+  const moved = ofType("finding").filter(f => f.obj["assessment-ref"] === asmtId && f.obj.state !== "open").length;
+  await jscSet.saveObjects([asmt, ...findings]);
+  if (stale.length) await jscSet.removeObjects(stale);
+  jscLog.info(T("assessment {id}: {result}, {n} finding(s)", { id: asmtId, result, n: failed.length }));
+  if (moved) jscLog.info(T("kept {n} finding(s) of an earlier run that were already moved on", { n: moved }));
+  await jscPage.refresh();
+  jscPage.show("board");
+}
+
+jscPage.init({ tool: "assess", title: T("Assess"), onGraph: g => { G = g; renderBoard(); renderCheck(); } });
+</script>
+</body>
+</html>
