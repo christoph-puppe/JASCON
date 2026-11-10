@@ -182,6 +182,13 @@ one function.
 **Second, the facet layer and the gate.** Load facet schemas from the
 manifest's pins — verifying *exact version and digest*, because the
 pin, not the URL, is the trust anchor — and validate every payload.
+Where a pin carries a stdlib id, compare its schema with the descriptor
+you ship and fail on any difference: the pin of a standard facet is the
+standard, verbatim (D26). Do all of this in the one function that loads
+pins. The reference validator had two until 2026-11-10; the one for its
+own example folder checked the digest only, and that folder pinned a
+stub under a stdlib id. The default run reported it green, the same
+folder named as a bundle failed.
 Then give your tool its **capability declaration** as ordinary
 configuration:
 
