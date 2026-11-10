@@ -63,6 +63,9 @@ refused while you type.*
 >   leave the `identified` state; and the coverage reports count source
 >   *paths*, not values that arrive — on the IFA corpus 122 content values
 >   do not (the other ten corpora are unmeasured).
+> - **Licences:** the repository is Apache-2.0; the converted corpora were
+>   checked against their publishers' terms and five bundles were removed
+>   ("What ships here", below).
 > - **Why 2.0.0:** the released spec says kernel-shape changes ride a
 >   *major* (D22 rev 3), and the author kept that rule. It is a major by
 >   rule and a superset in fact — every 1.0.0 bundle is a valid 2.0.0
@@ -72,7 +75,7 @@ refused while you type.*
 >   toward imported OSCAL data), and the specification needs its 2.0.0
 >   text. See the
 >   [backlog](drafts/oscal-semantic-core-v0.6-spec-feedback-backlog.md)
->   #41–#49 and the register sections "Amendments — CP-RISK-1" and
+>   #41–#50 and the register sections "Amendments — CP-RISK-1" and
 >   "Amendments — the 2.0.0 decision".
 
 ## Why this exists
@@ -207,13 +210,29 @@ The project moves through evidence gates; nothing advances on narrative.
   lifecycle exports, and the standing invitation — a third-party
   clean-room validator build against the conformance corpus.
 
-Reproduce the whole verdict in one line (needs [uv](https://docs.astral.sh/uv/)):
+Reproduce the whole verdict in one line (needs [uv](https://docs.astral.sh/uv/)) —
+on this branch that is the conformance corpus plus the bundles that ship
+here (see "What ships here" below); the eleven-bundle figures above are
+the 1.0.0 measurement:
 
 ```
 uv run --no-project --with jsonschema python jascon/scripts/validate_core.py
 ```
 
 ### The corpus
+
+**What ships here (2026-11-10).** Eleven corpora were converted and
+measured; the tables below are that record. **Six of the bundles are
+redistributed in this repository**, each with its publisher's terms in a
+`SOURCE-LICENSE.md` beside it: AU.ISM (CC BY 4.0), DE.BSI (CC BY-SA 4.0 —
+the converted bundle is ShareAlike material), the three NIST corpora (CC0 /
+U.S. public domain) and FedRAMP-CR26 (a U.S. Government work; its
+repository states no licence). **Five, marked †, are not**: both CIS
+corpora (CIS's terms forbid derivative works and re-posting) and DE.C5,
+DE.C3A and BE.CyFun (no licence statement could be found). Their converters
+and coverage reports remain; each directory says why in
+`NOT-REDISTRIBUTED.md`, and anyone entitled to the publisher's file can
+reproduce the bundle with the converter. See [NOTICE](NOTICE).
 
 The census corpora (gate 1 — the evidence base the architecture was derived from):
 
@@ -230,11 +249,11 @@ before these conversions ran, and first exercised by DE.C3A):
 
 | Corpus | Source | Emitted | Coverage |
 |---|---|---|---|
-| [BE.CyFun](converted_examples/BE.CyFun/cyfun-coverage-report.md) | CCB CyberFundamentals 2025, BASIC + ESSENTIAL resolved catalogs (one corpus) | 218 Requirements · 124 Sets (3 cumulative baselines) | 4,312 / 4,312 |
-| [CIS.Controls](converted_examples/CIS.Controls/cisc-coverage-report.md) | CIS Controls v8.1, OSCAL 1.1.3 | 171 Requirements · 34 Sets (IG1–3 baselines, asset/function categories) | 5,493 / 5,493 |
-| [CIS.Ubuntu2404](converted_examples/CIS.Ubuntu2404/cisb-coverage-report.md) | CIS Ubuntu 24.04 LTS Benchmark v1.0.0 | 312 Requirements · 635 Mappings (v7+v8) · 79 Sets (4 recovered profile baselines) | 20,698 / 20,698 |
-| [DE.C5](converted_examples/DE.C5/c5-coverage-report.md) | BSI C5:2026, OSCAL 1.2.2 | 623 Requirements · 190 Sets (basic baseline + additional criteria) | 5,868 / 5,868 |
-| [DE.C3A](converted_examples/DE.C3A/c3a-coverage-report.md) | BSI C3A v1.0, OSCAL 1.2.2 (GS++ grammar family) | 30 Requirements · 30 typed parameters (first `label`/`default` use) · 9 Sets | 1,093 / 1,093 |
+| † [BE.CyFun](converted_examples/BE.CyFun/cyfun-coverage-report.md) | CCB CyberFundamentals 2025, BASIC + ESSENTIAL resolved catalogs (one corpus) | 218 Requirements · 124 Sets (3 cumulative baselines) | 4,312 / 4,312 |
+| † [CIS.Controls](converted_examples/CIS.Controls/cisc-coverage-report.md) | CIS Controls v8.1, OSCAL 1.1.3 | 171 Requirements · 34 Sets (IG1–3 baselines, asset/function categories) | 5,493 / 5,493 |
+| † [CIS.Ubuntu2404](converted_examples/CIS.Ubuntu2404/cisb-coverage-report.md) | CIS Ubuntu 24.04 LTS Benchmark v1.0.0 | 312 Requirements · 635 Mappings (v7+v8) · 79 Sets (4 recovered profile baselines) | 20,698 / 20,698 |
+| † [DE.C5](converted_examples/DE.C5/c5-coverage-report.md) | BSI C5:2026, OSCAL 1.2.2 | 623 Requirements · 190 Sets (basic baseline + additional criteria) | 5,868 / 5,868 |
+| † [DE.C3A](converted_examples/DE.C3A/c3a-coverage-report.md) | BSI C3A v1.0, OSCAL 1.2.2 (GS++ grammar family) | 30 Requirements · 30 typed parameters (first `label`/`default` use) · 9 Sets | 1,093 / 1,093 |
 
 Gate-3 corpora (converted 2026-07-22; census first —
 [`drafts/gate-3-census.md`](drafts/gate-3-census.md) — zero kernel-schema
@@ -262,8 +281,8 @@ leaves your browser. It reads any bundle from `converted_examples/` and makes
 the five stages of the compliance graph *functional*, not diagrammatic:
 
 <p>
-<img alt="Stage 1 · Author: the CIS Controls corpus as a catalog tree with taxonomy roots and IG baselines, plus the requirement/set authoring workbench" src="docs/img/reader-author.png" width="49%">
-<img alt="Stage 3 · Map: the CIS Ubuntu benchmark crosswalk — 635 mappings to CIS Controls v7 and v8 with relationship, confidence, and external-target chips" src="docs/img/reader-map.png" width="49%">
+<img alt="Stage 1 · Author: the NIST CSF 2.0 corpus as a catalog tree — functions, categories, subcategories as nested Sets — plus the requirement/set authoring workbench" src="docs/img/reader-author.png" width="49%">
+<img alt="Stage 5 · Assess and Attest: the IFA GoodRead lifecycle corpus — Risk, Assessment, Finding and Attestation objects, with the check workbench" src="docs/img/reader-assess.png" width="49%">
 </p>
 
 - **Read** — objects rendered for humans: kernel fields plain, facets tinted
@@ -289,7 +308,7 @@ the five stages of the compliance graph *functional*, not diagrammatic:
   content-manifest carrying both digests per object: re-loadable here,
   verifiable by `validate_core.py`. Authored objects persist across reloads.
 
-![Object browser on the Grundschutz++ corpus: fifteen auto-populated filter dimensions — modality, threats, target-object categories, tags, required documentation, C-I-A-Auth objectives, effort, class, security level — every vocabulary the corpus actually carries](docs/img/reader-browser-facets.png)
+![Object browser on the Grundschutz++ corpus (content: BSI, CC BY-SA 4.0): fifteen auto-populated filter dimensions — modality, threats, target-object categories, tags, required documentation, C-I-A-Auth objectives, effort, class, security level — every vocabulary the corpus actually carries](docs/img/reader-browser-facets.png)
 
 *Above: the object browser on the Grundschutz++ corpus — fifteen filter
 dimensions auto-populated from the data (threats, target-object categories,

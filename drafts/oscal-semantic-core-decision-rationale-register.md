@@ -1668,3 +1668,48 @@ organisation with a legal department.
 derivative; accepted — adoption is the point, and the conformance corpus,
 not the license, is what keeps "conformant" honest (Ch. 15.1).
 
+# Amendments — the corpus licence review (2026-11-10)
+
+## #49 CLOSED — which converted corpora may be redistributed *(author rule: "keep the code, but remove the results where in doubt")*
+**Method.** For each of the eleven corpora: find the publisher's own
+statement of terms, in the publisher's own repository, and keep the
+converted bundle only where that statement clearly allows redistributing
+an adapted form. Everything was read on 2026-11-10. Where no statement
+could be found the bundle was removed — absence of a licence is not a
+licence.
+
+| Corpus | Publisher's terms — where read | Verdict |
+|---|---|---|
+| US.SP800-53 · US.CSF · US.IFA-GoodRead | Public domain in the U.S., CC0 1.0 worldwide — `LICENSE.md`, usnistgov/oscal-content | **kept** |
+| AU.ISM | CC BY 4.0, © Commonwealth of Australia — README "Copyright", AustralianCyberSecurityCentre/ism-oscal | **kept**, with attribution |
+| DE.BSI | CC BY-SA 4.0 — `LICENSE` and README, BSI-Bund/Stand-der-Technik-Bibliothek (the catalogue is in that repository: title confirmed) | **kept**; the bundle is ShareAlike material and is itself CC BY-SA 4.0, not Apache-2.0 |
+| FedRAMP-CR26 | **No licence file**; README and AGENTS.md silent — FedRAMP/rules. A U.S. Government work (17 U.S.C. § 105), but without the CC0 dedication NIST adds for the rest of the world | **kept** on the statutory basis; see the next entry |
+| CIS.Controls | CC BY-NC-**ND** 4.0; "Terms of Use for Non-Member CIS Products" forbid posting a product on any website and creating derivative works — `LICENSE.md`, CISecurity/CISControls_OSCAL | **removed** — forbidden |
+| CIS.Ubuntu2404 | The same Terms of Use cover CIS products; the benchmark's own page was not reachable | **removed** — forbidden / in doubt |
+| DE.C5 · DE.C3A | No statement found: not in BSI's CC BY-SA repository; no published OSCAL edition with terms found; bsi.bund.de unreachable from the review session | **removed** — in doubt |
+| BE.CyFun | No statement found for the machine-readable form or the third-party resolution converted from; CCB's PDFs carry a plain © notice | **removed** — in doubt |
+
+**What "removed" means.** The bundle and its OSCAL re-export left the
+tree; the converter stays; the coverage report stays (source paths, counts
+and rules — no text of the publication); a `NOT-REDISTRIBUTED.md` in each
+directory gives the reason and the way back. **The measurements stand** —
+they were made, and anyone entitled to the publisher's file can remake
+them — but they are no longer reproducible *from this repository alone*,
+and the README says so where it gives the one-line verdict.
+**What "kept" obliges.** Each kept directory carries a
+`SOURCE-LICENSE.md`: source, licence with the place it was read, changes
+made, no endorsement. `NOTICE` carries the same as a table and scopes the
+Apache-2.0 grant to the original work.
+**What the shipped evidence base loses.** With the two CIS corpora gone,
+no shipped corpus carries Mapping objects except FedRAMP-CR26's 373; C5's
+`sharpens` relations, C3A's first use of parameter `label`/`default` and
+CyFun's cumulative baselines are measured-but-not-shipped. After this
+entry the tree holds six bundles, 4,491 objects.
+**Also changed.** Two README screenshots showed CIS content; one was
+re-shot on NIST CSF 2.0, the other replaced by the Assess stage on the IFA
+corpus (which also shows the Risk type). The reader's Assess view printed
+`[object Object]` for an Assessment title since the `text` re-run; fixed.
+**Not done — #50.** The removed bundles are still in the git history and
+on `main`. Taking them out of the tree stops this branch from publishing
+them going forward; it does not unpublish what is already public.
+
