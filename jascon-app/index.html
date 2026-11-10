@@ -125,6 +125,8 @@ iframe { width: 100%; height: 100%; border: 0; display: block; }
    A tool is listed here when its page exists; the order is the order of the
    work. `types` are the kernel types the tool is about and drive its count. */
 const APPS = [
+  { id: "import", file: "import.html", glyph: "⤒", label: N("Import"), types: [],
+    desc: N("Import an OSCAL catalog or profile; everything after it works on JASCON") },
   { id: "browse", file: "browse.html", glyph: "⌕", label: N("Browse"), types: ["requirement", "requirementSet"],
     desc: N("The catalogue as a tree, every object with filters, statistics; write requirements and sets") },
   { id: "tailor", file: "tailor.html", glyph: "◬", label: N("Tailor"), types: ["tailoring"],
@@ -147,6 +149,7 @@ if (typeof jscStore === "undefined") {
 
 jscI18n.add("de", {
   "Set": "Set", "Settings": "Einstellungen", "Home": "Übersicht",
+  "Import": "Import", "Import an OSCAL catalog or profile; everything after it works on JASCON": "Einen OSCAL-Katalog oder ein OSCAL-Profil importieren; alles danach arbeitet auf JASCON",
   "Browse": "Durchsehen", "Tailor": "Tailoring", "Map": "Mapping", "Implement": "Umsetzen", "Assess": "Prüfen", "Risk": "Risiko",
   "The risk register with its heat map, scales and matrix, coverage of the selected requirements, risk catalogues":
     "Das Risikoregister mit Heatmap, Skalen und Matrix, Abdeckung der ausgewählten Anforderungen, Risikokataloge",

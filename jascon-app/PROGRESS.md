@@ -25,16 +25,29 @@ and in `readme.md`; this file says only what is done and what is next.
   the demo Tailoring; the exported set gives `validate_core.py` 1064 pass, 0 fail.
 - `tests/pages.test.mjs` opens every page in Chromium; see `ERRATA.md`.
 
+- Step 4: `jascon-oscal.js` (BSI preset after `convert_bsi.py`, generic
+  catalog rules, profile to Set and Tailoring) and `import.html`. The BSI
+  preset gives all 813 objects the semantic digest of the shipped DE.BSI
+  bundle; the NIST MODERATE profile selects the 287 members of the shipped
+  baseline. Driven in headless Chromium; `validate_core.py`: BSI import 814
+  pass, NIST generic with profile 1220 pass, 0 fail each.
+
 ## Next
 
-- Step 4: `import.html` (OSCAL catalog, then profile).
 - Step 3: the rest of the validator; `tests/rules.test.mjs` names the six
   vector families that are not ported yet. Then `validate.html`. The tool
   pages still type an object by its fields (`jscInferType`); `jscTypeOf`
   (schema matching) is ready to replace it at load.
-- Step 6: docs, README links of the repository, reader frozen.
+- The AI layer (model client with the key in memory, prompts in the
+  settings, risk suggestions).
+- A port of `convert_nist.py` as a third import preset.
+- Step 6: README of the repository (link, screenshots), reader frozen.
 
 ## Found on the way (not fixed here)
+
+- A catalog imported under one's own domain makes every Tailoring of that
+  domain authority-claimed over it (the tier rule compares origins). The
+  import page warns; the rule itself is the kernel's.
 
 - `jascon/examples` checked as a bundle fails D26: the stub pin of the stdlib
   assessment-criteria facet differs from the normative descriptor.

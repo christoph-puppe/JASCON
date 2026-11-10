@@ -4,10 +4,10 @@ A set of browser pages for working with JASCON bundles. There is no server and
 no build step: the pages are HTML files that share one script and one
 stylesheet. A bundle you load stays in your browser.
 
-State: build 0.3.0. This build has the frame (the hub, the settings page and
-the shared core) and six tool pages: Browse, Tailor, Map, Implement, Risk and
-Assess. The pages for validation and OSCAL import are not built yet, and the
-app does not call a model.
+State: build 0.4.0. This build has the frame (the hub, the settings page and
+the shared core) and seven tool pages: Import, Browse, Tailor, Map, Implement,
+Risk and Assess. A page for validation is not built yet, and the app does not
+call a model.
 
 ## Start
 
@@ -58,6 +58,7 @@ is saved to the set at once; the other open tools reload.
 
 | Tool | Shows | Writes |
 |---|---|---|
+| Import | An OSCAL catalog or profile and the report of its import | Requirements and Sets from a catalog, as a set of its own; a Set and a Tailoring from a profile |
 | Browse | The catalogue as a tree of Sets, every object with type filters and with the filters found in the loaded requirements, statistics | A Requirement (every `{param:}` token is declared as a parameter), a Set |
 | Tailor | Each Tailoring resolved: selection, operations with before and after, lattice verdict, derived tier | A Tailoring; the resolved requirements as a package of their own |
 | Map | The mappings as a table, with targets outside the set marked | A Mapping, also to a target outside the set |
@@ -76,6 +77,53 @@ kind is refused; a second operation on one target is refused.
 Running the same check again in Assess overwrites its Assessment and removes
 a Finding that no longer applies while it is still open. A Finding that was
 moved on is kept.
+
+## Importing OSCAL
+
+OSCAL enters the app on the Import page and nowhere else. The file is read in
+the browser; the import runs in memory and shows its report; nothing is
+written until you choose *Write to the set*.
+
+**A catalog** becomes Requirements and Sets, written as a bundle of its own
+into a set you name, with a manifest whose provenance names the source file
+and the licence you state. Two sets of rules:
+
+- *BSI Grundschutz++* follows `jascon/scripts/convert_bsi.py`: a nested
+  control is a clause of its parent, the modal verb becomes the modality, the
+  BSI props go to the standard facets and two BSI facets, the security level
+  becomes baseline Sets. Every object it makes from the Anwenderkatalog of
+  2026-07-16 has the semantic digest of the bundle under
+  `converted_examples/DE.BSI`.
+- *generic*, for any other catalog: every control, nested ones included, is a
+  Requirement; every part of the statement that carries prose is a clause;
+  the modality is `unspecified`, because OSCAL has no field for it. Props and
+  other parts are held verbatim in a facet under your namespace, with a
+  pinned schema. A control without statement prose is carried with its title
+  and listed in the report.
+
+The rules of `convert_nist.py` for NIST SP 800-53 are not ported. The generic
+rules read that catalog (1,196 requirements, valid for the reference
+validator), but the result is not the shipped SP 800-53 bundle: withdrawn
+controls are kept as requirements, and assessment objectives stay in the
+holding facet.
+
+Choose the namespace with care. Ids under your own domain make you the
+claimed authority of the catalog in the tier rule, and a Tailoring of yours
+may then weaken it without a Deviation. Use the publisher's namespace where
+it has one.
+
+**A profile** is added to the active set, because it names requirements that
+have to be there. A control is matched to the requirement whose id ends in
+the control's id, without regard to case.
+
+| In the profile | Becomes |
+|---|---|
+| `include-controls` with ids | a Set of those requirements, selected by a new Tailoring |
+| `include-all` | a select of the catalogue Set you name |
+| `exclude-controls` with ids | excludes of the Tailoring |
+| `set-parameters` | one `set-parameter` operation per clause that declares the parameter, if the value lies in its declared space |
+| a value outside the declared space | listed in the report, not written: it needs a Deviation |
+| `alters`, `merge`, pattern matching, child controls | counted in the report, not carried |
 
 ## Risk analysis
 
@@ -197,6 +245,9 @@ text in that language, the English text is shown, then whatever is there.
   and the scale and matrix rules. Not ported: the operation law per tier,
   facet payloads, conditional-apply, composition and signatures. A bundle
   that loads here is not thereby valid; use the Python validator.
+- The import knows two sets of catalog rules, BSI Grundschutz++ and generic.
+  From a profile it does not carry alters, merge, pattern matching or child
+  controls. OSCAL documents other than catalogs and profiles are refused.
 - The Risk form covers one likelihood, one impact and a matrix. Impact per
   dimension and other methods are not offered. The review date is a date or
   a calendar period.
@@ -237,6 +288,15 @@ interface string has a German text, and what is generated (the settings table
 above, `jascon-schema.js`, `jascon-presets.js`) matches its source. The second lists
 strings without a German text. The third rewrites the settings table from
 `JSC_CFG` in `jascon-core.js`.
+
+Three tests of the OSCAL import compare with the publishers' source files,
+which the repository does not carry (`sources/` is ignored); without the
+files they are skipped. The files are the Anwenderkatalog Grundschutz++ of
+2026-07-16 from `BSI-Bund/Stand-der-Technik-Bibliothek` (commit `39a1193`,
+`Anwenderkataloge/Grundschutz++/Grundschutz++-catalog.json`) as
+`sources/Grundschutz++-catalog.json`, and from `usnistgov/oscal-content`
+(`nist.gov/SP800-53/rev5/json/`) the catalog and the MODERATE baseline
+profile under `sources/nist/`.
 
 `jascon-schema.js` and `jascon-presets.js` are generated; after a change to
 the kernel schema, the shipped scales or the risk catalogues run:
