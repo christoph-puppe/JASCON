@@ -71,10 +71,11 @@ requirements and mints real objects.*
 >   *major* (D22 rev 3), and the author kept that rule. It is a major by
 >   rule and a superset in fact — every 1.0.0 bundle is a valid 2.0.0
 >   bundle; a 1.0.0 *tool* cannot read a bundle that carries a Risk.
+> - **The specification text:**
+>   [`oscal-semantic-core-specification-2.0.0-rc.1.md`](drafts/oscal-semantic-core-specification-2.0.0-rc.1.md)
+>   — a release candidate; D23 carries Risk.
 > - **Still blocking a release:** the PowerShell twin's port has not been
->   executed, one rule question is open (how strict the Risk shape is
->   toward imported OSCAL data), and the specification needs its 2.0.0
->   text. See the
+>   executed (one command on Windows; IV.5b of the candidate). See the
 >   [backlog](drafts/oscal-semantic-core-v0.6-spec-feedback-backlog.md)
 >   #41–#50 and the register sections "Amendments — CP-RISK-1" and
 >   "Amendments — the 2.0.0 decision".
