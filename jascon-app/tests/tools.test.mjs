@@ -10,6 +10,7 @@ import { fileURLToPath } from "node:url";
 import { findMissing } from "../tools/check-i18n.mjs";
 import { render } from "../tools/gen-docs.mjs";
 import { render as renderSchema } from "../tools/gen-schema.mjs";
+import { render as renderPresets } from "../tools/gen-presets.mjs";
 
 const APP = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -26,4 +27,8 @@ test("the settings table in readme.md is the generated one", () => {
 
 test("jascon-schema.js is the one generated from jascon/schemas/", () => {
   assert.equal(fs.readFileSync(path.join(APP, "jascon-schema.js"), "utf8"), renderSchema(), "run node jascon-app/tools/gen-schema.mjs");
+});
+
+test("jascon-presets.js is the one generated from the shipped scales and catalogues", () => {
+  assert.equal(fs.readFileSync(path.join(APP, "jascon-presets.js"), "utf8"), renderPresets(), "run node jascon-app/tools/gen-presets.mjs");
 });
