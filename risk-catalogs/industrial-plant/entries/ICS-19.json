@@ -1,0 +1,39 @@
+{
+ "id": "https://github.com/christoph-puppe/JASCON/risk-catalogs/industrial-plant/entry/ICS-19",
+ "version": "0.1.0",
+ "lifecycle": "draft",
+ "label": "ICS-19",
+ "title": {
+  "en": "Power failure, fire or water disables the control system",
+  "de": "Stromausfall, Brand oder Wasser setzt die Steuerungstechnik außer Betrieb"
+ },
+ "scenario": {
+  "en": "The control room or a cabinet with central controllers loses power, overheats, burns or is flooded. Without an uninterruptible supply and a defined shutdown the process stops in an undefined state.",
+  "de": "Die Leitwarte oder ein Schaltschrank mit zentralen Steuerungen verliert die Stromversorgung, überhitzt, brennt oder wird überflutet. Ohne unterbrechungsfreie Versorgung und definiertes Abfahren bleibt der Prozess in einem undefinierten Zustand stehen."
+ },
+ "category": "physical",
+ "impacts": [
+  "availability",
+  "safety"
+ ],
+ "suggested-treatments": [
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/PE-11"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/PE-13"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/PE-14"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/PE-15"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CP-2"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/PE-9"
+  }
+ ]
+}

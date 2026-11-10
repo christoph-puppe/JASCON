@@ -381,6 +381,7 @@ Install by copying the directory into your skills folder, or unpack
 ## Read the spec
 
 - [`drafts/oscal-semantic-core-specification-1.0.0.md`](drafts/oscal-semantic-core-specification-1.0.0.md) — the released specification; [`…-2.0.0-rc.1.md`](drafts/oscal-semantic-core-specification-2.0.0-rc.1.md) — the candidate on this branch
+- [`risk-catalogs/`](risk-catalogs/README.md) — prototype: two ready-made lists of typical risks (office IT, industrial plant; English and German) and a tool that imports them into `Risk` objects
 - [`PRIOR-ART.md`](PRIOR-ART.md) — the neighbouring formats, what each already does, and what JASCON does not add
 - [`drafts/oscal-semantic-core-v0.5-specification.md`](drafts/oscal-semantic-core-v0.5-specification.md) — the v0.5 draft (history)
 - [`drafts/oscal-semantic-core-decision-rationale-register.md`](drafts/oscal-semantic-core-decision-rationale-register.md) — every decision scored against the north star, with rejected alternatives and amendments

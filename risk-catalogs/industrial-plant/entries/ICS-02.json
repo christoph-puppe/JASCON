@@ -1,0 +1,42 @@
+{
+ "id": "https://github.com/christoph-puppe/JASCON/risk-catalogs/industrial-plant/entry/ICS-02",
+ "version": "0.1.0",
+ "lifecycle": "draft",
+ "label": "ICS-02",
+ "title": {
+  "en": "A vendor's remote maintenance access is misused",
+  "de": "Fernwartungszugang eines Herstellers wird missbraucht"
+ },
+ "scenario": {
+  "en": "A machine builder reaches controllers through an always-on remote connection with a shared account. Stolen vendor credentials or a compromised vendor laptop give an outsider direct access to the control system.",
+  "de": "Ein Maschinenbauer erreicht Steuerungen über eine dauerhaft offene Fernverbindung mit einem gemeinsam genutzten Konto. Gestohlene Zugangsdaten oder ein kompromittiertes Notebook des Herstellers geben einem Außenstehenden direkten Zugriff auf die Steuerung."
+ },
+ "category": "third-party",
+ "impacts": [
+  "integrity",
+  "availability"
+ ],
+ "suggested-treatments": [
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-17"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/MA-4"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/IA-2"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/IA-2.1"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-2"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AU-2"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SA-9"
+  }
+ ]
+}

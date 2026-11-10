@@ -1,0 +1,39 @@
+{
+ "id": "https://github.com/christoph-puppe/JASCON/risk-catalogs/industrial-plant/entry/ICS-12",
+ "version": "0.1.0",
+ "lifecycle": "draft",
+ "label": "ICS-12",
+ "title": {
+  "en": "Unauthenticated industrial protocols accept forged commands",
+  "de": "Industrieprotokolle ohne Authentisierung nehmen gefälschte Befehle an"
+ },
+ "scenario": {
+  "en": "Fieldbus and control protocols in the plant carry no authentication. Any device in the network segment can send start, stop or write commands, or replay recorded traffic, and the controller executes them.",
+  "de": "Feldbus- und Steuerungsprotokolle in der Anlage kennen keine Authentisierung. Jedes Gerät im Netzsegment kann Start-, Stopp- oder Schreibbefehle senden oder aufgezeichneten Verkehr wiedereinspielen, und die Steuerung führt sie aus."
+ },
+ "category": "network",
+ "impacts": [
+  "integrity",
+  "availability"
+ ],
+ "suggested-treatments": [
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SC-8"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SC-23"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/IA-3"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SC-7"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SI-4"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-4"
+  }
+ ]
+}

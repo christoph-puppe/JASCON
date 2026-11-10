@@ -1,0 +1,41 @@
+{
+ "id": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-14",
+ "version": "0.1.0",
+ "lifecycle": "draft",
+ "label": "OFF-14",
+ "title": {
+  "en": "An insider copies data before leaving",
+  "de": "Innentäter kopiert Daten vor dem Ausscheiden"
+ },
+ "scenario": {
+  "en": "An employee with legitimate access copies customer lists, price calculations or source code to a private device or account, shortly before moving to a competitor.",
+  "de": "Ein Mitarbeiter mit berechtigtem Zugriff kopiert Kundenlisten, Kalkulationen oder Quellcode auf ein privates Gerät oder Konto, kurz bevor er zu einem Wettbewerber wechselt."
+ },
+ "category": "data-exposure",
+ "impacts": [
+  "confidentiality"
+ ],
+ "suggested-treatments": [
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-6"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AU-6"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SI-4"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/PS-3"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/PS-4"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/MP-7"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-4"
+  }
+ ]
+}

@@ -1,0 +1,56 @@
+{
+ "id": "https://org.example/risk/OFF-11",
+ "version": "1",
+ "lifecycle": "draft",
+ "label": "OFF-11",
+ "title": {
+  "en": "Backups exist and cannot be restored",
+  "de": "Backups sind vorhanden und lassen sich nicht zurückspielen"
+ },
+ "scenario": {
+  "en": "Backup jobs report success for years and a restore was never tested. When data is lost, the backup turns out to be incomplete, too old, encrypted with a lost key, or far slower to restore than the business can wait.",
+  "de": "Die Sicherungsläufe melden seit Jahren Erfolg, eine Rücksicherung wurde nie geprobt. Beim Datenverlust zeigt sich, dass das Backup unvollständig, zu alt, mit einem verlorenen Schlüssel verschlüsselt oder viel langsamer wiederherstellbar ist, als das Geschäft warten kann."
+ },
+ "owner-ref": "https://org.example/party/ciso",
+ "state": "identified",
+ "tailoring-refs": [
+  "https://org.example/tailoring/soa-office-it"
+ ],
+ "treatments": [
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CP-9"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CP-9.1"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CP-4"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CP-10"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CP-6"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CP-2"
+  }
+ ],
+ "relations": [
+  {
+   "type": "https://github.com/christoph-puppe/JASCON/risk-catalogs/relation/instantiates",
+   "ref": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-11"
+  }
+ ],
+ "annotations": {
+  "imported-from": {
+   "entry": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-11",
+   "entry-version": "0.1.0",
+   "catalog": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it",
+   "catalog-version": "0.1.0"
+  }
+ },
+ "component-refs": [
+  "https://org.example/component/office-it"
+ ]
+}

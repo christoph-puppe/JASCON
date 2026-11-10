@@ -1,0 +1,39 @@
+{
+ "id": "https://github.com/christoph-puppe/JASCON/risk-catalogs/industrial-plant/entry/ICS-21",
+ "version": "0.1.0",
+ "lifecycle": "draft",
+ "label": "ICS-21",
+ "title": {
+  "en": "Incident response is not prepared for the plant",
+  "de": "Vorfallsbehandlung ist nicht auf die Anlage vorbereitet"
+ },
+ "scenario": {
+  "en": "The incident plan was written for office IT. In an attack nobody has decided who may disconnect the plant, how to run without the network, how to check that controller programs are unchanged, and when it is safe to restart.",
+  "de": "Der Notfallplan wurde für die Büro-IT geschrieben. Bei einem Angriff ist nicht entschieden, wer die Anlage vom Netz trennen darf, wie ohne Netz gefahren wird, wie sich prüfen lässt, ob Steuerungsprogramme unverändert sind, und wann der Wiederanlauf sicher ist."
+ },
+ "category": "detection-response",
+ "impacts": [
+  "availability",
+  "safety"
+ ],
+ "suggested-treatments": [
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/IR-8"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/IR-4"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/IR-3"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/IR-2"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CP-2"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CP-4"
+  }
+ ]
+}

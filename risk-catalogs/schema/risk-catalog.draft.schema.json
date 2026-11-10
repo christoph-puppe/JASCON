@@ -1,0 +1,204 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "https://github.com/christoph-puppe/JASCON/risk-catalogs/schema/risk-catalog.draft",
+ "title": "Risk catalogue and catalogue entry - DRAFT, a prototype outside the JASCON kernel",
+ "description": "Two shapes. An ENTRY is a ready-made risk scenario without the parts only an organisation can supply: it has no owner, no state, no rating and no acceptance, which is why it is not a kernel Risk. A CATALOGUE lists entries the way a RequirementSet lists requirements. Importing an entry means copying it into a kernel Risk object (see tools/risk_catalog.py); nothing references an entry at run time.",
+ "$defs": {
+  "text": {
+   "type": "object",
+   "minProperties": 1,
+   "propertyNames": {
+    "pattern": "^[a-z]{2,3}(-[a-z0-9]{1,8})*$"
+   },
+   "additionalProperties": {
+    "type": "string",
+    "minLength": 1
+   }
+  },
+  "uri": {
+   "type": "string",
+   "pattern": "^https?://."
+  },
+  "entry": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "id",
+    "version",
+    "lifecycle",
+    "title",
+    "scenario",
+    "category",
+    "impacts"
+   ],
+   "properties": {
+    "id": {
+     "type": "string",
+     "pattern": "^https?://."
+    },
+    "version": {
+     "type": "string",
+     "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+    },
+    "lifecycle": {
+     "enum": [
+      "draft",
+      "active",
+      "deprecated",
+      "withdrawn"
+     ]
+    },
+    "label": {
+     "type": "string",
+     "minLength": 1
+    },
+    "title": {
+     "$ref": "#/$defs/text"
+    },
+    "scenario": {
+     "$ref": "#/$defs/text"
+    },
+    "category": {
+     "enum": [
+      "social-engineering",
+      "malware",
+      "vulnerability",
+      "identity-access",
+      "data-exposure",
+      "third-party",
+      "resilience",
+      "detection-response",
+      "network",
+      "physical",
+      "compliance",
+      "human-error",
+      "change-integrity",
+      "safety"
+     ]
+    },
+    "impacts": {
+     "type": "array",
+     "minItems": 1,
+     "uniqueItems": true,
+     "items": {
+      "enum": [
+       "confidentiality",
+       "integrity",
+       "availability",
+       "safety"
+      ]
+     }
+    },
+    "suggested-treatments": {
+     "type": "array",
+     "minItems": 1,
+     "items": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+       "requirement-ref"
+      ],
+      "properties": {
+       "requirement-ref": {
+        "type": "string",
+        "pattern": "^https?://."
+       },
+       "statement-ids": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+         "type": "string",
+         "minLength": 1
+        }
+       }
+      }
+     }
+    },
+    "threat-refs": {
+     "type": "array",
+     "minItems": 1,
+     "items": {
+      "type": "string",
+      "pattern": "^https?://."
+     }
+    }
+   }
+  },
+  "catalog": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "id",
+    "version",
+    "lifecycle",
+    "title",
+    "members"
+   ],
+   "properties": {
+    "id": {
+     "type": "string",
+     "pattern": "^https?://."
+    },
+    "version": {
+     "type": "string",
+     "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+    },
+    "lifecycle": {
+     "enum": [
+      "draft",
+      "active",
+      "deprecated",
+      "withdrawn"
+     ]
+    },
+    "title": {
+     "$ref": "#/$defs/text"
+    },
+    "description": {
+     "$ref": "#/$defs/text"
+    },
+    "publisher-ref": {
+     "type": "string",
+     "pattern": "^https?://."
+    },
+    "license": {
+     "type": "string"
+    },
+    "suggestion-source": {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "title": {
+       "type": "string"
+      },
+      "requirement-prefix": {
+       "type": "string",
+       "pattern": "^https?://."
+      }
+     }
+    },
+    "members": {
+     "type": "array",
+     "minItems": 1,
+     "items": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+       "ref",
+       "sequence"
+      ],
+      "properties": {
+       "ref": {
+        "type": "string",
+        "pattern": "^https?://."
+       },
+       "sequence": {
+        "type": "integer"
+       }
+      }
+     }
+    }
+   }
+  }
+ }
+}
