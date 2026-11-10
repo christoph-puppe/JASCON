@@ -1803,3 +1803,54 @@ as a release candidate
 (`drafts/oscal-semantic-core-specification-2.0.0-rc.1.md`): D23 carries
 Risk, the rules and this decision.
 
+## Amendments — the rc.1 review (2026-11-10)
+
+**Trigger.** An external review of the pull request that carries
+2.0.0-rc.1 and of the concept as a whole. Nine findings against the
+branch, each reproduced before the fix (`drafts/CP-RISK-1.md` §13), and
+five observations about the design that no patch answers.
+
+**Decided by the fix (D23, D13).**
+- *Who justifies.* A Risk justifies a requirement once it is live,
+  published, `assessed` or `treated`, and carries a `treatment` option.
+  **Customer:** the auditor who runs `--require-risk-basis` and must not
+  be answered by a stub. **Simplicity:** one predicate over four kernel
+  fields; no facet is read. **Trade-off, accepted:** every OSCAL import
+  justifies nothing until levelled natively — the "rules stay strict"
+  decision above, followed through. **Rejected:** `treated` only (the
+  decision of 6.1.3 a–b precedes the acceptance of 6.1.3 f); any live Risk
+  (the landing — a stub passes).
+- *Where.* `tailoring-refs` on Risk. **Rejected:** scoping through
+  `component-refs` — a Tailoring names no component, so there is nothing
+  to join to; a `component-ref` on Tailoring — the right edge, and a
+  change to a released shape (backlog #51).
+- *RISK-13, RISK-14, typed selection edges, withdrawn Tailorings and
+  Requirements, checked dates.* Each closes a case where the validator
+  said less than the text.
+
+**Observed, not decided — the author's.**
+1. **No extension point for object types.** Facets attach to existing
+   objects; a new *entity* forces a major and, as D22 is worded, an
+   exception. Party, Threat, Scale and Evidence are bare landmark URIs
+   today and are the next candidates. #48 asks the narrow question; this
+   is the wide one.
+2. **No type discriminator, no kernel-version pin.** An unknown type and a
+   malformed object both report "matches NO type" (#44).
+3. **Identifiers under other organisations' domain names**
+   (`ns.bsi.bund.de`, `ns.nist.gov`, `ns.cyber.gov.au`, `ns.fedramp.gov`;
+   the schema `$id` under `ns.oscal.org`). D2 makes them opaque strings,
+   but D13 derives *authority-claimed* from the URI origin, so a
+   third-party conversion is authority-shaped until an authority signs —
+   and collides or diverges the day the authority publishes its own.
+4. **Version numbers.** 0.1 to 1.0.0 in eight days, 2.0.0 as an additive
+   superset. Under "closed shapes ⇒ every addition is a major" the number
+   stops telling a consumer how much changed.
+5. **Prior art.** IV.3 named OSCAL and IR 8477 only. `PRIOR-ART.md` now
+   lists the neighbours; Gemara and CycloneDX Attestations are the closest
+   and were not mentioned anywhere in the repository.
+
+**Erratum.** This register (D4 note, D20) and the 1.0.0 specification date
+OSCAL's Control Mapping Model "March 2026 (v1.2.1)". It shipped with
+v1.2.0 in December 2025. The journal above is left as written; the
+2.0.0 candidate and the handbook are corrected.
+

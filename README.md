@@ -8,24 +8,29 @@
 **N**otation — *one notation for every standard, in every language.*
 
 **Machine-readable compliance, rebuilt around meaning: nine shallow object
-types, two digests, and one house rule — every claim in the spec must survive
+types (ten on this branch — Risk), two digests, and one house rule — every claim in the spec must survive
 contact with real catalogs before it may stay.**
 
 This repository is a working design study, not a slide deck. It contains a
 draft specification with a public decision register, an **executable kernel
-schema** with a **157-vector conformance corpus** and *two* reference
+schema** with a **157-vector conformance corpus** (223 on this branch) and *two* reference
 validators — Python, and a **zero-dependency PowerShell 5.1 twin that runs
 on a stock Windows box** (the weekend-validator claim, measured: ~30×
 smaller than the OSCAL 1.x toolchain, crypto engines included) —
-**eleven framework and lifecycle corpora converted losslessly** (251,591
-source leaf values, coverage computed rather than asserted — including NIST
+**eleven framework and lifecycle corpora converted at 100 % declared path
+coverage** (251,591 source leaf values, every source path with a computed
+destination; whether every *value* arrives is measured on one corpus so
+far and does not hold there — backlog #41 — including NIST
 SP 800-53 Rev 5, its 800-53B baselines, and CSF 2.0), a **bidirectional
 OSCAL 1.2.2 export** that round-trips 5,886/5,886 objects to semantic-digest
 equality against the official NIST schema, and a zero-dependency
 **single-file reader & authoring studio** that turns the whole thing into
 something you can click.
 
-> Status: **pre-1.0, evidence-gated**, maintained in personal capacity.
+> Status: **1.0.0 released 2026-07-22; 2.0.0-rc.1 on this branch, not
+> tagged** — evidence-gated, maintained in personal capacity. Where JASCON
+> sits among OSCAL, Gemara, CycloneDX Attestations and the other formats in
+> this space: [`PRIOR-ART.md`](PRIOR-ART.md).
 > Nothing here is endorsed by NIST, BSI, ACSC, CCB, CIS, or FedRAMP.
 > Renamed from the working title *"OSCAL Semantic Core"* on 2026-07-22;
 > machine identifiers (namespace URIs, the attestation media type, schema
@@ -51,7 +56,7 @@ requirements and mints real objects.*
 > (`risk-coverage`) instead of a spreadsheet.
 >
 > - **Measured:** all 6,914 objects of the 1.0.0 corpus validate unchanged
->   under the new schema; the conformance corpus is 200 vectors in 13
+>   under the new schema; the conformance corpus is 223 vectors in 13
 >   families; the IFA lifecycle corpus now carries two real Risk objects
 >   (6,916 objects in eleven bundles, green in `validate_core.py`).
 > - **Corrected on the way in:** eight defects in the proposal's own
@@ -59,6 +64,12 @@ requirements and mints real objects.*
 >   in the 1.0.0 release itself: the corpus did not verify on a
 >   non-Windows clone (6,963 line-ending digest mismatches), fixed by
 >   [`.gitattributes`](.gitattributes) without re-spelling a digest.
+> - **Corrected after an external review of rc.1** (CP §13): a Risk now
+>   justifies a requirement only once it is assessed and its treatment
+>   option chosen; `tailoring-refs` scope a Risk to its Statement of
+>   Applicability; withdrawn Tailorings and Requirements no longer count;
+>   Tailoring `selects`/`excludes` are typed; dates and rating scales are
+>   checked. 23 vectors, each failing on the validator as it stood.
 > - **Reported, not smoothed over:** OSCAL's risk data has no owner, no
 >   single level and no acceptance date, so the first Risk corpus cannot
 >   leave the `identified` state; and the coverage reports count source
@@ -364,7 +375,9 @@ Install by copying the directory into your skills folder, or unpack
 
 ## Read the spec
 
-- [`drafts/oscal-semantic-core-v0.5-specification.md`](drafts/oscal-semantic-core-v0.5-specification.md) — the normative draft
+- [`drafts/oscal-semantic-core-specification-1.0.0.md`](drafts/oscal-semantic-core-specification-1.0.0.md) — the released specification; [`…-2.0.0-rc.1.md`](drafts/oscal-semantic-core-specification-2.0.0-rc.1.md) — the candidate on this branch
+- [`PRIOR-ART.md`](PRIOR-ART.md) — the neighbouring formats, what each already does, and what JASCON does not add
+- [`drafts/oscal-semantic-core-v0.5-specification.md`](drafts/oscal-semantic-core-v0.5-specification.md) — the v0.5 draft (history)
 - [`drafts/oscal-semantic-core-decision-rationale-register.md`](drafts/oscal-semantic-core-decision-rationale-register.md) — every decision scored against the north star, with rejected alternatives and amendments
 - [`drafts/oscal-semantic-core-v0.6-spec-feedback-backlog.md`](drafts/oscal-semantic-core-v0.6-spec-feedback-backlog.md) — the living input queue for v0.6: items enter with counts, leave via register entries
 - [`oscal-models-overview-1x-vs-semantic-core.md`](oscal-models-overview-1x-vs-semantic-core.md) — the eight OSCAL 1.x document models mapped onto the nine objects, with reusable Mermaid sources

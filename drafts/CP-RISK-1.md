@@ -3,7 +3,7 @@
 **Change proposal · JASCON kernel 1.0.0 → 1.1.0 · 2026-11-05** — *version decided by the author on 2026-11-10: **2.0.0** (§12)*
 **Process:** Chapter 15.4 (evidence in, corpus first, implementations follow). Every rule below carries a machine id, a human rationale and a failure message that prints on failure.
 **Scope:** kernel schema, reference validator, conformance corpus, example bundle, handbook text (Ch. 2, 10, 14; App. A, B, C, D, F, G; SKILL.md). Converters: follow-up (§8).
-**Status (2026-11-10): landed in the repository on a branch — NOT released. The version is decided: 2.0.0 (§12).** §1–§10 are the proposal as written on 2026-11-05 against the synced skill bundle. §11 records what happened on contact with the repository: what held, what was corrected (each correction demonstrated failing first), which claims below do not hold, and what the first corpus measurement said. §12 records the author's decisions of the same day. **Where the sections disagree, the later one is the state — and wherever §1–§11 write "1.1.0", read "2.0.0":** the schema file, its `$id` and every label were renamed. Open items: backlog #41–#50.
+**Status (2026-11-10): landed in the repository on a branch — NOT released. The version is decided: 2.0.0 (§12).** §1–§10 are the proposal as written on 2026-11-05 against the synced skill bundle. §11 records what happened on contact with the repository: what held, what was corrected (each correction demonstrated failing first), which claims below do not hold, and what the first corpus measurement said. §12 records the author's decisions of the same day. **Where the sections disagree, the later one is the state — and wherever §1–§11 write "1.1.0", read "2.0.0":** the schema file, its `$id` and every label were renamed. §13 records an external review of the release candidate (same day): nine findings, each reproduced first; four change what §5, §6 and §11.2 say. Open items: backlog #41–#52.
 
 ---
 
@@ -302,3 +302,59 @@ Put before the author with §11: *"The register (D22 rev 3) and spec IV.8 say po
 3. **Raw-blob line endings (backlog #42)** — first deferred, then done the same day: bundle files are `-text` and the blobs hold the digested CRLF bytes, so raw blob access verifies as well (§11.5 L-1 described the gap).
 4. **License — Apache-2.0.** `LICENSE` and `NOTICE` at the repository root, a copy of the license in the skill folder.
 
+---
+
+## 13. External review of 2.0.0-rc.1 (2026-11-10) — nine findings
+
+A review of the pull request and of the concept, done against the branch
+as pushed. Each behavioural finding was reproduced with a crafted bundle
+against `validate_core.py` before anything was changed, and is now pinned
+by vectors: run the current `risk-vectors.json` against the validator of
+commit `6b71647e` — 42 pass, 23 fail.
+
+| # | Finding | Why it matters | Fix | Vectors |
+|---|---|---|---|---|
+| X-1 | **Any live Risk with `treatments` counted as a justification.** A `draft`, `identified` Risk with no level, no option and no acceptance covered its requirement. | `--require-risk-basis` was satisfied by a three-field stub, while RISK-2/3/6 were strict about fields the coverage join never read. Both IFA risks were exactly this case. | A Risk **justifies** only when it is live, not `draft`, `assessed` or `treated`, and carries a `treatment`. Others are reported as `pending`. The normative failure now reads "justified by no Risk". | `identified-risk-justifies-nothing`, `assessed-risk-without-option-justifies-nothing`, `draft-risk-justifies-nothing` |
+| X-2 | **Coverage was not scoped.** With two Tailorings in a bundle, one Risk justified the same control in both; RISK-11 used the union of all selections. | A risk about system A justified the control in system B's Statement of Applicability. | New optional field **`tailoring-refs`** on Risk (closure-required, typed): the Risk justifies, and is held to RISK-11, only there. Unscoped Risks behave as before; **RISK-14** (SHOULD) notes them where more than one Tailoring is in force. | `scoped-risk-justifies-only-in-its-tailoring`, `unscoped-risk-among-two-tailorings-noted`, `scoped-risk-outside-its-own-tailoring`, `tailoring-ref-names-a-non-tailoring`, `tailoring-ref-not-in-bundle` |
+| X-3 | **Withdrawn Tailorings and withdrawn Requirements still counted** as selecting and selected. | Liveness had been applied to Risks only: a withdrawn SoA kept a control "in scope", and a withdrawn requirement demanded a risk basis. | A withdrawn Tailoring is not reported and selects nothing; a withdrawn Requirement is dropped from the selection, and a live Risk that names it fails RISK-11. | `withdrawn-tailoring-selects-nothing`, `withdrawn-requirement-is-not-selected`, `risk-leans-on-a-withdrawn-requirement` |
+| X-4 | **`selects[].set-ref` and `excludes[].ref` were untyped** — the defect R-5 fixed for Risk edges. A `set-ref` aimed at a Tailoring selected nothing and derived as authority-claimed; an exclude aimed at a Set removed nothing. | Silent empty selections. | Closure rule: `set-ref` names a RequirementSet; an exclude names a Requirement or a Set, and a Set excludes its members. No 1.0.0 object is affected (checked: all six Tailorings of the 1.0.0 corpus select Sets, none carries an exclude). | `select-names-a-tailoring-not-a-set`, `exclude-names-a-set-and-excludes-its-members`, `exclude-names-a-component` |
+| X-5 | **"Dated acceptance" was not dated.** `acceptance.date: "neulich"` validated, as did a `review-due` of −3.7 months. | §12.2 keeps RISK-6 strict for the sake of a *dated* acceptance. | Schema: `acceptance.date` and `review-due` dates are `YYYY-MM-DD`; `datetime` is RFC 3339 with an offset; duration `num` is a positive integer. Risk is new in this candidate, so nothing released is affected; both IFA deadlines conform. | `acceptance-date-is-not-a-date`, `review-due-negative-period`, `review-due-fractional-duration`, `review-due-date-is-not-a-date`, `review-due-datetime-needs-time-and-offset` |
+| X-6 | **Rating consistency was claimed and not checked** (D23: "a validator checks presence and consistency"). A residual on another scale than the rating passed; so did a residual without a rating. | Levels never compare across scales — a residual on another scale says nothing about the reduction. | **RISK-13**: `residual-rating` presupposes `rating` (schema conditional), on the same `scale-ref` (graph rule). | `residual-rating-without-rating`, `residual-rating-on-another-scale` |
+| X-7 | **One open selection anywhere disabled RISK-11 for the whole bundle.** | An unrelated predicate-select Tailoring turned every failure into "undecided". | Follows from X-2: RISK-11 is asked of the Tailorings a Risk belongs to; only an open selection among *those* leaves it undecided. For an unscoped Risk the bundle-wide reading stays — there it is the honest answer. | `open-tailoring-elsewhere-decides-nothing` |
+| X-8 | **The README headline contradicted the branch**: "nine object types", "157-vector", "pre-1.0", "converted losslessly" — the last against this document's own L-2. | The first screen is what a reader believes. | Headline reworded; "losslessly" replaced by what was measured (100 % declared path coverage; value arrival measured on one corpus, and not holding there). The GitHub repository description still carries the old sentence — it is not in the tree and has to be edited by the owner. | — |
+| X-9 | **The Mapping Model was dated "March 2026 with v1.2.1".** The OSCAL release notes say: "OSCAL 1.2.0 is a minor release which provides an additional OSCAL Model: Control Mapping" (v1.2.0, 12 December; v1.2.1 followed on 6 March, v1.2.2 on 30 April, v1.2.3 on 7 August 2026 and is the current release). | A wrong date in the comparison baseline, repeated in the handbook. | Corrected in the 2.0.0 candidate, Chapters 2 and 8 and the model overview. The released 1.0.0 text and the register journal are left as written; the candidate carries the erratum. | — |
+
+**Rule table after the review:** RISK-1…RISK-12 as in §11.2, with RISK-7
+and RISK-12 extended to `tailoring-refs` and RISK-11 asked per Tailoring;
+**RISK-13** — *`residual-rating` presupposes `rating`, on the same scale*;
+**RISK-14** *(SHOULD)* — *where more than one Tailoring is in force, a Risk
+names the Tailoring its treatment belongs to*.
+
+**Vectors after the review:** 65 (23 object · 34 bundle · 8 transitions).
+Conformance corpus: **223 vectors, 13 families**. Python reference
+validator: 223/223 and all shipped bundles, ALL GREEN.
+
+**What the review did not settle.**
+
+1. **The PowerShell twin is still unexecuted**, and now carries more
+   unexecuted code: every change above was ported to it by reading. The
+   expected line is `risk: 65 pass, 0 fail`. Backlog #45 stands.
+2. **X-1 makes the first Risk corpus justify nothing.** Both IFA risks are
+   `identified` (§11.4), hence `pending`. That is §12.2 followed to its
+   consequence; the IFA bundle carries no Tailoring, so no report changes.
+3. **`tailoring-refs` is the join that exists, not the one ISO describes.**
+   A Statement of Applicability belongs to a scope; the kernel has no edge
+   from a Tailoring to a Component. Adding one is a 1.0.0-shape change and
+   an author decision (backlog #51).
+4. **Not changed, deliberately:** `Deviation.opened` is as free a string as
+   `acceptance.date` was, but it is a released shape (backlog #52, with
+   #47a); a single `treatment` code cannot say "modify and share", which
+   ISO/IEC 27005 allows (not in the backlog yet); `treated` does not look at the
+   Implementation status or open Findings of the treating controls; and
+   whether a legal or contractual duty may justify an SoA row without a
+   Risk is still the policy switch's business (§8 item 5).
+5. **Concept-level findings of the same review**, recorded in the register
+   and not acted on here: no extension point for new object types, no type
+   discriminator and no kernel-version pin (#44), identifiers minted under
+   other organisations' domain names, and the prior art the specification
+   never named — now `PRIOR-ART.md`.

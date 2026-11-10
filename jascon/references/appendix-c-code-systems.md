@@ -86,9 +86,12 @@ retired` — forward only, skipping allowed (RISK-2/3 make the skipped
 content mandatory anyway), `retired` terminal: a recurrence is a *new*
 Risk, the Finding `closed` rule applied once more. Dispositions are the
 `treatment` code (C.10), never extra states. `retired` has a consequence
-beyond the state machine: a retired Risk justifies nothing (B.1.9 counts
-live Risks only) and is exempt from RISK-11 — retiring a risk and then
-dropping its control is the ordinary end of a treatment.
+beyond the state machine: a retired Risk justifies nothing (B.1.9) and is
+exempt from RISK-11 — retiring a risk and then
+dropping its control is the ordinary end of a treatment. `assessed` has
+one too: a Risk justifies a requirement only from `assessed` on, and only
+with a `treatment` option chosen — an `identified` Risk is listed as
+pending (B.1.9).
 
 ## C.4 Responsibility
 

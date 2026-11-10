@@ -224,5 +224,5 @@ Notes that keep the picture honest:
   bonded by an Attestation.
 
 *Sources: OSCAL 1.2.2 model set (incl. the Mapping Collection added
-with v1.2.1, March 2026); JASCON Specification v0.5 (D4, D13,
+with v1.2.0, December 2025); JASCON Specification v0.5 (D4, D13,
 D20, Appendix A); Handbook Chapters 2, 9, 11, 14.*

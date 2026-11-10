@@ -12,6 +12,14 @@
 > Register ("Amendments — CP-RISK-1" onward). The released 1.0.0 text
 > stays beside this file, unchanged.
 
+> **Amended after an external review of rc.1 (2026-11-10, same file).**
+> Nine findings, each reproduced against the validator first; record in
+> `drafts/CP-RISK-1.md` §13. D23 changed in substance at four points — who
+> *justifies* (an assessed Risk with a chosen option, not any live one),
+> *where* (`tailoring-refs`), RISK-13 (one scale) and RISK-14 (name the
+> Tailoring) — and D13 gained typed `selects` / `excludes`. Nothing was
+> tagged in between, so the file keeps its name.
+
 > **Name.** **JASCON** — **J**SON **A**ttestable **S**emantic **C**ompliance
 > **O**bject-graph **N**otation; *one notation for every standard, in every
 > language*. Renamed from the working title "OSCAL Semantic Core" on
@@ -35,7 +43,7 @@ released; this text adds one kernel type — **Risk** (D23) — and the ninth
 primitive that computes over it. It is a major version by the rule of
 D22 rev 3, not because anything breaks: all 6,914 objects of the 1.0.0
 corpus validate unchanged under the 2.0.0 schema, so a 1.0.0 bundle is a
-2.0.0 bundle. **Measured at rc.1:** a 200-vector conformance corpus in
+2.0.0 bundle. **Measured at rc.1:** a 223-vector conformance corpus in
 thirteen families; the Python reference validator green on it and on
 every bundle that ships; the first Risk corpus (two Risk objects
 converted from an OSCAL POA&M), and what that corpus shows the fourth
@@ -49,8 +57,13 @@ arrive (IV.2, R16). Eleven corpora were converted and measured (251,591
 source leaf values at path level, UNMAPPED = 0); **five of the bundles
 ship** with the repository, six were removed on licence grounds and are
 reproducible with the converters (§2). Comparison baseline throughout:
-**OSCAL 1.2.2** (current NIST line, eight models including the Control
-Mapping Model introduced March 2026 with v1.2.1).
+**OSCAL 1.2.2** (the release the export suite was measured against —
+eight models including the Control Mapping Model, which arrived with
+v1.2.0 in December 2025; the current NIST release at this writing is
+1.2.3, August 2026, not re-measured). *(Corrected in the rc.1 review:
+this text and the 1.0.0 text dated the Mapping Model "March 2026 with
+v1.2.1"; the OSCAL release notes say 1.2.0. Read "March 2026" below and in
+the register as "December 2025".)*
 
 **Provenance of this text.** The normative sections (Parts I–II,
 Appendices A–C) were amended in place through six adversarial review
@@ -169,7 +182,7 @@ self-containment.)
 | Reporting duties | — | — | `notification[]` | stdlib `reporting-obligation@1` |
 | Effectivity | — | — | `info.effective` | stdlib `effectivity@1` |
 | Deviations | — | audit practice | `corrective_actions`; hist. 4× state machine | Kernel `Deviation` (D8) |
-| **Cross-framework mappings** *(new row)* | — | — | KSI→800-53 ×263 | **Kernel `Mapping`** (D20) — external evidence: SCF ×200+ frameworks, CIS/CSA mapping products, NIST OLIR, and NIST's own March-2026 Mapping Model |
+| **Cross-framework mappings** *(new row)* | — | — | KSI→800-53 ×263 | **Kernel `Mapping`** (D20) — external evidence: SCF ×200+ frameworks, CIS/CSA mapping products, NIST OLIR, and NIST's own Mapping Model (OSCAL 1.2.0) |
 | **Ex-ante risk record** *(new row, 2.0.0)* | — | threat linkage only (authority side: threat references on 595 of 651 requirements, in `security-objectives@1`) | — | **Kernel `Risk`** (D23) — census **0-of-3**: admitted as an author-decided exception to D22 test 1. Evidence outside the census: three standards prescribing the record (ISO/IEC 27001 with 27005, BSI 200-3, SP 800-30) and one lifecycle corpus (OSCAL POA&M risks ×2) |
 | Rendering hints | — | — | `do_not_link`, `web_name` | Annotations (D10) |
 | Process flows | — | — | `info.flows[]` | out of scope (D17) |
@@ -260,7 +273,7 @@ flat BSI controls as fossil record; **CR26 is documents-as-views in
 production**). The type-count dogma is formally retired (P7's closing
 argument accepted): **semantic completeness beats winning the type-count
 argument** — and the ledger claim becomes *nine shallow types replace eight
-deep document models* (1.2.2's, including its March-2026 Mapping Model).
+deep document models* (1.2.2's, including the Mapping Model of 1.2.0).
 *(2.0.0)* The tenth type replaces no 1.x model: OSCAL keeps `risk` inside
 assessment-results and POA&M — ex post, a thing an assessor finds. D23 is
 the ex-ante record 1.x has no home for.
@@ -461,6 +474,14 @@ modality):**
 | `add-relation` / `remove-relation` | informative edges are free; **removing a `required` edge ⇒ Deviation** (B.3 — dropping a dependency weakens the graph; enforced since backlog #25). Normative cross-framework claims are Mapping objects, D20, with their own lifecycle |
 | `excludes` | **selection, never weakening — no Deviation** |
 
+**Selection edges are typed *(rc.1 review)*.** `selects[].set-ref` names a
+RequirementSet; `excludes[].ref` names a Requirement or a RequirementSet,
+and a Set there excludes its members. Any other target is a validation
+error. Before this rule a `set-ref` aimed at a Tailoring — the natural
+misreading of "chaining" — validated, selected nothing, and derived as
+authority-claimed; an exclude aimed at a Set removed nothing. Chaining
+stays what it was: the algorithm run again on the resolved package.
+
 The last row is a documented **rejection of P7-B2's "exclude always
 requires Deviation"**: excludes define scope — ISM's five classification
 baselines and FedRAMP's classes are *made of* excludes; requiring a
@@ -640,7 +661,8 @@ MAY down-translate it to `supports` losslessly for that reason.
 **Evidence.** SCF's raison d'être is mapping 1,500+ controls to 200+
 frameworks; CIS and CSA ship mapping documents as core products; NIST
 publishes OLIR; CR26 itself carries 263 KSI→800-53 mappings; and NIST just
-shipped an **entire eighth document model** for mappings (March 2026) —
+shipped an **entire eighth document model** for mappings (OSCAL 1.2.0,
+December 2025) —
 proof of demand, and proof of the 1.x pattern (a deep document tree with
 uuid/metadata/revisions and props throughout) this kernel exists to
 replace.
@@ -771,6 +793,7 @@ the answer to *why is this requirement in scope at all?*
   "state": "treated",                     // identified → assessed → treated → retired
   "threat-refs": [ "https://ns.bsi.bund.de/gspp/threat/G-0.19" ],
   "component-refs": [ "https://cso.example/component/acme-saas" ],
+  "tailoring-refs": [ "https://cso.example/tailoring/soa-2026" ],   // optional: the SoA this belongs to
   "rating": { "level": "hoch", "scale-ref": "https://cso.example/scale/bsi-200-3-matrix" },
   "residual-rating": { "level": "gering", "scale-ref": "https://cso.example/scale/bsi-200-3-matrix" },
   "treatment": "modify",                  // modify | retain | avoid | share
@@ -783,8 +806,12 @@ the answer to *why is this requirement in scope at all?*
 ```
 
 Required: `scenario`, `owner-ref`, `state`. `review-due` is a point in
-time (`{type: date | datetime, value}`) or a duration (elapsed, or
-calendar — fail-closed without the named calendar, D9). Finding gains one
+time (`{type: date | datetime, value}` — `YYYY-MM-DD`, or RFC 3339 with an
+explicit offset) or a duration (elapsed, or calendar — fail-closed
+without the named calendar, D9; `num` a positive integer).
+`acceptance.date` is `YYYY-MM-DD`. These formats are schema-checked
+*(rc.1 review)*: a "dated acceptance" that any string satisfies is not
+dated. `tailoring-refs` is optional and scopes the Risk (below). Finding gains one
 optional field, `risk-refs[]`: the ex-post record points at the ex-ante
 one. Shape-disjointness holds: `scenario` + `owner-ref` occur in no other
 type. Field table: Appendix A.9b.
@@ -800,9 +827,10 @@ and stay in facets (`risk-analysis@1`, parked — Appendix D).
 across scales (D2: identifiers are opaque); a validator checks presence
 and consistency, never magnitude.
 
-**Rules (normative).** RISK-1…6 are schema conditionals — any JSON-Schema
-validator enforces them; a conformant tool names the violated rule and
-prints its rationale. RISK-7…12 are graph rules.
+**Rules (normative).** RISK-1…6 and the first half of RISK-13 are schema
+conditionals — any JSON-Schema validator enforces them; a conformant tool
+names the violated rule and prints its rationale. RISK-7…12, the second
+half of RISK-13 and RISK-14 are graph rules.
 
 | Id | Rule | Why |
 |---|---|---|
@@ -812,12 +840,14 @@ prints its rationale. RISK-7…12 are graph rules.
 | RISK-4 | `treatment` = modify ⇒ `treatments` non-empty. | A modification with no controls is nothing (6.1.3 b). |
 | RISK-5 | `treatment` = share ⇒ `shared-with-ref`. | Sharing names who carries it. |
 | RISK-6 | `treatment` = retain ⇒ `acceptance`. | Retention *is* acceptance; silent retention is the oldest ISMS defect (6.1.3 f). |
-| RISK-7 | `treatments[].requirement-ref` and `component-refs[]` resolve in-bundle. | Closure-required, like `Implementation.requirement-ref` (the #16 taxonomy). |
+| RISK-7 | `treatments[].requirement-ref`, `component-refs[]` and `tailoring-refs[]` resolve in-bundle. | Closure-required, like `Implementation.requirement-ref` (the #16 taxonomy). |
 | RISK-8 | `treatments[].statement-ids` name statements of the target. | Clause precision is addressable or it is prose. |
 | RISK-9 *(SHOULD)* | A `risk-adjustment` Deviation names the Risk in `refs`. | The weakening and its justification meet in data (D8). |
 | RISK-10 *(SHOULD)* | At consumer tier every `excludes[]` entry carries a `rationale`. | An exclusion without justification is a list, not a Statement of Applicability (6.1.3 d). |
-| RISK-11 | A **live** Risk's treatment may not name a requirement that no Tailoring in the bundle selects. *Undecided* — reported, never failed — where a Tailoring's selection is open (a predicate select). | The treatment plan and the SoA disagree: the risk leans on a control the SoA dropped. |
-| RISK-12 | A Risk edge is typed: `treatments[].requirement-ref` names a Requirement, `component-refs` name Components, and a `Finding.risk-refs` entry that resolves in-bundle names a Risk (the edge itself stays landmark). | Coverage joins on Requirement ids; a mis-aimed reference is a wrong statement, not a loose one. |
+| RISK-11 | A **live** Risk's treatment may not name a requirement that none of *its* Tailorings selects — those in `tailoring-refs`, else every Tailoring in force in the bundle. A withdrawn Tailoring selects nothing; a withdrawn Requirement is selected by none. *Undecided* — reported, never failed — where one of those Tailorings has an open selection (a predicate select). | The treatment plan and the SoA disagree: the risk leans on a control the SoA dropped. |
+| RISK-12 | A Risk edge is typed: `treatments[].requirement-ref` names a Requirement, `component-refs` name Components, `tailoring-refs` name Tailorings, and a `Finding.risk-refs` entry that resolves in-bundle names a Risk (the edge itself stays landmark). | Coverage joins on Requirement ids; a mis-aimed reference is a wrong statement, not a loose one. |
+| RISK-13 *(rc.1 review)* | `residual-rating` presupposes `rating`, and both name the same `scale-ref`. | A residual level is what remains of a level; levels never compare across scales, so a residual on another scale says nothing about the reduction. |
+| RISK-14 *(SHOULD; rc.1 review)* | Where a bundle holds more than one Tailoring in force, a Risk with `treatments` names its Tailoring(s) in `tailoring-refs`. | Unscoped, a risk about system A justifies the control in system B's Statement of Applicability. |
 
 **States and options (code systems, Appendix C).** C.3c: `identified →
 assessed → treated → retired` — forward only, skipping allowed, `retired`
@@ -832,13 +862,40 @@ ever grows — a control justified once would stay justified for ever — and
 the ordinary end of a treatment (retire the risk, then drop its control)
 would be a permanent failure.
 
+**Justification *(rc.1 review)*.** Being live is necessary, not
+sufficient. A Risk justifies the requirements its `treatments` name once a
+treatment *decision* rests on an *assessed* risk: `lifecycle` is not
+`draft`, `state` is `assessed` or `treated`, and a `treatment` option is
+present (ISO/IEC 27001 6.1.3 a–b: controls are determined to implement the
+option chosen for an analysed risk). A live Risk short of that is
+*pending*: reported with the requirement it names, counted as uncovered.
+As first landed, any live Risk with `treatments` justified — so a
+three-field stub satisfied the policy switch, and RISK-2/3/6 were strict
+about fields the coverage join never read. The consequence for imported
+data is stated, not softened: an OSCAL risk stays `identified` (below) and
+therefore justifies nothing until a level and an option are recorded
+natively. RISK-11 still binds a pending Risk — a plan that leans on a
+control the Statement of Applicability dropped is already a contradiction.
+
+**Scope *(rc.1 review)*.** `tailoring-refs` name the Statement(s) of
+Applicability a Risk's treatment belongs to. Present: the Risk justifies,
+and is held to RISK-11, only in those Tailorings. Absent: it applies to
+every Tailoring in force in the bundle — correct for the one-SoA bundle,
+and noted (RISK-14) wherever there is more than one. `component-refs` do
+not do this job: a Tailoring carries no component, and the kernel has no
+edge from a Statement of Applicability to the system it is for (open —
+IV.9).
+
 **`risk-coverage` — the ninth primitive (Appendix B.1.9; tier: Portable).**
-For each Tailoring: the selected requirements (set-refs expanded through
-nested Sets to any depth, excludes removed) joined to the live Risks
-whose `treatments` name them. Output per Tailoring: `covered`,
-`uncovered`, `lapsed` (uncovered requirements named only by retired or
-withdrawn Risks), `open-selection`, `excludes-without-rationale`; per
-bundle: `treatment-out-of-scope`. A predicate select is resolved by the
+For each Tailoring in force (`lifecycle` ≠ `withdrawn`): the selected
+requirements (set-refs expanded through nested Sets to any depth,
+excludes removed — a Set there removes its members —, withdrawn
+Requirements dropped) joined to the Risks that justify them and belong to
+that Tailoring. Output per Tailoring: `covered`, `uncovered`, and two
+subsets of `uncovered` that say why — `pending` (named only by live Risks
+without an assessed treatment decision) and `lapsed` (named only by
+retired or withdrawn Risks) —, `open-selection`,
+`excludes-without-rationale`; per bundle: `treatment-out-of-scope`. A predicate select is resolved by the
 tailoring engine, not by this primitive; a Tailoring that carries one has
 an *open* selection — a lower bound from which nothing is concluded by
 absence. **Verdict discipline:** `uncovered` is a report line, never a
@@ -855,7 +912,7 @@ for.
 
 ```
 FAIL [risk-coverage] <tailoring>  selected <requirement>
-  named by no live Risk
+  justified by no Risk
   rationale: ISO/IEC 27001 6.1.3 d — inclusion in the Statement of
   Applicability carries its justification
 ```
@@ -888,7 +945,7 @@ as an exception to test 1. Corpus-exercised so far: `scenario`,
 `owner-ref`, `state`, `component-refs`, `treatment` + `treatments`,
 `review-due`, `Finding.risk-refs`, RISK-9. Vector-exercised only:
 `rating`, `residual-rating`, `acceptance`, `shared-with-ref`,
-`threat-refs`, the states beyond `identified`, and `risk-coverage` at
+`threat-refs`, `tailoring-refs`, the states beyond `identified`, and `risk-coverage` at
 corpus scale (the one corpus with Risks carries no Tailoring).
 
 **Version.** A tenth kernel type is a kernel-shape change, and by D22
@@ -918,7 +975,10 @@ Risk to Requirement* (a Mapping is a third party's claim about two
 requirements; "this control treats this risk" is the owner's decision
 and belongs on the object whose owner made it). *Acceptance as a
 Deviation* (two acts, two roles — D8). *Scoring fields in the kernel*
-(Q14 holds). *Relaxed rules for imported data* (above). *A tier-scoped
+(Q14 holds). *Relaxed rules for imported data* (above). *Counting every live Risk as
+a justification* (the first landing — rc.1 review). *Scoping by
+`component-refs`* (a Tailoring names no component; `tailoring-refs` is the
+edge that exists). *A tier-scoped
 policy switch* (above). *A `treats-risk` selection predicate* that would
 derive the Tailoring from the register — deferred: it widens the
 one-leash budget (D13) and needs its own evidence. *A selection-basis
@@ -980,7 +1040,7 @@ three requirements selected, one justified by a Risk, two by none.
 ## IV.1 Complexity ledger
 
 **Removed vs. OSCAL 1.2.2:** eight deep document models (incl. the
-March-2026 Mapping Model) · Metaschema · profile-resolution algebra + merge
+Mapping Model of 1.2.0) · Metaschema · profile-resolution algebra + merge
 strategies · XML/YAML conformance + serialization mapping · Schematron ·
 anonymous inline constraints · comp-def/SSP duplication · general JSON
 Patch. **Kernel:** 10 shallow types *(9 at 1.0.0)* · 2 sub-objects · 1
@@ -1036,6 +1096,11 @@ at the next Risk corpus.
 Add: **NIST OSCAL 1.2.2 Control Mapping Model** — as demand evidence *and*
 as the negative pattern (deep document model, props throughout) D20
 replaces; NIST IR 8477 / OLIR (relationship semantics).
+*(rc.1 review)* This delta never named the formats closest to JASCON.
+`PRIOR-ART.md` (repository root) does: Gemara, CycloneDX Attestations,
+the CISO Assistant library format, FedRAMP's rules JSON, SCF STRM,
+in-toto / SCITT — what each already does, and which JASCON features are
+therefore not new.
 
 ## IV.4 Coverage table (P7/P8 verdicts adopted)
 
@@ -1116,16 +1181,17 @@ The 1.0.0 gate asked for converters, an executable kernel, a lifecycle
 corpus and two implementations. The same four questions, asked of Risk:
 
 1. **Executable kernel + conformance.** ✓ Schema 2.0.0 (ten types);
-   **200 vectors, 13 families** — the twelve of 1.0.0 (lifecycle 36 → 37
-   with the tenth disjointness case) plus `risk` 42 (16 object · 18
-   bundle · 8 transitions). Every review correction to the proposal is
+   **223 vectors, 13 families** — the twelve of 1.0.0 (lifecycle 36 → 37
+   with the tenth disjointness case) plus `risk` 65 (23 object · 34
+   bundle · 8 transitions; 42 at the landing, 23 from the rc.1 review). Every review correction to the proposal is
    pinned by a vector that fails on the validator as first proposed.
-2. **First implementation.** ✓ `validate_core.py`: 200 / 200, the five
+2. **First implementation.** ✓ `validate_core.py`: 223 / 223, the five
    shipped bundles (3,715 objects, both digests each), and the example
    bundle with its manifest — ALL GREEN.
 3. **Second implementation.** ✗ **OPEN.** `validate_core.ps1` carries the
-   port (type, closure, typed edges, liveness, the coverage join, the 42
-   vectors, the policy switch) and has **not been executed** — no
+   port (type, closure, typed edges, liveness, justification, scope, the
+   coverage join, the 65 vectors, the policy switch) and has **not been
+   executed** — no
    PowerShell runtime was available where it was written. Until a run on
    Windows PowerShell 5.1 is green, Risk has one implementation. This
    item alone blocks the tag (backlog #45).
@@ -1167,6 +1233,7 @@ history. The compact line:
 | Corpus licence review | 2026-11-10 | Five bundles kept under their publishers' stated terms, six removed (terms forbid it, or none established); converters and coverage reports stay | "Amendments — the corpus licence review" |
 | Raw blobs · the Risk rules stay | 2026-11-10 | Bundle files stored as the digested bytes (every delivery channel verifies); RISK-1/2/3/6 kept strict toward imported data | "Amendments — raw blobs" · "… the Risk rules stay" |
 | **2.0.0-rc.1** | 2026-11-10 | This text: D23 new; D4, D8, D14, D15, D22 amended in place; gate state in IV.5b | this row |
+| rc.1 review | 2026-11-10 | External review: nine findings reproduced and fixed — justification needs an assessed treatment decision, `tailoring-refs`, RISK-13/14, typed Tailoring selection edges, withdrawn Tailorings/Requirements, checked dates; the Mapping Model date corrected; `PRIOR-ART.md` | CP-RISK-1 §13 · "Amendments — the rc.1 review" |
 
 ## IV.7 Release artifacts (what this candidate ships with)
 
@@ -1180,10 +1247,10 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
 - **Seven stdlib facet descriptors** (incl. the normative DSSE envelope
   profile) — unchanged from 1.0.0; pinned VERBATIM wherever bundled.
   `risk-analysis@1` is parked, with one measured payload (Appendix D).
-- **Conformance corpus**: **200 vectors, 13 families** (jcs 8 ·
+- **Conformance corpus**: **223 vectors, 13 families** (jcs 8 ·
   modality 21 · parameter 19 · tailoring 19 · attestation 5 · facet 7 ·
   reference 13 · lifecycle 37 · tier 9 · dsse 5 · composition 7 ·
-  conditional 8 · risk 42). In `risk-vectors.json`, `expected-rule` is
+  conditional 8 · risk 65). In `risk-vectors.json`, `expected-rule` is
   the portable assertion.
 - **Two reference validators**: `validate_core.py` (Python, jsonschema
   only) — green; `validate_core.ps1` (PowerShell 5.1, zero dependencies)
@@ -1236,13 +1303,17 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
 2. **The Risk rules toward imported data** — ✓ decided: kept strict (D23).
 3. **Licence** — ✓ Apache-2.0; corpus terms reviewed (§2).
 4. **The second implementation** — ☐ run `validate_core.ps1` on Windows
-   PowerShell 5.1; expect `risk: 42 pass, 0 fail` and ALL GREEN; remove
+   PowerShell 5.1; expect `risk: 65 pass, 0 fail` and ALL GREEN; remove
    the two port guards (backlog #45). **Blocks the tag.**
 5. **Decide before the tag** — ☐ a kernel-version pin in the manifest
    (#44); ☐ whether to tighten `Finding.actions[].due`, which would end
    the superset property (#47a); ☐ whether D22 gets a consumer-side
    clause (#48); ☐ whether the removed bundles are purged from history
-   (#50). The machine identifiers stay `oscal-semantic-core` unless the
+   (#50); ☐ an edge from a Tailoring to the Component it is a Statement
+   of Applicability for — `tailoring-refs` scopes a Risk by naming the
+   Tailoring, which is the join that exists, not the one ISO describes
+   (#51); ☐ `Deviation.opened` is still a free string — tightening it is a
+   1.0.0-shape change like #47a (#52). The machine identifiers stay `oscal-semantic-core` unless the
    author says otherwise — the 1.0.0 record tied that question to a
    major, and this is one.
 6. **Work, not decisions** — ☐ value arrival for the other corpora and
