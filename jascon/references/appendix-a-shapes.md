@@ -198,7 +198,7 @@ Risk whose `state` is `retired` or whose `lifecycle` is `withdrawn`
 justifies nothing (B.1.9). **Justification:** a live Risk justifies a
 requirement only once it is published (not `draft`), `assessed` or
 `treated`, and carries a `treatment` option — until then it is listed as
-`pending` (B.1.9). **Evidence:** example bundle (1 Risk), 65
+`pending` (B.1.9). **Evidence:** example bundle (1 Risk), 67
 vectors, and the IFA lifecycle corpus — 2 Risks converted from POA&M
 risks. That first corpus also measured what OSCAL cannot give this shape
 (A.12): no owner field, no single level, no dated acceptance.

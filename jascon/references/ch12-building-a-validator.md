@@ -266,8 +266,10 @@ Skip the type half and the join below runs on a mis-aimed id and
 returns an empty answer without an error. Finally RISK-13's second
 half: `rating` and `residual-rating` carry the same `scale-ref`.
 
-**Fourth, the join.** For every Tailoring whose `lifecycle` is not
-`withdrawn`:
+**Fourth, the join.** If the bundle carries no Tailoring at all,
+nothing was scoped out: take every Requirement in force as one implicit
+selection and go to step 5. Otherwise, for every Tailoring whose
+`lifecycle` is not `withdrawn`:
 
 1. Expand the `set-ref` selects through nested Sets to any depth, with
    a seen-set, so that a malformed cycle terminates. A fixed depth
@@ -292,9 +294,10 @@ half: `rating` and `residual-rating` carry the same `scale-ref`.
 treatments name: is the requirement in the selection of at least one
 Tailoring the Risk belongs to? If it is, done. If the requirement is
 withdrawn, fail. If one of those Tailorings is open, report
-*undecided* and do not fail. Otherwise fail. The rule is asked
-wherever a Tailoring exists, including the bundle in which everything
-was excluded and the bundle whose only Tailoring is withdrawn.
+*undecided* and do not fail. Otherwise fail. The rule is asked in
+every bundle, including the one in which everything was excluded and
+the one whose only Tailoring is withdrawn; without any Tailoring only a
+withdrawn requirement can fail it.
 
 **Sixth, the verdict.** `uncovered` is a report line. Offer the
 program's policy as a switch, and under the switch print the one
@@ -320,9 +323,10 @@ Failing RISK-11 under an open selection, a hard verdict from knowledge
 the primitive does not have. Letting one open Tailoring anywhere make
 the rule undecided for every Risk. Skipping the report when the bundle
 holds no Risk, which exempts the emptiest register from the strictest
-policy.
+policy. Skipping it when the bundle holds no Tailoring, as if an
+untailored catalogue had no controls in play.
 
-**What the corpus hands you:** `risk-vectors.json`, 65 cases. The
+**What the corpus hands you:** `risk-vectors.json`, 67 cases. The
 object vectors exercise typing and rule naming, the bundle vectors
 closure, the three buckets, scope and RISK-11, and eight transitions
 the state machine of C.3c. What it does not hand you is scale: the one
@@ -345,9 +349,18 @@ of the specification's final version is gated on two independent
 implementations agreeing with the corpus — the CommonMark discipline,
 adopted whole.
 
-Until the v0.6 gate runs, every number this chapter implies is
-**designed-for** — and the margin where the measured LoC and hours
-will sit stays honestly empty. The harness is how the project keeps
+The v0.6 gate was the list of four deliveries the v0.5 specification
+demanded before a 1.0 could exist: converters with computed coverage
+for the three census corpora, an executable schema with a conformance
+corpus, a lifecycle corpus beyond catalogues, and this measurement. It
+ran in July 2026 (specification IV.5). The measured numbers at 1.0.0:
+994 non-blank, non-comment lines of Python plus one schema library,
+1,163 lines of dependency-free PowerShell 5.1, both green on the same
+157 vectors, against 30,905 lines for the OSCAL 1.x toolchain it was
+compared with, which also authors and resolves and therefore does
+more. Three things are not measured: the hours of a fresh contributor,
+an implementation by someone other than the author, and the size of
+both validators since Risk was added. The harness is how the project keeps
 itself honest; running it yourself is how you keep the project
 honest. Both are the point.
 

@@ -326,24 +326,27 @@ commit `6b71647e` — 42 pass, 23 fail.
 
 | X-10 *(found after the merge)* | **Under `--require-risk-basis` a bundle with a Tailoring and no Risk at all passed.** Bundle validation printed and enforced the report only where at least one Risk existed. | The emptiest register satisfied the strictest policy. | The switch applies regardless of the number of Risks; without it, a Risk-free bundle stays silent as before. Reproduced on a four-object bundle (two requirements, a Set, a Tailoring): 0 failures before, 2 after. | — (bundle-run behaviour, outside the vector format) |
 
+| X-11 *(author, after the merge)* | **A bundle without any Tailoring produced no coverage report at all.** "If there is no tailoring, all controls are in play." | A register beside an untailored catalogue was never asked which controls rest on no risk. | With no Tailoring in the bundle every Requirement in force is selected implicitly (report key `*`); the policy switch and RISK-11 apply to it. A bundle whose Tailorings are all withdrawn still selects nothing. The IFA bundle now reports: 2 in play, 0 justified, both pending. | `no-tailoring-every-requirement-is-in-play`, `no-tailoring-risk-leans-on-a-withdrawn-requirement` |
+
 **Rule table after the review:** RISK-1…RISK-12 as in §11.2, with RISK-7
 and RISK-12 extended to `tailoring-refs` and RISK-11 asked per Tailoring;
 **RISK-13** — *`residual-rating` presupposes `rating`, on the same scale*;
 **RISK-14** *(SHOULD)* — *where more than one Tailoring is in force, a Risk
 names the Tailoring its treatment belongs to*.
 
-**Vectors after the review:** 65 (23 object · 34 bundle · 8 transitions).
-Conformance corpus: **223 vectors, 13 families**. Python reference
-validator: 223/223 and all shipped bundles, ALL GREEN.
+**Vectors after the review:** 67 (23 object · 36 bundle · 8 transitions).
+Conformance corpus: **225 vectors, 13 families**. Python reference
+validator: 225/225 and all shipped bundles, ALL GREEN.
 
 **What the review did not settle.**
 
 1. **The PowerShell twin is still unexecuted**, and now carries more
    unexecuted code: every change above was ported to it by reading. The
-   expected line is `risk: 65 pass, 0 fail`. Backlog #45 stands.
+   expected line is `risk: 67 pass, 0 fail`. Backlog #45 stands.
 2. **X-1 makes the first Risk corpus justify nothing.** Both IFA risks are
    `identified` (§11.4), hence `pending`. That is §12.2 followed to its
-   consequence; the IFA bundle carries no Tailoring, so no report changes.
+   consequence. *(Since X-11 the IFA bundle is reported: two requirements
+   in play, none justified.)*
 3. **`tailoring-refs` is the join that exists, not the one ISO describes.**
    A Statement of Applicability belongs to a scope; the kernel has no edge
    from a Tailoring to a Component. Adding one is a 1.0.0-shape change and
