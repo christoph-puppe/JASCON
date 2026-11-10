@@ -292,7 +292,7 @@ use case (`web_name`, `do_not_link` — pure chrome).
 | SSP | Component (+`authorizations[]`, system-context facet) + Implementation edges; the *document* is an L4 rendering, bonded by an Attestation | Ch. 9, 11 |
 | Assessment Plan / Assessment Results | Assessment (methods via `assessment-criteria@1`) / `Assessment.result` + Finding | Ch. 10 |
 | POA&M | `Finding.actions[]` + Deviation lifecycle | Ch. 10 |
-| Control Mapping Model (2026) | the Mapping type — nine flat fields instead of a document model | Ch. 8 |
+| Control Mapping Model (OSCAL 1.2.0) | the Mapping type — nine flat fields instead of a document model | Ch. 8 |
 | props + `ns` | registered facets (contracted) · annotations (invisible) · **or nothing** — the >70 % that were kernel deficits | Ch. 7 |
 | `label` / `alt-identifier` / `sort-id` props | kernel `label`, `aliases[]`, `sequence` | Ch. 3, 5 |
 | Metaschema, XML/YAML, Schematron | JSON Schema 2020-12 · one serialization · 8 primitives with rationale-on-failure (XML survives only as a one-way transit projection for guarded networks) | Ch. 11–12 |

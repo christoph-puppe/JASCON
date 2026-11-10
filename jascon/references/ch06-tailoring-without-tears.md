@@ -186,7 +186,10 @@ algebra — fits in four steps:
 
 **One:** expand `selects` (set references unfold through Chapter 5's
 nesting; predicates evaluate on their one-hop leash), then apply
-`excludes`. **Two:** validate every operation's address — unresolvable
+`excludes`. Both edges are typed: a `set-ref` names a RequirementSet —
+never another Tailoring, chaining is below —, and an exclude names a
+Requirement or a Set, whose members it removes; anything else is a
+validation error rather than a silent empty selection. **Two:** validate every operation's address — unresolvable
 targets fail closed; and **two operations addressing the same target
 within one Tailoring are a validation error**, full stop. Not last-wins:
 determinism you get either way, but silence you don't — if you want to
