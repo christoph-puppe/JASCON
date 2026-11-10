@@ -159,6 +159,13 @@ implementer), because `deviation-approved` fused two acts by two roles
 and lost the owner — becomes writable the day the source records that
 date.
 
+One consequence follows and is not softened: an imported Risk that stays
+`identified` is *pending* for `risk-coverage` (B.1.9) — it justifies
+nothing, because a justification rests on an assessed risk with a chosen
+option. A Statement of Applicability built on imported OSCAL risks reports
+its controls as uncovered until someone records the level natively. The
+converter reports that gap; it does not close it.
+
 ## 14.4 Playbook: CR26 and other bespoke JSON
 
 The American corpus converts almost by table lookup, because

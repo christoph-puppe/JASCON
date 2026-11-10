@@ -241,7 +241,7 @@ The gap list is Appendix E's and gate items 2–3's work order.
 `treatment` + `treatments` (×1), `review-due` (datetime ×2),
 `Finding.risk-refs` (×2), a `risk-adjustment` Deviation naming its Risk
 (×1). *Declared, not corpus-exercised:* `rating`, `residual-rating`,
-`acceptance`, `shared-with-ref`, `threat-refs`, and the states `assessed`,
+`acceptance`, `shared-with-ref`, `threat-refs`, `tailoring-refs`, and the states `assessed`,
 `treated`, `retired`. That list is not an accident of a small corpus: an
 OSCAL risk carries likelihood and impact but **no level** (so RISK-2 holds
 both risks at `identified`), **no owner** (derived from the imported SSP's
