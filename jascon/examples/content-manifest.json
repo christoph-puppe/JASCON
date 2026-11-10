@@ -1,5 +1,5 @@
 {
- "manifest-version": "1.1",
+ "manifest-version": "1",
  "objects": [
   {
    "id": "https://ns.bsi.bund.de/gspp/req/KONF.14.1",
