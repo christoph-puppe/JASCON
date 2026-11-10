@@ -1,7 +1,7 @@
 # Risk catalogues — ready-made lists of risks (prototype)
 
 *State: 2026-11-10 · version 0.1.0 · lifecycle `draft` · outside the JASCON
-kernel on purpose.*
+kernel, by decision (backlog #53, closed 2026-11-10).*
 
 A risk register usually starts from an empty spreadsheet. This directory
 holds two published lists of typical risks and a tool that imports them into
@@ -110,11 +110,14 @@ the Tailoring, the not-applicable record and the import report.
    and `tailoring-refs` are enough to copy an entry and to point back at
    it. A kernel type for the *entry* is only needed if catalogues are to be
    bundle objects themselves: digested, attestable, and a typed target for
-   the back-reference. That decision is open (backlog #53).
+   the back-reference. **Decided 2026-11-10: they are not.** Catalogues
+   stay outside the kernel; 2.0.0 gets no entry type (backlog #53).
 2. **"Not applicable" has no home.** The reason for not importing an entry
    lives in a side file here. Without it, the completeness check cannot
    tell a decision from a gap. A Tailoring records the same thing for
-   requirements (`excludes[].rationale`); nothing does for risks.
+   requirements (`excludes[].rationale`); nothing does for risks. With
+   catalogues outside the kernel the record stays a side file; its shape
+   is still to be defined (backlog #54).
 3. **A risk list does not justify a baseline.** 24 entries name 78 of 287
    selected controls. Under a policy that demands a risk basis for every
    control (`--require-risk-basis`), 209 stay uncovered however carefully
