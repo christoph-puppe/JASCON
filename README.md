@@ -358,6 +358,34 @@ http://localhost:8000/one-page-apps/jascon-reader.html#load=../converted_example
 jumps to any view, so every screenshot in this README is a link you can
 reproduce.
 
+## Work with it: the app
+
+[`jascon-app/`](jascon-app/) is the reader grown into a set of pages that
+share one core: a hub, and one page each to import OSCAL, browse, tailor,
+map, implement, analyse risk and assess. There is still no build step and no
+server, and a bundle you load stays in your browser.
+
+- **Import** reads an OSCAL catalog or profile; everything after it works on
+  JASCON. The BSI Grundschutz++ rules reproduce the shipped `DE.BSI` bundle
+  object for object, by semantic digest.
+- **Risk** is the page the reader did not have: a register with a heat map,
+  scales with their likelihood-impact matrix, the coverage of the selected
+  requirements, and the import of the risk catalogues under
+  [`risk-catalogs/`](risk-catalogs/).
+- What a page computes about validity comes from a port of
+  `validate_core.py`, run against the conformance vectors. The port is not
+  complete; [`jascon-app/readme.md`](jascon-app/readme.md) says which rule
+  families are in and which are not, and the Python validator stays the
+  reference.
+
+```bash
+python -m http.server 8000
+```
+
+Then open `http://localhost:8000/jascon-app/index.html`. The single-file
+reader above stays as it is, at v1.7.3, as the page that needs no folder
+around it; new work goes into the app.
+
 ## Install as a Claude skill
 
 [`jascon/`](jascon/) is an installable skill that guides an
