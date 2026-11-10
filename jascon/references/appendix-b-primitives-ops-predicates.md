@@ -246,7 +246,10 @@ engine, not by this primitive, so a Tailoring that carries one has an
 concluded from a requirement's absence.
 **Verdict:** a report by default — `uncovered` fails only under the
 program's policy (`--require-risk-basis`; ISO 27001 6.1.3 d says every
-SoA row, BSI 200-2 says the baseline justifies itself).
+SoA row, BSI 200-2 says the baseline justifies itself). Under the switch
+a bundle that carries a Tailoring and no Risk at all fails for every
+selected requirement — the empty register is the limiting case, not an
+exemption.
 `treatment-out-of-scope` fails (RISK-11: a live Risk leans on a control
 the SoA dropped) wherever the bundle has a Tailoring to disagree with —
 including the case where everything was excluded, where the only

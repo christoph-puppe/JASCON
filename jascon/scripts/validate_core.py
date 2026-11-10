@@ -1403,7 +1403,11 @@ def validate_bundle(bdir):
     cov, cerrs, cnotes = risk_coverage(bundle_objs, envelopes=envelopes, trusted=TRUSTED)
     for e in cerrs: fail(section, e)
     for n in cnotes + risk_link_notes(bundle_objs): print(f"    note: {n}")
-    if cov["risks"]:
+    # the report is printed where there is a register to report on; the
+    # policy switch applies regardless - a bundle with a Tailoring and NO
+    # Risk at all is the limiting case of "justified by no Risk", not an
+    # exemption from it
+    if cov["risks"] or REQUIRE_RISK_BASIS:
         for tid, r in cov["tailorings"].items():
             print(f"    risk-coverage: {tid} [{r['tier']}] selected={r['selected']}"
                   f"{'+ (open: predicate select)' if r['open-selection'] else ''} "

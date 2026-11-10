@@ -1561,7 +1561,8 @@ function Validate-Bundle([string]$bdir) {
         foreach ($e in $rc.errs) { FAIL $section $e }
         foreach ($n in $rc.notes) { Write-Host "    note: $n" }
         foreach ($n in (Risk-Link-Notes $bundleObjs)) { Write-Host "    note: $n" }
-        if ($rc.risks -gt 0) {
+        # the policy switch applies even where the bundle carries no Risk at all
+        if ($rc.risks -gt 0 -or $RequireRiskBasis) {
             foreach ($tid in @($rc.report.Keys)) {
                 $r = $rc.report[$tid]
                 $openTag = ''
