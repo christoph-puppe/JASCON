@@ -257,7 +257,7 @@ svg text{font-family:'JetBrains Mono',monospace}
             <span class="mono">objects/</span> tree of small JSON files.
           </p>
           <p style="margin-top:10px;max-width:66ch;color:var(--text-secondary)">
-            Open a bundle folder (e.g. <span class="mono">converted_examples/DE.C5/c5-core-bundle</span>)
+            Open a bundle folder (e.g. <span class="mono">converted_examples/US.CSF/csf-core-bundle</span>)
             with the button on the left — everything runs locally in your browser, nothing is uploaded.
             Then walk the <b>Stages</b>, browse objects, and verify the cryptographic digests yourself.
           </p>
@@ -1270,7 +1270,7 @@ function renderStageAssess() {
   const RESULT_C = { satisfied: "var(--green)", "not-satisfied": "var(--red)", inconclusive: "var(--amber)" };
   const aCards = asmts.map(a => `<div class="stmt">
     <span class="badge" style="border-color:${RESULT_C[a.obj.result] || "var(--border-2)"};color:${RESULT_C[a.obj.result] || "inherit"}">${esc(a.obj.result)}</span>
-    <a class="reflink" data-ref="${esc(a.obj.id)}"><b>${esc(a.obj.title || a.obj.label || a.obj.id.split("/").pop())}</b></a>
+    <a class="reflink" data-ref="${esc(a.obj.id)}"><b>${esc(tt(a.obj.title) || a.obj.label || a.obj.id.split("/").pop())}</b></a>
     <span class="hint">by ${esc((a.obj["performer-ref"] || "").split("/").pop())} · ${esc(a.obj.time || "")}</span>
     <div style="margin-top:4px">${(a.obj["subject-refs"] || []).map(s => refLink(s)).join(" · ")}</div></div>`).join("");
   const cols = { open: [], "in-remediation": [], closed: [] };
