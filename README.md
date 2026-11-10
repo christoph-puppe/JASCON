@@ -32,12 +32,13 @@ something you can click.
 > filenames) deliberately keep the `oscal-semantic-core` string for digest
 > stability — their migration is decided with the `v1.0.0` tag.
 
-![The bundle reader on the FedRAMP CR26 corpus: the Tailor stage derives the authority tier from data (id origin + selected content + attestations), counts same-target conflicts, and gives every operation a modality-lattice verdict — live, client-side.](docs/img/reader-tailor.png)
+![The bundle reader on the IFA GoodRead lifecycle corpus (NIST example content): stage 5, Assess and Attest — Risk, Assessment, Finding and Attestation objects, with the check workbench that mints real Assessment and Finding objects.](docs/img/reader-assess.png)
 
-*Above: the reader on the FedRAMP CR26 corpus. The `tier: authority-claimed`
-chip is **derived from the data**, not asserted; every tailoring operation
-gets a before→after lattice verdict; weakening without a recorded Deviation is
-refused while you type.*
+*Above: the reader on the IFA GoodRead lifecycle corpus — an OSCAL SSP,
+assessment plan, assessment results and POA&M converted to typed objects.
+Stage 5 shows the Risk objects beside the Assessment, its Findings and the
+Attestation; the workbench above them runs a check against the bundle's
+requirements and mints real objects.*
 
 ## Unreleased on this branch: JASCON 2.0.0 — Risk as a tenth kernel type
 
@@ -64,7 +65,7 @@ refused while you type.*
 >   *paths*, not values that arrive — on the IFA corpus 122 content values
 >   do not (the other ten corpora are unmeasured).
 > - **Licences:** the repository is Apache-2.0; the converted corpora were
->   checked against their publishers' terms and five bundles were removed
+>   checked against their publishers' terms and six bundles were removed
 >   ("What ships here", below).
 > - **Why 2.0.0:** the released spec says kernel-shape changes ride a
 >   *major* (D22 rev 3), and the author kept that rule. It is a major by
@@ -222,14 +223,15 @@ uv run --no-project --with jsonschema python jascon/scripts/validate_core.py
 ### The corpus
 
 **What ships here (2026-11-10).** Eleven corpora were converted and
-measured; the tables below are that record. **Six of the bundles are
+measured; the tables below are that record. **Five of the bundles are
 redistributed in this repository**, each with its publisher's terms in a
 `SOURCE-LICENSE.md` beside it: AU.ISM (CC BY 4.0), DE.BSI (CC BY-SA 4.0 —
-the converted bundle is ShareAlike material), the three NIST corpora (CC0 /
-U.S. public domain) and FedRAMP-CR26 (a U.S. Government work; its
-repository states no licence). **Five, marked †, are not**: both CIS
-corpora (CIS's terms forbid derivative works and re-posting) and DE.C5,
-DE.C3A and BE.CyFun (no licence statement could be found). Their converters
+the converted bundle is ShareAlike material) and the three NIST corpora
+(CC0 / U.S. public domain). **Six, marked †, are not**: both CIS corpora
+(CIS's terms forbid derivative works and re-posting); DE.C5, DE.C3A and
+BE.CyFun (no licence statement could be found); and FedRAMP-CR26 (a U.S.
+Government work whose repository states no licence — the doubtful case,
+removed in a commit of its own). Their converters
 and coverage reports remain; each directory says why in
 `NOT-REDISTRIBUTED.md`, and anyone entitled to the publisher's file can
 reproduce the bundle with the converter. See [NOTICE](NOTICE).
@@ -240,7 +242,7 @@ The census corpora (gate 1 — the evidence base the architecture was derived fr
 |---|---|---|---|
 | [AU.ISM](converted_examples/AU.ISM/ism-coverage-report.md) | ACSC ISM, OSCAL 1.1.2 catalog, 1,150 controls | 1,150 Requirements · 561 Sets (P10 fix pass recovered 239 taxonomy sets a slug collision had silently merged) | 36,161 / 36,161 leaf values |
 | [DE.BSI](converted_examples/DE.BSI/bsi-coverage-report.md) | Grundschutz++ v2026-07-16, OSCAL 1.1.3 (MS-TLS dropped by decision — defects reported to BSI) | 651 Requirements carrying 999 statements · 221 params with label/default · 162 Sets | 49,431 / 49,431 |
-| [FedRAMP-CR26](converted_examples/FedRAMP-CR26/cr26-coverage-report.md) | CR26 bespoke JSON, v2026.07.14.01 | 292 Requirements · 373 Mappings · 91 Sets · 4 Tailorings | 7,294 / 7,294 |
+| † [FedRAMP-CR26](converted_examples/FedRAMP-CR26/cr26-coverage-report.md) | CR26 bespoke JSON, v2026.07.14.01 | 292 Requirements · 373 Mappings · 91 Sets · 4 Tailorings | 7,294 / 7,294 |
 
 Validation corpora (converted 2026-07-21; the model held without kernel
 changes beyond the same morning's already-decided D9-rev parameter
@@ -282,7 +284,6 @@ the five stages of the compliance graph *functional*, not diagrammatic:
 
 <p>
 <img alt="Stage 1 · Author: the NIST CSF 2.0 corpus as a catalog tree — functions, categories, subcategories as nested Sets — plus the requirement/set authoring workbench" src="docs/img/reader-author.png" width="49%">
-<img alt="Stage 5 · Assess and Attest: the IFA GoodRead lifecycle corpus — Risk, Assessment, Finding and Attestation objects, with the check workbench" src="docs/img/reader-assess.png" width="49%">
 </p>
 
 - **Read** — objects rendered for humans: kernel fields plain, facets tinted
@@ -333,7 +334,7 @@ python -m http.server 8000
 then open
 
 ```
-http://localhost:8000/one-page-apps/jascon-reader.html#load=../converted_examples/FedRAMP-CR26/cr26-core-bundle/&view=stage:tailor
+http://localhost:8000/one-page-apps/jascon-reader.html#load=../converted_examples/US.IFA-GoodRead/ifa-core-bundle/&view=stage:assess
 ```
 
 — the `#load=<bundle-url>&view=<view>` fragment auto-loads any bundle and
