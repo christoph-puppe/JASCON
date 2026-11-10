@@ -56,26 +56,26 @@
  "treatment": "modify",
  "rating": {
   "level": "hoch",
-  "scale-ref": "https://org.example/scale/3x3",
+  "scale-ref": "https://github.com/christoph-puppe/JASCON/risk-catalogs/scale/risk-level-3",
   "likelihood": {
    "level": "häufig",
-   "scale-ref": "https://org.example/scale/likelihood"
+   "scale-ref": "https://github.com/christoph-puppe/JASCON/risk-catalogs/scale/likelihood-3"
   },
   "impact": {
    "level": "mittel",
-   "scale-ref": "https://org.example/scale/impact"
+   "scale-ref": "https://github.com/christoph-puppe/JASCON/risk-catalogs/scale/impact-3"
   }
  },
  "residual-rating": {
   "level": "gering",
-  "scale-ref": "https://org.example/scale/3x3",
+  "scale-ref": "https://github.com/christoph-puppe/JASCON/risk-catalogs/scale/risk-level-3",
   "likelihood": {
    "level": "selten",
-   "scale-ref": "https://org.example/scale/likelihood"
+   "scale-ref": "https://github.com/christoph-puppe/JASCON/risk-catalogs/scale/likelihood-3"
   },
   "impact": {
    "level": "mittel",
-   "scale-ref": "https://org.example/scale/impact"
+   "scale-ref": "https://github.com/christoph-puppe/JASCON/risk-catalogs/scale/impact-3"
   }
  }
 }

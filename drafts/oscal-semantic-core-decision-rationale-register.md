@@ -1938,3 +1938,30 @@ impact come without a level and stay in the holding facet.
 executed), 6 vectors (risk 73, corpus 240), the example Risk and the
 catalogue demo.
 
+## Amendments — scale definitions (2026-11-10)
+
+**Trigger.** The author: "Likelihood should be editable, wording and how
+many levels. Same as Auswirkung." Asked where the definitions should
+live, the author chose "pinned in manifest" over a new kernel type and
+over keeping them outside the kernel.
+**Decision (D3.7, D23).** A scale definition is a file the content
+manifest pins under `scales`: id, version, and levels listed lowest
+first, each a code with optional label and description. SCALE-1/2/3.
+**Customer.** The organisation whose method has five likelihood levels
+and three impact levels, in its own words — and the reader of its
+register, who can now see that.
+**Simplicity.** The pin mechanism already exists for facet schemas; the
+manifest gains one optional list and the kernel no type.
+**Rejected.** *A kernel type Scale* — an eleventh type and a second
+exception to D22 for something that needs neither lifecycle nor
+attestation of its own. *Outside the kernel* — the kernel validator would
+keep treating levels as free strings while the kernel carries the fields
+that use them. *A fixed kernel scale* — the request itself.
+**Trade-off, accepted.** A scale cannot be signed or superseded on its
+own; a new version is a new pin. The order is all the kernel knows: it
+does not say how likelihood and impact combine.
+**Shipped with it.** Schema, both validators (PowerShell by reading, not
+executed), `scale-vectors.json` (9 — the fifteenth family, corpus 249),
+three scales in the example bundle, three starting scales in
+`risk-catalogs/scales/` pinned by the catalogue demo.
+

@@ -1,0 +1,42 @@
+{
+ "id": "https://cso.example/scale/bsi-200-3-matrix",
+ "version": "1.0.0",
+ "title": {
+  "en": "Risk categories",
+  "de": "Risikokategorien"
+ },
+ "description": {
+  "en": "The example organisation's risk categories, modelled on BSI-Standard 200-3. Lowest first.",
+  "de": "Die Risikokategorien der Beispielorganisation, angelehnt an BSI-Standard 200-3. Niedrigste zuerst."
+ },
+ "levels": [
+  {
+   "level": "gering",
+   "label": {
+    "de": "gering",
+    "en": "low"
+   }
+  },
+  {
+   "level": "mittel",
+   "label": {
+    "de": "mittel",
+    "en": "medium"
+   }
+  },
+  {
+   "level": "hoch",
+   "label": {
+    "de": "hoch",
+    "en": "high"
+   }
+  },
+  {
+   "level": "sehr hoch",
+   "label": {
+    "de": "sehr hoch",
+    "en": "very high"
+   }
+  }
+ ]
+}

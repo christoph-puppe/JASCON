@@ -43,6 +43,7 @@ TYPES = ["requirement", "requirementSet", "tailoring", "mapping", "component",
 REGISTRY = jsonschema.validators.Draft202012Validator
 VALIDATORS = {t: REGISTRY({"$ref": f"#/$defs/{t}", "$defs": SCHEMA["$defs"]}) for t in TYPES}
 VALIDATORS["contentManifest"] = REGISTRY({"$ref": "#/$defs/contentManifest", "$defs": SCHEMA["$defs"]})
+VALIDATORS["scale"] = REGISTRY({"$ref": "#/$defs/scale", "$defs": SCHEMA["$defs"]})
 
 # normative stdlib facet descriptors (gate 2); payload validation per backlog #17
 STDLIB, STDLIB_RAW = {}, {}
@@ -901,9 +902,11 @@ def run_composition():
 KERNEL_VERSION = "2.0.0"
 KERNEL_SUPPORTED = ("1.0.0", "2.0.0")      # 2.0.0 is a superset of 1.0.0, measured
 
-def kernel_needed(objs):
+def kernel_needed(objs, manifest=None):
     """-> (minimum kernel version the content needs, the first object that
-    needs it). 2.0.0 added the Risk type and Finding.risk-refs."""
+    needs it). 2.0.0 added the Risk type, Finding.risk-refs and pinned
+    scale definitions."""
+    if manifest and manifest.get("scales"): return "2.0.0", "the manifest pins scale definitions"
     for oid in sorted(objs):
         t, o = objs[oid]
         if t == "risk": return "2.0.0", f"{oid} is a Risk"
@@ -918,7 +921,7 @@ def kernel_pin_errors(manifest, objs):
         return [f"manifest pins kernel-version {pin}; this validator implements {KERNEL_VERSION} "
                 f"and reads {', '.join(KERNEL_SUPPORTED)} (KERNEL-2: a tool stops at a kernel it does not "
                 f"implement, and says which)"]
-    need, why = kernel_needed(objs)
+    need, why = kernel_needed(objs, manifest)
     if need != "1.0.0" and pin != need:
         return [f"{why}, which needs kernel {need}, but the manifest "
                 f"{'pins kernel-version ' + pin if pin else 'pins no kernel-version'} "
@@ -940,6 +943,105 @@ def run_kernel():
             if not any(frag in e for e in errs): okc = False
         if okc: ok("kernel")
         else: fail("kernel", f"{case['name']}: expected {case.get('expected-fails', 0)} {case.get('expected-frags')}, got {errs}")
+
+# ---------------- pinned scale definitions (SCALE-1..3) ----------------
+# A scale is the organisation's own: how many levels, and what they are
+# called. Its definition is a small file the manifest pins by digest, the
+# way it pins facet schemas - not an object, not a kernel type. Levels are
+# listed from lowest to highest. A `scale-ref` that no pin answers stays
+# what it was: a landmark, its levels opaque.
+def scale_definition_errors(sd, pin=None):
+    """SCALE-1: a pinned definition has the scale shape, the id and version
+    its pin states, and no level twice."""
+    name = (pin or {}).get("path") or (sd.get("id") if isinstance(sd, dict) else "?")
+    if not VALIDATORS["scale"].is_valid(sd):
+        e = next(VALIDATORS["scale"].iter_errors(sd))
+        return [f"{name}: not a scale definition: {e.message[:110]} (SCALE-1)"]
+    errs = []
+    codes = [lv["level"] for lv in sd["levels"]]
+    dup = sorted({c for c in codes if codes.count(c) > 1})
+    if dup: errs.append(f"{name}: level(s) {dup} listed twice - a level has one place in the order (SCALE-1)")
+    if pin and (pin.get("id") != sd["id"] or pin.get("exact-version") != sd["version"]):
+        errs.append(f"{name}: pinned as {pin.get('id')} {pin.get('exact-version')}, the file says "
+                    f"{sd['id']} {sd['version']} (SCALE-1: the pin and the definition agree)")
+    return errs
+
+def _risk_levels(o):
+    """every level a Risk states: (where, level, scale-ref)"""
+    for field in ("rating", "residual-rating"):
+        r = o.get(field)
+        if not isinstance(r, dict): continue
+        yield field, r.get("level"), r.get("scale-ref")
+        for part in ("likelihood", "impact"):
+            p = r.get(part)
+            if isinstance(p, dict): yield f"{field}.{part}", p.get("level"), p.get("scale-ref")
+
+def scale_errors(scales, objs):
+    """scales: {scale id: definition}. -> (errors, notes).
+    SCALE-2: a level stated on a pinned scale is one of that scale's levels.
+    SCALE-3 (SHOULD): a residual level is not above the level it remains of."""
+    errs, notes = [], []
+    order = {sid: {lv["level"]: i for i, lv in enumerate(sd["levels"])} for sid, sd in scales.items()}
+    for oid in sorted(objs):
+        t, o = objs[oid]
+        if t != "risk": continue
+        seen = {}
+        for where, level, sref in _risk_levels(o):
+            if sref not in order: continue
+            if level not in order[sref]:
+                errs.append(f"{oid}: {where} level '{level}' is not a level of {sref} "
+                            f"(its levels: {', '.join(order[sref])}) (SCALE-2: a level is one the scale defines)")
+            else:
+                seen[where] = (order[sref][level], sref, level)
+        for part in ("", ".likelihood", ".impact"):
+            a, b = seen.get("rating" + part), seen.get("residual-rating" + part)
+            if a and b and a[1] == b[1] and b[0] > a[0]:
+                notes.append(f"{oid}: residual{part or ' level'} '{b[2]}' is above '{a[2]}' on {a[1]} "
+                             f"(SCALE-3, SHOULD: what remains after treatment is not more than what was there)")
+    return errs, notes
+
+def load_scale_pins(bdir, manifest, section):
+    """-> {scale id: definition} for the manifest's `scales` pins; failures
+    (missing file, digest, SCALE-1) are reported on `section`."""
+    scales = {}
+    for pin in manifest.get("scales", []) or []:
+        fp = os.path.join(bdir, pin["path"])
+        if not os.path.exists(fp):
+            fail(section, f"{pin['path']}: pinned scale definition listed but missing"); continue
+        raw = open(fp, "rb").read()
+        if pkg_digest(raw) != pin["digest"]:
+            fail(section, f"{pin['path']}: pinned scale definition digest mismatch{eol_hint(raw, pin['digest'])}")
+        try: sd = json.loads(raw.decode("utf-8"))
+        except Exception as e:
+            fail(section, f"{pin['path']}: pinned scale definition unreadable: {e}"); continue
+        errs = scale_definition_errors(sd, pin)
+        for e in errs: fail(section, e)
+        if not errs: scales[sd["id"]] = sd
+    return scales
+
+def run_scale():
+    v = json.load(open(os.path.join(CONF, "scale-vectors.json"), encoding="utf-8"))
+    for case in v["vectors"]:
+        errs, scales = [], {}
+        for sd in case["scales"]:
+            e = scale_definition_errors(sd)
+            errs += e
+            if not e: scales[sd["id"]] = sd
+        objs = {}
+        for o in case["objects"]:
+            t = inferType_single(o)
+            if t: objs[o["id"]] = (t, o)
+        e2, notes = scale_errors(scales, objs)
+        errs += e2
+        okc = len(errs) == case.get("expected-fails", 0) and len(objs) == len(case["objects"])
+        for frag in case.get("expected-frags", []):
+            if not any(frag in e for e in errs): okc = False
+        for frag in case.get("expected-notes", []):
+            if not any(frag in n for n in notes): okc = False
+        if case.get("expected-notes") == [] and notes: okc = False
+        if okc: ok("scale")
+        else: fail("scale", f"{case['name']}: expected {case.get('expected-fails', 0)} {case.get('expected-frags')} "
+                            f"notes {case.get('expected-notes')}, got {errs} notes {notes}")
 
 # ---------------- RISK-1..6: the schema enforces, this names (CP-RISK-1) ----------------
 # The six shape rules are JSON-Schema conditionals, so ANY schema validator
@@ -1472,6 +1574,9 @@ def validate_bundle(bdir):
                                    envelopes=envelopes, trusted=TRUSTED):
         fail(section, e)
     for e in kernel_pin_errors(manifest, bundle_objs): fail(section, e)
+    s_errs, s_notes = scale_errors(load_scale_pins(bdir, manifest, section), bundle_objs)
+    for e in s_errs: fail(section, e)
+    for n in s_notes: print(f"    note: {n}")
     # CP-RISK-1: B.1.9 risk-coverage report (+ RISK-11 errors), RISK-9/10 notes
     cov, cerrs, cnotes = risk_coverage(bundle_objs, envelopes=envelopes, trusted=TRUSTED)
     for e in cerrs: fail(section, e)
@@ -1528,6 +1633,7 @@ def validate_examples():
     else: fail(section, "content-manifest.json: manifest schema violation")
     listed = {e["path"]: e for e in manifest.get("objects", [])}
     pins = {fe["path"]: fe for fe in manifest.get("facet-schemas", [])}
+    scale_paths = {sp["path"] for sp in manifest.get("scales", []) or []}
     for rel, fe in pins.items():
         fp = os.path.join(exdir, rel)
         if not os.path.exists(fp): fail(section, f"{rel}: pinned facet schema listed but missing"); continue
@@ -1537,7 +1643,7 @@ def validate_examples():
     for rel in sorted(set(listed) - set(os.listdir(exdir))):
         fail(section, f"{rel}: listed but missing")
     for fn in sorted(os.listdir(exdir)):
-        if not fn.endswith(".json") or fn == "content-manifest.json" or fn in pins:
+        if not fn.endswith(".json") or fn == "content-manifest.json" or fn in pins or fn in scale_paths:
             continue
         raw = open(os.path.join(exdir, fn), "rb").read()
         obj = json.loads(raw.decode("utf-8"))
@@ -1558,6 +1664,9 @@ def validate_examples():
             fail(section, f"{fn}: manifest id != object id")
     for e in closure_errors(exobjs): fail(section, e)
     for e in kernel_pin_errors(manifest, exobjs): fail(section, e)
+    s_errs, s_notes = scale_errors(load_scale_pins(exdir, manifest, section), exobjs)
+    for e in s_errs: fail(section, e)
+    for n in s_notes: print(f"    note: {n}")
     cov, cerrs, cnotes = risk_coverage(exobjs)
     for e in cerrs: fail(section, e)
     for n in cnotes + risk_link_notes(exobjs): print(f"    note: {n}")
@@ -1597,8 +1706,8 @@ if "--compose" in _argv:
     sys.exit(1 if errs else 0)
 
 print("== conformance corpus ==")
-run_jcs(); run_modality(); run_parameters(); run_tailoring(); run_attestation(); run_facets(); run_references(); run_lifecycle(); run_tiers(); run_dsse(); run_composition(); run_conditional(); run_risk(); run_kernel()
-for k in ("jcs", "modality", "parameter", "tailoring", "attestation", "facet", "reference", "lifecycle", "tier", "dsse", "composition", "conditional", "risk", "kernel"):
+run_jcs(); run_modality(); run_parameters(); run_tailoring(); run_attestation(); run_facets(); run_references(); run_lifecycle(); run_tiers(); run_dsse(); run_composition(); run_conditional(); run_risk(); run_kernel(); run_scale()
+for k in ("jcs", "modality", "parameter", "tailoring", "attestation", "facet", "reference", "lifecycle", "tier", "dsse", "composition", "conditional", "risk", "kernel", "scale"):
     print(f"  {k}: {counts[k]} pass, {counts[k + ':FAIL']} fail")
 
 print("== bundles ==")

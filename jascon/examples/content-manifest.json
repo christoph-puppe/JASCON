@@ -113,5 +113,25 @@
    "path": "authorization-summary.md",
    "digest": "sha256:36405fcbe4e19ba3305b56c129e70925a27f4a16a10216a2ba3e0a13c625857e"
   }
+ ],
+ "scales": [
+  {
+   "id": "https://cso.example/scale/bsi-200-3-matrix",
+   "exact-version": "1.0.0",
+   "digest": "sha256:40124c4b4749f68e341f66aa4e0cd6b648d561c15c45a71e2988b429d3cf1b0f",
+   "path": "scale-bsi-200-3-matrix.json"
+  },
+  {
+   "id": "https://cso.example/scale/bsi-200-3-eintrittshaeufigkeit",
+   "exact-version": "1.0.0",
+   "digest": "sha256:0c78be2b94578ac19cad65352375bfcd20848ad17dd7898fdbfdf61f055149c4",
+   "path": "scale-bsi-200-3-eintrittshaeufigkeit.json"
+  },
+  {
+   "id": "https://cso.example/scale/bsi-200-3-schadenshoehe",
+   "exact-version": "1.0.0",
+   "digest": "sha256:6bc5a53ebd08b4d437863ce9ad75c9196620f1857423f73f03c6e3775beaf84c",
+   "path": "scale-bsi-200-3-schadenshoehe.json"
+  }
  ]
 }

@@ -12,7 +12,9 @@ Builds a complete JASCON bundle that the reference validator accepts:
   4. plays the organisation for two of the imported risks - assesses them
      and chooses a treatment option - so that the coverage report shows
      covered, pending and uncovered requirements side by side;
-  5. writes the content manifest, pinned to kernel 2.0.0.
+  5. pins the three starting scales of risk-catalogs/scales/ so that the
+     validator checks every level the two risks state;
+  6. writes the content manifest, pinned to kernel 2.0.0.
 
 Usage:
   python3 risk-catalogs/tools/build_demo.py OUT_DIR
@@ -28,6 +30,7 @@ ROOT = os.path.normpath(os.path.join(HERE, "..", ".."))
 SOURCE = os.path.join(ROOT, "converted_examples", "US.SP800-53", "sp800-53-core-bundle")
 CATALOG = os.path.join(ROOT, "risk-catalogs", "office-it")
 DEMO = os.path.join(ROOT, "risk-catalogs", "demo", "office-it-moderate")
+SCALES = os.path.join(ROOT, "risk-catalogs", "scales")
 ORG = "https://org.example"
 
 
@@ -84,7 +87,18 @@ def main():
     # label: (level, likelihood, impact) before and after treatment
     decided = {"OFF-02": (("hoch", "mittel", "hoch"), ("mittel", "selten", "hoch")),
                "OFF-04": (("hoch", "häufig", "mittel"), ("gering", "selten", "mittel"))}
-    scale, s_like, s_imp = f"{ORG}/scale/3x3", f"{ORG}/scale/likelihood", f"{ORG}/scale/impact"
+    # the organisation uses the three starting scales as published; it could
+    # equally copy them, reword them and change the number of levels
+    scale_defs = {fn: json.load(open(os.path.join(SCALES, fn), encoding="utf-8"))
+                  for fn in ("risk-level-3.json", "likelihood-3.json", "impact-3.json")}
+    scale, s_like, s_imp = (scale_defs[fn]["id"] for fn in ("risk-level-3.json", "likelihood-3.json", "impact-3.json"))
+    manifest["scales"] = []
+    for fn, sd in scale_defs.items():
+        raw = open(os.path.join(SCALES, fn), "rb").read()
+        os.makedirs(os.path.join(out, "scales"), exist_ok=True)
+        with open(os.path.join(out, "scales", fn), "wb") as f: f.write(raw)
+        manifest["scales"].append({"id": sd["id"], "exact-version": sd["version"],
+                                   "digest": "sha256:" + hashlib.sha256(raw).hexdigest(), "path": f"scales/{fn}"})
     def rated(level, likelihood, impact):
         return {"level": level, "scale-ref": scale,
                 "likelihood": {"level": likelihood, "scale-ref": s_like},
