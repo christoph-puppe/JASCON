@@ -1542,6 +1542,38 @@ def validate_object(section, path, obj):
                         fail(section, f"{path}: facet {fid} by-statement key '{sid}' names no statement (D10 rev)")
     return t
 
+def load_facet_pins(bdir, manifest, section):
+    """The facet schemas a manifest pins: files must exist, digests must
+    verify, and they form the registry for non-stdlib facet payload
+    validation (#17). ONE loader for validate_bundle and validate_examples:
+    the example pass had its own copy that checked existence and digest
+    only, so a stub pinned under a stdlib id passed the default run and
+    failed `validate_core.py jascon/examples` (D26) - two verdicts on one
+    folder. Returns (pinned: id -> validator, pinned_decl: id -> classes)."""
+    pinned = {}
+    pinned_decl = {}
+    for fe in manifest.get("facet-schemas", []):
+        fp = os.path.join(bdir, fe["path"])
+        if not os.path.exists(fp):
+            fail(section, f"{fe['path']}: pinned facet schema listed but missing"); continue
+        raw = open(fp, "rb").read()
+        if pkg_digest(raw) != fe["digest"]:
+            fail(section, f"{fe['path']}: pinned facet schema digest mismatch{eol_hint(raw, fe['digest'])}")
+        try:
+            sd = json.loads(raw.decode("utf-8"))
+            pinned[sd["id"]] = REGISTRY(sd.get("schema", {"type": "object"}))
+            # P10 #29: the pin's declaration feeds the attach/detach op-law;
+            # a pin that omits it is dangerous-by-default (D10: all four)
+            pinned_decl[sd["id"]] = sd.get("modifies-semantics",
+                                           ["assessment", "tailoring", "selection", "rendering"])
+            # #26 (D26 final): a pin of a STDLIB id must be the descriptor
+            # VERBATIM - the pin and the normative schema cannot diverge
+            if sd["id"] in STDLIB_RAW and canonical(sd.get("schema")) != canonical(STDLIB_RAW[sd["id"]]):
+                fail(section, f"{fe['path']}: pin of stdlib facet {sd['id']} DIVERGES from the normative descriptor (D26)")
+        except Exception as e:
+            fail(section, f"{fe['path']}: pinned facet schema unreadable: {e}")
+    return pinned, pinned_decl
+
 def validate_bundle(bdir):
     section = os.path.relpath(bdir, ROOT).replace("\\", "/")
     mpath = os.path.join(bdir, "content-manifest.json")
@@ -1575,30 +1607,7 @@ def validate_bundle(bdir):
             fail(section, f"{rel}: object id already used by {seen_ids[obj['id']]} (unique-within — the twin-catalog corpse)")
         seen_ids[obj.get("id")] = rel
         if t: bundle_objs[obj["id"]] = (t, obj)
-    # pinned facet schemas: files must exist, digests must verify, and they
-    # form the registry for non-stdlib facet payload validation (#17)
-    pinned = {}
-    pinned_decl = {}
-    for fe in manifest.get("facet-schemas", []):
-        fp = os.path.join(bdir, fe["path"])
-        if not os.path.exists(fp):
-            fail(section, f"{fe['path']}: pinned facet schema listed but missing"); continue
-        raw = open(fp, "rb").read()
-        if pkg_digest(raw) != fe["digest"]:
-            fail(section, f"{fe['path']}: pinned facet schema digest mismatch{eol_hint(raw, fe['digest'])}")
-        try:
-            sd = json.loads(raw.decode("utf-8"))
-            pinned[sd["id"]] = REGISTRY(sd.get("schema", {"type": "object"}))
-            # P10 #29: the pin's declaration feeds the attach/detach op-law;
-            # a pin that omits it is dangerous-by-default (D10: all four)
-            pinned_decl[sd["id"]] = sd.get("modifies-semantics",
-                                           ["assessment", "tailoring", "selection", "rendering"])
-            # #26 (D26 final): a pin of a STDLIB id must be the descriptor
-            # VERBATIM - the pin and the normative schema cannot diverge
-            if sd["id"] in STDLIB_RAW and canonical(sd.get("schema")) != canonical(STDLIB_RAW[sd["id"]]):
-                fail(section, f"{fe['path']}: pin of stdlib facet {sd['id']} DIVERGES from the normative descriptor (D26)")
-        except Exception as e:
-            fail(section, f"{fe['path']}: pinned facet schema unreadable: {e}")
+    pinned, pinned_decl = load_facet_pins(bdir, manifest, section)
     # DSSE envelopes (#24): envelope-ref resolves to a file BESIDE the
     # manifest (nothing signed contains its own signature, D3); with
     # --trusted-keys the run is in verification mode.
@@ -1692,12 +1701,7 @@ def validate_examples():
     listed = {e["path"]: e for e in manifest.get("objects", [])}
     pins = {fe["path"]: fe for fe in manifest.get("facet-schemas", [])}
     scale_paths = {sp["path"] for sp in manifest.get("scales", []) or []}
-    for rel, fe in pins.items():
-        fp = os.path.join(exdir, rel)
-        if not os.path.exists(fp): fail(section, f"{rel}: pinned facet schema listed but missing"); continue
-        raw = open(fp, "rb").read()
-        if pkg_digest(raw) != fe["digest"]:
-            fail(section, f"{rel}: pinned facet schema digest mismatch{eol_hint(raw, fe['digest'])}")
+    pinned, _ = load_facet_pins(exdir, manifest, section)   # the same loader as validate_bundle (D26 included)
     for rel in sorted(set(listed) - set(os.listdir(exdir))):
         fail(section, f"{rel}: listed but missing")
     for fn in sorted(os.listdir(exdir)):
@@ -1721,6 +1725,9 @@ def validate_examples():
         if obj.get("id") != entry["id"]:
             fail(section, f"{fn}: manifest id != object id")
     for e in closure_errors(exobjs): fail(section, e)
+    # facet payloads against stdlib / the pins just loaded (#17) - the
+    # example pass loaded the pins and never applied them
+    for e in facet_errors([(oid, o) for oid, (t, o) in exobjs.items()], pinned): fail(section, e)
     for e in kernel_pin_errors(manifest, exobjs): fail(section, e)
     s_errs, s_notes = scale_errors(load_scale_pins(exdir, manifest, section), exobjs)
     for e in s_errs: fail(section, e)

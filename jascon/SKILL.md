@@ -38,7 +38,7 @@ You must strictly adhere to the guidelines detailed in the handbook chapters and
 ### Requirement 6: Facet Extensions
 - **Description:** Extend the kernel only via registered, schema-pinned facets (`modifies-semantics`, fail-closed rules) or annotations (purely styling/chrome). Never add custom top-level fields to kernel objects.
 - **Reference Document:** [Chapter 7 — Facets: Extending Without Fracturing](references/ch07-facets-extending-without-fracturing.md)
-- **Companion Examples:** [gspp-taxonomy-1.0.0.json](examples/gspp-taxonomy-1.0.0.json) (Custom facet schema), [assessment-criteria-1.0.0-stub.json](examples/assessment-criteria-1.0.0-stub.json) (Descriptor stub)
+- **Companion Examples:** [gspp-taxonomy-1.0.0.json](examples/gspp-taxonomy-1.0.0.json) (Custom facet schema), [assessment-criteria-1.0.0.json](examples/assessment-criteria-1.0.0.json) (Stdlib descriptor, pinned verbatim)
 
 ### Requirement 7: Mappings and Crosswalks
 - **Description:** Map relationships using `Mapping` objects with IR 8477/OLIR relationship semantics plus the stdlib extension code `supplements` (supplement-pattern attachment; non-chaining). Always map at the statement-level scope for high precision.
@@ -128,7 +128,7 @@ The [examples/](examples/) directory contains a complete, self-consistent bundle
   - [authorization-summary.md](examples/authorization-summary.md) — L4 markdown report.
 - **Descriptors & Custom Facets:**
   - [gspp-taxonomy-1.0.0.json](examples/gspp-taxonomy-1.0.0.json) — Custom facet descriptor schema.
-  - [assessment-criteria-1.0.0-stub.json](examples/assessment-criteria-1.0.0-stub.json) — Extension descriptor stub.
+  - [assessment-criteria-1.0.0.json](examples/assessment-criteria-1.0.0.json) — Stdlib descriptor, pinned verbatim (D26).
 
 ## Migration Scripts Reference
 

@@ -31,6 +31,10 @@ were ported the same way and are equally UNEXECUTED.
 The two new call sites are guarded so that a port defect surfaces as a
 counted failure naming its line instead of ending the run; remove the
 guards after the first green run.
+The default run now also validates the skill's example bundle
+(jascon\examples) through Validate-Bundle, so the D26 rule (a pin of a
+stdlib facet id is the descriptor verbatim) reaches that folder without
+an argument. Written by reading, equally UNEXECUTED, and guarded.
 
 Usage: powershell -ExecutionPolicy Bypass -File validate_core.ps1 [bundle-dirs...]
        -VectorsOnly to skip bundles; -TrustedKeys file.json for verification mode;
@@ -1901,7 +1905,8 @@ Write-Host ("  vectors wall-clock: {0:n1} s" -f $SW.Elapsed.TotalSeconds)
 if (-not $VectorsOnly) {
     Write-Host '== bundles =='
     $targets = $Bundles
-    if (@($targets).Count -eq 0) {
+    $defaultRun = (@($targets).Count -eq 0)
+    if ($defaultRun) {
         $targets = @()
         $ce = Join-Path $ROOT 'converted_examples'
         foreach ($corpus in (Get-ChildItem $ce -Directory | Sort-Object Name)) {
@@ -1909,6 +1914,21 @@ if (-not $VectorsOnly) {
                 if ($d.Name.EndsWith('-bundle')) { $targets += $d.FullName } } }
     }
     foreach ($t in $targets) { Validate-Bundle (Resolve-Path $t).Path }
+    # The skill's example bundle belongs to the default run, as it does in
+    # validate_core.py ("skill-examples"). It was absent here, so a pin in
+    # jascon\examples that diverged from its stdlib descriptor (D26) was
+    # seen only by an explicit bundle argument. It goes through
+    # Validate-Bundle - the ONE pin loop of this file - so the default run
+    # and an explicit run cannot give two verdicts on the folder.
+    # Not covered here (validate_core.py does both): the Attestation beside
+    # the manifest, and files in the flat folder that the manifest omits.
+    # NOT EXECUTED (2026-11-10, no PowerShell runtime): guarded like the
+    # other unexecuted call sites; remove the guard after the first green run.
+    if ($defaultRun) {
+        try { Validate-Bundle (Join-Path $SKILL 'examples') } catch {
+            FAIL 'jascon/examples' "PORT ERROR (example bundle in the default run not yet executed on a real runtime - report this line): $($_.Exception.Message) @ line $($_.InvocationInfo.ScriptLineNumber)"
+        }
+    }
 }
 $SW.Stop()
 Write-Host ("total wall-clock: {0:n1} s" -f $SW.Elapsed.TotalSeconds)
