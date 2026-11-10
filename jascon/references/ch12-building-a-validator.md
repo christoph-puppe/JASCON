@@ -349,11 +349,8 @@ of the specification's final version is gated on two independent
 implementations agreeing with the corpus — the CommonMark discipline,
 adopted whole.
 
-The v0.6 gate was the list of four deliveries the v0.5 specification
-demanded before a 1.0 could exist: converters with computed coverage
-for the three census corpora, an executable schema with a conformance
-corpus, a lifecycle corpus beyond catalogues, and this measurement. It
-ran in July 2026 (specification IV.5). The measured numbers at 1.0.0:
+The harness ran in July 2026 (specification IV.5). The measured
+numbers at 1.0.0:
 994 non-blank, non-comment lines of Python plus one schema library,
 1,163 lines of dependency-free PowerShell 5.1, both green on the same
 157 vectors, against 30,905 lines for the OSCAL 1.x toolchain it was
