@@ -118,7 +118,7 @@
   {
    "id": "https://cso.example/scale/bsi-200-3-matrix",
    "exact-version": "1.0.0",
-   "digest": "sha256:40124c4b4749f68e341f66aa4e0cd6b648d561c15c45a71e2988b429d3cf1b0f",
+   "digest": "sha256:bd7c79c14fa0431241461769d3de8303c7504ebab2ea2210fbb8f7f967c5b832",
    "path": "scale-bsi-200-3-matrix.json"
   },
   {

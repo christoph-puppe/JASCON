@@ -137,7 +137,11 @@ risk level, three levels each, German codes with English labels. They are
 there to be changed: copy a file, reword the levels, add or remove some,
 give it your own id and version, and pin it in your bundle's manifest
 under `scales`. The validator then checks every level your risks state
-against your definition. The demo pins the three files as published.
+against your definition. The risk-level scale also carries a starting
+matrix over the other two; a rating that states likelihood and impact
+must then state the level the matrix gives, or say why not. Change the
+cells as freely as the levels. The demo pins the three files as
+published.
 
 ## Limits
 

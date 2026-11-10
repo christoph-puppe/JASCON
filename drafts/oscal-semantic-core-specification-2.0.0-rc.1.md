@@ -43,7 +43,7 @@ released; this text adds one kernel type — **Risk** (D23) — and the ninth
 primitive that computes over it. It is a major version by the rule of
 D22 rev 3, not because anything breaks: all 6,914 objects of the 1.0.0
 corpus validate unchanged under the 2.0.0 schema, so a 1.0.0 bundle is a
-2.0.0 bundle. **Measured at rc.1:** a 249-vector conformance corpus in
+2.0.0 bundle. **Measured at rc.1:** a 258-vector conformance corpus in
 fifteen families; the Python reference validator green on it and on
 every bundle that ships; the first Risk corpus (two Risk objects
 converted from an OSCAL POA&M), and what that corpus shows the fourth
@@ -286,7 +286,12 @@ relation (v0.4 — corrected).
    and version its pin states, and no level twice; **SCALE-2** — a level
    a Risk states on a pinned scale is one of that scale's levels;
    **SCALE-3** *(SHOULD)* — a residual level is not above the level it
-   remains of, which the order makes visible; noted, never failed. A
+   remains of, which the order makes visible; noted, never failed;
+   **SCALE-4** — the definition of a level scale MAY carry the
+   organisation's `matrix` over two other pinned scales (one cell for
+   every pair of their levels, each cell one of its own levels — part of
+   SCALE-1), and a rating that states both inputs then states the level
+   of their cell or an `override-rationale` (D23). A
    `scale-ref` that no pin answers stays a landmark and its levels
    opaque, exactly as before. A manifest that pins scales names kernel
    2.0.0 (KERNEL-1).
@@ -859,10 +864,12 @@ type. Field table: Appendix A.9b.
 it, what it says, its state, a level *as an opaque label on a named
 scale*, the treatment option, the requirements — to the statement — that
 carry the decision, who accepted what remains, and when it is reviewed.
-Not kernel: how the level was computed. The matrix that turns likelihood
-and impact into a level, CVSS vectors, FAIR distributions and impact per
-dimension differ by framework and by fashion and stay in facets
-(`risk-analysis@1`, parked — Appendix D).
+Not kernel: a scoring *method*. CVSS vectors, FAIR distributions and
+impact per dimension differ by framework and by fashion and stay in
+facets (`risk-analysis@1`, parked — Appendix D). The organisation's own
+*matrix* — which likelihood and impact yield which level — is neither
+kernel nor facet: it is part of the pinned definition of the level scale
+(D3.7, below).
 `rating.level` values compare as strings within one `scale-ref` and never
 across scales (D2: identifiers are opaque); a validator checks presence
 and consistency, never magnitude.
@@ -877,9 +884,9 @@ the consequences and the likelihood to be assessed before the level is
 determined, BSI 200-3 names Eintrittshäufigkeit and Schadenshöhe,
 SP 800-30 likelihood and impact, and OSCAL's risk data carries exactly
 these two. Nested in the rating they come with a residual pair for free
-and add no top-level field. The kernel computes nothing from them: it
-does not check that a level follows from its inputs, because the matrix is
-not kernel. One impact per rating; impact per dimension (confidentiality,
+and add no top-level field. The kernel prescribes no way of
+combining them; where the organisation has pinned its matrix, the level
+is held to it (SCALE-4, below). One impact per rating; impact per dimension (confidentiality,
 integrity, availability, safety) is the facet's. One consequence, stated:
 both sit *inside* a rating, and a rating needs a level — so OSCAL's
 likelihood and impact, which come without a level, still cannot land in
@@ -892,9 +899,26 @@ impact." A level is still an opaque string to the kernel, and a
 scale's definition as a pinned file (D3.7): the levels in order, in the
 organisation's own words and number. Where it does, the validator checks
 every level against it (SCALE-2) — a typo is no longer a new level — and
-notes a residual that sits above what it remains of (SCALE-3). The
-kernel still combines nothing: no rule says which likelihood and impact
-yield which level.
+notes a residual that sits above what it remains of (SCALE-3). 
+
+**The matrix lives in the level scale *(author decision, 2026-11-10)*.**
+As landed, this text assigned the matrix "to a facet". No such facet is
+registered, and a facet is the wrong home in any case: it attaches to an
+object, and a matrix belongs to a method and three scales, not to any
+one Risk. The matrix is therefore an optional member of the definition
+of the scale it produces levels on: `matrix {likelihood-scale,
+impact-scale, cells}`, `cells` giving, for every likelihood level, the
+level for every impact level. It is digested with the scale's pin and
+covered by an Attestation exactly as far as the pin is (a Full Match
+covers it, a Semantic Match does not — the limit all pins share). A
+rating's `scale-ref` already names that scale, so no new reference is
+needed. **SCALE-4:** on a scale that carries a matrix, a rating or
+residual rating that states both likelihood and impact on the matrix's
+two scales states the level of their cell. A mismatch **fails**. The one
+way to depart from the table is to say why: `override-rationale` on the
+rating turns the failure into a note. A level without inputs is not
+checked. This is a lookup in the organisation's own pinned table, not a
+kernel scoring method — the kernel still defines no matrix.
 
 **Rules (normative).** RISK-1…6 and the first half of RISK-13 are schema
 conditionals — any JSON-Schema validator enforces them; a conformant tool
@@ -1260,14 +1284,14 @@ The 1.0.0 gate asked for converters, an executable kernel, a lifecycle
 corpus and two implementations. The same four questions, asked of Risk:
 
 1. **Executable kernel + conformance.** ✓ Schema 2.0.0 (ten types);
-   **249 vectors, 15 families** — the twelve of 1.0.0 (lifecycle 36 → 37
+   **258 vectors, 15 families** — the twelve of 1.0.0 (lifecycle 36 → 37
    with the tenth disjointness case) plus `risk` 73 (27 object · 38
    bundle · 8 transitions; 42 at the landing, 25 from the rc.1 review, 6
    with likelihood and impact)
-   and `kernel` 9 (the manifest pin, D3.6) and `scale` 9 (pinned scale
+   and `kernel` 9 (the manifest pin, D3.6) and `scale` 18 (pinned scale
    definitions, D3.7). Every review correction to the proposal is
    pinned by a vector that fails on the validator as first proposed.
-2. **First implementation.** ✓ `validate_core.py`: 249 / 249, the five
+2. **First implementation.** ✓ `validate_core.py`: 258 / 258, the five
    shipped bundles (3,715 objects, both digests each), and the example
    bundle with its manifest — ALL GREEN.
 3. **Second implementation.** ✗ **OPEN.** `validate_core.ps1` carries the
@@ -1316,6 +1340,7 @@ history. The compact line:
 | Raw blobs · the Risk rules stay | 2026-11-10 | Bundle files stored as the digested bytes (every delivery channel verifies); RISK-1/2/3/6 kept strict toward imported data | "Amendments — raw blobs" · "… the Risk rules stay" |
 | **2.0.0-rc.1** | 2026-11-10 | This text: D23 new; D4, D8, D14, D15, D22 amended in place; gate state in IV.5b | this row |
 | Likelihood and impact | 2026-11-10 | `rating` and `residual-rating` may carry `likelihood` and `impact`, each a level on a named scale; RISK-13 extended to them; the matrix, CVSS, FAIR and impact per dimension stay in facets; 6 vectors | D23 · "Amendments — likelihood and impact" |
+| The matrix | 2026-11-10 | The organisation's matrix is an optional part of the level scale's pinned definition, not a facet; SCALE-4: a rating that states both inputs states the level of their cell, or an `override-rationale`; a mismatch fails; 9 vectors | D3.7 · D23 · "Amendments — the matrix" |
 | Scale definitions | 2026-11-10 | `scales` pins in the manifest: a scale's levels in order, the organisation's wording and number; SCALE-1/2/3; not a kernel type; 9 vectors, a fifteenth family | D3.7 · D23 · "Amendments — scale definitions" |
 | The kernel pin | 2026-11-10 | `kernel-version` in the content manifest: optional, absent = 1.0.0, required for content beyond 1.0.0 (KERNEL-1), fail-closed on an unimplemented kernel (KERNEL-2); 9 vectors, a fourteenth family; IFA and example manifests pinned | D3.6 · "Amendments — the kernel pin" |
 | rc.1 review | 2026-11-10 | External review: nine findings reproduced and fixed — justification needs an assessed treatment decision, `tailoring-refs`, RISK-13/14, typed Tailoring selection edges, withdrawn Tailorings/Requirements, checked dates; the Mapping Model date corrected; `PRIOR-ART.md` | CP-RISK-1 §13 · "Amendments — the rc.1 review" |
@@ -1332,10 +1357,10 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
 - **Seven stdlib facet descriptors** (incl. the normative DSSE envelope
   profile) — unchanged from 1.0.0; pinned VERBATIM wherever bundled.
   `risk-analysis@1` is parked, with one measured payload (Appendix D).
-- **Conformance corpus**: **249 vectors, 15 families** (jcs 8 ·
+- **Conformance corpus**: **258 vectors, 15 families** (jcs 8 ·
   modality 21 · parameter 19 · tailoring 19 · attestation 5 · facet 7 ·
   reference 13 · lifecycle 37 · tier 9 · dsse 5 · composition 7 ·
-  conditional 8 · risk 73 · kernel 9 · scale 9). In `risk-vectors.json`, `expected-rule` is
+  conditional 8 · risk 73 · kernel 9 · scale 18). In `risk-vectors.json`, `expected-rule` is
   the portable assertion.
 - **Two reference validators**: `validate_core.py` (Python, jsonschema
   only) — green; `validate_core.ps1` (PowerShell 5.1, zero dependencies)
