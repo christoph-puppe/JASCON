@@ -7,7 +7,7 @@ Source: **OSCAL IFA GoodRead example set** (SSP v1.1.1 + AP + AR + POA&M) + leve
 - Source leaf values inventoried: **835**
 - Mapped (declared destination): **835**
 - **UNMAPPED: 0**  ->  coverage **100.0 %**
-- Objects emitted: 1 assessment, 1 attestation, 6 component, 2 finding, 3 impl, 2 req - the five lifecycle types at document scale, manifest with both digests.
+- Objects emitted: 1 assessment, 1 attestation, 6 component, 2 finding, 3 impl, 2 req, 2 risk - the five lifecycle types and the Risk type (kernel 1.1.0) at document scale, manifest with both digests.
 - Carried Requirements (closure): https://ns.nist.gov/sp800-53/req/AC-6.1, https://ns.nist.gov/sp800-53/req/AC-2 - byte-identical copies from the US.SP800-53 bundle; an authorization package carries its baseline.
 
 ## Conversion rules (declared, counted)
@@ -16,10 +16,11 @@ Source: **OSCAL IFA GoodRead example set** (SSP v1.1.1 + AP + AR + POA&M) + leve
 - **date-authorized -> Component.authorizations + Attestation**: the ATO modeled as an attestation over {system Component, Implementation, AC-6.1} semantic digests; unsigned (envelope-ref absent) - signature verification is gate-4 (backlog #24).
 - **Leveraged/leveraging pair -> D5 inheritance**: consumer Implementation satisfied-by inherited-from{csp-iaas, auth-csp-iaas-2018} - basis-ref names the provider Component's authorization (edge-local closure enforced by the validator); provider export.provided -> capabilities, export.responsibilities -> customer-responsibilities.
 - **AR + AP -> one Assessment**: AP activities/steps ride Assessment.method (assessment-plan@1 payload); result not-satisfied from the finding target; observations (AR + POA&M, deduped by uuid) -> observations@1 facet + landmark evidence URIs.
-- **POA&M risks -> Findings**: RISK-2 (open + planned remediation) -> state in-remediation with actions[] (due = within-date-range.end); RISK-1 (status deviation-approved) -> approved `risk-adjustment` Deviation (rationale = mitigating factor, approver = the SCA division URI); characterizations (likelihood/impact) -> risk@1 facet.
-- **Finding target `ac-6.1_obj`** is a 53A OBJECTIVE id - it addresses into the sp800-53a@1 facet of the carried AC-6.1 (kept in risk@1.target-objective-id; kernel statement-ref stays statement-scoped).
+- **POA&M risks -> Risk objects (CP-RISK-1, kernel 1.1.0)**: statement -> `scenario`; deadline -> `review-due` (datetime - OSCAL's type is date-time-with-timezone); POA&M system-id -> `component-refs`; response `type` prop -> `treatment` (observed: accept x1, mitigate x1); the AR finding's related-risks edge -> `treatments[]` (RISK-2 is modified by AC-6.1). likelihood/impact, the source status and the response narrative -> risk-analysis@1 (the L2 holding pen for the parked stdlib facet).
+- **POA&M risks -> Findings**: RISK-2 (open + planned remediation) -> state in-remediation with actions[] (due = within-date-range.end); RISK-1 (status deviation-approved) -> approved `risk-adjustment` Deviation (rationale = mitigating factor, approver = the SCA division URI) whose `refs` name the Risk (RISK-9). Each Finding carries `risk-refs` to its Risk; the risk@1 framework facet is retired.
+- **Finding target `ac-6.1_obj`** is a 53A OBJECTIVE id - it addresses into the sp800-53a@1 facet of the carried AC-6.1 (kept in finding-target@1.target-objective-id; kernel statement-ref stays statement-scoped).
 - **Parties stay landmark** (#16, D22 0-of-3): performer/signer/approver are minted party URIs, no party objects.
-- **Payload free text language-tagged**: ap x7, observation x4, risk x3, system x6.
+- **Payload free text language-tagged**: ap x7, observation x4, risk x14, system x6.
 
 ## Findings (computed)
 
@@ -28,6 +29,8 @@ Source: **OSCAL IFA GoodRead example set** (SSP v1.1.1 + AP + AR + POA&M) + leve
 - **Placeholder uuids x4**: every export.provided/responsibility uuid in the leveraged pair is 11111111-... - the provided-uuid dereference is degenerate in source; inheritance wired via the authorization anchor instead.
 - **Unresolved parameter bindings**: ['ac-2_prm_1'] - `ac-2_prm_1` is a Rev-5.1-era param id; Rev 5.2.0 declares the _odp layer instead (the binding is carried verbatim; a resolver follows the odp@1 aggregates map).
 - **Kind mapping**: appliance->hardware x1 (OSCAL free-text component types vs. the kernel's closed componentKind).
+- **Value arrival (measured; path coverage above is a DECLARATION)**: 394 of 835 source leaf values occur verbatim in the emitted objects. Absent: 194 identity values (uuids/hrefs - re-minted as URIs by design), 125 document-metadata values, and **122 content values (63 of them prose of 40+ characters)** - each either transformed on purpose (a mapped code, a respelled id) or DROPPED. `UNMAPPED: 0` does not see the difference; the per-path list is in the JSON report (`value-arrival`) and is the work queue (backlog #41).
+- **What OSCAL cannot give the Risk shape** (model findings, REPORTED; nothing is invented - the one derived value is the owner): analysed in source (likelihood + impact) but no level: `assessed` unreachable (RISK-2) x2; owner absent in source (derived from the SSP `owner` role) x2; response `accept` without a dated acceptance: `retain` unreachable (RISK-6) x1. Owner source: the SSP `owner` role -> https://ifa.gov/goodread/party/owen-pearson.
 - observation carried in both AR and POA&M (deduped): AwesomeCloud IAM Roles Test - SYSTEM1234 System Engineer Role
 
 ## Full path map (every source path, its count, its destination)
@@ -128,16 +131,16 @@ Source: **OSCAL IFA GoodRead example set** (SSP v1.1.1 + AP + AR + POA&M) + leve
 | `ar.assessment-results.metadata.version` | 1 | L1 | bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports) |
 | `ar.assessment-results.results[].description` | 1 | L1 | Assessment id/title/time |
 | `ar.assessment-results.results[].end` | 1 | L1 | Assessment id/title/time |
-| `ar.assessment-results.results[].findings[].description` | 1 | L1 | Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> risk@1 facet |
-| `ar.assessment-results.results[].findings[].implementation-statement-uuid` | 1 | L1 | Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> risk@1 facet |
-| `ar.assessment-results.results[].findings[].related-observations[].observation-uuid` | 1 | L1 | Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> risk@1 facet |
-| `ar.assessment-results.results[].findings[].related-risks[].risk-uuid` | 1 | L1 | Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> risk@1 facet |
-| `ar.assessment-results.results[].findings[].target.description` | 1 | L1 | Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> risk@1 facet |
-| `ar.assessment-results.results[].findings[].target.status.state` | 1 | L1 | Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> risk@1 facet |
-| `ar.assessment-results.results[].findings[].target.target-id` | 1 | L1 | Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> risk@1 facet |
-| `ar.assessment-results.results[].findings[].target.type` | 1 | L1 | Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> risk@1 facet |
-| `ar.assessment-results.results[].findings[].title` | 1 | L1 | Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> risk@1 facet |
-| `ar.assessment-results.results[].findings[].uuid` | 1 | L1 | Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> risk@1 facet |
+| `ar.assessment-results.results[].findings[].description` | 1 | L1 | Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> finding-target@1 facet; related-risks -> Risk.treatments (the risk -> control edge) |
+| `ar.assessment-results.results[].findings[].implementation-statement-uuid` | 1 | L1 | Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> finding-target@1 facet; related-risks -> Risk.treatments (the risk -> control edge) |
+| `ar.assessment-results.results[].findings[].related-observations[].observation-uuid` | 1 | L1 | Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> finding-target@1 facet; related-risks -> Risk.treatments (the risk -> control edge) |
+| `ar.assessment-results.results[].findings[].related-risks[].risk-uuid` | 1 | L1 | Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> finding-target@1 facet; related-risks -> Risk.treatments (the risk -> control edge) |
+| `ar.assessment-results.results[].findings[].target.description` | 1 | L1 | Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> finding-target@1 facet; related-risks -> Risk.treatments (the risk -> control edge) |
+| `ar.assessment-results.results[].findings[].target.status.state` | 1 | L1 | Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> finding-target@1 facet; related-risks -> Risk.treatments (the risk -> control edge) |
+| `ar.assessment-results.results[].findings[].target.target-id` | 1 | L1 | Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> finding-target@1 facet; related-risks -> Risk.treatments (the risk -> control edge) |
+| `ar.assessment-results.results[].findings[].target.type` | 1 | L1 | Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> finding-target@1 facet; related-risks -> Risk.treatments (the risk -> control edge) |
+| `ar.assessment-results.results[].findings[].title` | 1 | L1 | Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> finding-target@1 facet; related-risks -> Risk.treatments (the risk -> control edge) |
+| `ar.assessment-results.results[].findings[].uuid` | 1 | L1 | Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> finding-target@1 facet; related-risks -> Risk.treatments (the risk -> control edge) |
 | `ar.assessment-results.results[].local-definitions.tasks[].associated-activities[].activity-uuid` | 1 | L1 | risk content consolidated with the POA&M risks (same risk graph, later state) |
 | `ar.assessment-results.results[].local-definitions.tasks[].associated-activities[].subjects[].type` | 1 | L1 | risk content consolidated with the POA&M risks (same risk graph, later state) |
 | `ar.assessment-results.results[].local-definitions.tasks[].description` | 1 | L1 | risk content consolidated with the POA&M risks (same risk graph, later state) |
@@ -392,32 +395,32 @@ Source: **OSCAL IFA GoodRead example set** (SSP v1.1.1 + AP + AR + POA&M) + leve
 | `poam.plan-of-action-and-milestones.poam-items[].related-risks[].risk-uuid` | 2 | L1 | poam-item titles ride the Finding titles; related-risks/observations resolved by uuid |
 | `poam.plan-of-action-and-milestones.poam-items[].title` | 2 | L1 | poam-item titles ride the Finding titles; related-risks/observations resolved by uuid |
 | `poam.plan-of-action-and-milestones.poam-items[].uuid` | 2 | L1 | poam-item titles ride the Finding titles; related-risks/observations resolved by uuid |
-| `poam.plan-of-action-and-milestones.risks[].characterizations[].facets[].name` | 4 | L2 | risk@1 facet characterizations (likelihood/impact, origin actors) |
-| `poam.plan-of-action-and-milestones.risks[].characterizations[].facets[].system` | 4 | L2 | risk@1 facet characterizations (likelihood/impact, origin actors) |
-| `poam.plan-of-action-and-milestones.risks[].characterizations[].facets[].value` | 4 | L2 | risk@1 facet characterizations (likelihood/impact, origin actors) |
-| `poam.plan-of-action-and-milestones.risks[].characterizations[].origin.actors[].actor-uuid` | 2 | L2 | risk@1 facet characterizations (likelihood/impact, origin actors) |
-| `poam.plan-of-action-and-milestones.risks[].characterizations[].origin.actors[].type` | 2 | L2 | risk@1 facet characterizations (likelihood/impact, origin actors) |
-| `poam.plan-of-action-and-milestones.risks[].deadline` | 2 | L1 | Finding id/title/state (deviation-approved -> approved Deviation; open+remediation -> in-remediation); deadline -> risk@1 |
-| `poam.plan-of-action-and-milestones.risks[].description` | 2 | L1 | Finding id/title/state (deviation-approved -> approved Deviation; open+remediation -> in-remediation); deadline -> risk@1 |
-| `poam.plan-of-action-and-milestones.risks[].mitigating-factors[].description` | 1 | L1 | Deviation rationale (RISK-1) / risk@1 mitigating-factors; observation links -> evidence refs |
-| `poam.plan-of-action-and-milestones.risks[].mitigating-factors[].uuid` | 1 | L1 | Deviation rationale (RISK-1) / risk@1 mitigating-factors; observation links -> evidence refs |
-| `poam.plan-of-action-and-milestones.risks[].related-observations[].observation-uuid` | 2 | L1 | Deviation rationale (RISK-1) / risk@1 mitigating-factors; observation links -> evidence refs |
-| `poam.plan-of-action-and-milestones.risks[].remediations[].description` | 2 | L1 | Finding.actions[] (task title/status; within-date-range.end -> due) |
-| `poam.plan-of-action-and-milestones.risks[].remediations[].lifecycle` | 2 | L1 | Finding.actions[] (task title/status; within-date-range.end -> due) |
-| `poam.plan-of-action-and-milestones.risks[].remediations[].props[].name` | 2 | L1 | Finding.actions[] (task title/status; within-date-range.end -> due) |
-| `poam.plan-of-action-and-milestones.risks[].remediations[].props[].value` | 2 | L1 | Finding.actions[] (task title/status; within-date-range.end -> due) |
-| `poam.plan-of-action-and-milestones.risks[].remediations[].tasks[].description` | 2 | L1 | Finding.actions[] (task title/status; within-date-range.end -> due) |
-| `poam.plan-of-action-and-milestones.risks[].remediations[].tasks[].timing.within-date-range.end` | 2 | L1 | Finding.actions[] (task title/status; within-date-range.end -> due) |
-| `poam.plan-of-action-and-milestones.risks[].remediations[].tasks[].timing.within-date-range.start` | 2 | L1 | Finding.actions[] (task title/status; within-date-range.end -> due) |
-| `poam.plan-of-action-and-milestones.risks[].remediations[].tasks[].title` | 2 | L1 | Finding.actions[] (task title/status; within-date-range.end -> due) |
-| `poam.plan-of-action-and-milestones.risks[].remediations[].tasks[].type` | 2 | L1 | Finding.actions[] (task title/status; within-date-range.end -> due) |
-| `poam.plan-of-action-and-milestones.risks[].remediations[].tasks[].uuid` | 2 | L1 | Finding.actions[] (task title/status; within-date-range.end -> due) |
-| `poam.plan-of-action-and-milestones.risks[].remediations[].title` | 2 | L1 | Finding.actions[] (task title/status; within-date-range.end -> due) |
-| `poam.plan-of-action-and-milestones.risks[].remediations[].uuid` | 2 | L1 | Finding.actions[] (task title/status; within-date-range.end -> due) |
-| `poam.plan-of-action-and-milestones.risks[].statement` | 2 | L1 | Finding id/title/state (deviation-approved -> approved Deviation; open+remediation -> in-remediation); deadline -> risk@1 |
-| `poam.plan-of-action-and-milestones.risks[].status` | 2 | L1 | Finding id/title/state (deviation-approved -> approved Deviation; open+remediation -> in-remediation); deadline -> risk@1 |
-| `poam.plan-of-action-and-milestones.risks[].title` | 2 | L1 | Finding id/title/state (deviation-approved -> approved Deviation; open+remediation -> in-remediation); deadline -> risk@1 |
-| `poam.plan-of-action-and-milestones.risks[].uuid` | 2 | L1 | Finding id/title/state (deviation-approved -> approved Deviation; open+remediation -> in-remediation); deadline -> risk@1 |
+| `poam.plan-of-action-and-milestones.risks[].characterizations[].facets[].name` | 4 | L2 | risk-analysis@1 characterizations (likelihood/impact + scale system, origin actors) - scoring stays out of the kernel (App. F Q14) |
+| `poam.plan-of-action-and-milestones.risks[].characterizations[].facets[].system` | 4 | L2 | risk-analysis@1 characterizations (likelihood/impact + scale system, origin actors) - scoring stays out of the kernel (App. F Q14) |
+| `poam.plan-of-action-and-milestones.risks[].characterizations[].facets[].value` | 4 | L2 | risk-analysis@1 characterizations (likelihood/impact + scale system, origin actors) - scoring stays out of the kernel (App. F Q14) |
+| `poam.plan-of-action-and-milestones.risks[].characterizations[].origin.actors[].actor-uuid` | 2 | L2 | risk-analysis@1 characterizations (likelihood/impact + scale system, origin actors) - scoring stays out of the kernel (App. F Q14) |
+| `poam.plan-of-action-and-milestones.risks[].characterizations[].origin.actors[].type` | 2 | L2 | risk-analysis@1 characterizations (likelihood/impact + scale system, origin actors) - scoring stays out of the kernel (App. F Q14) |
+| `poam.plan-of-action-and-milestones.risks[].deadline` | 2 | L1 | Risk id/title; statement -> scenario; deadline -> review-due (datetime); status -> Risk state (+ verbatim in risk-analysis@1) and Finding state (deviation-approved -> approved Deviation; open+remediation -> in-remediation) |
+| `poam.plan-of-action-and-milestones.risks[].description` | 2 | L2 | risk-analysis@1 description (the kernel's `scenario` is the OSCAL statement) |
+| `poam.plan-of-action-and-milestones.risks[].mitigating-factors[].description` | 1 | L1 | Deviation rationale (RISK-1) + risk-analysis@1 mitigating-factors; observation links -> evidence refs |
+| `poam.plan-of-action-and-milestones.risks[].mitigating-factors[].uuid` | 1 | L1 | Deviation rationale (RISK-1) + risk-analysis@1 mitigating-factors; observation links -> evidence refs |
+| `poam.plan-of-action-and-milestones.risks[].related-observations[].observation-uuid` | 2 | L1 | Deviation rationale (RISK-1) + risk-analysis@1 mitigating-factors; observation links -> evidence refs |
+| `poam.plan-of-action-and-milestones.risks[].remediations[].description` | 2 | L1 | Finding.actions[] description/status + risk-analysis@1 responses[] (lifecycle, title, narrative) |
+| `poam.plan-of-action-and-milestones.risks[].remediations[].lifecycle` | 2 | L1 | Finding.actions[] description/status + risk-analysis@1 responses[] (lifecycle, title, narrative) |
+| `poam.plan-of-action-and-milestones.risks[].remediations[].props[].name` | 2 | L1 | response `type` -> Risk.treatment (C.10: mitigate->modify, accept->retain, transfer|share->share, avoid->avoid) + verbatim in risk-analysis@1 responses[] |
+| `poam.plan-of-action-and-milestones.risks[].remediations[].props[].value` | 2 | L1 | response `type` -> Risk.treatment (C.10: mitigate->modify, accept->retain, transfer|share->share, avoid->avoid) + verbatim in risk-analysis@1 responses[] |
+| `poam.plan-of-action-and-milestones.risks[].remediations[].tasks[].description` | 2 | L1 | Finding.actions[] (task title; within-date-range.end -> due); remediation/task uuids are source identity (L0) |
+| `poam.plan-of-action-and-milestones.risks[].remediations[].tasks[].timing.within-date-range.end` | 2 | L1 | Finding.actions[] (task title; within-date-range.end -> due); remediation/task uuids are source identity (L0) |
+| `poam.plan-of-action-and-milestones.risks[].remediations[].tasks[].timing.within-date-range.start` | 2 | L1 | Finding.actions[] (task title; within-date-range.end -> due); remediation/task uuids are source identity (L0) |
+| `poam.plan-of-action-and-milestones.risks[].remediations[].tasks[].title` | 2 | L1 | Finding.actions[] (task title; within-date-range.end -> due); remediation/task uuids are source identity (L0) |
+| `poam.plan-of-action-and-milestones.risks[].remediations[].tasks[].type` | 2 | L1 | Finding.actions[] (task title; within-date-range.end -> due); remediation/task uuids are source identity (L0) |
+| `poam.plan-of-action-and-milestones.risks[].remediations[].tasks[].uuid` | 2 | L1 | Finding.actions[] (task title; within-date-range.end -> due); remediation/task uuids are source identity (L0) |
+| `poam.plan-of-action-and-milestones.risks[].remediations[].title` | 2 | L1 | Finding.actions[] description/status + risk-analysis@1 responses[] (lifecycle, title, narrative) |
+| `poam.plan-of-action-and-milestones.risks[].remediations[].uuid` | 2 | L1 | Finding.actions[] (task title; within-date-range.end -> due); remediation/task uuids are source identity (L0) |
+| `poam.plan-of-action-and-milestones.risks[].statement` | 2 | L1 | Risk id/title; statement -> scenario; deadline -> review-due (datetime); status -> Risk state (+ verbatim in risk-analysis@1) and Finding state (deviation-approved -> approved Deviation; open+remediation -> in-remediation) |
+| `poam.plan-of-action-and-milestones.risks[].status` | 2 | L1 | Risk id/title; statement -> scenario; deadline -> review-due (datetime); status -> Risk state (+ verbatim in risk-analysis@1) and Finding state (deviation-approved -> approved Deviation; open+remediation -> in-remediation) |
+| `poam.plan-of-action-and-milestones.risks[].title` | 2 | L1 | Risk id/title; statement -> scenario; deadline -> review-due (datetime); status -> Risk state (+ verbatim in risk-analysis@1) and Finding state (deviation-approved -> approved Deviation; open+remediation -> in-remediation) |
+| `poam.plan-of-action-and-milestones.risks[].uuid` | 2 | L1 | Risk id/title; statement -> scenario; deadline -> review-due (datetime); status -> Risk state (+ verbatim in risk-analysis@1) and Finding state (deviation-approved -> approved Deviation; open+remediation -> in-remediation) |
 | `poam.plan-of-action-and-milestones.system-id.id` | 1 | L1 | provenance / system id (system@1) |
 | `poam.plan-of-action-and-milestones.system-id.identifier-type` | 1 | L1 | provenance / system id (system@1) |
 | `poam.plan-of-action-and-milestones.uuid` | 1 | L1 | bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports) |

@@ -1,5 +1,5 @@
 {
- "id": "https://ifa.gov/goodread/facet/risk",
+ "id": "https://ifa.gov/goodread/facet/risk-analysis",
  "version": "1.0.0",
  "modifies-semantics": [],
  "note": "NORMATIVE pinned payload schema (backlog #26): closed shape - unknown keys are rejected, never smuggled",
@@ -10,23 +10,17 @@
    "risk-status": {
     "type": "string"
    },
-   "deadline": {
-    "type": "string"
-   },
-   "statement": {
+   "description": {
     "type": "object"
    },
    "characterizations": {
     "type": "array"
    },
-   "mitigating-factors": {
+   "responses": {
     "type": "array"
    },
-   "target-objective-id": {
-    "type": "string"
-   },
-   "implementation-statement-uuid": {
-    "type": "string"
+   "mitigating-factors": {
+    "type": "array"
    }
   },
   "additionalProperties": false

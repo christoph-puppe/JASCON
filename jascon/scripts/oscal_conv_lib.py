@@ -44,6 +44,8 @@ def textify(obj, lang):
             container[key] = {lang: container[key]}; n += 1
     wrap(obj, "title")
     wrap(obj, "rationale")                                   # mapping
+    wrap(obj, "scenario")                                    # risk (kernel 1.1.0)
+    if isinstance(obj.get("acceptance"), dict): wrap(obj["acceptance"], "rationale")
     for ex in obj.get("excludes", []) or []: wrap(ex, "rationale")
     for cap in obj.get("capabilities", []) or []: wrap(cap, "description")
     for a in obj.get("actions", []) or []: wrap(a, "description")
@@ -143,6 +145,52 @@ def inventory(node, prefix, counter, normalize=lambda p: p):
         for v in node: inventory(v, f"{prefix}[]", counter, normalize)
     else:
         counter[normalize(prefix)] += 1
+
+def value_arrival(sources, objects):
+    """Path coverage says where a source value is DECLARED to go; this checks
+    that it ARRIVED. For every leaf value of every source document: does it
+    occur verbatim somewhere in the emitted objects (keys included, so a
+    value that became a facet key counts)? A value that does not is either
+    TRANSFORMED on purpose (a mapped code, a respelled id, a minted URI) or
+    DROPPED - the report lists them so the difference is argued per path
+    instead of assumed. Introduced with the CP-RISK-1 re-run, where the
+    path-level report read 835/835 while 13 content values under
+    poam.risks[] - the risk response type among them - had never arrived.
+    sources: [(tag, document)]. Returns a JSON-able dict."""
+    def leaves(n, p):
+        if isinstance(n, dict):
+            for k, v in n.items(): yield from leaves(v, f"{p}.{k}")
+        elif isinstance(n, list):
+            for v in n: yield from leaves(v, f"{p}[]")
+        else: yield p, n
+    def strings(n):
+        if isinstance(n, dict):
+            for k, v in n.items(): yield k; yield from strings(v)
+        elif isinstance(n, list):
+            for v in n: yield from strings(v)
+        elif isinstance(n, str): yield n
+        elif n is not None: yield json.dumps(n)
+    hay = "\n".join(s for o in objects for s in strings(o))
+    total = present = 0
+    absent = {"identity": collections.Counter(), "document-metadata": collections.Counter(),
+              "content": collections.Counter()}
+    prose = 0
+    for tag, doc in sources:
+        for p, v in leaves(doc, tag):
+            total += 1
+            sv = v if isinstance(v, str) else json.dumps(v)
+            if sv in hay:
+                present += 1; continue
+            if re.search(r"(uuids?(\[\])?|href|\.id|-id)$", p): kind = "identity"
+            elif ".metadata." in p or ".back-matter." in p: kind = "document-metadata"
+            else:
+                kind = "content"
+                if len(sv) >= 40: prose += 1
+            absent[kind][p] += 1
+    return {"leaf-values": total, "arrived-verbatim": present,
+            "absent": {k: sum(c.values()) for k, c in absent.items()},
+            "absent-content-prose": prose,
+            "absent-content-paths": [{"path": p, "count": n} for p, n in sorted(absent["content"].items())]}
 
 def coverage(paths, rules):
     """rules: list of (regex, level, target). Returns (rows, unmapped)."""

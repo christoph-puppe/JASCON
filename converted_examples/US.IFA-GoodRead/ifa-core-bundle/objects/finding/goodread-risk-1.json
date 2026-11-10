@@ -8,6 +8,9 @@
  "assessment-ref": "https://ifa.gov/goodread/assessment/conmon-2023-06",
  "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-6.1",
  "state": "in-remediation",
+ "risk-refs": [
+  "https://ifa.gov/goodread/risk/goodread-risk-1"
+ ],
  "actions": [
   {
    "description": {
@@ -30,41 +33,9 @@
    "approver-ref": "https://ifa.gov/division/ociso/sca",
    "opened": "2023-05-19",
    "refs": [
-    "https://ifa.gov/goodread/evidence/obs-0c4de4fc"
+    "https://ifa.gov/goodread/evidence/obs-0c4de4fc",
+    "https://ifa.gov/goodread/risk/goodread-risk-1"
    ]
   }
- ],
- "facets": {
-  "https://ifa.gov/goodread/facet/risk@1": {
-   "risk-status": "deviation-approved",
-   "deadline": "2024-01-01T05:00:00-04:00",
-   "statement": {
-    "en": "An account without proper least privilege design and implementation can be used to significantly damage links created by the tool for use by public citizens, potentially causing a national outage. If an outage were to occur, IFA and Government policy will require the CIO of the agency to notify the Department of Homeland Security and the public.\n\nSuch an event will cause significant financial and reputational risk to IFA's Administrator, executive staff, and the agency overall."
-   },
-   "characterizations": [
-    {
-     "facets": [
-      {
-       "name": "likelihood",
-       "value": "low",
-       "system": "https://ifa.gov/division/ociso/sca"
-      },
-      {
-       "name": "impact",
-       "value": "high",
-       "system": "https://ifa.gov/division/ociso/sca"
-      }
-     ],
-     "origin-actors": [
-      "e7730080-71ce-4b20-bec4-84f33136fd58"
-     ]
-    }
-   ],
-   "mitigating-factors": [
-    {
-     "en": "The SYSTEM1234 application is designed and implemented to only allow access to the administrative functions for those with PAO staff role via the VPN via network configuration between the IFA Enterprise Support Systems and the SYSTEM1234 AwesomeCloud account. Additionally, the load balanacer configuration only allows access to view shortlinks from the public internet."
-    }
-   ]
-  }
- }
+ ]
 }
