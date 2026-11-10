@@ -89,8 +89,8 @@
   {
    "id": "https://cso.example/risk/R-2026-007",
    "version": "2026-11",
-   "package-digest": "sha256:192bfc44cb8a61b270ed6b706a382b46bf30d98626490c8f5fee052d9ef05333",
-   "semantic-digest": "sha256:d17d508eacc166567d76f9f096a2f48ae1a4d450e136553cf5630cbaaa7bca03",
+   "package-digest": "sha256:cef976b5283780ba31c5a05942d02cd29ec88f6c4a30d9379da916d9d021e33f",
+   "semantic-digest": "sha256:b0155c3de2728a84ef0e97688efd83c461194f26dfd36eb5537f8f4707fbd047",
    "path": "risk-acme-kms-key-rotation.json"
   }
  ],

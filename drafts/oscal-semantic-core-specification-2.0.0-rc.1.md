@@ -43,7 +43,7 @@ released; this text adds one kernel type — **Risk** (D23) — and the ninth
 primitive that computes over it. It is a major version by the rule of
 D22 rev 3, not because anything breaks: all 6,914 objects of the 1.0.0
 corpus validate unchanged under the 2.0.0 schema, so a 1.0.0 bundle is a
-2.0.0 bundle. **Measured at rc.1:** a 234-vector conformance corpus in
+2.0.0 bundle. **Measured at rc.1:** a 240-vector conformance corpus in
 fourteen families; the Python reference validator green on it and on
 every bundle that ships; the first Risk corpus (two Risk objects
 converted from an OSCAL POA&M), and what that corpus shows the fourth
@@ -810,8 +810,12 @@ the answer to *why is this requirement in scope at all?*
   "threat-refs": [ "https://ns.bsi.bund.de/gspp/threat/G-0.19" ],
   "component-refs": [ "https://cso.example/component/acme-saas" ],
   "tailoring-refs": [ "https://cso.example/tailoring/soa-2026" ],   // optional: the SoA this belongs to
-  "rating": { "level": "hoch", "scale-ref": "https://cso.example/scale/bsi-200-3-matrix" },
-  "residual-rating": { "level": "gering", "scale-ref": "https://cso.example/scale/bsi-200-3-matrix" },
+  "rating": { "level": "hoch", "scale-ref": "https://cso.example/scale/bsi-200-3-matrix",
+              "likelihood": { "level": "mittel", "scale-ref": "https://cso.example/scale/bsi-200-3-eintrittshaeufigkeit" },
+              "impact": { "level": "existenzbedrohend", "scale-ref": "https://cso.example/scale/bsi-200-3-schadenshoehe" } },
+  "residual-rating": { "level": "gering", "scale-ref": "https://cso.example/scale/bsi-200-3-matrix",
+              "likelihood": { "level": "selten", "scale-ref": "https://cso.example/scale/bsi-200-3-eintrittshaeufigkeit" },
+              "impact": { "level": "begrenzt", "scale-ref": "https://cso.example/scale/bsi-200-3-schadenshoehe" } },
   "treatment": "modify",                  // modify | retain | avoid | share
   "treatments": [ { "requirement-ref": "https://ns.bsi.bund.de/gspp/req/KONF.14.1",
                     "statement-ids": ["s2"] } ],
@@ -836,12 +840,31 @@ type. Field table: Appendix A.9b.
 it, what it says, its state, a level *as an opaque label on a named
 scale*, the treatment option, the requirements — to the statement — that
 carry the decision, who accepted what remains, and when it is reviewed.
-Not kernel: how the level was computed. Likelihood, impact, CVSS vectors,
-FAIR distributions and the BSI matrix differ by framework and by fashion
-and stay in facets (`risk-analysis@1`, parked — Appendix D).
+Not kernel: how the level was computed. The matrix that turns likelihood
+and impact into a level, CVSS vectors, FAIR distributions and impact per
+dimension differ by framework and by fashion and stay in facets
+(`risk-analysis@1`, parked — Appendix D).
 `rating.level` values compare as strings within one `scale-ref` and never
 across scales (D2: identifiers are opaque); a validator checks presence
 and consistency, never magnitude.
+
+**Likelihood and impact *(author decision, 2026-11-10)*.** `rating` and
+`residual-rating` MAY each carry `likelihood` and `impact`, and each of
+those is what the rating itself is: an opaque level on a named scale,
+`{level, scale-ref}`. As first landed they were facet material, on the
+argument that scoring differs by method. The argument holds for the
+computation and not for its two inputs: ISO/IEC 27001 6.1.2 d asks for
+the consequences and the likelihood to be assessed before the level is
+determined, BSI 200-3 names Eintrittshäufigkeit and Schadenshöhe,
+SP 800-30 likelihood and impact, and OSCAL's risk data carries exactly
+these two. Nested in the rating they come with a residual pair for free
+and add no top-level field. The kernel computes nothing from them: it
+does not check that a level follows from its inputs, because the matrix is
+not kernel. One impact per rating; impact per dimension (confidentiality,
+integrity, availability, safety) is the facet's. One consequence, stated:
+both sit *inside* a rating, and a rating needs a level — so OSCAL's
+likelihood and impact, which come without a level, still cannot land in
+the kernel and stay in the holding facet with the Risk at `identified`.
 
 **Rules (normative).** RISK-1…6 and the first half of RISK-13 are schema
 conditionals — any JSON-Schema validator enforces them; a conformant tool
@@ -862,7 +885,7 @@ half of RISK-13 and RISK-14 are graph rules.
 | RISK-10 *(SHOULD)* | At consumer tier every `excludes[]` entry carries a `rationale`. | An exclusion without justification is a list, not a Statement of Applicability (6.1.3 d). |
 | RISK-11 | A **live** Risk's treatment may not name a requirement that none of *its* Tailorings selects — those in `tailoring-refs`, else every Tailoring in force in the bundle. A withdrawn Tailoring selects nothing; a withdrawn Requirement is selected by none. *Undecided* — reported, never failed — where one of those Tailorings has an open selection (a predicate select). | The treatment plan and the SoA disagree: the risk leans on a control the SoA dropped. |
 | RISK-12 | A Risk edge is typed: `treatments[].requirement-ref` names a Requirement, `component-refs` name Components, `tailoring-refs` name Tailorings, and a `Finding.risk-refs` entry that resolves in-bundle names a Risk (the edge itself stays landmark). | Coverage joins on Requirement ids; a mis-aimed reference is a wrong statement, not a loose one. |
-| RISK-13 *(rc.1 review)* | `residual-rating` presupposes `rating`, and both name the same `scale-ref`. | A residual level is what remains of a level; levels never compare across scales, so a residual on another scale says nothing about the reduction. |
+| RISK-13 *(rc.1 review)* | `residual-rating` presupposes `rating`, and both name the same `scale-ref`; where both carry a `likelihood`, or both an `impact`, those name the same scale too. | A residual level is what remains of a level; levels never compare across scales, so a residual on another scale says nothing about the reduction. |
 | RISK-14 *(SHOULD; rc.1 review)* | Where a bundle holds more than one Tailoring in force, a Risk with `treatments` names its Tailoring(s) in `tailoring-refs`. | Unscoped, a risk about system A justifies the control in system B's Statement of Applicability. |
 
 **States and options (code systems, Appendix C).** C.3c: `identified →
@@ -1000,7 +1023,8 @@ Risk to Requirement* (a Mapping is a third party's claim about two
 requirements; "this control treats this risk" is the owner's decision
 and belongs on the object whose owner made it). *Acceptance as a
 Deviation* (two acts, two roles — D8). *Scoring fields in the kernel*
-(Q14 holds). *Relaxed rules for imported data* (above). *Counting every live Risk as
+(Q14 holds for the computation; its two inputs, likelihood and impact, are
+kernel since the author's decision of 2026-11-10 — above). *Relaxed rules for imported data* (above). *Counting every live Risk as
 a justification* (the first landing — rc.1 review). *Scoping by
 `component-refs`* (a Tailoring names no component; `tailoring-refs` is the
 edge that exists). *A tier-scoped
@@ -1206,17 +1230,18 @@ The 1.0.0 gate asked for converters, an executable kernel, a lifecycle
 corpus and two implementations. The same four questions, asked of Risk:
 
 1. **Executable kernel + conformance.** ✓ Schema 2.0.0 (ten types);
-   **234 vectors, 14 families** — the twelve of 1.0.0 (lifecycle 36 → 37
-   with the tenth disjointness case) plus `risk` 67 (23 object · 36
-   bundle · 8 transitions; 42 at the landing, 25 from the rc.1 review)
+   **240 vectors, 14 families** — the twelve of 1.0.0 (lifecycle 36 → 37
+   with the tenth disjointness case) plus `risk` 73 (27 object · 38
+   bundle · 8 transitions; 42 at the landing, 25 from the rc.1 review, 6
+   with likelihood and impact)
    and `kernel` 9 (the manifest pin, D3.6). Every review correction to the proposal is
    pinned by a vector that fails on the validator as first proposed.
-2. **First implementation.** ✓ `validate_core.py`: 234 / 234, the five
+2. **First implementation.** ✓ `validate_core.py`: 240 / 240, the five
    shipped bundles (3,715 objects, both digests each), and the example
    bundle with its manifest — ALL GREEN.
 3. **Second implementation.** ✗ **OPEN.** `validate_core.ps1` carries the
    port (type, closure, typed edges, liveness, justification, scope, the
-   coverage join, the 67 vectors, the policy switch) and has **not been
+   coverage join, the 73 vectors, the policy switch) and has **not been
    executed** — no
    PowerShell runtime was available where it was written. Until a run on
    Windows PowerShell 5.1 is green, Risk has one implementation. This
@@ -1259,6 +1284,7 @@ history. The compact line:
 | Corpus licence review | 2026-11-10 | Five bundles kept under their publishers' stated terms, six removed (terms forbid it, or none established); converters and coverage reports stay | "Amendments — the corpus licence review" |
 | Raw blobs · the Risk rules stay | 2026-11-10 | Bundle files stored as the digested bytes (every delivery channel verifies); RISK-1/2/3/6 kept strict toward imported data | "Amendments — raw blobs" · "… the Risk rules stay" |
 | **2.0.0-rc.1** | 2026-11-10 | This text: D23 new; D4, D8, D14, D15, D22 amended in place; gate state in IV.5b | this row |
+| Likelihood and impact | 2026-11-10 | `rating` and `residual-rating` may carry `likelihood` and `impact`, each a level on a named scale; RISK-13 extended to them; the matrix, CVSS, FAIR and impact per dimension stay in facets; 6 vectors | D23 · "Amendments — likelihood and impact" |
 | The kernel pin | 2026-11-10 | `kernel-version` in the content manifest: optional, absent = 1.0.0, required for content beyond 1.0.0 (KERNEL-1), fail-closed on an unimplemented kernel (KERNEL-2); 9 vectors, a fourteenth family; IFA and example manifests pinned | D3.6 · "Amendments — the kernel pin" |
 | rc.1 review | 2026-11-10 | External review: nine findings reproduced and fixed — justification needs an assessed treatment decision, `tailoring-refs`, RISK-13/14, typed Tailoring selection edges, withdrawn Tailorings/Requirements, checked dates; the Mapping Model date corrected; `PRIOR-ART.md` | CP-RISK-1 §13 · "Amendments — the rc.1 review" |
 
@@ -1274,10 +1300,10 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
 - **Seven stdlib facet descriptors** (incl. the normative DSSE envelope
   profile) — unchanged from 1.0.0; pinned VERBATIM wherever bundled.
   `risk-analysis@1` is parked, with one measured payload (Appendix D).
-- **Conformance corpus**: **234 vectors, 14 families** (jcs 8 ·
+- **Conformance corpus**: **240 vectors, 14 families** (jcs 8 ·
   modality 21 · parameter 19 · tailoring 19 · attestation 5 · facet 7 ·
   reference 13 · lifecycle 37 · tier 9 · dsse 5 · composition 7 ·
-  conditional 8 · risk 67 · kernel 9). In `risk-vectors.json`, `expected-rule` is
+  conditional 8 · risk 73 · kernel 9). In `risk-vectors.json`, `expected-rule` is
   the portable assertion.
 - **Two reference validators**: `validate_core.py` (Python, jsonschema
   only) — green; `validate_core.ps1` (PowerShell 5.1, zero dependencies)
@@ -1330,7 +1356,7 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
 2. **The Risk rules toward imported data** — ✓ decided: kept strict (D23).
 3. **Licence** — ✓ Apache-2.0; corpus terms reviewed (§2).
 4. **The second implementation** — ☐ run `validate_core.ps1` on Windows
-   PowerShell 5.1; expect `risk: 67 pass, 0 fail` and ALL GREEN; remove
+   PowerShell 5.1; expect `risk: 73 pass, 0 fail` and ALL GREEN; remove
    the two port guards (backlog #45). **Blocks the tag.**
 5. **Decide before the tag** — ✓ a kernel-version pin in the manifest
    (#44 — done, D3.6); ☐ whether to tighten `Finding.actions[].due`, which would end

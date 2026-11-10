@@ -328,22 +328,24 @@ commit `6b71647e` — 42 pass, 23 fail.
 
 | X-11 *(author, after the merge)* | **A bundle without any Tailoring produced no coverage report at all.** "If there is no tailoring, all controls are in play." | A register beside an untailored catalogue was never asked which controls rest on no risk. | With no Tailoring in the bundle every Requirement in force is selected implicitly (report key `*`); the policy switch and RISK-11 apply to it. A bundle whose Tailorings are all withdrawn still selects nothing. The IFA bundle now reports: 2 in play, 0 justified, both pending. | `no-tailoring-every-requirement-is-in-play`, `no-tailoring-risk-leans-on-a-withdrawn-requirement` |
 
+| X-12 *(author, after the merge)* | **Likelihood and impact were facet-only.** "Think we need those." | Three standards and OSCAL's data name exactly these two inputs; §3 kept them out together with the computation. | `rating` and `residual-rating` may carry `likelihood` and `impact`, each `{level, scale-ref}`. RISK-13 extended to them. The matrix, CVSS, FAIR and impact per dimension stay in the facet. An OSCAL risk still cannot use them: they sit inside a rating, and it has no level. | `rating-with-likelihood-and-impact`, `likelihood-without-scale`, `rating-with-an-unknown-input`, `impact-with-a-dimension`, `residual-impact-on-another-scale`, `residual-carries-only-one-input` |
+
 **Rule table after the review:** RISK-1…RISK-12 as in §11.2, with RISK-7
 and RISK-12 extended to `tailoring-refs` and RISK-11 asked per Tailoring;
 **RISK-13** — *`residual-rating` presupposes `rating`, on the same scale*;
 **RISK-14** *(SHOULD)* — *where more than one Tailoring is in force, a Risk
 names the Tailoring its treatment belongs to*.
 
-**Vectors after the review:** 67 (23 object · 36 bundle · 8 transitions).
-Conformance corpus: **225 vectors, 13 families** (234 in 14 with the
+**Vectors after the review:** 73 (27 object · 38 bundle · 8 transitions).
+Conformance corpus: **225 vectors, 13 families** (240 in 14 with the
 kernel-pin family, D3.6). Python reference
-validator: 234/234 and all shipped bundles, ALL GREEN.
+validator: 240/240 and all shipped bundles, ALL GREEN.
 
 **What the review did not settle.**
 
 1. **The PowerShell twin is still unexecuted**, and now carries more
    unexecuted code: every change above was ported to it by reading. The
-   expected line is `risk: 67 pass, 0 fail`. Backlog #45 stands.
+   expected line is `risk: 73 pass, 0 fail`. Backlog #45 stands.
 2. **X-1 makes the first Risk corpus justify nothing.** Both IFA risks are
    `identified` (§11.4), hence `pending`. That is §12.2 followed to its
    consequence. *(Since X-11 the IFA bundle is reported: two requirements

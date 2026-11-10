@@ -274,7 +274,7 @@ FAIL [risk-coverage] <tailoring>  selected <req>
   rationale: ISO/IEC 27001 6.1.3 d — inclusion in the Statement of
   Applicability carries its justification
 ```
-**Exercised:** `risk-vectors.json` (36 bundle vectors); the example bundle
+**Exercised:** `risk-vectors.json` (38 bundle vectors); the example bundle
 (3 selected, 1 justified, 2 uncovered). Not yet at corpus scale: the one
 corpus with Risks (IFA) carries no Tailoring, and no corpus Tailoring
 carries excludes or predicate selects.

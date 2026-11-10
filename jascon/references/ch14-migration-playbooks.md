@@ -149,7 +149,9 @@ has no owner; take the system owner from the imported SSP and declare the
 derivation. (2) **level** — a characterization carries likelihood and
 impact, never the combined level, so `risk-status` maps to `identified`
 (or `retired` for `closed`) and nothing else; `assessed` and `treated`
-need a `rating` the source does not hold. (3) **acceptance date** — a
+need a `rating` the source does not hold. The kernel's `likelihood` and
+`impact` do not help here: they live inside a rating, so without a level
+the source's two values stay in the facet. (3) **acceptance date** — a
 `deviation-approved` risk with an `accept` response has a rationale and,
 in prose, an approver, but no date; without one `retain` cannot be written
 (RISK-6), so the approval stays where the source put it — on the

@@ -154,6 +154,14 @@ def closure_errors(objs):
             if ra and rr and ra.get("scale-ref") != rr.get("scale-ref"):
                 errs.append(f"{oid}: residual-rating is on {rr.get('scale-ref')}, rating on {ra.get('scale-ref')} "
                             f"(RISK-13: {RISK_RULES['RISK-13']})")
+            # ... and so do the two inputs of a level, where both sides carry
+            # them: residual likelihood on the likelihood scale, residual
+            # impact on the impact scale
+            for part in ("likelihood", "impact"):
+                pa, pr = (ra or {}).get(part), (rr or {}).get(part)
+                if pa and pr and pa.get("scale-ref") != pr.get("scale-ref"):
+                    errs.append(f"{oid}: residual-rating {part} is on {pr.get('scale-ref')}, rating {part} on "
+                                f"{pa.get('scale-ref')} (RISK-13: {RISK_RULES['RISK-13']})")
             # owner-ref, threat-refs, shared-with-ref, acceptance.approver-ref,
             # rating.scale-ref are landmark (parties, threat catalogs, scales)
         elif t == "mapping":
