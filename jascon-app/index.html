@@ -125,6 +125,8 @@ iframe { width: 100%; height: 100%; border: 0; display: block; }
    A tool is listed here when its page exists; the order is the order of the
    work. `types` are the kernel types the tool is about and drive its count. */
 const APPS = [
+  { id: "browse", file: "browse.html", glyph: "⌕", label: N("Browse"), types: ["requirement", "requirementSet"],
+    desc: N("The catalogue as a tree, every object with filters, statistics; write requirements and sets") },
 ];
 
 const $ = id => document.getElementById(id);
@@ -135,6 +137,9 @@ if (typeof jscStore === "undefined") {
 
 jscI18n.add("de", {
   "Set": "Set", "Settings": "Einstellungen", "Home": "Übersicht",
+  "Browse": "Durchsehen",
+  "The catalogue as a tree, every object with filters, statistics; write requirements and sets":
+    "Der Katalog als Baum, jedes Objekt mit Filtern, Statistik; Anforderungen und Sets schreiben",
   "The working bundle every tool reads and writes": "Das Arbeits-Bundle, das alle Werkzeuge lesen und schreiben",
   "Switch the language of the interface": "Sprache der Oberfläche wechseln",
   "Open the current tool in its own tab": "Aktuelles Werkzeug in eigenem Tab öffnen",
