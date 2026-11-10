@@ -131,6 +131,41 @@ UUID-plumbing cluster (party-uuid, import-profile, attachment
 hashes) dies into L0 references and the content manifest: Level 1 by
 deletion.
 
+**Risk (2.0.0 — CP-RISK-1).** OSCAL 1.x `assessment-results`/`poam`
+`risks[]` become **Risk** objects. As run on the IFA corpus (2026-11-10):
+`statement` → `scenario`; `deadline` → `review-due` as a `datetime` (the
+OSCAL type is date-time-with-timezone); the POA&M `system-id` →
+`component-refs`; the response's `type` prop → `treatment` (`mitigate` →
+`modify`, `accept` → `retain`, `transfer`/`share` → `share`, `avoid` →
+`avoid`); the assessment finding's `related-risks` edge → `treatments[]`;
+`threat-ids` → `threat-refs` (none in the corpus). `remediations` stay
+`Finding.actions[]`; `related-observations` ride the Finding's evidence;
+the Finding gains `risk-refs`. `characterizations`, `mitigating-factors`,
+the source status and the response narrative go to a `risk-analysis@1`
+framework facet (the L2 holding pen for the parked stdlib facet).
+Three fields the Risk shape requires have **no OSCAL source**, and the
+playbook says so instead of inventing them: (1) **owner** — OSCAL's risk
+has no owner; take the system owner from the imported SSP and declare the
+derivation. (2) **level** — a characterization carries likelihood and
+impact, never the combined level, so `risk-status` maps to `identified`
+(or `retired` for `closed`) and nothing else; `assessed` and `treated`
+need a `rating` the source does not hold. (3) **acceptance date** — a
+`deviation-approved` risk with an `accept` response has a rationale and,
+in prose, an approver, but no date; without one `retain` cannot be written
+(RISK-6), so the approval stays where the source put it — on the
+`risk-adjustment` Deviation, which names the Risk (RISK-9). The split the
+kernel wants — `Risk.acceptance` (the owner) beside the Deviation (the
+implementer), because `deviation-approved` fused two acts by two roles
+and lost the owner — becomes writable the day the source records that
+date.
+
+One consequence follows and is not softened: an imported Risk that stays
+`identified` is *pending* for `risk-coverage` (B.1.9) — it justifies
+nothing, because a justification rests on an assessed risk with a chosen
+option. A Statement of Applicability built on imported OSCAL risks reports
+its controls as uncovered until someone records the level natively. The
+converter reports that gap; it does not close it.
+
 ## 14.4 Playbook: CR26 and other bespoke JSON
 
 The American corpus converts almost by table lookup, because

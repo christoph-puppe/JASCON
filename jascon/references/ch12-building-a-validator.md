@@ -64,7 +64,7 @@ verdicts match, not when you feel done.
 
 ## 12.2 Friday night: schemas and shapes
 
-Load the nine type schemas plus the sub-objects (Deviation,
+Load the ten type schemas plus the sub-objects (Deviation,
 authorization contexts) and the content-manifest schema. Until the
 gate ships them as artifacts, hand-code them from the specification's
 Appendix A — a bounded evening's work precisely because the shapes are
@@ -72,7 +72,7 @@ shallow.
 
 One data-model decision earns its keep all weekend: implement a
 generic object envelope — id, version, label, aliases, lifecycle,
-`facets`, `annotations`, `relations` — shared by all nine types, with
+`facets`, `annotations`, `relations` — shared by all ten types, with
 typed payloads per kind. Statements are a first-class list inside
 Requirement, because half the structural rules address them by id.
 

@@ -75,20 +75,21 @@ difference is the complexity budget's whole thesis. The failure mode
 this architecture answers is not "insufficient ontological
 expressiveness" — it is 22,000 annotation props and three national
 authorities routing around a standard that spent its budget on
-infrastructure. Nine shallow types with typed edges give the graph;
+infrastructure. Ten shallow types with typed edges give the graph;
 JSON Schema gives the weekend validator; a triple store gives
 neither. Anyone who wants RDF can project it — losslessly, from a
 model this simple.
 
 ## F.2 "You went too far" — the architecture objections
 
-**Q7. Nine types is arbitrary. Why not one generic node with typed
+**Q7. Ten types is arbitrary. Why not one generic node with typed
 properties?**
 Because "one generic node with typed properties" is the 1.x prop
 system with better marketing — the exact architecture whose measured
-cost opened the book. The nine types are not invented; they are the
-convergence table's output: the shapes three governments
-independently built. Fewer types pushes semantics back into
+cost opened the book. The types are not invented: nine are the
+convergence table's output, the shapes three governments independently
+built, and the tenth (Risk, 2.0.0) came through the change process with
+its own counts (CP-RISK-1). Fewer types pushes semantics back into
 string-keyed soup; more types failed the census test (no third
 authority needed them).
 
@@ -153,12 +154,7 @@ encode as data. BPM engines exist; this is their input, not their
 competitor.
 
 **Q14. Where's risk modeling — likelihood, impact, scoring?**
-In facets, where legitimate methodological diversity belongs.
-`security-objectives@1` carries the ratings authorities actually
-ship (measured: C/I/A/Auth ×4,494); scoring *methodologies* differ
-by framework and by fashion, which is the exact profile of a facet
-and the exact anti-profile of a kernel field. `privacy-assessment@1`
-is parked for the same discipline: no facet designed from memory.
+Scoring is in facets; the risk is in the kernel (2.0.0). The split is the measured one: four authorities (ISO 27001/27005, BSI 200-3, SP 800-30, OSCAL's own AR/POA&M) encode *the same* risk record — owner, scenario, level, treatment option, treating controls, residual acceptance — and *different* ways of computing the level. The record is a kernel type (A.9b) so that a selected requirement can name the risk that justifies it (ISO 6.1.3 b/d — the question OSCAL #2292 found unanswerable in 1.x); the computation is a facet (`risk-analysis@1`, parked until measured) so that CVSS, FAIR and the 4×4 matrix coexist under contract. `rating` carries only a level on a named scale and compares nothing across scales. `privacy-assessment@1` stays parked for the same discipline. *First measurement (IFA re-run, 2026-11-10), reported because it cuts against the sentence above:* the fourth authority does not carry the whole record. An OSCAL risk has likelihood and impact but no level, no owner and no acceptance date, so both corpus risks convert as `identified` and the one accepted risk cannot be written as `retain`. "The same record" holds for ISO 27001, BSI 200-3 and SP 800-30 as standards; for OSCAL as data three of the six fields arrive (scenario, treatment option, treating controls) and three do not (owner, level, dated acceptance). Decided 2026-11-10: the rules stay as they are — the states keep their guarantee, and an OSCAL import shows honestly what it lacks (specification D23).
 
 **Q15. Statements without mandatory grammar are just prose with
 extra steps.**

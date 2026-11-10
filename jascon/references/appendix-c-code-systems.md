@@ -81,6 +81,18 @@ approved | withdrawn` — one machine, four historical prop-copies
 retired. Terminal states are terminal; re-litigation is a *new*
 Deviation with its own record.
 
+**C.3c Risk states** *(2.0.0)*: `identified → assessed → treated →
+retired` — forward only, skipping allowed (RISK-2/3 make the skipped
+content mandatory anyway), `retired` terminal: a recurrence is a *new*
+Risk, the Finding `closed` rule applied once more. Dispositions are the
+`treatment` code (C.10), never extra states. `retired` has a consequence
+beyond the state machine: a retired Risk justifies nothing (B.1.9) and is
+exempt from RISK-11 — retiring a risk and then
+dropping its control is the ordinary end of a treatment. `assessed` has
+one too: a Risk justifies a requirement only from `assessed` on, and only
+with a `treatment` option chosen — an `identified` Risk is listed as
+pending (B.1.9).
+
 ## C.4 Responsibility
 
 `provider · customer · shared · inherited` — on Implementation edges.
@@ -188,6 +200,20 @@ not-applicable`. **Assessment results (seed):** `satisfied ·
 not-satisfied · inconclusive` — with the same C.3 smallness rule:
 nuance belongs in Findings and evidence, not in result-code
 proliferation. Seed status, gate-item-3 lifecycle corpus confirms.
+**Risk treatment options** *(2.0.0)*: `modify · retain · avoid · share` —
+adopted, not invented: ISO 31000 §6.5.2 / ISO 27005 §8.6, one-to-one with
+BSI 200-3 (Reduktion · Akzeptanz · Vermeidung · Transfer); SP 800-39's
+share and transfer both map to `share`. Each option binds a field
+(RISK-4/5/6): modify ⇒ `treatments`, share ⇒ `shared-with-ref`,
+retain ⇒ `acceptance`. Observed in the corpora (IFA re-run, 2026-11-10):
+OSCAL's response `type` prop carries the option — `mitigate` ×1 →
+`modify`, `accept` ×1 → `retain` (not emitted: the source has no dated
+acceptance, RISK-6). The fit is not one-to-one in the other direction:
+OSCAL allows seven values for that prop (`avoid · mitigate · transfer ·
+accept · share · contingency · none`); `transfer` and `share` both land
+on `share`, and `contingency` and `none` have no code here. Zero corpus
+instances of either so far; if one appears it stays in the facet and is
+counted, never coerced.
 
 ---
 

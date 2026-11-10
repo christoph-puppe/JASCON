@@ -1,0 +1,4316 @@
+{
+ "description": "CP-RISK-1 vectors (kernel 2.0.0). object-vectors: shape, disjointness and the RISK-1..6 conditionals - schema-enforced; `expected-rule` is the PORTABLE assertion (every implementation names the violated rule id), `expected-frag` is advisory (the field one schema library's diagnostic mentions). bundle-vectors: closure (RISK-7/8), typed Risk edges (RISK-12), the B.1.9 risk-coverage primitive (uncovered selections are REPORTED; --require-risk-basis fails them; only LIVE risks justify - retired or withdrawn ones are listed under `lapsed`; a predicate select makes the selection a lower bound), RISK-9/10 SHOULD-notes, RISK-11 treatment-out-of-scope (live risks only; asked of the Tailorings a Risk belongs to; undecided under a predicate select of one of those). Since the review of 2.0.0-rc.1: a Risk JUSTIFIES only once it is assessed and its option chosen (others are listed under `pending`); `tailoring-refs` scope a Risk to its Statement(s) of Applicability (RISK-14 notes the unscoped case); withdrawn Tailorings and Requirements are not in force; Tailoring selects/excludes are typed; RISK-13 holds rating and residual-rating to one scale; dates and review intervals are checked. risk-transitions: C.3c state machine - forward only, skipping allowed, retired terminal. Rules carry their why: each vector names the rule and the clause it answers to (ISO/IEC 27001:2022 6.1.2-6.1.3, BSI 200-3, NIST SP 800-30). The cases marked 'review finding R-n' were added when the proposal was landed in the repository (2026-11-10); each was demonstrated failing against the validator as first proposed.",
+ "object-vectors": [
+  {
+   "name": "minimal-identified-valid",
+   "expected": "valid",
+   "object": {
+    "id": "https://org.example/risk/R-1",
+    "version": "1",
+    "lifecycle": "active",
+    "scenario": {
+     "en": "Tenant keys exposed through a KMS export path."
+    },
+    "owner-ref": "https://org.example/party/ciso",
+    "state": "identified"
+   },
+   "rule": "RISK-1 shape: scenario + owner-ref + state are the disjoint signature (ISO 27001 6.1.2 c: a risk has an owner from the moment it is identified)"
+  },
+  {
+   "name": "assessed-without-rating",
+   "expected": "invalid",
+   "expected-rule": "RISK-2",
+   "expected-frag": "rating",
+   "object": {
+    "id": "https://org.example/risk/R-1",
+    "version": "1",
+    "lifecycle": "active",
+    "scenario": {
+     "en": "Tenant keys exposed through a KMS export path."
+    },
+    "owner-ref": "https://org.example/party/ciso",
+    "state": "assessed"
+   },
+   "rule": "RISK-2: assessed/treated carry a rating (ISO 6.1.2 d-e analyse+evaluate; BSI 200-3 Risikoeinstufung; SP 800-30 determine risk)"
+  },
+  {
+   "name": "assessed-with-rating-valid",
+   "expected": "valid",
+   "object": {
+    "id": "https://org.example/risk/R-1",
+    "version": "1",
+    "lifecycle": "active",
+    "scenario": {
+     "en": "Tenant keys exposed through a KMS export path."
+    },
+    "owner-ref": "https://org.example/party/ciso",
+    "state": "assessed",
+    "rating": {
+     "level": "hoch",
+     "scale-ref": "https://org.example/scale/bsi-200-3-4x4"
+    }
+   }
+  },
+  {
+   "name": "treated-without-acceptance",
+   "expected": "invalid",
+   "expected-rule": "RISK-3",
+   "expected-frag": "acceptance",
+   "object": {
+    "id": "https://org.example/risk/R-1",
+    "version": "1",
+    "lifecycle": "active",
+    "scenario": {
+     "en": "Tenant keys exposed through a KMS export path."
+    },
+    "owner-ref": "https://org.example/party/ciso",
+    "state": "treated",
+    "rating": {
+     "level": "hoch",
+     "scale-ref": "https://org.example/scale/bsi-200-3-4x4"
+    },
+    "treatment": "modify",
+    "treatments": [
+     {
+      "requirement-ref": "https://ns.auth.gov/fw/req/1"
+     }
+    ]
+   },
+   "rule": "RISK-3: a treated risk carries the owner's acceptance of the residual (ISO 6.1.3 f)"
+  },
+  {
+   "name": "treated-without-treatment-option",
+   "expected": "invalid",
+   "expected-rule": "RISK-3",
+   "expected-frag": "treatment",
+   "object": {
+    "id": "https://org.example/risk/R-1",
+    "version": "1",
+    "lifecycle": "active",
+    "scenario": {
+     "en": "Tenant keys exposed through a KMS export path."
+    },
+    "owner-ref": "https://org.example/party/ciso",
+    "state": "treated",
+    "rating": {
+     "level": "hoch",
+     "scale-ref": "https://org.example/scale/bsi-200-3-4x4"
+    },
+    "acceptance": {
+     "approver-ref": "https://org.example/party/ciso",
+     "date": "2026-11-05",
+     "rationale": {
+      "en": "Residual 'gering' is within appetite."
+     }
+    }
+   },
+   "rule": "RISK-3: treated names its option (ISO 6.1.3 a)"
+  },
+  {
+   "name": "modify-without-controls",
+   "expected": "invalid",
+   "expected-rule": "RISK-4",
+   "expected-frag": "treatments",
+   "object": {
+    "id": "https://org.example/risk/R-1",
+    "version": "1",
+    "lifecycle": "active",
+    "scenario": {
+     "en": "Tenant keys exposed through a KMS export path."
+    },
+    "owner-ref": "https://org.example/party/ciso",
+    "state": "identified",
+    "treatment": "modify"
+   },
+   "rule": "RISK-4: modify without controls is nothing (ISO 6.1.3 b determine all controls necessary)"
+  },
+  {
+   "name": "share-without-party",
+   "expected": "invalid",
+   "expected-rule": "RISK-5",
+   "expected-frag": "shared-with-ref",
+   "object": {
+    "id": "https://org.example/risk/R-1",
+    "version": "1",
+    "lifecycle": "active",
+    "scenario": {
+     "en": "Tenant keys exposed through a KMS export path."
+    },
+    "owner-ref": "https://org.example/party/ciso",
+    "state": "identified",
+    "treatment": "share"
+   },
+   "rule": "RISK-5: sharing names who carries it (ISO 27005 8.6.2; BSI 200-3 Risikotransfer)"
+  },
+  {
+   "name": "retain-without-acceptance",
+   "expected": "invalid",
+   "expected-rule": "RISK-6",
+   "expected-frag": "acceptance",
+   "object": {
+    "id": "https://org.example/risk/R-1",
+    "version": "1",
+    "lifecycle": "active",
+    "scenario": {
+     "en": "Tenant keys exposed through a KMS export path."
+    },
+    "owner-ref": "https://org.example/party/ciso",
+    "state": "identified",
+    "treatment": "retain"
+   },
+   "rule": "RISK-6: retain IS acceptance - no silent retention (ISO 6.1.3 f)"
+  },
+  {
+   "name": "avoid-at-identified-valid",
+   "expected": "valid",
+   "object": {
+    "id": "https://org.example/risk/R-1",
+    "version": "1",
+    "lifecycle": "active",
+    "scenario": {
+     "en": "Tenant keys exposed through a KMS export path."
+    },
+    "owner-ref": "https://org.example/party/ciso",
+    "state": "identified",
+    "treatment": "avoid"
+   },
+   "rule": "avoid needs neither controls nor a transferee; acceptance only once treated"
+  },
+  {
+   "name": "full-treated-valid",
+   "expected": "valid",
+   "object": {
+    "id": "https://org.example/risk/R-1",
+    "version": "1",
+    "lifecycle": "active",
+    "scenario": {
+     "en": "Tenant keys exposed through a KMS export path."
+    },
+    "owner-ref": "https://org.example/party/ciso",
+    "state": "treated",
+    "rating": {
+     "level": "hoch",
+     "scale-ref": "https://org.example/scale/bsi-200-3-4x4"
+    },
+    "residual-rating": {
+     "level": "gering",
+     "scale-ref": "https://org.example/scale/bsi-200-3-4x4"
+    },
+    "treatment": "modify",
+    "treatments": [
+     {
+      "requirement-ref": "https://ns.auth.gov/fw/req/1",
+      "statement-ids": [
+       "s2"
+      ]
+     }
+    ],
+    "acceptance": {
+     "approver-ref": "https://org.example/party/ciso",
+     "date": "2026-11-05",
+     "rationale": {
+      "en": "Residual 'gering' is within appetite."
+     }
+    },
+    "threat-refs": [
+     "https://ns.bsi.bund.de/gspp/threat/G-0.19"
+    ],
+    "component-refs": [
+     "https://org.example/component/saas"
+    ],
+    "review-due": {
+     "type": "calendar-period",
+     "num": 12,
+     "unit": "months",
+     "calendar-ref": "https://org.example/calendar/isms"
+    }
+   }
+  },
+  {
+   "name": "scoring-field-in-kernel-rejected",
+   "expected": "invalid",
+   "expected-frag": "likelihood",
+   "object": {
+    "id": "https://org.example/risk/R-1",
+    "version": "1",
+    "lifecycle": "active",
+    "scenario": {
+     "en": "Tenant keys exposed through a KMS export path."
+    },
+    "owner-ref": "https://org.example/party/ciso",
+    "state": "identified",
+    "likelihood": 3,
+    "impact": 4
+   },
+   "rule": "closed shape (D10): likelihood/impact/CVSS live in a facet - methodologies differ, the kernel carries the label on a named scale (App. F Q14)"
+  },
+  {
+   "name": "rating-without-scale-rejected",
+   "expected": "invalid",
+   "expected-frag": "scale-ref",
+   "object": {
+    "id": "https://org.example/risk/R-1",
+    "version": "1",
+    "lifecycle": "active",
+    "scenario": {
+     "en": "Tenant keys exposed through a KMS export path."
+    },
+    "owner-ref": "https://org.example/party/ciso",
+    "state": "assessed",
+    "rating": {
+     "level": "high"
+    }
+   },
+   "rule": "a level without its scale is a bare word - the 'erhöht beside normal-SdT' corpse (App. C)"
+  },
+  {
+   "name": "unknown-treatment-code",
+   "expected": "invalid",
+   "expected-frag": "transfer",
+   "object": {
+    "id": "https://org.example/risk/R-1",
+    "version": "1",
+    "lifecycle": "active",
+    "scenario": {
+     "en": "Tenant keys exposed through a KMS export path."
+    },
+    "owner-ref": "https://org.example/party/ciso",
+    "state": "identified",
+    "treatment": "transfer"
+   },
+   "rule": "C.12 is a closed set: ISO 31000 'share' absorbs 800-39 transfer; an unknown code is an error, never a warning"
+  },
+  {
+   "name": "empty-optional-container",
+   "expected": "invalid",
+   "expected-frag": "threat-refs",
+   "object": {
+    "id": "https://org.example/risk/R-1",
+    "version": "1",
+    "lifecycle": "active",
+    "scenario": {
+     "en": "Tenant keys exposed through a KMS export path."
+    },
+    "owner-ref": "https://org.example/party/ciso",
+    "state": "identified",
+    "threat-refs": []
+   },
+   "rule": "D3.3 optional empties MUST be absent"
+  },
+  {
+   "name": "finding-shape-is-not-risk",
+   "expected": "invalid",
+   "object": {
+    "id": "https://org.example/f/1",
+    "version": "1",
+    "lifecycle": "active",
+    "assessment-ref": "https://org.example/a/1",
+    "requirement-ref": "https://ns.auth.gov/fw/req/1",
+    "state": "open",
+    "scenario": {
+     "en": "x"
+    },
+    "owner-ref": "https://org.example/party/x"
+   },
+   "rule": "shape-disjointness: a Finding with risk fields smeared on matches NO type - the edge is Finding.risk-refs, never field-mixing"
+  },
+  {
+   "name": "risk-without-owner",
+   "expected": "invalid",
+   "expected-rule": "RISK-1",
+   "expected-frag": "owner-ref",
+   "object": {
+    "id": "https://org.example/risk/R-1",
+    "version": "1",
+    "lifecycle": "active",
+    "scenario": {
+     "en": "Tenant keys exposed through a KMS export path."
+    },
+    "state": "identified"
+   },
+   "rule": "RISK-1: a risk without an owner is a worry, not a managed risk (ISO 27001 6.1.2 c 2). The object matches NO type - the owner is part of the disjoint signature - and the validator names RISK-1 rather than leaving the reader with 'matches no type'"
+  },
+  {
+   "name": "risk-scoped-with-residual-and-dated-review",
+   "object": {
+    "id": "https://org.example/risk/R-9",
+    "version": "1",
+    "lifecycle": "active",
+    "scenario": {
+     "en": "Scenario 9."
+    },
+    "owner-ref": "https://org.example/party/ciso",
+    "state": "treated",
+    "rating": {
+     "level": "hoch",
+     "scale-ref": "https://org.example/scale/4x4"
+    },
+    "treatment": "retain",
+    "acceptance": {
+     "approver-ref": "https://org.example/party/ciso",
+     "date": "2026-11-05",
+     "rationale": {
+      "en": "Within appetite."
+     }
+    },
+    "tailoring-refs": [
+     "https://org.example/tailoring/soa"
+    ],
+    "residual-rating": {
+     "level": "gering",
+     "scale-ref": "https://org.example/scale/4x4"
+    },
+    "review-due": {
+     "type": "date",
+     "value": "2027-11-05"
+    }
+   },
+   "expected": "valid",
+   "rule": "A.9b: tailoring-refs, residual-rating beside rating, review-due as an ISO date"
+  },
+  {
+   "name": "acceptance-date-is-not-a-date",
+   "object": {
+    "id": "https://org.example/risk/R-9",
+    "version": "1",
+    "lifecycle": "active",
+    "scenario": {
+     "en": "Scenario 9."
+    },
+    "owner-ref": "https://org.example/party/ciso",
+    "state": "treated",
+    "rating": {
+     "level": "hoch",
+     "scale-ref": "https://org.example/scale/4x4"
+    },
+    "treatment": "retain",
+    "acceptance": {
+     "approver-ref": "https://org.example/party/ciso",
+     "date": "neulich",
+     "rationale": {
+      "en": "Within appetite."
+     }
+    }
+   },
+   "expected": "invalid",
+   "expected-frag": "date",
+   "rule": "A.9b: acceptance.date is an ISO 8601 calendar date (YYYY-MM-DD) - a 'dated acceptance' that any string satisfies is not dated"
+  },
+  {
+   "name": "review-due-negative-period",
+   "object": {
+    "id": "https://org.example/risk/R-9",
+    "version": "1",
+    "lifecycle": "active",
+    "scenario": {
+     "en": "Scenario 9."
+    },
+    "owner-ref": "https://org.example/party/ciso",
+    "state": "treated",
+    "rating": {
+     "level": "hoch",
+     "scale-ref": "https://org.example/scale/4x4"
+    },
+    "treatment": "retain",
+    "acceptance": {
+     "approver-ref": "https://org.example/party/ciso",
+     "date": "2026-11-05",
+     "rationale": {
+      "en": "Within appetite."
+     }
+    },
+    "review-due": {
+     "type": "calendar-period",
+     "num": -3,
+     "unit": "months",
+     "calendar-ref": "https://org.example/calendar/isms"
+    }
+   },
+   "expected": "invalid",
+   "rule": "A.9b: a review interval is a positive whole number of units"
+  },
+  {
+   "name": "review-due-fractional-duration",
+   "object": {
+    "id": "https://org.example/risk/R-9",
+    "version": "1",
+    "lifecycle": "active",
+    "scenario": {
+     "en": "Scenario 9."
+    },
+    "owner-ref": "https://org.example/party/ciso",
+    "state": "treated",
+    "rating": {
+     "level": "hoch",
+     "scale-ref": "https://org.example/scale/4x4"
+    },
+    "treatment": "retain",
+    "acceptance": {
+     "approver-ref": "https://org.example/party/ciso",
+     "date": "2026-11-05",
+     "rationale": {
+      "en": "Within appetite."
+     }
+    },
+    "review-due": {
+     "type": "elapsed-duration",
+     "num": 1.5,
+     "unit": "hours"
+    }
+   },
+   "expected": "invalid",
+   "rule": "A.9b: a review interval is a positive whole number of units - use the smaller unit"
+  },
+  {
+   "name": "review-due-date-is-not-a-date",
+   "object": {
+    "id": "https://org.example/risk/R-9",
+    "version": "1",
+    "lifecycle": "active",
+    "scenario": {
+     "en": "Scenario 9."
+    },
+    "owner-ref": "https://org.example/party/ciso",
+    "state": "treated",
+    "rating": {
+     "level": "hoch",
+     "scale-ref": "https://org.example/scale/4x4"
+    },
+    "treatment": "retain",
+    "acceptance": {
+     "approver-ref": "https://org.example/party/ciso",
+     "date": "2026-11-05",
+     "rationale": {
+      "en": "Within appetite."
+     }
+    },
+    "review-due": {
+     "type": "date",
+     "value": "next spring"
+    }
+   },
+   "expected": "invalid",
+   "rule": "A.9b: a review-due point in time is an ISO 8601 date"
+  },
+  {
+   "name": "review-due-datetime-needs-time-and-offset",
+   "object": {
+    "id": "https://org.example/risk/R-9",
+    "version": "1",
+    "lifecycle": "active",
+    "scenario": {
+     "en": "Scenario 9."
+    },
+    "owner-ref": "https://org.example/party/ciso",
+    "state": "treated",
+    "rating": {
+     "level": "hoch",
+     "scale-ref": "https://org.example/scale/4x4"
+    },
+    "treatment": "retain",
+    "acceptance": {
+     "approver-ref": "https://org.example/party/ciso",
+     "date": "2026-11-05",
+     "rationale": {
+      "en": "Within appetite."
+     }
+    },
+    "review-due": {
+     "type": "datetime",
+     "value": "2027-11-05"
+    }
+   },
+   "expected": "invalid",
+   "rule": "A.9b: type datetime is RFC 3339 with an explicit offset - two tools must not read one value as two instants"
+  },
+  {
+   "name": "residual-rating-without-rating",
+   "object": {
+    "id": "https://org.example/risk/R-8",
+    "version": "1",
+    "lifecycle": "active",
+    "scenario": {
+     "en": "Scenario 8."
+    },
+    "owner-ref": "https://org.example/party/ciso",
+    "state": "identified",
+    "residual-rating": {
+     "level": "gering",
+     "scale-ref": "https://org.example/scale/4x4"
+    }
+   },
+   "expected": "invalid",
+   "expected-rule": "RISK-13",
+   "rule": "RISK-13: a residual level presupposes a rating"
+  }
+ ],
+ "bundle-vectors": [
+  {
+   "name": "coverage-two-of-three-justified",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Encrypt in transit."
+       }
+      },
+      {
+       "id": "s2",
+       "modality": "should",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Rotate keys."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/req/2",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Log access."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/req/3",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "should",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Train staff."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/base",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      },
+      {
+       "ref": "https://ns.auth.gov/fw/req/2",
+       "sequence": 20
+      },
+      {
+       "ref": "https://ns.auth.gov/fw/req/3",
+       "sequence": 30
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/tailoring/soa-2026",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/base"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/component/saas",
+     "version": "1",
+     "lifecycle": "active",
+     "kind": "service"
+    },
+    {
+     "id": "https://org.example/risk/R-1",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Tenant keys exposed through a KMS export path."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "treated",
+     "rating": {
+      "level": "hoch",
+      "scale-ref": "https://org.example/scale/bsi-200-3-4x4"
+     },
+     "treatment": "modify",
+     "acceptance": {
+      "approver-ref": "https://org.example/party/ciso",
+      "date": "2026-11-05",
+      "rationale": {
+       "en": "Residual 'gering' is within appetite."
+      }
+     },
+     "treatments": [
+      {
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s2"
+       ]
+      }
+     ],
+     "component-refs": [
+      "https://org.example/component/saas"
+     ]
+    },
+    {
+     "id": "https://org.example/risk/R-2",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Unauthorised access goes unnoticed."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "assessed",
+     "rating": {
+      "level": "hoch",
+      "scale-ref": "https://org.example/scale/bsi-200-3-4x4"
+     },
+     "treatment": "modify",
+     "treatments": [
+      {
+       "requirement-ref": "https://ns.auth.gov/fw/req/2"
+      }
+     ]
+    }
+   ],
+   "expected-fails": 0,
+   "expected-coverage": {
+    "https://org.example/tailoring/soa-2026": {
+     "covered": [
+      "https://ns.auth.gov/fw/req/1",
+      "https://ns.auth.gov/fw/req/2"
+     ],
+     "uncovered": [
+      "https://ns.auth.gov/fw/req/3"
+     ]
+    }
+   },
+   "rule": "B.1.9: req/3 is selected but named by no Risk - reported, not failed (policy switch --require-risk-basis)"
+  },
+  {
+   "name": "coverage-exclude-without-rationale-noted",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Encrypt in transit."
+       }
+      },
+      {
+       "id": "s2",
+       "modality": "should",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Rotate keys."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/req/2",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Log access."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/req/3",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "should",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Train staff."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/base",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      },
+      {
+       "ref": "https://ns.auth.gov/fw/req/2",
+       "sequence": 20
+      },
+      {
+       "ref": "https://ns.auth.gov/fw/req/3",
+       "sequence": 30
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/tailoring/soa-2026",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/base"
+      }
+     ],
+     "excludes": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/3"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/component/saas",
+     "version": "1",
+     "lifecycle": "active",
+     "kind": "service"
+    },
+    {
+     "id": "https://org.example/risk/R-1",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Tenant keys exposed through a KMS export path."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "treated",
+     "rating": {
+      "level": "hoch",
+      "scale-ref": "https://org.example/scale/bsi-200-3-4x4"
+     },
+     "treatment": "modify",
+     "acceptance": {
+      "approver-ref": "https://org.example/party/ciso",
+      "date": "2026-11-05",
+      "rationale": {
+       "en": "Residual 'gering' is within appetite."
+      }
+     },
+     "treatments": [
+      {
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s2"
+       ]
+      }
+     ],
+     "component-refs": [
+      "https://org.example/component/saas"
+     ]
+    },
+    {
+     "id": "https://org.example/risk/R-2",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Unauthorised access goes unnoticed."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "assessed",
+     "rating": {
+      "level": "hoch",
+      "scale-ref": "https://org.example/scale/bsi-200-3-4x4"
+     },
+     "treatment": "modify",
+     "treatments": [
+      {
+       "requirement-ref": "https://ns.auth.gov/fw/req/2"
+      }
+     ]
+    }
+   ],
+   "expected-fails": 0,
+   "expected-notes": [
+    "RISK-10"
+   ],
+   "expected-coverage": {
+    "https://org.example/tailoring/soa-2026": {
+     "covered": [
+      "https://ns.auth.gov/fw/req/1",
+      "https://ns.auth.gov/fw/req/2"
+     ],
+     "uncovered": []
+    }
+   },
+   "rule": "RISK-10 SHOULD: an SoA exclusion carries its justification (ISO 6.1.3 d)"
+  },
+  {
+   "name": "coverage-exclude-with-rationale-clean",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Encrypt in transit."
+       }
+      },
+      {
+       "id": "s2",
+       "modality": "should",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Rotate keys."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/req/2",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Log access."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/req/3",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "should",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Train staff."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/base",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      },
+      {
+       "ref": "https://ns.auth.gov/fw/req/2",
+       "sequence": 20
+      },
+      {
+       "ref": "https://ns.auth.gov/fw/req/3",
+       "sequence": 30
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/tailoring/soa-2026",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/base"
+      }
+     ],
+     "excludes": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/3",
+       "rationale": {
+        "en": "No own staff; operations fully outsourced (contract C-17)."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/component/saas",
+     "version": "1",
+     "lifecycle": "active",
+     "kind": "service"
+    },
+    {
+     "id": "https://org.example/risk/R-1",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Tenant keys exposed through a KMS export path."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "treated",
+     "rating": {
+      "level": "hoch",
+      "scale-ref": "https://org.example/scale/bsi-200-3-4x4"
+     },
+     "treatment": "modify",
+     "acceptance": {
+      "approver-ref": "https://org.example/party/ciso",
+      "date": "2026-11-05",
+      "rationale": {
+       "en": "Residual 'gering' is within appetite."
+      }
+     },
+     "treatments": [
+      {
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s2"
+       ]
+      }
+     ],
+     "component-refs": [
+      "https://org.example/component/saas"
+     ]
+    },
+    {
+     "id": "https://org.example/risk/R-2",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Unauthorised access goes unnoticed."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "assessed",
+     "rating": {
+      "level": "hoch",
+      "scale-ref": "https://org.example/scale/bsi-200-3-4x4"
+     },
+     "treatment": "modify",
+     "treatments": [
+      {
+       "requirement-ref": "https://ns.auth.gov/fw/req/2"
+      }
+     ]
+    }
+   ],
+   "expected-fails": 0,
+   "expected-coverage": {
+    "https://org.example/tailoring/soa-2026": {
+     "covered": [
+      "https://ns.auth.gov/fw/req/1",
+      "https://ns.auth.gov/fw/req/2"
+     ],
+     "uncovered": []
+    }
+   }
+  },
+  {
+   "name": "statement-id-names-no-statement",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Encrypt in transit."
+       }
+      },
+      {
+       "id": "s2",
+       "modality": "should",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Rotate keys."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/base",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/tailoring/soa-2026",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/base"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/component/saas",
+     "version": "1",
+     "lifecycle": "active",
+     "kind": "service"
+    },
+    {
+     "id": "https://org.example/risk/R-3",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Tenant keys exposed through a KMS export path."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "identified",
+     "treatment": "modify",
+     "treatments": [
+      {
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s9"
+       ]
+      }
+     ]
+    }
+   ],
+   "expected-fails": 1,
+   "expected-frags": [
+    "RISK-8"
+   ],
+   "rule": "RISK-8: treatments.statement-ids must address statements of the target"
+  },
+  {
+   "name": "treatment-requirement-not-in-bundle",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Encrypt in transit."
+       }
+      },
+      {
+       "id": "s2",
+       "modality": "should",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Rotate keys."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/base",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/tailoring/soa-2026",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/base"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/component/saas",
+     "version": "1",
+     "lifecycle": "active",
+     "kind": "service"
+    },
+    {
+     "id": "https://org.example/risk/R-4",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Tenant keys exposed through a KMS export path."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "identified",
+     "treatment": "modify",
+     "treatments": [
+      {
+       "requirement-ref": "https://ns.auth.gov/fw/req/99"
+      }
+     ]
+    }
+   ],
+   "expected-fails": 1,
+   "expected-frags": [
+    "RISK-7"
+   ],
+   "rule": "RISK-7: treatments.requirement-ref is closure-required (like Implementation.requirement-ref)"
+  },
+  {
+   "name": "treatment-out-of-scope",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Encrypt in transit."
+       }
+      },
+      {
+       "id": "s2",
+       "modality": "should",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Rotate keys."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/req/2",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Log access."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/req/3",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "should",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Train staff."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/base",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      },
+      {
+       "ref": "https://ns.auth.gov/fw/req/2",
+       "sequence": 20
+      },
+      {
+       "ref": "https://ns.auth.gov/fw/req/3",
+       "sequence": 30
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/tailoring/soa-2026",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/base"
+      }
+     ],
+     "excludes": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/3",
+       "rationale": {
+        "en": "No own staff; operations fully outsourced (contract C-17)."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/component/saas",
+     "version": "1",
+     "lifecycle": "active",
+     "kind": "service"
+    },
+    {
+     "id": "https://org.example/risk/R-1",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Tenant keys exposed through a KMS export path."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "treated",
+     "rating": {
+      "level": "hoch",
+      "scale-ref": "https://org.example/scale/bsi-200-3-4x4"
+     },
+     "treatment": "modify",
+     "acceptance": {
+      "approver-ref": "https://org.example/party/ciso",
+      "date": "2026-11-05",
+      "rationale": {
+       "en": "Residual 'gering' is within appetite."
+      }
+     },
+     "treatments": [
+      {
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s2"
+       ]
+      }
+     ],
+     "component-refs": [
+      "https://org.example/component/saas"
+     ]
+    },
+    {
+     "id": "https://org.example/risk/R-5",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Tenant keys exposed through a KMS export path."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "identified",
+     "treatment": "modify",
+     "treatments": [
+      {
+       "requirement-ref": "https://ns.auth.gov/fw/req/3"
+      }
+     ]
+    }
+   ],
+   "expected-fails": 1,
+   "expected-frags": [
+    "RISK-11"
+   ],
+   "rule": "RISK-11: a Risk leans on req/3, which the SoA excludes - the treatment plan and the SoA disagree"
+  },
+  {
+   "name": "risk-adjustment-deviation-without-risk-ref-noted",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Encrypt in transit."
+       }
+      },
+      {
+       "id": "s2",
+       "modality": "should",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Rotate keys."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/base",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/tailoring/soa-2026",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/base"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/component/saas",
+     "version": "1",
+     "lifecycle": "active",
+     "kind": "service"
+    },
+    {
+     "id": "https://org.example/risk/R-1",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Tenant keys exposed through a KMS export path."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "treated",
+     "rating": {
+      "level": "hoch",
+      "scale-ref": "https://org.example/scale/bsi-200-3-4x4"
+     },
+     "treatment": "modify",
+     "acceptance": {
+      "approver-ref": "https://org.example/party/ciso",
+      "date": "2026-11-05",
+      "rationale": {
+       "en": "Residual 'gering' is within appetite."
+      }
+     },
+     "treatments": [
+      {
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s2"
+       ]
+      }
+     ],
+     "component-refs": [
+      "https://org.example/component/saas"
+     ]
+    },
+    {
+     "id": "https://org.example/impl/saas--req-1",
+     "version": "1",
+     "lifecycle": "active",
+     "component-ref": "https://org.example/component/saas",
+     "requirement-ref": "https://ns.auth.gov/fw/req/1",
+     "responsibility": "provider",
+     "satisfied-by": [
+      {
+       "capability-ref": "cap"
+      }
+     ],
+     "status": "partial",
+     "deviations": [
+      {
+       "type": "risk-adjustment",
+       "state": "approved",
+       "rationale": {
+        "en": "Quarterly rotation accepted."
+       },
+       "approver-ref": "https://org.example/party/ciso",
+       "opened": "2026-10-01"
+      }
+     ]
+    }
+   ],
+   "expected-fails": 0,
+   "expected-notes": [
+    "RISK-9"
+   ],
+   "rule": "RISK-9 SHOULD: the weakening names the Risk it accepts"
+  },
+  {
+   "name": "risk-adjustment-deviation-with-risk-ref-clean",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Encrypt in transit."
+       }
+      },
+      {
+       "id": "s2",
+       "modality": "should",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Rotate keys."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/base",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/tailoring/soa-2026",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/base"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/component/saas",
+     "version": "1",
+     "lifecycle": "active",
+     "kind": "service"
+    },
+    {
+     "id": "https://org.example/risk/R-1",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Tenant keys exposed through a KMS export path."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "treated",
+     "rating": {
+      "level": "hoch",
+      "scale-ref": "https://org.example/scale/bsi-200-3-4x4"
+     },
+     "treatment": "modify",
+     "acceptance": {
+      "approver-ref": "https://org.example/party/ciso",
+      "date": "2026-11-05",
+      "rationale": {
+       "en": "Residual 'gering' is within appetite."
+      }
+     },
+     "treatments": [
+      {
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s2"
+       ]
+      }
+     ],
+     "component-refs": [
+      "https://org.example/component/saas"
+     ]
+    },
+    {
+     "id": "https://org.example/impl/saas--req-1",
+     "version": "1",
+     "lifecycle": "active",
+     "component-ref": "https://org.example/component/saas",
+     "requirement-ref": "https://ns.auth.gov/fw/req/1",
+     "responsibility": "provider",
+     "satisfied-by": [
+      {
+       "capability-ref": "cap"
+      }
+     ],
+     "status": "partial",
+     "deviations": [
+      {
+       "type": "risk-adjustment",
+       "state": "approved",
+       "rationale": {
+        "en": "Quarterly rotation accepted."
+       },
+       "approver-ref": "https://org.example/party/ciso",
+       "opened": "2026-10-01",
+       "refs": [
+        "https://org.example/risk/R-1"
+       ]
+      }
+     ]
+    }
+   ],
+   "expected-fails": 0
+  },
+  {
+   "name": "retired-risk-justifies-nothing",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Encrypt in transit."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/base",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/tailoring/soa-2026",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/base"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/risk/R-1",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Tenant keys exposed through a KMS export path."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "retired",
+     "rating": {
+      "level": "hoch",
+      "scale-ref": "https://org.example/scale/bsi-200-3-4x4"
+     },
+     "treatment": "modify",
+     "acceptance": {
+      "approver-ref": "https://org.example/party/ciso",
+      "date": "2026-11-05",
+      "rationale": {
+       "en": "Residual 'gering' is within appetite."
+      }
+     },
+     "treatments": [
+      {
+       "requirement-ref": "https://ns.auth.gov/fw/req/1"
+      }
+     ]
+    }
+   ],
+   "expected-fails": 0,
+   "expected-notes": [
+    "retired"
+   ],
+   "expected-coverage": {
+    "https://org.example/tailoring/soa-2026": {
+     "covered": [],
+     "uncovered": [
+      "https://ns.auth.gov/fw/req/1"
+     ],
+     "lapsed": [
+      "https://ns.auth.gov/fw/req/1"
+     ]
+    }
+   },
+   "rule": "B.1.9 + C.3c: `retired` is terminal, so a retired Risk no longer justifies its control - req/1 is reported uncovered, with the lapsed Risk named. Counting it would make coverage monotone: a control justified once stays justified for ever (review finding R-2)"
+  },
+  {
+   "name": "withdrawn-risk-justifies-nothing",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Encrypt in transit."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/base",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/tailoring/soa-2026",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/base"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/risk/R-1",
+     "version": "1",
+     "lifecycle": "withdrawn",
+     "scenario": {
+      "en": "Tenant keys exposed through a KMS export path."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "treated",
+     "rating": {
+      "level": "hoch",
+      "scale-ref": "https://org.example/scale/bsi-200-3-4x4"
+     },
+     "treatment": "modify",
+     "acceptance": {
+      "approver-ref": "https://org.example/party/ciso",
+      "date": "2026-11-05",
+      "rationale": {
+       "en": "Residual 'gering' is within appetite."
+      }
+     },
+     "treatments": [
+      {
+       "requirement-ref": "https://ns.auth.gov/fw/req/1"
+      }
+     ]
+    }
+   ],
+   "expected-fails": 0,
+   "expected-notes": [
+    "withdrawn"
+   ],
+   "expected-coverage": {
+    "https://org.example/tailoring/soa-2026": {
+     "covered": [],
+     "uncovered": [
+      "https://ns.auth.gov/fw/req/1"
+     ],
+     "lapsed": [
+      "https://ns.auth.gov/fw/req/1"
+     ]
+    }
+   },
+   "rule": "B.1.9: lifecycle `withdrawn` unpublishes the Risk object; an unpublished record justifies nothing (review finding R-2)"
+  },
+  {
+   "name": "retired-risk-outside-the-soa-is-history",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Encrypt in transit."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/req/2",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Log access."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/base",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      },
+      {
+       "ref": "https://ns.auth.gov/fw/req/2",
+       "sequence": 20
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/tailoring/soa-2026",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/base"
+      }
+     ],
+     "excludes": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/2",
+       "rationale": {
+        "en": "Risk R-2 retired with the legacy gateway; the control is no longer needed."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/risk/R-1",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Tenant keys exposed through a KMS export path."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "treated",
+     "rating": {
+      "level": "hoch",
+      "scale-ref": "https://org.example/scale/bsi-200-3-4x4"
+     },
+     "treatment": "modify",
+     "acceptance": {
+      "approver-ref": "https://org.example/party/ciso",
+      "date": "2026-11-05",
+      "rationale": {
+       "en": "Residual 'gering' is within appetite."
+      }
+     },
+     "treatments": [
+      {
+       "requirement-ref": "https://ns.auth.gov/fw/req/1"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/risk/R-2",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Tenant keys exposed through a KMS export path."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "retired",
+     "rating": {
+      "level": "hoch",
+      "scale-ref": "https://org.example/scale/bsi-200-3-4x4"
+     },
+     "treatment": "modify",
+     "acceptance": {
+      "approver-ref": "https://org.example/party/ciso",
+      "date": "2026-11-05",
+      "rationale": {
+       "en": "Residual 'gering' is within appetite."
+      }
+     },
+     "treatments": [
+      {
+       "requirement-ref": "https://ns.auth.gov/fw/req/2"
+      }
+     ]
+    }
+   ],
+   "expected-fails": 0,
+   "expected-coverage": {
+    "https://org.example/tailoring/soa-2026": {
+     "covered": [
+      "https://ns.auth.gov/fw/req/1"
+     ],
+     "uncovered": []
+    }
+   },
+   "rule": "RISK-11 binds LIVE risks: retiring a risk and then dropping its control from the SoA is the ordinary end of a treatment, not a contradiction. Without the liveness test this bundle fails for ever, or the retired record has to be falsified to pass (review finding R-3)"
+  },
+  {
+   "name": "predicate-select-leaves-risk-11-undecided",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Encrypt in transit."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/req/2",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Log access."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/req/3",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Train staff."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/base",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      },
+      {
+       "ref": "https://ns.auth.gov/fw/req/2",
+       "sequence": 20
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/tailoring/soa-2026",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/base"
+      },
+      {
+       "predicate": {
+        "field-equals": {
+         "path": "lifecycle",
+         "value": "active"
+        }
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/risk/R-1",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Tenant keys exposed through a KMS export path."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "treated",
+     "rating": {
+      "level": "hoch",
+      "scale-ref": "https://org.example/scale/bsi-200-3-4x4"
+     },
+     "treatment": "modify",
+     "acceptance": {
+      "approver-ref": "https://org.example/party/ciso",
+      "date": "2026-11-05",
+      "rationale": {
+       "en": "Residual 'gering' is within appetite."
+      }
+     },
+     "treatments": [
+      {
+       "requirement-ref": "https://ns.auth.gov/fw/req/1"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/risk/R-2",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Tenant keys exposed through a KMS export path."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "treated",
+     "rating": {
+      "level": "hoch",
+      "scale-ref": "https://org.example/scale/bsi-200-3-4x4"
+     },
+     "treatment": "modify",
+     "acceptance": {
+      "approver-ref": "https://org.example/party/ciso",
+      "date": "2026-11-05",
+      "rationale": {
+       "en": "Residual 'gering' is within appetite."
+      }
+     },
+     "treatments": [
+      {
+       "requirement-ref": "https://ns.auth.gov/fw/req/3"
+      }
+     ]
+    }
+   ],
+   "expected-fails": 0,
+   "expected-notes": [
+    "RISK-11 undecided",
+    "lower bound"
+   ],
+   "expected-coverage": {
+    "https://org.example/tailoring/soa-2026": {
+     "covered": [
+      "https://ns.auth.gov/fw/req/1"
+     ],
+     "uncovered": [
+      "https://ns.auth.gov/fw/req/2"
+     ]
+    }
+   },
+   "rule": "B.1.9 + B.2: a predicate select is engine-resolved, so the primitive's selection is a LOWER BOUND. req/3 is selected by the predicate; failing RISK-11 on it would be a false failure from incomplete knowledge. The primitive says 'undecided' and never guesses (review finding R-1)"
+  },
+  {
+   "name": "deeply-nested-sets-are-expanded",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Encrypt in transit."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/n0",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/set/n1",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/n1",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/set/n2",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/n2",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/set/n3",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/n3",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/set/n4",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/n4",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/set/n5",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/n5",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/set/n6",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/n6",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/set/n7",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/n7",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/set/n8",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/n8",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/set/n9",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/n9",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/set/n10",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/n10",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/tailoring/soa-2026",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/n0"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/risk/R-1",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Tenant keys exposed through a KMS export path."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "treated",
+     "rating": {
+      "level": "hoch",
+      "scale-ref": "https://org.example/scale/bsi-200-3-4x4"
+     },
+     "treatment": "modify",
+     "acceptance": {
+      "approver-ref": "https://org.example/party/ciso",
+      "date": "2026-11-05",
+      "rationale": {
+       "en": "Residual 'gering' is within appetite."
+      }
+     },
+     "treatments": [
+      {
+       "requirement-ref": "https://ns.auth.gov/fw/req/1"
+      }
+     ]
+    }
+   ],
+   "expected-fails": 0,
+   "expected-coverage": {
+    "https://org.example/tailoring/soa-2026": {
+     "covered": [
+      "https://ns.auth.gov/fw/req/1"
+     ],
+     "uncovered": []
+    }
+   },
+   "rule": "B.1.9 + D21: membership is a DAG of any depth; req/1 sits under eleven nested Sets and is selected. A depth cap would drop it from the selection without a word (review finding R-4)"
+  },
+  {
+   "name": "everything-excluded-then-treated",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Encrypt in transit."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/base",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/tailoring/soa-2026",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/base"
+      }
+     ],
+     "excludes": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "rationale": {
+        "en": "Out of scope for this system."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/risk/R-1",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Tenant keys exposed through a KMS export path."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "treated",
+     "rating": {
+      "level": "hoch",
+      "scale-ref": "https://org.example/scale/bsi-200-3-4x4"
+     },
+     "treatment": "modify",
+     "acceptance": {
+      "approver-ref": "https://org.example/party/ciso",
+      "date": "2026-11-05",
+      "rationale": {
+       "en": "Residual 'gering' is within appetite."
+      }
+     },
+     "treatments": [
+      {
+       "requirement-ref": "https://ns.auth.gov/fw/req/1"
+      }
+     ]
+    }
+   ],
+   "expected-fails": 1,
+   "expected-frags": [
+    "RISK-11"
+   ],
+   "rule": "RISK-11 holds when the selection is EMPTY, not only when it is non-empty: the SoA excludes the one control the Risk leans on. Gating the rule on a non-empty selection lets exactly the fully-descoped case through (review finding R-4b)"
+  },
+  {
+   "name": "treatment-names-a-set-not-a-requirement",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Encrypt in transit."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/base",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/tailoring/soa-2026",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/base"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/risk/R-1",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Tenant keys exposed through a KMS export path."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "treated",
+     "rating": {
+      "level": "hoch",
+      "scale-ref": "https://org.example/scale/bsi-200-3-4x4"
+     },
+     "treatment": "modify",
+     "acceptance": {
+      "approver-ref": "https://org.example/party/ciso",
+      "date": "2026-11-05",
+      "rationale": {
+       "en": "Residual 'gering' is within appetite."
+      }
+     },
+     "treatments": [
+      {
+       "requirement-ref": "https://ns.auth.gov/fw/set/base"
+      }
+     ]
+    }
+   ],
+   "expected-fails": 1,
+   "expected-frags": [
+    "RISK-12"
+   ],
+   "rule": "RISK-12: treatments[].requirement-ref names a Requirement. A Set id resolves in-bundle, so RISK-7 alone passes it and it resurfaces as a misleading RISK-11; coverage joins on Requirement ids, so the edge would justify nothing (review finding R-5)"
+  },
+  {
+   "name": "component-ref-names-a-non-component",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Encrypt in transit."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/base",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/tailoring/soa-2026",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/base"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/risk/R-1",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Tenant keys exposed through a KMS export path."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "treated",
+     "rating": {
+      "level": "hoch",
+      "scale-ref": "https://org.example/scale/bsi-200-3-4x4"
+     },
+     "treatment": "modify",
+     "acceptance": {
+      "approver-ref": "https://org.example/party/ciso",
+      "date": "2026-11-05",
+      "rationale": {
+       "en": "Residual 'gering' is within appetite."
+      }
+     },
+     "treatments": [
+      {
+       "requirement-ref": "https://ns.auth.gov/fw/req/1"
+      }
+     ],
+     "component-refs": [
+      "https://ns.auth.gov/fw/req/1"
+     ]
+    }
+   ],
+   "expected-fails": 1,
+   "expected-frags": [
+    "RISK-12"
+   ],
+   "rule": "RISK-12: component-refs name Components - the asset at risk is not a requirement (review finding R-5)"
+  },
+  {
+   "name": "finding-risk-ref-is-landmark",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Encrypt in transit."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/assessment/2026-q3",
+     "version": "1",
+     "lifecycle": "active",
+     "subject-refs": [
+      "https://ns.auth.gov/fw/req/1"
+     ],
+     "method": {
+      "kind": "review"
+     },
+     "performer-ref": "https://org.example/party/auditor",
+     "time": "2026-09-30",
+     "result": "not-satisfied"
+    },
+    {
+     "id": "https://org.example/finding/F-1",
+     "version": "1",
+     "lifecycle": "active",
+     "assessment-ref": "https://org.example/assessment/2026-q3",
+     "requirement-ref": "https://ns.auth.gov/fw/req/1",
+     "state": "open",
+     "risk-refs": [
+      "https://org.example/risk/R-77"
+     ]
+    }
+   ],
+   "expected-fails": 0,
+   "rule": "Finding.risk-refs is LANDMARK: the assessor's Finding and the organisation's register normally live in different bundles, so an unresolved risk-ref is not an error"
+  },
+  {
+   "name": "finding-risk-ref-names-a-non-risk",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Encrypt in transit."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/assessment/2026-q3",
+     "version": "1",
+     "lifecycle": "active",
+     "subject-refs": [
+      "https://ns.auth.gov/fw/req/1"
+     ],
+     "method": {
+      "kind": "review"
+     },
+     "performer-ref": "https://org.example/party/auditor",
+     "time": "2026-09-30",
+     "result": "not-satisfied"
+    },
+    {
+     "id": "https://org.example/finding/F-1",
+     "version": "1",
+     "lifecycle": "active",
+     "assessment-ref": "https://org.example/assessment/2026-q3",
+     "requirement-ref": "https://ns.auth.gov/fw/req/1",
+     "state": "open",
+     "risk-refs": [
+      "https://ns.auth.gov/fw/req/1"
+     ]
+    }
+   ],
+   "expected-fails": 1,
+   "expected-frags": [
+    "RISK-12"
+   ],
+   "rule": "RISK-12: landmark does not mean untyped. Like a Mapping scope, the edge binds IF the target is present - a risk-ref that resolves in-bundle to a Requirement is a wrong statement (review finding R-5)"
+  },
+  {
+   "name": "identified-risk-justifies-nothing",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Requirement 1."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/req/2",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Requirement 2."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/base",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      },
+      {
+       "ref": "https://ns.auth.gov/fw/req/2",
+       "sequence": 20
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/tailoring/soa",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/base"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/risk/R-1",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Scenario 1."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "identified",
+     "treatments": [
+      {
+       "requirement-ref": "https://ns.auth.gov/fw/req/1"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/risk/R-2",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Scenario 2."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "identified",
+     "treatment": "modify",
+     "treatments": [
+      {
+       "requirement-ref": "https://ns.auth.gov/fw/req/2"
+      }
+     ]
+    }
+   ],
+   "expected-fails": 0,
+   "expected-notes": [
+    "without an assessed treatment decision"
+   ],
+   "expected-coverage": {
+    "https://org.example/tailoring/soa": {
+     "covered": [],
+     "uncovered": [
+      "https://ns.auth.gov/fw/req/1",
+      "https://ns.auth.gov/fw/req/2"
+     ],
+     "pending": [
+      "https://ns.auth.gov/fw/req/1",
+      "https://ns.auth.gov/fw/req/2"
+     ]
+    }
+   },
+   "rule": "B.1.9: a Risk justifies once it is assessed AND its treatment option is chosen - an identified risk (with or without an option) leaves its requirement uncovered, reported as pending"
+  },
+  {
+   "name": "assessed-risk-without-option-justifies-nothing",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Requirement 1."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/req/2",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Requirement 2."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/base",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      },
+      {
+       "ref": "https://ns.auth.gov/fw/req/2",
+       "sequence": 20
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/tailoring/soa",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/base"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/risk/R-1",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Scenario 1."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "assessed",
+     "rating": {
+      "level": "hoch",
+      "scale-ref": "https://org.example/scale/4x4"
+     },
+     "treatments": [
+      {
+       "requirement-ref": "https://ns.auth.gov/fw/req/1"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/risk/R-2",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Scenario 2."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "assessed",
+     "rating": {
+      "level": "hoch",
+      "scale-ref": "https://org.example/scale/4x4"
+     },
+     "treatment": "modify",
+     "treatments": [
+      {
+       "requirement-ref": "https://ns.auth.gov/fw/req/2"
+      }
+     ]
+    }
+   ],
+   "expected-fails": 0,
+   "expected-coverage": {
+    "https://org.example/tailoring/soa": {
+     "covered": [
+      "https://ns.auth.gov/fw/req/2"
+     ],
+     "uncovered": [
+      "https://ns.auth.gov/fw/req/1"
+     ],
+     "pending": [
+      "https://ns.auth.gov/fw/req/1"
+     ]
+    }
+   },
+   "rule": "B.1.9: assessed but no treatment option chosen - no decision, no justification (ISO/IEC 27001 6.1.3 a-b)"
+  },
+  {
+   "name": "draft-risk-justifies-nothing",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Requirement 1."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/req/2",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Requirement 2."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/base",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      },
+      {
+       "ref": "https://ns.auth.gov/fw/req/2",
+       "sequence": 20
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/tailoring/soa",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/base"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/risk/R-1",
+     "version": "1",
+     "lifecycle": "draft",
+     "scenario": {
+      "en": "Scenario 1."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "assessed",
+     "rating": {
+      "level": "hoch",
+      "scale-ref": "https://org.example/scale/4x4"
+     },
+     "treatment": "modify",
+     "treatments": [
+      {
+       "requirement-ref": "https://ns.auth.gov/fw/req/1"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/risk/R-2",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Scenario 2."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "assessed",
+     "rating": {
+      "level": "hoch",
+      "scale-ref": "https://org.example/scale/4x4"
+     },
+     "treatment": "modify",
+     "treatments": [
+      {
+       "requirement-ref": "https://ns.auth.gov/fw/req/2"
+      }
+     ]
+    }
+   ],
+   "expected-fails": 0,
+   "expected-coverage": {
+    "https://org.example/tailoring/soa": {
+     "covered": [
+      "https://ns.auth.gov/fw/req/2"
+     ],
+     "uncovered": [
+      "https://ns.auth.gov/fw/req/1"
+     ],
+     "pending": [
+      "https://ns.auth.gov/fw/req/1"
+     ]
+    }
+   },
+   "rule": "B.1.9: a draft Risk is not yet a published decision - pending"
+  },
+  {
+   "name": "scoped-risk-justifies-only-in-its-tailoring",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Requirement 1."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/req/2",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Requirement 2."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/base",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      },
+      {
+       "ref": "https://ns.auth.gov/fw/req/2",
+       "sequence": 20
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/tailoring/soa-a",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/base"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/tailoring/soa-b",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/base"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/risk/R-1",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Scenario 1."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "assessed",
+     "rating": {
+      "level": "hoch",
+      "scale-ref": "https://org.example/scale/4x4"
+     },
+     "treatment": "modify",
+     "treatments": [
+      {
+       "requirement-ref": "https://ns.auth.gov/fw/req/1"
+      }
+     ],
+     "tailoring-refs": [
+      "https://org.example/tailoring/soa-a"
+     ]
+    }
+   ],
+   "expected-fails": 0,
+   "expected-coverage": {
+    "https://org.example/tailoring/soa-a": {
+     "covered": [
+      "https://ns.auth.gov/fw/req/1"
+     ],
+     "uncovered": [
+      "https://ns.auth.gov/fw/req/2"
+     ]
+    },
+    "https://org.example/tailoring/soa-b": {
+     "covered": [],
+     "uncovered": [
+      "https://ns.auth.gov/fw/req/1",
+      "https://ns.auth.gov/fw/req/2"
+     ]
+    }
+   },
+   "rule": "B.1.9: tailoring-refs scope a Risk - a risk about system A does not justify the control in system B's Statement of Applicability"
+  },
+  {
+   "name": "unscoped-risk-among-two-tailorings-noted",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Requirement 1."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/req/2",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Requirement 2."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/base",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      },
+      {
+       "ref": "https://ns.auth.gov/fw/req/2",
+       "sequence": 20
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/tailoring/soa-a",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/base"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/tailoring/soa-b",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/base"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/risk/R-1",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Scenario 1."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "assessed",
+     "rating": {
+      "level": "hoch",
+      "scale-ref": "https://org.example/scale/4x4"
+     },
+     "treatment": "modify",
+     "treatments": [
+      {
+       "requirement-ref": "https://ns.auth.gov/fw/req/1"
+      }
+     ]
+    }
+   ],
+   "expected-fails": 0,
+   "expected-notes": [
+    "RISK-14"
+   ],
+   "expected-coverage": {
+    "https://org.example/tailoring/soa-a": {
+     "covered": [
+      "https://ns.auth.gov/fw/req/1"
+     ],
+     "uncovered": [
+      "https://ns.auth.gov/fw/req/2"
+     ]
+    },
+    "https://org.example/tailoring/soa-b": {
+     "covered": [
+      "https://ns.auth.gov/fw/req/1"
+     ],
+     "uncovered": [
+      "https://ns.auth.gov/fw/req/2"
+     ]
+    }
+   },
+   "rule": "RISK-14 (SHOULD): with more than one Tailoring in force an unscoped Risk counts in each - noted, not failed"
+  },
+  {
+   "name": "scoped-risk-outside-its-own-tailoring",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Requirement 1."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/req/2",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Requirement 2."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/base",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      },
+      {
+       "ref": "https://ns.auth.gov/fw/req/2",
+       "sequence": 20
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/one",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/tailoring/soa-a",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/one"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/tailoring/soa-b",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/base"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/risk/R-2",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Scenario 2."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "assessed",
+     "rating": {
+      "level": "hoch",
+      "scale-ref": "https://org.example/scale/4x4"
+     },
+     "treatment": "modify",
+     "treatments": [
+      {
+       "requirement-ref": "https://ns.auth.gov/fw/req/2"
+      }
+     ],
+     "tailoring-refs": [
+      "https://org.example/tailoring/soa-a"
+     ]
+    }
+   ],
+   "expected-fails": 1,
+   "expected-frags": [
+    "RISK-11",
+    "the Tailoring(s) it belongs to do not select"
+   ],
+   "rule": "RISK-11 is asked of the Tailoring(s) the Risk belongs to: soa-b selecting req/2 does not rescue a risk scoped to soa-a"
+  },
+  {
+   "name": "open-tailoring-elsewhere-decides-nothing",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Requirement 1."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/req/2",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Requirement 2."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/base",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      },
+      {
+       "ref": "https://ns.auth.gov/fw/req/2",
+       "sequence": 20
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/one",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/tailoring/soa-a",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/one"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/tailoring/other",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "predicate": {
+        "present": {
+         "path": "facets"
+        }
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/risk/R-2",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Scenario 2."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "assessed",
+     "rating": {
+      "level": "hoch",
+      "scale-ref": "https://org.example/scale/4x4"
+     },
+     "treatment": "modify",
+     "treatments": [
+      {
+       "requirement-ref": "https://ns.auth.gov/fw/req/2"
+      }
+     ],
+     "tailoring-refs": [
+      "https://org.example/tailoring/soa-a"
+     ]
+    }
+   ],
+   "expected-fails": 1,
+   "expected-frags": [
+    "RISK-11"
+   ],
+   "rule": "RISK-11: an open (predicate) selection leaves the rule undecided only for Risks that belong to that Tailoring"
+  },
+  {
+   "name": "tailoring-ref-names-a-non-tailoring",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Requirement 1."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/req/2",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Requirement 2."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/base",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      },
+      {
+       "ref": "https://ns.auth.gov/fw/req/2",
+       "sequence": 20
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/tailoring/soa",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/base"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/risk/R-1",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Scenario 1."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "assessed",
+     "rating": {
+      "level": "hoch",
+      "scale-ref": "https://org.example/scale/4x4"
+     },
+     "treatment": "modify",
+     "treatments": [
+      {
+       "requirement-ref": "https://ns.auth.gov/fw/req/1"
+      }
+     ],
+     "tailoring-refs": [
+      "https://ns.auth.gov/fw/set/base"
+     ]
+    }
+   ],
+   "expected-fails": 2,
+   "expected-frags": [
+    "RISK-12",
+    "not a Tailoring"
+   ],
+   "rule": "RISK-12: tailoring-refs name Tailorings"
+  },
+  {
+   "name": "tailoring-ref-not-in-bundle",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Requirement 1."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/req/2",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Requirement 2."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/base",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      },
+      {
+       "ref": "https://ns.auth.gov/fw/req/2",
+       "sequence": 20
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/tailoring/soa",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/base"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/risk/R-1",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Scenario 1."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "assessed",
+     "rating": {
+      "level": "hoch",
+      "scale-ref": "https://org.example/scale/4x4"
+     },
+     "treatment": "modify",
+     "treatments": [
+      {
+       "requirement-ref": "https://ns.auth.gov/fw/req/1"
+      }
+     ],
+     "tailoring-refs": [
+      "https://org.example/tailoring/elsewhere"
+     ]
+    }
+   ],
+   "expected-fails": 2,
+   "expected-frags": [
+    "RISK-7"
+   ],
+   "rule": "RISK-7: tailoring-refs are closure-required (the join needs both ends)"
+  },
+  {
+   "name": "withdrawn-tailoring-selects-nothing",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Requirement 1."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/req/2",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Requirement 2."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/base",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      },
+      {
+       "ref": "https://ns.auth.gov/fw/req/2",
+       "sequence": 20
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/tailoring/soa-old",
+     "version": "1",
+     "lifecycle": "withdrawn",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/base"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/risk/R-1",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Scenario 1."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "assessed",
+     "rating": {
+      "level": "hoch",
+      "scale-ref": "https://org.example/scale/4x4"
+     },
+     "treatment": "modify",
+     "treatments": [
+      {
+       "requirement-ref": "https://ns.auth.gov/fw/req/1"
+      }
+     ]
+    }
+   ],
+   "expected-fails": 1,
+   "expected-frags": [
+    "RISK-11"
+   ],
+   "expected-notes": [
+    "withdrawn - selects nothing"
+   ],
+   "rule": "B.1.9 / RISK-11: a withdrawn Tailoring is history - it is not reported and cannot keep a live Risk's control in scope"
+  },
+  {
+   "name": "withdrawn-requirement-is-not-selected",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "withdrawn",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Requirement 1."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/req/2",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Requirement 2."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/base",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      },
+      {
+       "ref": "https://ns.auth.gov/fw/req/2",
+       "sequence": 20
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/tailoring/soa",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/base"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/risk/R-2",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Scenario 2."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "assessed",
+     "rating": {
+      "level": "hoch",
+      "scale-ref": "https://org.example/scale/4x4"
+     },
+     "treatment": "modify",
+     "treatments": [
+      {
+       "requirement-ref": "https://ns.auth.gov/fw/req/2"
+      }
+     ]
+    }
+   ],
+   "expected-fails": 0,
+   "expected-notes": [
+    "withdrawn and not counted"
+   ],
+   "expected-coverage": {
+    "https://org.example/tailoring/soa": {
+     "covered": [
+      "https://ns.auth.gov/fw/req/2"
+     ],
+     "uncovered": []
+    }
+   },
+   "rule": "B.1.9: a withdrawn Requirement is not in force - not counted as selected, so it needs no risk basis"
+  },
+  {
+   "name": "risk-leans-on-a-withdrawn-requirement",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "withdrawn",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Requirement 1."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/req/2",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Requirement 2."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/base",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      },
+      {
+       "ref": "https://ns.auth.gov/fw/req/2",
+       "sequence": 20
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/tailoring/soa",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/base"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/risk/R-1",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Scenario 1."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "assessed",
+     "rating": {
+      "level": "hoch",
+      "scale-ref": "https://org.example/scale/4x4"
+     },
+     "treatment": "modify",
+     "treatments": [
+      {
+       "requirement-ref": "https://ns.auth.gov/fw/req/1"
+      }
+     ]
+    }
+   ],
+   "expected-fails": 1,
+   "expected-frags": [
+    "RISK-11",
+    "which is withdrawn"
+   ],
+   "rule": "RISK-11: a live Risk whose treatment names a withdrawn Requirement leans on a control that no longer exists"
+  },
+  {
+   "name": "select-names-a-tailoring-not-a-set",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Requirement 1."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/req/2",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Requirement 2."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/base",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      },
+      {
+       "ref": "https://ns.auth.gov/fw/req/2",
+       "sequence": 20
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/tailoring/soa",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/base"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/tailoring/chained",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://org.example/tailoring/soa"
+      }
+     ]
+    }
+   ],
+   "expected-fails": 1,
+   "expected-frags": [
+    "not a RequirementSet"
+   ],
+   "rule": "D13: selects[].set-ref names a RequirementSet - a Tailoring there selected nothing, silently (chaining runs on the resolved package)"
+  },
+  {
+   "name": "exclude-names-a-set-and-excludes-its-members",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Requirement 1."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/req/2",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Requirement 2."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/base",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      },
+      {
+       "ref": "https://ns.auth.gov/fw/req/2",
+       "sequence": 20
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/one",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/tailoring/soa",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/base"
+      }
+     ],
+     "excludes": [
+      {
+       "ref": "https://ns.auth.gov/fw/set/one",
+       "rationale": {
+        "en": "Out of scope."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/risk/R-2",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Scenario 2."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "assessed",
+     "rating": {
+      "level": "hoch",
+      "scale-ref": "https://org.example/scale/4x4"
+     },
+     "treatment": "modify",
+     "treatments": [
+      {
+       "requirement-ref": "https://ns.auth.gov/fw/req/2"
+      }
+     ]
+    }
+   ],
+   "expected-fails": 0,
+   "expected-coverage": {
+    "https://org.example/tailoring/soa": {
+     "covered": [
+      "https://ns.auth.gov/fw/req/2"
+     ],
+     "uncovered": []
+    }
+   },
+   "rule": "D13 / B.1.9: an exclude that names a Set excludes its members"
+  },
+  {
+   "name": "exclude-names-a-component",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Requirement 1."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/req/2",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Requirement 2."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/base",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      },
+      {
+       "ref": "https://ns.auth.gov/fw/req/2",
+       "sequence": 20
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/component/saas",
+     "version": "1",
+     "lifecycle": "active",
+     "kind": "service"
+    },
+    {
+     "id": "https://org.example/tailoring/soa",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/base"
+      }
+     ],
+     "excludes": [
+      {
+       "ref": "https://org.example/component/saas",
+       "rationale": {
+        "en": "x"
+       }
+      }
+     ]
+    }
+   ],
+   "expected-fails": 1,
+   "expected-frags": [
+    "neither a Requirement nor a RequirementSet"
+   ],
+   "rule": "D13: an exclude names a Requirement or a RequirementSet"
+  },
+  {
+   "name": "residual-rating-on-another-scale",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Requirement 1."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/req/2",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Requirement 2."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/base",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      },
+      {
+       "ref": "https://ns.auth.gov/fw/req/2",
+       "sequence": 20
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/tailoring/soa",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/base"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/risk/R-1",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Scenario 1."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "assessed",
+     "rating": {
+      "level": "hoch",
+      "scale-ref": "https://org.example/scale/4x4"
+     },
+     "treatment": "modify",
+     "treatments": [
+      {
+       "requirement-ref": "https://ns.auth.gov/fw/req/1"
+      }
+     ],
+     "residual-rating": {
+      "level": "7.1",
+      "scale-ref": "https://org.example/scale/cvss"
+     }
+    }
+   ],
+   "expected-fails": 1,
+   "expected-frags": [
+    "RISK-13"
+   ],
+   "rule": "RISK-13: rating and residual-rating are on ONE scale - levels never compare across scales (D23)"
+  }
+ ],
+ "risk-transitions": [
+  {
+   "from": "identified",
+   "to": "assessed",
+   "valid": true
+  },
+  {
+   "from": "assessed",
+   "to": "treated",
+   "valid": true
+  },
+  {
+   "from": "treated",
+   "to": "retired",
+   "valid": true
+  },
+  {
+   "from": "identified",
+   "to": "treated",
+   "valid": true,
+   "reason": "skipping is legal; RISK-2/3 make the skipped content mandatory"
+  },
+  {
+   "from": "identified",
+   "to": "retired",
+   "valid": true,
+   "reason": "a risk identified and found not to apply retires without treatment"
+  },
+  {
+   "from": "treated",
+   "to": "assessed",
+   "valid": false,
+   "reason": "no backwards moves - a re-assessment that changes the picture is a new version of the Risk, not a state regression"
+  },
+  {
+   "from": "retired",
+   "to": "identified",
+   "valid": false,
+   "reason": "retired is terminal; a recurring risk is a NEW Risk (the Finding `closed` rule, C.3)"
+  },
+  {
+   "from": "retired",
+   "to": "treated",
+   "valid": false
+  }
+ ]
+}

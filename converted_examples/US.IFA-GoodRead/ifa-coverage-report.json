@@ -575,61 +575,61 @@
    "path": "ar.assessment-results.results[].findings[].description",
    "count": 1,
    "level": "L1",
-   "destination": "Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> risk@1 facet"
+   "destination": "Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> finding-target@1 facet; related-risks -> Risk.treatments (the risk -> control edge)"
   },
   {
    "path": "ar.assessment-results.results[].findings[].implementation-statement-uuid",
    "count": 1,
    "level": "L1",
-   "destination": "Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> risk@1 facet"
+   "destination": "Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> finding-target@1 facet; related-risks -> Risk.treatments (the risk -> control edge)"
   },
   {
    "path": "ar.assessment-results.results[].findings[].related-observations[].observation-uuid",
    "count": 1,
    "level": "L1",
-   "destination": "Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> risk@1 facet"
+   "destination": "Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> finding-target@1 facet; related-risks -> Risk.treatments (the risk -> control edge)"
   },
   {
    "path": "ar.assessment-results.results[].findings[].related-risks[].risk-uuid",
    "count": 1,
    "level": "L1",
-   "destination": "Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> risk@1 facet"
+   "destination": "Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> finding-target@1 facet; related-risks -> Risk.treatments (the risk -> control edge)"
   },
   {
    "path": "ar.assessment-results.results[].findings[].target.description",
    "count": 1,
    "level": "L1",
-   "destination": "Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> risk@1 facet"
+   "destination": "Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> finding-target@1 facet; related-risks -> Risk.treatments (the risk -> control edge)"
   },
   {
    "path": "ar.assessment-results.results[].findings[].target.status.state",
    "count": 1,
    "level": "L1",
-   "destination": "Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> risk@1 facet"
+   "destination": "Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> finding-target@1 facet; related-risks -> Risk.treatments (the risk -> control edge)"
   },
   {
    "path": "ar.assessment-results.results[].findings[].target.target-id",
    "count": 1,
    "level": "L1",
-   "destination": "Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> risk@1 facet"
+   "destination": "Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> finding-target@1 facet; related-risks -> Risk.treatments (the risk -> control edge)"
   },
   {
    "path": "ar.assessment-results.results[].findings[].target.type",
    "count": 1,
    "level": "L1",
-   "destination": "Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> risk@1 facet"
+   "destination": "Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> finding-target@1 facet; related-risks -> Risk.treatments (the risk -> control edge)"
   },
   {
    "path": "ar.assessment-results.results[].findings[].title",
    "count": 1,
    "level": "L1",
-   "destination": "Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> risk@1 facet"
+   "destination": "Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> finding-target@1 facet; related-risks -> Risk.treatments (the risk -> control edge)"
   },
   {
    "path": "ar.assessment-results.results[].findings[].uuid",
    "count": 1,
    "level": "L1",
-   "destination": "Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> risk@1 facet"
+   "destination": "Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> finding-target@1 facet; related-risks -> Risk.treatments (the risk -> control edge)"
   },
   {
    "path": "ar.assessment-results.results[].local-definitions.tasks[].associated-activities[].activity-uuid",
@@ -2159,157 +2159,157 @@
    "path": "poam.plan-of-action-and-milestones.risks[].characterizations[].facets[].name",
    "count": 4,
    "level": "L2",
-   "destination": "risk@1 facet characterizations (likelihood/impact, origin actors)"
+   "destination": "risk-analysis@1 characterizations (likelihood/impact + scale system, origin actors) - scoring stays out of the kernel (App. F Q14)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.risks[].characterizations[].facets[].system",
    "count": 4,
    "level": "L2",
-   "destination": "risk@1 facet characterizations (likelihood/impact, origin actors)"
+   "destination": "risk-analysis@1 characterizations (likelihood/impact + scale system, origin actors) - scoring stays out of the kernel (App. F Q14)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.risks[].characterizations[].facets[].value",
    "count": 4,
    "level": "L2",
-   "destination": "risk@1 facet characterizations (likelihood/impact, origin actors)"
+   "destination": "risk-analysis@1 characterizations (likelihood/impact + scale system, origin actors) - scoring stays out of the kernel (App. F Q14)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.risks[].characterizations[].origin.actors[].actor-uuid",
    "count": 2,
    "level": "L2",
-   "destination": "risk@1 facet characterizations (likelihood/impact, origin actors)"
+   "destination": "risk-analysis@1 characterizations (likelihood/impact + scale system, origin actors) - scoring stays out of the kernel (App. F Q14)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.risks[].characterizations[].origin.actors[].type",
    "count": 2,
    "level": "L2",
-   "destination": "risk@1 facet characterizations (likelihood/impact, origin actors)"
+   "destination": "risk-analysis@1 characterizations (likelihood/impact + scale system, origin actors) - scoring stays out of the kernel (App. F Q14)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.risks[].deadline",
    "count": 2,
    "level": "L1",
-   "destination": "Finding id/title/state (deviation-approved -> approved Deviation; open+remediation -> in-remediation); deadline -> risk@1"
+   "destination": "Risk id/title; statement -> scenario; deadline -> review-due (datetime); status -> Risk state (+ verbatim in risk-analysis@1) and Finding state (deviation-approved -> approved Deviation; open+remediation -> in-remediation)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.risks[].description",
    "count": 2,
-   "level": "L1",
-   "destination": "Finding id/title/state (deviation-approved -> approved Deviation; open+remediation -> in-remediation); deadline -> risk@1"
+   "level": "L2",
+   "destination": "risk-analysis@1 description (the kernel's `scenario` is the OSCAL statement)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.risks[].mitigating-factors[].description",
    "count": 1,
    "level": "L1",
-   "destination": "Deviation rationale (RISK-1) / risk@1 mitigating-factors; observation links -> evidence refs"
+   "destination": "Deviation rationale (RISK-1) + risk-analysis@1 mitigating-factors; observation links -> evidence refs"
   },
   {
    "path": "poam.plan-of-action-and-milestones.risks[].mitigating-factors[].uuid",
    "count": 1,
    "level": "L1",
-   "destination": "Deviation rationale (RISK-1) / risk@1 mitigating-factors; observation links -> evidence refs"
+   "destination": "Deviation rationale (RISK-1) + risk-analysis@1 mitigating-factors; observation links -> evidence refs"
   },
   {
    "path": "poam.plan-of-action-and-milestones.risks[].related-observations[].observation-uuid",
    "count": 2,
    "level": "L1",
-   "destination": "Deviation rationale (RISK-1) / risk@1 mitigating-factors; observation links -> evidence refs"
+   "destination": "Deviation rationale (RISK-1) + risk-analysis@1 mitigating-factors; observation links -> evidence refs"
   },
   {
    "path": "poam.plan-of-action-and-milestones.risks[].remediations[].description",
    "count": 2,
    "level": "L1",
-   "destination": "Finding.actions[] (task title/status; within-date-range.end -> due)"
+   "destination": "Finding.actions[] description/status + risk-analysis@1 responses[] (lifecycle, title, narrative)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.risks[].remediations[].lifecycle",
    "count": 2,
    "level": "L1",
-   "destination": "Finding.actions[] (task title/status; within-date-range.end -> due)"
+   "destination": "Finding.actions[] description/status + risk-analysis@1 responses[] (lifecycle, title, narrative)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.risks[].remediations[].props[].name",
    "count": 2,
    "level": "L1",
-   "destination": "Finding.actions[] (task title/status; within-date-range.end -> due)"
+   "destination": "response `type` -> Risk.treatment (C.10: mitigate->modify, accept->retain, transfer|share->share, avoid->avoid) + verbatim in risk-analysis@1 responses[]"
   },
   {
    "path": "poam.plan-of-action-and-milestones.risks[].remediations[].props[].value",
    "count": 2,
    "level": "L1",
-   "destination": "Finding.actions[] (task title/status; within-date-range.end -> due)"
+   "destination": "response `type` -> Risk.treatment (C.10: mitigate->modify, accept->retain, transfer|share->share, avoid->avoid) + verbatim in risk-analysis@1 responses[]"
   },
   {
    "path": "poam.plan-of-action-and-milestones.risks[].remediations[].tasks[].description",
    "count": 2,
    "level": "L1",
-   "destination": "Finding.actions[] (task title/status; within-date-range.end -> due)"
+   "destination": "Finding.actions[] (task title; within-date-range.end -> due); remediation/task uuids are source identity (L0)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.risks[].remediations[].tasks[].timing.within-date-range.end",
    "count": 2,
    "level": "L1",
-   "destination": "Finding.actions[] (task title/status; within-date-range.end -> due)"
+   "destination": "Finding.actions[] (task title; within-date-range.end -> due); remediation/task uuids are source identity (L0)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.risks[].remediations[].tasks[].timing.within-date-range.start",
    "count": 2,
    "level": "L1",
-   "destination": "Finding.actions[] (task title/status; within-date-range.end -> due)"
+   "destination": "Finding.actions[] (task title; within-date-range.end -> due); remediation/task uuids are source identity (L0)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.risks[].remediations[].tasks[].title",
    "count": 2,
    "level": "L1",
-   "destination": "Finding.actions[] (task title/status; within-date-range.end -> due)"
+   "destination": "Finding.actions[] (task title; within-date-range.end -> due); remediation/task uuids are source identity (L0)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.risks[].remediations[].tasks[].type",
    "count": 2,
    "level": "L1",
-   "destination": "Finding.actions[] (task title/status; within-date-range.end -> due)"
+   "destination": "Finding.actions[] (task title; within-date-range.end -> due); remediation/task uuids are source identity (L0)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.risks[].remediations[].tasks[].uuid",
    "count": 2,
    "level": "L1",
-   "destination": "Finding.actions[] (task title/status; within-date-range.end -> due)"
+   "destination": "Finding.actions[] (task title; within-date-range.end -> due); remediation/task uuids are source identity (L0)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.risks[].remediations[].title",
    "count": 2,
    "level": "L1",
-   "destination": "Finding.actions[] (task title/status; within-date-range.end -> due)"
+   "destination": "Finding.actions[] description/status + risk-analysis@1 responses[] (lifecycle, title, narrative)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.risks[].remediations[].uuid",
    "count": 2,
    "level": "L1",
-   "destination": "Finding.actions[] (task title/status; within-date-range.end -> due)"
+   "destination": "Finding.actions[] (task title; within-date-range.end -> due); remediation/task uuids are source identity (L0)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.risks[].statement",
    "count": 2,
    "level": "L1",
-   "destination": "Finding id/title/state (deviation-approved -> approved Deviation; open+remediation -> in-remediation); deadline -> risk@1"
+   "destination": "Risk id/title; statement -> scenario; deadline -> review-due (datetime); status -> Risk state (+ verbatim in risk-analysis@1) and Finding state (deviation-approved -> approved Deviation; open+remediation -> in-remediation)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.risks[].status",
    "count": 2,
    "level": "L1",
-   "destination": "Finding id/title/state (deviation-approved -> approved Deviation; open+remediation -> in-remediation); deadline -> risk@1"
+   "destination": "Risk id/title; statement -> scenario; deadline -> review-due (datetime); status -> Risk state (+ verbatim in risk-analysis@1) and Finding state (deviation-approved -> approved Deviation; open+remediation -> in-remediation)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.risks[].title",
    "count": 2,
    "level": "L1",
-   "destination": "Finding id/title/state (deviation-approved -> approved Deviation; open+remediation -> in-remediation); deadline -> risk@1"
+   "destination": "Risk id/title; statement -> scenario; deadline -> review-due (datetime); status -> Risk state (+ verbatim in risk-analysis@1) and Finding state (deviation-approved -> approved Deviation; open+remediation -> in-remediation)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.risks[].uuid",
    "count": 2,
    "level": "L1",
-   "destination": "Finding id/title/state (deviation-approved -> approved Deviation; open+remediation -> in-remediation); deadline -> risk@1"
+   "destination": "Risk id/title; statement -> scenario; deadline -> review-due (datetime); status -> Risk state (+ verbatim in risk-analysis@1) and Finding state (deviation-approved -> approved Deviation; open+remediation -> in-remediation)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.system-id.id",
@@ -2833,6 +2833,7 @@
   "component": 6,
   "impl": 3,
   "assessment": 1,
+  "risk": 2,
   "finding": 2,
   "attestation": 1
  },
@@ -2850,6 +2851,315 @@
   "system": 6,
   "observation": 4,
   "ap": 7,
-  "risk": 3
+  "risk": 14
+ },
+ "risk-shape-gaps": {
+  "owner absent in source (derived from the SSP `owner` role)": 2,
+  "analysed in source (likelihood + impact) but no level: `assessed` unreachable (RISK-2)": 2,
+  "response `accept` without a dated acceptance: `retain` unreachable (RISK-6)": 1
+ },
+ "response-types": {
+  "mitigate": 1,
+  "accept": 1
+ },
+ "value-arrival": {
+  "leaf-values": 835,
+  "arrived-verbatim": 394,
+  "absent": {
+   "identity": 194,
+   "document-metadata": 125,
+   "content": 122
+  },
+  "absent-content-prose": 63,
+  "absent-content-paths": [
+   {
+    "path": "ap.assessment-plan.assessment-subjects[].description",
+    "count": 1
+   },
+   {
+    "path": "ap.assessment-plan.tasks[].remarks",
+    "count": 1
+   },
+   {
+    "path": "ar.assessment-results.local-definitions.activities[].description",
+    "count": 1
+   },
+   {
+    "path": "ar.assessment-results.local-definitions.activities[].steps[].description",
+    "count": 3
+   },
+   {
+    "path": "ar.assessment-results.local-definitions.activities[].steps[].remarks",
+    "count": 2
+   },
+   {
+    "path": "ar.assessment-results.local-definitions.activities[].steps[].title",
+    "count": 3
+   },
+   {
+    "path": "ar.assessment-results.local-definitions.activities[].title",
+    "count": 1
+   },
+   {
+    "path": "ar.assessment-results.results[].description",
+    "count": 1
+   },
+   {
+    "path": "ar.assessment-results.results[].end",
+    "count": 1
+   },
+   {
+    "path": "ar.assessment-results.results[].findings[].description",
+    "count": 1
+   },
+   {
+    "path": "ar.assessment-results.results[].findings[].target.description",
+    "count": 1
+   },
+   {
+    "path": "ar.assessment-results.results[].local-definitions.tasks[].description",
+    "count": 1
+   },
+   {
+    "path": "ar.assessment-results.results[].local-definitions.tasks[].title",
+    "count": 1
+   },
+   {
+    "path": "ar.assessment-results.results[].observations[].remarks",
+    "count": 2
+   },
+   {
+    "path": "ar.assessment-results.results[].risks[].statement",
+    "count": 1
+   },
+   {
+    "path": "ar.assessment-results.results[].risks[].status",
+    "count": 1
+   },
+   {
+    "path": "cdef.component-definition.components[].control-implementations[].description",
+    "count": 1
+   },
+   {
+    "path": "cdef.component-definition.components[].control-implementations[].implemented-requirements[].set-parameters[].values[]",
+    "count": 1
+   },
+   {
+    "path": "cdef.component-definition.components[].control-implementations[].implemented-requirements[].statements[].description",
+    "count": 2
+   },
+   {
+    "path": "cdef.component-definition.components[].control-implementations[].source",
+    "count": 1
+   },
+   {
+    "path": "cdef.component-definition.components[].description",
+    "count": 1
+   },
+   {
+    "path": "cdef.component-definition.components[].purpose",
+    "count": 1
+   },
+   {
+    "path": "lev.system-security-plan.control-implementation.description",
+    "count": 1
+   },
+   {
+    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].remarks",
+    "count": 1
+   },
+   {
+    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].description",
+    "count": 2
+   },
+   {
+    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].export.description",
+    "count": 2
+   },
+   {
+    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].remarks",
+    "count": 1
+   },
+   {
+    "path": "lev.system-security-plan.system-characteristics.authorization-boundary.description",
+    "count": 1
+   },
+   {
+    "path": "lev.system-security-plan.system-characteristics.remarks",
+    "count": 1
+   },
+   {
+    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].availability-impact.adjustment-justification",
+    "count": 1
+   },
+   {
+    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].categorizations[].information-type-ids[]",
+    "count": 1
+   },
+   {
+    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].confidentiality-impact.adjustment-justification",
+    "count": 1
+   },
+   {
+    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].description",
+    "count": 1
+   },
+   {
+    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].integrity-impact.adjustment-justification",
+    "count": 1
+   },
+   {
+    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].title",
+    "count": 1
+   },
+   {
+    "path": "lev.system-security-plan.system-implementation.components[].description",
+    "count": 2
+   },
+   {
+    "path": "lev.system-security-plan.system-implementation.components[].props[].name",
+    "count": 1
+   },
+   {
+    "path": "lev.system-security-plan.system-implementation.components[].title",
+    "count": 1
+   },
+   {
+    "path": "lev.system-security-plan.system-implementation.components[].type",
+    "count": 1
+   },
+   {
+    "path": "lev.system-security-plan.system-implementation.users[].authorized-privileges[].functions-performed[]",
+    "count": 1
+   },
+   {
+    "path": "lvg.system-security-plan.control-implementation.description",
+    "count": 1
+   },
+   {
+    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].remarks",
+    "count": 1
+   },
+   {
+    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].description",
+    "count": 3
+   },
+   {
+    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].inherited[].description",
+    "count": 1
+   },
+   {
+    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].satisfied[].description",
+    "count": 1
+   },
+   {
+    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].remarks",
+    "count": 1
+   },
+   {
+    "path": "lvg.system-security-plan.system-characteristics.authorization-boundary.description",
+    "count": 1
+   },
+   {
+    "path": "lvg.system-security-plan.system-characteristics.remarks",
+    "count": 1
+   },
+   {
+    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].availability-impact.adjustment-justification",
+    "count": 1
+   },
+   {
+    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].categorizations[].information-type-ids[]",
+    "count": 1
+   },
+   {
+    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].confidentiality-impact.adjustment-justification",
+    "count": 1
+   },
+   {
+    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].description",
+    "count": 1
+   },
+   {
+    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].integrity-impact.adjustment-justification",
+    "count": 1
+   },
+   {
+    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].title",
+    "count": 1
+   },
+   {
+    "path": "lvg.system-security-plan.system-implementation.components[].description",
+    "count": 4
+   },
+   {
+    "path": "lvg.system-security-plan.system-implementation.components[].props[].name",
+    "count": 8
+   },
+   {
+    "path": "lvg.system-security-plan.system-implementation.components[].props[].value",
+    "count": 7
+   },
+   {
+    "path": "lvg.system-security-plan.system-implementation.components[].title",
+    "count": 3
+   },
+   {
+    "path": "lvg.system-security-plan.system-implementation.components[].type",
+    "count": 1
+   },
+   {
+    "path": "lvg.system-security-plan.system-implementation.leveraged-authorizations[].links[].rel",
+    "count": 1
+   },
+   {
+    "path": "lvg.system-security-plan.system-implementation.users[].authorized-privileges[].functions-performed[]",
+    "count": 1
+   },
+   {
+    "path": "poam.plan-of-action-and-milestones.observations[].remarks",
+    "count": 2
+   },
+   {
+    "path": "poam.plan-of-action-and-milestones.observations[].types[]",
+    "count": 1
+   },
+   {
+    "path": "poam.plan-of-action-and-milestones.poam-items[].description",
+    "count": 2
+   },
+   {
+    "path": "poam.plan-of-action-and-milestones.poam-items[].title",
+    "count": 1
+   },
+   {
+    "path": "ssp.system-security-plan.control-implementation.description",
+    "count": 1
+   },
+   {
+    "path": "ssp.system-security-plan.system-implementation.components[].description",
+    "count": 1
+   },
+   {
+    "path": "ssp.system-security-plan.system-implementation.components[].type",
+    "count": 1
+   },
+   {
+    "path": "ssp.system-security-plan.system-implementation.inventory-items[].implemented-components[].props[].value",
+    "count": 6
+   },
+   {
+    "path": "ssp.system-security-plan.system-implementation.inventory-items[].props[].class",
+    "count": 14
+   },
+   {
+    "path": "ssp.system-security-plan.system-implementation.inventory-items[].props[].value",
+    "count": 1
+   },
+   {
+    "path": "ssp.system-security-plan.system-implementation.users[].role-ids[]",
+    "count": 1
+   }
+  ]
  }
 }

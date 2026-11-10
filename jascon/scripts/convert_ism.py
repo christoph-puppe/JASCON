@@ -4,6 +4,7 @@ Gate item 1, authority 1. Emits: bundle + computed coverage report.
 Every source field path is inventoried and must have a declared destination;
 UNMAPPED paths are the gate's failure signal (target: zero)."""
 import json, hashlib, os, re, copy, sys, collections
+from oscal_conv_lib import BUNDLE_NEWLINE   # one byte spelling on every OS (D3.1)
 
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 SRC = os.path.join(ROOT, "sources", "ism.json")
@@ -21,7 +22,7 @@ def T(v):
 def w(path, obj):
     p = os.path.join(OUT, path)
     os.makedirs(os.path.dirname(p), exist_ok=True)
-    with open(p, "w", encoding="utf-8") as f:
+    with open(p, "w", encoding="utf-8", newline=BUNDLE_NEWLINE) as f:
         json.dump(obj, f, indent=1, ensure_ascii=False); f.write("\n")
 
 def sha_file(path):

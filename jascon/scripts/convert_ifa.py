@@ -7,12 +7,19 @@ Implementations (param bindings against the REAL minted AC-6.1 ODPs;
 inheritance via inherited-from{component-ref, basis-ref}), Assessment (AR
 ConMon result, AP as method payload, observations as facet + landmark
 evidence URIs), Findings (POA&M risks -> states/actions/deviations), and an
-Attestation modeling the SSP's date-authorized ATO. Referenced Requirements
+Attestation modeling the SSP's date-authorized ATO.
+CP-RISK-1 re-run (kernel 2.0.0, 2026-11-10): the POA&M risks are also
+emitted as Risk objects - the first corpus measurement of the tenth type.
+What OSCAL cannot give the Risk shape is REPORTED, never filled in: no
+owner field (derived from the imported SSP, declared), no single level
+(likelihood + impact only - `assessed`/`treated` are unreachable), no dated
+acceptance (`retain` is unreachable). Findings point at their Risk with
+`risk-refs`; the risk@1 framework facet is retired. Referenced Requirements
 (AC-6.1, AC-2) ride along as byte-identical copies from the US.SP800-53
 bundle - an authorization package carries its baseline. Coverage target: 0.
 Depends on: convert_nist.py output (run first)."""
 import json, os, re, collections
-from oscal_conv_lib import make_T, slug, Bundle, inventory, coverage, report, semantic_digest
+from oscal_conv_lib import make_T, slug, Bundle, inventory, coverage, report, semantic_digest, value_arrival
 
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 SRCDIR = os.path.join(ROOT, "sources", "nist")
@@ -21,7 +28,8 @@ NISTB = os.path.join(ROOT, "converted_examples", "US.SP800-53", "sp800-53-core-b
 NS = "https://ifa.gov/goodread"          # the source's own (fictional) agency domain
 F_SYS = f"{NS}/facet/system@1"
 F_OBS = f"{NS}/facet/observations@1"
-F_RISK = f"{NS}/facet/risk@1"
+F_RISKA = f"{NS}/facet/risk-analysis@1"    # L2 holding pen for the parked stdlib risk-analysis@1 (App. D)
+F_FTGT = f"{NS}/facet/finding-target@1"    # the Finding-side residue of the retired risk@1 facet
 F_AP = f"{NS}/facet/assessment-plan@1"
 F_PROTO = f"{NS}/facet/protocols@1"
 
@@ -295,21 +303,96 @@ bundle.add("objects/assessment/conmon-2023-06.json",
             "evidence-refs": [o["id"] for o in obs_dedup],
             "facets": {F_OBS: {"observations": obs_dedup}}})
 
-# ================= 5. Findings (AR finding + POA&M risks) =================
+# ================= 5. Risks + Findings (POA&M risks, AR finding) =================
 V_POAM = POAM["metadata"]["version"]
 risks = {r["uuid"]: r for r in POAM.get("risks", [])}
 items = POAM.get("poam-items", [])
 target_obj = finding_src["target"]["target-id"]           # ac-6.1_obj - the 53A objective address
-def risk_facet(rk):
-    f = {"risk-status": rk.get("status"), "deadline": rk.get("deadline"),
-         "statement": T(pua_scan(rk.get("statement", "")), "risk"),
+
+# --- CP-RISK-1: the ex-ante record. Every field below names its source; what
+# --- the source cannot supply is counted in risk_gaps and printed in the report.
+# OSCAL response `type` prop (allowed: avoid mitigate transfer accept share
+# contingency none) -> C.10 treatment option. `contingency` and `none` have no
+# JASCON code; they stay in the facet and are counted.
+RESPONSE_TREATMENT = {"avoid": "avoid", "mitigate": "modify", "transfer": "share",
+                      "share": "share", "accept": "retain"}
+risk_gaps = collections.Counter()
+response_types = collections.Counter()
+_owner = next((rp["party-uuids"][0] for rp in SSP["metadata"].get("responsible-parties", []) or []
+               if rp.get("role-id") == "owner" and rp.get("party-uuids")), None)
+RISK_OWNER = party_uri(SSP, _owner, "system-owner")
+_poam_sys = (POAM.get("system-id") or {}).get("id")
+_ssp_sys = {x.get("id") for x in sc.get("system-ids", []) or []}
+
+def risk_analysis(rk):
+    """Everything App. F Q14 keeps out of the kernel: how the level would be
+    computed (likelihood, impact, their scale system, who rated), plus the
+    source's own status and response narrative, verbatim."""
+    f = {"risk-status": rk.get("status"),
+         "description": T(pua_scan(rk.get("description", "")), "risk"),
          "characterizations": [{"facets": [{"name": x["name"], "value": x["value"], "system": x["system"]}
                                            for x in ch.get("facets", [])],
                                 "origin-actors": [a.get("actor-uuid") for a in ch.get("origin", {}).get("actors", [])]}
-                               for ch in rk.get("characterizations", []) or []]}
+                               for ch in rk.get("characterizations", []) or []],
+         "responses": [{"type": next((p.get("value") for p in rm.get("props", []) or [] if p.get("name") == "type"), None),
+                        "lifecycle": rm.get("lifecycle"), "title": rm.get("title"),
+                        "description": T(pua_scan(rm.get("description", "")), "risk"),
+                        # Finding.actions[] is {description, due, status}; the task's type,
+                        # narrative and START have no kernel field and ride here verbatim
+                        "tasks": [{"type": t.get("type"), "title": t.get("title"),
+                                   "description": T(pua_scan(t.get("description", "")), "risk"),
+                                   **{k: v for k, v in (t.get("timing", {}).get("within-date-range", {}) or {}).items()}}
+                                  for t in rm.get("tasks", []) or []]}
+                       for rm in rk.get("remediations", []) or []]}
     mit = [T(pua_scan(m.get("description", "")), "risk") for m in rk.get("mitigating-factors", []) or []]
     if mit: f["mitigating-factors"] = mit
     return f
+
+def risk_object(rk, name, treats):
+    """One POA&M risk -> one Risk. `treats`: the requirement the paired
+    Finding is against (the control the response modifies), or None."""
+    o = {"id": f"{NS}/risk/{name}", "version": V_POAM, "lifecycle": "active",
+         "title": rk.get("title", ""),
+         "scenario": pua_scan(rk.get("statement", "")),            # OSCAL `statement` IS the risk statement
+         "owner-ref": RISK_OWNER}
+    risk_gaps["owner absent in source (derived from the SSP `owner` role)"] += 1
+    # state: `closed` retires; every other OSCAL status is at most `identified`,
+    # because assessed/treated require a rating (RISK-2) and an OSCAL
+    # characterization carries likelihood and impact, never the level.
+    if rk.get("status") == "closed":
+        o["state"] = "retired"
+    else:
+        o["state"] = "identified"
+        if rk.get("characterizations"):
+            risk_gaps["analysed in source (likelihood + impact) but no level: `assessed` unreachable (RISK-2)"] += 1
+    if _poam_sys and _poam_sys in _ssp_sys:
+        o["component-refs"] = [COMP_SYS]                           # POA&M system-id == the SSP's system id
+    rtypes = [r["type"] for r in risk_analysis(rk)["responses"] if r["type"]]
+    for rt in rtypes: response_types[rt] += 1
+    tcode = RESPONSE_TREATMENT.get(rtypes[0]) if rtypes else None
+    if rtypes and tcode is None:
+        risk_gaps[f"response type `{rtypes[0]}` has no treatment code (C.10)"] += 1
+    if tcode == "modify" and treats:
+        o["treatment"] = "modify"
+        o["treatments"] = [{"requirement-ref": treats}]
+    elif tcode == "avoid":
+        o["treatment"] = "avoid"
+    elif tcode == "retain":
+        # RISK-6: retain requires acceptance{approver-ref, date, rationale}. The
+        # source has the rationale (the response narrative) and names the
+        # approver only in prose; it has NO acceptance date. A date is not
+        # invented: the option stays in the facet, the approval stays on the
+        # Finding's Deviation, and the gap is reported.
+        risk_gaps["response `accept` without a dated acceptance: `retain` unreachable (RISK-6)"] += 1
+    elif tcode == "share":
+        risk_gaps["response `transfer`/`share` names no party: `share` unreachable (RISK-5)"] += 1
+    elif tcode == "modify":
+        risk_gaps["response `mitigate` with no control linked in source: `modify` unreachable (RISK-4)"] += 1
+    if rk.get("deadline"):
+        o["review-due"] = {"type": "datetime", "value": rk["deadline"]}   # OSCAL deadline: date-time-with-timezone
+    o["facets"] = {F_RISKA: risk_analysis(rk)}
+    return o
+
 def actions_of(rk):
     out = []
     for rm in rk.get("remediations", []) or []:
@@ -325,27 +408,35 @@ def actions_of(rk):
 rk2 = next(r for r in risks.values() if "Engineers" in r["title"])
 rk1 = next(r for r in risks.values() if r is not rk2)
 sca = rk1["characterizations"][0]["facets"][0]["system"]   # https://ifa.gov/division/ociso/sca
+# The AR finding (target: an AC-6(1) objective) names this risk through
+# related-risks - that is the source's own risk -> control edge.
+RISK2 = risk_object(rk2, "goodread-risk-2", REQ_AC61)
+RISK1 = risk_object(rk1, "goodread-risk-1", None)
+bundle.add("objects/risk/goodread-risk-2.json", RISK2)
+bundle.add("objects/risk/goodread-risk-1.json", RISK1)
 bundle.add("objects/finding/goodread-risk-2.json",
            {"id": f"{NS}/finding/goodread-risk-2", "version": V_POAM, "lifecycle": "active",
             "title": finding_src.get("title", rk2["title"]),
             "assessment-ref": ASSESS, "requirement-ref": REQ_AC61,
             "state": "in-remediation",
+            "risk-refs": [RISK2["id"]],
             "actions": actions_of(rk2),
-            "facets": {F_RISK: {**risk_facet(rk2), "target-objective-id": target_obj,
+            "facets": {F_FTGT: {"target-objective-id": target_obj,
                                 "implementation-statement-uuid": finding_src.get("implementation-statement-uuid")}}})
 bundle.add("objects/finding/goodread-risk-1.json",
            {"id": f"{NS}/finding/goodread-risk-1", "version": V_POAM, "lifecycle": "active",
             "title": rk1.get("title", ""),
             "assessment-ref": ASSESS, "requirement-ref": REQ_AC61,
             "state": "in-remediation",
+            "risk-refs": [RISK1["id"]],
             "actions": actions_of(rk1),
+            # RISK-9: the risk-adjustment Deviation names the Risk it adjusts for
             "deviations": [{"type": "risk-adjustment", "state": "approved",
                             "rationale": pua_scan(rk1.get("mitigating-factors", [{}])[0].get("description",
                                           "Risk accepted per POA&M deviation approval.")),
                             "approver-ref": sca,
                             "opened": (POAM.get("observations", [{}])[0].get("collected", "2023-05-19"))[:10],
-                            "refs": [f"{NS}/evidence/obs-{POAM['observations'][0]['uuid'][:8]}"]}],
-            "facets": {F_RISK: risk_facet(rk1)}})
+                            "refs": [f"{NS}/evidence/obs-{POAM['observations'][0]['uuid'][:8]}", RISK1["id"]]}]})
 
 # ================= 6. Attestation (the ATO as attestation) =================
 ato_subjects = [{"id": o["id"], "semantic-digest": semantic_digest(o)}
@@ -378,10 +469,12 @@ bundle.stub("goodread-system-stub.json", F_SYS.split("@")[0], [],
              "data-flow": {"type": "object"}, "users": {"type": "array"},
              "inventory-items": {"type": "array"}, "customer-responsibilities": {"type": "array"}})
 bundle.stub("goodread-observations-stub.json", F_OBS.split("@")[0], [], {"observations": {"type": "array"}})
-bundle.stub("goodread-risk-stub.json", F_RISK.split("@")[0], [],
-            {"risk-status": {"type": "string"}, "deadline": {"type": "string"},
-             "statement": {"type": "object"}, "characterizations": {"type": "array"},
-             "mitigating-factors": {"type": "array"}, "target-objective-id": {"type": "string"},
+bundle.stub("goodread-risk-analysis-stub.json", F_RISKA.split("@")[0], [],
+            {"risk-status": {"type": "string"}, "description": {"type": "object"},
+             "characterizations": {"type": "array"}, "responses": {"type": "array"},
+             "mitigating-factors": {"type": "array"}})
+bundle.stub("goodread-finding-target-stub.json", F_FTGT.split("@")[0], [],
+            {"target-objective-id": {"type": "string"},
              "implementation-statement-uuid": {"type": "string"}})
 bundle.stub("goodread-ap-stub.json", F_AP.split("@")[0], [], {"activities": {"type": "array"}})
 bundle.stub("goodread-protocols-stub.json", F_PROTO.split("@")[0], [], {"protocols": {"type": "array"}})
@@ -389,7 +482,8 @@ bundle.write({"source": "OSCAL IFA GoodRead example set (SSP 1.1.1, AP, AR, POA&
                         "leveraging SSP pair + component-definition example (usnistgov/oscal-content)",
               "source-note": "FICTIONAL example content by NIST; converted as the gate-3 lifecycle corpus",
               "source-oscal-version": SSP["metadata"]["oscal-version"],
-              "converter": "convert_ifa.py v0.1",
+              "source-commit": "usnistgov/oscal-content@9402f031 (2026-07-14; the state fetched 2026-07-22)",
+              "converter": "convert_ifa.py v0.2 (CP-RISK-1 re-run: POA&M risks -> Risk objects)",
               "carried-requirements": carried,
               "attestation-note": "content-manifest-digest = sha256 over the JSON array of "
                                   "{id, semantic-digest} subject entries (deterministic mini-manifest)"})
@@ -419,7 +513,7 @@ RULES = [
   "observations@1 facet + landmark evidence URIs (methods/types/collected/expires carried)"),
  (r"^ar\.assessment-results\.results\[\]\.findings\[\]\.", "L1",
   "Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + "
-  "implementation-statement-uuid -> risk@1 facet"),
+  "implementation-statement-uuid -> finding-target@1 facet; related-risks -> Risk.treatments (the risk -> control edge)"),
  (r"^ar\.assessment-results\.results\[\]\.(risks|local-definitions)", "L1",
   "risk content consolidated with the POA&M risks (same risk graph, later state)"),
  (r"^ar\.assessment-results\.local-definitions\.", "L2",
@@ -427,15 +521,23 @@ RULES = [
  (r"^poam\.plan-of-action-and-milestones\.(uuid$|system-id)", "L1", "provenance / system id (system@1)"),
  (r"^poam\.plan-of-action-and-milestones\.observations\[\]\.", "L1",
   "observations@1 facet + landmark evidence URIs (deduped against AR by uuid)"),
- (r"^poam\.plan-of-action-and-milestones\.risks\[\]\.(uuid|title|description|statement|status|deadline)$", "L1",
-  "Finding id/title/state (deviation-approved -> approved Deviation; open+remediation -> in-remediation); "
-  "deadline -> risk@1"),
+ (r"^poam\.plan-of-action-and-milestones\.risks\[\]\.(uuid|title|statement|status|deadline)$", "L1",
+  "Risk id/title; statement -> scenario; deadline -> review-due (datetime); status -> Risk state "
+  "(+ verbatim in risk-analysis@1) and Finding state (deviation-approved -> approved Deviation; "
+  "open+remediation -> in-remediation)"),
+ (r"^poam\.plan-of-action-and-milestones\.risks\[\]\.description$", "L2",
+  "risk-analysis@1 description (the kernel's `scenario` is the OSCAL statement)"),
  (r"^poam\.plan-of-action-and-milestones\.risks\[\]\.characterizations\[\]\.", "L2",
-  "risk@1 facet characterizations (likelihood/impact, origin actors)"),
+  "risk-analysis@1 characterizations (likelihood/impact + scale system, origin actors) - scoring stays out of the kernel (App. F Q14)"),
+ (r"^poam\.plan-of-action-and-milestones\.risks\[\]\.remediations\[\]\.props\[\]\.", "L1",
+  "response `type` -> Risk.treatment (C.10: mitigate->modify, accept->retain, transfer|share->share, avoid->avoid) "
+  "+ verbatim in risk-analysis@1 responses[]"),
+ (r"^poam\.plan-of-action-and-milestones\.risks\[\]\.remediations\[\]\.(lifecycle|title|description)$", "L1",
+  "Finding.actions[] description/status + risk-analysis@1 responses[] (lifecycle, title, narrative)"),
  (r"^poam\.plan-of-action-and-milestones\.risks\[\]\.remediations\[\]\.", "L1",
-  "Finding.actions[] (task title/status; within-date-range.end -> due)"),
+  "Finding.actions[] (task title; within-date-range.end -> due); remediation/task uuids are source identity (L0)"),
  (r"^poam\.plan-of-action-and-milestones\.risks\[\]\.(mitigating-factors|related-observations)\[?\]?\.", "L1",
-  "Deviation rationale (RISK-1) / risk@1 mitigating-factors; observation links -> evidence refs"),
+  "Deviation rationale (RISK-1) + risk-analysis@1 mitigating-factors; observation links -> evidence refs"),
  (r"^poam\.plan-of-action-and-milestones\.poam-items\[\]\.", "L1",
   "poam-item titles ride the Finding titles; related-risks/observations resolved by uuid"),
  (r"^(lev|lvg)\.system-security-plan\.system-characteristics\.", "L1",
@@ -461,6 +563,12 @@ RULES = [
   "Component (kind mapped) id/title"),
 ]
 rows, unmapped = coverage(paths, RULES)
+# value arrival (measured, not declared): the path map above says where each
+# source path is MEANT to go; this says how many values actually got there
+VA = value_arrival([("ssp", {"system-security-plan": SSP}), ("ap", {"assessment-plan": AP}),
+                    ("ar", {"assessment-results": AR}), ("poam", {"plan-of-action-and-milestones": POAM}),
+                    ("lev", {"system-security-plan": LEV}), ("lvg", {"system-security-plan": LVG}),
+                    ("cdef", {"component-definition": CDEF})], list(bundle.objects.values()))
 
 types = collections.Counter(rel.split("/")[1] for rel in bundle.objects)
 j = report(
@@ -471,7 +579,7 @@ j = report(
     f"leveraged/leveraging SSP pair + component-definition example (usnistgov/oscal-content; "
     f"FICTIONAL example content by NIST). Census: `drafts/gate-3-census.md` §4.",
     [f"- Objects emitted: " + ", ".join(f"{v} {k}" for k, v in sorted(types.items())) +
-     f" - the five lifecycle types at document scale, manifest with both digests.",
+     f" - the five lifecycle types and the Risk type (kernel 2.0.0) at document scale, manifest with both digests.",
      f"- Carried Requirements (closure): {', '.join(carried)} - byte-identical copies from the "
      f"US.SP800-53 bundle; an authorization package carries its baseline."],
     [f"- **SSP -> Component + Implementation**: by-component -> capability + satisfied-by; "
@@ -486,13 +594,20 @@ j = report(
      f"- **AR + AP -> one Assessment**: AP activities/steps ride Assessment.method "
      f"(assessment-plan@1 payload); result not-satisfied from the finding target; observations "
      f"(AR + POA&M, deduped by uuid) -> observations@1 facet + landmark evidence URIs.",
+     f"- **POA&M risks -> Risk objects (CP-RISK-1, kernel 2.0.0)**: statement -> `scenario`; "
+     f"deadline -> `review-due` (datetime - OSCAL's type is date-time-with-timezone); POA&M system-id -> "
+     f"`component-refs`; response `type` prop -> `treatment` (observed: "
+     f"{', '.join(f'{k} x{v}' for k, v in sorted(response_types.items())) or 'none'}); the AR finding's "
+     f"related-risks edge -> `treatments[]` (RISK-2 is modified by AC-6.1). likelihood/impact, the source "
+     f"status and the response narrative -> risk-analysis@1 (the L2 holding pen for the parked stdlib facet).",
      f"- **POA&M risks -> Findings**: RISK-2 (open + planned remediation) -> state in-remediation with "
      f"actions[] (due = within-date-range.end); RISK-1 (status deviation-approved) -> approved "
-     f"`risk-adjustment` Deviation (rationale = mitigating factor, approver = the SCA division URI); "
-     f"characterizations (likelihood/impact) -> risk@1 facet.",
+     f"`risk-adjustment` Deviation (rationale = mitigating factor, approver = the SCA division URI) whose "
+     f"`refs` name the Risk (RISK-9). Each Finding carries `risk-refs` to its Risk; the risk@1 framework "
+     f"facet is retired.",
      f"- **Finding target `{target_obj}`** is a 53A OBJECTIVE id - it addresses into the sp800-53a@1 "
-     f"facet of the carried AC-6.1 (kept in risk@1.target-objective-id; kernel statement-ref stays "
-     f"statement-scoped).",
+     f"facet of the carried AC-6.1 (kept in finding-target@1.target-objective-id; kernel statement-ref "
+     f"stays statement-scoped).",
      f"- **Parties stay landmark** (#16, D22 0-of-3): performer/signer/approver are minted party URIs, "
      f"no party objects.",
      f"- **Payload free text language-tagged**: " + ", ".join(f"{k} x{v}" for k, v in sorted(lang_wraps.items())) + "."],
@@ -510,15 +625,29 @@ j = report(
       f"(the binding is carried verbatim; a resolver follows the odp@1 aggregates map)." if unresolved_bind else "."),
      f"- **Kind mapping**: " + (", ".join(f"{k} x{v}" for k, v in kind_mapped.items()) or "none") +
      f" (OSCAL free-text component types vs. the kernel's closed componentKind).",
+     f"- **Value arrival (measured; path coverage above is a DECLARATION)**: {VA['arrived-verbatim']:,} of "
+     f"{VA['leaf-values']:,} source leaf values occur verbatim in the emitted objects. Absent: "
+     f"{VA['absent']['identity']} identity values (uuids/hrefs - re-minted as URIs by design), "
+     f"{VA['absent']['document-metadata']} document-metadata values, and **{VA['absent']['content']} content "
+     f"values ({VA['absent-content-prose']} of them prose of 40+ characters)** - each either transformed on "
+     f"purpose (a mapped code, a respelled id) or DROPPED. `UNMAPPED: 0` does not see the difference; the "
+     f"per-path list is in the JSON report (`value-arrival`) and is the work queue (backlog #41).",
+     f"- **What OSCAL cannot give the Risk shape** (model findings, REPORTED; nothing is invented - the one derived value is the owner): " +
+     "; ".join(f"{k} x{v}" for k, v in sorted(risk_gaps.items())) +
+     f". Owner source: the SSP `owner` role -> {RISK_OWNER}.",
      *(f"- {n}" for n in findings_notes)],
     rows, unmapped,
     {"objects-emitted": dict(types), "carried-requirements": carried,
      "stmt-respell": n_stmt_respell, "pua-codepoints": n_pua,
      "placeholder-uuids": uuid_placeholder, "unresolved-bindings": unresolved_bind,
-     "lang-wraps": dict(lang_wraps)})
+     "lang-wraps": dict(lang_wraps),
+     "risk-shape-gaps": dict(risk_gaps), "response-types": dict(response_types),
+     "value-arrival": VA})
 print(f"objects: {sum(types.values())} {dict(types)}")
 print(f"leaves: {j['totals']['leaf-values']:,}  mapped: {j['totals']['mapped']:,}  "
       f"UNMAPPED: {j['totals']['unmapped']}")
+print(f"value arrival: {VA['arrived-verbatim']}/{VA['leaf-values']} verbatim; absent content values: "
+      f"{VA['absent']['content']} ({VA['absent-content-prose']} prose)")
 print(f"respell: {n_stmt_respell}  pua: {n_pua}  placeholder-uuids: {uuid_placeholder}  "
       f"unresolved-bindings: {unresolved_bind}")
 if unmapped:

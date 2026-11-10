@@ -5,6 +5,7 @@ subsets/classes/types -> nested Sets; class variance -> Tailorings (computable
 deltas) + L2 class-variants payloads (full fidelity); FRD -> terminology;
 CTL Rev5 overlay -> parked L2 (resolves at gate item 3). Coverage target: 0."""
 import json, hashlib, os, re, copy, collections, shutil
+from oscal_conv_lib import BUNDLE_NEWLINE   # one byte spelling on every OS (D3.1)
 
 ROOT=os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)),"..",".."))
 SRC=os.path.join(ROOT,"sources","cr_fedramp-consolidated-rules.json")
@@ -26,7 +27,7 @@ ELAPSED={"seconds","minutes","hours"}; CAL={"days","bizdays","weeks","months","y
 
 def w(p,o):
     fp=os.path.join(OUT,p); os.makedirs(os.path.dirname(fp),exist_ok=True)
-    open(fp,"w",encoding="utf-8").write(json.dumps(o,indent=1,ensure_ascii=False)+"\n")
+    with open(fp,"w",encoding="utf-8",newline=BUNDLE_NEWLINE) as f: f.write(json.dumps(o,indent=1,ensure_ascii=False)+"\n")
 def shaf(p): return "sha256:"+hashlib.sha256(open(os.path.join(OUT,p),"rb").read()).hexdigest()
 def _canon(o):
     if isinstance(o, dict):

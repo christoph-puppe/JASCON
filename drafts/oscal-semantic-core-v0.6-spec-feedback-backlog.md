@@ -6,6 +6,53 @@ proposed disposition, and its source. This file is the input queue
 for the v0.6 specification revision; items leave it only via a
 decision recorded in the register.
 
+**THE BACKLOG IS OPEN AGAIN** (2026-11-10, the CP-RISK-1 landing —
+register "Amendments — CP-RISK-1"): landing the Risk change proposal in
+the repository filed **#40–#47**; the author's answers of the same day
+closed **#40** (the release is **2.0.0** — register "Amendments — the
+2.0.0 decision"), deferred #42, and added **#48 · #49**; the corpus
+licence review closed **#49** and left **#50**; **#42** was then done
+on the author's word, and **#43** decided ("keep"). Open: #41, #44–#48,
+#50, and **#51 · #52** from the external review of rc.1 (nine findings
+fixed on the branch — `drafts/CP-RISK-1.md` §13). Two need the author (#48, #50); one needs a Windows machine
+(#45); the rest are work. The eight review findings against the proposal
+itself (R-1…R-8) were closed in the landing pass and never entered this
+file — `drafts/CP-RISK-1.md` §11.2.
+
+| # | Item | Evidence | Proposed disposition | Source |
+|---|---|---|---|---|
+| 41 | **Path coverage is not value arrival** *(Major, class c — affects the "lossless" headline)*. Coverage reports count source paths with a declared destination; values are not checked. | **Measured, IFA only**: 394/835 leaf values occur verbatim in the bundle; absent 194 identity + 120 document-metadata + **122 content (63 prose ≥ 40 chars)**; before the re-run 138 — 13 under `poam.risks[]`, incl. the response `type` prop. Other ten corpora: **unmeasured** (sources not in repo) | Wire `oscal_conv_lib.value_arrival()` into every converter's report; for each absent content path either carry it or declare it dropped with a reason; then re-word the "converted losslessly" sentences (README, spec Status) to what is measured | CP-RISK-1 landing, L-2 |
+| 44 | **Nothing in a bundle pins the kernel version** *(Minor, class b)*. A 1.0.0 tool meeting a Risk fails closed as "matches NO type" — no version in the message. The proposal's `manifest-version: "1.1"` was an undefined second spelling and was reverted. | Demonstrated: `contentManifest` shape has no such field; 11/11 corpus manifests, the converter library and the reader write `"1"` | Open on its own now that #40 is closed. 2.0.0 is the natural window: an optional kernel pin in the manifest (itself a closed-shape change) or a written rule that `manifest-version` tracks the kernel line. Decide before the tag | CP-RISK-1 landing |
+| 45 | **PowerShell twin: the CP-RISK-1 port has never run** *(blocks the two-implementation gate)*. Ported from the Python reference and the vectors without a PowerShell runtime. Also observed while porting, **unverified**: the twin keys objects in `[ordered]@{}`, which compares keys case-insensitively — two ids differing only in case would collide, where the Python reference keeps both (D2: string-compared). | Not executed. Static checks only (bracket balance, no `$var:` hazards) | Run `powershell -ExecutionPolicy Bypass -File jascon/scripts/validate_core.ps1`; expect `risk: 42 pass, 0 fail` and ALL GREEN; remove the two port guards; add a case-differing-ids reference vector to settle the observation | CP-RISK-1 landing |
+| 46 | **The example attestation binds nothing** *(Minor, class c)*. Its three `subject-semantic-digests` match no example object and its `content-manifest-digest` no manifest — since before 1.0.0. Separately: the IFA bundle lists its Attestation **inside** the content manifest, which D3.1 excludes by definition. | Measured: 3/3 subject digests unmatched (also against the 1.0.0 blobs) · `objects/attestation/ifa-ato.json` is a manifest entry | Make the example attestation real and have `validate_examples` hold it to it (attestation-binds on the example bundle); move the IFA attestation beside its manifest at the next converter touch. README caveat 6 now says what is true meanwhile | CP-RISK-1 landing, L-3 |
+| 47 | **Two smaller shape questions** *(Minor)*. (a) Tightening `Finding.actions[].due` to `#/$defs/due` is a breaking change — it rides a major, not a converter re-run. 2.0.0 is that major and the change was **not taken**: it would end the measured property that every 1.0.0 bundle is a 2.0.0 bundle. (b) C.10 has four treatment options; OSCAL's response `type` prop allows seven — `contingency` and `none` have no code (D22 test 3, "one vocabulary without flattening"). | (a) argued; corpus would pass (3 Findings with actions) · (b) measured vocabulary: OSCAL metaschema lists 7; corpus instances of the two unmapped values: 0 | (a) author's call before the 2.0.0 tag: superset property or a typed `due`. (b) leave until an instance appears; it then stays in the facet and is counted | CP-RISK-1 landing |
+| 48 | **D22 test 1 cannot admit a consumer-side type** *(decision; residue of #40)*. Risk entered the kernel as an author-decided exception to "measured 2-of-3 in the census corpus": 0 of 3 census corpora encode a risk record, because census authorities publish catalogs and a risk register is consumer-side data. As worded the test can never be met by such a type. | Measured: 0/3 census corpora; 1 non-census corpus (IFA) supplying 3 of 6 record fields; three standards prescribing the record. Register "D22-applied — Risk and test 1" | Author decides: leave D22 as is and let this exception stand as the single precedent, or add a consumer-side clause with its own bar (e.g. N standards prescribing the record + one measured lifecycle corpus + the major) | 2.0.0 decision |
+| 50 | **The removed bundles are still in history and on `main`** *(author; residue of #49)*. The licence review took six bundles out of the tree (both CIS corpora, C5, C3A, CyFun, and FedRAMP-CR26 as the doubtful case). Earlier commits and the default branch still serve them. | Measured: `git show <1.0.0 commit>:converted_examples/CIS.Controls/...` still resolves; `main` is unchanged until this branch merges | Author decides: (a) accept — merging stops future publication, history stays; (b) purge — rewrite history and force-push `main`, which invalidates every existing clone and commit id cited in the register. Not something to do without an explicit instruction | Corpus licence review, 2026-11-10 |
+| 51 | **No edge from a Tailoring to the scope it is a Statement of Applicability for** *(decision; from the rc.1 review, X-2)*. `risk-coverage` now scopes a Risk through `Risk.tailoring-refs`, because a Tailoring names no Component and `Risk.component-refs` therefore has nothing to join to. | Demonstrated: two Tailorings in one bundle shared every justification until `tailoring-refs`; `tailoring` shape has no component field. | Author: either `tailoring-refs` is the model (then say so in D13), or Tailoring gains an optional `component-refs` — a change to a released shape, so it rides this major or the next. | rc.1 review (CP §13) |
+| 52 | **`Deviation.opened` is a free string** *(Minor; from the rc.1 review, X-5)*. The same defect was fixed for `Risk.acceptance.date` and `review-due`, which are new in 2.0.0. `opened` is a 1.0.0 shape. | Schema: `{"type": "string", "minLength": 1}`. Corpus values not surveyed. | Decide with #47a — both end the "every 1.0.0 bundle is a 2.0.0 bundle" property if any shipped value does not conform; survey first. | rc.1 review (CP §13) |
+
+**Closed 2026-11-10** (author decision; register "Amendments — the 2.0.0
+decision"): **#40** → the kernel that carries Risk is **2.0.0**; D22 rev
+3 stands unamended; the schema, both validators, the vectors, the
+handbook and the reader were renamed in one pass. Measured alongside:
+2.0.0 is a superset — all 6,914 objects of the 1.0.0 corpus validate
+unchanged. The half of D22 rev 3 that "v2" does not answer left as #48.
+**#49** → the corpus licence review (register "Amendments — the corpus
+licence review"): three NIST corpora, ISM and Grundschutz++ kept under
+their publishers' stated terms; both CIS corpora, C5, C3A and CyFun
+removed from the tree (terms forbid it, or no terms found), and
+FedRAMP-CR26 removed as the doubtful case in a commit of its own (a U.S.
+Government work, but no licence stated by the publisher). Converters and
+coverage reports stay. Five bundles ship. Residue: #50.
+**#42** → the blobs are the digested bytes (register "Amendments — raw
+blobs"): bundle files are `-text` and stored CRLF, so raw blob access
+verifies too — 4,527 / 4,527 staged blobs match their manifest digests.
+**#43** → the Risk rules stay as written (register "Amendments — the Risk
+rules stay"): no relaxation for imported OSCAL data; an import that lacks
+owner, level or dated acceptance stays `identified` and says so.
+
+<details><summary>State of this file at the 1.0.0 release (2026-07-22) — kept as written</summary>
+
 **THE BACKLOG IS EMPTY AGAIN** (2026-07-22, the P10 fix pass — register
 "Amendments — the P10 fix pass"): the P10 review of the 1.0.0-rc.1 text
 filed **#29–#37** (4 Major · 4 Minor · 1 erratum; register "Amendments —
@@ -18,6 +65,8 @@ converter slug collision that had silently merged **239 ISM taxonomy
 sets** — recovered by re-conversion (corpus 6,675 → 6,914 objects).
 Every item that ever entered this file has left it through a register
 entry.
+
+</details>
 
 <details><summary>The P10/P10b rows as they stood (all eleven closed by the fix pass)</summary>
 

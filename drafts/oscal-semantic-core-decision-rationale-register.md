@@ -1403,3 +1403,454 @@ Name ✓ JASCON → P10 ✓ → P10b ✓ → fix pass ✓ → **`v1.0.0` tagged
 and 157/157 vectors are green at the release commit. Post-1.0 work
 rides the pending queue (OSCAL mapping/profile exports, SSP-family
 lifecycle exports, the clean-room invitation).
+
+# Amendments — CP-RISK-1 (2026-11-10): Risk as the tenth kernel type — landed on a branch, NOT released
+
+**What this section is.** `drafts/CP-RISK-1.md` proposes Risk as a tenth
+kernel type (schema 1.1.0), written 2026-11-05 against the synced skill
+bundle, without sight of this register, the specification, the corpora
+or the PowerShell twin. On 2026-11-10 it was applied to the repository,
+reviewed adversarially, corrected, and measured against the first Risk
+corpus. This section records that landing. **Nothing is tagged**: one
+entry below is an open contradiction with D22 rev 3 that only the author
+can close, and the second implementation has not run. The backlog is
+open again (#40–#47).
+
+## The landing — what held (measured)
+The patch applied without a rejected hunk. Under the 1.1.0 schema **all
+6,914 objects of the 1.0.0 corpus match exactly one kernel shape — zero
+new failures in eleven bundles**; the proposal's compatibility claim is
+measured. Conformance after the landing: **200 vectors in 13 families**
+(risk 42: 16 object · 18 bundle · 8 transitions; lifecycle 36 → 37 by the
+tenth disjointness case); corpus **6,916 manifest-listed objects** (IFA
+15 → 17), ALL GREEN in `validate_core.py` on Linux.
+
+## L-1 — Package digests and line endings: the 1.0.0 corpus did not verify off Windows *(found on the way)*
+**Finding (measured).** On a fresh clone under Linux, the 1.0.0
+validator reports **6,963 failures, every one a digest-of-bytes
+mismatch** (6,914 objects + 49 pinned facet schemas); semantic digests:
+0 failures. The manifests digest CRLF bytes — the converters wrote in
+text mode on Windows — and git stored the blobs LF-normalised. Every
+file matches once `\r` is restored. "Reproduce the whole verdict in one
+line" was true on the machine that wrote it and on no other; a `git
+archive` of the 1.0.0 commit (what a ZIP download is) fails the same way.
+**Decision.** `.gitattributes` gives the bundle directories
+`text eol=crlf`, and the converters write that line ending explicitly
+(`oscal_conv_lib.BUNDLE_NEWLINE`) instead of inheriting the platform's.
+No published digest is re-spelled.
+**Verified.** Fresh clones under `core.autocrlf` true / false / input, an
+existing Windows-style tree that receives the change, and `git archive`:
+6,914/6,914 objects and 49/49 pins each. The converter claim is proven
+on the one corpus whose sources were at hand: `convert_ifa.py`, run on
+Linux from `usnistgov/oscal-content@9402f031`, reproduces the committed
+1.0.0 IFA bundle with zero diff.
+**Customer.** Anyone who is not the author. **Simplicity.** One
+attributes file; the two-digest design did its job — meaning verified
+throughout, only packaging differed — and the validator now says *why*
+on such a mismatch instead of printing 6,963 bare lines.
+**Trade-off / known limit.** The blobs stay LF, so a consumer that
+bypasses checkout (`git show`, raw blob URLs, a client that ignores eol
+attributes) still sees a package mismatch: 0/15 on the IFA bundle.
+Storing the CRLF bytes as blobs under `-text` cures that channel too
+(measured: 15/15; a 6,975-file commit; pack +0.02 MiB) and was not done
+because nothing in the repository reads blobs that way and the commit
+would bury the review. **Rejected:** re-digesting to LF — it re-spells
+6,963 published digests for zero semantic gain, the tag-time identifier
+rule applied to bytes. Backlog #42.
+**Also:** the skill's example bundle is pinned `eol=lf` (the bytes inside
+the skill zip), and its manifest — never verified by either validator —
+is now verified on every Python run. At 1.0.0 it could not have passed
+on any checkout: 8 of 12 package digests matched CRLF bytes, 4 matched LF.
+
+## CP-RISK-1 review — eight findings, all closed with vectors
+Each was demonstrated failing against the validator as proposed
+(the current `risk-vectors.json` under the 2026-11-05 validator: 33 pass,
+9 fail). Full table: `drafts/CP-RISK-1.md` §11.2. In one line each:
+**R-1** RISK-11 failed falsely under a predicate select — now "undecided"
+under an open selection · **R-2** a retired or withdrawn Risk justified
+its control for ever — only live Risks justify, the rest are `lapsed` ·
+**R-3** retiring a risk then dropping its control failed RISK-11
+permanently — the rule binds live Risks · **R-4** Set expansion stopped
+silently at depth 8 — any depth · **R-4b** RISK-11 was skipped on an
+empty selection — applies wherever a Tailoring exists · **R-5** Risk
+edges were untyped — **RISK-12** · **R-6** the proposal's `FAIL [RISK-n]`
+messages were not implemented and the vectors asserted jsonschema's
+wording — rule naming + the portable `expected-rule` · **R-7/R-8**
+B.1.9's failure format, a docstring, dead code.
+**Customer.** An ISO 27001 auditor asking "which controls rest on no
+risk?" must not be answered with a false failure (R-1, R-3) or a stale
+yes (R-2). **Simplicity.** One liveness predicate, one typing rule.
+**Trade-off.** Under a predicate select the primitive now says less
+(a lower bound, an "undecided") rather than more — deliberate: say, do
+not guess.
+
+## RISK-12 — a Risk edge is typed *(new rule)*
+**Decision.** `treatments[].requirement-ref` names a Requirement,
+`component-refs` name Components, and a `Finding.risk-refs` entry that
+resolves in-bundle names a Risk (it stays landmark: unresolved is legal).
+**Rationale.** Coverage joins on Requirement ids; a Set id in a treatment
+passed RISK-7 and resurfaced as a misleading RISK-11. The Mapping
+precedent (scopes bind if the endpoint is present) applied to the new
+edges. **Scope note.** The older closure rules (Implementation, Finding)
+still check resolution only, not target type — unchanged here, an
+observation for whoever next touches #16.
+
+## `due` — a point in time is `{type: date | datetime, value}` *(schema, pre-release)*
+**Decision.** The proposal's `#/$defs/due` spelled the date branch
+`{type: "date", date}`. Zero instances existed; the corpus already
+spells Finding action deadlines `{type: "datetime", value}` (×2), and
+OSCAL's `deadline` is date-time-with-timezone. The branch now accepts
+both kinds under the measured spelling; `Risk.review-due` uses it (×2).
+**Not done:** tightening `Finding.actions[].due` to this union — by the
+proposal's own compatibility promise that is a *breaking* change
+(backlog #47).
+
+## The IFA re-run — the first Risk corpus *(follow-up 2 of the handoff)*
+**Delivered.** POA&M risks → 2 Risk objects; Findings carry `risk-refs`;
+the `risk-adjustment` Deviation names its Risk (RISK-9 at corpus scale);
+the `risk@1` framework facet is retired in favour of a `risk-analysis@1`
+holding pen on the Risk; the response `type` prop — dropped by the 1.0.0
+conversion — is now the source of `treatment` (`mitigate` ×1, `accept`
+×1). 835/835 paths, bundle green, reader v1.7.2 shows them.
+**Measured, and it cuts against the proposal's fourth authority.** OSCAL's
+risk carries **no owner** (×2 — derived from the imported SSP's `owner`
+role, declared), **no level** (×2 — likelihood and impact only, so RISK-2
+holds both at `identified`) and **no dated acceptance** (×1 — so the one
+`accept` response cannot be written as `retain` under RISK-6; no date was
+invented). Of the six fields the proposal says four authorities share,
+OSCAL data supplies three. Whether RISK-2/RISK-6 are right to refuse or
+one notch too strict for imported data is backlog #43 — the corpus
+supplies the counts, not the verdict.
+**Source pin.** `usnistgov/oscal-content@9402f031` (2026-07-14), the
+state the 1.0.0 conversion fetched. Upstream changed the IFA files on
+2026-10-18/22; against current upstream the converter still maps
+919/919 paths, but adopting that is a separate measurement.
+
+## L-2 — Path coverage is not value arrival *(found on the way; OPEN, #41)*
+**Finding (measured, IFA only).** The coverage reports count source
+*paths* that match a rule with a declared destination. They do not check
+that the value got there. `oscal_conv_lib.value_arrival()` — added with
+this landing and printed in the IFA report — finds that of 835 source
+leaf values, 394 occur verbatim in the emitted objects; absent are 194
+identity values (uuids/hrefs, re-minted by design), 120
+document-metadata values, and **122 content values, 63 of them prose of
+40+ characters** (component and implementation descriptions,
+observation remarks, POA&M item descriptions, the assessment finding's
+own description). Before this re-run the count was 138: under
+`poam.risks[]` alone 13 content values had never arrived, the risk
+response type among them, while the report read "835 / 835, UNMAPPED 0".
+**What this does and does not say.** Some absences are deliberate
+transformations (a mapped code, a respelled id); the check cannot tell
+those from drops, which is why it lists paths instead of issuing a
+verdict. It does say that "converted losslessly, coverage computed
+rather than asserted" is established at path level only, for this corpus;
+the other ten are unmeasured (their sources are not in the repository).
+No headline number was changed here — that is the author's sentence to
+re-word once the other corpora are measured.
+
+## ~~OPEN~~ CLOSED the same day — the version number contradicts D22 rev 3 *(#40; decided: 2.0.0 — see "Amendments — the 2.0.0 decision")*
+The proposal ships as "1.1.0, minor" on the argument that every
+1.0.0-valid object stays valid. This register says, at the 1.0.0-rc.1
+consolidation: *"Post-1.0, kernel promotion requires measured 2-of-3 and
+a major version under D3.5 governance"* (D22 rev 3), and the
+specification repeats it (IV.8: "kernel-shape changes ride major
+versions"). Two further points sharpen it: D22's first test asks for
+2-of-3 authority encodings **in the census corpus**, and the proposal's
+count is of standards, with the one corpus encoding (OSCAL) supplying
+half the record; and a 1.0.0 tool cannot read a 1.1.0 bundle that
+carries a Risk at all (closed shapes — it reports "matches NO type",
+with no version in the message, because nothing in a bundle pins the
+kernel version: #44).
+**Not decided here.** The two consistent outcomes: (a) the release is
+**2.0.0**; (b) **D22 rev 4** amends the rule on the record — e.g.
+"a kernel addition under which every previously valid object stays valid
+rides a minor; anything else a major" — and says what replaces the
+census test for a type no national catalog can encode (a risk register
+is consumer-side by nature). The schema file keeps the name the proposal
+gave it until then; no tag, no release notes.
+
+## State at the end of the landing
+Python reference: 200/200, eleven bundles, ALL GREEN. **PowerShell twin:
+ported, not executed** — no PowerShell runtime was available where the
+port was written; its header says so, the two new call sites are
+guarded, and until it runs green on Windows PowerShell 5.1 the risk
+family has one implementation (#45). Export suite: not re-run (its ten
+input bundles are byte-identical; the NIST schema it needs is not in the
+repository). Handbook, SKILL.md and the skill zip (78 entries) follow
+the landed state; the specification file is untouched — it is the
+released 1.0.0 text, and what replaces it waits on #40.
+
+# Amendments — the 2.0.0 decision (2026-11-10)
+
+## #40 CLOSED — the kernel that carries Risk is 2.0.0 *(author decision)*
+**Decision.** "v2" — the author, 2026-11-10, on being shown the
+contradiction recorded above. The release is **2.0.0**, a major version,
+as D22 rev 3 and specification IV.8 require. **D22 is not amended.**
+Schema file `oscal-semantic-core-2.0.0.schema.json`, `$id`
+`https://ns.oscal.org/semantic-core/schema/2.0.0`; the working label
+"1.1.0" was replaced in the schema, both validators, the vectors, the
+handbook, SKILL.md, the reader and the converter in one pass. It
+survives in the proposal's §1–§11 and in the landing record above, both
+kept as written.
+**A major by rule, a superset in fact (measured).** Nothing in 2.0.0
+invalidates 1.0.0 content: all 6,914 objects of the 1.0.0 corpus
+validate unchanged, so a 1.0.0 bundle is a 2.0.0 bundle. The reverse
+does not hold — a 1.0.0 tool meets a Risk and reports "matches NO type"
+— and that asymmetry is what a major number tells a consumer.
+**Customer.** A consumer who reads "2.0.0" upgrades the tool before the
+data. "1.1.0" on a closed-shape kernel would have promised a forward
+compatibility the format cannot give.
+**Simplicity.** The rule stands as written: no rev 4, no carve-out.
+**Trade-off.** A "2.0" sixteen weeks after 1.0.0.
+**What the major opens, and what this entry does NOT take.** The 1.0.0
+record tied two things to a major: (1) re-spelling the machine
+identifiers ("Revisit only with a D3.5 major version, should one ever
+exist") — **unchanged here**; `oscal-semantic-core` stays in namespace
+URIs, the media type and schema filenames until the author says
+otherwise; (2) tightening `Finding.actions[].due` (#47a) — **not
+taken**, so that the superset property stays true. Both windows are open
+until the tag.
+**Not yet a release.** No tag. Before one: the PowerShell twin must run
+(#45), #43 must be decided, and the specification needs its 2.0.0 text
+(D4's count, a decision entry for Risk, D14's primitive count, D15's
+matrix, IV.1/IV.6/IV.7) — deliberately not written before #43, which
+decides normative wording.
+
+## D22-applied — Risk and test 1: an exception on the record, not a pass *(#48 filed)*
+D22 rev 3 asks two things of a post-1.0 promotion: a major version — now
+met — and *measured 2-of-3*, independent authority encodings in the
+census corpus. Risk does not meet the second as written. **0 of the 3
+census corpora** (ISM, Grundschutz++, CR26) encode a risk record; the one
+corpus that does (IFA, OSCAL POA&M — not a census corpus) supplies three
+of the record's six fields. The promotion rests on the author's decision
+("kernel type, not facet" in the proposal, confirmed by "v2"), argued
+from three standards that prescribe the same record (ISO/IEC 27001 with
+27005, BSI-Standard 200-3, SP 800-30). Evidence tier, labeled as house
+rule 1 demands: **designed-for, with one partial measurement** — not
+*measured 2-of-3*. Tests 2 and 3 for the record: one shared computation
+— yes (`risk-coverage`); one vocabulary without flattening — the four
+options fit ISO and BSI one-to-one, OSCAL's seven do not (#47b).
+**Why an exception and not a quiet pass.** D22 says a promotion "that
+cannot show its three passes is rejected without further argument". This
+one was admitted by its author against test 1, for a reason the rule did
+not foresee: census authorities publish catalogs, and a risk register is
+consumer-side data that no catalog publisher ships — test 1 as worded
+can never be met by a consumer-side type, whatever the evidence. Whether
+D22 should carry a consumer-side clause with its own evidence bar is
+**#48**. Until that is decided this entry is the precedent, and it is
+exactly one.
+
+## License — Apache-2.0 *(author decision, 2026-11-10; closes the 1.0.0 release note "no LICENSE file")*
+**Decision.** The repository is licensed under the **Apache License,
+Version 2.0**. `LICENSE` at the root is the canonical text, byte for
+byte (apache.org `LICENSE-2.0.txt`: 11,358 bytes, SHA-256
+`cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30`); a
+copy rides in the skill folder, so the installable zip states its own
+terms (79 entries). `NOTICE` names the copyright holder and says what
+the grant covers.
+**Scope — the part that needed care.** The license can only cover what
+is the author's to license: the specification, register, handbook,
+schemas, vectors, software and reader. The eleven bundles under
+`converted_examples/` are conversions of publications by ACSC, BSI, CCB,
+CIS, FedRAMP and NIST; `NOTICE` says they stay subject to their
+publishers' terms and that the Apache grant adds nothing to those.
+**Not done, and it matters.** Nobody has checked those terms corpus by
+corpus. Nothing in the repository records the license any source was
+published under — not the bundles, not the coverage reports. NIST and
+FedRAMP material is U.S. government work; the others are not, and
+whether each permits redistributing a *converted* form is unverified.
+Backlog **#49**.
+**Customer.** Anyone who wants to build on the format now has explicit
+copyright and patent grants (Apache-2.0 §2–§3) — the precondition for
+the standing clean-room-validator invitation to be taken up by an
+organisation with a legal department.
+**Trade-off.** A permissive license lets a vendor ship a closed
+derivative; accepted — adoption is the point, and the conformance corpus,
+not the license, is what keeps "conformant" honest (Ch. 15.1).
+
+# Amendments — the corpus licence review (2026-11-10)
+
+## #49 CLOSED — which converted corpora may be redistributed *(author rule: "keep the code, but remove the results where in doubt")*
+**Method.** For each of the eleven corpora: find the publisher's own
+statement of terms, in the publisher's own repository, and keep the
+converted bundle only where that statement clearly allows redistributing
+an adapted form. Everything was read on 2026-11-10. Where no statement
+could be found the bundle was removed — absence of a licence is not a
+licence.
+
+| Corpus | Publisher's terms — where read | Verdict |
+|---|---|---|
+| US.SP800-53 · US.CSF · US.IFA-GoodRead | Public domain in the U.S., CC0 1.0 worldwide — `LICENSE.md`, usnistgov/oscal-content | **kept** |
+| AU.ISM | CC BY 4.0, © Commonwealth of Australia — README "Copyright", AustralianCyberSecurityCentre/ism-oscal | **kept**, with attribution |
+| DE.BSI | CC BY-SA 4.0 — `LICENSE` and README, BSI-Bund/Stand-der-Technik-Bibliothek (the catalogue is in that repository: title confirmed) | **kept**; the bundle is ShareAlike material and is itself CC BY-SA 4.0, not Apache-2.0 |
+| FedRAMP-CR26 | **No licence file**; README and AGENTS.md silent — FedRAMP/rules. A U.S. Government work (17 U.S.C. § 105), but without the CC0 dedication NIST adds for the rest of the world | **kept** on the statutory basis; see the next entry |
+| CIS.Controls | CC BY-NC-**ND** 4.0; "Terms of Use for Non-Member CIS Products" forbid posting a product on any website and creating derivative works — `LICENSE.md`, CISecurity/CISControls_OSCAL | **removed** — forbidden |
+| CIS.Ubuntu2404 | The same Terms of Use cover CIS products; the benchmark's own page was not reachable | **removed** — forbidden / in doubt |
+| DE.C5 · DE.C3A | No statement found: not in BSI's CC BY-SA repository; no published OSCAL edition with terms found; bsi.bund.de unreachable from the review session | **removed** — in doubt |
+| BE.CyFun | No statement found for the machine-readable form or the third-party resolution converted from; CCB's PDFs carry a plain © notice | **removed** — in doubt |
+
+**What "removed" means.** The bundle and its OSCAL re-export left the
+tree; the converter stays; the coverage report stays (source paths, counts
+and rules — no text of the publication); a `NOT-REDISTRIBUTED.md` in each
+directory gives the reason and the way back. **The measurements stand** —
+they were made, and anyone entitled to the publisher's file can remake
+them — but they are no longer reproducible *from this repository alone*,
+and the README says so where it gives the one-line verdict.
+**What "kept" obliges.** Each kept directory carries a
+`SOURCE-LICENSE.md`: source, licence with the place it was read, changes
+made, no endorsement. `NOTICE` carries the same as a table and scopes the
+Apache-2.0 grant to the original work.
+**What the shipped evidence base loses.** With the two CIS corpora gone,
+no shipped corpus carries Mapping objects except FedRAMP-CR26's 373; C5's
+`sharpens` relations, C3A's first use of parameter `label`/`default` and
+CyFun's cumulative baselines are measured-but-not-shipped. After this
+entry the tree holds six bundles, 4,491 objects.
+**Also changed.** Two README screenshots showed CIS content; one was
+re-shot on NIST CSF 2.0, the other replaced by the Assess stage on the IFA
+corpus (which also shows the Risk type). The reader's Assess view printed
+`[object Object]` for an Assessment title since the `text` re-run; fixed.
+**Not done — #50.** The removed bundles are still in the git history and
+on `main`. Taking them out of the tree stops this branch from publishing
+them going forward; it does not unpublish what is already public.
+
+# Amendments — raw blobs (2026-11-10)
+
+## #42 CLOSED — the blobs are the digested bytes *(author: "do it")*
+**Decision.** Bundle files are `-text`: git never converts them, and the
+blobs hold exactly the bytes the manifests digest (CRLF). The
+`text eol=crlf` rule of L-1 is replaced; no digest is re-spelled.
+**Why.** L-1 repaired every channel that goes through a checkout and left
+one that does not: a consumer reading blobs directly — `git show`, a raw
+URL, a client that ignores eol attributes — still received LF bytes and a
+package mismatch (measured then: 0 of 15 on the IFA bundle).
+**Scope.** The six bundles then in the tree: 4,533 files (4,527 objects
+and pinned schemas + 6 manifests), one commit, whitespace-only.
+**Verified.** Staged blobs against manifest digests: 4,527 / 4,527. Then,
+from the commit: fresh clones under `core.autocrlf` true / false / input,
+an existing Windows-style tree that receives the commit, `git archive`,
+and raw blob reads — every channel verifies every object.
+**Customer.** A reader deep-linked at a raw URL, a mirror, a CI cache —
+anyone who never ran `git checkout`.
+**Simplicity.** One rule, and the one the two-digest design implies:
+delivered bytes are stored bytes.
+**Trade-off.** One large mechanical commit; diffs of bundle files show
+`^M`. Taken after the licence review on purpose, so that only bundles
+that stay were rewritten.
+
+## FedRAMP-CR26 — removed as the doubtful case, in a commit of its own
+**Decision.** By the author's rule the FedRAMP bundle goes too. The table
+above kept it "on the statutory basis"; this entry takes that back, and
+says why the two readings differ.
+**For keeping.** It is a publication of a U.S. federal program, and 17
+U.S.C. § 105 withholds U.S. copyright from works of the U.S. Government.
+The repository's README invites readers to "read, analyze, and integrate"
+the dataset.
+**For removing.** § 105 is a statute about the United States, not a
+statement by the publisher. NIST adds a CC0 dedication precisely because
+§ 105 does not reach the rest of the world; FedRAMP's repository has no
+licence file at all, and this repository is published from Germany.
+"Integrate" is a description of use, not a grant. fedramp.gov and gsa.gov
+could not be reached from the review session, so no site-level statement
+was read. The rule says: in doubt, remove.
+**Cost, stated.** CR26 is one of the three census corpora, the only
+shipped corpus with Tailorings (5) and — after the CIS removals — the only
+one with Mappings (373). With it gone, **no shipped corpus exercises
+Tailoring or Mapping at scale**; the example bundle and the vectors still
+do. The README's opening screenshot and its deep link showed CR26; both
+now show the IFA lifecycle corpus. The tree holds **five bundles, 3,715
+objects**.
+**Reversible on purpose.** The removal is one commit touching nothing
+else. If FedRAMP states a licence, or the author judges § 105 sufficient,
+`git revert` of that commit restores the bundle (as CRLF blobs — the
+raw-blob fix was applied before the removal for exactly this reason), its
+export, the screenshot and the link.
+
+# Amendments — the Risk rules stay (2026-11-10)
+
+## #43 CLOSED — RISK-1, RISK-2, RISK-3 and RISK-6 are kept as written *(author decision: "keep")*
+**The question.** The first Risk corpus (IFA, OSCAL POA&M) showed that
+OSCAL's risk data has no owner field, no single level (likelihood and
+impact only) and no dated acceptance. Under the rules both risks stay
+`identified` although both were analysed, and the one formally accepted
+risk cannot be written as `retain`. Keep the rules, or relax them for
+imported data?
+**Decision.** Keep. Every Risk has an owner (RISK-1); `assessed` and
+`treated` require a `rating` (RISK-2); `treated` and `retain` require an
+`acceptance` with approver, date and rationale (RISK-3, RISK-6). No
+import-only variant, no facet-in-place-of-a-field.
+**Customer.** The auditor the type was built for. A state that sometimes
+means "has a level" is a state that has to be re-checked every time; the
+ISO 27001 clauses behind the rules (6.1.2 c, 6.1.2 d–e, 6.1.3 f) are the
+reason the record is kernel at all.
+**Simplicity.** One meaning per state, for every bundle, readable without
+opening a facet — and no kernel rule that depends on a facet's content
+(the layering D10 exists to protect).
+**Reasons recorded with the decision.** (1) Asymmetry: loosening a rule
+later never invalidates data already written; tightening one later would.
+Start strict. (2) Evidence: one fictional example with two risks is a
+measurement, not a population; a second corpus (a BSI 200-3 export —
+BSI's own `Risikomanagement` catalogue now sits in the
+Stand-der-Technik-Bibliothek repository — or a real POA&M) comes before
+any change. (3) Nothing is lost: the source status, likelihood, impact
+and the response narrative ride verbatim in the `risk-analysis@1` holding
+pen.
+**Trade-off, accepted.** An OSCAL import looks less mature than it is
+until someone adds the level and the acceptance natively. That is the
+converter reporting a gap in the source, not repairing it — house rule,
+applied to the fourth authority.
+**Follow-on.** With this decided the 2.0.0 specification text was written
+as a release candidate
+(`drafts/oscal-semantic-core-specification-2.0.0-rc.1.md`): D23 carries
+Risk, the rules and this decision.
+
+## Amendments — the rc.1 review (2026-11-10)
+
+**Trigger.** An external review of the pull request that carries
+2.0.0-rc.1 and of the concept as a whole. Nine findings against the
+branch, each reproduced before the fix (`drafts/CP-RISK-1.md` §13), and
+five observations about the design that no patch answers.
+
+**Decided by the fix (D23, D13).**
+- *Who justifies.* A Risk justifies a requirement once it is live,
+  published, `assessed` or `treated`, and carries a `treatment` option.
+  **Customer:** the auditor who runs `--require-risk-basis` and must not
+  be answered by a stub. **Simplicity:** one predicate over four kernel
+  fields; no facet is read. **Trade-off, accepted:** every OSCAL import
+  justifies nothing until levelled natively — the "rules stay strict"
+  decision above, followed through. **Rejected:** `treated` only (the
+  decision of 6.1.3 a–b precedes the acceptance of 6.1.3 f); any live Risk
+  (the landing — a stub passes).
+- *Where.* `tailoring-refs` on Risk. **Rejected:** scoping through
+  `component-refs` — a Tailoring names no component, so there is nothing
+  to join to; a `component-ref` on Tailoring — the right edge, and a
+  change to a released shape (backlog #51).
+- *RISK-13, RISK-14, typed selection edges, withdrawn Tailorings and
+  Requirements, checked dates.* Each closes a case where the validator
+  said less than the text.
+
+**Observed, not decided — the author's.**
+1. **No extension point for object types.** Facets attach to existing
+   objects; a new *entity* forces a major and, as D22 is worded, an
+   exception. Party, Threat, Scale and Evidence are bare landmark URIs
+   today and are the next candidates. #48 asks the narrow question; this
+   is the wide one.
+2. **No type discriminator, no kernel-version pin.** An unknown type and a
+   malformed object both report "matches NO type" (#44).
+3. **Identifiers under other organisations' domain names**
+   (`ns.bsi.bund.de`, `ns.nist.gov`, `ns.cyber.gov.au`, `ns.fedramp.gov`;
+   the schema `$id` under `ns.oscal.org`). D2 makes them opaque strings,
+   but D13 derives *authority-claimed* from the URI origin, so a
+   third-party conversion is authority-shaped until an authority signs —
+   and collides or diverges the day the authority publishes its own.
+4. **Version numbers.** 0.1 to 1.0.0 in eight days, 2.0.0 as an additive
+   superset. Under "closed shapes ⇒ every addition is a major" the number
+   stops telling a consumer how much changed.
+5. **Prior art.** IV.3 named OSCAL and IR 8477 only. `PRIOR-ART.md` now
+   lists the neighbours; Gemara and CycloneDX Attestations are the closest
+   and were not mentioned anywhere in the repository.
+
+**Erratum.** This register (D4 note, D20) and the 1.0.0 specification date
+OSCAL's Control Mapping Model "March 2026 (v1.2.1)". It shipped with
+v1.2.0 in December 2025. The journal above is left as written; the
+2.0.0 candidate and the handbook are corrected.
+

@@ -11,7 +11,7 @@ shared ids, 10 silently diverged, census 2026-07-03 - stays on the record
 in census and handbook). Parameters carry first-class label/default since
 the D9 rev (backlog #1): the param-extras residue drains to alt-ids only."""
 import json, hashlib, os, re, copy, collections
-from oscal_conv_lib import Bundle
+from oscal_conv_lib import Bundle, BUNDLE_NEWLINE
 
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 OUT = os.path.join(ROOT, "converted_examples", "DE.BSI", "bsi-core-bundle")
@@ -34,7 +34,7 @@ MODAL = {"MUSS":"must","SOLLTE":"should","KANN":"may","DARF NICHT":"must-not",
 
 def w(path,obj):
     p=os.path.join(OUT,path); os.makedirs(os.path.dirname(p),exist_ok=True)
-    with open(p,"w",encoding="utf-8") as f: json.dump(obj,f,indent=1,ensure_ascii=False); f.write("\n")
+    with open(p,"w",encoding="utf-8",newline=BUNDLE_NEWLINE) as f: json.dump(obj,f,indent=1,ensure_ascii=False); f.write("\n")
 def sha_file(path): return "sha256:"+hashlib.sha256(open(os.path.join(OUT,path),"rb").read()).hexdigest()
 def semantic_digest(o):
     o=copy.deepcopy(o); o.pop("annotations",None)

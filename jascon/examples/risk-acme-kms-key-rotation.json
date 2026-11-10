@@ -1,0 +1,63 @@
+{
+ "id": "https://cso.example/risk/R-2026-007",
+ "version": "2026-11",
+ "label": "R-2026-007",
+ "lifecycle": "active",
+ "title": {
+  "en": "Tenant data exposure through long-lived KMS keys",
+  "de": "Offenlegung von Mandantendaten durch langlebige KMS-Schlüssel"
+ },
+ "scenario": {
+  "en": "A KMS key compromised through an export path or an insider stays valid for years because keys are never rotated; every tenant record encrypted under it is exposed retroactively.",
+  "de": "Ein über einen Exportpfad oder Innentäter kompromittierter KMS-Schlüssel bleibt jahrelang gültig, weil Schlüssel nie gewechselt werden; jeder damit verschlüsselte Mandantendatensatz ist rückwirkend offengelegt."
+ },
+ "owner-ref": "https://cso.example/party/ciso",
+ "state": "treated",
+ "threat-refs": [
+  "https://ns.bsi.bund.de/gspp/threat/G-0.19",
+  "https://ns.bsi.bund.de/gspp/threat/G-0.28"
+ ],
+ "component-refs": [
+  "https://cso.example/component/acme-saas"
+ ],
+ "rating": {
+  "level": "hoch",
+  "scale-ref": "https://cso.example/scale/bsi-200-3-matrix"
+ },
+ "residual-rating": {
+  "level": "gering",
+  "scale-ref": "https://cso.example/scale/bsi-200-3-matrix"
+ },
+ "treatment": "modify",
+ "treatments": [
+  {
+   "requirement-ref": "https://ns.bsi.bund.de/gspp/req/KONF.14.1",
+   "statement-ids": [
+    "s2"
+   ]
+  }
+ ],
+ "acceptance": {
+  "approver-ref": "https://cso.example/party/ciso",
+  "date": "2026-11-05",
+  "rationale": {
+   "en": "Monthly rotation (KONF.14.1 s2, bound by the 2026-Q3 finding closure) brings the residual to 'gering', within the ISMS appetite for tenant confidentiality."
+  }
+ },
+ "review-due": {
+  "type": "calendar-period",
+  "num": 12,
+  "unit": "months",
+  "calendar-ref": "https://cso.example/calendar/isms"
+ },
+ "relations": [
+  {
+   "type": "reference",
+   "ref": "https://cso.example/doc/risk-assessment-2026#R-2026-007"
+  }
+ ],
+ "annotations": {
+  "register-row": 7,
+  "source": "Risikoanalyse 2026 nach BSI-Standard 200-3"
+ }
+}

@@ -213,6 +213,62 @@ FAIL [conditional-apply:<instance-id>] on <object-id>
 **Exercised:** declared; corpus instantiation is gate-item-2 work
 (the CR26 class-conditioned timeframes are the natural first cases).
 
+### B.1.9 `risk-coverage` *(2.0.0 — CP-RISK-1, the ninth primitive)*
+
+**What it computes:** for each Tailoring **in force** (`lifecycle` ≠
+`withdrawn`), the selected requirements — set-refs expanded through nested
+Sets to any depth, excludes removed (an exclude that names a Set removes
+its members), `withdrawn` Requirements dropped — joined to the Risks that
+**justify** them.
+**Who justifies.** A Risk justifies the requirements its `treatments` name
+once a treatment *decision* rests on an *assessed* risk: it is live
+(`state` ≠ `retired`, `lifecycle` ≠ `withdrawn`), published (`lifecycle` ≠
+`draft`), its `state` is `assessed` or `treated`, and it carries a
+`treatment` option. ISO/IEC 27001 6.1.3 a–b: controls are determined to
+implement the option chosen for an analysed risk. Without this rule a
+three-field stub — scenario, owner, treatments — satisfies the policy
+switch, and RISK-2/3/6 are strict about fields coverage never reads.
+**Scope.** A Risk's `tailoring-refs` name the Statement(s) of
+Applicability its treatment belongs to: it justifies, and is held to
+RISK-11, only there. Without them it applies to every Tailoring of the
+bundle — and where more than one is in force that is noted (RISK-14,
+SHOULD), because a risk about system A then justifies the control in
+system B's Statement of Applicability.
+**Output:** per Tailoring `covered` {requirement → [risk ids]},
+`uncovered` [requirement ids], and two subsets of `uncovered` that say
+*why*: `pending` {requirement → [live Risks without an assessed treatment
+decision]} and `lapsed` {requirement → [retired or withdrawn risk ids]};
+`open-selection`, `excludes-without-rationale`; per bundle
+`treatment-out-of-scope`.
+**Open selections:** a predicate select (B.2) is resolved by the tailoring
+engine, not by this primitive, so a Tailoring that carries one has an
+*open* selection — the computed set is a lower bound, and nothing is
+concluded from a requirement's absence.
+**Verdict:** a report by default — `uncovered` fails only under the
+program's policy (`--require-risk-basis`; ISO 27001 6.1.3 d says every
+SoA row, BSI 200-2 says the baseline justifies itself).
+`treatment-out-of-scope` fails (RISK-11: a live Risk leans on a control
+the SoA dropped) wherever the bundle has a Tailoring to disagree with —
+including the case where everything was excluded, where the only
+Tailoring is withdrawn, and where the named Requirement is withdrawn. The
+rule is asked of the Tailorings the Risk belongs to; where one of *those*
+has an open selection it is reported as *undecided*, never guessed — an
+open Tailoring the Risk does not belong to decides nothing. An unresolved or mistyped
+target is RISK-7/RISK-12's failure, not a second one here.
+**Rationale:** 6.1.3 b/d make "every control rests on a treatment
+decision" a documented property; a property that can be computed must not
+be audited by hand.
+```
+FAIL [risk-coverage] <tailoring>  selected <req>
+  justified by no Risk
+  rationale: ISO/IEC 27001 6.1.3 d — inclusion in the Statement of
+  Applicability carries its justification
+```
+**Exercised:** `risk-vectors.json` (34 bundle vectors); the example bundle
+(3 selected, 1 justified, 2 uncovered). Not yet at corpus scale: the one
+corpus with Risks (IFA) carries no Tailoring, and no corpus Tailoring
+carries excludes or predicate selects.
+
 ---
 
 ## B.2 The three predicates (shared vocabulary, one leash)
@@ -324,5 +380,10 @@ primitives, operations, and predicates are *versioned closed sets*
 (R3: contained, never a language) — the ninth primitive, when its
 evidence arrives, ships as a set version through the Chapter 15
 process, with counts, corpus cases, and two implementations. Until
-then, the honest inventory stands: eight, eight, and three — every
+then, the honest inventory stands: **nine**, eight, and three — every
 one carrying the reason it exists, printed at the moment it says no.
+The ninth (`risk-coverage`, B.1.9) arrived that way in the 2.0.0 cycle:
+counts (CP-RISK-1 §2), corpus cases, one implementation green. The gate
+is still closed: the PowerShell twin carries the port but has not been
+executed against the vectors, and until it has, this primitive has one
+implementation, not two.

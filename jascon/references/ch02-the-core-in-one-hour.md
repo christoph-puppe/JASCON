@@ -18,10 +18,10 @@ own material, know where each piece of it belongs: kernel field, set,
 tailoring, facet, annotation, or (most often, as Chapter 1's census
 showed) nowhere, because the mechanism it was imitating now exists.
 
-We will not tour nine types in the abstract. We will start with the
+We will not tour ten types in the abstract. We will start with the
 smallest real object in the corpus — an Australian control — and keep
 asking one question: *what does reality add next?* Each honest answer
-introduces exactly one type. By the end, all nine have appeared because
+introduces exactly one type. By the end, all ten have appeared because
 something measured demanded them, which is also how they got into the
 specification in the first place.
 
@@ -156,7 +156,7 @@ absorbed 5,900+ membership props.
 **Mapping — the ninth type, and the newest.** Crosswalks are entire
 business models (SCF maps its catalog to 200+ frameworks; CIS and CSA
 ship mappings as core products; the American corpus itself carries 263
-KSI→800-53 links). NIST's answer, in March 2026, was an eighth full
+KSI→800-53 links). NIST's answer, with OSCAL 1.2.0 in December 2025, was an eighth full
 document model. The core's answer is nine flat fields:
 
 ```json
@@ -215,9 +215,24 @@ and "what the AO signed" can never quietly diverge again. The mechanics
 package proven* from *compliance content proven, packaging altered*) get
 their own chapter (11); for the hour, know that the object exists and why.
 
-That is nine: **Requirement, RequirementSet, Tailoring, Mapping** on the
+**Risk.** Everything above answers *what is required, what is in place,
+what was found*. An ISMS asks one question before all of those: *why is
+this requirement in scope at all?* ISO/IEC 27001 answers it with a risk
+owner, a treatment decision and a Statement of Applicability; BSI-Standard
+200-3 and NIST SP 800-30 answer it the same way under other names. A Risk
+records that answer as data: a `scenario`, an `owner-ref`, a `state`, a
+`rating` as an opaque level on a named scale, a `treatment` from four codes
+the standards share verbatim, and `treatments[]` — the requirements, to the
+clause, that carry the decision. Scoring methodology stays in facets; the
+fact that this control exists *because of* that risk is kernel. A Finding
+may point back with `risk-refs`; a `risk-adjustment` Deviation names the
+Risk it accepts. The Statement of Applicability is then a computation
+(`risk-coverage`, B.1.9), not a spreadsheet (Ch. 10 §10.6).
+
+That is ten: **Requirement, RequirementSet, Tailoring, Mapping** on the
 content side; **Component, Implementation, Assessment, Finding** on the
-system side; **Attestation** bonding the two worlds to paper.
+system side; **Risk** on the organisation's side between the two, saying
+why the content is in scope; **Attestation** bonding all of it to paper.
 
 ```
             CONTENT                      SYSTEMS
@@ -277,7 +292,7 @@ use case (`web_name`, `do_not_link` — pure chrome).
 | SSP | Component (+`authorizations[]`, system-context facet) + Implementation edges; the *document* is an L4 rendering, bonded by an Attestation | Ch. 9, 11 |
 | Assessment Plan / Assessment Results | Assessment (methods via `assessment-criteria@1`) / `Assessment.result` + Finding | Ch. 10 |
 | POA&M | `Finding.actions[]` + Deviation lifecycle | Ch. 10 |
-| Control Mapping Model (2026) | the Mapping type — nine flat fields instead of a document model | Ch. 8 |
+| Control Mapping Model (OSCAL 1.2.0) | the Mapping type — nine flat fields instead of a document model | Ch. 8 |
 | props + `ns` | registered facets (contracted) · annotations (invisible) · **or nothing** — the >70 % that were kernel deficits | Ch. 7 |
 | `label` / `alt-identifier` / `sort-id` props | kernel `label`, `aliases[]`, `sequence` | Ch. 3, 5 |
 | Metaschema, XML/YAML, Schematron | JSON Schema 2020-12 · one serialization · 8 primitives with rationale-on-failure (XML survives only as a one-way transit projection for guarded networks) | Ch. 11–12 |

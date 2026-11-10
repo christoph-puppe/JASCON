@@ -1,0 +1,52 @@
+JASCON - JSON Attestable Semantic Compliance Object-graph Notation
+Copyright 2026 Christoph Puppe
+
+Licensed under the Apache License, Version 2.0. See the LICENSE file.
+
+What the Apache license covers
+------------------------------
+The original work in this repository: the specification, the decision
+register and the other documents under drafts/; the handbook, kernel
+schema, standard-library facet descriptors, conformance corpus, example
+bundle and software under jascon/; the reader under one-page-apps/; and
+the coverage reports under converted_examples/.
+
+What it does not cover: converted third-party publications
+----------------------------------------------------------
+Each bundle (and OSCAL re-export) under converted_examples/ is a
+conversion of a publication by its authority and is offered under that
+publication's terms, stated in the SOURCE-LICENSE.md beside it. Terms
+were read in the publishers' own repositories on 2026-11-10.
+
+  AU.ISM           Information Security Manual, Australian Signals
+                   Directorate. (c) Commonwealth of Australia.
+                   CC BY 4.0.
+  DE.BSI           Anwenderkatalog Grundschutz++, Bundesamt fuer
+                   Sicherheit in der Informationstechnik (BSI).
+                   CC BY-SA 4.0 - the converted bundle is ShareAlike
+                   material and is itself CC BY-SA 4.0.
+  US.SP800-53      NIST SP 800-53 Rev 5.2.0 / 800-53A / 800-53B.
+  US.CSF           NIST Cybersecurity Framework 2.0.
+  US.IFA-GoodRead  NIST OSCAL example content (fictional).
+                   All three: U.S. public domain, CC0 1.0 worldwide.
+
+The example bundle under jascon/examples/ is illustrative. Its requirement
+KONF.14.1 paraphrases one requirement of the Grundschutz++ catalogue (BSI,
+CC BY-SA 4.0); the other requirement texts are invented.
+
+Measured, not redistributed
+---------------------------
+Six further corpora were converted and measured, and their bundles were
+removed from this repository on 2026-11-10 because the publishers' terms
+forbid redistributing an adapted form or could not be established:
+CIS Controls v8.1 and the CIS Ubuntu Linux 24.04 LTS Benchmark (Center
+for Internet Security - terms forbid derivative works and re-posting);
+BSI C5:2026, BSI C3A v1.0 and the CCB CyberFundamentals Framework 2025
+(no licence statement found); and the FedRAMP Consolidated Rules for
+2026 (a U.S. Government work, 17 U.S.C. 105, whose repository states no
+licence - removed as the doubtful case, in a commit of its own). Their
+converters and coverage reports remain; each directory's
+NOT-REDISTRIBUTED.md gives the reason.
+
+JASCON is maintained in personal capacity. Nothing in this repository is
+endorsed by, or affiliated with, any of the organisations named above.
