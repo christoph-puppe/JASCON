@@ -313,7 +313,9 @@ function jscObjectPath(type, id, taken) {
    The manifest is computed from what is in the graph now. If it says the same
    as the manifest the bundle came with, that manifest leaves unchanged, text
    and all; otherwise the computed one is written. Either way a second export
-   of the same graph gives the same bytes.
+   of the same graph gives the same bytes. `provenance` adds lines to the
+   provenance of a bundle that has no manifest of its own (a resolved
+   package names the Tailoring it was resolved with).
    -> { files: [{path, text}], manifest, verbatim, problems } */
 /* An attestation is listed only if the manifest it came with listed it;
    otherwise it travels beside the manifest (D3.1). */
@@ -326,7 +328,7 @@ function jscNeedsKernel2(g) {
   }
   return false;
 }
-async function jscBuildBundle(g) {
+async function jscBuildBundle(g, provenance) {
   const problems = [];
   const objects = [];
   for (const id of g.order) {
@@ -351,7 +353,7 @@ async function jscBuildBundle(g) {
   if (kernel) manifest["kernel-version"] = kernel;
   manifest.provenance = g.manifest
     ? { ...(old.provenance || {}), "edited-with": JSC_TOOL }
-    : { source: "JASCON-App", converter: JSC_TOOL };
+    : { source: "JASCON-App", converter: JSC_TOOL, ...(provenance || {}) };
   manifest.objects = objects;
   manifest["facet-schemas"] = facetPins;
   if (scalePins.length) manifest.scales = scalePins;
