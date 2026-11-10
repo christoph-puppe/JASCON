@@ -128,14 +128,20 @@ class Bundle:
                     except OSError: pass
         for o in self.objects.values(): textify(o, self.lang)   # #12 delivery
         for rel, o in {**self.objects, **self.schemas}.items(): self._w(rel, o)
-        manifest = {"manifest-version": "1", "provenance": provenance,
+        manifest = {"manifest-version": "1"}
+        # backlog #44: content beyond the 1.0.0 kernel names its kernel
+        # (KERNEL-1). Bundles without it stay unpinned - byte-identical to
+        # their 1.0.0 conversion and readable by a 1.0.0 tool.
+        if any(("scenario" in o and "owner-ref" in o) or o.get("risk-refs") for o in self.objects.values()):
+            manifest["kernel-version"] = "2.0.0"
+        manifest.update({"provenance": provenance,
                     "objects": [{"id": o["id"], "version": o["version"],
                                  "package-digest": self._sha(rel),
                                  "semantic-digest": semantic_digest(o), "path": rel}
                                 for rel, o in sorted(self.objects.items())],
                     "facet-schemas": [{"id": s["id"], "exact-version": s["version"],
                                        "digest": self._sha(rel), "path": rel}
-                                      for rel, s in sorted(self.schemas.items())]}
+                                      for rel, s in sorted(self.schemas.items())]})
         self._w("content-manifest.json", manifest)
         return manifest
 

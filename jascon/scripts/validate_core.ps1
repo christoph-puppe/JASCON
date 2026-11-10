@@ -11,7 +11,7 @@ digests, shape-disjoint type inference against the kernel JSON Schema
 modality lattice, reference closure, facet enforcement (fail-closed),
 tier derivation (Set-member resolution + DSSE verification mode with a
 dependency-free Ed25519 over System.Numerics.BigInteger), op-law duties,
-D3.5 composition, B.1.8 conditional-apply, and all 13 vector families.
+D3.5 composition, B.1.8 conditional-apply, and all 14 vector families.
 
 Kernel 2.0.0 (CP-RISK-1): Risk is the tenth kernel type - typed by the
 schema (RISK-1..6 are schema conditionals, named on failure by
@@ -1404,6 +1404,56 @@ function Run-Conditional {
 }
 # C.3c Risk states: forward only, skipping allowed, retired terminal
 $RISK_NEXT = @{identified = @('assessed', 'treated', 'retired'); assessed = @('treated', 'retired'); treated = @('retired'); retired = @()}
+# ---------------- the kernel-version pin (backlog #44) ----------------
+# A manifest MAY carry `kernel-version`; absent means 1.0.0 content.
+# KERNEL-1: content beyond 1.0.0 (a Risk, Finding.risk-refs) pins the kernel
+# it needs. KERNEL-2: a tool stops at a pin it does not implement and names
+# both versions. PORTED BY READING, NOT EXECUTED - like the Risk port.
+$KERNEL_VERSION = '2.0.0'
+$KERNEL_SUPPORTED = @('1.0.0', '2.0.0')
+function Kernel-Pin-Errors($manifest, $objs) {
+    $errs = New-Object System.Collections.ArrayList
+    $pin = $null
+    if ((Is-Map $manifest) -and $manifest.Contains('kernel-version')) { $pin = [string]$manifest['kernel-version'] }
+    if ($null -ne $pin -and ($KERNEL_SUPPORTED -cnotcontains $pin)) {
+        [void]$errs.Add("manifest pins kernel-version $pin; this validator implements $KERNEL_VERSION and reads $($KERNEL_SUPPORTED -join ', ') (KERNEL-2: a tool stops at a kernel it does not implement, and says which)")
+        return ,$errs
+    }
+    $why = $null
+    $ids = New-Object System.Collections.ArrayList
+    foreach ($oid in $objs.Keys) { [void]$ids.Add([string]$oid) }
+    foreach ($oid in (Sorted-Ordinal $ids)) {
+        $t = $objs[$oid].t; $o = $objs[$oid].o
+        if ($t -ceq 'risk') { $why = "$oid is a Risk"; break }
+        $hasRefs = $false
+        foreach ($x in @($o['risk-refs'])) { if ($null -ne $x) { $hasRefs = $true } }
+        if ($t -ceq 'finding' -and $hasRefs) { $why = "$oid carries risk-refs"; break }
+    }
+    if ($null -ne $why -and $pin -cne '2.0.0') {
+        $said = 'pins no kernel-version'
+        if ($null -ne $pin) { $said = "pins kernel-version $pin" }
+        [void]$errs.Add("$why, which needs kernel 2.0.0, but the manifest $said (KERNEL-1: content beyond 1.0.0 names its kernel, so that an older tool can say what it is missing)")
+    }
+    return ,$errs
+}
+function Run-Kernel {
+    foreach ($case in (Load-Vectors 'kernel-vectors.json')['vectors']) {
+        $objs = To-Objs $case['objects']
+        $errs = New-Object System.Collections.ArrayList
+        if (-not (Test-Schema $DEFS['contentManifest'] $case['manifest'])) { [void]$errs.Add('manifest schema violation') }
+        else { foreach ($e in (Kernel-Pin-Errors $case['manifest'] $objs)) { [void]$errs.Add($e) } }
+        $exp = 0
+        if ($case.Contains('expected-fails')) { $exp = $case['expected-fails'] }
+        $okc = (($errs.Count -eq $exp) -and ($objs.Count -eq @($case['objects']).Count))
+        foreach ($frag in @($case['expected-frags'])) {
+            if ($null -eq $frag) { continue }
+            $hit = $false
+            foreach ($e in $errs) { if ($e.Contains($frag)) { $hit = $true } }
+            if (-not $hit) { $okc = $false } }
+        if ($okc) { OK 'kernel' } else { FAIL 'kernel' "$($case['name']): expected $exp, got $(@($errs) -join ' ~ ')" }
+    }
+}
+
 function Run-Risk {
     $v = Load-Vectors 'risk-vectors.json'
     foreach ($case in $v['risk-transitions']) {
@@ -1567,6 +1617,9 @@ function Validate-Bundle([string]$bdir) {
     }
     foreach ($e in (Closure-Errors $bundleObjs)) { FAIL $section $e }
     foreach ($e in (Duty-Errors $bundleObjs $pinnedDecl $envelopes $TRUSTED)) { FAIL $section $e }
+    try { foreach ($e in (Kernel-Pin-Errors $manifest $bundleObjs)) { FAIL $section $e } } catch {
+        FAIL $section "kernel-version PORT ERROR (not yet executed on a real runtime - report this line): $($_.Exception.Message) @ line $($_.InvocationInfo.ScriptLineNumber)"
+    }
     # CP-RISK-1: B.1.9 risk-coverage report (+ RISK-11 errors), RISK-9/10 notes
     try {
         $rc = Risk-Coverage $bundleObjs $envelopes $TRUSTED
@@ -1620,8 +1673,11 @@ Run-References; Run-Lifecycle; Run-Tiers; Run-Dsse; Run-Composition; Run-Conditi
 try { Run-Risk } catch {
     FAIL 'risk' "PORT ERROR (CP-RISK-1 port not yet executed on a real runtime - report this line): $($_.Exception.Message) @ line $($_.InvocationInfo.ScriptLineNumber)"
 }
+try { Run-Kernel } catch {
+    FAIL 'kernel' "PORT ERROR (kernel-version pin not yet executed on a real runtime - report this line): $($_.Exception.Message) @ line $($_.InvocationInfo.ScriptLineNumber)"
+}
 $FAMILIES = @('jcs', 'modality', 'parameter', 'tailoring', 'attestation', 'facet',
-              'reference', 'lifecycle', 'tier', 'dsse', 'composition', 'conditional', 'risk')
+              'reference', 'lifecycle', 'tier', 'dsse', 'composition', 'conditional', 'risk', 'kernel')
 foreach ($k in $FAMILIES) {
     $p = 0; if ($COUNTS.ContainsKey($k)) { $p = $COUNTS[$k] }
     $f = 0; if ($COUNTS.ContainsKey("${k}:FAIL")) { $f = $COUNTS["${k}:FAIL"] }

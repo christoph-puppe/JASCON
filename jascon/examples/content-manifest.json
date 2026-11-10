@@ -1,5 +1,6 @@
 {
  "manifest-version": "1",
+ "kernel-version": "2.0.0",
  "objects": [
   {
    "id": "https://ns.bsi.bund.de/gspp/req/KONF.14.1",

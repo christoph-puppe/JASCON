@@ -1,0 +1,331 @@
+{
+ "description": "Kernel-version pin (backlog #44, kernel 2.0.0). A content manifest MAY carry `kernel-version`; absent means 1.0.0 content. KERNEL-1: a bundle whose content needs a later kernel (a Risk object, Finding.risk-refs) MUST pin that kernel. KERNEL-2: a tool that meets a pin it does not implement fails closed and names the pinned version and its own. Each vector: a manifest (objects list left empty - the vector's objects are given beside it), the objects, and the expected number of failures.",
+ "vectors": [
+  {
+   "name": "unpinned-1.0.0-content",
+   "manifest": {
+    "manifest-version": "1",
+    "objects": []
+   },
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Requirement 1."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/finding/f",
+     "version": "1",
+     "lifecycle": "active",
+     "assessment-ref": "https://org.example/assessment/a",
+     "requirement-ref": "https://ns.auth.gov/fw/req/1",
+     "state": "open"
+    }
+   ],
+   "expected-fails": 0,
+   "rule": "no pin = 1.0.0 content: every 1.0.0 manifest stays valid, and a 1.0.0 tool keeps reading it"
+  },
+  {
+   "name": "pinned-1.0.0-content",
+   "manifest": {
+    "manifest-version": "1",
+    "kernel-version": "1.0.0",
+    "objects": []
+   },
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Requirement 1."
+       }
+      }
+     ]
+    }
+   ],
+   "expected-fails": 0,
+   "rule": "an explicit 1.0.0 pin on 1.0.0 content is legal (a 1.0.0 tool, whose manifest shape is closed, will not read it)"
+  },
+  {
+   "name": "pinned-2.0.0-with-risk",
+   "manifest": {
+    "manifest-version": "1",
+    "kernel-version": "2.0.0",
+    "objects": []
+   },
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Requirement 1."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/risk/R-1",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Scenario."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "identified"
+    }
+   ],
+   "expected-fails": 0,
+   "rule": "KERNEL-1 satisfied: a bundle that carries a Risk pins 2.0.0"
+  },
+  {
+   "name": "pinned-2.0.0-without-2.0.0-content",
+   "manifest": {
+    "manifest-version": "1",
+    "kernel-version": "2.0.0",
+    "objects": []
+   },
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Requirement 1."
+       }
+      }
+     ]
+    }
+   ],
+   "expected-fails": 0,
+   "rule": "a pin states the kernel the bundle was written against; it may be newer than the content strictly needs"
+  },
+  {
+   "name": "risk-without-pin",
+   "manifest": {
+    "manifest-version": "1",
+    "objects": []
+   },
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Requirement 1."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/risk/R-1",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Scenario."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "identified"
+    }
+   ],
+   "expected-fails": 1,
+   "expected-frags": [
+    "KERNEL-1",
+    "pins no kernel-version"
+   ],
+   "rule": "KERNEL-1: content beyond 1.0.0 names its kernel - otherwise a 1.0.0 tool reports 'matches NO type' and no version (backlog #44)"
+  },
+  {
+   "name": "risk-under-a-1.0.0-pin",
+   "manifest": {
+    "manifest-version": "1",
+    "kernel-version": "1.0.0",
+    "objects": []
+   },
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Requirement 1."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/risk/R-1",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Scenario."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "identified"
+    }
+   ],
+   "expected-fails": 1,
+   "expected-frags": [
+    "KERNEL-1",
+    "pins kernel-version 1.0.0"
+   ],
+   "rule": "KERNEL-1: the pin must be the kernel the content needs, not merely present"
+  },
+  {
+   "name": "finding-risk-refs-without-pin",
+   "manifest": {
+    "manifest-version": "1",
+    "objects": []
+   },
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Requirement 1."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/finding/f",
+     "version": "1",
+     "lifecycle": "active",
+     "assessment-ref": "https://org.example/assessment/a",
+     "requirement-ref": "https://ns.auth.gov/fw/req/1",
+     "state": "open",
+     "risk-refs": [
+      "https://org.example/risk/elsewhere"
+     ]
+    }
+   ],
+   "expected-fails": 1,
+   "expected-frags": [
+    "KERNEL-1",
+    "risk-refs"
+   ],
+   "rule": "KERNEL-1: Finding.risk-refs is a 2.0.0 field - a closed 1.0.0 Finding shape rejects it"
+  },
+  {
+   "name": "pin-this-tool-does-not-implement",
+   "manifest": {
+    "manifest-version": "1",
+    "kernel-version": "3.0.0",
+    "objects": []
+   },
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Requirement 1."
+       }
+      }
+     ]
+    }
+   ],
+   "expected-fails": 1,
+   "expected-frags": [
+    "KERNEL-2",
+    "3.0.0"
+   ],
+   "rule": "KERNEL-2: a tool stops at a kernel it does not implement and names both versions"
+  },
+  {
+   "name": "pin-is-not-a-version",
+   "manifest": {
+    "manifest-version": "1",
+    "kernel-version": "2.0",
+    "objects": []
+   },
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Requirement 1."
+       }
+      }
+     ]
+    }
+   ],
+   "expected-fails": 1,
+   "expected-frags": [
+    "manifest schema"
+   ],
+   "rule": "kernel-version is MAJOR.MINOR.PATCH - schema-checked"
+  }
+ ]
+}

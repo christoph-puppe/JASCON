@@ -883,6 +883,56 @@ def run_composition():
         else: fail("composition", f"{case['name']}: expected {exp}/{case.get('expected-resolutions')}, "
                                   f"got {[e[:80] for e in errs]}/{res}")
 
+# ---------------- the kernel-version pin (backlog #44) ----------------
+# A content manifest MAY carry `kernel-version`. Absent, the bundle is
+# 1.0.0 content - every 1.0.0 manifest stays valid, and a 1.0.0 tool keeps
+# reading it. A bundle that carries anything the 1.0.0 kernel cannot type
+# MUST pin the kernel that can (KERNEL-1), and a tool meeting a pin it does
+# not implement stops there, with both versions in the message (KERNEL-2) -
+# instead of "matches NO type" on the first object it cannot read.
+KERNEL_VERSION = "2.0.0"
+KERNEL_SUPPORTED = ("1.0.0", "2.0.0")      # 2.0.0 is a superset of 1.0.0, measured
+
+def kernel_needed(objs):
+    """-> (minimum kernel version the content needs, the first object that
+    needs it). 2.0.0 added the Risk type and Finding.risk-refs."""
+    for oid in sorted(objs):
+        t, o = objs[oid]
+        if t == "risk": return "2.0.0", f"{oid} is a Risk"
+        if t == "finding" and o.get("risk-refs"): return "2.0.0", f"{oid} carries risk-refs"
+    return "1.0.0", None
+
+def kernel_pin_errors(manifest, objs):
+    """-> [error] for the manifest's kernel-version pin against this tool
+    and against the bundle's own content."""
+    pin = manifest.get("kernel-version")
+    if pin is not None and pin not in KERNEL_SUPPORTED:
+        return [f"manifest pins kernel-version {pin}; this validator implements {KERNEL_VERSION} "
+                f"and reads {', '.join(KERNEL_SUPPORTED)} (KERNEL-2: a tool stops at a kernel it does not "
+                f"implement, and says which)"]
+    need, why = kernel_needed(objs)
+    if need != "1.0.0" and pin != need:
+        return [f"{why}, which needs kernel {need}, but the manifest "
+                f"{'pins kernel-version ' + pin if pin else 'pins no kernel-version'} "
+                f"(KERNEL-1: content beyond 1.0.0 names its kernel, so that an older tool can say "
+                f"what it is missing)"]
+    return []
+
+def run_kernel():
+    v = json.load(open(os.path.join(CONF, "kernel-vectors.json"), encoding="utf-8"))
+    for case in v["vectors"]:
+        objs = {}
+        for o in case["objects"]:
+            t = inferType_single(o)
+            if t: objs[o["id"]] = (t, o)
+        errs = [] if VALIDATORS["contentManifest"].is_valid(case["manifest"]) else ["manifest schema violation"]
+        if not errs: errs = kernel_pin_errors(case["manifest"], objs)
+        okc = len(errs) == case.get("expected-fails", 0) and len(objs) == len(case["objects"])
+        for frag in case.get("expected-frags", []):
+            if not any(frag in e for e in errs): okc = False
+        if okc: ok("kernel")
+        else: fail("kernel", f"{case['name']}: expected {case.get('expected-fails', 0)} {case.get('expected-frags')}, got {errs}")
+
 # ---------------- RISK-1..6: the schema enforces, this names (CP-RISK-1) ----------------
 # The six shape rules are JSON-Schema conditionals, so ANY schema validator
 # refuses the object. A schema verdict is a bare "no" (or one library's
@@ -1413,6 +1463,7 @@ def validate_bundle(bdir):
     for e in tailoring_duty_errors(bundle_objs, pinned_decl=pinned_decl,
                                    envelopes=envelopes, trusted=TRUSTED):
         fail(section, e)
+    for e in kernel_pin_errors(manifest, bundle_objs): fail(section, e)
     # CP-RISK-1: B.1.9 risk-coverage report (+ RISK-11 errors), RISK-9/10 notes
     cov, cerrs, cnotes = risk_coverage(bundle_objs, envelopes=envelopes, trusted=TRUSTED)
     for e in cerrs: fail(section, e)
@@ -1498,6 +1549,7 @@ def validate_examples():
         if obj.get("id") != entry["id"]:
             fail(section, f"{fn}: manifest id != object id")
     for e in closure_errors(exobjs): fail(section, e)
+    for e in kernel_pin_errors(manifest, exobjs): fail(section, e)
     cov, cerrs, cnotes = risk_coverage(exobjs)
     for e in cerrs: fail(section, e)
     for n in cnotes + risk_link_notes(exobjs): print(f"    note: {n}")
@@ -1537,8 +1589,8 @@ if "--compose" in _argv:
     sys.exit(1 if errs else 0)
 
 print("== conformance corpus ==")
-run_jcs(); run_modality(); run_parameters(); run_tailoring(); run_attestation(); run_facets(); run_references(); run_lifecycle(); run_tiers(); run_dsse(); run_composition(); run_conditional(); run_risk()
-for k in ("jcs", "modality", "parameter", "tailoring", "attestation", "facet", "reference", "lifecycle", "tier", "dsse", "composition", "conditional", "risk"):
+run_jcs(); run_modality(); run_parameters(); run_tailoring(); run_attestation(); run_facets(); run_references(); run_lifecycle(); run_tiers(); run_dsse(); run_composition(); run_conditional(); run_risk(); run_kernel()
+for k in ("jcs", "modality", "parameter", "tailoring", "attestation", "facet", "reference", "lifecycle", "tier", "dsse", "composition", "conditional", "risk", "kernel"):
     print(f"  {k}: {counts[k]} pass, {counts[k + ':FAIL']} fail")
 
 print("== bundles ==")

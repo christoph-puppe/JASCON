@@ -1,5 +1,6 @@
 {
  "manifest-version": "1",
+ "kernel-version": "2.0.0",
  "provenance": {
   "source": "OSCAL IFA GoodRead example set (SSP 1.1.1, AP, AR, POA&M) + leveraged/leveraging SSP pair + component-definition example (usnistgov/oscal-content)",
   "source-note": "FICTIONAL example content by NIST; converted as the gate-3 lifecycle corpus",
