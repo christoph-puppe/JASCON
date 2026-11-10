@@ -1882,3 +1882,29 @@ executed), `kernel-vectors.json` (9 — the fourteenth family), the
 converter library (pins automatically when the content needs it; bundles
 without such content reproduce byte for byte), the reader (v1.7.3).
 
+## Amendments — risk catalogues stay outside the kernel (2026-11-10)
+
+**Trigger.** The author's idea of ready-made risk lists that an
+organisation imports, the prototype built for it (`risk-catalogs/`), and
+backlog #53: does a catalogue entry become a kernel type before the 2.0.0
+tag?
+**Decision (author).** "Keep outside of kernel." Catalogues, their draft
+schema and the import tool stay in `risk-catalogs/`. 2.0.0 gets no entry
+type.
+**Evidence.** The prototype imported 23 entries into kernel `Risk` objects
+and the reference validator accepted the resulting bundle (1,065 pass)
+without any kernel change: `Risk`, `relations`, `annotations` and
+`tailoring-refs` were enough. A kernel type would have bought digests,
+attestation and a typed back-reference for catalogues, and nothing the
+import needs.
+**Customer.** The organisation that wants a starting list. It gets one
+today, and no validator carries an eleventh type for it.
+**Simplicity.** The kernel stays at ten types; D22 is not asked for a
+second exception.
+**Trade-off, accepted.** A catalogue is not a bundle object: it has no
+package or semantic digest, cannot be the subject of an Attestation, and
+the back-reference from an imported Risk is an untyped `relations` entry
+with a URI the validator does not resolve.
+**Left open.** Where a recorded "not applicable" for a catalogue risk
+lives (backlog #54) — outside the kernel, like the catalogues.
+
