@@ -1,0 +1,47 @@
+{
+ "id": "https://github.com/christoph-puppe/JASCON/risk-catalogs/scale/likelihood-3",
+ "version": "0.1.0",
+ "title": {
+  "en": "Likelihood, three levels",
+  "de": "Eintrittswahrscheinlichkeit, drei Stufen"
+ },
+ "description": {
+  "en": "A starting scale. Copy it, change the wording, add or remove levels, give it your own id. Lowest first.",
+  "de": "Eine Ausgangsskala. Kopieren, Wortlaut ändern, Stufen ergänzen oder streichen, eine eigene id vergeben. Niedrigste zuerst."
+ },
+ "levels": [
+  {
+   "level": "selten",
+   "label": {
+    "de": "selten",
+    "en": "rare"
+   },
+   "description": {
+    "de": "Höchstens einmal in fünf Jahren zu erwarten.",
+    "en": "Expected at most once in five years."
+   }
+  },
+  {
+   "level": "mittel",
+   "label": {
+    "de": "mittel",
+    "en": "occasional"
+   },
+   "description": {
+    "de": "Etwa einmal im Jahr zu erwarten.",
+    "en": "Expected about once a year."
+   }
+  },
+  {
+   "level": "häufig",
+   "label": {
+    "de": "häufig",
+    "en": "frequent"
+   },
+   "description": {
+    "de": "Mehrmals im Jahr zu erwarten.",
+    "en": "Expected several times a year."
+   }
+  }
+ ]
+}

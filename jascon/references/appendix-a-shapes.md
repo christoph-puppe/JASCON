@@ -221,11 +221,23 @@ bundle carries content a 1.0.0 tool cannot type — a Risk, a Finding with
 stops and names both versions — KERNEL-2) · `objects[]`
 {id, version, **package-digest**, **semantic-digest**, path} ● ·
 `facet-schemas[]` {id, **exact-version**, digest, path} ● (exact pins,
-never ranges — D3) · `renderings[]` ○ · provenance ○. The manifest is
+never ranges — D3) · `scales[]` ○ {id, **exact-version**, digest, path}
+(2.0.0 — pinned scale definitions, below) · `renderings[]` ○ · provenance ○. The manifest is
 the sealed resolver: every reference lands here or validation fails
 with a rationale.
 
 ---
+
+**Scale definition** *(2.0.0; a pinned file, not an object)*: `id` ● ·
+`version` ● (`MAJOR.MINOR.PATCH`) · `title` ○ text · `description` ○ text ·
+`levels` ● — at least two, **lowest first**, each {`level` ● code,
+`label` ○ text, `description` ○ text}. The organisation chooses how many
+levels and what they are called. SCALE-1: shape, id and version as
+pinned, no level twice. SCALE-2: a level a Risk states on a pinned scale
+(`rating`, `residual-rating`, and the `likelihood` and `impact` in each)
+is one the scale defines. SCALE-3 *(SHOULD)*: a residual is not above
+what it remains of. Unpinned `scale-ref`s stay landmark and opaque.
+Evidence: three scales in the example bundle, `scale-vectors.json` (9).
 
 ## A.12 What the three converters actually exercised
 

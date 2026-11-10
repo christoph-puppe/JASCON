@@ -130,6 +130,15 @@ the Tailoring, the not-applicable record and the import report.
    controls. For another catalogue they have to be translated, which is
    what `Mapping` objects are for. Not built here.
 
+## Scales to start from
+
+[`scales/`](scales/) holds three starting scales — likelihood, impact and
+risk level, three levels each, German codes with English labels. They are
+there to be changed: copy a file, reword the levels, add or remove some,
+give it your own id and version, and pin it in your bundle's manifest
+under `scales`. The validator then checks every level your risks state
+against your definition. The demo pins the three files as published.
+
 ## Limits
 
 - Content: one author, no second review, no audit use (above).
@@ -147,6 +156,7 @@ the Tailoring, the not-applicable record and the import report.
 risk-catalogs/
   office-it/          catalog.json, entries/OFF-*.json
   industrial-plant/   catalog.json, entries/ICS-*.json
+  scales/             likelihood-3.json, impact-3.json, risk-level-3.json
   schema/             risk-catalog.draft.schema.json
   tools/              risk_catalog.py, build_demo.py
   demo/office-it-moderate/   the import result of the demo

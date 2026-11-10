@@ -1,0 +1,582 @@
+{
+ "description": "Pinned scale definitions (kernel 2.0.0). A scale is a small definition file the content manifest pins by digest under `scales`, like a facet schema: id, version, and `levels` listed from lowest to highest, each a code with optional multilingual label and description. How many levels and what they are called is the organisation's choice. SCALE-1: a pinned definition has the scale shape, the id and version its pin states, and no level twice. SCALE-2: a level a Risk states on a pinned scale (rating, residual-rating, and the likelihood and impact inside each) is one of that scale's levels. SCALE-3 (SHOULD): a residual level is not above the level it remains of - noted. A scale-ref that no pin answers stays a landmark and its levels opaque. Each vector: the scale definitions as if pinned, the objects, the expected failures and notes.",
+ "vectors": [
+  {
+   "name": "own-wording-own-number-of-levels",
+   "scales": [
+    {
+     "id": "https://org.example/scale/likelihood",
+     "version": "1.0.0",
+     "levels": [
+      {
+       "level": "never"
+      },
+      {
+       "level": "sometimes"
+      },
+      {
+       "level": "often"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/scale/impact",
+     "version": "1.0.0",
+     "levels": [
+      {
+       "level": "minor"
+      },
+      {
+       "level": "serious"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/scale/risk",
+     "version": "1.0.0",
+     "levels": [
+      {
+       "level": "green"
+      },
+      {
+       "level": "amber"
+      },
+      {
+       "level": "red"
+      }
+     ]
+    }
+   ],
+   "objects": [
+    {
+     "id": "https://org.example/risk/R-1",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Scenario 1."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "assessed",
+     "rating": {
+      "level": "red",
+      "scale-ref": "https://org.example/scale/risk",
+      "likelihood": {
+       "level": "often",
+       "scale-ref": "https://org.example/scale/likelihood"
+      },
+      "impact": {
+       "level": "serious",
+       "scale-ref": "https://org.example/scale/impact"
+      }
+     },
+     "residual-rating": {
+      "level": "green",
+      "scale-ref": "https://org.example/scale/risk",
+      "likelihood": {
+       "level": "never",
+       "scale-ref": "https://org.example/scale/likelihood"
+      },
+      "impact": {
+       "level": "serious",
+       "scale-ref": "https://org.example/scale/impact"
+      }
+     }
+    }
+   ],
+   "expected-fails": 0,
+   "expected-notes": [],
+   "rule": "A scale is the organisation's: three likelihood levels, two impact levels, any wording. Every level a Risk states is one its scale defines (SCALE-2)."
+  },
+  {
+   "name": "level-the-scale-does-not-define",
+   "scales": [
+    {
+     "id": "https://org.example/scale/likelihood",
+     "version": "1.0.0",
+     "levels": [
+      {
+       "level": "never"
+      },
+      {
+       "level": "sometimes"
+      },
+      {
+       "level": "often"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/scale/impact",
+     "version": "1.0.0",
+     "levels": [
+      {
+       "level": "minor"
+      },
+      {
+       "level": "serious"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/scale/risk",
+     "version": "1.0.0",
+     "levels": [
+      {
+       "level": "green"
+      },
+      {
+       "level": "amber"
+      },
+      {
+       "level": "red"
+      }
+     ]
+    }
+   ],
+   "objects": [
+    {
+     "id": "https://org.example/risk/R-2",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Scenario 2."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "assessed",
+     "rating": {
+      "level": "purple",
+      "scale-ref": "https://org.example/scale/risk",
+      "likelihood": {
+       "level": "often",
+       "scale-ref": "https://org.example/scale/likelihood"
+      },
+      "impact": {
+       "level": "serious",
+       "scale-ref": "https://org.example/scale/impact"
+      }
+     }
+    }
+   ],
+   "expected-fails": 1,
+   "expected-frags": [
+    "SCALE-2",
+    "purple"
+   ],
+   "rule": "SCALE-2: a rating level stated on a pinned scale is one of that scale's levels - a typo is no longer a new level"
+  },
+  {
+   "name": "likelihood-level-the-scale-does-not-define",
+   "scales": [
+    {
+     "id": "https://org.example/scale/likelihood",
+     "version": "1.0.0",
+     "levels": [
+      {
+       "level": "never"
+      },
+      {
+       "level": "sometimes"
+      },
+      {
+       "level": "often"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/scale/impact",
+     "version": "1.0.0",
+     "levels": [
+      {
+       "level": "minor"
+      },
+      {
+       "level": "serious"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/scale/risk",
+     "version": "1.0.0",
+     "levels": [
+      {
+       "level": "green"
+      },
+      {
+       "level": "amber"
+      },
+      {
+       "level": "red"
+      }
+     ]
+    }
+   ],
+   "objects": [
+    {
+     "id": "https://org.example/risk/R-3",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Scenario 3."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "assessed",
+     "rating": {
+      "level": "red",
+      "scale-ref": "https://org.example/scale/risk",
+      "likelihood": {
+       "level": "rarely",
+       "scale-ref": "https://org.example/scale/likelihood"
+      },
+      "impact": {
+       "level": "serious",
+       "scale-ref": "https://org.example/scale/impact"
+      }
+     }
+    }
+   ],
+   "expected-fails": 1,
+   "expected-frags": [
+    "SCALE-2",
+    "rating.likelihood"
+   ],
+   "rule": "SCALE-2 covers likelihood and impact like the level itself"
+  },
+  {
+   "name": "residual-impact-level-the-scale-does-not-define",
+   "scales": [
+    {
+     "id": "https://org.example/scale/likelihood",
+     "version": "1.0.0",
+     "levels": [
+      {
+       "level": "never"
+      },
+      {
+       "level": "sometimes"
+      },
+      {
+       "level": "often"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/scale/impact",
+     "version": "1.0.0",
+     "levels": [
+      {
+       "level": "minor"
+      },
+      {
+       "level": "serious"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/scale/risk",
+     "version": "1.0.0",
+     "levels": [
+      {
+       "level": "green"
+      },
+      {
+       "level": "amber"
+      },
+      {
+       "level": "red"
+      }
+     ]
+    }
+   ],
+   "objects": [
+    {
+     "id": "https://org.example/risk/R-4",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Scenario 4."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "assessed",
+     "rating": {
+      "level": "red",
+      "scale-ref": "https://org.example/scale/risk",
+      "likelihood": {
+       "level": "often",
+       "scale-ref": "https://org.example/scale/likelihood"
+      },
+      "impact": {
+       "level": "serious",
+       "scale-ref": "https://org.example/scale/impact"
+      }
+     },
+     "residual-rating": {
+      "level": "green",
+      "scale-ref": "https://org.example/scale/risk",
+      "likelihood": {
+       "level": "never",
+       "scale-ref": "https://org.example/scale/likelihood"
+      },
+      "impact": {
+       "level": "catastrophic",
+       "scale-ref": "https://org.example/scale/impact"
+      }
+     }
+    }
+   ],
+   "expected-fails": 1,
+   "expected-frags": [
+    "SCALE-2",
+    "residual-rating.impact"
+   ],
+   "rule": "SCALE-2 covers the residual rating and its inputs"
+  },
+  {
+   "name": "residual-above-the-rating-is-noted",
+   "scales": [
+    {
+     "id": "https://org.example/scale/likelihood",
+     "version": "1.0.0",
+     "levels": [
+      {
+       "level": "never"
+      },
+      {
+       "level": "sometimes"
+      },
+      {
+       "level": "often"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/scale/impact",
+     "version": "1.0.0",
+     "levels": [
+      {
+       "level": "minor"
+      },
+      {
+       "level": "serious"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/scale/risk",
+     "version": "1.0.0",
+     "levels": [
+      {
+       "level": "green"
+      },
+      {
+       "level": "amber"
+      },
+      {
+       "level": "red"
+      }
+     ]
+    }
+   ],
+   "objects": [
+    {
+     "id": "https://org.example/risk/R-5",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Scenario 5."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "assessed",
+     "rating": {
+      "level": "amber",
+      "scale-ref": "https://org.example/scale/risk",
+      "likelihood": {
+       "level": "sometimes",
+       "scale-ref": "https://org.example/scale/likelihood"
+      },
+      "impact": {
+       "level": "serious",
+       "scale-ref": "https://org.example/scale/impact"
+      }
+     },
+     "residual-rating": {
+      "level": "red",
+      "scale-ref": "https://org.example/scale/risk",
+      "likelihood": {
+       "level": "often",
+       "scale-ref": "https://org.example/scale/likelihood"
+      },
+      "impact": {
+       "level": "serious",
+       "scale-ref": "https://org.example/scale/impact"
+      }
+     }
+    }
+   ],
+   "expected-fails": 0,
+   "expected-notes": [
+    "SCALE-3",
+    "residual level 'red' is above 'amber'",
+    "residual.likelihood"
+   ],
+   "rule": "SCALE-3 (SHOULD): levels are listed lowest first, so a residual above what it remains of can be seen - noted, not failed"
+  },
+  {
+   "name": "unpinned-scale-stays-opaque",
+   "scales": [
+    {
+     "id": "https://org.example/scale/likelihood",
+     "version": "1.0.0",
+     "levels": [
+      {
+       "level": "never"
+      },
+      {
+       "level": "sometimes"
+      },
+      {
+       "level": "often"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/scale/impact",
+     "version": "1.0.0",
+     "levels": [
+      {
+       "level": "minor"
+      },
+      {
+       "level": "serious"
+      }
+     ]
+    }
+   ],
+   "objects": [
+    {
+     "id": "https://org.example/risk/R-7",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "Scenario 7."
+     },
+     "owner-ref": "https://org.example/party/ciso",
+     "state": "assessed",
+     "rating": {
+      "level": "anything",
+      "scale-ref": "https://org.example/scale/not-pinned",
+      "likelihood": {
+       "level": "often",
+       "scale-ref": "https://org.example/scale/likelihood"
+      },
+      "impact": {
+       "level": "serious",
+       "scale-ref": "https://org.example/scale/impact"
+      }
+     }
+    }
+   ],
+   "expected-fails": 0,
+   "rule": "A scale-ref no pin answers is a landmark as before: its levels are opaque strings and nothing is checked"
+  },
+  {
+   "name": "a-level-listed-twice",
+   "scales": [
+    {
+     "id": "https://org.example/scale/likelihood",
+     "version": "1.0.0",
+     "levels": [
+      {
+       "level": "never"
+      },
+      {
+       "level": "often"
+      },
+      {
+       "level": "often"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/scale/impact",
+     "version": "1.0.0",
+     "levels": [
+      {
+       "level": "minor"
+      },
+      {
+       "level": "serious"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/scale/risk",
+     "version": "1.0.0",
+     "levels": [
+      {
+       "level": "green"
+      },
+      {
+       "level": "amber"
+      },
+      {
+       "level": "red"
+      }
+     ]
+    }
+   ],
+   "objects": [],
+   "expected-fails": 1,
+   "expected-frags": [
+    "SCALE-1",
+    "twice"
+   ],
+   "rule": "SCALE-1: a level has one place in the order"
+  },
+  {
+   "name": "a-scale-with-one-level",
+   "scales": [
+    {
+     "id": "https://org.example/scale/impact",
+     "version": "1.0.0",
+     "levels": [
+      {
+       "level": "only"
+      }
+     ]
+    }
+   ],
+   "objects": [],
+   "expected-fails": 1,
+   "expected-frags": [
+    "SCALE-1"
+   ],
+   "rule": "SCALE-1: a scale has at least two levels - one level distinguishes nothing"
+  },
+  {
+   "name": "a-scale-version-that-is-not-a-version",
+   "scales": [
+    {
+     "id": "https://org.example/scale/risk",
+     "version": "1",
+     "levels": [
+      {
+       "level": "green"
+      },
+      {
+       "level": "amber"
+      },
+      {
+       "level": "red"
+      }
+     ]
+    }
+   ],
+   "objects": [],
+   "expected-fails": 1,
+   "expected-frags": [
+    "SCALE-1"
+   ],
+   "rule": "SCALE-1: a definition carries MAJOR.MINOR.PATCH - the manifest pins an exact version"
+  }
+ ]
+}
