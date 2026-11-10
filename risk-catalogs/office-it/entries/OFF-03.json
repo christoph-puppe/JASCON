@@ -1,0 +1,37 @@
+{
+ "id": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-03",
+ "version": "0.1.0",
+ "lifecycle": "draft",
+ "label": "OFF-03",
+ "title": {
+  "en": "Unpatched internet-facing system is exploited",
+  "de": "Ungepatchtes, aus dem Internet erreichbares System wird ausgenutzt"
+ },
+ "scenario": {
+  "en": "A VPN gateway, mail server or web application runs a version with a published vulnerability. An attacker exploits it before the patch is installed and gains a foothold inside the network.",
+  "de": "Ein VPN-Gateway, Mailserver oder eine Webanwendung läuft in einer Version mit veröffentlichter Schwachstelle. Ein Angreifer nutzt sie aus, bevor der Patch eingespielt ist, und setzt sich im internen Netz fest."
+ },
+ "category": "vulnerability",
+ "impacts": [
+  "confidentiality",
+  "integrity",
+  "availability"
+ ],
+ "suggested-treatments": [
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SI-2"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/RA-5"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CM-8"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SC-7"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SI-4"
+  }
+ ]
+}

@@ -1,0 +1,39 @@
+{
+ "id": "https://github.com/christoph-puppe/JASCON/risk-catalogs/industrial-plant/entry/ICS-07",
+ "version": "0.1.0",
+ "lifecycle": "draft",
+ "label": "ICS-07",
+ "title": {
+  "en": "Default or shared passwords on controllers and operator panels",
+  "de": "Standard- oder Gemeinschaftspasswörter an Steuerungen und Bediengeräten"
+ },
+ "scenario": {
+  "en": "Controllers, panels, switches and drives keep the vendor's default password, or the whole shift uses one account. Anyone on the network can operate or reprogram the devices, and no action can be traced to a person.",
+  "de": "Steuerungen, Bediengeräte, Switches und Antriebe behalten das Standardpasswort des Herstellers, oder die ganze Schicht nutzt ein Konto. Jeder im Netz kann die Geräte bedienen oder umprogrammieren, und keine Handlung lässt sich einer Person zuordnen."
+ },
+ "category": "identity-access",
+ "impacts": [
+  "integrity",
+  "availability"
+ ],
+ "suggested-treatments": [
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/IA-5"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/IA-2"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-2"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/IA-3"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-6"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AU-2"
+  }
+ ]
+}

@@ -1,0 +1,40 @@
+{
+ "id": "https://github.com/christoph-puppe/JASCON/risk-catalogs/industrial-plant/entry/ICS-22",
+ "version": "0.1.0",
+ "lifecycle": "draft",
+ "label": "ICS-22",
+ "title": {
+  "en": "Cloud and IIoT connections open a path into the plant",
+  "de": "Cloud- und IIoT-Anbindungen öffnen einen Weg in die Anlage"
+ },
+ "scenario": {
+  "en": "Machines send data to a vendor cloud or a monitoring platform through a gateway that also accepts commands or updates from outside. The connection bypasses the plant firewall and is not known to the people responsible for security.",
+  "de": "Maschinen senden Daten an eine Hersteller-Cloud oder eine Überwachungsplattform über ein Gateway, das auch Befehle oder Updates von außen annimmt. Die Verbindung umgeht die Anlagenfirewall und ist den Sicherheitsverantwortlichen nicht bekannt."
+ },
+ "category": "network",
+ "impacts": [
+  "confidentiality",
+  "integrity",
+  "availability"
+ ],
+ "suggested-treatments": [
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SC-7"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-4"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CA-3"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SA-9"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CM-8"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-17"
+  }
+ ]
+}

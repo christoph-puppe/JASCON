@@ -1,0 +1,39 @@
+{
+ "id": "https://github.com/christoph-puppe/JASCON/risk-catalogs/industrial-plant/entry/ICS-05",
+ "version": "0.1.0",
+ "lifecycle": "draft",
+ "label": "ICS-05",
+ "title": {
+  "en": "Legacy systems without vendor support are exploited",
+  "de": "Altsysteme ohne Herstellerunterstützung werden ausgenutzt"
+ },
+ "scenario": {
+  "en": "Operator stations and controllers run operating systems and firmware that no longer receive security updates, because the machine is certified or cannot be stopped. Known vulnerabilities stay open for the life of the machine.",
+  "de": "Bedienstationen und Steuerungen laufen mit Betriebssystemen und Firmware, die keine Sicherheitsupdates mehr erhalten, weil die Maschine abgenommen ist oder nicht angehalten werden kann. Bekannte Schwachstellen bleiben über die Lebensdauer der Maschine offen."
+ },
+ "category": "vulnerability",
+ "impacts": [
+  "integrity",
+  "availability"
+ ],
+ "suggested-treatments": [
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SA-22"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SI-2"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SC-7"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/RA-5"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CM-7"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SI-4"
+  }
+ ]
+}

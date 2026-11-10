@@ -1,0 +1,39 @@
+{
+ "id": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-24",
+ "version": "0.1.0",
+ "lifecycle": "draft",
+ "label": "OFF-24",
+ "title": {
+  "en": "A configuration change breaks or opens a system",
+  "de": "Konfigurationsänderung legt ein System lahm oder öffnet es"
+ },
+ "scenario": {
+  "en": "An administrator changes a firewall rule, a group policy or a cloud setting directly in production, without review or a way back. The change stops a service or removes a protection, and nobody can say what was changed.",
+  "de": "Ein Administrator ändert eine Firewall-Regel, eine Gruppenrichtlinie oder eine Cloud-Einstellung direkt in der Produktion, ohne Prüfung und ohne Rückweg. Die Änderung legt einen Dienst still oder hebt einen Schutz auf, und niemand kann sagen, was geändert wurde."
+ },
+ "category": "human-error",
+ "impacts": [
+  "integrity",
+  "availability"
+ ],
+ "suggested-treatments": [
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CM-3"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CM-2"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CM-5"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CM-6"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CM-4"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AU-2"
+  }
+ ]
+}

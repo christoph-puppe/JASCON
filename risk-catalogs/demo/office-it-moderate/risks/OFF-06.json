@@ -1,0 +1,53 @@
+{
+ "id": "https://org.example/risk/OFF-06",
+ "version": "1",
+ "lifecycle": "draft",
+ "label": "OFF-06",
+ "title": {
+  "en": "Lost or stolen laptop or phone with readable data",
+  "de": "Verlorenes oder gestohlenes Notebook oder Smartphone mit lesbaren Daten"
+ },
+ "scenario": {
+  "en": "A device is left on a train or stolen from a car. Its storage is not encrypted or the device is unlocked, so customer data, mail and stored credentials are readable by whoever holds it.",
+  "de": "Ein Gerät bleibt im Zug liegen oder wird aus dem Auto gestohlen. Der Datenträger ist nicht verschlüsselt oder das Gerät ist entsperrt, sodass Kundendaten, E-Mails und gespeicherte Zugangsdaten für den Finder lesbar sind."
+ },
+ "owner-ref": "https://org.example/party/ciso",
+ "state": "identified",
+ "tailoring-refs": [
+  "https://org.example/tailoring/soa-office-it"
+ ],
+ "treatments": [
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SC-28"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-19"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CM-8"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/MP-5"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/IR-6"
+  }
+ ],
+ "relations": [
+  {
+   "type": "https://github.com/christoph-puppe/JASCON/risk-catalogs/relation/instantiates",
+   "ref": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-06"
+  }
+ ],
+ "annotations": {
+  "imported-from": {
+   "entry": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-06",
+   "entry-version": "0.1.0",
+   "catalog": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it",
+   "catalog-version": "0.1.0"
+  }
+ },
+ "component-refs": [
+  "https://org.example/component/office-it"
+ ]
+}

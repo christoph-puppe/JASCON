@@ -1,0 +1,40 @@
+{
+ "id": "https://github.com/christoph-puppe/JASCON/risk-catalogs/industrial-plant/entry/ICS-14",
+ "version": "0.1.0",
+ "lifecycle": "draft",
+ "label": "ICS-14",
+ "title": {
+  "en": "An operating or maintenance error causes a stop or damage",
+  "de": "Bedien- oder Instandhaltungsfehler führt zu Stillstand oder Schaden"
+ },
+ "scenario": {
+  "en": "A technician loads the program of another machine, tests a change on the running line or confirms an alarm without understanding it. The error is not caught because changes are not reviewed and staff were not trained on the system.",
+  "de": "Ein Techniker lädt das Programm einer anderen Maschine, testet eine Änderung an der laufenden Linie oder quittiert einen Alarm, ohne ihn zu verstehen. Der Fehler fällt nicht auf, weil Änderungen nicht geprüft werden und das Personal an dem System nicht geschult wurde."
+ },
+ "category": "human-error",
+ "impacts": [
+  "integrity",
+  "availability",
+  "safety"
+ ],
+ "suggested-treatments": [
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AT-3"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CM-3"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CM-4"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/MA-2"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/PL-4"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CM-5"
+  }
+ ]
+}

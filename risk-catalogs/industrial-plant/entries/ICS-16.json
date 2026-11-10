@@ -1,0 +1,36 @@
+{
+ "id": "https://github.com/christoph-puppe/JASCON/risk-catalogs/industrial-plant/entry/ICS-16",
+ "version": "0.1.0",
+ "lifecycle": "draft",
+ "label": "ICS-16",
+ "title": {
+  "en": "Nobody knows which devices and versions are in the plant",
+  "de": "Niemand weiß, welche Geräte und Versionen in der Anlage stehen"
+ },
+ "scenario": {
+  "en": "There is no current inventory of controllers, panels, switches and their firmware. When a vulnerability is published, nobody can say whether the plant is affected, and unknown devices stay unpatched and unmonitored.",
+  "de": "Es gibt kein aktuelles Verzeichnis der Steuerungen, Bediengeräte, Switches und ihrer Firmware. Wird eine Schwachstelle veröffentlicht, kann niemand sagen, ob die Anlage betroffen ist, und unbekannte Geräte bleiben ungepatcht und unüberwacht."
+ },
+ "category": "detection-response",
+ "impacts": [
+  "integrity",
+  "availability"
+ ],
+ "suggested-treatments": [
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CM-8"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CM-8.1"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/PM-5"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/RA-5"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CM-2"
+  }
+ ]
+}

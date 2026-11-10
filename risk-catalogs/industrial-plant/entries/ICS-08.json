@@ -1,0 +1,36 @@
+{
+ "id": "https://github.com/christoph-puppe/JASCON/risk-catalogs/industrial-plant/entry/ICS-08",
+ "version": "0.1.0",
+ "lifecycle": "draft",
+ "label": "ICS-08",
+ "title": {
+  "en": "Control components are reachable from the internet",
+  "de": "Steuerungskomponenten sind aus dem Internet erreichbar"
+ },
+ "scenario": {
+  "en": "A controller, a remote access gateway or a web interface of the building or plant control is connected to the internet directly, often through a mobile router installed for one project. Search engines for devices list it.",
+  "de": "Eine Steuerung, ein Fernwartungsgateway oder die Weboberfläche der Gebäude- oder Anlagensteuerung hängt direkt am Internet, oft über einen Mobilfunkrouter, der für ein Projekt eingebaut wurde. Gerätesuchmaschinen führen sie auf."
+ },
+ "category": "network",
+ "impacts": [
+  "integrity",
+  "availability"
+ ],
+ "suggested-treatments": [
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SC-7"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CM-7"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/RA-5"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-17"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CM-8"
+  }
+ ]
+}

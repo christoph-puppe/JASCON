@@ -1,0 +1,38 @@
+{
+ "id": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-09",
+ "version": "0.1.0",
+ "lifecycle": "draft",
+ "label": "OFF-09",
+ "title": {
+  "en": "Business data in cloud services nobody approved",
+  "de": "Geschäftsdaten in Cloud-Diensten, die niemand freigegeben hat"
+ },
+ "scenario": {
+  "en": "Teams store files in private cloud drives, online converters or messaging apps because they are convenient. The organisation does not know where the data is, who can read it, or how to delete it.",
+  "de": "Teams legen Dateien in privaten Cloud-Speichern, Online-Konvertern oder Messenger-Apps ab, weil es bequem ist. Die Organisation weiß nicht, wo die Daten liegen, wer sie lesen kann und wie sie zu löschen sind."
+ },
+ "category": "data-exposure",
+ "impacts": [
+  "confidentiality"
+ ],
+ "suggested-treatments": [
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-20"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SA-9"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CM-11"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CM-10"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/PL-4"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AT-2"
+  }
+ ]
+}

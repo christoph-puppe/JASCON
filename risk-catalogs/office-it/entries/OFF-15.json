@@ -1,0 +1,39 @@
+{
+ "id": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-15",
+ "version": "0.1.0",
+ "lifecycle": "draft",
+ "label": "OFF-15",
+ "title": {
+  "en": "Malware arrives by attachment, download or USB stick",
+  "de": "Schadsoftware gelangt über Anhang, Download oder USB-Stick ins Haus"
+ },
+ "scenario": {
+  "en": "A user opens an office document with active content, installs a tool from an unofficial site, or plugs in a found USB stick. Code runs on the workstation with the user's rights.",
+  "de": "Ein Benutzer öffnet ein Office-Dokument mit aktiven Inhalten, installiert ein Werkzeug von einer inoffiziellen Seite oder steckt einen gefundenen USB-Stick an. Auf dem Arbeitsplatzrechner läuft Code mit den Rechten des Benutzers."
+ },
+ "category": "malware",
+ "impacts": [
+  "integrity",
+  "availability"
+ ],
+ "suggested-treatments": [
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SI-3"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SI-8"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/MP-7"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CM-7"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CM-7.5"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CM-11"
+  }
+ ]
+}

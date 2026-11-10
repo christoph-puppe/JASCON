@@ -1,0 +1,53 @@
+{
+ "id": "https://org.example/risk/OFF-10",
+ "version": "1",
+ "lifecycle": "draft",
+ "label": "OFF-10",
+ "title": {
+  "en": "A sharing link or storage setting exposes internal data",
+  "de": "Freigabelink oder Speichereinstellung legt interne Daten offen"
+ },
+ "scenario": {
+  "en": "A folder in a collaboration service is shared with anyone who has the link, or a cloud storage container is set to public. Internal documents become readable from the internet without anyone noticing.",
+  "de": "Ein Ordner in einem Kollaborationsdienst wird für alle freigegeben, die den Link kennen, oder ein Cloud-Speicher ist öffentlich eingestellt. Interne Dokumente sind unbemerkt aus dem Internet lesbar."
+ },
+ "owner-ref": "https://org.example/party/ciso",
+ "state": "identified",
+ "tailoring-refs": [
+  "https://org.example/tailoring/soa-office-it"
+ ],
+ "treatments": [
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-3"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-21"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-22"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CM-6"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CA-7"
+  }
+ ],
+ "relations": [
+  {
+   "type": "https://github.com/christoph-puppe/JASCON/risk-catalogs/relation/instantiates",
+   "ref": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-10"
+  }
+ ],
+ "annotations": {
+  "imported-from": {
+   "entry": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-10",
+   "entry-version": "0.1.0",
+   "catalog": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it",
+   "catalog-version": "0.1.0"
+  }
+ },
+ "component-refs": [
+  "https://org.example/component/office-it"
+ ]
+}

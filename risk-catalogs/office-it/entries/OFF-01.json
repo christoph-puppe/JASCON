@@ -1,0 +1,39 @@
+{
+ "id": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-01",
+ "version": "0.1.0",
+ "lifecycle": "draft",
+ "label": "OFF-01",
+ "title": {
+  "en": "Phishing leads to stolen credentials",
+  "de": "Phishing führt zu gestohlenen Zugangsdaten"
+ },
+ "scenario": {
+  "en": "An employee enters their password on a forged login page reached through an email. The attacker signs in to mail and file services as that employee and reads, forwards or deletes data.",
+  "de": "Eine Mitarbeiterin gibt ihr Passwort auf einer gefälschten Anmeldeseite ein, die sie über eine E-Mail erreicht hat. Der Angreifer meldet sich in ihrem Namen an Mail- und Dateidiensten an und liest, leitet weiter oder löscht Daten."
+ },
+ "category": "social-engineering",
+ "impacts": [
+  "confidentiality",
+  "integrity"
+ ],
+ "suggested-treatments": [
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AT-2"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/IA-2"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/IA-2.1"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/IA-2.2"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SI-8"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-7"
+  }
+ ]
+}

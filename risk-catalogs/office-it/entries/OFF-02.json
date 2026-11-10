@@ -1,0 +1,42 @@
+{
+ "id": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-02",
+ "version": "0.1.0",
+ "lifecycle": "draft",
+ "label": "OFF-02",
+ "title": {
+  "en": "Ransomware encrypts file servers and backups",
+  "de": "Ransomware verschlüsselt Dateiserver und Backups"
+ },
+ "scenario": {
+  "en": "Malware started on one workstation spreads with the user's rights, encrypts network shares and reaches the online backups. Work stops until systems are rebuilt, and the attacker threatens to publish copied data.",
+  "de": "Schadsoftware, die auf einem Arbeitsplatzrechner gestartet wurde, breitet sich mit den Rechten des Benutzers aus, verschlüsselt Netzlaufwerke und erreicht die online angebundenen Backups. Die Arbeit ruht, bis die Systeme neu aufgebaut sind, und der Angreifer droht mit der Veröffentlichung kopierter Daten."
+ },
+ "category": "malware",
+ "impacts": [
+  "integrity",
+  "availability"
+ ],
+ "suggested-treatments": [
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CP-9"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CP-10"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SI-3"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-6"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CM-7"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/IR-4"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SC-7"
+  }
+ ]
+}
