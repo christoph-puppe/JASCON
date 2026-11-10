@@ -1640,3 +1640,31 @@ D22 should carry a consumer-side clause with its own evidence bar is
 **#48**. Until that is decided this entry is the precedent, and it is
 exactly one.
 
+## License — Apache-2.0 *(author decision, 2026-11-10; closes the 1.0.0 release note "no LICENSE file")*
+**Decision.** The repository is licensed under the **Apache License,
+Version 2.0**. `LICENSE` at the root is the canonical text, byte for
+byte (apache.org `LICENSE-2.0.txt`: 11,358 bytes, SHA-256
+`cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30`); a
+copy rides in the skill folder, so the installable zip states its own
+terms (79 entries). `NOTICE` names the copyright holder and says what
+the grant covers.
+**Scope — the part that needed care.** The license can only cover what
+is the author's to license: the specification, register, handbook,
+schemas, vectors, software and reader. The eleven bundles under
+`converted_examples/` are conversions of publications by ACSC, BSI, CCB,
+CIS, FedRAMP and NIST; `NOTICE` says they stay subject to their
+publishers' terms and that the Apache grant adds nothing to those.
+**Not done, and it matters.** Nobody has checked those terms corpus by
+corpus. Nothing in the repository records the license any source was
+published under — not the bundles, not the coverage reports. NIST and
+FedRAMP material is U.S. government work; the others are not, and
+whether each permits redistributing a *converted* form is unverified.
+Backlog **#49**.
+**Customer.** Anyone who wants to build on the format now has explicit
+copyright and patent grants (Apache-2.0 §2–§3) — the precondition for
+the standing clean-room-validator invitation to be taken up by an
+organisation with a legal department.
+**Trade-off.** A permissive license lets a vendor ship a closed
+derivative; accepted — adoption is the point, and the conformance corpus,
+not the license, is what keeps "conformant" honest (Ch. 15.1).
+
