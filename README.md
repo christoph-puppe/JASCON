@@ -72,7 +72,7 @@ refused while you type.*
 >   toward imported OSCAL data), and the specification needs its 2.0.0
 >   text. See the
 >   [backlog](drafts/oscal-semantic-core-v0.6-spec-feedback-backlog.md)
->   #41–#48 and the register sections "Amendments — CP-RISK-1" and
+>   #41–#49 and the register sections "Amendments — CP-RISK-1" and
 >   "Amendments — the 2.0.0 decision".
 
 ## Why this exists
@@ -369,3 +369,13 @@ is an adversarial FAQ, and review findings land in the v0.6 backlog with their
 diffs on the record. Items enter the backlog with counts and leave via a
 decision recorded in the register; an item that can neither be evidenced nor
 closed after two gate cycles gets deleted.
+
+## License
+
+[Apache License 2.0](LICENSE) — Copyright 2026 Christoph Puppe.
+
+The license covers the original work in this repository: specification,
+decision register, handbook, kernel schema, conformance corpus, software
+and reader. The bundles under `converted_examples/` are conversions of
+third-party publications and remain subject to their publishers' terms —
+see [NOTICE](NOTICE).

@@ -1,0 +1,23 @@
+JASCON - JSON Attestable Semantic Compliance Object-graph Notation
+Copyright 2026 Christoph Puppe
+
+Licensed under the Apache License, Version 2.0. See the LICENSE file.
+
+What the license covers
+-----------------------
+The original work in this repository: the specification, the decision
+register and the other documents under drafts/; the handbook, kernel
+schema, standard-library facet descriptors, conformance corpus, example
+bundle and software under jascon/; and the reader under one-page-apps/.
+
+What it does not cover
+----------------------
+The bundles and OSCAL exports under converted_examples/ are conversions
+of publications by ACSC, BSI, CCB, CIS, FedRAMP and NIST. Those
+publications belong to their publishers and remain subject to the
+publishers' own terms. The Apache License grants no rights in them
+beyond what those terms allow; anyone who redistributes the converted
+content is responsible for meeting them.
+
+JASCON is maintained in personal capacity. Nothing in this repository is
+endorsed by, or affiliated with, any of the organisations named above.
