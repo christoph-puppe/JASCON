@@ -18,8 +18,8 @@ const rules = require("../jascon-rules.js");
 const vectors = name => JSON.parse(fs.readFileSync(path.join(CONF, name + "-vectors.json"), "utf8"));
 const asObjs = list => new Map(list.map(o => [o.id, { type: core.jscInferType(o), obj: o }]));
 
-const PORTED = ["jcs", "kernel", "lifecycle", "modality", "parameter", "reference", "risk", "scale", "tier"];
-const NOT_PORTED = ["attestation", "composition", "conditional", "dsse", "facet", "tailoring"];
+const PORTED = ["attestation", "facet", "jcs", "kernel", "lifecycle", "modality", "parameter", "reference", "risk", "scale", "tailoring", "tier"];
+const NOT_PORTED = ["composition", "conditional", "dsse"];
 /* Where a vector carries expected-frag (singular), it asserts the wording of
    one Python schema library's diagnostic; the vector files call that
    advisory and expected-rule the portable assertion, and so do these tests.
@@ -155,7 +155,15 @@ test("schema matching agrees with the type every shipped object was given by its
 });
 
 test("a schema keyword this checker does not implement is refused, not skipped", () => {
-  assert.throws(() => rules.jscSchemaCheck({ maxLength: 3 }, "abcd", {}), /maxLength is not supported/);
+  assert.throws(() => rules.jscSchemaCheck({ dependentRequired: { a: ["b"] } }, { a: 1 }, {}), /dependentRequired is not supported/);
+  // the plain bounds a pinned facet schema may use are implemented
+  const errs = (schema, v) => rules.jscSchemaCheck(schema, v, {}).errors.map(e => e.keyword);
+  assert.deepEqual(errs({ maximum: 3 }, 4), ["maximum"]);
+  assert.deepEqual(errs({ maxLength: 3 }, "abcd"), ["maxLength"]);
+  assert.deepEqual(errs({ uniqueItems: true, maxItems: 2 }, [1, 1, 2]), ["maxItems", "uniqueItems"]);
+  assert.deepEqual(errs({ oneOf: [{ type: "string" }, { minLength: 1 }] }, "a"), ["oneOf"]);
+  assert.deepEqual(errs({ not: { type: "string" } }, "a"), ["not"]);
+  assert.deepEqual(errs({ oneOf: [{ type: "string" }, { type: "number" }], not: { const: 5 } }, 4), []);
 });
 
 test("reference: the number of closure errors of every vector", () => {
@@ -241,6 +249,104 @@ test("the example bundle: its scales, its matrix and its Risk agree, and coverag
   const cov = await rules.jscRiskCoverage(objs);
   assert.deepEqual(cov.errors, []);
   assert.equal(cov.report.risks, 1);
+});
+
+test("jcs: canonical form, and optional containers that must be absent instead of empty", () => {
+  const v = vectors("jcs").vectors;
+  assert.equal(v.length, 8);
+  for (const c of v) {
+    if (c.canonical != null) assert.equal(core.jscCanonical(c.input), c.canonical, c.name);
+    else assert.equal(rules.jscOptionalEmptyViolations(c["authoring-input"]).length ? "invalid" : "valid", c.expected, c.name);
+  }
+});
+
+test("facet: every vector (stdlib, pinned, private, unregistered)", () => {
+  const v = vectors("facet").vectors;
+  assert.equal(v.length, 7);
+  for (const c of v) {
+    const errs = rules.jscFacetErrors([[c.name, c.object]], new Map(Object.entries(c.pinned || {})));
+    assert.equal(errs.length ? "invalid" : "valid", c.expected, `${c.name}: ${errs[0] || ""}`);
+  }
+});
+
+test("tailoring: the operation law of every vector, through the function the app uses", async () => {
+  const v = vectors("tailoring").vectors;
+  assert.equal(v.length, 19);
+  const A = "https://auth.example", C = "https://consumer.example";
+  for (const c of v) {
+    /* The vectors state a tier, a base modality and a parameter declaration,
+       and name requirements of their own. A small graph is built in which
+       jscDeriveTier derives the stated tier: one requirement that has every
+       statement the operations name, each with the base modality and the
+       declared parameter. Every operation aims at that requirement and
+       keeps its own statement, parameter, field and facet, so a same-target
+       conflict stays one and distinct targets stay distinct. */
+    const decl = c["parameter-decl"], sids = [...new Set(["s1", ...(c.operations || []).map(op => op["statement-id"]).filter(Boolean)])];
+    const names = [...new Set((c.operations || []).filter(op => op.op === "set-parameter").map(op => op.parameter || (decl && decl.name)).filter(Boolean))];
+    const req = { id: A + "/req/1", version: "1", lifecycle: "active", statements: sids.map(id => ({ id, modality: c["base-modality"] || "must",
+      "obligated-parties": [A + "/p"], prose: { en: "X." }, ...(decl && names.length ? { parameters: names.map(name => ({ ...decl, name })) } : {}) })) };
+    const set = { id: A + "/set/all", version: "1", lifecycle: "active", members: [{ ref: req.id }] };
+    const ops = (c.operations || []).map(op => ({ ...op, "requirement-ref": req.id,
+      ...(op["statement-id"] === undefined && ["set-modality", "set-parameter", "replace-prose"].includes(op.op) ? { "statement-id": "s1" } : {}),
+      ...(op.op === "set-parameter" && op.parameter === undefined && decl ? { parameter: decl.name } : {}) }));
+    const owner = c.tier === "consumer" ? C : A;
+    const t = { id: owner + "/tailoring/t", version: "1", lifecycle: "active", selects: [{ "set-ref": set.id }], operations: ops };
+    const objs = new Map([[req.id, { type: "requirement", obj: req }], [set.id, { type: "requirementSet", obj: set }], [t.id, { type: "tailoring", obj: t }]]);
+    if (c.tier) assert.equal(await rules.jscDeriveTier(t, objs), c.tier === "consumer" ? "consumer" : "authority-claimed", c.name + ": tier of the built graph");
+    const errs = await rules.jscTailoringDutyErrors(objs, new Map(Object.entries(c["facet-decls"] || {})));
+    assert.equal(errs.length ? "error" : "valid", c.verdict, `${c.name}: ${errs.join(" | ")}`);
+  }
+});
+
+test("attestation: the bi-modal verdict of every vector", async () => {
+  const v = vectors("attestation").vectors;
+  assert.equal(v.length, 5);
+  const digests = async (obj, indent) => ({ semantic: await core.jscSemanticDigest(obj), package: await core.jscPackageDigest(JSON.stringify(obj, null, indent)) });
+  for (const c of v) {
+    const sc = c.scenario, delivered = JSON.parse(JSON.stringify(sc["delivered-subject"] || sc.subject));
+    if (sc["delivered-mutation"] === "annotation-added") delivered.annotations = { web_name: "chrome" };
+    const got = rules.jscAttestationVerdict(await digests(sc.subject, 1), await digests(delivered, sc["delivered-mutation"] === "reindent" ? 4 : 1));
+    assert.equal(got, c.expected, c.name);
+  }
+});
+
+test("one object: the 216 rule, duplicate statement ids, a by-statement key that names nothing, an empty optional list", () => {
+  const base = { id: "https://a.example/req/1", version: "1", lifecycle: "active" };
+  const st = (id, text, params) => ({ id, modality: "must", "obligated-parties": ["https://a.example/p"], prose: { en: text }, ...(params ? { parameters: params } : {}) });
+  const errs = o => rules.jscObjectErrors(o).errors.join(" | ");
+  assert.equal(errs({ ...base, statements: [st("s1", "Keep {param:days} days.", [{ name: "days", type: "integer" }])] }), "");
+  assert.match(errs({ ...base, statements: [st("s1", "Keep {param:days} days.")] }), /unbound \{param:days\}/);
+  assert.match(errs({ ...base, statements: [st("s1", "X."), st("s1", "Y.")] }), /duplicate statement ids/);
+  assert.match(errs({ ...base, statements: [st("s1", "X.")], facets: { "private:x@1": { "by-statement": { s9: {} } } } }), /names no statement/);
+  assert.match(errs({ ...base, statements: [st("s1", "X.")], relations: [] }), /NO type|optional empty/);
+  assert.equal(rules.jscObjectErrors({ ...base }).type, null);
+});
+
+test("a whole set: every shipped bundle passes the ported rules, as it passes the reference validator", async () => {
+  const ROOT = path.resolve(CONF, "../..");
+  const tree = (dir, prefix = "") => fs.readdirSync(dir).sort().flatMap(n => fs.statSync(path.join(dir, n)).isDirectory()
+    ? tree(path.join(dir, n), prefix + n + "/") : [{ path: prefix + n, text: core.jscDecode(fs.readFileSync(path.join(dir, n))) }]);
+  const base = path.join(ROOT, "converted_examples");
+  const bundles = fs.readdirSync(base).flatMap(c => fs.statSync(path.join(base, c)).isDirectory()
+    ? fs.readdirSync(path.join(base, c)).filter(d => d.endsWith("-bundle")).map(d => path.join(base, c, d)) : []);
+  assert.equal(bundles.length, 5);
+  for (const dir of bundles) {
+    const g = core.jscGraphFrom(core.jscClassifyFiles(tree(dir)).records);
+    const res = await rules.jscCheckGraph(g, await core.jscVerify(g));
+    const errors = res.findings.filter(f => f.kind === "error");
+    assert.deepEqual(errors.slice(0, 3), [], path.relative(ROOT, dir));
+    assert.equal(Object.values(res.types).reduce((a, b) => a + b, 0), g.objects.size, "every object is typed: " + path.relative(ROOT, dir));
+  }
+});
+
+test("a whole set: the example folder, checked as a bundle, shows the one error the reference validator shows", async () => {
+  const EX = path.resolve(CONF, "../examples");
+  const files = fs.readdirSync(EX).map(n => ({ path: n, text: core.jscDecode(fs.readFileSync(path.join(EX, n))) }));
+  const g = core.jscGraphFrom(core.jscClassifyFiles(files).records);
+  const res = await rules.jscCheckGraph(g, await core.jscVerify(g));
+  const errors = res.findings.filter(f => f.kind === "error").map(f => f.message);
+  assert.equal(errors.length, 1, errors.join(" | "));
+  assert.match(errors[0], /DIVERGES from the normative descriptor \(D26\)/);
 });
 
 test("every vector family is either ported or named as not ported", () => {

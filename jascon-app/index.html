@@ -139,6 +139,8 @@ const APPS = [
     desc: N("The risk register with its heat map, scales and matrix, coverage of the selected requirements, risk catalogues") },
   { id: "assess", file: "assess.html", glyph: "◉", label: N("Assess"), types: ["assessment", "finding", "attestation"],
     desc: N("Assessments, findings and attestations; run a check and write its result") },
+  { id: "validate", file: "validate.html", glyph: "◐", label: N("Validate"), types: [],
+    desc: N("Check the active set against the kernel rules this app has ported") },
 ];
 
 const $ = id => document.getElementById(id);
@@ -149,6 +151,7 @@ if (typeof jscStore === "undefined") {
 
 jscI18n.add("de", {
   "Set": "Set", "Settings": "Einstellungen", "Home": "Übersicht",
+  "Validate": "Validieren", "Check the active set against the kernel rules this app has ported": "Das aktive Set gegen die Kernel-Regeln prüfen, die diese App portiert hat",
   "Import": "Import", "Import an OSCAL catalog or profile; everything after it works on JASCON": "Einen OSCAL-Katalog oder ein OSCAL-Profil importieren; alles danach arbeitet auf JASCON",
   "Browse": "Durchsehen", "Tailor": "Tailoring", "Map": "Mapping", "Implement": "Umsetzen", "Assess": "Prüfen", "Risk": "Risiko",
   "The risk register with its heat map, scales and matrix, coverage of the selected requirements, risk catalogues":

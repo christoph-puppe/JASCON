@@ -4,10 +4,9 @@ A set of browser pages for working with JASCON bundles. There is no server and
 no build step: the pages are HTML files that share one script and one
 stylesheet. A bundle you load stays in your browser.
 
-State: build 0.4.0. This build has the frame (the hub, the settings page and
-the shared core) and seven tool pages: Import, Browse, Tailor, Map, Implement,
-Risk and Assess. A page for validation is not built yet, and the app does not
-call a model.
+State: build 0.5.0. This build has the frame (the hub, the settings page and
+the shared core) and eight tool pages: Import, Browse, Tailor, Map,
+Implement, Risk, Assess and Validate. The app does not call a model.
 
 ## Start
 
@@ -65,6 +64,8 @@ is saved to the set at once; the other open tools reload.
 | Implement | Components and Implementation edges; whether the authorization an inherited edge names is found | Components, a system Component that lists them, Implementations |
 | Risk | The register with a heat map, the scales and their matrix, the coverage of the selected requirements, the risk catalogues | A Risk; a scale; the record of catalogue entries that do not apply |
 | Assess | Assessments, Findings by state, Attestations with a Full Match / Semantic Match / Tamper verdict | An Assessment with one Finding per requirement that is not satisfied; the state of a Finding |
+
+| Validate | What the ported kernel rules say about the whole set, by area, with the object each finding is about | A report as JSON, on request |
 
 Clicking a reference opens the object in a drawer on the right; Escape closes
 it.
@@ -238,21 +239,18 @@ text in that language, the English text is shown, then whatever is there.
 
 ## Limits of this build
 
-- The app does not yet check the kernel rules as a whole. Ported from the
-  Python validator and run against its conformance vectors are the modality
-  lattice, the parameter law, selection, tier, the state machines, schema
-  matching, reference closure, the kernel pin, the Risk rules with coverage
-  and the scale and matrix rules. Not ported: the operation law per tier,
-  facet payloads, conditional-apply, composition and signatures. A bundle
-  that loads here is not thereby valid; use the Python validator.
-- The import knows two sets of catalog rules, BSI Grundschutz++ and generic.
-  From a profile it does not carry alters, merge, pattern matching or child
-  controls. OSCAL documents other than catalogs and profiles are refused.
-- The Risk form covers one likelihood, one impact and a matrix. Impact per
-  dimension and other methods are not offered. The review date is a date or
-  a calendar period.
-- Risk catalogues other than the two shipped ones cannot be loaded.
-- The app does not call a model; there are no suggestions.
+- The Validate page is not the reference validator. Ported from
+  `validate_core.py` and run against their conformance vectors are twelve of
+  its fifteen rule families: canonical form, modality, parameter, tier,
+  tailoring (the operation law), reference, lifecycle, kernel, facet,
+  attestation, risk and scale. Not ported: conditional-apply, the
+  composition of two bundles, and DSSE signatures. A set that passes here has
+  not been checked for those; run the Python validator on the export.
+- The other pages still take an object's type from its fields when a set is
+  loaded; the Validate page says where the kernel schema disagrees.
+- Loading from a URL fetches what the manifest lists. A file beside the
+  manifest that it does not list, such as an attestation, is not fetched;
+  load the folder or a ZIP for those.
 - Predicate selects of a Tailoring are not evaluated; the selection is then
   shown as open and its count as a lower bound.
 - The Tailor page applies set-modality, set-parameter and replace-prose.

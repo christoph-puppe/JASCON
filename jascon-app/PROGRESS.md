@@ -32,16 +32,22 @@ and in `readme.md`; this file says only what is done and what is next.
   baseline. Driven in headless Chromium; `validate_core.py`: BSI import 814
   pass, NIST generic with profile 1220 pass, 0 fail each.
 
+- Step 3: the per-object checks, facet payloads, the operation law per tier,
+  the attestation verdict and `jscCheckGraph` (a whole set) in
+  `jascon-rules.js`; twelve of the fifteen vector families pass; the five
+  shipped bundles pass the whole-set check and the example folder shows the
+  one D26 error the Python validator shows. `validate.html` on top of it.
+
 ## Next
 
-- Step 3: the rest of the validator; `tests/rules.test.mjs` names the six
-  vector families that are not ported yet. Then `validate.html`. The tool
-  pages still type an object by its fields (`jscInferType`); `jscTypeOf`
-  (schema matching) is ready to replace it at load.
 - The AI layer (model client with the key in memory, prompts in the
-  settings, risk suggestions).
+  settings, risk suggestions). The plan names it for the first version; it
+  is not built.
+- The three vector families still missing: conditional, composition, dsse.
+- Let the pages type objects by schema at load (`jscTypeOf`) instead of by
+  fields (`jscInferType`).
 - A port of `convert_nist.py` as a third import preset.
-- Step 6: README of the repository (link, screenshots), reader frozen.
+- Screenshots for the repository README.
 
 ## Found on the way (not fixed here)
 
