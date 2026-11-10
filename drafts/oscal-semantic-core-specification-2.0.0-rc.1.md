@@ -43,8 +43,8 @@ released; this text adds one kernel type — **Risk** (D23) — and the ninth
 primitive that computes over it. It is a major version by the rule of
 D22 rev 3, not because anything breaks: all 6,914 objects of the 1.0.0
 corpus validate unchanged under the 2.0.0 schema, so a 1.0.0 bundle is a
-2.0.0 bundle. **Measured at rc.1:** a 225-vector conformance corpus in
-thirteen families; the Python reference validator green on it and on
+2.0.0 bundle. **Measured at rc.1:** a 234-vector conformance corpus in
+fourteen families; the Python reference validator green on it and on
 every bundle that ships; the first Risk corpus (two Risk objects
 converted from an OSCAL POA&M), and what that corpus shows the fourth
 authority's data to lack. **Not yet measured, said here rather than
@@ -255,6 +255,22 @@ relation (v0.4 — corrected).
    resolves deterministically to the highest pinned minor with both
    payload sets re-validated — incompatibility is a reported error, never a
    silent pick.
+
+6. **The kernel-version pin *(2.0.0 — backlog #44, author 2026-11-10)*.**
+   The manifest MAY carry `kernel-version` (`MAJOR.MINOR.PATCH`): the
+   kernel the bundle's objects were written against. `manifest-version`
+   is unchanged — it names the format of the manifest, not the kernel.
+   **Absent means 1.0.0**, so every 1.0.0 manifest stays valid and a
+   bundle of 1.0.0 content stays readable by a 1.0.0 tool. Two rules:
+   **KERNEL-1** — a bundle that carries content the 1.0.0 kernel cannot
+   type (at 2.0.0: a Risk, or a Finding with `risk-refs`) MUST pin the
+   kernel that can; **KERNEL-2** — a tool that meets a pin it does not
+   implement MUST stop and name the pinned version and the versions it
+   reads. A 1.0.0 tool, whose manifest shape is closed, rejects a pinned
+   manifest at the manifest — one file earlier than before, though still
+   without a version in its message; the version appears from 2.0.0 tools
+   on. The pin is deliberately not required everywhere: requiring it would
+   end the measured property that a 1.0.0 bundle is a 2.0.0 bundle.
 
 **Evidence.** Air-gapped estates; registry link-rot; P7's fixed-point proof;
 P6's omitted-vs-empty hash fragmentation; the two-digest necessity
@@ -958,9 +974,11 @@ corpus scale (the one corpus with Risks carries no Tailoring).
 **Version.** A tenth kernel type is a kernel-shape change, and by D22
 rev 3 it rides a major: **2.0.0**. It is a superset in fact — every
 1.0.0-valid object validates unchanged (measured: 6,914 / 6,914) — and
-the reverse does not hold: a 1.0.0 tool cannot type a Risk. Nothing in a
-bundle pins the kernel version today (a 1.0.0 tool reports "matches NO
-type", not a version); whether the manifest should is open (backlog #44).
+the reverse does not hold: a 1.0.0 tool cannot type a Risk. The
+manifest names the kernel since the rc.1 review (D3.6): a bundle that
+carries a Risk pins `kernel-version` 2.0.0, and a tool that does not
+implement the pinned kernel stops and says so. Before, a 1.0.0 tool
+reported "matches NO type" and no version (backlog #44, closed).
 
 **Rationale (north star applied).** *Customer:* every organisation that
 runs an ISMS, and the auditor who asks which selected controls rest on no
@@ -1188,11 +1206,12 @@ The 1.0.0 gate asked for converters, an executable kernel, a lifecycle
 corpus and two implementations. The same four questions, asked of Risk:
 
 1. **Executable kernel + conformance.** ✓ Schema 2.0.0 (ten types);
-   **225 vectors, 13 families** — the twelve of 1.0.0 (lifecycle 36 → 37
+   **234 vectors, 14 families** — the twelve of 1.0.0 (lifecycle 36 → 37
    with the tenth disjointness case) plus `risk` 67 (23 object · 36
-   bundle · 8 transitions; 42 at the landing, 25 from the rc.1 review). Every review correction to the proposal is
+   bundle · 8 transitions; 42 at the landing, 25 from the rc.1 review)
+   and `kernel` 9 (the manifest pin, D3.6). Every review correction to the proposal is
    pinned by a vector that fails on the validator as first proposed.
-2. **First implementation.** ✓ `validate_core.py`: 225 / 225, the five
+2. **First implementation.** ✓ `validate_core.py`: 234 / 234, the five
    shipped bundles (3,715 objects, both digests each), and the example
    bundle with its manifest — ALL GREEN.
 3. **Second implementation.** ✗ **OPEN.** `validate_core.ps1` carries the
@@ -1240,6 +1259,7 @@ history. The compact line:
 | Corpus licence review | 2026-11-10 | Five bundles kept under their publishers' stated terms, six removed (terms forbid it, or none established); converters and coverage reports stay | "Amendments — the corpus licence review" |
 | Raw blobs · the Risk rules stay | 2026-11-10 | Bundle files stored as the digested bytes (every delivery channel verifies); RISK-1/2/3/6 kept strict toward imported data | "Amendments — raw blobs" · "… the Risk rules stay" |
 | **2.0.0-rc.1** | 2026-11-10 | This text: D23 new; D4, D8, D14, D15, D22 amended in place; gate state in IV.5b | this row |
+| The kernel pin | 2026-11-10 | `kernel-version` in the content manifest: optional, absent = 1.0.0, required for content beyond 1.0.0 (KERNEL-1), fail-closed on an unimplemented kernel (KERNEL-2); 9 vectors, a fourteenth family; IFA and example manifests pinned | D3.6 · "Amendments — the kernel pin" |
 | rc.1 review | 2026-11-10 | External review: nine findings reproduced and fixed — justification needs an assessed treatment decision, `tailoring-refs`, RISK-13/14, typed Tailoring selection edges, withdrawn Tailorings/Requirements, checked dates; the Mapping Model date corrected; `PRIOR-ART.md` | CP-RISK-1 §13 · "Amendments — the rc.1 review" |
 
 ## IV.7 Release artifacts (what this candidate ships with)
@@ -1254,10 +1274,10 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
 - **Seven stdlib facet descriptors** (incl. the normative DSSE envelope
   profile) — unchanged from 1.0.0; pinned VERBATIM wherever bundled.
   `risk-analysis@1` is parked, with one measured payload (Appendix D).
-- **Conformance corpus**: **225 vectors, 13 families** (jcs 8 ·
+- **Conformance corpus**: **234 vectors, 14 families** (jcs 8 ·
   modality 21 · parameter 19 · tailoring 19 · attestation 5 · facet 7 ·
   reference 13 · lifecycle 37 · tier 9 · dsse 5 · composition 7 ·
-  conditional 8 · risk 67). In `risk-vectors.json`, `expected-rule` is
+  conditional 8 · risk 67 · kernel 9). In `risk-vectors.json`, `expected-rule` is
   the portable assertion.
 - **Two reference validators**: `validate_core.py` (Python, jsonschema
   only) — green; `validate_core.ps1` (PowerShell 5.1, zero dependencies)
@@ -1283,7 +1303,7 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
 - **The Decision Rationale Register** —
   `drafts/oscal-semantic-core-decision-rationale-register.md` — and the
   change proposal with its landing record, `drafts/CP-RISK-1.md`.
-- **The reader** (`one-page-apps/jascon-reader.html`, v1.7.2) —
+- **The reader** (`one-page-apps/jascon-reader.html`, v1.7.3) —
   recognises the Risk type.
 - **License**: Apache-2.0 for the original work (`LICENSE`, `NOTICE`);
   the shipped bundles under their publishers' terms.
@@ -1312,8 +1332,8 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
 4. **The second implementation** — ☐ run `validate_core.ps1` on Windows
    PowerShell 5.1; expect `risk: 67 pass, 0 fail` and ALL GREEN; remove
    the two port guards (backlog #45). **Blocks the tag.**
-5. **Decide before the tag** — ☐ a kernel-version pin in the manifest
-   (#44); ☐ whether to tighten `Finding.actions[].due`, which would end
+5. **Decide before the tag** — ✓ a kernel-version pin in the manifest
+   (#44 — done, D3.6); ☐ whether to tighten `Finding.actions[].due`, which would end
    the superset property (#47a); ☐ whether D22 gets a consumer-side
    clause (#48); ☐ whether the removed bundles are purged from history
    (#50); ☐ an edge from a Tailoring to the Component it is a Statement

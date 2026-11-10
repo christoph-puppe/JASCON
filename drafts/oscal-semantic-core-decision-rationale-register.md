@@ -1854,3 +1854,31 @@ OSCAL's Control Mapping Model "March 2026 (v1.2.1)". It shipped with
 v1.2.0 in December 2025. The journal above is left as written; the
 2.0.0 candidate and the handbook are corrected.
 
+## Amendments — the kernel pin (2026-11-10)
+
+**Trigger.** Backlog #44, and the author's instruction: "add the
+kernel-version pin to the manifest."
+**Decision (D3.6).** `kernel-version` in the content manifest, optional,
+`MAJOR.MINOR.PATCH`. Absent means 1.0.0. KERNEL-1: content beyond 1.0.0
+pins the kernel it needs. KERNEL-2: a tool stops at a kernel it does not
+implement and names both versions.
+**Customer.** The operator of an older tool who is handed a newer bundle
+and today reads "matches NO type".
+**Simplicity.** One string, two rules, no negotiation: a tool carries the
+list of kernels it reads.
+**Rejected.** *A required pin* — every 1.0.0 manifest would become
+invalid, ending the superset property the 2.0.0 decision kept. *Re-using
+`manifest-version`* — the proposal's `"1.1"` was exactly that and was
+reverted: it conflates the format of one file with the shapes of all the
+others. *Pinning every shipped bundle* — the manifest shape of a 1.0.0
+tool is closed, so a pin on the four catalogue bundles would lock out
+tools that can read them perfectly well; only the two bundles that carry
+a Risk (IFA, the example bundle) are pinned.
+**Trade-off, stated.** A 1.0.0 tool still prints no version: it rejects
+the pinned manifest as a schema violation. The message improves only from
+2.0.0 tools on — the earliest point at which it could.
+**Shipped with it.** Schema, both validators (PowerShell by reading, not
+executed), `kernel-vectors.json` (9 — the fourteenth family), the
+converter library (pins automatically when the content needs it; bundles
+without such content reproduce byte for byte), the reader (v1.7.3).
+

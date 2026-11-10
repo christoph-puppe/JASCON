@@ -213,7 +213,12 @@ Implementation · Finding); Excel dies of enumerated states.
 
 ## A.11 Bundle artifacts
 
-**content-manifest.json:** `manifest-version` ● · `objects[]`
+**content-manifest.json:** `manifest-version` ● (the manifest *format*,
+`"1"`) · `kernel-version` ○ (`MAJOR.MINOR.PATCH`, 2.0.0 — the kernel the
+content was written against; absent means 1.0.0; **required** once the
+bundle carries content a 1.0.0 tool cannot type — a Risk, a Finding with
+`risk-refs` — KERNEL-1; a tool that does not implement the pinned kernel
+stops and names both versions — KERNEL-2) · `objects[]`
 {id, version, **package-digest**, **semantic-digest**, path} ● ·
 `facet-schemas[]` {id, **exact-version**, digest, path} ● (exact pins,
 never ranges — D3) · `renderings[]` ○ · provenance ○. The manifest is
