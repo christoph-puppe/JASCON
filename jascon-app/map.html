@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Map · JASCON App</title>
+<link rel="stylesheet" href="jascon-core.css">
+<script>try{var _t=localStorage.getItem("jsc:cfg:ui:theme")||"dark";if(_t!=="system")document.documentElement.setAttribute("data-theme",_t)}catch(e){}</script>
+</head>
+<body>
+<div id="app"><div id="mid">
+  <nav id="rail" aria-label="Views">
+    <div class="railgroup">
+      <div class="nano" data-i18n>Views</div>
+      <button class="navitem" data-view="table"><span class="glyph">⇄</span><span data-i18n>Mappings</span><span class="navcount" id="nc-mappings"></span></button>
+      <button class="navitem" data-view="write"><span class="glyph">✎</span><span data-i18n>Write a mapping</span></button>
+    </div>
+    <div class="railgroup">
+      <p class="hint" data-i18n>A mapping is a claim by a named author that two requirements relate. Claims by different authors may contradict each other; the reader chooses whose mapping to trust.</p>
+    </div>
+  </nav>
+  <main id="main">
+    <section class="glass card" data-view="table">
+      <h2><span class="glyph">⇄</span><span data-i18n>Mappings</span></h2>
+      <div id="table"></div>
+    </section>
+    <section class="glass card" data-view="write">
+      <h2><span class="glyph">✎</span><span data-i18n>Write a mapping</span></h2>
+      <div id="write"></div>
+    </section>
+  </main>
+</div></div>
+
+<script src="jascon-core.js"></script>
+<script src="jascon-rules.js"></script>
+<script src="jascon-view.js"></script>
+<script>
+"use strict";
+/* Map: the crosswalk claims of the set as a table, and a workbench that
+   writes one. A target may lie outside the set; it is then a landmark, shown
+   as external and not checked. Derives from the map stage of the bundle
+   reader. */
+jscI18n.add("de", {
+  "Map": "Mapping", "Mappings": "Mappings", "Write a mapping": "Mapping schreiben",
+  "A mapping is a claim by a named author that two requirements relate. Claims by different authors may contradict each other; the reader chooses whose mapping to trust.":
+    "Ein Mapping ist die Aussage eines benannten Autors, dass zwei Anforderungen in Beziehung stehen. Aussagen verschiedener Autoren dürfen sich widersprechen; wer liest, entscheidet, wessen Mapping er vertraut.",
+  "This set holds no mapping. Write one in the other view.": "Dieses Set enthält kein Mapping. In der anderen Ansicht eines schreiben.",
+  "all": "alle", "Filter by source or target": "Nach Quelle oder Ziel filtern", "Source": "Quelle", "Relationship": "Beziehung", "Target": "Ziel",
+  "Confidence": "Vertrauensgrad", "Author": "Autor", "external": "extern", "and {n} more; narrow the filter": "und {n} weitere; Filter eingrenzen",
+  "Targets outside this set": "Ziele außerhalb dieses Sets",
+  "type to choose the source requirement": "tippen, um die Quell-Anforderung zu wählen", "whole requirement": "ganze Anforderung",
+  "Scope": "Geltung", "choose from the set, or paste a URI and press Enter": "aus dem Set wählen oder eine URI einfügen und Enter drücken",
+  "Rationale: why does this relationship hold?": "Begründung: Warum gilt diese Beziehung?", "Author (party)": "Autor (Partei)",
+  "Add the mapping": "Mapping hinzufügen", "Choose a source requirement.": "Eine Quell-Anforderung wählen.",
+  "Choose a target, or paste a URI and press Enter.": "Ein Ziel wählen oder eine URI einfügen und Enter drücken.",
+  "A mapping with the id {id} exists already.": "Ein Mapping mit der Id {id} gibt es schon.",
+  "The strongest claim. Use it only when the two say the same.": "Die stärkste Aussage. Nur verwenden, wenn beide dasselbe sagen.",
+  "An attachment: the source adds to the target. It does not chain.": "Ein Anhang: Die Quelle ergänzt das Ziel. Er verkettet sich nicht.",
+  "The honest weak claim: the source helps to meet the target.": "Die ehrliche schwache Aussage: Die Quelle hilft, das Ziel zu erfüllen.",
+});
+
+const $ = id => document.getElementById(id);
+const V = jscView, esc = jscEsc;
+const RELATIONSHIPS = ["supports", "equal", "subset-of", "superset-of", "intersects", "conflicts", "supplements"];
+const REL_HINT = { equal: N("The strongest claim. Use it only when the two say the same."),
+  supplements: N("An attachment: the source adds to the target. It does not chain."),
+  supports: N("The honest weak claim: the source helps to meet the target.") };
+const draft = V.draft("map", () => ({ source: null, scope: "", target: null, relationship: "supports", confidence: "draft", rationale: "", author: "author" }));
+const filter = { rel: "", q: "" };
+let G = jscSet.graph;
+
+function renderTable() {
+  const all = [...G.objects.values()].filter(r => r.type === "mapping");
+  $("nc-mappings").textContent = all.length || "";
+  if (!all.length) { $("table").innerHTML = `<div class="empty">${esc(T("This set holds no mapping. Write one in the other view."))}</div>`; return; }
+  const rels = {}, external = {};
+  for (const m of all) {
+    rels[m.obj.relationship] = (rels[m.obj.relationship] || 0) + 1;
+    if (!G.objects.has(m.obj["target-ref"])) { const p = m.obj["target-ref"].split("/").slice(0, 5).join("/"); external[p] = (external[p] || 0) + 1; }
+  }
+  const q = filter.q.toLowerCase(), cap = 400;
+  const shown = all.filter(m => (!filter.rel || m.obj.relationship === filter.rel) &&
+    (!q || m.obj["source-ref"].toLowerCase().includes(q) || m.obj["target-ref"].toLowerCase().includes(q)));
+  const end = ref => { const r = G.objects.get(ref); return r ? V.refLink(ref, V.labelOf(r)) : `<span class="mono" style="font-size:11px">${esc(ref)}</span> ${V.badge(T("external"))}`; };
+  $("table").innerHTML = `<div class="filterrow"><button type="button" class="fpill ${filter.rel ? "" : "on"}" data-rel="">${esc(T("all"))} · ${all.length}</button>
+      ${Object.entries(rels).map(([r, n]) => `<button type="button" class="fpill ${filter.rel === r ? "on" : ""}" data-rel="${esc(r)}">${esc(r)} · ${n}</button>`).join("")}</div>
+    <input type="search" id="mapq" placeholder="${esc(T("Filter by source or target"))}" aria-label="${esc(T("Filter by source or target"))}" value="${esc(filter.q)}" style="max-width:340px;margin-bottom:10px">
+    <table class="flat"><tr><th>${esc(T("Source"))}</th><th>${esc(T("Relationship"))}</th><th>${esc(T("Target"))}</th><th>${esc(T("Confidence"))}</th><th>${esc(T("Author"))}</th><th></th></tr>
+    ${shown.slice(0, cap).map(m => `<tr><td>${end(m.obj["source-ref"])} ${(m.obj["source-scope"] || []).map(s => V.badge(s)).join("")}</td>
+      <td><span class="badge" style="border-color:var(--teal);color:var(--teal)">${esc(m.obj.relationship)}</span></td>
+      <td>${end(m.obj["target-ref"])} ${(m.obj["target-scope"] || []).map(s => V.badge(s)).join("")}</td>
+      <td>${V.badge(m.obj.confidence)}</td><td class="hint">${esc(V.last((m.obj.provenance || {})["author-ref"] || ""))}</td>
+      <td>${V.refLink(m.obj.id, "⋯")}</td></tr>`).join("")}</table>
+    ${shown.length > cap ? `<div class="hint" style="padding:6px">${esc(T("and {n} more; narrow the filter", { n: shown.length - cap }))}</div>` : ""}
+    ${Object.keys(external).length ? `<div class="nano sectionlabel">${esc(T("Targets outside this set"))}</div>` +
+      Object.entries(external).sort((a, b) => b[1] - a[1]).map(([p, n]) => `<div class="hint mono" style="font-size:11px">↗ ${esc(p)}/… × ${n}</div>`).join("") : ""}`;
+  V.wireRefs($("table"));
+  $("table").querySelectorAll("[data-rel]").forEach(b => b.addEventListener("click", () => { filter.rel = b.dataset.rel; renderTable(); }));
+  let timer;
+  $("mapq").addEventListener("input", e => { filter.q = e.target.value; clearTimeout(timer); timer = setTimeout(() => { renderTable(); $("mapq").focus(); }, 250); });
+}
+
+function renderWrite() {
+  const d = draft.data, el = $("write");
+  const src = d.source && G.objects.get(d.source), tgt = d.target && G.objects.get(d.target);
+  const sel = (id, options, current) => `<select id="${id}">${options.map(o => `<option ${o === current ? "selected" : ""}>${esc(o)}</option>`).join("")}</select>`;
+  el.innerHTML = `<div class="wb">
+    <div class="wbrow"><label>${esc(T("Source"))}</label>${V.pickerHtml("m-src", T("type to choose the source requirement"))}
+      ${src ? `<span class="wbchip">◇ ${esc(V.labelOf(src))}</span><label for="m-scope">${esc(T("Scope"))}</label>
+        <select id="m-scope"><option value="">${esc(T("whole requirement"))}</option>${src.obj.statements.map(s => `<option value="${esc(s.id)}" ${d.scope === s.id ? "selected" : ""}>${esc(T("statement {id}", { id: s.id }))}</option>`).join("")}</select>` : ""}</div>
+    <div class="wbrow"><label for="m-rel">${esc(T("Relationship"))}</label>${sel("m-rel", RELATIONSHIPS, d.relationship)}<span class="hint">${esc(T(REL_HINT[d.relationship] || ""))}</span></div>
+    <div class="wbrow"><label>${esc(T("Target"))}</label>${V.pickerHtml("m-tgt", T("choose from the set, or paste a URI and press Enter"))}
+      ${d.target ? `<span class="wbchip">${esc(tgt ? V.labelOf(tgt) : d.target)}${tgt ? "" : " " + V.badge(T("external"))}<span class="x" id="m-cleartgt" role="button" tabindex="0" aria-label="✕">✕</span></span>` : ""}</div>
+    <div class="wbrow"><label for="m-conf">${esc(T("Confidence"))}</label>${sel("m-conf", ["draft", "reviewed", "authoritative"], d.confidence)}
+      <label for="m-author">${esc(T("Author (party)"))}</label><input type="text" id="m-author" value="${esc(d.author)}" style="width:140px">
+      <input type="text" id="m-rat" placeholder="${esc(T("Rationale: why does this relationship hold?"))}" aria-label="${esc(T("Rationale: why does this relationship hold?"))}" value="${esc(d.rationale)}" style="flex:1;min-width:240px"></div>
+    <div class="wbrow"><button type="button" class="primary" id="m-add">${esc(T("Add the mapping"))}</button><span class="verdict-bad" id="m-err" role="alert"></span></div></div>`;
+  const again = () => { draft.save(); renderWrite(); };
+  V.wirePicker(el, "m-src", ["requirement"], id => { d.source = id; d.scope = ""; again(); });
+  V.wirePicker(el, "m-tgt", ["requirement"], id => { d.target = id; again(); });
+  el.querySelector("#m-tgt").addEventListener("keydown", e => {
+    const v = e.target.value.trim();
+    if (e.key === "Enter" && /^https?:\/\/./.test(v)) { d.target = v; again(); }
+  });
+  if (el.querySelector("#m-cleartgt")) el.querySelector("#m-cleartgt").addEventListener("click", () => { d.target = null; again(); });
+  for (const [id, key, rerender] of [["m-scope", "scope"], ["m-rel", "relationship", true], ["m-conf", "confidence"], ["m-author", "author"], ["m-rat", "rationale"]]) {
+    const n = el.querySelector("#" + id);
+    if (n) n.addEventListener("change", () => { d[key] = n.value; draft.save(); if (rerender) renderWrite(); });
+  }
+  el.querySelector("#m-add").addEventListener("click", async () => {
+    const err = el.querySelector("#m-err");
+    if (!d.source) { err.textContent = T("Choose a source requirement."); return; }
+    if (!d.target) { err.textContent = T("Choose a target, or paste a URI and press Enter."); return; }
+    const id = jscSet.mintId("map", V.last(d.source) + "--" + V.last(d.target));
+    if (G.objects.has(id)) { err.textContent = T("A mapping with the id {id} exists already.", { id }); return; }
+    const m = { id, version: "1", lifecycle: "draft", "source-ref": d.source, "target-ref": d.target,
+      relationship: d.relationship, direction: "source-to-target", confidence: d.confidence };
+    if (d.scope) m["source-scope"] = ["statement:" + d.scope];
+    if (d.rationale.trim()) m.rationale = { [jscI18n.contentLang()]: d.rationale.trim() };
+    m.provenance = { "author-ref": jscSet.mintId("party", d.author || "author"), date: jscToday() };
+    await jscSet.saveObjects([m]);
+    Object.assign(d, { source: null, scope: "", target: null, rationale: "" });
+    draft.save();
+    await jscPage.refresh();
+    jscPage.show("table");
+  });
+}
+
+jscPage.init({ tool: "map", title: T("Map"), onGraph: g => { G = g; renderTable(); renderWrite(); } });
+</script>
+</body>
+</html>

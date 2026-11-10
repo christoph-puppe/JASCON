@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Implement · JASCON App</title>
+<link rel="stylesheet" href="jascon-core.css">
+<script>try{var _t=localStorage.getItem("jsc:cfg:ui:theme")||"dark";if(_t!=="system")document.documentElement.setAttribute("data-theme",_t)}catch(e){}</script>
+</head>
+<body>
+<div id="app"><div id="mid">
+  <nav id="rail" aria-label="Views">
+    <div class="railgroup">
+      <div class="nano" data-i18n>Views</div>
+      <button class="navitem" data-view="system"><span class="glyph">⬡</span><span data-i18n>Components and edges</span><span class="navcount" id="nc-impl"></span></button>
+      <button class="navitem" data-view="build"><span class="glyph">✎</span><span data-i18n>Build a system</span></button>
+    </div>
+    <div class="railgroup">
+      <p class="hint" data-i18n>A component says what a system, service or product is. An implementation is the edge from a component to a requirement: who is responsible, how far it is done, and on which authorization an inherited edge rests.</p>
+    </div>
+  </nav>
+  <main id="main">
+    <section class="glass card" data-view="system">
+      <h2><span class="glyph">⬡</span><span data-i18n>Components and edges</span></h2>
+      <div id="system"></div>
+    </section>
+    <section class="glass card" data-view="build">
+      <h2><span class="glyph">✎</span><span data-i18n>Build a system</span></h2>
+      <div id="build"></div>
+    </section>
+  </main>
+</div></div>
+
+<script src="jascon-core.js"></script>
+<script src="jascon-rules.js"></script>
+<script src="jascon-view.js"></script>
+<script>
+"use strict";
+/* Implement: the Components and Implementation edges of the set, and a
+   workbench that builds a system of assets and attaches requirements to them.
+
+   The workbench writes: one Component per asset, one Component of kind
+   "system" that lists the assets as its members, and one Implementation per
+   asset and requirement. It offers the responsibilities provider, customer
+   and shared. It does not offer "inherited": an inherited edge must name the
+   authorization it rests on (D5), and this workbench does not collect one.
+   Derives from the implement stage of the bundle reader, which wrote the
+   system as a Set of components; a Component with members is the kernel's
+   shape for it. */
+jscI18n.add("de", {
+  "Implement": "Umsetzen", "Components and edges": "Komponenten und Kanten", "Build a system": "System aufbauen",
+  "A component says what a system, service or product is. An implementation is the edge from a component to a requirement: who is responsible, how far it is done, and on which authorization an inherited edge rests.":
+    "Eine Komponente sagt, was ein System, Dienst oder Produkt ist. Eine Implementation ist die Kante von einer Komponente zu einer Anforderung: wer verantwortlich ist, wie weit sie umgesetzt ist, und auf welcher Autorisierung eine geerbte Kante beruht.",
+  "This set holds no component and no implementation. Build a system in the other view.": "Dieses Set enthält weder Komponente noch Implementation. In der anderen Ansicht ein System aufbauen.",
+  "Components ({n})": "Komponenten ({n})", "Implementation edges ({n})": "Implementations-Kanten ({n})",
+  "Every inherited edge names the authorization it rests on. The mark says whether that authorization is found on the named component in this set.":
+    "Jede geerbte Kante nennt die Autorisierung, auf der sie beruht. Das Zeichen sagt, ob diese Autorisierung an der genannten Komponente in diesem Set gefunden wird.",
+  "Component": "Komponente", "Requirement": "Anforderung", "Responsibility": "Verantwortung", "Satisfied by": "Erfüllt durch", "Status": "Status",
+  "inherited, basis {basis}": "geerbt, Grundlage {basis}", "authority": "Autorität", "member": "Mitglied",
+  "Filter by component or requirement": "Nach Komponente oder Anforderung filtern", "and {n} more; narrow the filter": "und {n} weitere; Filter eingrenzen",
+  "System title": "Titel des Systems", "New asset": "Neues Asset", "asset title": "Titel des Assets", "Add the asset": "Asset hinzufügen",
+  "no asset yet: add a server, a service, a policy": "noch kein Asset: einen Server, einen Dienst, eine Richtlinie hinzufügen",
+  "Attach": "Anhängen", "requirement, or a Set to attach all its requirements": "Anforderung, oder ein Set, um alle seine Anforderungen anzuhängen",
+  "Filter and select…": "Filtern und auswählen…", "remove": "entfernen", "no requirement attached yet": "noch keine Anforderung angehängt",
+  "and {n} more attached": "und {n} weitere angehängt",
+  "assets": "Assets", "implementation edges": "Implementations-Kanten", "Save the system to the set": "System ins Set speichern", "Clear": "Leeren",
+  "An asset needs a title.": "Ein Asset braucht einen Titel.", "Add an asset first.": "Zuerst ein Asset hinzufügen.",
+  "attached {n} requirement(s) to {asset}; {skipped} were attached already": "{n} Anforderung(en) an {asset} angehängt; {skipped} waren schon angehängt",
+  "Control selector: the filters come from the kernel fields and facets of the loaded requirements": "Control-Auswahl: Die Filter stammen aus den Kernel-Feldern und Facets der geladenen Anforderungen",
+  "text: id, label or title": "Text: Id, Label oder Titel", "member of": "Mitglied von", "any Set": "beliebiges Set", "any": "beliebig",
+  "of {n} requirements match": "von {n} Anforderungen passen", "selected": "ausgewählt", "Select all that match": "Alle passenden auswählen",
+  "Clear the selection": "Auswahl leeren", "Attach the {n} selected": "Die {n} ausgewählten anhängen", "Close": "Schließen",
+  "nothing matches": "nichts passt", "{n} more match; all of them are included in “Select all that match”": "{n} weitere passen; alle sind in „Alle passenden auswählen“ enthalten",
+});
+
+const $ = id => document.getElementById(id);
+const V = jscView, esc = jscEsc;
+const KINDS = ["system", "service", "software", "hardware", "policy", "process"];
+const RESPONSIBILITIES = ["provider", "customer", "shared"], STATUSES = ["planned", "partial", "implemented", "not-applicable"];
+const draft = V.draft("implement", () => ({ title: "My system", components: [], implementations: [], open: null, picked: [],
+  filter: { q: "", set: "", dims: {} }, newTitle: "", newKind: "software" }));
+let G = jscSet.graph, edgeFilter = "";
+const ofType = t => [...G.objects.values()].filter(r => r.type === t);
+const sel = (id, options, current, extra) => `<select id="${id}" ${extra || ""}>${options.map(o => `<option ${o === current ? "selected" : ""}>${esc(o)}</option>`).join("")}</select>`;
+
+/* ---------- what the set holds ---------- */
+function renderSystem() {
+  const comps = ofType("component"), impls = ofType("implementation");
+  $("nc-impl").textContent = impls.length || "";
+  if (!comps.length && !impls.length) { $("system").innerHTML = `<div class="empty">${esc(T("This set holds no component and no implementation. Build a system in the other view."))}</div>`; return; }
+  const cards = comps.map(c => `<div class="stmt">${V.typeBadge("component")}${V.badge(c.obj.kind)} <b>${V.refLink(c.obj.id, V.titleOf(c))}</b>
+    ${(c.obj.capabilities || []).map(cap => V.badge("⚙ " + cap.id, TT(cap.description))).join("")}
+    ${(c.obj.authorizations || []).map(a => `<span class="badge" style="border-color:var(--green);color:var(--green)" title="${esc(T("authority"))}: ${esc(a["authority-ref"])}">✦ ${esc(a.id)}${a["scope-label"] ? " · " + esc(a["scope-label"]) : ""}</span>`).join("")}
+    ${(c.obj.members || []).map(m => `<div class="hint" style="margin-top:4px">↳ ${V.refLink(m["component-ref"], G.objects.has(m["component-ref"]) ? V.titleOf(G.objects.get(m["component-ref"])) : m["component-ref"])}${m.context ? " (" + esc(m.context) + ")" : ""}</div>`).join("")}</div>`).join("");
+  const q = edgeFilter.toLowerCase(), cap = 300;
+  const shown = impls.filter(i => !q || i.obj["component-ref"].toLowerCase().includes(q) || i.obj["requirement-ref"].toLowerCase().includes(q));
+  const name = ref => (G.objects.has(ref) ? V.labelOf(G.objects.get(ref)) : ref);
+  const rows = shown.slice(0, cap).map(i => {
+    const o = i.obj;
+    const sat = (o["satisfied-by"] || []).map(s => {
+      if (s["capability-ref"]) return V.badge("⚙ " + s["capability-ref"]);
+      const inh = s["inherited-from"] || {}, from = G.objects.get(inh["component-ref"]);
+      const ok = !!from && (from.obj.authorizations || []).some(a => a.id === inh["basis-ref"]);   // D5: the basis is an authorization of the named component
+      return `<span class="badge" style="border-color:var(--${ok ? "green" : "red"});color:var(--${ok ? "green" : "red"})">${esc(T("inherited, basis {basis}", { basis: inh["basis-ref"] || "?" }))} ${ok ? "✓" : "✗"}</span>`;
+    }).join(" ");
+    return `<tr><td>${V.refLink(o["component-ref"], name(o["component-ref"]))}</td>
+      <td>${V.refLink(o["requirement-ref"], name(o["requirement-ref"]))} ${(o["statement-refs"] || []).map(s => V.badge(s)).join("")}</td>
+      <td>${V.badge(o.responsibility)}</td><td>${sat}</td><td>${V.badge(o.status)}</td><td>${V.refLink(o.id, "⋯")}</td></tr>`;
+  }).join("");
+  $("system").innerHTML = `<div class="nano sectionlabel">${esc(T("Components ({n})", { n: comps.length }))}</div>${cards}
+    <div class="nano sectionlabel">${esc(T("Implementation edges ({n})", { n: impls.length }))}</div>
+    <p class="hint" style="margin-bottom:8px">${esc(T("Every inherited edge names the authorization it rests on. The mark says whether that authorization is found on the named component in this set."))}</p>
+    <input type="search" id="edgeq" placeholder="${esc(T("Filter by component or requirement"))}" aria-label="${esc(T("Filter by component or requirement"))}" value="${esc(edgeFilter)}" style="max-width:340px;margin-bottom:10px">
+    <table class="flat"><tr><th>${esc(T("Component"))}</th><th>${esc(T("Requirement"))}</th><th>${esc(T("Responsibility"))}</th><th>${esc(T("Satisfied by"))}</th><th>${esc(T("Status"))}</th><th></th></tr>${rows}</table>
+    ${shown.length > cap ? `<div class="hint" style="padding:6px">${esc(T("and {n} more; narrow the filter", { n: shown.length - cap }))}</div>` : ""}`;
+  V.wireRefs($("system"));
+  let timer;
+  $("edgeq").addEventListener("input", e => { edgeFilter = e.target.value; clearTimeout(timer); timer = setTimeout(() => { renderSystem(); $("edgeq").focus(); }, 250); });
+}
+
+/* ---------- workbench ---------- */
+/* Attaches requirement ids to asset ci with the responsibility and status
+   chosen on its row; an edge that exists already is left alone. */
+function attach(ci, reqIds) {
+  const d = draft.data, c = d.components[ci];
+  const resp = $("resp-" + ci).value, stat = $("stat-" + ci).value;
+  let added = 0;
+  for (const rid of reqIds) {
+    if (d.implementations.some(e => e["component-ref"] === c.id && e["requirement-ref"] === rid)) continue;
+    d.implementations.push({ id: jscSet.mintId("impl", c.title + "-" + V.last(rid)), "component-ref": c.id, "requirement-ref": rid, responsibility: resp, status: stat });
+    added++;
+  }
+  jscLog.ok(T("attached {n} requirement(s) to {asset}; {skipped} were attached already", { n: added, asset: c.title, skipped: reqIds.length - added }));
+}
+function selectorHtml(ci) {
+  const d = draft.data, f = d.filter, idx = V.dimIndex();
+  const all = G.order.filter(id => G.objects.get(id).type === "requirement"), matching = all.filter(id => V.reqMatches(id, f, idx));
+  const picked = new Set(d.picked), cap = 200;
+  const dims = idx.usable.map(([k, vals]) => `<span><label style="margin-right:4px">${esc(k)}</label><select data-dim="${esc(k)}" style="max-width:170px"><option value="">${esc(T("any"))}</option>${
+    [...vals.entries()].sort((a, b) => b[1] - a[1]).map(([v, n]) => `<option value="${esc(v)}" ${f.dims[k] === v ? "selected" : ""}>${esc(V.dimOptLabel(v))} (${n})</option>`).join("")}</select></span>`).join(" ");
+  const rows = matching.slice(0, cap).map(id => {
+    const r = G.objects.get(id);
+    return `<div class="leaf" style="display:flex;gap:7px;align-items:center;padding:2px 0"><input type="checkbox" data-pickreq="${esc(id)}" ${picked.has(id) ? "checked" : ""} aria-label="${esc(V.labelOf(r))}">
+      ${V.refLink(id, V.labelOf(r))}<span class="hint" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(TT(r.obj.title).slice(0, 70))}</span>${V.modBadge(r.obj.statements[0].modality)}</div>`;
+  }).join("");
+  return `<div class="glass" style="padding:12px;margin:8px 0">
+    <div class="nano" style="margin-bottom:6px">${esc(T("Control selector: the filters come from the kernel fields and facets of the loaded requirements"))}</div>
+    <div class="wbrow"><input type="search" id="cf-q" placeholder="${esc(T("text: id, label or title"))}" aria-label="${esc(T("text: id, label or title"))}" value="${esc(f.q)}" style="max-width:240px">
+      <label for="cf-set">${esc(T("member of"))}</label><select id="cf-set" style="max-width:260px"><option value="">${esc(T("any Set"))}</option>${idx.sets.map(s => `<option value="${esc(s.id)}" ${f.set === s.id ? "selected" : ""}>${esc(s.title)}</option>`).join("")}</select></div>
+    <div class="wbrow" style="row-gap:6px">${dims}</div>
+    <div class="wbrow"><span class="chip"><b>${matching.length}</b>${esc(T("of {n} requirements match", { n: all.length }))}</span><span class="chip"><b>${picked.size}</b>${esc(T("selected"))}</span>
+      <button type="button" id="cf-all">${esc(T("Select all that match"))}</button><button type="button" id="cf-none">${esc(T("Clear the selection"))}</button>
+      <button type="button" class="primary" id="cf-attach" ${picked.size ? "" : "disabled"}>${esc(T("Attach the {n} selected", { n: picked.size }))}</button>
+      <button type="button" id="cf-close">${esc(T("Close"))}</button></div>
+    <div style="max-height:260px;overflow-y:auto;border-top:1px solid var(--border-1);padding-top:6px">${rows || `<span class="hint">${esc(T("nothing matches"))}</span>`}
+      ${matching.length > cap ? `<div class="hint" style="padding:6px">${esc(T("{n} more match; all of them are included in “Select all that match”", { n: matching.length - cap }))}</div>` : ""}</div></div>`;
+}
+function renderBuild() {
+  const d = draft.data, el = $("build");
+  const name = ref => (G.objects.has(ref) ? V.labelOf(G.objects.get(ref)) : V.last(ref));
+  const assets = d.components.map((c, ci) => {
+    const edges = d.implementations.filter(i => i["component-ref"] === c.id), cap = 60;
+    return `<div class="stmt">${V.badge(c.kind)} <b>${esc(c.title)}</b> <span class="mono" style="font-size:9.5px;color:var(--text-quiet)">${esc(c.id)}</span>
+      <button type="button" class="small danger" data-delcomp="${ci}" style="float:right">${esc(T("remove"))}</button>
+      <div class="wbrow"><label>${esc(T("Attach"))}</label>${V.pickerHtml("pick-" + ci, T("requirement, or a Set to attach all its requirements"))}
+        <button type="button" data-open="${ci}">${esc(T("Filter and select…"))}</button>
+        <label for="resp-${ci}">${esc(T("Responsibility"))}</label>${sel("resp-" + ci, RESPONSIBILITIES, c.resp || "provider", `data-row="${ci}" data-key="resp"`)}
+        <label for="stat-${ci}">${esc(T("Status"))}</label>${sel("stat-" + ci, STATUSES, c.stat || "planned", `data-row="${ci}" data-key="stat"`)}</div>
+      ${d.open === ci ? selectorHtml(ci) : ""}
+      ${edges.slice(0, cap).map(e => `<span class="wbchip">◇ ${esc(name(e["requirement-ref"]))} ${V.badge(e.responsibility)}${V.badge(e.status)}<span class="x" data-delimpl="${esc(e.id)}" role="button" tabindex="0" aria-label="✕">✕</span></span>`).join("") || `<span class="hint">${esc(T("no requirement attached yet"))}</span>`}
+      ${edges.length > cap ? `<span class="hint">${esc(T("and {n} more attached", { n: edges.length - cap }))}</span>` : ""}</div>`;
+  }).join("");
+  el.innerHTML = `<div class="wb">
+    <div class="wbrow"><label for="sys-title">${esc(T("System title"))}</label><input type="text" id="sys-title" value="${esc(d.title)}" style="min-width:200px">
+      <label for="new-title">${esc(T("New asset"))}</label><input type="text" id="new-title" placeholder="${esc(T("asset title"))}" value="${esc(d.newTitle)}" style="min-width:180px">
+      ${sel("new-kind", KINDS.filter(k => k !== "system"), d.newKind, `aria-label="kind"`)}
+      <button type="button" class="primary" id="add-asset">${esc(T("Add the asset"))}</button><span class="verdict-bad" id="asset-err" role="alert"></span></div>
+    ${assets || `<span class="hint">${esc(T("no asset yet: add a server, a service, a policy"))}</span>`}
+    <div class="wbrow" style="border-top:1px solid var(--border-1);padding-top:10px">
+      <span class="chip"><b>${d.components.length}</b>${esc(T("assets"))}</span><span class="chip"><b>${d.implementations.length}</b>${esc(T("implementation edges"))}</span>
+      <button type="button" class="primary" id="sys-save">${esc(T("Save the system to the set"))}</button><button type="button" id="sys-clear">${esc(T("Clear"))}</button>
+      <span class="verdict-bad" id="sys-err" role="alert"></span></div></div>`;
+  V.wireRefs(el);
+  const again = () => { draft.save(); renderBuild(); };
+  const on = (selector, event, fn) => el.querySelectorAll(selector).forEach(n => n.addEventListener(event, () => fn(n)));
+  on("#sys-title", "change", n => { d.title = n.value.trim() || d.title; draft.save(); });
+  on("#new-title", "change", n => { d.newTitle = n.value; draft.save(); });
+  on("#new-kind", "change", n => { d.newKind = n.value; draft.save(); });
+  on("#add-asset", "click", () => {
+    const title = $("new-title").value.trim();
+    if (!title) { $("asset-err").textContent = T("An asset needs a title."); return; }
+    d.components.push({ id: jscSet.mintId("comp", title), title, kind: $("new-kind").value });
+    d.newTitle = ""; again();
+  });
+  on("[data-row]", "change", n => { d.components[+n.dataset.row][n.dataset.key] = n.value; draft.save(); });
+  on("[data-open]", "click", n => { d.open = d.open === +n.dataset.open ? null : +n.dataset.open; d.picked = []; again(); });
+  on("[data-delcomp]", "click", n => {
+    const c = d.components[+n.dataset.delcomp];
+    d.implementations = d.implementations.filter(e => e["component-ref"] !== c.id);
+    d.components.splice(+n.dataset.delcomp, 1); d.open = null; again();
+  });
+  on("[data-delimpl]", "click", n => { d.implementations = d.implementations.filter(e => e.id !== n.dataset.delimpl); again(); });
+  d.components.forEach((c, ci) => V.wirePicker(el, "pick-" + ci, ["requirement", "requirementSet"], id => { attach(ci, [...jscExpandRefs([id], G.objects)]); again(); }));
+  if (d.open !== null && $("cf-q")) {
+    const f = d.filter;
+    let timer;
+    $("cf-q").addEventListener("input", e => { f.q = e.target.value; clearTimeout(timer); timer = setTimeout(() => { again(); $("cf-q").focus(); }, 250); });
+    on("#cf-set", "change", n => { f.set = n.value; again(); });
+    on("[data-dim]", "change", n => { f.dims[n.dataset.dim] = n.value; again(); });
+    on("[data-pickreq]", "change", n => { const s = new Set(d.picked); n.checked ? s.add(n.dataset.pickreq) : s.delete(n.dataset.pickreq); d.picked = [...s]; again(); });
+    on("#cf-all", "click", () => { const idx = V.dimIndex(); d.picked = G.order.filter(id => V.reqMatches(id, f, idx)); again(); });
+    on("#cf-none", "click", () => { d.picked = []; again(); });
+    on("#cf-close", "click", () => { d.open = null; again(); });
+    on("#cf-attach", "click", () => { attach(d.open, d.picked); d.picked = []; d.open = null; again(); });
+  }
+  on("#sys-save", "click", async () => {
+    if (!d.components.length) { $("sys-err").textContent = T("Add an asset first."); return; }
+    const lang = jscI18n.contentLang();
+    const comps = d.components.map(c => ({ id: c.id, version: "1", lifecycle: "draft", title: { [lang]: c.title }, kind: c.kind }));
+    const system = { id: jscSet.mintId("comp", d.title), version: "1", lifecycle: "draft", title: { [lang]: d.title }, kind: "system",
+      members: d.components.map(c => ({ "component-ref": c.id })) };
+    const impls = d.implementations.map(e => ({ id: e.id, version: "1", lifecycle: "draft", "component-ref": e["component-ref"],
+      "requirement-ref": e["requirement-ref"], responsibility: e.responsibility, "satisfied-by": [{ "capability-ref": "declared" }], status: e.status }));
+    await jscSet.saveObjects([...comps, system, ...impls]);
+    await jscPage.refresh();
+    jscPage.show("system");
+  });
+  on("#sys-clear", "click", () => { draft.reset(); renderBuild(); });
+}
+
+jscPage.init({ tool: "implement", title: T("Implement"), onGraph: g => { G = g; renderSystem(); renderBuild(); } });
+</script>
+</body>
+</html>
