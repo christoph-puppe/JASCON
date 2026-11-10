@@ -1,10 +1,10 @@
 {
- "manifest-version": "1",
+ "manifest-version": "1.1",
  "objects": [
   {
    "id": "https://ns.bsi.bund.de/gspp/req/KONF.14.1",
    "version": "2026-07",
-   "package-digest": "sha256:1a4a22b98326513a2d161d456f2cc18054f15f085f378917fdd2c5a40b85819b",
+   "package-digest": "sha256:0b827943c752f4e292b50f975f6361badf85854e0a74440a78ae084cec2b5c91",
    "semantic-digest": "sha256:6d9a22885ddaa2c6f164ad70dcb3e67d5afe6f569d0d8795f5f34553d4d46b17",
    "path": "req-konf-14-1.json"
   },
@@ -18,35 +18,35 @@
   {
    "id": "https://ns.fedramp.gov/cr26/req/IEC-CSO-IIR",
    "version": "2026.07.14.01",
-   "package-digest": "sha256:a0ad733e4ef30ffd884dcc0efe861d7a2d6aa83f13186e6cd276db60ddf7c4f6",
+   "package-digest": "sha256:087506370e3acd12e2ced1d82e9ba1572d4a32e20f7c40341f6c6c2b498e13d7",
    "semantic-digest": "sha256:9cffd8dd8aefe80a92024106c91a3b0e680a37f1e6c598f449075feafbee5887",
    "path": "req-iec-cso-iir.json"
   },
   {
    "id": "https://ns.bsi.bund.de/gspp/set/tax/crypto",
    "version": "2026-07",
-   "package-digest": "sha256:ea24e9f1383eaff7122383b034949d347785edef5499e670125d8d30e64527b8",
+   "package-digest": "sha256:7bd7548f6517358b4c779d0e84b3389abd828da50843310a6154b031f841931b",
    "semantic-digest": "sha256:cfb4b039a31024ad00300607d27698dcfb11f34ad041f051e913086fa31f491c",
    "path": "set-crypto.json"
   },
   {
    "id": "https://ns.bsi.bund.de/gspp/set/baseline/example",
    "version": "2026-07",
-   "package-digest": "sha256:ca50c770f333481ad8f12e4c3d581d78b9252fcfd11c5a213623f6d72ccde562",
+   "package-digest": "sha256:0b3891caeaed3eb4e51f255c92802b0636368b75f396189605fd9d347c57f5f8",
    "semantic-digest": "sha256:698b9723ee2cacef9884c8d0d5b8ee4e71d1fdb3d1932bb9642bf5ccdabacd76",
    "path": "set-baseline.json"
   },
   {
    "id": "https://ns.bsi.bund.de/gspp/tailoring/erhoeht",
    "version": "2026-07",
-   "package-digest": "sha256:5837ac5f56c561df8b12583863e7c26d32c8afb6739f0d2cb0f745907a242b0e",
+   "package-digest": "sha256:7670cda43d51530d03cdd1e80b1412b46f201aa0a3c86907a1e8aecd33480dd8",
    "semantic-digest": "sha256:687d6fd01be7053509635126d148b04890695fe28948954b2477dfb42a8c8634",
    "path": "tailoring-elevated.json"
   },
   {
    "id": "https://maps.example.org/map/2026-1/konf-14-1--ism-1234",
    "version": "2026-1",
-   "package-digest": "sha256:9a54d51be73619343a060a9668c2769a75ac5a862b6d7d9e891ff89b4fd6409f",
+   "package-digest": "sha256:57f78990f68d11c657a85282343ab26fef72badce7a1b38a5c3044e4eb3c00bf",
    "semantic-digest": "sha256:f98624624c9d0417a1ce7a6f092e8f7c21e5249a4a07c2e7487e5fa56d1e4743",
    "path": "mapping-konf-ism.json"
   },
@@ -60,7 +60,7 @@
   {
    "id": "https://cso.example/component/acme-saas",
    "version": "2026-07",
-   "package-digest": "sha256:9252ee4a97f29c4aaf7449afac3fdffcb5e181c7340ebd82e336f4409ed0a08d",
+   "package-digest": "sha256:013b7171ebc26617dda24516dc9ffc6e5cc33eae30b04f060ce8ce322b56b263",
    "semantic-digest": "sha256:c6cb03198bd6da55fdb14655af49c9c7c3e1c380337ac013a86d7b1f7fce8ca1",
    "path": "component-acme-saas.json"
   },
@@ -81,9 +81,16 @@
   {
    "id": "https://assessor.example/finding/2026-q3-acme-017",
    "version": "1",
-   "package-digest": "sha256:77537265251ee24f80c01fd48fb4712fc7d498bb5478661056143b581f15f1b3",
-   "semantic-digest": "sha256:ec72d680807bf9c97ebe2917ab885e7f411c955f622187323a59ddbcf734feaf",
+   "package-digest": "sha256:687dcab932374febace2791c0a355df7b38778de9f8ace6217576926c94edc8f",
+   "semantic-digest": "sha256:6208717f2dc1f40fbc849c0091280ae4aaf0f426e84062a652f74103294adf30",
    "path": "finding-017.json"
+  },
+  {
+   "id": "https://cso.example/risk/R-2026-007",
+   "version": "2026-11",
+   "package-digest": "sha256:192bfc44cb8a61b270ed6b706a382b46bf30d98626490c8f5fee052d9ef05333",
+   "semantic-digest": "sha256:d17d508eacc166567d76f9f096a2f48ae1a4d450e136553cf5630cbaaa7bca03",
+   "path": "risk-acme-kms-key-rotation.json"
   }
  ],
  "facet-schemas": [

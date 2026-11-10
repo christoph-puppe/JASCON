@@ -8,11 +8,18 @@ Runs, in order:
    bi-modal vectors.
 2. BUNDLE VALIDATION over every converted_examples bundle + the skill's
    example bundle: type inference (an object must match EXACTLY ONE of the
-   nine kernel shapes - shape-disjointness is a conformance property),
+   TEN kernel shapes - shape-disjointness is a conformance property),
    closed-shape schema validation, code systems, by-statement facet keys
    vs. host statement ids (D10 rev), {param:} token binding (the 216
    rule), optional-empty-container rule (D3.3), manifest completeness +
    both digests re-verified per object.
+3. RISK (CP-RISK-1, kernel 1.1.0): Risk is the tenth kernel type; the
+   schema carries RISK-2..6 as conditionals, this file adds the closure
+   rules (RISK-7/8), the state machine (C.3c), the Deviation link note
+   (RISK-9) and the risk-coverage primitive (B.1.9): for every consumer
+   Tailoring, which selected requirement is justified by NO Risk - the
+   ISO/IEC 27001 6.1.3 d question, computed instead of audited by hand.
+   `--require-risk-basis` turns uncovered selections into failures.
 
 Exit 0 = all green. Usage: uv run --with jsonschema validate_core.py [bundle-dir ...]
 """
@@ -27,11 +34,11 @@ DECIMAL_RE = r"^(-?[1-9][0-9]*(\.[0-9]+)?|0(\.[0-9]+)?|-0\.[0-9]*[1-9][0-9]*)$"
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.normpath(os.path.join(HERE, "..", ".."))
 SKILL = os.path.join(ROOT, "jascon")
-SCHEMA = json.load(open(os.path.join(SKILL, "schemas", "oscal-semantic-core-1.0.0.schema.json"), encoding="utf-8"))
+SCHEMA = json.load(open(os.path.join(SKILL, "schemas", "oscal-semantic-core-1.1.0.schema.json"), encoding="utf-8"))
 CONF = os.path.join(SKILL, "conformance")
 
 TYPES = ["requirement", "requirementSet", "tailoring", "mapping", "component",
-         "implementation", "assessment", "finding", "attestation"]
+         "implementation", "assessment", "finding", "attestation", "risk"]
 REGISTRY = jsonschema.validators.Draft202012Validator
 VALIDATORS = {t: REGISTRY({"$ref": f"#/$defs/{t}", "$defs": SCHEMA["$defs"]}) for t in TYPES}
 VALIDATORS["contentManifest"] = REGISTRY({"$ref": "#/$defs/contentManifest", "$defs": SCHEMA["$defs"]})
@@ -86,6 +93,25 @@ def closure_errors(objs):
         elif t == "finding":
             need(oid, o["assessment-ref"], "assessment-ref")
             need(oid, o["requirement-ref"], "requirement-ref")
+            # risk-refs are LANDMARK: the assessor's Finding points into the
+            # organisation's risk register, which normally lives in another bundle
+        elif t == "risk":
+            # RISK-7: the controls a risk leans on are the organisation's own
+            # selected requirements - closure-required like Implementation.requirement-ref
+            for tr in o.get("treatments", []) or []:
+                need(oid, tr["requirement-ref"], "treatments requirement-ref (RISK-7)")
+                tgt = objs.get(tr["requirement-ref"])
+                if tgt and tgt[0] == "requirement":
+                    sids = {st["id"] for st in tgt[1]["statements"]}
+                    for sid in tr.get("statement-ids", []) or []:
+                        if sid not in sids:
+                            errs.append(f"{oid}: treatments statement-id '{sid}' names no statement of "
+                                        f"{tr['requirement-ref']} (RISK-8: clause precision is addressable or it is prose)")
+            # RISK-7b: the assets at risk are Components of this bundle
+            for cref in o.get("component-refs", []) or []:
+                need(oid, cref, "component-refs (RISK-7)")
+            # owner-ref, threat-refs, shared-with-ref, acceptance.approver-ref,
+            # rating.scale-ref are landmark (parties, threat catalogs, scales)
         elif t == "mapping":
             for side in ("source", "target"):   # endpoints are landmark; scopes bind IF the endpoint is present
                 ep = objs.get(o.get(f"{side}-ref"))
@@ -286,7 +312,8 @@ def modality_verdict_py(frm, to):
 OPTIONAL_CONTAINERS = {"aliases", "canonical-alias", "replaces", "relations", "facets",
                        "annotations", "parameters", "deviations", "excludes",
                        "source-scope", "target-scope", "evidence-refs", "statement-refs",
-                       "capabilities", "authorizations", "actions", "choices"}
+                       "capabilities", "authorizations", "actions", "choices",
+                       "threat-refs", "component-refs", "treatments", "risk-refs"}
 REQUIRED_CONTAINERS = {"statements", "members", "selects", "operations", "subject-refs",
                        "satisfied-by", "subject-semantic-digests", "objects", "facet-schemas"}
 
@@ -765,6 +792,11 @@ def inferType_single(o):
 DEV_NEXT = {"investigating": {"pending", "withdrawn"}, "pending": {"approved", "withdrawn"},
             "approved": set(), "withdrawn": set()}
 FIND_NEXT = {"open": {"in-remediation", "closed"}, "in-remediation": {"closed"}, "closed": set()}
+# C.3c Risk states: identified -> assessed -> treated -> retired; forward only,
+# skipping allowed (RISK-2/3 make the skipped fields mandatory anyway);
+# retired is terminal - a recurring risk is a NEW Risk, like a recurring Finding
+RISK_NEXT = {"identified": {"assessed", "treated", "retired"}, "assessed": {"treated", "retired"},
+             "treated": {"retired"}, "retired": set()}
 def run_tiers():
     v = json.load(open(os.path.join(CONF, "tier-vectors.json"), encoding="utf-8"))
     for case in v["vectors"]:
@@ -806,6 +838,125 @@ def run_composition():
         if okc: ok("composition")
         else: fail("composition", f"{case['name']}: expected {exp}/{case.get('expected-resolutions')}, "
                                   f"got {[e[:80] for e in errs]}/{res}")
+
+# ---------------- B.1.9 risk-coverage (CP-RISK-1) ----------------
+def _selected_requirements(tobj, objs, notes):
+    """Resolve a Tailoring's selection to requirement ids (set-refs expanded
+    through nested Sets; predicates are noted and skipped - selection by
+    predicate is resolved by the tailoring engine, not here)."""
+    sel, seen = set(), set()
+    def walk(sid, depth=0):
+        if sid in seen or depth > 8: return
+        seen.add(sid)
+        tgt = objs.get(sid)
+        if not tgt: return
+        if tgt[0] == "requirementSet":
+            for m in tgt[1].get("members", []): walk(m["ref"], depth + 1)
+        elif tgt[0] == "requirement":
+            sel.add(sid)
+    for s in tobj.get("selects", []):
+        if "set-ref" in s: walk(s["set-ref"])
+        else: notes.append(f"{tobj['id']}: predicate select not expanded by risk-coverage (engine-resolved)")
+    for e in tobj.get("excludes", []) or []:
+        sel.discard(e["ref"])
+    return sel
+
+def risk_coverage(objs, sdig_fn=None, envelopes=None, trusted=None):
+    """B.1.9: for each Tailoring, which selected requirements are named by a
+    Risk's treatments (justified), which are not (uncovered), which excludes
+    lack a rationale, and which treatments point at requirements NO Tailoring
+    selects (treatment-out-of-scope: the risk relies on a control the SoA
+    dropped). Returns (report, errors, notes). Uncovered is a REPORT line:
+    whether a control needs a risk basis is the program's policy (ISO 27001
+    6.1.3 d: yes; BSI 200-2 Basis-Anforderungen: justified by the baseline)."""
+    notes, errs = [], []
+    risks = {oid: o for oid, (t, o) in objs.items() if t == "risk"}
+    treats = collections.defaultdict(set)          # requirement id -> {risk ids}
+    for rid, r in risks.items():
+        for tr in r.get("treatments", []) or []:
+            treats[tr["requirement-ref"]].add(rid)
+    report = {"tailorings": {}, "risks": len(risks), "treatment-out-of-scope": []}
+    all_selected = set()
+    for tid, (t, tobj) in sorted(objs.items()):
+        if t != "tailoring": continue
+        tier = derive_tier(tobj, objs, sdig_fn or sdig, envelopes=envelopes, trusted=trusted)
+        sel = _selected_requirements(tobj, objs, notes)
+        all_selected |= sel
+        covered = {q: sorted(treats[q]) for q in sorted(sel) if treats.get(q)}
+        uncovered = sorted(q for q in sel if not treats.get(q))
+        excl_no_rationale = [e["ref"] for e in tobj.get("excludes", []) or [] if not e.get("rationale")]
+        report["tailorings"][tid] = {"tier": tier, "selected": len(sel), "covered": covered,
+                                     "uncovered": uncovered, "excludes-without-rationale": excl_no_rationale}
+        if tier == "consumer" and excl_no_rationale:
+            # ISO 27001 6.1.3 d: exclusion is justified or it is not a Statement of Applicability
+            notes.append(f"{tid}: {len(excl_no_rationale)} exclude(s) without rationale at consumer tier "
+                         f"(RISK-10, SHOULD: an SoA exclusion carries its justification)")
+    if risks and all_selected:
+        for q, rids in sorted(treats.items()):
+            if q not in all_selected and q in objs:
+                report["treatment-out-of-scope"].append({"requirement": q, "risks": sorted(rids)})
+                errs.append(f"{sorted(rids)[0]}: treatment names {q}, which no Tailoring in this bundle selects "
+                            f"(RISK-11: a risk cannot lean on a control the SoA dropped)")
+    return report, errs, notes
+
+def risk_link_notes(objs):
+    """RISK-9 (SHOULD): a `risk-adjustment` Deviation references the Risk it
+    adjusts for in `refs`, so the weakening and its justification meet."""
+    notes = []
+    risk_ids = {oid for oid, (t, o) in objs.items() if t == "risk"}
+    if not risk_ids: return notes
+    for oid, (t, o) in objs.items():
+        devs = list(o.get("deviations", []) or [])
+        if t == "tailoring":
+            devs += [op["deviation"] for op in o.get("operations", []) or [] if isinstance(op.get("deviation"), dict)]
+        for d in devs:
+            if d.get("type") == "risk-adjustment" and not (set(d.get("refs", []) or []) & risk_ids):
+                notes.append(f"{oid}: risk-adjustment Deviation references no Risk of this bundle "
+                             f"(RISK-9, SHOULD: the adjustment names the risk it accepts)")
+    return notes
+
+def run_risk():
+    v = json.load(open(os.path.join(CONF, "risk-vectors.json"), encoding="utf-8"))
+    for case in v.get("risk-transitions", []):          # C.3c state machine
+        got = case["to"] in RISK_NEXT[case["from"]]
+        if got == case["valid"]: ok("risk")
+        else: fail("risk", f"risk {case['from']}->{case['to']}: expected valid={case['valid']}")
+    for case in v["object-vectors"]:
+        o = case["object"]
+        m = [t for t in TYPES if VALIDATORS[t].is_valid(o)]
+        if case["expected"] == "valid":
+            okc = m == ["risk"]
+        else:
+            okc = m == []
+            if okc and case.get("expected-frag"):
+                e = next(iter(VALIDATORS["risk"].iter_errors(o)), None)
+                okc = e is not None and case["expected-frag"] in (e.message + "/" + "/".join(map(str, e.absolute_path)))
+        if okc: ok("risk")
+        else: fail("risk", f"{case['name']}: expected {case['expected']} {case.get('expected-frag','')}, matched {m}")
+    for case in v["bundle-vectors"]:
+        objs = {}
+        for o in case["objects"]:
+            t = inferType_single(o)
+            if t: objs[o["id"]] = (t, o)
+        errs = closure_errors(objs)
+        rep_, cerrs, notes = risk_coverage(objs)
+        errs += cerrs
+        notes += risk_link_notes(objs)
+        okc = len(errs) == case.get("expected-fails", 0)
+        for frag in case.get("expected-frags", []):
+            if not any(frag in e for e in errs): okc = False
+        for frag in case.get("expected-notes", []):
+            if not any(frag in n for n in notes): okc = False
+        exp = case.get("expected-coverage")
+        if exp:
+            for tid, want in exp.items():
+                got = rep_["tailorings"].get(tid, {})
+                if sorted(got.get("uncovered", [])) != sorted(want.get("uncovered", [])): okc = False
+                if sorted(got.get("covered", {}).keys()) != sorted(want.get("covered", [])): okc = False
+        if okc: ok("risk")
+        else: fail("risk", f"{case['name']}: expected {case.get('expected-fails',0)} fails {case.get('expected-frags')} "
+                           f"notes {case.get('expected-notes')} cov {exp}; got errs {[e[:80] for e in errs]} "
+                           f"notes {[n[:80] for n in notes]} cov {rep_['tailorings']}")
 
 def run_conditional():
     v = json.load(open(os.path.join(CONF, "conditional-vectors.json"), encoding="utf-8"))
@@ -862,6 +1013,10 @@ def run_lifecycle():
         got = case["to"] in FIND_NEXT[case["from"]]
         if got == case["valid"]: ok("lifecycle")
         else: fail("lifecycle", f"finding {case['from']}->{case['to']}: expected valid={case['valid']}")
+    for case in v.get("risk-transitions", []):
+        got = case["to"] in RISK_NEXT[case["from"]]
+        if got == case["valid"]: ok("lifecycle")
+        else: fail("lifecycle", f"risk {case['from']}->{case['to']}: expected valid={case['valid']}")
     for case in v["identity-events"]:
         allowed = case["record"] == "canonical-alias"
         want = case["substitution"] == "allowed"
@@ -879,7 +1034,7 @@ def run_lifecycle():
         okv = got == case["composed"] or (case["composed"] == "supports" and got in ("supports", "intersects"))
         if okv: ok("lifecycle")
         else: fail("lifecycle", f"compose({case['a']},{case['b']}): expected {case['composed']}, got {got}")
-    # shape disjointness: nine canonical minimal objects -> exactly one match each; garbage -> zero
+    # shape disjointness: ten canonical minimal objects -> exactly one match each; garbage -> zero
     P = "https://ex.org"
     MINIMAL = {
         "requirement": {"id": P+"/r", "version": "1", "lifecycle": "active",
@@ -900,6 +1055,8 @@ def run_lifecycle():
         "attestation": {"id": P+"/at", "version": "1", "lifecycle": "active",
             "subject-semantic-digests": ["sha256:" + "0"*64], "content-manifest-digest": "sha256:" + "0"*64,
             "signer": P+"/p", "timestamp": "2026-07-21"},
+        "risk": {"id": P+"/rk", "version": "1", "lifecycle": "active", "scenario": {"en": "X."},
+            "owner-ref": P+"/p", "state": "identified"},
     }
     for want, o in MINIMAL.items():
         m = [t for t in TYPES if VALIDATORS[t].is_valid(o)]
@@ -1038,6 +1195,18 @@ def validate_bundle(bdir):
     for e in tailoring_duty_errors(bundle_objs, pinned_decl=pinned_decl,
                                    envelopes=envelopes, trusted=TRUSTED):
         fail(section, e)
+    # CP-RISK-1: B.1.9 risk-coverage report (+ RISK-11 errors), RISK-9/10 notes
+    cov, cerrs, cnotes = risk_coverage(bundle_objs, envelopes=envelopes, trusted=TRUSTED)
+    for e in cerrs: fail(section, e)
+    for n in cnotes + risk_link_notes(bundle_objs): print(f"    note: {n}")
+    if cov["risks"]:
+        for tid, r in cov["tailorings"].items():
+            print(f"    risk-coverage: {tid} [{r['tier']}] selected={r['selected']} "
+                  f"justified={len(r['covered'])} uncovered={len(r['uncovered'])}")
+            for q in r["uncovered"]:
+                msg = f"{tid}: selected {q} is named by no Risk (B.1.9 uncovered; ISO 27001 6.1.3 d)"
+                if REQUIRE_RISK_BASIS: fail(section, msg)
+                else: print(f"      uncovered: {q}")
     for e in facet_errors([(oid, o) for oid, (t, o) in bundle_objs.items()], pinned):
         fail(section, e)
     # #24: report the derived Tailoring tier DISTINCTLY (spec:399) — a prefix
@@ -1067,12 +1236,25 @@ def validate_examples():
     exdir = os.path.join(SKILL, "examples")
     section = "skill-examples"
     typec = collections.Counter()
+    exobjs = {}
     for fn in sorted(os.listdir(exdir)):
         if not fn.endswith(".json") or "manifest" in fn or "stub" in fn or fn.startswith(("gspp-taxonomy",)):
             continue
         obj = json.load(open(os.path.join(exdir, fn), encoding="utf-8"))
         t = validate_object(section, fn, obj)
-        if t: typec[t] += 1
+        if t:
+            typec[t] += 1
+            exobjs[obj["id"]] = (t, obj)
+    for e in closure_errors(exobjs): fail(section, e)
+    cov, cerrs, cnotes = risk_coverage(exobjs)
+    for e in cerrs: fail(section, e)
+    for n in cnotes + risk_link_notes(exobjs): print(f"    note: {n}")
+    for tid, r in cov["tailorings"].items():
+        print(f"    risk-coverage: {tid} [{r['tier']}] selected={r['selected']} "
+              f"justified={len(r['covered'])} uncovered={r['uncovered']}")
+        if REQUIRE_RISK_BASIS:
+            for q in r["uncovered"]:
+                fail(section, f"{tid}: selected {q} is named by no Risk (B.1.9 uncovered; ISO 27001 6.1.3 d)")
     return typec
 
 # ---------------- run ----------------
@@ -1080,7 +1262,11 @@ def validate_examples():
 # of signer URI -> Ed25519 public key (hex). Without it, structural mode.
 # --compose DIR_A DIR_B runs the D3.5 composition engine over two bundles.
 TRUSTED = None
+REQUIRE_RISK_BASIS = False
 _argv = sys.argv[1:]
+if "--require-risk-basis" in _argv:      # policy switch: uncovered selections become failures
+    REQUIRE_RISK_BASIS = True
+    _argv.remove("--require-risk-basis")
 if "--trusted-keys" in _argv:
     _i = _argv.index("--trusted-keys")
     TRUSTED = json.load(open(_argv[_i + 1], encoding="utf-8"))
@@ -1098,8 +1284,8 @@ if "--compose" in _argv:
     sys.exit(1 if errs else 0)
 
 print("== conformance corpus ==")
-run_jcs(); run_modality(); run_parameters(); run_tailoring(); run_attestation(); run_facets(); run_references(); run_lifecycle(); run_tiers(); run_dsse(); run_composition(); run_conditional()
-for k in ("jcs", "modality", "parameter", "tailoring", "attestation", "facet", "reference", "lifecycle", "tier", "dsse", "composition", "conditional"):
+run_jcs(); run_modality(); run_parameters(); run_tailoring(); run_attestation(); run_facets(); run_references(); run_lifecycle(); run_tiers(); run_dsse(); run_composition(); run_conditional(); run_risk()
+for k in ("jcs", "modality", "parameter", "tailoring", "attestation", "facet", "reference", "lifecycle", "tier", "dsse", "composition", "conditional", "risk"):
     print(f"  {k}: {counts[k]} pass, {counts[k + ':FAIL']} fail")
 
 print("== bundles ==")

@@ -220,6 +220,12 @@ The governing principle, quoted from the user directive that decided
 #8: **a tool that cannot handle a facet must stop working on that
 data** — fail-closed engages only when declarations are honest.
 
+**Parked (1.1.0, named exit):** `risk-analysis@1` — likelihood, impact,
+method-ref, characterizations, mitigating factors: everything Appendix F
+Q14 keeps out of the kernel now that the Risk *object* is kernel (A.9b).
+First corpus: the IFA `risk@1` framework facet (shipped, 2 risks);
+second: a BSI 200-3 Risikoanalyse export. Ships when measured.
+
 **Parked:** `privacy-assessment@1` — deliberately not shipped until
 the Rev5-era privacy corpus is measured; a privacy facet designed
 from memory would violate the book's only method. The audit table

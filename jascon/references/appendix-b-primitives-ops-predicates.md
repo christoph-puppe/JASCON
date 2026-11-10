@@ -213,6 +213,29 @@ FAIL [conditional-apply:<instance-id>] on <object-id>
 **Exercised:** declared; corpus instantiation is gate-item-2 work
 (the CR26 class-conditioned timeframes are the natural first cases).
 
+### B.1.9 `risk-coverage` *(1.1.0 — CP-RISK-1, the ninth primitive)*
+
+**What it computes:** for each Tailoring, the selected requirements
+(set-refs expanded through nested Sets, excludes removed) joined to the
+Risks whose `treatments` name them. **Output:** per Tailoring `covered`
+{requirement → [risk ids]}, `uncovered` [requirement ids],
+`excludes-without-rationale`; per bundle `treatment-out-of-scope`.
+**Verdict:** a report by default — `uncovered` fails only under the
+program's policy (`--require-risk-basis`; ISO 27001 6.1.3 d says every
+SoA row, BSI 200-2 says the baseline justifies itself);
+`treatment-out-of-scope` always fails (RISK-11: a Risk leans on a control
+the SoA dropped). **Rationale:** 6.1.3 b/d make "every control rests on a
+treatment decision" a documented property; a property that can be
+computed must not be audited by hand.
+```
+FAIL [risk-coverage] <tailoring>  selected <req>
+  named by no Risk
+  rationale: ISO/IEC 27001 6.1.3 d — inclusion in the Statement of
+  Applicability carries its justification
+```
+**Exercised:** `risk-vectors.json` (8 bundle vectors); the example bundle
+(3 selected, 1 justified, 2 uncovered).
+
 ---
 
 ## B.2 The three predicates (shared vocabulary, one leash)
@@ -324,5 +347,8 @@ primitives, operations, and predicates are *versioned closed sets*
 (R3: contained, never a language) — the ninth primitive, when its
 evidence arrives, ships as a set version through the Chapter 15
 process, with counts, corpus cases, and two implementations. Until
-then, the honest inventory stands: eight, eight, and three — every
+then, the honest inventory stands: **nine**, eight, and three — every
 one carrying the reason it exists, printed at the moment it says no.
+The ninth (`risk-coverage`, B.1.9) arrived exactly that way in the 1.1.0
+cycle: counts (CP-RISK-1 §2), corpus cases, one implementation green, the
+second as the release gate.
