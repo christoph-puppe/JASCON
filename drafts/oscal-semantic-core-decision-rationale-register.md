@@ -2033,5 +2033,9 @@ hand. Whether `method` keys must be registered facets is a rule question
 **Shipped with it.** `validate_core.py`; `validate_core.ps1` gains the
 example bundle in its default run through its one bundle path (it had no
 example pass) — **by reading, not executed**; example README and SKILL.md;
-skill zip rebuilt. Python: 258 vectors, five bundles and the examples,
+skill zip rebuilt. Handbook: Chapters 7 and 12 now state the rule, which
+stood in the specification and this register only; Chapter 10's
+Assessment example carried a `criteria-ref` the descriptor does not have
+and shows the shipped payload instead; Appendix D.6 lists the
+descriptor's payload completely. Python: 258 vectors, five bundles and the examples,
 ALL GREEN, with and without the `jascon/examples` argument.
