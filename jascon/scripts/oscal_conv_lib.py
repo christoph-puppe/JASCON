@@ -44,7 +44,7 @@ def textify(obj, lang):
             container[key] = {lang: container[key]}; n += 1
     wrap(obj, "title")
     wrap(obj, "rationale")                                   # mapping
-    wrap(obj, "scenario")                                    # risk (kernel 1.1.0)
+    wrap(obj, "scenario")                                    # risk (kernel 2.0.0)
     if isinstance(obj.get("acceptance"), dict): wrap(obj["acceptance"], "rationale")
     for ex in obj.get("excludes", []) or []: wrap(ex, "rationale")
     for cap in obj.get("capabilities", []) or []: wrap(cap, "description")

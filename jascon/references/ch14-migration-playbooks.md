@@ -131,7 +131,7 @@ UUID-plumbing cluster (party-uuid, import-profile, attachment
 hashes) dies into L0 references and the content manifest: Level 1 by
 deletion.
 
-**Risk (1.1.0 — CP-RISK-1).** OSCAL 1.x `assessment-results`/`poam`
+**Risk (2.0.0 — CP-RISK-1).** OSCAL 1.x `assessment-results`/`poam`
 `risks[]` become **Risk** objects. As run on the IFA corpus (2026-11-10):
 `statement` → `scenario`; `deadline` → `review-due` as a `datetime` (the
 OSCAL type is date-time-with-timezone); the POA&M `system-id` →

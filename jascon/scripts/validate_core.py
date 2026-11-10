@@ -13,7 +13,7 @@ Runs, in order:
    vs. host statement ids (D10 rev), {param:} token binding (the 216
    rule), optional-empty-container rule (D3.3), manifest completeness +
    both digests re-verified per object.
-3. RISK (CP-RISK-1, kernel 1.1.0): Risk is the tenth kernel type; the
+3. RISK (CP-RISK-1, kernel 2.0.0): Risk is the tenth kernel type; the
    schema carries RISK-1..6 (named on failure by risk_rule_violations),
    this file adds the closure rules (RISK-7/8), typed Risk edges
    (RISK-12), the state machine (C.3c), the Deviation link note (RISK-9)
@@ -35,7 +35,7 @@ DECIMAL_RE = r"^(-?[1-9][0-9]*(\.[0-9]+)?|0(\.[0-9]+)?|-0\.[0-9]*[1-9][0-9]*)$"
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.normpath(os.path.join(HERE, "..", ".."))
 SKILL = os.path.join(ROOT, "jascon")
-SCHEMA = json.load(open(os.path.join(SKILL, "schemas", "oscal-semantic-core-1.1.0.schema.json"), encoding="utf-8"))
+SCHEMA = json.load(open(os.path.join(SKILL, "schemas", "oscal-semantic-core-2.0.0.schema.json"), encoding="utf-8"))
 CONF = os.path.join(SKILL, "conformance")
 
 TYPES = ["requirement", "requirementSet", "tailoring", "mapping", "component",

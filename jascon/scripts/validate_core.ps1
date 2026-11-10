@@ -13,7 +13,7 @@ tier derivation (Set-member resolution + DSSE verification mode with a
 dependency-free Ed25519 over System.Numerics.BigInteger), op-law duties,
 D3.5 composition, B.1.8 conditional-apply, and all 13 vector families.
 
-Kernel 1.1.0 (CP-RISK-1): Risk is the tenth kernel type - typed by the
+Kernel 2.0.0 (CP-RISK-1): Risk is the tenth kernel type - typed by the
 schema (RISK-1..6 are schema conditionals, named on failure by
 Risk-Rule-Violations), closure RISK-7/8, typed Risk edges RISK-12, the
 B.1.9 risk-coverage primitive (live risks only; a predicate select leaves
@@ -124,7 +124,7 @@ function Content-Digest($obj) {
 # Consumes the normative kernel schema + stdlib descriptors. Supported
 # keywords are exactly those the shipped schemas use; an UNKNOWN validation
 # keyword throws (fail-loud, the D10 spirit - never silently pass).
-$SCHEMA = Read-Json (Join-Path $SKILL "schemas\oscal-semantic-core-1.1.0.schema.json")
+$SCHEMA = Read-Json (Join-Path $SKILL "schemas\oscal-semantic-core-2.0.0.schema.json")
 $DEFS = $SCHEMA['$defs']
 $IGNORE_KW = @('description', 'title', '$schema', '$id', 'contentEncoding', 'default', 'examples', 'note', '$defs')
 $KNOWN_KW = @('$ref', 'allOf', 'anyOf', 'if', 'then', 'const', 'enum', 'type', 'required',

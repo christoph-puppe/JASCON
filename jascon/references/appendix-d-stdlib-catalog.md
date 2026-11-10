@@ -220,7 +220,7 @@ The governing principle, quoted from the user directive that decided
 #8: **a tool that cannot handle a facet must stop working on that
 data** — fail-closed engages only when declarations are honest.
 
-**Parked (1.1.0, named exit):** `risk-analysis@1` — likelihood, impact,
+**Parked (2.0.0, named exit):** `risk-analysis@1` — likelihood, impact,
 method-ref, characterizations, mitigating factors: everything Appendix F
 Q14 keeps out of the kernel now that the Risk *object* is kernel (A.9b).
 First corpus, measured 2026-11-10: the IFA re-run retired the `risk@1`

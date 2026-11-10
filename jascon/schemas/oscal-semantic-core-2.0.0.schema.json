@@ -1,8 +1,8 @@
 {
  "$schema": "https://json-schema.org/draft/2020-12/schema",
- "$id": "https://ns.oscal.org/semantic-core/schema/1.1.0",
- "title": "JASCON - normative kernel shapes (1.1.0: Risk kernel type)",
- "description": "The TEN kernel types + Deviation sub-object + content manifest, field by field per Handbook Appendix A / spec Appendix A. Kernel shapes are CLOSED (unevaluatedProperties: false): an unknown top-level field is a validation error - facets are the extension surface (D10). Objects carry no type discriminator; a conformant object matches EXACTLY ONE of the ten type entry points (shape-disjointness is itself a conformance property, exercised by the conformance corpus). 1.1.0 adds Risk (CP-RISK-1): the ex-ante record that ISO/IEC 27001 6.1.2-6.1.3, BSI 200-3 and NIST SP 800-30 all encode independently - a requirement selected by a consumer is justified by the Risks whose treatments name it. Rating SCALES stay facet-level (App. F Q14 holds for scoring); the risk's identity, owner, scenario, treatment decision, treating controls and residual-risk acceptance are kernel.",
+ "$id": "https://ns.oscal.org/semantic-core/schema/2.0.0",
+ "title": "JASCON - normative kernel shapes (2.0.0: Risk kernel type)",
+ "description": "The TEN kernel types + Deviation sub-object + content manifest, field by field per Handbook Appendix A / spec Appendix A. Kernel shapes are CLOSED (unevaluatedProperties: false): an unknown top-level field is a validation error - facets are the extension surface (D10). Objects carry no type discriminator; a conformant object matches EXACTLY ONE of the ten type entry points (shape-disjointness is itself a conformance property, exercised by the conformance corpus). 2.0.0 - a major version by rule (D22 rev 3: kernel-shape changes ride majors), a superset in fact (every 1.0.0-valid object validates unchanged) - adds Risk (CP-RISK-1): the ex-ante record that ISO/IEC 27001 6.1.2-6.1.3, BSI 200-3 and NIST SP 800-30 all encode independently - a requirement selected by a consumer is justified by the Risks whose treatments name it. Rating SCALES stay facet-level (App. F Q14 holds for scoring); the risk's identity, owner, scenario, treatment decision, treating controls and residual-risk acceptance are kernel.",
  "$defs": {
   "uri": {
    "type": "string",
