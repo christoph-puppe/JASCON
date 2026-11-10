@@ -8,6 +8,9 @@
  "assessment-ref": "https://ifa.gov/goodread/assessment/conmon-2023-06",
  "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-6.1",
  "state": "in-remediation",
+ "risk-refs": [
+  "https://ifa.gov/goodread/risk/goodread-risk-2"
+ ],
  "actions": [
   {
    "description": {
@@ -21,31 +24,7 @@
   }
  ],
  "facets": {
-  "https://ifa.gov/goodread/facet/risk@1": {
-   "risk-status": "open",
-   "deadline": "2023-06-23T17:00:00-04:00",
-   "statement": {
-    "en": "An account without proper least privilege design and implementation can be used to surreptitiously add, change, or delete cloud infrastructure to the too managing all links to IFA's communication to public citizens, potentially causing significant harm with no forensic evidence to recover the system. Regardless of the extent and duration of a potential incident, such a configuration greatly increases the risk of an insider threat if there were likely to a potential insider threat in the SYSTEM1234 Product Team.\n\nIf such an insider threat existed and acted with this n, the resulting event could cause significant financial and reputational risk to IFA's Administrator, executive staff, and the agency overall."
-   },
-   "characterizations": [
-    {
-     "facets": [
-      {
-       "name": "likelihood",
-       "value": "low",
-       "system": "https://ifa.gov/division/ociso/sca"
-      },
-      {
-       "name": "impact",
-       "value": "high",
-       "system": "https://ifa.gov/division/ociso/sca"
-      }
-     ],
-     "origin-actors": [
-      "e7730080-71ce-4b20-bec4-84f33136fd58"
-     ]
-    }
-   ],
+  "https://ifa.gov/goodread/facet/finding-target@1": {
    "target-objective-id": "ac-6.1_obj",
    "implementation-statement-uuid": "d5f9b263-965d-440b-99e7-77f5df670a11"
   }

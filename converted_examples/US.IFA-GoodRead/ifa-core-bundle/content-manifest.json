@@ -4,7 +4,8 @@
   "source": "OSCAL IFA GoodRead example set (SSP 1.1.1, AP, AR, POA&M) + leveraged/leveraging SSP pair + component-definition example (usnistgov/oscal-content)",
   "source-note": "FICTIONAL example content by NIST; converted as the gate-3 lifecycle corpus",
   "source-oscal-version": "1.1.3",
-  "converter": "convert_ifa.py v0.1",
+  "source-commit": "usnistgov/oscal-content@9402f031 (2026-07-14; the state fetched 2026-07-22)",
+  "converter": "convert_ifa.py v0.2 (CP-RISK-1 re-run: POA&M risks -> Risk objects)",
   "carried-requirements": [
    "https://ns.nist.gov/sp800-53/req/AC-6.1",
    "https://ns.nist.gov/sp800-53/req/AC-2"
@@ -71,15 +72,15 @@
   {
    "id": "https://ifa.gov/goodread/finding/goodread-risk-1",
    "version": "1.2.1",
-   "package-digest": "sha256:685ceba6907b53d58c435d1194197aff38339cd335fba0545500b621cf82d158",
-   "semantic-digest": "sha256:631d2d1861c17f8a525937ea107c76565ce61450de00464344eaa8e7f7e938cf",
+   "package-digest": "sha256:34a9dd91c44ca889f383ad566d871545b537d3996bc74ff7652fbacd22ae9d8a",
+   "semantic-digest": "sha256:9432eefaadbfe91c8b24adf20db8f581a8de735ea474533c23811718736151e1",
    "path": "objects/finding/goodread-risk-1.json"
   },
   {
    "id": "https://ifa.gov/goodread/finding/goodread-risk-2",
    "version": "1.2.1",
-   "package-digest": "sha256:a086e82ba1b02de076501512dd412d47d8dec7ca70cd3b1126854955cb455b24",
-   "semantic-digest": "sha256:428fbbaa489c0956268fe2f31a6ab00c40300d704ba7ba9da7067dbd3c0d1477",
+   "package-digest": "sha256:4cba852f8d1c316b0f387dda1ef8030d629a8a0c8e24c3b8911f24420436e80a",
+   "semantic-digest": "sha256:ae4988fb24d3d813995cd68c443171f108391bdfacfd3f4fbd675184c03c3994",
    "path": "objects/finding/goodread-risk-2.json"
   },
   {
@@ -116,6 +117,20 @@
    "package-digest": "sha256:d51ae9565482ce9aea132e81bd7e8263b740e8b5f55b939271c98c94d5414a01",
    "semantic-digest": "sha256:21637d8ecfe2f6255b6d385528772eac9ca7605d64c72d3d7666e1428c67ca3b",
    "path": "objects/req/ac-6-1.json"
+  },
+  {
+   "id": "https://ifa.gov/goodread/risk/goodread-risk-1",
+   "version": "1.2.1",
+   "package-digest": "sha256:59ed2c36476be3c8735e9888ac5ab0a04a28319582c6b503e0bc4dbafb565d71",
+   "semantic-digest": "sha256:e1b00126122ab90261a5580efe6592089813004f276b83ca2783f18abcaa7b51",
+   "path": "objects/risk/goodread-risk-1.json"
+  },
+  {
+   "id": "https://ifa.gov/goodread/risk/goodread-risk-2",
+   "version": "1.2.1",
+   "package-digest": "sha256:678741aefcbfab14580af664c29c985a491167e9ecbab77115f5f8c186d764c3",
+   "semantic-digest": "sha256:5ddeaf0a6d8718f3b7b67df22e1998d6beb42dc552ef9fd178b156a4e8971ab0",
+   "path": "objects/risk/goodread-risk-2.json"
   }
  ],
  "facet-schemas": [
@@ -124,6 +139,12 @@
    "exact-version": "1.0.0",
    "digest": "sha256:f429717108872f328d58973596565ee421d75800c2411687d16d45ffe58038a2",
    "path": "schemas/goodread-ap-stub.json"
+  },
+  {
+   "id": "https://ifa.gov/goodread/facet/finding-target",
+   "exact-version": "1.0.0",
+   "digest": "sha256:897901b44ef409990e24c7f2170390eeed274c0ec7386dee735b84d6f00bc87e",
+   "path": "schemas/goodread-finding-target-stub.json"
   },
   {
    "id": "https://ifa.gov/goodread/facet/observations",
@@ -138,10 +159,10 @@
    "path": "schemas/goodread-protocols-stub.json"
   },
   {
-   "id": "https://ifa.gov/goodread/facet/risk",
+   "id": "https://ifa.gov/goodread/facet/risk-analysis",
    "exact-version": "1.0.0",
-   "digest": "sha256:faae462c22ba02cd9859e7198c2296a1498555dde7ee7288820550c9854637b9",
-   "path": "schemas/goodread-risk-stub.json"
+   "digest": "sha256:6899e344dab42cda4ea56d8328e387f5d867312750dbf0f1b47235f87d1b81ef",
+   "path": "schemas/goodread-risk-analysis-stub.json"
   },
   {
    "id": "https://ifa.gov/goodread/facet/system",
