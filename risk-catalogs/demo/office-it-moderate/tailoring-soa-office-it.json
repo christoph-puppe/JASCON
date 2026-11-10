@@ -1,0 +1,14 @@
+{
+ "id": "https://org.example/tailoring/soa-office-it",
+ "version": "1",
+ "lifecycle": "active",
+ "title": {
+  "en": "Statement of Applicability - office IT",
+  "de": "Erklärung zur Anwendbarkeit - Büro-IT"
+ },
+ "selects": [
+  {
+   "set-ref": "https://ns.nist.gov/sp800-53/set/baseline/moderate"
+  }
+ ]
+}

@@ -1,0 +1,39 @@
+{
+ "id": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-21",
+ "version": "0.1.0",
+ "lifecycle": "draft",
+ "label": "OFF-21",
+ "title": {
+  "en": "Unknown devices are connected to the network",
+  "de": "Unbekannte Geräte sind am Netz angeschlossen"
+ },
+ "scenario": {
+  "en": "Private laptops, forgotten test servers, cameras and printers with default settings are connected and nobody maintains them. They are not patched or monitored and serve as an entry point or hiding place.",
+  "de": "Private Notebooks, vergessene Testserver, Kameras und Drucker mit Werkseinstellungen sind angeschlossen, und niemand pflegt sie. Sie werden weder gepatcht noch überwacht und dienen als Einstieg oder Versteck."
+ },
+ "category": "network",
+ "impacts": [
+  "confidentiality",
+  "integrity"
+ ],
+ "suggested-treatments": [
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CM-8"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CM-8.3"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/IA-3"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-18"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/RA-5"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SC-7"
+  }
+ ]
+}

@@ -1,0 +1,38 @@
+{
+ "id": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-20",
+ "version": "0.1.0",
+ "lifecycle": "draft",
+ "label": "OFF-20",
+ "title": {
+  "en": "Personal data is processed or lost without the legal duties being met",
+  "de": "Personenbezogene Daten werden verarbeitet oder gehen verloren, ohne dass die gesetzlichen Pflichten erfüllt sind"
+ },
+ "scenario": {
+  "en": "A new tool processes personal data without a documented purpose or legal basis, or a data breach is not reported to the authority within the legal deadline. The organisation faces fines and claims.",
+  "de": "Ein neues Werkzeug verarbeitet personenbezogene Daten ohne dokumentierten Zweck oder Rechtsgrundlage, oder eine Datenpanne wird der Aufsichtsbehörde nicht innerhalb der gesetzlichen Frist gemeldet. Der Organisation drohen Bußgelder und Ansprüche."
+ },
+ "category": "compliance",
+ "impacts": [
+  "confidentiality"
+ ],
+ "suggested-treatments": [
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/PT-2"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/PT-3"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/RA-8"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/IR-6"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/PM-5.1"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SI-12"
+  }
+ ]
+}

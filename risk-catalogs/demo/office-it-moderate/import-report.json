@@ -1,0 +1,50 @@
+{
+ "catalog": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it",
+ "catalog-version": "0.1.0",
+ "selection": "selected by https://org.example/tailoring/soa-office-it",
+ "selected-requirements": 287,
+ "imported": [
+  "https://org.example/risk/OFF-01",
+  "https://org.example/risk/OFF-02",
+  "https://org.example/risk/OFF-03",
+  "https://org.example/risk/OFF-04",
+  "https://org.example/risk/OFF-05",
+  "https://org.example/risk/OFF-06",
+  "https://org.example/risk/OFF-07",
+  "https://org.example/risk/OFF-08",
+  "https://org.example/risk/OFF-09",
+  "https://org.example/risk/OFF-10",
+  "https://org.example/risk/OFF-11",
+  "https://org.example/risk/OFF-12",
+  "https://org.example/risk/OFF-13",
+  "https://org.example/risk/OFF-14",
+  "https://org.example/risk/OFF-15",
+  "https://org.example/risk/OFF-16",
+  "https://org.example/risk/OFF-17",
+  "https://org.example/risk/OFF-18",
+  "https://org.example/risk/OFF-19",
+  "https://org.example/risk/OFF-20",
+  "https://org.example/risk/OFF-21",
+  "https://org.example/risk/OFF-22",
+  "https://org.example/risk/OFF-24"
+ ],
+ "not-applicable": [
+  {
+   "entry": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-23",
+   "rationale": "Public AI services are blocked at the web proxy and no licence for one exists; reviewed 2026-11-10."
+  }
+ ],
+ "suggestions-out-of-scope": {
+  "https://org.example/risk/OFF-13": [
+   "https://ns.nist.gov/sp800-53/req/CM-14"
+  ],
+  "https://org.example/risk/OFF-20": [
+   "https://ns.nist.gov/sp800-53/req/PT-2",
+   "https://ns.nist.gov/sp800-53/req/PT-3",
+   "https://ns.nist.gov/sp800-53/req/RA-8",
+   "https://ns.nist.gov/sp800-53/req/PM-5.1"
+  ]
+ },
+ "without-treatment": [],
+ "selected-requirements-no-entry-suggests": 209
+}

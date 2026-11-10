@@ -1,0 +1,39 @@
+{
+ "id": "https://github.com/christoph-puppe/JASCON/risk-catalogs/industrial-plant/entry/ICS-03",
+ "version": "0.1.0",
+ "lifecycle": "draft",
+ "label": "ICS-03",
+ "title": {
+  "en": "Controller logic or setpoints are changed without authorisation",
+  "de": "Steuerungsprogramm oder Sollwerte werden unbefugt geändert"
+ },
+ "scenario": {
+  "en": "Someone with network access to a controller downloads a modified program or changes limits and setpoints. The process runs outside its specification, product is spoiled or equipment is damaged.",
+  "de": "Jemand mit Netzzugriff auf eine Steuerung lädt ein verändertes Programm oder ändert Grenz- und Sollwerte. Der Prozess läuft außerhalb seiner Spezifikation, Produkt wird Ausschuss oder die Anlage nimmt Schaden."
+ },
+ "category": "change-integrity",
+ "impacts": [
+  "integrity",
+  "availability"
+ ],
+ "suggested-treatments": [
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CM-3"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/CM-5"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-3"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SI-7"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AU-2"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/IA-3"
+  }
+ ]
+}

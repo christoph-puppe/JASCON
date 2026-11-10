@@ -1,0 +1,43 @@
+{
+ "id": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-07",
+ "version": "0.1.0",
+ "lifecycle": "draft",
+ "label": "OFF-07",
+ "title": {
+  "en": "Standing administrator rights are misused or taken over",
+  "de": "Dauerhafte Administratorrechte werden missbraucht oder übernommen"
+ },
+ "scenario": {
+  "en": "Employees work every day with accounts that hold administrator rights. A single compromised session, or a single mistake, changes or deletes systems and data across the organisation.",
+  "de": "Beschäftigte arbeiten täglich mit Konten, die Administratorrechte besitzen. Eine einzige kompromittierte Sitzung oder ein einziger Fehler verändert oder löscht Systeme und Daten in der ganzen Organisation."
+ },
+ "category": "identity-access",
+ "impacts": [
+  "confidentiality",
+  "integrity",
+  "availability"
+ ],
+ "suggested-treatments": [
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-2"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-5"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-6"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-6.1"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-6.5"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AU-2"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AU-6"
+  }
+ ]
+}

@@ -1,0 +1,36 @@
+{
+ "id": "https://github.com/christoph-puppe/JASCON/risk-catalogs/industrial-plant/entry/ICS-13",
+ "version": "0.1.0",
+ "lifecycle": "draft",
+ "label": "ICS-13",
+ "title": {
+  "en": "Wireless links in the plant are intercepted or jammed",
+  "de": "Funkverbindungen in der Anlage werden abgehört oder gestört"
+ },
+ "scenario": {
+  "en": "Mobile panels, driverless vehicles or sensors use WLAN or other radio links with weak or shared keys. An attacker near the site reads or injects traffic, or a jammer interrupts the link and stops the cell.",
+  "de": "Mobile Bediengeräte, fahrerlose Transportfahrzeuge oder Sensoren nutzen WLAN oder andere Funkstrecken mit schwachen oder gemeinsam genutzten Schlüsseln. Ein Angreifer in der Nähe des Geländes liest oder schleust Verkehr ein, oder ein Störsender unterbricht die Strecke und hält die Zelle an."
+ },
+ "category": "network",
+ "impacts": [
+  "integrity",
+  "availability"
+ ],
+ "suggested-treatments": [
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-18"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-18.1"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SC-40"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SC-5"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/SC-8"
+  }
+ ]
+}

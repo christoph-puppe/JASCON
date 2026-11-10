@@ -1,0 +1,36 @@
+{
+ "id": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-22",
+ "version": "0.1.0",
+ "lifecycle": "draft",
+ "label": "OFF-22",
+ "title": {
+  "en": "Unauthorised people enter offices or the server room",
+  "de": "Unbefugte betreten Büros oder den Serverraum"
+ },
+ "scenario": {
+  "en": "A visitor follows an employee through the door, or a server room is left unlocked. The person takes a device, plugs hardware into the network or photographs documents and screens.",
+  "de": "Ein Besucher geht hinter einem Mitarbeiter durch die Tür, oder ein Serverraum steht offen. Die Person nimmt ein Gerät mit, schließt Hardware ans Netz an oder fotografiert Unterlagen und Bildschirme."
+ },
+ "category": "physical",
+ "impacts": [
+  "confidentiality",
+  "availability"
+ ],
+ "suggested-treatments": [
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/PE-2"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/PE-3"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/PE-6"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/PE-8"
+  },
+  {
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AT-2"
+  }
+ ]
+}
