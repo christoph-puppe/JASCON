@@ -156,7 +156,7 @@ absorbed 5,900+ membership props.
 **Mapping — the ninth type, and the newest.** Crosswalks are entire
 business models (SCF maps its catalog to 200+ frameworks; CIS and CSA
 ship mappings as core products; the American corpus itself carries 263
-KSI→800-53 links). NIST's answer, in March 2026, was an eighth full
+KSI→800-53 links). NIST's answer, with OSCAL 1.2.0 in December 2025, was an eighth full
 document model. The core's answer is nine flat fields:
 
 ```json
