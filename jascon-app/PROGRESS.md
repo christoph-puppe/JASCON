@@ -16,15 +16,22 @@ and in `readme.md`; this file says only what is done and what is next.
   Each was driven in headless Chromium and its output checked with
   `validate_core.py`.
 
+- Step 5: the rules the risk page stands on (schema matching, closure, kernel
+  pin, Risk rules with coverage, scales and matrix; vector families risk,
+  scale, kernel, reference and lifecycle pass), `jascon-riskcat.js` (catalogue
+  import, rebuilt against the committed demo), `jascon-presets.js`, and
+  `risk.html` (register with heat map, form, scale and matrix editor,
+  coverage, catalogue import). Driven in headless Chromium on SP 800-53 with
+  the demo Tailoring; the exported set gives `validate_core.py` 1064 pass, 0 fail.
+- `tests/pages.test.mjs` opens every page in Chromium; see `ERRATA.md`.
+
 ## Next
 
-- Step 5 before step 3, because the risk page is the first requirement: port
-  the Risk rules, the scale and matrix rules and risk coverage into
-  `jascon-rules.js` (vector families `risk` and `scale`), then `risk.html`
-  (register, form, scales with the matrix, heat map, coverage, catalogue import).
 - Step 4: `import.html` (OSCAL catalog, then profile).
-- Step 3: the rest of the validator; `tests/rules.test.mjs` names the vector
-  families that are not ported yet. Then `validate.html`.
+- Step 3: the rest of the validator; `tests/rules.test.mjs` names the six
+  vector families that are not ported yet. Then `validate.html`. The tool
+  pages still type an object by its fields (`jscInferType`); `jscTypeOf`
+  (schema matching) is ready to replace it at load.
 - Step 6: docs, README links of the repository, reader frozen.
 
 ## Found on the way (not fixed here)
