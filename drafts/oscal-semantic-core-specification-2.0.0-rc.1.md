@@ -43,7 +43,7 @@ released; this text adds one kernel type — **Risk** (D23) — and the ninth
 primitive that computes over it. It is a major version by the rule of
 D22 rev 3, not because anything breaks: all 6,914 objects of the 1.0.0
 corpus validate unchanged under the 2.0.0 schema, so a 1.0.0 bundle is a
-2.0.0 bundle. **Measured at rc.1:** a 223-vector conformance corpus in
+2.0.0 bundle. **Measured at rc.1:** a 225-vector conformance corpus in
 thirteen families; the Python reference validator green on it and on
 every bundle that ships; the first Risk corpus (two Risk objects
 converted from an OSCAL POA&M), and what that corpus shows the fourth
@@ -887,6 +887,11 @@ edge from a Statement of Applicability to the system it is for (open —
 IV.9).
 
 **`risk-coverage` — the ninth primitive (Appendix B.1.9; tier: Portable).**
+A bundle with no Tailoring at all has scoped nothing out: every
+Requirement in force is in play, and that implicit selection is reported
+like a Tailoring's *(author, 2026-11-10: "if there is no tailoring, all
+controls are in play")*. A bundle whose Tailorings are all withdrawn
+selects nothing.
 For each Tailoring in force (`lifecycle` ≠ `withdrawn`): the selected
 requirements (set-refs expanded through nested Sets to any depth,
 excludes removed — a Set there removes its members —, withdrawn
@@ -908,7 +913,9 @@ validators call it `--require-risk-basis`. The switch applies to every
 Tailoring, not only to consumer tier: an organisation's Statement of
 Applicability over its own catalog derives as authority-claimed (D13),
 and exempting that would exempt exactly the case the primitive exists
-for.
+for. It applies equally to a bundle that carries no Risk at all — the
+empty register is the limiting case, not an exemption — and to the
+implicit selection of a bundle without a Tailoring.
 
 ```
 FAIL [risk-coverage] <tailoring>  selected <requirement>
@@ -1181,16 +1188,16 @@ The 1.0.0 gate asked for converters, an executable kernel, a lifecycle
 corpus and two implementations. The same four questions, asked of Risk:
 
 1. **Executable kernel + conformance.** ✓ Schema 2.0.0 (ten types);
-   **223 vectors, 13 families** — the twelve of 1.0.0 (lifecycle 36 → 37
-   with the tenth disjointness case) plus `risk` 65 (23 object · 34
-   bundle · 8 transitions; 42 at the landing, 23 from the rc.1 review). Every review correction to the proposal is
+   **225 vectors, 13 families** — the twelve of 1.0.0 (lifecycle 36 → 37
+   with the tenth disjointness case) plus `risk` 67 (23 object · 36
+   bundle · 8 transitions; 42 at the landing, 25 from the rc.1 review). Every review correction to the proposal is
    pinned by a vector that fails on the validator as first proposed.
-2. **First implementation.** ✓ `validate_core.py`: 223 / 223, the five
+2. **First implementation.** ✓ `validate_core.py`: 225 / 225, the five
    shipped bundles (3,715 objects, both digests each), and the example
    bundle with its manifest — ALL GREEN.
 3. **Second implementation.** ✗ **OPEN.** `validate_core.ps1` carries the
    port (type, closure, typed edges, liveness, justification, scope, the
-   coverage join, the 65 vectors, the policy switch) and has **not been
+   coverage join, the 67 vectors, the policy switch) and has **not been
    executed** — no
    PowerShell runtime was available where it was written. Until a run on
    Windows PowerShell 5.1 is green, Risk has one implementation. This
@@ -1247,10 +1254,10 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
 - **Seven stdlib facet descriptors** (incl. the normative DSSE envelope
   profile) — unchanged from 1.0.0; pinned VERBATIM wherever bundled.
   `risk-analysis@1` is parked, with one measured payload (Appendix D).
-- **Conformance corpus**: **223 vectors, 13 families** (jcs 8 ·
+- **Conformance corpus**: **225 vectors, 13 families** (jcs 8 ·
   modality 21 · parameter 19 · tailoring 19 · attestation 5 · facet 7 ·
   reference 13 · lifecycle 37 · tier 9 · dsse 5 · composition 7 ·
-  conditional 8 · risk 65). In `risk-vectors.json`, `expected-rule` is
+  conditional 8 · risk 67). In `risk-vectors.json`, `expected-rule` is
   the portable assertion.
 - **Two reference validators**: `validate_core.py` (Python, jsonschema
   only) — green; `validate_core.ps1` (PowerShell 5.1, zero dependencies)
@@ -1303,7 +1310,7 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
 2. **The Risk rules toward imported data** — ✓ decided: kept strict (D23).
 3. **Licence** — ✓ Apache-2.0; corpus terms reviewed (§2).
 4. **The second implementation** — ☐ run `validate_core.ps1` on Windows
-   PowerShell 5.1; expect `risk: 65 pass, 0 fail` and ALL GREEN; remove
+   PowerShell 5.1; expect `risk: 67 pass, 0 fail` and ALL GREEN; remove
    the two port guards (backlog #45). **Blocks the tag.**
 5. **Decide before the tag** — ☐ a kernel-version pin in the manifest
    (#44); ☐ whether to tighten `Finding.actions[].due`, which would end

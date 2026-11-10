@@ -22,7 +22,7 @@ the selection open), RISK-9/10 notes, RISK-11.
 PORT STATUS (2026-11-10): the CP-RISK-1 additions were ported from
 validate_core.py and risk-vectors.json in an environment WITHOUT a
 PowerShell runtime. They have NOT been executed. Until a run on Windows
-PowerShell 5.1 prints "risk: 65 pass, 0 fail" and ALL GREEN, the risk
+PowerShell 5.1 prints "risk: 67 pass, 0 fail" and ALL GREEN, the risk
 family counts as ONE implementation, not two (Ch. 15: the release gate).
 The fixes of the rc.1 review (same day: justification needs an assessed
 treatment decision, tailoring-refs scoping, RISK-13/14, typed Tailoring
@@ -1017,10 +1017,22 @@ function Risk-Coverage($objs, $envelopes, $trusted) {
     }
     $report = [ordered]@{}
     $selections = @{}
+    # No Tailoring at all: nothing was scoped out, so every Requirement in
+    # force is in play; the implicit selection is reported under '*'. (All
+    # Tailorings WITHDRAWN is a different statement and selects nothing.)
+    if ($tailIds.Count -eq 0) { [void]$inForce.Add('*') }
     foreach ($tid in $inForce) {
-        $tobj = $objs[$tid].o
-        $tier = Derive-Tier $tobj $objs $envelopes $trusted
-        $sr = Selected-Requirements $tobj $objs
+        if ($tid -ceq '*') {
+            $tobj = @{}; $tier = 'none'
+            $all = New-Object System.Collections.ArrayList
+            foreach ($oid in $objs.Keys) {
+                if ($objs[$oid].t -ceq 'requirement' -and $objs[$oid].o['lifecycle'] -cne 'withdrawn') { [void]$all.Add([string]$oid) } }
+            $sr = @{sel = $all; isOpen = $false; gone = (New-Object System.Collections.ArrayList)}
+        } else {
+            $tobj = $objs[$tid].o
+            $tier = Derive-Tier $tobj $objs $envelopes $trusted
+            $sr = Selected-Requirements $tobj $objs
+        }
         $sel = $sr.sel
         $selections[$tid] = $sr
         if ($sr.isOpen) {
@@ -1073,7 +1085,7 @@ function Risk-Coverage($objs, $envelopes, $trusted) {
     # mistyped target is RISK-7/12's failure. Where one of THOSE selections
     # is open the question is undecidable here: said, not guessed.
     $outOfScope = @{}; $undecided = @{}
-    if ($tailIds.Count -gt 0) {
+    if ($true) {
         foreach ($rid in $riskIds) {
             $r = $objs[$rid].o
             if (-not (Risk-Is-Live $r)) { continue }
@@ -1565,6 +1577,7 @@ function Validate-Bundle([string]$bdir) {
         if ($rc.risks -gt 0 -or $RequireRiskBasis) {
             foreach ($tid in @($rc.report.Keys)) {
                 $r = $rc.report[$tid]
+                if ($tid -ceq '*') { $tid = '(no Tailoring: every requirement is in play)' }
                 $openTag = ''
                 if ($r.isOpen) { $openTag = '+ (open: predicate select)' }
                 Write-Host "    risk-coverage: $tid [$($r.tier)] selected=$($r.selected)$openTag justified=$($r.covered.Count) uncovered=$($r.uncovered.Count)"
