@@ -22,8 +22,12 @@ the selection open), RISK-9/10 notes, RISK-11.
 PORT STATUS (2026-11-10): the CP-RISK-1 additions were ported from
 validate_core.py and risk-vectors.json in an environment WITHOUT a
 PowerShell runtime. They have NOT been executed. Until a run on Windows
-PowerShell 5.1 prints "risk: 42 pass, 0 fail" and ALL GREEN, the risk
+PowerShell 5.1 prints "risk: 65 pass, 0 fail" and ALL GREEN, the risk
 family counts as ONE implementation, not two (Ch. 15: the release gate).
+The fixes of the rc.1 review (same day: justification needs an assessed
+treatment decision, tailoring-refs scoping, RISK-13/14, typed Tailoring
+selects/excludes, withdrawn Tailorings and Requirements, 23 more vectors)
+were ported the same way and are equally UNEXECUTED.
 The two new call sites are guarded so that a port defect surfaces as a
 counted failure naming its line instead of ending the run; remove the
 guards after the first green run.
@@ -241,7 +245,7 @@ $OPTIONAL_CONTAINERS = @('aliases', 'canonical-alias', 'replaces', 'relations', 
                          'annotations', 'parameters', 'deviations', 'excludes',
                          'source-scope', 'target-scope', 'evidence-refs', 'statement-refs',
                          'capabilities', 'authorizations', 'actions', 'choices',
-                         'threat-refs', 'component-refs', 'treatments', 'risk-refs')
+                         'threat-refs', 'component-refs', 'treatments', 'risk-refs', 'tailoring-refs')
 function Optional-Empty-Violations($obj, [string]$path = '$') {
     $out = New-Object System.Collections.ArrayList
     if (Is-Map $obj) {
@@ -341,9 +345,23 @@ function Closure-Errors($objs) {
         if ($t -eq 'requirementSet') {
             foreach ($m in @($o['members'])) { if ($null -ne $m) { Need $oid $m['ref'] 'member ref' } }
         } elseif ($t -eq 'tailoring') {
+            # a Tailoring edge is typed, like a Risk edge (RISK-12): a set-ref
+            # that is not a RequirementSet selects nothing, silently; an
+            # exclude that is neither a Requirement nor a Set removes nothing
             foreach ($s in @($o['selects'])) {
-                if ($null -ne $s -and $s.Contains('set-ref')) { Need $oid $s['set-ref'] 'selects set-ref' } }
-            foreach ($e in @($o['excludes'])) { if ($null -ne $e) { Need $oid $e['ref'] 'excludes ref' } }
+                if ($null -eq $s -or -not $s.Contains('set-ref')) { continue }
+                $sr = [string]$s['set-ref']
+                Need $oid $sr 'selects set-ref'
+                if ($objs.Contains($sr) -and $objs[$sr].t -cne 'requirementSet') {
+                    [void]$errs.Add("${oid}: selects set-ref resolves to a $($objs[$sr].t), not a RequirementSet: $sr (D13: a selection names a Set - chaining runs on the resolved package, never by reference)") }
+            }
+            foreach ($e in @($o['excludes'])) {
+                if ($null -eq $e) { continue }
+                $er = [string]$e['ref']
+                Need $oid $er 'excludes ref'
+                if ($objs.Contains($er) -and $objs[$er].t -cne 'requirement' -and $objs[$er].t -cne 'requirementSet') {
+                    [void]$errs.Add("${oid}: excludes ref resolves to a $($objs[$er].t), neither a Requirement nor a RequirementSet: $er (D13: an exclusion scopes out requirements - one, or a Set's members)") }
+            }
             foreach ($op in @($o['operations'])) {
                 if ($null -eq $op) { continue }
                 Need $oid $op['requirement-ref'] 'operation requirement-ref'
@@ -400,6 +418,19 @@ function Closure-Errors($objs) {
                 Need $oid $cref 'component-refs (RISK-7)'
                 if ($objs.Contains($cref) -and $objs[$cref].t -cne 'component') {
                     [void]$errs.Add("${oid}: component-refs entry resolves to a $($objs[$cref].t), not a Component: $cref (RISK-12: a Risk edge is typed - the asset at risk is a Component)") } }
+            # the Statement(s) of Applicability this risk's treatment belongs to
+            foreach ($tref in @($o['tailoring-refs'])) {
+                if ($null -eq $tref) { continue }
+                Need $oid $tref 'tailoring-refs (RISK-7)'
+                if ($objs.Contains($tref) -and $objs[$tref].t -cne 'tailoring') {
+                    [void]$errs.Add("${oid}: tailoring-refs entry resolves to a $($objs[$tref].t), not a Tailoring: $tref (RISK-12: a Risk edge is typed - the scope of a treatment is a Tailoring)") }
+            }
+            # RISK-13: levels compare within ONE scale and never across (D23)
+            if ($o.Contains('rating') -and $o.Contains('residual-rating')) {
+                $sa = [string]$o['rating']['scale-ref']; $sb = [string]$o['residual-rating']['scale-ref']
+                if ($sa -cne $sb) {
+                    [void]$errs.Add("${oid}: residual-rating is on $sb, rating on $sa (RISK-13: a residual level is what remains of a level - it presupposes a rating, on the same scale)") }
+            }
         } elseif ($t -eq 'mapping') {
             foreach ($side in @('source', 'target')) {
                 $ref = $o["$side-ref"]
@@ -877,6 +908,7 @@ function Risk-Rule-Violations($o) {
     if ($tr -ceq 'modify' -and -not $o.Contains('treatments')) { [void]$out.Add('RISK-4') }
     if ($tr -ceq 'share' -and -not $o.Contains('shared-with-ref')) { [void]$out.Add('RISK-5') }
     if ($tr -ceq 'retain' -and -not $o.Contains('acceptance')) { [void]$out.Add('RISK-6') }
+    if ($o.Contains('residual-rating') -and -not $o.Contains('rating')) { [void]$out.Add('RISK-13') }
     return ,$out
 }
 
@@ -898,18 +930,33 @@ function Same-Set($a, $b) {
 # A Risk justifies a control only while it is being managed: `retired` is
 # terminal (C.3c) and lifecycle `withdrawn` unpublishes the object.
 function Risk-Is-Live($r) { return (($r['state'] -cne 'retired') -and ($r['lifecycle'] -cne 'withdrawn')) }
-# set-refs expanded through nested Sets to any depth (D21: a DAG; the seen
-# list makes a malformed cycle terminate). A predicate select is resolved by
-# the tailoring engine, not here: its presence makes the selection OPEN.
-function Selected-Requirements($tobj, $objs) {
-    $sel = New-Object System.Collections.ArrayList
+# A Risk JUSTIFIES a requirement once a treatment decision rests on an
+# assessed risk: live, published (not draft), state assessed or treated,
+# and a treatment option chosen (ISO/IEC 27001 6.1.3 a-b). Without this a
+# three-field stub would satisfy -RequireRiskBasis.
+function Risk-Justifies($r) {
+    if (-not (Risk-Is-Live $r)) { return $false }
+    if ($r['lifecycle'] -ceq 'draft') { return $false }
+    if (($r['state'] -cne 'assessed') -and ($r['state'] -cne 'treated')) { return $false }
+    return [bool]$r.Contains('treatment')
+}
+# tailoring-refs scope a Risk; without them it applies to every Tailoring
+function Risk-Applies($r, [string]$tid) {
+    $n = 0; $hit = $false
+    foreach ($x in @($r['tailoring-refs'])) { if ($null -ne $x) { $n++; if ([string]$x -ceq $tid) { $hit = $true } } }
+    return (($n -eq 0) -or $hit)
+}
+function Risk-Is-Scoped($r) {
+    foreach ($x in @($r['tailoring-refs'])) { if ($null -ne $x) { return $true } }
+    return $false
+}
+# ids -> Requirement ids, through nested Sets to any depth (D21: a DAG; the
+# seen list makes a malformed cycle terminate)
+function Expand-Refs($refs, $objs) {
+    $out = New-Object System.Collections.ArrayList
     $seen = New-Object System.Collections.ArrayList
     $stack = New-Object System.Collections.ArrayList
-    $isOpen = $false
-    foreach ($s in @($tobj['selects'])) {
-        if ($null -eq $s) { continue }
-        if ($s.Contains('set-ref')) { [void]$stack.Add([string]$s['set-ref']) } else { $isOpen = $true }
-    }
+    foreach ($x in @($refs)) { if ($null -ne $x) { [void]$stack.Add([string]$x) } }
     while ($stack.Count -gt 0) {
         $sid = $stack[$stack.Count - 1]
         $stack.RemoveAt($stack.Count - 1)
@@ -920,78 +967,148 @@ function Selected-Requirements($tobj, $objs) {
         if ($tgt.t -ceq 'requirementSet') {
             foreach ($m in @($tgt.o['members'])) { if ($null -ne $m) { [void]$stack.Add([string]$m['ref']) } }
         } elseif ($tgt.t -ceq 'requirement') {
-            if ($sel -cnotcontains $sid) { [void]$sel.Add($sid) }
+            if ($out -cnotcontains $sid) { [void]$out.Add($sid) }
         }
     }
-    foreach ($e in @($tobj['excludes'])) { if ($null -ne $e) { $sel.Remove([string]$e['ref']) } }
-    return @{sel = $sel; isOpen = $isOpen}
+    return ,$out
+}
+# set-refs name Sets (typed in Closure-Errors); an exclude names a
+# Requirement or a Set, and a Set excludes its members; a withdrawn
+# Requirement is not in force. A predicate select is resolved by the
+# tailoring engine, not here: its presence makes the selection OPEN.
+function Selected-Requirements($tobj, $objs) {
+    $roots = New-Object System.Collections.ArrayList
+    $isOpen = $false
+    foreach ($s in @($tobj['selects'])) {
+        if ($null -eq $s) { continue }
+        if ($s.Contains('set-ref')) {
+            $sr = [string]$s['set-ref']
+            if ($objs.Contains($sr) -and $objs[$sr].t -ceq 'requirementSet') { [void]$roots.Add($sr) }
+        } else { $isOpen = $true }
+    }
+    $sel = Expand-Refs $roots $objs
+    $exRoots = New-Object System.Collections.ArrayList
+    foreach ($e in @($tobj['excludes'])) { if ($null -ne $e) { [void]$exRoots.Add([string]$e['ref']) } }
+    foreach ($q in @(Expand-Refs $exRoots $objs)) { if ($null -ne $q) { $sel.Remove([string]$q) } }
+    $gone = New-Object System.Collections.ArrayList
+    foreach ($q in @($sel)) { if ($null -ne $q -and $objs[$q].o['lifecycle'] -ceq 'withdrawn') { [void]$gone.Add([string]$q) } }
+    foreach ($q in $gone) { $sel.Remove($q) }
+    return @{sel = $sel; isOpen = $isOpen; gone = $gone}
+}
+function Add-To-Bucket($bucket, [string]$q, [string]$rid) {
+    if (-not $bucket.ContainsKey($q)) { $bucket[$q] = New-Object System.Collections.ArrayList }
+    if ($bucket[$q] -cnotcontains $rid) { [void]$bucket[$q].Add($rid) }
 }
 function Risk-Coverage($objs, $envelopes, $trusted) {
     $notes = New-Object System.Collections.ArrayList
     $errs = New-Object System.Collections.ArrayList
-    $treats = @{}; $lapsed = @{}; $nRisks = 0
+    $riskIds = New-Object System.Collections.ArrayList
+    $tailIds = New-Object System.Collections.ArrayList
     foreach ($oid in $objs.Keys) {
-        if ($objs[$oid].t -cne 'risk') { continue }
-        $nRisks++
-        $r = $objs[$oid].o
-        $bucket = $treats
-        if (-not (Risk-Is-Live $r)) { $bucket = $lapsed }
-        foreach ($tr in @($r['treatments'])) {
-            if ($null -eq $tr) { continue }
-            $q = [string]$tr['requirement-ref']
-            if (-not $bucket.ContainsKey($q)) { $bucket[$q] = New-Object System.Collections.ArrayList }
-            if ($bucket[$q] -cnotcontains $oid) { [void]$bucket[$q].Add([string]$oid) }
-        }
+        if ($objs[$oid].t -ceq 'risk') { [void]$riskIds.Add([string]$oid) }
+        if ($objs[$oid].t -ceq 'tailoring') { [void]$tailIds.Add([string]$oid) }
+    }
+    $riskIds = Sorted-Ordinal $riskIds
+    $inForce = New-Object System.Collections.ArrayList
+    foreach ($tid in (Sorted-Ordinal $tailIds)) {
+        if ($objs[$tid].o['lifecycle'] -ceq 'withdrawn') {
+            [void]$notes.Add("${tid}: withdrawn - selects nothing and is not reported (a withdrawn Statement of Applicability is history)")
+        } else { [void]$inForce.Add($tid) }
     }
     $report = [ordered]@{}
-    $allSelected = New-Object System.Collections.ArrayList
-    $anyOpen = $false; $nTail = 0
-    $tids = New-Object System.Collections.ArrayList
-    foreach ($oid in $objs.Keys) { if ($objs[$oid].t -ceq 'tailoring') { [void]$tids.Add([string]$oid) } }
-    foreach ($tid in (Sorted-Ordinal $tids)) {
-        $nTail++
+    $selections = @{}
+    foreach ($tid in $inForce) {
         $tobj = $objs[$tid].o
         $tier = Derive-Tier $tobj $objs $envelopes $trusted
         $sr = Selected-Requirements $tobj $objs
         $sel = $sr.sel
+        $selections[$tid] = $sr
         if ($sr.isOpen) {
-            $anyOpen = $true
             [void]$notes.Add("${tid}: predicate select not expanded by risk-coverage (engine-resolved) - the selection is a lower bound") }
+        if ($sr.gone.Count -gt 0) {
+            [void]$notes.Add("${tid}: $($sr.gone.Count) selected requirement(s) are withdrawn and not counted (first: $((Sorted-Ordinal $sr.gone)[0]))") }
+        $treats = @{}; $pending = @{}; $lapsed = @{}
+        foreach ($rid in $riskIds) {
+            $r = $objs[$rid].o
+            if (-not (Risk-Applies $r $tid)) { continue }
+            $bucket = $lapsed
+            if (Risk-Justifies $r) { $bucket = $treats } elseif (Risk-Is-Live $r) { $bucket = $pending }
+            foreach ($tr in @($r['treatments'])) {
+                if ($null -ne $tr) { Add-To-Bucket $bucket ([string]$tr['requirement-ref']) $rid } }
+        }
         $covered = New-Object System.Collections.ArrayList
         $uncovered = New-Object System.Collections.ArrayList
+        $pendingOnly = New-Object System.Collections.ArrayList
         $lapsedOnly = New-Object System.Collections.ArrayList
         foreach ($q in (Sorted-Ordinal $sel)) {
-            if ($allSelected -cnotcontains $q) { [void]$allSelected.Add($q) }
-            if ($treats.ContainsKey($q)) { [void]$covered.Add($q) }
-            else {
-                [void]$uncovered.Add($q)
-                if ($lapsed.ContainsKey($q)) {
-                    [void]$lapsedOnly.Add($q)
-                    [void]$notes.Add("${tid}: selected $q is named only by retired/withdrawn Risk(s) $((Sorted-Ordinal $lapsed[$q]) -join ', ') - counted as uncovered (C.3c: a retired risk justifies nothing)") } }
+            if ($treats.ContainsKey($q)) { [void]$covered.Add($q); continue }
+            [void]$uncovered.Add($q)
+            if ($pending.ContainsKey($q)) {
+                [void]$pendingOnly.Add($q)
+                [void]$notes.Add("${tid}: selected $q is named only by Risk(s) without an assessed treatment decision $((Sorted-Ordinal $pending[$q]) -join ', ') - counted as uncovered (a risk justifies once it is assessed and its option chosen)")
+            } elseif ($lapsed.ContainsKey($q)) {
+                [void]$lapsedOnly.Add($q)
+                [void]$notes.Add("${tid}: selected $q is named only by retired/withdrawn Risk(s) $((Sorted-Ordinal $lapsed[$q]) -join ', ') - counted as uncovered (C.3c: a retired risk justifies nothing)")
+            }
         }
         $exclNo = 0
         foreach ($e in @($tobj['excludes'])) { if ($null -ne $e -and -not $e.Contains('rationale')) { $exclNo++ } }
         if ($tier -ceq 'consumer' -and $exclNo -gt 0) {
             [void]$notes.Add("${tid}: $exclNo exclude(s) without rationale at consumer tier (RISK-10, SHOULD: an SoA exclusion carries its justification)") }
-        $report[$tid] = @{tier = $tier; selected = $sel.Count; isOpen = $sr.isOpen; covered = $covered; uncovered = $uncovered; lapsed = $lapsedOnly}
+        $report[$tid] = @{tier = $tier; selected = $sel.Count; isOpen = $sr.isOpen; covered = $covered; uncovered = $uncovered; pending = $pendingOnly; lapsed = $lapsedOnly}
     }
-    # RISK-11 binds LIVE risks only, and only where a Tailoring exists to
-    # disagree with; an unresolved or mistyped target is RISK-7/12's failure.
-    # With an open selection the question is undecidable here: said, not guessed.
-    if ($nTail -gt 0) {
-        foreach ($q in (Sorted-Ordinal @($treats.Keys))) {
-            if ($allSelected -ccontains $q) { continue }
-            if (-not $objs.Contains($q)) { continue }
-            if ($objs[$q].t -cne 'requirement') { continue }
-            $first = (Sorted-Ordinal $treats[$q])[0]
-            if ($anyOpen) {
-                [void]$notes.Add("${first}: treatment names $q, which no set-ref select reaches - RISK-11 undecided: a predicate select in this bundle may select it")
-                continue
-            }
-            [void]$errs.Add("${first}: treatment names $q, which no Tailoring in this bundle selects (RISK-11: a risk cannot lean on a control the SoA dropped)")
+    # RISK-14 (SHOULD): with more than one Tailoring in force an unscoped
+    # Risk counts in each
+    if ($inForce.Count -gt 1) {
+        foreach ($rid in $riskIds) {
+            $r = $objs[$rid].o
+            $hasTr = $false
+            foreach ($tr in @($r['treatments'])) { if ($null -ne $tr) { $hasTr = $true } }
+            if ((Risk-Is-Live $r) -and $hasTr -and -not (Risk-Is-Scoped $r)) {
+                [void]$notes.Add("${rid}: no tailoring-refs in a bundle with $($inForce.Count) Tailorings - its treatment counts in each (RISK-14, SHOULD: a Risk names the Tailoring its treatment belongs to)") }
         }
     }
-    return @{report = $report; errs = $errs; notes = $notes; risks = $nRisks}
+    # RISK-11 binds LIVE risks only and is asked of the Tailorings the risk
+    # belongs to (its tailoring-refs, else all in force); an unresolved or
+    # mistyped target is RISK-7/12's failure. Where one of THOSE selections
+    # is open the question is undecidable here: said, not guessed.
+    $outOfScope = @{}; $undecided = @{}
+    if ($tailIds.Count -gt 0) {
+        foreach ($rid in $riskIds) {
+            $r = $objs[$rid].o
+            if (-not (Risk-Is-Live $r)) { continue }
+            $mine = New-Object System.Collections.ArrayList
+            foreach ($tid in $inForce) { if (Risk-Applies $r $tid) { [void]$mine.Add($tid) } }
+            foreach ($tr in @($r['treatments'])) {
+                if ($null -eq $tr) { continue }
+                $q = [string]$tr['requirement-ref']
+                if (-not $objs.Contains($q)) { continue }
+                if ($objs[$q].t -cne 'requirement') { continue }
+                $selected = $false; $anyOpen = $false
+                foreach ($tid in $mine) {
+                    if ($selections[$tid].sel -ccontains $q) { $selected = $true }
+                    if ($selections[$tid].isOpen) { $anyOpen = $true }
+                }
+                if ($selected) { continue }
+                if (($objs[$q].o['lifecycle'] -cne 'withdrawn') -and $anyOpen) { Add-To-Bucket $undecided $q $rid }
+                else { Add-To-Bucket $outOfScope $q $rid }
+            }
+        }
+    }
+    foreach ($q in (Sorted-Ordinal @($undecided.Keys))) {
+        $first = (Sorted-Ordinal $undecided[$q])[0]
+        [void]$notes.Add("${first}: treatment names $q, which no set-ref select reaches - RISK-11 undecided: a predicate select of its Tailoring(s) may select it")
+    }
+    foreach ($q in (Sorted-Ordinal @($outOfScope.Keys))) {
+        $first = (Sorted-Ordinal $outOfScope[$q])[0]
+        $scoped = $false
+        foreach ($rid in $outOfScope[$q]) { if (Risk-Is-Scoped $objs[$rid].o) { $scoped = $true } }
+        $why = 'which no Tailoring in this bundle selects'
+        if ($scoped) { $why = 'which the Tailoring(s) it belongs to do not select' }
+        if ($objs[$q].o['lifecycle'] -ceq 'withdrawn') { $why = 'which is withdrawn' }
+        [void]$errs.Add("${first}: treatment names $q, $why (RISK-11: a risk cannot lean on a control the SoA dropped)")
+    }
+    return @{report = $report; errs = $errs; notes = $notes; risks = $riskIds.Count}
 }
 # RISK-9 (SHOULD): a risk-adjustment Deviation names the Risk it adjusts for
 function Risk-Link-Notes($objs) {
@@ -1019,7 +1136,7 @@ function Risk-Link-Notes($objs) {
 }
 # the normative B.1.9 failure, printed under the policy switch
 function Risk-Basis-Fail([string]$tid, [string]$q) {
-    return "FAIL [risk-coverage] $tid  selected $q`n  named by no live Risk`n  rationale: ISO/IEC 27001 6.1.3 d - inclusion in the Statement of Applicability carries its justification"
+    return "FAIL [risk-coverage] $tid  selected $q`n  justified by no Risk`n  rationale: ISO/IEC 27001 6.1.3 d - inclusion in the Statement of Applicability carries its justification"
 }
 
 $COUNTS = @{}
@@ -1328,6 +1445,7 @@ function Run-Risk {
                 if (-not (Same-Set $got.uncovered $want['uncovered'])) { $okc = $false }
                 if (-not (Same-Set $got.covered $want['covered'])) { $okc = $false }
                 if ($want.Contains('lapsed')) { if (-not (Same-Set $got.lapsed $want['lapsed'])) { $okc = $false } }
+                if ($want.Contains('pending')) { if (-not (Same-Set $got.pending $want['pending'])) { $okc = $false } }
             }
         }
         if ($okc) { OK 'risk' }
