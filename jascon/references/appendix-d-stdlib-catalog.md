@@ -220,6 +220,21 @@ The governing principle, quoted from the user directive that decided
 #8: **a tool that cannot handle a facet must stop working on that
 data** — fail-closed engages only when declarations are honest.
 
+**Parked (2.0.0, named exit):** `risk-analysis@1` — likelihood, impact,
+method-ref, characterizations, mitigating factors: everything Appendix F
+Q14 keeps out of the kernel now that the Risk *object* is kernel (A.9b).
+First corpus, measured 2026-11-10: the IFA re-run retired the `risk@1`
+framework facet (it sat on Findings) and carries the same content on the
+two Risk objects as `ifa.gov/goodread/facet/risk-analysis@1` — the L2
+holding pen. Observed payload: `characterizations` (likelihood and impact
+as name/value pairs under a scale `system` URI, plus origin actors) ×2,
+`responses` (type, lifecycle, title, narrative, tasks) ×2,
+`mitigating-factors` ×1, the source `risk-status` and `description`. What
+that one corpus already says about the design: the level is NOT in the
+source — a stdlib facet that wants to explain a `rating` must carry the
+method that combines the two inputs. Second corpus: a BSI 200-3
+Risikoanalyse export. Ships when both are measured.
+
 **Parked:** `privacy-assessment@1` — deliberately not shipped until
 the Rev5-era privacy corpus is measured; a privacy facet designed
 from memory would violate the book's only method. The audit table

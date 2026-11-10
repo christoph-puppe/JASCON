@@ -6,7 +6,7 @@ type**, wired together as a single, closed, cross-referentially
 consistent package — the same running story the Handbook tells
 (KONF.14.1, the Acme SaaS on a PaaS, finding 017).
 
-## Coverage: the nine types + sub-objects + bundle artifacts
+## Coverage: the ten types + sub-objects + bundle artifacts
 
 | # | Type | File | Demonstrates |
 |---|---|---|---|
@@ -20,6 +20,7 @@ consistent package — the same running story the Handbook tells
 | 6 | Implementation | `implementation-acme-konf.json` | per-clause `statement-refs`, shared responsibility, capability + `inherited-from` with **basis-ref → authorization id** |
 | 7 | Assessment | `assessment-2026q3.json` | facet-typed method (stdlib stub), subjects, result |
 | 8 | Finding | `finding-017.json` | statement-scoped finding, calendar-aware action, **Deviation sub-object** (false-positive, approved) |
+| 10 | Risk | `risk-acme-kms-key-rotation.json` | treated Risk on a BSI 200-3 scale, G 0.x threat refs, **treats KONF.14.1 s2** (the clause finding 017 is against — which now carries `risk-refs`), CISO acceptance of the residual, 12-month calendar review; `risk-coverage` on this bundle: 3 selected, 1 justified, 2 uncovered |
 | 9 | Attestation | `attestation-acme-2026.json` | subject **semantic** digests, content-manifest binding, rendering block — *beside* the manifest, never inside |
 | — | Content manifest | `content-manifest.json` | both digests per object, exact-pinned facet schemas, rendering digest |
 | — | Facet descriptors | `gspp-taxonomy-1.0.0.json`, `assessment-criteria-1.0.0-stub.json` | custom facet descriptors and stubs |
@@ -29,9 +30,14 @@ consistent package — the same running story the Handbook tells
 
 - **Closed object references.** Every object-to-object `ref` resolves
   inside this bundle via the manifest — sealed-mode friendly.
-- **Real digests.** All `package-digest` values are true SHA-256 over
-  the file bytes as shipped. All `semantic-digest` values are SHA-256
-  over the canonicalized object **minus `annotations`**.
+- **Real digests — and now checked.** All `package-digest` values are
+  true SHA-256 over the file bytes as shipped (LF line endings, the bytes
+  inside the skill zip; `.gitattributes` keeps a Windows checkout from
+  re-spelling them). All `semantic-digest` values are SHA-256 over the
+  canonicalized object **minus `annotations`**. `validate_core.py`
+  verifies this manifest on every run. *Correction (2026-11-10):* it did
+  not before, and at 1.0.0 the claim above was false for every checkout —
+  8 of the 12 package digests matched CRLF bytes and 4 matched LF bytes.
   Canonicalization note: computed with a JCS-compatible serialization
   (sorted keys, minimal separators, UTF-8, no escaping of non-ASCII)
   — exact for this content, which contains **no floating-point
@@ -65,10 +71,14 @@ consistent package — the same running story the Handbook tells
    This is pedagogy, not an omission.
 5. **`assessment-criteria` schema is a stub**; the normative stdlib
    schema ships with the v0.6 gate.
-6. **The attestation's `template-ref.digest` is a marked placeholder**
-   and the DSSE **envelope is out of scope** of these examples
-   (`envelope-ref` points at a path not included) — envelope bytes are
-   defined by the stdlib DSSE profile, not by example files.
+6. **The attestation is illustrative end to end.** Its
+   `template-ref.digest` is a marked placeholder, the DSSE **envelope is
+   out of scope** (`envelope-ref` points at a path not included), and —
+   not marked until 2026-11-10 — its three `subject-semantic-digests` and
+   its `content-manifest-digest` **match no object and no manifest in this
+   folder** (they predate the `text` primitive re-run). It shows the
+   *shape* of an attestation; it binds nothing here. Making it real, and
+   having the validator hold it to that, is backlog #46.
 7. One rendering stands in for real deliverables; real bundles list
    as many as they ship.
 

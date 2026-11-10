@@ -1,7 +1,7 @@
 # The JASCON Handbook
 # Appendix A — Shapes Reference
 
-**Purpose:** the nine types, two sub-objects, and bundle artifacts,
+**Purpose:** the ten types, two sub-objects, and bundle artifacts,
 field by field — with the evidence column that makes this appendix
 different from a schema dump: which measured corpus reality each field
 answers to. Counts cite the three-authority census and the gate-item-1
@@ -86,8 +86,8 @@ track Sets (20x/Rev5) are built purely from subset-Set members.
 
 | Field | | Type | Meaning & evidence |
 |---|---|---|---|
-| `selects` | ● | [{set-ref} \| {predicate}] | What's in scope; predicates are the closed D14 set. |
-| `excludes` | ○ | [{ref, rationale?}] | **Selection, never Deviation** (D13) — scoping out is not weakening. |
+| `selects` | ● | [{set-ref} \| {predicate}] | What's in scope; predicates are the closed D14 set. A `set-ref` is closure-required and **typed: it names a RequirementSet** — anything else selected nothing, silently (rc.1 review). |
+| `excludes` | ○ | [{ref, rationale?}] | **Selection, never Deviation** (D13) — scoping out is not weakening. `ref` names a Requirement **or a RequirementSet, whose members it excludes**; any other type is an error. |
 | `operations` | ○ | [Operation] | Ordered; identity-addressed; same-target twice = error; chaining only via explicit `override`. |
 | `deviations` | ○ | [Deviation] | Ex-ante channel — a weakening op **must** reference one. Evidence: CR26's 111 class-variant modality ops needed **zero** (every published delta tightens — measured, not assumed). |
 
@@ -148,7 +148,10 @@ CR26 artifacts/key-tests/examples shape} · `performer-ref` ● ·
 `time` ● · `result` ● code · `evidence-refs` ○.
 
 **Finding:** `assessment-ref` ● · `requirement-ref` ● ·
-`statement-ref` ○ · `state` ● code (C.3) ·
+`statement-ref` ○ · `state` ● code (C.3) · `risk-refs` ○ [URI] — the
+ex-post record points at the ex-ante Risk(s) it materialised against;
+landmark (assessor bundle → organisation register, 2.0.0), but typed: a
+ref that resolves in-bundle must name a Risk (RISK-12) ·
 `actions` ○ [{description ●, due ○ {date | elapsed-duration |
 calendar-period}, status ●}] — computable deadlines
 (fail-closed without the named calendar) ·
@@ -163,6 +166,42 @@ FedRAMP deviation props are its `type` values.
 | `content-manifest-digest` | ● | digest | *Package state* bound — enables bi-modal verification (Full vs Semantic Match). |
 | `rendering` | ● | {artifact-digest ●, media-type ●, template-ref{id,version,digest} ●, renderer ●} | *Paper* bound; templates are pinned TCB citizens; chrome-only annotation use is the renderer's law. |
 | `signer` ● · `timestamp` ● · `envelope-ref` ● | | | DSSE profile (stdlib); attestations live **beside** the manifest — nothing signed contains its own signature (D3). |
+
+## A.9b Risk *(kernel 2.0.0 — CP-RISK-1)*
+
+The ex-ante record: why a requirement is in scope. Four authorities encode
+it with the same fields (ISO/IEC 27001 6.1.2–6.1.3 / 27005, BSI 200-3,
+SP 800-30, OSCAL AR/POA&M `risk`); the *scales* differ and stay in facets.
+Common fields (A.0) plus:
+
+| Field | | Type | Meaning & evidence |
+|---|---|---|---|
+| `scenario` | ● | text | The risk statement — event and consequence (ISO 27005 event-based; BSI 200-3 Gefährdung am Zielobjekt). Multilingual like every normative text. |
+| `owner-ref` | ● | URI | The risk owner (ISO 6.1.2 c 2). Landmark ref — a party, not a bundle object. |
+| `state` | ● | code (C.3c) | identified · assessed · treated · retired. |
+| `threat-refs` | ○ | [URI] | Threat catalog entries (G 0.x, ATT&CK techniques, 800-30 threat events). Landmark. |
+| `component-refs` | ○ | [URI] | The assets at risk — Components of this bundle. Closure-required (RISK-7) and typed: each names a Component (RISK-12). |
+| `tailoring-refs` | ○ | [URI] | The Statement(s) of Applicability this risk's treatment belongs to — Tailorings of this bundle. Closure-required (RISK-7), typed (RISK-12). Present: the Risk justifies, and is held to RISK-11, only there. Absent: it applies to every Tailoring of the bundle (noted where there is more than one — RISK-14). |
+| `rating` | ○ | {level ●, scale-ref ●} | Inherent/current level on a named scale. **Required** once `state` ∈ assessed · treated (RISK-2). |
+| `residual-rating` | ○ | {level ●, scale-ref ●} | The level after treatment. Presupposes `rating`, on the **same** `scale-ref` (RISK-13). |
+| `treatment` | ○ | code (C.10) | modify · retain · avoid · share. **Required** once treated (RISK-3). |
+| `treatments` | ○ | [{requirement-ref ●, statement-ids ○}] | **The ISO 6.1.3 b edge**: the controls determined for this risk, to the clause. requirement-ref closure-required (RISK-7) and typed — it names a Requirement, never a Set (RISK-12); statement-ids must address the target (RISK-8). **Required** for `modify` (RISK-4). |
+| `shared-with-ref` | ○ | URI | Who carries the shared risk. **Required** for `share` (RISK-5). |
+| `acceptance` | ○ | {approver-ref ●, date ●, rationale ●} | The owner's acceptance of the residual (ISO 6.1.3 f). `date` is an ISO 8601 calendar date (`YYYY-MM-DD`), schema-checked. **Required** for `retain` (RISK-6) and once treated (RISK-3). |
+| `review-due` | ○ | date \| datetime \| elapsed-duration \| calendar-period | ISO 8.2 "at planned intervals". A point in time is `{type: date \| datetime, value}` — `date` is `YYYY-MM-DD`, `datetime` is RFC 3339 with an explicit offset, both schema-checked; durations as in `Finding.actions[].due` with `num` a positive integer, fail-closed without the named calendar. `datetime` is measured, not designed: OSCAL's `deadline` is date-time-with-timezone and both corpus deadlines are (IFA ×2). |
+
+**Shape-disjointness:** `scenario` + `owner-ref` occur in no other type.
+**Closure:** `treatments[].requirement-ref`, `component-refs` and
+`tailoring-refs` in-bundle (RISK-7) and typed (RISK-12); `owner-ref`, `threat-refs`,
+`shared-with-ref`, `approver-ref`, `scale-ref` landmark. **Liveness:** a
+Risk whose `state` is `retired` or whose `lifecycle` is `withdrawn`
+justifies nothing (B.1.9). **Justification:** a live Risk justifies a
+requirement only once it is published (not `draft`), `assessed` or
+`treated`, and carries a `treatment` option — until then it is listed as
+`pending` (B.1.9). **Evidence:** example bundle (1 Risk), 65
+vectors, and the IFA lifecycle corpus — 2 Risks converted from POA&M
+risks. That first corpus also measured what OSCAL cannot give this shape
+(A.12): no owner field, no single level, no dated acceptance.
 
 ## A.10 Sub-object: Deviation
 
@@ -196,3 +235,20 @@ predicate selects, excludes, set-field/replace-prose/relation/facet
 ops, uri/date/integer/decimal parameters, canonical-alias/replaces
 events, Assessment/Finding/Attestation at scale (example-bundle only).
 The gap list is Appendix E's and gate items 2–3's work order.
+
+**Risk (2.0.0), first corpus measurement — IFA re-run 2026-11-10.**
+*Exercised:* `scenario`, `owner-ref`, `state`, `component-refs`,
+`treatment` + `treatments` (×1), `review-due` (datetime ×2),
+`Finding.risk-refs` (×2), a `risk-adjustment` Deviation naming its Risk
+(×1). *Declared, not corpus-exercised:* `rating`, `residual-rating`,
+`acceptance`, `shared-with-ref`, `threat-refs`, `tailoring-refs`, and the states `assessed`,
+`treated`, `retired`. That list is not an accident of a small corpus: an
+OSCAL risk carries likelihood and impact but **no level** (so RISK-2 holds
+both risks at `identified`), **no owner** (derived from the imported SSP's
+`owner` role, declared in the coverage report) and **no acceptance date**
+(so the one `accept` response cannot become `retain` under RISK-6). The
+kernel shape and the fourth authority disagree on three required fields;
+the disagreement was put to the author and decided on 2026-11-10: **the
+rules stay** (specification D23). `assessed` always means "has a level",
+`retain` always means "has a dated, attributed acceptance"; an import that
+cannot say so stays `identified`, with its source status in a facet.
