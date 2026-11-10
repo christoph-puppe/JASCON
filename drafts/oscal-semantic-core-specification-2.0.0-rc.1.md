@@ -43,7 +43,7 @@ released; this text adds one kernel type — **Risk** (D23) — and the ninth
 primitive that computes over it. It is a major version by the rule of
 D22 rev 3, not because anything breaks: all 6,914 objects of the 1.0.0
 corpus validate unchanged under the 2.0.0 schema, so a 1.0.0 bundle is a
-2.0.0 bundle. **Measured at rc.1:** a 258-vector conformance corpus in
+2.0.0 bundle. **Measured at rc.1:** a 264-vector conformance corpus in
 fifteen families; the Python reference validator green on it and on
 every bundle that ships; the first Risk corpus (two Risk objects
 converted from an OSCAL POA&M), and what that corpus shows the fourth
@@ -1284,14 +1284,15 @@ The 1.0.0 gate asked for converters, an executable kernel, a lifecycle
 corpus and two implementations. The same four questions, asked of Risk:
 
 1. **Executable kernel + conformance.** ✓ Schema 2.0.0 (ten types);
-   **258 vectors, 15 families** — the twelve of 1.0.0 (lifecycle 36 → 37
-   with the tenth disjointness case) plus `risk` 73 (27 object · 38
+   **264 vectors, 15 families** — the twelve of 1.0.0 (lifecycle 36 → 37
+   with the tenth disjointness case; attestation 5 → 11 with the
+   in-bundle subject vectors) plus `risk` 73 (27 object · 38
    bundle · 8 transitions; 42 at the landing, 25 from the rc.1 review, 6
    with likelihood and impact)
    and `kernel` 9 (the manifest pin, D3.6) and `scale` 18 (pinned scale
    definitions, D3.7). Every review correction to the proposal is
    pinned by a vector that fails on the validator as first proposed.
-2. **First implementation.** ✓ `validate_core.py`: 258 / 258, the five
+2. **First implementation.** ✓ `validate_core.py`: 264 / 264, the five
    shipped bundles (3,715 objects, both digests each), and the example
    bundle with its manifest — ALL GREEN.
 3. **Second implementation.** ✗ **OPEN.** `validate_core.ps1` carries the
@@ -1357,14 +1358,15 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
 - **Seven stdlib facet descriptors** (incl. the normative DSSE envelope
   profile) — unchanged from 1.0.0; pinned VERBATIM wherever bundled.
   `risk-analysis@1` is parked, with one measured payload (Appendix D).
-- **Conformance corpus**: **258 vectors, 15 families** (jcs 8 ·
-  modality 21 · parameter 19 · tailoring 19 · attestation 5 · facet 7 ·
+- **Conformance corpus**: **264 vectors, 15 families** (jcs 8 ·
+  modality 21 · parameter 19 · tailoring 19 · attestation 11 · facet 7 ·
   reference 13 · lifecycle 37 · tier 9 · dsse 5 · composition 7 ·
   conditional 8 · risk 73 · kernel 9 · scale 18). In `risk-vectors.json`, `expected-rule` is
   the portable assertion.
 - **Two reference validators**: `validate_core.py` (Python, jsonschema
   only) — green; `validate_core.ps1` (PowerShell 5.1, zero dependencies)
-  — at 1.0.0 parity for the twelve families, Risk port **not executed**.
+  — at 1.0.0 parity for the twelve families, Risk port **not executed**
+  (nor the in-bundle attestation subject rule, ported the same way).
 - **Bidirectional export**: `export_oscal.py` — as at 1.0.0 (OSCAL 1.2.2
   out, generic re-import, 5,886/5,886 round-trip measured on the ten
   catalog bundles then present); not re-run.

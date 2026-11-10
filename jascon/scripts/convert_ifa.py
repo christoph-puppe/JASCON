@@ -19,7 +19,7 @@ acceptance (`retain` is unreachable). Findings point at their Risk with
 bundle - an authorization package carries its baseline. Coverage target: 0.
 Depends on: convert_nist.py output (run first)."""
 import json, os, re, collections
-from oscal_conv_lib import make_T, slug, Bundle, inventory, coverage, report, semantic_digest, value_arrival
+from oscal_conv_lib import make_T, slug, Bundle, inventory, coverage, report, value_arrival
 
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 SRCDIR = os.path.join(ROOT, "sources", "nist")
@@ -439,7 +439,11 @@ bundle.add("objects/finding/goodread-risk-1.json",
                             "refs": [f"{NS}/evidence/obs-{POAM['observations'][0]['uuid'][:8]}", RISK1["id"]]}]})
 
 # ================= 6. Attestation (the ATO as attestation) =================
-ato_subjects = [{"id": o["id"], "semantic-digest": semantic_digest(o)}
+# The subject digests must be those of the objects AS WRITTEN: write()
+# language-tags text fields, and the manifest digests that form. The module
+# function on the in-memory object attested a Component that was never shipped
+# (errata 2026-11-10); the Bundle method digests the written form.
+ato_subjects = [{"id": o["id"], "semantic-digest": bundle.semantic_digest_of(o)}
                 for rel, o in sorted(bundle.objects.items())
                 if o["id"] in (COMP_SYS, IMPL_SYS, REQ_AC61)]
 mini_manifest = json.dumps(ato_subjects, separators=(",", ":"), ensure_ascii=False).encode()
@@ -478,15 +482,23 @@ bundle.stub("goodread-finding-target-stub.json", F_FTGT.split("@")[0], [],
              "implementation-statement-uuid": {"type": "string"}})
 bundle.stub("goodread-ap-stub.json", F_AP.split("@")[0], [], {"activities": {"type": "array"}})
 bundle.stub("goodread-protocols-stub.json", F_PROTO.split("@")[0], [], {"protocols": {"type": "array"}})
-bundle.write({"source": "OSCAL IFA GoodRead example set (SSP 1.1.1, AP, AR, POA&M) + leveraged/"
+manifest = bundle.write({"source": "OSCAL IFA GoodRead example set (SSP 1.1.1, AP, AR, POA&M) + leveraged/"
                         "leveraging SSP pair + component-definition example (usnistgov/oscal-content)",
               "source-note": "FICTIONAL example content by NIST; converted as the gate-3 lifecycle corpus",
               "source-oscal-version": SSP["metadata"]["oscal-version"],
               "source-commit": "usnistgov/oscal-content@9402f031 (2026-07-14; the state fetched 2026-07-22)",
-              "converter": "convert_ifa.py v0.2 (CP-RISK-1 re-run: POA&M risks -> Risk objects)",
+              "converter": "convert_ifa.py v0.3 (the Attestation digests its subjects as written)",
               "carried-requirements": carried,
               "attestation-note": "content-manifest-digest = sha256 over the JSON array of "
                                   "{id, semantic-digest} subject entries (deterministic mini-manifest)"})
+# Postcondition: what the Attestation says about a subject is what the manifest
+# says about the same object. A converter that breaks this stops here instead
+# of shipping a bundle that verifies as tampered.
+_listed = {e["id"]: e["semantic-digest"] for e in manifest["objects"]}
+_stale = [s["id"] for s in ato_subjects if _listed.get(s["id"]) != s["semantic-digest"]]
+if _stale:
+    raise SystemExit(f"attestation subject digest != manifest semantic-digest for {_stale} "
+                     f"(digest taken before the object reached its written form?)")
 
 # ---------- coverage ----------
 RULES = [

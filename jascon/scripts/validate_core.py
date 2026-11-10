@@ -285,6 +285,44 @@ def derive_tier(tobj, objs, sdig_fn, envelopes=None, trusted=None, notes=None):
                     return "authority-proven"
     return "authority-claimed" if claimed else "consumer"
 
+def attestation_subject_errors(objs, report=None):
+    """attestation-binds, the subject half (D7, Ch. 11.5): an Attestation
+    that names a subject by id and travels in the same bundle as that object
+    must carry the object's semantic digest. Anything else is the TAMPER
+    state - neither of the two green states - and therefore a FAILURE, not a
+    note. Appendix B section 7 specifies exactly that ("anything else =
+    fail", with per-subject detail); both operands are in the bundle, so no
+    key, trust root or outside knowledge is needed, and it is the same
+    evidence class as a manifest semantic-digest mismatch. Signed or
+    unsigned makes no difference; the envelope is a separate axis.
+    Deliberately NOT judged here (0 errors from this rule): a bare-digest
+    subject names no object, and a subject absent from the bundle is the
+    DSSE profile's completeness question (Ch. 11.6).
+    Errata 2026-11-10: the IFA ATO attested the system Component before the
+    converter language-tagged its text fields; every run printed ALL GREEN.
+    `report`, if given, collects one (attestation id, in-bundle, matched)
+    tuple per Attestation for the bundle printout."""
+    errs = []
+    for aid, (t, att) in sorted(objs.items()):
+        if t != "attestation": continue
+        present = matched = 0
+        for subj in att.get("subject-semantic-digests", []) or []:
+            if not isinstance(subj, dict): continue
+            tgt = objs.get(subj.get("id"))
+            if tgt is None: continue
+            present += 1
+            actual = sdig(tgt[1])
+            if actual == subj.get("semantic-digest"):
+                matched += 1
+                continue
+            # message shape: Appendix B section 7 (per-subject detail)
+            errs.append(f"{aid}: [attestation-binds] subject {subj['id']}: recomputed semantic digest "
+                        f"{actual}, attested {subj.get('semantic-digest')} - normative content differs "
+                        f"from what was attested (a packaging-only delta would have left the semantic "
+                        f"digest unchanged); if the object changed legitimately, re-issue the Attestation")
+        if report is not None: report.append((aid, present, matched))
+    return errs
+
 def tailoring_duty_errors(objs, pinned_decl=None, sdig_fn=None, envelopes=None, trusted=None):
     """Op-law enforcement with the derived tier (D13 + #19; #24 verification mode)."""
     errs = []
@@ -817,6 +855,28 @@ def run_attestation():
         else: got = "semantic-match"
         if got == case["expected"]: ok("attestation")
         else: fail("attestation", f"{case['name']}: expected {case['expected']}, got {got}")
+    # bundle-vectors: an Attestation beside its subjects. `COMPUTE` is the
+    # digest of the object as delivered, `ATTESTED` the digest of the same id
+    # in `attested` (the object as it was when the Attestation was made).
+    # Substituted before type inference, like the tier vectors.
+    for case in v.get("bundle-vectors", []):
+        delivered = {o["id"]: o for o in case["objects"]}
+        attested = {o["id"]: o for o in case.get("attested", [])}
+        for o in case["objects"]:
+            for subj in o.get("subject-semantic-digests", []) or []:
+                if not isinstance(subj, dict): continue
+                src = {"COMPUTE": delivered, "ATTESTED": attested}.get(subj.get("semantic-digest"))
+                if src is not None and subj["id"] in src:
+                    subj["semantic-digest"] = sdig(src[subj["id"]])
+        objs = {}
+        for o in case["objects"]:
+            t = inferType_single(o)
+            if t: objs[o["id"]] = (t, o)
+        errs = attestation_subject_errors(objs)
+        named = all(any(f"subject {sid}:" in e for e in errs) for sid in case.get("expected-subjects", []))
+        if len(errs) == case["expected-errors"] and named: ok("attestation")
+        else: fail("attestation", f"{case['name']}: expected {case['expected-errors']} errors naming "
+                                  f"{case.get('expected-subjects', [])}, got {len(errs)} ({errs[:2]})")
 
 def run_facets():
     v = json.load(open(os.path.join(CONF, "facet-vectors.json"), encoding="utf-8"))
@@ -1625,6 +1685,12 @@ def validate_bundle(bdir):
                 print(f"    dsse: {oid} = {tag}")
         else:
             print(f"    dsse: {oid} = no envelope (unsigned attestation)")
+    # attestation-binds, subject half: an in-bundle subject must carry the
+    # digest that was attested (failure, not a note - see the function)
+    att_report = []
+    for e in attestation_subject_errors(bundle_objs, att_report): fail(section, e)
+    for aid, present, matched in att_report:
+        print(f"    attestation: {aid} subjects: {present} in bundle, {matched} digest-matched")
     # reference taxonomy (#16) + facet payloads (#17) + tier duties (#19/#24)
     for e in closure_errors(bundle_objs):
         fail(section, e)
@@ -1721,6 +1787,7 @@ def validate_examples():
         if obj.get("id") != entry["id"]:
             fail(section, f"{fn}: manifest id != object id")
     for e in closure_errors(exobjs): fail(section, e)
+    for e in attestation_subject_errors(exobjs): fail(section, e)
     for e in kernel_pin_errors(manifest, exobjs): fail(section, e)
     s_errs, s_notes = scale_errors(load_scale_pins(exdir, manifest, section), exobjs)
     for e in s_errs: fail(section, e)

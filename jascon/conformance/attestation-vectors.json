@@ -44,5 +44,100 @@
             "obligated-parties": ["https://ex.org/party/org"], "prose": { "en": "X may be done." } } ] },
         "delivered-mutation": "prose edited after signing" },
       "expected": "tamper" }
+  ],
+  "bundle-vectors-description": "attestation-binds, the subject half, on a bundle: an Attestation that names a subject by id ({id, semantic-digest}) and travels beside that object MUST carry the object's semantic digest; a mismatch is the TAMPER state and a validation ERROR (never a note - D7 knows two green states, and both operands are in the bundle). `objects` is the bundle as delivered. `attested`, where present, holds objects as they were when the Attestation was made. Placeholders, substituted before type inference: COMPUTE = semantic digest of the delivered object with that id; ATTESTED = semantic digest of the object with that id in `attested`. `expected-errors` is the error count of THIS rule; `expected-subjects` is the portable assertion - each listed subject id is named by an error. Out of the rule's scope and therefore 0 errors: bare-digest subjects (they name no object) and subjects absent from the bundle (completeness is the DSSE profile's seventh question, Ch. 11.6).",
+  "bundle-vectors": [
+    { "name": "subjects-match",
+      "objects": [
+        { "id": "https://ex.org/req/1", "version": "1", "lifecycle": "active",
+          "statements": [ { "id": "s1", "modality": "must",
+            "obligated-parties": ["https://ex.org/party/org"], "prose": { "en": "X must be done." } } ] },
+        { "id": "https://ex.org/component/sys", "version": "1", "label": "SYS", "lifecycle": "active",
+          "title": { "en": "The system" }, "kind": "system" },
+        { "id": "https://ex.org/attestation/ato", "version": "1", "lifecycle": "active",
+          "subject-semantic-digests": [
+            { "id": "https://ex.org/component/sys", "semantic-digest": "COMPUTE" },
+            { "id": "https://ex.org/req/1", "semantic-digest": "COMPUTE" } ],
+          "content-manifest-digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+          "signer": "https://ex.org/party/ao", "timestamp": "2026-11-10T00:00:00Z" } ],
+      "expected-errors": 0 },
+    { "name": "errata-ifa-ato-text-wrapped-after-attest",
+      "note": "The IFA GoodRead defect (2026-11-10) in miniature: the converter digested the system Component for the Attestation and only then language-tagged its title for writing. One of two subjects is stale; the Requirement, already in its written form, matches.",
+      "attested": [
+        { "id": "https://ex.org/component/sys", "version": "1", "label": "SYS", "lifecycle": "active",
+          "title": "The system", "kind": "system" } ],
+      "objects": [
+        { "id": "https://ex.org/req/1", "version": "1", "lifecycle": "active",
+          "statements": [ { "id": "s1", "modality": "must",
+            "obligated-parties": ["https://ex.org/party/org"], "prose": { "en": "X must be done." } } ] },
+        { "id": "https://ex.org/component/sys", "version": "1", "label": "SYS", "lifecycle": "active",
+          "title": { "en": "The system" }, "kind": "system" },
+        { "id": "https://ex.org/attestation/ato", "version": "1", "lifecycle": "active",
+          "subject-semantic-digests": [
+            { "id": "https://ex.org/component/sys", "semantic-digest": "ATTESTED" },
+            { "id": "https://ex.org/req/1", "semantic-digest": "COMPUTE" } ],
+          "content-manifest-digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+          "signer": "https://ex.org/party/ao", "timestamp": "2026-11-10T00:00:00Z" } ],
+      "expected-errors": 1,
+      "expected-subjects": ["https://ex.org/component/sys"] },
+    { "name": "subject-meaning-edited-after-attest",
+      "note": "modality must -> should after the Attestation was made: the meaning moved, the attested digest did not",
+      "attested": [
+        { "id": "https://ex.org/req/1", "version": "1", "lifecycle": "active",
+          "statements": [ { "id": "s1", "modality": "must",
+            "obligated-parties": ["https://ex.org/party/org"], "prose": { "en": "X must be done." } } ] } ],
+      "objects": [
+        { "id": "https://ex.org/req/1", "version": "1", "lifecycle": "active",
+          "statements": [ { "id": "s1", "modality": "should",
+            "obligated-parties": ["https://ex.org/party/org"], "prose": { "en": "X must be done." } } ] },
+        { "id": "https://ex.org/attestation/ato", "version": "1", "lifecycle": "active",
+          "subject-semantic-digests": [
+            { "id": "https://ex.org/req/1", "semantic-digest": "ATTESTED" } ],
+          "content-manifest-digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+          "signer": "https://ex.org/party/ao", "timestamp": "2026-11-10T00:00:00Z" } ],
+      "expected-errors": 1,
+      "expected-subjects": ["https://ex.org/req/1"] },
+    { "name": "annotation-only-change-is-not-tamper",
+      "note": "annotations are digest-excluded chrome: the delivered subject gained one, its semantic digest is the attested one - Semantic Match territory, no error",
+      "attested": [
+        { "id": "https://ex.org/req/1", "version": "1", "lifecycle": "active",
+          "statements": [ { "id": "s1", "modality": "must",
+            "obligated-parties": ["https://ex.org/party/org"], "prose": { "en": "X must be done." } } ] } ],
+      "objects": [
+        { "id": "https://ex.org/req/1", "version": "1", "lifecycle": "active",
+          "annotations": { "web_name": "chrome" },
+          "statements": [ { "id": "s1", "modality": "must",
+            "obligated-parties": ["https://ex.org/party/org"], "prose": { "en": "X must be done." } } ] },
+        { "id": "https://ex.org/attestation/ato", "version": "1", "lifecycle": "active",
+          "subject-semantic-digests": [
+            { "id": "https://ex.org/req/1", "semantic-digest": "ATTESTED" } ],
+          "content-manifest-digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+          "signer": "https://ex.org/party/ao", "timestamp": "2026-11-10T00:00:00Z" } ],
+      "expected-errors": 0 },
+    { "name": "subject-absent-from-bundle-is-not-this-rule",
+      "note": "boundary: the subject id resolves to nothing in the bundle, so there is no in-bundle object to compare with. Whether an absent subject is acceptable is the completeness question of the DSSE profile, not this rule.",
+      "objects": [
+        { "id": "https://ex.org/req/1", "version": "1", "lifecycle": "active",
+          "statements": [ { "id": "s1", "modality": "must",
+            "obligated-parties": ["https://ex.org/party/org"], "prose": { "en": "X must be done." } } ] },
+        { "id": "https://ex.org/attestation/ato", "version": "1", "lifecycle": "active",
+          "subject-semantic-digests": [
+            { "id": "https://ex.org/req/not-shipped",
+              "semantic-digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111" } ],
+          "content-manifest-digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+          "signer": "https://ex.org/party/ao", "timestamp": "2026-11-10T00:00:00Z" } ],
+      "expected-errors": 0 },
+    { "name": "bare-digest-subjects-are-not-this-rule",
+      "note": "boundary: a bare digest names no object. It matches nothing in the bundle here, and this rule still reports nothing - it compares only what an Attestation says about a NAMED in-bundle subject.",
+      "objects": [
+        { "id": "https://ex.org/req/1", "version": "1", "lifecycle": "active",
+          "statements": [ { "id": "s1", "modality": "must",
+            "obligated-parties": ["https://ex.org/party/org"], "prose": { "en": "X must be done." } } ] },
+        { "id": "https://ex.org/attestation/ato", "version": "1", "lifecycle": "active",
+          "subject-semantic-digests": [
+            "sha256:2222222222222222222222222222222222222222222222222222222222222222" ],
+          "content-manifest-digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+          "signer": "https://ex.org/party/ao", "timestamp": "2026-11-10T00:00:00Z" } ],
+      "expected-errors": 0 }
   ]
 }

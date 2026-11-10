@@ -8,7 +8,7 @@
  "subject-semantic-digests": [
   {
    "id": "https://ifa.gov/goodread/component/system1234",
-   "semantic-digest": "sha256:304d90cbd68d39fca0de28c88d7a5c440af72699133ef1b1fd170288cbedc077"
+   "semantic-digest": "sha256:8185bd7ac90008db09f3ef8e862d82a0001b374259a0acc152ecc41119fb7cdf"
   },
   {
    "id": "https://ifa.gov/goodread/impl/system1234-ac-6.1",
@@ -19,7 +19,7 @@
    "semantic-digest": "sha256:21637d8ecfe2f6255b6d385528772eac9ca7605d64c72d3d7666e1428c67ca3b"
   }
  ],
- "content-manifest-digest": "sha256:2d508eba78bb4030c11bd7f265e9679b8012b15a615719fa19d8d352a0486505",
+ "content-manifest-digest": "sha256:6be70def8f3836053469a8e4ee86c03c3693fc2f90b3fd0c25d578c3c510621e",
  "signer": "https://ifa.gov/goodread/party/authorizing-official",
  "timestamp": "2025-05-19T00:00:00Z"
 }

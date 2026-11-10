@@ -6,7 +6,7 @@
   "source-note": "FICTIONAL example content by NIST; converted as the gate-3 lifecycle corpus",
   "source-oscal-version": "1.1.3",
   "source-commit": "usnistgov/oscal-content@9402f031 (2026-07-14; the state fetched 2026-07-22)",
-  "converter": "convert_ifa.py v0.2 (CP-RISK-1 re-run: POA&M risks -> Risk objects)",
+  "converter": "convert_ifa.py v0.3 (the Attestation digests its subjects as written)",
   "carried-requirements": [
    "https://ns.nist.gov/sp800-53/req/AC-6.1",
    "https://ns.nist.gov/sp800-53/req/AC-2"
@@ -24,8 +24,8 @@
   {
    "id": "https://ifa.gov/goodread/attestation/ifa-ato",
    "version": "1.1.1",
-   "package-digest": "sha256:3cfe411191c52551b766ce9b1070de637d5ba7e9a5a41e19abf3d71f8a37bf71",
-   "semantic-digest": "sha256:e134eea346da385a90c139e110e6e4ac031c7a7da3c2def8230b633954e02a62",
+   "package-digest": "sha256:28c69736b44446120822b14a3a53a424e85cc3c8ede59d38f5f5d42ca6e66e49",
+   "semantic-digest": "sha256:1f2b5b4f21812d6336280be059841f92e3983ce051fd7659321d839d8d7b0fcf",
    "path": "objects/attestation/ifa-ato.json"
   },
   {

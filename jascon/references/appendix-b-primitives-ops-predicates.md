@@ -186,7 +186,13 @@ FAIL [attestation-binds] <attestation-id>
 **Exercised:** real two-digest computation across all bundles; the
 example bundle's differing package/semantic digests are the
 reproducible demo. Envelope verification awaits the DSSE profile
-(gate item 2).
+(gate item 2). The subject comparison runs on every bundle: an
+Attestation that names a subject by id and travels beside that object
+fails when the recomputed digest differs (six `bundle-vectors` in
+`attestation-vectors.json`). It caught its first case in the shipped
+IFA GoodRead bundle, whose converter had digested a Component before
+language-tagging its text fields. Bare-digest subjects and subjects
+absent from the bundle are not judged by this comparison.
 
 ### 8 · `conditional-apply(trigger, enforcement)` — *P+*
 

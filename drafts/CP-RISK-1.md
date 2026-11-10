@@ -341,9 +341,10 @@ and RISK-12 extended to `tailoring-refs` and RISK-11 asked per Tailoring;
 names the Tailoring its treatment belongs to*.
 
 **Vectors after the review:** 73 (27 object · 38 bundle · 8 transitions).
-Conformance corpus: **225 vectors, 13 families** (258 in 15 with the
-kernel-pin and scale families, D3.6, D3.7). Python reference
-validator: 258/258 and all shipped bundles, ALL GREEN.
+Conformance corpus: **225 vectors, 13 families** (264 in 15 with the
+kernel-pin and scale families, D3.6, D3.7, and the six in-bundle
+attestation subject vectors). Python reference
+validator: 264/264 and all shipped bundles, ALL GREEN.
 
 **What the review did not settle.**
 

@@ -85,6 +85,18 @@ class Bundle:
         self.schemas = {}          # relpath -> pinned schema obj
     def add(self, relpath, obj):
         self.objects[relpath] = obj
+    def semantic_digest_of(self, obj):
+        """Semantic digest of `obj` AS write() WILL EMIT IT. write()
+        language-tags the kernel text fields (textify); a digest taken from
+        the in-memory object before that is the digest of a different object.
+        Anything a converter embeds in another object - an Attestation's
+        subject digests - must come from here. textify only wraps plain
+        strings, so tagging early changes nothing write() would not do.
+        Errata 2026-11-10 (class: mismatch): convert_ifa.py digested the
+        system Component with the module function and attested its
+        pre-textify form; the manifest carried the written one."""
+        textify(obj, self.lang)
+        return semantic_digest(obj)
     def stub(self, name, fid, mods, props,
              note="NORMATIVE pinned payload schema (backlog #26): closed shape - unknown keys are rejected, never smuggled"):
         # #26 delivered: pins are the normative payload contract, fail-closed.

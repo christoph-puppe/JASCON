@@ -1997,3 +1997,52 @@ matrix. Methods that are more than a table stay facet material.
 executed), 9 vectors (scale 18, corpus 258), a 4×4 matrix in the example
 bundle and a 3×3 starting matrix in `risk-catalogs/scales/`.
 
+## Amendments — the stale attested digest (2026-11-10)
+
+**Trigger.** A check outside the validator: in the shipped IFA GoodRead
+bundle the Attestation `ifa-ato` carried `sha256:304d90cb…` for the
+system Component, the manifest `sha256:8185bd7a…`. The other two
+subjects matched. `validate_core.py` printed ALL GREEN.
+**Erratum (class: mismatch — two modules disagreed on which form of an
+object is digested).** `convert_ifa.py` took the subject digests from the
+in-memory objects. `Bundle.write()` then language-tags the kernel text
+fields and digests that form into the manifest. The Component has a
+`title` and a capability `description`, so its written form is another
+object; the Implementation has neither, and AC-6.1 arrives already
+tagged. Present since the #12 text delivery (`ee103e99`); the control run
+of the unchanged converter against `usnistgov/oscal-content@9402f031`
+reproduces the stale digest byte for byte. The attestation was
+regenerated at every re-run — a re-run alone could not repair it.
+**Fix.** `Bundle.semantic_digest_of()` digests the object as `write()`
+emits it; the converter uses it and stops if a subject digest differs
+from the manifest entry of the same object. Converter v0.3. The re-run
+changes two files and nothing else: the Attestation (one subject digest,
+`content-manifest-digest`) and the manifest (the Attestation's two
+digests, the converter string).
+**Decision.** An Attestation that names a subject by id and travels in
+the same bundle as that object fails validation when the recomputed
+semantic digest differs. This is `attestation-binds` as Appendix B §7
+has always specified it ("anything else = fail", with per-subject
+detail); the validators compared a subject digest only to derive the
+tier of a Tailoring, never to judge the Attestation itself.
+**Customer.** The assessor who is handed an authorization package and
+reads "ALL GREEN" as "the system that was authorized is the system in
+the package".
+**Rejected.** *A note instead of a failure* — D7 knows two green states,
+and a subject whose meaning differs is neither; a note leaves the exit
+code at zero, which is how this defect shipped. *Judging bare-digest
+subjects and absent subjects in the same rule* — a bare digest names no
+object, and an absent subject is the completeness question of the DSSE
+profile; both stay as they were, each pinned by a boundary vector.
+*Failing only signed Attestations* — the envelope is a separate axis; a
+statement about a digest the subject does not have is wrong either way.
+**Trade-off, stated.** The corrected Attestation keeps `version` 1.1.1:
+converted objects carry the version of their source document, as the
+CP-RISK-1 re-run did for the Findings. It is unsigned, so no signature
+breaks, but two different objects now exist under one id and version;
+the converter string in the manifest tells them apart.
+**Shipped with it.** Both validators (PowerShell by reading, **not
+executed** — no runtime was available), six `bundle-vectors` in
+`attestation-vectors.json` (attestation 11, corpus 264), among them the
+regression vector `errata-ifa-ato-text-wrapped-after-attest`; Appendix B
+and Chapter 12; the skill zip.

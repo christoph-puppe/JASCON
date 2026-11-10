@@ -31,6 +31,11 @@ were ported the same way and are equally UNEXECUTED.
 The two new call sites are guarded so that a port defect surfaces as a
 counted failure naming its line instead of ending the run; remove the
 guards after the first green run.
+The attestation subject rule (2026-11-10: an in-bundle Attestation whose
+subject digest differs from the in-bundle subject FAILS - Attestation-
+Subject-Errors, Run-Attestation-Bundle, six bundle-vectors) was ported the
+same way and is equally NOT EXECUTED. Its two call sites carry the same
+guard; a green run prints "attestation: 11 pass, 0 fail".
 
 Usage: powershell -ExecutionPolicy Bypass -File validate_core.ps1 [bundle-dirs...]
        -VectorsOnly to skip bundles; -TrustedKeys file.json for verification mode;
@@ -676,6 +681,42 @@ function Derive-Tier($tobj, $objs, $envelopes, $trusted) {
     if ($claimed) { return 'authority-claimed' } else { return 'consumer' }
 }
 
+# ---------------- attestation-binds, the subject half (D7, Ch. 11.5) ----------------
+# An Attestation that names a subject by id and travels in the same bundle as
+# that object must carry the object's semantic digest. A mismatch is the
+# TAMPER state - neither of the two green states - and a FAILURE, not a note
+# (Appendix B section 7: "anything else = fail", with per-subject detail);
+# both operands are in the bundle, so no key or trust root is needed. Signed
+# or unsigned makes no difference. Outside this rule (0 errors): bare-digest
+# subjects (they name no object) and subjects absent from the bundle
+# (completeness is the DSSE profile's question).
+# $report, if given, collects @(attestation id, in-bundle, matched).
+# PORTED BY READING, NOT EXECUTED - like the Risk port.
+function Attestation-Subject-Errors($objs, $report) {
+    $errs = New-Object System.Collections.ArrayList
+    $ids = New-Object System.Collections.ArrayList
+    foreach ($oid in $objs.Keys) { [void]$ids.Add([string]$oid) }
+    foreach ($aid in (Sorted-Ordinal $ids)) {
+        if ($objs[$aid].t -cne 'attestation') { continue }
+        $present = 0; $matched = 0
+        foreach ($subj in @($objs[$aid].o['subject-semantic-digests'])) {
+            if ($null -eq $subj -or -not (Is-Map $subj)) { continue }
+            $sid = [string]$subj['id']
+            if (-not $objs.Contains($sid)) { continue }
+            # [ordered] finds keys case-insensitively; ids compare as strings (D2)
+            if ([string]$objs[$sid].o['id'] -cne $sid) { continue }
+            $present++
+            $actual = SDig $objs[$sid].o
+            $said = [string]$subj['semantic-digest']
+            if ($actual -ceq $said) { $matched++; continue }
+            # message shape: Appendix B section 7 (per-subject detail)
+            [void]$errs.Add("${aid}: [attestation-binds] subject ${sid}: recomputed semantic digest $actual, attested $said - normative content differs from what was attested (a packaging-only delta would have left the semantic digest unchanged); if the object changed legitimately, re-issue the Attestation")
+        }
+        if ($null -ne $report) { [void]$report.Add(@($aid, $present, $matched)) }
+    }
+    return ,$errs
+}
+
 # ---------------- op-law duties (D13 + #19/#24) ----------------
 function Duty-Errors($objs, $pinnedDecl, $envelopes, $trusted) {
     $errs = New-Object System.Collections.ArrayList
@@ -1258,6 +1299,39 @@ function Run-Attestation {
         if ($got -eq $case['expected']) { OK 'attestation' } else { FAIL 'attestation' "$($case['name']): expected $($case['expected']), got $got" }
     }
 }
+# bundle-vectors: an Attestation beside its subjects. COMPUTE = digest of the
+# delivered object with that id, ATTESTED = digest of the same id in
+# `attested`; substituted before type inference, like the tier vectors.
+# PORTED BY READING, NOT EXECUTED.
+function Run-Attestation-Bundle {
+    $v = Load-Vectors 'attestation-vectors.json'
+    foreach ($case in @($v['bundle-vectors'])) {
+        if ($null -eq $case) { continue }
+        $delivered = @{}; $attested = @{}
+        foreach ($o in $case['objects']) { $delivered[$o['id']] = $o }
+        foreach ($o in @($case['attested'])) { if ($null -ne $o) { $attested[$o['id']] = $o } }
+        foreach ($o in $case['objects']) {
+            foreach ($subj in @($o['subject-semantic-digests'])) {
+                if (-not (Is-Map $subj)) { continue }
+                $src = $null
+                if ($subj['semantic-digest'] -ceq 'COMPUTE') { $src = $delivered }
+                elseif ($subj['semantic-digest'] -ceq 'ATTESTED') { $src = $attested }
+                if ($null -ne $src -and $src.ContainsKey($subj['id'])) { $subj['semantic-digest'] = SDig $src[$subj['id']] }
+            }
+        }
+        $objs = To-Objs $case['objects']
+        $errs = Attestation-Subject-Errors $objs $null
+        $named = $true
+        foreach ($sid in @($case['expected-subjects'])) {
+            if ($null -eq $sid) { continue }
+            $hit = $false
+            foreach ($e in @($errs)) { if (([string]$e).Contains("subject ${sid}:")) { $hit = $true } }
+            if (-not $hit) { $named = $false }
+        }
+        if (@($errs).Count -eq $case['expected-errors'] -and $named) { OK 'attestation' }
+        else { FAIL 'attestation' "$($case['name']): expected $($case['expected-errors']) errors, got $(@($errs).Count): $(@($errs) -join ' | ')" }
+    }
+}
 function Run-Facets {
     foreach ($case in (Load-Vectors 'facet-vectors.json')['vectors']) {
         $pinned = @{}
@@ -1804,6 +1878,14 @@ function Validate-Bundle([string]$bdir) {
         if (Test-Path $ep) { $envelopes[$e.o['envelope-ref']] = Read-Json $ep }
         else { FAIL $section "${oid}: envelope-ref '$($e.o['envelope-ref'])' does not resolve beside the manifest" }
     }
+    # attestation-binds, subject half: failure, not a note (see the function)
+    try {
+        $attReport = New-Object System.Collections.ArrayList
+        foreach ($e in (Attestation-Subject-Errors $bundleObjs $attReport)) { FAIL $section $e }
+        foreach ($r in $attReport) { Write-Host "    attestation: $($r[0]) subjects: $($r[1]) in bundle, $($r[2]) digest-matched" }
+    } catch {
+        FAIL $section "attestation subject rule PORT ERROR (not yet executed on a real runtime - report this line): $($_.Exception.Message) @ line $($_.InvocationInfo.ScriptLineNumber)"
+    }
     foreach ($e in (Closure-Errors $bundleObjs)) { FAIL $section $e }
     foreach ($e in (Duty-Errors $bundleObjs $pinnedDecl $envelopes $TRUSTED)) { FAIL $section $e }
     try { foreach ($e in (Kernel-Pin-Errors $manifest $bundleObjs)) { FAIL $section $e } } catch {
@@ -1880,6 +1962,9 @@ $SW = [System.Diagnostics.Stopwatch]::StartNew()
 Write-Host '== conformance corpus (validate_core.ps1 - the weekend implementation) =='
 Run-Jcs; Run-Modality; Run-Parameters; Run-Tailoring; Run-Attestation; Run-Facets
 Run-References; Run-Lifecycle; Run-Tiers; Run-Dsse; Run-Composition; Run-Conditional
+try { Run-Attestation-Bundle } catch {
+    FAIL 'attestation' "PORT ERROR (attestation subject rule not yet executed on a real runtime - report this line): $($_.Exception.Message) @ line $($_.InvocationInfo.ScriptLineNumber)"
+}
 try { Run-Risk } catch {
     FAIL 'risk' "PORT ERROR (CP-RISK-1 port not yet executed on a real runtime - report this line): $($_.Exception.Message) @ line $($_.InvocationInfo.ScriptLineNumber)"
 }

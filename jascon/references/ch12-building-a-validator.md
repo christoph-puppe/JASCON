@@ -213,7 +213,9 @@ it one. `attestation-binds` is Chapter 11's bi-modal state function:
 verify the envelope per the DSSE profile's seven answers, then return
 Full Match, Semantic Match, or failure — never a boolean, because the
 two green states mean different things and your callers must see
-which.
+which. The subject comparison needs no key and runs on every bundle:
+an Attestation shipped beside a subject whose recomputed semantic
+digest differs is a failure, signed or not, never a note.
 
 **Fourth, the tailoring resolver** — Appendix B, implemented
 literally: expand `selects` through set nesting and apply `excludes`;
