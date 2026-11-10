@@ -40,7 +40,7 @@ says so."
 
 What each promise contains, and the receipts a buyer asks for:
 
-**Core** promises passive correctness: schema validation of all nine
+**Core** promises passive correctness: schema validation of all ten
 types, sealed-mode operation, package-digest verification, local
 resolution, the structural primitives, and preservation of everything
 unknown — with *zero* semantic computation. Receipts: a sealed run

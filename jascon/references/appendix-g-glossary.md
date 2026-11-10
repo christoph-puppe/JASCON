@@ -345,8 +345,9 @@ it. Tenth kernel type (1.1.0). (Ch. 10 §10.6, App. A.9b)
 `acceptance` (ISO/IEC 27001 6.1.2 c 2). (App. A.9b)
 
 **risk-coverage** — the ninth primitive: which selected requirements are
-justified by a Risk, which are not; the Statement of Applicability as a
-computation. (App. B.1.9)
+justified by a live Risk, which are not; the Statement of Applicability as
+a computation. Retired and withdrawn Risks are listed as `lapsed`, never
+counted. (App. B.1.9)
 
 **Statement** — the identified clause: id, modality, parties,
 parameters, prose. The shared fine-grained address of the whole

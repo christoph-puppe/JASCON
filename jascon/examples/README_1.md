@@ -30,9 +30,14 @@ consistent package — the same running story the Handbook tells
 
 - **Closed object references.** Every object-to-object `ref` resolves
   inside this bundle via the manifest — sealed-mode friendly.
-- **Real digests.** All `package-digest` values are true SHA-256 over
-  the file bytes as shipped. All `semantic-digest` values are SHA-256
-  over the canonicalized object **minus `annotations`**.
+- **Real digests — and now checked.** All `package-digest` values are
+  true SHA-256 over the file bytes as shipped (LF line endings, the bytes
+  inside the skill zip; `.gitattributes` keeps a Windows checkout from
+  re-spelling them). All `semantic-digest` values are SHA-256 over the
+  canonicalized object **minus `annotations`**. `validate_core.py`
+  verifies this manifest on every run. *Correction (2026-11-10):* it did
+  not before, and at 1.0.0 the claim above was false for every checkout —
+  8 of the 12 package digests matched CRLF bytes and 4 matched LF bytes.
   Canonicalization note: computed with a JCS-compatible serialization
   (sorted keys, minimal separators, UTF-8, no escaping of non-ASCII)
   — exact for this content, which contains **no floating-point
@@ -66,10 +71,14 @@ consistent package — the same running story the Handbook tells
    This is pedagogy, not an omission.
 5. **`assessment-criteria` schema is a stub**; the normative stdlib
    schema ships with the v0.6 gate.
-6. **The attestation's `template-ref.digest` is a marked placeholder**
-   and the DSSE **envelope is out of scope** of these examples
-   (`envelope-ref` points at a path not included) — envelope bytes are
-   defined by the stdlib DSSE profile, not by example files.
+6. **The attestation is illustrative end to end.** Its
+   `template-ref.digest` is a marked placeholder, the DSSE **envelope is
+   out of scope** (`envelope-ref` points at a path not included), and —
+   not marked until 2026-11-10 — its three `subject-semantic-digests` and
+   its `content-manifest-digest` **match no object and no manifest in this
+   folder** (they predate the `text` primitive re-run). It shows the
+   *shape* of an attestation; it binds nothing here. Making it real, and
+   having the validator hold it to that, is backlog #46.
 7. One rendering stands in for real deliverables; real bundles list
    as many as they ship.
 
