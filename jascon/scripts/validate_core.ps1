@@ -22,7 +22,7 @@ the selection open), RISK-9/10 notes, RISK-11.
 PORT STATUS (2026-11-10): the CP-RISK-1 additions were ported from
 validate_core.py and risk-vectors.json in an environment WITHOUT a
 PowerShell runtime. They have NOT been executed. Until a run on Windows
-PowerShell 5.1 prints "risk: 67 pass, 0 fail" and ALL GREEN, the risk
+PowerShell 5.1 prints "risk: 73 pass, 0 fail" and ALL GREEN, the risk
 family counts as ONE implementation, not two (Ch. 15: the release gate).
 The fixes of the rc.1 review (same day: justification needs an assessed
 treatment decision, tailoring-refs scoping, RISK-13/14, typed Tailoring
@@ -430,6 +430,15 @@ function Closure-Errors($objs) {
                 $sa = [string]$o['rating']['scale-ref']; $sb = [string]$o['residual-rating']['scale-ref']
                 if ($sa -cne $sb) {
                     [void]$errs.Add("${oid}: residual-rating is on $sb, rating on $sa (RISK-13: a residual level is what remains of a level - it presupposes a rating, on the same scale)") }
+                # ... and so do likelihood and impact, where both sides carry them
+                foreach ($part in @('likelihood', 'impact')) {
+                    $pa = $o['rating'][$part]; $pr = $o['residual-rating'][$part]
+                    if ((Is-Map $pa) -and (Is-Map $pr)) {
+                        $ua = [string]$pa['scale-ref']; $ub = [string]$pr['scale-ref']
+                        if ($ua -cne $ub) {
+                            [void]$errs.Add("${oid}: residual-rating $part is on $ub, rating $part on $ua (RISK-13: a residual level is what remains of a level - it presupposes a rating, on the same scale)") }
+                    }
+                }
             }
         } elseif ($t -eq 'mapping') {
             foreach ($side in @('source', 'target')) {

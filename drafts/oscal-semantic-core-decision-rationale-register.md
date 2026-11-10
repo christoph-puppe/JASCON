@@ -1882,3 +1882,59 @@ executed), `kernel-vectors.json` (9 — the fourteenth family), the
 converter library (pins automatically when the content needs it; bundles
 without such content reproduce byte for byte), the reader (v1.7.3).
 
+## Amendments — risk catalogues stay outside the kernel (2026-11-10)
+
+**Trigger.** The author's idea of ready-made risk lists that an
+organisation imports, the prototype built for it (`risk-catalogs/`), and
+backlog #53: does a catalogue entry become a kernel type before the 2.0.0
+tag?
+**Decision (author).** "Keep outside of kernel." Catalogues, their draft
+schema and the import tool stay in `risk-catalogs/`. 2.0.0 gets no entry
+type.
+**Evidence.** The prototype imported 23 entries into kernel `Risk` objects
+and the reference validator accepted the resulting bundle (1,065 pass)
+without any kernel change: `Risk`, `relations`, `annotations` and
+`tailoring-refs` were enough. A kernel type would have bought digests,
+attestation and a typed back-reference for catalogues, and nothing the
+import needs.
+**Customer.** The organisation that wants a starting list. It gets one
+today, and no validator carries an eleventh type for it.
+**Simplicity.** The kernel stays at ten types; D22 is not asked for a
+second exception.
+**Trade-off, accepted.** A catalogue is not a bundle object: it has no
+package or semantic digest, cannot be the subject of an Attestation, and
+the back-reference from an imported Risk is an untyped `relations` entry
+with a URI the validator does not resolve.
+**Left open.** Where a recorded "not applicable" for a catalogue risk
+lives (backlog #54) — outside the kernel, like the catalogues.
+
+## Amendments — likelihood and impact (2026-11-10)
+
+**Trigger.** The author: "JASCON's kernel Risk has only an opaque rating
+{level, scale-ref}; likelihood and impact are deliberately not kernel
+fields. Think we need those."
+**Decision (D23).** `rating` and `residual-rating` may each carry
+`likelihood` and `impact`, each `{level, scale-ref}`. RISK-13 holds a
+likelihood or impact carried on both sides to one scale.
+**Customer.** Whoever reads a register: the level alone does not say
+whether a risk is rare and ruinous or frequent and cheap, and the residual
+level alone does not say which of the two the treatment changed.
+**Evidence.** ISO/IEC 27001 6.1.2 d, BSI 200-3 and SP 800-30 name the two
+inputs; OSCAL's risk characterizations carry them (IFA ×2). Appendix F
+Q14 kept them out together with the computation; only the computation
+differs by method.
+**Simplicity.** No new top-level field; the residual pair comes with the
+nesting; the kernel still compares nothing and computes nothing.
+**Rejected.** *Top-level fields* — four of them, and a likelihood without
+a rating would then be writable, a half-assessed state the rules have no
+word for. *Impact per dimension* — a third standard-specific vocabulary;
+stays in the facet until a corpus shows one shape. *Checking that the
+level follows from the inputs* — that is the matrix, and the matrix is not
+kernel. *Letting likelihood plus impact count as assessed* — RISK-2 keeps
+its one meaning.
+**Trade-off, stated.** OSCAL imports gain nothing: their likelihood and
+impact come without a level and stay in the holding facet.
+**Shipped with it.** Schema, both validators (PowerShell by reading, not
+executed), 6 vectors (risk 73, corpus 240), the example Risk and the
+catalogue demo.
+

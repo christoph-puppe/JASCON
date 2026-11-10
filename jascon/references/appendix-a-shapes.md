@@ -182,8 +182,8 @@ Common fields (A.0) plus:
 | `threat-refs` | ○ | [URI] | Threat catalog entries (G 0.x, ATT&CK techniques, 800-30 threat events). Landmark. |
 | `component-refs` | ○ | [URI] | The assets at risk — Components of this bundle. Closure-required (RISK-7) and typed: each names a Component (RISK-12). |
 | `tailoring-refs` | ○ | [URI] | The Statement(s) of Applicability this risk's treatment belongs to — Tailorings of this bundle. Closure-required (RISK-7), typed (RISK-12). Present: the Risk justifies, and is held to RISK-11, only there. Absent: it applies to every Tailoring of the bundle (noted where there is more than one — RISK-14). |
-| `rating` | ○ | {level ●, scale-ref ●} | Inherent/current level on a named scale. **Required** once `state` ∈ assessed · treated (RISK-2). |
-| `residual-rating` | ○ | {level ●, scale-ref ●} | The level after treatment. Presupposes `rating`, on the **same** `scale-ref` (RISK-13). |
+| `rating` | ○ | {level ●, scale-ref ●, likelihood ○, impact ○} | Inherent/current level on a named scale. **Required** once `state` ∈ assessed · treated (RISK-2). `likelihood` and `impact` are each `{level ●, scale-ref ●}` — the two inputs ISO/IEC 27001 6.1.2 d, BSI 200-3 and SP 800-30 name; opaque like the level, never computed with. One impact; impact per dimension is the facet's. |
+| `residual-rating` | ○ | {level ●, scale-ref ●, likelihood ○, impact ○} | The level after treatment, with its own likelihood and impact. Presupposes `rating`, on the **same** `scale-ref`; a likelihood or impact carried on both sides names the same scale as its counterpart (RISK-13). |
 | `treatment` | ○ | code (C.10) | modify · retain · avoid · share. **Required** once treated (RISK-3). |
 | `treatments` | ○ | [{requirement-ref ●, statement-ids ○}] | **The ISO 6.1.3 b edge**: the controls determined for this risk, to the clause. requirement-ref closure-required (RISK-7) and typed — it names a Requirement, never a Set (RISK-12); statement-ids must address the target (RISK-8). **Required** for `modify` (RISK-4). |
 | `shared-with-ref` | ○ | URI | Who carries the shared risk. **Required** for `share` (RISK-5). |
@@ -198,7 +198,7 @@ Risk whose `state` is `retired` or whose `lifecycle` is `withdrawn`
 justifies nothing (B.1.9). **Justification:** a live Risk justifies a
 requirement only once it is published (not `draft`), `assessed` or
 `treated`, and carries a `treatment` option — until then it is listed as
-`pending` (B.1.9). **Evidence:** example bundle (1 Risk), 67
+`pending` (B.1.9). **Evidence:** example bundle (1 Risk), 73
 vectors, and the IFA lifecycle corpus — 2 Risks converted from POA&M
 risks. That first corpus also measured what OSCAL cannot give this shape
 (A.12): no owner field, no single level, no dated acceptance.
@@ -245,7 +245,7 @@ The gap list is Appendix E's and gate items 2–3's work order.
 *Exercised:* `scenario`, `owner-ref`, `state`, `component-refs`,
 `treatment` + `treatments` (×1), `review-due` (datetime ×2),
 `Finding.risk-refs` (×2), a `risk-adjustment` Deviation naming its Risk
-(×1). *Declared, not corpus-exercised:* `rating`, `residual-rating`,
+(×1). *Declared, not corpus-exercised:* `rating` (with `likelihood`, `impact`), `residual-rating`,
 `acceptance`, `shared-with-ref`, `threat-refs`, `tailoring-refs`, and the states `assessed`,
 `treated`, `retired`. That list is not an accident of a small corpus: an
 OSCAL risk carries likelihood and impact but **no level** (so RISK-2 holds
