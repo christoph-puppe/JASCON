@@ -19,22 +19,16 @@ Risk-Rule-Violations), closure RISK-7/8, typed Risk edges RISK-12, the
 B.1.9 risk-coverage primitive (live risks only; a predicate select leaves
 the selection open), RISK-9/10 notes, RISK-11.
 
-PORT STATUS (2026-11-10): the CP-RISK-1 additions were ported from
-validate_core.py and risk-vectors.json in an environment WITHOUT a
-PowerShell runtime. They have NOT been executed. Until a run on Windows
-PowerShell 5.1 prints "risk: 73 pass, 0 fail" and ALL GREEN, the risk
-family counts as ONE implementation, not two (Ch. 15: the release gate).
-The fixes of the rc.1 review (same day: justification needs an assessed
-treatment decision, tailoring-refs scoping, RISK-13/14, typed Tailoring
-selects/excludes, withdrawn Tailorings and Requirements, 23 more vectors)
-were ported the same way and are equally UNEXECUTED.
-The two new call sites are guarded so that a port defect surfaces as a
-counted failure naming its line instead of ending the run; remove the
-guards after the first green run.
-The default run now also validates the skill's example bundle
-(jascon\examples) through Validate-Bundle, so the D26 rule (a pin of a
-stdlib facet id is the descriptor verbatim) reaches that folder without
-an argument. Written by reading, equally UNEXECUTED, and guarded.
+PORT STATUS (2026-11-11): the 2.0.0 additions (CP-RISK-1 and its rc.1
+review fixes, the kernel-version pin, scale definitions and the matrix,
+the D26 pin rule) were ported on 2026-11-10 without a PowerShell runtime
+and first EXECUTED on 2026-11-11 on Windows PowerShell 5.1: all 258
+vectors in 15 families pass, the same counts as validate_core.py; the
+port guards are removed. Fixed on that run: the example folder is read
+flat, as validate_examples() reads it (its Attestation was skipped, an
+unlisted file went unnoticed); every Attestation's envelope is checked
+in a bundle (a broken one failed only if a tier derivation used it);
+every map is keyed ordinally (#45: ids differing only in case collided).
 
 Usage: powershell -ExecutionPolicy Bypass -File validate_core.ps1 [bundle-dirs...]
        -VectorsOnly to skip bundles; -TrustedKeys file.json for verification mode;
@@ -51,10 +45,16 @@ $SKILL = Join-Path $ROOT "jascon"
 $CONF = Join-Path $SKILL "conformance"
 $INV = [System.Globalization.CultureInfo]::InvariantCulture
 
+# Every map is keyed ORDINALLY. PowerShell's @{} and [ordered]@{} compare
+# keys case-insensitively, so two ids differing only in case collided here
+# while validate_core.py keeps both (D2: ids are string-compared; #45).
+function New-Map { return (New-Object System.Collections.Hashtable ([System.StringComparer]::Ordinal)) }
+function New-OMap { return (New-Object System.Collections.Specialized.OrderedDictionary ([System.StringComparer]::Ordinal)) }
+
 # ---------------- json -> ordered maps ----------------
 function ConvertTo-Map($o) {
     if ($o -is [System.Management.Automation.PSCustomObject]) {
-        $m = [ordered]@{}
+        $m = (New-OMap)
         foreach ($p in $o.PSObject.Properties) { $m[$p.Name] = ConvertTo-Map $p.Value }
         return $m
     }
@@ -71,7 +71,7 @@ function Read-Json([string]$path) {
 function Is-Map($v) { return ($v -is [System.Collections.IDictionary]) }
 function Is-List($v) { return (-not (Is-Map $v)) -and ($v -is [System.Collections.IEnumerable]) -and -not ($v -is [string]) }
 function Copy-Deep($v) {
-    if (Is-Map $v) { $m = [ordered]@{}; foreach ($k in $v.Keys) { $m[$k] = Copy-Deep $v[$k] }; return $m }
+    if (Is-Map $v) { $m = (New-OMap); foreach ($k in $v.Keys) { $m[$k] = Copy-Deep $v[$k] }; return $m }
     if (Is-List $v) { $a = New-Object System.Collections.ArrayList
         foreach ($x in $v) { [void]$a.Add((Copy-Deep $x)) }; return ,$a }
     return $v
@@ -237,7 +237,7 @@ function Infer-Single($obj) {
 }
 
 # stdlib facet descriptors (fail-closed registry)
-$STDLIB = @{}; $STDLIB_DECL = @{}
+$STDLIB = (New-Map); $STDLIB_DECL = (New-Map)
 foreach ($f in (Get-ChildItem (Join-Path $SKILL "schemas\stdlib") -Filter *.json | Sort-Object Name)) {
     $d = Read-Json $f.FullName
     $STDLIB[$d['id']] = $d['schema']
@@ -458,7 +458,7 @@ function Closure-Errors($objs) {
     }
     # membership graphs are DAGs (D21; P10 #39): overlap is legal, cycles
     # are not - naive baseline expansion / nearest-Set search would loop.
-    $color = @{}
+    $color = (New-Map)
     foreach ($root in @($objs.Keys)) {
         if ($objs[$root].t -cne 'requirementSet' -or $color.ContainsKey($root)) { continue }
         $refs0 = New-Object System.Collections.ArrayList
@@ -757,7 +757,7 @@ function Semver([string]$v) {
 }
 function Compose($aObjs, $aPins, $bObjs, $bPins) {
     $errors = New-Object System.Collections.ArrayList
-    $resolutions = [ordered]@{}
+    $resolutions = (New-OMap)
     $all = New-Object System.Collections.ArrayList
     foreach ($k in $aPins.Keys) { if ($all -cnotcontains $k) { [void]$all.Add($k) } }
     foreach ($k in $bPins.Keys) { if ($all -cnotcontains $k) { [void]$all.Add($k) } }
@@ -793,7 +793,7 @@ function Compose($aObjs, $aPins, $bObjs, $bPins) {
             $resolutions[$fid] = $win['version']
         }
     }
-    $aIds = @{}
+    $aIds = (New-Map)
     foreach ($pair in $aObjs) { $aIds[$pair[0]] = $pair[1] }
     foreach ($pair in $bObjs) {
         if ($aIds.ContainsKey($pair[0])) {
@@ -1028,15 +1028,15 @@ function Risk-Coverage($objs, $envelopes, $trusted) {
             [void]$notes.Add("${tid}: withdrawn - selects nothing and is not reported (a withdrawn Statement of Applicability is history)")
         } else { [void]$inForce.Add($tid) }
     }
-    $report = [ordered]@{}
-    $selections = @{}
+    $report = (New-OMap)
+    $selections = (New-Map)
     # No Tailoring at all: nothing was scoped out, so every Requirement in
     # force is in play; the implicit selection is reported under '*'. (All
     # Tailorings WITHDRAWN is a different statement and selects nothing.)
     if ($tailIds.Count -eq 0) { [void]$inForce.Add('*') }
     foreach ($tid in $inForce) {
         if ($tid -ceq '*') {
-            $tobj = @{}; $tier = 'none'
+            $tobj = (New-Map); $tier = 'none'
             $all = New-Object System.Collections.ArrayList
             foreach ($oid in $objs.Keys) {
                 if ($objs[$oid].t -ceq 'requirement' -and $objs[$oid].o['lifecycle'] -cne 'withdrawn') { [void]$all.Add([string]$oid) } }
@@ -1052,7 +1052,7 @@ function Risk-Coverage($objs, $envelopes, $trusted) {
             [void]$notes.Add("${tid}: predicate select not expanded by risk-coverage (engine-resolved) - the selection is a lower bound") }
         if ($sr.gone.Count -gt 0) {
             [void]$notes.Add("${tid}: $($sr.gone.Count) selected requirement(s) are withdrawn and not counted (first: $((Sorted-Ordinal $sr.gone)[0]))") }
-        $treats = @{}; $pending = @{}; $lapsed = @{}
+        $treats = (New-Map); $pending = (New-Map); $lapsed = (New-Map)
         foreach ($rid in $riskIds) {
             $r = $objs[$rid].o
             if (-not (Risk-Applies $r $tid)) { continue }
@@ -1065,15 +1065,16 @@ function Risk-Coverage($objs, $envelopes, $trusted) {
         $uncovered = New-Object System.Collections.ArrayList
         $pendingOnly = New-Object System.Collections.ArrayList
         $lapsedOnly = New-Object System.Collections.ArrayList
+        $lab = $tid; if ($tid -ceq '*') { $lab = '(no Tailoring)' }   # as validate_core.py labels the implicit selection
         foreach ($q in (Sorted-Ordinal $sel)) {
             if ($treats.ContainsKey($q)) { [void]$covered.Add($q); continue }
             [void]$uncovered.Add($q)
             if ($pending.ContainsKey($q)) {
                 [void]$pendingOnly.Add($q)
-                [void]$notes.Add("${tid}: selected $q is named only by Risk(s) without an assessed treatment decision $((Sorted-Ordinal $pending[$q]) -join ', ') - counted as uncovered (a risk justifies once it is assessed and its option chosen)")
+                [void]$notes.Add("${lab}: selected $q is named only by Risk(s) without an assessed treatment decision $((Sorted-Ordinal $pending[$q]) -join ', ') - counted as uncovered (a risk justifies once it is assessed and its option chosen)")
             } elseif ($lapsed.ContainsKey($q)) {
                 [void]$lapsedOnly.Add($q)
-                [void]$notes.Add("${tid}: selected $q is named only by retired/withdrawn Risk(s) $((Sorted-Ordinal $lapsed[$q]) -join ', ') - counted as uncovered (C.3c: a retired risk justifies nothing)")
+                [void]$notes.Add("${lab}: selected $q is named only by retired/withdrawn Risk(s) $((Sorted-Ordinal $lapsed[$q]) -join ', ') - counted as uncovered (C.3c: a retired risk justifies nothing)")
             }
         }
         $exclNo = 0
@@ -1097,7 +1098,7 @@ function Risk-Coverage($objs, $envelopes, $trusted) {
     # belongs to (its tailoring-refs, else all in force); an unresolved or
     # mistyped target is RISK-7/12's failure. Where one of THOSE selections
     # is open the question is undecidable here: said, not guessed.
-    $outOfScope = @{}; $undecided = @{}
+    $outOfScope = (New-Map); $undecided = (New-Map)
     if ($true) {
         foreach ($rid in $riskIds) {
             $r = $objs[$rid].o
@@ -1164,7 +1165,7 @@ function Risk-Basis-Fail([string]$tid, [string]$q) {
     return "FAIL [risk-coverage] $tid  selected $q`n  justified by no Risk`n  rationale: ISO/IEC 27001 6.1.3 d - inclusion in the Statement of Applicability carries its justification"
 }
 
-$COUNTS = @{}
+$COUNTS = (New-Map)
 $FAILURES = New-Object System.Collections.ArrayList
 function OK([string]$section) { if (-not $COUNTS.ContainsKey($section)) { $COUNTS[$section] = 0 }; $COUNTS[$section]++ }
 function FAIL([string]$section, [string]$msg) {
@@ -1174,7 +1175,7 @@ function FAIL([string]$section, [string]$msg) {
 }
 function Load-Vectors([string]$name) { return Read-Json (Join-Path $CONF $name) }
 function To-Objs($list) {
-    $objs = [ordered]@{}
+    $objs = (New-OMap)
     foreach ($o in $list) {
         $t = Infer-Single $o
         if ($null -ne $t) { $objs[$o['id']] = @{t = $t; o = $o} }
@@ -1264,7 +1265,7 @@ function Run-Attestation {
 }
 function Run-Facets {
     foreach ($case in (Load-Vectors 'facet-vectors.json')['vectors']) {
-        $pinned = @{}
+        $pinned = (New-Map)
         if ($case.Contains('pinned') -and $null -ne $case['pinned']) {
             foreach ($k in $case['pinned'].Keys) { $pinned[$k] = $case['pinned'][$k] } }
         $errs = Facet-Errors @(,@($case['name'], $case['object'])) $pinned
@@ -1342,7 +1343,7 @@ function Run-Lifecycle {
 }
 function Run-Tiers {
     foreach ($case in (Load-Vectors 'tier-vectors.json')['vectors']) {
-        $byId = @{}
+        $byId = (New-Map)
         foreach ($o in $case['objects']) { $byId[$o['id']] = $o }
         foreach ($o in $case['objects']) {
             foreach ($subj in @($o['subject-semantic-digests'])) {
@@ -1387,8 +1388,8 @@ function Run-Composition {
     foreach ($case in (Load-Vectors 'composition-vectors.json')['vectors']) {
         $aP = @(); foreach ($o in @($case['a']['objects'])) { $aP += ,@($o['id'], $o) }
         $bP = @(); foreach ($o in @($case['b']['objects'])) { $bP += ,@($o['id'], $o) }
-        $aPins = $case['a']['pins']; if ($null -eq $aPins) { $aPins = [ordered]@{} }
-        $bPins = $case['b']['pins']; if ($null -eq $bPins) { $bPins = [ordered]@{} }
+        $aPins = $case['a']['pins']; if ($null -eq $aPins) { $aPins = (New-OMap) }
+        $bPins = $case['b']['pins']; if ($null -eq $bPins) { $bPins = (New-OMap) }
         $r = Compose $aP $aPins $bP $bPins
         $res = $r[0]; $errs = $r[1]
         $exp = @($case['expected-errors'])
@@ -1558,7 +1559,7 @@ function Risk-Levels($o) {
 function Scale-Errors($scales, $objs) {
     $errs = New-Object System.Collections.ArrayList
     $notes = New-Object System.Collections.ArrayList
-    $order = @{}
+    $order = (New-Map)
     foreach ($sid in $scales.Keys) {
         $codes = New-Object System.Collections.ArrayList
         foreach ($lv in @($scales[$sid]['levels'])) { [void]$codes.Add([string]$lv['level']) }
@@ -1567,7 +1568,7 @@ function Scale-Errors($scales, $objs) {
     $ids = New-Object System.Collections.ArrayList
     foreach ($oid in $objs.Keys) { if ($objs[$oid].t -ceq 'risk') { [void]$ids.Add([string]$oid) } }
     foreach ($oid in (Sorted-Ordinal $ids)) {
-        $seen = @{}
+        $seen = (New-Map)
         foreach ($x in (Risk-Levels $objs[$oid].o)) {
             if (-not $order.ContainsKey($x.sref)) { continue }
             $codes = $order[$x.sref]
@@ -1616,7 +1617,7 @@ function Scale-Errors($scales, $objs) {
 function Run-Scale {
     foreach ($case in (Load-Vectors 'scale-vectors.json')['vectors']) {
         $errs = New-Object System.Collections.ArrayList
-        $scales = @{}
+        $scales = (New-Map)
         foreach ($sd in @($case['scales'])) {
             if ($null -eq $sd) { continue }
             $e = Scale-Definition-Errors $sd $null
@@ -1752,16 +1753,16 @@ function Validate-Object([string]$section, [string]$path, $obj) {
     }
     return $t
 }
-function Validate-Bundle([string]$bdir) {
+function Validate-Bundle([string]$bdir, [switch]$Flat) {
     $section = $bdir.Replace($ROOT, '').TrimStart('\').Replace('\', '/')
     Write-Host "  -> $section"   # sign of life: big bundles run minutes with no output (P10 user report)
     $mpath = Join-Path $bdir 'content-manifest.json'
     if (-not (Test-Path $mpath)) { FAIL $section 'no content-manifest.json'; return }
     $manifest = Read-Json $mpath
     if (Test-Schema $DEFS['contentManifest'] $manifest) { OK $section } else { FAIL $section 'manifest schema violation' }
-    $typec = @{}
-    $seenIds = @{}
-    $bundleObjs = [ordered]@{}
+    $typec = (New-Map)
+    $seenIds = (New-Map)
+    $bundleObjs = (New-OMap)
     foreach ($entry in $manifest['objects']) {
         $fp = Join-Path $bdir $entry['path']
         if (-not (Test-Path $fp)) { FAIL $section "$($entry['path']): listed but missing"; continue }
@@ -1779,8 +1780,33 @@ function Validate-Bundle([string]$bdir) {
         $seenIds[$obj['id']] = $entry['path']
         if ($null -ne $t) { $bundleObjs[$obj['id']] = @{t = $t; o = $obj} }
     }
-    $pinned = @{}
-    $pinnedDecl = @{}
+    # A flat folder (jascon\examples) keeps its objects beside the manifest,
+    # as validate_examples() in validate_core.py reads it: every other .json
+    # there is an object; an Attestation may stay unlisted (D3.1: it lives
+    # BESIDE the manifest), anything else unlisted fails.
+    if ($Flat) {
+        $skip = New-Object 'System.Collections.Generic.HashSet[string]'
+        [void]$skip.Add('content-manifest.json')
+        foreach ($entry in $manifest['objects']) { [void]$skip.Add($entry['path']) }
+        foreach ($fe in @($manifest['facet-schemas'])) { if ($null -ne $fe) { [void]$skip.Add($fe['path']) } }
+        foreach ($sp in @($manifest['scales'])) { if ($null -ne $sp) { [void]$skip.Add($sp['path']) } }
+        foreach ($f in (Get-ChildItem $bdir -File -Filter *.json | Sort-Object Name)) {
+            if ($skip.Contains($f.Name)) { continue }
+            $obj = Read-Json $f.FullName
+            $t = Validate-Object $section $f.Name $obj
+            if ($t -ne 'attestation') {
+                if ($null -ne $t) { FAIL $section "$($f.Name): on disk but not in manifest" }
+                continue
+            }
+            if (-not $typec.ContainsKey($t)) { $typec[$t] = 0 }
+            $typec[$t]++
+            if ($seenIds.ContainsKey($obj['id'])) { FAIL $section "$($f.Name): object id already used (unique-within)" }
+            $seenIds[$obj['id']] = $f.Name
+            $bundleObjs[$obj['id']] = @{t = $t; o = $obj}
+        }
+    }
+    $pinned = (New-Map)
+    $pinnedDecl = (New-Map)
     foreach ($fe in @($manifest['facet-schemas'])) {
         if ($null -eq $fe) { continue }
         $fp = Join-Path $bdir $fe['path']
@@ -1800,61 +1826,70 @@ function Validate-Bundle([string]$bdir) {
             if ((Format-Canonical $sch) -cne (Format-Canonical $STDLIB[$sd['id']])) {
                 FAIL $section "$($fe['path']): pin of stdlib facet $($sd['id']) DIVERGES from the normative descriptor (D26)" } }
     }
-    $envelopes = @{}
+    $envelopes = (New-Map)
     foreach ($oid in $bundleObjs.Keys) {
         $e = $bundleObjs[$oid]
         if ($e.t -ne 'attestation' -or -not $e.o.Contains('envelope-ref')) { continue }
         $ep = Join-Path $bdir $e.o['envelope-ref']
-        if (Test-Path $ep) { $envelopes[$e.o['envelope-ref']] = Read-Json $ep }
+        if (Test-Path $ep) {
+            try { $envelopes[$e.o['envelope-ref']] = Read-Json $ep }
+            catch { FAIL $section "$($e.o['envelope-ref']): envelope unreadable: $($_.Exception.Message)" }
+        }
+        elseif ($Flat) {
+            # validate_examples() resolves no envelopes; a note keeps the twins on one verdict
+            Write-Host "    note: ${oid}: envelope-ref '$($e.o['envelope-ref'])' does not resolve beside the manifest (not checked for the example folder, as in validate_core.py)" }
         else { FAIL $section "${oid}: envelope-ref '$($e.o['envelope-ref'])' does not resolve beside the manifest" }
+    }
+    # every Attestation's envelope is checked, not only the ones a Tier
+    # derivation happens to consult (validate_core.py: a broken envelope fails)
+    foreach ($oid in ($bundleObjs.Keys | Sort-Object)) {
+        $e = $bundleObjs[$oid]
+        if ($e.t -ne 'attestation') { continue }
+        if (-not $e.o.Contains('envelope-ref')) { Write-Host "    dsse: $oid = no envelope (unsigned attestation)"; continue }
+        $envObj = $envelopes[$e.o['envelope-ref']]
+        if ($null -eq $envObj) { continue }
+        $vr = Verify-Envelope $envObj $e.o $TRUSTED
+        if ($vr[0] -eq 'error') { FAIL $section "${oid}: dsse: $($vr[1])"; Write-Host "    dsse: $oid = FAIL - $($vr[1])" }
+        elseif ($vr[0] -eq 'verified') { Write-Host "    dsse: $oid = signature VERIFIED (Ed25519)" }
+        else { Write-Host "    dsse: $oid = signature UNVERIFIED - $($vr[1])" }
     }
     foreach ($e in (Closure-Errors $bundleObjs)) { FAIL $section $e }
     foreach ($e in (Duty-Errors $bundleObjs $pinnedDecl $envelopes $TRUSTED)) { FAIL $section $e }
-    try { foreach ($e in (Kernel-Pin-Errors $manifest $bundleObjs)) { FAIL $section $e } } catch {
-        FAIL $section "kernel-version PORT ERROR (not yet executed on a real runtime - report this line): $($_.Exception.Message) @ line $($_.InvocationInfo.ScriptLineNumber)"
-    }
+    foreach ($e in (Kernel-Pin-Errors $manifest $bundleObjs)) { FAIL $section $e }
     # pinned scale definitions: SCALE-1 on each pin, SCALE-2/3 on the Risks
-    try {
-        $scaleDefs = @{}
-        foreach ($sp in @($manifest['scales'])) {
-            if ($null -eq $sp) { continue }
-            $sfp = Join-Path $bdir $sp['path']
-            if (-not (Test-Path $sfp)) { FAIL $section "$($sp['path']): pinned scale definition listed but missing"; continue }
-            $sraw = [System.IO.File]::ReadAllBytes($sfp)
-            if ((Sha256-Hex $sraw) -cne $sp['digest']) { FAIL $section "$($sp['path']): pinned scale definition digest mismatch" }
-            $sdef = Read-Json $sfp
-            $sde = Scale-Definition-Errors $sdef $sp
-            foreach ($e in $sde) { FAIL $section $e }
-            if ($sde.Count -eq 0) { $scaleDefs[[string]$sdef['id']] = $sdef }
-        }
-        foreach ($e in (Matrix-Errors $scaleDefs)) { FAIL $section $e }
-        $se = Scale-Errors $scaleDefs $bundleObjs
-        foreach ($e in $se.errs) { FAIL $section $e }
-        foreach ($n in $se.notes) { Write-Host "    note: $n" }
-    } catch {
-        FAIL $section "scale PORT ERROR (not yet executed on a real runtime - report this line): $($_.Exception.Message) @ line $($_.InvocationInfo.ScriptLineNumber)"
+    $scaleDefs = (New-Map)
+    foreach ($sp in @($manifest['scales'])) {
+        if ($null -eq $sp) { continue }
+        $sfp = Join-Path $bdir $sp['path']
+        if (-not (Test-Path $sfp)) { FAIL $section "$($sp['path']): pinned scale definition listed but missing"; continue }
+        $sraw = [System.IO.File]::ReadAllBytes($sfp)
+        if ((Sha256-Hex $sraw) -cne $sp['digest']) { FAIL $section "$($sp['path']): pinned scale definition digest mismatch" }
+        $sdef = Read-Json $sfp
+        $sde = Scale-Definition-Errors $sdef $sp
+        foreach ($e in $sde) { FAIL $section $e }
+        if ($sde.Count -eq 0) { $scaleDefs[[string]$sdef['id']] = $sdef }
     }
+    foreach ($e in (Matrix-Errors $scaleDefs)) { FAIL $section $e }
+    $se = Scale-Errors $scaleDefs $bundleObjs
+    foreach ($e in $se.errs) { FAIL $section $e }
+    foreach ($n in $se.notes) { Write-Host "    note: $n" }
     # CP-RISK-1: B.1.9 risk-coverage report (+ RISK-11 errors), RISK-9/10 notes
-    try {
-        $rc = Risk-Coverage $bundleObjs $envelopes $TRUSTED
-        foreach ($e in $rc.errs) { FAIL $section $e }
-        foreach ($n in $rc.notes) { Write-Host "    note: $n" }
-        foreach ($n in (Risk-Link-Notes $bundleObjs)) { Write-Host "    note: $n" }
-        # the policy switch applies even where the bundle carries no Risk at all
-        if ($rc.risks -gt 0 -or $RequireRiskBasis) {
-            foreach ($tid in @($rc.report.Keys)) {
-                $r = $rc.report[$tid]
-                if ($tid -ceq '*') { $tid = '(no Tailoring: every requirement is in play)' }
-                $openTag = ''
-                if ($r.isOpen) { $openTag = '+ (open: predicate select)' }
-                Write-Host "    risk-coverage: $tid [$($r.tier)] selected=$($r.selected)$openTag justified=$($r.covered.Count) uncovered=$($r.uncovered.Count)"
-                foreach ($q in $r.uncovered) {
-                    if ($RequireRiskBasis) { FAIL $section (Risk-Basis-Fail $tid $q) }
-                    else { Write-Host "      uncovered: $q" } }
-            }
+    $rc = Risk-Coverage $bundleObjs $envelopes $TRUSTED
+    foreach ($e in $rc.errs) { FAIL $section $e }
+    foreach ($n in $rc.notes) { Write-Host "    note: $n" }
+    foreach ($n in (Risk-Link-Notes $bundleObjs)) { Write-Host "    note: $n" }
+    # the policy switch applies even where the bundle carries no Risk at all
+    if ($rc.risks -gt 0 -or $RequireRiskBasis) {
+        foreach ($tid in @($rc.report.Keys)) {
+            $r = $rc.report[$tid]
+            if ($tid -ceq '*') { $tid = '(no Tailoring: every requirement is in play)' }
+            $openTag = ''
+            if ($r.isOpen) { $openTag = '+ (open: predicate select)' }
+            Write-Host "    risk-coverage: $tid [$($r.tier)] selected=$($r.selected)$openTag justified=$($r.covered.Count) uncovered=$($r.uncovered.Count)"
+            foreach ($q in $r.uncovered) {
+                if ($RequireRiskBasis) { FAIL $section (Risk-Basis-Fail $tid $q) }
+                else { Write-Host "      uncovered: $q" } }
         }
-    } catch {
-        FAIL $section "risk-coverage PORT ERROR (CP-RISK-1 port not yet executed on a real runtime - report this line): $($_.Exception.Message) @ line $($_.InvocationInfo.ScriptLineNumber)"
     }
     $pairs = New-Object System.Collections.ArrayList
     foreach ($oid in $bundleObjs.Keys) { [void]$pairs.Add(@($oid, $bundleObjs[$oid].o)) }
@@ -1865,12 +1900,13 @@ function Validate-Bundle([string]$bdir) {
             Write-Host "    tier: $oid = $tier"
         }
     }
-    # on-disk vs manifest
+    # on-disk vs manifest (a flat folder was checked above); one set lookup
+    # per file - the nested loop was quadratic, 2.9 M compares on the ISM bundle
+    $listedPaths = New-Object 'System.Collections.Generic.HashSet[string]' ([System.StringComparer]::Ordinal)
+    foreach ($entry in $manifest['objects']) { [void]$listedPaths.Add($entry['path']) }
     foreach ($f in (Get-ChildItem (Join-Path $bdir 'objects') -Recurse -Filter *.json -ErrorAction SilentlyContinue)) {
         $rel = $f.FullName.Substring($bdir.Length + 1).Replace('\', '/')
-        $listed = $false
-        foreach ($entry in $manifest['objects']) { if ($entry['path'] -ceq $rel) { $listed = $true; break } }
-        if (-not $listed) { FAIL $section "${rel}: on disk but not in manifest" }
+        if (-not $listedPaths.Contains($rel)) { FAIL $section "${rel}: on disk but not in manifest" }
     }
     $summary = @()
     foreach ($k in ($typec.Keys | Sort-Object)) { $summary += "$k=$($typec[$k])" }
@@ -1884,15 +1920,7 @@ $SW = [System.Diagnostics.Stopwatch]::StartNew()
 Write-Host '== conformance corpus (validate_core.ps1 - the weekend implementation) =='
 Run-Jcs; Run-Modality; Run-Parameters; Run-Tailoring; Run-Attestation; Run-Facets
 Run-References; Run-Lifecycle; Run-Tiers; Run-Dsse; Run-Composition; Run-Conditional
-try { Run-Risk } catch {
-    FAIL 'risk' "PORT ERROR (CP-RISK-1 port not yet executed on a real runtime - report this line): $($_.Exception.Message) @ line $($_.InvocationInfo.ScriptLineNumber)"
-}
-try { Run-Kernel } catch {
-    FAIL 'kernel' "PORT ERROR (kernel-version pin not yet executed on a real runtime - report this line): $($_.Exception.Message) @ line $($_.InvocationInfo.ScriptLineNumber)"
-}
-try { Run-Scale } catch {
-    FAIL 'scale' "PORT ERROR (scale definitions not yet executed on a real runtime - report this line): $($_.Exception.Message) @ line $($_.InvocationInfo.ScriptLineNumber)"
-}
+Run-Risk; Run-Kernel; Run-Scale
 $FAMILIES = @('jcs', 'modality', 'parameter', 'tailoring', 'attestation', 'facet',
               'reference', 'lifecycle', 'tier', 'dsse', 'composition', 'conditional', 'risk', 'kernel', 'scale')
 foreach ($k in $FAMILIES) {
@@ -1900,7 +1928,7 @@ foreach ($k in $FAMILIES) {
     $f = 0; if ($COUNTS.ContainsKey("${k}:FAIL")) { $f = $COUNTS["${k}:FAIL"] }
     Write-Host "  ${k}: $p pass, $f fail"
 }
-Write-Host ("  vectors wall-clock: {0:n1} s" -f $SW.Elapsed.TotalSeconds)
+Write-Host ("  vectors wall-clock: " + $SW.Elapsed.TotalSeconds.ToString('F1', $INV) + " s")
 
 if (-not $VectorsOnly) {
     Write-Host '== bundles =='
@@ -1920,18 +1948,12 @@ if (-not $VectorsOnly) {
     # seen only by an explicit bundle argument. It goes through
     # Validate-Bundle - the ONE pin loop of this file - so the default run
     # and an explicit run cannot give two verdicts on the folder.
-    # Not covered here (validate_core.py does both): the Attestation beside
-    # the manifest, and files in the flat folder that the manifest omits.
-    # NOT EXECUTED (2026-11-10, no PowerShell runtime): guarded like the
-    # other unexecuted call sites; remove the guard after the first green run.
-    if ($defaultRun) {
-        try { Validate-Bundle (Join-Path $SKILL 'examples') } catch {
-            FAIL 'jascon/examples' "PORT ERROR (example bundle in the default run not yet executed on a real runtime - report this line): $($_.Exception.Message) @ line $($_.InvocationInfo.ScriptLineNumber)"
-        }
-    }
+    # -Flat reads the folder as validate_examples() does: the Attestation
+    # beside the manifest is validated, any other unlisted .json fails.
+    if ($defaultRun) { Validate-Bundle (Join-Path $SKILL 'examples') -Flat }
 }
 $SW.Stop()
-Write-Host ("total wall-clock: {0:n1} s" -f $SW.Elapsed.TotalSeconds)
+Write-Host ("total wall-clock: " + $SW.Elapsed.TotalSeconds.ToString('F1', $INV) + " s")
 $nfail = 0
 foreach ($k in $COUNTS.Keys) { if ($k.EndsWith(':FAIL')) { $nfail += $COUNTS[$k] } }
 if ($nfail -gt 0) {
