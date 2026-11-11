@@ -378,10 +378,10 @@ one view that asks a language model (below).
   what it sends, keeps the key in memory only, and writes nothing into the
   set until you take a suggestion.
 - What a page computes about validity comes from a port of
-  `validate_core.py`, run against the conformance vectors. The port is not
-  complete; [`jascon-app/readme.md`](jascon-app/readme.md) says which rule
-  families are in and which are not, and the Python validator stays the
-  reference.
+  `validate_core.py`, run against all fifteen families of the conformance
+  vectors, signatures (Ed25519, verification only) included.
+  [`jascon-app/readme.md`](jascon-app/readme.md) says what the app still
+  leaves to the Python validator, which stays the reference.
 
 ```bash
 python -m http.server 8000

@@ -1,12 +1,14 @@
 /* Runs the conformance vectors of jascon/conformance/ against
-   jascon-rules.js, family by family, as far as the rules are ported. A family
-   that is listed here must pass completely; a family that is not ported yet
-   is named in NOT_PORTED, and the last test fails when a vector file appears
-   that is in neither list, so a new family cannot go unnoticed. */
+   jascon-rules.js, family by family. All fifteen families are ported. A
+   family that is listed in PORTED must pass completely; NOT_PORTED is empty
+   and stays as the place to name a family that is not ported yet. The last
+   test fails when a vector file appears that is in neither list, so a new
+   family cannot go unnoticed. */
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
+import nodeCrypto from "node:crypto";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 
@@ -18,8 +20,8 @@ const rules = require("../jascon-rules.js");
 const vectors = name => JSON.parse(fs.readFileSync(path.join(CONF, name + "-vectors.json"), "utf8"));
 const asObjs = list => new Map(list.map(o => [o.id, { type: core.jscInferType(o), obj: o }]));
 
-const PORTED = ["attestation", "facet", "jcs", "kernel", "lifecycle", "modality", "parameter", "reference", "risk", "scale", "tailoring", "tier"];
-const NOT_PORTED = ["composition", "conditional", "dsse"];
+const PORTED = ["attestation", "composition", "conditional", "dsse", "facet", "jcs", "kernel", "lifecycle", "modality", "parameter", "reference", "risk", "scale", "tailoring", "tier"];
+const NOT_PORTED = [];
 /* Where a vector carries expected-frag (singular), it asserts the wording of
    one Python schema library's diagnostic; the vector files call that
    advisory and expected-rule the portable assertion, and so do these tests.
@@ -347,6 +349,96 @@ test("a whole set: the example folder, checked as a bundle, shows the one error 
   const errors = res.findings.filter(f => f.kind === "error").map(f => f.message);
   assert.equal(errors.length, 1, errors.join(" | "));
   assert.match(errors[0], /DIVERGES from the normative descriptor \(D26\)/);
+});
+
+test("composition: every vector, as the reference runner judges it", () => {
+  const v = vectors("composition").vectors;
+  assert.equal(v.length, 7);
+  for (const c of v) {
+    const side = x => [(x.objects || []).map(o => [o.id, o]), x.pins || {}];
+    const { resolutions, errors } = rules.jscCompose(...side(c.a), ...side(c.b));
+    const want = c["expected-errors"] || [];
+    assert.equal(errors.length, want.length, `${c.name}: ${errors.join(" | ")}`);
+    for (const frag of want) assert.ok(errors.some(e => e.includes(frag)), `${c.name}: ${frag}`);
+    for (const [fid, ver] of Object.entries(c["expected-resolutions"] || {})) assert.equal(resolutions[fid], ver, `${c.name}: ${fid}`);
+    /* which bundle is called A must not matter to what is resolved or to how much is reported */
+    const swapped = rules.jscCompose(...side(c.b), ...side(c.a));
+    assert.deepEqual(swapped.resolutions, resolutions, c.name + ": the same resolutions with the sides swapped");
+    assert.equal(swapped.errors.length, errors.length, c.name + ": as many errors with the sides swapped");
+  }
+});
+
+test("conditional: every vector, with the normative text of a failure", () => {
+  const v = vectors("conditional").vectors;
+  assert.equal(v.length, 8);
+  for (const c of v) {
+    const errs = rules.jscConditionalApply(c.instance, asObjs(c.objects));
+    assert.equal(errs.length, c["expected-fails"] || 0, `${c.name}: ${errs.join(" | ")}`);
+    for (const frag of c["expected-frags"] || []) assert.ok(errs.some(e => e.includes(frag)), `${c.name}: ${frag}`);
+  }
+});
+
+test("dsse: the verdict on every envelope and the tier in verification mode", async () => {
+  const v = vectors("dsse").vectors;
+  assert.equal(v.length, 5);
+  for (const c of v) {
+    const objs = asObjs(c.objects), envs = c.envelopes || {}, trusted = c["trusted-keys"] || {};
+    const att = [...objs.values()].find(r => r.type === "attestation").obj, env = envs[att["envelope-ref"]];
+    const res = att["envelope-ref"] && env !== undefined ? await rules.jscVerifyEnvelope(env, att, trusted) : { status: "absent", detail: "" };
+    const want = c["expected-envelope"];
+    if (want !== undefined) {
+      const [status, frag] = want.includes(":") ? [want.slice(0, want.indexOf(":")), want.slice(want.indexOf(":") + 1)] : [want, ""];
+      assert.equal(res.status, status, c.name);
+      assert.ok(res.detail.includes(frag), `${c.name}: ${res.detail}`);
+    }
+    const t = [...objs.values()].find(r => r.type === "tailoring");
+    if (c["expected-tier"] !== undefined) assert.equal(await rules.jscDeriveTier(t.obj, objs, { envelopes: new Map(Object.entries(envs)), trusted }), c["expected-tier"], c.name);
+  }
+});
+
+test("Ed25519: the two first test vectors of RFC 8032, and agreement with the platform's implementation", async () => {
+  const hex = h => Uint8Array.from(h.match(/../g) || [], x => parseInt(x, 16));
+  const rfc = [
+    ["d75a980182b10ab7d54bfed3c964073a0ee172f3daa62325af021a68f707511a", "",
+      "e5564300c360ac729086e2cc806e828a84877f1eb8e5d974d873e065224901555fb8821590a33bacc61e39701cf9b46bd25bf5f0595bbe24655141438e7a100b"],
+    ["3d4017c3e843895a92b70aa74d1b7ebc9c982ccf2ec4968cc0cd55f12af4660c", "72",
+      "92a009a9f0d4cab8720e820b5f642540a2b27b5416503f8fb3762223ebdb69da085ac1e43e15996e458f3613d0f11d8c387b2eaeb4302aeeb00d291612bb0c00"],
+  ];
+  for (const [pub, msg, sig] of rfc) {
+    assert.equal(await rules.jscEd25519Verify(hex(pub), hex(msg), hex(sig)), true, "RFC 8032 vector for " + pub.slice(0, 8));
+    assert.equal(await rules.jscEd25519Verify(hex(pub), hex(msg + "00"), hex(sig)), false, "another message does not verify");
+  }
+  for (let i = 0; i < 12; i++) {
+    const { publicKey, privateKey } = nodeCrypto.generateKeyPairSync("ed25519");
+    const pub = new Uint8Array(publicKey.export({ format: "der", type: "spki" }).subarray(-32));
+    const msg = new Uint8Array(nodeCrypto.randomBytes(1 + i * 37)), sig = new Uint8Array(nodeCrypto.sign(null, msg, privateKey));
+    assert.equal(await rules.jscEd25519Verify(pub, msg, sig), true, "a platform signature verifies, round " + i);
+    const bad = sig.slice(); bad[i % 64] ^= 1;
+    assert.equal(await rules.jscEd25519Verify(pub, msg, bad), nodeCrypto.verify(null, msg, publicKey, bad), "a flipped bit is judged as the platform judges it, round " + i);
+    assert.equal(await rules.jscEd25519Verify(pub, msg.slice(1), sig), false);
+  }
+  assert.equal(await rules.jscEd25519Verify(new Uint8Array(31), new Uint8Array(1), new Uint8Array(64)), false, "a key of the wrong length");
+});
+
+test("a whole set: a signed attestation is verified with a trusted key, unverified without one, an error under a wrong one", async () => {
+  const c = vectors("dsse").vectors.find(x => x.name === "signed-envelope-proves-in-verification-mode");
+  const att = c.objects.find(o => o["envelope-ref"]), tid = c.objects.find(o => o.operations).id;
+  const files = [...c.objects.map((o, i) => ({ path: `o${i}.json`, text: core.jscSerialize(o) })),
+    { path: att["envelope-ref"], text: JSON.stringify(c.envelopes[att["envelope-ref"]]) }];
+  const g = core.jscGraphFrom(core.jscClassifyFiles(files).records);
+  assert.equal(g.aux.length, 1, "the envelope is kept beside the objects under the name the attestation gives");
+  const sig = async opts => { const r = await rules.jscCheckGraph(g, null, opts); return { status: r.signatures[att.id], tier: r.tiers[tid], errors: r.findings.filter(f => f.kind === "error" && f.area === "signature").map(f => f.message) }; };
+  assert.deepEqual(await sig({ trusted: c["trusted-keys"] }), { status: "verified", tier: "authority-proven", errors: [] });
+  assert.deepEqual(await sig(), { status: "unverified", tier: "authority-proven", errors: [] }, "without keys the digest match stands and the signature is unverified");
+  const wrong = await sig({ trusted: { [att.signer]: "00".repeat(32) } });
+  assert.equal(wrong.status, "error");
+  assert.equal(wrong.tier, "consumer", "a signature that does not verify proves nothing");
+  assert.match(wrong.errors[0], /no signature verifies under the trusted key/);
+  /* without the envelope file: the attestation is not listed in a manifest here, so the reference would not look and this is a note */
+  const g2 = core.jscGraphFrom(core.jscClassifyFiles(files.slice(0, -1)).records), r2 = await rules.jscCheckGraph(g2, null, { trusted: c["trusted-keys"] });
+  assert.equal(r2.signatures[att.id], "missing");
+  assert.equal(r2.tiers[tid], "consumer");
+  assert.deepEqual(r2.findings.filter(f => f.kind === "error" && f.area === "signature"), []);
 });
 
 test("every vector family is either ported or named as not ported", () => {

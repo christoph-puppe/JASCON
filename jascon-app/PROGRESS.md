@@ -47,13 +47,19 @@ and in `readme.md`; this file says only what is done and what is next.
   the exported set gives `validate_core.py` 1043 pass, 0 fail. No real
   service was called.
 
+- The last three rule families: DSSE envelopes (Ed25519, with the tier in
+  verification mode), the composition of two bundles, and conditional-apply,
+  in `jascon-rules.js`; all fifteen vector families pass. `validate.html`
+  takes trusted keys and has a view that composes the active set with
+  another one. Driven in headless Chromium with the signed fixture of the
+  dsse vectors.
+
 ## Next
 
 - One real call per service with a key of the user's: the model ids in the
   settings and the request shape were checked against a simulated service
   only (the model documentation could not be reached from the build
   environment).
-- The three vector families still missing: conditional, composition, dsse.
 - Let the pages type objects by schema at load (`jscTypeOf`) instead of by
   fields (`jscInferType`).
 - A port of `convert_nist.py` as a third import preset.
@@ -67,6 +73,10 @@ and in `readme.md`; this file says only what is done and what is next.
 
 - `jascon/examples` checked as a bundle fails D26: the stub pin of the stdlib
   assessment-criteria facet differs from the normative descriptor.
+- The example attestation names an envelope (`attestation-envelope.dsse`)
+  that the repository does not carry, and `validate_core.py` checks an
+  envelope only for an attestation the manifest lists, which an attestation
+  over the manifest cannot be (D3.1).
 - The IFA bundle's attestation carries a stale digest for `system1234`.
 
 ## Open
