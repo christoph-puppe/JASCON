@@ -43,6 +43,7 @@
         <p data-i18n>The generic rules make every nested control a Requirement of its own, with a relation to its parent. The modality is unspecified, because OSCAL has no field for the binding force. Props and parts the kernel has no field for are held verbatim in a facet under your namespace, with a pinned schema; nothing is dropped without a line in the report.</p>
         <p data-i18n>The preset for the BSI Anwenderkatalog Grundschutz++ follows the converter of this repository: a nested control is a clause of its parent, the modal verb becomes the modality, the BSI props go to the standard facets, and the security level becomes baseline Sets. Its ids are minted under the namespace the converter uses.</p>
         <p data-i18n>The preset for NIST SP 800-53 Rev 5 follows the converter of this repository: a withdrawn control is not converted and its successor names it; every statement item with prose is a clause with modality must; assessment objectives and methods, the administrative data of parameters and the guidance go to facets under the NIST namespace. The baselines are profiles and are imported as profiles.</p>
+        <p data-i18n>The preset for a CIS Benchmark follows the converter of this repository: every rule is a Requirement with one clause, whose text is the rule's title because the export leaves the statement empty; the audit and remediation text and the marking automated or manual go to the facet assessment-criteria; the profiles become baseline Sets and the CIS Controls cross-references Mappings. The Checks tool drafts machine checks from the audit text.</p>
         <p data-i18n>A profile. The controls it includes become a Set, and a Tailoring selects that Set. Excluded controls become excludes. A set-parameter becomes an operation on every clause that declares the parameter, if the value lies in the declared space; a value outside it needs a Deviation and is listed, not written.</p>
         <p data-i18n>Not carried, and counted in the report: alters, the merge directive, pattern matching, the inclusion of child controls. An alter changes text, and somebody has to decide whether that is editorial or substantive; use the Tailor tool for it.</p>
         <p data-i18n>Imported content stays under its publisher's terms. State them in the field for the licence; they are written into the provenance of the bundle.</p>
@@ -55,6 +56,7 @@
 <script src="jascon-schema.js"></script>
 <script src="jascon-rules.js"></script>
 <script src="jascon-oscal.js"></script>
+<script src="jascon-checks.js"></script>
 <script src="jascon-view.js"></script>
 <script>
 "use strict";
@@ -101,6 +103,21 @@ jscI18n.add("de", {
   "The preset for NIST SP 800-53 Rev 5 follows the converter of this repository: a withdrawn control is not converted and its successor names it; every statement item with prose is a clause with modality must; assessment objectives and methods, the administrative data of parameters and the guidance go to facets under the NIST namespace. The baselines are profiles and are imported as profiles.":
     "Das Preset für NIST SP 800-53 Rev 5 folgt dem Konverter dieses Repositorys: Ein zurückgezogenes Control wird nicht konvertiert, sein Nachfolger nennt es; jedes Statement-Element mit Text ist eine Klausel mit Modalität must; Prüfziele und -methoden, die Verwaltungsdaten der Parameter und die Guidance gehen in Facets unter dem NIST-Namensraum. Die Baselines sind Profile und werden als Profile importiert.", "generic": "generisch",
   "Namespace for the ids": "Namensraum für die Ids",
+  "The preset for a CIS Benchmark follows the converter of this repository: every rule is a Requirement with one clause, whose text is the rule's title because the export leaves the statement empty; the audit and remediation text and the marking automated or manual go to the facet assessment-criteria; the profiles become baseline Sets and the CIS Controls cross-references Mappings. The Checks tool drafts machine checks from the audit text.":
+    "Das Preset für einen CIS Benchmark folgt dem Konverter dieses Repositorys: Jede Regel wird eine Anforderung mit einer Klausel, deren Text der Titel der Regel ist, weil der Export das Statement leer lässt; Audit- und Remediation-Text und die Kennzeichnung automated oder manual gehen in das Facet assessment-criteria; die Profile werden Baseline-Sets und die Querverweise auf die CIS Controls Mappings. Das Werkzeug Prüfungen entwirft aus dem Audit-Text maschinelle Prüfungen.",
+  "CIS Benchmark (the repository's converter)": "CIS Benchmark (der Konverter des Repositorys)", "mappings": "Mappings",
+  "rules by their marking (automated rules can get a check)": "Regeln nach Kennzeichnung (automatisierte Regeln können eine Prüfung bekommen)",
+  "CIS Controls cross-references, as Mappings (supports, draft)": "Querverweise auf die CIS Controls, als Mappings (supports, draft)",
+  "profiles, as baseline Sets": "Profile, als Baseline-Sets",
+  "clause prose minted from the rule title (the statement of the source is empty)": "Klauseltext aus dem Titel der Regel gebildet (das Statement der Quelle ist leer)",
+  "links that resolve to nothing": "Verweise, die ins Leere gehen",
+  "The repository's converter mints this namespace for the CIS Ubuntu 24.04 Benchmark and derives it from the title for any other, pending a namespace CIS publishes.":
+    "Der Konverter des Repositorys vergibt diesen Namensraum für den CIS Ubuntu 24.04 Benchmark und leitet ihn für jeden anderen aus dem Titel ab, bis CIS einen Namensraum veröffentlicht.",
+  "Checks": "Prüfungen", "Language of the collector code": "Sprache des Kollektor-Codes",
+  "Afterwards, draft checks for the {n} automated rules with a model, in the Checks tool": "Danach Prüfungen für die {n} automatisierten Regeln mit einem Modell entwerfen, im Werkzeug Prüfungen",
+  "Nothing is sent now. After the write the Checks tool opens with these rules, shows what would be sent, and asks for a key and a click. Without this, every check can still be written by hand or drafted one by one there.":
+    "Jetzt wird nichts gesendet. Nach dem Schreiben öffnet sich das Werkzeug Prüfungen mit diesen Regeln, zeigt, was gesendet würde, und fragt nach einem Schlüssel und einem Klick. Ohne diese Wahl lässt sich dort jede Prüfung weiterhin von Hand schreiben oder einzeln entwerfen.",
+  "opening the Checks tool with the automated rules of this import": "das Werkzeug Prüfungen wird mit den automatisierten Regeln dieses Imports geöffnet",
   "Use the publisher's namespace if it has one. Ids under your own domain make you the claimed authority of this catalog: a Tailoring of yours may then weaken it without a Deviation.":
     "Den Namensraum des Herausgebers verwenden, wenn es einen gibt. Ids unter der eigenen Domain machen Sie zur beanspruchten Autorität dieses Katalogs: Ein eigenes Tailoring darf ihn dann ohne Deviation abschwächen.", "Language of the text": "Sprache des Textes", "Short name (used in file paths)": "Kurzname (für Dateipfade)",
   "Licence of the source": "Lizenz der Quelle", "for example CC BY-SA 4.0, or the publisher's statement": "zum Beispiel CC BY-SA 4.0, oder die Angabe des Herausgebers",
@@ -147,9 +164,18 @@ async function read(file) {
   doc = parsed; kind = k;
   const meta = doc[k].metadata || {}, slug = jscOscalSlug(meta.title || file.name.replace(/\.json$/i, ""));
   opts = k === "catalog"
-    ? { preset: jscOscalGuessPreset(doc), ns: jscCfg.get("org:ns").replace(/\/+$/, "") + "/fw/" + slug, lang: jscI18n.contentLang(), key: slug.slice(0, 24), licence: "", set: slug.slice(0, 40) }
+    ? { preset: jscOscalGuessPreset(doc), ns: jscCfg.get("org:ns").replace(/\/+$/, "") + "/fw/" + slug, lang: jscI18n.contentLang(), key: slug.slice(0, 24), licence: "", set: slug.slice(0, 40),
+        checks: false, runtime: "bash" }
     : { ns: jscCfg.get("org:ns").replace(/\/+$/, ""), lang: jscI18n.contentLang(), catalogSet: "" };
+  if (opts.preset === "cis-benchmark") opts.ns = jscCisNamespace(doc.catalog);
   render();
+}
+/* rules a CIS export marks automated: the ones a check can be drafted for */
+function countAutomated(cat) {
+  let n = 0;
+  const walk = node => { for (const c of node.controls || []) { if ((c.props || []).some(p => p.name === "marking" && p.value === "automated")) n++; walk(c); } for (const g of node.groups || []) walk(g); };
+  walk(cat);
+  return n;
 }
 function countControls(cat) {
   let controls = 0, groups = 0;
@@ -168,8 +194,14 @@ function reportHtml() {
   const r = result.report, objs = result.objects, bad = result.invalid;
   const row = (label, html) => (html ? `<div class="k">${esc(T(label))}</div><div class="v">${html}</div>` : "");
   const n = type => objs.filter(o => (type === "requirement" ? o.obj.statements : type === "set" ? o.obj.members : o.obj.selects)).length;
+  const maps = objs.filter(o => o.obj["source-ref"]).length;
   const body = kind === "catalog"
-    ? `<div>${chip(n("requirement"), "requirements")}${chip(n("set"), "sets")}${chip(r.statements, "clauses")}${chip(result.facetSchemas.length, "pinned facet schemas")}</div><div class="kv">
+    ? `<div>${chip(n("requirement"), "requirements")}${chip(n("set"), "sets")}${maps ? chip(maps, "mappings") : ""}${chip(r.statements, "clauses")}${chip(result.facetSchemas.length, "pinned facet schemas")}</div><div class="kv">
+        ${row("rules by their marking (automated rules can get a check)", r.methods && Object.keys(r.methods).length ? counts(r.methods) : "")}
+        ${row("CIS Controls cross-references, as Mappings (supports, draft)", r.mappings && (r.mappings.v7 + r.mappings.v8) ? counts({ v8: r.mappings.v8, v7: r.mappings.v7 }) : "")}
+        ${row("profiles, as baseline Sets", r.profiles && Object.keys(r.profiles).length ? counts(r.profiles) : "")}
+        ${row("clause prose minted from the rule title (the statement of the source is empty)", r["minted-prose"] ? String(r["minted-prose"]) : "")}
+        ${row("links that resolve to nothing", r["unresolved-links"] ? String(r["unresolved-links"]) : "")}
         ${row("controls without statement prose (carried with their title)", (r["controls-without-prose"] || []).length ? capped(r["controls-without-prose"]) : "")}
         ${row("source defects (reported, not repaired)", (r["source-defects"] || []).length ? `<b>${r["source-defects"].length}</b> ` + capped(r["source-defects"].map(d => `${d.control} ${d.prop}`), 6) : "")}
         ${row("parameters no clause names", r["parameters-unreferenced"] ? String(r["parameters-unreferenced"]) : "")}
@@ -201,12 +233,16 @@ function render() {
   if (kind === "catalog") {
     const c = countControls(doc.catalog), fixed = FIXED[opts.preset];   // a preset of the repository mints under its publisher's namespace
     head = kv("title", meta.title || "") + kv("version", meta.version || "") + kv("OSCAL version", meta["oscal-version"] || "") + kv("controls", String(c.controls)) + kv("groups", String(c.groups));
-    form = `<label for="o-preset">${esc(T("Rules"))}</label><div><select id="o-preset">${opt("generic", T("generic"), opts.preset)}${opt("bsi-gspp", T("BSI Grundschutz++ (the repository's converter)"), opts.preset)}${opt("nist-sp800-53", T("NIST SP 800-53 Rev 5 (the repository's converter)"), opts.preset)}</select>
+    const cis = opts.preset === "cis-benchmark", auto = cis ? countAutomated(doc.catalog) : 0;
+    form = `<label for="o-preset">${esc(T("Rules"))}</label><div><select id="o-preset">${opt("generic", T("generic"), opts.preset)}${opt("bsi-gspp", T("BSI Grundschutz++ (the repository's converter)"), opts.preset)}${opt("nist-sp800-53", T("NIST SP 800-53 Rev 5 (the repository's converter)"), opts.preset)}${opt("cis-benchmark", T("CIS Benchmark (the repository's converter)"), opts.preset)}</select>
         ${fixed ? `<div class="hint">${esc(T("The preset mints ids under {ns} and reads the text as {lang}.", { ns: fixed.ns, lang: fixed.lang }))}</div>` : ""}</div>
       ${fixed ? "" : `<label for="o-ns">${esc(T("Namespace for the ids"))}</label><div><input type="url" id="o-ns" value="${esc(opts.ns)}">
-          <div class="hint">${esc(T("Use the publisher's namespace if it has one. Ids under your own domain make you the claimed authority of this catalog: a Tailoring of yours may then weaken it without a Deviation."))}</div></div>
-        <label for="o-lang">${esc(T("Language of the text"))}</label><div><input type="text" id="o-lang" value="${esc(opts.lang)}" style="max-width:90px"></div>
-        <label for="o-key">${esc(T("Short name (used in file paths)"))}</label><div><input type="text" id="o-key" value="${esc(opts.key)}" style="max-width:260px"></div>`}
+          <div class="hint">${esc(cis ? T("The repository's converter mints this namespace for the CIS Ubuntu 24.04 Benchmark and derives it from the title for any other, pending a namespace CIS publishes.") : T("Use the publisher's namespace if it has one. Ids under your own domain make you the claimed authority of this catalog: a Tailoring of yours may then weaken it without a Deviation."))}</div></div>
+        ${cis ? "" : `<label for="o-lang">${esc(T("Language of the text"))}</label><div><input type="text" id="o-lang" value="${esc(opts.lang)}" style="max-width:90px"></div>
+        <label for="o-key">${esc(T("Short name (used in file paths)"))}</label><div><input type="text" id="o-key" value="${esc(opts.key)}" style="max-width:260px"></div>`}`}
+      ${cis ? `<label for="o-checks">${esc(T("Checks"))}</label><div><label><input type="checkbox" id="o-checks" ${opts.checks ? "checked" : ""}> ${esc(T("Afterwards, draft checks for the {n} automated rules with a model, in the Checks tool", { n: auto }))}</label>
+          <select id="o-runtime" aria-label="${esc(T("Language of the collector code"))}">${JSC_CHECKS.RUNTIMES.map(x => opt(x, x, opts.runtime)).join("")}</select>
+          <div class="hint">${esc(T("Nothing is sent now. After the write the Checks tool opens with these rules, shows what would be sent, and asks for a key and a click. Without this, every check can still be written by hand or drafted one by one there."))}</div></div>` : ""}
       <label for="o-licence">${esc(T("Licence of the source"))}</label><div><input type="text" id="o-licence" value="${esc(opts.licence)}" placeholder="${esc(T("for example CC BY-SA 4.0, or the publisher's statement"))}"></div>
       <label for="o-set">${esc(T("Set to write into"))}</label><div><input type="text" id="o-set" value="${esc(opts.set)}" style="max-width:320px"></div>`;
   } else {
@@ -221,10 +257,18 @@ function render() {
     <div class="kv" style="margin-bottom:12px">${head}</div>
     <div class="form">${form}<div class="wide wbrow"><button type="button" class="primary" id="run">${esc(T("Run the import"))}</button><span class="verdict-bad" id="run-err" role="alert"></span></div></div>
     ${reportHtml()}`;
-  for (const [id, key] of [["o-preset", "preset"], ["o-ns", "ns"], ["o-lang", "lang"], ["o-key", "key"], ["o-licence", "licence"], ["o-set", "set"], ["o-catset", "catalogSet"]]) {
+  for (const [id, key] of [["o-preset", "preset"], ["o-ns", "ns"], ["o-lang", "lang"], ["o-key", "key"], ["o-licence", "licence"], ["o-set", "set"], ["o-catset", "catalogSet"], ["o-runtime", "runtime"]]) {
     const n = $(id);
-    if (n) n.addEventListener("change", () => { opts[key] = n.value.trim(); result = null; render(); });
+    if (n) n.addEventListener("change", () => {
+      const before = opts.preset;
+      opts[key] = n.value.trim(); result = null;
+      /* the CIS preset mints under the benchmark's namespace; leaving it gives the namespace of the other rules back */
+      if (key === "preset" && opts.preset === "cis-benchmark") opts.ns = jscCisNamespace(doc.catalog);
+      else if (key === "preset" && before === "cis-benchmark") opts.ns = jscCfg.get("org:ns").replace(/\/+$/, "") + "/fw/" + jscOscalSlug(doc.catalog.metadata.title || "catalog");
+      render();
+    });
   }
+  if ($("o-checks")) $("o-checks").addEventListener("change", e => { opts.checks = e.target.checked; });
   $("run").addEventListener("click", run);
   if ($("write")) $("write").addEventListener("click", write);
 }
@@ -252,9 +296,16 @@ async function write() {
   await jscSet.importFiles(set, built.files, { replace: true });
   jscStore.setActiveSet(set);
   jscLog.ok(T("wrote {n} object(s) and {s} pinned schema(s) to set \"{set}\"; it is now the active set", { n: result.objects.length, s: result.facetSchemas.length, set }));
+  const handOver = opts.preset === "cis-benchmark" && opts.checks;
+  if (handOver) localStorage.setItem(JSC_CHECKS.QUEUE, JSON.stringify({ set, runtime: opts.runtime, source: fileName, only: "automated", at: new Date().toISOString() }));
   result = null; doc = null;
   await jscPage.reload(false);
   render();
+  if (handOver) {
+    jscLog.info(T("opening the Checks tool with the automated rules of this import"));
+    if (window.parent !== window) window.parent.postMessage({ jsc: "tool", tool: "checks" }, location.protocol === "file:" ? "*" : location.origin);
+    else location.href = "checks.html";
+  }
 }
 
 $("btn-pick").addEventListener("click", () => $("pick").click());

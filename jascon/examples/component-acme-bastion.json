@@ -1,0 +1,10 @@
+{
+ "id": "https://cso.example/component/bastion-01",
+ "version": "2026-11",
+ "label": "bastion-01",
+ "lifecycle": "active",
+ "title": {
+  "en": "Bastion host (Ubuntu 24.04 LTS)"
+ },
+ "kind": "system"
+}

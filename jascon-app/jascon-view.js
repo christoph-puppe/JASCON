@@ -62,6 +62,15 @@ jscI18n.add("de", {
   "not offered as filters (free text, values do not repeat): {list}": "nicht als Filter angeboten (Freitext, Werte wiederholen sich nicht): {list}",
 });
 
+jscI18n.add("de", {
+  "A machine check (proposed, CP-CHECK-1): the facts a collector reports and the comparisons they must pass. The code that collects rides along and decides nothing.":
+    "Eine maschinelle Prüfung (vorgeschlagen, CP-CHECK-1): die Fakten, die ein Kollektor meldet, und die Vergleiche, die sie bestehen müssen. Der Code, der sammelt, reist mit und entscheidet nichts.",
+  "discharges": "erfüllt", "platform": "Plattform", "confidence": "Vertrauensgrad", "per resource": "je Ressource",
+  "none observed passes": "keine beobachtet gilt als bestanden", "none observed is inconclusive": "keine beobachtet ist unbestimmt",
+  "fresh for": "gültig für", "author": "Autor", "Facts the collector reports": "Fakten, die der Kollektor meldet", "Applies when": "Gilt, wenn",
+  "Passes when all of these hold": "Bestanden, wenn alle diese gelten", "Collectors": "Kollektoren",
+});
+
 const esc = jscEsc;
 const TYPE_VIEW = {
   requirement:    { glyph: "◇", color: "var(--accent)", what: N("One requirement of a framework with its clauses: statements, each with a binding force (modality), the parties it binds, typed parameters and prose in several languages.") },
@@ -71,6 +80,7 @@ const TYPE_VIEW = {
   component:      { glyph: "⬡", color: "var(--green)", what: N("A system, service or product with its capabilities and authorizations.") },
   implementation: { glyph: "◈", color: "var(--green)", what: N("The edge that says: this component satisfies this requirement, with the responsibility per clause and, where inherited, the authorization it rests on.") },
   risk:           { glyph: "△", color: "color-mix(in oklab, var(--red) 55%, var(--amber))", what: N("The record made before the fact: a scenario with an owner, a state, a level on a named scale, a treatment decision and the requirements that carry it.") },
+  check:          { glyph: "⊨", color: "color-mix(in oklab, var(--green) 60%, var(--blue))", what: N("A machine check (proposed, CP-CHECK-1): the facts a collector reports and the comparisons they must pass. The code that collects rides along and decides nothing.") },
   assessment:     { glyph: "◉", color: "var(--red)", what: N("An assessment run: subjects, method, performer, result.") },
   finding:        { glyph: "◎", color: "var(--red)", what: N("A finding against a requirement, down to the statement, with states, actions that carry deadlines, and Deviations.") },
   attestation:    { glyph: "✦", color: "var(--text-primary)", what: N("The signature layer: semantic digests of the subjects, the digest of the manifest and the pinned rendering.") },
@@ -200,12 +210,28 @@ function riskBody(o) {
     section(T("Threats"), (o["threat-refs"] || []).map(u => badge(last(u), u)).join(" ")) +
     section(T("Components at risk"), refs(o["component-refs"])) + section(T("Belongs to the Tailorings"), refs(o["tailoring-refs"]));
 }
+/* A Check: the requirement it discharges, the fact contract, the comparisons
+   that decide, and the collector code (shown, never run here). */
+function checkBody(o) {
+  const expected = e => (e && typeof e === "object" && !Array.isArray(e) ? `<span class="paramtok">{param:${esc(e.param)}}</span>` : `<span class="mono">${esc(JSON.stringify(e))}</span>`);
+  const assertion = a => `<div class="mono" style="font-size:12px">${esc(a.fact)} <b>${esc(a.op)}</b> ${a.expected === undefined ? "" : expected(a.expected)}</div>`;
+  const cols = (((o.facets || {})["https://ns.oscal.org/stdlib/facet/collector@1"] || {}).collectors) || [], p = o.provenance || {};
+  return `<div class="kv">${kv(T("discharges"), (o["requirement-ref"] ? refLink(o["requirement-ref"]) : "") + (o["statement-ids"] || []).map(s => " " + badge(T("statement {id}", { id: s }))).join(""))}
+      ${kv(T("platform"), esc(o.platform || ""))}${kv(T("confidence"), badge(o.confidence || "?"))}
+      ${o.each ? kv(T("per resource"), esc(o.each.resource) + " " + badge(T(o.each["allow-empty"] ? "none observed passes" : "none observed is inconclusive"))) : ""}
+      ${o.validity ? kv(T("fresh for"), esc(`${o.validity.num} ${o.validity.unit}`)) : ""}
+      ${kv(T("author"), esc(p["author-ref"] || "") + (p.date ? " · " + esc(p.date) : ""))}</div>` +
+    section(T("Facts the collector reports"), (o.observes || []).map(f => `<div>${badge(f.type + (f.cardinality === "many" ? "[]" : ""))} <span class="mono">${esc(f.name)}</span> <span class="hint">${esc(TT(f.description))}</span></div>`).join("")) +
+    section(T("Applies when"), (o["applies-when"] || []).map(assertion).join("")) +
+    section(T("Passes when all of these hold"), (o.criteria || []).map(assertion).join("")) +
+    section(T("Collectors"), cols.map(c => `<div style="margin:6px 0">${badge(c.id)}${badge(c.runtime)}${c.privileges ? badge(c.privileges) : ""}<pre class="raw" style="max-height:240px">${esc(c.source)}</pre></div>`).join(""));
+}
 const GENERIC_SKIP = new Set(["id", "version", "label", "title", "lifecycle", "aliases", "relations", "facets", "annotations"]);
 function genericBody(o) {
   const rest = Object.fromEntries(Object.entries(o).filter(([k]) => !GENERIC_SKIP.has(k)));
   return Object.keys(rest).length ? section(T("Fields"), prettyVal(rest)) : "";
 }
-const BODY = { requirement: requirementBody, requirementSet: setBody, tailoring: tailoringBody, mapping: mappingBody, risk: riskBody };
+const BODY = { requirement: requirementBody, requirementSet: setBody, tailoring: tailoringBody, mapping: mappingBody, risk: riskBody, check: checkBody };
 
 /* The whole object as markup. `verified` is the row jscVerify gave for it. */
 function objectHtml(r, verified) {

@@ -1,0 +1,52 @@
+{
+ "id": "https://cso.example/check/LNX-SSH-1-ciphers",
+ "version": "1.0.0",
+ "lifecycle": "active",
+ "title": {
+  "en": "sshd: no CBC-mode cipher offered"
+ },
+ "requirement-ref": "https://cso.example/req/LNX-SSH-1",
+ "statement-ids": [
+  "s2"
+ ],
+ "platform": "https://cso.example/platform/linux-host",
+ "observes": [
+  {
+   "name": "sshd.ciphers",
+   "type": "code",
+   "cardinality": "many",
+   "description": {
+    "en": "Ciphers as reported by sshd -T, one entry per cipher"
+   }
+  }
+ ],
+ "criteria": [
+  {
+   "fact": "sshd.ciphers",
+   "op": "matches-not",
+   "expected": ".*-cbc"
+  }
+ ],
+ "validity": {
+  "num": 24,
+  "unit": "hours"
+ },
+ "confidence": "reviewed",
+ "provenance": {
+  "author-ref": "https://cso.example/party/secops",
+  "date": "2026-11-11"
+ },
+ "facets": {
+  "https://ns.oscal.org/stdlib/facet/collector@1": {
+   "collectors": [
+    {
+     "id": "bash",
+     "runtime": "bash",
+     "privileges": "root",
+     "timeout-seconds": 30,
+     "source": "#!/bin/bash\n# observes sshd.ciphers (the offered cipher list) from the effective sshd configuration\nset -o pipefail\nc=$(sshd -T | awk '$1==\"ciphers\"{print $2}') || exit 1\nprintf '{\"facts\":{\"sshd.ciphers\":[%s]}}\\n' \"$(printf '%s' \"$c\" | awk -v RS=, 'NF{printf \"%s\\\"%s\\\"\", (n++ ? \",\" : \"\"), $0}')\"\n"
+    }
+   ]
+  }
+ }
+}

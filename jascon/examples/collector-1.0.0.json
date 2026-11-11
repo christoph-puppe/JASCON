@@ -1,0 +1,33 @@
+{
+  "id": "https://ns.oscal.org/stdlib/facet/collector",
+  "version": "1.0.0",
+  "modifies-semantics": [],
+  "note": "PROPOSED (CP-CHECK-1, not released). The code that observes what a Check declares in `observes`, carried ON the Check so that the Check's semantic digest covers the exact source. One Check, N collectors: the same fact contract served by a shell script, an Ansible task, a Python SDK call or a raw API request - choosing a language chooses a collector, never another Check. A collector prints ONE observation (kernel $defs/checkObservation: {facts} or {resources}) and decides nothing; it reports EFFECTIVE values (defaults resolved, drop-ins merged - `sshd -T`, not sshd_config), a fact it looked for and did not find is left out (observed absent), and a collector that could not look prints nothing (no observation, inconclusive); the verdict is check-verdict (B.1.10) over that observation, which any tool recomputes without running code. Declaration [] because nothing in this payload changes what passing means - criteria do, and they are kernel. A tool that cannot run a runtime still validates, recomputes and renders. `runtime` is a closed code list plus namespaced URIs for the rest. `privileges` states what the code needs, so a runner can refuse rather than escalate. Credentials and target inventory NEVER appear here: they are runner configuration.",
+  "schema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object", "additionalProperties": false,
+    "required": ["collectors"],
+    "properties": {
+      "collectors": {
+        "type": "array", "minItems": 1,
+        "items": {
+          "type": "object", "additionalProperties": false,
+          "required": ["id", "runtime", "source"],
+          "properties": {
+            "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$" },
+            "runtime": {
+              "anyOf": [
+                { "enum": ["sh", "bash", "powershell", "python", "ansible", "http-api"] },
+                { "type": "string", "pattern": "^https?://." }
+              ]
+            },
+            "source": { "type": "string", "minLength": 1 },
+            "privileges": { "enum": ["unprivileged", "root"] },
+            "timeout-seconds": { "type": "integer", "minimum": 1 },
+            "description": { "type": "object", "minProperties": 1 }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+ "record-version": "1",
+ "check-ref": "https://cso.example/check/LNX-SSH-1-ciphers",
+ "check-digest": "sha256:41c5ce5827346c06c90cb605bb08b152e358e361a4cb434b27db2157deaaf415",
+ "collector-id": "bash",
+ "subject-ref": "https://cso.example/component/bastion-01",
+ "target": {
+  "platform": "ubuntu-24.04",
+  "hostname-sha256": "94578d642f3c929e4bc60f17c96bedc74e314236540df7bbea1221c451b8ee2b"
+ },
+ "runner": {
+  "id": "manual (no runner yet)",
+  "version": "0"
+ },
+ "started": "2026-11-10T06:00:03Z",
+ "finished": "2026-11-10T06:00:04Z",
+ "exit-status": 0,
+ "observation-digest": "sha256:38f6a064f4ce97454ff1817a68655c675aabac59c43225960f55e8aefe31d9b9",
+ "outputs": [
+  {
+   "name": "stdout",
+   "digest": "sha256:fa9847da7106598c905c9a76717b073231feb40d6aed7c3affad86a6686fb933",
+   "media-type": "application/json",
+   "size": 99
+  }
+ ],
+ "note": {
+  "en": "Produced for the CP-CHECK-1 worked example: the check's bash collector source was executed unchanged against a stub `sshd` that prints a fixed configuration. No real host was assessed and no runner exists yet (CP-CHECK-1 phase 2)."
+ }
+}

@@ -3,13 +3,15 @@
 A set of browser pages for working with JASCON bundles. There is no server and
 no build step: the pages are HTML files that share one script and one
 stylesheet. A bundle you load stays in your browser, with one exception you
-have to switch on yourself: the suggestions of the Risk page send text to a
-model service once you type a key (see "Suggestions from a model").
+have to switch on yourself: the suggestions of the Risk page and the drafts
+of the Checks page send text to a model service once you type a key (see
+"Suggestions from a model").
 
-State: build 0.8.0. This build has the frame (the hub, the settings page and
-the shared core) and eight tool pages: Import, Browse, Tailor, Map,
-Implement, Risk, Assess and Validate. One view of the Risk page can ask a
-language model; nothing else in the app does, and nothing needs one.
+State: build 0.9.1. This build has the frame (the hub, the settings page and
+the shared core) and nine tool pages, in the order of the work: Import,
+Browse, Risk, Tailor, Map, Implement, Checks, Assess and Validate. One view of the Risk page and
+the drafting of the Checks page can ask a language model; nothing else in
+the app does, and nothing needs one.
 
 ## Start
 
@@ -62,10 +64,11 @@ is saved to the set at once; the other open tools reload.
 |---|---|---|
 | Import | An OSCAL catalog or profile and the report of its import | Requirements and Sets from a catalog, as a set of its own; a Set and a Tailoring from a profile |
 | Browse | The catalogue as a tree of Sets, every object with type filters and with the filters found in the loaded requirements, statistics | A Requirement (every `{param:}` token is declared as a parameter), a Set |
+| Risk | The register with a heat map, the scales and their matrix, the coverage of the selected requirements, the risk catalogues | A Risk; a scale; the record of catalogue entries that do not apply |
 | Tailor | Each Tailoring resolved: selection, operations with before and after, lattice verdict, derived tier | A Tailoring; the resolved requirements as a package of their own |
 | Map | The mappings as a table, with targets outside the set marked | A Mapping, also to a target outside the set |
 | Implement | Components and Implementation edges; whether the authorization an inherited edge names is found | Components, a system Component that lists them, Implementations |
-| Risk | The register with a heat map, the scales and their matrix, the coverage of the selected requirements, the risk catalogues | A Risk; a scale; the record of catalogue entries that do not apply |
+| Checks | The rules that carry assessment criteria (audit text, automated or manual) and their machine checks; a tester that computes the verdict for an observation you paste | A Check, written in the form or drafted by a model, one at a time or for many rules |
 | Assess | Assessments, Findings by state, Attestations with a Full Match / Semantic Match / Tamper verdict | An Assessment with one Finding per requirement that is not satisfied; the state of a Finding |
 
 | Validate | What the ported kernel rules say about the whole set, by area, with the object each finding is about; signatures against keys you trust; what composing the set with another set would report | A report as JSON, on request |
@@ -116,6 +119,20 @@ and the licence you state. Three sets of rules:
   of SA-15(13), objectives of SA-24, labels of SI-2(7), one back-matter
   resource). The preset makes no baseline Sets: a baseline is a profile, and
   you import it as one.
+
+- *CIS Benchmark*, the rules of `convert_cis_benchmark.py`: every rule is a
+  Requirement with one clause whose text is the rule's title (the export
+  leaves the statement empty); the audit and remediation text and the
+  marking automated or manual go to `assessment-criteria@1`, which is where
+  the Checks tool reads them; profiles become baseline Sets, the CIS Controls
+  cross-references Mappings (supports, draft), the xccdf id an alias. For the
+  CIS Ubuntu 24.04 Benchmark it mints the converter's namespace, for any
+  other one derived from the title, which you may change. The repository
+  carries no CIS Benchmark (CIS terms); a test runs the Python converter and
+  the preset on a catalog of the same shape written for the test and finds
+  every object with the same semantic digest. The option *draft checks for
+  the automated rules with a model* opens the Checks tool after the write
+  with those rules selected; it sends nothing by itself.
 
 The generic rules read the NIST catalog too (1,196 requirements, valid for
 the reference validator), with a different result: withdrawn controls are
@@ -197,10 +214,65 @@ selection contains and names the entry it came from. A risk that exists is
 never overwritten by an import. An entry that does not apply is recorded with
 its reason in `risk-catalogs/not-applicable.json` beside the manifest.
 
+## Checks
+
+The Check type is proposed in `drafts/CP-CHECK-1.md` and not released. A
+check has two parts: a collector, code that reports facts and decides
+nothing, and criteria, a flat list of comparisons from eleven fixed
+operators that must all hold. Because the verdict is computed from the
+facts, anyone can recompute it from a recorded observation; the Validate
+page does so for every check result an Assessment carries.
+
+The tool has three views.
+
+**Rules and checks.** Every requirement that carries assessment criteria
+(a CIS import puts its audit text there) or has a check, with the marking
+automated or manual and the checks it has. A check for any other
+requirement is written from the editor.
+
+**Edit a check.** The form of one check: requirement and clauses, platform,
+confidence, the facts with their types, the criteria and the conditions
+under which the rule applies, per-resource repetition, how long a result
+stays fresh, and the collectors with their code. Below it stands what the
+kernel rules say (the shape and CHECK-1 to CHECK-7: a fact is declared once,
+an operator fits its fact, a parameter is declared on the clause and
+tightening it never loosens the check, a pattern is an I-Regexp), and what
+the read-only lint finds in the code. A check the rules refuse cannot be
+saved. *Try the criteria* computes the verdict for an observation you paste,
+with parameter values typed or taken from a Tailoring. *Ask a model for this
+check* sends this one rule, with an optional description of your own, and
+fills the form with the answer; nothing is saved until you save.
+
+**Draft with a model.** The same question for many rules: by default the
+rules marked automated, or every rule with audit text. Resolved in code and
+never sent: a rule marked manual, a rule without audit text, and a rule that
+has a check with a collector in the chosen language already. The log states
+that split before the run. Answers are kept as they arrive; a draft is
+saved only when you tick it and save, and only if the rules pass it again.
+
+What the lint is: a list of patterns for commands that write, install,
+restart or reach the network, per language. A warning asks for a look; no
+warning proves a script harmless. The app does not run a collector.
+
 ## Suggestions from a model
 
-The last view of the Risk page asks a language model for the two things no
-rule can compute. Everything else on the page, and in the app, is computed.
+Two places ask a language model for what no rule can compute: the last view
+of the Risk page (risks and their treatments) and the Checks page (facts,
+criteria and collector code for a technical rule). Everything else in the
+app is computed.
+
+- **Draft a check.** One call per rule. The app sends the rule (title,
+  clauses, parameters with their bounds, audit and remediation text, your
+  description), the target language and the contract of a check: the
+  eleven operators and five fact types, taken from the kernel schema, and
+  the rules for collectors (read only, effective values, one line of JSON).
+  The answer schema restricts operators and fact types to the kernel's. The
+  app assembles the answer: it mints the id, sets the requirement and
+  clauses, writes confidence and lifecycle draft and names the service in
+  the annotations. An answer whose expected value is not JSON, that names a
+  parameter the rule does not have, or that writes a decimal as a float is
+  refused with its reason; a rule the model says does not fit (judgement,
+  two facts compared, arithmetic) gets no check.
 
 - **Suggest risks.** You describe the scope. The app adds the components of
   the set, the risks the register has already and the levels of the pinned
@@ -316,12 +388,13 @@ text in that language, the English text is shown, then whatever is there.
 
 ## Limits of this build
 
-- The Validate page is not the reference validator. All fifteen rule
+- The Validate page is not the reference validator. All sixteen rule
   families of `validate_core.py` are ported and run against their conformance
   vectors: canonical form, modality, parameter, tier, tailoring (the
   operation law), reference, lifecycle, kernel, facet, attestation, risk,
-  scale, DSSE signatures, the composition of two bundles and
-  conditional-apply. What the page does not judge: conditional-apply
+  scale, DSSE signatures, the composition of two bundles,
+  conditional-apply, and the proposed Check type of `drafts/CP-CHECK-1.md`
+  (I-Regexp, check-verdict, CHECK-1 to CHECK-15 with the evidence chain). What the page does not judge: conditional-apply
   instances (no bundle has a place to carry one; the reference validator does
   not run them on a bundle either) and the bytes of a bundle on disk (line
   ends, files the manifest does not list). In a case of doubt run the Python
@@ -334,10 +407,12 @@ text in that language, the English text is shown, then whatever is there.
   envelope of an unlisted one as a note.
 - The other pages still take an object's type from its fields when a set is
   loaded; the Validate page says where the kernel schema disagrees.
-- Loading from a URL fetches what the manifest lists, and the envelope a
-  listed attestation names. A file beside the manifest that nothing listed
-  names, such as an attestation over the manifest, is not fetched; load the
-  folder or a ZIP for those.
+- Loading from a URL fetches what the manifest lists, the envelope a
+  listed attestation names, and the evidence store the check results of an
+  Assessment name (`evidence/sha256/<hex>`: the records and the outputs they
+  list). A file beside the manifest that nothing listed names, such as an
+  attestation over the manifest, is not fetched; load the folder or a ZIP for
+  those.
 - Predicate selects of a Tailoring are not evaluated; the selection is then
   shown as open and its count as a lower bound.
 - The Tailor page applies set-modality, set-parameter and replace-prose.
@@ -348,7 +423,10 @@ text in that language, the English text is shown, then whatever is there.
   against the kernel schema.
 - Files other than text (images, PDF) in a bundle folder are not stored,
   except a file an attestation names as its envelope, and
-  are missing from the export.
+  are missing from the export. Evidence blobs are kept when they are text
+  (and at most 256 KiB when a folder is picked); a blob that is not UTF-8
+  text is reported by the Validate page as one it cannot verify, and the
+  reference validator can.
 - The model view was run against a simulated service only. No call to a
   real service was made while it was built, and the model ids in the
   settings were not checked against Google's list on that day; a wrong id
@@ -357,7 +435,9 @@ text in that language, the English text is shown, then whatever is there.
   suggestion. There is no price estimate, no list of models to pick from, no
   search grounding, and no fallback for an endpoint that rejects a JSON
   schema.
-- Suggestions exist on the Risk page only.
+- Suggestions exist on the Risk page and the Checks page.
+- The app does not run collectors and does not record runs; a check is
+  written, drafted and tried against an observation you paste.
 - No web font is fetched and no script is loaded from another host. The only
   requests to another host are the calls to the model service you chose.
 
@@ -380,7 +460,9 @@ edited bundle passes the reference validator, the ported rules pass the
 conformance vectors of their families, the catalogue import rebuilds the
 committed demo, the model access behaves as described above against a
 simulated service (what a request carries, the retry limit, the checks on an
-answer, the key in no storage), every page starts in a browser without a script error, every
+answer, the key in no storage), the Checks tool goes from a CIS import to
+saved checks against a simulated model and the exported bundle passes the
+reference validator, every page starts in a browser without a script error, every
 interface string has a German text, and what is generated (the settings table
 above, `jascon-schema.js`, `jascon-presets.js`) matches its source. The second lists
 strings without a German text. The third rewrites the settings table from

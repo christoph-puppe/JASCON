@@ -4,7 +4,7 @@
    profile becomes a RequirementSet (what it includes) and a Tailoring (what
    it excludes and sets). Everything after the import works on JASCON.
 
-   Three ways to read a catalog, chosen by `preset`:
+   Four ways to read a catalog, chosen by `preset`:
 
    bsi-gspp   The rules of jascon/scripts/convert_bsi.py for the BSI
               Anwenderkatalog Grundschutz++: a nested control is a clause of
@@ -23,6 +23,11 @@
               guidance in facets. On the same source file its objects equal
               the Python converter's. It makes no baseline Sets; a baseline
               is a profile and is imported as one.
+   cis-benchmark  The rules of convert_cis_benchmark.py for a CIS Benchmark:
+              one Requirement per rule, audit and remediation text with the
+              automated/manual marking in assessment-criteria@1 (what the
+              Checks tool drafts checks from), profiles as baseline Sets,
+              CIS Controls cross-references as Mappings.
 
    What an import cannot carry is counted in the report it returns, never
    dropped without a line: a control without statement prose, a relation
@@ -501,16 +506,177 @@ function jscImportGeneric(cat, opts) {
   return { objects, facetSchemas, provenance, report };
 }
 
+/* ====================================================================
+   CIS Benchmark (after convert_cis_benchmark.py v0.1)
+   ====================================================================
+   One hardening rule becomes one Requirement with one clause: the CIS
+   export leaves the statement part empty and carries the norm in the title,
+   so the clause prose is minted from the title and counted. The audit and
+   remediation text, and the automated/manual marking, go to the stdlib facet
+   assessment-criteria@1 - which is where the Checks tool reads them. Profile
+   links in the back-matter become one baseline Set per profile, the CIS
+   Controls cross-references become Mapping objects (supports, draft: the
+   source types no relationship), the xccdf id an alias.
+
+   The Python converter mints the namespace of the one benchmark it reads;
+   for that title this preset mints the same, and tests/oscal.test.mjs
+   compares every object by semantic digest with the converter's output on a
+   synthetic catalog of the same shape. For any other benchmark the
+   namespace is derived from the title and can be changed on the page. */
+const JSC_CIS = { cisc8: "https://ns.cisecurity.org/controls/v8", cisc7: "https://ns.cisecurity.org/controls/v7", key: "cisb", lang: "en",
+  F_ACRIT: "https://ns.oscal.org/stdlib/facet/assessment-criteria@1", COMPAT: "https://ns.oscal.org/compat/oscal-1x@1",
+  KNOWN: { "CIS Ubuntu Linux 24.04 LTS Benchmark": "https://ns.cisecurity.org/benchmark/ubuntu-24.04-lts" } };
+function jscCisNamespace(cat) {
+  const title = String((cat.metadata || {}).title || "").trim();
+  if (JSC_CIS.KNOWN[title]) return JSC_CIS.KNOWN[title];
+  const name = title.replace(/^CIS\s+/i, "").replace(/\s+Benchmark\b.*$/i, "").toLowerCase().replace(/[^a-z0-9.]+/g, "-").replace(/^-+|-+$/g, "");
+  return "https://ns.cisecurity.org/benchmark/" + (name || "benchmark");
+}
+function jscImportCis(cat, opts) {
+  const C = JSC_CIS, version = cat.metadata.version, lang = C.lang;
+  const ns = (opts && opts.ns) || jscCisNamespace(cat);
+  const F_NARR = `${ns}/facet/narrative@1`, F_XREF = `${ns}/facet/external-references@1`;
+  const L = v => (v === undefined || v === null ? v : { [lang]: v });
+  const objects = [], report = { preset: "cis-benchmark", controls: 0, statements: 0, methods: {}, mappings: { v7: 0, v8: 0 },
+    "unresolved-links": 0, "minted-prose": 0, profiles: {}, namespace: ns };
+  const resources = new Map((((cat["back-matter"] || {}).resources) || []).map(r => [r.uuid, r]));
+  const kindOf = r => {
+    for (const p of r.props || []) {
+      if (p.name === "marking" && String(p.value || "").includes("benchmarks_profile")) return "profile";
+      if (p.name === "version" && p.class === "CIS_Controls") return "safeguard";
+    }
+    return "document";
+  };
+  const profileMembers = new Map();
+  let seq = 0;
+  const nseq = () => (seq += 10);
+  function control(c) {
+    const rid = `${ns}/req/${c.id}`, props = c.props || [];
+    const labelProp = props.find(p => p.name === "label");
+    const afterSep = v => { const i = v.indexOf("xccdf_id: "); return i >= 0 ? v.slice(i + 10) : v; };   // Python's split(sep, 1)[-1]
+    const aliases = props.filter(p => p.name === "marking" && String(p.value).startsWith("xccdf_id:"))
+      .map(p => ({ scheme: "xccdf", value: afterSep(String(p.value)) }));
+    const methodProp = props.find(p => p.name === "marking" && (p.value === "automated" || p.value === "manual"));
+    if (methodProp) report.methods[methodProp.value] = (report.methods[methodProp.value] || 0) + 1;
+    report.controls++; report.statements++; report["minted-prose"]++;
+    const req = { id: rid, version, label: labelProp ? labelProp.value : c.id, lifecycle: "active", title: L(c.title === undefined ? c.id : c.title),
+      statements: [{ id: "s1", modality: "unspecified", "obligated-parties": [`${ns}/party/system-administrator`],
+        prose: { [lang]: c.title === undefined ? "" : c.title } }] };
+    if (aliases.length) req.aliases = aliases;
+    const narr = {}, acrit = {}, xrefs = [];
+    if (methodProp) acrit.method = methodProp.value;
+    for (const p of c.parts || []) {
+      const lab = ((p.props || []).find(x => x.name === "label") || {}).value;
+      if (p.name === "statement" && (lab === "Description" || lab === "Rationale")) narr[lab.toLowerCase()] = L(p.prose === undefined ? "" : p.prose);
+      else if (p.name === "assessment-method") acrit.audit = L(p.prose === undefined ? "" : p.prose);
+      else if (p.name === "guidance" && lab === "Remediation") acrit.remediation = L(p.prose === undefined ? "" : p.prose);
+      else if (p.name === "guidance" && p.class === "CIS_Controls") {
+        for (const l of p.links || []) {
+          const r = resources.get(String(l.href || "").replace(/^#+/, ""));
+          if (!r || kindOf(r) !== "safeguard") { report["unresolved-links"]++; continue; }
+          const num = ((r.props || []).find(x => x.name === "marking" && /^\d+(\.\d+)?$/.test(String(x.value))) || {}).value;
+          const ver = ((r.props || []).find(x => x.name === "version" && x.class === "CIS_Controls") || {}).value || "?";
+          if (!num) { report["unresolved-links"]++; continue; }
+          let target;
+          if (ver === "8") {
+            const pp = String(num).split(".");
+            target = `${C.cisc8}/req/cisc-${String(Number(pp[0])).padStart(3, "0")}${pp.length > 1 ? "." + String(Number(pp[1])).padStart(3, "0") : ""}`;
+            report.mappings.v8++;
+          } else { target = `${C.cisc7}/req/${num}`; report.mappings.v7++; }
+          const tail = `${jscOscalSlug(c.id)}--v${ver}-${jscOscalSlug(num)}`;
+          objects.push({ path: `objects/map/${tail}.json`, obj: { id: `${ns}/map/${tail}`, version, lifecycle: "active",
+            "source-ref": rid, "target-ref": target, relationship: "supports", direction: "source-to-target", confidence: "draft",
+            rationale: L("Imported from the CIS Benchmark's CIS Controls cross-reference; the source carried no typed relationship (handbook 8.6)."),
+            provenance: { "author-ref": `${ns}/party/cis`, date: version } } });
+        }
+      } else if (p.name === "guidance" && p.class === "References") {
+        xrefs.push(...(p.props || []).filter(x => x.name === "marking" && x.class === "Reference").map(x => x.value));
+      }
+    }
+    const facets = {};
+    if (Object.keys(narr).length) facets[F_NARR] = narr;
+    if (Object.keys(acrit).length) facets[C.F_ACRIT] = acrit;
+    if (xrefs.length) facets[F_XREF] = { references: xrefs };
+    if (Object.keys(facets).length) req.facets = facets;
+    const rels = [];
+    for (const l of c.links || []) {
+      const u = String(l.href || "").replace(/^#+/, ""), r = resources.get(u);
+      if (r && kindOf(r) === "profile") {
+        const t = r.title || u;
+        if (!profileMembers.has(t)) profileMembers.set(t, []);
+        profileMembers.get(t).push(rid);
+      } else if (r) rels.push({ type: "reference", ref: ((r.rlinks || [{}])[0] || {}).href || r.title || u });
+      else report["unresolved-links"]++;
+    }
+    if (rels.length) req.relations = rels;
+    objects.push({ path: `objects/req/${jscOscalSlug(c.id)}.json`, obj: req });
+    return rid;
+  }
+  /* Sequence numbers follow the converter: a sub-group's entry is numbered
+     after its own members, a control's after it was converted. */
+  function group(g) {
+    const entries = [];
+    let carried = (g.parts || []).map(p => ({ group: g.title === undefined ? "" : g.title, name: p.name, prose: L(p.prose === undefined ? "" : p.prose) }));
+    for (const sub of g.groups || []) {
+      const [uri, sc] = group(sub);
+      carried = carried.concat(sc);
+      if (uri) entries.push({ ref: uri, sequence: nseq() });
+    }
+    for (const c of g.controls || []) { const ref = control(c); entries.push({ ref, sequence: nseq() }); }
+    if (!entries.length) return [null, carried];
+    const label = ((g.props || []).find(p => p.name === "label") || {}).value;
+    const name = jscOscalSlug(g.id || g.title);
+    const set = { id: `${ns}/set/tax/${name}`, version, lifecycle: "active", title: L(g.title === undefined ? "" : g.title), members: entries };
+    if (label) set.label = label;
+    if (carried.length) { set.facets = { [C.COMPAT]: { "group-parts": carried } }; carried = []; }
+    objects.push({ path: `objects/set/tax-${name}.json`, obj: set });
+    return [set.id, carried];
+  }
+  const top = [];
+  let rootCarried = [];
+  for (const g of cat.groups || []) {
+    const [uri, carried] = group(g);
+    rootCarried = rootCarried.concat(carried);
+    if (uri) top.push({ ref: uri, sequence: nseq() });
+  }
+  const root = { id: `${ns}/set/tax/root`, version, lifecycle: "active", title: L(cat.metadata.title), members: top };
+  if (rootCarried.length) root.facets = { [C.COMPAT]: { "group-parts": rootCarried } };
+  objects.push({ path: "objects/set/tax-root.json", obj: root });
+  const byCodePoint = (a, b) => (a < b ? -1 : a > b ? 1 : 0);
+  for (const title of [...profileMembers.keys()].sort(byCodePoint)) {
+    const clean = title.replace(/\\+/g, " "), name = jscOscalSlug(clean), refs = [...new Set(profileMembers.get(title))].sort(byCodePoint);
+    report.profiles[clean] = refs.length;
+    objects.push({ path: `objects/set/profile-${name}.json`, obj: { id: `${ns}/set/profile/${name}`, version, lifecycle: "active",
+      title: L(`Benchmark profile: ${clean}`), members: refs.map((ref, i) => ({ ref, sequence: (i + 1) * 10 })) } });
+  }
+  const stub = (file, id, props, note) => ({ path: `schemas/${file}`, def: { id, version: "1.0.0", "modifies-semantics": [],
+    note: note || "NORMATIVE pinned payload schema (backlog #26): closed shape - unknown keys are rejected, never smuggled",
+    schema: { $schema: "https://json-schema.org/draft/2020-12/schema", type: "object", properties: props, additionalProperties: false } } });
+  const facetSchemas = [
+    jscStdlibPin("assessment-criteria"),
+    stub("cisb-narrative-stub.json", F_NARR.split("@")[0], { description: { type: "object" }, rationale: { type: "object" } }),
+    stub("cisb-external-references-stub.json", F_XREF.split("@")[0], { references: { type: "array", items: { type: "string" } } }),
+    stub("oscal-1x-compat-stub.json", "https://ns.oscal.org/compat/oscal-1x", { "group-parts": { type: "array" } },
+      "ILLUSTRATIVE STUB - Level-2 waiting room (intended deprecation; see D16/handbook 14.6)"),
+  ];
+  const provenance = { sources: [{ key: C.key, title: cat.metadata.title, version, "oscal-version": cat.metadata["oscal-version"] }],
+    converter: "JASCON-App OSCAL import, preset cis-benchmark (the rules of convert_cis_benchmark.py v0.1)",
+    "namespace-note": "authority namespace minted by converter pending a CIS-published URI" };
+  return { objects, facetSchemas, provenance, report };
+}
+
 /* doc: the parsed OSCAL file. -> { objects: [{path, obj}], facetSchemas: [{path, def}], provenance, report } */
 function jscOscalImportCatalog(doc, opts) {
   const cat = doc && doc.catalog;
   if (!cat || !cat.metadata) throw new Error("this is not an OSCAL catalog: no catalog.metadata");
-  return opts.preset === "bsi-gspp" ? jscImportBsi(cat) : opts.preset === "nist-sp800-53" ? jscImportNist(cat) : jscImportGeneric(cat, opts);
+  return opts.preset === "bsi-gspp" ? jscImportBsi(cat) : opts.preset === "nist-sp800-53" ? jscImportNist(cat)
+    : opts.preset === "cis-benchmark" ? jscImportCis(cat, opts) : jscImportGeneric(cat, opts);
 }
 /* A guess at the preset from the catalog itself; the user decides. */
 function jscOscalGuessPreset(doc) {
   const title = (((doc || {}).catalog || {}).metadata || {}).title || "";
-  return /Grundschutz\+\+/.test(title) ? "bsi-gspp" : /SP 800-53 Rev(ision)? 5/i.test(title) ? "nist-sp800-53" : "generic";
+  return /Grundschutz\+\+/.test(title) ? "bsi-gspp" : /SP 800-53 Rev(ision)? 5/i.test(title) ? "nist-sp800-53"
+    : /^\s*CIS\b.*\bBenchmark\b/i.test(title) ? "cis-benchmark" : "generic";
 }
 
 /* ====================================================================
@@ -609,5 +775,6 @@ function jscOscalKind(doc) {
 }
 
 if (typeof module !== "undefined" && module.exports) {
-  module.exports = { jscOscalSlug, jscOscalProse, jscOscalImportCatalog, jscOscalGuessPreset, jscOscalImportProfile, jscOscalKind, JSC_BSI, JSC_NIST };
+  module.exports = { jscOscalSlug, jscOscalProse, jscOscalImportCatalog, jscOscalGuessPreset, jscOscalImportProfile, jscOscalKind, JSC_BSI, JSC_NIST,
+    JSC_CIS, jscCisNamespace };
 }

@@ -6,7 +6,10 @@ type**, wired together as a single, closed, cross-referentially
 consistent package — the same running story the Handbook tells
 (KONF.14.1, the Acme SaaS on a PaaS, finding 017).
 
-## Coverage: the ten types + sub-objects + bundle artifacts
+## Coverage: the eleven types + sub-objects + bundle artifacts
+
+*Check (type 11) is **proposed** in `drafts/CP-CHECK-1.md` and not
+released; its rows are marked below.*
 
 | # | Type | File | Demonstrates |
 |---|---|---|---|
@@ -21,6 +24,12 @@ consistent package — the same running story the Handbook tells
 | 7 | Assessment | `assessment-2026q3.json` | facet-typed method (stdlib `assessment-criteria@1`), subjects, result |
 | 8 | Finding | `finding-017.json` | statement-scoped finding, calendar-aware action, **Deviation sub-object** (false-positive, approved) |
 | 10 | Risk | `risk-acme-kms-key-rotation.json` | treated Risk on a BSI 200-3 scale, G 0.x threat refs, **treats KONF.14.1 s2** (the clause finding 017 is against — which now carries `risk-refs`), CISO acceptance of the residual, 12-month calendar review; `risk-coverage` on this bundle: 3 selected, 1 justified, 2 uncovered |
+| 11 *(proposed)* | Check | `check-acme-ssh-maxauthtries.json`, `check-acme-ssh-ciphers.json` | typed fact contract (`observes`) + closed comparators (`criteria`); s1 binds `{"param": "max-auth-tries"}` with `at-most` (the parameter tightens lower - CHECK-5); s2 uses `matches-not` with the I-Regexp `.*-cbc` over a list fact; one fact contract, **two collectors** (bash, python) in `collector@1` |
+| 1d *(proposed)* | Requirement + Set + Tailoring | `req-acme-lnx-ssh-1.json`, `set-acme-linux.json`, `tailoring-acme-linux-prod.json` | Acme's own SSH clause pair; the production Tailoring binds `max-auth-tries` = 4, and that bound value is what both runs used (CHECK-12) |
+| 5b *(proposed)* | Component | `component-acme-bastion.json` | the host under test |
+| 7b *(proposed)* | Assessment (automated runs) | `assessment-acme-bastion-2026-11-03.json`, `assessment-acme-bastion-2026-11-10.json` | `check-results`: observation inline, verdict **recomputed** by the validator (CHECK-9), result = aggregate (CHECK-10), `tailoring-ref`, `evidence-record` per row; run 1 fails s2 (`aes128-cbc` offered), run 2 passes |
+| 8b *(proposed)* | Finding | `finding-acme-bastion-ssh-cbc.json` | raised by a check (`check-ref`, CHECK-14), closed after the 2026-11-10 run (related) |
+| — *(proposed)* | Evidence store | `evidence/sha256/<hex>` | content-addressed blobs beside the manifest, never listed in it: 4 evidence records + 3 collector outputs (the identical MaxAuthTries output of both runs is stored once). Flip a byte and CHECK-15 fails; delete a raw output and the validator reports it *withheld* |
 | 9 | Attestation | `attestation-acme-2026.json` | subject **semantic** digests, content-manifest binding, rendering block — *beside* the manifest, never inside |
 | — | Content manifest | `content-manifest.json` | both digests per object, exact-pinned facet schemas, rendering digest |
 | — | Facet descriptors | `gspp-taxonomy-1.0.0.json`, `assessment-criteria-1.0.0.json` | a custom facet descriptor, and a stdlib descriptor pinned **verbatim** (D26) |
@@ -91,6 +100,14 @@ consistent package — the same running story the Handbook tells
    having the validator hold it to that, is backlog #46.
 7. One rendering stands in for real deliverables; real bundles list
    as many as they ship.
+8. **The check runs assessed no real host.** No runner exists yet
+   (CP-CHECK-1 phase 2). The evidence was produced by executing each
+   Check's bash collector source *unchanged* against a stub `sshd` that
+   prints a fixed configuration; every evidence record says so in its
+   `note`. The bytes, digests and verdicts are real; the host is not.
+9. **The Risk now names its Tailoring** (`tailoring-refs`, 2026-11-11):
+   with the Linux Tailoring this bundle holds two, and RISK-14 asks a
+   Risk to say which Statement of Applicability its treatment belongs to.
 
 ## Suggested uses
 

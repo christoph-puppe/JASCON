@@ -1,0 +1,14 @@
+{
+ "id": "https://cso.example/set/linux-baseline",
+ "version": "2026-11",
+ "lifecycle": "active",
+ "title": {
+  "en": "Acme Linux host baseline"
+ },
+ "members": [
+  {
+   "ref": "https://cso.example/req/LNX-SSH-1",
+   "sequence": 10
+  }
+ ]
+}

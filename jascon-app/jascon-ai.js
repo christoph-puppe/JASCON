@@ -4,7 +4,9 @@
    Nothing in the app needs a model. Everything a rule or a lookup can answer
    is answered in code (jascon-rules.js); a model is asked only for the two
    things no rule can compute: a draft of risk scenarios for a described
-   scope, and which of the selected requirements act on a given risk. A model
+   scope, which of the selected requirements act on a given risk, and a
+   draft of a machine check (facts, criteria, collector code) for a
+   technical rule. A model
    answer is a suggestion: it is checked here against what was sent, shown,
    and written into the set only when a person takes it.
 
@@ -123,6 +125,42 @@ REQUIREMENTS (key | label | title | text)
 
 RISK
 {risk}` },
+  { key: "check-draft", label: N("Prompt: draft a check"), need: ["{rule}"],
+    also: ["{runtime}", "{platform}", "{facttypes}", "{ops}", "{lang}"],
+    append: { "{rule}": "RULE" },
+    def: `You are a security engineer. You turn one technical rule into a machine check. A person reviews every draft before it is used.
+
+A CHECK HAS TWO PARTS
+1. A collector: a {runtime} program that runs on the target ({platform}), reads the effective state and prints exactly one line of JSON: {"facts": {...}}, or {"resources": [{"id": "...", "facts": {...}}, ...]} when the rule is about each of many things (files, accounts, mounts). The collector decides nothing.
+2. Criteria: a flat list of assertions that must ALL hold. Each assertion compares one fact with one operator. Nothing else decides pass or fail.
+
+COLLECTOR RULES
+- Read only. Never change the system: no writes, no installs, no service changes, no edits of configuration. No network access.
+- Report effective values: what the running system uses, with defaults resolved and include files merged (for example "sshd -T", not the config file).
+- A fact you looked for and did not find is left out of "facts". If the program cannot look at all (command missing, permission denied), it exits with a non-zero status and prints nothing.
+- Numbers as JSON numbers, booleans as true or false, decimals as strings like "1.5", lists as JSON arrays of strings.
+- Short and plain.
+
+FACT TYPES
+{facttypes}
+A fact is one value, or a list when its cardinality is "many".
+
+OPERATORS (there are no others)
+{ops}
+
+EXPECTED
+- "expected" is JSON text: a literal of the fact's type ("4", "\\"no\\"", "true", "[\\"a\\", \\"b\\"]"), or {"param": "<name>"} for a parameter listed under RULE. When the rule has a parameter for the threshold, use it, never its default.
+- present and absent take no value: "expected" is "".
+- matches and matches-not take an I-Regexp pattern (RFC 9485) that must match the WHOLE value: no anchors, no \\d \\w \\s \\b, no lookaround, no back-references, no flags. Write [0-9], [ \\t], and explicit alternatives instead.
+
+WHEN IT DOES NOT FIT
+A rule that needs human judgement, a comparison between two facts, arithmetic, or an OR across different facts cannot be a check. Then "fits" is false, "reason" says why, and the other fields are empty.
+
+ANSWER
+"fits"; "reason": one or two sentences in the language "{lang}"; "each": the kind of resource when the rule is about each of many things, else ""; "facts": name, type, cardinality ("one" or "many"), description; "criteria": fact, op, expected; "applies_when": assertions that must hold for the rule to apply at all, else an empty list; "collector": the {runtime} source.
+
+RULE
+{rule}` },
 ];
 
 /* The prompt that is sent: the template with its placeholders filled. An
@@ -262,6 +300,60 @@ function jscAiTreatCheck(answer, { keys, already }) {
     treatments.push({ id, reason: jscAiOneLine(t.reason, 400) });
   }
   return { treatments, unknown, known };
+}
+
+
+/* ---------- pass C: draft a check ----------
+   One call per rule. What the model may use comes from the kernel schema:
+   the page passes the operator and fact-type enums of $defs/checkOp and
+   $defs/checkFactType, so prompt, answer schema and kernel cannot disagree.
+   The answer is assembled into a Check in code (jascon-checks.js) and judged
+   there by the same rules as a check written by hand. */
+const JSC_AI_CHECK_OPS = {
+  "equals": "equals: the value is exactly expected (one value; decimals compare by value)",
+  "one-of": "one-of: the value is one of the listed values (one value)",
+  "at-least": "at-least: the value is expected or more (integer or decimal)",
+  "at-most": "at-most: the value is expected or less (integer or decimal)",
+  "present": "present: the fact was reported",
+  "absent": "absent: the fact was not reported (looked for and not found)",
+  "includes-all": "includes-all: the list contains every listed value",
+  "excludes-all": "excludes-all: the list contains none of the listed values",
+  "subset-of": "subset-of: every element of the list is one of the listed values; [] means the list must be empty",
+  "matches": "matches: the whole value matches the pattern; on a list, every element does",
+  "matches-not": "matches-not: the whole value does not match the pattern; on a list, no element does",
+};
+function jscAiCheckOps(ops) {
+  return ops.map(op => { if (!JSC_AI_CHECK_OPS[op]) throw new Error(`no description for the operator ${op}`); return "- " + JSC_AI_CHECK_OPS[op]; }).join("\n");
+}
+function jscAiCheckSchema(ops, types) {
+  const assertion = { type: "object", additionalProperties: false, required: ["fact", "op", "expected"],
+    properties: { fact: { type: "string" }, op: { type: "string", enum: [...ops] }, expected: { type: "string" } } };
+  return { type: "object", additionalProperties: false, required: ["fits", "reason", "each", "facts", "criteria", "applies_when", "collector"],
+    properties: { fits: { type: "boolean" }, reason: { type: "string" }, each: { type: "string" },
+      facts: { type: "array", items: { type: "object", additionalProperties: false, required: ["name", "type", "cardinality", "description"],
+        properties: { name: { type: "string" }, type: { type: "string", enum: [...types] }, cardinality: { type: "string", enum: ["one", "many"] },
+          description: { type: "string" } } } },
+      criteria: { type: "array", items: assertion }, applies_when: { type: "array", items: assertion }, collector: { type: "string" } } };
+}
+/* The RULE block: the varying item, last in the prompt. params: Map name ->
+   {statement, decl} (jscChecksParams); text: a language-map reader. */
+function jscAiCheckRule({ req, statementIds, params, audit, remediation, description, text }) {
+  const cover = new Set(statementIds && statementIds.length ? statementIds : (req.statements || []).map(s => s.id));
+  const lines = [`title: ${jscAiOneLine([req.label, text(req.title)].filter(Boolean).join(": "))}`];
+  for (const s of req.statements || []) if (cover.has(s.id)) lines.push(`clause ${s.id} (${s.modality}): ${jscAiOneLine(text(s.prose))}`);
+  const ps = [...params].map(([name, { decl }]) => `${name} (${[decl.type, decl.tightening && "tightening " + decl.tightening,
+    decl.min !== undefined && "min " + decl.min, decl.max !== undefined && "max " + decl.max,
+    decl.choices && "choices " + decl.choices.map(c => c.value).join("|")].filter(Boolean).join(", ")})`);
+  lines.push(`parameters: ${ps.length ? ps.join("; ") : "none"}`);
+  if (String(audit || "").trim()) lines.push(`audit:\n${String(audit).trim()}`);
+  if (String(remediation || "").trim()) lines.push(`remediation (what a compliant system looks like):\n${String(remediation).trim()}`);
+  if (String(description || "").trim()) lines.push(`description of the check:\n${String(description).trim()}`);
+  return lines.join("\n");
+}
+function jscAiCheckShape(answer) {
+  if (!answer || typeof answer !== "object" || typeof answer.fits !== "boolean") throw jscAiBadOutput("the answer has no \"fits\"");
+  for (const k of ["facts", "criteria", "applies_when"]) if (!Array.isArray(answer[k])) throw jscAiBadOutput(`the answer has no list "${k}"`);
+  return answer;
 }
 
 /* Size of a run before it is paid for. A token is taken as four characters,
@@ -455,7 +547,7 @@ return { state, MINIMAL_OK, MAX_RETRIES, clampLevel, apiError, isTransient, gemi
 if (typeof module !== "undefined" && module.exports) {
   module.exports = { JSC_AI_BACKENDS, JSC_AI_LEVELS, JSC_PROMPTS, jscPromptFill, jscPromptMissing, jscAiRiskSchema, jscAiRiskInput,
     jscAiRiskShape, jscAiRiskCheck, JSC_AI_TREAT_SCHEMA, jscAiCandidates, jscAiRiskText, jscAiTreatShape, jscAiTreatCheck,
-    jscAiEstimate, jscAiCore };
+    jscAiEstimate, jscAiCore, JSC_AI_CHECK_OPS, jscAiCheckOps, jscAiCheckSchema, jscAiCheckRule, jscAiCheckShape };
 }
 
 /* ====================================================================
@@ -466,6 +558,7 @@ if (typeof window !== "undefined") (() => {
 
 jscI18n.add("de", {
   "Prompt: suggest risks": "Prompt: Risiken vorschlagen", "Prompt: suggest treatments": "Prompt: Behandlungen vorschlagen",
+  "Prompt: draft a check": "Prompt: Prüfung entwerfen",
   "OpenAI-compatible endpoint": "OpenAI-kompatibler Endpunkt",
   "Key": "Schlüssel", "Key for {backend}": "Schlüssel für {backend}", "Forget the key": "Schlüssel vergessen",
   "a key is in memory": "ein Schlüssel liegt im Speicher der Seite", "no key": "kein Schlüssel",

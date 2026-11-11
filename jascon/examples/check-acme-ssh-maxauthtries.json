@@ -1,0 +1,60 @@
+{
+ "id": "https://cso.example/check/LNX-SSH-1-maxauthtries",
+ "version": "1.0.0",
+ "lifecycle": "active",
+ "title": {
+  "en": "sshd: authentication attempts within the bound"
+ },
+ "requirement-ref": "https://cso.example/req/LNX-SSH-1",
+ "statement-ids": [
+  "s1"
+ ],
+ "platform": "https://cso.example/platform/linux-host",
+ "observes": [
+  {
+   "name": "sshd.maxauthtries",
+   "type": "integer",
+   "description": {
+    "en": "MaxAuthTries as reported by sshd -T (the effective value, defaults included)"
+   }
+  }
+ ],
+ "criteria": [
+  {
+   "fact": "sshd.maxauthtries",
+   "op": "at-most",
+   "expected": {
+    "param": "max-auth-tries"
+   }
+  }
+ ],
+ "validity": {
+  "num": 24,
+  "unit": "hours"
+ },
+ "confidence": "reviewed",
+ "provenance": {
+  "author-ref": "https://cso.example/party/secops",
+  "date": "2026-11-11"
+ },
+ "facets": {
+  "https://ns.oscal.org/stdlib/facet/collector@1": {
+   "collectors": [
+    {
+     "id": "bash",
+     "runtime": "bash",
+     "privileges": "root",
+     "timeout-seconds": 30,
+     "source": "#!/bin/bash\n# observes sshd.maxauthtries from the effective sshd configuration\nset -o pipefail\nv=$(sshd -T | awk '$1==\"maxauthtries\"{print $2}') || exit 1\nif [ -n \"$v\" ]; then printf '{\"facts\":{\"sshd.maxauthtries\":%s}}\\n' \"$v\"; else echo '{\"facts\":{}}'; fi\n"
+    },
+    {
+     "id": "python",
+     "runtime": "python",
+     "privileges": "root",
+     "timeout-seconds": 30,
+     "source": "import json, subprocess\nout = subprocess.run([\"sshd\", \"-T\"], capture_output=True, text=True, check=True).stdout\nfacts = {}\nfor line in out.splitlines():\n    key, _, value = line.partition(\" \")\n    if key == \"maxauthtries\":\n        facts[\"sshd.maxauthtries\"] = int(value)\nprint(json.dumps({\"facts\": facts}))\n"
+    }
+   ]
+  }
+ }
+}

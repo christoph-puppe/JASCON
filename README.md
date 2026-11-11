@@ -93,7 +93,11 @@ requirements and mints real objects.*
 > - **Second implementation, executed (2026-11-11):** the PowerShell twin
 >   ran on Windows PowerShell 5.1 — 258/258 vectors, the five shipped
 >   bundles and the example folder ALL GREEN, the same counts as the
->   Python reference (IV.5b item 3 of the candidate). The tag is the
+>   Python reference (IV.5b item 3 of the candidate). That run covers the
+>   ten types of rc.1. The proposed Check type (CP-CHECK-1) is not in the
+>   twin: it stops at the example folder on the schema keyword `not`
+>   (backlog #56), so this gate is open again until Check is ported or
+>   withdrawn. The tag is the
 >   author's call. See the
 >   [backlog](drafts/oscal-semantic-core-v0.6-spec-feedback-backlog.md)
 >   #41–#50 and the register sections "Amendments — CP-RISK-1" and
@@ -364,26 +368,38 @@ reproduce.
 ## Work with it: the app
 
 [`jascon-app/`](jascon-app/) is the reader grown into a set of pages that
-share one core: a hub, and one page each to import OSCAL, browse, tailor,
-map, implement, analyse risk and assess. There is still no build step and no
-server, and a bundle you load stays in your browser unless you switch on the
-one view that asks a language model (below).
+share one core: a hub, and one page each, in the order of the work, to
+import OSCAL, browse, analyse risk, tailor, map, implement, write checks and
+assess. There is still no
+build step and no server, and a bundle you load stays in your browser unless
+you switch on one of the two places that ask a language model (below).
 
 - **Import** reads an OSCAL catalog or profile; everything after it works on
   JASCON. The BSI Grundschutz++ rules reproduce the shipped `DE.BSI` bundle
   object for object, by semantic digest; the NIST SP 800-53 rules give what
-  `convert_nist.py` gives on the same source file.
+  `convert_nist.py` gives on the same source file; the CIS Benchmark rules
+  give what `convert_cis_benchmark.py` gives, shown on a catalog of the same
+  shape (the repository carries no CIS Benchmark).
+- **Checks** writes machine checks for technical rules (the proposed Check
+  type of [`drafts/CP-CHECK-1.md`](drafts/CP-CHECK-1.md)): the facts a
+  collector reports, the comparisons that decide, the collector code. A
+  model can draft them, one rule at a time or for every automated rule of a
+  CIS import, in the language you choose (bash, sh, Python, PowerShell,
+  Ansible, an HTTP API); every draft is judged by the kernel rules and a
+  read-only lint, and saved only when you take it. The app does not run
+  collectors.
 - **Risk** is the page the reader did not have: a register with a heat map,
   scales with their likelihood-impact matrix, the coverage of the selected
   requirements, and the import of the risk catalogues under
   [`risk-catalogs/`](risk-catalogs/).
 - The Risk page can ask a language model for drafts of risks and for the
-  requirements that treat a risk. It does so only after you type a key, shows
-  what it sends, keeps the key in memory only, and writes nothing into the
-  set until you take a suggestion.
+  requirements that treat a risk, the Checks page for drafts of checks. Both
+  do so only after you type a key, show what they send, keep the key in
+  memory only, and write nothing into the set until you take a suggestion.
 - What a page computes about validity comes from a port of
-  `validate_core.py`, run against all fifteen families of the conformance
-  vectors, signatures (Ed25519, verification only) included.
+  `validate_core.py`, run against all sixteen families of the conformance
+  vectors, signatures (Ed25519, verification only) and the proposed checks
+  included.
   [`jascon-app/readme.md`](jascon-app/readme.md) says what the app still
   leaves to the Python validator, which stays the reference.
 

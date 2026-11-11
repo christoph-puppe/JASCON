@@ -15,11 +15,15 @@
    The tests against shipped bundles need the publishers' source files,
    which the repository does not carry (sources/ is ignored). Without them
    they are skipped; the two tests on hand-made input always run; the
-   readme says where the files come from. */
+   readme says where the files come from. The CIS preset is compared with
+   its converter on a catalog written for the test (needs python3). */
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
+import os from "node:os";
 import path from "node:path";
+import { spawnSync } from "node:child_process";
+import { cisSynthetic } from "./cis-synthetic.mjs";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 
@@ -205,4 +209,48 @@ test("NIST preset: the rules on a small catalog", () => {
   for (const o of out.objects) { const type = rules.jscTypeOf(o.obj); assert.ok(type, `${o.path}: ${rules.jscObjectErrors(o.obj).errors.join("; ")}`); objs.set(o.obj.id, { type, obj: o.obj }); }
   assert.deepEqual(rules.jscClosureErrors(objs), []);
   assert.deepEqual(rules.jscFacetErrors(out.objects.map(o => [o.obj.id, o.obj]), new Map(out.facetSchemas.map(f => [f.def.id, f.def.schema]))), []);
+});
+
+/* CIS preset. The catalog (tests/cis-synthetic.mjs) is written in the shape
+   of the CIS OSCAL export; its text is invented. The Python converter is run
+   on it in a throwaway copy of the scripts, and every object the preset makes
+   must carry the semantic digest the converter's manifest states. */
+const python = spawnSync("python3", ["--version"]).status === 0;
+test("CIS preset: on a catalog of the benchmark's shape, every object has the semantic digest of convert_cis_benchmark.py", { skip: !python && "python3 is not installed" }, async () => {
+  const src = cisSynthetic();
+  assert.equal(oscal.jscOscalGuessPreset(src), "cis-benchmark");
+  /* the converter reads fixed paths relative to its own folder: give it a tree of its own */
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "jascon-cis-"));
+  try {
+    fs.mkdirSync(path.join(tmp, "jascon/scripts"), { recursive: true });
+    fs.mkdirSync(path.join(tmp, "sources"));
+    for (const f of ["convert_cis_benchmark.py", "oscal_conv_lib.py"]) fs.copyFileSync(path.join(ROOT, "jascon/scripts", f), path.join(tmp, "jascon/scripts", f));
+    fs.cpSync(path.join(ROOT, "jascon/schemas"), path.join(tmp, "jascon/schemas"), { recursive: true });
+    fs.writeFileSync(path.join(tmp, "sources/CIS Ubuntu Linux 24.04 LTS Benchmark.json"), JSON.stringify(src));
+    const run = spawnSync("python3", [path.join(tmp, "jascon/scripts/convert_cis_benchmark.py")], { cwd: tmp, encoding: "utf8" });
+    assert.equal(run.status, 0, run.stderr);
+    const dir = path.join(tmp, "converted_examples/CIS.Ubuntu2404/cisb-core-bundle"), manifest = json(path.join(dir, "content-manifest.json"));
+    const out = oscal.jscOscalImportCatalog(src, { preset: "cis-benchmark" });
+    const want = new Map(manifest.objects.map(e => [e.path, e]));
+    assert.deepEqual(out.objects.map(o => o.path).sort(), [...want.keys()].sort(), "the same files");
+    for (const o of out.objects) {
+      assert.equal(o.obj.id, want.get(o.path).id, o.path);
+      assert.equal(await core.jscSemanticDigest(o.obj), want.get(o.path)["semantic-digest"], o.path + " has the converter's meaning");
+    }
+    assert.deepEqual(out.facetSchemas.map(f => f.path).sort(), manifest["facet-schemas"].map(e => e.path).sort());
+    for (const f of out.facetSchemas) assert.deepEqual(f.def, json(path.join(dir, f.path)), f.path);
+    /* and the report counts what the converter counts */
+    assert.deepEqual(out.report.methods, { automated: 3, manual: 2 });
+    assert.deepEqual(out.report.mappings, { v7: 1, v8: 3 });
+    assert.equal(out.report["unresolved-links"], 2);
+    assert.deepEqual(out.report.profiles, { "Level 1 - Server": 2, "Level 2   Workstation": 2 }, "a backslash in a profile title becomes a space, as in the converter");
+    const objs = rules.jscTypedObjects(out.objects.map(o => o.obj));
+    assert.equal(objs.size, out.objects.length, "every object is one kernel type");
+  } finally { fs.rmSync(tmp, { recursive: true, force: true }); }
+});
+test("CIS preset: the namespace is the converter's for its benchmark and derived from the title for any other", () => {
+  assert.equal(oscal.jscCisNamespace({ metadata: { title: "CIS Ubuntu Linux 24.04 LTS Benchmark" } }), "https://ns.cisecurity.org/benchmark/ubuntu-24.04-lts");
+  assert.equal(oscal.jscCisNamespace({ metadata: { title: "CIS Red Hat Enterprise Linux 9 Benchmark v2.0.0" } }), "https://ns.cisecurity.org/benchmark/red-hat-enterprise-linux-9");
+  const own = oscal.jscOscalImportCatalog(cisSynthetic(), { preset: "cis-benchmark", ns: "https://example.org/cis" });
+  assert.ok(own.objects.every(o => o.obj.id.startsWith("https://example.org/cis/")), "a namespace chosen on the page is used");
 });
