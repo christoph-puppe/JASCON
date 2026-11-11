@@ -2039,3 +2039,37 @@ Assessment example carried a `criteria-ref` the descriptor does not have
 and shows the shipped payload instead; Appendix D.6 lists the
 descriptor's payload completely. Python: 258 vectors, five bundles and the examples,
 ALL GREEN, with and without the `jascon/examples` argument.
+
+## Amendments — the Attestation shape (2026-11-11)
+
+**Trigger.** Handbook and schema disagreed on which Attestation fields are
+required. Appendix A.9 marked `rendering` and `envelope-ref` required, and
+inside `rendering` also `template-ref` and `renderer`; it typed
+`subject-semantic-digests` as `[digest]` and did not list
+`provenance-map-ref`. Specification D7 listed `rendering` and
+`envelope-ref` without the `?` it gives `provenance-map-ref`. The schema
+requires `subject-semantic-digests`, `content-manifest-digest`, `signer`
+and `timestamp`; inside `rendering`, `artifact-digest` and `media-type`.
+**Decision.** The schema stands; D7, Appendix A.9, Chapter 11 and the
+glossary entry follow it. No schema, validator, vector or bundle change.
+**Evidence.** The attestation shape is the same in the schema at the 1.0.0
+release commit and today (compared field by field). The specification
+already presupposes it: D13 names the unsigned attestation, D15 has Core
+treat Attestations as schema-valid data. Shipped content depends on it: the
+IFA attestation has neither `rendering` nor `envelope-ref`; the dsse vector
+`unsigned-attestation-cannot-prove-in-verification-mode` needs a
+schema-valid Attestation without an envelope; tier derivation reads only
+subjects of the form `{id, semantic-digest}`, which A.9 did not describe (8
+of the 9 shipped Attestation objects use it). Appendix A's own convention
+says the conformance corpus is definitive.
+**Rejected.** *Make the fields required to match the text* — a closed-shape
+change that invalidates the IFA bundle and a dsse vector and removes the
+unsigned state D13 defines; not a correction, and not made silently.
+**Open, found on the way (#55).** The schema checks no member of
+`template-ref` and no format of `timestamp`; whether a paper-binding
+attestation must carry `rendering` and `envelope-ref` is undecided. A.9 now
+says what is checked and what is convention.
+**Shipped with it.** Appendix A.9 (one row per field, with counts), Chapter
+11 (§11.4, §11.6), glossary "Attestation", specification D7, IV.6 and IV.9;
+skill zip rebuilt (84 entries). Python: 258 vectors, five bundles and the
+examples, ALL GREEN.

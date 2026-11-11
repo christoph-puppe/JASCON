@@ -162,10 +162,21 @@ FedRAMP deviation props are its `type` values.
 
 | Field | | Type | Meaning |
 |---|---|---|---|
-| `subject-semantic-digests` | ● | [digest] | *Meaning* bound (JCS minus annotations). |
+| `subject-semantic-digests` | ● | [digest \| {id ●, semantic-digest ●}] | *Meaning* bound (JCS minus annotations). At least one entry, each in one of two forms. A bare digest binds a meaning without naming its object. `{id, semantic-digest}` names it, and is the form tier derivation reads (D13): an Attestation proves authority over a Tailoring only through a subject that names the Tailoring by `id`. |
 | `content-manifest-digest` | ● | digest | *Package state* bound — enables bi-modal verification (Full vs Semantic Match). |
-| `rendering` | ● | {artifact-digest ●, media-type ●, template-ref{id,version,digest} ●, renderer ●} | *Paper* bound; templates are pinned TCB citizens; chrome-only annotation use is the renderer's law. |
-| `signer` ● · `timestamp` ● · `envelope-ref` ● | | | DSSE profile (stdlib); attestations live **beside** the manifest — nothing signed contains its own signature (D3). |
+| `rendering` | ○ | {artifact-digest ● digest, media-type ● string, template-ref ○ object, renderer ○ string} | *Paper* bound, where a document was rendered and signed; an attestation over content alone carries none. Templates are pinned TCB citizens and `template-ref` is by convention `{id, version, digest}`, but the schema types it as an object and checks no member (backlog #55). Chrome-only annotation use is the renderer's law. |
+| `signer` | ● | URI | The attesting party. Tier derivation compares its origin with the origin of the tailored content (D13). |
+| `timestamp` | ● | string | When it was attested. Non-empty; the schema checks no format (backlog #55). The corpus writes RFC 3339 or a calendar date. |
+| `envelope-ref` | ○ | string | Path of the DSSE envelope (stdlib `dsse-envelope@1`), resolved **beside** the manifest — nothing signed contains its own signature (D3). Present: the path resolves to that envelope; the reference validator fails a bundle whose Attestation names a path that does not (the illustrative example attestation is not yet held to it — backlog #46). Absent: an *unsigned* attestation — schema-valid, reported as "no envelope (unsigned attestation)", and proving nothing in verification mode (D13; `dsse-vectors.json`). |
+| `provenance-map-ref` | ○ | string | The provenance map: statement-id or object-id → rendering anchor (Ch. 11.4). |
+
+The shape is closed: the common fields (A.0) and these seven, nothing
+else. Required are the two digest bindings, `signer` and `timestamp`.
+**Evidence:** 9 Attestation objects ship (IFA bundle 1, example folder 1,
+`dsse-vectors.json` 5, `tier-vectors.json` 2): `rendering` ×1,
+`envelope-ref` ×5, `provenance-map-ref` ×0; subjects in the named form
+×8, bare ×1. The IFA ATO, modelled from an SSP's `date-authorized`, has
+neither a document nor a signature to bind and carries neither field.
 
 ## A.9b Risk *(kernel 2.0.0 — CP-RISK-1)*
 

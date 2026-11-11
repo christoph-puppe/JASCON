@@ -350,13 +350,27 @@ public PR #8 retreat; historical Rev4 enums mapping 1:1. Per-clause
 responsibility via `statement-refs` is how shared responsibility actually
 works.
 
-## D7 — Attestation: content-manifest binding, **bi-modal verification**, verification contract, provenance map. *(rev. v0.5 — P7-B1 + P6-F1 merged)*
+## D7 — Attestation: content-manifest binding, **bi-modal verification**, verification contract, provenance map. *(rev. v0.5 — P7-B1 + P6-F1 merged)* *(rev. 2.0.0 — required and optional fields as the delivered schema has them)*
 **Decision.**
-`{subject-semantic-digests[], content-manifest-digest, rendering
-{artifact-digest, media-type, template-ref (pinned), renderer}, signer,
-timestamp, envelope-ref, provenance-map-ref?}` — the attestation binds the
+`{subject-semantic-digests[] (each a digest | {id, semantic-digest}),
+content-manifest-digest, rendering? {artifact-digest, media-type,
+template-ref? (pinned), renderer?}, signer, timestamp, envelope-ref?,
+provenance-map-ref?}` — the attestation binds the
 **content-manifest digest** (which covers every object's package- and
 semantic-digest at signing time) and is itself outside that manifest (D3).
+Required are `subject-semantic-digests` (at least one),
+`content-manifest-digest`, `signer` and `timestamp`. `rendering` is
+present where a document was rendered and signed, and then carries at
+least `artifact-digest` and `media-type`. `envelope-ref` is present once
+the attestation is signed; without it the attestation is **unsigned** —
+schema-valid data (D15), reported as unsigned, and proving nothing in
+verification mode (D13). A subject in the form `{id, semantic-digest}`
+names its object; tier derivation (D13) reads only that form. *(This
+paragraph and the `?` marks align the text with the schema: the 1.0.0
+text listed `rendering` and `envelope-ref` without `?`, while the 1.0.0
+schema, the IFA bundle and the dsse vectors already had them optional.
+What the schema leaves unchecked — the members of `template-ref`, the
+format of `timestamp` — is backlog #55.)*
 Verification is a **normative two-state machine**:
 
 1. **Full Match** — signature valid, content-manifest digest matches the
@@ -1344,6 +1358,7 @@ history. The compact line:
 | Scale definitions | 2026-11-10 | `scales` pins in the manifest: a scale's levels in order, the organisation's wording and number; SCALE-1/2/3; not a kernel type; 9 vectors, a fifteenth family | D3.7 · D23 · "Amendments — scale definitions" |
 | The kernel pin | 2026-11-10 | `kernel-version` in the content manifest: optional, absent = 1.0.0, required for content beyond 1.0.0 (KERNEL-1), fail-closed on an unimplemented kernel (KERNEL-2); 9 vectors, a fourteenth family; IFA and example manifests pinned | D3.6 · "Amendments — the kernel pin" |
 | rc.1 review | 2026-11-10 | External review: nine findings reproduced and fixed — justification needs an assessed treatment decision, `tailoring-refs`, RISK-13/14, typed Tailoring selection edges, withdrawn Tailorings/Requirements, checked dates; the Mapping Model date corrected; `PRIOR-ART.md` | CP-RISK-1 §13 · "Amendments — the rc.1 review" |
+| The Attestation shape | 2026-11-11 | Appendix A.9 marked `rendering` and `envelope-ref` required and D7 listed them without `?`; the schema never required them. The schema stands; D7, A.9 and Chapter 11 follow it; no schema, validator or vector change; #55 filed for what the schema leaves unchecked | D7 · "Amendments — the Attestation shape" |
 
 ## IV.7 Release artifacts (what this candidate ships with)
 
@@ -1423,7 +1438,10 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
    of Applicability for — `tailoring-refs` scopes a Risk by naming the
    Tailoring, which is the join that exists, not the one ISO describes
    (#51); ☐ `Deviation.opened` is still a free string — tightening it is a
-   1.0.0-shape change like #47a (#52). The machine identifiers stay `oscal-semantic-core` unless the
+   1.0.0-shape change like #47a (#52); ☐ whether the Attestation shape
+   is tightened — `template-ref` typed as `{id, version, digest}`,
+   `timestamp` format-checked, `rendering` and `envelope-ref` required
+   for a signed paper (#55). The machine identifiers stay `oscal-semantic-core` unless the
    author says otherwise — the 1.0.0 record tied that question to a
    major, and this is one.
 6. **Work, not decisions** — ☐ value arrival for the other corpora and

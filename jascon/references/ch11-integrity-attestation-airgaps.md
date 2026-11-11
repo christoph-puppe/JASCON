@@ -173,13 +173,29 @@ inseparable:
   "envelope-ref": "envelopes/acme-ato-2026.dsse" }
 ```
 
+The example shows every binding; the schema requires fewer. Required
+are `subject-semantic-digests`, `content-manifest-digest`, `signer` and
+`timestamp`. `rendering` is there when a document was rendered and
+signed, and then needs only `artifact-digest` and `media-type`; the
+template pin and the renderer name are optional in the schema and are
+what makes the paper auditable. `envelope-ref` is there once the
+attestation is signed. Without it the attestation is *unsigned*: valid
+against the schema, reported by the validator as "no envelope (unsigned
+attestation)", and worth nothing to a consumer who verifies signatures
+(§11.6). The IFA corpus ships one — an ATO modelled from the
+`date-authorized` of an SSP, with no document and no signature to bind.
+A subject is either a bare digest or `{id, semantic-digest}`; the second
+form names the object, and it is the only one that can prove authority
+over a Tailoring (Chapter 6). Field table: Appendix A.9.
+
 Three bindings, three questions answered. The
 **subject-semantic-digests** pin *what was approved* — the meaning of
 each subject object, immune to repackaging. The
 **content-manifest-digest** pins *the exact package state at signing*
 — and because the manifest carries every object's package-digest,
 annotations included, this is the binding that closes the in-transit
-annotation swap from §11.1. The **rendering block** pins *which paper*
+annotation swap from §11.1. The **rendering block**, where there is a
+paper, pins *which paper*
 — artifact digest, plus a template reference pinned by version and
 digest, plus the named renderer, because the renderer is part of the
 trusted computing base and the template pin is how you audit it. The
@@ -229,7 +245,8 @@ acceptance checklist for anyone *receiving* an attested package — and
 as the build sheet for anyone producing one:
 
 *Where is the envelope?* (`envelope-ref`, resolvable in the bundle's
-transport wrapper.) *Exactly which digest set is signed?* (The
+transport wrapper. An attestation without it is unsigned and answers
+none of the seven.) *Exactly which digest set is signed?* (The
 attestation's three bindings — no ambiguity about bytes-versus-
 canonical.) *In what format is the signer's identity expressed?*
 *How are trust roots expressed and distributed* — sealed environments

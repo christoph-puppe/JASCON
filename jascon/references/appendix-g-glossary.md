@@ -24,9 +24,11 @@ check: required documentation/artifacts, examples, key tests; the
 KSI shape's home; declares `[assessment]`. (App. D.6)
 
 **Attestation** — the kernel object binding meaning (subject semantic
-digests), package state (manifest digest), and paper (rendering
-digest) under one signature; lives *beside* the manifest, never
-inside it. (Ch. 11, App. A.9)
+digests), package state (manifest digest), and — where a document was
+rendered — paper (rendering digest), under one signature once its DSSE
+envelope is attached; lives *beside* the manifest, never inside it.
+Without an envelope it is *unsigned* and proves nothing to a verifying
+consumer. (Ch. 11, App. A.9)
 
 **attestation-binds** — the Portable-tier primitive that evaluates an
 Attestation and returns Full Match, Semantic Match, or fail.
