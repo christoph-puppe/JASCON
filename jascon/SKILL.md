@@ -1,6 +1,6 @@
 ---
 name: jascon
-description: Guidelines and requirements for authoring, validating, and migrating to JASCON (JSON Attestable Semantic Compliance Object-graph Notation, formerly "Semantic OSCAL" / "OSCAL Semantic Core").
+description: Guidelines and requirements for authoring, validating, and migrating to JASCON (JSON Attestable Semantic Compliance Object-graph Notation).
 ---
 
 # JASCON Skill Requirements

@@ -252,7 +252,7 @@ if, like the American corpus, your deadlines count business days, you owe
 your consumers the calendar that makes them computable; Chapter 4 takes
 this up with the parameter algebra.
 
-It is more than OSCAL 1.x ever asked of a publisher — and that is the
+It is more than the predecessor format ever asked of a publisher — and that is the
 point stated plainly. 1.x asked nothing, and the measured result was
 identifier spaces made of spreadsheet links, history in month-strings,
 and a national registry that evaporated. The Authority tier's duties are

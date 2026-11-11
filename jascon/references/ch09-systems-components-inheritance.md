@@ -41,7 +41,7 @@ same object, wearing two hats, and any model that forces it into one
 type per hat forces somebody to maintain a duplicate.
 
 The field data on that duplication is unusually direct. A professional
-OSCAL-authoring team publicly migrated its tooling *away* from
+compliance-authoring team publicly migrated its tooling *away* from
 component definitions because the model's complexity exceeded its value
 — the retreat is on the record in their repository history. And the
 decade before that, the old flagship program encoded exactly the

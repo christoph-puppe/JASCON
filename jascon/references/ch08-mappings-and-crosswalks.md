@@ -46,7 +46,7 @@ spoke. A *relation entry* is worse, and the census caught the failure
 in the wild: the American corpus carries **263** KSI→800-53 links as
 bare lowercase identifier strings — no relationship type, no version
 pin, no author, no confidence — consumable only on faith. And the old
-standard's own answer, shipped with OSCAL 1.2.0 in December 2025, proved the demand while
+standard's own answer, shipped in December 2025, proved the demand while
 demonstrating the anti-pattern one more time: an entire eighth
 *document model* for mappings, with the full uuid/metadata/revisions
 scaffolding and props throughout.
