@@ -94,11 +94,11 @@ requirements and mints real objects.*
 > - **Second implementation, executed (2026-11-11):** the PowerShell twin
 >   ran on Windows PowerShell 5.1 — 258/258 vectors, the five shipped
 >   bundles and the example folder ALL GREEN, the same counts as the
->   Python reference (IV.5b item 3 of the candidate). That run covers the
->   ten types of rc.1. The proposed Check type (CP-CHECK-1) is not in the
->   twin: it stops at the example folder on the schema keyword `not`
->   (backlog #56), so this gate is open again until Check is ported or
->   withdrawn. The tag is the
+>   Python reference (IV.5b item 3 of the candidate). The proposed Check
+>   type (CP-CHECK-1) was ported to the twin the same day (backlog #56):
+>   415/415 vectors in 16 families (`check: 156`), the five bundles and
+>   the example folder with its two Checks and its evidence store, again
+>   the Python reference's counts. The tag is the
 >   author's call. See the
 >   [backlog](drafts/jascon-v0.6-spec-feedback-backlog.md)
 >   #41–#50 and the register sections "Amendments — CP-RISK-1" and
