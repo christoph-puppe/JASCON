@@ -39,7 +39,7 @@ The object is deliberately spare:
 { "id": "https://assessor.example/assessment/2026-q3-acme",
   "subject-refs": ["https://cso.example/component/acme-saas"],
   "method": { "https://ns.oscal.org/stdlib/facet/assessment-criteria@1":
-              { "criteria-ref": "https://ns.fedramp.gov/cr26/…" } },
+    { "summary": { "en": "Document review of KONF.14.1 evidence duties; key test: rotation artifacts present." } } },
   "performer-ref": "https://assessor.example/party/lead-assessor",
   "time": "2026-07-15",
   "result": "satisfied",
