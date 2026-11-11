@@ -8,8 +8,29 @@ What the Apache license covers
 The original work in this repository: the specification, the decision
 register and the other documents under drafts/; the handbook, kernel
 schema, standard-library facet descriptors, conformance corpus, example
-bundle and software under jascon/; the reader under one-page-apps/; and
-the coverage reports under converted_examples/.
+bundle and software under jascon/; the reader under one-page-apps/; the
+app under jascon-app/; and the coverage reports under converted_examples/.
+
+Code derived from other work
+----------------------------
+Parts of jascon-app/ derive from the Grundschutz++ OSCAL tools of
+NTT DATA (https://github.com/NTTDATA-DACH/Grundschutz-Plus-Plus-Tools,
+folder GS++-oscal-app, read at commit bfaefe5 of 2026-10-28), licensed
+under the Apache License, Version 2.0. That repository carries no
+copyright notice and no NOTICE file of its own.
+
+  jascon-app/jascon-core.js    the IndexedDB store with sets, the ZIP
+                               writer and reader, the colour-scheme
+                               switch and the list filter follow
+                               gpp-core.js
+  jascon-app/jascon-core.css   the design tokens for the dark and the
+                               light scheme follow gpp-core.css
+  jascon-app/index.html        the hub layout (tabs over an iframe) and
+                               the Markdown renderer follow index.html
+
+All of it was changed: rewritten for JASCON bundles, renamed, translated
+from German, and cut down to what this app uses. The other pages of the
+app are named in this list as they take code from that repository.
 
 What it does not cover: converted third-party publications
 ----------------------------------------------------------

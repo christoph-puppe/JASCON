@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Browse · JASCON App</title>
+<link rel="stylesheet" href="jascon-core.css">
+<script>try{var _t=localStorage.getItem("jsc:cfg:ui:theme")||"dark";if(_t!=="system")document.documentElement.setAttribute("data-theme",_t)}catch(e){}</script>
+<style>
+#browser { display: grid; grid-template-columns: minmax(280px, 380px) 1fr; gap: 14px; min-height: 420px; }
+#objlist { overflow-y: auto; max-height: 62vh; display: flex; flex-direction: column; gap: 4px; padding-right: 4px; }
+#detail { overflow-y: auto; max-height: 62vh; padding: 16px 18px; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+@media (max-width: 1000px) { #browser, .two { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div id="app"><div id="mid">
+  <nav id="rail" aria-label="Views">
+    <div class="railgroup">
+      <div class="nano" data-i18n>Views</div>
+      <button class="navitem" data-view="catalog"><span class="glyph">▣</span><span data-i18n>Catalogue</span><span class="navcount" id="nc-sets"></span></button>
+      <button class="navitem" data-view="objects"><span class="glyph">⌕</span><span data-i18n>Objects</span><span class="navcount" id="nc-objects"></span></button>
+      <button class="navitem" data-view="stats"><span class="glyph">◔</span><span data-i18n>Statistics</span></button>
+      <button class="navitem" data-view="author"><span class="glyph">✎</span><span data-i18n>Write requirements and sets</span></button>
+      <button class="navitem" data-view="legend"><span class="glyph">?</span><span data-i18n>How to read an object</span></button>
+    </div>
+  </nav>
+  <main id="main">
+    <section class="glass card" data-view="catalog">
+      <h2><span class="glyph">▣</span><span data-i18n>Catalogue</span></h2>
+      <p class="hint" style="max-width:80ch;margin-bottom:12px" data-i18n>Requirements carry their clauses as statements. Sets carry every kind of membership: chapters, baselines, profiles. A Set that no other Set lists is a root.</p>
+      <div id="catalog"></div>
+    </section>
+
+    <section class="glass card" data-view="objects">
+      <div class="cardhead">
+        <h2><span class="glyph">⌕</span><span data-i18n>Objects</span></h2>
+        <input type="search" id="search" data-i18n-attr="placeholder aria-label" placeholder="Search id, label or title" aria-label="Search id, label or title" style="max-width:300px">
+      </div>
+      <div class="filterrow" id="typefilters"></div>
+      <div class="filterrow" id="dimfilters" style="row-gap:6px"></div>
+      <div id="browser">
+        <div id="objlist"></div>
+        <div id="detail" class="glass"><div class="hint" data-i18n>Choose an object on the left. Kernel fields are shown plain, facets in a tinted box, annotations in a dashed one.</div></div>
+      </div>
+    </section>
+
+    <section class="glass card" data-view="stats">
+      <h2><span class="glyph">◔</span><span data-i18n>Statistics</span></h2>
+      <div class="statgrid" id="stats"></div>
+    </section>
+
+    <section class="glass card" data-view="author">
+      <h2><span class="glyph">✎</span><span data-i18n>Write requirements and sets</span></h2>
+      <div id="author"></div>
+    </section>
+
+    <section class="glass card" data-view="legend">
+      <h2><span class="glyph">?</span><span data-i18n>How to read an object</span></h2>
+      <div class="two">
+        <div style="font-size:12.5px;color:var(--text-secondary);max-width:70ch;display:flex;flex-direction:column;gap:8px">
+          <p data-i18n>Every object has three layers, kept strictly apart.</p>
+          <p data-i18n>Kernel: identity (an id that is a URI, compared as a string and never fetched), version, lifecycle, statements with a binding force, obligated parties, typed parameters, membership, aliases and relations.</p>
+          <p data-i18n>Facets: registered extensions pinned to a schema. Each says which computations it may change; a tool that does not understand such a facet must stop, never guess.</p>
+          <p data-i18n>Annotations: notes for display. They are left out of the semantic digest and may be removed without changing what the object means.</p>
+          <p data-i18n>Two digests seal each object in the manifest. The package digest binds the delivered bytes; the semantic digest binds the meaning. A signature therefore survives repackaging, and a change of meaning has nowhere to hide.</p>
+          <p data-i18n>The lattice on the right orders the binding force. Moving up is a tightening and free. Moving down or across is a weakening and needs a Deviation, unless the authority itself publishes the Tailoring.</p>
+        </div>
+        <div><div class="nano" style="margin-bottom:6px" data-i18n>Modality lattice</div><svg viewBox="0 0 300 240" width="100%" id="lattice" role="img"></svg></div>
+      </div>
+    </section>
+  </main>
+</div></div>
+
+<script src="jascon-core.js"></script>
+<script src="jascon-schema.js"></script>
+<script src="jascon-rules.js"></script>
+<script src="jascon-view.js"></script>
+<script>
+"use strict";
+/* Browse: the catalogue as a tree of Sets, every object with filters, the
+   statistics of the set, and a workbench that writes Requirements and Sets.
+   Reads the active set; writes only through the workbench. Derives from the
+   overview, browser, statistics and author stage of the bundle reader. */
+jscI18n.add("de", {
+  "Browse": "Durchsehen", "Views": "Ansichten", "Catalogue": "Katalog", "Objects": "Objekte", "Statistics": "Statistik",
+  "Write requirements and sets": "Anforderungen und Sets schreiben", "How to read an object": "Wie ein Objekt zu lesen ist",
+  "Requirements carry their clauses as statements. Sets carry every kind of membership: chapters, baselines, profiles. A Set that no other Set lists is a root.":
+    "Anforderungen tragen ihre Klauseln als Statements. Sets tragen jede Art von Mitgliedschaft: Kapitel, Baselines, Profile. Ein Set, das kein anderes Set aufführt, ist eine Wurzel.",
+  "Search id, label or title": "Id, Label oder Titel suchen",
+  "Choose an object on the left. Kernel fields are shown plain, facets in a tinted box, annotations in a dashed one.":
+    "Links ein Objekt wählen. Kernel-Felder stehen schlicht, Facets in einem getönten Kasten, Annotationen in einem gestrichelten.",
+  "Every object has three layers, kept strictly apart.": "Jedes Objekt hat drei Schichten, die streng getrennt bleiben.",
+  "Kernel: identity (an id that is a URI, compared as a string and never fetched), version, lifecycle, statements with a binding force, obligated parties, typed parameters, membership, aliases and relations.":
+    "Kernel: Identität (eine Id, die eine URI ist, als Zeichenkette verglichen und nie abgerufen wird), Version, Lifecycle, Statements mit Bindungswirkung, verpflichtete Parteien, typisierte Parameter, Mitgliedschaft, Aliase und Beziehungen.",
+  "Facets: registered extensions pinned to a schema. Each says which computations it may change; a tool that does not understand such a facet must stop, never guess.":
+    "Facets: registrierte Erweiterungen, an ein Schema gepinnt. Jedes sagt, welche Berechnungen es verändern darf; ein Werkzeug, das ein solches Facet nicht versteht, muss anhalten, nie raten.",
+  "Annotations: notes for display. They are left out of the semantic digest and may be removed without changing what the object means.":
+    "Annotationen: Hinweise für die Anzeige. Sie gehen nicht in den Semantic-Digest ein und dürfen entfernt werden, ohne dass sich die Bedeutung des Objekts ändert.",
+  "Two digests seal each object in the manifest. The package digest binds the delivered bytes; the semantic digest binds the meaning. A signature therefore survives repackaging, and a change of meaning has nowhere to hide.":
+    "Zwei Digests versiegeln jedes Objekt im Manifest. Der Package-Digest bindet die gelieferten Bytes, der Semantic-Digest die Bedeutung. Eine Signatur übersteht deshalb ein Umpacken, und eine Bedeutungsänderung kann sich nirgends verstecken.",
+  "The lattice on the right orders the binding force. Moving up is a tightening and free. Moving down or across is a weakening and needs a Deviation, unless the authority itself publishes the Tailoring.":
+    "Der Verband rechts ordnet die Bindungswirkung. Nach oben ist eine Verschärfung und frei. Nach unten oder quer ist eine Abschwächung und braucht eine Deviation, außer die Autorität selbst veröffentlicht das Tailoring.",
+  "Modality lattice": "Modalitätsverband", "up: tighten (free) · down or across: weaken (Deviation)": "hoch: verschärfen (frei) · runter oder quer: abschwächen (Deviation)",
+  "This set holds no requirement and no Set. Load a bundle on the Home page or write a requirement.": "Dieses Set enthält weder Anforderung noch Set. Ein Bundle auf der Übersichtsseite laden oder eine Anforderung schreiben.",
+  "requirements": "Anforderungen", "sets": "Sets", "root sets": "Wurzel-Sets",
+  "Chapters and taxonomy": "Kapitel und Taxonomie", "Baselines, profiles, markers": "Baselines, Profile, Marker",
+  "{n} members · {r} requirements": "{n} Mitglieder · {r} Anforderungen", "{n} statements": "{n} Statements",
+  "shown above": "oben schon gezeigt", "nesting deeper than 8 levels is not shown": "Schachtelung tiefer als 8 Ebenen wird nicht gezeigt",
+  "nothing matches": "nichts passt", "and {n} more; narrow the search": "und {n} weitere; Suche eingrenzen", "any": "beliebig",
+  "clear the filters": "Filter leeren", "these filters match requirements only": "diese Filter treffen nur Anforderungen",
+  "Objects by type": "Objekte nach Typ", "objects": "Objekte", "Modality of {n} statements": "Modalität von {n} Statements",
+  "Lifecycle, parameters, languages": "Lifecycle, Parameter, Sprachen", "typed parameters": "typisierte Parameter", "prose languages": "Sprachen der Prosa",
+  "New requirement": "Neue Anforderung", "Title": "Titel", "Modality": "Modalität", "Language": "Sprache", "Obligated party": "Verpflichtete Partei",
+  "The normative sentence. Name a parameter as {param:name}.": "Der normative Satz. Einen Parameter als {param:name} nennen.",
+  "Add the requirement": "Anforderung hinzufügen", "New set": "Neues Set", "type to add a member (requirement or set)": "tippen, um ein Mitglied hinzuzufügen (Anforderung oder Set)",
+  "no member chosen yet": "noch kein Mitglied gewählt", "Add the set": "Set hinzufügen",
+  "Title and statement are both needed.": "Titel und Statement werden beide gebraucht.",
+  "A set needs a title and at least one member.": "Ein Set braucht einen Titel und mindestens ein Mitglied.",
+  "declared {n} parameter(s) from the {param:} tokens of the statement": "{n} Parameter aus den {param:}-Token des Statements deklariert",
+  "An object with the id {id} exists already; choose another title.": "Ein Objekt mit der Id {id} gibt es schon; einen anderen Titel wählen.",
+  "New objects get an id under {ns}. Change the namespace in the settings.": "Neue Objekte bekommen eine Id unter {ns}. Der Namensraum lässt sich in den Einstellungen ändern.",
+});
+
+const $ = id => document.getElementById(id);
+const V = jscView, esc = jscEsc;
+const state = { types: new Set(), q: "", dims: {}, selected: null };
+const draft = V.draft("browse", () => ({ members: [], title: "", prose: "", modality: "must", lang: jscI18n.contentLang(), party: "organisation", setTitle: "" }));
+let G = jscSet.graph;
+const ofType = t => [...G.objects.values()].filter(r => r.type === t);
+
+/* ---------- catalogue: the Sets as a tree ---------- */
+function renderCatalog() {
+  const sets = ofType("requirementSet"), reqs = ofType("requirement");
+  $("nc-sets").textContent = sets.length || "";
+  if (!sets.length && !reqs.length) { $("catalog").innerHTML = `<div class="empty">${esc(T("This set holds no requirement and no Set. Load a bundle on the Home page or write a requirement."))}</div>`; return; }
+  const parents = jscSetParents(G.objects), roots = sets.filter(r => !parents.has(r.obj.id));
+  const shown = new Set();
+  const node = (ref, depth) => {
+    const r = G.objects.get(ref);
+    if (!r) return `<div class="leaf">${V.refLink(ref)}</div>`;
+    if (r.type === "requirement") {
+      const n = r.obj.statements.length;
+      return `<div class="leaf">${V.typeGlyph("requirement")} ${V.refLink(ref, V.labelOf(r))} ${r.obj.statements.slice(0, 3).map(s => V.modBadge(s.modality)).join("")}<span class="cnt">${n > 1 ? esc(T("{n} statements", { n })) : ""}</span></div>`;
+    }
+    if (r.type !== "requirementSet") return "";
+    if (depth > 8) return `<div class="leaf cnt">${esc(T("nesting deeper than 8 levels is not shown"))}</div>`;
+    const again = shown.has(ref);
+    shown.add(ref);
+    const mem = r.obj.members || [];
+    return `<details ${depth === 0 && roots.length <= 4 ? "open" : ""}><summary>${V.typeGlyph("requirementSet")} ${V.refLink(ref, V.titleOf(r))}
+      <span class="cnt">${esc(T("{n} members · {r} requirements", { n: mem.length, r: jscExpandRefs([ref], G.objects).size }))}</span></summary>
+      ${again ? `<div class="leaf cnt">${esc(T("shown above"))}</div>` : mem.map(m => node(m.ref, depth + 1)).join("")}</details>`;
+  };
+  const baseline = roots.filter(r => /baseline|profile|class|marker|ig[0-9]/.test(r.obj.id)), tax = roots.filter(r => !baseline.includes(r));
+  const chip = (n, label) => `<span class="chip"><b>${n}</b>${esc(T(label))}</span>`;
+  const tree = list => `<div class="tree">${list.map(r => node(r.obj.id, 0)).join("") || `<span class="hint">—</span>`}</div>`;
+  $("catalog").innerHTML = chip(reqs.length, "requirements") + chip(sets.length, "sets") + chip(roots.length, "root sets") +
+    `<div class="two" style="margin-top:8px"><div><div class="nano" style="margin-bottom:6px">${esc(T("Chapters and taxonomy"))}</div>${tree(tax)}</div>
+     <div><div class="nano" style="margin-bottom:6px">${esc(T("Baselines, profiles, markers"))}</div>${tree(baseline)}</div></div>`;
+  V.wireRefs($("catalog"));
+}
+
+/* ---------- objects: filters, list, detail ---------- */
+function visibleIds() {
+  const q = state.q.toLowerCase(), dims = Object.entries(state.dims).filter(([, v]) => v);
+  const idx = dims.length ? V.dimIndex() : null;
+  return G.order.filter(id => {
+    const r = G.objects.get(id);
+    if (state.types.size && !state.types.has(r.type)) return false;
+    if (idx) {   // a dimension filter can only be met by a requirement
+      const mine = idx.reqDims.get(id);
+      if (!mine || dims.some(([k, v]) => !(mine.get(k) || new Set()).has(v))) return false;
+    }
+    return !q || id.toLowerCase().includes(q) || (r.obj.label || "").toLowerCase().includes(q) || TT(r.obj.title).toLowerCase().includes(q);
+  });
+}
+function renderFilters() {
+  const counts = jscTypeCounts(G);
+  $("typefilters").innerHTML = JSC_TYPES.filter(t => counts[t]).map(t =>
+    `<button type="button" class="fpill ${state.types.has(t) ? "on" : ""}" data-t="${t}" aria-pressed="${state.types.has(t)}">${V.TYPE_VIEW[t].glyph} ${t} · ${counts[t]}</button>`).join("");
+  $("typefilters").querySelectorAll("[data-t]").forEach(b => b.addEventListener("click", () => {
+    state.types.has(b.dataset.t) ? state.types.delete(b.dataset.t) : state.types.add(b.dataset.t);
+    renderObjects();
+  }));
+  const idx = counts.requirement ? V.dimIndex() : null, active = Object.values(state.dims).some(Boolean);
+  $("dimfilters").innerHTML = idx ? idx.usable.map(([k, vals]) => {
+    const opts = [...vals.entries()].sort((a, b) => b[1] - a[1]).map(([v, n]) =>
+      `<option value="${esc(v)}" ${state.dims[k] === v ? "selected" : ""}>${esc(V.dimOptLabel(v))} (${n})</option>`).join("");
+    return `<span><label style="margin-right:4px">${esc(k)}</label><select data-dim="${esc(k)}" style="max-width:170px"><option value="">${esc(T("any"))}</option>${opts}</select></span>`;
+  }).join(" ") + (active ? ` <button type="button" class="small" id="dim-clear">${esc(T("clear the filters"))}</button> <span class="hint">${esc(T("these filters match requirements only"))}</span>` : "") : "";
+  $("dimfilters").querySelectorAll("[data-dim]").forEach(s => s.addEventListener("change", () => { state.dims[s.dataset.dim] = s.value; renderObjects(); }));
+  if ($("dim-clear")) $("dim-clear").addEventListener("click", () => { state.dims = {}; renderObjects(); });
+}
+function renderList() {
+  const ids = visibleIds(), cap = 400;
+  $("nc-objects").textContent = G.objects.size || "";
+  $("objlist").innerHTML = (ids.slice(0, cap).map(id => {
+    const r = G.objects.get(id);
+    return `<div class="objrow ${state.selected === id ? "active" : ""}" data-id="${esc(id)}" tabindex="0" role="button">
+      <div class="t">${V.typeGlyph(r.type)} ${esc(V.labelOf(r))}</div><div class="s">${esc(id)}</div></div>`;
+  }).join("") || `<div class="hint">${esc(T("nothing matches"))}</div>`) +
+    (ids.length > cap ? `<div class="hint" style="padding:8px">${esc(T("and {n} more; narrow the search", { n: ids.length - cap }))}</div>` : "");
+  $("objlist").querySelectorAll(".objrow").forEach(el => {
+    const go = () => select(el.dataset.id);
+    el.addEventListener("click", go);
+    el.addEventListener("keydown", e => { if (e.key === "Enter") go(); });
+  });
+}
+function renderObjects() { renderFilters(); renderList(); }
+function select(id) {
+  const r = G.objects.get(id);
+  if (!r) return;
+  state.selected = id;
+  if (jscPage.view !== "objects") jscPage.show("objects");
+  $("detail").innerHTML = V.objectHtml(r);
+  V.wireRefs($("detail"));
+  $("detail").scrollTop = 0;
+  renderList();
+}
+V.onOpen = select;
+$("search").addEventListener("input", e => { state.q = e.target.value; renderList(); });
+
+/* ---------- statistics ---------- */
+function renderStats() {
+  const counts = jscTypeCounts(G), mods = {}, langs = {}, life = {};
+  let stmts = 0, params = 0;
+  for (const r of G.objects.values()) {
+    life[r.obj.lifecycle] = (life[r.obj.lifecycle] || 0) + 1;
+    for (const s of (r.type === "requirement" ? r.obj.statements : [])) {
+      stmts++; mods[s.modality] = (mods[s.modality] || 0) + 1; params += (s.parameters || []).length;
+      for (const k of Object.keys(s.prose || {})) langs[k] = (langs[k] || 0) + 1;
+    }
+  }
+  const slices = JSC_TYPES.filter(t => counts[t]).map(t => ({ label: t, value: counts[t], color: V.TYPE_VIEW[t].color }));
+  $("stats").innerHTML = `
+    <div class="statcell"><div class="nano" style="margin-bottom:8px">${esc(T("Objects by type"))}</div>
+      <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap">${V.donut(slices, T("objects"))}
+      <div class="legend" style="flex-direction:column;align-items:flex-start">${slices.map(s => `<div class="li"><span class="dot" style="background:${s.color}"></span>${s.label} · ${s.value}</div>`).join("")}</div></div></div>
+    <div class="statcell"><div class="nano" style="margin-bottom:8px">${esc(T("Modality of {n} statements", { n: stmts }))}</div>
+      ${V.hbars(Object.entries(mods).sort((a, b) => b[1] - a[1]).map(([m, v]) => ({ label: m, value: v, color: V.MODALITY_COLOR[m] || "var(--text-quiet)" })))}</div>
+    <div class="statcell"><div class="nano" style="margin-bottom:8px">${esc(T("Lifecycle, parameters, languages"))}</div>
+      ${V.hbars(Object.entries(life).map(([k, v]) => ({ label: k, value: v, color: "var(--blue)" })))}
+      <div class="kv" style="margin-top:10px">${V.kv(T("typed parameters"), String(params))}${V.kv(T("prose languages"), esc(Object.entries(langs).map(([k, v]) => `${k} (${v})`).join(" · ") || "—"))}</div></div>`;
+}
+
+/* ---------- workbench: a Requirement, a Set ---------- */
+function renderAuthor() {
+  const d = draft.data;
+  $("author").innerHTML = `<p class="hint" style="margin-bottom:10px">${esc(T("New objects get an id under {ns}. Change the namespace in the settings.", { ns: jscCfg.get("org:ns") }))}</p>
+    <div class="wb"><div class="nano" style="margin-bottom:8px">${esc(T("New requirement"))}</div>
+      <div class="wbrow"><label for="au-title">${esc(T("Title"))}</label><input type="text" id="au-title" value="${esc(d.title)}" style="min-width:240px">
+        <label for="au-mod">${esc(T("Modality"))}</label><select id="au-mod">${JSC_MODALITIES.map(m => `<option ${d.modality === m ? "selected" : ""}>${m}</option>`).join("")}</select>
+        <label for="au-lang">${esc(T("Language"))}</label><input type="text" id="au-lang" value="${esc(d.lang)}" style="width:56px;min-width:56px">
+        <label for="au-party">${esc(T("Obligated party"))}</label><input type="text" id="au-party" value="${esc(d.party)}" style="width:140px"></div>
+      <div class="wbrow"><textarea id="au-prose" aria-label="${esc(T("The normative sentence. Name a parameter as {param:name}."))}" placeholder="${esc(T("The normative sentence. Name a parameter as {param:name}."))}" style="flex-basis:100%">${esc(d.prose)}</textarea></div>
+      <div class="wbrow"><button type="button" class="primary" id="au-addreq">${esc(T("Add the requirement"))}</button><span class="verdict-bad" id="au-err" role="alert"></span></div></div>
+    <div class="wb"><div class="nano" style="margin-bottom:8px">${esc(T("New set"))}</div>
+      <div class="wbrow"><label for="au-settitle">${esc(T("Title"))}</label><input type="text" id="au-settitle" value="${esc(d.setTitle)}" style="min-width:220px">
+        ${V.pickerHtml("au-mem", T("type to add a member (requirement or set)"))}</div>
+      <div>${d.members.map(id => `<span class="wbchip">${esc(G.objects.has(id) ? V.labelOf(G.objects.get(id)) : id)}<span class="x" data-del="${esc(id)}" role="button" tabindex="0">✕</span></span>`).join("") || `<span class="hint">${esc(T("no member chosen yet"))}</span>`}</div>
+      <div class="wbrow"><button type="button" class="primary" id="au-addset">${esc(T("Add the set"))}</button><span class="verdict-bad" id="au-seterr" role="alert"></span></div></div>`;
+  const el = $("author");
+  for (const [id, key] of [["au-title", "title"], ["au-mod", "modality"], ["au-lang", "lang"], ["au-party", "party"], ["au-prose", "prose"], ["au-settitle", "setTitle"]]) {
+    el.querySelector("#" + id).addEventListener("change", e => { d[key] = e.target.value; draft.save(); });
+  }
+  V.wirePicker(el, "au-mem", ["requirement", "requirementSet"], id => { if (!d.members.includes(id)) d.members.push(id); draft.save(); renderAuthor(); });
+  el.querySelectorAll("[data-del]").forEach(x => x.addEventListener("click", () => { d.members = d.members.filter(m => m !== x.dataset.del); draft.save(); renderAuthor(); }));
+  el.querySelector("#au-addreq").addEventListener("click", async () => {
+    const title = d.title.trim(), text = d.prose.trim(), lang = d.lang.trim() || "en", err = el.querySelector("#au-err");
+    if (!title || !text) { err.textContent = T("Title and statement are both needed."); return; }
+    const id = jscSet.mintId("req", title);
+    if (G.objects.has(id)) { err.textContent = T("An object with the id {id} exists already; choose another title.", { id }); return; }
+    const tokens = [...new Set([...text.matchAll(/\{param:([^}]+)\}/g)].map(m => m[1]))];
+    const st = { id: "s1", modality: d.modality, "obligated-parties": [jscSet.mintId("party", d.party || "organisation")], prose: { [lang]: text } };
+    if (tokens.length) st.parameters = tokens.map(name => ({ name, type: "string" }));   // every {param:} token is declared
+    await jscSet.saveObjects([{ id, version: "1", label: jscSlug(title).toUpperCase().slice(0, 24), lifecycle: "draft", title: { [lang]: title }, statements: [st] }]);
+    if (tokens.length) jscLog.info(T("declared {n} parameter(s) from the {param:} tokens of the statement", { n: tokens.length }));
+    d.title = ""; d.prose = ""; draft.save();
+    await jscPage.refresh();
+  });
+  el.querySelector("#au-addset").addEventListener("click", async () => {
+    const title = d.setTitle.trim(), err = el.querySelector("#au-seterr");
+    if (!title || !d.members.length) { err.textContent = T("A set needs a title and at least one member."); return; }
+    const id = jscSet.mintId("set", title);
+    if (G.objects.has(id)) { err.textContent = T("An object with the id {id} exists already; choose another title.", { id }); return; }
+    await jscSet.saveObjects([{ id, version: "1", lifecycle: "draft", title: { [d.lang.trim() || "en"]: title },
+      members: d.members.map((ref, i) => ({ ref, sequence: (i + 1) * 10 })) }]);
+    d.setTitle = ""; d.members = []; draft.save();
+    await jscPage.refresh();
+  });
+}
+
+/* ---------- lattice ---------- */
+function renderLattice() {
+  const P = { unspecified: [150, 215], may: [95, 155], should: [95, 95], must: [95, 35], "may-only": [205, 110], "should-not": [245, 165], "must-not": [245, 80] };
+  const E = [["unspecified", "may"], ["may", "should"], ["should", "must"], ["may", "may-only"], ["unspecified", "should-not"], ["should-not", "must-not"]];
+  $("lattice").innerHTML = E.map(([a, b]) => `<line x1="${P[a][0]}" y1="${P[a][1] - 10}" x2="${P[b][0]}" y2="${P[b][1] + 10}" stroke="var(--text-quiet)" stroke-width="1.2"/>`).join("") +
+    Object.entries(P).map(([m, [x, y]]) => `<circle cx="${x}" cy="${y}" r="4" fill="${V.MODALITY_COLOR[m]}"/><text x="${x}" y="${y - 9}" text-anchor="middle" fill="${V.MODALITY_COLOR[m]}" font-size="10.5">${m}</text>`).join("") +
+    `<text x="8" y="14" fill="var(--text-quiet)" font-size="8.5">${esc(T("up: tighten (free) · down or across: weaken (Deviation)"))}</text>`;
+  $("lattice").setAttribute("aria-label", T("Modality lattice"));
+}
+
+jscPage.init({ tool: "browse", title: T("Browse"), onGraph: g => {
+  G = g;
+  renderCatalog(); renderObjects(); renderStats(); renderAuthor(); renderLattice();
+  if (state.selected && G.objects.has(state.selected)) { $("detail").innerHTML = V.objectHtml(G.objects.get(state.selected)); V.wireRefs($("detail")); }
+} });
+</script>
+</body>
+</html>

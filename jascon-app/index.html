@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JASCON App</title>
+<link rel="stylesheet" href="jascon-core.css">
+<script>/* colour scheme before the first paint; jascon-core.js loads at the end */try{var _t=localStorage.getItem("jsc:cfg:ui:theme")||"dark";if(_t!=="system")document.documentElement.setAttribute("data-theme",_t)}catch(e){}</script>
+<style>
+/* The hub: a header, one tab per tool, and below them either the Home sheet
+   (sets, loading, integrity, export, help) or the chosen tool in an iframe. */
+body { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+header { display: flex; align-items: center; gap: 10px; min-height: 54px; padding: 6px 18px; background: var(--bg-elev-1); border-bottom: 1px solid var(--border-1); flex-wrap: wrap; }
+header .brand { font-weight: 700; font-size: 15px; white-space: nowrap; }
+header .brand span { color: var(--accent); }
+header .spacer { flex: 1; }
+header .btn, header button { font-family: var(--mono); font-size: 11px; letter-spacing: .04em; padding: 5px 10px; }
+#tabs { display: flex; gap: 4px; padding: 7px 14px; background: var(--bg-elev-1); border-bottom: 1px solid var(--border-1); overflow-x: auto; }
+#tabs button { flex: 0 0 auto; background: transparent; color: var(--text-secondary); border: 1px solid transparent; padding: 6px 12px; font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+#tabs button:hover { color: var(--text-primary); background: var(--bg-elev-2); }
+#tabs button.active { color: var(--text-primary); background: var(--accent-soft); border-color: var(--border-2); }
+#tabs button.active .glyph { color: var(--accent); }
+.frame-wrap { flex: 1; position: relative; min-height: 0; }
+iframe { width: 100%; height: 100%; border: 0; display: block; }
+.sheet { position: absolute; inset: 0; overflow: auto; padding: 22px 26px 40px; display: flex; flex-direction: column; gap: 16px; background: var(--bg-deep); }
+.sheet .lead { max-width: 74ch; color: var(--text-secondary); font-size: 13px; }
+.row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+#drop { border: 1px dashed var(--border-2); border-radius: 12px; padding: 16px 18px; }
+#home-log { font-family: var(--mono); font-size: 11px; line-height: 1.7; max-height: 190px; overflow-y: auto; background: var(--bg-sunken); border: 1px solid var(--border-1); border-radius: 9px; padding: 8px 12px; }
+#home-log .ts { color: var(--text-quiet); margin-right: 8px; }
+.md { max-width: 86ch; line-height: 1.65; font-size: 13.5px; color: var(--text-secondary); }
+.md h1, .md h2, .md h3, .md h4 { color: var(--text-primary); line-height: 1.3; margin: 1.5em 0 .5em; }
+.md h1 { font-size: 20px; } .md h2 { font-size: 16px; } .md h3 { font-size: 14px; } .md h4 { font-size: 13.5px; }
+.md h1:first-child { margin-top: 0; }
+.md p, .md ul, .md ol, .md table, .md pre, .md blockquote { margin: .7em 0; }
+.md pre { background: var(--bg-sunken); border: 1px solid var(--border-1); border-radius: 8px; padding: 12px 14px; overflow-x: auto; }
+.md pre code { background: none; border: 0; padding: 0; }
+.md blockquote { padding: 6px 14px; border-left: 2px solid var(--accent); background: var(--bg-elev-1); }
+.md table { border-collapse: collapse; font-size: 12.5px; display: block; overflow-x: auto; }
+.md th, .md td { border: 1px solid var(--border-2); padding: 5px 10px; text-align: left; vertical-align: top; }
+.md th { color: var(--text-primary); background: var(--bg-elev-2); }
+.md ul, .md ol { padding-left: 1.4em; }
+.md hr { border: 0; border-top: 1px solid var(--border-2); margin: 1.6em 0; }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">◈ JASCON <span>App</span></div>
+  <span class="pill" id="build-pill"></span>
+  <label for="set-select" data-i18n>Set</label>
+  <select id="set-select" data-i18n-attr="title" title="The working bundle every tool reads and writes"></select>
+  <div class="spacer"></div>
+  <button id="key-pill" type="button" class="hidden" data-i18n-attr="title" title="A key for a model service is held in the memory of this page. Click to forget it."></button>
+  <button id="btn-theme" type="button"></button>
+  <button id="btn-lang" type="button" data-i18n-attr="title" title="Switch the language of the interface"></button>
+  <a class="btn" href="config.html" data-i18n>Settings</a>
+  <a class="btn" id="open-standalone" href="#" target="_blank" rel="noopener" data-i18n-attr="title" title="Open the current tool in its own tab">↗</a>
+</header>
+<nav id="tabs" aria-label="Tools"></nav>
+
+<div class="frame-wrap">
+  <iframe id="app-frame" title="Tool" src="about:blank" class="hidden"></iframe>
+
+  <section class="sheet" id="home">
+    <p class="lead" data-i18n>A set is one working bundle: requirements, sets, tailorings, components, risks, assessments and what belongs to them. Every tool reads and writes the active set. It is stored in this browser (IndexedDB), on this computer, and nowhere else.</p>
+
+    <div class="glass card">
+      <div class="cardhead">
+        <h2><span class="glyph">▣</span><span id="set-title"></span></h2>
+        <div class="row">
+          <button id="btn-set-new" type="button" data-i18n>+ New set</button>
+          <button id="btn-set-delete" type="button" class="danger" data-i18n>Delete set</button>
+        </div>
+      </div>
+      <div id="set-empty" class="empty" data-i18n>This set is empty. Load a bundle below.</div>
+      <div id="set-data" class="hidden">
+        <div id="set-chips"></div>
+        <div class="kv" id="set-kv"></div>
+        <div class="nano sectionlabel" data-i18n>Pinned files</div>
+        <div id="set-pins" class="mono" style="font-size:11px;color:var(--text-tertiary)"></div>
+      </div>
+    </div>
+
+    <div class="glass card" id="drop">
+      <h2><span class="glyph">⤒</span><span data-i18n>Load a bundle</span></h2>
+      <div class="row">
+        <button class="primary" id="btn-folder" type="button" data-i18n>Open bundle folder…</button>
+        <button id="btn-files" type="button" data-i18n>Open files or ZIP…</button>
+        <button id="btn-url" type="button" data-i18n>Load from URL…</button>
+        <input type="file" id="pick-folder" webkitdirectory multiple hidden>
+        <input type="file" id="pick-files" accept=".json,.zip,.md,.dsse" multiple hidden>
+      </div>
+      <p class="hint" style="margin-top:8px" data-i18n>Or drop a bundle folder, a ZIP or JSON files anywhere on this page. A bundle with a content-manifest.json replaces the content of the active set; loose files are added to it. Loading from a URL needs this page to be served over http.</p>
+    </div>
+
+    <div class="glass card">
+      <h2><span class="glyph">◉</span><span data-i18n>Integrity and export</span></h2>
+      <div class="row">
+        <button id="btn-verify" type="button" data-i18n>Verify all digests</button>
+        <button id="btn-export" type="button" data-i18n>Export the set as a bundle (.zip)</button>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="verify-bar"></div></div>
+      <p class="hint" style="margin-top:8px" data-i18n>Verify recomputes both SHA-256 digests of every object, the package digest over the bytes and the semantic digest over the canonical form, and compares them with the manifest the bundle came with. Export writes a content manifest for what the set holds now; a set nobody changed leaves with the manifest it came with.</p>
+      <div id="verify-out" style="margin-top:10px"></div>
+    </div>
+
+    <div class="glass card">
+      <h2><span class="glyph">≡</span><span data-i18n>Log</span></h2>
+      <div id="home-log" role="log"></div>
+    </div>
+
+    <div class="glass card">
+      <h2><span class="glyph">?</span><span data-i18n>Help</span></h2>
+      <article id="help" class="md"></article>
+    </div>
+  </section>
+</div>
+
+<script src="jascon-core.js"></script>
+<script>
+"use strict";
+/* The hub. It owns three things: which tool is shown, which set is active,
+   and how a bundle gets into and out of a set. The tools themselves run in
+   the iframe and learn about a change through the store's touch signal.
+
+   A tool is listed here when its page exists; the order is the order of the
+   work. `types` are the kernel types the tool is about and drive its count. */
+const APPS = [
+  { id: "import", file: "import.html", glyph: "⤒", label: N("Import"), types: [],
+    desc: N("Import an OSCAL catalog or profile; everything after it works on JASCON") },
+  { id: "browse", file: "browse.html", glyph: "⌕", label: N("Browse"), types: ["requirement", "requirementSet"],
+    desc: N("The catalogue as a tree, every object with filters, statistics; write requirements and sets") },
+  { id: "tailor", file: "tailor.html", glyph: "◬", label: N("Tailor"), types: ["tailoring"],
+    desc: N("Resolve the Tailorings of the set and write a new one, with the weakening law enforced") },
+  { id: "map", file: "map.html", glyph: "⇄", label: N("Map"), types: ["mapping"],
+    desc: N("The crosswalk claims between requirements, and a workbench that writes one") },
+  { id: "implement", file: "implement.html", glyph: "⬡", label: N("Implement"), types: ["component", "implementation"],
+    desc: N("Components and implementation edges; build a system and attach requirements to its assets") },
+  { id: "risk", file: "risk.html", glyph: "△", label: N("Risk"), types: ["risk"],
+    desc: N("The risk register with its heat map, scales and matrix, coverage of the selected requirements, risk catalogues") },
+  { id: "assess", file: "assess.html", glyph: "◉", label: N("Assess"), types: ["assessment", "finding", "attestation"],
+    desc: N("Assessments, findings and attestations; run a check and write its result") },
+  { id: "validate", file: "validate.html", glyph: "◐", label: N("Validate"), types: [],
+    desc: N("Check the active set against the kernel rules this app has ported") },
+];
+
+const $ = id => document.getElementById(id);
+if (typeof jscStore === "undefined") {
+  document.body.textContent = "jascon-core.js is missing. Unpack the complete jascon-app folder.";
+  throw new Error("jascon-core.js missing");
+}
+
+jscI18n.add("de", {
+  "Set": "Set", "Settings": "Einstellungen", "Home": "Übersicht", "model key in memory": "Modell-Schlüssel im Speicher",
+  "A key for a model service is held in the memory of this page. Click to forget it.": "Ein Schlüssel für einen Modell-Dienst liegt im Speicher dieser Seite. Klicken, um ihn zu vergessen.",
+  "Validate": "Validieren", "Check the active set against the kernel rules this app has ported": "Das aktive Set gegen die Kernel-Regeln prüfen, die diese App portiert hat",
+  "Import": "Import", "Import an OSCAL catalog or profile; everything after it works on JASCON": "Einen OSCAL-Katalog oder ein OSCAL-Profil importieren; alles danach arbeitet auf JASCON",
+  "Browse": "Durchsehen", "Tailor": "Tailoring", "Map": "Mapping", "Implement": "Umsetzen", "Assess": "Prüfen", "Risk": "Risiko",
+  "The risk register with its heat map, scales and matrix, coverage of the selected requirements, risk catalogues":
+    "Das Risikoregister mit Heatmap, Skalen und Matrix, Abdeckung der ausgewählten Anforderungen, Risikokataloge",
+  "The crosswalk claims between requirements, and a workbench that writes one": "Die Crosswalk-Aussagen zwischen Anforderungen und eine Werkbank, die eine schreibt",
+  "Components and implementation edges; build a system and attach requirements to its assets": "Komponenten und Implementations-Kanten; ein System aufbauen und Anforderungen an seine Assets hängen",
+  "Assessments, findings and attestations; run a check and write its result": "Assessments, Feststellungen und Attestationen; eine Prüfung durchführen und ihr Ergebnis schreiben",
+  "Resolve the Tailorings of the set and write a new one, with the weakening law enforced":
+    "Die Tailorings des Sets auflösen und ein neues schreiben, mit durchgesetztem Abschwächungsgesetz",
+  "The catalogue as a tree, every object with filters, statistics; write requirements and sets":
+    "Der Katalog als Baum, jedes Objekt mit Filtern, Statistik; Anforderungen und Sets schreiben",
+  "The working bundle every tool reads and writes": "Das Arbeits-Bundle, das alle Werkzeuge lesen und schreiben",
+  "Switch the language of the interface": "Sprache der Oberfläche wechseln",
+  "Open the current tool in its own tab": "Aktuelles Werkzeug in eigenem Tab öffnen",
+  "A set is one working bundle: requirements, sets, tailorings, components, risks, assessments and what belongs to them. Every tool reads and writes the active set. It is stored in this browser (IndexedDB), on this computer, and nowhere else.":
+    "Ein Set ist ein Arbeits-Bundle: Anforderungen, Sets, Tailorings, Komponenten, Risiken, Prüfungen und was dazugehört. Alle Werkzeuge lesen und schreiben das aktive Set. Es liegt in diesem Browser (IndexedDB), auf diesem Rechner, und nirgends sonst.",
+  "+ New set": "+ Neues Set", "Delete set": "Set löschen",
+  "This set is empty. Load a bundle below.": "Dieses Set ist leer. Unten ein Bundle laden.",
+  "Pinned files": "Gepinnte Dateien", "Load a bundle": "Bundle laden",
+  "Open bundle folder…": "Bundle-Ordner öffnen…", "Open files or ZIP…": "Dateien oder ZIP öffnen…", "Load from URL…": "Von URL laden…",
+  "Or drop a bundle folder, a ZIP or JSON files anywhere on this page. A bundle with a content-manifest.json replaces the content of the active set; loose files are added to it. Loading from a URL needs this page to be served over http.":
+    "Oder einen Bundle-Ordner, ein ZIP oder JSON-Dateien irgendwo auf diese Seite ziehen. Ein Bundle mit content-manifest.json ersetzt den Inhalt des aktiven Sets; einzelne Dateien kommen hinzu. Laden von einer URL setzt voraus, dass diese Seite über http ausgeliefert wird.",
+  "Integrity and export": "Integrität und Export",
+  "Verify all digests": "Alle Digests prüfen", "Export the set as a bundle (.zip)": "Set als Bundle exportieren (.zip)",
+  "Verify recomputes both SHA-256 digests of every object, the package digest over the bytes and the semantic digest over the canonical form, and compares them with the manifest the bundle came with. Export writes a content manifest for what the set holds now; a set nobody changed leaves with the manifest it came with.":
+    "Die Prüfung berechnet beide SHA-256-Digests jedes Objekts neu, den Package-Digest über die Bytes und den Semantic-Digest über die kanonische Form, und vergleicht sie mit dem Manifest, mit dem das Bundle kam. Der Export schreibt ein Content-Manifest für den jetzigen Inhalt des Sets; ein unverändertes Set geht mit dem Manifest hinaus, mit dem es kam.",
+  "Log": "Protokoll", "Help": "Hilfe",
+  "Set \"{set}\"": "Set „{set}“",
+  "Name of the new set": "Name des neuen Sets",
+  "A set name is 1 to 60 characters without line breaks.": "Ein Set-Name hat 1 bis 60 Zeichen ohne Zeilenumbruch.",
+  "Delete set \"{set}\" with its {n} file(s)? This cannot be undone.": "Set „{set}“ mit {n} Datei(en) löschen? Das lässt sich nicht rückgängig machen.",
+  "set \"{set}\" deleted": "Set „{set}“ gelöscht",
+  "nothing to load: no JSON, Markdown or ZIP file in the selection": "Nichts zu laden: keine JSON-, Markdown- oder ZIP-Datei in der Auswahl",
+  "Set \"{set}\" holds {n} file(s). Replace them with this bundle?": "Set „{set}“ enthält {n} Datei(en). Durch dieses Bundle ersetzen?",
+  "loaded {n} object(s) from {source} into set \"{set}\"": "{n} Objekt(e) aus {source} in Set „{set}“ geladen",
+  "added {n} file(s) from {source} to set \"{set}\"": "{n} Datei(en) aus {source} zu Set „{set}“ hinzugefügt",
+  "load failed: {msg}": "Laden fehlgeschlagen: {msg}",
+  "Bundle URL (the folder that holds content-manifest.json)": "Bundle-URL (der Ordner mit content-manifest.json)",
+  "this page runs from file://, where the browser blocks fetch. Serve the repository (python -m http.server) and open the page over http.":
+    "Diese Seite läuft von file://, dort blockiert der Browser fetch. Das Repository ausliefern (python -m http.server) und die Seite über http öffnen.",
+  "{n} file(s) could not be fetched (first: {first})": "{n} Datei(en) konnten nicht geholt werden (erste: {first})",
+  "the folder": "dem Ordner", "the selection": "der Auswahl", "the drop": "dem Drop",
+  "this set has no manifest; there is nothing to verify against": "Dieses Set hat kein Manifest; es gibt nichts, wogegen geprüft werden könnte",
+  "verified": "geprüft", "mismatch": "Abweichung", "not in the manifest": "nicht im Manifest", "listed but missing": "gelistet, aber fehlend", "pins": "Pins",
+  "verification: {ok} ok, {bad} mismatch, {unlisted} not in the manifest, {missing} listed but missing; pins {pinsOk}/{pins}":
+    "Prüfung: {ok} in Ordnung, {bad} Abweichung, {unlisted} nicht im Manifest, {missing} gelistet, aber fehlend; Pins {pinsOk}/{pins}",
+  "Object": "Objekt", "Package digest": "Package-Digest", "Semantic digest": "Semantic-Digest", "Note": "Hinweis",
+  "ok": "in Ordnung", "edited in this app since the bundle was loaded": "in dieser App geändert, seit das Bundle geladen wurde",
+  "added in this app": "in dieser App hinzugefügt", "does not match the manifest": "passt nicht zum Manifest",
+  "the set is empty; nothing to export": "Das Set ist leer; nichts zu exportieren",
+  "exported {name}: {n} files, manifest unchanged (nothing was edited)": "{name} exportiert: {n} Dateien, Manifest unverändert (nichts wurde bearbeitet)",
+  "exported {name}: {n} files, new manifest with both digests per object": "{name} exportiert: {n} Dateien, neues Manifest mit beiden Digests je Objekt",
+  "source": "Quelle", "converter": "Konverter", "kernel": "Kernel", "objects": "Objekte", "manifest": "Manifest", "edited with": "bearbeitet mit",
+  "none (loose files)": "keines (lose Dateien)", "{n} entries": "{n} Einträge", "1.0.0 (no pin)": "1.0.0 (kein Pin)",
+  "none": "keine", "facet schema": "Facet-Schema", "scale": "Skala", "scale with matrix": "Skala mit Matrix",
+  "The help text (readme.md) could not be loaded here: {msg}. Open readme.md from the jascon-app folder.":
+    "Der Hilfetext (readme.md) konnte hier nicht geladen werden: {msg}. Bitte readme.md aus dem Ordner jascon-app öffnen.",
+});
+
+/* ---------- log of the Home sheet ---------- */
+const hubLog = (() => {
+  const write = cls => msg => {
+    const t = new Date(), div = document.createElement("div"), ts = document.createElement("span");
+    div.className = "l-" + cls; ts.className = "ts"; ts.textContent = t.toTimeString().slice(0, 8);
+    div.append(ts, String(msg));
+    $("home-log").appendChild(div);
+    $("home-log").scrollTop = $("home-log").scrollHeight;
+  };
+  return { info: write("info"), ok: write("ok"), warn: write("warn"), err: write("err") };
+})();
+
+/* ---------- header: build, theme, language ---------- */
+$("build-pill").textContent = "build " + JSC_BUILD;
+const syncHeader = () => {
+  $("btn-theme").textContent = "◐ " + T(jscTheme.get());
+  $("btn-lang").textContent = jscI18n.lang().toUpperCase();
+};
+$("btn-theme").addEventListener("click", () => {
+  jscTheme.set(jscTheme.next());
+  try { if ($("app-frame").contentDocument) jscTheme.apply($("app-frame").contentDocument); } catch (e) { /* frame not ready */ }
+  syncHeader();
+});
+$("btn-lang").addEventListener("click", () => {
+  jscCfg.set("ui:lang", jscI18n.lang() === "de" ? "en" : "de");
+  location.reload();
+});
+
+/* ---------- tabs: Home plus one per tool ---------- */
+const tabs = $("tabs"), frame = $("app-frame");
+function buildTabs() {
+  const add = (id, glyph, label, title) => {
+    const b = document.createElement("button");
+    b.type = "button"; b.dataset.id = id; b.title = title || "";
+    const g = document.createElement("span"); g.className = "glyph"; g.textContent = glyph;
+    const c = document.createElement("span"); c.className = "navcount"; c.dataset.count = id;
+    b.append(g, label, c);
+    b.addEventListener("click", () => select(id, true));
+    tabs.appendChild(b);
+  };
+  add("home", "⌂", T("Home"));
+  APPS.forEach(a => add(a.id, a.glyph, T(a.label), T(a.desc)));
+}
+function select(id, push) {
+  const app = APPS.find(a => a.id === id);
+  const shown = app ? app.id : "home";
+  [...tabs.children].forEach(b => {
+    const on = b.dataset.id === shown;
+    b.classList.toggle("active", on);
+    if (on) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current");
+  });
+  $("home").classList.toggle("hidden", !!app);
+  frame.classList.toggle("hidden", !app);
+  if (app && !frame.src.endsWith("/" + app.file)) frame.src = app.file;
+  $("open-standalone").href = app ? app.file : "index.html";
+  document.title = (app ? T(app.label) + " · " : "") + "JASCON App";
+  if (push) history.replaceState(null, "", "#" + shown);
+}
+
+/* ---------- the active set ---------- */
+const validSetName = n => typeof n === "string" && n.trim().length >= 1 && n.trim().length <= 60 && !/[\n\r]/.test(n);
+async function refresh() {
+  const sets = await jscStore.sets(), active = jscStore.activeSet();
+  const sel = $("set-select");
+  sel.textContent = "";
+  for (const s of sets) {
+    const o = document.createElement("option");
+    o.value = s.name; o.textContent = `${s.name} (${s.count})`; o.selected = s.name === active;
+    sel.appendChild(o);
+  }
+  const g = await jscSet.load();
+  $("set-title").textContent = T("Set \"{set}\"", { set: active });
+  const has = g.objects.size > 0 || g.scales.size > 0;
+  $("set-empty").classList.toggle("hidden", has);
+  $("set-data").classList.toggle("hidden", !has);
+  const counts = jscTypeCounts(g);
+  for (const a of APPS) {
+    const n = (a.types || []).reduce((s, t) => s + (counts[t] || 0), 0);
+    const c = tabs.querySelector(`[data-count="${a.id}"]`);
+    if (c) c.textContent = n ? String(n) : "";
+  }
+  if (!has) return;
+  $("set-chips").innerHTML = JSC_TYPES.filter(t => counts[t])
+    .map(t => `<span class="chip"><b>${counts[t]}</b>${jscEsc(t)}</span>`).join("");
+  const p = (g.manifest && g.manifest.provenance) || {};
+  const rows = [];
+  const add = (k, v) => { if (v) rows.push(`<div class="k">${jscEsc(T(k))}</div><div class="v">${jscEsc(v)}</div>`); };
+  (p.sources || []).forEach(s => add("source", [s.title, s.version && "v" + s.version].filter(Boolean).join(" · ")));
+  add("source", p.source);
+  add("converter", p.converter);
+  add("edited with", p["edited-with"]);
+  add("kernel", g.manifest ? (g.manifest["kernel-version"] || T("1.0.0 (no pin)")) : "");
+  add("manifest", g.manifest ? T("{n} entries", { n: (g.manifest.objects || []).length }) : T("none (loose files)"));
+  add("objects", String(g.objects.size));
+  $("set-kv").innerHTML = rows.join("");
+  const pins = [
+    ...g.facetSchemas.map(x => `◇ ${T("facet schema")} · ${jscEsc(x.def.id || x.path)} @${jscEsc((x.pin && x.pin["exact-version"]) || x.def.version || "?")}`),
+    ...[...g.scales.values()].map(x => `△ ${T(x.def.matrix ? "scale with matrix" : "scale")} · ${jscEsc(x.def.id)} @${jscEsc(x.def.version || "?")} · ${x.def.levels.map(l => jscEsc(l.level)).join(" < ")}`),
+  ];
+  $("set-pins").innerHTML = pins.map(l => `<div style="margin:3px 0">${l}</div>`).join("") || `<span class="hint">${jscEsc(T("none"))}</span>`;
+  g.problems.forEach(m => hubLog.warn(m));
+}
+$("set-select").addEventListener("change", e => { jscStore.setActiveSet(e.target.value); $("verify-out").textContent = ""; refresh(); });
+$("btn-set-new").addEventListener("click", () => {
+  const name = prompt(T("Name of the new set"), "");
+  if (name === null) return;
+  if (!validSetName(name)) { alert(T("A set name is 1 to 60 characters without line breaks.")); return; }
+  jscStore.setActiveSet(name.trim()); $("verify-out").textContent = ""; refresh();
+});
+$("btn-set-delete").addEventListener("click", async () => {
+  const set = jscStore.activeSet(), n = (await jscStore.files(set)).length;
+  if (!confirm(T("Delete set \"{set}\" with its {n} file(s)? This cannot be undone.", { set, n }))) return;
+  await jscStore.removeSet(set);
+  jscStore.setActiveSet("default");
+  hubLog.ok(T("set \"{set}\" deleted", { set }));
+  $("verify-out").textContent = ""; refresh();
+});
+
+/* ---------- loading ----------
+   A selection with a manifest is a bundle and replaces the set; a selection
+   without one is loose files and is added. Either way the files are stored
+   as they arrived. */
+async function load(files, source) {
+  if (!files.length) { hubLog.warn(T("nothing to load: no JSON, Markdown or ZIP file in the selection")); return; }
+  const set = jscStore.activeSet();
+  const isBundle = files.some(f => f.path === JSC_MANIFEST || f.path.endsWith("/" + JSC_MANIFEST));
+  const held = (await jscStore.files(set)).length;
+  if (isBundle && held && !confirm(T("Set \"{set}\" holds {n} file(s). Replace them with this bundle?", { set, n: held }))) return;
+  try {
+    const res = await jscSet.importFiles(set, files, { replace: isBundle });
+    hubLog.ok(T(isBundle ? "loaded {n} object(s) from {source} into set \"{set}\"" : "added {n} file(s) from {source} to set \"{set}\"",
+      { n: isBundle ? res.objects : res.files, source, set }));
+    res.problems.forEach(m => hubLog.warn(m));
+  } catch (e) {
+    hubLog.err(T("load failed: {msg}", { msg: e.message }));
+    if (!(e instanceof JscKernelError)) throw e;
+  }
+  $("verify-out").textContent = "";
+  await refresh();
+}
+$("btn-folder").addEventListener("click", () => $("pick-folder").click());
+$("btn-files").addEventListener("click", () => $("pick-files").click());
+$("pick-folder").addEventListener("change", async e => { await load(await jscReadFiles(e.target.files), T("the folder")); e.target.value = ""; });
+$("pick-files").addEventListener("change", async e => { await load(await jscReadFiles(e.target.files), T("the selection")); e.target.value = ""; });
+async function loadUrl(url) {
+  try {
+    const { files, failed } = await jscFetchBundle(url);
+    if (failed.length) hubLog.warn(T("{n} file(s) could not be fetched (first: {first})", { n: failed.length, first: failed[0] }));
+    await load(files, url);
+  } catch (e) {
+    hubLog.err(T("load failed: {msg}", { msg: e.message }));
+    if (location.protocol === "file:") hubLog.warn(T("this page runs from file://, where the browser blocks fetch. Serve the repository (python -m http.server) and open the page over http."));
+  }
+}
+$("btn-url").addEventListener("click", () => {
+  const url = prompt(T("Bundle URL (the folder that holds content-manifest.json)"), "../converted_examples/US.IFA-GoodRead/ifa-core-bundle/");
+  if (url) loadUrl(url);
+});
+document.addEventListener("dragover", e => { e.preventDefault(); $("drop").classList.add("droptarget"); });
+document.addEventListener("dragleave", e => { if (!e.relatedTarget) $("drop").classList.remove("droptarget"); });
+document.addEventListener("drop", async e => {
+  e.preventDefault(); $("drop").classList.remove("droptarget");
+  select("home", true);
+  await load(await jscReadDrop(e.dataTransfer), T("the drop"));
+});
+
+/* ---------- integrity ---------- */
+$("btn-verify").addEventListener("click", async () => {
+  const g = await jscSet.load(), bar = $("verify-bar"), out = $("verify-out");
+  if (!g.manifest) { hubLog.warn(T("this set has no manifest; there is nothing to verify against")); return; }
+  bar.classList.remove("done"); bar.style.width = "0%";
+  const v = await jscVerify(g, (done, total) => { bar.style.width = Math.round(100 * done / total) + "%"; });
+  bar.style.width = "100%"; bar.classList.add("done");
+  const pinsOk = v.pins.filter(p => p.ok).length, c = v.counts;
+  const clean = !c.bad && !c.unlisted && !c.missing && pinsOk === v.pins.length;
+  hubLog[clean ? "ok" : "warn"](T("verification: {ok} ok, {bad} mismatch, {unlisted} not in the manifest, {missing} listed but missing; pins {pinsOk}/{pins}",
+    { ...c, pinsOk, pins: v.pins.length }));
+  const chip = (n, label, cls) => `<span class="chip"><b class="${cls}">${n}</b>${jscEsc(T(label))}</span>`;
+  /* A mismatch on an object this app wrote is an edit, not tampering; the
+     table says which it is. Only rows that are not plainly "ok" are shown. */
+  const rows = [];
+  for (const [id, r] of v.objects) {
+    const rec = g.objects.get(id);
+    if (r && r.pkg && r.sem) continue;
+    if (!r && jscBesideManifest(rec)) continue;
+    const mark = okay => okay ? `<span class="verdict-ok">${jscEsc(T("ok"))}</span>` : `<span class="verdict-bad">${jscEsc(T("mismatch"))}</span>`;
+    const note = rec.origin === "authored"
+      ? T(r ? "edited in this app since the bundle was loaded" : "added in this app")
+      : T(r ? "does not match the manifest" : "not in the manifest");
+    rows.push(`<tr><td class="mono">${jscEsc(id)}</td><td>${r ? mark(r.pkg) : "—"}</td><td>${r ? mark(r.sem) : "—"}</td><td>${jscEsc(note)}</td></tr>`);
+  }
+  out.innerHTML = chip(c.ok, "verified", "verdict-ok") + chip(c.bad, "mismatch", c.bad ? "verdict-bad" : "") +
+    chip(c.unlisted, "not in the manifest", c.unlisted ? "verdict-warn" : "") + chip(c.missing, "listed but missing", c.missing ? "verdict-bad" : "") +
+    chip(`${pinsOk}/${v.pins.length}`, "pins", pinsOk === v.pins.length ? "verdict-ok" : "verdict-bad") +
+    (rows.length ? `<table class="flat"><tr><th>${jscEsc(T("Object"))}</th><th>${jscEsc(T("Package digest"))}</th><th>${jscEsc(T("Semantic digest"))}</th><th>${jscEsc(T("Note"))}</th></tr>${rows.slice(0, 200).join("")}</table>` : "");
+});
+
+/* ---------- export ---------- */
+$("btn-export").addEventListener("click", async () => {
+  const g = await jscSet.load();
+  if (!g.objects.size && !g.scales.size) { hubLog.warn(T("the set is empty; nothing to export")); return; }
+  const z = await jscSet.exportZip();
+  z.problems.forEach(m => hubLog.warn(m));
+  jscDownload(z.name, z.bytes, "application/zip");
+  hubLog.ok(T(z.verbatim ? "exported {name}: {n} files, manifest unchanged (nothing was edited)"
+                         : "exported {name}: {n} files, new manifest with both digests per object", { name: z.name, n: z.count }));
+});
+
+/* ---------- help: the app's readme, rendered ----------
+   A small Markdown renderer. It escapes every text before it adds markup and
+   turns only http(s) links into links, so the file cannot inject script. */
+function md2html(md) {
+  const fences = [];
+  md = md.replace(/```[^\n]*\n([\s\S]*?)```/g, (m, code) => { fences.push(code); return `\u0000F${fences.length - 1}\u0000`; });
+  const inline = s => jscEsc(s)
+    .replace(/`([^`]+)`/g, "<code>$1</code>")
+    .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+    .replace(/(^|[\s(])\*([^*\n]+)\*/g, "$1<em>$2</em>")
+    .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (m, text, href) =>
+      /^https?:/.test(href) ? `<a href="${href}" target="_blank" rel="noopener">${text}</a>` : text);
+  const out = [];
+  let para = [], list = null, table = null, quote = [];
+  const flushPara = () => { if (para.length) { out.push("<p>" + inline(para.join(" ")) + "</p>"); para = []; } };
+  const flushList = () => { if (list) { out.push(`<${list.tag}>` + list.items.map(i => "<li>" + inline(i) + "</li>").join("") + `</${list.tag}>`); list = null; } };
+  const flushTable = () => {
+    if (!table) return;
+    const cells = r => r.replace(/^\||\|$/g, "").split("|").map(c => inline(c.trim()));
+    out.push("<table>" + table.filter(r => !/^[\s|:-]+$/.test(r))
+      .map((r, i) => "<tr>" + cells(r).map(c => (i ? `<td>${c}</td>` : `<th>${c}</th>`)).join("") + "</tr>").join("") + "</table>");
+    table = null;
+  };
+  const flushQuote = () => { if (quote.length) { out.push("<blockquote>" + inline(quote.join(" ")) + "</blockquote>"); quote = []; } };
+  const flushAll = () => { flushPara(); flushList(); flushTable(); flushQuote(); };
+  for (const raw of md.split(/\r?\n/)) {
+    const line = raw.replace(/\s+$/, "");
+    const fence = line.match(/^\u0000F(\d+)\u0000$/);
+    if (fence) { flushAll(); out.push("<pre><code>" + jscEsc(fences[+fence[1]]) + "</code></pre>"); continue; }
+    if (!line.trim()) { flushAll(); continue; }
+    const h = line.match(/^(#{1,4})\s+(.*)/);
+    if (h) { flushAll(); out.push(`<h${h[1].length}>${inline(h[2])}</h${h[1].length}>`); continue; }
+    if (/^(---+|\*\*\*+)$/.test(line.trim())) { flushAll(); out.push("<hr>"); continue; }
+    if (/^\s*\|/.test(line)) { flushPara(); flushList(); flushQuote(); (table = table || []).push(line.trim()); continue; }
+    const li = line.match(/^\s*([-*]|\d+\.)\s+(.*)/);
+    if (li) {
+      flushPara(); flushTable(); flushQuote();
+      const tag = /\d/.test(li[1]) ? "ol" : "ul";
+      if (!list || list.tag !== tag) { flushList(); list = { tag, items: [] }; }
+      list.items.push(li[2]); continue;
+    }
+    const q = line.match(/^>\s?(.*)/);
+    if (q) { flushPara(); flushList(); flushTable(); quote.push(q[1]); continue; }
+    if (list) { list.items[list.items.length - 1] += " " + line.trim(); continue; }
+    flushTable(); flushQuote(); para.push(line.trim());
+  }
+  flushAll();
+  return out.join("\n");
+}
+async function loadHelp() {
+  try {
+    const res = await fetch("readme.md");
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    $("help").innerHTML = md2html(await res.text());
+  } catch (e) {
+    $("help").textContent = T("The help text (readme.md) could not be loaded here: {msg}. Open readme.md from the jascon-app folder.", { msg: e.message });
+  }
+}
+
+/* ---------- the key of a model service ----------
+   A tool page that calls a model (jascon-ai.js) hands the key the user typed
+   to this window, so that it survives a change of tool; the next tool page
+   asks for it. It is held in this one variable and nowhere else: a reload of
+   the hub, or a visit to the settings page, clears it. Messages are taken
+   only from the hub's own frame and, when served over http(s), only from
+   the hub's own origin. */
+const aiKeys = Object.create(null);
+const frameOrigin = () => (location.protocol === "file:" ? "*" : location.origin);
+function syncKeyPill() {
+  const n = Object.keys(aiKeys).length;
+  $("key-pill").classList.toggle("hidden", !n);
+  $("key-pill").textContent = n ? "⚿ " + T("model key in memory") + " ✕" : "";
+}
+window.addEventListener("message", e => {
+  if (e.source !== frame.contentWindow || (location.protocol !== "file:" && e.origin !== location.origin)) return;
+  const d = e.data;
+  if (!d || d.jsc !== "ai-key") return;
+  if (d.op === "set" && typeof d.backend === "string" && typeof d.key === "string") {
+    if (d.key) aiKeys[d.backend] = d.key; else delete aiKeys[d.backend];
+    syncKeyPill();
+  }
+  if (d.op === "get") e.source.postMessage({ jsc: "ai-key", op: "keys", keys: { ...aiKeys } }, frameOrigin());
+});
+$("key-pill").addEventListener("click", () => {
+  for (const k of Object.keys(aiKeys)) delete aiKeys[k];
+  syncKeyPill();
+  if (frame.contentWindow) frame.contentWindow.postMessage({ jsc: "ai-key", op: "keys", keys: {} }, frameOrigin());
+});
+
+/* ---------- start ----------
+   #<tool> selects a tool; #load=<bundle-url>&tool=<tool> loads a bundle into
+   the active set first, so a link can reproduce a view. The same happens
+   when the address changes while the page is open. */
+async function route() {
+  const hash = location.hash.slice(1), params = new URLSearchParams(hash.includes("=") ? hash : "");
+  if (params.get("load")) await loadUrl(params.get("load")); else await refresh();
+  select(params.get("tool") || (hash.includes("=") ? "home" : hash) || "home", false);
+}
+(async () => {
+  buildTabs();
+  jscI18n.apply();
+  syncHeader();
+  await route();
+  window.addEventListener("hashchange", route);
+  /* a tool in the iframe, or another tab, wrote to the store */
+  window.addEventListener("storage", e => {
+    if (e.key && e.key.startsWith("jsc:cfg:store:")) refresh();
+    if (e.key === "jsc:cfg:ui:theme") { jscTheme.apply(); syncHeader(); }
+  });
+  loadHelp();
+})();
+</script>
+</body>
+</html>

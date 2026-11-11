@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Validate · JASCON App</title>
+<link rel="stylesheet" href="jascon-core.css">
+<script>try{var _t=localStorage.getItem("jsc:cfg:ui:theme")||"dark";if(_t!=="system")document.documentElement.setAttribute("data-theme",_t)}catch(e){}</script>
+</head>
+<body>
+<div id="app"><div id="mid">
+  <nav id="rail" aria-label="Views">
+    <div class="railgroup">
+      <div class="nano" data-i18n>Views</div>
+      <button class="navitem" data-view="check"><span class="glyph">◐</span><span data-i18n>Check the set</span><span class="navcount" id="nc-errors"></span></button>
+      <button class="navitem" data-view="compose"><span class="glyph">⊕</span><span data-i18n>Compose two sets</span></button>
+      <button class="navitem" data-view="scope"><span class="glyph">?</span><span data-i18n>What is checked, and what is not</span></button>
+    </div>
+    <div class="railgroup">
+      <p class="hint" data-i18n>The check runs the kernel rules this app has ported from the reference validator, each against its conformance vectors. The Python validator stays the reference.</p>
+    </div>
+  </nav>
+  <main id="main">
+    <section class="glass card" data-view="check">
+      <h2><span class="glyph">◐</span><span data-i18n>Check the set</span></h2>
+      <div class="wbrow"><button type="button" class="primary" id="run" data-i18n>Check the active set</button>
+        <button type="button" id="download" disabled data-i18n>Download the report (JSON)</button></div>
+      <details id="keys-box" style="margin:6px 0"><summary data-i18n>Trusted keys for signatures</summary>
+        <p class="hint" style="max-width:86ch" data-i18n>An attestation may name an envelope with a signature (DSSE, Ed25519). Whose key to trust is yours to say and never comes from the bundle: a JSON map of signer URI to public key in hex. With a map here the check runs in verification mode: an envelope is judged against the signer's key, and a Tailoring counts as authority-proven only through an envelope that verifies. Without one, an envelope is checked for what it binds and reported as unverified. Public keys are no secret; the map is kept in this browser.</p>
+        <textarea id="keys" spellcheck="false" style="min-height:70px;font-family:var(--mono);font-size:12px" placeholder='{"https://authority.example/party/signer": "bb10…2e65"}' data-i18n-attr="aria-label" aria-label="Trusted keys for signatures"></textarea>
+        <div id="keys-state" class="hint" role="status"></div></details>
+      <div class="progress-track"><div class="progress-fill" id="bar"></div></div>
+      <div id="out" style="margin-top:12px"></div>
+    </section>
+    <section class="glass card" data-view="compose">
+      <h2><span class="glyph">⊕</span><span data-i18n>Compose two sets</span></h2>
+      <p class="hint" style="max-width:86ch" data-i18n>What would happen if the active set and another set were used together. Where both pin a facet in the same major line, the higher version wins and the payloads of both are checked again under it. What does not fit is reported and never picked silently: two major lines, a version that is not semver, a payload that fails under the winner, one id at two versions, and one id and version with two meanings. Nothing is written.</p>
+      <div class="wbrow"><label for="other" data-i18n>The other set</label><select id="other"></select><button type="button" class="primary" id="compose-run" data-i18n>Compose</button></div>
+      <div id="compose-out" style="margin-top:12px"></div>
+    </section>
+    <section class="glass card" data-view="scope">
+      <h2><span class="glyph">?</span><span data-i18n>What is checked, and what is not</span></h2>
+      <div style="font-size:12.5px;color:var(--text-secondary);max-width:86ch;display:flex;flex-direction:column;gap:8px">
+        <p data-i18n>Checked, each rule ported from validate_core.py and run against its conformance vectors:</p>
+        <p data-i18n>The manifest: its shape, and that it pins the kernel its content needs. Every object: that it matches exactly one kernel type, that an optional list is absent instead of empty, that statement ids are unique, that every {param:} token is declared, that a facet keyed by statement names statements that exist.</p>
+        <p data-i18n>Integrity: both digests of every object and the digest of every pinned file against the manifest. An object edited in this app is reported as a note, because the export writes a new manifest.</p>
+        <p data-i18n>References: every reference that must resolve inside the bundle does, with the right type; Set membership has no cycle; a mapping's scope names statements that exist.</p>
+        <p data-i18n>Tailorings: two operations on one target; a weakening without a Deviation at consumer tier; a parameter value of the wrong kind. Facets: every payload against the standard descriptor or the pinned schema; an unregistered facet fails.</p>
+        <p data-i18n>Risks and scales: RISK-1 to RISK-14 with the coverage of the selected requirements, SCALE-1 to SCALE-4 with the matrix.</p>
+        <p data-i18n>Signatures: the envelope an attestation names is checked for what it binds, and against the signer's key when you supply trusted keys. The reference validator looks only at attestations the manifest lists; this check looks at every attestation of the set and reports a missing envelope of an unlisted one as a note.</p>
+        <p data-i18n>The composition of two sets has a view of its own.</p>
+        <p class="verdict-warn" data-i18n>Not checked: conditional-apply instances. The engine is ported and passes its vectors, but no bundle has a place to carry an instance, here as in the reference validator. The bytes of a bundle on disk (line ends, files the manifest does not list) are judged by the Python validator only. In every case of doubt run jascon/scripts/validate_core.py on the exported bundle; it is the reference.</p>
+      </div>
+    </section>
+  </main>
+</div></div>
+
+<script src="jascon-core.js"></script>
+<script src="jascon-schema.js"></script>
+<script src="jascon-rules.js"></script>
+<script src="jascon-view.js"></script>
+<script>
+"use strict";
+/* Validate: runs jscCheckGraph over the active set and shows what it found.
+   The page adds no rule of its own; a finding is a sentence of
+   jascon-rules.js, which keeps the reference validator's wording. The scope
+   of the check, and what it leaves to the Python validator, is stated on the
+   page's second view and repeated above every result. */
+jscI18n.add("de", {
+  "Validate": "Validieren", "Check the set": "Set prüfen", "What is checked, and what is not": "Was geprüft wird, und was nicht",
+  "The check runs the kernel rules this app has ported from the reference validator, each against its conformance vectors. The Python validator stays the reference.":
+    "Die Prüfung führt die Kernel-Regeln aus, die diese App vom Referenzvalidator portiert hat, jede gegen ihre Konformitätsvektoren. Der Python-Validator bleibt die Referenz.",
+  "Compose two sets": "Zwei Sets zusammenführen", "The other set": "Das andere Set", "Compose": "Zusammenführen",
+  "What would happen if the active set and another set were used together. Where both pin a facet in the same major line, the higher version wins and the payloads of both are checked again under it. What does not fit is reported and never picked silently: two major lines, a version that is not semver, a payload that fails under the winner, one id at two versions, and one id and version with two meanings. Nothing is written.":
+    "Was geschähe, wenn das aktive Set und ein anderes zusammen benutzt würden. Wo beide ein Facet in derselben Major-Linie pinnen, gewinnt die höhere Version, und die Nutzlasten beider werden unter ihr erneut geprüft. Was nicht passt, wird gemeldet und nie stillschweigend gewählt: zwei Major-Linien, eine Version, die kein Semver ist, eine Nutzlast, die unter dem Gewinner durchfällt, eine Id in zwei Versionen und eine Id und Version mit zwei Bedeutungen. Geschrieben wird nichts.",
+  "There is no other set in this browser. Load a second bundle into a new set on the Home page.": "In diesem Browser gibt es kein anderes Set. Auf der Übersicht ein zweites Bundle in ein neues Set laden.",
+  "A is the active set \"{a}\", B is \"{b}\".": "A ist das aktive Set „{a}“, B ist „{b}“.",
+  "Resolved facet versions": "Aufgelöste Facet-Versionen", "No facet is pinned in either set.": "In keinem der Sets ist ein Facet gepinnt.",
+  "The two sets compose without an error.": "Die beiden Sets lassen sich ohne Fehler zusammenführen.", "objects in both": "Objekte in beiden",
+  "composed \"{a}\" with \"{b}\": {e} error(s)": "„{a}“ mit „{b}“ zusammengeführt: {e} Fehler",
+  "Trusted keys for signatures": "Vertrauenswürdige Schlüssel für Signaturen",
+  "An attestation may name an envelope with a signature (DSSE, Ed25519). Whose key to trust is yours to say and never comes from the bundle: a JSON map of signer URI to public key in hex. With a map here the check runs in verification mode: an envelope is judged against the signer's key, and a Tailoring counts as authority-proven only through an envelope that verifies. Without one, an envelope is checked for what it binds and reported as unverified. Public keys are no secret; the map is kept in this browser.":
+    "Eine Attestation kann einen Umschlag mit Signatur nennen (DSSE, Ed25519). Wessen Schlüssel zu trauen ist, legen Sie fest; er kommt nie aus dem Bundle: eine JSON-Tabelle von Signierer-URI zu öffentlichem Schlüssel in Hex. Mit einer Tabelle läuft die Prüfung im Verifikationsmodus: Ein Umschlag wird gegen den Schlüssel des Signierers beurteilt, und ein Tailoring gilt nur durch einen verifizierenden Umschlag als authority-proven. Ohne Tabelle wird ein Umschlag darauf geprüft, was er bindet, und als unverifiziert gemeldet. Öffentliche Schlüssel sind kein Geheimnis; die Tabelle bleibt in diesem Browser.",
+  "no keys: signatures are reported as unverified": "keine Schlüssel: Signaturen werden als unverifiziert gemeldet",
+  "{n} trusted key(s): the check runs in verification mode": "{n} vertrauenswürdige(r) Schlüssel: Die Prüfung läuft im Verifikationsmodus",
+  "not a JSON map of signer URI to 64 hex digits: {msg}": "keine JSON-Tabelle von Signierer-URI zu 64 Hex-Ziffern: {msg}",
+  "Signatures: the envelope an attestation names is checked for what it binds, and against the signer's key when you supply trusted keys. The reference validator looks only at attestations the manifest lists; this check looks at every attestation of the set and reports a missing envelope of an unlisted one as a note.":
+    "Signaturen: Der Umschlag, den eine Attestation nennt, wird darauf geprüft, was er bindet, und gegen den Schlüssel des Signierers, wenn Sie vertrauenswürdige Schlüssel angeben. Der Referenzvalidator betrachtet nur Attestationen, die das Manifest listet; diese Prüfung betrachtet jede Attestation des Sets und meldet einen fehlenden Umschlag einer nicht gelisteten als Hinweis.",
+  "The composition of two sets has a view of its own.": "Die Zusammenführung zweier Sets hat eine eigene Ansicht.",
+  "Not checked: conditional-apply instances. The engine is ported and passes its vectors, but no bundle has a place to carry an instance, here as in the reference validator. The bytes of a bundle on disk (line ends, files the manifest does not list) are judged by the Python validator only. In every case of doubt run jascon/scripts/validate_core.py on the exported bundle; it is the reference.":
+    "Nicht geprüft: conditional-apply-Instanzen. Die Engine ist portiert und besteht ihre Vektoren, aber kein Bundle hat einen Platz für eine Instanz, hier wie im Referenzvalidator. Die Bytes eines Bundles auf der Platte (Zeilenenden, Dateien, die das Manifest nicht listet) beurteilt nur der Python-Validator. In jedem Zweifelsfall jascon/scripts/validate_core.py auf dem exportierten Bundle laufen lassen; er ist die Referenz.",
+  "signature": "Signatur", "Signatures": "Signaturen",
+  "Check the active set": "Aktives Set prüfen", "Download the report (JSON)": "Bericht herunterladen (JSON)",
+  "Checked, each rule ported from validate_core.py and run against its conformance vectors:": "Geprüft, jede Regel aus validate_core.py portiert und gegen ihre Konformitätsvektoren gelaufen:",
+  "The manifest: its shape, and that it pins the kernel its content needs. Every object: that it matches exactly one kernel type, that an optional list is absent instead of empty, that statement ids are unique, that every {param:} token is declared, that a facet keyed by statement names statements that exist.":
+    "Das Manifest: seine Form, und dass es den Kernel pinnt, den sein Inhalt braucht. Jedes Objekt: dass es auf genau einen Kernel-Typ passt, dass eine optionale Liste fehlt statt leer zu sein, dass Statement-Ids eindeutig sind, dass jedes {param:}-Token deklariert ist, dass ein nach Statement geschlüsseltes Facet Statements nennt, die es gibt.",
+  "Integrity: both digests of every object and the digest of every pinned file against the manifest. An object edited in this app is reported as a note, because the export writes a new manifest.":
+    "Integrität: beide Digests jedes Objekts und der Digest jeder gepinnten Datei gegen das Manifest. Ein in dieser App bearbeitetes Objekt wird als Hinweis gemeldet, weil der Export ein neues Manifest schreibt.",
+  "References: every reference that must resolve inside the bundle does, with the right type; Set membership has no cycle; a mapping's scope names statements that exist.":
+    "Verweise: Jeder Verweis, der im Bundle auflösen muss, tut das, mit dem richtigen Typ; die Set-Mitgliedschaft hat keinen Zyklus; der Scope eines Mappings nennt Statements, die es gibt.",
+  "Tailorings: two operations on one target; a weakening without a Deviation at consumer tier; a parameter value of the wrong kind. Facets: every payload against the standard descriptor or the pinned schema; an unregistered facet fails.":
+    "Tailorings: zwei Operationen auf ein Ziel; eine Abschwächung ohne Deviation auf Consumer-Stufe; ein Parameterwert der falschen Art. Facets: jede Nutzlast gegen den Standard-Deskriptor oder das gepinnte Schema; ein unregistriertes Facet fällt durch.",
+  "Risks and scales: RISK-1 to RISK-14 with the coverage of the selected requirements, SCALE-1 to SCALE-4 with the matrix.":
+    "Risiken und Skalen: RISK-1 bis RISK-14 mit der Abdeckung der ausgewählten Anforderungen, SCALE-1 bis SCALE-4 mit der Matrix.",
+  "The set is empty; there is nothing to check.": "Das Set ist leer; es gibt nichts zu prüfen.",
+  "objects": "Objekte", "errors": "Fehler", "notes": "Hinweise", "typed": "typisiert",
+  "No error from the rules this app has ported.": "Kein Fehler nach den Regeln, die diese App portiert hat.",
+  "all": "alle", "Filter the findings": "Befunde filtern", "Kind": "Art", "Area": "Bereich", "Object": "Objekt", "Finding": "Befund",
+  "error": "Fehler", "note": "Hinweis", "and {n} more; narrow the filter": "und {n} weitere; Filter eingrenzen", "Tier of the Tailorings": "Stufe der Tailorings",
+  "checked set \"{set}\": {e} error(s), {n} note(s) in {ms} ms": "Set „{set}“ geprüft: {e} Fehler, {n} Hinweis(e) in {ms} ms",
+  "manifest": "Manifest", "files": "Dateien", "object": "Objekt", "digest": "Digest", "reference": "Verweis", "tailoring": "Tailoring", "scale": "Skala", "risk": "Risiko", "facet": "Facet",
+});
+
+const $ = id => document.getElementById(id);
+const V = jscView, esc = jscEsc;
+const AREAS = { manifest: N("manifest"), files: N("files"), object: N("object"), digest: N("digest"), reference: N("reference"),
+  tailoring: N("tailoring"), scale: N("scale"), risk: N("risk"), facet: N("facet"), signature: N("signature") };
+let G = jscSet.graph, last = null, filter = { area: "", kind: "", q: "" };
+const ui = V.draft("validate", () => ({ keys: "", other: "" }));
+
+/* The trusted keys as typed: null when the field is empty, the map when it
+   is one, and an error otherwise. A map that cannot be read stops the check;
+   a key that is silently dropped would turn "error" into "unverified". */
+function trustedKeys() {
+  const text = ui.data.keys.trim();
+  if (!text) return { trusted: null, error: "" };
+  try {
+    const map = JSON.parse(text);
+    if (!map || typeof map !== "object" || Array.isArray(map)) throw new Error("not a map");
+    for (const [signer, key] of Object.entries(map)) if (typeof key !== "string" || !/^[0-9a-fA-F]{64}$/.test(key)) throw new Error(signer);
+    return { trusted: map, error: "" };
+  } catch (e) { return { trusted: null, error: T("not a JSON map of signer URI to 64 hex digits: {msg}", { msg: e.message }) }; }
+}
+function showKeys() {
+  const k = trustedKeys(), el = $("keys-state");
+  el.className = k.error ? "verdict-bad" : "hint";
+  el.textContent = k.error || (k.trusted ? T("{n} trusted key(s): the check runs in verification mode", { n: Object.keys(k.trusted).length }) : T("no keys: signatures are reported as unverified"));
+  $("run").disabled = !!k.error;
+}
+
+async function run() {
+  if (!G.objects.size && !G.scales.size) { $("out").innerHTML = `<div class="empty">${esc(T("The set is empty; there is nothing to check."))}</div>`; return; }
+  const bar = $("bar"), t0 = performance.now();
+  bar.classList.remove("done"); bar.style.width = "0%";
+  const verified = await jscVerify(G, (done, total) => { bar.style.width = Math.round(70 * done / total) + "%"; });
+  const res = await jscCheckGraph(G, G.manifest ? verified : null, { trusted: trustedKeys().trusted });
+  bar.style.width = "100%"; bar.classList.add("done");
+  last = { set: jscSet.name, tool: JSC_TOOL, "not-checked": ["conditional-apply instances", "bytes on disk"], "verification-mode": !!trustedKeys().trusted, ...res };
+  const e = res.findings.filter(f => f.kind === "error").length, n = res.findings.length - e;
+  jscLog[e ? "warn" : "ok"](T("checked set \"{set}\": {e} error(s), {n} note(s) in {ms} ms", { set: jscSet.name, e, n, ms: Math.round(performance.now() - t0) }));
+  $("nc-errors").textContent = e || "";
+  $("download").disabled = false;
+  render();
+}
+function render() {
+  if (!last) return;
+  const all = last.findings, errors = all.filter(f => f.kind === "error").length, typed = Object.values(last.types).reduce((a, b) => a + b, 0);
+  const q = filter.q.toLowerCase(), cap = 400;
+  const shown = all.filter(f => (!filter.area || f.area === filter.area) && (!filter.kind || f.kind === filter.kind) &&
+    (!q || f.message.toLowerCase().includes(q) || (f.object || "").toLowerCase().includes(q)));
+  const byArea = {}; all.forEach(f => { byArea[f.area] = (byArea[f.area] || 0) + 1; });
+  const chip = (n, label, cls) => `<span class="chip"><b class="${cls || ""}">${esc(n)}</b>${esc(T(label))}</span>`;
+  $("out").innerHTML = `<div>${chip(G.objects.size, "objects")}${chip(typed, "typed", typed === G.objects.size ? "verdict-ok" : "verdict-bad")}
+      ${chip(errors, "errors", errors ? "verdict-bad" : "verdict-ok")}${chip(all.length - errors, "notes")}
+      ${JSC_TYPES.filter(t => last.types[t]).map(t => `<span class="chip"><b>${last.types[t]}</b>${esc(t)}</span>`).join("")}</div>
+    ${errors ? "" : `<p class="verdict-ok" style="margin:6px 0">✓ ${esc(T("No error from the rules this app has ported."))}</p>`}
+    ${Object.keys(last.tiers).length ? V.section(T("Tier of the Tailorings"), Object.entries(last.tiers).map(([id, tier]) => `<div>${V.refLink(id, V.last(id))} ${V.badge(tier)}</div>`).join("")) : ""}
+    ${Object.keys(last.signatures).length ? V.section(T("Signatures"), Object.entries(last.signatures).map(([id, st]) => `<div>${V.refLink(id, V.last(id))} <span class="${st === "verified" ? "verdict-ok" : st === "error" ? "verdict-bad" : "hint"}">${esc(st)}</span></div>`).join("")) : ""}
+    ${all.length ? `<div class="filterrow" style="margin-top:12px"><button type="button" class="fpill ${filter.area ? "" : "on"}" data-area="">${esc(T("all"))} · ${all.length}</button>
+        ${Object.entries(byArea).map(([a, n]) => `<button type="button" class="fpill ${filter.area === a ? "on" : ""}" data-area="${esc(a)}">${esc(T(AREAS[a] || a))} · ${n}</button>`).join("")}
+        <button type="button" class="fpill ${filter.kind === "error" ? "on" : ""}" data-kind="error">${esc(T("errors"))}</button>
+        <button type="button" class="fpill ${filter.kind === "note" ? "on" : ""}" data-kind="note">${esc(T("notes"))}</button>
+        <input type="search" id="q" placeholder="${esc(T("Filter the findings"))}" aria-label="${esc(T("Filter the findings"))}" value="${esc(filter.q)}" style="max-width:280px"></div>
+      <table class="flat"><tr><th>${esc(T("Kind"))}</th><th>${esc(T("Area"))}</th><th>${esc(T("Object"))}</th><th>${esc(T("Finding"))}</th></tr>
+      ${shown.slice(0, cap).map(f => `<tr><td class="${f.kind === "error" ? "verdict-bad" : "hint"}">${esc(T(f.kind))}</td><td>${esc(T(AREAS[f.area] || f.area))}</td>
+        <td class="mono" style="font-size:11px">${f.object ? V.refLink(f.object, V.last(f.object)) : ""}</td><td>${esc(f.message)}</td></tr>`).join("")}</table>
+      ${shown.length > cap ? `<div class="hint" style="padding:6px">${esc(T("and {n} more; narrow the filter", { n: shown.length - cap }))}</div>` : ""}` : ""}`;
+  V.wireRefs($("out"));
+  $("out").querySelectorAll("[data-area]").forEach(b => b.addEventListener("click", () => { filter.area = b.dataset.area; render(); }));
+  $("out").querySelectorAll("[data-kind]").forEach(b => b.addEventListener("click", () => { filter.kind = filter.kind === b.dataset.kind ? "" : b.dataset.kind; render(); }));
+  let timer;
+  if ($("q")) $("q").addEventListener("input", e => { filter.q = e.target.value; clearTimeout(timer); timer = setTimeout(() => { render(); $("q").focus(); }, 250); });
+}
+/* ---------- composition with another set ---------- */
+async function renderOther() {
+  const sets = (await jscStore.sets()).filter(s => s.name !== jscSet.name && s.count), sel = $("other");
+  sel.innerHTML = sets.map(s => `<option value="${esc(s.name)}" ${s.name === ui.data.other ? "selected" : ""}>${esc(s.name)} (${s.count})</option>`).join("");
+  $("compose-run").disabled = !sets.length;
+  if (!sets.length) $("compose-out").innerHTML = `<div class="empty">${esc(T("There is no other set in this browser. Load a second bundle into a new set on the Home page."))}</div>`;
+}
+async function compose() {
+  const name = $("other").value;
+  if (!name) return;
+  ui.data.other = name; ui.save();
+  const other = jscGraphFrom(await jscStore.files(name)), a = jscComposeSide(G), b = jscComposeSide(other);
+  const res = jscCompose(a.objs, a.pins, b.objs, b.pins), both = b.objs.filter(([id]) => G.objects.has(id)).length;
+  jscLog[res.errors.length ? "warn" : "ok"](T("composed \"{a}\" with \"{b}\": {e} error(s)", { a: jscSet.name, b: name, e: res.errors.length }));
+  const versions = Object.entries(res.resolutions);
+  $("compose-out").innerHTML = `<p class="hint">${esc(T("A is the active set \"{a}\", B is \"{b}\".", { a: jscSet.name, b: name }))}</p>
+    <div><span class="chip"><b>${a.objs.length}</b>A</span><span class="chip"><b>${b.objs.length}</b>B</span><span class="chip"><b>${both}</b>${esc(T("objects in both"))}</span>
+      <span class="chip"><b class="${res.errors.length ? "verdict-bad" : "verdict-ok"}">${res.errors.length}</b>${esc(T("errors"))}</span></div>
+    ${res.errors.length ? res.errors.slice(0, 300).map(m => `<div class="verdict-bad">✗ ${esc(m)}</div>`).join("") : `<p class="verdict-ok" style="margin:6px 0">✓ ${esc(T("The two sets compose without an error."))}</p>`}
+    ${V.section(T("Resolved facet versions"), versions.length ? versions.map(([fid, ver]) => `<div><span class="mono">${esc(fid)}</span> ${V.badge(ver)}</div>`).join("") : `<div class="hint">${esc(T("No facet is pinned in either set."))}</div>`)}`;
+}
+$("compose-run").addEventListener("click", compose);
+$("keys").value = ui.data.keys;
+$("keys").addEventListener("input", e => { ui.data.keys = e.target.value; ui.save(); showKeys(); });
+showKeys();
+$("run").addEventListener("click", run);
+$("download").addEventListener("click", () => jscDownload(jscSlug(last.set) + "-check.json", jscSerialize(last), "application/json"));
+
+jscPage.init({ tool: "validate", title: T("Validate"), onGraph: async g => { G = g; last = null; $("out").textContent = ""; $("download").disabled = true; $("nc-errors").textContent = ""; $("compose-out").textContent = ""; await renderOther(); } });
+</script>
+</body>
+</html>
