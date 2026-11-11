@@ -1,6 +1,6 @@
 # JASCON — "Kernel + Registered Facets"
 ## Specification 2.0.0-rc.1
-### release candidate, 2026-11-10 · the 1.0.0 text (released 2026-07-22) amended by CP-RISK-1: Risk as the tenth kernel type · NOT tagged — the gate (IV.5b) is open
+### release candidate, 2026-11-10 · the 1.0.0 text (released 2026-07-22) amended by CP-RISK-1: Risk as the tenth kernel type · NOT tagged — the second implementation is green since 2026-11-11 (IV.5b); the tag is the author's decision
 
 > **What changed since 1.0.0.** One decision is new — **D23**, `Risk` as the
 > tenth kernel type with `risk-coverage` as the ninth primitive. D4, D8,
@@ -48,8 +48,9 @@ fifteen families; the Python reference validator green on it and on
 every bundle that ships; the first Risk corpus (two Risk objects
 converted from an OSCAL POA&M), and what that corpus shows the fourth
 authority's data to lack. **Not yet measured, said here rather than
-below the fold:** the PowerShell twin carries the Risk port but has not
-been executed — Risk has one implementation, not two (IV.5b); Risk
+below the fold:** Risk's two implementations share one author — the
+PowerShell twin, green on 2026-11-11, is independent in language and
+runtime only (IV.5b); Risk
 entered the kernel as an author-decided exception to D22's census test
 (D22, closing note); and the coverage figures inherited from 1.0.0 count
 source *paths* with a declared destination, not values verified to
@@ -1294,13 +1295,16 @@ corpus and two implementations. The same four questions, asked of Risk:
 2. **First implementation.** ✓ `validate_core.py`: 258 / 258, the five
    shipped bundles (3,715 objects, both digests each), and the example
    bundle with its manifest — ALL GREEN.
-3. **Second implementation.** ✗ **OPEN.** `validate_core.ps1` carries the
-   port (type, closure, typed edges, liveness, justification, scope, the
-   coverage join, the 73 vectors, the policy switch) and has **not been
-   executed** — no
-   PowerShell runtime was available where it was written. Until a run on
-   Windows PowerShell 5.1 is green, Risk has one implementation. This
-   item alone blocks the tag (backlog #45).
+3. **Second implementation.** ✓ (2026-11-11) `validate_core.ps1`,
+   ported without a runtime on 2026-11-10, ran on Windows PowerShell 5.1:
+   258 / 258 in the same fifteen families, the five shipped bundles
+   (3,715 objects, both digests each) and the example folder — ALL GREEN,
+   every count equal to the Python reference's. The run fixed three
+   divergences, none of them a vector failure: the example folder is
+   read flat, as the reference reads it; every Attestation's envelope is
+   checked; ids are keyed ordinally, where PowerShell's maps had compared
+   them case-insensitively (backlog #45). Both implementations have one
+   author: their independence is language and runtime.
 4. **Corpus.** ◐ One: IFA, two Risk objects — enough to exercise the
    record's sourced half and to measure what the source lacks; not enough
    to exercise `rating`, `acceptance`, the later states, or

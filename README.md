@@ -90,8 +90,11 @@ requirements and mints real objects.*
 >   then stops with both versions in the message instead of "matches NO
 >   type". Bundles without such content stay unpinned and readable by
 >   1.0.0 tools.
-> - **Still blocking a release:** the PowerShell twin's port has not been
->   executed (one command on Windows; IV.5b of the candidate). See the
+> - **Second implementation, executed (2026-11-11):** the PowerShell twin
+>   ran on Windows PowerShell 5.1 — 258/258 vectors, the five shipped
+>   bundles and the example folder ALL GREEN, the same counts as the
+>   Python reference (IV.5b item 3 of the candidate). The tag is the
+>   author's call. See the
 >   [backlog](drafts/oscal-semantic-core-v0.6-spec-feedback-backlog.md)
 >   #41–#50 and the register sections "Amendments — CP-RISK-1" and
 >   "Amendments — the 2.0.0 decision".
