@@ -173,7 +173,7 @@
   {
    "id": "https://ns.oscal.org/stdlib/facet/collector",
    "exact-version": "1.0.0",
-   "digest": "sha256:58233f06d980c9c2c5bb8ec3c92366bfad63251cc37e69add27366be0ecdf125",
+   "digest": "sha256:5aed21990a698a5063d4a88e0ca0fcbb7a5abf210163726c5b6b808bf543d639",
    "path": "collector-1.0.0.json"
   }
  ],
