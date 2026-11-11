@@ -1329,20 +1329,22 @@ async function jscCheckGraph(g, verified, opts) {
     if (verified.counts.missing) add("error", "manifest", null, `${verified.counts.missing} object(s) listed but missing`);
   }
   /* Envelopes: an attestation names a file beside the manifest; nothing signed contains its own signature.
-     The reference validator looks only at attestations the manifest lists, and an attestation over the
-     manifest cannot be listed in it (D3.1). This check looks at every attestation of the set. So that it
-     raises no error the reference does not, an envelope that is missing for an unlisted attestation is a
-     note; one that is there and does not bind or verify is an error in both cases. */
+     An attestation over the manifest cannot be listed in it (D3.1), so this check looks at every
+     attestation of the set, listed or not, as the reference validator does since 2026-11-11 (before, it
+     read only what the manifest lists and skipped every conformant attestation). A named envelope that
+     does not resolve is an error in both cases. envelope-ref is a path in the manifest's directory or
+     below it: an absolute path, a scheme or a ".." segment does not resolve. An attestation the manifest
+     lists all the same is checked like any other, and its place is a note. */
   const envelopes = new Map(), signatures = {};
   for (const id of [...objs.keys()].sort()) {
     const r = objs.get(id), ref = r.obj["envelope-ref"];
     if (r.type !== "attestation") continue;
+    if ((g.objects.get(id) || {}).entry) add("note", "manifest", id, "listed in the content manifest; an Attestation lies beside it (D3.1) - checked all the same");
     if (!ref) { signatures[id] = "unsigned"; add("note", "signature", id, "no envelope (unsigned attestation)"); continue; }
-    const file = g.aux.find(a => a.path === ref);
+    const file = jscEnvelopeRefInside(ref) ? g.aux.find(a => a.path === ref) : undefined;
     if (!file) {
-      const listed = !!(g.objects.get(id) || {}).entry;
       signatures[id] = "missing";
-      add(listed ? "error" : "note", "signature", id, `envelope-ref '${ref}' does not resolve beside the manifest`);
+      add("error", "signature", id, `envelope-ref '${ref}' does not resolve beside the manifest`);
       continue;
     }
     let env;
@@ -1381,6 +1383,9 @@ async function jscCheckGraph(g, verified, opts) {
   return { findings, types, tiers, coverage: cov.report, signatures };
 }
 const jscRulesBeside = r => r.type === "attestation" && !r.entry;
+/* envelope-ref stays inside the bundle: relative, no scheme or drive letter, no ".." segment */
+const jscEnvelopeRefInside = ref => typeof ref === "string" && ref !== "" && !/^[A-Za-z][A-Za-z0-9+.-]*:/.test(ref)
+  && !/^[\/\\]/.test(ref) && !ref.split(/[\/\\]/).includes("..");
 
 if (typeof module !== "undefined" && module.exports) {
   module.exports = { JSC_MODALITIES, JSC_ELAPSED_UNITS, JSC_CALENDAR_UNITS, jscModalityVerdict, jscParamCheck,

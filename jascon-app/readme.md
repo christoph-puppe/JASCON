@@ -6,7 +6,7 @@ stylesheet. A bundle you load stays in your browser, with one exception you
 have to switch on yourself: the suggestions of the Risk page send text to a
 model service once you type a key (see "Suggestions from a model").
 
-State: build 0.8.0. This build has the frame (the hub, the settings page and
+State: build 0.8.1. This build has the frame (the hub, the settings page and
 the shared core) and eight tool pages: Import, Browse, Tailor, Map,
 Implement, Risk, Assess and Validate. One view of the Risk page can ask a
 language model; nothing else in the app does, and nothing needs one.
@@ -328,10 +328,11 @@ text in that language, the English text is shown, then whatever is there.
   validator on the export; where the two disagree, the app is wrong.
 - Signatures: Ed25519 over a DSSE envelope, verification only. A key is
   trusted because you say so on the Validate page, never because a bundle
-  carries it. The app cannot sign. The reference validator looks at the
-  envelope of an attestation only when the manifest lists the attestation;
-  the app looks at every attestation of the set and reports a missing
-  envelope of an unlisted one as a note.
+  carries it. The app cannot sign. Every attestation of the set is checked,
+  whether the manifest lists it or it lies beside the manifest (D3.1), and an
+  envelope that is named and missing is an error, as in the reference
+  validator. The reference reads an unlisted attestation only from the
+  manifest's own directory; the app takes one from anywhere in the set.
 - The other pages still take an object's type from its fields when a set is
   loaded; the Validate page says where the kernel schema disagrees.
 - Loading from a URL fetches what the manifest lists, and the envelope a

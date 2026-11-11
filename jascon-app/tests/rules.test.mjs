@@ -347,6 +347,18 @@ test("a whole set: the example folder, checked as a bundle, passes as it passes 
   const g = core.jscGraphFrom(core.jscClassifyFiles(files).records);
   const errorsOf = async () => (await rules.jscCheckGraph(g, await core.jscVerify(g))).findings.filter(f => f.kind === "error").map(f => f.message);
   assert.deepEqual(await errorsOf(), []);
+  /* The attestation lies beside the manifest (D3.1) and names an envelope the folder carries, signed with the
+     fixture key of the dsse vectors: unverified without keys, verified with them, and a missing envelope is an error. */
+  const att = [...g.objects.values()].find(r => r.type === "attestation");
+  assert.ok(att && !att.entry && att.obj["envelope-ref"], "the example attestation is unlisted and names an envelope");
+  const keys = JSON.parse(fs.readFileSync(path.join(CONF, "dsse-fixture-trusted-keys.json"), "utf8"));
+  assert.equal((await rules.jscCheckGraph(g, await core.jscVerify(g))).signatures[att.obj.id], "unverified");
+  assert.equal((await rules.jscCheckGraph(g, await core.jscVerify(g), { trusted: keys })).signatures[att.obj.id], "verified");
+  for (const s of att.obj["subject-semantic-digests"]) assert.equal(await core.jscSemanticDigest(g.objects.get(s.id).obj), s["semantic-digest"], "subject " + s.id);
+  assert.equal(att.obj["content-manifest-digest"], await core.jscPackageDigest(g.manifestText), "the attestation binds the manifest as delivered");
+  const bare = core.jscGraphFrom(core.jscClassifyFiles(files.filter(f => f.path !== att.obj["envelope-ref"])).records);
+  assert.deepEqual((await rules.jscCheckGraph(bare, await core.jscVerify(bare))).findings.filter(f => f.kind === "error").map(f => f.message),
+    [`envelope-ref '${att.obj["envelope-ref"]}' does not resolve beside the manifest`]);
   /* The folder pins the stdlib facet assessment-criteria. A pin of a stdlib id must be the normative descriptor
      verbatim; the same pin with one more property in its schema is the error the folder itself once carried. */
   const pin = g.facetSchemas.find(f => f.def.id === "https://ns.oscal.org/stdlib/facet/assessment-criteria");
@@ -440,11 +452,38 @@ test("a whole set: a signed attestation is verified with a trusted key, unverifi
   assert.equal(wrong.status, "error");
   assert.equal(wrong.tier, "consumer", "a signature that does not verify proves nothing");
   assert.match(wrong.errors[0], /no signature verifies under the trusted key/);
-  /* without the envelope file: the attestation is not listed in a manifest here, so the reference would not look and this is a note */
+  /* without the envelope file: an error, whether or not a manifest lists the attestation, as in the reference validator */
   const g2 = core.jscGraphFrom(core.jscClassifyFiles(files.slice(0, -1)).records), r2 = await rules.jscCheckGraph(g2, null, { trusted: c["trusted-keys"] });
   assert.equal(r2.signatures[att.id], "missing");
   assert.equal(r2.tiers[tid], "consumer");
-  assert.deepEqual(r2.findings.filter(f => f.kind === "error" && f.area === "signature"), []);
+  assert.deepEqual(r2.findings.filter(f => f.kind === "error" && f.area === "signature").map(f => f.message), [`envelope-ref '${att["envelope-ref"]}' does not resolve beside the manifest`]);
+});
+
+test("dsse, bundle level: an attestation beside the manifest is loaded, its envelope judged and its tier derived, as the reference validator does", async () => {
+  /* The same cases validate_core.py writes to disk and hands to validate_bundle. Here they become the file
+     records of a set: listed objects under objects/ with a manifest built from the bytes written, the
+     attestation and the envelope beside it, an `outside` file one directory above the bundle. */
+  const cases = vectors("dsse")["bundle-vectors"];
+  assert.equal(cases.length, 10);
+  for (const c of cases) {
+    const files = [], entries = [];
+    for (const [i, o] of (c.listed || []).entries()) {
+      const rel = `objects/o${i}.json`, text = core.jscSerialize(o);
+      files.push({ path: rel, text });
+      entries.push({ id: o.id, version: o.version, "package-digest": await core.jscPackageDigest(text), "semantic-digest": await core.jscSemanticDigest(o), path: rel });
+    }
+    files.push({ path: "content-manifest.json", text: JSON.stringify({ "manifest-version": "1", objects: entries }) });
+    for (const key of ["beside", "envelopes"]) for (const [rel, v] of Object.entries(c[key] || {})) files.push({ path: rel, text: JSON.stringify(v) });
+    for (const [rel, v] of Object.entries(c.outside || {})) files.push({ path: "../" + rel, text: JSON.stringify(v) });
+    const g = core.jscGraphFrom(core.jscClassifyFiles(files).records);
+    const res = await rules.jscCheckGraph(g, await core.jscVerify(g), c["trusted-keys"] ? { trusted: c["trusted-keys"] } : undefined);
+    const errors = res.findings.filter(f => f.kind === "error").map(f => `${f.object || ""}: ${f.message}`);
+    assert.equal(errors.length, c["expected-fails"] || 0, `${c.name}: ${errors.join(" | ")}`);
+    for (const frag of c["expected-frags"] || []) assert.ok(errors.some(e => e.includes(frag)), `${c.name}: no error says '${frag}': ${errors.join(" | ")}`);
+    for (const frag of c["expected-notes"] || []) assert.ok(res.findings.some(f => f.kind === "note" && f.message.includes(frag)), `${c.name}: no note says '${frag}'`);
+    for (const [id, want] of Object.entries(c["expected-envelopes"] || {})) assert.equal(res.signatures[id], want, `${c.name}: envelope of ${id}`);
+    for (const [id, want] of Object.entries(c["expected-tiers"] || {})) assert.equal(res.tiers[id], want, `${c.name}: tier of ${id}`);
+  }
 });
 
 test("every vector family is either ported or named as not ported", () => {

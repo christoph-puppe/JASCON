@@ -60,6 +60,14 @@ and in `readme.md`; this file says only what is done and what is next.
   file. Driven in headless Chromium with the MODERATE profile on top;
   `validate_core.py` on the export: 1038 pass, 0 fail.
 
+- Build 0.8.1: the reference validator now loads the attestations beside the
+  manifest (D3.1) and fails a named envelope that is missing, so
+  `jscCheckGraph` reports that as an error for every attestation, no longer
+  as a note for an unlisted one. `envelope-ref` cannot leave the bundle. The
+  ten `bundle-vectors` of `dsse-vectors.json` run in `tests/rules.test.mjs`
+  with the expectations the Python runner has; the example folder carries a
+  signed envelope and passes.
+
 ## Next
 
 - One real call per service with a key of the user's: the model ids in the
@@ -76,10 +84,6 @@ and in `readme.md`; this file says only what is done and what is next.
   domain authority-claimed over it (the tier rule compares origins). The
   import page warns; the rule itself is the kernel's.
 
-- The example attestation names an envelope (`attestation-envelope.dsse`)
-  that the repository does not carry, and `validate_core.py` checks an
-  envelope only for an attestation the manifest lists, which an attestation
-  over the manifest cannot be (D3.1).
 - The IFA bundle's attestation carries a stale digest for `system1234`.
 - The shipped `converted_examples/US.SP800-53` bundle was converted from an
   earlier revision of NIST's 5.2.0 file. In it SA-15(13) "Logging Syntax"
