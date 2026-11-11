@@ -1,0 +1,60 @@
+{
+ "id": "https://cso.example/assessment/bastion-01-2026-11-03",
+ "version": "1",
+ "label": "Daily run 2026-11-03",
+ "lifecycle": "active",
+ "subject-refs": [
+  "https://cso.example/component/bastion-01"
+ ],
+ "method": {
+  "https://ns.oscal.org/stdlib/facet/assessment-criteria@1": {
+   "method": "automated"
+  }
+ },
+ "performer-ref": "https://cso.example/party/secops",
+ "time": "2026-11-03T06:00:05Z",
+ "result": "not-satisfied",
+ "tailoring-ref": "https://cso.example/tailoring/linux-prod",
+ "check-results": [
+  {
+   "check-ref": "https://cso.example/check/LNX-SSH-1-maxauthtries",
+   "check-digest": "sha256:09f28ab06e8352bfb07984bec33588559cfe7be64ac14c51cc55538a16f85898",
+   "collector-id": "bash",
+   "outcome": "satisfied",
+   "time": "2026-11-03T06:00:02Z",
+   "parameters": {
+    "max-auth-tries": 4
+   },
+   "observation": {
+    "facts": {
+     "sshd.maxauthtries": 4
+    }
+   },
+   "evidence-record": {
+    "ref": "evidence/sha256/9765c06f4628c2b863a2fe96d641c0aff00d111ad0239d849818368bff0b2b14",
+    "digest": "sha256:9765c06f4628c2b863a2fe96d641c0aff00d111ad0239d849818368bff0b2b14"
+   }
+  },
+  {
+   "check-ref": "https://cso.example/check/LNX-SSH-1-ciphers",
+   "check-digest": "sha256:41c5ce5827346c06c90cb605bb08b152e358e361a4cb434b27db2157deaaf415",
+   "collector-id": "bash",
+   "outcome": "not-satisfied",
+   "time": "2026-11-03T06:00:04Z",
+   "observation": {
+    "facts": {
+     "sshd.ciphers": [
+      "chacha20-poly1305@openssh.com",
+      "aes256-gcm@openssh.com",
+      "aes256-ctr",
+      "aes128-cbc"
+     ]
+    }
+   },
+   "evidence-record": {
+    "ref": "evidence/sha256/a0410160c145c307fedcfc1fdbc1df83b7ba9d648989e9fb5200f59dbe2f202c",
+    "digest": "sha256:a0410160c145c307fedcfc1fdbc1df83b7ba9d648989e9fb5200f59dbe2f202c"
+   }
+  }
+ ]
+}

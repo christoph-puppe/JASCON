@@ -89,9 +89,72 @@
   {
    "id": "https://cso.example/risk/R-2026-007",
    "version": "2026-11",
-   "package-digest": "sha256:cef976b5283780ba31c5a05942d02cd29ec88f6c4a30d9379da916d9d021e33f",
-   "semantic-digest": "sha256:b0155c3de2728a84ef0e97688efd83c461194f26dfd36eb5537f8f4707fbd047",
+   "package-digest": "sha256:37321e408f781792b0022260887bf6d05fd1a056925a399997ee814c8a3d5cc4",
+   "semantic-digest": "sha256:e68e638f9e6ed44cea36b7185ea62e84fa9b493f5981b5b5bb949689a07ba611",
    "path": "risk-acme-kms-key-rotation.json"
+  },
+  {
+   "id": "https://cso.example/req/LNX-SSH-1",
+   "version": "2026-11",
+   "package-digest": "sha256:599763204b1a74167588517dca06f6a23b92c3c1238ff6da791af1de51e35973",
+   "semantic-digest": "sha256:e1bf49d0c3071c9d9157b02e5e41d885656725388979a5d05f81539a27ae6722",
+   "path": "req-acme-lnx-ssh-1.json"
+  },
+  {
+   "id": "https://cso.example/set/linux-baseline",
+   "version": "2026-11",
+   "package-digest": "sha256:9cc12a83a87944ae83959e5db183ee85a8cac3662fa833386d37dd17b93cc352",
+   "semantic-digest": "sha256:385b97d9c130c2b4e6f9f065c7ebb457b9658261606505ffed1ea880f66df5d1",
+   "path": "set-acme-linux.json"
+  },
+  {
+   "id": "https://cso.example/tailoring/linux-prod",
+   "version": "2026-11",
+   "package-digest": "sha256:0319a70187e7e5cac1e660af3e5fa42652405f1a390aa55ef2a1d5ee1e353cce",
+   "semantic-digest": "sha256:5a9190647311ac5ab2f929bca50b1a3faf53a94f8b8159e50bc1337f077c17ad",
+   "path": "tailoring-acme-linux-prod.json"
+  },
+  {
+   "id": "https://cso.example/component/bastion-01",
+   "version": "2026-11",
+   "package-digest": "sha256:4bd84adb32632ff351519e656b93e6d5f49f22d95b45a17d6e88927393bfd3f3",
+   "semantic-digest": "sha256:bd47b07324ddf6d8e18c92660f820c8bb8277fcce6513dd8d822c1a245a3ad4d",
+   "path": "component-acme-bastion.json"
+  },
+  {
+   "id": "https://cso.example/check/LNX-SSH-1-maxauthtries",
+   "version": "1.0.0",
+   "package-digest": "sha256:e1d507121e130ac55a14ead75a962f45f2f1d9c6b1c99efc1046f0304a287b52",
+   "semantic-digest": "sha256:09f28ab06e8352bfb07984bec33588559cfe7be64ac14c51cc55538a16f85898",
+   "path": "check-acme-ssh-maxauthtries.json"
+  },
+  {
+   "id": "https://cso.example/check/LNX-SSH-1-ciphers",
+   "version": "1.0.0",
+   "package-digest": "sha256:f2492597899970af75ad84c044b588dedd4e5c0b1ef729f4b394596c004d12be",
+   "semantic-digest": "sha256:41c5ce5827346c06c90cb605bb08b152e358e361a4cb434b27db2157deaaf415",
+   "path": "check-acme-ssh-ciphers.json"
+  },
+  {
+   "id": "https://cso.example/assessment/bastion-01-2026-11-03",
+   "version": "1",
+   "package-digest": "sha256:9000d2c731aa396d0d34292e08f257fa1a63168d1b1b6da9c9fc63f9cb535680",
+   "semantic-digest": "sha256:c20dcb900539f0850071d6903bb603f4fd69bc3eaeceaa14326d54c60a4573b0",
+   "path": "assessment-acme-bastion-2026-11-03.json"
+  },
+  {
+   "id": "https://cso.example/assessment/bastion-01-2026-11-10",
+   "version": "1",
+   "package-digest": "sha256:9b9133068c1003d63a7471a3acce04e173ce7b540c05eddf7b8a3708849711d5",
+   "semantic-digest": "sha256:491ec2b09da763355b7e932b08aaabafbaea3fa1e9cd2b910f388ac94ed29dfe",
+   "path": "assessment-acme-bastion-2026-11-10.json"
+  },
+  {
+   "id": "https://cso.example/finding/bastion-01-ssh-cbc",
+   "version": "2",
+   "package-digest": "sha256:90842582398eb586b57cbb579808a52b06e6afca813db3f773a2d5ca621eb2f1",
+   "semantic-digest": "sha256:9e6b34dee2dbf814b7dbc32894c27c82584d806e7bb931394deeb025dadd5ccc",
+   "path": "finding-acme-bastion-ssh-cbc.json"
   }
  ],
  "facet-schemas": [
@@ -106,6 +169,12 @@
    "exact-version": "1.0.0",
    "digest": "sha256:51a28023f41f84693bee32cae02450974d4356fc41e90c6527d9211b8706e1bb",
    "path": "assessment-criteria-1.0.0-stub.json"
+  },
+  {
+   "id": "https://ns.oscal.org/stdlib/facet/collector",
+   "exact-version": "1.0.0",
+   "digest": "sha256:58233f06d980c9c2c5bb8ec3c92366bfad63251cc37e69add27366be0ecdf125",
+   "path": "collector-1.0.0.json"
   }
  ],
  "renderings": [

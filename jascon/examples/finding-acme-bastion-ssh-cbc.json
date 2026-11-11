@@ -1,0 +1,24 @@
+{
+ "id": "https://cso.example/finding/bastion-01-ssh-cbc",
+ "version": "2",
+ "lifecycle": "active",
+ "relations": [
+  {
+   "type": "related",
+   "ref": "https://cso.example/assessment/bastion-01-2026-11-10"
+  }
+ ],
+ "assessment-ref": "https://cso.example/assessment/bastion-01-2026-11-03",
+ "requirement-ref": "https://cso.example/req/LNX-SSH-1",
+ "statement-ref": "s2",
+ "state": "closed",
+ "check-ref": "https://cso.example/check/LNX-SSH-1-ciphers",
+ "actions": [
+  {
+   "description": {
+    "en": "Remove aes128-cbc from the Ciphers line of sshd_config; the next daily run verifies."
+   },
+   "status": "done"
+  }
+ ]
+}

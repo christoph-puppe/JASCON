@@ -8,7 +8,7 @@ Runs, in order:
    bi-modal vectors.
 2. BUNDLE VALIDATION over every converted_examples bundle + the skill's
    example bundle: type inference (an object must match EXACTLY ONE of the
-   TEN kernel shapes - shape-disjointness is a conformance property),
+   ELEVEN kernel shapes - shape-disjointness is a conformance property),
    closed-shape schema validation, code systems, by-statement facet keys
    vs. host statement ids (D10 rev), {param:} token binding (the 216
    rule), optional-empty-container rule (D3.3), manifest completeness +
@@ -21,6 +21,14 @@ Runs, in order:
    selected requirement is justified by NO live Risk - the ISO/IEC 27001
    6.1.3 d question, computed instead of audited by hand.
    `--require-risk-basis` turns uncovered selections into failures.
+4. CHECK (CP-CHECK-1, kernel 2.0.0): Check is the eleventh kernel type -
+   a typed fact contract plus a flat conjunction over eleven comparators
+   (check-verdict, B.1.10; patterns are I-Regexp, RFC 9485, matched by a
+   built-in state-set engine). CHECK-1..7 hold the Check to its
+   requirement and its own contract; CHECK-8..14 recompute every verdict
+   an Assessment records, its aggregate, and its parameter values
+   against the Tailoring it names; CHECK-15 walks the evidence chain
+   (record -> raw outputs) in the store beside the bundle.
 
 Exit 0 = all green. Usage: uv run --with jsonschema validate_core.py [bundle-dir ...]
 """
@@ -39,11 +47,14 @@ SCHEMA = json.load(open(os.path.join(SKILL, "schemas", "oscal-semantic-core-2.0.
 CONF = os.path.join(SKILL, "conformance")
 
 TYPES = ["requirement", "requirementSet", "tailoring", "mapping", "component",
-         "implementation", "assessment", "finding", "attestation", "risk"]
+         "implementation", "assessment", "finding", "attestation", "risk", "check"]
 REGISTRY = jsonschema.validators.Draft202012Validator
 VALIDATORS = {t: REGISTRY({"$ref": f"#/$defs/{t}", "$defs": SCHEMA["$defs"]}) for t in TYPES}
 VALIDATORS["contentManifest"] = REGISTRY({"$ref": "#/$defs/contentManifest", "$defs": SCHEMA["$defs"]})
 VALIDATORS["scale"] = REGISTRY({"$ref": "#/$defs/scale", "$defs": SCHEMA["$defs"]})
+# CP-CHECK-1: file shapes beside the bundle, not object types
+VALIDATORS["evidenceRecord"] = REGISTRY({"$ref": "#/$defs/evidenceRecord", "$defs": SCHEMA["$defs"]})
+VALIDATORS["checkObservation"] = REGISTRY({"$ref": "#/$defs/checkObservation", "$defs": SCHEMA["$defs"]})
 
 # normative stdlib facet descriptors (gate 2); payload validation per backlog #17
 STDLIB, STDLIB_RAW = {}, {}
@@ -366,7 +377,8 @@ OPTIONAL_CONTAINERS = {"aliases", "canonical-alias", "replaces", "relations", "f
                        "annotations", "parameters", "deviations", "excludes",
                        "source-scope", "target-scope", "evidence-refs", "statement-refs",
                        "capabilities", "authorizations", "actions", "choices",
-                       "threat-refs", "component-refs", "treatments", "risk-refs", "tailoring-refs"}
+                       "threat-refs", "component-refs", "treatments", "risk-refs", "tailoring-refs",
+                       "statement-ids", "applies-when", "check-results", "derived-from"}
 REQUIRED_CONTAINERS = {"statements", "members", "selects", "operations", "subject-refs",
                        "satisfied-by", "subject-semantic-digests", "objects", "facet-schemas"}
 
@@ -904,13 +916,18 @@ KERNEL_SUPPORTED = ("1.0.0", "2.0.0")      # 2.0.0 is a superset of 1.0.0, measu
 
 def kernel_needed(objs, manifest=None):
     """-> (minimum kernel version the content needs, the first object that
-    needs it). 2.0.0 added the Risk type, Finding.risk-refs and pinned
-    scale definitions."""
+    needs it). 2.0.0 added the Risk type, Finding.risk-refs, pinned
+    scale definitions, the Check type, Assessment.check-results and
+    .tailoring-ref, and Finding.check-ref."""
     if manifest and manifest.get("scales"): return "2.0.0", "the manifest pins scale definitions"
     for oid in sorted(objs):
         t, o = objs[oid]
         if t == "risk": return "2.0.0", f"{oid} is a Risk"
         if t == "finding" and o.get("risk-refs"): return "2.0.0", f"{oid} carries risk-refs"
+        if t == "check": return "2.0.0", f"{oid} is a Check"
+        if t == "assessment" and (o.get("check-results") or o.get("tailoring-ref")):
+            return "2.0.0", f"{oid} carries check results"
+        if t == "finding" and o.get("check-ref"): return "2.0.0", f"{oid} carries a check-ref"
     return "1.0.0", None
 
 def kernel_pin_errors(manifest, objs):
@@ -1380,6 +1397,650 @@ def run_risk():
                            f"notes {case.get('expected-notes')} cov {exp}; got errs {[e[:80] for e in errs]} "
                            f"notes {[n[:80] for n in notes]} cov {rep_['tailorings']}")
 
+# ---------------- CHECK (CP-CHECK-1, kernel 2.0.0) ----------------
+# A Check states what to observe on a platform (`observes`, a typed fact
+# contract) and what the observation must satisfy (`criteria`, a flat
+# conjunction over a CLOSED set of eleven comparators - primitive
+# check-verdict, App. B.1.10). The code that collects the facts rides the
+# Check in the stdlib facet collector@1 and decides nothing: every verdict
+# an Assessment records is recomputed here from the observation it records.
+# Three-valued throughout (strong Kleene AND): one not-satisfied decides,
+# else one inconclusive decides, else satisfied. An unbound parameter is
+# inconclusive - a default is never substituted (D9).
+SAT, NOT, INC, NA = "satisfied", "not-satisfied", "inconclusive", "not-applicable"
+COLLECTOR_FACET = "https://ns.oscal.org/stdlib/facet/collector"
+CHECK_RULES = {
+    "CHECK-1": "a check discharges a requirement; when that requirement is in the bundle the edge is typed and the clauses it names exist",
+    "CHECK-2": "every assertion reads a fact the check declares, and a fact is declared once - the fact contract is all a collector promises",
+    "CHECK-3": "an operator compares what it can compare - ordering on numbers, patterns on text, set operators on lists - and a literal has the fact's type",
+    "CHECK-4": "a bound value comes from a parameter the requirement declares exactly once on the covered clauses, with a fitting type - so tailoring the requirement retunes the check; a pattern is never a parameter",
+    "CHECK-5": "tightening a parameter must never loosen the check: at-most needs a parameter that tightens lower, at-least one that tightens higher",
+    "CHECK-6": "a pattern is an I-Regexp (RFC 9485) within the kernel's size limits, so two conformant tools return one verdict, in bounded time",
+    "CHECK-7": "collectors are well-formed and each is named once, so a result row can say which code observed",
+    "CHECK-8": "a result names the check it ran and that check's semantic digest - a changed check is a different check",
+    "CHECK-9": "a recorded outcome is the one check-verdict computes from the recorded observation - verdicts are recomputed, never taken on trust",
+    "CHECK-10": "an assessment that carries check results has one row per check, and its result is their aggregate: any not-satisfied, else any inconclusive or none applicable, else satisfied",
+    "CHECK-11": "no observation, no verdict: a row without one is inconclusive and says why",
+    "CHECK-12": "a run's parameter values are the ones the Tailoring it names binds - an implementer does not set its own pass mark",
+    "CHECK-13": "a result's collector-id names a collector of the check",
+    "CHECK-14": "a Finding raised by a check is about the requirement - and the clause - that check discharges",
+    "CHECK-15": "evidence is content-addressed and stays inside the bundle's store: every digest in the chain verifies against the bytes, and a record describes the run it is attached to",
+}
+
+# -- I-Regexp (RFC 9485) for matches / matches-not --
+# The dialect is the ABNF of RFC 9485 (iregexp.abnf of the IETF JSONPath WG):
+# XSD regexps without character-class subtraction, without multi-character
+# escapes (\d \w \s ...) and without Unicode blocks. Matching is always the
+# WHOLE value (XSD semantics), case-sensitive, by code point; `^` and `$`
+# are ordinary characters; `.` is any character but \n and \r. The engine
+# does not hand the pattern to a host regex library - Python re, .NET and
+# ECMAScript disagree on exactly those constructs - it parses the ABNF and
+# runs a Thompson state-set simulation: linear in program x input, no
+# backtracking, so no pattern can stall a validator.
+IRE_MAX_PATTERN = 256      # characters
+IRE_MAX_STATES = 1000      # compiled program, after {m,n} expansion
+IRE_MAX_INPUT = 4096       # characters per matched value; longer -> inconclusive
+_IRE_CATS = {"L", "Lu", "Ll", "Lm", "Lo", "Lt", "M", "Mc", "Me", "Mn", "N", "Nd", "Nl", "No",
+             "P", "Pc", "Pd", "Pe", "Pf", "Pi", "Po", "Ps", "Z", "Zl", "Zp", "Zs",
+             "S", "Sc", "Sk", "Sm", "So", "C", "Cc", "Cf", "Cn", "Co"}
+_IRE_CAT_CACHE = {}
+
+class IRegexpError(ValueError):
+    pass
+
+def _ire_norm(rs):
+    out = []
+    for lo, hi in sorted(rs):
+        if out and lo <= out[-1][1] + 1: out[-1] = (out[-1][0], max(out[-1][1], hi))
+        else: out.append((lo, hi))
+    return out
+
+def _ire_compl(rs):
+    out, nxt = [], 0
+    for lo, hi in _ire_norm(rs):
+        if lo > nxt: out.append((nxt, lo - 1))
+        nxt = hi + 1
+    if nxt <= 0x10FFFF: out.append((nxt, 0x10FFFF))
+    return out
+
+_IRE_DOT = _ire_compl([(10, 10), (13, 13)])
+
+def _ire_cat(prop):
+    """Code-point ranges of a Unicode general category (host Unicode database)."""
+    if prop not in _IRE_CAT_CACHE:
+        import unicodedata
+        out, start = [], None
+        for cp in range(0x110000):
+            hit = unicodedata.category(chr(cp)).startswith(prop)
+            if hit and start is None: start = cp
+            elif not hit and start is not None: out.append((start, cp - 1)); start = None
+        if start is not None: out.append((start, 0x10FFFF))
+        _IRE_CAT_CACHE[prop] = out
+    return _IRE_CAT_CACHE[prop]
+
+def _ire_normal(c):
+    o = ord(c)     # NormalChar of the ABNF
+    return (o <= 0x27 or c in ",-" or 0x2F <= o <= 0x3E or 0x40 <= o <= 0x5A
+            or 0x5E <= o <= 0x7A or o >= 0x7E)
+
+def ire_parse(p):
+    """-> AST of an I-Regexp; raises IRegexpError naming the construct and position."""
+    if not isinstance(p, str): raise IRegexpError("a pattern is a string")
+    if len(p) > IRE_MAX_PATTERN:
+        raise IRegexpError(f"pattern is {len(p)} characters long; the limit is {IRE_MAX_PATTERN}")
+    pos = 0
+    def peek(k=0): return p[pos + k] if pos + k < len(p) else None
+    def err(what): raise IRegexpError(f"{what} at position {pos} of {p!r}")
+    def regexp():
+        nonlocal pos
+        br = [branch()]
+        while peek() == "|":
+            pos += 1; br.append(branch())
+        return ("alt", br)
+    def branch():
+        items = []
+        while peek() is not None and peek() not in "|)":
+            items.append(piece())
+        return ("cat", items)
+    def piece():
+        nonlocal pos
+        a = atom()
+        c = peek()
+        if c == "*": pos += 1; return ("rep", a, 0, None)
+        if c == "+": pos += 1; return ("rep", a, 1, None)
+        if c == "?": pos += 1; return ("rep", a, 0, 1)
+        if c == "{":
+            m = re.match(r"\{([0-9]+)(,([0-9]*))?\}", p[pos:])
+            if not m: err("malformed range quantifier (I-Regexp has {n}, {n,} and {n,m})")
+            lo = int(m.group(1))
+            hi = lo if m.group(2) is None else (int(m.group(3)) if m.group(3) else None)
+            if hi is not None and hi < lo: err(f"range quantifier {m.group(0)} has its bounds reversed")
+            if lo > IRE_MAX_STATES or (hi or 0) > IRE_MAX_STATES: err("range quantifier exceeds the size limit")
+            pos += m.end(); return ("rep", a, lo, hi)
+        return a
+    def escape():
+        nonlocal pos
+        n = peek(1)
+        if n in ("p", "P") and peek(2) == "{":
+            end = p.find("}", pos + 3)
+            prop = p[pos + 3:end] if end > 0 else None
+            if prop not in _IRE_CATS:
+                err(f"\\{n}{{{prop}}} is not a Unicode general category (I-Regexp has categories, not blocks)")
+            pos = end + 1
+            rs = _ire_cat(prop)
+            return _ire_compl(rs) if n == "P" else rs
+        if n is not None and n in "()*+-.?[\\]^{|}":
+            pos += 2; return [(ord(n), ord(n))]
+        if n in ("n", "r", "t"):
+            pos += 2; o = {"n": 10, "r": 13, "t": 9}[n]; return [(o, o)]
+        err(f"escape \\{n or ''} is not I-Regexp (no \\d \\w \\s \\b, no back-references)")
+    def cc_char():
+        nonlocal pos
+        c = peek()
+        if c == "\\":
+            if peek(1) in ("p", "P"): err("a category escape cannot bound a range")
+            return escape()[0][0]
+        if c is None or c in "-[]": err(f"{c!r} must be escaped inside a character class")
+        pos += 1; return ord(c)
+    def char_class():
+        nonlocal pos
+        pos += 1
+        neg = peek() == "^"
+        if neg: pos += 1
+        items, first = [], True
+        while True:
+            c = peek()
+            if c is None: err("unclosed character class")
+            if c == "]":
+                if first: err("empty character class")
+                pos += 1; break
+            if c == "-":
+                if first or peek(1) == "]":
+                    items.append((45, 45)); pos += 1; first = False; continue
+                err("'-' inside a character class only first or last (no class subtraction)")
+            if c == "\\" and peek(1) in ("p", "P"):
+                items += escape(); first = False; continue
+            lo = cc_char()
+            if peek() == "-" and peek(1) not in ("]", None):
+                pos += 1
+                hi = cc_char()
+                if hi < lo: err("character range out of order")
+                items.append((lo, hi))
+            else:
+                items.append((lo, lo))
+            first = False
+        rs = _ire_norm(items)
+        return _ire_compl(rs) if neg else rs
+    def atom():
+        nonlocal pos
+        c = peek()
+        if c == "(":
+            pos += 1
+            r = regexp()
+            if peek() != ")": err("unclosed group")
+            pos += 1; return r
+        if c == ".": pos += 1; return ("set", _IRE_DOT)
+        if c == "\\": return ("set", escape())
+        if c == "[": return ("set", char_class())
+        if c is not None and _ire_normal(c): pos += 1; return ("set", [(ord(c), ord(c))])
+        err(f"{c!r} cannot start an atom here" if c else "the pattern ends where an atom is expected")
+    ast = regexp()
+    if pos != len(p): err(f"unbalanced {p[pos]!r}")
+    return ast
+
+_IRE_PROGS = {}
+def ire_compile(p):
+    """-> (states, start). A state is ["c", ranges, next] | ["s", a, b] | ["m"]."""
+    if p in _IRE_PROGS: return _IRE_PROGS[p]
+    ast = ire_parse(p)
+    st = []
+    def new(s):
+        st.append(s)
+        if len(st) > IRE_MAX_STATES:
+            raise IRegexpError(f"pattern {p!r} compiles to more than {IRE_MAX_STATES} states")
+        return len(st) - 1
+    def comp(n, nxt):
+        if n[0] == "set": return new(["c", n[1], nxt])
+        if n[0] == "cat":
+            for it in reversed(n[1]): nxt = comp(it, nxt)
+            return nxt
+        if n[0] == "alt":
+            starts = [comp(b, nxt) for b in n[1]]
+            s = starts[-1]
+            for b in reversed(starts[:-1]): s = new(["s", b, s])
+            return s
+        _, a, lo, hi = n
+        t = nxt
+        if hi is None:
+            loop = new(["s", None, nxt]); st[loop][1] = comp(a, loop); t = loop
+        else:
+            for _ in range(hi - lo): t = new(["s", comp(a, t), nxt])
+        for _ in range(lo): t = comp(a, t)
+        return t
+    end = new(["m"])
+    _IRE_PROGS[p] = (st, comp(ast, end))
+    return _IRE_PROGS[p]
+
+def _ire_in(rs, o):
+    import bisect
+    i = bisect.bisect_right(rs, (o, 0x110000)) - 1
+    return i >= 0 and rs[i][0] <= o <= rs[i][1]
+
+def _ire_closure(st, seeds):
+    seen, out, stack = set(), [], list(seeds)
+    while stack:
+        s = stack.pop()
+        if s in seen: continue
+        seen.add(s)
+        if st[s][0] == "s": stack.append(st[s][2]); stack.append(st[s][1])
+        else: out.append(s)
+    return out
+
+def ire_fullmatch(p, text):
+    st, start = ire_compile(p)
+    cur = _ire_closure(st, [start])
+    for ch in text:
+        o = ord(ch)
+        nxt = [st[s][2] for s in cur if st[s][0] == "c" and _ire_in(st[s][1], o)]
+        if not nxt: return False
+        cur = _ire_closure(st, nxt)
+    return any(st[s][0] == "m" for s in cur)
+
+# -- check-verdict (B.1.10) --
+CHECK_OPS = {   # which comparators fit which fact (present / absent fit every fact)
+    "one": {"string": {"equals", "one-of", "matches", "matches-not"},
+            "code": {"equals", "one-of", "matches", "matches-not"},
+            "integer": {"equals", "one-of", "at-least", "at-most"},
+            "decimal": {"equals", "one-of", "at-least", "at-most"},
+            "boolean": {"equals"}},
+    "many": {"string": {"includes-all", "excludes-all", "subset-of", "matches", "matches-not"},
+             "code": {"includes-all", "excludes-all", "subset-of", "matches", "matches-not"},
+             "integer": {"includes-all", "excludes-all", "subset-of"},
+             "decimal": {"includes-all", "excludes-all", "subset-of"},
+             "boolean": set()},
+}
+CHECK_LIST_OPS = {"one-of", "includes-all", "excludes-all", "subset-of"}
+CHECK_PATTERN_OPS = {"matches", "matches-not"}
+
+def _fact_ok(ftype, x):
+    if ftype == "integer": return isinstance(x, int) and not isinstance(x, bool)
+    if ftype == "decimal": return isinstance(x, str) and re.match(DECIMAL_RE, x) is not None
+    if ftype == "boolean": return isinstance(x, bool)
+    return isinstance(x, str)          # string, code
+
+def _fact_value_ok(decl, v):
+    if decl.get("cardinality") == "many":
+        return isinstance(v, list) and all(_fact_ok(decl["type"], x) for x in v)
+    return _fact_ok(decl["type"], v)
+
+def _expected_ok(op, ftype, e):
+    if op in CHECK_LIST_OPS:
+        return isinstance(e, list) and all(_fact_ok(ftype, x) for x in e) and (op == "subset-of" or len(e) > 0)
+    if op in CHECK_PATTERN_OPS: return isinstance(e, str)
+    return _fact_ok(ftype, e)
+
+def _check_assert(a, facts, decls, params):
+    """-> (outcome, reason) of one assertion over one set of facts."""
+    f, op = a["fact"], a["op"]
+    d = decls.get(f)
+    if d is None: return INC, f"fact '{f}' is not declared in observes"
+    if op == "present": return (SAT, f"{f} is present") if f in facts else (NOT, f"{f} is not present")
+    if op == "absent": return (SAT, f"{f} is absent") if f not in facts else (NOT, f"{f} is present")
+    t, many = d["type"], d.get("cardinality") == "many"
+    if op not in CHECK_OPS["many" if many else "one"][t]:
+        return INC, f"{op} does not fit a {t}{' list' if many else ''} fact"
+    if f not in facts: return INC, f"fact '{f}' was not observed"
+    v = facts[f]
+    if not _fact_value_ok(d, v): return INC, f"fact '{f}' is not a {t}{' list' if many else ''}: {v!r}"
+    e, src = a.get("expected"), "the literal"
+    if isinstance(e, dict):
+        pn = e.get("param")
+        if pn not in params: return INC, f"parameter '{pn}' is unbound - a default is never substituted (D9)"
+        e, src = params[pn], f"parameter '{pn}'"
+    if not _expected_ok(op, t, e): return INC, f"{src} {e!r} does not fit {op} on a {t} fact"
+    N = (lambda x: Decimal(x)) if t == "decimal" else (lambda x: x)
+    if op == "equals": hit = N(v) == N(e)
+    elif op == "one-of": hit = N(v) in [N(x) for x in e]
+    elif op == "at-least": hit = N(v) >= N(e)
+    elif op == "at-most": hit = N(v) <= N(e)
+    elif op == "includes-all": hit = all(N(x) in {N(y) for y in v} for x in e)
+    elif op == "excludes-all": hit = not any(N(x) in {N(y) for y in v} for x in e)
+    elif op == "subset-of": hit = all(N(x) in {N(y) for y in e} for x in v)
+    else:                               # matches / matches-not: whole value, every element of a list
+        vals = v if many else [v]
+        if any(len(x) > IRE_MAX_INPUT for x in vals):
+            return INC, f"a value of '{f}' is longer than {IRE_MAX_INPUT} characters - not matched"
+        try:
+            hits = [ire_fullmatch(e, x) for x in vals]
+        except IRegexpError as ex:
+            return INC, f"pattern rejected: {ex}"
+        hit = all(hits) if op == "matches" else not any(hits)
+    return (SAT if hit else NOT), f"{f} {op} {e!r}: observed {v!r}"
+
+def _kleene(results):
+    """[(outcome, [reason])] -> (outcome, reasons): strong Kleene AND."""
+    for want in (NOT, INC):
+        if any(o == want for o, _ in results):
+            return want, [r for o, rs in results if o == want for r in rs]
+    return SAT, []
+
+def check_verdict(check, observation, params=None):
+    """B.1.10 check-verdict: (outcome, reasons) of one Check over one recorded
+    observation, with the parameter values the run was bound to."""
+    params = params or {}
+    if observation is None:
+        return INC, ["no observation: the collector did not report"]
+    decls = {d["name"]: d for d in check.get("observes", [])}
+    def run(assertions, facts):
+        return _kleene([(o, [w]) for o, w in (_check_assert(a, facts, decls, params) for a in assertions)])
+    def on(facts):
+        if check.get("applies-when"):
+            aw, why = run(check["applies-when"], facts)
+            if aw == NOT: return NA, ["applies-when does not hold: " + "; ".join(why)]
+            if aw == INC: return INC, ["applicability unknown: " + "; ".join(why)]
+        return run(check["criteria"], facts)
+    if check.get("each"):
+        kind = check["each"]["resource"]
+        res = observation.get("resources")
+        if not isinstance(res, list):
+            return INC, [f"the check runs per {kind}, but the observation carries no resources"]
+        outs = []
+        for r in res:
+            o, why = on(r.get("facts", {}))
+            if o != NA: outs.append((o, [f"{r.get('id')}: {w}" for w in why]))
+        if not outs:
+            if check["each"]["allow-empty"]: return SAT, [f"no applicable {kind} observed, and allow-empty holds"]
+            return INC, [f"no applicable {kind} observed, and allow-empty is false"]
+        return _kleene(outs)
+    facts = observation.get("facts")
+    if not isinstance(facts, dict): return INC, ["the observation carries no facts"]
+    return on(facts)
+
+def check_aggregate(outcomes):
+    app = [o for o in outcomes if o != NA]
+    if not app: return INC
+    if NOT in app: return NOT
+    if INC in app: return INC
+    return SAT
+
+def _check_param_decls(check, objs):
+    """-> {name: [(statement-id, declaration)]} over the covered clauses, or None
+    when the requirement is not in the bundle."""
+    req = objs.get(check["requirement-ref"])
+    if not req or req[0] != "requirement": return None
+    cover = set(check.get("statement-ids") or [s["id"] for s in req[1]["statements"]])
+    out = {}
+    for s in req[1]["statements"]:
+        if s["id"] in cover:
+            for pd in s.get("parameters", []) or []:
+                out.setdefault(pd["name"], []).append((s["id"], pd))
+    return out
+
+def _param_fits(pd, fdecl, op):
+    pt, ft = pd.get("type"), fdecl["type"]
+    if op in CHECK_LIST_OPS:
+        return pt == "list" or (pt == "choice" and pd.get("cardinality") == "many")
+    if ft in ("integer", "decimal", "boolean"): return pt == ft
+    return pt in ("string", "code") or (pt == "choice" and pd.get("cardinality") != "many")
+
+def check_object_errors(oid, o, objs):
+    """CHECK-1..7 over one Check -> [(rule, message)]."""
+    E = []
+    def bad(rule, msg): E.append((rule, f"{oid}: {msg} ({rule}: {CHECK_RULES[rule]})"))
+    req = objs.get(o["requirement-ref"])
+    if req and req[0] != "requirement":
+        bad("CHECK-1", f"requirement-ref resolves to a {req[0]}, not a Requirement: {o['requirement-ref']}")
+    elif req:
+        sids = {s["id"] for s in req[1]["statements"]}
+        for sid in o.get("statement-ids", []) or []:
+            if sid not in sids: bad("CHECK-1", f"statement-id '{sid}' names no statement of {o['requirement-ref']}")
+    names = [d["name"] for d in o["observes"]]
+    for n in sorted({n for n in names if names.count(n) > 1}):
+        bad("CHECK-2", f"fact '{n}' is declared twice")
+    decls = {d["name"]: d for d in o["observes"]}
+    params = _check_param_decls(o, objs)
+    for where in ("criteria", "applies-when"):
+        for i, a in enumerate(o.get(where, []) or []):
+            at, op = f"{where}[{i}]", a["op"]
+            d = decls.get(a["fact"])
+            if d is None:
+                bad("CHECK-2", f"{at} reads fact '{a['fact']}', which observes does not declare"); continue
+            card, t = d.get("cardinality", "one"), d["type"]
+            if op in ("present", "absent"): continue
+            if op not in CHECK_OPS[card][t]:
+                bad("CHECK-3", f"{at}: {op} does not fit a {t}{' list' if card == 'many' else ''} fact"); continue
+            e = a.get("expected")
+            if isinstance(e, dict):
+                pn = e["param"]
+                if op in CHECK_PATTERN_OPS:
+                    bad("CHECK-4", f"{at}: binds parameter '{pn}' as a pattern"); continue
+                if params is None:
+                    bad("CHECK-4", f"{at}: binds parameter '{pn}', but requirement {o['requirement-ref']} "
+                                   f"is not in the bundle, so the binding cannot be checked"); continue
+                found = params.get(pn, [])
+                if len(found) != 1:
+                    bad("CHECK-4", f"{at}: parameter '{pn}' is declared {len(found)} times on the covered statements"); continue
+                pd = found[0][1]
+                if not _param_fits(pd, d, op):
+                    bad("CHECK-4", f"{at}: parameter '{pn}' is a {pd.get('type')}, which does not fit {op} on a {t} fact")
+                tg = pd.get("tightening")
+                if (op == "at-most" and tg == "higher") or (op == "at-least" and tg == "lower"):
+                    bad("CHECK-5", f"{at}: {op} against parameter '{pn}', which tightens {tg} - tightening it would loosen the check")
+            elif op in CHECK_PATTERN_OPS and isinstance(e, str):
+                try:
+                    ire_compile(e)
+                except IRegexpError as ex:
+                    bad("CHECK-6", f"{at}: {ex}")
+            elif not _expected_ok(op, t, e):
+                bad("CHECK-3", f"{at}: {e!r} does not fit {op} on a {t}{' list' if card == 'many' else ''} fact")
+    col = (o.get("facets") or {}).get(COLLECTOR_FACET + "@1")
+    if col is not None:
+        if COLLECTOR_FACET in STDLIB and not STDLIB[COLLECTOR_FACET].is_valid(col):
+            e = next(STDLIB[COLLECTOR_FACET].iter_errors(col))
+            bad("CHECK-7", f"collector@1 payload: {e.message[:110]} @ {'/'.join(map(str, e.absolute_path))}")
+        else:
+            ids = [c["id"] for c in col.get("collectors", [])]
+            for n in sorted({n for n in ids if ids.count(n) > 1}):
+                bad("CHECK-7", f"collector id '{n}' is used twice")
+    return E
+
+MISSING = object()       # "this Tailoring binds no value" - distinct from any JSON value
+
+def _tailoring_bindings(check, tail, objs):
+    """-> {parameter: value or MISSING} that the Tailoring binds for the
+    parameters this check reads."""
+    out = {}
+    decls = _check_param_decls(check, objs) or {}
+    for a in check["criteria"] + (check.get("applies-when") or []):
+        e = a.get("expected")
+        if not isinstance(e, dict) or len(decls.get(e["param"], [])) != 1: continue
+        pn = e["param"]; sid = decls[pn][0][0]
+        out[pn] = MISSING
+        for op in tail.get("operations", []) or []:
+            if (op.get("op") == "set-parameter" and op.get("requirement-ref") == check["requirement-ref"]
+                    and op.get("parameter") == pn and op.get("statement-id") in (None, sid)):
+                out[pn] = op["value"]
+    return out
+
+def _evidence_chain(oid, at, a, row, read):
+    """CHECK-15: row -> evidence record -> raw outputs, and observation-ref.
+    read(ref) -> bytes, or None when the store does not hold it.
+    -> (observation loaded from observation-ref or None, [(rule, msg)], [note])"""
+    E, notes, obs = [], [], None
+    def bad(msg): E.append(("CHECK-15", f"{oid}: {at}: {msg} (CHECK-15: {CHECK_RULES['CHECK-15']})"))
+    def load(dref, what):
+        ref, want = dref["ref"], dref["digest"]
+        if re.match(r"^[A-Za-z][A-Za-z0-9+.-]*:", ref):
+            notes.append(f"{oid}: {at}: {what} {ref} is a URI - not resolvable offline"); return None
+        if ref.startswith("/") or ".." in ref.replace("\\", "/").split("/"):
+            bad(f"{what} ref {ref} leaves the bundle"); return None
+        m = re.match(r"^evidence/sha256/([0-9a-f]{64})$", ref)
+        if m and "sha256:" + m.group(1) != want:
+            bad(f"{what} {ref} is stored under another digest than the recorded {want}"); return None
+        raw = read(ref)
+        if raw is None:
+            notes.append(f"{oid}: {at}: {what} {ref} withheld - not in the bundle's store"); return None
+        if pkg_digest(raw) != want:
+            bad(f"{what} {ref} does not match its digest"); return None
+        return raw
+    if row.get("observation-ref"):
+        raw = load(row["observation-ref"], "observation")
+        if raw is not None:
+            try:
+                obs = json.loads(raw.decode("utf-8"))
+            except Exception as ex:
+                bad(f"observation file unreadable: {ex}")
+            if obs is not None and not VALIDATORS["checkObservation"].is_valid(obs):
+                bad("the observation file is not an observation"); obs = None
+    if row.get("evidence-record"):
+        raw = load(row["evidence-record"], "evidence record")
+        rec = None
+        if raw is not None:
+            try:
+                rec = json.loads(raw.decode("utf-8"))
+            except Exception as ex:
+                bad(f"evidence record unreadable: {ex}")
+        if rec is not None and not VALIDATORS["evidenceRecord"].is_valid(rec):
+            e = next(VALIDATORS["evidenceRecord"].iter_errors(rec))
+            bad(f"evidence record: {e.message[:100]} @ {'/'.join(map(str, e.absolute_path))}"); rec = None
+        if rec is not None:
+            if rec["check-ref"] != row["check-ref"] or rec["check-digest"] != row["check-digest"]:
+                bad("the evidence record is about another check, or another version of it")
+            if row.get("collector-id") and rec.get("collector-id") and rec["collector-id"] != row["collector-id"]:
+                bad(f"the evidence record names collector '{rec['collector-id']}', the row '{row['collector-id']}'")
+            if rec["subject-ref"] not in a["subject-refs"]:
+                bad(f"the evidence record's subject {rec['subject-ref']} is not a subject of the assessment")
+            seen = row.get("observation") if row.get("observation") is not None else obs
+            if rec.get("observation-digest") and seen is not None and sdig(seen) != rec["observation-digest"]:
+                bad("the evidence record binds another observation than the row records")
+            for out in rec["outputs"]:
+                load({"ref": "evidence/sha256/" + out["digest"].split(":", 1)[1], "digest": out["digest"]},
+                     f"output '{out['name']}'")
+    return obs, E, notes
+
+def check_errors(objs, read=None):
+    """CHECK-1..15 over a bundle -> ([(rule, message)], [note]).
+    read: the evidence store reader (CHECK-15); None skips the chain."""
+    E, notes = [], []
+    def bad(rule, oid, msg): E.append((rule, f"{oid}: {msg} ({rule}: {CHECK_RULES[rule]})"))
+    for oid, (t, o) in sorted(objs.items()):
+        if t == "check":
+            E += check_object_errors(oid, o, objs)
+        elif t == "finding" and o.get("check-ref"):
+            c = objs.get(o["check-ref"])
+            if c and c[0] != "check":
+                bad("CHECK-14", oid, f"check-ref resolves to a {c[0]}, not a Check: {o['check-ref']}")
+            elif c:
+                if c[1]["requirement-ref"] != o["requirement-ref"]:
+                    bad("CHECK-14", oid, f"check {o['check-ref']} discharges {c[1]['requirement-ref']}, "
+                                         f"the Finding is against {o['requirement-ref']}")
+                sids = c[1].get("statement-ids")
+                if sids and o.get("statement-ref") and o["statement-ref"] not in sids:
+                    bad("CHECK-14", oid, f"statement-ref '{o['statement-ref']}' is not a clause check {o['check-ref']} covers")
+        elif t == "assessment" and (o.get("check-results") or o.get("tailoring-ref")):
+            tail = None
+            if o.get("tailoring-ref"):
+                tg = objs.get(o["tailoring-ref"])
+                if not tg: bad("CHECK-12", oid, f"tailoring-ref does not resolve in-bundle: {o['tailoring-ref']}")
+                elif tg[0] != "tailoring": bad("CHECK-12", oid, f"tailoring-ref resolves to a {tg[0]}, not a Tailoring")
+                else: tail = tg[1]
+            outcomes, seen = [], set()
+            for i, row in enumerate(o.get("check-results", []) or []):
+                at, cref = f"check-results[{i}]", row["check-ref"]
+                if cref in seen: bad("CHECK-10", oid, f"{at}: check {cref} has a second row")
+                seen.add(cref)
+                outcomes.append(row["outcome"])
+                obs = row.get("observation")
+                if obs is None and row.get("observation-ref") is None and (row["outcome"] != INC or not row.get("reason")):
+                    bad("CHECK-11", oid, f"{at}: no observation, yet the outcome is {row['outcome']}"
+                                         f"{'' if row.get('reason') else ' and no reason is given'}")
+                if read is not None:
+                    o2, e2, n2 = _evidence_chain(oid, at, o, row, read)
+                    E += e2; notes += n2
+                    if obs is None: obs = o2
+                c = objs.get(cref)
+                if c is None:
+                    notes.append(f"{oid}: {at}: check {cref} is not in this bundle - verdict not recomputed"); continue
+                if c[0] != "check":
+                    bad("CHECK-8", oid, f"{at}: check-ref resolves to a {c[0]}, not a Check"); continue
+                if row["check-digest"] != sdig(c[1]):
+                    bad("CHECK-8", oid, f"{at}: check-digest does not match {cref} - the check changed after the run")
+                cols = ((c[1].get("facets") or {}).get(COLLECTOR_FACET + "@1") or {}).get("collectors")
+                if row.get("collector-id") and isinstance(cols, list) and \
+                        row["collector-id"] not in {x.get("id") for x in cols if isinstance(x, dict)}:
+                    bad("CHECK-13", oid, f"{at}: collector-id '{row['collector-id']}' names no collector of {cref}")
+                if tail is not None:
+                    have = row.get("parameters") or {}
+                    for pn, want in _tailoring_bindings(c[1], tail, objs).items():
+                        if want is MISSING and pn in have:
+                            bad("CHECK-12", oid, f"{at}: the run used {pn}={have[pn]!r}, but {o['tailoring-ref']} binds no value for it")
+                        elif want is not MISSING and (pn not in have or canonical(have[pn]) != canonical(want)):
+                            bad("CHECK-12", oid, f"{at}: the run used {pn}={have.get(pn, '(unbound)')!r}, "
+                                                 f"{o['tailoring-ref']} binds {want!r}")
+                elif row.get("parameters"):
+                    notes.append(f"{oid}: {at}: parameter values are the performer's statement - no tailoring-ref to hold them to")
+                if obs is None and row.get("observation-ref"):
+                    notes.append(f"{oid}: {at}: observation not available here - verdict not recomputed"); continue
+                got, why = check_verdict(c[1], obs, row.get("parameters"))
+                if got != row["outcome"]:
+                    bad("CHECK-9", oid, f"{at}: recorded {row['outcome']}, check-verdict computes {got}"
+                                        f"{' (' + '; '.join(why)[:200] + ')' if why else ''}")
+            if o.get("check-results"):
+                agg = check_aggregate(outcomes)
+                if o["result"] != agg:
+                    bad("CHECK-10", oid, f"result is {o['result']}, the aggregate of its check results is {agg}")
+    return E, notes
+
+def store_reader(bdir):
+    """The bundle's evidence store: files beside the manifest, by relative path."""
+    def read(ref):
+        fp = os.path.join(bdir, *ref.split("/"))
+        return open(fp, "rb").read() if os.path.isfile(fp) else None
+    return read
+
+def run_check():
+    v = json.load(open(os.path.join(CONF, "check-vectors.json"), encoding="utf-8"))
+    for case in v["regex-vectors"]:
+        try:
+            ire_compile(case["pattern"]); valid, why = True, ""
+        except IRegexpError as ex:
+            valid, why = False, str(ex)
+        okc = valid == case["valid"]
+        bad_m = [s for s in case.get("match", []) if not (valid and ire_fullmatch(case["pattern"], s))]
+        bad_n = [s for s in case.get("no-match", []) if valid and ire_fullmatch(case["pattern"], s)]
+        if okc and not bad_m and not bad_n: ok("check")
+        else: fail("check", f"regex {case['pattern']!r}: expected valid={case['valid']}, got {valid} {why}; "
+                            f"should match but did not {bad_m}; should not match but did {bad_n}")
+    for case in v["verdict-vectors"]:
+        got, why = check_verdict(case["check"], case.get("observation"), case.get("parameters"))
+        if got == case["expected"]: ok("check")
+        else: fail("check", f"verdict {case['name']}: expected {case['expected']}, got {got} {why}")
+    for case in v["aggregate-vectors"]:
+        got = check_aggregate(case["outcomes"])
+        if got == case["expected"]: ok("check")
+        else: fail("check", f"aggregate {case['outcomes']}: expected {case['expected']}, got {got}")
+    for case in v["object-vectors"]:
+        m = [t for t in TYPES if VALIDATORS[t].is_valid(case["object"])]
+        want = [case["type"]] if case["expected"] == "valid" else []
+        if m == want: ok("check")
+        else: fail("check", f"object {case['name']}: expected {case['expected']} {want}, matched {m}")
+    for case in v["bundle-vectors"]:
+        objs, untyped = {}, []
+        for o in case["objects"]:
+            t = inferType_single(o)
+            if t: objs[o["id"]] = (t, o)
+            else: untyped.append(o.get("id"))
+        store = {k: val.encode("utf-8") for k, val in (case.get("store") or {}).items()}
+        errs, notes = check_errors(objs, read=(store.get if "store" in case else None))
+        named = sorted({r for r, _ in errs})
+        okc = not untyped and named == sorted(set(case["expected-rules"]))
+        for frag in case.get("expected-notes", []):
+            if not any(frag in n for n in notes): okc = False
+        if okc: ok("check")
+        else: fail("check", f"bundle {case['name']}: expected rules {case['expected-rules']} notes "
+                            f"{case.get('expected-notes', [])}, got {named} untyped {untyped} "
+                            f"{[e[:150] for _, e in errs]} notes {[n[:100] for n in notes]}")
+
 def run_conditional():
     v = json.load(open(os.path.join(CONF, "conditional-vectors.json"), encoding="utf-8"))
     for case in v["vectors"]:
@@ -1452,7 +2113,7 @@ def run_lifecycle():
         okv = got == case["composed"] or (case["composed"] == "supports" and got in ("supports", "intersects"))
         if okv: ok("lifecycle")
         else: fail("lifecycle", f"compose({case['a']},{case['b']}): expected {case['composed']}, got {got}")
-    # shape disjointness: ten canonical minimal objects -> exactly one match each; garbage -> zero
+    # shape disjointness: eleven canonical minimal objects -> exactly one match each; garbage -> zero
     P = "https://ex.org"
     MINIMAL = {
         "requirement": {"id": P+"/r", "version": "1", "lifecycle": "active",
@@ -1475,6 +2136,10 @@ def run_lifecycle():
             "signer": P+"/p", "timestamp": "2026-07-21"},
         "risk": {"id": P+"/rk", "version": "1", "lifecycle": "active", "scenario": {"en": "X."},
             "owner-ref": P+"/p", "state": "identified"},
+        "check": {"id": P+"/ck", "version": "1", "lifecycle": "active", "requirement-ref": P+"/r",
+            "platform": P+"/platform/linux", "observes": [{"name": "x", "type": "integer"}],
+            "criteria": [{"fact": "x", "op": "at-most", "expected": 4}], "confidence": "draft",
+            "provenance": {"author-ref": P+"/p", "date": "2026-11-11"}},
     }
     for want, o in MINIMAL.items():
         m = [t for t in TYPES if VALIDATORS[t].is_valid(o)]
@@ -1654,6 +2319,10 @@ def validate_bundle(bdir):
                 else: print(f"      uncovered: {q}")
     for e in facet_errors([(oid, o) for oid, (t, o) in bundle_objs.items()], pinned):
         fail(section, e)
+    # CP-CHECK-1: check shapes, recomputed verdicts, the evidence chain
+    c_errs, c_notes = check_errors(bundle_objs, read=store_reader(bdir))
+    for _, e in c_errs: fail(section, e)
+    for n in c_notes: print(f"    note: {n}")
     # #24: report the derived Tailoring tier DISTINCTLY (spec:399) — a prefix
     # claim is an honest-publisher signal, not proof; in verification mode
     # (--trusted-keys) proven additionally requires a verifying envelope.
@@ -1725,6 +2394,9 @@ def validate_examples():
     s_errs, s_notes = scale_errors(load_scale_pins(exdir, manifest, section), exobjs)
     for e in s_errs: fail(section, e)
     for n in s_notes: print(f"    note: {n}")
+    c_errs, c_notes = check_errors(exobjs, read=store_reader(exdir))
+    for _, e in c_errs: fail(section, e)
+    for n in c_notes: print(f"    note: {n}")
     cov, cerrs, cnotes = risk_coverage(exobjs)
     for e in cerrs: fail(section, e)
     for n in cnotes + risk_link_notes(exobjs): print(f"    note: {n}")
@@ -1764,8 +2436,8 @@ if "--compose" in _argv:
     sys.exit(1 if errs else 0)
 
 print("== conformance corpus ==")
-run_jcs(); run_modality(); run_parameters(); run_tailoring(); run_attestation(); run_facets(); run_references(); run_lifecycle(); run_tiers(); run_dsse(); run_composition(); run_conditional(); run_risk(); run_kernel(); run_scale()
-for k in ("jcs", "modality", "parameter", "tailoring", "attestation", "facet", "reference", "lifecycle", "tier", "dsse", "composition", "conditional", "risk", "kernel", "scale"):
+run_jcs(); run_modality(); run_parameters(); run_tailoring(); run_attestation(); run_facets(); run_references(); run_lifecycle(); run_tiers(); run_dsse(); run_composition(); run_conditional(); run_risk(); run_kernel(); run_scale(); run_check()
+for k in ("jcs", "modality", "parameter", "tailoring", "attestation", "facet", "reference", "lifecycle", "tier", "dsse", "composition", "conditional", "risk", "kernel", "scale", "check"):
     print(f"  {k}: {counts[k]} pass, {counts[k + ':FAIL']} fail")
 
 print("== bundles ==")

@@ -53,6 +53,9 @@
    ]
   }
  ],
+ "tailoring-refs": [
+  "https://ns.bsi.bund.de/gspp/tailoring/erhoeht"
+ ],
  "acceptance": {
   "approver-ref": "https://cso.example/party/ciso",
   "date": "2026-11-05",

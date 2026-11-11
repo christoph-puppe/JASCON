@@ -1,0 +1,30 @@
+{
+ "record-version": "1",
+ "check-ref": "https://cso.example/check/LNX-SSH-1-maxauthtries",
+ "check-digest": "sha256:09f28ab06e8352bfb07984bec33588559cfe7be64ac14c51cc55538a16f85898",
+ "collector-id": "bash",
+ "subject-ref": "https://cso.example/component/bastion-01",
+ "target": {
+  "platform": "ubuntu-24.04",
+  "hostname-sha256": "94578d642f3c929e4bc60f17c96bedc74e314236540df7bbea1221c451b8ee2b"
+ },
+ "runner": {
+  "id": "manual (no runner yet)",
+  "version": "0"
+ },
+ "started": "2026-11-10T06:00:01Z",
+ "finished": "2026-11-10T06:00:02Z",
+ "exit-status": 0,
+ "observation-digest": "sha256:5f3420c588b7473d556377c58e60156f217c43679d8f2cb5c319d21c87849483",
+ "outputs": [
+  {
+   "name": "stdout",
+   "digest": "sha256:19d4576d69fd588a6305d23900ae07af8255f59bfa9b491bb89958b333abd455",
+   "media-type": "application/json",
+   "size": 34
+  }
+ ],
+ "note": {
+  "en": "Produced for the CP-CHECK-1 worked example: the check's bash collector source was executed unchanged against a stub `sshd` that prints a fixed configuration. No real host was assessed and no runner exists yet (CP-CHECK-1 phase 2)."
+ }
+}

@@ -25,3 +25,8 @@ converted_examples/*/*-core-bundle/** -text
 # The skill's example bundle ships inside SKILL_jascon.zip with LF bytes;
 # its content-manifest digests those. Keep them LF on Windows checkouts too.
 jascon/examples/*.json text eol=lf
+
+# Evidence blobs are content-addressed (CP-CHECK-1, CHECK-15): the file NAME
+# is the SHA-256 of its bytes. Git must never re-spell them, whatever the
+# platform or core.autocrlf says.
+jascon/examples/evidence/** -text

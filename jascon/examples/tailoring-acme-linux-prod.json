@@ -1,0 +1,22 @@
+{
+ "id": "https://cso.example/tailoring/linux-prod",
+ "version": "2026-11",
+ "lifecycle": "active",
+ "title": {
+  "en": "Production Linux hosts"
+ },
+ "selects": [
+  {
+   "set-ref": "https://cso.example/set/linux-baseline"
+  }
+ ],
+ "operations": [
+  {
+   "op": "set-parameter",
+   "requirement-ref": "https://cso.example/req/LNX-SSH-1",
+   "statement-id": "s1",
+   "parameter": "max-auth-tries",
+   "value": 4
+  }
+ ]
+}

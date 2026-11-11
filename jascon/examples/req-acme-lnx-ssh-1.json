@@ -1,0 +1,41 @@
+{
+ "id": "https://cso.example/req/LNX-SSH-1",
+ "version": "2026-11",
+ "label": "LNX-SSH-1",
+ "lifecycle": "active",
+ "title": {
+  "en": "SSH daemon hardening"
+ },
+ "statements": [
+  {
+   "id": "s1",
+   "modality": "must",
+   "obligated-parties": [
+    "https://cso.example/party/platform-ops"
+   ],
+   "prose": {
+    "en": "The SSH daemon allows at most {param:max-auth-tries} authentication attempts per connection."
+   },
+   "parameters": [
+    {
+     "name": "max-auth-tries",
+     "type": "integer",
+     "label": "maximum authentication attempts",
+     "tightening": "lower",
+     "min": 1,
+     "max": 10
+    }
+   ]
+  },
+  {
+   "id": "s2",
+   "modality": "must",
+   "obligated-parties": [
+    "https://cso.example/party/platform-ops"
+   ],
+   "prose": {
+    "en": "The SSH daemon offers no cipher in CBC mode."
+   }
+  }
+ ]
+}
