@@ -35,6 +35,14 @@ The default run now also validates the skill's example bundle
 (jascon\examples) through Validate-Bundle, so the D26 rule (a pin of a
 stdlib facet id is the descriptor verbatim) reaches that folder without
 an argument. Written by reading, equally UNEXECUTED, and guarded.
+Attestations beside the manifest (2026-11-11): Validate-Bundle read only
+what the manifest lists, and D3.1 keeps an Attestation out of that list, so
+no conformant Attestation was typed, had its envelope checked or took part
+in tier derivation. It now loads them from the manifest's directory, judges
+the envelope of every Attestation (a named envelope that does not resolve
+fails; this file had also never called Verify-Envelope on a bundle), and
+runs the bundle-vectors of dsse-vectors.json on disk. Ported from
+validate_core.py by reading, UNEXECUTED, and guarded like the rest.
 
 Usage: powershell -ExecutionPolicy Bypass -File validate_core.ps1 [bundle-dirs...]
        -VectorsOnly to skip bundles; -TrustedKeys file.json for verification mode;
@@ -1382,6 +1390,94 @@ function Run-Dsse {
         if ($okc -and $case.Contains('expected-tier')) { if ($tier -ne $case['expected-tier']) { $okc = $false } }
         if ($okc) { OK 'dsse' } else { FAIL 'dsse' "$($case['name']): got $st($why)/$tier" }
     }
+    # Bundle-level cases: the vectors above hand the engine objects in memory
+    # and so never noticed that Validate-Bundle did not LOAD an Attestation
+    # beside the manifest. Each case here is a bundle on disk, judged by
+    # Validate-Bundle itself. NOT EXECUTED (2026-11-11, no PowerShell
+    # runtime): guarded; remove the guard after the first green run.
+    try {
+        $bcases = (Load-Vectors 'dsse-vectors.json')['bundle-vectors']
+        foreach ($case in @($bcases)) {
+            if ($null -eq $case) { continue }
+            $res = Run-Bundle-Case $case
+            $problems = New-Object System.Collections.ArrayList
+            $want = 0
+            if ($case.Contains('expected-fails')) { $want = [int]$case['expected-fails'] }
+            if ($res.fails.Count -ne $want) { [void]$problems.Add("$($res.fails.Count) fails, expected $want") }
+            foreach ($frag in @($case['expected-frags'])) {
+                if ($null -eq $frag) { continue }
+                $hit = $false
+                foreach ($m in $res.fails) { if ($m.Contains($frag)) { $hit = $true; break } }
+                if (-not $hit) { [void]$problems.Add("no fail says '$frag'") }
+            }
+            foreach ($frag in @($case['expected-notes'])) {
+                if ($null -eq $frag) { continue }
+                $hit = $false
+                foreach ($m in $res.report['notes']) { if ($m.Contains($frag)) { $hit = $true; break } }
+                if (-not $hit) { [void]$problems.Add("no note says '$frag'") }
+            }
+            foreach ($pair in @(@('expected-envelopes', 'envelopes'), @('expected-tiers', 'tiers'))) {
+                if (-not $case.Contains($pair[0])) { continue }
+                foreach ($oid in @($case[$pair[0]].Keys)) {
+                    $got = $res.report[$pair[1]][$oid]
+                    if ($got -cne $case[$pair[0]][$oid]) { [void]$problems.Add("$($pair[1]) ${oid}: $got, expected $($case[$pair[0]][$oid])") }
+                }
+            }
+            if ($problems.Count -eq 0) { OK 'dsse' }
+            else { FAIL 'dsse' "bundle $($case['name']): $(@($problems) -join '; ') - fails: $(@($res.fails) -join ' ~ ')" }
+        }
+    } catch {
+        FAIL 'dsse' "PORT ERROR (bundle-vectors not yet executed on a real runtime - report this line): $($_.Exception.Message) @ line $($_.InvocationInfo.ScriptLineNumber)"
+    }
+}
+# One bundle-level vector as a bundle on disk, judged by Validate-Bundle.
+# `listed` objects go under objects\ and into a manifest written here (the
+# package digests are of the bytes written here); `beside` and `envelopes`
+# are files in the manifest's directory; `outside` files lie one directory
+# ABOVE the bundle, where no envelope-ref may reach.
+# $COUNTS and $FAILURES are declared LOCAL: PowerShell resolves a variable
+# through the callers' scopes, so OK and FAIL, called from Validate-Bundle,
+# count into these two and the run's own verdict stays untouched.
+function Run-Bundle-Case($case) {
+    $COUNTS = @{}
+    $FAILURES = New-Object System.Collections.ArrayList
+    $caseRoot = Join-Path ([System.IO.Path]::GetTempPath()) ('jascon-dsse-' + [System.Guid]::NewGuid().ToString('N'))
+    $caseDir = Join-Path $caseRoot 'bundle'
+    $rep = @{envelopes = @{}; tiers = @{}; notes = (New-Object System.Collections.ArrayList)}
+    function Put-Json([string]$base, [string]$rel, $value) {
+        $fp = Join-Path $base $rel
+        $parent = Split-Path -Parent $fp
+        if (-not (Test-Path -LiteralPath $parent)) { [void](New-Item -ItemType Directory -Path $parent -Force) }
+        $raw = [System.Text.Encoding]::UTF8.GetBytes((Format-Canonical $value))
+        [System.IO.File]::WriteAllBytes($fp, $raw)
+        return ,$raw
+    }
+    try {
+        [void](New-Item -ItemType Directory -Path (Join-Path $caseDir 'objects') -Force)
+        $entries = New-Object System.Collections.ArrayList
+        $i = 0
+        foreach ($o in @($case['listed'])) {
+            if ($null -eq $o) { continue }
+            $rel = "objects/o$i.json"; $i++
+            $raw = Put-Json $caseDir $rel $o
+            [void]$entries.Add([ordered]@{id = $o['id']; version = $o['version']; 'package-digest' = (Sha256-Hex $raw)
+                                          'semantic-digest' = (SDig $o); path = $rel})
+        }
+        [void](Put-Json $caseDir 'content-manifest.json' ([ordered]@{'manifest-version' = '1'; objects = $entries}))
+        foreach ($fileKey in @('beside', 'envelopes')) {
+            if (-not $case.Contains($fileKey)) { continue }
+            foreach ($rel in @($case[$fileKey].Keys)) { [void](Put-Json $caseDir $rel $case[$fileKey][$rel]) }
+        }
+        if ($case.Contains('outside')) {
+            foreach ($rel in @($case['outside'].Keys)) { [void](Put-Json $caseRoot $rel $case['outside'][$rel]) }
+        }
+        $caseKeys = $null
+        if ($case.Contains('trusted-keys')) { $caseKeys = $case['trusted-keys'] }
+        $null = @(Validate-Bundle $caseDir $caseKeys $rep 6>&1)     # its Write-Host lines are not this run's output
+    } finally {
+        if (Test-Path -LiteralPath $caseRoot) { Remove-Item -LiteralPath $caseRoot -Recurse -Force }
+    }
+    return @{fails = $FAILURES; report = $rep}
 }
 function Run-Composition {
     foreach ($case in (Load-Vectors 'composition-vectors.json')['vectors']) {
@@ -1752,7 +1848,21 @@ function Validate-Object([string]$section, [string]$path, $obj) {
     }
     return $t
 }
-function Validate-Bundle([string]$bdir) {
+# `envelope-ref` names a file in the manifest's directory or below it. An
+# absolute path, a scheme (or drive letter) or a `..` segment would read
+# outside the bundle: it does not resolve. -> path or $null
+function Envelope-Path([string]$bdir, $ref) {
+    if (-not ($ref -is [string]) -or $ref -eq '') { return $null }
+    if ($ref -match '^[A-Za-z][A-Za-z0-9+.-]*:') { return $null }
+    if ($ref.StartsWith('/') -or $ref.StartsWith('\')) { return $null }
+    if (@($ref -split '[\\/]') -ccontains '..') { return $null }
+    return (Join-Path $bdir $ref)
+}
+$LISTED_ATTESTATION_NOTE = 'listed in the content manifest; an Attestation lies beside it (D3.1) - checked all the same'
+# $keys: signer URI -> Ed25519 public key (hex) = verification mode; $null = structural.
+# $report, a hashtable, receives what a test compares: envelopes (attestation id ->
+# verified | unverified | error | missing | unsigned), tiers (tailoring id -> tier), notes.
+function Validate-Bundle([string]$bdir, $keys = $TRUSTED, $report = $null) {
     $section = $bdir.Replace($ROOT, '').TrimStart('\').Replace('\', '/')
     Write-Host "  -> $section"   # sign of life: big bundles run minutes with no output (P10 user report)
     $mpath = Join-Path $bdir 'content-manifest.json'
@@ -1801,15 +1911,76 @@ function Validate-Bundle([string]$bdir) {
                 FAIL $section "$($fe['path']): pin of stdlib facet $($sd['id']) DIVERGES from the normative descriptor (D26)" } }
     }
     $envelopes = @{}
-    foreach ($oid in $bundleObjs.Keys) {
-        $e = $bundleObjs[$oid]
-        if ($e.t -ne 'attestation' -or -not $e.o.Contains('envelope-ref')) { continue }
-        $ep = Join-Path $bdir $e.o['envelope-ref']
-        if (Test-Path $ep) { $envelopes[$e.o['envelope-ref']] = Read-Json $ep }
-        else { FAIL $section "${oid}: envelope-ref '$($e.o['envelope-ref'])' does not resolve beside the manifest" }
+    $envStatus = @{}
+    try {
+        # Attestations lie BESIDE the content manifest and are not listed in it
+        # (D3.1: nothing signed contains its own signature). Beside = a .json
+        # file in the manifest's own directory that the manifest neither lists
+        # nor pins and that carries `subject-semantic-digests`. Such a file is
+        # an Attestation or a failure; other unlisted files there stay unread.
+        $listedAtt = New-Object System.Collections.ArrayList
+        foreach ($oid in $bundleObjs.Keys) { if ($bundleObjs[$oid].t -eq 'attestation') { [void]$listedAtt.Add($oid) } }
+        $accounted = New-Object System.Collections.ArrayList
+        [void]$accounted.Add('content-manifest.json')
+        foreach ($entry in $manifest['objects']) { [void]$accounted.Add($entry['path']) }
+        foreach ($pinKey in @('facet-schemas', 'scales')) {
+            foreach ($pe in @($manifest[$pinKey])) { if ($null -ne $pe) { [void]$accounted.Add($pe['path']) } } }
+        foreach ($f in (Get-ChildItem -LiteralPath $bdir -File | Sort-Object Name)) {
+            if (-not $f.Name.EndsWith('.json') -or $accounted -ccontains $f.Name) { continue }
+            $bobj = $null
+            try { $bobj = Read-Json $f.FullName } catch { continue }
+            if (-not (Is-Map $bobj) -or -not $bobj.Contains('subject-semantic-digests')) { continue }
+            $bt = Validate-Object $section $f.Name $bobj
+            if ($null -eq $bt) { continue }
+            if ($seenIds.ContainsKey($bobj['id'])) { FAIL $section "$($f.Name): object id already used (unique-within)"; continue }
+            $seenIds[$bobj['id']] = $f.Name
+            if (-not $typec.ContainsKey($bt)) { $typec[$bt] = 0 }
+            $typec[$bt]++
+            $bundleObjs[$bobj['id']] = @{t = $bt; o = $bobj}
+        }
+        # DSSE envelopes (#24) of EVERY Attestation, listed or beside the manifest
+        foreach ($oid in @($bundleObjs.Keys)) {
+            $e = $bundleObjs[$oid]
+            if ($e.t -ne 'attestation') { continue }
+            if ($listedAtt -ccontains $oid) {
+                Write-Host "    note: ${oid}: $LISTED_ATTESTATION_NOTE"
+                if ($null -ne $report) { [void]$report['notes'].Add("${oid}: $LISTED_ATTESTATION_NOTE") }
+            }
+            $ref = $null
+            if ($e.o.Contains('envelope-ref')) { $ref = $e.o['envelope-ref'] }
+            if ($null -eq $ref -or $ref -eq '') {
+                $envStatus[$oid] = 'unsigned'
+                Write-Host "    dsse: $oid = no envelope (unsigned attestation)"
+                continue
+            }
+            $ep = Envelope-Path $bdir $ref
+            if ($null -eq $ep -or -not (Test-Path -LiteralPath $ep -PathType Leaf)) {
+                $envStatus[$oid] = 'missing'
+                FAIL $section "${oid}: envelope-ref '$ref' does not resolve beside the manifest"
+                continue
+            }
+            $envObj = $null
+            try { $envObj = Read-Json $ep } catch {
+                $envStatus[$oid] = 'error'
+                FAIL $section "${ref}: envelope unreadable: $($_.Exception.Message)"
+                continue
+            }
+            $envelopes[$ref] = $envObj
+            $vr = Verify-Envelope $envObj $e.o $keys
+            $envStatus[$oid] = $vr[0]
+            if ($vr[0] -eq 'verified') { Write-Host "    dsse: $oid = signature VERIFIED (Ed25519)" }
+            elseif ($vr[0] -eq 'unverified') { Write-Host "    dsse: $oid = signature UNVERIFIED - $($vr[1])" }
+            else {
+                FAIL $section "${oid}: dsse: $($vr[1])"
+                Write-Host "    dsse: $oid = FAIL - $($vr[1])"
+            }
+        }
+    } catch {
+        FAIL $section "attestation PORT ERROR (attestations beside the manifest not yet executed on a real runtime - report this line): $($_.Exception.Message) @ line $($_.InvocationInfo.ScriptLineNumber)"
     }
+    if ($null -ne $report) { $report['envelopes'] = $envStatus }
     foreach ($e in (Closure-Errors $bundleObjs)) { FAIL $section $e }
-    foreach ($e in (Duty-Errors $bundleObjs $pinnedDecl $envelopes $TRUSTED)) { FAIL $section $e }
+    foreach ($e in (Duty-Errors $bundleObjs $pinnedDecl $envelopes $keys)) { FAIL $section $e }
     try { foreach ($e in (Kernel-Pin-Errors $manifest $bundleObjs)) { FAIL $section $e } } catch {
         FAIL $section "kernel-version PORT ERROR (not yet executed on a real runtime - report this line): $($_.Exception.Message) @ line $($_.InvocationInfo.ScriptLineNumber)"
     }
@@ -1836,7 +2007,7 @@ function Validate-Bundle([string]$bdir) {
     }
     # CP-RISK-1: B.1.9 risk-coverage report (+ RISK-11 errors), RISK-9/10 notes
     try {
-        $rc = Risk-Coverage $bundleObjs $envelopes $TRUSTED
+        $rc = Risk-Coverage $bundleObjs $envelopes $keys
         foreach ($e in $rc.errs) { FAIL $section $e }
         foreach ($n in $rc.notes) { Write-Host "    note: $n" }
         foreach ($n in (Risk-Link-Notes $bundleObjs)) { Write-Host "    note: $n" }
@@ -1861,7 +2032,8 @@ function Validate-Bundle([string]$bdir) {
     foreach ($e in (Facet-Errors $pairs $pinned)) { FAIL $section $e }
     foreach ($oid in $bundleObjs.Keys) {
         if ($bundleObjs[$oid].t -eq 'tailoring') {
-            $tier = Derive-Tier $bundleObjs[$oid].o $bundleObjs $envelopes $TRUSTED
+            $tier = Derive-Tier $bundleObjs[$oid].o $bundleObjs $envelopes $keys
+            if ($null -ne $report) { $report['tiers'][$oid] = $tier }
             Write-Host "    tier: $oid = $tier"
         }
     }
@@ -1920,8 +2092,11 @@ if (-not $VectorsOnly) {
     # seen only by an explicit bundle argument. It goes through
     # Validate-Bundle - the ONE pin loop of this file - so the default run
     # and an explicit run cannot give two verdicts on the folder.
-    # Not covered here (validate_core.py does both): the Attestation beside
-    # the manifest, and files in the flat folder that the manifest omits.
+    # The Attestation beside the manifest is covered by Validate-Bundle
+    # since 2026-11-11. Not covered here (validate_core.py does both): the
+    # example folder's own guard on that Attestation (its subject digests,
+    # its manifest digest and the fixture signature, backlog #46), and files
+    # in the flat folder that the manifest omits.
     # NOT EXECUTED (2026-11-10, no PowerShell runtime): guarded like the
     # other unexecuted call sites; remove the guard after the first green run.
     if ($defaultRun) {

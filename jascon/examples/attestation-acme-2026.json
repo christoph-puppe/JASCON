@@ -3,11 +3,20 @@
   "version": "1",
   "lifecycle": "active",
   "subject-semantic-digests": [
-    "sha256:7aaf60aac02185ae45e9f5891adb1f1151991bfd162ce2f21ede1db1cd7d11d0",
-    "sha256:c26d65937908fa2fb3019f6255cd355ce64b54b87cbcc31488e183ebe48471d9",
-    "sha256:09de9745b1ce8d137b9fd8131cafbb79c12c4209487d37de012ce8bbcf052b10"
+    {
+      "id": "https://cso.example/component/acme-saas",
+      "semantic-digest": "sha256:c6cb03198bd6da55fdb14655af49c9c7c3e1c380337ac013a86d7b1f7fce8ca1"
+    },
+    {
+      "id": "https://cso.example/impl/acme--konf-14-1",
+      "semantic-digest": "sha256:7b89f06e6b7cae8758c227083fb07d82cb224c143eece8bc5d72eddd9a0b2cb0"
+    },
+    {
+      "id": "https://assessor.example/assessment/2026-q3-acme",
+      "semantic-digest": "sha256:637044bb6cc9cd70c68523151aaa4be2736699af5578451804be074929e35a92"
+    }
   ],
-  "content-manifest-digest": "sha256:692f86e9b5df786d76ebe0e639449e9d2af1bcb089e55d9f8ee46e19fb9b21a5",
+  "content-manifest-digest": "sha256:e64c62b99f6d9ebf32de8fb60b7fb98a09b252cafa4d3eaee8f8996f86804730",
   "rendering": {
     "artifact-digest": "sha256:36405fcbe4e19ba3305b56c129e70925a27f4a16a10216a2ba3e0a13c625857e",
     "media-type": "text/markdown",

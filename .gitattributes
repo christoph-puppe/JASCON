@@ -25,3 +25,5 @@ converted_examples/*/*-core-bundle/** -text
 # The skill's example bundle ships inside SKILL_jascon.zip with LF bytes;
 # its content-manifest digests those. Keep them LF on Windows checkouts too.
 jascon/examples/*.json text eol=lf
+# The envelope of the example attestation: sign_example.py --check compares bytes.
+jascon/examples/*.dsse text eol=lf

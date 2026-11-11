@@ -12,7 +12,9 @@ Runs, in order:
    closed-shape schema validation, code systems, by-statement facet keys
    vs. host statement ids (D10 rev), {param:} token binding (the 216
    rule), optional-empty-container rule (D3.3), manifest completeness +
-   both digests re-verified per object.
+   both digests re-verified per object. Attestations lie BESIDE the
+   manifest (D3.1) and are loaded from its directory: the DSSE envelope of
+   every Attestation is judged, and a named envelope that is missing fails.
 3. RISK (CP-RISK-1, kernel 2.0.0): Risk is the tenth kernel type; the
    schema carries RISK-1..6 (named on failure by risk_rule_violations),
    this file adds the closure rules (RISK-7/8), typed Risk edges
@@ -24,7 +26,7 @@ Runs, in order:
 
 Exit 0 = all green. Usage: uv run --with jsonschema validate_core.py [bundle-dir ...]
 """
-import json, hashlib, os, re, sys, copy, collections, base64
+import json, hashlib, os, re, sys, copy, collections, base64, contextlib, io, tempfile
 from decimal import Decimal
 import jsonschema
 
@@ -376,6 +378,21 @@ def ok(section): counts[section] += 1
 def fail(section, msg):
     counts[section + ":FAIL"] += 1
     fails.append(f"[{section}] {msg}")
+
+@contextlib.contextmanager
+def isolated_run():
+    """A validator run whose passes, fails and output are a test's DATA, not
+    this run's verdict: the bundle-level vectors expect failures, and those
+    must not turn the corpus red. -> (fails of the run, its output)."""
+    global fails, counts
+    saved = (fails, counts)
+    fails, counts = [], collections.Counter()
+    out = io.StringIO()
+    try:
+        with contextlib.redirect_stdout(out):
+            yield fails, out
+    finally:
+        fails, counts = saved
 
 # ---------------- canonical form ----------------
 def _canon(o):
@@ -1424,6 +1441,57 @@ def run_dsse():
             okc = tier == exp_tier
         if okc: ok("dsse")
         else: fail("dsse", f"{case['name']}: expected {exp_env}/{exp_tier}, got {st}({why[:70]})/{tier}")
+    # Bundle-level cases: the five above call the engine on objects in
+    # memory and so never noticed that validate_bundle did not LOAD an
+    # Attestation beside the manifest. Each case here is a bundle on disk,
+    # judged by validate_bundle itself.
+    for case in v.get("bundle-vectors", []):
+        with tempfile.TemporaryDirectory() as tmp:
+            bdir = write_bundle_case(case, tmp)
+            rep = {}
+            with isolated_run() as (got, out):
+                validate_bundle(bdir, trusted=case.get("trusted-keys"), report=rep)
+        text = out.getvalue()
+        problems = []
+        if len(got) != case.get("expected-fails", 0):
+            problems.append(f"{len(got)} fails, expected {case.get('expected-fails', 0)}")
+        for frag in case.get("expected-frags", []):
+            if not any(frag in e for e in got): problems.append(f"no fail says '{frag}'")
+        for frag in case.get("expected-notes", []):
+            if frag not in text: problems.append(f"no note says '{frag}'")
+        for key, exp in (("envelopes", case.get("expected-envelopes", {})), ("tiers", case.get("expected-tiers", {}))):
+            for oid, want in exp.items():
+                if rep.get(key, {}).get(oid) != want:
+                    problems.append(f"{key[:-1]} {oid}: {rep.get(key, {}).get(oid)}, expected {want}")
+        if not problems: ok("dsse")
+        else: fail("dsse", f"bundle {case['name']}: {'; '.join(problems)} - fails: {[e[:110] for e in got]}")
+
+def write_bundle_case(case, tmp):
+    """A bundle-level vector as a bundle on disk -> its directory. `listed`
+    objects go under objects/ and into a manifest this runner writes (the
+    package digests are of the bytes written here, so every implementation
+    may serialize as it likes); `beside` and `envelopes` are files in the
+    manifest's directory, by the names the vector gives; `outside` files lie
+    in the directory ABOVE the bundle, where no envelope-ref may reach."""
+    bdir = os.path.join(tmp, "bundle")
+    os.makedirs(os.path.join(bdir, "objects"))
+    def put(base, rel, value):
+        fp = os.path.join(base, *rel.split("/"))
+        os.makedirs(os.path.dirname(fp), exist_ok=True)
+        raw = (json.dumps(value, indent=1, ensure_ascii=False) + "\n").encode("utf-8")
+        with open(fp, "wb") as f: f.write(raw)
+        return raw
+    entries = []
+    for i, o in enumerate(case.get("listed", [])):
+        rel = f"objects/o{i}.json"
+        raw = put(bdir, rel, o)
+        entries.append({"id": o["id"], "version": o["version"], "package-digest": pkg_digest(raw),
+                        "semantic-digest": sdig(o), "path": rel})
+    put(bdir, "content-manifest.json", {"manifest-version": "1", "objects": entries})
+    for key in ("beside", "envelopes"):
+        for rel, value in (case.get(key) or {}).items(): put(bdir, rel, value)
+    for rel, value in (case.get("outside") or {}).items(): put(tmp, rel, value)
+    return bdir
 
 def run_lifecycle():
     v = json.load(open(os.path.join(CONF, "lifecycle-vectors.json"), encoding="utf-8"))
@@ -1574,8 +1642,91 @@ def load_facet_pins(bdir, manifest, section):
             fail(section, f"{fe['path']}: pinned facet schema unreadable: {e}")
     return pinned, pinned_decl
 
-def validate_bundle(bdir):
-    section = os.path.relpath(bdir, ROOT).replace("\\", "/")
+def load_beside_attestations(bdir, manifest, listed, section, objs, typec, seen_ids):
+    """Attestations lie BESIDE the content manifest and are not listed in it
+    (D3.1: nothing signed contains its own signature). Reading only what the
+    manifest lists therefore skipped every conformant Attestation: no type,
+    no envelope check, no part in tier derivation. Beside = a .json file in
+    the manifest's own directory that the manifest neither lists nor pins
+    and that carries `subject-semantic-digests`. Such a file is an
+    Attestation or a failure; other unlisted files there are not this
+    bundle's objects and stay unread, as before."""
+    accounted = set(listed) | {"content-manifest.json"}
+    for key in ("facet-schemas", "scales"):
+        accounted |= {e.get("path") for e in manifest.get(key, []) or []}
+    for fn in sorted(os.listdir(bdir)):
+        fp = os.path.join(bdir, fn)
+        if not fn.endswith(".json") or fn in accounted or not os.path.isfile(fp):
+            continue
+        try: obj = json.loads(open(fp, "rb").read().decode("utf-8"))
+        except Exception: continue
+        if not isinstance(obj, dict) or "subject-semantic-digests" not in obj:
+            continue
+        t = validate_object(section, fn, obj)
+        if t is None: continue
+        if obj.get("id") in seen_ids:
+            fail(section, f"{fn}: object id already used by {seen_ids[obj['id']]} (unique-within — the twin-catalog corpse)")
+            continue
+        seen_ids[obj.get("id")] = fn
+        typec[t] += 1
+        objs[obj["id"]] = (t, obj)
+
+def envelope_path(bdir, ref):
+    """`envelope-ref` names a file in the manifest's directory or below it.
+    An absolute path, a scheme (or drive letter) or a `..` segment would
+    read outside the bundle: it does not resolve. -> path or None."""
+    if not isinstance(ref, str) or not ref: return None
+    if re.match(r"^[A-Za-z][A-Za-z0-9+.-]*:", ref) or ref[0] in "/\\": return None
+    if ".." in re.split(r"[\\/]", ref): return None
+    return os.path.join(bdir, ref)
+
+LISTED_ATTESTATION_NOTE = ("listed in the content manifest; an Attestation lies beside it (D3.1) "
+                           "- checked all the same")
+
+def check_envelopes(bdir, objs, section, trusted, listed_ids=()):
+    """DSSE envelopes (#24) of EVERY Attestation of the bundle, listed or
+    beside the manifest: `envelope-ref` resolves to a file beside the
+    manifest (nothing signed contains its own signature, D3); a named
+    envelope that does not resolve is a failure. With `trusted` the run is
+    in verification mode. ONE function for validate_bundle and
+    validate_examples. -> (envelopes: envelope-ref -> envelope,
+    status: attestation id -> verified | unverified | error | missing | unsigned)."""
+    envelopes, status = {}, {}
+    for oid, (t, o) in sorted(objs.items()):
+        if t != "attestation": continue
+        if oid in listed_ids:
+            print(f"    note: {oid}: {LISTED_ATTESTATION_NOTE}")
+        ref = o.get("envelope-ref")
+        if not ref:
+            status[oid] = "unsigned"
+            print(f"    dsse: {oid} = no envelope (unsigned attestation)")
+            continue
+        ep = envelope_path(bdir, ref)
+        if ep is None or not os.path.isfile(ep):
+            status[oid] = "missing"
+            fail(section, f"{oid}: envelope-ref '{ref}' does not resolve beside the manifest")
+            continue
+        try:
+            env = json.load(open(ep, encoding="utf-8"))
+        except Exception as e:
+            status[oid] = "error"
+            fail(section, f"{ref}: envelope unreadable: {e}")
+            continue
+        envelopes[ref] = env
+        st, why = verify_envelope(env, o, trusted)
+        status[oid] = st
+        tag = {"verified": "signature VERIFIED (Ed25519)",
+               "unverified": f"signature UNVERIFIED - {why}"}.get(st, f"FAIL - {why}")
+        if st == "error": fail(section, f"{oid}: dsse: {why}")
+        print(f"    dsse: {oid} = {tag}")
+    return envelopes, status
+
+def validate_bundle(bdir, trusted=None, report=None):
+    """`trusted` (signer URI -> Ed25519 public key, hex) puts the run in
+    verification mode. `report`, a dict, receives what a test compares:
+    envelopes (attestation id -> status) and tiers (tailoring id -> tier)."""
+    try: section = os.path.relpath(bdir, ROOT).replace("\\", "/")
+    except ValueError: section = os.path.basename(bdir)      # another drive (Windows temp)
     mpath = os.path.join(bdir, "content-manifest.json")
     if not os.path.exists(mpath):
         fail(section, "no content-manifest.json"); return
@@ -1608,44 +1759,23 @@ def validate_bundle(bdir):
         seen_ids[obj.get("id")] = rel
         if t: bundle_objs[obj["id"]] = (t, obj)
     pinned, pinned_decl = load_facet_pins(bdir, manifest, section)
-    # DSSE envelopes (#24): envelope-ref resolves to a file BESIDE the
-    # manifest (nothing signed contains its own signature, D3); with
-    # --trusted-keys the run is in verification mode.
-    envelopes = {}
-    for oid, (t2, o2) in bundle_objs.items():
-        if t2 != "attestation" or not o2.get("envelope-ref"): continue
-        ep = os.path.join(bdir, o2["envelope-ref"])
-        if os.path.exists(ep):
-            try:
-                envelopes[o2["envelope-ref"]] = json.load(open(ep, encoding="utf-8"))
-            except Exception as e:
-                fail(section, f"{o2['envelope-ref']}: envelope unreadable: {e}")
-        else:
-            fail(section, f"{oid}: envelope-ref '{o2['envelope-ref']}' does not resolve beside the manifest")
-    for oid, (t2, o2) in sorted(bundle_objs.items()):
-        if t2 != "attestation": continue
-        if o2.get("envelope-ref"):
-            env = envelopes.get(o2["envelope-ref"])
-            if env is not None:
-                st, why = verify_envelope(env, o2, TRUSTED)
-                tag = {"verified": "signature VERIFIED (Ed25519)",
-                       "unverified": f"signature UNVERIFIED - {why}"}.get(st, f"FAIL - {why}")
-                if st == "error": fail(section, f"{oid}: dsse: {why}")
-                print(f"    dsse: {oid} = {tag}")
-        else:
-            print(f"    dsse: {oid} = no envelope (unsigned attestation)")
+    listed_ids = {oid for oid, (t2, _) in bundle_objs.items() if t2 == "attestation"}
+    load_beside_attestations(bdir, manifest, listed, section, bundle_objs, typec, seen_ids)
+    envelopes, env_status = check_envelopes(bdir, bundle_objs, section, trusted, listed_ids)
+    if report is not None:
+        report["envelopes"], report["tiers"] = env_status, {}
     # reference taxonomy (#16) + facet payloads (#17) + tier duties (#19/#24)
     for e in closure_errors(bundle_objs):
         fail(section, e)
     for e in tailoring_duty_errors(bundle_objs, pinned_decl=pinned_decl,
-                                   envelopes=envelopes, trusted=TRUSTED):
+                                   envelopes=envelopes, trusted=trusted):
         fail(section, e)
     for e in kernel_pin_errors(manifest, bundle_objs): fail(section, e)
     s_errs, s_notes = scale_errors(load_scale_pins(bdir, manifest, section), bundle_objs)
     for e in s_errs: fail(section, e)
     for n in s_notes: print(f"    note: {n}")
     # CP-RISK-1: B.1.9 risk-coverage report (+ RISK-11 errors), RISK-9/10 notes
-    cov, cerrs, cnotes = risk_coverage(bundle_objs, envelopes=envelopes, trusted=TRUSTED)
+    cov, cerrs, cnotes = risk_coverage(bundle_objs, envelopes=envelopes, trusted=trusted)
     for e in cerrs: fail(section, e)
     for n in cnotes + risk_link_notes(bundle_objs): print(f"    note: {n}")
     # the report is printed where there is a register to report on; the
@@ -1669,10 +1799,11 @@ def validate_bundle(bdir):
     for tid, (tt, tobj2) in sorted(bundle_objs.items()):
         if tt == "tailoring":
             tnotes = []
-            tr = derive_tier(tobj2, bundle_objs, sdig, envelopes=envelopes, trusted=TRUSTED, notes=tnotes)
+            tr = derive_tier(tobj2, bundle_objs, sdig, envelopes=envelopes, trusted=trusted, notes=tnotes)
+            if report is not None: report["tiers"][tid] = tr
             note = {"authority-claimed": " [prefix claim - UNPROVEN]",
                     "authority-proven": (" [attestation digest-matched + signature VERIFIED]"
-                                         if TRUSTED is not None else
+                                         if trusted is not None else
                                          " [attestation digest-matched; UNVERIFIED - run with --trusted-keys]")}.get(tr, "")
             print(f"    tier: {tid} = {tr}{note}")
             for n in tnotes:
@@ -1686,16 +1817,62 @@ def validate_bundle(bdir):
         fail(section, f"{rel}: on disk but not in manifest")
     return typec
 
-def validate_examples():
+FIXTURE_KEYS_FILE = os.path.join(CONF, "dsse-fixture-trusted-keys.json")
+
+def example_attestation_errors(att, objs, exdir, manifest, manifest_raw, env):
+    """The example Attestation is held to what it shows (backlog #46): until
+    2026-11-11 its three subject digests and its manifest digest matched
+    nothing in the folder and its envelope did not exist, and no run said
+    so. Every binding must hold here: each subject names an object of the
+    folder with its semantic digest, `content-manifest-digest` is the digest
+    of the manifest's bytes as delivered, the rendering digest is the
+    manifest's and the file's, and the envelope verifies under the fixture
+    key. This is the folder's self-consistency, not a rule for bundles:
+    sign_example.py rewrites attestation and envelope after an edit."""
+    errs, aid = [], att.get("id")
+    for subj in att.get("subject-semantic-digests", []):
+        if not isinstance(subj, dict):
+            errs.append(f"{aid}: subject {subj} carries no id - the example names its subjects"); continue
+        tgt = objs.get(subj["id"])
+        if tgt is None:
+            errs.append(f"{aid}: subject {subj['id']} is not in the example folder"); continue
+        if sdig(tgt[1]) != subj["semantic-digest"]:
+            errs.append(f"{aid}: subject {subj['id']}: recomputed semantic digest {sdig(tgt[1])}, "
+                        f"signed {subj['semantic-digest']} (run jascon/scripts/sign_example.py)")
+    if att.get("content-manifest-digest") != pkg_digest(manifest_raw):
+        errs.append(f"{aid}: content-manifest-digest != the digest of content-manifest.json as delivered "
+                    f"({pkg_digest(manifest_raw)}; run jascon/scripts/sign_example.py)")
+    art = (att.get("rendering") or {}).get("artifact-digest")
+    rend = next((r for r in manifest.get("renderings", []) or [] if r.get("digest") == art), None)
+    if rend is None:
+        errs.append(f"{aid}: rendering.artifact-digest matches no rendering of the manifest")
+    else:
+        rp = os.path.join(exdir, rend["path"])
+        if not os.path.isfile(rp) or pkg_digest(open(rp, "rb").read()) != art:
+            errs.append(f"{aid}: rendering {rend['path']} does not have the attested digest")
+    if env is None:
+        errs.append(f"{aid}: the example attestation carries no readable envelope")
+    else:
+        st, why = verify_envelope(env, att, json.load(open(FIXTURE_KEYS_FILE, encoding="utf-8")))
+        if st != "verified":
+            errs.append(f"{aid}: the envelope does not verify under the fixture key: {st} {why}")
+    return errs
+
+def validate_examples(trusted=None):
+    """`trusted`: the keys of --trusted-keys; without them the fixture keys
+    (the example envelope is signed with the dsse vectors' fixture key)."""
     exdir = os.path.join(SKILL, "examples")
     section = "skill-examples"
+    if trusted is None:
+        trusted = json.load(open(FIXTURE_KEYS_FILE, encoding="utf-8"))
     typec = collections.Counter()
     exobjs = {}
     # The example manifest is checked like any other (it was not, and at
     # 1.0.0 its package digests were a mix of CRLF and LF spellings - 8 of
     # 12 failed on an LF tree, the other 4 on a CRLF tree, unnoticed).
     # Attestations live BESIDE the manifest (D3.1) and are not listed.
-    manifest = json.load(open(os.path.join(exdir, "content-manifest.json"), encoding="utf-8"))
+    manifest_raw = open(os.path.join(exdir, "content-manifest.json"), "rb").read()
+    manifest = json.loads(manifest_raw.decode("utf-8"))
     if VALIDATORS["contentManifest"].is_valid(manifest): ok(section)
     else: fail(section, "content-manifest.json: manifest schema violation")
     listed = {e["path"]: e for e in manifest.get("objects", [])}
@@ -1724,6 +1901,16 @@ def validate_examples():
             fail(section, f"{fn}: semantic-digest mismatch")
         if obj.get("id") != entry["id"]:
             fail(section, f"{fn}: manifest id != object id")
+    # envelopes and bindings of the Attestation beside the manifest: the same
+    # envelope check as validate_bundle, then the folder's own guard (#46)
+    listed_ids = {e["id"] for e in listed.values()}
+    envelopes, _ = check_envelopes(exdir, exobjs, section, trusted,
+                                   {oid for oid, (t, _) in exobjs.items() if t == "attestation" and oid in listed_ids})
+    for oid, (t, o) in sorted(exobjs.items()):
+        if t == "attestation":
+            for e in example_attestation_errors(o, exobjs, exdir, manifest, manifest_raw,
+                                                envelopes.get(o.get("envelope-ref"))):
+                fail(section, e)
     for e in closure_errors(exobjs): fail(section, e)
     # facet payloads against stdlib / the pins just loaded (#17) - the
     # example pass loaded the pins and never applied them
@@ -1732,7 +1919,7 @@ def validate_examples():
     s_errs, s_notes = scale_errors(load_scale_pins(exdir, manifest, section), exobjs)
     for e in s_errs: fail(section, e)
     for n in s_notes: print(f"    note: {n}")
-    cov, cerrs, cnotes = risk_coverage(exobjs)
+    cov, cerrs, cnotes = risk_coverage(exobjs, envelopes=envelopes, trusted=trusted)
     for e in cerrs: fail(section, e)
     for n in cnotes + risk_link_notes(exobjs): print(f"    note: {n}")
     for tid, r in cov["tailorings"].items():
@@ -1748,57 +1935,66 @@ def validate_examples():
 # --trusted-keys FILE puts the run in verification mode (#24): a JSON map
 # of signer URI -> Ed25519 public key (hex). Without it, structural mode.
 # --compose DIR_A DIR_B runs the D3.5 composition engine over two bundles.
-TRUSTED = None
+# The run is main(): the engines above can be imported without running
+# (sign_example.py signs with ed25519_sign and digests with sdig).
 REQUIRE_RISK_BASIS = False
-_argv = sys.argv[1:]
-if "--require-risk-basis" in _argv:      # policy switch: uncovered selections become failures
-    REQUIRE_RISK_BASIS = True
-    _argv.remove("--require-risk-basis")
-if "--trusted-keys" in _argv:
-    _i = _argv.index("--trusted-keys")
-    TRUSTED = json.load(open(_argv[_i + 1], encoding="utf-8"))
-    _argv = _argv[:_i] + _argv[_i + 2:]
-if "--compose" in _argv:
-    _i = _argv.index("--compose")
-    da, db = _argv[_i + 1], _argv[_i + 2]
-    (ao, ap), (bo, bp) = _load_compose_side(da), _load_compose_side(db)
-    res, errs = compose(ao, ap, bo, bp)
-    print(f"== compose {da} + {db} ==")
-    for fid, ver in sorted(res.items()):
-        print(f"  resolved: {fid} @ {ver}")
-    for e in errs:
-        print(f"  ERROR: {e}")
-    sys.exit(1 if errs else 0)
 
-print("== conformance corpus ==")
-run_jcs(); run_modality(); run_parameters(); run_tailoring(); run_attestation(); run_facets(); run_references(); run_lifecycle(); run_tiers(); run_dsse(); run_composition(); run_conditional(); run_risk(); run_kernel(); run_scale()
-for k in ("jcs", "modality", "parameter", "tailoring", "attestation", "facet", "reference", "lifecycle", "tier", "dsse", "composition", "conditional", "risk", "kernel", "scale"):
-    print(f"  {k}: {counts[k]} pass, {counts[k + ':FAIL']} fail")
+def main(argv):
+    global REQUIRE_RISK_BASIS
+    trusted = None
+    _argv = list(argv)
+    if "--require-risk-basis" in _argv:      # policy switch: uncovered selections become failures
+        REQUIRE_RISK_BASIS = True
+        _argv.remove("--require-risk-basis")
+    if "--trusted-keys" in _argv:
+        _i = _argv.index("--trusted-keys")
+        trusted = json.load(open(_argv[_i + 1], encoding="utf-8"))
+        _argv = _argv[:_i] + _argv[_i + 2:]
+    if "--compose" in _argv:
+        _i = _argv.index("--compose")
+        da, db = _argv[_i + 1], _argv[_i + 2]
+        (ao, ap), (bo, bp) = _load_compose_side(da), _load_compose_side(db)
+        res, errs = compose(ao, ap, bo, bp)
+        print(f"== compose {da} + {db} ==")
+        for fid, ver in sorted(res.items()):
+            print(f"  resolved: {fid} @ {ver}")
+        for e in errs:
+            print(f"  ERROR: {e}")
+        return 1 if errs else 0
 
-print("== bundles ==")
-targets = _argv
-if not targets:
-    ce = os.path.join(ROOT, "converted_examples")
-    targets = []
-    for corpus in sorted(os.listdir(ce)):
-        cdir = os.path.join(ce, corpus)
-        if not os.path.isdir(cdir): continue
-        for d in sorted(os.listdir(cdir)):
-            if d.endswith("-bundle") and os.path.isdir(os.path.join(cdir, d)):
-                targets.append(os.path.join(cdir, d))
-total_types = collections.Counter()
-for b in targets:
-    tc = validate_bundle(b) or collections.Counter()
+    print("== conformance corpus ==")
+    run_jcs(); run_modality(); run_parameters(); run_tailoring(); run_attestation(); run_facets(); run_references(); run_lifecycle(); run_tiers(); run_dsse(); run_composition(); run_conditional(); run_risk(); run_kernel(); run_scale()
+    for k in ("jcs", "modality", "parameter", "tailoring", "attestation", "facet", "reference", "lifecycle", "tier", "dsse", "composition", "conditional", "risk", "kernel", "scale"):
+        print(f"  {k}: {counts[k]} pass, {counts[k + ':FAIL']} fail")
+
+    print("== bundles ==")
+    targets = _argv
+    if not targets:
+        ce = os.path.join(ROOT, "converted_examples")
+        targets = []
+        for corpus in sorted(os.listdir(ce)):
+            cdir = os.path.join(ce, corpus)
+            if not os.path.isdir(cdir): continue
+            for d in sorted(os.listdir(cdir)):
+                if d.endswith("-bundle") and os.path.isdir(os.path.join(cdir, d)):
+                    targets.append(os.path.join(cdir, d))
+    total_types = collections.Counter()
+    for b in targets:
+        tc = validate_bundle(b, trusted=trusted) or collections.Counter()
+        total_types += tc
+        sec = os.path.relpath(b, ROOT).replace("\\", "/")
+        print(f"  {sec}: {counts[sec]} pass, {counts[sec + ':FAIL']} fail  {dict(tc)}")
+    tc = validate_examples(trusted=trusted)
     total_types += tc
-    sec = os.path.relpath(b, ROOT).replace("\\", "/")
-    print(f"  {sec}: {counts[sec]} pass, {counts[sec + ':FAIL']} fail  {dict(tc)}")
-tc = validate_examples()
-total_types += tc
-print(f"  skill-examples: {counts['skill-examples']} pass, {counts['skill-examples:FAIL']} fail  {dict(tc)}")
-print("== type coverage ==", dict(total_types))
+    print(f"  skill-examples: {counts['skill-examples']} pass, {counts['skill-examples:FAIL']} fail  {dict(tc)}")
+    print("== type coverage ==", dict(total_types))
 
-if fails:
-    print(f"\n{len(fails)} FAILURES:")
-    for f in fails[:60]: print("  -", f)
-    sys.exit(1)
-print("\nALL GREEN")
+    if fails:
+        print(f"\n{len(fails)} FAILURES:")
+        for f in fails[:60]: print("  -", f)
+        return 1
+    print("\nALL GREEN")
+    return 0
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))
