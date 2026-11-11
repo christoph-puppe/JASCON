@@ -138,6 +138,8 @@ const APPS = [
     desc: N("Components and implementation edges; build a system and attach requirements to its assets") },
   { id: "risk", file: "risk.html", glyph: "△", label: N("Risk"), types: ["risk"],
     desc: N("The risk register with its heat map, scales and matrix, coverage of the selected requirements, risk catalogues") },
+  { id: "checks", file: "checks.html", glyph: "⊨", label: N("Checks"), types: ["check"],
+    desc: N("Machine checks for technical rules: facts, criteria and collector code, written by hand or drafted by a model") },
   { id: "assess", file: "assess.html", glyph: "◉", label: N("Assess"), types: ["assessment", "finding", "attestation"],
     desc: N("Assessments, findings and attestations; run a check and write its result") },
   { id: "validate", file: "validate.html", glyph: "◐", label: N("Validate"), types: [],
@@ -155,6 +157,9 @@ jscI18n.add("de", {
   "A key for a model service is held in the memory of this page. Click to forget it.": "Ein Schlüssel für einen Modell-Dienst liegt im Speicher dieser Seite. Klicken, um ihn zu vergessen.",
   "Validate": "Validieren", "Check the active set against the kernel rules this app has ported": "Das aktive Set gegen die Kernel-Regeln prüfen, die diese App portiert hat",
   "Import": "Import", "Import an OSCAL catalog or profile; everything after it works on JASCON": "Einen OSCAL-Katalog oder ein OSCAL-Profil importieren; alles danach arbeitet auf JASCON",
+  "Checks": "Prüfungen",
+  "Machine checks for technical rules: facts, criteria and collector code, written by hand or drafted by a model":
+    "Maschinelle Prüfungen für technische Regeln: Fakten, Kriterien und Kollektor-Code, von Hand geschrieben oder von einem Modell entworfen",
   "Browse": "Durchsehen", "Tailor": "Tailoring", "Map": "Mapping", "Implement": "Umsetzen", "Assess": "Prüfen", "Risk": "Risiko",
   "The risk register with its heat map, scales and matrix, coverage of the selected requirements, risk catalogues":
     "Das Risikoregister mit Heatmap, Skalen und Matrix, Abdeckung der ausgewählten Anforderungen, Risikokataloge",
@@ -497,6 +502,8 @@ function syncKeyPill() {
 window.addEventListener("message", e => {
   if (e.source !== frame.contentWindow || (location.protocol !== "file:" && e.origin !== location.origin)) return;
   const d = e.data;
+  /* a tool hands over to another one, for example Import to Checks after a CIS import */
+  if (d && d.jsc === "tool" && APPS.some(a => a.id === d.tool)) { select(d.tool, true); return; }
   if (!d || d.jsc !== "ai-key") return;
   if (d.op === "set" && typeof d.backend === "string" && typeof d.key === "string") {
     if (d.key) aiKeys[d.backend] = d.key; else delete aiKeys[d.backend];

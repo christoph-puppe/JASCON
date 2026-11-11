@@ -1,0 +1,617 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Checks · JASCON App</title>
+<link rel="stylesheet" href="jascon-core.css">
+<script>try{var _t=localStorage.getItem("jsc:cfg:ui:theme")||"dark";if(_t!=="system")document.documentElement.setAttribute("data-theme",_t)}catch(e){}</script>
+</head>
+<body>
+<div id="app"><div id="mid">
+  <nav id="rail" aria-label="Views">
+    <div class="railgroup">
+      <div class="nano" data-i18n>Views</div>
+      <button class="navitem" data-view="rules"><span class="glyph">⊨</span><span data-i18n>Rules and checks</span><span class="navcount" id="nc-rules"></span></button>
+      <button class="navitem" data-view="edit"><span class="glyph">✎</span><span data-i18n>Edit a check</span></button>
+      <button class="navitem" data-view="draft"><span class="glyph">✧</span><span data-i18n>Draft with a model</span></button>
+    </div>
+    <div class="railgroup">
+      <p class="hint" data-i18n>A check has two parts. The collector is code that reports facts and decides nothing. The criteria compare those facts with eleven fixed operators, so anyone can recompute a verdict from a recorded observation. A model may draft both; the kernel rules judge the draft, and you decide what is saved.</p>
+      <p class="hint" data-i18n>The Check type is proposed (drafts/CP-CHECK-1.md) and not released. This app cannot run a collector.</p>
+    </div>
+  </nav>
+  <main id="main">
+    <section class="glass card" data-view="rules">
+      <h2><span class="glyph">⊨</span><span data-i18n>Rules and checks</span></h2>
+      <div id="rules"></div>
+    </section>
+    <section class="glass card" data-view="edit">
+      <h2><span class="glyph">✎</span><span data-i18n>Edit a check</span></h2>
+      <div id="edit"></div>
+    </section>
+    <section class="glass card" data-view="draft">
+      <h2><span class="glyph">✧</span><span data-i18n>Draft with a model</span></h2>
+      <div id="draft"></div>
+    </section>
+  </main>
+</div></div>
+
+<script src="jascon-core.js"></script>
+<script src="jascon-schema.js"></script>
+<script src="jascon-rules.js"></script>
+<script src="jascon-checks.js"></script>
+<script src="jascon-view.js"></script>
+<script src="jascon-ai.js"></script>
+<script>
+"use strict";
+/* Checks: machine checks for the technical rules of a set (CP-CHECK-1).
+
+   Three views over the active set:
+   - Rules and checks: every requirement that carries assessment criteria
+     (a CIS import puts the audit text there) or has a check, with its
+     checks. From here a check is written or drafted, one at a time.
+   - Edit a check: the form of one Check - requirement and clauses, the
+     facts a collector reports, the criteria, the collector code - with the
+     kernel rules (shape, CHECK-1..7) and the read-only lint shown as it is
+     typed, a tester that computes the verdict for an observation you paste,
+     and a button that asks a model for a draft of this one check.
+   - Draft with a model: the same question for many rules at once (all
+     automated rules of an import, say), with an estimate before the run,
+     answers kept as they arrive, and a draft saved only when you take it.
+
+   What is decided where: a rule marked manual, a rule without audit text
+   and a rule that has a check in the chosen language already are resolved
+   in code and never sent. The model writes facts, criteria and collector
+   code; jascon-checks.js assembles the Check (id, requirement, clauses,
+   confidence draft) and the rules of jascon-rules.js judge it like a check
+   written by hand. A draft that the rules refuse cannot be saved.
+
+   The page writes Check objects and nothing else. It does not run code
+   and does not record runs. */
+const $ = id => document.getElementById(id);
+const V = jscView, esc = jscEsc;
+const OPS = JSC_SCHEMA.$defs.checkOp.enum, FACT_TYPES = JSC_SCHEMA.$defs.checkFactType.enum;
+const UNITS = JSC_SCHEMA.$defs.elapsedUnit.enum;
+const ui = V.draft("checks", () => ({ filter: { q: "", method: "", has: "" }, edit: null,
+  batch: { runtime: "bash", scope: "automated", fresh: false, rows: {} }, queue: null }));
+let G = jscSet.graph;
+const opt = (value, text, current) => `<option value="${esc(value)}" ${value === current ? "selected" : ""}>${esc(text)}</option>`;
+const chip = (n, label, cls) => `<span class="chip"><b class="${cls || ""}">${esc(n)}</b>${esc(T(label))}</span>`;
+const orgNs = () => jscCfg.get("org:ns").replace(/\/+$/, "") || "https://example.org/my";
+const reqOf = id => { const r = G.objects.get(id); return r && r.type === "requirement" ? r.obj : null; };
+const lang = () => jscI18n.contentLang();
+
+jscI18n.add("de", {
+  "Rules and checks": "Regeln und Prüfungen", "Edit a check": "Prüfung bearbeiten", "Draft with a model": "Mit einem Modell entwerfen",
+  "A check has two parts. The collector is code that reports facts and decides nothing. The criteria compare those facts with eleven fixed operators, so anyone can recompute a verdict from a recorded observation. A model may draft both; the kernel rules judge the draft, and you decide what is saved.":
+    "Eine Prüfung hat zwei Teile. Der Kollektor ist Code, der Fakten meldet und nichts entscheidet. Die Kriterien vergleichen diese Fakten mit elf festen Operatoren, sodass jeder ein Urteil aus einer aufgezeichneten Beobachtung nachrechnen kann. Ein Modell darf beides entwerfen; die Kernel-Regeln beurteilen den Entwurf, und Sie entscheiden, was gespeichert wird.",
+  "The Check type is proposed (drafts/CP-CHECK-1.md) and not released. This app cannot run a collector.":
+    "Der Typ Check ist vorgeschlagen (drafts/CP-CHECK-1.md) und nicht freigegeben. Diese App kann keinen Kollektor ausführen.",
+  "Checks": "Prüfungen", "rules offered": "angebotene Regeln", "automated": "automatisiert", "manual": "manuell", "with a check": "mit Prüfung",
+  "This set has no requirement with assessment criteria and no check. Import a CIS Benchmark on the Import page, or write a check for any requirement in the editor.":
+    "Dieses Set hat keine Anforderung mit Prüfkriterien und keine Prüfung. Auf der Seite Import einen CIS Benchmark importieren oder im Editor eine Prüfung für eine beliebige Anforderung schreiben.",
+  "Filter by label, title or id": "Nach Label, Titel oder Id filtern", "all": "alle", "without a check": "ohne Prüfung",
+  "Rule": "Regel", "Marking": "Kennzeichnung", "New check": "Neue Prüfung", "Edit": "Bearbeiten", "and {n} more; narrow the filter": "und {n} weitere; Filter eingrenzen",
+  "Requirement": "Anforderung", "type to choose a requirement": "tippen, um eine Anforderung zu wählen", "Clauses": "Klauseln",
+  "none ticked: the check covers every clause": "keine angekreuzt: Die Prüfung deckt jede Klausel ab", "Audit text of the source": "Audit-Text der Quelle",
+  "Remediation text of the source": "Remediation-Text der Quelle", "Platform under test": "Geprüfte Plattform",
+  "An opaque URI for the kind of system the collector runs on.": "Eine opake URI für die Art System, auf dem der Kollektor läuft.",
+  "Confidence": "Vertrauensgrad", "Lifecycle": "Lebenszyklus", "Author (party)": "Autor (Partei)",
+  "Facts the collector reports": "Fakten, die der Kollektor meldet", "name": "Name", "type": "Typ", "one value": "ein Wert", "a list": "eine Liste", "description": "Beschreibung",
+  "+ fact": "+ Fakt", "Passes when all of these hold": "Bestanden, wenn alle diese gelten", "Applies only when all of these hold (optional)": "Gilt nur, wenn alle diese gelten (optional)",
+  "+ assertion": "+ Aussage", "fact": "Fakt", "expected, as JSON": "erwartet, als JSON",
+  "A literal of the fact's type (4, \"no\", true, [\"a\"]) or {\"param\": \"name\"}. Parameters of the covered clauses: {list}": "Ein Literal vom Typ des Fakts (4, \"no\", true, [\"a\"]) oder {\"param\": \"Name\"}. Parameter der abgedeckten Klauseln: {list}",
+  "none": "keine", "Per resource": "Je Ressource", "The facts repeat per resource; the criteria hold for each.": "Die Fakten wiederholen sich je Ressource; die Kriterien gelten für jede.",
+  "kind of resource, for example file": "Art der Ressource, zum Beispiel Datei", "no resource observed passes": "keine beobachtete Ressource gilt als bestanden",
+  "Fresh for": "Gültig für", "Collectors": "Kollektoren", "+ collector": "+ Kollektor", "id": "Id", "language": "Sprache", "privileges": "Rechte", "source": "Quelltext",
+  "unprivileged": "ohne Sonderrechte", "root": "root", "(not stated)": "(nicht angegeben)",
+  "Read-only lint: line {line} - {why}": "Lint auf reines Lesen: Zeile {line} - {why}",
+  "The lint looks for commands that write, install, restart or reach the network. A warning asks for a look; no warning proves nothing.":
+    "Der Lint sucht Befehle, die schreiben, installieren, neu starten oder ins Netz gehen. Eine Warnung verlangt einen Blick; keine Warnung beweist nichts.",
+  "What the kernel rules say": "Was die Kernel-Regeln sagen", "The check passes the kernel rules this app has ported.": "Die Prüfung besteht die Kernel-Regeln, die diese App portiert hat.",
+  "Save the check": "Prüfung speichern", "Discard": "Verwerfen", "Choose a requirement first.": "Zuerst eine Anforderung wählen.",
+  "saved check {id}": "Prüfung {id} gespeichert", "Try the criteria": "Kriterien ausprobieren",
+  "Paste an observation as a collector would print it, and the values of the parameters, to see the verdict. Nothing is run.":
+    "Eine Beobachtung so einfügen, wie ein Kollektor sie ausgeben würde, und die Werte der Parameter, um das Urteil zu sehen. Es wird nichts ausgeführt.",
+  "observation": "Beobachtung", "parameter values": "Parameterwerte", "values bound by": "Werte gebunden durch", "(type them)": "(selbst eintragen)",
+  "Verdict": "Urteil", "not JSON: {msg}": "kein JSON: {msg}",
+  "Ask a model for this check": "Ein Modell um diese Prüfung bitten",
+  "The model gets the rule (title, clauses, parameters, audit and remediation text, your description) and the contract of a check. Its answer fills the form; nothing is saved until you save.":
+    "Das Modell erhält die Regel (Titel, Klauseln, Parameter, Audit- und Remediation-Text, Ihre Beschreibung) und den Vertrag einer Prüfung. Seine Antwort füllt das Formular; gespeichert wird erst, wenn Sie speichern.",
+  "Describe the check (optional; needed where the rule has no audit text)": "Die Prüfung beschreiben (optional; nötig, wo die Regel keinen Audit-Text hat)",
+  "Collector language": "Kollektor-Sprache", "Ask the model": "Das Modell fragen", "What is sent": "Was gesendet wird",
+  "The model says this rule does not fit a check: {reason}": "Das Modell sagt, diese Regel passt in keine Prüfung: {reason}",
+  "The answer could not be made into a check:": "Die Antwort ließ sich nicht zu einer Prüfung machen:",
+  "draft from {by}: {reason}": "Entwurf von {by}: {reason}", "draft a check failed: {msg}": "Prüfung entwerfen fehlgeschlagen: {msg}",
+  "Everything else on this page is computed. Here a language model is asked for what no rule can compute: facts, criteria and collector code for a technical rule. Rules marked manual, rules without audit text and rules that have a check in the chosen language are not sent. The app assembles each answer into a Check and judges it with the kernel rules; nothing is written until you take a draft.":
+    "Alles andere auf dieser Seite wird berechnet. Hier wird ein Sprachmodell nach dem gefragt, was keine Regel berechnen kann: Fakten, Kriterien und Kollektor-Code für eine technische Regel. Manuell gekennzeichnete Regeln, Regeln ohne Audit-Text und Regeln, die schon eine Prüfung in der gewählten Sprache haben, werden nicht gesendet. Die App setzt jede Antwort zu einer Prüfung zusammen und beurteilt sie mit den Kernel-Regeln; geschrieben wird erst, wenn Sie einen Entwurf übernehmen.",
+  "From the import of {source}: the automated rules are selected, collector language {runtime}. Nothing has been sent.": "Aus dem Import von {source}: Die automatisierten Regeln sind ausgewählt, Kollektor-Sprache {runtime}. Nichts wurde gesendet.",
+  "Dismiss": "Verwerfen", "rules marked automated": "als automatisiert gekennzeichnete Regeln", "every rule with audit text": "jede Regel mit Audit-Text",
+  "to draft": "zu entwerfen", "marked manual": "manuell gekennzeichnet", "without audit text": "ohne Audit-Text", "have a check in this language": "haben eine Prüfung in dieser Sprache",
+  "ask again, do not use kept answers": "erneut fragen, gespeicherte Antworten nicht verwenden", "cancel": "abbrechen",
+  "{calls} call(s), about {tokens} tokens, to {service}": "{calls} Aufruf(e), etwa {tokens} Tokens, an {service}",
+  "cancel requested; calls in flight are finished, no further call is started": "Abbruch angefordert; laufende Aufrufe werden beendet, kein weiterer wird gestartet",
+  "{n} rule(s) offered: {s} sent to the model, {k} resolved without it ({m} marked manual, {a} without audit text, {h} with a check in {runtime})":
+    "{n} Regel(n) angeboten: {s} an das Modell gesendet, {k} ohne es entschieden ({m} manuell gekennzeichnet, {a} ohne Audit-Text, {h} mit Prüfung in {runtime})",
+  "checks: {c} answer(s) kept from before, {s} call(s) sent, {f} failed; {d} draft(s) pass the rules, {x} do not fit, {e} could not be assembled":
+    "Prüfungen: {c} Antwort(en) von früher, {s} Aufruf(e) gesendet, {f} fehlgeschlagen; {d} Entwurf/Entwürfe bestehen die Regeln, {x} passen nicht, {e} ließen sich nicht zusammensetzen",
+  "estimate: {calls} call(s), about {tokens} tokens. The service counted: {input} in ({cached} from its cache), {output} out, {thoughts} thinking, in {n} call(s).":
+    "Schätzung: {calls} Aufruf(e), etwa {tokens} Tokens. Der Dienst zählte: {input} rein ({cached} aus seinem Cache), {output} raus, {thoughts} Denken, in {n} Aufruf(en).",
+  "pending": "ausstehend", "does not fit a check": "passt in keine Prüfung", "passes the rules": "besteht die Regeln", "refused by the rules": "von den Regeln abgelehnt",
+  "Save the ticked": "Angekreuzte speichern", "tick all that pass": "alle ankreuzen, die bestehen", "Open in the editor": "Im Editor öffnen", "Discard the drafts": "Entwürfe verwerfen",
+  "saved {n} check(s)": "{n} Prüfung(en) gespeichert", "Nothing to draft: every offered rule is resolved without a model.": "Nichts zu entwerfen: Jede angebotene Regel ist ohne Modell entschieden.",
+  "Prompt": "Prompt", "cancelled": "abgebrochen", "draft checks": "Prüfungen entwerfen",
+});
+
+/* ====================== rules and checks ====================== */
+function rules() { return jscChecksRules(G.objects); }
+function renderRules() {
+  const all = rules(), f = ui.data.filter;
+  $("nc-rules").textContent = all.length || "";
+  if (!all.length) { $("rules").innerHTML = `<p class="hint">${esc(T("This set has no requirement with assessment criteria and no check. Import a CIS Benchmark on the Import page, or write a check for any requirement in the editor."))}</p>`; return; }
+  const q = f.q.toLowerCase();
+  const shown = all.filter(r => (!f.method || r.method === f.method) && (!f.has || (f.has === "yes") === (r.checks.length > 0))
+    && (!q || r.id.toLowerCase().includes(q) || (r.req.label || "").toLowerCase().includes(q) || TT(r.req.title).toLowerCase().includes(q)));
+  const seg = (key, value, label) => `<button type="button" data-f="${key}" data-v="${value}" class="${f[key] === value ? "on-inc" : ""}" aria-pressed="${f[key] === value}">${esc(T(label))}</button>`;
+  const checkLine = id => {
+    const c = G.objects.get(id).obj, cols = ((c.facets || {})[JSC_CHECKS.COLLECTOR] || {}).collectors || [];
+    return `<div>${V.refLink(id, V.last(id))} ${cols.map(x => V.badge(x.runtime)).join("")}${V.badge(c.confidence)}${V.badge(c.lifecycle)} <button type="button" class="small" data-edit="${esc(id)}">${esc(T("Edit"))}</button></div>`;
+  };
+  $("rules").innerHTML = `<div class="wbrow">${chip(all.length, "rules offered")}${chip(all.filter(r => r.method === "automated").length, "automated")}${chip(all.filter(r => r.method === "manual").length, "manual")}${chip(all.filter(r => r.checks.length).length, "with a check")}</div>
+    <div class="wbrow"><input type="search" id="r-q" value="${esc(f.q)}" placeholder="${esc(T("Filter by label, title or id"))}" style="max-width:320px">
+      <span class="seg">${seg("method", "", "all")}${seg("method", "automated", "automated")}${seg("method", "manual", "manual")}</span>
+      <span class="seg">${seg("has", "", "all")}${seg("has", "no", "without a check")}${seg("has", "yes", "with a check")}</span></div>
+    <table class="flat"><tr><th>${esc(T("Rule"))}</th><th>${esc(T("Marking"))}</th><th>${esc(T("Checks"))}</th><th></th></tr>
+    ${shown.slice(0, 300).map(r => `<tr><td>${V.refLink(r.id, r.req.label || V.last(r.id))}<div class="hint">${esc(TT(r.req.title))}</div></td>
+      <td>${r.method ? V.badge(T(r.method)) : ""}</td><td>${r.checks.map(checkLine).join("")}</td>
+      <td><button type="button" class="small" data-new="${esc(r.id)}">${esc(T("New check"))}</button></td></tr>`).join("")}</table>
+    ${shown.length > 300 ? `<p class="hint">${esc(T("and {n} more; narrow the filter", { n: shown.length - 300 }))}</p>` : ""}`;
+  V.wireRefs($("rules"));
+  $("r-q").addEventListener("change", e => { f.q = e.target.value; ui.save(); renderRules(); });
+  $("rules").querySelectorAll("[data-f]").forEach(b => b.addEventListener("click", () => { f[b.dataset.f] = b.dataset.v; ui.save(); renderRules(); }));
+  $("rules").querySelectorAll("[data-new]").forEach(b => b.addEventListener("click", () => { startEdit(null, b.dataset.new); jscPage.show("edit"); }));
+  $("rules").querySelectorAll("[data-edit]").forEach(b => b.addEventListener("click", () => { startEdit(b.dataset.edit); jscPage.show("edit"); }));
+}
+
+/* ====================== the editor ======================
+   E is the form as plain data, kept in the page's draft store so that a
+   reload loses nothing. build() turns it into a Check object; the object
+   is what the rules judge and what is saved. */
+const blankCollector = runtime => ({ id: runtime, runtime, privileges: "", source: "" });
+function startEdit(checkId, reqId) {
+  if (checkId) {
+    const c = G.objects.get(checkId).obj, cols = ((c.facets || {})[JSC_CHECKS.COLLECTOR] || {}).collectors || [];
+    ui.data.edit = { existing: checkId, reqId: c["requirement-ref"], statementIds: [...(c["statement-ids"] || [])], platform: c.platform,
+      confidence: c.confidence, lifecycle: c.lifecycle, authorRef: (c.provenance || {})["author-ref"] || "",
+      observes: c.observes.map(f => ({ name: f.name, type: f.type, cardinality: f.cardinality || "one", description: TT(f.description) })),
+      criteria: c.criteria.map(a => ({ fact: a.fact, op: a.op, expected: a.expected === undefined ? "" : JSON.stringify(a.expected) })),
+      applies: (c["applies-when"] || []).map(a => ({ fact: a.fact, op: a.op, expected: a.expected === undefined ? "" : JSON.stringify(a.expected) })),
+      each: { on: !!c.each, resource: c.each ? c.each.resource : "", allowEmpty: c.each ? c.each["allow-empty"] : false },
+      validity: { on: !!c.validity, num: c.validity ? c.validity.num : 24, unit: c.validity ? c.validity.unit : "hours" },
+      collectors: cols.map(x => ({ id: x.id, runtime: x.runtime, privileges: x.privileges || "", source: x.source })),
+      keep: { title: c.title, version: c.version, provenance: c.provenance, annotations: c.annotations, facets: c.facets },
+      description: "", runtime: (cols[0] || {}).runtime || "bash", ai: null, tester: { observation: "", params: "", tailoring: "" } };
+  } else {
+    const req = reqOf(reqId);
+    ui.data.edit = { existing: null, reqId: reqId || "", statementIds: [], platform: req ? jscChecksPlatform(req.id, orgNs()) : "",
+      confidence: "draft", lifecycle: "draft", authorRef: orgNs() + "/party/check-author",
+      observes: [{ name: "", type: "string", cardinality: "one", description: "" }], criteria: [{ fact: "", op: "equals", expected: "" }], applies: [],
+      each: { on: false, resource: "", allowEmpty: false }, validity: { on: false, num: 24, unit: "hours" },
+      collectors: [blankCollector("bash")], keep: {}, description: "", runtime: "bash", ai: null, tester: { observation: "", params: "", tailoring: "" } };
+  }
+  ui.save();
+  renderEdit();
+}
+/* the form -> { obj, errors: [string] }; errors are what keeps the form from being an object at all */
+function build(E) {
+  const errors = [], req = reqOf(E.reqId);
+  if (!E.reqId) errors.push(T("Choose a requirement first."));
+  const parse = (list, where) => list.filter(a => a.fact || a.expected).map((a, i) => {
+    const out = { fact: a.fact, op: a.op };
+    if (a.op === "present" || a.op === "absent") return out;
+    try { out.expected = JSON.parse(a.expected); } catch (e) { errors.push(`${where}[${i}]: ${T("not JSON: {msg}", { msg: e.message })}`); }
+    return out;
+  });
+  const taken = new Set(G.objects.keys());
+  const id = E.existing || (req ? jscChecksMintId(orgNs(), req, (E.collectors[0] || {}).runtime || "check", taken) : "");
+  const obj = { id, version: (E.keep && E.keep.version) || "0.1.0", lifecycle: E.lifecycle,
+    title: (E.keep && E.keep.title) || { [lang()]: `${req ? req.label || V.last(req.id) : "?"}: ${(E.collectors[0] || {}).runtime || ""} check` },
+    "requirement-ref": E.reqId };
+  if (E.statementIds.length) obj["statement-ids"] = [...E.statementIds];
+  obj.platform = E.platform;
+  obj.observes = E.observes.filter(f => f.name).map(f => {
+    const d = { name: f.name, type: f.type };
+    if (f.cardinality === "many") d.cardinality = "many";
+    if (f.description.trim()) d.description = { [lang()]: f.description.trim() };
+    return d;
+  });
+  obj.criteria = parse(E.criteria, "criteria");
+  const aw = parse(E.applies, "applies-when");
+  if (aw.length) obj["applies-when"] = aw;
+  if (E.each.on) obj.each = { resource: E.each.resource, "allow-empty": !!E.each.allowEmpty };
+  if (E.validity.on) obj.validity = { num: parseInt(E.validity.num, 10) || 1, unit: E.validity.unit };
+  obj.confidence = E.confidence;
+  obj.provenance = { ...((E.keep && E.keep.provenance) || {}), "author-ref": E.authorRef, date: jscToday() };
+  const cols = E.collectors.filter(c => c.source.trim()).map(c => {
+    const x = { id: c.id, runtime: c.runtime, source: c.source.endsWith("\n") ? c.source : c.source + "\n" };
+    if (c.privileges) x.privileges = c.privileges;
+    return x;
+  });
+  const facets = { ...((E.keep && E.keep.facets) || {}) };
+  if (cols.length) facets[JSC_CHECKS.COLLECTOR] = { collectors: cols }; else delete facets[JSC_CHECKS.COLLECTOR];
+  if (Object.keys(facets).length) obj.facets = facets;
+  if (E.keep && E.keep.annotations) obj.annotations = E.keep.annotations;
+  return { obj, errors };
+}
+/* what the rules say about a built check, in the context of the set: shape, empty containers, CHECK-1..7 */
+function judge(obj) {
+  const shape = jscShapeErrors("check", obj), objs = new Map(G.objects);
+  objs.set(obj.id, { type: "check", obj });
+  const rulesSay = shape.length ? [] : jscCheckObjectErrors(obj.id, obj, objs).map(([, m]) => m.slice(obj.id.length + 2));
+  const empty = jscOptionalEmptyViolations(obj);
+  return [...shape.map(m => "shape " + m), ...(empty.length ? [`optional empty containers present: ${empty.join(", ")}`] : []), ...rulesSay];
+}
+const assertionRows = (list, key, facts) => list.map((a, i) => {
+  const d = facts.find(f => f.name === a.fact), card = d ? (d.cardinality === "many" ? "many" : "one") : "one";
+  const fits = d ? ["present", "absent", ...JSC_CHECK_OPS[card][d.type]] : OPS;
+  return `<div class="wbrow" data-row="${key}" data-i="${i}">
+    <select data-k="fact" aria-label="${esc(T("fact"))}">${opt("", "—", a.fact)}${facts.filter(f => f.name).map(f => opt(f.name, f.name, a.fact)).join("")}</select>
+    <select data-k="op" aria-label="op">${OPS.map(o => `<option value="${o}" ${o === a.op ? "selected" : ""} ${fits.includes(o) ? "" : "disabled"}>${o}</option>`).join("")}</select>
+    <input type="text" data-k="expected" value="${esc(a.expected)}" placeholder="${esc(T("expected, as JSON"))}" style="flex:1;font-family:var(--mono)" ${a.op === "present" || a.op === "absent" ? "disabled" : ""}>
+    <button type="button" class="small" data-del="${key}" data-i="${i}">✕</button></div>`;
+}).join("");
+/* The frame of the view is built once: the key panel and the prompt editor
+   keep their listeners and their focus; the form, the tester and the model
+   status below are drawn again on every change. */
+let editBuilt = false;
+function buildEditFrame() {
+  if (editBuilt) return;
+  editBuilt = true;
+  $("edit").innerHTML = `<div id="e-form"></div>
+    <div class="nano sectionlabel">${esc(T("Try the criteria"))}</div><div id="e-test"></div>
+    <div class="nano sectionlabel">${esc(T("Ask a model for this check"))}</div>
+    <p class="hint">${esc(T("The model gets the rule (title, clauses, parameters, audit and remediation text, your description) and the contract of a check. Its answer fills the form; nothing is saved until you save."))}</p>
+    <div id="e-ai-access"></div><div id="e-ai"></div>
+    <details style="margin-top:8px"><summary>${esc(T("Prompt"))}</summary><div id="e-ai-prompt"></div></details>`;
+  jscAi.accessPanel($("e-ai-access"));
+  jscAi.promptEditor($("e-ai-prompt"), "check-draft");
+  $("e-ai-prompt").addEventListener("jsc:prompt", () => { if (!RUN.which && ui.data.edit) renderEdit(); });
+}
+function renderEdit() {
+  buildEditFrame();
+  const E = ui.data.edit;
+  if (!E) { startEdit(null, ""); return; }
+  const req = reqOf(E.reqId), rule = rules().find(r => r.id === E.reqId);
+  const params = req ? jscChecksParams(req, E.statementIds) : new Map();
+  const { obj, errors } = build(E);
+  const said = errors.length ? errors : judge(obj);
+  const lint = E.collectors.flatMap((c, ci) => jscCollectorLint(c.runtime, c.source).map(w => ({ ...w, ci })));
+  $("e-form").innerHTML = `
+    <div class="kv">
+      <div class="k">${esc(T("Requirement"))}</div><div class="v">${req ? `${V.refLink(req.id, req.label || V.last(req.id))} <span class="hint">${esc(TT(req.title))}</span>` : ""}
+        ${E.existing ? "" : `<div class="wbrow">${V.pickerHtml("e-req", T("type to choose a requirement"))}</div>`}</div>
+      ${req ? `<div class="k">${esc(T("Clauses"))}</div><div class="v">${req.statements.map(s => `<label style="display:block"><input type="checkbox" data-sid="${esc(s.id)}" ${E.statementIds.includes(s.id) ? "checked" : ""}> ${V.badge(s.id)}${V.modBadge(s.modality)} ${V.prose(TT(s.prose))}</label>`).join("")}<div class="hint">${esc(T("none ticked: the check covers every clause"))}</div></div>` : ""}
+      ${rule && rule.audit ? `<div class="k">${esc(T("Audit text of the source"))}</div><div class="v"><pre class="raw" style="white-space:pre-wrap;max-height:220px">${esc(TT(rule.audit))}</pre></div>` : ""}
+      ${rule && rule.remediation ? `<div class="k">${esc(T("Remediation text of the source"))}</div><div class="v"><details><summary class="hint">…</summary><pre class="raw" style="white-space:pre-wrap;max-height:220px">${esc(TT(rule.remediation))}</pre></details></div>` : ""}
+      <div class="k">${esc(T("Platform under test"))}</div><div class="v"><input type="url" id="e-platform" value="${esc(E.platform)}"><div class="hint">${esc(T("An opaque URI for the kind of system the collector runs on."))}</div></div>
+      <div class="k">${esc(T("Confidence"))}</div><div class="v wbrow" style="margin:0"><select id="e-confidence">${JSC_SCHEMA.$defs.confidence.enum.map(x => opt(x, x, E.confidence)).join("")}</select>
+        <label for="e-lifecycle">${esc(T("Lifecycle"))}</label><select id="e-lifecycle">${JSC_SCHEMA.$defs.lifecycle.enum.map(x => opt(x, x, E.lifecycle)).join("")}</select></div>
+      <div class="k">${esc(T("Author (party)"))}</div><div class="v"><input type="url" id="e-author" value="${esc(E.authorRef)}"></div>
+    </div>
+    <div class="nano sectionlabel">${esc(T("Facts the collector reports"))}</div>
+    ${E.observes.map((f, i) => `<div class="wbrow" data-row="observes" data-i="${i}"><input type="text" data-k="name" value="${esc(f.name)}" placeholder="${esc(T("name"))}" style="max-width:220px;font-family:var(--mono)">
+      <select data-k="type" aria-label="${esc(T("type"))}">${FACT_TYPES.map(t => opt(t, t, f.type)).join("")}</select>
+      <select data-k="cardinality" aria-label="cardinality">${opt("one", T("one value"), f.cardinality)}${opt("many", T("a list"), f.cardinality)}</select>
+      <input type="text" data-k="description" value="${esc(f.description)}" placeholder="${esc(T("description"))}" style="flex:1"><button type="button" class="small" data-del="observes" data-i="${i}">✕</button></div>`).join("")}
+    <button type="button" class="small" data-add="observes">${esc(T("+ fact"))}</button>
+    <div class="nano sectionlabel">${esc(T("Passes when all of these hold"))}</div>
+    ${assertionRows(E.criteria, "criteria", E.observes)}<button type="button" class="small" data-add="criteria">${esc(T("+ assertion"))}</button>
+    <div class="hint">${esc(T("A literal of the fact's type (4, \"no\", true, [\"a\"]) or {\"param\": \"name\"}. Parameters of the covered clauses: {list}", { list: params.size ? [...params.keys()].join(", ") : T("none") }))}</div>
+    <div class="nano sectionlabel">${esc(T("Applies only when all of these hold (optional)"))}</div>
+    ${assertionRows(E.applies, "applies", E.observes)}<button type="button" class="small" data-add="applies">${esc(T("+ assertion"))}</button>
+    <div class="nano sectionlabel">${esc(T("Per resource"))}</div>
+    <div class="wbrow"><label><input type="checkbox" id="e-each" ${E.each.on ? "checked" : ""}> ${esc(T("The facts repeat per resource; the criteria hold for each."))}</label>
+      ${E.each.on ? `<input type="text" id="e-each-res" value="${esc(E.each.resource)}" placeholder="${esc(T("kind of resource, for example file"))}" style="max-width:240px"><label><input type="checkbox" id="e-each-empty" ${E.each.allowEmpty ? "checked" : ""}> ${esc(T("no resource observed passes"))}</label>` : ""}</div>
+    <div class="wbrow"><label><input type="checkbox" id="e-valid" ${E.validity.on ? "checked" : ""}> ${esc(T("Fresh for"))}</label>
+      ${E.validity.on ? `<input type="number" id="e-valid-num" min="1" value="${esc(E.validity.num)}" style="width:90px;min-width:90px"><select id="e-valid-unit">${UNITS.map(u => opt(u, u, E.validity.unit)).join("")}</select>` : ""}</div>
+    <div class="nano sectionlabel">${esc(T("Collectors"))}</div>
+    ${E.collectors.map((c, i) => `<div class="stmt" data-row="collectors" data-i="${i}"><div class="wbrow" style="margin-top:0">
+        <label>${esc(T("id"))}</label><input type="text" data-k="id" value="${esc(c.id)}" style="max-width:140px;font-family:var(--mono)">
+        <label>${esc(T("language"))}</label><select data-k="runtime">${JSC_CHECKS.RUNTIMES.map(x => opt(x, x, c.runtime)).join("")}</select>
+        <label>${esc(T("privileges"))}</label><select data-k="privileges">${opt("", T("(not stated)"), c.privileges)}${opt("unprivileged", T("unprivileged"), c.privileges)}${opt("root", T("root"), c.privileges)}</select>
+        <div style="flex:1"></div><button type="button" class="small" data-del="collectors" data-i="${i}">✕</button></div>
+      <textarea data-k="source" spellcheck="false" style="min-height:140px" aria-label="${esc(T("source"))}">${esc(c.source)}</textarea>
+      ${lint.filter(w => w.ci === i).map(w => `<div class="verdict-warn">⚠ ${esc(T("Read-only lint: line {line} - {why}", { line: w.line, why: w.why }))} <span class="mono hint">${esc(w.text)}</span></div>`).join("")}</div>`).join("")}
+    <button type="button" class="small" data-add="collectors">${esc(T("+ collector"))}</button>
+    <div class="hint">${esc(T("The lint looks for commands that write, install, restart or reach the network. A warning asks for a look; no warning proves nothing."))}</div>
+    <div class="nano sectionlabel">${esc(T("What the kernel rules say"))}</div>
+    ${said.length ? said.map(m => `<div class="verdict-bad">✗ ${esc(m)}</div>`).join("") : `<div class="verdict-ok">✓ ${esc(T("The check passes the kernel rules this app has ported."))}</div>`}
+    <div class="wbrow"><button type="button" class="primary" id="e-save" ${said.length ? "disabled" : ""}>${esc(T("Save the check"))}</button><button type="button" id="e-discard">${esc(T("Discard"))}</button></div>`;
+  wireEdit(E);
+  renderTester(E, obj);
+  renderEditAi(E, req, rule);
+}
+function wireEdit(E) {
+  const root = $("e-form"), again = () => { ui.save(); renderEdit(); };
+  V.wireRefs(root);
+  V.wirePicker(root, "e-req", ["requirement"], id => { E.reqId = id; E.statementIds = []; E.platform = jscChecksPlatform(id, orgNs()); again(); });
+  root.querySelectorAll("[data-sid]").forEach(b => b.addEventListener("change", () => {
+    E.statementIds = [...root.querySelectorAll("[data-sid]")].filter(x => x.checked).map(x => x.dataset.sid); again();
+  }));
+  const field = (id, fn) => { const n = $(id); if (n) n.addEventListener("change", () => { fn(n); again(); }); };
+  field("e-platform", n => { E.platform = n.value.trim(); });
+  field("e-confidence", n => { E.confidence = n.value; });
+  field("e-lifecycle", n => { E.lifecycle = n.value; });
+  field("e-author", n => { E.authorRef = n.value.trim(); });
+  field("e-each", n => { E.each.on = n.checked; });
+  field("e-each-res", n => { E.each.resource = n.value.trim(); });
+  field("e-each-empty", n => { E.each.allowEmpty = n.checked; });
+  field("e-valid", n => { E.validity.on = n.checked; });
+  field("e-valid-num", n => { E.validity.num = n.value; });
+  field("e-valid-unit", n => { E.validity.unit = n.value; });
+  const list = key => E[key === "applies" ? "applies" : key];
+  root.querySelectorAll("[data-row] [data-k]").forEach(n => n.addEventListener("change", () => {
+    const row = n.closest("[data-row]"), item = list(row.dataset.row)[+row.dataset.i];
+    item[n.dataset.k] = n.value;
+    if (row.dataset.row === "collectors" && n.dataset.k === "runtime" && (!item.id || JSC_CHECKS.RUNTIMES.includes(item.id))) item.id = n.value;
+    again();
+  }));
+  root.querySelectorAll("[data-add]").forEach(b => b.addEventListener("click", () => {
+    const k = b.dataset.add;
+    list(k).push(k === "observes" ? { name: "", type: "string", cardinality: "one", description: "" } : k === "collectors" ? blankCollector("bash") : { fact: "", op: "equals", expected: "" });
+    again();
+  }));
+  root.querySelectorAll("[data-del]").forEach(b => b.addEventListener("click", () => { list(b.dataset.del).splice(+b.dataset.i, 1); again(); }));
+  $("e-discard").addEventListener("click", () => { ui.data.edit = null; ui.save(); renderEdit(); });
+  $("e-save").addEventListener("click", async () => {
+    const { obj, errors } = build(E);
+    if (errors.length || judge(obj).length) { again(); return; }
+    await jscSet.saveObjects([obj]);
+    jscLog.ok(T("saved check {id}", { id: obj.id }));
+    E.existing = obj.id; E.keep = { title: obj.title, version: obj.version, provenance: obj.provenance, annotations: obj.annotations, facets: obj.facets };
+    ui.save();
+    await jscPage.refresh();
+  });
+}
+/* The tester computes check-verdict for a pasted observation. The parameter
+   values may be taken from a Tailoring of the set, as a run would be bound. */
+function renderTester(E, obj) {
+  const t = E.tester, tailorings = [...G.objects.values()].filter(r => r.type === "tailoring");
+  let verdict = "";
+  if (t.observation.trim()) {
+    try {
+      const observation = JSON.parse(t.observation), params = t.params.trim() ? JSON.parse(t.params) : {};
+      const [outcome, why] = jscCheckVerdict(obj, observation, params);
+      const cls = { satisfied: "verdict-ok", "not-satisfied": "verdict-bad", inconclusive: "verdict-warn", "not-applicable": "hint" }[outcome];
+      verdict = `<div class="${cls}"><b>${esc(T("Verdict"))}: ${esc(outcome)}</b></div>${why.map(w => `<div class="hint mono">· ${esc(w)}</div>`).join("")}`;
+    } catch (e) { verdict = `<div class="verdict-bad">${esc(T("not JSON: {msg}", { msg: e.message }))}</div>`; }
+  }
+  $("e-test").innerHTML = `<p class="hint">${esc(T("Paste an observation as a collector would print it, and the values of the parameters, to see the verdict. Nothing is run."))}</p>
+    <textarea id="t-obs" placeholder='{"facts": {"sshd.maxauthtries": 4}}' aria-label="${esc(T("observation"))}">${esc(t.observation)}</textarea>
+    <div class="wbrow"><label for="t-tail">${esc(T("values bound by"))}</label><select id="t-tail">${opt("", T("(type them)"), t.tailoring)}${tailorings.map(r => opt(r.obj.id, V.labelOf(r), t.tailoring)).join("")}</select></div>
+    <textarea id="t-params" style="min-height:50px" placeholder='{"max-auth-tries": 4}' aria-label="${esc(T("parameter values"))}">${esc(t.params)}</textarea>${verdict}`;
+  $("t-obs").addEventListener("change", e => { t.observation = e.target.value; ui.save(); renderEdit(); });
+  $("t-params").addEventListener("change", e => { t.params = e.target.value; ui.save(); renderEdit(); });
+  $("t-tail").addEventListener("change", e => {
+    t.tailoring = e.target.value;
+    const tg = G.objects.get(t.tailoring), bound = {};
+    for (const op of (tg ? tg.obj.operations || [] : [])) if (op.op === "set-parameter" && op["requirement-ref"] === E.reqId) bound[op.parameter] = op.value;
+    if (tg) t.params = JSON.stringify(bound);
+    ui.save(); renderEdit();
+  });
+}
+
+/* ====================== the model ======================
+   One rule, one call. The prompt is built from the editable template and
+   the rule; the answer is assembled in jascon-checks.js. The editor shows
+   the draft; the batch view keeps it until it is taken or discarded. */
+const RUN = { which: null, done: 0, total: 0 };
+const auditText = rule => (rule && rule.audit ? TT(rule.audit) : "");
+function promptFor(req, rule, statementIds, runtime, platform, description) {
+  const params = jscChecksParams(req, statementIds);
+  const vars = { runtime, platform, lang: lang(), facttypes: FACT_TYPES.join(", "), ops: jscAiCheckOps(OPS),
+    rule: jscAiCheckRule({ req, statementIds, params, audit: auditText(rule), remediation: rule && rule.remediation ? TT(rule.remediation) : "", description, text: TT }) };
+  return jscAi.fill("check-draft", vars);
+}
+async function askOne(req, rule, statementIds, runtime, platform, description, cfg, fresh, taken) {
+  const prompt = promptFor(req, rule, statementIds, runtime, platform, description);
+  const got = await jscAi.ask(prompt, cfg, `${req.label || V.last(req.id)} (${runtime})`, jscAiCheckShape, fresh);
+  const src = auditText(rule) || description || "";
+  const derivedFrom = src ? { ref: req.id, digest: "sha256:" + await jscSha256(src) } : null;
+  const built = jscChecksFromAnswer(got.answer, { req, statementIds, platform, runtime, lang: lang(), date: jscToday(),
+    id: jscChecksMintId(orgNs(), req, runtime, taken), authorRef: orgNs() + "/party/check-author", drafter: `${cfg.backend}/${cfg.model}`, derivedFrom });
+  taken.add(built.check ? built.check.id : "");
+  return { ...built, cached: got.cached, errors: built.check ? judge(built.check) : [] };
+}
+const usageLine = est => T("estimate: {calls} call(s), about {tokens} tokens. The service counted: {input} in ({cached} from its cache), {output} out, {thoughts} thinking, in {n} call(s).",
+  { calls: est.calls, tokens: est.tokens, input: jscAi.usage.input, cached: jscAi.usage.cached, output: jscAi.usage.output, thoughts: jscAi.usage.thoughts, n: jscAi.usage.calls });
+function renderEditAi(E, req, rule) {
+  const busy = !!RUN.which, why = jscAi.missing() || (!req ? T("Choose a requirement first.") : "");
+  const prompt = req ? promptFor(req, rule, E.statementIds, E.runtime, E.platform, E.description) : "";
+  const est = jscAiEstimate(prompt ? [prompt] : []);
+  $("e-ai").innerHTML = `<label for="e-desc" class="hint">${esc(T("Describe the check (optional; needed where the rule has no audit text)"))}</label>
+    <textarea id="e-desc" style="min-height:60px">${esc(E.description)}</textarea>
+    <div class="wbrow"><label for="e-runtime">${esc(T("Collector language"))}</label><select id="e-runtime">${JSC_CHECKS.RUNTIMES.map(x => opt(x, x, E.runtime)).join("")}</select>
+      <button type="button" class="primary" id="e-ai-run" ${busy || why ? "disabled" : ""}>${esc(T("Ask the model"))}</button>
+      <span class="hint">${esc(T("{calls} call(s), about {tokens} tokens, to {service}", { calls: est.calls, tokens: est.tokens, service: jscAi.label() + (jscAi.model() ? " / " + jscAi.model() : "") }))}</span></div>
+    ${why && req ? `<p class="hint verdict-warn">${esc(why)}</p>` : ""}
+    <details><summary>${esc(T("What is sent"))}</summary><pre class="raw" style="white-space:pre-wrap">${esc(prompt)}</pre></details>
+    ${E.ai ? (E.ai.fits === false ? `<div class="verdict-warn">${esc(T("The model says this rule does not fit a check: {reason}", { reason: E.ai.reason }))}</div>`
+      : E.ai.problems && E.ai.problems.length ? `<div class="verdict-bad">${esc(T("The answer could not be made into a check:"))}</div>${E.ai.problems.map(p => `<div class="verdict-bad">✗ ${esc(p)}</div>`).join("")}`
+      : `<div class="hint">${esc(T("draft from {by}: {reason}", { by: E.ai.by, reason: E.ai.reason }))}</div>`) : ""}`;
+  $("e-desc").addEventListener("change", e => { E.description = e.target.value; ui.save(); renderEdit(); });
+  $("e-runtime").addEventListener("change", e => { E.runtime = e.target.value; ui.save(); renderEdit(); });
+  $("e-ai-run").addEventListener("click", async () => {
+    let cfg;
+    try { cfg = jscAi.cfgFor(jscAiCheckSchema(OPS, FACT_TYPES)); } catch (e) { jscLog.err(e.message); return; }
+    RUN.which = "edit"; jscAi.resetCancel(); jscAi.resetUsage(); renderEdit();
+    try {
+      const taken = new Set(G.objects.keys());
+      if (E.existing) taken.delete(E.existing);
+      const res = await askOne(req, rule, E.statementIds, E.runtime, E.platform, E.description, cfg, false, taken);
+      E.ai = { fits: res.fits, reason: res.reason, problems: res.problems, by: `${cfg.backend}/${cfg.model}` };
+      if (res.check) {
+        /* the draft replaces the facts, criteria and the collector of its language; other collectors stay */
+        const c = res.check, col = c.facets[JSC_CHECKS.COLLECTOR].collectors[0];
+        E.observes = c.observes.map(f => ({ name: f.name, type: f.type, cardinality: f.cardinality || "one", description: TT(f.description) }));
+        E.criteria = c.criteria.map(a => ({ fact: a.fact, op: a.op, expected: a.expected === undefined ? "" : JSON.stringify(a.expected) }));
+        E.applies = (c["applies-when"] || []).map(a => ({ fact: a.fact, op: a.op, expected: a.expected === undefined ? "" : JSON.stringify(a.expected) }));
+        E.each = { on: !!c.each, resource: c.each ? c.each.resource : "", allowEmpty: false };
+        E.collectors = [...E.collectors.filter(x => x.runtime !== E.runtime && x.source.trim()), { id: col.id, runtime: col.runtime, privileges: "", source: col.source }];
+        E.confidence = "draft";
+        E.keep = { ...E.keep, provenance: c.provenance, annotations: c.annotations };
+      }
+    } catch (e) { jscLog.err(T("draft a check failed: {msg}", { msg: e.message })); }
+    RUN.which = null;
+    if (jscAi.usage.calls) jscLog.info(usageLine(est));
+    ui.save(); renderEdit();
+  });
+}
+
+/* ====================== drafting many ====================== */
+/* Which rules are sent and which are resolved without a model, for the
+   chosen language: a rule marked manual, a rule without audit text and a
+   rule that has a check with a collector in this language are not sent. */
+function batchInput() {
+  const B = ui.data.batch, all = rules();
+  const hasCheckIn = r => r.checks.some(id => (((G.objects.get(id).obj.facets || {})[JSC_CHECKS.COLLECTOR] || {}).collectors || []).some(c => c.runtime === B.runtime));
+  const manual = all.filter(r => r.method === "manual");
+  const noAudit = all.filter(r => r.method !== "manual" && !auditText(r));
+  const done = all.filter(r => r.method !== "manual" && auditText(r) && hasCheckIn(r));
+  const send = all.filter(r => r.method !== "manual" && auditText(r) && !hasCheckIn(r) && (B.scope === "all" || r.method === "automated"));
+  const prompts = send.map(r => ({ r, prompt: promptFor(r.req, r, [], B.runtime, jscChecksPlatform(r.id, orgNs()), "") }));
+  return { all, manual, noAudit, done, send, prompts, est: jscAiEstimate(prompts.map(p => p.prompt)) };
+}
+async function runBatch() {
+  const B = ui.data.batch, inp = batchInput();
+  let cfg;
+  try { cfg = jscAi.cfgFor(jscAiCheckSchema(OPS, FACT_TYPES)); } catch (e) { jscLog.err(e.message); return; }
+  jscLog.info(T("{n} rule(s) offered: {s} sent to the model, {k} resolved without it ({m} marked manual, {a} without audit text, {h} with a check in {runtime})",
+    { n: inp.all.length, s: inp.send.length, k: inp.all.length - inp.send.length, m: inp.manual.length, a: inp.noAudit.length, h: inp.done.length, runtime: B.runtime }));
+  const stamp = { by: `${cfg.backend}/${cfg.model}`, at: new Date().toISOString(), runtime: B.runtime };
+  for (const p of inp.prompts) B.rows[p.r.id] = { ...stamp, state: "pending" };
+  RUN.which = "batch"; RUN.done = 0; RUN.total = inp.prompts.length; jscAi.resetCancel(); jscAi.resetUsage(); renderDraft();
+  const taken = new Set(G.objects.keys());
+  let cached = 0, failed = 0;
+  const tasks = inp.prompts.map(p => async () => {
+    const row = B.rows[p.r.id];
+    try {
+      const res = await askOne(p.r.req, p.r, [], B.runtime, jscChecksPlatform(p.r.id, orgNs()), "", cfg, B.fresh, taken);
+      if (res.cached) cached++;
+      Object.assign(row, { state: !res.fits ? "notfit" : res.check ? "ok" : "error", reason: res.reason, problems: res.problems, check: res.check, errors: res.errors });
+    } catch (e) { failed++; Object.assign(row, { state: "error", problems: [e.message] }); }
+    ui.save();   // kept as it arrives: a reload during the run loses no answer
+  });
+  await jscAi.core.runPool(tasks, jscAi.concurrency(), (done, total) => { RUN.done = done; RUN.total = total; renderDraft(); });
+  for (const p of inp.prompts) if (B.rows[p.r.id].state === "pending") Object.assign(B.rows[p.r.id], { state: "error", problems: [T("cancelled")] });
+  const rows = inp.prompts.map(p => B.rows[p.r.id]);
+  jscLog[failed ? "warn" : "ok"](T("checks: {c} answer(s) kept from before, {s} call(s) sent, {f} failed; {d} draft(s) pass the rules, {x} do not fit, {e} could not be assembled",
+    { c: cached, s: inp.prompts.length - cached - failed, f: failed, d: rows.filter(r => r.state === "ok" && !(r.errors || []).length).length,
+      x: rows.filter(r => r.state === "notfit").length, e: rows.filter(r => r.state === "error").length }));
+  RUN.which = null;
+  if (jscAi.usage.calls) jscLog.info(usageLine(inp.est));
+  ui.save(); renderDraft();
+}
+let draftBuilt = false;
+function renderDraft() {
+  if (!draftBuilt) {
+    draftBuilt = true;
+    $("draft").innerHTML = `<p class="hint" style="max-width:86ch;margin-bottom:10px">${esc(T("Everything else on this page is computed. Here a language model is asked for what no rule can compute: facts, criteria and collector code for a technical rule. Rules marked manual, rules without audit text and rules that have a check in the chosen language are not sent. The app assembles each answer into a Check and judges it with the kernel rules; nothing is written until you take a draft."))}</p>
+      <div id="d-access"></div><div id="d-body"></div>
+      <details style="margin-top:8px"><summary>${esc(T("Prompt"))}</summary><div id="d-prompt"></div></details>`;
+    jscAi.accessPanel($("d-access"));
+    jscAi.onKey(() => { if (!RUN.which) { renderDraft(); if (ui.data.edit) renderEdit(); } });
+    jscAi.promptEditor($("d-prompt"), "check-draft");
+    $("d-prompt").addEventListener("jsc:prompt", () => { if (!RUN.which) renderDraft(); });
+  }
+  const B = ui.data.batch, inp = batchInput(), mine = RUN.which === "batch", busy = !!RUN.which;
+  const why = jscAi.missing() || (!inp.send.length ? T("Nothing to draft: every offered rule is resolved without a model.") : "");
+  const Q = ui.data.queue;
+  const rows = Object.entries(B.rows).filter(([id]) => G.objects.has(id));
+  const stateBadge = row => row.state === "pending" ? V.badge(T("pending")) : row.state === "notfit" ? `<span class="verdict-warn">${esc(T("does not fit a check"))}</span>`
+    : row.state === "ok" && !(row.errors || []).length ? `<span class="verdict-ok">✓ ${esc(T("passes the rules"))}</span>` : row.state === "ok" ? `<span class="verdict-bad">✗ ${esc(T("refused by the rules"))}</span>` : "";
+  $("d-body").innerHTML = `${Q ? `<div class="stmt"><span class="verdict-warn">${esc(T("From the import of {source}: the automated rules are selected, collector language {runtime}. Nothing has been sent.", { source: Q.source, runtime: Q.runtime }))}</span>
+      <button type="button" class="small" id="d-q-dismiss">${esc(T("Dismiss"))}</button></div>` : ""}
+    <div class="wbrow"><label for="d-runtime">${esc(T("Collector language"))}</label><select id="d-runtime" ${busy ? "disabled" : ""}>${JSC_CHECKS.RUNTIMES.map(x => opt(x, x, B.runtime)).join("")}</select>
+      <span class="seg"><button type="button" data-scope="automated" class="${B.scope !== "all" ? "on-inc" : ""}" aria-pressed="${B.scope !== "all"}">${esc(T("rules marked automated"))}</button><button type="button" data-scope="all" class="${B.scope === "all" ? "on-inc" : ""}" aria-pressed="${B.scope === "all"}">${esc(T("every rule with audit text"))}</button></span></div>
+    <div class="wbrow">${chip(inp.send.length, "to draft")}${chip(inp.manual.length, "marked manual")}${chip(inp.noAudit.length, "without audit text")}${chip(inp.done.length, "have a check in this language")}</div>
+    <div class="wbrow"><button type="button" class="primary" id="d-run" ${busy || why ? "disabled" : ""}>${esc(T("Ask the model"))}</button>
+      ${mine ? `<button type="button" class="danger" id="d-cancel">■ ${esc(T("cancel"))}</button><progress max="${RUN.total}" value="${RUN.done}"></progress><span class="hint">${RUN.done}/${RUN.total}</span>` : ""}
+      <span class="hint">${esc(T("{calls} call(s), about {tokens} tokens, to {service}", { calls: inp.est.calls, tokens: inp.est.tokens, service: jscAi.label() + (jscAi.model() ? " / " + jscAi.model() : "") }))}</span>
+      <label><input type="checkbox" id="d-fresh" ${B.fresh ? "checked" : ""}> ${esc(T("ask again, do not use kept answers"))}</label></div>
+    ${why ? `<p class="hint verdict-warn">${esc(why)}</p>` : ""}
+    <details id="d-sent"><summary>${esc(T("What is sent"))}</summary><pre class="raw" style="white-space:pre-wrap"></pre></details>
+    ${rows.length ? `<div class="wbrow"><button type="button" class="small primary" id="d-save">${esc(T("Save the ticked"))}</button><button type="button" class="small" id="d-tick">${esc(T("tick all that pass"))}</button><button type="button" class="small" id="d-clear">${esc(T("Discard the drafts"))}</button></div>` : ""}
+    ${rows.map(([id, row]) => {
+      const req = reqOf(id), c = row.check, ok = row.state === "ok" && !(row.errors || []).length;
+      const lint = c ? jscCollectorLint(row.runtime, c.facets[JSC_CHECKS.COLLECTOR].collectors[0].source) : [];
+      return `<div class="stmt" data-drow="${esc(id)}"><label><input type="checkbox" data-pick ${row.pick ? "checked" : ""} ${ok ? "" : "disabled"}> <b>${V.refLink(id, req ? req.label || V.last(id) : V.last(id))}</b></label>
+        <span class="hint">${esc(req ? TT(req.title) : "")}</span> ${stateBadge(row)} ${V.badge(row.runtime)}
+        ${row.reason ? `<div class="hint">${esc(row.reason)}</div>` : ""}
+        ${(row.problems || []).map(m => `<div class="verdict-bad">✗ ${esc(m)}</div>`).join("")}${(row.errors || []).map(m => `<div class="verdict-bad">✗ ${esc(m)}</div>`).join("")}
+        ${c ? `<div class="mono" style="font-size:11.5px;margin-top:4px">${c.criteria.map(a => esc(`${a.fact} ${a.op} ${a.expected === undefined ? "" : JSON.stringify(a.expected)}`)).join("<br>")}</div>
+          ${lint.map(w => `<div class="verdict-warn">⚠ ${esc(T("Read-only lint: line {line} - {why}", { line: w.line, why: w.why }))}</div>`).join("")}
+          <details><summary class="hint">${esc(T("source"))}</summary><pre class="raw">${esc(c.facets[JSC_CHECKS.COLLECTOR].collectors[0].source)}</pre></details>
+          <button type="button" class="small" data-open>${esc(T("Open in the editor"))}</button>` : ""}</div>`;
+    }).join("")}`;
+  V.wireRefs($("d-body"));
+  const on = (sel, ev, fn) => $("d-body").querySelectorAll(sel).forEach(n => n.addEventListener(ev, () => fn(n)));
+  on("#d-q-dismiss", "click", () => { ui.data.queue = null; ui.save(); renderDraft(); });
+  on("#d-runtime", "change", n => { B.runtime = n.value; ui.save(); renderDraft(); });
+  on("[data-scope]", "click", n => { B.scope = n.dataset.scope; ui.save(); renderDraft(); });
+  on("#d-fresh", "change", n => { B.fresh = n.checked; ui.save(); });
+  on("#d-run", "click", runBatch);
+  on("#d-cancel", "click", () => { jscAi.cancel(); jscLog.warn(T("cancel requested; calls in flight are finished, no further call is started")); });
+  const sent = $("d-sent");
+  sent.addEventListener("toggle", () => { if (sent.open) { const now = batchInput(); sent.querySelector("pre").textContent = now.prompts.length ? now.prompts[0].prompt : ""; } });
+  const rowOf = n => B.rows[n.closest("[data-drow]").dataset.drow];
+  on("[data-pick]", "change", n => { rowOf(n).pick = n.checked; ui.save(); });
+  on("#d-tick", "click", () => { for (const r of Object.values(B.rows)) if (r.state === "ok" && !(r.errors || []).length) r.pick = true; ui.save(); renderDraft(); });
+  on("#d-clear", "click", () => { B.rows = {}; ui.save(); renderDraft(); });
+  on("[data-open]", "click", n => {
+    const id = n.closest("[data-drow]").dataset.drow, c = rowOf(n).check;
+    ui.data.edit = null; startEdit(null, id);
+    const E = ui.data.edit, col = c.facets[JSC_CHECKS.COLLECTOR].collectors[0];
+    Object.assign(E, { platform: c.platform, confidence: c.confidence, lifecycle: c.lifecycle, runtime: col.runtime,
+      observes: c.observes.map(f => ({ name: f.name, type: f.type, cardinality: f.cardinality || "one", description: TT(f.description) })),
+      criteria: c.criteria.map(a => ({ fact: a.fact, op: a.op, expected: a.expected === undefined ? "" : JSON.stringify(a.expected) })),
+      applies: (c["applies-when"] || []).map(a => ({ fact: a.fact, op: a.op, expected: a.expected === undefined ? "" : JSON.stringify(a.expected) })),
+      each: { on: !!c.each, resource: c.each ? c.each.resource : "", allowEmpty: c.each ? c.each["allow-empty"] : false },
+      collectors: [{ id: col.id, runtime: col.runtime, privileges: "", source: col.source }], keep: { provenance: c.provenance, annotations: c.annotations } });
+    ui.save(); renderEdit(); jscPage.show("edit");
+  });
+  on("#d-save", "click", async () => {
+    const picked = Object.entries(B.rows).filter(([, r]) => r.pick && r.state === "ok" && r.check);
+    const fine = picked.filter(([, r]) => !judge(r.check).length);   // judged again: the set may have changed since the draft
+    if (!fine.length) return;
+    await jscSet.saveObjects(fine.map(([, r]) => r.check));
+    for (const [id] of fine) delete B.rows[id];
+    jscLog.ok(T("saved {n} check(s)", { n: fine.length }));
+    ui.save();
+    await jscPage.refresh();
+  });
+}
+
+/* ---------- start ---------- */
+/* The Import page hands over through localStorage: the set it wrote, the
+   runtime, and which rules. Taken once, for that set, never acted on alone. */
+function takeQueue() {
+  let q = null;
+  try { q = JSON.parse(localStorage.getItem(JSC_CHECKS.QUEUE) || "null"); } catch (e) { q = null; }
+  if (!q || q.set !== jscStore.activeSet()) return false;
+  localStorage.removeItem(JSC_CHECKS.QUEUE);
+  ui.data.queue = { source: String(q.source || ""), runtime: JSC_CHECKS.RUNTIMES.includes(q.runtime) ? q.runtime : "bash" };
+  ui.data.batch.runtime = ui.data.queue.runtime; ui.data.batch.scope = "automated";
+  ui.save();
+  return true;
+}
+jscPage.init({ tool: "checks", title: T("Checks"), onGraph: g => {
+  G = g;
+  if (ui.data.edit && ui.data.edit.existing && !G.objects.has(ui.data.edit.existing)) ui.data.edit = null;
+  renderRules(); renderDraft();
+  if (!RUN.which) renderEdit();
+} }).then(() => { if (takeQueue()) { renderDraft(); jscPage.show("draft"); } });
+</script>
+</body>
+</html>

@@ -1827,7 +1827,15 @@ async function jscCheckGraph(g, verified, opts) {
 
   if (g.manifest) {
     jscShapeErrors("contentManifest", g.manifest).slice(0, 5).forEach(m => add("error", "manifest", null, `manifest schema: ${m}`));
-    jscKernelPinErrors(g.manifest, g.objects).forEach(m => add("error", "manifest", null, m));
+    /* KERNEL-1 holds for what the bundle came with. Content written in this
+       app that needs a newer kernel (a Risk, a Check) gets its pin with the
+       export, as its digests do: a note until then, not an error. */
+    const imported = new Map([...g.objects].filter(([, r]) => r.origin !== "authored"));
+    const pinErrors = jscKernelPinErrors(g.manifest, imported);
+    pinErrors.forEach(m => add("error", "manifest", null, m));
+    if (!pinErrors.length && jscKernelPinErrors(g.manifest, g.objects).length) {
+      add("note", "manifest", null, `content written in this app needs kernel ${jscKernelNeeded(g.objects, g.manifest)[0]}; the export writes kernel-version, the manifest the set came with does not have it`);
+    }
   } else add("note", "manifest", null, "the set has no content manifest; digests and pins cannot be checked until it is exported");
   g.problems.forEach(m => add("error", "files", null, m));
 

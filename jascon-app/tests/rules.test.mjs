@@ -490,3 +490,23 @@ test("every vector family is either ported or named as not ported", () => {
   const families = fs.readdirSync(CONF).filter(f => f.endsWith("-vectors.json")).map(f => f.replace("-vectors.json", "")).sort();
   assert.deepEqual(families, [...PORTED, ...NOT_PORTED].sort());
 });
+
+/* ERRATA 2026-11-11: a Risk or a Check written in the app into a set whose
+   manifest pins no kernel was reported as a KERNEL-1 error, although the
+   export writes the pin. What the set came with is held to KERNEL-1; what
+   the app wrote is a note until the export. */
+test("a whole set: content written in the app needs no pin before the export; imported content does", async () => {
+  const P = "https://ex.org";
+  const req = { id: P + "/r", version: "1", lifecycle: "active", statements: [{ id: "s1", modality: "must", "obligated-parties": [P + "/p"], prose: { en: "X." } }] };
+  const check = { id: P + "/ck", version: "1", lifecycle: "draft", "requirement-ref": P + "/r", platform: P + "/pl",
+    observes: [{ name: "x", type: "integer" }], criteria: [{ fact: "x", op: "at-most", expected: 4 }], confidence: "draft", provenance: { "author-ref": P + "/p", date: "2026-11-11" } };
+  const files = [{ path: "content-manifest.json", text: JSON.stringify({ "manifest-version": "1", objects: [] }) }, { path: "objects/r.json", text: JSON.stringify(req) }];
+  const g = core.jscGraphFrom(core.jscClassifyFiles(files).records);
+  g.objects.set(check.id, { obj: check, type: "check", path: "objects/check/ck.json", text: JSON.stringify(check), origin: "authored", entry: null });
+  const res = await rules.jscCheckGraph(g, null);
+  assert.deepEqual(res.findings.filter(f => f.area === "manifest" && f.kind === "error").map(f => f.message), []);
+  assert.ok(res.findings.some(f => f.area === "manifest" && f.kind === "note" && /the export writes kernel-version/.test(f.message)));
+  g.objects.get(check.id).origin = "imported";
+  const res2 = await rules.jscCheckGraph(g, null);
+  assert.ok(res2.findings.some(f => f.area === "manifest" && f.kind === "error" && /KERNEL-1/.test(f.message)), "the same Check, imported, needs the pin");
+});

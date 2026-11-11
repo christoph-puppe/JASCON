@@ -23,3 +23,22 @@ surprise, blunder.
 - **Test.** `tests/pages.test.mjs`, "every page starts without a script
   error, in English and in German": opens every page the hub lists in
   Chromium and fails on any page or console error.
+
+## 2026-11-11 · build 0.8.1 · a Risk written in the app was a KERNEL-1 error until the export
+
+- **Symptom.** A Risk written on the Risk page into a set whose manifest pins
+  no kernel (any 1.0.0 bundle, a catalog import) made the Validate page
+  report "needs kernel 2.0.0, but the manifest pins no kernel-version" as an
+  error, although the export writes `kernel-version` 2.0.0. Found when the
+  Checks tool wrote a Check into a freshly imported CIS set.
+- **Cause.** `jscCheckGraph` held the manifest the set came with to KERNEL-1
+  for every object of the set, including those the app wrote and will pin
+  on export. The digests of such objects were already a note.
+- **Class.** Forgotten: authored content that needs a newer kernel was a
+  case nobody handled; the Risk end-to-end test loads a bundle that is
+  pinned already.
+- **Fix.** KERNEL-1 is judged on the imported objects; a need that comes
+  only from authored content is a note that the export writes the pin.
+- **Test.** `tests/rules.test.mjs`, "a whole set: content written in the app
+  needs no pin before the export; imported content does"; and
+  `tests/checks.test.mjs`, which writes checks into an unpinned set.
