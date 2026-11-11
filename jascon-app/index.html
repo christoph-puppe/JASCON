@@ -124,20 +124,23 @@ iframe { width: 100%; height: 100%; border: 0; display: block; }
    the iframe and learn about a change through the store's touch signal.
 
    A tool is listed here when its page exists; the order is the order of the
-   work. `types` are the kernel types the tool is about and drive its count. */
+   work, as an ISMS runs it (ISO/IEC 27001 6.1.2-6.1.3): bring the catalogue
+   in and look at it, analyse the risks, select and tailor what they call
+   for, relate it to other frameworks, implement, check, assess, validate.
+   `types` are the kernel types the tool is about and drive its count. */
 const APPS = [
   { id: "import", file: "import.html", glyph: "⤒", label: N("Import"), types: [],
     desc: N("Import an OSCAL catalog or profile; everything after it works on JASCON") },
   { id: "browse", file: "browse.html", glyph: "⌕", label: N("Browse"), types: ["requirement", "requirementSet"],
     desc: N("The catalogue as a tree, every object with filters, statistics; write requirements and sets") },
+  { id: "risk", file: "risk.html", glyph: "△", label: N("Risk"), types: ["risk"],
+    desc: N("The risk register with its heat map, scales and matrix, coverage of the selected requirements, risk catalogues") },
   { id: "tailor", file: "tailor.html", glyph: "◬", label: N("Tailor"), types: ["tailoring"],
     desc: N("Resolve the Tailorings of the set and write a new one, with the weakening law enforced") },
   { id: "map", file: "map.html", glyph: "⇄", label: N("Map"), types: ["mapping"],
     desc: N("The crosswalk claims between requirements, and a workbench that writes one") },
   { id: "implement", file: "implement.html", glyph: "⬡", label: N("Implement"), types: ["component", "implementation"],
     desc: N("Components and implementation edges; build a system and attach requirements to its assets") },
-  { id: "risk", file: "risk.html", glyph: "△", label: N("Risk"), types: ["risk"],
-    desc: N("The risk register with its heat map, scales and matrix, coverage of the selected requirements, risk catalogues") },
   { id: "checks", file: "checks.html", glyph: "⊨", label: N("Checks"), types: ["check"],
     desc: N("Machine checks for technical rules: facts, criteria and collector code, written by hand or drafted by a model") },
   { id: "assess", file: "assess.html", glyph: "◉", label: N("Assess"), types: ["assessment", "finding", "attestation"],

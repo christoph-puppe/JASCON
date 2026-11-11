@@ -36,7 +36,7 @@
 
 /* ==JSC-PURE-START== */
 
-const JSC_BUILD = "0.9.0";
+const JSC_BUILD = "0.9.1";
 const JSC_TOOL = "JASCON-App " + JSC_BUILD;
 /* The kernel this app writes, and the kernels it reads (KERNEL-2: a tool
    stops at a pin it does not implement and names both). */

@@ -361,8 +361,9 @@ reproduce.
 ## Work with it: the app
 
 [`jascon-app/`](jascon-app/) is the reader grown into a set of pages that
-share one core: a hub, and one page each to import OSCAL, browse, tailor,
-map, implement, analyse risk, write checks and assess. There is still no
+share one core: a hub, and one page each, in the order of the work, to
+import OSCAL, browse, analyse risk, tailor, map, implement, write checks and
+assess. There is still no
 build step and no server, and a bundle you load stays in your browser unless
 you switch on one of the two places that ask a language model (below).
 

@@ -7,9 +7,9 @@ have to switch on yourself: the suggestions of the Risk page and the drafts
 of the Checks page send text to a model service once you type a key (see
 "Suggestions from a model").
 
-State: build 0.9.0. This build has the frame (the hub, the settings page and
-the shared core) and nine tool pages: Import, Browse, Tailor, Map,
-Implement, Risk, Checks, Assess and Validate. One view of the Risk page and
+State: build 0.9.1. This build has the frame (the hub, the settings page and
+the shared core) and nine tool pages, in the order of the work: Import,
+Browse, Risk, Tailor, Map, Implement, Checks, Assess and Validate. One view of the Risk page and
 the drafting of the Checks page can ask a language model; nothing else in
 the app does, and nothing needs one.
 
@@ -64,10 +64,10 @@ is saved to the set at once; the other open tools reload.
 |---|---|---|
 | Import | An OSCAL catalog or profile and the report of its import | Requirements and Sets from a catalog, as a set of its own; a Set and a Tailoring from a profile |
 | Browse | The catalogue as a tree of Sets, every object with type filters and with the filters found in the loaded requirements, statistics | A Requirement (every `{param:}` token is declared as a parameter), a Set |
+| Risk | The register with a heat map, the scales and their matrix, the coverage of the selected requirements, the risk catalogues | A Risk; a scale; the record of catalogue entries that do not apply |
 | Tailor | Each Tailoring resolved: selection, operations with before and after, lattice verdict, derived tier | A Tailoring; the resolved requirements as a package of their own |
 | Map | The mappings as a table, with targets outside the set marked | A Mapping, also to a target outside the set |
 | Implement | Components and Implementation edges; whether the authorization an inherited edge names is found | Components, a system Component that lists them, Implementations |
-| Risk | The register with a heat map, the scales and their matrix, the coverage of the selected requirements, the risk catalogues | A Risk; a scale; the record of catalogue entries that do not apply |
 | Checks | The rules that carry assessment criteria (audit text, automated or manual) and their machine checks; a tester that computes the verdict for an observation you paste | A Check, written in the form or drafted by a model, one at a time or for many rules |
 | Assess | Assessments, Findings by state, Attestations with a Full Match / Semantic Match / Tamper verdict | An Assessment with one Finding per requirement that is not satisfied; the state of a Finding |
 
