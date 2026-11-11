@@ -1826,7 +1826,7 @@
      "date": "2026-11-11"
     },
     "facets": {
-     "https://ns.jascon.org/stdlib/facet/collector@1": {
+     "https://ns.jascon.net/stdlib/facet/collector@1": {
       "collectors": [
        {
         "id": "bash",
@@ -1905,7 +1905,7 @@
      "date": "2026-11-11"
     },
     "facets": {
-     "https://ns.jascon.org/stdlib/facet/collector@1": {
+     "https://ns.jascon.net/stdlib/facet/collector@1": {
       "collectors": [
        {
         "id": "bash",
@@ -1949,7 +1949,7 @@
      "date": "2026-11-11"
     },
     "facets": {
-     "https://ns.jascon.org/stdlib/facet/collector@1": {
+     "https://ns.jascon.net/stdlib/facet/collector@1": {
       "collectors": [
        {
         "id": "bash",
@@ -1992,7 +1992,7 @@
      "date": "2026-11-11"
     },
     "facets": {
-     "https://ns.jascon.org/stdlib/facet/collector@1": {
+     "https://ns.jascon.net/stdlib/facet/collector@1": {
       "collectors": [
        {
         "id": "bash",
@@ -2036,7 +2036,7 @@
      "date": "2026-11-11"
     },
     "facets": {
-     "https://ns.jascon.org/stdlib/facet/collector@1": {
+     "https://ns.jascon.net/stdlib/facet/collector@1": {
       "collectors": [
        {
         "id": "bash",
@@ -2083,7 +2083,7 @@
      "date": "2026-11-11"
     },
     "facets": {
-     "https://ns.jascon.org/stdlib/facet/collector@1": {
+     "https://ns.jascon.net/stdlib/facet/collector@1": {
       "collectors": [
        {
         "id": "bash",
@@ -2125,7 +2125,7 @@
     ],
     "confidence": "reviewed",
     "facets": {
-     "https://ns.jascon.org/stdlib/facet/collector@1": {
+     "https://ns.jascon.net/stdlib/facet/collector@1": {
       "collectors": [
        {
         "id": "bash",
@@ -2171,7 +2171,7 @@
      "date": "2026-11-11"
     },
     "facets": {
-     "https://ns.jascon.org/stdlib/facet/collector@1": {
+     "https://ns.jascon.net/stdlib/facet/collector@1": {
       "collectors": [
        {
         "id": "bash",
@@ -2218,7 +2218,7 @@
      "date": "2026-11-11"
     },
     "facets": {
-     "https://ns.jascon.org/stdlib/facet/collector@1": {
+     "https://ns.jascon.net/stdlib/facet/collector@1": {
       "collectors": [
        {
         "id": "bash",
@@ -2264,7 +2264,7 @@
      "date": "Nov 2026"
     },
     "facets": {
-     "https://ns.jascon.org/stdlib/facet/collector@1": {
+     "https://ns.jascon.net/stdlib/facet/collector@1": {
       "collectors": [
        {
         "id": "bash",
@@ -2310,7 +2310,7 @@
      "date": "2026-11-11"
     },
     "facets": {
-     "https://ns.jascon.org/stdlib/facet/collector@1": {
+     "https://ns.jascon.net/stdlib/facet/collector@1": {
       "collectors": [
        {
         "id": "bash",
@@ -2337,7 +2337,7 @@
      "https://ex.org/component/host-1"
     ],
     "method": {
-     "https://ns.jascon.org/stdlib/facet/assessment-criteria@1": {
+     "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
       "method": "automated"
      }
     },
@@ -2347,7 +2347,7 @@
     "check-results": [
      {
       "check-ref": "https://ex.org/check/ssh-1-maxauthtries",
-      "check-digest": "sha256:20bdd39ad8aab540f31f1fbc8c7b92e59bf4d61676afaa947c84d07f76d556fc",
+      "check-digest": "sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435",
       "outcome": "satisfied",
       "time": "2026-11-11T09:00:00Z",
       "collector-id": "bash",
@@ -2376,7 +2376,7 @@
      "https://ex.org/component/host-1"
     ],
     "method": {
-     "https://ns.jascon.org/stdlib/facet/assessment-criteria@1": {
+     "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
       "method": "automated"
      }
     },
@@ -2386,7 +2386,7 @@
     "check-results": [
      {
       "check-ref": "https://ex.org/check/ssh-1-maxauthtries",
-      "check-digest": "sha256:20bdd39ad8aab540f31f1fbc8c7b92e59bf4d61676afaa947c84d07f76d556fc",
+      "check-digest": "sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435",
       "outcome": "satisfied",
       "time": "2026-11-11T09:00:00Z",
       "collector-id": "bash",
@@ -2418,7 +2418,7 @@
      "https://ex.org/component/host-1"
     ],
     "method": {
-     "https://ns.jascon.org/stdlib/facet/assessment-criteria@1": {
+     "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
       "method": "automated"
      }
     },
@@ -2428,7 +2428,7 @@
     "check-results": [
      {
       "check-ref": "https://ex.org/check/ssh-1-maxauthtries",
-      "check-digest": "sha256:20bdd39ad8aab540f31f1fbc8c7b92e59bf4d61676afaa947c84d07f76d556fc",
+      "check-digest": "sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435",
       "outcome": "satisfied",
       "time": "2026-11-11",
       "collector-id": "bash",
@@ -2456,7 +2456,7 @@
      "https://ex.org/component/host-1"
     ],
     "method": {
-     "https://ns.jascon.org/stdlib/facet/assessment-criteria@1": {
+     "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
       "method": "automated"
      }
     },
@@ -2466,7 +2466,7 @@
     "check-results": [
      {
       "check-ref": "https://ex.org/check/ssh-1-maxauthtries",
-      "check-digest": "sha256:20bdd39ad8aab540f31f1fbc8c7b92e59bf4d61676afaa947c84d07f76d556fc",
+      "check-digest": "sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435",
       "outcome": "error",
       "time": "2026-11-11T09:00:00Z",
       "collector-id": "bash",
@@ -2494,7 +2494,7 @@
      "https://ex.org/component/host-1"
     ],
     "method": {
-     "https://ns.jascon.org/stdlib/facet/assessment-criteria@1": {
+     "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
       "method": "automated"
      }
     },
@@ -2504,7 +2504,7 @@
     "check-results": [
      {
       "check-ref": "https://ex.org/check/ssh-1-maxauthtries",
-      "check-digest": "sha256:20bdd39ad8aab540f31f1fbc8c7b92e59bf4d61676afaa947c84d07f76d556fc",
+      "check-digest": "sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435",
       "outcome": "satisfied",
       "time": "2026-11-11T09:00:00Z",
       "collector-id": "bash",
@@ -2659,7 +2659,7 @@
       "date": "2026-11-11"
      },
      "facets": {
-      "https://ns.jascon.org/stdlib/facet/collector@1": {
+      "https://ns.jascon.net/stdlib/facet/collector@1": {
        "collectors": [
         {
          "id": "bash",
@@ -2708,7 +2708,7 @@
       "https://ex.org/component/host-1"
      ],
      "method": {
-      "https://ns.jascon.org/stdlib/facet/assessment-criteria@1": {
+      "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
        "method": "automated"
       }
      },
@@ -2718,7 +2718,7 @@
      "check-results": [
       {
        "check-ref": "https://ex.org/check/ssh-1-maxauthtries",
-       "check-digest": "sha256:20bdd39ad8aab540f31f1fbc8c7b92e59bf4d61676afaa947c84d07f76d556fc",
+       "check-digest": "sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435",
        "outcome": "satisfied",
        "time": "2026-11-11T09:00:00Z",
        "collector-id": "bash",
@@ -2858,7 +2858,7 @@
       "date": "2026-11-11"
      },
      "facets": {
-      "https://ns.jascon.org/stdlib/facet/collector@1": {
+      "https://ns.jascon.net/stdlib/facet/collector@1": {
        "collectors": [
         {
          "id": "bash",
@@ -2907,7 +2907,7 @@
       "https://ex.org/component/host-1"
      ],
      "method": {
-      "https://ns.jascon.org/stdlib/facet/assessment-criteria@1": {
+      "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
        "method": "automated"
       }
      },
@@ -2917,7 +2917,7 @@
      "check-results": [
       {
        "check-ref": "https://ex.org/check/ssh-1-maxauthtries",
-       "check-digest": "sha256:20bdd39ad8aab540f31f1fbc8c7b92e59bf4d61676afaa947c84d07f76d556fc",
+       "check-digest": "sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435",
        "outcome": "satisfied",
        "time": "2026-11-11T09:00:00Z",
        "collector-id": "bash",
@@ -2941,7 +2941,7 @@
       "https://ex.org/component/host-1"
      ],
      "method": {
-      "https://ns.jascon.org/stdlib/facet/assessment-criteria@1": {
+      "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
        "method": "automated"
       }
      },
@@ -2951,7 +2951,7 @@
      "check-results": [
       {
        "check-ref": "https://ex.org/check/ssh-1-maxauthtries",
-       "check-digest": "sha256:20bdd39ad8aab540f31f1fbc8c7b92e59bf4d61676afaa947c84d07f76d556fc",
+       "check-digest": "sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435",
        "outcome": "not-satisfied",
        "time": "2026-11-11T09:00:00Z",
        "collector-id": "bash",
@@ -3091,7 +3091,7 @@
       "date": "2026-11-11"
      },
      "facets": {
-      "https://ns.jascon.org/stdlib/facet/collector@1": {
+      "https://ns.jascon.net/stdlib/facet/collector@1": {
        "collectors": [
         {
          "id": "bash",
@@ -3140,7 +3140,7 @@
       "https://ex.org/component/host-1"
      ],
      "method": {
-      "https://ns.jascon.org/stdlib/facet/assessment-criteria@1": {
+      "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
        "method": "automated"
       }
      },
@@ -3279,7 +3279,7 @@
       "date": "2026-11-11"
      },
      "facets": {
-      "https://ns.jascon.org/stdlib/facet/collector@1": {
+      "https://ns.jascon.net/stdlib/facet/collector@1": {
        "collectors": [
         {
          "id": "bash",
@@ -3369,7 +3369,7 @@
       "date": "2026-11-11"
      },
      "facets": {
-      "https://ns.jascon.org/stdlib/facet/collector@1": {
+      "https://ns.jascon.net/stdlib/facet/collector@1": {
        "collectors": [
         {
          "id": "bash",
@@ -3464,7 +3464,7 @@
       "date": "2026-11-11"
      },
      "facets": {
-      "https://ns.jascon.org/stdlib/facet/collector@1": {
+      "https://ns.jascon.net/stdlib/facet/collector@1": {
        "collectors": [
         {
          "id": "bash",
@@ -3557,7 +3557,7 @@
       "date": "2026-11-11"
      },
      "facets": {
-      "https://ns.jascon.org/stdlib/facet/collector@1": {
+      "https://ns.jascon.net/stdlib/facet/collector@1": {
        "collectors": [
         {
          "id": "bash",
@@ -3719,7 +3719,7 @@
       "date": "2026-11-11"
      },
      "facets": {
-      "https://ns.jascon.org/stdlib/facet/collector@1": {
+      "https://ns.jascon.net/stdlib/facet/collector@1": {
        "collectors": [
         {
          "id": "bash",
@@ -3884,7 +3884,7 @@
       "date": "2026-11-11"
      },
      "facets": {
-      "https://ns.jascon.org/stdlib/facet/collector@1": {
+      "https://ns.jascon.net/stdlib/facet/collector@1": {
        "collectors": [
         {
          "id": "bash",
@@ -3934,7 +3934,7 @@
       "date": "2026-11-11"
      },
      "facets": {
-      "https://ns.jascon.org/stdlib/facet/collector@1": {
+      "https://ns.jascon.net/stdlib/facet/collector@1": {
        "collectors": [
         {
          "id": "bash",
@@ -4101,7 +4101,7 @@
       "date": "2026-11-11"
      },
      "facets": {
-      "https://ns.jascon.org/stdlib/facet/collector@1": {
+      "https://ns.jascon.net/stdlib/facet/collector@1": {
        "collectors": [
         {
          "id": "bash",
@@ -4190,7 +4190,7 @@
       "date": "2026-11-11"
      },
      "facets": {
-      "https://ns.jascon.org/stdlib/facet/collector@1": {
+      "https://ns.jascon.net/stdlib/facet/collector@1": {
        "collectors": [
         {
          "id": "bash",
@@ -4355,7 +4355,7 @@
       "date": "2026-11-11"
      },
      "facets": {
-      "https://ns.jascon.org/stdlib/facet/collector@1": {
+      "https://ns.jascon.net/stdlib/facet/collector@1": {
        "collectors": [
         {
          "id": "bash",
@@ -4450,7 +4450,7 @@
       "date": "2026-11-11"
      },
      "facets": {
-      "https://ns.jascon.org/stdlib/facet/collector@1": {
+      "https://ns.jascon.net/stdlib/facet/collector@1": {
        "collectors": [
         {
          "id": "bash",
@@ -4588,7 +4588,7 @@
       "date": "2026-11-11"
      },
      "facets": {
-      "https://ns.jascon.org/stdlib/facet/collector@1": {
+      "https://ns.jascon.net/stdlib/facet/collector@1": {
        "collectors": [
         {
          "id": "bash",
@@ -4637,7 +4637,7 @@
       "https://ex.org/component/host-1"
      ],
      "method": {
-      "https://ns.jascon.org/stdlib/facet/assessment-criteria@1": {
+      "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
        "method": "automated"
       }
      },
@@ -4789,7 +4789,7 @@
       "date": "2026-11-11"
      },
      "facets": {
-      "https://ns.jascon.org/stdlib/facet/collector@1": {
+      "https://ns.jascon.net/stdlib/facet/collector@1": {
        "collectors": [
         {
          "id": "bash",
@@ -4838,7 +4838,7 @@
       "https://ex.org/component/host-1"
      ],
      "method": {
-      "https://ns.jascon.org/stdlib/facet/assessment-criteria@1": {
+      "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
        "method": "automated"
       }
      },
@@ -4848,7 +4848,7 @@
      "check-results": [
       {
        "check-ref": "https://ex.org/req/ssh-1",
-       "check-digest": "sha256:20bdd39ad8aab540f31f1fbc8c7b92e59bf4d61676afaa947c84d07f76d556fc",
+       "check-digest": "sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435",
        "outcome": "satisfied",
        "time": "2026-11-11T09:00:00Z",
        "collector-id": "bash",
@@ -4990,7 +4990,7 @@
       "date": "2026-11-11"
      },
      "facets": {
-      "https://ns.jascon.org/stdlib/facet/collector@1": {
+      "https://ns.jascon.net/stdlib/facet/collector@1": {
        "collectors": [
         {
          "id": "bash",
@@ -5039,7 +5039,7 @@
       "https://ex.org/component/host-1"
      ],
      "method": {
-      "https://ns.jascon.org/stdlib/facet/assessment-criteria@1": {
+      "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
        "method": "automated"
       }
      },
@@ -5049,7 +5049,7 @@
      "check-results": [
       {
        "check-ref": "https://ex.org/check/ssh-1-maxauthtries",
-       "check-digest": "sha256:20bdd39ad8aab540f31f1fbc8c7b92e59bf4d61676afaa947c84d07f76d556fc",
+       "check-digest": "sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435",
        "outcome": "satisfied",
        "time": "2026-11-11T09:00:00Z",
        "collector-id": "bash",
@@ -5191,7 +5191,7 @@
       "date": "2026-11-11"
      },
      "facets": {
-      "https://ns.jascon.org/stdlib/facet/collector@1": {
+      "https://ns.jascon.net/stdlib/facet/collector@1": {
        "collectors": [
         {
          "id": "bash",
@@ -5240,7 +5240,7 @@
       "https://ex.org/component/host-1"
      ],
      "method": {
-      "https://ns.jascon.org/stdlib/facet/assessment-criteria@1": {
+      "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
        "method": "automated"
       }
      },
@@ -5250,7 +5250,7 @@
      "check-results": [
       {
        "check-ref": "https://ex.org/check/ssh-1-maxauthtries",
-       "check-digest": "sha256:20bdd39ad8aab540f31f1fbc8c7b92e59bf4d61676afaa947c84d07f76d556fc",
+       "check-digest": "sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435",
        "outcome": "not-satisfied",
        "time": "2026-11-11T09:00:00Z",
        "collector-id": "bash",
@@ -5392,7 +5392,7 @@
       "date": "2026-11-11"
      },
      "facets": {
-      "https://ns.jascon.org/stdlib/facet/collector@1": {
+      "https://ns.jascon.net/stdlib/facet/collector@1": {
        "collectors": [
         {
          "id": "bash",
@@ -5441,7 +5441,7 @@
       "https://ex.org/component/host-1"
      ],
      "method": {
-      "https://ns.jascon.org/stdlib/facet/assessment-criteria@1": {
+      "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
        "method": "automated"
       }
      },
@@ -5451,7 +5451,7 @@
      "check-results": [
       {
        "check-ref": "https://ex.org/check/ssh-1-maxauthtries",
-       "check-digest": "sha256:20bdd39ad8aab540f31f1fbc8c7b92e59bf4d61676afaa947c84d07f76d556fc",
+       "check-digest": "sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435",
        "outcome": "satisfied",
        "time": "2026-11-11T09:00:00Z",
        "collector-id": "bash",
@@ -5466,7 +5466,7 @@
       },
       {
        "check-ref": "https://ex.org/check/ssh-1-maxauthtries",
-       "check-digest": "sha256:20bdd39ad8aab540f31f1fbc8c7b92e59bf4d61676afaa947c84d07f76d556fc",
+       "check-digest": "sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435",
        "outcome": "satisfied",
        "time": "2026-11-11T09:00:00Z",
        "collector-id": "bash",
@@ -5608,7 +5608,7 @@
       "date": "2026-11-11"
      },
      "facets": {
-      "https://ns.jascon.org/stdlib/facet/collector@1": {
+      "https://ns.jascon.net/stdlib/facet/collector@1": {
        "collectors": [
         {
          "id": "bash",
@@ -5657,7 +5657,7 @@
       "https://ex.org/component/host-1"
      ],
      "method": {
-      "https://ns.jascon.org/stdlib/facet/assessment-criteria@1": {
+      "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
        "method": "automated"
       }
      },
@@ -5805,7 +5805,7 @@
       "date": "2026-11-11"
      },
      "facets": {
-      "https://ns.jascon.org/stdlib/facet/collector@1": {
+      "https://ns.jascon.net/stdlib/facet/collector@1": {
        "collectors": [
         {
          "id": "bash",
@@ -5854,7 +5854,7 @@
       "https://ex.org/component/host-1"
      ],
      "method": {
-      "https://ns.jascon.org/stdlib/facet/assessment-criteria@1": {
+      "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
        "method": "automated"
       }
      },
@@ -5864,7 +5864,7 @@
      "check-results": [
       {
        "check-ref": "https://ex.org/check/ssh-1-maxauthtries",
-       "check-digest": "sha256:20bdd39ad8aab540f31f1fbc8c7b92e59bf4d61676afaa947c84d07f76d556fc",
+       "check-digest": "sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435",
        "outcome": "satisfied",
        "time": "2026-11-11T09:00:00Z",
        "collector-id": "bash",
@@ -6002,7 +6002,7 @@
       "date": "2026-11-11"
      },
      "facets": {
-      "https://ns.jascon.org/stdlib/facet/collector@1": {
+      "https://ns.jascon.net/stdlib/facet/collector@1": {
        "collectors": [
         {
          "id": "bash",
@@ -6051,7 +6051,7 @@
       "https://ex.org/component/host-1"
      ],
      "method": {
-      "https://ns.jascon.org/stdlib/facet/assessment-criteria@1": {
+      "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
        "method": "automated"
       }
      },
@@ -6061,7 +6061,7 @@
      "check-results": [
       {
        "check-ref": "https://ex.org/check/ssh-1-maxauthtries",
-       "check-digest": "sha256:20bdd39ad8aab540f31f1fbc8c7b92e59bf4d61676afaa947c84d07f76d556fc",
+       "check-digest": "sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435",
        "outcome": "inconclusive",
        "time": "2026-11-11T09:00:00Z",
        "collector-id": "bash",
@@ -6199,7 +6199,7 @@
       "date": "2026-11-11"
      },
      "facets": {
-      "https://ns.jascon.org/stdlib/facet/collector@1": {
+      "https://ns.jascon.net/stdlib/facet/collector@1": {
        "collectors": [
         {
          "id": "bash",
@@ -6248,7 +6248,7 @@
       "https://ex.org/component/host-1"
      ],
      "method": {
-      "https://ns.jascon.org/stdlib/facet/assessment-criteria@1": {
+      "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
        "method": "automated"
       }
      },
@@ -6258,7 +6258,7 @@
      "check-results": [
       {
        "check-ref": "https://ex.org/check/ssh-1-maxauthtries",
-       "check-digest": "sha256:20bdd39ad8aab540f31f1fbc8c7b92e59bf4d61676afaa947c84d07f76d556fc",
+       "check-digest": "sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435",
        "outcome": "satisfied",
        "time": "2026-11-11T09:00:00Z",
        "collector-id": "bash",
@@ -6362,7 +6362,7 @@
       "date": "2026-11-11"
      },
      "facets": {
-      "https://ns.jascon.org/stdlib/facet/collector@1": {
+      "https://ns.jascon.net/stdlib/facet/collector@1": {
        "collectors": [
         {
          "id": "bash",
@@ -6382,7 +6382,7 @@
       "https://ex.org/component/host-1"
      ],
      "method": {
-      "https://ns.jascon.org/stdlib/facet/assessment-criteria@1": {
+      "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
        "method": "automated"
       }
      },
@@ -6392,7 +6392,7 @@
      "check-results": [
       {
        "check-ref": "https://ex.org/check/ssh-1-maxauthtries",
-       "check-digest": "sha256:20bdd39ad8aab540f31f1fbc8c7b92e59bf4d61676afaa947c84d07f76d556fc",
+       "check-digest": "sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435",
        "outcome": "satisfied",
        "time": "2026-11-11T09:00:00Z",
        "collector-id": "bash",
@@ -6506,7 +6506,7 @@
       "date": "2026-11-11"
      },
      "facets": {
-      "https://ns.jascon.org/stdlib/facet/collector@1": {
+      "https://ns.jascon.net/stdlib/facet/collector@1": {
        "collectors": [
         {
          "id": "bash",
@@ -6526,7 +6526,7 @@
       "https://ex.org/component/host-1"
      ],
      "method": {
-      "https://ns.jascon.org/stdlib/facet/assessment-criteria@1": {
+      "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
        "method": "automated"
       }
      },
@@ -6536,7 +6536,7 @@
      "check-results": [
       {
        "check-ref": "https://ex.org/check/ssh-1-maxauthtries",
-       "check-digest": "sha256:20bdd39ad8aab540f31f1fbc8c7b92e59bf4d61676afaa947c84d07f76d556fc",
+       "check-digest": "sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435",
        "outcome": "satisfied",
        "time": "2026-11-11T09:00:00Z",
        "collector-id": "bash",
@@ -6678,7 +6678,7 @@
       "date": "2026-11-11"
      },
      "facets": {
-      "https://ns.jascon.org/stdlib/facet/collector@1": {
+      "https://ns.jascon.net/stdlib/facet/collector@1": {
        "collectors": [
         {
          "id": "bash",
@@ -6727,7 +6727,7 @@
       "https://ex.org/component/host-1"
      ],
      "method": {
-      "https://ns.jascon.org/stdlib/facet/assessment-criteria@1": {
+      "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
        "method": "automated"
       }
      },
@@ -6737,7 +6737,7 @@
      "check-results": [
       {
        "check-ref": "https://ex.org/check/ssh-1-maxauthtries",
-       "check-digest": "sha256:20bdd39ad8aab540f31f1fbc8c7b92e59bf4d61676afaa947c84d07f76d556fc",
+       "check-digest": "sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435",
        "outcome": "satisfied",
        "time": "2026-11-11T09:00:00Z",
        "collector-id": "bash",
@@ -6879,7 +6879,7 @@
       "date": "2026-11-11"
      },
      "facets": {
-      "https://ns.jascon.org/stdlib/facet/collector@1": {
+      "https://ns.jascon.net/stdlib/facet/collector@1": {
        "collectors": [
         {
          "id": "bash",
@@ -6928,7 +6928,7 @@
       "https://ex.org/component/host-1"
      ],
      "method": {
-      "https://ns.jascon.org/stdlib/facet/assessment-criteria@1": {
+      "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
        "method": "automated"
       }
      },
@@ -6938,7 +6938,7 @@
      "check-results": [
       {
        "check-ref": "https://ex.org/check/ssh-1-maxauthtries",
-       "check-digest": "sha256:20bdd39ad8aab540f31f1fbc8c7b92e59bf4d61676afaa947c84d07f76d556fc",
+       "check-digest": "sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435",
        "outcome": "satisfied",
        "time": "2026-11-11T09:00:00Z",
        "collector-id": "python",
@@ -7080,7 +7080,7 @@
       "date": "2026-11-11"
      },
      "facets": {
-      "https://ns.jascon.org/stdlib/facet/collector@1": {
+      "https://ns.jascon.net/stdlib/facet/collector@1": {
        "collectors": [
         {
          "id": "bash",
@@ -7129,7 +7129,7 @@
       "https://ex.org/component/host-1"
      ],
      "method": {
-      "https://ns.jascon.org/stdlib/facet/assessment-criteria@1": {
+      "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
        "method": "automated"
       }
      },
@@ -7139,7 +7139,7 @@
      "check-results": [
       {
        "check-ref": "https://ex.org/check/ssh-1-maxauthtries",
-       "check-digest": "sha256:20bdd39ad8aab540f31f1fbc8c7b92e59bf4d61676afaa947c84d07f76d556fc",
+       "check-digest": "sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435",
        "outcome": "satisfied",
        "time": "2026-11-11T09:00:00Z",
        "collector-id": "bash",
@@ -7291,7 +7291,7 @@
       "date": "2026-11-11"
      },
      "facets": {
-      "https://ns.jascon.org/stdlib/facet/collector@1": {
+      "https://ns.jascon.net/stdlib/facet/collector@1": {
        "collectors": [
         {
          "id": "bash",
@@ -7340,7 +7340,7 @@
       "https://ex.org/component/host-1"
      ],
      "method": {
-      "https://ns.jascon.org/stdlib/facet/assessment-criteria@1": {
+      "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
        "method": "automated"
       }
      },
@@ -7350,7 +7350,7 @@
      "check-results": [
       {
        "check-ref": "https://ex.org/check/ssh-1-maxauthtries",
-       "check-digest": "sha256:20bdd39ad8aab540f31f1fbc8c7b92e59bf4d61676afaa947c84d07f76d556fc",
+       "check-digest": "sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435",
        "outcome": "satisfied",
        "time": "2026-11-11T09:00:00Z",
        "collector-id": "bash",
@@ -7392,7 +7392,7 @@
       "https://ex.org/component/host-1"
      ],
      "method": {
-      "https://ns.jascon.org/stdlib/facet/assessment-criteria@1": {
+      "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
        "method": "automated"
       }
      },
@@ -7402,7 +7402,7 @@
      "check-results": [
       {
        "check-ref": "https://ex.org/check/ssh-1-maxauthtries",
-       "check-digest": "sha256:20bdd39ad8aab540f31f1fbc8c7b92e59bf4d61676afaa947c84d07f76d556fc",
+       "check-digest": "sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435",
        "outcome": "satisfied",
        "time": "2026-11-11T09:00:00Z",
        "collector-id": "bash",
@@ -7541,7 +7541,7 @@
       "date": "2026-11-11"
      },
      "facets": {
-      "https://ns.jascon.org/stdlib/facet/collector@1": {
+      "https://ns.jascon.net/stdlib/facet/collector@1": {
        "collectors": [
         {
          "id": "bash",
@@ -7590,7 +7590,7 @@
       "https://ex.org/component/host-1"
      ],
      "method": {
-      "https://ns.jascon.org/stdlib/facet/assessment-criteria@1": {
+      "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
        "method": "automated"
       }
      },
@@ -7600,7 +7600,7 @@
      "check-results": [
       {
        "check-ref": "https://ex.org/check/ssh-1-maxauthtries",
-       "check-digest": "sha256:20bdd39ad8aab540f31f1fbc8c7b92e59bf4d61676afaa947c84d07f76d556fc",
+       "check-digest": "sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435",
        "outcome": "satisfied",
        "time": "2026-11-11T09:00:00Z",
        "collector-id": "bash",
@@ -7613,8 +7613,8 @@
         }
        },
        "evidence-record": {
-        "ref": "evidence/sha256/33009029449c5054b6eb66242f6d8080a8b7f0e9937a01fd29785c60af30a2ca",
-        "digest": "sha256:33009029449c5054b6eb66242f6d8080a8b7f0e9937a01fd29785c60af30a2ca"
+        "ref": "evidence/sha256/393c95aad3f8f5b2e920fbba38870d5b63ce953104bf44fe5b96dd320ddcbf06",
+        "digest": "sha256:393c95aad3f8f5b2e920fbba38870d5b63ce953104bf44fe5b96dd320ddcbf06"
        }
       }
      ],
@@ -7623,7 +7623,7 @@
    ],
    "expected-rules": [],
    "store": {
-    "evidence/sha256/33009029449c5054b6eb66242f6d8080a8b7f0e9937a01fd29785c60af30a2ca": "{\n \"record-version\": \"1\",\n \"check-ref\": \"https://ex.org/check/ssh-1-maxauthtries\",\n \"check-digest\": \"sha256:20bdd39ad8aab540f31f1fbc8c7b92e59bf4d61676afaa947c84d07f76d556fc\",\n \"collector-id\": \"bash\",\n \"subject-ref\": \"https://ex.org/component/host-1\",\n \"started\": \"2026-11-11T08:59:58Z\",\n \"finished\": \"2026-11-11T09:00:00Z\",\n \"exit-status\": 0,\n \"observation-digest\": \"sha256:5f3420c588b7473d556377c58e60156f217c43679d8f2cb5c319d21c87849483\",\n \"outputs\": [\n  {\n   \"name\": \"stdout\",\n   \"digest\": \"sha256:8a4d9980a72c9267e5e6487141fdfa7c639b4381dd0a58d53ac033ad751d1c31\",\n   \"media-type\": \"text/plain\"\n  }\n ]\n}\n",
+    "evidence/sha256/393c95aad3f8f5b2e920fbba38870d5b63ce953104bf44fe5b96dd320ddcbf06": "{\n \"record-version\": \"1\",\n \"check-ref\": \"https://ex.org/check/ssh-1-maxauthtries\",\n \"check-digest\": \"sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435\",\n \"collector-id\": \"bash\",\n \"subject-ref\": \"https://ex.org/component/host-1\",\n \"started\": \"2026-11-11T08:59:58Z\",\n \"finished\": \"2026-11-11T09:00:00Z\",\n \"exit-status\": 0,\n \"observation-digest\": \"sha256:5f3420c588b7473d556377c58e60156f217c43679d8f2cb5c319d21c87849483\",\n \"outputs\": [\n  {\n   \"name\": \"stdout\",\n   \"digest\": \"sha256:8a4d9980a72c9267e5e6487141fdfa7c639b4381dd0a58d53ac033ad751d1c31\",\n   \"media-type\": \"text/plain\"\n  }\n ]\n}\n",
     "evidence/sha256/8a4d9980a72c9267e5e6487141fdfa7c639b4381dd0a58d53ac033ad751d1c31": "maxauthtries 4\nciphers aes256-gcm@openssh.com,aes256-ctr\n"
    }
   },
@@ -7748,7 +7748,7 @@
       "date": "2026-11-11"
      },
      "facets": {
-      "https://ns.jascon.org/stdlib/facet/collector@1": {
+      "https://ns.jascon.net/stdlib/facet/collector@1": {
        "collectors": [
         {
          "id": "bash",
@@ -7797,7 +7797,7 @@
       "https://ex.org/component/host-1"
      ],
      "method": {
-      "https://ns.jascon.org/stdlib/facet/assessment-criteria@1": {
+      "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
        "method": "automated"
       }
      },
@@ -7807,7 +7807,7 @@
      "check-results": [
       {
        "check-ref": "https://ex.org/check/ssh-1-maxauthtries",
-       "check-digest": "sha256:20bdd39ad8aab540f31f1fbc8c7b92e59bf4d61676afaa947c84d07f76d556fc",
+       "check-digest": "sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435",
        "outcome": "satisfied",
        "time": "2026-11-11T09:00:00Z",
        "collector-id": "bash",
@@ -7820,8 +7820,8 @@
         }
        },
        "evidence-record": {
-        "ref": "evidence/sha256/33009029449c5054b6eb66242f6d8080a8b7f0e9937a01fd29785c60af30a2ca",
-        "digest": "sha256:33009029449c5054b6eb66242f6d8080a8b7f0e9937a01fd29785c60af30a2ca"
+        "ref": "evidence/sha256/393c95aad3f8f5b2e920fbba38870d5b63ce953104bf44fe5b96dd320ddcbf06",
+        "digest": "sha256:393c95aad3f8f5b2e920fbba38870d5b63ce953104bf44fe5b96dd320ddcbf06"
        }
       }
      ],
@@ -7832,7 +7832,7 @@
     "CHECK-15"
    ],
    "store": {
-    "evidence/sha256/33009029449c5054b6eb66242f6d8080a8b7f0e9937a01fd29785c60af30a2ca": "{\n \"record-version\": \"1\",\n \"check-ref\": \"https://ex.org/check/ssh-1-maxauthtries\",\n \"check-digest\": \"sha256:20bdd39ad8aab540f31f1fbc8c7b92e59bf4d61676afaa947c84d07f76d556fc\",\n \"collector-id\": \"bash\",\n \"subject-ref\": \"https://ex.org/component/host-1\",\n \"started\": \"2026-11-11T08:59:58Z\",\n \"finished\": \"2026-11-11T09:00:00Z\",\n \"exit-status\": 0,\n \"observation-digest\": \"sha256:5f3420c588b7473d556377c58e60156f217c43679d8f2cb5c319d21c87849483\",\n \"outputs\": [\n  {\n   \"name\": \"stdout\",\n   \"digest\": \"sha256:8a4d9980a72c9267e5e6487141fdfa7c639b4381dd0a58d53ac033ad751d1c31\",\n   \"media-type\": \"text/plain\"\n  }\n ]\n}\n",
+    "evidence/sha256/393c95aad3f8f5b2e920fbba38870d5b63ce953104bf44fe5b96dd320ddcbf06": "{\n \"record-version\": \"1\",\n \"check-ref\": \"https://ex.org/check/ssh-1-maxauthtries\",\n \"check-digest\": \"sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435\",\n \"collector-id\": \"bash\",\n \"subject-ref\": \"https://ex.org/component/host-1\",\n \"started\": \"2026-11-11T08:59:58Z\",\n \"finished\": \"2026-11-11T09:00:00Z\",\n \"exit-status\": 0,\n \"observation-digest\": \"sha256:5f3420c588b7473d556377c58e60156f217c43679d8f2cb5c319d21c87849483\",\n \"outputs\": [\n  {\n   \"name\": \"stdout\",\n   \"digest\": \"sha256:8a4d9980a72c9267e5e6487141fdfa7c639b4381dd0a58d53ac033ad751d1c31\",\n   \"media-type\": \"text/plain\"\n  }\n ]\n}\n",
     "evidence/sha256/8a4d9980a72c9267e5e6487141fdfa7c639b4381dd0a58d53ac033ad751d1c31": "maxauthtries 9\nciphers aes256-gcm@openssh.com,aes256-ctr\n"
    }
   },
@@ -7957,7 +7957,7 @@
       "date": "2026-11-11"
      },
      "facets": {
-      "https://ns.jascon.org/stdlib/facet/collector@1": {
+      "https://ns.jascon.net/stdlib/facet/collector@1": {
        "collectors": [
         {
          "id": "bash",
@@ -8006,7 +8006,7 @@
       "https://ex.org/component/host-1"
      ],
      "method": {
-      "https://ns.jascon.org/stdlib/facet/assessment-criteria@1": {
+      "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
        "method": "automated"
       }
      },
@@ -8016,7 +8016,7 @@
      "check-results": [
       {
        "check-ref": "https://ex.org/check/ssh-1-maxauthtries",
-       "check-digest": "sha256:20bdd39ad8aab540f31f1fbc8c7b92e59bf4d61676afaa947c84d07f76d556fc",
+       "check-digest": "sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435",
        "outcome": "satisfied",
        "time": "2026-11-11T09:00:00Z",
        "collector-id": "bash",
@@ -8029,8 +8029,8 @@
         }
        },
        "evidence-record": {
-        "ref": "evidence/sha256/33009029449c5054b6eb66242f6d8080a8b7f0e9937a01fd29785c60af30a2ca",
-        "digest": "sha256:33009029449c5054b6eb66242f6d8080a8b7f0e9937a01fd29785c60af30a2ca"
+        "ref": "evidence/sha256/393c95aad3f8f5b2e920fbba38870d5b63ce953104bf44fe5b96dd320ddcbf06",
+        "digest": "sha256:393c95aad3f8f5b2e920fbba38870d5b63ce953104bf44fe5b96dd320ddcbf06"
        }
       }
      ],
@@ -8042,7 +8042,7 @@
     "withheld"
    ],
    "store": {
-    "evidence/sha256/33009029449c5054b6eb66242f6d8080a8b7f0e9937a01fd29785c60af30a2ca": "{\n \"record-version\": \"1\",\n \"check-ref\": \"https://ex.org/check/ssh-1-maxauthtries\",\n \"check-digest\": \"sha256:20bdd39ad8aab540f31f1fbc8c7b92e59bf4d61676afaa947c84d07f76d556fc\",\n \"collector-id\": \"bash\",\n \"subject-ref\": \"https://ex.org/component/host-1\",\n \"started\": \"2026-11-11T08:59:58Z\",\n \"finished\": \"2026-11-11T09:00:00Z\",\n \"exit-status\": 0,\n \"observation-digest\": \"sha256:5f3420c588b7473d556377c58e60156f217c43679d8f2cb5c319d21c87849483\",\n \"outputs\": [\n  {\n   \"name\": \"stdout\",\n   \"digest\": \"sha256:8a4d9980a72c9267e5e6487141fdfa7c639b4381dd0a58d53ac033ad751d1c31\",\n   \"media-type\": \"text/plain\"\n  }\n ]\n}\n"
+    "evidence/sha256/393c95aad3f8f5b2e920fbba38870d5b63ce953104bf44fe5b96dd320ddcbf06": "{\n \"record-version\": \"1\",\n \"check-ref\": \"https://ex.org/check/ssh-1-maxauthtries\",\n \"check-digest\": \"sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435\",\n \"collector-id\": \"bash\",\n \"subject-ref\": \"https://ex.org/component/host-1\",\n \"started\": \"2026-11-11T08:59:58Z\",\n \"finished\": \"2026-11-11T09:00:00Z\",\n \"exit-status\": 0,\n \"observation-digest\": \"sha256:5f3420c588b7473d556377c58e60156f217c43679d8f2cb5c319d21c87849483\",\n \"outputs\": [\n  {\n   \"name\": \"stdout\",\n   \"digest\": \"sha256:8a4d9980a72c9267e5e6487141fdfa7c639b4381dd0a58d53ac033ad751d1c31\",\n   \"media-type\": \"text/plain\"\n  }\n ]\n}\n"
    }
   },
   {
@@ -8166,7 +8166,7 @@
       "date": "2026-11-11"
      },
      "facets": {
-      "https://ns.jascon.org/stdlib/facet/collector@1": {
+      "https://ns.jascon.net/stdlib/facet/collector@1": {
        "collectors": [
         {
          "id": "bash",
@@ -8215,7 +8215,7 @@
       "https://ex.org/component/host-1"
      ],
      "method": {
-      "https://ns.jascon.org/stdlib/facet/assessment-criteria@1": {
+      "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
        "method": "automated"
       }
      },
@@ -8225,7 +8225,7 @@
      "check-results": [
       {
        "check-ref": "https://ex.org/check/ssh-1-maxauthtries",
-       "check-digest": "sha256:20bdd39ad8aab540f31f1fbc8c7b92e59bf4d61676afaa947c84d07f76d556fc",
+       "check-digest": "sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435",
        "outcome": "satisfied",
        "time": "2026-11-11T09:00:00Z",
        "collector-id": "bash",
@@ -8239,7 +8239,7 @@
        },
        "evidence-record": {
         "ref": "evidence/sha256/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-        "digest": "sha256:33009029449c5054b6eb66242f6d8080a8b7f0e9937a01fd29785c60af30a2ca"
+        "digest": "sha256:393c95aad3f8f5b2e920fbba38870d5b63ce953104bf44fe5b96dd320ddcbf06"
        }
       }
      ],
@@ -8250,7 +8250,7 @@
     "CHECK-15"
    ],
    "store": {
-    "evidence/sha256/33009029449c5054b6eb66242f6d8080a8b7f0e9937a01fd29785c60af30a2ca": "{\n \"record-version\": \"1\",\n \"check-ref\": \"https://ex.org/check/ssh-1-maxauthtries\",\n \"check-digest\": \"sha256:20bdd39ad8aab540f31f1fbc8c7b92e59bf4d61676afaa947c84d07f76d556fc\",\n \"collector-id\": \"bash\",\n \"subject-ref\": \"https://ex.org/component/host-1\",\n \"started\": \"2026-11-11T08:59:58Z\",\n \"finished\": \"2026-11-11T09:00:00Z\",\n \"exit-status\": 0,\n \"observation-digest\": \"sha256:5f3420c588b7473d556377c58e60156f217c43679d8f2cb5c319d21c87849483\",\n \"outputs\": [\n  {\n   \"name\": \"stdout\",\n   \"digest\": \"sha256:8a4d9980a72c9267e5e6487141fdfa7c639b4381dd0a58d53ac033ad751d1c31\",\n   \"media-type\": \"text/plain\"\n  }\n ]\n}\n",
+    "evidence/sha256/393c95aad3f8f5b2e920fbba38870d5b63ce953104bf44fe5b96dd320ddcbf06": "{\n \"record-version\": \"1\",\n \"check-ref\": \"https://ex.org/check/ssh-1-maxauthtries\",\n \"check-digest\": \"sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435\",\n \"collector-id\": \"bash\",\n \"subject-ref\": \"https://ex.org/component/host-1\",\n \"started\": \"2026-11-11T08:59:58Z\",\n \"finished\": \"2026-11-11T09:00:00Z\",\n \"exit-status\": 0,\n \"observation-digest\": \"sha256:5f3420c588b7473d556377c58e60156f217c43679d8f2cb5c319d21c87849483\",\n \"outputs\": [\n  {\n   \"name\": \"stdout\",\n   \"digest\": \"sha256:8a4d9980a72c9267e5e6487141fdfa7c639b4381dd0a58d53ac033ad751d1c31\",\n   \"media-type\": \"text/plain\"\n  }\n ]\n}\n",
     "evidence/sha256/8a4d9980a72c9267e5e6487141fdfa7c639b4381dd0a58d53ac033ad751d1c31": "maxauthtries 4\nciphers aes256-gcm@openssh.com,aes256-ctr\n"
    }
   },
@@ -8375,7 +8375,7 @@
       "date": "2026-11-11"
      },
      "facets": {
-      "https://ns.jascon.org/stdlib/facet/collector@1": {
+      "https://ns.jascon.net/stdlib/facet/collector@1": {
        "collectors": [
         {
          "id": "bash",
@@ -8424,7 +8424,7 @@
       "https://ex.org/component/host-1"
      ],
      "method": {
-      "https://ns.jascon.org/stdlib/facet/assessment-criteria@1": {
+      "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
        "method": "automated"
       }
      },
@@ -8434,7 +8434,7 @@
      "check-results": [
       {
        "check-ref": "https://ex.org/check/ssh-1-maxauthtries",
-       "check-digest": "sha256:20bdd39ad8aab540f31f1fbc8c7b92e59bf4d61676afaa947c84d07f76d556fc",
+       "check-digest": "sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435",
        "outcome": "satisfied",
        "time": "2026-11-11T09:00:00Z",
        "collector-id": "bash",
@@ -8584,7 +8584,7 @@
       "date": "2026-11-11"
      },
      "facets": {
-      "https://ns.jascon.org/stdlib/facet/collector@1": {
+      "https://ns.jascon.net/stdlib/facet/collector@1": {
        "collectors": [
         {
          "id": "bash",
@@ -8633,7 +8633,7 @@
       "https://ex.org/component/host-1"
      ],
      "method": {
-      "https://ns.jascon.org/stdlib/facet/assessment-criteria@1": {
+      "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
        "method": "automated"
       }
      },
@@ -8643,7 +8643,7 @@
      "check-results": [
       {
        "check-ref": "https://ex.org/check/ssh-1-maxauthtries",
-       "check-digest": "sha256:20bdd39ad8aab540f31f1fbc8c7b92e59bf4d61676afaa947c84d07f76d556fc",
+       "check-digest": "sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435",
        "outcome": "satisfied",
        "time": "2026-11-11T09:00:00Z",
        "collector-id": "bash",
@@ -8656,8 +8656,8 @@
         }
        },
        "evidence-record": {
-        "ref": "evidence/sha256/eebf9a8bf8a88aed387b909e42b3bdcf4d3b19a36b079b222844cae12e18932a",
-        "digest": "sha256:eebf9a8bf8a88aed387b909e42b3bdcf4d3b19a36b079b222844cae12e18932a"
+        "ref": "evidence/sha256/ab2284e856d4cc7337b1cf8689bb9b9376518b5b8dd0f2e7c972a5568c35a387",
+        "digest": "sha256:ab2284e856d4cc7337b1cf8689bb9b9376518b5b8dd0f2e7c972a5568c35a387"
        }
       }
      ],
@@ -8668,7 +8668,7 @@
     "CHECK-15"
    ],
    "store": {
-    "evidence/sha256/eebf9a8bf8a88aed387b909e42b3bdcf4d3b19a36b079b222844cae12e18932a": "{\n \"record-version\": \"1\",\n \"check-ref\": \"https://ex.org/check/ssh-1-maxauthtries\",\n \"check-digest\": \"sha256:20bdd39ad8aab540f31f1fbc8c7b92e59bf4d61676afaa947c84d07f76d556fc\",\n \"collector-id\": \"bash\",\n \"subject-ref\": \"https://ex.org/component/host-1\",\n \"started\": \"2026-11-11T08:59:58Z\",\n \"finished\": \"2026-11-11T09:00:00Z\",\n \"exit-status\": 0,\n \"observation-digest\": \"sha256:22b77c359455e136ed6817b11e901c92ea2431496bf0e5fd36df239e44e20b22\",\n \"outputs\": [\n  {\n   \"name\": \"stdout\",\n   \"digest\": \"sha256:8a4d9980a72c9267e5e6487141fdfa7c639b4381dd0a58d53ac033ad751d1c31\",\n   \"media-type\": \"text/plain\"\n  }\n ]\n}\n",
+    "evidence/sha256/ab2284e856d4cc7337b1cf8689bb9b9376518b5b8dd0f2e7c972a5568c35a387": "{\n \"record-version\": \"1\",\n \"check-ref\": \"https://ex.org/check/ssh-1-maxauthtries\",\n \"check-digest\": \"sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435\",\n \"collector-id\": \"bash\",\n \"subject-ref\": \"https://ex.org/component/host-1\",\n \"started\": \"2026-11-11T08:59:58Z\",\n \"finished\": \"2026-11-11T09:00:00Z\",\n \"exit-status\": 0,\n \"observation-digest\": \"sha256:22b77c359455e136ed6817b11e901c92ea2431496bf0e5fd36df239e44e20b22\",\n \"outputs\": [\n  {\n   \"name\": \"stdout\",\n   \"digest\": \"sha256:8a4d9980a72c9267e5e6487141fdfa7c639b4381dd0a58d53ac033ad751d1c31\",\n   \"media-type\": \"text/plain\"\n  }\n ]\n}\n",
     "evidence/sha256/8a4d9980a72c9267e5e6487141fdfa7c639b4381dd0a58d53ac033ad751d1c31": "maxauthtries 4\nciphers aes256-gcm@openssh.com,aes256-ctr\n"
    }
   },
@@ -8793,7 +8793,7 @@
       "date": "2026-11-11"
      },
      "facets": {
-      "https://ns.jascon.org/stdlib/facet/collector@1": {
+      "https://ns.jascon.net/stdlib/facet/collector@1": {
        "collectors": [
         {
          "id": "bash",
@@ -8842,7 +8842,7 @@
       "https://ex.org/component/host-1"
      ],
      "method": {
-      "https://ns.jascon.org/stdlib/facet/assessment-criteria@1": {
+      "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
        "method": "automated"
       }
      },
@@ -8852,7 +8852,7 @@
      "check-results": [
       {
        "check-ref": "https://ex.org/check/ssh-1-maxauthtries",
-       "check-digest": "sha256:20bdd39ad8aab540f31f1fbc8c7b92e59bf4d61676afaa947c84d07f76d556fc",
+       "check-digest": "sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435",
        "outcome": "satisfied",
        "time": "2026-11-11T09:00:00Z",
        "collector-id": "bash",
@@ -8865,8 +8865,8 @@
         }
        },
        "evidence-record": {
-        "ref": "evidence/sha256/12a788320f2b3202957cebdc0aa9da6d10b7908618f44d0324c32394787c291c",
-        "digest": "sha256:12a788320f2b3202957cebdc0aa9da6d10b7908618f44d0324c32394787c291c"
+        "ref": "evidence/sha256/5e5b9303238029550de28b2a491eda6cd94b88af036f6276263b37c9fef4a330",
+        "digest": "sha256:5e5b9303238029550de28b2a491eda6cd94b88af036f6276263b37c9fef4a330"
        }
       }
      ],
@@ -8877,7 +8877,7 @@
     "CHECK-15"
    ],
    "store": {
-    "evidence/sha256/12a788320f2b3202957cebdc0aa9da6d10b7908618f44d0324c32394787c291c": "{\n \"record-version\": \"1\",\n \"check-ref\": \"https://ex.org/check/ssh-1-maxauthtries\",\n \"check-digest\": \"sha256:20bdd39ad8aab540f31f1fbc8c7b92e59bf4d61676afaa947c84d07f76d556fc\",\n \"collector-id\": \"bash\",\n \"subject-ref\": \"https://ex.org/component/host-2\",\n \"started\": \"2026-11-11T08:59:58Z\",\n \"finished\": \"2026-11-11T09:00:00Z\",\n \"exit-status\": 0,\n \"observation-digest\": \"sha256:5f3420c588b7473d556377c58e60156f217c43679d8f2cb5c319d21c87849483\",\n \"outputs\": [\n  {\n   \"name\": \"stdout\",\n   \"digest\": \"sha256:8a4d9980a72c9267e5e6487141fdfa7c639b4381dd0a58d53ac033ad751d1c31\",\n   \"media-type\": \"text/plain\"\n  }\n ]\n}\n",
+    "evidence/sha256/5e5b9303238029550de28b2a491eda6cd94b88af036f6276263b37c9fef4a330": "{\n \"record-version\": \"1\",\n \"check-ref\": \"https://ex.org/check/ssh-1-maxauthtries\",\n \"check-digest\": \"sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435\",\n \"collector-id\": \"bash\",\n \"subject-ref\": \"https://ex.org/component/host-2\",\n \"started\": \"2026-11-11T08:59:58Z\",\n \"finished\": \"2026-11-11T09:00:00Z\",\n \"exit-status\": 0,\n \"observation-digest\": \"sha256:5f3420c588b7473d556377c58e60156f217c43679d8f2cb5c319d21c87849483\",\n \"outputs\": [\n  {\n   \"name\": \"stdout\",\n   \"digest\": \"sha256:8a4d9980a72c9267e5e6487141fdfa7c639b4381dd0a58d53ac033ad751d1c31\",\n   \"media-type\": \"text/plain\"\n  }\n ]\n}\n",
     "evidence/sha256/8a4d9980a72c9267e5e6487141fdfa7c639b4381dd0a58d53ac033ad751d1c31": "maxauthtries 4\nciphers aes256-gcm@openssh.com,aes256-ctr\n"
    }
   },
@@ -9002,7 +9002,7 @@
       "date": "2026-11-11"
      },
      "facets": {
-      "https://ns.jascon.org/stdlib/facet/collector@1": {
+      "https://ns.jascon.net/stdlib/facet/collector@1": {
        "collectors": [
         {
          "id": "bash",
@@ -9051,7 +9051,7 @@
       "https://ex.org/component/host-1"
      ],
      "method": {
-      "https://ns.jascon.org/stdlib/facet/assessment-criteria@1": {
+      "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
        "method": "automated"
       }
      },
@@ -9061,7 +9061,7 @@
      "check-results": [
       {
        "check-ref": "https://ex.org/check/ssh-1-maxauthtries",
-       "check-digest": "sha256:20bdd39ad8aab540f31f1fbc8c7b92e59bf4d61676afaa947c84d07f76d556fc",
+       "check-digest": "sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435",
        "outcome": "satisfied",
        "time": "2026-11-11T09:00:00Z",
        "collector-id": "bash",
@@ -9075,7 +9075,7 @@
        },
        "evidence-record": {
         "ref": "../evidence/x",
-        "digest": "sha256:33009029449c5054b6eb66242f6d8080a8b7f0e9937a01fd29785c60af30a2ca"
+        "digest": "sha256:393c95aad3f8f5b2e920fbba38870d5b63ce953104bf44fe5b96dd320ddcbf06"
        }
       }
      ],
@@ -9086,7 +9086,7 @@
     "CHECK-15"
    ],
    "store": {
-    "evidence/sha256/33009029449c5054b6eb66242f6d8080a8b7f0e9937a01fd29785c60af30a2ca": "{\n \"record-version\": \"1\",\n \"check-ref\": \"https://ex.org/check/ssh-1-maxauthtries\",\n \"check-digest\": \"sha256:20bdd39ad8aab540f31f1fbc8c7b92e59bf4d61676afaa947c84d07f76d556fc\",\n \"collector-id\": \"bash\",\n \"subject-ref\": \"https://ex.org/component/host-1\",\n \"started\": \"2026-11-11T08:59:58Z\",\n \"finished\": \"2026-11-11T09:00:00Z\",\n \"exit-status\": 0,\n \"observation-digest\": \"sha256:5f3420c588b7473d556377c58e60156f217c43679d8f2cb5c319d21c87849483\",\n \"outputs\": [\n  {\n   \"name\": \"stdout\",\n   \"digest\": \"sha256:8a4d9980a72c9267e5e6487141fdfa7c639b4381dd0a58d53ac033ad751d1c31\",\n   \"media-type\": \"text/plain\"\n  }\n ]\n}\n",
+    "evidence/sha256/393c95aad3f8f5b2e920fbba38870d5b63ce953104bf44fe5b96dd320ddcbf06": "{\n \"record-version\": \"1\",\n \"check-ref\": \"https://ex.org/check/ssh-1-maxauthtries\",\n \"check-digest\": \"sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435\",\n \"collector-id\": \"bash\",\n \"subject-ref\": \"https://ex.org/component/host-1\",\n \"started\": \"2026-11-11T08:59:58Z\",\n \"finished\": \"2026-11-11T09:00:00Z\",\n \"exit-status\": 0,\n \"observation-digest\": \"sha256:5f3420c588b7473d556377c58e60156f217c43679d8f2cb5c319d21c87849483\",\n \"outputs\": [\n  {\n   \"name\": \"stdout\",\n   \"digest\": \"sha256:8a4d9980a72c9267e5e6487141fdfa7c639b4381dd0a58d53ac033ad751d1c31\",\n   \"media-type\": \"text/plain\"\n  }\n ]\n}\n",
     "evidence/sha256/8a4d9980a72c9267e5e6487141fdfa7c639b4381dd0a58d53ac033ad751d1c31": "maxauthtries 4\nciphers aes256-gcm@openssh.com,aes256-ctr\n"
    }
   },
@@ -9211,7 +9211,7 @@
       "date": "2026-11-11"
      },
      "facets": {
-      "https://ns.jascon.org/stdlib/facet/collector@1": {
+      "https://ns.jascon.net/stdlib/facet/collector@1": {
        "collectors": [
         {
          "id": "bash",
@@ -9260,7 +9260,7 @@
       "https://ex.org/component/host-1"
      ],
      "method": {
-      "https://ns.jascon.org/stdlib/facet/assessment-criteria@1": {
+      "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
        "method": "automated"
       }
      },
@@ -9270,7 +9270,7 @@
      "check-results": [
       {
        "check-ref": "https://ex.org/check/ssh-1-maxauthtries",
-       "check-digest": "sha256:20bdd39ad8aab540f31f1fbc8c7b92e59bf4d61676afaa947c84d07f76d556fc",
+       "check-digest": "sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435",
        "outcome": "satisfied",
        "time": "2026-11-11T09:00:00Z",
        "collector-id": "bash",
@@ -9284,7 +9284,7 @@
        },
        "evidence-record": {
         "ref": "https://evidence.example/run/42",
-        "digest": "sha256:33009029449c5054b6eb66242f6d8080a8b7f0e9937a01fd29785c60af30a2ca"
+        "digest": "sha256:393c95aad3f8f5b2e920fbba38870d5b63ce953104bf44fe5b96dd320ddcbf06"
        }
       }
      ],
@@ -9296,7 +9296,7 @@
     "not resolvable offline"
    ],
    "store": {
-    "evidence/sha256/33009029449c5054b6eb66242f6d8080a8b7f0e9937a01fd29785c60af30a2ca": "{\n \"record-version\": \"1\",\n \"check-ref\": \"https://ex.org/check/ssh-1-maxauthtries\",\n \"check-digest\": \"sha256:20bdd39ad8aab540f31f1fbc8c7b92e59bf4d61676afaa947c84d07f76d556fc\",\n \"collector-id\": \"bash\",\n \"subject-ref\": \"https://ex.org/component/host-1\",\n \"started\": \"2026-11-11T08:59:58Z\",\n \"finished\": \"2026-11-11T09:00:00Z\",\n \"exit-status\": 0,\n \"observation-digest\": \"sha256:5f3420c588b7473d556377c58e60156f217c43679d8f2cb5c319d21c87849483\",\n \"outputs\": [\n  {\n   \"name\": \"stdout\",\n   \"digest\": \"sha256:8a4d9980a72c9267e5e6487141fdfa7c639b4381dd0a58d53ac033ad751d1c31\",\n   \"media-type\": \"text/plain\"\n  }\n ]\n}\n",
+    "evidence/sha256/393c95aad3f8f5b2e920fbba38870d5b63ce953104bf44fe5b96dd320ddcbf06": "{\n \"record-version\": \"1\",\n \"check-ref\": \"https://ex.org/check/ssh-1-maxauthtries\",\n \"check-digest\": \"sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435\",\n \"collector-id\": \"bash\",\n \"subject-ref\": \"https://ex.org/component/host-1\",\n \"started\": \"2026-11-11T08:59:58Z\",\n \"finished\": \"2026-11-11T09:00:00Z\",\n \"exit-status\": 0,\n \"observation-digest\": \"sha256:5f3420c588b7473d556377c58e60156f217c43679d8f2cb5c319d21c87849483\",\n \"outputs\": [\n  {\n   \"name\": \"stdout\",\n   \"digest\": \"sha256:8a4d9980a72c9267e5e6487141fdfa7c639b4381dd0a58d53ac033ad751d1c31\",\n   \"media-type\": \"text/plain\"\n  }\n ]\n}\n",
     "evidence/sha256/8a4d9980a72c9267e5e6487141fdfa7c639b4381dd0a58d53ac033ad751d1c31": "maxauthtries 4\nciphers aes256-gcm@openssh.com,aes256-ctr\n"
    }
   }

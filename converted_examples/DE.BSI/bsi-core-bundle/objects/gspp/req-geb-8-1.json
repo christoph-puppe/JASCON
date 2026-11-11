@@ -29,7 +29,7 @@
   }
  ],
  "facets": {
-  "https://ns.jascon.org/stdlib/facet/statement-grammar@1": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
    "by-statement": {
     "smt": {
      "action": "platzieren",
@@ -47,7 +47,7 @@
     }
    }
   },
-  "https://ns.jascon.org/stdlib/facet/assessment-criteria@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "by-statement": {
     "smt": {
      "required-documentation": [
@@ -61,7 +61,7 @@
     }
    }
   },
-  "https://ns.jascon.org/stdlib/facet/security-objectives@1": {
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
    "by-statement": {
     "smt": {
      "confidentiality": "2",

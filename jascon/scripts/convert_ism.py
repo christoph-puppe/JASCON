@@ -173,7 +173,7 @@ def mint_req(c):
 def next_seq():
     global seq_counter; seq_counter += 10; return seq_counter
 
-COMPAT = "https://ns.jascon.org/compat/oscal-1x@1"
+COMPAT = "https://ns.jascon.net/compat/oscal-1x@1"
 compat_payloads = 0
 
 def own_parts(g):
@@ -248,7 +248,7 @@ for _base, _, _files in os.walk(os.path.join(OUT, "objects")):
         if _rel.endswith(".json") and _rel not in objects:
             os.remove(_fp)
 w("schemas/oscal-1x-compat-1.0.0-stub.json", {
-    "id": "https://ns.jascon.org/compat/oscal-1x", "version": "1.0.0",
+    "id": "https://ns.jascon.net/compat/oscal-1x", "version": "1.0.0",
     "note": "NORMATIVE pinned payload schema (backlog 26); Level-2 waiting room (intended deprecation; see D16/handbook 14.6)",
     "modifies-semantics": [],
     "schema": {"$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -268,7 +268,7 @@ manifest = {"manifest-version": "1",
                          "package-digest": sha_file(rel),
                          "semantic-digest": semantic_digest(o), "path": rel}
                         for rel, o in sorted(objects.items())],
-            "facet-schemas": [{"id": "https://ns.jascon.org/compat/oscal-1x",
+            "facet-schemas": [{"id": "https://ns.jascon.net/compat/oscal-1x",
                                "exact-version": "1.0.0",
                                "digest": sha_file("schemas/oscal-1x-compat-1.0.0-stub.json"),
                                "path": "schemas/oscal-1x-compat-1.0.0-stub.json"}]}

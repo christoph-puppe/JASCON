@@ -75,7 +75,7 @@
   }
  ],
  "facets": {
-  "https://ns.jascon.org/stdlib/facet/statement-grammar@1": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
    "by-statement": {
     "smt": {
      "action": "löschen",
@@ -109,7 +109,7 @@
     }
    }
   },
-  "https://ns.jascon.org/stdlib/facet/assessment-criteria@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "by-statement": {
     "smt": {
      "required-documentation": [
@@ -133,7 +133,7 @@
     }
    }
   },
-  "https://ns.jascon.org/stdlib/facet/security-objectives@1": {
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
    "by-statement": {
     "smt": {
      "confidentiality": "2",
@@ -239,7 +239,7 @@
     }
    }
   },
-  "https://ns.jascon.org/compat/oscal-1x@1": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
    "param-extras": {
     "asst.7.3-prm1": {
      "alt-identifier": "7dc77e01-b62b-4e7f-bb4c-d9c67551d8fa"

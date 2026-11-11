@@ -23,7 +23,7 @@
 > **Name.** **JASCON** — **J**SON **A**ttestable **S**emantic **C**ompliance
 > **O**bject-graph **N**otation; *one notation for every standard, in every
 > language*. Every machine identifier carries the name: namespaces under
-> `https://ns.jascon.org/`, the media type
+> `https://ns.jascon.net/`, the media type
 > `application/vnd.jascon.attestation+json`, the schema
 > `jascon-2.0.0.schema.json` (author decision 2026-11-11, taken in this
 > major — IV.9). Digests and signatures made under the earlier identifiers

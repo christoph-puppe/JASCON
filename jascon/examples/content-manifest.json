@@ -75,8 +75,8 @@
   {
    "id": "https://assessor.example/assessment/2026-q3-acme",
    "version": "1",
-   "package-digest": "sha256:2912503b551149d5b1d8870b7b0a46cf7e10ce1627a5e39fda37218fa280c888",
-   "semantic-digest": "sha256:72004658f92d2cee69f9986446c89cd84270fa8a310e239ae43bdf389760d346",
+   "package-digest": "sha256:b81338cadd543813c45789c098980e5ac6ef84cf8f4174872a8604212e8a591a",
+   "semantic-digest": "sha256:46d87c840d567e8fb43cf7b649e199afcde8662967762840d72145d3cfdeb899",
    "path": "assessment-2026q3.json"
   },
   {
@@ -124,29 +124,29 @@
   {
    "id": "https://cso.example/check/LNX-SSH-1-maxauthtries",
    "version": "1.0.0",
-   "package-digest": "sha256:7e7229d107b2804556ecf35fbcf7c660278c4fefea90ad566fb54a9d0d4b3ac2",
-   "semantic-digest": "sha256:ae181230f04a444f93af7a7cbbd308b618c17bb6e1aca2dfb9241c6e88e84bc7",
+   "package-digest": "sha256:53e0feadfb923269e89b4b8e01627acaab4868a0db60efd21f5f2b6b88f151b4",
+   "semantic-digest": "sha256:ca389189ab10328b54a1bd8c5b77ad48041b2ef3a719cb68a6e427d6654e1d26",
    "path": "check-acme-ssh-maxauthtries.json"
   },
   {
    "id": "https://cso.example/check/LNX-SSH-1-ciphers",
    "version": "1.0.0",
-   "package-digest": "sha256:bc1aa1b02944b11f32bfee154a55deca4770567a06aa4a88c8c923425c327cf5",
-   "semantic-digest": "sha256:28591213be0d26e48a5b1b5d1284b1783f23d414e4c40d921b786d0ebcbc17f4",
+   "package-digest": "sha256:1f3f1cf70c169ea02f59d8ff6e1ffa509caae4aeb7e22effa0daea73ad6849cb",
+   "semantic-digest": "sha256:b5ec275f0904a0a882d27e1434efb28e0595a74c6c0814297b2537fa49833f56",
    "path": "check-acme-ssh-ciphers.json"
   },
   {
    "id": "https://cso.example/assessment/bastion-01-2026-11-03",
    "version": "1",
-   "package-digest": "sha256:a806e1ffa97e28d343b70934cc263b86312d6ea251cbe360301d84ecd8c07892",
-   "semantic-digest": "sha256:ec53ab3fb6aa8387bab758d2cc6f1033271102e1111f718dc4b05a66c3ae2ad7",
+   "package-digest": "sha256:f4545006e1f66788b80a5e22cc861b84021ca19eb1ec7f81d173a08289ff1d1a",
+   "semantic-digest": "sha256:753be68f11a73d2cb4541b7b1368247126af616f7b1ba054f2907af105d8fb6e",
    "path": "assessment-acme-bastion-2026-11-03.json"
   },
   {
    "id": "https://cso.example/assessment/bastion-01-2026-11-10",
    "version": "1",
-   "package-digest": "sha256:bbec936a12aac16683e9e3428aa7a4235f34155443e72f5e447183509c44c30b",
-   "semantic-digest": "sha256:baed25f9728bd41de56df8b4d41a7cd6d7d177baa16b3365cbdba96724074be3",
+   "package-digest": "sha256:79cc2ec6f5ec7a1b45a753037a64f1fe02ed6f582c9a8095682f9306bb03cf3d",
+   "semantic-digest": "sha256:0df090148a716cad4887bda8964576a7ab760893db675bd84e64436e015a4853",
    "path": "assessment-acme-bastion-2026-11-10.json"
   },
   {
@@ -165,15 +165,15 @@
    "path": "gspp-taxonomy-1.0.0.json"
   },
   {
-   "id": "https://ns.jascon.org/stdlib/facet/assessment-criteria",
+   "id": "https://ns.jascon.net/stdlib/facet/assessment-criteria",
    "exact-version": "1.0.0",
-   "digest": "sha256:29e6592ecac7433444300e93e4b095ed0dc9d45e9d794e6012b8bb2fb8e4097d",
+   "digest": "sha256:c3cc779a0502ede84afefb0a0b05fa351da58363ff2ff70f13c8e344a3343902",
    "path": "assessment-criteria-1.0.0.json"
   },
   {
-   "id": "https://ns.jascon.org/stdlib/facet/collector",
+   "id": "https://ns.jascon.net/stdlib/facet/collector",
    "exact-version": "1.0.0",
-   "digest": "sha256:0b5172bdd5ad3dbbbd4487f4cbde016ef3c38299fdfabcf9f9aa3840a6e6b6b0",
+   "digest": "sha256:0a16d5696e50ed3cf058ec930948a55defec02c1b0e34975c6ae95ac39033ad5",
    "path": "collector-1.0.0.json"
   }
  ],

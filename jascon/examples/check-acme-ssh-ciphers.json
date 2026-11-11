@@ -37,7 +37,7 @@
   "date": "2026-11-11"
  },
  "facets": {
-  "https://ns.jascon.org/stdlib/facet/collector@1": {
+  "https://ns.jascon.net/stdlib/facet/collector@1": {
    "collectors": [
     {
      "id": "bash",

@@ -957,7 +957,7 @@ validated against the OFFICIAL NIST release schema, with a generic
 importer and per-object semantic-digest round-trip. Real OSCAL where
 OSCAL has the construct (statements→parts, params→params+select,
 relations→links, root-Set tree→groups); the D16 props channel
-(`https://ns.jascon.org/core`) for what it cannot say —
+(`https://ns.jascon.net/core`) for what it cannot say —
 including Sets in full, because the catalog model cannot represent
 overlapping membership (baselines).
 **Evidence (measured).** 10/10 catalog bundles schema-valid; round-trip
@@ -1392,7 +1392,7 @@ re-installs under the new path; the 1.0.0 release notes now cite
 `jascon/` paths that the `v1.0.0` tag itself does not contain.
 
 **Unchanged, deliberately:** the kernel schema filename and `$id`
-(`jascon-1.0.0.schema.json`), `https://ns.jascon.org/core`,
+(`jascon-1.0.0.schema.json`), `https://ns.jascon.net/core`,
 and the DSSE payload type. Both validators reproduce the pre-rename
 result byte-for-byte modulo the directory name; the rebuilt bundle
 carries the same 76 entries.
@@ -1587,7 +1587,7 @@ released 1.0.0 text, and what replaces it waits on #40.
 contradiction recorded above. The release is **2.0.0**, a major version,
 as D22 rev 3 and specification IV.8 require. **D22 is not amended.**
 Schema file `jascon-2.0.0.schema.json`, `$id`
-`https://ns.jascon.org/schema/2.0.0`; the working label
+`https://ns.jascon.net/schema/2.0.0`; the working label
 "1.1.0" was replaced in the schema, both validators, the vectors, the
 handbook, SKILL.md, the reader and the converter in one pass. It
 survives in the proposal's §1–§11 and in the landing record above, both
@@ -1838,7 +1838,7 @@ five observations about the design that no patch answers.
    malformed object both report "matches NO type" (#44).
 3. **Identifiers under other organisations' domain names**
    (`ns.bsi.bund.de`, `ns.nist.gov`, `ns.cyber.gov.au`, `ns.fedramp.gov`;
-   the schema `$id` under `ns.jascon.org`). D2 makes them opaque strings,
+   the schema `$id` under `ns.jascon.net`). D2 makes them opaque strings,
    but D13 derives *authority-claimed* from the URI origin, so a
    third-party conversion is authority-shaped until an authority signs —
    and collides or diverges the day the authority publishes its own.
@@ -2049,14 +2049,15 @@ are named `jascon-…`, and the DSSE payload type is
 `application/vnd.jascon.attestation+json`. This takes, for these two
 identifiers, the window the 1.0.0 record tied to a major (D3.5) and
 2.0.0 left open (IV.9).
-**Second step, same day (author decision).** The namespaces follow:
+**Second step, same day (author decision).** The namespaces follow, onto
+`jascon.net`, the domain the author registered for the project that day:
 
 | Before | Now |
 |---|---|
-| `https://ns.oscal.org/stdlib/…` (stdlib facets, templates) | `https://ns.jascon.org/stdlib/…` |
-| `https://ns.oscal.org/compat/oscal-1x` (source-format facet) | `https://ns.jascon.org/compat/oscal-1x` |
-| `https://ns.oscal.org/semantic-core/schema/2.0.0` (schema `$id`) | `https://ns.jascon.org/schema/2.0.0` |
-| `https://ns.oscal-semantic.org/core` (D16 compatibility namespace) | `https://ns.jascon.org/core` |
+| `https://ns.oscal.org/stdlib/…` (stdlib facets, templates) | `https://ns.jascon.net/stdlib/…` |
+| `https://ns.oscal.org/compat/oscal-1x` (source-format facet) | `https://ns.jascon.net/compat/oscal-1x` |
+| `https://ns.oscal.org/semantic-core/schema/2.0.0` (schema `$id`) | `https://ns.jascon.net/schema/2.0.0` |
+| `https://ns.oscal-semantic.org/core` (D16 compatibility namespace) | `https://ns.jascon.net/core` |
 
 Facet ids are inside semantic digests, so every literal digest that
 depended on them was recomputed to a fixpoint: object and manifest

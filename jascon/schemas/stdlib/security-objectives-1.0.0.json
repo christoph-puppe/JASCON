@@ -1,5 +1,5 @@
 {
-  "id": "https://ns.jascon.org/stdlib/facet/security-objectives",
+  "id": "https://ns.jascon.net/stdlib/facet/security-objectives",
   "version": "1.0.0",
   "modifies-semantics": ["selection"],
   "note": "NORMATIVE (gate item 2). Declaration promoted [] -> [selection] per D10 rev 2 (backlog #8): objective-driven baselining is a real selection use, and a tool that cannot handle this facet must stop working on that data - fail-closed engages only when declarations are honest. Rating values are the authority's own scale, frozen by the pinned schema, never normalized (the measured '1'/'0' scale shares nothing with anyone - App. F Q22).",

@@ -1,5 +1,5 @@
 {
-  "id": "https://ns.jascon.org/stdlib/facet/effectivity",
+  "id": "https://ns.jascon.net/stdlib/facet/effectivity",
   "version": "1.0.0",
   "modifies-semantics": ["selection"],
   "note": "NORMATIVE (gate item 2). Declaration promoted [] -> [selection] per D10 rev 2 (backlog #8): time-gated applicability is selection by calendar - a selecting tool that ignores effectivity windows selects wrongly. Window values carry the source's own shape (CR26 obtain/maintain/grace machinery observed); kernel absorption (lifecycle + L0 versioning cover part of the need) stays a D22-rev audit question.",

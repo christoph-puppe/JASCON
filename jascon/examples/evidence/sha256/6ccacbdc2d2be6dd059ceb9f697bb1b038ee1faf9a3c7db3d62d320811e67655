@@ -1,7 +1,7 @@
 {
  "record-version": "1",
  "check-ref": "https://cso.example/check/LNX-SSH-1-maxauthtries",
- "check-digest": "sha256:ae181230f04a444f93af7a7cbbd308b618c17bb6e1aca2dfb9241c6e88e84bc7",
+ "check-digest": "sha256:ca389189ab10328b54a1bd8c5b77ad48041b2ef3a719cb68a6e427d6654e1d26",
  "collector-id": "bash",
  "subject-ref": "https://cso.example/component/bastion-01",
  "target": {

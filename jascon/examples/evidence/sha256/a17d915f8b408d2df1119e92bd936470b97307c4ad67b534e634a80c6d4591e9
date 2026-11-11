@@ -1,7 +1,7 @@
 {
  "record-version": "1",
  "check-ref": "https://cso.example/check/LNX-SSH-1-ciphers",
- "check-digest": "sha256:28591213be0d26e48a5b1b5d1284b1783f23d414e4c40d921b786d0ebcbc17f4",
+ "check-digest": "sha256:b5ec275f0904a0a882d27e1434efb28e0595a74c6c0814297b2537fa49833f56",
  "collector-id": "bash",
  "subject-ref": "https://cso.example/component/bastion-01",
  "target": {

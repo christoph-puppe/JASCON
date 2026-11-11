@@ -33,7 +33,7 @@ something you can click.
 > this space: [`PRIOR-ART.md`](PRIOR-ART.md).
 > Nothing here is endorsed by NIST, BSI, ACSC, CCB, CIS, or FedRAMP.
 > Every machine identifier carries the name: namespaces
-> under `https://ns.jascon.org/`, the attestation media type
+> under `https://ns.jascon.net/`, the attestation media type
 > `application/vnd.jascon.attestation+json`, and the schema filenames.
 
 ![The bundle reader on the IFA GoodRead lifecycle corpus (NIST example content): stage 5, Assess and Attest — Risk, Assessment, Finding and Attestation objects, with the check workbench that mints real Assessment and Finding objects.](docs/img/reader-assess.png)

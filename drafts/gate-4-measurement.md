@@ -103,7 +103,7 @@ every object by **semantic digest**.
 The projection is real OSCAL where OSCAL has the construct
 (statements→parts, `{param:}`↔`{{ insert: param }}`, typed
 params→params+select, relations→links, the root-Set tree→groups) and a
-namespaced props channel (`https://ns.jascon.org/core`) for
+namespaced props channel (`https://ns.jascon.net/core`) for
 what it cannot say — the D16 compatibility mechanism, in reverse.
 
 **D16 asymmetries measured on the way (all counted in the exports):**
