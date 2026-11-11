@@ -393,7 +393,8 @@ process, with counts, corpus cases, and two implementations. Until
 then, the honest inventory stands: **nine**, eight, and three — every
 one carrying the reason it exists, printed at the moment it says no.
 The ninth (`risk-coverage`, B.1.9) arrived that way in the 2.0.0 cycle:
-counts (CP-RISK-1 §2), corpus cases, one implementation green. The gate
-is still closed: the PowerShell twin carries the port but has not been
-executed against the vectors, and until it has, this primitive has one
-implementation, not two.
+counts (CP-RISK-1 §2), corpus cases, and two implementations green:
+the Python reference and, since its first run on 2026-11-11, the
+PowerShell twin, both on the same 73 risk vectors. Both were written by
+the same author, so their independence is one of language and runtime,
+not of reading.

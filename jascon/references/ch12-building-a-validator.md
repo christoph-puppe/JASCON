@@ -364,8 +364,8 @@ the state machine of C.3c. What it does not hand you is scale: the one
 converted corpus with Risks holds two of them and no Tailoring, so
 your join will meet its first real Statement of Applicability in your
 own data. The reference implementation of this section is about 160
-lines of Python, the closure checks aside; the PowerShell twin carries the same logic and, at
-this writing, has not been run against the vectors.
+lines of Python, the closure checks aside; the PowerShell twin carries the same logic and
+passes the same 73 risk vectors (first run on Windows PowerShell 5.1, 2026-11-11).
 
 ## 12.8 The harness, and the honest numbers
 
