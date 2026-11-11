@@ -1997,3 +1997,45 @@ matrix. Methods that are more than a table stay facet material.
 executed), 9 vectors (scale 18, corpus 258), a 4×4 matrix in the example
 bundle and a 3×3 starting matrix in `risk-catalogs/scales/`.
 
+
+## Amendments — the example pin (2026-11-10)
+
+**Trigger.** One folder, two verdicts: `validate_core.py jascon/examples`
+reported `14 pass, 1 fail` (the D26 line: the pin of
+`…/stdlib/facet/assessment-criteria` DIVERGES from the normative
+descriptor), the default run reported the same folder ALL GREEN.
+**Cause.** The example bundle pinned `assessment-criteria-1.0.0-stub.json`
+under the stdlib id — a placeholder from before the normative descriptor
+existed, never replaced. `validate_examples()` carried its own copy of the
+pin loop and checked existence and digest only; `validate_bundle()` also
+applies D26.
+**Decision.** The example pins the descriptor **verbatim**: the file is a
+byte copy of `schemas/stdlib/assessment-criteria-1.0.0.json`, named
+`assessment-criteria-1.0.0.json`. Both passes load pins with one function
+(`load_facet_pins`), so the rule cannot be applied in one and missed in
+the other. The example pass now also validates facet payloads against the
+pins it loads; it had loaded them and applied none.
+**Correction on the record.** The stub never had an effect: for a stdlib
+id the validator takes the normative schema, whatever the bundle pins. And
+the example's own payload did not fit that schema — `summary` was a string
+where the descriptor requires an object. It is now a language map; the
+assessment's two digests in the example manifest changed with it.
+**Rejected.** *Give the stub an id outside the stdlib namespace* — the
+example Assessment exists to show the stdlib facet in `method` (Chapter
+10); under a private id it would show something else, and the stub was
+announced as temporary.
+**Open, found on the way.** No validator checks an Assessment's `method`
+payload against a facet schema: facet enforcement reads `facets` only. The
+mismatch above was therefore invisible to both passes and was checked by
+hand. Whether `method` keys must be registered facets is a rule question
+(the lifecycle fixtures and two risk vectors use
+`"method": {"kind": "review"}`), not decided here.
+**Shipped with it.** `validate_core.py`; `validate_core.ps1` gains the
+example bundle in its default run through its one bundle path (it had no
+example pass) — **by reading, not executed**; example README and SKILL.md;
+skill zip rebuilt. Handbook: Chapters 7 and 12 now state the rule, which
+stood in the specification and this register only; Chapter 10's
+Assessment example carried a `criteria-ref` the descriptor does not have
+and shows the shipped payload instead; Appendix D.6 lists the
+descriptor's payload completely. Python: 258 vectors, five bundles and the examples,
+ALL GREEN, with and without the `jascon/examples` argument.
