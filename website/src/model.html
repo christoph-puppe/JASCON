@@ -1,0 +1,276 @@
+---
+title: The model: ten object types | JASCON
+description: The JASCON kernel in one page. Ten shallow object types, the order of the modal verbs, typed parameters, facets with a contract, two digests per object, three conformance tiers, and where each OSCAL 1.x construct went.
+nav: model
+---
+<section class="page-hero">
+  <div class="wrap">
+    <p class="eyebrow">The model</p>
+    <h1>Ten object types and what each one replaces</h1>
+    <p class="lede">The kernel holds what three national frameworks were measured to need and nothing else. This page walks through it once. The normative text is the <a href="{{ blob }}/drafts/jascon-specification-1.0.0.md" rel="noopener">specification</a>; the long form with every count is the <a href="{{ tree }}/jascon/references" rel="noopener">handbook</a>.</p>
+  </div>
+</section>
+
+<section class="section" id="smallest">
+  <div class="wrap">
+    <div class="split">
+      <div class="stack-lg reveal">
+        <div class="section-head" style="margin-bottom:0">
+          <p class="eyebrow"><span class="no">01</span> The smallest object</p>
+          <h2>A complete requirement</h2>
+          <p class="lede">This is a whole object, with no props, no facets and no document around it. The handbook uses it as its first example because the entire extension surface of the Australian ISM needs nothing more.</p>
+        </div>
+        <ul class="ticks">
+          <li><b><code>id</code></b> is a URI under the authority's own domain. It is compared as a string and never fetched, so validation works on a sealed network.</li>
+          <li><b><code>version</code></b> and two digests in the manifest carry the history. The ISM maintains 2,202 revision props by hand for the same purpose.</li>
+          <li><b><code>statements</code></b> is a list because clauses are real: Grundschutz++ contains 347 nested pseudo-controls that exist only to make clauses addressable.</li>
+          <li><b><code>modality</code></b> and <b><code>obligated-parties</code></b> sit on the statement. One requirement can bind the operator with MUST and the customer with SHOULD.</li>
+          <li><b><code>prose</code></b> is a map from language tag to text.</li>
+        </ul>
+      </div>
+      <div class="window reveal">
+        <div class="window-bar">
+          <span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="window-title">jascon/examples/req-ism-1234.json</span>
+          <span class="window-note">illustrative text</span>
+        </div>
+        <pre><code data-lang="json">{{ file:jascon/examples/req-ism-1234.json }}</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="types">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">02</span> The types</p>
+      <h2>Each type exists because a published catalogue demanded it</h2>
+      <p class="lede">Nine types are in the released 1.0.0. Risk is the tenth, in the 2.0.0 release candidate. Check is a proposal. The right column says what the type takes over from OSCAL 1.x or from common practice.</p>
+    </div>
+
+    <div class="reveal">
+      <p class="group-label">Content: what is required</p>
+      <div class="types">
+        <div class="type">
+          <h3>Requirement</h3>
+          <p>One control, rule or criterion as a list of identified statements. Each statement has a modality, obligated parties, typed parameters and prose. Guidance and objectives are statements too, with the modality <code>unspecified</code>, or they sit in a framework facet.</p>
+          <p class="replaces"><b>Takes over</b>Catalog controls and their parts; the <code>label</code>, <code>alt-identifier</code> and <code>sort-id</code> props.</p>
+        </div>
+        <div class="type">
+          <h3>RequirementSet</h3>
+          <p>Membership, and nothing else. A Set lists requirements or other Sets with a sequence number. Chapters, families, baselines, maturity levels and classification markers are all Sets, and a requirement may be in many.</p>
+          <p class="replaces"><b>Takes over</b>Groups, the resolved-profile baselines, and the 5,301-entry applicability matrix of the ISM.</p>
+        </div>
+        <div class="type">
+          <h3>Tailoring</h3>
+          <p>A selection plus a closed list of eight operations, each addressed by identity: requirement, statement, parameter. Nothing is copied. Resolution is one deterministic pass; there are no merge rules because global identifiers make them unnecessary.</p>
+          <p class="replaces"><b>Takes over</b>Profiles and the profile-resolution specification; inline per-class variants as in FedRAMP CR26.</p>
+        </div>
+        <div class="type">
+          <h3>Mapping</h3>
+          <p>One crosswalk edge in nine flat fields: source, target, optional statement scope, relationship, direction, confidence, rationale, provenance. Relationship codes follow NIST IR 8477, plus <code>supplements</code> for content attached to a foreign catalogue.</p>
+          <p class="replaces"><b>Takes over</b>The control mapping model of OSCAL 1.2; crosswalk spreadsheets.</p>
+        </div>
+      </div>
+
+      <p class="group-label">Organisation: why it is in scope</p>
+      <div class="types">
+        <div class="type">
+          <h3>Risk <small><span class="tier tier-designed">2.0.0-rc.1</span></small></h3>
+          <p>The record ISO/IEC 27001 6.1.2 and 6.1.3, BSI Standard 200-3 and NIST SP 800-30 all require: a scenario, an owner, a state, a rating as a level on a named scale, one of four treatment options, and the clauses that carry the treatment. Scoring methods stay outside the kernel. A Risk justifies a requirement once it is assessed and its option chosen.</p>
+          <p class="replaces"><b>Takes over</b>The risk register as a spreadsheet and the Statement of Applicability as a document. <code>risk-coverage</code> computes the latter.</p>
+        </div>
+      </div>
+
+      <p class="group-label">Systems: what is in place and what was found</p>
+      <div class="types">
+        <div class="type">
+          <h3>Component</h3>
+          <p>A product, service, policy, process or a system, which is a component with members. Authorization boundaries are identified objects on the component. An absent boundary asserts nothing.</p>
+          <p class="replaces"><b>Takes over</b>Component definitions and the system description of the SSP.</p>
+        </div>
+        <div class="type">
+          <h3>Implementation</h3>
+          <p>One edge: this component satisfies that requirement, optionally that statement, in this way. Responsibility is <code>provider</code>, <code>customer</code>, <code>shared</code> or <code>inherited</code>. An inherited edge must name the upstream component and the authorization it leans on, so a SaaS on a PaaS on an IaaS is checked link by link.</p>
+          <p class="replaces"><b>Takes over</b>The implemented requirements of the SSP and the control implementations of component definitions, which said the same thing twice.</p>
+        </div>
+        <div class="type">
+          <h3>Assessment</h3>
+          <p>Who checked what, how, when, with which result and which evidence. The method is described through a registered facet.</p>
+          <p class="replaces"><b>Takes over</b>Assessment plan and assessment results.</p>
+        </div>
+        <div class="type">
+          <h3>Finding</h3>
+          <p>A gap against a requirement or a statement: state, actions with due dates that know their calendar, and Deviations. A Deviation is one typed record with one state machine (investigating, pending, approved or withdrawn) wherever something is weakened or accepted.</p>
+          <p class="replaces"><b>Takes over</b>The POA&amp;M and four FedRAMP extensions that each encoded the same state machine.</p>
+        </div>
+      </div>
+
+      <p class="group-label">Signature</p>
+      <div class="types">
+        <div class="type">
+          <h3>Attestation</h3>
+          <p>Binds the semantic digests of the objects, the digest of the content manifest and the digest of the rendered document a person signed, in a DSSE envelope. What the machine checked and what the authorizing official signed cannot drift apart unnoticed.</p>
+          <p class="replaces"><b>Takes over</b>The signed PDF whose relation to the data nobody can verify.</p>
+        </div>
+      </div>
+
+      <p class="group-label">Proposed</p>
+      <div class="types">
+        <div class="type">
+          <h3>Check <small><span class="tier tier-proposed">CP-CHECK-1</span></small></h3>
+          <p>A typed contract of the facts a collector reports, and a flat conjunction over eleven comparators that decides pass or fail. Collector code sits in a facet. What does not fit this form stays a manual check. Recorded verdicts are recomputed by the validator, and evidence files are named by their SHA-256.</p>
+          <p class="replaces"><b>Would take over</b>Audit procedures as prose, such as the 291 automated rules of the CIS Ubuntu 24.04 Benchmark that arrive as text a person must read.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="modality">
+  <div class="wrap">
+    <div class="split">
+      <div class="stack-lg reveal">
+        <div class="section-head" style="margin-bottom:0">
+          <p class="eyebrow"><span class="no">03</span> Binding force</p>
+          <h2>The modal verbs have an order, and tailoring is checked against it</h2>
+          <p class="lede">Three corpora converge on the same field: <code>modal_verb</code> in Grundschutz++ (1,006 instances), <code>force</code> in FedRAMP CR26, the style guide of the ISM. In JASCON it is a kernel code with a partial order.</p>
+        </div>
+        <div class="lattice">
+          <span class="chain-label">Obligations</span>
+          <div class="chain"><span>unspecified</span><i></i><span>may</span><i></i><span>should</span><i></i><span>must</span></div>
+          <span class="chain-label">Prohibitions</span>
+          <div class="chain"><span>unspecified</span><i></i><span>should-not</span><i></i><span>must-not</span></div>
+          <span class="chain-label">Restriction (German DARF NUR)</span>
+          <div class="chain"><span>may</span><i></i><span>may-only</span></div>
+        </div>
+        <p class="muted">A move along an arrow is monotone and free. A move against it is an easing, and a move between the chains is an axis change. A Tailoring published by the authority may make either; a consumer's Tailoring needs a recorded Deviation with an approver for both. Excluding a requirement is plain selection and needs no Deviation, because baselines consist of exclusions.</p>
+      </div>
+      <div class="stack-lg reveal">
+        <div class="window">
+          <div class="window-bar">
+            <span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="window-title">an operation with a typed deadline</span>
+          </div>
+          <pre><code data-lang="json">{
+  "op": "set-parameter",
+  "requirement-ref": "https://ns.fedramp.gov/cr26/req/IEC-CSO-IIR",
+  "statement-id": "s1",
+  "parameter": "iir-deadline",
+  "value": { "type": "duration", "num": 6, "unit": "hours" }
+}</code></pre>
+        </div>
+        <div class="stack">
+          <h3>Parameters are typed</h3>
+          <p class="muted">Strings, integers, canonical decimals, booleans, dates, URIs and codes, with choice, list and range as containers. Durations are either elapsed time or a calendar period that names its calendar, because a deadline in business days means nothing without one. A <code>{param:name}</code> token in prose must resolve to a declared parameter, which makes the 216 drifting placeholders of the census impossible to write.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="extension">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">04</span> Extension</p>
+      <h2>Two members on every object carry everything else</h2>
+      <p class="lede">More than 70 % of the 22,000 props counted in three national catalogues imitate kernel mechanics: membership, ordering, history, aliases, clause structure. The remainder gets a contract.</p>
+    </div>
+    <div class="grid g2 reveal">
+      <article class="card">
+        <div class="card-top"><h3><code>facets</code></h3><span class="tier tier-measured">7 in the standard library</span></div>
+        <p>A facet name resolves to a JSON Schema pinned in the bundle's manifest by exact version and digest. Its descriptor declares what it changes: assessment, tailoring, selection or rendering. A tool validates the payload against the pin. A tool that meets a semantics-bearing facet it does not implement stops and prints the reason.</p>
+        <p class="how"><b>Why:</b> three tools that meet one unknown prop today do three different things, and all three claim conformance.</p>
+      </article>
+      <article class="card">
+        <div class="card-top"><h3><code>annotations</code></h3><span class="tier tier-measured">excluded from digests</span></div>
+        <p>A flat map for tool bookkeeping and rendering hints: a tracker id, a web name, a do-not-link flag. Annotations are outside every compliance computation and outside the semantic digest by definition, so nothing conformant can read meaning from them.</p>
+        <p class="how"><b>Why:</b> tools need a place for their own notes that cannot turn into a second, unvalidated vocabulary.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="integrity">
+  <div class="wrap">
+    <div class="split even">
+      <div class="stack-lg reveal">
+        <div class="section-head" style="margin-bottom:0">
+          <p class="eyebrow"><span class="no">05</span> Integrity</p>
+          <h2>Two digests per object</h2>
+          <p class="lede">A publication is a bundle: objects, pinned facet schemas, renderings and one content manifest. The attestation lies beside the manifest, since nothing signed can contain its own signature.</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Verdict</th><th>Package digest</th><th>Semantic digest</th><th>Meaning</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Full Match</th><td class="yes">equal</td><td class="yes">equal</td><td>The exact package that was attested.</td></tr>
+              <tr><th scope="row">Semantic Match</th><td class="no">differs</td><td class="yes">equal</td><td>The approved content, repackaged. The verifier says so.</td></tr>
+              <tr><th scope="row">Tamper</th><td class="no">any</td><td class="no">differs</td><td>The content is not what was approved.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <a class="link-arrow" href="index.html#try">Compute both digests in your browser</a>
+      </div>
+      <div class="stack-lg reveal">
+        <div class="section-head" style="margin-bottom:0">
+          <p class="eyebrow"><span class="no">06</span> Conformance</p>
+          <h2>Three tiers, each with receipts</h2>
+          <p class="lede">A tier claim is checked against the public conformance corpus. A claim without corpus results is a datasheet.</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Tier</th><th>Promises</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Core</th><td>Schema validation of every type, sealed operation, package digests, local reference resolution, and preservation of everything unknown. No semantic computation.</td></tr>
+              <tr><th scope="row">Portable</th><td>Facet validation against pins with the fail-closed gate, semantic digests, deterministic tailoring resolution, lawful bundle composition, risk coverage.</td></tr>
+              <tr><th scope="row">Authority</th><td>Publication duties: governed stable identifiers, alias and lineage records on every reorganisation, both digests per object, a deprecation lifecycle.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="oscal">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">07</span> For OSCAL 1.x users</p>
+      <h2>Where everything went</h2>
+      <p class="lede">OSCAL is the origin of this work and the format JASCON reads and writes. Catalogue bundles export to OSCAL 1.2.2; what OSCAL has no construct for rides in namespaced props and returns on import.</p>
+    </div>
+    <div class="table-wrap reveal">
+      <table>
+        <thead><tr><th>OSCAL 1.2.2</th><th>In JASCON</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Catalog: groups, controls, parts</th><td>Requirement objects in nested RequirementSets. Statement parts become <code>statements</code>.</td></tr>
+          <tr><th scope="row">Profile and profile resolution</th><td>Tailoring: selection plus operations addressed by identity, resolved by one deterministic algorithm of half a page.</td></tr>
+          <tr><th scope="row">Component definition</th><td><code>Component.capabilities</code></td></tr>
+          <tr><th scope="row">System security plan</th><td>Component with <code>authorizations</code>, plus Implementation edges. The document is a rendering, bound by an Attestation.</td></tr>
+          <tr><th scope="row">Assessment plan and results</th><td>Assessment with its method in a facet, its result, and Findings.</td></tr>
+          <tr><th scope="row">POA&amp;M</th><td><code>Finding.actions</code> and the Deviation lifecycle.</td></tr>
+          <tr><th scope="row">Control mapping model</th><td>The Mapping type.</td></tr>
+          <tr><th scope="row">props with <code>ns</code></th><td>A registered facet, an annotation, or nothing: most props imitated a kernel mechanism.</td></tr>
+          <tr><th scope="row">Metaschema, XML, YAML, Schematron</th><td>JSON Schema 2020-12, one serialization, nine rule primitives whose rationale prints on failure.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="source reveal">The eight OSCAL document models mapped onto the object types, with diagrams: <a href="{{ blob }}/oscal-1x-models-and-jascon.md" rel="noopener">oscal-1x-models-and-jascon.md</a>. Migration levels and playbooks: <a href="{{ blob }}/jascon/references/ch14-migration-playbooks.md" rel="noopener">handbook, chapter 14</a>.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="cta reveal">
+      <div>
+        <h2>Read one hour, then open a bundle</h2>
+        <p>Chapter 2 of the handbook builds the kernel from the smallest real object upward. The app shows the same objects on SP 800-53, CSF 2.0, the ISM and Grundschutz++.</p>
+      </div>
+      <div class="cta-actions">
+        <a class="btn btn-primary" href="{{ blob }}/jascon/references/ch02-the-core-in-one-hour.md" rel="noopener">The core in one hour <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a class="btn btn-ghost" href="start.html">Get started <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>
