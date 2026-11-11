@@ -55,9 +55,9 @@ the point; bring more.
 
 | Artifact | Where |
 |---|---|
-| Specification 1.0.0 | `drafts/oscal-semantic-core-specification-1.0.0.md` |
-| Decision Rationale Register (the full amendment journal) | `drafts/oscal-semantic-core-decision-rationale-register.md` |
-| Kernel JSON Schema (closed shapes, shape-disjoint inference) | `jascon/schemas/oscal-semantic-core-1.0.0.schema.json` |
+| Specification 1.0.0 | `drafts/jascon-specification-1.0.0.md` |
+| Decision Rationale Register (the full amendment journal) | `drafts/jascon-decision-rationale-register.md` |
+| Kernel JSON Schema (closed shapes, shape-disjoint inference) | `jascon/schemas/jascon-1.0.0.schema.json` |
 | Seven stdlib facet descriptors incl. the DSSE profile | `jascon/schemas/stdlib/` |
 | Conformance corpus (157 vectors, 12 families) | `jascon/conformance/` |
 | Both reference validators + export suite + converters | `jascon/scripts/` |
@@ -81,9 +81,11 @@ invitation — the corpus is the referee.
 ## Notes
 
 - **Machine identifiers** (namespace URIs, the attestation media type,
-  schema filenames) deliberately retain the working-title string
-  `oscal-semantic-core`: identifiers are opaque (D2), and re-spelling
+  schema filenames) deliberately retain the working-title string:
+  identifiers are opaque (D2), and re-spelling
   them would churn every digest and signature for zero semantic gain.
   The decision is recorded in the register ("Amendments — v1.0.0").
+  *(Reversed on 2026-11-11 for the media type and the schema filenames;
+  register, "Amendments — 2026-11-11".)*
 - JASCON is maintained in **personal capacity**. Nothing here is
   endorsed by NIST, BSI, ACSC, CCB, CIS, or FedRAMP.

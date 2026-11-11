@@ -3,7 +3,7 @@
 > Semantic Core"; the project was renamed **JASCON** the same day
 > (naming entry in the rationale register). The consolidated release
 > candidate is
-> **`oscal-semantic-core-specification-1.0.0.md`** (consolidated as
+> **`jascon-specification-1.0.0.md`** (consolidated as
 > rc.1, released as **1.0.0** at tag `v1.0.0`, 2026-07-22; same
 > normative content, journals compacted); amendments continue in the
 > Decision Rationale Register only.
@@ -764,7 +764,7 @@ replaces; NIST IR 8477 / OLIR (relationship semantics).
 ## IV.7 v0.6-cycle decisions (2026-07-21; from the review-round-1 backlog)
 
 Backlog items decided per the standing rule (counts in, register entries
-out); rows leave `oscal-semantic-core-v0.6-spec-feedback-backlog.md`:
+out); rows leave `jascon-v0.6-spec-feedback-backlog.md`:
 
 | Backlog | Decision | Change |
 |---|---|---|

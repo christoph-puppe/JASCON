@@ -35,12 +35,12 @@ The **OSCAL Semantic Core** specification presents a rigorously engineered, empi
 
 ### 1. Architectural & Graph Model Integrity
 
-#### Kernel vs. Document Model ([drafts/oscal-semantic-core-v0.5-specification.md](drafts/oscal-semantic-core-v0.5-specification.md))
+#### Kernel vs. Document Model ([drafts/jascon-v0.5-specification.md](drafts/jascon-v0.5-specification.md))
 - **9 Kernel Types**: `Requirement`, `RequirementSet`, `Tailoring`, `Mapping`, `Component`, `Implementation`, `Assessment`, `Finding`, `Attestation` (plus `Deviation` & `Authorization` sub-objects).
 - **Documents as Renderings (L4)**: Replaces deep document trees with flat records linked via global URIs. Documents (e.g., SSPs, SARs, Catalogs) become presentation-layer views generated from graph queries rather than transport units.
 - **Elimination of Profile Merge Algebra**: Eliminates OSCAL 1.x profile resolution, inheritance cascades, and positional JSON Patch fragility. Tailoring operations (`set-modality`, `set-parameter`, `replace-prose`, `detach-facet`, `excludes`) use **identity addressing** (`requirement-ref` + `statement-id`), making overrides deterministic and reordering-resistant.
 
-#### Three-Layer Separation ([drafts/oscal-semantic-core-decision-rationale-register.md](drafts/oscal-semantic-core-decision-rationale-register.md))
+#### Three-Layer Separation ([drafts/jascon-decision-rationale-register.md](drafts/jascon-decision-rationale-register.md))
 ```
 +-----------------------------------------------------------------------+
 |  Kernel (Normative, Fixed)                                           |
@@ -152,7 +152,7 @@ Legacy OSCAL digital signatures fail when transport tools strip non-normative me
 - **Modality Partial Order (P8-E2)**: Resolved by defining a normative partial order lattice supporting obligations, prohibitions, restrictions (`may-only` / `DARF NUR`), and unmonotone moves requiring a `Deviation` (D9).
 - **Kernel Promotion Bar (D22)**: Established normative rules requiring ≥ 2-of-3 census authority encodings, shared computation, and non-flattening vocabulary before any candidate enters the kernel.
 
-#### Active Open Backlog Items ([drafts/oscal-semantic-core-v0.6-spec-feedback-backlog.md](drafts/oscal-semantic-core-v0.6-spec-feedback-backlog.md))
+#### Active Open Backlog Items ([drafts/jascon-v0.6-spec-feedback-backlog.md](drafts/jascon-v0.6-spec-feedback-backlog.md))
 - **Item #6 (Terminology Hosting Shape)**: Re-scoped under D22 anticipated-convergence path. Pending decision on dedicated carrier object vs. root-Set hosting.
 - **Item #10 (CTL/ODP Addressing)**: Statement-level addresses for 79 CTL overlays to resolve during the NIST catalog conversion.
 - **Item #12 (Localized-Text Primitive)**: Defining `text` (`{BCP-47: string}`) for human-readable fields (`title`, `rationale`) to replace inconsistent string definitions across converted corpora.

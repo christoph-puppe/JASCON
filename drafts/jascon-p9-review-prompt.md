@@ -83,10 +83,10 @@ validated, coverage totals, pass history) into a checklist for Stage 3
 recomputation.
 
 **Stage 1 — The normative core.**
-`drafts/oscal-semantic-core-v0.5-specification.md` (all parts including
-the changelog), `drafts/oscal-semantic-core-decision-rationale-register.md`
+`drafts/jascon-v0.5-specification.md` (all parts including
+the changelog), `drafts/jascon-decision-rationale-register.md`
 (D1 through the latest entry, amendments, D22-applied notes),
-`drafts/oscal-semantic-core-v0.6-spec-feedback-backlog.md` (open items
+`drafts/jascon-v0.6-spec-feedback-backlog.md` (open items
 and the closed log). The v0.6-cycle decisions amended the register
 *after* the v0.5 spec text froze — hunt specifically for spec–register
 divergence created by that sequencing.
@@ -103,7 +103,7 @@ the spec is the contract; the schemas are the delivery. Log every place
 a promise exceeds the contract or the contract exceeds the delivery.
 
 **Stage 3 — Executables against prose.**
-- `jascon/schemas/oscal-semantic-core-1.0.0.schema.json` and
+- `jascon/schemas/jascon-1.0.0.schema.json` and
   the stdlib descriptors, field-by-field against Appendix A and the
   spec's normative text for at least three object types chosen by risk
   (justify the choice).

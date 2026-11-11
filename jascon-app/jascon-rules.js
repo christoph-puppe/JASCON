@@ -1042,7 +1042,7 @@ const jscAttestationVerdict = (signed, delivered) =>
    "unverified", which is not an error and proves nothing.
 
    Verification only. Nothing here can sign. */
-const JSC_DSSE_PAYLOAD_TYPE = "application/vnd.oscal-semantic-core.attestation+json";
+const JSC_DSSE_PAYLOAD_TYPE = "application/vnd.jascon.attestation+json";
 const JSC_ED_P = 2n ** 255n - 19n;
 const JSC_ED_L = 2n ** 252n + 27742317777372353535851937790883648493n;
 const jscEdMod = a => ((a % JSC_ED_P) + JSC_ED_P) % JSC_ED_P;

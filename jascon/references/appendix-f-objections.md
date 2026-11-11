@@ -353,7 +353,7 @@ schemas and backlog #6 as pending; both had shipped hours earlier
 
 ## F.8 Third round — the P9 twin adversarial runs (2026-07-21)
 
-The project's own P9 prompt (`drafts/oscal-semantic-core-p9-review-prompt.md`)
+The project's own P9 prompt (`drafts/jascon-p9-review-prompt.md`)
 ran twice, independently — run 1 fresh, run 2 with disclosed limitations
 and a concordance section. Two runs of one prompt make agreements
 replication evidence; both were adjudicated same-day, their reports

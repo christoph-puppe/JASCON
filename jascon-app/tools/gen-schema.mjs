@@ -15,7 +15,7 @@ import { fileURLToPath } from "node:url";
 
 const APP = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const SCHEMAS = path.resolve(APP, "../jascon/schemas");
-const KERNEL = "oscal-semantic-core-2.0.0.schema.json";
+const KERNEL = "jascon-2.0.0.schema.json";
 const OUT = path.join(APP, "jascon-schema.js");
 
 export function render() {
