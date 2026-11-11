@@ -6,7 +6,7 @@ stylesheet. A bundle you load stays in your browser, with one exception you
 have to switch on yourself: the suggestions of the Risk page send text to a
 model service once you type a key (see "Suggestions from a model").
 
-State: build 0.7.0. This build has the frame (the hub, the settings page and
+State: build 0.8.0. This build has the frame (the hub, the settings page and
 the shared core) and eight tool pages: Import, Browse, Tailor, Map,
 Implement, Risk, Assess and Validate. One view of the Risk page can ask a
 language model; nothing else in the app does, and nothing needs one.
@@ -90,7 +90,7 @@ written until you choose *Write to the set*.
 
 **A catalog** becomes Requirements and Sets, written as a bundle of its own
 into a set you name, with a manifest whose provenance names the source file
-and the licence you state. Two sets of rules:
+and the licence you state. Three sets of rules:
 
 - *BSI Grundschutz++* follows `jascon/scripts/convert_bsi.py`: a nested
   control is a clause of its parent, the modal verb becomes the modality, the
@@ -105,11 +105,21 @@ and the licence you state. Two sets of rules:
   pinned schema. A control without statement prose is carried with its title
   and listed in the report.
 
-The rules of `convert_nist.py` for NIST SP 800-53 are not ported. The generic
-rules read that catalog (1,196 requirements, valid for the reference
-validator), but the result is not the shipped SP 800-53 bundle: withdrawn
-controls are kept as requirements, and assessment objectives stay in the
-holding facet.
+- *NIST SP 800-53 Rev 5*, the rules of `convert_nist.py`: a withdrawn control
+  is not converted, and its successor names it in `replaces`; every statement
+  item with prose is a clause with modality `must`; SP 800-53A objectives and
+  methods, the administrative data of parameters and the guidance go to
+  facets under the NIST namespace. On the same source file its 1,035 objects
+  equal the Python converter's. Against the shipped
+  `converted_examples/US.SP800-53` bundle four objects differ, because NIST
+  republished its 5.2.0 file after that bundle was converted (the statement
+  of SA-15(13), objectives of SA-24, labels of SI-2(7), one back-matter
+  resource). The preset makes no baseline Sets: a baseline is a profile, and
+  you import it as one.
+
+The generic rules read the NIST catalog too (1,196 requirements, valid for
+the reference validator), with a different result: withdrawn controls are
+kept as requirements, and assessment objectives stay in the holding facet.
 
 Choose the namespace with care. Ids under your own domain make you the
 claimed authority of the catalog in the tier rule, and a Tailoring of yours
