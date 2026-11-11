@@ -36,9 +36,9 @@ You must strictly adhere to the guidelines detailed in the handbook chapters and
 - **Companion Example:** [tailoring-elevated.json](examples/tailoring-elevated.json) (Monotone tailoring operations)
 
 ### Requirement 6: Facet Extensions
-- **Description:** Extend the kernel only via registered, schema-pinned facets (`modifies-semantics`, fail-closed rules) or annotations (purely styling/chrome). Never add custom top-level fields to kernel objects.
+- **Description:** Extend the kernel only via registered, schema-pinned facets (`modifies-semantics`, fail-closed rules) or annotations (purely styling/chrome). Never add custom top-level fields to kernel objects. A bundle that pins a stdlib facet pins the normative descriptor verbatim; a pin under a stdlib id with a different schema is a validation error (D26).
 - **Reference Document:** [Chapter 7 — Facets: Extending Without Fracturing](references/ch07-facets-extending-without-fracturing.md)
-- **Companion Examples:** [gspp-taxonomy-1.0.0.json](examples/gspp-taxonomy-1.0.0.json) (Custom facet schema), [assessment-criteria-1.0.0-stub.json](examples/assessment-criteria-1.0.0-stub.json) (Descriptor stub)
+- **Companion Examples:** [gspp-taxonomy-1.0.0.json](examples/gspp-taxonomy-1.0.0.json) (Custom facet schema), [assessment-criteria-1.0.0.json](examples/assessment-criteria-1.0.0.json) (Stdlib descriptor, pinned verbatim)
 
 ### Requirement 7: Mappings and Crosswalks
 - **Description:** Map relationships using `Mapping` objects with IR 8477/OLIR relationship semantics plus the stdlib extension code `supplements` (supplement-pattern attachment; non-chaining). Always map at the statement-level scope for high precision.
@@ -69,7 +69,7 @@ You must strictly adhere to the guidelines detailed in the handbook chapters and
 - **Description:** Ensure structural validation, facet schema checking, and resolution conformance. Adhere to JCS (JSON Canonicalization Schema) and tailoring resolution logic. The normative kernel schema, stdlib facet descriptors, and conformance vectors ship with this skill and are the definitive contract.
 - **Reference Document:** [Chapter 12 — Building a Validator (The Weekend Chapter)](references/ch12-building-a-validator.md)
 - **Normative Artifacts:** [oscal-semantic-core-2.0.0.schema.json](schemas/oscal-semantic-core-2.0.0.schema.json) (kernel shapes, closed; shape-disjoint type inference). The schema filename, its `$id` (`https://ns.oscal.org/semantic-core/schema/2.0.0`), the D16 compatibility namespace `https://ns.oscal-semantic.org/core`, and the attestation media type `application/vnd.oscal-semantic-core.attestation+json` deliberately keep the working-title spelling: identifiers are opaque (D2), and re-spelling them would churn every digest and signature for zero semantic gain. Also normative: [schemas/stdlib/](schemas/stdlib/) (six facet descriptors with declared semantics), [conformance/](conformance/) (258 vectors in 15 families — JCS, modality lattice, parameters, tailoring, attestation, facets, references, lifecycle, tiers, DSSE, composition, conditional-apply, risk, kernel pin, scale definitions). When a bundle carries a Risk or a Finding with `risk-refs`, its content manifest MUST carry `"kernel-version": "2.0.0"` (KERNEL-1); a bundle of 1.0.0 content leaves the field out and stays readable by 1.0.0 tools. In `risk-vectors.json`, `expected-rule` is the portable assertion (every implementation names the violated rule id); `expected-frag` is advisory.
-- **Reference Implementation:** [validate_core.py](scripts/validate_core.py) — runs the conformance corpus and validates any bundle (schemas, digests, by-statement keys, `{param:}` bindings, manifest completeness).
+- **Reference Implementation:** [validate_core.py](scripts/validate_core.py) — runs the conformance corpus and validates any bundle (schemas, digests, by-statement keys, `{param:}` bindings, manifest completeness, stdlib pins equal to their descriptors). Its default run includes the example bundle in `examples/`.
 
 ### Requirement 12: Safe Consumption
 - **Description:** Handle unknown facets and annotations with standard fail-closed / warnings. Manage rendering, templates, and actionable error UX gracefully.
@@ -128,7 +128,7 @@ The [examples/](examples/) directory contains a complete, self-consistent bundle
   - [authorization-summary.md](examples/authorization-summary.md) — L4 markdown report.
 - **Descriptors & Custom Facets:**
   - [gspp-taxonomy-1.0.0.json](examples/gspp-taxonomy-1.0.0.json) — Custom facet descriptor schema.
-  - [assessment-criteria-1.0.0-stub.json](examples/assessment-criteria-1.0.0-stub.json) — Extension descriptor stub.
+  - [assessment-criteria-1.0.0.json](examples/assessment-criteria-1.0.0.json) — Stdlib descriptor, pinned verbatim (D26).
 
 ## Migration Scripts Reference
 
