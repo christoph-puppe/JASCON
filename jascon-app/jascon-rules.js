@@ -23,10 +23,16 @@
    RISK-1 to RISK-14 with risk coverage, and the scale and matrix rules
    SCALE-1 to SCALE-4. jscCheckGraph runs them over a whole set.
 
-   Not ported: conditional-apply, the composition of two bundles, and DSSE
-   signature verification. A set that passes here has not been checked for
-   those; the Python validator has them. tests/rules.test.mjs names the
-   vector families still missing.
+   Also ported, each against its vector family: the verification of DSSE
+   envelopes (Ed25519) with the tier of a Tailoring in verification mode,
+   the composition of two bundles (D3.5), and the conditional-apply engine
+   (B.1.8). All fifteen vector families run against this file. The
+   conditional-apply engine is run by nothing but its vectors, here as in
+   the reference: no bundle has a place to carry an instance yet.
+
+   Not ported: the reading of a bundle from disk with its end-of-line and
+   file checks (jascon-core.js reads sets from the browser's store instead),
+   and the command line. The Python validator stays the reference.
 
    A page loads jascon-core.js, jascon-schema.js (generated from the kernel
    schema) and then this file. */
@@ -168,12 +174,16 @@ function jscSelection(tobj, objs) {
    not turn a consumer into an authority. One origin that is also the
    Tailoring's own is authority-claimed; an in-bundle Attestation by that
    origin whose subjects include the Tailoring, digest-matched, makes it
-   authority-proven. Signatures are not verified here. */
+   authority-proven. With `verify` = { envelopes: Map(envelope-ref -> envelope),
+   trusted: {signer: public key hex}, notes: [] or null } the tier is derived
+   in verification mode: the matching attestation must also carry an envelope
+   that verifies under the signer's trusted key, and the reason an
+   attestation did not prove is pushed to notes. */
 function jscUriOrigin(u) {
   const s = String(u), p = s.split("/");
   return s.startsWith("http") && p.length >= 3 ? p.slice(0, 3).join("/") : s;
 }
-async function jscDeriveTier(tobj, objs) {
+async function jscDeriveTier(tobj, objs, verify) {
   const origins = new Set();
   const memberOrigins = (sid, depth) => {
     const tgt = objs.get(sid);
@@ -198,7 +208,14 @@ async function jscDeriveTier(tobj, objs) {
       for (const subj of r.obj["subject-semantic-digests"] || []) {
         if (!subj || typeof subj !== "object" || subj.id !== tobj.id) continue;
         digest = digest || await jscRulesSemanticDigest(tobj);
-        if (subj["semantic-digest"] === digest) return "authority-proven";
+        if (subj["semantic-digest"] !== digest) continue;
+        if (verify && verify.trusted) {   // verification mode (#24): the digest match must also be signed
+          const env = r.obj["envelope-ref"] ? (verify.envelopes || new Map()).get(r.obj["envelope-ref"]) : undefined;
+          const res = env !== undefined ? await jscVerifyEnvelope(env, r.obj, verify.trusted)
+            : { status: "error", detail: "unsigned attestation (no envelope) cannot prove in verification mode" };
+          if (res.status !== "verified") { if (verify.notes) verify.notes.push(`${r.obj.id}: ${res.detail}`); continue; }
+        }
+        return "authority-proven";
       }
     }
   }
@@ -628,7 +645,7 @@ const JSC_NO_TAILORING = "*";   // report key of the implicit selection: every r
    -> { report: { tailorings: {id: {tier, selected, open-selection, covered,
         uncovered, pending, lapsed, excludes-without-rationale}}, risks,
         treatment-out-of-scope }, errors (RISK-11), notes } */
-async function jscRiskCoverage(objs) {
+async function jscRiskCoverage(objs, verify) {
   const notes = [], errs = [];
   const of = type => new Map([...objs].filter(([, r]) => r.type === type).map(([id, r]) => [id, r.obj]));
   const risks = of("risk"), tailorings = of("tailoring");
@@ -646,7 +663,7 @@ async function jscRiskCoverage(objs) {
       sel = new Set([...objs].filter(([, r]) => r.type === "requirement" && r.obj.lifecycle !== "withdrawn").map(([id]) => id));
     } else {
       tobj = tailorings.get(tid);
-      tier = await jscDeriveTier(tobj, objs);
+      tier = await jscDeriveTier(tobj, objs, verify && { ...verify, notes: null });
       const s = jscSelection(tobj, objs);
       sel = s.selected; open = s.open; notes.push(...s.notes);
     }
@@ -955,11 +972,11 @@ function jscFacetErrors(items, pinned) {
    semantics, the removal of a `required` relation. Wrong at any tier: two
    operations on one target, a parameter value of the wrong kind, a facet
    nobody registered. pinnedDecl: Map(facet id -> its modifies-semantics). */
-async function jscTailoringDutyErrors(objs, pinnedDecl) {
+async function jscTailoringDutyErrors(objs, pinnedDecl, verify) {
   const errs = [], pd = pinnedDecl || new Map();
   for (const [oid, { type, obj: tobj }] of objs) {
     if (type !== "tailoring") continue;
-    const tier = await jscDeriveTier(tobj, objs), seen = new Set();
+    const tier = await jscDeriveTier(tobj, objs, verify && { ...verify, notes: null }), seen = new Set();
     for (const op of tobj.operations || []) {
       const key = jscTargetKey(op);
       if (seen.has(key)) {
@@ -1005,15 +1022,280 @@ const jscAttestationVerdict = (signed, delivered) =>
   delivered.semantic !== signed.semantic ? "tamper" : delivered.package === signed.package ? "full-match" : "semantic-match";
 
 /* ====================================================================
+   Signatures: DSSE envelopes over attestations (backlog #24)
+   ====================================================================
+   The standard facet dsse-envelope@1 fixes what is signed (the
+   Attestation's canonical form, annotations left out) and how the input of
+   the signature is built (PAE of DSSE v1), but names no algorithm. The
+   reference validator pins Ed25519 (RFC 8032) and so does this port, as the
+   same arithmetic on big integers, so that both accept and reject the same
+   inputs. Only SHA-512 is taken from the platform (WebCrypto).
+
+   Trusted keys are an input: a map of signer URI to public key in hex. They
+   never come from the bundle. Without a key for the signer an envelope is
+   "unverified", which is not an error and proves nothing.
+
+   Verification only. Nothing here can sign. */
+const JSC_DSSE_PAYLOAD_TYPE = "application/vnd.oscal-semantic-core.attestation+json";
+const JSC_ED_P = 2n ** 255n - 19n;
+const JSC_ED_L = 2n ** 252n + 27742317777372353535851937790883648493n;
+const jscEdMod = a => ((a % JSC_ED_P) + JSC_ED_P) % JSC_ED_P;
+function jscEdPow(base, exp) {
+  let r = 1n, b = jscEdMod(base);
+  for (let e = exp; e > 0n; e >>= 1n) { if (e & 1n) r = r * b % JSC_ED_P; b = b * b % JSC_ED_P; }
+  return r;
+}
+const JSC_ED_D = jscEdMod(-121665n * jscEdPow(121666n, JSC_ED_P - 2n));
+/* points are [x, y, z, t] in extended coordinates */
+function jscEdAdd(P, Q) {
+  const [x1, y1, z1, t1] = P, [x2, y2, z2, t2] = Q;
+  const a = jscEdMod((y1 - x1) * (y2 - x2)), b = jscEdMod((y1 + x1) * (y2 + x2));
+  const c = jscEdMod(2n * t1 * t2 * JSC_ED_D), d = jscEdMod(2n * z1 * z2);
+  const e = b - a, f = d - c, g = d + c, h = b + a;
+  return [jscEdMod(e * f), jscEdMod(g * h), jscEdMod(f * g), jscEdMod(e * h)];
+}
+function jscEdMul(s, P) {
+  let Q = [0n, 1n, 1n, 0n];
+  for (; s > 0n; s >>= 1n) { if (s & 1n) Q = jscEdAdd(Q, P); P = jscEdAdd(P, P); }
+  return Q;
+}
+const jscLeInt = bytes => { let n = 0n; for (let i = bytes.length - 1; i >= 0; i--) n = (n << 8n) | BigInt(bytes[i]); return n; };
+const jscLeBytes = n => { const out = new Uint8Array(32); for (let i = 0; i < 32; i++) { out[i] = Number(n & 255n); n >>= 8n; } return out; };
+function jscEdCompress(P) {
+  const zi = jscEdPow(P[2], JSC_ED_P - 2n), x = P[0] * zi % JSC_ED_P, y = P[1] * zi % JSC_ED_P;
+  return jscLeBytes(y | ((x & 1n) << 255n));
+}
+function jscEdDecompress(bytes) {
+  let y = jscLeInt(bytes);
+  const sign = y >> 255n;
+  y &= (1n << 255n) - 1n;
+  if (y >= JSC_ED_P) return null;
+  const xx = jscEdMod((y * y - 1n) * jscEdPow(JSC_ED_D * y * y + 1n, JSC_ED_P - 2n));
+  let x = jscEdPow(xx, (JSC_ED_P + 3n) / 8n);
+  if (jscEdMod(x * x - xx) !== 0n) {
+    x = x * jscEdPow(2n, (JSC_ED_P - 1n) / 4n) % JSC_ED_P;
+    if (jscEdMod(x * x - xx) !== 0n) return null;
+  }
+  if (x % 2n !== sign) x = JSC_ED_P - x;
+  return [x, y, 1n, x * y % JSC_ED_P];
+}
+const JSC_ED_B = jscEdDecompress(jscLeBytes(4n * jscEdPow(5n, JSC_ED_P - 2n) % JSC_ED_P));
+async function jscSha512(bytes) {
+  const subtle = typeof crypto !== "undefined" && crypto.subtle;
+  if (!subtle) throw new Error("this page has no WebCrypto (open the app from localhost or over https)");
+  return new Uint8Array(await subtle.digest("SHA-512", bytes));
+}
+const jscConcat = (...parts) => { const out = new Uint8Array(parts.reduce((n, p) => n + p.length, 0)); let at = 0; for (const p of parts) { out.set(p, at); at += p.length; } return out; };
+const jscSameBytes = (a, b) => a.length === b.length && a.every((v, i) => v === b[i]);
+/* pub, msg, sig: Uint8Array -> true when sig is an Ed25519 signature of msg under pub */
+async function jscEd25519Verify(pub, msg, sig) {
+  if (sig.length !== 64 || pub.length !== 32) return false;
+  const A = jscEdDecompress(pub);
+  if (!A) return false;
+  const Rb = sig.slice(0, 32), s = jscLeInt(sig.slice(32));
+  if (s >= JSC_ED_L) return false;
+  const R = jscEdDecompress(Rb);
+  if (!R) return false;
+  const k = jscLeInt(await jscSha512(jscConcat(Rb, pub, msg))) % JSC_ED_L;
+  return jscSameBytes(jscEdCompress(jscEdMul(s, JSC_ED_B)), jscEdCompress(jscEdAdd(R, jscEdMul(k, A))));
+}
+/* strict base64 and hex: anything outside the alphabet is an error, as in the reference */
+function jscBase64Bytes(text) {
+  const s = String(text);
+  if (s.length % 4 || !/^[A-Za-z0-9+/]*={0,2}$/.test(s)) throw new Error("not valid base64");
+  return Uint8Array.from(atob(s), c => c.charCodeAt(0));
+}
+function jscHexBytes(text) {
+  const s = String(text);
+  if (s.length % 2 || !/^[0-9a-fA-F]*$/.test(s)) throw new Error("not valid hex");
+  return Uint8Array.from(s.match(/../g) || [], h => parseInt(h, 16));
+}
+const jscUtf8Bytes = text => new TextEncoder().encode(text);
+const jscPae = (type, payload) => jscConcat(jscUtf8Bytes(`DSSEv1 ${type.length} `), type, jscUtf8Bytes(` ${payload.length} `), payload);
+/* -> { status: "verified" | "unverified" | "error", detail }.
+   The payload must be the Attestation's canonical form; the signature is
+   over PAE(payloadType, payload). */
+async function jscVerifyEnvelope(env, att, trusted) {
+  const out = (status, detail) => ({ status, detail });
+  if (!jscIsPlainObject(env)) return out("error", "envelope unreadable");
+  if (env.payloadType !== JSC_DSSE_PAYLOAD_TYPE) return out("error", "wrong payloadType");
+  let payload;
+  try { payload = jscBase64Bytes(env.payload ?? ""); } catch (e) { return out("error", "payload is not valid base64"); }
+  if (!jscSameBytes(payload, jscUtf8Bytes(jscRulesCanonical(att)))) return out("error", "payload != the Attestation's canonical form (attestation-binds)");
+  const key = (trusted || {})[att.signer];
+  if (key === undefined || key === null) return out("unverified", "no trusted key supplied for the signer");
+  const pae = jscPae(jscUtf8Bytes(env.payloadType), payload);
+  for (const sg of Array.isArray(env.signatures) ? env.signatures : []) {
+    try {
+      if (await jscEd25519Verify(jscHexBytes(key), pae, jscBase64Bytes((sg && sg.sig) ?? ""))) return out("verified", "");
+    } catch (e) {
+      if (/WebCrypto/.test(e.message)) return out("error", "the signature cannot be checked here: " + e.message);
+      /* a signature or key that cannot be read does not verify; the next one is tried */
+    }
+  }
+  return out("error", "no signature verifies under the trusted key (Ed25519)");
+}
+
+/* ====================================================================
+   Composition of two bundles (D3.5, backlog #18)
+   ====================================================================
+   Two bundles that pin different minors of one major line of a facet
+   resolve to the highest pinned minor, and the payloads of both are checked
+   again under it. What does not fit is reported and never picked silently:
+   pins that are not semver, two major lines, a payload that fails under the
+   winner, one id at two versions, and one id and version with two meanings.
+   objs: [[id, object]]; pins: {facet id: {version, schema}}.
+   -> { resolutions: {facet id: version}, errors } */
+function jscSemver(v) {
+  const m = /^(\d+)\.(\d+)\.(\d+)$/.exec(String(v));
+  return m ? m.slice(1).map(Number) : null;
+}
+function jscCompose(aObjs, aPins, bObjs, bPins) {
+  const errors = [], resolutions = {};
+  for (const fid of [...new Set([...Object.keys(aPins), ...Object.keys(bPins)])].sort()) {
+    const pa = aPins[fid], pb = bPins[fid];
+    if (!pa || !pb) { resolutions[fid] = (pa || pb).version; continue; }
+    const sa = jscSemver(pa.version), sb = jscSemver(pb.version);
+    if (!sa || !sb) { errors.push(`${fid}: non-semver pin (${pa.version} / ${pb.version}) — the registry policy is semver (D3.5)`); continue; }
+    if (sa[0] !== sb[0]) { errors.push(`${fid}: major lines ${pa.version} vs ${pb.version} are incompatible (D3.5; reported, never a silent pick)`); continue; }
+    const aWins = sa[1] > sb[1] || (sa[1] === sb[1] && sa[2] >= sb[2]), win = aWins ? pa : pb, schema = win.schema || { type: "object" };
+    resolutions[fid] = win.version;
+    for (const [side, objs] of [["A", aObjs], ["B", bObjs]]) {
+      for (const [oid, o] of objs) {
+        for (const [key, payload] of Object.entries((o && o.facets) || {})) {
+          if (jscFacetBase(key) !== fid) continue;
+          let found;
+          try { found = jscSchemaCheck(schema, payload, schema).errors; }
+          catch (e) { errors.push(`${fid}: ${side} ${oid}: payload cannot be re-validated under the resolved ${win.version}: ${e.message}`); continue; }
+          if (found.length) errors.push(`${fid}: ${side} ${oid}: payload fails re-validation under the resolved ${win.version}: ${found[0].message.slice(0, 90)}`);
+        }
+      }
+    }
+  }
+  const inA = new Map(aObjs);
+  for (const [oid, o] of bObjs) {
+    if (!inA.has(oid)) continue;
+    const oa = inA.get(oid);
+    if (oa.version !== o.version) errors.push(`${oid}: composed at two versions (${oa.version} vs ${o.version}) — cross-version resolution needs the lineage machinery, REPORTED`);
+    else if (jscRulesCanonical(oa) !== jscRulesCanonical(o)) errors.push(`${oid}: same id + version but DIFFERENT semantic digests — divergent twins (reported, never silently picked)`);
+  }
+  return { resolutions, errors };
+}
+/* one side of a composition from a loaded graph */
+function jscComposeSide(g) {
+  const pins = {};
+  for (const f of g.facetSchemas) if (f.def && f.def.id) pins[f.def.id] = { version: (f.pin && f.pin["exact-version"]) || f.def.version, schema: f.def.schema };
+  return { objs: [...g.objects].map(([id, r]) => [id, r.obj]), pins };
+}
+
+/* ====================================================================
+   Conditional apply (B.1.8, backlog #18)
+   ====================================================================
+   The one bounded conditional of the kernel: a trigger that is exactly one
+   predicate (field-equals, param-equals or present; no nesting, at most one
+   reference hop written "a->b") and an enforcement that is one primitive
+   (param-bounds or code-from). Where the trigger holds on an object the
+   enforcement is judged; elsewhere nothing happens. A trigger over a
+   parameter that is declared but not bound is an error of its own, never
+   "does not hold". The text of a failure is normative and kept. */
+/* Python's json.dumps with its default separators, for the messages */
+function jscPyJson(v) {
+  if (Array.isArray(v)) return "[" + v.map(jscPyJson).join(", ") + "]";
+  if (jscIsPlainObject(v)) return "{" + Object.entries(v).map(([k, x]) => jscPyJson(k) + ": " + jscPyJson(x)).join(", ") + "}";
+  return JSON.stringify(v === undefined ? null : v).replace(/[\u0080-￿]/g, c => "\\u" + c.charCodeAt(0).toString(16).padStart(4, "0"));
+}
+const jscSameValue = (a, b) => jscRulesCanonical({ v: a }) === jscRulesCanonical({ v: b });
+function jscPathGet(obj, path, objs) {
+  const hops = String(path).split("->");
+  if (hops.length > 2) return { st: "error", v: `path '${path}' exceeds the one-hop budget (B.2)` };
+  let cur = obj;
+  for (let i = 0; i < hops.length; i++) {
+    if (i === 1) {   // follow the reference
+      const tgt = typeof cur === "string" ? objs.get(cur) : null;
+      if (!tgt) return { st: "error", v: `reference hop '${hops[0]}' does not resolve in-bundle` };
+      cur = tgt.obj;
+    }
+    for (const part of hops[i].trim().split(".")) {
+      if (!part) continue;
+      if (jscIsPlainObject(cur) && Object.prototype.hasOwnProperty.call(cur, part)) cur = cur[part];
+      else return { st: "absent", v: null };
+    }
+  }
+  return { st: "ok", v: cur };
+}
+/* -> { verdict: "holds" | "holds-not" | "error", detail } */
+function jscEvalPredicate(pred, obj, objs) {
+  const out = (verdict, detail) => ({ verdict, detail });
+  const kinds = ["field-equals", "param-equals", "present"].filter(k => k in pred);
+  if (kinds.length !== 1 || ["and", "or", "not"].some(k => k in pred)) return out("error", "trigger must be exactly ONE predicate — no nesting, no boolean composition (B.2)");
+  const k = kinds[0], a = pred[k];
+  if (k === "field-equals") {
+    const { st, v } = jscPathGet(obj, a.path, objs);
+    if (st === "error") return out("error", v);
+    if (st === "absent") return out("holds-not", `path '${a.path}' absent`);
+    return out(jscSameValue(v, a.value) ? "holds" : "holds-not", `path '${a.path}' = ${jscPyJson(v).slice(0, 40)}, expected ${jscPyJson(a.value).slice(0, 40)}`);
+  }
+  if (k === "param-equals") {
+    for (const s of obj.statements || []) {
+      for (const p of s.parameters || []) {
+        if (p.name !== a.name) continue;
+        if (!("default" in p)) return out("error", `parameter '${a.name}' declared but UNBOUND — its own error via prose-params-resolve, never silently false (B.2)`);
+        return out(jscSameValue(p.default, a.value) ? "holds" : "holds-not", `param '${a.name}' = ${jscPyJson(p.default).slice(0, 40)}`);
+      }
+    }
+    return out("holds-not", `no parameter '${a.name}' declared`);
+  }
+  const { st, v } = jscPathGet(obj, a.path, objs);
+  if (st === "error") return out("error", v);
+  return out(st === "ok" ? "holds" : "holds-not", `path '${a.path}' ${st === "ok" ? "present" : "absent"}`);
+}
+/* -> the failures of one instance over the objects, each in the normative form */
+function jscConditionalApply(inst, objs) {
+  const errs = [], enf = inst.enforcement || {}, prim = enf.primitive;
+  const rationale = inst.rationale === undefined ? "(none declared)" : inst.rationale;
+  const id = inst["instance-id"] === undefined ? "None" : inst["instance-id"];
+  for (const oid of [...objs.keys()].sort()) {
+    const o = objs.get(oid).obj, { verdict, detail: why } = jscEvalPredicate(inst.trigger || {}, o, objs);
+    if (verdict === "error") { errs.push(`FAIL [conditional-apply:${id}] on ${oid}\n  trigger: malformed/unevaluable: ${why}\n  rationale: ${rationale}`); continue; }
+    if (verdict !== "holds") continue;
+    let detail = null;
+    if (prim === "param-bounds") {
+      const decl = { type: enf.type === undefined ? "integer" : enf.type };
+      for (const key of ["min", "max", "unit", "num", "tightening", "calendar-ref", "choices", "cardinality"]) if (key in enf) decl[key] = enf[key];
+      let found = false;
+      for (const s of o.statements || []) {
+        for (const p of s.parameters || []) {
+          if (p.name !== enf.parameter || !("default" in p)) continue;
+          found = true;
+          const v = jscParamCheck(decl, p.default);
+          if (v !== "valid") detail = `parameter '${enf.parameter}' value ${jscPyJson(p.default).slice(0, 40)} outside the enforced bounds (${v})`;
+        }
+      }
+      if (!found && (enf.required === undefined ? true : enf.required)) detail = `parameter '${enf.parameter}' not bound on any statement`;
+    } else if (prim === "code-from") {
+      const { st, v } = jscPathGet(o, enf.path === undefined ? "" : enf.path, objs);
+      if (st !== "ok" || !(enf.codes || []).some(c => jscSameValue(c, v))) detail = `path '${enf.path}' = ${st === "ok" ? jscPyJson(v).slice(0, 40) : "absent"} not in the declared code list`;
+    } else detail = `unknown enforcement primitive '${prim}' (the predicates you get are the predicates there are)`;
+    if (detail) errs.push(`FAIL [conditional-apply:${id}] on ${oid}\n  trigger: ${why} held; enforcement [${prim}] failed: ${detail}\n  rationale: ${rationale}`);
+  }
+  return errs;
+}
+
+/* ====================================================================
    A whole set
    ====================================================================
    Everything this file can say about a loaded graph, in the order the
    reference validator works: the manifest, each object, the digests, the
    pinned files, references, the operation law, the kernel pin, the scales,
    risk coverage, facet payloads. `verified` is the result of jscVerify.
+   opts.trusted, a map of signer URI to public key in hex, puts the check in
+   verification mode: an envelope is then judged against the signer's key,
+   and a Tailoring is authority-proven only through a verifying envelope.
    -> { findings: [{ kind: "error"|"note", area, object: id or null, message }],
-        types: {type: count}, tiers: {tailoring id: tier}, coverage: report } */
-async function jscCheckGraph(g, verified) {
+        types: {type: count}, tiers: {tailoring id: tier}, coverage: report,
+        signatures: {attestation id: "verified"|"unverified"|"error"|"missing"|"unsigned"} } */
+async function jscCheckGraph(g, verified, opts) {
+  const trusted = (opts && opts.trusted) || null;
   const findings = [], types = {};
   const add = (kind, area, object, message) => findings.push({ kind, area, object, message });
   const ids = [...g.objects.keys()];
@@ -1046,6 +1328,32 @@ async function jscCheckGraph(g, verified) {
     verified.pins.filter(p => !p.ok).forEach(p => add("error", "digest", null, `${p.path}: pinned file digest mismatch`));
     if (verified.counts.missing) add("error", "manifest", null, `${verified.counts.missing} object(s) listed but missing`);
   }
+  /* Envelopes: an attestation names a file beside the manifest; nothing signed contains its own signature.
+     The reference validator looks only at attestations the manifest lists, and an attestation over the
+     manifest cannot be listed in it (D3.1). This check looks at every attestation of the set. So that it
+     raises no error the reference does not, an envelope that is missing for an unlisted attestation is a
+     note; one that is there and does not bind or verify is an error in both cases. */
+  const envelopes = new Map(), signatures = {};
+  for (const id of [...objs.keys()].sort()) {
+    const r = objs.get(id), ref = r.obj["envelope-ref"];
+    if (r.type !== "attestation") continue;
+    if (!ref) { signatures[id] = "unsigned"; add("note", "signature", id, "no envelope (unsigned attestation)"); continue; }
+    const file = g.aux.find(a => a.path === ref);
+    if (!file) {
+      const listed = !!(g.objects.get(id) || {}).entry;
+      signatures[id] = "missing";
+      add(listed ? "error" : "note", "signature", id, `envelope-ref '${ref}' does not resolve beside the manifest`);
+      continue;
+    }
+    let env;
+    try { env = JSON.parse(file.text); } catch (e) { signatures[id] = "error"; add("error", "signature", id, `${ref}: envelope unreadable: ${e.message}`); continue; }
+    envelopes.set(ref, env);
+    const res = await jscVerifyEnvelope(env, r.obj, trusted);
+    signatures[id] = res.status;
+    if (res.status === "error") add("error", "signature", id, `dsse: ${res.detail}`);
+    else add("note", "signature", id, res.status === "verified" ? "signature VERIFIED (Ed25519)" : `signature UNVERIFIED - ${res.detail}`);
+  }
+  const verify = trusted ? { envelopes, trusted } : null;
   pass("reference", "error")(jscClosureErrors(objs));
   const pinnedSchemas = new Map(), pinnedDecl = new Map();
   for (const f of g.facetSchemas) {
@@ -1055,16 +1363,22 @@ async function jscCheckGraph(g, verified) {
     const std = JSC_STDLIB_BY_ID.get(f.def.id);
     if (std && jscRulesCanonical(f.def.schema || {}) !== jscRulesCanonical(std.schema)) add("error", "facet", null, `${f.path}: pin of stdlib facet ${f.def.id} DIVERGES from the normative descriptor (D26)`);
   }
-  pass("tailoring", "error")(await jscTailoringDutyErrors(objs, pinnedDecl));
+  pass("tailoring", "error")(await jscTailoringDutyErrors(objs, pinnedDecl, verify));
   const pins = new Map([...g.scales.values()].filter(x => x.pin).map(x => [x.def.id, x.pin]));
   const sc = jscCheckScales([...g.scales.values()].map(x => x.def), objs, pins);
   pass("scale", "error")(sc.errors); pass("scale", "note")(sc.notes);
-  const cov = await jscRiskCoverage(objs);
+  const cov = await jscRiskCoverage(objs, verify);
   pass("risk", "error")(cov.errors); pass("risk", "note")([...cov.notes, ...jscRiskLinkNotes(objs)]);
   pass("facet", "error")(jscFacetErrors([...objs].map(([id, r]) => [id, r.obj]), pinnedSchemas));
   const tiers = {};
-  for (const [id, r] of objs) if (r.type === "tailoring") tiers[id] = await jscDeriveTier(r.obj, objs);
-  return { findings, types, tiers, coverage: cov.report };
+  for (const [id, r] of objs) {
+    if (r.type !== "tailoring") continue;
+    const why = [];
+    tiers[id] = await jscDeriveTier(r.obj, objs, verify && { ...verify, notes: why });
+    why.forEach(m => add("note", "tailoring", id, "not proven by " + m));
+    if (tiers[id] === "authority-proven" && !trusted) add("note", "tailoring", id, "authority-proven by a digest match; the signature is UNVERIFIED without trusted keys");
+  }
+  return { findings, types, tiers, coverage: cov.report, signatures };
 }
 const jscRulesBeside = r => r.type === "attestation" && !r.entry;
 
@@ -1075,5 +1389,6 @@ if (typeof module !== "undefined" && module.exports) {
     jscSchemaCheck, jscShapeErrors, jscMatchTypes, jscTypeOf, jscTypedObjects, JSC_KERNEL_TYPES, JSC_RISK_RULES, jscClosureErrors,
     jscKernelNeeded, jscKernelPinErrors, jscRiskRuleViolations, jscRiskIsLive, jscRiskJustifies, JSC_NO_TAILORING, jscRiskCoverage,
     jscRiskLinkNotes, jscScaleDefinitionErrors, jscMatrixErrors, jscRiskLevels, jscMatrixCell, jscScaleErrors, jscCheckScales,
-    jscOptionalEmptyViolations, jscObjectErrors, jscFacetErrors, jscTailoringDutyErrors, jscAttestationVerdict, jscCheckGraph };
+    jscOptionalEmptyViolations, jscObjectErrors, jscFacetErrors, jscTailoringDutyErrors, jscAttestationVerdict, jscCheckGraph,
+    JSC_DSSE_PAYLOAD_TYPE, jscEd25519Verify, jscVerifyEnvelope, jscSemver, jscCompose, jscComposeSide, jscPathGet, jscEvalPredicate, jscConditionalApply };
 }

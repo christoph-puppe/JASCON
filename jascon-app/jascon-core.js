@@ -36,7 +36,7 @@
 
 /* ==JSC-PURE-START== */
 
-const JSC_BUILD = "0.6.0";
+const JSC_BUILD = "0.7.0";
 const JSC_TOOL = "JASCON-App " + JSC_BUILD;
 /* The kernel this app writes, and the kernels it reads (KERNEL-2: a tool
    stops at a pin it does not implement and names both). */
@@ -459,6 +459,21 @@ function jscZip(files) {
   return out;
 }
 const jscDecode = bytes => new TextDecoder("utf-8", { ignoreBOM: true }).decode(bytes);
+
+/* ---------- which files of a folder or ZIP a set keeps ---------- */
+const TEXT_FILE = /\.(json|md|txt|csv|html|xml|ya?ml|dsse)$/i;   // .dsse: the envelope of an attestation, JSON
+/* Of everything handed over, the files a set keeps: those with a text
+   extension, and any file an attestation names as its envelope, whatever it
+   is called. entries: [{path, text}] */
+function jscKeepFiles(entries) {
+  const out = entries.filter(e => TEXT_FILE.test(e.path));
+  const named = new Set(out.flatMap(e => [...e.text.matchAll(/"envelope-ref"\s*:\s*"([^"\\]+)"/g)].map(m => m[1])));
+  for (const e of entries) {
+    if (!TEXT_FILE.test(e.path) && [...named].some(n => e.path === n || e.path.endsWith("/" + n))) out.push(e);
+  }
+  return out;
+}
+
 /* -> [{path, text}] for every entry that is not a directory */
 async function jscUnzip(bytes) {
   const buf = bytes instanceof Uint8Array ? bytes : new Uint8Array(bytes);
@@ -496,7 +511,7 @@ async function jscUnzip(bytes) {
 if (typeof module !== "undefined" && module.exports) {
   module.exports = { JSC_CFG, N, JSC_BUILD, JSC_TOOL, JSC_KERNEL, JSC_KERNEL_READS, JSC_TYPES, JSC_MANIFEST, JscKernelError,
     jscEsc, jscSlug, jscText, jscInferType, jscIsScale, jscCanonical, jscSha256, jscSha256Js, jscUtf8,
-    jscPackageDigest, jscSemanticDigest, jscSerialize, jscNormalizePaths, jscClassifyFiles, jscGraphFrom,
+    jscPackageDigest, jscSemanticDigest, jscSerialize, jscNormalizePaths, jscClassifyFiles, jscGraphFrom, jscKeepFiles,
     jscTypeCounts, jscObjectPath, jscNeedsKernel2, jscBesideManifest, jscBuildBundle, jscVerify, jscCrc32, jscZip, jscUnzip, jscDecode };
 }
 
@@ -739,17 +754,17 @@ const jscSet = {
 window.jscSet = jscSet;
 
 /* ---------- reading what the user hands over ---------- */
-const TEXT_FILE = /\.(json|md|txt|csv|html|xml|ya?ml)$/i;
-/* FileList or File[] -> [{path, text}]; a .zip is opened in place. */
+/* FileList or File[] -> [{path, text}]; a .zip is opened in place. A file
+   that is neither text by its name nor named as an envelope is read only if
+   it is small: an image or a PDF in a bundle folder is not loaded. */
 async function jscReadFiles(fileList) {
-  const out = [];
+  const all = [];
   for (const f of [...fileList]) {
-    const bytes = new Uint8Array(await f.arrayBuffer());
     const path = f.jscPath || f.webkitRelativePath || f.name;
-    if (/\.zip$/i.test(f.name)) out.push(...(await jscUnzip(bytes)).filter(e => TEXT_FILE.test(e.path)));
-    else if (TEXT_FILE.test(f.name)) out.push({ path, text: jscDecode(bytes) });
+    if (/\.zip$/i.test(f.name)) all.push(...await jscUnzip(new Uint8Array(await f.arrayBuffer())));
+    else if (TEXT_FILE.test(f.name) || f.size <= 262144) all.push({ path, text: jscDecode(new Uint8Array(await f.arrayBuffer())) });
   }
-  return out;
+  return jscKeepFiles(all);
 }
 /* A drop may carry folders; walk them and keep the relative path. */
 async function jscReadDrop(dataTransfer) {
@@ -795,6 +810,14 @@ async function jscFetchBundle(url) {
       try { files.push(await get(p)); } catch (e) { failed.push(e.message); }
     }
   }));
+  /* the envelope of a listed attestation lies beside the manifest and is named only by the attestation */
+  for (const f of [...files]) {
+    if (!f.text.includes('"envelope-ref"')) continue;
+    let ref = null;
+    try { ref = JSON.parse(f.text)["envelope-ref"]; } catch (e) { /* not JSON: nothing to follow */ }
+    if (typeof ref !== "string" || !ref || /^[a-z]+:|^\/|\.\./i.test(ref) || files.some(x => x.path === ref)) continue;
+    try { files.push(await get(ref)); } catch (e) { /* a missing envelope is reported by the check, not by the load */ }
+  }
   return { files, failed };
 }
 function jscDownload(name, data, mime) {

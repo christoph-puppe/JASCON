@@ -173,3 +173,14 @@ test("text primitive: wanted language, then English, then what is there", () => 
   assert.equal(core.jscText("plain", "de"), "plain");
   assert.equal(core.jscText(undefined, "de"), "");
 });
+
+test("a set keeps text files and the envelope an attestation names, whatever the envelope is called", () => {
+  const kept = core.jscKeepFiles([
+    { path: "b/attestation.json", text: '{"id":"https://x/att","envelope-ref": "env-1"}' },
+    { path: "b/env-1", text: '{"payloadType":"x"}' },
+    { path: "b/other-file", text: "not named by anything" },
+    { path: "b/picture.png", text: "binary" },
+    { path: "b/sig.dsse", text: "{}" },
+  ]).map(e => e.path);
+  assert.deepEqual(kept, ["b/attestation.json", "b/sig.dsse", "b/env-1"]);
+});

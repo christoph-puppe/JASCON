@@ -6,7 +6,7 @@ stylesheet. A bundle you load stays in your browser, with one exception you
 have to switch on yourself: the suggestions of the Risk page send text to a
 model service once you type a key (see "Suggestions from a model").
 
-State: build 0.6.0. This build has the frame (the hub, the settings page and
+State: build 0.7.0. This build has the frame (the hub, the settings page and
 the shared core) and eight tool pages: Import, Browse, Tailor, Map,
 Implement, Risk, Assess and Validate. One view of the Risk page can ask a
 language model; nothing else in the app does, and nothing needs one.
@@ -68,7 +68,7 @@ is saved to the set at once; the other open tools reload.
 | Risk | The register with a heat map, the scales and their matrix, the coverage of the selected requirements, the risk catalogues | A Risk; a scale; the record of catalogue entries that do not apply |
 | Assess | Assessments, Findings by state, Attestations with a Full Match / Semantic Match / Tamper verdict | An Assessment with one Finding per requirement that is not satisfied; the state of a Finding |
 
-| Validate | What the ported kernel rules say about the whole set, by area, with the object each finding is about | A report as JSON, on request |
+| Validate | What the ported kernel rules say about the whole set, by area, with the object each finding is about; signatures against keys you trust; what composing the set with another set would report | A report as JSON, on request |
 
 Clicking a reference opens the object in a drawer on the right; Escape closes
 it.
@@ -306,28 +306,38 @@ text in that language, the English text is shown, then whatever is there.
 
 ## Limits of this build
 
-- The Validate page is not the reference validator. Ported from
-  `validate_core.py` and run against their conformance vectors are twelve of
-  its fifteen rule families: canonical form, modality, parameter, tier,
-  tailoring (the operation law), reference, lifecycle, kernel, facet,
-  attestation, risk and scale. Not ported: conditional-apply, the
-  composition of two bundles, and DSSE signatures. A set that passes here has
-  not been checked for those; run the Python validator on the export.
+- The Validate page is not the reference validator. All fifteen rule
+  families of `validate_core.py` are ported and run against their conformance
+  vectors: canonical form, modality, parameter, tier, tailoring (the
+  operation law), reference, lifecycle, kernel, facet, attestation, risk,
+  scale, DSSE signatures, the composition of two bundles and
+  conditional-apply. What the page does not judge: conditional-apply
+  instances (no bundle has a place to carry one; the reference validator does
+  not run them on a bundle either) and the bytes of a bundle on disk (line
+  ends, files the manifest does not list). In a case of doubt run the Python
+  validator on the export; where the two disagree, the app is wrong.
+- Signatures: Ed25519 over a DSSE envelope, verification only. A key is
+  trusted because you say so on the Validate page, never because a bundle
+  carries it. The app cannot sign. The reference validator looks at the
+  envelope of an attestation only when the manifest lists the attestation;
+  the app looks at every attestation of the set and reports a missing
+  envelope of an unlisted one as a note.
 - The other pages still take an object's type from its fields when a set is
   loaded; the Validate page says where the kernel schema disagrees.
-- Loading from a URL fetches what the manifest lists. A file beside the
-  manifest that it does not list, such as an attestation, is not fetched;
-  load the folder or a ZIP for those.
+- Loading from a URL fetches what the manifest lists, and the envelope a
+  listed attestation names. A file beside the manifest that nothing listed
+  names, such as an attestation over the manifest, is not fetched; load the
+  folder or a ZIP for those.
 - Predicate selects of a Tailoring are not evaluated; the selection is then
   shown as open and its count as a lower bound.
 - The Tailor page applies set-modality, set-parameter and replace-prose.
   Other operations are shown, and a resolution that contains one is reported
   as incomplete.
 - The Implement workbench does not write inherited edges.
-- Signatures of attestations are not verified.
 - The type of an object is recognised by its fields, not by matching it
   against the kernel schema.
-- Files other than text (images, PDF) in a bundle folder are not stored and
+- Files other than text (images, PDF) in a bundle folder are not stored,
+  except a file an attestation names as its envelope, and
   are missing from the export.
 - The model view was run against a simulated service only. No call to a
   real service was made while it was built, and the model ids in the
