@@ -11,7 +11,7 @@ digests, shape-disjoint type inference against the kernel JSON Schema
 modality lattice, reference closure, facet enforcement (fail-closed),
 tier derivation (Set-member resolution + DSSE verification mode with a
 dependency-free Ed25519 over System.Numerics.BigInteger), op-law duties,
-D3.5 composition, B.1.8 conditional-apply, and all 15 vector families.
+D3.5 composition, B.1.8 conditional-apply, and all 16 vector families.
 
 Kernel 2.0.0 (CP-RISK-1): Risk is the tenth kernel type - typed by the
 schema (RISK-1..6 are schema conditionals, named on failure by
@@ -29,6 +29,19 @@ flat, as validate_examples() reads it (its Attestation was skipped, an
 unlisted file went unnoticed); every Attestation's envelope is checked
 in a bundle (a broken one failed only if a tier derivation used it);
 every map is keyed ordinally (#45: ids differing only in case collided).
+
+Kernel 2.0.0 (CP-CHECK-1, PROPOSED; backlog #56, ported and run on
+2026-11-11): Check is the eleventh kernel type. The schema subset gained
+oneOf, not and else. Here: the I-Regexp engine (RFC 9485 ABNF, parsed and
+run as a state-set simulation, never handed to .NET Regex), check-verdict
+(B.1.10), CHECK-1..15 with every recorded verdict recomputed and the
+evidence chain verified in the store beside the manifest. 415 vectors in
+16 families pass (check: 156), the same counts as validate_core.py.
+KNOWN LIMITS of this port: a general category (\p{..}) is read from the
+HOST's Unicode database, .NET here and unicodedata there, so a code point
+assigned after either database was built can match differently; an
+integer fact beyond 64 bits is not read as an integer; -ceq, used on ids
+outside the Check code, is culture-sensitive ("a" + U+00AD equals "a").
 
 Usage: powershell -ExecutionPolicy Bypass -File validate_core.ps1 [bundle-dirs...]
        -VectorsOnly to skip bundles; -TrustedKeys file.json for verification mode;
@@ -135,7 +148,7 @@ function Content-Digest($obj) {
 $SCHEMA = Read-Json (Join-Path $SKILL "schemas\oscal-semantic-core-2.0.0.schema.json")
 $DEFS = $SCHEMA['$defs']
 $IGNORE_KW = @('description', 'title', '$schema', '$id', 'contentEncoding', 'default', 'examples', 'note', '$defs')
-$KNOWN_KW = @('$ref', 'allOf', 'anyOf', 'if', 'then', 'const', 'enum', 'type', 'required',
+$KNOWN_KW = @('$ref', 'allOf', 'anyOf', 'oneOf', 'not', 'if', 'then', 'else', 'const', 'enum', 'type', 'required',
               'properties', 'additionalProperties', 'unevaluatedProperties', 'items',
               'minItems', 'maxItems', 'minLength', 'maxLength', 'minProperties', 'pattern',
               'propertyNames', 'minimum', 'maximum')
@@ -175,9 +188,15 @@ function Test-Schema($sch, $v) {
         $any = $false
         foreach ($s in $sch['anyOf']) { if (Test-Schema $s $v) { $any = $true; break } }
         if (-not $any) { return $false } }
+    if ($sch.Contains('oneOf')) {          # exactly one branch holds (CP-CHECK-1: checkObservation)
+        $n1 = 0
+        foreach ($s in $sch['oneOf']) { if (Test-Schema $s $v) { $n1++ } }
+        if ($n1 -ne 1) { return $false } }
+    if ($sch.Contains('not')) { if (Test-Schema $sch['not'] $v) { return $false } }
     if ($sch.Contains('if')) {
-        if ((Test-Schema $sch['if'] $v) -and $sch.Contains('then')) {
-            if (-not (Test-Schema $sch['then'] $v)) { return $false } } }
+        if (Test-Schema $sch['if'] $v) {
+            if ($sch.Contains('then')) { if (-not (Test-Schema $sch['then'] $v)) { return $false } } }
+        elseif ($sch.Contains('else')) { if (-not (Test-Schema $sch['else'] $v)) { return $false } } }
     if ($sch.Contains('const')) {
         if ((Format-Canonical $v) -cne (Format-Canonical $sch['const'])) { return $false } }
     if ($sch.Contains('enum')) {
@@ -224,7 +243,7 @@ function Test-Schema($sch, $v) {
     return $true
 }
 $TYPES = @('requirement', 'requirementSet', 'tailoring', 'mapping', 'component',
-           'implementation', 'assessment', 'finding', 'attestation', 'risk')
+           'implementation', 'assessment', 'finding', 'attestation', 'risk', 'check')
 function Infer-Types($obj) {
     $m = New-Object System.Collections.ArrayList
     foreach ($t in $TYPES) { if (Test-Schema $DEFS[$t] $obj) { [void]$m.Add($t) } }
@@ -249,7 +268,8 @@ $OPTIONAL_CONTAINERS = @('aliases', 'canonical-alias', 'replaces', 'relations', 
                          'annotations', 'parameters', 'deviations', 'excludes',
                          'source-scope', 'target-scope', 'evidence-refs', 'statement-refs',
                          'capabilities', 'authorizations', 'actions', 'choices',
-                         'threat-refs', 'component-refs', 'treatments', 'risk-refs', 'tailoring-refs')
+                         'threat-refs', 'component-refs', 'treatments', 'risk-refs', 'tailoring-refs',
+                         'statement-ids', 'applies-when', 'check-results', 'derived-from')
 function Optional-Empty-Violations($obj, [string]$path = '$') {
     $out = New-Object System.Collections.ArrayList
     if (Is-Map $obj) {
@@ -1308,7 +1328,7 @@ function Run-Lifecycle {
         if (-not $okv -and $case['composed'] -eq 'supports' -and ($got -eq 'supports' -or $got -eq 'intersects')) { $okv = $true }
         if ($okv) { OK 'lifecycle' } else { FAIL 'lifecycle' "compose($a,$b): expected $($case['composed']), got $got" }
     }
-    # shape disjointness over the ten minimal objects
+    # shape disjointness over the eleven minimal objects
     $P = 'https://ex.org'
     $minimal = [ordered]@{
         requirement = [ordered]@{id = "$P/r"; version = '1'; lifecycle = 'active';
@@ -1331,6 +1351,10 @@ function Run-Lifecycle {
             signer = "$P/p"; timestamp = '2026-07-21'}
         risk = [ordered]@{id = "$P/rk"; version = '1'; lifecycle = 'active'; scenario = [ordered]@{en = 'X.'};
             'owner-ref' = "$P/p"; state = 'identified'}
+        check = [ordered]@{id = "$P/ck"; version = '1'; lifecycle = 'active'; 'requirement-ref' = "$P/r";
+            platform = "$P/platform/linux"; observes = @([ordered]@{name = 'x'; type = 'integer'});
+            criteria = @([ordered]@{fact = 'x'; op = 'at-most'; expected = 4}); confidence = 'draft';
+            provenance = [ordered]@{'author-ref' = "$P/p"; date = '2026-11-11'}}
     }
     foreach ($want in $minimal.Keys) {
         $m = Infer-Types $minimal[$want]
@@ -1422,7 +1446,7 @@ $RISK_NEXT = @{identified = @('assessed', 'treated', 'retired'); assessed = @('t
 # A manifest MAY carry `kernel-version`; absent means 1.0.0 content.
 # KERNEL-1: content beyond 1.0.0 (a Risk, Finding.risk-refs) pins the kernel
 # it needs. KERNEL-2: a tool stops at a pin it does not implement and names
-# both versions. PORTED BY READING, NOT EXECUTED - like the Risk port.
+# both versions.
 $KERNEL_VERSION = '2.0.0'
 $KERNEL_SUPPORTED = @('1.0.0', '2.0.0')
 function Kernel-Pin-Errors($manifest, $objs) {
@@ -1446,6 +1470,11 @@ function Kernel-Pin-Errors($manifest, $objs) {
         $hasRefs = $false
         foreach ($x in @($o['risk-refs'])) { if ($null -ne $x) { $hasRefs = $true } }
         if ($t -ceq 'finding' -and $hasRefs) { $why = "$oid carries risk-refs"; break }
+        # CP-CHECK-1: the Check type, Assessment.check-results / .tailoring-ref, Finding.check-ref
+        if ($t -ceq 'check') { $why = "$oid is a Check"; break }
+        if ($t -ceq 'assessment' -and ((Ck-Truthy $o['check-results']) -or (Ck-Truthy $o['tailoring-ref']))) {
+            $why = "$oid carries check results"; break }
+        if ($t -ceq 'finding' -and (Ck-Truthy $o['check-ref'])) { $why = "$oid carries a check-ref"; break }
     }
     if ($null -ne $why -and $pin -cne '2.0.0') {
         $said = 'pins no kernel-version'
@@ -1476,7 +1505,7 @@ function Run-Kernel {
 # A scale is the organisation's own: how many levels and what they are
 # called. Its definition is a file the manifest pins by digest under
 # `scales`, levels listed lowest first. A scale-ref no pin answers stays a
-# landmark. PORTED BY READING, NOT EXECUTED - like the Risk port.
+# landmark.
 function Scale-Definition-Errors($sd, $pin) {
     $errs = New-Object System.Collections.ArrayList
     $name = '?'
@@ -1709,6 +1738,955 @@ function Run-Risk {
     }
 }
 
+# ---------------- CHECK (CP-CHECK-1, kernel 2.0.0; backlog #56) ----------------
+# Check is the eleventh kernel type: a typed fact contract (`observes`) and
+# a flat conjunction over eleven comparators (`criteria`) - primitive
+# check-verdict, App. B.1.10. Every verdict an Assessment records is
+# recomputed here from the observation it records. Three-valued (strong
+# Kleene AND): one not-satisfied decides, else one inconclusive, else
+# satisfied. An unbound parameter is inconclusive, never a default (D9).
+#
+# Values are compared ORDINALLY ([string]::Equals / CompareOrdinal), never
+# with -ceq: PowerShell's -ceq is culture-sensitive, so "a" + U+00AD equals
+# "a" there, while validate_core.py compares code points.
+$CK_SAT = 'satisfied'; $CK_NOT = 'not-satisfied'; $CK_INC = 'inconclusive'; $CK_NA = 'not-applicable'
+$COLLECTOR_FACET = 'https://ns.oscal.org/stdlib/facet/collector'
+$DECIMAL_RX = '^(-?[1-9][0-9]*(\.[0-9]+)?|0(\.[0-9]+)?|-0\.[0-9]*[1-9][0-9]*)$'
+$CHECK_RULES = @{
+    'CHECK-1'  = 'a check discharges a requirement; when that requirement is in the bundle the edge is typed and the clauses it names exist'
+    'CHECK-2'  = 'every assertion reads a fact the check declares, and a fact is declared once - the fact contract is all a collector promises'
+    'CHECK-3'  = 'an operator compares what it can compare - ordering on numbers, patterns on text, set operators on lists - and a literal has the fact''s type'
+    'CHECK-4'  = 'a bound value comes from a parameter the requirement declares exactly once on the covered clauses, with a fitting type - so tailoring the requirement retunes the check; a pattern is never a parameter'
+    'CHECK-5'  = 'tightening a parameter must never loosen the check: at-most needs a parameter that tightens lower, at-least one that tightens higher'
+    'CHECK-6'  = 'a pattern is an I-Regexp (RFC 9485) within the kernel''s size limits, so two conformant tools return one verdict, in bounded time'
+    'CHECK-7'  = 'collectors are well-formed and each is named once, so a result row can say which code observed'
+    'CHECK-8'  = 'a result names the check it ran and that check''s semantic digest - a changed check is a different check'
+    'CHECK-9'  = 'a recorded outcome is the one check-verdict computes from the recorded observation - verdicts are recomputed, never taken on trust'
+    'CHECK-10' = 'an assessment that carries check results has one row per check, and its result is their aggregate: any not-satisfied, else any inconclusive or none applicable, else satisfied'
+    'CHECK-11' = 'no observation, no verdict: a row without one is inconclusive and says why'
+    'CHECK-12' = 'a run''s parameter values are the ones the Tailoring it names binds - an implementer does not set its own pass mark'
+    'CHECK-13' = 'a result''s collector-id names a collector of the check'
+    'CHECK-14' = 'a Finding raised by a check is about the requirement - and the clause - that check discharges'
+    'CHECK-15' = 'evidence is content-addressed and stays inside the bundle''s store: every digest in the chain verifies against the bytes, and a record describes the run it is attached to'
+}
+
+# -- I-Regexp (RFC 9485) for matches / matches-not --
+# The dialect is the ABNF of RFC 9485: XSD regexps without character-class
+# subtraction, without multi-character escapes (\d \w \s ...) and without
+# Unicode blocks. Matching is the WHOLE value, case-sensitive, by code
+# point; `^` and `$` are ordinary characters; `.` is any character but \n
+# and \r. The pattern is NEVER handed to .NET Regex (CP-CHECK-1 6.3): the
+# ABNF is parsed here and run as a Thompson state-set simulation - linear
+# in program x input, no backtracking. A rejected pattern throws
+# System.FormatException (the IRegexpError of validate_core.py).
+# Ranges are flat int arrays: lo0, hi0, lo1, hi1, ... sorted and disjoint.
+$IRE_MAX_PATTERN = 256      # code points
+$IRE_MAX_STATES = 1000      # compiled program, after {m,n} expansion
+$IRE_MAX_INPUT = 4096       # code points per matched value; longer -> inconclusive
+$IRE_CATS = @('L', 'Lu', 'Ll', 'Lm', 'Lo', 'Lt', 'M', 'Mc', 'Me', 'Mn', 'N', 'Nd', 'Nl', 'No',
+              'P', 'Pc', 'Pd', 'Pe', 'Pf', 'Pi', 'Po', 'Ps', 'Z', 'Zl', 'Zp', 'Zs',
+              'S', 'Sc', 'Sk', 'Sm', 'So', 'C', 'Cc', 'Cf', 'Cn', 'Co')
+# System.Globalization.UnicodeCategory, by its integer value
+$IRE_CAT_ABBR = @('Lu', 'Ll', 'Lt', 'Lm', 'Lo', 'Mn', 'Mc', 'Me', 'Nd', 'Nl', 'No', 'Zs', 'Zl', 'Zp',
+                  'Cc', 'Cf', 'Cs', 'Co', 'Pc', 'Pd', 'Ps', 'Pe', 'Pi', 'Pf', 'Po', 'Sm', 'Sc', 'Sk', 'So', 'Cn')
+$script:IreCatRuns = $null
+$script:IreCatCache = (New-Map)
+$script:IreProgs = (New-Map)
+$script:IreP = $null; $script:IrePos = 0; $script:IreSrc = ''
+$script:IreK = $null; $script:IreR = $null; $script:IreA = $null; $script:IreB = $null
+
+function Ire-CPs([string]$s) {
+    $out = New-Object 'System.Collections.Generic.List[int]'
+    $n = $s.Length; $i = 0
+    while ($i -lt $n) {
+        $c = [int]$s[$i]
+        if ($c -ge 0xD800 -and $c -le 0xDBFF -and ($i + 1) -lt $n) {
+            $d = [int]$s[$i + 1]
+            if ($d -ge 0xDC00 -and $d -le 0xDFFF) {
+                $out.Add(0x10000 + (($c - 0xD800) * 0x400) + ($d - 0xDC00)); $i += 2; continue }
+        }
+        $out.Add($c); $i++
+    }
+    return ,$out
+}
+function Ire-Norm($pairs) {
+    $n = ($pairs.Count -shr 1)
+    if ($n -eq 0) { return ,(New-Object int[] 0) }
+    $los = New-Object int[] $n; $his = New-Object int[] $n
+    for ($i = 0; $i -lt $n; $i++) { $los[$i] = $pairs[2 * $i]; $his[$i] = $pairs[2 * $i + 1] }
+    [Array]::Sort($los, $his)
+    $out = New-Object 'System.Collections.Generic.List[int]'
+    for ($i = 0; $i -lt $n; $i++) {
+        $c = $out.Count
+        if ($c -gt 0 -and $los[$i] -le ($out[$c - 1] + 1)) { if ($his[$i] -gt $out[$c - 1]) { $out[$c - 1] = $his[$i] } }
+        else { $out.Add($los[$i]); $out.Add($his[$i]) }
+    }
+    return ,($out.ToArray())
+}
+function Ire-Compl($pairs) {
+    $rs = Ire-Norm $pairs
+    $out = New-Object 'System.Collections.Generic.List[int]'
+    $nxt = 0
+    for ($i = 0; $i -lt $rs.Length; $i += 2) {
+        if ($rs[$i] -gt $nxt) { $out.Add($nxt); $out.Add($rs[$i] - 1) }
+        $nxt = $rs[$i + 1] + 1
+    }
+    if ($nxt -le 0x10FFFF) { $out.Add($nxt); $out.Add(0x10FFFF) }
+    return ,($out.ToArray())
+}
+$IRE_DOT = Ire-Compl ([int[]]@(10, 10, 13, 13))
+
+function Ire-Cat([string]$prop) {
+    # code-point ranges of a Unicode general category - the HOST's Unicode
+    # database (.NET here, unicodedata in validate_core.py)
+    if ($script:IreCatCache.ContainsKey($prop)) { return ,($script:IreCatCache[$prop]) }
+    if ($null -eq $script:IreCatRuns) {
+        $runs = New-Object 'System.Collections.Generic.List[int]'
+        $start = 0; $cur = -1
+        for ($cp = 0; $cp -lt 0x110000; $cp++) {
+            if ($cp -lt 0x10000) { $c = [int][System.Globalization.CharUnicodeInfo]::GetUnicodeCategory([char]$cp) }
+            else { $c = [int][System.Globalization.CharUnicodeInfo]::GetUnicodeCategory([char]::ConvertFromUtf32($cp), 0) }
+            if ($c -ne $cur) {
+                if ($cur -ge 0) { $runs.Add($start); $runs.Add($cp - 1); $runs.Add($cur) }
+                $start = $cp; $cur = $c }
+        }
+        $runs.Add($start); $runs.Add(0x10FFFF); $runs.Add($cur)
+        $script:IreCatRuns = $runs
+    }
+    $runs = $script:IreCatRuns
+    $sel = New-Object 'System.Collections.Generic.List[int]'
+    for ($i = 0; $i -lt $runs.Count; $i += 3) {
+        if ($IRE_CAT_ABBR[$runs[$i + 2]].StartsWith($prop, [System.StringComparison]::Ordinal)) {
+            $sel.Add($runs[$i]); $sel.Add($runs[$i + 1]) }
+    }
+    $rs = Ire-Norm $sel
+    $script:IreCatCache[$prop] = $rs
+    return ,$rs
+}
+function Ire-Normal([int]$o) {     # NormalChar of the ABNF
+    return (($o -le 0x27) -or ($o -eq 0x2C) -or ($o -eq 0x2D) -or ($o -ge 0x2F -and $o -le 0x3E) -or
+            ($o -ge 0x40 -and $o -le 0x5A) -or ($o -ge 0x5E -and $o -le 0x7A) -or ($o -ge 0x7E))
+}
+function Ire-Peek([int]$k = 0) {
+    $i = $script:IrePos + $k
+    if ($i -lt $script:IreP.Count) { return $script:IreP[$i] }
+    return -1
+}
+function Ire-Err([string]$what) {
+    throw (New-Object System.FormatException ("$what at position $($script:IrePos) of '$($script:IreSrc)'"))
+}
+function Ire-Regexp {
+    $br = New-Object System.Collections.ArrayList
+    [void]$br.Add((Ire-Branch))
+    while ((Ire-Peek) -eq 124) { $script:IrePos++; [void]$br.Add((Ire-Branch)) }
+    return @{k = 'alt'; b = $br}
+}
+function Ire-Branch {
+    $items = New-Object System.Collections.ArrayList
+    while ($true) {
+        $c = Ire-Peek
+        if ($c -eq -1 -or $c -eq 124 -or $c -eq 41) { break }
+        [void]$items.Add((Ire-Piece))
+    }
+    return @{k = 'cat'; i = $items}
+}
+function Ire-Piece {
+    $a = Ire-Atom
+    $c = Ire-Peek
+    if ($c -eq 42) { $script:IrePos++; return @{k = 'rep'; a = $a; lo = 0; hi = -1} }
+    if ($c -eq 43) { $script:IrePos++; return @{k = 'rep'; a = $a; lo = 1; hi = -1} }
+    if ($c -eq 63) { $script:IrePos++; return @{k = 'rep'; a = $a; lo = 0; hi = 1} }
+    if ($c -eq 123) {
+        # \{([0-9]+)(,([0-9]*))?\}
+        $P = $script:IreP; $n = $P.Count; $i = $script:IrePos + 1
+        $d1 = ''; $d2 = ''; $comma = $false
+        while ($i -lt $n -and $P[$i] -ge 48 -and $P[$i] -le 57) { $d1 += [char]$P[$i]; $i++ }
+        if ($d1.Length -gt 0 -and $i -lt $n -and $P[$i] -eq 44) {
+            $comma = $true; $i++
+            while ($i -lt $n -and $P[$i] -ge 48 -and $P[$i] -le 57) { $d2 += [char]$P[$i]; $i++ }
+        }
+        if (-not ($d1.Length -gt 0 -and $i -lt $n -and $P[$i] -eq 125)) {
+            Ire-Err 'malformed range quantifier (I-Regexp has {n}, {n,} and {n,m})' }
+        $max = [System.Numerics.BigInteger]$IRE_MAX_STATES
+        $lo = [System.Numerics.BigInteger]::Parse($d1, $INV)
+        $hi = $null
+        if (-not $comma) { $hi = $lo } elseif ($d2.Length -gt 0) { $hi = [System.Numerics.BigInteger]::Parse($d2, $INV) }
+        if ($null -ne $hi -and $hi.CompareTo($lo) -lt 0) { Ire-Err 'range quantifier has its bounds reversed' }
+        if ($lo.CompareTo($max) -gt 0 -or ($null -ne $hi -and $hi.CompareTo($max) -gt 0)) {
+            Ire-Err 'range quantifier exceeds the size limit' }
+        $script:IrePos = $i + 1
+        $hiI = -1; if ($null -ne $hi) { $hiI = [int]$hi }
+        return @{k = 'rep'; a = $a; lo = [int]$lo; hi = $hiI}
+    }
+    return $a
+}
+function Ire-Escape {
+    $n = Ire-Peek 1
+    if (($n -eq 112 -or $n -eq 80) -and (Ire-Peek 2) -eq 123) {
+        $P = $script:IreP; $end = -1
+        for ($i = $script:IrePos + 3; $i -lt $P.Count; $i++) { if ($P[$i] -eq 125) { $end = $i; break } }
+        $prop = $null
+        if ($end -gt 0) {
+            $prop = ''
+            for ($i = $script:IrePos + 3; $i -lt $end; $i++) {
+                if ($P[$i] -gt 127) { $prop = $null; break }
+                $prop += [char]$P[$i] }
+        }
+        if ($null -eq $prop -or ($IRE_CATS -cnotcontains $prop)) {
+            Ire-Err "\$([char]$n){$prop} is not a Unicode general category (I-Regexp has categories, not blocks)" }
+        $script:IrePos = $end + 1
+        $rs = Ire-Cat $prop
+        if ($n -eq 80) { $rs = Ire-Compl $rs }
+        return ,$rs
+    }
+    # ( ) * + - . ? [ \ ] ^ { | }
+    if (@(40, 41, 42, 43, 45, 46, 63, 91, 92, 93, 94, 123, 124, 125) -contains $n) {
+        $script:IrePos += 2; return ,([int[]]@($n, $n)) }
+    if ($n -eq 110) { $script:IrePos += 2; return ,([int[]]@(10, 10)) }
+    if ($n -eq 114) { $script:IrePos += 2; return ,([int[]]@(13, 13)) }
+    if ($n -eq 116) { $script:IrePos += 2; return ,([int[]]@(9, 9)) }
+    Ire-Err 'this escape is not I-Regexp (no \d \w \s \b, no back-references)'
+}
+function Ire-CcChar {
+    $c = Ire-Peek
+    if ($c -eq 92) {
+        $n1 = Ire-Peek 1
+        if ($n1 -eq 112 -or $n1 -eq 80) { Ire-Err 'a category escape cannot bound a range' }
+        $r = Ire-Escape
+        return $r[0]
+    }
+    if ($c -eq -1 -or $c -eq 45 -or $c -eq 91 -or $c -eq 93) { Ire-Err 'this character must be escaped inside a character class' }
+    $script:IrePos++
+    return $c
+}
+function Ire-CharClass {
+    $script:IrePos++
+    $neg = ((Ire-Peek) -eq 94)
+    if ($neg) { $script:IrePos++ }
+    $items = New-Object 'System.Collections.Generic.List[int]'
+    $first = $true
+    while ($true) {
+        $c = Ire-Peek
+        if ($c -eq -1) { Ire-Err 'unclosed character class' }
+        if ($c -eq 93) {
+            if ($first) { Ire-Err 'empty character class' }
+            $script:IrePos++; break
+        }
+        if ($c -eq 45) {
+            if ($first -or (Ire-Peek 1) -eq 93) { $items.Add(45); $items.Add(45); $script:IrePos++; $first = $false; continue }
+            Ire-Err "'-' inside a character class only first or last (no class subtraction)"
+        }
+        if ($c -eq 92) {
+            $n1 = Ire-Peek 1
+            if ($n1 -eq 112 -or $n1 -eq 80) {
+                $r = Ire-Escape
+                foreach ($x in $r) { $items.Add($x) }
+                $first = $false; continue }
+        }
+        $lo = Ire-CcChar
+        $p0 = Ire-Peek; $p1 = Ire-Peek 1
+        if ($p0 -eq 45 -and $p1 -ne 93 -and $p1 -ne -1) {
+            $script:IrePos++
+            $hi = Ire-CcChar
+            if ($hi -lt $lo) { Ire-Err 'character range out of order' }
+            $items.Add($lo); $items.Add($hi)
+        } else { $items.Add($lo); $items.Add($lo) }
+        $first = $false
+    }
+    if ($neg) { $rs = Ire-Compl $items } else { $rs = Ire-Norm $items }
+    return ,$rs
+}
+function Ire-Atom {
+    $c = Ire-Peek
+    if ($c -eq 40) {
+        $script:IrePos++
+        $r = Ire-Regexp
+        if ((Ire-Peek) -ne 41) { Ire-Err 'unclosed group' }
+        $script:IrePos++
+        return $r
+    }
+    if ($c -eq 46) { $script:IrePos++; return @{k = 'set'; r = $IRE_DOT} }
+    if ($c -eq 92) { $r = Ire-Escape; return @{k = 'set'; r = $r} }
+    if ($c -eq 91) { $r = Ire-CharClass; return @{k = 'set'; r = $r} }
+    if ($c -ne -1 -and (Ire-Normal $c)) { $script:IrePos++; return @{k = 'set'; r = ([int[]]@($c, $c))} }
+    if ($c -eq -1) { Ire-Err 'the pattern ends where an atom is expected' }
+    Ire-Err 'this character cannot start an atom here'
+}
+function Ire-Parse($p) {
+    if (-not ($p -is [string])) { throw (New-Object System.FormatException 'a pattern is a string') }
+    $cps = Ire-CPs $p
+    if ($cps.Count -gt $IRE_MAX_PATTERN) {
+        throw (New-Object System.FormatException "pattern is $($cps.Count) characters long; the limit is $IRE_MAX_PATTERN") }
+    $script:IreP = $cps; $script:IrePos = 0; $script:IreSrc = $p
+    $ast = Ire-Regexp
+    if ($script:IrePos -ne $cps.Count) { Ire-Err 'unbalanced character' }
+    return $ast
+}
+# a state is kind 0 (code-point set R, then A) | 1 (split to A and B) | 2 (match)
+function Ire-New([int]$k, $r, [int]$a, [int]$b) {
+    $script:IreK.Add($k); $script:IreR.Add($r); $script:IreA.Add($a); $script:IreB.Add($b)
+    if ($script:IreK.Count -gt $IRE_MAX_STATES) {
+        throw (New-Object System.FormatException "pattern '$($script:IreSrc)' compiles to more than $IRE_MAX_STATES states") }
+    return ($script:IreK.Count - 1)
+}
+function Ire-Comp($n, [int]$nxt) {
+    $k = $n['k']
+    if ($k -ceq 'set') { return (Ire-New 0 ($n['r']) $nxt 0) }
+    if ($k -ceq 'cat') {
+        $items = $n['i']
+        for ($i = $items.Count - 1; $i -ge 0; $i--) { $nxt = Ire-Comp ($items[$i]) $nxt }
+        return $nxt
+    }
+    if ($k -ceq 'alt') {
+        $starts = New-Object 'System.Collections.Generic.List[int]'
+        foreach ($b in $n['b']) { $s0 = Ire-Comp $b $nxt; $starts.Add($s0) }
+        $s = $starts[$starts.Count - 1]
+        for ($i = $starts.Count - 2; $i -ge 0; $i--) { $s = Ire-New 1 $null ($starts[$i]) $s }
+        return $s
+    }
+    $a = $n['a']; $lo = $n['lo']; $hi = $n['hi']; $t = $nxt
+    if ($hi -lt 0) {
+        $loop = Ire-New 1 $null (-1) $nxt
+        $body = Ire-Comp $a $loop
+        $script:IreA[$loop] = $body
+        $t = $loop
+    } else {
+        for ($j = 0; $j -lt ($hi - $lo); $j++) { $x = Ire-Comp $a $t; $t = Ire-New 1 $null $x $nxt }
+    }
+    for ($j = 0; $j -lt $lo; $j++) { $t = Ire-Comp $a $t }
+    return $t
+}
+function Ire-Compile($p) {
+    if (($p -is [string]) -and $script:IreProgs.ContainsKey($p)) { return $script:IreProgs[$p] }
+    $ast = Ire-Parse $p
+    $script:IreK = New-Object 'System.Collections.Generic.List[int]'
+    $script:IreR = New-Object 'System.Collections.Generic.List[object]'
+    $script:IreA = New-Object 'System.Collections.Generic.List[int]'
+    $script:IreB = New-Object 'System.Collections.Generic.List[int]'
+    $end = Ire-New 2 $null 0 0
+    $start = Ire-Comp $ast $end
+    $prog = @{K = $script:IreK.ToArray(); R = $script:IreR.ToArray(); A = $script:IreA.ToArray(); B = $script:IreB.ToArray(); start = $start}
+    $script:IreProgs[$p] = $prog
+    return $prog
+}
+function Ire-In($rs, [int]$o) {
+    $lo = 0; $hi = ($rs.Length -shr 1) - 1
+    while ($lo -le $hi) {
+        $mid = ($lo + $hi) -shr 1
+        if ($o -lt $rs[2 * $mid]) { $hi = $mid - 1 }
+        elseif ($o -gt $rs[2 * $mid + 1]) { $lo = $mid + 1 }
+        else { return $true }
+    }
+    return $false
+}
+function Ire-Closure($prog, $seeds) {
+    $K = $prog.K; $A = $prog.A; $B = $prog.B
+    $seen = New-Object bool[] $K.Length
+    $out = New-Object 'System.Collections.Generic.List[int]'
+    $stack = New-Object 'System.Collections.Generic.Stack[int]'
+    foreach ($s in $seeds) { $stack.Push($s) }
+    while ($stack.Count -gt 0) {
+        $s = $stack.Pop()
+        if ($seen[$s]) { continue }
+        $seen[$s] = $true
+        if ($K[$s] -eq 1) { $stack.Push($B[$s]); $stack.Push($A[$s]) } else { $out.Add($s) }
+    }
+    return ,$out
+}
+function Ire-FullMatch($p, [string]$text) {
+    $prog = Ire-Compile $p
+    $K = $prog.K; $R = $prog.R; $A = $prog.A
+    $seed = New-Object 'System.Collections.Generic.List[int]'
+    $seed.Add($prog.start)
+    $cur = Ire-Closure $prog $seed
+    $cps = Ire-CPs $text
+    foreach ($o in $cps) {
+        $nxt = New-Object 'System.Collections.Generic.List[int]'
+        foreach ($s in $cur) { if ($K[$s] -eq 0 -and (Ire-In ($R[$s]) $o)) { $nxt.Add($A[$s]) } }
+        if ($nxt.Count -eq 0) { return $false }
+        $cur = Ire-Closure $prog $nxt
+    }
+    foreach ($s in $cur) { if ($K[$s] -eq 2) { return $true } }
+    return $false
+}
+
+# -- check-verdict (B.1.10) --
+$CHECK_OPS = @{     # which comparators fit which fact (present / absent fit every fact)
+    one  = @{ string = @('equals', 'one-of', 'matches', 'matches-not'); code = @('equals', 'one-of', 'matches', 'matches-not')
+              integer = @('equals', 'one-of', 'at-least', 'at-most'); decimal = @('equals', 'one-of', 'at-least', 'at-most')
+              boolean = @('equals') }
+    many = @{ string = @('includes-all', 'excludes-all', 'subset-of', 'matches', 'matches-not')
+              code = @('includes-all', 'excludes-all', 'subset-of', 'matches', 'matches-not')
+              integer = @('includes-all', 'excludes-all', 'subset-of'); decimal = @('includes-all', 'excludes-all', 'subset-of')
+              boolean = @() }
+}
+$CHECK_LIST_OPS = @('one-of', 'includes-all', 'excludes-all', 'subset-of')
+$CHECK_PATTERN_OPS = @('matches', 'matches-not')
+
+function Ck-Truthy($v) {    # Python truthiness of a JSON value
+    if ($null -eq $v) { return $false }
+    if ($v -is [bool]) { return $v }
+    if ($v -is [string]) { return ($v.Length -gt 0) }
+    if (Is-Map $v) { return ($v.Count -gt 0) }
+    if (Is-List $v) { return (@($v).Count -gt 0) }
+    return ($v -ne 0)
+}
+function Ck-SEq($a, $b) { return (($a -is [string]) -and ($b -is [string]) -and [string]::Equals([string]$a, [string]$b, [System.StringComparison]::Ordinal)) }
+function Ck-Show($v) { return (Format-Canonical $v) }
+function Ck-FactOk([string]$ft, $x) {
+    if ($ft -ceq 'integer') { return ((($x -is [int]) -or ($x -is [long])) -and -not ($x -is [bool])) }
+    if ($ft -ceq 'decimal') { return (($x -is [string]) -and [System.Text.RegularExpressions.Regex]::IsMatch($x, $DECIMAL_RX)) }
+    if ($ft -ceq 'boolean') { return ($x -is [bool]) }
+    return ($x -is [string])          # string, code
+}
+function Ck-FactValueOk($decl, $v) {
+    $ft = [string]$decl['type']
+    if (Ck-SEq $decl['cardinality'] 'many') {
+        if (-not (Is-List $v)) { return $false }
+        foreach ($x in $v) { if (-not (Ck-FactOk $ft $x)) { return $false } }
+        return $true
+    }
+    return (Ck-FactOk $ft $v)
+}
+function Ck-ExpectedOk([string]$op, [string]$ft, $e) {
+    if ($CHECK_LIST_OPS -ccontains $op) {
+        if (-not (Is-List $e)) { return $false }
+        foreach ($x in $e) { if (-not (Ck-FactOk $ft $x)) { return $false } }
+        return (($op -ceq 'subset-of') -or (@($e).Count -gt 0))
+    }
+    if ($CHECK_PATTERN_OPS -ccontains $op) { return ($e -is [string]) }
+    return (Ck-FactOk $ft $e)
+}
+# exact decimals: (unscaled BigInteger, scale) - [decimal] stops at 28 digits
+function Ck-Dec([string]$s) {
+    $s = $s.Trim()
+    $neg = $s.StartsWith('-'); if ($neg) { $s = $s.Substring(1) }
+    $dot = $s.IndexOf('.'); $frac = ''
+    if ($dot -ge 0) { $frac = $s.Substring($dot + 1); $s = $s.Substring(0, $dot) }
+    $u = [System.Numerics.BigInteger]::Parse($s + $frac, $INV)
+    if ($neg) { $u = [System.Numerics.BigInteger]::Negate($u) }
+    return @{u = $u; s = $frac.Length}
+}
+function Ck-Cmp([string]$ft, $a, $b) {    # -1 / 0 / 1 over two values of one fact type
+    if ($ft -ceq 'decimal') {
+        $x = Ck-Dec $a; $y = Ck-Dec $b
+        $sc = [Math]::Max($x.s, $y.s)
+        $xu = [System.Numerics.BigInteger]::Multiply($x.u, [System.Numerics.BigInteger]::Pow(10, $sc - $x.s))
+        $yu = [System.Numerics.BigInteger]::Multiply($y.u, [System.Numerics.BigInteger]::Pow(10, $sc - $y.s))
+        return $xu.CompareTo($yu)
+    }
+    if ($ft -ceq 'integer') { return ([long]$a).CompareTo([long]$b) }
+    if ($ft -ceq 'boolean') { if ([bool]$a -eq [bool]$b) { return 0 } else { return 1 } }
+    return [Math]::Sign([string]::CompareOrdinal([string]$a, [string]$b))
+}
+function Ck-In([string]$ft, $x, $list) {
+    foreach ($y in $list) { if ((Ck-Cmp $ft $x $y) -eq 0) { return $true } }
+    return $false
+}
+function Ck-R([string]$o, [string]$w) { return @{o = $o; w = $w} }
+function Ck-Assert($a, $facts, $decls, $params) {
+    # -> @{o = outcome; w = reason} of one assertion over one set of facts
+    $f = [string]$a['fact']; $op = [string]$a['op']
+    if (-not $decls.ContainsKey($f)) { return (Ck-R $CK_INC "fact '$f' is not declared in observes") }
+    $d = $decls[$f]
+    $has = ((Is-Map $facts) -and $facts.Contains($f))
+    if ($op -ceq 'present') { if ($has) { return (Ck-R $CK_SAT "$f is present") } else { return (Ck-R $CK_NOT "$f is not present") } }
+    if ($op -ceq 'absent') { if (-not $has) { return (Ck-R $CK_SAT "$f is absent") } else { return (Ck-R $CK_NOT "$f is present") } }
+    $t = [string]$d['type']; $many = (Ck-SEq $d['cardinality'] 'many')
+    $card = 'one'; $lst = ''
+    if ($many) { $card = 'many'; $lst = ' list' }
+    if (-not $CHECK_OPS[$card].ContainsKey($t) -or ($CHECK_OPS[$card][$t] -cnotcontains $op)) {
+        return (Ck-R $CK_INC "$op does not fit a $t$lst fact") }
+    if (-not $has) { return (Ck-R $CK_INC "fact '$f' was not observed") }
+    $v = $facts[$f]
+    if (-not (Ck-FactValueOk $d $v)) { return (Ck-R $CK_INC "fact '$f' is not a $t${lst}: $(Ck-Show $v)") }
+    $e = $a['expected']; $src = 'the literal'
+    if (Is-Map $e) {
+        $pn = $e['param']
+        if (-not ($pn -is [string]) -or -not (Is-Map $params) -or -not $params.Contains($pn)) {
+            return (Ck-R $CK_INC "parameter '$pn' is unbound - a default is never substituted (D9)") }
+        $e = $params[$pn]; $src = "parameter '$pn'"
+    }
+    if (-not (Ck-ExpectedOk $op $t $e)) { return (Ck-R $CK_INC "$src $(Ck-Show $e) does not fit $op on a $t fact") }
+    $hit = $false
+    if ($op -ceq 'equals') { $hit = ((Ck-Cmp $t $v $e) -eq 0) }
+    elseif ($op -ceq 'one-of') { $hit = (Ck-In $t $v $e) }
+    elseif ($op -ceq 'at-least') { $hit = ((Ck-Cmp $t $v $e) -ge 0) }
+    elseif ($op -ceq 'at-most') { $hit = ((Ck-Cmp $t $v $e) -le 0) }
+    elseif ($op -ceq 'includes-all') { $hit = $true; foreach ($x in $e) { if (-not (Ck-In $t $x $v)) { $hit = $false; break } } }
+    elseif ($op -ceq 'excludes-all') { $hit = $true; foreach ($x in $e) { if (Ck-In $t $x $v) { $hit = $false; break } } }
+    elseif ($op -ceq 'subset-of') { $hit = $true; foreach ($x in $v) { if (-not (Ck-In $t $x $e)) { $hit = $false; break } } }
+    else {                              # matches / matches-not: whole value, every element of a list
+        $vals = New-Object System.Collections.ArrayList
+        if ($many) { foreach ($x in $v) { [void]$vals.Add($x) } } else { [void]$vals.Add($v) }
+        foreach ($x in $vals) {
+            if ((Ire-CPs $x).Count -gt $IRE_MAX_INPUT) {
+                return (Ck-R $CK_INC "a value of '$f' is longer than $IRE_MAX_INPUT characters - not matched") } }
+        $all = $true; $any = $false
+        try {
+            foreach ($x in $vals) { if (Ire-FullMatch $e $x) { $any = $true } else { $all = $false } }
+        } catch [System.FormatException] {
+            return (Ck-R $CK_INC "pattern rejected: $($_.Exception.Message)")
+        }
+        if ($op -ceq 'matches') { $hit = $all } else { $hit = (-not $any) }
+    }
+    $o = $CK_NOT; if ($hit) { $o = $CK_SAT }
+    return (Ck-R $o "$f $op $(Ck-Show $e): observed $(Ck-Show $v)")
+}
+function Ck-Kleene($results) {
+    # list of @{o; w = list of reasons} -> @{o; w}: strong Kleene AND
+    foreach ($want in @($CK_NOT, $CK_INC)) {
+        $hit = $false; $why = New-Object System.Collections.ArrayList
+        foreach ($r in $results) {
+            if ($r.o -ceq $want) { $hit = $true; foreach ($x in $r.w) { [void]$why.Add($x) } } }
+        if ($hit) { return @{o = $want; w = $why} }
+    }
+    return @{o = $CK_SAT; w = (New-Object System.Collections.ArrayList)}
+}
+function Ck-Run($assertions, $facts, $decls, $params) {
+    $res = New-Object System.Collections.ArrayList
+    foreach ($a in $assertions) {
+        $r = Ck-Assert $a $facts $decls $params
+        $w = New-Object System.Collections.ArrayList; [void]$w.Add($r.w)
+        [void]$res.Add(@{o = $r.o; w = $w})
+    }
+    return (Ck-Kleene $res)
+}
+function Ck-On($check, $facts, $decls, $params) {
+    if (Ck-Truthy $check['applies-when']) {
+        $aw = Ck-Run $check['applies-when'] $facts $decls $params
+        $w = New-Object System.Collections.ArrayList
+        if ($aw.o -ceq $CK_NOT) { [void]$w.Add('applies-when does not hold: ' + (@($aw.w) -join '; ')); return @{o = $CK_NA; w = $w} }
+        if ($aw.o -ceq $CK_INC) { [void]$w.Add('applicability unknown: ' + (@($aw.w) -join '; ')); return @{o = $CK_INC; w = $w} }
+    }
+    return (Ck-Run $check['criteria'] $facts $decls $params)
+}
+function Ck-One([string]$o, [string]$w) {
+    $l = New-Object System.Collections.ArrayList; [void]$l.Add($w)
+    return @{o = $o; w = $l}
+}
+function Check-Verdict($check, $observation, $params) {
+    # B.1.10 check-verdict: @{o = outcome; w = reasons} of one Check over one
+    # recorded observation, with the parameter values the run was bound to
+    if (-not (Is-Map $params)) { $params = (New-OMap) }
+    if ($null -eq $observation) { return (Ck-One $CK_INC 'no observation: the collector did not report') }
+    $decls = (New-Map)
+    foreach ($d in @($check['observes'])) { if ($null -ne $d) { $decls[[string]$d['name']] = $d } }
+    if (Ck-Truthy $check['each']) {
+        $kind = $check['each']['resource']
+        $res = $null; if (Is-Map $observation) { $res = $observation['resources'] }
+        if (-not (Is-List $res)) { return (Ck-One $CK_INC "the check runs per $kind, but the observation carries no resources") }
+        $outs = New-Object System.Collections.ArrayList
+        foreach ($r in $res) {
+            $rf = $null; if ((Is-Map $r) -and $r.Contains('facts')) { $rf = $r['facts'] } else { $rf = (New-OMap) }
+            $one = Ck-On $check $rf $decls $params
+            if ($one.o -cne $CK_NA) {
+                $w = New-Object System.Collections.ArrayList
+                foreach ($x in $one.w) { [void]$w.Add("$($r['id']): $x") }
+                [void]$outs.Add(@{o = $one.o; w = $w}) }
+        }
+        if ($outs.Count -eq 0) {
+            if ($check['each']['allow-empty'] -eq $true) { return (Ck-One $CK_SAT "no applicable $kind observed, and allow-empty holds") }
+            return (Ck-One $CK_INC "no applicable $kind observed, and allow-empty is false")
+        }
+        return (Ck-Kleene $outs)
+    }
+    $facts = $null; if (Is-Map $observation) { $facts = $observation['facts'] }
+    if (-not (Is-Map $facts)) { return (Ck-One $CK_INC 'the observation carries no facts') }
+    return (Ck-On $check $facts $decls $params)
+}
+function Check-Aggregate($outcomes) {
+    $n = 0; $hasNot = $false; $hasInc = $false
+    foreach ($o in $outcomes) {
+        if ($o -ceq $CK_NA) { continue }
+        $n++
+        if ($o -ceq $CK_NOT) { $hasNot = $true }
+        if ($o -ceq $CK_INC) { $hasInc = $true }
+    }
+    if ($n -eq 0) { return $CK_INC }
+    if ($hasNot) { return $CK_NOT }
+    if ($hasInc) { return $CK_INC }
+    return $CK_SAT
+}
+function Ck-Obj($objs, $ref) {      # the bundle entry a ref names, or $null
+    if (($ref -is [string]) -and $objs.Contains($ref)) { return $objs[$ref] }
+    return $null
+}
+function Ck-ParamDecls($check, $objs) {
+    # -> map name -> list of @{sid; pd} over the covered clauses, or $null
+    # when the requirement is not in the bundle
+    $req = Ck-Obj $objs $check['requirement-ref']
+    if ($null -eq $req -or $req.t -cne 'requirement') { return $null }
+    $cover = New-Object 'System.Collections.Generic.HashSet[string]' ([System.StringComparer]::Ordinal)
+    if (Ck-Truthy $check['statement-ids']) { foreach ($x in $check['statement-ids']) { [void]$cover.Add([string]$x) } }
+    else { foreach ($s in $req.o['statements']) { [void]$cover.Add([string]$s['id']) } }
+    $out = (New-Map)
+    foreach ($s in $req.o['statements']) {
+        if (-not $cover.Contains([string]$s['id'])) { continue }
+        foreach ($pd in @($s['parameters'])) {
+            if ($null -eq $pd) { continue }
+            $pn = [string]$pd['name']
+            if (-not $out.ContainsKey($pn)) { $out[$pn] = New-Object System.Collections.ArrayList }
+            [void]$out[$pn].Add(@{sid = [string]$s['id']; pd = $pd})
+        }
+    }
+    return $out
+}
+function Ck-ParamFits($pd, $fdecl, [string]$op) {
+    $pt = [string]$pd['type']; $ft = [string]$fdecl['type']
+    $pmany = (Ck-SEq $pd['cardinality'] 'many')
+    if ($CHECK_LIST_OPS -ccontains $op) { return (($pt -ceq 'list') -or ($pt -ceq 'choice' -and $pmany)) }
+    if ($ft -ceq 'integer' -or $ft -ceq 'decimal' -or $ft -ceq 'boolean') { return ($pt -ceq $ft) }
+    return (($pt -ceq 'string') -or ($pt -ceq 'code') -or ($pt -ceq 'choice' -and -not $pmany))
+}
+function Ck-Bad($errList, [string]$rule, [string]$oid, [string]$msg) {
+    [void]$errList.Add(@{rule = $rule; msg = "${oid}: $msg (${rule}: $($CHECK_RULES[$rule]))"})
+}
+function Check-Object-Errors([string]$oid, $o, $objs) {
+    # CHECK-1..7 over one Check -> list of @{rule; msg}
+    $errList = New-Object System.Collections.ArrayList
+    $rref = $o['requirement-ref']
+    $req = Ck-Obj $objs $rref
+    if ($null -ne $req -and $req.t -cne 'requirement') {
+        Ck-Bad $errList 'CHECK-1' $oid "requirement-ref resolves to a $($req.t), not a Requirement: $rref"
+    } elseif ($null -ne $req) {
+        $sids = New-Object 'System.Collections.Generic.HashSet[string]' ([System.StringComparer]::Ordinal)
+        foreach ($s in $req.o['statements']) { [void]$sids.Add([string]$s['id']) }
+        foreach ($sid in @($o['statement-ids'])) {
+            if ($null -eq $sid) { continue }
+            if (-not $sids.Contains([string]$sid)) { Ck-Bad $errList 'CHECK-1' $oid "statement-id '$sid' names no statement of $rref" } }
+    }
+    $count = (New-Map); $decls = (New-Map)
+    foreach ($d in $o['observes']) {
+        $n = [string]$d['name']
+        if (-not $count.ContainsKey($n)) { $count[$n] = 0 }
+        $count[$n]++; $decls[$n] = $d
+    }
+    $names = New-Object System.Collections.ArrayList
+    foreach ($n in $count.Keys) { if ($count[$n] -gt 1) { [void]$names.Add([string]$n) } }
+    foreach ($n in (Sorted-Ordinal $names)) { Ck-Bad $errList 'CHECK-2' $oid "fact '$n' is declared twice" }
+    $params = Ck-ParamDecls $o $objs
+    foreach ($where in @('criteria', 'applies-when')) {
+        $i = -1
+        foreach ($a in @($o[$where])) {
+            if ($null -eq $a) { continue }
+            $i++
+            $at = "$where[$i]"; $op = [string]$a['op']; $fn = [string]$a['fact']
+            if (-not $decls.ContainsKey($fn)) {
+                Ck-Bad $errList 'CHECK-2' $oid "$at reads fact '$fn', which observes does not declare"; continue }
+            $d = $decls[$fn]
+            $card = 'one'; $lst = ''
+            if (Ck-SEq $d['cardinality'] 'many') { $card = 'many'; $lst = ' list' }
+            $t = [string]$d['type']
+            if ($op -ceq 'present' -or $op -ceq 'absent') { continue }
+            if (-not $CHECK_OPS[$card].ContainsKey($t) -or ($CHECK_OPS[$card][$t] -cnotcontains $op)) {
+                Ck-Bad $errList 'CHECK-3' $oid "${at}: $op does not fit a $t$lst fact"; continue }
+            $e = $a['expected']
+            if (Is-Map $e) {
+                $pn = [string]$e['param']
+                if ($CHECK_PATTERN_OPS -ccontains $op) {
+                    Ck-Bad $errList 'CHECK-4' $oid "${at}: binds parameter '$pn' as a pattern"; continue }
+                if ($null -eq $params) {
+                    Ck-Bad $errList 'CHECK-4' $oid "${at}: binds parameter '$pn', but requirement $rref is not in the bundle, so the binding cannot be checked"; continue }
+                $found = $null; if ($params.ContainsKey($pn)) { $found = $params[$pn] }
+                $nf = 0; if ($null -ne $found) { $nf = $found.Count }
+                if ($nf -ne 1) {
+                    Ck-Bad $errList 'CHECK-4' $oid "${at}: parameter '$pn' is declared $nf times on the covered statements"; continue }
+                $pd = $found[0].pd
+                if (-not (Ck-ParamFits $pd $d $op)) {
+                    Ck-Bad $errList 'CHECK-4' $oid "${at}: parameter '$pn' is a $($pd['type']), which does not fit $op on a $t fact" }
+                $tg = $pd['tightening']
+                if (($op -ceq 'at-most' -and (Ck-SEq $tg 'higher')) -or ($op -ceq 'at-least' -and (Ck-SEq $tg 'lower'))) {
+                    Ck-Bad $errList 'CHECK-5' $oid "${at}: $op against parameter '$pn', which tightens $tg - tightening it would loosen the check" }
+            } elseif (($CHECK_PATTERN_OPS -ccontains $op) -and ($e -is [string])) {
+                try { [void](Ire-Compile $e) }
+                catch [System.FormatException] { Ck-Bad $errList 'CHECK-6' $oid "${at}: $($_.Exception.Message)" }
+            } elseif (-not (Ck-ExpectedOk $op $t $e)) {
+                Ck-Bad $errList 'CHECK-3' $oid "${at}: $(Ck-Show $e) does not fit $op on a $t$lst fact"
+            }
+        }
+    }
+    $col = $null
+    if ((Is-Map $o['facets']) -and $o['facets'].Contains("$COLLECTOR_FACET@1")) { $col = $o['facets']["$COLLECTOR_FACET@1"] }
+    if ($null -ne $col) {
+        if ($STDLIB.ContainsKey($COLLECTOR_FACET) -and -not (Test-Schema $STDLIB[$COLLECTOR_FACET] $col)) {
+            Ck-Bad $errList 'CHECK-7' $oid 'collector@1 payload violates its schema'
+        } elseif (Is-Map $col) {
+            $cc = (New-Map)
+            foreach ($c in @($col['collectors'])) {
+                if ($null -eq $c) { continue }
+                $n = [string]$c['id']
+                if (-not $cc.ContainsKey($n)) { $cc[$n] = 0 }
+                $cc[$n]++ }
+            $dups = New-Object System.Collections.ArrayList
+            foreach ($n in $cc.Keys) { if ($cc[$n] -gt 1) { [void]$dups.Add([string]$n) } }
+            foreach ($n in (Sorted-Ordinal $dups)) { Ck-Bad $errList 'CHECK-7' $oid "collector id '$n' is used twice" }
+        }
+    }
+    return ,$errList
+}
+$CK_MISSING = New-Object object    # "this Tailoring binds no value" - distinct from any JSON value
+function Ck-TailoringBindings($check, $tail, $objs) {
+    # -> ordered map parameter -> value or $CK_MISSING, for the parameters this check reads
+    $out = (New-OMap)
+    $decls = Ck-ParamDecls $check $objs
+    if ($null -eq $decls) { return $out }
+    $asserts = New-Object System.Collections.ArrayList
+    foreach ($a in @($check['criteria'])) { if ($null -ne $a) { [void]$asserts.Add($a) } }
+    foreach ($a in @($check['applies-when'])) { if ($null -ne $a) { [void]$asserts.Add($a) } }
+    foreach ($a in $asserts) {
+        $e = $a['expected']
+        if (-not (Is-Map $e)) { continue }
+        $pn = [string]$e['param']
+        if (-not $decls.ContainsKey($pn) -or $decls[$pn].Count -ne 1) { continue }
+        $sid = $decls[$pn][0].sid
+        $val = $CK_MISSING
+        foreach ($op in @($tail['operations'])) {
+            if ($null -eq $op) { continue }
+            if ((Ck-SEq $op['op'] 'set-parameter') -and (Ck-SEq $op['requirement-ref'] $check['requirement-ref']) -and
+                (Ck-SEq $op['parameter'] $pn) -and (($null -eq $op['statement-id']) -or (Ck-SEq $op['statement-id'] $sid))) {
+                $val = $op['value'] }
+        }
+        $out[$pn] = $val
+    }
+    return $out
+}
+# The evidence store: @{dir = folder beside the manifest} or @{map = ref -> text}
+# (the vectors). -> the bytes, or $null when the store does not hold the ref.
+function Store-Read($store, [string]$ref) {
+    if ($store.ContainsKey('map')) {
+        $m = $store['map']
+        if ((Is-Map $m) -and $m.Contains($ref)) { return ,([System.Text.Encoding]::UTF8.GetBytes([string]$m[$ref])) }
+        return $null
+    }
+    $fp = Join-Path $store['dir'] ($ref.Replace('/', '\'))
+    if (Test-Path -LiteralPath $fp -PathType Leaf) { return ,([System.IO.File]::ReadAllBytes($fp)) }
+    return $null
+}
+function Ck-Json-Bytes([byte[]]$raw) {     # throws when the bytes are not UTF-8 JSON
+    $txt = (New-Object System.Text.UTF8Encoding($false, $true)).GetString($raw)
+    $v = ConvertTo-Map ($txt | ConvertFrom-Json)
+    return ,$v
+}
+function Ck-Load($ctx, $dref, [string]$what) {
+    # one link of the chain -> the bytes, or $null (with an error or a note recorded)
+    $ref = [string]$dref['ref']; $want = [string]$dref['digest']
+    $pre = "$($ctx.oid): $($ctx.at): "
+    if ([System.Text.RegularExpressions.Regex]::IsMatch($ref, '^[A-Za-z][A-Za-z0-9+.-]*:')) {
+        [void]$ctx.notes.Add("$pre$what $ref is a URI - not resolvable offline"); return $null }
+    if ($ref.StartsWith('/') -or ($ref.Replace('\', '/').Split('/') -ccontains '..')) {
+        Ck-Bad $ctx.E 'CHECK-15' $ctx.oid "$($ctx.at): $what ref $ref leaves the bundle"; return $null }
+    $m = [System.Text.RegularExpressions.Regex]::Match($ref, '^evidence/sha256/([0-9a-f]{64})$')
+    if ($m.Success -and -not (Ck-SEq ('sha256:' + $m.Groups[1].Value) $want)) {
+        Ck-Bad $ctx.E 'CHECK-15' $ctx.oid "$($ctx.at): $what $ref is stored under another digest than the recorded $want"; return $null }
+    $raw = Store-Read $ctx.store $ref
+    if ($null -eq $raw) {
+        [void]$ctx.notes.Add("$pre$what $ref withheld - not in the bundle's store"); return $null }
+    if (-not (Ck-SEq (Sha256-Hex $raw) $want)) {
+        Ck-Bad $ctx.E 'CHECK-15' $ctx.oid "$($ctx.at): $what $ref does not match its digest"; return $null }
+    return ,$raw
+}
+function Evidence-Chain([string]$oid, [string]$at, $a, $row, $store, $errList, $notes) {
+    # CHECK-15: row -> evidence record -> raw outputs, and observation-ref.
+    # -> the observation loaded from observation-ref, or $null
+    $ctx = @{oid = $oid; at = $at; store = $store; E = $errList; notes = $notes}
+    $obs = $null
+    if (Ck-Truthy $row['observation-ref']) {
+        $raw = Ck-Load $ctx $row['observation-ref'] 'observation'
+        if ($null -ne $raw) {
+            try { $obs = Ck-Json-Bytes $raw }
+            catch { Ck-Bad $errList 'CHECK-15' $oid "${at}: observation file unreadable: $($_.Exception.Message)"; $obs = $null }
+            if ($null -ne $obs -and -not (Test-Schema $DEFS['checkObservation'] $obs)) {
+                Ck-Bad $errList 'CHECK-15' $oid "${at}: the observation file is not an observation"; $obs = $null }
+        }
+    }
+    if (Ck-Truthy $row['evidence-record']) {
+        $raw = Ck-Load $ctx $row['evidence-record'] 'evidence record'
+        $rec = $null
+        if ($null -ne $raw) {
+            try { $rec = Ck-Json-Bytes $raw }
+            catch { Ck-Bad $errList 'CHECK-15' $oid "${at}: evidence record unreadable: $($_.Exception.Message)"; $rec = $null }
+        }
+        if ($null -ne $rec -and -not (Test-Schema $DEFS['evidenceRecord'] $rec)) {
+            Ck-Bad $errList 'CHECK-15' $oid "${at}: evidence record violates its schema"; $rec = $null }
+        if ($null -ne $rec) {
+            if (-not (Ck-SEq $rec['check-ref'] $row['check-ref']) -or -not (Ck-SEq $rec['check-digest'] $row['check-digest'])) {
+                Ck-Bad $errList 'CHECK-15' $oid "${at}: the evidence record is about another check, or another version of it" }
+            if ((Ck-Truthy $row['collector-id']) -and (Ck-Truthy $rec['collector-id']) -and -not (Ck-SEq $rec['collector-id'] $row['collector-id'])) {
+                Ck-Bad $errList 'CHECK-15' $oid "${at}: the evidence record names collector '$($rec['collector-id'])', the row '$($row['collector-id'])'" }
+            $isSubject = $false
+            foreach ($s in @($a['subject-refs'])) { if (Ck-SEq $s $rec['subject-ref']) { $isSubject = $true } }
+            if (-not $isSubject) {
+                Ck-Bad $errList 'CHECK-15' $oid "${at}: the evidence record's subject $($rec['subject-ref']) is not a subject of the assessment" }
+            $seen = $obs; if ($null -ne $row['observation']) { $seen = $row['observation'] }
+            if ((Ck-Truthy $rec['observation-digest']) -and $null -ne $seen -and -not (Ck-SEq (SDig $seen) $rec['observation-digest'])) {
+                Ck-Bad $errList 'CHECK-15' $oid "${at}: the evidence record binds another observation than the row records" }
+            foreach ($out in $rec['outputs']) {
+                $dg = [string]$out['digest']
+                $dref = @{ref = ('evidence/sha256/' + $dg.Substring($dg.IndexOf(':') + 1)); digest = $dg}
+                [void](Ck-Load $ctx $dref "output '$($out['name'])'")
+            }
+        }
+    }
+    return ,$obs
+}
+function Check-Errors($objs, $store) {
+    # CHECK-1..15 over a bundle -> @{errs = list of @{rule; msg}; notes = list}.
+    # $store: the evidence store (CHECK-15); $null skips the chain.
+    $errList = New-Object System.Collections.ArrayList
+    $notes = New-Object System.Collections.ArrayList
+    $ids = New-Object System.Collections.ArrayList
+    foreach ($oid in $objs.Keys) { [void]$ids.Add([string]$oid) }
+    foreach ($oid in (Sorted-Ordinal $ids)) {
+        $t = $objs[$oid].t; $o = $objs[$oid].o
+        if ($t -ceq 'check') {
+            foreach ($x in (Check-Object-Errors $oid $o $objs)) { [void]$errList.Add($x) }
+        } elseif ($t -ceq 'finding' -and (Ck-Truthy $o['check-ref'])) {
+            $c = Ck-Obj $objs $o['check-ref']
+            if ($null -ne $c -and $c.t -cne 'check') {
+                Ck-Bad $errList 'CHECK-14' $oid "check-ref resolves to a $($c.t), not a Check: $($o['check-ref'])"
+            } elseif ($null -ne $c) {
+                if (-not (Ck-SEq $c.o['requirement-ref'] $o['requirement-ref'])) {
+                    Ck-Bad $errList 'CHECK-14' $oid "check $($o['check-ref']) discharges $($c.o['requirement-ref']), the Finding is against $($o['requirement-ref'])" }
+                $sids = $c.o['statement-ids']
+                if ((Ck-Truthy $sids) -and (Ck-Truthy $o['statement-ref'])) {
+                    $in = $false
+                    foreach ($s in $sids) { if (Ck-SEq $s $o['statement-ref']) { $in = $true } }
+                    if (-not $in) { Ck-Bad $errList 'CHECK-14' $oid "statement-ref '$($o['statement-ref'])' is not a clause check $($o['check-ref']) covers" }
+                }
+            }
+        } elseif ($t -ceq 'assessment' -and ((Ck-Truthy $o['check-results']) -or (Ck-Truthy $o['tailoring-ref']))) {
+            $tail = $null
+            if (Ck-Truthy $o['tailoring-ref']) {
+                $tg = Ck-Obj $objs $o['tailoring-ref']
+                if ($null -eq $tg) { Ck-Bad $errList 'CHECK-12' $oid "tailoring-ref does not resolve in-bundle: $($o['tailoring-ref'])" }
+                elseif ($tg.t -cne 'tailoring') { Ck-Bad $errList 'CHECK-12' $oid "tailoring-ref resolves to a $($tg.t), not a Tailoring" }
+                else { $tail = $tg.o }
+            }
+            $outcomes = New-Object System.Collections.ArrayList
+            $seenRefs = New-Object 'System.Collections.Generic.HashSet[string]' ([System.StringComparer]::Ordinal)
+            $i = -1
+            foreach ($row in @($o['check-results'])) {
+                if ($null -eq $row) { continue }
+                $i++
+                $at = "check-results[$i]"; $cref = [string]$row['check-ref']
+                if (-not $seenRefs.Add($cref)) { Ck-Bad $errList 'CHECK-10' $oid "${at}: check $cref has a second row" }
+                [void]$outcomes.Add([string]$row['outcome'])
+                $obs = $row['observation']
+                if ($null -eq $obs -and $null -eq $row['observation-ref'] -and
+                    (-not (Ck-SEq $row['outcome'] $CK_INC) -or -not (Ck-Truthy $row['reason']))) {
+                    $nr = ''; if (-not (Ck-Truthy $row['reason'])) { $nr = ' and no reason is given' }
+                    Ck-Bad $errList 'CHECK-11' $oid "${at}: no observation, yet the outcome is $($row['outcome'])$nr" }
+                if ($null -ne $store) {
+                    $o2 = Evidence-Chain $oid $at $o $row $store $errList $notes
+                    if ($null -eq $obs) { $obs = $o2 }
+                }
+                $c = Ck-Obj $objs $cref
+                if ($null -eq $c) {
+                    [void]$notes.Add("${oid}: ${at}: check $cref is not in this bundle - verdict not recomputed"); continue }
+                if ($c.t -cne 'check') {
+                    Ck-Bad $errList 'CHECK-8' $oid "${at}: check-ref resolves to a $($c.t), not a Check"; continue }
+                if (-not (Ck-SEq $row['check-digest'] (SDig $c.o))) {
+                    Ck-Bad $errList 'CHECK-8' $oid "${at}: check-digest does not match $cref - the check changed after the run" }
+                $cols = $null
+                if ((Is-Map $c.o['facets']) -and (Is-Map $c.o['facets']["$COLLECTOR_FACET@1"])) { $cols = $c.o['facets']["$COLLECTOR_FACET@1"]['collectors'] }
+                if ((Ck-Truthy $row['collector-id']) -and (Is-List $cols)) {
+                    $known = $false
+                    foreach ($x in $cols) { if ((Is-Map $x) -and (Ck-SEq $x['id'] $row['collector-id'])) { $known = $true } }
+                    if (-not $known) { Ck-Bad $errList 'CHECK-13' $oid "${at}: collector-id '$($row['collector-id'])' names no collector of $cref" }
+                }
+                if ($null -ne $tail) {
+                    $have = $row['parameters']; if (-not (Is-Map $have)) { $have = (New-OMap) }
+                    $bind = Ck-TailoringBindings $c.o $tail $objs
+                    foreach ($pn in @($bind.Keys)) {
+                        $want = $bind[[string]$pn]
+                        $isMissing = [object]::ReferenceEquals($want, $CK_MISSING)
+                        if ($isMissing -and $have.Contains($pn)) {
+                            Ck-Bad $errList 'CHECK-12' $oid "${at}: the run used $pn=$(Ck-Show ($have[$pn])), but $($o['tailoring-ref']) binds no value for it"
+                        } elseif (-not $isMissing -and (-not $have.Contains($pn) -or -not (Ck-SEq (Canonical ($have[$pn])) (Canonical $want)))) {
+                            $used = '(unbound)'; if ($have.Contains($pn)) { $used = Ck-Show ($have[$pn]) }
+                            Ck-Bad $errList 'CHECK-12' $oid "${at}: the run used $pn=$used, $($o['tailoring-ref']) binds $(Ck-Show $want)" }
+                    }
+                } elseif (Ck-Truthy $row['parameters']) {
+                    [void]$notes.Add("${oid}: ${at}: parameter values are the performer's statement - no tailoring-ref to hold them to")
+                }
+                if ($null -eq $obs -and (Ck-Truthy $row['observation-ref'])) {
+                    [void]$notes.Add("${oid}: ${at}: observation not available here - verdict not recomputed"); continue }
+                $got = Check-Verdict $c.o $obs $row['parameters']
+                if (-not (Ck-SEq $got.o $row['outcome'])) {
+                    $why = (@($got.w) -join '; ')
+                    if ($why.Length -gt 200) { $why = $why.Substring(0, 200) }
+                    if ($why.Length -gt 0) { $why = " ($why)" }
+                    Ck-Bad $errList 'CHECK-9' $oid "${at}: recorded $($row['outcome']), check-verdict computes $($got.o)$why" }
+            }
+            if (Ck-Truthy $o['check-results']) {
+                $agg = Check-Aggregate $outcomes
+                if (-not (Ck-SEq $o['result'] $agg)) {
+                    Ck-Bad $errList 'CHECK-10' $oid "result is $($o['result']), the aggregate of its check results is $agg" }
+            }
+        }
+    }
+    return @{errs = $errList; notes = $notes}
+}
+function Run-Check {
+    $v = Load-Vectors 'check-vectors.json'
+    foreach ($case in $v['regex-vectors']) {
+        $valid = $true; $why = ''
+        try { [void](Ire-Compile $case['pattern']) }
+        catch [System.FormatException] { $valid = $false; $why = $_.Exception.Message }
+        $badM = New-Object System.Collections.ArrayList; $badN = New-Object System.Collections.ArrayList
+        if ($case.Contains('match')) {
+            foreach ($s in $case['match']) { if (-not ($valid -and (Ire-FullMatch $case['pattern'] $s))) { [void]$badM.Add($s) } } }
+        if ($case.Contains('no-match')) {
+            foreach ($s in $case['no-match']) { if ($valid -and (Ire-FullMatch $case['pattern'] $s)) { [void]$badN.Add($s) } } }
+        if ($valid -eq $case['valid'] -and $badM.Count -eq 0 -and $badN.Count -eq 0) { OK 'check' }
+        else { FAIL 'check' "regex '$($case['pattern'])': expected valid=$($case['valid']), got $valid $why; should match but did not [$(@($badM) -join ' | ')]; should not match but did [$(@($badN) -join ' | ')]" }
+    }
+    foreach ($case in $v['verdict-vectors']) {
+        $got = Check-Verdict $case['check'] $case['observation'] $case['parameters']
+        if (Ck-SEq $got.o $case['expected']) { OK 'check' }
+        else { FAIL 'check' "verdict $($case['name']): expected $($case['expected']), got $($got.o) $(@($got.w) -join '; ')" }
+    }
+    foreach ($case in $v['aggregate-vectors']) {
+        $got = Check-Aggregate $case['outcomes']
+        if (Ck-SEq $got $case['expected']) { OK 'check' }
+        else { FAIL 'check' "aggregate [$(@($case['outcomes']) -join ',')]: expected $($case['expected']), got $got" }
+    }
+    foreach ($case in $v['object-vectors']) {
+        $m = Infer-Types $case['object']
+        $okc = $false
+        if ($case['expected'] -ceq 'valid') { $okc = (@($m).Count -eq 1 -and (Ck-SEq $m[0] $case['type'])) }
+        else { $okc = (@($m).Count -eq 0) }
+        if ($okc) { OK 'check' }
+        else { FAIL 'check' "object $($case['name']): expected $($case['expected']) $($case['type']), matched [$(@($m) -join ',')]" }
+    }
+    foreach ($case in $v['bundle-vectors']) {
+        $objs = (New-OMap); $untyped = New-Object System.Collections.ArrayList
+        foreach ($o in $case['objects']) {
+            $t = Infer-Single $o
+            if ($null -ne $t) { $objs[[string]$o['id']] = @{t = $t; o = $o} } else { [void]$untyped.Add([string]$o['id']) }
+        }
+        $store = $null
+        if ($case.Contains('store')) { $store = @{map = $case['store']} }
+        $res = Check-Errors $objs $store
+        $named = New-Object 'System.Collections.Generic.SortedSet[string]' ([System.StringComparer]::Ordinal)
+        foreach ($e in $res.errs) { [void]$named.Add($e.rule) }
+        $wantSet = New-Object 'System.Collections.Generic.SortedSet[string]' ([System.StringComparer]::Ordinal)
+        foreach ($r in @($case['expected-rules'])) { if ($null -ne $r) { [void]$wantSet.Add([string]$r) } }
+        $okc = ($untyped.Count -eq 0 -and $named.SetEquals($wantSet))
+        foreach ($frag in @($case['expected-notes'])) {
+            if ($null -eq $frag) { continue }
+            $hit = $false
+            foreach ($n in $res.notes) { if ($n.Contains($frag)) { $hit = $true } }
+            if (-not $hit) { $okc = $false } }
+        if ($okc) { OK 'check' }
+        else {
+            $msgs = New-Object System.Collections.ArrayList
+            foreach ($e in $res.errs) { $m1 = $e.msg; if ($m1.Length -gt 150) { $m1 = $m1.Substring(0, 150) }; [void]$msgs.Add($m1) }
+            FAIL 'check' "bundle $($case['name']): expected rules [$(@($case['expected-rules']) -join ',')] notes [$(@($case['expected-notes']) -join ' | ')], got [$(@($named) -join ',')] untyped [$(@($untyped) -join ',')] $(@($msgs) -join ' ~ ') notes $(@($res.notes) -join ' ~ ')" }
+    }
+}
+
 # ---------------- bundle validation ----------------
 $TRUSTED = $null
 if ($TrustedKeys -ne '') { $TRUSTED = Read-Json $TrustedKeys }
@@ -1894,6 +2872,11 @@ function Validate-Bundle([string]$bdir, [switch]$Flat) {
     $pairs = New-Object System.Collections.ArrayList
     foreach ($oid in $bundleObjs.Keys) { [void]$pairs.Add(@($oid, $bundleObjs[$oid].o)) }
     foreach ($e in (Facet-Errors $pairs $pinned)) { FAIL $section $e }
+    # CP-CHECK-1: check shapes, recomputed verdicts, the evidence chain in
+    # the store beside the manifest
+    $ce = Check-Errors $bundleObjs @{dir = $bdir}
+    foreach ($e in $ce.errs) { FAIL $section $e.msg }
+    foreach ($n in $ce.notes) { Write-Host "    note: $n" }
     foreach ($oid in $bundleObjs.Keys) {
         if ($bundleObjs[$oid].t -eq 'tailoring') {
             $tier = Derive-Tier $bundleObjs[$oid].o $bundleObjs $envelopes $TRUSTED
@@ -1920,9 +2903,9 @@ $SW = [System.Diagnostics.Stopwatch]::StartNew()
 Write-Host '== conformance corpus (validate_core.ps1 - the weekend implementation) =='
 Run-Jcs; Run-Modality; Run-Parameters; Run-Tailoring; Run-Attestation; Run-Facets
 Run-References; Run-Lifecycle; Run-Tiers; Run-Dsse; Run-Composition; Run-Conditional
-Run-Risk; Run-Kernel; Run-Scale
+Run-Risk; Run-Kernel; Run-Scale; Run-Check
 $FAMILIES = @('jcs', 'modality', 'parameter', 'tailoring', 'attestation', 'facet',
-              'reference', 'lifecycle', 'tier', 'dsse', 'composition', 'conditional', 'risk', 'kernel', 'scale')
+              'reference', 'lifecycle', 'tier', 'dsse', 'composition', 'conditional', 'risk', 'kernel', 'scale', 'check')
 foreach ($k in $FAMILIES) {
     $p = 0; if ($COUNTS.ContainsKey($k)) { $p = $COUNTS[$k] }
     $f = 0; if ($COUNTS.ContainsKey("${k}:FAIL")) { $f = $COUNTS["${k}:FAIL"] }

@@ -3,7 +3,7 @@
 **Change proposal · JASCON kernel 2.0.0-rc.1 → 2.0.0 · 2026-11-11**
 **Process:** Chapter 15.4 (evidence in, corpus first, implementations follow). Every rule carries a machine id, a rationale and a failure message that prints on failure.
 **Scope:** kernel schema, reference validator, conformance corpus, example bundle, one stdlib facet. Handbook, specification, SKILL.md, reader and PowerShell twin: §10, after the author's review of this proposal.
-**Status (2026-11-11): PROPOSED, on branch `claude/focused-lovelace-rfcofx`, NOT released.** The schema, the validator, 156 vectors and the worked example are in the repository and green under `validate_core.py`. The PowerShell twin is not ported. Evidence tier of the promotion: D22 test 1 **fails** (0 of 3 census corpora), test 3 **measured on two non-census corpora** (§2.2: 481 of 510 CIS-profile rules fit; one operator gap, not-equal) — test 1 is the problem §8 puts to the author.
+**Status (2026-11-11): PROPOSED, on branch `claude/focused-lovelace-rfcofx`, NOT released.** The schema, the validator, 156 vectors and the worked example are in the repository and green under `validate_core.py`. The PowerShell twin was ported on 2026-11-11 and passes the same 156 vectors (backlog #56). Evidence tier of the promotion: D22 test 1 **fails** (0 of 3 census corpora), test 3 **measured on two non-census corpora** (§2.2: 481 of 510 CIS-profile rules fit; one operator gap, not-equal) — test 1 is the problem §8 puts to the author.
 
 **Author decisions this proposal implements (2026-11-10/11):** (1) a check is a new kernel type, not a facet; (2) pass or fail is declarative only — code collects facts, a closed set of comparators decides, what does not fit stays manual; (3) **regex is part of that set**; (4) first slice Linux host via bash; (5) first deliverable is this proposal plus model, example and vectors, no runner and no generator.
 
@@ -214,7 +214,7 @@ The kernel fixes three things the RFC leaves to the host:
 
 - **Whole value.** XSD semantics: the pattern must match the entire value. `^` and `$` are ordinary characters. `.` is any character except `\n` and `\r`.
 - **Size limits.** Pattern ≤ 256 characters; compiled program ≤ 1,000 states (after `{m,n}` expansion); value ≤ 4,096 characters, else `inconclusive`.
-- **No host engine.** The reference validator parses the ABNF itself and matches with a Thompson state-set simulation: linear in program × input, no backtracking. `(a*)*b` against 4,096 `a`s takes 0.01 s. The second implementation must not translate patterns into `System.Text.RegularExpressions` either; it ports the ~150-line engine. This is what makes the verdict independent of the host, not the syntax check alone.
+- **No host engine.** The reference validator parses the ABNF itself and matches with a Thompson state-set simulation: linear in program × input, no backtracking. `(a*)*b` against 4,096 `a`s takes 0.01 s. The second implementation must not translate patterns into `System.Text.RegularExpressions` either; it ports the ~150-line engine. This is what makes the verdict independent of the host, not the syntax check alone. *(2026-11-11: one dependence is left - a general category `\p{..}` is read from the host's Unicode database in all three implementations, backlog #59.)*
 
 One residual divergence is stated rather than hidden: `\p{…}` categories come from the host's Unicode database (Python 3.13: Unicode 15.1). A character assigned between two Unicode versions can be categorised differently by two tools. The vectors avoid such characters; a check that depends on them is fragile by construction.
 
@@ -261,7 +261,7 @@ The worked example assessed no real host. Each run executed the Check's bash col
 
 **Follows (named exits):**
 
-1. **Step 1b, after the author's review:** handbook and specification deltas (§10), SKILL.md, `SKILL_jascon.zip`, README type count, the reader, the PowerShell twin.
+1. **Step 1b, after the author's review:** handbook and specification deltas (§10), SKILL.md, `SKILL_jascon.zip`, README type count, the reader. *(The PowerShell twin was ported ahead of this step, 2026-11-11 - backlog #56.)*
 2. **Phase 2 — runner and store, bash.** A prototype directory `assessments/` beside `risk-catalogs/`, so `jascon/scripts` stays free of subprocess and LLM code. `run` executes collectors on a target and writes evidence; `evaluate` recomputes verdicts; `verify-chain` walks the store. Verified in throwaway Ubuntu containers. Artifacts beyond stdout and stderr (a collector saving the full `sshd -T` dump) are designed there.
 3. **Phase 3 — import.** From `assessment-criteria@1.audit` or prose. Deterministic first: join by reference id to an open corpus, translate its declarative tests, take XCCDF Values as parameters (the CIS converter mints none today — `convert_cis_benchmark.py`:91-93). LLM Maker only for the residual, schema-constrained; Checker in order: schema and lint, one compliant and one non-compliant fixture (a check that cannot fail is rejected), an empty filesystem diff (the real read-only guard; lint cannot prove it and audits often need root), agreement with an existing scanner, a second model without the Maker's reasoning, a human. Output lands as `confidence: draft`. KPI: the false-pass rate on held-out rules with known truth. CIS-derived output stays local.
 4. **Phase 4 — more runtimes and platforms,** one at a time: Ansible and Python collectors for Linux, then Kubernetes (kind), AWS, GCP, Azure.
@@ -313,5 +313,5 @@ D4 (eleven types), D14 (one sentence: a regular expression in the I-Regexp diale
 ## 12. Found on the way (filed in the backlog, not fixed here)
 
 - **#55** `Assessment.method` is never facet-validated, and all three method payloads in the repository fail their own pinned schema: the example's `summary` is a string where the normative schema wants an object; the ch10 sample uses `criteria-ref`, which `additionalProperties: false` rejects; the IFA bundle's `tasks` and `reviewed-controls` are not in its pinned `goodread-ap-stub`. Turning validation on fixes all three in one change; IFA needs a converter re-run whose sources are not in this checkout.
-- **#56** The PowerShell twin does not know Check. Until it is ported, it reports the example bundle's two Checks as matching no type. Joins #45 as a blocker of the tag.
+- **#56** The PowerShell twin does not know Check. Until it is ported, it reports the example bundle's two Checks as matching no type. Joins #45 as a blocker of the tag. *(Closed 2026-11-11: ported, `check: 156 pass, 0 fail` on Windows PowerShell 5.1. Before the port the twin did not report "no type"; it stopped on the schema keyword `not`.)*
 - **#57** The reader cannot open a bundle that holds a Check.

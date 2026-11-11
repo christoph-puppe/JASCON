@@ -1,6 +1,6 @@
 # JASCON — "Kernel + Registered Facets"
 ## Specification 2.0.0-rc.1
-### release candidate, 2026-11-10 · the 1.0.0 text (released 2026-07-22) amended by CP-RISK-1: Risk as the tenth kernel type · NOT tagged — the second implementation is green for the ten types since 2026-11-11 (IV.5b), the proposed Check type is not ported to it (backlog #56); the tag is the author's decision
+### release candidate, 2026-11-10 · the 1.0.0 text (released 2026-07-22) amended by CP-RISK-1: Risk as the tenth kernel type · NOT tagged — the second implementation is green since 2026-11-11 (IV.5b), the proposed Check type included (backlog #56, closed); the tag is the author's decision
 
 > **What changed since 1.0.0.** One decision is new — **D23**, `Risk` as the
 > tenth kernel type with `risk-coverage` as the ninth primitive. D4, D8,
