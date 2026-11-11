@@ -1,5 +1,5 @@
 /* Runs the conformance vectors of jascon/conformance/ against
-   jascon-rules.js, family by family. All fifteen families are ported. A
+   jascon-rules.js, family by family. All sixteen families are ported. A
    family that is listed in PORTED must pass completely; NOT_PORTED is empty
    and stays as the place to name a family that is not ported yet. The last
    test fails when a vector file appears that is in neither list, so a new
@@ -20,7 +20,7 @@ const rules = require("../jascon-rules.js");
 const vectors = name => JSON.parse(fs.readFileSync(path.join(CONF, name + "-vectors.json"), "utf8"));
 const asObjs = list => new Map(list.map(o => [o.id, { type: core.jscInferType(o), obj: o }]));
 
-const PORTED = ["attestation", "composition", "conditional", "dsse", "facet", "jcs", "kernel", "lifecycle", "modality", "parameter", "reference", "risk", "scale", "tailoring", "tier"];
+const PORTED = ["attestation", "check", "composition", "conditional", "dsse", "facet", "jcs", "kernel", "lifecycle", "modality", "parameter", "reference", "risk", "scale", "tailoring", "tier"];
 const NOT_PORTED = [];
 /* Where a vector carries expected-frag (singular), it asserts the wording of
    one Python schema library's diagnostic; the vector files call that
@@ -343,7 +343,10 @@ test("a whole set: every shipped bundle passes the ported rules, as it passes th
 
 test("a whole set: the example folder, checked as a bundle, passes as it passes the reference validator; a diverging pin of a stdlib facet fails (D26)", async () => {
   const EX = path.resolve(CONF, "../examples");
-  const files = fs.readdirSync(EX).map(n => ({ path: n, text: core.jscDecode(fs.readFileSync(path.join(EX, n))) }));
+  /* the folder holds an evidence store in a subfolder (CP-CHECK-1), so it is read as a tree */
+  const tree = (dir, prefix = "") => fs.readdirSync(dir).sort().flatMap(n => fs.statSync(path.join(dir, n)).isDirectory()
+    ? tree(path.join(dir, n), prefix + n + "/") : [{ path: prefix + n, text: core.jscDecode(fs.readFileSync(path.join(dir, n))) }]);
+  const files = tree(EX);
   const g = core.jscGraphFrom(core.jscClassifyFiles(files).records);
   const errorsOf = async () => (await rules.jscCheckGraph(g, await core.jscVerify(g))).findings.filter(f => f.kind === "error").map(f => f.message);
   assert.deepEqual(await errorsOf(), []);
@@ -445,6 +448,42 @@ test("a whole set: a signed attestation is verified with a trusted key, unverifi
   assert.equal(r2.signatures[att.id], "missing");
   assert.equal(r2.tiers[tid], "consumer");
   assert.deepEqual(r2.findings.filter(f => f.kind === "error" && f.area === "signature"), []);
+});
+
+/* CP-CHECK-1. The bundle vectors name the exact set of CHECK rules a
+   conformant tool reports; `store` is the evidence store as text. */
+test("check: I-Regexp - what must and must not match whole-value, and what every implementation refuses", () => {
+  for (const c of vectors("check")["regex-vectors"]) {
+    let valid = true, why = "";
+    try { rules.jscIreCompile(c.pattern); } catch (e) { if (!(e instanceof rules.JscIRegexpError)) throw e; valid = false; why = e.message; }
+    assert.equal(valid, c.valid, `${JSON.stringify(c.pattern)}: ${why}`);
+    for (const t of c.match || []) assert.ok(rules.jscIreFullMatch(c.pattern, t), `${JSON.stringify(c.pattern)} matches ${JSON.stringify(t)}`);
+    for (const t of c["no-match"] || []) assert.ok(!rules.jscIreFullMatch(c.pattern, t), `${JSON.stringify(c.pattern)} does not match ${JSON.stringify(t)}`);
+  }
+});
+test("check: check-verdict over every verdict vector, and the aggregate", () => {
+  const v = vectors("check");
+  for (const c of v["verdict-vectors"]) {
+    const [got, why] = rules.jscCheckVerdict(c.check, c.observation, c.parameters);
+    assert.equal(got, c.expected, `${c.name}: ${why.join("; ")}`);
+  }
+  for (const c of v["aggregate-vectors"]) assert.equal(rules.jscCheckAggregate(c.outcomes), c.expected, JSON.stringify(c.outcomes));
+});
+test("check: closed shapes - each object vector matches exactly its type, or none", () => {
+  for (const c of vectors("check")["object-vectors"]) {
+    assert.deepEqual(rules.jscMatchTypes(c.object), c.expected === "valid" ? [c.type] : [], c.name);
+  }
+});
+test("check: the CHECK rules every bundle vector names, the evidence chain included", async () => {
+  for (const c of vectors("check")["bundle-vectors"]) {
+    const objs = rules.jscTypedObjects(c.objects);
+    assert.equal(objs.size, c.objects.length, `${c.name}: every object is typed`);
+    const store = c.store ? new Map(Object.entries(c.store)) : null;
+    const res = await rules.jscCheckErrors(objs, store ? ref => (store.has(ref) ? store.get(ref) : null) : null);
+    assert.deepEqual([...new Set(res.errors.map(([r]) => r))].sort(), [...new Set(c["expected-rules"])].sort(),
+      `${c.name}: ${res.errors.map(([, m]) => m).join(" | ")}`);
+    for (const frag of c["expected-notes"] || []) assert.ok(res.notes.some(n => n.includes(frag)), `${c.name}: a note with "${frag}"`);
+  }
 });
 
 test("every vector family is either ported or named as not ported", () => {

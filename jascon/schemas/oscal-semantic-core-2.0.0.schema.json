@@ -2182,10 +2182,16 @@
    }
   },
   "checkScalar": {
-   "type": [
-    "string",
-    "integer",
-    "boolean"
+   "anyOf": [
+    {
+     "type": "string"
+    },
+    {
+     "type": "integer"
+    },
+    {
+     "type": "boolean"
+    }
    ]
   },
   "checkExpected": {

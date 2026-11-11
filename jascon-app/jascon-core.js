@@ -36,7 +36,7 @@
 
 /* ==JSC-PURE-START== */
 
-const JSC_BUILD = "0.8.0";
+const JSC_BUILD = "0.8.1";
 const JSC_TOOL = "JASCON-App " + JSC_BUILD;
 /* The kernel this app writes, and the kernels it reads (KERNEL-2: a tool
    stops at a pin it does not implement and names both). */
@@ -44,9 +44,9 @@ const JSC_KERNEL = "2.0.0";
 const JSC_KERNEL_READS = ["1.0.0", "2.0.0"];
 
 const JSC_TYPES = ["requirement", "requirementSet", "tailoring", "mapping", "component",
-  "implementation", "risk", "assessment", "finding", "attestation"];
+  "implementation", "risk", "check", "assessment", "finding", "attestation"];
 const JSC_TYPE_DIR = { requirement: "req", requirementSet: "set", tailoring: "tailoring",
-  mapping: "map", component: "comp", implementation: "impl", risk: "risk",
+  mapping: "map", component: "comp", implementation: "impl", risk: "risk", check: "check",
   assessment: "asmt", finding: "finding", attestation: "att" };
 const JSC_MANIFEST = "content-manifest.json";
 
@@ -119,6 +119,7 @@ function jscInferType(o) {
   if (!o || typeof o !== "object" || Array.isArray(o)) return null;
   if ("manifest-version" in o) return "manifest";
   if ("statements" in o) return "requirement";
+  if ("observes" in o && "criteria" in o) return "check";   // before Implementation: a Check has a requirement-ref too
   if ("selects" in o) return "tailoring";
   if ("source-ref" in o && "target-ref" in o) return "mapping";
   if ("kind" in o) return "component";
@@ -343,8 +344,9 @@ const jscBesideManifest = r => r.type === "attestation" && !r.entry;
 function jscNeedsKernel2(g) {
   if (g.scales.size) return true;
   for (const r of g.objects.values()) {
-    if (r.type === "risk") return true;
-    if (r.type === "finding" && Array.isArray(r.obj["risk-refs"]) && r.obj["risk-refs"].length) return true;
+    if (r.type === "risk" || r.type === "check") return true;
+    if (r.type === "finding" && ((Array.isArray(r.obj["risk-refs"]) && r.obj["risk-refs"].length) || r.obj["check-ref"])) return true;
+    if (r.type === "assessment" && (r.obj["check-results"] || r.obj["tailoring-ref"])) return true;
   }
   return false;
 }
@@ -462,11 +464,16 @@ const jscDecode = bytes => new TextDecoder("utf-8", { ignoreBOM: true }).decode(
 
 /* ---------- which files of a folder or ZIP a set keeps ---------- */
 const TEXT_FILE = /\.(json|md|txt|csv|html|xml|ya?ml|dsse)$/i;   // .dsse: the envelope of an attestation, JSON
+/* A content-addressed evidence blob beside the manifest (CP-CHECK-1,
+   CHECK-15): its name is the SHA-256 of its bytes and it has no extension. */
+const JSC_EVIDENCE_PATH = /(^|\/)evidence\/sha256\/[0-9a-f]{64}$/;
 /* Of everything handed over, the files a set keeps: those with a text
-   extension, and any file an attestation names as its envelope, whatever it
-   is called. entries: [{path, text}] */
+   extension, any file an attestation names as its envelope, whatever it is
+   called, and the blobs of the evidence store. A set holds text only; an
+   evidence blob that is not UTF-8 text cannot be verified here and the check
+   says so. entries: [{path, text}] */
 function jscKeepFiles(entries) {
-  const out = entries.filter(e => TEXT_FILE.test(e.path));
+  const out = entries.filter(e => TEXT_FILE.test(e.path) || JSC_EVIDENCE_PATH.test(e.path));
   const named = new Set(out.flatMap(e => [...e.text.matchAll(/"envelope-ref"\s*:\s*"([^"\\]+)"/g)].map(m => m[1])));
   for (const e of entries) {
     if (!TEXT_FILE.test(e.path) && [...named].some(n => e.path === n || e.path.endsWith("/" + n))) out.push(e);
@@ -818,6 +825,20 @@ async function jscFetchBundle(url) {
     if (typeof ref !== "string" || !ref || /^[a-z]+:|^\/|\.\./i.test(ref) || files.some(x => x.path === ref)) continue;
     try { files.push(await get(ref)); } catch (e) { /* a missing envelope is reported by the check, not by the load */ }
   }
+  /* The evidence store lies beside the manifest too, named only by the check
+     results of an Assessment (record, observation) and by each record (its
+     outputs). A blob that is not there is reported as withheld by the check. */
+  const want = [], safe = ref => typeof ref === "string" && JSC_EVIDENCE_PATH.test(ref) && !files.some(x => x.path === ref) && !want.includes(ref);
+  const follow = async refs => {
+    const fresh = refs.filter(safe);
+    want.push(...fresh);
+    const got = [];
+    for (const ref of fresh) { try { const f = await get(ref); files.push(f); got.push(f); } catch (e) { /* withheld */ } }
+    return got;
+  };
+  const rows = files.flatMap(f => { try { return JSON.parse(f.text)["check-results"] || []; } catch (e) { return []; } });
+  const records = await follow(rows.flatMap(r => [r && (r["evidence-record"] || {}).ref, r && (r["observation-ref"] || {}).ref]));
+  await follow(records.flatMap(f => { try { return (JSON.parse(f.text).outputs || []).map(o => "evidence/sha256/" + String(o.digest).replace(/^sha256:/, "")); } catch (e) { return []; } }));
   return { files, failed };
 }
 function jscDownload(name, data, mime) {

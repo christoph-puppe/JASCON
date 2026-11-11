@@ -26,7 +26,9 @@
    Also ported, each against its vector family: the verification of DSSE
    envelopes (Ed25519) with the tier of a Tailoring in verification mode,
    the composition of two bundles (D3.5), and the conditional-apply engine
-   (B.1.8). All fifteen vector families run against this file. The
+   (B.1.8). All fifteen vector families run against this file, and the
+   sixteenth of the proposed Check type (CP-CHECK-1): I-Regexp,
+   check-verdict and CHECK-1..15 with the evidence chain. The
    conditional-apply engine is run by nothing but its vectors, here as in
    the reference: no bundle has a place to carry an instance yet.
 
@@ -418,7 +420,7 @@ function jscShapeErrors(name, v) {
   return jscSchemaCheck({ $ref: "#/$defs/" + name }, v, root).errors.map(e => `${e.path || "/"}: ${e.message}`);
 }
 const JSC_KERNEL_TYPES = ["requirement", "requirementSet", "tailoring", "mapping", "component", "implementation",
-  "assessment", "finding", "attestation", "risk"];
+  "assessment", "finding", "attestation", "risk", "check"];
 /* the kernel types whose shape `o` matches; a conformant object matches one */
 const jscMatchTypes = o => JSC_KERNEL_TYPES.filter(t => !jscSchemaCheck({ $ref: "#/$defs/" + t }, o, jscRulesSchema.JSC_SCHEMA).errors.length);
 const jscTypeOf = o => { const m = jscMatchTypes(o); return m.length === 1 ? m[0] : null; };
@@ -587,6 +589,9 @@ function jscKernelNeeded(objs, manifest) {
     const { type, obj } = objs.get(oid);
     if (type === "risk") return ["2.0.0", `${oid} is a Risk`];
     if (type === "finding" && (obj["risk-refs"] || []).length) return ["2.0.0", `${oid} carries risk-refs`];
+    if (type === "check") return ["2.0.0", `${oid} is a Check`];
+    if (type === "assessment" && (obj["check-results"] || obj["tailoring-ref"])) return ["2.0.0", `${oid} carries check results`];
+    if (type === "finding" && obj["check-ref"]) return ["2.0.0", `${oid} carries a check-ref`];
   }
   return ["1.0.0", null];
 }
@@ -889,7 +894,8 @@ function jscCheckScales(definitions, objs, pins) {
    semantic digests. -> the paths of the empty ones */
 const JSC_OPTIONAL_CONTAINERS = new Set(["aliases", "canonical-alias", "replaces", "relations", "facets", "annotations", "parameters",
   "deviations", "excludes", "source-scope", "target-scope", "evidence-refs", "statement-refs", "capabilities", "authorizations",
-  "actions", "choices", "threat-refs", "component-refs", "treatments", "risk-refs", "tailoring-refs"]);
+  "actions", "choices", "threat-refs", "component-refs", "treatments", "risk-refs", "tailoring-refs",
+  "statement-ids", "applies-when", "check-results", "derived-from"]);
 function jscOptionalEmptyViolations(obj, path = "$") {
   const out = [];
   if (Array.isArray(obj)) obj.forEach((v, i) => out.push(...jscOptionalEmptyViolations(v, `${path}[${i}]`)));
@@ -1282,6 +1288,521 @@ function jscConditionalApply(inst, objs) {
 }
 
 /* ====================================================================
+   Checks (CP-CHECK-1, proposed for kernel 2.0.0)
+   ====================================================================
+   A Check states what to observe (`observes`, a typed fact contract) and
+   what the observation must satisfy (`criteria`, a flat AND over eleven
+   comparators). The code that collects the facts rides the Check in the
+   stdlib facet collector@1 and decides nothing: every outcome an Assessment
+   records is recomputed here from the observation it records.
+
+   Ported from validate_core.py and run against check-vectors.json:
+   - I-Regexp (RFC 9485) for matches / matches-not: the ABNF is parsed here
+     and the pattern runs on a state-set engine, never on the platform's
+     RegExp, whose dialect is exactly what I-Regexp leaves out. Whole value,
+     by code point, `^` and `$` literal, `.` neither \n nor \r. Unicode
+     categories are asked of the platform's \p{..}, the one place a host's
+     Unicode version shows.
+   - check-verdict: strong Kleene AND; an unbound parameter is inconclusive,
+     never a default (D9).
+   - CHECK-1..15 over a set, the evidence chain against the files beside
+     the manifest included. */
+const JSC_CHECK_RULES = {
+  "CHECK-1": "a check discharges a requirement; when that requirement is in the bundle the edge is typed and the clauses it names exist",
+  "CHECK-2": "every assertion reads a fact the check declares, and a fact is declared once - the fact contract is all a collector promises",
+  "CHECK-3": "an operator compares what it can compare - ordering on numbers, patterns on text, set operators on lists - and a literal has the fact's type",
+  "CHECK-4": "a bound value comes from a parameter the requirement declares exactly once on the covered clauses, with a fitting type - so tailoring the requirement retunes the check; a pattern is never a parameter",
+  "CHECK-5": "tightening a parameter must never loosen the check: at-most needs a parameter that tightens lower, at-least one that tightens higher",
+  "CHECK-6": "a pattern is an I-Regexp (RFC 9485) within the kernel's size limits, so two conformant tools return one verdict, in bounded time",
+  "CHECK-7": "collectors are well-formed and each is named once, so a result row can say which code observed",
+  "CHECK-8": "a result names the check it ran and that check's semantic digest - a changed check is a different check",
+  "CHECK-9": "a recorded outcome is the one check-verdict computes from the recorded observation - verdicts are recomputed, never taken on trust",
+  "CHECK-10": "an assessment that carries check results has one row per check, and its result is their aggregate: any not-satisfied, else any inconclusive or none applicable, else satisfied",
+  "CHECK-11": "no observation, no verdict: a row without one is inconclusive and says why",
+  "CHECK-12": "a run's parameter values are the ones the Tailoring it names binds - an implementer does not set its own pass mark",
+  "CHECK-13": "a result's collector-id names a collector of the check",
+  "CHECK-14": "a Finding raised by a check is about the requirement - and the clause - that check discharges",
+  "CHECK-15": "evidence is content-addressed and stays inside the bundle's store: every digest in the chain verifies against the bytes, and a record describes the run it is attached to",
+};
+const JSC_SAT = "satisfied", JSC_NOT = "not-satisfied", JSC_INC = "inconclusive", JSC_NA = "not-applicable";
+const JSC_COLLECTOR_FACET = "https://ns.oscal.org/stdlib/facet/collector";
+
+/* ---------- I-Regexp ---------- */
+const JSC_IRE_MAX_PATTERN = 256, JSC_IRE_MAX_STATES = 1000, JSC_IRE_MAX_INPUT = 4096;
+const JSC_IRE_CATS = new Set(["L", "Lu", "Ll", "Lm", "Lo", "Lt", "M", "Mc", "Me", "Mn", "N", "Nd", "Nl", "No",
+  "P", "Pc", "Pd", "Pe", "Pf", "Pi", "Po", "Ps", "Z", "Zl", "Zp", "Zs", "S", "Sc", "Sk", "Sm", "So", "C", "Cc", "Cf", "Cn", "Co"]);
+class JscIRegexpError extends Error {}
+const jscIreCatRe = new Map();
+function jscIreInCat(prop, cp) {
+  if (!jscIreCatRe.has(prop)) jscIreCatRe.set(prop, new RegExp(`^\\p{${prop}}$`, "u"));
+  return jscIreCatRe.get(prop).test(String.fromCodePoint(cp));
+}
+/* A character set: code-point ranges and categories, united, then negated
+   if `neg`. A category item carries its own negation (\P{..}). */
+function jscIreHas(set, cp) {
+  let hit = set.ranges.some(([lo, hi]) => lo <= cp && cp <= hi) || set.cats.some(c => jscIreInCat(c.prop, cp) !== c.neg);
+  return set.neg ? !hit : hit;
+}
+const JSC_IRE_DOT = { ranges: [[10, 10], [13, 13]], cats: [], neg: true };
+const jscIreIsNormal = c => { const o = c.codePointAt(0);
+  return o <= 0x27 || c === "," || c === "-" || (o >= 0x2F && o <= 0x3E) || (o >= 0x40 && o <= 0x5A) || (o >= 0x5E && o <= 0x7A) || o >= 0x7E; };
+
+function jscIreParse(p) {
+  if (typeof p !== "string") throw new JscIRegexpError("a pattern is a string");
+  const P = [...p];   // code points, as the RFC counts them
+  if (P.length > JSC_IRE_MAX_PATTERN) throw new JscIRegexpError(`pattern is ${P.length} characters long; the limit is ${JSC_IRE_MAX_PATTERN}`);
+  let pos = 0;
+  const peek = (k = 0) => (pos + k < P.length ? P[pos + k] : null);
+  const err = what => { throw new JscIRegexpError(`${what} at position ${pos} of ${JSON.stringify(p)}`); };
+  const one = cp => ({ ranges: [[cp, cp]], cats: [], neg: false });
+  function regexp() {
+    const br = [branch()];
+    while (peek() === "|") { pos++; br.push(branch()); }
+    return ["alt", br];
+  }
+  function branch() {
+    const items = [];
+    while (peek() !== null && peek() !== "|" && peek() !== ")") items.push(piece());
+    return ["cat", items];
+  }
+  function piece() {
+    const a = atom(), c = peek();
+    if (c === "*") { pos++; return ["rep", a, 0, null]; }
+    if (c === "+") { pos++; return ["rep", a, 1, null]; }
+    if (c === "?") { pos++; return ["rep", a, 0, 1]; }
+    if (c === "{") {
+      const m = /^\{([0-9]+)(,([0-9]*))?\}/.exec(P.slice(pos).join(""));
+      if (!m) err("malformed range quantifier (I-Regexp has {n}, {n,} and {n,m})");
+      const lo = Number(m[1]), hi = m[2] === undefined ? lo : (m[3] ? Number(m[3]) : null);
+      if (hi !== null && hi < lo) err(`range quantifier ${m[0]} has its bounds reversed`);
+      if (lo > JSC_IRE_MAX_STATES || (hi || 0) > JSC_IRE_MAX_STATES) err("range quantifier exceeds the size limit");
+      pos += [...m[0]].length;
+      return ["rep", a, lo, hi];
+    }
+    return a;
+  }
+  function escape() {   // P[pos] is "\"; -> a set
+    const n = peek(1);
+    if ((n === "p" || n === "P") && peek(2) === "{") {
+      const end = P.indexOf("}", pos + 3), prop = end > 0 ? P.slice(pos + 3, end).join("") : null;
+      if (!JSC_IRE_CATS.has(prop)) err(`\\${n}{${prop}} is not a Unicode general category (I-Regexp has categories, not blocks)`);
+      pos = end + 1;
+      return { ranges: [], cats: [{ prop, neg: n === "P" }], neg: false };
+    }
+    if (n !== null && "()*+-.?[\\]^{|}".includes(n)) { pos += 2; return one(n.codePointAt(0)); }
+    if (n === "n" || n === "r" || n === "t") { pos += 2; return one({ n: 10, r: 13, t: 9 }[n]); }
+    err(`escape \\${n || ""} is not I-Regexp (no \\d \\w \\s \\b, no back-references)`);
+  }
+  function ccChar() {
+    const c = peek();
+    if (c === "\\") {
+      if (peek(1) === "p" || peek(1) === "P") err("a category escape cannot bound a range");
+      return escape().ranges[0][0];
+    }
+    if (c === null || c === "-" || c === "[" || c === "]") err(`${JSON.stringify(c)} must be escaped inside a character class`);
+    pos++;
+    return c.codePointAt(0);
+  }
+  function charClass() {
+    pos++;
+    const set = { ranges: [], cats: [], neg: peek() === "^" };
+    if (set.neg) pos++;
+    let first = true;
+    for (;;) {
+      const c = peek();
+      if (c === null) err("unclosed character class");
+      if (c === "]") { if (first) err("empty character class"); pos++; break; }
+      if (c === "-") {
+        if (first || peek(1) === "]") { set.ranges.push([45, 45]); pos++; first = false; continue; }
+        err("'-' inside a character class only first or last (no class subtraction)");
+      }
+      if (c === "\\" && (peek(1) === "p" || peek(1) === "P")) { set.cats.push(...escape().cats); first = false; continue; }
+      const lo = ccChar();
+      if (peek() === "-" && peek(1) !== "]" && peek(1) !== null) {
+        pos++;
+        const hi = ccChar();
+        if (hi < lo) err("character range out of order");
+        set.ranges.push([lo, hi]);
+      } else set.ranges.push([lo, lo]);
+      first = false;
+    }
+    return set;
+  }
+  function atom() {
+    const c = peek();
+    if (c === "(") {
+      pos++;
+      const r = regexp();
+      if (peek() !== ")") err("unclosed group");
+      pos++;
+      return r;
+    }
+    if (c === ".") { pos++; return ["set", JSC_IRE_DOT]; }
+    if (c === "\\") return ["set", escape()];
+    if (c === "[") return ["set", charClass()];
+    if (c !== null && jscIreIsNormal(c)) { pos++; return ["set", one(c.codePointAt(0))]; }
+    err(c !== null ? `${JSON.stringify(c)} cannot start an atom here` : "the pattern ends where an atom is expected");
+  }
+  const ast = regexp();
+  if (pos !== P.length) err(`unbalanced ${JSON.stringify(P[pos])}`);
+  return ast;
+}
+/* -> {st, start}; a state is ["c", set, next] | ["s", a, b] | ["m"] */
+const jscIrePrograms = new Map();
+function jscIreCompile(p) {
+  if (jscIrePrograms.has(p)) return jscIrePrograms.get(p);
+  const ast = jscIreParse(p), st = [];
+  const add = s => { st.push(s); if (st.length > JSC_IRE_MAX_STATES) throw new JscIRegexpError(`pattern ${JSON.stringify(p)} compiles to more than ${JSC_IRE_MAX_STATES} states`); return st.length - 1; };
+  function comp(n, next) {
+    if (n[0] === "set") return add(["c", n[1], next]);
+    if (n[0] === "cat") { for (const it of [...n[1]].reverse()) next = comp(it, next); return next; }
+    if (n[0] === "alt") {
+      const starts = n[1].map(b => comp(b, next));
+      let s = starts[starts.length - 1];
+      for (const b of starts.slice(0, -1).reverse()) s = add(["s", b, s]);
+      return s;
+    }
+    const [, a, lo, hi] = n;
+    let t = next;
+    if (hi === null) { const loop = add(["s", null, next]); st[loop][1] = comp(a, loop); t = loop; }
+    else for (let i = 0; i < hi - lo; i++) t = add(["s", comp(a, t), next]);
+    for (let i = 0; i < lo; i++) t = comp(a, t);
+    return t;
+  }
+  const end = add(["m"]);
+  const prog = { st, start: comp(ast, end) };
+  jscIrePrograms.set(p, prog);
+  return prog;
+}
+function jscIreClosure(st, seeds) {
+  const seen = new Set(), out = [], stack = [...seeds];
+  while (stack.length) {
+    const s = stack.pop();
+    if (seen.has(s)) continue;
+    seen.add(s);
+    if (st[s][0] === "s") stack.push(st[s][2], st[s][1]); else out.push(s);
+  }
+  return out;
+}
+function jscIreFullMatch(p, text) {
+  const { st, start } = jscIreCompile(p);
+  let cur = jscIreClosure(st, [start]);
+  for (const ch of String(text)) {
+    const cp = ch.codePointAt(0);
+    const next = cur.filter(s => st[s][0] === "c" && jscIreHas(st[s][1], cp)).map(s => st[s][2]);
+    if (!next.length) return false;
+    cur = jscIreClosure(st, next);
+  }
+  return cur.some(s => st[s][0] === "m");
+}
+
+/* ---------- check-verdict (B.1.10) ---------- */
+const JSC_CHECK_OPS = {   // which comparators fit which fact; present / absent fit every fact
+  one: { string: ["equals", "one-of", "matches", "matches-not"], code: ["equals", "one-of", "matches", "matches-not"],
+    integer: ["equals", "one-of", "at-least", "at-most"], decimal: ["equals", "one-of", "at-least", "at-most"], boolean: ["equals"] },
+  many: { string: ["includes-all", "excludes-all", "subset-of", "matches", "matches-not"], code: ["includes-all", "excludes-all", "subset-of", "matches", "matches-not"],
+    integer: ["includes-all", "excludes-all", "subset-of"], decimal: ["includes-all", "excludes-all", "subset-of"], boolean: [] },
+};
+const JSC_CHECK_LIST_OPS = ["one-of", "includes-all", "excludes-all", "subset-of"];
+const JSC_CHECK_PATTERN_OPS = ["matches", "matches-not"];
+function jscFactOk(type, x) {
+  if (type === "integer") return typeof x === "number" && Number.isInteger(x);
+  if (type === "decimal") return typeof x === "string" && JSC_DECIMAL_RE.test(x);
+  if (type === "boolean") return typeof x === "boolean";
+  return typeof x === "string";   // string, code
+}
+const jscFactValueOk = (decl, v) => decl.cardinality === "many" ? Array.isArray(v) && v.every(x => jscFactOk(decl.type, x)) : jscFactOk(decl.type, v);
+function jscExpectedOk(op, type, e) {
+  if (JSC_CHECK_LIST_OPS.includes(op)) return Array.isArray(e) && e.every(x => jscFactOk(type, x)) && (op === "subset-of" || e.length > 0);
+  if (JSC_CHECK_PATTERN_OPS.includes(op)) return typeof e === "string";
+  return jscFactOk(type, e);
+}
+/* the value a decimal stands for, as a key: trailing zeros of the fraction do not count */
+const jscDecimalKey = s => (s.includes(".") ? s.replace(/0+$/, "").replace(/\.$/, "") : s);
+/* -> [outcome, reason] of one assertion over one set of facts */
+function jscCheckAssert(a, facts, decls, params) {
+  const f = a.fact, op = a.op, d = decls.get(f);
+  if (!d) return [JSC_INC, `fact '${f}' is not declared in observes`];
+  const has = Object.prototype.hasOwnProperty.call(facts, f);
+  if (op === "present") return has ? [JSC_SAT, `${f} is present`] : [JSC_NOT, `${f} is not present`];
+  if (op === "absent") return !has ? [JSC_SAT, `${f} is absent`] : [JSC_NOT, `${f} is present`];
+  const t = d.type, many = d.cardinality === "many";
+  if (!JSC_CHECK_OPS[many ? "many" : "one"][t].includes(op)) return [JSC_INC, `${op} does not fit a ${t}${many ? " list" : ""} fact`];
+  if (!has) return [JSC_INC, `fact '${f}' was not observed`];
+  const v = facts[f];
+  if (!jscFactValueOk(d, v)) return [JSC_INC, `fact '${f}' is not a ${t}${many ? " list" : ""}: ${JSON.stringify(v)}`];
+  let e = a.expected, src = "the literal";
+  if (jscIsPlainObject(e)) {
+    const pn = e.param;
+    if (!Object.prototype.hasOwnProperty.call(params, pn)) return [JSC_INC, `parameter '${pn}' is unbound - a default is never substituted (D9)`];
+    e = params[pn]; src = `parameter '${pn}'`;
+  }
+  if (!jscExpectedOk(op, t, e)) return [JSC_INC, `${src} ${JSON.stringify(e)} does not fit ${op} on a ${t} fact`];
+  const key = t === "decimal" ? jscDecimalKey : x => x;
+  const cmp = (x, y) => (t === "decimal" ? jscDecimalCompare(x, y) : x < y ? -1 : x > y ? 1 : 0);
+  let hit;
+  if (op === "equals") hit = key(v) === key(e);
+  else if (op === "one-of") hit = e.map(key).includes(key(v));
+  else if (op === "at-least") hit = cmp(v, e) >= 0;
+  else if (op === "at-most") hit = cmp(v, e) <= 0;
+  else if (op === "includes-all") { const got = new Set(v.map(key)); hit = e.every(x => got.has(key(x))); }
+  else if (op === "excludes-all") { const got = new Set(v.map(key)); hit = !e.some(x => got.has(key(x))); }
+  else if (op === "subset-of") { const ok = new Set(e.map(key)); hit = v.every(x => ok.has(key(x))); }
+  else {   // matches / matches-not: whole value, every element of a list
+    const vals = many ? v : [v];
+    if (vals.some(x => [...x].length > JSC_IRE_MAX_INPUT)) return [JSC_INC, `a value of '${f}' is longer than ${JSC_IRE_MAX_INPUT} characters - not matched`];
+    let hits;
+    try { hits = vals.map(x => jscIreFullMatch(e, x)); }
+    catch (ex) { if (ex instanceof JscIRegexpError) return [JSC_INC, `pattern rejected: ${ex.message}`]; throw ex; }
+    hit = op === "matches" ? hits.every(Boolean) : !hits.some(Boolean);
+  }
+  return [hit ? JSC_SAT : JSC_NOT, `${f} ${op} ${JSON.stringify(e)}: observed ${JSON.stringify(v)}`];
+}
+/* [[outcome, [reason]]] -> [outcome, reasons]: strong Kleene AND */
+function jscKleene(results) {
+  for (const want of [JSC_NOT, JSC_INC]) {
+    if (results.some(([o]) => o === want)) return [want, results.filter(([o]) => o === want).flatMap(([, rs]) => rs)];
+  }
+  return [JSC_SAT, []];
+}
+/* B.1.10: [outcome, reasons] of one Check over one observation, with the
+   parameter values the run was bound to */
+function jscCheckVerdict(check, observation, params) {
+  params = params || {};
+  if (observation === null || observation === undefined) return [JSC_INC, ["no observation: the collector did not report"]];
+  const decls = new Map((check.observes || []).map(d => [d.name, d]));
+  const run = (list, facts) => jscKleene(list.map(a => { const [o, w] = jscCheckAssert(a, facts, decls, params); return [o, [w]]; }));
+  const on = facts => {
+    if ((check["applies-when"] || []).length) {
+      const [aw, why] = run(check["applies-when"], facts);
+      if (aw === JSC_NOT) return [JSC_NA, ["applies-when does not hold: " + why.join("; ")]];
+      if (aw === JSC_INC) return [JSC_INC, ["applicability unknown: " + why.join("; ")]];
+    }
+    return run(check.criteria, facts);
+  };
+  if (check.each) {
+    const kind = check.each.resource, res = observation.resources;
+    if (!Array.isArray(res)) return [JSC_INC, [`the check runs per ${kind}, but the observation carries no resources`]];
+    const outs = [];
+    for (const r of res) {
+      const [o, why] = on(jscIsPlainObject(r.facts) ? r.facts : {});
+      if (o !== JSC_NA) outs.push([o, why.map(w => `${r.id}: ${w}`)]);
+    }
+    if (!outs.length) return check.each["allow-empty"] ? [JSC_SAT, [`no applicable ${kind} observed, and allow-empty holds`]]
+      : [JSC_INC, [`no applicable ${kind} observed, and allow-empty is false`]];
+    return jscKleene(outs);
+  }
+  if (!jscIsPlainObject(observation.facts)) return [JSC_INC, ["the observation carries no facts"]];
+  return on(observation.facts);
+}
+function jscCheckAggregate(outcomes) {
+  const app = outcomes.filter(o => o !== JSC_NA);
+  if (!app.length) return JSC_INC;
+  if (app.includes(JSC_NOT)) return JSC_NOT;
+  if (app.includes(JSC_INC)) return JSC_INC;
+  return JSC_SAT;
+}
+
+/* ---------- CHECK-1..7: one Check against its requirement and itself ---------- */
+/* -> Map(name -> [[statement id, declaration]]) over the covered clauses, or
+   null when the requirement is not in the set */
+function jscCheckParamDecls(check, objs) {
+  const req = objs.get(check["requirement-ref"]);
+  if (!req || req.type !== "requirement") return null;
+  const cover = new Set(check["statement-ids"] || req.obj.statements.map(s => s.id)), out = new Map();
+  for (const s of req.obj.statements) {
+    if (!cover.has(s.id)) continue;
+    for (const pd of s.parameters || []) { if (!out.has(pd.name)) out.set(pd.name, []); out.get(pd.name).push([s.id, pd]); }
+  }
+  return out;
+}
+function jscParamFits(pd, fdecl, op) {
+  const pt = pd.type, ft = fdecl.type;
+  if (JSC_CHECK_LIST_OPS.includes(op)) return pt === "list" || (pt === "choice" && pd.cardinality === "many");
+  if (["integer", "decimal", "boolean"].includes(ft)) return pt === ft;
+  return pt === "string" || pt === "code" || (pt === "choice" && pd.cardinality !== "many");
+}
+/* -> [[rule, message]] */
+function jscCheckObjectErrors(oid, o, objs) {
+  const E = [], bad = (rule, msg) => E.push([rule, `${oid}: ${msg} (${rule}: ${JSC_CHECK_RULES[rule]})`]);
+  const req = objs.get(o["requirement-ref"]);
+  if (req && req.type !== "requirement") bad("CHECK-1", `requirement-ref resolves to a ${req.type}, not a Requirement: ${o["requirement-ref"]}`);
+  else if (req) {
+    const sids = new Set(req.obj.statements.map(s => s.id));
+    for (const sid of o["statement-ids"] || []) if (!sids.has(sid)) bad("CHECK-1", `statement-id '${sid}' names no statement of ${o["requirement-ref"]}`);
+  }
+  const names = o.observes.map(d => d.name);
+  [...new Set(names.filter((n, i) => names.indexOf(n) !== i))].sort().forEach(n => bad("CHECK-2", `fact '${n}' is declared twice`));
+  const decls = new Map(o.observes.map(d => [d.name, d])), params = jscCheckParamDecls(o, objs);
+  for (const where of ["criteria", "applies-when"]) {
+    (o[where] || []).forEach((a, i) => {
+      const at = `${where}[${i}]`, op = a.op, d = decls.get(a.fact);
+      if (!d) { bad("CHECK-2", `${at} reads fact '${a.fact}', which observes does not declare`); return; }
+      const card = d.cardinality || "one", t = d.type;
+      if (op === "present" || op === "absent") return;
+      if (!JSC_CHECK_OPS[card][t].includes(op)) { bad("CHECK-3", `${at}: ${op} does not fit a ${t}${card === "many" ? " list" : ""} fact`); return; }
+      const e = a.expected;
+      if (jscIsPlainObject(e)) {
+        const pn = e.param;
+        if (JSC_CHECK_PATTERN_OPS.includes(op)) { bad("CHECK-4", `${at}: binds parameter '${pn}' as a pattern`); return; }
+        if (params === null) { bad("CHECK-4", `${at}: binds parameter '${pn}', but requirement ${o["requirement-ref"]} is not in the bundle, so the binding cannot be checked`); return; }
+        const found = params.get(pn) || [];
+        if (found.length !== 1) { bad("CHECK-4", `${at}: parameter '${pn}' is declared ${found.length} times on the covered statements`); return; }
+        const pd = found[0][1];
+        if (!jscParamFits(pd, d, op)) bad("CHECK-4", `${at}: parameter '${pn}' is a ${pd.type}, which does not fit ${op} on a ${t} fact`);
+        const tg = pd.tightening;
+        if ((op === "at-most" && tg === "higher") || (op === "at-least" && tg === "lower")) bad("CHECK-5", `${at}: ${op} against parameter '${pn}', which tightens ${tg} - tightening it would loosen the check`);
+      } else if (JSC_CHECK_PATTERN_OPS.includes(op) && typeof e === "string") {
+        try { jscIreCompile(e); } catch (ex) { if (!(ex instanceof JscIRegexpError)) throw ex; bad("CHECK-6", `${at}: ${ex.message}`); }
+      } else if (!jscExpectedOk(op, t, e)) bad("CHECK-3", `${at}: ${JSON.stringify(e)} does not fit ${op} on a ${t}${card === "many" ? " list" : ""} fact`);
+    });
+  }
+  const col = (o.facets || {})[JSC_COLLECTOR_FACET + "@1"];
+  if (col !== undefined) {
+    const std = JSC_STDLIB_BY_ID.get(JSC_COLLECTOR_FACET);
+    const errs = std ? jscSchemaCheck(std.schema, col, std.schema).errors : [];
+    if (errs.length) bad("CHECK-7", `collector@1 payload: ${errs[0].message} @ ${errs[0].path || "/"}`);
+    else {
+      const ids = (col.collectors || []).map(c => c.id);
+      [...new Set(ids.filter((n, i) => ids.indexOf(n) !== i))].sort().forEach(n => bad("CHECK-7", `collector id '${n}' is used twice`));
+    }
+  }
+  return E;
+}
+
+/* ---------- CHECK-8..15: runs, Findings, evidence ---------- */
+const JSC_UNBOUND = Symbol("unbound");   // "this Tailoring binds no value", distinct from every JSON value
+function jscTailoringBindings(check, tail, objs) {
+  const out = new Map(), decls = jscCheckParamDecls(check, objs) || new Map();
+  for (const a of [...check.criteria, ...(check["applies-when"] || [])]) {
+    const e = a.expected;
+    if (!jscIsPlainObject(e) || (decls.get(e.param) || []).length !== 1) continue;
+    const pn = e.param, sid = decls.get(pn)[0][0];
+    out.set(pn, JSC_UNBOUND);
+    for (const op of tail.operations || []) {
+      if (op.op === "set-parameter" && op["requirement-ref"] === check["requirement-ref"] && op.parameter === pn
+          && (op["statement-id"] === undefined || op["statement-id"] === sid)) out.set(pn, op.value);
+    }
+  }
+  return out;
+}
+const JSC_EVIDENCE_REF = /^evidence\/sha256\/([0-9a-f]{64})$/;
+/* CHECK-15: row -> evidence record -> raw outputs, and observation-ref.
+   read(ref) -> the stored text, or null when the store does not hold it.
+   -> {observation loaded from observation-ref or null, errors, notes} */
+async function jscEvidenceChain(oid, at, a, row, read) {
+  const E = [], notes = [];
+  let obs = null;
+  const bad = msg => E.push(["CHECK-15", `${oid}: ${at}: ${msg} (CHECK-15: ${JSC_CHECK_RULES["CHECK-15"]})`]);
+  const load = async (dref, what) => {
+    const ref = dref.ref, want = dref.digest;
+    if (/^[A-Za-z][A-Za-z0-9+.-]*:/.test(ref)) { notes.push(`${oid}: ${at}: ${what} ${ref} is a URI - not resolvable offline`); return null; }
+    if (ref.startsWith("/") || ref.replace(/\\/g, "/").split("/").includes("..")) { bad(`${what} ref ${ref} leaves the bundle`); return null; }
+    const m = JSC_EVIDENCE_REF.exec(ref);
+    if (m && "sha256:" + m[1] !== want) { bad(`${what} ${ref} is stored under another digest than the recorded ${want}`); return null; }
+    const text = read(ref);
+    if (text === null || text === undefined) { notes.push(`${oid}: ${at}: ${what} ${ref} withheld - not in the bundle's store`); return null; }
+    if (await jscRulesPackageDigest(text) !== want) {
+      /* the app holds text; a blob that was not UTF-8 lost bytes on the way in */
+      if (text.includes("�")) notes.push(`${oid}: ${at}: ${what} ${ref} is not UTF-8 text - this app cannot verify it; the reference validator can`);
+      else bad(`${what} ${ref} does not match its digest`);
+      return null;
+    }
+    return text;
+  };
+  if (row["observation-ref"]) {
+    const text = await load(row["observation-ref"], "observation");
+    if (text !== null) {
+      try { obs = JSON.parse(text); } catch (ex) { bad(`observation file unreadable: ${ex.message}`); }
+      if (obs !== null && jscShapeErrors("checkObservation", obs).length) { bad("the observation file is not an observation"); obs = null; }
+    }
+  }
+  if (row["evidence-record"]) {
+    const text = await load(row["evidence-record"], "evidence record");
+    let rec = null;
+    if (text !== null) { try { rec = JSON.parse(text); } catch (ex) { bad(`evidence record unreadable: ${ex.message}`); } }
+    const shape = rec !== null ? jscShapeErrors("evidenceRecord", rec) : [];
+    if (shape.length) { bad(`evidence record: ${shape[0]}`); rec = null; }
+    if (rec !== null) {
+      if (rec["check-ref"] !== row["check-ref"] || rec["check-digest"] !== row["check-digest"]) bad("the evidence record is about another check, or another version of it");
+      if (row["collector-id"] && rec["collector-id"] && rec["collector-id"] !== row["collector-id"]) bad(`the evidence record names collector '${rec["collector-id"]}', the row '${row["collector-id"]}'`);
+      if (!a["subject-refs"].includes(rec["subject-ref"])) bad(`the evidence record's subject ${rec["subject-ref"]} is not a subject of the assessment`);
+      const seen = row.observation !== undefined ? row.observation : obs;
+      if (rec["observation-digest"] && seen !== null && seen !== undefined && await jscRulesSemanticDigest(seen) !== rec["observation-digest"]) bad("the evidence record binds another observation than the row records");
+      for (const out of rec.outputs) await load({ ref: "evidence/sha256/" + out.digest.replace(/^sha256:/, ""), digest: out.digest }, `output '${out.name}'`);
+    }
+  }
+  return { obs, errors: E, notes };
+}
+/* CHECK-1..15 over a set. objs: Map(id -> {type, obj}); read: the evidence
+   store (see jscEvidenceChain), or null to leave the chain out.
+   -> { errors: [[rule, message]], notes: [string] } */
+async function jscCheckErrors(objs, read) {
+  const E = [], notes = [];
+  const bad = (rule, oid, msg) => E.push([rule, `${oid}: ${msg} (${rule}: ${JSC_CHECK_RULES[rule]})`]);
+  for (const oid of [...objs.keys()].sort()) {
+    const { type: t, obj: o } = objs.get(oid);
+    if (t === "check") E.push(...jscCheckObjectErrors(oid, o, objs));
+    else if (t === "finding" && o["check-ref"]) {
+      const c = objs.get(o["check-ref"]);
+      if (c && c.type !== "check") bad("CHECK-14", oid, `check-ref resolves to a ${c.type}, not a Check: ${o["check-ref"]}`);
+      else if (c) {
+        if (c.obj["requirement-ref"] !== o["requirement-ref"]) bad("CHECK-14", oid, `check ${o["check-ref"]} discharges ${c.obj["requirement-ref"]}, the Finding is against ${o["requirement-ref"]}`);
+        const sids = c.obj["statement-ids"];
+        if (sids && o["statement-ref"] && !sids.includes(o["statement-ref"])) bad("CHECK-14", oid, `statement-ref '${o["statement-ref"]}' is not a clause check ${o["check-ref"]} covers`);
+      }
+    } else if (t === "assessment" && (o["check-results"] || o["tailoring-ref"])) {
+      let tail = null;
+      if (o["tailoring-ref"]) {
+        const tg = objs.get(o["tailoring-ref"]);
+        if (!tg) bad("CHECK-12", oid, `tailoring-ref does not resolve in-bundle: ${o["tailoring-ref"]}`);
+        else if (tg.type !== "tailoring") bad("CHECK-12", oid, `tailoring-ref resolves to a ${tg.type}, not a Tailoring`);
+        else tail = tg.obj;
+      }
+      const outcomes = [], seen = new Set();
+      for (const [i, row] of (o["check-results"] || []).entries()) {
+        const at = `check-results[${i}]`, cref = row["check-ref"];
+        if (seen.has(cref)) bad("CHECK-10", oid, `${at}: check ${cref} has a second row`);
+        seen.add(cref);
+        outcomes.push(row.outcome);
+        let obs = row.observation === undefined ? null : row.observation;
+        if (obs === null && !row["observation-ref"] && (row.outcome !== JSC_INC || !row.reason)) {
+          bad("CHECK-11", oid, `${at}: no observation, yet the outcome is ${row.outcome}${row.reason ? "" : " and no reason is given"}`);
+        }
+        if (read) {
+          const ch = await jscEvidenceChain(oid, at, o, row, read);
+          E.push(...ch.errors); notes.push(...ch.notes);
+          if (obs === null) obs = ch.obs;
+        }
+        const c = objs.get(cref);
+        if (!c) { notes.push(`${oid}: ${at}: check ${cref} is not in this bundle - verdict not recomputed`); continue; }
+        if (c.type !== "check") { bad("CHECK-8", oid, `${at}: check-ref resolves to a ${c.type}, not a Check`); continue; }
+        if (row["check-digest"] !== await jscRulesSemanticDigest(c.obj)) bad("CHECK-8", oid, `${at}: check-digest does not match ${cref} - the check changed after the run`);
+        const cols = ((c.obj.facets || {})[JSC_COLLECTOR_FACET + "@1"] || {}).collectors;
+        if (row["collector-id"] && Array.isArray(cols) && !cols.some(x => x && x.id === row["collector-id"])) bad("CHECK-13", oid, `${at}: collector-id '${row["collector-id"]}' names no collector of ${cref}`);
+        if (tail) {
+          const have = row.parameters || {};
+          for (const [pn, want] of jscTailoringBindings(c.obj, tail, objs)) {
+            const got = Object.prototype.hasOwnProperty.call(have, pn);
+            if (want === JSC_UNBOUND && got) bad("CHECK-12", oid, `${at}: the run used ${pn}=${JSON.stringify(have[pn])}, but ${o["tailoring-ref"]} binds no value for it`);
+            else if (want !== JSC_UNBOUND && (!got || !jscSameValue(have[pn], want))) bad("CHECK-12", oid, `${at}: the run used ${pn}=${got ? JSON.stringify(have[pn]) : "(unbound)"}, ${o["tailoring-ref"]} binds ${JSON.stringify(want)}`);
+          }
+        } else if (row.parameters) notes.push(`${oid}: ${at}: parameter values are the performer's statement - no tailoring-ref to hold them to`);
+        if (obs === null && row["observation-ref"]) { notes.push(`${oid}: ${at}: observation not available here - verdict not recomputed`); continue; }
+        const [got, why] = jscCheckVerdict(c.obj, obs, row.parameters);
+        if (got !== row.outcome) bad("CHECK-9", oid, `${at}: recorded ${row.outcome}, check-verdict computes ${got}${why.length ? " (" + why.join("; ").slice(0, 200) + ")" : ""}`);
+      }
+      if (o["check-results"]) {
+        const agg = jscCheckAggregate(outcomes);
+        if (o.result !== agg) bad("CHECK-10", oid, `result is ${o.result}, the aggregate of its check results is ${agg}`);
+      }
+    }
+  }
+  return { errors: E, notes };
+}
+const jscRulesPackageDigest = jscRulesCore ? jscRulesCore.jscPackageDigest : text => jscPackageDigest(text);
+
+/* ====================================================================
    A whole set
    ====================================================================
    Everything this file can say about a loaded graph, in the order the
@@ -1370,6 +1891,10 @@ async function jscCheckGraph(g, verified, opts) {
   const cov = await jscRiskCoverage(objs, verify);
   pass("risk", "error")(cov.errors); pass("risk", "note")([...cov.notes, ...jscRiskLinkNotes(objs)]);
   pass("facet", "error")(jscFacetErrors([...objs].map(([id, r]) => [id, r.obj]), pinnedSchemas));
+  /* CP-CHECK-1: check shapes, recomputed verdicts, the evidence store beside the manifest */
+  const store = new Map(g.aux.map(a => [a.path, a.text]));
+  const checks = await jscCheckErrors(objs, ref => (store.has(ref) ? store.get(ref) : null));
+  pass("check", "error")(checks.errors.map(([, m]) => m)); pass("check", "note")(checks.notes);
   const tiers = {};
   for (const [id, r] of objs) {
     if (r.type !== "tailoring") continue;
@@ -1390,5 +1915,7 @@ if (typeof module !== "undefined" && module.exports) {
     jscKernelNeeded, jscKernelPinErrors, jscRiskRuleViolations, jscRiskIsLive, jscRiskJustifies, JSC_NO_TAILORING, jscRiskCoverage,
     jscRiskLinkNotes, jscScaleDefinitionErrors, jscMatrixErrors, jscRiskLevels, jscMatrixCell, jscScaleErrors, jscCheckScales,
     jscOptionalEmptyViolations, jscObjectErrors, jscFacetErrors, jscTailoringDutyErrors, jscAttestationVerdict, jscCheckGraph,
-    JSC_DSSE_PAYLOAD_TYPE, jscEd25519Verify, jscVerifyEnvelope, jscSemver, jscCompose, jscComposeSide, jscPathGet, jscEvalPredicate, jscConditionalApply };
+    JSC_DSSE_PAYLOAD_TYPE, jscEd25519Verify, jscVerifyEnvelope, jscSemver, jscCompose, jscComposeSide, jscPathGet, jscEvalPredicate, jscConditionalApply,
+    JSC_CHECK_RULES, JSC_CHECK_OPS, JscIRegexpError, jscIreCompile, jscIreFullMatch, jscCheckVerdict, jscCheckAggregate, jscCheckParamDecls,
+    jscCheckObjectErrors, jscCheckErrors };
 }

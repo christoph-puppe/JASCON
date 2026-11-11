@@ -6,7 +6,7 @@ stylesheet. A bundle you load stays in your browser, with one exception you
 have to switch on yourself: the suggestions of the Risk page send text to a
 model service once you type a key (see "Suggestions from a model").
 
-State: build 0.8.0. This build has the frame (the hub, the settings page and
+State: build 0.8.1. This build has the frame (the hub, the settings page and
 the shared core) and eight tool pages: Import, Browse, Tailor, Map,
 Implement, Risk, Assess and Validate. One view of the Risk page can ask a
 language model; nothing else in the app does, and nothing needs one.
@@ -316,12 +316,13 @@ text in that language, the English text is shown, then whatever is there.
 
 ## Limits of this build
 
-- The Validate page is not the reference validator. All fifteen rule
+- The Validate page is not the reference validator. All sixteen rule
   families of `validate_core.py` are ported and run against their conformance
   vectors: canonical form, modality, parameter, tier, tailoring (the
   operation law), reference, lifecycle, kernel, facet, attestation, risk,
-  scale, DSSE signatures, the composition of two bundles and
-  conditional-apply. What the page does not judge: conditional-apply
+  scale, DSSE signatures, the composition of two bundles,
+  conditional-apply, and the proposed Check type of `drafts/CP-CHECK-1.md`
+  (I-Regexp, check-verdict, CHECK-1 to CHECK-15 with the evidence chain). What the page does not judge: conditional-apply
   instances (no bundle has a place to carry one; the reference validator does
   not run them on a bundle either) and the bytes of a bundle on disk (line
   ends, files the manifest does not list). In a case of doubt run the Python
@@ -334,10 +335,12 @@ text in that language, the English text is shown, then whatever is there.
   envelope of an unlisted one as a note.
 - The other pages still take an object's type from its fields when a set is
   loaded; the Validate page says where the kernel schema disagrees.
-- Loading from a URL fetches what the manifest lists, and the envelope a
-  listed attestation names. A file beside the manifest that nothing listed
-  names, such as an attestation over the manifest, is not fetched; load the
-  folder or a ZIP for those.
+- Loading from a URL fetches what the manifest lists, the envelope a
+  listed attestation names, and the evidence store the check results of an
+  Assessment name (`evidence/sha256/<hex>`: the records and the outputs they
+  list). A file beside the manifest that nothing listed names, such as an
+  attestation over the manifest, is not fetched; load the folder or a ZIP for
+  those.
 - Predicate selects of a Tailoring are not evaluated; the selection is then
   shown as open and its count as a lower bound.
 - The Tailor page applies set-modality, set-parameter and replace-prose.
@@ -348,7 +351,10 @@ text in that language, the English text is shown, then whatever is there.
   against the kernel schema.
 - Files other than text (images, PDF) in a bundle folder are not stored,
   except a file an attestation names as its envelope, and
-  are missing from the export.
+  are missing from the export. Evidence blobs are kept when they are text
+  (and at most 256 KiB when a folder is picked); a blob that is not UTF-8
+  text is reported by the Validate page as one it cannot verify, and the
+  reference validator can.
 - The model view was run against a simulated service only. No call to a
   real service was made while it was built, and the model ids in the
   settings were not checked against Google's list on that day; a wrong id

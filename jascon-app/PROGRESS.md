@@ -60,6 +60,14 @@ and in `readme.md`; this file says only what is done and what is next.
   file. Driven in headless Chromium with the MODERATE profile on top;
   `validate_core.py` on the export: 1038 pass, 0 fail.
 
+- The proposed Check type (CP-CHECK-1, merged from the branch that drafts
+  it): type recognised at load, `kernel-version` 2.0.0 written when a Check,
+  check results or a check-ref are in the set, the evidence store kept on
+  load (folder, ZIP, URL) and export, and the sixteenth vector family ported
+  to `jascon-rules.js` (I-Regexp on a state-set engine, check-verdict,
+  CHECK-1..15 with the evidence chain). The example folder passes the
+  whole-set check with its two Checks, and a tampered evidence blob fails it.
+
 ## Next
 
 - One real call per service with a key of the user's: the model ids in the
