@@ -220,7 +220,14 @@ it one. `attestation-binds` is Chapter 11's bi-modal state function:
 verify the envelope per the DSSE profile's seven answers, then return
 Full Match, Semantic Match, or failure — never a boolean, because the
 two green states mean different things and your callers must see
-which.
+which. One trap before any of that: the attestation is not in your
+manifest map. It lies beside the manifest (§11.2), so a loader that
+walks the manifest's `objects` and stops there never types it, never
+opens its envelope and never lets it prove a Tailoring's tier — and
+reports green. Read the manifest's directory for it; the conformance
+corpus carries the case as a bundle on disk (`bundle-vectors` in
+`dsse-vectors.json`), because a vector that hands your engine its
+objects in memory cannot catch a file you did not load.
 
 **Fourth, the tailoring resolver** — Appendix B, implemented
 literally: expand `selects` through set nesting and apply `excludes`;

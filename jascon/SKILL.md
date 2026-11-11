@@ -69,7 +69,7 @@ You must strictly adhere to the guidelines detailed in the handbook chapters and
 - **Description:** Ensure structural validation, facet schema checking, and resolution conformance. Adhere to JCS (JSON Canonicalization Schema) and tailoring resolution logic. The normative kernel schema, stdlib facet descriptors, and conformance vectors ship with this skill and are the definitive contract.
 - **Reference Document:** [Chapter 12 — Building a Validator (The Weekend Chapter)](references/ch12-building-a-validator.md)
 - **Normative Artifacts:** [oscal-semantic-core-2.0.0.schema.json](schemas/oscal-semantic-core-2.0.0.schema.json) (kernel shapes, closed; shape-disjoint type inference). The schema filename, its `$id` (`https://ns.oscal.org/semantic-core/schema/2.0.0`), the D16 compatibility namespace `https://ns.oscal-semantic.org/core`, and the attestation media type `application/vnd.oscal-semantic-core.attestation+json` deliberately keep the working-title spelling: identifiers are opaque (D2), and re-spelling them would churn every digest and signature for zero semantic gain. Also normative: [schemas/stdlib/](schemas/stdlib/) (six facet descriptors with declared semantics), [conformance/](conformance/) (258 vectors in 15 families — JCS, modality lattice, parameters, tailoring, attestation, facets, references, lifecycle, tiers, DSSE, composition, conditional-apply, risk, kernel pin, scale definitions). When a bundle carries a Risk or a Finding with `risk-refs`, its content manifest MUST carry `"kernel-version": "2.0.0"` (KERNEL-1); a bundle of 1.0.0 content leaves the field out and stays readable by 1.0.0 tools. In `risk-vectors.json`, `expected-rule` is the portable assertion (every implementation names the violated rule id); `expected-frag` is advisory.
-- **Reference Implementation:** [validate_core.py](scripts/validate_core.py) — runs the conformance corpus and validates any bundle (schemas, digests, by-statement keys, `{param:}` bindings, manifest completeness, stdlib pins equal to their descriptors). Its default run includes the example bundle in `examples/`.
+- **Reference Implementation:** [validate_core.py](scripts/validate_core.py) — runs the conformance corpus and validates any bundle (schemas, digests, by-statement keys, `{param:}` bindings, manifest completeness, stdlib pins equal to their descriptors, the envelope of every Attestation listed or beside the manifest). Its default run includes the example bundle in `examples/`; after an edit there, [sign_example.py](scripts/sign_example.py) re-binds and re-signs the example Attestation.
 
 ### Requirement 12: Safe Consumption
 - **Description:** Handle unknown facets and annotations with standard fail-closed / warnings. Manage rendering, templates, and actionable error UX gracefully.
@@ -123,7 +123,8 @@ The [examples/](examples/) directory contains a complete, self-consistent bundle
 - **Finding & Deviation:**
   - [finding-017.json](examples/finding-017.json) — Auditable finding with Deviation sub-object.
 - **Attestation & Package Integrity:**
-  - [attestation-acme-2026.json](examples/attestation-acme-2026.json) — Attestation with semantic digests.
+  - [attestation-acme-2026.json](examples/attestation-acme-2026.json) — Attestation with semantic digests, beside the manifest.
+  - [attestation-envelope.dsse](examples/attestation-envelope.dsse) — its DSSE envelope, signed with the fixture key of the conformance corpus.
   - [content-manifest.json](examples/content-manifest.json) — Package integrity manifest pinning schemas.
   - [authorization-summary.md](examples/authorization-summary.md) — L4 markdown report.
 - **Descriptors & Custom Facets:**

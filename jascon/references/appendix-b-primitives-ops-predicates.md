@@ -163,8 +163,13 @@ negatives in the example bundle's break-it recipes.
 
 **Signature:** (attestation, bundle) → Full Match | Semantic Match |
 fail (+ per-subject detail).
+**Loading:** the attestation is a file beside the content manifest,
+not an entry of it (D3.1); a validator reads the manifest's directory
+for it. `envelope-ref` resolves relative to that directory and inside
+it; a named envelope that is not there is a failure.
 **Semantics:** verify signature (envelope, stdlib DSSE profile); check
-`content-manifest-digest` against the manifest as shipped; recompute
+`content-manifest-digest` against the manifest as shipped (SHA-256 over
+its bytes as delivered); recompute
 each subject's semantic digest (JCS canonicalization of the object
 *minus annotations*, with the empty-omission and decimal-as-string
 guards) and compare. All subjects match + manifest matches = **Full**;

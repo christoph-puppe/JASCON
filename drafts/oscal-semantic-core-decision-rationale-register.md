@@ -2039,3 +2039,64 @@ Assessment example carried a `criteria-ref` the descriptor does not have
 and shows the shipped payload instead; Appendix D.6 lists the
 descriptor's payload completely. Python: 258 vectors, five bundles and the examples,
 ALL GREEN, with and without the `jascon/examples` argument.
+
+## Amendments — attestations beside the manifest (2026-11-11)
+
+**Trigger.** Porting the validator to JavaScript for `jascon-app/`: the
+port looked at every attestation of a set and reported an envelope the
+reference validator had never asked for.
+**Cause.** `validate_bundle()` built its object graph from the manifest's
+`objects` and from nothing else. D3.1 excludes an Attestation from that
+list. A conformant Attestation was therefore never typed, its
+`envelope-ref` never resolved, `verify_envelope()` never called for it,
+and `derive_tier()` could not find it — in structural and in verification
+mode. The envelope check ran for exactly one layout, the listed
+Attestation, which D3.1 forbids (the IFA bundle). `validate_examples()`
+typed the example Attestation and checked nothing about it: its three
+subject digests and its manifest digest matched nothing in the folder,
+the envelope it names was not in the repository, and every run was green.
+The five `dsse` vectors could not see any of this; they hand the engine
+its objects in memory.
+**Decision.** (1) A validator loads the Attestations beside the manifest:
+a JSON file in the manifest's own directory that the manifest neither
+lists nor pins and that carries `subject-semantic-digests` is an
+Attestation or a failure. It gets the envelope check and counts in tier
+derivation like a listed one. (2) An `envelope-ref` that names no file is
+a failure for every Attestation, in both modes. (3) `envelope-ref` is a
+path inside the manifest's directory; an absolute path, a scheme or a
+`..` segment does not resolve — the Python validator joined the path
+unchecked. (4) An Attestation the manifest lists is checked as before and
+noted, not failed. (5) `content-manifest-digest` is SHA-256 over the
+manifest's bytes as delivered; D7 had not said which bytes.
+**Rejected.** *State that only listed Attestations are checked* — it
+would make the reference check the layout the specification forbids and
+skip the one it prescribes. *Search the whole bundle tree for unlisted
+Attestations* — "beside" would stop meaning a place, and an unlisted
+file under `objects/` is an error already. *Fail a listed Attestation* —
+correct by D3.1, but it turns the IFA bundle red for a converter change
+that #46 already carries. *Evaluate `attestation-binds` on every bundle*
+— it needs a decision this change does not take: whether a subject that
+is not in the bundle is a landmark reference (the reference taxonomy,
+#16) or a completeness failure (Chapter 11); and the IFA Attestation's
+digest for `system1234` is stale.
+**The example.** Its Attestation now names component, implementation and
+assessment with their semantic digests, binds the manifest's bytes and
+the rendering, and carries an envelope signed with the fixture key of the
+dsse vectors (public seed: the envelope shows the mechanism, not a
+signer). The example pass fails when a binding drifts;
+`scripts/sign_example.py` rewrites Attestation and envelope and has a
+`--check`. The trusted key for the example is
+`conformance/dsse-fixture-trusted-keys.json` — beside the vectors, not in
+the bundle, because a key never comes from the bundle.
+**Shipped with it.** `validate_core.py` (one envelope function for both
+passes; the run moved into `main()` so the engines can be imported);
+ten `bundle-vectors` in `dsse-vectors.json`, each written to disk and
+judged by the bundle validation itself (dsse 5 → 15, corpus 268);
+`validate_core.ps1` — **by reading, not executed**, guarded, and it had
+never called `Verify-Envelope` on a bundle at all; the app
+(`jscCheckGraph`: a missing envelope is an error, listed or not) with the
+same ten cases in its tests; D3.1, D7, D13, Chapters 11 and 12, Appendix
+B.1.7; example README; skill zip rebuilt. Python: 268 vectors, five
+bundles and the examples, ALL GREEN, with and without the
+`jascon/examples` argument and with `--trusted-keys`. Backlog: #55 filed
+and closed, #46 half done.

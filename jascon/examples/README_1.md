@@ -21,7 +21,8 @@ consistent package — the same running story the Handbook tells
 | 7 | Assessment | `assessment-2026q3.json` | facet-typed method (stdlib `assessment-criteria@1`), subjects, result |
 | 8 | Finding | `finding-017.json` | statement-scoped finding, calendar-aware action, **Deviation sub-object** (false-positive, approved) |
 | 10 | Risk | `risk-acme-kms-key-rotation.json` | treated Risk on a BSI 200-3 scale, G 0.x threat refs, **treats KONF.14.1 s2** (the clause finding 017 is against — which now carries `risk-refs`), CISO acceptance of the residual, 12-month calendar review; `risk-coverage` on this bundle: 3 selected, 1 justified, 2 uncovered |
-| 9 | Attestation | `attestation-acme-2026.json` | subject **semantic** digests, content-manifest binding, rendering block — *beside* the manifest, never inside |
+| 9 | Attestation | `attestation-acme-2026.json` | subject **semantic** digests (component, implementation, assessment), content-manifest binding, rendering block — *beside* the manifest, never inside |
+| — | DSSE envelope | `attestation-envelope.dsse` | the attestation's canonical form as payload, signed (Ed25519) with the **fixture key** of the conformance corpus; named by `envelope-ref` |
 | — | Content manifest | `content-manifest.json` | both digests per object, exact-pinned facet schemas, rendering digest |
 | — | Facet descriptors | `gspp-taxonomy-1.0.0.json`, `assessment-criteria-1.0.0.json` | a custom facet descriptor, and a stdlib descriptor pinned **verbatim** (D26) |
 | — | Rendering (L4) | `authorization-summary.md` | the "document as view", digest-bound by the attestation |
@@ -81,14 +82,37 @@ consistent package — the same running story the Handbook tells
    only the pin's digest. Both now load pins with one function. The
    assessment's `summary` became a language map with it: the normative
    schema types `summary` as an object, the stub had typed it as a string.
-6. **The attestation is illustrative end to end.** Its
-   `template-ref.digest` is a marked placeholder, the DSSE **envelope is
-   out of scope** (`envelope-ref` points at a path not included), and —
-   not marked until 2026-11-10 — its three `subject-semantic-digests` and
-   its `content-manifest-digest` **match no object and no manifest in this
-   folder** (they predate the `text` primitive re-run). It shows the
-   *shape* of an attestation; it binds nothing here. Making it real, and
-   having the validator hold it to that, is backlog #46.
+6. **The attestation binds this folder; its signer is a fixture.** Its
+   three `subject-semantic-digests` name the component, the
+   implementation and the assessment of the Acme story and match them;
+   its `content-manifest-digest` is the SHA-256 of `content-manifest.json`
+   as delivered; its rendering digest is that of
+   `authorization-summary.md`. `attestation-envelope.dsse` carries the
+   attestation's canonical form and an Ed25519 signature. `validate_core.py`
+   holds all of this on every run and fails the folder when one of them
+   drifts. After an edit to a subject, the manifest or the rendering:
+
+   ```bash
+   python3 jascon/scripts/sign_example.py
+   ```
+
+   The signature is made with the **fixture key** of
+   `conformance/dsse-vectors.json`, whose seed is printed there. Everybody
+   can sign with it: the envelope shows the mechanism and proves nothing
+   about an authorizing official. To see verification mode, hand the
+   validator the fixture's public key — as input, because a key never
+   comes from the bundle:
+
+   ```bash
+   python3 jascon/scripts/validate_core.py --trusted-keys jascon/conformance/dsse-fixture-trusted-keys.json jascon/examples
+   ```
+
+   Still illustrative: `template-ref.digest` is a marked placeholder.
+   *Correction (2026-11-11):* until then the three subject digests and the
+   manifest digest matched no object and no manifest in this folder, the
+   envelope the attestation names did not exist, and no validator run said
+   so — the reference validator read only what the manifest lists, and an
+   attestation is by definition not listed (D3.1; backlog #46 and #55).
 7. One rendering stands in for real deliverables; real bundles list
    as many as they ship.
 

@@ -132,6 +132,17 @@ memorizing: *nothing signed contains its own signature.* Attestations
 live beside the content manifest; a transport wrapper may list both,
 but it is never the signed structure.
 
+*Beside* is meant literally, because a validator has to find the file:
+an attestation is a JSON file in the content manifest's own directory,
+and the manifest does not list it. A validator reads that directory,
+takes every unlisted file that carries `subject-semantic-digests` as an
+attestation — or fails it, if its shape is not one — checks its envelope
+and lets it count in tier derivation (Chapter 6). A validator that reads
+only what the manifest lists sees no conformant attestation at all; the
+reference validator did exactly that until 2026-11-11. An attestation
+that a manifest lists all the same is checked too, and the validator
+notes the placement.
+
 ## 11.3 Sealed mode, end to end
 
 "Sealed" is not a deployment option; it is a **Core conformance
@@ -228,9 +239,13 @@ and the profile is normative about seven questions. They double as the
 acceptance checklist for anyone *receiving* an attested package — and
 as the build sheet for anyone producing one:
 
-*Where is the envelope?* (`envelope-ref`, resolvable in the bundle's
-transport wrapper.) *Exactly which digest set is signed?* (The
-attestation's three bindings — no ambiguity about bytes-versus-
+*Where is the envelope?* (`envelope-ref`, a path relative to the
+content manifest's directory and inside it — no absolute path, no
+`..`. A named envelope that is not there is a failure, not an unsigned
+attestation.) *Exactly which digest set is signed?* (The
+attestation's three bindings — subjects by semantic digest, the
+content manifest by the SHA-256 of its bytes as delivered, the
+rendering by its bytes — no ambiguity about bytes-versus-
 canonical.) *In what format is the signer's identity expressed?*
 *How are trust roots expressed and distributed* — sealed environments
 included? *What timestamps exist*, and is a trusted timestamp among

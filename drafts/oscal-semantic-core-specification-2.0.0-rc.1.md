@@ -231,6 +231,20 @@ relation (v0.4 — corrected).
    it (a transport manifest MAY list both but is never the signed
    structure). This dissolves the manifest↔attestation hash cycle P7-B1
    proved: nothing signed contains its own signature.
+   *(2026-11-11 — where an Attestation lies, and that it is read.)* An
+   Attestation is a file in the content manifest's own directory. Its
+   `envelope-ref` is a path relative to that directory and stays inside
+   it: an absolute path, a scheme or a `..` segment does not resolve. A
+   validator **loads every Attestation it finds there** — a JSON file the
+   manifest neither lists nor pins and that carries
+   `subject-semantic-digests` is an Attestation or a failure — judges its
+   envelope and lets it take part in tier derivation (D13). An
+   `envelope-ref` that names no file is a failure, in structural and in
+   verification mode. An Attestation that a content manifest lists all
+   the same is checked like any other, and its placement is reported as a
+   note. Until this date the reference validator read only what the
+   manifest lists, which is the one place a conformant Attestation cannot
+   be (register "Amendments — attestations beside the manifest").
 2. **Sealed mode** remains a Core conformance requirement: full validation
    with zero network access, resolution via the manifest only.
 3. **JCS pre-normalization (P6-F3):** before JCS serialization, all
@@ -357,6 +371,10 @@ works.
 timestamp, envelope-ref, provenance-map-ref?}` — the attestation binds the
 **content-manifest digest** (which covers every object's package- and
 semantic-digest at signing time) and is itself outside that manifest (D3).
+*(2026-11-11)* `content-manifest-digest` is SHA-256 over the content
+manifest's **bytes as delivered** — the package domain, like every
+`package-digest` (D3.1). The text had not said which bytes; a manifest
+that was re-serialized therefore yields Semantic Match, not failure.
 Verification is a **normative two-state machine**:
 
 1. **Full Match** — signature valid, content-manifest digest matches the
@@ -562,7 +580,9 @@ same resolution equally recognizes an authority's own content behind a
 foreign-minted wrapper. A predicate select or mixed-origin content
 blocks the claim, because tailoring across authorities' content is
 consumer work by definition; (2) **authority-proven** iff additionally
-(or instead — proof beats prefix) an in-bundle Attestation whose signer
+(or instead — proof beats prefix) an in-bundle Attestation — one
+delivered beside the content manifest, which a validator therefore loads
+(D3.1) — whose signer
 shares the selected content's origin lists the Tailoring among its
 subjects with a verifying semantic digest — and, **in verification mode
 (gate 4, #24: trusted keys supplied), iff that Attestation's DSSE
@@ -1291,7 +1311,9 @@ corpus and two implementations. The same four questions, asked of Risk:
    and `kernel` 9 (the manifest pin, D3.6) and `scale` 18 (pinned scale
    definitions, D3.7). Every review correction to the proposal is
    pinned by a vector that fails on the validator as first proposed.
-2. **First implementation.** ✓ `validate_core.py`: 258 / 258, the five
+   *(2026-11-11: 268 — `dsse` 5 → 15 with ten bundle-level cases for an
+   Attestation beside the manifest, D3.1.)*
+2. **First implementation.** ✓ `validate_core.py`: 268 / 268, the five
    shipped bundles (3,715 objects, both digests each), and the example
    bundle with its manifest — ALL GREEN.
 3. **Second implementation.** ✗ **OPEN.** `validate_core.ps1` carries the
@@ -1357,9 +1379,10 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
 - **Seven stdlib facet descriptors** (incl. the normative DSSE envelope
   profile) — unchanged from 1.0.0; pinned VERBATIM wherever bundled.
   `risk-analysis@1` is parked, with one measured payload (Appendix D).
-- **Conformance corpus**: **258 vectors, 15 families** (jcs 8 ·
+- **Conformance corpus**: **268 vectors, 15 families** (jcs 8 ·
   modality 21 · parameter 19 · tailoring 19 · attestation 5 · facet 7 ·
-  reference 13 · lifecycle 37 · tier 9 · dsse 5 · composition 7 ·
+  reference 13 · lifecycle 37 · tier 9 · dsse 15 — five on the engine,
+  ten on bundles on disk · composition 7 ·
   conditional 8 · risk 73 · kernel 9 · scale 18). In `risk-vectors.json`, `expected-rule` is
   the portable assertion.
 - **Two reference validators**: `validate_core.py` (Python, jsonschema
@@ -1428,7 +1451,10 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
    major, and this is one.
 6. **Work, not decisions** — ☐ value arrival for the other corpora and
    the re-wording of "converted losslessly" that follows from it (#41);
-   ☐ a real attestation in the example bundle (#46); ☐ a second Risk
-   corpus (IV.5b item 4).
+   ◐ a real attestation in the example bundle (#46) — done 2026-11-11:
+   its three bindings are held by the example pass and its envelope is
+   signed with the fixture key; still open in #46: the IFA bundle lists
+   its Attestation in the manifest, and `attestation-binds` is not
+   evaluated on bundles; ☐ a second Risk corpus (IV.5b item 4).
 7. **Tag `v2.0.0`** — on the author's go, after item 4.
 
