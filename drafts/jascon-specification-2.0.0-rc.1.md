@@ -26,14 +26,17 @@
 > 2026-07-22 (decision recorded in the rationale register; uniqueness
 > verified by collision scan the same day). Machine identifiers — namespace
 > URIs, the attestation media type
-> `application/vnd.oscal-semantic-core.attestation+json`, schema filenames —
-> deliberately retain the `oscal-semantic-core` string for digest stability.
+> `application/vnd.jascon.attestation+json`, schema filenames —
+> deliberately retained the working-title string for digest stability.
 > **Decided at the tag: they remain.** Identifiers are opaque strings (D2);
 > the brand lives in prose; churning every digest and signature for a
 > spelling would contradict the stability the identifiers exist to provide
 > (register "Amendments — v1.0.0"; revisit only with a D3.5 major).
-> *(2.0.0: this is that major. The identifiers are unchanged in this
-> candidate; whether to revisit them is the author's question — IV.9.)*
+> *(2.0.0: this is that major. Author decision 2026-11-11: the attestation
+> media type and the schema filenames now carry `jascon`
+> (`application/vnd.jascon.attestation+json`, `jascon-2.0.0.schema.json`);
+> envelopes signed under the old media type must be re-signed. Namespace
+> URIs and schema `$id`s keep their spelling — IV.9.)*
 > Nothing here is endorsed
 > by NIST, BSI, ACSC, CCB, CIS, or FedRAMP; the project is maintained in
 > personal capacity.
@@ -1337,7 +1340,7 @@ history. The compact line:
 | **1.0.0-rc.1** | 2026-07-22 | This consolidation; D22's anticipated path closed unused (rev 3) | this row |
 | P10 + P10b | 2026-07-22 | Adversarial review of THIS text (no Blockers; #29–#37 filed) + external Gemini review adjudicated (#38–#39 in; G-3/G-4/G-5 refuted) | "Amendments — P10" / "P10b" |
 | P10 fix pass | 2026-07-22 | All eleven items closed: op-law completed (pinned declarations, same-target on bundles, predicates schema-bound), D21 acyclicity — whose first run recovered **239 silently-merged ISM taxonomy sets** (corpus 6,675 → 6,914 objects; export 5,886/5,886); Part II aligned to the delivered schema; vectors 149 → 157; `DE.BSI` rename; errata swept | "Amendments — the P10 fix pass" |
-| **1.0.0** | 2026-07-22 | Released at tag `v1.0.0`; machine identifiers stay `oscal-semantic-core` by the tag-time decision (opaque strings, D2) | "Amendments — v1.0.0" |
+| **1.0.0** | 2026-07-22 | Released at tag `v1.0.0`; machine identifiers keep the working-title string by the tag-time decision (opaque strings, D2) | "Amendments — v1.0.0" |
 | CP-RISK-1 landing | 2026-11-10 | The Risk proposal applied, reviewed and corrected (eight findings, each pinned by a vector; RISK-12 added); the first Risk corpus (IFA re-run) and what OSCAL's data lacks; found on the way — the 1.0.0 corpus did not verify off Windows (line endings), and coverage is path-level, not value arrival | "Amendments — CP-RISK-1" |
 | The 2.0.0 decision | 2026-11-10 | The release that carries Risk is a major (D22 rev 3 stands); recorded as an exception to D22 test 1; Apache-2.0 | "Amendments — the 2.0.0 decision" |
 | Corpus licence review | 2026-11-10 | Five bundles kept under their publishers' stated terms, six removed (terms forbid it, or none established); converters and coverage reports stay | "Amendments — the corpus licence review" |
@@ -1354,7 +1357,7 @@ history. The compact line:
 In the repository at the rc.1 commit. "Green" below means the Python
 reference validator; the PowerShell twin's state is IV.5b item 3.
 
-- **Kernel schema** `oscal-semantic-core-2.0.0.schema.json` — closed
+- **Kernel schema** `jascon-2.0.0.schema.json` — closed
   shapes, shape-disjoint type inference, 10 types + Deviation + manifest;
   the `text` primitive on every human-readable field. A superset of the
   1.0.0 schema.
@@ -1388,7 +1391,7 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
   `jascon/references/appendix-{a,b,c}-*.md`, with the handbook chapters
   ch01–ch15 and appendices D–G beside them.
 - **The Decision Rationale Register** —
-  `drafts/oscal-semantic-core-decision-rationale-register.md` — and the
+  `drafts/jascon-decision-rationale-register.md` — and the
   change proposal with its landing record, `drafts/CP-RISK-1.md`.
 - **The reader** (`one-page-apps/jascon-reader.html`, v1.7.3) —
   recognises the Risk type.
@@ -1405,7 +1408,7 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
    pass closed all eleven items the standing way — register
    "Amendments — P10 / P10b / the P10 fix pass".
 3. **Tag `v1.0.0`** — ✓ tagged 2026-07-22 on the author's go. Machine
-   identifiers remain `oscal-semantic-core` by the tag-time decision
+   identifiers remain in the working-title spelling by the tag-time decision
    (title block; register "Amendments — v1.0.0"). From here,
    kernel-shape changes ride major versions under D3.5 governance, and
    the anticipated-convergence path stays closed (D22 rev 3).
@@ -1427,9 +1430,9 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
    of Applicability for — `tailoring-refs` scopes a Risk by naming the
    Tailoring, which is the join that exists, not the one ISO describes
    (#51); ☐ `Deviation.opened` is still a free string — tightening it is a
-   1.0.0-shape change like #47a (#52). The machine identifiers stay `oscal-semantic-core` unless the
-   author says otherwise — the 1.0.0 record tied that question to a
-   major, and this is one.
+   1.0.0-shape change like #47a (#52). The author decided on 2026-11-11: the media type and the schema
+   filenames now carry `jascon`; namespace URIs and `$id`s keep their
+   spelling (register, "Amendments — 2026-11-11").
 6. **Work, not decisions** — ☐ value arrival for the other corpora and
    the re-wording of "converted losslessly" that follows from it (#41);
    ☐ a real attestation in the example bundle (#46); ☐ a second Risk

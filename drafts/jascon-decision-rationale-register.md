@@ -1046,7 +1046,7 @@ narrative ×1) — each now a declared contract, none smuggled.
 
 ## The release candidate document
 **Decision.** The specification is consolidated into
-`drafts/oscal-semantic-core-specification-1.0.0-rc.1.md`: the normative
+`drafts/jascon-specification-1.0.0-rc.1.md`: the normative
 Parts I–III as amended in place through every cycle, the corpus/coverage
 /ledger claims updated from *designed-for* to *measured* where the gates
 measured them, IV.5 marked delivered item by item, and the amendment
@@ -1089,7 +1089,7 @@ converted at 100 % coverage; every prose field a language map.
 **Scope.** Brand rename across the living documents and the reader
 (file renamed `jascon-reader.html`, v1.7.0). Superseded drafts, dated
 register entries, review records, and census files retain the working
-title as history. **Machine identifiers keep the `oscal-semantic-core`
+title as history. **Machine identifiers keep the working-title
 string** — namespace URIs, the attestation media type, schema
 filenames — for digest stability; their migration is decided with the
 `v1.0.0` tag. Trademark screen (DPMA/EUIPO/USPTO) and domain
@@ -1327,15 +1327,15 @@ Refuted stays refuted: G-3 · G-4 · G-5 (P10b entry) — none acted on.
 
 **Tagged `v1.0.0` on the author's go** ("create the 1.0.0 and do a
 release"). The spec file promoted in place:
-`drafts/oscal-semantic-core-specification-1.0.0.md` (renamed from
+`drafts/jascon-specification-1.0.0.md` (renamed from
 `…-1.0.0-rc.1.md`; title and IV.6/IV.8 updated; README and the v0.5
 banner repointed). Release notes:
 `drafts/jascon-1.0.0-release-notes.md` (doubles as the GitHub release
 body; the SKILL zip is the attachable artifact).
 
 **The tag-time decision — machine identifiers remain
-`oscal-semantic-core`.** Namespace URIs, the attestation media type
-(`application/vnd.oscal-semantic-core.attestation+json` — inside every
+in the working-title spelling.** Namespace URIs, the attestation media type
+(`application/vnd.jascon.attestation+json` — inside every
 DSSE PAE), schema filenames and `$id`s, and the skill's machine name
 keep the working-title string. *(The skill's machine name and folder
 were carved out of this list post-1.0.0 — see "Amendments — post-1.0.0
@@ -1349,7 +1349,7 @@ should one ever exist.
 **Customer.** Every shipped bundle, attestation, and third-party pin
 stays verifiable forever against 1.0.0 artifacts.
 **Simplicity.** One rule: brands may move, identifiers do not.
-**Trade-off.** The string `oscal-semantic-core` outlives the working
+**Trade-off.** The working-title string outlives the working
 title inside URIs — cosmetic, documented in the spec's title block.
 
 Residual on the author (outside the repo): the DPMA/EUIPO/USPTO
@@ -1373,7 +1373,7 @@ and `convert_cr26.py` — repointed in the same pass.
 **This narrows the v1.0.0 tag-time decision, it does not reverse it.**
 That entry listed "the skill's machine name" alongside namespace URIs,
 the media type, and schema `$id`s. The four are not the same kind of
-thing: a namespace URI, `application/vnd.oscal-semantic-core.attestation+json`
+thing: a namespace URI, `application/vnd.jascon.attestation+json`
 and a schema `$id` are **inside the digested bytes** — PAE payloads,
 pinned manifests, signatures. A directory name and a skill invocation
 handle are **not inputs to any digest**; nothing verifiable depends on
@@ -1392,7 +1392,7 @@ re-installs under the new path; the 1.0.0 release notes now cite
 `jascon/` paths that the `v1.0.0` tag itself does not contain.
 
 **Unchanged, deliberately:** the kernel schema filename and `$id`
-(`oscal-semantic-core-1.0.0.schema.json`), `https://ns.oscal-semantic.org/core`,
+(`jascon-1.0.0.schema.json`), `https://ns.oscal-semantic.org/core`,
 and the DSSE payload type. Both validators reproduce the pre-rename
 result byte-for-byte modulo the directory name; the rebuilt bundle
 carries the same 76 entries.
@@ -1586,7 +1586,7 @@ released 1.0.0 text, and what replaces it waits on #40.
 **Decision.** "v2" — the author, 2026-11-10, on being shown the
 contradiction recorded above. The release is **2.0.0**, a major version,
 as D22 rev 3 and specification IV.8 require. **D22 is not amended.**
-Schema file `oscal-semantic-core-2.0.0.schema.json`, `$id`
+Schema file `jascon-2.0.0.schema.json`, `$id`
 `https://ns.oscal.org/semantic-core/schema/2.0.0`; the working label
 "1.1.0" was replaced in the schema, both validators, the vectors, the
 handbook, SKILL.md, the reader and the converter in one pass. It
@@ -1605,7 +1605,7 @@ compatibility the format cannot give.
 **What the major opens, and what this entry does NOT take.** The 1.0.0
 record tied two things to a major: (1) re-spelling the machine
 identifiers ("Revisit only with a D3.5 major version, should one ever
-exist") — **unchanged here**; `oscal-semantic-core` stays in namespace
+exist") — **unchanged here**; the working-title string stays in namespace
 URIs, the media type and schema filenames until the author says
 otherwise; (2) tightening `Finding.actions[].due` (#47a) — **not
 taken**, so that the superset property stays true. Both windows are open
@@ -1800,7 +1800,7 @@ converter reporting a gap in the source, not repairing it — house rule,
 applied to the fourth authority.
 **Follow-on.** With this decided the 2.0.0 specification text was written
 as a release candidate
-(`drafts/oscal-semantic-core-specification-2.0.0-rc.1.md`): D23 carries
+(`drafts/jascon-specification-2.0.0-rc.1.md`): D23 carries
 Risk, the rules and this decision.
 
 ## Amendments — the rc.1 review (2026-11-10)
@@ -2039,3 +2039,23 @@ Assessment example carried a `criteria-ref` the descriptor does not have
 and shows the shipped payload instead; Appendix D.6 lists the
 descriptor's payload completely. Python: 258 vectors, five bundles and the examples,
 ALL GREEN, with and without the `jascon/examples` argument.
+
+# Amendments — 2026-11-11: the media type and the schema filenames follow the brand
+
+**Author decision.** The working-title string leaves the repository's
+file names and the attestation media type: the kernel schema is
+`jascon/schemas/jascon-2.0.0.schema.json`, the drafts under `drafts/`
+are named `jascon-…`, and the DSSE payload type is
+`application/vnd.jascon.attestation+json`. This takes, for these two
+identifiers, the window the 1.0.0 record tied to a major (D3.5) and
+2.0.0 left open (IV.9).
+**Not changed.** Namespace URIs and schema `$id`s
+(`https://ns.oscal.org/semantic-core/…`, the D16 compatibility namespace)
+keep their spelling: they are inside every semantic digest and pin.
+**Consequence.** The media type is an input to every DSSE signature
+(PAE). An envelope signed under the old type no longer verifies and must
+be re-signed. The conformance fixture key is now derived from
+sha256('jascon dsse fixture key 1'); all DSSE vectors are re-signed, and
+`wrong-key-fails-signature` now carries a real signature by a second key
+(sha256('jascon dsse wrong key 1')). The schema filename is not hashed;
+the app's generated `jascon-schema.js` and both validators follow it.

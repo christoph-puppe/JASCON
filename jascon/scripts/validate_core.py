@@ -43,7 +43,7 @@ DECIMAL_RE = r"^(-?[1-9][0-9]*(\.[0-9]+)?|0(\.[0-9]+)?|-0\.[0-9]*[1-9][0-9]*)$"
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.normpath(os.path.join(HERE, "..", ".."))
 SKILL = os.path.join(ROOT, "jascon")
-SCHEMA = json.load(open(os.path.join(SKILL, "schemas", "oscal-semantic-core-2.0.0.schema.json"), encoding="utf-8"))
+SCHEMA = json.load(open(os.path.join(SKILL, "schemas", "jascon-2.0.0.schema.json"), encoding="utf-8"))
 CONF = os.path.join(SKILL, "conformance")
 
 TYPES = ["requirement", "requirementSet", "tailoring", "mapping", "component",
@@ -419,7 +419,7 @@ def content_digest(obj):
 # algorithm; the reference engine pins Ed25519 (RFC 8032), dependency-free.
 # Key distribution is authority-local (the R6 pattern): trusted keys arrive
 # as INPUT (--trusted-keys file / vector fixtures), never from the bundle.
-DSSE_PAYLOAD_TYPE = "application/vnd.oscal-semantic-core.attestation+json"
+DSSE_PAYLOAD_TYPE = "application/vnd.jascon.attestation+json"
 _ED_P = 2**255 - 19
 _ED_L = 2**252 + 27742317777372353535851937790883648493
 _ED_D = (-121665 * pow(121666, _ED_P - 2, _ED_P)) % _ED_P

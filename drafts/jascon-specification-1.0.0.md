@@ -8,12 +8,14 @@
 > 2026-07-22 (decision recorded in the rationale register; uniqueness
 > verified by collision scan the same day). Machine identifiers — namespace
 > URIs, the attestation media type
-> `application/vnd.oscal-semantic-core.attestation+json`, schema filenames —
-> deliberately retain the `oscal-semantic-core` string for digest stability.
+> `application/vnd.jascon.attestation+json`, schema filenames —
+> deliberately retain the working-title string for digest stability.
 > **Decided at the tag: they remain.** Identifiers are opaque strings (D2);
 > the brand lives in prose; churning every digest and signature for a
 > spelling would contradict the stability the identifiers exist to provide
 > (register "Amendments — v1.0.0"; revisit only with a D3.5 major).
+> *(Reversed in 2.0.0 for the media type and the schema filenames —
+> register, "Amendments — 2026-11-11".)*
 > Nothing here is endorsed
 > by NIST, BSI, ACSC, CCB, CIS, or FedRAMP; the project is maintained in
 > personal capacity.
@@ -848,14 +850,14 @@ history. The compact line:
 | **1.0.0-rc.1** | 2026-07-22 | This consolidation; D22's anticipated path closed unused (rev 3) | this row |
 | P10 + P10b | 2026-07-22 | Adversarial review of THIS text (no Blockers; #29–#37 filed) + external Gemini review adjudicated (#38–#39 in; G-3/G-4/G-5 refuted) | "Amendments — P10" / "P10b" |
 | P10 fix pass | 2026-07-22 | All eleven items closed: op-law completed (pinned declarations, same-target on bundles, predicates schema-bound), D21 acyclicity — whose first run recovered **239 silently-merged ISM taxonomy sets** (corpus 6,675 → 6,914 objects; export 5,886/5,886); Part II aligned to the delivered schema; vectors 149 → 157; `DE.BSI` rename; errata swept | "Amendments — the P10 fix pass" |
-| **1.0.0** | 2026-07-22 | Released at tag `v1.0.0`; machine identifiers stay `oscal-semantic-core` by the tag-time decision (opaque strings, D2) | "Amendments — v1.0.0" |
+| **1.0.0** | 2026-07-22 | Released at tag `v1.0.0`; machine identifiers keep the working-title string by the tag-time decision (opaque strings, D2) | "Amendments — v1.0.0" |
 
 ## IV.7 Release artifacts (what this specification ships with)
 
 Everything below is in the repository, reproducible, and green at the
 rc.1 commit:
 
-- **Kernel schema** `oscal-semantic-core-1.0.0.schema.json` — closed
+- **Kernel schema** `jascon-1.0.0.schema.json` — closed
   shapes, shape-disjoint type inference, 9 types + Deviation + manifest;
   the `text` primitive (`{BCP-47: string | [string]}`) on every
   human-readable field.
@@ -883,7 +885,7 @@ rc.1 commit:
   C (code systems) — at `jascon/references/appendix-{a,b,c}-*.md`,
   with the handbook chapters ch01–ch15 and appendices D–G beside them.
 - **The Decision Rationale Register** —
-  `drafts/oscal-semantic-core-decision-rationale-register.md`: the full
+  `drafts/jascon-decision-rationale-register.md`: the full
   amendment journal this text compacts (IV.6).
 - **The reader** (`one-page-apps/jascon-reader.html`, v1.7.1) —
   a zero-dependency single-file browser, authoring workbench, and
@@ -899,7 +901,7 @@ rc.1 commit:
    pass closed all eleven items the standing way — register
    "Amendments — P10 / P10b / the P10 fix pass".
 3. **Tag `v1.0.0`** — ✓ tagged 2026-07-22 on the author's go. Machine
-   identifiers remain `oscal-semantic-core` by the tag-time decision
+   identifiers remain in the working-title spelling by the tag-time decision
    (title block; register "Amendments — v1.0.0"). From here,
    kernel-shape changes ride major versions under D3.5 governance, and
    the anticipated-convergence path stays closed (D22 rev 3).

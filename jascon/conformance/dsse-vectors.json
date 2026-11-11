@@ -1,6 +1,6 @@
 {
- "description": "DSSE verification vectors (gate 4, backlog #24). The reference engine pins Ed25519 (RFC 8032); payload = the Attestation's canonical form (annotations excluded); signature input = PAE(payloadType, payload) per DSSE v1. Fixture seed = sha256('oscal-semantic-core dsse fixture key 1'); PUBLIC KEY (hex) embedded in trusted-keys. Digests and signatures are LITERALS - re-run the authoring script after any object edit (it fails loudly, never silently).",
- "fixture-public-key": "bb10925493ae5228537a99fc91cdcca6a2bd5cde8b7c5b8e3f40f50e5edb2e65",
+ "description": "DSSE verification vectors (gate 4, backlog #24). The reference engine pins Ed25519 (RFC 8032); payload = the Attestation's canonical form (annotations excluded); signature input = PAE(payloadType, payload) per DSSE v1. Fixture seed = sha256('jascon dsse fixture key 1'); PUBLIC KEY (hex) embedded in trusted-keys. Digests and signatures are LITERALS - re-run the authoring script after any object edit (it fails loudly, never silently).",
+ "fixture-public-key": "c34a11dc1f8f626ce1ed80cb562361be14e293083679c3bb9990eee7b311404a",
  "vectors": [
   {
    "name": "signed-envelope-proves-in-verification-mode",
@@ -71,17 +71,17 @@
    "envelopes": {
     "env-1": {
      "payload": "eyJjb250ZW50LW1hbmlmZXN0LWRpZ2VzdCI6InNoYTI1Njo3YjFhNmI5ZWUwZjE3NmNiOGQxZTllMTYzMDljNWVjNzFmZTMyZDZlMjI4NDFhZjQyNDhiNTUxODZlNjQ2MDZmIiwiZW52ZWxvcGUtcmVmIjoiZW52LTEiLCJpZCI6Imh0dHBzOi8vbnMuYXV0aC5nb3YvZncvYXR0ZXN0YXRpb24vdGFpbG9yaW5nLWFwcHJvdmFsIiwibGlmZWN5Y2xlIjoiYWN0aXZlIiwic2lnbmVyIjoiaHR0cHM6Ly9ucy5hdXRoLmdvdi9mdy9wYXJ0eS9hbyIsInN1YmplY3Qtc2VtYW50aWMtZGlnZXN0cyI6W3siaWQiOiJodHRwczovL25zLm90aGVyLmV4YW1wbGUvdGFpbG9yaW5nL2Vhc2VkIiwic2VtYW50aWMtZGlnZXN0Ijoic2hhMjU2OmI0ZTUzMGY5ZjI0ZjFmZmYzOTZiMzQ2NzgyMmY1ODU3Y2YzMGM5NDZmZTQ5OTJhODE4MDkzYTIwMjM4ZGU5YjgifV0sInRpbWVzdGFtcCI6IjIwMjYtMDctMjJUMTI6MDA6MDBaIiwidmVyc2lvbiI6IjEifQ==",
-     "payloadType": "application/vnd.oscal-semantic-core.attestation+json",
+     "payloadType": "application/vnd.jascon.attestation+json",
      "signatures": [
       {
        "keyid": "fixture-1",
-       "sig": "fjnSiLcZyOtnFEJpEoA2K+g45SPfqDhAWFll0qLT4nXYi3zsSBmx/GtcXIdXuxNgNGTdOZKfNDegd5CNkCWzCw=="
+       "sig": "Htq0IhpmexEksMJCNCAAOtX/MRKcuZTepjuqlI3AIuXbheV+tt2+LLva38JPIqrmdbiCrTIAGKYj4r3hfh0pDg=="
       }
      ]
     }
    },
    "trusted-keys": {
-    "https://ns.auth.gov/fw/party/ao": "bb10925493ae5228537a99fc91cdcca6a2bd5cde8b7c5b8e3f40f50e5edb2e65"
+    "https://ns.auth.gov/fw/party/ao": "c34a11dc1f8f626ce1ed80cb562361be14e293083679c3bb9990eee7b311404a"
    },
    "expected-envelope": "verified",
    "expected-tier": "authority-proven"
@@ -153,7 +153,7 @@
    ],
    "envelopes": {},
    "trusted-keys": {
-    "https://ns.auth.gov/fw/party/ao": "bb10925493ae5228537a99fc91cdcca6a2bd5cde8b7c5b8e3f40f50e5edb2e65"
+    "https://ns.auth.gov/fw/party/ao": "c34a11dc1f8f626ce1ed80cb562361be14e293083679c3bb9990eee7b311404a"
    },
    "expected-tier": "consumer"
   },
@@ -226,17 +226,17 @@
    "envelopes": {
     "env-1": {
      "payload": "eyJjb250ZW50LW1hbmlmZXN0LWRpZ2VzdCI6InNoYTI1Njo3YjFhNmI5ZWUwZjE3NmNiOGQxZTllMTYzMDljNWVjNzFmZTMyZDZlMjI4NDFhZjQyNDhiNTUxODZlNjQ2MDZmIiwiZW52ZWxvcGUtcmVmIjoiZW52LTEiLCJpZCI6Imh0dHBzOi8vbnMuYXV0aC5nb3YvZncvYXR0ZXN0YXRpb24vdGFpbG9yaW5nLWFwcHJvdmFsIiwibGlmZWN5Y2xlIjoiYWN0aXZlIiwic2lnbmVyIjoiaHR0cHM6Ly9ucy5hdXRoLmdvdi9mdy9wYXJ0eS9hbyIsInN1YmplY3Qtc2VtYW50aWMtZGlnZXN0cyI6W3siaWQiOiJodHRwczovL25zLm90aGVyLmV4YW1wbGUvdGFpbG9yaW5nL2Vhc2VkIiwic2VtYW50aWMtZGlnZXN0Ijoic2hhMjU2OmI0ZTUzMGY5ZjI0ZjFmZmYzOTZiMzQ2NzgyMmY1ODU3Y2YzMGM5NDZmZTQ5OTJhODE4MDkzYTIwMjM4ZGU5YjgifV0sInRpbWVzdGFtcCI6IjIwMjYtMDctMjNUMTI6MDA6MDBaIiwidmVyc2lvbiI6IjEifQ==",
-     "payloadType": "application/vnd.oscal-semantic-core.attestation+json",
+     "payloadType": "application/vnd.jascon.attestation+json",
      "signatures": [
       {
        "keyid": "fixture-1",
-       "sig": "XpDhY+Pr1mVy1ZViMwVQyylzia2EKZ/kX2arPA5xK+mO0WXrb+kby75jxfbsXnA4s1pp9AiwIMX/2jXpoMwCDg=="
+       "sig": "yyoitsqjAhHeZvYT+brHJ0VkiCHw0KyU4X4WKnYzHygNiy/VwJoi/HOxgxt/Z1DPm2Y6jydb1xnTlNztilg4Aw=="
       }
      ]
     }
    },
    "trusted-keys": {
-    "https://ns.auth.gov/fw/party/ao": "bb10925493ae5228537a99fc91cdcca6a2bd5cde8b7c5b8e3f40f50e5edb2e65"
+    "https://ns.auth.gov/fw/party/ao": "c34a11dc1f8f626ce1ed80cb562361be14e293083679c3bb9990eee7b311404a"
    },
    "expected-envelope": "error:canonical form",
    "expected-tier": "consumer"
@@ -309,20 +309,21 @@
    "envelopes": {
     "env-1": {
      "payload": "eyJjb250ZW50LW1hbmlmZXN0LWRpZ2VzdCI6InNoYTI1Njo3YjFhNmI5ZWUwZjE3NmNiOGQxZTllMTYzMDljNWVjNzFmZTMyZDZlMjI4NDFhZjQyNDhiNTUxODZlNjQ2MDZmIiwiZW52ZWxvcGUtcmVmIjoiZW52LTEiLCJpZCI6Imh0dHBzOi8vbnMuYXV0aC5nb3YvZncvYXR0ZXN0YXRpb24vdGFpbG9yaW5nLWFwcHJvdmFsIiwibGlmZWN5Y2xlIjoiYWN0aXZlIiwic2lnbmVyIjoiaHR0cHM6Ly9ucy5hdXRoLmdvdi9mdy9wYXJ0eS9hbyIsInN1YmplY3Qtc2VtYW50aWMtZGlnZXN0cyI6W3siaWQiOiJodHRwczovL25zLm90aGVyLmV4YW1wbGUvdGFpbG9yaW5nL2Vhc2VkIiwic2VtYW50aWMtZGlnZXN0Ijoic2hhMjU2OmI0ZTUzMGY5ZjI0ZjFmZmYzOTZiMzQ2NzgyMmY1ODU3Y2YzMGM5NDZmZTQ5OTJhODE4MDkzYTIwMjM4ZGU5YjgifV0sInRpbWVzdGFtcCI6IjIwMjYtMDctMjJUMTI6MDA6MDBaIiwidmVyc2lvbiI6IjEifQ==",
-     "payloadType": "application/vnd.oscal-semantic-core.attestation+json",
+     "payloadType": "application/vnd.jascon.attestation+json",
      "signatures": [
       {
        "keyid": "fixture-1",
-       "sig": "S6NgnZETbUa8K76ky8pP8vQMkfaL3L3sHDapRnLMnlQxgjegmP5CFYfqYKWGjMhSO0BiTBVwdDjghCyMrgF6DA=="
+       "sig": "S8CYRsg4rR0R2Hdk+GSS15URHvUAMY0yla3PHOOR4boyt0ULjjU4SIGpMl4HBViw54hMrzFPI+rgbMG1twiaCQ=="
       }
      ]
     }
    },
    "trusted-keys": {
-    "https://ns.auth.gov/fw/party/ao": "bb10925493ae5228537a99fc91cdcca6a2bd5cde8b7c5b8e3f40f50e5edb2e65"
+    "https://ns.auth.gov/fw/party/ao": "c34a11dc1f8f626ce1ed80cb562361be14e293083679c3bb9990eee7b311404a"
    },
    "expected-envelope": "error:no signature verifies",
-   "expected-tier": "consumer"
+   "expected-tier": "consumer",
+   "note": "a well-formed signature by a key the verifier does not trust (seed sha256('jascon dsse wrong key 1')): no signature verifies, proven is NOT granted."
   },
   {
    "name": "missing-trusted-key-is-unverified-not-proven",
@@ -393,11 +394,11 @@
    "envelopes": {
     "env-1": {
      "payload": "eyJjb250ZW50LW1hbmlmZXN0LWRpZ2VzdCI6InNoYTI1Njo3YjFhNmI5ZWUwZjE3NmNiOGQxZTllMTYzMDljNWVjNzFmZTMyZDZlMjI4NDFhZjQyNDhiNTUxODZlNjQ2MDZmIiwiZW52ZWxvcGUtcmVmIjoiZW52LTEiLCJpZCI6Imh0dHBzOi8vbnMuYXV0aC5nb3YvZncvYXR0ZXN0YXRpb24vdGFpbG9yaW5nLWFwcHJvdmFsIiwibGlmZWN5Y2xlIjoiYWN0aXZlIiwic2lnbmVyIjoiaHR0cHM6Ly9ucy5hdXRoLmdvdi9mdy9wYXJ0eS9hbyIsInN1YmplY3Qtc2VtYW50aWMtZGlnZXN0cyI6W3siaWQiOiJodHRwczovL25zLm90aGVyLmV4YW1wbGUvdGFpbG9yaW5nL2Vhc2VkIiwic2VtYW50aWMtZGlnZXN0Ijoic2hhMjU2OmI0ZTUzMGY5ZjI0ZjFmZmYzOTZiMzQ2NzgyMmY1ODU3Y2YzMGM5NDZmZTQ5OTJhODE4MDkzYTIwMjM4ZGU5YjgifV0sInRpbWVzdGFtcCI6IjIwMjYtMDctMjJUMTI6MDA6MDBaIiwidmVyc2lvbiI6IjEifQ==",
-     "payloadType": "application/vnd.oscal-semantic-core.attestation+json",
+     "payloadType": "application/vnd.jascon.attestation+json",
      "signatures": [
       {
        "keyid": "fixture-1",
-       "sig": "fjnSiLcZyOtnFEJpEoA2K+g45SPfqDhAWFll0qLT4nXYi3zsSBmx/GtcXIdXuxNgNGTdOZKfNDegd5CNkCWzCw=="
+       "sig": "Htq0IhpmexEksMJCNCAAOtX/MRKcuZTepjuqlI3AIuXbheV+tt2+LLva38JPIqrmdbiCrTIAGKYj4r3hfh0pDg=="
       }
      ]
     }

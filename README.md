@@ -32,10 +32,11 @@ something you can click.
 > sits among OSCAL, Gemara, CycloneDX Attestations and the other formats in
 > this space: [`PRIOR-ART.md`](PRIOR-ART.md).
 > Nothing here is endorsed by NIST, BSI, ACSC, CCB, CIS, or FedRAMP.
-> Renamed from the working title *"OSCAL Semantic Core"* on 2026-07-22;
-> machine identifiers (namespace URIs, the attestation media type, schema
-> filenames) deliberately keep the `oscal-semantic-core` string for digest
-> stability — their migration is decided with the `v1.0.0` tag.
+> Renamed from the working title *"OSCAL Semantic Core"* on 2026-07-22.
+> Since 2026-11-11 the attestation media type and the schema filenames
+> carry the name too (`application/vnd.jascon.attestation+json`,
+> `jascon-2.0.0.schema.json`); namespace URIs and schema `$id`s keep
+> their spelling for digest stability.
 
 ![The bundle reader on the IFA GoodRead lifecycle corpus (NIST example content): stage 5, Assess and Attest — Risk, Assessment, Finding and Attestation objects, with the check workbench that mints real Assessment and Finding objects.](docs/img/reader-assess.png)
 
@@ -83,7 +84,7 @@ requirements and mints real objects.*
 >   rule and a superset in fact — every 1.0.0 bundle is a valid 2.0.0
 >   bundle; a 1.0.0 *tool* cannot read a bundle that carries a Risk.
 > - **The specification text:**
->   [`oscal-semantic-core-specification-2.0.0-rc.1.md`](drafts/oscal-semantic-core-specification-2.0.0-rc.1.md)
+>   [`jascon-specification-2.0.0-rc.1.md`](drafts/jascon-specification-2.0.0-rc.1.md)
 >   — a release candidate; D23 carries Risk.
 > - **The kernel names itself:** a manifest may carry `kernel-version`,
 >   and a bundle with content beyond 1.0.0 (a Risk) must — an older tool
@@ -99,7 +100,7 @@ requirements and mints real objects.*
 >   the example folder with its two Checks and its evidence store, again
 >   the Python reference's counts. The tag is the
 >   author's call. See the
->   [backlog](drafts/oscal-semantic-core-v0.6-spec-feedback-backlog.md)
+>   [backlog](drafts/jascon-v0.6-spec-feedback-backlog.md)
 >   #41–#50 and the register sections "Amendments — CP-RISK-1" and
 >   "Amendments — the 2.0.0 decision".
 
@@ -129,9 +130,9 @@ side of that paradox:
   eight profile documents, because consuming the profile mechanism costs more
   than inlining.
 
-**The specification:** [`oscal-semantic-core-specification-1.0.0.md`](drafts/oscal-semantic-core-specification-1.0.0.md)
+**The specification:** [`jascon-specification-1.0.0.md`](drafts/jascon-specification-1.0.0.md)
 (**v1.0.0**, released 2026-07-22) with its companion
-[Decision Rationale Register](drafts/oscal-semantic-core-decision-rationale-register.md).
+[Decision Rationale Register](drafts/jascon-decision-rationale-register.md).
 
 Full argument with sources: [Chapter 1 — Why This Exists](jascon/references/ch01-why-this-exists.md).
 
@@ -158,7 +159,7 @@ carry it or stop with a reason, never guess.
 
 Every design decision is scored against four tests — *simpler · closer to
 measured customer needs · no more props · less need for bespoke JSON* — in the
-[Decision Rationale Register](drafts/oscal-semantic-core-decision-rationale-register.md)
+[Decision Rationale Register](drafts/jascon-decision-rationale-register.md)
 (22 decisions plus a public amendment log; rejected alternatives stay on the
 record).
 
@@ -433,12 +434,12 @@ Install by copying the directory into your skills folder, or unpack
 
 ## Read the spec
 
-- [`drafts/oscal-semantic-core-specification-1.0.0.md`](drafts/oscal-semantic-core-specification-1.0.0.md) — the released specification; [`…-2.0.0-rc.1.md`](drafts/oscal-semantic-core-specification-2.0.0-rc.1.md) — the candidate on this branch
+- [`drafts/jascon-specification-1.0.0.md`](drafts/jascon-specification-1.0.0.md) — the released specification; [`…-2.0.0-rc.1.md`](drafts/jascon-specification-2.0.0-rc.1.md) — the candidate on this branch
 - [`risk-catalogs/`](risk-catalogs/README.md) — prototype: two ready-made lists of typical risks (office IT, industrial plant; English and German) and a tool that imports them into `Risk` objects
 - [`PRIOR-ART.md`](PRIOR-ART.md) — the neighbouring formats, what each already does, and what JASCON does not add
-- [`drafts/oscal-semantic-core-v0.5-specification.md`](drafts/oscal-semantic-core-v0.5-specification.md) — the v0.5 draft (history)
-- [`drafts/oscal-semantic-core-decision-rationale-register.md`](drafts/oscal-semantic-core-decision-rationale-register.md) — every decision scored against the north star, with rejected alternatives and amendments
-- [`drafts/oscal-semantic-core-v0.6-spec-feedback-backlog.md`](drafts/oscal-semantic-core-v0.6-spec-feedback-backlog.md) — the living input queue for v0.6: items enter with counts, leave via register entries
+- [`drafts/jascon-v0.5-specification.md`](drafts/jascon-v0.5-specification.md) — the v0.5 draft (history)
+- [`drafts/jascon-decision-rationale-register.md`](drafts/jascon-decision-rationale-register.md) — every decision scored against the north star, with rejected alternatives and amendments
+- [`drafts/jascon-v0.6-spec-feedback-backlog.md`](drafts/jascon-v0.6-spec-feedback-backlog.md) — the living input queue for v0.6: items enter with counts, leave via register entries
 - [`oscal-models-overview-1x-vs-semantic-core.md`](oscal-models-overview-1x-vs-semantic-core.md) — the eight OSCAL 1.x document models mapped onto the nine objects, with reusable Mermaid sources
 
 ## House rules

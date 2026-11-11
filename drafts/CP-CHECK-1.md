@@ -250,7 +250,7 @@ What the kernel route costs is real and belongs in the decision: a shape closed 
 
 | Artifact | Change |
 |---|---|
-| `schemas/oscal-semantic-core-2.0.0.schema.json` | `$defs/check`, `checkFact`, `checkFactType`, `checkOp`, `checkAssertion`, `checkExpected`, `checkScalar`, `checkObservation`, `checkOutcome`, `checkResult`, `evidenceRecord`, `digestRef`, `date`, `dateTime`; `assessment.check-results`, `assessment.tailoring-ref`; `finding.check-ref`; title and description |
+| `schemas/jascon-2.0.0.schema.json` | `$defs/check`, `checkFact`, `checkFactType`, `checkOp`, `checkAssertion`, `checkExpected`, `checkScalar`, `checkObservation`, `checkOutcome`, `checkResult`, `evidenceRecord`, `digestRef`, `date`, `dateTime`; `assessment.check-results`, `assessment.tailoring-ref`; `finding.check-ref`; title and description |
 | `schemas/stdlib/collector-1.0.0.json` | the collector facet, `modifies-semantics: []` |
 | `scripts/validate_core.py` | `check` in TYPES and MINIMAL; I-Regexp parser and state-set matcher; `check_verdict` (B.1.10); `check_aggregate`; CHECK-1..15; evidence chain over the store beside the bundle; KERNEL-1 extended; `run_check` |
 | `conformance/check-vectors.json` | 37 regex, 51 verdict, 7 aggregate, 18 shape, 43 bundle vectors; each CHECK rule expected by at least one; 9 deliberate engine mutations each turn at least one vector red |

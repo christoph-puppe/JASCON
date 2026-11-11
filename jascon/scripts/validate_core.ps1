@@ -145,7 +145,7 @@ function Content-Digest($obj) {
 # Consumes the normative kernel schema + stdlib descriptors. Supported
 # keywords are exactly those the shipped schemas use; an UNKNOWN validation
 # keyword throws (fail-loud, the D10 spirit - never silently pass).
-$SCHEMA = Read-Json (Join-Path $SKILL "schemas\oscal-semantic-core-2.0.0.schema.json")
+$SCHEMA = Read-Json (Join-Path $SKILL "schemas\jascon-2.0.0.schema.json")
 $DEFS = $SCHEMA['$defs']
 $IGNORE_KW = @('description', 'title', '$schema', '$id', 'contentEncoding', 'default', 'examples', 'note', '$defs')
 $KNOWN_KW = @('$ref', 'allOf', 'anyOf', 'oneOf', 'not', 'if', 'then', 'else', 'const', 'enum', 'type', 'required',
@@ -603,7 +603,7 @@ function Ed-Verify([byte[]]$pub, [byte[]]$msg, [byte[]]$sig) {
     $rhs = Ed-Compress (Ed-Add $R (Ed-Mul $k $A))
     return (@(Compare-Object $lhs $rhs -SyncWindow 0).Length -eq 0)
 }
-$DSSE_PT = 'application/vnd.oscal-semantic-core.attestation+json'
+$DSSE_PT = 'application/vnd.jascon.attestation+json'
 function PAE([byte[]]$payload) {
     $t = [System.Text.Encoding]::ASCII.GetBytes($DSSE_PT)
     $head = [System.Text.Encoding]::ASCII.GetBytes('DSSEv1 ' + $t.Length + ' ')
