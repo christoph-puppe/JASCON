@@ -1325,7 +1325,7 @@ const JSC_CHECK_RULES = {
   "CHECK-15": "evidence is content-addressed and stays inside the bundle's store: every digest in the chain verifies against the bytes, and a record describes the run it is attached to",
 };
 const JSC_SAT = "satisfied", JSC_NOT = "not-satisfied", JSC_INC = "inconclusive", JSC_NA = "not-applicable";
-const JSC_COLLECTOR_FACET = "https://ns.oscal.org/stdlib/facet/collector";
+const JSC_COLLECTOR_FACET = "https://ns.jascon.org/stdlib/facet/collector";
 
 /* ---------- I-Regexp ---------- */
 const JSC_IRE_MAX_PATTERN = 256, JSC_IRE_MAX_STATES = 1000, JSC_IRE_MAX_INPUT = 4096;

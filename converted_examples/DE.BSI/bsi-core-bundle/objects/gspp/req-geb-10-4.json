@@ -43,7 +43,7 @@
   }
  ],
  "facets": {
-  "https://ns.oscal.org/stdlib/facet/statement-grammar@1": {
+  "https://ns.jascon.org/stdlib/facet/statement-grammar@1": {
    "by-statement": {
     "smt": {
      "action": "installieren",
@@ -63,7 +63,7 @@
     }
    }
   },
-  "https://ns.oscal.org/stdlib/facet/assessment-criteria@1": {
+  "https://ns.jascon.org/stdlib/facet/assessment-criteria@1": {
    "by-statement": {
     "smt": {
      "required-documentation": [
@@ -77,7 +77,7 @@
     }
    }
   },
-  "https://ns.oscal.org/stdlib/facet/security-objectives@1": {
+  "https://ns.jascon.org/stdlib/facet/security-objectives@1": {
    "by-statement": {
     "smt": {
      "confidentiality": "1",
@@ -132,7 +132,7 @@
     }
    }
   },
-  "https://ns.oscal.org/compat/oscal-1x@1": {
+  "https://ns.jascon.org/compat/oscal-1x@1": {
    "param-extras": {
     "geb.10.4-prm1": {
      "alt-identifier": "3a8c199a-408d-4ac6-9355-b850d4f5188a"

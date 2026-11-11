@@ -15,7 +15,7 @@ OUTDIR = os.path.join(ROOT, "converted_examples", "DE.C5")
 NS = "https://ns.bsi.bund.de/c5"   # minted by converter; pending a BSI-published URI
 F_CORR = f"{NS}/facet/corresponding@1"
 F_NARR = f"{NS}/facet/narrative@1"
-COMPAT = "https://ns.oscal.org/compat/oscal-1x@1"
+COMPAT = "https://ns.jascon.org/compat/oscal-1x@1"
 
 lang_wraps = collections.Counter()
 T = make_T("en", lang_wraps)
@@ -142,7 +142,7 @@ sharpens_ok = [(cid, t) for cid, t in sharpens_ok if t in req_ids]
 bundle.stub("c5-corresponding-stub.json", F_CORR.split("@")[0], [],
             {"customer-requirements": {"type": "array"}})
 bundle.stub("c5-narrative-stub.json", F_NARR.split("@")[0], [], {"guidance": {"type": "array"}})
-bundle.stub("oscal-1x-compat-stub.json", "https://ns.oscal.org/compat/oscal-1x", [],
+bundle.stub("oscal-1x-compat-stub.json", "https://ns.jascon.org/compat/oscal-1x", [],
             {"undefined-items": {"type": "array"}},
             note="ILLUSTRATIVE STUB - Level-2 waiting room (intended deprecation; see D16/handbook 14.6)")
 bundle.write({"source": cat["metadata"]["title"], "source-version": VER,

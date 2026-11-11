@@ -32,11 +32,11 @@
 > the brand lives in prose; churning every digest and signature for a
 > spelling would contradict the stability the identifiers exist to provide
 > (register "Amendments — v1.0.0"; revisit only with a D3.5 major).
-> *(2.0.0: this is that major. Author decision 2026-11-11: the attestation
-> media type and the schema filenames now carry `jascon`
-> (`application/vnd.jascon.attestation+json`, `jascon-2.0.0.schema.json`);
-> envelopes signed under the old media type must be re-signed. Namespace
-> URIs and schema `$id`s keep their spelling — IV.9.)*
+> *(2.0.0: this is that major. Author decision 2026-11-11: every machine
+> identifier carries the name — namespaces under `https://ns.jascon.org/`,
+> the media type `application/vnd.jascon.attestation+json`, the schema
+> `jascon-2.0.0.schema.json`. Digests and signatures made under the
+> earlier identifiers do not carry over — IV.9.)*
 > Nothing here is endorsed
 > by NIST, BSI, ACSC, CCB, CIS, or FedRAMP; the project is maintained in
 > personal capacity.
@@ -1430,9 +1430,8 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
    of Applicability for — `tailoring-refs` scopes a Risk by naming the
    Tailoring, which is the join that exists, not the one ISO describes
    (#51); ☐ `Deviation.opened` is still a free string — tightening it is a
-   1.0.0-shape change like #47a (#52). The author decided on 2026-11-11: the media type and the schema
-   filenames now carry `jascon`; namespace URIs and `$id`s keep their
-   spelling (register, "Amendments — 2026-11-11").
+   1.0.0-shape change like #47a (#52). The author decided on 2026-11-11: every machine identifier carries
+   `jascon` (register, "Amendments — 2026-11-11").
 6. **Work, not decisions** — ☐ value arrival for the other corpora and
    the re-wording of "converted losslessly" that follows from it (#41);
    ☐ a real attestation in the example bundle (#46); ☐ a second Risk

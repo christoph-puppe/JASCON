@@ -1,5 +1,5 @@
 {
- "id": "https://ns.oscal.org/stdlib/facet/assessment-criteria",
+ "id": "https://ns.jascon.org/stdlib/facet/assessment-criteria",
  "version": "1.0.0",
  "modifies-semantics": [
   "assessment"

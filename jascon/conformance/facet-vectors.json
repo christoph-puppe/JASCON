@@ -20,7 +20,7 @@
      }
     ],
     "facets": {
-     "https://ns.oscal.org/stdlib/facet/statement-grammar@1": {
+     "https://ns.jascon.org/stdlib/facet/statement-grammar@1": {
       "by-statement": {
        "s1": {
         "action": "verschlüsseln",
@@ -51,7 +51,7 @@
      }
     ],
     "facets": {
-     "https://ns.oscal.org/stdlib/facet/statement-grammar@1": {
+     "https://ns.jascon.org/stdlib/facet/statement-grammar@1": {
       "by-statement": {
        "s1": {
         "action": 42,
@@ -83,7 +83,7 @@
      }
     ],
     "facets": {
-     "https://ns.oscal.org/stdlib/facet/terminology@1": {
+     "https://ns.jascon.org/stdlib/facet/terminology@1": {
       "glossary-info": {}
      }
     }

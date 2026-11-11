@@ -21,12 +21,12 @@ SOURCES = [("gspp", os.path.join(ROOT, "sources", "Grundschutz++-catalog.json"),
             "https://ns.bsi.bund.de/gspp")]
 CENSUS = {"version": "2026-07-03", "controls": 998, "defects-gspp": 213,
           "statements": 1015}   # census r2 baseline for the delta report
-F_GRAM = "https://ns.oscal.org/stdlib/facet/statement-grammar@1"
-F_SECO = "https://ns.oscal.org/stdlib/facet/security-objectives@1"
-F_ACRIT = "https://ns.oscal.org/stdlib/facet/assessment-criteria@1"
+F_GRAM = "https://ns.jascon.org/stdlib/facet/statement-grammar@1"
+F_SECO = "https://ns.jascon.org/stdlib/facet/security-objectives@1"
+F_ACRIT = "https://ns.jascon.org/stdlib/facet/assessment-criteria@1"
 F_TAX  = "https://ns.bsi.bund.de/facet/gspp-taxonomy@1"
 F_NARR = "https://ns.bsi.bund.de/facet/gspp-narrative@1"
-F_COMPAT = "https://ns.oscal.org/compat/oscal-1x@1"
+F_COMPAT = "https://ns.jascon.org/compat/oscal-1x@1"
 MODAL = {"MUSS":"must","SOLLTE":"should","KANN":"may","DARF NICHT":"must-not",
          "SOLLTE NICHT":"should-not","DARF NUR":"may-only",
          "MÜSSEN":"must","SOLLTEN":"should","KÖNNEN":"may",
@@ -289,7 +289,7 @@ bundle.pin_stdlib("security-objectives-1.0.0.json")
 bundle.pin_stdlib("assessment-criteria-1.0.0.json")
 bundle.stub("gspp-narrative-1.0.0-stub.json","https://ns.bsi.bund.de/facet/gspp-narrative",[],
      {"by-statement":{"type":"object"},"description":{"type":"object"}})
-bundle.stub("oscal-1x-compat-1.0.0-stub.json","https://ns.oscal.org/compat/oscal-1x",[],
+bundle.stub("oscal-1x-compat-1.0.0-stub.json","https://ns.jascon.org/compat/oscal-1x",[],
      {"param-extras":{"type":"object"}})
 
 for rel,o in objects.items(): bundle.add(rel,o)

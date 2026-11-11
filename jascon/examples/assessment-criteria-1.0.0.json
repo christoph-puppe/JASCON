@@ -1,5 +1,5 @@
 {
-  "id": "https://ns.oscal.org/stdlib/facet/assessment-criteria",
+  "id": "https://ns.jascon.org/stdlib/facet/assessment-criteria",
   "version": "1.0.0",
   "modifies-semantics": ["assessment"],
   "note": "NORMATIVE (gate item 2). Declaration [assessment] confirmed by use (D.12 audit): tools that assess must understand or halt. Payload may be flat (per-object) or by-statement keyed where per-clause (D10 rev keying rule applies to the by-statement form). Absorbs documentation duties x966 (BSI/ISM), CR26 artifacts/examples/key-tests, CIS assessment-objectives, and the benchmark audit/remediation/method shape.",

@@ -1,7 +1,7 @@
 {
  "record-version": "1",
  "check-ref": "https://cso.example/check/LNX-SSH-1-maxauthtries",
- "check-digest": "sha256:09f28ab06e8352bfb07984bec33588559cfe7be64ac14c51cc55538a16f85898",
+ "check-digest": "sha256:ae181230f04a444f93af7a7cbbd308b618c17bb6e1aca2dfb9241c6e88e84bc7",
  "collector-id": "bash",
  "subject-ref": "https://cso.example/component/bastion-01",
  "target": {
@@ -12,8 +12,8 @@
   "id": "manual (no runner yet)",
   "version": "0"
  },
- "started": "2026-11-03T06:00:01Z",
- "finished": "2026-11-03T06:00:02Z",
+ "started": "2026-11-10T06:00:01Z",
+ "finished": "2026-11-10T06:00:02Z",
  "exit-status": 0,
  "observation-digest": "sha256:5f3420c588b7473d556377c58e60156f217c43679d8f2cb5c319d21c87849483",
  "outputs": [

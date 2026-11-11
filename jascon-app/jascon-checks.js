@@ -24,8 +24,8 @@
 
 const jscChecksCore = (typeof module !== "undefined" && module.exports) ? require("./jascon-core.js") : { jscSlug };
 const JSC_CHECKS = {
-  COLLECTOR: "https://ns.oscal.org/stdlib/facet/collector@1",
-  ACRIT: "https://ns.oscal.org/stdlib/facet/assessment-criteria@1",
+  COLLECTOR: "https://ns.jascon.org/stdlib/facet/collector@1",
+  ACRIT: "https://ns.jascon.org/stdlib/facet/assessment-criteria@1",
   /* the hand-over from the Import page: which rules to draft checks for, in which runtime. Not a secret. */
   QUEUE: "jsc:cfg:checks:queue",
   RUNTIMES: ["bash", "sh", "python", "powershell", "ansible", "http-api"],

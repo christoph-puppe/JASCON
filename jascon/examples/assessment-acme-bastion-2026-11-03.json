@@ -7,7 +7,7 @@
   "https://cso.example/component/bastion-01"
  ],
  "method": {
-  "https://ns.oscal.org/stdlib/facet/assessment-criteria@1": {
+  "https://ns.jascon.org/stdlib/facet/assessment-criteria@1": {
    "method": "automated"
   }
  },
@@ -18,7 +18,7 @@
  "check-results": [
   {
    "check-ref": "https://cso.example/check/LNX-SSH-1-maxauthtries",
-   "check-digest": "sha256:09f28ab06e8352bfb07984bec33588559cfe7be64ac14c51cc55538a16f85898",
+   "check-digest": "sha256:ae181230f04a444f93af7a7cbbd308b618c17bb6e1aca2dfb9241c6e88e84bc7",
    "collector-id": "bash",
    "outcome": "satisfied",
    "time": "2026-11-03T06:00:02Z",
@@ -31,13 +31,13 @@
     }
    },
    "evidence-record": {
-    "ref": "evidence/sha256/9765c06f4628c2b863a2fe96d641c0aff00d111ad0239d849818368bff0b2b14",
-    "digest": "sha256:9765c06f4628c2b863a2fe96d641c0aff00d111ad0239d849818368bff0b2b14"
+    "ref": "evidence/sha256/d2de895187bfb8b1ce93263966628a459a8dbf3edf0c29798202fa2ead9898d9",
+    "digest": "sha256:d2de895187bfb8b1ce93263966628a459a8dbf3edf0c29798202fa2ead9898d9"
    }
   },
   {
    "check-ref": "https://cso.example/check/LNX-SSH-1-ciphers",
-   "check-digest": "sha256:41c5ce5827346c06c90cb605bb08b152e358e361a4cb434b27db2157deaaf415",
+   "check-digest": "sha256:28591213be0d26e48a5b1b5d1284b1783f23d414e4c40d921b786d0ebcbc17f4",
    "collector-id": "bash",
    "outcome": "not-satisfied",
    "time": "2026-11-03T06:00:04Z",
@@ -52,8 +52,8 @@
     }
    },
    "evidence-record": {
-    "ref": "evidence/sha256/a0410160c145c307fedcfc1fdbc1df83b7ba9d648989e9fb5200f59dbe2f202c",
-    "digest": "sha256:a0410160c145c307fedcfc1fdbc1df83b7ba9d648989e9fb5200f59dbe2f202c"
+    "ref": "evidence/sha256/6f4c3c4a125697a20eb1eb6755d09b96d93e9bf6b1f8bbdcb25d308d766401bd",
+    "digest": "sha256:6f4c3c4a125697a20eb1eb6755d09b96d93e9bf6b1f8bbdcb25d308d766401bd"
    }
   }
  ]

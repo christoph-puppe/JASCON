@@ -193,7 +193,7 @@ Then give your tool its **capability declaration** as ordinary
 configuration:
 
 ```json
-{ "understands": ["https://ns.oscal.org/stdlib/facet/assessment-criteria@1.2.0"],
+{ "understands": ["https://ns.jascon.org/stdlib/facet/assessment-criteria@1.2.0"],
   "preserves-unknown": true,
   "fails-closed-for": ["assessment", "tailoring", "selection"] }
 ```

@@ -33,10 +33,9 @@ something you can click.
 > this space: [`PRIOR-ART.md`](PRIOR-ART.md).
 > Nothing here is endorsed by NIST, BSI, ACSC, CCB, CIS, or FedRAMP.
 > Renamed from the working title *"OSCAL Semantic Core"* on 2026-07-22.
-> Since 2026-11-11 the attestation media type and the schema filenames
-> carry the name too (`application/vnd.jascon.attestation+json`,
-> `jascon-2.0.0.schema.json`); namespace URIs and schema `$id`s keep
-> their spelling for digest stability.
+> Since 2026-11-11 every machine identifier carries the name: namespaces
+> under `https://ns.jascon.org/`, the attestation media type
+> `application/vnd.jascon.attestation+json`, and the schema filenames.
 
 ![The bundle reader on the IFA GoodRead lifecycle corpus (NIST example content): stage 5, Assess and Attest — Risk, Assessment, Finding and Attestation objects, with the check workbench that mints real Assessment and Finding objects.](docs/img/reader-assess.png)
 

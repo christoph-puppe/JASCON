@@ -1,5 +1,5 @@
 {
-  "id": "https://ns.oscal.org/stdlib/facet/statement-grammar",
+  "id": "https://ns.jascon.org/stdlib/facet/statement-grammar",
   "version": "1.0.0",
   "modifies-semantics": [],
   "note": "NORMATIVE (gate item 2). Chrome-for-computation confirmed (D.12 audit): the grammar decomposition serves authoring and QA; assessment semantics live in assessment-criteria@1. Per-clause payloads MUST use the by-statement keying (D10 rev, backlog #7): a key naming no statement of the host is a validation error.",
