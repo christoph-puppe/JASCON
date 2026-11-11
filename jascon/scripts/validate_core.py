@@ -1408,7 +1408,7 @@ def run_risk():
 # else one inconclusive decides, else satisfied. An unbound parameter is
 # inconclusive - a default is never substituted (D9).
 SAT, NOT, INC, NA = "satisfied", "not-satisfied", "inconclusive", "not-applicable"
-COLLECTOR_FACET = "https://ns.oscal.org/stdlib/facet/collector"
+COLLECTOR_FACET = "https://ns.jascon.net/stdlib/facet/collector"
 CHECK_RULES = {
     "CHECK-1": "a check discharges a requirement; when that requirement is in the bundle the edge is typed and the clauses it names exist",
     "CHECK-2": "every assertion reads a fact the check declares, and a fact is declared once - the fact contract is all a collector promises",

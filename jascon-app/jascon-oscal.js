@@ -74,9 +74,9 @@ function jscStdlibPin(shortName) {
    ==================================================================== */
 const JSC_BSI = {
   ns: "https://ns.bsi.bund.de/gspp", key: "gspp", lang: "de",
-  F_GRAM: "https://ns.oscal.org/stdlib/facet/statement-grammar@1", F_SECO: "https://ns.oscal.org/stdlib/facet/security-objectives@1",
-  F_ACRIT: "https://ns.oscal.org/stdlib/facet/assessment-criteria@1", F_TAX: "https://ns.bsi.bund.de/facet/gspp-taxonomy@1",
-  F_NARR: "https://ns.bsi.bund.de/facet/gspp-narrative@1", F_COMPAT: "https://ns.oscal.org/compat/oscal-1x@1",
+  F_GRAM: "https://ns.jascon.net/stdlib/facet/statement-grammar@1", F_SECO: "https://ns.jascon.net/stdlib/facet/security-objectives@1",
+  F_ACRIT: "https://ns.jascon.net/stdlib/facet/assessment-criteria@1", F_TAX: "https://ns.bsi.bund.de/facet/gspp-taxonomy@1",
+  F_NARR: "https://ns.bsi.bund.de/facet/gspp-narrative@1", F_COMPAT: "https://ns.jascon.net/compat/oscal-1x@1",
   MODAL: { "MUSS": "must", "SOLLTE": "should", "KANN": "may", "DARF NICHT": "must-not", "SOLLTE NICHT": "should-not", "DARF NUR": "may-only",
     "MÜSSEN": "must", "SOLLTEN": "should", "KÖNNEN": "may", "DÜRFEN NICHT": "must-not", "DÜRFEN NUR": "may-only" },
 };
@@ -196,7 +196,7 @@ function jscImportBsi(cat) {
       { "by-statement": { type: "object" }, "observed-sec-levels": { enum: [...secValues].sort() } }),
     jscStdlibPin("statement-grammar"), jscStdlibPin("security-objectives"), jscStdlibPin("assessment-criteria"),
     jscFacetStub("gspp-narrative-1.0.0-stub.json", "https://ns.bsi.bund.de/facet/gspp-narrative", [], { "by-statement": { type: "object" }, description: { type: "object" } }),
-    jscFacetStub("oscal-1x-compat-1.0.0-stub.json", "https://ns.oscal.org/compat/oscal-1x", [], { "param-extras": { type: "object" } }),
+    jscFacetStub("oscal-1x-compat-1.0.0-stub.json", "https://ns.jascon.net/compat/oscal-1x", [], { "param-extras": { type: "object" } }),
   ];
   const provenance = { sources: [{ key: B.key, title: cat.metadata.title, version, "oscal-version": cat.metadata["oscal-version"] }],
     converter: "JASCON-App OSCAL import, preset bsi-gspp (the rules of convert_bsi.py v0.2)" };
@@ -524,7 +524,7 @@ function jscImportGeneric(cat, opts) {
    synthetic catalog of the same shape. For any other benchmark the
    namespace is derived from the title and can be changed on the page. */
 const JSC_CIS = { cisc8: "https://ns.cisecurity.org/controls/v8", cisc7: "https://ns.cisecurity.org/controls/v7", key: "cisb", lang: "en",
-  F_ACRIT: "https://ns.oscal.org/stdlib/facet/assessment-criteria@1", COMPAT: "https://ns.oscal.org/compat/oscal-1x@1",
+  F_ACRIT: "https://ns.jascon.net/stdlib/facet/assessment-criteria@1", COMPAT: "https://ns.jascon.net/compat/oscal-1x@1",
   KNOWN: { "CIS Ubuntu Linux 24.04 LTS Benchmark": "https://ns.cisecurity.org/benchmark/ubuntu-24.04-lts" } };
 function jscCisNamespace(cat) {
   const title = String((cat.metadata || {}).title || "").trim();
@@ -656,7 +656,7 @@ function jscImportCis(cat, opts) {
     jscStdlibPin("assessment-criteria"),
     stub("cisb-narrative-stub.json", F_NARR.split("@")[0], { description: { type: "object" }, rationale: { type: "object" } }),
     stub("cisb-external-references-stub.json", F_XREF.split("@")[0], { references: { type: "array", items: { type: "string" } } }),
-    stub("oscal-1x-compat-stub.json", "https://ns.oscal.org/compat/oscal-1x", { "group-parts": { type: "array" } },
+    stub("oscal-1x-compat-stub.json", "https://ns.jascon.net/compat/oscal-1x", { "group-parts": { type: "array" } },
       "ILLUSTRATIVE STUB - Level-2 waiting room (intended deprecation; see D16/handbook 14.6)"),
   ];
   const provenance = { sources: [{ key: C.key, title: cat.metadata.title, version, "oscal-version": cat.metadata["oscal-version"] }],

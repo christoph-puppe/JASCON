@@ -215,7 +215,7 @@ function riskBody(o) {
 function checkBody(o) {
   const expected = e => (e && typeof e === "object" && !Array.isArray(e) ? `<span class="paramtok">{param:${esc(e.param)}}</span>` : `<span class="mono">${esc(JSON.stringify(e))}</span>`);
   const assertion = a => `<div class="mono" style="font-size:12px">${esc(a.fact)} <b>${esc(a.op)}</b> ${a.expected === undefined ? "" : expected(a.expected)}</div>`;
-  const cols = (((o.facets || {})["https://ns.oscal.org/stdlib/facet/collector@1"] || {}).collectors) || [], p = o.provenance || {};
+  const cols = (((o.facets || {})["https://ns.jascon.net/stdlib/facet/collector@1"] || {}).collectors) || [], p = o.provenance || {};
   return `<div class="kv">${kv(T("discharges"), (o["requirement-ref"] ? refLink(o["requirement-ref"]) : "") + (o["statement-ids"] || []).map(s => " " + badge(T("statement {id}", { id: s }))).join(""))}
       ${kv(T("platform"), esc(o.platform || ""))}${kv(T("confidence"), badge(o.confidence || "?"))}
       ${o.each ? kv(T("per resource"), esc(o.each.resource) + " " + badge(T(o.each["allow-empty"] ? "none observed passes" : "none observed is inconclusive"))) : ""}

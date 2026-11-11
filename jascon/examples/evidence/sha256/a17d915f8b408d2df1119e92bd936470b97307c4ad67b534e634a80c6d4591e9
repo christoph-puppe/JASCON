@@ -1,7 +1,7 @@
 {
  "record-version": "1",
- "check-ref": "https://cso.example/check/LNX-SSH-1-maxauthtries",
- "check-digest": "sha256:09f28ab06e8352bfb07984bec33588559cfe7be64ac14c51cc55538a16f85898",
+ "check-ref": "https://cso.example/check/LNX-SSH-1-ciphers",
+ "check-digest": "sha256:b5ec275f0904a0a882d27e1434efb28e0595a74c6c0814297b2537fa49833f56",
  "collector-id": "bash",
  "subject-ref": "https://cso.example/component/bastion-01",
  "target": {
@@ -12,16 +12,16 @@
   "id": "manual (no runner yet)",
   "version": "0"
  },
- "started": "2026-11-10T06:00:01Z",
- "finished": "2026-11-10T06:00:02Z",
+ "started": "2026-11-10T06:00:03Z",
+ "finished": "2026-11-10T06:00:04Z",
  "exit-status": 0,
- "observation-digest": "sha256:5f3420c588b7473d556377c58e60156f217c43679d8f2cb5c319d21c87849483",
+ "observation-digest": "sha256:38f6a064f4ce97454ff1817a68655c675aabac59c43225960f55e8aefe31d9b9",
  "outputs": [
   {
    "name": "stdout",
-   "digest": "sha256:19d4576d69fd588a6305d23900ae07af8255f59bfa9b491bb89958b333abd455",
+   "digest": "sha256:fa9847da7106598c905c9a76717b073231feb40d6aed7c3affad86a6686fb933",
    "media-type": "application/json",
-   "size": 34
+   "size": 99
   }
  ],
  "note": {

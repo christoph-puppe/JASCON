@@ -1,5 +1,5 @@
 {
- "id": "https://ns.oscal.org/compat/oscal-1x",
+ "id": "https://ns.jascon.net/compat/oscal-1x",
  "version": "1.0.0",
  "modifies-semantics": [],
  "note": "NORMATIVE pinned payload schema (backlog #26): closed shape - unknown keys are rejected, never smuggled",

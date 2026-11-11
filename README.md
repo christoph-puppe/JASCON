@@ -1,6 +1,6 @@
 # Project Status and Disclaimer
 
-**Important Notice:** This project is **not** affiliated with or approved by the National Institute of Standards and Technology (NIST) or the OSCAL foundation.
+**Important Notice:** This project is **not** affiliated with or approved by the National Institute of Standards and Technology (NIST).
 
 # JASCON
 
@@ -15,8 +15,8 @@ This repository is a working design study, not a slide deck. It contains a
 draft specification with a public decision register, an **executable kernel
 schema** with a **157-vector conformance corpus** (258 in 15 families on `main`) and *two* reference
 validators — Python, and a **zero-dependency PowerShell 5.1 twin that runs
-on a stock Windows box** (the weekend-validator claim, measured: ~30×
-smaller than the OSCAL 1.x toolchain, crypto engines included) —
+on a stock Windows box** (the weekend-validator claim, measured,
+crypto engines included) —
 **eleven framework and lifecycle corpora converted at 100 % declared path
 coverage** (251,591 source leaf values, every source path with a computed
 destination; whether every *value* arrives is measured on one corpus so
@@ -32,11 +32,9 @@ something you can click.
 > sits among OSCAL, Gemara, CycloneDX Attestations and the other formats in
 > this space: [`PRIOR-ART.md`](PRIOR-ART.md).
 > Nothing here is endorsed by NIST, BSI, ACSC, CCB, CIS, or FedRAMP.
-> Renamed from the working title *"OSCAL Semantic Core"* on 2026-07-22.
-> Since 2026-11-11 the attestation media type and the schema filenames
-> carry the name too (`application/vnd.jascon.attestation+json`,
-> `jascon-2.0.0.schema.json`); namespace URIs and schema `$id`s keep
-> their spelling for digest stability.
+> Every machine identifier carries the name: namespaces
+> under `https://ns.jascon.net/`, the attestation media type
+> `application/vnd.jascon.attestation+json`, and the schema filenames.
 
 ![The bundle reader on the IFA GoodRead lifecycle corpus (NIST example content): stage 5, Assess and Attest — Risk, Assessment, Finding and Attestation objects, with the check workbench that mints real Assessment and Finding objects.](docs/img/reader-assess.png)
 
@@ -351,8 +349,8 @@ No server: download the HTML file, open it, drag any
 With a server (enables URL loading and shareable deep links):
 
 ```
-git clone https://github.com/christoph-puppe/Semantic-OSCAL-2-Ideas.git
-cd Semantic-OSCAL-2-Ideas
+git clone https://github.com/christoph-puppe/JASCON.git
+cd JASCON
 python -m http.server 8000
 ```
 
@@ -440,7 +438,7 @@ Install by copying the directory into your skills folder, or unpack
 - [`drafts/jascon-v0.5-specification.md`](drafts/jascon-v0.5-specification.md) — the v0.5 draft (history)
 - [`drafts/jascon-decision-rationale-register.md`](drafts/jascon-decision-rationale-register.md) — every decision scored against the north star, with rejected alternatives and amendments
 - [`drafts/jascon-v0.6-spec-feedback-backlog.md`](drafts/jascon-v0.6-spec-feedback-backlog.md) — the living input queue for v0.6: items enter with counts, leave via register entries
-- [`oscal-models-overview-1x-vs-semantic-core.md`](oscal-models-overview-1x-vs-semantic-core.md) — the eight OSCAL 1.x document models mapped onto the nine objects, with reusable Mermaid sources
+- [`oscal-1x-models-and-jascon.md`](oscal-1x-models-and-jascon.md) — the eight OSCAL 1.x document models mapped onto the nine objects, with reusable Mermaid sources
 
 ## House rules
 

@@ -1,5 +1,5 @@
 {
-  "id": "https://ns.oscal.org/stdlib/facet/reporting-obligation",
+  "id": "https://ns.jascon.net/stdlib/facet/reporting-obligation",
   "version": "1.0.0",
   "modifies-semantics": ["assessment"],
   "note": "NORMATIVE (gate item 2). Declaration promoted [] -> [assessment] per D10 rev 2 (backlog #8): notification duties are checkable - they alter what passing means, and an assessing tool that cannot read them must halt. Also the strongest anticipated-convergence candidate after terminology (D22 rev audit): NIS2 / DORA / CRA are notification-duty regimes; kernel promotion revisits when an EU corpus lands.",

@@ -12,7 +12,7 @@ ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)),
 SRC = os.path.join(ROOT, "sources", "CIS Controls.json")
 OUTDIR = os.path.join(ROOT, "converted_examples", "CIS.Controls")
 NS = "https://ns.cisecurity.org/controls/v8"   # minted by converter; pending a CIS-published URI
-F_ACRIT = "https://ns.oscal.org/stdlib/facet/assessment-criteria@1"
+F_ACRIT = "https://ns.jascon.net/stdlib/facet/assessment-criteria@1"
 F_NARR = f"{NS}/facet/narrative@1"
 
 lang_wraps = collections.Counter()

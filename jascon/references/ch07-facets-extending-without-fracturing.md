@@ -126,7 +126,7 @@ The German taxonomy cluster, by the numbers: `sec_level` ×998,
 whole.
 
 **The descriptor**, published at
-`https://ns.bsi.bund.de/.well-known/oscal-facets/gspp-taxonomy/1.0.0/`:
+`https://ns.bsi.bund.de/.well-known/jascon-facets/gspp-taxonomy/1.0.0/`:
 
 ```json
 { "id": "https://ns.bsi.bund.de/facet/gspp-taxonomy",
@@ -185,7 +185,7 @@ your own well-known path" and "nobody" — and both are lessons paid for
 in full.
 
 **Self-publication, no gate.** You place the descriptor under
-`https://<your-domain>/.well-known/oscal-facets/<name>/<version>/`;
+`https://<your-domain>/.well-known/jascon-facets/<name>/<version>/`;
 existence plus validity makes it a registered facet. The ecosystem's
 index — a curated search surface with an append-only transparency log —
 helps the world *find* it and notice tampering, but it is an index, not

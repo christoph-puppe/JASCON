@@ -76,7 +76,7 @@
   }
  ],
  "facets": {
-  "https://ns.oscal.org/compat/oscal-1x@1": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
    "group-parts": [
     {
      "group": "Protect cyber security principles",

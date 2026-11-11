@@ -22,21 +22,13 @@
 
 > **Name.** **JASCON** — **J**SON **A**ttestable **S**emantic **C**ompliance
 > **O**bject-graph **N**otation; *one notation for every standard, in every
-> language*. Renamed from the working title "OSCAL Semantic Core" on
-> 2026-07-22 (decision recorded in the rationale register; uniqueness
-> verified by collision scan the same day). Machine identifiers — namespace
-> URIs, the attestation media type
-> `application/vnd.jascon.attestation+json`, schema filenames —
-> deliberately retained the working-title string for digest stability.
-> **Decided at the tag: they remain.** Identifiers are opaque strings (D2);
-> the brand lives in prose; churning every digest and signature for a
-> spelling would contradict the stability the identifiers exist to provide
-> (register "Amendments — v1.0.0"; revisit only with a D3.5 major).
-> *(2.0.0: this is that major. Author decision 2026-11-11: the attestation
-> media type and the schema filenames now carry `jascon`
-> (`application/vnd.jascon.attestation+json`, `jascon-2.0.0.schema.json`);
-> envelopes signed under the old media type must be re-signed. Namespace
-> URIs and schema `$id`s keep their spelling — IV.9.)*
+> language*. Every machine identifier carries the name: namespaces under
+> `https://ns.jascon.net/`, the media type
+> `application/vnd.jascon.attestation+json`, the schema
+> `jascon-2.0.0.schema.json` (author decision 2026-11-11, taken in this
+> major — IV.9). Digests and signatures made under the earlier identifiers
+> do not carry over. Naming history: register, "Amendments — v1.0.0" and
+> "Amendments — 2026-11-11".
 > Nothing here is endorsed
 > by NIST, BSI, ACSC, CCB, CIS, or FedRAMP; the project is maintained in
 > personal capacity.
@@ -318,9 +310,9 @@ production**). The type-count dogma is formally retired (P7's closing
 argument accepted): **semantic completeness beats winning the type-count
 argument** — and the ledger claim becomes *nine shallow types replace eight
 deep document models* (1.2.2's, including the Mapping Model of 1.2.0).
-*(2.0.0)* The tenth type replaces no 1.x model: OSCAL keeps `risk` inside
-assessment-results and POA&M — ex post, a thing an assessor finds. D23 is
-the ex-ante record 1.x has no home for.
+*(2.0.0)* The tenth type replaces no 1.x model: the predecessor format keeps
+`risk` inside assessment-results and POA&M — ex post, a thing an assessor
+finds. D23 is the ex-ante record 1.x has no home for.
 
 ## D5 — Component (absorbs System); **identified authorization contexts**; edge-local inductive boundary rule. *(rev. v0.5 — P7-G on authorization scoping)*
 **Decision.** As v0.4, with authorization contexts made addressable:
@@ -486,7 +478,7 @@ invent a divergent keying and fracture per-clause alignment.
 **Rejected.** Uniform fail-closed including `private:` (kills the valve);
 uniform trust-the-publisher default (props with extra steps).
 
-## D11 — SP 800-53 as Canonical Reference Facet; `oscal-stdlib`.
+## D11 — SP 800-53 as Canonical Reference Facet; the JASCON stdlib.
 Unchanged. The stdlib now also carries the **IR 8477 / OLIR relationship
 code system** for D20 and the calendar code systems for D9.
 
@@ -1146,7 +1138,7 @@ three requirements selected, one justified by a Risk, two by none.
 
 ## IV.1 Complexity ledger
 
-**Removed vs. OSCAL 1.2.2:** eight deep document models (incl. the
+**Removed vs. the predecessor format (1.2.2):** eight deep document models (incl. the
 Mapping Model of 1.2.0) · Metaschema · profile-resolution algebra + merge
 strategies · XML/YAML conformance + serialization mapping · Schematron ·
 anonymous inline constraints · comp-def/SSP duplication · general JSON
@@ -1164,7 +1156,7 @@ conditional-apply — is **994 non-blank, non-comment lines of Python**
 (+ jsonschema) and **1,163 lines of zero-dependency PowerShell 5.1**
 (at the P10 fix-pass commit; the gate-4-commit figures were 938/1,110),
 against **30,905 lines / 162 files** for compliance-trestle 4.2.0, the
-OSCAL 1.x validator+resolver toolchain (tests excluded) — **≈30×
+predecessor format's validator+resolver toolchain (tests excluded) — **≈30×
 each** (31×/27×), ~14× combined. Measured
 size deltas versus the OSCAL sources: ISM −29 %, GS++ −50 %,
 CR26 +55 % — smaller where sources are redundant, larger where a
@@ -1430,9 +1422,8 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
    of Applicability for — `tailoring-refs` scopes a Risk by naming the
    Tailoring, which is the join that exists, not the one ISO describes
    (#51); ☐ `Deviation.opened` is still a free string — tightening it is a
-   1.0.0-shape change like #47a (#52). The author decided on 2026-11-11: the media type and the schema
-   filenames now carry `jascon`; namespace URIs and `$id`s keep their
-   spelling (register, "Amendments — 2026-11-11").
+   1.0.0-shape change like #47a (#52). The author decided on 2026-11-11: every machine identifier carries
+   `jascon` (register, "Amendments — 2026-11-11").
 6. **Work, not decisions** — ☐ value arrival for the other corpora and
    the re-wording of "converted losslessly" that follows from it (#41);
    ☐ a real attestation in the example bundle (#46); ☐ a second Risk

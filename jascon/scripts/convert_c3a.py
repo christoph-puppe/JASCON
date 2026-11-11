@@ -12,10 +12,10 @@ ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)),
 SRC = os.path.join(ROOT, "sources", "c3a_oscal_catalog.json")
 OUTDIR = os.path.join(ROOT, "converted_examples", "DE.C3A")
 NS = "https://ns.bsi.bund.de/c3a"   # minted by converter; pending a BSI-published URI
-F_GRAM = "https://ns.oscal.org/stdlib/facet/statement-grammar@1"
+F_GRAM = "https://ns.jascon.net/stdlib/facet/statement-grammar@1"
 F_TAX = f"{NS}/facet/taxonomy@1"
 F_NARR = f"{NS}/facet/narrative@1"
-COMPAT = "https://ns.oscal.org/compat/oscal-1x@1"
+COMPAT = "https://ns.jascon.net/compat/oscal-1x@1"
 
 lang_wraps = collections.Counter()
 T = make_T("de", lang_wraps)
@@ -137,7 +137,7 @@ bundle.pin_stdlib("statement-grammar-1.0.0.json")   # 26: stdlib pins are VERBAT
 bundle.stub("c3a-taxonomy-stub.json", F_TAX.split("@")[0], [],
             {"effort-level": {"type": "string"}, "tags": {"type": "array"}})
 bundle.stub("c3a-narrative-stub.json", F_NARR.split("@")[0], [], {"guidance": {"type": "array"}})
-bundle.stub("oscal-1x-compat-stub.json", "https://ns.oscal.org/compat/oscal-1x", [],
+bundle.stub("oscal-1x-compat-stub.json", "https://ns.jascon.net/compat/oscal-1x", [],
             {"param-extras": {"type": "array"}},
             note="ILLUSTRATIVE STUB - Level-2 waiting room (intended deprecation; see D16/handbook 14.6)")
 bundle.write({"source": cat["metadata"]["title"], "source-version": VER,

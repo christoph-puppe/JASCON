@@ -1,5 +1,5 @@
 {
-  "id": "https://ns.oscal.org/stdlib/facet/terminology",
+  "id": "https://ns.jascon.net/stdlib/facet/terminology",
   "version": "1.0.0",
   "modifies-semantics": [],
   "note": "NORMATIVE (gate item 2). HOSTING RULE (backlog #6, decided at gate 2): a glossary MUST be hosted as this facet on a RequirementSet - typically the corpus root Set - whose id, version, and lifecycle govern the glossary; a dedicated carrier object is REJECTED (D22 absorption clause: the mechanism exists and measured 264/264 reference resolution; identity and lifecycle come free from the host Set). `uses-term` relations resolve against the terminology payload of the nearest hosting Set in the bundle; an unresolvable term ref is a validation error at Portable tier. Term headwords and aliases are identifiers-adjacent display keys and stay bare strings; definitions and notes are payload free text and MUST be language-tagged (backlog #12 facet-authoring rule).",

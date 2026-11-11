@@ -1,5 +1,5 @@
 {
- "id": "https://ns.oscal.org/stdlib/facet/security-objectives",
+ "id": "https://ns.jascon.net/stdlib/facet/security-objectives",
  "version": "1.0.0",
  "modifies-semantics": [
   "selection"

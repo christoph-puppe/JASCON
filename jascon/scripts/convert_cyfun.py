@@ -13,7 +13,7 @@ SRC_B = os.path.join(ROOT, "sources", "CyFun 2025 BASIC Resolved.json")
 SRC_E = os.path.join(ROOT, "sources", "CyFun 2025 ESSENTIAL Resolved.json")
 OUTDIR = os.path.join(ROOT, "converted_examples", "BE.CyFun")
 NS = "https://ns.ccb.belgium.be/cyfun"   # minted by converter; pending an authority URI
-COMPAT = "https://ns.oscal.org/compat/oscal-1x@1"
+COMPAT = "https://ns.jascon.net/compat/oscal-1x@1"
 
 lang_wraps = collections.Counter()
 T = make_T("en", lang_wraps)
@@ -155,7 +155,7 @@ basic_level_in_basic_file = sorted(i for i in bi
     if "basic" in [p["value"] for p in bi[i].get("props", []) or [] if p["name"] == "assurance-level"])
 membership_mismatch = sorted(set(bi) - set(basic_level_in_basic_file))
 
-bundle.stub("oscal-1x-compat-stub.json", "https://ns.oscal.org/compat/oscal-1x", [],
+bundle.stub("oscal-1x-compat-stub.json", "https://ns.jascon.net/compat/oscal-1x", [],
             {"group-parts": {"type": "array", "items": {"type": "object", "properties": {
                 "group": {"type": "string"}, "name": {"type": "string"},
                 "prose": {"type": "object", "additionalProperties": {"type": "string"}}}}}},

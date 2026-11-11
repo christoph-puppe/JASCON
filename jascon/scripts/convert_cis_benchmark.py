@@ -15,10 +15,10 @@ OUTDIR = os.path.join(ROOT, "converted_examples", "CIS.Ubuntu2404")
 NS = "https://ns.cisecurity.org/benchmark/ubuntu-24.04-lts"
 CISC8 = "https://ns.cisecurity.org/controls/v8"
 CISC7 = "https://ns.cisecurity.org/controls/v7"
-F_ACRIT = "https://ns.oscal.org/stdlib/facet/assessment-criteria@1"
+F_ACRIT = "https://ns.jascon.net/stdlib/facet/assessment-criteria@1"
 F_NARR = f"{NS}/facet/narrative@1"
 F_XREF = f"{NS}/facet/external-references@1"
-COMPAT = "https://ns.oscal.org/compat/oscal-1x@1"
+COMPAT = "https://ns.jascon.net/compat/oscal-1x@1"
 
 lang_wraps = collections.Counter()
 T = make_T("en", lang_wraps)
@@ -199,7 +199,7 @@ bundle.stub("cisb-narrative-stub.json", F_NARR.split("@")[0], [],
             {"description": {"type": "object"}, "rationale": {"type": "object"}})
 bundle.stub("cisb-external-references-stub.json", F_XREF.split("@")[0], [],
             {"references": {"type": "array", "items": {"type": "string"}}})
-bundle.stub("oscal-1x-compat-stub.json", "https://ns.oscal.org/compat/oscal-1x", [],
+bundle.stub("oscal-1x-compat-stub.json", "https://ns.jascon.net/compat/oscal-1x", [],
             {"group-parts": {"type": "array"}},
             note="ILLUSTRATIVE STUB - Level-2 waiting room (intended deprecation; see D16/handbook 14.6)")
 bundle.write({"source": cat["metadata"]["title"], "source-version": VER,

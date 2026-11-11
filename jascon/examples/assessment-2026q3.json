@@ -6,7 +6,7 @@
     "https://cso.example/component/acme-saas"
   ],
   "method": {
-    "https://ns.oscal.org/stdlib/facet/assessment-criteria@1": {
+    "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
       "summary": {
         "en": "Document review of KONF.14.1 evidence duties; key test: rotation artifacts present."
       }

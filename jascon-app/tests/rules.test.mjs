@@ -352,7 +352,7 @@ test("a whole set: the example folder, checked as a bundle, passes as it passes 
   assert.deepEqual(await errorsOf(), []);
   /* The folder pins the stdlib facet assessment-criteria. A pin of a stdlib id must be the normative descriptor
      verbatim; the same pin with one more property in its schema is the error the folder itself once carried. */
-  const pin = g.facetSchemas.find(f => f.def.id === "https://ns.oscal.org/stdlib/facet/assessment-criteria");
+  const pin = g.facetSchemas.find(f => f.def.id === "https://ns.jascon.net/stdlib/facet/assessment-criteria");
   assert.ok(pin, "the example folder pins a stdlib facet");
   pin.def = { ...pin.def, schema: { ...pin.def.schema, properties: { ...pin.def.schema.properties, extra: { type: "string" } } } };
   const errors = await errorsOf();

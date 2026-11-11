@@ -12,7 +12,7 @@
     "artifact-digest": "sha256:36405fcbe4e19ba3305b56c129e70925a27f4a16a10216a2ba3e0a13c625857e",
     "media-type": "text/markdown",
     "template-ref": {
-      "id": "https://ns.oscal.org/stdlib/template/summary",
+      "id": "https://ns.jascon.net/stdlib/template/summary",
       "version": "1.0.0",
       "digest": "sha256:ILLUSTRATIVE-SEE-README"
     },

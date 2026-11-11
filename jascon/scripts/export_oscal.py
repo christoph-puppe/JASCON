@@ -11,7 +11,7 @@ params (+ select for choices), relations -> links, the root-Set tree ->
 groups, titles/labels natively. What OSCAL cannot say (modality,
 obligated-parties, statement-scoped declarations, facets, lifecycle,
 lineage, overlapping Set membership) rides namespaced props under
-https://ns.oscal-semantic.org/core - the D16 compatibility channel, in
+https://ns.jascon.net/core - the D16 compatibility channel, in
 reverse. Sets additionally ride the props channel in full because the
 catalog model cannot represent overlapping membership (baselines!) -
 groups are the 1.x navigation view, the props channel is the exact one.
@@ -31,7 +31,7 @@ import regex   # the OFFICIAL NIST JSON schema uses \p{L} Unicode property
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.normpath(os.path.join(HERE, "..", ".."))
-SC = "https://ns.oscal-semantic.org/core"
+SC = "https://ns.jascon.net/core"
 OSCHEMA = json.load(open(os.path.join(ROOT, "sources", "nist", "oscal_catalog_schema.json"), encoding="utf-8"))
 
 def _pattern(validator, patrn, instance, schema):

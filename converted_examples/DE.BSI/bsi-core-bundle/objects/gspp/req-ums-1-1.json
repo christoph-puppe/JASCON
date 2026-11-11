@@ -26,7 +26,7 @@
   }
  ],
  "facets": {
-  "https://ns.oscal.org/stdlib/facet/statement-grammar@1": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
    "by-statement": {
     "smt": {
      "action": "überprüfen",
@@ -53,7 +53,7 @@
     }
    }
   },
-  "https://ns.oscal.org/compat/oscal-1x@1": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
    "param-extras": {
     "ums.1.1-prm1": {
      "alt-identifier": "e2c90fc0-e6e5-4a89-8099-39360b6e8eb9"

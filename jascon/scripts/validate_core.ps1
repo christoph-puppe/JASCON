@@ -1750,7 +1750,7 @@ function Run-Risk {
 # with -ceq: PowerShell's -ceq is culture-sensitive, so "a" + U+00AD equals
 # "a" there, while validate_core.py compares code points.
 $CK_SAT = 'satisfied'; $CK_NOT = 'not-satisfied'; $CK_INC = 'inconclusive'; $CK_NA = 'not-applicable'
-$COLLECTOR_FACET = 'https://ns.oscal.org/stdlib/facet/collector'
+$COLLECTOR_FACET = 'https://ns.jascon.net/stdlib/facet/collector'
 $DECIMAL_RX = '^(-?[1-9][0-9]*(\.[0-9]+)?|0(\.[0-9]+)?|-0\.[0-9]*[1-9][0-9]*)$'
 $CHECK_RULES = @{
     'CHECK-1'  = 'a check discharges a requirement; when that requirement is in the bundle the edge is typed and the clauses it names exist'

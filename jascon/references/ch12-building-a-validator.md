@@ -193,7 +193,7 @@ Then give your tool its **capability declaration** as ordinary
 configuration:
 
 ```json
-{ "understands": ["https://ns.oscal.org/stdlib/facet/assessment-criteria@1.2.0"],
+{ "understands": ["https://ns.jascon.net/stdlib/facet/assessment-criteria@1.2.0"],
   "preserves-unknown": true,
   "fails-closed-for": ["assessment", "tailoring", "selection"] }
 ```
@@ -384,7 +384,7 @@ The harness ran in July 2026 (specification IV.5). The measured
 numbers at 1.0.0:
 994 non-blank, non-comment lines of Python plus one schema library,
 1,163 lines of dependency-free PowerShell 5.1, both green on the same
-157 vectors, against 30,905 lines for the OSCAL 1.x toolchain it was
+157 vectors, against 30,905 lines for the predecessor format's toolchain it was
 compared with, which also authors and resolves and therefore does
 more. Three things are not measured: the hours of a fresh contributor,
 an implementation by someone other than the author, and the size of
