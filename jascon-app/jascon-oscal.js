@@ -17,10 +17,12 @@
               is a clause; the modality is `unspecified`, because OSCAL has
               no field for it; every prop and every other part is carried in
               a holding facet, verbatim, so nothing is dropped silently.
-   The NIST SP 800-53 rules of convert_nist.py (withdrawn controls folded
-   into `replaces`, assessment objectives, ODP facets) are not ported; the
-   generic path reads that catalog, with a different result than the shipped
-   bundle, and the report says so.
+   nist-sp800-53  The rules of convert_nist.py for NIST SP 800-53 Rev 5:
+              withdrawn controls folded into `replaces`, statement items as
+              clauses, SP 800-53A objectives and methods, parameter data and
+              guidance in facets. On the same source file its objects equal
+              the Python converter's. It makes no baseline Sets; a baseline
+              is a profile and is imported as one.
 
    What an import cannot carry is counted in the report it returns, never
    dropped without a line: a control without statement prose, a relation
@@ -197,6 +199,199 @@ function jscImportBsi(cat) {
 }
 
 /* ====================================================================
+   NIST SP 800-53 Rev 5 (after convert_nist.py v0.1)
+   ====================================================================
+   Families become Sets under one root Set. A live control or enhancement
+   becomes a Requirement: its statement and every item below it that has
+   prose becomes one statement, modality `must` by the corpus rule, bound to
+   the parties its implementation-level props name. A parameter is declared
+   on the statement whose prose inserts it; one that no statement inserts is
+   declared on the first. Guidance, the SP 800-53A objectives and methods,
+   the administrative data of parameters and the RMF marker go into facets.
+   A withdrawn control is not converted; its successor names it in
+   `replaces`, with the withdrawn label and title kept as an annotation.
+
+   The baselines are profiles of their own and are imported as profiles;
+   this preset makes no baseline Set. */
+const JSC_NIST = { ns: "https://ns.nist.gov/sp800-53", key: "sp800-53", lang: "en", rmf: "http://csrc.nist.gov/ns/rmf" };
+function jscImportNist(cat) {
+  const NS = JSC_NIST.ns, version = cat.metadata.version;
+  const F = { narr: `${NS}/facet/narrative@1`, a: `${NS}/facet/sp800-53a@1`, odp: `${NS}/facet/odp@1`, rmf: `${NS}/facet/rmf@1`, ref: `${NS}/facet/references@1` };
+  const T = v => ({ en: v });
+  const props = (c, name, ns, cls) => (c.props || []).filter(p => p.name === name && (ns === undefined || p.ns === ns) && (cls === undefined || p.class === cls)).map(p => p.value);
+  const prop = (c, name, ns, cls) => { const v = props(c, name, ns, cls); return v.length ? v[0] : null; };
+  const mint = id => `${NS}/req/${String(id).toUpperCase()}`;
+  /* {{ insert: param, x }} -> {param:x}; a markdown link to an anchor -> its text */
+  const rewrite = (prose, used) => String(prose || "")
+    .replace(/\{\{\s*insert:\s*param,\s*([a-z0-9._-]+)\s*\}\}/g, (m, id) => { if (used) used.add(id); return `{param:${id}}`; })
+    .replace(/\[([^\]]+)\]\(#[a-zA-Z0-9._-]+\)/g, "$1");
+  const byCode = (a, b) => (a < b ? -1 : a > b ? 1 : 0);
+  const report = { preset: "nist-sp800-53", controls: 0, statements: 0, "withdrawn-not-converted": 0, "parameters-from-another-control": [],
+    "parameters-without-insertion": 0, "related-to-withdrawn-or-missing": 0, "references-unresolved": 0, "withdrawn-into-withdrawn": [], "withdrawn-target-missing": [] };
+
+  const res = new Map((((cat["back-matter"] || {}).resources) || []).map(r => [r.uuid,
+    { title: r.title || "", citation: (r.citation || {}).text || "", url: ((r.rlinks || [{}])[0] || {}).href || "" }]));
+  /* every control at any depth, with the top group it stands under */
+  const controls = [];
+  const walkControl = (c, top) => { controls.push({ c, top }); for (const s of c.controls || []) walkControl(s, top); };
+  const walkGroup = (g, top) => { for (const c of g.controls || []) walkControl(c, top || g); for (const s of g.groups || []) walkGroup(s, top || g); };
+  for (const g of cat.groups || []) walkGroup(g, null);
+  for (const c of cat.controls || []) walkControl(c, null);
+  const byId = new Map(controls.map(x => [x.c.id, x.c]));
+  const withdrawn = new Set(controls.filter(x => prop(x.c, "status") === "withdrawn").map(x => x.c.id));
+  const live = controls.filter(x => !withdrawn.has(x.c.id));
+  const groupsById = new Map((cat.groups || []).map(g => [g.id, g]));
+  const paramsGlobal = new Map(controls.flatMap(x => (x.c.params || []).map(pm => [pm.id, pm])));
+  report["withdrawn-not-converted"] = withdrawn.size;
+
+  /* a withdrawn control points at its successor; the kernel records it on the successor */
+  const MODE = { "incorporated-into": "merged-into", "moved-to": "renamed" };
+  const succ = new Map(), famSucc = new Map();
+  const push = (map, key, e) => map.set(key, [...(map.get(key) || []), e]);
+  for (const { c } of controls) {
+    if (!withdrawn.has(c.id)) continue;
+    for (const l of c.links || []) {
+      const href = String(l.href || "").replace(/^#+/, "");
+      if (!(l.rel in MODE)) continue;
+      let target = href, into = null;
+      if (href.includes("_smt")) { const at = href.indexOf("_smt"); target = href.slice(0, at); into = "smt" + href.split("_smt")[1]; }   // a statement of the successor
+      const e = { ref: mint(c.id), mode: MODE[l.rel], label: prop(c, "label") || c.id.toUpperCase(), title: c.title || "" };
+      if (into) e.into = into;
+      if (withdrawn.has(target)) report["withdrawn-into-withdrawn"].push([c.id, target]);
+      else if (byId.has(target)) push(succ, target, e);
+      else if (groupsById.has(target)) push(famSucc, target, e);   // moved to a whole family
+      else report["withdrawn-target-missing"].push([c.id, href]);
+    }
+  }
+  const lineage = (o, entries) => {
+    o.replaces = entries.map(e => ({ ref: e.ref, mode: e.mode }));
+    o.annotations = { "nist-withdrawal": entries.map(e => Object.fromEntries(Object.entries(e).filter(([k]) => ["ref", "label", "title", "into", "mode"].includes(k)))) };
+  };
+  const paramDecl = pm => {
+    const d = { name: pm.id };
+    if ("select" in pm) {
+      d.type = "choice";
+      d.choices = ((pm.select || {}).choice || []).map(ch => ({ value: rewrite(ch) }));
+      if ((pm.select || {})["how-many"] === "one-or-more") d.cardinality = "many";
+    } else d.type = "string";
+    if (pm.label) d.label = pm.label;
+    return d;
+  };
+  const objTree = (pt, used) => {
+    const node = {};
+    if (pt.id) node.id = pt.id;
+    const lab = prop(pt, "label", undefined, "sp800-53a");
+    if (lab) node.label = lab;
+    if (pt.prose) node.prose = T(rewrite(pt.prose, used));
+    const kids = (pt.parts || []).map(s => objTree(s, used));
+    if (kids.length) node.children = kids;
+    return node;
+  };
+  const methodsOf = (c, used) => (c.parts || []).filter(pt => pt.name === "assessment-method").map(pt => {
+    const m = { method: prop(pt, "method"), label: prop(pt, "label", undefined, "sp800-53a") };
+    const objs = (pt.parts || []).filter(s => s.name === "assessment-objects").map(s => s.prose || "");
+    if (objs.length) m.objects = objs[0].split(/\n\s*\n/).filter(x => x.trim()).map(x => T(rewrite(x.trim(), used)));
+    return Object.fromEntries(Object.entries(m).filter(([, v]) => (Array.isArray(v) ? v.length : v)));
+  });
+  /* the statement part and every part below it that has prose, in document order */
+  const flatStatements = c => {
+    const out = [], walk = pt => { if (pt.prose) out.push(pt); for (const s of pt.parts || []) walk(s); };
+    for (const pt of c.parts || []) if (pt.name === "statement") walk(pt);
+    return out;
+  };
+
+  const objects = [];
+  for (const { c } of live) {
+    const cid = c.id, params = new Map((c.params || []).map(pm => [pm.id, pm]));
+    const plain = ((c.props || []).find(p => p.name === "label" && !p.class) || { value: cid.toUpperCase() }).value;
+    let levels = props(c, "implementation-level", JSC_NIST.rmf);
+    if (!levels.length) levels = ["organization"];
+    const parties = levels.map(v => `${NS}/party/${v}`), stmts = [], declared = new Set();
+    for (const pt of flatStatements(c)) {
+      const used = new Set(), prose = rewrite(pt.prose, used);
+      let sid = pt.id === undefined ? `${cid}_smt` : pt.id;
+      if (sid.startsWith(cid + "_")) sid = sid.slice(cid.length + 1);
+      const s = { id: sid, modality: "must", "obligated-parties": parties, prose: { en: prose } }, decls = [];
+      for (const u of [...used].sort(byCode)) {
+        if (params.has(u)) decls.push(paramDecl(params.get(u)));
+        else if (paramsGlobal.has(u)) { decls.push(paramDecl(paramsGlobal.get(u))); report["parameters-from-another-control"].push([cid, u]); }   // the source inserts another control's parameter
+      }
+      if (decls.length) s.parameters = decls;
+      used.forEach(u => declared.add(u));
+      stmts.push(s);
+    }
+    const rest = [...params.keys()].filter(pid => !declared.has(pid));
+    if (rest.length && stmts.length) {
+      stmts[0].parameters = [...(stmts[0].parameters || []), ...[...rest].sort(byCode).map(p => paramDecl(params.get(p)))];
+      report["parameters-without-insertion"] += rest.length;
+    }
+    const req = { id: mint(cid), version, label: plain, lifecycle: "active", title: T(c.title === undefined ? cid : c.title), statements: stmts };
+    const facets = {};
+    const guidance = (c.parts || []).filter(p => p.name === "guidance" && p.prose).map(p => T(rewrite(p.prose)));
+    if (guidance.length) facets[F.narr] = { guidance };
+    const usedF = new Set();
+    const objectives = (c.parts || []).filter(p => p.name === "assessment-objective").map(p => objTree(p, usedF)), methods = methodsOf(c, usedF);
+    if (objectives.length || methods.length) facets[F.a] = { ...(objectives.length ? { objectives } : {}), ...(methods.length ? { methods } : {}) };
+    const admin = {};
+    for (const [pid, pm] of params) {
+      const a = {}, pv = name => (pm.props || []).filter(p => p.name === name).map(p => p.value);
+      if ((pm.guidelines || []).length) a.guidelines = pm.guidelines.map(g => T(rewrite(g.prose || "")));
+      if (pv("alt-identifier").length) a["alt-identifiers"] = pv("alt-identifier");
+      if (pv("alt-label")[0]) a["alt-label"] = pv("alt-label")[0];
+      if (pv("aggregates").length) a.aggregates = pv("aggregates");
+      if (Object.keys(a).length) admin[pid] = a;
+    }
+    if (Object.keys(admin).length) facets[F.odp] = { params: admin };
+    if (prop(c, "contributes-to-assurance", JSC_NIST.rmf) === "true") facets[F.rmf] = { "contributes-to-assurance": true };
+    if (Object.keys(facets).length) req.facets = facets;
+    const rels = [], seen = new Set();
+    const rel = (type, ref) => { if (!seen.has(type + "\n" + ref)) { seen.add(type + "\n" + ref); rels.push({ type, ref }); } };
+    for (const l of c.links || []) {
+      const href = String(l.href || "").replace(/^#+/, "");
+      if (l.rel === "related" && byId.has(href) && !withdrawn.has(href)) rel("related", mint(href));
+      else if (l.rel === "related") report["related-to-withdrawn-or-missing"]++;
+      else if (l.rel === "required" && byId.has(href)) rel("required", mint(href));
+      else if (l.rel === "reference" && res.has(href) && res.get(href).url) rel("reference", res.get(href).url);
+      else if (l.rel === "reference") report["references-unresolved"]++;
+    }
+    if (rels.length) req.relations = rels;
+    if (succ.has(cid)) lineage(req, succ.get(cid));
+    objects.push({ path: `objects/req/${jscOscalSlug(cid)}.json`, obj: req });
+    report.controls++; report.statements += stmts.length;
+  }
+
+  const rootMembers = [];
+  for (const g of cat.groups || []) {
+    const sortId = id => prop(byId.get(id), "sort-id") || id;
+    const fam = live.filter(x => x.top && x.top.id === g.id).map(x => x.c.id).sort((a, b) => byCode(sortId(a), sortId(b)));
+    const id = `${NS}/set/family/${g.id}`;
+    const set = { id, version, lifecycle: "active", title: T(g.title === undefined ? g.id : g.title), label: prop(g, "label") || g.id.toUpperCase(),
+      members: fam.map((cid, i) => ({ ref: mint(cid), sequence: (i + 1) * 10 })) };
+    const overview = (g.parts || []).filter(p => p.name === "overview");
+    if (overview.length) set.facets = { [F.narr]: { guidance: overview.map(p => T(rewrite(p.prose || ""))) } };
+    if (famSucc.has(g.id)) lineage(set, famSucc.get(g.id));
+    objects.push({ path: `objects/set/family-${jscOscalSlug(g.id)}.json`, obj: set });
+    rootMembers.push({ ref: id, sequence: rootMembers.length * 10 + 10 });
+  }
+  const resources = [...res.values()].sort((a, b) => byCode(a.title, b.title)).map(r => Object.fromEntries(Object.entries(r).filter(([, v]) => v)));
+  objects.push({ path: "objects/set/root.json", obj: { id: `${NS}/set/root`, version, lifecycle: "active", title: T(cat.metadata.title), members: rootMembers,
+    facets: { [F.ref]: { resources } } } });
+
+  const base = f => f.replace(/@1$/, "");
+  const facetSchemas = [
+    jscFacetStub("sp800-53-narrative-stub.json", base(F.narr), [], { guidance: { type: "array" } }),
+    jscFacetStub("sp800-53a-stub.json", base(F.a), [], { objectives: { type: "array" }, methods: { type: "array" } }),
+    jscFacetStub("sp800-53-odp-stub.json", base(F.odp), [], { params: { type: "object" } }),
+    jscFacetStub("sp800-53-rmf-stub.json", base(F.rmf), [], { "contributes-to-assurance": { type: "boolean" } }),
+    jscFacetStub("sp800-53-references-stub.json", base(F.ref), [], { resources: { type: "array" } }),
+  ];
+  const provenance = { sources: [{ key: JSC_NIST.key, title: cat.metadata.title, version, "oscal-version": cat.metadata["oscal-version"] }],
+    converter: "JASCON-App OSCAL import, preset nist-sp800-53 (the rules of convert_nist.py v0.1, without the baseline Sets)",
+    "namespace-note": "https://ns.nist.gov/sp800-53 is minted to match the mapping endpoints of the corpus; pending a URI published by NIST" };
+  return { objects, facetSchemas, provenance, report };
+}
+
+/* ====================================================================
    Any other catalog
    ==================================================================== */
 /* opts: { ns, lang, key } - the namespace the ids are minted under, the
@@ -310,12 +505,12 @@ function jscImportGeneric(cat, opts) {
 function jscOscalImportCatalog(doc, opts) {
   const cat = doc && doc.catalog;
   if (!cat || !cat.metadata) throw new Error("this is not an OSCAL catalog: no catalog.metadata");
-  return opts.preset === "bsi-gspp" ? jscImportBsi(cat) : jscImportGeneric(cat, opts);
+  return opts.preset === "bsi-gspp" ? jscImportBsi(cat) : opts.preset === "nist-sp800-53" ? jscImportNist(cat) : jscImportGeneric(cat, opts);
 }
 /* A guess at the preset from the catalog itself; the user decides. */
 function jscOscalGuessPreset(doc) {
   const title = (((doc || {}).catalog || {}).metadata || {}).title || "";
-  return /Grundschutz\+\+/.test(title) ? "bsi-gspp" : "generic";
+  return /Grundschutz\+\+/.test(title) ? "bsi-gspp" : /SP 800-53 Rev(ision)? 5/i.test(title) ? "nist-sp800-53" : "generic";
 }
 
 /* ====================================================================
@@ -414,5 +609,5 @@ function jscOscalKind(doc) {
 }
 
 if (typeof module !== "undefined" && module.exports) {
-  module.exports = { jscOscalSlug, jscOscalProse, jscOscalImportCatalog, jscOscalGuessPreset, jscOscalImportProfile, jscOscalKind, JSC_BSI };
+  module.exports = { jscOscalSlug, jscOscalProse, jscOscalImportCatalog, jscOscalGuessPreset, jscOscalImportProfile, jscOscalKind, JSC_BSI, JSC_NIST };
 }

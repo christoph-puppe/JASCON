@@ -54,6 +54,12 @@ and in `readme.md`; this file says only what is done and what is next.
   another one. Driven in headless Chromium with the signed fixture of the
   dsse vectors.
 
+- The NIST SP 800-53 preset in `jascon-oscal.js` (the rules of
+  `convert_nist.py`, without the baseline Sets). On the local source file all
+  1,035 objects equal the output of the Python converter run on the same
+  file. Driven in headless Chromium with the MODERATE profile on top;
+  `validate_core.py` on the export: 1038 pass, 0 fail.
+
 ## Next
 
 - One real call per service with a key of the user's: the model ids in the
@@ -62,7 +68,6 @@ and in `readme.md`; this file says only what is done and what is next.
   environment).
 - Let the pages type objects by schema at load (`jscTypeOf`) instead of by
   fields (`jscInferType`).
-- A port of `convert_nist.py` as a third import preset.
 - Screenshots for the repository README.
 
 ## Found on the way (not fixed here)
@@ -78,6 +83,9 @@ and in `readme.md`; this file says only what is done and what is next.
   envelope only for an attestation the manifest lists, which an attestation
   over the manifest cannot be (D3.1).
 - The IFA bundle's attestation carries a stale digest for `system1234`.
+- The shipped `converted_examples/US.SP800-53` bundle was converted from an
+  earlier revision of NIST's 5.2.0 file. In it SA-15(13) "Logging Syntax"
+  carries the statement of SA-15(12); NIST's current file has it right.
 
 ## Open
 

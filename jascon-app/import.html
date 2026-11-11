@@ -42,6 +42,7 @@
         <p data-i18n>A catalog. Each control becomes a Requirement, each group a Set, and the catalog itself the root Set. The text of the statement part becomes the clauses; an insert of a parameter becomes a {param:} token, and the parameter is declared on the clause that names it. A link to another control becomes a relation.</p>
         <p data-i18n>The generic rules make every nested control a Requirement of its own, with a relation to its parent. The modality is unspecified, because OSCAL has no field for the binding force. Props and parts the kernel has no field for are held verbatim in a facet under your namespace, with a pinned schema; nothing is dropped without a line in the report.</p>
         <p data-i18n>The preset for the BSI Anwenderkatalog Grundschutz++ follows the converter of this repository: a nested control is a clause of its parent, the modal verb becomes the modality, the BSI props go to the standard facets, and the security level becomes baseline Sets. Its ids are minted under the namespace the converter uses.</p>
+        <p data-i18n>The preset for NIST SP 800-53 Rev 5 follows the converter of this repository: a withdrawn control is not converted and its successor names it; every statement item with prose is a clause with modality must; assessment objectives and methods, the administrative data of parameters and the guidance go to facets under the NIST namespace. The baselines are profiles and are imported as profiles.</p>
         <p data-i18n>A profile. The controls it includes become a Set, and a Tailoring selects that Set. Excluded controls become excludes. A set-parameter becomes an operation on every clause that declares the parameter, if the value lies in the declared space; a value outside it needs a Deviation and is listed, not written.</p>
         <p data-i18n>Not carried, and counted in the report: alters, the merge directive, pattern matching, the inclusion of child controls. An alter changes text, and somebody has to decide whether that is editorial or substantive; use the Tailor tool for it.</p>
         <p data-i18n>Imported content stays under its publisher's terms. State them in the field for the licence; they are written into the provenance of the bundle.</p>
@@ -90,7 +91,15 @@ jscI18n.add("de", {
   "{name}: not JSON ({msg})": "{name}: kein JSON ({msg})", "{name}: an OSCAL {kind}. This page imports catalogs and profiles.": "{name}: ein OSCAL-{kind}. Diese Seite importiert Kataloge und Profile.",
   "{name}: not an OSCAL document (one root key is expected)": "{name}: kein OSCAL-Dokument (erwartet wird genau ein Wurzelschlüssel)",
   "Catalog": "Katalog", "Profile": "Profil", "title": "Titel", "version": "Version", "OSCAL version": "OSCAL-Version", "controls": "Controls", "groups": "Gruppen", "imports": "Importe",
-  "Rules": "Regeln", "BSI Grundschutz++ (the repository's converter)": "BSI Grundschutz++ (der Konverter des Repositorys)", "generic": "generisch",
+  "Rules": "Regeln", "BSI Grundschutz++ (the repository's converter)": "BSI Grundschutz++ (der Konverter des Repositorys)",
+  "NIST SP 800-53 Rev 5 (the repository's converter)": "NIST SP 800-53 Rev 5 (der Konverter des Repositorys)",
+  "withdrawn controls, not converted; the successor names them in replaces": "zurückgezogene Controls, nicht konvertiert; der Nachfolger nennt sie in replaces",
+  "parameters no clause inserts (declared on the first clause)": "Parameter, die keine Klausel einsetzt (an der ersten Klausel deklariert)",
+  "clauses that insert another control's parameter": "Klauseln, die den Parameter eines anderen Controls einsetzen",
+  "links to a withdrawn or missing control (dropped)": "Verweise auf ein zurückgezogenes oder fehlendes Control (entfallen)",
+  "withdrawn controls whose successor is withdrawn or missing": "zurückgezogene Controls, deren Nachfolger zurückgezogen ist oder fehlt",
+  "The preset for NIST SP 800-53 Rev 5 follows the converter of this repository: a withdrawn control is not converted and its successor names it; every statement item with prose is a clause with modality must; assessment objectives and methods, the administrative data of parameters and the guidance go to facets under the NIST namespace. The baselines are profiles and are imported as profiles.":
+    "Das Preset für NIST SP 800-53 Rev 5 folgt dem Konverter dieses Repositorys: Ein zurückgezogenes Control wird nicht konvertiert, sein Nachfolger nennt es; jedes Statement-Element mit Text ist eine Klausel mit Modalität must; Prüfziele und -methoden, die Verwaltungsdaten der Parameter und die Guidance gehen in Facets unter dem NIST-Namensraum. Die Baselines sind Profile und werden als Profile importiert.", "generic": "generisch",
   "Namespace for the ids": "Namensraum für die Ids",
   "Use the publisher's namespace if it has one. Ids under your own domain make you the claimed authority of this catalog: a Tailoring of yours may then weaken it without a Deviation.":
     "Den Namensraum des Herausgebers verwenden, wenn es einen gibt. Ids unter der eigenen Domain machen Sie zur beanspruchten Autorität dieses Katalogs: Ein eigenes Tailoring darf ihn dann ohne Deviation abschwächen.", "Language of the text": "Sprache des Textes", "Short name (used in file paths)": "Kurzname (für Dateipfade)",
@@ -153,6 +162,7 @@ function invalid(objects) {
   return objects.map(o => ({ o, type: jscTypeOf(o.obj) })).filter(x => !x.type)
     .map(x => `${x.o.obj.id}: ${(jscShapeErrors(x.o.obj.statements ? "requirement" : x.o.obj.selects ? "tailoring" : "requirementSet", x.o.obj)[0] || "matches no shape")}`);
 }
+const FIXED = { "bsi-gspp": JSC_BSI, "nist-sp800-53": JSC_NIST };
 function reportHtml() {
   if (!result) return "";
   const r = result.report, objs = result.objects, bad = result.invalid;
@@ -163,6 +173,11 @@ function reportHtml() {
         ${row("controls without statement prose (carried with their title)", (r["controls-without-prose"] || []).length ? capped(r["controls-without-prose"]) : "")}
         ${row("source defects (reported, not repaired)", (r["source-defects"] || []).length ? `<b>${r["source-defects"].length}</b> ` + capped(r["source-defects"].map(d => `${d.control} ${d.prop}`), 6) : "")}
         ${row("parameters no clause names", r["parameters-unreferenced"] ? String(r["parameters-unreferenced"]) : "")}
+        ${row("withdrawn controls, not converted; the successor names them in replaces", r["withdrawn-not-converted"] ? String(r["withdrawn-not-converted"]) : "")}
+        ${row("parameters no clause inserts (declared on the first clause)", r["parameters-without-insertion"] ? String(r["parameters-without-insertion"]) : "")}
+        ${row("clauses that insert another control's parameter", (r["parameters-from-another-control"] || []).length ? capped(r["parameters-from-another-control"].map(x => x.join(" ← "))) : "")}
+        ${row("links to a withdrawn or missing control (dropped)", r["related-to-withdrawn-or-missing"] ? String(r["related-to-withdrawn-or-missing"]) : "")}
+        ${row("withdrawn controls whose successor is withdrawn or missing", [...(r["withdrawn-into-withdrawn"] || []), ...(r["withdrawn-target-missing"] || [])].length ? capped([...r["withdrawn-into-withdrawn"], ...r["withdrawn-target-missing"]].map(x => x.join(" → "))) : "")}
         ${row("links without a target", r["links-without-target"] ? String(r["links-without-target"]) : "")}
         ${row("Props held in the facet", Object.keys(r["props-held"] || {}).length ? counts(r["props-held"]) : "")}
         ${row("Parts held in the facet", Object.keys(r["parts-held"] || {}).length ? counts(r["parts-held"]) : "")}
@@ -184,11 +199,11 @@ function render() {
   const meta = doc[kind].metadata || {}, kv = (k, v) => `<div class="k">${esc(T(k))}</div><div class="v">${esc(v)}</div>`;
   let head, form;
   if (kind === "catalog") {
-    const c = countControls(doc.catalog), bsi = opts.preset === "bsi-gspp";
+    const c = countControls(doc.catalog), fixed = FIXED[opts.preset];   // a preset of the repository mints under its publisher's namespace
     head = kv("title", meta.title || "") + kv("version", meta.version || "") + kv("OSCAL version", meta["oscal-version"] || "") + kv("controls", String(c.controls)) + kv("groups", String(c.groups));
-    form = `<label for="o-preset">${esc(T("Rules"))}</label><div><select id="o-preset">${opt("generic", T("generic"), opts.preset)}${opt("bsi-gspp", T("BSI Grundschutz++ (the repository's converter)"), opts.preset)}</select>
-        ${bsi ? `<div class="hint">${esc(T("The preset mints ids under {ns} and reads the text as {lang}.", { ns: JSC_BSI.ns, lang: JSC_BSI.lang }))}</div>` : ""}</div>
-      ${bsi ? "" : `<label for="o-ns">${esc(T("Namespace for the ids"))}</label><div><input type="url" id="o-ns" value="${esc(opts.ns)}">
+    form = `<label for="o-preset">${esc(T("Rules"))}</label><div><select id="o-preset">${opt("generic", T("generic"), opts.preset)}${opt("bsi-gspp", T("BSI Grundschutz++ (the repository's converter)"), opts.preset)}${opt("nist-sp800-53", T("NIST SP 800-53 Rev 5 (the repository's converter)"), opts.preset)}</select>
+        ${fixed ? `<div class="hint">${esc(T("The preset mints ids under {ns} and reads the text as {lang}.", { ns: fixed.ns, lang: fixed.lang }))}</div>` : ""}</div>
+      ${fixed ? "" : `<label for="o-ns">${esc(T("Namespace for the ids"))}</label><div><input type="url" id="o-ns" value="${esc(opts.ns)}">
           <div class="hint">${esc(T("Use the publisher's namespace if it has one. Ids under your own domain make you the claimed authority of this catalog: a Tailoring of yours may then weaken it without a Deviation."))}</div></div>
         <label for="o-lang">${esc(T("Language of the text"))}</label><div><input type="text" id="o-lang" value="${esc(opts.lang)}" style="max-width:90px"></div>
         <label for="o-key">${esc(T("Short name (used in file paths)"))}</label><div><input type="text" id="o-key" value="${esc(opts.key)}" style="max-width:260px"></div>`}
@@ -214,7 +229,7 @@ function render() {
   if ($("write")) $("write").addEventListener("click", write);
 }
 function run() {
-  const needsNs = kind === "profile" || opts.preset !== "bsi-gspp";
+  const needsNs = kind === "profile" || !FIXED[opts.preset];
   if (needsNs && !/^https?:\/\/./.test(opts.ns)) { $("run-err").textContent = T("A namespace is an http(s) URI."); return; }
   try {
     result = kind === "catalog" ? jscOscalImportCatalog(doc, opts)

@@ -368,7 +368,8 @@ one view that asks a language model (below).
 
 - **Import** reads an OSCAL catalog or profile; everything after it works on
   JASCON. The BSI Grundschutz++ rules reproduce the shipped `DE.BSI` bundle
-  object for object, by semantic digest.
+  object for object, by semantic digest; the NIST SP 800-53 rules give what
+  `convert_nist.py` gives on the same source file.
 - **Risk** is the page the reader did not have: a register with a heat map,
   scales with their likelihood-impact matrix, the coverage of the selected
   requirements, and the import of the risk catalogues under
