@@ -341,12 +341,18 @@ test("a whole set: every shipped bundle passes the ported rules, as it passes th
   }
 });
 
-test("a whole set: the example folder, checked as a bundle, shows the one error the reference validator shows", async () => {
+test("a whole set: the example folder, checked as a bundle, passes as it passes the reference validator; a diverging pin of a stdlib facet fails (D26)", async () => {
   const EX = path.resolve(CONF, "../examples");
   const files = fs.readdirSync(EX).map(n => ({ path: n, text: core.jscDecode(fs.readFileSync(path.join(EX, n))) }));
   const g = core.jscGraphFrom(core.jscClassifyFiles(files).records);
-  const res = await rules.jscCheckGraph(g, await core.jscVerify(g));
-  const errors = res.findings.filter(f => f.kind === "error").map(f => f.message);
+  const errorsOf = async () => (await rules.jscCheckGraph(g, await core.jscVerify(g))).findings.filter(f => f.kind === "error").map(f => f.message);
+  assert.deepEqual(await errorsOf(), []);
+  /* The folder pins the stdlib facet assessment-criteria. A pin of a stdlib id must be the normative descriptor
+     verbatim; the same pin with one more property in its schema is the error the folder itself once carried. */
+  const pin = g.facetSchemas.find(f => f.def.id === "https://ns.oscal.org/stdlib/facet/assessment-criteria");
+  assert.ok(pin, "the example folder pins a stdlib facet");
+  pin.def = { ...pin.def, schema: { ...pin.def.schema, properties: { ...pin.def.schema.properties, extra: { type: "string" } } } };
+  const errors = await errorsOf();
   assert.equal(errors.length, 1, errors.join(" | "));
   assert.match(errors[0], /DIVERGES from the normative descriptor \(D26\)/);
 });

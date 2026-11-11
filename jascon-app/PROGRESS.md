@@ -35,8 +35,8 @@ and in `readme.md`; this file says only what is done and what is next.
 - Step 3: the per-object checks, facet payloads, the operation law per tier,
   the attestation verdict and `jscCheckGraph` (a whole set) in
   `jascon-rules.js`; twelve of the fifteen vector families pass; the five
-  shipped bundles pass the whole-set check and the example folder shows the
-  one D26 error the Python validator shows. `validate.html` on top of it.
+  shipped bundles pass the whole-set check, and so does the example folder
+  since its pin was repaired on `main` (PR #8). `validate.html` on top of it.
 
 - The model access: `jascon-ai.js` (one client for Gemini, OpenRouter and an
   own endpoint; the key in memory and relayed through the hub; editable
@@ -76,8 +76,6 @@ and in `readme.md`; this file says only what is done and what is next.
   domain authority-claimed over it (the tier rule compares origins). The
   import page warns; the rule itself is the kernel's.
 
-- `jascon/examples` checked as a bundle fails D26: the stub pin of the stdlib
-  assessment-criteria facet differs from the normative descriptor.
 - The example attestation names an envelope (`attestation-envelope.dsse`)
   that the repository does not carry, and `validate_core.py` checks an
   envelope only for an attestation the manifest lists, which an attestation
