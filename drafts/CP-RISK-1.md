@@ -283,7 +283,7 @@ Sources: `usnistgov/oscal-content@9402f031` (2026-07-14 — the state the 1.0.0 
 | Check | State |
 |---|---|
 | Python reference validator | 200/200 vectors · 11 bundles · 6,916 objects · both digests · **ALL GREEN** (Linux) |
-| PowerShell twin | Ported (Risk type, RISK-7/8/12, risk-coverage, 42 vectors, `-RequireRiskBasis`). **Not executed** — no PowerShell runtime was available where the port was written. One implementation, not two, until a run on Windows PowerShell 5.1 is green. |
+| PowerShell twin | Ported (Risk type, RISK-7/8/12, risk-coverage, 42 vectors, `-RequireRiskBasis`). **Not executed** — no PowerShell runtime was available where the port was written. One implementation, not two, until a run on Windows PowerShell 5.1 is green. **2026-11-11: executed and green** — 258/258 vectors, five bundles and the example folder, every count equal to the Python reference's (spec IV.5b item 3). |
 | OSCAL export suite | Not re-run: its inputs (the ten catalog bundles) are byte-identical; the NIST schema it needs is not in the repository. |
 | Reader | v1.7.2 recognises the Risk type; verified in headless Chromium on the re-converted IFA bundle (17 objects, 2 typed `risk`, no page errors). |
 | Release | **Not yet.** Version decided: 2.0.0 (§12). No tag — the PowerShell run comes first. The 2.0.0 specification text exists as a release candidate (`drafts/oscal-semantic-core-specification-2.0.0-rc.1.md`). |
@@ -350,6 +350,8 @@ validator: 258/258 and all shipped bundles, ALL GREEN.
 1. **The PowerShell twin is still unexecuted**, and now carries more
    unexecuted code: every change above was ported to it by reading. The
    expected line is `risk: 73 pass, 0 fail`. Backlog #45 stands.
+   *(2026-11-11: run on Windows PowerShell 5.1 — `risk: 73 pass, 0
+   fail` and ALL GREEN; #45 closed.)*
 2. **X-1 makes the first Risk corpus justify nothing.** Both IFA risks are
    `identified` (§11.4), hence `pending`. That is §12.2 followed to its
    consequence. *(Since X-11 the IFA bundle is reported: two requirements
