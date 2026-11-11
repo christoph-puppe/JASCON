@@ -43,6 +43,18 @@ assigned after either database was built can match differently; an
 integer fact beyond 64 bits is not read as an integer; -ceq, used on ids
 outside the Check code, is culture-sensitive ("a" + U+00AD equals "a").
 
+SPEED (2026-11-11): type inference took four fifths of a bundle run. The
+schema interpreter now reads a schema node once into a plan, tests the
+cheap keywords first and remembers a $ref verdict for the object under
+inference; JSON is read from the .NET parser's own dictionaries instead
+of ConvertFrom-Json's PSCustomObjects; the canonical form is written into
+one StringBuilder. Measured on one machine: the default run 1452 s ->
+219 s, the vectors 72 s -> 19 s, the output of the run unchanged line for
+line. 700 mutated objects get the same types, digests and optional-empty
+findings from this file and from validate_core.py - among them objects
+with members that differ only in case or have an empty name, which
+ConvertFrom-Json could not read at all.
+
 Usage: powershell -ExecutionPolicy Bypass -File validate_core.ps1 [bundle-dirs...]
        -VectorsOnly to skip bundles; -TrustedKeys file.json for verification mode;
        -RequireRiskBasis turns uncovered selections into failures (policy switch).
@@ -65,21 +77,52 @@ function New-Map { return (New-Object System.Collections.Hashtable ([System.Stri
 function New-OMap { return (New-Object System.Collections.Specialized.OrderedDictionary ([System.StringComparer]::Ordinal)) }
 
 # ---------------- json -> ordered maps ----------------
+# ConvertFrom-Json wraps this same parser and then builds a PSCustomObject per
+# object, which costs most of the read and cannot hold two members that
+# differ only in case, or an empty member name. Reading the parser's own
+# dictionaries is faster and takes every JSON object validate_core.py takes.
+Add-Type -AssemblyName System.Web.Extensions
+$JSON = New-Object System.Web.Script.Serialization.JavaScriptSerializer
+$JSON.MaxJsonLength = [int]::MaxValue
+$JSON.RecursionLimit = 1020
 function ConvertTo-Map($o) {
+    if ($o -is [System.Collections.IDictionary]) {
+        $m = (New-OMap)
+        foreach ($kv in $o.GetEnumerator()) {
+            $x = $kv.Value
+            if (($null -eq $x) -or ($x -is [string]) -or ($x -is [System.ValueType])) { $m[[string]$kv.Key] = $x }
+            else { $m[[string]$kv.Key] = ConvertTo-Map $x }
+        }
+        return $m
+    }
     if ($o -is [System.Management.Automation.PSCustomObject]) {
         $m = (New-OMap)
         foreach ($p in $o.PSObject.Properties) { $m[$p.Name] = ConvertTo-Map $p.Value }
         return $m
     }
-    if ($o -is [System.Array]) {
+    if (($o -is [System.Collections.IEnumerable]) -and -not ($o -is [string])) {
         $a = New-Object System.Collections.ArrayList
-        foreach ($x in $o) { [void]$a.Add((ConvertTo-Map $x)) }
+        foreach ($x in $o) {
+            if (($null -eq $x) -or ($x -is [string]) -or ($x -is [System.ValueType])) { [void]$a.Add($x) }
+            else { [void]$a.Add((ConvertTo-Map $x)) }
+        }
         return ,$a
     }
     return $o
 }
+function Parse-Json([string]$txt) {
+    # the parser returns $null for an empty text; JSON has no empty document
+    if ($txt.Trim().Length -eq 0) { throw 'not JSON: the text is empty' }
+    $v = ConvertTo-Map ($JSON.DeserializeObject($txt))
+    return ,$v
+}
 function Read-Json([string]$path) {
-    ConvertTo-Map ((Get-Content -Raw -Encoding UTF8 $path) | ConvertFrom-Json)
+    # a rooted path is read directly (Get-Content costs milliseconds per
+    # file); a relative one still goes through PowerShell's own location
+    if ([System.IO.Path]::IsPathRooted($path)) { $txt = [System.IO.File]::ReadAllText($path, [System.Text.Encoding]::UTF8) }
+    else { $txt = [string](Get-Content -Raw -Encoding UTF8 $path) }
+    $v = Parse-Json $txt
+    return ,$v
 }
 function Is-Map($v) { return ($v -is [System.Collections.IDictionary]) }
 function Is-List($v) { return (-not (Is-Map $v)) -and ($v -is [System.Collections.IEnumerable]) -and -not ($v -is [string]) }
@@ -91,7 +134,10 @@ function Copy-Deep($v) {
 }
 
 # ---------------- canonical form (RFC 8785 member ordering) ----------------
+# only these need escaping: the quote, the backslash, C0 controls
+$ESC_RX = New-Object System.Text.RegularExpressions.Regex '["\\\u0000-\u001f]'
 function Esc-Json([string]$s) {
+    if (-not $ESC_RX.IsMatch($s)) { return $s }     # the common case: nothing to escape
     $sb = New-Object System.Text.StringBuilder
     foreach ($ch in $s.ToCharArray()) {
         $c = [int]$ch
@@ -107,32 +153,75 @@ function Esc-Json([string]$s) {
     }
     return $sb.ToString()
 }
+function Write-Canonical($v, $sb) {
+    if ($v -is [System.Collections.IDictionary]) {
+        $keys = New-Object 'System.Collections.Generic.List[string]'
+        foreach ($k in $v.Keys) { $keys.Add([string]$k) }
+        $keys.Sort([System.StringComparer]::Ordinal)     # UTF-16 code units
+        [void]$sb.Append('{')
+        $first = $true
+        foreach ($k in $keys) {
+            if ($first) { $first = $false } else { [void]$sb.Append(',') }
+            if ($ESC_RX.IsMatch($k)) { [void]$sb.Append('"').Append((Esc-Json $k)).Append('":') }
+            else { [void]$sb.Append('"').Append($k).Append('":') }
+            $x = $v[$k]
+            if ($x -is [string]) {       # a text leaf needs no call of its own
+                if ($ESC_RX.IsMatch($x)) { [void]$sb.Append('"').Append((Esc-Json $x)).Append('"') }
+                else { [void]$sb.Append('"').Append($x).Append('"') }
+            } else { Write-Canonical $x $sb }
+        }
+        [void]$sb.Append('}')
+        return
+    }
+    if ($null -eq $v) { [void]$sb.Append('null'); return }
+    if ($v -is [string]) {
+        if ($ESC_RX.IsMatch($v)) { [void]$sb.Append('"').Append((Esc-Json $v)).Append('"') }
+        else { [void]$sb.Append('"').Append($v).Append('"') }
+        return
+    }
+    if ($v -is [bool]) { if ($v) { [void]$sb.Append('true') } else { [void]$sb.Append('false') }; return }
+    if ($v -is [System.Collections.IEnumerable]) {
+        [void]$sb.Append('[')
+        $first = $true
+        foreach ($x in $v) {
+            if ($first) { $first = $false } else { [void]$sb.Append(',') }
+            if ($x -is [string]) {
+                if ($ESC_RX.IsMatch($x)) { [void]$sb.Append('"').Append((Esc-Json $x)).Append('"') }
+                else { [void]$sb.Append('"').Append($x).Append('"') }
+            } else { Write-Canonical $x $sb }
+        }
+        [void]$sb.Append(']')
+        return
+    }
+    if ($v -is [decimal]) { [void]$sb.Append($v.ToString($INV)); return }
+    if ($v -is [double]) { [void]$sb.Append($v.ToString('R', $INV)); return }
+    [void]$sb.Append($v.ToString($INV))
+}
 function Format-Canonical($v) {
     if ($null -eq $v) { return 'null' }
+    if ($v -is [string]) {
+        if ($ESC_RX.IsMatch($v)) { return '"' + (Esc-Json $v) + '"' }
+        return '"' + $v + '"'
+    }
     if ($v -is [bool]) { if ($v) { return 'true' } else { return 'false' } }
-    if ($v -is [string]) { return '"' + (Esc-Json $v) + '"' }
-    if (Is-Map $v) {
-        $keys = @($v.Keys | ForEach-Object { [string]$_ })
-        [Array]::Sort($keys, [System.StringComparer]::Ordinal)   # UTF-16 code units
-        $parts = foreach ($k in $keys) { '"' + (Esc-Json $k) + '":' + (Format-Canonical $v[$k]) }
-        return '{' + ($parts -join ',') + '}'
-    }
-    if (Is-List $v) {
-        $parts = foreach ($x in $v) { Format-Canonical $x }
-        return '[' + ($parts -join ',') + ']'
-    }
-    if ($v -is [decimal]) { return $v.ToString($INV) }
-    if ($v -is [double]) { return $v.ToString('R', $INV) }
-    return $v.ToString($INV)
+    $sb = New-Object System.Text.StringBuilder
+    Write-Canonical $v $sb
+    return $sb.ToString()
 }
 $SHA = [System.Security.Cryptography.SHA256]::Create()
 function Sha256-Hex([byte[]]$bytes) {
     return 'sha256:' + (($SHA.ComputeHash($bytes) | ForEach-Object { $_.ToString('x2') }) -join '')
 }
 function Canonical($obj) {
-    $o = Copy-Deep $obj
-    if (Is-Map $o) { $o.Remove('annotations') }
-    return Format-Canonical $o
+    # the semantic form drops the top-level `annotations` only, so a shallow
+    # copy of the top level is enough (it was a deep copy of the object)
+    if (($obj -is [System.Collections.IDictionary]) -and $obj.Contains('annotations')) {
+        $o = (New-OMap)
+        foreach ($k in $obj.Keys) {
+            if (-not [string]::Equals([string]$k, 'annotations', [System.StringComparison]::Ordinal)) { $o[[string]$k] = $obj[$k] } }
+        return Format-Canonical $o
+    }
+    return Format-Canonical $obj
 }
 function SDig($obj) { return Sha256-Hex ([System.Text.Encoding]::UTF8.GetBytes((Canonical $obj))) }
 function Content-Digest($obj) {
@@ -174,79 +263,161 @@ function Type-Is($v, [string]$t) {
     }
     throw "unknown type keyword: $t"
 }
-function Test-Schema($sch, $v) {
-    if ($null -eq $sch) { return $true }
+# SPEED (2026-11-11). The interpreter took 0.16 s per object, four fifths
+# of a bundle run. Four changes:
+#  - a schema node is read ONCE into a plan: its keywords are held to the
+#    subset (still fail-loud, still on first visit) and put in evaluation
+#    order - the cheap ones first, so a shape that lacks a required member
+#    fails before its subschemas are walked;
+#  - type inference tests one object against all eleven shapes, and every
+#    shape begins with $ref base: a $ref applied to the object under
+#    inference is evaluated once and remembered for the other ten;
+#  - the declared-property set of a closed shape is built once per node;
+#  - compiled patterns are kept (Regex.IsMatch keeps only fifteen).
+# Two comparisons became exact on the way: declared property names and
+# const / enum values are compared ordinally (they were -notcontains and
+# -ceq, which fold case resp. follow the culture - backlog #58).
+$TS_ORDER = @('type', 'required', 'minProperties', 'const', 'enum', 'minLength', 'maxLength', 'pattern',
+              'minItems', 'maxItems', 'minimum', 'maximum', 'propertyNames', '$ref', 'allOf', 'anyOf',
+              'oneOf', 'not', 'if', 'properties', 'additionalProperties', 'unevaluatedProperties', 'items')
+$script:TsPlans = New-Object 'System.Collections.Generic.Dictionary[object,object]'       # schema node -> its keywords, in order
+$script:TsDeclared = New-Object 'System.Collections.Generic.Dictionary[object,object]'    # closed node -> declared names
+$script:TsRegex = New-Object 'System.Collections.Generic.Dictionary[string,object]' ([System.StringComparer]::Ordinal)
+$script:TsTop = $null       # the object under type inference, or $null
+$script:TsRefMemo = $null   # $ref -> verdict, for that object only
+function New-SchemaPlan($sch) {
     foreach ($kw in $sch.Keys) {
         if (($KNOWN_KW -notcontains $kw) -and ($IGNORE_KW -notcontains $kw)) {
             throw "schema keyword '$kw' outside the documented subset (fail-loud)"
         }
     }
-    if ($sch.Contains('$ref')) { if (-not (Test-Schema (Resolve-Ref $sch['$ref']) $v)) { return $false } }
-    if ($sch.Contains('allOf')) {
-        foreach ($s in $sch['allOf']) { if (-not (Test-Schema $s $v)) { return $false } } }
-    if ($sch.Contains('anyOf')) {
-        $any = $false
-        foreach ($s in $sch['anyOf']) { if (Test-Schema $s $v) { $any = $true; break } }
-        if (-not $any) { return $false } }
-    if ($sch.Contains('oneOf')) {          # exactly one branch holds (CP-CHECK-1: checkObservation)
-        $n1 = 0
-        foreach ($s in $sch['oneOf']) { if (Test-Schema $s $v) { $n1++ } }
-        if ($n1 -ne 1) { return $false } }
-    if ($sch.Contains('not')) { if (Test-Schema $sch['not'] $v) { return $false } }
-    if ($sch.Contains('if')) {
-        if (Test-Schema $sch['if'] $v) {
-            if ($sch.Contains('then')) { if (-not (Test-Schema $sch['then'] $v)) { return $false } } }
-        elseif ($sch.Contains('else')) { if (-not (Test-Schema $sch['else'] $v)) { return $false } } }
-    if ($sch.Contains('const')) {
-        if ((Format-Canonical $v) -cne (Format-Canonical $sch['const'])) { return $false } }
-    if ($sch.Contains('enum')) {
-        $hit = $false
-        foreach ($e in $sch['enum']) { if ((Format-Canonical $v) -ceq (Format-Canonical $e)) { $hit = $true; break } }
-        if (-not $hit) { return $false } }
-    if ($sch.Contains('type')) { if (-not (Type-Is $v $sch['type'])) { return $false } }
-    if (Is-Map $v) {
-        if ($sch.Contains('required')) {
-            foreach ($k in $sch['required']) { if (-not $v.Contains($k)) { return $false } } }
-        if ($sch.Contains('minProperties')) { if ($v.Count -lt $sch['minProperties']) { return $false } }
-        if ($sch.Contains('propertyNames')) {
-            foreach ($k in $v.Keys) { if (-not (Test-Schema $sch['propertyNames'] ([string]$k))) { return $false } } }
-        if ($sch.Contains('properties')) {
-            foreach ($k in $sch['properties'].Keys) {
-                if ($v.Contains($k)) { if (-not (Test-Schema $sch['properties'][$k] $v[$k])) { return $false } } } }
-        if ($sch.Contains('additionalProperties')) {
-            $ap = $sch['additionalProperties']
-            $declared = New-Object System.Collections.ArrayList
-            Collect-Props $sch $declared
-            foreach ($k in $v.Keys) {
-                if ($declared -notcontains $k) {
-                    if ($ap -is [bool]) { if (-not $ap) { return $false } }
-                    else { if (-not (Test-Schema $ap $v[$k])) { return $false } } } } }
-        if ($sch.Contains('unevaluatedProperties')) {
-            if ($sch['unevaluatedProperties'] -eq $false) {
-                $declared = New-Object System.Collections.ArrayList
-                Collect-Props $sch $declared
-                foreach ($k in $v.Keys) { if ($declared -notcontains $k) { return $false } } } }
+    $list = New-Object System.Collections.ArrayList
+    foreach ($kw in $TS_ORDER) { if ($sch.Contains($kw)) { [void]$list.Add($kw) } }
+    $plan = $list.ToArray()
+    $script:TsPlans[$sch] = $plan
+    return ,$plan
+}
+function Get-Declared($sch) {
+    $acc = New-Object System.Collections.ArrayList
+    Collect-Props $sch $acc
+    $set = New-Object 'System.Collections.Generic.HashSet[string]' ([System.StringComparer]::Ordinal)
+    foreach ($k in $acc) { [void]$set.Add([string]$k) }
+    $script:TsDeclared[$sch] = $set
+    return ,$set
+}
+function Test-Schema($sch, $v) {
+    if ($null -eq $sch) { return $true }
+    $plan = $null
+    if (-not $script:TsPlans.TryGetValue($sch, [ref]$plan)) { $plan = New-SchemaPlan $sch }
+    $isMap = $v -is [System.Collections.IDictionary]
+    $isStr = $v -is [string]
+    $isList = (-not $isMap) -and (-not $isStr) -and ($v -is [System.Collections.IEnumerable])
+    foreach ($kw in $plan) {
+        if ($kw -eq '$ref') {
+            $ref = $sch['$ref']
+            if (($null -ne $script:TsTop) -and [object]::ReferenceEquals($v, $script:TsTop)) {
+                if ($script:TsRefMemo.ContainsKey($ref)) { $r = $script:TsRefMemo[$ref] }
+                else { $r = Test-Schema (Resolve-Ref $ref) $v; $script:TsRefMemo[$ref] = $r }
+            } else { $r = Test-Schema (Resolve-Ref $ref) $v }
+            if (-not $r) { return $false }
+        }
+        elseif ($kw -eq 'type') {
+            $t = $sch['type']
+            if ($t -eq 'object') { if (-not $isMap) { return $false } }
+            elseif ($t -eq 'string') { if (-not $isStr) { return $false } }
+            elseif ($t -eq 'array') { if (-not $isList) { return $false } }
+            elseif (-not (Type-Is $v $t)) { return $false }
+        }
+        elseif ($kw -eq 'properties') {
+            if ($isMap) {
+                $props = $sch['properties']
+                foreach ($k in $props.Keys) {
+                    if ($v.Contains($k)) { if (-not (Test-Schema $props[$k] $v[$k])) { return $false } } } }
+        }
+        elseif ($kw -eq 'required') {
+            if ($isMap) { foreach ($k in $sch['required']) { if (-not $v.Contains($k)) { return $false } } }
+        }
+        elseif ($kw -eq 'additionalProperties') {
+            if ($isMap) {
+                $ap = $sch['additionalProperties']
+                $declared = $null
+                if (-not $script:TsDeclared.TryGetValue($sch, [ref]$declared)) { $declared = Get-Declared $sch }
+                foreach ($k in $v.Keys) {
+                    if (-not $declared.Contains([string]$k)) {
+                        if ($ap -is [bool]) { if (-not $ap) { return $false } }
+                        else { if (-not (Test-Schema $ap $v[$k])) { return $false } } } } }
+        }
+        elseif ($kw -eq 'items') {
+            if ($isList) { $is = $sch['items']; foreach ($x in $v) { if (-not (Test-Schema $is $x)) { return $false } } }
+        }
+        elseif ($kw -eq 'allOf') {
+            foreach ($s in $sch['allOf']) { if (-not (Test-Schema $s $v)) { return $false } }
+        }
+        elseif ($kw -eq 'enum') {
+            $hit = $false
+            if ($isStr) {
+                foreach ($e in $sch['enum']) {
+                    if (($e -is [string]) -and [string]::Equals($v, $e, [System.StringComparison]::Ordinal)) { $hit = $true; break } }
+            } else {
+                $cv = Format-Canonical $v
+                foreach ($e in $sch['enum']) {
+                    if ([string]::Equals($cv, (Format-Canonical $e), [System.StringComparison]::Ordinal)) { $hit = $true; break } }
+            }
+            if (-not $hit) { return $false }
+        }
+        elseif ($kw -eq 'pattern') {
+            if ($isStr) {
+                $pt = $sch['pattern']; $rx = $null
+                if (-not $script:TsRegex.TryGetValue($pt, [ref]$rx)) {
+                    $rx = New-Object System.Text.RegularExpressions.Regex $pt
+                    $script:TsRegex[$pt] = $rx }
+                if (-not $rx.IsMatch($v)) { return $false } }
+        }
+        elseif ($kw -eq 'const') {
+            if (-not [string]::Equals((Format-Canonical $v), (Format-Canonical $sch['const']), [System.StringComparison]::Ordinal)) { return $false }
+        }
+        elseif ($kw -eq 'minLength') { if ($isStr) { if ($v.Length -lt $sch['minLength']) { return $false } } }
+        elseif ($kw -eq 'maxLength') { if ($isStr) { if ($v.Length -gt $sch['maxLength']) { return $false } } }
+        elseif ($kw -eq 'minItems') { if ($isList) { if (@($v).Count -lt $sch['minItems']) { return $false } } }
+        elseif ($kw -eq 'maxItems') { if ($isList) { if (@($v).Count -gt $sch['maxItems']) { return $false } } }
+        elseif ($kw -eq 'minProperties') { if ($isMap) { if ($v.Count -lt $sch['minProperties']) { return $false } } }
+        elseif ($kw -eq 'anyOf') {
+            $any = $false
+            foreach ($s in $sch['anyOf']) { if (Test-Schema $s $v) { $any = $true; break } }
+            if (-not $any) { return $false }
+        }
+        elseif ($kw -eq 'if') {
+            if (Test-Schema $sch['if'] $v) {
+                if ($sch.Contains('then')) { if (-not (Test-Schema $sch['then'] $v)) { return $false } } }
+            elseif ($sch.Contains('else')) { if (-not (Test-Schema $sch['else'] $v)) { return $false } }
+        }
+        elseif ($kw -eq 'unevaluatedProperties') {
+            if ($isMap -and ($sch['unevaluatedProperties'] -eq $false)) {
+                $declared = $null
+                if (-not $script:TsDeclared.TryGetValue($sch, [ref]$declared)) { $declared = Get-Declared $sch }
+                foreach ($k in $v.Keys) { if (-not $declared.Contains([string]$k)) { return $false } } }
+        }
+        elseif ($kw -eq 'propertyNames') {
+            if ($isMap) { $pn = $sch['propertyNames']; foreach ($k in $v.Keys) { if (-not (Test-Schema $pn ([string]$k))) { return $false } } }
+        }
+        elseif ($kw -eq 'oneOf') {         # exactly one branch holds (CP-CHECK-1: checkObservation)
+            $n1 = 0
+            foreach ($s in $sch['oneOf']) { if (Test-Schema $s $v) { $n1++ } }
+            if ($n1 -ne 1) { return $false }
+        }
+        elseif ($kw -eq 'not') { if (Test-Schema $sch['not'] $v) { return $false } }
+        elseif ($kw -eq 'minimum') { if (Type-Is $v 'number') { if ($v -lt $sch['minimum']) { return $false } } }
+        elseif ($kw -eq 'maximum') { if (Type-Is $v 'number') { if ($v -gt $sch['maximum']) { return $false } } }
     }
-    if ($v -is [string]) {
-        if ($sch.Contains('minLength')) { if ($v.Length -lt $sch['minLength']) { return $false } }
-        if ($sch.Contains('maxLength')) { if ($v.Length -gt $sch['maxLength']) { return $false } }
-        if ($sch.Contains('pattern')) {
-            if (-not [System.Text.RegularExpressions.Regex]::IsMatch($v, $sch['pattern'])) { return $false } } }
-    if (Is-List $v) {
-        if ($sch.Contains('minItems')) { if (@($v).Count -lt $sch['minItems']) { return $false } }
-        if ($sch.Contains('maxItems')) { if (@($v).Count -gt $sch['maxItems']) { return $false } }
-        if ($sch.Contains('items')) {
-            foreach ($x in $v) { if (-not (Test-Schema $sch['items'] $x)) { return $false } } } }
-    if (Type-Is $v 'number') {
-        if ($sch.Contains('minimum')) { if ($v -lt $sch['minimum']) { return $false } }
-        if ($sch.Contains('maximum')) { if ($v -gt $sch['maximum']) { return $false } } }
     return $true
 }
 $TYPES = @('requirement', 'requirementSet', 'tailoring', 'mapping', 'component',
            'implementation', 'assessment', 'finding', 'attestation', 'risk', 'check')
 function Infer-Types($obj) {
     $m = New-Object System.Collections.ArrayList
-    foreach ($t in $TYPES) { if (Test-Schema $DEFS[$t] $obj) { [void]$m.Add($t) } }
+    $script:TsTop = $obj; $script:TsRefMemo = (New-Map)
+    try { foreach ($t in $TYPES) { if (Test-Schema $DEFS[$t] $obj) { [void]$m.Add($t) } } }
+    finally { $script:TsTop = $null; $script:TsRefMemo = $null }
     return ,$m
 }
 function Infer-Single($obj) {
@@ -270,24 +441,34 @@ $OPTIONAL_CONTAINERS = @('aliases', 'canonical-alias', 'replaces', 'relations', 
                          'capabilities', 'authorizations', 'actions', 'choices',
                          'threat-refs', 'component-refs', 'treatments', 'risk-refs', 'tailoring-refs',
                          'statement-ids', 'applies-when', 'check-results', 'derived-from')
-function Optional-Empty-Violations($obj, [string]$path = '$') {
-    $out = New-Object System.Collections.ArrayList
-    if (Is-Map $obj) {
+$OPTIONAL_SET = New-Object 'System.Collections.Generic.HashSet[string]' ([System.StringComparer]::Ordinal)
+foreach ($k in $OPTIONAL_CONTAINERS) { [void]$OPTIONAL_SET.Add($k) }
+function Optional-Empty-Walk($obj, [string]$path, $out) {
+    if ($obj -is [System.Collections.IDictionary]) {
         foreach ($k in $obj.Keys) {
             $v = $obj[$k]
-            $isEmpty = $false
-            if ((Is-Map $v) -and $v.Count -eq 0) { $isEmpty = $true }
-            if ((Is-List $v) -and @($v).Count -eq 0) { $isEmpty = $true }
-            if (($OPTIONAL_CONTAINERS -contains $k) -and $isEmpty) { [void]$out.Add("$path.$k") }
-            foreach ($x in (Optional-Empty-Violations $v "$path.$k")) { [void]$out.Add($x) }
+            if ($null -eq $v -or $v -is [string]) { continue }
+            if ($v -is [System.Collections.IDictionary]) {
+                if ($v.Count -eq 0 -and $OPTIONAL_SET.Contains([string]$k)) { [void]$out.Add("$path.$k") }
+                Optional-Empty-Walk $v "$path.$k" $out
+            } elseif ($v -is [System.Collections.IEnumerable]) {
+                if (@($v).Count -eq 0 -and $OPTIONAL_SET.Contains([string]$k)) { [void]$out.Add("$path.$k") }
+                Optional-Empty-Walk $v "$path.$k" $out
+            }
         }
-    } elseif (Is-List $obj) {
+    } elseif (($obj -is [System.Collections.IEnumerable]) -and -not ($obj -is [string])) {
         $i = 0
         foreach ($v in $obj) {
-            foreach ($x in (Optional-Empty-Violations $v "$path[$i]")) { [void]$out.Add($x) }
+            if (($null -ne $v) -and -not ($v -is [string]) -and
+                (($v -is [System.Collections.IDictionary]) -or ($v -is [System.Collections.IEnumerable]))) {
+                Optional-Empty-Walk $v "$path[$i]" $out }
             $i++
         }
     }
+}
+function Optional-Empty-Violations($obj, [string]$path = '$') {
+    $out = New-Object System.Collections.ArrayList
+    Optional-Empty-Walk $obj $path $out
     return ,$out
 }
 
@@ -2465,7 +2646,7 @@ function Store-Read($store, [string]$ref) {
 }
 function Ck-Json-Bytes([byte[]]$raw) {     # throws when the bytes are not UTF-8 JSON
     $txt = (New-Object System.Text.UTF8Encoding($false, $true)).GetString($raw)
-    $v = ConvertTo-Map ($txt | ConvertFrom-Json)
+    $v = Parse-Json $txt
     return ,$v
 }
 function Ck-Load($ctx, $dref, [string]$what) {
