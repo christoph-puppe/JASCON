@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tailor · JASCON App</title>
+<link rel="stylesheet" href="jascon-core.css">
+<script>try{var _t=localStorage.getItem("jsc:cfg:ui:theme")||"dark";if(_t!=="system")document.documentElement.setAttribute("data-theme",_t)}catch(e){}</script>
+<style>
+.diffrow { display: grid; grid-template-columns: 1fr 24px 1fr; gap: 6px; align-items: center; }
+.diffrow .arrow { text-align: center; color: var(--text-quiet); }
+</style>
+</head>
+<body>
+<div id="app"><div id="mid">
+  <nav id="rail" aria-label="Views">
+    <div class="railgroup">
+      <div class="nano" data-i18n>Views</div>
+      <button class="navitem" data-view="resolve"><span class="glyph">◬</span><span data-i18n>Tailorings</span><span class="navcount" id="nc-tailorings"></span></button>
+      <button class="navitem" data-view="write"><span class="glyph">✎</span><span data-i18n>Write a Tailoring</span></button>
+    </div>
+    <div class="railgroup">
+      <p class="hint" data-i18n>A Tailoring selects by Set, excludes, and changes requirements by operations that name the requirement and the statement. Nothing is copied.</p>
+    </div>
+  </nav>
+  <main id="main">
+    <section class="glass card" data-view="resolve">
+      <h2><span class="glyph">◬</span><span data-i18n>Tailorings</span></h2>
+      <div id="resolve"></div>
+    </section>
+    <section class="glass card" data-view="write">
+      <h2><span class="glyph">✎</span><span data-i18n>Write a Tailoring</span></h2>
+      <div id="write"></div>
+    </section>
+  </main>
+</div></div>
+
+<script src="jascon-core.js"></script>
+<script src="jascon-schema.js"></script>
+<script src="jascon-rules.js"></script>
+<script src="jascon-view.js"></script>
+<script>
+"use strict";
+/* Tailor: resolve the Tailorings of the set and write a new one.
+
+   Resolving follows Appendix B of the specification: expand the selects
+   through nested Sets, take the excludes out (a Set excludes its members),
+   drop withdrawn requirements, then apply the operations in list order to
+   copies. The rules are jascon-rules.js; this page only shows their result.
+
+   Writing enforces the weakening law while the Tailoring is built: an easing
+   of a modality, a parameter value outside its declared space and a
+   substantive change of prose each need a Deviation with a rationale; a
+   value of the wrong kind is refused; a second operation on one target is
+   refused. Derives from the tailor stage of the bundle reader. */
+jscI18n.add("de", {
+  "Tailor": "Tailoring", "Tailorings": "Tailorings", "Write a Tailoring": "Tailoring schreiben",
+  "A Tailoring selects by Set, excludes, and changes requirements by operations that name the requirement and the statement. Nothing is copied.":
+    "Ein Tailoring wählt über Sets aus, schließt aus und ändert Anforderungen durch Operationen, die Anforderung und Statement benennen. Kopiert wird nichts.",
+  "This set holds no Tailoring. Write one in the other view.": "Dieses Set enthält kein Tailoring. In der anderen Ansicht eines schreiben.",
+  "tier": "Stufe der Autorität", "requirements selected": "Anforderungen ausgewählt", "excluded": "ausgeschlossen", "operations": "Operationen",
+  "same-target conflicts": "Konflikte auf demselben Ziel", "weakenings": "Abschwächungen", "modified": "geändert",
+  "open selection: a predicate select is not evaluated here, the count is a lower bound": "offene Auswahl: ein Prädikat wird hier nicht ausgewertet, die Zahl ist eine Untergrenze",
+  "The tier follows from the data: one origin for the selected content that is also the Tailoring's own is authority-claimed; an attestation by that origin over the Tailoring makes it authority-proven. Signatures are not verified in this app.":
+    "Die Stufe folgt aus den Daten: Ein einziger Ursprung der ausgewählten Inhalte, der auch der des Tailorings ist, heißt authority-claimed; eine Attestation dieses Ursprungs über das Tailoring macht daraus authority-proven. Signaturen werden in dieser App nicht geprüft.",
+  "Operation": "Operation", "Target": "Ziel", "Before and after": "Vorher und nachher", "Verdict": "Urteil",
+  "outside the selection": "außerhalb der Auswahl", "no Deviation: legal only at authority tier": "keine Deviation: nur auf Autoritätsstufe zulässig",
+  "Deviation attached": "Deviation angehängt", "no operations": "keine Operationen", "parameter not found": "Parameter nicht gefunden",
+  "Resolved requirements": "Aufgelöste Anforderungen", "no operation changes a requirement": "keine Operation ändert eine Anforderung",
+  "Export the resolved package (.zip)": "Aufgelöstes Paket exportieren (.zip)",
+  "cannot export: the resolution has errors ({first})": "Export nicht möglich: Die Auflösung hat Fehler ({first})",
+  "exported {name}: {n} requirements as resolved by {id}": "{name} exportiert: {n} Anforderungen, aufgelöst durch {id}",
+  "Label": "Label", "Select a Set": "Set auswählen", "type to add a Set to the selection": "tippen, um ein Set zur Auswahl hinzuzufügen",
+  "requirements in scope": "Anforderungen im Geltungsbereich", "no Set selected yet: choose a baseline, a chapter or the root": "noch kein Set gewählt: eine Baseline, ein Kapitel oder die Wurzel wählen",
+  "Exclude": "Ausschließen", "type to exclude a requirement or a Set": "tippen, um eine Anforderung oder ein Set auszuschließen",
+  "why is it excluded? (recommended)": "warum ausgeschlossen? (empfohlen)",
+  "Operation on": "Operation auf", "type to choose a requirement": "tippen, um eine Anforderung zu wählen", "Statement": "Statement",
+  "new modality": "neue Modalität", "parameter": "Parameter", "value": "Wert", "other…": "anderer…", "number": "Zahl", "unit": "Einheit",
+  "declared: {num} {unit}": "deklariert: {num} {unit}", "this statement declares no parameter": "dieses Statement deklariert keinen Parameter",
+  "language": "Sprache", "intent": "Absicht", "within the declared space": "im deklarierten Raum",
+  "outside the declared space: needs a Deviation": "außerhalb des deklarierten Raums: braucht eine Deviation",
+  "not a legal value for this parameter; no Deviation helps": "kein zulässiger Wert für diesen Parameter; da hilft keine Deviation",
+  "editorial: free": "redaktionell: frei", "substantive: needs a Deviation": "inhaltlich: braucht eine Deviation",
+  "A Deviation is needed: this is the audited way to weaken": "Eine Deviation ist nötig: Das ist der geprüfte Weg der Abschwächung",
+  "type": "Typ", "approver": "genehmigt von", "rationale (needed)": "Begründung (nötig)",
+  "Add the operation": "Operation hinzufügen", "no operation yet": "noch keine Operation",
+  "Save the Tailoring to the set": "Tailoring ins Set speichern", "Download as JSON": "Als JSON herunterladen", "Clear": "Leeren",
+  "Two operations on one target in one Tailoring are an error. Chain Tailorings to override.": "Zwei Operationen auf dasselbe Ziel in einem Tailoring sind ein Fehler. Zum Überschreiben Tailorings verketten.",
+  "This is a weakening. Give the Deviation a rationale.": "Das ist eine Abschwächung. Der Deviation eine Begründung geben.",
+  "Prose is needed.": "Prosa wird gebraucht.", "Select at least one Set first.": "Zuerst mindestens ein Set auswählen.",
+  "operation added: {op} on {target}": "Operation hinzugefügt: {op} auf {target}",
+});
+
+const $ = id => document.getElementById(id);
+const V = jscView, esc = jscEsc;
+const DEVIATION_TYPES = ["risk-adjustment", "operational-requirement", "false-positive", "vendor-dependency", "derogation"];
+const fresh = () => ({ label: "my-tailoring", selects: [], excludes: [], operations: [], op: {} });
+const draft = V.draft("tailor", fresh);
+let G = jscSet.graph, picked = null;
+const mono = v => `<span class="mono" style="font-size:11px">${esc(typeof v === "string" ? v : JSON.stringify(v))}</span>`;
+const chip = (n, label, cls) => `<span class="chip ${cls || ""}"><b>${esc(n)}</b>${esc(T(label))}</span>`;
+const stmtOf = (reqId, stmtId) => { const r = G.objects.get(reqId); return r && r.type === "requirement" ? r.obj.statements.find(s => s.id === stmtId) : null; };
+const carriesDeviation = op => !!(op.deviation || op["deviation-ref"]);
+
+/* ---------- resolve ---------- */
+async function renderResolve() {
+  const all = [...G.objects.values()].filter(r => r.type === "tailoring");
+  $("nc-tailorings").textContent = all.length || "";
+  if (!all.length) { $("resolve").innerHTML = `<div class="empty">${esc(T("This set holds no Tailoring. Write one in the other view."))}</div>`; return; }
+  if (!picked || !G.objects.has(picked)) picked = all[0].obj.id;
+  const o = G.objects.get(picked).obj;
+  const res = jscResolveTailoring(o, G.objects), tier = await jscDeriveTier(o, G.objects);
+  const weak = (o.operations || []).filter(op => {
+    const s = stmtOf(op["requirement-ref"], op["statement-id"]);
+    return op.op === "set-modality" && s && jscModalityVerdict(s.modality, op.modality) !== "monotone";
+  }).length;
+  const conflicts = res.errors.filter(e => e.startsWith("same-target")).length;
+  const rows = (o.operations || []).map(op => {
+    const req = G.objects.get(op["requirement-ref"]), s = stmtOf(op["requirement-ref"], op["statement-id"]);
+    let before = "", after = "", verdict = "";
+    if (op.op === "set-modality" && s) {
+      const v = jscModalityVerdict(s.modality, op.modality);
+      before = V.modBadge(s.modality); after = V.modBadge(op.modality);
+      verdict = `<span class="${V.VERDICT_CLASS[v]}">${v}</span>` +
+        (v !== "monotone" && !carriesDeviation(op) ? ` <span class="hint">${esc(T("no Deviation: legal only at authority tier"))}</span>` : "");
+    } else if (op.op === "set-parameter" && s) {
+      const p = (s.parameters || []).find(x => x.name === op.parameter);
+      before = p ? mono(p.default !== undefined ? p.default : (p.num !== undefined ? { num: p.num, unit: p.unit } : null)) : `<span class="hint">${esc(T("parameter not found"))}</span>`;
+      after = mono(op.value);
+      if (p) { const pv = jscParamCheck(p, op.value); verdict = `<span class="${pv === "valid" ? "verdict-ok" : pv === "invalid" ? "verdict-bad" : "verdict-warn"}">${pv}</span>`; }
+    } else after = mono(op.value ?? op.prose ?? op.relation ?? op.payload ?? "");
+    return `<tr><td><span class="badge" style="border-color:var(--amber);color:var(--amber)">${esc(op.op)}</span></td>
+      <td>${V.refLink(op["requirement-ref"], req ? V.labelOf(req) : op["requirement-ref"])} ${op["statement-id"] ? V.badge(op["statement-id"]) : ""}
+        ${res.selected.has(op["requirement-ref"]) ? "" : `<span class="verdict-warn">${esc(T("outside the selection"))}</span>`}</td>
+      <td><div class="diffrow"><div>${before}</div><div class="arrow">▶</div><div>${after}</div></div></td>
+      <td>${verdict}${carriesDeviation(op) ? ` <span class="badge" style="border-color:var(--red);color:var(--red)">${esc(T("Deviation attached"))}</span>` : ""}</td></tr>`;
+  }).join("");
+  const cards = [...res.touched.entries()].slice(0, 40).map(([id, log]) => `<div class="stmt">${V.refLink(id, V.labelOf(G.objects.get(id)))}
+    ${log.map(n => `<div class="diffrow" style="margin-top:4px"><div>${n.what === "modality" ? V.modBadge(n.from) : mono(n.from ?? "—")}</div><div class="arrow">▶</div>
+      <div>${n.what === "modality" ? V.modBadge(n.to) : mono(n.to)} <span class="hint">${esc(n.statement)} · ${esc(n.what)}${n.parameter ? " " + esc(n.parameter) : ""}</span>
+      ${n.verdict ? `<span class="${V.VERDICT_CLASS[n.verdict]}">${n.verdict}</span>` : ""}</div></div>`).join("")}</div>`).join("");
+  $("resolve").innerHTML = `<div class="filterrow">${all.map(t => `<button type="button" class="fpill ${t.obj.id === picked ? "on" : ""}" data-pick="${esc(t.obj.id)}">◬ ${esc(V.labelOf(t))}</button>`).join("")}</div>
+    <div style="margin:6px 0 10px"><span class="chip" title="${esc(T("The tier follows from the data: one origin for the selected content that is also the Tailoring's own is authority-claimed; an attestation by that origin over the Tailoring makes it authority-proven. Signatures are not verified in this app."))}">${esc(T("tier"))} <b class="${tier === "consumer" ? "verdict-warn" : "verdict-ok"}">${tier}</b></span>
+      ${chip(res.selected.size + (res.open ? "+" : ""), "requirements selected")}${chip((o.excludes || []).length, "excluded")}${chip((o.operations || []).length, "operations")}
+      ${chip(conflicts, "same-target conflicts", conflicts ? "verdict-bad" : "")}${chip(weak, "weakenings", weak ? "verdict-warn" : "")}${chip(res.touched.size, "modified")}
+      ${V.refLink(o.id, "⋯")}</div>
+    ${res.open ? `<p class="hint verdict-warn">${esc(T("open selection: a predicate select is not evaluated here, the count is a lower bound"))}</p>` : ""}
+    ${[...res.errors, ...res.notes].map(e => `<div class="${res.errors.includes(e) ? "verdict-bad" : "hint"}">${esc(e)}</div>`).join("")}
+    <table class="flat" style="margin-top:8px"><tr><th>${esc(T("Operation"))}</th><th>${esc(T("Target"))}</th><th>${esc(T("Before and after"))}</th><th>${esc(T("Verdict"))}</th></tr>
+      ${rows || `<tr><td colspan="4" class="hint">${esc(T("no operations"))}</td></tr>`}</table>
+    <div class="nano sectionlabel">${esc(T("Resolved requirements"))}</div>
+    <div class="wbrow"><button type="button" class="primary" id="export-resolved" ${res.errors.length ? "disabled" : ""}>${esc(T("Export the resolved package (.zip)"))}</button></div>
+    ${cards || `<span class="hint">${esc(T("no operation changes a requirement"))}</span>`}`;
+  V.wireRefs($("resolve"));
+  $("resolve").querySelectorAll("[data-pick]").forEach(b => b.addEventListener("click", () => { picked = b.dataset.pick; renderResolve(); }));
+  $("export-resolved").addEventListener("click", () => exportResolved(o, res));
+}
+/* The selected requirements as the Tailoring leaves them: a bundle of their
+   own, whose provenance names the Tailoring (Appendix B step 4). */
+async function exportResolved(o, res) {
+  if (res.errors.length) { jscLog.err(T("cannot export: the resolution has errors ({first})", { first: res.errors[0] })); return; }
+  const taken = new Set();
+  const records = [...res.selected].sort().map(id => {
+    const obj = res.resolved.get(id) || G.objects.get(id).obj;
+    return { path: jscObjectPath("requirement", id, taken), text: jscSerialize(obj), kind: "object", type: "requirement", id, origin: "authored" };
+  });
+  const built = await jscBuildBundle(jscGraphFrom(records), { source: "resolved package", tailoring: o.id, "tailoring-version": o.version });
+  const folder = jscSlug(o.label || "resolved") + "-resolved", name = folder + ".zip";
+  jscDownload(name, jscZip(built.files.map(f => ({ path: folder + "/" + f.path, text: f.text }))), "application/zip");
+  jscLog.ok(T("exported {name}: {n} requirements as resolved by {id}", { name, n: records.length, id: o.id }));
+}
+
+/* ---------- write ---------- */
+/* What the operation in the draft would be, and what the law says about it.
+   -> { op, needsDeviation, invalid, verdictHtml, payloadHtml } or null */
+function draftOperation() {
+  const d = draft.data.op, req = d.req ? G.objects.get(d.req) : null;
+  if (!req || req.type !== "requirement") return null;
+  const stmt = req.obj.statements.find(s => s.id === d.stmt) || req.obj.statements[0];
+  const kind = d.kind || "set-modality";
+  const op = { op: kind, "requirement-ref": req.obj.id, "statement-id": stmt.id };
+  let needsDeviation = false, invalid = null, verdictHtml = "", payloadHtml = "";
+  const sel = (id, options, current) => `<select id="${id}">${options.map(o => `<option ${o === current ? "selected" : ""}>${esc(o)}</option>`).join("")}</select>`;
+  if (kind === "set-modality") {
+    op.modality = d.modality || stmt.modality;
+    const v = jscModalityVerdict(stmt.modality, op.modality);
+    needsDeviation = v !== "monotone";
+    payloadHtml = `<label for="op-modality">${esc(T("new modality"))}</label>${sel("op-modality", JSC_MODALITIES, op.modality)}`;
+    verdictHtml = `${V.modBadge(stmt.modality)} ▶ ${V.modBadge(op.modality)} <span class="${V.VERDICT_CLASS[v]}">${v}</span>`;
+  } else if (kind === "set-parameter") {
+    const params = stmt.parameters || [], p = params.find(x => x.name === d.param) || params[0];
+    if (!p) return { op, stmt, req, invalid: T("this statement declares no parameter"), needsDeviation, verdictHtml,
+      payloadHtml: `<span class="hint">${esc(T("this statement declares no parameter"))}</span>` };
+    op.parameter = p.name;
+    payloadHtml = `<label for="op-param">${esc(T("parameter"))}</label>${sel("op-param", params.map(x => x.name), p.name)}`;
+    const duration = p.type === "elapsed-duration" || p.type === "calendar-period";
+    if (p.type === "choice") {
+      const values = (p.choices || []).map(c => c.value), cur = d.value ?? values[0];
+      payloadHtml += `<label for="op-value">${esc(T("value"))}</label><select id="op-value">${values.map(v => `<option ${cur === v ? "selected" : ""}>${esc(v)}</option>`).join("")}<option value="__other__" ${cur === "__other__" ? "selected" : ""}>${esc(T("other…"))}</option></select>` +
+        (cur === "__other__" ? `<input type="text" id="op-valuex" value="${esc(d.valuex || "")}" style="width:140px" aria-label="${esc(T("value"))}">` : "");
+      op.value = cur === "__other__" ? (d.valuex || "") : cur;
+    } else if (duration) {
+      const units = p.type === "elapsed-duration" ? JSC_ELAPSED_UNITS : JSC_CALENDAR_UNITS;
+      payloadHtml += `<label for="op-num">${esc(T("number"))}</label><input type="text" id="op-num" value="${esc(d.num ?? p.num ?? "")}" style="width:70px;min-width:70px">
+        <label for="op-unit">${esc(T("unit"))}</label>${sel("op-unit", units, d.unit || p.unit)}
+        <span class="hint">${esc(T("declared: {num} {unit}", { num: p.num ?? "—", unit: p.unit ?? "" }))}${p.tightening ? " · tightening " + esc(p.tightening) : ""}</span>`;
+      op.value = { num: Number(d.num ?? p.num), unit: d.unit || p.unit };
+    } else {
+      payloadHtml += `<label for="op-value">${esc(T("value"))}</label><input type="text" id="op-value" value="${esc(d.value || "")}" style="width:160px">`;
+      op.value = p.type === "integer" ? Number(d.value) : (d.value || "");
+    }
+    const pv = jscParamCheck(p, op.value);
+    needsDeviation = pv === "deviation-required";
+    if (pv === "invalid") invalid = T("not a legal value for this parameter; no Deviation helps");
+    verdictHtml = pv === "valid" ? `<span class="verdict-ok">${esc(T("within the declared space"))}</span>`
+      : pv === "invalid" ? `<span class="verdict-bad">${esc(invalid)}</span>` : `<span class="verdict-warn">${esc(T("outside the declared space: needs a Deviation"))}</span>`;
+  } else {   // replace-prose
+    const lang = d.lang || Object.keys(stmt.prose)[0] || "en", intent = d.intent || "editorial";
+    const text = d.prose ?? jscText(stmt.prose, lang);
+    op.prose = { [lang]: text }; op.intent = intent;
+    needsDeviation = intent === "substantive";
+    if (!text.trim()) invalid = T("Prose is needed.");
+    payloadHtml = `<label for="op-lang">${esc(T("language"))}</label><input type="text" id="op-lang" value="${esc(lang)}" style="width:56px;min-width:56px">
+      <label for="op-intent">${esc(T("intent"))}</label>${sel("op-intent", ["editorial", "substantive"], intent)}
+      <textarea id="op-prose" style="flex-basis:100%" aria-label="${esc(T("Statement"))}">${esc(text)}</textarea>`;
+    verdictHtml = needsDeviation ? `<span class="verdict-warn">${esc(T("substantive: needs a Deviation"))}</span>` : `<span class="verdict-ok">${esc(T("editorial: free"))}</span>`;
+  }
+  return { op, stmt, req, needsDeviation, invalid, verdictHtml, payloadHtml };
+}
+function buildTailoring() {
+  const d = draft.data, lang = jscI18n.contentLang();
+  const o = { id: jscSet.mintId("tailoring", d.label || "my-tailoring"), version: "1", label: d.label, lifecycle: "draft",
+    title: { [lang]: d.label }, selects: d.selects.map(s => ({ "set-ref": s })) };
+  if (d.excludes.length) o.excludes = d.excludes.map(e => (e.rationale ? { ref: e.ref, rationale: { [lang]: e.rationale } } : { ref: e.ref }));
+  o.operations = JSON.parse(JSON.stringify(d.operations));
+  return o;
+}
+function renderWrite() {
+  const d = draft.data, cur = draftOperation(), el = $("write");
+  const scope = jscSelection({ id: "draft", selects: d.selects.map(s => ({ "set-ref": s })), excludes: d.excludes }, G.objects).selected;
+  const name = id => (G.objects.has(id) ? V.labelOf(G.objects.get(id)) : id);
+  const x = (attr, val) => `<span class="x" ${attr}="${esc(val)}" role="button" tabindex="0" aria-label="✕">✕</span>`;
+  el.innerHTML = `<div class="wb">
+    <div class="wbrow"><label for="t-label">${esc(T("Label"))}</label><input type="text" id="t-label" value="${esc(d.label)}" style="width:180px"></div>
+    <div class="wbrow"><label>${esc(T("Select a Set"))}</label>${V.pickerHtml("t-sel", T("type to add a Set to the selection"))}${chip(scope.size, "requirements in scope")}</div>
+    <div>${d.selects.map(s => `<span class="wbchip">▣ ${esc(name(s))}${x("data-delsel", s)}</span>`).join("") || `<span class="hint">${esc(T("no Set selected yet: choose a baseline, a chapter or the root"))}</span>`}</div>
+    <div class="wbrow"><label>${esc(T("Exclude"))}</label>${V.pickerHtml("t-ex", T("type to exclude a requirement or a Set"))}
+      <input type="text" id="t-exwhy" placeholder="${esc(T("why is it excluded? (recommended)"))}" aria-label="${esc(T("why is it excluded? (recommended)"))}" value="${esc(d.exwhy || "")}" style="min-width:240px;flex:1"></div>
+    <div>${d.excludes.map(e => `<span class="wbchip" title="${esc(e.rationale || "")}">⊖ ${esc(name(e.ref))}${e.rationale ? " ✎" : ""}${x("data-delex", e.ref)}</span>`).join("")}</div>
+    <div class="wbrow" style="border-top:1px solid var(--border-1);padding-top:10px"><label>${esc(T("Operation on"))}</label>${V.pickerHtml("t-req", T("type to choose a requirement"))}
+      ${cur ? `<span class="wbchip">◇ ${esc(V.labelOf(cur.req))}</span>
+        <label for="op-stmt">${esc(T("Statement"))}</label><select id="op-stmt">${cur.req.obj.statements.map(s => `<option ${s.id === cur.stmt.id ? "selected" : ""}>${esc(s.id)}</option>`).join("")}</select>
+        <label for="op-kind">${esc(T("Operation"))}</label><select id="op-kind">${["set-modality", "set-parameter", "replace-prose"].map(k => `<option ${k === cur.op.op ? "selected" : ""}>${k}</option>`).join("")}</select>` : ""}</div>
+    ${cur ? `<div class="wbrow">${cur.payloadHtml}</div><div class="wbrow">${cur.verdictHtml}</div>
+      ${cur.needsDeviation && !cur.invalid ? `<div class="devbox"><span class="nano" style="color:var(--amber)">${esc(T("A Deviation is needed: this is the audited way to weaken"))}</span>
+        <div class="wbrow"><label for="dev-type">${esc(T("type"))}</label><select id="dev-type">${DEVIATION_TYPES.map(t => `<option ${d.op.devType === t ? "selected" : ""}>${t}</option>`).join("")}</select>
+          <label for="dev-approver">${esc(T("approver"))}</label><input type="text" id="dev-approver" value="${esc(d.op.devApprover || "ciso")}" style="width:120px">
+          <input type="text" id="dev-rationale" placeholder="${esc(T("rationale (needed)"))}" aria-label="${esc(T("rationale (needed)"))}" value="${esc(d.op.devRationale || "")}" style="flex:1;min-width:220px"></div></div>` : ""}
+      <div class="wbrow"><button type="button" class="primary" id="op-add" ${cur.invalid ? "disabled" : ""}>${esc(T("Add the operation"))}</button><span class="verdict-bad" id="op-err" role="alert"></span></div>` : ""}
+    <div style="margin-top:8px">${d.operations.map((o, i) => `<div class="wbchip"><span class="badge" style="border-color:var(--amber);color:var(--amber)">${esc(o.op)}</span>
+      ${esc(name(o["requirement-ref"]))} · ${esc(o["statement-id"])}${o.modality ? " → " + esc(o.modality) : ""}${o.parameter ? ` ⚙ ${esc(o.parameter)}=${esc(JSON.stringify(o.value))}` : ""}
+      ${o.deviation ? `<span class="verdict-warn">⚑</span>` : ""}${x("data-delop", i)}</div>`).join("") || `<span class="hint">${esc(T("no operation yet"))}</span>`}</div>
+    <div class="wbrow" style="border-top:1px solid var(--border-1);padding-top:10px">
+      <button type="button" class="primary" id="t-save">${esc(T("Save the Tailoring to the set"))}</button>
+      <button type="button" id="t-download">${esc(T("Download as JSON"))}</button><button type="button" id="t-clear">${esc(T("Clear"))}</button>
+      <span class="verdict-bad" id="t-err" role="alert"></span></div></div>`;
+
+  const again = () => { draft.save(); renderWrite(); };
+  const bind = (id, set, rerender) => { const n = el.querySelector("#" + id); if (n) n.addEventListener("change", () => { set(n.value); draft.save(); if (rerender) renderWrite(); }); };
+  bind("t-label", v => { d.label = v.trim() || d.label; });
+  bind("t-exwhy", v => { d.exwhy = v; });
+  V.wirePicker(el, "t-sel", ["requirementSet"], id => { if (!d.selects.includes(id)) d.selects.push(id); again(); });
+  V.wirePicker(el, "t-ex", ["requirement", "requirementSet"], id => {
+    if (!d.excludes.some(e => e.ref === id)) d.excludes.push({ ref: id, ...(d.exwhy && d.exwhy.trim() ? { rationale: d.exwhy.trim() } : {}) });
+    d.exwhy = ""; again();
+  });
+  V.wirePicker(el, "t-req", ["requirement"], id => { d.op = { req: id }; again(); });
+  el.querySelectorAll("[data-delsel]").forEach(n => n.addEventListener("click", () => { d.selects = d.selects.filter(s => s !== n.dataset.delsel); again(); }));
+  el.querySelectorAll("[data-delex]").forEach(n => n.addEventListener("click", () => { d.excludes = d.excludes.filter(e => e.ref !== n.dataset.delex); again(); }));
+  el.querySelectorAll("[data-delop]").forEach(n => n.addEventListener("click", () => { d.operations.splice(+n.dataset.delop, 1); again(); }));
+  bind("op-stmt", v => { d.op = { req: d.op.req, stmt: v, kind: d.op.kind }; }, true);
+  bind("op-kind", v => { d.op = { req: d.op.req, stmt: d.op.stmt, kind: v }; }, true);
+  for (const [id, key] of [["op-modality", "modality"], ["op-param", "param"], ["op-value", "value"], ["op-valuex", "valuex"], ["op-num", "num"],
+    ["op-unit", "unit"], ["op-lang", "lang"], ["op-intent", "intent"], ["op-prose", "prose"]]) bind(id, v => { d.op[key] = v; }, true);
+  for (const [id, key] of [["dev-type", "devType"], ["dev-approver", "devApprover"], ["dev-rationale", "devRationale"]]) bind(id, v => { d.op[key] = v; });
+  const add = el.querySelector("#op-add");
+  if (add) add.addEventListener("click", () => {
+    const c = draftOperation(), err = el.querySelector("#op-err");
+    if (!c || c.invalid) return;
+    if (d.operations.some(o => jscTargetKey(o) === jscTargetKey(c.op))) { err.textContent = T("Two operations on one target in one Tailoring are an error. Chain Tailorings to override."); return; }
+    if (c.needsDeviation) {
+      if (!(d.op.devRationale || "").trim()) { err.textContent = T("This is a weakening. Give the Deviation a rationale."); return; }
+      c.op.deviation = { type: d.op.devType || DEVIATION_TYPES[0], state: "pending", rationale: { [jscI18n.contentLang()]: d.op.devRationale.trim() },
+        "approver-ref": jscSet.mintId("party", d.op.devApprover || "approver"), opened: jscToday() };
+    }
+    d.operations.push(c.op);
+    jscLog.ok(T("operation added: {op} on {target}", { op: c.op.op, target: V.labelOf(c.req) + " " + c.stmt.id }));
+    d.op = { req: d.op.req };
+    again();
+  });
+  el.querySelector("#t-save").addEventListener("click", async () => {
+    if (!d.selects.length) { el.querySelector("#t-err").textContent = T("Select at least one Set first."); return; }
+    const o = buildTailoring();
+    await jscSet.saveObjects([o]);
+    picked = o.id;
+    await jscPage.refresh();
+    jscPage.show("resolve");
+  });
+  el.querySelector("#t-download").addEventListener("click", () => jscDownload(jscSlug(d.label) + ".json", jscSerialize(buildTailoring()), "application/json"));
+  el.querySelector("#t-clear").addEventListener("click", () => { draft.reset(); renderWrite(); });
+}
+
+jscPage.init({ tool: "tailor", title: T("Tailor"), onGraph: async g => { G = g; await renderResolve(); renderWrite(); } });
+</script>
+</body>
+</html>

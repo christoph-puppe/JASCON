@@ -358,6 +358,40 @@ http://localhost:8000/one-page-apps/jascon-reader.html#load=../converted_example
 jumps to any view, so every screenshot in this README is a link you can
 reproduce.
 
+## Work with it: the app
+
+[`jascon-app/`](jascon-app/) is the reader grown into a set of pages that
+share one core: a hub, and one page each to import OSCAL, browse, tailor,
+map, implement, analyse risk and assess. There is still no build step and no
+server, and a bundle you load stays in your browser unless you switch on the
+one view that asks a language model (below).
+
+- **Import** reads an OSCAL catalog or profile; everything after it works on
+  JASCON. The BSI Grundschutz++ rules reproduce the shipped `DE.BSI` bundle
+  object for object, by semantic digest; the NIST SP 800-53 rules give what
+  `convert_nist.py` gives on the same source file.
+- **Risk** is the page the reader did not have: a register with a heat map,
+  scales with their likelihood-impact matrix, the coverage of the selected
+  requirements, and the import of the risk catalogues under
+  [`risk-catalogs/`](risk-catalogs/).
+- The Risk page can ask a language model for drafts of risks and for the
+  requirements that treat a risk. It does so only after you type a key, shows
+  what it sends, keeps the key in memory only, and writes nothing into the
+  set until you take a suggestion.
+- What a page computes about validity comes from a port of
+  `validate_core.py`, run against all fifteen families of the conformance
+  vectors, signatures (Ed25519, verification only) included.
+  [`jascon-app/readme.md`](jascon-app/readme.md) says what the app still
+  leaves to the Python validator, which stays the reference.
+
+```bash
+python -m http.server 8000
+```
+
+Then open `http://localhost:8000/jascon-app/index.html`. The single-file
+reader above stays as it is, at v1.7.3, as the page that needs no folder
+around it; new work goes into the app.
+
 ## Install as a Claude skill
 
 [`jascon/`](jascon/) is an installable skill that guides an
