@@ -1,0 +1,148 @@
+{
+ "measured": {
+  "date": "2026-11-11",
+  "commit": "91e05e79",
+  "by": "jascon/scripts/validate_core.py"
+ },
+ "vectors": {
+  "total": 415,
+  "families": [
+   {
+    "name": "jcs",
+    "vectors": 8
+   },
+   {
+    "name": "modality",
+    "vectors": 21
+   },
+   {
+    "name": "parameter",
+    "vectors": 19
+   },
+   {
+    "name": "tailoring",
+    "vectors": 19
+   },
+   {
+    "name": "attestation",
+    "vectors": 5
+   },
+   {
+    "name": "facet",
+    "vectors": 7
+   },
+   {
+    "name": "reference",
+    "vectors": 13
+   },
+   {
+    "name": "lifecycle",
+    "vectors": 38
+   },
+   {
+    "name": "tier",
+    "vectors": 9
+   },
+   {
+    "name": "dsse",
+    "vectors": 5
+   },
+   {
+    "name": "composition",
+    "vectors": 7
+   },
+   {
+    "name": "conditional",
+    "vectors": 8
+   },
+   {
+    "name": "risk",
+    "vectors": 73
+   },
+   {
+    "name": "kernel",
+    "vectors": 9
+   },
+   {
+    "name": "scale",
+    "vectors": 18
+   },
+   {
+    "name": "check",
+    "vectors": 156
+   }
+  ]
+ },
+ "bundles": [
+  {
+   "corpus": "AU.ISM",
+   "path": "converted_examples/AU.ISM/ism-core-bundle",
+   "objects": 1711,
+   "types": {
+    "requirement": 1150,
+    "requirementSet": 561
+   }
+  },
+  {
+   "corpus": "DE.BSI",
+   "path": "converted_examples/DE.BSI/bsi-core-bundle",
+   "objects": 813,
+   "types": {
+    "requirement": 651,
+    "requirementSet": 162
+   }
+  },
+  {
+   "corpus": "US.CSF",
+   "path": "converted_examples/US.CSF/csf-core-bundle",
+   "objects": 135,
+   "types": {
+    "requirement": 106,
+    "requirementSet": 29
+   }
+  },
+  {
+   "corpus": "US.IFA-GoodRead",
+   "path": "converted_examples/US.IFA-GoodRead/ifa-core-bundle",
+   "objects": 17,
+   "types": {
+    "assessment": 1,
+    "attestation": 1,
+    "component": 6,
+    "finding": 2,
+    "implementation": 3,
+    "requirement": 2,
+    "risk": 2
+   }
+  },
+  {
+   "corpus": "US.SP800-53",
+   "path": "converted_examples/US.SP800-53/sp800-53-core-bundle",
+   "objects": 1039,
+   "types": {
+    "requirement": 1014,
+    "requirementSet": 25
+   }
+  }
+ ],
+ "examples": {
+  "objects": 23,
+  "types": {
+   "assessment": 3,
+   "attestation": 1,
+   "check": 2,
+   "component": 3,
+   "finding": 2,
+   "implementation": 1,
+   "mapping": 1,
+   "requirement": 4,
+   "risk": 1,
+   "requirementSet": 3,
+   "tailoring": 2
+  }
+ },
+ "validators": {
+  "python_lines": 2185,
+  "powershell_lines": 2900
+ }
+}

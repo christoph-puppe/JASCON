@@ -410,6 +410,14 @@ Then open `http://localhost:8000/jascon-app/index.html`. The single-file
 reader above stays as it is, at v1.7.3, as the page that needs no folder
 around it; new work goes into the app.
 
+## The website
+
+[`website/`](website/) is the source of [jascon.net](https://jascon.net): a
+static site that also serves the app and the redistributable bundles, so that
+a catalogue opens in the browser from a link. Its counts of vectors and
+objects are filled in from a run of the reference validator when the site is
+built. How to build and publish it: [`website/README.md`](website/README.md).
+
 ## Install as a Claude skill
 
 [`jascon/`](jascon/) is an installable skill that guides an

@@ -1,0 +1,123 @@
+---
+title: Join: bring a validator, a catalogue or an objection | JASCON
+description: JASCON has one maintainer and no third-party user yet. What the project needs from framework authorities, tool builders, GRC engineers and auditors, how a change gets into the specification, and where to start.
+nav: join
+---
+<section class="page-hero">
+  <div class="wrap">
+    <p class="eyebrow">Join</p>
+    <h1>Bring a validator, a catalogue or an objection</h1>
+    <p class="lede">A notation for compliance data is worth what the second and the third party make of it. JASCON has one maintainer, a released specification and no known user outside its repository. The work below is the work that only someone else can do.</p>
+  </div>
+</section>
+
+<section class="section" id="needed">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">01</span> What is needed</p>
+      <h2>Six contributions, in order of weight</h2>
+    </div>
+    <div class="grid g3 reveal">
+      <article class="card feature">
+        <div class="card-top"><span class="card-no">The standing invitation</span><span class="tier tier-open">open</span></div>
+        <h3>A validator by someone who did not write the specification</h3>
+        <p>Take the specification, appendices A to C and the conformance corpus, and build a validator in a language of your choice without reading the two existing ones. Every place where the text did not determine your implementation is a defect of the text. The vectors are the referee, and the result is recorded whichever way it goes.</p>
+        <p class="how"><b>Start:</b> <code>jascon/conformance/</code>, <a href="{{ blob }}/jascon/references/ch12-building-a-validator.md" rel="noopener">handbook chapter 12</a>.</p>
+      </article>
+      <article class="card">
+        <div class="card-top"><span class="card-no">Authorities</span></div>
+        <h3>A catalogue converted by its own publisher</h3>
+        <p>Eleven conversions exist, all by the project. A publisher knows what its props were meant to say. Ten requirements re-encoded by the people who wrote them test the kernel harder than a thousand converted by a script.</p>
+        <p class="how"><b>Start:</b> the Import page, or <a href="{{ blob }}/jascon/references/ch14-migration-playbooks.md" rel="noopener">chapter 14</a>.</p>
+      </article>
+      <article class="card">
+        <div class="card-top"><span class="card-no">Review</span></div>
+        <h3>Objections with counts</h3>
+        <p>The handbook's appendix F answers 23 objections and lists the ones that changed the text. Two reviews are due now: the 2.0.0 release candidate with its Risk type, and the Check proposal. A reader from the Gemara or the CycloneDX community is the right person to ask why JASCON does not extend theirs.</p>
+        <p class="how"><b>Start:</b> <a href="{{ blob }}/drafts/CP-RISK-1.md" rel="noopener">CP-RISK-1</a>, <a href="{{ blob }}/drafts/CP-CHECK-1.md" rel="noopener">CP-CHECK-1</a>.</p>
+      </article>
+      <article class="card">
+        <div class="card-top"><span class="card-no">Measurement</span></div>
+        <h3>Value arrival on the other ten corpora</h3>
+        <p>Coverage is measured by source path. Whether each value arrives is measured on one corpus, and there it does not hold. Whoever holds the source files of the others can run the measurement and report what is lost.</p>
+        <p class="how"><b>Start:</b> backlog item 41, <code>oscal_conv_lib.value_arrival()</code>.</p>
+      </article>
+      <article class="card">
+        <div class="card-top"><span class="card-no">Practice</span></div>
+        <h3>A real ISMS in the notation</h3>
+        <p>A risk register, a Statement of Applicability and one audit cycle of a real organisation, written as Risks, a Tailoring, Implementations and Findings. The Risk type was derived from three standards; it has not met an auditor.</p>
+        <p class="how"><b>Start:</b> the Risk page of the app; anonymise and report what did not fit.</p>
+      </article>
+      <article class="card">
+        <div class="card-top"><span class="card-no">Code</span></div>
+        <h3>Exports and bridges</h3>
+        <p>Exports to the OSCAL mapping, profile and SSP models are missing. An in-toto predicate for the attestation would reach existing verifiers. A collector runner for the proposed Check type does not exist.</p>
+        <p class="how"><b>Start:</b> <code>jascon/scripts/export_oscal.py</code>, <a href="{{ blob }}/PRIOR-ART.md" rel="noopener">PRIOR-ART.md</a>.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="process">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">02</span> How a change gets in</p>
+      <h2>Evidence in, corpus first, implementations follow</h2>
+      <p class="lede">The change process is built against one sentence from an old issue tracker: nobody can say why this rule exists.</p>
+    </div>
+    <div class="rules3 reveal">
+      <div class="rule3">
+        <span class="no">01</span>
+        <h3>A proposal leads with counts</h3>
+        <p>"Three authorities encode this independently" is an argument. "It would be elegant" is none. An item enters the backlog with its evidence and leaves through an entry in the decision register, where the rejected alternatives stay on the record.</p>
+      </div>
+      <div class="rule3">
+        <span class="no">02</span>
+        <h3>Every rule carries its reason</h3>
+        <p>A rule has a machine id, a rationale and a failure message, and the rationale prints when the rule fails. A rule that cannot name the counted failure it prevents is a candidate for deletion.</p>
+      </div>
+      <div class="rule3">
+        <span class="no">03</span>
+        <h3>A gap is closed by a version</h3>
+        <p>Primitives, operations and code systems are closed sets with versions. A genuine gap becomes a change proposal with new conformance vectors and a decision on the version number. Both validators have to pass before a release.</p>
+      </div>
+    </div>
+    <p class="source reveal">The process in full: <a href="{{ blob }}/jascon/references/ch15-governance-conformance-ecosystem.md" rel="noopener">handbook, chapter 15</a>. All 23 decisions with their scores and amendments: <a href="{{ blob }}/drafts/jascon-decision-rationale-register.md" rel="noopener">the decision register</a>.</p>
+  </div>
+</section>
+
+<section class="section" id="expect">
+  <div class="wrap">
+    <div class="split even">
+      <div class="stack-lg reveal">
+        <div class="section-head" style="margin-bottom:0">
+          <p class="eyebrow"><span class="no">03</span> What to expect</p>
+          <h2>A small project that keeps its record public</h2>
+        </div>
+        <ul class="ticks">
+          <li><b>Findings are adjudicated on the record.</b> A confirmed one is fixed and gets a conformance vector. A refuted one is written down with the reason, so that it stays refuted.</li>
+          <li><b>Corrections carry the weight of the claim they correct.</b> The first published scan undercounted the German catalogue by 347 nested controls; the correction went out with the same prominence.</li>
+          <li><b>The licence is Apache 2.0</b> for specification, schema, vectors, validators and app. Converted catalogues stay under their publishers' terms.</li>
+          <li><b>Response times are those of one person</b> working in personal capacity, without an organisation behind the project.</li>
+        </ul>
+      </div>
+      <div class="stack reveal">
+        <article class="card">
+          <h3>Open an issue</h3>
+          <p>For a defect, an objection, a question or a catalogue you would like to see converted. State what you counted and where.</p>
+          <a class="link-arrow" href="{{ repo }}/issues" rel="noopener">Issues on GitHub</a>
+        </article>
+        <article class="card">
+          <h3>Send a pull request</h3>
+          <p>For a vector, a converter, a fix to a validator or to the handbook. A change to a rule comes with the vectors that fail without it.</p>
+          <a class="link-arrow" href="{{ repo }}/pulls" rel="noopener">Pull requests on GitHub</a>
+        </article>
+        <article class="card">
+          <h3>Use it and say so</h3>
+          <p>A bundle published by a second party is the strongest evidence this project can get. If you publish one, an issue with the link is enough.</p>
+          <a class="link-arrow" href="start.html">Get started</a>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>

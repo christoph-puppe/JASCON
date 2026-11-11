@@ -1,0 +1,225 @@
+---
+title: Evidence: what was measured and what was not | JASCON
+description: The conformance corpus, the two reference validators, the converted catalogues with their licences, the evidence gates, the open limits and the neighbouring formats. Every number is labelled measured, designed for or proposed.
+nav: evidence
+---
+<section class="page-hero">
+  <div class="wrap">
+    <p class="eyebrow">Evidence</p>
+    <h1>What was measured, on what, and what was not</h1>
+    <p class="lede">Three rules govern the project. Every claim is labelled as measured, designed for or hypothesised. No mechanism enters the specification without a published catalogue that demands it. Every prohibition names the counted failure it prevents. This page applies the first rule to the project itself.</p>
+    <div class="chips">
+      <span class="tier tier-measured">measured</span>
+      <span class="tier tier-designed">designed for</span>
+      <span class="tier tier-proposed">proposed</span>
+      <span class="tier tier-open">open</span>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="conformance">
+  <div class="wrap">
+    <div class="split">
+      <div class="stack-lg reveal">
+        <div class="section-head" style="margin-bottom:0">
+          <p class="eyebrow"><span class="no">01</span> Conformance</p>
+          <h2>The test suite is the specification's referee</h2>
+          <p class="lede">A tool is conformant when the corpus says so. On {{ facts.measured.date }}, at commit <code>{{ facts.measured.commit }}</code>, the reference validator passed {{ n.vectors }} of {{ n.vectors }} vectors in {{ n.families }} families and re-verified both digests of {{ n.shipped_objects }} objects in the {{ n.bundles }} bundles this site serves.</p>
+        </div>
+        <ul class="chips">
+{{ html.family_chips }}
+        </ul>
+        <p class="small">The released 1.0.0 has 157 vectors in twelve families. <code>risk</code>, <code>kernel</code> and <code>scale</code> came with 2.0.0-rc.1. The 156 <code>check</code> vectors belong to the proposed Check type.</p>
+      </div>
+      <div class="stack reveal">
+        <article class="card">
+          <div class="card-top"><h3>validate_core.py</h3><span class="tier tier-measured">measured at build</span></div>
+          <p>The reference: one Python file of {{ n.python_lines }} lines, with <code>jsonschema</code> as its only dependency. It includes canonicalization, both digests, the tailoring law, Ed25519 and DSSE verification, bundle composition, risk coverage and an I-Regexp engine.</p>
+        </article>
+        <article class="card">
+          <div class="card-top"><h3>validate_core.ps1</h3><span class="tier tier-measured">measured 2026-11-11</span></div>
+          <p>The twin: {{ n.powershell_lines }} lines of Windows PowerShell 5.1 with no dependency, for the machine an auditor already has. It returned the same counts as the Python reference on all {{ n.vectors }} vectors, the five bundles and the example folder.</p>
+        </article>
+        <article class="card">
+          <div class="card-top"><h3>A third, in the browser</h3><span class="tier tier-measured">measured</span></div>
+          <p>The app's Validate page runs a JavaScript port of the kernel rules against all sixteen vector families. The app's readme lists what it leaves to the Python validator.</p>
+        </article>
+        <p class="small">Line counts use the counter of the gate-4 report: non-blank lines that do not start with <code>#</code>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="corpora">
+  <div class="wrap">
+    <div class="section-head wide reveal">
+      <p class="eyebrow"><span class="no">02</span> Corpora</p>
+      <h2>Eleven conversions measured, five passed on</h2>
+      <p class="lede">Each converter writes a coverage report that states every rule with its count and reports defects of the source without repairing them. Five bundles may be redistributed under their publishers' terms and are served here. Open any of them in the app.</p>
+    </div>
+    <div class="table-wrap reveal">
+      <table>
+        <thead><tr><th>Corpus</th><th class="num">Objects</th><th>Types</th><th>Licence of the content</th><th></th></tr></thead>
+        <tbody>
+{{ html.bundle_rows }}
+        </tbody>
+      </table>
+    </div>
+    <p class="source reveal">Object counts measured at build. No publisher produced, reviewed or endorsed these conversions. The Apache licence of the project does not cover the bundles; the licence note beside each bundle does.</p>
+
+    <div class="split even reveal" style="margin-top: clamp(40px, 5vw, 64px);">
+      <div class="stack">
+        <h3>Measured, not passed on</h3>
+        <p class="muted">Six further corpora were converted and measured for 1.0.0. Their bundles were removed from the repository on 10 November 2026 after a review of the publishers' terms. The converters and coverage reports remain, so anyone entitled to the source file can reproduce the bundle.</p>
+        <ul class="plain">
+          <li>CIS Controls v8.1 and the CIS Ubuntu 24.04 LTS Benchmark: the terms forbid derivative works.</li>
+          <li>BSI C5:2026, BSI C3A and the Belgian CyberFundamentals 2025: no licence statement was found.</li>
+          <li>FedRAMP CR26: a U.S. Government work whose repository states no licence.</li>
+        </ul>
+      </div>
+      <div class="stack">
+        <h3>The 1.0.0 measurement <span class="tier tier-measured">22 July 2026</span></h3>
+        <ul class="plain">
+          <li>Eleven bundles, 6,914 objects, both digests re-verified per object.</li>
+          <li>251,591 leaf values in the sources, every source path with a declared destination.</li>
+          <li>OSCAL 1.2.2 export of ten catalogue bundles: valid against NIST's release schema, 5,886 of 5,886 objects equal by semantic digest after re-import.</li>
+          <li>Size against the sources: ISM 29 % smaller, Grundschutz++ 50 % smaller, CR26 55 % larger. The format is smaller where a source is redundant and larger where a bespoke format was terse.</li>
+        </ul>
+        <a class="link-arrow" href="{{ blob }}/drafts/gate-4-measurement.md" rel="noopener">The gate-4 measurement report</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="gates">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">03</span> Gates</p>
+      <h2>Nothing advances on narrative</h2>
+    </div>
+    <div class="gates reveal">
+      <div class="gate">
+        <span class="gate-when">mid-2026</span><span class="gate-rail"><i></i></span>
+        <div class="gate-body"><h3>Gate 1: the census <span class="tier tier-measured">done</span></h3><p>The ISM (1,150 controls, 8,958 props), Grundschutz++ (13,315 props) and FedRAMP CR26 (246 rules, no props) inventoried before the architecture was drawn. The kernel is what all three were measured to need.</p></div>
+      </div>
+      <div class="gate">
+        <span class="gate-when">July 2026</span><span class="gate-rail"><i></i></span>
+        <div class="gate-body"><h3>Gate 2: executable <span class="tier tier-measured">done</span></h3><p>The normative JSON Schema with closed, mutually exclusive shapes, seven standard-library facet descriptors, the conformance corpus and the reference validator.</p></div>
+      </div>
+      <div class="gate">
+        <span class="gate-when">22 July 2026</span><span class="gate-rail"><i></i></span>
+        <div class="gate-body"><h3>Gate 3: the customer test <span class="tier tier-measured">done</span></h3><p>SP 800-53 Rev 5.2.0 with the four 800-53B baselines, CSF 2.0 and a full lifecycle set of SSP, assessment plan, results and POA&amp;M. No change to the kernel schema was needed. The corpus exposed two defects in the reference validator, which were fixed.</p></div>
+      </div>
+      <div class="gate">
+        <span class="gate-when">22 July 2026</span><span class="gate-rail"><i></i></span>
+        <div class="gate-body"><h3>Gate 4: the engines, and release 1.0.0 <span class="tier tier-measured">done</span></h3><p>DSSE signature verification with a dependency-free Ed25519, bundle composition, the conditional rule, the PowerShell twin and the bidirectional OSCAL export. The specification went through adversarial review in the repository and an external pass; every finding was adjudicated on the record. One fix recovered 239 ISM taxonomy sets that a converter had silently merged.</p></div>
+      </div>
+      <div class="gate rc">
+        <span class="gate-when">10 Nov 2026</span><span class="gate-rail"><i></i></span>
+        <div class="gate-body"><h3>2.0.0-rc.1: Risk as the tenth type <span class="tier tier-designed">release candidate, not tagged</span></h3><p>All 6,914 objects of the 1.0.0 corpus validate unchanged under the new schema. The type entered as a recorded exception to the promotion rule: no census authority publishes a risk record, because a risk register is the consumer's data. Three standards prescribe the record.</p></div>
+      </div>
+      <div class="gate prop">
+        <span class="gate-when">11 Nov 2026</span><span class="gate-rail"><i></i></span>
+        <div class="gate-body"><h3>CP-CHECK-1: Check as the eleventh type <span class="tier tier-proposed">proposed</span></h3><p>Schema, validator, 156 vectors and a worked example with an evidence store. A census of two open check corpora measured the fit: 481 of 510 rules of the CIS Ubuntu 24.04 profiles in ComplianceAsCode, and no comparison in either corpus that needs a regex outside I-Regexp.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="limits">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">04</span> Limits</p>
+      <h2>What is not proven</h2>
+      <p class="lede">These are the open points on {{ facts.measured.date }}. Each of them is also a place where outside work counts for more than the maintainer's.</p>
+    </div>
+    <div class="limits reveal">
+      <div class="limit">
+        <h3>No third-party user <span class="tier tier-open">open</span></h3>
+        <p>A search on 10 November 2026 found no mention of JASCON outside its own repository. No authority publishes in it and no vendor reads it. The measured conversions and the defects found in published catalogues can be used without adopting the format.</p>
+      </div>
+      <div class="limit">
+        <h3>One author behind both validators <span class="tier tier-open">open</span></h3>
+        <p>The Python reference and the PowerShell twin were written by the project author with AI assistance from the same sources. Their independence is limited to language and runtime. The gate measures whether the specification determines an implementation. It does not measure a stranger's weekend.</p>
+      </div>
+      <div class="limit">
+        <h3>Path coverage is not value arrival <span class="tier tier-open">open, backlog 41</span></h3>
+        <p>The coverage reports count source paths with a declared destination. Whether each value arrives was measured on one corpus, the NIST example system: 394 of 835 leaf values occur verbatim in the bundle, and 122 content values do not arrive at all. The other ten corpora are unmeasured.</p>
+      </div>
+      <div class="limit">
+        <h3>The first Risk corpus stays in its first state <span class="tier tier-open">open</span></h3>
+        <p>OSCAL's risk data has no owner, no single level and no acceptance date. Risks converted from it cannot leave the state <code>identified</code>, so risk coverage on real converted data shows every requirement as uncovered. Coverage with a treated risk is shown on the example bundle only.</p>
+      </div>
+      <div class="limit">
+        <h3>Check fails the promotion rule as written <span class="tier tier-proposed">proposed</span></h3>
+        <p>A semantic enters the kernel when two of the three census authorities encode it. None encodes a machine-decidable check. The proposal states this and leaves the decision to the author; 29 of 510 measured rules do not fit its declarative form and stay manual.</p>
+      </div>
+      <div class="limit">
+        <h3>Known defects in shipped examples <span class="tier tier-open">open, backlog 46 and 55</span></h3>
+        <p>The example attestation is illustrative: its subject digests match no example object. The method payload of an Assessment is not yet validated against its pinned facet schema, and the three in the repository would fail.</p>
+      </div>
+      <div class="limit">
+        <h3>Governance is one person <span class="tier tier-open">open</span></h3>
+        <p>The handbook describes a federated registry and a steward for the standard library. Neither exists. Today there is one maintainer in personal capacity, a public decision register, and the conformance corpus.</p>
+      </div>
+    </div>
+    <p class="source reveal">The full queue with counts: <a href="{{ blob }}/drafts/jascon-v0.6-spec-feedback-backlog.md" rel="noopener">the spec-feedback backlog</a>. Items enter with evidence and leave through an entry in the <a href="{{ blob }}/drafts/jascon-decision-rationale-register.md" rel="noopener">decision register</a>.</p>
+  </div>
+</section>
+
+<section class="section" id="prior-art">
+  <div class="wrap">
+    <div class="section-head wide reveal">
+      <p class="eyebrow"><span class="no">05</span> Prior art</p>
+      <h2>Most of JASCON is not new</h2>
+      <p class="lede">A survey of the neighbouring formats, read from their public repositories on 10 November 2026. No neighbour's data was converted and no feature was tested against an implementation, so the cells say what a schema or its documentation shows.</p>
+    </div>
+    <div class="table-wrap reveal">
+      <table>
+        <thead><tr><th>JASCON feature</th><th>Nearest prior art</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Structured modality per statement</th><td>The modal-verb vocabulary of Grundschutz++; the keywords of the FedRAMP rules; the OpenSSF OSPS Baseline</td></tr>
+          <tr><th scope="row">Prose as a language map</th><td>The <code>translations</code> map of the CISO Assistant library format</td></tr>
+          <tr><th scope="row">Baselines as membership</th><td>OSCAL profiles; XCCDF profiles</td></tr>
+          <tr><th scope="row">Tailoring as a closed list of operations</th><td>OSCAL profile <code>alter</code> and <code>set-parameter</code>; XCCDF <code>refine-value</code></td></tr>
+          <tr><th scope="row">Typed cross-framework mappings</th><td>NIST IR 8477; the STRM of the Secure Controls Framework; the OSCAL 1.2 mapping model; Gemara mapping documents</td></tr>
+          <tr><th scope="row">Typed, schema-bound extensions</th><td>Gemara (CUE); OSCAL props with namespaces, untyped</td></tr>
+          <tr><th scope="row">Component to finding chain</th><td>The OSCAL lifecycle models; CycloneDX declarations</td></tr>
+          <tr><th scope="row">Signed attestation over requirements</th><td>CycloneDX affirmations and signatures (ECMA-424); the DSSE envelope of in-toto</td></tr>
+          <tr><th scope="row">A risk record</th><td>The OSCAL <code>risk</code> assembly, after the fact; the Gemara risk catalogue; NIST IR 8286</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="split even reveal" style="margin-top: clamp(40px, 5vw, 64px);">
+      <div class="stack">
+        <h3>What no neighbour was found to combine</h3>
+        <ul class="ticks">
+          <li><b>Two digests per object</b>, one over the delivered bytes and one over the canonical content, so that an attestation survives repackaging.</li>
+          <li><b>A partial order of modality</b> against which tailoring is checked, with weakening routed through a recorded Deviation.</li>
+          <li><b>A risk record joined to control selection</b>, so that the requirements resting on no risk are computed.</li>
+          <li><b>Extensions that fail closed</b>: an extension declares which computations it changes, and a tool that does not understand it must stop.</li>
+        </ul>
+      </div>
+      <div class="stack">
+        <h3>How far that claim goes</h3>
+        <p class="muted">Each of the four has partial precedent. The claim concerns the combination and is only as strong as the survey. Gemara and CycloneDX Attestations are the closest neighbours, and a reader from either community will ask why JASCON does not extend theirs. The attestation gap is narrow: in-toto has no predicate that attests a requirement, and a JASCON attestation expressed as one would reach an existing verifier ecosystem.</p>
+        <a class="link-arrow" href="{{ blob }}/PRIOR-ART.md" rel="noopener">PRIOR-ART.md, with sources</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="cta reveal">
+      <div>
+        <h2>Reproduce the verdict in one line</h2>
+        <p>Clone the repository and run the validator. It executes the conformance corpus, then re-verifies every object of every shipped bundle with both digests. It needs Python and <code style="color:inherit;background:none;padding:0">jsonschema</code>.</p>
+      </div>
+      <div class="cta-actions">
+        <a class="btn btn-primary" href="start.html#validate">The command <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a class="btn btn-ghost" href="join.html">Find a defect, file it <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>

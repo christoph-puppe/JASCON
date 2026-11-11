@@ -1,0 +1,58 @@
+# Builds website/ into one folder and publishes it with GitHub Pages.
+#
+# It runs when main changes in a path the site is made from, and by hand
+# (Actions > Website > Run workflow). The build runs the reference validator
+# first; if that is not ALL GREEN, nothing is published.
+#
+# One-time setup in the repository: Settings > Pages > Source: GitHub Actions,
+# then the custom domain. See website/README.md.
+name: Website
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "website/**"
+      - "jascon-app/**"
+      - "one-page-apps/**"
+      - "converted_examples/**"
+      - "jascon/**"
+      - "LICENSE"
+      - "NOTICE"
+      - ".github/workflows/website.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install the validator's one dependency
+        run: pip install jsonschema
+      - name: Measure and build
+        run: python website/build.py --measure --out _site
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

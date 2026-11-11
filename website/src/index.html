@@ -1,0 +1,501 @@
+---
+title: JASCON: the data layer for GRC engineering
+description: JASCON is an open notation for compliance data. Standards, tailoring, risks, implementations, assessments and attestations become one graph of typed, content-addressed JSON objects that a program can validate, diff, compute on and sign.
+nav: home
+---
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <p class="eyebrow">Open notation &middot; Apache 2.0</p>
+      <h1>The data layer for <em>GRC&nbsp;engineering</em></h1>
+      <p class="lede">JASCON writes standards, tailoring, risks, implementations, assessments and attestations as one graph of typed, content-addressed JSON objects. A Statement of Applicability becomes a computation, a crosswalk becomes data, and a signature still verifies after the bundle is repackaged.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="app/index.html#load=../converted_examples/US.CSF/csf-core-bundle/&amp;tool=browse">Open the app on NIST CSF 2.0
+          <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a class="btn btn-ghost" href="start.html">Get started</a>
+      </div>
+      <div class="hero-status">
+        <span><i class="dot"></i>1.0.0 released 22 July 2026</span>
+        <span><i class="dot rc"></i>2.0.0-rc.1 in review</span>
+        <span>Independent project, one maintainer</span>
+      </div>
+    </div>
+
+    <div class="window" data-tabs>
+      <div class="window-bar" role="tablist" aria-label="Example objects">
+        <span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+        <button class="tab" role="tab" aria-selected="true" data-panel="hero-risk">risk.json</button>
+        <button class="tab" role="tab" aria-selected="false" data-panel="hero-req">requirement.json</button>
+        <button class="tab" role="tab" aria-selected="false" data-panel="hero-tailoring">tailoring.json</button>
+        <span class="window-note">excerpts</span>
+      </div>
+      <pre id="hero-risk" role="tabpanel" tabindex="0"><code data-lang="json">{
+  "id": "https://cso.example/risk/R-2026-007",
+  "title": {
+    "en": "Tenant data exposure through long-lived KMS keys",
+    "de": "Offenlegung von Mandantendaten durch langlebige KMS-Schlüssel"
+  },
+  "owner-ref": "https://cso.example/party/ciso",
+  "state": "treated",
+  "rating": { "level": "hoch",
+              "scale-ref": "https://cso.example/scale/bsi-200-3-matrix" },
+  "treatment": "modify",
+  «"treatments": [
+    { "requirement-ref": "https://ns.bsi.bund.de/gspp/req/KONF.14.1",
+      "statement-ids": ["s2"] }
+  ]»,
+  "tailoring-refs": ["https://ns.bsi.bund.de/gspp/tailoring/erhoeht"]
+}</code></pre>
+      <pre id="hero-req" role="tabpanel" tabindex="0"><code data-lang="json">{
+  "id": "https://ns.bsi.bund.de/gspp/req/KONF.14.1",
+  "version": "2026-07",
+  "label": "KONF.14.1",
+  "statements": [
+    { "id": "s1",
+      «"modality": "may"»,
+      "parameters": [
+        { "name": "transport-crypto", "type": "choice", "cardinality": "one",
+          "choices": [ { "value": "tls13" }, { "value": "tls12-pfs" } ] }
+      ],
+      "prose": { "de": "Konfiguration für Anwendungen KANN Kommunikation beim Transport über Netze nach «{param:transport-crypto}» verschlüsseln." } },
+    { "id": "s2",
+      "modality": "should",
+      "prose": { "de": "Kryptographische Schlüssel SOLLTEN in regelmäßigen Abständen gewechselt werden." } }
+  ],
+  "facets": {
+    "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": { "sec-level": "normal-sdt" }
+  }
+}</code></pre>
+      <pre id="hero-tailoring" role="tabpanel" tabindex="0"><code data-lang="json">{
+  "id": "https://ns.bsi.bund.de/gspp/tailoring/erhoeht",
+  "version": "2026-07",
+  "title": { "en": "Elevated protection level" },
+  "selects": [
+    { "set-ref": "https://ns.bsi.bund.de/gspp/set/baseline/example" }
+  ],
+  "operations": [
+    { "op": "set-modality",
+      "requirement-ref": "https://ns.bsi.bund.de/gspp/req/KONF.14.1",
+      "statement-id": "s1",
+      «"modality": "must"» },
+    { "op": "set-parameter",
+      "requirement-ref": "https://ns.bsi.bund.de/gspp/req/KONF.14.1",
+      "statement-id": "s1",
+      "parameter": "transport-crypto",
+      "value": "tls13" }
+  ]
+}</code></pre>
+      <div class="window-foot">
+        <span>validate_core.py</span>
+        <span><b>risk-coverage</b> erhoeht: selected 3 &middot; justified 1 &middot; uncovered 2</span>
+        <span class="ok">all green</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section tight flush" aria-label="Measured">
+  <div class="wrap">
+    <div class="stats reveal">
+      <div class="stat">
+        <span class="stat-n">{{ n.vectors }}<small>/ {{ n.vectors }}</small></span>
+        <p>conformance vectors in {{ n.families }} families pass in the reference validator. The vectors decide what conformant means.</p>
+        <span class="tier tier-measured">measured at build</span>
+      </div>
+      <div class="stat">
+        <span class="stat-n">2</span>
+        <p>reference validators with identical counts: Python, and PowerShell 5.1 that runs on a stock Windows machine with nothing installed.</p>
+        <span class="tier tier-measured">measured 2026-11-11</span>
+      </div>
+      <div class="stat">
+        <span class="stat-n">11</span>
+        <p>published frameworks and lifecycle sets converted, among them ISM, Grundschutz++, SP 800-53, CSF 2.0 and C5. Every source path has a computed destination.</p>
+        <span class="tier tier-measured">measured at 1.0.0</span>
+      </div>
+      <div class="stat">
+        <span class="stat-n">5,886</span>
+        <p>catalogue objects exported to OSCAL 1.2.2, validated against the NIST schema, re-imported and compared. All 5,886 are equal by semantic digest.</p>
+        <span class="tier tier-measured">measured at 1.0.0</span>
+      </div>
+    </div>
+    <p class="stats-note">The first figure is recomputed whenever this site is built (commit <code>{{ facts.measured.commit }}</code>). "Every source path" is path coverage: whether every value arrives was measured on one corpus so far, and there 122 content values did not. That and the other open points are listed under <a href="evidence.html#limits">what is not proven</a>.</p>
+  </div>
+</section>
+
+<section class="section band" id="why">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">01</span> Why</p>
+      <h2>Valid and meaningless are compatible states</h2>
+      <p class="lede">In mid-2026 this project counted, field by field, what three national authorities publish in machine-readable form: the Australian ISM, the German Grundschutz++ and FedRAMP's Consolidated Rules. Four counts decided the design.</p>
+    </div>
+    <div class="findings reveal">
+      <div class="finding">
+        <span class="finding-n">0 of 100+</span>
+        <h3>FedRAMP authorizations in 2025 that arrived as OSCAL</h3>
+        <p>FedRAMP's RFC-0024 of January 2026 records more than one hundred Rev5 authorizations processed in 2025 and no submission in OSCAL, the format the programme helped to design.</p>
+      </div>
+      <div class="finding">
+        <span class="finding-n">216</span>
+        <h3>defects that no validator can see</h3>
+        <p>Grundschutz++ carries 12,059 namespaced props whose vocabulary lives in CSV side files. Among them sit 216 pseudo-placeholders such as <code>&#123;&#123;einem anerkannten Standard&#125;&#125;</code>, some contradicting the prose beside them. Every OSCAL validator reports the catalogues as valid.</p>
+      </div>
+      <div class="finding">
+        <span class="finding-n">2 teams, 1 model</span>
+        <h3>The same structure, discovered twice</h3>
+        <p>FedRAMP wrote its 2026 rules as plain JSON without OSCAL. Its typed fields match the German prop names almost one to one: <code>force</code> and <code>modal_verb</code>, <code>affects</code> and <code>target_object_categories</code>. The two teams did not coordinate.</p>
+      </div>
+      <div class="finding">
+        <span class="finding-n">5,301</span>
+        <h3>membership entries maintained twice</h3>
+        <p>59 % of all ISM props are one applicability matrix. It repeats what ASD also publishes as eight profile documents, because inlining the matrix costs less than consuming the profile mechanism.</p>
+      </div>
+    </div>
+    <p class="source reveal">Counts from the published catalogues, July 2026. Method and raw numbers: <a href="{{ blob }}/jascon/references/ch01-why-this-exists.md" rel="noopener">handbook, chapter 1</a> and the <a href="{{ blob }}/drafts/prop-census-three-authorities-v0.3-input-r2.md" rel="noopener">prop census</a>. The catalogue authors are professionals and their tools reported green. OSCAL 1.x constrains document structure, where frameworks legitimately differ, and has no contract for extensions, where the meaning lives. JASCON reverses both settings.</p>
+  </div>
+</section>
+
+<section class="section" id="model">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">02</span> The model</p>
+      <h2>Documents become renderings of a graph</h2>
+      <p class="lede">Ten shallow object types, each with a global identifier, a version and two SHA-256 digests. What every measured framework needs sits in a fixed kernel. What one framework needs sits in a registered facet with a schema.</p>
+    </div>
+    <div class="split flip">
+      <figure class="reveal">
+        <svg class="graph" viewBox="0 0 640 470" role="img" aria-labelledby="graph-title graph-desc">
+          <title id="graph-title">The JASCON object graph</title>
+          <desc id="graph-desc">Content types on the left: Tailoring selects a RequirementSet, whose members are Requirements; a Mapping relates Requirements. System types on the right: Implementation, Assessment and Finding refer to a Component. In the middle a Risk justifies the Requirements that treat it, and a proposed Check decides a Requirement for an Assessment. An Attestation binds the graph to the signed document.</desc>
+          <defs>
+            <marker id="ah" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="head" d="M0 0 10 5 0 10z"/></marker>
+            <marker id="ah-a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="head accent" d="M0 0 10 5 0 10z"/></marker>
+            <marker id="ah-p" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="head prop" d="M0 0 10 5 0 10z"/></marker>
+          </defs>
+          <text class="zone" x="30" y="16">Content</text>
+          <text class="zone" x="240" y="16">Organisation</text>
+          <text class="zone" x="450" y="16">Systems</text>
+
+          <path class="edge" d="M110 76V124" marker-end="url(#ah)"/>
+          <path class="edge" d="M110 172V220" marker-end="url(#ah)"/>
+          <path class="edge" d="M110 318V270" marker-end="url(#ah)"/>
+          <path class="edge" d="M30 53C2 53 2 245 28 245" marker-end="url(#ah)"/>
+          <path class="edge" d="M530 126V78" marker-end="url(#ah)"/>
+          <path class="edge" d="M530 318V270" marker-end="url(#ah)"/>
+          <path class="edge" d="M610 245C638 245 638 53 612 53" marker-end="url(#ah)"/>
+          <path class="edge" d="M450 149 192 228" marker-end="url(#ah)"/>
+          <path class="edge" d="M450 341 192 262" marker-end="url(#ah)"/>
+          <path class="edge accent" d="M290 124 177 220" marker-end="url(#ah-a)"/>
+          <path class="edge accent" d="M400 95 448 63" marker-end="url(#ah-a)"/>
+          <path class="edge prop" d="M240 245H192" marker-end="url(#ah-p)"/>
+          <path class="edge prop" d="M450 245H402" marker-end="url(#ah-p)"/>
+          <path class="edge bind" d="M110 364V402M530 364V402"/>
+
+          <text class="elabel" x="118" y="104">selects</text>
+          <text class="elabel" x="118" y="200">members</text>
+          <text class="elabel" x="118" y="298">relates</text>
+          <text class="elabel accent" x="228" y="166" text-anchor="middle" transform="rotate(-40 228 166)">justifies</text>
+          <text class="elabel" x="322" y="181" text-anchor="middle" transform="rotate(-17 322 181)">satisfies</text>
+          <text class="elabel" x="322" y="296" text-anchor="middle" transform="rotate(17 322 296)">against</text>
+
+          <g class="node content"><rect x="30" y="30" width="160" height="46" rx="10"/><text x="44" y="50">Tailoring</text><text class="sub" x="44" y="65">selection and operations</text></g>
+          <g class="node content"><rect x="30" y="126" width="160" height="46" rx="10"/><text x="44" y="146">RequirementSet</text><text class="sub" x="44" y="161">catalogues, baselines</text></g>
+          <g class="node content"><rect x="30" y="222" width="160" height="46" rx="10"/><text x="44" y="242">Requirement</text><text class="sub" x="44" y="257">clauses with modality</text></g>
+          <g class="node content"><rect x="30" y="318" width="160" height="46" rx="10"/><text x="44" y="338">Mapping</text><text class="sub" x="44" y="353">a crosswalk edge</text></g>
+
+          <g class="node org"><rect x="240" y="78" width="160" height="46" rx="10"/><text x="254" y="98">Risk</text><text class="sub" x="254" y="113">why it is in scope</text></g>
+          <g class="node proposed"><rect x="240" y="222" width="160" height="46" rx="10"/><text x="254" y="242">Check</text><text class="sub" x="254" y="257">proposed: facts, criteria</text></g>
+
+          <g class="node"><rect x="450" y="30" width="160" height="46" rx="10"/><text x="464" y="50">Component</text><text class="sub" x="464" y="65">systems, services</text></g>
+          <g class="node"><rect x="450" y="126" width="160" height="46" rx="10"/><text x="464" y="146">Implementation</text><text class="sub" x="464" y="161">who satisfies what</text></g>
+          <g class="node"><rect x="450" y="222" width="160" height="46" rx="10"/><text x="464" y="242">Assessment</text><text class="sub" x="464" y="257">method and result</text></g>
+          <g class="node"><rect x="450" y="318" width="160" height="46" rx="10"/><text x="464" y="338">Finding</text><text class="sub" x="464" y="353">gap, actions, deviation</text></g>
+
+          <g class="node attest"><rect x="30" y="404" width="580" height="46" rx="10"/><text x="44" y="424">Attestation</text><text class="sub" x="44" y="439">binds the semantic digests of the graph to the document a person signed</text></g>
+        </svg>
+        <div class="graph-legend">
+          <span><i></i>released in 1.0.0</span>
+          <span class="lg-org"><i></i>new in 2.0.0-rc.1</span>
+          <span class="lg-prop"><i></i>proposed (CP-CHECK-1)</span>
+          <span class="lg-att"><i></i>signature layer</span>
+        </div>
+      </figure>
+      <div class="stack-lg reveal">
+        <div class="layers compact">
+          <div class="layer l-kernel">
+            <h3><i></i>Kernel</h3>
+            <p>Binding force per clause, typed parameters and deadlines, membership, aliases, history.</p>
+            <p class="contract">Normative and closed. Changes ride a version.</p>
+          </div>
+          <div class="layer l-facet">
+            <h3><i></i>Facets</h3>
+            <p>Framework vocabulary: the German statement grammar, 800-53A objectives, protection goals.</p>
+            <p class="contract">Registered, schema-pinned. A tool that does not know one stops with a reason.</p>
+          </div>
+          <div class="layer l-anno">
+            <h3><i></i>Annotations</h3>
+            <p>Tracker ids, rendering hints, tool bookkeeping.</p>
+            <p class="contract">Outside every compliance computation and outside the semantic digest.</p>
+          </div>
+        </div>
+        <p class="muted">Failures are made unrepresentable where that is possible. A parameter token in prose must name a declared parameter. A tailoring operation addresses a statement by identity, so an upstream erratum cannot repoint it.</p>
+        <a class="link-arrow" href="model.html">The ten types, field by field</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="implications">
+  <div class="wrap">
+    <div class="section-head wide reveal">
+      <p class="eyebrow"><span class="no">03</span> What changes</p>
+      <h2>What follows when compliance data can be computed on</h2>
+      <p class="lede">GRC engineering treats compliance like any other engineering artefact: versioned, typed, tested and signed. That needs data a program can reason about. Eight consequences, each with its mechanism and the state of its evidence.</p>
+    </div>
+    <div class="grid g3 reveal">
+      <article class="card feature">
+        <div class="card-top"><span class="card-no">ISO/IEC 27001 6.1.3 d</span><span class="tier tier-measured">measured on two bundles</span></div>
+        <h3>The Statement of Applicability becomes a computation</h3>
+        <p>A Risk names its owner, its treatment decision and the clauses that carry that decision. The primitive <code>risk-coverage</code> then lists every selected requirement that rests on no assessed risk. An auditor used to sample that from a spreadsheet.</p>
+        <p class="how"><b>Mechanism:</b> the Risk type of kernel 2.0.0-rc.1. On the example bundle the validator reports 3 selected, 1 justified, 2 uncovered, and names the two.</p>
+      </article>
+      <article class="card">
+        <div class="card-top"><span class="card-no">Mapping</span><span class="tier tier-measured">measured</span></div>
+        <h3>A crosswalk is data with an author</h3>
+        <p>A Mapping is an object of its own: source, target, relationship, confidence and provenance, down to the single statement. A third party's crosswalk belongs to neither catalogue and can be versioned, diffed and disputed.</p>
+        <p class="how"><b>Mechanism:</b> relationship codes from NIST IR 8477. 1,008 Mappings in the 1.0.0 corpus.</p>
+      </article>
+      <article class="card">
+        <div class="card-top"><span class="card-no">Tailoring</span><span class="tier tier-measured">measured</span></div>
+        <h3>Tailoring that survives an upstream release</h3>
+        <p>A Tailoring selects by Set and changes by identity: this requirement, this statement, this parameter. Strengthening is free. Weakening needs a recorded Deviation, checked against a partial order of the modal verbs.</p>
+        <p class="how"><b>Mechanism:</b> eight closed operations, deterministic resolution, no merge rules.</p>
+      </article>
+      <article class="card">
+        <div class="card-top"><span class="card-no">Attestation</span><span class="tier tier-measured">measured</span></div>
+        <h3>A signature that survives repackaging</h3>
+        <p>An attestation binds semantic digests. Re-indent a file or add a tracker id and the verdict is Semantic Match. Change a modal verb and it is Tamper.</p>
+        <p class="how"><b>Mechanism:</b> package digest over the bytes, semantic digest over the canonical content; DSSE envelope, Ed25519. <a href="#try">Try it below.</a></p>
+      </article>
+      <article class="card">
+        <div class="card-top"><span class="card-no">Kernel rules</span><span class="tier tier-measured">measured</span></div>
+        <h3>Valid implies checkable</h3>
+        <p>A <code>{param:}</code> token must name a declared, typed parameter. A facet pins its schema and declares which computations it changes. The converter built on these rules found 213 pseudo-placeholders in a national catalogue in production.</p>
+        <p class="how"><b>Mechanism:</b> closed shapes, bound tokens, fail-closed facets.</p>
+      </article>
+      <article class="card">
+        <div class="card-top"><span class="card-no">text</span><span class="tier tier-measured">measured</span></div>
+        <h3>One requirement, every language</h3>
+        <p>Every human-readable field is a map from BCP 47 language tag to text. A requirement in German and English is one object with one identifier, which is what NIS2, DORA and the CRA will need across the Union's official languages.</p>
+        <p class="how"><b>Mechanism:</b> the <code>text</code> primitive. The Grundschutz++ bundle carries <code>de</code>.</p>
+      </article>
+      <article class="card">
+        <div class="card-top"><span class="card-no">Check</span><span class="tier tier-proposed">proposed</span></div>
+        <h3>Checks a second party can recompute</h3>
+        <p>Code collects facts, a closed set of comparators decides, and the evidence is stored under its own hash. An auditor recomputes the verdict from the recorded facts without touching the system.</p>
+        <p class="how"><b>Mechanism:</b> change proposal CP-CHECK-1. Of 510 rules in the CIS Ubuntu 24.04 profiles of ComplianceAsCode, 481 fit.</p>
+      </article>
+      <article class="card">
+        <div class="card-top"><span class="card-no">Exit</span><span class="tier tier-measured">measured</span></div>
+        <h3>The way out is built in</h3>
+        <p>Catalogue bundles export to OSCAL 1.2.2 that validates against NIST's schema and re-imports to the same digests. The reference validator is one Python file of {{ n.python_lines }} lines, and conformance is decided by public vectors.</p>
+        <p class="how"><b>Mechanism:</b> <code>export_oscal.py</code>, the conformance corpus, Apache 2.0.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="try">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">04</span> Try it</p>
+      <h2>Change the bytes, then change the meaning</h2>
+      <p class="lede">An example requirement from the repository, with the two digests its content manifest records. Edit it or use the buttons. Both digests are computed in your browser by the rule the validator uses.</p>
+    </div>
+    <div class="demo reveal" id="digest-demo">
+      <div class="demo-edit">
+        <div class="window-bar">
+          <span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="window-title">jascon/examples/req-ism-1234.json</span>
+          <span class="window-note">editable</span>
+        </div>
+        <textarea spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="The requirement object, editable">{{ file:jascon/examples/req-ism-1234.json }}</textarea>
+      </div>
+      <div class="demo-side">
+        <div class="demo-actions">
+          <p>Change something</p>
+          <button class="demo-btn" type="button" data-edit="reindent">Re-indent the file <small>bytes only</small></button>
+          <button class="demo-btn" type="button" data-edit="annotate">Add a tracker annotation <small>bytes only</small></button>
+          <button class="demo-btn" type="button" data-edit="reorder">Reverse the member order <small>bytes only</small></button>
+          <button class="demo-btn" type="button" data-edit="weaken">Weaken "must" to "should" <small>meaning</small></button>
+          <button class="demo-btn reset" type="button" data-edit="reset">Reset to the attested text</button>
+        </div>
+        <div class="digests" aria-live="polite">
+          <div class="digest">
+            <div class="digest-h"><b>Package digest</b><span data-state="package" class="same">unchanged</span></div>
+            <code data-out="package">sha256:&hellip;</code>
+            <small>SHA-256 over the delivered bytes</small>
+          </div>
+          <div class="digest">
+            <div class="digest-h"><b>Semantic digest</b><span data-state="semantic" class="same">unchanged</span></div>
+            <code data-out="semantic">sha256:&hellip;</code>
+            <small>SHA-256 over the canonical content, annotations left out</small>
+          </div>
+        </div>
+        <div class="verdict" data-v="full" aria-live="polite">
+          <span class="verdict-k">Verdict of the attestation check</span>
+          <span class="verdict-v">Full Match</span>
+          <p>Bytes and meaning are the ones recorded in the example bundle's content manifest.</p>
+        </div>
+      </div>
+      <script type="application/json" id="digest-expected">{{ json:demo }}</script>
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="app">
+  <div class="wrap">
+    <div class="split even" style="align-items:end; margin-bottom: clamp(32px, 4vw, 52px);">
+      <div class="section-head reveal" style="margin-bottom:0">
+        <p class="eyebrow"><span class="no">05</span> The tool</p>
+        <h2>A working app without a server</h2>
+        <p class="lede">The JASCON app is a set of browser pages with no build step and no backend. A bundle you load stays in your browser. The tabs follow the order of the work.</p>
+      </div>
+      <div class="stack reveal">
+        <ul class="ticks">
+          <li><b>Import</b> an OSCAL catalogue or profile. The Grundschutz++ rules reproduce the shipped bundle object for object, by semantic digest.</li>
+          <li><b>Risk, Tailor, Map, Implement, Assess:</b> every page writes real objects into the working set and exports a bundle with both digests per object.</li>
+          <li><b>Drafts from a model, verdicts from the kernel.</b> Two pages can ask a language model once you enter a key. A draft is judged by the kernel rules and saved only when you take it.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="screens reveal" data-tabs>
+      <div class="screen-tabs" role="tablist" aria-label="App screens">
+        <button class="screen-tab" role="tab" aria-selected="true" data-panel="screen-browse">Browse</button>
+        <button class="screen-tab" role="tab" aria-selected="false" data-panel="screen-risk">Risk</button>
+        <button class="screen-tab" role="tab" aria-selected="false" data-panel="screen-tailor">Tailor</button>
+        <button class="screen-tab" role="tab" aria-selected="false" data-panel="screen-validate">Validate</button>
+      </div>
+      <figure class="screen" id="screen-browse" role="tabpanel">
+        <div class="frame">
+          <div class="frame-bar"><span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="frame-url">jascon.net/app/#load=../converted_examples/DE.BSI/bsi-core-bundle/&amp;tool=browse</span></div>
+          <img src="assets/img/app-browse.webp" width="2560" height="1500" loading="lazy" alt="The Browse page on the Grundschutz++ bundle: a list of requirements, fifteen filters built from the data, and one requirement opened with its kernel fields, facets and annotations.">
+        </div>
+        <figcaption><p>Browse on the Grundschutz++ bundle. The filters are built from the data: every kernel field and every facet value that repeats becomes one. Content: BSI, CC BY-SA 4.0.</p><a class="link-arrow" href="app/index.html#load=../converted_examples/DE.BSI/bsi-core-bundle/&amp;tool=browse">Open this view</a></figcaption>
+      </figure>
+      <figure class="screen" id="screen-risk" role="tabpanel">
+        <div class="frame">
+          <div class="frame-bar"><span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="frame-url">jascon.net/app/#load=../jascon/examples/&amp;tool=risk</span></div>
+          <img src="assets/img/app-risk.webp" width="2560" height="1500" loading="lazy" alt="The Risk page: a register with a heat map of likelihood against impact on a scale the organisation defines.">
+        </div>
+        <figcaption><p>The risk register on the example bundle, with the heat map of a BSI 200-3 matrix. Scales belong to the organisation; the kernel stores the level and the scale it is on.</p><a class="link-arrow" href="app/index.html#load=../jascon/examples/&amp;tool=risk">Open this view</a></figcaption>
+      </figure>
+      <figure class="screen" id="screen-tailor" role="tabpanel">
+        <div class="frame">
+          <div class="frame-bar"><span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="frame-url">jascon.net/app/#load=../jascon/examples/&amp;tool=tailor</span></div>
+          <img src="assets/img/app-tailor.webp" width="2560" height="1500" loading="lazy" alt="The Tailor page: a Tailoring resolved, each operation with its target, the value before and after, and the verdict of the modality order.">
+        </div>
+        <figcaption><p>A Tailoring resolved: each operation with its target, before and after, and the verdict. The authority tier is derived from the data.</p><a class="link-arrow" href="app/index.html#load=../jascon/examples/&amp;tool=tailor">Open this view</a></figcaption>
+      </figure>
+      <figure class="screen" id="screen-validate" role="tabpanel">
+        <div class="frame">
+          <div class="frame-bar"><span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="frame-url">jascon.net/app/#load=../jascon/examples/&amp;tool=validate</span></div>
+          <img src="assets/img/app-validate.webp" width="2560" height="1500" loading="lazy" alt="The Validate page after a run: object counts by type, no errors, and the derived tier of each Tailoring.">
+        </div>
+        <figcaption><p>Validate runs the kernel rules ported from the reference validator, each against its conformance vectors. The Python validator stays the reference.</p><a class="link-arrow" href="app/index.html#load=../jascon/examples/&amp;tool=validate">Open this view</a></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="evidence">
+  <div class="wrap">
+    <div class="split">
+      <div class="section-head reveal" style="margin-bottom:0; position:sticky; top:104px;">
+        <p class="eyebrow"><span class="no">06</span> Evidence</p>
+        <h2>Every claim has to survive real catalogues</h2>
+        <p class="lede">The project moves through evidence gates. A mechanism enters the specification when a published catalogue demands it, and a number on this site is either measured or labelled as something else.</p>
+        <div class="chips" style="margin-top:6px">
+          <span class="tier tier-measured">measured</span>
+          <span class="tier tier-designed">designed for</span>
+          <span class="tier tier-proposed">proposed</span>
+        </div>
+        <a class="link-arrow" href="evidence.html">Gates, corpora and limits</a>
+      </div>
+      <div class="gates reveal">
+        <div class="gate">
+          <span class="gate-when">mid-2026</span><span class="gate-rail"><i></i></span>
+          <div class="gate-body"><h3>Gate 1: the census</h3><p>ISM, Grundschutz++ and FedRAMP CR26 inventoried to the last prop before the architecture was drawn. More than 70 % of 22,000 counted props needed no extension at all: they were membership, ordering, history and clause structure.</p></div>
+        </div>
+        <div class="gate">
+          <span class="gate-when">July 2026</span><span class="gate-rail"><i></i></span>
+          <div class="gate-body"><h3>Gate 2: executable</h3><p>A normative JSON Schema, standard-library facets, a conformance corpus and a validator that re-verifies both digests of every object.</p></div>
+        </div>
+        <div class="gate">
+          <span class="gate-when">22 July 2026</span><span class="gate-rail"><i></i></span>
+          <div class="gate-body"><h3>Gates 3 and 4, release 1.0.0</h3><p>SP 800-53 with its baselines, CSF 2.0 and a full SSP-to-POA&amp;M set converted with no change to the kernel schema. Signature verification, a second validator in PowerShell, and the OSCAL round trip.</p></div>
+        </div>
+        <div class="gate rc">
+          <span class="gate-when">Nov 2026</span><span class="gate-rail"><i></i></span>
+          <div class="gate-body"><h3>2.0.0-rc.1: Risk <span class="tier tier-designed">release candidate</span></h3><p>The tenth type. Every 1.0.0 bundle validates unchanged under the new schema. An external review of the candidate produced 23 new vectors, each failing on the validator as it stood.</p></div>
+        </div>
+        <div class="gate prop">
+          <span class="gate-when">Nov 2026</span><span class="gate-rail"><i></i></span>
+          <div class="gate-body"><h3>CP-CHECK-1: Check <span class="tier tier-proposed">proposed</span></h3><p>Schema, validator, 156 vectors and a worked example are in the repository. No census authority encodes a machine-decidable check today, and the proposal says so in its first paragraph.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="roles">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">07</span> Who it is for</p>
+      <h2>Four chairs, one first move each</h2>
+      <p class="lede">Each of these costs a day and needs nobody's permission.</p>
+    </div>
+    <div class="grid g4 reveal">
+      <article class="card role">
+        <span class="who">You publish a framework</span>
+        <h3>Authorities and standards bodies</h3>
+        <p>Your catalogue keeps its structure. Baselines become Sets, variants become Tailorings, your vocabulary becomes a facet with a schema.</p>
+        <p class="move"><b>First move</b>Choose a namespace, write one Set and re-encode ten requirements. Or open your catalogue in the Import page.</p>
+      </article>
+      <article class="card role">
+        <span class="who">You build tools</span>
+        <h3>GRC vendors and platform teams</h3>
+        <p>One JSON Schema, one serialization, nine primitives with a rationale that prints on failure. No metaschema and no profile resolution.</p>
+        <p class="move"><b>First move</b>Clone the conformance corpus and write a validator in your language. The vectors are the referee.</p>
+      </article>
+      <article class="card role">
+        <span class="who">You run compliance</span>
+        <h3>GRC engineers, CISOs, ISMS owners</h3>
+        <p>Your risk register, Statement of Applicability, implementation statements and findings as files in a repository, reviewed like code.</p>
+        <p class="move"><b>First move</b>Load SP 800-53 or Grundschutz++ in the app, write three risks and read the coverage.</p>
+      </article>
+      <article class="card role">
+        <span class="who">You assess or buy</span>
+        <h3>Auditors, assessors, procurement</h3>
+        <p>You verify what was approved, on your own machine, offline. The PowerShell validator needs a stock Windows box and nothing else.</p>
+        <p class="move"><b>First move</b>Ask a supplier for a bundle and run the validator on it. Treat a conformance claim without corpus results as a datasheet.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="cta reveal">
+      <div>
+        <h2>One maintainer and no third-party user yet</h2>
+        <p>That is the state on {{ facts.measured.date }}, and the reason this site exists. Three contributions would change it most: a validator written by someone who did not write the specification, a catalogue converted by its own publisher, and objections that come with counts.</p>
+      </div>
+      <div class="cta-actions">
+        <a class="btn btn-primary" href="join.html">How to take part <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a class="btn btn-ghost" href="{{ repo }}" rel="noopener">The repository on GitHub <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a class="btn btn-ghost" href="{{ blob }}/drafts/jascon-specification-1.0.0.md" rel="noopener">Specification 1.0.0 <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>

@@ -9,7 +9,8 @@ The original work in this repository: the specification, the decision
 register and the other documents under drafts/; the handbook, kernel
 schema, standard-library facet descriptors, conformance corpus, example
 bundle and software under jascon/; the reader under one-page-apps/; the
-app under jascon-app/; and the coverage reports under converted_examples/.
+app under jascon-app/; the website under website/ (its fonts excepted, see
+below); and the coverage reports under converted_examples/.
 
 Code derived from other work
 ----------------------------
@@ -31,6 +32,17 @@ copyright notice and no NOTICE file of its own.
 All of it was changed: rewritten for JASCON bundles, renamed, translated
 from German, and cut down to what this app uses. The other pages of the
 app are named in this list as they take code from that repository.
+
+Fonts served by the website
+---------------------------
+website/static/assets/fonts/ holds Latin subsets of three typefaces, as
+packaged by Fontsource, each under the SIL Open Font License, Version 1.1
+(full texts in LICENSE.txt in that folder):
+
+  Inter            Copyright 2016 The Inter Project Authors
+  Source Serif 4   copyright line as the package states it; see
+                   LICENSE.txt
+  JetBrains Mono   Copyright 2020 The JetBrains Mono Project Authors
 
 What it does not cover: converted third-party publications
 ----------------------------------------------------------
