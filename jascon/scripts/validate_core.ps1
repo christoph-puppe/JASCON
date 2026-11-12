@@ -43,6 +43,16 @@ assigned after either database was built can match differently; an
 integer fact beyond 64 bits is not read as an integer; -ceq, used on ids
 outside the Check code, is culture-sensitive ("a" + U+00AD equals "a").
 
+Kernel 2.0.0 (CP-ADVICE-1, PROPOSED; ported and run on 2026-11-12): advice
+packs. A manifest may carry a pack header; a capability may name clauses
+(statement-ids); capability-ref has a grammar. ADVICE-1..11: what a pack
+may hold, capabilities and the edges that cite them, the vendor's manifest
+a set keeps under packs/sha256/, and what an import may touch
+(Compose-Advice). Publisher claimed or proven uses the envelope check of
+the Tailoring tier. NOT ported: the --import-advice dry run of
+validate_core.py (the rule it prints, ADVICE-11, is here and in the
+vectors).
+
 SPEED (2026-11-11): type inference took four fifths of a bundle run. The
 schema interpreter now reads a schema node once into a plan, tests the
 cheap keywords first and remembers a $ref verdict for the object under
@@ -1642,6 +1652,8 @@ function Kernel-Pin-Errors($manifest, $objs) {
     $hasScales = $false
     if (Is-Map $manifest) { foreach ($x in @($manifest['scales'])) { if ($null -ne $x) { $hasScales = $true } } }
     if ($hasScales) { $why = 'the manifest pins scale definitions' }
+    # CP-ADVICE-1: the pack header of a manifest, statement-ids on a capability
+    if ($null -eq $why -and (Is-Map $manifest) -and (Ck-Truthy $manifest['pack'])) { $why = 'the manifest carries a pack header' }
     $ids = New-Object System.Collections.ArrayList
     foreach ($oid in $objs.Keys) { [void]$ids.Add([string]$oid) }
     foreach ($oid in (Sorted-Ordinal $ids)) {
@@ -1656,6 +1668,11 @@ function Kernel-Pin-Errors($manifest, $objs) {
         if ($t -ceq 'assessment' -and ((Ck-Truthy $o['check-results']) -or (Ck-Truthy $o['tailoring-ref']))) {
             $why = "$oid carries check results"; break }
         if ($t -ceq 'finding' -and (Ck-Truthy $o['check-ref'])) { $why = "$oid carries a check-ref"; break }
+        if ($t -ceq 'component') {
+            foreach ($c in @($o['capabilities'])) {
+                if ($null -ne $c -and (Ck-Truthy $c['statement-ids'])) { $why = "$oid names clauses on a capability (statement-ids)" } }
+            if ($null -ne $why) { break }
+        }
     }
     if ($null -ne $why -and $pin -cne '2.0.0') {
         $said = 'pins no kernel-version'
@@ -2868,6 +2885,540 @@ function Run-Check {
     }
 }
 
+# ---------------- ADVICE (CP-ADVICE-1, kernel 2.0.0) ----------------
+# An advice pack is a bundle whose manifest carries a pack header and whose
+# objects are Components: a vendor's recommendations as one published file.
+# A capability is a CLAIM; the only statement that a requirement is met
+# stays the Implementation in the user's namespace, which cites it.
+# ADVICE-1..3 hold a pack to being advice; 4..7 hold capabilities and the
+# edges that cite them, in every bundle; 8..10 hold the vendor's manifest a
+# set keeps (packs/sha256/<hex>, beside the manifest like an envelope) to
+# the objects in the set; 11 is import.
+$PACK_STORE = 'packs/sha256/'
+$ADVICE_RULES = @{
+    'ADVICE-1' = 'advice must not be able to change what is required or how it is assessed - a pack holds Components and nothing else'
+    'ADVICE-2' = "a pack cannot carry an object under someone else's identity, and so cannot replace one: its ids, its own id and its publisher share one origin"
+    'ADVICE-3' = "advice must not reach a computation through a facet: no facet on a pack's object declares a semantics class"
+    'ADVICE-4' = 'a capability-ref must name one thing: capability ids are unique within a Component'
+    'ADVICE-5' = 'a recommendation is about a requirement; when that requirement is in the bundle the edge is typed and the clauses it names exist'
+    'ADVICE-6' = "a suggested value the catalog cannot accept is the publisher's defect, found before a user adopts it"
+    'ADVICE-7' = "an edge that leans on a capability nobody declared proves nothing, and advice applies to a system because the system contains the product - the cited component is in the bundle, declares the capability, and is the edge's own or one of its members"
+    'ADVICE-8' = "a kept pack manifest is content-addressed and lives beside the manifest: its name is the SHA-256 of its bytes, it carries a pack header, and the bundle's manifest does not list it"
+    'ADVICE-9' = 'the advice in the set is what the vendor published: every object a kept pack manifest lists is in the bundle at that version with that semantic digest'
+    'ADVICE-10' = 'one release of a pack in a set, and one pack per object'
+    'ADVICE-11' = 'import never overwrites what the pack does not own: it adds ids the bundle does not hold and replaces ids an earlier release of the same pack brought'
+}
+function Adv-Bad($errList, [string]$rule, [string]$where, [string]$msg) {
+    [void]$errList.Add(@{rule = $rule; msg = "${where}: $msg (${rule}: $($ADVICE_RULES[$rule]))"})
+}
+function Adv-Ids($objs) {
+    $ids = New-Object System.Collections.ArrayList
+    foreach ($oid in $objs.Keys) { [void]$ids.Add([string]$oid) }
+    return ,(Sorted-Ordinal $ids)
+}
+function Adv-CapIds($comp) {       # the capability ids a Component declares
+    $s = New-Object 'System.Collections.Generic.HashSet[string]' ([System.StringComparer]::Ordinal)
+    foreach ($c in @($comp['capabilities'])) { if ($null -ne $c) { [void]$s.Add([string]$c['id']) } }
+    return ,$s
+}
+function Pack-Errors($manifest, $objs, $pinnedDecl) {
+    # ADVICE-1..3 over a published pack -> list of @{rule; msg}. A manifest
+    # without a pack header is not a pack and is held to nothing here.
+    $errList = New-Object System.Collections.ArrayList
+    if (-not (Is-Map $manifest) -or -not (Ck-Truthy $manifest['pack'])) { return ,$errList }
+    $pack = $manifest['pack']; $pid0 = [string]$pack['id']
+    $origin = Uri-Origin $pid0
+    $ids = Adv-Ids $objs
+    foreach ($oid in $ids) {
+        $t = $objs[$oid].t
+        if ($t -cne 'component') {
+            $hint = ''
+            if ($t -ceq 'attestation') { $hint = ' (an attestation travels beside the manifest, D3.1)' }
+            Adv-Bad $errList 'ADVICE-1' $pid0 "$oid is a $t - an advice pack holds components only$hint"
+        }
+    }
+    $pub = [string]$pack['publisher']['ref']
+    if ((Uri-Origin $pub) -cne $origin) { Adv-Bad $errList 'ADVICE-2' $pid0 "publisher $pub is not under the pack's origin $origin" }
+    foreach ($oid in $ids) {
+        if ((Uri-Origin $oid) -cne $origin) { Adv-Bad $errList 'ADVICE-2' $pid0 "$oid is not under the pack's origin $origin" }
+    }
+    foreach ($oid in $ids) {
+        $facets = $objs[$oid].o['facets']
+        if ($null -eq $facets) { continue }
+        $keys = New-Object System.Collections.ArrayList
+        foreach ($k in $facets.Keys) { [void]$keys.Add([string]$k) }
+        foreach ($key in (Sorted-Ordinal $keys)) {
+            if ($key.StartsWith('private:')) { continue }     # declares [] by definition (D10)
+            $base = $key
+            if ($key.LastIndexOf('@') -ge 0) { $base = $key.Substring(0, $key.LastIndexOf('@')) }
+            $decl = $null
+            if ($STDLIB_DECL.ContainsKey($base)) { $decl = $STDLIB_DECL[$base] }
+            elseif ($null -ne $pinnedDecl -and $pinnedDecl.Contains($base)) { $decl = $pinnedDecl[$base] }
+            $classes = New-Object System.Collections.ArrayList
+            foreach ($c in @($decl)) { if ($null -ne $c) { [void]$classes.Add([string]$c) } }
+            if ($classes.Count -gt 0) {      # unregistered is Facet-Errors' failure, not ours
+                Adv-Bad $errList 'ADVICE-3' $oid "facet $key declares modifies-semantics ['$((Sorted-Ordinal $classes) -join "', '")'] - not allowed in an advice pack"
+            }
+        }
+    }
+    return ,$errList
+}
+function Capability-Errors($objs) {
+    # ADVICE-4..6 over every Component -> @{errs; notes}
+    $errList = New-Object System.Collections.ArrayList
+    $notes = New-Object System.Collections.ArrayList
+    foreach ($oid in (Adv-Ids $objs)) {
+        if ($objs[$oid].t -cne 'component') { continue }
+        $o = $objs[$oid].o
+        $seen = New-Object 'System.Collections.Generic.HashSet[string]' ([System.StringComparer]::Ordinal)
+        $dups = New-Object 'System.Collections.Generic.SortedSet[string]' ([System.StringComparer]::Ordinal)
+        foreach ($c in @($o['capabilities'])) {
+            if ($null -eq $c) { continue }
+            if (-not $seen.Add([string]$c['id'])) { [void]$dups.Add([string]$c['id']) }
+        }
+        foreach ($n in $dups) { Adv-Bad $errList 'ADVICE-4' $oid "capability id '$n' is used twice" }
+        $untyped = 0
+        foreach ($c in @($o['capabilities'])) {
+            if ($null -eq $c) { continue }
+            $at = "$oid#$($c['id'])"
+            $rref = $c['requirement-ref']
+            if ($null -eq $rref) {
+                if (Ck-Truthy $c['statement-ids']) { Adv-Bad $errList 'ADVICE-5' $at 'statement-ids without a requirement-ref' }
+                continue
+            }
+            $req = Ck-Obj $objs $rref
+            if ($null -eq $req) { $untyped++; continue }
+            if ($req.t -cne 'requirement') {
+                Adv-Bad $errList 'ADVICE-5' $at "requirement-ref resolves to a $($req.t), not a Requirement: $rref"; continue }
+            $sids = New-Object 'System.Collections.Generic.HashSet[string]' ([System.StringComparer]::Ordinal)
+            foreach ($s in $req.o['statements']) { [void]$sids.Add([string]$s['id']) }
+            $cover = New-Object 'System.Collections.Generic.HashSet[string]' ([System.StringComparer]::Ordinal)
+            if (Ck-Truthy $c['statement-ids']) {
+                foreach ($sid in $c['statement-ids']) {
+                    if (-not $sids.Contains([string]$sid)) { Adv-Bad $errList 'ADVICE-5' $at "statement-id '$sid' names no statement of $rref" }
+                    [void]$cover.Add([string]$sid)
+                }
+            } else { foreach ($sid in $sids) { [void]$cover.Add($sid) } }
+            $decls = (New-Map)
+            foreach ($s in $req.o['statements']) {
+                if (-not $cover.Contains([string]$s['id'])) { continue }
+                foreach ($pd in @($s['parameters'])) {
+                    if ($null -eq $pd) { continue }
+                    $pn = [string]$pd['name']
+                    if (-not $decls.ContainsKey($pn)) { $decls[$pn] = New-Object System.Collections.ArrayList }
+                    [void]$decls[$pn].Add($pd)
+                }
+            }
+            $binds = $c['parameter-bindings']
+            if (Is-Map $binds) {
+                $names = New-Object System.Collections.ArrayList
+                foreach ($k in $binds.Keys) { [void]$names.Add([string]$k) }
+                foreach ($pn in (Sorted-Ordinal $names)) {
+                    $found = 0
+                    if ($decls.ContainsKey($pn)) { $found = $decls[$pn].Count }
+                    if ($found -ne 1) {
+                        Adv-Bad $errList 'ADVICE-6' $at "binds parameter '$pn', which is declared $found times on the covered statements of $rref"; continue }
+                    $verdict = Param-Check $decls[$pn][0] $binds[$pn]
+                    if ($verdict -cne 'valid') {
+                        $how = 'outside the declared space'
+                        if ($verdict -ceq 'invalid') { $how = 'of the wrong kind' }
+                        Adv-Bad $errList 'ADVICE-6' $at "binds parameter '$pn' to a value $how"
+                    }
+                }
+            }
+        }
+        if ($untyped -gt 0) { [void]$notes.Add("${oid}: $untyped capability requirement-ref(s) outside the bundle - not typed (resolves-if-present)") }
+    }
+    return @{errs = $errList; notes = $notes}
+}
+function Split-CapRef([string]$ref, [string]$own) {
+    # a bare id names a capability of the edge's own component;
+    # <component-id>#<capability-id> names one of that component
+    $i = $ref.LastIndexOf('#')
+    if ($i -ge 0) { return @($ref.Substring(0, $i), $ref.Substring($i + 1)) }
+    return @($own, $ref)
+}
+function Capability-Ref-Errors($objs) {
+    # ADVICE-7 over every Implementation -> list of @{rule; msg}
+    $errList = New-Object System.Collections.ArrayList
+    foreach ($oid in (Adv-Ids $objs)) {
+        if ($objs[$oid].t -cne 'implementation') { continue }
+        $o = $objs[$oid].o
+        $own = [string]$o['component-ref']
+        foreach ($sb in @($o['satisfied-by'])) {
+            if ($null -eq $sb -or -not (Is-Map $sb) -or -not $sb.Contains('capability-ref')) { continue }
+            $ref = [string]$sb['capability-ref']
+            $sp = Split-CapRef $ref $own
+            $cid = $sp[0]; $cap = $sp[1]
+            $comp = Ck-Obj $objs $cid
+            if ($null -eq $comp) {
+                if ($cid -cne $own) {      # the edge's own component is Closure-Errors' failure
+                    $shown = $cid; if ($cid -ceq '') { $shown = '(none)' }
+                    Adv-Bad $errList 'ADVICE-7' $oid "cites $ref, but component $shown is not in the bundle"
+                }
+                continue
+            }
+            if ($comp.t -cne 'component') {
+                Adv-Bad $errList 'ADVICE-7' $oid "cites $ref, which resolves to a $($comp.t), not a Component"; continue }
+            if (-not (Adv-CapIds $comp.o).Contains($cap)) {
+                Adv-Bad $errList 'ADVICE-7' $oid "cites capability '$cap', which $cid does not declare"; continue }
+            if ($cid -cne $own) {
+                $owner = Ck-Obj $objs $own
+                if ($null -ne $owner -and $owner.t -ceq 'component') {
+                    $isMember = $false
+                    foreach ($m in @($owner.o['members'])) { if ($null -ne $m -and (Ck-SEq $m['component-ref'] $cid)) { $isMember = $true } }
+                    if (-not $isMember) { Adv-Bad $errList 'ADVICE-7' $oid "cites $ref, but $cid is not a member of $own" }
+                }
+            }
+        }
+    }
+    return ,$errList
+}
+function Read-Kept-Packs([string]$bdir) {
+    # -> list of @{name; raw} for the pack manifests a bundle keeps
+    $out = New-Object System.Collections.ArrayList
+    $d = Join-Path $bdir ($PACK_STORE.TrimEnd('/').Replace('/', '\'))
+    if (-not (Test-Path $d -PathType Container)) { return ,$out }
+    foreach ($f in (Get-ChildItem $d -File | Sort-Object Name)) {
+        [void]$out.Add(@{name = $f.Name; raw = [System.IO.File]::ReadAllBytes($f.FullName)}) }
+    return ,$out
+}
+function Kept-Pack-Errors($kept, $manifest, $objs) {
+    # ADVICE-8..10 -> @{errs; packs} ; packs: the well-formed ones, @{name; km}
+    $errList = New-Object System.Collections.ArrayList
+    $packs = New-Object System.Collections.ArrayList
+    $names = New-Object System.Collections.ArrayList
+    $byName = (New-Map)
+    foreach ($k in @($kept)) { if ($null -ne $k) { [void]$names.Add([string]$k.name); $byName[[string]$k.name] = $k } }
+    foreach ($name in (Sorted-Ordinal $names)) {
+        $raw = [byte[]]$byName[$name].raw
+        $where = $PACK_STORE + $name
+        if ((Sha256-Hex $raw).Substring(7) -cne $name) { Adv-Bad $errList 'ADVICE-8' $where 'does not match its name'; continue }
+        $km = $null
+        try { $km = Parse-Json ([System.Text.Encoding]::UTF8.GetString($raw)) }
+        catch { Adv-Bad $errList 'ADVICE-8' $where 'is not readable JSON'; continue }
+        if (-not (Is-Map $km) -or -not (Test-Schema $DEFS['contentManifest'] $km) -or -not $km.Contains('pack')) {
+            Adv-Bad $errList 'ADVICE-8' $where 'is not a content manifest with a pack header'; continue }
+        [void]$packs.Add(@{name = $name; km = $km})
+    }
+    if (Is-Map $manifest) {
+        foreach ($e in @($manifest['objects'])) {
+            if ($null -eq $e -or -not (Is-Map $e)) { continue }
+            $p = [string]$e['path']
+            if ($p.StartsWith($PACK_STORE)) { Adv-Bad $errList 'ADVICE-8' $p "is listed in the bundle's manifest" }
+        }
+    }
+    $release = (New-Map); $owner = (New-Map)
+    foreach ($pk in $packs) {
+        $km = $pk.km
+        $pid0 = [string]$km['pack']['id']; $rel = [string]$km['pack']['version']
+        if ($release.ContainsKey($pid0)) {
+            Adv-Bad $errList 'ADVICE-10' $pid0 "releases $($release[$pid0]) and $rel are both in the bundle"; continue }
+        $release[$pid0] = $rel
+        foreach ($e in @($km['objects'])) {
+            if ($null -eq $e) { continue }
+            $eid = [string]$e['id']
+            if ($owner.ContainsKey($eid)) {
+                Adv-Bad $errList 'ADVICE-10' $eid "is listed by two kept manifests: $($owner[$eid]) and $pid0"; continue }
+            $owner[$eid] = $pid0
+            $tgt = Ck-Obj $objs $eid
+            if ($null -eq $tgt) {
+                Adv-Bad $errList 'ADVICE-9' $eid "is listed by release $rel of $pid0 and is not in the bundle" }
+            elseif (-not (Ck-SEq $tgt.o['version'] $e['version'])) {
+                Adv-Bad $errList 'ADVICE-9' $eid "is at version $($tgt.o['version']), release $rel of $pid0 lists $($e['version'])" }
+            elseif ((SDig $tgt.o) -cne [string]$e['semantic-digest']) {
+                Adv-Bad $errList 'ADVICE-9' $eid "differs from release $rel of $pid0 (semantic digest) - the vendor's advice was edited after import" }
+        }
+    }
+    return @{errs = $errList; packs = $packs}
+}
+function Pack-Publisher($pack, [string]$mdigest, $objs, $envelopes, $trusted, $notes) {
+    # claimed | proven: the same two words, and the same envelope check, as
+    # the Tailoring tier (Derive-Tier). Proven needs an Attestation whose
+    # signer has the pack's origin and which binds this manifest's digest;
+    # in verification mode its envelope must verify under a trusted key.
+    $origin = Uri-Origin ([string]$pack['id'])
+    foreach ($oid in (Adv-Ids $objs)) {
+        $o = $objs[$oid].o
+        if ($objs[$oid].t -cne 'attestation') { continue }
+        if ((Uri-Origin ([string]$o['signer'])) -cne $origin) { continue }
+        if (-not (Ck-SEq $o['content-manifest-digest'] $mdigest)) { continue }
+        if ($null -ne $trusted) {
+            $env = $null
+            if ($null -ne $envelopes -and $o.Contains('envelope-ref')) { $env = $envelopes[$o['envelope-ref']] }
+            $st = 'error'; $why = 'unsigned attestation (no envelope) cannot prove in verification mode'
+            if ($null -ne $env) { $r = Verify-Envelope $env $o $trusted; $st = $r[0]; $why = $r[1] }
+            if ($st -cne 'verified') {
+                if ($null -ne $notes) { [void]$notes.Add("${oid}: $why") }
+                continue
+            }
+        }
+        return 'proven'
+    }
+    return 'claimed'
+}
+function Compose-Advice($aObjs, $aKept, $bManifest, [string]$bDigest, $bObjs, $pinnedDecl) {
+    # ADVICE-11: what importing pack B into bundle A does. Nothing is
+    # written; the result is the plan and its receipt.
+    $R = @{result = 'refused'; added = (New-Object System.Collections.ArrayList); replaced = (New-Object System.Collections.ArrayList)
+           removed = (New-Object System.Collections.ArrayList); dangling = (New-Object System.Collections.ArrayList)
+           capabilities = (New-OMap); unchanged = $aObjs.Count; errors = (New-Object System.Collections.ArrayList)}
+    $pack = $null
+    if ((Is-Map $bManifest) -and (Ck-Truthy $bManifest['pack'])) { $pack = $bManifest['pack'] }
+    if ($null -eq $pack) {
+        Adv-Bad $R.errors 'ADVICE-11' '(import)' 'the manifest carries no pack header - this is not an advice pack'
+        return $R
+    }
+    foreach ($e in (Pack-Errors $bManifest $bObjs $pinnedDecl)) { [void]$R.errors.Add($e) }
+    foreach ($k in $aKept) { if ($k.name -ceq $bDigest) { $R.result = 'already-imported'; $R.errors.Clear(); return $R } }
+    $packId = [string]$pack['id']
+    $prev = 0
+    $owned = New-Object 'System.Collections.Generic.HashSet[string]' ([System.StringComparer]::Ordinal)
+    $other = (New-Map)
+    foreach ($k in $aKept) {
+        $samePack = ([string]$k.km['pack']['id'] -ceq $packId)
+        if ($samePack) { $prev++ }
+        foreach ($e in @($k.km['objects'])) {
+            if ($null -eq $e) { continue }
+            if ($samePack) { [void]$owned.Add([string]$e['id']) } else { $other[[string]$e['id']] = [string]$k.km['pack']['id'] }
+        }
+    }
+    foreach ($oid in (Adv-Ids $bObjs)) {
+        if (-not $aObjs.Contains($oid)) { [void]$R.added.Add($oid) }
+        elseif ($owned.Contains($oid)) { [void]$R.replaced.Add($oid) }
+        else {
+            $whose = "not part of $packId"
+            if ($other.ContainsKey($oid)) { $whose = "belongs to $($other[$oid])" }
+            Adv-Bad $R.errors 'ADVICE-11' $oid "is already in the set and $whose"
+        }
+    }
+    $gone = New-Object System.Collections.ArrayList
+    foreach ($oid in $owned) { if ($aObjs.Contains($oid) -and -not $bObjs.Contains($oid)) { [void]$gone.Add($oid) } }
+    foreach ($oid in (Sorted-Ordinal $gone)) { [void]$R.removed.Add($oid) }
+    foreach ($oid in $R.replaced) {
+        $old = (New-Map); $new = (New-Map)
+        foreach ($c in @($aObjs[$oid].o['capabilities'])) { if ($null -ne $c) { $old[[string]$c['id']] = $c } }
+        foreach ($c in @($bObjs[$oid].o['capabilities'])) { if ($null -ne $c) { $new[[string]$c['id']] = $c } }
+        $d = @{added = (New-Object System.Collections.ArrayList); removed = (New-Object System.Collections.ArrayList); changed = (New-Object System.Collections.ArrayList)}
+        foreach ($k in (Adv-Ids $new)) { if (-not $old.ContainsKey($k)) { [void]$d.added.Add($k) } }
+        foreach ($k in (Adv-Ids $old)) {
+            if (-not $new.ContainsKey($k)) { [void]$d.removed.Add($k) }
+            elseif ((Canonical $old[$k]) -cne (Canonical $new[$k])) { [void]$d.changed.Add($k) }
+        }
+        if (($d.added.Count + $d.removed.Count + $d.changed.Count) -gt 0) { $R.capabilities[$oid] = $d }
+    }
+    foreach ($iid in (Adv-Ids $aObjs)) {
+        if ($aObjs[$iid].t -cne 'implementation') { continue }
+        $o = $aObjs[$iid].o
+        foreach ($sb in @($o['satisfied-by'])) {
+            if ($null -eq $sb -or -not (Is-Map $sb) -or -not $sb.Contains('capability-ref')) { continue }
+            $ref = [string]$sb['capability-ref']
+            $sp = Split-CapRef $ref ([string]$o['component-ref'])
+            $cid = $sp[0]; $cap = $sp[1]
+            $dropped = ($R.removed -ccontains $cid)
+            if (-not $dropped -and ($R.replaced -ccontains $cid)) { $dropped = -not (Adv-CapIds $bObjs[$cid].o).Contains($cap) }
+            if ($dropped) { [void]$R.dangling.Add("$iid -> $ref") }
+        }
+    }
+    if ($R.errors.Count -gt 0) { return $R }
+    if ($prev -gt 0) { $R.result = 'replace' } else { $R.result = 'import' }
+    $R.unchanged = $aObjs.Count - $R.replaced.Count - $R.removed.Count
+    return $R
+}
+function Advice-Errors($manifest, $objs, $pinnedDecl, $kept) {
+    # everything ADVICE-1..10 says about one bundle -> @{errs; notes; packs}
+    $errList = New-Object System.Collections.ArrayList
+    $listed = (New-OMap)
+    if (Is-Map $manifest) {
+        foreach ($e in @($manifest['objects'])) {
+            if ($null -ne $e -and (Is-Map $e) -and $objs.Contains([string]$e['id'])) { $listed[[string]$e['id']] = $objs[[string]$e['id']] } }
+    }
+    foreach ($e in (Pack-Errors $manifest $listed $pinnedDecl)) { [void]$errList.Add($e) }
+    $ce = Capability-Errors $objs
+    foreach ($e in $ce.errs) { [void]$errList.Add($e) }
+    foreach ($e in (Capability-Ref-Errors $objs)) { [void]$errList.Add($e) }
+    $ke = Kept-Pack-Errors $kept $manifest $objs
+    foreach ($e in $ke.errs) { [void]$errList.Add($e) }
+    return @{errs = $errList; notes = $ce.notes; packs = $ke.packs}
+}
+function Adv-Typed($objects) {
+    $objs = (New-OMap); $untyped = New-Object System.Collections.ArrayList
+    foreach ($o in @($objects)) {
+        if ($null -eq $o) { continue }
+        $t = Infer-Single $o
+        if ($null -ne $t) { $objs[[string]$o['id']] = @{t = $t; o = $o} } else { [void]$untyped.Add([string]$o['id']) }
+    }
+    return @{objs = $objs; untyped = $untyped}
+}
+function Adv-Fill($manifest, $published) {
+    # a vector's manifest lists its objects by id; version and digests are
+    # COMPUTEd from the objects as published, so no literal goes stale
+    $byId = (New-Map)
+    foreach ($o in @($published)) { if ($null -ne $o) { $byId[[string]$o['id']] = $o } }
+    $m = Copy-Deep $manifest
+    foreach ($e in @($m['objects'])) {
+        if ($null -eq $e) { continue }
+        $src = $null
+        if ($byId.ContainsKey([string]$e['id'])) { $src = $byId[[string]$e['id']] }
+        if ((Ck-SEq $e['semantic-digest'] 'COMPUTE') -and $null -ne $src) { $e['semantic-digest'] = SDig $src }
+        if (-not $e.Contains('version')) { if ($null -ne $src) { $e['version'] = $src['version'] } else { $e['version'] = '1' } }
+        if (-not $e.Contains('package-digest')) { $e['package-digest'] = 'sha256:' + ('0' * 64) }
+        if (-not $e.Contains('path')) {
+            $id0 = [string]$e['id']
+            $e['path'] = 'objects/' + $id0.Substring($id0.LastIndexOf('/') + 1) + '.json' }
+    }
+    return $m
+}
+function Adv-Kept($caseKept) {
+    # -> list of @{name; raw} for a vector's kept manifests; the bytes are
+    # the manifest's canonical form, `name` overrides the computed name
+    $out = New-Object System.Collections.ArrayList
+    foreach ($k in @($caseKept)) {
+        if ($null -eq $k) { continue }
+        if ($k.Contains('raw')) { $raw = [System.Text.Encoding]::UTF8.GetBytes([string]$k['raw']) }
+        else { $raw = [System.Text.Encoding]::UTF8.GetBytes((Canonical (Adv-Fill $k['manifest'] $k['published']))) }
+        $name = (Sha256-Hex $raw).Substring(7)
+        if ($k.Contains('name')) { $name = [string]$k['name'] }
+        [void]$out.Add(@{name = $name; raw = $raw})
+    }
+    return ,$out
+}
+function Adv-Judge([string]$kind, $case, $errs, $notes, [bool]$extraOk, $untyped) {
+    $named = New-Object 'System.Collections.Generic.SortedSet[string]' ([System.StringComparer]::Ordinal)
+    foreach ($e in $errs) { [void]$named.Add($e.rule) }
+    $wantSet = New-Object 'System.Collections.Generic.SortedSet[string]' ([System.StringComparer]::Ordinal)
+    foreach ($r in @($case['expected-rules'])) { if ($null -ne $r) { [void]$wantSet.Add([string]$r) } }
+    $okc = ($extraOk -and @($untyped).Count -eq 0 -and $named.SetEquals($wantSet))
+    foreach ($frag in @($case['expected-frags'])) {
+        if ($null -eq $frag) { continue }
+        $hit = $false
+        foreach ($e in $errs) { if ($e.msg.Contains($frag)) { $hit = $true } }
+        if (-not $hit) { $okc = $false } }
+    foreach ($frag in @($case['expected-notes'])) {
+        if ($null -eq $frag) { continue }
+        $hit = $false
+        foreach ($n in @($notes)) { if ($null -ne $n -and $n.Contains($frag)) { $hit = $true } }
+        if (-not $hit) { $okc = $false } }
+    if ($okc) { OK 'advice' }
+    else {
+        $msgs = New-Object System.Collections.ArrayList
+        foreach ($e in $errs) { $m1 = $e.msg; if ($m1.Length -gt 150) { $m1 = $m1.Substring(0, 150) }; [void]$msgs.Add($m1) }
+        FAIL 'advice' "$kind $($case['name']): expected rules [$(@($case['expected-rules']) -join ',')] frags [$(@($case['expected-frags']) -join ' | ')], got [$(@($named) -join ',')] untyped [$(@($untyped) -join ',')] $(@($msgs) -join ' ~ ') notes $(@($notes) -join ' ~ ')" }
+}
+function Adv-SameList($got, $want) {
+    return ((@($got) -join "`n") -ceq (@($want) -join "`n")) -and (@($got).Count -eq @($want).Count)
+}
+function Run-Advice {
+    $v = Load-Vectors 'advice-vectors.json'
+    $none = New-Object System.Collections.ArrayList
+    foreach ($case in $v['shape-vectors']) {
+        $got = 'invalid'
+        if ($case['kind'] -ceq 'manifest') { if (Test-Schema $DEFS['contentManifest'] $case['document']) { $got = 'valid' } }
+        else {
+            $m = Infer-Types $case['document']
+            if (@($m).Count -eq 1 -and (Ck-SEq $m[0] $case['kind'])) { $got = 'valid' }
+        }
+        if ($got -ceq $case['expected']) { OK 'advice' } else { FAIL 'advice' "shape $($case['name']): expected $($case['expected']), got $got" }
+    }
+    foreach ($case in $v['pack-vectors']) {
+        $ty = Adv-Typed $case['objects']
+        $m = Adv-Fill $case['manifest'] $case['objects']
+        $errs = New-Object System.Collections.ArrayList
+        if (-not (Test-Schema $DEFS['contentManifest'] $m)) { [void]$errs.Add(@{rule = 'SCHEMA'; msg = 'manifest schema violation'}) }
+        else {
+            foreach ($e in (Pack-Errors $m $ty.objs $case['declared'])) { [void]$errs.Add($e) }
+            foreach ($e in (Kernel-Pin-Errors $m $ty.objs)) { [void]$errs.Add(@{rule = 'KERNEL-1'; msg = [string]$e}) }
+        }
+        Adv-Judge 'pack' $case $errs $none $true $ty.untyped
+    }
+    foreach ($case in $v['graph-vectors']) {
+        $ty = Adv-Typed $case['objects']
+        $ce = Capability-Errors $ty.objs
+        $errs = New-Object System.Collections.ArrayList
+        foreach ($e in $ce.errs) { [void]$errs.Add($e) }
+        foreach ($e in (Capability-Ref-Errors $ty.objs)) { [void]$errs.Add($e) }
+        Adv-Judge 'graph' $case $errs $ce.notes $true $ty.untyped
+    }
+    foreach ($case in $v['kept-vectors']) {
+        $ty = Adv-Typed $case['objects']
+        $ke = Kept-Pack-Errors (Adv-Kept $case['kept']) $case['manifest'] $ty.objs
+        $extra = $true
+        if ($case.Contains('expected-packs')) { $extra = ($ke.packs.Count -eq $case['expected-packs']) }
+        Adv-Judge 'kept' $case $ke.errs $none $extra $ty.untyped
+    }
+    foreach ($case in $v['publisher-vectors']) {
+        $m = Adv-Fill $case['manifest'] $case['published']
+        $mdig = Sha256-Hex ([System.Text.Encoding]::UTF8.GetBytes((Canonical $m)))
+        $subjects = Copy-Deep $case['objects']
+        foreach ($o in @($subjects)) { if ($null -ne $o -and (Ck-SEq $o['content-manifest-digest'] 'COMPUTE')) { $o['content-manifest-digest'] = $mdig } }
+        $ty = Adv-Typed $subjects
+        $got = Pack-Publisher $m['pack'] $mdig $ty.objs $case['envelopes'] $case['trusted-keys'] $null
+        if ($got -ceq $case['expected'] -and $ty.untyped.Count -eq 0) { OK 'advice' }
+        else { FAIL 'advice' "publisher $($case['name']): expected $($case['expected']), got $got untyped [$(@($ty.untyped) -join ',')]" }
+    }
+    foreach ($case in $v['import-vectors']) {
+        $a = Adv-Typed $case['a']['objects']
+        $aPacks = (Kept-Pack-Errors (Adv-Kept $case['a']['kept']) $null (New-OMap)).packs
+        $b = Adv-Typed $case['b']['objects']
+        $bm = Adv-Fill $case['b']['manifest'] $case['b']['objects']
+        $bdig = (Sha256-Hex ([System.Text.Encoding]::UTF8.GetBytes((Canonical $bm)))).Substring(7)
+        $R = Compose-Advice $a.objs $aPacks $bm $bdig $b.objs $null
+        $exp = $case['expected']
+        $same = $true
+        if ($exp.Contains('result') -and -not (Ck-SEq $R.result $exp['result'])) { $same = $false }
+        foreach ($k in @('added', 'replaced', 'removed', 'dangling')) {
+            if ($exp.Contains($k) -and -not (Adv-SameList $R[$k] $exp[$k])) { $same = $false } }
+        if ($exp.Contains('unchanged') -and ($R.unchanged -ne $exp['unchanged'])) { $same = $false }
+        $unt = New-Object System.Collections.ArrayList
+        foreach ($x in $a.untyped) { [void]$unt.Add($x) }; foreach ($x in $b.untyped) { [void]$unt.Add($x) }
+        Adv-Judge 'import' $case $R.errors $none $same $unt
+    }
+}
+function Advice-Report([string]$section, [string]$bdir, $manifest, [byte[]]$rawManifest, $objs, $pinnedDecl, $envelopes, [switch]$Flat) {
+    # CP-ADVICE-1 for one bundle: ADVICE-1..10, and who published what
+    $ae = Advice-Errors $manifest $objs $pinnedDecl (Read-Kept-Packs $bdir)
+    foreach ($e in $ae.errs) { FAIL $section $e.msg }
+    foreach ($n in $ae.notes) { Write-Host "    note: $n" }
+    $atts = (New-OMap)
+    foreach ($oid in $objs.Keys) { if ($objs[$oid].t -ceq 'attestation') { $atts[[string]$oid] = $objs[$oid] } }
+    $isPack = ((Is-Map $manifest) -and (Ck-Truthy $manifest['pack']) -and (Test-Schema $DEFS['contentManifest'] $manifest))
+    if ($isPack -and -not $Flat) {
+        # Attestations BESIDE the manifest (D3.1): JSON files in the manifest's own
+        # folder that it does not list and that type as an Attestation
+        $listedPaths = New-Object 'System.Collections.Generic.HashSet[string]' ([System.StringComparer]::Ordinal)
+        foreach ($e in @($manifest['objects'])) { if ($null -ne $e) { [void]$listedPaths.Add([string]$e['path']) } }
+        foreach ($f in (Get-ChildItem $bdir -File -Filter *.json | Sort-Object Name)) {
+            if ($f.Name -ceq 'content-manifest.json' -or $listedPaths.Contains($f.Name)) { continue }
+            try { $o = Read-Json $f.FullName } catch { continue }
+            if ((Is-Map $o) -and ((Infer-Single $o) -ceq 'attestation')) { $atts[[string]$o['id']] = @{t = 'attestation'; o = $o} }
+        }
+    }
+    $envs = (New-Map)
+    if ($null -ne $envelopes) { foreach ($k in $envelopes.Keys) { $envs[[string]$k] = $envelopes[$k] } }
+    foreach ($oid in $atts.Keys) {
+        $a = $atts[$oid].o
+        if (-not $a.Contains('envelope-ref')) { continue }
+        $ref = [string]$a['envelope-ref']
+        $ep = Join-Path $bdir $ref
+        if (-not $envs.ContainsKey($ref) -and (Test-Path $ep -PathType Leaf)) { try { $envs[$ref] = Read-Json $ep } catch { } }
+    }
+    $jobs = New-Object System.Collections.ArrayList
+    if ($isPack) { [void]$jobs.Add(@{pack = $manifest['pack']; mdig = (Sha256-Hex $rawManifest); where = 'pack'}) }
+    foreach ($pk in $ae.packs) {
+        [void]$jobs.Add(@{pack = $pk.km['pack']; mdig = ('sha256:' + $pk.name); where = "kept pack ($(@($pk.km['objects']).Count) object(s))"}) }
+    foreach ($j in $jobs) {
+        $pn = New-Object System.Collections.ArrayList
+        $st = Pack-Publisher $j.pack $j.mdig $atts $envs $TRUSTED $pn
+        $tag = 'publisher CLAIMED [header and prefix - UNPROVEN]'
+        if ($st -ceq 'proven') {
+            if ($null -ne $TRUSTED) { $tag = 'publisher PROVEN [attestation binds the manifest + signature VERIFIED]' }
+            else { $tag = 'publisher PROVEN [attestation binds the manifest; UNVERIFIED - run with --trusted-keys]' }
+        }
+        Write-Host "    $($j.where): $($j.pack['id']) release $($j.pack['version']) by $($j.pack['publisher']['ref']) = $tag"
+        foreach ($n in $pn) { Write-Host "          $n" }
+    }
+}
+
 # ---------------- bundle validation ----------------
 $TRUSTED = $null
 if ($TrustedKeys -ne '') { $TRUSTED = Read-Json $TrustedKeys }
@@ -2918,6 +3469,7 @@ function Validate-Bundle([string]$bdir, [switch]$Flat) {
     $mpath = Join-Path $bdir 'content-manifest.json'
     if (-not (Test-Path $mpath)) { FAIL $section 'no content-manifest.json'; return }
     $manifest = Read-Json $mpath
+    $rawManifest = [System.IO.File]::ReadAllBytes($mpath)
     if (Test-Schema $DEFS['contentManifest'] $manifest) { OK $section } else { FAIL $section 'manifest schema violation' }
     $typec = (New-Map)
     $seenIds = (New-Map)
@@ -3058,6 +3610,8 @@ function Validate-Bundle([string]$bdir, [switch]$Flat) {
     $ce = Check-Errors $bundleObjs @{dir = $bdir}
     foreach ($e in $ce.errs) { FAIL $section $e.msg }
     foreach ($n in $ce.notes) { Write-Host "    note: $n" }
+    # CP-ADVICE-1: pack rules, capabilities and the edges that cite them, kept manifests
+    Advice-Report $section $bdir $manifest $rawManifest $bundleObjs $pinnedDecl $envelopes -Flat:$Flat
     foreach ($oid in $bundleObjs.Keys) {
         if ($bundleObjs[$oid].t -eq 'tailoring') {
             $tier = Derive-Tier $bundleObjs[$oid].o $bundleObjs $envelopes $TRUSTED
@@ -3084,9 +3638,9 @@ $SW = [System.Diagnostics.Stopwatch]::StartNew()
 Write-Host '== conformance corpus (validate_core.ps1 - the weekend implementation) =='
 Run-Jcs; Run-Modality; Run-Parameters; Run-Tailoring; Run-Attestation; Run-Facets
 Run-References; Run-Lifecycle; Run-Tiers; Run-Dsse; Run-Composition; Run-Conditional
-Run-Risk; Run-Kernel; Run-Scale; Run-Check
+Run-Risk; Run-Kernel; Run-Scale; Run-Check; Run-Advice
 $FAMILIES = @('jcs', 'modality', 'parameter', 'tailoring', 'attestation', 'facet',
-              'reference', 'lifecycle', 'tier', 'dsse', 'composition', 'conditional', 'risk', 'kernel', 'scale', 'check')
+              'reference', 'lifecycle', 'tier', 'dsse', 'composition', 'conditional', 'risk', 'kernel', 'scale', 'check', 'advice')
 foreach ($k in $FAMILIES) {
     $p = 0; if ($COUNTS.ContainsKey($k)) { $p = $COUNTS[$k] }
     $f = 0; if ($COUNTS.ContainsKey("${k}:FAIL")) { $f = $COUNTS["${k}:FAIL"] }
@@ -3104,6 +3658,10 @@ if (-not $VectorsOnly) {
         foreach ($corpus in (Get-ChildItem $ce -Directory | Sort-Object Name)) {
             foreach ($d in (Get-ChildItem $corpus.FullName -Directory | Sort-Object Name)) {
                 if ($d.Name.EndsWith('-bundle')) { $targets += $d.FullName } } }
+        # CP-ADVICE-1: the worked advice pack(s) of the skill
+        $ep = Join-Path $SKILL 'example-packs'
+        if (Test-Path $ep -PathType Container) {
+            foreach ($d in (Get-ChildItem $ep -Directory | Sort-Object Name)) { $targets += $d.FullName } }
     }
     foreach ($t in $targets) { Validate-Bundle (Resolve-Path $t).Path }
     # The skill's example bundle belongs to the default run, as it does in
