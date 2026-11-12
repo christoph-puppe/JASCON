@@ -1,6 +1,6 @@
 # JASCON — "Kernel + Registered Facets"
 ## Specification 2.0.0-rc.2
-### release candidate, 2026-11-12 · the 1.0.0 text (released 2026-07-22) amended by CP-RISK-1 (Risk, the tenth kernel type) and CP-CHECK-1 (Check, the eleventh) · NOT tagged — the Python reference and the app's port are green on this candidate; the PowerShell twin has not been executed with the two changes of 2026-11-12 (IV.5b); the tag is the author's decision
+### release candidate, 2026-11-12 · the 1.0.0 text (released 2026-07-22) amended by CP-RISK-1 (Risk, the tenth kernel type) and CP-CHECK-1 (Check, the eleventh) · NOT tagged — the Python reference, the PowerShell twin and the app's port are green on this candidate (IV.5b); the tag is the author's decision
 
 > **What changed since rc.1 (2026-11-12).** One decision is new — **D24**,
 > `Check` as the eleventh kernel type with `check-verdict` as the tenth
@@ -59,8 +59,7 @@ the five shipped bundles and on the example folder; the app's JavaScript
 port green on the same vectors. **Not yet measured, said here rather than
 below the fold:** Risk's two implementations share one author — the
 PowerShell twin, green on 2026-11-11, is independent in language and
-runtime only (IV.5b), and it has not been executed with the twelfth
-comparator and the per-resource counts of D24; Risk and Check entered the
+runtime only (IV.5b); Risk and Check entered the
 kernel under D22's consumer-side clause, which no census authority's data
 supports by construction (D22); Check has a worked example and two counted
 check corpora, and no runner and no converted check corpus (D24); and the coverage figures inherited from 1.0.0 count
@@ -1322,9 +1321,7 @@ and Kubernetes; no cloud API was counted, and a correction after the tag
 costs a major. 29 of 510 counted rules stay manual. Nothing in the
 repository runs a collector, and `collector@1` carries the source of an
 `http-api` collector as free text, which a runner cannot execute as it
-stands. Until the PowerShell twin has run with the twelfth comparator and
-the per-resource counts, those two have one executed validator and the
-app's port.
+stands. Both validators were written by one author.
 
 **Rejected.** *Criteria in a facet on a Requirement the check author
 owns, promoted later* (an independent design review during planning):
@@ -1579,16 +1576,18 @@ and of Check:
    shipped bundles (3,715 objects, both digests each), and the example
    folder (24 objects, two Checks, two runs, the evidence store) — ALL
    GREEN on 2026-11-12.
-3. **Second implementation.** ◐ `validate_core.ps1` ran on Windows
-   PowerShell 5.1 on 2026-11-11: 415 / 415 in sixteen families with Check
-   as then proposed (`check`: 156), the five bundles and the example
-   folder, every count equal to the Python reference's. The twelfth
-   comparator, the per-resource counts and the surrogate rule (32 vectors)
-   were ported on
-   2026-11-12 **without a runtime and have not been executed** (backlog
-   #60). **This blocks the tag.** Both implementations have one author:
-   their independence is language and runtime. A third, the JavaScript
-   port in `jascon-app/`, passes all sixteen families including the 188.
+3. **Second implementation.** ✓ `validate_core.ps1` ran on Windows
+   PowerShell 5.1 on 2026-11-11 with Check as then proposed (415 / 415)
+   and again on 2026-11-12 with the twelfth comparator, the per-resource
+   counts and the surrogate rule: `check: 188 pass, 0 fail`, the five
+   bundles and the example folder, every count equal to the Python
+   reference's (backlog #60, closed). That second run was made on the
+   tree that also holds the advice-pack proposal, so its total is 518
+   vectors in 17 families, of which the 447 of this candidate are a
+   part (`drafts/CP-ADVICE-1.md` §13.4). Both implementations have one
+   author: their independence is language and runtime. A third, the
+   JavaScript port in `jascon-app/`, passes the sixteen families of this
+   candidate including the 188.
 4. **Corpus.** ◐ Risk: one, IFA, two Risk objects — enough to exercise
    the record's sourced half and to measure what the source lacks; not
    enough to exercise `rating`, `acceptance`, the later states, or
@@ -1662,8 +1661,7 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
   given, the per-resource counts.
 - **Two reference validators**: `validate_core.py` (Python, jsonschema
   only) — green; `validate_core.ps1` (PowerShell 5.1, zero dependencies)
-  — green on 2026-11-11 with 415 vectors; the twelfth comparator and the
-  per-resource counts ported and **not executed** (IV.5b item 3).
+  — green on 2026-11-12 with every vector of this candidate (IV.5b item 3).
 - **Bidirectional export**: `export_oscal.py` — as at 1.0.0 (OSCAL 1.2.2
   out, generic re-import, 5,886/5,886 round-trip measured on the ten
   catalog bundles then present); not re-run.
@@ -1716,10 +1714,9 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
    Risk and Check (author, 2026-11-12).
 2. **The Risk rules toward imported data** — ✓ decided: kept strict (D23).
 3. **Licence** — ✓ Apache-2.0; corpus terms reviewed (§2).
-4. **The second implementation** — ◐ ran green on 2026-11-11 (415
-   vectors). ☐ Run `validate_core.ps1` again on Windows PowerShell 5.1
-   with the changes of 2026-11-12; expect `check: 188 pass, 0 fail`, 447
-   in all, and ALL GREEN (backlog #60). **Blocks the tag.**
+4. **The second implementation** — ✓ ran green on 2026-11-11 (415
+   vectors) and on 2026-11-12 with the changes of that day (`check: 188`;
+   backlog #60, closed).
 5. **Decided** — ✓ a kernel-version pin in the manifest (#44, D3.6); ✓
    D22 has a consumer-side clause (#48); ✓ the six open points of
    CP-CHECK-1; ✓ every machine identifier carries `jascon` (register,
@@ -1742,4 +1739,7 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
    than it is** — a runner that executes collectors and writes evidence;
    a declared request format for `http-api` collectors in `collector@1`;
    a census of checks against cloud APIs.
-8. **Tag `v2.0.0`** — on the author's go, after item 4.
+8. **Tag `v2.0.0`** — on the author's go. Nothing in this list blocks it
+   any more; what is undecided is item 5, and the advice-pack proposal
+   (`drafts/CP-ADVICE-1.md`), whose fields are in the schema while its
+   eight open points are not answered.

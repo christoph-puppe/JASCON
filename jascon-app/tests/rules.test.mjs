@@ -1,6 +1,6 @@
 /* Runs the conformance vectors of jascon/conformance/ against
    jascon-rules.js, family by family. All sixteen families are ported. A
-   family that is listed in PORTED must pass completely; NOT_PORTED is empty
+   family that is listed in PORTED must pass completely; NOT_PORTED names the families the app does not implement (today: advice)
    and stays as the place to name a family that is not ported yet. The last
    test fails when a vector file appears that is in neither list, so a new
    family cannot go unnoticed. */
@@ -21,7 +21,7 @@ const vectors = name => JSON.parse(fs.readFileSync(path.join(CONF, name + "-vect
 const asObjs = list => new Map(list.map(o => [o.id, { type: core.jscInferType(o), obj: o }]));
 
 const PORTED = ["attestation", "check", "composition", "conditional", "dsse", "facet", "jcs", "kernel", "lifecycle", "modality", "parameter", "reference", "risk", "scale", "tailoring", "tier"];
-const NOT_PORTED = [];
+const NOT_PORTED = ["advice"];   // CP-ADVICE-1 (proposed): the app does not read advice packs
 /* Where a vector carries expected-frag (singular), it asserts the wording of
    one Python schema library's diagnostic; the vector files call that
    advisory and expected-rule the portable assertion, and so do these tests.

@@ -394,7 +394,9 @@ text in that language, the English text is shown, then whatever is there.
   operation law), reference, lifecycle, kernel, facet, attestation, risk,
   scale, DSSE signatures, the composition of two bundles,
   conditional-apply, and the Check type of `drafts/CP-CHECK-1.md`
-  (I-Regexp, check-verdict, CHECK-1 to CHECK-15 with the evidence chain). What the page does not judge: conditional-apply
+  (I-Regexp, check-verdict, CHECK-1 to CHECK-15 with the evidence chain). What the page does not judge: advice packs (the
+  rules ADVICE-1 to ADVICE-11 of the proposed `drafts/CP-ADVICE-1.md` are not
+  ported, and the app has no import for a pack), conditional-apply
   instances (no bundle has a place to carry one; the reference validator does
   not run them on a bundle either) and the bytes of a bundle on disk (line
   ends, files the manifest does not list). In a case of doubt run the Python

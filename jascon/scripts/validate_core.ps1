@@ -37,15 +37,15 @@ run as a state-set simulation, never handed to .NET Regex), check-verdict
 (B.1.10), CHECK-1..15 with every recorded verdict recomputed and the
 evidence chain verified in the store beside the manifest. 415 vectors in
 16 families pass (check: 156), the same counts as validate_core.py.
-NOT YET EXECUTED (2026-11-12): the twelfth comparator `not-equals`, the
-per-resource counts of B.1.10 step 5 (Check-Each, Ck-Percent, the
-`expected-resources` of the verdict vectors) and the refusal of surrogate
-code points in a pattern (RFC 9485 as published; `pattern-codepoints` in
-the regex vectors) were ported from the Python reference without a
-PowerShell runtime. The Python reference and the app's
-port pass 188 check vectors (447 in all); this file has to show the same
-counts on Windows PowerShell 5.1 before the two-implementation gate holds
-again. Until then the counts above are those of 2026-11-11.
+EXECUTED 2026-11-12 on Windows PowerShell 5.1: the twelfth comparator
+`not-equals`, the per-resource counts of B.1.10 step 5 (Check-Each,
+Ck-Percent, the `expected-resources` of the verdict vectors) and the
+refusal of surrogate code points in a pattern (RFC 9485 as published;
+`pattern-codepoints` in the regex vectors) had been ported without a
+PowerShell runtime. They ran with the advice-pack proposal in the tree:
+518 vectors in 17 families (check: 188), the five bundles, the worked
+pack and the example folder, the same counts as validate_core.py
+(drafts/CP-ADVICE-1.md, 13.4). Backlog #60 is closed by that run.
 KNOWN LIMITS of this port: a general category (\p{..}) is read from the
 HOST's Unicode database, .NET here and unicodedata there, so a code point
 assigned after either database was built can match differently; an
