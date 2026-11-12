@@ -266,8 +266,13 @@ never to a library's message text.
 
 One check belongs to the manifest walk and is triggered here: a bundle
 in which you have just typed a Risk, or a Finding with `risk-refs`,
-must pin `kernel-version` 2.0.0 (KERNEL-1). `kernel-vectors.json` has
-the nine cases.
+must pin `kernel-version` 2.0.0 (KERNEL-1). The same holds for a Check,
+for a manifest with a pack header, and for a Component that carries
+`product-version`. `kernel-vectors.json` has eleven cases for the pin
+and fourteen `shape-vectors` for three fields 2.0.0 typed or added: a
+Deviation's `opened` (DATE-1), the `due` of a Finding's action (DATE-2)
+and `product-version`. The schema refuses; your code only names the
+rule, as for RISK-1 to RISK-6.
 
 **Third, close and type the edges.** Four references on a Risk are
 closure-required and typed: `treatments[].requirement-ref` names a
@@ -428,6 +433,37 @@ it was asked to check has stopped being a validator.
 
 The corpus for this sitting is `check-vectors.json`: 188 cases, of
 which 42 are for the engine alone.
+
+## 12.8b A short fifth sitting: advice packs *(2.0.0)*
+
+No type and no primitive (D25, Chapter 9.7): eleven rules over things
+you already load. Three places need code.
+
+**The manifest walk.** A manifest with a `pack` header is an advice
+pack. Every object it lists is a Component (ADVICE-1), every id shares
+one origin with `pack.id` and `publisher.ref` (ADVICE-2), no facet
+declares a semantics class (ADVICE-3). Read the Attestations that lie
+beside a pack's manifest: the pack may not list them, and without them
+you cannot say whether the publisher is claimed or proven.
+
+**The graph.** Capability ids are unique (ADVICE-4); clause ids and
+suggested values are checked only where the requirement is in the bundle
+(ADVICE-5, ADVICE-6); a `capability-ref` is a bare id of the edge's own
+component or `<component-id>#<capability-id>` of a member (ADVICE-7).
+Run ADVICE-7 over old content before you trust it: on the shipped
+bundles it found one edge that cited a capability its own component did
+not declare.
+
+**The store.** Files under `packs/sha256/` are kept manifests: the name
+is the SHA-256 of the bytes, the content is a manifest with a pack
+header, and the bundle's own manifest does not list them (ADVICE-8).
+Each object a kept manifest lists is in the bundle at that version and
+semantic digest (ADVICE-9); one kept manifest per pack, one pack per
+object (ADVICE-10). Composing a pack into a set is the composition
+engine of 12.6 with one lawful replacement (ADVICE-11).
+
+`advice-vectors.json` has 74 cases: 9 shape, 15 pack, 21 graph, 11 kept
+manifest, 8 publisher, 10 import.
 
 ## 12.9 The harness, and the honest numbers
 
