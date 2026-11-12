@@ -1097,6 +1097,13 @@
          "requirement-ref": {
           "$ref": "#/$defs/uri"
          },
+         "statement-ids": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+           "type": "string"
+          }
+         },
          "description": {
           "$ref": "#/$defs/text"
          },
@@ -1587,6 +1594,48 @@
     },
     "provenance": {
      "type": "object"
+    },
+    "pack": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "kind",
+      "id",
+      "version",
+      "publisher"
+     ],
+     "properties": {
+      "kind": {
+       "enum": [
+        "advice"
+       ]
+      },
+      "id": {
+       "$ref": "#/$defs/uri"
+      },
+      "version": {
+       "type": "string",
+       "minLength": 1
+      },
+      "title": {
+       "$ref": "#/$defs/text"
+      },
+      "publisher": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "ref"
+       ],
+       "properties": {
+        "ref": {
+         "$ref": "#/$defs/uri"
+        },
+        "name": {
+         "$ref": "#/$defs/text"
+        }
+       }
+      }
+     }
     },
     "objects": {
      "type": "array",
