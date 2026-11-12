@@ -8,8 +8,9 @@ consistent package — the same running story the Handbook tells
 
 ## Coverage: the eleven types + sub-objects + bundle artifacts
 
-*Check (type 11) is **proposed** in `drafts/CP-CHECK-1.md` and not
-released; its rows are marked below.*
+*Check (type 11) belongs to kernel 2.0.0 since the author's decisions of
+2026-11-12 (`drafts/CP-CHECK-1.md` §13); 2.0.0 is a release candidate
+and not tagged. Its rows are marked (2.0.0) below.*
 
 | # | Type | File | Demonstrates |
 |---|---|---|---|
@@ -24,12 +25,12 @@ released; its rows are marked below.*
 | 7 | Assessment | `assessment-2026q3.json` | facet-typed method (stdlib `assessment-criteria@1`), subjects, result |
 | 8 | Finding | `finding-017.json` | statement-scoped finding, calendar-aware action, **Deviation sub-object** (false-positive, approved) |
 | 10 | Risk | `risk-acme-kms-key-rotation.json` | treated Risk on a BSI 200-3 scale, G 0.x threat refs, **treats KONF.14.1 s2** (the clause finding 017 is against — which now carries `risk-refs`), CISO acceptance of the residual, 12-month calendar review; `risk-coverage` on this bundle: 3 selected, 1 justified, 2 uncovered |
-| 11 *(proposed)* | Check | `check-acme-ssh-maxauthtries.json`, `check-acme-ssh-ciphers.json` | typed fact contract (`observes`) + closed comparators (`criteria`); s1 binds `{"param": "max-auth-tries"}` with `at-most` (the parameter tightens lower - CHECK-5); s2 uses `matches-not` with the I-Regexp `.*-cbc` over a list fact; one fact contract, **two collectors** (bash, python) in `collector@1` |
-| 1d *(proposed)* | Requirement + Set + Tailoring | `req-acme-lnx-ssh-1.json`, `set-acme-linux.json`, `tailoring-acme-linux-prod.json` | Acme's own SSH clause pair; the production Tailoring binds `max-auth-tries` = 4, and that bound value is what both runs used (CHECK-12) |
-| 5b *(proposed)* | Component | `component-acme-bastion.json` | the host under test |
-| 7b *(proposed)* | Assessment (automated runs) | `assessment-acme-bastion-2026-11-03.json`, `assessment-acme-bastion-2026-11-10.json` | `check-results`: observation inline, verdict **recomputed** by the validator (CHECK-9), result = aggregate (CHECK-10), `tailoring-ref`, `evidence-record` per row; run 1 fails s2 (`aes128-cbc` offered), run 2 passes |
-| 8b *(proposed)* | Finding | `finding-acme-bastion-ssh-cbc.json` | raised by a check (`check-ref`, CHECK-14), closed after the 2026-11-10 run (related) |
-| — *(proposed)* | Evidence store | `evidence/sha256/<hex>` | content-addressed blobs beside the manifest, never listed in it: 4 evidence records + 3 collector outputs (the identical MaxAuthTries output of both runs is stored once). Flip a byte and CHECK-15 fails; delete a raw output and the validator reports it *withheld* |
+| 11 *(2.0.0)* | Check | `check-acme-ssh-maxauthtries.json`, `check-acme-ssh-ciphers.json` | typed fact contract (`observes`) + closed comparators (`criteria`); s1 binds `{"param": "max-auth-tries"}` with `at-most` (the parameter tightens lower - CHECK-5); s2 uses `matches-not` with the I-Regexp `.*-cbc` over a list fact; one fact contract, **two collectors** (bash, python) in `collector@1` |
+| 1d *(2.0.0)* | Requirement + Set + Tailoring | `req-acme-lnx-ssh-1.json`, `set-acme-linux.json`, `tailoring-acme-linux-prod.json` | Acme's own SSH clause pair; the production Tailoring binds `max-auth-tries` = 4, and that bound value is what both runs used (CHECK-12) |
+| 5b *(2.0.0)* | Component | `component-acme-bastion.json` | the host under test |
+| 7b *(2.0.0)* | Assessment (automated runs) | `assessment-acme-bastion-2026-11-03.json`, `assessment-acme-bastion-2026-11-10.json` | `check-results`: observation inline, verdict **recomputed** by the validator (CHECK-9), result = aggregate (CHECK-10), `tailoring-ref`, `evidence-record` per row; run 1 fails s2 (`aes128-cbc` offered), run 2 passes |
+| 8b *(2.0.0)* | Finding | `finding-acme-bastion-ssh-cbc.json` | raised by a check (`check-ref`, CHECK-14), closed after the 2026-11-10 run (related) |
+| — *(2.0.0)* | Evidence store | `evidence/sha256/<hex>` | content-addressed blobs beside the manifest, never listed in it: 4 evidence records + 3 collector outputs (the identical MaxAuthTries output of both runs is stored once). Flip a byte and CHECK-15 fails; delete a raw output and the validator reports it *withheld* |
 | 5c *(proposed)* | Component (a vendor's, imported) | `component-dbvendor-server-7.json` | CP-ADVICE-1: three recommendations as capabilities - `cap-tls` on KONF.14.1 **s1** with the suggested value `transport-crypto: tls13`, `cap-key-rotation` on **s2**, `cap-audit-log` against a requirement this bundle does not hold (resolves-if-present: a note, not an error). Byte for byte the object of the published pack |
 | — *(proposed)* | Kept pack manifest | `packs/sha256/<hex>` | the vendor's manifest as it arrived, named by the SHA-256 of its bytes, beside the manifest and never listed in it. It is the import record: publisher, release 3, the one object and its digests (ADVICE-8..10). Edit the vendor's Component and ADVICE-9 names it |
 | 6b *(proposed)* | Implementation (adopts advice) | `implementation-acme-konf-14-1-s2.json` | `capability-ref` in the form `<component-id>#<capability-id>`: Acme's edge, on Acme's component, cites the vendor's recommendation. `component-acme-saas.json` lists the product as a member, which ADVICE-7 requires |

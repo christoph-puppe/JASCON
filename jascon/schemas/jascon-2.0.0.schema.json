@@ -2192,6 +2192,7 @@
   "checkOp": {
    "enum": [
     "equals",
+    "not-equals",
     "one-of",
     "at-least",
     "at-most",

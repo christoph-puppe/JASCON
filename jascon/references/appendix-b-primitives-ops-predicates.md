@@ -281,6 +281,106 @@ carries excludes or predicate selects.
 
 ---
 
+### B.1.10 `check-verdict` *(2.0.0 — CP-CHECK-1, the tenth primitive)* — *P+*
+
+**Signature:** `check-verdict(check, observation, parameters) →
+satisfied | not-satisfied | inconclusive | not-applicable`, with
+reasons. The observation is `{facts}` or, for a Check with `each`,
+`{resources: [{id, facts}]}`. The parameters are the values the run was
+bound to.
+
+**The twelve comparators (C.13).**
+
+| Op | Fact | `expected` | Holds when |
+|---|---|---|---|
+| `equals` | one; any type | scalar or param | the value equals expected (decimals by value) |
+| `not-equals` | one; any type | scalar or param | the value differs from expected (decimals by value) |
+| `one-of` | one; string, code, integer, decimal | non-empty list or list param | the value is in the list |
+| `at-least` / `at-most` | one; integer, decimal | scalar or param | ordering; decimals by value, never as floats |
+| `present` / `absent` | any | none | the key is, or is not, in the observation |
+| `includes-all` | many | non-empty list | every listed value occurs |
+| `excludes-all` | many | non-empty list | no listed value occurs |
+| `subset-of` | many | list, may be empty | every observed value is listed; `[]` means "must be empty" |
+| `matches` / `matches-not` | string, code; one or many | I-Regexp literal | the whole value matches, or does not; on a list every element, or no element |
+
+There is no OR, no NOT, no nesting, no arithmetic, no path and no
+comparison between two facts: the leash of B.4, applied once more.
+
+**Evaluation.**
+
+1. No observation: `inconclusive`.
+2. `applies-when` false: `not-applicable`; unknown: `inconclusive`.
+3. An undeclared fact, an unobserved fact, a mistyped value, an unbound
+   parameter or a mistyped bound value: `inconclusive`. **A default is
+   never substituted** (D9). `not-equals` on a missing fact is
+   `inconclusive` as well, never satisfied.
+4. **Strong Kleene AND:** one `not-satisfied` decides; else one
+   `inconclusive` decides; else `satisfied`. A definite failure is never
+   hidden behind an unknown elsewhere.
+5. `each`: **every resource is evaluated**, none is skipped after the
+   first failure. Resources whose `applies-when` is false are not
+   applicable; the rest combine by step 4, so the outcome is for-all.
+   With no applicable resource: `satisfied` if `allow-empty`, else
+   `inconclusive`. Beside the outcome a tool reports `applicable`,
+   `not-satisfied`, `inconclusive`, `not-applicable` and the share of
+   not-satisfied among applicable resources as a whole percentage:
+   `(200·part + whole) div (2·whole)` in integers, so rounded half up,
+   but 1 at the least while one resource fails and 99 at the most while
+   one passes. When the outcome is not `satisfied`, the first reason is
+   that count. The counts are recomputed from the recorded observation
+   and stored nowhere.
+6. Aggregate over an Assessment's rows (CHECK-10): `not-applicable`
+   rows are dropped; with none left the result is `inconclusive`.
+
+An absent key means *observed absent*. A collector that could not look
+prints nothing. A collector reports **effective** values, defaults
+resolved and drop-in files merged.
+
+**Regular expressions.** I-Regexp, RFC 9485. Fixed by the kernel: the
+pattern matches the **whole value** (`^` and `$` are ordinary
+characters, `.` excludes `\n` and `\r`; several lines need
+`(.|\n|\r)*`); a pattern has at most 256 characters, its compiled
+program at most 1,000 states, a value at most 4,096 characters, else
+`inconclusive`; and **no host engine**: an implementation parses the
+grammar and matches by simulating the set of live states, without
+backtracking. The grammar is the RFC's as published: a surrogate code
+point (U+D800 to U+DFFF) is no pattern character. One dependence is left: a category `\p{..}` is read from
+the host's Unicode database (backlog #59).
+
+**The rules that rest on it.**
+
+| Id | Rule | Failure message (abridged) |
+|---|---|---|
+| CHECK-1 | An in-bundle `requirement-ref` is a Requirement; `statement-ids` name its statements. | `<check>: statement-id 's9' names no statement of <req>` |
+| CHECK-2 | Fact names are unique; every assertion reads a declared fact. | `criteria[1] reads fact 'sshd.permitrootlogin', which observes does not declare` |
+| CHECK-3 | The operator fits the fact's type and cardinality; a literal has the fact's type. | `criteria[0]: not-equals does not fit a code list fact` |
+| CHECK-4 | `{param}` names a parameter declared exactly once on the covered clauses, with a fitting type; the requirement is in the bundle; a pattern is never a parameter. | `criteria[0]: parameter 'max-tries' is declared 0 times on the covered statements` |
+| CHECK-5 | `at-most` never binds a parameter that tightens `higher`, `at-least` never one that tightens `lower`. | `at-most against parameter 'max-auth-tries', which tightens higher - tightening it would loosen the check` |
+| CHECK-6 | A pattern is I-Regexp within the size limits. | `escape \w is not I-Regexp (no \d \w \s \b, no back-references) at position 0` |
+| CHECK-7 | `collector@1` matches its schema; collector ids are unique. | `collector id 'bash' is used twice` |
+| CHECK-8 | A row's `check-ref` is a Check; `check-digest` matches it. | `check-digest does not match <check> - the check changed after the run` |
+| CHECK-9 | A row's outcome equals `check-verdict` over its observation and parameters. | `recorded satisfied, check-verdict computes not-satisfied (sshd.maxauthtries at-most 4: observed 5)` |
+| CHECK-10 | One row per check; `Assessment.result` is the aggregate of the rows. | `result is satisfied, the aggregate of its check results is not-satisfied` |
+| CHECK-11 | A row without an observation is `inconclusive` and carries a `reason`. | `no observation, yet the outcome is satisfied and no reason is given` |
+| CHECK-12 | `tailoring-ref` resolves to a Tailoring; each row's `parameters` equal what it binds. | `the run used max-auth-tries=6, <tailoring> binds 4` |
+| CHECK-13 | A row's `collector-id` names a collector of the Check. | `collector-id 'python' names no collector of <check>` |
+| CHECK-14 | A Finding's in-bundle `check-ref` is a Check about the same requirement and a covered clause. | `statement-ref 's2' is not a clause check <check> covers` |
+| CHECK-15 | Evidence references stay in the store; every digest verifies; a record names the row's check, digest, collector and subject, and binds the row's observation. | `output 'stdout' evidence/sha256/2d66… does not match its digest` |
+
+Notes, never failures: a row whose Check is outside the bundle (*not
+recomputed*); a row with `parameters` and no `tailoring-ref` (*the
+performer's statement*); a withheld raw output; and, for a per-resource
+row, the count of step 5.
+
+**Rationale, with its corpse.** 291 of the 312 rules of the CIS Ubuntu
+24.04 Benchmark are marked automated and reached this format as prose in
+an `audit` string. An exit code hides its threshold, cannot be reached
+by a tailored parameter and leaves a bit where an observation should be.
+**Measured fit:** 481 of 510 rules of the CIS Ubuntu 24.04 profiles of
+ComplianceAsCode; the operators of kube-bench `cis-1.12` map onto the
+set (CP-CHECK-1 §2.2). **Exercised:** `check-vectors.json`, 188 cases;
+the worked example LNX-SSH-1 with two runs.
+
 ## B.2 The three predicates (shared vocabulary, one leash)
 
 Used identically as `conditional-apply` triggers and in
@@ -390,7 +490,7 @@ primitives, operations, and predicates are *versioned closed sets*
 (R3: contained, never a language) — the ninth primitive, when its
 evidence arrives, ships as a set version through the Chapter 15
 process, with counts, corpus cases, and two implementations. Until
-then, the honest inventory stands: **nine**, eight, and three — every
+then, the honest inventory stands: **ten**, eight, and three — every
 one carrying the reason it exists, printed at the moment it says no.
 The ninth (`risk-coverage`, B.1.9) arrived that way in the 2.0.0 cycle:
 counts (CP-RISK-1 §2), corpus cases, and two implementations green:
@@ -398,3 +498,11 @@ the Python reference and, since its first run on 2026-11-11, the
 PowerShell twin, both on the same 73 risk vectors. Both were written by
 the same author, so their independence is one of language and runtime,
 not of reading.
+The tenth (`check-verdict`, B.1.10) arrived in the same cycle: counts
+(CP-CHECK-1 §2), 188 vectors, and the Python reference with the app's
+port green on them. The PowerShell twin passed the 156 vectors of the
+proposal on 2026-11-11; what came after (the twelfth comparator, the
+per-resource counts, the surrogate rule) is ported there and has not run
+(backlog #60). With it comes a
+second closed set, the twelve comparators, under the same leash: a
+thirteenth is a set version with counts, never a facet.

@@ -1,7 +1,7 @@
 # The jascon.net site
 
-The public site of the project: five pages (home, the model, evidence, get
-started, join), a legal notice, and a 404 page. It is static, has no
+The public site of the project: six pages (home, the model, checks, evidence,
+get started, join), a legal notice, and a 404 page. It is static, has no
 dependency beyond Python's standard library to build, and sends no request
 to another host when it is read.
 
@@ -56,6 +56,15 @@ computes both digests in the browser. The file and its expected digests are
 read from the example bundle at build time, so the demo cannot drift from the
 manifest.
 
+The Check demo (home page and `checks.html`, one partial:
+`src/_check-demo.html`) does not re-implement the verdict. It loads
+`app/jascon-schema.js` and `app/jascon-rules.js`, the app's port of the kernel
+rules, when the demo comes near the viewport, and calls `jscCheckVerdict` and
+`jscCheckAggregate`. Requirement, bound parameter, the two Checks and the
+observations of the two recorded runs are read from `jascon/examples/` at
+build time. In a `--pages-only` build the demo says that the rules are
+missing.
+
 ## Editing
 
 - A page is `src/<name>.html`: a header between two `---` lines (`title`,
@@ -63,7 +72,7 @@ manifest.
   `src/_layout.html`, once.
 - `{{ name }}` is replaced from the facts, `site.json` and the page header.
   An unknown name stops the build. `{{ file:path }}` sets in a file of the
-  repository.
+  repository, `{{ include:_name.html }}` a partial of `src/`.
 - `<code data-lang="json">` and `<code data-lang="sh">` are coloured by the
   build. In JSON, `«` and `»` mark the part the text points at.
 - The build checks every local link and anchor and stops on a broken one.

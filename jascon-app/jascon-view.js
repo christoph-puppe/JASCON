@@ -63,8 +63,8 @@ jscI18n.add("de", {
 });
 
 jscI18n.add("de", {
-  "A machine check (proposed, CP-CHECK-1): the facts a collector reports and the comparisons they must pass. The code that collects rides along and decides nothing.":
-    "Eine maschinelle Prüfung (vorgeschlagen, CP-CHECK-1): die Fakten, die ein Kollektor meldet, und die Vergleiche, die sie bestehen müssen. Der Code, der sammelt, reist mit und entscheidet nichts.",
+  "A machine check: the facts a collector reports and the comparisons they must pass. The code that collects rides along and decides nothing.":
+    "Eine maschinelle Prüfung: die Fakten, die ein Kollektor meldet, und die Vergleiche, die sie bestehen müssen. Der Code, der sammelt, reist mit und entscheidet nichts.",
   "discharges": "erfüllt", "platform": "Plattform", "confidence": "Vertrauensgrad", "per resource": "je Ressource",
   "none observed passes": "keine beobachtet gilt als bestanden", "none observed is inconclusive": "keine beobachtet ist unbestimmt",
   "fresh for": "gültig für", "author": "Autor", "Facts the collector reports": "Fakten, die der Kollektor meldet", "Applies when": "Gilt, wenn",
@@ -80,7 +80,7 @@ const TYPE_VIEW = {
   component:      { glyph: "⬡", color: "var(--green)", what: N("A system, service or product with its capabilities and authorizations.") },
   implementation: { glyph: "◈", color: "var(--green)", what: N("The edge that says: this component satisfies this requirement, with the responsibility per clause and, where inherited, the authorization it rests on.") },
   risk:           { glyph: "△", color: "color-mix(in oklab, var(--red) 55%, var(--amber))", what: N("The record made before the fact: a scenario with an owner, a state, a level on a named scale, a treatment decision and the requirements that carry it.") },
-  check:          { glyph: "⊨", color: "color-mix(in oklab, var(--green) 60%, var(--blue))", what: N("A machine check (proposed, CP-CHECK-1): the facts a collector reports and the comparisons they must pass. The code that collects rides along and decides nothing.") },
+  check:          { glyph: "⊨", color: "color-mix(in oklab, var(--green) 60%, var(--blue))", what: N("A machine check: the facts a collector reports and the comparisons they must pass. The code that collects rides along and decides nothing.") },
   assessment:     { glyph: "◉", color: "var(--red)", what: N("An assessment run: subjects, method, performer, result.") },
   finding:        { glyph: "◎", color: "var(--red)", what: N("A finding against a requirement, down to the statement, with states, actions that carry deadlines, and Deviations.") },
   attestation:    { glyph: "✦", color: "var(--text-primary)", what: N("The signature layer: semantic digests of the subjects, the digest of the manifest and the pinned rendering.") },

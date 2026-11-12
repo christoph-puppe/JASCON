@@ -273,7 +273,7 @@ Nothing shipped with the proposal as drafted. Steps 2 to 5 and part of step 8 we
 | `drafts/cp-advice-1/` | `author_vectors.py` (writes the vectors), `build_example.py` (writes the pack and the example set; a second run changes nothing), `mutate.py`, `fix_ifa_capability_ref.py`, `regen_app_schema.py` |
 | `.gitattributes` | the pack, the kept manifest and the envelopes are `-text` |
 
-**Measured on 2026-11-12, one machine:** `validate_core.py` — 486 of 486 vectors in 17 families (`advice: 71`), the five corpus bundles, the worked pack and the example folder, ALL GREEN. `validate_core.ps1` on Windows PowerShell 5.1 — the same 486 vectors and, bundle by bundle, the same pass counts (1,712 · 814 · 136 · 18 · 1,040 · pack 2 · examples 27), ALL GREEN, 191 s. Both report the pack's publisher *proven*; with the fixture key as trusted key the reference validator reports the signature verified.
+**Measured on 2026-11-12, one machine, before the merge with `main`:** `validate_core.py` — 486 of 486 vectors in 17 families (`advice: 71`), the five corpus bundles, the worked pack and the example folder, ALL GREEN. `validate_core.ps1` on Windows PowerShell 5.1 — the same 486 vectors and, bundle by bundle, the same pass counts (1,712 · 814 · 136 · 18 · 1,040 · pack 2 · examples 27), ALL GREEN, 191 s. The counts after the merge are in §13.4. Both report the pack's publisher *proven*; with the fixture key as trusted key the reference validator reports the signature verified.
 
 **Mutations.** 28 deliberate defects, put into the reference validator one at a time, each turn at least one advice vector red (`mutate.py`). Three further guards are not counted: removing them crashes the code behind them, which is not a verdict.
 
@@ -294,5 +294,21 @@ Nothing shipped with the proposal as drafted. Steps 2 to 5 and part of step 8 we
 - **No converter.** `convert_cdef.py` and the component-definition export are not written. The IFA conversion still drops clause-level text and suggested values, and its coverage report still counts them as carried (§12).
 - **No census** of public component definitions (§2.3). The evidence for `statement-ids` is still one fictional file.
 - **No specification text** (D3, D5, D6, D15, D22) and no change to the reader.
-- **`SKILL_jascon.zip` is not rebuilt.** Compared with the tree, the archive lacks every file of the proposed Check type (19 files) and holds older validators: it is kept at the state before CP-CHECK-1, whose step 1b reserves it for the author's review. Rebuilding it for advice packs would pull Check in with them. It also still lacks the Appendix A correction of §12.
+- **`SKILL_jascon.zip`** was not rebuilt on the branch: at that time the archive was held at the state before CP-CHECK-1. That changed on `main` the same day; see §13.4.
 - **The findings of §12 are not filed in the backlog.**
+
+### 13.4 After the merge with `main` (2026-11-12)
+
+While this branch was written, `main` moved to **2.0.0-rc.2**: Check was accepted into the candidate with six author decisions, D22 gained a consumer-side clause (backlog #48 closed), a twelfth comparator and per-resource counts came in, and the specification draft was renamed to `jascon-specification-2.0.0-rc.2.md`. The branch was merged with that state. Four files conflicted — two generated (`jascon-schema.js`, `facts.json`; regenerated and re-measured) and two hand-written (`examples/README_1.md`, `website/src/evidence.html`; both sides kept).
+
+**Measured on the merged tree, one machine:** `validate_core.py` — 518 of 518 vectors in 17 families (`check: 188`, `advice: 71`), the five corpus bundles, the worked pack and the example folder, ALL GREEN. `validate_core.ps1` on Windows PowerShell 5.1 — the same 518 vectors and, bundle by bundle, the same pass counts (1,712 · 814 · 136 · 18 · 1,040 · pack 2 · examples 27), ALL GREEN, 184 s. The 28 mutations are caught as before, the vectors and the worked example come out byte-identical from their scripts, and the site builds.
+
+**A by-product for backlog #60.** That item says the twin's port of `not-equals`, the per-resource counts and the surrogate rule "have never run". They ran in the two runs above: `check: 188 pass, 0 fail`, and the example folder with its two Checks green. The item is not closed here; whether this run settles it is its owner's call.
+
+What the merge makes of earlier sections:
+
+- **§8 and §2.3, D22.** Backlog #48 is closed by the consumer-side clause (D22 rev 4): data that catalogue authorities do not publish may enter the kernel when a recognised standard requires the record, or when it is established practice shown by at least two independent open implementations whose content was counted — with tests 2 and 3 in force and on a major. The clause is written for *types*; this proposal adds a field and a manifest header, and no type. Read for the field all the same, it is **not met**: no standard is named here, and the counted content is one fictional file, where the clause asks for two implementations. The census of §2.3 is what could change that. `statement-ids` therefore stays separable (§11 item 3).
+- **§11 item 2.** "Check is itself still proposed" no longer holds: Check is in the 2.0.0 candidate. The recommendation stands for its other reason — a vendor shipping Checks ships ways to assess.
+- **Line references into the specification** (§2.3, §8) name `jascon-specification-2.0.0-rc.1.md`, which is now `-rc.2.md`; the lines moved.
+- **`SKILL_jascon.zip`.** `main` rebuilt the archive with Check in it. Compared entry by entry, the archive of that commit is exactly the 103 files git tracks under `jascon/`, as blobs. With the rule known, the archive is rebuilt from the merged tree by `drafts/cp-advice-1/build_skill_zip.py`, which makes that comparison first and writes nothing if it fails. The archive now carries the advice pack, its vectors and the handbook text, marked proposed as in the tree.
+- **The website** no longer calls Check proposed. The advice pack is the one entry under "Proposed" on the model page, and its limit on the evidence page is worded against the consumer-side clause.

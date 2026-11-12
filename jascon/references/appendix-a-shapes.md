@@ -1,7 +1,7 @@
 # The JASCON Handbook
 # Appendix A — Shapes Reference
 
-**Purpose:** the ten types, two sub-objects, and bundle artifacts,
+**Purpose:** the eleven types, two sub-objects, and bundle artifacts,
 field by field — with the evidence column that makes this appendix
 different from a schema dump: which measured corpus reality each field
 answers to. Counts cite the three-authority census and the gate-item-1
@@ -145,7 +145,16 @@ track Sets (20x/Rev5) are built purely from subset-Set members.
 **Assessment:** `subject-refs` ● [URI] · `method` ● {facet payload —
 assessment-criteria absorbs ISM/BSI documentation duties ×966 and the
 CR26 artifacts/key-tests/examples shape} · `performer-ref` ● ·
-`time` ● · `result` ● code · `evidence-refs` ○.
+`time` ● · `result` ● code · `evidence-refs` ○ ·
+`check-results` ○ [row] *(2.0.0)* — one row per check run: `check-ref` ●,
+`check-digest` ● (the Check's semantic digest), `collector-id` ○,
+`outcome` ● (C.14), `time` ● (RFC 3339), `parameters` ○ (the values the
+run was bound to), `observation` ○ inline *or* `observation-ref` ○
+{ref, digest}, `evidence-record` ○ {ref, digest}, `reason` ○ text. The
+observation is inline by default, so the Assessment's semantic digest
+covers what was observed. With rows, `result` is their aggregate
+(CHECK-10) · `tailoring-ref` ○ URI *(2.0.0)* — the Tailoring whose bound
+parameter values the run used; closure-required and typed (CHECK-12).
 
 **Finding:** `assessment-ref` ● · `requirement-ref` ● ·
 `statement-ref` ○ · `state` ● code (C.3) · `risk-refs` ○ [URI] — the
@@ -156,7 +165,10 @@ ref that resolves in-bundle must name a Risk (RISK-12) ·
 calendar-period}, status ●}] — computable deadlines
 (fail-closed without the named calendar) ·
 `deviations` ○ [Deviation] — the ex-post channel; the four historical
-FedRAMP deviation props are its `type` values.
+FedRAMP deviation props are its `type` values ·
+`check-ref` ○ URI *(2.0.0)* — the Check that raised the finding; typed
+if in the bundle, and held to the same requirement and a covered clause
+(CHECK-14).
 
 ## A.9 Attestation
 
@@ -203,6 +215,35 @@ vectors, and the IFA lifecycle corpus — 2 Risks converted from POA&M
 risks. That first corpus also measured what OSCAL cannot give this shape
 (A.12): no owner field, no single level, no dated acceptance.
 
+## A.9c Check *(kernel 2.0.0 — CP-CHECK-1)*
+
+How a machine decides a requirement: the facts a collector must report,
+and the comparisons that decide. No census authority publishes one; the
+type entered under the consumer-side clause of D22, counted on two open
+check corpora (D24). Common fields (A.0) plus:
+
+| Field | | Type | Meaning & evidence |
+|---|---|---|---|
+| `requirement-ref` | ● | URI | The requirement the check discharges. **Resolves if present**, like a Mapping endpoint: a check pack may ship without a catalogue it may not pass on. In the bundle, the edge is typed (CHECK-1). |
+| `statement-ids` | ○ | [string] | The clauses covered; absent means all. |
+| `platform` | ● | URI | The platform under test, opaque. There is no closed list: platforms change faster than kernels. |
+| `observes` | ● | [{`name` ●, `type` ●, `cardinality` ○, `description` ○ text}] | The fact contract. Types C.12; `cardinality` `one` (default) or `many`. Names unique (CHECK-2). |
+| `criteria` | ● | [{`fact` ●, `op` ●, `expected` ○}] | A flat conjunction over the twelve comparators (C.13). `expected` is a literal of the fact's type, a list, or `{"param": name}`; `present` and `absent` take none. |
+| `applies-when` | ○ | as `criteria` | False: the check is not applicable. With `each`, a filter per resource. |
+| `each` | ○ | {`resource` ●, `allow-empty` ●} | The facts repeat per resource and the criteria hold for every one. `allow-empty` must be stated: an empty set passes only where the author said so. |
+| `validity` | ○ | {`num` ●, `unit` ●} elapsed | How long a result stays fresh. Read at reading time; nothing is mutated. |
+| `confidence` | ● | code C.7 | `draft` (generated) · `reviewed` · `authoritative` (published by the requirement's authority). |
+| `provenance` | ● | {`author-ref` ●, `date` ●, `derived-from` ○ [{ref, digest}]} | Whose check this is; `derived-from` pins the text a generator worked from. |
+
+**Shape-disjointness:** `observes` together with `criteria` occurs in
+no other type. **Collector code** is not kernel: it rides in the stdlib
+facet `collector@1` (Appendix D), `{collectors: [{id ●, runtime ●
+(C.15), source ●, privileges ○, timeout-seconds ○, description ○}]}`,
+inline so that the Check's digest covers the exact source, and declared
+`[]` because nothing in it changes what passing means. Credentials and
+target inventory never appear in a bundle. Evidence: the two Checks of
+the example bundle, `check-vectors.json` (188).
+
 ## A.10 Sub-object: Deviation
 
 `type` ● ∈ false-positive · operational-requirement · risk-adjustment ·
@@ -217,7 +258,8 @@ Implementation · Finding); Excel dies of enumerated states.
 `"1"`) · `kernel-version` ○ (`MAJOR.MINOR.PATCH`, 2.0.0 — the kernel the
 content was written against; absent means 1.0.0; **required** once the
 bundle carries content a 1.0.0 tool cannot type — a Risk, a Finding with
-`risk-refs` — KERNEL-1; a tool that does not implement the pinned kernel
+`risk-refs`, a Check, an Assessment with `check-results` or
+`tailoring-ref`, a Finding with `check-ref` — KERNEL-1; a tool that does not implement the pinned kernel
 stops and names both versions — KERNEL-2) · `objects[]`
 {id, version, **package-digest**, **semantic-digest**, path} ● ·
 `facet-schemas[]` {id, **exact-version**, digest, path} ● (exact pins,
@@ -265,6 +307,21 @@ pinned in the same bundle (SCALE-1). SCALE-4: a rating on such a scale
 that states both inputs states the level of their cell; a mismatch
 fails unless the rating carries `override-rationale`. Unpinned `scale-ref`s stay landmark and opaque.
 Evidence: three scales in the example bundle, `scale-vectors.json` (18).
+
+**Evidence store** *(2.0.0; files beside the manifest, never listed in
+it)*: a directory `evidence/sha256/<hex>`, every file named by the
+SHA-256 of its bytes, the same placement as signature envelopes. An
+**evidence record** (`$defs/evidenceRecord`) is one such file:
+`record-version` "1" · `check-ref` · `check-digest` · `collector-id` ·
+`subject-ref` · `target` (a descriptor without secrets) · `runner` ·
+`started` · `finished` · `exit-status` · `observation-digest` ·
+`outputs[]` {name, digest, media-type, size, redacted} · `redactions` ·
+`note`. The chain: an Attestation binds the Assessment's semantic
+digest; the row holds the observation and the record's digest; the
+record holds the digest of the same observation and of each raw output.
+Redaction happens before hashing. A raw output that is gone is reported
+as withheld and is no failure (CHECK-15). Evidence: seven files in the
+example bundle.
 
 ## A.12 What the three converters actually exercised
 

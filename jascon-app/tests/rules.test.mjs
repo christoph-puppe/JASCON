@@ -455,10 +455,12 @@ test("a whole set: a signed attestation is verified with a trusted key, unverifi
 test("check: I-Regexp - what must and must not match whole-value, and what every implementation refuses", () => {
   for (const c of vectors("check")["regex-vectors"]) {
     let valid = true, why = "";
-    try { rules.jscIreCompile(c.pattern); } catch (e) { if (!(e instanceof rules.JscIRegexpError)) throw e; valid = false; why = e.message; }
-    assert.equal(valid, c.valid, `${JSON.stringify(c.pattern)}: ${why}`);
-    for (const t of c.match || []) assert.ok(rules.jscIreFullMatch(c.pattern, t), `${JSON.stringify(c.pattern)} matches ${JSON.stringify(t)}`);
-    for (const t of c["no-match"] || []) assert.ok(!rules.jscIreFullMatch(c.pattern, t), `${JSON.stringify(c.pattern)} does not match ${JSON.stringify(t)}`);
+    /* a pattern that no JSON text may carry (a lone surrogate) is given as code points */
+    const pat = c["pattern-codepoints"] ? String.fromCodePoint(...c["pattern-codepoints"]) : c.pattern;
+    try { rules.jscIreCompile(pat); } catch (e) { if (!(e instanceof rules.JscIRegexpError)) throw e; valid = false; why = e.message; }
+    assert.equal(valid, c.valid, `${JSON.stringify(pat)}: ${why}`);
+    for (const t of c.match || []) assert.ok(rules.jscIreFullMatch(pat, t), `${JSON.stringify(pat)} matches ${JSON.stringify(t)}`);
+    for (const t of c["no-match"] || []) assert.ok(!rules.jscIreFullMatch(pat, t), `${JSON.stringify(pat)} does not match ${JSON.stringify(t)}`);
   }
 });
 test("check: check-verdict over every verdict vector, and the aggregate", () => {
@@ -466,8 +468,14 @@ test("check: check-verdict over every verdict vector, and the aggregate", () => 
   for (const c of v["verdict-vectors"]) {
     const [got, why] = rules.jscCheckVerdict(c.check, c.observation, c.parameters);
     assert.equal(got, c.expected, `${c.name}: ${why.join("; ")}`);
+    if (c["expected-resources"]) {   // a per-resource check: every resource is evaluated and counted
+      const { results, ...counts } = rules.jscCheckEach(c.check, c.observation, c.parameters);
+      assert.deepEqual(counts, c["expected-resources"], c.name);
+      assert.equal(results.length, c.observation.resources.length, c.name);
+    }
   }
   for (const c of v["aggregate-vectors"]) assert.equal(rules.jscCheckAggregate(c.outcomes), c.expected, JSON.stringify(c.outcomes));
+  for (const c of v["share-vectors"]) assert.equal(rules.jscPercentShare(c.part, c.whole), c.expected, `${c.part} of ${c.whole}`);
 });
 test("check: closed shapes - each object vector matches exactly its type, or none", () => {
   for (const c of vectors("check")["object-vectors"]) {

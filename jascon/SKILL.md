@@ -12,7 +12,7 @@ When triggered, this skill guides the agent in applying the JASCON standard corr
 You must strictly adhere to the guidelines detailed in the handbook chapters and companion examples linked below:
 
 ### Requirement 1: Paradigm Alignment & Motivation
-- **Description:** Align all compliance data into a graph of ten shallow, globally identified objects (Requirement, RequirementSet, Tailoring, Mapping, Component, Implementation, Assessment, Finding, Attestation, Risk) and 2 sub-objects (Deviation, Authorization). Ensure strict separation of concerns between kernel semantics, registered facets, and rendering annotations.
+- **Description:** Align all compliance data into a graph of eleven shallow, globally identified objects (Requirement, RequirementSet, Tailoring, Mapping, Component, Implementation, Assessment, Finding, Attestation, Risk, Check) and 2 sub-objects (Deviation, Authorization). Ensure strict separation of concerns between kernel semantics, registered facets, and rendering annotations.
 - **Reference Document:** [Chapter 1 — Why This Exists](references/ch01-why-this-exists.md) and [Chapter 2 — The Core in One Hour](references/ch02-the-core-in-one-hour.md)
 - **Companion Example:** [req-ism-1234.json](examples/req-ism-1234.json) (Zero-facet minimum requirement)
 
@@ -65,6 +65,11 @@ You must strictly adhere to the guidelines detailed in the handbook chapters and
 - **Reference Document:** [Chapter 10 §10.6](references/ch10-assessment-findings-deviations.md), [Appendix A.9b](references/appendix-a-shapes.md), [CP-RISK-1](../drafts/CP-RISK-1.md) (in the repository; not part of the skill bundle)
 - **Companion Examples:** [risk-acme-kms-key-rotation.json](examples/risk-acme-kms-key-rotation.json) (treated Risk treating KONF.14.1 s2), [risk-vectors.json](conformance/risk-vectors.json)
 
+### Requirement 9b: Automated assessment with Checks
+- **Description:** Model a machine check as a `Check` object (kernel 2.0.0, CP-CHECK-1): a typed fact contract (`observes`) and a flat conjunction over the twelve comparators (`criteria`: equals · not-equals · one-of · at-least · at-most · present · absent · includes-all · excludes-all · subset-of · matches · matches-not), bound to the requirement's parameters with `{"param": …}`. There is no OR, NOT, nesting or arithmetic; what does not fit stays a manual check. Collector code rides the Check in the stdlib facet `collector@1`, reports effective values, and decides nothing. Record runs as `Assessment.check-results` with the observation inline; the validator recomputes every verdict (CHECK-9) and holds the parameters to the Tailoring named in `tailoring-ref` (CHECK-12). A per-resource check (`each`) passes only if every applicable resource passes; every resource is evaluated, and the count and share of failing ones are reported with the verdict. Patterns are I-Regexp (RFC 9485), whole-value, never a parameter. Evidence is content-addressed in `evidence/sha256/` beside the manifest (CHECK-15). A bundle with a Check pins `kernel-version` 2.0.0. Never execute collector code from a bundle you were asked to validate.
+- **Reference Document:** [Chapter 10 §10.7](references/ch10-assessment-findings-deviations.md), [Appendix A.9c](references/appendix-a-shapes.md), [Appendix B.1.10](references/appendix-b-primitives-ops-predicates.md), [CP-CHECK-1](../drafts/CP-CHECK-1.md) (in the repository; not part of the skill bundle)
+- **Companion Examples:** [check-acme-ssh-maxauthtries.json](examples/check-acme-ssh-maxauthtries.json) (`at-most` against a parameter, bash and python collectors), [check-acme-ssh-ciphers.json](examples/check-acme-ssh-ciphers.json) (`matches-not` on a list), [assessment-acme-bastion-2026-11-03.json](examples/assessment-acme-bastion-2026-11-03.json) (two rows, one failing), [finding-acme-bastion-ssh-cbc.json](examples/finding-acme-bastion-ssh-cbc.json) (`check-ref`), [check-vectors.json](conformance/check-vectors.json)
+
 ### Requirement 10: Integrity, Attestation, and Air-Gaps
 - **Description:** Apply both package digests (for byte transport) and semantic digests (for meaning preservation). Follow the DSSE profile checklist and attestation structures for air-gapped security assurance.
 - **Reference Document:** [Chapter 11 — Integrity, Attestation, and Air-Gaps](references/ch11-integrity-attestation-airgaps.md)
@@ -94,9 +99,9 @@ You must strictly adhere to the guidelines detailed in the handbook chapters and
 
 ## Appendices Reference
 
-- [Appendix A: Shapes reference](references/appendix-a-shapes.md) — The ten types + sub-objects, field by field.
+- [Appendix A: Shapes reference](references/appendix-a-shapes.md) — The eleven types + sub-objects, field by field.
 - [Appendix B: Primitives, operations, predicates](references/appendix-b-primitives-ops-predicates.md) — One page each, with rationale and failure messages.
-- [Appendix C: Code systems](references/appendix-c-code-systems.md) — Modality (with the lattice diagram), lifecycle, deviation states, responsibility, mapping relationships, duration units, confidence.
+- [Appendix C: Code systems](references/appendix-c-code-systems.md) — Modality (with the lattice diagram), lifecycle, deviation states, responsibility, mapping relationships, duration units, confidence, and the fact types, comparators, outcomes and collector runtimes of Check.
 - [Appendix D: stdlib facet catalog](references/appendix-d-stdlib-catalog.md) — The eight standard facets with schemas, examples, and candidates.
 - [Appendix E: Worked corpora](references/appendix-e-worked-corpora.md) — KONF.14.1, IEC-CSO-IIR + class tailoring, ISM control, SCF mapping.
 - [Appendix F: Objections and answers](references/appendix-f-objections.md) — Adversarial FAQ (why not CEL / XML / JSON Patch, etc.).
@@ -131,6 +136,13 @@ The [examples/](examples/) directory contains a complete, self-consistent bundle
   - [assessment-2026q3.json](examples/assessment-2026q3.json) — Assessment execution details.
 - **Finding & Deviation:**
   - [finding-017.json](examples/finding-017.json) — Auditable finding with Deviation sub-object.
+- **Check, runs and evidence (kernel 2.0.0):**
+  - [req-acme-lnx-ssh-1.json](examples/req-acme-lnx-ssh-1.json) — Requirement with two clauses and one integer parameter.
+  - [tailoring-acme-linux-prod.json](examples/tailoring-acme-linux-prod.json) — Binds the parameter the check reads.
+  - [check-acme-ssh-maxauthtries.json](examples/check-acme-ssh-maxauthtries.json), [check-acme-ssh-ciphers.json](examples/check-acme-ssh-ciphers.json) — The two Checks, with collectors.
+  - [assessment-acme-bastion-2026-11-03.json](examples/assessment-acme-bastion-2026-11-03.json), [assessment-acme-bastion-2026-11-10.json](examples/assessment-acme-bastion-2026-11-10.json) — Two daily runs with their observations.
+  - [finding-acme-bastion-ssh-cbc.json](examples/finding-acme-bastion-ssh-cbc.json) — The finding the first run raised, closed by the second.
+  - `examples/evidence/sha256/` — Seven evidence files, each named by its digest.
 - **Attestation & Package Integrity:**
   - [attestation-acme-2026.json](examples/attestation-acme-2026.json) — Attestation with semantic digests.
   - [content-manifest.json](examples/content-manifest.json) — Package integrity manifest pinning schemas.
