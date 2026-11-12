@@ -38,8 +38,10 @@ result-specification?, target-object-categories[]}}`.
  "result-specification": "über Netze nach {{einem anerkannten Standard}}",
  "target-object-categories": ["Anwendungen"]}
 ```
-Note the visible passenger: one of the 216 pseudo-placeholders rides
-*inside* the grammar payload — preserved, reported, unrepaired
+Note the passenger: the template's parameter slot
+`{{einem anerkannten Standard}}` rides *inside* the grammar payload as
+published, while the prose binds the same parameter as a token; the
+converter checks that the slot stands where the prose inserts it
 (§14.5). **Absorbs:** modal_verb/action_word/result/… ×~4,000 grammar
 props. **Status:** high confidence; exercised at 1,015 statements.
 

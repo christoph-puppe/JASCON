@@ -331,7 +331,7 @@ test("attestation: the bi-modal verdict of every vector", async () => {
   }
 });
 
-test("one object: the 216 rule, duplicate statement ids, a by-statement key that names nothing, an empty optional list", () => {
+test("one object: prose-params-resolve, duplicate statement ids, a by-statement key that names nothing, an empty optional list", () => {
   const base = { id: "https://a.example/req/1", version: "1", lifecycle: "active" };
   const st = (id, text, params) => ({ id, modality: "must", "obligated-parties": ["https://a.example/p"], prose: { en: text }, ...(params ? { parameters: params } : {}) });
   const errs = o => rules.jscObjectErrors(o).errors.join(" | ");

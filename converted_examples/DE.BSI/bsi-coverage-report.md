@@ -20,11 +20,12 @@ Source: **Anwenderkatalog Grundschutz++** v2026-07-16T05:11:52.605669+00:00 — 
 
 ## Findings (computed)
 
-- **Defective source values: 213** - `{{...}}` pseudo-placeholders inside part-prop values, REPORTED for the authors' queue (never repaired, passed through, or dropped silently - handbook 14.5). Full list in the JSON report; first three:
-    - `GC.1.1` / `result_specification`: "nach {{einem anerkannten Standard}}..."
-    - `GC.9.1.1` / `result`: "die {{Rollen und Zuständigkeiten}} im Rahmen des ISMS..."
-    - `GC.9.1.1.1` / `result`: "die Zuständigkeit für Informationssicherheit {{einer unabhängigen Pers..."
-- **Census delta (source moved)**: catalog v2026-07-16 vs. census v2026-07-03 - controls 999 (census 998), defective `{{...}}` values 213 (census GS++-only 213). Deltas are the authors editing the catalog between snapshots; every claim in this report re-verifies against the version named above.
+- **List values packed into one string: 781** - `tags` 125 of 470, `threats` 616 of 900, `target_object_categories` 40 of 634, `documentation` 0 of 960. Several vocabulary terms joined by commas in ONE prop value, where OSCAL repeats the prop once per value and JSON has arrays. The string is schema-valid, so no OSCAL validator sees the list, and none can check its terms against the vocabulary; every consumer has to know to split. The converter splits on `,` (rules above) and REPORTS the source form for the authors' queue (handbook 14.5). Full list in the JSON report; first three `tags` values:
+    - `GC.3.1.1`: "Compliance Management, Inventories"
+    - `ASST.3.10`: "Lieferketten, Shadow IT"
+    - `ASST.3.11`: "Data Leak, Shadow IT"
+- **Parameter slots in the sentence template: 221** `{{Label}}` in result/result_specification values - parameters, not defects: 221 stand exactly where the statement prose inserts a parameter (`{{ insert: param, x }}`), 219 repeat the label of a parameter declared on the same control (other wording: `GC.1.1` "einem anerkannten Standard", `NOT.1.1.4` "Reaktiv-, Aufbau- oder Standard-"). Carried verbatim in `statement-grammar@1`.
+- **Census delta (source moved)**: catalog v2026-07-16 vs. census v2026-07-03 - controls 999 (census 998), packed `tags` values 125 (census GS++-only 125). Deltas are the authors editing the catalog between snapshots; every claim in this report re-verifies against the version named above.
 - **Tag spelling drift** (space vs hyphen variants coexist): {'Compliance Management': 6} - reported, not normalized.
 - **sec_level value space observed**: {'normal-SdT': 772, 'erhöht': 227} (note the bare 'erhöht' vs 'normal-SdT' asymmetry - vocabulary drift the pinned schema now freezes).
 
@@ -43,9 +44,9 @@ Source: **Anwenderkatalog Grundschutz++** v2026-07-16T05:11:52.605669+00:00 — 
 | `catalog.groups[].groups[].controls[].controls[].controls[].controls[].id` | 2 | L1 | Requirement id (top) / statement id (nested) |
 | `catalog.groups[].groups[].controls[].controls[].controls[].controls[].parts[].id` | 4 | L1 | statement/guidance part identity -> statement id / narrative key |
 | `catalog.groups[].groups[].controls[].controls[].controls[].controls[].parts[].name` | 4 | L1 | statement/guidance part identity -> statement id / narrative key |
-| `catalog.groups[].groups[].controls[].controls[].controls[].controls[].parts[].props[].name` | 7 | L1 | dispatch by part-prop name (grammar/objectives/criteria; defects reported) |
+| `catalog.groups[].groups[].controls[].controls[].controls[].controls[].parts[].props[].name` | 7 | L1 | dispatch by part-prop name (grammar/objectives/criteria; packed lists reported) |
 | `catalog.groups[].groups[].controls[].controls[].controls[].controls[].parts[].props[].ns` | 7 | L1 | absorbed: CSV-link namespaces replaced by pinned facet schemas |
-| `catalog.groups[].groups[].controls[].controls[].controls[].controls[].parts[].props[].value` | 7 | L1 | dispatch by part-prop name (grammar/objectives/criteria; defects reported) |
+| `catalog.groups[].groups[].controls[].controls[].controls[].controls[].parts[].props[].value` | 7 | L1 | dispatch by part-prop name (grammar/objectives/criteria; packed lists reported) |
 | `catalog.groups[].groups[].controls[].controls[].controls[].controls[].parts[].prose` | 4 | L1 | statements[].prose.de ({{insert}} -> {param:}) / gspp-narrative guidance |
 | `catalog.groups[].groups[].controls[].controls[].controls[].controls[].props[].name` | 6 | L1 | dispatch by prop name (see per-prop table) |
 | `catalog.groups[].groups[].controls[].controls[].controls[].controls[].props[].ns` | 4 | L1 | absorbed: CSV-link namespaces replaced by pinned facet schemas |
@@ -60,9 +61,9 @@ Source: **Anwenderkatalog Grundschutz++** v2026-07-16T05:11:52.605669+00:00 — 
 | `catalog.groups[].groups[].controls[].controls[].controls[].params[].props[].value` | 4 | L2 | compat oscal-1x: param-extras (param alt-identifier only) |
 | `catalog.groups[].groups[].controls[].controls[].controls[].parts[].id` | 37 | L1 | statement/guidance part identity -> statement id / narrative key |
 | `catalog.groups[].groups[].controls[].controls[].controls[].parts[].name` | 37 | L1 | statement/guidance part identity -> statement id / narrative key |
-| `catalog.groups[].groups[].controls[].controls[].controls[].parts[].props[].name` | 95 | L1 | dispatch by part-prop name (grammar/objectives/criteria; defects reported) |
+| `catalog.groups[].groups[].controls[].controls[].controls[].parts[].props[].name` | 95 | L1 | dispatch by part-prop name (grammar/objectives/criteria; packed lists reported) |
 | `catalog.groups[].groups[].controls[].controls[].controls[].parts[].props[].ns` | 95 | L1 | absorbed: CSV-link namespaces replaced by pinned facet schemas |
-| `catalog.groups[].groups[].controls[].controls[].controls[].parts[].props[].value` | 95 | L1 | dispatch by part-prop name (grammar/objectives/criteria; defects reported) |
+| `catalog.groups[].groups[].controls[].controls[].controls[].parts[].props[].value` | 95 | L1 | dispatch by part-prop name (grammar/objectives/criteria; packed lists reported) |
 | `catalog.groups[].groups[].controls[].controls[].controls[].parts[].prose` | 37 | L1 | statements[].prose.de ({{insert}} -> {param:}) / gspp-narrative guidance |
 | `catalog.groups[].groups[].controls[].controls[].controls[].props[].name` | 131 | L1 | dispatch by prop name (see per-prop table) |
 | `catalog.groups[].groups[].controls[].controls[].controls[].props[].ns` | 112 | L1 | absorbed: CSV-link namespaces replaced by pinned facet schemas |
@@ -78,9 +79,9 @@ Source: **Anwenderkatalog Grundschutz++** v2026-07-16T05:11:52.605669+00:00 — 
 | `catalog.groups[].groups[].controls[].controls[].params[].values[]` | 1 | L1 | parameter label / default - first-class since the D9 rev (backlog #1); residue drained |
 | `catalog.groups[].groups[].controls[].controls[].parts[].id` | 653 | L1 | statement/guidance part identity -> statement id / narrative key |
 | `catalog.groups[].groups[].controls[].controls[].parts[].name` | 653 | L1 | statement/guidance part identity -> statement id / narrative key |
-| `catalog.groups[].groups[].controls[].controls[].parts[].props[].name` | 1,632 | L1 | dispatch by part-prop name (grammar/objectives/criteria; defects reported) |
+| `catalog.groups[].groups[].controls[].controls[].parts[].props[].name` | 1,632 | L1 | dispatch by part-prop name (grammar/objectives/criteria; packed lists reported) |
 | `catalog.groups[].groups[].controls[].controls[].parts[].props[].ns` | 1,632 | L1 | absorbed: CSV-link namespaces replaced by pinned facet schemas |
-| `catalog.groups[].groups[].controls[].controls[].parts[].props[].value` | 1,632 | L1 | dispatch by part-prop name (grammar/objectives/criteria; defects reported) |
+| `catalog.groups[].groups[].controls[].controls[].parts[].props[].value` | 1,632 | L1 | dispatch by part-prop name (grammar/objectives/criteria; packed lists reported) |
 | `catalog.groups[].groups[].controls[].controls[].parts[].prose` | 653 | L1 | statements[].prose.de ({{insert}} -> {param:}) / gspp-narrative guidance |
 | `catalog.groups[].groups[].controls[].controls[].props[].name` | 2,589 | L1 | dispatch by prop name (see per-prop table) |
 | `catalog.groups[].groups[].controls[].controls[].props[].ns` | 2,262 | L1 | absorbed: CSV-link namespaces replaced by pinned facet schemas |
@@ -96,9 +97,9 @@ Source: **Anwenderkatalog Grundschutz++** v2026-07-16T05:11:52.605669+00:00 — 
 | `catalog.groups[].groups[].controls[].params[].values[]` | 1 | L1 | parameter label / default - first-class since the D9 rev (backlog #1); residue drained |
 | `catalog.groups[].groups[].controls[].parts[].id` | 1,302 | L1 | statement/guidance part identity -> statement id / narrative key |
 | `catalog.groups[].groups[].controls[].parts[].name` | 1,302 | L1 | statement/guidance part identity -> statement id / narrative key |
-| `catalog.groups[].groups[].controls[].parts[].props[].name` | 3,308 | L1 | dispatch by part-prop name (grammar/objectives/criteria; defects reported) |
+| `catalog.groups[].groups[].controls[].parts[].props[].name` | 3,308 | L1 | dispatch by part-prop name (grammar/objectives/criteria; packed lists reported) |
 | `catalog.groups[].groups[].controls[].parts[].props[].ns` | 3,308 | L1 | absorbed: CSV-link namespaces replaced by pinned facet schemas |
-| `catalog.groups[].groups[].controls[].parts[].props[].value` | 3,308 | L1 | dispatch by part-prop name (grammar/objectives/criteria; defects reported) |
+| `catalog.groups[].groups[].controls[].parts[].props[].value` | 3,308 | L1 | dispatch by part-prop name (grammar/objectives/criteria; packed lists reported) |
 | `catalog.groups[].groups[].controls[].parts[].prose` | 1,302 | L1 | statements[].prose.de ({{insert}} -> {param:}) / gspp-narrative guidance |
 | `catalog.groups[].groups[].controls[].props[].name` | 5,240 | L1 | dispatch by prop name (see per-prop table) |
 | `catalog.groups[].groups[].controls[].props[].ns` | 4,589 | L1 | absorbed: CSV-link namespaces replaced by pinned facet schemas |
@@ -141,18 +142,18 @@ Source: **Anwenderkatalog Grundschutz++** v2026-07-16T05:11:52.605669+00:00 — 
 | `label` | L1 | Requirement.label (top) / taxonomy by-statement label (nested) |
 | `sec_level` | L1 | top: baseline Set membership; nested: taxonomy by-statement |
 | `effort_level` | L1 | gspp-taxonomy: effort (by-statement) |
-| `tags` | L1 | gspp-taxonomy: tags[] (comma-split; inconsistencies reported) |
+| `tags` | L1 | gspp-taxonomy: tags[] (comma-split; packed lists and inconsistencies reported) |
 | `confidentiality` | L1 | security-objectives (by-statement) |
 | `integrity` | L1 | security-objectives (by-statement) |
 | `availability` | L1 | security-objectives (by-statement) |
 | `authenticity` | L1 | security-objectives (by-statement) |
-| `threats` | L1 | security-objectives threat-refs[] (comma-split, minted threat code URIs) |
+| `threats` | L1 | security-objectives threat-refs[] (comma-split, packed lists reported; minted threat code URIs) |
 | `modal_verb` | L1 | statements[].modality (mapped code system) |
 | `action_word` | L1 | statement-grammar: action (by-statement) |
 | `result` | L1 | statement-grammar: result (by-statement) |
 | `result_specification` | L1 | statement-grammar: result-specification (by-statement) |
-| `target_object_categories` | L1 | statement-grammar: target-object-categories[] (by-statement) |
-| `documentation` | L1 | assessment-criteria: required-documentation[] (by-statement) |
+| `target_object_categories` | L1 | statement-grammar: target-object-categories[] (by-statement; comma-split, packed lists reported) |
+| `documentation` | L1 | assessment-criteria: required-documentation[] (by-statement; comma-split, packed lists reported) |
 | `practice` | L1 | gspp-taxonomy: practice (by-statement) |
 
 ## UNMAPPED (gate target: zero)

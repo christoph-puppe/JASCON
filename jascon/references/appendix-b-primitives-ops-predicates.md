@@ -113,20 +113,22 @@ produced by the BSI converter are the negative corpus in waiting.
 that statement; every declared parameter is referenced or explicitly
 marked display-only. Unbound token = error. Structural check only —
 no evaluation, which is why Core can run it.
-**Rationale:** the 216. One national corpus ships 216
-`{{...}}` pseudo-placeholders inside schema-valid documents — free
-text wearing parameter costume, invisible to every 1.x tool. A token
-is a contract or it is a defect; this primitive is the eyes.
+**Rationale:** a token is a contract or it is a defect; this
+primitive is the eyes. A slot in prose that names nothing has no
+value to insert, no type to check and nothing to tailor. The German
+catalog does this right in its own notation: its 221 insertions all
+name declared parameters, and its sentence template marks the same
+slots as `{{Label}}`, each where the prose inserts the parameter.
 **Failure:**
 ```
 FAIL [prose-params-resolve] <req>/<statement>
   token {param:<name>} has no declared parameter
-  rationale: 216 pseudo-placeholders shipped invisibly in one
-  national corpus; binding is checked so costume can't pass as
-  contract.
+  rationale: a slot in prose must name a declared parameter, or it
+  has no value, no type and nothing to tailor.
 ```
-**Exercised:** at scale (converter token conversion); the 216 are the
-reported negative cases, verbatim, in the BSI coverage report.
+**Exercised:** at scale (converter token conversion in every corpus;
+the BSI run binds all 221 parameters); the negative cases are the
+conformance corpus's.
 
 ### 6 · `modality-monotonic` — *P+*
 

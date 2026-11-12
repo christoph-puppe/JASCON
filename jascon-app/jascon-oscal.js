@@ -52,6 +52,10 @@ function jscOscalSlug(s) {
 const JSC_INSERT_RE = /\{\{\s*insert:\s*param,\s*([^}\s]+)\s*\}\}/g;
 const jscOscalProse = prose => String(prose || "").replace(JSC_INSERT_RE, (m, id) => `{param:${id}}`);
 const jscSplitList = v => String(v).split(",").map(x => x.trim()).filter(Boolean);
+const JSC_BSI_SLOT = /\{\{(?!\s*insert:)(.*?)\}\}/;
+const JSC_BSI_INSERT = "\\{\\{\\s*insert:\\s*param,\\s*[^}\\s]+\\s*\\}\\}";
+const JSC_BSI_LIST_PROPS = ["tags", "threats", "target_object_categories", "documentation"];
+const jscReEscape = s => String(s).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 const jscPropMap = list => Object.fromEntries((list || []).map(p => [p.name, p.value]));
 /* #uuid -> the URL (or, failing that, the title) of the back-matter resource */
 function jscBackMatter(doc) {
@@ -83,15 +87,25 @@ const JSC_BSI = {
 function jscImportBsi(cat) {
   const B = JSC_BSI, ns = B.ns, version = cat.metadata.version, lang = B.lang;
   const objects = [], bm = jscBackMatter(cat), secValues = new Set(), baseline = new Map();
-  const report = { preset: "bsi-gspp", controls: 0, statements: 0, "source-defects": [], "unknown-modal-verbs": {}, "parameters-unreferenced": 0 };
+  const report = { preset: "bsi-gspp", controls: 0, statements: 0, "packed-list-values": [], "parameter-slots": 0, "parameter-slots-not-at-insert": [], "unknown-modal-verbs": {}, "parameters-unreferenced": 0 };
   let seq = 0;
   const nseq = () => (seq += 10);
   /* one statement, and its facet payloads keyed by the statement id, from control c */
   const statement = (c, sid, isChild, req) => {
     const parts = c.parts || [], smt = parts.find(p => p.name === "statement") || {}, guid = parts.find(p => p.name === "guidance");
     const text = jscOscalProse(smt.prose), pp = jscPropMap(smt.props), cp = jscPropMap(c.props);
+    /* {{Label}} in a sentence-template prop marks a parameter: it must stand
+       where the prose inserts one (convert_bsi.py, slot_at_insert) */
     for (const part of parts) for (const p of part.props || []) {
-      if (String(p.value || "").includes("{{")) report["source-defects"].push({ control: c.id, part: part.name, prop: p.name, value: p.value });
+      const v = String(p.value || ""), texts = v.split(JSC_BSI_SLOT).filter((_, i) => i % 2 === 0);
+      if (texts.length < 2) continue;
+      report["parameter-slots"] += texts.length - 1;
+      if (!new RegExp(texts.map(jscReEscape).join(JSC_BSI_INSERT)).test(smt.prose || "")) report["parameter-slots-not-at-insert"].push({ control: c.id, prop: p.name, value: v });
+    }
+    /* a list of vocabulary terms joined by commas into one value, where OSCAL
+       repeats the prop once per term: split below, reported here */
+    for (const p of [...(smt.props || []), ...(c.props || [])]) {
+      if (JSC_BSI_LIST_PROPS.includes(p.name) && jscSplitList(p.value).length > 1) report["packed-list-values"].push({ control: c.id, prop: p.name, value: p.value });
     }
     const mv = pp.modal_verb;
     if (mv !== undefined && !(mv in B.MODAL)) report["unknown-modal-verbs"][mv] = (report["unknown-modal-verbs"][mv] || 0) + 1;
@@ -445,7 +459,7 @@ function jscImportGeneric(cat, opts) {
       seen.add(sid);
       const st = { id: sid, modality: "unspecified", "obligated-parties": [`${ns}/party/organization`], prose: { [lang]: cl.prose } };
       const tokens = [...new Set([...cl.prose.matchAll(/\{param:([^}]+)\}/g)].map(m => m[1]))];
-      const declared = tokens.map(t => { used.add(t); return params.has(t) ? paramOf(params.get(t)) : { name: t, type: "string" }; });   // every token is declared (the 216 rule)
+      const declared = tokens.map(t => { used.add(t); return params.has(t) ? paramOf(params.get(t)) : { name: t, type: "string" }; });   // every token is declared (prose-params-resolve)
       if (declared.length) st.parameters = declared;
       req.statements.push(st);
     }

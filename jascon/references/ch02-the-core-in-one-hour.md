@@ -102,9 +102,13 @@ parameters:
 ```
 
 The `{param:…}` token is *bound*: a rule called `prose-params-resolve`
-verifies every token against a declared parameter. That single binding
-makes the census's ugliest measurement — 216 pseudo-placeholders drifting
-silently inside schema-valid documents — **unwritable**. The type algebra
+verifies every token against a declared parameter, so a slot in the prose
+always names something declared and typed. Lists get the same treatment one
+layer out: the facets that carry the German grammar and taxonomy pin
+schemas that type `tags`, `threat-refs` and `target-object-categories` as
+arrays. That makes the census's ugliest measurement — 781 lists packed
+into comma-separated strings inside schema-valid documents — **visible**:
+a string where the pinned schema wants an array fails. The type algebra
 is deliberately small (strings, integers, canonical decimals, booleans,
 dates, URIs, codes; choice/list/range containers; and durations split into
 elapsed time versus calendar periods, because the American corpus counts

@@ -47,7 +47,7 @@ registry-rot corpse; ISM's own OCR→ISM renumbering history.
 | `id` | ● | string | Unique within the Requirement; stable and citable (tailoring ops, findings, mapping scopes, statement-refs all address it). Converters mint `smt` for the own-clause, child-control ids for flattened clauses. |
 | `modality` | ● | code (C.1 lattice) | unspecified · may · should · must · should-not · must-not · may-only. Evidence: BSI `modal_verb` ×1,006 (should 626 / may 225 / must 155); CR26 `force` 246 layered; ISM structurally modal-free → honest `unspecified` ×1,149. |
 | `obligated-parties` | ● | [code/ref] | Who the clause binds. Evidence: CR26 `affects[]` (Providers 159 / Agencies 24 / Assessors 23 / FedRAMP 16 / Advisors 3); BSI/ISM: documented single-party defaults. |
-| `parameters` | ○ | [Parameter] | Declared insertion points; prose references them as `{param:name}` — an unbound token is a validation error (the 216 lesson). |
+| `parameters` | ○ | [Parameter] | Declared insertion points; prose references them as `{param:name}` — an unbound token is a validation error (`prose-params-resolve`). |
 | `prose` | ● | text | The normative text — `text` = `{BCP-47: string \| [string]}` (the #12 primitive; formerly named langMap). |
 
 **Parameter algebra (D9/D14):** every parameter carries `name` ● and

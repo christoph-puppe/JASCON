@@ -53,8 +53,13 @@ test("BSI preset: every object has the semantic digest of the shipped DE.BSI bun
   assert.equal(out.objects.length, 813);
   for (const f of out.facetSchemas) assert.deepEqual(f.def, json(path.join(dir, f.path)), f.path);
   assert.deepEqual(out.facetSchemas.map(f => f.path).sort(), manifest["facet-schemas"].map(e => e.path).sort());
-  // the converter's own count of source defects: pseudo-placeholders in prop values, reported and not repaired
-  assert.equal(out.report["source-defects"].length, 213);
+  // the converter's own counts: lists packed into one comma-separated value are reported; the {{Label}}
+  // slots of the sentence template are parameters, every one where the prose inserts a parameter
+  const packed = {};
+  for (const d of out.report["packed-list-values"]) packed[d.prop] = (packed[d.prop] || 0) + 1;
+  assert.deepEqual(packed, { tags: 125, threats: 616, target_object_categories: 40 });
+  assert.equal(out.report["parameter-slots"], 221);
+  assert.deepEqual(out.report["parameter-slots-not-at-insert"], []);
 });
 
 test("generic rules: NIST SP 800-53 becomes valid kernel objects whose references close", { skip: missing(NIST_SRC) }, () => {

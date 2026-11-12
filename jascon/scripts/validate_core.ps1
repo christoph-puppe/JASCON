@@ -3605,7 +3605,7 @@ function Validate-Object([string]$section, [string]$path, $obj) {
                 if (Is-List $txt) { $txt = ($txt -join ' ') }
                 foreach ($mt in [System.Text.RegularExpressions.Regex]::Matches($txt, '\{param:([^}]+)\}')) {
                     if ($declared -cnotcontains $mt.Groups[1].Value) {
-                        FAIL $section "${path}: unbound {param:$($mt.Groups[1].Value)} in statement $($s['id']) (the 216 rule)" } } }
+                        FAIL $section "${path}: unbound {param:$($mt.Groups[1].Value)} in statement $($s['id']) (prose-params-resolve)" } } }
         }
         if ($null -ne $obj['facets']) {
             foreach ($fid in $obj['facets'].Keys) {

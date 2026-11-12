@@ -18,8 +18,9 @@ unchanged, does so under CC BY-SA 4.0 and keeps this attribution.
 **Changes made.** The catalogue was converted to JASCON objects by
 `jascon/scripts/convert_bsi.py`: structure, identifiers and metadata are
 re-expressed; requirement text is carried as published. Source defects are
-reported, not repaired (the 213 pseudo-placeholders are listed in
-`bsi-coverage-report.md`, with every conversion rule and its count). The
+reported, not repaired (the 781 list values packed into single
+comma-separated strings are listed in `bsi-coverage-report.json` and counted
+in `bsi-coverage-report.md`, with every conversion rule and its count). The
 Mindeststandard-TLS draft catalogue was not converted. `oscal-export/` is a
 re-export of the converted bundle to OSCAL 1.2.2.
 

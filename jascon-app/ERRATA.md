@@ -70,3 +70,34 @@ surprise, blunder.
   runs the whole-set check; the export of that set passes
   `validate_core.py`. `tests/advice.test.mjs`, "a capability id is derived
   from the requirement and unique within its component".
+
+## 2026-11-12 · build 0.9.4 · the BSI import counted 213 parameters as source defects and missed the lists packed into one value
+
+- **Symptom.** The Import page, run on the Anwenderkatalog Grundschutz++,
+  reported 213 "source defects": every sentence-template prop
+  (`result`, `result_specification`) that contains a `{{…}}` slot, such as
+  `nach {{einem anerkannten Standard}}` in GC.1.1. The same count stood in
+  `convert_bsi.py`'s coverage report, and the handbook and the website called
+  them pseudo-placeholders that no validator can see. They are parameters:
+  all 221 slots stand exactly where the statement prose inserts a parameter
+  (`{{ insert: param, … }}`), and 219 repeat the label of the parameter the
+  control declares. The source's real defect went unreported: 125 of 470
+  `tags` values, 616 of 900 `threats` values and 40 of 634
+  `target_object_categories` values pack several vocabulary terms into one
+  comma-separated string, where OSCAL repeats the prop and JSON has arrays.
+  Pointed out by the project's author.
+- **Cause.** The converter took `{{` in a prop value for a broken
+  placeholder without checking it against the parameters and the prose of
+  the same control. The comma-split was written as a conversion rule and
+  never counted as a finding.
+- **Class.** Data: a reading of the source's notation that nobody checked
+  against the source.
+- **Why it was not caught.** The test asserted the count (213) and not what
+  the counted values were; nothing compared a slot with the prose.
+- **Fix.** The import, like `convert_bsi.py`, checks every `{{…}}` slot
+  against the prose (it must stand where a parameter is inserted; a slot
+  that does not is reported) and reports every list value packed into one
+  string. The objects it writes are unchanged.
+- **Test.** `tests/oscal.test.mjs`, "BSI preset: …": the packed values per
+  prop (tags 125, threats 616, target_object_categories 40), 221 slots and
+  none away from an insertion.

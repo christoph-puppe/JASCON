@@ -2364,3 +2364,57 @@ counted before (2 clause entries, 2 values); NIST's second example carries
 neither, and no file carries a product version. Both are examples by the
 format's maintainers. The census that could change D22 is of component
 definitions vendors published, and it is still owed (CP-ADVICE-1 §2.3).
+
+# Amendments — 2026-11-12: the packed lists (the "216" withdrawn)
+
+**What was wrong.** Since the census of 2026-07-03 the project counted 216
+prop values in the BSI corpus (213 in Grundschutz++, 3 in MS-TLS) as
+"pseudo-placeholders": `{{einem anerkannten Standard}}` in a `result` or
+`result_specification` prop, read as free text imitating parameter syntax.
+The handbook, the website, the README, the specification's principles and
+the converter's coverage report carried the number, and the validators
+named the `{param:}` binding check "the 216 rule". The author pointed out
+that these are valid parameters.
+**What the source says.** Checked on the catalogue of 2026-07-16 (the one
+the shipped bundle was converted from), on the census snapshot of
+2026-07-03 and on the build of 2026-10-29: all `{{…}}` slots in the
+sentence-template props (221 in Grundschutz++ of 2026-07-16, 3 in
+MS-TLS) stand exactly where the statement prose of the same control
+inserts a parameter with `{{ insert: param, … }}`; 219 of the 221 repeat
+the label of that parameter, two (GC.1.1, NOT.1.1.4) use other wording at
+the same place. The sentence template marks its parameter slots by label.
+They are parameters, not defects, and there is nothing to report.
+**The real defect.** Several props hold a list of vocabulary terms and
+pack it into ONE comma-separated string instead of repeating the prop (the
+OSCAL form) or using an array (the JSON form): in the catalogue of
+2026-07-16, 125 of 470 `tags` values (`"Data Leak, Shadow IT"`, ASST.3.11),
+616 of 900 `threats` values (`"G 0.18, G 0.30"`) and 40 of 634
+`target_object_categories` values — 781 in all. Each is a well-formed
+string, so no OSCAL validator sees the list, nothing checks its terms
+against the CSV vocabulary, and every consumer has to know from outside the
+document to split. The converter already split them (a declared rule) but
+never counted them as a finding. Recounts: census snapshot 2026-07-03 —
+125 of 468 `tags`; build 2026-10-29 — 125 of 470 `tags`, 635 of 901
+`threats`, 39 of 636 `target_object_categories`.
+**What changed.** `convert_bsi.py` reports the packed lists per prop and
+checks every `{{…}}` slot against the prose (a slot away from an insertion
+would be reported; there is none); the coverage report is regenerated, the
+bundle is byte-identical. The app's BSI import does the same (build 0.9.4,
+`jascon-app/ERRATA.md`), with the counts in its test. The binding check
+keeps its rule and its predicate name, `prose-params-resolve`, in all five
+implementations; NIST's "216 per-statement rule" is the per-statement
+parameter rule. The handbook (ch01, 02, 04, 07, 12, 14; appendices A, B,
+D, E, F, G), the website, the README, rc.3's principles and the source
+licence note now cite the packed lists; ch01 and §14.5 say what was
+wrong. The 1.0.0 specification and the deep-research review carry an
+erratum note; the historical drafts (v0.5, the gate-3 census and plan,
+the prop census r2) and the entries above stay as written and are
+corrected by this section — including "the 216-defect class" under D9,
+"216 pseudo-placeholders" in "The structurally-dead category" (they are
+carried as published in `statement-grammar@1`, not made dead) and "the
+216 per-statement rule" in the NIST findings.
+**What it does not change.** No kernel shape, rule or vector. The bundle's
+objects and digests are unchanged.
+**Lesson, for §14.5.** A finding about a source is tested against the
+source's own notation before it goes to the authors' queue. This one was
+not, for four months.

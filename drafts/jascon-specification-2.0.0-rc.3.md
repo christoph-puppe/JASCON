@@ -145,9 +145,10 @@ adversarial findings** (G, SOL/H, P6/P7/P8 — rejections documented);
 (3) **the three-authority census** (ISM v2026.06.18 · BSI GS++/MS-TLS
 2026-07 · FedRAMP CR26 v2026.07.14.01).
 
-Principles: **failures unrepresentable, not forbidden** (the 216
-pseudo-placeholders inside schema-valid BSI documents remain the standing
-proof); **complexity-budget reallocation** (1.x spent the budget on
+Principles: **failures unrepresentable, not forbidden** (the 781 list
+values that schema-valid BSI documents pack into comma-separated strings
+remain the standing proof — register, "Amendments — 2026-11-12: the
+packed lists"); **complexity-budget reallocation** (1.x spent the budget on
 infrastructure — RFC-0024 records the verdict: 100+ Rev5 authorizations in
 2025, zero OSCAL); **claims follow evidence tier** (measured / designed-for /
 hypothesized, always labeled).

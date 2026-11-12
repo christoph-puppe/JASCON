@@ -159,9 +159,9 @@ nav: home
         <p>FedRAMP's RFC-0024 of January 2026 records more than one hundred Rev5 authorizations processed in 2025 and no submission in OSCAL, the format the programme helped to design.</p>
       </div>
       <div class="finding">
-        <span class="finding-n">216</span>
-        <h3>defects that no validator can see</h3>
-        <p>Grundschutz++ carries 12,059 namespaced props whose vocabulary lives in CSV side files. Among them sit 216 pseudo-placeholders such as <code>&#123;&#123;einem anerkannten Standard&#125;&#125;</code>, some contradicting the prose beside them. Every OSCAL validator reports the catalogues as valid.</p>
+        <span class="finding-n">125</span>
+        <h3>lists that no validator can see</h3>
+        <p>Grundschutz++ (catalogue of 16 July 2026) carries 12,009 namespaced props whose vocabulary lives in CSV side files. 125 of its 470 <code>tags</code> values pack several terms into one comma-separated string, such as <code>"Data Leak, Shadow IT"</code> in ASST.3.11, where JSON has arrays and OSCAL repeats the prop; 616 <code>threats</code> values do the same. Every OSCAL validator sees one string and reports the catalogue as valid.</p>
       </div>
       <div class="finding">
         <span class="finding-n">2 teams, 1 model</span>
@@ -302,7 +302,7 @@ nav: home
       <article class="card">
         <div class="card-top"><span class="card-no">Kernel rules</span><span class="tier tier-measured">measured</span></div>
         <h3>Valid implies checkable</h3>
-        <p>A <code>{param:}</code> token must name a declared, typed parameter. A facet pins its schema and declares which computations it changes. The converter built on these rules found 213 pseudo-placeholders in a national catalogue in production.</p>
+        <p>A <code>{param:}</code> token must name a declared, typed parameter. A facet pins its schema and declares which computations it changes. The converter built on these rules found 781 list values that a national catalogue in production packs into single comma-separated strings.</p>
         <p class="how"><b>Mechanism:</b> closed shapes, bound tokens, fail-closed facets.</p>
       </article>
       <article class="card">

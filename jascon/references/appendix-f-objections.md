@@ -161,8 +161,9 @@ Scoring is in facets; the risk is in the kernel (2.0.0). The split is the measur
 **Q15. Statements without mandatory grammar are just prose with
 extra steps.**
 The German corpus answers in both directions. With grammar: 1,006
-machine-decomposed clauses, QA-checkable, defect-findable (the 216
-and the 9 were found *because* grammar is data). Without: ISM's
+machine-decomposed clauses, QA-checkable, defect-findable (the 9
+clauses that say MUSS without a `modal_verb` were found *because*
+grammar is data). Without: ISM's
 1,149 declarative statements convert at Core tier with zero facets
 and zero loss. Mandatory grammar would have made the second corpus a
 second-class citizen — R2 accepts the bifurcation because the

@@ -2,8 +2,11 @@
 """BSI Grundschutz++ (OSCAL 1.1.3) -> Semantic Core bundle.
 Gate item 1, authority 2. Nested pseudo-controls -> statements; part-level
 grammar/objective/taxonomy props -> facet payloads keyed by statement id;
-{{ insert: param }} -> {param:} tokens; the {{...}} prop-value defects are
-REPORTED, never laundered. Pattern-based coverage: UNMAPPED target = 0.
+{{ insert: param }} -> {param:} tokens; the {{Label}} slots in the
+sentence-template props are parameters (each stands where the prose inserts
+one) and are checked, not reported; list values packed into one
+comma-separated string are split and REPORTED, never laundered.
+Pattern-based coverage: UNMAPPED target = 0.
 
 Single-catalog mode since 2026-07-21: MS-TLS dropped from the corpus by
 decision (its defects were reported to BSI; the twin-catalog finding - 11
@@ -19,8 +22,9 @@ RMD = os.path.join(ROOT, "converted_examples", "DE.BSI", "bsi-coverage-report.md
 RJS = os.path.join(ROOT, "converted_examples", "DE.BSI", "bsi-coverage-report.json")
 SOURCES = [("gspp", os.path.join(ROOT, "sources", "Grundschutz++-catalog.json"),
             "https://ns.bsi.bund.de/gspp")]
-CENSUS = {"version": "2026-07-03", "controls": 998, "defects-gspp": 213,
-          "statements": 1015}   # census r2 baseline for the delta report
+CENSUS = {"version": "2026-07-03", "controls": 998, "packed-tags-gspp": 125,
+          "statements": 1015}   # census r2 baseline for the delta report; packed
+                                # tags recounted on that snapshot 2026-11-12
 F_GRAM = "https://ns.jascon.net/stdlib/facet/statement-grammar@1"
 F_SECO = "https://ns.jascon.net/stdlib/facet/security-objectives@1"
 F_ACRIT = "https://ns.jascon.net/stdlib/facet/assessment-criteria@1"
@@ -74,7 +78,7 @@ RULES = [
  (C+r"\.parts\[\]\.(id|name)$", "L1", "statement/guidance part identity -> statement id / narrative key"),
  (C+r"\.parts\[\]\.prose$", "L1", "statements[].prose.de ({{insert}} -> {param:}) / gspp-narrative guidance"),
  (C+r"\.parts\[\]\.props\[\]\.ns$", "L1", "absorbed: CSV-link namespaces replaced by pinned facet schemas"),
- (C+r"\.parts\[\]\.props\[\]\.(name|value)$", "L1", "dispatch by part-prop name (grammar/objectives/criteria; defects reported)"),
+ (C+r"\.parts\[\]\.props\[\]\.(name|value)$", "L1", "dispatch by part-prop name (grammar/objectives/criteria; packed lists reported)"),
 ]
 def destination(path):
     for pat,lvl,tgt in RULES:
@@ -86,30 +90,44 @@ PROP_DEST = {
  "label": ("L1","Requirement.label (top) / taxonomy by-statement label (nested)"),
  "sec_level": ("L1","top: baseline Set membership; nested: taxonomy by-statement"),
  "effort_level": ("L1","gspp-taxonomy: effort (by-statement)"),
- "tags": ("L1","gspp-taxonomy: tags[] (comma-split; inconsistencies reported)"),
+ "tags": ("L1","gspp-taxonomy: tags[] (comma-split; packed lists and inconsistencies reported)"),
  "confidentiality": ("L1","security-objectives (by-statement)"),
  "integrity": ("L1","security-objectives (by-statement)"),
  "availability": ("L1","security-objectives (by-statement)"),
  "authenticity": ("L1","security-objectives (by-statement)"),
- "threats": ("L1","security-objectives threat-refs[] (comma-split, minted threat code URIs)"),
+ "threats": ("L1","security-objectives threat-refs[] (comma-split, packed lists reported; minted threat code URIs)"),
  "modal_verb": ("L1","statements[].modality (mapped code system)"),
  "action_word": ("L1","statement-grammar: action (by-statement)"),
  "result": ("L1","statement-grammar: result (by-statement)"),
  "result_specification": ("L1","statement-grammar: result-specification (by-statement)"),
- "target_object_categories": ("L1","statement-grammar: target-object-categories[] (by-statement)"),
- "documentation": ("L1","assessment-criteria: required-documentation[] (by-statement)"),
+ "target_object_categories": ("L1","statement-grammar: target-object-categories[] (by-statement; comma-split, packed lists reported)"),
+ "documentation": ("L1","assessment-criteria: required-documentation[] (by-statement; comma-split, packed lists reported)"),
  "practice": ("L1","gspp-taxonomy: practice (by-statement)"),
 }
 
 INSERT_RE = re.compile(r"\{\{\s*insert:\s*param,\s*([^}\s]+)\s*\}\}")
+# {{Label}} in a sentence-template prop (result, result_specification) marks
+# the place of a parameter; the prose inserts the same parameter there
+SLOT_RE = re.compile(r"\{\{(?!\s*insert:)(.*?)\}\}")
+INSERT_PAT = r"\{\{\s*insert:\s*param,\s*[^}\s]+\s*\}\}"
+# props whose value is a list of vocabulary terms; the source joins several
+# terms with commas into ONE string instead of repeating the prop
+LIST_PROPS = ("tags", "threats", "target_object_categories", "documentation")
 
 stats = collections.defaultdict(collections.Counter)
-defects=[]; unknown_modal=collections.Counter(); modality_count=collections.Counter()
+packed=collections.defaultdict(list); list_props=collections.Counter()
+slots=[]; unknown_modal=collections.Counter(); modality_count=collections.Counter()
 objects={}; unresolved_links=0
 params_unref=0; params_total=0; multi_value_params=[]
 tag_values=collections.Counter(); sec_values=collections.Counter()
 
 def convert_prose(pr): return INSERT_RE.sub(lambda m:"{param:"+m.group(1)+"}", pr or "")
+
+def slot_at_insert(value, prose):
+    """True if the prose reads like the template value with every {{Label}}
+    slot replaced by a parameter insertion"""
+    texts = SLOT_RE.split(value)[0::2]
+    return re.search(INSERT_PAT.join(re.escape(t) for t in texts), prose or "") is not None
 
 def part_props_of(c):
     smt=[p for p in c.get("parts",[]) or [] if p.get("name")=="statement"]
@@ -121,12 +139,24 @@ def collect_stmt(prefix_ns, c, sid, is_child, req):
     smt, guid = part_props_of(c)
     prose = convert_prose(smt.get("prose",""))
     pp = {p["name"]:p["value"] for p in (smt.get("props",[]) or [])}
-    # defect scan on ALL part-prop values
+    # parameter slots in ALL part-prop values: each {{Label}} must stand where
+    # the prose inserts a parameter; the label normally repeats the parameter's
+    labels={pm.get("label") for pm in c.get("params",[]) or []}
     for part in c.get("parts",[]) or []:
         for p in part.get("props",[]) or []:
-            if "{{" in (p.get("value") or ""):
-                defects.append({"control":c["id"],"part":part.get("name"),
-                                "prop":p["name"],"value":p["value"]})
+            v=p.get("value") or ""
+            found=SLOT_RE.findall(v)
+            if not found: continue
+            at_insert=slot_at_insert(v, smt.get("prose",""))
+            for label in found:
+                slots.append({"control":c["id"],"prop":p["name"],"slot":label,
+                              "at-insert":at_insert,"label-of-a-parameter":label in labels})
+    # list values: one prop per term is the OSCAL form; count the packed ones
+    for p in (smt.get("props",[]) or []) + (c.get("props",[]) or []):
+        if p["name"] in LIST_PROPS:
+            list_props[p["name"]]+=1
+            if len(split_list(p["value"]))>1:
+                packed[p["name"]].append({"control":c["id"],"value":p["value"]})
     mv = pp.get("modal_verb")
     if mv is None: mod="unspecified"
     elif mv in MODAL: mod=MODAL[mv]
@@ -312,11 +342,16 @@ j={"sources":[{"key":k,"title":t,"version":v} for k,t,v,_ in catalogs_meta],
              "coverage-pct":round(100*mapped/total,3)},
    "objects":{"requirements":reqs,"statements":nstmt,"sets":sets,"total":len(objects)},
    "modality":dict(modality_count),"unknown-modal-verbs":dict(unknown_modal),
-   "defective-prop-values":len(defects),
-   "defects":defects,
+   "packed-list-values":{n:{"props":list_props[n],"packed":len(packed[n]),"values":packed[n]}
+                         for n in LIST_PROPS},
+   "parameter-slots":{"slots":len(slots),
+                      "at-insert":sum(s["at-insert"] for s in slots),
+                      "label-of-a-parameter":sum(s["label-of-a-parameter"] for s in slots),
+                      "other-wording":[s for s in slots if not s["label-of-a-parameter"]],
+                      "not-at-insert":[s for s in slots if not s["at-insert"]]},
    "census-delta":{"census-version":CENSUS["version"],"this-version":catalogs_meta[0][2],
                    "controls":{"census":CENSUS["controls"],"now":len(all_ids["gspp"])},
-                   "defects":{"census-gspp":CENSUS["defects-gspp"],"now":len(defects)}},
+                   "packed-tags":{"census-gspp":CENSUS["packed-tags-gspp"],"now":len(packed["tags"])}},
    "parameters":{"total":params_total,"unreferenced-in-prose":params_unref,
                  "multi-value":multi_value_params},
    "mstls":"dropped by decision 2026-07-21 (reported to BSI; twin-catalog finding stays in census/handbook)",
@@ -364,14 +399,28 @@ md.append(f"- **Baselines** from top-control `sec_level`: "
 md.append("- **alt-identifier** -> aliases (scheme bsi-uuid) on Requirements; child alt-ids "
           "by-statement. CSV-link namespaces absorbed: pinned schemas replace them.\n")
 md.append("## Findings (computed)\n")
-md.append(f"- **Defective source values: {len(defects)}** - `{{{{...}}}}` pseudo-placeholders inside "
-          "part-prop values, REPORTED for the authors' queue (never repaired, passed through, or "
-          "dropped silently - handbook 14.5). Full list in the JSON report; first three:")
-for d in defects[:3]:
-    md.append(f"    - `{d['control']}` / `{d['prop']}`: \"{d['value'][:70]}...\"")
+npacked=sum(len(v) for v in packed.values())
+md.append(f"- **List values packed into one string: {npacked}** - "
+          + ", ".join(f"`{n}` {len(packed[n])} of {list_props[n]}" for n in LIST_PROPS)
+          + ". Several vocabulary terms joined by commas in ONE prop value, where OSCAL repeats the "
+          "prop once per value and JSON has arrays. The string is schema-valid, so no OSCAL validator "
+          "sees the list, and none can check its terms against the vocabulary; every consumer has to "
+          "know to split. The converter splits on `,` (rules above) and REPORTS the source form for the "
+          "authors' queue (handbook 14.5). Full list in the JSON report; first three `tags` values:")
+for d in packed["tags"][:3]:
+    md.append(f"    - `{d['control']}`: \"{d['value']}\"")
+ps=j["parameter-slots"]
+md.append(f"- **Parameter slots in the sentence template: {ps['slots']}** `{{{{Label}}}}` in "
+          f"result/result_specification values - parameters, not defects: {ps['at-insert']} stand exactly "
+          f"where the statement prose inserts a parameter (`{{{{ insert: param, x }}}}`), "
+          f"{ps['label-of-a-parameter']} repeat the label of a parameter declared on the same control"
+          + (" (other wording: " + ", ".join(f"`{s['control']}` \"{s['slot']}\"" for s in ps["other-wording"]) + ")"
+             if ps["other-wording"] else "")
+          + ". Carried verbatim in `statement-grammar@1`."
+          + (f" **Not at an insertion: {len(ps['not-at-insert'])}** - reported." if ps["not-at-insert"] else ""))
 md.append(f"- **Census delta (source moved)**: catalog v{catalogs_meta[0][2][:10]} vs. census v{CENSUS['version']} - "
-          f"controls {len(all_ids['gspp'])} (census {CENSUS['controls']}), defective `{{{{...}}}}` values "
-          f"{len(defects)} (census GS++-only {CENSUS['defects-gspp']}). Deltas are the authors editing the "
+          f"controls {len(all_ids['gspp'])} (census {CENSUS['controls']}), packed `tags` values "
+          f"{len(packed['tags'])} (census GS++-only {CENSUS['packed-tags-gspp']}). Deltas are the authors editing the "
           f"catalog between snapshots; every claim in this report re-verifies against the version named above.")
 inc = j["tag-value-inconsistencies"]
 if inc: md.append(f"- **Tag spelling drift** (space vs hyphen variants coexist): {inc} - "
@@ -396,7 +445,9 @@ print("modality:",dict(modality_count)," unknown:",dict(unknown_modal))
 compat_n=sum(1 for o in objects.values() if "facets" in o and F_COMPAT in o.get("facets",{}))
 print(f"params: {params_total} (label/default first-class; unreferenced-in-prose: {params_unref})  "
       f"L2 param-extras residue (alt-ids only): {compat_n} requirements")
-print(f"defects: {len(defects)} (census gspp {CENSUS['defects-gspp']})  "
-      f"controls: {len(all_ids['gspp'])} (census {CENSUS['controls']})")
+print("packed list values: " + ", ".join(f"{n} {len(packed[n])}/{list_props[n]}" for n in LIST_PROPS)
+      + f" (census gspp tags {CENSUS['packed-tags-gspp']})  controls: {len(all_ids['gspp'])} (census {CENSUS['controls']})")
+print(f"parameter slots {{{{Label}}}}: {len(slots)}  at an insertion: {sum(s['at-insert'] for s in slots)}  "
+      f"label of a parameter: {sum(s['label-of-a-parameter'] for s in slots)}")
 if unmapped:
     print("UNMAPPED:"); [print("  ",p,"x",n) for p,n in unmapped[:30]]

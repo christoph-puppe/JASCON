@@ -34,8 +34,8 @@ every claim in it is a number somebody in this project counted in a
 published artifact, and the few that are not are labeled. By the end you
 will know why the standard built for this job received zero organic
 submissions from its flagship program in a year of record volume, why the
-world's most carefully authored OSCAL catalog contains 216 defects that no
-validator on the planet can see, why the newest authoritative compliance
+world's most carefully authored OSCAL catalog packs 781 lists into plain
+strings that no validator on the planet can see, why the newest authoritative compliance
 format in the United States is not OSCAL at all — and why those three facts
 have the same root cause, which is fixable.
 
@@ -119,22 +119,33 @@ home for any of it, so all of it lives in **12,059 namespace-qualified
 props** whose "schema" is a set of CSV files behind mutable repository
 links that no validator can read.
 
-The consequence is the most important measurement in this book. The
-catalogs contain **216 pseudo-placeholders** — strings like
-`{{einem anerkannten Standard}}` sitting inside prop values, imitating the
-standard's parameter-insertion syntax in a place where that syntax has no
-meaning, several of them contradicting the actual parameter the adjacent
-prose correctly references. Two machine-readable representations of the
-same requirement, silently diverging, in documents that **every OSCAL
-validator on earth certifies as flawless**. Nobody was careless here; the
-authors are professionals and the tooling all reported green. The standard
-simply has no organ that can see meaning. Schema-valid and semantically
-hollow are, in OSCAL 1.x, fully compatible states — and 216 counted
-instances prove it is not a theoretical risk.
+The consequence is the most important measurement in this book. A
+vocabulary typed nowhere has lists typed nowhere: **125 of the catalog's
+470 `tags` values** pack several terms into one comma-separated string —
+`"Data Leak, Shadow IT"` on ASST.3.11 — and so do 616 of 900 `threats`
+values (`"G 0.18, G 0.30"`) and 40 of 634 `target_object_categories`
+values: 781 lists in all, in the catalogue of 16 July 2026. JSON has
+arrays, and OSCAL lets a prop repeat once per value; the catalog uses
+neither, and nothing in the document says which props hold a list. A
+consumer that does not split on the comma reads `"Data Leak, Shadow IT"` as
+one tag that no vocabulary contains; a consumer that does has learned the
+rule from outside the document. And the documents are ones that **every
+OSCAL validator on earth certifies as flawless**, because each value is a
+well-formed string. Nobody was careless here; the authors are professionals
+and the tooling all reported green. The standard simply has no organ that
+can see meaning. Schema-valid and semantically hollow are, in OSCAL 1.x,
+fully compatible states — and 781 counted instances prove it is not a
+theoretical risk.
+
+*Correction, 2026-11-12.* Earlier editions of this chapter counted 216
+sentence-template values (`result`, `result_specification`) containing
+`{{…}}` as "pseudo-placeholders". Those slots are parameters: each stands
+exactly where the statement prose inserts a parameter, and almost all
+repeat that parameter's label. The register records the amendment.
 
 > **Don't** publish vocabulary as human-readable side files and call it a
 > namespace. Measured cost: 12,059 prop instances validated by nothing,
-> 216 silent defects, and — as we will see — vocabulary that drifts
+> 781 lists packed into strings, and — as we will see — vocabulary that drifts
 > between releases with no tool able to notice.
 
 **The United States** is the control group, and an accidental gift to this
@@ -256,8 +267,8 @@ parameters, deadlines, secondary identifiers, revision history — would
 have to live in the core, because the census shows them converging across
 three continents (the American proof). Everything framework-specific
 would still need a home, but one with a machine-readable contract, so
-that "valid" finally implies "checkable meaning" and the 216-defect class
-becomes *unrepresentable* rather than undetectable. The document
+that "valid" finally implies "checkable meaning" and a list packed into a
+string becomes *unrepresentable* rather than undetectable. The document
 conventions of any one framework — including NIST's — would have to
 leave the core and bind only their own content. And all of it would have
 to be implementable by a competent developer in days, in any language,
@@ -301,7 +312,7 @@ into the specification, and it will not appear here.
 
 **Every "don't" names its corpse.** Prohibitions in this book are never
 etiquette. Each one cites the measured failure it prevents, with the
-number attached — the way §1.2's box carries its 12,059 and its 216. A
+number attached — the way §1.2's box carries its 12,059 and its 781. A
 rule that cannot name what it prevents is a rule this project would
 delete, and the specification's change process is built so that such
 rules *can* be deleted: every constraint ships with a recorded rationale

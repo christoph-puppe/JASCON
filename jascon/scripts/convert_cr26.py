@@ -586,7 +586,7 @@ md=[f"# CR26 -> Semantic Core: Coverage Report (computed)\n",
  f"reference/schema-name citation labels, following-information sentence lists (kernel `text` decision pending, backlog #12). "
  f"Left as-source by the verbatim rule: free text quoted inside L2 `class-variants` payloads (per-class "
  f"descriptions/notes, e.g. pain_timeframes[].fir.description) - preserved-in-full waiting rooms are quotations, "
- f"not authored payload (the 216 discipline: report, never repair); they drain with the payloads themselves. "
+ f"not authored payload (report, never repair); they drain with the payloads themselves. "
  f"Stub-file `note` annotations are schema metadata, not corpus content.\n",
  "## Findings (computed)\n",
  f"- **Census, layered:** rules = **246** = 225 track-independent (data.all) + 12 rev5-only + 9 20x-only. "

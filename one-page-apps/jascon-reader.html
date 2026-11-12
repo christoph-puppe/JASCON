@@ -201,7 +201,7 @@ svg text{font-family:'JetBrains Mono',monospace}
     <div class="pill" id="pill-bundle">no bundle loaded</div>
     <div class="pill hidden" id="pill-verify"></div>
     <div style="flex:1"></div>
-    <div class="pill">v1.9.0 · build 2026-11-12</div>
+    <div class="pill">v1.9.1 · build 2026-11-12</div>
   </div>
 
   <div id="mid">
@@ -508,7 +508,7 @@ function sha256Fallback(bytes) {
 }
 
 /* ---------- loading ---------- */
-const READER_ID = "jascon-reader.html v1.9.0";
+const READER_ID = "jascon-reader.html v1.9.1";
 /* URL loading — works when this page and the bundle are served over http(s)
    (e.g. `python -m http.server` from the repo root); file:// blocks fetch by design. */
 async function loadFromUrl(input) {
@@ -2371,7 +2371,7 @@ function wireAuthorWb(el) {
     const req = { id: mintId("req", title), version: "1", label: slug(title).toUpperCase().slice(0, 24),
       lifecycle: "draft", title, statements: [st] };
     addToGraph([req]);
-    if (tokens.length) l.info(`declared ${new Set(tokens).size} parameter(s) from {param:} tokens — the 216 rule works both ways`);
+    if (tokens.length) l.info(`declared ${new Set(tokens).size} parameter(s) from {param:} tokens — prose-params-resolve works both ways`);
     d.auTitle = ""; d.auProse = ""; err.textContent = ""; rerender();
   };
   const as = el.querySelector("#wb-au-addset");

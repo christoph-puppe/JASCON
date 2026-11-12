@@ -980,7 +980,7 @@ function jscObjectErrors(obj) {
       const declared = new Set((st.parameters || []).map(p => p.name));
       for (const txt of Object.values(st.prose)) {
         for (const m of (Array.isArray(txt) ? txt.join(" ") : txt).matchAll(/\{param:([^}]+)\}/g)) {
-          if (!declared.has(m[1])) errors.push(`unbound {param:${m[1]}} in statement ${st.id} (the 216 rule)`);
+          if (!declared.has(m[1])) errors.push(`unbound {param:${m[1]}} in statement ${st.id} (prose-params-resolve)`);
         }
       }
     }
