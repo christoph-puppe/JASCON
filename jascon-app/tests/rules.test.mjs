@@ -455,10 +455,12 @@ test("a whole set: a signed attestation is verified with a trusted key, unverifi
 test("check: I-Regexp - what must and must not match whole-value, and what every implementation refuses", () => {
   for (const c of vectors("check")["regex-vectors"]) {
     let valid = true, why = "";
-    try { rules.jscIreCompile(c.pattern); } catch (e) { if (!(e instanceof rules.JscIRegexpError)) throw e; valid = false; why = e.message; }
-    assert.equal(valid, c.valid, `${JSON.stringify(c.pattern)}: ${why}`);
-    for (const t of c.match || []) assert.ok(rules.jscIreFullMatch(c.pattern, t), `${JSON.stringify(c.pattern)} matches ${JSON.stringify(t)}`);
-    for (const t of c["no-match"] || []) assert.ok(!rules.jscIreFullMatch(c.pattern, t), `${JSON.stringify(c.pattern)} does not match ${JSON.stringify(t)}`);
+    /* a pattern that no JSON text may carry (a lone surrogate) is given as code points */
+    const pat = c["pattern-codepoints"] ? String.fromCodePoint(...c["pattern-codepoints"]) : c.pattern;
+    try { rules.jscIreCompile(pat); } catch (e) { if (!(e instanceof rules.JscIRegexpError)) throw e; valid = false; why = e.message; }
+    assert.equal(valid, c.valid, `${JSON.stringify(pat)}: ${why}`);
+    for (const t of c.match || []) assert.ok(rules.jscIreFullMatch(pat, t), `${JSON.stringify(pat)} matches ${JSON.stringify(t)}`);
+    for (const t of c["no-match"] || []) assert.ok(!rules.jscIreFullMatch(pat, t), `${JSON.stringify(pat)} does not match ${JSON.stringify(t)}`);
   }
 });
 test("check: check-verdict over every verdict vector, and the aggregate", () => {

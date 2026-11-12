@@ -37,11 +37,13 @@ run as a state-set simulation, never handed to .NET Regex), check-verdict
 (B.1.10), CHECK-1..15 with every recorded verdict recomputed and the
 evidence chain verified in the store beside the manifest. 415 vectors in
 16 families pass (check: 156), the same counts as validate_core.py.
-NOT YET EXECUTED (2026-11-12): the twelfth comparator `not-equals` and the
+NOT YET EXECUTED (2026-11-12): the twelfth comparator `not-equals`, the
 per-resource counts of B.1.10 step 5 (Check-Each, Ck-Percent, the
-`expected-resources` of the verdict vectors) were ported from the Python
-reference without a PowerShell runtime. The Python reference and the app's
-port pass 183 check vectors (442 in all); this file has to show the same
+`expected-resources` of the verdict vectors) and the refusal of surrogate
+code points in a pattern (RFC 9485 as published; `pattern-codepoints` in
+the regex vectors) were ported from the Python reference without a
+PowerShell runtime. The Python reference and the app's
+port pass 188 check vectors (447 in all); this file has to show the same
 counts on Windows PowerShell 5.1 before the two-implementation gate holds
 again. Until then the counts above are those of 2026-11-11.
 KNOWN LIMITS of this port: a general category (\p{..}) is read from the
@@ -2051,9 +2053,13 @@ function Ire-Cat([string]$prop) {
     $script:IreCatCache[$prop] = $rs
     return ,$rs
 }
-function Ire-Normal([int]$o) {     # NormalChar of the ABNF
+$IRE_SURROGATE = 'a surrogate code point (U+D800 to U+DFFF) is not a character of I-Regexp (RFC 9485, NormalChar and CCchar)'
+function Ire-Surrogate([int]$o) { return ($o -ge 0xD800 -and $o -le 0xDFFF) }
+function Ire-Normal([int]$o) {     # NormalChar of the ABNF as PUBLISHED in RFC 9485: it skips the
+                                   # surrogate code points, which the working group's file did not (#61)
     return (($o -le 0x27) -or ($o -eq 0x2C) -or ($o -eq 0x2D) -or ($o -ge 0x2F -and $o -le 0x3E) -or
-            ($o -ge 0x40 -and $o -le 0x5A) -or ($o -ge 0x5E -and $o -le 0x7A) -or ($o -ge 0x7E))
+            ($o -ge 0x40 -and $o -le 0x5A) -or ($o -ge 0x5E -and $o -le 0x7A) -or
+            ($o -ge 0x7E -and -not ($o -ge 0xD800 -and $o -le 0xDFFF)))
 }
 function Ire-Peek([int]$k = 0) {
     $i = $script:IrePos + $k
@@ -2144,6 +2150,7 @@ function Ire-CcChar {
         return $r[0]
     }
     if ($c -eq -1 -or $c -eq 45 -or $c -eq 91 -or $c -eq 93) { Ire-Err 'this character must be escaped inside a character class' }
+    if (Ire-Surrogate $c) { Ire-Err $IRE_SURROGATE }
     $script:IrePos++
     return $c
 }
@@ -2198,6 +2205,7 @@ function Ire-Atom {
     if ($c -eq 91) { $r = Ire-CharClass; return @{k = 'set'; r = $r} }
     if ($c -ne -1 -and (Ire-Normal $c)) { $script:IrePos++; return @{k = 'set'; r = ([int[]]@($c, $c))} }
     if ($c -eq -1) { Ire-Err 'the pattern ends where an atom is expected' }
+    if (Ire-Surrogate $c) { Ire-Err $IRE_SURROGATE }
     Ire-Err 'this character cannot start an atom here'
 }
 function Ire-Parse($p) {
@@ -2871,13 +2879,23 @@ function Run-Check {
     $v = Load-Vectors 'check-vectors.json'
     foreach ($case in $v['regex-vectors']) {
         $valid = $true; $why = ''
-        try { [void](Ire-Compile $case['pattern']) }
+        # a pattern that no JSON text may carry (a lone surrogate) is given as code points
+        $pat = $case['pattern']
+        if ($case.Contains('pattern-codepoints')) {
+            $sb = New-Object System.Text.StringBuilder
+            foreach ($cp in $case['pattern-codepoints']) {
+                $n = [int]$cp
+                if ($n -lt 0x10000) { [void]$sb.Append([char]$n) } else { [void]$sb.Append([char]::ConvertFromUtf32($n)) }
+            }
+            $pat = $sb.ToString()
+        }
+        try { [void](Ire-Compile $pat) }
         catch [System.FormatException] { $valid = $false; $why = $_.Exception.Message }
         $badM = New-Object System.Collections.ArrayList; $badN = New-Object System.Collections.ArrayList
         if ($case.Contains('match')) {
-            foreach ($s in $case['match']) { if (-not ($valid -and (Ire-FullMatch $case['pattern'] $s))) { [void]$badM.Add($s) } } }
+            foreach ($s in $case['match']) { if (-not ($valid -and (Ire-FullMatch $pat $s))) { [void]$badM.Add($s) } } }
         if ($case.Contains('no-match')) {
-            foreach ($s in $case['no-match']) { if ($valid -and (Ire-FullMatch $case['pattern'] $s)) { [void]$badN.Add($s) } } }
+            foreach ($s in $case['no-match']) { if ($valid -and (Ire-FullMatch $pat $s)) { [void]$badN.Add($s) } } }
         if ($valid -eq $case['valid'] -and $badM.Count -eq 0 -and $badN.Count -eq 0) { OK 'check' }
         else { FAIL 'check' "regex '$($case['pattern'])': expected valid=$($case['valid']), got $valid $why; should match but did not [$(@($badM) -join ' | ')]; should not match but did [$(@($badN) -join ' | ')]" }
     }

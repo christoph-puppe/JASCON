@@ -217,7 +217,7 @@ nav: checks
         <ul class="plain">
           <li>A pattern matches the whole value. <code>^</code> and <code>$</code> are ordinary characters.</li>
           <li>Limits: 256 characters per pattern, 1,000 states, 4,096 characters per value. Beyond that the row is inconclusive.</li>
-          <li>No host engine. Each implementation parses the grammar itself and matches without backtracking, so a pattern cannot stall a validator.</li>
+          <li>No host engine. Each implementation parses the grammar itself, as RFC 9485 publishes it, and matches without backtracking, so a pattern cannot stall a validator.</li>
           <li>One dependence is left and stated: a Unicode category <code>\p{..}</code> is read from the host's database (backlog 59).</li>
         </ul>
       </div>
@@ -287,7 +287,7 @@ nav: checks
   <div class="wrap">
     <div class="section-head reveal">
       <p class="eyebrow"><span class="no">07</span> State</p>
-      <h2>Accepted for 2.0.0, two items before the tag</h2>
+      <h2>Accepted for 2.0.0, one item before the tag</h2>
       <p class="lede">On 12 November 2026 the author decided the open points of the proposal. Check is part of release candidate 2.0.0-rc.2 and goes live with 2.0.0. The candidate is not tagged.</p>
     </div>
     <div class="state-cols reveal">
@@ -295,8 +295,9 @@ nav: checks
         <div class="card-top"><h3>In the repository</h3><span class="tier tier-measured">measured</span></div>
         <ul class="ticks">
           <li><b>Schema and rules:</b> the Check shape, the run rows on Assessment, the reference on Finding, the evidence record, the facet <code>collector@1</code>; CHECK-1 to CHECK-15 and the primitive <code>check-verdict</code>, each with a rationale that prints on failure.</li>
-          <li><b>{{ n.check_vectors }} conformance vectors</b> pass in the Python reference and in the app's JavaScript port. Four deliberate breaks of the reference each turn a vector red.</li>
+          <li><b>{{ n.check_vectors }} conformance vectors</b> pass in the Python reference and in the app's JavaScript port. Five deliberate breaks of the reference each turn a vector red.</li>
           <li><b>A worked example</b> with two Checks, two runs, a Finding and seven evidence files.</li>
+          <li><b>The grammar of RFC 9485 as published,</b> compared on 12 November. It keeps surrogate code points out of patterns, which the working group's file did not; the three engines were corrected and five vectors pin it.</li>
           <li><b>Text:</b> specification D24, handbook chapter 10 and the validator chapter, appendices A, B and C, and the skill for coding agents.</li>
           <li><b>Tools:</b> the app's Checks page writes checks by hand or lets a language model draft them, one rule at a time or for every automated rule of a CIS import. The single-file reader shows Checks and recorded runs.</li>
         </ul>
@@ -304,8 +305,7 @@ nav: checks
       <article class="card">
         <div class="card-top"><h3>Open</h3><span class="tier tier-open">open</span></div>
         <ul class="plain">
-          <li><b>Blocks the tag: the second validator.</b> The PowerShell twin passed the 156 vectors of the proposal on Windows PowerShell 5.1. The 27 added since (the twelfth comparator, the per-resource counts) are ported there and have not run.</li>
-          <li><b>Blocks the tag: the published grammar.</b> The engines implement the grammar file of the IETF working group. It has not been compared with the published text of RFC 9485.</li>
+          <li><b>Blocks the tag: the second validator.</b> The PowerShell twin passed the 156 vectors of the proposal on Windows PowerShell 5.1. The 32 added since (the twelfth comparator, the per-resource counts, the surrogate rule) are ported there and have not run.</li>
           <li><b>No runner.</b> Nothing in the repository executes a collector on a target, and the app does not either. An HTTP collector has no declared request format yet.</li>
           <li><b>No cloud platform counted.</b> The census covers Linux hosts and Kubernetes. The shape closes at the tag on those two.</li>
           <li><b>One open choice:</b> whether a Unicode category in a pattern follows the host's database or a pinned table.</li>

@@ -242,7 +242,7 @@ facet `collector@1` (Appendix D), `{collectors: [{id ●, runtime ●
 inline so that the Check's digest covers the exact source, and declared
 `[]` because nothing in it changes what passing means. Credentials and
 target inventory never appear in a bundle. Evidence: the two Checks of
-the example bundle, `check-vectors.json` (183).
+the example bundle, `check-vectors.json` (188).
 
 ## A.10 Sub-object: Deviation
 

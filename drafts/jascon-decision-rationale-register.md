@@ -2079,7 +2079,7 @@ the app's generated `jascon-schema.js` and both validators follow it.
 
 The change proposal `drafts/CP-CHECK-1.md` put seven points to the
 author. Six were decisions and were answered on 2026-11-12; the seventh
-is a comparison that is still owed (#61). This section is the record;
+was a comparison, done the same day (#61, below). This section is the record;
 the specification is `drafts/jascon-specification-2.0.0-rc.2.md`
 (D24 new; D4, D14, D15, D22 amended).
 
@@ -2148,9 +2148,9 @@ while `0 < part < whole`. One failing resource in 300 reads 1 %, 299 in
   `inconclusive` on a missing fact; CHECK-3 refuses it on a list.
 - `check_each` / `jscCheckEach` / `Check-Each`: the counts of a
   per-resource check; the first reason of a failing one is the count.
-- Vectors: `check` 156 → 183, the corpus 415 → 442. Four deliberate
+- Vectors: `check` 156 → 188, the corpus 415 → 447. Five deliberate
   breaks of the reference each turn at least one new vector red.
-- Python reference: ALL GREEN, 442 vectors, five bundles, the example
+- Python reference: ALL GREEN, 447 vectors, five bundles, the example
   folder. App: its suite green with the same vectors (build 0.9.2).
 - PowerShell twin: both changes ported, **not executed** (#60).
 - Reader v1.8.0 reads the eleventh type (#57).
@@ -2158,6 +2158,28 @@ while `0 < part < whole`. One failing resource in 300 reads 1 %, 299 in
   (B.1.10), C (C.12 to C.15), F (two questions), G; SKILL.md
   (requirement 9b). Specification 2.0.0-rc.2.
 
-**Open after this section:** #60 and #61 block the tag. #62: an
+## #61 CLOSED — the grammar against the published RFC 9485
+
+The engines were written from the IETF working group's `iregexp.abnf`
+(commit `edceaa5e`), because rfc-editor.org could not be reached. On
+2026-11-12 it could. The grammar figure of the RFC (October 2023) and
+the group's file are equal line for line except in two rules: the RFC
+writes `%x7E-D7FF / %xE000-10FFFF` where the file has `%x7E-10FFFF`
+(`NormalChar`), and `%x5E-D7FF / %xE000-10FFFF` for `%x5E-10FFFF`
+(`CCchar`), each with the comment "skip surrogate code points". The
+group's file is unchanged at `main`, so the difference arose on the way
+to publication. The three engines accepted a lone surrogate as a
+pattern character; they now refuse it with a message that names the
+rule. Five regex vectors: three refusals, the two neighbours of the
+block, one character beyond U+FFFF. A pattern with a lone surrogate
+cannot stand in JSON text that every parser accepts, so such a vector
+carries `pattern-codepoints`. The RFC's additional restriction that
+`[^]` is no class was already met. Semantics: the RFC defers to XSD,
+which matches the whole string, as the kernel says.
+**What it shows.** The difference was invisible to 183 green vectors in
+two engines, because both were written from the same file. Only the
+published text could show it.
+
+**Open after this section:** #60 blocks the tag. #62: an
 `http-api` collector has no declared format, which a runner needs first.
 

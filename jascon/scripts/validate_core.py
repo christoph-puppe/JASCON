@@ -1478,10 +1478,15 @@ def _ire_cat(prop):
         _IRE_CAT_CACHE[prop] = out
     return _IRE_CAT_CACHE[prop]
 
+def _ire_surrogate(c):
+    return c is not None and 0xD800 <= ord(c) <= 0xDFFF
+IRE_SURROGATE = "a surrogate code point (U+D800 to U+DFFF) is not a character of I-Regexp (RFC 9485, NormalChar and CCchar)"
+
 def _ire_normal(c):
-    o = ord(c)     # NormalChar of the ABNF
+    o = ord(c)     # NormalChar of the ABNF as PUBLISHED in RFC 9485: it skips the
+                   # surrogate code points, which the working group's file did not (backlog #61)
     return (o <= 0x27 or c in ",-" or 0x2F <= o <= 0x3E or 0x40 <= o <= 0x5A
-            or 0x5E <= o <= 0x7A or o >= 0x7E)
+            or 0x5E <= o <= 0x7A or (o >= 0x7E and not 0xD800 <= o <= 0xDFFF))
 
 def ire_parse(p):
     """-> AST of an I-Regexp; raises IRegexpError naming the construct and position."""
@@ -1541,6 +1546,7 @@ def ire_parse(p):
             if peek(1) in ("p", "P"): err("a category escape cannot bound a range")
             return escape()[0][0]
         if c is None or c in "-[]": err(f"{c!r} must be escaped inside a character class")
+        if _ire_surrogate(c): err(IRE_SURROGATE)
         pos += 1; return ord(c)
     def char_class():
         nonlocal pos
@@ -1583,6 +1589,7 @@ def ire_parse(p):
         if c == "\\": return ("set", escape())
         if c == "[": return ("set", char_class())
         if c is not None and _ire_normal(c): pos += 1; return ("set", [(ord(c), ord(c))])
+        if _ire_surrogate(c): err(IRE_SURROGATE)
         err(f"{c!r} cannot start an atom here" if c else "the pattern ends where an atom is expected")
     ast = regexp()
     if pos != len(p): err(f"unbalanced {p[pos]!r}")
@@ -2041,15 +2048,17 @@ def store_reader(bdir):
 def run_check():
     v = json.load(open(os.path.join(CONF, "check-vectors.json"), encoding="utf-8"))
     for case in v["regex-vectors"]:
+        # a pattern that no JSON text may carry (a lone surrogate) is given as code points
+        pat = "".join(map(chr, case["pattern-codepoints"])) if "pattern-codepoints" in case else case["pattern"]
         try:
-            ire_compile(case["pattern"]); valid, why = True, ""
+            ire_compile(pat); valid, why = True, ""
         except IRegexpError as ex:
             valid, why = False, str(ex)
         okc = valid == case["valid"]
-        bad_m = [s for s in case.get("match", []) if not (valid and ire_fullmatch(case["pattern"], s))]
-        bad_n = [s for s in case.get("no-match", []) if valid and ire_fullmatch(case["pattern"], s)]
+        bad_m = [s for s in case.get("match", []) if not (valid and ire_fullmatch(pat, s))]
+        bad_n = [s for s in case.get("no-match", []) if valid and ire_fullmatch(pat, s)]
         if okc and not bad_m and not bad_n: ok("check")
-        else: fail("check", f"regex {case['pattern']!r}: expected valid={case['valid']}, got {valid} {why}; "
+        else: fail("check", f"regex {pat!r}: expected valid={case['valid']}, got {valid} {why}; "
                             f"should match but did not {bad_m}; should not match but did {bad_n}")
     for case in v["verdict-vectors"]:
         got, why = check_verdict(case["check"], case.get("observation"), case.get("parameters"))

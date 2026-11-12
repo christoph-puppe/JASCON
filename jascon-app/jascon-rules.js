@@ -1344,8 +1344,12 @@ function jscIreHas(set, cp) {
   return set.neg ? !hit : hit;
 }
 const JSC_IRE_DOT = { ranges: [[10, 10], [13, 13]], cats: [], neg: true };
+/* NormalChar of the ABNF as PUBLISHED in RFC 9485: it skips the surrogate code
+   points, which the working group's file did not (backlog #61) */
+const jscIreIsSurrogate = c => { if (c === null) return false; const o = c.codePointAt(0); return o >= 0xD800 && o <= 0xDFFF; };
+const JSC_IRE_SURROGATE = "a surrogate code point (U+D800 to U+DFFF) is not a character of I-Regexp (RFC 9485, NormalChar and CCchar)";
 const jscIreIsNormal = c => { const o = c.codePointAt(0);
-  return o <= 0x27 || c === "," || c === "-" || (o >= 0x2F && o <= 0x3E) || (o >= 0x40 && o <= 0x5A) || (o >= 0x5E && o <= 0x7A) || o >= 0x7E; };
+  return o <= 0x27 || c === "," || c === "-" || (o >= 0x2F && o <= 0x3E) || (o >= 0x40 && o <= 0x5A) || (o >= 0x5E && o <= 0x7A) || (o >= 0x7E && !(o >= 0xD800 && o <= 0xDFFF)); };
 
 function jscIreParse(p) {
   if (typeof p !== "string") throw new JscIRegexpError("a pattern is a string");
@@ -1400,6 +1404,7 @@ function jscIreParse(p) {
       return escape().ranges[0][0];
     }
     if (c === null || c === "-" || c === "[" || c === "]") err(`${JSON.stringify(c)} must be escaped inside a character class`);
+    if (jscIreIsSurrogate(c)) err(JSC_IRE_SURROGATE);
     pos++;
     return c.codePointAt(0);
   }
@@ -1441,6 +1446,7 @@ function jscIreParse(p) {
     if (c === "\\") return ["set", escape()];
     if (c === "[") return ["set", charClass()];
     if (c !== null && jscIreIsNormal(c)) { pos++; return ["set", one(c.codePointAt(0))]; }
+    if (jscIreIsSurrogate(c)) err(JSC_IRE_SURROGATE);
     err(c !== null ? `${JSON.stringify(c)} cannot start an atom here` : "the pattern ends where an atom is expected");
   }
   const ast = regexp();

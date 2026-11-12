@@ -1,5 +1,5 @@
 {
- "description": "CP-CHECK-1 vectors (kernel 2.0.0). regex-vectors: the I-Regexp dialect (RFC 9485 ABNF) - valid patterns with strings that must and must not match WHOLE-value, and patterns every implementation must refuse, each with why; several are dialect traps where Python re, .NET or ECMAScript would answer differently. verdict-vectors: check-verdict (B.1.10) over {check (observes, criteria, applies-when?, each?), observation, parameters?} -> one of satisfied | not-satisfied | inconclusive | not-applicable; strong Kleene AND; an unbound parameter is inconclusive (D9). expected-resources, where a vector carries it, are the counts of a per-resource check (B.1.10 step 5): every resource is evaluated, and the share of not-satisfied ones is a whole percentage in integer arithmetic. share-vectors: that percentage for {part, whole} - rounded half up, never 0 while part > 0, never 100 while part < whole. aggregate-vectors: Assessment.result from row outcomes (CHECK-10). object-vectors: closed shapes - an object must match exactly the named type, or none. bundle-vectors: the CHECK-n rule ids a conformant tool names for the bundle (exact set; expected-notes are substrings of notes); `store` is an in-memory evidence store, path -> UTF-8 text. Check digests are semantic digests computed by the reference canonical form; editing a vector Check without recomputing its digest makes CHECK-8 fire.",
+ "description": "CP-CHECK-1 vectors (kernel 2.0.0). regex-vectors: the I-Regexp dialect (RFC 9485 ABNF) - valid patterns with strings that must and must not match WHOLE-value, and patterns every implementation must refuse, each with why; several are dialect traps where Python re, .NET or ECMAScript would answer differently. A pattern that no JSON text may carry (a lone surrogate code point) is given in `pattern-codepoints`, and `pattern` then only describes it. verdict-vectors: check-verdict (B.1.10) over {check (observes, criteria, applies-when?, each?), observation, parameters?} -> one of satisfied | not-satisfied | inconclusive | not-applicable; strong Kleene AND; an unbound parameter is inconclusive (D9). expected-resources, where a vector carries it, are the counts of a per-resource check (B.1.10 step 5): every resource is evaluated, and the share of not-satisfied ones is a whole percentage in integer arithmetic. share-vectors: that percentage for {part, whole} - rounded half up, never 0 while part > 0, never 100 while part < whole. aggregate-vectors: Assessment.result from row outcomes (CHECK-10). object-vectors: closed shapes - an object must match exactly the named type, or none. bundle-vectors: the CHECK-n rule ids a conformant tool names for the bundle (exact set; expected-notes are substrings of notes); `store` is an in-memory evidence store, path -> UTF-8 text. Check digests are semantic digests computed by the reference canonical form; editing a vector Check without recomputing its digest makes CHECK-8 fire.",
  "regex-vectors": [
   {
    "pattern": "[0-7]{3}",
@@ -288,6 +288,60 @@
    "pattern": "(a{100}){20}",
    "valid": false,
    "why": "compiles to more than IRE_MAX_STATES (1000)"
+  },
+  {
+   "pattern": "a U+D800 b (given as pattern-codepoints)",
+   "pattern-codepoints": [
+    97,
+    55296,
+    98
+   ],
+   "valid": false,
+   "why": "a surrogate code point is no NormalChar in RFC 9485 as published; the working group's ABNF file allowed it"
+  },
+  {
+   "pattern": "[ U+DFFF ] (given as pattern-codepoints)",
+   "pattern-codepoints": [
+    91,
+    57343,
+    93
+   ],
+   "valid": false,
+   "why": "a surrogate code point is no CCchar in RFC 9485 as published"
+  },
+  {
+   "pattern": "[ a - U+DBFF ] (given as pattern-codepoints)",
+   "pattern-codepoints": [
+    91,
+    97,
+    45,
+    56319,
+    93
+   ],
+   "valid": false,
+   "why": "a surrogate code point cannot bound a range either"
+  },
+  {
+   "pattern": "U+D7FF U+E000 (given as pattern-codepoints)",
+   "pattern-codepoints": [
+    55295,
+    57344
+   ],
+   "valid": true,
+   "why": "the code points on either side of the surrogate block are characters"
+  },
+  {
+   "pattern": "😀+",
+   "valid": true,
+   "match": [
+    "😀",
+    "😀😀"
+   ],
+   "no-match": [
+    "",
+    "a"
+   ],
+   "why": "a code point beyond U+FFFF is one character, also where the host stores it as a surrogate pair"
   }
  ],
  "verdict-vectors": [

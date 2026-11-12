@@ -391,8 +391,11 @@ live states: linear in program times input. In the reference, parser and
 matcher together are about 200 lines. Three things are the kernel's and
 not the RFC's: the pattern matches the whole value, `^` and `$` are
 ordinary characters, and the limits are 256 characters per pattern,
-1,000 states and 4,096 characters per value. The 37 regex vectors
-include the traps where a host engine answers differently.
+1,000 states and 4,096 characters per value. Work from the RFC as
+published: its grammar keeps surrogate code points out of patterns,
+which the working group's file did not, and the three engines here
+were wrong on that until they were compared with it. The 42 regex
+vectors include the traps where a host engine answers differently.
 
 **Third, the verdict.** One function over a Check, an observation and
 the bound parameters. An undeclared or unobserved fact, a mistyped
@@ -423,8 +426,8 @@ output is a note, withheld, and no failure.
 You never run a collector. A validator that executes code from a bundle
 it was asked to check has stopped being a validator.
 
-The corpus for this sitting is `check-vectors.json`: 183 cases, of
-which 37 are for the engine alone.
+The corpus for this sitting is `check-vectors.json`: 188 cases, of
+which 42 are for the engine alone.
 
 ## 12.9 The harness, and the honest numbers
 

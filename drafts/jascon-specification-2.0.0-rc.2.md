@@ -53,8 +53,8 @@ corpus validate unchanged under the 2.0.0 schema, so a 1.0.0 bundle is a
 fifteen families; the Python reference validator green on it and on
 every bundle that ships; the first Risk corpus (two Risk objects
 converted from an OSCAL POA&M), and what that corpus shows the fourth
-authority's data to lack. **Measured at rc.2 (2026-11-12):** 442 vectors
-in sixteen families (`check`: 183); the Python reference green on them, on
+authority's data to lack. **Measured at rc.2 (2026-11-12):** 447 vectors
+in sixteen families (`check`: 188); the Python reference green on them, on
 the five shipped bundles and on the example folder; the app's JavaScript
 port green on the same vectors. **Not yet measured, said here rather than
 below the fold:** Risk's two implementations share one author — the
@@ -1238,7 +1238,10 @@ states, a value of at most 4,096 characters, beyond which the assertion
 is `inconclusive`. **No host engine**: an implementation parses the
 grammar itself and matches without backtracking, so that a verdict does
 not depend on Python, .NET or ECMAScript and a pattern cannot stall a
-validator. One dependence is left and stated: a general category `\p{..}`
+validator. The grammar is that of the RFC **as published** (compared on
+2026-11-12): it keeps the surrogate code points U+D800 to U+DFFF out of
+`NormalChar` and `CCchar`, which the working group's file did not, and a
+pattern that holds one is refused. One dependence is left and stated: a general category `\p{..}`
 is read from the host's Unicode database (backlog #59). A pattern is
 never a parameter (CHECK-4).
 
@@ -1563,15 +1566,16 @@ corpus and two implementations. The same four questions, asked of Risk
 and of Check:
 
 1. **Executable kernel + conformance.** ✓ Schema 2.0.0 (eleven types);
-   **442 vectors, 16 families** — the twelve of 1.0.0 (lifecycle 36 → 38
+   **447 vectors, 16 families** — the twelve of 1.0.0 (lifecycle 36 → 38
    with the tenth and the eleventh disjointness case) plus `risk` 73,
    `kernel` 9 (the manifest pin, D3.6), `scale` 18 (pinned scale
-   definitions, D3.7) and `check` 183 (37 regex · 63 verdict · 7
+   definitions, D3.7) and `check` 188 (42 regex · 63 verdict · 7
    aggregate · 12 share · 20 object · 44 bundle; 156 at the proposal, 27
-   from the decisions of 2026-11-12). Every review correction is pinned
-   by a vector that fails on the validator as first proposed; for the 27,
-   four deliberate breaks of the reference each turn a vector red.
-2. **First implementation.** ✓ `validate_core.py`: 442 / 442, the five
+   from the decisions of 2026-11-12, 5 from the comparison with the
+   published RFC 9485). Every review correction is pinned
+   by a vector that fails on the validator as first proposed; for the 32,
+   five deliberate breaks of the reference each turn a vector red.
+2. **First implementation.** ✓ `validate_core.py`: 447 / 447, the five
    shipped bundles (3,715 objects, both digests each), and the example
    folder (24 objects, two Checks, two runs, the evidence store) — ALL
    GREEN on 2026-11-12.
@@ -1579,11 +1583,12 @@ and of Check:
    PowerShell 5.1 on 2026-11-11: 415 / 415 in sixteen families with Check
    as then proposed (`check`: 156), the five bundles and the example
    folder, every count equal to the Python reference's. The twelfth
-   comparator and the per-resource counts (27 vectors) were ported on
+   comparator, the per-resource counts and the surrogate rule (32 vectors)
+   were ported on
    2026-11-12 **without a runtime and have not been executed** (backlog
    #60). **This blocks the tag.** Both implementations have one author:
    their independence is language and runtime. A third, the JavaScript
-   port in `jascon-app/`, passes all sixteen families including the 183.
+   port in `jascon-app/`, passes all sixteen families including the 188.
 4. **Corpus.** ◐ Risk: one, IFA, two Risk objects — enough to exercise
    the record's sourced half and to measure what the source lacks; not
    enough to exercise `rating`, `acceptance`, the later states, or
@@ -1630,7 +1635,7 @@ history. The compact line:
 | The kernel pin | 2026-11-10 | `kernel-version` in the content manifest: optional, absent = 1.0.0, required for content beyond 1.0.0 (KERNEL-1), fail-closed on an unimplemented kernel (KERNEL-2); 9 vectors, a fourteenth family; IFA and example manifests pinned | D3.6 · "Amendments — the kernel pin" |
 | rc.1 review | 2026-11-10 | External review: nine findings reproduced and fixed — justification needs an assessed treatment decision, `tailoring-refs`, RISK-13/14, typed Tailoring selection edges, withdrawn Tailorings/Requirements, checked dates; the Mapping Model date corrected; `PRIOR-ART.md` | CP-RISK-1 §13 · "Amendments — the rc.1 review" |
 | CP-CHECK-1 | 2026-11-11 | The Check proposal: schema, reference validator, 156 vectors, a worked example with an evidence store, a census of two open check corpora; the PowerShell twin ported and run (415 / 415, #56) | `drafts/CP-CHECK-1.md` |
-| Check accepted | 2026-11-12 | Six author decisions: a consumer-side clause for D22 (#48 closed); run rows stay kernel; `requirement-ref` resolves if present; Check goes live with 2.0.0; no new quantifier, but every resource is evaluated and the failing share reported; `not-equals` as the twelfth comparator. 156 → 183 vectors; the reader reads the type (#57 closed) | CP-CHECK-1 §13 · "Amendments — CP-CHECK-1" |
+| Check accepted | 2026-11-12 | The grammar compared with the published RFC 9485 (surrogate code points refused, #61 closed). Six author decisions: a consumer-side clause for D22 (#48 closed); run rows stay kernel; `requirement-ref` resolves if present; Check goes live with 2.0.0; no new quantifier, but every resource is evaluated and the failing share reported; `not-equals` as the twelfth comparator. 156 → 188 vectors; the reader reads the type (#57 closed) | CP-CHECK-1 §13 · "Amendments — CP-CHECK-1" |
 | **2.0.0-rc.2** | 2026-11-12 | This text: D24 new; D4, D14, D15, D22 amended in place; Risk's exception paragraph replaced by the clause; gate state in IV.5b | this row |
 
 ## IV.7 Release artifacts (what this candidate ships with)
@@ -1648,10 +1653,10 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
   bundled, and `collector@1` *(2.0.0-rc.2)*, which carries collector code
   on a Check and declares `modifies-semantics: []`.
   `risk-analysis@1` is parked, with one measured payload (Appendix D).
-- **Conformance corpus**: **442 vectors, 16 families** (jcs 8 ·
+- **Conformance corpus**: **447 vectors, 16 families** (jcs 8 ·
   modality 21 · parameter 19 · tailoring 19 · attestation 5 · facet 7 ·
   reference 13 · lifecycle 38 · tier 9 · dsse 5 · composition 7 ·
-  conditional 8 · risk 73 · kernel 9 · scale 18 · check 183). In
+  conditional 8 · risk 73 · kernel 9 · scale 18 · check 188). In
   `risk-vectors.json`, `expected-rule` is the portable assertion; in
   `check-vectors.json`, the outcome, the named CHECK rules and, where
   given, the per-resource counts.
@@ -1713,7 +1718,7 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
 3. **Licence** — ✓ Apache-2.0; corpus terms reviewed (§2).
 4. **The second implementation** — ◐ ran green on 2026-11-11 (415
    vectors). ☐ Run `validate_core.ps1` again on Windows PowerShell 5.1
-   with the changes of 2026-11-12; expect `check: 183 pass, 0 fail`, 442
+   with the changes of 2026-11-12; expect `check: 188 pass, 0 fail`, 447
    in all, and ALL GREEN (backlog #60). **Blocks the tag.**
 5. **Decided** — ✓ a kernel-version pin in the manifest (#44, D3.6); ✓
    D22 has a consumer-side clause (#48); ✓ the six open points of
@@ -1725,10 +1730,10 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
    a Statement of Applicability for (#51); ☐ `Deviation.opened` is still
    a free string (#52); ☐ whether `\p{..}` follows the host's Unicode
    database or a pinned table (#59).
-6. **Work, not decisions** — ☐ compare the implemented I-Regexp grammar
-   with the published text of RFC 9485; the implementation follows the
-   working group's ABNF, and the RFC text could not be fetched from the
-   build environment on either day (#61, **blocks the tag**); ☐ value
+6. **Work, not decisions** — ✓ the implemented I-Regexp grammar was
+   compared with the published text of RFC 9485 on 2026-11-12: equal
+   except that the RFC keeps surrogate code points out of `NormalChar`
+   and `CCchar`; the engines now refuse them (#61, closed); ☐ value
    arrival for the other corpora and the re-wording of "converted
    losslessly" that follows from it (#41); ☐ a real attestation in the
    example bundle (#46); ☐ `Assessment.method` payloads held to their
@@ -1737,4 +1742,4 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
    than it is** — a runner that executes collectors and writes evidence;
    a declared request format for `http-api` collectors in `collector@1`;
    a census of checks against cloud APIs.
-8. **Tag `v2.0.0`** — on the author's go, after items 4 and 6 (#61).
+8. **Tag `v2.0.0`** — on the author's go, after item 4.

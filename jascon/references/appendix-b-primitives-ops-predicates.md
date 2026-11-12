@@ -343,7 +343,8 @@ characters, `.` excludes `\n` and `\r`; several lines need
 program at most 1,000 states, a value at most 4,096 characters, else
 `inconclusive`; and **no host engine**: an implementation parses the
 grammar and matches by simulating the set of live states, without
-backtracking. One dependence is left: a category `\p{..}` is read from
+backtracking. The grammar is the RFC's as published: a surrogate code
+point (U+D800 to U+DFFF) is no pattern character. One dependence is left: a category `\p{..}` is read from
 the host's Unicode database (backlog #59).
 
 **The rules that rest on it.**
@@ -377,7 +378,7 @@ an `audit` string. An exit code hides its threshold, cannot be reached
 by a tailored parameter and leaves a bit where an observation should be.
 **Measured fit:** 481 of 510 rules of the CIS Ubuntu 24.04 profiles of
 ComplianceAsCode; the operators of kube-bench `cis-1.12` map onto the
-set (CP-CHECK-1 §2.2). **Exercised:** `check-vectors.json`, 183 cases;
+set (CP-CHECK-1 §2.2). **Exercised:** `check-vectors.json`, 188 cases;
 the worked example LNX-SSH-1 with two runs.
 
 ## B.2 The three predicates (shared vocabulary, one leash)
@@ -498,9 +499,10 @@ PowerShell twin, both on the same 73 risk vectors. Both were written by
 the same author, so their independence is one of language and runtime,
 not of reading.
 The tenth (`check-verdict`, B.1.10) arrived in the same cycle: counts
-(CP-CHECK-1 §2), 183 vectors, and the Python reference with the app's
+(CP-CHECK-1 §2), 188 vectors, and the Python reference with the app's
 port green on them. The PowerShell twin passed the 156 vectors of the
-proposal on 2026-11-11; the twelfth comparator and the per-resource
-counts are ported there and have not run (backlog #60). With it comes a
+proposal on 2026-11-11; what came after (the twelfth comparator, the
+per-resource counts, the surrogate rule) is ported there and has not run
+(backlog #60). With it comes a
 second closed set, the twelve comparators, under the same leash: a
 thirteenth is a set version with counts, never a facet.

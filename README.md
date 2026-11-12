@@ -14,7 +14,7 @@ contact with real catalogs before it may stay.**
 
 This repository is a working design study, not a slide deck. It contains a
 draft specification with a public decision register, an **executable kernel
-schema** with a **157-vector conformance corpus** (442 in 16 families in the 2.0.0 candidate) and *two* reference
+schema** with a **157-vector conformance corpus** (447 in 16 families in the 2.0.0 candidate) and *two* reference
 validators — Python, and a **zero-dependency PowerShell 5.1 twin that runs
 on a stock Windows box** (the weekend-validator claim, measured,
 crypto engines included) —
@@ -57,7 +57,7 @@ requirements and mints real objects.*
 > observation, so any tool recomputes the verdict and a parameter the
 > Tailoring binds sets the pass mark.
 >
-> - **Measured:** 183 check vectors (442 in all, 16 families) pass in the
+> - **Measured:** 188 check vectors (447 in all, 16 families) pass in the
 >   Python reference and in the app's port; four deliberate breaks of the
 >   reference each turn a new vector red. Fit, counted on two open check
 >   corpora: 481 of 510 rules of the CIS Ubuntu 24.04 profiles in
@@ -68,9 +68,11 @@ requirements and mints real objects.*
 >   catalogue it refers to; `not-equals` is the twelfth comparator; a
 >   per-resource check stays for-all, evaluates every resource and
 >   reports the share that fails.
+> - **Compared with the published RFC 9485 (2026-11-12):** the grammar
+>   matches except that the RFC excludes surrogate code points from
+>   pattern characters; the three engines now do too (backlog #61, closed).
 > - **Not done, and blocking the tag:** the PowerShell twin has not been
->   executed with the last two changes (backlog #60), and the I-Regexp
->   grammar has not been compared with the published RFC 9485 text (#61).
+>   executed with the changes of 2026-11-12 (backlog #60).
 > - **Not there at all:** a runner. Nothing in this repository executes a
 >   collector; the worked example ran its bash collector against a stub.
 >   The fit was counted on Linux hosts and Kubernetes, on no cloud API.
@@ -128,7 +130,7 @@ requirements and mints real objects.*
 >   415/415 vectors in 16 families (`check: 156`), the five bundles and
 >   the example folder with its two Checks and its evidence store, again
 >   the Python reference's counts. On 2026-11-12 Check was accepted and
->   changed in two places (above): the Python reference stands at 442
+>   changed in three places (above): the Python reference stands at 447
 >   vectors, and the twin has not run with them yet. The tag is the
 >   author's call. See the
 >   [backlog](drafts/jascon-v0.6-spec-feedback-backlog.md)
