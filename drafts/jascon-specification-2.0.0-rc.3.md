@@ -1577,8 +1577,9 @@ is the composition engine of gate 4 with one lawful replacement. *No
 props / no bespoke:* the document model that gave OSCAL this guarantee is
 replaced by a rule on a bundle.
 **Cons, stated.** Two kernel fields entered without counted evidence.
-No converter from OSCAL component definitions exists, so the only pack
-there is was written for this purpose. What the app and the reader do
+The only pack there is was written for this purpose; the pack builder
+imports OSCAL component definitions (IV.7), and none published by a vendor
+has been imported yet. What the app and the reader do
 with a pack is stated in IV.7.
 
 **Rejected.** *The vendor publishes Implementation objects*: an
@@ -1998,7 +1999,7 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
   two exports through the reference validator. Not driven: drag and
   drop of a pack, and the German texts of the new views on screen.
 - **The pack builder** (`one-page-apps/jascon-pack-builder.html`,
-  v1.0.0) — the vendor's side of D25: one offline HTML file that writes
+  v1.1.0) — the vendor's side of D25: one offline HTML file that writes
   a pack from a form and judges it with the app's kernel code, inlined
   and held equal to the app's by `one-page-apps/tools/sync-inlined.mjs`
   in CI. It signs a release with Ed25519 in the browser or prepares the
@@ -2007,8 +2008,18 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
   version. Measured by four browser tests: the worked pack, typed in,
   comes out with its Component byte for byte and its manifest equal but
   for the provenance line, and the reference reports its signature
-  VERIFIED; signed by `openssl` from the prepared bytes, the same. Six
-  deliberate defects in the builder each turn one of them red.
+  VERIFIED; signed by `openssl` from the prepared bytes, the same. Since
+  v1.1.0 it imports an OSCAL component definition: one recommendation
+  per implemented requirement, `statements` to clauses, `set-parameters`
+  to suggested values, control ids through the loaded catalogue, the
+  rule of the NIST SP 800-53 conversion or a prefix the vendor gives,
+  and a report of what it could not place and what a pack cannot carry.
+  Measured on a test component definition: with the SP 800-53 catalogue
+  loaded, every clause and suggested value passes ADVICE-5 and ADVICE-6,
+  values set for a whole control implementation land where the catalogue
+  declares them, and Rev 4 parameter ids take the catalogue's names. Six
+  browser tests; eleven deliberate defects in the builder each turn one
+  of them red.
 - **License**: Apache-2.0 for the original work (`LICENSE`, `NOTICE`);
   the shipped bundles under their publishers' terms.
 
@@ -2059,6 +2070,7 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
 7. **Not part of this candidate, named so that nobody reads it as more
    than it is** — a runner that executes collectors and writes evidence;
    a declared request format for `http-api` collectors in `collector@1`
-   (#62); a census of checks against cloud APIs; a converter from OSCAL
-   component definitions to advice packs, and a census of public ones.
+   (#62); a census of checks against cloud APIs; a census of public
+   OSCAL component definitions, and a run of the builder's import over
+   them.
 8. **Tag `v2.0.0`** — on the author's go. Nothing in this list blocks it.

@@ -12,6 +12,12 @@
       is refused; with both versions raised the release is ready.
    3. With a catalogue loaded, a suggested value the covered clauses do not
       declare is refused (ADVICE-6).
+   5. An OSCAL component definition imported without a catalogue: control
+      ids by the NIST rule, statements to clauses, values to suggestions,
+      a prefix asked for the other source; what a pack cannot carry named.
+   6. The same with the SP 800-53 catalogue loaded: values set for the
+      whole control implementation placed, a Rev 4 parameter id renamed to
+      the catalogue's, and every clause and value passes ADVICE-5/6.
    4. Signing elsewhere: the prepared bytes signed by openssl (where present)
       make the publisher proven, and a change afterwards asks for a new
       signature.
@@ -53,7 +59,9 @@ async function open() {
   const errors = [];
   page.on("pageerror", e => errors.push("pageerror: " + e.message));
   page.on("console", m => { if (m.type() === "error") errors.push("console: " + m.text()); });
-  page.on("dialog", d => d.accept());
+  /* confirm() is answered yes; prompt() takes the next answer a test queued, or its default */
+  const answers = [], prompts = [];
+  page.on("dialog", d => { if (d.type() === "prompt") { prompts.push(d.message()); return d.accept(answers.length ? answers.shift() : d.defaultValue()); } return d.accept(); });
   await page.goto(PAGE);
   await page.locator('body[data-state="ready"] #sec-check .status').waitFor();
   const set = async (sel, value) => { const l = page.locator(sel).first(); await settle(); await l.fill(value); await l.dispatchEvent("change"); };
@@ -73,7 +81,7 @@ async function open() {
     assert.deepEqual(errors, [], "no script error on the page");
   };
   const shutdown = async () => { await browser.close(); fs.rmSync(tmp, { recursive: true, force: true }); };
-  return { page, tmp, set, settle, status, download, finish, shutdown };
+  return { page, tmp, set, settle, status, download, finish, shutdown, answers, prompts };
 }
 /* The browser is closed whether the test passes or fails; a browser left
    open keeps node waiting after a failed assertion. */
@@ -218,4 +226,71 @@ test("signing elsewhere: the prepared bytes, signed by openssl, prove the publis
   assert.equal(plan.label, "proven");
   await set('[data-bind="c.0.productVersion"]', "7.3");
   assert.match(await B.status(), /SIGN.*changed after the bytes to sign were prepared/);
+}));
+
+const CDEF = path.join(ROOT, "one-page-apps/tests/fixtures/component-definition-dbserver.json");
+const NIST = "https://ns.nist.gov/sp800-53/req/";
+const componentsOf = files => files.filter(f => f.path.startsWith("objects/component/")).map(f => JSON.parse(f.text));
+const capsOf = c => Object.fromEntries((c.capabilities || []).map(k => [k["requirement-ref"] || k.id, k]));
+
+test("an OSCAL component definition becomes Components and recommendations; what a pack cannot carry is named", OPTS, () => withBuilder(async B => {
+  const { page, set } = B;
+  await set('[data-bind="origin"]', "https://dbvendor.example");
+  B.answers.push("https://backup-standard.example/req/");
+  await page.setInputFiles("#pick-oscal", CDEF);
+  await B.settle();
+  assert.equal(B.prompts.length, 1, "one prefix asked for, for the one source that is neither NIST nor in a catalogue");
+  assert.match(B.prompts[0], /backup-standard\.example\/catalog\.json/);
+  const report = (await page.locator("#sec-import").innerText()).replace(/\s+/g, " ");
+  assert.match(report, /2 component\(s\) with 5 recommendation\(s\)/);
+  assert.match(report, /0 through the catalogue, 4 by the rule of the NIST SP 800-53 conversion, 1 by a prefix you gave/);
+  assert.match(report, /1 product version\(s\) from a version prop/);
+  assert.match(report, /Suggested values not placed: sc-08_odp \(set for the whole control implementation; load the catalogue to place it\)/);
+  assert.match(report, /Kinds mapped: Example DB Backup Link: interconnection -> service/);
+  assert.match(report, /components\[\]\.props ×1/);
+  assert.match(report, /component-definition\.capabilities ×1/);
+  assert.equal(await page.locator('[data-bind="pack.title"][data-lang="en"]').inputValue(), "Example DB Server 7 component definition");
+  assert.equal(await page.locator('[data-bind="publisher.name"][data-lang="en"]').inputValue(), "Example DB Vendor Inc.");
+  await set('[data-bind="pack.id"]', "https://dbvendor.example/pack/server-7-hardening");
+  assert.match(await B.status(), /Ready to publish/);
+
+  const files = await unzip(await B.download("#btn-download"));
+  const [server, link] = componentsOf(files);
+  assert.equal(server.id, "https://dbvendor.example/component/example-db-server-7");
+  assert.equal(server["product-version"], "7");
+  assert.equal(server.version, "2026-11");
+  assert.equal(link.kind, "service");
+  const caps = capsOf(server);
+  assert.deepEqual(Object.keys(caps), [NIST + "SC-8", NIST + "AC-2", NIST + "AC-2.1", NIST + "AU-12"]);
+  assert.deepEqual(caps[NIST + "SC-8"]["statement-ids"], ["smt"]);
+  assert.equal(caps[NIST + "SC-8"].id, "cap-sc-8");
+  assert.equal(caps[NIST + "SC-8"].description.en, "The server encrypts every client connection.\n\nsmt: Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3.");
+  assert.deepEqual(caps[NIST + "AC-2"]["statement-ids"], ["smt.e", "smt.g"]);
+  assert.deepEqual(caps[NIST + "AC-2"]["parameter-bindings"], { "ac-02_odp.03": "the database administrator" });
+  assert.deepEqual(caps[NIST + "AC-2.1"]["parameter-bindings"], { "ac-2.1_prm_1": "the user management API" }, "without the catalogue the Rev 4 id stays as it was");
+  assert.equal(capsOf(link)["https://backup-standard.example/req/BAK-1"].id, "cap-bak-1");
+}));
+
+test("with the SP 800-53 catalogue loaded, the import places every value under the catalogue's names and passes ADVICE-5 and ADVICE-6", OPTS, () => withBuilder(async B => {
+  const { page, set } = B;
+  await page.setInputFiles("#pick-cat-folder", path.join(ROOT, "converted_examples/US.SP800-53/sp800-53-core-bundle"));
+  await B.settle();
+  assert.match(await page.locator("#cat-state").innerText(), /^1014 requirement\(s\)/);
+  await set('[data-bind="origin"]', "https://dbvendor.example");
+  B.answers.push("");                    // the backup standard stays unresolved: its recommendation is set by hand
+  await page.setInputFiles("#pick-oscal", CDEF);
+  await B.settle();
+  const report = (await page.locator("#sec-import").innerText()).replace(/\s+/g, " ");
+  assert.match(report, /4 through the catalogue, 0 by the rule of the NIST SP 800-53 conversion, 0 by a prefix you gave, 1 not resolved/);
+  assert.match(report, /Not resolved; set the requirement by hand: BAK-1/);
+  assert.doesNotMatch(report, /Suggested values not placed/);
+  assert.doesNotMatch(report, /Clauses the catalogue does not have/);
+  await set('[data-bind="pack.id"]', "https://dbvendor.example/pack/server-7-hardening");
+  const s = await B.status();
+  assert.doesNotMatch(s, /ADVICE-5|ADVICE-6/, "every clause and suggested value is one the catalogue declares");
+  assert.match(s, /Ready to publish/);
+  const [server] = componentsOf(await unzip(await B.download("#btn-download")));
+  const caps = capsOf(server);
+  assert.deepEqual(caps[NIST + "SC-8"]["parameter-bindings"], { "sc-08_odp": ["confidentiality", "integrity"] }, "set for the whole control implementation, placed where it is declared, as a list for a many-choice");
+  assert.deepEqual(caps[NIST + "AC-2.1"]["parameter-bindings"], { "ac-02.01_odp": "the user management API" }, "the Rev 4 id renamed through alt-identifiers");
 }));

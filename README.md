@@ -514,11 +514,21 @@ writes the ZIP. Reopening a published pack keeps its bytes until something
 changes; changed content then needs a new release version, and a changed
 Component a new version of its own.
 
+A vendor who already has an **OSCAL component definition** imports it:
+each component becomes a Component, each implemented requirement a
+recommendation, its `statements` the clauses and its `set-parameters` the
+suggested values. Control ids resolve through the loaded catalogue, by the
+rule of the NIST SP 800-53 conversion, or by a prefix the vendor gives for
+any other source; a report names what was carried, what could not be
+placed, and the OSCAL content an advice pack has no place for.
+
 Measured: typed into the form, the worked pack comes out with its Component
 byte for byte and its manifest equal but for the provenance line, and
 `validate_core.py` reports the signature VERIFIED
-([`one-page-apps/tests/`](one-page-apps/tests/), four browser tests, run in
-CI; six deliberate defects in the builder each turn one of them red). Also on [jascon.net/pack-builder/](https://jascon.net/pack-builder/).
+([`one-page-apps/tests/`](one-page-apps/tests/), six browser tests, run in
+CI; eleven deliberate defects in the builder each turn one of them red).
+With the SP 800-53 catalogue loaded, a test component definition imports
+with every clause and suggested value accepted by ADVICE-5 and ADVICE-6. Also on [jascon.net/pack-builder/](https://jascon.net/pack-builder/).
 
 ## The website
 

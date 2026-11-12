@@ -123,8 +123,10 @@ simply ceases to exist as a second document. *(2.0.0, CP-ADVICE-1:
 a component definition is also the natural source of an advice pack —
 one Component per component, one capability per implemented
 requirement, `statements[]` to `statement-ids`, `set-parameters` to
-`parameter-bindings`. That converter is designed, not written: the one
-conversion in the repository, of NIST's example file, carries the
+`parameter-bindings`. The pack builder
+(`one-page-apps/jascon-pack-builder.html`) does exactly this on import and
+reports what it could not place. The older conversion in the repository,
+of NIST's example file inside the IFA corpus, still carries the
 control-level description only and leaves 2 clause-level texts and 2
 parameter values behind, although its coverage report counts them as
 carried (backlog #64). Chapter 9.7; `drafts/CP-ADVICE-1.md` §12.)* **Assessment plans and

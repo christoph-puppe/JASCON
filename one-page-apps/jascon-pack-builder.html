@@ -111,9 +111,11 @@ details[open]>summary{margin-bottom:6px}
   <span class="spacer"></span>
   <button type="button" id="btn-open-folder">Open a pack folder…</button>
   <button type="button" id="btn-open-zip">Open a pack ZIP…</button>
+  <button type="button" id="btn-oscal">Import OSCAL component definition…</button>
   <button type="button" id="btn-new">New pack</button>
   <input type="file" id="pick-open-folder" webkitdirectory multiple hidden>
   <input type="file" id="pick-open-zip" accept=".zip" hidden>
+  <input type="file" id="pick-oscal" accept=".json" hidden>
 </header>
 
 <div id="wrap">
@@ -128,9 +130,11 @@ details[open]>summary{margin-bottom:6px}
       <li>Sign the release with your Ed25519 key, in this page or with openssl, so that customers can tell it comes from you.</li>
       <li>Download the ZIP and publish it together with your public key.</li>
     </ol>
+    <p>Have an OSCAL component definition already? <b>Import</b> it: each component becomes a Component, each implemented requirement a recommendation, its statements the clauses and its set-parameters the suggested values. A report says what was carried and what has no place in a pack.</p>
     <p class="hint">Everything stays in this page. Your draft is kept in this browser's storage, your key only in the page's memory: a reload forgets it. To change a published pack, open it, change it and give the release a new version.</p>
   </details>
 
+  <section class="card hidden" id="sec-import"></section>
   <section class="card" id="sec-publisher"></section>
   <section id="sec-components"></section>
   <div class="row" style="margin:-4px 0 16px"><button type="button" id="btn-add-component">+ Add a component</button></div>
@@ -3373,13 +3377,23 @@ if (typeof module !== "undefined" && module.exports) {
      page's memory. It is never written to storage or into a file; the
      stored draft holds no key and no signature.
 
+   OSCAL import. importOscal() turns an OSCAL 1.x component definition
+   (JSON) into Components of the draft: one recommendation per implemented
+   requirement, `statements` to clause ids, `set-parameters` to suggested
+   values (CP-ADVICE-1 §9, handbook 14). A control id resolves through the
+   loaded catalogue first, then by the rule of the NIST SP 800-53
+   conversion (convert_nist.py: <ns>/req/<CONTROL-ID>), then by a prefix the
+   vendor gives for that source. Statement ids follow convert_ifa.py
+   (stmt_norm). What has no place in a pack is counted and named in the
+   report, never silently dropped.
+
    Not here: generating keys (openssl does it, see the signing panel),
    editing list-valued texts (they are shown as one paragraph), facets
    (ADVICE-3 forbids semantic ones; private ones on an opened pack are kept
    as they are), and anything a customer does with a pack. */
 "use strict";
 (() => {
-const PB_VERSION = "1.0.0";
+const PB_VERSION = "1.1.0";
 const PB_TOOL = "JASCON Advice Pack Builder";
 const STORE_KEY = "jascon-pack-builder:draft:v1";
 const KINDS = JSC_SCHEMA.$defs.componentKind.enum;
@@ -3438,9 +3452,11 @@ function loadDraft() {
 /* ---------- text maps: one input per content language ---------- */
 function textInputs(bind, map, multi, placeholder) {
   return draft.langs.map(l => `<div class="lang"><span>${esc(l)}</span>${multi
-    ? `<textarea data-bind="${bind}" data-lang="${esc(l)}" rows="2" placeholder="${esc(placeholder || "")}" style="font-family:inherit;font-size:13.5px">${esc(map[l] || "")}</textarea>`
+    ? `<textarea data-bind="${bind}" data-lang="${esc(l)}" rows="${rowsFor(map[l])}" placeholder="${esc(placeholder || "")}" style="font-family:inherit;font-size:13.5px">${esc(map[l] || "")}</textarea>`
     : `<input type="text" data-bind="${bind}" data-lang="${esc(l)}" placeholder="${esc(placeholder || "")}" value="${esc(map[l] || "")}">`}</div>`).join("");
 }
+/* tall enough for what it holds, from two rows to twelve */
+const rowsFor = t => Math.min(12, Math.max(2, String(t || "").split("\n").reduce((n, line) => n + Math.max(1, Math.ceil(line.length / 95)), 0)));
 function textOf(map) {
   const out = {};
   for (const l of draft.langs) { const v = String(map[l] || "").trim(); if (v) out[l] = v; }
@@ -3463,6 +3479,7 @@ function redrawCap(at) {
   draw(() => { el.outerHTML = capHtml(c, i, c.caps[j], j); });
 }
 function renderAll() {
+  renderImport();
   renderPublisher();
   renderComponents();
   renderCatalog();
@@ -4070,7 +4087,180 @@ async function fetchCatalog(url) {
   return files;
 }
 
-/* ---------- events ---------- */
+/* ---------- importing an OSCAL component definition ---------- */
+/* OSCAL 1.x component types onto the six Component kinds (C.6). Every
+   mapping that is not one to one is named in the report. */
+const OSCAL_KIND = { "this-system": "system", software: "software", hardware: "hardware", service: "service", policy: "policy",
+  "process-procedure": "process", plan: "policy", guidance: "policy", standard: "policy", interconnection: "service",
+  physical: "hardware", validation: "software" };
+const NIST_800_53 = { test: src => /800-53/i.test(src), mint: cid => "https://ns.nist.gov/sp800-53/req/" + cid.toUpperCase(), name: "the NIST SP 800-53 conversion" };
+/* convert_ifa.py stmt_norm: "ac-2_smt.a" -> "smt.a", "stmt" -> "smt" */
+function stmtNorm(sid, cid) {
+  let s = String(sid || "");
+  if (s.startsWith(cid + "_")) s = s.slice(cid.length + 1);
+  if (s.startsWith("stmt")) s = "smt" + s.slice(4);
+  return s;
+}
+/* catalogue requirements by the names an OSCAL control id can take: the last
+   segment of the id, the label with "(1)" spelled ".1", every alias */
+function catalogIndex() {
+  const ix = new Map();
+  for (const [id, r] of catalog) {
+    const keys = [lastSegment(id), r.label && String(r.label).replace(/\((\d+)\)/g, ".$1"), ...(r.aliases || []).map(a => a && a.value)];
+    for (const k of keys) if (k) { const kk = String(k).toLowerCase(); if (!ix.has(kk)) ix.set(kk, id); }
+  }
+  return ix;
+}
+/* a parameter name as the catalogue declares it: the name itself, or the one
+   whose alt-identifiers list the OSCAL param-id (Rev 4 _prm_ ids) */
+function paramName(req, pid) {
+  if (!req) return pid;
+  const names = (req.statements || []).flatMap(st => (st.parameters || []).map(p => p.name));
+  if (names.includes(pid)) return pid;
+  let found = null;
+  const walk = v => {
+    if (found || !v || typeof v !== "object") return;
+    for (const [k, x] of Object.entries(v)) {
+      if (names.includes(k) && x && Array.isArray(x["alt-identifiers"]) && x["alt-identifiers"].includes(pid)) { found = k; return; }
+      walk(x);
+    }
+  };
+  walk(req.facets);
+  return found || pid;
+}
+function declaredParam(req, name, sids) {
+  for (const st of (req && req.statements) || []) if (!sids.length || sids.includes(st.id)) for (const p of st.parameters || []) if (p.name === name) return p;
+  return null;
+}
+const oscalText = v => (typeof v === "string" ? v.trim() : "");
+
+async function importOscal(text, source) {
+  let doc;
+  try { doc = JSON.parse(text); } catch (e) { log(`${source}: not JSON (${e.message}); this page reads the JSON form of OSCAL`, true); return; }
+  const cd = jscIsPlainObject(doc) ? doc["component-definition"] : null;
+  if (!jscIsPlainObject(cd) || !Array.isArray(cd.components) || !cd.components.length) {
+    log(`${source}: not an OSCAL component definition with components (expected component-definition.components[])`, true); return;
+  }
+  const R = { source, components: 0, caps: 0, how: { catalogue: 0, nist: 0, prefix: 0 }, unresolved: [], clauses: 0, clausesMissing: [],
+    values: 0, valuesUnplaced: [], kinds: [], productVersions: 0, dropped: new Map() };
+  const drop = (path, n = 1) => R.dropped.set(path, (R.dropped.get(path) || 0) + n);
+  const ix = catalogIndex(), prefixes = new Map(), lang = draft.langs[0], meta = cd.metadata || {};
+  /* -> { ref, req } for one control id of one source */
+  const resolve = (cid, src) => {
+    const hit = ix.get(cid.toLowerCase()) || ix.get(cid.toLowerCase().replace(/\.0*(\d+)$/, ".$1"));
+    if (hit) { R.how.catalogue++; return { ref: hit, req: catalog.get(hit) }; }
+    if (NIST_800_53.test(src)) { R.how.nist++; const ref = NIST_800_53.mint(cid); return { ref, req: catalog.get(ref) || null }; }
+    if (!prefixes.has(src)) {
+      const answer = prompt(`The controls of ${src || "an unnamed source"} are not in the loaded catalogue. Their requirement ids are this prefix followed by the control id (for example https://ns.example.org/req/). Leave it empty to resolve them by hand.`, "");
+      prefixes.set(src, (answer || "").trim());
+    }
+    const prefix = prefixes.get(src);
+    if (!prefix) { R.unresolved.push(cid); return { ref: "", req: null }; }
+    R.how.prefix++;
+    return { ref: prefix + cid, req: catalog.get(prefix + cid) || null };
+  };
+
+  const comps = [];
+  for (const oc of cd.components) {
+    if (!jscIsPlainObject(oc)) continue;
+    R.components++;
+    const title = oscalText(oc.title) || "component";
+    const kind = OSCAL_KIND[oc.type] || "software";
+    if (OSCAL_KIND[oc.type] !== oc.type) R.kinds.push(`${title}: ${oc.type || "no type"} -> ${kind}`);
+    const pv = (oc.props || []).find(p => p && p.name === "version");
+    if (pv) R.productVersions++;
+    for (const k of ["props", "links", "responsible-roles", "protocols", "purpose"]) {
+      const v = oc[k]; const n = Array.isArray(v) ? v.filter(x => !(k === "props" && x === pv)).length : v ? 1 : 0;
+      if (n) drop(`components[].${k}`, n);
+    }
+    if (oscalText(oc.description)) drop("components[].description (a Component has no description field)");
+    const c = { ...blankComponent(), label: title, title: { [lang]: title }, kind, productVersion: pv ? String(pv.value) : "",
+      version: oscalText(meta.version) || thisMonth(), caps: [],
+      id: draft.origin ? `${draft.origin}/component/${jscSlug(title)}` : "" };
+    const taken = new Set();
+    for (const ci of oc["control-implementations"] || []) {
+      const src = oscalText(ci.source);
+      if (oscalText(ci.description)) drop("control-implementations[].description");
+      for (const k of ["props", "links"]) if (Array.isArray(ci[k]) && ci[k].length) drop(`control-implementations[].${k}`, ci[k].length);
+      const shared = ci["set-parameters"] || [], capsHere = [];
+      for (const ir of ci["implemented-requirements"] || []) {
+        const cid = oscalText(ir["control-id"]);
+        if (!cid) { drop("implemented-requirements[] without a control-id"); continue; }
+        const { ref, req } = resolve(cid, src);
+        const cap = blankCap();
+        cap.requirementRef = ref;
+        cap.id = jscCapabilityId(ref || cid, taken);
+        /* the clauses: the catalogue's own spelling when it has the requirement */
+        const parts = [oscalText(ir.description)].filter(Boolean);
+        const sids = [];
+        for (const st of ir.statements || []) {
+          const raw = oscalText(st["statement-id"]);
+          if (!raw) continue;
+          const norm = stmtNorm(raw, cid), have = req ? (req.statements || []).map(x => x.id) : null;
+          const sid = !have ? norm : [norm, raw, raw.slice(cid.length + 1)].find(x => have.includes(x)) || norm;
+          if (have && !have.includes(sid)) R.clausesMissing.push(`${cid} ${raw}`);
+          if (ref && !sids.includes(sid)) { sids.push(sid); R.clauses++; }
+          if (oscalText(st.description)) parts.push(`${sid}: ${oscalText(st.description)}`);
+          for (const k of ["props", "links", "responsible-roles"]) if (Array.isArray(st[k]) && st[k].length) drop(`statements[].${k}`, st[k].length);
+        }
+        if (!ref) parts.unshift(`OSCAL control ${cid}${src ? " of " + src : ""}:`);
+        cap.statementIds = ref ? sids : [];
+        if (parts.length) cap.description = { [lang]: parts.join("\n\n") };
+        for (const k of ["props", "links", "responsible-roles"]) if (Array.isArray(ir[k]) && ir[k].length) drop(`implemented-requirements[].${k}`, ir[k].length);
+        /* suggested values: the implemented requirement's own */
+        for (const sp of ir["set-parameters"] || []) {
+          const vals = (sp.values || []).map(String);
+          if (!ref || !vals.length) { R.valuesUnplaced.push(`${cid} ${sp["param-id"]}`); continue; }
+          const name = paramName(req, sp["param-id"]), decl = declaredParam(req, name, []);
+          setKey(cap.bindings, name, decl && decl.type === "choice" && decl.cardinality === "many" ? vals : vals.length === 1 ? vals[0] : vals);
+          R.values++;
+        }
+        capsHere.push({ cap, req });
+        c.caps.push(cap);
+        R.caps++;
+      }
+      /* values set for the whole control implementation go where the catalogue declares them */
+      for (const sp of shared) {
+        const vals = (sp.values || []).map(String);
+        const homes = capsHere.filter(x => x.req && declaredParam(x.req, paramName(x.req, sp["param-id"]), []));
+        if (!homes.length || !vals.length) { R.valuesUnplaced.push(`${sp["param-id"]} (set for the whole control implementation${catalog.size ? "" : "; load the catalogue to place it"})`); continue; }
+        for (const { cap, req } of homes) {
+          const name = paramName(req, sp["param-id"]), decl = declaredParam(req, name, []);
+          if (!Object.prototype.hasOwnProperty.call(cap.bindings, name)) { setKey(cap.bindings, name, decl.type === "choice" && decl.cardinality === "many" ? vals : vals.length === 1 ? vals[0] : vals); R.values++; }
+        }
+      }
+    }
+    comps.push(c);
+  }
+  for (const k of ["capabilities", "back-matter", "import-component-definitions"]) if (cd[k]) drop(`component-definition.${k}`, Array.isArray(cd[k]) ? cd[k].length : 1);
+
+  /* into the draft: a draft with only an empty Component is replaced, anything else is added to */
+  const empty = draft.components.length === 1 && !draft.components[0].label && !draft.components[0].id && draft.components[0].caps.every(k => !k.id && !k.requirementRef);
+  draft.components = empty ? comps : [...draft.components, ...comps];
+  if (!Object.keys(draft.pack.title).length && oscalText(meta.title)) draft.pack.title = { [lang]: oscalText(meta.title) };
+  const org = (meta.parties || []).find(p => p && p.type === "organization" && oscalText(p.name));
+  if (org && !Object.keys(draft.publisher.name).length) draft.publisher.name = { [lang]: oscalText(org.name) };
+  importReport = R;
+  log(`imported ${source}: ${R.components} component(s), ${R.caps} recommendation(s); requirements ${R.how.catalogue} from the catalogue, ${R.how.nist} by the NIST rule, ${R.how.prefix} by a prefix, ${R.unresolved.length} unresolved; ${R.values} suggested value(s), ${R.valuesUnplaced.length} not placed`);
+  renderAll(); saveDraft();
+}
+let importReport = null;
+function renderImport() {
+  const R = importReport, el = $("sec-import");
+  el.classList.toggle("hidden", !R);
+  if (!R) return;
+  const list = (title, xs) => xs.length ? `<p><b>${esc(title)}</b> ${xs.slice(0, 30).map(x => `<code>${esc(x)}</code>`).join(", ")}${xs.length > 30 ? ` and ${xs.length - 30} more` : ""}</p>` : "";
+  const dropped = [...R.dropped].map(([k, n]) => `${k} ×${n}`);
+  draw(() => { el.innerHTML = `<div class="capt"><h2 style="margin:0">Imported from ${esc(R.source)}</h2><span class="spacer"></span>
+      <button type="button" class="quiet" id="btn-import-close">Close</button></div>
+    <p>${R.components} component(s) with ${R.caps} recommendation(s). Requirements resolved: ${R.how.catalogue} through the catalogue, ${R.how.nist} by the rule of the NIST SP 800-53 conversion, ${R.how.prefix} by a prefix you gave${R.unresolved.length ? `, <b>${R.unresolved.length} not resolved</b>` : ""}. ${R.clauses} clause(s), ${R.values} suggested value(s)${R.productVersions ? `, ${R.productVersions} product version(s) from a <code>version</code> prop` : ""}.</p>
+    ${list("Not resolved; set the requirement by hand:", R.unresolved)}
+    ${list("Clauses the catalogue does not have:", R.clausesMissing)}
+    ${list("Suggested values not placed:", R.valuesUnplaced)}
+    ${list("Kinds mapped:", R.kinds)}
+    ${list("Not carried, because a pack has no place for it:", dropped)}
+    <p class="hint">Check every recommendation before you publish: OSCAL describes how a component implements a control, an advice pack what a customer may do with your product. ${catalog.size ? "" : "Load the catalogue below to have clauses and suggested values checked."}</p>`; });
+}
 document.addEventListener("input", e => { if (e.target.closest("main")) onEdit(e.target, false); });
 document.addEventListener("change", e => {
   const el = e.target;
@@ -4111,10 +4301,12 @@ document.addEventListener("click", async e => {
     case "btn-add-component": draft.components.push(blankComponent()); renderComponents(); changed(); break;
     case "btn-new":
       if (draftHasContent() && !confirm("Start a new pack? The current draft is discarded.")) break;
-      draft = blankDraft(); opened = null; signing.made = null; signing.external = null; bindErrors.clear();
+      draft = blankDraft(); opened = null; importReport = null; signing.made = null; signing.external = null; bindErrors.clear();
       renderAll(); changed(); break;
     case "btn-open-folder": $("pick-open-folder").click(); break;
     case "btn-open-zip": $("pick-open-zip").click(); break;
+    case "btn-oscal": $("pick-oscal").click(); break;
+    case "btn-import-close": importReport = null; renderImport(); break;
     case "btn-cat-folder": $("pick-cat-folder").click(); break;
     case "btn-cat-files": $("pick-cat-files").click(); break;
     case "btn-cat-url": {
@@ -4160,6 +4352,7 @@ document.addEventListener("click", async e => {
 /* every path out of a read, refused ones included, ends in a fresh check */
 $("pick-open-folder").addEventListener("change", e => job(async () => { const l = [...e.target.files]; e.target.value = ""; await openPack(await readPicked(l), "the folder"); }));
 $("pick-open-zip").addEventListener("change", e => job(async () => { const f = e.target.files[0]; e.target.value = ""; if (f) await openPack(await readPicked([f]), f.name); }));
+$("pick-oscal").addEventListener("change", e => job(async () => { const f = e.target.files[0]; e.target.value = ""; if (f) await importOscal(await f.text(), f.name); }));
 $("pick-cat-folder").addEventListener("change", e => job(async () => { const l = [...e.target.files]; e.target.value = ""; await loadCatalog(await readPicked(l), "a folder"); }));
 $("pick-cat-files").addEventListener("change", e => job(async () => { const l = [...e.target.files]; e.target.value = ""; await loadCatalog(await readPicked(l), `${l.length} file(s)`); }));
 $("pick-key").addEventListener("change", e => job(async () => {
