@@ -3700,10 +3700,20 @@ function setOrigin(origin) {
   for (const c of draft.components) c.id = move(c.id) || (origin && c.label.trim() ? `${origin}/component/${jscSlug(c.label)}` : c.id);
 }
 
-let pending = null;
+/* body[data-state] is "checking" from the moment anything changes until
+   the panel shows the verdict for it, then "ready". People see the panel;
+   tests wait for the state instead of guessing a delay. */
+let pending = null, jobs = 0;
+const busy = () => { document.body.dataset.state = "checking"; };
+/* a file read or a fetch: the state stays "checking" until it and the check after it are done */
+async function job(fn) {
+  jobs++; busy();
+  try { await fn(); } finally { jobs--; evaluate(); }
+}
 function changed() {
+  busy();
   clearTimeout(pending);
-  pending = setTimeout(() => { saveDraft(); evaluate(); }, 250);
+  pending = setTimeout(() => { pending = null; saveDraft(); evaluate(); }, 250);
 }
 
 /* ---------- assembling the pack ---------- */
@@ -3909,12 +3919,13 @@ function readPublicKey(text) {
 let seq = 0;
 async function evaluate() {
   const mine = ++seq;
+  busy();
   let res;
   try { res = await assemble(); }
-  catch (e) { log(`check failed: ${e.message}`, true); return; }
+  catch (e) { log(`check failed: ${e.message}`, true); res = null; }
   if (mine !== seq) return;               // a newer edit is already being checked
-  last = res;
-  draw(() => { renderCheck(res); renderSign(res); renderPublish(res); });
+  if (res) { last = res; draw(() => { renderCheck(res); renderSign(res); renderPublish(res); }); }
+  if (!pending && !jobs) document.body.dataset.state = "ready";
 }
 const LABEL = {
   proven: ["proven", "v-ok", "the signature verifies under the public key you gave"],
@@ -4023,7 +4034,7 @@ async function openPack(files, source) {
   signing.made = null; signing.external = signing.external && { pub: signing.external.pub, pubText: signing.external.pubText };
   bindErrors.clear();
   log(`opened ${h.id} release ${h.version} from ${source}: ${comps.length} component(s), manifest sha256:${pack.digest.slice(0, 16)}…`);
-  renderAll(); saveDraft(); evaluate();
+  renderAll(); saveDraft();
 }
 function draftHasContent() { return canon(draft) !== canon(blankDraft()) && !!(draft.origin || draft.components.some(c => c.label || c.id)); }
 
@@ -4037,7 +4048,7 @@ async function loadCatalog(files, source) {
   }
   catalogSource = source;
   log(`catalogue from ${source}: ${n} requirement(s) read, ${other} other file(s) skipped${bad ? `, ${bad} not JSON` : ""}`, !n);
-  renderAll(); saveDraft(); evaluate();
+  renderAll(); saveDraft();
 }
 /* A published bundle by URL: its manifest, then every object it lists, eight at a time. */
 async function fetchCatalog(url) {
@@ -4110,9 +4121,11 @@ document.addEventListener("click", async e => {
       const url = $("f-cat-url").value.trim();
       if (!url) break;
       b.disabled = true;
-      try { await loadCatalog(await fetchCatalog(url), url); }
-      catch (err) { log(`catalogue ${url}: ${err.message}`, true); }
-      finally { b.disabled = false; }
+      await job(async () => {
+        try { await loadCatalog(await fetchCatalog(url), url); }
+        catch (err) { log(`catalogue ${url}: ${err.message}`, true); }
+        finally { b.disabled = false; }
+      });
       break;
     }
     case "btn-cat-clear": catalog.clear(); catalogSource = ""; renderAll(); changed(); break;
@@ -4144,18 +4157,18 @@ document.addEventListener("click", async e => {
     }
   }
 });
-$("pick-open-folder").addEventListener("change", async e => { await openPack(await readPicked(e.target.files), "the folder"); e.target.value = ""; });
-$("pick-open-zip").addEventListener("change", async e => { const f = e.target.files[0]; if (f) await openPack(await readPicked([f]), f.name); e.target.value = ""; });
-$("pick-cat-folder").addEventListener("change", async e => { await loadCatalog(await readPicked(e.target.files), "a folder"); e.target.value = ""; });
-$("pick-cat-files").addEventListener("change", async e => { await loadCatalog(await readPicked(e.target.files), `${e.target.files.length} file(s)`); e.target.value = ""; });
-$("pick-key").addEventListener("change", async e => {
+/* every path out of a read, refused ones included, ends in a fresh check */
+$("pick-open-folder").addEventListener("change", e => job(async () => { const l = [...e.target.files]; e.target.value = ""; await openPack(await readPicked(l), "the folder"); }));
+$("pick-open-zip").addEventListener("change", e => job(async () => { const f = e.target.files[0]; e.target.value = ""; if (f) await openPack(await readPicked([f]), f.name); }));
+$("pick-cat-folder").addEventListener("change", e => job(async () => { const l = [...e.target.files]; e.target.value = ""; await loadCatalog(await readPicked(l), "a folder"); }));
+$("pick-cat-files").addEventListener("change", e => job(async () => { const l = [...e.target.files]; e.target.value = ""; await loadCatalog(await readPicked(l), `${l.length} file(s)`); }));
+$("pick-key").addEventListener("change", e => job(async () => {
   const f = e.target.files[0];
   e.target.value = "";
   if (!f) return;
   try { Object.assign(signing, await loadKey(f), { made: null }); log(`key loaded; public key ${signing.pub}`); }
   catch (err) { log(`key: ${err.message}`, true); }
-  changed();
-});
+}));
 $("pick-sig").addEventListener("change", async e => {
   const f = e.target.files[0];
   e.target.value = "";

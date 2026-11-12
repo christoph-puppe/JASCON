@@ -55,9 +55,10 @@ async function open() {
   page.on("console", m => { if (m.type() === "error") errors.push("console: " + m.text()); });
   page.on("dialog", d => d.accept());
   await page.goto(PAGE);
-  await page.locator("#sec-check .status").waitFor();
-  const set = async (sel, value) => { const l = page.locator(sel).first(); await l.fill(value); await l.dispatchEvent("change"); };
-  const settle = async () => page.waitForTimeout(450);          // the check runs 250 ms after the last edit
+  await page.locator('body[data-state="ready"] #sec-check .status').waitFor();
+  const set = async (sel, value) => { const l = page.locator(sel).first(); await settle(); await l.fill(value); await l.dispatchEvent("change"); };
+  /* the page says when the panel shows the verdict for everything done so far (body[data-state]) */
+  const settle = async () => page.locator('body[data-state="ready"]').waitFor();
   const status = async () => { await settle(); return (await page.locator("#sec-check").innerText()).replace(/\s+/g, " "); };
   const download = async click => {
     const [d] = await Promise.all([page.waitForEvent("download"), page.click(click)]);
