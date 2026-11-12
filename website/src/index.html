@@ -8,7 +8,7 @@ nav: home
     <div class="hero-copy">
       <p class="eyebrow">Open notation &middot; Apache 2.0</p>
       <h1>The data layer for <em>GRC&nbsp;engineering</em></h1>
-      <p class="lede">JASCON writes standards, tailoring, risks, implementations, assessments and attestations as one graph of typed, content-addressed JSON objects. A Statement of Applicability becomes a computation, a crosswalk becomes data, and a signature still verifies after the bundle is repackaged.</p>
+      <p class="lede">JASCON writes standards, tailoring, risks, implementations, assessments and attestations as one graph of typed, content-addressed JSON objects. A Statement of Applicability becomes a computation, a machine check becomes something a second party can recompute, and a signature still verifies after the bundle is repackaged.</p>
       <div class="hero-actions">
         <a class="btn btn-primary" href="app/index.html#load=../converted_examples/US.CSF/csf-core-bundle/&amp;tool=browse">Open the app on NIST CSF 2.0
           <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
@@ -27,9 +27,11 @@ nav: home
         <button class="tab" role="tab" aria-selected="true" data-panel="hero-risk">risk.json</button>
         <button class="tab" role="tab" aria-selected="false" data-panel="hero-req">requirement.json</button>
         <button class="tab" role="tab" aria-selected="false" data-panel="hero-tailoring">tailoring.json</button>
+        <button class="tab" role="tab" aria-selected="false" data-panel="hero-check">check.json</button>
         <span class="window-note">excerpts</span>
       </div>
-      <pre id="hero-risk" role="tabpanel" tabindex="0"><code data-lang="json">{
+      <div class="panel" id="hero-risk" role="tabpanel" tabindex="0">
+        <pre><code data-lang="json">{
   "id": "https://cso.example/risk/R-2026-007",
   "title": {
     "en": "Tenant data exposure through long-lived KMS keys",
@@ -46,7 +48,10 @@ nav: home
   ]»,
   "tailoring-refs": ["https://ns.bsi.bund.de/gspp/tailoring/erhoeht"]
 }</code></pre>
-      <pre id="hero-req" role="tabpanel" tabindex="0"><code data-lang="json">{
+        <div class="window-foot"><span>validate_core.py</span><span><b>risk-coverage</b> erhoeht: selected 3 &middot; justified 1 &middot; uncovered 2</span></div>
+      </div>
+      <div class="panel" id="hero-req" role="tabpanel" tabindex="0">
+        <pre><code data-lang="json">{
   "id": "https://ns.bsi.bund.de/gspp/req/KONF.14.1",
   "version": "2026-07",
   "label": "KONF.14.1",
@@ -66,7 +71,10 @@ nav: home
     "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": { "sec-level": "normal-sdt" }
   }
 }</code></pre>
-      <pre id="hero-tailoring" role="tabpanel" tabindex="0"><code data-lang="json">{
+        <div class="window-foot"><span>validate_core.py</span><span><b>prose-params-resolve</b> every {param:} token names a declared parameter</span></div>
+      </div>
+      <div class="panel" id="hero-tailoring" role="tabpanel" tabindex="0">
+        <pre><code data-lang="json">{
   "id": "https://ns.bsi.bund.de/gspp/tailoring/erhoeht",
   "version": "2026-07",
   "title": { "en": "Elevated protection level" },
@@ -85,10 +93,25 @@ nav: home
       "value": "tls13" }
   ]
 }</code></pre>
-      <div class="window-foot">
-        <span>validate_core.py</span>
-        <span><b>risk-coverage</b> erhoeht: selected 3 &middot; justified 1 &middot; uncovered 2</span>
-        <span class="ok">all green</span>
+        <div class="window-foot"><span>validate_core.py</span><span><b>modality-monotonic</b> may to must: monotone, no Deviation needed</span></div>
+      </div>
+      <div class="panel" id="hero-check" role="tabpanel" tabindex="0">
+        <pre><code data-lang="json">{
+  "id": "https://cso.example/check/LNX-SSH-1-maxauthtries",
+  "requirement-ref": "https://cso.example/req/LNX-SSH-1",
+  "statement-ids": ["s1"],
+  "platform": "https://cso.example/platform/linux-host",
+  "observes": [
+    { "name": "sshd.maxauthtries", "type": "integer" }
+  ],
+  «"criteria": [
+    { "fact": "sshd.maxauthtries", "op": "at-most",
+      "expected": { "param": "max-auth-tries" } }
+  ]»,
+  "validity": { "num": 24, "unit": "hours" },
+  "confidence": "reviewed"
+}</code></pre>
+        <div class="window-foot"><span>proposed type</span><span><b>check-verdict</b> observed 4, the Tailoring binds 4: satisfied</span></div>
       </div>
     </div>
   </div>
@@ -250,7 +273,7 @@ nav: home
     <div class="section-head wide reveal">
       <p class="eyebrow"><span class="no">03</span> What changes</p>
       <h2>What follows when compliance data can be computed on</h2>
-      <p class="lede">GRC engineering treats compliance like any other engineering artefact: versioned, typed, tested and signed. That needs data a program can reason about. Eight consequences, each with its mechanism and the state of its evidence.</p>
+      <p class="lede">GRC engineering treats compliance like any other engineering artefact: versioned, typed, tested and signed. That needs data a program can reason about. Eight consequences, each with its mechanism and the state of its evidence. A ninth, the machine check, has the next section to itself.</p>
     </div>
     <div class="grid g3 reveal">
       <article class="card feature">
@@ -290,10 +313,10 @@ nav: home
         <p class="how"><b>Mechanism:</b> the <code>text</code> primitive. The Grundschutz++ bundle carries <code>de</code>.</p>
       </article>
       <article class="card">
-        <div class="card-top"><span class="card-no">Check</span><span class="tier tier-proposed">proposed</span></div>
-        <h3>Checks a second party can recompute</h3>
-        <p>Code collects facts, a closed set of comparators decides, and the evidence is stored under its own hash. An auditor recomputes the verdict from the recorded facts without touching the system.</p>
-        <p class="how"><b>Mechanism:</b> change proposal CP-CHECK-1. Of 510 rules in the CIS Ubuntu 24.04 profiles of ComplianceAsCode, 481 fit.</p>
+        <div class="card-top"><span class="card-no">Implementation</span><span class="tier tier-measured">measured on one corpus</span></div>
+        <h3>Inheritance with a named basis</h3>
+        <p>A SaaS on a PaaS on an IaaS: every inherited edge names the upstream component and the specific authorization it leans on. Responsibility is typed per statement as provider, customer, shared or inherited.</p>
+        <p class="how"><b>Mechanism:</b> one Implementation edge with <code>inherited-from</code> and <code>basis-ref</code>, checked link by link.</p>
       </article>
       <article class="card">
         <div class="card-top"><span class="card-no">Exit</span><span class="tier tier-measured">measured</span></div>
@@ -305,10 +328,35 @@ nav: home
   </div>
 </section>
 
-<section class="section" id="try">
+<section class="section" id="checks">
+  <div class="wrap">
+    <div class="split" style="margin-bottom: clamp(36px, 5vw, 56px);">
+      <div class="section-head reveal" style="margin-bottom:0">
+        <p class="eyebrow"><span class="no">04</span> Checks</p>
+        <h2>When the assessor is a machine</h2>
+        <p class="lede">A scanner that exits with 0 or 1 hides its threshold and ignores the tailoring. A Check publishes the facts a collector reports and the comparisons that decide, and the run record carries the observation.</p>
+        <div class="chips">
+          <span class="tier tier-proposed">proposed as the eleventh type</span>
+          <span class="tier tier-measured">{{ n.check_vectors }} vectors, three implementations</span>
+        </div>
+      </div>
+      <div class="stack reveal">
+        <ul class="ticks">
+          <li><b>The Tailoring sets the pass mark.</b> The criteria bind a parameter of the requirement. Tighten it and yesterday's observation is judged again, without a change to the code.</li>
+          <li><b>A verdict is recomputed.</b> The validator evaluates the criteria on every recorded observation and rejects a row whose outcome differs.</li>
+          <li><b>Measured fit:</b> 481 of the 510 rules in the CIS Ubuntu 24.04 profiles of ComplianceAsCode fit the declarative form. The other 29 stay manual.</li>
+        </ul>
+        <a class="link-arrow" href="checks.html">The design, the evidence chain and the open decisions</a>
+      </div>
+    </div>
+{{ include:_check-demo.html }}
+  </div>
+</section>
+
+<section class="section band" id="try">
   <div class="wrap">
     <div class="section-head reveal">
-      <p class="eyebrow"><span class="no">04</span> Try it</p>
+      <p class="eyebrow"><span class="no">05</span> Try it</p>
       <h2>Change the bytes, then change the meaning</h2>
       <p class="lede">An example requirement from the repository, with the two digests its content manifest records. Edit it or use the buttons. Both digests are computed in your browser by the rule the validator uses.</p>
     </div>
@@ -353,11 +401,11 @@ nav: home
   </div>
 </section>
 
-<section class="section band" id="app">
+<section class="section" id="app">
   <div class="wrap">
     <div class="split even" style="align-items:end; margin-bottom: clamp(32px, 4vw, 52px);">
       <div class="section-head reveal" style="margin-bottom:0">
-        <p class="eyebrow"><span class="no">05</span> The tool</p>
+        <p class="eyebrow"><span class="no">06</span> The tool</p>
         <h2>A working app without a server</h2>
         <p class="lede">The JASCON app is a set of browser pages with no build step and no backend. A bundle you load stays in your browser. The tabs follow the order of the work.</p>
       </div>
@@ -374,6 +422,7 @@ nav: home
         <button class="screen-tab" role="tab" aria-selected="true" data-panel="screen-browse">Browse</button>
         <button class="screen-tab" role="tab" aria-selected="false" data-panel="screen-risk">Risk</button>
         <button class="screen-tab" role="tab" aria-selected="false" data-panel="screen-tailor">Tailor</button>
+        <button class="screen-tab" role="tab" aria-selected="false" data-panel="screen-checks">Checks</button>
         <button class="screen-tab" role="tab" aria-selected="false" data-panel="screen-validate">Validate</button>
       </div>
       <figure class="screen" id="screen-browse" role="tabpanel">
@@ -397,6 +446,13 @@ nav: home
         </div>
         <figcaption><p>A Tailoring resolved: each operation with its target, before and after, and the verdict. The authority tier is derived from the data.</p><a class="link-arrow" href="app/index.html#load=../jascon/examples/&amp;tool=tailor">Open this view</a></figcaption>
       </figure>
+      <figure class="screen" id="screen-checks" role="tabpanel">
+        <div class="frame">
+          <div class="frame-bar"><span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="frame-url">jascon.net/app/#load=../jascon/examples/&amp;tool=checks</span></div>
+          <img src="assets/img/app-checks.webp" width="2560" height="1500" loading="lazy" alt="The Checks page: a check opened with the clauses of the requirement it covers, its platform and the facts its collector reports.">
+        </div>
+        <figcaption><p>The Checks page on the example bundle: the facts a collector reports, the comparisons that decide, the collector code. A model can draft a check; the kernel rules and a read-only lint judge the draft. The app does not run collectors.</p><a class="link-arrow" href="app/index.html#load=../jascon/examples/&amp;tool=checks">Open this view</a></figcaption>
+      </figure>
       <figure class="screen" id="screen-validate" role="tabpanel">
         <div class="frame">
           <div class="frame-bar"><span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="frame-url">jascon.net/app/#load=../jascon/examples/&amp;tool=validate</span></div>
@@ -408,11 +464,11 @@ nav: home
   </div>
 </section>
 
-<section class="section" id="evidence">
+<section class="section band" id="evidence">
   <div class="wrap">
     <div class="split">
       <div class="section-head reveal" style="margin-bottom:0; position:sticky; top:104px;">
-        <p class="eyebrow"><span class="no">06</span> Evidence</p>
+        <p class="eyebrow"><span class="no">07</span> Evidence</p>
         <h2>Every claim has to survive real catalogues</h2>
         <p class="lede">The project moves through evidence gates. A mechanism enters the specification when a published catalogue demands it, and a number on this site is either measured or labelled as something else.</p>
         <div class="chips" style="margin-top:6px">
@@ -441,17 +497,17 @@ nav: home
         </div>
         <div class="gate prop">
           <span class="gate-when">Nov 2026</span><span class="gate-rail"><i></i></span>
-          <div class="gate-body"><h3>CP-CHECK-1: Check <span class="tier tier-proposed">proposed</span></h3><p>Schema, validator, 156 vectors and a worked example are in the repository. No census authority encodes a machine-decidable check today, and the proposal says so in its first paragraph.</p></div>
+          <div class="gate-body"><h3>CP-CHECK-1: Check <span class="tier tier-proposed">proposed</span></h3><p>Schema, both validators, {{ n.check_vectors }} vectors and a worked example are in the repository. No census authority encodes a machine-decidable check today, and the proposal says so in its first paragraph. <a href="checks.html">More on checks.</a></p></div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<section class="section band" id="roles">
+<section class="section" id="roles">
   <div class="wrap">
     <div class="section-head reveal">
-      <p class="eyebrow"><span class="no">07</span> Who it is for</p>
+      <p class="eyebrow"><span class="no">08</span> Who it is for</p>
       <h2>Four chairs, one first move each</h2>
       <p class="lede">Each of these costs a day and needs nobody's permission.</p>
     </div>
@@ -484,7 +540,7 @@ nav: home
   </div>
 </section>
 
-<section class="section">
+<section class="section" style="padding-top:0">
   <div class="wrap">
     <div class="cta reveal">
       <div>
