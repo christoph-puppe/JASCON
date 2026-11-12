@@ -399,6 +399,14 @@ exactly as it would the vendor's.
 > implemented than you implemented. A claim stays a claim until your own
 > edge cites it.
 
+**Writing one.** A vendor needs no JASCON tooling of its own:
+`one-page-apps/jascon-pack-builder.html` in the repository is a single
+offline page that writes the pack from a form, checks it with the same
+rules a customer's import runs (with the catalogue loaded, clauses and
+suggested values too), signs the release with an Ed25519 key or prepares
+the bytes for `openssl`, and refuses changed content under an old release
+version.
+
 *Evidence tier, stated: designed for, with one fictional example
 component definition in the corpus (3 recommendations, 2 clause-level
 entries, 2 suggested parameter values); no census authority publishes

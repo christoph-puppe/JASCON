@@ -1997,6 +1997,18 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
   release, a refused pack, the three publisher states, adoption, and
   two exports through the reference validator. Not driven: drag and
   drop of a pack, and the German texts of the new views on screen.
+- **The pack builder** (`one-page-apps/jascon-pack-builder.html`,
+  v1.0.0) — the vendor's side of D25: one offline HTML file that writes
+  a pack from a form and judges it with the app's kernel code, inlined
+  and held equal to the app's by `one-page-apps/tools/sync-inlined.mjs`
+  in CI. It signs a release with Ed25519 in the browser or prepares the
+  bytes for an external signer, and refuses changed content under the
+  version of an opened release and a changed Component under its old
+  version. Measured by four browser tests: the worked pack, typed in,
+  comes out with its Component byte for byte and its manifest equal but
+  for the provenance line, and the reference reports its signature
+  VERIFIED; signed by `openssl` from the prepared bytes, the same. Six
+  deliberate defects in the builder each turn one of them red.
 - **License**: Apache-2.0 for the original work (`LICENSE`, `NOTICE`);
   the shipped bundles under their publishers' terms.
 

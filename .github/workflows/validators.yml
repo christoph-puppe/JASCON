@@ -1,10 +1,13 @@
 # Runs the reference validators on every change to what they read.
 #
-# Three jobs, one per implementation:
+# Four jobs, one per implementation and one for the pages:
 #   python      validate_core.py, the reference (Ubuntu, Python 3.12)
 #   powershell  validate_core.ps1, the twin, on WINDOWS POWERSHELL 5.1
 #               (windows-latest; `shell: powershell` is 5.1, `pwsh` would be 7)
 #   app         the JavaScript port in jascon-app/ against the same vectors
+#   browser     the app's pages and the pack builder (one-page-apps/) in
+#               Chromium, driven by Playwright, their output held to the
+#               reference validator
 #
 # Each job fails unless its validator ends ALL GREEN. The counts are written
 # to the job summary, so a run is a dated record of what passed where
@@ -18,6 +21,7 @@ on:
       - "jascon/**"
       - "converted_examples/**"
       - "jascon-app/**"
+      - "one-page-apps/**"
       - ".gitattributes"
       - ".github/workflows/validators.yml"
   pull_request:
@@ -25,6 +29,7 @@ on:
       - "jascon/**"
       - "converted_examples/**"
       - "jascon-app/**"
+      - "one-page-apps/**"
       - ".gitattributes"
       - ".github/workflows/validators.yml"
   workflow_dispatch:
@@ -102,5 +107,25 @@ jobs:
           node jascon-app/tools/gen-schema.mjs --check
           node jascon-app/tools/gen-docs.mjs --check
           node jascon-app/tools/check-i18n.mjs
+          node one-page-apps/tools/sync-inlined.mjs --check
       - name: Test suite
         run: node --test "jascon-app/tests/*.test.mjs"
+
+  browser:
+    name: Pages in a browser (app and pack builder)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: The validator's one dependency, Playwright and Chromium
+        run: |
+          pip install jsonschema
+          npm install --no-save --no-package-lock playwright@1.63.0
+          npx playwright install --with-deps chromium
+      - name: Browser tests
+        run: node --test jascon-app/tests/pages.test.mjs "one-page-apps/tests/*.test.mjs"

@@ -496,6 +496,30 @@ reader above stays as the page that needs no folder around it; it is at
 v1.9.0, reads the Check type and shows advice packs. New work goes into
 the app.
 
+## For vendors: the pack builder
+
+[`one-page-apps/jascon-pack-builder.html`](one-page-apps/jascon-pack-builder.html)
+writes an advice pack. It is one HTML file that runs offline from disk; it
+loads no font, script or frame, and nothing leaves the page except a
+catalogue URL you type in. A vendor describes the product as a Component and
+each recommendation as a capability; with the catalogue loaded, the page
+offers the clauses and parameters of each requirement and checks every
+suggested value. While you type it judges the pack with the app's own kernel
+code, inlined into the file by
+[`one-page-apps/tools/sync-inlined.mjs`](one-page-apps/tools/sync-inlined.mjs)
+(CI fails when the copy drifts), so its verdict is the one a customer's
+import will give. It signs the release with an Ed25519 key in the browser,
+or prepares the exact bytes for `openssl pkeyutl` or a signing service, and
+writes the ZIP. Reopening a published pack keeps its bytes until something
+changes; changed content then needs a new release version, and a changed
+Component a new version of its own.
+
+Measured: typed into the form, the worked pack comes out with its Component
+byte for byte and its manifest equal but for the provenance line, and
+`validate_core.py` reports the signature VERIFIED
+([`one-page-apps/tests/`](one-page-apps/tests/), four browser tests, run in
+CI; six deliberate defects in the builder each turn one of them red). Also on [jascon.net/pack-builder/](https://jascon.net/pack-builder/).
+
 ## The website
 
 [`website/`](website/) is the source of [jascon.net](https://jascon.net): a

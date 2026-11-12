@@ -450,6 +450,9 @@ def copy_apps(out, facts):
     os.makedirs(os.path.join(out, "reader"), exist_ok=True)
     shutil.copy2(os.path.join(REPO, "one-page-apps", "jascon-reader.html"),
                  os.path.join(out, "reader", "index.html"))
+    os.makedirs(os.path.join(out, "pack-builder"), exist_ok=True)
+    shutil.copy2(os.path.join(REPO, "one-page-apps", "jascon-pack-builder.html"),
+                 os.path.join(out, "pack-builder", "index.html"))
     for b in facts["bundles"]:
         corpus_src = os.path.join(REPO, "converted_examples", b["corpus"])
         corpus_dst = os.path.join(out, "converted_examples", b["corpus"])

@@ -24,6 +24,7 @@ into the app work as they will on the domain:
 | `/` | `website/src/*.html` set into `_layout.html`, and `website/static/` as it is |
 | `/app/` | `jascon-app/` (without its tests and tools) |
 | `/reader/` | `one-page-apps/jascon-reader.html` |
+| `/pack-builder/` | `one-page-apps/jascon-pack-builder.html` |
 | `/converted_examples/` | the five bundles the repository may pass on, each with its `SOURCE-LICENSE.md` |
 | `/jascon/` | the example bundle, the schemas and the conformance vectors |
 
