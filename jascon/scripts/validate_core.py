@@ -22,7 +22,7 @@ Runs, in order:
    6.1.3 d question, computed instead of audited by hand.
    `--require-risk-basis` turns uncovered selections into failures.
 4. CHECK (CP-CHECK-1, kernel 2.0.0): Check is the eleventh kernel type -
-   a typed fact contract plus a flat conjunction over eleven comparators
+   a typed fact contract plus a flat conjunction over twelve comparators
    (check-verdict, B.1.10; patterns are I-Regexp, RFC 9485, matched by a
    built-in state-set engine). CHECK-1..7 hold the Check to its
    requirement and its own contract; CHECK-8..14 recompute every verdict
@@ -1400,7 +1400,7 @@ def run_risk():
 # ---------------- CHECK (CP-CHECK-1, kernel 2.0.0) ----------------
 # A Check states what to observe on a platform (`observes`, a typed fact
 # contract) and what the observation must satisfy (`criteria`, a flat
-# conjunction over a CLOSED set of eleven comparators - primitive
+# conjunction over a CLOSED set of twelve comparators - primitive
 # check-verdict, App. B.1.10). The code that collects the facts rides the
 # Check in the stdlib facet collector@1 and decides nothing: every verdict
 # an Assessment records is recomputed here from the observation it records.
@@ -1648,11 +1648,11 @@ def ire_fullmatch(p, text):
 
 # -- check-verdict (B.1.10) --
 CHECK_OPS = {   # which comparators fit which fact (present / absent fit every fact)
-    "one": {"string": {"equals", "one-of", "matches", "matches-not"},
-            "code": {"equals", "one-of", "matches", "matches-not"},
-            "integer": {"equals", "one-of", "at-least", "at-most"},
-            "decimal": {"equals", "one-of", "at-least", "at-most"},
-            "boolean": {"equals"}},
+    "one": {"string": {"equals", "not-equals", "one-of", "matches", "matches-not"},
+            "code": {"equals", "not-equals", "one-of", "matches", "matches-not"},
+            "integer": {"equals", "not-equals", "one-of", "at-least", "at-most"},
+            "decimal": {"equals", "not-equals", "one-of", "at-least", "at-most"},
+            "boolean": {"equals", "not-equals"}},
     "many": {"string": {"includes-all", "excludes-all", "subset-of", "matches", "matches-not"},
              "code": {"includes-all", "excludes-all", "subset-of", "matches", "matches-not"},
              "integer": {"includes-all", "excludes-all", "subset-of"},
@@ -1700,6 +1700,7 @@ def _check_assert(a, facts, decls, params):
     if not _expected_ok(op, t, e): return INC, f"{src} {e!r} does not fit {op} on a {t} fact"
     N = (lambda x: Decimal(x)) if t == "decimal" else (lambda x: x)
     if op == "equals": hit = N(v) == N(e)
+    elif op == "not-equals": hit = N(v) != N(e)
     elif op == "one-of": hit = N(v) in [N(x) for x in e]
     elif op == "at-least": hit = N(v) >= N(e)
     elif op == "at-most": hit = N(v) <= N(e)
@@ -1724,37 +1725,73 @@ def _kleene(results):
             return want, [r for o, rs in results if o == want for r in rs]
     return SAT, []
 
+def _check_on(check, facts, params):
+    """-> (outcome, reasons) of one Check over one set of facts."""
+    decls = {d["name"]: d for d in check.get("observes", [])}
+    def run(assertions):
+        return _kleene([(o, [w]) for o, w in (_check_assert(a, facts, decls, params) for a in assertions)])
+    if check.get("applies-when"):
+        aw, why = run(check["applies-when"])
+        if aw == NOT: return NA, ["applies-when does not hold: " + "; ".join(why)]
+        if aw == INC: return INC, ["applicability unknown: " + "; ".join(why)]
+    return run(check["criteria"])
+
+def percent_share(part, whole):
+    """A share as a whole percentage, in integer arithmetic so that every
+    implementation prints the same number: rounded half up, but never 0 while
+    part > 0 and never 100 while part < whole."""
+    if whole <= 0 or part <= 0: return 0
+    if part >= whole: return 100
+    return min(99, max(1, (200 * part + whole) // (2 * whole)))
+
+def check_each(check, observation, params=None):
+    """B.1.10 step 5, for a per-resource Check: EVERY resource is evaluated,
+    none is skipped after the first failure. -> {results: [(id, outcome,
+    reasons)], applicable, not-satisfied, inconclusive, not-applicable,
+    percent-not-satisfied}, or None when the Check is not per-resource or the
+    observation carries no resources. The outcome stays for-all; the counts
+    say how far from it a run is."""
+    if not check.get("each") or not isinstance(observation, dict) or not isinstance(observation.get("resources"), list):
+        return None
+    params = params or {}
+    results = []
+    for r in observation["resources"]:
+        facts = r.get("facts") if isinstance(r, dict) else None
+        o, why = _check_on(check, facts if isinstance(facts, dict) else {}, params)
+        results.append((r.get("id") if isinstance(r, dict) else None, o, why))
+    n = {k: sum(1 for _, o, _ in results if o == k) for k in (SAT, NOT, INC, NA)}
+    applicable = len(results) - n[NA]
+    return {"results": results, "applicable": applicable, "not-satisfied": n[NOT], "inconclusive": n[INC],
+            "not-applicable": n[NA], "percent-not-satisfied": percent_share(n[NOT], applicable)}
+
+def check_each_summary(kind, each):
+    """One line a person reads first: how many resources, and what share, fail."""
+    if each["not-satisfied"]:
+        return (f"{each['not-satisfied']} of {each['applicable']} applicable {kind} resources not satisfied "
+                f"({each['percent-not-satisfied']} %)")
+    if each["inconclusive"]:
+        return f"{each['inconclusive']} of {each['applicable']} applicable {kind} resources inconclusive"
+    return f"all {each['applicable']} applicable {kind} resources satisfied"
+
 def check_verdict(check, observation, params=None):
     """B.1.10 check-verdict: (outcome, reasons) of one Check over one recorded
     observation, with the parameter values the run was bound to."""
     params = params or {}
     if observation is None:
         return INC, ["no observation: the collector did not report"]
-    decls = {d["name"]: d for d in check.get("observes", [])}
-    def run(assertions, facts):
-        return _kleene([(o, [w]) for o, w in (_check_assert(a, facts, decls, params) for a in assertions)])
-    def on(facts):
-        if check.get("applies-when"):
-            aw, why = run(check["applies-when"], facts)
-            if aw == NOT: return NA, ["applies-when does not hold: " + "; ".join(why)]
-            if aw == INC: return INC, ["applicability unknown: " + "; ".join(why)]
-        return run(check["criteria"], facts)
     if check.get("each"):
         kind = check["each"]["resource"]
-        res = observation.get("resources")
-        if not isinstance(res, list):
+        each = check_each(check, observation, params)
+        if each is None:
             return INC, [f"the check runs per {kind}, but the observation carries no resources"]
-        outs = []
-        for r in res:
-            o, why = on(r.get("facts", {}))
-            if o != NA: outs.append((o, [f"{r.get('id')}: {w}" for w in why]))
-        if not outs:
+        if not each["applicable"]:
             if check["each"]["allow-empty"]: return SAT, [f"no applicable {kind} observed, and allow-empty holds"]
             return INC, [f"no applicable {kind} observed, and allow-empty is false"]
-        return _kleene(outs)
+        got, why = _kleene([(o, [f"{rid}: {w}" for w in ws]) for rid, o, ws in each["results"] if o != NA])
+        return got, ([check_each_summary(kind, each)] + why if got != SAT else why)
     facts = observation.get("facts")
     if not isinstance(facts, dict): return INC, ["the observation carries no facts"]
-    return on(facts)
+    return _check_on(check, facts, params)
 
 def check_aggregate(outcomes):
     app = [o for o in outcomes if o != NA]
@@ -1982,6 +2019,9 @@ def check_errors(objs, read=None):
                 if obs is None and row.get("observation-ref"):
                     notes.append(f"{oid}: {at}: observation not available here - verdict not recomputed"); continue
                 got, why = check_verdict(c[1], obs, row.get("parameters"))
+                each = check_each(c[1], obs, row.get("parameters"))
+                if each is not None and each["applicable"]:
+                    notes.append(f"{oid}: {at}: {check_each_summary(c[1]['each']['resource'], each)}")
                 if got != row["outcome"]:
                     bad("CHECK-9", oid, f"{at}: recorded {row['outcome']}, check-verdict computes {got}"
                                         f"{' (' + '; '.join(why)[:200] + ')' if why else ''}")
@@ -2013,12 +2053,19 @@ def run_check():
                             f"should match but did not {bad_m}; should not match but did {bad_n}")
     for case in v["verdict-vectors"]:
         got, why = check_verdict(case["check"], case.get("observation"), case.get("parameters"))
-        if got == case["expected"]: ok("check")
-        else: fail("check", f"verdict {case['name']}: expected {case['expected']}, got {got} {why}")
+        each = check_each(case["check"], case.get("observation"), case.get("parameters"))
+        counts = None if each is None else {k: each[k] for k in each if k != "results"}
+        want = case.get("expected-resources")
+        if got == case["expected"] and (want is None or counts == want): ok("check")
+        else: fail("check", f"verdict {case['name']}: expected {case['expected']} {want or ''}, got {got} {counts or ''} {why}")
     for case in v["aggregate-vectors"]:
         got = check_aggregate(case["outcomes"])
         if got == case["expected"]: ok("check")
         else: fail("check", f"aggregate {case['outcomes']}: expected {case['expected']}, got {got}")
+    for case in v["share-vectors"]:
+        got = percent_share(case["part"], case["whole"])
+        if got == case["expected"]: ok("check")
+        else: fail("check", f"share {case['part']} of {case['whole']}: expected {case['expected']} %, got {got} %")
     for case in v["object-vectors"]:
         m = [t for t in TYPES if VALIDATORS[t].is_valid(case["object"])]
         want = [case["type"]] if case["expected"] == "valid" else []

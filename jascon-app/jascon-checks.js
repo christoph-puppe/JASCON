@@ -1,6 +1,6 @@
 /* JASCON-App: what the Checks tool computes, without the page.
 
-   The proposed Check type (drafts/CP-CHECK-1.md) splits a machine check in
+   The Check type (drafts/CP-CHECK-1.md, kernel 2.0.0) splits a machine check in
    two: a collector (code that reports facts) and criteria (comparisons that
    decide). This file holds what the tool does around that split, as plain
    functions of plain data, so that tests run it in node:

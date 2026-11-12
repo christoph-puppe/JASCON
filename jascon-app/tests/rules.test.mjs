@@ -466,8 +466,14 @@ test("check: check-verdict over every verdict vector, and the aggregate", () => 
   for (const c of v["verdict-vectors"]) {
     const [got, why] = rules.jscCheckVerdict(c.check, c.observation, c.parameters);
     assert.equal(got, c.expected, `${c.name}: ${why.join("; ")}`);
+    if (c["expected-resources"]) {   // a per-resource check: every resource is evaluated and counted
+      const { results, ...counts } = rules.jscCheckEach(c.check, c.observation, c.parameters);
+      assert.deepEqual(counts, c["expected-resources"], c.name);
+      assert.equal(results.length, c.observation.resources.length, c.name);
+    }
   }
   for (const c of v["aggregate-vectors"]) assert.equal(rules.jscCheckAggregate(c.outcomes), c.expected, JSON.stringify(c.outcomes));
+  for (const c of v["share-vectors"]) assert.equal(rules.jscPercentShare(c.part, c.whole), c.expected, `${c.part} of ${c.whole}`);
 });
 test("check: closed shapes - each object vector matches exactly its type, or none", () => {
   for (const c of vectors("check")["object-vectors"]) {

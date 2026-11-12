@@ -7,7 +7,7 @@ have to switch on yourself: the suggestions of the Risk page and the drafts
 of the Checks page send text to a model service once you type a key (see
 "Suggestions from a model").
 
-State: build 0.9.1. This build has the frame (the hub, the settings page and
+State: build 0.9.2. This build has the frame (the hub, the settings page and
 the shared core) and nine tool pages, in the order of the work: Import,
 Browse, Risk, Tailor, Map, Implement, Checks, Assess and Validate. One view of the Risk page and
 the drafting of the Checks page can ask a language model; nothing else in
@@ -216,10 +216,10 @@ its reason in `risk-catalogs/not-applicable.json` beside the manifest.
 
 ## Checks
 
-The Check type is proposed in `drafts/CP-CHECK-1.md` and not released. A
-check has two parts: a collector, code that reports facts and decides
-nothing, and criteria, a flat list of comparisons from eleven fixed
-operators that must all hold. Because the verdict is computed from the
+The Check type belongs to the 2.0.0 release candidate (`drafts/CP-CHECK-1.md`,
+accepted on 2026-11-12); 2.0.0 is not tagged yet. A check has two parts: a
+collector, code that reports facts and decides nothing, and criteria, a flat
+list of comparisons from twelve fixed operators that must all hold. Because the verdict is computed from the
 facts, anyone can recompute it from a recorded observation; the Validate
 page does so for every check result an Assessment carries.
 
@@ -264,7 +264,7 @@ app is computed.
 - **Draft a check.** One call per rule. The app sends the rule (title,
   clauses, parameters with their bounds, audit and remediation text, your
   description), the target language and the contract of a check: the
-  eleven operators and five fact types, taken from the kernel schema, and
+  twelve operators and five fact types, taken from the kernel schema, and
   the rules for collectors (read only, effective values, one line of JSON).
   The answer schema restricts operators and fact types to the kernel's. The
   app assembles the answer: it mints the id, sets the requirement and
@@ -393,7 +393,7 @@ text in that language, the English text is shown, then whatever is there.
   vectors: canonical form, modality, parameter, tier, tailoring (the
   operation law), reference, lifecycle, kernel, facet, attestation, risk,
   scale, DSSE signatures, the composition of two bundles,
-  conditional-apply, and the proposed Check type of `drafts/CP-CHECK-1.md`
+  conditional-apply, and the Check type of `drafts/CP-CHECK-1.md`
   (I-Regexp, check-verdict, CHECK-1 to CHECK-15 with the evidence chain). What the page does not judge: conditional-apply
   instances (no bundle has a place to carry one; the reference validator does
   not run them on a bundle either) and the bytes of a bundle on disk (line

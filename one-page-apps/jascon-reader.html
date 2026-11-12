@@ -201,7 +201,7 @@ svg text{font-family:'JetBrains Mono',monospace}
     <div class="pill" id="pill-bundle">no bundle loaded</div>
     <div class="pill hidden" id="pill-verify"></div>
     <div style="flex:1"></div>
-    <div class="pill">v1.7.3 · build 2026-11-10</div>
+    <div class="pill">v1.8.0 · build 2026-11-12</div>
   </div>
 
   <div id="mid">
@@ -251,7 +251,7 @@ svg text{font-family:'JetBrains Mono',monospace}
           <p style="max-width:66ch;color:var(--text-secondary)">
             This is a reader for <b>JASCON bundles</b> — the file format in which
             compliance frameworks (BSI Grundschutz++, FedRAMP CR26, the ACSC ISM, CIS, CyFun, C5 …)
-            are represented as a <b>graph of nine shallow, globally identified objects</b> instead of
+            are represented as a <b>graph of eleven shallow, globally identified objects</b> instead of
             eight nested document models. A bundle is a folder: one <span class="mono">content-manifest.json</span>
             (the sealed table of contents, with two integrity digests per object) plus an
             <span class="mono">objects/</span> tree of small JSON files.
@@ -384,6 +384,7 @@ const TYPES = {
   mapping:       { glyph:"⇄", color:"oklch(0.75 0.14 190)", what:"A typed crosswalk claim between two requirements, with relationship code, confidence grade and provenance — contradictory mappings may coexist." },
   component:     { glyph:"⬡", color:"oklch(0.75 0.18 145)", what:"A system, service or product with capabilities and identified authorizations — what a vendor claims." },
   implementation:{ glyph:"◈", color:"oklch(0.75 0.18 145)", what:"The edge that says: this component satisfies this requirement, with responsibility split per clause and inheritance that names its authorization basis." },
+  check:         { glyph:"◎", color:"oklch(0.82 0.13 110)", what:"A machine-checkable test of a requirement's clauses (kernel 2.0.0): the facts a collector must observe and a flat AND of criteria over them. The verdict is a pure function of Check, observation and bound parameters — collector code rides in a facet and decides nothing." },
   assessment:    { glyph:"◉", color:"oklch(0.65 0.2 25)",   what:"An assessment run: subjects, method, performer, result." },
   finding:       { glyph:"◉", color:"oklch(0.65 0.2 25)",   what:"A finding against a requirement (down to the statement), with states, deadline-bearing actions and Deviations as the audited escape." },
   risk:          { glyph:"△", color:"oklch(0.78 0.14 25)", what:"The ex-ante record (kernel 2.0.0): a scenario with an owner, a state, a level on a named scale, a treatment decision and the requirements that carry it — why a control is in scope at all." },
@@ -403,9 +404,9 @@ const STAGES = [
   { key:"implement",label:"4 · Implement", types:["component","implementation"],
     desc:"Systems declare what they are; Implementation edges declare who satisfies which clause, and on what basis.",
     long:"Components (systems, services, software, policies) carry capabilities and identified authorizations. Implementation edges bind component to requirement with clause-level responsibility (provider / customer / shared / inherited) — and every inherited edge must name the authorization it leans on (basis-ref), so multi-tier supply chains verify link by link. This stage replaces both the component-definition and the SSP's implemented-requirements." },
-  { key:"assess",   label:"5 · Assess & Attest", types:["risk","assessment","finding","attestation"],
-    desc:"Results, findings with deadlines and audited deviations — then signatures that survive repackaging.",
-    long:"Assessments record method and result; Findings track states with deadline-bearing actions and Deviations as the single audited weakening channel (one state machine — investigating → pending → approved | withdrawn). Attestations bind three things: the semantic digests of what was approved, the manifest digest of the package, and the pinned rendering template — so a signature proves meaning even when bytes were legitimately repackaged. This stage replaces AP, AR and POA&M." },
+  { key:"assess",   label:"5 · Assess & Attest", types:["risk","check","assessment","finding","attestation"],
+    desc:"Checks and results, findings with deadlines and audited deviations — then signatures that survive repackaging.",
+    long:"Checks make a clause machine-checkable: a fact contract plus a flat AND of criteria, with collector code in a facet. Assessments record method and result — an automated run adds one check-result row per Check, with the observation it was judged on; Findings track states with deadline-bearing actions and Deviations as the single audited weakening channel (one state machine — investigating → pending → approved | withdrawn). Attestations bind three things: the semantic digests of what was approved, the manifest digest of the package, and the pinned rendering template — so a signature proves meaning even when bytes were legitimately repackaged. This stage replaces AP, AR and POA&M." },
 ];
 const MODALITY_COLORS = {
   "must":"oklch(0.7 0.18 300)", "should":"oklch(0.70 0.15 240)", "may":"oklch(0.75 0.18 145)",
@@ -422,6 +423,7 @@ const MODALITY_EXPLAIN = {
 /* ---------- state ---------- */
 const state = {
   files: new Map(),        // relpath -> {text, bytes}
+  evidence: new Map(),     // relpath -> {bytes, ok?} — the evidence store beside the manifest (evidence/sha256/<hex>), never manifest entries
   manifest: null,
   manifestByPath: new Map(),
   objects: new Map(),      // id -> {obj, path, type, entry}
@@ -444,6 +446,7 @@ function inferType(o) {
   if ("subject-refs" in o && "method" in o) return "assessment";
   if ("assessment-ref" in o && "state" in o) return "finding";
   if ("scenario" in o && "owner-ref" in o) return "risk";   // kernel 2.0.0 (CP-RISK-1): the disjoint Risk signature
+  if ("observes" in o && "criteria" in o) return "check";   // kernel 2.0.0 (CP-CHECK-1): observes + criteria occur in no other type
   if ("subject-semantic-digests" in o) return "attestation";
   if ("members" in o) return "requirementSet";
   return null;
@@ -504,7 +507,7 @@ function sha256Fallback(bytes) {
 }
 
 /* ---------- loading ---------- */
-const READER_ID = "jascon-reader.html v1.7.3";
+const READER_ID = "jascon-reader.html v1.8.0";
 /* URL loading — works when this page and the bundle are served over http(s)
    (e.g. `python -m http.server` from the repo root); file:// blocks fetch by design. */
 async function loadFromUrl(input) {
@@ -548,19 +551,48 @@ async function loadFromUrl(input) {
   await Promise.all(workers);
   if (failed) l.warn(`${failed} file(s) failed to fetch — loading what arrived`);
   l.ok(`bundle fetched in ${Math.round(performance.now() - t0)} ms`);
+  state.evidence.clear();
   indexBundle();
+  await fetchEvidence(base);
   return true;
 }
+/* The evidence store (v1.8.0, CP-CHECK-1 §4.4): files beside the manifest, evidence/sha256/<hex>,
+   each named by the SHA-256 of its bytes and never listed in the manifest. A folder load keeps
+   them apart from the objects; a URL load has no directory to list, so it fetches only the
+   records the check-results name. A record that is not there is withheld — a note, not a failure. */
+const EVIDENCE_RE = /(^|\/)evidence\/sha256\/[0-9a-f]{64}$/;
+async function fetchEvidence(base) {
+  const refs = new Set();
+  for (const r of state.objects.values()) if (r.type === "assessment")
+    for (const row of r.obj["check-results"] || [])
+      for (const d of [row["evidence-record"], row["observation-ref"]])
+        if (d && /^evidence\/sha256\/[0-9a-f]{64}$/.test(d.ref || "")) refs.add(d.ref);
+  if (!refs.size) return;
+  let withheld = 0;
+  await Promise.all([...refs].map(async ref => {
+    try {
+      const r = await fetch(new URL(ref, base));
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      state.evidence.set(ref, { bytes: new Uint8Array(await r.arrayBuffer()) });
+    } catch { withheld++; }
+  }));
+  l.info(`evidence store: fetched ${state.evidence.size} of ${refs.size} file(s) named by check-results — beside the manifest, not manifest entries` +
+    (withheld ? ` (${withheld} withheld or not served — a note, not a failure)` : ""));
+  renderOverview();
+}
 async function loadFileList(fileList) {
+  const relOf = f => (f.webkitRelativePath || f.name).split("/").slice(1).join("/") || f.name;
+  const evid = [...fileList].filter(f => EVIDENCE_RE.test(relOf(f)));
   const files = [...fileList].filter(f => f.name.endsWith(".json"));
   if (!files.length) { l.warn("no .json files in selection"); return; }
   l.info(`reading ${files.length} json file(s)…`);
-  state.files.clear();
+  state.files.clear(); state.evidence.clear();
   for (const f of files) {
-    const rel = (f.webkitRelativePath || f.name).split("/").slice(1).join("/") || f.name;
+    const rel = relOf(f);
     const bytes = new Uint8Array(await f.arrayBuffer());
     state.files.set(rel, { text: new TextDecoder().decode(bytes), bytes });
   }
+  for (const f of evid) state.evidence.set(relOf(f), { bytes: new Uint8Array(await f.arrayBuffer()) });
   indexBundle();
 }
 function indexBundle() {
@@ -570,6 +602,7 @@ function indexBundle() {
   let manifestPath = null;
   for (const p of state.files.keys()) if (p.endsWith("content-manifest.json")) { manifestPath = p; break; }
   const prefix = manifestPath ? manifestPath.slice(0, -"content-manifest.json".length) : "";
+  state.prefix = prefix;
   state.manifestBytes = manifestPath ? state.files.get(manifestPath).bytes : null;
   if (manifestPath) {
     try {
@@ -603,6 +636,8 @@ function indexBundle() {
   l.ok(`indexed ${parsed} objects (${failed} parse failures, ${unknown} non-kernel files skipped)`);
   const counts = typeCounts();
   l.info("types: " + Object.entries(counts).map(([k, v]) => `${k} ${v}`).join(" · "));
+  for (const p of [...state.evidence.keys()]) if (!p.startsWith(prefix + "evidence/sha256/")) state.evidence.delete(p);   // only the store beside THIS manifest
+  if (state.evidence.size) l.info(`evidence store: ${state.evidence.size} file(s) beside the manifest — content-addressed (evidence/sha256/<hex>), not manifest entries`);
   const prov = state.manifest?.provenance || {};
   $("pill-bundle").textContent = (prov.source || prov.sources?.[0]?.title || "bundle") + " · " + parsed + " objects";
   $("pill-bundle").classList.add("on");
@@ -644,8 +679,10 @@ function renderOverview() {
   add("source oscal", p["source-oscal-version"]);
   add("converter", p.converter);
   add("namespace note", p["namespace-note"]);
+  add("kernel version", state.manifest?.["kernel-version"]);
   add("objects", String(state.objects.size));
   add("manifest entries", state.manifest ? String(state.manifest.objects.length) : "—");
+  add("evidence store", state.evidence.size ? `${state.evidence.size} file(s) beside the manifest (not manifest entries)` : "");
   $("ov-kv").innerHTML = rows.join("");
   $("ov-schemas").innerHTML = (state.manifest?.["facet-schemas"] || [])
     .map(s => `<div class="mono" style="font-size:11px;margin:3px 0">◇ ${esc(s.id)} <span style="color:var(--text-quiet)">@${esc(s["exact-version"])} · ${esc((s.digest || "").slice(0, 23))}…</span></div>`)
@@ -803,7 +840,8 @@ function facetsHtml(o) {
         inner = `<div class="hint" style="margin-bottom:4px">keyed by-statement — each key MUST name a statement of this object</div>` +
           Object.entries(payload["by-statement"]).map(([sid, pv]) =>
             `<div style="margin:6px 0"><span class="badge">stmt ${esc(sid)}</span>${prettyVal(pv, 1)}</div>`).join("");
-      } else inner = prettyVal(payload, 1);
+      } else if (fid === COLLECTOR_FACET && Array.isArray(payload?.collectors)) inner = collectorsHtml(payload);
+      else inner = prettyVal(payload, 1);
       return `<div class="facetbox"><div class="mono" style="font-size:10.5px;color:var(--accent);margin-bottom:6px">${esc(fid)}</div>${inner}</div>`;
     }).join("");
 }
@@ -881,10 +919,151 @@ function renderMapping(r) {
     ${kvRow("provenance", `${esc(o.provenance?.["author-ref"] || "")} · ${esc(o.provenance?.date || "")} <span class="hint">— whose claim this is</span>`)}
   </div>`;
 }
-function renderGeneric(r) {
-  const skip = new Set(["id","version","label","title","lifecycle","aliases","relations","facets","annotations","statements","members"]);
+function renderGeneric(r, omit = []) {
+  const skip = new Set(["id","version","label","title","lifecycle","aliases","relations","facets","annotations","statements","members", ...omit]);
   const rest = Object.fromEntries(Object.entries(r.obj).filter(([k]) => !skip.has(k)));
   return Object.keys(rest).length ? `<div class="nano sectionlabel">Fields</div>${prettyVal(rest)}` : "";
+}
+
+/* ---------- Check (v1.8.0 · kernel 2.0.0, CP-CHECK-1) ----------
+   Rendered, never run: this reader executes no collector and has no check-verdict engine.
+   Every outcome it shows is the one RECORDED in an Assessment's check-results;
+   validate_core.py recomputes verdicts (CHECK-9), this page does not. */
+const COLLECTOR_FACET = "https://ns.jascon.net/stdlib/facet/collector@1";
+const CHECK_OP_EXPLAIN = {   // the twelve comparators of check-verdict (B.1.10) — tooltips only, nothing is evaluated here
+  "equals":"value equals expected", "not-equals":"value differs from expected", "one-of":"value is in the list",
+  "at-least":"value ≥ expected", "at-most":"value ≤ expected",
+  "present":"the fact is in the observation", "absent":"the fact is not in the observation",
+  "includes-all":"every listed value occurs", "excludes-all":"no listed value occurs",
+  "subset-of":"every observed value is listed — [] means: must be empty",
+  "matches":"the whole value matches the I-Regexp pattern (on a list: every element)",
+  "matches-not":"the whole value does not match the I-Regexp pattern (on a list: no element)",
+};
+const OUTCOME_C = { satisfied: "var(--green)", "not-satisfied": "var(--red)", inconclusive: "var(--amber)", "not-applicable": "var(--text-quiet)" };
+function outcomeBadge(outcome) {
+  const c = OUTCOME_C[outcome] || "var(--border-2)";
+  return `<span class="badge" style="border-color:${c};color:${c}" title="recorded outcome — not recomputed by this reader">${esc(outcome)}</span>`;
+}
+/* resolves-if-present: a ref that leaves the bundle is marked, never treated as an error */
+function refOrOutside(uri) {
+  return refLink(uri) + (state.objects.has(uri) ? "" : ` <span class="badge" title="resolves if present — a ref that leaves the bundle is a note, not an error">outside this bundle</span>`);
+}
+function criteriaHtml(list) {   // one readable line per assertion: fact op expected
+  return (list || []).map(c => {
+    const e = c.expected;
+    const exp = e === undefined ? ""
+      : (e && typeof e === "object" && !Array.isArray(e) && "param" in e)
+        ? `<span class="paramtok" title="bound at run time to the tailored value of this requirement parameter — a default is never substituted">{param: ${esc(e.param)}}</span>`
+        : `<span style="color:var(--text-primary)">${esc(JSON.stringify(e))}</span>`;
+    return `<div class="mono critline" style="font-size:11.5px;margin:3px 0;color:var(--text-secondary)">${esc(c.fact)} <span style="color:var(--amber)" title="${esc(CHECK_OP_EXPLAIN[c.op] || "")}">${esc(c.op)}</span> ${exp}</div>`;
+  }).join("");
+}
+function checkRuns(checkId) {   // recorded check-results rows naming this Check, newest first
+  const runs = [];
+  for (const a of state.objects.values()) if (a.type === "assessment")
+    for (const row of a.obj["check-results"] || []) if (row["check-ref"] === checkId) runs.push({ asmt: a.obj.id, row });
+  return runs.sort((x, y) => String(y.row.time).localeCompare(String(x.row.time)));
+}
+function checkRunsHtml(runs, cap = 8) {
+  return runs.slice(0, cap).map(x => `${outcomeBadge(x.row.outcome)}<a class="reflink" data-ref="${esc(x.asmt)}" title="open the Assessment that recorded it">${esc(x.row.time || "")}</a>`).join(" &nbsp; ") +
+    (runs.length > cap ? ` <span class="hint">…and ${runs.length - cap} more</span>` : "");
+}
+function collectorsHtml(payload) {
+  const rest = Object.fromEntries(Object.entries(payload).filter(([k]) => k !== "collectors"));
+  return `<div class="hint" style="margin-bottom:4px">collector code — shown as text, never executed by this reader. A collector decides nothing: it prints one observation, the criteria above give the verdict.</div>` +
+    payload.collectors.map(c => `<div style="margin:8px 0">
+      <span class="badge">${esc(c.id)}</span><span class="badge" title="runtime">▷ ${esc(c.runtime)}</span>
+      ${c.privileges ? `<span class="badge" title="what the code needs — so a runner can refuse rather than escalate">privileges: ${esc(c.privileges)}</span>` : ""}
+      ${c["timeout-seconds"] !== undefined ? `<span class="badge">timeout ${esc(c["timeout-seconds"])} s</span>` : ""}
+      ${c.description ? `<div class="hint" style="margin-top:3px">${esc(tt(c.description))}</div>` : ""}
+      <pre class="raw" style="max-height:220px;margin-top:6px">${esc(c.source)}</pre></div>`).join("") +
+    (Object.keys(rest).length ? prettyVal(rest, 1) : "");
+}
+function renderCheck(r) {
+  const o = r.obj, req = state.objects.get(o["requirement-ref"]);
+  const stmts = req?.type === "requirement" ? req.obj.statements : null;
+  const clauses = (o["statement-ids"] || []).map(sid => {
+    const s = stmts?.find(x => x.id === sid);
+    return `<div style="margin:2px 0"><span class="badge">stmt ${esc(sid)}</span>` +
+      (s ? `${modBadge(s.modality)}<span style="color:var(--text-primary)">${proseHtml(tt(Object.values(s.prose || {})[0]))}</span>`
+         : stmts ? `<span class="verdict-warn">⚠ names no statement of this requirement</span>` : "") + `</div>`;
+  }).join("");
+  const facts = (o.observes || []).map(f => `<tr><td class="mono" style="font-size:11.5px">${esc(f.name)}</td>
+    <td><span class="badge">${esc(f.type)}</span></td><td>${esc(f.cardinality || "one")}</td><td>${esc(tt(f.description))}</td></tr>`).join("");
+  const p = o.provenance || {}, runs = checkRuns(o.id);
+  const CONF = { draft: "generated, not yet reviewed", authoritative: "published by the requirement's authority" };
+  return `<div class="nano sectionlabel">Discharges</div><div class="kv">
+      ${kvRow("requirement", refOrOutside(o["requirement-ref"]))}
+      ${kvRow("clauses", clauses || `<span class="hint">no clauses named</span>`)}
+      ${kvRow("platform", `<span class="mono" style="font-size:11px">${esc(o.platform)}</span> <span class="hint">— the platform under test (opaque URI)</span>`)}
+    </div>
+    <div class="nano sectionlabel">Fact contract (${(o.observes || []).length}) — what a collector must observe</div>
+    <table class="flat"><tr><th>fact</th><th>type</th><th>cardinality</th><th>description</th></tr>${facts}</table>
+    ${o["applies-when"] ? `<div class="nano sectionlabel">Applies when (${o["applies-when"].length}) — false means not applicable</div>${criteriaHtml(o["applies-when"])}` : ""}
+    <div class="nano sectionlabel">Criteria (${(o.criteria || []).length}) — a flat AND: every line must hold</div>${criteriaHtml(o.criteria)}
+    ${o.each ? `<div class="nano sectionlabel">Each</div><div class="v">the facts repeat per <span class="badge">${esc(o.each.resource)}</span> and the criteria hold for every one — an empty set ${o.each["allow-empty"] ? "passes" : "does not pass"} <span class="hint">(allow-empty: ${esc(o.each["allow-empty"])})</span></div>` : ""}
+    <div class="nano sectionlabel">Validity · confidence · provenance</div><div class="kv">
+      ${o.validity ? kvRow("validity", `${esc(o.validity.num)} ${esc(o.validity.unit)} <span class="hint">— how long a result stays fresh (read-time only)</span>`) : ""}
+      ${kvRow("confidence", `<span class="badge">${esc(o.confidence)}</span> <span class="hint">${esc(CONF[o.confidence] || "")}</span>`)}
+      ${kvRow("provenance", `${esc(p["author-ref"] || "")} · ${esc(p.date || "")} <span class="hint">— whose check this is</span>`)}
+      ${p["derived-from"] ? kvRow("derived-from", p["derived-from"].map(d => `<div>${refLink(d.ref)} <span class="mono" style="font-size:10.5px;color:var(--text-quiet)">${esc(d.digest)}</span></div>`).join("")) : ""}
+    </div>
+    <div class="nano sectionlabel">Recorded results (${runs.length}) — as recorded in Assessments; nothing is run or recomputed here</div>
+    <div>${runs.length ? checkRunsHtml(runs) : `<span class="hint">no Assessment in this bundle records a run of this check</span>`}</div>`;
+}
+/* Assessment: generic fields as before; the two CP-CHECK-1 fields get their own rendering */
+function evidenceRefHtml(d, what) {   // {ref, digest} into the evidence store beside the manifest
+  const f = state.evidence.get((state.prefix || "") + d.ref);
+  const store = f
+    ? `<span class="verdict-ok">in the loaded evidence store</span>` +
+      (f.ok === undefined ? "" : f.ok ? `<span style="color:var(--green)"> ✓ bytes match the content address</span>` : `<span style="color:var(--red)"> ✗ bytes do NOT match the content address</span>`)
+    : `<span class="hint">not loaded — withheld or outside this selection (a note, not a failure)</span>`;
+  let text = "";
+  if (f && f.bytes.length <= 65536) { try { text = new TextDecoder("utf-8", { fatal: true }).decode(f.bytes); } catch {} }
+  return `<div class="mono" style="font-size:10.5px;word-break:break-all">${esc(d.ref)}</div>
+    <div class="mono" style="font-size:10.5px;color:var(--text-quiet);word-break:break-all">${esc(d.digest)}</div><div>${store}</div>` +
+    (text ? `<details><summary>${esc(what)} — as stored</summary><pre class="raw" style="max-height:220px">${esc(text)}</pre></details>` : "");
+}
+function checkResultsHtml(o) {
+  const rows = o["check-results"]; if (!rows) return "";
+  return `<div class="nano sectionlabel">Check results (${rows.length}) — one row per check run, outcomes as recorded</div>
+    <div class="hint" style="margin-bottom:4px">The outcome shown is the recorded one. This reader runs no collector and does not recompute check-verdict — validate_core.py does (CHECK-9).</div>` +
+    rows.map(row => {
+      const c = state.objects.get(row["check-ref"]), isCheck = c?.type === "check";
+      const sem = isCheck ? c.entry?.["semantic-digest"] : null;
+      const digMark = !sem ? "" : sem === row["check-digest"]
+        ? `<span style="color:var(--green)"> ✓ matches the Check's semantic digest in the manifest</span>`
+        : `<span style="color:var(--red)"> ✗ differs from the manifest — the check changed after the run</span>`;
+      const obs = row.observation ? prettyVal(row.observation.facts ?? row.observation, 1)
+        : row["observation-ref"] ? `<span class="hint">by reference</span>${evidenceRefHtml(row["observation-ref"], "observation")}`
+        : `<span class="hint">none — no observation, no verdict</span>`;
+      return `<div class="stmt checkrow">
+        <div>${outcomeBadge(row.outcome)}${isCheck
+          ? `<a class="reflink" data-ref="${esc(row["check-ref"])}"><b>${esc(tt(c.obj.title) || c.obj.label || row["check-ref"])}</b></a>`
+          : refOrOutside(row["check-ref"])}</div>
+        <div class="kv" style="margin-top:8px">
+          ${kvRow("time", esc(row.time))}
+          ${row["collector-id"] ? kvRow("collector-id", `<span class="badge">${esc(row["collector-id"])}</span>`) : ""}
+          ${isCheck ? kvRow("criteria", criteriaHtml(c.obj.criteria)) : ""}
+          ${row.parameters ? kvRow("parameters", Object.entries(row.parameters).map(([k, v]) => `<span class="badge">⚙ ${esc(k)} = ${esc(JSON.stringify(v))}</span>`).join(" ") +
+              (o["tailoring-ref"] ? "" : ` <span class="hint">the performer's statement — no tailoring-ref</span>`)) : ""}
+          ${kvRow("observation", obs)}
+          ${row.reason ? kvRow("reason", esc(tt(row.reason))) : ""}
+          ${kvRow("check-digest", `<span class="mono" style="font-size:10.5px;word-break:break-all">${esc(row["check-digest"])}</span>${digMark}`)}
+          ${row["evidence-record"] ? kvRow("evidence-record", evidenceRefHtml(row["evidence-record"], "evidence record")) : ""}
+        </div></div>`;
+    }).join("");
+}
+function renderAssessment(r) {
+  const o = r.obj;
+  return renderGeneric(r, ["check-results", "tailoring-ref"]) +
+    (o["tailoring-ref"] ? `<div class="nano sectionlabel">Tailoring — whose bound parameter values the run used</div><div class="v">${refOrOutside(o["tailoring-ref"])}</div>` : "") +
+    checkResultsHtml(o);
+}
+function renderFinding(r) {   // generic fields as before; check-ref (CP-CHECK-1) becomes a link
+  const ref = r.obj["check-ref"];
+  return renderGeneric(r, ["check-ref"]) +
+    (ref ? `<div class="nano sectionlabel">Raised by check</div><div class="v">${refOrOutside(ref)}</div>` : "");
 }
 function openObject(id) {
   const r = state.objects.get(id);
@@ -896,6 +1075,9 @@ function openObject(id) {
   else if (r.type === "requirementSet") body += renderSet(r);
   else if (r.type === "tailoring") body += renderTailoring(r);
   else if (r.type === "mapping") body += renderMapping(r);
+  else if (r.type === "check") body += renderCheck(r);
+  else if (r.type === "assessment") body += renderAssessment(r);
+  else if (r.type === "finding") body += renderFinding(r);
   else body += renderGeneric(r);
   body += aliasesHtml(r.obj) + relationsHtml(r.obj) + facetsHtml(r.obj) + annotationsHtml(r.obj) + digestRow(r);
   body += `<details style="margin-top:12px"><summary>raw JSON</summary><pre class="raw">${esc(JSON.stringify(r.obj, null, 1))}</pre></details>`;
@@ -948,6 +1130,16 @@ function renderStats() {
     }
   const life = {};
   for (const r of state.objects.values()) life[r.obj.lifecycle] = (life[r.obj.lifecycle] || 0) + 1;
+  const outcomes = {}, runtimes = {};
+  for (const r of state.objects.values()) {
+    if (r.type === "assessment") for (const row of r.obj["check-results"] || []) outcomes[row.outcome] = (outcomes[row.outcome] || 0) + 1;
+    if (r.type === "check") for (const c of r.obj.facets?.[COLLECTOR_FACET]?.collectors || []) runtimes[c.runtime] = (runtimes[c.runtime] || 0) + 1;
+  }
+  const checkCell = !counts.check && !Object.keys(outcomes).length ? "" : `
+    <div class="statcell"><div class="nano" style="margin-bottom:8px">Checks · recorded check results</div>
+      ${hBarRows(Object.entries(outcomes).sort((a,b)=>b[1]-a[1]).map(([k,v]) => ({label:k,value:v,color:OUTCOME_C[k]||"var(--text-quiet)"}))) || '<div class="hint">no check results recorded in this bundle</div>'}
+      <div class="kv" style="margin-top:10px">${kvRow("checks", String(counts.check || 0))}${kvRow("collectors by runtime", Object.entries(runtimes).map(([k,v])=>`${esc(k)} (${v})`).join(" · ") || "—")}</div>
+      <div class="hint" style="margin-top:8px">outcomes as recorded in Assessments — this reader runs no collector and recomputes no verdict.</div></div>`;
   grid.innerHTML = `
     <div class="statcell"><div class="nano" style="margin-bottom:8px">Objects by type</div>
       <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap">${donutChart(typeSlices)}
@@ -958,7 +1150,7 @@ function renderStats() {
       <div class="hint" style="margin-top:8px">unspecified is honest, not missing: declarative frameworks bind force via baseline membership.</div></div>
     <div class="statcell"><div class="nano" style="margin-bottom:8px">Lifecycle · parameters · languages</div>
       ${hBarRows(Object.entries(life).map(([k,v]) => ({label:k,value:v,color:"var(--blue)"})))}
-      <div class="kv" style="margin-top:10px">${kvRow("typed parameters", String(params))}${kvRow("prose languages", Object.entries(langs).map(([k,v])=>`${k} (${v})`).join(" · ") || "—")}</div></div>`;
+      <div class="kv" style="margin-top:10px">${kvRow("typed parameters", String(params))}${kvRow("prose languages", Object.entries(langs).map(([k,v])=>`${k} (${v})`).join(" · ") || "—")}</div></div>${checkCell}`;
 }
 
 /* ---------- lattice svg ---------- */
@@ -996,11 +1188,20 @@ async function verifyAll() {
   }
   $("verifybar").style.width = "100%"; $("verifybar").classList.add("done");
   setTimeout(() => { $("verifybar").style.width = "0%"; $("verifybar").classList.remove("done"); }, 1200);
+  let evBad = 0;
+  if (state.evidence.size) {   // the evidence store is content-addressed: each file is named by the SHA-256 of its bytes
+    let evOk = 0;
+    for (const [p, f] of state.evidence) {
+      f.ok = await sha256hex(f.bytes) === p.split("/").pop();
+      if (f.ok) evOk++; else { evBad++; l.err(`evidence store: ${p} does not match its content address`); }
+    }
+    (evBad ? l.err : l.ok)(`evidence store: ${evOk} file(s) match their content address, ${evBad} mismatches`);
+  }
   const ms = Math.round(performance.now() - t0);
   (bad ? l.err : l.ok)(`digest verification: ${ok} ok, ${bad} mismatches in ${ms}ms`);
   $("pill-verify").classList.remove("hidden");
-  $("pill-verify").textContent = bad ? `✗ ${bad} digest mismatches` : `✓ ${ok} objects verified`;
-  $("pill-verify").style.color = bad ? "var(--red)" : "var(--green)";
+  $("pill-verify").textContent = (bad ? `✗ ${bad} digest mismatches` : `✓ ${ok} objects verified`) + (evBad ? ` · ✗ ${evBad} evidence file(s)` : "");
+  $("pill-verify").style.color = bad || evBad ? "var(--red)" : "var(--green)";
   renderList();
   if (state.selected) openObject(state.selected);
 }
@@ -1264,15 +1465,28 @@ function renderStageAssess() {
   const asmts = [...state.objects.values()].filter(r => r.type === "assessment");
   const finds = [...state.objects.values()].filter(r => r.type === "finding");
   const atts = [...state.objects.values()].filter(r => r.type === "attestation");
-  if (!asmts.length && !finds.length && !atts.length)
+  const checks = [...state.objects.values()].filter(r => r.type === "check");
+  if (!asmts.length && !finds.length && !atts.length && !checks.length)
     return stageHead("assess") + wbAssessHtml() +
       `<p class="hint">No Assessments / Findings / Attestations in this bundle yet — run a check above; generated objects land on the board here.</p>`;
   const RESULT_C = { satisfied: "var(--green)", "not-satisfied": "var(--red)", inconclusive: "var(--amber)" };
+  const cCards = checks.map(c => {
+    const o = c.obj, runs = checkRuns(o.id), colls = o.facets?.[COLLECTOR_FACET]?.collectors;
+    return `<div class="stmt checkcard">
+      <span class="badge" style="border-color:${TYPES.check.color};color:${TYPES.check.color}">${TYPES.check.glyph} check</span>
+      <a class="reflink" data-ref="${esc(o.id)}"><b>${esc(tt(o.title) || o.label || o.id.split("/").pop())}</b></a>
+      <span class="badge" title="confidence">${esc(o.confidence)}</span>
+      <span class="hint">platform ${esc(String(o.platform || "").split("/").pop())} · ${Array.isArray(colls) ? "collectors: " + esc(colls.map(x => x.runtime).join(", ")) : "no collector facet"}</span>
+      <div class="hint" style="margin-top:4px">discharges ${refOrOutside(o["requirement-ref"])}${(o["statement-ids"] || []).map(s => ` <span class="badge">stmt ${esc(s)}</span>`).join("")}</div>
+      <div style="margin-top:4px">${criteriaHtml(o.criteria)}</div>
+      <div class="hint" style="margin-top:4px">${runs.length ? "recorded: " + checkRunsHtml(runs, 4) : "no recorded run in this bundle"}</div></div>`;
+  }).join("");
   const aCards = asmts.map(a => `<div class="stmt">
     <span class="badge" style="border-color:${RESULT_C[a.obj.result] || "var(--border-2)"};color:${RESULT_C[a.obj.result] || "inherit"}">${esc(a.obj.result)}</span>
     <a class="reflink" data-ref="${esc(a.obj.id)}"><b>${esc(tt(a.obj.title) || a.obj.label || a.obj.id.split("/").pop())}</b></a>
     <span class="hint">by ${esc((a.obj["performer-ref"] || "").split("/").pop())} · ${esc(a.obj.time || "")}</span>
-    <div style="margin-top:4px">${(a.obj["subject-refs"] || []).map(s => refLink(s)).join(" · ")}</div></div>`).join("");
+    <div style="margin-top:4px">${(a.obj["subject-refs"] || []).map(s => refLink(s)).join(" · ")}</div>
+    ${a.obj["check-results"] ? `<div class="hint" style="margin-top:4px">${TYPES.check.glyph} ${a.obj["check-results"].length} check results, as recorded: ${a.obj["check-results"].map(row => outcomeBadge(row.outcome)).join("")}</div>` : ""}</div>`).join("");
   const cols = { open: [], "in-remediation": [], closed: [] };
   finds.forEach(f => (cols[f.obj.state] = cols[f.obj.state] || []).push(f));
   const kanban = `<div class="kanban">` + Object.entries(cols).map(([st, fs]) => `<div class="col">
@@ -1280,7 +1494,8 @@ function renderStageAssess() {
       fs.map(f => `<div class="stmt" style="margin:6px 0">
         <a class="reflink" data-ref="${esc(f.obj.id)}"><b>${esc(f.obj.label || f.obj.id.split("/").pop())}</b></a>
         <div class="hint">against ${refLink(f.obj["requirement-ref"])}${f.obj["statement-ref"] ? ` <span class="badge">stmt ${esc(f.obj["statement-ref"])}</span>` : ""}</div>
-        ${(f.obj.actions || []).map(ac => `<div class="hint">▸ ${esc(ac.description)} ${ac.due ? `<span class="badge" title="deadline">${esc(JSON.stringify(ac.due))}</span>` : ""} <span class="badge">${esc(ac.status)}</span></div>`).join("")}
+        ${f.obj["check-ref"] ? `<div class="hint">raised by check ${refOrOutside(f.obj["check-ref"])}</div>` : ""}
+        ${(f.obj.actions || []).map(ac => `<div class="hint">▸ ${esc(tt(ac.description))} ${ac.due ? `<span class="badge" title="deadline">${esc(JSON.stringify(ac.due))}</span>` : ""} <span class="badge">${esc(ac.status)}</span></div>`).join("")}
         ${(f.obj.deviations || []).map(d => `<div class="hint verdict-warn">⚑ Deviation: ${esc(d.type)} · ${esc(d.state)}</div>`).join("")}
       </div>`).join("") + `</div>`).join("") + `</div>`;
   const attCards = atts.map(a => `<div class="stmt">
@@ -1290,6 +1505,7 @@ function renderStageAssess() {
     <div style="margin-top:6px"><button class="primary" data-att="${esc(a.obj.id)}">◉ Verify bi-modal</button>
     <span class="hint"> Full Match = bytes as signed · Semantic Match = meaning intact through repackaging · Tamper = meaning changed</span></div></div>`).join("");
   return stageHead("assess") + wbAssessHtml() +
+    (checks.length ? `<div class="nano sectionlabel">Checks (${checks.length}) — what a machine observes and which criteria must hold; outcomes are the recorded ones, nothing is run or recomputed here</div>${cCards}` : "") +
     (asmts.length ? `<div class="nano sectionlabel">Assessments (${asmts.length})</div>${aCards}` : "") +
     (finds.length ? `<div class="nano sectionlabel">Findings (${finds.length}) — dispositions are Deviations, deadlines live in actions[].due</div>${kanban}` : "") +
     (atts.length ? `<div class="nano sectionlabel">Attestations (${atts.length})</div>${attCards}` : "");
@@ -1381,13 +1597,14 @@ async function buildWorkspaceBundleFiles(objs, provenance) {
   const enc = new TextEncoder();
   // backlog #44 / KERNEL-1: content beyond the 1.0.0 kernel (a Risk, or a
   // Finding with risk-refs) names its kernel in the manifest
-  const needs2 = objs.some(o => (o && o.scenario && o["owner-ref"]) || (o && Array.isArray(o["risk-refs"]) && o["risk-refs"].length));
+  const needs2 = objs.some(o => (o && o.scenario && o["owner-ref"]) || (o && Array.isArray(o["risk-refs"]) && o["risk-refs"].length) ||
+    (o && ((o.observes && o.criteria) || o["check-results"] || o["tailoring-ref"] || o["check-ref"])));   // CP-CHECK-1 content is kernel 2.0.0 too
   const files = []; const manifest = { "manifest-version": "1",
     ...(needs2 ? { "kernel-version": "2.0.0" } : {}), provenance,
     objects: [], "facet-schemas": [] };
   const DIR = { requirement: "req", requirementSet: "set", tailoring: "tailoring",
     mapping: "map", component: "comp", implementation: "impl",
-    assessment: "asmt", finding: "finding", attestation: "att", risk: "risk" };
+    assessment: "asmt", finding: "finding", attestation: "att", risk: "risk", check: "check" };
   for (const o of objs) {
     const t = inferType(o);
     const rel = `objects/${DIR[t] || "obj"}/${slug(o.id.split("/").slice(-2).join("-"))}.json`;
@@ -2229,7 +2446,7 @@ $("btn-paste").onclick = () => {
 async function walkEntry(entry, out) {
   if (entry.isFile) {
     const f = await new Promise((res, rej) => entry.file(res, rej));
-    if (f.name.endsWith(".json")) {
+    if (f.name.endsWith(".json") || EVIDENCE_RE.test(entry.fullPath)) {
       Object.defineProperty(f, "webkitRelativePath", { value: entry.fullPath.replace(/^\//, "") });
       out.push(f);
     }
@@ -2281,7 +2498,7 @@ renderLattice();
 restoreWorkspaceObjects();
 renderStages();
 setView("overview");
-l.info("JASCON Bundle Reader v1.7.1 · build 2026-07-22 — everything runs locally, nothing leaves this page");
+l.info("JASCON Bundle Reader v1.8.0 · build 2026-11-12 — everything runs locally, nothing leaves this page");
 l.info("open a bundle folder (contains content-manifest.json + objects/) or drop it here — or serve the repo over http and deep-link: #load=<bundle-url>&view=stage:tailor");
 
 /* deep links: #load=<bundle-url>&view=<view> — shareable when served over http(s) */

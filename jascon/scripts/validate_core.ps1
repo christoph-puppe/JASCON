@@ -37,6 +37,13 @@ run as a state-set simulation, never handed to .NET Regex), check-verdict
 (B.1.10), CHECK-1..15 with every recorded verdict recomputed and the
 evidence chain verified in the store beside the manifest. 415 vectors in
 16 families pass (check: 156), the same counts as validate_core.py.
+NOT YET EXECUTED (2026-11-12): the twelfth comparator `not-equals` and the
+per-resource counts of B.1.10 step 5 (Check-Each, Ck-Percent, the
+`expected-resources` of the verdict vectors) were ported from the Python
+reference without a PowerShell runtime. The Python reference and the app's
+port pass 183 check vectors (442 in all); this file has to show the same
+counts on Windows PowerShell 5.1 before the two-implementation gate holds
+again. Until then the counts above are those of 2026-11-11.
 KNOWN LIMITS of this port: a general category (\p{..}) is read from the
 HOST's Unicode database, .NET here and unicodedata there, so a code point
 assigned after either database was built can match differently; an
@@ -1921,7 +1928,7 @@ function Run-Risk {
 
 # ---------------- CHECK (CP-CHECK-1, kernel 2.0.0; backlog #56) ----------------
 # Check is the eleventh kernel type: a typed fact contract (`observes`) and
-# a flat conjunction over eleven comparators (`criteria`) - primitive
+# a flat conjunction over twelve comparators (`criteria`) - primitive
 # check-verdict, App. B.1.10. Every verdict an Assessment records is
 # recomputed here from the observation it records. Three-valued (strong
 # Kleene AND): one not-satisfied decides, else one inconclusive, else
@@ -2293,9 +2300,9 @@ function Ire-FullMatch($p, [string]$text) {
 
 # -- check-verdict (B.1.10) --
 $CHECK_OPS = @{     # which comparators fit which fact (present / absent fit every fact)
-    one  = @{ string = @('equals', 'one-of', 'matches', 'matches-not'); code = @('equals', 'one-of', 'matches', 'matches-not')
-              integer = @('equals', 'one-of', 'at-least', 'at-most'); decimal = @('equals', 'one-of', 'at-least', 'at-most')
-              boolean = @('equals') }
+    one  = @{ string = @('equals', 'not-equals', 'one-of', 'matches', 'matches-not'); code = @('equals', 'not-equals', 'one-of', 'matches', 'matches-not')
+              integer = @('equals', 'not-equals', 'one-of', 'at-least', 'at-most'); decimal = @('equals', 'not-equals', 'one-of', 'at-least', 'at-most')
+              boolean = @('equals', 'not-equals') }
     many = @{ string = @('includes-all', 'excludes-all', 'subset-of', 'matches', 'matches-not')
               code = @('includes-all', 'excludes-all', 'subset-of', 'matches', 'matches-not')
               integer = @('includes-all', 'excludes-all', 'subset-of'); decimal = @('includes-all', 'excludes-all', 'subset-of')
@@ -2391,6 +2398,7 @@ function Ck-Assert($a, $facts, $decls, $params) {
     if (-not (Ck-ExpectedOk $op $t $e)) { return (Ck-R $CK_INC "$src $(Ck-Show $e) does not fit $op on a $t fact") }
     $hit = $false
     if ($op -ceq 'equals') { $hit = ((Ck-Cmp $t $v $e) -eq 0) }
+    elseif ($op -ceq 'not-equals') { $hit = ((Ck-Cmp $t $v $e) -ne 0) }
     elseif ($op -ceq 'one-of') { $hit = (Ck-In $t $v $e) }
     elseif ($op -ceq 'at-least') { $hit = ((Ck-Cmp $t $v $e) -ge 0) }
     elseif ($op -ceq 'at-most') { $hit = ((Ck-Cmp $t $v $e) -le 0) }
@@ -2446,6 +2454,52 @@ function Ck-One([string]$o, [string]$w) {
     $l = New-Object System.Collections.ArrayList; [void]$l.Add($w)
     return @{o = $o; w = $l}
 }
+function Ck-Percent([long]$part, [long]$whole) {
+    # a share as a whole percentage, in integer arithmetic so that every
+    # implementation prints the same number: rounded half up, but never 0
+    # while part > 0 and never 100 while part < whole
+    if ($whole -le 0 -or $part -le 0) { return 0 }
+    if ($part -ge $whole) { return 100 }
+    $p = [long][math]::Floor([decimal](200 * $part + $whole) / [decimal](2 * $whole))
+    if ($p -lt 1) { $p = 1 }
+    if ($p -gt 99) { $p = 99 }
+    return $p
+}
+function Check-Each($check, $observation, $params) {
+    # B.1.10 step 5, for a per-resource Check: EVERY resource is evaluated,
+    # none is skipped after the first failure. -> @{results = list of
+    # @{id; o; w}; applicable; 'not-satisfied'; inconclusive;
+    # 'not-applicable'; 'percent-not-satisfied'}, or $null when the Check is
+    # not per-resource or the observation carries no resources. The outcome
+    # stays for-all; the counts say how far from it a run is.
+    if (-not (Ck-Truthy $check['each'])) { return $null }
+    if (-not (Is-Map $observation)) { return $null }
+    $res = $observation['resources']
+    if (-not (Is-List $res)) { return $null }
+    if (-not (Is-Map $params)) { $params = (New-OMap) }
+    $decls = (New-Map)
+    foreach ($d in @($check['observes'])) { if ($null -ne $d) { $decls[[string]$d['name']] = $d } }
+    $results = New-Object System.Collections.ArrayList
+    $nNot = 0; $nInc = 0; $nNa = 0
+    foreach ($r in $res) {
+        $rf = $null; $rid = $null
+        if ((Is-Map $r) -and $r.Contains('facts') -and (Is-Map $r['facts'])) { $rf = $r['facts'] } else { $rf = (New-OMap) }
+        if (Is-Map $r) { $rid = $r['id'] }
+        $one = Ck-On $check $rf $decls $params
+        if ($one.o -ceq $CK_NOT) { $nNot++ } elseif ($one.o -ceq $CK_INC) { $nInc++ } elseif ($one.o -ceq $CK_NA) { $nNa++ }
+        [void]$results.Add(@{id = $rid; o = $one.o; w = $one.w})
+    }
+    $applicable = $results.Count - $nNa
+    return @{ results = $results; applicable = $applicable; 'not-satisfied' = $nNot; inconclusive = $nInc
+              'not-applicable' = $nNa; 'percent-not-satisfied' = (Ck-Percent $nNot $applicable) }
+}
+function Ck-EachSummary($kind, $each) {
+    # one line a person reads first: how many resources, and what share, fail
+    if ($each['not-satisfied'] -gt 0) {
+        return "$($each['not-satisfied']) of $($each['applicable']) applicable $kind resources not satisfied ($($each['percent-not-satisfied']) %)" }
+    if ($each['inconclusive'] -gt 0) { return "$($each['inconclusive']) of $($each['applicable']) applicable $kind resources inconclusive" }
+    return "all $($each['applicable']) applicable $kind resources satisfied"
+}
 function Check-Verdict($check, $observation, $params) {
     # B.1.10 check-verdict: @{o = outcome; w = reasons} of one Check over one
     # recorded observation, with the parameter values the run was bound to
@@ -2455,22 +2509,22 @@ function Check-Verdict($check, $observation, $params) {
     foreach ($d in @($check['observes'])) { if ($null -ne $d) { $decls[[string]$d['name']] = $d } }
     if (Ck-Truthy $check['each']) {
         $kind = $check['each']['resource']
-        $res = $null; if (Is-Map $observation) { $res = $observation['resources'] }
-        if (-not (Is-List $res)) { return (Ck-One $CK_INC "the check runs per $kind, but the observation carries no resources") }
-        $outs = New-Object System.Collections.ArrayList
-        foreach ($r in $res) {
-            $rf = $null; if ((Is-Map $r) -and $r.Contains('facts')) { $rf = $r['facts'] } else { $rf = (New-OMap) }
-            $one = Ck-On $check $rf $decls $params
-            if ($one.o -cne $CK_NA) {
-                $w = New-Object System.Collections.ArrayList
-                foreach ($x in $one.w) { [void]$w.Add("$($r['id']): $x") }
-                [void]$outs.Add(@{o = $one.o; w = $w}) }
-        }
-        if ($outs.Count -eq 0) {
+        $each = Check-Each $check $observation $params
+        if ($null -eq $each) { return (Ck-One $CK_INC "the check runs per $kind, but the observation carries no resources") }
+        if ($each['applicable'] -eq 0) {
             if ($check['each']['allow-empty'] -eq $true) { return (Ck-One $CK_SAT "no applicable $kind observed, and allow-empty holds") }
             return (Ck-One $CK_INC "no applicable $kind observed, and allow-empty is false")
         }
-        return (Ck-Kleene $outs)
+        $outs = New-Object System.Collections.ArrayList
+        foreach ($one in $each['results']) {
+            if ($one.o -cne $CK_NA) {
+                $w = New-Object System.Collections.ArrayList
+                foreach ($x in $one.w) { [void]$w.Add("$($one.id): $x") }
+                [void]$outs.Add(@{o = $one.o; w = $w}) }
+        }
+        $got = Ck-Kleene $outs
+        if ($got.o -cne $CK_SAT) { $got.w.Insert(0, (Ck-EachSummary $kind $each)) }
+        return $got
     }
     $facts = $null; if (Is-Map $observation) { $facts = $observation['facts'] }
     if (-not (Is-Map $facts)) { return (Ck-One $CK_INC 'the observation carries no facts') }
@@ -2794,6 +2848,10 @@ function Check-Errors($objs, $store) {
                 if ($null -eq $obs -and (Ck-Truthy $row['observation-ref'])) {
                     [void]$notes.Add("${oid}: ${at}: observation not available here - verdict not recomputed"); continue }
                 $got = Check-Verdict $c.o $obs $row['parameters']
+                $each = Check-Each $c.o $obs $row['parameters']
+                if (($null -ne $each) -and ($each['applicable'] -gt 0)) {
+                    $eachKind = $c.o['each']['resource']
+                    [void]$notes.Add("${oid}: ${at}: $(Ck-EachSummary $eachKind $each)") }
                 if (-not (Ck-SEq $got.o $row['outcome'])) {
                     $why = (@($got.w) -join '; ')
                     if ($why.Length -gt 200) { $why = $why.Substring(0, 200) }
@@ -2825,8 +2883,23 @@ function Run-Check {
     }
     foreach ($case in $v['verdict-vectors']) {
         $got = Check-Verdict $case['check'] $case['observation'] $case['parameters']
-        if (Ck-SEq $got.o $case['expected']) { OK 'check' }
+        $okc = (Ck-SEq $got.o $case['expected'])
+        $want = $case['expected-resources']     # a per-resource check: every resource is evaluated and counted
+        if ($okc -and (Is-Map $want)) {
+            $each = Check-Each $case['check'] $case['observation'] $case['parameters']
+            if ($null -eq $each) { $okc = $false }
+            else {
+                foreach ($k in @('applicable', 'not-satisfied', 'inconclusive', 'not-applicable', 'percent-not-satisfied')) {
+                    if (-not $want.Contains($k) -or ([long]$want[$k] -ne [long]$each[$k])) { $okc = $false } }
+            }
+        }
+        if ($okc) { OK 'check' }
         else { FAIL 'check' "verdict $($case['name']): expected $($case['expected']), got $($got.o) $(@($got.w) -join '; ')" }
+    }
+    foreach ($case in $v['share-vectors']) {
+        $got = Ck-Percent ([long]$case['part']) ([long]$case['whole'])
+        if ([long]$got -eq [long]$case['expected']) { OK 'check' }
+        else { FAIL 'check' "share $($case['part']) of $($case['whole']): expected $($case['expected']) %, got $got %" }
     }
     foreach ($case in $v['aggregate-vectors']) {
         $got = Check-Aggregate $case['outcomes']

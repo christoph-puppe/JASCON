@@ -27,7 +27,7 @@
    envelopes (Ed25519) with the tier of a Tailoring in verification mode,
    the composition of two bundles (D3.5), and the conditional-apply engine
    (B.1.8). All fifteen vector families run against this file, and the
-   sixteenth of the proposed Check type (CP-CHECK-1): I-Regexp,
+   sixteenth of the Check type (CP-CHECK-1): I-Regexp,
    check-verdict and CHECK-1..15 with the evidence chain. The
    conditional-apply engine is run by nothing but its vectors, here as in
    the reference: no bundle has a place to carry an instance yet.
@@ -1288,10 +1288,10 @@ function jscConditionalApply(inst, objs) {
 }
 
 /* ====================================================================
-   Checks (CP-CHECK-1, proposed for kernel 2.0.0)
+   Checks (CP-CHECK-1, kernel 2.0.0)
    ====================================================================
    A Check states what to observe (`observes`, a typed fact contract) and
-   what the observation must satisfy (`criteria`, a flat AND over eleven
+   what the observation must satisfy (`criteria`, a flat AND over twelve
    comparators). The code that collects the facts rides the Check in the
    stdlib facet collector@1 and decides nothing: every outcome an Assessment
    records is recomputed here from the observation it records.
@@ -1498,8 +1498,8 @@ function jscIreFullMatch(p, text) {
 
 /* ---------- check-verdict (B.1.10) ---------- */
 const JSC_CHECK_OPS = {   // which comparators fit which fact; present / absent fit every fact
-  one: { string: ["equals", "one-of", "matches", "matches-not"], code: ["equals", "one-of", "matches", "matches-not"],
-    integer: ["equals", "one-of", "at-least", "at-most"], decimal: ["equals", "one-of", "at-least", "at-most"], boolean: ["equals"] },
+  one: { string: ["equals", "not-equals", "one-of", "matches", "matches-not"], code: ["equals", "not-equals", "one-of", "matches", "matches-not"],
+    integer: ["equals", "not-equals", "one-of", "at-least", "at-most"], decimal: ["equals", "not-equals", "one-of", "at-least", "at-most"], boolean: ["equals", "not-equals"] },
   many: { string: ["includes-all", "excludes-all", "subset-of", "matches", "matches-not"], code: ["includes-all", "excludes-all", "subset-of", "matches", "matches-not"],
     integer: ["includes-all", "excludes-all", "subset-of"], decimal: ["includes-all", "excludes-all", "subset-of"], boolean: [] },
 };
@@ -1542,6 +1542,7 @@ function jscCheckAssert(a, facts, decls, params) {
   const cmp = (x, y) => (t === "decimal" ? jscDecimalCompare(x, y) : x < y ? -1 : x > y ? 1 : 0);
   let hit;
   if (op === "equals") hit = key(v) === key(e);
+  else if (op === "not-equals") hit = key(v) !== key(e);
   else if (op === "one-of") hit = e.map(key).includes(key(v));
   else if (op === "at-least") hit = cmp(v, e) >= 0;
   else if (op === "at-most") hit = cmp(v, e) <= 0;
@@ -1565,35 +1566,65 @@ function jscKleene(results) {
   }
   return [JSC_SAT, []];
 }
+/* [outcome, reasons] of one Check over one set of facts */
+function jscCheckOn(check, facts, params) {
+  const decls = new Map((check.observes || []).map(d => [d.name, d]));
+  const run = list => jscKleene(list.map(a => { const [o, w] = jscCheckAssert(a, facts, decls, params); return [o, [w]]; }));
+  if ((check["applies-when"] || []).length) {
+    const [aw, why] = run(check["applies-when"]);
+    if (aw === JSC_NOT) return [JSC_NA, ["applies-when does not hold: " + why.join("; ")]];
+    if (aw === JSC_INC) return [JSC_INC, ["applicability unknown: " + why.join("; ")]];
+  }
+  return run(check.criteria);
+}
+/* A share as a whole percentage, in integer arithmetic so that every
+   implementation prints the same number: rounded half up, but never 0 while
+   part > 0 and never 100 while part < whole. */
+function jscPercentShare(part, whole) {
+  if (whole <= 0 || part <= 0) return 0;
+  if (part >= whole) return 100;
+  return Math.min(99, Math.max(1, Math.floor((200 * part + whole) / (2 * whole))));
+}
+/* B.1.10 step 5, for a per-resource Check: EVERY resource is evaluated, none
+   is skipped after the first failure. -> {results: [[id, outcome, reasons]],
+   applicable, not-satisfied, inconclusive, not-applicable,
+   percent-not-satisfied}, or null when the Check is not per-resource or the
+   observation carries no resources. The outcome stays for-all; the counts
+   say how far from it a run is. */
+function jscCheckEach(check, observation, params) {
+  if (!check.each || !jscIsPlainObject(observation) || !Array.isArray(observation.resources)) return null;
+  params = params || {};
+  const results = observation.resources.map(r => {
+    const facts = jscIsPlainObject(r) && jscIsPlainObject(r.facts) ? r.facts : {};
+    const [o, why] = jscCheckOn(check, facts, params);
+    return [jscIsPlainObject(r) ? r.id : undefined, o, why];
+  });
+  const n = o => results.filter(r => r[1] === o).length;
+  const applicable = results.length - n(JSC_NA);
+  return { results, applicable, "not-satisfied": n(JSC_NOT), inconclusive: n(JSC_INC), "not-applicable": n(JSC_NA),
+    "percent-not-satisfied": jscPercentShare(n(JSC_NOT), applicable) };
+}
+/* one line a person reads first: how many resources, and what share, fail */
+function jscCheckEachSummary(kind, each) {
+  if (each["not-satisfied"]) return `${each["not-satisfied"]} of ${each.applicable} applicable ${kind} resources not satisfied (${each["percent-not-satisfied"]} %)`;
+  if (each.inconclusive) return `${each.inconclusive} of ${each.applicable} applicable ${kind} resources inconclusive`;
+  return `all ${each.applicable} applicable ${kind} resources satisfied`;
+}
 /* B.1.10: [outcome, reasons] of one Check over one observation, with the
    parameter values the run was bound to */
 function jscCheckVerdict(check, observation, params) {
   params = params || {};
   if (observation === null || observation === undefined) return [JSC_INC, ["no observation: the collector did not report"]];
-  const decls = new Map((check.observes || []).map(d => [d.name, d]));
-  const run = (list, facts) => jscKleene(list.map(a => { const [o, w] = jscCheckAssert(a, facts, decls, params); return [o, [w]]; }));
-  const on = facts => {
-    if ((check["applies-when"] || []).length) {
-      const [aw, why] = run(check["applies-when"], facts);
-      if (aw === JSC_NOT) return [JSC_NA, ["applies-when does not hold: " + why.join("; ")]];
-      if (aw === JSC_INC) return [JSC_INC, ["applicability unknown: " + why.join("; ")]];
-    }
-    return run(check.criteria, facts);
-  };
   if (check.each) {
-    const kind = check.each.resource, res = observation.resources;
-    if (!Array.isArray(res)) return [JSC_INC, [`the check runs per ${kind}, but the observation carries no resources`]];
-    const outs = [];
-    for (const r of res) {
-      const [o, why] = on(jscIsPlainObject(r.facts) ? r.facts : {});
-      if (o !== JSC_NA) outs.push([o, why.map(w => `${r.id}: ${w}`)]);
-    }
-    if (!outs.length) return check.each["allow-empty"] ? [JSC_SAT, [`no applicable ${kind} observed, and allow-empty holds`]]
+    const kind = check.each.resource, each = jscCheckEach(check, observation, params);
+    if (!each) return [JSC_INC, [`the check runs per ${kind}, but the observation carries no resources`]];
+    if (!each.applicable) return check.each["allow-empty"] ? [JSC_SAT, [`no applicable ${kind} observed, and allow-empty holds`]]
       : [JSC_INC, [`no applicable ${kind} observed, and allow-empty is false`]];
-    return jscKleene(outs);
+    const [got, why] = jscKleene(each.results.filter(r => r[1] !== JSC_NA).map(([id, o, ws]) => [o, ws.map(w => `${id}: ${w}`)]));
+    return [got, got !== JSC_SAT ? [jscCheckEachSummary(kind, each), ...why] : why];
   }
   if (!jscIsPlainObject(observation.facts)) return [JSC_INC, ["the observation carries no facts"]];
-  return on(observation.facts);
+  return jscCheckOn(check, observation.facts, params);
 }
 function jscCheckAggregate(outcomes) {
   const app = outcomes.filter(o => o !== JSC_NA);
@@ -1790,6 +1821,8 @@ async function jscCheckErrors(objs, read) {
         } else if (row.parameters) notes.push(`${oid}: ${at}: parameter values are the performer's statement - no tailoring-ref to hold them to`);
         if (obs === null && row["observation-ref"]) { notes.push(`${oid}: ${at}: observation not available here - verdict not recomputed`); continue; }
         const [got, why] = jscCheckVerdict(c.obj, obs, row.parameters);
+        const each = jscCheckEach(c.obj, obs, row.parameters);
+        if (each && each.applicable) notes.push(`${oid}: ${at}: ${jscCheckEachSummary(c.obj.each.resource, each)}`);
         if (got !== row.outcome) bad("CHECK-9", oid, `${at}: recorded ${row.outcome}, check-verdict computes ${got}${why.length ? " (" + why.join("; ").slice(0, 200) + ")" : ""}`);
       }
       if (o["check-results"]) {
@@ -1924,6 +1957,6 @@ if (typeof module !== "undefined" && module.exports) {
     jscRiskLinkNotes, jscScaleDefinitionErrors, jscMatrixErrors, jscRiskLevels, jscMatrixCell, jscScaleErrors, jscCheckScales,
     jscOptionalEmptyViolations, jscObjectErrors, jscFacetErrors, jscTailoringDutyErrors, jscAttestationVerdict, jscCheckGraph,
     JSC_DSSE_PAYLOAD_TYPE, jscEd25519Verify, jscVerifyEnvelope, jscSemver, jscCompose, jscComposeSide, jscPathGet, jscEvalPredicate, jscConditionalApply,
-    JSC_CHECK_RULES, JSC_CHECK_OPS, JscIRegexpError, jscIreCompile, jscIreFullMatch, jscCheckVerdict, jscCheckAggregate, jscCheckParamDecls,
+    JSC_CHECK_RULES, JSC_CHECK_OPS, JscIRegexpError, jscIreCompile, jscIreFullMatch, jscCheckVerdict, jscCheckEach, jscCheckEachSummary, jscPercentShare, jscCheckAggregate, jscCheckParamDecls,
     jscCheckObjectErrors, jscCheckErrors };
 }
