@@ -1,0 +1,42 @@
+{
+ "id": "https://dbvendor.example/component/server-7",
+ "version": "2026-10",
+ "label": "Example DB Server 7",
+ "lifecycle": "active",
+ "title": {
+  "en": "Example DB Server, release line 7"
+ },
+ "kind": "software",
+ "capabilities": [
+  {
+   "id": "cap-tls",
+   "requirement-ref": "https://ns.bsi.bund.de/gspp/req/KONF.14.1",
+   "statement-ids": [
+    "s1"
+   ],
+   "description": {
+    "en": "Set net.tls.mode to requireTLS and net.tls.disabledProtocols to TLS1_0,TLS1_1,TLS1_2. Clients older than driver 4.2 cannot connect afterwards."
+   },
+   "parameter-bindings": {
+    "transport-crypto": "tls13"
+   }
+  },
+  {
+   "id": "cap-key-rotation",
+   "requirement-ref": "https://ns.bsi.bund.de/gspp/req/KONF.14.1",
+   "statement-ids": [
+    "s2"
+   ],
+   "description": {
+    "en": "Rotate the server certificate and key with the rotateCertificates command; no restart is needed. The vendor suggests an interval of 90 days."
+   }
+  },
+  {
+   "id": "cap-audit-log",
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AU-12",
+   "description": {
+    "en": "Turn on the audit log with auditLog.destination: file and ship it off the host."
+   }
+  }
+ ]
+}

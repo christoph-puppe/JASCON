@@ -8,6 +8,10 @@
   {
    "component-ref": "https://paas.example/component/platform",
    "context": "runtime"
+  },
+  {
+   "component-ref": "https://dbvendor.example/component/server-7",
+   "context": "datastore"
   }
  ],
  "capabilities": [
