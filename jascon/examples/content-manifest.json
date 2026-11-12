@@ -61,8 +61,8 @@
   {
    "id": "https://cso.example/component/acme-saas",
    "version": "2026-07",
-   "package-digest": "sha256:013b7171ebc26617dda24516dc9ffc6e5cc33eae30b04f060ce8ce322b56b263",
-   "semantic-digest": "sha256:c6cb03198bd6da55fdb14655af49c9c7c3e1c380337ac013a86d7b1f7fce8ca1",
+   "package-digest": "sha256:8041194b28fca8a1f569a40c733a728292b93191ef0598a15cb8e938f3ed5a8b",
+   "semantic-digest": "sha256:86b98185aa0eef19e6d1fde05853a401b34b1d08dab67756fb05e103f9db19df",
    "path": "component-acme-saas.json"
   },
   {
@@ -155,6 +155,20 @@
    "package-digest": "sha256:90842582398eb586b57cbb579808a52b06e6afca813db3f773a2d5ca621eb2f1",
    "semantic-digest": "sha256:9e6b34dee2dbf814b7dbc32894c27c82584d806e7bb931394deeb025dadd5ccc",
    "path": "finding-acme-bastion-ssh-cbc.json"
+  },
+  {
+   "id": "https://dbvendor.example/component/server-7",
+   "version": "2026-10",
+   "package-digest": "sha256:b2584fb9dcef40763ce98e5ffa354acbe3cde662ef3ec356edb87d112bea2072",
+   "semantic-digest": "sha256:8bd8d4b3b190f94a4d625161e5e988fbca697bdc3774e54757ac5030425022aa",
+   "path": "component-dbvendor-server-7.json"
+  },
+  {
+   "id": "https://cso.example/impl/acme--konf-14-1-s2",
+   "version": "2026-11",
+   "package-digest": "sha256:1d30885cab6f3d4c30d73d50a6c1f608785cd4601cba87b95486d08a8193704f",
+   "semantic-digest": "sha256:c4ef8e52a5e1ddfe4893dc929eb349b583a38a627c045dde26c260328656393a",
+   "path": "implementation-acme-konf-14-1-s2.json"
   }
  ],
  "facet-schemas": [

@@ -119,7 +119,15 @@ conversion *forces* the question 1.x let slide ("inherited under
 found a real gap, not a converter bug. **Component definitions**
 become `capabilities[]` on vendor Components — the duplication axis
 whose complexity drove a professional team's public retreat (PR #8)
-simply ceases to exist as a second document. **Assessment plans and
+simply ceases to exist as a second document. *(CP-ADVICE-1, proposed:
+a component definition is also the natural source of an advice pack —
+one Component per component, one capability per implemented
+requirement, `statements[]` to `statement-ids`, `set-parameters` to
+`parameter-bindings`. That converter is designed, not written: the one
+conversion in the repository, of NIST's example file, carries the
+control-level description only and leaves 2 clause-level texts and 2
+parameter values behind, although its coverage report counts them as
+carried. Chapter 9.7; `drafts/CP-ADVICE-1.md` §12.)* **Assessment plans and
 results** become Assessment objects (methods via
 `assessment-criteria`) and Findings; **POA&M items** become
 `Finding.actions[]` with computable due dates; and the four

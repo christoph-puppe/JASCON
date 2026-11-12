@@ -145,6 +145,22 @@ composition puzzle; and a *major*-line conflict (A pins `@1`, B pins
 vocabularies — consume separately, or wait for the publisher's
 migration path.
 
+**The one lawful replacement** *(CP-ADVICE-1, proposed).* Composition
+as described so far never replaces an object: one id at two versions
+is a report. An advice pack is the exception with a boundary. Importing
+one adds the ids your set does not hold; importing *another release of
+the same pack* replaces the ids the earlier release brought — which
+your set can tell, because it kept that release's manifest — and
+removes those the new release dropped. Any other id you already hold is
+refused, the file you already imported is a no-op, and a file that is
+not a lawful pack is refused before anything is compared (ADVICE-11,
+ADVICE-1..3). The report for this merge has a fixed shape: added,
+replaced, removed; the capabilities that changed; every edge of yours
+that cites one the new release no longer declares; and the receipt —
+how many of your objects are untouched. The reference validator prints
+it without writing anything:
+`validate_core.py --import-advice <set-dir> <pack-dir>`.
+
 Make the **composition report** a standard artifact of every merge:
 which pins met, what was chosen, what was re-validated, what refused.
 It is ten lines of output and the difference between an auditable

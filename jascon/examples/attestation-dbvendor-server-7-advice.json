@@ -1,0 +1,18 @@
+{
+ "id": "https://dbvendor.example/attestation/server-7-hardening-3",
+ "version": "1",
+ "lifecycle": "active",
+ "title": {
+  "en": "Release 3 of the Server 7 hardening advice, as published"
+ },
+ "subject-semantic-digests": [
+  {
+   "id": "https://dbvendor.example/component/server-7",
+   "semantic-digest": "sha256:8bd8d4b3b190f94a4d625161e5e988fbca697bdc3774e54757ac5030425022aa"
+  }
+ ],
+ "content-manifest-digest": "sha256:433f4124ba42ad84971cc9f34c63f78d784a906219204847caa03b3afe790d87",
+ "signer": "https://dbvendor.example/party/vendor",
+ "timestamp": "2026-10-20T09:00:00Z",
+ "envelope-ref": "attestation-dbvendor-server-7-advice.dsse"
+}

@@ -1,0 +1,7131 @@
+{
+ "description": "Advice packs (CP-ADVICE-1, kernel 2.0.0). An advice pack is a bundle whose manifest carries a pack header and whose objects are Components: a vendor's recommendations as one published file. shape-vectors: the header and a capability's statement-ids, by schema. pack-vectors: what a pack may hold (ADVICE-1..3) and the kernel pin it needs (KERNEL-1); `declared` gives the modifies-semantics classes of facets the pack pins. graph-vectors: capabilities and the edges that cite them, in any bundle (ADVICE-4..7). kept-vectors: the vendor's manifest a set keeps under packs/sha256/ (ADVICE-8..10); a kept entry is {manifest, published} - the file's bytes are the manifest's canonical form and its name the SHA-256 of them unless `name` or `raw` says otherwise. publisher-vectors: claimed or proven, the words and the envelope check of the Tailoring tier. import-vectors: what importing pack b into set a does (ADVICE-11). In every manifest of this file an objects entry gives the id and \"semantic-digest\": \"COMPUTE\"; the harness fills version, digests and path from the objects as published. Each case names the rules that must fire, exactly (`expected-rules`), and fragments their messages must contain. The digest an Attestation binds and its signature are LITERALS written by drafts/cp-advice-1/author_vectors.py with the fixture key of dsse-vectors.json.",
+ "fixture-public-key": "c34a11dc1f8f626ce1ed80cb562361be14e293083679c3bb9990eee7b311404a",
+ "shape-vectors": [
+  {
+   "name": "manifest-with-pack-header",
+   "kind": "manifest",
+   "expected": "valid",
+   "document": {
+    "manifest-version": "1",
+    "kernel-version": "2.0.0",
+    "pack": {
+     "kind": "advice",
+     "id": "https://vendor.example/pack/server-7-advice",
+     "version": "3",
+     "title": {
+      "en": "Server 7 hardening advice"
+     },
+     "publisher": {
+      "ref": "https://vendor.example/party/vendor",
+      "name": {
+       "en": "Vendor Inc."
+      }
+     }
+    },
+    "objects": [
+     {
+      "id": "https://vendor.example/component/server-7",
+      "semantic-digest": "sha256:383ca1e382a499e928a021d312920e19dc7ef792e6e7ec31805659e8be9e32c3",
+      "version": "3",
+      "package-digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "path": "objects/server-7.json"
+     }
+    ]
+   }
+  },
+  {
+   "name": "manifest-without-pack-header-stays-valid",
+   "kind": "manifest",
+   "expected": "valid",
+   "note": "a 1.0.0 manifest is a 2.0.0 manifest; a manifest without the header is not a pack",
+   "document": {
+    "manifest-version": "1",
+    "objects": []
+   }
+  },
+  {
+   "name": "pack-without-publisher",
+   "kind": "manifest",
+   "expected": "invalid",
+   "document": {
+    "manifest-version": "1",
+    "kernel-version": "2.0.0",
+    "pack": {
+     "kind": "advice",
+     "id": "https://vendor.example/pack/server-7-advice",
+     "version": "3",
+     "title": {
+      "en": "Server 7 hardening advice"
+     }
+    },
+    "objects": [
+     {
+      "id": "https://vendor.example/component/server-7",
+      "semantic-digest": "sha256:383ca1e382a499e928a021d312920e19dc7ef792e6e7ec31805659e8be9e32c3",
+      "version": "3",
+      "package-digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "path": "objects/server-7.json"
+     }
+    ]
+   }
+  },
+  {
+   "name": "pack-publisher-without-ref",
+   "kind": "manifest",
+   "expected": "invalid",
+   "document": {
+    "manifest-version": "1",
+    "kernel-version": "2.0.0",
+    "pack": {
+     "kind": "advice",
+     "id": "https://vendor.example/pack/server-7-advice",
+     "version": "3",
+     "title": {
+      "en": "Server 7 hardening advice"
+     },
+     "publisher": {
+      "name": {
+       "en": "Vendor Inc."
+      }
+     }
+    },
+    "objects": [
+     {
+      "id": "https://vendor.example/component/server-7",
+      "semantic-digest": "sha256:383ca1e382a499e928a021d312920e19dc7ef792e6e7ec31805659e8be9e32c3",
+      "version": "3",
+      "package-digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "path": "objects/server-7.json"
+     }
+    ]
+   }
+  },
+  {
+   "name": "pack-without-version",
+   "kind": "manifest",
+   "expected": "invalid",
+   "document": {
+    "manifest-version": "1",
+    "kernel-version": "2.0.0",
+    "pack": {
+     "kind": "advice",
+     "id": "https://vendor.example/pack/server-7-advice",
+     "title": {
+      "en": "Server 7 hardening advice"
+     },
+     "publisher": {
+      "ref": "https://vendor.example/party/vendor",
+      "name": {
+       "en": "Vendor Inc."
+      }
+     }
+    },
+    "objects": [
+     {
+      "id": "https://vendor.example/component/server-7",
+      "semantic-digest": "sha256:383ca1e382a499e928a021d312920e19dc7ef792e6e7ec31805659e8be9e32c3",
+      "version": "3",
+      "package-digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "path": "objects/server-7.json"
+     }
+    ]
+   }
+  },
+  {
+   "name": "pack-kind-outside-the-code-system",
+   "kind": "manifest",
+   "expected": "invalid",
+   "note": "the kinds are a closed set of one; a check pack would be a new code, by process",
+   "document": {
+    "manifest-version": "1",
+    "kernel-version": "2.0.0",
+    "pack": {
+     "kind": "checks",
+     "id": "https://vendor.example/pack/server-7-advice",
+     "version": "3",
+     "title": {
+      "en": "Server 7 hardening advice"
+     },
+     "publisher": {
+      "ref": "https://vendor.example/party/vendor",
+      "name": {
+       "en": "Vendor Inc."
+      }
+     }
+    },
+    "objects": [
+     {
+      "id": "https://vendor.example/component/server-7",
+      "semantic-digest": "sha256:383ca1e382a499e928a021d312920e19dc7ef792e6e7ec31805659e8be9e32c3",
+      "version": "3",
+      "package-digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "path": "objects/server-7.json"
+     }
+    ]
+   }
+  },
+  {
+   "name": "pack-header-is-closed",
+   "kind": "manifest",
+   "expected": "invalid",
+   "document": {
+    "manifest-version": "1",
+    "kernel-version": "2.0.0",
+    "pack": {
+     "kind": "advice",
+     "id": "https://vendor.example/pack/server-7-advice",
+     "version": "3",
+     "title": {
+      "en": "Server 7 hardening advice"
+     },
+     "publisher": {
+      "ref": "https://vendor.example/party/vendor",
+      "name": {
+       "en": "Vendor Inc."
+      }
+     },
+     "licence": "CC-BY-4.0"
+    },
+    "objects": [
+     {
+      "id": "https://vendor.example/component/server-7",
+      "semantic-digest": "sha256:383ca1e382a499e928a021d312920e19dc7ef792e6e7ec31805659e8be9e32c3",
+      "version": "3",
+      "package-digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "path": "objects/server-7.json"
+     }
+    ]
+   }
+  },
+  {
+   "name": "capability-with-statement-ids",
+   "kind": "component",
+   "expected": "valid",
+   "document": {
+    "id": "https://vendor.example/component/server-7",
+    "version": "3",
+    "lifecycle": "active",
+    "kind": "software",
+    "title": {
+     "en": "Example Server 7"
+    },
+    "capabilities": [
+     {
+      "id": "cap-tls",
+      "requirement-ref": "https://ns.auth.gov/fw/req/1",
+      "statement-ids": [
+       "s1"
+      ],
+      "description": {
+       "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+      },
+      "parameter-bindings": {
+       "proto": "tls13"
+      }
+     },
+     {
+      "id": "cap-rotate",
+      "requirement-ref": "https://ns.auth.gov/fw/req/1",
+      "statement-ids": [
+       "s2"
+      ],
+      "description": {
+       "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+      }
+     }
+    ]
+   }
+  },
+  {
+   "name": "capability-statement-ids-empty",
+   "kind": "component",
+   "expected": "invalid",
+   "note": "an optional array is present with content or absent (D3.3)",
+   "document": {
+    "id": "https://vendor.example/component/server-7",
+    "version": "3",
+    "lifecycle": "active",
+    "kind": "software",
+    "title": {
+     "en": "Example Server 7"
+    },
+    "capabilities": [
+     {
+      "id": "cap-tls",
+      "requirement-ref": "https://ns.auth.gov/fw/req/1",
+      "statement-ids": [],
+      "description": {
+       "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+      },
+      "parameter-bindings": {
+       "proto": "tls13"
+      }
+     }
+    ]
+   }
+  }
+ ],
+ "pack-vectors": [
+  {
+   "name": "lawful-pack",
+   "manifest": {
+    "manifest-version": "1",
+    "kernel-version": "2.0.0",
+    "pack": {
+     "kind": "advice",
+     "id": "https://vendor.example/pack/server-7-advice",
+     "version": "3",
+     "title": {
+      "en": "Server 7 hardening advice"
+     },
+     "publisher": {
+      "ref": "https://vendor.example/party/vendor",
+      "name": {
+       "en": "Vendor Inc."
+      }
+     }
+    },
+    "objects": [
+     {
+      "id": "https://vendor.example/component/server-7",
+      "semantic-digest": "COMPUTE"
+     }
+    ]
+   },
+   "objects": [
+    {
+     "id": "https://vendor.example/component/server-7",
+     "version": "3",
+     "lifecycle": "active",
+     "kind": "software",
+     "title": {
+      "en": "Example Server 7"
+     },
+     "capabilities": [
+      {
+       "id": "cap-tls",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s1"
+       ],
+       "description": {
+        "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+       },
+       "parameter-bindings": {
+        "proto": "tls13"
+       }
+      },
+      {
+       "id": "cap-rotate",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s2"
+       ],
+       "description": {
+        "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+       }
+      }
+     ]
+    }
+   ],
+   "expected-rules": []
+  },
+  {
+   "name": "pack-with-a-tailoring",
+   "manifest": {
+    "manifest-version": "1",
+    "kernel-version": "2.0.0",
+    "pack": {
+     "kind": "advice",
+     "id": "https://vendor.example/pack/server-7-advice",
+     "version": "3",
+     "title": {
+      "en": "Server 7 hardening advice"
+     },
+     "publisher": {
+      "ref": "https://vendor.example/party/vendor",
+      "name": {
+       "en": "Vendor Inc."
+      }
+     }
+    },
+    "objects": [
+     {
+      "id": "https://vendor.example/component/server-7",
+      "semantic-digest": "COMPUTE"
+     },
+     {
+      "id": "https://vendor.example/tailoring/t",
+      "semantic-digest": "COMPUTE"
+     }
+    ]
+   },
+   "objects": [
+    {
+     "id": "https://vendor.example/component/server-7",
+     "version": "3",
+     "lifecycle": "active",
+     "kind": "software",
+     "title": {
+      "en": "Example Server 7"
+     },
+     "capabilities": [
+      {
+       "id": "cap-tls",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s1"
+       ],
+       "description": {
+        "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+       },
+       "parameter-bindings": {
+        "proto": "tls13"
+       }
+      },
+      {
+       "id": "cap-rotate",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s2"
+       ],
+       "description": {
+        "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://vendor.example/tailoring/t",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/base"
+      }
+     ]
+    }
+   ],
+   "expected-rules": [
+    "ADVICE-1"
+   ],
+   "expected-frags": [
+    "is a tailoring"
+   ]
+  },
+  {
+   "name": "pack-with-a-requirement-of-its-own",
+   "note": "authorship under the vendor's own prefix is lawful (Ch. 6.A) - in a bundle, not in an advice pack",
+   "manifest": {
+    "manifest-version": "1",
+    "kernel-version": "2.0.0",
+    "pack": {
+     "kind": "advice",
+     "id": "https://vendor.example/pack/server-7-advice",
+     "version": "3",
+     "title": {
+      "en": "Server 7 hardening advice"
+     },
+     "publisher": {
+      "ref": "https://vendor.example/party/vendor",
+      "name": {
+       "en": "Vendor Inc."
+      }
+     }
+    },
+    "objects": [
+     {
+      "id": "https://vendor.example/component/server-7",
+      "semantic-digest": "COMPUTE"
+     },
+     {
+      "id": "https://vendor.example/req/1",
+      "semantic-digest": "COMPUTE"
+     }
+    ]
+   },
+   "objects": [
+    {
+     "id": "https://vendor.example/component/server-7",
+     "version": "3",
+     "lifecycle": "active",
+     "kind": "software",
+     "title": {
+      "en": "Example Server 7"
+     },
+     "capabilities": [
+      {
+       "id": "cap-tls",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s1"
+       ],
+       "description": {
+        "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+       },
+       "parameter-bindings": {
+        "proto": "tls13"
+       }
+      },
+      {
+       "id": "cap-rotate",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s2"
+       ],
+       "description": {
+        "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://vendor.example/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/operator"
+       ],
+       "parameters": [
+        {
+         "name": "proto",
+         "type": "choice",
+         "cardinality": "one",
+         "choices": [
+          {
+           "value": "tls13",
+           "label": {
+            "en": "TLS 1.3"
+           }
+          },
+          {
+           "value": "tls12",
+           "label": {
+            "en": "TLS 1.2"
+           }
+          }
+         ]
+        },
+        {
+         "name": "max-tries",
+         "type": "integer",
+         "min": 1,
+         "max": 10,
+         "tightening": "lower"
+        }
+       ],
+       "prose": {
+        "en": "Traffic is encrypted with {param:proto}; at most {param:max-tries} attempts."
+       }
+      },
+      {
+       "id": "s2",
+       "modality": "should",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/operator"
+       ],
+       "prose": {
+        "en": "Keys are rotated."
+       }
+      }
+     ]
+    }
+   ],
+   "expected-rules": [
+    "ADVICE-1"
+   ],
+   "expected-frags": [
+    "is a requirement"
+   ]
+  },
+  {
+   "name": "pack-lists-its-attestation",
+   "manifest": {
+    "manifest-version": "1",
+    "kernel-version": "2.0.0",
+    "pack": {
+     "kind": "advice",
+     "id": "https://vendor.example/pack/server-7-advice",
+     "version": "3",
+     "title": {
+      "en": "Server 7 hardening advice"
+     },
+     "publisher": {
+      "ref": "https://vendor.example/party/vendor",
+      "name": {
+       "en": "Vendor Inc."
+      }
+     }
+    },
+    "objects": [
+     {
+      "id": "https://vendor.example/component/server-7",
+      "semantic-digest": "COMPUTE"
+     },
+     {
+      "id": "https://vendor.example/attestation/server-7-advice-3",
+      "semantic-digest": "COMPUTE"
+     }
+    ]
+   },
+   "objects": [
+    {
+     "id": "https://vendor.example/component/server-7",
+     "version": "3",
+     "lifecycle": "active",
+     "kind": "software",
+     "title": {
+      "en": "Example Server 7"
+     },
+     "capabilities": [
+      {
+       "id": "cap-tls",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s1"
+       ],
+       "description": {
+        "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+       },
+       "parameter-bindings": {
+        "proto": "tls13"
+       }
+      },
+      {
+       "id": "cap-rotate",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s2"
+       ],
+       "description": {
+        "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://vendor.example/attestation/server-7-advice-3",
+     "version": "1",
+     "lifecycle": "active",
+     "subject-semantic-digests": [
+      "sha256:383ca1e382a499e928a021d312920e19dc7ef792e6e7ec31805659e8be9e32c3"
+     ],
+     "content-manifest-digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+     "signer": "https://vendor.example/party/vendor",
+     "timestamp": "2026-11-12T12:00:00Z"
+    }
+   ],
+   "expected-rules": [
+    "ADVICE-1"
+   ],
+   "expected-frags": [
+    "beside the manifest"
+   ]
+  },
+  {
+   "name": "object-under-a-foreign-origin",
+   "manifest": {
+    "manifest-version": "1",
+    "kernel-version": "2.0.0",
+    "pack": {
+     "kind": "advice",
+     "id": "https://vendor.example/pack/server-7-advice",
+     "version": "3",
+     "title": {
+      "en": "Server 7 hardening advice"
+     },
+     "publisher": {
+      "ref": "https://vendor.example/party/vendor",
+      "name": {
+       "en": "Vendor Inc."
+      }
+     }
+    },
+    "objects": [
+     {
+      "id": "https://ns.auth.gov/fw/component/server-7",
+      "semantic-digest": "COMPUTE"
+     }
+    ]
+   },
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/component/server-7",
+     "version": "3",
+     "lifecycle": "active",
+     "kind": "software",
+     "title": {
+      "en": "Example Server 7"
+     },
+     "capabilities": [
+      {
+       "id": "cap-tls",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s1"
+       ],
+       "description": {
+        "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+       },
+       "parameter-bindings": {
+        "proto": "tls13"
+       }
+      },
+      {
+       "id": "cap-rotate",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s2"
+       ],
+       "description": {
+        "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+       }
+      }
+     ]
+    }
+   ],
+   "expected-rules": [
+    "ADVICE-2"
+   ],
+   "expected-frags": [
+    "is not under the pack's origin"
+   ]
+  },
+  {
+   "name": "publisher-under-a-foreign-origin",
+   "manifest": {
+    "manifest-version": "1",
+    "kernel-version": "2.0.0",
+    "pack": {
+     "kind": "advice",
+     "id": "https://vendor.example/pack/server-7-advice",
+     "version": "3",
+     "title": {
+      "en": "Server 7 hardening advice"
+     },
+     "publisher": {
+      "ref": "https://reseller.example/party/r"
+     }
+    },
+    "objects": [
+     {
+      "id": "https://vendor.example/component/server-7",
+      "semantic-digest": "COMPUTE"
+     }
+    ]
+   },
+   "objects": [
+    {
+     "id": "https://vendor.example/component/server-7",
+     "version": "3",
+     "lifecycle": "active",
+     "kind": "software",
+     "title": {
+      "en": "Example Server 7"
+     },
+     "capabilities": [
+      {
+       "id": "cap-tls",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s1"
+       ],
+       "description": {
+        "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+       },
+       "parameter-bindings": {
+        "proto": "tls13"
+       }
+      },
+      {
+       "id": "cap-rotate",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s2"
+       ],
+       "description": {
+        "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+       }
+      }
+     ]
+    }
+   ],
+   "expected-rules": [
+    "ADVICE-2"
+   ],
+   "expected-frags": [
+    "publisher"
+   ]
+  },
+  {
+   "name": "facet-that-declares-a-semantics-class",
+   "declared": {
+    "https://vendor.example/facet/sizing": [
+     "assessment"
+    ]
+   },
+   "manifest": {
+    "manifest-version": "1",
+    "kernel-version": "2.0.0",
+    "pack": {
+     "kind": "advice",
+     "id": "https://vendor.example/pack/server-7-advice",
+     "version": "3",
+     "title": {
+      "en": "Server 7 hardening advice"
+     },
+     "publisher": {
+      "ref": "https://vendor.example/party/vendor",
+      "name": {
+       "en": "Vendor Inc."
+      }
+     }
+    },
+    "objects": [
+     {
+      "id": "https://vendor.example/component/server-7",
+      "semantic-digest": "COMPUTE"
+     }
+    ]
+   },
+   "objects": [
+    {
+     "id": "https://vendor.example/component/server-7",
+     "version": "3",
+     "lifecycle": "active",
+     "kind": "software",
+     "title": {
+      "en": "Example Server 7"
+     },
+     "capabilities": [
+      {
+       "id": "cap-tls",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s1"
+       ],
+       "description": {
+        "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+       },
+       "parameter-bindings": {
+        "proto": "tls13"
+       }
+      },
+      {
+       "id": "cap-rotate",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s2"
+       ],
+       "description": {
+        "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+       }
+      }
+     ],
+     "facets": {
+      "https://vendor.example/facet/sizing@1": {
+       "cores": 8
+      }
+     }
+    }
+   ],
+   "expected-rules": [
+    "ADVICE-3"
+   ],
+   "expected-frags": [
+    "modifies-semantics ['assessment']"
+   ]
+  },
+  {
+   "name": "stdlib-facet-that-declares-a-semantics-class",
+   "manifest": {
+    "manifest-version": "1",
+    "kernel-version": "2.0.0",
+    "pack": {
+     "kind": "advice",
+     "id": "https://vendor.example/pack/server-7-advice",
+     "version": "3",
+     "title": {
+      "en": "Server 7 hardening advice"
+     },
+     "publisher": {
+      "ref": "https://vendor.example/party/vendor",
+      "name": {
+       "en": "Vendor Inc."
+      }
+     }
+    },
+    "objects": [
+     {
+      "id": "https://vendor.example/component/server-7",
+      "semantic-digest": "COMPUTE"
+     }
+    ]
+   },
+   "objects": [
+    {
+     "id": "https://vendor.example/component/server-7",
+     "version": "3",
+     "lifecycle": "active",
+     "kind": "software",
+     "title": {
+      "en": "Example Server 7"
+     },
+     "capabilities": [
+      {
+       "id": "cap-tls",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s1"
+       ],
+       "description": {
+        "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+       },
+       "parameter-bindings": {
+        "proto": "tls13"
+       }
+      },
+      {
+       "id": "cap-rotate",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s2"
+       ],
+       "description": {
+        "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+       }
+      }
+     ],
+     "facets": {
+      "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {}
+     }
+    }
+   ],
+   "expected-rules": [
+    "ADVICE-3"
+   ]
+  },
+  {
+   "name": "facet-that-declares-nothing",
+   "declared": {
+    "https://vendor.example/facet/sizing": []
+   },
+   "manifest": {
+    "manifest-version": "1",
+    "kernel-version": "2.0.0",
+    "pack": {
+     "kind": "advice",
+     "id": "https://vendor.example/pack/server-7-advice",
+     "version": "3",
+     "title": {
+      "en": "Server 7 hardening advice"
+     },
+     "publisher": {
+      "ref": "https://vendor.example/party/vendor",
+      "name": {
+       "en": "Vendor Inc."
+      }
+     }
+    },
+    "objects": [
+     {
+      "id": "https://vendor.example/component/server-7",
+      "semantic-digest": "COMPUTE"
+     }
+    ]
+   },
+   "objects": [
+    {
+     "id": "https://vendor.example/component/server-7",
+     "version": "3",
+     "lifecycle": "active",
+     "kind": "software",
+     "title": {
+      "en": "Example Server 7"
+     },
+     "capabilities": [
+      {
+       "id": "cap-tls",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s1"
+       ],
+       "description": {
+        "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+       },
+       "parameter-bindings": {
+        "proto": "tls13"
+       }
+      },
+      {
+       "id": "cap-rotate",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s2"
+       ],
+       "description": {
+        "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+       }
+      }
+     ],
+     "facets": {
+      "https://vendor.example/facet/sizing@1": {
+       "cores": 8
+      }
+     }
+    }
+   ],
+   "expected-rules": []
+  },
+  {
+   "name": "private-payload-rides",
+   "manifest": {
+    "manifest-version": "1",
+    "kernel-version": "2.0.0",
+    "pack": {
+     "kind": "advice",
+     "id": "https://vendor.example/pack/server-7-advice",
+     "version": "3",
+     "title": {
+      "en": "Server 7 hardening advice"
+     },
+     "publisher": {
+      "ref": "https://vendor.example/party/vendor",
+      "name": {
+       "en": "Vendor Inc."
+      }
+     }
+    },
+    "objects": [
+     {
+      "id": "https://vendor.example/component/server-7",
+      "semantic-digest": "COMPUTE"
+     }
+    ]
+   },
+   "objects": [
+    {
+     "id": "https://vendor.example/component/server-7",
+     "version": "3",
+     "lifecycle": "active",
+     "kind": "software",
+     "title": {
+      "en": "Example Server 7"
+     },
+     "capabilities": [
+      {
+       "id": "cap-tls",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s1"
+       ],
+       "description": {
+        "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+       },
+       "parameter-bindings": {
+        "proto": "tls13"
+       }
+      },
+      {
+       "id": "cap-rotate",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s2"
+       ],
+       "description": {
+        "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+       }
+      }
+     ],
+     "facets": {
+      "private:vendor/sku@1": {
+       "sku": "S7"
+      }
+     }
+    }
+   ],
+   "expected-rules": []
+  },
+  {
+   "name": "pack-without-a-kernel-pin",
+   "manifest": {
+    "manifest-version": "1",
+    "pack": {
+     "kind": "advice",
+     "id": "https://vendor.example/pack/server-7-advice",
+     "version": "3",
+     "title": {
+      "en": "Server 7 hardening advice"
+     },
+     "publisher": {
+      "ref": "https://vendor.example/party/vendor",
+      "name": {
+       "en": "Vendor Inc."
+      }
+     }
+    },
+    "objects": [
+     {
+      "id": "https://vendor.example/component/server-7",
+      "semantic-digest": "COMPUTE"
+     }
+    ]
+   },
+   "objects": [
+    {
+     "id": "https://vendor.example/component/server-7",
+     "version": "3",
+     "lifecycle": "active",
+     "kind": "software",
+     "title": {
+      "en": "Example Server 7"
+     },
+     "capabilities": [
+      {
+       "id": "cap-tls",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s1"
+       ],
+       "description": {
+        "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+       },
+       "parameter-bindings": {
+        "proto": "tls13"
+       }
+      },
+      {
+       "id": "cap-rotate",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s2"
+       ],
+       "description": {
+        "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+       }
+      }
+     ]
+    }
+   ],
+   "expected-rules": [
+    "KERNEL-1"
+   ],
+   "expected-frags": [
+    "pack header"
+   ]
+  },
+  {
+   "name": "pack-pinned-to-1.0.0",
+   "manifest": {
+    "manifest-version": "1",
+    "kernel-version": "1.0.0",
+    "pack": {
+     "kind": "advice",
+     "id": "https://vendor.example/pack/server-7-advice",
+     "version": "3",
+     "title": {
+      "en": "Server 7 hardening advice"
+     },
+     "publisher": {
+      "ref": "https://vendor.example/party/vendor",
+      "name": {
+       "en": "Vendor Inc."
+      }
+     }
+    },
+    "objects": [
+     {
+      "id": "https://vendor.example/component/server-7",
+      "semantic-digest": "COMPUTE"
+     }
+    ]
+   },
+   "objects": [
+    {
+     "id": "https://vendor.example/component/server-7",
+     "version": "3",
+     "lifecycle": "active",
+     "kind": "software",
+     "title": {
+      "en": "Example Server 7"
+     },
+     "capabilities": [
+      {
+       "id": "cap-tls",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s1"
+       ],
+       "description": {
+        "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+       },
+       "parameter-bindings": {
+        "proto": "tls13"
+       }
+      },
+      {
+       "id": "cap-rotate",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s2"
+       ],
+       "description": {
+        "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+       }
+      }
+     ]
+    }
+   ],
+   "expected-rules": [
+    "KERNEL-1"
+   ]
+  }
+ ],
+ "graph-vectors": [
+  {
+   "name": "adopted-advice",
+   "note": "the user's edge, on the user's component, cites the vendor's capability; the product is a member",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/operator"
+       ],
+       "parameters": [
+        {
+         "name": "proto",
+         "type": "choice",
+         "cardinality": "one",
+         "choices": [
+          {
+           "value": "tls13",
+           "label": {
+            "en": "TLS 1.3"
+           }
+          },
+          {
+           "value": "tls12",
+           "label": {
+            "en": "TLS 1.2"
+           }
+          }
+         ]
+        },
+        {
+         "name": "max-tries",
+         "type": "integer",
+         "min": 1,
+         "max": 10,
+         "tightening": "lower"
+        }
+       ],
+       "prose": {
+        "en": "Traffic is encrypted with {param:proto}; at most {param:max-tries} attempts."
+       }
+      },
+      {
+       "id": "s2",
+       "modality": "should",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/operator"
+       ],
+       "prose": {
+        "en": "Keys are rotated."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://vendor.example/component/server-7",
+     "version": "3",
+     "lifecycle": "active",
+     "kind": "software",
+     "title": {
+      "en": "Example Server 7"
+     },
+     "capabilities": [
+      {
+       "id": "cap-tls",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s1"
+       ],
+       "description": {
+        "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+       },
+       "parameter-bindings": {
+        "proto": "tls13"
+       }
+      },
+      {
+       "id": "cap-rotate",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s2"
+       ],
+       "description": {
+        "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/component/app",
+     "version": "1",
+     "lifecycle": "active",
+     "kind": "system",
+     "members": [
+      {
+       "component-ref": "https://vendor.example/component/server-7",
+       "context": "datastore"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/impl/app-req-1",
+     "version": "1",
+     "lifecycle": "active",
+     "component-ref": "https://org.example/component/app",
+     "requirement-ref": "https://ns.auth.gov/fw/req/1",
+     "statement-refs": [
+      "s1"
+     ],
+     "responsibility": "customer",
+     "satisfied-by": [
+      {
+       "capability-ref": "https://vendor.example/component/server-7#cap-tls"
+      }
+     ],
+     "status": "planned"
+    }
+   ],
+   "expected-rules": []
+  },
+  {
+   "name": "capability-id-twice",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/operator"
+       ],
+       "parameters": [
+        {
+         "name": "proto",
+         "type": "choice",
+         "cardinality": "one",
+         "choices": [
+          {
+           "value": "tls13",
+           "label": {
+            "en": "TLS 1.3"
+           }
+          },
+          {
+           "value": "tls12",
+           "label": {
+            "en": "TLS 1.2"
+           }
+          }
+         ]
+        },
+        {
+         "name": "max-tries",
+         "type": "integer",
+         "min": 1,
+         "max": 10,
+         "tightening": "lower"
+        }
+       ],
+       "prose": {
+        "en": "Traffic is encrypted with {param:proto}; at most {param:max-tries} attempts."
+       }
+      },
+      {
+       "id": "s2",
+       "modality": "should",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/operator"
+       ],
+       "prose": {
+        "en": "Keys are rotated."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://vendor.example/component/server-7",
+     "version": "3",
+     "lifecycle": "active",
+     "kind": "software",
+     "title": {
+      "en": "Example Server 7"
+     },
+     "capabilities": [
+      {
+       "id": "cap-tls",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s1"
+       ],
+       "description": {
+        "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+       },
+       "parameter-bindings": {
+        "proto": "tls13"
+       }
+      },
+      {
+       "id": "cap-tls",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s2"
+       ],
+       "description": {
+        "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+       }
+      }
+     ]
+    }
+   ],
+   "expected-rules": [
+    "ADVICE-4"
+   ],
+   "expected-frags": [
+    "'cap-tls' is used twice"
+   ]
+  },
+  {
+   "name": "statement-id-names-no-clause",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/operator"
+       ],
+       "parameters": [
+        {
+         "name": "proto",
+         "type": "choice",
+         "cardinality": "one",
+         "choices": [
+          {
+           "value": "tls13",
+           "label": {
+            "en": "TLS 1.3"
+           }
+          },
+          {
+           "value": "tls12",
+           "label": {
+            "en": "TLS 1.2"
+           }
+          }
+         ]
+        },
+        {
+         "name": "max-tries",
+         "type": "integer",
+         "min": 1,
+         "max": 10,
+         "tightening": "lower"
+        }
+       ],
+       "prose": {
+        "en": "Traffic is encrypted with {param:proto}; at most {param:max-tries} attempts."
+       }
+      },
+      {
+       "id": "s2",
+       "modality": "should",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/operator"
+       ],
+       "prose": {
+        "en": "Keys are rotated."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://vendor.example/component/server-7",
+     "version": "3",
+     "lifecycle": "active",
+     "kind": "software",
+     "title": {
+      "en": "Example Server 7"
+     },
+     "capabilities": [
+      {
+       "id": "cap-rotate",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s9"
+       ],
+       "description": {
+        "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+       }
+      }
+     ]
+    }
+   ],
+   "expected-rules": [
+    "ADVICE-5"
+   ],
+   "expected-frags": [
+    "'s9' names no statement"
+   ]
+  },
+  {
+   "name": "statement-ids-without-requirement",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/operator"
+       ],
+       "parameters": [
+        {
+         "name": "proto",
+         "type": "choice",
+         "cardinality": "one",
+         "choices": [
+          {
+           "value": "tls13",
+           "label": {
+            "en": "TLS 1.3"
+           }
+          },
+          {
+           "value": "tls12",
+           "label": {
+            "en": "TLS 1.2"
+           }
+          }
+         ]
+        },
+        {
+         "name": "max-tries",
+         "type": "integer",
+         "min": 1,
+         "max": 10,
+         "tightening": "lower"
+        }
+       ],
+       "prose": {
+        "en": "Traffic is encrypted with {param:proto}; at most {param:max-tries} attempts."
+       }
+      },
+      {
+       "id": "s2",
+       "modality": "should",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/operator"
+       ],
+       "prose": {
+        "en": "Keys are rotated."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://vendor.example/component/server-7",
+     "version": "3",
+     "lifecycle": "active",
+     "kind": "software",
+     "title": {
+      "en": "Example Server 7"
+     },
+     "capabilities": [
+      {
+       "id": "cap-rotate",
+       "statement-ids": [
+        "s2"
+       ],
+       "description": {
+        "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+       }
+      }
+     ]
+    }
+   ],
+   "expected-rules": [
+    "ADVICE-5"
+   ],
+   "expected-frags": [
+    "without a requirement-ref"
+   ]
+  },
+  {
+   "name": "requirement-ref-resolves-to-a-component",
+   "objects": [
+    {
+     "id": "https://org.example/component/app",
+     "version": "1",
+     "lifecycle": "active",
+     "kind": "system"
+    },
+    {
+     "id": "https://vendor.example/component/server-7",
+     "version": "3",
+     "lifecycle": "active",
+     "kind": "software",
+     "title": {
+      "en": "Example Server 7"
+     },
+     "capabilities": [
+      {
+       "id": "cap-rotate",
+       "requirement-ref": "https://org.example/component/app",
+       "description": {
+        "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+       }
+      }
+     ]
+    }
+   ],
+   "expected-rules": [
+    "ADVICE-5"
+   ],
+   "expected-frags": [
+    "not a Requirement"
+   ]
+  },
+  {
+   "name": "requirement-outside-the-bundle",
+   "note": "resolves-if-present: a pack ships without the catalog",
+   "objects": [
+    {
+     "id": "https://vendor.example/component/server-7",
+     "version": "3",
+     "lifecycle": "active",
+     "kind": "software",
+     "title": {
+      "en": "Example Server 7"
+     },
+     "capabilities": [
+      {
+       "id": "cap-tls",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s1"
+       ],
+       "description": {
+        "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+       },
+       "parameter-bindings": {
+        "proto": "tls13"
+       }
+      },
+      {
+       "id": "cap-rotate",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s2"
+       ],
+       "description": {
+        "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+       }
+      }
+     ]
+    }
+   ],
+   "expected-rules": [],
+   "expected-notes": [
+    "2 capability requirement-ref(s) outside the bundle"
+   ]
+  },
+  {
+   "name": "binding-names-no-parameter",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/operator"
+       ],
+       "parameters": [
+        {
+         "name": "proto",
+         "type": "choice",
+         "cardinality": "one",
+         "choices": [
+          {
+           "value": "tls13",
+           "label": {
+            "en": "TLS 1.3"
+           }
+          },
+          {
+           "value": "tls12",
+           "label": {
+            "en": "TLS 1.2"
+           }
+          }
+         ]
+        },
+        {
+         "name": "max-tries",
+         "type": "integer",
+         "min": 1,
+         "max": 10,
+         "tightening": "lower"
+        }
+       ],
+       "prose": {
+        "en": "Traffic is encrypted with {param:proto}; at most {param:max-tries} attempts."
+       }
+      },
+      {
+       "id": "s2",
+       "modality": "should",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/operator"
+       ],
+       "prose": {
+        "en": "Keys are rotated."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://vendor.example/component/server-7",
+     "version": "3",
+     "lifecycle": "active",
+     "kind": "software",
+     "title": {
+      "en": "Example Server 7"
+     },
+     "capabilities": [
+      {
+       "id": "cap-tls",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s1"
+       ],
+       "description": {
+        "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+       },
+       "parameter-bindings": {
+        "cipher": "aes"
+       }
+      }
+     ]
+    }
+   ],
+   "expected-rules": [
+    "ADVICE-6"
+   ],
+   "expected-frags": [
+    "declared 0 times"
+   ]
+  },
+  {
+   "name": "binding-outside-the-declared-choices",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/operator"
+       ],
+       "parameters": [
+        {
+         "name": "proto",
+         "type": "choice",
+         "cardinality": "one",
+         "choices": [
+          {
+           "value": "tls13",
+           "label": {
+            "en": "TLS 1.3"
+           }
+          },
+          {
+           "value": "tls12",
+           "label": {
+            "en": "TLS 1.2"
+           }
+          }
+         ]
+        },
+        {
+         "name": "max-tries",
+         "type": "integer",
+         "min": 1,
+         "max": 10,
+         "tightening": "lower"
+        }
+       ],
+       "prose": {
+        "en": "Traffic is encrypted with {param:proto}; at most {param:max-tries} attempts."
+       }
+      },
+      {
+       "id": "s2",
+       "modality": "should",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/operator"
+       ],
+       "prose": {
+        "en": "Keys are rotated."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://vendor.example/component/server-7",
+     "version": "3",
+     "lifecycle": "active",
+     "kind": "software",
+     "title": {
+      "en": "Example Server 7"
+     },
+     "capabilities": [
+      {
+       "id": "cap-tls",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s1"
+       ],
+       "description": {
+        "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+       },
+       "parameter-bindings": {
+        "proto": "tls11"
+       }
+      }
+     ]
+    }
+   ],
+   "expected-rules": [
+    "ADVICE-6"
+   ],
+   "expected-frags": [
+    "outside the declared space"
+   ]
+  },
+  {
+   "name": "binding-above-the-declared-maximum",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/operator"
+       ],
+       "parameters": [
+        {
+         "name": "proto",
+         "type": "choice",
+         "cardinality": "one",
+         "choices": [
+          {
+           "value": "tls13",
+           "label": {
+            "en": "TLS 1.3"
+           }
+          },
+          {
+           "value": "tls12",
+           "label": {
+            "en": "TLS 1.2"
+           }
+          }
+         ]
+        },
+        {
+         "name": "max-tries",
+         "type": "integer",
+         "min": 1,
+         "max": 10,
+         "tightening": "lower"
+        }
+       ],
+       "prose": {
+        "en": "Traffic is encrypted with {param:proto}; at most {param:max-tries} attempts."
+       }
+      },
+      {
+       "id": "s2",
+       "modality": "should",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/operator"
+       ],
+       "prose": {
+        "en": "Keys are rotated."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://vendor.example/component/server-7",
+     "version": "3",
+     "lifecycle": "active",
+     "kind": "software",
+     "title": {
+      "en": "Example Server 7"
+     },
+     "capabilities": [
+      {
+       "id": "cap-tls",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s1"
+       ],
+       "description": {
+        "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+       },
+       "parameter-bindings": {
+        "max-tries": 11
+       }
+      }
+     ]
+    }
+   ],
+   "expected-rules": [
+    "ADVICE-6"
+   ],
+   "expected-frags": [
+    "outside the declared space"
+   ]
+  },
+  {
+   "name": "binding-of-the-wrong-kind",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/operator"
+       ],
+       "parameters": [
+        {
+         "name": "proto",
+         "type": "choice",
+         "cardinality": "one",
+         "choices": [
+          {
+           "value": "tls13",
+           "label": {
+            "en": "TLS 1.3"
+           }
+          },
+          {
+           "value": "tls12",
+           "label": {
+            "en": "TLS 1.2"
+           }
+          }
+         ]
+        },
+        {
+         "name": "max-tries",
+         "type": "integer",
+         "min": 1,
+         "max": 10,
+         "tightening": "lower"
+        }
+       ],
+       "prose": {
+        "en": "Traffic is encrypted with {param:proto}; at most {param:max-tries} attempts."
+       }
+      },
+      {
+       "id": "s2",
+       "modality": "should",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/operator"
+       ],
+       "prose": {
+        "en": "Keys are rotated."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://vendor.example/component/server-7",
+     "version": "3",
+     "lifecycle": "active",
+     "kind": "software",
+     "title": {
+      "en": "Example Server 7"
+     },
+     "capabilities": [
+      {
+       "id": "cap-tls",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s1"
+       ],
+       "description": {
+        "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+       },
+       "parameter-bindings": {
+        "max-tries": "four"
+       }
+      }
+     ]
+    }
+   ],
+   "expected-rules": [
+    "ADVICE-6"
+   ],
+   "expected-frags": [
+    "of the wrong kind"
+   ]
+  },
+  {
+   "name": "binding-on-a-clause-not-covered",
+   "note": "proto is declared on s1; the capability covers s2",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/operator"
+       ],
+       "parameters": [
+        {
+         "name": "proto",
+         "type": "choice",
+         "cardinality": "one",
+         "choices": [
+          {
+           "value": "tls13",
+           "label": {
+            "en": "TLS 1.3"
+           }
+          },
+          {
+           "value": "tls12",
+           "label": {
+            "en": "TLS 1.2"
+           }
+          }
+         ]
+        },
+        {
+         "name": "max-tries",
+         "type": "integer",
+         "min": 1,
+         "max": 10,
+         "tightening": "lower"
+        }
+       ],
+       "prose": {
+        "en": "Traffic is encrypted with {param:proto}; at most {param:max-tries} attempts."
+       }
+      },
+      {
+       "id": "s2",
+       "modality": "should",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/operator"
+       ],
+       "prose": {
+        "en": "Keys are rotated."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://vendor.example/component/server-7",
+     "version": "3",
+     "lifecycle": "active",
+     "kind": "software",
+     "title": {
+      "en": "Example Server 7"
+     },
+     "capabilities": [
+      {
+       "id": "cap-rotate",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s2"
+       ],
+       "description": {
+        "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+       },
+       "parameter-bindings": {
+        "proto": "tls13"
+       }
+      }
+     ]
+    }
+   ],
+   "expected-rules": [
+    "ADVICE-6"
+   ],
+   "expected-frags": [
+    "declared 0 times"
+   ]
+  },
+  {
+   "name": "binding-without-statement-ids-covers-every-clause",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/operator"
+       ],
+       "parameters": [
+        {
+         "name": "proto",
+         "type": "choice",
+         "cardinality": "one",
+         "choices": [
+          {
+           "value": "tls13",
+           "label": {
+            "en": "TLS 1.3"
+           }
+          },
+          {
+           "value": "tls12",
+           "label": {
+            "en": "TLS 1.2"
+           }
+          }
+         ]
+        },
+        {
+         "name": "max-tries",
+         "type": "integer",
+         "min": 1,
+         "max": 10,
+         "tightening": "lower"
+        }
+       ],
+       "prose": {
+        "en": "Traffic is encrypted with {param:proto}; at most {param:max-tries} attempts."
+       }
+      },
+      {
+       "id": "s2",
+       "modality": "should",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/operator"
+       ],
+       "prose": {
+        "en": "Keys are rotated."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://vendor.example/component/server-7",
+     "version": "3",
+     "lifecycle": "active",
+     "kind": "software",
+     "title": {
+      "en": "Example Server 7"
+     },
+     "capabilities": [
+      {
+       "id": "cap-tls",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "description": {
+        "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+       },
+       "parameter-bindings": {
+        "proto": "tls13"
+       }
+      }
+     ]
+    }
+   ],
+   "expected-rules": []
+  },
+  {
+   "name": "binding-without-requirement-ref",
+   "note": "nothing to check it against: a 1.0.0 capability stays valid",
+   "objects": [
+    {
+     "id": "https://org.example/component/app",
+     "version": "1",
+     "lifecycle": "active",
+     "kind": "system",
+     "capabilities": [
+      {
+       "id": "cap-own",
+       "description": {
+        "en": "Own TLS termination."
+       },
+       "parameter-bindings": {
+        "proto": "tls13"
+       }
+      }
+     ]
+    }
+   ],
+   "expected-rules": []
+  },
+  {
+   "name": "bare-id-of-the-own-component",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/operator"
+       ],
+       "parameters": [
+        {
+         "name": "proto",
+         "type": "choice",
+         "cardinality": "one",
+         "choices": [
+          {
+           "value": "tls13",
+           "label": {
+            "en": "TLS 1.3"
+           }
+          },
+          {
+           "value": "tls12",
+           "label": {
+            "en": "TLS 1.2"
+           }
+          }
+         ]
+        },
+        {
+         "name": "max-tries",
+         "type": "integer",
+         "min": 1,
+         "max": 10,
+         "tightening": "lower"
+        }
+       ],
+       "prose": {
+        "en": "Traffic is encrypted with {param:proto}; at most {param:max-tries} attempts."
+       }
+      },
+      {
+       "id": "s2",
+       "modality": "should",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/operator"
+       ],
+       "prose": {
+        "en": "Keys are rotated."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/component/app",
+     "version": "1",
+     "lifecycle": "active",
+     "kind": "system",
+     "capabilities": [
+      {
+       "id": "cap-own",
+       "description": {
+        "en": "Own TLS termination."
+       },
+       "parameter-bindings": {
+        "proto": "tls13"
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/impl/app-req-1",
+     "version": "1",
+     "lifecycle": "active",
+     "component-ref": "https://org.example/component/app",
+     "requirement-ref": "https://ns.auth.gov/fw/req/1",
+     "statement-refs": [
+      "s1"
+     ],
+     "responsibility": "customer",
+     "satisfied-by": [
+      {
+       "capability-ref": "cap-own"
+      }
+     ],
+     "status": "planned"
+    }
+   ],
+   "expected-rules": []
+  },
+  {
+   "name": "bare-id-nobody-declared",
+   "note": "the literal a tool wrote when it had nothing to cite",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/operator"
+       ],
+       "parameters": [
+        {
+         "name": "proto",
+         "type": "choice",
+         "cardinality": "one",
+         "choices": [
+          {
+           "value": "tls13",
+           "label": {
+            "en": "TLS 1.3"
+           }
+          },
+          {
+           "value": "tls12",
+           "label": {
+            "en": "TLS 1.2"
+           }
+          }
+         ]
+        },
+        {
+         "name": "max-tries",
+         "type": "integer",
+         "min": 1,
+         "max": 10,
+         "tightening": "lower"
+        }
+       ],
+       "prose": {
+        "en": "Traffic is encrypted with {param:proto}; at most {param:max-tries} attempts."
+       }
+      },
+      {
+       "id": "s2",
+       "modality": "should",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/operator"
+       ],
+       "prose": {
+        "en": "Keys are rotated."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/component/app",
+     "version": "1",
+     "lifecycle": "active",
+     "kind": "system",
+     "capabilities": [
+      {
+       "id": "cap-own",
+       "description": {
+        "en": "Own TLS termination."
+       },
+       "parameter-bindings": {
+        "proto": "tls13"
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/impl/app-req-1",
+     "version": "1",
+     "lifecycle": "active",
+     "component-ref": "https://org.example/component/app",
+     "requirement-ref": "https://ns.auth.gov/fw/req/1",
+     "statement-refs": [
+      "s1"
+     ],
+     "responsibility": "customer",
+     "satisfied-by": [
+      {
+       "capability-ref": "declared"
+      }
+     ],
+     "status": "planned"
+    }
+   ],
+   "expected-rules": [
+    "ADVICE-7"
+   ],
+   "expected-frags": [
+    "does not declare"
+   ]
+  },
+  {
+   "name": "full-form-to-the-own-component",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/operator"
+       ],
+       "parameters": [
+        {
+         "name": "proto",
+         "type": "choice",
+         "cardinality": "one",
+         "choices": [
+          {
+           "value": "tls13",
+           "label": {
+            "en": "TLS 1.3"
+           }
+          },
+          {
+           "value": "tls12",
+           "label": {
+            "en": "TLS 1.2"
+           }
+          }
+         ]
+        },
+        {
+         "name": "max-tries",
+         "type": "integer",
+         "min": 1,
+         "max": 10,
+         "tightening": "lower"
+        }
+       ],
+       "prose": {
+        "en": "Traffic is encrypted with {param:proto}; at most {param:max-tries} attempts."
+       }
+      },
+      {
+       "id": "s2",
+       "modality": "should",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/operator"
+       ],
+       "prose": {
+        "en": "Keys are rotated."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/component/app",
+     "version": "1",
+     "lifecycle": "active",
+     "kind": "system",
+     "capabilities": [
+      {
+       "id": "cap-own",
+       "description": {
+        "en": "Own TLS termination."
+       },
+       "parameter-bindings": {
+        "proto": "tls13"
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/impl/app-req-1",
+     "version": "1",
+     "lifecycle": "active",
+     "component-ref": "https://org.example/component/app",
+     "requirement-ref": "https://ns.auth.gov/fw/req/1",
+     "statement-refs": [
+      "s1"
+     ],
+     "responsibility": "customer",
+     "satisfied-by": [
+      {
+       "capability-ref": "https://org.example/component/app#cap-own"
+      }
+     ],
+     "status": "planned"
+    }
+   ],
+   "expected-rules": []
+  },
+  {
+   "name": "cited-component-not-in-the-bundle",
+   "note": "closure-required: advice that was not imported cannot be adopted",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/operator"
+       ],
+       "parameters": [
+        {
+         "name": "proto",
+         "type": "choice",
+         "cardinality": "one",
+         "choices": [
+          {
+           "value": "tls13",
+           "label": {
+            "en": "TLS 1.3"
+           }
+          },
+          {
+           "value": "tls12",
+           "label": {
+            "en": "TLS 1.2"
+           }
+          }
+         ]
+        },
+        {
+         "name": "max-tries",
+         "type": "integer",
+         "min": 1,
+         "max": 10,
+         "tightening": "lower"
+        }
+       ],
+       "prose": {
+        "en": "Traffic is encrypted with {param:proto}; at most {param:max-tries} attempts."
+       }
+      },
+      {
+       "id": "s2",
+       "modality": "should",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/operator"
+       ],
+       "prose": {
+        "en": "Keys are rotated."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/component/app",
+     "version": "1",
+     "lifecycle": "active",
+     "kind": "system",
+     "members": [
+      {
+       "component-ref": "https://vendor.example/component/server-7",
+       "context": "datastore"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/impl/app-req-1",
+     "version": "1",
+     "lifecycle": "active",
+     "component-ref": "https://org.example/component/app",
+     "requirement-ref": "https://ns.auth.gov/fw/req/1",
+     "statement-refs": [
+      "s1"
+     ],
+     "responsibility": "customer",
+     "satisfied-by": [
+      {
+       "capability-ref": "https://vendor.example/component/server-7#cap-tls"
+      }
+     ],
+     "status": "planned"
+    }
+   ],
+   "expected-rules": [
+    "ADVICE-7"
+   ],
+   "expected-frags": [
+    "is not in the bundle"
+   ]
+  },
+  {
+   "name": "cited-component-is-not-a-member",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/operator"
+       ],
+       "parameters": [
+        {
+         "name": "proto",
+         "type": "choice",
+         "cardinality": "one",
+         "choices": [
+          {
+           "value": "tls13",
+           "label": {
+            "en": "TLS 1.3"
+           }
+          },
+          {
+           "value": "tls12",
+           "label": {
+            "en": "TLS 1.2"
+           }
+          }
+         ]
+        },
+        {
+         "name": "max-tries",
+         "type": "integer",
+         "min": 1,
+         "max": 10,
+         "tightening": "lower"
+        }
+       ],
+       "prose": {
+        "en": "Traffic is encrypted with {param:proto}; at most {param:max-tries} attempts."
+       }
+      },
+      {
+       "id": "s2",
+       "modality": "should",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/operator"
+       ],
+       "prose": {
+        "en": "Keys are rotated."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://vendor.example/component/server-7",
+     "version": "3",
+     "lifecycle": "active",
+     "kind": "software",
+     "title": {
+      "en": "Example Server 7"
+     },
+     "capabilities": [
+      {
+       "id": "cap-tls",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s1"
+       ],
+       "description": {
+        "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+       },
+       "parameter-bindings": {
+        "proto": "tls13"
+       }
+      },
+      {
+       "id": "cap-rotate",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s2"
+       ],
+       "description": {
+        "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/component/app",
+     "version": "1",
+     "lifecycle": "active",
+     "kind": "system"
+    },
+    {
+     "id": "https://org.example/impl/app-req-1",
+     "version": "1",
+     "lifecycle": "active",
+     "component-ref": "https://org.example/component/app",
+     "requirement-ref": "https://ns.auth.gov/fw/req/1",
+     "statement-refs": [
+      "s1"
+     ],
+     "responsibility": "customer",
+     "satisfied-by": [
+      {
+       "capability-ref": "https://vendor.example/component/server-7#cap-tls"
+      }
+     ],
+     "status": "planned"
+    }
+   ],
+   "expected-rules": [
+    "ADVICE-7"
+   ],
+   "expected-frags": [
+    "is not a member of"
+   ]
+  },
+  {
+   "name": "cited-capability-not-declared",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/operator"
+       ],
+       "parameters": [
+        {
+         "name": "proto",
+         "type": "choice",
+         "cardinality": "one",
+         "choices": [
+          {
+           "value": "tls13",
+           "label": {
+            "en": "TLS 1.3"
+           }
+          },
+          {
+           "value": "tls12",
+           "label": {
+            "en": "TLS 1.2"
+           }
+          }
+         ]
+        },
+        {
+         "name": "max-tries",
+         "type": "integer",
+         "min": 1,
+         "max": 10,
+         "tightening": "lower"
+        }
+       ],
+       "prose": {
+        "en": "Traffic is encrypted with {param:proto}; at most {param:max-tries} attempts."
+       }
+      },
+      {
+       "id": "s2",
+       "modality": "should",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/operator"
+       ],
+       "prose": {
+        "en": "Keys are rotated."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://vendor.example/component/server-7",
+     "version": "3",
+     "lifecycle": "active",
+     "kind": "software",
+     "title": {
+      "en": "Example Server 7"
+     },
+     "capabilities": [
+      {
+       "id": "cap-tls",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s1"
+       ],
+       "description": {
+        "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+       },
+       "parameter-bindings": {
+        "proto": "tls13"
+       }
+      },
+      {
+       "id": "cap-rotate",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s2"
+       ],
+       "description": {
+        "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/component/app",
+     "version": "1",
+     "lifecycle": "active",
+     "kind": "system",
+     "members": [
+      {
+       "component-ref": "https://vendor.example/component/server-7",
+       "context": "datastore"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/impl/app-req-1",
+     "version": "1",
+     "lifecycle": "active",
+     "component-ref": "https://org.example/component/app",
+     "requirement-ref": "https://ns.auth.gov/fw/req/1",
+     "statement-refs": [
+      "s1"
+     ],
+     "responsibility": "customer",
+     "satisfied-by": [
+      {
+       "capability-ref": "https://vendor.example/component/server-7#cap-gone"
+      }
+     ],
+     "status": "planned"
+    }
+   ],
+   "expected-rules": [
+    "ADVICE-7"
+   ],
+   "expected-frags": [
+    "'cap-gone', which"
+   ]
+  },
+  {
+   "name": "cited-thing-is-not-a-component",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/operator"
+       ],
+       "parameters": [
+        {
+         "name": "proto",
+         "type": "choice",
+         "cardinality": "one",
+         "choices": [
+          {
+           "value": "tls13",
+           "label": {
+            "en": "TLS 1.3"
+           }
+          },
+          {
+           "value": "tls12",
+           "label": {
+            "en": "TLS 1.2"
+           }
+          }
+         ]
+        },
+        {
+         "name": "max-tries",
+         "type": "integer",
+         "min": 1,
+         "max": 10,
+         "tightening": "lower"
+        }
+       ],
+       "prose": {
+        "en": "Traffic is encrypted with {param:proto}; at most {param:max-tries} attempts."
+       }
+      },
+      {
+       "id": "s2",
+       "modality": "should",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/operator"
+       ],
+       "prose": {
+        "en": "Keys are rotated."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://vendor.example/component/server-7",
+     "version": "3",
+     "lifecycle": "active",
+     "kind": "software",
+     "title": {
+      "en": "Example Server 7"
+     },
+     "capabilities": [
+      {
+       "id": "cap-tls",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s1"
+       ],
+       "description": {
+        "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+       },
+       "parameter-bindings": {
+        "proto": "tls13"
+       }
+      },
+      {
+       "id": "cap-rotate",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s2"
+       ],
+       "description": {
+        "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/component/app",
+     "version": "1",
+     "lifecycle": "active",
+     "kind": "system",
+     "members": [
+      {
+       "component-ref": "https://vendor.example/component/server-7",
+       "context": "datastore"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/impl/app-req-1",
+     "version": "1",
+     "lifecycle": "active",
+     "component-ref": "https://org.example/component/app",
+     "requirement-ref": "https://ns.auth.gov/fw/req/1",
+     "statement-refs": [
+      "s1"
+     ],
+     "responsibility": "customer",
+     "satisfied-by": [
+      {
+       "capability-ref": "https://ns.auth.gov/fw/req/1#s1"
+      }
+     ],
+     "status": "planned"
+    }
+   ],
+   "expected-rules": [
+    "ADVICE-7"
+   ],
+   "expected-frags": [
+    "not a Component"
+   ]
+  },
+  {
+   "name": "inherited-edge-is-not-a-capability-ref",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/operator"
+       ],
+       "parameters": [
+        {
+         "name": "proto",
+         "type": "choice",
+         "cardinality": "one",
+         "choices": [
+          {
+           "value": "tls13",
+           "label": {
+            "en": "TLS 1.3"
+           }
+          },
+          {
+           "value": "tls12",
+           "label": {
+            "en": "TLS 1.2"
+           }
+          }
+         ]
+        },
+        {
+         "name": "max-tries",
+         "type": "integer",
+         "min": 1,
+         "max": 10,
+         "tightening": "lower"
+        }
+       ],
+       "prose": {
+        "en": "Traffic is encrypted with {param:proto}; at most {param:max-tries} attempts."
+       }
+      },
+      {
+       "id": "s2",
+       "modality": "should",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/operator"
+       ],
+       "prose": {
+        "en": "Keys are rotated."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://vendor.example/component/server-7",
+     "version": "3",
+     "lifecycle": "active",
+     "kind": "software",
+     "title": {
+      "en": "Example Server 7"
+     },
+     "capabilities": [
+      {
+       "id": "cap-tls",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s1"
+       ],
+       "description": {
+        "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+       },
+       "parameter-bindings": {
+        "proto": "tls13"
+       }
+      },
+      {
+       "id": "cap-rotate",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s2"
+       ],
+       "description": {
+        "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/component/app",
+     "version": "1",
+     "lifecycle": "active",
+     "kind": "system",
+     "members": [
+      {
+       "component-ref": "https://vendor.example/component/server-7",
+       "context": "datastore"
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/impl/app-req-1",
+     "version": "1",
+     "lifecycle": "active",
+     "component-ref": "https://org.example/component/app",
+     "requirement-ref": "https://ns.auth.gov/fw/req/1",
+     "statement-refs": [
+      "s1"
+     ],
+     "responsibility": "customer",
+     "satisfied-by": [
+      {
+       "inherited-from": {
+        "component-ref": "https://vendor.example/component/server-7",
+        "basis-ref": "https://vendor.example/auth/x"
+       }
+      }
+     ],
+     "status": "planned"
+    }
+   ],
+   "expected-rules": []
+  }
+ ],
+ "kept-vectors": [
+  {
+   "name": "kept-manifest-matches-the-set",
+   "objects": [
+    {
+     "id": "https://vendor.example/component/server-7",
+     "version": "3",
+     "lifecycle": "active",
+     "kind": "software",
+     "title": {
+      "en": "Example Server 7"
+     },
+     "capabilities": [
+      {
+       "id": "cap-tls",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s1"
+       ],
+       "description": {
+        "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+       },
+       "parameter-bindings": {
+        "proto": "tls13"
+       }
+      },
+      {
+       "id": "cap-rotate",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s2"
+       ],
+       "description": {
+        "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/component/app",
+     "version": "1",
+     "lifecycle": "active",
+     "kind": "system",
+     "members": [
+      {
+       "component-ref": "https://vendor.example/component/server-7",
+       "context": "datastore"
+      }
+     ]
+    }
+   ],
+   "kept": [
+    {
+     "manifest": {
+      "manifest-version": "1",
+      "kernel-version": "2.0.0",
+      "pack": {
+       "kind": "advice",
+       "id": "https://vendor.example/pack/server-7-advice",
+       "version": "3",
+       "title": {
+        "en": "Server 7 hardening advice"
+       },
+       "publisher": {
+        "ref": "https://vendor.example/party/vendor",
+        "name": {
+         "en": "Vendor Inc."
+        }
+       }
+      },
+      "objects": [
+       {
+        "id": "https://vendor.example/component/server-7",
+        "semantic-digest": "COMPUTE"
+       }
+      ]
+     },
+     "published": [
+      {
+       "id": "https://vendor.example/component/server-7",
+       "version": "3",
+       "lifecycle": "active",
+       "kind": "software",
+       "title": {
+        "en": "Example Server 7"
+       },
+       "capabilities": [
+        {
+         "id": "cap-tls",
+         "requirement-ref": "https://ns.auth.gov/fw/req/1",
+         "statement-ids": [
+          "s1"
+         ],
+         "description": {
+          "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+         },
+         "parameter-bindings": {
+          "proto": "tls13"
+         }
+        },
+        {
+         "id": "cap-rotate",
+         "requirement-ref": "https://ns.auth.gov/fw/req/1",
+         "statement-ids": [
+          "s2"
+         ],
+         "description": {
+          "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+         }
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "expected-rules": [],
+   "expected-packs": 1
+  },
+  {
+   "name": "name-is-not-the-digest",
+   "objects": [
+    {
+     "id": "https://vendor.example/component/server-7",
+     "version": "3",
+     "lifecycle": "active",
+     "kind": "software",
+     "title": {
+      "en": "Example Server 7"
+     },
+     "capabilities": [
+      {
+       "id": "cap-tls",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s1"
+       ],
+       "description": {
+        "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+       },
+       "parameter-bindings": {
+        "proto": "tls13"
+       }
+      },
+      {
+       "id": "cap-rotate",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s2"
+       ],
+       "description": {
+        "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+       }
+      }
+     ]
+    }
+   ],
+   "kept": [
+    {
+     "name": "0000000000000000000000000000000000000000000000000000000000000000",
+     "manifest": {
+      "manifest-version": "1",
+      "kernel-version": "2.0.0",
+      "pack": {
+       "kind": "advice",
+       "id": "https://vendor.example/pack/server-7-advice",
+       "version": "3",
+       "title": {
+        "en": "Server 7 hardening advice"
+       },
+       "publisher": {
+        "ref": "https://vendor.example/party/vendor",
+        "name": {
+         "en": "Vendor Inc."
+        }
+       }
+      },
+      "objects": [
+       {
+        "id": "https://vendor.example/component/server-7",
+        "semantic-digest": "COMPUTE"
+       }
+      ]
+     },
+     "published": [
+      {
+       "id": "https://vendor.example/component/server-7",
+       "version": "3",
+       "lifecycle": "active",
+       "kind": "software",
+       "title": {
+        "en": "Example Server 7"
+       },
+       "capabilities": [
+        {
+         "id": "cap-tls",
+         "requirement-ref": "https://ns.auth.gov/fw/req/1",
+         "statement-ids": [
+          "s1"
+         ],
+         "description": {
+          "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+         },
+         "parameter-bindings": {
+          "proto": "tls13"
+         }
+        },
+        {
+         "id": "cap-rotate",
+         "requirement-ref": "https://ns.auth.gov/fw/req/1",
+         "statement-ids": [
+          "s2"
+         ],
+         "description": {
+          "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+         }
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "expected-rules": [
+    "ADVICE-8"
+   ],
+   "expected-frags": [
+    "does not match its name"
+   ],
+   "expected-packs": 0
+  },
+  {
+   "name": "kept-file-is-not-json",
+   "objects": [
+    {
+     "id": "https://vendor.example/component/server-7",
+     "version": "3",
+     "lifecycle": "active",
+     "kind": "software",
+     "title": {
+      "en": "Example Server 7"
+     },
+     "capabilities": [
+      {
+       "id": "cap-tls",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s1"
+       ],
+       "description": {
+        "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+       },
+       "parameter-bindings": {
+        "proto": "tls13"
+       }
+      },
+      {
+       "id": "cap-rotate",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s2"
+       ],
+       "description": {
+        "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+       }
+      }
+     ]
+    }
+   ],
+   "kept": [
+    {
+     "raw": "not json"
+    }
+   ],
+   "expected-rules": [
+    "ADVICE-8"
+   ],
+   "expected-frags": [
+    "not readable JSON"
+   ],
+   "expected-packs": 0
+  },
+  {
+   "name": "kept-file-is-not-a-manifest",
+   "objects": [
+    {
+     "id": "https://vendor.example/component/server-7",
+     "version": "3",
+     "lifecycle": "active",
+     "kind": "software",
+     "title": {
+      "en": "Example Server 7"
+     },
+     "capabilities": [
+      {
+       "id": "cap-tls",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s1"
+       ],
+       "description": {
+        "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+       },
+       "parameter-bindings": {
+        "proto": "tls13"
+       }
+      },
+      {
+       "id": "cap-rotate",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s2"
+       ],
+       "description": {
+        "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+       }
+      }
+     ]
+    }
+   ],
+   "kept": [
+    {
+     "raw": "{\"hello\":1}"
+    }
+   ],
+   "expected-rules": [
+    "ADVICE-8"
+   ],
+   "expected-frags": [
+    "not a content manifest with a pack header"
+   ],
+   "expected-packs": 0
+  },
+  {
+   "name": "kept-manifest-without-pack-header",
+   "objects": [
+    {
+     "id": "https://vendor.example/component/server-7",
+     "version": "3",
+     "lifecycle": "active",
+     "kind": "software",
+     "title": {
+      "en": "Example Server 7"
+     },
+     "capabilities": [
+      {
+       "id": "cap-tls",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s1"
+       ],
+       "description": {
+        "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+       },
+       "parameter-bindings": {
+        "proto": "tls13"
+       }
+      },
+      {
+       "id": "cap-rotate",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s2"
+       ],
+       "description": {
+        "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+       }
+      }
+     ]
+    }
+   ],
+   "kept": [
+    {
+     "manifest": {
+      "manifest-version": "1",
+      "kernel-version": "2.0.0",
+      "objects": [
+       {
+        "id": "https://vendor.example/component/server-7",
+        "semantic-digest": "COMPUTE"
+       }
+      ]
+     },
+     "published": [
+      {
+       "id": "https://vendor.example/component/server-7",
+       "version": "3",
+       "lifecycle": "active",
+       "kind": "software",
+       "title": {
+        "en": "Example Server 7"
+       },
+       "capabilities": [
+        {
+         "id": "cap-tls",
+         "requirement-ref": "https://ns.auth.gov/fw/req/1",
+         "statement-ids": [
+          "s1"
+         ],
+         "description": {
+          "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+         },
+         "parameter-bindings": {
+          "proto": "tls13"
+         }
+        },
+        {
+         "id": "cap-rotate",
+         "requirement-ref": "https://ns.auth.gov/fw/req/1",
+         "statement-ids": [
+          "s2"
+         ],
+         "description": {
+          "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+         }
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "expected-rules": [
+    "ADVICE-8"
+   ],
+   "expected-packs": 0
+  },
+  {
+   "name": "kept-manifest-listed-in-the-bundle-manifest",
+   "objects": [
+    {
+     "id": "https://vendor.example/component/server-7",
+     "version": "3",
+     "lifecycle": "active",
+     "kind": "software",
+     "title": {
+      "en": "Example Server 7"
+     },
+     "capabilities": [
+      {
+       "id": "cap-tls",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s1"
+       ],
+       "description": {
+        "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+       },
+       "parameter-bindings": {
+        "proto": "tls13"
+       }
+      },
+      {
+       "id": "cap-rotate",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s2"
+       ],
+       "description": {
+        "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+       }
+      }
+     ]
+    }
+   ],
+   "manifest": {
+    "manifest-version": "1",
+    "objects": [
+     {
+      "id": "https://vendor.example/component/server-7",
+      "path": "packs/sha256/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+     }
+    ]
+   },
+   "kept": [
+    {
+     "manifest": {
+      "manifest-version": "1",
+      "kernel-version": "2.0.0",
+      "pack": {
+       "kind": "advice",
+       "id": "https://vendor.example/pack/server-7-advice",
+       "version": "3",
+       "title": {
+        "en": "Server 7 hardening advice"
+       },
+       "publisher": {
+        "ref": "https://vendor.example/party/vendor",
+        "name": {
+         "en": "Vendor Inc."
+        }
+       }
+      },
+      "objects": [
+       {
+        "id": "https://vendor.example/component/server-7",
+        "semantic-digest": "COMPUTE"
+       }
+      ]
+     },
+     "published": [
+      {
+       "id": "https://vendor.example/component/server-7",
+       "version": "3",
+       "lifecycle": "active",
+       "kind": "software",
+       "title": {
+        "en": "Example Server 7"
+       },
+       "capabilities": [
+        {
+         "id": "cap-tls",
+         "requirement-ref": "https://ns.auth.gov/fw/req/1",
+         "statement-ids": [
+          "s1"
+         ],
+         "description": {
+          "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+         },
+         "parameter-bindings": {
+          "proto": "tls13"
+         }
+        },
+        {
+         "id": "cap-rotate",
+         "requirement-ref": "https://ns.auth.gov/fw/req/1",
+         "statement-ids": [
+          "s2"
+         ],
+         "description": {
+          "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+         }
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "expected-rules": [
+    "ADVICE-8"
+   ],
+   "expected-frags": [
+    "is listed in the bundle's manifest"
+   ],
+   "expected-packs": 1
+  },
+  {
+   "name": "listed-object-not-in-the-set",
+   "objects": [
+    {
+     "id": "https://org.example/component/app",
+     "version": "1",
+     "lifecycle": "active",
+     "kind": "system",
+     "members": [
+      {
+       "component-ref": "https://vendor.example/component/server-7",
+       "context": "datastore"
+      }
+     ]
+    }
+   ],
+   "kept": [
+    {
+     "manifest": {
+      "manifest-version": "1",
+      "kernel-version": "2.0.0",
+      "pack": {
+       "kind": "advice",
+       "id": "https://vendor.example/pack/server-7-advice",
+       "version": "3",
+       "title": {
+        "en": "Server 7 hardening advice"
+       },
+       "publisher": {
+        "ref": "https://vendor.example/party/vendor",
+        "name": {
+         "en": "Vendor Inc."
+        }
+       }
+      },
+      "objects": [
+       {
+        "id": "https://vendor.example/component/server-7",
+        "semantic-digest": "COMPUTE"
+       }
+      ]
+     },
+     "published": [
+      {
+       "id": "https://vendor.example/component/server-7",
+       "version": "3",
+       "lifecycle": "active",
+       "kind": "software",
+       "title": {
+        "en": "Example Server 7"
+       },
+       "capabilities": [
+        {
+         "id": "cap-tls",
+         "requirement-ref": "https://ns.auth.gov/fw/req/1",
+         "statement-ids": [
+          "s1"
+         ],
+         "description": {
+          "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+         },
+         "parameter-bindings": {
+          "proto": "tls13"
+         }
+        },
+        {
+         "id": "cap-rotate",
+         "requirement-ref": "https://ns.auth.gov/fw/req/1",
+         "statement-ids": [
+          "s2"
+         ],
+         "description": {
+          "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+         }
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "expected-rules": [
+    "ADVICE-9"
+   ],
+   "expected-frags": [
+    "is not in the bundle"
+   ]
+  },
+  {
+   "name": "advice-edited-after-import",
+   "objects": [
+    {
+     "id": "https://vendor.example/component/server-7",
+     "version": "3",
+     "lifecycle": "active",
+     "kind": "software",
+     "title": {
+      "en": "Example Server 7"
+     },
+     "capabilities": [
+      {
+       "id": "cap-tls",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s1"
+       ],
+       "description": {
+        "en": "Set net.tls.mode to preferTLS."
+       },
+       "parameter-bindings": {
+        "proto": "tls13"
+       }
+      },
+      {
+       "id": "cap-rotate",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s2"
+       ],
+       "description": {
+        "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/component/app",
+     "version": "1",
+     "lifecycle": "active",
+     "kind": "system",
+     "members": [
+      {
+       "component-ref": "https://vendor.example/component/server-7",
+       "context": "datastore"
+      }
+     ]
+    }
+   ],
+   "kept": [
+    {
+     "manifest": {
+      "manifest-version": "1",
+      "kernel-version": "2.0.0",
+      "pack": {
+       "kind": "advice",
+       "id": "https://vendor.example/pack/server-7-advice",
+       "version": "3",
+       "title": {
+        "en": "Server 7 hardening advice"
+       },
+       "publisher": {
+        "ref": "https://vendor.example/party/vendor",
+        "name": {
+         "en": "Vendor Inc."
+        }
+       }
+      },
+      "objects": [
+       {
+        "id": "https://vendor.example/component/server-7",
+        "semantic-digest": "COMPUTE"
+       }
+      ]
+     },
+     "published": [
+      {
+       "id": "https://vendor.example/component/server-7",
+       "version": "3",
+       "lifecycle": "active",
+       "kind": "software",
+       "title": {
+        "en": "Example Server 7"
+       },
+       "capabilities": [
+        {
+         "id": "cap-tls",
+         "requirement-ref": "https://ns.auth.gov/fw/req/1",
+         "statement-ids": [
+          "s1"
+         ],
+         "description": {
+          "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+         },
+         "parameter-bindings": {
+          "proto": "tls13"
+         }
+        },
+        {
+         "id": "cap-rotate",
+         "requirement-ref": "https://ns.auth.gov/fw/req/1",
+         "statement-ids": [
+          "s2"
+         ],
+         "description": {
+          "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+         }
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "expected-rules": [
+    "ADVICE-9"
+   ],
+   "expected-frags": [
+    "edited after import"
+   ]
+  },
+  {
+   "name": "object-at-another-version",
+   "objects": [
+    {
+     "id": "https://vendor.example/component/server-7",
+     "version": "4",
+     "lifecycle": "active",
+     "kind": "software",
+     "title": {
+      "en": "Example Server 7"
+     },
+     "capabilities": [
+      {
+       "id": "cap-tls",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s1"
+       ],
+       "description": {
+        "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+       },
+       "parameter-bindings": {
+        "proto": "tls13"
+       }
+      },
+      {
+       "id": "cap-rotate",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s2"
+       ],
+       "description": {
+        "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/component/app",
+     "version": "1",
+     "lifecycle": "active",
+     "kind": "system",
+     "members": [
+      {
+       "component-ref": "https://vendor.example/component/server-7",
+       "context": "datastore"
+      }
+     ]
+    }
+   ],
+   "kept": [
+    {
+     "manifest": {
+      "manifest-version": "1",
+      "kernel-version": "2.0.0",
+      "pack": {
+       "kind": "advice",
+       "id": "https://vendor.example/pack/server-7-advice",
+       "version": "3",
+       "title": {
+        "en": "Server 7 hardening advice"
+       },
+       "publisher": {
+        "ref": "https://vendor.example/party/vendor",
+        "name": {
+         "en": "Vendor Inc."
+        }
+       }
+      },
+      "objects": [
+       {
+        "id": "https://vendor.example/component/server-7",
+        "semantic-digest": "COMPUTE"
+       }
+      ]
+     },
+     "published": [
+      {
+       "id": "https://vendor.example/component/server-7",
+       "version": "3",
+       "lifecycle": "active",
+       "kind": "software",
+       "title": {
+        "en": "Example Server 7"
+       },
+       "capabilities": [
+        {
+         "id": "cap-tls",
+         "requirement-ref": "https://ns.auth.gov/fw/req/1",
+         "statement-ids": [
+          "s1"
+         ],
+         "description": {
+          "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+         },
+         "parameter-bindings": {
+          "proto": "tls13"
+         }
+        },
+        {
+         "id": "cap-rotate",
+         "requirement-ref": "https://ns.auth.gov/fw/req/1",
+         "statement-ids": [
+          "s2"
+         ],
+         "description": {
+          "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+         }
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "expected-rules": [
+    "ADVICE-9"
+   ],
+   "expected-frags": [
+    "is at version 4"
+   ]
+  },
+  {
+   "name": "two-releases-of-one-pack",
+   "objects": [
+    {
+     "id": "https://vendor.example/component/server-7",
+     "version": "3",
+     "lifecycle": "active",
+     "kind": "software",
+     "title": {
+      "en": "Example Server 7"
+     },
+     "capabilities": [
+      {
+       "id": "cap-tls",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s1"
+       ],
+       "description": {
+        "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+       },
+       "parameter-bindings": {
+        "proto": "tls13"
+       }
+      },
+      {
+       "id": "cap-rotate",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s2"
+       ],
+       "description": {
+        "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/component/app",
+     "version": "1",
+     "lifecycle": "active",
+     "kind": "system",
+     "members": [
+      {
+       "component-ref": "https://vendor.example/component/server-7",
+       "context": "datastore"
+      }
+     ]
+    }
+   ],
+   "kept": [
+    {
+     "manifest": {
+      "manifest-version": "1",
+      "kernel-version": "2.0.0",
+      "pack": {
+       "kind": "advice",
+       "id": "https://vendor.example/pack/server-7-advice",
+       "version": "3",
+       "title": {
+        "en": "Server 7 hardening advice"
+       },
+       "publisher": {
+        "ref": "https://vendor.example/party/vendor",
+        "name": {
+         "en": "Vendor Inc."
+        }
+       }
+      },
+      "objects": [
+       {
+        "id": "https://vendor.example/component/server-7",
+        "semantic-digest": "COMPUTE"
+       }
+      ]
+     },
+     "published": [
+      {
+       "id": "https://vendor.example/component/server-7",
+       "version": "3",
+       "lifecycle": "active",
+       "kind": "software",
+       "title": {
+        "en": "Example Server 7"
+       },
+       "capabilities": [
+        {
+         "id": "cap-tls",
+         "requirement-ref": "https://ns.auth.gov/fw/req/1",
+         "statement-ids": [
+          "s1"
+         ],
+         "description": {
+          "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+         },
+         "parameter-bindings": {
+          "proto": "tls13"
+         }
+        },
+        {
+         "id": "cap-rotate",
+         "requirement-ref": "https://ns.auth.gov/fw/req/1",
+         "statement-ids": [
+          "s2"
+         ],
+         "description": {
+          "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+         }
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "manifest": {
+      "manifest-version": "1",
+      "kernel-version": "2.0.0",
+      "pack": {
+       "kind": "advice",
+       "id": "https://vendor.example/pack/server-7-advice",
+       "version": "4",
+       "title": {
+        "en": "Server 7 hardening advice"
+       },
+       "publisher": {
+        "ref": "https://vendor.example/party/vendor",
+        "name": {
+         "en": "Vendor Inc."
+        }
+       }
+      },
+      "objects": [
+       {
+        "id": "https://vendor.example/component/server-7",
+        "semantic-digest": "COMPUTE"
+       }
+      ]
+     },
+     "published": [
+      {
+       "id": "https://vendor.example/component/server-7",
+       "version": "3",
+       "lifecycle": "active",
+       "kind": "software",
+       "title": {
+        "en": "Example Server 7"
+       },
+       "capabilities": [
+        {
+         "id": "cap-tls",
+         "requirement-ref": "https://ns.auth.gov/fw/req/1",
+         "statement-ids": [
+          "s1"
+         ],
+         "description": {
+          "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+         },
+         "parameter-bindings": {
+          "proto": "tls13"
+         }
+        },
+        {
+         "id": "cap-rotate",
+         "requirement-ref": "https://ns.auth.gov/fw/req/1",
+         "statement-ids": [
+          "s2"
+         ],
+         "description": {
+          "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+         }
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "expected-rules": [
+    "ADVICE-10"
+   ],
+   "expected-frags": [
+    "are both in the bundle"
+   ]
+  },
+  {
+   "name": "one-object-in-two-packs",
+   "objects": [
+    {
+     "id": "https://vendor.example/component/server-7",
+     "version": "3",
+     "lifecycle": "active",
+     "kind": "software",
+     "title": {
+      "en": "Example Server 7"
+     },
+     "capabilities": [
+      {
+       "id": "cap-tls",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s1"
+       ],
+       "description": {
+        "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+       },
+       "parameter-bindings": {
+        "proto": "tls13"
+       }
+      },
+      {
+       "id": "cap-rotate",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s2"
+       ],
+       "description": {
+        "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/component/app",
+     "version": "1",
+     "lifecycle": "active",
+     "kind": "system",
+     "members": [
+      {
+       "component-ref": "https://vendor.example/component/server-7",
+       "context": "datastore"
+      }
+     ]
+    }
+   ],
+   "kept": [
+    {
+     "manifest": {
+      "manifest-version": "1",
+      "kernel-version": "2.0.0",
+      "pack": {
+       "kind": "advice",
+       "id": "https://vendor.example/pack/server-7-advice",
+       "version": "3",
+       "title": {
+        "en": "Server 7 hardening advice"
+       },
+       "publisher": {
+        "ref": "https://vendor.example/party/vendor",
+        "name": {
+         "en": "Vendor Inc."
+        }
+       }
+      },
+      "objects": [
+       {
+        "id": "https://vendor.example/component/server-7",
+        "semantic-digest": "COMPUTE"
+       }
+      ]
+     },
+     "published": [
+      {
+       "id": "https://vendor.example/component/server-7",
+       "version": "3",
+       "lifecycle": "active",
+       "kind": "software",
+       "title": {
+        "en": "Example Server 7"
+       },
+       "capabilities": [
+        {
+         "id": "cap-tls",
+         "requirement-ref": "https://ns.auth.gov/fw/req/1",
+         "statement-ids": [
+          "s1"
+         ],
+         "description": {
+          "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+         },
+         "parameter-bindings": {
+          "proto": "tls13"
+         }
+        },
+        {
+         "id": "cap-rotate",
+         "requirement-ref": "https://ns.auth.gov/fw/req/1",
+         "statement-ids": [
+          "s2"
+         ],
+         "description": {
+          "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+         }
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "manifest": {
+      "manifest-version": "1",
+      "kernel-version": "2.0.0",
+      "pack": {
+       "kind": "advice",
+       "id": "https://vendor.example/pack/server-7-extras",
+       "version": "1",
+       "title": {
+        "en": "Server 7 hardening advice"
+       },
+       "publisher": {
+        "ref": "https://vendor.example/party/vendor",
+        "name": {
+         "en": "Vendor Inc."
+        }
+       }
+      },
+      "objects": [
+       {
+        "id": "https://vendor.example/component/server-7",
+        "semantic-digest": "COMPUTE"
+       }
+      ]
+     },
+     "published": [
+      {
+       "id": "https://vendor.example/component/server-7",
+       "version": "3",
+       "lifecycle": "active",
+       "kind": "software",
+       "title": {
+        "en": "Example Server 7"
+       },
+       "capabilities": [
+        {
+         "id": "cap-tls",
+         "requirement-ref": "https://ns.auth.gov/fw/req/1",
+         "statement-ids": [
+          "s1"
+         ],
+         "description": {
+          "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+         },
+         "parameter-bindings": {
+          "proto": "tls13"
+         }
+        },
+        {
+         "id": "cap-rotate",
+         "requirement-ref": "https://ns.auth.gov/fw/req/1",
+         "statement-ids": [
+          "s2"
+         ],
+         "description": {
+          "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+         }
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "expected-rules": [
+    "ADVICE-10"
+   ],
+   "expected-frags": [
+    "is listed by two kept manifests"
+   ]
+  }
+ ],
+ "publisher-vectors": [
+  {
+   "name": "no-attestation",
+   "manifest": {
+    "manifest-version": "1",
+    "kernel-version": "2.0.0",
+    "pack": {
+     "kind": "advice",
+     "id": "https://vendor.example/pack/server-7-advice",
+     "version": "3",
+     "title": {
+      "en": "Server 7 hardening advice"
+     },
+     "publisher": {
+      "ref": "https://vendor.example/party/vendor",
+      "name": {
+       "en": "Vendor Inc."
+      }
+     }
+    },
+    "objects": [
+     {
+      "id": "https://vendor.example/component/server-7",
+      "semantic-digest": "COMPUTE"
+     }
+    ]
+   },
+   "published": [
+    {
+     "id": "https://vendor.example/component/server-7",
+     "version": "3",
+     "lifecycle": "active",
+     "kind": "software",
+     "title": {
+      "en": "Example Server 7"
+     },
+     "capabilities": [
+      {
+       "id": "cap-tls",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s1"
+       ],
+       "description": {
+        "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+       },
+       "parameter-bindings": {
+        "proto": "tls13"
+       }
+      },
+      {
+       "id": "cap-rotate",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s2"
+       ],
+       "description": {
+        "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+       }
+      }
+     ]
+    }
+   ],
+   "objects": [],
+   "expected": "claimed"
+  },
+  {
+   "name": "attestation-binds-the-manifest",
+   "note": "structural mode: no trusted keys, the digest match proves - as for a Tailoring's tier",
+   "manifest": {
+    "manifest-version": "1",
+    "kernel-version": "2.0.0",
+    "pack": {
+     "kind": "advice",
+     "id": "https://vendor.example/pack/server-7-advice",
+     "version": "3",
+     "title": {
+      "en": "Server 7 hardening advice"
+     },
+     "publisher": {
+      "ref": "https://vendor.example/party/vendor",
+      "name": {
+       "en": "Vendor Inc."
+      }
+     }
+    },
+    "objects": [
+     {
+      "id": "https://vendor.example/component/server-7",
+      "semantic-digest": "COMPUTE"
+     }
+    ]
+   },
+   "published": [
+    {
+     "id": "https://vendor.example/component/server-7",
+     "version": "3",
+     "lifecycle": "active",
+     "kind": "software",
+     "title": {
+      "en": "Example Server 7"
+     },
+     "capabilities": [
+      {
+       "id": "cap-tls",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s1"
+       ],
+       "description": {
+        "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+       },
+       "parameter-bindings": {
+        "proto": "tls13"
+       }
+      },
+      {
+       "id": "cap-rotate",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s2"
+       ],
+       "description": {
+        "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+       }
+      }
+     ]
+    }
+   ],
+   "objects": [
+    {
+     "id": "https://vendor.example/attestation/server-7-advice-3",
+     "version": "1",
+     "lifecycle": "active",
+     "subject-semantic-digests": [
+      "sha256:383ca1e382a499e928a021d312920e19dc7ef792e6e7ec31805659e8be9e32c3"
+     ],
+     "content-manifest-digest": "sha256:22d47097b8b4dcae70f3f8c16b47e26c5cfbbace61fe687a9d7ad8b0897d5f2c",
+     "signer": "https://vendor.example/party/vendor",
+     "timestamp": "2026-11-12T12:00:00Z"
+    }
+   ],
+   "expected": "proven"
+  },
+  {
+   "name": "attestation-of-a-foreign-signer",
+   "manifest": {
+    "manifest-version": "1",
+    "kernel-version": "2.0.0",
+    "pack": {
+     "kind": "advice",
+     "id": "https://vendor.example/pack/server-7-advice",
+     "version": "3",
+     "title": {
+      "en": "Server 7 hardening advice"
+     },
+     "publisher": {
+      "ref": "https://vendor.example/party/vendor",
+      "name": {
+       "en": "Vendor Inc."
+      }
+     }
+    },
+    "objects": [
+     {
+      "id": "https://vendor.example/component/server-7",
+      "semantic-digest": "COMPUTE"
+     }
+    ]
+   },
+   "published": [
+    {
+     "id": "https://vendor.example/component/server-7",
+     "version": "3",
+     "lifecycle": "active",
+     "kind": "software",
+     "title": {
+      "en": "Example Server 7"
+     },
+     "capabilities": [
+      {
+       "id": "cap-tls",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s1"
+       ],
+       "description": {
+        "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+       },
+       "parameter-bindings": {
+        "proto": "tls13"
+       }
+      },
+      {
+       "id": "cap-rotate",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s2"
+       ],
+       "description": {
+        "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+       }
+      }
+     ]
+    }
+   ],
+   "objects": [
+    {
+     "id": "https://vendor.example/attestation/server-7-advice-3",
+     "version": "1",
+     "lifecycle": "active",
+     "subject-semantic-digests": [
+      "sha256:383ca1e382a499e928a021d312920e19dc7ef792e6e7ec31805659e8be9e32c3"
+     ],
+     "content-manifest-digest": "sha256:22d47097b8b4dcae70f3f8c16b47e26c5cfbbace61fe687a9d7ad8b0897d5f2c",
+     "signer": "https://reseller.example/party/r",
+     "timestamp": "2026-11-12T12:00:00Z"
+    }
+   ],
+   "expected": "claimed"
+  },
+  {
+   "name": "attestation-binds-another-manifest",
+   "manifest": {
+    "manifest-version": "1",
+    "kernel-version": "2.0.0",
+    "pack": {
+     "kind": "advice",
+     "id": "https://vendor.example/pack/server-7-advice",
+     "version": "3",
+     "title": {
+      "en": "Server 7 hardening advice"
+     },
+     "publisher": {
+      "ref": "https://vendor.example/party/vendor",
+      "name": {
+       "en": "Vendor Inc."
+      }
+     }
+    },
+    "objects": [
+     {
+      "id": "https://vendor.example/component/server-7",
+      "semantic-digest": "COMPUTE"
+     }
+    ]
+   },
+   "published": [
+    {
+     "id": "https://vendor.example/component/server-7",
+     "version": "3",
+     "lifecycle": "active",
+     "kind": "software",
+     "title": {
+      "en": "Example Server 7"
+     },
+     "capabilities": [
+      {
+       "id": "cap-tls",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s1"
+       ],
+       "description": {
+        "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+       },
+       "parameter-bindings": {
+        "proto": "tls13"
+       }
+      },
+      {
+       "id": "cap-rotate",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s2"
+       ],
+       "description": {
+        "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+       }
+      }
+     ]
+    }
+   ],
+   "objects": [
+    {
+     "id": "https://vendor.example/attestation/server-7-advice-3",
+     "version": "1",
+     "lifecycle": "active",
+     "subject-semantic-digests": [
+      "sha256:383ca1e382a499e928a021d312920e19dc7ef792e6e7ec31805659e8be9e32c3"
+     ],
+     "content-manifest-digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+     "signer": "https://vendor.example/party/vendor",
+     "timestamp": "2026-11-12T12:00:00Z"
+    }
+   ],
+   "expected": "claimed"
+  },
+  {
+   "name": "verification-mode-unsigned",
+   "note": "with trusted keys an unsigned attestation no longer proves",
+   "manifest": {
+    "manifest-version": "1",
+    "kernel-version": "2.0.0",
+    "pack": {
+     "kind": "advice",
+     "id": "https://vendor.example/pack/server-7-advice",
+     "version": "3",
+     "title": {
+      "en": "Server 7 hardening advice"
+     },
+     "publisher": {
+      "ref": "https://vendor.example/party/vendor",
+      "name": {
+       "en": "Vendor Inc."
+      }
+     }
+    },
+    "objects": [
+     {
+      "id": "https://vendor.example/component/server-7",
+      "semantic-digest": "COMPUTE"
+     }
+    ]
+   },
+   "published": [
+    {
+     "id": "https://vendor.example/component/server-7",
+     "version": "3",
+     "lifecycle": "active",
+     "kind": "software",
+     "title": {
+      "en": "Example Server 7"
+     },
+     "capabilities": [
+      {
+       "id": "cap-tls",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s1"
+       ],
+       "description": {
+        "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+       },
+       "parameter-bindings": {
+        "proto": "tls13"
+       }
+      },
+      {
+       "id": "cap-rotate",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s2"
+       ],
+       "description": {
+        "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+       }
+      }
+     ]
+    }
+   ],
+   "objects": [
+    {
+     "id": "https://vendor.example/attestation/server-7-advice-3",
+     "version": "1",
+     "lifecycle": "active",
+     "subject-semantic-digests": [
+      "sha256:383ca1e382a499e928a021d312920e19dc7ef792e6e7ec31805659e8be9e32c3"
+     ],
+     "content-manifest-digest": "sha256:22d47097b8b4dcae70f3f8c16b47e26c5cfbbace61fe687a9d7ad8b0897d5f2c",
+     "signer": "https://vendor.example/party/vendor",
+     "timestamp": "2026-11-12T12:00:00Z"
+    }
+   ],
+   "trusted-keys": {
+    "https://vendor.example/party/vendor": "c34a11dc1f8f626ce1ed80cb562361be14e293083679c3bb9990eee7b311404a"
+   },
+   "expected": "claimed"
+  },
+  {
+   "name": "verification-mode-signed",
+   "manifest": {
+    "manifest-version": "1",
+    "kernel-version": "2.0.0",
+    "pack": {
+     "kind": "advice",
+     "id": "https://vendor.example/pack/server-7-advice",
+     "version": "3",
+     "title": {
+      "en": "Server 7 hardening advice"
+     },
+     "publisher": {
+      "ref": "https://vendor.example/party/vendor",
+      "name": {
+       "en": "Vendor Inc."
+      }
+     }
+    },
+    "objects": [
+     {
+      "id": "https://vendor.example/component/server-7",
+      "semantic-digest": "COMPUTE"
+     }
+    ]
+   },
+   "published": [
+    {
+     "id": "https://vendor.example/component/server-7",
+     "version": "3",
+     "lifecycle": "active",
+     "kind": "software",
+     "title": {
+      "en": "Example Server 7"
+     },
+     "capabilities": [
+      {
+       "id": "cap-tls",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s1"
+       ],
+       "description": {
+        "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+       },
+       "parameter-bindings": {
+        "proto": "tls13"
+       }
+      },
+      {
+       "id": "cap-rotate",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s2"
+       ],
+       "description": {
+        "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+       }
+      }
+     ]
+    }
+   ],
+   "objects": [
+    {
+     "id": "https://vendor.example/attestation/server-7-advice-3",
+     "version": "1",
+     "lifecycle": "active",
+     "subject-semantic-digests": [
+      "sha256:383ca1e382a499e928a021d312920e19dc7ef792e6e7ec31805659e8be9e32c3"
+     ],
+     "content-manifest-digest": "sha256:22d47097b8b4dcae70f3f8c16b47e26c5cfbbace61fe687a9d7ad8b0897d5f2c",
+     "signer": "https://vendor.example/party/vendor",
+     "timestamp": "2026-11-12T12:00:00Z",
+     "envelope-ref": "env-1"
+    }
+   ],
+   "envelopes": {
+    "env-1": {
+     "payloadType": "application/vnd.jascon.attestation+json",
+     "payload": "eyJjb250ZW50LW1hbmlmZXN0LWRpZ2VzdCI6InNoYTI1NjoyMmQ0NzA5N2I4YjRkY2FlNzBmM2Y4YzE2YjQ3ZTI2YzVjZmJiYWNlNjFmZTY4N2E5ZDdhZDhiMDg5N2Q1ZjJjIiwiZW52ZWxvcGUtcmVmIjoiZW52LTEiLCJpZCI6Imh0dHBzOi8vdmVuZG9yLmV4YW1wbGUvYXR0ZXN0YXRpb24vc2VydmVyLTctYWR2aWNlLTMiLCJsaWZlY3ljbGUiOiJhY3RpdmUiLCJzaWduZXIiOiJodHRwczovL3ZlbmRvci5leGFtcGxlL3BhcnR5L3ZlbmRvciIsInN1YmplY3Qtc2VtYW50aWMtZGlnZXN0cyI6WyJzaGEyNTY6MzgzY2ExZTM4MmE0OTllOTI4YTAyMWQzMTI5MjBlMTlkYzdlZjc5MmU2ZTdlYzMxODA1NjU5ZThiZTllMzJjMyJdLCJ0aW1lc3RhbXAiOiIyMDI2LTExLTEyVDEyOjAwOjAwWiIsInZlcnNpb24iOiIxIn0=",
+     "signatures": [
+      {
+       "keyid": "https://vendor.example/party/vendor",
+       "sig": "6jXcG4QxkSB6qdFDh/exlTL547TKqZAG03ABuaNPngRD3FTg9LAD3RcPuc1JmUukXjbdVW1yGBQlIMHh6n/8Bg=="
+      }
+     ]
+    }
+   },
+   "trusted-keys": {
+    "https://vendor.example/party/vendor": "c34a11dc1f8f626ce1ed80cb562361be14e293083679c3bb9990eee7b311404a"
+   },
+   "expected": "proven"
+  },
+  {
+   "name": "verification-mode-no-key-for-the-signer",
+   "manifest": {
+    "manifest-version": "1",
+    "kernel-version": "2.0.0",
+    "pack": {
+     "kind": "advice",
+     "id": "https://vendor.example/pack/server-7-advice",
+     "version": "3",
+     "title": {
+      "en": "Server 7 hardening advice"
+     },
+     "publisher": {
+      "ref": "https://vendor.example/party/vendor",
+      "name": {
+       "en": "Vendor Inc."
+      }
+     }
+    },
+    "objects": [
+     {
+      "id": "https://vendor.example/component/server-7",
+      "semantic-digest": "COMPUTE"
+     }
+    ]
+   },
+   "published": [
+    {
+     "id": "https://vendor.example/component/server-7",
+     "version": "3",
+     "lifecycle": "active",
+     "kind": "software",
+     "title": {
+      "en": "Example Server 7"
+     },
+     "capabilities": [
+      {
+       "id": "cap-tls",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s1"
+       ],
+       "description": {
+        "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+       },
+       "parameter-bindings": {
+        "proto": "tls13"
+       }
+      },
+      {
+       "id": "cap-rotate",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s2"
+       ],
+       "description": {
+        "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+       }
+      }
+     ]
+    }
+   ],
+   "objects": [
+    {
+     "id": "https://vendor.example/attestation/server-7-advice-3",
+     "version": "1",
+     "lifecycle": "active",
+     "subject-semantic-digests": [
+      "sha256:383ca1e382a499e928a021d312920e19dc7ef792e6e7ec31805659e8be9e32c3"
+     ],
+     "content-manifest-digest": "sha256:22d47097b8b4dcae70f3f8c16b47e26c5cfbbace61fe687a9d7ad8b0897d5f2c",
+     "signer": "https://vendor.example/party/vendor",
+     "timestamp": "2026-11-12T12:00:00Z",
+     "envelope-ref": "env-1"
+    }
+   ],
+   "envelopes": {
+    "env-1": {
+     "payloadType": "application/vnd.jascon.attestation+json",
+     "payload": "eyJjb250ZW50LW1hbmlmZXN0LWRpZ2VzdCI6InNoYTI1NjoyMmQ0NzA5N2I4YjRkY2FlNzBmM2Y4YzE2YjQ3ZTI2YzVjZmJiYWNlNjFmZTY4N2E5ZDdhZDhiMDg5N2Q1ZjJjIiwiZW52ZWxvcGUtcmVmIjoiZW52LTEiLCJpZCI6Imh0dHBzOi8vdmVuZG9yLmV4YW1wbGUvYXR0ZXN0YXRpb24vc2VydmVyLTctYWR2aWNlLTMiLCJsaWZlY3ljbGUiOiJhY3RpdmUiLCJzaWduZXIiOiJodHRwczovL3ZlbmRvci5leGFtcGxlL3BhcnR5L3ZlbmRvciIsInN1YmplY3Qtc2VtYW50aWMtZGlnZXN0cyI6WyJzaGEyNTY6MzgzY2ExZTM4MmE0OTllOTI4YTAyMWQzMTI5MjBlMTlkYzdlZjc5MmU2ZTdlYzMxODA1NjU5ZThiZTllMzJjMyJdLCJ0aW1lc3RhbXAiOiIyMDI2LTExLTEyVDEyOjAwOjAwWiIsInZlcnNpb24iOiIxIn0=",
+     "signatures": [
+      {
+       "keyid": "https://vendor.example/party/vendor",
+       "sig": "6jXcG4QxkSB6qdFDh/exlTL547TKqZAG03ABuaNPngRD3FTg9LAD3RcPuc1JmUukXjbdVW1yGBQlIMHh6n/8Bg=="
+      }
+     ]
+    }
+   },
+   "trusted-keys": {
+    "https://other.example/party/x": "c34a11dc1f8f626ce1ed80cb562361be14e293083679c3bb9990eee7b311404a"
+   },
+   "expected": "claimed"
+  },
+  {
+   "name": "verification-mode-signature-does-not-verify",
+   "manifest": {
+    "manifest-version": "1",
+    "kernel-version": "2.0.0",
+    "pack": {
+     "kind": "advice",
+     "id": "https://vendor.example/pack/server-7-advice",
+     "version": "3",
+     "title": {
+      "en": "Server 7 hardening advice"
+     },
+     "publisher": {
+      "ref": "https://vendor.example/party/vendor",
+      "name": {
+       "en": "Vendor Inc."
+      }
+     }
+    },
+    "objects": [
+     {
+      "id": "https://vendor.example/component/server-7",
+      "semantic-digest": "COMPUTE"
+     }
+    ]
+   },
+   "published": [
+    {
+     "id": "https://vendor.example/component/server-7",
+     "version": "3",
+     "lifecycle": "active",
+     "kind": "software",
+     "title": {
+      "en": "Example Server 7"
+     },
+     "capabilities": [
+      {
+       "id": "cap-tls",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s1"
+       ],
+       "description": {
+        "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+       },
+       "parameter-bindings": {
+        "proto": "tls13"
+       }
+      },
+      {
+       "id": "cap-rotate",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s2"
+       ],
+       "description": {
+        "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+       }
+      }
+     ]
+    }
+   ],
+   "objects": [
+    {
+     "id": "https://vendor.example/attestation/server-7-advice-3",
+     "version": "1",
+     "lifecycle": "active",
+     "subject-semantic-digests": [
+      "sha256:383ca1e382a499e928a021d312920e19dc7ef792e6e7ec31805659e8be9e32c3"
+     ],
+     "content-manifest-digest": "sha256:22d47097b8b4dcae70f3f8c16b47e26c5cfbbace61fe687a9d7ad8b0897d5f2c",
+     "signer": "https://vendor.example/party/vendor",
+     "timestamp": "2026-11-12T12:00:00Z",
+     "envelope-ref": "env-1"
+    }
+   ],
+   "envelopes": {
+    "env-1": {
+     "payloadType": "application/vnd.jascon.attestation+json",
+     "payload": "eyJjb250ZW50LW1hbmlmZXN0LWRpZ2VzdCI6InNoYTI1NjoyMmQ0NzA5N2I4YjRkY2FlNzBmM2Y4YzE2YjQ3ZTI2YzVjZmJiYWNlNjFmZTY4N2E5ZDdhZDhiMDg5N2Q1ZjJjIiwiZW52ZWxvcGUtcmVmIjoiZW52LTEiLCJpZCI6Imh0dHBzOi8vdmVuZG9yLmV4YW1wbGUvYXR0ZXN0YXRpb24vc2VydmVyLTctYWR2aWNlLTMiLCJsaWZlY3ljbGUiOiJhY3RpdmUiLCJzaWduZXIiOiJodHRwczovL3ZlbmRvci5leGFtcGxlL3BhcnR5L3ZlbmRvciIsInN1YmplY3Qtc2VtYW50aWMtZGlnZXN0cyI6WyJzaGEyNTY6MzgzY2ExZTM4MmE0OTllOTI4YTAyMWQzMTI5MjBlMTlkYzdlZjc5MmU2ZTdlYzMxODA1NjU5ZThiZTllMzJjMyJdLCJ0aW1lc3RhbXAiOiIyMDI2LTExLTEyVDEyOjAwOjAwWiIsInZlcnNpb24iOiIxIn0=",
+     "signatures": [
+      {
+       "keyid": "https://vendor.example/party/vendor",
+       "sig": "6zXcG4QxkSB6qdFDh/exlTL547TKqZAG03ABuaNPngRD3FTg9LAD3RcPuc1JmUukXjbdVW1yGBQlIMHh6n/8Bg=="
+      }
+     ]
+    }
+   },
+   "trusted-keys": {
+    "https://vendor.example/party/vendor": "c34a11dc1f8f626ce1ed80cb562361be14e293083679c3bb9990eee7b311404a"
+   },
+   "expected": "claimed"
+  }
+ ],
+ "import-vectors": [
+  {
+   "name": "first-import",
+   "a": {
+    "objects": [
+     {
+      "id": "https://ns.auth.gov/fw/req/1",
+      "version": "1",
+      "lifecycle": "active",
+      "statements": [
+       {
+        "id": "s1",
+        "modality": "must",
+        "obligated-parties": [
+         "https://ns.auth.gov/fw/p/operator"
+        ],
+        "parameters": [
+         {
+          "name": "proto",
+          "type": "choice",
+          "cardinality": "one",
+          "choices": [
+           {
+            "value": "tls13",
+            "label": {
+             "en": "TLS 1.3"
+            }
+           },
+           {
+            "value": "tls12",
+            "label": {
+             "en": "TLS 1.2"
+            }
+           }
+          ]
+         },
+         {
+          "name": "max-tries",
+          "type": "integer",
+          "min": 1,
+          "max": 10,
+          "tightening": "lower"
+         }
+        ],
+        "prose": {
+         "en": "Traffic is encrypted with {param:proto}; at most {param:max-tries} attempts."
+        }
+       },
+       {
+        "id": "s2",
+        "modality": "should",
+        "obligated-parties": [
+         "https://ns.auth.gov/fw/p/operator"
+        ],
+        "prose": {
+         "en": "Keys are rotated."
+        }
+       }
+      ]
+     },
+     {
+      "id": "https://org.example/component/app",
+      "version": "1",
+      "lifecycle": "active",
+      "kind": "system"
+     }
+    ]
+   },
+   "b": {
+    "manifest": {
+     "manifest-version": "1",
+     "kernel-version": "2.0.0",
+     "pack": {
+      "kind": "advice",
+      "id": "https://vendor.example/pack/server-7-advice",
+      "version": "3",
+      "title": {
+       "en": "Server 7 hardening advice"
+      },
+      "publisher": {
+       "ref": "https://vendor.example/party/vendor",
+       "name": {
+        "en": "Vendor Inc."
+       }
+      }
+     },
+     "objects": [
+      {
+       "id": "https://vendor.example/component/server-7",
+       "semantic-digest": "COMPUTE"
+      }
+     ]
+    },
+    "objects": [
+     {
+      "id": "https://vendor.example/component/server-7",
+      "version": "3",
+      "lifecycle": "active",
+      "kind": "software",
+      "title": {
+       "en": "Example Server 7"
+      },
+      "capabilities": [
+       {
+        "id": "cap-tls",
+        "requirement-ref": "https://ns.auth.gov/fw/req/1",
+        "statement-ids": [
+         "s1"
+        ],
+        "description": {
+         "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+        },
+        "parameter-bindings": {
+         "proto": "tls13"
+        }
+       },
+       {
+        "id": "cap-rotate",
+        "requirement-ref": "https://ns.auth.gov/fw/req/1",
+        "statement-ids": [
+         "s2"
+        ],
+        "description": {
+         "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+        }
+       }
+      ]
+     }
+    ]
+   },
+   "expected": {
+    "result": "import",
+    "added": [
+     "https://vendor.example/component/server-7"
+    ],
+    "replaced": [],
+    "removed": [],
+    "dangling": [],
+    "unchanged": 2
+   },
+   "expected-rules": []
+  },
+  {
+   "name": "the-same-file-again",
+   "note": "the kept manifest has the digest of the file: nothing is written",
+   "a": {
+    "objects": [
+     {
+      "id": "https://ns.auth.gov/fw/req/1",
+      "version": "1",
+      "lifecycle": "active",
+      "statements": [
+       {
+        "id": "s1",
+        "modality": "must",
+        "obligated-parties": [
+         "https://ns.auth.gov/fw/p/operator"
+        ],
+        "parameters": [
+         {
+          "name": "proto",
+          "type": "choice",
+          "cardinality": "one",
+          "choices": [
+           {
+            "value": "tls13",
+            "label": {
+             "en": "TLS 1.3"
+            }
+           },
+           {
+            "value": "tls12",
+            "label": {
+             "en": "TLS 1.2"
+            }
+           }
+          ]
+         },
+         {
+          "name": "max-tries",
+          "type": "integer",
+          "min": 1,
+          "max": 10,
+          "tightening": "lower"
+         }
+        ],
+        "prose": {
+         "en": "Traffic is encrypted with {param:proto}; at most {param:max-tries} attempts."
+        }
+       },
+       {
+        "id": "s2",
+        "modality": "should",
+        "obligated-parties": [
+         "https://ns.auth.gov/fw/p/operator"
+        ],
+        "prose": {
+         "en": "Keys are rotated."
+        }
+       }
+      ]
+     },
+     {
+      "id": "https://org.example/component/app",
+      "version": "1",
+      "lifecycle": "active",
+      "kind": "system",
+      "members": [
+       {
+        "component-ref": "https://vendor.example/component/server-7",
+        "context": "datastore"
+       }
+      ]
+     },
+     {
+      "id": "https://vendor.example/component/server-7",
+      "version": "3",
+      "lifecycle": "active",
+      "kind": "software",
+      "title": {
+       "en": "Example Server 7"
+      },
+      "capabilities": [
+       {
+        "id": "cap-tls",
+        "requirement-ref": "https://ns.auth.gov/fw/req/1",
+        "statement-ids": [
+         "s1"
+        ],
+        "description": {
+         "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+        },
+        "parameter-bindings": {
+         "proto": "tls13"
+        }
+       },
+       {
+        "id": "cap-rotate",
+        "requirement-ref": "https://ns.auth.gov/fw/req/1",
+        "statement-ids": [
+         "s2"
+        ],
+        "description": {
+         "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+        }
+       }
+      ]
+     },
+     {
+      "id": "https://org.example/impl/app-req-1",
+      "version": "1",
+      "lifecycle": "active",
+      "component-ref": "https://org.example/component/app",
+      "requirement-ref": "https://ns.auth.gov/fw/req/1",
+      "statement-refs": [
+       "s1"
+      ],
+      "responsibility": "customer",
+      "satisfied-by": [
+       {
+        "capability-ref": "https://vendor.example/component/server-7#cap-tls"
+       }
+      ],
+      "status": "planned"
+     }
+    ],
+    "kept": [
+     {
+      "manifest": {
+       "manifest-version": "1",
+       "kernel-version": "2.0.0",
+       "pack": {
+        "kind": "advice",
+        "id": "https://vendor.example/pack/server-7-advice",
+        "version": "3",
+        "title": {
+         "en": "Server 7 hardening advice"
+        },
+        "publisher": {
+         "ref": "https://vendor.example/party/vendor",
+         "name": {
+          "en": "Vendor Inc."
+         }
+        }
+       },
+       "objects": [
+        {
+         "id": "https://vendor.example/component/server-7",
+         "semantic-digest": "COMPUTE"
+        }
+       ]
+      },
+      "published": [
+       {
+        "id": "https://vendor.example/component/server-7",
+        "version": "3",
+        "lifecycle": "active",
+        "kind": "software",
+        "title": {
+         "en": "Example Server 7"
+        },
+        "capabilities": [
+         {
+          "id": "cap-tls",
+          "requirement-ref": "https://ns.auth.gov/fw/req/1",
+          "statement-ids": [
+           "s1"
+          ],
+          "description": {
+           "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+          },
+          "parameter-bindings": {
+           "proto": "tls13"
+          }
+         },
+         {
+          "id": "cap-rotate",
+          "requirement-ref": "https://ns.auth.gov/fw/req/1",
+          "statement-ids": [
+           "s2"
+          ],
+          "description": {
+           "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+          }
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   },
+   "b": {
+    "manifest": {
+     "manifest-version": "1",
+     "kernel-version": "2.0.0",
+     "pack": {
+      "kind": "advice",
+      "id": "https://vendor.example/pack/server-7-advice",
+      "version": "3",
+      "title": {
+       "en": "Server 7 hardening advice"
+      },
+      "publisher": {
+       "ref": "https://vendor.example/party/vendor",
+       "name": {
+        "en": "Vendor Inc."
+       }
+      }
+     },
+     "objects": [
+      {
+       "id": "https://vendor.example/component/server-7",
+       "semantic-digest": "COMPUTE"
+      }
+     ]
+    },
+    "objects": [
+     {
+      "id": "https://vendor.example/component/server-7",
+      "version": "3",
+      "lifecycle": "active",
+      "kind": "software",
+      "title": {
+       "en": "Example Server 7"
+      },
+      "capabilities": [
+       {
+        "id": "cap-tls",
+        "requirement-ref": "https://ns.auth.gov/fw/req/1",
+        "statement-ids": [
+         "s1"
+        ],
+        "description": {
+         "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+        },
+        "parameter-bindings": {
+         "proto": "tls13"
+        }
+       },
+       {
+        "id": "cap-rotate",
+        "requirement-ref": "https://ns.auth.gov/fw/req/1",
+        "statement-ids": [
+         "s2"
+        ],
+        "description": {
+         "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+        }
+       }
+      ]
+     }
+    ]
+   },
+   "expected": {
+    "result": "already-imported",
+    "added": [],
+    "replaced": [],
+    "removed": [],
+    "unchanged": 4
+   },
+   "expected-rules": []
+  },
+  {
+   "name": "another-release-replaces",
+   "note": "the one lawful replacement: the ids an earlier release of the same pack brought",
+   "a": {
+    "objects": [
+     {
+      "id": "https://ns.auth.gov/fw/req/1",
+      "version": "1",
+      "lifecycle": "active",
+      "statements": [
+       {
+        "id": "s1",
+        "modality": "must",
+        "obligated-parties": [
+         "https://ns.auth.gov/fw/p/operator"
+        ],
+        "parameters": [
+         {
+          "name": "proto",
+          "type": "choice",
+          "cardinality": "one",
+          "choices": [
+           {
+            "value": "tls13",
+            "label": {
+             "en": "TLS 1.3"
+            }
+           },
+           {
+            "value": "tls12",
+            "label": {
+             "en": "TLS 1.2"
+            }
+           }
+          ]
+         },
+         {
+          "name": "max-tries",
+          "type": "integer",
+          "min": 1,
+          "max": 10,
+          "tightening": "lower"
+         }
+        ],
+        "prose": {
+         "en": "Traffic is encrypted with {param:proto}; at most {param:max-tries} attempts."
+        }
+       },
+       {
+        "id": "s2",
+        "modality": "should",
+        "obligated-parties": [
+         "https://ns.auth.gov/fw/p/operator"
+        ],
+        "prose": {
+         "en": "Keys are rotated."
+        }
+       }
+      ]
+     },
+     {
+      "id": "https://org.example/component/app",
+      "version": "1",
+      "lifecycle": "active",
+      "kind": "system",
+      "members": [
+       {
+        "component-ref": "https://vendor.example/component/server-7",
+        "context": "datastore"
+       }
+      ]
+     },
+     {
+      "id": "https://vendor.example/component/server-7",
+      "version": "3",
+      "lifecycle": "active",
+      "kind": "software",
+      "title": {
+       "en": "Example Server 7"
+      },
+      "capabilities": [
+       {
+        "id": "cap-tls",
+        "requirement-ref": "https://ns.auth.gov/fw/req/1",
+        "statement-ids": [
+         "s1"
+        ],
+        "description": {
+         "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+        },
+        "parameter-bindings": {
+         "proto": "tls13"
+        }
+       },
+       {
+        "id": "cap-rotate",
+        "requirement-ref": "https://ns.auth.gov/fw/req/1",
+        "statement-ids": [
+         "s2"
+        ],
+        "description": {
+         "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+        }
+       }
+      ]
+     },
+     {
+      "id": "https://org.example/impl/app-req-1",
+      "version": "1",
+      "lifecycle": "active",
+      "component-ref": "https://org.example/component/app",
+      "requirement-ref": "https://ns.auth.gov/fw/req/1",
+      "statement-refs": [
+       "s1"
+      ],
+      "responsibility": "customer",
+      "satisfied-by": [
+       {
+        "capability-ref": "https://vendor.example/component/server-7#cap-tls"
+       }
+      ],
+      "status": "planned"
+     }
+    ],
+    "kept": [
+     {
+      "manifest": {
+       "manifest-version": "1",
+       "kernel-version": "2.0.0",
+       "pack": {
+        "kind": "advice",
+        "id": "https://vendor.example/pack/server-7-advice",
+        "version": "3",
+        "title": {
+         "en": "Server 7 hardening advice"
+        },
+        "publisher": {
+         "ref": "https://vendor.example/party/vendor",
+         "name": {
+          "en": "Vendor Inc."
+         }
+        }
+       },
+       "objects": [
+        {
+         "id": "https://vendor.example/component/server-7",
+         "semantic-digest": "COMPUTE"
+        }
+       ]
+      },
+      "published": [
+       {
+        "id": "https://vendor.example/component/server-7",
+        "version": "3",
+        "lifecycle": "active",
+        "kind": "software",
+        "title": {
+         "en": "Example Server 7"
+        },
+        "capabilities": [
+         {
+          "id": "cap-tls",
+          "requirement-ref": "https://ns.auth.gov/fw/req/1",
+          "statement-ids": [
+           "s1"
+          ],
+          "description": {
+           "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+          },
+          "parameter-bindings": {
+           "proto": "tls13"
+          }
+         },
+         {
+          "id": "cap-rotate",
+          "requirement-ref": "https://ns.auth.gov/fw/req/1",
+          "statement-ids": [
+           "s2"
+          ],
+          "description": {
+           "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+          }
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   },
+   "b": {
+    "manifest": {
+     "manifest-version": "1",
+     "kernel-version": "2.0.0",
+     "pack": {
+      "kind": "advice",
+      "id": "https://vendor.example/pack/server-7-advice",
+      "version": "4",
+      "title": {
+       "en": "Server 7 hardening advice"
+      },
+      "publisher": {
+       "ref": "https://vendor.example/party/vendor",
+       "name": {
+        "en": "Vendor Inc."
+       }
+      }
+     },
+     "objects": [
+      {
+       "id": "https://vendor.example/component/server-7",
+       "semantic-digest": "COMPUTE"
+      }
+     ]
+    },
+    "objects": [
+     {
+      "id": "https://vendor.example/component/server-7",
+      "version": "4",
+      "lifecycle": "active",
+      "kind": "software",
+      "title": {
+       "en": "Example Server 7"
+      },
+      "capabilities": [
+       {
+        "id": "cap-tls",
+        "requirement-ref": "https://ns.auth.gov/fw/req/1",
+        "statement-ids": [
+         "s1"
+        ],
+        "description": {
+         "en": "Set net.tls.mode to requireTLS; TLS 1.2 is off by default from 7.2."
+        },
+        "parameter-bindings": {
+         "proto": "tls13"
+        }
+       },
+       {
+        "id": "cap-rotate",
+        "requirement-ref": "https://ns.auth.gov/fw/req/1",
+        "statement-ids": [
+         "s2"
+        ],
+        "description": {
+         "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+        }
+       },
+       {
+        "id": "cap-audit",
+        "description": {
+         "en": "Turn on the audit log."
+        }
+       }
+      ]
+     }
+    ]
+   },
+   "expected": {
+    "result": "replace",
+    "added": [],
+    "replaced": [
+     "https://vendor.example/component/server-7"
+    ],
+    "removed": [],
+    "dangling": [],
+    "unchanged": 3
+   },
+   "expected-rules": []
+  },
+  {
+   "name": "release-drops-an-adopted-capability",
+   "note": "not refused: reported before anything is written; ADVICE-7 then holds the edge",
+   "a": {
+    "objects": [
+     {
+      "id": "https://ns.auth.gov/fw/req/1",
+      "version": "1",
+      "lifecycle": "active",
+      "statements": [
+       {
+        "id": "s1",
+        "modality": "must",
+        "obligated-parties": [
+         "https://ns.auth.gov/fw/p/operator"
+        ],
+        "parameters": [
+         {
+          "name": "proto",
+          "type": "choice",
+          "cardinality": "one",
+          "choices": [
+           {
+            "value": "tls13",
+            "label": {
+             "en": "TLS 1.3"
+            }
+           },
+           {
+            "value": "tls12",
+            "label": {
+             "en": "TLS 1.2"
+            }
+           }
+          ]
+         },
+         {
+          "name": "max-tries",
+          "type": "integer",
+          "min": 1,
+          "max": 10,
+          "tightening": "lower"
+         }
+        ],
+        "prose": {
+         "en": "Traffic is encrypted with {param:proto}; at most {param:max-tries} attempts."
+        }
+       },
+       {
+        "id": "s2",
+        "modality": "should",
+        "obligated-parties": [
+         "https://ns.auth.gov/fw/p/operator"
+        ],
+        "prose": {
+         "en": "Keys are rotated."
+        }
+       }
+      ]
+     },
+     {
+      "id": "https://org.example/component/app",
+      "version": "1",
+      "lifecycle": "active",
+      "kind": "system",
+      "members": [
+       {
+        "component-ref": "https://vendor.example/component/server-7",
+        "context": "datastore"
+       }
+      ]
+     },
+     {
+      "id": "https://vendor.example/component/server-7",
+      "version": "3",
+      "lifecycle": "active",
+      "kind": "software",
+      "title": {
+       "en": "Example Server 7"
+      },
+      "capabilities": [
+       {
+        "id": "cap-tls",
+        "requirement-ref": "https://ns.auth.gov/fw/req/1",
+        "statement-ids": [
+         "s1"
+        ],
+        "description": {
+         "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+        },
+        "parameter-bindings": {
+         "proto": "tls13"
+        }
+       },
+       {
+        "id": "cap-rotate",
+        "requirement-ref": "https://ns.auth.gov/fw/req/1",
+        "statement-ids": [
+         "s2"
+        ],
+        "description": {
+         "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+        }
+       }
+      ]
+     },
+     {
+      "id": "https://org.example/impl/app-req-1",
+      "version": "1",
+      "lifecycle": "active",
+      "component-ref": "https://org.example/component/app",
+      "requirement-ref": "https://ns.auth.gov/fw/req/1",
+      "statement-refs": [
+       "s1"
+      ],
+      "responsibility": "customer",
+      "satisfied-by": [
+       {
+        "capability-ref": "https://vendor.example/component/server-7#cap-tls"
+       }
+      ],
+      "status": "planned"
+     }
+    ],
+    "kept": [
+     {
+      "manifest": {
+       "manifest-version": "1",
+       "kernel-version": "2.0.0",
+       "pack": {
+        "kind": "advice",
+        "id": "https://vendor.example/pack/server-7-advice",
+        "version": "3",
+        "title": {
+         "en": "Server 7 hardening advice"
+        },
+        "publisher": {
+         "ref": "https://vendor.example/party/vendor",
+         "name": {
+          "en": "Vendor Inc."
+         }
+        }
+       },
+       "objects": [
+        {
+         "id": "https://vendor.example/component/server-7",
+         "semantic-digest": "COMPUTE"
+        }
+       ]
+      },
+      "published": [
+       {
+        "id": "https://vendor.example/component/server-7",
+        "version": "3",
+        "lifecycle": "active",
+        "kind": "software",
+        "title": {
+         "en": "Example Server 7"
+        },
+        "capabilities": [
+         {
+          "id": "cap-tls",
+          "requirement-ref": "https://ns.auth.gov/fw/req/1",
+          "statement-ids": [
+           "s1"
+          ],
+          "description": {
+           "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+          },
+          "parameter-bindings": {
+           "proto": "tls13"
+          }
+         },
+         {
+          "id": "cap-rotate",
+          "requirement-ref": "https://ns.auth.gov/fw/req/1",
+          "statement-ids": [
+           "s2"
+          ],
+          "description": {
+           "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+          }
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   },
+   "b": {
+    "manifest": {
+     "manifest-version": "1",
+     "kernel-version": "2.0.0",
+     "pack": {
+      "kind": "advice",
+      "id": "https://vendor.example/pack/server-7-advice",
+      "version": "4",
+      "title": {
+       "en": "Server 7 hardening advice"
+      },
+      "publisher": {
+       "ref": "https://vendor.example/party/vendor",
+       "name": {
+        "en": "Vendor Inc."
+       }
+      }
+     },
+     "objects": [
+      {
+       "id": "https://vendor.example/component/server-7",
+       "semantic-digest": "COMPUTE"
+      }
+     ]
+    },
+    "objects": [
+     {
+      "id": "https://vendor.example/component/server-7",
+      "version": "4",
+      "lifecycle": "active",
+      "kind": "software",
+      "title": {
+       "en": "Example Server 7"
+      },
+      "capabilities": [
+       {
+        "id": "cap-rotate",
+        "requirement-ref": "https://ns.auth.gov/fw/req/1",
+        "statement-ids": [
+         "s2"
+        ],
+        "description": {
+         "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+        }
+       }
+      ]
+     }
+    ]
+   },
+   "expected": {
+    "result": "replace",
+    "replaced": [
+     "https://vendor.example/component/server-7"
+    ],
+    "dangling": [
+     "https://org.example/impl/app-req-1 -> https://vendor.example/component/server-7#cap-tls"
+    ],
+    "unchanged": 3
+   },
+   "expected-rules": []
+  },
+  {
+   "name": "release-drops-a-component",
+   "a": {
+    "objects": [
+     {
+      "id": "https://ns.auth.gov/fw/req/1",
+      "version": "1",
+      "lifecycle": "active",
+      "statements": [
+       {
+        "id": "s1",
+        "modality": "must",
+        "obligated-parties": [
+         "https://ns.auth.gov/fw/p/operator"
+        ],
+        "parameters": [
+         {
+          "name": "proto",
+          "type": "choice",
+          "cardinality": "one",
+          "choices": [
+           {
+            "value": "tls13",
+            "label": {
+             "en": "TLS 1.3"
+            }
+           },
+           {
+            "value": "tls12",
+            "label": {
+             "en": "TLS 1.2"
+            }
+           }
+          ]
+         },
+         {
+          "name": "max-tries",
+          "type": "integer",
+          "min": 1,
+          "max": 10,
+          "tightening": "lower"
+         }
+        ],
+        "prose": {
+         "en": "Traffic is encrypted with {param:proto}; at most {param:max-tries} attempts."
+        }
+       },
+       {
+        "id": "s2",
+        "modality": "should",
+        "obligated-parties": [
+         "https://ns.auth.gov/fw/p/operator"
+        ],
+        "prose": {
+         "en": "Keys are rotated."
+        }
+       }
+      ]
+     },
+     {
+      "id": "https://org.example/component/app",
+      "version": "1",
+      "lifecycle": "active",
+      "kind": "system",
+      "members": [
+       {
+        "component-ref": "https://vendor.example/component/server-7"
+       },
+       {
+        "component-ref": "https://vendor.example/component/server-6"
+       }
+      ]
+     },
+     {
+      "id": "https://vendor.example/component/server-7",
+      "version": "3",
+      "lifecycle": "active",
+      "kind": "software",
+      "title": {
+       "en": "Example Server 7"
+      },
+      "capabilities": [
+       {
+        "id": "cap-tls",
+        "requirement-ref": "https://ns.auth.gov/fw/req/1",
+        "statement-ids": [
+         "s1"
+        ],
+        "description": {
+         "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+        },
+        "parameter-bindings": {
+         "proto": "tls13"
+        }
+       },
+       {
+        "id": "cap-rotate",
+        "requirement-ref": "https://ns.auth.gov/fw/req/1",
+        "statement-ids": [
+         "s2"
+        ],
+        "description": {
+         "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+        }
+       }
+      ]
+     },
+     {
+      "id": "https://vendor.example/component/server-6",
+      "version": "3",
+      "lifecycle": "active",
+      "kind": "software",
+      "title": {
+       "en": "Example Server 6"
+      },
+      "capabilities": [
+       {
+        "id": "cap-tls",
+        "requirement-ref": "https://ns.auth.gov/fw/req/1",
+        "statement-ids": [
+         "s1"
+        ],
+        "description": {
+         "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+        },
+        "parameter-bindings": {
+         "proto": "tls13"
+        }
+       },
+       {
+        "id": "cap-rotate",
+        "requirement-ref": "https://ns.auth.gov/fw/req/1",
+        "statement-ids": [
+         "s2"
+        ],
+        "description": {
+         "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+        }
+       }
+      ]
+     },
+     {
+      "id": "https://org.example/impl/app-req-1-legacy",
+      "version": "1",
+      "lifecycle": "active",
+      "component-ref": "https://org.example/component/app",
+      "requirement-ref": "https://ns.auth.gov/fw/req/1",
+      "statement-refs": [
+       "s2"
+      ],
+      "responsibility": "customer",
+      "satisfied-by": [
+       {
+        "capability-ref": "https://vendor.example/component/server-6#cap-rotate"
+       }
+      ],
+      "status": "planned"
+     }
+    ],
+    "kept": [
+     {
+      "manifest": {
+       "manifest-version": "1",
+       "kernel-version": "2.0.0",
+       "pack": {
+        "kind": "advice",
+        "id": "https://vendor.example/pack/server-7-advice",
+        "version": "3",
+        "title": {
+         "en": "Server 7 hardening advice"
+        },
+        "publisher": {
+         "ref": "https://vendor.example/party/vendor",
+         "name": {
+          "en": "Vendor Inc."
+         }
+        }
+       },
+       "objects": [
+        {
+         "id": "https://vendor.example/component/server-7",
+         "semantic-digest": "COMPUTE"
+        },
+        {
+         "id": "https://vendor.example/component/server-6",
+         "semantic-digest": "COMPUTE"
+        }
+       ]
+      },
+      "published": [
+       {
+        "id": "https://vendor.example/component/server-7",
+        "version": "3",
+        "lifecycle": "active",
+        "kind": "software",
+        "title": {
+         "en": "Example Server 7"
+        },
+        "capabilities": [
+         {
+          "id": "cap-tls",
+          "requirement-ref": "https://ns.auth.gov/fw/req/1",
+          "statement-ids": [
+           "s1"
+          ],
+          "description": {
+           "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+          },
+          "parameter-bindings": {
+           "proto": "tls13"
+          }
+         },
+         {
+          "id": "cap-rotate",
+          "requirement-ref": "https://ns.auth.gov/fw/req/1",
+          "statement-ids": [
+           "s2"
+          ],
+          "description": {
+           "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+          }
+         }
+        ]
+       },
+       {
+        "id": "https://vendor.example/component/server-6",
+        "version": "3",
+        "lifecycle": "active",
+        "kind": "software",
+        "title": {
+         "en": "Example Server 6"
+        },
+        "capabilities": [
+         {
+          "id": "cap-tls",
+          "requirement-ref": "https://ns.auth.gov/fw/req/1",
+          "statement-ids": [
+           "s1"
+          ],
+          "description": {
+           "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+          },
+          "parameter-bindings": {
+           "proto": "tls13"
+          }
+         },
+         {
+          "id": "cap-rotate",
+          "requirement-ref": "https://ns.auth.gov/fw/req/1",
+          "statement-ids": [
+           "s2"
+          ],
+          "description": {
+           "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+          }
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   },
+   "b": {
+    "manifest": {
+     "manifest-version": "1",
+     "kernel-version": "2.0.0",
+     "pack": {
+      "kind": "advice",
+      "id": "https://vendor.example/pack/server-7-advice",
+      "version": "4",
+      "title": {
+       "en": "Server 7 hardening advice"
+      },
+      "publisher": {
+       "ref": "https://vendor.example/party/vendor",
+       "name": {
+        "en": "Vendor Inc."
+       }
+      }
+     },
+     "objects": [
+      {
+       "id": "https://vendor.example/component/server-7",
+       "semantic-digest": "COMPUTE"
+      }
+     ]
+    },
+    "objects": [
+     {
+      "id": "https://vendor.example/component/server-7",
+      "version": "4",
+      "lifecycle": "active",
+      "kind": "software",
+      "title": {
+       "en": "Example Server 7"
+      },
+      "capabilities": [
+       {
+        "id": "cap-tls",
+        "requirement-ref": "https://ns.auth.gov/fw/req/1",
+        "statement-ids": [
+         "s1"
+        ],
+        "description": {
+         "en": "Set net.tls.mode to requireTLS; TLS 1.2 is off by default from 7.2."
+        },
+        "parameter-bindings": {
+         "proto": "tls13"
+        }
+       },
+       {
+        "id": "cap-rotate",
+        "requirement-ref": "https://ns.auth.gov/fw/req/1",
+        "statement-ids": [
+         "s2"
+        ],
+        "description": {
+         "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+        }
+       },
+       {
+        "id": "cap-audit",
+        "description": {
+         "en": "Turn on the audit log."
+        }
+       }
+      ]
+     }
+    ]
+   },
+   "expected": {
+    "result": "replace",
+    "replaced": [
+     "https://vendor.example/component/server-7"
+    ],
+    "removed": [
+     "https://vendor.example/component/server-6"
+    ],
+    "dangling": [
+     "https://org.example/impl/app-req-1-legacy -> https://vendor.example/component/server-6#cap-rotate"
+    ],
+    "unchanged": 3
+   },
+   "expected-rules": []
+  },
+  {
+   "name": "id-in-the-set-that-no-pack-brought",
+   "note": "the component was loaded as a loose file: import does not overwrite it",
+   "a": {
+    "objects": [
+     {
+      "id": "https://ns.auth.gov/fw/req/1",
+      "version": "1",
+      "lifecycle": "active",
+      "statements": [
+       {
+        "id": "s1",
+        "modality": "must",
+        "obligated-parties": [
+         "https://ns.auth.gov/fw/p/operator"
+        ],
+        "parameters": [
+         {
+          "name": "proto",
+          "type": "choice",
+          "cardinality": "one",
+          "choices": [
+           {
+            "value": "tls13",
+            "label": {
+             "en": "TLS 1.3"
+            }
+           },
+           {
+            "value": "tls12",
+            "label": {
+             "en": "TLS 1.2"
+            }
+           }
+          ]
+         },
+         {
+          "name": "max-tries",
+          "type": "integer",
+          "min": 1,
+          "max": 10,
+          "tightening": "lower"
+         }
+        ],
+        "prose": {
+         "en": "Traffic is encrypted with {param:proto}; at most {param:max-tries} attempts."
+        }
+       },
+       {
+        "id": "s2",
+        "modality": "should",
+        "obligated-parties": [
+         "https://ns.auth.gov/fw/p/operator"
+        ],
+        "prose": {
+         "en": "Keys are rotated."
+        }
+       }
+      ]
+     },
+     {
+      "id": "https://org.example/component/app",
+      "version": "1",
+      "lifecycle": "active",
+      "kind": "system",
+      "members": [
+       {
+        "component-ref": "https://vendor.example/component/server-7",
+        "context": "datastore"
+       }
+      ]
+     },
+     {
+      "id": "https://vendor.example/component/server-7",
+      "version": "3",
+      "lifecycle": "active",
+      "kind": "software",
+      "title": {
+       "en": "Example Server 7"
+      },
+      "capabilities": [
+       {
+        "id": "cap-tls",
+        "requirement-ref": "https://ns.auth.gov/fw/req/1",
+        "statement-ids": [
+         "s1"
+        ],
+        "description": {
+         "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+        },
+        "parameter-bindings": {
+         "proto": "tls13"
+        }
+       },
+       {
+        "id": "cap-rotate",
+        "requirement-ref": "https://ns.auth.gov/fw/req/1",
+        "statement-ids": [
+         "s2"
+        ],
+        "description": {
+         "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+        }
+       }
+      ]
+     }
+    ]
+   },
+   "b": {
+    "manifest": {
+     "manifest-version": "1",
+     "kernel-version": "2.0.0",
+     "pack": {
+      "kind": "advice",
+      "id": "https://vendor.example/pack/server-7-advice",
+      "version": "3",
+      "title": {
+       "en": "Server 7 hardening advice"
+      },
+      "publisher": {
+       "ref": "https://vendor.example/party/vendor",
+       "name": {
+        "en": "Vendor Inc."
+       }
+      }
+     },
+     "objects": [
+      {
+       "id": "https://vendor.example/component/server-7",
+       "semantic-digest": "COMPUTE"
+      }
+     ]
+    },
+    "objects": [
+     {
+      "id": "https://vendor.example/component/server-7",
+      "version": "3",
+      "lifecycle": "active",
+      "kind": "software",
+      "title": {
+       "en": "Example Server 7"
+      },
+      "capabilities": [
+       {
+        "id": "cap-tls",
+        "requirement-ref": "https://ns.auth.gov/fw/req/1",
+        "statement-ids": [
+         "s1"
+        ],
+        "description": {
+         "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+        },
+        "parameter-bindings": {
+         "proto": "tls13"
+        }
+       },
+       {
+        "id": "cap-rotate",
+        "requirement-ref": "https://ns.auth.gov/fw/req/1",
+        "statement-ids": [
+         "s2"
+        ],
+        "description": {
+         "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+        }
+       }
+      ]
+     }
+    ]
+   },
+   "expected": {
+    "result": "refused",
+    "unchanged": 3
+   },
+   "expected-rules": [
+    "ADVICE-11"
+   ],
+   "expected-frags": [
+    "not part of"
+   ]
+  },
+  {
+   "name": "id-that-another-pack-brought",
+   "a": {
+    "objects": [
+     {
+      "id": "https://ns.auth.gov/fw/req/1",
+      "version": "1",
+      "lifecycle": "active",
+      "statements": [
+       {
+        "id": "s1",
+        "modality": "must",
+        "obligated-parties": [
+         "https://ns.auth.gov/fw/p/operator"
+        ],
+        "parameters": [
+         {
+          "name": "proto",
+          "type": "choice",
+          "cardinality": "one",
+          "choices": [
+           {
+            "value": "tls13",
+            "label": {
+             "en": "TLS 1.3"
+            }
+           },
+           {
+            "value": "tls12",
+            "label": {
+             "en": "TLS 1.2"
+            }
+           }
+          ]
+         },
+         {
+          "name": "max-tries",
+          "type": "integer",
+          "min": 1,
+          "max": 10,
+          "tightening": "lower"
+         }
+        ],
+        "prose": {
+         "en": "Traffic is encrypted with {param:proto}; at most {param:max-tries} attempts."
+        }
+       },
+       {
+        "id": "s2",
+        "modality": "should",
+        "obligated-parties": [
+         "https://ns.auth.gov/fw/p/operator"
+        ],
+        "prose": {
+         "en": "Keys are rotated."
+        }
+       }
+      ]
+     },
+     {
+      "id": "https://org.example/component/app",
+      "version": "1",
+      "lifecycle": "active",
+      "kind": "system",
+      "members": [
+       {
+        "component-ref": "https://vendor.example/component/server-7",
+        "context": "datastore"
+       }
+      ]
+     },
+     {
+      "id": "https://vendor.example/component/server-7",
+      "version": "3",
+      "lifecycle": "active",
+      "kind": "software",
+      "title": {
+       "en": "Example Server 7"
+      },
+      "capabilities": [
+       {
+        "id": "cap-tls",
+        "requirement-ref": "https://ns.auth.gov/fw/req/1",
+        "statement-ids": [
+         "s1"
+        ],
+        "description": {
+         "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+        },
+        "parameter-bindings": {
+         "proto": "tls13"
+        }
+       },
+       {
+        "id": "cap-rotate",
+        "requirement-ref": "https://ns.auth.gov/fw/req/1",
+        "statement-ids": [
+         "s2"
+        ],
+        "description": {
+         "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+        }
+       }
+      ]
+     }
+    ],
+    "kept": [
+     {
+      "manifest": {
+       "manifest-version": "1",
+       "kernel-version": "2.0.0",
+       "pack": {
+        "kind": "advice",
+        "id": "https://vendor.example/pack/server-7-extras",
+        "version": "1",
+        "title": {
+         "en": "Server 7 hardening advice"
+        },
+        "publisher": {
+         "ref": "https://vendor.example/party/vendor",
+         "name": {
+          "en": "Vendor Inc."
+         }
+        }
+       },
+       "objects": [
+        {
+         "id": "https://vendor.example/component/server-7",
+         "semantic-digest": "COMPUTE"
+        }
+       ]
+      },
+      "published": [
+       {
+        "id": "https://vendor.example/component/server-7",
+        "version": "3",
+        "lifecycle": "active",
+        "kind": "software",
+        "title": {
+         "en": "Example Server 7"
+        },
+        "capabilities": [
+         {
+          "id": "cap-tls",
+          "requirement-ref": "https://ns.auth.gov/fw/req/1",
+          "statement-ids": [
+           "s1"
+          ],
+          "description": {
+           "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+          },
+          "parameter-bindings": {
+           "proto": "tls13"
+          }
+         },
+         {
+          "id": "cap-rotate",
+          "requirement-ref": "https://ns.auth.gov/fw/req/1",
+          "statement-ids": [
+           "s2"
+          ],
+          "description": {
+           "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+          }
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   },
+   "b": {
+    "manifest": {
+     "manifest-version": "1",
+     "kernel-version": "2.0.0",
+     "pack": {
+      "kind": "advice",
+      "id": "https://vendor.example/pack/server-7-advice",
+      "version": "3",
+      "title": {
+       "en": "Server 7 hardening advice"
+      },
+      "publisher": {
+       "ref": "https://vendor.example/party/vendor",
+       "name": {
+        "en": "Vendor Inc."
+       }
+      }
+     },
+     "objects": [
+      {
+       "id": "https://vendor.example/component/server-7",
+       "semantic-digest": "COMPUTE"
+      }
+     ]
+    },
+    "objects": [
+     {
+      "id": "https://vendor.example/component/server-7",
+      "version": "3",
+      "lifecycle": "active",
+      "kind": "software",
+      "title": {
+       "en": "Example Server 7"
+      },
+      "capabilities": [
+       {
+        "id": "cap-tls",
+        "requirement-ref": "https://ns.auth.gov/fw/req/1",
+        "statement-ids": [
+         "s1"
+        ],
+        "description": {
+         "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+        },
+        "parameter-bindings": {
+         "proto": "tls13"
+        }
+       },
+       {
+        "id": "cap-rotate",
+        "requirement-ref": "https://ns.auth.gov/fw/req/1",
+        "statement-ids": [
+         "s2"
+        ],
+        "description": {
+         "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+        }
+       }
+      ]
+     }
+    ]
+   },
+   "expected": {
+    "result": "refused"
+   },
+   "expected-rules": [
+    "ADVICE-11"
+   ],
+   "expected-frags": [
+    "belongs to"
+   ]
+  },
+  {
+   "name": "not-a-pack",
+   "a": {
+    "objects": [
+     {
+      "id": "https://ns.auth.gov/fw/req/1",
+      "version": "1",
+      "lifecycle": "active",
+      "statements": [
+       {
+        "id": "s1",
+        "modality": "must",
+        "obligated-parties": [
+         "https://ns.auth.gov/fw/p/operator"
+        ],
+        "parameters": [
+         {
+          "name": "proto",
+          "type": "choice",
+          "cardinality": "one",
+          "choices": [
+           {
+            "value": "tls13",
+            "label": {
+             "en": "TLS 1.3"
+            }
+           },
+           {
+            "value": "tls12",
+            "label": {
+             "en": "TLS 1.2"
+            }
+           }
+          ]
+         },
+         {
+          "name": "max-tries",
+          "type": "integer",
+          "min": 1,
+          "max": 10,
+          "tightening": "lower"
+         }
+        ],
+        "prose": {
+         "en": "Traffic is encrypted with {param:proto}; at most {param:max-tries} attempts."
+        }
+       },
+       {
+        "id": "s2",
+        "modality": "should",
+        "obligated-parties": [
+         "https://ns.auth.gov/fw/p/operator"
+        ],
+        "prose": {
+         "en": "Keys are rotated."
+        }
+       }
+      ]
+     },
+     {
+      "id": "https://org.example/component/app",
+      "version": "1",
+      "lifecycle": "active",
+      "kind": "system"
+     }
+    ]
+   },
+   "b": {
+    "manifest": {
+     "manifest-version": "1",
+     "kernel-version": "2.0.0",
+     "objects": [
+      {
+       "id": "https://vendor.example/component/server-7",
+       "semantic-digest": "COMPUTE"
+      }
+     ]
+    },
+    "objects": [
+     {
+      "id": "https://vendor.example/component/server-7",
+      "version": "3",
+      "lifecycle": "active",
+      "kind": "software",
+      "title": {
+       "en": "Example Server 7"
+      },
+      "capabilities": [
+       {
+        "id": "cap-tls",
+        "requirement-ref": "https://ns.auth.gov/fw/req/1",
+        "statement-ids": [
+         "s1"
+        ],
+        "description": {
+         "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+        },
+        "parameter-bindings": {
+         "proto": "tls13"
+        }
+       },
+       {
+        "id": "cap-rotate",
+        "requirement-ref": "https://ns.auth.gov/fw/req/1",
+        "statement-ids": [
+         "s2"
+        ],
+        "description": {
+         "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+        }
+       }
+      ]
+     }
+    ]
+   },
+   "expected": {
+    "result": "refused",
+    "added": []
+   },
+   "expected-rules": [
+    "ADVICE-11"
+   ],
+   "expected-frags": [
+    "no pack header"
+   ]
+  },
+  {
+   "name": "pack-that-is-not-advice",
+   "a": {
+    "objects": [
+     {
+      "id": "https://ns.auth.gov/fw/req/1",
+      "version": "1",
+      "lifecycle": "active",
+      "statements": [
+       {
+        "id": "s1",
+        "modality": "must",
+        "obligated-parties": [
+         "https://ns.auth.gov/fw/p/operator"
+        ],
+        "parameters": [
+         {
+          "name": "proto",
+          "type": "choice",
+          "cardinality": "one",
+          "choices": [
+           {
+            "value": "tls13",
+            "label": {
+             "en": "TLS 1.3"
+            }
+           },
+           {
+            "value": "tls12",
+            "label": {
+             "en": "TLS 1.2"
+            }
+           }
+          ]
+         },
+         {
+          "name": "max-tries",
+          "type": "integer",
+          "min": 1,
+          "max": 10,
+          "tightening": "lower"
+         }
+        ],
+        "prose": {
+         "en": "Traffic is encrypted with {param:proto}; at most {param:max-tries} attempts."
+        }
+       },
+       {
+        "id": "s2",
+        "modality": "should",
+        "obligated-parties": [
+         "https://ns.auth.gov/fw/p/operator"
+        ],
+        "prose": {
+         "en": "Keys are rotated."
+        }
+       }
+      ]
+     },
+     {
+      "id": "https://org.example/component/app",
+      "version": "1",
+      "lifecycle": "active",
+      "kind": "system"
+     }
+    ]
+   },
+   "b": {
+    "manifest": {
+     "manifest-version": "1",
+     "kernel-version": "2.0.0",
+     "pack": {
+      "kind": "advice",
+      "id": "https://vendor.example/pack/server-7-advice",
+      "version": "3",
+      "title": {
+       "en": "Server 7 hardening advice"
+      },
+      "publisher": {
+       "ref": "https://vendor.example/party/vendor",
+       "name": {
+        "en": "Vendor Inc."
+       }
+      }
+     },
+     "objects": [
+      {
+       "id": "https://vendor.example/component/server-7",
+       "semantic-digest": "COMPUTE"
+      },
+      {
+       "id": "https://vendor.example/tailoring/t",
+       "semantic-digest": "COMPUTE"
+      }
+     ]
+    },
+    "objects": [
+     {
+      "id": "https://vendor.example/component/server-7",
+      "version": "3",
+      "lifecycle": "active",
+      "kind": "software",
+      "title": {
+       "en": "Example Server 7"
+      },
+      "capabilities": [
+       {
+        "id": "cap-tls",
+        "requirement-ref": "https://ns.auth.gov/fw/req/1",
+        "statement-ids": [
+         "s1"
+        ],
+        "description": {
+         "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+        },
+        "parameter-bindings": {
+         "proto": "tls13"
+        }
+       },
+       {
+        "id": "cap-rotate",
+        "requirement-ref": "https://ns.auth.gov/fw/req/1",
+        "statement-ids": [
+         "s2"
+        ],
+        "description": {
+         "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+        }
+       }
+      ]
+     },
+     {
+      "id": "https://vendor.example/tailoring/t",
+      "version": "1",
+      "lifecycle": "active",
+      "selects": [
+       {
+        "set-ref": "https://ns.auth.gov/fw/set/base"
+       }
+      ]
+     }
+    ]
+   },
+   "expected": {
+    "result": "refused"
+   },
+   "expected-rules": [
+    "ADVICE-1"
+   ]
+  },
+  {
+   "name": "pack-with-an-object-under-the-users-origin",
+   "a": {
+    "objects": [
+     {
+      "id": "https://ns.auth.gov/fw/req/1",
+      "version": "1",
+      "lifecycle": "active",
+      "statements": [
+       {
+        "id": "s1",
+        "modality": "must",
+        "obligated-parties": [
+         "https://ns.auth.gov/fw/p/operator"
+        ],
+        "parameters": [
+         {
+          "name": "proto",
+          "type": "choice",
+          "cardinality": "one",
+          "choices": [
+           {
+            "value": "tls13",
+            "label": {
+             "en": "TLS 1.3"
+            }
+           },
+           {
+            "value": "tls12",
+            "label": {
+             "en": "TLS 1.2"
+            }
+           }
+          ]
+         },
+         {
+          "name": "max-tries",
+          "type": "integer",
+          "min": 1,
+          "max": 10,
+          "tightening": "lower"
+         }
+        ],
+        "prose": {
+         "en": "Traffic is encrypted with {param:proto}; at most {param:max-tries} attempts."
+        }
+       },
+       {
+        "id": "s2",
+        "modality": "should",
+        "obligated-parties": [
+         "https://ns.auth.gov/fw/p/operator"
+        ],
+        "prose": {
+         "en": "Keys are rotated."
+        }
+       }
+      ]
+     },
+     {
+      "id": "https://org.example/component/app",
+      "version": "1",
+      "lifecycle": "active",
+      "kind": "system"
+     }
+    ]
+   },
+   "b": {
+    "manifest": {
+     "manifest-version": "1",
+     "kernel-version": "2.0.0",
+     "pack": {
+      "kind": "advice",
+      "id": "https://vendor.example/pack/server-7-advice",
+      "version": "3",
+      "title": {
+       "en": "Server 7 hardening advice"
+      },
+      "publisher": {
+       "ref": "https://vendor.example/party/vendor",
+       "name": {
+        "en": "Vendor Inc."
+       }
+      }
+     },
+     "objects": [
+      {
+       "id": "https://vendor.example/component/server-7",
+       "semantic-digest": "COMPUTE"
+      },
+      {
+       "id": "https://org.example/component/other",
+       "semantic-digest": "COMPUTE"
+      }
+     ]
+    },
+    "objects": [
+     {
+      "id": "https://vendor.example/component/server-7",
+      "version": "3",
+      "lifecycle": "active",
+      "kind": "software",
+      "title": {
+       "en": "Example Server 7"
+      },
+      "capabilities": [
+       {
+        "id": "cap-tls",
+        "requirement-ref": "https://ns.auth.gov/fw/req/1",
+        "statement-ids": [
+         "s1"
+        ],
+        "description": {
+         "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+        },
+        "parameter-bindings": {
+         "proto": "tls13"
+        }
+       },
+       {
+        "id": "cap-rotate",
+        "requirement-ref": "https://ns.auth.gov/fw/req/1",
+        "statement-ids": [
+         "s2"
+        ],
+        "description": {
+         "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+        }
+       }
+      ]
+     },
+     {
+      "id": "https://org.example/component/other",
+      "version": "1",
+      "lifecycle": "active",
+      "kind": "system"
+     }
+    ]
+   },
+   "expected": {
+    "result": "refused"
+   },
+   "expected-rules": [
+    "ADVICE-2"
+   ]
+  }
+ ]
+}

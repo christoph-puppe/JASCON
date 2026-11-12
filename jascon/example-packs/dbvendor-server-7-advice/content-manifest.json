@@ -1,0 +1,32 @@
+{
+ "manifest-version": "1",
+ "kernel-version": "2.0.0",
+ "provenance": {
+  "source": "JASCON worked example (CP-ADVICE-1); a fictional vendor and product",
+  "written-with": "drafts/cp-advice-1/build_example.py"
+ },
+ "pack": {
+  "kind": "advice",
+  "id": "https://dbvendor.example/pack/server-7-hardening",
+  "version": "3",
+  "title": {
+   "en": "Server 7 hardening advice"
+  },
+  "publisher": {
+   "ref": "https://dbvendor.example/party/vendor",
+   "name": {
+    "en": "Example DB Vendor Inc."
+   }
+  }
+ },
+ "objects": [
+  {
+   "id": "https://dbvendor.example/component/server-7",
+   "version": "2026-10",
+   "package-digest": "sha256:b2584fb9dcef40763ce98e5ffa354acbe3cde662ef3ec356edb87d112bea2072",
+   "semantic-digest": "sha256:8bd8d4b3b190f94a4d625161e5e988fbca697bdc3774e54757ac5030425022aa",
+   "path": "objects/component/server-7.json"
+  }
+ ],
+ "facet-schemas": []
+}

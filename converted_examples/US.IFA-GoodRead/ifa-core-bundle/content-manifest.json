@@ -94,8 +94,8 @@
   {
    "id": "https://ifa.gov/goodread/impl/saas-ac-2",
    "version": "1.0.0",
-   "package-digest": "sha256:6ba1be78d4e02b0894cd2509c6355d895c816dd75b34479edbb617d7a700b27f",
-   "semantic-digest": "sha256:9bfe64354e62c03d4ce85054c4c79f31237e5f771367af42dced3867224dfc2e",
+   "package-digest": "sha256:136a90be01467ce382ab6a85bb00d1bf942119d526e2d33c5ae64b37394c792f",
+   "semantic-digest": "sha256:b19e521c62a43c944b3db8c41efc5c66318eff3e2b8421cd48373ba7756b5d9d",
    "path": "objects/impl/saas-ac-2.json"
   },
   {

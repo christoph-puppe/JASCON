@@ -30,3 +30,11 @@ jascon/examples/*.json text eol=lf
 # is the SHA-256 of its bytes. Git must never re-spell them, whatever the
 # platform or core.autocrlf says.
 jascon/examples/evidence/** -text
+
+# A kept pack manifest is content-addressed too (CP-ADVICE-1, ADVICE-8): the
+# file NAME is the SHA-256 of the vendor's manifest bytes, and the vendor's
+# Attestation binds that digest. The worked pack is a bundle: its manifest
+# digests the bytes of its objects. Git never re-spells either.
+jascon/examples/packs/** -text
+jascon/examples/*.dsse -text
+jascon/example-packs/** -text

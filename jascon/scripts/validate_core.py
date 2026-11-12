@@ -29,6 +29,14 @@ Runs, in order:
    an Assessment records, its aggregate, and its parameter values
    against the Tailoring it names; CHECK-15 walks the evidence chain
    (record -> raw outputs) in the store beside the bundle.
+5. ADVICE (CP-ADVICE-1, proposed): an advice pack is a bundle whose
+   manifest carries a pack header and whose objects are Components - a
+   vendor's recommendations as one published file. ADVICE-1..3 hold a
+   pack to being advice; 4..7 hold capabilities and the edges that cite
+   them (capability-ref has a grammar and is closure-required); 8..10
+   hold the vendor's manifest a set keeps under packs/sha256/ to the
+   objects in the set; 11 is import. `--import-advice SET PACK` prints
+   what an import would do and its receipt, and writes nothing.
 
 Exit 0 = all green. Usage: uv run --with jsonschema validate_core.py [bundle-dir ...]
 """
@@ -918,8 +926,10 @@ def kernel_needed(objs, manifest=None):
     """-> (minimum kernel version the content needs, the first object that
     needs it). 2.0.0 added the Risk type, Finding.risk-refs, pinned
     scale definitions, the Check type, Assessment.check-results and
-    .tailoring-ref, and Finding.check-ref."""
+    .tailoring-ref, Finding.check-ref, the pack header of a manifest and
+    statement-ids on a capability (CP-ADVICE-1)."""
     if manifest and manifest.get("scales"): return "2.0.0", "the manifest pins scale definitions"
+    if manifest and manifest.get("pack"): return "2.0.0", "the manifest carries a pack header"
     for oid in sorted(objs):
         t, o = objs[oid]
         if t == "risk": return "2.0.0", f"{oid} is a Risk"
@@ -928,6 +938,8 @@ def kernel_needed(objs, manifest=None):
         if t == "assessment" and (o.get("check-results") or o.get("tailoring-ref")):
             return "2.0.0", f"{oid} carries check results"
         if t == "finding" and o.get("check-ref"): return "2.0.0", f"{oid} carries a check-ref"
+        if t == "component" and any(c.get("statement-ids") for c in o.get("capabilities", []) or []):
+            return "2.0.0", f"{oid} names clauses on a capability (statement-ids)"
     return "1.0.0", None
 
 def kernel_pin_errors(manifest, objs):
@@ -2205,6 +2217,366 @@ def run_lifecycle():
         fail("lifecycle", "disjointness: field-free object matches a type")
     else: ok("lifecycle")
 
+# ---------------- ADVICE (CP-ADVICE-1, kernel 2.0.0) ----------------
+# An advice pack is a bundle whose manifest carries a pack header and whose
+# objects are Components: a vendor's recommendations as one published file.
+# A capability is a CLAIM (requirement, clauses, text, suggested parameter
+# values); the only statement that a requirement is met stays the
+# Implementation in the user's namespace, which cites the capability.
+# ADVICE-1..3 hold a pack to being advice; 4..7 hold capabilities and the
+# edges that cite them, in every bundle; 8..10 hold the vendor's manifest a
+# set keeps (packs/sha256/<hex>, beside the manifest like an envelope) to
+# the objects in the set; 11 is import - the one lawful replacement the
+# composition engine knows.
+PACK_STORE = "packs/sha256/"
+ADVICE_RULES = {
+    "ADVICE-1": "advice must not be able to change what is required or how it is assessed - a pack holds Components and nothing else",
+    "ADVICE-2": "a pack cannot carry an object under someone else's identity, and so cannot replace one: its ids, its own id and its publisher share one origin",
+    "ADVICE-3": "advice must not reach a computation through a facet: no facet on a pack's object declares a semantics class",
+    "ADVICE-4": "a capability-ref must name one thing: capability ids are unique within a Component",
+    "ADVICE-5": "a recommendation is about a requirement; when that requirement is in the bundle the edge is typed and the clauses it names exist",
+    "ADVICE-6": "a suggested value the catalog cannot accept is the publisher's defect, found before a user adopts it",
+    "ADVICE-7": "an edge that leans on a capability nobody declared proves nothing, and advice applies to a system because the system contains the product - the cited component is in the bundle, declares the capability, and is the edge's own or one of its members",
+    "ADVICE-8": "a kept pack manifest is content-addressed and lives beside the manifest: its name is the SHA-256 of its bytes, it carries a pack header, and the bundle's manifest does not list it",
+    "ADVICE-9": "the advice in the set is what the vendor published: every object a kept pack manifest lists is in the bundle at that version with that semantic digest",
+    "ADVICE-10": "one release of a pack in a set, and one pack per object",
+    "ADVICE-11": "import never overwrites what the pack does not own: it adds ids the bundle does not hold and replaces ids an earlier release of the same pack brought",
+}
+
+def _adv(rule, where, msg):
+    return (rule, f"{where}: {msg} ({rule}: {ADVICE_RULES[rule]})")
+
+def pack_errors(manifest, objs, pinned_decl=None):
+    """ADVICE-1..3 over a published pack -> [(rule, message)]. objs: the
+    objects the manifest lists, id -> (type, obj). A manifest without a
+    pack header is not a pack and is held to nothing here."""
+    pack = manifest.get("pack")
+    if not pack: return []
+    E, pid = [], pack["id"]
+    origin = uri_origin(pid)
+    for oid in sorted(objs):
+        t = objs[oid][0]
+        if t != "component":
+            E.append(_adv("ADVICE-1", pid, f"{oid} is a {t} - an advice pack holds components only"
+                          f"{' (an attestation travels beside the manifest, D3.1)' if t == 'attestation' else ''}"))
+    pub = pack["publisher"]["ref"]
+    if uri_origin(pub) != origin:
+        E.append(_adv("ADVICE-2", pid, f"publisher {pub} is not under the pack's origin {origin}"))
+    for oid in sorted(objs):
+        if uri_origin(oid) != origin:
+            E.append(_adv("ADVICE-2", pid, f"{oid} is not under the pack's origin {origin}"))
+    for oid in sorted(objs):
+        for key in sorted((objs[oid][1].get("facets") or {})):
+            base = key.rsplit("@", 1)[0]
+            if key.startswith("private:"): continue      # declares [] by definition (D10)
+            decl = STDLIB_DECL[base] if base in STDLIB_DECL else (pinned_decl or {}).get(base)
+            if decl:                                     # unregistered is facet_errors' failure, not ours
+                E.append(_adv("ADVICE-3", oid, f"facet {key} declares modifies-semantics {sorted(decl)} - "
+                                               f"not allowed in an advice pack"))
+    return E
+
+def capability_errors(objs):
+    """ADVICE-4..6 over every Component -> ([(rule, message)], notes)."""
+    E, notes = [], []
+    for oid in sorted(objs):
+        t, o = objs[oid]
+        if t != "component": continue
+        caps = o.get("capabilities") or []
+        ids = [c["id"] for c in caps]
+        for n in sorted({n for n in ids if ids.count(n) > 1}):
+            E.append(_adv("ADVICE-4", oid, f"capability id '{n}' is used twice"))
+        untyped = 0
+        for c in caps:
+            at, rref = f"{oid}#{c['id']}", c.get("requirement-ref")
+            if rref is None:
+                if c.get("statement-ids"):
+                    E.append(_adv("ADVICE-5", at, "statement-ids without a requirement-ref"))
+                continue
+            req = objs.get(rref)
+            if not req:
+                untyped += 1; continue
+            if req[0] != "requirement":
+                E.append(_adv("ADVICE-5", at, f"requirement-ref resolves to a {req[0]}, not a Requirement: {rref}")); continue
+            sids = [s["id"] for s in req[1]["statements"]]
+            for sid in c.get("statement-ids") or []:
+                if sid not in sids:
+                    E.append(_adv("ADVICE-5", at, f"statement-id '{sid}' names no statement of {rref}"))
+            cover = set(c.get("statement-ids") or sids)
+            decls = {}
+            for s in req[1]["statements"]:
+                if s["id"] in cover:
+                    for pd in s.get("parameters", []) or []:
+                        decls.setdefault(pd["name"], []).append(pd)
+            for pn in sorted(c.get("parameter-bindings") or {}):
+                found = decls.get(pn, [])
+                if len(found) != 1:
+                    E.append(_adv("ADVICE-6", at, f"binds parameter '{pn}', which is declared {len(found)} times "
+                                                  f"on the covered statements of {rref}")); continue
+                verdict = param_check(found[0], c["parameter-bindings"][pn])
+                if verdict != "valid":
+                    E.append(_adv("ADVICE-6", at, f"binds parameter '{pn}' to a value "
+                                                  f"{'of the wrong kind' if verdict == 'invalid' else 'outside the declared space'}"))
+        if untyped:
+            notes.append(f"{oid}: {untyped} capability requirement-ref(s) outside the bundle - not typed (resolves-if-present)")
+    return E, notes
+
+def split_capability_ref(ref, own):
+    """-> (component id, capability id). A bare id names a capability of the
+    edge's own component; `<component-id>#<capability-id>` names one of that
+    component."""
+    if "#" in ref:
+        cid, cap = ref.rsplit("#", 1)
+        return cid, cap
+    return own, ref
+
+def capability_ref_errors(objs):
+    """ADVICE-7 over every Implementation -> [(rule, message)]."""
+    E = []
+    for oid in sorted(objs):
+        t, o = objs[oid]
+        if t != "implementation": continue
+        own = o["component-ref"]
+        for sb in o.get("satisfied-by", []):
+            ref = sb.get("capability-ref")
+            if ref is None: continue
+            cid, cap = split_capability_ref(ref, own)
+            comp = objs.get(cid)
+            if not comp:
+                if cid != own:      # the edge's own component is closure_errors' failure
+                    E.append(_adv("ADVICE-7", oid, f"cites {ref}, but component {cid or '(none)'} is not in the bundle"))
+                continue
+            if comp[0] != "component":
+                E.append(_adv("ADVICE-7", oid, f"cites {ref}, which resolves to a {comp[0]}, not a Component")); continue
+            if cap not in {c["id"] for c in comp[1].get("capabilities", []) or []}:
+                E.append(_adv("ADVICE-7", oid, f"cites capability '{cap}', which {cid} does not declare")); continue
+            if cid != own:
+                owner = objs.get(own)
+                if owner and owner[0] == "component" and \
+                   cid not in {m["component-ref"] for m in owner[1].get("members", []) or []}:
+                    E.append(_adv("ADVICE-7", oid, f"cites {ref}, but {cid} is not a member of {own}"))
+    return E
+
+def read_kept_packs(bdir):
+    """-> [(file name, bytes)] of the pack manifests a bundle keeps."""
+    d = os.path.join(bdir, *PACK_STORE.strip("/").split("/"))
+    if not os.path.isdir(d): return []
+    return [(fn, open(os.path.join(d, fn), "rb").read()) for fn in sorted(os.listdir(d))
+            if os.path.isfile(os.path.join(d, fn))]
+
+def kept_pack_errors(kept, manifest, objs):
+    """ADVICE-8..10 -> ([(rule, message)], [(name, kept manifest)] that are
+    well-formed). kept: [(file name, bytes)] under packs/sha256/."""
+    E, packs = [], []
+    for name, raw in sorted(kept):
+        where = PACK_STORE + name
+        if hashlib.sha256(raw).hexdigest() != name:
+            E.append(_adv("ADVICE-8", where, "does not match its name")); continue
+        try:
+            km = json.loads(raw.decode("utf-8"))
+        except Exception:
+            E.append(_adv("ADVICE-8", where, "is not readable JSON")); continue
+        if not VALIDATORS["contentManifest"].is_valid(km) or "pack" not in km:
+            E.append(_adv("ADVICE-8", where, "is not a content manifest with a pack header")); continue
+        packs.append((name, km))
+    for e in (manifest or {}).get("objects", []) or []:
+        if str(e.get("path", "")).startswith(PACK_STORE):
+            E.append(_adv("ADVICE-8", e["path"], "is listed in the bundle's manifest"))
+    release, owner = {}, {}
+    for name, km in packs:
+        pid, rel = km["pack"]["id"], km["pack"]["version"]
+        if pid in release:
+            E.append(_adv("ADVICE-10", pid, f"releases {release[pid]} and {rel} are both in the bundle"))
+            continue
+        release[pid] = rel
+        for e in km.get("objects", []):
+            if e["id"] in owner:
+                E.append(_adv("ADVICE-10", e["id"], f"is listed by two kept manifests: {owner[e['id']]} and {pid}"))
+                continue
+            owner[e["id"]] = pid
+            tgt = objs.get(e["id"])
+            if not tgt:
+                E.append(_adv("ADVICE-9", e["id"], f"is listed by release {rel} of {pid} and is not in the bundle"))
+            elif tgt[1].get("version") != e["version"]:
+                E.append(_adv("ADVICE-9", e["id"], f"is at version {tgt[1].get('version')}, release {rel} of {pid} lists {e['version']}"))
+            elif sdig(tgt[1]) != e["semantic-digest"]:
+                E.append(_adv("ADVICE-9", e["id"], f"differs from release {rel} of {pid} (semantic digest) - "
+                                                   f"the vendor's advice was edited after import"))
+    return E, packs
+
+def pack_publisher(pack, mdigest, objs, envelopes=None, trusted=None, notes=None):
+    """claimed | proven. The publisher is CLAIMED by the header and the
+    origin its ids share with it (ADVICE-2). It is PROVEN when an
+    Attestation whose signer has that origin binds this manifest's digest -
+    and, in verification mode, its envelope verifies under a trusted key.
+    The same two words, and the same envelope check, as the Tailoring tier
+    (derive_tier)."""
+    origin = uri_origin(pack["id"])
+    for oid in sorted(objs):
+        t, o = objs[oid]
+        if t != "attestation" or uri_origin(o.get("signer", "")) != origin: continue
+        if o.get("content-manifest-digest") != mdigest: continue
+        if trusted is not None:
+            env = (envelopes or {}).get(o.get("envelope-ref"))
+            if o.get("envelope-ref") and env is not None:
+                st, why = verify_envelope(env, o, trusted)
+            else:
+                st, why = "error", "unsigned attestation (no envelope) cannot prove in verification mode"
+            if st != "verified":
+                if notes is not None: notes.append(f"{oid}: {why}")
+                continue
+        return "proven"
+    return "claimed"
+
+def compose_advice(a_objs, a_kept, b_manifest, b_digest, b_objs, pinned_decl=None):
+    """ADVICE-11: what importing pack B into bundle A does. a_objs / b_objs:
+    id -> (type, obj); a_kept: [(name, kept manifest)] of A; b_digest: the
+    hex SHA-256 of B's manifest bytes. Nothing is written; the result is the
+    plan and its receipt:
+      result    import | replace | already-imported | refused
+      added / replaced / removed   object ids
+      dangling  the edges of A that cite a capability the new release drops
+      unchanged how many objects of A the import leaves as they are"""
+    R = {"result": "refused", "added": [], "replaced": [], "removed": [], "dangling": [],
+         "capabilities": {}, "unchanged": len(a_objs), "errors": []}
+    pack = b_manifest.get("pack")
+    if not pack:
+        R["errors"].append(_adv("ADVICE-11", "(import)", "the manifest carries no pack header - this is not an advice pack"))
+        return R
+    R["errors"] += pack_errors(b_manifest, b_objs, pinned_decl)
+    if any(name == b_digest for name, _ in a_kept):
+        R["result"] = "already-imported"; R["errors"] = []
+        return R
+    prev = [km for _, km in a_kept if km["pack"]["id"] == pack["id"]]
+    owned = {e["id"] for km in prev for e in km.get("objects", [])}
+    other = {e["id"]: km["pack"]["id"] for _, km in a_kept if km["pack"]["id"] != pack["id"]
+             for e in km.get("objects", [])}
+    for oid in sorted(b_objs):
+        if oid not in a_objs: R["added"].append(oid)
+        elif oid in owned: R["replaced"].append(oid)
+        else:
+            R["errors"].append(_adv("ADVICE-11", oid, f"is already in the set and "
+                               f"{'belongs to ' + other[oid] if oid in other else 'not part of ' + pack['id']}"))
+    R["removed"] = sorted(o for o in owned if o in a_objs and o not in b_objs)
+    for oid in R["replaced"]:
+        old = {c["id"]: c for c in a_objs[oid][1].get("capabilities", []) or []}
+        new = {c["id"]: c for c in b_objs[oid][1].get("capabilities", []) or []}
+        d = {"added": sorted(set(new) - set(old)), "removed": sorted(set(old) - set(new)),
+             "changed": sorted(k for k in set(old) & set(new) if canonical(old[k]) != canonical(new[k]))}
+        if any(d.values()): R["capabilities"][oid] = d
+    for iid in sorted(a_objs):
+        t, o = a_objs[iid]
+        if t != "implementation": continue
+        for sb in o.get("satisfied-by", []):
+            ref = sb.get("capability-ref")
+            if ref is None: continue
+            cid, cap = split_capability_ref(ref, o["component-ref"])
+            if cid in R["removed"] or (cid in R["replaced"] and
+                                       cap not in {c["id"] for c in b_objs[cid][1].get("capabilities", []) or []}):
+                R["dangling"].append(f"{iid} -> {ref}")
+    if R["errors"]:
+        return R
+    R["result"] = "replace" if prev else "import"
+    R["unchanged"] = len(a_objs) - len(R["replaced"]) - len(R["removed"])
+    return R
+
+def advice_errors(manifest, objs, pinned_decl=None, kept=None):
+    """Everything ADVICE-1..10 says about one bundle -> ([(rule, message)], notes, kept packs)."""
+    listed = {e["id"] for e in (manifest or {}).get("objects", []) or []}
+    E = pack_errors(manifest or {}, {i: v for i, v in objs.items() if i in listed}, pinned_decl)
+    ce, notes = capability_errors(objs)
+    ke, packs = kept_pack_errors(kept or [], manifest, objs)
+    return E + ce + capability_ref_errors(objs) + ke, notes, packs
+
+def _advice_typed(objects):
+    objs, untyped = {}, []
+    for o in objects:
+        t = inferType_single(o)
+        if t: objs[o["id"]] = (t, o)
+        else: untyped.append(o.get("id"))
+    return objs, untyped
+
+def _advice_fill(manifest, published):
+    """A vector's manifest lists its objects by id; version and digests are
+    COMPUTEd from the objects as published, so no literal goes stale."""
+    by_id = {o["id"]: o for o in published}
+    m = copy.deepcopy(manifest)
+    for e in m.get("objects", []):
+        src = by_id.get(e["id"])
+        if e.get("semantic-digest") == "COMPUTE" and src is not None:
+            e["semantic-digest"] = sdig(src)
+        e.setdefault("version", src["version"] if src else "1")
+        e.setdefault("package-digest", "sha256:" + "0" * 64)
+        e.setdefault("path", "objects/" + e["id"].rsplit("/", 1)[-1] + ".json")
+    return m
+
+def _advice_kept(case_kept):
+    """-> [(file name, bytes)] for a vector's kept manifests. The bytes are
+    the manifest's canonical form; `name` overrides the computed name."""
+    out = []
+    for k in case_kept or []:
+        raw = k["raw"].encode("utf-8") if "raw" in k else canonical(_advice_fill(k["manifest"], k.get("published", []))).encode("utf-8")
+        out.append((k.get("name") or hashlib.sha256(raw).hexdigest(), raw))
+    return out
+
+def run_advice():
+    v = json.load(open(os.path.join(CONF, "advice-vectors.json"), encoding="utf-8"))
+    def judge(kind, case, errs, notes=(), extra_ok=True, untyped=()):
+        named = sorted({r for r, _ in errs})
+        okc = extra_ok and not untyped and named == sorted(set(case.get("expected-rules", [])))
+        for frag in case.get("expected-frags", []):
+            if not any(frag in m for _, m in errs): okc = False
+        for frag in case.get("expected-notes", []):
+            if not any(frag in n for n in notes): okc = False
+        if okc: ok("advice")
+        else: fail("advice", f"{kind} {case['name']}: expected rules {case.get('expected-rules', [])} "
+                             f"frags {case.get('expected-frags', [])}, got {named} untyped {list(untyped)} "
+                             f"{[m[:150] for _, m in errs]} notes {[n[:100] for n in notes]}")
+    for case in v["shape-vectors"]:
+        if case["kind"] == "manifest":
+            got = "valid" if VALIDATORS["contentManifest"].is_valid(case["document"]) else "invalid"
+        else:
+            m = [t for t in TYPES if VALIDATORS[t].is_valid(case["document"])]
+            got = "valid" if m == [case["kind"]] else "invalid"
+        if got == case["expected"]: ok("advice")
+        else: fail("advice", f"shape {case['name']}: expected {case['expected']}, got {got}")
+    for case in v["pack-vectors"]:
+        objs, untyped = _advice_typed(case["objects"])
+        m = _advice_fill(case["manifest"], case["objects"])
+        errs = [] if VALIDATORS["contentManifest"].is_valid(m) else [("SCHEMA", "manifest schema violation")]
+        if not errs:
+            errs = pack_errors(m, objs, case.get("declared")) + [("KERNEL-1", e) for e in kernel_pin_errors(m, objs)]
+        judge("pack", case, errs, untyped=untyped)
+    for case in v["graph-vectors"]:
+        objs, untyped = _advice_typed(case["objects"])
+        ce, notes = capability_errors(objs)
+        judge("graph", case, ce + capability_ref_errors(objs), notes, untyped=untyped)
+    for case in v["kept-vectors"]:
+        objs, untyped = _advice_typed(case["objects"])
+        errs, packs = kept_pack_errors(_advice_kept(case["kept"]), case.get("manifest"), objs)
+        judge("kept", case, errs, extra_ok=len(packs) == case.get("expected-packs", len(packs)), untyped=untyped)
+    for case in v["publisher-vectors"]:
+        m = _advice_fill(case["manifest"], case.get("published", []))
+        mdig = "sha256:" + hashlib.sha256(canonical(m).encode("utf-8")).hexdigest()
+        subjects = copy.deepcopy(case["objects"])
+        for o in subjects:
+            if o.get("content-manifest-digest") == "COMPUTE": o["content-manifest-digest"] = mdig
+        objs, untyped = _advice_typed(subjects)
+        got = pack_publisher(m["pack"], mdig, objs, envelopes=case.get("envelopes"),
+                             trusted=case.get("trusted-keys"))
+        if got == case["expected"] and not untyped: ok("advice")
+        else: fail("advice", f"publisher {case['name']}: expected {case['expected']}, got {got} untyped {untyped}")
+    for case in v["import-vectors"]:
+        a_objs, ua = _advice_typed(case["a"]["objects"])
+        _, a_packs = kept_pack_errors(_advice_kept(case["a"].get("kept")), None, {})
+        b_objs, ub = _advice_typed(case["b"]["objects"])
+        bm = _advice_fill(case["b"]["manifest"], case["b"]["objects"])
+        bdig = hashlib.sha256(canonical(bm).encode("utf-8")).hexdigest()
+        R = compose_advice(a_objs, a_packs, bm, bdig, b_objs)
+        exp = case["expected"]
+        same = all(R[k] == exp[k] for k in ("result", "added", "replaced", "removed", "dangling") if k in exp) \
+               and ("unchanged" not in exp or R["unchanged"] == exp["unchanged"])
+        judge("import", case, R["errors"], extra_ok=same, untyped=ua + ub)
+
 # ---------------- 2) bundle validation ----------------
 PARAM_TOKEN = re.compile(r"\{param:([^}]+)\}")
 
@@ -2295,12 +2667,53 @@ def load_facet_pins(bdir, manifest, section):
             fail(section, f"{fe['path']}: pinned facet schema unreadable: {e}")
     return pinned, pinned_decl
 
+def beside_attestations(bdir, listed_paths):
+    """Attestations BESIDE the manifest (D3.1): JSON files in the manifest's
+    own folder that it does not list and that type as an Attestation. A pack
+    lists Components only (ADVICE-1), so its vendor's Attestation is here."""
+    out = {}
+    for fn in sorted(os.listdir(bdir)):
+        if not fn.endswith(".json") or fn == "content-manifest.json" or fn in listed_paths: continue
+        try:
+            o = json.load(open(os.path.join(bdir, fn), encoding="utf-8"))
+        except Exception:
+            continue
+        if isinstance(o, dict) and inferType_single(o) == "attestation": out[o["id"]] = ("attestation", o)
+    return out
+
+def advice_report(section, bdir, manifest, raw_manifest, objs, pinned_decl, envelopes):
+    """CP-ADVICE-1 for one bundle: ADVICE-1..10, and who published what."""
+    a_errs, a_notes, packs = advice_errors(manifest, objs, pinned_decl, read_kept_packs(bdir))
+    for _, e in a_errs: fail(section, e)
+    for n in a_notes: print(f"    note: {n}")
+    atts = {i: v for i, v in objs.items() if v[0] == "attestation"}
+    def status(pack, mdig, where):
+        envs = dict(envelopes or {})
+        for _, (_, a) in sorted(atts.items()):
+            ref = a.get("envelope-ref")
+            if ref and ref not in envs and os.path.isfile(os.path.join(bdir, ref)):
+                try: envs[ref] = json.load(open(os.path.join(bdir, ref), encoding="utf-8"))
+                except Exception: pass
+        pn = []
+        st = pack_publisher(pack, mdig, atts, envelopes=envs, trusted=TRUSTED, notes=pn)
+        tag = {"claimed": "publisher CLAIMED [header and prefix - UNPROVEN]",
+               "proven": ("publisher PROVEN [attestation binds the manifest + signature VERIFIED]" if TRUSTED is not None
+                          else "publisher PROVEN [attestation binds the manifest; UNVERIFIED - run with --trusted-keys]")}[st]
+        print(f"    {where}: {pack['id']} release {pack['version']} by {pack['publisher']['ref']} = {tag}")
+        for n in pn: print(f"          {n}")
+    if manifest.get("pack") and VALIDATORS["contentManifest"].is_valid(manifest):
+        atts.update(beside_attestations(bdir, {e["path"] for e in manifest.get("objects", [])}))
+        status(manifest["pack"], pkg_digest(raw_manifest), "pack")
+    for name, km in packs:
+        status(km["pack"], "sha256:" + name, f"kept pack ({len(km.get('objects', []))} object(s))")
+
 def validate_bundle(bdir):
     section = os.path.relpath(bdir, ROOT).replace("\\", "/")
     mpath = os.path.join(bdir, "content-manifest.json")
     if not os.path.exists(mpath):
         fail(section, "no content-manifest.json"); return
-    manifest = json.load(open(mpath, encoding="utf-8"))
+    raw_manifest = open(mpath, "rb").read()
+    manifest = json.loads(raw_manifest.decode("utf-8"))
     if not VALIDATORS["contentManifest"].is_valid(manifest):
         e = next(VALIDATORS["contentManifest"].iter_errors(manifest))
         fail(section, f"manifest schema: {e.message[:120]} @ {'/'.join(map(str, e.absolute_path))}")
@@ -2388,6 +2801,8 @@ def validate_bundle(bdir):
     c_errs, c_notes = check_errors(bundle_objs, read=store_reader(bdir))
     for _, e in c_errs: fail(section, e)
     for n in c_notes: print(f"    note: {n}")
+    # CP-ADVICE-1: pack rules, capabilities and the edges that cite them, kept manifests
+    advice_report(section, bdir, manifest, raw_manifest, bundle_objs, pinned_decl, envelopes)
     # #24: report the derived Tailoring tier DISTINCTLY (spec:399) — a prefix
     # claim is an honest-publisher signal, not proof; in verification mode
     # (--trusted-keys) proven additionally requires a verifying envelope.
@@ -2420,13 +2835,14 @@ def validate_examples():
     # 1.0.0 its package digests were a mix of CRLF and LF spellings - 8 of
     # 12 failed on an LF tree, the other 4 on a CRLF tree, unnoticed).
     # Attestations live BESIDE the manifest (D3.1) and are not listed.
-    manifest = json.load(open(os.path.join(exdir, "content-manifest.json"), encoding="utf-8"))
+    raw_manifest = open(os.path.join(exdir, "content-manifest.json"), "rb").read()
+    manifest = json.loads(raw_manifest.decode("utf-8"))
     if VALIDATORS["contentManifest"].is_valid(manifest): ok(section)
     else: fail(section, "content-manifest.json: manifest schema violation")
     listed = {e["path"]: e for e in manifest.get("objects", [])}
     pins = {fe["path"]: fe for fe in manifest.get("facet-schemas", [])}
     scale_paths = {sp["path"] for sp in manifest.get("scales", []) or []}
-    pinned, _ = load_facet_pins(exdir, manifest, section)   # the same loader as validate_bundle (D26 included)
+    pinned, pinned_decl = load_facet_pins(exdir, manifest, section)   # the same loader as validate_bundle (D26 included)
     for rel in sorted(set(listed) - set(os.listdir(exdir))):
         fail(section, f"{rel}: listed but missing")
     for fn in sorted(os.listdir(exdir)):
@@ -2460,6 +2876,7 @@ def validate_examples():
     c_errs, c_notes = check_errors(exobjs, read=store_reader(exdir))
     for _, e in c_errs: fail(section, e)
     for n in c_notes: print(f"    note: {n}")
+    advice_report(section, exdir, manifest, raw_manifest, exobjs, pinned_decl, None)
     cov, cerrs, cnotes = risk_coverage(exobjs)
     for e in cerrs: fail(section, e)
     for n in cnotes + risk_link_notes(exobjs): print(f"    note: {n}")
@@ -2498,9 +2915,43 @@ if "--compose" in _argv:
         print(f"  ERROR: {e}")
     sys.exit(1 if errs else 0)
 
+def _load_listed(bdir):
+    """-> (manifest, raw manifest bytes, id -> (type, obj)) for the objects a bundle's manifest lists."""
+    raw = open(os.path.join(bdir, "content-manifest.json"), "rb").read()
+    m = json.loads(raw.decode("utf-8"))
+    objs = {}
+    for e in m.get("objects", []):
+        o = json.load(open(os.path.join(bdir, e["path"]), encoding="utf-8"))
+        t = inferType_single(o)
+        if t: objs[o["id"]] = (t, o)
+    return m, raw, objs
+
+if "--import-advice" in _argv:
+    _i = _argv.index("--import-advice")
+    dset, dpack = _argv[_i + 1], _argv[_i + 2]
+    am, _, ao = _load_listed(dset)
+    bm, braw, bo = _load_listed(dpack)
+    _, a_packs = kept_pack_errors(read_kept_packs(dset), am, ao)
+    R = compose_advice(ao, a_packs, bm, hashlib.sha256(braw).hexdigest(), bo)
+    pk = bm.get("pack") or {}
+    print(f"== import-advice {dpack} -> {dset} (dry run, nothing is written) ==")
+    if pk: print(f"  pack: {pk['id']} release {pk['version']} by {pk['publisher']['ref']}")
+    print(f"  result: {R['result']}")
+    for k in ("added", "replaced", "removed"):
+        for oid in R[k]: print(f"  {k}: {oid}")
+    for oid, d in sorted(R["capabilities"].items()):
+        print(f"  capabilities of {oid}: added {d['added']} removed {d['removed']} changed {d['changed']}")
+    for d in R["dangling"]: print(f"  dangling edge: {d}")
+    if R["result"] in ("import", "replace"):
+        print(f"  receipt: unchanged {R['unchanged']} of {len(ao) - len(R['replaced']) - len(R['removed'])} "
+              f"- added {len(R['added'])} component(s); the pack holds components only (ADVICE-1), "
+              f"so no requirement, tailoring or assessment is touched")
+    for _, e in R["errors"]: print(f"  ERROR: {e}")
+    sys.exit(1 if R["result"] == "refused" else 0)
+
 print("== conformance corpus ==")
-run_jcs(); run_modality(); run_parameters(); run_tailoring(); run_attestation(); run_facets(); run_references(); run_lifecycle(); run_tiers(); run_dsse(); run_composition(); run_conditional(); run_risk(); run_kernel(); run_scale(); run_check()
-for k in ("jcs", "modality", "parameter", "tailoring", "attestation", "facet", "reference", "lifecycle", "tier", "dsse", "composition", "conditional", "risk", "kernel", "scale", "check"):
+run_jcs(); run_modality(); run_parameters(); run_tailoring(); run_attestation(); run_facets(); run_references(); run_lifecycle(); run_tiers(); run_dsse(); run_composition(); run_conditional(); run_risk(); run_kernel(); run_scale(); run_check(); run_advice()
+for k in ("jcs", "modality", "parameter", "tailoring", "attestation", "facet", "reference", "lifecycle", "tier", "dsse", "composition", "conditional", "risk", "kernel", "scale", "check", "advice"):
     print(f"  {k}: {counts[k]} pass, {counts[k + ':FAIL']} fail")
 
 print("== bundles ==")
@@ -2514,6 +2965,9 @@ if not targets:
         for d in sorted(os.listdir(cdir)):
             if d.endswith("-bundle") and os.path.isdir(os.path.join(cdir, d)):
                 targets.append(os.path.join(cdir, d))
+    ep = os.path.join(SKILL, "example-packs")      # CP-ADVICE-1: the worked advice pack(s)
+    if os.path.isdir(ep):
+        targets += [os.path.join(ep, d) for d in sorted(os.listdir(ep)) if os.path.isdir(os.path.join(ep, d))]
 total_types = collections.Counter()
 for b in targets:
     tc = validate_bundle(b) or collections.Counter()

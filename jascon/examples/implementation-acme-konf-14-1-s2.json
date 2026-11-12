@@ -1,0 +1,17 @@
+{
+ "id": "https://cso.example/impl/acme--konf-14-1-s2",
+ "version": "2026-11",
+ "lifecycle": "active",
+ "component-ref": "https://cso.example/component/acme-saas",
+ "requirement-ref": "https://ns.bsi.bund.de/gspp/req/KONF.14.1",
+ "statement-refs": [
+  "s2"
+ ],
+ "responsibility": "provider",
+ "satisfied-by": [
+  {
+   "capability-ref": "https://dbvendor.example/component/server-7#cap-key-rotation"
+  }
+ ],
+ "status": "planned"
+}

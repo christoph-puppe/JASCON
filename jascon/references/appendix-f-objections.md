@@ -298,6 +298,32 @@ normative name in the specification. *(Decided 2026-07-21: named in spec
 D21; `supplements` registered as a stdlib relationship extension code,
 D20/C.5 — backlog #5 closed.)*
 
+**Q24. You abolished document models. Is an "advice pack" not a
+component-definition document by another name?** *(CP-ADVICE-1,
+proposed.)*
+No new model was added: an advice pack is a bundle, and its objects
+are Components that exist with or without it. What a pack adds is a
+header in the manifest and three rules about what the bundle may
+hold. The old world's guarantee — a vendor cannot change your
+controls — came from the shape of a document, which has no place for
+a control. Here it comes from a rule with a printed reason
+(ADVICE-1), checked on import and checkable again later, because the
+vendor's manifest stays in your set, named by its digest. The honest
+limit is in §9.7: no existing object changes, but references that
+were landmarks now resolve, so validation output may.
+
+**Q25. Why may a vendor not just ship Implementation objects for its
+product? They have clause refs, bindings and a status already.**
+Because an Implementation is the statement that a requirement *is
+met*. Importing a vendor's edges would change what your set says is
+implemented — the opposite of advice — and it rebuilds the
+duplication Chapter 9 opened with: one description of how a
+requirement is met in a vendor artifact, one in the system's own.
+A capability is a claim; it becomes part of your compliance picture
+only when an edge in your namespace cites it. The cost is one field
+(`statement-ids` on a capability) whose evidence is thin — one
+example file — and the proposal says so and marks it separable.
+
 ---
 
 **Field addendum (2026-07-20) — the first punch from the field.** Hours

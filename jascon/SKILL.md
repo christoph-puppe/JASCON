@@ -50,6 +50,11 @@ You must strictly adhere to the guidelines detailed in the handbook chapters and
 - **Reference Document:** [Chapter 9 — Systems, Components, and Inheritance](references/ch09-systems-components-inheritance.md)
 - **Companion Examples:** [component-paas.json](examples/component-paas.json), [component-acme-saas.json](examples/component-acme-saas.json) (Platform/SaaS components), [implementation-acme-konf.json](examples/implementation-acme-konf.json) (CRM implementation referencing upstream authorizations)
 
+### Requirement 8a: Vendor Advice (Advice Packs) *(CP-ADVICE-1, proposed, not released)*
+- **Description:** Model a vendor's recommendations as **capabilities on the vendor's Component** (`requirement-ref`, `statement-ids`, `description`, suggested `parameter-bindings`), never as Implementation objects: a capability is a claim, and the only statement that a requirement is met is an Implementation in the user's namespace that cites it. Publish them as an **advice pack**: a bundle whose content manifest carries a `pack` header (`kind: advice`, `id`, `version`, `publisher`) and pins `kernel-version` 2.0.0, whose listed objects are Components only (ADVICE-1), all under the publisher's origin (ADVICE-2), with no facet that declares a semantics class (ADVICE-3); the vendor's Attestation and envelope sit beside the manifest. Adopt a recommendation with `capability-ref` in the form `<component-id>#<capability-id>`; the cited component must be in the bundle, declare the capability and be a member of the edge's component (ADVICE-7) - do not use `inherited-from`, which says another party performs the control. On import, keep the vendor's manifest unchanged under `packs/sha256/<hex>` (the name is the SHA-256 of its bytes; ADVICE-8..10) and never edit the vendor's objects. Import adds new ids and replaces only the ids an earlier release of the same pack brought (ADVICE-11); the same file again is a no-op. State the publisher as *claimed* or *proven*, never as a bare name.
+- **Reference Document:** [Chapter 9, section 9.7](references/ch09-systems-components-inheritance.md); shapes in [Appendix A](references/appendix-a-shapes.md) (A.5, A.6, A.11); the proposal with its counts and open points is `drafts/CP-ADVICE-1.md` in the repository.
+- **Companion Examples:** the published pack [example-packs/dbvendor-server-7-advice/](example-packs/dbvendor-server-7-advice/) (manifest with pack header, one Component with three capabilities, Attestation and DSSE envelope beside the manifest); in the example bundle the result of importing it: [component-dbvendor-server-7.json](examples/component-dbvendor-server-7.json) (the vendor's object, byte for byte), `examples/packs/sha256/<hex>` (the kept manifest), [component-acme-saas.json](examples/component-acme-saas.json) (the product as a member), [implementation-acme-konf-14-1-s2.json](examples/implementation-acme-konf-14-1-s2.json) (the edge that adopts `cap-key-rotation`). Vectors: [advice-vectors.json](conformance/advice-vectors.json) (71). Dry run of an import: `validate_core.py --import-advice <set-dir> <pack-dir>`.
+
 ### Requirement 9: Assessment, Findings, and Deviations
 - **Description:** Define assessment methods, track finding statuses and action deadlines, and manage the lifecycle of deviations as an audited weakening channel.
 - **Reference Document:** [Chapter 10 — Assessment, Findings, Deviations](references/ch10-assessment-findings-deviations.md)
@@ -123,6 +128,10 @@ The [examples/](examples/) directory contains a complete, self-consistent bundle
   - [component-acme-saas.json](examples/component-acme-saas.json) — Downstream SaaS component.
 - **Implementation:**
   - [implementation-acme-konf.json](examples/implementation-acme-konf.json) — Implementation with CRM responsibility sharing.
+- **Advice pack** *(CP-ADVICE-1, proposed)*:
+  - [example-packs/dbvendor-server-7-advice/](example-packs/dbvendor-server-7-advice/) — The file a vendor publishes: pack header, one Component, Attestation and envelope beside the manifest.
+  - [component-dbvendor-server-7.json](examples/component-dbvendor-server-7.json) — The vendor's Component in the importing set; three recommendations, one against a requirement the set does not hold.
+  - [implementation-acme-konf-14-1-s2.json](examples/implementation-acme-konf-14-1-s2.json) — Adoption: the user's edge cites `<component-id>#cap-key-rotation`.
 - **Assessment:**
   - [assessment-2026q3.json](examples/assessment-2026q3.json) — Assessment execution details.
 - **Finding & Deviation:**

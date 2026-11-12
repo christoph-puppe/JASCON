@@ -214,6 +214,11 @@ accept · share · contingency · none`); `transfer` and `share` both land
 on `share`, and `contingency` and `none` have no code here. Zero corpus
 instances of either so far; if one appears it stays in the facet and is
 counted, never coerced.
+**Pack kinds** *(2.0.0, CP-ADVICE-1, proposed)*: `advice` — a closed set
+of one. The kind is what the pack rules fire on: an `advice` pack holds
+Components only (ADVICE-1). A pack of Checks would be a second code with
+rules of its own, added by the process of C.11, never by reading
+`advice` loosely.
 
 ---
 

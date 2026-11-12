@@ -16,7 +16,7 @@
    }
   },
   {
-   "capability-ref": "cap-consumer-ac-2a"
+   "capability-ref": "https://ifa.gov/goodread/component/access-control-appliance#cap-consumer-ac-2a"
   }
  ],
  "parameter-bindings": {

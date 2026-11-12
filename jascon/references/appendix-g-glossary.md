@@ -7,6 +7,12 @@ load-bearing. Where a number appears, it is a measured one.
 
 ---
 
+**Advice pack** *(CP-ADVICE-1, proposed)* — a vendor's recommendations
+as one published file: a bundle whose manifest carries a pack header
+(`kind: advice`, id, version, publisher) and whose objects are
+Components only (ADVICE-1..3). Importing one changes no existing
+object. (Ch. 9.7, App. A.11)
+
 **Alias** — an alternative name for an object, carried with its
 scheme (`{scheme, value}`); absorbs 1.x `alt-identifier` (×1,219
 measured). Distinct from *canonical-alias*. (Ch. 3, App. A.0)
@@ -72,9 +78,16 @@ facet NIST owns, shipped by default, governed like every other
 facet: "the standard library, not the constitution." (Ch. 15,
 App. D.9)
 
-**Capability** — a vendor claim on a Component (`{id, description,
-parameter-bindings}`); the replacement for the component-definition
-document and its duplication axis. (Ch. 9)
+**Capability** — a vendor claim on a Component (`{id, requirement-ref,
+statement-ids, description, parameter-bindings}`); the replacement for
+the component-definition document and its duplication axis. A
+recommendation in an advice pack is a capability; it counts for nothing
+until an Implementation cites it. (Ch. 9, 9.7)
+
+**capability-ref** — how an Implementation cites a capability: a bare
+id (of the edge's own component) or `<component-id>#<capability-id>`;
+closure-required, and a foreign component must be a member (ADVICE-7).
+(Ch. 9.7, App. A.6)
 
 **Census** — this project's method: count every field in every corpus
 before designing anything. "When in doubt, count." (Ch. 1; the
@@ -91,6 +104,12 @@ one recorded observation and the bound parameter values; `satisfied`,
 verdict is recomputed (CHECK-9). (App. B.1.10)
 
 **Chrome** — see *Annotation*.
+
+**Claimed / proven (publisher)** — the two states of an advice pack's
+publisher, the words of the Tailoring tier: *claimed* by the pack
+header and the origin its ids share with it; *proven* when an
+Attestation of that origin binds the manifest's digest and, in
+verification mode, its envelope verifies. (Ch. 9.7)
 
 **Code system** — a versioned closed enumeration (`modality@1`…)
 validated by `code-from`; unknown codes are errors because unpoliced
@@ -254,6 +273,12 @@ Requirement (± statements), responsibility, satisfied-by
 **JCS** — RFC 8785 JSON Canonicalization Scheme: one byte sequence
 per data value; the semantic digest's foundation, with the
 empty-omission and decimal-as-string guards on top. (Ch. 11)
+
+**Kept pack manifest** — the vendor's content manifest as it arrived,
+kept in the importing set under `packs/sha256/<hex>` (the name is the
+SHA-256 of its bytes), beside the set's own manifest and never listed
+in it. It is the import record: vendor, release, every object and its
+digest (ADVICE-8..10). (Ch. 9.7, 11.2)
 
 **KSI** — Key Security Indicator (CR26): named indicator +
 statement + tests + control links; converts to a Requirement plus

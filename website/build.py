@@ -137,7 +137,7 @@ def measure():
         sys.stderr.write(out[-3000:] + run.stderr[-3000:])
         die("the reference validator is not ALL GREEN; nothing was built")
 
-    families, bundles, examples, example_types = [], [], 0, {}
+    families, bundles, packs, examples, example_types = [], [], [], 0, {}
     section = None
     for line in out.splitlines():
         if line.startswith("== "):
@@ -156,6 +156,9 @@ def measure():
             if name == "skill-examples":
                 examples = sum(counts.values())
                 example_types = counts
+            elif name.startswith("jascon/example-packs/"):
+                # the skill's worked advice pack(s) (CP-ADVICE-1): examples, not a corpus
+                packs.append({"path": name, "objects": sum(counts.values())})
             else:
                 corpus = name.split("/")[1]
                 if corpus not in CORPORA:
@@ -177,6 +180,7 @@ def measure():
         },
         "bundles": bundles,
         "examples": {"objects": examples, "types": example_types},
+        "example_packs": packs,
         "validators": {
             "python_lines": count_lines(os.path.join(REPO, VALIDATOR_PY)),
             "powershell_lines": count_lines(os.path.join(REPO, VALIDATOR_PS)),
@@ -256,6 +260,8 @@ def context(facts, site):
             "powershell_lines": facts["validators"]["powershell_lines"],
             "check_vectors": next((f["vectors"] for f in facts["vectors"]["families"]
                                    if f["name"] == "check"), 0),
+            "advice_vectors": next((f["vectors"] for f in facts["vectors"]["families"]
+                                    if f["name"] == "advice"), 0),
         },
         "html": fragments(facts),
         "demo": demo_digests(),
@@ -456,8 +462,9 @@ def copy_apps(out, facts):
                 copy_tree(path, os.path.join(corpus_dst, name))
             elif os.path.isfile(path) and name.endswith(".md"):
                 shutil.copy2(path, os.path.join(corpus_dst, name))
-    for part in ("examples", "schemas", "conformance"):
-        copy_tree(os.path.join(REPO, "jascon", part), os.path.join(out, "jascon", part))
+    for part in ("examples", "example-packs", "schemas", "conformance"):
+        if os.path.isdir(os.path.join(REPO, "jascon", part)):
+            copy_tree(os.path.join(REPO, "jascon", part), os.path.join(out, "jascon", part))
     for name in ("LICENSE", "NOTICE"):
         shutil.copy2(os.path.join(REPO, name), os.path.join(out, name + ".txt"))
 
