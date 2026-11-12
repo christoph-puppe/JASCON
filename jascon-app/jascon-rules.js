@@ -28,7 +28,9 @@
    the composition of two bundles (D3.5), and the conditional-apply engine
    (B.1.8). All fifteen vector families run against this file, and the
    sixteenth of the Check type (CP-CHECK-1): I-Regexp,
-   check-verdict and CHECK-1..15 with the evidence chain. The
+   check-verdict and CHECK-1..15 with the evidence chain, and the
+   seventeenth of advice packs (CP-ADVICE-1): ADVICE-1..11 with the
+   publisher verdict and the import plan. The
    conditional-apply engine is run by nothing but its vectors, here as in
    the reference: no bundle has a place to carry an instance yet.
 
@@ -582,9 +584,14 @@ function jscClosureErrors(objs) {
    Kernel pin (KERNEL-1, KERNEL-2)
    ==================================================================== */
 const JSC_RULES_KERNEL = "2.0.0", JSC_RULES_KERNEL_READS = ["1.0.0", "2.0.0"];
-/* -> [version the content needs, why] */
+/* -> [version the content needs, why]. 2.0.0 added the Risk type,
+   Finding.risk-refs, pinned scale definitions, the Check type,
+   Assessment.check-results and .tailoring-ref, Finding.check-ref, the pack
+   header of a manifest, statement-ids on a capability (CP-ADVICE-1) and
+   product-version on a Component (author decision 2026-11-12). */
 function jscKernelNeeded(objs, manifest) {
   if (manifest && (manifest.scales || []).length) return ["2.0.0", "the manifest pins scale definitions"];
+  if (manifest && manifest.pack) return ["2.0.0", "the manifest carries a pack header"];
   for (const oid of [...objs.keys()].sort()) {
     const { type, obj } = objs.get(oid);
     if (type === "risk") return ["2.0.0", `${oid} is a Risk`];
@@ -592,6 +599,8 @@ function jscKernelNeeded(objs, manifest) {
     if (type === "check") return ["2.0.0", `${oid} is a Check`];
     if (type === "assessment" && (obj["check-results"] || obj["tailoring-ref"])) return ["2.0.0", `${oid} carries check results`];
     if (type === "finding" && obj["check-ref"]) return ["2.0.0", `${oid} carries a check-ref`];
+    if (type === "component" && (obj.capabilities || []).some(c => (c["statement-ids"] || []).length)) return ["2.0.0", `${oid} names clauses on a capability (statement-ids)`];
+    if (type === "component" && "product-version" in obj) return ["2.0.0", `${oid} names the product version it describes (product-version)`];
   }
   return ["1.0.0", null];
 }
@@ -907,6 +916,43 @@ function jscOptionalEmptyViolations(obj, path = "$") {
   }
   return out;
 }
+/* DATE-1 and DATE-2: two fields 1.0.0 left as free text and 2.0.0 types
+   (author decision 2026-11-12). The schema enforces; this names the rule
+   when an object matches no type, so that a 1.0.0 bundle with a free-text
+   date is told what to correct. */
+const JSC_DATE_RULES = {
+  "DATE-1": "a Deviation's `opened` is a date, YYYY-MM-DD - a date that any string satisfies cannot be compared, sorted or checked",
+  "DATE-2": "the `due` of a Finding's action is a typed point in time or duration (date, datetime, elapsed-duration, calendar-period) - a deadline a machine cannot read is prose",
+};
+/* a value as Python's repr prints it, for the message of DATE-1 */
+function jscPyRepr(v) {
+  if (typeof v === "string") return v.includes("'") && !v.includes('"') ? `"${v.replace(/\\/g, "\\\\")}"` : `'${v.replace(/\\/g, "\\\\").replace(/'/g, "\\'")}'`;
+  if (v === null || v === undefined) return "None";
+  if (typeof v === "boolean") return v ? "True" : "False";
+  if (Array.isArray(v)) return "[" + v.map(jscPyRepr).join(", ") + "]";
+  if (jscIsPlainObject(v)) return "{" + Object.entries(v).map(([k, x]) => jscPyRepr(k) + ": " + jscPyRepr(x)).join(", ") + "}";
+  return String(v);
+}
+/* -> [[rule id, what is wrong]] for an object that carries Deviations or
+   actions. It explains a refusal; it never accepts (the schema decides). */
+function jscDateRuleViolations(o) {
+  const out = [];
+  if (!jscIsPlainObject(o)) return out;
+  const valid = (shape, v) => !jscSchemaCheck({ $ref: "#/$defs/" + shape }, v, jscRulesSchema.JSC_SCHEMA).errors.length;
+  const deviations = (x, at) => {
+    if (jscIsPlainObject(x)) {
+      (Array.isArray(x.deviations) ? x.deviations : []).forEach((dv, i) => {
+        if (jscIsPlainObject(dv) && "opened" in dv && !valid("date", dv.opened)) out.push(["DATE-1", `${at}deviations[${i}].opened is ${jscPyRepr(dv.opened)}`]);
+      });
+      for (const [k, v] of Object.entries(x)) if (k !== "deviations") deviations(v, `${at}${k}.`);
+    } else if (Array.isArray(x)) x.forEach((v, i) => deviations(v, at ? `${at.slice(0, -1)}[${i}].` : `[${i}].`));
+  };
+  deviations(o, "");
+  (Array.isArray(o.actions) ? o.actions : []).forEach((a, i) => {
+    if (jscIsPlainObject(a) && "due" in a && !valid("due", a.due)) out.push(["DATE-2", `actions[${i}].due is ${jscPyJson(a.due, true)}`]);
+  });
+  return out;
+}
 /* What is wrong with one object, without looking at any other.
    -> { type: its one kernel type or null, errors: [string] } */
 function jscObjectErrors(obj) {
@@ -920,6 +966,8 @@ function jscObjectErrors(obj) {
       if (jscIsPlainObject(obj) && ("scenario" in obj || "owner-ref" in obj)) {
         best += jscRiskRuleViolations(obj).map(([rule, what]) => ` [${rule}] ${what} - ${JSC_RISK_RULES[rule]}`).join("");
       }
+      /* two fields that 1.0.0 left as free text and 2.0.0 types */
+      best += jscDateRuleViolations(obj).map(([rule, what]) => ` [${rule}] ${what} - ${JSC_DATE_RULES[rule]}`).join("");
     }
     return { type: null, errors: [`matches ${matches.length ? matches.join(" and ") : "NO type"}${best}`] };
   }
@@ -1204,11 +1252,13 @@ function jscComposeSide(g) {
    enforcement is judged; elsewhere nothing happens. A trigger over a
    parameter that is declared but not bound is an error of its own, never
    "does not hold". The text of a failure is normative and kept. */
-/* Python's json.dumps with its default separators, for the messages */
-function jscPyJson(v) {
-  if (Array.isArray(v)) return "[" + v.map(jscPyJson).join(", ") + "]";
-  if (jscIsPlainObject(v)) return "{" + Object.entries(v).map(([k, x]) => jscPyJson(k) + ": " + jscPyJson(x)).join(", ") + "}";
-  return JSON.stringify(v === undefined ? null : v).replace(/[\u0080-￿]/g, c => "\\u" + c.charCodeAt(0).toString(16).padStart(4, "0"));
+/* Python's json.dumps with its default separators, for the messages; with
+   `plain` as ensure_ascii=False writes it */
+function jscPyJson(v, plain) {
+  if (Array.isArray(v)) return "[" + v.map(x => jscPyJson(x, plain)).join(", ") + "]";
+  if (jscIsPlainObject(v)) return "{" + Object.entries(v).map(([k, x]) => jscPyJson(k, plain) + ": " + jscPyJson(x, plain)).join(", ") + "}";
+  const s = JSON.stringify(v === undefined ? null : v);
+  return plain ? s : s.replace(/[\u0080-￿]/g, c => "\\u" + c.charCodeAt(0).toString(16).padStart(4, "0"));
 }
 const jscSameValue = (a, b) => jscRulesCanonical({ v: a }) === jscRulesCanonical({ v: b });
 function jscPathGet(obj, path, objs) {
@@ -1842,18 +1892,599 @@ async function jscCheckErrors(objs, read) {
 const jscRulesPackageDigest = jscRulesCore ? jscRulesCore.jscPackageDigest : text => jscPackageDigest(text);
 
 /* ====================================================================
+   Advice packs (CP-ADVICE-1, kernel 2.0.0)
+   ====================================================================
+   An advice pack is a bundle whose manifest carries a pack header and whose
+   objects are Components: a vendor's recommendations as one published file.
+   A capability is a CLAIM (requirement, clauses, text, suggested parameter
+   values); the only statement that a requirement is met stays the
+   Implementation in the user's namespace, which cites the capability.
+   ADVICE-1..3 hold a pack to being advice; 4..7 hold capabilities and the
+   edges that cite them, in every bundle; 8..10 hold the vendor's manifest a
+   set keeps (packs/sha256/<hex>, beside the manifest like an envelope) to
+   the objects in the set; 11 is import, the one lawful replacement the
+   composition engine knows.
+
+   Ported from validate_core.py (pack_errors, capability_errors,
+   capability_ref_errors, kept_pack_errors, pack_publisher, compose_advice)
+   and run against advice-vectors.json. Every function returns its failures
+   as [[rule, message]], the message in the reference's words. */
+const JSC_PACK_STORE = "packs/sha256/";
+const JSC_ADVICE_RULES = {
+  "ADVICE-1": "advice must not be able to change what is required or how it is assessed - a pack holds Components and nothing else",
+  "ADVICE-2": "a pack cannot carry an object under someone else's identity, and so cannot replace one: its ids, its own id and its publisher share one origin",
+  "ADVICE-3": "advice must not reach a computation through a facet: no facet on a pack's object declares a semantics class",
+  "ADVICE-4": "a capability-ref must name one thing: capability ids are unique within a Component",
+  "ADVICE-5": "a recommendation is about a requirement; when that requirement is in the bundle the edge is typed and the clauses it names exist",
+  "ADVICE-6": "a suggested value the catalog cannot accept is the publisher's defect, found before a user adopts it",
+  "ADVICE-7": "an edge that leans on a capability nobody declared proves nothing, and advice applies to a system because the system contains the product - the cited component is in the bundle, declares the capability, and is the edge's own or one of its members",
+  "ADVICE-8": "a kept pack manifest is content-addressed and lives beside the manifest: its name is the SHA-256 of its bytes, it carries a pack header, and the bundle's manifest does not list it",
+  "ADVICE-9": "the advice in the set is what the vendor published: every object a kept pack manifest lists is in the bundle at that version with that semantic digest",
+  "ADVICE-10": "one release of a pack in a set, and one pack per object",
+  "ADVICE-11": "import never overwrites what the pack does not own: it adds ids the bundle does not hold and replaces ids an earlier release of the same pack brought",
+};
+const jscAdv = (rule, where, msg) => [rule, `${where}: ${msg} (${rule}: ${JSC_ADVICE_RULES[rule]})`];
+const jscRulesSha256 = jscRulesCore ? jscRulesCore.jscSha256 : data => jscSha256(data);
+
+/* ADVICE-1..3 over a published pack. objs: the objects the manifest lists.
+   A manifest without a pack header is not a pack and is held to nothing
+   here. pinnedDecl: Map(facet id -> the modifies-semantics its pin declares). */
+function jscPackErrors(manifest, objs, pinnedDecl) {
+  const pack = manifest && manifest.pack;
+  if (!pack) return [];
+  const E = [], pid = pack.id, origin = jscUriOrigin(pid), ids = [...objs.keys()].sort(), pd = pinnedDecl || new Map();
+  for (const oid of ids) {
+    const t = objs.get(oid).type;
+    if (t !== "component") {
+      E.push(jscAdv("ADVICE-1", pid, `${oid} is a ${t} - an advice pack holds components only${t === "attestation" ? " (an attestation travels beside the manifest, D3.1)" : ""}`));
+    }
+  }
+  const pub = (pack.publisher || {}).ref;
+  if (jscUriOrigin(pub) !== origin) E.push(jscAdv("ADVICE-2", pid, `publisher ${pub} is not under the pack's origin ${origin}`));
+  for (const oid of ids) if (jscUriOrigin(oid) !== origin) E.push(jscAdv("ADVICE-2", pid, `${oid} is not under the pack's origin ${origin}`));
+  for (const oid of ids) {
+    for (const key of Object.keys(objs.get(oid).obj.facets || {}).sort()) {
+      if (jscIsPrivateFacet(key)) continue;   // declares nothing by definition (D10)
+      const base = jscFacetBase(key);
+      const decl = JSC_STDLIB_BY_ID.has(base) ? JSC_STDLIB_BY_ID.get(base)["modifies-semantics"] || [] : pd.get(base);
+      /* an unregistered facet is jscFacetErrors' failure, not this rule's */
+      if (decl && decl.length) E.push(jscAdv("ADVICE-3", oid, `facet ${key} declares modifies-semantics [${[...decl].sort().map(x => `'${x}'`).join(", ")}] - not allowed in an advice pack`));
+    }
+  }
+  return E;
+}
+
+/* ADVICE-4..6 over every Component -> { errors, notes } */
+function jscCapabilityErrors(objs) {
+  const E = [], notes = [];
+  for (const oid of [...objs.keys()].sort()) {
+    const { type, obj: o } = objs.get(oid);
+    if (type !== "component") continue;
+    const caps = o.capabilities || [], ids = caps.map(c => c.id);
+    [...new Set(ids.filter((n, i) => ids.indexOf(n) !== i))].sort().forEach(n => E.push(jscAdv("ADVICE-4", oid, `capability id '${n}' is used twice`)));
+    let untyped = 0;
+    for (const c of caps) {
+      const at = `${oid}#${c.id}`, rref = c["requirement-ref"], named = c["statement-ids"] || [];
+      if (rref === undefined || rref === null) {
+        if (named.length) E.push(jscAdv("ADVICE-5", at, "statement-ids without a requirement-ref"));
+        continue;
+      }
+      const req = objs.get(rref);
+      if (!req) { untyped++; continue; }
+      if (req.type !== "requirement") { E.push(jscAdv("ADVICE-5", at, `requirement-ref resolves to a ${req.type}, not a Requirement: ${rref}`)); continue; }
+      const sids = req.obj.statements.map(s => s.id);
+      for (const sid of named) if (!sids.includes(sid)) E.push(jscAdv("ADVICE-5", at, `statement-id '${sid}' names no statement of ${rref}`));
+      const cover = new Set(named.length ? named : sids), decls = new Map();
+      for (const s of req.obj.statements) {
+        if (!cover.has(s.id)) continue;
+        for (const pd of s.parameters || []) { if (!decls.has(pd.name)) decls.set(pd.name, []); decls.get(pd.name).push(pd); }
+      }
+      const bound = c["parameter-bindings"] || {};
+      for (const pn of Object.keys(bound).sort()) {
+        const found = decls.get(pn) || [];
+        if (found.length !== 1) { E.push(jscAdv("ADVICE-6", at, `binds parameter '${pn}', which is declared ${found.length} times on the covered statements of ${rref}`)); continue; }
+        const verdict = jscParamCheck(found[0], bound[pn]);
+        if (verdict !== "valid") E.push(jscAdv("ADVICE-6", at, `binds parameter '${pn}' to a value ${verdict === "invalid" ? "of the wrong kind" : "outside the declared space"}`));
+      }
+    }
+    if (untyped) notes.push(`${oid}: ${untyped} capability requirement-ref(s) outside the bundle - not typed (resolves-if-present)`);
+  }
+  return { errors: E, notes };
+}
+
+/* -> [component id, capability id]. A bare id names a capability of the
+   edge's own component; `<component-id>#<capability-id>` names one of that
+   component. */
+function jscSplitCapabilityRef(ref, own) {
+  const s = String(ref), at = s.lastIndexOf("#");
+  return at < 0 ? [own, s] : [s.slice(0, at), s.slice(at + 1)];
+}
+
+/* ADVICE-7 over every Implementation */
+function jscCapabilityRefErrors(objs) {
+  const E = [];
+  for (const oid of [...objs.keys()].sort()) {
+    const { type, obj: o } = objs.get(oid);
+    if (type !== "implementation") continue;
+    const own = o["component-ref"];
+    for (const sb of o["satisfied-by"] || []) {
+      const ref = sb["capability-ref"];
+      if (ref === undefined || ref === null) continue;
+      const [cid, cap] = jscSplitCapabilityRef(ref, own), comp = objs.get(cid);
+      if (!comp) {   // the edge's own component is jscClosureErrors' failure
+        if (cid !== own) E.push(jscAdv("ADVICE-7", oid, `cites ${ref}, but component ${cid || "(none)"} is not in the bundle`));
+        continue;
+      }
+      if (comp.type !== "component") { E.push(jscAdv("ADVICE-7", oid, `cites ${ref}, which resolves to a ${comp.type}, not a Component`)); continue; }
+      if (!(comp.obj.capabilities || []).some(c => c.id === cap)) { E.push(jscAdv("ADVICE-7", oid, `cites capability '${cap}', which ${cid} does not declare`)); continue; }
+      if (cid !== own) {
+        const owner = objs.get(own);
+        if (owner && owner.type === "component" && !(owner.obj.members || []).some(m => m["component-ref"] === cid)) {
+          E.push(jscAdv("ADVICE-7", oid, `cites ${ref}, but ${cid} is not a member of ${own}`));
+        }
+      }
+    }
+  }
+  return E;
+}
+
+/* ADVICE-8..10. kept: [[file name, text]] of the files under packs/sha256/;
+   manifest: the bundle's own, or null.
+   -> { errors, packs: [[name, kept manifest]] that are well-formed } */
+async function jscKeptPackErrors(kept, manifest, objs) {
+  const E = [], packs = [];
+  for (const [name, text] of [...kept].sort((a, b) => (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0))) {
+    const where = JSC_PACK_STORE + name;
+    if (await jscRulesSha256(text) !== name) { E.push(jscAdv("ADVICE-8", where, "does not match its name")); continue; }
+    let km;
+    try { km = JSON.parse(text); } catch (e) { E.push(jscAdv("ADVICE-8", where, "is not readable JSON")); continue; }
+    if (!jscIsPlainObject(km) || jscShapeErrors("contentManifest", km).length || !("pack" in km)) { E.push(jscAdv("ADVICE-8", where, "is not a content manifest with a pack header")); continue; }
+    packs.push([name, km]);
+  }
+  for (const e of (manifest && manifest.objects) || []) {
+    if (e && String(e.path === undefined ? "" : e.path).startsWith(JSC_PACK_STORE)) E.push(jscAdv("ADVICE-8", e.path, "is listed in the bundle's manifest"));
+  }
+  const release = new Map(), owner = new Map();
+  for (const [, km] of packs) {
+    const pid = km.pack.id, rel = km.pack.version;
+    if (release.has(pid)) { E.push(jscAdv("ADVICE-10", pid, `releases ${release.get(pid)} and ${rel} are both in the bundle`)); continue; }
+    release.set(pid, rel);
+    for (const e of km.objects || []) {
+      if (owner.has(e.id)) { E.push(jscAdv("ADVICE-10", e.id, `is listed by two kept manifests: ${owner.get(e.id)} and ${pid}`)); continue; }
+      owner.set(e.id, pid);
+      const tgt = objs.get(e.id);
+      if (!tgt) E.push(jscAdv("ADVICE-9", e.id, `is listed by release ${rel} of ${pid} and is not in the bundle`));
+      else if (tgt.obj.version !== e.version) E.push(jscAdv("ADVICE-9", e.id, `is at version ${tgt.obj.version}, release ${rel} of ${pid} lists ${e.version}`));
+      else if (await jscRulesSemanticDigest(tgt.obj) !== e["semantic-digest"]) {
+        E.push(jscAdv("ADVICE-9", e.id, `differs from release ${rel} of ${pid} (semantic digest) - the vendor's advice was edited after import`));
+      }
+    }
+  }
+  return { errors: E, packs };
+}
+
+/* "claimed" | "proven". The publisher is CLAIMED by the header and the
+   origin its ids share with it (ADVICE-2). It is PROVEN when an Attestation
+   whose signer has that origin binds this manifest's digest - and, in
+   verification mode, its envelope verifies under a trusted key. The same
+   two words, and the same envelope check, as the Tailoring tier
+   (jscDeriveTier). mdigest: "sha256:<hex>" of the manifest's bytes;
+   verify: { envelopes: Map, trusted, notes } or null, as for jscDeriveTier. */
+async function jscPackPublisher(pack, mdigest, objs, verify) {
+  const origin = jscUriOrigin(pack.id);
+  for (const oid of [...objs.keys()].sort()) {
+    const { type, obj: o } = objs.get(oid);
+    if (type !== "attestation" || jscUriOrigin(o.signer || "") !== origin) continue;
+    if (o["content-manifest-digest"] !== mdigest) continue;
+    if (verify && verify.trusted) {
+      const env = o["envelope-ref"] ? (verify.envelopes || new Map()).get(o["envelope-ref"]) : undefined;
+      const res = env !== undefined && env !== null ? await jscVerifyEnvelope(env, o, verify.trusted)
+        : { status: "error", detail: "unsigned attestation (no envelope) cannot prove in verification mode" };
+      if (res.status !== "verified") { if (verify.notes) verify.notes.push(`${oid}: ${res.detail}`); continue; }
+    }
+    return "proven";
+  }
+  return "claimed";
+}
+
+/* ADVICE-11: what importing pack B into bundle A does. aObjs / bObjs:
+   Map(id -> {type, obj}); aKept: [[name, kept manifest]] of A; bDigest: the
+   hex SHA-256 of B's manifest bytes. Nothing is written; the result is the
+   plan and its receipt:
+     result     import | replace | already-imported | refused
+     added / replaced / removed   object ids
+     capabilities   per replaced Component: capability ids added, removed, changed
+     dangling   the edges of A that cite a capability the new release drops
+     unchanged  how many objects of A the import leaves as they are
+     errors     [[rule, message]] */
+function jscComposeAdvice(aObjs, aKept, bManifest, bDigest, bObjs, pinnedDecl) {
+  const R = { result: "refused", added: [], replaced: [], removed: [], dangling: [], capabilities: {}, unchanged: aObjs.size, errors: [] };
+  const pack = bManifest && bManifest.pack;
+  if (!pack) {
+    R.errors.push(jscAdv("ADVICE-11", "(import)", "the manifest carries no pack header - this is not an advice pack"));
+    return R;
+  }
+  R.errors.push(...jscPackErrors(bManifest, bObjs, pinnedDecl));
+  if (aKept.some(([name]) => name === bDigest)) { R.result = "already-imported"; R.errors = []; return R; }
+  const prev = aKept.filter(([, km]) => km.pack.id === pack.id).map(([, km]) => km);
+  const owned = new Set(prev.flatMap(km => (km.objects || []).map(e => e.id))), other = new Map();
+  for (const [, km] of aKept) if (km.pack.id !== pack.id) for (const e of km.objects || []) other.set(e.id, km.pack.id);
+  for (const oid of [...bObjs.keys()].sort()) {
+    if (!aObjs.has(oid)) R.added.push(oid);
+    else if (owned.has(oid)) R.replaced.push(oid);
+    else R.errors.push(jscAdv("ADVICE-11", oid, `is already in the set and ${other.has(oid) ? "belongs to " + other.get(oid) : "not part of " + pack.id}`));
+  }
+  R.removed = [...owned].filter(o => aObjs.has(o) && !bObjs.has(o)).sort();
+  const capsOf = r => new Map((r.obj.capabilities || []).map(c => [c.id, c]));
+  for (const oid of R.replaced) {
+    const old = capsOf(aObjs.get(oid)), now = capsOf(bObjs.get(oid));
+    const d = { added: [...now.keys()].filter(k => !old.has(k)).sort(), removed: [...old.keys()].filter(k => !now.has(k)).sort(),
+      changed: [...old.keys()].filter(k => now.has(k) && jscRulesCanonical(old.get(k)) !== jscRulesCanonical(now.get(k))).sort() };
+    if (d.added.length || d.removed.length || d.changed.length) R.capabilities[oid] = d;
+  }
+  for (const iid of [...aObjs.keys()].sort()) {
+    const { type, obj: o } = aObjs.get(iid);
+    if (type !== "implementation") continue;
+    for (const sb of o["satisfied-by"] || []) {
+      const ref = sb["capability-ref"];
+      if (ref === undefined || ref === null) continue;
+      const [cid, cap] = jscSplitCapabilityRef(ref, o["component-ref"]);
+      if (R.removed.includes(cid) || (R.replaced.includes(cid) && !capsOf(bObjs.get(cid)).has(cap))) R.dangling.push(`${iid} -> ${ref}`);
+    }
+  }
+  if (R.errors.length) return R;
+  R.result = prev.length ? "replace" : "import";
+  R.unchanged = aObjs.size - R.replaced.length - R.removed.length;
+  return R;
+}
+
+/* Everything ADVICE-1..10 says about one bundle. objs: every typed object;
+   listed: the ids its manifest lists (ADVICE-1..3 are asked of those);
+   kept: [[file name, text]] under packs/sha256/.
+   -> { errors, notes, packs: [[name, kept manifest]] } */
+async function jscAdviceErrors(manifest, objs, pinnedDecl, kept) {
+  const listed = new Set(((manifest && manifest.objects) || []).map(e => e && e.id));
+  const E = jscPackErrors(manifest || {}, new Map([...objs].filter(([id]) => listed.has(id))), pinnedDecl);
+  const caps = jscCapabilityErrors(objs), k = await jscKeptPackErrors(kept || [], manifest, objs);
+  return { errors: [...E, ...caps.errors, ...jscCapabilityRefErrors(objs), ...k.errors], notes: caps.notes, packs: k.packs };
+}
+
+/* ====================================================================
+   Advice packs: reading one, the import plan, adoption
+   ====================================================================
+   Tool behaviour around the rules above (CP-ADVICE-1 §3, right column, and
+   §4.6): the part two tools need not agree on. Nothing here writes. A page
+   shows the plan, and on confirmation hands its `writes` and `deletes` to
+   the store. */
+const jscRulesNormalize = jscRulesCore ? jscRulesCore.jscNormalizePaths : files => jscNormalizePaths(files);
+const jscRulesObjectPath = jscRulesCore ? jscRulesCore.jscObjectPath : (type, id, taken) => jscObjectPath(type, id, taken);
+const jscRulesSlug = jscRulesCore ? jscRulesCore.jscSlug : s => jscSlug(s);
+const JSC_ALL_SEMANTICS = ["assessment", "tailoring", "selection", "rendering"];   // a pin that omits its declaration is dangerous by default (D10)
+const JSC_DESCRIBES = "https://ns.jascon.net/stdlib/relation/describes";
+
+/* A pack as it was handed over (a folder, a ZIP, the files of a URL), read
+   and held to its own manifest the way a bundle is: every listed file is
+   there, has both digests the manifest states and matches one kernel type.
+   files: [{path, text}] -> {
+     manifest, manifestText, digest: hex SHA-256 of the manifest's bytes,
+     objs: Map(id -> {type, obj}) of the objects the manifest lists,
+     texts: Map(id -> {path, text}), the files as they arrived,
+     facetSchemas: [{id, version, path, text, def}], pinnedDecl: Map(facet id -> classes),
+     attestations: [{obj, path, text, envelope: {path, text} | null}] beside the manifest (D3.1),
+     problems: [string], what is wrong with the files themselves }
+   or null when the selection holds no content manifest. */
+async function jscAdvicePack(files) {
+  const byPath = new Map(jscRulesNormalize(files).files.map(f => [f.path, f.text]));
+  if (!byPath.has("content-manifest.json")) return null;
+  const P = { manifest: null, manifestText: byPath.get("content-manifest.json"), digest: null, objs: new Map(), texts: new Map(),
+    facetSchemas: [], pinnedDecl: new Map(), attestations: [], problems: [] };
+  P.digest = await jscRulesSha256(P.manifestText);
+  let manifest;
+  try { manifest = JSON.parse(P.manifestText); } catch (e) { P.problems.push(`content-manifest.json: not JSON (${e.message})`); return P; }
+  const shape = jscIsPlainObject(manifest) ? jscShapeErrors("contentManifest", manifest) : ["/: is not an object"];
+  if (shape.length) { P.problems.push(`manifest schema: ${shape[0]}`); return P; }
+  P.manifest = manifest;
+  const listed = new Set(["content-manifest.json"]), pinned = new Map();
+  for (const fe of manifest["facet-schemas"] || []) {
+    listed.add(fe.path);
+    const text = byPath.get(fe.path);
+    if (text === undefined) { P.problems.push(`${fe.path}: pinned facet schema listed but missing`); continue; }
+    if (await jscRulesPackageDigest(text) !== fe.digest) P.problems.push(`${fe.path}: pinned facet schema digest mismatch`);
+    let def;
+    try { def = JSON.parse(text); } catch (e) { P.problems.push(`${fe.path}: pinned facet schema unreadable: ${e.message}`); continue; }
+    if (!jscIsPlainObject(def) || typeof def.id !== "string") { P.problems.push(`${fe.path}: pinned facet schema unreadable: it has no id`); continue; }
+    pinned.set(def.id, def.schema || { type: "object" });
+    P.pinnedDecl.set(def.id, def["modifies-semantics"] || JSC_ALL_SEMANTICS);
+    P.facetSchemas.push({ id: def.id, version: fe["exact-version"], path: fe.path, text, def });
+  }
+  for (const sp of manifest.scales || []) listed.add(sp.path);
+  for (const e of manifest.objects) {
+    listed.add(e.path);
+    const text = byPath.get(e.path);
+    if (text === undefined) { P.problems.push(`${e.path}: listed but missing`); continue; }
+    let obj;
+    try { obj = JSON.parse(text); } catch (err) { P.problems.push(`${e.path}: not JSON (${err.message})`); continue; }
+    if (await jscRulesPackageDigest(text) !== e["package-digest"]) P.problems.push(`${e.path}: package-digest mismatch`);
+    if (!jscIsPlainObject(obj)) { P.problems.push(`${e.path}: matches NO type`); continue; }
+    if (await jscRulesSemanticDigest(obj) !== e["semantic-digest"]) P.problems.push(`${e.path}: semantic-digest mismatch`);
+    if (obj.id !== e.id) P.problems.push(`${e.path}: manifest id != object id`);
+    const res = jscObjectErrors(obj);
+    res.errors.forEach(m => P.problems.push(`${e.path}: ${m}`));
+    if (!res.type) continue;
+    if (P.objs.has(obj.id)) { P.problems.push(`${e.path}: object id already used by ${P.texts.get(obj.id).path}`); continue; }
+    P.objs.set(obj.id, { type: res.type, obj });
+    P.texts.set(obj.id, { path: e.path, text });
+  }
+  P.problems.push(...jscFacetErrors([...P.objs].map(([id, r]) => [id, r.obj]), pinned));
+  /* Attestations beside the manifest: JSON files of the manifest's own folder that it does not list and
+     that type as an Attestation. A pack lists Components only (ADVICE-1), so its vendor's Attestation is here. */
+  for (const [path, text] of byPath) {
+    if (path.includes("/") || !path.endsWith(".json") || listed.has(path)) continue;
+    let obj;
+    try { obj = JSON.parse(text); } catch (e) { continue; }
+    if (jscTypeOf(obj) !== "attestation") continue;
+    const ref = obj["envelope-ref"];
+    P.attestations.push({ obj, path, text, envelope: jscPlainPath(ref) && byPath.has(ref) ? { path: ref, text: byPath.get(ref) } : null });
+  }
+  return P;
+}
+/* a path that stays inside the bundle: relative, no scheme, no "..", no backslash */
+const jscPlainPath = p => typeof p === "string" && !!p && !/^[a-z][a-z0-9+.-]*:|^\/|\\|(^|\/)\.\.(\/|$)/i.test(p);
+
+/* What importing a pack into the set `g` would do (CP-ADVICE-1 §4.6), as a
+   plan a page can show before anything is written. pack: jscAdvicePack's
+   result; opts.trusted: signer URI -> public key hex, or nothing.
+   -> { result: import | replace | already-imported | refused,
+        pack: the header, digest, previous: the release this one replaces,
+        publisher: claimed | proven, verified, publisherNotes,
+        added, replaced, removed: object ids; capabilities: the diff per
+        replaced Component; dangling: the reference's list;
+        affected: [{edge, ref, what: removed | changed}], every
+        Implementation of the set that cites a capability the new release
+        drops or changes; resolves: edges of the set that name a Component
+        the pack brings (their rules were silent and are not afterwards);
+        errors: [[rule, message]], notes: [string],
+        writes: [{path, text, kind, type, id, origin}], deletes: [path],
+        dropped: ids of the earlier release's attestations,
+        before: Map(id -> semantic digest) of the set as it is }
+   An object that came with a pack is written with origin "pack": it is the
+   vendor's file byte for byte, and the export lists it. */
+async function jscAdviceImport(g, pack, opts) {
+  const trusted = (opts && opts.trusted) || null;
+  const plan = { result: "refused", pack: null, digest: pack.digest, previous: null, publisher: "claimed", verified: false, publisherNotes: [],
+    added: [], replaced: [], removed: [], capabilities: {}, dangling: [], affected: [], resolves: [], errors: [], notes: [],
+    writes: [], deletes: [], dropped: [], before: new Map() };
+  if (!pack.manifest) { plan.errors = pack.problems.map(m => ["PACK", m]); return plan; }
+  const aObjs = new Map([...g.objects].map(([id, r]) => [id, { type: r.type || "object", obj: r.obj }]));   // the type the set was loaded with, as the pages use it
+  const kept = (await jscKeptPackErrors(jscRulesKeptPacks(g), null, new Map())).packs;
+  const R = jscComposeAdvice(aObjs, kept, pack.manifest, pack.digest, pack.objs, pack.pinnedDecl);
+  const header = pack.manifest.pack || null;
+  Object.assign(plan, { result: R.result, pack: header, added: R.added, replaced: R.replaced, removed: R.removed, capabilities: R.capabilities, dangling: R.dangling, errors: R.errors });
+  if (!header) return plan;
+  /* who published it: an Attestation beside the pack's manifest that binds this manifest */
+  const envelopes = new Map();
+  for (const a of pack.attestations) if (a.envelope) { try { envelopes.set(a.envelope.path, JSON.parse(a.envelope.text)); } catch (e) { envelopes.set(a.envelope.path, null); } }
+  plan.publisher = await jscPackPublisher(header, "sha256:" + pack.digest, new Map(pack.attestations.map(a => [a.obj.id, { type: "attestation", obj: a.obj }])),
+    trusted ? { envelopes, trusted, notes: plan.publisherNotes } : null);
+  plan.verified = plan.publisher === "proven" && !!trusted;
+  const mine = kept.filter(([, km]) => km.pack.id === header.id);
+  if (mine.length) plan.previous = mine[0][1].pack.version;
+  if (R.result === "already-imported") return plan;
+  /* the pack as a bundle: its files against its own manifest, and the kernel it pins */
+  plan.errors = [...pack.problems.map(m => ["PACK", m]), ...jscKernelPinErrors(pack.manifest, pack.objs).map(m => [/KERNEL-2/.test(m) ? "KERNEL-2" : "KERNEL-1", m]), ...R.errors];
+  /* one set holds one version of a facet schema (D3.5: reported, never a silent pick) */
+  const newFacets = [];
+  for (const f of pack.facetSchemas) {
+    const have = g.facetSchemas.find(x => x.def && x.def.id === f.id);
+    if (!have) { newFacets.push(f); continue; }
+    const version = (have.pin && have.pin["exact-version"]) || have.def.version;
+    if (version !== f.version || jscRulesCanonical(have.def) !== jscRulesCanonical(f.def)) {
+      plan.errors.push(["PACK", `${f.id}: the pack pins this facet schema at ${f.version}, the set holds ${version}${version === f.version ? " with another content" : ""} - a set holds one version of a facet schema, and none is picked silently (D3.5)`]);
+    }
+  }
+  if (plan.errors.length) { plan.result = "refused"; return plan; }
+  /* the edges of the set the import touches without changing them */
+  for (const [iid, { type, obj: o }] of [...aObjs].sort((a, b) => (a[0] < b[0] ? -1 : 1))) {
+    if (type !== "implementation") continue;
+    for (const sb of o["satisfied-by"] || []) {
+      const inh = sb["inherited-from"], ref = sb["capability-ref"];
+      if (jscIsPlainObject(inh) && R.added.includes(inh["component-ref"])) plan.resolves.push(`${iid}: inherited-from ${inh["component-ref"]} now resolves, and its basis-ref '${inh["basis-ref"]}' must name an authorization there (D5)`);
+      if (typeof ref !== "string") continue;
+      const [cid, cap] = jscSplitCapabilityRef(ref, o["component-ref"]);
+      if (R.added.includes(cid)) plan.resolves.push(`${iid}: cites ${ref}, which now resolves, and is held to ADVICE-7`);
+      const d = R.capabilities[cid];
+      if (R.removed.includes(cid) || (d && d.removed.includes(cap))) plan.affected.push({ edge: iid, ref, what: "removed" });
+      else if (d && d.changed.includes(cap)) plan.affected.push({ edge: iid, ref, what: "changed" });
+    }
+  }
+  for (const [id, r] of g.objects) plan.before.set(id, await jscRulesSemanticDigest(r.obj));
+  /* what leaves: the objects only the earlier release had, its kept manifest, its attestation and envelope */
+  const taken = new Set(["content-manifest.json", ...[...g.objects.values()].map(r => r.path), ...g.aux.map(a => a.path),
+    ...g.facetSchemas.map(x => x.path), ...[...g.scales.values()].map(x => x.path)]);
+  const drop = path => { if (!plan.deletes.includes(path)) plan.deletes.push(path); taken.delete(path); };
+  for (const id of R.removed) drop(g.objects.get(id).path);
+  for (const [name] of mine) {
+    drop(JSC_PACK_STORE + name);
+    for (const [id, r] of g.objects) {
+      if (r.type === "attestation" && !r.entry && r.obj["content-manifest-digest"] === "sha256:" + name) { plan.dropped.push(id); drop(r.path); }
+    }
+  }
+  const stays = [...g.objects].filter(([id, r]) => r.type === "attestation" && !plan.dropped.includes(id)).map(([, r]) => r.obj["envelope-ref"]);
+  for (const id of plan.dropped) {
+    const ref = g.objects.get(id).obj["envelope-ref"];
+    if (ref && !stays.includes(ref) && g.aux.some(a => a.path === ref)) drop(ref);
+  }
+  /* what comes: the vendor's files as they are, the manifest under the name of its digest */
+  const write = (path, text, kind, type, id) => plan.writes.push({ path, text, kind, type, id, origin: "pack" });
+  /* a file keeps the path it has in the pack when that path is a plain one and free in the set */
+  const free = (wanted, type, id) => {
+    if (jscPlainPath(wanted) && !wanted.startsWith(JSC_PACK_STORE) && !taken.has(wanted)) { taken.add(wanted); return wanted; }
+    if (type !== "facet") return jscRulesObjectPath(type, id, taken);
+    const base = "facets/" + jscRulesSlug(String(id).split("/").filter(Boolean).pop());
+    let path = base + ".json";
+    for (let n = 2; taken.has(path); n++) path = `${base}-${n}.json`;
+    taken.add(path);
+    return path;
+  };
+  for (const id of R.replaced) write(g.objects.get(id).path, pack.texts.get(id).text, "object", "component", id);
+  for (const id of R.added) write(free(pack.texts.get(id).path, "component", id), pack.texts.get(id).text, "object", "component", id);
+  for (const f of newFacets) write(free(f.path, "facet", f.id), f.text, "facet-schema", null, f.id);
+  write(JSC_PACK_STORE + pack.digest, pack.manifestText, "aux", null, null);
+  taken.add(JSC_PACK_STORE + pack.digest);
+  for (const a of pack.attestations) {
+    const id = a.obj.id;
+    if (a.obj["content-manifest-digest"] !== "sha256:" + pack.digest) { plan.notes.push(`${id}: binds another manifest than this one and is not kept`); continue; }
+    if (g.objects.has(id) && !plan.dropped.includes(id)) { plan.notes.push(`${id}: an object of this id is in the set already; the pack's attestation is not kept`); continue; }
+    if (a.envelope) {
+      const cur = g.aux.find(x => x.path === a.envelope.path);
+      if (cur && !plan.deletes.includes(cur.path) && cur.text !== a.envelope.text) { plan.notes.push(`${id}: its envelope ${a.envelope.path} would overwrite another file of the set; the attestation is not kept`); continue; }
+    }
+    write(free(a.path, "attestation", id), a.text, "object", "attestation", id);
+    if (a.envelope) { write(a.envelope.path, a.envelope.text, "aux", null, null); taken.add(a.envelope.path); }
+  }
+  if (plan.publisher === "claimed") plan.notes.push(`${header.id}: the publisher is claimed, not proven - no attestation beside the manifest binds it${trusted ? " with a signature that verifies under a trusted key" : ""}`);
+  plan.deletes = plan.deletes.filter(p => !plan.writes.some(w => w.path === p));
+  return plan;
+}
+
+/* The receipt of an import (CP-ADVICE-1 §4.7), measured on the set as it is
+   after the write: of the objects the import does not own, how many have the
+   semantic digest they had before. g: the graph after the import.
+   -> { unchanged, of, added, replaced, removed, text } */
+async function jscAdviceReceipt(plan, g) {
+  const owned = new Set([...plan.replaced, ...plan.removed, ...plan.dropped]);
+  const others = [...plan.before.keys()].filter(id => !owned.has(id));
+  let unchanged = 0;
+  for (const id of others) if (g.objects.has(id) && await jscRulesSemanticDigest(g.objects.get(id).obj) === plan.before.get(id)) unchanged++;
+  const added = plan.added.filter(id => g.objects.has(id)).length;
+  return { unchanged, of: others.length, added, replaced: plan.replaced.length, removed: plan.removed.length,
+    text: `unchanged ${unchanged} of ${others.length} · added ${added} components` };
+}
+
+/* The packs a set holds, for a page that lists them: every well-formed
+   kept manifest with who published it, and what ADVICE-8 to ADVICE-10 say
+   about the kept files. trusted: signer URI -> public key hex, or nothing.
+   -> { packs: [{ name, id, version, title, publisher: {ref, name},
+                  status: claimed | proven, verified, why: [string], objects: [id] }],
+        errors: [[rule, message]] } */
+async function jscAdviceHeld(g, trusted) {
+  const objs = new Map([...g.objects].map(([id, r]) => [id, { type: r.type, obj: r.obj }]));
+  const kept = await jscKeptPackErrors(jscRulesKeptPacks(g), g.manifest, objs);
+  const atts = new Map([...objs].filter(([, r]) => r.type === "attestation")), envelopes = new Map(), packs = [];
+  for (const { obj } of atts.values()) {
+    const file = obj["envelope-ref"] && g.aux.find(a => a.path === obj["envelope-ref"]);
+    if (file) { try { envelopes.set(file.path, JSON.parse(file.text)); } catch (e) { envelopes.set(file.path, null); } }
+  }
+  for (const [name, km] of kept.packs) {
+    const why = [];
+    const status = await jscPackPublisher(km.pack, "sha256:" + name, atts, trusted ? { envelopes, trusted, notes: why } : null);
+    packs.push({ name, id: km.pack.id, version: km.pack.version, title: km.pack.title || null, publisher: km.pack.publisher,
+      status, verified: status === "proven" && !!trusted, why, objects: (km.objects || []).map(e => e.id) });
+  }
+  return { packs, errors: kept.errors };
+}
+
+/* An id for the capability a Component declares for a requirement: "cap-"
+   and the last part of the requirement's id, unique within the Component
+   (ADVICE-4). taken: Set of the capability ids in use; the result joins it. */
+function jscCapabilityId(requirementId, taken) {
+  const base = "cap-" + jscRulesSlug(String(requirementId).split("/").filter(Boolean).pop());
+  let id = base;
+  for (let n = 2; taken.has(id); n++) id = `${base}-${n}`;
+  taken.add(id);
+  return id;
+}
+
+/* Adopting a capability (CP-ADVICE-1 §5, "Not a rule here"): what each
+   suggested parameter value meets in the set. A value is offered for copying
+   into the edge only when it lies in the parameter's declared space and
+   agrees with every Tailoring in force that selects the requirement and
+   binds the parameter: the same value, or, for a parameter that tightens,
+   one on the tight side of it. Anything else is shown and not written.
+   -> { requirement: {type, obj} | null, statements: [id] the capability
+        covers, bindings: [{ name, value, verdict: fits | no-requirement |
+        not-declared | wrong-kind | outside-declared | outside-tailoring,
+        tailoring: id | null, bound: the value that Tailoring binds }] } */
+function jscAdviceAdoption(objs, capability) {
+  const req = objs.get(capability["requirement-ref"]), bound = capability["parameter-bindings"] || {};
+  const typed = req && req.type === "requirement" ? req : null, named = capability["statement-ids"] || [];
+  const all = typed ? typed.obj.statements.map(s => s.id) : [], cover = named.length ? named : all;
+  const out = { requirement: typed, statements: cover, bindings: [] };
+  const tailorings = [...objs.values()].filter(r => r.type === "tailoring" && r.obj.lifecycle !== "withdrawn" && typed && jscSelection(r.obj, objs).selected.has(typed.obj.id));
+  const tight = (decl, a, b) => {   // is a on the tight side of b, or equal to it?
+    if (jscSameValue(a, b)) return true;
+    const dir = decl.tightening;
+    if (dir !== "lower" && dir !== "higher") return false;
+    let cmp = null;
+    if (typeof a === "number" && typeof b === "number") cmp = a - b;
+    else if (typeof a === "string" && typeof b === "string" && JSC_DECIMAL_RE.test(a) && JSC_DECIMAL_RE.test(b)) cmp = jscDecimalCompare(a, b);
+    else if (jscIsPlainObject(a) && jscIsPlainObject(b) && a.unit === b.unit && typeof a.num === "number" && typeof b.num === "number") cmp = a.num - b.num;
+    return cmp !== null && (dir === "lower" ? cmp <= 0 : cmp >= 0);
+  };
+  for (const name of Object.keys(bound).sort()) {
+    const b = { name, value: bound[name], verdict: "fits", tailoring: null, bound: undefined };
+    out.bindings.push(b);
+    if (!typed) { b.verdict = "no-requirement"; continue; }
+    const decls = typed.obj.statements.filter(s => cover.includes(s.id)).flatMap(s => (s.parameters || []).filter(p => p.name === name).map(p => [s.id, p]));
+    if (decls.length !== 1) { b.verdict = "not-declared"; continue; }
+    const [sid, decl] = decls[0], verdict = jscParamCheck(decl, b.value);
+    if (verdict !== "valid") { b.verdict = verdict === "invalid" ? "wrong-kind" : "outside-declared"; continue; }
+    for (const t of tailorings) {
+      for (const op of t.obj.operations || []) {
+        if (op.op !== "set-parameter" || op["requirement-ref"] !== typed.obj.id || op.parameter !== name || (op["statement-id"] !== undefined && op["statement-id"] !== sid)) continue;
+        if (!tight(decl, b.value, op.value)) { b.verdict = "outside-tailoring"; b.tailoring = t.obj.id; b.bound = op.value; }
+      }
+    }
+  }
+  return out;
+}
+
+/* The Implementation that adopts a capability (CP-ADVICE-1 §4.4): an edge
+   of the user's component `ownId` that cites <productId>#<capability id>.
+   An edge of that component for the same requirement and the same clauses
+   gains the citation; otherwise a new edge is made under opts.id. Of
+   opts.copy, the names of suggested values the user ticked, only those are
+   written that jscAdviceAdoption finds fitting. The product must be a
+   member of the user's component for the edge to hold (ADVICE-7); that is
+   the caller's to see to. -> the object to save, or null when the
+   capability names no Requirement of the set (an edge needs one). */
+function jscAdviceEdge(objs, ownId, productId, capability, opts) {
+  const adoption = jscAdviceAdoption(objs, capability);
+  if (!adoption.requirement) return null;
+  const req = capability["requirement-ref"], sids = capability["statement-ids"] || [], ref = `${productId}#${capability.id}`;
+  const copy = Object.fromEntries(adoption.bindings.filter(b => b.verdict === "fits" && (opts.copy || []).includes(b.name)).map(b => [b.name, b.value]));
+  const sameClauses = o => JSON.stringify([...(o["statement-refs"] || [])].sort()) === JSON.stringify([...sids].sort());
+  const old = [...objs.values()].find(r => r.type === "implementation" && r.obj["component-ref"] === ownId && r.obj["requirement-ref"] === req && sameClauses(r.obj));
+  const bindings = { ...((old && old.obj["parameter-bindings"]) || {}), ...copy };
+  if (old) {
+    const edge = { ...old.obj, "satisfied-by": [...old.obj["satisfied-by"].filter(s => s["capability-ref"] !== ref), { "capability-ref": ref }] };
+    if (Object.keys(bindings).length) edge["parameter-bindings"] = bindings;
+    return edge;
+  }
+  const edge = { id: opts.id, version: "1", lifecycle: "draft", "component-ref": ownId, "requirement-ref": req };
+  if (sids.length) edge["statement-refs"] = [...sids];
+  edge.responsibility = opts.responsibility || "provider";
+  edge["satisfied-by"] = [{ "capability-ref": ref }];
+  if (Object.keys(bindings).length) edge["parameter-bindings"] = bindings;
+  edge.status = opts.status || "planned";
+  return edge;
+}
+
+/* ====================================================================
    A whole set
    ====================================================================
    Everything this file can say about a loaded graph, in the order the
    reference validator works: the manifest, each object, the digests, the
    pinned files, references, the operation law, the kernel pin, the scales,
-   risk coverage, facet payloads. `verified` is the result of jscVerify.
+   risk coverage, facet payloads, checks, advice packs. `verified` is the result of jscVerify.
    opts.trusted, a map of signer URI to public key in hex, puts the check in
    verification mode: an envelope is then judged against the signer's key,
    and a Tailoring is authority-proven only through a verifying envelope.
    -> { findings: [{ kind: "error"|"note", area, object: id or null, message }],
         types: {type: count}, tiers: {tailoring id: tier}, coverage: report,
-        signatures: {attestation id: "verified"|"unverified"|"error"|"missing"|"unsigned"} } */
+        signatures: {attestation id: "verified"|"unverified"|"error"|"missing"|"unsigned"},
+        packs: [{ where, name: the kept file's name or null, id, version, title, publisher,
+                  status: "claimed"|"proven", verified, objects: [id] }] } */
 async function jscCheckGraph(g, verified, opts) {
   const trusted = (opts && opts.trusted) || null;
   const findings = [], types = {};
@@ -1869,7 +2500,7 @@ async function jscCheckGraph(g, verified, opts) {
     /* KERNEL-1 holds for what the bundle came with. Content written in this
        app that needs a newer kernel (a Risk, a Check) gets its pin with the
        export, as its digests do: a note until then, not an error. */
-    const imported = new Map([...g.objects].filter(([, r]) => r.origin !== "authored"));
+    const imported = new Map([...g.objects].filter(([, r]) => !jscRulesAdded(r)));
     const pinErrors = jscKernelPinErrors(g.manifest, imported);
     pinErrors.forEach(m => add("error", "manifest", null, m));
     if (!pinErrors.length && jscKernelPinErrors(g.manifest, g.objects).length) {
@@ -1888,8 +2519,15 @@ async function jscCheckGraph(g, verified, opts) {
   if (verified) {
     for (const [id, v] of verified.objects) {
       const r = g.objects.get(id);
-      if (v === null) { if (!jscRulesBeside(r) && g.manifest) add(r.origin === "authored" ? "note" : "error", "digest", id, r.origin === "authored" ? "written in this app; not in the manifest until the set is exported" : "on disk but not in manifest"); continue; }
-      const edited = r.origin === "authored" ? " (edited in this app; the export writes a new manifest)" : "";
+      if (v === null) {
+        if (!jscRulesBeside(r) && g.manifest) {
+          add(jscRulesAdded(r) ? "note" : "error", "digest", id, r.origin === "authored" ? "written in this app; not in the manifest until the set is exported"
+            : r.origin === "pack" ? "came with an advice pack; not in the manifest until the set is exported" : "on disk but not in manifest");
+        }
+        continue;
+      }
+      const edited = r.origin === "authored" ? " (edited in this app; the export writes a new manifest)"
+        : r.origin === "pack" ? " (replaced by another release of its advice pack; the export writes a new manifest)" : "";
       if (!v.pkg) add(edited ? "note" : "error", "digest", id, "package-digest mismatch" + edited);
       if (!v.sem) add(edited ? "note" : "error", "digest", id, "semantic-digest mismatch" + edited);
     }
@@ -1942,6 +2580,32 @@ async function jscCheckGraph(g, verified, opts) {
   const store = new Map(g.aux.map(a => [a.path, a.text]));
   const checks = await jscCheckErrors(objs, ref => (store.has(ref) ? store.get(ref) : null));
   pass("check", "error")(checks.errors.map(([, m]) => m)); pass("check", "note")(checks.notes);
+  /* CP-ADVICE-1: the pack rules, capabilities and the edges that cite them, the pack manifests the set
+     keeps beside its own, and who published what. A message of ADVICE-5/6 starts with
+     <component>#<capability>; it is filed under the component and keeps its start. */
+  const advice = await jscAdviceErrors(g.manifest, objs, pinnedDecl, jscRulesKeptPacks(g));
+  for (const [, m] of advice.errors) {
+    const id = about(m) || ids.find(x => m.startsWith(x + "#")) || null;
+    add("error", "advice", id, about(m) ? strip(m) : m);
+  }
+  pass("advice", "note")(advice.notes);
+  const packs = [], atts = new Map([...objs].filter(([, r]) => r.type === "attestation"));
+  const publisher = async (pack, mdigest, where, name, listed) => {
+    const why = [];
+    const status = await jscPackPublisher(pack, mdigest, atts, verify && { ...verify, notes: why });
+    packs.push({ where, name, id: pack.id, version: pack.version, title: pack.title || null, publisher: pack.publisher, status, verified: status === "proven" && !!trusted, objects: listed });
+    const tag = status === "claimed" ? "publisher CLAIMED [header and prefix - UNPROVEN]"
+      : trusted ? "publisher PROVEN [attestation binds the manifest + signature VERIFIED]"
+      : "publisher PROVEN [attestation binds the manifest; UNVERIFIED without trusted keys]";
+    add("note", "advice", null, `${where}: ${pack.id} release ${pack.version} by ${(pack.publisher || {}).ref} = ${tag}`);
+    why.forEach(m => add("note", "advice", null, `${pack.id}: not proven by ${m}`));
+  };
+  if (g.manifest && g.manifest.pack && !jscShapeErrors("contentManifest", g.manifest).length) {
+    await publisher(g.manifest.pack, await jscRulesPackageDigest(g.manifestText), "pack", null, (g.manifest.objects || []).map(e => e.id));
+  }
+  for (const [name, km] of advice.packs) {
+    await publisher(km.pack, "sha256:" + name, `kept pack (${(km.objects || []).length} object(s))`, name, (km.objects || []).map(e => e.id));
+  }
   const tiers = {};
   for (const [id, r] of objs) {
     if (r.type !== "tailoring") continue;
@@ -1950,9 +2614,12 @@ async function jscCheckGraph(g, verified, opts) {
     why.forEach(m => add("note", "tailoring", id, "not proven by " + m));
     if (tiers[id] === "authority-proven" && !trusted) add("note", "tailoring", id, "authority-proven by a digest match; the signature is UNVERIFIED without trusted keys");
   }
-  return { findings, types, tiers, coverage: cov.report, signatures };
+  return { findings, types, tiers, coverage: cov.report, signatures, packs };
 }
 const jscRulesBeside = r => r.type === "attestation" && !r.entry;
+const jscRulesKeptPacks = jscRulesCore ? jscRulesCore.jscKeptPacks : g => jscKeptPacks(g);
+/* an object the set's manifest does not know yet because it was written here, or came with an advice pack */
+const jscRulesAdded = r => r.origin === "authored" || r.origin === "pack";
 
 if (typeof module !== "undefined" && module.exports) {
   module.exports = { JSC_MODALITIES, JSC_ELAPSED_UNITS, JSC_CALENDAR_UNITS, jscModalityVerdict, jscParamCheck,
@@ -1964,5 +2631,8 @@ if (typeof module !== "undefined" && module.exports) {
     jscOptionalEmptyViolations, jscObjectErrors, jscFacetErrors, jscTailoringDutyErrors, jscAttestationVerdict, jscCheckGraph,
     JSC_DSSE_PAYLOAD_TYPE, jscEd25519Verify, jscVerifyEnvelope, jscSemver, jscCompose, jscComposeSide, jscPathGet, jscEvalPredicate, jscConditionalApply,
     JSC_CHECK_RULES, JSC_CHECK_OPS, JscIRegexpError, jscIreCompile, jscIreFullMatch, jscCheckVerdict, jscCheckEach, jscCheckEachSummary, jscPercentShare, jscCheckAggregate, jscCheckParamDecls,
-    jscCheckObjectErrors, jscCheckErrors };
+    jscCheckObjectErrors, jscCheckErrors,
+    JSC_DATE_RULES, jscDateRuleViolations, JSC_PACK_STORE, JSC_ADVICE_RULES, jscPackErrors, jscCapabilityErrors, jscSplitCapabilityRef,
+    jscCapabilityRefErrors, jscKeptPackErrors, jscPackPublisher, jscComposeAdvice, jscAdviceErrors,
+    JSC_DESCRIBES, jscAdvicePack, jscAdviceImport, jscAdviceReceipt, jscAdviceHeld, jscAdviceAdoption, jscAdviceEdge, jscCapabilityId };
 }

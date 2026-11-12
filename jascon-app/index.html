@@ -90,7 +90,22 @@ iframe { width: 100%; height: 100%; border: 0; display: block; }
         <input type="file" id="pick-folder" webkitdirectory multiple hidden>
         <input type="file" id="pick-files" accept=".json,.zip,.md,.dsse" multiple hidden>
       </div>
-      <p class="hint" style="margin-top:8px" data-i18n>Or drop a bundle folder, a ZIP or JSON files anywhere on this page. A bundle with a content-manifest.json replaces the content of the active set; loose files are added to it. Loading from a URL needs this page to be served over http.</p>
+      <p class="hint" style="margin-top:8px" data-i18n>Or drop a bundle folder, a ZIP or JSON files anywhere on this page. A bundle with a content-manifest.json replaces the content of the active set; loose files are added to it. An advice pack replaces nothing: it is shown below and added when you confirm. Loading from a URL needs this page to be served over http.</p>
+    </div>
+
+    <div class="glass card" id="advice">
+      <h2><span class="glyph">⬡</span><span data-i18n>Advice packs</span></h2>
+      <p class="hint" style="max-width:86ch;margin-bottom:8px" data-i18n>An advice pack is a bundle a vendor publishes: its manifest carries a pack header and its objects are Components with the vendor's recommendations. A pack is added to the active set and never loaded over it. You see what it holds before anything is written, and the vendor's manifest is kept beside the set's own, so the set says which release of which pack came in.</p>
+      <div class="row">
+        <button id="btn-pack-folder" type="button" data-i18n>Add a pack from a folder…</button>
+        <button id="btn-pack-files" type="button" data-i18n>Add a pack from a ZIP…</button>
+        <button id="btn-pack-url" type="button" data-i18n>Add a pack from a URL…</button>
+        <input type="file" id="pick-pack-folder" webkitdirectory multiple hidden>
+        <input type="file" id="pick-pack-files" accept=".zip,.json,.dsse" multiple hidden>
+      </div>
+      <div id="pack-preview" style="margin-top:10px"></div>
+      <div class="nano sectionlabel" data-i18n>Packs in this set</div>
+      <div id="pack-list"></div>
     </div>
 
     <div class="glass card">
@@ -117,11 +132,20 @@ iframe { width: 100%; height: 100%; border: 0; display: block; }
 </div>
 
 <script src="jascon-core.js"></script>
+<script src="jascon-schema.js"></script>
+<script src="jascon-rules.js"></script>
+<script src="jascon-view.js"></script>
 <script>
 "use strict";
 /* The hub. It owns three things: which tool is shown, which set is active,
    and how a bundle gets into and out of a set. The tools themselves run in
    the iframe and learn about a change through the store's touch signal.
+
+   A bundle whose manifest carries a pack header is an advice pack
+   (CP-ADVICE-1). It never replaces a set: it is read, held to the rules
+   ADVICE-1 to ADVICE-3 and ADVICE-11 of jascon-rules.js, shown, and added
+   when the user says so. That is why this page loads the rules, and the
+   shared view code that renders a capability.
 
    A tool is listed here when its page exists; the order is the order of the
    work, as an ISMS runs it (ISO/IEC 27001 6.1.2-6.1.3): bring the catalogue
@@ -182,8 +206,8 @@ jscI18n.add("de", {
   "This set is empty. Load a bundle below.": "Dieses Set ist leer. Unten ein Bundle laden.",
   "Pinned files": "Gepinnte Dateien", "Load a bundle": "Bundle laden",
   "Open bundle folder…": "Bundle-Ordner öffnen…", "Open files or ZIP…": "Dateien oder ZIP öffnen…", "Load from URL…": "Von URL laden…",
-  "Or drop a bundle folder, a ZIP or JSON files anywhere on this page. A bundle with a content-manifest.json replaces the content of the active set; loose files are added to it. Loading from a URL needs this page to be served over http.":
-    "Oder einen Bundle-Ordner, ein ZIP oder JSON-Dateien irgendwo auf diese Seite ziehen. Ein Bundle mit content-manifest.json ersetzt den Inhalt des aktiven Sets; einzelne Dateien kommen hinzu. Laden von einer URL setzt voraus, dass diese Seite über http ausgeliefert wird.",
+  "Or drop a bundle folder, a ZIP or JSON files anywhere on this page. A bundle with a content-manifest.json replaces the content of the active set; loose files are added to it. An advice pack replaces nothing: it is shown below and added when you confirm. Loading from a URL needs this page to be served over http.":
+    "Oder einen Bundle-Ordner, ein ZIP oder JSON-Dateien irgendwo auf diese Seite ziehen. Ein Bundle mit content-manifest.json ersetzt den Inhalt des aktiven Sets; einzelne Dateien kommen hinzu. Ein Advice Pack ersetzt nichts: Es wird unten gezeigt und hinzugefügt, wenn Sie bestätigen. Laden von einer URL setzt voraus, dass diese Seite über http ausgeliefert wird.",
   "Integrity and export": "Integrität und Export",
   "Verify all digests": "Alle Digests prüfen", "Export the set as a bundle (.zip)": "Set als Bundle exportieren (.zip)",
   "Verify recomputes both SHA-256 digests of every object, the package digest over the bytes and the semantic digest over the canonical form, and compares them with the manifest the bundle came with. Export writes a content manifest for what the set holds now; a set nobody changed leaves with the manifest it came with.":
@@ -219,6 +243,47 @@ jscI18n.add("de", {
   "none": "keine", "facet schema": "Facet-Schema", "scale": "Skala", "scale with matrix": "Skala mit Matrix",
   "The help text (readme.md) could not be loaded here: {msg}. Open readme.md from the jascon-app folder.":
     "Der Hilfetext (readme.md) konnte hier nicht geladen werden: {msg}. Bitte readme.md aus dem Ordner jascon-app öffnen.",
+});
+jscI18n.add("de", {
+  "Advice packs": "Advice Packs",
+  "An advice pack is a bundle a vendor publishes: its manifest carries a pack header and its objects are Components with the vendor's recommendations. A pack is added to the active set and never loaded over it. You see what it holds before anything is written, and the vendor's manifest is kept beside the set's own, so the set says which release of which pack came in.":
+    "Ein Advice Pack ist ein Bundle, das ein Hersteller veröffentlicht: Sein Manifest trägt einen Pack-Kopf, und seine Objekte sind Komponenten mit den Empfehlungen des Herstellers. Ein Pack kommt zum aktiven Set hinzu und ersetzt es nie. Sie sehen, was es enthält, bevor etwas geschrieben wird, und das Manifest des Herstellers bleibt neben dem des Sets erhalten; so sagt das Set, welche Ausgabe welches Packs hereinkam.",
+  "Add a pack from a folder…": "Pack aus einem Ordner hinzufügen…", "Add a pack from a ZIP…": "Pack aus einem ZIP hinzufügen…", "Add a pack from a URL…": "Pack von einer URL hinzufügen…",
+  "Packs in this set": "Packs in diesem Set", "This set holds no advice pack.": "Dieses Set enthält kein Advice Pack.",
+  "{source} is an advice pack: it is shown first and added to the set, never loaded over it": "{source} ist ein Advice Pack: Es wird erst gezeigt und dann zum Set hinzugefügt, nie darüber geladen",
+  "{source} holds no content-manifest.json: an advice pack is a bundle, a folder or a ZIP with its manifest": "{source} enthält keine content-manifest.json: Ein Advice Pack ist ein Bundle, ein Ordner oder ein ZIP mit seinem Manifest",
+  "URL of the pack (the folder that holds its content-manifest.json)": "URL des Packs (der Ordner mit seiner content-manifest.json)",
+  "claimed": "behauptet", "proven": "belegt", "added": "neu", "changed": "geändert", "removed": "entfernt", "replaced": "ersetzt", "component(s) added": "Komponente(n) hinzugefügt",
+  "claimed: the header names the publisher and the ids share its origin; no attestation beside the manifest binds this manifest, so nothing proves it":
+    "behauptet: Der Kopf nennt den Herausgeber, und die Ids teilen seinen Ursprung; keine Attestation neben dem Manifest bindet dieses Manifest, also belegt es nichts",
+  "proven: an attestation of the publisher binds this manifest; its signature is not verified, because no trusted key is set on the Validate page":
+    "belegt: Eine Attestation des Herausgebers bindet dieses Manifest; ihre Signatur ist nicht verifiziert, weil auf der Seite Validieren kein vertrauenswürdiger Schlüssel hinterlegt ist",
+  "proven: an attestation of the publisher binds this manifest, and its signature verifies under the key you trust":
+    "belegt: Eine Attestation des Herausgebers bindet dieses Manifest, und ihre Signatur verifiziert unter dem Schlüssel, dem Sie vertrauen",
+  "not proven by {what}": "nicht belegt durch {what}",
+  "product version": "Produktversion", "describes": "beschreibt", "declares no capability": "deklariert keine Fähigkeit", "no longer in this release": "nicht mehr in dieser Ausgabe",
+  "Not imported: {source}": "Nicht importiert: {source}", "pack": "Pack", "release": "Ausgabe", "publisher": "Herausgeber",
+  "another release of a pack this set holds; it holds release {old}. Releases are not ordered: which of the two is newer is yours to say.":
+    "eine andere Ausgabe eines Packs, das dieses Set enthält; es enthält Ausgabe {old}. Ausgaben sind nicht geordnet: Welche der beiden neuer ist, entscheiden Sie.",
+  "Already imported: release {release}": "Bereits importiert: Ausgabe {release}", "Nothing was written.": "Es wurde nichts geschrieben.", "Close": "Schließen", "Cancel": "Abbrechen",
+  "This pack is not imported. Nothing was written.": "Dieses Pack wird nicht importiert. Es wurde nichts geschrieben.", "Components ({n})": "Komponenten ({n})",
+  "The vendor's manifest is kept unchanged beside the set's own, and its attestation with it.": "Das Manifest des Herstellers bleibt unverändert neben dem des Sets erhalten, und seine Attestation mit ihm.",
+  "The vendor's manifest is kept unchanged beside the set's own.": "Das Manifest des Herstellers bleibt unverändert neben dem des Sets erhalten.",
+  "A pack holds Components only (ADVICE-1), so no requirement, tailoring or assessment of the set is touched.": "Ein Pack enthält nur Komponenten (ADVICE-1); keine Anforderung, kein Tailoring und kein Assessment des Sets wird berührt.",
+  "Components this release no longer holds; they leave the set": "Komponenten, die diese Ausgabe nicht mehr enthält; sie verlassen das Set",
+  "Implementations of this set that cite a removed or changed capability": "Implementationen dieses Sets, die eine entfernte oder geänderte Fähigkeit zitieren",
+  "An edge that cites a removed capability points at nothing after the import and fails ADVICE-7 until you decide what it should say.":
+    "Eine Kante, die eine entfernte Fähigkeit zitiert, zeigt nach dem Import ins Leere und verletzt ADVICE-7, bis Sie entscheiden, was sie sagen soll.",
+  "References of this set that resolve after the import, so that rules which were silent on them apply": "Verweise dieses Sets, die nach dem Import auflösen, sodass Regeln greifen, die bisher dazu schwiegen",
+  "Replace release {old} with release {release}": "Ausgabe {old} durch Ausgabe {release} ersetzen", "Import release {release} into set \"{set}\"": "Ausgabe {release} in Set „{set}“ importieren",
+  "pack not imported: {n} reason(s)": "Pack nicht importiert: {n} Grund/Gründe",
+  "pack {id} release {release}: {n} component(s), publisher {status}. Nothing is written until you confirm.": "Pack {id} Ausgabe {release}: {n} Komponente(n), Herausgeber {status}. Geschrieben wird erst, wenn Sie bestätigen.",
+  "the set changed since the preview; look at it again": "Das Set hat sich seit der Vorschau geändert; bitte noch einmal ansehen",
+  "imported release {release} of {id}": "Ausgabe {release} von {id} importiert", "replaced {n}, removed {m}": "{n} ersetzt, {m} entfernt",
+  "Measured after the write: of the objects of the set that the pack does not own, this many have the semantic digest they had before. That no Tailoring resolves differently follows from ADVICE-1 and was not computed.":
+    "Nach dem Schreiben gemessen: Von den Objekten des Sets, die dem Pack nicht gehören, haben so viele den Semantic-Digest, den sie vorher hatten. Dass kein Tailoring anders auflöst, folgt aus ADVICE-1 und wurde nicht berechnet.",
+  "kept pack manifests: {ok} of {n} match their name": "aufbewahrte Pack-Manifeste: {ok} von {n} passen zu ihrem Namen", "kept pack manifests": "aufbewahrte Pack-Manifeste",
+  "replaced by another release of its advice pack": "durch eine andere Ausgabe seines Advice Packs ersetzt", "came with an advice pack": "kam mit einem Advice Pack",
 });
 
 /* ---------- log of the Home sheet ---------- */
@@ -302,6 +367,7 @@ async function refresh() {
     const c = tabs.querySelector(`[data-count="${a.id}"]`);
     if (c) c.textContent = n ? String(n) : "";
   }
+  await renderPacks(g);
   if (!has) return;
   $("set-chips").innerHTML = JSC_TYPES.filter(t => counts[t])
     .map(t => `<span class="chip"><b>${counts[t]}</b>${jscEsc(t)}</span>`).join("");
@@ -344,9 +410,15 @@ $("btn-set-delete").addEventListener("click", async () => {
    without one is loose files and is added. Either way the files are stored
    as they arrived. */
 async function load(files, source) {
-  if (!files.length) { hubLog.warn(T("nothing to load: no JSON, Markdown or ZIP file in the selection")); return; }
+  if (!files.length) { hubLog.warn(T("nothing to load: no JSON, Markdown or ZIP file in the selection")); return false; }
   const set = jscStore.activeSet();
   const isBundle = files.some(f => f.path === JSC_MANIFEST || f.path.endsWith("/" + JSC_MANIFEST));
+  /* a bundle whose manifest carries a pack header is an advice pack: it is never loaded over the set */
+  if (isBundle && isPack(files)) {
+    hubLog.info(T("{source} is an advice pack: it is shown first and added to the set, never loaded over it", { source }));
+    await offerPack(files, source);
+    return true;
+  }
   const held = (await jscStore.files(set)).length;
   if (isBundle && held && !confirm(T("Set \"{set}\" holds {n} file(s). Replace them with this bundle?", { set, n: held }))) return;
   try {
@@ -360,25 +432,161 @@ async function load(files, source) {
   }
   $("verify-out").textContent = "";
   await refresh();
+  return false;
 }
 $("btn-folder").addEventListener("click", () => $("pick-folder").click());
 $("btn-files").addEventListener("click", () => $("pick-files").click());
 $("pick-folder").addEventListener("change", async e => { await load(await jscReadFiles(e.target.files), T("the folder")); e.target.value = ""; });
 $("pick-files").addEventListener("change", async e => { await load(await jscReadFiles(e.target.files), T("the selection")); e.target.value = ""; });
-async function loadUrl(url) {
+/* -> true when the URL held an advice pack, which is now on show on this sheet.
+   `asPack` is the button that adds a pack: what it is given is never loaded
+   over the set, whatever it turns out to be. */
+async function loadUrl(url, asPack) {
   try {
     const { files, failed } = await jscFetchBundle(url);
     if (failed.length) hubLog.warn(T("{n} file(s) could not be fetched (first: {first})", { n: failed.length, first: failed[0] }));
-    await load(files, url);
+    if (asPack) { await offerPack(files, url); return true; }
+    return await load(files, url);
   } catch (e) {
     hubLog.err(T("load failed: {msg}", { msg: e.message }));
     if (location.protocol === "file:") hubLog.warn(T("this page runs from file://, where the browser blocks fetch. Serve the repository (python -m http.server) and open the page over http."));
+    return false;
   }
 }
 $("btn-url").addEventListener("click", () => {
   const url = prompt(T("Bundle URL (the folder that holds content-manifest.json)"), "../converted_examples/US.IFA-GoodRead/ifa-core-bundle/");
   if (url) loadUrl(url);
 });
+
+/* ---------- advice packs (CP-ADVICE-1 §4.6) ----------
+   A pack is read, held to its own manifest and to ADVICE-1..3 and ADVICE-11,
+   and shown; nothing is written before the user confirms. The same file
+   again writes nothing. Another release of a pack the set holds is shown
+   with what changes, and replaces only what the earlier release brought.
+   The rules and the plan are jascon-rules.js; this is the dialogue. */
+const V = jscView;
+let shown = null;   // { pack, source } : the pack on show, waiting for a decision
+/* the manifest of a selection, parsed, or null */
+function manifestOf(files) {
+  const paths = files.map(f => f.path).filter(p => p === JSC_MANIFEST || p.endsWith("/" + JSC_MANIFEST)).sort((a, b) => a.length - b.length);
+  try { return paths.length ? JSON.parse(files.find(f => f.path === paths[0]).text) : null; } catch (e) { return null; }
+}
+const isPack = files => { const m = manifestOf(files); return !!m && typeof m === "object" && "pack" in m; };
+const PUBLISHER = {
+  claimed: N("claimed: the header names the publisher and the ids share its origin; no attestation beside the manifest binds this manifest, so nothing proves it"),
+  proven: N("proven: an attestation of the publisher binds this manifest; its signature is not verified, because no trusted key is set on the Validate page"),
+  verified: N("proven: an attestation of the publisher binds this manifest, and its signature verifies under the key you trust"),
+};
+const publisherHtml = (header, status, verified) => {
+  const key = status === "proven" && verified ? "verified" : status, pub = header.publisher || {};
+  return `${pub.name ? jscEsc(TT(pub.name)) + " · " : ""}<span class="mono">${jscEsc(pub.ref)}</span>
+    <span class="badge" style="border-color:var(--${status === "proven" ? "green" : "amber"});color:var(--${status === "proven" ? "green" : "amber"})">${jscEsc(T(status))}</span>
+    <div class="hint">${jscEsc(T(PUBLISHER[key]))}</div>`;
+};
+/* one Component of a pack, with what a replacement changes on it */
+function packComponentHtml(o, diff) {
+  const mark = id => !diff ? "" : diff.added.includes(id) ? V.badge(T("added")) : diff.changed.includes(id) ? V.badge(T("changed")) : "";
+  const about = (o.relations || []).filter(r => r.type === JSC_DESCRIBES);
+  return `<div style="border-left:3px solid var(--green);padding-left:12px;margin:12px 0"><div>${V.typeBadge("component")}${V.badge(o.kind || "?")}${V.badge("v " + o.version)}
+      ${o["product-version"] !== undefined ? V.badge(T("product version") + " " + o["product-version"]) : ""} <b>${jscEsc(TT(o.title) || o.label || V.last(o.id))}</b></div>
+    <div class="mono" style="font-size:10.5px;color:var(--text-quiet);word-break:break-all">${jscEsc(o.id)}</div>
+    ${about.map(r => `<div class="hint">${jscEsc(T("describes"))} ${V.refLink(r.ref)}</div>`).join("")}
+    ${(o.capabilities || []).map(c => V.capabilityHtml(c, mark(c.id))).join("") || `<div class="hint">${jscEsc(T("declares no capability"))}</div>`}
+    ${diff && diff.removed.length ? `<div class="verdict-warn">${jscEsc(T("no longer in this release"))}: ${diff.removed.map(id => V.badge("⚙ " + id)).join(" ")}</div>` : ""}</div>`;
+}
+function packPreviewHtml(pack, plan, source) {
+  const h = plan.pack, lines = (list, cls) => list.map(m => `<div class="${cls}">${jscEsc(m)}</div>`).join("");
+  if (!h) return `<div class="wb"><b>${jscEsc(T("Not imported: {source}", { source }))}</b>${lines(plan.errors.map(([, m]) => "✗ " + m), "verdict-bad")}</div>`;
+  const head = `<div class="kv">${V.kv(T("pack"), `<span class="mono">${jscEsc(h.id)}</span>`)}
+      ${V.kv(T("release"), V.badge(h.version) + (plan.result === "replace" ? ` <span class="hint">${jscEsc(T("another release of a pack this set holds; it holds release {old}. Releases are not ordered: which of the two is newer is yours to say.", { old: plan.previous }))}</span>` : ""))}
+      ${V.kv(T("publisher"), publisherHtml(h, plan.publisher, plan.verified) + lines(plan.publisherNotes.map(m => T("not proven by {what}", { what: m })), "hint"))}
+      ${V.kv(T("manifest"), `<span class="mono" style="font-size:10.5px;word-break:break-all">sha256:${jscEsc(pack.digest)}</span>`)}</div>`;
+  const title = `<b>${jscEsc(TT(h.title) || V.last(h.id))}</b> <span class="hint">${jscEsc(source)}</span>`;
+  if (plan.result === "already-imported") {
+    return `<div class="wb">${title}${head}<p class="verdict-ok" style="margin-top:8px">✓ ${jscEsc(T("Already imported: release {release}", { release: h.version }))}. ${jscEsc(T("Nothing was written."))}</p>
+      <div class="row"><button type="button" id="pack-cancel">${jscEsc(T("Close"))}</button></div></div>`;
+  }
+  const comps = [...pack.objs.values()].filter(r => r.type === "component").map(r => packComponentHtml(r.obj, plan.capabilities[r.obj.id])).join("");
+  if (plan.result === "refused") {
+    return `<div class="wb">${title}${head}<p class="verdict-bad" style="margin-top:8px">${jscEsc(T("This pack is not imported. Nothing was written."))}</p>
+      ${lines(plan.errors.map(([, m]) => "✗ " + m), "verdict-bad")}${V.section(T("Components ({n})", { n: pack.objs.size }), comps)}
+      <div class="row" style="margin-top:8px"><button type="button" id="pack-cancel">${jscEsc(T("Close"))}</button></div></div>`;
+  }
+  const count = (n, label) => `<span class="chip"><b>${n}</b>${jscEsc(T(label))}</span>`;
+  const keeps = plan.writes.filter(w => w.type === "attestation").length;
+  const go = plan.result === "replace" ? N("Replace release {old} with release {release}") : N("Import release {release} into set \"{set}\"");
+  return `<div class="wb">${title}${head}
+    <div style="margin-top:8px">${count(plan.added.length, N("component(s) added"))}${plan.result === "replace" ? count(plan.replaced.length, N("replaced")) + count(plan.removed.length, N("removed")) : ""}
+      <span class="hint">${jscEsc(T(keeps ? "The vendor's manifest is kept unchanged beside the set's own, and its attestation with it." : "The vendor's manifest is kept unchanged beside the set's own."))}
+      ${jscEsc(T("A pack holds Components only (ADVICE-1), so no requirement, tailoring or assessment of the set is touched."))}</span></div>
+    ${V.section(T("Components ({n})", { n: pack.objs.size }), comps)}
+    ${plan.removed.length ? V.section(T("Components this release no longer holds; they leave the set"), plan.removed.map(id => `<div class="mono">${jscEsc(id)}</div>`).join("")) : ""}
+    ${plan.result === "replace" ? V.section(T("Implementations of this set that cite a removed or changed capability"),
+      plan.affected.map(a => `<div>${V.refLink(a.edge, V.last(a.edge))} → <span class="mono">${jscEsc(a.ref)}</span> ${V.badge(T(a.what))}</div>`).join("") +
+      (plan.affected.some(a => a.what === "removed") ? `<div class="verdict-warn">${jscEsc(T("An edge that cites a removed capability points at nothing after the import and fails ADVICE-7 until you decide what it should say."))}</div>` : "") ||
+      `<div class="hint">${jscEsc(T("none"))}</div>`) : ""}
+    ${plan.resolves.length ? V.section(T("References of this set that resolve after the import, so that rules which were silent on them apply"), lines(plan.resolves, "hint")) : ""}
+    ${lines(plan.notes.map(m => "· " + m), "hint")}
+    <div class="row" style="margin-top:10px"><button type="button" class="primary" id="pack-import">${jscEsc(T(go, { old: plan.previous, release: h.version, set: jscStore.activeSet() }))}</button>
+      <button type="button" id="pack-cancel">${jscEsc(T("Cancel"))}</button></div></div>`;
+}
+/* reads what was handed over as a pack and shows it; writes nothing */
+async function offerPack(files, source) {
+  const el = $("pack-preview");
+  select("home", true);
+  const pack = files.length ? await jscAdvicePack(files) : null;
+  if (!pack) { shown = null; el.textContent = ""; hubLog.warn(T("{source} holds no content-manifest.json: an advice pack is a bundle, a folder or a ZIP with its manifest", { source })); return; }
+  const plan = await jscAdviceImport(await jscSet.load(), pack, { trusted: jscTrustedKeys() });
+  shown = { pack, source };
+  el.innerHTML = packPreviewHtml(pack, plan, source);
+  V.wireRefs(el);
+  const h = plan.pack;
+  if (plan.result === "already-imported") hubLog.ok(T("Already imported: release {release}", { release: h.version }) + " · " + h.id);
+  else if (plan.result === "refused") { hubLog.err(T("pack not imported: {n} reason(s)", { n: plan.errors.length })); plan.errors.forEach(([, m]) => hubLog.err(m)); }
+  else hubLog.info(T("pack {id} release {release}: {n} component(s), publisher {status}. Nothing is written until you confirm.", { id: h.id, release: h.version, n: pack.objs.size, status: T(plan.publisher) }));
+  const close = () => { shown = null; el.textContent = ""; };
+  if ($("pack-cancel")) $("pack-cancel").addEventListener("click", close);
+  if ($("pack-import")) $("pack-import").addEventListener("click", async () => {
+    $("pack-import").disabled = true;
+    /* the plan is made again on the set as it is now: another page may have written since the preview */
+    const now = await jscAdviceImport(await jscSet.load(), pack, { trusted: jscTrustedKeys() });
+    if (now.result !== plan.result || JSON.stringify([now.added, now.replaced, now.removed]) !== JSON.stringify([plan.added, plan.replaced, plan.removed])) {
+      hubLog.warn(T("the set changed since the preview; look at it again"));
+      await offerPack(files, source);
+      return;
+    }
+    await jscSet.applyPack(now);
+    const receipt = await jscAdviceReceipt(now, jscSet.graph);
+    hubLog.ok(T("imported release {release} of {id}", { release: h.version, id: h.id }) + ": " + receipt.text + (now.result === "replace" ? " · " + T("replaced {n}, removed {m}", { n: receipt.replaced, m: receipt.removed }) : ""));
+    el.innerHTML = `<div class="wb"><p class="verdict-ok">✓ ${jscEsc(T("imported release {release} of {id}", { release: h.version, id: h.id }))}</p>
+      <p class="mono" id="pack-receipt">${jscEsc(receipt.text)}</p>
+      <p class="hint">${jscEsc(T("Measured after the write: of the objects of the set that the pack does not own, this many have the semantic digest they had before. That no Tailoring resolves differently follows from ADVICE-1 and was not computed."))}</p></div>`;
+    shown = null;
+    $("verify-out").textContent = "";
+    await refresh();
+  });
+  el.scrollIntoView({ block: "nearest" });
+}
+$("btn-pack-folder").addEventListener("click", () => $("pick-pack-folder").click());
+$("btn-pack-files").addEventListener("click", () => $("pick-pack-files").click());
+$("pick-pack-folder").addEventListener("change", async e => { await offerPack(await jscReadFiles(e.target.files), T("the folder")); e.target.value = ""; });
+$("pick-pack-files").addEventListener("change", async e => { await offerPack(await jscReadFiles(e.target.files), T("the selection")); e.target.value = ""; });
+$("btn-pack-url").addEventListener("click", () => {
+  const url = prompt(T("URL of the pack (the folder that holds its content-manifest.json)"), "../jascon/example-packs/dbvendor-server-7-advice/");
+  if (url) loadUrl(url, true);
+});
+/* the packs the active set holds: which pack, which release, who published it and whether that is proven */
+async function renderPacks(g) {
+  const held = await jscAdviceHeld(g, jscTrustedKeys()), el = $("pack-list");
+  const name = id => (g.objects.has(id) ? V.refLink(id, V.labelOf(g.objects.get(id))) : `<span class="mono">${jscEsc(id)}</span>`);
+  el.innerHTML = held.packs.map(p => `<div class="stmt"><b>${jscEsc(TT(p.title) || V.last(p.id))}</b> ${V.badge(T("release") + " " + p.version)}
+      <div class="mono" style="font-size:10.5px;color:var(--text-quiet);word-break:break-all">${jscEsc(p.id)} · packs/sha256/${jscEsc(p.name)}</div>
+      <div style="margin-top:4px">${publisherHtml(p, p.status, p.verified)}</div>
+      <div style="margin-top:4px">${p.objects.map(name).join(" · ")}</div></div>`).join("") +
+    held.errors.map(([, m]) => `<div class="verdict-bad">✗ ${jscEsc(m)}</div>`).join("") ||
+    `<div class="hint">${jscEsc(T("This set holds no advice pack."))}</div>`;
+  V.wireRefs(el);
+}
 document.addEventListener("dragover", e => { e.preventDefault(); $("drop").classList.add("droptarget"); });
 document.addEventListener("dragleave", e => { if (!e.relatedTarget) $("drop").classList.remove("droptarget"); });
 document.addEventListener("drop", async e => {
@@ -394,10 +602,13 @@ $("btn-verify").addEventListener("click", async () => {
   bar.classList.remove("done"); bar.style.width = "0%";
   const v = await jscVerify(g, (done, total) => { bar.style.width = Math.round(100 * done / total) + "%"; });
   bar.style.width = "100%"; bar.classList.add("done");
-  const pinsOk = v.pins.filter(p => p.ok).length, c = v.counts;
-  const clean = !c.bad && !c.unlisted && !c.missing && pinsOk === v.pins.length;
+  const pinsOk = v.pins.filter(p => p.ok).length, packsOk = v.packs.filter(p => p.ok).length, c = v.counts;
+  const clean = !c.bad && !c.unlisted && !c.missing && pinsOk === v.pins.length && packsOk === v.packs.length;
   hubLog[clean ? "ok" : "warn"](T("verification: {ok} ok, {bad} mismatch, {unlisted} not in the manifest, {missing} listed but missing; pins {pinsOk}/{pins}",
     { ...c, pinsOk, pins: v.pins.length }));
+  /* a kept pack manifest is named by the SHA-256 of its bytes (ADVICE-8) */
+  if (v.packs.length) hubLog[packsOk === v.packs.length ? "ok" : "warn"](T("kept pack manifests: {ok} of {n} match their name", { ok: packsOk, n: v.packs.length }));
+  v.packs.filter(p => !p.ok).forEach(p => hubLog.err(`${p.path}: does not match its name (ADVICE-8)`));
   const chip = (n, label, cls) => `<span class="chip"><b class="${cls}">${n}</b>${jscEsc(T(label))}</span>`;
   /* A mismatch on an object this app wrote is an edit, not tampering; the
      table says which it is. Only rows that are not plainly "ok" are shown. */
@@ -409,12 +620,14 @@ $("btn-verify").addEventListener("click", async () => {
     const mark = okay => okay ? `<span class="verdict-ok">${jscEsc(T("ok"))}</span>` : `<span class="verdict-bad">${jscEsc(T("mismatch"))}</span>`;
     const note = rec.origin === "authored"
       ? T(r ? "edited in this app since the bundle was loaded" : "added in this app")
+      : rec.origin === "pack" ? T(r ? "replaced by another release of its advice pack" : "came with an advice pack")
       : T(r ? "does not match the manifest" : "not in the manifest");
     rows.push(`<tr><td class="mono">${jscEsc(id)}</td><td>${r ? mark(r.pkg) : "—"}</td><td>${r ? mark(r.sem) : "—"}</td><td>${jscEsc(note)}</td></tr>`);
   }
   out.innerHTML = chip(c.ok, "verified", "verdict-ok") + chip(c.bad, "mismatch", c.bad ? "verdict-bad" : "") +
     chip(c.unlisted, "not in the manifest", c.unlisted ? "verdict-warn" : "") + chip(c.missing, "listed but missing", c.missing ? "verdict-bad" : "") +
     chip(`${pinsOk}/${v.pins.length}`, "pins", pinsOk === v.pins.length ? "verdict-ok" : "verdict-bad") +
+    (v.packs.length ? chip(`${packsOk}/${v.packs.length}`, N("kept pack manifests"), packsOk === v.packs.length ? "verdict-ok" : "verdict-bad") : "") +
     (rows.length ? `<table class="flat"><tr><th>${jscEsc(T("Object"))}</th><th>${jscEsc(T("Package digest"))}</th><th>${jscEsc(T("Semantic digest"))}</th><th>${jscEsc(T("Note"))}</th></tr>${rows.slice(0, 200).join("")}</table>` : "");
 });
 
@@ -526,8 +739,9 @@ $("key-pill").addEventListener("click", () => {
    when the address changes while the page is open. */
 async function route() {
   const hash = location.hash.slice(1), params = new URLSearchParams(hash.includes("=") ? hash : "");
-  if (params.get("load")) await loadUrl(params.get("load")); else await refresh();
-  select(params.get("tool") || (hash.includes("=") ? "home" : hash) || "home", false);
+  /* an advice pack is shown on this sheet and waits for a decision; the tool the link names is not opened over it */
+  const onShow = params.get("load") ? await loadUrl(params.get("load")) : (await refresh(), false);
+  select(onShow ? "home" : params.get("tool") || (hash.includes("=") ? "home" : hash) || "home", false);
 }
 (async () => {
   buildTabs();

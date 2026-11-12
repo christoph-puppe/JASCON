@@ -71,6 +71,12 @@ jscI18n.add("de", {
   "Passes when all of these hold": "Bestanden, wenn alle diese gelten", "Collectors": "Kollektoren",
 });
 
+jscI18n.add("de", {
+  "names no requirement": "nennt keine Anforderung", "suggested values": "vorgeschlagene Werte", "kind": "Art",
+  "product version": "Produktversion", "describes": "beschreibt", "Capabilities ({n})": "Fähigkeiten ({n})",
+  "Authorizations": "Autorisierungen", "from an advice pack": "aus einem Advice Pack",
+});
+
 const esc = jscEsc;
 const TYPE_VIEW = {
   requirement:    { glyph: "◇", color: "var(--accent)", what: N("One requirement of a framework with its clauses: statements, each with a binding force (modality), the parties it binds, typed parameters and prose in several languages.") },
@@ -226,18 +232,44 @@ function checkBody(o) {
     section(T("Passes when all of these hold"), (o.criteria || []).map(assertion).join("")) +
     section(T("Collectors"), cols.map(c => `<div style="margin:6px 0">${badge(c.id)}${badge(c.runtime)}${c.privileges ? badge(c.privileges) : ""}<pre class="raw" style="max-height:240px">${esc(c.source)}</pre></div>`).join(""));
 }
+/* One capability of a Component: its id, the requirement and clauses it is
+   about, the text, and the parameter values it suggests. A capability is a
+   claim; nothing here says a requirement is met. `mark` is markup a page
+   puts behind the id (added, changed, a verdict). */
+function capabilityHtml(c, mark) {
+  const req = c["requirement-ref"], bound = Object.entries(c["parameter-bindings"] || {});
+  return `<div class="stmt"><div>${badge("⚙ " + c.id)}${mark || ""}
+      ${req ? refLink(req, objs().has(req) ? labelOf(objs().get(req)) : req) : `<span class="hint">${esc(T("names no requirement"))}</span>`}
+      ${(c["statement-ids"] || []).map(s => badge(T("statement {id}", { id: s }))).join("")}</div>
+    ${typeof c.description === "string" ? `<div class="prose">${prose(c.description)}</div>` : c.description ? langBlocks(c.description, "prose") : ""}
+    ${bound.length ? `<div class="hint" style="margin-top:4px">${esc(T("suggested values"))}: ${bound.map(([k, v]) => `<span class="paramtok">${esc(k)} = ${esc(JSON.stringify(v))}</span>`).join(" ")}</div>` : ""}</div>`;
+}
+/* A Component: what it is, the version of the product it describes, the
+   product of somebody else it is about (a relation of type describes, shown
+   and never computed with), its members, capabilities and authorizations. */
+function componentBody(o) {
+  const about = (o.relations || []).filter(r => r.type === JSC_DESCRIBES);
+  return `<div class="kv">${kv(T("kind"), badge(o.kind || "?"))}
+      ${o["product-version"] !== undefined ? kv(T("product version"), `<span class="mono">${esc(o["product-version"])}</span>`) : ""}
+      ${about.map(r => kv(T("describes"), refLink(r.ref))).join("")}</div>` +
+    section(T("Members ({n})", { n: (o.members || []).length }), (o.members || []).map(m =>
+      `<div>${refLink(m["component-ref"], objs().has(m["component-ref"]) ? titleOf(objs().get(m["component-ref"])) : m["component-ref"])}${m.context ? ` <span class="hint">(${esc(m.context)})</span>` : ""}</div>`).join("")) +
+    section(T("Capabilities ({n})", { n: (o.capabilities || []).length }), (o.capabilities || []).map(c => capabilityHtml(c)).join("")) +
+    section(T("Authorizations"), o.authorizations ? prettyVal(o.authorizations) : "");
+}
 const GENERIC_SKIP = new Set(["id", "version", "label", "title", "lifecycle", "aliases", "relations", "facets", "annotations"]);
 function genericBody(o) {
   const rest = Object.fromEntries(Object.entries(o).filter(([k]) => !GENERIC_SKIP.has(k)));
   return Object.keys(rest).length ? section(T("Fields"), prettyVal(rest)) : "";
 }
-const BODY = { requirement: requirementBody, requirementSet: setBody, tailoring: tailoringBody, mapping: mappingBody, risk: riskBody, check: checkBody };
+const BODY = { requirement: requirementBody, requirementSet: setBody, tailoring: tailoringBody, mapping: mappingBody, component: componentBody, risk: riskBody, check: checkBody };
 
 /* The whole object as markup. `verified` is the row jscVerify gave for it. */
 function objectHtml(r, verified) {
   const o = r.obj, view = TYPE_VIEW[r.type];
   const head = `<div style="margin-bottom:10px">${typeBadge(r.type)}${badge(o.lifecycle || "?")}${o.label ? badge(o.label) : ""}${badge("v " + (o.version || "?"))}
-      ${r.origin === "authored" ? `<span class="badge" style="border-color:var(--amber);color:var(--amber)">${esc(T("edited in this app"))}</span>` : ""}</div>
+      ${r.origin === "authored" ? `<span class="badge" style="border-color:var(--amber);color:var(--amber)">${esc(T("edited in this app"))}</span>` : ""}
+      ${r.origin === "pack" ? `<span class="badge" style="border-color:var(--green);color:var(--green)">${esc(T("from an advice pack"))}</span>` : ""}</div>
     <h3 style="font-size:15px;margin-bottom:2px">${esc(titleOf(r))}</h3>
     <div class="mono" style="font-size:10.5px;color:var(--text-quiet);word-break:break-all">${esc(o.id)}</div>
     <div class="hint" style="margin-top:6px">${esc(T(view.what))}</div>`;
@@ -430,7 +462,7 @@ window.jscView = {
   TYPE_VIEW, MODALITY_COLOR, VERDICT_CLASS, onOpen: null,
   open(id) { (this.onOpen || openDrawer)(id); },
   last, labelOf, titleOf, typeGlyph, typeBadge, badge, modBadge, refLink, wireRefs, prose, langBlocks, kv, prettyVal, section,
-  objectHtml, pickerHtml, wirePicker, donut, hbars, dimIndex, dimOptLabel, reqMatches, draft,
+  objectHtml, capabilityHtml, pickerHtml, wirePicker, donut, hbars, dimIndex, dimOptLabel, reqMatches, draft,
 };
 
 })();
