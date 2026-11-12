@@ -249,6 +249,9 @@ test("an OSCAL component definition becomes Components and recommendations; what
   assert.match(report, /Kinds mapped: Example DB Backup Link: interconnection -> service/);
   assert.match(report, /components\[\]\.props ×1/);
   assert.match(report, /component-definition\.capabilities ×1/);
+  assert.match(report, /back-matter\.resources \(other than sources\) ×1/);
+  assert.match(report, /1 source\(s\) read through the back-matter\. 1 parameter reference\(s\) in the texts rewritten/);
+  assert.match(report, /1 suggested value\(s\) keep an OSCAL Rev 4 parameter id \(ac-2\.1 ac-2\.1_prm_1\)/, "a Rev 4 id the catalogue would rename is named");
   assert.equal(await page.locator('[data-bind="pack.title"][data-lang="en"]').inputValue(), "Example DB Server 7 component definition");
   assert.equal(await page.locator('[data-bind="publisher.name"][data-lang="en"]').inputValue(), "Example DB Vendor Inc.");
   await set('[data-bind="pack.id"]', "https://dbvendor.example/pack/server-7-hardening");
@@ -264,7 +267,7 @@ test("an OSCAL component definition becomes Components and recommendations; what
   assert.deepEqual(Object.keys(caps), [NIST + "SC-8", NIST + "AC-2", NIST + "AC-2.1", NIST + "AU-12"]);
   assert.deepEqual(caps[NIST + "SC-8"]["statement-ids"], ["smt"]);
   assert.equal(caps[NIST + "SC-8"].id, "cap-sc-8");
-  assert.equal(caps[NIST + "SC-8"].description.en, "The server encrypts every client connection.\n\nsmt: Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3.");
+  assert.equal(caps[NIST + "SC-8"].description.en, "The server encrypts every client connection.\n\nsmt: Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3; this protects the {param:sc-08_odp} of transmitted data.");
   assert.deepEqual(caps[NIST + "AC-2"]["statement-ids"], ["smt.e", "smt.g"]);
   assert.deepEqual(caps[NIST + "AC-2"]["parameter-bindings"], { "ac-02_odp.03": "the database administrator" });
   assert.deepEqual(caps[NIST + "AC-2.1"]["parameter-bindings"], { "ac-2.1_prm_1": "the user management API" }, "without the catalogue the Rev 4 id stays as it was");
@@ -285,6 +288,7 @@ test("with the SP 800-53 catalogue loaded, the import places every value under t
   assert.match(report, /Not resolved; set the requirement by hand: BAK-1/);
   assert.doesNotMatch(report, /Suggested values not placed/);
   assert.doesNotMatch(report, /Clauses the catalogue does not have/);
+  assert.doesNotMatch(report, /Rev 4 parameter id/, "with the catalogue the Rev 4 id is renamed, so nothing is left to warn about");
   await set('[data-bind="pack.id"]', "https://dbvendor.example/pack/server-7-hardening");
   const s = await B.status();
   assert.doesNotMatch(s, /ADVICE-5|ADVICE-6/, "every clause and suggested value is one the catalogue declares");
@@ -293,4 +297,33 @@ test("with the SP 800-53 catalogue loaded, the import places every value under t
   const caps = capsOf(server);
   assert.deepEqual(caps[NIST + "SC-8"]["parameter-bindings"], { "sc-08_odp": ["confidentiality", "integrity"] }, "set for the whole control implementation, placed where it is declared, as a list for a many-choice");
   assert.deepEqual(caps[NIST + "AC-2.1"]["parameter-bindings"], { "ac-02.01_odp": "the user management API" }, "the Rev 4 id renamed through alt-identifiers");
+}));
+
+/* NIST's own examples (oscal-content, public domain): the census inputs of
+   drafts/cp-advice-1-census/. Their sources are back-matter references, one
+   of them Rev 4, and their texts carry OSCAL's insert markup. */
+test("NIST's example component definitions import with every control resolved and no OSCAL markup left", OPTS, () => withBuilder(async B => {
+  const { page, set } = B;
+  await set('[data-bind="origin"]', "https://vendor.example");
+  const dir = path.join(ROOT, "drafts/cp-advice-1-census/inputs");
+  for (const f of fs.readdirSync(dir).filter(f => f.endsWith(".json")).sort()) {
+    await page.click("#btn-new");
+    await set('[data-bind="origin"]', "https://vendor.example");
+    await page.setInputFiles("#pick-oscal", path.join(dir, f));
+    await B.settle();
+    const r = await page.evaluate(() => window.jscPackBuilder.report());
+    assert.equal(B.prompts.length, 0, `${f}: no prefix asked for`);
+    assert.deepEqual(r.unresolved, [], `${f}: every control resolved`);
+    assert.equal(r.how.nist, r.caps, `${f}: by the SP 800-53 rule, through the back-matter`);
+    const caps = (await page.evaluate(() => window.jscPackBuilder.draft())).components.flatMap(c => c.caps);
+    assert.ok(caps.every(k => !/\{\{\s*insert:/.test(JSON.stringify(k.description))), `${f}: no OSCAL markup left`);
+    if (/^example-component(-min)?\.json$/.test(f)) {
+      assert.equal(r.notes.filter(n => /is a Rev 4 source/.test(n)).length, 2, `${f}: both Rev 4 sources named`);
+      assert.ok(r.notes.some(n => /ac-2\.3 is implemented twice/.test(n)), `${f}: the double implementation named`);
+    } else {
+      assert.equal(r.clauses, 2, `${f}: both clause-level statements carried`);
+      assert.equal(r.values, 2, `${f}: both values carried`);
+      assert.ok(r.notes.some(n => /Rev 4 parameter id/.test(n)), `${f}: the Rev 4 parameter ids are named`);
+    }
+  }
 }));

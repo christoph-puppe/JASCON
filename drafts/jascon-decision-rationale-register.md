@@ -2341,3 +2341,26 @@ of a set; fixed in both validators.
 for the author to decide before it. Four choices the app made are listed
 for confirmation in `drafts/CP-ADVICE-1.md` §14.3. Work that does not block: #41, #46,
 #47b, #54, #55, #58, #62, #64.
+
+## Census of NIST's example component definitions (2026-11-12)
+
+**What was done.** The four JSON component definitions NIST publishes in
+`usnistgov/oscal-content` (commit `f0de6d8d`, two distinct definitions and
+their minified twins) were run through the pack builder's import, with and
+without the SP 800-53 catalogue (`drafts/cp-advice-1-census/`, by the
+builder's own code in Chromium).
+**What it found.** Five things the first version of the import got wrong or
+kept quiet about: every `source` is a `#uuid` into the back-matter (0 of
+10 implemented requirements resolved without a catalogue); one file cites
+the Rev 4 catalogue and a FedRAMP Rev 4 baseline, whose ids the Rev 5
+conversion does not share; texts carry `{{ insert: param, … }}` markup;
+parameters use Rev 4 ids; one control is implemented twice. Builder 1.2.0
+reads the back-matter (10 of 10 resolved), rewrites the markup, counts
+FedRAMP baselines as SP 800-53 sources and names the rest in its report.
+Each fix has a test and a deliberate defect that turns it red.
+**What it does not change.** D22's record for `statement-ids` and
+`product-version`. The clause-level evidence is the same MongoDB example
+counted before (2 clause entries, 2 values); NIST's second example carries
+neither, and no file carries a product version. Both are examples by the
+format's maintainers. The census that could change D22 is of component
+definitions vendors published, and it is still owed (CP-ADVICE-1 §2.3).
