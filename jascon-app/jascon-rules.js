@@ -2087,6 +2087,25 @@ async function jscPackPublisher(pack, mdigest, objs, verify) {
   return "claimed";
 }
 
+/* How a page words a publisher. jscPackPublisher answers claimed or proven
+   as the reference does, and in structural mode "proven" means only that an
+   Attestation of the publisher's origin binds the manifest. Anyone can write
+   such an Attestation, so without a verified signature that is no proof, and
+   a page must not show it as one (specification D13 says the same of the
+   tier: a validator without keys reports the digest match as UNVERIFIED
+   rather than granting proof). Display only; no rule reads this.
+     proven    a trusted key is set and the envelope verified under it
+     attested  an Attestation binds the manifest, and no trusted key is set:
+               attested, not verified - until then the publisher is a claim
+     claimed   everything else, also a signature that did not verify
+   status: jscPackPublisher's answer; trustedSet: whether the check ran in
+   verification mode; verified: whether the envelope verified. */
+function jscPublisherLabel(status, trustedSet, verified) {
+  if (status !== "proven") return "claimed";
+  if (!trustedSet) return "attested";
+  return verified ? "proven" : "claimed";
+}
+
 /* ADVICE-11: what importing pack B into bundle A does. aObjs / bObjs:
    Map(id -> {type, obj}); aKept: [[name, kept manifest]] of A; bDigest: the
    hex SHA-256 of B's manifest bytes. Nothing is written; the result is the
@@ -2237,6 +2256,7 @@ const jscPlainPath = p => typeof p === "string" && !!p && !/^[a-z][a-z0-9+.-]*:|
    -> { result: import | replace | already-imported | refused,
         pack: the header, digest, previous: the release this one replaces,
         publisher: claimed | proven, verified, publisherNotes,
+        label: proven | attested | claimed, the word a page shows (jscPublisherLabel),
         added, replaced, removed: object ids; capabilities: the diff per
         replaced Component; dangling: the reference's list;
         affected: [{edge, ref, what: removed | changed}], every
@@ -2251,7 +2271,7 @@ const jscPlainPath = p => typeof p === "string" && !!p && !/^[a-z][a-z0-9+.-]*:|
    vendor's file byte for byte, and the export lists it. */
 async function jscAdviceImport(g, pack, opts) {
   const trusted = (opts && opts.trusted) || null;
-  const plan = { result: "refused", pack: null, digest: pack.digest, previous: null, publisher: "claimed", verified: false, publisherNotes: [],
+  const plan = { result: "refused", pack: null, digest: pack.digest, previous: null, publisher: "claimed", verified: false, label: "claimed", publisherNotes: [],
     added: [], replaced: [], removed: [], capabilities: {}, dangling: [], affected: [], resolves: [], errors: [], notes: [],
     writes: [], deletes: [], dropped: [], before: new Map() };
   if (!pack.manifest) { plan.errors = pack.problems.map(m => ["PACK", m]); return plan; }
@@ -2267,6 +2287,7 @@ async function jscAdviceImport(g, pack, opts) {
   plan.publisher = await jscPackPublisher(header, "sha256:" + pack.digest, new Map(pack.attestations.map(a => [a.obj.id, { type: "attestation", obj: a.obj }])),
     trusted ? { envelopes, trusted, notes: plan.publisherNotes } : null);
   plan.verified = plan.publisher === "proven" && !!trusted;
+  plan.label = jscPublisherLabel(plan.publisher, !!trusted, plan.verified);
   const mine = kept.filter(([, km]) => km.pack.id === header.id);
   if (mine.length) plan.previous = mine[0][1].pack.version;
   if (R.result === "already-imported") return plan;
@@ -2365,7 +2386,8 @@ async function jscAdviceReceipt(plan, g) {
    kept manifest with who published it, and what ADVICE-8 to ADVICE-10 say
    about the kept files. trusted: signer URI -> public key hex, or nothing.
    -> { packs: [{ name, id, version, title, publisher: {ref, name},
-                  status: claimed | proven, verified, why: [string], objects: [id] }],
+                  status: claimed | proven, verified, label: proven | attested | claimed,
+                  why: [string], objects: [id] }],
         errors: [[rule, message]] } */
 async function jscAdviceHeld(g, trusted) {
   const objs = new Map([...g.objects].map(([id, r]) => [id, { type: r.type, obj: r.obj }]));
@@ -2379,7 +2401,8 @@ async function jscAdviceHeld(g, trusted) {
     const why = [];
     const status = await jscPackPublisher(km.pack, "sha256:" + name, atts, trusted ? { envelopes, trusted, notes: why } : null);
     packs.push({ name, id: km.pack.id, version: km.pack.version, title: km.pack.title || null, publisher: km.pack.publisher,
-      status, verified: status === "proven" && !!trusted, why, objects: (km.objects || []).map(e => e.id) });
+      status, verified: status === "proven" && !!trusted, label: jscPublisherLabel(status, !!trusted, status === "proven" && !!trusted),
+      why, objects: (km.objects || []).map(e => e.id) });
   }
   return { packs, errors: kept.errors };
 }
@@ -2484,7 +2507,8 @@ function jscAdviceEdge(objs, ownId, productId, capability, opts) {
         types: {type: count}, tiers: {tailoring id: tier}, coverage: report,
         signatures: {attestation id: "verified"|"unverified"|"error"|"missing"|"unsigned"},
         packs: [{ where, name: the kept file's name or null, id, version, title, publisher,
-                  status: "claimed"|"proven", verified, objects: [id] }] } */
+                  status: "claimed"|"proven", verified, label: "proven"|"attested"|"claimed",
+                  why: [string], objects: [id] }] } */
 async function jscCheckGraph(g, verified, opts) {
   const trusted = (opts && opts.trusted) || null;
   const findings = [], types = {};
@@ -2593,7 +2617,8 @@ async function jscCheckGraph(g, verified, opts) {
   const publisher = async (pack, mdigest, where, name, listed) => {
     const why = [];
     const status = await jscPackPublisher(pack, mdigest, atts, verify && { ...verify, notes: why });
-    packs.push({ where, name, id: pack.id, version: pack.version, title: pack.title || null, publisher: pack.publisher, status, verified: status === "proven" && !!trusted, objects: listed });
+    packs.push({ where, name, id: pack.id, version: pack.version, title: pack.title || null, publisher: pack.publisher, status, verified: status === "proven" && !!trusted,
+      label: jscPublisherLabel(status, !!trusted, status === "proven" && !!trusted), why, objects: listed });
     const tag = status === "claimed" ? "publisher CLAIMED [header and prefix - UNPROVEN]"
       : trusted ? "publisher PROVEN [attestation binds the manifest + signature VERIFIED]"
       : "publisher PROVEN [attestation binds the manifest; UNVERIFIED without trusted keys]";
@@ -2633,6 +2658,6 @@ if (typeof module !== "undefined" && module.exports) {
     JSC_CHECK_RULES, JSC_CHECK_OPS, JscIRegexpError, jscIreCompile, jscIreFullMatch, jscCheckVerdict, jscCheckEach, jscCheckEachSummary, jscPercentShare, jscCheckAggregate, jscCheckParamDecls,
     jscCheckObjectErrors, jscCheckErrors,
     JSC_DATE_RULES, jscDateRuleViolations, JSC_PACK_STORE, JSC_ADVICE_RULES, jscPackErrors, jscCapabilityErrors, jscSplitCapabilityRef,
-    jscCapabilityRefErrors, jscKeptPackErrors, jscPackPublisher, jscComposeAdvice, jscAdviceErrors,
+    jscCapabilityRefErrors, jscKeptPackErrors, jscPackPublisher, jscPublisherLabel, jscComposeAdvice, jscAdviceErrors,
     JSC_DESCRIBES, jscAdvicePack, jscAdviceImport, jscAdviceReceipt, jscAdviceHeld, jscAdviceAdoption, jscAdviceEdge, jscCapabilityId };
 }

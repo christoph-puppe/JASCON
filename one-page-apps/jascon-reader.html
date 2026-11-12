@@ -201,7 +201,7 @@ svg text{font-family:'JetBrains Mono',monospace}
     <div class="pill" id="pill-bundle">no bundle loaded</div>
     <div class="pill hidden" id="pill-verify"></div>
     <div style="flex:1"></div>
-    <div class="pill">v1.8.0 · build 2026-11-12</div>
+    <div class="pill">v1.9.0 · build 2026-11-12</div>
   </div>
 
   <div id="mid">
@@ -424,6 +424,7 @@ const MODALITY_EXPLAIN = {
 const state = {
   files: new Map(),        // relpath -> {text, bytes}
   evidence: new Map(),     // relpath -> {bytes, ok?} — the evidence store beside the manifest (evidence/sha256/<hex>), never manifest entries
+  packs: new Map(),        // relpath -> {bytes, ok?} — the pack manifests a set keeps beside its own (packs/sha256/<hex>, CP-ADVICE-1), never manifest entries
   manifest: null,
   manifestByPath: new Map(),
   objects: new Map(),      // id -> {obj, path, type, entry}
@@ -507,7 +508,7 @@ function sha256Fallback(bytes) {
 }
 
 /* ---------- loading ---------- */
-const READER_ID = "jascon-reader.html v1.8.0";
+const READER_ID = "jascon-reader.html v1.9.0";
 /* URL loading — works when this page and the bundle are served over http(s)
    (e.g. `python -m http.server` from the repo root); file:// blocks fetch by design. */
 async function loadFromUrl(input) {
@@ -551,10 +552,68 @@ async function loadFromUrl(input) {
   await Promise.all(workers);
   if (failed) l.warn(`${failed} file(s) failed to fetch — loading what arrived`);
   l.ok(`bundle fetched in ${Math.round(performance.now() - t0)} ms`);
-  state.evidence.clear();
+  state.evidence.clear(); state.packs.clear();
+  await fetchBeside(base, manifest, [...paths, ...(manifest.scales || []).map(s => s.path)]);
   indexBundle();
   await fetchEvidence(base);
   return true;
+}
+/* Advice packs (v1.9.0, CP-ADVICE-1 §4.5): a set keeps the manifest of every pack it imported,
+   unchanged, as packs/sha256/<hex> beside its own manifest — named by the SHA-256 of its bytes and
+   never listed. The attestation of a pack's publisher lies beside the manifest too. A folder load
+   finds both. A URL names files, not folders, so a URL load can find them only where the server
+   lists the folder (python's http.server does), and asking for a listing that is not there shows
+   as an error in the browser console. So the server is asked only where there is a reason: the
+   manifest carries a pack header, or it lists Components under an origin from which it lists
+   nothing else — the mark of a set that holds a pack (a pack brings Components and nothing else,
+   all under its publisher's origin: ADVICE-1, ADVICE-2). Without a listing nothing is found. */
+const PACK_RE = /(^|\/)packs\/sha256\/[^/]+$/;
+async function fetchBeside(base, manifest, listed) {
+  const origin = id => String(id).split("/").slice(0, 3).join("/");
+  const typed = [...state.files].filter(([p]) => p !== "content-manifest.json")
+    .map(([, f]) => { try { const o = JSON.parse(f.text); return [inferType(o), o && o.id]; } catch { return [null, null]; } }).filter(([t, id]) => t && typeof id === "string");
+  const others = new Set(typed.filter(([t]) => t !== "component").map(([, id]) => origin(id)));
+  if (!manifest.pack && !typed.some(([t, id]) => t === "component" && !others.has(origin(id)))) return;
+  const listing = async rel => {
+    try {
+      const r = await fetch(new URL(rel, base));
+      if (!r.ok || !/html/i.test(r.headers.get("content-type") || "")) return null;
+      return [...(await r.text()).matchAll(/href="([^"?#]+)"/g)].map(m => { try { return decodeURIComponent(m[1]); } catch { return ""; } });
+    } catch { return null; }
+  };
+  const get = async rel => { const r = await fetch(new URL(rel, base)); if (!r.ok) throw new Error("HTTP " + r.status); return new Uint8Array(await r.arrayBuffer()); };
+  const top = await listing("");
+  if (!top) { l.info("this server lists no folders — pack manifests kept beside the manifest (packs/sha256/) and attestations beside it cannot be found from a URL; open the folder instead"); return; }
+  const kept = [];
+  if (top.includes("packs/")) for (const name of ((await listing("packs/sha256/")) || []).filter(n => /^[0-9a-f]{64}$/.test(n)).slice(0, 64)) {
+    try { state.packs.set("packs/sha256/" + name, { bytes: await get("packs/sha256/" + name) }); kept.push("sha256:" + name); } catch (e) { l.warn(`fetch packs/sha256/${name}: ${e.message}`); }
+  }
+  if (!manifest.pack && !kept.length) return;
+  for (const name of top.filter(n => /^[^/]+\.json$/.test(n) && n !== "content-manifest.json" && !listed.includes(n)).slice(0, 64)) {
+    try {
+      const bytes = await get(name), text = new TextDecoder().decode(bytes), o = JSON.parse(text);
+      if (inferType(o) === "attestation" && (manifest.pack || kept.includes(o["content-manifest-digest"]))) state.files.set(name, { text, bytes });
+    } catch { /* not a file this reader shows */ }
+  }
+}
+/* claimed | proven, structurally (CP-ADVICE-1 §4.2): the publisher of a pack is CLAIMED by the
+   header and the origin its ids share with it; it is PROVEN when an Attestation among the loaded
+   objects, whose signer has that origin, binds the digest of the pack's manifest. This reader
+   verifies no signature and runs none of the ADVICE rules — validate_core.py does. */
+function packPublisher(pack, hex) {
+  const origin = u => { const p = String(u).split("/"); return String(u).startsWith("http") && p.length >= 3 ? p.slice(0, 3).join("/") : String(u); };
+  for (const r of state.objects.values())
+    if (r.type === "attestation" && hex && origin(r.obj.signer || "") === origin(pack.id) && r.obj["content-manifest-digest"] === "sha256:" + hex) return "proven";
+  return "claimed";
+}
+const PUBLISHER_NOTE = {
+  claimed: "CLAIMED — by the header and the id prefix; no loaded attestation binds this manifest",
+  proven: "PROVEN — an attestation of that origin binds this manifest (its signature is not verified here)",
+};
+function packLine(pack, hex) {
+  if (!pack || typeof pack !== "object" || !pack.id) return "not readable as a pack header";
+  const pub = pack.publisher || {}, st = packPublisher(pack, hex);
+  return `${tt(pack.title) ? tt(pack.title) + " · " : ""}${pack.id} · release ${pack.version} · publisher ${tt(pub.name) ? tt(pub.name) + " · " : ""}${pub.ref} = ${PUBLISHER_NOTE[st]}`;
 }
 /* The evidence store (v1.8.0, CP-CHECK-1 §4.4): files beside the manifest, evidence/sha256/<hex>,
    each named by the SHA-256 of its bytes and never listed in the manifest. A folder load keeps
@@ -583,16 +642,18 @@ async function fetchEvidence(base) {
 async function loadFileList(fileList) {
   const relOf = f => (f.webkitRelativePath || f.name).split("/").slice(1).join("/") || f.name;
   const evid = [...fileList].filter(f => EVIDENCE_RE.test(relOf(f)));
-  const files = [...fileList].filter(f => f.name.endsWith(".json"));
+  const kept = [...fileList].filter(f => PACK_RE.test(relOf(f)));   // kept pack manifests: beside the manifest, never objects
+  const files = [...fileList].filter(f => f.name.endsWith(".json") && !PACK_RE.test(relOf(f)));
   if (!files.length) { l.warn("no .json files in selection"); return; }
   l.info(`reading ${files.length} json file(s)…`);
-  state.files.clear(); state.evidence.clear();
+  state.files.clear(); state.evidence.clear(); state.packs.clear();
   for (const f of files) {
     const rel = relOf(f);
     const bytes = new Uint8Array(await f.arrayBuffer());
     state.files.set(rel, { text: new TextDecoder().decode(bytes), bytes });
   }
   for (const f of evid) state.evidence.set(relOf(f), { bytes: new Uint8Array(await f.arrayBuffer()) });
+  for (const f of kept) state.packs.set(relOf(f), { bytes: new Uint8Array(await f.arrayBuffer()) });
   indexBundle();
 }
 function indexBundle() {
@@ -615,6 +676,7 @@ function indexBundle() {
   for (const [p, f] of state.files) {
     if (p.endsWith("content-manifest.json")) continue;
     if (/(^|\/)schemas\//.test(p)) continue;
+    if (PACK_RE.test(p)) continue;   // a kept pack manifest is no object of the bundle, whatever it is called
     let obj;
     try { obj = JSON.parse(f.text); } catch (e) { l.err(`parse ${p}: ${e.message}`); failed++; continue; }
     const t = inferType(obj);
@@ -638,6 +700,19 @@ function indexBundle() {
   l.info("types: " + Object.entries(counts).map(([k, v]) => `${k} ${v}`).join(" · "));
   for (const p of [...state.evidence.keys()]) if (!p.startsWith(prefix + "evidence/sha256/")) state.evidence.delete(p);   // only the store beside THIS manifest
   if (state.evidence.size) l.info(`evidence store: ${state.evidence.size} file(s) beside the manifest — content-addressed (evidence/sha256/<hex>), not manifest entries`);
+  /* advice packs: the header of this bundle, and the pack manifests it keeps beside its own */
+  for (const p of [...state.packs.keys()]) if (!p.startsWith(prefix + "packs/sha256/")) state.packs.delete(p);
+  for (const [p, f] of state.packs) {
+    try { const m = JSON.parse(new TextDecoder().decode(f.bytes)); f.pack = m && typeof m === "object" ? m.pack : null; f.objects = Array.isArray(m?.objects) ? m.objects.length : 0; }
+    catch { f.pack = null; f.objects = 0; }
+    l.info(`kept pack manifest ${p.slice(prefix.length)}: ${packLine(f.pack, p.split("/").pop())}`);
+  }
+  state.manifestHex = null;
+  if (state.manifest?.pack) {
+    l.info(`this bundle is an advice pack (its manifest carries a pack header): ${packLine(state.manifest.pack, null)} — publisher status follows once the manifest is digested`);
+    const bytes = state.manifestBytes;
+    sha256hex(bytes).then(hex => { if (state.manifestBytes === bytes) { state.manifestHex = hex; renderOverview(); } });   // unless another bundle was loaded meanwhile
+  }
   const prov = state.manifest?.provenance || {};
   $("pill-bundle").textContent = (prov.source || prov.sources?.[0]?.title || "bundle") + " · " + parsed + " objects";
   $("pill-bundle").classList.add("on");
@@ -683,6 +758,11 @@ function renderOverview() {
   add("objects", String(state.objects.size));
   add("manifest entries", state.manifest ? String(state.manifest.objects.length) : "—");
   add("evidence store", state.evidence.size ? `${state.evidence.size} file(s) beside the manifest (not manifest entries)` : "");
+  /* CP-ADVICE-1: the pack header of this bundle, and the pack manifests it keeps (which vendor, which release) */
+  if (state.manifest?.pack) add("advice pack", packLine(state.manifest.pack, state.manifestHex) + (state.manifestHex ? "" : " (digesting the manifest…)"));
+  for (const [p, f] of state.packs)
+    add("kept pack manifest", `${packLine(f.pack, p.split("/").pop())} · ${f.objects} object(s) listed · ${p.slice((state.prefix || "").length, (state.prefix || "").length + 26)}…` +
+      (f.ok === false ? " · ✗ DOES NOT MATCH ITS NAME (ADVICE-8)" : f.ok ? " · ✓ matches its name" : ""));
   $("ov-kv").innerHTML = rows.join("");
   $("ov-schemas").innerHTML = (state.manifest?.["facet-schemas"] || [])
     .map(s => `<div class="mono" style="font-size:11px;margin:3px 0">◇ ${esc(s.id)} <span style="color:var(--text-quiet)">@${esc(s["exact-version"])} · ${esc((s.digest || "").slice(0, 23))}…</span></div>`)
@@ -919,6 +999,25 @@ function renderMapping(r) {
     ${kvRow("provenance", `${esc(o.provenance?.["author-ref"] || "")} · ${esc(o.provenance?.date || "")} <span class="hint">— whose claim this is</span>`)}
   </div>`;
 }
+/* Component (v1.9.0): what it is, the version of the product it describes (`product-version`, kernel
+   2.0.0 — one opaque text, never parsed or ordered), the product of somebody else it is about (a
+   relation of type describes: shown, never computed with), and its capabilities. A capability is a
+   CLAIM — requirement, clauses, text, suggested parameter values (CP-ADVICE-1); that a requirement
+   is met is said only by an Implementation that cites it as <component-id>#<capability-id>. */
+const DESCRIBES = "https://ns.jascon.net/stdlib/relation/describes";
+function renderComponent(r) {
+  const o = r.obj, about = (o.relations || []).filter(x => x.type === DESCRIBES);
+  const caps = (o.capabilities || []).map(c => `<div class="stmt"><span class="badge">⚙ ${esc(c.id)}</span>
+      ${c["requirement-ref"] ? refLink(c["requirement-ref"]) : `<span class="hint">names no requirement</span>`}
+      ${(c["statement-ids"] || []).map(s => `<span class="badge">stmt ${esc(s)}</span>`).join("")}
+      ${c.description ? `<div class="prose">${proseHtml(tt(c.description))}</div>` : ""}
+      ${c["parameter-bindings"] ? `<div class="hint">suggested values: ${Object.entries(c["parameter-bindings"]).map(([k, v]) => `<span class="paramtok">${esc(k)} = ${esc(JSON.stringify(v))}</span>`).join(" ")}</div>` : ""}</div>`).join("");
+  return `<div class="kv">${kvRow("kind", `<span class="badge">${esc(o.kind)}</span>`)}
+      ${o["product-version"] !== undefined ? kvRow("product-version", `<span class="mono">${esc(o["product-version"])}</span> <span class="hint">— the version of the product this Component describes; opaque text, nothing is ordered from it</span>`) : ""}
+      ${about.map(x => kvRow("describes", refLink(x.ref) + ` <span class="hint">— the product this Component is about (a third party's advice names the vendor's Component)</span>`)).join("")}</div>` +
+    (caps ? `<div class="nano sectionlabel">Capabilities (${o.capabilities.length}) — claims, adopted by an Implementation that cites &lt;component-id&gt;#&lt;capability-id&gt;</div>${caps}` : "") +
+    renderGeneric(r, ["kind", "product-version", "capabilities"]);
+}
 function renderGeneric(r, omit = []) {
   const skip = new Set(["id","version","label","title","lifecycle","aliases","relations","facets","annotations","statements","members", ...omit]);
   const rest = Object.fromEntries(Object.entries(r.obj).filter(([k]) => !skip.has(k)));
@@ -1076,6 +1175,7 @@ function openObject(id) {
   else if (r.type === "tailoring") body += renderTailoring(r);
   else if (r.type === "mapping") body += renderMapping(r);
   else if (r.type === "check") body += renderCheck(r);
+  else if (r.type === "component") body += renderComponent(r);
   else if (r.type === "assessment") body += renderAssessment(r);
   else if (r.type === "finding") body += renderFinding(r);
   else body += renderGeneric(r);
@@ -1197,11 +1297,20 @@ async function verifyAll() {
     }
     (evBad ? l.err : l.ok)(`evidence store: ${evOk} file(s) match their content address, ${evBad} mismatches`);
   }
+  let pkBad = 0;
+  if (state.packs.size) {   // a kept pack manifest is named by the SHA-256 of its bytes too (ADVICE-8)
+    for (const [p, f] of state.packs) {
+      f.ok = await sha256hex(f.bytes) === p.split("/").pop();
+      if (!f.ok) { pkBad++; l.err(`kept pack manifest: ${p} does not match its name (ADVICE-8)`); }
+    }
+    (pkBad ? l.err : l.ok)(`kept pack manifests: ${state.packs.size - pkBad} of ${state.packs.size} match their name`);
+    renderOverview();
+  }
   const ms = Math.round(performance.now() - t0);
   (bad ? l.err : l.ok)(`digest verification: ${ok} ok, ${bad} mismatches in ${ms}ms`);
   $("pill-verify").classList.remove("hidden");
-  $("pill-verify").textContent = (bad ? `✗ ${bad} digest mismatches` : `✓ ${ok} objects verified`) + (evBad ? ` · ✗ ${evBad} evidence file(s)` : "");
-  $("pill-verify").style.color = bad || evBad ? "var(--red)" : "var(--green)";
+  $("pill-verify").textContent = (bad ? `✗ ${bad} digest mismatches` : `✓ ${ok} objects verified`) + (evBad ? ` · ✗ ${evBad} evidence file(s)` : "") + (pkBad ? ` · ✗ ${pkBad} kept pack manifest(s)` : "");
+  $("pill-verify").style.color = bad || evBad || pkBad ? "var(--red)" : "var(--green)";
   renderList();
   if (state.selected) openObject(state.selected);
 }
@@ -1406,7 +1515,9 @@ function renderStageImplement() {
   const compCards = comps.map(c => `<div class="stmt">
     <span class="badge" style="border-color:${TYPES.component.color};color:${TYPES.component.color}">⬡ ${esc(c.obj.kind)}</span>
     <a class="reflink" data-ref="${esc(c.obj.id)}"><b>${esc(tt(c.obj.title) || c.obj.label || c.obj.id)}</b></a>
-    ${(c.obj.capabilities || []).map(cap => `<span class="badge" title="${esc(cap.description || "")}">⚙ ${esc(cap.id)}</span>`).join("")}
+    ${c.obj["product-version"] !== undefined ? `<span class="badge" title="product-version: the version of the product this Component describes">product ${esc(c.obj["product-version"])}</span>` : ""}
+    ${(c.obj.capabilities || []).map(cap => `<span class="badge" title="${esc(tt(cap.description))}">⚙ ${esc(cap.id)}</span>`).join("")}
+    ${(c.obj.relations || []).filter(x => x.type === DESCRIBES).map(x => `<div class="leaf" style="margin-top:4px">describes ${refLink(x.ref)}</div>`).join("")}
     ${(c.obj.authorizations || []).map(a => `<span class="badge" style="border-color:var(--green);color:var(--green)" title="authority: ${esc(a["authority-ref"])}">✦ ${esc(a.id)}${a["scope-label"] ? " · " + esc(a["scope-label"]) : ""}</span>`).join("")}
     ${(c.obj.members || []).map(m => `<div class="leaf" style="margin-top:4px">↳ ${refLink(m["component-ref"])} ${m.context ? `<span class="hint">(${esc(m.context)})</span>` : ""}</div>`).join("")}
   </div>`).join("");
@@ -1598,7 +1709,8 @@ async function buildWorkspaceBundleFiles(objs, provenance) {
   // backlog #44 / KERNEL-1: content beyond the 1.0.0 kernel (a Risk, or a
   // Finding with risk-refs) names its kernel in the manifest
   const needs2 = objs.some(o => (o && o.scenario && o["owner-ref"]) || (o && Array.isArray(o["risk-refs"]) && o["risk-refs"].length) ||
-    (o && ((o.observes && o.criteria) || o["check-results"] || o["tailoring-ref"] || o["check-ref"])));   // CP-CHECK-1 content is kernel 2.0.0 too
+    (o && ((o.observes && o.criteria) || o["check-results"] || o["tailoring-ref"] || o["check-ref"])) ||   // CP-CHECK-1 content is kernel 2.0.0 too
+    (o && o.kind && ("product-version" in o || (o.capabilities || []).some(c => (c["statement-ids"] || []).length))));   // and so are product-version and a capability's statement-ids
   const files = []; const manifest = { "manifest-version": "1",
     ...(needs2 ? { "kernel-version": "2.0.0" } : {}), provenance,
     objects: [], "facet-schemas": [] };
@@ -2037,10 +2149,25 @@ function buildSystemObjects() {
   const s = work.system;
   const sysSet = { id: mintId("set", s.title), version: "1", lifecycle: "draft", title: s.title,
     members: s.components.map((c, i) => ({ ref: c.id, sequence: (i + 1) * 10 })) };
-  const comps = s.components.map(c => ({ id: c.id, version: "1", lifecycle: "draft", title: c.title, kind: c.kind }));
+  /* v1.9.0 (ADVICE-7): a capability-ref names a capability its component declares. Each asset declares
+     one capability per control attached to it — id derived from the requirement, unique within the
+     component (ADVICE-4) — and the edge cites that id. Until 1.8.0 every edge said "declared", a
+     capability no component declared. */
+  const capOf = new Map();
+  const comps = s.components.map(c => {
+    const taken = new Set();
+    const caps = s.implementations.filter(e => e["component-ref"] === c.id).map(e => {
+      const base = "cap-" + slug(e["requirement-ref"].split("/").filter(Boolean).pop());
+      let id = base;
+      for (let n = 2; taken.has(id); n++) id = `${base}-${n}`;
+      taken.add(id); capOf.set(e, id);
+      return { id, "requirement-ref": e["requirement-ref"] };
+    });
+    return { id: c.id, version: "1", lifecycle: "draft", title: c.title, kind: c.kind, ...(caps.length ? { capabilities: caps } : {}) };
+  });
   const impls = s.implementations.map(e => ({ id: e.id, version: "1", lifecycle: "draft",
     "component-ref": e["component-ref"], "requirement-ref": e["requirement-ref"],
-    responsibility: e.responsibility, "satisfied-by": [{ "capability-ref": "declared" }], status: e.status }));
+    responsibility: e.responsibility, "satisfied-by": [{ "capability-ref": capOf.get(e) }], status: e.status }));
   return [...comps, ...impls, sysSet];
 }
 function wireImplementWb(el) {
@@ -2446,7 +2573,7 @@ $("btn-paste").onclick = () => {
 async function walkEntry(entry, out) {
   if (entry.isFile) {
     const f = await new Promise((res, rej) => entry.file(res, rej));
-    if (f.name.endsWith(".json") || EVIDENCE_RE.test(entry.fullPath)) {
+    if (f.name.endsWith(".json") || EVIDENCE_RE.test(entry.fullPath) || PACK_RE.test(entry.fullPath)) {
       Object.defineProperty(f, "webkitRelativePath", { value: entry.fullPath.replace(/^\//, "") });
       out.push(f);
     }
@@ -2498,7 +2625,7 @@ renderLattice();
 restoreWorkspaceObjects();
 renderStages();
 setView("overview");
-l.info("JASCON Bundle Reader v1.8.0 · build 2026-11-12 — everything runs locally, nothing leaves this page");
+l.info("JASCON Bundle Reader v1.9.0 · build 2026-11-12 — everything runs locally, nothing leaves this page");
 l.info("open a bundle folder (contains content-manifest.json + objects/) or drop it here — or serve the repo over http and deep-link: #load=<bundle-url>&view=stage:tailor");
 
 /* deep links: #load=<bundle-url>&view=<view> — shareable when served over http(s) */

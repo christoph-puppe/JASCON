@@ -276,8 +276,8 @@ function renderBuild() {
     const capOf = new Map();
     const comps = d.components.map(c => {
       const taken = new Set(), caps = d.implementations.filter(e => e["component-ref"] === c.id).map(e => {
-        capOf.set(e.id, jscCapabilityId(e["requirement-ref"], taken));
-        return { id: capOf.get(e.id), "requirement-ref": e["requirement-ref"] };
+        capOf.set(e, jscCapabilityId(e["requirement-ref"], taken));
+        return { id: capOf.get(e), "requirement-ref": e["requirement-ref"] };
       });
       return { id: c.id, version: "1", lifecycle: "draft", title: { [lang]: c.title }, kind: c.kind,
         ...(c.pv ? { "product-version": c.pv } : {}), ...(caps.length ? { capabilities: caps } : {}) };
@@ -285,7 +285,7 @@ function renderBuild() {
     const system = { id: jscSet.mintId("comp", d.title), version: "1", lifecycle: "draft", title: { [lang]: d.title }, kind: "system",
       members: d.components.map(c => ({ "component-ref": c.id })) };
     const impls = d.implementations.map(e => ({ id: e.id, version: "1", lifecycle: "draft", "component-ref": e["component-ref"],
-      "requirement-ref": e["requirement-ref"], responsibility: e.responsibility, "satisfied-by": [{ "capability-ref": capOf.get(e.id) }], status: e.status }));
+      "requirement-ref": e["requirement-ref"], responsibility: e.responsibility, "satisfied-by": [{ "capability-ref": capOf.get(e) }], status: e.status }));
     await jscSet.saveObjects([...comps, system, ...impls]);
     await jscPage.refresh();
     jscPage.show("system");

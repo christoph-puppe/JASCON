@@ -472,16 +472,19 @@ function manifestOf(files) {
   try { return paths.length ? JSON.parse(files.find(f => f.path === paths[0]).text) : null; } catch (e) { return null; }
 }
 const isPack = files => { const m = manifestOf(files); return !!m && typeof m === "object" && "pack" in m; };
+/* Three words for a publisher (jscPublisherLabel). Only a signature that verified under a key the user
+   trusts is shown as proof, in green. An attestation that merely binds the manifest is anyone's to write. */
 const PUBLISHER = {
-  claimed: N("claimed: the header names the publisher and the ids share its origin; no attestation beside the manifest binds this manifest, so nothing proves it"),
-  proven: N("proven: an attestation of the publisher binds this manifest; its signature is not verified, because no trusted key is set on the Validate page"),
-  verified: N("proven: an attestation of the publisher binds this manifest, and its signature verifies under the key you trust"),
+  proven: [N("proven"), N("an attestation of the publisher binds this manifest, and its signature verifies under the key you trust")],
+  attested: [N("attested, not verified"), N("an attestation in the publisher's name binds this manifest; the signature was not checked because no trusted key is set on the Validate page; until then the publisher is a claim")],
+  claimed: [N("claimed"), N("the header names the publisher and the ids share its origin; nothing proves it")],
 };
-const publisherHtml = (header, status, verified) => {
-  const key = status === "proven" && verified ? "verified" : status, pub = header.publisher || {};
+const publisherHtml = (header, label, why) => {
+  const pub = header.publisher || {}, colour = label === "proven" ? "green" : "amber";
   return `${pub.name ? jscEsc(TT(pub.name)) + " · " : ""}<span class="mono">${jscEsc(pub.ref)}</span>
-    <span class="badge" style="border-color:var(--${status === "proven" ? "green" : "amber"});color:var(--${status === "proven" ? "green" : "amber"})">${jscEsc(T(status))}</span>
-    <div class="hint">${jscEsc(T(PUBLISHER[key]))}</div>`;
+    <span class="badge" data-publisher="${label}" style="border-color:var(--${colour});color:var(--${colour})">${jscEsc(T(PUBLISHER[label][0]))}</span>
+    <div class="hint">${jscEsc(T(PUBLISHER[label][1]))}</div>
+    ${(why || []).map(m => `<div class="hint">${jscEsc(T("not proven by {what}", { what: m }))}</div>`).join("")}`;
 };
 /* one Component of a pack, with what a replacement changes on it */
 function packComponentHtml(o, diff) {
