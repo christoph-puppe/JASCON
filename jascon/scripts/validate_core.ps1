@@ -46,6 +46,13 @@ PowerShell runtime. They ran with the advice-pack proposal in the tree:
 518 vectors in 17 families (check: 188), the five bundles, the worked
 pack and the example folder, the same counts as validate_core.py
 (drafts/CP-ADVICE-1.md, 13.4). Backlog #60 is closed by that run.
+NOT YET EXECUTED (2026-11-12, later the same day): the author's decisions
+on advice packs and on two date fields. Ported here without a PowerShell
+runtime: KERNEL-1 for a Component with product-version, Date-Rule-Violations
+(DATE-1, DATE-2) and the shape-vectors of kernel-vectors.json. The schema
+changes themselves (product-version, the typed due and opened) need no
+code here: this file reads the kernel schema. The Python reference stands
+at 537 vectors in 17 families (kernel: 25, advice: 74). Backlog #63.
 KNOWN LIMITS of this port: a general category (\p{..}) is read from the
 HOST's Unicode database, .NET here and unicodedata there, so a code point
 assigned after either database was built can match differently; an
@@ -1680,6 +1687,8 @@ function Kernel-Pin-Errors($manifest, $objs) {
         if ($t -ceq 'component') {
             foreach ($c in @($o['capabilities'])) {
                 if ($null -ne $c -and (Ck-Truthy $c['statement-ids'])) { $why = "$oid names clauses on a capability (statement-ids)" } }
+            if (($null -eq $why) -and (Is-Map $o) -and $o.Contains('product-version')) {
+                $why = "$oid names the product version it describes (product-version)" }
             if ($null -ne $why) { break }
         }
     }
@@ -1689,6 +1698,37 @@ function Kernel-Pin-Errors($manifest, $objs) {
         [void]$errs.Add("$why, which needs kernel 2.0.0, but the manifest $said (KERNEL-1: content beyond 1.0.0 names its kernel, so that an older tool can say what it is missing)")
     }
     return ,$errs
+}
+# DATE-1/2: two fields 1.0.0 left as free text and 2.0.0 types (author
+# decision 2026-11-12, backlog #47a and #52): Deviation.opened is a date,
+# the due of a Finding's action a typed point in time or duration. The
+# schema enforces; this names the rule when an object matches no type, so
+# that a 1.0.0 bundle with a free-text date is told what to correct. It
+# never ACCEPTS anything.
+function Date-Walk($x, $out) {
+    if (Is-Map $x) {
+        if ($x.Contains('deviations') -and (Is-List $x['deviations'])) {
+            foreach ($dv in $x['deviations']) {
+                if ((Is-Map $dv) -and $dv.Contains('opened') -and -not (Test-Schema $DEFS['date'] $dv['opened'])) {
+                    if (-not $out.Contains('DATE-1')) { [void]$out.Add('DATE-1') } }
+            }
+        }
+        foreach ($k in @($x.Keys)) { if ($k -cne 'deviations') { Date-Walk $x[$k] $out } }
+    } elseif (Is-List $x) {
+        foreach ($v in $x) { Date-Walk $v $out }
+    }
+}
+function Date-Rule-Violations($o) {
+    $out = New-Object System.Collections.ArrayList
+    if (-not (Is-Map $o)) { return ,$out }
+    Date-Walk $o $out
+    if ($o.Contains('actions') -and (Is-List $o['actions'])) {
+        foreach ($a in $o['actions']) {
+            if ((Is-Map $a) -and $a.Contains('due') -and -not (Test-Schema $DEFS['due'] $a['due'])) {
+                if (-not $out.Contains('DATE-2')) { [void]$out.Add('DATE-2') } }
+        }
+    }
+    return ,$out
 }
 function Run-Kernel {
     foreach ($case in (Load-Vectors 'kernel-vectors.json')['vectors']) {
@@ -1705,6 +1745,20 @@ function Run-Kernel {
             foreach ($e in $errs) { if ($e.Contains($frag)) { $hit = $true } }
             if (-not $hit) { $okc = $false } }
         if ($okc) { OK 'kernel' } else { FAIL 'kernel' "$($case['name']): expected $exp, got $(@($errs) -join ' ~ ')" }
+    }
+    # closed shapes of fields that 2.0.0 typed or added; an invalid vector names its rule
+    $all = Load-Vectors 'kernel-vectors.json'
+    if ($all.Contains('shape-vectors')) {
+        foreach ($case in $all['shape-vectors']) {
+            $m = Infer-Types $case['document']
+            $got = 'invalid'
+            if ((@($m).Count -eq 1) -and ([string]@($m)[0] -ceq [string]$case['kind'])) { $got = 'valid' }
+            $named = (@(Date-Rule-Violations $case['document']) | Sort-Object) -join ','
+            $want = ''
+            if ($case.Contains('expected-rules')) { $want = (@($case['expected-rules']) | Sort-Object) -join ',' }
+            if (($got -ceq [string]$case['expected']) -and ($named -ceq $want)) { OK 'kernel' }
+            else { FAIL 'kernel' "shape $($case['name']): expected $($case['expected']) [$want], got $got [$named]" }
+        }
     }
 }
 
@@ -3520,6 +3574,10 @@ function Validate-Object([string]$section, [string]$path, $obj) {
         if (@($m).Count -eq 0 -and (Is-Map $obj) -and ($obj.Contains('scenario') -or $obj.Contains('owner-ref'))) {
             $rv = Risk-Rule-Violations $obj     # the Risk signature: name the violated rule(s)
             if (@($rv).Count -gt 0) { $why = " - FAIL [$(@($rv) -join '] [')]" }
+        }
+        if (@($m).Count -eq 0) {
+            $dv = Date-Rule-Violations $obj      # two fields that 1.0.0 left as free text and 2.0.0 types
+            if (@($dv).Count -gt 0) { $why = "$why - FAIL [$(@($dv) -join '] [')] a date field of 1.0.0 is typed in 2.0.0" }
         }
         FAIL $section "${path}: matches [$(@($m) -join ',')]$why"
         return $null

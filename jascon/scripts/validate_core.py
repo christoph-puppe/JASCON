@@ -60,6 +60,8 @@ REGISTRY = jsonschema.validators.Draft202012Validator
 VALIDATORS = {t: REGISTRY({"$ref": f"#/$defs/{t}", "$defs": SCHEMA["$defs"]}) for t in TYPES}
 VALIDATORS["contentManifest"] = REGISTRY({"$ref": "#/$defs/contentManifest", "$defs": SCHEMA["$defs"]})
 VALIDATORS["scale"] = REGISTRY({"$ref": "#/$defs/scale", "$defs": SCHEMA["$defs"]})
+VALIDATORS["due"] = REGISTRY({"$ref": "#/$defs/due", "$defs": SCHEMA["$defs"]})
+VALIDATORS["date"] = REGISTRY({"$ref": "#/$defs/date", "$defs": SCHEMA["$defs"]})
 # CP-CHECK-1: file shapes beside the bundle, not object types
 VALIDATORS["evidenceRecord"] = REGISTRY({"$ref": "#/$defs/evidenceRecord", "$defs": SCHEMA["$defs"]})
 VALIDATORS["checkObservation"] = REGISTRY({"$ref": "#/$defs/checkObservation", "$defs": SCHEMA["$defs"]})
@@ -926,8 +928,9 @@ def kernel_needed(objs, manifest=None):
     """-> (minimum kernel version the content needs, the first object that
     needs it). 2.0.0 added the Risk type, Finding.risk-refs, pinned
     scale definitions, the Check type, Assessment.check-results and
-    .tailoring-ref, Finding.check-ref, the pack header of a manifest and
-    statement-ids on a capability (CP-ADVICE-1)."""
+    .tailoring-ref, Finding.check-ref, the pack header of a manifest,
+    statement-ids on a capability (CP-ADVICE-1) and product-version on a
+    Component (author decision 2026-11-12)."""
     if manifest and manifest.get("scales"): return "2.0.0", "the manifest pins scale definitions"
     if manifest and manifest.get("pack"): return "2.0.0", "the manifest carries a pack header"
     for oid in sorted(objs):
@@ -940,6 +943,8 @@ def kernel_needed(objs, manifest=None):
         if t == "finding" and o.get("check-ref"): return "2.0.0", f"{oid} carries a check-ref"
         if t == "component" and any(c.get("statement-ids") for c in o.get("capabilities", []) or []):
             return "2.0.0", f"{oid} names clauses on a capability (statement-ids)"
+        if t == "component" and "product-version" in o:
+            return "2.0.0", f"{oid} names the product version it describes (product-version)"
     return "1.0.0", None
 
 def kernel_pin_errors(manifest, objs):
@@ -972,6 +977,13 @@ def run_kernel():
             if not any(frag in e for e in errs): okc = False
         if okc: ok("kernel")
         else: fail("kernel", f"{case['name']}: expected {case.get('expected-fails', 0)} {case.get('expected-frags')}, got {errs}")
+    for case in v.get("shape-vectors", []):
+        # closed shapes of fields that 2.0.0 typed or added; an invalid one names its rule
+        m = [t for t in TYPES if VALIDATORS[t].is_valid(case["document"])]
+        got = "valid" if m == [case["kind"]] else "invalid"
+        named = sorted({r for r, _ in date_rule_violations(case["document"])})
+        if got == case["expected"] and named == sorted(case.get("expected-rules", [])): ok("kernel")
+        else: fail("kernel", f"shape {case['name']}: expected {case['expected']} {case.get('expected-rules', [])}, got {got} {named}")
 
 # ---------------- pinned scale definitions (SCALE-1..3) ----------------
 # A scale is the organisation's own: how many levels, and what they are
@@ -1147,6 +1159,35 @@ RISK_RULES = {
     "RISK-6": "retention IS acceptance - no silent retention (ISO/IEC 27001 6.1.3 f)",
     "RISK-13": "a residual level is what remains of a level - it presupposes a rating, on the same scale (D23: levels never compare across scales)",
 }
+# ---------------- DATE-1/2: two fields 1.0.0 left as free text ----------------
+# 2.0.0 types them (author decision 2026-11-12, backlog #47a and #52). The
+# schema enforces; this names the rule when an object matches no type, so
+# that a 1.0.0 bundle with a free-text date is told what to correct.
+DATE_RULES = {
+    "DATE-1": "a Deviation's `opened` is a date, YYYY-MM-DD - a date that any string satisfies cannot be compared, sorted or checked",
+    "DATE-2": "the `due` of a Finding's action is a typed point in time or duration (date, datetime, elapsed-duration, calendar-period) - a deadline a machine cannot read is prose",
+}
+def date_rule_violations(o):
+    """-> [(rule id, what is wrong)] for an object that carries Deviations or
+    actions. Never used to ACCEPT an object (the schema decides), only to
+    explain a refusal."""
+    out = []
+    if not isinstance(o, dict): return out
+    def deviations(x, at):
+        if isinstance(x, dict):
+            for i, dv in enumerate(x.get("deviations") or [] if isinstance(x.get("deviations"), list) else []):
+                if isinstance(dv, dict) and "opened" in dv and not VALIDATORS["date"].is_valid(dv["opened"]):
+                    out.append(("DATE-1", f"{at}deviations[{i}].opened is {dv['opened']!r}"))
+            for k, v in x.items():
+                if k != "deviations": deviations(v, f"{at}{k}.")
+        elif isinstance(x, list):
+            for i, v in enumerate(x): deviations(v, f"{at[:-1]}[{i}]." if at else f"[{i}].")
+    deviations(o, "")
+    for i, a in enumerate(o.get("actions") or [] if isinstance(o.get("actions"), list) else []):
+        if isinstance(a, dict) and "due" in a and not VALIDATORS["due"].is_valid(a["due"]):
+            out.append(("DATE-2", f"actions[{i}].due is {json.dumps(a['due'], ensure_ascii=False)}"))
+    return out
+
 def risk_rule_violations(o):
     """-> [(rule id, what is wrong)] for an object carrying the Risk
     signature. Mirrors the schema conditionals one-to-one; never used to
@@ -2612,6 +2653,9 @@ def validate_object(section, path, obj):
                 # the Risk signature: name the violated rule and print its why
                 best += "".join(f"\n      FAIL [{rid}] {what} - {RISK_RULES[rid]}"
                                 for rid, what in risk_rule_violations(obj))
+            # two fields that 1.0.0 left as free text and 2.0.0 types
+            best += "".join(f"\n      FAIL [{rid}] {what} - {DATE_RULES[rid]}"
+                            for rid, what in date_rule_violations(obj))
         fail(section, f"{path}: matches {matches or 'NO type'}{best}")
         return None
     ok(section)

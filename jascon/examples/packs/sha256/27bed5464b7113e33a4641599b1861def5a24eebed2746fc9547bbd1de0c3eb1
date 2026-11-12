@@ -23,8 +23,8 @@
   {
    "id": "https://dbvendor.example/component/server-7",
    "version": "2026-10",
-   "package-digest": "sha256:b2584fb9dcef40763ce98e5ffa354acbe3cde662ef3ec356edb87d112bea2072",
-   "semantic-digest": "sha256:8bd8d4b3b190f94a4d625161e5e988fbca697bdc3774e54757ac5030425022aa",
+   "package-digest": "sha256:11cdf4dd32588a6a6d8d1ca05e58c7ae1aa9587927a938d5e039b4afcc12851b",
+   "semantic-digest": "sha256:a332a7e225e727eca6d1a9487b34cecc22f3021883313749fa35c6e80f4b3684",
    "path": "objects/component/server-7.json"
   }
  ],

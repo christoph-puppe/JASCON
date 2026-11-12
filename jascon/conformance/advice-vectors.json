@@ -1052,6 +1052,204 @@
    "expected-rules": []
   },
   {
+   "name": "pack-names-the-product-version",
+   "note": "product-version is opaque text on a Component; nothing is ordered or parsed (author decision 2026-11-12)",
+   "manifest": {
+    "manifest-version": "1",
+    "kernel-version": "2.0.0",
+    "pack": {
+     "kind": "advice",
+     "id": "https://vendor.example/pack/server-7-advice",
+     "version": "3",
+     "title": {
+      "en": "Server 7 hardening advice"
+     },
+     "publisher": {
+      "ref": "https://vendor.example/party/vendor",
+      "name": {
+       "en": "Vendor Inc."
+      }
+     }
+    },
+    "objects": [
+     {
+      "id": "https://vendor.example/component/server-7",
+      "semantic-digest": "COMPUTE"
+     }
+    ]
+   },
+   "objects": [
+    {
+     "id": "https://vendor.example/component/server-7",
+     "version": "3",
+     "lifecycle": "active",
+     "kind": "software",
+     "title": {
+      "en": "Example Server 7"
+     },
+     "capabilities": [
+      {
+       "id": "cap-tls",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s1"
+       ],
+       "description": {
+        "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+       },
+       "parameter-bindings": {
+        "proto": "tls13"
+       }
+      },
+      {
+       "id": "cap-rotate",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s2"
+       ],
+       "description": {
+        "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+       }
+      }
+     ],
+     "product-version": "7.2"
+    }
+   ],
+   "expected-rules": []
+  },
+  {
+   "name": "third-party-pack-describes-the-vendors-product",
+   "note": "a consultancy publishes its own Component under its own origin (ADVICE-2) and says which product it is about with the stdlib relation `describes`; the vendor's Component need not be in the pack",
+   "manifest": {
+    "manifest-version": "1",
+    "kernel-version": "2.0.0",
+    "pack": {
+     "kind": "advice",
+     "id": "https://advisor.example/pack/server-7-hardening",
+     "version": "1",
+     "title": {
+      "en": "Independent hardening advice for Example Server 7"
+     },
+     "publisher": {
+      "ref": "https://advisor.example/party/advisor",
+      "name": {
+       "en": "Advisor GmbH"
+      }
+     }
+    },
+    "objects": [
+     {
+      "id": "https://advisor.example/component/server-7-hardening",
+      "semantic-digest": "COMPUTE"
+     }
+    ]
+   },
+   "objects": [
+    {
+     "id": "https://advisor.example/component/server-7-hardening",
+     "version": "1",
+     "lifecycle": "active",
+     "kind": "software",
+     "title": {
+      "en": "Hardening advice for Example Server 7"
+     },
+     "product-version": "7",
+     "relations": [
+      {
+       "type": "https://ns.jascon.net/stdlib/relation/describes",
+       "ref": "https://vendor.example/component/server-7"
+      }
+     ],
+     "capabilities": [
+      {
+       "id": "cap-tls",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s1"
+       ],
+       "description": {
+        "en": "Disable every protocol below TLS 1.3, and test client drivers first."
+       },
+       "parameter-bindings": {
+        "proto": "tls13"
+       }
+      }
+     ]
+    }
+   ],
+   "expected-rules": []
+  },
+  {
+   "name": "third-party-pack-under-the-vendors-id",
+   "note": "what `describes` is for: advice about a product is never published under the product's own id",
+   "manifest": {
+    "manifest-version": "1",
+    "kernel-version": "2.0.0",
+    "pack": {
+     "kind": "advice",
+     "id": "https://advisor.example/pack/server-7-hardening",
+     "version": "1",
+     "title": {
+      "en": "Independent hardening advice for Example Server 7"
+     },
+     "publisher": {
+      "ref": "https://advisor.example/party/advisor",
+      "name": {
+       "en": "Advisor GmbH"
+      }
+     }
+    },
+    "objects": [
+     {
+      "id": "https://vendor.example/component/server-7",
+      "semantic-digest": "COMPUTE"
+     }
+    ]
+   },
+   "objects": [
+    {
+     "id": "https://vendor.example/component/server-7",
+     "version": "3",
+     "lifecycle": "active",
+     "kind": "software",
+     "title": {
+      "en": "Example Server 7"
+     },
+     "capabilities": [
+      {
+       "id": "cap-tls",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s1"
+       ],
+       "description": {
+        "en": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3."
+       },
+       "parameter-bindings": {
+        "proto": "tls13"
+       }
+      },
+      {
+       "id": "cap-rotate",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-ids": [
+        "s2"
+       ],
+       "description": {
+        "en": "Rotate the server certificate with rotateCertificates; no restart is needed."
+       }
+      }
+     ]
+    }
+   ],
+   "expected-rules": [
+    "ADVICE-2"
+   ],
+   "expected-frags": [
+    "is not under the pack's origin"
+   ]
+  },
+  {
    "name": "pack-without-a-kernel-pin",
    "manifest": {
     "manifest-version": "1",
