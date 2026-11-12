@@ -195,10 +195,13 @@ side of that paradox:
   became its central theme.
 - **Valid and meaningless are compatible states.** The German Grundschutz++
   catalogs carry **12,059 namespace-qualified props** whose "schema" is a set
-  of CSV files behind mutable links. Inside them sit **216 pseudo-placeholders**
-  (`{{einem anerkannten Standard}}`) that imitate parameter syntax where it has
-  no meaning — several contradicting the adjacent prose. Every OSCAL validator
-  on earth certifies these documents as flawless.
+  of CSV files behind mutable links. Inside them, **125 of the 470 `tags`
+  values** pack several vocabulary terms into one comma-separated string
+  (`"Data Leak, Shadow IT"` in ASST.3.11), and two thirds of the `threats`
+  values do the same (`"G 0.18, G 0.30"`): lists, where JSON has arrays and
+  OSCAL repeats the prop. A validator sees one string, so nothing checks the
+  terms against the CSV, and every consumer has to know to split. Every OSCAL
+  validator on earth certifies these documents as flawless.
 - **The same model keeps getting rediscovered.** FedRAMP built CR26 on a green
   field in 2026 with no props mechanism, and its typed fields correspond almost
   one-to-one to the German prop names: `modal_verb` ↔ `force`,
@@ -373,9 +376,13 @@ changes forced):
 
 Each conversion ships a computed coverage report that declares every rule with
 counts and **reports source defects rather than repairing them** — the BSI run
-surfaces all 213 pseudo-placeholders in the current GS++ catalog for the
-authors' queue (the census figure of 216 included MS-TLS's 3, dropped from the
-corpus 2026-07-21); the C5 run surfaces a six-fold `gc-undefined` id collision.
+reports the 781 list values the GS++ catalog packs into single comma-separated
+strings (125 `tags`, 616 `threats`, 40 `target_object_categories`) for the
+authors' queue, and checks each of its 221 `{{…}}` sentence-template slots
+against the prose: all stand where a parameter is inserted, so they are
+parameters (until 2026-11-12 the converter miscounted them as 213 defects;
+erratum in the [register](drafts/jascon-decision-rationale-register.md));
+the C5 run surfaces a six-fold `gc-undefined` id collision.
 Finding real defects in shipping national catalogs is what "the converter is a
 measurement instrument" means.
 
@@ -493,7 +500,7 @@ python -m http.server 8000
 
 Then open `http://localhost:8000/jascon-app/index.html`. The single-file
 reader above stays as the page that needs no folder around it; it is at
-v1.9.0, reads the Check type and shows advice packs. New work goes into
+v1.9.1, reads the Check type and shows advice packs. New work goes into
 the app.
 
 ## For vendors: the pack builder

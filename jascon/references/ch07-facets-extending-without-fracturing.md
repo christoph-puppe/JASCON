@@ -67,7 +67,7 @@ see it.
 
 > **Don't** publish vocabulary as side files a validator cannot read.
 > Measured cost, one national corpus: 12,059 prop instances bound to
-> CSV links, a defect class of 216 no tool could see, and vocabulary
+> CSV links, 781 lists packed into strings that no tool could see, and vocabulary
 > that changed between releases with nothing able to notice.
 
 ## 7.2 Anatomy of a facet: the descriptor

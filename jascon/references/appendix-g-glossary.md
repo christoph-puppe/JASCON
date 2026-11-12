@@ -323,9 +323,16 @@ in the Assessment's row, so that the verdict can be recomputed.
 add/remove-relation, attach/detach-facet), identity-addressed,
 per-op weakening law. (Ch. 6, App. B.3)
 
+**Packed list** — several vocabulary terms joined by commas into one
+prop value, where JSON has arrays and OSCAL repeats the prop; 781 in
+the German catalog of 16 July 2026 (125 `tags`, 616 `threats`, 40
+`target_object_categories`), split by a declared rule and reported —
+never passed through or dropped. (Ch. 1, 14.5)
+
 **Parameter** — a statement's typed insertion point; prose references
-it as `{param:name}`; an unbound token is a validation error — the
-216's negation. (Ch. 4)
+it as `{param:name}`; an unbound token is a validation error
+(`prose-params-resolve`). The German sentence template marks the same
+slot as `{{Label}}`. (Ch. 4)
 
 **Pin** — an exact facet-schema version + digest in the manifest;
 the trust anchor that makes sealed validation and lawful composition
@@ -353,9 +360,10 @@ architecture's origin corpse. (Ch. 1, 7)
 **Provenance** — whose claim, when — mandatory on Mappings, recorded
 on manifests and resolutions. (Ch. 8, 11)
 
-**Pseudo-placeholder** — free text costumed as a parameter
-(`{{...}}`); the 216 (213 + 3) found, listed, and queued — never
-repaired, passed through, or dropped. (Ch. 1, 14.5, App. E)
+**Pseudo-placeholder** — withdrawn term (2026-11-12). Earlier
+editions used it for the `{{...}}` slots in 216 values of the German
+sentence template and counted them as defects; they are parameters, each
+standing where the statement prose inserts one. (Ch. 1, 14.5)
 
 **Rationale-on-failure** — every rule carries machine id, human
 reason, failure message; the reason *prints* when the rule fires.

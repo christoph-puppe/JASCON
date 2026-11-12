@@ -24,1287 +24,3177 @@
   "may": 224
  },
  "unknown-modal-verbs": {},
- "defective-prop-values": 213,
- "defects": [
-  {
-   "control": "GC.1.1",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "nach {{einem anerkannten Standard}}"
-  },
-  {
-   "control": "GC.9.1.1",
-   "part": "statement",
-   "prop": "result",
-   "value": "die {{Rollen und Zuständigkeiten}} im Rahmen des ISMS"
-  },
-  {
-   "control": "GC.9.1.1.1",
-   "part": "statement",
-   "prop": "result",
-   "value": "die Zuständigkeit für Informationssicherheit {{einer unabhängigen Person}}"
-  },
-  {
-   "control": "GC.10.1.2",
-   "part": "statement",
-   "prop": "result",
-   "value": "bei sicherheitsrelevanten Projekten die Beteiligung {{der relevanten Sicherheitsorgane}}"
-  },
-  {
-   "control": "UMS.1.1",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "im Anforderungspaket vollständig {{regelmäßig}}"
-  },
-  {
-   "control": "UMS.5.1",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "durch {{eine zuständige Person oder Rolle}}"
-  },
-  {
-   "control": "VRB.2.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}}"
-  },
-  {
-   "control": "VRB.6.1",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}}"
-  },
-  {
-   "control": "PERF.1.2",
-   "part": "statement",
-   "prop": "result",
-   "value": "die {{regelmäßige}} Überprüfung und Fortschreibung des Umsetzungsplans"
-  },
-  {
-   "control": "PERF.1.3",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}}"
-  },
-  {
-   "control": "PERF.2.1",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}} sowie anlassbezogen"
-  },
-  {
-   "control": "PERF.4.1",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}} sowie anlassbezogen in einem Managementbericht"
-  },
-  {
-   "control": "PERF.4.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}} anhand des Managementberichtes"
-  },
-  {
-   "control": "PERF.5.1",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "zur {{regelmäßigen}} Überwachung der Informationssicherheit"
-  },
-  {
-   "control": "RISK.1.1",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "nach {{einem anerkannten Standard}}"
-  },
-  {
-   "control": "ASST.1.1.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{zuständigen Personen oder Rollen}}"
-  },
-  {
-   "control": "ASST.1.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}} und anlassbezogen auf Aktualität"
-  },
-  {
-   "control": "ASST.2.1.1",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{einer zuständigen Person oder Rolle}}"
-  },
-  {
-   "control": "ASST.2.3.1",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "durch {{eine zuständige Person oder Rolle}}"
-  },
-  {
-   "control": "ASST.2.3.2.1",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig oder bei Änderungen}}"
-  },
-  {
-   "control": "ASST.3.10",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "durch {{eine zuständige Person oder Rolle}}"
-  },
-  {
-   "control": "ASST.3.11",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "durch {{eine zuständige Person oder Rolle}}"
-  },
-  {
-   "control": "ASST.4.1",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "durch {{eine zuständige Person oder Rolle}}"
-  },
-  {
-   "control": "ASST.4.3",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "durch {{eine zuständige Person oder Rolle}}"
-  },
-  {
-   "control": "ASST.5.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig oder prädiktiv}}"
-  },
-  {
-   "control": "ASST.5.3",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "durch {{eine zuständige Person oder Rolle}}"
-  },
-  {
-   "control": "ASST.7.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "für {{eine bestimmte Frist}}"
-  },
-  {
-   "control": "ASST.7.2.1",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "mindestens für {{eine bestimmte Frist}}"
-  },
-  {
-   "control": "ASST.7.3",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "durch {{kryptografisches löschen, überschreiben oder vernichten des Speichermediums}}"
-  },
-  {
-   "control": "ASST.7.3.1",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "nach {{einem anerkannten Standard}} gemäß {{einer Sicherheitsstufe}}"
-  },
-  {
-   "control": "ASST.7.3.3",
-   "part": "statement",
-   "prop": "result",
-   "value": "die Daten durch {{eine vom BSI zugelassene Löschanwendung}}"
-  },
-  {
-   "control": "ASST.7.6",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "durch {{eine zuständige Person oder Rolle}}"
-  },
-  {
-   "control": "PERS.1.1.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{zuständigen Personen oder Rollen}}"
-  },
-  {
-   "control": "PERS.1.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}} und anlassbezogen auf Aktualität"
-  },
-  {
-   "control": "PERS.4.1",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}}"
-  },
-  {
-   "control": "PERS.4.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "im Einklang mit den Anforderungen der Praktik Sensibilisierung bei Neuzugang und {{regelmäßig}}"
-  },
-  {
-   "control": "PERS.5.3",
-   "part": "statement",
-   "prop": "result",
-   "value": "die Vertrauenswürdigkeit für {{definierte sicherheitskritische Rollen}}"
-  },
-  {
-   "control": "PERS.5.3",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}} und anlassbezogen"
-  },
-  {
-   "control": "BES.1.1.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{zuständigen Personen oder Rollen}}"
-  },
-  {
-   "control": "BES.1.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}} und anlassbezogen auf Aktualität"
-  },
-  {
-   "control": "BES.1.5",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "durch {{eine zuständige Person oder Rolle}}"
-  },
-  {
-   "control": "BES.4.2",
-   "part": "statement",
-   "prop": "result",
-   "value": "{{Kriterien}} für die Beschaffung"
-  },
-  {
-   "control": "BES.4.8.1",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "nach {{einem passenden Sicherheitsstandard}}"
-  },
-  {
-   "control": "BES.5.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "anhand von {{Kriterien}}"
-  },
-  {
-   "control": "BES.5.5.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "anhand von {{Kriterien}}"
-  },
-  {
-   "control": "BES.5.6.3",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "für {{kritische Komponenten}}"
-  },
-  {
-   "control": "BES.5.10.3.1",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "nach {{einem anerkannten Standard}}"
-  },
-  {
-   "control": "BES.7.1",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "anhand von {{Kriterien zur Akzeptanz}} vor der ersten Verwendung"
-  },
-  {
-   "control": "BES.7.4.4.1",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "nach {{einem anerkannten Standard}}"
-  },
-  {
-   "control": "BES.7.4.12",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "nach {{einem anerkannten Standard}}"
-  },
-  {
-   "control": "DLS.1.1.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{zuständigen Personen oder Rollen}}"
-  },
-  {
-   "control": "DLS.1.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}} und anlassbezogen auf Aktualität"
-  },
-  {
-   "control": "DLS.2.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "bei der Übertragung zum Anbieter nach {{einem anerkannten Standard}}"
-  },
-  {
-   "control": "DLS.3.1",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}}"
-  },
-  {
-   "control": "DLS.3.1.1",
-   "part": "statement",
-   "prop": "result",
-   "value": "die Einhaltung der Sicherheitsvorgaben anhand eines {{Audits, Zertifikates oder vergleichbaren Sicherheitsnachweises}}"
-  },
-  {
-   "control": "DLS.3.1.1",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}}"
-  },
-  {
-   "control": "DLS.3.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "auf Änderungen der Gefährdungslage oder Prozessinhalte {{regelmäßig}}"
-  },
-  {
-   "control": "DLS.3.6",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}}"
-  },
-  {
-   "control": "TEST.1.1",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{für den Informationsverbund, pro Geschäftsprozess oder pro IT-System}}"
-  },
-  {
-   "control": "TEST.1.1.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{zuständigen Personen oder Rollen}}"
-  },
-  {
-   "control": "TEST.1.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}} und anlassbezogen auf Aktualität"
-  },
-  {
-   "control": "TEST.3.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}}"
-  },
-  {
-   "control": "TEST.5.5",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}}"
-  },
-  {
-   "control": "GEB.1.1.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{zuständigen Personen oder Rollen}}"
-  },
-  {
-   "control": "GEB.1.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}} und anlassbezogen auf Aktualität"
-  },
-  {
-   "control": "GEB.1.3.1",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "vor Autorisierung anhand von {{Kriterien}}"
-  },
-  {
-   "control": "GEB.3.3.1",
-   "part": "statement",
-   "prop": "result",
-   "value": "Zutritte durch {{einen automatiserten Mechanismus}}"
-  },
-  {
-   "control": "GEB.3.3.3",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "durch {{eine zuständige Person oder Rolle}}"
-  },
-  {
-   "control": "GEB.3.5",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "nach {{einer entsprechenden Norm}}"
-  },
-  {
-   "control": "GEB.3.6",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "nach {{einer entsprechenden Norm}}"
-  },
-  {
-   "control": "GEB.3.7",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}}"
-  },
-  {
-   "control": "GEB.4.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "durch {{eine zuständige Person oder Rolle}}"
-  },
-  {
-   "control": "GEB.6.4",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "nach {{einer anerkannten Norm}}"
-  },
-  {
-   "control": "GEB.7.1",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{zuständigen Personen oder Rollen}}"
-  },
-  {
-   "control": "GEB.7.3",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}}"
-  },
-  {
-   "control": "GEB.8.3",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "nach {{einem anerkannten Standard}}"
-  },
-  {
-   "control": "GEB.8.4",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "anhand von {{Schwellwerten}}"
-  },
-  {
-   "control": "GEB.9.1.1",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}} vorausschauend"
-  },
-  {
-   "control": "GEB.9.1.3",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "für {{eine Stützzeit}}"
-  },
-  {
-   "control": "GEB.9.1.4",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "für {{eine längere Stützzeit}}"
-  },
-  {
-   "control": "GEB.9.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}}"
-  },
-  {
-   "control": "GEB.9.6",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "auf {{für den Betrieb zuständige Personen oder Rollen}}"
-  },
-  {
-   "control": "GEB.10.1",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "anhand von {{Schwellwerten}}"
-  },
-  {
-   "control": "GEB.10.1.1",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}}"
-  },
-  {
-   "control": "GEB.10.1.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "anhand von {{Schwellwerten}}"
-  },
-  {
-   "control": "GEB.10.2.4",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": ", sodass sie Feuern für {{eine bestimmte Frist}} standhalten,"
-  },
-  {
-   "control": "GEB.10.2.7",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}}"
-  },
-  {
-   "control": "GEB.10.4",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "nach {{einem anerkannten Standard}}"
-  },
-  {
-   "control": "GEB.10.4.1",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}}  auf Niederohmigkeit"
-  },
-  {
-   "control": "SENS.1.1.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{zuständigen Personen oder Rollen}}"
-  },
-  {
-   "control": "SENS.1.2",
-   "part": "statement",
-   "prop": "result",
-   "value": "den Erfolg der Sensibilisierung anhand {{objektivierter Kriterien}}"
-  },
-  {
-   "control": "SENS.1.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}}"
-  },
-  {
-   "control": "ARCH.1.1.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{zuständigen Personen oder Rollen}}"
-  },
-  {
-   "control": "ARCH.1.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}} und anlassbezogen auf Aktualität"
-  },
-  {
-   "control": "ARCH.2.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "anhand von {{Kriterien}}"
-  },
-  {
-   "control": "ARCH.2.6",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}}"
-  },
-  {
-   "control": "ARCH.3.4",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{nach einem anerkannten Standard}}"
-  },
-  {
-   "control": "ARCH.4.1.1",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "anhand {{dynamischer Kriterien}} im Einklang mit den zugehörigen Anforderungen des Identitäts- und Berechtigungsmanagements"
-  },
-  {
-   "control": "ARCH.4.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "durch {{eine zuständige Person oder Rolle}}"
-  },
-  {
-   "control": "ARCH.5.1.10",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "anhand von {{Kriterien}}"
-  },
-  {
-   "control": "ARCH.6.1",
-   "part": "statement",
-   "prop": "result",
-   "value": "eine  {{physisch oder logisch}} kontrollierte Verbindungsführung"
-  },
-  {
-   "control": "ARCH.6.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "nach {{einem anerkannten Standard}}"
-  },
-  {
-   "control": "ARCH.7.1",
-   "part": "statement",
-   "prop": "result",
-   "value": "Serverdienste ausschließlich auf für die Anwendung dedizierten {{virtuellen oder physischen}} Hostsystemen"
-  },
-  {
-   "control": "ARCH.9.2",
-   "part": "statement",
-   "prop": "result",
-   "value": "eine {{netzbasierte oder serverbasierte}} automatische Lastverteilung"
-  },
-  {
-   "control": "ARCH.9.3",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "anhand von {{Schwellwerten}}"
-  },
-  {
-   "control": "BER.1.1.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{zuständigen Personen oder Rollen}}"
-  },
-  {
-   "control": "BER.1.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}} und anlassbezogen auf Aktualität"
-  },
-  {
-   "control": "BER.2.3",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}}"
-  },
-  {
-   "control": "BER.3.7",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "durch {{bestimmte Personen oder Rollen}}"
-  },
-  {
-   "control": "BER.3.15",
-   "part": "statement",
-   "prop": "result",
-   "value": "weitere Anmeldeversuche nach Erreichen von {{einem maximalen Schwellwert an}} fehlgeschlagenen Versuchen"
-  },
-  {
-   "control": "BER.3.16",
-   "part": "statement",
-   "prop": "result",
-   "value": "weitere Anmeldeversuche nach Erreichen von {{einem maximalen Schwellwert an}} fehlgeschlagenen Versuchen"
-  },
-  {
-   "control": "BER.3.17",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "nach {{einer Frist}}"
-  },
-  {
-   "control": "BER.3.18",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "nach {{einer Frist}}"
-  },
-  {
-   "control": "BER.3.19",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "für {{einen bestimmten Zeitraum}}"
-  },
-  {
-   "control": "BER.4.1.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "für {{besonders kritische Ressourcen oder Zugänge}}"
-  },
-  {
-   "control": "BER.4.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "durch {{bestimmte Personen oder Rollen}}"
-  },
-  {
-   "control": "BER.4.4",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}} auf Erforderlichkeit"
-  },
-  {
-   "control": "BER.4.4.1",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}} auf Übereinstimmung"
-  },
-  {
-   "control": "BER.5.10",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "durch {{einen automatisierten Mechanismus}}"
-  },
-  {
-   "control": "BER.6.1",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "bei der Schlüsselerzeugung nach {{einem anerkannten Standard}}"
-  },
-  {
-   "control": "BER.6.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "nach {{einem anerkannten Standard}} bei der Schlüsselerzeugung"
-  },
-  {
-   "control": "BER.6.5",
-   "part": "statement",
-   "prop": "result",
-   "value": "{{Kriterien}} für die Qualität von Zufallszahlen"
-  },
-  {
-   "control": "BER.6.7",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "durch {{eine zuständige Person oder Rolle}}"
-  },
-  {
-   "control": "BER.6.14",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}}"
-  },
-  {
-   "control": "BER.6.16.1",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{einer zuständigen Person oder Rolle}}"
-  },
-  {
-   "control": "NOT.1.1.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{zuständigen Personen oder Rollen}}"
-  },
-  {
-   "control": "NOT.1.1.4",
-   "part": "statement",
-   "prop": "result",
-   "value": "ein {{Reaktiv-, Aufbau- oder Standard-}}BCMS nach {{einem anerkannten BCM-Standard}}"
-  },
-  {
-   "control": "NOT.1.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}} und anlassbezogen auf Aktualität"
-  },
-  {
-   "control": "NOT.2.1.1",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "einschließlich BAO-Stab und Notfallteams {{zuständigen Personen oder Rollen}}"
-  },
-  {
-   "control": "NOT.2.1.4",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}}  durch Stabsübungen"
-  },
-  {
-   "control": "NOT.3.4",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}}"
-  },
-  {
-   "control": "NOT.4.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}}"
-  },
-  {
-   "control": "NOT.4.3",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}}"
-  },
-  {
-   "control": "NOT.4.4",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "durch {{einen automatisierten Mechanismus}}"
-  },
-  {
-   "control": "NOT.4.5",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}}"
-  },
-  {
-   "control": "NOT.4.5.1",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}}"
-  },
-  {
-   "control": "NOT.4.5.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}}"
-  },
-  {
-   "control": "NOT.4.8",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "durch {{einen anerkannten kryptographischen Algorithmus}}"
-  },
-  {
-   "control": "NOT.4.13",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "nach {{einem anerkannten Standard}} {{regelmäßig}}"
-  },
-  {
-   "control": "NOT.4.14",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}}"
-  },
-  {
-   "control": "NOT.4.16",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}}"
-  },
-  {
-   "control": "NOT.4.16.1",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "mindestens anhand von repräsentativen Stichproben {{regelmäßig}}"
-  },
-  {
-   "control": "NOT.4.17",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}}"
-  },
-  {
-   "control": "DET.1.1.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{zuständigen Personen oder Rollen}}"
-  },
-  {
-   "control": "DET.1.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}} und anlassbezogen auf Aktualität"
-  },
-  {
-   "control": "DET.2.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{dediziertem Personal}}"
-  },
-  {
-   "control": "DET.3.1",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "mindestens für {{eine bestimmte Frist}}"
-  },
-  {
-   "control": "DET.3.1.6",
-   "part": "statement",
-   "prop": "result",
-   "value": "{{bestimmte systemspezifische Ereignisse}}"
-  },
-  {
-   "control": "DET.3.1.11",
-   "part": "statement",
-   "prop": "result",
-   "value": "{{bestimmte anwendungsspezifische Ereignisse}}"
-  },
-  {
-   "control": "DET.3.3",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "anhand von {{Kriterien}}"
-  },
-  {
-   "control": "DET.3.4",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{bei Erreichen eines bestimmten Schwellwertes oder regelmäßig}}"
-  },
-  {
-   "control": "DET.3.6",
-   "part": "statement",
-   "prop": "result",
-   "value": "Nachweise für den Zusammenhang {{bestimter Ereignisse}} mit {{einer bestimmten Person oder Rolle}}"
-  },
-  {
-   "control": "DET.4.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "durch {{einen automatisierten Mechanismus}}"
-  },
-  {
-   "control": "DET.4.9",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}}"
-  },
-  {
-   "control": "DET.4.11.1",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}}"
-  },
-  {
-   "control": "DET.4.11.3",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "anhand von {{Kriterien}}"
-  },
-  {
-   "control": "DET.4.12",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "anhand von {{Schwellwerten}}"
-  },
-  {
-   "control": "DET.4.12.1",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "anhand von {{Schwellwerten}}"
-  },
-  {
-   "control": "DET.4.13",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "anhand von {{Schwellwerten}}"
-  },
-  {
-   "control": "DET.4.14",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "anhand von {{Schwellwerten}}"
-  },
-  {
-   "control": "DET.4.15",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "anhand von {{Schwellwerten}}"
-  },
-  {
-   "control": "DET.4.16",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "anhand von {{Schwellwerten}}"
-  },
-  {
-   "control": "DET.4.17",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "anhand von {{Schwellwerten}}"
-  },
-  {
-   "control": "DET.4.18",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}}"
-  },
-  {
-   "control": "DET.4.19",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "durch {{einen automatisierten Mechanismus}}"
-  },
-  {
-   "control": "DET.5.1.1",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "anhand von {{risikobasierten Kriterien}} innerhalb {{einer Frist}}"
-  },
-  {
-   "control": "DET.5.3.1",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "durch {{zuständige Personen oder Rollen}}"
-  },
-  {
-   "control": "DET.5.4",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "nach {{einer anerkannten Vorgehensweise}} {{regelmäßig}}"
-  },
-  {
-   "control": "DET.5.5",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}} durch unabhängig agierende Sicherheitsexperten"
-  },
-  {
-   "control": "DET.5.6",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}}"
-  },
-  {
-   "control": "DET.5.7",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{bei Sicherheitsvorfällen mit verdeckten Kanälen und regelmäßig}}"
-  },
-  {
-   "control": "DET.5.8",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}}"
-  },
-  {
-   "control": "DET.5.8.1",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "anhand von {{Kriterien zur Suche}} {{regelmäßig}}"
-  },
-  {
-   "control": "DET.5.10.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "durch {{einen automatisierten Mechanismus}}"
-  },
-  {
-   "control": "DET.5.10.3",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "durch {{einen automatisierten Mechanismus}}"
-  },
-  {
-   "control": "DET.6.1",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "anhand von {{Kriterien}}"
-  },
-  {
-   "control": "DET.6.1.1",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "anhand von {{Kriterien}} durch {{einen automatisierten Mechanismus}}"
-  },
-  {
-   "control": "DET.6.1.2",
-   "part": "statement",
-   "prop": "result",
-   "value": "bei sicherheitskritischen Ereignissen eine Alarmierung von {{für die Vorfallsbehandlung zuständigen Personen oder Rollen}}"
-  },
-  {
-   "control": "DET.6.1.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "durch {{einen automatisierten Mechanismus}}"
-  },
-  {
-   "control": "REA.1.1.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{zuständigen Personen oder Rollen}}"
-  },
-  {
-   "control": "REA.1.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}} und anlassbezogen auf Aktualität"
-  },
-  {
-   "control": "REA.1.3",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}}"
-  },
-  {
-   "control": "REA.2.5",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "bei Vorfällen, die {{bestimmte Kriterien}} erfüllen,"
-  },
-  {
-   "control": "REA.2.5.3",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "binnen {{einer Frist}}"
-  },
-  {
-   "control": "REA.3.1",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}}"
-  },
-  {
-   "control": "KONF.1.1.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{zuständigen Personen oder Rollen}}"
-  },
-  {
-   "control": "KONF.1.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}} und anlassbezogen auf Aktualität"
-  },
-  {
-   "control": "KONF.2.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "nach {{anerkannten Standards}} im Einklang mit den zugehörigen Anforderungen zum Identitäts- und Berechtigungsmanagement"
-  },
-  {
-   "control": "KONF.2.5",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}}"
-  },
-  {
-   "control": "KONF.2.5.1",
-   "part": "statement",
-   "prop": "result",
-   "value": "die Überprüfung der Konfiguration durch {{einen automatisierten Mechanismus}}"
-  },
-  {
-   "control": "KONF.3.5",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{durch einen automatisierten Mechanismus}}"
-  },
-  {
-   "control": "KONF.3.6.1",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "bei Inaktivität nach {{einer längeren Frist}}"
-  },
-  {
-   "control": "KONF.4.2.1",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "durch {{einen anerkannten kryptographischen Algorithmus}}"
-  },
-  {
-   "control": "KONF.6.1.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "von {{bestimmten Anwendungen}}"
-  },
-  {
-   "control": "KONF.7.7",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}}"
-  },
-  {
-   "control": "KONF.9.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "anhand von {{Schwellwerten}}"
-  },
-  {
-   "control": "KONF.9.3",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "für {{bestimmte kritische Funktionen}}"
-  },
-  {
-   "control": "KONF.10.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "nach {{anerkannten Standards}} im Einklang mit den zugehörigen Anforderungen zum Identitäts- und Berechtigungsmanagement"
-  },
-  {
-   "control": "KONF.10.5",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}}"
-  },
-  {
-   "control": "KONF.10.5.1",
-   "part": "statement",
-   "prop": "result",
-   "value": "die Überprüfung der Konfiguration durch {{einen automatisierten Mechanismus}}"
-  },
-  {
-   "control": "KONF.11.3",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "anhand von {{Kriterien}}"
-  },
-  {
-   "control": "KONF.11.4",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "durch {{einen automatisierten Mechanismus}}"
-  },
-  {
-   "control": "KONF.12.1",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "durch {{einen automatisierten Mechanismus}}"
-  },
-  {
-   "control": "KONF.12.4",
-   "part": "statement",
-   "prop": "result",
-   "value": "die Speicherung von Zugangsdaten {{in einem dedizierten Passwort-Manager mit Browser-Integration oder direkt im Browser durch ein Master-Passwort geschützt}}"
-  },
-  {
-   "control": "KONF.12.11",
-   "part": "statement",
-   "prop": "result",
-   "value": "die Übermittlung {{eines Pseudonyms oder gar keiner Anzeigekennung}}"
-  },
-  {
-   "control": "KONF.13.7",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}}"
-  },
-  {
-   "control": "KONF.13.8",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig oder bei Eingang}}"
-  },
-  {
-   "control": "KONF.14.1",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "über Netze nach {{einem anerkannten Standard}}"
-  },
-  {
-   "control": "KONF.15.1",
-   "part": "statement",
-   "prop": "result",
-   "value": "in der Anwendung zur Verfügung stehenden Speicherplatz pro {{Zugangskonto oder Mandant}}"
-  },
-  {
-   "control": "KONF.15.1",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "anhand von {{Schwellwerten}}"
-  },
-  {
-   "control": "DEV.1.1.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{zuständigen Personen oder Rollen}}"
-  },
-  {
-   "control": "DEV.1.2",
-   "part": "statement",
-   "prop": "result_specification",
-   "value": "{{regelmäßig}} und anlassbezogen auf Aktualität"
-  },
-  {
-   "control": "DEV.5.1",
-   "part": "statement",
-   "prop": "result",
-   "value": "die Bereitstellung von Sicherheitsupdates mindestens für {{einen bestimmten Zeitraum}}"
+ "packed-list-values": {
+  "tags": {
+   "props": 470,
+   "packed": 125,
+   "values": [
+    {
+     "control": "GC.3.1.1",
+     "value": "Compliance Management, Inventories"
+    },
+    {
+     "control": "ASST.3.10",
+     "value": "Lieferketten, Shadow IT"
+    },
+    {
+     "control": "ASST.3.11",
+     "value": "Data Leak, Shadow IT"
+    },
+    {
+     "control": "ASST.3.11.1",
+     "value": "Data Leak, Shadow IT"
+    },
+    {
+     "control": "PERS.6.1",
+     "value": "Insider Threat, Kompetenzmanagement"
+    },
+    {
+     "control": "BES.1.4",
+     "value": "Lieferketten, Shared Responsibility Model"
+    },
+    {
+     "control": "BES.1.5",
+     "value": "Lieferketten, Shared Responsibility Model"
+    },
+    {
+     "control": "BES.1.6",
+     "value": "Lieferketten, Shared Responsibility Model"
+    },
+    {
+     "control": "BES.1.7",
+     "value": "Lieferketten, Shared Responsibility Model"
+    },
+    {
+     "control": "BES.3.2",
+     "value": "Lieferketten, Advanced Persistent Threats (APT)"
+    },
+    {
+     "control": "BES.3.3",
+     "value": "Lieferketten, Advanced Persistent Threats (APT)"
+    },
+    {
+     "control": "BES.4.6.3",
+     "value": "Lieferketten, Cryptography, Advanced Persistent Threats (APT)"
+    },
+    {
+     "control": "BES.4.8",
+     "value": "Lieferketten, Advanced Persistent Threats (APT)"
+    },
+    {
+     "control": "BES.5.1",
+     "value": "Lieferketten, Kompetenzmanagement"
+    },
+    {
+     "control": "BES.5.7",
+     "value": "Lieferketten, Kompetenzmanagement"
+    },
+    {
+     "control": "BES.5.10.4",
+     "value": "Lieferketten, Exit-Strategie"
+    },
+    {
+     "control": "BES.5.10.5",
+     "value": "Lieferketten, Exit-Strategie"
+    },
+    {
+     "control": "BES.6.1",
+     "value": "Lieferketten, Exit-Strategie"
+    },
+    {
+     "control": "BES.6.2",
+     "value": "Lieferketten, Exit-Strategie"
+    },
+    {
+     "control": "BES.6.2.1",
+     "value": "Lieferketten, Exit-Strategie"
+    },
+    {
+     "control": "BES.6.3",
+     "value": "Lieferketten, Exit-Strategie"
+    },
+    {
+     "control": "BES.6.4",
+     "value": "Lieferketten, Exit-Strategie"
+    },
+    {
+     "control": "BES.6.5",
+     "value": "Lieferketten, Exit-Strategie"
+    },
+    {
+     "control": "BES.6.6",
+     "value": "Lieferketten, Exit-Strategie"
+    },
+    {
+     "control": "BES.8.1",
+     "value": "Lieferketten, Exit-Strategie"
+    },
+    {
+     "control": "BES.8.2",
+     "value": "Lieferketten, Exit-Strategie"
+    },
+    {
+     "control": "BES.8.3",
+     "value": "Lieferketten, Exit-Strategie"
+    },
+    {
+     "control": "DLS.3.5",
+     "value": "Lieferketten, Exit-Strategie"
+    },
+    {
+     "control": "DLS.3.6",
+     "value": "Lieferketten, Exit-Strategie"
+    },
+    {
+     "control": "DLS.4.1",
+     "value": "Lieferketten, Exit-Strategie"
+    },
+    {
+     "control": "DLS.4.1.1",
+     "value": "Lieferketten, Exit-Strategie"
+    },
+    {
+     "control": "DLS.4.1.2",
+     "value": "Lieferketten, Exit-Strategie"
+    },
+    {
+     "control": "SENS.2.4",
+     "value": "Bring Your Own Device, Insider Threat"
+    },
+    {
+     "control": "SENS.2.4.1",
+     "value": "Bring Your Own Device, Insider Threat"
+    },
+    {
+     "control": "SENS.4.1",
+     "value": "Authentication and Authorization, Advanced Persistent Threats (APT)"
+    },
+    {
+     "control": "SENS.4.1.2",
+     "value": "Credential Stuffing, Privilege Escalation, Password Policy"
+    },
+    {
+     "control": "SENS.4.1.3",
+     "value": "Authentication and Authorization, Password Policy"
+    },
+    {
+     "control": "SENS.4.1.6",
+     "value": "Authentication and Authorization, Password Policy"
+    },
+    {
+     "control": "SENS.8.6",
+     "value": "Physical Access Control, Advanced Persistent Threats (APT)"
+    },
+    {
+     "control": "SENS.9.1",
+     "value": "Physical Access Control, Shoulder Surfing"
+    },
+    {
+     "control": "SENS.9.7",
+     "value": "Auslandsreisen, Advanced Persistent Threats (APT)"
+    },
+    {
+     "control": "SENS.10.5",
+     "value": "Privilege Escalation, Insider Threat, Privilegierte Rechte"
+    },
+    {
+     "control": "ARCH.2.1",
+     "value": "Lateral Movement, Separation of Concerns"
+    },
+    {
+     "control": "ARCH.2.2",
+     "value": "Lateral Movement, Separation of Concerns"
+    },
+    {
+     "control": "ARCH.2.2.1",
+     "value": "Internet Exposure, Command & Control"
+    },
+    {
+     "control": "ARCH.2.2.2",
+     "value": "Lateral Movement, Separation of Concerns"
+    },
+    {
+     "control": "ARCH.2.2.3",
+     "value": "Lateral Movement, Separation of Concerns"
+    },
+    {
+     "control": "ARCH.2.2.4",
+     "value": "Lateral Movement, Separation of Concerns"
+    },
+    {
+     "control": "ARCH.2.2.5",
+     "value": "Lateral Movement, Separation of Concerns"
+    },
+    {
+     "control": "ARCH.2.2.7",
+     "value": "Lateral Movement, Separation of Concerns"
+    },
+    {
+     "control": "ARCH.2.2.8",
+     "value": "Lateral Movement, Separation of Concerns"
+    },
+    {
+     "control": "ARCH.2.2.9",
+     "value": "Lateral Movement, Separation of Concerns"
+    },
+    {
+     "control": "ARCH.2.2.10",
+     "value": "Lateral Movement, Separation of Concerns"
+    },
+    {
+     "control": "ARCH.2.2.11",
+     "value": "Lateral Movement, Separation of Concerns"
+    },
+    {
+     "control": "ARCH.2.2.12",
+     "value": "Lateral Movement, Separation of Concerns"
+    },
+    {
+     "control": "ARCH.2.3",
+     "value": "Advanced Persistent Threats (APT), Lateral Movement"
+    },
+    {
+     "control": "ARCH.4.1",
+     "value": "Network Access Control, Rogue Access Point"
+    },
+    {
+     "control": "ARCH.4.1.1",
+     "value": "Network Access Control, Rogue Access Point"
+    },
+    {
+     "control": "ARCH.4.1.2",
+     "value": "Network Access Control, Rogue Access Point"
+    },
+    {
+     "control": "ARCH.8.1",
+     "value": "Hochverfügbarkeit, Failover"
+    },
+    {
+     "control": "ARCH.8.2",
+     "value": "Hochverfügbarkeit, Failover, PSTN"
+    },
+    {
+     "control": "ARCH.8.3",
+     "value": "Hochverfügbarkeit, Failover"
+    },
+    {
+     "control": "ARCH.9.3",
+     "value": "Hochverfügbarkeit, DDoS"
+    },
+    {
+     "control": "ARCH.9.4",
+     "value": "Hochverfügbarkeit, DDoS"
+    },
+    {
+     "control": "ARCH.9.5",
+     "value": "Hochverfügbarkeit, DDoS"
+    },
+    {
+     "control": "BER.3.11",
+     "value": "Privilege Escalation, Insider Threat, Privilegierte Rechte"
+    },
+    {
+     "control": "BER.3.13",
+     "value": "Credential Stuffing, Brute-Force-Attacke"
+    },
+    {
+     "control": "BER.3.15",
+     "value": "Credential Stuffing, Brute-Force-Attacke"
+    },
+    {
+     "control": "BER.3.16",
+     "value": "Credential Stuffing, Brute-Force-Attacke"
+    },
+    {
+     "control": "BER.3.20",
+     "value": "Credential Stuffing, Brute-Force-Attacke"
+    },
+    {
+     "control": "BER.3.28",
+     "value": "BCM, Privilegierte Rechte"
+    },
+    {
+     "control": "BER.4.1",
+     "value": "Security by Default, Privilegierte Rechte"
+    },
+    {
+     "control": "BER.5.4",
+     "value": "MFA, Credential Stuffing, Brute-Force-Attacke"
+    },
+    {
+     "control": "BER.5.5",
+     "value": "MFA, Living off the land, Privilege Escalation, Credential Stuffing, Brute-Force-Attacke"
+    },
+    {
+     "control": "BER.5.6",
+     "value": "Credential Stuffing, Privilege Escalation, Password Policy"
+    },
+    {
+     "control": "BER.5.7",
+     "value": "Credential Stuffing, Password Policy"
+    },
+    {
+     "control": "BER.5.8",
+     "value": "Privilege Escalation, Credential Stuffing, Brute-Force-Attacke, Password Policy, Cryptography"
+    },
+    {
+     "control": "BER.5.10",
+     "value": "Credential Stuffing, Password Policy"
+    },
+    {
+     "control": "DET.4.6.1",
+     "value": "Advanced Persistent Threats (APT), Command & Control, Data Exfiltration, Insider Threat, Living off the land"
+    },
+    {
+     "control": "DET.4.10",
+     "value": "Advanced Persistent Threats (APT), Honeypot"
+    },
+    {
+     "control": "DET.4.11",
+     "value": "Command & Control, Lateral Movement, Data Exfiltration"
+    },
+    {
+     "control": "DET.4.11.1",
+     "value": "Advanced Persistent Threats (APT), Command & Control"
+    },
+    {
+     "control": "DET.4.11.2",
+     "value": "Advanced Persistent Threats (APT), Honeypot"
+    },
+    {
+     "control": "DET.5.4",
+     "value": "Pentest, Advanced Persistent Threats (APT)"
+    },
+    {
+     "control": "DET.5.5",
+     "value": "Pentest, Advanced Persistent Threats (APT)"
+    },
+    {
+     "control": "DET.5.7",
+     "value": "Pentest, Advanced Persistent Threats (APT)"
+    },
+    {
+     "control": "KONF.2.9",
+     "value": "Cryptography, Produktbeschreibung"
+    },
+    {
+     "control": "KONF.3.1",
+     "value": "Produktbeschreibung, Cryptography"
+    },
+    {
+     "control": "KONF.3.2",
+     "value": "Produktbeschreibung, Cryptography"
+    },
+    {
+     "control": "KONF.4.1.1",
+     "value": "Produktbeschreibung, Lateral Movement"
+    },
+    {
+     "control": "KONF.4.2.1",
+     "value": "Produktbeschreibung, Cryptography"
+    },
+    {
+     "control": "KONF.6.4",
+     "value": "Produktbeschreibung, Living off the land"
+    },
+    {
+     "control": "KONF.6.10",
+     "value": "Produktbeschreibung, Data Leak"
+    },
+    {
+     "control": "KONF.7.2",
+     "value": "Produktbeschreibung, Lateral Movement"
+    },
+    {
+     "control": "KONF.7.3",
+     "value": "Produktbeschreibung, Lateral Movement"
+    },
+    {
+     "control": "KONF.7.10",
+     "value": "Produktbeschreibung, Living off the land"
+    },
+    {
+     "control": "KONF.7.11",
+     "value": "Produktbeschreibung, Lieferketten"
+    },
+    {
+     "control": "KONF.11.3",
+     "value": "Produktbeschreibung, Data Leak, Recon"
+    },
+    {
+     "control": "KONF.11.4",
+     "value": "Produktbeschreibung, Brute-Force-Attacke"
+    },
+    {
+     "control": "KONF.11.7.2.1",
+     "value": "Produktbeschreibung, PSTN"
+    },
+    {
+     "control": "KONF.11.8",
+     "value": "Produktbeschreibung, Cryptography"
+    },
+    {
+     "control": "KONF.12.1.1",
+     "value": "Produktbeschreibung, Phishing"
+    },
+    {
+     "control": "KONF.12.4",
+     "value": "Produktbeschreibung, Cryptography"
+    },
+    {
+     "control": "KONF.12.5",
+     "value": "Produktbeschreibung, Phishing, Data Leak"
+    },
+    {
+     "control": "KONF.13.1",
+     "value": "Produktbeschreibung, Phishing"
+    },
+    {
+     "control": "KONF.13.3",
+     "value": "Produktbeschreibung, Cryptography"
+    },
+    {
+     "control": "KONF.13.4",
+     "value": "Produktbeschreibung, Cryptography"
+    },
+    {
+     "control": "KONF.14.1",
+     "value": "Produktbeschreibung, Cryptography"
+    },
+    {
+     "control": "KONF.14.1.2",
+     "value": "Produktbeschreibung, Cryptography"
+    },
+    {
+     "control": "KONF.14.5",
+     "value": "Produktbeschreibung, Phishing, Replay Attacks, Session Hijacking"
+    },
+    {
+     "control": "KONF.15.1",
+     "value": "Produktbeschreibung, Denial of Service"
+    },
+    {
+     "control": "KONF.15.2",
+     "value": "Produktbeschreibung, Phishing, Denial of Service"
+    },
+    {
+     "control": "KONF.15.3",
+     "value": "Produktbeschreibung, Phishing, Denial of Service"
+    },
+    {
+     "control": "KONF.15.4",
+     "value": "Produktbeschreibung, Hochverfügbarkeit"
+    },
+    {
+     "control": "DEV.2.6.1",
+     "value": "Security by Design, Produktbeschreibung"
+    },
+    {
+     "control": "DEV.2.6.2",
+     "value": "Security by Design, Produktbeschreibung"
+    },
+    {
+     "control": "DEV.3.1",
+     "value": "Authentication and Authorization, Replay Attacks, Session Hijacking, Produktbeschreibung"
+    },
+    {
+     "control": "DEV.3.2",
+     "value": "Security by Design, Error Handling, Produktbeschreibung"
+    },
+    {
+     "control": "DEV.3.3",
+     "value": "Security by Design, Error Handling, Produktbeschreibung"
+    },
+    {
+     "control": "DEV.3.4",
+     "value": "Produktbeschreibung, Cryptography"
+    },
+    {
+     "control": "DEV.4.2",
+     "value": "Lieferketten, Secure Compiling Practices"
+    },
+    {
+     "control": "DEV.4.3",
+     "value": "Produktbeschreibung, Lieferketten"
+    },
+    {
+     "control": "DEV.4.5",
+     "value": "Lieferketten, Secure Compiling Practices"
+    },
+    {
+     "control": "DEV.4.8",
+     "value": "Produktbeschreibung, Security by Default"
+    },
+    {
+     "control": "DEV.4.9",
+     "value": "Produktbeschreibung, Security by Default"
+    }
+   ]
+  },
+  "threats": {
+   "props": 900,
+   "packed": 616,
+   "values": [
+    {
+     "control": "ASST.1.1",
+     "value": "G 0.18, G 0.19"
+    },
+    {
+     "control": "ASST.1.1.1",
+     "value": "G 0.18, G 0.37"
+    },
+    {
+     "control": "ASST.1.1.2",
+     "value": "G 0.18, G 0.31"
+    },
+    {
+     "control": "ASST.1.1.3",
+     "value": "G 0.18, G 0.31"
+    },
+    {
+     "control": "ASST.2.1",
+     "value": "G 0.18, G 0.16, G 0.17, G 0.45"
+    },
+    {
+     "control": "ASST.2.1.1",
+     "value": "G 0.18, G 0.16, G 0.17, G 0.45"
+    },
+    {
+     "control": "ASST.2.2",
+     "value": "G 0.16, G 0.18, G 0.17, G 0.45"
+    },
+    {
+     "control": "ASST.2.2.1",
+     "value": "G 0.16, G 0.18, G 0.17, G 0.45"
+    },
+    {
+     "control": "ASST.2.3",
+     "value": "G 0.18, G 0.16, G 0.17, G 0.45"
+    },
+    {
+     "control": "ASST.2.3.1",
+     "value": "G 0.18, G 0.16, G 0.17, G 0.45"
+    },
+    {
+     "control": "ASST.2.3.2",
+     "value": "G 0.18, G 0.16, G 0.17, G 0.45"
+    },
+    {
+     "control": "ASST.2.3.2.1",
+     "value": "G 0.18, G 0.16, G 0.17, G 0.45"
+    },
+    {
+     "control": "ASST.2.4",
+     "value": "G 0.18, G 0.19, G 0.16, G 0.17"
+    },
+    {
+     "control": "ASST.3.1.1",
+     "value": "G 0.18, G 0.29"
+    },
+    {
+     "control": "ASST.3.4",
+     "value": "G 0.18, G 0.19"
+    },
+    {
+     "control": "ASST.3.11",
+     "value": "G 0.18, G 0.30"
+    },
+    {
+     "control": "ASST.3.11.1",
+     "value": "G 0.18, G 0.30"
+    },
+    {
+     "control": "ASST.3.12",
+     "value": "G 0.18, G 0.30"
+    },
+    {
+     "control": "ASST.4.1",
+     "value": "G 0.19, G 0.43, G 0.15"
+    },
+    {
+     "control": "ASST.4.2",
+     "value": "G 0.19, G 0.18, G 0.43, G 0.15"
+    },
+    {
+     "control": "ASST.4.3",
+     "value": "G 0.19, G 0.43, G 0.15"
+    },
+    {
+     "control": "ASST.4.4",
+     "value": "G 0.19, G 0.43, G 0.15"
+    },
+    {
+     "control": "ASST.4.5",
+     "value": "G 0.19, G 0.43, G 0.15"
+    },
+    {
+     "control": "ASST.5.1",
+     "value": "G 0.31, G 0.21, G 0.25, G 0.28"
+    },
+    {
+     "control": "ASST.5.2",
+     "value": "G 0.31, G 0.25, G 0.28, G 0.21"
+    },
+    {
+     "control": "ASST.5.3",
+     "value": "G 0.31, G 0.25, G 0.21, G 0.28"
+    },
+    {
+     "control": "ASST.5.4",
+     "value": "G 0.28, G 0.31, G 0.25, G 0.26"
+    },
+    {
+     "control": "ASST.5.5",
+     "value": "G 0.31, G 0.25, G 0.28, G 0.21"
+    },
+    {
+     "control": "ASST.5.6",
+     "value": "G 0.31, G 0.25, G 0.28, G 0.21"
+    },
+    {
+     "control": "ASST.5.7",
+     "value": "G 0.31, G 0.37, G 0.18, G 0.25"
+    },
+    {
+     "control": "ASST.7.1",
+     "value": "G 0.19, G 0.45, G 0.16, G 0.38"
+    },
+    {
+     "control": "ASST.7.2",
+     "value": "G 0.45, G 0.38, G 0.19, G 0.18"
+    },
+    {
+     "control": "ASST.7.2.1",
+     "value": "G 0.45, G 0.19, G 0.16, G 0.38"
+    },
+    {
+     "control": "ASST.7.3",
+     "value": "G 0.19, G 0.16, G 0.45, G 0.38"
+    },
+    {
+     "control": "ASST.7.3.1",
+     "value": "G 0.19, G 0.45, G 0.16, G 0.38"
+    },
+    {
+     "control": "ASST.7.3.2",
+     "value": "G 0.45, G 0.19, G 0.16, G 0.38"
+    },
+    {
+     "control": "ASST.7.3.3",
+     "value": "G 0.19, G 0.45, G 0.16, G 0.38"
+    },
+    {
+     "control": "ASST.7.4",
+     "value": "G 0.19, G 0.45, G 0.16, G 0.38"
+    },
+    {
+     "control": "ASST.7.5",
+     "value": "G 0.19, G 0.16, G 0.45, G 0.38"
+    },
+    {
+     "control": "ASST.7.6",
+     "value": "G 0.19, G 0.45, G 0.16, G 0.38"
+    },
+    {
+     "control": "ASST.7.7",
+     "value": "G 0.19, G 0.45, G 0.16, G 0.38"
+    },
+    {
+     "control": "PERS.1.1.1",
+     "value": "G 0.18, G 0.37"
+    },
+    {
+     "control": "PERS.1.1.2",
+     "value": "G 0.18, G 0.31"
+    },
+    {
+     "control": "PERS.1.1.3",
+     "value": "G 0.18, G 0.31"
+    },
+    {
+     "control": "PERS.2.1",
+     "value": "G 0.18, G 0.33, G 0.31"
+    },
+    {
+     "control": "PERS.2.2",
+     "value": "G 0.18, G 0.33, G 0.31"
+    },
+    {
+     "control": "PERS.2.3",
+     "value": "G 0.18, G 0.33, G 0.31"
+    },
+    {
+     "control": "PERS.2.3.1",
+     "value": "G 0.18, G 0.33, G 0.31"
+    },
+    {
+     "control": "PERS.2.3.2",
+     "value": "G 0.18, G 0.33, G 0.31"
+    },
+    {
+     "control": "PERS.2.3.3",
+     "value": "G 0.18, G 0.33, G 0.31"
+    },
+    {
+     "control": "PERS.2.3.4",
+     "value": "G 0.18, G 0.26, G 0.33, G 0.28"
+    },
+    {
+     "control": "PERS.2.4",
+     "value": "G 0.18, G 0.33, G 0.31"
+    },
+    {
+     "control": "PERS.3.1",
+     "value": "G 0.31, G 0.33, G 0.32, G 0.35"
+    },
+    {
+     "control": "PERS.3.2",
+     "value": "G 0.31, G 0.33, G 0.32, G 0.35"
+    },
+    {
+     "control": "PERS.3.3",
+     "value": "G 0.31, G 0.33, G 0.32, G 0.35"
+    },
+    {
+     "control": "PERS.3.4",
+     "value": "G 0.31, G 0.33, G 0.32, G 0.35"
+    },
+    {
+     "control": "PERS.3.5",
+     "value": "G 0.31, G 0.33, G 0.32, G 0.35"
+    },
+    {
+     "control": "PERS.3.6",
+     "value": "G 0.31, G 0.33, G 0.32, G 0.35"
+    },
+    {
+     "control": "PERS.3.6.1",
+     "value": "G 0.31, G 0.33, G 0.32, G 0.35"
+    },
+    {
+     "control": "PERS.3.7",
+     "value": "G 0.31, G 0.33, G 0.32, G 0.35"
+    },
+    {
+     "control": "BES.1.1.1",
+     "value": "G 0.18, G 0.37"
+    },
+    {
+     "control": "BES.1.1.2",
+     "value": "G 0.18, G 0.31"
+    },
+    {
+     "control": "BES.1.1.3",
+     "value": "G 0.18, G 0.31"
+    },
+    {
+     "control": "BES.1.6",
+     "value": "G 0.18, G 0.37"
+    },
+    {
+     "control": "BES.2.2",
+     "value": "G 0.18, G 0.37"
+    },
+    {
+     "control": "BES.4.2",
+     "value": "G 0.20, G 0.18, G 0.37"
+    },
+    {
+     "control": "BES.4.5.2",
+     "value": "G 0.20, G 0.14, G 0.19, G 0.29"
+    },
+    {
+     "control": "BES.4.6",
+     "value": "G 0.20, G 0.22, G 0.23"
+    },
+    {
+     "control": "BES.4.6.1",
+     "value": "G 0.20, G 0.21, G 0.22"
+    },
+    {
+     "control": "BES.4.6.2",
+     "value": "G 0.20, G 0.21, G 0.22"
+    },
+    {
+     "control": "BES.4.6.3",
+     "value": "G 0.21, G 0.22, G 0.20"
+    },
+    {
+     "control": "BES.4.7",
+     "value": "G 0.20, G 0.11, G 0.25"
+    },
+    {
+     "control": "BES.4.8.2",
+     "value": "G 0.20, G 0.18"
+    },
+    {
+     "control": "BES.5.9.1",
+     "value": "G 0.20, G 0.18"
+    },
+    {
+     "control": "BES.5.10",
+     "value": "G 0.20, G 0.18"
+    },
+    {
+     "control": "BES.5.11",
+     "value": "G 0.29, G 0.20, G 0.18, G 0.37"
+    },
+    {
+     "control": "BES.5.13.1",
+     "value": "G 0.20, G 0.25"
+    },
+    {
+     "control": "BES.6.2.1",
+     "value": "G 0.20, G 0.18"
+    },
+    {
+     "control": "BES.7.1",
+     "value": "G 0.26, G 0.18"
+    },
+    {
+     "control": "BES.7.1.1",
+     "value": "G 0.26, G 0.18, G 0.28"
+    },
+    {
+     "control": "BES.7.1.2",
+     "value": "G 0.26, G 0.18"
+    },
+    {
+     "control": "BES.7.2",
+     "value": "G 0.18, G 0.26, G 0.28"
+    },
+    {
+     "control": "BES.7.3",
+     "value": "G 0.18, G 0.26"
+    },
+    {
+     "control": "BES.7.4",
+     "value": "G 0.26, G 0.18"
+    },
+    {
+     "control": "BES.7.4.1",
+     "value": "G 0.18, G 0.26, G 0.28"
+    },
+    {
+     "control": "BES.7.4.2",
+     "value": "G 0.26, G 0.18"
+    },
+    {
+     "control": "BES.7.4.3",
+     "value": "G 0.28, G 0.31, G 0.26, G 0.18"
+    },
+    {
+     "control": "BES.7.4.4",
+     "value": "G 0.18, G 0.26, G 0.37"
+    },
+    {
+     "control": "BES.7.4.4.1",
+     "value": "G 0.26, G 0.18, G 0.28"
+    },
+    {
+     "control": "BES.7.4.5",
+     "value": "G 0.26, G 0.18, G 0.28"
+    },
+    {
+     "control": "BES.7.4.6",
+     "value": "G 0.18, G 0.26"
+    },
+    {
+     "control": "BES.7.4.7",
+     "value": "G 0.26, G 0.18"
+    },
+    {
+     "control": "BES.7.4.8",
+     "value": "G 0.26, G 0.18"
+    },
+    {
+     "control": "BES.7.4.9",
+     "value": "G 0.26, G 0.18"
+    },
+    {
+     "control": "BES.7.4.10",
+     "value": "G 0.26, G 0.18"
+    },
+    {
+     "control": "BES.7.4.11",
+     "value": "G 0.18, G 0.26, G 0.28"
+    },
+    {
+     "control": "BES.7.4.12",
+     "value": "G 0.26, G 0.18, G 0.28"
+    },
+    {
+     "control": "BES.8.1",
+     "value": "G 0.18, G 0.25"
+    },
+    {
+     "control": "BES.8.5",
+     "value": "G 0.18, G 0.29"
+    },
+    {
+     "control": "DLS.1.1.1",
+     "value": "G 0.18, G 0.37"
+    },
+    {
+     "control": "DLS.1.1.2",
+     "value": "G 0.18, G 0.31"
+    },
+    {
+     "control": "DLS.1.1.3",
+     "value": "G 0.18, G 0.31"
+    },
+    {
+     "control": "DLS.2.1",
+     "value": "G 0.18, G 0.14"
+    },
+    {
+     "control": "DLS.2.2",
+     "value": "G 0.18, G 0.14"
+    },
+    {
+     "control": "DLS.2.3",
+     "value": "G 0.18, G 0.14"
+    },
+    {
+     "control": "DLS.3.1",
+     "value": "G 0.11, G 0.29, G 0.20"
+    },
+    {
+     "control": "DLS.3.1.1",
+     "value": "G 0.29, G 0.11, G 0.20, G 0.18"
+    },
+    {
+     "control": "DLS.3.2",
+     "value": "G 0.11, G 0.20"
+    },
+    {
+     "control": "DLS.3.3",
+     "value": "G 0.11, G 0.20"
+    },
+    {
+     "control": "DLS.3.4",
+     "value": "G 0.11, G 0.20"
+    },
+    {
+     "control": "DLS.3.5",
+     "value": "G 0.11, G 0.19, G 0.20"
+    },
+    {
+     "control": "DLS.3.6",
+     "value": "G 0.11, G 0.20"
+    },
+    {
+     "control": "DLS.4.1.2",
+     "value": "G 0.18, G 0.29"
+    },
+    {
+     "control": "TEST.1.1.3",
+     "value": "G 0.18, G 0.29"
+    },
+    {
+     "control": "TEST.1.3",
+     "value": "G 0.18, G 0.30, G 0.23"
+    },
+    {
+     "control": "TEST.2.2.3",
+     "value": "G 0.18, G 0.28, G 0.25"
+    },
+    {
+     "control": "TEST.3.1",
+     "value": "G 0.26, G 0.28, G 0.27"
+    },
+    {
+     "control": "TEST.3.1.1",
+     "value": "G 0.18, G 0.37, G 0.28, G 0.26"
+    },
+    {
+     "control": "TEST.3.1.2",
+     "value": "G 0.28, G 0.46, G 0.20"
+    },
+    {
+     "control": "TEST.3.1.3",
+     "value": "G 0.28, G 0.20, G 0.23"
+    },
+    {
+     "control": "TEST.3.1.4",
+     "value": "G 0.26, G 0.28"
+    },
+    {
+     "control": "TEST.3.1.5",
+     "value": "G 0.28, G 0.18"
+    },
+    {
+     "control": "TEST.3.1.6",
+     "value": "G 0.28, G 0.18"
+    },
+    {
+     "control": "TEST.3.1.7",
+     "value": "G 0.28, G 0.26"
+    },
+    {
+     "control": "TEST.3.1.8",
+     "value": "G 0.23, G 0.46"
+    },
+    {
+     "control": "TEST.3.1.9",
+     "value": "G 0.23, G 0.28"
+    },
+    {
+     "control": "TEST.3.1.10",
+     "value": "G 0.28, G 0.18"
+    },
+    {
+     "control": "TEST.3.1.11",
+     "value": "G 0.28, G 0.18, G 0.23"
+    },
+    {
+     "control": "TEST.3.2",
+     "value": "G 0.28, G 0.18, G 0.27"
+    },
+    {
+     "control": "TEST.4.1.2",
+     "value": "G 0.25, G 0.26, G 0.18"
+    },
+    {
+     "control": "TEST.4.1.3",
+     "value": "G 0.18, G 0.37"
+    },
+    {
+     "control": "TEST.4.2",
+     "value": "G 0.26, G 0.25"
+    },
+    {
+     "control": "TEST.4.4",
+     "value": "G 0.18, G 0.27"
+    },
+    {
+     "control": "TEST.5.1",
+     "value": "G 0.18, G 0.25"
+    },
+    {
+     "control": "TEST.5.2",
+     "value": "G 0.23, G 0.14, G 0.41, G 0.21"
+    },
+    {
+     "control": "TEST.5.4",
+     "value": "G 0.23, G 0.22, G 0.43, G 0.18"
+    },
+    {
+     "control": "GEB.1.1.1",
+     "value": "G 0.18, G 0.37"
+    },
+    {
+     "control": "GEB.1.1.2",
+     "value": "G 0.18, G 0.31"
+    },
+    {
+     "control": "GEB.1.1.3",
+     "value": "G 0.18, G 0.31"
+    },
+    {
+     "control": "GEB.1.3",
+     "value": "G 0.18, G 0.29"
+    },
+    {
+     "control": "GEB.1.3.1",
+     "value": "G 0.18, G 0.26"
+    },
+    {
+     "control": "GEB.2.1",
+     "value": "G 0.18, G 0.44, G 0.16, G 0.24"
+    },
+    {
+     "control": "GEB.2.2",
+     "value": "G 0.18, G 0.44, G 0.16, G 0.24"
+    },
+    {
+     "control": "GEB.2.3",
+     "value": "G 0.44, G 0.16, G 0.24, G 0.19"
+    },
+    {
+     "control": "GEB.2.4",
+     "value": "G 0.19, G 0.13, G 0.12"
+    },
+    {
+     "control": "GEB.3.1",
+     "value": "G 0.44, G 0.16, G 0.24, G 0.19"
+    },
+    {
+     "control": "GEB.3.1.1",
+     "value": "G 0.44, G 0.16, G 0.24"
+    },
+    {
+     "control": "GEB.3.1.2",
+     "value": "G 0.44, G 0.16, G 0.24, G 0.19"
+    },
+    {
+     "control": "GEB.3.2",
+     "value": "G 0.44, G 0.16, G 0.24"
+    },
+    {
+     "control": "GEB.3.3",
+     "value": "G 0.44, G 0.16, G 0.24, G 0.19"
+    },
+    {
+     "control": "GEB.3.3.1",
+     "value": "G 0.44, G 0.16, G 0.24, G 0.19"
+    },
+    {
+     "control": "GEB.3.3.2",
+     "value": "G 0.18, G 0.44, G 0.16, G 0.24"
+    },
+    {
+     "control": "GEB.3.3.3",
+     "value": "G 0.44, G 0.16, G 0.24, G 0.19"
+    },
+    {
+     "control": "GEB.3.4",
+     "value": "G 0.44, G 0.16, G 0.24"
+    },
+    {
+     "control": "GEB.3.5",
+     "value": "G 0.44, G 0.16, G 0.24, G 0.19"
+    },
+    {
+     "control": "GEB.3.6",
+     "value": "G 0.44, G 0.16, G 0.24, G 0.19"
+    },
+    {
+     "control": "GEB.3.7",
+     "value": "G 0.44, G 0.16, G 0.24"
+    },
+    {
+     "control": "GEB.4.1",
+     "value": "G 0.44, G 0.16, G 0.24, G 0.19"
+    },
+    {
+     "control": "GEB.4.2",
+     "value": "G 0.44, G 0.16, G 0.24, G 0.32"
+    },
+    {
+     "control": "GEB.4.3",
+     "value": "G 0.44, G 0.16, G 0.24"
+    },
+    {
+     "control": "GEB.4.4",
+     "value": "G 0.44, G 0.16, G 0.24, G 0.19"
+    },
+    {
+     "control": "GEB.5.1",
+     "value": "G 0.44, G 0.19, G 0.21"
+    },
+    {
+     "control": "GEB.5.2",
+     "value": "G 0.44, G 0.19, G 0.21"
+    },
+    {
+     "control": "GEB.5.3",
+     "value": "G 0.44, G 0.21"
+    },
+    {
+     "control": "GEB.6.4",
+     "value": "G 0.2, G 0.1"
+    },
+    {
+     "control": "GEB.8.2",
+     "value": "G 0.2, G 0.4"
+    },
+    {
+     "control": "GEB.9.1",
+     "value": "G 0.25, G 0.8, G 0.10"
+    },
+    {
+     "control": "GEB.9.1.3",
+     "value": "G 0.8, G 0.25, G 0.10"
+    },
+    {
+     "control": "GEB.9.3",
+     "value": "G 0.1, G 0.8, G 0.10, G 0.25"
+    },
+    {
+     "control": "GEB.10.2",
+     "value": "G 0.18, G 0.29"
+    },
+    {
+     "control": "SENS.1.1.1",
+     "value": "G 0.18, G 0.37"
+    },
+    {
+     "control": "SENS.1.1.2",
+     "value": "G 0.18, G 0.31"
+    },
+    {
+     "control": "SENS.1.1.3",
+     "value": "G 0.18, G 0.31"
+    },
+    {
+     "control": "SENS.2.1",
+     "value": "G 0.31, G 0.42"
+    },
+    {
+     "control": "SENS.2.2",
+     "value": "G 0.31, G 0.42"
+    },
+    {
+     "control": "SENS.2.3",
+     "value": "G 0.31, G 0.42"
+    },
+    {
+     "control": "SENS.2.4",
+     "value": "G 0.31, G 0.42"
+    },
+    {
+     "control": "SENS.2.4.1",
+     "value": "G 0.31, G 0.42"
+    },
+    {
+     "control": "SENS.2.5",
+     "value": "G 0.31, G 0.42"
+    },
+    {
+     "control": "SENS.2.6",
+     "value": "G 0.31, G 0.42"
+    },
+    {
+     "control": "SENS.2.7",
+     "value": "G 0.31, G 0.42"
+    },
+    {
+     "control": "SENS.2.8",
+     "value": "G 0.31, G 0.42"
+    },
+    {
+     "control": "SENS.2.8.1",
+     "value": "G 0.31, G 0.42"
+    },
+    {
+     "control": "SENS.4.1",
+     "value": "G 0.30, G 0.36, G 0.23"
+    },
+    {
+     "control": "SENS.4.1.1",
+     "value": "G 0.30, G 0.36, G 0.23"
+    },
+    {
+     "control": "SENS.4.1.2",
+     "value": "G 0.30, G 0.36, G 0.23"
+    },
+    {
+     "control": "SENS.4.1.3",
+     "value": "G 0.30, G 0.36, G 0.23"
+    },
+    {
+     "control": "SENS.4.1.4",
+     "value": "G 0.30, G 0.36, G 0.23"
+    },
+    {
+     "control": "SENS.4.1.5",
+     "value": "G 0.30, G 0.36, G 0.23"
+    },
+    {
+     "control": "SENS.4.1.6",
+     "value": "G 0.30, G 0.36, G 0.23"
+    },
+    {
+     "control": "SENS.4.2",
+     "value": "G 0.30, G 0.36, G 0.23"
+    },
+    {
+     "control": "SENS.4.3",
+     "value": "G 0.30, G 0.36, G 0.23"
+    },
+    {
+     "control": "SENS.5.1",
+     "value": "G 0.19, G 0.38, G 0.22, G 0.45"
+    },
+    {
+     "control": "SENS.5.2",
+     "value": "G 0.19, G 0.38, G 0.22, G 0.45"
+    },
+    {
+     "control": "SENS.5.3",
+     "value": "G 0.19, G 0.38, G 0.22, G 0.42"
+    },
+    {
+     "control": "SENS.5.4",
+     "value": "G 0.19, G 0.38, G 0.22, G 0.45"
+    },
+    {
+     "control": "SENS.5.5",
+     "value": "G 0.38, G 0.45, G 0.19, G 0.22"
+    },
+    {
+     "control": "SENS.5.6",
+     "value": "G 0.19, G 0.38, G 0.22, G 0.45"
+    },
+    {
+     "control": "SENS.7.20",
+     "value": "G 0.42, G 0.36"
+    },
+    {
+     "control": "SENS.8.2",
+     "value": "G 0.18, G 0.29"
+    },
+    {
+     "control": "SENS.9.1",
+     "value": "G 0.18, G 0.29"
+    },
+    {
+     "control": "SENS.10.1",
+     "value": "G 0.31, G 0.30, G 0.32"
+    },
+    {
+     "control": "SENS.10.2",
+     "value": "G 0.31, G 0.30, G 0.32, G 0.42"
+    },
+    {
+     "control": "SENS.10.3",
+     "value": "G 0.31, G 0.30, G 0.32"
+    },
+    {
+     "control": "SENS.10.4",
+     "value": "G 0.31, G 0.30, G 0.32"
+    },
+    {
+     "control": "SENS.10.5",
+     "value": "G 0.31, G 0.30, G 0.32"
+    },
+    {
+     "control": "ARCH.1.1",
+     "value": "G 0.18, G 0.29, G 0.30"
+    },
+    {
+     "control": "ARCH.1.1.1",
+     "value": "G 0.18, G 0.37, G 0.29"
+    },
+    {
+     "control": "ARCH.1.1.2",
+     "value": "G 0.18, G 0.31"
+    },
+    {
+     "control": "ARCH.1.1.3",
+     "value": "G 0.18, G 0.29"
+    },
+    {
+     "control": "ARCH.1.2",
+     "value": "G 0.18, G 0.29, G 0.31"
+    },
+    {
+     "control": "ARCH.2.1",
+     "value": "G 0.23, G 0.19, G 0.30, G 0.47"
+    },
+    {
+     "control": "ARCH.2.2",
+     "value": "G 0.23, G 0.47, G 0.40"
+    },
+    {
+     "control": "ARCH.2.2.1",
+     "value": "G 0.14, G 0.23, G 0.39, G 0.40, G 0.9, G 0.47"
+    },
+    {
+     "control": "ARCH.2.2.3",
+     "value": "G 0.23, G 0.9, G 0.40"
+    },
+    {
+     "control": "ARCH.2.2.4",
+     "value": "G 0.23, G 0.9, G 0.40"
+    },
+    {
+     "control": "ARCH.2.2.5",
+     "value": "G 0.23, G 0.9, G 0.40"
+    },
+    {
+     "control": "ARCH.2.2.6",
+     "value": "G 0.23, G 0.47"
+    },
+    {
+     "control": "ARCH.2.2.7",
+     "value": "G 0.30, G 0.23, G 0.32, G 0.19"
+    },
+    {
+     "control": "ARCH.2.2.8",
+     "value": "G 0.23, G 0.26, G 0.20, G 0.28"
+    },
+    {
+     "control": "ARCH.2.2.9",
+     "value": "G 0.23, G 0.18, G 0.39"
+    },
+    {
+     "control": "ARCH.2.2.10",
+     "value": "G 0.30, G 0.18, G 0.39"
+    },
+    {
+     "control": "ARCH.2.2.11",
+     "value": "G 0.18, G 0.29, G 0.23, G 0.9"
+    },
+    {
+     "control": "ARCH.2.2.12",
+     "value": "G 0.23, G 0.30, G 0.15"
+    },
+    {
+     "control": "ARCH.2.3",
+     "value": "G 0.23, G 0.30, G 0.15"
+    },
+    {
+     "control": "ARCH.2.4",
+     "value": "G 0.18, G 0.23, G 0.30"
+    },
+    {
+     "control": "ARCH.2.5",
+     "value": "G 0.23, G 0.30, G 0.18, G 0.37"
+    },
+    {
+     "control": "ARCH.2.6",
+     "value": "G 0.19, G 0.30, G 0.22, G 0.41"
+    },
+    {
+     "control": "ARCH.3.1",
+     "value": "G 0.18, G 0.43"
+    },
+    {
+     "control": "ARCH.3.2",
+     "value": "G 0.18, G 0.16"
+    },
+    {
+     "control": "ARCH.3.3",
+     "value": "G 0.18, G 0.23"
+    },
+    {
+     "control": "ARCH.3.4",
+     "value": "G 0.23, G 0.15, G 0.43"
+    },
+    {
+     "control": "ARCH.4.1",
+     "value": "G 0.18, G 0.23"
+    },
+    {
+     "control": "ARCH.4.1.1",
+     "value": "G 0.18, G 0.36"
+    },
+    {
+     "control": "ARCH.4.2",
+     "value": "G 0.18, G 0.22"
+    },
+    {
+     "control": "ARCH.4.3",
+     "value": "G 0.18, G 0.23"
+    },
+    {
+     "control": "ARCH.5.1",
+     "value": "G 0.23, G 0.14, G 0.30"
+    },
+    {
+     "control": "ARCH.5.1.2",
+     "value": "G 0.23, G 0.40"
+    },
+    {
+     "control": "ARCH.5.1.3",
+     "value": "G 0.23, G 0.40"
+    },
+    {
+     "control": "ARCH.5.1.4",
+     "value": "G 0.23, G 0.40"
+    },
+    {
+     "control": "ARCH.5.1.5",
+     "value": "G 0.23, G 0.14"
+    },
+    {
+     "control": "ARCH.5.1.6",
+     "value": "G 0.23, G 0.40"
+    },
+    {
+     "control": "ARCH.5.1.7",
+     "value": "G 0.23, G 0.30, G 0.43"
+    },
+    {
+     "control": "ARCH.5.1.8",
+     "value": "G 0.23, G 0.39, G 0.30"
+    },
+    {
+     "control": "ARCH.5.1.9",
+     "value": "G 0.23, G 0.14, G 0.39"
+    },
+    {
+     "control": "ARCH.5.1.10",
+     "value": "G 0.39, G 0.28, G 0.14, G 0.23"
+    },
+    {
+     "control": "ARCH.5.1.10.1",
+     "value": "G 0.39, G 0.28, G 0.14, G 0.23"
+    },
+    {
+     "control": "ARCH.5.1.10.2",
+     "value": "G 0.39, G 0.28, G 0.14, G 0.23"
+    },
+    {
+     "control": "ARCH.5.1.10.3",
+     "value": "G 0.39, G 0.28, G 0.14, G 0.23"
+    },
+    {
+     "control": "ARCH.5.1.11",
+     "value": "G 0.19, G 0.30, G 0.40"
+    },
+    {
+     "control": "ARCH.5.1.12",
+     "value": "G 0.19, G 0.30"
+    },
+    {
+     "control": "ARCH.5.1.13",
+     "value": "G 0.19, G 0.30"
+    },
+    {
+     "control": "ARCH.5.2",
+     "value": "G 0.23, G 0.14"
+    },
+    {
+     "control": "ARCH.6.1",
+     "value": "G 0.23, G 0.14"
+    },
+    {
+     "control": "ARCH.6.2",
+     "value": "G 0.15, G 0.14, G 0.18"
+    },
+    {
+     "control": "ARCH.7.1",
+     "value": "G 0.25, G 0.28, G 0.23"
+    },
+    {
+     "control": "ARCH.7.2",
+     "value": "G 0.27, G 0.18"
+    },
+    {
+     "control": "ARCH.7.3",
+     "value": "G 0.18, G 0.46, G 0.19"
+    },
+    {
+     "control": "ARCH.8.1",
+     "value": "G 0.25, G 0.11, G 0.9, G 0.18"
+    },
+    {
+     "control": "ARCH.8.2",
+     "value": "G 0.9, G 0.27, G 0.25, G 0.11"
+    },
+    {
+     "control": "ARCH.8.3",
+     "value": "G 0.25, G 0.9, G 0.40, G 0.27"
+    },
+    {
+     "control": "ARCH.9.1",
+     "value": "G 0.18, G 0.27"
+    },
+    {
+     "control": "ARCH.9.2",
+     "value": "G 0.18, G 0.27"
+    },
+    {
+     "control": "ARCH.9.4",
+     "value": "G 0.18, G 0.27, G 0.25"
+    },
+    {
+     "control": "ARCH.9.5",
+     "value": "G 0.27, G 0.40, G 0.25"
+    },
+    {
+     "control": "BER.1.1.1",
+     "value": "G 0.18, G 0.37"
+    },
+    {
+     "control": "BER.1.1.2",
+     "value": "G 0.18, G 0.31"
+    },
+    {
+     "control": "BER.1.1.3",
+     "value": "G 0.18, G 0.31"
+    },
+    {
+     "control": "BER.2.1",
+     "value": "G 0.36, G 0.30, G 0.32"
+    },
+    {
+     "control": "BER.2.2",
+     "value": "G 0.36, G 0.30, G 0.32"
+    },
+    {
+     "control": "BER.2.3",
+     "value": "G 0.36, G 0.30, G 0.32"
+    },
+    {
+     "control": "BER.2.4",
+     "value": "G 0.36, G 0.30, G 0.32, G 0.37"
+    },
+    {
+     "control": "BER.2.5",
+     "value": "G 0.36, G 0.30, G 0.32"
+    },
+    {
+     "control": "BER.2.6",
+     "value": "G 0.36, G 0.30, G 0.32"
+    },
+    {
+     "control": "BER.3.6",
+     "value": "G 0.36, G 0.30, G 0.32"
+    },
+    {
+     "control": "BER.3.7",
+     "value": "G 0.36, G 0.30, G 0.32"
+    },
+    {
+     "control": "BER.3.8",
+     "value": "G 0.36, G 0.30, G 0.32"
+    },
+    {
+     "control": "BER.3.9",
+     "value": "G 0.36, G 0.30, G 0.32, G 0.37"
+    },
+    {
+     "control": "BER.3.10",
+     "value": "G 0.36, G 0.30, G 0.32"
+    },
+    {
+     "control": "BER.3.11",
+     "value": "G 0.36, G 0.30, G 0.32"
+    },
+    {
+     "control": "BER.3.12",
+     "value": "G 0.36, G 0.30, G 0.32"
+    },
+    {
+     "control": "BER.3.13",
+     "value": "G 0.36, G 0.30, G 0.32"
+    },
+    {
+     "control": "BER.3.14",
+     "value": "G 0.36, G 0.30, G 0.32"
+    },
+    {
+     "control": "BER.3.15",
+     "value": "G 0.36, G 0.30, G 0.32"
+    },
+    {
+     "control": "BER.3.16",
+     "value": "G 0.36, G 0.30, G 0.32"
+    },
+    {
+     "control": "BER.3.17",
+     "value": "G 0.36, G 0.30, G 0.32"
+    },
+    {
+     "control": "BER.3.18",
+     "value": "G 0.36, G 0.30, G 0.32"
+    },
+    {
+     "control": "BER.3.19",
+     "value": "G 0.30, G 0.32, G 0.36"
+    },
+    {
+     "control": "BER.3.20",
+     "value": "G 0.36, G 0.30, G 0.32"
+    },
+    {
+     "control": "BER.3.21",
+     "value": "G 0.36, G 0.30, G 0.32"
+    },
+    {
+     "control": "BER.3.22",
+     "value": "G 0.36, G 0.30, G 0.32"
+    },
+    {
+     "control": "BER.3.23",
+     "value": "G 0.36, G 0.30, G 0.32"
+    },
+    {
+     "control": "BER.3.24",
+     "value": "G 0.36, G 0.30, G 0.32"
+    },
+    {
+     "control": "BER.3.25",
+     "value": "G 0.36, G 0.30, G 0.32"
+    },
+    {
+     "control": "BER.3.26",
+     "value": "G 0.36, G 0.30, G 0.32"
+    },
+    {
+     "control": "BER.3.27",
+     "value": "G 0.36, G 0.30, G 0.32"
+    },
+    {
+     "control": "BER.3.28",
+     "value": "G 0.36, G 0.30, G 0.32"
+    },
+    {
+     "control": "BER.3.29",
+     "value": "G 0.36, G 0.30, G 0.32"
+    },
+    {
+     "control": "BER.3.30",
+     "value": "G 0.36, G 0.30"
+    },
+    {
+     "control": "BER.3.31",
+     "value": "G 0.36, G 0.30"
+    },
+    {
+     "control": "BER.4.1",
+     "value": "G 0.36, G 0.30, G 0.32, G 0.18"
+    },
+    {
+     "control": "BER.4.1.1",
+     "value": "G 0.36, G 0.30, G 0.32"
+    },
+    {
+     "control": "BER.4.1.2",
+     "value": "G 0.32, G 0.30, G 0.36"
+    },
+    {
+     "control": "BER.4.2",
+     "value": "G 0.36, G 0.30, G 0.32"
+    },
+    {
+     "control": "BER.4.3",
+     "value": "G 0.36, G 0.30, G 0.32"
+    },
+    {
+     "control": "BER.4.4",
+     "value": "G 0.36, G 0.30, G 0.32"
+    },
+    {
+     "control": "BER.4.4.1",
+     "value": "G 0.36, G 0.30, G 0.32"
+    },
+    {
+     "control": "BER.4.5",
+     "value": "G 0.36, G 0.30, G 0.32"
+    },
+    {
+     "control": "BER.4.6",
+     "value": "G 0.36, G 0.30, G 0.32"
+    },
+    {
+     "control": "BER.4.7",
+     "value": "G 0.36, G 0.30, G 0.32"
+    },
+    {
+     "control": "BER.4.8",
+     "value": "G 0.36, G 0.30, G 0.32"
+    },
+    {
+     "control": "BER.4.9",
+     "value": "G 0.36, G 0.30, G 0.32"
+    },
+    {
+     "control": "BER.5.1",
+     "value": "G 0.36, G 0.30, G 0.42"
+    },
+    {
+     "control": "BER.5.2",
+     "value": "G 0.36, G 0.30"
+    },
+    {
+     "control": "BER.5.3",
+     "value": "G 0.36, G 0.30"
+    },
+    {
+     "control": "BER.5.4",
+     "value": "G 0.36, G 0.30, G 0.42"
+    },
+    {
+     "control": "BER.5.5",
+     "value": "G 0.36, G 0.30"
+    },
+    {
+     "control": "BER.5.6",
+     "value": "G 0.36, G 0.30, G 0.42"
+    },
+    {
+     "control": "BER.5.7",
+     "value": "G 0.36, G 0.30, G 0.42"
+    },
+    {
+     "control": "BER.5.8",
+     "value": "G 0.36, G 0.30"
+    },
+    {
+     "control": "BER.5.9",
+     "value": "G 0.36, G 0.30, G 0.42"
+    },
+    {
+     "control": "BER.5.10",
+     "value": "G 0.36, G 0.30, G 0.18, G 0.47"
+    },
+    {
+     "control": "BER.6.10",
+     "value": "G 0.36, G 0.19, G 0.22"
+    },
+    {
+     "control": "BER.6.11",
+     "value": "G 0.36, G 0.19, G 0.22"
+    },
+    {
+     "control": "BER.6.14",
+     "value": "G 0.19, G 0.22, G 0.36"
+    },
+    {
+     "control": "BER.6.15",
+     "value": "G 0.19, G 0.22, G 0.36"
+    },
+    {
+     "control": "BER.6.16.2",
+     "value": "G 0.36, G 0.19, G 0.22"
+    },
+    {
+     "control": "BER.6.16.4",
+     "value": "G 0.19, G 0.22, G 0.36"
+    },
+    {
+     "control": "NOT.1.1.1",
+     "value": "G 0.18, G 0.37"
+    },
+    {
+     "control": "NOT.1.1.2",
+     "value": "G 0.18, G 0.31"
+    },
+    {
+     "control": "NOT.1.1.3",
+     "value": "G 0.18, G 0.31"
+    },
+    {
+     "control": "NOT.3.3",
+     "value": "G 0.25, G 0.27, G 0.40"
+    },
+    {
+     "control": "NOT.4.1",
+     "value": "G 0.45, G 0.18, G 0.25, G 0.37"
+    },
+    {
+     "control": "NOT.4.2",
+     "value": "G 0.45, G 0.39, G 0.25"
+    },
+    {
+     "control": "NOT.4.3",
+     "value": "G 0.45, G 0.39, G 0.25"
+    },
+    {
+     "control": "NOT.4.4",
+     "value": "G 0.45, G 0.39"
+    },
+    {
+     "control": "NOT.4.5",
+     "value": "G 0.45, G 0.39"
+    },
+    {
+     "control": "NOT.4.5.1",
+     "value": "G 0.45, G 0.39, G 0.25"
+    },
+    {
+     "control": "NOT.4.5.2",
+     "value": "G 0.45, G 0.39, G 0.18, G 0.37"
+    },
+    {
+     "control": "NOT.4.6",
+     "value": "G 0.45, G 0.39, G 0.25"
+    },
+    {
+     "control": "NOT.4.7",
+     "value": "G 0.45, G 0.39"
+    },
+    {
+     "control": "NOT.4.8",
+     "value": "G 0.45, G 0.39, G 0.25, G 0.19"
+    },
+    {
+     "control": "NOT.4.9",
+     "value": "G 0.45, G 0.39, G 0.25"
+    },
+    {
+     "control": "NOT.4.10",
+     "value": "G 0.45, G 0.39, G 0.1, G 0.25"
+    },
+    {
+     "control": "NOT.4.11",
+     "value": "G 0.45, G 0.39"
+    },
+    {
+     "control": "NOT.4.13",
+     "value": "G 0.45, G 0.39, G 0.25"
+    },
+    {
+     "control": "NOT.4.14",
+     "value": "G 0.45, G 0.39, G 0.25, G 0.1"
+    },
+    {
+     "control": "NOT.4.15",
+     "value": "G 0.45, G 0.39, G 0.25"
+    },
+    {
+     "control": "NOT.4.16",
+     "value": "G 0.45, G 0.39"
+    },
+    {
+     "control": "NOT.4.16.1",
+     "value": "G 0.45, G 0.39, G 0.25"
+    },
+    {
+     "control": "NOT.4.17",
+     "value": "G 0.45, G 0.39, G 0.25"
+    },
+    {
+     "control": "DET.1.1",
+     "value": "G 0.18, G 0.29"
+    },
+    {
+     "control": "DET.1.1.1",
+     "value": "G 0.18, G 0.37"
+    },
+    {
+     "control": "DET.1.1.3",
+     "value": "G 0.18, G 0.31"
+    },
+    {
+     "control": "DET.1.2",
+     "value": "G 0.18, G 0.27, G 0.29"
+    },
+    {
+     "control": "DET.2.1",
+     "value": "G 0.18, G 0.29, G 0.20, G 0.47"
+    },
+    {
+     "control": "DET.2.1.1",
+     "value": "G 0.39, G 0.41, G 0.47, G 0.25"
+    },
+    {
+     "control": "DET.2.1.2",
+     "value": "G 0.39, G 0.41, G 0.47"
+    },
+    {
+     "control": "DET.2.1.3",
+     "value": "G 0.29, G 0.18, G 0.33, G 0.47"
+    },
+    {
+     "control": "DET.2.2",
+     "value": "G 0.29, G 0.18, G 0.33, G 0.20"
+    },
+    {
+     "control": "DET.2.3",
+     "value": "G 0.27, G 0.23, G 0.41, G 0.47"
+    },
+    {
+     "control": "DET.3.1",
+     "value": "G 0.37, G 0.32, G 0.29"
+    },
+    {
+     "control": "DET.3.1.1",
+     "value": "G 0.37, G 0.27, G 0.23"
+    },
+    {
+     "control": "DET.3.1.2",
+     "value": "G 0.31, G 0.32, G 0.30"
+    },
+    {
+     "control": "DET.3.1.3",
+     "value": "G 0.37, G 0.18, G 0.23"
+    },
+    {
+     "control": "DET.3.1.4",
+     "value": "G 0.37, G 0.23, G 0.26, G 0.18"
+    },
+    {
+     "control": "DET.3.1.5",
+     "value": "G 0.37, G 0.23, G 0.29"
+    },
+    {
+     "control": "DET.3.1.6",
+     "value": "G 0.37, G 0.23, G 0.29"
+    },
+    {
+     "control": "DET.3.1.7",
+     "value": "G 0.37, G 0.18"
+    },
+    {
+     "control": "DET.3.1.8",
+     "value": "G 0.37, G 0.23, G 0.29"
+    },
+    {
+     "control": "DET.3.1.9",
+     "value": "G 0.37, G 0.23, G 0.32"
+    },
+    {
+     "control": "DET.3.1.10",
+     "value": "G 0.37, G 0.23, G 0.29, G 0.27"
+    },
+    {
+     "control": "DET.3.1.11",
+     "value": "G 0.37, G 0.23, G 0.32, G 0.46"
+    },
+    {
+     "control": "DET.3.2",
+     "value": "G 0.14, G 0.23, G 0.18"
+    },
+    {
+     "control": "DET.3.3",
+     "value": "G 0.37, G 0.26, G 0.18, G 0.46"
+    },
+    {
+     "control": "DET.3.4",
+     "value": "G 0.37, G 0.32, G 0.46"
+    },
+    {
+     "control": "DET.3.5",
+     "value": "G 0.18, G 0.37"
+    },
+    {
+     "control": "DET.3.6",
+     "value": "G 0.37, G 0.23, G 0.32, G 0.46"
+    },
+    {
+     "control": "DET.4.1",
+     "value": "G 0.32, G 0.37, G 0.27"
+    },
+    {
+     "control": "DET.4.2",
+     "value": "G 0.39, G 0.23, G 0.32"
+    },
+    {
+     "control": "DET.4.3",
+     "value": "G 0.39, G 0.32, G 0.28"
+    },
+    {
+     "control": "DET.4.4",
+     "value": "G 0.39, G 0.32, G 0.28"
+    },
+    {
+     "control": "DET.4.5",
+     "value": "G 0.37, G 0.19"
+    },
+    {
+     "control": "DET.4.6",
+     "value": "G 0.32, G 0.28, G 0.23"
+    },
+    {
+     "control": "DET.4.6.1",
+     "value": "G 0.32, G 0.39, G 0.37"
+    },
+    {
+     "control": "DET.4.7",
+     "value": "G 0.25, G 0.26, G 0.27"
+    },
+    {
+     "control": "DET.4.9",
+     "value": "G 0.23, G 0.39, G 0.32, G 0.41"
+    },
+    {
+     "control": "DET.4.10",
+     "value": "G 0.21, G 0.23, G 0.40, G 0.32"
+    },
+    {
+     "control": "DET.4.11",
+     "value": "G 0.23, G 0.39, G 0.32"
+    },
+    {
+     "control": "DET.4.11.1",
+     "value": "G 0.23, G 0.32"
+    },
+    {
+     "control": "DET.4.11.2",
+     "value": "G 0.23, G 0.39"
+    },
+    {
+     "control": "DET.4.11.3",
+     "value": "G 0.23, G 0.39, G 0.37"
+    },
+    {
+     "control": "DET.4.12",
+     "value": "G 0.23, G 0.25, G 0.26, G 0.27"
+    },
+    {
+     "control": "DET.4.12.1",
+     "value": "G 0.25, G 0.26, G 0.27, G 0.18"
+    },
+    {
+     "control": "DET.4.13",
+     "value": "G 0.25, G 0.27, G 0.18, G 0.23"
+    },
+    {
+     "control": "DET.4.14",
+     "value": "G 0.25, G 0.27, G 0.18, G 0.23"
+    },
+    {
+     "control": "DET.4.15",
+     "value": "G 0.25, G 0.27, G 0.18"
+    },
+    {
+     "control": "DET.4.16",
+     "value": "G 0.27, G 0.25, G 0.18"
+    },
+    {
+     "control": "DET.4.17",
+     "value": "G 0.27, G 0.25, G 0.18"
+    },
+    {
+     "control": "DET.4.19",
+     "value": "G 0.23, G 0.43, G 0.25"
+    },
+    {
+     "control": "DET.5.1",
+     "value": "G 0.23, G 0.39, G 0.18"
+    },
+    {
+     "control": "DET.5.1.1",
+     "value": "G 0.28, G 0.23, G 0.18"
+    },
+    {
+     "control": "DET.5.2",
+     "value": "G 0.28, G 0.23, G 0.18"
+    },
+    {
+     "control": "DET.5.3",
+     "value": "G 0.28, G 0.23, G 0.18"
+    },
+    {
+     "control": "DET.5.3.1",
+     "value": "G 0.39, G 0.18"
+    },
+    {
+     "control": "DET.5.3.2",
+     "value": "G 0.28, G 0.23"
+    },
+    {
+     "control": "DET.5.3.3",
+     "value": "G 0.28, G 0.18, G 0.23"
+    },
+    {
+     "control": "DET.5.5",
+     "value": "G 0.23, G 0.39, G 0.28"
+    },
+    {
+     "control": "DET.5.6",
+     "value": "G 0.23, G 0.39"
+    },
+    {
+     "control": "DET.5.8",
+     "value": "G 0.29, G 0.18"
+    },
+    {
+     "control": "DET.5.8.1",
+     "value": "G 0.29, G 0.18, G 0.28, G 0.23"
+    },
+    {
+     "control": "DET.5.9",
+     "value": "G 0.28, G 0.23"
+    },
+    {
+     "control": "DET.5.9.1",
+     "value": "G 0.28, G 0.23"
+    },
+    {
+     "control": "DET.5.10",
+     "value": "G 0.28, G 0.23"
+    },
+    {
+     "control": "DET.5.10.1",
+     "value": "G 0.28, G 0.20"
+    },
+    {
+     "control": "DET.5.10.2",
+     "value": "G 0.30, G 0.21, G 0.23, G 0.39"
+    },
+    {
+     "control": "DET.5.10.3",
+     "value": "G 0.28, G 0.23, G 0.39"
+    },
+    {
+     "control": "DET.5.10.4",
+     "value": "G 0.28, G 0.23, G 0.39, G 0.20"
+    },
+    {
+     "control": "DET.5.10.5",
+     "value": "G 0.39, G 0.28, G 0.18"
+    },
+    {
+     "control": "DET.6.1",
+     "value": "G 0.39, G 0.23, G 0.18"
+    },
+    {
+     "control": "DET.6.1.1",
+     "value": "G 0.39, G 0.23"
+    },
+    {
+     "control": "DET.6.1.2",
+     "value": "G 0.25, G 0.29, G 0.27"
+    },
+    {
+     "control": "DET.6.1.3",
+     "value": "G 0.39, G 0.18, G 0.37"
+    },
+    {
+     "control": "DET.6.2",
+     "value": "G 0.18, G 0.39, G 0.23"
+    },
+    {
+     "control": "DET.6.2.1",
+     "value": "G 0.23, G 0.39, G 0.22, G 0.19"
+    },
+    {
+     "control": "DET.6.2.2",
+     "value": "G 0.39, G 0.23, G 0.21, G 0.14"
+    },
+    {
+     "control": "REA.1.1.1",
+     "value": "G 0.18, G 0.37"
+    },
+    {
+     "control": "REA.1.1.2",
+     "value": "G 0.18, G 0.31"
+    },
+    {
+     "control": "REA.1.1.3",
+     "value": "G 0.18, G 0.31"
+    },
+    {
+     "control": "REA.2.1",
+     "value": "G 0.39, G 0.47, G 0.23, G 0.40"
+    },
+    {
+     "control": "REA.2.2",
+     "value": "G 0.39, G 0.47, G 0.23, G 0.40"
+    },
+    {
+     "control": "REA.2.3",
+     "value": "G 0.39, G 0.47, G 0.37, G 0.23"
+    },
+    {
+     "control": "REA.2.4",
+     "value": "G 0.39, G 0.47, G 0.23, G 0.40"
+    },
+    {
+     "control": "REA.2.5",
+     "value": "G 0.39, G 0.47, G 0.18"
+    },
+    {
+     "control": "REA.2.5.1",
+     "value": "G 0.39, G 0.47"
+    },
+    {
+     "control": "REA.2.5.2",
+     "value": "G 0.39, G 0.47"
+    },
+    {
+     "control": "REA.2.5.3",
+     "value": "G 0.39, G 0.47"
+    },
+    {
+     "control": "REA.2.6",
+     "value": "G 0.39, G 0.47, G 0.23, G 0.40"
+    },
+    {
+     "control": "REA.2.6.1",
+     "value": "G 0.39, G 0.47, G 0.18, G 0.37"
+    },
+    {
+     "control": "REA.2.6.2",
+     "value": "G 0.39, G 0.47"
+    },
+    {
+     "control": "REA.2.6.2.1",
+     "value": "G 0.39, G 0.47"
+    },
+    {
+     "control": "REA.2.6.3",
+     "value": "G 0.39, G 0.47, G 0.23, G 0.40"
+    },
+    {
+     "control": "REA.2.6.4",
+     "value": "G 0.39, G 0.47"
+    },
+    {
+     "control": "REA.2.6.5",
+     "value": "G 0.39, G 0.47, G 0.23, G 0.40"
+    },
+    {
+     "control": "KONF.1.1.3",
+     "value": "G 0.18, G 0.31"
+    },
+    {
+     "control": "KONF.1.2",
+     "value": "G 0.18, G 0.29"
+    },
+    {
+     "control": "KONF.1.3",
+     "value": "G 0.18, G 0.20"
+    },
+    {
+     "control": "KONF.1.4",
+     "value": "G 0.19, G 0.22, G 0.46"
+    },
+    {
+     "control": "KONF.2.1.1",
+     "value": "G 0.18, G 0.45"
+    },
+    {
+     "control": "KONF.2.2",
+     "value": "G 0.18, G 0.29"
+    },
+    {
+     "control": "KONF.2.3",
+     "value": "G 0.30, G 0.23"
+    },
+    {
+     "control": "KONF.2.4",
+     "value": "G 0.23, G 0.28"
+    },
+    {
+     "control": "KONF.2.4.1",
+     "value": "G 0.23, G 0.14"
+    },
+    {
+     "control": "KONF.2.4.2",
+     "value": "G 0.19, G 0.23"
+    },
+    {
+     "control": "KONF.2.5",
+     "value": "G 0.22, G 0.21, G 0.46, G 0.31"
+    },
+    {
+     "control": "KONF.2.5.1",
+     "value": "G 0.31, G 0.23, G 0.21, G 0.22"
+    },
+    {
+     "control": "KONF.2.6",
+     "value": "G 0.31, G 0.30, G 0.18"
+    },
+    {
+     "control": "KONF.2.7",
+     "value": "G 0.11, G 0.18"
+    },
+    {
+     "control": "KONF.2.8",
+     "value": "G 0.27, G 0.18"
+    },
+    {
+     "control": "KONF.2.9",
+     "value": "G 0.21, G 0.39"
+    },
+    {
+     "control": "KONF.3.1",
+     "value": "G 0.19, G 0.21"
+    },
+    {
+     "control": "KONF.3.2",
+     "value": "G 0.19, G 0.14"
+    },
+    {
+     "control": "KONF.3.3",
+     "value": "G 0.30, G 0.16, G 0.17"
+    },
+    {
+     "control": "KONF.3.5",
+     "value": "G 0.16, G 0.17"
+    },
+    {
+     "control": "KONF.3.6",
+     "value": "G 0.16, G 0.17, G 0.30, G 0.19"
+    },
+    {
+     "control": "KONF.3.6.1",
+     "value": "G 0.16, G 0.30, G 0.19, G 0.17"
+    },
+    {
+     "control": "KONF.3.7",
+     "value": "G 0.23, G 0.39, G 0.19"
+    },
+    {
+     "control": "KONF.3.8",
+     "value": "G 0.39, G 0.23"
+    },
+    {
+     "control": "KONF.4.1",
+     "value": "G 0.18, G 0.30"
+    },
+    {
+     "control": "KONF.4.1.1",
+     "value": "G 0.43, G 0.36"
+    },
+    {
+     "control": "KONF.4.2",
+     "value": "G 0.22, G 0.43"
+    },
+    {
+     "control": "KONF.4.2.1",
+     "value": "G 0.22, G 0.19, G 0.15"
+    },
+    {
+     "control": "KONF.4.3",
+     "value": "G 0.23, G 0.30"
+    },
+    {
+     "control": "KONF.4.4",
+     "value": "G 0.30, G 0.32"
+    },
+    {
+     "control": "KONF.4.5",
+     "value": "G 0.22, G 0.43"
+    },
+    {
+     "control": "KONF.5.1.1",
+     "value": "G 0.30, G 0.21"
+    },
+    {
+     "control": "KONF.5.1.2",
+     "value": "G 0.30, G 0.19"
+    },
+    {
+     "control": "KONF.5.2",
+     "value": "G 0.30, G 0.32"
+    },
+    {
+     "control": "KONF.6.1",
+     "value": "G 0.32, G 0.30"
+    },
+    {
+     "control": "KONF.6.1.1",
+     "value": "G 0.19, G 0.22"
+    },
+    {
+     "control": "KONF.6.1.2",
+     "value": "G 0.39, G 0.23"
+    },
+    {
+     "control": "KONF.6.1.3",
+     "value": "G 0.19, G 0.31"
+    },
+    {
+     "control": "KONF.6.2",
+     "value": "G 0.19, G 0.30"
+    },
+    {
+     "control": "KONF.6.3",
+     "value": "G 0.19, G 0.46"
+    },
+    {
+     "control": "KONF.6.4",
+     "value": "G 0.32, G 0.30"
+    },
+    {
+     "control": "KONF.6.4.1",
+     "value": "G 0.30, G 0.32"
+    },
+    {
+     "control": "KONF.6.5",
+     "value": "G 0.32, G 0.30"
+    },
+    {
+     "control": "KONF.6.6",
+     "value": "G 0.19, G 0.30"
+    },
+    {
+     "control": "KONF.6.6.1",
+     "value": "G 0.19, G 0.22"
+    },
+    {
+     "control": "KONF.6.7",
+     "value": "G 0.32, G 0.30"
+    },
+    {
+     "control": "KONF.6.8",
+     "value": "G 0.32, G 0.30"
+    },
+    {
+     "control": "KONF.6.9",
+     "value": "G 0.19, G 0.22"
+    },
+    {
+     "control": "KONF.6.11",
+     "value": "G 0.39, G 0.40"
+    },
+    {
+     "control": "KONF.6.12",
+     "value": "G 0.19, G 0.30"
+    },
+    {
+     "control": "KONF.6.13",
+     "value": "G 0.32, G 0.30"
+    },
+    {
+     "control": "KONF.6.14",
+     "value": "G 0.39, G 0.23"
+    },
+    {
+     "control": "KONF.6.15",
+     "value": "G 0.39, G 0.23"
+    },
+    {
+     "control": "KONF.6.16",
+     "value": "G 0.19, G 0.23"
+    },
+    {
+     "control": "KONF.7.1",
+     "value": "G 0.39, G 0.23"
+    },
+    {
+     "control": "KONF.7.2",
+     "value": "G 0.39, G 0.23"
+    },
+    {
+     "control": "KONF.7.3",
+     "value": "G 0.39, G 0.23"
+    },
+    {
+     "control": "KONF.7.4",
+     "value": "G 0.39, G 0.23"
+    },
+    {
+     "control": "KONF.7.5",
+     "value": "G 0.39, G 0.18"
+    },
+    {
+     "control": "KONF.7.6",
+     "value": "G 0.39, G 0.18"
+    },
+    {
+     "control": "KONF.7.7",
+     "value": "G 0.39, G 0.18"
+    },
+    {
+     "control": "KONF.7.8",
+     "value": "G 0.39, G 0.18"
+    },
+    {
+     "control": "KONF.7.9",
+     "value": "G 0.39, G 0.20"
+    },
+    {
+     "control": "KONF.7.10",
+     "value": "G 0.30, G 0.39"
+    },
+    {
+     "control": "KONF.7.11",
+     "value": "G 0.30, G 0.39"
+    },
+    {
+     "control": "KONF.7.12",
+     "value": "G 0.30, G 0.39"
+    },
+    {
+     "control": "KONF.7.13",
+     "value": "G 0.30, G 0.39"
+    },
+    {
+     "control": "KONF.7.14",
+     "value": "G 0.39, G 0.21"
+    },
+    {
+     "control": "KONF.7.15",
+     "value": "G 0.23, G 0.18"
+    },
+    {
+     "control": "KONF.7.16",
+     "value": "G 0.28, G 0.23"
+    },
+    {
+     "control": "KONF.7.16.1",
+     "value": "G 0.28, G 0.23"
+    },
+    {
+     "control": "KONF.8.1",
+     "value": "G 0.18, G 0.28"
+    },
+    {
+     "control": "KONF.8.1.1",
+     "value": "G 0.18, G 0.28"
+    },
+    {
+     "control": "KONF.8.2",
+     "value": "G 0.18, G 0.28"
+    },
+    {
+     "control": "KONF.9.1",
+     "value": "G 0.27, G 0.40"
+    },
+    {
+     "control": "KONF.9.2",
+     "value": "G 0.27, G 0.40"
+    },
+    {
+     "control": "KONF.9.3",
+     "value": "G 0.18, G 0.25"
+    },
+    {
+     "control": "KONF.10.1.1",
+     "value": "G 0.18, G 0.45"
+    },
+    {
+     "control": "KONF.10.2",
+     "value": "G 0.18, G 0.29"
+    },
+    {
+     "control": "KONF.10.3",
+     "value": "G 0.30, G 0.23"
+    },
+    {
+     "control": "KONF.10.4",
+     "value": "G 0.28, G 0.23"
+    },
+    {
+     "control": "KONF.10.5",
+     "value": "G 0.31, G 0.23, G 0.21, G 0.22"
+    },
+    {
+     "control": "KONF.10.5.1",
+     "value": "G 0.31, G 0.23, G 0.21, G 0.22"
+    },
+    {
+     "control": "KONF.11.1",
+     "value": "G 0.19, G 0.30"
+    },
+    {
+     "control": "KONF.11.1.1",
+     "value": "G 0.19, G 0.30"
+    },
+    {
+     "control": "KONF.11.1.2",
+     "value": "G 0.43, G 0.36"
+    },
+    {
+     "control": "KONF.11.2",
+     "value": "G 0.19, G 0.30"
+    },
+    {
+     "control": "KONF.11.3",
+     "value": "G 0.19, G 0.14"
+    },
+    {
+     "control": "KONF.11.4",
+     "value": "G 0.23, G 0.19"
+    },
+    {
+     "control": "KONF.11.5",
+     "value": "G 0.23, G 0.30"
+    },
+    {
+     "control": "KONF.11.6",
+     "value": "G 0.23, G 0.30"
+    },
+    {
+     "control": "KONF.11.7",
+     "value": "G 0.23, G 0.19"
+    },
+    {
+     "control": "KONF.11.7.1",
+     "value": "G 0.30, G 0.19"
+    },
+    {
+     "control": "KONF.11.7.2",
+     "value": "G 0.23, G 0.30"
+    },
+    {
+     "control": "KONF.11.7.2.1",
+     "value": "G 0.23, G 0.30"
+    },
+    {
+     "control": "KONF.11.8",
+     "value": "G 0.19, G 0.14"
+    },
+    {
+     "control": "KONF.12.1",
+     "value": "G 0.28, G 0.23"
+    },
+    {
+     "control": "KONF.12.1.2",
+     "value": "G 0.28, G 0.23"
+    },
+    {
+     "control": "KONF.12.1.3",
+     "value": "G 0.19, G 0.28"
+    },
+    {
+     "control": "KONF.12.1.4",
+     "value": "G 0.22, G 0.46"
+    },
+    {
+     "control": "KONF.12.1.5",
+     "value": "G 0.15, G 0.43"
+    },
+    {
+     "control": "KONF.12.1.6",
+     "value": "G 0.39, G 0.28"
+    },
+    {
+     "control": "KONF.12.1.7",
+     "value": "G 0.39, G 0.28"
+    },
+    {
+     "control": "KONF.12.1.9",
+     "value": "G 0.46, G 0.45"
+    },
+    {
+     "control": "KONF.12.1.10",
+     "value": "G 0.28, G 0.23"
+    },
+    {
+     "control": "KONF.12.1.11",
+     "value": "G 0.39, G 0.23"
+    },
+    {
+     "control": "KONF.12.2",
+     "value": "G 0.15, G 0.43"
+    },
+    {
+     "control": "KONF.12.3",
+     "value": "G 0.19, G 0.14"
+    },
+    {
+     "control": "KONF.12.4",
+     "value": "G 0.19, G 0.30"
+    },
+    {
+     "control": "KONF.12.5",
+     "value": "G 0.19, G 0.30"
+    },
+    {
+     "control": "KONF.12.6",
+     "value": "G 0.19, G 0.14"
+    },
+    {
+     "control": "KONF.12.7",
+     "value": "G 0.30, G 0.22"
+    },
+    {
+     "control": "KONF.12.8",
+     "value": "G 0.19, G 0.14"
+    },
+    {
+     "control": "KONF.12.9",
+     "value": "G 0.19, G 0.29"
+    },
+    {
+     "control": "KONF.12.10",
+     "value": "G 0.19, G 0.43"
+    },
+    {
+     "control": "KONF.12.11",
+     "value": "G 0.19, G 0.14"
+    },
+    {
+     "control": "KONF.12.12",
+     "value": "G 0.37, G 0.23"
+    },
+    {
+     "control": "KONF.12.13",
+     "value": "G 0.18, G 0.37"
+    },
+    {
+     "control": "KONF.12.14",
+     "value": "G 0.43, G 0.22"
+    },
+    {
+     "control": "KONF.13.1",
+     "value": "G 0.39, G 0.23"
+    },
+    {
+     "control": "KONF.13.1.1",
+     "value": "G 0.39, G 0.42"
+    },
+    {
+     "control": "KONF.13.1.2",
+     "value": "G 0.39, G 0.23"
+    },
+    {
+     "control": "KONF.13.2",
+     "value": "G 0.36, G 0.22"
+    },
+    {
+     "control": "KONF.13.2.1",
+     "value": "G 0.43, G 0.36"
+    },
+    {
+     "control": "KONF.13.2.2",
+     "value": "G 0.36, G 0.46"
+    },
+    {
+     "control": "KONF.13.3",
+     "value": "G 0.36, G 0.46"
+    },
+    {
+     "control": "KONF.13.4",
+     "value": "G 0.36, G 0.37"
+    },
+    {
+     "control": "KONF.13.5",
+     "value": "G 0.36, G 0.43"
+    },
+    {
+     "control": "KONF.13.5.1",
+     "value": "G 0.36, G 0.42"
+    },
+    {
+     "control": "KONF.13.6",
+     "value": "G 0.36, G 0.46"
+    },
+    {
+     "control": "KONF.13.7",
+     "value": "G 0.43, G 0.15"
+    },
+    {
+     "control": "KONF.13.8",
+     "value": "G 0.36, G 0.42"
+    },
+    {
+     "control": "KONF.13.9",
+     "value": "G 0.36, G 0.42"
+    },
+    {
+     "control": "KONF.13.10",
+     "value": "G 0.43, G 0.36"
+    },
+    {
+     "control": "KONF.13.11",
+     "value": "G 0.43, G 0.15"
+    },
+    {
+     "control": "KONF.14.1",
+     "value": "G 0.43, G 0.15"
+    },
+    {
+     "control": "KONF.14.1.1",
+     "value": "G 0.43, G 0.15"
+    },
+    {
+     "control": "KONF.14.1.2",
+     "value": "G 0.19, G 0.15"
+    },
+    {
+     "control": "KONF.14.2",
+     "value": "G 0.43, G 0.22"
+    },
+    {
+     "control": "KONF.14.3",
+     "value": "G 0.40, G 0.30"
+    },
+    {
+     "control": "KONF.14.4",
+     "value": "G 0.27, G 0.40"
+    },
+    {
+     "control": "KONF.14.5",
+     "value": "G 0.27, G 0.40"
+    },
+    {
+     "control": "KONF.15.1",
+     "value": "G 0.27, G 0.40"
+    },
+    {
+     "control": "KONF.15.2",
+     "value": "G 0.27, G 0.40"
+    },
+    {
+     "control": "KONF.15.3",
+     "value": "G 0.27, G 0.40"
+    },
+    {
+     "control": "KONF.15.4",
+     "value": "G 0.27, G 0.40"
+    },
+    {
+     "control": "DEV.1.1.1",
+     "value": "G 0.18, G 0.37, G 0.29, G 0.31"
+    },
+    {
+     "control": "DEV.1.1.2",
+     "value": "G 0.18, G 0.31"
+    },
+    {
+     "control": "DEV.1.2",
+     "value": "G 0.18, G 0.29"
+    },
+    {
+     "control": "DEV.2.1",
+     "value": "G 0.28, G 0.46, G 0.18"
+    },
+    {
+     "control": "DEV.2.3",
+     "value": "G 0.28, G 0.32, G 0.21"
+    },
+    {
+     "control": "DEV.2.4",
+     "value": "G 0.22, G 0.46"
+    },
+    {
+     "control": "DEV.2.5",
+     "value": "G 0.28, G 0.21, G 0.22, G 0.19"
+    },
+    {
+     "control": "DEV.2.6",
+     "value": "G 0.28, G 0.21, G 0.22, G 0.46"
+    },
+    {
+     "control": "DEV.3.2",
+     "value": "G 0.28, G 0.21"
+    },
+    {
+     "control": "DEV.3.3",
+     "value": "G 0.28, G 0.19"
+    },
+    {
+     "control": "DEV.3.4",
+     "value": "G 0.28, G 0.19"
+    },
+    {
+     "control": "DEV.4.1",
+     "value": "G 0.36, G 0.29"
+    },
+    {
+     "control": "DEV.4.2",
+     "value": "G 0.28, G 0.46, G 0.20"
+    },
+    {
+     "control": "DEV.4.3",
+     "value": "G 0.18, G 0.28"
+    },
+    {
+     "control": "DEV.4.4",
+     "value": "G 0.22, G 0.46"
+    },
+    {
+     "control": "DEV.4.7",
+     "value": "G 0.18, G 0.22, G 0.46"
+    },
+    {
+     "control": "DEV.4.8",
+     "value": "G 0.18, G 0.30"
+    },
+    {
+     "control": "DEV.4.9",
+     "value": "G 0.18, G 0.30"
+    },
+    {
+     "control": "DEV.4.10",
+     "value": "G 0.37, G 0.22"
+    },
+    {
+     "control": "DEV.4.11",
+     "value": "G 0.28, G 0.18"
+    },
+    {
+     "control": "DEV.5.1",
+     "value": "G 0.28, G 0.18"
+    },
+    {
+     "control": "DEV.5.2",
+     "value": "G 0.18, G 0.29"
+    },
+    {
+     "control": "DEV.5.3",
+     "value": "G 0.20, G 0.22, G 0.46"
+    },
+    {
+     "control": "DEV.6.1",
+     "value": "G 0.18, G 0.25, G 0.26"
+    },
+    {
+     "control": "DEV.7.1",
+     "value": "G 0.18, G 0.25, G 0.26"
+    },
+    {
+     "control": "DEV.7.2",
+     "value": "G 0.36, G 0.43"
+    }
+   ]
+  },
+  "target_object_categories": {
+   "props": 634,
+   "packed": 40,
+   "values": [
+    {
+     "control": "GEB.3.4",
+     "value": "Nutzende, Standorte"
+    },
+    {
+     "control": "GEB.7.2",
+     "value": "Nutzende, Standorte"
+    },
+    {
+     "control": "SENS.2.3",
+     "value": "Nutzende, Anwendungen"
+    },
+    {
+     "control": "SENS.5.2",
+     "value": "Nutzende, Informationen"
+    },
+    {
+     "control": "SENS.7.2",
+     "value": "Nutzende, Interpersonelle Kommunikation"
+    },
+    {
+     "control": "SENS.7.3",
+     "value": "Nutzende, Interpersonelle Kommunikation"
+    },
+    {
+     "control": "SENS.7.4",
+     "value": "Nutzende, Interpersonelle Kommunikation"
+    },
+    {
+     "control": "SENS.7.5",
+     "value": "Nutzende, Interpersonelle Kommunikation"
+    },
+    {
+     "control": "SENS.7.6",
+     "value": "Nutzende, Interpersonelle Kommunikation"
+    },
+    {
+     "control": "SENS.7.7",
+     "value": "Nutzende, Interpersonelle Kommunikation"
+    },
+    {
+     "control": "SENS.7.8",
+     "value": "Nutzende, E-Mail"
+    },
+    {
+     "control": "SENS.7.9",
+     "value": "Nutzende, Office-Anwendungen"
+    },
+    {
+     "control": "SENS.7.10",
+     "value": "Nutzende, Virtualisierungslösungen"
+    },
+    {
+     "control": "SENS.7.11",
+     "value": "Nutzende, VK-Anwendungen"
+    },
+    {
+     "control": "SENS.7.12",
+     "value": "Nutzende, Endgeräte"
+    },
+    {
+     "control": "SENS.7.13",
+     "value": "Nutzende, Endgeräte"
+    },
+    {
+     "control": "SENS.7.14",
+     "value": "Nutzende, Endgeräte"
+    },
+    {
+     "control": "SENS.7.15",
+     "value": "Nutzende, TK-Anwendungen"
+    },
+    {
+     "control": "SENS.7.16",
+     "value": "Nutzende, TK-Anwendungen"
+    },
+    {
+     "control": "SENS.7.17",
+     "value": "Nutzende, TK-Anwendungen"
+    },
+    {
+     "control": "SENS.7.18",
+     "value": "Nutzende, Mobiltelefone"
+    },
+    {
+     "control": "SENS.7.19",
+     "value": "Nutzende, Mobiltelefone"
+    },
+    {
+     "control": "SENS.7.20",
+     "value": "Nutzende, Informationen"
+    },
+    {
+     "control": "SENS.7.21",
+     "value": "Nutzende, Faxe"
+    },
+    {
+     "control": "SENS.7.22",
+     "value": "Nutzende, Faxe"
+    },
+    {
+     "control": "SENS.7.23",
+     "value": "Nutzende, Endgeräte"
+    },
+    {
+     "control": "SENS.7.24",
+     "value": "Nutzende, Webbrowser"
+    },
+    {
+     "control": "SENS.7.25",
+     "value": "Nutzende, Fahrzeuge"
+    },
+    {
+     "control": "SENS.8.3",
+     "value": "Nutzende, Endgeräte"
+    },
+    {
+     "control": "SENS.8.4",
+     "value": "Nutzende, Gebäude"
+    },
+    {
+     "control": "SENS.8.6",
+     "value": "Mitarbeitende, Standorte"
+    },
+    {
+     "control": "SENS.8.7",
+     "value": "Mitarbeitende, Standorte"
+    },
+    {
+     "control": "SENS.8.8",
+     "value": "Nutzende, Räume"
+    },
+    {
+     "control": "SENS.8.10",
+     "value": "Nutzende, Standorte"
+    },
+    {
+     "control": "SENS.10.4",
+     "value": "Administrierende, Netze"
+    },
+    {
+     "control": "BER.5.4",
+     "value": "Anwendungen, Externe Netzanschlüsse"
+    },
+    {
+     "control": "KONF.14.4",
+     "value": "Anwendungen, Endgeräte"
+    },
+    {
+     "control": "KONF.15.1",
+     "value": "Anwendungen, Hostsysteme"
+    },
+    {
+     "control": "KONF.15.2",
+     "value": "Anwendungen, Hostsysteme"
+    },
+    {
+     "control": "KONF.15.3",
+     "value": "Anwendungen, Hostsysteme"
+    }
+   ]
+  },
+  "documentation": {
+   "props": 960,
+   "packed": 0,
+   "values": []
   }
- ],
+ },
+ "parameter-slots": {
+  "slots": 221,
+  "at-insert": 221,
+  "label-of-a-parameter": 219,
+  "other-wording": [
+   {
+    "control": "GC.1.1",
+    "prop": "result_specification",
+    "slot": "einem anerkannten Standard",
+    "at-insert": true,
+    "label-of-a-parameter": false
+   },
+   {
+    "control": "NOT.1.1.4",
+    "prop": "result",
+    "slot": "Reaktiv-, Aufbau- oder Standard-",
+    "at-insert": true,
+    "label-of-a-parameter": false
+   }
+  ],
+  "not-at-insert": []
+ },
  "census-delta": {
   "census-version": "2026-07-03",
   "this-version": "2026-07-16T05:11:52.605669+00:00",
@@ -1312,9 +3202,9 @@
    "census": 998,
    "now": 999
   },
-  "defects": {
-   "census-gspp": 213,
-   "now": 213
+  "packed-tags": {
+   "census-gspp": 125,
+   "now": 125
   }
  },
  "parameters": {
@@ -1408,7 +3298,7 @@
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].controls[].parts[].props[].name",
    "count": 7,
    "level": "L1",
-   "destination": "dispatch by part-prop name (grammar/objectives/criteria; defects reported)"
+   "destination": "dispatch by part-prop name (grammar/objectives/criteria; packed lists reported)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].controls[].parts[].props[].ns",
@@ -1420,7 +3310,7 @@
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].controls[].parts[].props[].value",
    "count": 7,
    "level": "L1",
-   "destination": "dispatch by part-prop name (grammar/objectives/criteria; defects reported)"
+   "destination": "dispatch by part-prop name (grammar/objectives/criteria; packed lists reported)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].controls[].parts[].prose",
@@ -1510,7 +3400,7 @@
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].parts[].props[].name",
    "count": 95,
    "level": "L1",
-   "destination": "dispatch by part-prop name (grammar/objectives/criteria; defects reported)"
+   "destination": "dispatch by part-prop name (grammar/objectives/criteria; packed lists reported)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].parts[].props[].ns",
@@ -1522,7 +3412,7 @@
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].parts[].props[].value",
    "count": 95,
    "level": "L1",
-   "destination": "dispatch by part-prop name (grammar/objectives/criteria; defects reported)"
+   "destination": "dispatch by part-prop name (grammar/objectives/criteria; packed lists reported)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].parts[].prose",
@@ -1618,7 +3508,7 @@
    "path": "catalog.groups[].groups[].controls[].controls[].parts[].props[].name",
    "count": 1632,
    "level": "L1",
-   "destination": "dispatch by part-prop name (grammar/objectives/criteria; defects reported)"
+   "destination": "dispatch by part-prop name (grammar/objectives/criteria; packed lists reported)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].parts[].props[].ns",
@@ -1630,7 +3520,7 @@
    "path": "catalog.groups[].groups[].controls[].controls[].parts[].props[].value",
    "count": 1632,
    "level": "L1",
-   "destination": "dispatch by part-prop name (grammar/objectives/criteria; defects reported)"
+   "destination": "dispatch by part-prop name (grammar/objectives/criteria; packed lists reported)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].parts[].prose",
@@ -1726,7 +3616,7 @@
    "path": "catalog.groups[].groups[].controls[].parts[].props[].name",
    "count": 3308,
    "level": "L1",
-   "destination": "dispatch by part-prop name (grammar/objectives/criteria; defects reported)"
+   "destination": "dispatch by part-prop name (grammar/objectives/criteria; packed lists reported)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].parts[].props[].ns",
@@ -1738,7 +3628,7 @@
    "path": "catalog.groups[].groups[].controls[].parts[].props[].value",
    "count": 3308,
    "level": "L1",
-   "destination": "dispatch by part-prop name (grammar/objectives/criteria; defects reported)"
+   "destination": "dispatch by part-prop name (grammar/objectives/criteria; packed lists reported)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].parts[].prose",

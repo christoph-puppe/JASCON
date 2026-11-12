@@ -10,8 +10,8 @@ Runs, in order:
    example bundle: type inference (an object must match EXACTLY ONE of the
    ELEVEN kernel shapes - shape-disjointness is a conformance property),
    closed-shape schema validation, code systems, by-statement facet keys
-   vs. host statement ids (D10 rev), {param:} token binding (the 216
-   rule), optional-empty-container rule (D3.3), manifest completeness +
+   vs. host statement ids (D10 rev), {param:} token binding
+   (prose-params-resolve), optional-empty-container rule (D3.3), manifest completeness +
    both digests re-verified per object.
 3. RISK (CP-RISK-1, kernel 2.0.0): Risk is the tenth kernel type; the
    schema carries RISK-1..6 (named on failure by risk_rule_violations),
@@ -2671,7 +2671,7 @@ def validate_object(section, path, obj):
             for lang, txt in s["prose"].items():
                 for tok in PARAM_TOKEN.findall(txt if isinstance(txt, str) else " ".join(txt)):
                     if tok not in declared:
-                        fail(section, f"{path}: unbound {{param:{tok}}} in statement {s['id']} (the 216 rule)")
+                        fail(section, f"{path}: unbound {{param:{tok}}} in statement {s['id']} (prose-params-resolve)")
         for fid, payload in (obj.get("facets") or {}).items():
             if isinstance(payload, dict) and "by-statement" in payload and isinstance(payload["by-statement"], dict):
                 for sid in payload["by-statement"]:

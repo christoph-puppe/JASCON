@@ -17,7 +17,8 @@ gate-item-1 bundles on disk (`bsi-core-bundle`, `ism-core-bundle`,
 alt-identifier, taxonomy props, **two nested pseudo-controls**
 (KONF.14.1.1, .2), one param whose label fuses alternatives
 (`"TLS 1.3 (oder TLS 1.2 mit PFS)"`), and statement-part grammar
-props carrying one of the 216 defects.
+props whose `result_specification` marks that parameter's slot as
+`{{einem anerkannten Standard}}`.
 
 **Converted** (`objects/mstls/req-konf-14-1.json`, excerpts):
 ```json
@@ -36,8 +37,9 @@ props carrying one of the 216 defects.
    "prose": {"de": "Bei Einsatz von Webservern MUSS ..."}}]}
 ```
 Facets on the object: `statement-grammar@1` (the KANN/verschlüsseln
-decomposition, **with `{{einem anerkannten Standard}}` riding
-visibly** — defect #14 of 216, preserved not repaired),
+decomposition, **with the slot `{{einem anerkannten Standard}}`
+carried as published** — the parameter the prose binds as
+`{param:konf.14.1-prm1}`),
 `assessment-criteria@1` (Konfigurationshistorie),
 `gspp-taxonomy@1` keyed by-statement (each clause keeps its own
 sec-level/effort/title/alt-id — KONF.14.1.1 carries effort 4 against
@@ -53,7 +55,7 @@ And **statement KONF.14.1.2 is a finding**: its prose says MUSS, its
 grammar props omit `modal_verb` — one of exactly **9** such clauses
 corpus-wide (1,006 declared / 1,015 statements). The converter maps
 the declared channel and refuses to guess from prose; the 9 join the
-216 in the authors' queue. Grammar coverage: 99.1 %, now a number.
+packed lists in the authors' queue. Grammar coverage: 99.1 %, now a number.
 
 **Validator checks:** `prose-params-resolve` (the `{param:}` token
 binds), `unique-within` (three statement ids), `code-from`
@@ -180,7 +182,7 @@ catch — in our own converter first:
    and C corrected on the record.
 3. **A source finding.** 9 clauses whose prose says MUSS while the
    grammar layer omits `modal_verb` (E.1) — grammar coverage 99.1 %,
-   queued for the authors beside the 216.
+   queued for the authors beside the packed lists.
 
 What E does **not** yet contain, by the same honesty: SSP/AP/AR/POA&M
 lifecycle walks and SCF at scale (gate item 3), and a predicate-

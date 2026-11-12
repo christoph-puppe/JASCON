@@ -15,7 +15,7 @@ Source: **Electronic (OSCAL) Version of NIST SP 800-53 Rev 5.2.0 Controls and SP
 - **Withdrawn tombstones dropped, lineage inverted (kernel `replaces[]`)**: 182 withdrawn; 199 successor edges on Requirements + 1 on family Sets (sa-12 'moved to SR' - the successor is a whole family; shared base makes Set-level `replaces` legal) (incorporated-into->merged-into, moved-to->renamed); statement-precision + withdrawn label/title in `annotations['nist-withdrawal']`; withdrawn->withdrawn chains x0, dangling x0.
 - **Modality corpus rule `must` x1918**: Rev 5 statements are uniformly imperative and obligation binds on baseline selection - the INVERSE of the declarative national pattern (ISM/CIS/CyFun/C5). Force in the mood, selection in the baseline Sets; both confirm D13's split axes.
 - **Obligated parties from `implementation-level`**: organization/system party URIs; absent -> organization default x0.
-- **Two-layer ODP params -> statement-scoped decls**: declared on each statement whose prose inserts them (216 per-statement rule); choice x133, string else; legacy _prm_ aggregates carried as params + odp@1 `aggregates`; params without a statement insertion site x399 declared on the first statement (326 bind only in the 53A objectives, 73 nowhere).
+- **Two-layer ODP params -> statement-scoped decls**: declared on each statement whose prose inserts them (per-statement parameter rule); choice x133, string else; legacy _prm_ aggregates carried as params + odp@1 `aggregates`; params without a statement insertion site x399 declared on the first statement (326 bind only in the 53A objectives, 73 nowhere).
 - **SP 800-53A layer -> sp800-53a@1** on 1014 Requirements: objective trees (53a labels kept - the #10 addressing surface) + EXAMINE/INTERVIEW/TEST methods with object lists (language-tagged).
 - **Relations**: related x3510, reference x838, required x715, related-to-withdrawn-or-missing x2; reference targets resolved to publication URLs (landmark); title/citation table -> references@1 on the root Set.
 - **Markdown citation links in prose -> plain text** x525 (citation rides the reference relation).
@@ -28,7 +28,7 @@ Source: **Electronic (OSCAL) Version of NIST SP 800-53 Rev 5.2.0 Controls and SP
 - **#10 measure (ODP -> statement addressing)**: insertion-count histogram {0: 399, 1: 1201}; params inserted in >=2 statements: **0** (none) - the (requirement, ODP) address resolves via the declaring statement.
 - **Corpus mapping endpoints vs minted ids**: 437 citations resolve (217 distinct), 0 hit withdrawn tombstones ([]) - a resolver follows the successor's `replaces[]` backwards; 0 cite unknown labels ([]).
 - **Baseline ids not emitted** (withdrawn or unknown): none.
-- **Cross-control param insertions x3** ([('ia-13.3', 'ia-13_odp.01'), ('sc-42.2', 'sc-42.01_odp'), ('si-10.1', 'si-10_odp')]): prose in one control inserts another control's ODP - a source irregularity (3 of 2,945 insertions); the declaration is duplicated onto the inserting statement per the 216 per-statement rule. REPORTED upstream.
+- **Cross-control param insertions x3** ([('ia-13.3', 'ia-13_odp.01'), ('sc-42.2', 'sc-42.01_odp'), ('si-10.1', 'si-10_odp')]): prose in one control inserts another control's ODP - a source irregularity (3 of 2,945 insertions); the declaration is duplicated onto the inserting statement per the per-statement parameter rule. REPORTED upstream.
 - **Params bound nowhere x73** (ODPs defined for assessment that neither control text nor 53A objectives insert) - declarations without any insertion site.
 
 ## Full path map (every source path, its count, its destination)
@@ -121,8 +121,8 @@ Source: **Electronic (OSCAL) Version of NIST SP 800-53 Rev 5.2.0 Controls and SP
 | `nist.catalog.groups[].controls[].links[].href` | 5,265 | L1 | related->related; required->required; reference->reference (resolved URL); incorporated-into/moved-to->successor replaces[] (merged-into/renamed) + nist-withdrawal annotation |
 | `nist.catalog.groups[].controls[].links[].rel` | 5,265 | L1 | related->related; required->required; reference->reference (resolved URL); incorporated-into/moved-to->successor replaces[] (merged-into/renamed) + nist-withdrawal annotation |
 | `nist.catalog.groups[].controls[].params[].guidelines[].prose` | 1,327 | L2 | odp@1 facet params.{name}.guidelines (language-tagged) |
-| `nist.catalog.groups[].controls[].params[].id` | 1,600 | L1 | statement-scoped kernel parameter decl (name, label) on each inserting statement (216 per-statement rule) |
-| `nist.catalog.groups[].controls[].params[].label` | 1,467 | L1 | statement-scoped kernel parameter decl (name, label) on each inserting statement (216 per-statement rule) |
+| `nist.catalog.groups[].controls[].params[].id` | 1,600 | L1 | statement-scoped kernel parameter decl (name, label) on each inserting statement (per-statement parameter rule) |
+| `nist.catalog.groups[].controls[].params[].label` | 1,467 | L1 | statement-scoped kernel parameter decl (name, label) on each inserting statement (per-statement parameter rule) |
 | `nist.catalog.groups[].controls[].params[].props[].class` | 1,564 | L1 | prop label (formal ODP id) -> L3-derivable (round-trip asserted); alt-identifier/alt-label/aggregates -> odp@1 facet |
 | `nist.catalog.groups[].controls[].params[].props[].name` | 3,021 | L1 | prop label (formal ODP id) -> L3-derivable (round-trip asserted); alt-identifier/alt-label/aggregates -> odp@1 facet |
 | `nist.catalog.groups[].controls[].params[].props[].ns` | 331 | L1 | prop label (formal ODP id) -> L3-derivable (round-trip asserted); alt-identifier/alt-label/aggregates -> odp@1 facet |

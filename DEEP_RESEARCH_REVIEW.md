@@ -6,6 +6,16 @@
 > — the 8-corpus total in its own table is 130,350. Do not quote these
 > numbers as project claims. Full adjudication:
 > `jascon/references/appendix-f-objections.md` §F.7.
+>
+> **ERRATUM (2026-11-12).** The "213 `{{...}}` pseudo-placeholders" it
+> credits to the BSI run are **not defects**: they are the parameter slots of
+> the sentence template, each standing where the statement prose inserts a
+> parameter. The project's converter had misread them; the review repeated
+> it. The source defect the run now reports is 781 list values packed into
+> single comma-separated strings (125 `tags`, 616 `threats`, 40
+> `target_object_categories`); see
+> `converted_examples/DE.BSI/bsi-coverage-report.md` and the register's
+> amendment of 2026-11-12.
 
 # Comprehensive Deep Research & Technical Review: Semantic OSCAL (v0.5 Specification)
 

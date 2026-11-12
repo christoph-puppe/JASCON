@@ -74,7 +74,10 @@ adversarial findings** (G, SOL/H, P6/P7/P8 — rejections documented);
 
 Principles: **failures unrepresentable, not forbidden** (the 216
 pseudo-placeholders inside schema-valid BSI documents remain the standing
-proof); **complexity-budget reallocation** (1.x spent the budget on
+proof *[erratum 2026-11-12: the 216 values hold the parameter slots of the
+sentence template and are not defects; the standing proof is the 781 list values packed
+into comma-separated strings — register, "Amendments — 2026-11-12: the
+packed lists"]*); **complexity-budget reallocation** (1.x spent the budget on
 infrastructure — RFC-0024 records the verdict: 100+ Rev5 authorizations in
 2025, zero OSCAL); **claims follow evidence tier** (measured / designed-for /
 hypothesized, always labeled).

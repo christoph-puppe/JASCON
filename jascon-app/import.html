@@ -128,7 +128,7 @@ jscI18n.add("de", {
   "(none)": "(keines)", "The profile is added to the active set, {set}, because it names requirements that have to be there.": "Das Profil kommt ins aktive Set, {set}, weil es Anforderungen nennt, die dort vorhanden sein müssen.",
   "Report": "Bericht", "requirements": "Anforderungen", "sets": "Sets", "clauses": "Klauseln", "pinned facet schemas": "gepinnte Facet-Schemas",
   "controls without statement prose (carried with their title)": "Controls ohne Statement-Prosa (mit ihrem Titel übernommen)",
-  "source defects (reported, not repaired)": "Quelldefekte (gemeldet, nicht repariert)", "parameters no clause names": "Parameter, die keine Klausel nennt",
+  "lists packed into one comma-separated value (split, reported)": "Listen in einem kommagetrennten Wert (aufgeteilt, gemeldet)", "parameter slots not where the prose inserts a parameter": "Parameterplätze, an denen die Prosa keinen Parameter einsetzt", "parameters no clause names": "Parameter, die keine Klausel nennt",
   "links without a target": "Links ohne Ziel", "Props held in the facet": "Im Facet gehaltene Props", "Parts held in the facet": "Im Facet gehaltene Parts",
   "Relation types minted under the namespace": "Unter dem Namensraum vergebene Relationstypen", "Modal verbs not known": "Unbekannte Modalverben",
   "included": "eingeschlossen", "excluded": "ausgeschlossen", "parameters set": "Parameter gesetzt", "Controls not found in the set": "Im Set nicht gefundene Controls",
@@ -204,7 +204,8 @@ function reportHtml() {
         ${row("clause prose minted from the rule title (the statement of the source is empty)", r["minted-prose"] ? String(r["minted-prose"]) : "")}
         ${row("links that resolve to nothing", r["unresolved-links"] ? String(r["unresolved-links"]) : "")}
         ${row("controls without statement prose (carried with their title)", (r["controls-without-prose"] || []).length ? capped(r["controls-without-prose"]) : "")}
-        ${row("source defects (reported, not repaired)", (r["source-defects"] || []).length ? `<b>${r["source-defects"].length}</b> ` + capped(r["source-defects"].map(d => `${d.control} ${d.prop}`), 6) : "")}
+        ${row("lists packed into one comma-separated value (split, reported)", (r["packed-list-values"] || []).length ? `<b>${r["packed-list-values"].length}</b> ` + capped(r["packed-list-values"].map(d => `${d.control} ${d.prop}`), 6) : "")}
+        ${row("parameter slots not where the prose inserts a parameter", (r["parameter-slots-not-at-insert"] || []).length ? capped(r["parameter-slots-not-at-insert"].map(d => `${d.control} ${d.prop}`), 6) : "")}
         ${row("parameters no clause names", r["parameters-unreferenced"] ? String(r["parameters-unreferenced"]) : "")}
         ${row("withdrawn controls, not converted; the successor names them in replaces", r["withdrawn-not-converted"] ? String(r["withdrawn-not-converted"]) : "")}
         ${row("parameters no clause inserts (declared on the first clause)", r["parameters-without-insertion"] ? String(r["parameters-without-insertion"]) : "")}

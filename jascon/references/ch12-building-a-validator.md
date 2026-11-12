@@ -131,14 +131,13 @@ units: load the stdlib code systems (pinned like any facet schema) and
 verify membership. Pure lookup — the deliberate boringness is the
 feature.
 
-**`prose-params-resolve`** — the 216-killer, and the most satisfying
+**`prose-params-resolve`** — the binding check, and the most satisfying
 test cases in the corpus. Scan each statement's prose for `{param:…}`
 tokens; every token must name a declared parameter of *that*
 statement (error), and every parameter should be referenced somewhere
-(lint). With this function green, the census's ugliest defect class —
-216 pseudo-placeholders drifting silently inside schema-valid national
-documents — is not detected but *unwritable*: there is no valid way to
-express it.
+(lint). With this function green, a slot in the prose that names no
+declared parameter is not detected later but *unwritable*: there is no
+valid way to express it.
 
 Note what is *absent* from Saturday: `conditional-apply`,
 `modality-monotonic`, `attestation-binds`. They are semantic — 

@@ -527,13 +527,13 @@
    "path": "nist.catalog.groups[].controls[].params[].id",
    "count": 1600,
    "level": "L1",
-   "destination": "statement-scoped kernel parameter decl (name, label) on each inserting statement (216 per-statement rule)"
+   "destination": "statement-scoped kernel parameter decl (name, label) on each inserting statement (per-statement parameter rule)"
   },
   {
    "path": "nist.catalog.groups[].controls[].params[].label",
    "count": 1467,
    "level": "L1",
-   "destination": "statement-scoped kernel parameter decl (name, label) on each inserting statement (216 per-statement rule)"
+   "destination": "statement-scoped kernel parameter decl (name, label) on each inserting statement (per-statement parameter rule)"
   },
   {
    "path": "nist.catalog.groups[].controls[].params[].props[].class",

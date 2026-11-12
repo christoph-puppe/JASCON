@@ -5,7 +5,7 @@ live controls/enhancements -> Requirements (statement items flattened,
 modality `must` corpus rule); 182 withdrawn tombstones -> dropped, lineage
 inverted onto the successor's kernel `replaces[]`; SP 800-53A layer ->
 sp800-53a@1 facet; two-layer ODP params -> statement-scoped kernel
-parameters (declared where inserted, the 216 per-statement rule) + odp@1
+parameters (declared where inserted, the per-statement parameter rule) + odp@1
 admin facet; baselines -> 4 membership Sets. Coverage target: 0."""
 import json, os, re, collections
 from oscal_conv_lib import make_T, slug, Bundle, inventory, coverage, report, walk_controls
@@ -395,7 +395,7 @@ RULES = [
  (r"^nist\.catalog\.groups\[\]\.controls\[\]\.links\[\]\.(href|rel)$", "L1",
   "related->related; required->required; reference->reference (resolved URL); incorporated-into/moved-to->successor replaces[] (merged-into/renamed) + nist-withdrawal annotation"),
  (r"^nist\.catalog\.groups\[\]\.controls\[\]\.params\[\]\.(id|label)$", "L1",
-  "statement-scoped kernel parameter decl (name, label) on each inserting statement (216 per-statement rule)"),
+  "statement-scoped kernel parameter decl (name, label) on each inserting statement (per-statement parameter rule)"),
  (r"^nist\.catalog\.groups\[\]\.controls\[\]\.params\[\]\.select\.", "L1",
   "choice type + choices[] + cardinality many (one-or-more)"),
  (r"^nist\.catalog\.groups\[\]\.controls\[\]\.params\[\]\.guidelines\[\]\.prose$", "L2",
@@ -444,7 +444,7 @@ j = report(
      f"- **Obligated parties from `implementation-level`**: organization/system party URIs; "
      f"absent -> organization default x{op_default}.",
      f"- **Two-layer ODP params -> statement-scoped decls**: declared on each statement whose prose inserts "
-     f"them (216 per-statement rule); choice x{sum(1 for cid, (rid, _, r) in req_ids.items() for s in r['statements'] for p in s.get('parameters', []) if p['type'] == 'choice')}, "
+     f"them (per-statement parameter rule); choice x{sum(1 for cid, (rid, _, r) in req_ids.items() for s in r['statements'] for p in s.get('parameters', []) if p['type'] == 'choice')}, "
      f"string else; legacy _prm_ aggregates carried as params + odp@1 `aggregates`; params without a "
      f"statement insertion site x{sum(no_site.values())} declared on the first statement "
      f"({len(facet_only)} bind only in the 53A objectives, {len(nowhere)} nowhere).",
@@ -471,7 +471,7 @@ j = report(
      ("; ".join(f"{b}: {v}" for b, v in bl_missing.items()) if bl_missing else "none") + ".",
      f"- **Cross-control param insertions x{len(cross_param)}** ({cross_param}): prose in one control "
      f"inserts another control's ODP - a source irregularity (3 of 2,945 insertions); the declaration is "
-     f"duplicated onto the inserting statement per the 216 per-statement rule. REPORTED upstream.",
+     f"duplicated onto the inserting statement per the per-statement parameter rule. REPORTED upstream.",
      f"- **Params bound nowhere x{len(nowhere)}** (ODPs defined for assessment that neither control text "
      f"nor 53A objectives insert) - declarations without any insertion site."],
     rows, unmapped,

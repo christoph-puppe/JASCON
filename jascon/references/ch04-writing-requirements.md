@@ -24,9 +24,9 @@ stays prose?** — including the special honesty rules for deadlines.
 
 This chapter is those four questions, each introduced by the corpus
 artifact that forced the answer, ending with the finished object. Along
-the way, the census's ugliest defect class — the 216 silent
-pseudo-placeholders — becomes literally unwritable, which is the whole
-point of the machinery.
+the way, the census's ugliest defect class — lists packed into
+comma-separated strings that no validator can see — loses its hiding
+place, which is the whole point of the machinery.
 
 ## 4.1 One clause or several? The 347-control lesson
 
@@ -231,23 +231,24 @@ questionnaires flattened into yes/no annotations.)
 `{param:transport-crypto}`, and the `prose-params-resolve` rule verifies
 every token against a declared parameter of that statement — token
 without parameter is a validation error; parameter never referenced is a
-lint. This is the mechanism that retires the census's ugliest exhibit.
-The old German catalog contained **216 values** like
-`{{einem anerkannten Standard}}` — strings *imitating* the standard's
-insertion syntax in places where that syntax had no meaning, several of
-them contradicting the real parameter the adjacent prose correctly
-referenced, all of them invisible to every validator on earth. In the
-statement model that entire class is **unwritable**: the only insertion
-syntax that exists is checked, and prose that disagrees with its
-parameters does not validate. Multilingual authoring falls out for free
+lint. The German catalog shows the same idea in its own notation: its
+sentence template marks the parameter slot of a `result` or
+`result_specification` prop as `{{einem anerkannten Standard}}`, the label
+of the parameter that the statement prose inserts at the same place. All
+221 such slots in the catalogue of 16 July 2026 stand where the prose
+inserts a parameter. They are parameters, and the statement model keeps
+them parameters: the prose cites each as a bound token, the grammar facet
+carries the template as published, and prose that names an undeclared
+parameter does not validate. Multilingual authoring falls out for free
 — modality and parameters are language-neutral; `prose{de: …, en: …}`
 renders MUSS or MUST as display, and the machine-readable truth is
 identical in every language.
 
-> **Don't** invent prose-level pseudo-syntax. Measured cost: 216 silent
-> defects in one professionally authored national corpus — two
-> machine-readable representations of the same requirement, diverging for
-> months inside documents every tool certified as flawless.
+> **Don't** pack a list into a string. Measured cost: 781 values in one
+> professionally authored national corpus — 125 `tags`, 616 `threats`, 40
+> target object categories — that every reader must know to split on the
+> comma and that no validator can check against their vocabulary, inside
+> documents every tool certified as flawless.
 
 ## 4.7 The four questions, answered: KONF.14.1 finished
 
@@ -270,8 +271,9 @@ Modality `may` — KANN, honestly, leaving the strengthening to the
 security-level tailorings where it belongs. One obligated party, minted
 under the authority's prefix; the *Anwendungen* target waits for the
 grammar facet. One choice parameter, bound into prose by a token a
-validator checks. Seven props became zero; the pseudo-placeholder that
-haunted this very control's sibling field cannot be expressed at all.
+validator checks. Seven props became zero, and the parameter that the old
+template field marked as `{{einem anerkannten Standard}}` is this same
+typed choice.
 
 The checklist, for the wall: *How many clauses — and would each survive
 alone? Which modality — and what does the lattice then permit without a
