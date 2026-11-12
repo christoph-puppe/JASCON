@@ -224,7 +224,7 @@ bundle.add("objects/impl/saas-ac-2.json",
             "statement-refs": lvg_sids,
             "responsibility": "shared",
             "satisfied-by": [{"inherited-from": {"component-ref": COMP_IAAS, "basis-ref": AUTH_CSP}},
-                             {"capability-ref": "cap-consumer-ac-2a"}],
+                             {"capability-ref": f"{COMP_APPL}#cap-consumer-ac-2a"}],
             "parameter-bindings": lvg_bind,
             "status": "implemented",
             "evidence-refs": [f"{NS}/doc/ssp-{LVG['uuid']}"]})
