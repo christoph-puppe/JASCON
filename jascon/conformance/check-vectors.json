@@ -1,5 +1,5 @@
 {
- "description": "CP-CHECK-1 vectors (kernel 2.0.0, PROPOSED). regex-vectors: the I-Regexp dialect (RFC 9485 ABNF) - valid patterns with strings that must and must not match WHOLE-value, and patterns every implementation must refuse, each with why; several are dialect traps where Python re, .NET or ECMAScript would answer differently. verdict-vectors: check-verdict (B.1.10) over {check (observes, criteria, applies-when?, each?), observation, parameters?} -> one of satisfied | not-satisfied | inconclusive | not-applicable; strong Kleene AND; an unbound parameter is inconclusive (D9). aggregate-vectors: Assessment.result from row outcomes (CHECK-10). object-vectors: closed shapes - an object must match exactly the named type, or none. bundle-vectors: the CHECK-n rule ids a conformant tool names for the bundle (exact set; expected-notes are substrings of notes); `store` is an in-memory evidence store, path -> UTF-8 text. Check digests are semantic digests computed by the reference canonical form; editing a vector Check without recomputing its digest makes CHECK-8 fire.",
+ "description": "CP-CHECK-1 vectors (kernel 2.0.0). regex-vectors: the I-Regexp dialect (RFC 9485 ABNF) - valid patterns with strings that must and must not match WHOLE-value, and patterns every implementation must refuse, each with why; several are dialect traps where Python re, .NET or ECMAScript would answer differently. A pattern that no JSON text may carry (a lone surrogate code point) is given in `pattern-codepoints`, and `pattern` then only describes it. verdict-vectors: check-verdict (B.1.10) over {check (observes, criteria, applies-when?, each?), observation, parameters?} -> one of satisfied | not-satisfied | inconclusive | not-applicable; strong Kleene AND; an unbound parameter is inconclusive (D9). expected-resources, where a vector carries it, are the counts of a per-resource check (B.1.10 step 5): every resource is evaluated, and the share of not-satisfied ones is a whole percentage in integer arithmetic. share-vectors: that percentage for {part, whole} - rounded half up, never 0 while part > 0, never 100 while part < whole. aggregate-vectors: Assessment.result from row outcomes (CHECK-10). object-vectors: closed shapes - an object must match exactly the named type, or none. bundle-vectors: the CHECK-n rule ids a conformant tool names for the bundle (exact set; expected-notes are substrings of notes); `store` is an in-memory evidence store, path -> UTF-8 text. Check digests are semantic digests computed by the reference canonical form; editing a vector Check without recomputing its digest makes CHECK-8 fire.",
  "regex-vectors": [
   {
    "pattern": "[0-7]{3}",
@@ -288,6 +288,60 @@
    "pattern": "(a{100}){20}",
    "valid": false,
    "why": "compiles to more than IRE_MAX_STATES (1000)"
+  },
+  {
+   "pattern": "a U+D800 b (given as pattern-codepoints)",
+   "pattern-codepoints": [
+    97,
+    55296,
+    98
+   ],
+   "valid": false,
+   "why": "a surrogate code point is no NormalChar in RFC 9485 as published; the working group's ABNF file allowed it"
+  },
+  {
+   "pattern": "[ U+DFFF ] (given as pattern-codepoints)",
+   "pattern-codepoints": [
+    91,
+    57343,
+    93
+   ],
+   "valid": false,
+   "why": "a surrogate code point is no CCchar in RFC 9485 as published"
+  },
+  {
+   "pattern": "[ a - U+DBFF ] (given as pattern-codepoints)",
+   "pattern-codepoints": [
+    91,
+    97,
+    45,
+    56319,
+    93
+   ],
+   "valid": false,
+   "why": "a surrogate code point cannot bound a range either"
+  },
+  {
+   "pattern": "U+D7FF U+E000 (given as pattern-codepoints)",
+   "pattern-codepoints": [
+    55295,
+    57344
+   ],
+   "valid": true,
+   "why": "the code points on either side of the surrogate block are characters"
+  },
+  {
+   "pattern": "😀+",
+   "valid": true,
+   "match": [
+    "😀",
+    "😀😀"
+   ],
+   "no-match": [
+    "",
+    "a"
+   ],
+   "why": "a code point beyond U+FFFF is one character, also where the host stores it as a surrogate pair"
   }
  ],
  "verdict-vectors": [
@@ -1743,6 +1797,516 @@
     ]
    },
    "expected": "inconclusive"
+  },
+  {
+   "name": "not-equals holds on an integer",
+   "check": {
+    "observes": [
+     {
+      "name": "x",
+      "type": "integer"
+     }
+    ],
+    "criteria": [
+     {
+      "fact": "x",
+      "op": "not-equals",
+      "expected": 0
+     }
+    ]
+   },
+   "observation": {
+    "facts": {
+     "x": 3
+    }
+   },
+   "expected": "satisfied"
+  },
+  {
+   "name": "not-equals fails on the same integer",
+   "check": {
+    "observes": [
+     {
+      "name": "x",
+      "type": "integer"
+     }
+    ],
+    "criteria": [
+     {
+      "fact": "x",
+      "op": "not-equals",
+      "expected": 0
+     }
+    ]
+   },
+   "observation": {
+    "facts": {
+     "x": 0
+    }
+   },
+   "expected": "not-satisfied"
+  },
+  {
+   "name": "not-equals on decimals compares by value: 1.50 is 1.5",
+   "check": {
+    "observes": [
+     {
+      "name": "x",
+      "type": "decimal"
+     }
+    ],
+    "criteria": [
+     {
+      "fact": "x",
+      "op": "not-equals",
+      "expected": "1.5"
+     }
+    ]
+   },
+   "observation": {
+    "facts": {
+     "x": "1.50"
+    }
+   },
+   "expected": "not-satisfied"
+  },
+  {
+   "name": "not-equals on a string, whole value and case-sensitive",
+   "check": {
+    "observes": [
+     {
+      "name": "x",
+      "type": "string"
+     }
+    ],
+    "criteria": [
+     {
+      "fact": "x",
+      "op": "not-equals",
+      "expected": "Yes"
+     }
+    ]
+   },
+   "observation": {
+    "facts": {
+     "x": "yes"
+    }
+   },
+   "expected": "satisfied"
+  },
+  {
+   "name": "not-equals on a boolean",
+   "check": {
+    "observes": [
+     {
+      "name": "x",
+      "type": "boolean"
+     }
+    ],
+    "criteria": [
+     {
+      "fact": "x",
+      "op": "not-equals",
+      "expected": true
+     }
+    ]
+   },
+   "observation": {
+    "facts": {
+     "x": false
+    }
+   },
+   "expected": "satisfied"
+  },
+  {
+   "name": "not-equals against a bound parameter",
+   "check": {
+    "observes": [
+     {
+      "name": "x",
+      "type": "integer"
+     }
+    ],
+    "criteria": [
+     {
+      "fact": "x",
+      "op": "not-equals",
+      "expected": {
+       "param": "forbidden-port"
+      }
+     }
+    ]
+   },
+   "observation": {
+    "facts": {
+     "x": 22
+    }
+   },
+   "parameters": {
+    "forbidden-port": 22
+   },
+   "expected": "not-satisfied"
+  },
+  {
+   "name": "not-equals on a missing fact is inconclusive, never satisfied",
+   "check": {
+    "observes": [
+     {
+      "name": "x",
+      "type": "integer"
+     }
+    ],
+    "criteria": [
+     {
+      "fact": "x",
+      "op": "not-equals",
+      "expected": 0
+     }
+    ]
+   },
+   "observation": {
+    "facts": {}
+   },
+   "expected": "inconclusive"
+  },
+  {
+   "name": "not-equals does not fit a list fact (excludes-all says it)",
+   "check": {
+    "observes": [
+     {
+      "name": "x",
+      "type": "code",
+      "cardinality": "many"
+     }
+    ],
+    "criteria": [
+     {
+      "fact": "x",
+      "op": "not-equals",
+      "expected": "aes128-cbc"
+     }
+    ]
+   },
+   "observation": {
+    "facts": {
+     "x": [
+      "aes256-ctr"
+     ]
+    }
+   },
+   "expected": "inconclusive"
+  },
+  {
+   "name": "each: every resource is evaluated - 3 of 4 applicable fail, one is not applicable",
+   "check": {
+    "observes": [
+     {
+      "name": "mode",
+      "type": "string"
+     },
+     {
+      "name": "kind",
+      "type": "code"
+     }
+    ],
+    "criteria": [
+     {
+      "fact": "mode",
+      "op": "matches",
+      "expected": "[0-7][0-5][0-5]"
+     }
+    ],
+    "applies-when": [
+     {
+      "fact": "kind",
+      "op": "equals",
+      "expected": "file"
+     }
+    ],
+    "each": {
+     "resource": "file",
+     "allow-empty": false
+    }
+   },
+   "observation": {
+    "resources": [
+     {
+      "id": "/ok/0",
+      "facts": {
+       "kind": "file",
+       "mode": "640"
+      }
+     },
+     {
+      "id": "/bad/0",
+      "facts": {
+       "kind": "file",
+       "mode": "666"
+      }
+     },
+     {
+      "id": "/bad/1",
+      "facts": {
+       "kind": "file",
+       "mode": "666"
+      }
+     },
+     {
+      "id": "/bad/2",
+      "facts": {
+       "kind": "file",
+       "mode": "666"
+      }
+     },
+     {
+      "id": "/dir/0",
+      "facts": {
+       "kind": "dir",
+       "mode": "777"
+      }
+     }
+    ]
+   },
+   "expected": "not-satisfied",
+   "expected-resources": {
+    "applicable": 4,
+    "not-satisfied": 3,
+    "inconclusive": 0,
+    "not-applicable": 1,
+    "percent-not-satisfied": 75
+   }
+  },
+  {
+   "name": "each: a failure is counted beside an unknown, and decides",
+   "check": {
+    "observes": [
+     {
+      "name": "mode",
+      "type": "string"
+     },
+     {
+      "name": "kind",
+      "type": "code"
+     }
+    ],
+    "criteria": [
+     {
+      "fact": "mode",
+      "op": "matches",
+      "expected": "[0-7][0-5][0-5]"
+     }
+    ],
+    "applies-when": [
+     {
+      "fact": "kind",
+      "op": "equals",
+      "expected": "file"
+     }
+    ],
+    "each": {
+     "resource": "file",
+     "allow-empty": false
+    }
+   },
+   "observation": {
+    "resources": [
+     {
+      "id": "/ok/0",
+      "facts": {
+       "kind": "file",
+       "mode": "640"
+      }
+     },
+     {
+      "id": "/bad/0",
+      "facts": {
+       "kind": "file",
+       "mode": "666"
+      }
+     },
+     {
+      "id": "/unknown/0",
+      "facts": {
+       "kind": "file"
+      }
+     }
+    ]
+   },
+   "expected": "not-satisfied",
+   "expected-resources": {
+    "applicable": 3,
+    "not-satisfied": 1,
+    "inconclusive": 1,
+    "not-applicable": 0,
+    "percent-not-satisfied": 33
+   }
+  },
+  {
+   "name": "each: the share is a whole percentage, half rounds up - 1 of 8 is 13",
+   "check": {
+    "observes": [
+     {
+      "name": "mode",
+      "type": "string"
+     },
+     {
+      "name": "kind",
+      "type": "code"
+     }
+    ],
+    "criteria": [
+     {
+      "fact": "mode",
+      "op": "matches",
+      "expected": "[0-7][0-5][0-5]"
+     }
+    ],
+    "applies-when": [
+     {
+      "fact": "kind",
+      "op": "equals",
+      "expected": "file"
+     }
+    ],
+    "each": {
+     "resource": "file",
+     "allow-empty": false
+    }
+   },
+   "observation": {
+    "resources": [
+     {
+      "id": "/ok/0",
+      "facts": {
+       "kind": "file",
+       "mode": "640"
+      }
+     },
+     {
+      "id": "/ok/1",
+      "facts": {
+       "kind": "file",
+       "mode": "640"
+      }
+     },
+     {
+      "id": "/ok/2",
+      "facts": {
+       "kind": "file",
+       "mode": "640"
+      }
+     },
+     {
+      "id": "/ok/3",
+      "facts": {
+       "kind": "file",
+       "mode": "640"
+      }
+     },
+     {
+      "id": "/ok/4",
+      "facts": {
+       "kind": "file",
+       "mode": "640"
+      }
+     },
+     {
+      "id": "/ok/5",
+      "facts": {
+       "kind": "file",
+       "mode": "640"
+      }
+     },
+     {
+      "id": "/ok/6",
+      "facts": {
+       "kind": "file",
+       "mode": "640"
+      }
+     },
+     {
+      "id": "/bad/0",
+      "facts": {
+       "kind": "file",
+       "mode": "666"
+      }
+     }
+    ]
+   },
+   "expected": "not-satisfied",
+   "expected-resources": {
+    "applicable": 8,
+    "not-satisfied": 1,
+    "inconclusive": 0,
+    "not-applicable": 0,
+    "percent-not-satisfied": 13
+   }
+  },
+  {
+   "name": "each: all applicable resources hold, the counts say so",
+   "check": {
+    "observes": [
+     {
+      "name": "mode",
+      "type": "string"
+     },
+     {
+      "name": "kind",
+      "type": "code"
+     }
+    ],
+    "criteria": [
+     {
+      "fact": "mode",
+      "op": "matches",
+      "expected": "[0-7][0-5][0-5]"
+     }
+    ],
+    "applies-when": [
+     {
+      "fact": "kind",
+      "op": "equals",
+      "expected": "file"
+     }
+    ],
+    "each": {
+     "resource": "file",
+     "allow-empty": false
+    }
+   },
+   "observation": {
+    "resources": [
+     {
+      "id": "/ok/0",
+      "facts": {
+       "kind": "file",
+       "mode": "640"
+      }
+     },
+     {
+      "id": "/ok/1",
+      "facts": {
+       "kind": "file",
+       "mode": "640"
+      }
+     },
+     {
+      "id": "/dir/0",
+      "facts": {
+       "kind": "dir",
+       "mode": "777"
+      }
+     }
+    ]
+   },
+   "expected": "satisfied",
+   "expected-resources": {
+    "applicable": 2,
+    "not-satisfied": 0,
+    "inconclusive": 0,
+    "not-applicable": 1,
+    "percent-not-satisfied": 0
+   }
   }
  ],
  "aggregate-vectors": [
@@ -1791,6 +2355,68 @@
   {
    "outcomes": [],
    "expected": "inconclusive"
+  }
+ ],
+ "share-vectors": [
+  {
+   "part": 0,
+   "whole": 5,
+   "expected": 0
+  },
+  {
+   "part": 5,
+   "whole": 5,
+   "expected": 100
+  },
+  {
+   "part": 1,
+   "whole": 2,
+   "expected": 50
+  },
+  {
+   "part": 1,
+   "whole": 3,
+   "expected": 33
+  },
+  {
+   "part": 2,
+   "whole": 3,
+   "expected": 67
+  },
+  {
+   "part": 1,
+   "whole": 8,
+   "expected": 13
+  },
+  {
+   "part": 1,
+   "whole": 200,
+   "expected": 1
+  },
+  {
+   "part": 1,
+   "whole": 300,
+   "expected": 1
+  },
+  {
+   "part": 1,
+   "whole": 100000,
+   "expected": 1
+  },
+  {
+   "part": 299,
+   "whole": 300,
+   "expected": 99
+  },
+  {
+   "part": 99999,
+   "whole": 100000,
+   "expected": 99
+  },
+  {
+   "part": 0,
+   "whole": 0,
+   "expected": 0
   }
  ],
  "object-vectors": [
@@ -2535,6 +3161,95 @@
    },
    "expected": "valid",
    "type": "finding"
+  },
+  {
+   "name": "a Check with not-equals",
+   "object": {
+    "id": "https://ex.org/check/ssh-1-maxauthtries",
+    "version": "1",
+    "lifecycle": "active",
+    "requirement-ref": "https://ex.org/req/ssh-1",
+    "statement-ids": [
+     "s1"
+    ],
+    "platform": "https://ex.org/platform/linux-host",
+    "observes": [
+     {
+      "name": "sshd.maxauthtries",
+      "type": "integer"
+     }
+    ],
+    "criteria": [
+     {
+      "fact": "sshd.maxauthtries",
+      "op": "not-equals",
+      "expected": 0
+     }
+    ],
+    "confidence": "reviewed",
+    "provenance": {
+     "author-ref": "https://ex.org/party/secops",
+     "date": "2026-11-11"
+    },
+    "facets": {
+     "https://ns.jascon.net/stdlib/facet/collector@1": {
+      "collectors": [
+       {
+        "id": "bash",
+        "runtime": "bash",
+        "privileges": "root",
+        "source": "#!/bin/bash\nv=$(sshd -T | awk '$1==\"maxauthtries\"{print $2}')\n[ -n \"$v\" ] && printf '{\"facts\":{\"sshd.maxauthtries\":%s}}\\n' \"$v\" || echo '{\"facts\":{}}'\n"
+       }
+      ]
+     }
+    }
+   },
+   "expected": "valid",
+   "type": "check"
+  },
+  {
+   "name": "an operator outside the twelve",
+   "object": {
+    "id": "https://ex.org/check/ssh-1-maxauthtries",
+    "version": "1",
+    "lifecycle": "active",
+    "requirement-ref": "https://ex.org/req/ssh-1",
+    "statement-ids": [
+     "s1"
+    ],
+    "platform": "https://ex.org/platform/linux-host",
+    "observes": [
+     {
+      "name": "sshd.maxauthtries",
+      "type": "integer"
+     }
+    ],
+    "criteria": [
+     {
+      "fact": "sshd.maxauthtries",
+      "op": "greater-than",
+      "expected": 0
+     }
+    ],
+    "confidence": "reviewed",
+    "provenance": {
+     "author-ref": "https://ex.org/party/secops",
+     "date": "2026-11-11"
+    },
+    "facets": {
+     "https://ns.jascon.net/stdlib/facet/collector@1": {
+      "collectors": [
+       {
+        "id": "bash",
+        "runtime": "bash",
+        "privileges": "root",
+        "source": "#!/bin/bash\nv=$(sshd -T | awk '$1==\"maxauthtries\"{print $2}')\n[ -n \"$v\" ] && printf '{\"facts\":{\"sshd.maxauthtries\":%s}}\\n' \"$v\" || echo '{\"facts\":{}}'\n"
+       }
+      ]
+     }
+    }
+   },
+   "expected": "invalid"
   }
  ],
  "bundle-vectors": [
@@ -3636,6 +4351,82 @@
        "fact": "sshd.ciphers",
        "op": "at-least",
        "expected": "a"
+      }
+     ],
+     "confidence": "reviewed",
+     "provenance": {
+      "author-ref": "https://ex.org/party/secops",
+      "date": "2026-11-11"
+     }
+    }
+   ],
+   "expected-rules": [
+    "CHECK-3"
+   ]
+  },
+  {
+   "name": "CHECK-3: not-equals does not fit a list fact",
+   "objects": [
+    {
+     "id": "https://ex.org/req/ssh-1",
+     "version": "1",
+     "lifecycle": "active",
+     "title": {
+      "en": "SSH hardening"
+     },
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ex.org/party/ops"
+       ],
+       "prose": {
+        "en": "The SSH daemon allows at most {param:max-auth-tries} authentication attempts per connection."
+       },
+       "parameters": [
+        {
+         "name": "max-auth-tries",
+         "type": "integer",
+         "tightening": "lower",
+         "min": 1,
+         "max": 10
+        }
+       ]
+      },
+      {
+       "id": "s2",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ex.org/party/ops"
+       ],
+       "prose": {
+        "en": "The SSH daemon offers no cipher in CBC mode."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/check/ssh-1-ciphers",
+     "version": "1",
+     "lifecycle": "active",
+     "requirement-ref": "https://ex.org/req/ssh-1",
+     "statement-ids": [
+      "s2"
+     ],
+     "platform": "https://ex.org/platform/linux-host",
+     "observes": [
+      {
+       "name": "sshd.ciphers",
+       "type": "code",
+       "cardinality": "many"
+      }
+     ],
+     "criteria": [
+      {
+       "fact": "sshd.ciphers",
+       "op": "not-equals",
+       "expected": "aes128-cbc"
       }
      ],
      "confidence": "reviewed",

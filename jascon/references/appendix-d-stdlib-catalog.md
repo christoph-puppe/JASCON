@@ -144,6 +144,37 @@ example bundle carries a language map there (`{"en": "…"}`).
 the corpus default-artifacts block. **Status:** high; exercised
 across all three corpora.
 
+## D.6b `collector@1` *(2.0.0 — CP-CHECK-1)*
+
+**For:** the code that observes what a Check declares. It sits on the
+Check, so the Check's semantic digest covers the exact source.
+**Declares:** `[]`. Nothing in the payload changes what passing means;
+the criteria do, and they are kernel (D24). A tool that cannot run a
+runtime still validates, recomputes and renders.
+**Payload:** `{collectors: [{id ●, runtime ●, source ●, privileges ○
+(unprivileged | root), timeout-seconds ○, description ○}]}`. `runtime`
+is `sh · bash · powershell · python · ansible · http-api` or a
+namespaced URI (C.15). One Check may carry several collectors for the
+same fact contract; a run names the one it used (`collector-id`,
+CHECK-13).
+
+In the field, from the example bundle (the only bundle that carries
+one; no converted corpus does):
+
+```json
+{ "id": "bash", "runtime": "bash", "privileges": "root",
+  "timeout-seconds": 30,
+  "source": "#!/bin/bash\nset -o pipefail\nv=$(sshd -T | awk '$1==\"maxauthtries\"{print $2}') || exit 1\n…" }
+```
+
+**The contract of a collector.** It prints one observation and decides
+nothing. It reports effective values, with defaults resolved. A fact it
+looked for and did not find is left out; a collector that could not
+look prints nothing. Credentials and target inventory never appear
+here: they are the runner's configuration.
+**Open:** the `source` of an `http-api` collector is free text, which no
+tool can execute as it stands (backlog #62).
+
 ## D.7 `system-context@1` — *medium confidence*
 
 **Purpose:** the SSP's system-characteristics residue — deployment

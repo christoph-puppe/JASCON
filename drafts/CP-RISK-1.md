@@ -286,7 +286,7 @@ Sources: `usnistgov/oscal-content@9402f031` (2026-07-14 — the state the 1.0.0 
 | PowerShell twin | Ported (Risk type, RISK-7/8/12, risk-coverage, 42 vectors, `-RequireRiskBasis`). **Not executed** — no PowerShell runtime was available where the port was written. One implementation, not two, until a run on Windows PowerShell 5.1 is green. **2026-11-11: executed and green** — 258/258 vectors, five bundles and the example folder, every count equal to the Python reference's (spec IV.5b item 3). |
 | OSCAL export suite | Not re-run: its inputs (the ten catalog bundles) are byte-identical; the NIST schema it needs is not in the repository. |
 | Reader | v1.7.2 recognises the Risk type; verified in headless Chromium on the re-converted IFA bundle (17 objects, 2 typed `risk`, no page errors). |
-| Release | **Not yet.** Version decided: 2.0.0 (§12). No tag — the PowerShell run comes first. The 2.0.0 specification text exists as a release candidate (`drafts/jascon-specification-2.0.0-rc.1.md`). |
+| Release | **Not yet.** Version decided: 2.0.0 (§12). No tag — the PowerShell run comes first. The 2.0.0 specification text exists as a release candidate (`drafts/jascon-specification-2.0.0-rc.1.md`; since 2026-11-12 the candidate is `…-rc.2.md`, which also carries Check). |
 
 ---
 

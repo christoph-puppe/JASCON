@@ -17,8 +17,8 @@
       <button class="navitem" data-view="draft"><span class="glyph">✧</span><span data-i18n>Draft with a model</span></button>
     </div>
     <div class="railgroup">
-      <p class="hint" data-i18n>A check has two parts. The collector is code that reports facts and decides nothing. The criteria compare those facts with eleven fixed operators, so anyone can recompute a verdict from a recorded observation. A model may draft both; the kernel rules judge the draft, and you decide what is saved.</p>
-      <p class="hint" data-i18n>The Check type is proposed (drafts/CP-CHECK-1.md) and not released. This app cannot run a collector.</p>
+      <p class="hint" data-i18n>A check has two parts. The collector is code that reports facts and decides nothing. The criteria compare those facts with twelve fixed operators, so anyone can recompute a verdict from a recorded observation. A model may draft both; the kernel rules judge the draft, and you decide what is saved.</p>
+      <p class="hint" data-i18n>The Check type belongs to the 2.0.0 release candidate (drafts/CP-CHECK-1.md); 2.0.0 is not tagged yet. This app cannot run a collector.</p>
     </div>
   </nav>
   <main id="main">
@@ -84,10 +84,10 @@ const lang = () => jscI18n.contentLang();
 
 jscI18n.add("de", {
   "Rules and checks": "Regeln und Prüfungen", "Edit a check": "Prüfung bearbeiten", "Draft with a model": "Mit einem Modell entwerfen",
-  "A check has two parts. The collector is code that reports facts and decides nothing. The criteria compare those facts with eleven fixed operators, so anyone can recompute a verdict from a recorded observation. A model may draft both; the kernel rules judge the draft, and you decide what is saved.":
-    "Eine Prüfung hat zwei Teile. Der Kollektor ist Code, der Fakten meldet und nichts entscheidet. Die Kriterien vergleichen diese Fakten mit elf festen Operatoren, sodass jeder ein Urteil aus einer aufgezeichneten Beobachtung nachrechnen kann. Ein Modell darf beides entwerfen; die Kernel-Regeln beurteilen den Entwurf, und Sie entscheiden, was gespeichert wird.",
-  "The Check type is proposed (drafts/CP-CHECK-1.md) and not released. This app cannot run a collector.":
-    "Der Typ Check ist vorgeschlagen (drafts/CP-CHECK-1.md) und nicht freigegeben. Diese App kann keinen Kollektor ausführen.",
+  "A check has two parts. The collector is code that reports facts and decides nothing. The criteria compare those facts with twelve fixed operators, so anyone can recompute a verdict from a recorded observation. A model may draft both; the kernel rules judge the draft, and you decide what is saved.":
+    "Eine Prüfung hat zwei Teile. Der Kollektor ist Code, der Fakten meldet und nichts entscheidet. Die Kriterien vergleichen diese Fakten mit zwölf festen Operatoren, sodass jeder ein Urteil aus einer aufgezeichneten Beobachtung nachrechnen kann. Ein Modell darf beides entwerfen; die Kernel-Regeln beurteilen den Entwurf, und Sie entscheiden, was gespeichert wird.",
+  "The Check type belongs to the 2.0.0 release candidate (drafts/CP-CHECK-1.md); 2.0.0 is not tagged yet. This app cannot run a collector.":
+    "Der Typ Check gehört zum Release-Kandidaten 2.0.0 (drafts/CP-CHECK-1.md); 2.0.0 ist noch nicht getaggt. Diese App kann keinen Kollektor ausführen.",
   "Checks": "Prüfungen", "rules offered": "angebotene Regeln", "automated": "automatisiert", "manual": "manuell", "with a check": "mit Prüfung",
   "This set has no requirement with assessment criteria and no check. Import a CIS Benchmark on the Import page, or write a check for any requirement in the editor.":
     "Dieses Set hat keine Anforderung mit Prüfkriterien und keine Prüfung. Auf der Seite Import einen CIS Benchmark importieren oder im Editor eine Prüfung für eine beliebige Anforderung schreiben.",
@@ -384,7 +384,10 @@ function renderTester(E, obj) {
       const observation = JSON.parse(t.observation), params = t.params.trim() ? JSON.parse(t.params) : {};
       const [outcome, why] = jscCheckVerdict(obj, observation, params);
       const cls = { satisfied: "verdict-ok", "not-satisfied": "verdict-bad", inconclusive: "verdict-warn", "not-applicable": "hint" }[outcome];
-      verdict = `<div class="${cls}"><b>${esc(T("Verdict"))}: ${esc(outcome)}</b></div>${why.map(w => `<div class="hint mono">· ${esc(w)}</div>`).join("")}`;
+      /* a per-resource check: every resource was evaluated; the counts and the failing share come first */
+      const each = jscCheckEach(obj, observation, params);
+      const share = each && each.applicable ? `<div class="hint"><b>${esc(jscCheckEachSummary(obj.each.resource, each))}</b> · ${each.inconclusive} inconclusive · ${each["not-applicable"]} not applicable</div>` : "";
+      verdict = `<div class="${cls}"><b>${esc(T("Verdict"))}: ${esc(outcome)}</b></div>${share}${why.slice(share && outcome !== "satisfied" ? 1 : 0).map(w => `<div class="hint mono">· ${esc(w)}</div>`).join("")}`;
     } catch (e) { verdict = `<div class="verdict-bad">${esc(T("not JSON: {msg}", { msg: e.message }))}</div>`; }
   }
   $("e-test").innerHTML = `<p class="hint">${esc(T("Paste an observation as a collector would print it, and the values of the parameters, to see the verdict. Nothing is run."))}</p>

@@ -75,21 +75,23 @@ difference is the complexity budget's whole thesis. The failure mode
 this architecture answers is not "insufficient ontological
 expressiveness" — it is 22,000 annotation props and three national
 authorities routing around a standard that spent its budget on
-infrastructure. Ten shallow types with typed edges give the graph;
+infrastructure. Eleven shallow types with typed edges give the graph;
 JSON Schema gives the weekend validator; a triple store gives
 neither. Anyone who wants RDF can project it — losslessly, from a
 model this simple.
 
 ## F.2 "You went too far" — the architecture objections
 
-**Q7. Ten types is arbitrary. Why not one generic node with typed
+**Q7. Eleven types is arbitrary. Why not one generic node with typed
 properties?**
 Because "one generic node with typed properties" is the 1.x prop
 system with better marketing — the exact architecture whose measured
 cost opened the book. The types are not invented: nine are the
 convergence table's output, the shapes three governments independently
 built, and the tenth (Risk, 2.0.0) came through the change process with
-its own counts (CP-RISK-1). Fewer types pushes semantics back into
+its own counts (CP-RISK-1), as did the eleventh (Check, 2.0.0;
+CP-CHECK-1). Neither is something a catalogue authority publishes, which
+is why D22 now has a clause for such types and names what each rests on. Fewer types pushes semantics back into
 string-keyed soup; more types failed the census test (no third
 authority needed them).
 
@@ -409,3 +411,52 @@ The pattern across three rounds holds: the punches that land get diffs
 the same day, the misses get counts, and each round's sharpest finding
 came from running code against the repo — which is the whole thesis,
 applied to the thesis.
+
+## F.9 The machine check — objections to the eleventh type (2026-11-12)
+
+**Q24. Why not let the script's exit code decide, as scanners do?**
+Because the threshold then lives in code nobody reviews against the
+requirement, a tailored parameter cannot reach it, and the record holds
+a bit where an observation should be. A Check separates the two: the
+collector reports facts and decides nothing, and twelve comparators
+decide. What the split buys is measurable in the example: bind
+`max-auth-tries` to 3 where it was 4, and the recorded observation of 4
+fails without a change to the collector. The price is that some checks
+do not fit. Of 510 counted rules, 29 stay manual, and they are counted
+as manual.
+
+**Q25. Q1 rejected expression languages. Why is a regular expression
+allowed?**
+A regular expression is a membership test over one string and not a
+language for rules, and the kernel already relies on one in every JSON
+Schema `pattern`. What Q1 feared is real for regular expressions all the
+same: Python, .NET and ECMAScript disagree on `\d`, `\w`, `.`, anchors
+and flags, and a backtracking engine can be stalled. So the dialect is
+I-Regexp (RFC 9485), the match is against the whole value, pattern and
+input are bounded, and no implementation may hand the pattern to its
+host's engine. The census supports the cut: of 491 patterns in the
+counted Ubuntu profiles, 23 sit on the comparison side, and all 23 are
+inside I-Regexp or can be rewritten mechanically. The patterns that
+need more (lookahead, `\s`, `\b`) are on the extraction side, which is
+the collector's.
+
+**Q26. You closed the shape after counting two platforms. A cloud API
+will break it.**
+It may. The census covers Linux hosts (ComplianceAsCode) and Kubernetes
+(kube-bench); no check against a cloud API was counted, and the author
+decided on 2026-11-12 that Check goes live with 2.0.0 regardless. Two
+things limit the damage. The parts most likely to differ per platform
+are outside the kernel: the collector, its runtime, and how a response
+becomes facts. And the kernel parts are small: typed facts, twelve
+comparators, one conjunction. If a third platform shows a comparison
+the set cannot say, that is a thirteenth comparator, proposed with
+counts, as the twelfth was (`not-equals`: 85 uses in kube-bench, 2 in
+OVAL). A correction to the shape itself costs a major. This answer is a
+bet, and it is labelled as one.
+
+**The punch that landed.** The proposal asked for a second exception to
+the promotion rule. The author refused and wrote a clause instead (D22
+rev 4): a type that catalogue authorities do not publish needs a
+recognised standard that requires the record, or established practice
+shown by two counted open implementations, and it rides a major. Risk
+had entered as an exception two days earlier; that wording is gone.

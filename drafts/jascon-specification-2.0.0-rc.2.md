@@ -1,6 +1,17 @@
 # JASCON — "Kernel + Registered Facets"
-## Specification 2.0.0-rc.1
-### release candidate, 2026-11-10 · the 1.0.0 text (released 2026-07-22) amended by CP-RISK-1: Risk as the tenth kernel type · NOT tagged — the second implementation is green since 2026-11-11 (IV.5b), the proposed Check type included (backlog #56, closed); the tag is the author's decision
+## Specification 2.0.0-rc.2
+### release candidate, 2026-11-12 · the 1.0.0 text (released 2026-07-22) amended by CP-RISK-1 (Risk, the tenth kernel type) and CP-CHECK-1 (Check, the eleventh) · NOT tagged — the Python reference and the app's port are green on this candidate; the PowerShell twin has not been executed with the two changes of 2026-11-12 (IV.5b); the tag is the author's decision
+
+> **What changed since rc.1 (2026-11-12).** One decision is new — **D24**,
+> `Check` as the eleventh kernel type with `check-verdict` as the tenth
+> primitive. D4, D14, D15 and D22 were amended in place and marked
+> *(2.0.0-rc.2)*. D22 gained the consumer-side clause under which Risk and
+> Check enter the kernel; the paragraph that recorded Risk as an exception
+> now refers to that clause. An eleventh kernel type is a new candidate, so
+> this file is rc.2 and the rc.1 file is gone from the tree (git keeps it).
+> The proposal, its census and the author's six decisions are
+> `drafts/CP-CHECK-1.md` (§13); the journal is the register, "Amendments —
+> CP-CHECK-1".
 
 > **What changed since 1.0.0.** One decision is new — **D23**, `Risk` as the
 > tenth kernel type with `risk-coverage` as the ninth primitive. D4, D8,
@@ -34,20 +45,25 @@
 > personal capacity.
 
 **Status.** A **release candidate.** The 1.0.0 architecture stands as
-released; this text adds one kernel type — **Risk** (D23) — and the ninth
-primitive that computes over it. It is a major version by the rule of
+released; this text adds two kernel types — **Risk** (D23) and **Check**
+(D24) — and the two primitives that compute over them. It is a major version by the rule of
 D22 rev 3, not because anything breaks: all 6,914 objects of the 1.0.0
 corpus validate unchanged under the 2.0.0 schema, so a 1.0.0 bundle is a
 2.0.0 bundle. **Measured at rc.1:** a 258-vector conformance corpus in
 fifteen families; the Python reference validator green on it and on
 every bundle that ships; the first Risk corpus (two Risk objects
 converted from an OSCAL POA&M), and what that corpus shows the fourth
-authority's data to lack. **Not yet measured, said here rather than
+authority's data to lack. **Measured at rc.2 (2026-11-12):** 447 vectors
+in sixteen families (`check`: 188); the Python reference green on them, on
+the five shipped bundles and on the example folder; the app's JavaScript
+port green on the same vectors. **Not yet measured, said here rather than
 below the fold:** Risk's two implementations share one author — the
 PowerShell twin, green on 2026-11-11, is independent in language and
-runtime only (IV.5b); Risk
-entered the kernel as an author-decided exception to D22's census test
-(D22, closing note); and the coverage figures inherited from 1.0.0 count
+runtime only (IV.5b), and it has not been executed with the twelfth
+comparator and the per-resource counts of D24; Risk and Check entered the
+kernel under D22's consumer-side clause, which no census authority's data
+supports by construction (D22); Check has a worked example and two counted
+check corpora, and no runner and no converted check corpus (D24); and the coverage figures inherited from 1.0.0 count
 source *paths* with a declared destination, not values verified to
 arrive (IV.2, R16). Eleven corpora were converted and measured (251,591
 source leaf values at path level, UNMAPPED = 0); **five of the bundles
@@ -69,7 +85,8 @@ four evidence gates; the full amendment journal lives in the
 history. This release candidate is that text, consolidated: journals
 compacted to IV.6, gate results recorded in IV.5, nothing renumbered.
 For 2.0.0-rc.1 the same discipline: D23 added, five decisions amended in
-place and marked *(2.0.0)*, the gate state in IV.5b.
+place and marked *(2.0.0)*, the gate state in IV.5b. For 2.0.0-rc.2: D24
+added, four decisions amended in place and marked *(2.0.0-rc.2)*.
 
 **North star (session directive, governs every verdict):** *more simple ·
 closer to the needs of the customers · no more props · less need for custom
@@ -85,7 +102,9 @@ review rounds 1–2 (adjudicated, F.6/F.7) + P9 twin adversarial runs
 (adjudicated, F.8) + gates 1–4 delivered + the converter rerun →
 1.0.0-rc.1 → P10 twice (in-repo + external, adjudicated) + the fix
 pass → **1.0.0** → CP-RISK-1 (proposal 2026-11-05; landing review, first
-Risk corpus and the author's decisions 2026-11-10) → **2.0.0-rc.1**.
+Risk corpus and the author's decisions 2026-11-10) → 2.0.0-rc.1 →
+CP-CHECK-1 (proposal and census 2026-11-11; the author's decisions
+2026-11-12) → **2.0.0-rc.2**.
 
 ---
 
@@ -299,10 +318,11 @@ established in v0.4 (H1/SOL-9) now made cycle-free.
 single digest domain (either breaks stripping or enables the H1 forgery);
 IEEE decimals (canonicalization hazard).
 
-## D4 — Ten shallow kernel types; documents are renderings. *(rev. 2.0.0 — D23)*
-*(count updated by D20, and by D23 at 2.0.0)* Requirement, RequirementSet,
+## D4 — Eleven shallow kernel types; documents are renderings. *(rev. 2.0.0 — D23; rev. 2.0.0-rc.2 — D24)*
+*(count updated by D20, by D23 at 2.0.0 and by D24 at 2.0.0-rc.2)*
+Requirement, RequirementSet,
 Tailoring, Component, Implementation, Assessment, Finding, Attestation,
-**Mapping**, **Risk** — shallow,
+**Mapping**, **Risk**, **Check** — shallow,
 typed, referenced; no parts, no document tree, no positional semantics.
 Documents are L4 renderings. Evidence unchanged (the #2118/#2112 class; 998
 flat BSI controls as fossil record; **CR26 is documents-as-views in
@@ -313,6 +333,10 @@ deep document models* (1.2.2's, including the Mapping Model of 1.2.0).
 *(2.0.0)* The tenth type replaces no 1.x model: the predecessor format keeps
 `risk` inside assessment-results and POA&M — ex post, a thing an assessor
 finds. D23 is the ex-ante record 1.x has no home for.
+*(2.0.0-rc.2)* The eleventh type replaces no 1.x model either: the
+predecessor's assessment plan names methods and its results carry
+observations, and nothing in either holds the condition under which an
+observation passes. D24 is that condition, as data.
 
 ## D5 — Component (absorbs System); **identified authorization contexts**; edge-local inductive boundary rule. *(rev. v0.5 — P7-G on authorization scoping)*
 **Decision.** As v0.4, with authorization contexts made addressable:
@@ -584,7 +608,7 @@ merge semantics are the corpse in the basement). Hop budget harmonized with
 D14 (P8-E3): one shared predicate vocabulary, one budget — at most one
 reference hop, everywhere.
 
-## D14 — Rules: nine primitives, one bounded conditional, **no general-purpose expression language.** *(rev. v0.5 — wording P8; tier P8-E1)* *(rev. 2.0.0 — the ninth primitive, D23)*
+## D14 — Rules: ten primitives, one bounded conditional, **no general-purpose expression language.** *(rev. v0.5 — wording P8; tier P8-E1)* *(rev. 2.0.0 — the ninth primitive, D23)* *(rev. 2.0.0-rc.2 — the tenth, D24)*
 Unchanged in substance. `attestation-binds` evaluation moves to **Portable**
 (Core treats Attestation objects as schema-valid data) — resolving P8-E1's
 Core/JCS contradiction. The ledger phrase is corrected to the defensible
@@ -596,6 +620,18 @@ first use of the escape path the closed set was given at 1.0.0: a
 versioned addition that arrived with counts, corpus cases and a normative
 failure format. It computes one fixed join; it defines no expression, no
 predicate and no operation.
+**The tenth primitive *(2.0.0-rc.2)*.** `check-verdict` (Appendix B.1.10)
+evaluates a flat conjunction of twelve comparators over the facts one
+observation reports. It has no OR, no NOT, no nesting, no arithmetic, no
+paths and no comparison between two facts; what needs one of these is a
+manual check and is counted as one (D24). Two of the twelve, `matches` and
+`matches-not`, take a regular expression. A regular expression is a
+membership test over one string and not a language for rules, and the
+kernel already relies on one in every JSON Schema `pattern`. The danger
+D14 names is real for it all the same — two conformant tools, two
+verdicts — so the dialect is I-Regexp (RFC 9485), the match is against the
+whole value, pattern and input are bounded, and no implementation may
+hand the pattern to its host's engine (D24).
 
 ## D15 — Conformance: **Core is the passive tier**; normative feature × tier matrix. *(rev. v0.5 — P7-B3 + P8-E1)*
 **Decision.** Core is redefined as **passive**: validate kernel structure,
@@ -609,13 +645,13 @@ objects — the silent-ignore state P7-B3 exposed is unrepresentable.
 
 | Feature | Core | Portable | Authority |
 |---|---:|---:|---:|
-| Kernel schemas incl. statements[], all ten types | Required | Required | Required |
+| Kernel schemas incl. statements[], all eleven types | Required | Required | Required |
 | Local (manifest) resolution · sealed mode · package-digest verification | Required | Required | Required |
 | Structural primitives (`references-resolve`, `digest-verified`, `unique-within`, `code-from`, `prose-params-resolve`) | Required | Required | Required |
 | Preservation of unknown registered facets & annotations | Required | Required | Required |
 | **Any semantic computation** (tailoring, assessment, selection, normative rendering) | **Forbidden** | Required (fail-closed rules apply) | Required |
 | Registered-facet schema validation · capability declarations · fail-closed | — | Required | Required |
-| Semantic digests (JCS) · `attestation-binds` · `modality-monotonic` · `conditional-apply` · `risk-coverage` *(2.0.0: the report is required; failing on `uncovered` is program policy)* | — | Required | Required |
+| Semantic digests (JCS) · `attestation-binds` · `modality-monotonic` · `conditional-apply` · `risk-coverage` *(2.0.0: the report is required; failing on `uncovered` is program policy)* · `check-verdict` *(2.0.0-rc.2: every recorded verdict is recomputed from its recorded observation; running a collector is outside every tier)* | — | Required | Required |
 | Exact facet version+digest pinning; bundle-composition resolution | — | Required | Required |
 | Publication duties (stable ids, alias/lineage records, both digests, `.well-known`, deprecation lifecycle, calendar refs for calendar-periods) | — | — | Required |
 
@@ -800,22 +836,42 @@ waits in a facet until a second authority ships it — deliberate: the
 kernel lags evidence, never leads taste. First stated publicly in Appendix
 F Q22; normative here.
 
-**Applied at 2.0.0 — Risk: an exception on the record, not a pass.**
-D22 rev 3 asks two things of a post-1.0 promotion: a major version, and
-*measured 2-of-3* in the census corpus. Risk (D23) meets the first — this
-is 2.0.0 — and does **not** meet the second as written: none of the three
-census corpora encodes a risk record. It was admitted by its author
-against test 1, for a reason the rule did not foresee: census authorities
-publish catalogs, and a risk register is consumer-side data that no
-catalog publisher ships, so test 1 as worded can never be met by a
-consumer-side type, whatever the evidence. Tests 2 and 3 for the record:
-one shared computation — yes (`risk-coverage`); one vocabulary without
-flattening — the four treatment options fit ISO and BSI one-to-one, while
-OSCAL's seven response types do not (two have no code). Evidence tier of
-the promotion: **designed-for, with one partial measurement**. Whether
-D22 should carry a consumer-side clause with its own bar is open (register
-"D22-applied — Risk and test 1"; backlog #48). Until it is decided, this
-paragraph is the precedent, and it is exactly one.
+**The consumer-side clause *(rev 4, 2.0.0-rc.2 — author decision
+2026-11-12; closes backlog #48)*.** Test 1 counts what catalogue
+authorities publish. A risk register and a machine check are data of the
+organisation that consumes a catalogue; no authority ships them, so test 1
+as worded can never be met by such a type, whatever the evidence. For
+these, and only for these:
+
+> A type that catalogue authorities do not publish may be promoted to the
+> kernel when (a) a recognised standard of the weight of ISO/IEC 27001, or
+> one of the same standing, requires the record, or the record is
+> established practice, shown by at least two independent open
+> implementations whose content was counted; (b) tests 2 and 3 hold, with
+> test 3 measured on at least one corpus; and (c) it rides a major. The
+> standard or the counted implementations are named in the decision
+> register.
+
+Test 1 stays as it is for everything authorities do publish. The clause
+is narrower than the anticipated-convergence path that closed unused at
+1.0: it admits no anticipation, it asks for a named standard or for
+counted content, and it leaves tests 2 and 3 in force.
+
+**Applied at 2.0.0 — Risk and Check, under the consumer-side clause.**
+**Risk** (D23) enters under the first branch of (a): ISO/IEC 27001 6.1.2
+and 6.1.3, BSI-Standard 200-3 and NIST SP 800-30 require the record. (b):
+one shared computation, `risk-coverage`; one vocabulary, in that the four
+treatment options fit ISO and BSI one to one, while OSCAL's seven response
+types do not (two have no code), measured on the IFA corpus. (c): 2.0.0.
+**Check** (D24) enters under the second branch of (a): machine-decidable
+checks are established practice in posture management and configuration
+scanning, counted so far on ComplianceAsCode (the four CIS profiles for
+Ubuntu 24.04: 510 rules, 481 fit) and on kube-bench (`cis-1.12`: 103
+automated checks). (b): one shared computation, `check-verdict`; one
+vocabulary, the twelve comparators, onto which every comparison operator
+of both corpora maps. (c): 2.0.0. What the clause does not supply is a
+third counted platform: the fit is measured on Linux hosts and on
+Kubernetes, and on no cloud API (D24, "Cons, stated").
 
 ## D23 — **`Risk` as the tenth kernel type; `risk-coverage` as the ninth primitive.** *(new, 2.0.0 — CP-RISK-1; author decisions 2026-11-10)*
 **Decision.** A shallow first-class object for the ex-ante risk record —
@@ -1036,8 +1092,9 @@ the OSCAL POA&M of the IFA lifecycle set, converted to two Risk objects —
 supplying three of the record's six shared fields (scenario, treatment
 option, treating controls) and lacking three (owner, level, dated
 acceptance). The census corpora encode none of it. Tier: **designed-for,
-with one partial measurement**; D22's closing note records the promotion
-as an exception to test 1. Corpus-exercised so far: `scenario`,
+with one partial measurement**; the promotion rests on D22's
+consumer-side clause, first branch *(2.0.0-rc.2; this sentence used to
+call it an exception to test 1)*. Corpus-exercised so far: `scenario`,
 `owner-ref`, `state`, `component-refs`, `treatment` + `treatments`,
 `review-due`, `Finding.risk-refs`, RISK-9. Vector-exercised only:
 `rating`, `residual-rating`, `acceptance`, `shared-with-ref`,
@@ -1062,8 +1119,8 @@ props / no bespoke:* without a kernel home the risk register stays a
 spreadsheet, or a framework facet no second tool can read — which is
 where the 1.0.0 conversion of the IFA corpus had left it.
 **Cons, stated.** Every validator carries a tenth type for ever; the
-promotion is an exception to the rule that was written to prevent
-promotion-by-advocacy; the evidence is three standards and one partial
+promotion needed a clause that D22 did not have when the type was drafted
+(the consumer-side clause, written two days later); the evidence is three standards and one partial
 corpus; and until the second implementation runs, the primitive has one.
 
 **Rejected.** *Risk as a facet* (the 1.0.0 answer of Appendix F Q14 —
@@ -1084,6 +1141,204 @@ one-leash budget (D13) and needs its own evidence. *A selection-basis
 field on Tailoring* (`baseline · risk · legal`) — the policy switch does
 the same job without a shape change until a corpus shows the field being
 authored.
+
+## D24 — **`Check` as the eleventh kernel type; `check-verdict` as the tenth primitive.** *(new, 2.0.0-rc.2 — CP-CHECK-1; author decisions 2026-11-10 to 2026-11-12)*
+**Decision.** A shallow first-class object for the machine check: the
+facts a collector must report, and the comparisons that decide. Code
+observes and decides nothing. The verdict is a pure function of the
+Check, one recorded observation and the parameter values the run was
+bound to, so any tool recomputes it without running anything.
+
+```json
+{ "id": "https://cso.example/check/LNX-SSH-1-maxauthtries",
+  "version": "1.0.0", "lifecycle": "active",
+  "requirement-ref": "https://cso.example/req/LNX-SSH-1",
+  "statement-ids": ["s1"],
+  "platform": "https://cso.example/platform/linux-host",
+  "observes": [ { "name": "sshd.maxauthtries", "type": "integer" } ],
+  "criteria": [ { "fact": "sshd.maxauthtries", "op": "at-most",
+                  "expected": { "param": "max-auth-tries" } } ],
+  "validity": { "num": 24, "unit": "hours" },
+  "confidence": "reviewed",
+  "provenance": { "author-ref": "https://cso.example/party/secops",
+                  "date": "2026-11-11" } }
+```
+
+Shape (Appendix A.9c): `requirement-ref` and optional `statement-ids`;
+`platform`, an opaque URI; `observes`, the fact contract (name, type
+`string · integer · decimal · boolean · code`, cardinality `one` or
+`many`); `criteria`, a flat conjunction of assertions `{fact, op,
+expected}` whose `expected` is a literal or `{"param": name}`; optional
+`applies-when` (same shape) and `each` (`{resource, allow-empty}`: the
+facts repeat per resource); `validity`; `confidence`; `provenance`. Two
+existing types gain optional fields: an Assessment `check-results` (one
+row per check run, with the observation inline) and `tailoring-ref`; a
+Finding `check-ref`.
+
+**What is kernel, and what is not.** The line is drawn where tools must
+agree. Kernel: the requirement and clauses a check discharges, the
+platform, the fact contract, the criteria, applicability and per-resource
+repetition, confidence and provenance, and a run's row. Outside: the
+**collector code**, in the stdlib facet `collector@1` on the Check, so that
+the Check's semantic digest covers the exact source; the runner, its
+schedule and its credentials, which never appear in a bundle; target
+inventory; the evidence store's backend; the raw evidence bytes, which lie
+beside the bundle under their own hash. `collector@1` declares
+`modifies-semantics: []`: nothing in it changes what passing means, and a
+tool that cannot run a runtime still validates, recomputes and renders.
+
+**The comparators (code system C.13; twelve).** `equals` · `not-equals` ·
+`one-of` · `at-least` · `at-most` · `present` · `absent` · `includes-all` ·
+`excludes-all` · `subset-of` · `matches` · `matches-not`. The first five
+take one value, the next two any fact, the three after them a list, and
+the last two a string or code, single or listed. There is no OR, no NOT,
+no nesting, no arithmetic, no path and no comparison between two facts;
+alternatives of a value are `one-of`, and negation lives in the operator
+pairs. `not-equals` is the twelfth *(author decision 2026-11-12)*: the
+census found it 85 times across kube-bench and twice in OVAL states, and
+for a number nothing else says it.
+
+**`check-verdict` — the tenth primitive (Appendix B.1.10; tier:
+Portable).** Input: a Check, one observation (`{facts}` or `{resources:
+[{id, facts}]}`), the bound parameter values. Output: `satisfied ·
+not-satisfied · inconclusive · not-applicable`, with reasons.
+
+1. No observation: `inconclusive`.
+2. `applies-when` false: `not-applicable`; unknown: `inconclusive`.
+3. An undeclared or unobserved fact, a mistyped value, an unbound
+   parameter or a mistyped bound value: `inconclusive`. A default is never
+   substituted (D9).
+4. The assertions combine by strong Kleene AND: one `not-satisfied`
+   decides; else one `inconclusive` decides; else `satisfied`.
+5. With `each`, **every resource is evaluated** and none is skipped after
+   the first failure *(author decision 2026-11-12)*. The outcome stays
+   for-all, by step 4 over the applicable resources; with none applicable
+   it is `satisfied` if `allow-empty`, else `inconclusive`. Beside the
+   outcome a tool reports the counts `applicable`, `not-satisfied`,
+   `inconclusive` and `not-applicable`, and the share of not-satisfied
+   among applicable resources as a whole percentage in integer arithmetic:
+   rounded half up, never 0 while one resource fails, never 100 while one
+   passes. The counts are recomputed from the recorded observation, which
+   holds every resource with its facts; a row stores none of them.
+6. An Assessment's `result` is the aggregate of its rows (CHECK-10):
+   not-applicable rows are dropped; with none left it is `inconclusive`.
+
+An absent key means *observed absent*: the collector looked and did not
+find it. A collector that could not look prints nothing. A collector
+reports **effective** values, with defaults resolved, because most ORs
+across facts in the counted corpora read "setting absent or setting equals
+value", which an effective value turns into one comparison.
+
+**Regular expressions.** `matches` and `matches-not` take a pattern in
+**I-Regexp, RFC 9485**. The kernel fixes three things the dialect leaves
+to the host. The pattern matches the **whole value**; `^` and `$` are
+ordinary characters, and `.` excludes `\n` and `\r`. **Size limits**: a
+pattern of at most 256 characters, a compiled program of at most 1,000
+states, a value of at most 4,096 characters, beyond which the assertion
+is `inconclusive`. **No host engine**: an implementation parses the
+grammar itself and matches without backtracking, so that a verdict does
+not depend on Python, .NET or ECMAScript and a pattern cannot stall a
+validator. The grammar is that of the RFC **as published** (compared on
+2026-11-12): it keeps the surrogate code points U+D800 to U+DFFF out of
+`NormalChar` and `CCchar`, which the working group's file did not, and a
+pattern that holds one is refused. One dependence is left and stated: a general category `\p{..}`
+is read from the host's Unicode database (backlog #59). A pattern is
+never a parameter (CHECK-4).
+
+**Rules (normative; Appendix B.1.10 carries the failure messages).**
+
+| Id | Rule |
+|---|---|
+| CHECK-1 | An in-bundle `requirement-ref` is a Requirement, and `statement-ids` name its statements. The reference **resolves if present**: a Check may ship without the catalogue it refers to *(author decision 2026-11-12)*. |
+| CHECK-2 | Fact names are unique; every assertion reads a declared fact. |
+| CHECK-3 | The operator fits the fact's type and cardinality; a literal has the fact's type. |
+| CHECK-4 | `{param}` names a parameter declared exactly once on the covered clauses, with a fitting type; the requirement is in the bundle; a pattern is never a parameter. |
+| CHECK-5 | `at-most` never binds a parameter that tightens `higher`, `at-least` never one that tightens `lower`: tightening a parameter must not loosen a check. |
+| CHECK-6 | A pattern is I-Regexp within the size limits. |
+| CHECK-7 | `collector@1` matches its schema; collector ids are unique. |
+| CHECK-8 | A row's `check-ref` is a Check, and `check-digest` is its semantic digest: a changed check is a different check. |
+| CHECK-9 | A row's outcome equals `check-verdict` over its observation and parameters. |
+| CHECK-10 | One row per check; `Assessment.result` is the aggregate of the rows. |
+| CHECK-11 | A row without an observation is `inconclusive` and carries a `reason`. |
+| CHECK-12 | `tailoring-ref` resolves to a Tailoring, and each row's `parameters` equal what it binds: an implementer does not set its own pass mark. |
+| CHECK-13 | A row's `collector-id` names a collector of the Check. |
+| CHECK-14 | A Finding's in-bundle `check-ref` is a Check about the same requirement and a covered clause. |
+| CHECK-15 | Evidence references stay in the store beside the manifest and every digest verifies; a missing raw blob is reported as withheld and is no failure. |
+
+**The run record is kernel *(author decision 2026-11-12)*.** The rows are
+a field of Assessment and not a facet under `method`. A declarative
+verdict is new computation, and Appendix B.4 lets facets bind arguments
+and never define computation; under a facet every tool that did not know
+it would have to stop on every such assessment. The observation sits
+inline by default, so the Assessment's semantic digest covers it and an
+Attestation over the Assessment binds what was observed.
+
+**Evidence.** A directory beside the content manifest,
+`evidence/sha256/<hex>`, every file named by the SHA-256 of its bytes and
+none listed in the manifest. An evidence record (`$defs/evidenceRecord`)
+names check, digest, collector, subject, times and exit status, and
+carries the digest of the same observation and of each raw output.
+Redaction happens before hashing.
+
+**The kernel pin.** KERNEL-1 extends: a bundle that carries a Check, an
+Assessment with `check-results` or `tailoring-ref`, or a Finding with
+`check-ref` pins `kernel-version: "2.0.0"`.
+
+**Evidence — and its tier.** No census authority encodes a
+machine-decidable check: the CIS Ubuntu 24.04 Benchmark marks 291 of 312
+rules automated and carries every one as an `audit` string; the others
+name methods. The type enters under D22's consumer-side clause, second
+branch. Counted for it: ComplianceAsCode at `f0d40648`, the four CIS
+profiles for Ubuntu 24.04, 510 rules, of which **481 fit** the declarative
+form (23 only if the collector resolves effective values and reports mode
+bits as flag sets), 12 need arithmetic, 9 a comparison between two facts,
+6 an OR across facts, 2 a version ordering, and **none a regular
+expression outside I-Regexp**; kube-bench at `e278a591`, `cis-1.12`, 103
+automated checks, whose operators map onto the set. The fit classes are a
+judgement, recorded rule by rule (`drafts/cp-check-1-census/`). Tier:
+**measured on two corpora outside the census, fit by judgement**.
+Exercised by the worked example and by vectors: every field and every
+rule. Exercised by nothing yet: a collector run on a real system. The
+example's two runs executed the bash collector against a stub `sshd`.
+
+**Version.** An eleventh kernel type rides the same major as the tenth:
+2.0.0 is untagged, and the author set Check up to go live with it
+*(2026-11-12)*. The superset property holds: every object of the five
+shipped bundles and the example folder validates unchanged. A tool that
+implemented rc.1 claims 2.0.0 and reports a Check as "matches NO type";
+that is tolerable only because nothing was released under 2.0.0.
+
+**Rationale (north star applied).** *Customer:* the operator who runs
+checks every night, and the auditor who has to believe them. An exit code
+hides its threshold, cannot be reached by a tailored parameter, and leaves
+a bit where an observation should be. *Simplicity:* twelve comparators
+and one conjunction, small enough for the weekend validator. *No props /
+no bespoke:* without a kernel home the pass condition stays a sentence in
+an `audit` string, which is where 291 automated rules of one benchmark
+are today.
+**Cons, stated.** Every validator carries an eleventh type and an I-Regexp
+engine for ever. The shape closes on two counted platforms, Linux hosts
+and Kubernetes; no cloud API was counted, and a correction after the tag
+costs a major. 29 of 510 counted rules stay manual. Nothing in the
+repository runs a collector, and `collector@1` carries the source of an
+`http-api` collector as free text, which a runner cannot execute as it
+stands. Until the PowerShell twin has run with the twelfth comparator and
+the per-resource counts, those two have one executed validator and the
+app's port.
+
+**Rejected.** *Criteria in a facet on a Requirement the check author
+owns, promoted later* (an independent design review during planning):
+it keeps the kernel smaller, and it leaves `check-verdict` either a
+kernel primitive whose input shape is kernel in all but name, or a
+computation in a facet, which B.4 forbids. *The script's exit code as
+the verdict*: the threshold then lives in code nobody reviews against the
+requirement. *A quantifier beside for-all* ("at least one", "exactly
+one": 12 counted cases): a count the collector reports and `at-least 1`
+or `equals 1` say it. *Closure-required `requirement-ref`*: a check pack
+for a catalogue that may not be passed on could not validate. *A general
+regular-expression dialect*: two conformant tools, two verdicts. *OR,
+NOT, arithmetic*: the leash of B.4; what needs them is manual and
+counted.
 
 ---
 
@@ -1132,6 +1387,29 @@ to the clause without anyone reconciling three documents — and
 `risk-coverage` on the example bundle reports what a spreadsheet hides:
 three requirements selected, one justified by a Risk, two by none.
 
+## III.6 — A check, two runs and the finding between them *(2.0.0-rc.2)*
+
+`LNX-SSH-1` has two clauses: at most `{param:max-auth-tries}`
+authentication attempts, and no cipher in CBC mode. The Tailoring for
+production hosts binds the parameter to 4. Two Checks discharge the two
+clauses; the second reads
+
+```json
+"observes": [ { "name": "sshd.ciphers", "type": "code", "cardinality": "many" } ],
+"criteria": [ { "fact": "sshd.ciphers", "op": "matches-not", "expected": ".*-cbc" } ]
+```
+
+The run of 3 November records `"sshd.maxauthtries": 4` (satisfied against
+the bound 4) and a cipher list that contains `aes128-cbc` (not satisfied),
+so the Assessment's result is not-satisfied. The Finding against clause
+`s2` names the check that raised it. The run of 10 November records the
+list without that cipher, both rows are satisfied, and the Finding is
+closed with a relation to that run. The validator recomputes all four
+verdicts from the recorded observations and holds both runs to the value
+the Tailoring binds; bind 3 instead, and the unchanged observation of 4
+fails. The example assessed no real host: each run executed the Check's
+bash collector against a stub `sshd`, and every evidence record says so.
+
 ---
 
 # Part IV — Ledger, risks, gate, changelog
@@ -1142,9 +1420,10 @@ three requirements selected, one justified by a Risk, two by none.
 Mapping Model of 1.2.0) · Metaschema · profile-resolution algebra + merge
 strategies · XML/YAML conformance + serialization mapping · Schematron ·
 anonymous inline constraints · comp-def/SSP duplication · general JSON
-Patch. **Kernel:** 10 shallow types *(9 at 1.0.0)* · 2 sub-objects · 1
-serialization · JSON Schema 2020-12 · 9 primitives *(8 at 1.0.0)* + a
-closed op vocabulary + 3 predicates ·
+Patch. **Kernel:** 11 shallow types *(9 at 1.0.0, 10 at rc.1)* · 2
+sub-objects · 1 serialization · JSON Schema 2020-12 · 10 primitives *(8 at
+1.0.0, 9 at rc.1)* + a closed op vocabulary + 3 predicates + 12
+comparators ·
 **no general-purpose expression language** · 0 document conventions. The
 six retained subsystems (kernel schemas; content-manifest protocol; facet
 system; rule interpreter; tailoring resolver; attestation protocol) are
@@ -1165,6 +1444,12 @@ bespoke format was terse.
 validators grew with Risk (closure, liveness, the coverage join, 42
 vectors); they were **not** re-measured with the gate-4 counter for this
 candidate, and the ≈30× claim is therefore a 1.0.0 claim until they are.
+*(2.0.0-rc.2)* Re-measured on 2026-11-12 with the gate-4 counter
+(non-blank lines that do not start with `#`): `validate_core.py` **2,228**
+lines, `validate_core.ps1` **2,963**. Against the 30,905 lines of the
+toolchain counted at gate 4 that is ≈14× and ≈10×. Risk, Check, the
+I-Regexp engine, scales and the kernel pin more than doubled both files;
+the ≈30× of 1.0.0 is history. Each validator is still one file.
 
 ## IV.2 Risk register (delta)
 
@@ -1274,44 +1559,50 @@ ships: the bundles for CIS, CR26, C5, C3A and CyFun are not redistributed
    vectors and the repaired ISM taxonomy lifts the round-trip to
    **5,886/5,886** — re-measured, ALL GREEN in both validators.)*
 
-## IV.5b The 2.0.0 gate — state at rc.1 (2026-11-10)
+## IV.5b The 2.0.0 gate — state at rc.2 (2026-11-12)
 
 The 1.0.0 gate asked for converters, an executable kernel, a lifecycle
-corpus and two implementations. The same four questions, asked of Risk:
+corpus and two implementations. The same four questions, asked of Risk
+and of Check:
 
-1. **Executable kernel + conformance.** ✓ Schema 2.0.0 (ten types);
-   **258 vectors, 15 families** — the twelve of 1.0.0 (lifecycle 36 → 37
-   with the tenth disjointness case) plus `risk` 73 (27 object · 38
-   bundle · 8 transitions; 42 at the landing, 25 from the rc.1 review, 6
-   with likelihood and impact)
-   and `kernel` 9 (the manifest pin, D3.6) and `scale` 18 (pinned scale
-   definitions, D3.7). Every review correction to the proposal is
-   pinned by a vector that fails on the validator as first proposed.
-2. **First implementation.** ✓ `validate_core.py`: 258 / 258, the five
+1. **Executable kernel + conformance.** ✓ Schema 2.0.0 (eleven types);
+   **447 vectors, 16 families** — the twelve of 1.0.0 (lifecycle 36 → 38
+   with the tenth and the eleventh disjointness case) plus `risk` 73,
+   `kernel` 9 (the manifest pin, D3.6), `scale` 18 (pinned scale
+   definitions, D3.7) and `check` 188 (42 regex · 63 verdict · 7
+   aggregate · 12 share · 20 object · 44 bundle; 156 at the proposal, 27
+   from the decisions of 2026-11-12, 5 from the comparison with the
+   published RFC 9485). Every review correction is pinned
+   by a vector that fails on the validator as first proposed; for the 32,
+   five deliberate breaks of the reference each turn a vector red.
+2. **First implementation.** ✓ `validate_core.py`: 447 / 447, the five
    shipped bundles (3,715 objects, both digests each), and the example
-   bundle with its manifest — ALL GREEN.
-3. **Second implementation.** ✓ (2026-11-11) `validate_core.ps1`,
-   ported without a runtime on 2026-11-10, ran on Windows PowerShell 5.1:
-   258 / 258 in the same fifteen families, the five shipped bundles
-   (3,715 objects, both digests each) and the example folder — ALL GREEN,
-   every count equal to the Python reference's. The run fixed three
-   divergences, none of them a vector failure: the example folder is
-   read flat, as the reference reads it; every Attestation's envelope is
-   checked; ids are keyed ordinally, where PowerShell's maps had compared
-   them case-insensitively (backlog #45). Both implementations have one
-   author: their independence is language and runtime.
-4. **Corpus.** ◐ One: IFA, two Risk objects — enough to exercise the
-   record's sourced half and to measure what the source lacks; not enough
-   to exercise `rating`, `acceptance`, the later states, or
+   folder (24 objects, two Checks, two runs, the evidence store) — ALL
+   GREEN on 2026-11-12.
+3. **Second implementation.** ◐ `validate_core.ps1` ran on Windows
+   PowerShell 5.1 on 2026-11-11: 415 / 415 in sixteen families with Check
+   as then proposed (`check`: 156), the five bundles and the example
+   folder, every count equal to the Python reference's. The twelfth
+   comparator, the per-resource counts and the surrogate rule (32 vectors)
+   were ported on
+   2026-11-12 **without a runtime and have not been executed** (backlog
+   #60). **This blocks the tag.** Both implementations have one author:
+   their independence is language and runtime. A third, the JavaScript
+   port in `jascon-app/`, passes all sixteen families including the 188.
+4. **Corpus.** ◐ Risk: one, IFA, two Risk objects — enough to exercise
+   the record's sourced half and to measure what the source lacks; not
+   enough to exercise `rating`, `acceptance`, the later states, or
    `risk-coverage` at scale (D23). The second corpus is named, not
    delivered: a BSI 200-3 risk analysis, or BSI's `Risikomanagement`
-   catalogue, or a real POA&M.
+   catalogue, or a real POA&M. Check: none converted. Two check corpora
+   were counted for fit (D24); the worked example ran against a stub; no
+   runner exists.
 
 Not re-run for this candidate: the OSCAL export suite (its inputs among
 the shipped bundles are byte-identical to 1.0.0; the NIST release schema
-it validates against is not in the repository). Risk has no place in a
-1.x *catalog* export; a POA&M-side export belongs to the pending
-lifecycle-export work.
+it validates against is not in the repository). Neither Risk nor Check
+has a place in a 1.x *catalog* export; a POA&M-side and an
+assessment-results export belong to the pending lifecycle-export work.
 
 ## IV.6 Amendment history (compact)
 
@@ -1343,27 +1634,36 @@ history. The compact line:
 | Scale definitions | 2026-11-10 | `scales` pins in the manifest: a scale's levels in order, the organisation's wording and number; SCALE-1/2/3; not a kernel type; 9 vectors, a fifteenth family | D3.7 · D23 · "Amendments — scale definitions" |
 | The kernel pin | 2026-11-10 | `kernel-version` in the content manifest: optional, absent = 1.0.0, required for content beyond 1.0.0 (KERNEL-1), fail-closed on an unimplemented kernel (KERNEL-2); 9 vectors, a fourteenth family; IFA and example manifests pinned | D3.6 · "Amendments — the kernel pin" |
 | rc.1 review | 2026-11-10 | External review: nine findings reproduced and fixed — justification needs an assessed treatment decision, `tailoring-refs`, RISK-13/14, typed Tailoring selection edges, withdrawn Tailorings/Requirements, checked dates; the Mapping Model date corrected; `PRIOR-ART.md` | CP-RISK-1 §13 · "Amendments — the rc.1 review" |
+| CP-CHECK-1 | 2026-11-11 | The Check proposal: schema, reference validator, 156 vectors, a worked example with an evidence store, a census of two open check corpora; the PowerShell twin ported and run (415 / 415, #56) | `drafts/CP-CHECK-1.md` |
+| Check accepted | 2026-11-12 | The grammar compared with the published RFC 9485 (surrogate code points refused, #61 closed). Six author decisions: a consumer-side clause for D22 (#48 closed); run rows stay kernel; `requirement-ref` resolves if present; Check goes live with 2.0.0; no new quantifier, but every resource is evaluated and the failing share reported; `not-equals` as the twelfth comparator. 156 → 188 vectors; the reader reads the type (#57 closed) | CP-CHECK-1 §13 · "Amendments — CP-CHECK-1" |
+| **2.0.0-rc.2** | 2026-11-12 | This text: D24 new; D4, D14, D15, D22 amended in place; Risk's exception paragraph replaced by the clause; gate state in IV.5b | this row |
 
 ## IV.7 Release artifacts (what this candidate ships with)
 
-In the repository at the rc.1 commit. "Green" below means the Python
+In the repository at the rc.2 commit. "Green" below means the Python
 reference validator; the PowerShell twin's state is IV.5b item 3.
 
 - **Kernel schema** `jascon-2.0.0.schema.json` — closed
-  shapes, shape-disjoint type inference, 10 types + Deviation + manifest;
+  shapes, shape-disjoint type inference, 11 types + Deviation + manifest
+  + the evidence record;
   the `text` primitive on every human-readable field. A superset of the
   1.0.0 schema.
-- **Seven stdlib facet descriptors** (incl. the normative DSSE envelope
-  profile) — unchanged from 1.0.0; pinned VERBATIM wherever bundled.
+- **Eight stdlib facet descriptors**: the seven of 1.0.0 (incl. the
+  normative DSSE envelope profile), unchanged and pinned VERBATIM wherever
+  bundled, and `collector@1` *(2.0.0-rc.2)*, which carries collector code
+  on a Check and declares `modifies-semantics: []`.
   `risk-analysis@1` is parked, with one measured payload (Appendix D).
-- **Conformance corpus**: **258 vectors, 15 families** (jcs 8 ·
+- **Conformance corpus**: **447 vectors, 16 families** (jcs 8 ·
   modality 21 · parameter 19 · tailoring 19 · attestation 5 · facet 7 ·
-  reference 13 · lifecycle 37 · tier 9 · dsse 5 · composition 7 ·
-  conditional 8 · risk 73 · kernel 9 · scale 18). In `risk-vectors.json`, `expected-rule` is
-  the portable assertion.
+  reference 13 · lifecycle 38 · tier 9 · dsse 5 · composition 7 ·
+  conditional 8 · risk 73 · kernel 9 · scale 18 · check 188). In
+  `risk-vectors.json`, `expected-rule` is the portable assertion; in
+  `check-vectors.json`, the outcome, the named CHECK rules and, where
+  given, the per-resource counts.
 - **Two reference validators**: `validate_core.py` (Python, jsonschema
   only) — green; `validate_core.ps1` (PowerShell 5.1, zero dependencies)
-  — at 1.0.0 parity for the twelve families, Risk port **not executed**.
+  — green on 2026-11-11 with 415 vectors; the twelfth comparator and the
+  per-resource counts ported and **not executed** (IV.5b item 3).
 - **Bidirectional export**: `export_oscal.py` — as at 1.0.0 (OSCAL 1.2.2
   out, generic re-import, 5,886/5,886 round-trip measured on the ten
   catalog bundles then present); not re-run.
@@ -1378,15 +1678,20 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
   DE.C3A, BE.CyFun, FedRAMP-CR26: coverage report and
   `NOT-REDISTRIBUTED.md` only.
 - **The normative appendices** — A (shapes, with A.9b Risk) · B
-  (primitives incl. B.1.9, operations, predicates) · C (code systems,
-  with C.3c and the treatment options) — at
+  (primitives incl. B.1.9 and B.1.10, operations, predicates) · C (code
+  systems, with C.3c, the treatment options and C.12 to C.15 for Check) — at
   `jascon/references/appendix-{a,b,c}-*.md`, with the handbook chapters
   ch01–ch15 and appendices D–G beside them.
 - **The Decision Rationale Register** —
-  `drafts/jascon-decision-rationale-register.md` — and the
-  change proposal with its landing record, `drafts/CP-RISK-1.md`.
-- **The reader** (`one-page-apps/jascon-reader.html`, v1.7.3) —
-  recognises the Risk type.
+  `drafts/jascon-decision-rationale-register.md` — and the two
+  change proposals with their records, `drafts/CP-RISK-1.md` and
+  `drafts/CP-CHECK-1.md` (with its census under
+  `drafts/cp-check-1-census/`).
+- **The reader** (`one-page-apps/jascon-reader.html`, v1.8.0) —
+  recognises Risk and Check; it shows recorded verdicts and recomputes
+  none. **The app** (`jascon-app/`, build 0.9.2) writes Checks, drafts
+  them with a model on request and recomputes every recorded verdict; it
+  runs no collector.
 - **License**: Apache-2.0 for the original work (`LICENSE`, `NOTICE`);
   the shipped bundles under their publishers' terms.
 
@@ -1405,28 +1710,36 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
    kernel-shape changes ride major versions under D3.5 governance, and
    the anticipated-convergence path stays closed (D22 rev 3).
 
-## IV.9 From 2.0.0-rc.1 to 2.0.0
+## IV.9 From 2.0.0-rc.2 to 2.0.0
 
-1. **The version** — ✓ decided: 2.0.0 (author, 2026-11-10). D22 rev 3
-   unamended.
+1. **The version** — ✓ decided: 2.0.0 (author, 2026-11-10); it carries
+   Risk and Check (author, 2026-11-12).
 2. **The Risk rules toward imported data** — ✓ decided: kept strict (D23).
 3. **Licence** — ✓ Apache-2.0; corpus terms reviewed (§2).
-4. **The second implementation** — ☐ run `validate_core.ps1` on Windows
-   PowerShell 5.1; expect `risk: 73 pass, 0 fail` and ALL GREEN; remove
-   the two port guards (backlog #45). **Blocks the tag.**
-5. **Decide before the tag** — ✓ a kernel-version pin in the manifest
-   (#44 — done, D3.6); ☐ whether to tighten `Finding.actions[].due`, which would end
-   the superset property (#47a); ☐ whether D22 gets a consumer-side
-   clause (#48); ☐ whether the removed bundles are purged from history
-   (#50); ☐ an edge from a Tailoring to the Component it is a Statement
-   of Applicability for — `tailoring-refs` scopes a Risk by naming the
-   Tailoring, which is the join that exists, not the one ISO describes
-   (#51); ☐ `Deviation.opened` is still a free string — tightening it is a
-   1.0.0-shape change like #47a (#52). The author decided on 2026-11-11: every machine identifier carries
-   `jascon` (register, "Amendments — 2026-11-11").
-6. **Work, not decisions** — ☐ value arrival for the other corpora and
-   the re-wording of "converted losslessly" that follows from it (#41);
-   ☐ a real attestation in the example bundle (#46); ☐ a second Risk
-   corpus (IV.5b item 4).
-7. **Tag `v2.0.0`** — on the author's go, after item 4.
-
+4. **The second implementation** — ◐ ran green on 2026-11-11 (415
+   vectors). ☐ Run `validate_core.ps1` again on Windows PowerShell 5.1
+   with the changes of 2026-11-12; expect `check: 188 pass, 0 fail`, 447
+   in all, and ALL GREEN (backlog #60). **Blocks the tag.**
+5. **Decided** — ✓ a kernel-version pin in the manifest (#44, D3.6); ✓
+   D22 has a consumer-side clause (#48); ✓ the six open points of
+   CP-CHECK-1; ✓ every machine identifier carries `jascon` (register,
+   "Amendments — 2026-11-11"). **Still to decide before the tag** — ☐
+   whether to tighten `Finding.actions[].due`, which would end the
+   superset property (#47a); ☐ whether the removed bundles are purged
+   from history (#50); ☐ an edge from a Tailoring to the Component it is
+   a Statement of Applicability for (#51); ☐ `Deviation.opened` is still
+   a free string (#52); ☐ whether `\p{..}` follows the host's Unicode
+   database or a pinned table (#59).
+6. **Work, not decisions** — ✓ the implemented I-Regexp grammar was
+   compared with the published text of RFC 9485 on 2026-11-12: equal
+   except that the RFC keeps surrogate code points out of `NormalChar`
+   and `CCchar`; the engines now refuse them (#61, closed); ☐ value
+   arrival for the other corpora and the re-wording of "converted
+   losslessly" that follows from it (#41); ☐ a real attestation in the
+   example bundle (#46); ☐ `Assessment.method` payloads held to their
+   pinned schema (#55); ☐ a second Risk corpus (IV.5b item 4).
+7. **Not part of this candidate, named so that nobody reads it as more
+   than it is** — a runner that executes collectors and writes evidence;
+   a declared request format for `http-api` collectors in `collector@1`;
+   a census of checks against cloud APIs.
+8. **Tag `v2.0.0`** — on the author's go, after item 4.

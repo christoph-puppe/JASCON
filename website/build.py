@@ -254,9 +254,12 @@ def context(facts, site):
             "example_objects": facts["examples"]["objects"],
             "python_lines": facts["validators"]["python_lines"],
             "powershell_lines": facts["validators"]["powershell_lines"],
+            "check_vectors": next((f["vectors"] for f in facts["vectors"]["families"]
+                                   if f["name"] == "check"), 0),
         },
         "html": fragments(facts),
         "demo": demo_digests(),
+        "checkdemo": check_demo(),
         "year": str(datetime.date.today().year),
     }
     ctx["html"]["imprint"] = imprint(site)
@@ -274,6 +277,26 @@ def demo_digests():
         if entry.get("path") == DEMO_FILE:
             return {"package": entry["package-digest"], "semantic": entry["semantic-digest"]}
     die(f"{DEMO_FILE} is not in the example bundle's manifest")
+
+
+def check_demo():
+    """The worked example the Check demo evaluates, read from the example
+    bundle: the requirement, the Tailoring that binds its parameter, the two
+    Checks, and the observations of the two recorded runs."""
+    ex = os.path.join(REPO, "jascon", "examples")
+    load = lambda name: json.loads(read(os.path.join(ex, name)))
+    checks = [load("check-acme-ssh-maxauthtries.json"), load("check-acme-ssh-ciphers.json")]
+    tailoring = load("tailoring-acme-linux-prod.json")
+    runs = []
+    for name in ("assessment-acme-bastion-2026-11-03.json", "assessment-acme-bastion-2026-11-10.json"):
+        a = load(name)
+        facts = {}
+        for row in a["check-results"]:
+            facts.update(row["observation"]["facts"])
+        runs.append({"label": a["label"], "result": a["result"], "facts": facts})
+    bound = {op["parameter"]: op["value"] for op in tailoring["operations"] if op["op"] == "set-parameter"}
+    return {"checks": [{k: c[k] for k in ("id", "title", "statement-ids", "observes", "criteria")} for c in checks],
+            "requirement": load("req-acme-lnx-ssh-1.json"), "bound": bound, "runs": runs}
 
 
 def imprint(site):
@@ -300,6 +323,8 @@ TOKEN = re.compile(r"\{\{\s*([^{}]+?)\s*\}\}")
 def render(text, ctx, where):
     def sub(m):
         key = m.group(1)
+        if key.startswith("include:"):
+            return render(read(os.path.join(SRC, key[8:])), ctx, key[8:])
         if key.startswith("file:"):
             return html.escape(read(os.path.join(REPO, key[5:])).rstrip("\n"), quote=False)
         if key.startswith("json:"):
@@ -308,7 +333,7 @@ def render(text, ctx, where):
         value = lookup(ctx, key)
         if value is None:
             die(f"{where}: unknown name {{{{ {key} }}}}")
-        if key.startswith("html.") or key == "content":
+        if key.startswith("html.") or key in ("content",):
             return value
         return html.escape(fmt(value), quote=True)
     return TOKEN.sub(sub, text)
@@ -486,6 +511,10 @@ def check_links(out, pages, pages_only):
             elif frag and path.endswith(".html") and not path.startswith(("app/", "reader/")):
                 if f'id="{frag}"' not in read(full):
                     broken.append(f"{name}: {target} names no id in {path}")
+    if not pages_only:
+        for engine in ("app/jascon-schema.js", "app/jascon-rules.js"):
+            if not os.path.isfile(os.path.join(out, engine)):
+                broken.append(f"{engine} is missing; the Check demo loads it")
     if broken:
         die("broken links:\n  " + "\n  ".join(broken))
 

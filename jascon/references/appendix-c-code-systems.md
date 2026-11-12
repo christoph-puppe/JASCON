@@ -227,3 +227,27 @@ way — counts, corpus cases, two implementations. The seed-set
 markings above (C.3, C.10) are this book's evidence-tier discipline
 applied to its own vocabulary: where the corpus hasn't voted yet, the
 set says so.
+
+## C.12 to C.15 — the code systems of Check *(2.0.0)*
+
+C.11's footer applies to each: closed sets, versioned, changed by a
+proposal with counts.
+
+**C.12 Fact types:** `string · integer · decimal · boolean · code`, with
+the cardinality `one · many`. A decimal is the canonical decimal string
+of the kernel and compares by value; a JSON float is no decimal fact.
+
+**C.13 Comparators** (twelve): `equals · not-equals · one-of · at-least ·
+at-most · present · absent · includes-all · excludes-all · subset-of ·
+matches · matches-not`. Which fits which fact is the table of B.1.10.
+`not-equals` joined on 2026-11-12: the census had found it 85 times
+across kube-bench and twice in OVAL states, and for a number nothing
+else says it.
+
+**C.14 Check outcomes:** `satisfied · not-satisfied · inconclusive ·
+not-applicable`. The three assessment results, and the one a single
+check needs and an assessment does not.
+
+**C.15 Collector runtimes** (in `collector@1`): `sh · bash · powershell ·
+python · ansible · http-api`, or a namespaced URI. For `http-api` the
+`source` has no declared format yet (backlog #62).

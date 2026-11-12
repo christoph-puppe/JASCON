@@ -312,7 +312,7 @@ That is why this exists. Not because OSCAL 1.x was a bad idea — it was
 the right idea with its complexity budget spent on the wrong layer — but
 because three governments' own artifacts, read closely, describe both the
 failure and its remedy with a precision no design committee could match.
-The next chapter puts the remedy in front of you whole: ten shallow
+The next chapter puts the remedy in front of you whole: eleven shallow
 object types, one serialization, and an Australian control encoded so
 simply it needs nothing else — the entire core, in about an hour.
 

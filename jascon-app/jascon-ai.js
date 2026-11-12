@@ -311,6 +311,7 @@ function jscAiTreatCheck(answer, { keys, already }) {
    there by the same rules as a check written by hand. */
 const JSC_AI_CHECK_OPS = {
   "equals": "equals: the value is exactly expected (one value; decimals compare by value)",
+  "not-equals": "not-equals: the value is anything but expected (one value; decimals compare by value; on a list use excludes-all)",
   "one-of": "one-of: the value is one of the listed values (one value)",
   "at-least": "at-least: the value is expected or more (integer or decimal)",
   "at-most": "at-most: the value is expected or less (integer or decimal)",
