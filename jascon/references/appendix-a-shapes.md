@@ -125,7 +125,7 @@ track Sets (20x/Rev5) are built purely from subset-Set members.
 |---|---|---|---|
 | `kind` | ● | code | system · service · software · hardware · policy · process · … (C.6). |
 | `members` | ○ | [{component-ref ●, context ○}] | Composition. |
-| `capabilities` | ○ | [{id ●, description ○, parameter-bindings ○}] | What the vendor claims — comp-def's replacement (the PR-#8 duplication axis, deleted). |
+| `capabilities` | ○ | [{id ●, requirement-ref ○, description ○, parameter-bindings ○}] | What the vendor claims — comp-def's replacement (the PR-#8 duplication axis, deleted). `requirement-ref` names the requirement a capability is about; it is a landmark — the component asserts support, no system binds it. |
 | `authorizations` | ○ | [{id ●, authority-ref ●, scope-label ○, includes ○[]}] | **Identified** trust contexts; `includes` scopes; absence is silence, and silence is silence (Ch. 9). |
 
 ## A.6 Implementation
