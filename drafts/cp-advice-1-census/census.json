@@ -1,0 +1,415 @@
+{
+ "measured": "2026-11-12",
+ "builder": "1.2.0",
+ "inputs": "drafts/cp-advice-1-census/sources/ (see README.md for their origin)",
+ "files": [
+  {
+   "file": "example-component-definition-min.json",
+   "sha256": "03b13ac8d76c828a10612faa42f5f35c7f85837a1e9b11f6e74f4cfc4ed796a3",
+   "canonical-sha256": "b3b734f6571c53dfcbc9592b9902df1d32bc48cb258775311161b91a4873544a",
+   "source": {
+    "oscal-version": "1.2.3",
+    "components": 1,
+    "component-types": [
+     "service"
+    ],
+    "control-implementations": 1,
+    "implemented-requirements": 3,
+    "control-ids": [
+     "sc-8",
+     "sc-8.1",
+     "sa-4.9"
+    ],
+    "statements": 2,
+    "set-parameters": 2,
+    "sources": [
+     "#ba047e56-faef-430c-bafb-c54e9a87c6e8"
+    ],
+    "insert-markup": 2
+   },
+   "without-catalogue": {
+    "resolved": {
+     "catalogue": 0,
+     "nist": 3,
+     "prefix": 0
+    },
+    "unresolved": [],
+    "recommendations": 3,
+    "requirement-refs": [
+     "https://ns.nist.gov/sp800-53/req/SC-8",
+     "https://ns.nist.gov/sp800-53/req/SC-8.1",
+     "https://ns.nist.gov/sp800-53/req/SA-4.9"
+    ],
+    "clauses": 2,
+    "clauses-not-in-catalogue": [],
+    "statement-ids": [
+     "SC-8: smt",
+     "SC-8.1: smt"
+    ],
+    "values": 2,
+    "values-not-placed": [],
+    "bindings": [
+     "SC-8: {\"sc-8_prm_1\":\"confidentiality\"}",
+     "SC-8.1: {\"sc-8.1_prm_1\":\"prevent unauthorized disclosure of information\"}"
+    ],
+    "insert-markup-left": 0,
+    "notes": [
+     "2 suggested value(s) keep an OSCAL Rev 4 parameter id (sc-8 sc-8_prm_1, sc-8.1 sc-8.1_prm_1). The SP 800-53 conversion names its parameters differently, and a customer whose set holds the catalogue would see ADVICE-6 fail. Load the SP 800-53 catalogue and import again: the ids are then renamed."
+    ],
+    "kinds": [],
+    "not-carried": {
+     "components[].responsible-roles": 2,
+     "components[].protocols": 3,
+     "components[].purpose": 1,
+     "components[].description (a Component has no description field)": 1,
+     "control-implementations[].description": 1,
+     "statements[].responsible-roles": 1,
+     "back-matter.resources (other than sources)": 1
+    },
+    "errors-by-rule": {},
+    "prompts": 0,
+    "page-errors": []
+   },
+   "with-sp800-53-rev5": {
+    "resolved": {
+     "catalogue": 3,
+     "nist": 0,
+     "prefix": 0
+    },
+    "unresolved": [],
+    "recommendations": 3,
+    "requirement-refs": [
+     "https://ns.nist.gov/sp800-53/req/SC-8",
+     "https://ns.nist.gov/sp800-53/req/SC-8.1",
+     "https://ns.nist.gov/sp800-53/req/SA-4.9"
+    ],
+    "clauses": 2,
+    "clauses-not-in-catalogue": [],
+    "statement-ids": [
+     "SC-8: smt",
+     "SC-8.1: smt"
+    ],
+    "values": 2,
+    "values-not-placed": [],
+    "bindings": [
+     "SC-8: {\"sc-08_odp\":[\"confidentiality\"]}",
+     "SC-8.1: {\"sc-08.01_odp\":[\"prevent unauthorized disclosure of information\"]}"
+    ],
+    "insert-markup-left": 0,
+    "notes": [],
+    "kinds": [],
+    "not-carried": {
+     "components[].responsible-roles": 2,
+     "components[].protocols": 3,
+     "components[].purpose": 1,
+     "components[].description (a Component has no description field)": 1,
+     "control-implementations[].description": 1,
+     "statements[].responsible-roles": 1,
+     "back-matter.resources (other than sources)": 1
+    },
+    "errors-by-rule": {},
+    "prompts": 0,
+    "page-errors": []
+   }
+  },
+  {
+   "file": "example-component-definition.json",
+   "sha256": "52f142887f598ae912d794cc7189628336047a0874f326077d3f87f471733fea",
+   "canonical-sha256": "b3b734f6571c53dfcbc9592b9902df1d32bc48cb258775311161b91a4873544a",
+   "source": {
+    "oscal-version": "1.2.3",
+    "components": 1,
+    "component-types": [
+     "service"
+    ],
+    "control-implementations": 1,
+    "implemented-requirements": 3,
+    "control-ids": [
+     "sc-8",
+     "sc-8.1",
+     "sa-4.9"
+    ],
+    "statements": 2,
+    "set-parameters": 2,
+    "sources": [
+     "#ba047e56-faef-430c-bafb-c54e9a87c6e8"
+    ],
+    "insert-markup": 2
+   },
+   "without-catalogue": {
+    "resolved": {
+     "catalogue": 0,
+     "nist": 3,
+     "prefix": 0
+    },
+    "unresolved": [],
+    "recommendations": 3,
+    "requirement-refs": [
+     "https://ns.nist.gov/sp800-53/req/SC-8",
+     "https://ns.nist.gov/sp800-53/req/SC-8.1",
+     "https://ns.nist.gov/sp800-53/req/SA-4.9"
+    ],
+    "clauses": 2,
+    "clauses-not-in-catalogue": [],
+    "statement-ids": [
+     "SC-8: smt",
+     "SC-8.1: smt"
+    ],
+    "values": 2,
+    "values-not-placed": [],
+    "bindings": [
+     "SC-8: {\"sc-8_prm_1\":\"confidentiality\"}",
+     "SC-8.1: {\"sc-8.1_prm_1\":\"prevent unauthorized disclosure of information\"}"
+    ],
+    "insert-markup-left": 0,
+    "notes": [
+     "2 suggested value(s) keep an OSCAL Rev 4 parameter id (sc-8 sc-8_prm_1, sc-8.1 sc-8.1_prm_1). The SP 800-53 conversion names its parameters differently, and a customer whose set holds the catalogue would see ADVICE-6 fail. Load the SP 800-53 catalogue and import again: the ids are then renamed."
+    ],
+    "kinds": [],
+    "not-carried": {
+     "components[].responsible-roles": 2,
+     "components[].protocols": 3,
+     "components[].purpose": 1,
+     "components[].description (a Component has no description field)": 1,
+     "control-implementations[].description": 1,
+     "statements[].responsible-roles": 1,
+     "back-matter.resources (other than sources)": 1
+    },
+    "errors-by-rule": {},
+    "prompts": 0,
+    "page-errors": []
+   },
+   "with-sp800-53-rev5": {
+    "resolved": {
+     "catalogue": 3,
+     "nist": 0,
+     "prefix": 0
+    },
+    "unresolved": [],
+    "recommendations": 3,
+    "requirement-refs": [
+     "https://ns.nist.gov/sp800-53/req/SC-8",
+     "https://ns.nist.gov/sp800-53/req/SC-8.1",
+     "https://ns.nist.gov/sp800-53/req/SA-4.9"
+    ],
+    "clauses": 2,
+    "clauses-not-in-catalogue": [],
+    "statement-ids": [
+     "SC-8: smt",
+     "SC-8.1: smt"
+    ],
+    "values": 2,
+    "values-not-placed": [],
+    "bindings": [
+     "SC-8: {\"sc-08_odp\":[\"confidentiality\"]}",
+     "SC-8.1: {\"sc-08.01_odp\":[\"prevent unauthorized disclosure of information\"]}"
+    ],
+    "insert-markup-left": 0,
+    "notes": [],
+    "kinds": [],
+    "not-carried": {
+     "components[].responsible-roles": 2,
+     "components[].protocols": 3,
+     "components[].purpose": 1,
+     "components[].description (a Component has no description field)": 1,
+     "control-implementations[].description": 1,
+     "statements[].responsible-roles": 1,
+     "back-matter.resources (other than sources)": 1
+    },
+    "errors-by-rule": {},
+    "prompts": 0,
+    "page-errors": []
+   }
+  },
+  {
+   "file": "example-component-min.json",
+   "sha256": "6ff5cfc63a32174f1793d4ec0f0ca1a36f1f6908eb0d685ca13e1343d3166662",
+   "canonical-sha256": "9ad341faa03b055c77926ba7a5a364257efa7f3da3ce6074bc0abf0f684881fd",
+   "source": {
+    "oscal-version": "1.2.3",
+    "components": 1,
+    "component-types": [
+     "software"
+    ],
+    "control-implementations": 2,
+    "implemented-requirements": 2,
+    "control-ids": [
+     "ac-2.3",
+     "ac-2.3"
+    ],
+    "statements": 0,
+    "set-parameters": 0,
+    "sources": [
+     "#f52e1458-7a97-49fd-8189-6af6a4e7051b",
+     "#ec013e7d-e2a2-4ddb-a174-fbd9da24b0d8"
+    ],
+    "insert-markup": 0
+   },
+   "without-catalogue": {
+    "resolved": {
+     "catalogue": 0,
+     "nist": 2,
+     "prefix": 0
+    },
+    "unresolved": [],
+    "recommendations": 2,
+    "requirement-refs": [
+     "https://ns.nist.gov/sp800-53/req/AC-2.3",
+     "https://ns.nist.gov/sp800-53/req/AC-2.3"
+    ],
+    "clauses": 0,
+    "clauses-not-in-catalogue": [],
+    "statement-ids": [],
+    "values": 0,
+    "values-not-placed": [],
+    "bindings": [],
+    "insert-markup-left": 0,
+    "notes": [
+     "test component 1: ../../../../nist.gov/SP800-53/rev4/json/NIST_SP-800-53_rev4_catalog.json is a Rev 4 source. Its controls were resolved to the ids of the SP 800-53 conversion, which is Rev 5; a control Rev 5 withdrew or changed needs a look by hand.",
+     "test component 1: https://raw.githubusercontent.com/GSA/fedramp-automation/master/dist/content/rev4/baselines/json/FedRAMP_rev4_HIGH-baseline_profile.json is a Rev 4 source. Its controls were resolved to the ids of the SP 800-53 conversion, which is Rev 5; a control Rev 5 withdrew or changed needs a look by hand.",
+     "test component 1: ac-2.3 is implemented twice (from more than one source); it became two recommendations for one requirement."
+    ],
+    "kinds": [],
+    "not-carried": {
+     "components[].responsible-roles": 1,
+     "components[].description (a Component has no description field)": 1,
+     "control-implementations[].description": 2,
+     "back-matter.resources (other than sources)": 1
+    },
+    "errors-by-rule": {},
+    "prompts": 0,
+    "page-errors": []
+   },
+   "with-sp800-53-rev5": {
+    "resolved": {
+     "catalogue": 2,
+     "nist": 0,
+     "prefix": 0
+    },
+    "unresolved": [],
+    "recommendations": 2,
+    "requirement-refs": [
+     "https://ns.nist.gov/sp800-53/req/AC-2.3",
+     "https://ns.nist.gov/sp800-53/req/AC-2.3"
+    ],
+    "clauses": 0,
+    "clauses-not-in-catalogue": [],
+    "statement-ids": [],
+    "values": 0,
+    "values-not-placed": [],
+    "bindings": [],
+    "insert-markup-left": 0,
+    "notes": [
+     "test component 1: ../../../../nist.gov/SP800-53/rev4/json/NIST_SP-800-53_rev4_catalog.json is a Rev 4 source. Its controls were resolved to the ids of the SP 800-53 conversion, which is Rev 5; a control Rev 5 withdrew or changed needs a look by hand.",
+     "test component 1: https://raw.githubusercontent.com/GSA/fedramp-automation/master/dist/content/rev4/baselines/json/FedRAMP_rev4_HIGH-baseline_profile.json is a Rev 4 source. Its controls were resolved to the ids of the SP 800-53 conversion, which is Rev 5; a control Rev 5 withdrew or changed needs a look by hand.",
+     "test component 1: ac-2.3 is implemented twice (from more than one source); it became two recommendations for one requirement."
+    ],
+    "kinds": [],
+    "not-carried": {
+     "components[].responsible-roles": 1,
+     "components[].description (a Component has no description field)": 1,
+     "control-implementations[].description": 2,
+     "back-matter.resources (other than sources)": 1
+    },
+    "errors-by-rule": {},
+    "prompts": 0,
+    "page-errors": []
+   }
+  },
+  {
+   "file": "example-component.json",
+   "sha256": "c6cb4b702a76d9459c778f066561e6155efd5dc83cc65dd9c3e2a3c1cb873cc7",
+   "canonical-sha256": "9ad341faa03b055c77926ba7a5a364257efa7f3da3ce6074bc0abf0f684881fd",
+   "source": {
+    "oscal-version": "1.2.3",
+    "components": 1,
+    "component-types": [
+     "software"
+    ],
+    "control-implementations": 2,
+    "implemented-requirements": 2,
+    "control-ids": [
+     "ac-2.3",
+     "ac-2.3"
+    ],
+    "statements": 0,
+    "set-parameters": 0,
+    "sources": [
+     "#f52e1458-7a97-49fd-8189-6af6a4e7051b",
+     "#ec013e7d-e2a2-4ddb-a174-fbd9da24b0d8"
+    ],
+    "insert-markup": 0
+   },
+   "without-catalogue": {
+    "resolved": {
+     "catalogue": 0,
+     "nist": 2,
+     "prefix": 0
+    },
+    "unresolved": [],
+    "recommendations": 2,
+    "requirement-refs": [
+     "https://ns.nist.gov/sp800-53/req/AC-2.3",
+     "https://ns.nist.gov/sp800-53/req/AC-2.3"
+    ],
+    "clauses": 0,
+    "clauses-not-in-catalogue": [],
+    "statement-ids": [],
+    "values": 0,
+    "values-not-placed": [],
+    "bindings": [],
+    "insert-markup-left": 0,
+    "notes": [
+     "test component 1: ../../../../nist.gov/SP800-53/rev4/json/NIST_SP-800-53_rev4_catalog.json is a Rev 4 source. Its controls were resolved to the ids of the SP 800-53 conversion, which is Rev 5; a control Rev 5 withdrew or changed needs a look by hand.",
+     "test component 1: https://raw.githubusercontent.com/GSA/fedramp-automation/master/dist/content/rev4/baselines/json/FedRAMP_rev4_HIGH-baseline_profile.json is a Rev 4 source. Its controls were resolved to the ids of the SP 800-53 conversion, which is Rev 5; a control Rev 5 withdrew or changed needs a look by hand.",
+     "test component 1: ac-2.3 is implemented twice (from more than one source); it became two recommendations for one requirement."
+    ],
+    "kinds": [],
+    "not-carried": {
+     "components[].responsible-roles": 1,
+     "components[].description (a Component has no description field)": 1,
+     "control-implementations[].description": 2,
+     "back-matter.resources (other than sources)": 1
+    },
+    "errors-by-rule": {},
+    "prompts": 0,
+    "page-errors": []
+   },
+   "with-sp800-53-rev5": {
+    "resolved": {
+     "catalogue": 2,
+     "nist": 0,
+     "prefix": 0
+    },
+    "unresolved": [],
+    "recommendations": 2,
+    "requirement-refs": [
+     "https://ns.nist.gov/sp800-53/req/AC-2.3",
+     "https://ns.nist.gov/sp800-53/req/AC-2.3"
+    ],
+    "clauses": 0,
+    "clauses-not-in-catalogue": [],
+    "statement-ids": [],
+    "values": 0,
+    "values-not-placed": [],
+    "bindings": [],
+    "insert-markup-left": 0,
+    "notes": [
+     "test component 1: ../../../../nist.gov/SP800-53/rev4/json/NIST_SP-800-53_rev4_catalog.json is a Rev 4 source. Its controls were resolved to the ids of the SP 800-53 conversion, which is Rev 5; a control Rev 5 withdrew or changed needs a look by hand.",
+     "test component 1: https://raw.githubusercontent.com/GSA/fedramp-automation/master/dist/content/rev4/baselines/json/FedRAMP_rev4_HIGH-baseline_profile.json is a Rev 4 source. Its controls were resolved to the ids of the SP 800-53 conversion, which is Rev 5; a control Rev 5 withdrew or changed needs a look by hand.",
+     "test component 1: ac-2.3 is implemented twice (from more than one source); it became two recommendations for one requirement."
+    ],
+    "kinds": [],
+    "not-carried": {
+     "components[].responsible-roles": 1,
+     "components[].description (a Component has no description field)": 1,
+     "control-implementations[].description": 2,
+     "back-matter.resources (other than sources)": 1
+    },
+    "errors-by-rule": {},
+    "prompts": 0,
+    "page-errors": []
+   }
+  }
+ ]
+}

@@ -1578,8 +1578,11 @@ props / no bespoke:* the document model that gave OSCAL this guarantee is
 replaced by a rule on a bundle.
 **Cons, stated.** Two kernel fields entered without counted evidence.
 The only pack there is was written for this purpose; the pack builder
-imports OSCAL component definitions (IV.7), and none published by a vendor
-has been imported yet. What the app and the reader do
+imports OSCAL component definitions (IV.7). NIST's example component
+definitions import without loss of anything a pack can hold
+(`drafts/cp-advice-1-census/`); none published by a vendor has been
+imported yet, and that census is what could change the evidence for the
+two fields above. What the app and the reader do
 with a pack is stated in IV.7.
 
 **Rejected.** *The vendor publishes Implementation objects*: an
@@ -1999,7 +2002,7 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
   two exports through the reference validator. Not driven: drag and
   drop of a pack, and the German texts of the new views on screen.
 - **The pack builder** (`one-page-apps/jascon-pack-builder.html`,
-  v1.1.0) — the vendor's side of D25: one offline HTML file that writes
+  v1.2.0) — the vendor's side of D25: one offline HTML file that writes
   a pack from a form and judges it with the app's kernel code, inlined
   and held equal to the app's by `one-page-apps/tools/sync-inlined.mjs`
   in CI. It signs a release with Ed25519 in the browser or prepares the
@@ -2017,9 +2020,12 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
   Measured on a test component definition: with the SP 800-53 catalogue
   loaded, every clause and suggested value passes ADVICE-5 and ADVICE-6,
   values set for a whole control implementation land where the catalogue
-  declares them, and Rev 4 parameter ids take the catalogue's names. Six
-  browser tests; eleven deliberate defects in the builder each turn one
-  of them red.
+  declares them, and Rev 4 parameter ids take the catalogue's names.
+  Run over NIST's example component definitions
+  (`drafts/cp-advice-1-census/`): 10 of 10 implemented requirements
+  resolved without a catalogue, every clause and value carried, Rev 4
+  sources and a control implemented twice named. Seven browser tests;
+  sixteen deliberate defects in the builder each turn one of them red.
 - **License**: Apache-2.0 for the original work (`LICENSE`, `NOTICE`);
   the shipped bundles under their publishers' terms.
 
@@ -2070,7 +2076,7 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
 7. **Not part of this candidate, named so that nobody reads it as more
    than it is** — a runner that executes collectors and writes evidence;
    a declared request format for `http-api` collectors in `collector@1`
-   (#62); a census of checks against cloud APIs; a census of public
-   OSCAL component definitions, and a run of the builder's import over
-   them.
+   (#62); a census of checks against cloud APIs; a census of OSCAL
+   component definitions vendors published (NIST's own examples are
+   counted, `drafts/cp-advice-1-census/`).
 8. **Tag `v2.0.0`** — on the author's go. Nothing in this list blocks it.

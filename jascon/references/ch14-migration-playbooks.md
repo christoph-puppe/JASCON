@@ -125,7 +125,11 @@ one Component per component, one capability per implemented
 requirement, `statements[]` to `statement-ids`, `set-parameters` to
 `parameter-bindings`. The pack builder
 (`one-page-apps/jascon-pack-builder.html`) does exactly this on import and
-reports what it could not place. The older conversion in the repository,
+reports what it could not place. Three things in real files to expect: a
+`source` that is a `#uuid` into the back-matter rather than a URL, Rev 4
+sources whose control and parameter ids are not the Rev 5 conversion's,
+and OSCAL's `{{ insert: param, … }}` markup inside the texts; the import
+handles or names each (`drafts/cp-advice-1-census/`). The older conversion in the repository,
 of NIST's example file inside the IFA corpus, still carries the
 control-level description only and leaves 2 clause-level texts and 2
 parameter values behind, although its coverage report counts them as

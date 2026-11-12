@@ -3393,7 +3393,7 @@ if (typeof module !== "undefined" && module.exports) {
    as they are), and anything a customer does with a pack. */
 "use strict";
 (() => {
-const PB_VERSION = "1.1.0";
+const PB_VERSION = "1.2.0";
 const PB_TOOL = "JASCON Advice Pack Builder";
 const STORE_KEY = "jascon-pack-builder:draft:v1";
 const KINDS = JSC_SCHEMA.$defs.componentKind.enum;
@@ -4093,7 +4093,13 @@ async function fetchCatalog(url) {
 const OSCAL_KIND = { "this-system": "system", software: "software", hardware: "hardware", service: "service", policy: "policy",
   "process-procedure": "process", plan: "policy", guidance: "policy", standard: "policy", interconnection: "service",
   physical: "hardware", validation: "software" };
-const NIST_800_53 = { test: src => /800-53/i.test(src), mint: cid => "https://ns.nist.gov/sp800-53/req/" + cid.toUpperCase(), name: "the NIST SP 800-53 conversion" };
+/* SP 800-53 and the FedRAMP baselines, which are profiles of it. The source
+   is whatever `source` names: a URL, or a "#uuid" into the back-matter, whose
+   resource then supplies its title and links (NIST's own examples do this). */
+const NIST_800_53 = { test: src => /800-53|fedramp/i.test(src), mint: cid => "https://ns.nist.gov/sp800-53/req/" + cid.toUpperCase() };
+const REV4 = /rev(ision)?[\s_-]?4\b/i;
+/* OSCAL markup for a parameter inside a text, written as JASCON prose writes it */
+const INSERT = /\{\{\s*insert:\s*param,\s*([^}\s]+)\s*\}\}/g;
 /* convert_ifa.py stmt_norm: "ac-2_smt.a" -> "smt.a", "stmt" -> "smt" */
 function stmtNorm(sid, cid) {
   let s = String(sid || "");
@@ -4142,19 +4148,29 @@ async function importOscal(text, source) {
     log(`${source}: not an OSCAL component definition with components (expected component-definition.components[])`, true); return;
   }
   const R = { source, components: 0, caps: 0, how: { catalogue: 0, nist: 0, prefix: 0 }, unresolved: [], clauses: 0, clausesMissing: [],
-    values: 0, valuesUnplaced: [], kinds: [], productVersions: 0, dropped: new Map() };
+    values: 0, valuesUnplaced: [], kinds: [], productVersions: 0, dropped: new Map(), notes: [], backMatter: 0, markup: 0, oldIds: [] };
   const drop = (path, n = 1) => R.dropped.set(path, (R.dropped.get(path) || 0) + n);
   const ix = catalogIndex(), prefixes = new Map(), lang = draft.langs[0], meta = cd.metadata || {};
-  /* -> { ref, req } for one control id of one source */
+  const resources = new Map(((cd["back-matter"] || {}).resources || []).filter(jscIsPlainObject).map(r => [r.uuid, r]));
+  /* -> { text: what identifies the source, shown: how the report names it } */
+  const sourceOf = src => {
+    if (!src.startsWith("#")) return { text: src, shown: src };
+    const r = resources.get(src.slice(1));
+    if (!r) { R.notes.push(`source ${src} names no resource in the back-matter`); return { text: src, shown: src }; }
+    const hrefs = (r.rlinks || []).map(l => l && l.href).filter(Boolean);
+    R.backMatter++;
+    return { text: [r.title || "", ...hrefs].join(" "), shown: hrefs.find(h => /\.json$/i.test(h)) || hrefs[0] || r.title || src };
+  };
+  /* -> { ref, req } for one control id of one source ({text, shown}) */
   const resolve = (cid, src) => {
     const hit = ix.get(cid.toLowerCase()) || ix.get(cid.toLowerCase().replace(/\.0*(\d+)$/, ".$1"));
     if (hit) { R.how.catalogue++; return { ref: hit, req: catalog.get(hit) }; }
-    if (NIST_800_53.test(src)) { R.how.nist++; const ref = NIST_800_53.mint(cid); return { ref, req: catalog.get(ref) || null }; }
-    if (!prefixes.has(src)) {
-      const answer = prompt(`The controls of ${src || "an unnamed source"} are not in the loaded catalogue. Their requirement ids are this prefix followed by the control id (for example https://ns.example.org/req/). Leave it empty to resolve them by hand.`, "");
-      prefixes.set(src, (answer || "").trim());
+    if (NIST_800_53.test(src.text)) { R.how.nist++; const ref = NIST_800_53.mint(cid); return { ref, req: catalog.get(ref) || null }; }
+    if (!prefixes.has(src.text)) {
+      const answer = prompt(`The controls of ${src.shown || "an unnamed source"} are not in the loaded catalogue. Their requirement ids are this prefix followed by the control id (for example https://ns.example.org/req/). Leave it empty to resolve them by hand.`, "");
+      prefixes.set(src.text, (answer || "").trim());
     }
-    const prefix = prefixes.get(src);
+    const prefix = prefixes.get(src.text);
     if (!prefix) { R.unresolved.push(cid); return { ref: "", req: null }; }
     R.how.prefix++;
     return { ref: prefix + cid, req: catalog.get(prefix + cid) || null };
@@ -4178,8 +4194,11 @@ async function importOscal(text, source) {
       version: oscalText(meta.version) || thisMonth(), caps: [],
       id: draft.origin ? `${draft.origin}/component/${jscSlug(title)}` : "" };
     const taken = new Set();
+    const seenRefs = new Set();
     for (const ci of oc["control-implementations"] || []) {
-      const src = oscalText(ci.source);
+      const src = sourceOf(oscalText(ci.source));
+      const rev4 = REV4.test(src.text);
+      if (rev4 && NIST_800_53.test(src.text)) R.notes.push(`${title}: ${src.shown} is a Rev 4 source. Its controls were resolved to the ids of the SP 800-53 conversion, which is Rev 5; a control Rev 5 withdrew or changed needs a look by hand.`);
       if (oscalText(ci.description)) drop("control-implementations[].description");
       for (const k of ["props", "links"]) if (Array.isArray(ci[k]) && ci[k].length) drop(`control-implementations[].${k}`, ci[k].length);
       const shared = ci["set-parameters"] || [], capsHere = [];
@@ -4187,11 +4206,15 @@ async function importOscal(text, source) {
         const cid = oscalText(ir["control-id"]);
         if (!cid) { drop("implemented-requirements[] without a control-id"); continue; }
         const { ref, req } = resolve(cid, src);
+        if (ref && seenRefs.has(ref)) R.notes.push(`${title}: ${cid} is implemented twice (from more than one source); it became two recommendations for one requirement.`);
+        if (ref) seenRefs.add(ref);
+        /* {{ insert: param, x }} -> {param:<the catalogue's name for x>} */
+        const unmark = t => t.replace(INSERT, (_, pid) => { R.markup++; return `{param:${paramName(req, pid)}}`; });
         const cap = blankCap();
         cap.requirementRef = ref;
         cap.id = jscCapabilityId(ref || cid, taken);
         /* the clauses: the catalogue's own spelling when it has the requirement */
-        const parts = [oscalText(ir.description)].filter(Boolean);
+        const parts = [unmark(oscalText(ir.description))].filter(Boolean);
         const sids = [];
         for (const st of ir.statements || []) {
           const raw = oscalText(st["statement-id"]);
@@ -4200,10 +4223,10 @@ async function importOscal(text, source) {
           const sid = !have ? norm : [norm, raw, raw.slice(cid.length + 1)].find(x => have.includes(x)) || norm;
           if (have && !have.includes(sid)) R.clausesMissing.push(`${cid} ${raw}`);
           if (ref && !sids.includes(sid)) { sids.push(sid); R.clauses++; }
-          if (oscalText(st.description)) parts.push(`${sid}: ${oscalText(st.description)}`);
+          if (oscalText(st.description)) parts.push(`${sid}: ${unmark(oscalText(st.description))}`);
           for (const k of ["props", "links", "responsible-roles"]) if (Array.isArray(st[k]) && st[k].length) drop(`statements[].${k}`, st[k].length);
         }
-        if (!ref) parts.unshift(`OSCAL control ${cid}${src ? " of " + src : ""}:`);
+        if (!ref) parts.unshift(`OSCAL control ${cid}${src.shown ? " of " + src.shown : ""}:`);
         cap.statementIds = ref ? sids : [];
         if (parts.length) cap.description = { [lang]: parts.join("\n\n") };
         for (const k of ["props", "links", "responsible-roles"]) if (Array.isArray(ir[k]) && ir[k].length) drop(`implemented-requirements[].${k}`, ir[k].length);
@@ -4214,6 +4237,7 @@ async function importOscal(text, source) {
           const name = paramName(req, sp["param-id"]), decl = declaredParam(req, name, []);
           setKey(cap.bindings, name, decl && decl.type === "choice" && decl.cardinality === "many" ? vals : vals.length === 1 ? vals[0] : vals);
           R.values++;
+          if (!req && /_prm_/.test(name)) R.oldIds.push(`${cid} ${name}`);
         }
         capsHere.push({ cap, req });
         c.caps.push(cap);
@@ -4232,7 +4256,9 @@ async function importOscal(text, source) {
     }
     comps.push(c);
   }
-  for (const k of ["capabilities", "back-matter", "import-component-definitions"]) if (cd[k]) drop(`component-definition.${k}`, Array.isArray(cd[k]) ? cd[k].length : 1);
+  for (const k of ["capabilities", "import-component-definitions"]) if (cd[k]) drop(`component-definition.${k}`, Array.isArray(cd[k]) ? cd[k].length : 1);
+  const unused = [...resources.values()].filter(r => !(cd.components || []).some(c => (c["control-implementations"] || []).some(ci => ci.source === "#" + r.uuid))).length;
+  if (unused) drop("back-matter.resources (other than sources)", unused);
 
   /* into the draft: a draft with only an empty Component is replaced, anything else is added to */
   const empty = draft.components.length === 1 && !draft.components[0].label && !draft.components[0].id && draft.components[0].caps.every(k => !k.id && !k.requirementRef);
@@ -4240,8 +4266,11 @@ async function importOscal(text, source) {
   if (!Object.keys(draft.pack.title).length && oscalText(meta.title)) draft.pack.title = { [lang]: oscalText(meta.title) };
   const org = (meta.parties || []).find(p => p && p.type === "organization" && oscalText(p.name));
   if (org && !Object.keys(draft.publisher.name).length) draft.publisher.name = { [lang]: oscalText(org.name) };
+  /* a Rev 4 parameter id is not the name the Rev 5 conversion declares: a customer
+     whose set holds SP 800-53 would see ADVICE-6 fail on it */
+  if (R.oldIds.length) R.notes.push(`${R.oldIds.length} suggested value(s) keep an OSCAL Rev 4 parameter id (${R.oldIds.slice(0, 4).join(", ")}${R.oldIds.length > 4 ? ", …" : ""}). The SP 800-53 conversion names its parameters differently, and a customer whose set holds the catalogue would see ADVICE-6 fail. Load the SP 800-53 catalogue and import again: the ids are then renamed.`);
   importReport = R;
-  log(`imported ${source}: ${R.components} component(s), ${R.caps} recommendation(s); requirements ${R.how.catalogue} from the catalogue, ${R.how.nist} by the NIST rule, ${R.how.prefix} by a prefix, ${R.unresolved.length} unresolved; ${R.values} suggested value(s), ${R.valuesUnplaced.length} not placed`);
+  log(`imported ${source}: ${R.components} component(s), ${R.caps} recommendation(s); requirements ${R.how.catalogue} from the catalogue, ${R.how.nist} by the NIST rule, ${R.how.prefix} by a prefix, ${R.unresolved.length} unresolved; ${R.values} suggested value(s), ${R.valuesUnplaced.length} not placed; ${R.notes.length} note(s)`);
   renderAll(); saveDraft();
 }
 let importReport = null;
@@ -4254,6 +4283,8 @@ function renderImport() {
   draw(() => { el.innerHTML = `<div class="capt"><h2 style="margin:0">Imported from ${esc(R.source)}</h2><span class="spacer"></span>
       <button type="button" class="quiet" id="btn-import-close">Close</button></div>
     <p>${R.components} component(s) with ${R.caps} recommendation(s). Requirements resolved: ${R.how.catalogue} through the catalogue, ${R.how.nist} by the rule of the NIST SP 800-53 conversion, ${R.how.prefix} by a prefix you gave${R.unresolved.length ? `, <b>${R.unresolved.length} not resolved</b>` : ""}. ${R.clauses} clause(s), ${R.values} suggested value(s)${R.productVersions ? `, ${R.productVersions} product version(s) from a <code>version</code> prop` : ""}.</p>
+    ${R.notes.length ? `<p><b>Check:</b></p><ul style="margin:4px 0 8px 20px">${R.notes.map(n => `<li>${esc(n)}</li>`).join("")}</ul>` : ""}
+    ${R.backMatter || R.markup ? `<p class="hint">${R.backMatter ? `${R.backMatter} source(s) read through the back-matter. ` : ""}${R.markup ? `${R.markup} parameter reference(s) in the texts rewritten from OSCAL's <code>{{ insert: param, … }}</code> to <code>{param:…}</code>.` : ""}</p>` : ""}
     ${list("Not resolved; set the requirement by hand:", R.unresolved)}
     ${list("Clauses the catalogue does not have:", R.clausesMissing)}
     ${list("Suggested values not placed:", R.valuesUnplaced)}
@@ -4374,6 +4405,15 @@ function jscDownload(name, data) {
   document.body.appendChild(a); a.click(); a.remove();
   setTimeout(() => URL.revokeObjectURL(a.href), 10000);
 }
+
+/* ---------- a read-only view for tests and the census ----------
+   Copies, never the live state: nothing outside this page can change it. */
+window.jscPackBuilder = Object.freeze({
+  version: PB_VERSION,
+  draft: () => JSON.parse(JSON.stringify(draft)),
+  report: () => importReport && JSON.parse(JSON.stringify({ ...importReport, dropped: Object.fromEntries(importReport.dropped) })),
+  problems: () => (last ? last.problems.map(p => ({ ...p })) : []),
+});
 
 /* ---------- start ---------- */
 $("version").textContent = "v" + PB_VERSION;
