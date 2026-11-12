@@ -71,8 +71,10 @@ requirements and mints real objects.*
 > - **Compared with the published RFC 9485 (2026-11-12):** the grammar
 >   matches except that the RFC excludes surrogate code points from
 >   pattern characters; the three engines now do too (backlog #61, closed).
-> - **Not done, and blocking the tag:** the PowerShell twin has not been
->   executed with the changes of 2026-11-12 (backlog #60).
+> - **Second implementation:** the PowerShell twin ran on Windows
+>   PowerShell 5.1 with the changes of 2026-11-12 the same day:
+>   `check: 188 pass, 0 fail`, every count equal to the reference's
+>   (backlog #60, closed).
 > - **Not there at all:** a runner. Nothing in this repository executes a
 >   collector; the worked example ran its bash collector against a stub.
 >   The fit was counted on Linux hosts and Kubernetes, on no cloud API.
@@ -131,7 +133,7 @@ requirements and mints real objects.*
 >   the example folder with its two Checks and its evidence store, again
 >   the Python reference's counts. On 2026-11-12 Check was accepted and
 >   changed in three places (above): the Python reference stands at 447
->   vectors, and the twin has not run with them yet. The tag is the
+>   vectors, and the twin passed them the same day. The tag is the
 >   author's call. See the
 >   [backlog](drafts/jascon-v0.6-spec-feedback-backlog.md)
 >   #41–#50 and the register sections "Amendments — CP-RISK-1" and

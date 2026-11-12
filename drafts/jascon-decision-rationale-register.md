@@ -2183,3 +2183,22 @@ published text could show it.
 **Open after this section:** #60 blocks the tag. #62: an
 `http-api` collector has no declared format, which a runner needs first.
 
+## #60 CLOSED — the twin ran with the changes of 2026-11-12
+
+The three changes of that day (the twelfth comparator, the per-resource
+counts, the surrogate rule) were ported to `validate_core.ps1` without a
+PowerShell runtime and filed as #60. The same day another session, which
+had a Windows machine, merged this state into the advice-pack branch and
+ran the twin on Windows PowerShell 5.1: 518 vectors in 17 families,
+`check: 188 pass, 0 fail`, the five bundles, the worked pack and the
+example folder, bundle by bundle the reference's counts
+(`drafts/CP-ADVICE-1.md` §13.4). That run is what #60 asked for. The
+header of the twin says so now. Nothing from CP-CHECK-1 blocks the tag
+any more.
+**What is open instead.** The advice-pack proposal is on `main` as
+proposed: its manifest header and one capability field are in the 2.0.0
+schema, its eight points for the author are unanswered, the
+specification does not describe it, and the app neither ports its rules
+nor reads a pack (the app's suite names the family as not ported since
+this commit; before, one test failed on `main`, unnoticed because the
+advice session had no Node).
