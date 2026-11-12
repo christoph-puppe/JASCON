@@ -36,8 +36,8 @@ nav: evidence
           <p>The reference: one Python file of {{ n.python_lines }} lines, with <code>jsonschema</code> as its only dependency. It includes canonicalization, both digests, the tailoring law, Ed25519 and DSSE verification, bundle composition, risk coverage and an I-Regexp engine.</p>
         </article>
         <article class="card">
-          <div class="card-top"><h3>validate_core.ps1</h3><span class="tier tier-open">one run owed</span></div>
-          <p>The twin: {{ n.powershell_lines }} lines of Windows PowerShell 5.1 with no dependency, for the machine an auditor already has. On 12 November it returned the same counts as the Python reference on the 518 vectors of rc.2 with the advice rules, the five bundles, the worked pack and the example folder. The three changes of rc.3 are ported and have not run; {{ n.vectors }} vectors are expected.</p>
+          <div class="card-top"><h3>validate_core.ps1</h3><span class="tier tier-measured">measured 2026-11-12</span></div>
+          <p>The twin: {{ n.powershell_lines }} lines of Windows PowerShell 5.1 with no dependency, for the machine an auditor already has. On 12 November it returned the same counts as the Python reference on all {{ n.vectors }} vectors, the five bundles, the worked pack and the example folder, on a hosted Windows runner. A <a href="{{ repo }}/actions/workflows/validators.yml" rel="noopener">workflow</a> repeats that run on every change.</p>
         </article>
         <article class="card">
           <div class="card-top"><h3>A third, in the browser</h3><span class="tier tier-measured">measured</span></div>
@@ -158,8 +158,8 @@ nav: evidence
         <p>The fit of the Check type was counted on Linux hosts and Kubernetes. No check against a cloud API was counted, nothing in the repository runs a collector, and the worked example ran against a stub. 29 of 510 counted rules do not fit the declarative form and stay manual. <a href="checks.html#state">The state in full.</a></p>
       </div>
       <div class="limit">
-        <h3>The 2.0.0 tag waits for one run <span class="tier tier-open">open, backlog 63</span></h3>
-        <p>Nothing is left to decide. The Python reference is green on all {{ n.vectors }} vectors of the candidate. The PowerShell twin last ran on 518 of them; the changes of rc.3 are ported to it and have not been executed, because that needs a Windows machine. The tag follows that run.</p>
+        <h3>2.0.0 is a candidate, not a release <span class="tier tier-open">open</span></h3>
+        <p>Nothing is left to decide, and both validators are green on all {{ n.vectors }} vectors of the candidate. The tag is the author's step and has not been taken. Until then the released version is 1.0.0, and the shapes of 2.0.0 can still change.</p>
       </div>
       <div class="limit">
         <h3>Not every 1.0.0 bundle is a 2.0.0 bundle <span class="tier tier-measured">decided</span></h3>

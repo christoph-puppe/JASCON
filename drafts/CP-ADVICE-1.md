@@ -336,7 +336,7 @@ What the merge makes of earlier sections:
 - **`describes`.** No schema change: `relations[].type` is the extensible code surface (handbook C.8). Two vectors show a third party's pack about a vendor's product, valid under its own origin and refused (ADVICE-2) under the vendor's.
 - **Vectors.** 71 → **74** (pack 12 → 15).
 - **Specification.** D25 is the decision; D3 item 8 the pack header and the kept manifest; D5 the two fields; D6 the grammar of `capability-ref`; D15 the rules in the matrix; D22 the override; III.7 the worked example.
-- **Measured:** `validate_core.py` 537 of 537 vectors in 17 families, ALL GREEN; 28 of 28 mutations caught. The PowerShell twin is ported and **not executed** with `product-version` (backlog #63); its last run is the 518 of §13.4.
+- **Measured:** `validate_core.py` 537 of 537 vectors in 17 families, ALL GREEN; 28 of 28 mutations caught. `validate_core.ps1` on Windows PowerShell 5.1, a hosted runner of GitHub Actions: the same 537 vectors and the same bundle counts, ALL GREEN, 64 s (backlog #63, closed; https://github.com/christoph-puppe/JASCON/actions/runs/43204019670).
 
 ### 14.3 What §13.3 said does not exist, now
 

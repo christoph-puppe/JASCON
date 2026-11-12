@@ -49,9 +49,9 @@ requirements and mints real objects.*
 
 > **State 2026-11-12 — release candidate 2.0.0-rc.3; not tagged.**
 > Everything below this section describes the released **1.0.0**. The
-> candidate adds two kernel types, Risk and Check, and advice packs. One
-> thing blocks the tag: the PowerShell twin has to run once more on
-> Windows with the three changes of rc.3 (backlog #63).
+> candidate adds two kernel types, Risk and Check, and advice packs.
+> Both reference validators are green on it, and nothing is left to
+> decide: the tag is the author's call.
 >
 > **Advice packs** ([CP-ADVICE-1](drafts/CP-ADVICE-1.md), accepted by the
 > author on 2026-11-12): a vendor's recommendations as one published
@@ -81,9 +81,12 @@ requirements and mints real objects.*
 >   removed bundles stay in the git history (#50), a Tailoring names no
 >   Component (#51), Unicode categories in a pattern follow the host
 >   (#59).
-> - **Second implementation:** the PowerShell twin ran green on rc.2 with
->   the advice rules (518 vectors). The changes of rc.3 are ported and
->   **not executed**.
+> - **Second implementation:** the PowerShell twin ran on Windows
+>   PowerShell 5.1 on a hosted runner of GitHub Actions: 537 of 537
+>   vectors, the bundles, the pack and the example folder with the
+>   reference's counts (backlog #63, closed). A
+>   [workflow](.github/workflows/validators.yml) now runs both validators
+>   and the app's port on every change.
 > - **Not there:** a pack published by a vendor; a converter from OSCAL
 >   component definitions; a census of public ones. The evidence for
 >   `statement-ids` is one fictional file by NIST.
@@ -175,7 +178,7 @@ requirements and mints real objects.*
 >   the Python reference's counts. On 2026-11-12 Check was accepted and
 >   changed in three places (above): the Python reference stood at 447
 >   vectors, and the twin passed them the same day. The tag is the
->   author's call, after the run named at the top. See the
+>   author's call. See the
 >   [backlog](drafts/jascon-v0.6-spec-feedback-backlog.md)
 >   #41–#50 and the register sections "Amendments — CP-RISK-1" and
 >   "Amendments — the 2.0.0 decision".

@@ -46,13 +46,17 @@ PowerShell runtime. They ran with the advice-pack proposal in the tree:
 518 vectors in 17 families (check: 188), the five bundles, the worked
 pack and the example folder, the same counts as validate_core.py
 (drafts/CP-ADVICE-1.md, 13.4). Backlog #60 is closed by that run.
-NOT YET EXECUTED (2026-11-12, later the same day): the author's decisions
-on advice packs and on two date fields. Ported here without a PowerShell
-runtime: KERNEL-1 for a Component with product-version, Date-Rule-Violations
-(DATE-1, DATE-2) and the shape-vectors of kernel-vectors.json. The schema
-changes themselves (product-version, the typed due and opened) need no
-code here: this file reads the kernel schema. The Python reference stands
-at 537 vectors in 17 families (kernel: 25, advice: 74). Backlog #63.
+EXECUTED 2026-11-12, later the same day, on Windows PowerShell 5.1 (a
+hosted Windows runner of GitHub Actions, .github/workflows/validators.yml):
+the author's decisions on advice packs and on two date fields had been
+ported without a PowerShell runtime - KERNEL-1 for a Component with
+product-version, Date-Rule-Violations (DATE-1, DATE-2) and the
+shape-vectors of kernel-vectors.json. The schema changes themselves
+(product-version, the typed due and opened) need no code here: this file
+reads the kernel schema. 537 vectors in 17 families (kernel: 25, advice:
+74), the five bundles, the worked pack and the example folder, the same
+counts as validate_core.py. Backlog #63 is closed by that run, and the
+workflow repeats it on every change.
 KNOWN LIMITS of this port: a general category (\p{..}) is read from the
 HOST's Unicode database, .NET here and unicodedata there, so a code point
 assigned after either database was built can match differently; an

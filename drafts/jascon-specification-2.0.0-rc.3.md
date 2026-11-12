@@ -1,6 +1,6 @@
 # JASCON — "Kernel + Registered Facets"
 ## Specification 2.0.0-rc.3
-### release candidate, 2026-11-12 · the 1.0.0 text (released 2026-07-22) amended by CP-RISK-1 (Risk, the tenth kernel type), CP-CHECK-1 (Check, the eleventh) and CP-ADVICE-1 (advice packs) · NOT tagged — the Python reference is green on this candidate; the PowerShell twin has run green on rc.2 with the advice rules and has not run with the three changes of rc.3 (IV.5b); the tag is the author's decision
+### release candidate, 2026-11-12 · the 1.0.0 text (released 2026-07-22) amended by CP-RISK-1 (Risk, the tenth kernel type), CP-CHECK-1 (Check, the eleventh) and CP-ADVICE-1 (advice packs) · NOT tagged — both reference validators are green on this candidate, the PowerShell twin on Windows PowerShell 5.1 (IV.5b); the tag is the author's decision
 
 > **What changed since rc.2 (2026-11-12, the same day).** One decision is
 > new — **D25**, advice packs: a vendor's recommendations as one published
@@ -76,14 +76,17 @@ in sixteen families (`check`: 188); the Python reference green on them, on
 the five shipped bundles and on the example folder; the app's JavaScript
 port green on the same vectors. **Measured at rc.3 (2026-11-12):** 537
 vectors in seventeen families (`kernel`: 25, `advice`: 74); the Python
-reference green on them, on the five shipped bundles, the worked advice
-pack and the example folder. **Not yet measured, said here rather than
+reference and the PowerShell twin (Windows PowerShell 5.1) green on
+them, on the five shipped bundles, the worked advice pack and the example
+folder. **Not yet measured, said here rather than
 below the fold:** Risk's two implementations share one author — the
 PowerShell twin, green on 2026-11-11, is independent in language and
 runtime only (IV.5b); Risk and Check entered the
 kernel under D22's consumer-side clause, which no census authority's data
 supports by construction (D22); Check has a worked example and two counted
-check corpora, and no runner and no converted check corpus (D24); and the coverage figures inherited from 1.0.0 count
+check corpora, and no runner and no converted check corpus (D24); advice
+packs have one worked pack and no pack a vendor published, and two of
+their fields entered against D22 on the author's decision (D25); and the coverage figures inherited from 1.0.0 count
 source *paths* with a declared destination, not values verified to
 arrive (IV.2, R16). Eleven corpora were converted and measured (251,591
 source leaf values at path level, UNMAPPED = 0); **five of the bundles
@@ -1849,16 +1852,20 @@ of Check and of advice packs:
 2. **First implementation.** ✓ `validate_core.py`: 537 / 537, the five
    shipped bundles (3,715 objects, both digests each), the worked advice
    pack and the example folder — ALL GREEN on 2026-11-12.
-3. **Second implementation.** ◐ `validate_core.ps1` ran on Windows
-   PowerShell 5.1 on 2026-11-12 on rc.2 with the advice rules: 518 / 518
-   in seventeen families, the five bundles, the worked pack and the
-   example folder, every count equal to the Python reference's (backlog
-   #60, closed; `drafts/CP-ADVICE-1.md` §13.4). The changes of rc.3 are
-   ported and **have not been executed**: KERNEL-1 for `product-version`,
-   the names DATE-1 and DATE-2, and the fourteen shape vectors (backlog
-   #63). The schema changes themselves need no code in the twin, which
-   reads the kernel schema. **This blocks the tag.** Both implementations
-   have one author: their independence is language and runtime. A third,
+3. **Second implementation.** ✓ `validate_core.ps1` ran on Windows
+   PowerShell 5.1 on 2026-11-12 on this candidate: 537 / 537 in
+   seventeen families (`kernel: 25`, `advice: 74`), the five bundles,
+   the worked pack and the example folder, every count equal to the
+   Python reference's, ALL GREEN in 64 s (backlog #63, closed). The
+   machine was a hosted Windows runner of GitHub Actions, commit
+   `5a75454b`; the run is public (`https://github.com/christoph-puppe/JASCON/actions/runs/43204019670`).
+   Since that commit the workflow `.github/workflows/validators.yml`
+   runs both validators and the app's port on every change, so this item
+   is a standing measurement and no longer a run somebody has to
+   remember. Earlier the same day the twin had run on a second Windows
+   machine on rc.2 with the advice rules (518 / 518; backlog #60). Both
+   implementations have one author: their independence is language and
+   runtime. A third,
    the JavaScript port in `jascon-app/`: its state is in IV.7.
 4. **Corpus.** ◐ Risk: one, IFA, two Risk objects — enough to exercise
    the record's sourced half and to measure what the source lacks; not
@@ -1940,8 +1947,9 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
   folder after importing it.
 - **Two reference validators**: `validate_core.py` (Python, jsonschema
   only) — green; `validate_core.ps1` (PowerShell 5.1, zero dependencies)
-  — green on 2026-11-12 on rc.2 with the advice rules (518 vectors); the
-  three changes of rc.3 ported and **not executed** (IV.5b item 3).
+  — green on 2026-11-12 on all 537 vectors of this candidate, on Windows
+  PowerShell 5.1 (IV.5b item 3). A workflow runs both, and the app's
+  port, on every change (`.github/workflows/validators.yml`).
 - **Bidirectional export**: `export_oscal.py` — as at 1.0.0 (OSCAL 1.2.2
   out, generic re-import, 5,886/5,886 round-trip measured on the ten
   catalog bundles then present); not re-run.
@@ -1996,12 +2004,11 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
    Risk, Check and advice packs (author, 2026-11-12).
 2. **The Risk rules toward imported data** — ✓ decided: kept strict (D23).
 3. **Licence** — ✓ Apache-2.0; corpus terms reviewed (§2).
-4. **The second implementation** — ◐ ran green on 2026-11-11 (415
-   vectors) and on 2026-11-12 (518 vectors: rc.2 with the advice rules;
-   backlog #60, closed). ☐ Run `validate_core.ps1` once more on Windows
-   PowerShell 5.1 with the changes of rc.3; expect `kernel: 25 pass`,
-   `advice: 74 pass`, 537 in all, and ALL GREEN (backlog #63). **Blocks
-   the tag.**
+4. **The second implementation** — ✓ ran green on 2026-11-11 (415
+   vectors), on 2026-11-12 on rc.2 with the advice rules (518 vectors;
+   backlog #60, closed) and on 2026-11-12 on this candidate (537
+   vectors, Windows PowerShell 5.1 on a hosted runner; backlog #63,
+   closed). It now runs on every change.
 5. **Decided** — ✓ a kernel-version pin in the manifest (#44, D3.6); ✓
    D22 has a consumer-side clause (#48); ✓ the six open points of
    CP-CHECK-1; ✓ the eight of CP-ADVICE-1; ✓ `Deviation.opened` and the
@@ -2025,4 +2032,4 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
    a declared request format for `http-api` collectors in `collector@1`
    (#62); a census of checks against cloud APIs; a converter from OSCAL
    component definitions to advice packs, and a census of public ones.
-8. **Tag `v2.0.0`** — on the author's go, after item 4.
+8. **Tag `v2.0.0`** — on the author's go. Nothing in this list blocks it.
