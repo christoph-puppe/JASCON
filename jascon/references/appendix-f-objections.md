@@ -489,3 +489,131 @@ rev 4): a type that catalogue authorities do not publish needs a
 recognised standard that requires the record, or established practice
 shown by two counted open implementations, and it rides a major. Risk
 had entered as an exception two days earlier; that wording is gone.
+
+## F.10 "Why not extend theirs?" — the neighbours (2026-11-13)
+
+These answers rest on a check of ten features against five neighbours,
+made on 2026-11-13 against the schema or the code at a named version:
+OSCAL 1.2.3, Gemara 1.6.0, CycloneDX 1.7.2, CISO Assistant (community,
+`main` at 694e32a9) and XCCDF 1.2 with SCAP 1.4. The ten features were
+chosen by this project for what they do for the people who run
+compliance and the people who audit it: controls selected by risk, risk
+acceptance on record, decisions that can be traced, vendor advice kept
+apart from the controls, exceptions and findings with deadlines, checks
+as code, one chain from clause to evidence file, several languages in
+one object, a signature that survives repackaging, and extension by
+facets with a contract. No neighbour's
+data was converted; each verdict says what a format provides, not what a
+deployment does with it. The table, with the construct and the source of
+every cell, is in `PRIOR-ART.md`.
+
+**Q27. OSCAL already models everything from catalog to POA&M. Why not
+extend OSCAL?**
+Because the three things this project adds would land in the place that
+Chapter 1 counted as the failure. OSCAL is ahead on two of the ten
+features: the chain from control to an evidence file with a hash, and
+deadlines on risks. It is behind on five. A risk exists only in
+assessment results and POA&M, after the assessment, never beside the
+selection it would justify; no construct carries a second language; no
+profile change records an author; and there is no native signing —
+inline signatures were declined upstream in 2023 (issue 245), which
+leaves byte hashes on back-matter resources. The fifth is the mechanism
+itself: an extension is a prop in a namespace that no schema backs, no
+document pins and no consumer must understand. The first four could be
+added as props. That is the route Grundschutz++ took with more than 12,000
+of them, and it is the route that left 781 lists packed into single
+comma-separated strings, which no validator can see.
+JASCON keeps OSCAL as its exchange partner instead: catalogue bundles
+export to OSCAL 1.2.2 and re-import to the same semantic digests
+(5,886 of 5,886). A signature made over a JASCON bundle therefore still
+verifies after a round trip through OSCAL, which no OSCAL document can
+say of itself.
+
+**Q28. Gemara is the closest neighbour, layered and typed. Why not
+extend Gemara?**
+That would be a fair experiment, and this answer says what it would
+have to add. In Gemara 1.6.0 prose has no second language, no finding or
+exemption carries a due date, a risk is accepted without an approver or
+a date, and the layer that would hold implementation records has no
+schema. Signing exists, but in the publishing tool over the bundle's
+bytes, outside the schema, so a reformatted file no longer verifies. The
+schemas are closed: a third party can narrow them with a CUE profile, as
+the OSPS Baseline does, but cannot add a field, and the artifact does not
+pin the profile it was written against. The
+features JASCON enforces are kernel invariants a validator checks: a
+weakening without an approved Deviation is invalid, and an advice pack
+cannot change a requirement. In Gemara the comparable constructs are
+optional or still moving — the policy and risk schemas are marked
+experimental, and `main` removed the requirement modifiers together
+with their required rationale. Where Gemara is ahead, JASCON borrows:
+typed mappings with strength and confidence are the same IR 8477
+semantics. A reader from the Gemara community is the right person to
+say which of the gaps above are closed on a branch this check did not
+read.
+
+**Q29. CycloneDX Attestations already sign requirements, claims and
+evidence. Why a new format?**
+Because signing is the one feature where CycloneDX is close, and the
+others are missing. CycloneDX 1.7.2 signs per object over canonical JSON
+(JSF over JCS), so re-indenting and reordering keys leave the signature
+intact. The XML schema and the protobuf definition have no place for a
+signature, so it does not survive conversion, and neither signer nor
+affirmation carries a date. Beyond signing, CycloneDX has no risk
+object, no record of tailoring and no language map, and evidence
+attachments carry no hash. An extension is a name/value pair of strings
+whose registry is optional. Separation of vendor and controls rests on
+who signs which object: one file may define the standard's text, the
+claims and a self-assessor at once. JASCON's semantic digest also leaves
+annotations out, so a tracker id or a rendering hint can change without
+breaking an attestation, and it holds across formats because it binds
+content, not a serialisation.
+
+**Q30. XCCDF had overrides with authority and reason, tailoring files,
+`xml:lang` and signed data streams in 2012. What is new?**
+Less than a slide would like, and this appendix says so. XCCDF 1.2 keeps
+a vendor's benchmark untouched under a separate Tailoring file, records
+an override of a result with required authority, time and reason, and
+repeats titles and descriptions per language; SCAP 1.4 adds
+countersigning. JASCON's language map and its Deviation are not firsts.
+What XCCDF does not have: a risk record; a due date, expiry or waiver
+type; a hash on a collected item; an author on a single tailoring change
+(a severity can be lowered with no reason given); an element in a
+foreign namespace is checked only if a schema happens to be at hand. Its signatures use a
+canonicalisation that keeps whitespace, so re-indenting breaks them. A
+check in any language runs only through an OpenSCAP extension, outside
+SCAP conformance. And XCCDF is a format for checklists and their
+results; it has no catalogue mapping, no implementation record and no
+Statement of Applicability. JASCON's Check (Chapter 10 §10.7) learned
+from it: the declarative comparison is OVAL's idea, the collector in any
+language is SCE's.
+
+**Q31. CISO Assistant already computes a Statement of Applicability,
+records risk acceptance and gives exceptions an expiry. Why a format?**
+Because in CISO Assistant those features live in the application, and
+the question is what leaves it. Its library format carries frameworks,
+reference controls, risk matrices, mappings and translations per object,
+but not risk scenarios, acceptances, exceptions or the Statement of
+Applicability; those travel between instances through a backup export,
+which an auditor's own tool cannot read as a standard. Custom fields
+are typed inside the application, while the importer silently drops a
+library key it does not know. Nothing is
+signed: library and backup carry byte hashes for deduplication. A
+library update can rewrite existing assessments, so vendor content and
+the user's records are not kept apart. JASCON aims at the file that goes
+to the auditor and still means the same thing there. The comparison
+also shows where the application is ahead, and that is the next
+paragraph.
+
+**The punch that landed.** The check found two places where a neighbour
+is ahead, and both are recorded as open limits rather than argued away.
+A Deviation records when it was opened and who approved it, and has no
+expiry: a security exception in CISO Assistant has an expiration date,
+and a risk in OSCAL a deadline. No tailoring operation records its own
+author: a weakening needs an approved Deviation, every other change is
+attributed only through the Tailoring that holds it, where CISO
+Assistant logs each change with who and when. Neither has a proposal
+yet. Two claims in this project's own survey were also wrong and are
+corrected in `PRIOR-ART.md`: XCCDF does carry several languages, and
+"no neighbour combines" holds only for risk joined to control selection
+and a recomputed check verdict as data that leaves the tool — the other
+features each exist somewhere else, if not in one place.

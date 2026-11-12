@@ -145,36 +145,31 @@ nav: home
   </div>
 </section>
 
-<section class="section band" id="why">
+<section class="section band" id="compare">
   <div class="wrap">
-    <div class="section-head reveal">
-      <p class="eyebrow"><span class="no">01</span> Why</p>
-      <h2>Valid and meaningless are compatible states</h2>
-      <p class="lede">In mid-2026 this project counted, field by field, what three national authorities publish in machine-readable form: the Australian ISM, the German Grundschutz++ and FedRAMP's Consolidated Rules. Four counts decided the design.</p>
+    <div class="section-head wide reveal">
+      <p class="eyebrow"><span class="no">01</span> Prior art</p>
+      <h2>Ten things users and auditors need, format by format</h2>
+      <p class="lede">Checked on 13 November 2026 against the schemas and the code of five neighbours: OSCAL 1.2.3, Gemara 1.6.0, CycloneDX 1.7.2, CISO Assistant and XCCDF 1.2 with SCAP 1.4. No neighbour's data was converted. A cell says what a format provides, not what a deployment does with it.</p>
     </div>
-    <div class="findings reveal">
-      <div class="finding">
-        <span class="finding-n">0 of 100+</span>
-        <h3>FedRAMP authorizations in 2025 that arrived as OSCAL</h3>
-        <p>FedRAMP's RFC-0024 of January 2026 records more than one hundred Rev5 authorizations processed in 2025 and no submission in OSCAL, the format the programme helped to design.</p>
-      </div>
-      <div class="finding">
-        <span class="finding-n">125</span>
-        <h3>lists that no validator can see</h3>
-        <p>Grundschutz++ (catalogue of 16 July 2026) carries 12,009 namespaced props whose vocabulary lives in CSV side files. 125 of its 470 <code>tags</code> values pack several terms into one comma-separated string, such as <code>"Data Leak, Shadow IT"</code> in ASST.3.11, where JSON has arrays and OSCAL repeats the prop; 616 <code>threats</code> values do the same. Every OSCAL validator sees one string and reports the catalogue as valid.</p>
-      </div>
-      <div class="finding">
-        <span class="finding-n">2 teams, 1 model</span>
-        <h3>The same structure, discovered twice</h3>
-        <p>FedRAMP wrote its 2026 rules as plain JSON without OSCAL. Its typed fields match the German prop names almost one to one: <code>force</code> and <code>modal_verb</code>, <code>affects</code> and <code>target_object_categories</code>. The two teams did not coordinate.</p>
-      </div>
-      <div class="finding">
-        <span class="finding-n">5,301</span>
-        <h3>membership entries maintained twice</h3>
-        <p>59 % of all ISM props are one applicability matrix. It repeats what ASD also publishes as eight profile documents, because inlining the matrix costs less than consuming the profile mechanism.</p>
-      </div>
+    <div class="table-wrap reveal">
+      <table class="compare">
+        <thead><tr><th>What helps</th><th>OSCAL</th><th>Gemara</th><th>CycloneDX</th><th>CISO Assistant</th><th>SCAP / XCCDF</th><th>JASCON</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Controls selected by risk <small>ISO/IEC 27001 6.1.2 and 6.1.3</small></th><td class="no">no<small>a risk exists only after assessment</small></td><td class="part">partial<small>joined only through threats</small></td><td class="no">no</td><td class="part">tool only<small>not in the exchange format</small></td><td class="no">no</td><td class="yes">yes<small>the Statement of Applicability is computed; 2.0.0 candidate</small></td></tr>
+          <tr><th scope="row">Risk acceptance on record</th><td class="part">partial<small>no field for approver or date</small></td><td class="part">partial<small>no approver, no date</small></td><td class="no">no</td><td class="part">tool only<small>approver, date, expiry</small></td><td class="yes">yes<small>for check results: authority, time, reason</small></td><td class="yes">yes<small>approver, date, rationale; 2.0.0 candidate</small></td></tr>
+          <tr><th scope="row">Every decision traceable</th><td class="part">partial<small>who and when per document only</small></td><td class="part">partial<small>a rationale, no author</small></td><td class="no">no</td><td class="part">partial<small>an audit log; no reason enforced</small></td><td class="part">partial<small>an optional remark per change</small></td><td class="part">partial<small>weakening needs an approved exception; no author per change</small></td></tr>
+          <tr><th scope="row">Vendor recommendations kept apart from the controls</th><td class="yes">yes<small>component definitions; adoption is a copy</small></td><td class="part">partial<small>separate files, no authority boundary</small></td><td class="part">partial<small>one file may also define the standard</small></td><td class="part">partial<small>a library update can rewrite assessments</small></td><td class="part">partial<small>the vendor's checks still decide</small></td><td class="yes">yes<small>enforced on import; 2.0.0 candidate</small></td></tr>
+          <tr><th scope="row">Exceptions and findings with deadlines</th><td class="yes">yes<small>risk deadlines, milestones</small></td><td class="no">no</td><td class="part">partial<small>evidence expiry only</small></td><td class="part">tool only<small>exception expiry, due dates</small></td><td class="no">no</td><td class="part">partial<small>typed due dates on findings; an exception has no expiry</small></td></tr>
+          <tr><th scope="row">Automated checks as code, in any language</th><td class="part">partial<small>runs recorded, no check logic</small></td><td class="part">partial<small>runs recorded, logic outside the format</small></td><td class="part">partial<small>a command line as text</small></td><td class="part">partial<small>imports other tools' results</small></td><td class="part">partial<small>any language only outside SCAP conformance</small></td><td class="yes">yes<small>verdict recomputed from the observation; no runner; 2.0.0 candidate</small></td></tr>
+          <tr><th scope="row">One chain from clause to implementation, check run and evidence file</th><td class="yes">yes<small>with a hash on the evidence</small></td><td class="part">partial<small>no implementation record</small></td><td class="part">partial<small>attachments carry no hash</small></td><td class="part">partial<small>tool results not linked to controls</small></td><td class="part">partial<small>text references, no hashes</small></td><td class="yes">yes<small>check runs: 2.0.0 candidate</small></td></tr>
+          <tr><th scope="row">Several languages in one object</th><td class="no">no</td><td class="no">no</td><td class="no">no</td><td class="yes">yes<small>a <code>translations</code> map</small></td><td class="yes">yes<small><code>xml:lang</code></small></td><td class="yes">yes<small>a language map</small></td></tr>
+          <tr><th scope="row">A signature that survives repackaging</th><td class="no">no<small>byte hashes only</small></td><td class="no">no<small>bundle bytes, signed by tooling</small></td><td class="part">partial<small>lost in the XML and protobuf forms</small></td><td class="no">no</td><td class="part">partial<small>re-indenting breaks it</small></td><td class="yes">yes<small>also after a round trip through OSCAL</small></td></tr>
+          <tr><th scope="row">Extensible by facets <small>a contract that is enforced, pinned, and stops a tool that does not understand it</small></th><td class="part">partial<small>namespaced props, no schema behind them</small></td><td class="part">partial<small>closed schemas; a profile can narrow, not add</small></td><td class="part">partial<small>string properties, optional registry</small></td><td class="part">tool only<small>the format ignores unknown keys</small></td><td class="part">partial<small>foreign elements checked laxly</small></td><td class="yes">yes<small>schema pinned by digest; unknown semantics stop the tool</small></td></tr>
+        </tbody>
+      </table>
     </div>
-    <p class="source reveal">Counts from the published catalogues, July 2026. Method and raw numbers: <a href="{{ blob }}/jascon/references/ch01-why-this-exists.md" rel="noopener">handbook, chapter 1</a> and the <a href="{{ blob }}/drafts/prop-census-three-authorities-v0.3-input-r2.md" rel="noopener">prop census</a>. The catalogue authors are professionals and their tools reported green. OSCAL 1.x constrains document structure, where frameworks legitimately differ, and has no contract for extensions, where the meaning lives. JASCON reverses both settings.</p>
+    <p class="source reveal"><b>No</b>: the schema was read and has nothing for it. <b>Tool only</b>: the CISO Assistant application has it, the library format that leaves the application does not. The ten rows were chosen by this project, and on two of them a neighbour is ahead: an exception in JASCON has no expiry, and no tailoring change records its own author. Several languages, recorded acceptance, deadlines and the evidence chain each exist somewhere else. No neighbour has risk joined to the selection of controls, a recomputed check verdict, or an extension with a pinned contract that stops a tool which does not understand it, as data that leaves the tool. The source of every cell: <a href="{{ blob }}/PRIOR-ART.md" rel="noopener">PRIOR-ART.md</a>. What else each format misses: <a href="evidence.html#prior-art">prior art</a>. Why not extend one of them: <a href="{{ blob }}/jascon/references/appendix-f-objections.md" rel="noopener">handbook, appendix F.10</a>.</p>
   </div>
 </section>
 

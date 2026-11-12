@@ -536,6 +536,11 @@ td a.open { font-weight: 600; color: var(--accent); white-space: nowrap; text-de
 td a.open:hover { text-decoration: underline; }
 td.yes { color: var(--green); font-weight: 600; }
 td.no { color: var(--ink-3); }
+td.part { color: var(--amber); font-weight: 600; }
+table.compare tbody th { min-width: 22ch; }
+table.compare tbody th small { color: var(--ink-3); }
+table.compare td { white-space: nowrap; }
+table.compare td small { white-space: normal; min-width: 11ch; }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .chips li { display: inline-flex; align-items: center; gap: 8px; padding: 6px 6px 6px 11px; border: 1px solid var(--rule-2); border-radius: 999px; background: var(--card); font-size: 0.8rem; }
 .chips li code { background: none; padding: 0; color: var(--ink); font-size: 0.78rem; }

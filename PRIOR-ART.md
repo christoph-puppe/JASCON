@@ -2,7 +2,9 @@
 
 *State: 2026-11-10. Written during the external review of 2.0.0-rc.1
 (`drafts/CP-RISK-1.md` §13), because the specification's own prior-art
-section (IV.3) named OSCAL and NIST IR 8477 and nothing else.*
+section (IV.3) named OSCAL and NIST IR 8477 and nothing else. Extended
+2026-11-13 with a feature-by-feature check of five neighbours against
+their schemas at named versions ("Ten user-facing features", below).*
 
 This file answers three questions: which machine-readable formats already
 cover the ground JASCON covers, which JASCON features are therefore **not**
@@ -143,8 +145,11 @@ way, inside OSCAL props or outside OSCAL altogether.
 ### Older and adjacent
 
 - **SCAP / XCCDF / OVAL [secondary]:** checklist and check languages in
-  XML; XCCDF profiles are select-and-refine tailoring. No mappings, risk or
-  language maps.
+  XML; XCCDF profiles are select-and-refine tailoring. No mappings or risk.
+  *Corrected 2026-11-13:* this entry said "no language maps", taken from a
+  secondary source. XCCDF 1.2 repeats `title` and `description` per
+  `xml:lang` (read in the XSD and NIST IR 7275r4); see the nine-feature
+  check below.
 - **OpenControl / Compliance Masonry [repo]:** YAML standards and component
   narratives; no meaningful activity since 2023.
 - **MITRE Heimdall Data Format, OCSF compliance findings, SARIF
@@ -162,11 +167,11 @@ way, inside OSCAL props or outside OSCAL altogether.
 | JASCON feature | Nearest prior art |
 |---|---|
 | Structured modality per statement (must / should / may) | BSI Grundschutz++ modal-verb vocabulary; FedRAMP rules keywords; OSPS Baseline |
-| Prose as a language map | CISO Assistant `translations` |
+| Prose as a language map | CISO Assistant `translations`; XCCDF `xml:lang` |
 | Sets and baselines as membership, not markers | OSCAL profiles; XCCDF profiles |
 | Tailoring as a closed list of operations | OSCAL profile `alter` / `set-parameter`; XCCDF `refine-value` |
 | Typed cross-framework mappings | NIST IR 8477; SCF STRM; OSCAL 1.2 mapping model; Gemara mapping documents |
-| Typed, schema-bound extensions | Gemara (CUE); OSCAL props with namespaces (untyped) |
+| Typed, schema-bound extensions | Typed custom fields inside CISO Assistant; CUE profiles that narrow Gemara's closed schemas (OSPS Baseline); OSCAL props with namespaces (untyped); XCCDF elements in foreign namespaces (validated laxly) |
 | Component / implementation / assessment / finding chain | OSCAL lifecycle models; CycloneDX declarations |
 | Signed attestation over requirements | CycloneDX affirmations and signatures; DSSE envelope |
 | A risk record | OSCAL `risk` (ex post); Gemara risk catalog; CISO Assistant risk matrices; IR 8286 |
@@ -189,6 +194,57 @@ Within the limits stated at the top, no format was found that has all of:
 
 Each of the four has partial precedent. The claim is about the combination,
 and it is only as strong as this survey.
+
+## Ten user-facing features, checked against the schemas (2026-11-13)
+
+A second pass, made for the GRC Engineering Community talk: ten features
+that help the people who run compliance and the people who audit it,
+checked against the schemas and code of five neighbours. Unlike the survey
+above, every cell here was read from a primary source at a named version.
+No neighbour's data was converted; a cell says what the schema or code
+provides, not what a deployment does with it.
+
+Versions read: **OSCAL** v1.2.3 (Metaschema sources, JSON schema and XSD) ·
+**Gemara** v1.6.0 (CUE schemas, commit 14a8b1c; `main` at 5cea1b6 where it
+differs) · **CycloneDX** 1.7.2 (`bom-1.7.schema.json`, `jsf-0.82`, XSD,
+proto) · **CISO Assistant** community `main` at 694e32a9 (Django models and
+library YAML; **T** = the tool's data model, **F** = the library exchange
+format) · **SCAP** XCCDF 1.2 XSD, NIST IR 7275r4, SP 800-126r4 (SCAP 1.4,
+June 2026), IR 7802, OpenSCAP SCE.
+
+| Feature | OSCAL 1.2.3 | Gemara 1.6 | CycloneDX 1.7 | CISO Assistant | SCAP / XCCDF 1.2 | JASCON |
+|---|---|---|---|---|---|---|
+| 1 Risk-based control selection (ISO/IEC 27001 6.1.2–6.1.3) | no — `risk` only in assessment results and POA&M, after the fact | partial — a policy lists mitigated risks; controls join only through threats | no — a risk document can only be linked | T yes (SoA endpoint from `RiskScenario.applied_controls`) · F no | no — optional free-text `select/remark` | yes, 2.0.0 candidate — `Risk.treatments` name requirements to the clause; `risk-coverage` computes the SoA |
+| 2 Risk acceptance on record | partial — assembled from props, `risk-log` and statuses; no approver or acceptance date field | partial — `#AcceptedRisk`, justification optional, no approver or date | no | T yes (`RiskAcceptance`: approver, state, `accepted_at`, expiry) · F no | yes for results — `override` with required `@authority`, `@time`, old/new result, `remark` (authority is free text) | yes, 2.0.0 candidate — `acceptance` {approver-ref, date, rationale} plus residual level on a named scale |
+| 3 Every decision traceable | partial — profile changes carry no author; who/when only per document | partial — required `modification-rationale` on modifiers (removed on `main`); exclusions bare | no | partial — T audit log records who and when on every change; a justification is not enforced | partial — optional `remark` per change, who/when per Tailoring document; severity can drop unjustified | partial — every weakening needs an approved Deviation (approver, rationale, date), checked against the modality order; strengthening ops carry no individual author; exclusion rationale optional |
+| 4 Vendor recommendations kept apart from the controls | yes — the component definition cannot modify catalog or profile; adoption copies into the SSP, provenance link optional | partial — separate artifacts, explicit import; no vendor type or authority boundary | partial — claims and attestations are separate objects, but one file may also define the standard's text | partial — explicit library load; a library update can rewrite existing assessments | partial — a separate Tailoring file leaves the benchmark untouched, but the vendor's checks and defaults decide the results | yes, 2.0.0 candidate — advice packs hold Components only; import can change no requirement, tailoring or assessment (ADVICE-1..11); adoption by citation; publisher labelled claimed, attested or proven |
+| 5 Exceptions and findings with deadlines | yes — `risks/deadline`, deviation statuses, remediation milestones | no — no due date or expiry on findings or exemptions | partial — only `evidence.expires` | T yes (`SecurityException.expiration_date`, finding `due_date`) · F no | no — no waiver type, due date or expiry | partial — typed `due` on finding actions and typed `review-due` on risks (2.0.0 candidate); **a Deviation has no expiry** |
+| 6 Automated checks as code | partial — tool and observations recordable; no check logic on a control | partial — evaluation runs recorded in detail; check logic outside the format | partial — a command line as a string in a workflow task | partial — T imports results of external tools; no logic attached; old runs pruned | partial — any engine via `check/@system`; OpenSCAP SCE runs any executable but is outside SCAP 1.4 conformance; ARF makes runs reproducible | yes, 2.0.0 candidate — `collector@1` code in sh, bash, PowerShell, Python, Ansible, HTTP or a namespaced runtime; declarative criteria; every verdict recomputed from the recorded observation; no runner exists |
+| 7 Clause → implementation → check run → evidence file | yes — control → SSP → finding → observation → back-matter resource with hash | partial — clause → run → evidence with digest; no implementation record (layer 4 has no schema) | partial — clause → claim → evidence; attachments carry no hash | partial — T clause → control → evidence with SHA-256; tool results not linked to controls or evidence | partial — rule → result → collected items; references are text, items unhashed | yes — requirement → Implementation → Assessment run (`check-ref`) → `evidence/sha256/`; check runs are 2.0.0 candidate |
+| 8 Several languages in one object | no | no | no | yes — F and T reference objects carry `translations`; user-created objects single-language | yes — `@xml:lang` on repeatable title and description | yes — every human-readable field is a BCP 47 language map (1.0.0) |
+| 9 A signature that survives repackaging | no — byte hashes on resources only; inline signing declined (issue #245) | bytes only — signed OCI bundle via grcli and cosign, outside the schema | partial — JSF over JCS per object survives re-indentation and key order; XSD and proto carry no signature | no — byte hashes for deduplication | partial — XML-DSig; required C14N keeps whitespace, so re-indenting breaks it; countersigning in SCAP 1.4 | yes — semantic digest over canonical content without annotations, DSSE envelope; verifies after reformatting, a changed annotation and an OSCAL round trip (1.0.0, 5,886/5,886) |
+| 10 Extensible by facets: a contract that is enforced, pinned, and stops a tool that does not understand it | partial — `props` with an `ns` URI on almost every object; nothing ties the namespace to a schema, no document pins a version, no consumer must stop | partial — closed CUE definitions; a third party can narrow them with a CUE profile (OSPS Baseline) but not add a field; `cue vet` rejects unknown fields; the artifact does not pin the profile | partial — `properties` as name/value strings; the property taxonomy registry is optional; no pin; unknown properties pass | T partial (typed `CustomFieldDefinition`, values checked) · F no (unknown library keys silently ignored; `validate_library` is empty) | partial — `xs:any ##other` in metadata, target facts and check content, validated laxly; no pin; an unknown check system gives `notchecked`, an unknown extended component a warning | yes — facets registered under their own namespace, schema pinned in the manifest by exact version and digest, standard-library facets pinned verbatim; a facet that changes semantics stops a tool that does not implement it; annotations stay outside the digest (1.0.0) |
+
+What this changes in the claims above:
+
+- **Not unique:** several languages (CISO Assistant, XCCDF), risk acceptance
+  (CISO Assistant's tool, XCCDF overrides), deadlines (OSCAL, CISO
+  Assistant's tool), the evidence chain (OSCAL), vendor separation (OSCAL
+  component definitions). JASCON's version is stricter in places, which is
+  a different claim from "only".
+- **No neighbour has as a format:** risk joined to control selection
+  (CISO Assistant has it only inside its application), check verdicts
+  recomputed from recorded observations with the pass mark set by the
+  tailoring, and an extension whose contract is pinned and which stops a
+  tool that does not understand it (Gemara rejects unknown fields, but
+  offers no way to add one).
+- **Closest rival on signing:** CycloneDX — per-object JCS signatures
+  survive reformatting, not conversion. JASCON's semantic digest also
+  ignores annotations and verifies after an OSCAL round trip.
+- **Where JASCON is behind:** a Deviation has no expiry (CISO Assistant's
+  security exceptions and OSCAL's risk deadlines do), and no tailoring
+  operation records its own author (CISO Assistant's audit log does).
+  Both are candidates for the backlog.
 
 ## What follows for JASCON
 
