@@ -477,9 +477,13 @@ you switch on one of the two places that ask a language model (below).
   do so only after you type a key, show what they send, keep the key in
   memory only, and write nothing into the set until you take a suggestion.
 - What a page computes about validity comes from a port of
-  `validate_core.py`, run against all sixteen families of the conformance
-  vectors, signatures (Ed25519, verification only) and checks
-  included.
+  `validate_core.py`, run against all seventeen families of the
+  conformance vectors, signatures (Ed25519, verification only), checks
+  and advice packs included.
+- **Advice packs** are imported on the Home page: a preview of what a
+  vendor's file holds, the publisher as claimed, attested or proven, a
+  receipt after the import, and on the Implement page the adoption of a
+  recommendation as your own edge.
   [`jascon-app/readme.md`](jascon-app/readme.md) says what the app still
   leaves to the Python validator, which stays the reference.
 
@@ -489,7 +493,8 @@ python -m http.server 8000
 
 Then open `http://localhost:8000/jascon-app/index.html`. The single-file
 reader above stays as the page that needs no folder around it; it is at
-v1.8.0 and reads the Check type. New work goes into the app.
+v1.9.0, reads the Check type and shows advice packs. New work goes into
+the app.
 
 ## The website
 

@@ -78,7 +78,7 @@ port green on the same vectors. **Measured at rc.3 (2026-11-12):** 537
 vectors in seventeen families (`kernel`: 25, `advice`: 74); the Python
 reference and the PowerShell twin (Windows PowerShell 5.1) green on
 them, on the five shipped bundles, the worked advice pack and the example
-folder. **Not yet measured, said here rather than
+folder; the app's JavaScript port green on the same vectors. **Not yet measured, said here rather than
 below the fold:** Risk's two implementations share one author — the
 PowerShell twin, green on 2026-11-11, is independent in language and
 runtime only (IV.5b); Risk and Check entered the
@@ -1578,8 +1578,8 @@ props / no bespoke:* the document model that gave OSCAL this guarantee is
 replaced by a rule on a bundle.
 **Cons, stated.** Two kernel fields entered without counted evidence.
 No converter from OSCAL component definitions exists, so the only pack
-there is was written for this purpose. Whether the app reads packs is
-stated in IV.7.
+there is was written for this purpose. What the app and the reader do
+with a pack is stated in IV.7.
 
 **Rejected.** *The vendor publishes Implementation objects*: an
 Implementation says that a requirement is met, so importing a vendor's
@@ -1870,7 +1870,8 @@ of Check and of advice packs:
    machine on rc.2 with the advice rules (518 / 518; backlog #60). Both
    implementations have one author: their independence is language and
    runtime. A third,
-   the JavaScript port in `jascon-app/`: its state is in IV.7.
+   the JavaScript port in `jascon-app/`, passes the same vectors in the
+   same workflow; what it leaves to the reference is in its readme.
 4. **Corpus.** ◐ Risk: one, IFA, two Risk objects — enough to exercise
    the record's sourced half and to measure what the source lacks; not
    enough to exercise `rating`, `acceptance`, the later states, or
@@ -1979,11 +1980,23 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
   `drafts/cp-check-1-census/`) and `drafts/CP-ADVICE-1.md` (with the
   scripts that write its vectors and its worked example under
   `drafts/cp-advice-1/`).
-- **The reader** (`one-page-apps/jascon-reader.html`, v1.8.0) —
+- **The reader** (`one-page-apps/jascon-reader.html`, v1.9.0) —
   recognises Risk and Check; it shows recorded verdicts and recomputes
-  none. **The app** (`jascon-app/`, build 0.9.2) writes Checks, drafts
-  them with a model on request and recomputes every recorded verdict; it
-  runs no collector.
+  none. It shows a pack's header, the pack manifests a set keeps and a
+  Component's `product-version`, and checks a kept manifest against its
+  name; it runs no ADVICE rule and checks no signature. **The app**
+  (`jascon-app/`, build 0.9.3) writes Checks, drafts them with a model
+  on request and recomputes every recorded verdict; it runs no
+  collector. It ports ADVICE-1 to ADVICE-11 and passes the 74 advice
+  vectors and the 14 kernel shape vectors (115 tests). It imports a pack
+  from a folder, a ZIP or a URL after a preview, prints the receipt,
+  shows what another release changes and which edges it leaves without
+  a target, and writes an adoption as `<component-id>#<capability-id>`.
+  A publisher is shown as claimed, as attested and not verified, or as
+  proven (D25). Driven in a browser: import, a second import, another
+  release, a refused pack, the three publisher states, adoption, and
+  two exports through the reference validator. Not driven: drag and
+  drop of a pack, and the German texts of the new views on screen.
 - **License**: Apache-2.0 for the original work (`LICENSE`, `NOTICE`);
   the shipped bundles under their publishers' terms.
 

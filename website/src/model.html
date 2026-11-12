@@ -256,9 +256,10 @@ nav: model
           <li><b>A recommendation is a capability.</b> It names the requirement, the clauses, a text and suggested parameter values. <code>product-version</code> says which version of the product the advice is for.</li>
           <li><b>Adopting is your edge.</b> Your Implementation cites <code>&lt;component-id&gt;#&lt;capability-id&gt;</code>, and the product must be a member of your system. Until then the capability is a claim and nothing computes on it.</li>
           <li><b>The vendor's manifest is the import record.</b> It stays in your set, named by the SHA-256 of its bytes. The same file is not imported twice, another release replaces only what the earlier one brought, and advice edited after import is reported.</li>
-          <li><b>Claimed or proven.</b> A tool shows the publisher as claimed until the vendor's attestation binds the manifest and its signature verifies under a key you trust.</li>
+          <li><b>Claimed, attested or proven.</b> A tool shows the publisher as proven only when the vendor's attestation binds the manifest and its signature verifies under a key you trust. An attestation nobody checked is shown as such.</li>
         </ul>
         <p class="small"><span class="tier tier-designed">designed for</span> {{ n.advice_vectors }} vectors and one worked pack, signed with a public test key. No vendor has published a pack, and the clause-level field rests on one fictional example file. <a href="evidence.html#limits">The limits.</a></p>
+        <a class="link-arrow" href="app/index.html#load=../jascon/example-packs/dbvendor-server-7-advice/">Preview the worked pack in the app</a>
       </div>
       <div class="stack-lg reveal">
         <div class="window">

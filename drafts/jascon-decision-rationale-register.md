@@ -2316,6 +2316,28 @@ unnoticed.
 that GitHub changes over time. The summary of each run names the
 PowerShell version it found; the job fails if it is not 5.x.
 
+## The app and the reader, and what building them changed
+
+App build 0.9.3 ports ADVICE-1 to ADVICE-11 (74 vectors, 115 tests in
+its suite) and imports, replaces, refuses and adopts; reader v1.9.0
+shows packs and runs no rule (`drafts/CP-ADVICE-1.md` §14.3;
+specification IV.7).
+**Three states on a screen, two in the rules.** With no trusted key, an
+Attestation that binds a pack's manifest was printed as PROVEN with the
+word UNVERIFIED behind it. On a screen that is a green word over an
+unchecked signature, and such an Attestation costs nothing to forge.
+D25 now names a third display state, *attested, not verified*; the
+validators print it, the result values and the vectors stay as they
+were. **Rejected:** a third result value in `pack_publisher`. It would
+change eight vectors and the tier rule's vocabulary for a distinction
+that only matters where a person reads the output.
+**A defect in the reference.** `validate_bundle` read attestations
+beside the manifest only for a pack's own manifest, so a set that kept a
+pack reported its publisher as claimed although the vendor's Attestation
+lay beside it. Found by the app's port, which reads every attestation
+of a set; fixed in both validators.
+
 **Open after this section.** Nothing blocks the tag, and nothing is left
-for the author to decide before it. Work that does not block: #41, #46,
+for the author to decide before it. Four choices the app made are listed
+for confirmation in `drafts/CP-ADVICE-1.md` §14.3. Work that does not block: #41, #46,
 #47b, #54, #55, #58, #62, #64.
