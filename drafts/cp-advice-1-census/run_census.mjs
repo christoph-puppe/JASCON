@@ -2,7 +2,7 @@
 /* Census of OSCAL component definitions through the pack builder's import
    (CP-ADVICE-1 §2.3; specification D22, D25).
 
-   For every file in sources/ it opens one-page-apps/jascon-pack-builder.html
+   For every file in inputs/ it opens one-page-apps/jascon-pack-builder.html
    in Chromium, imports the file twice, once into a page with no catalogue
    and once with the SP 800-53 Rev 5 catalogue of converted_examples/
    loaded, and records what the import made of it next to what the source
@@ -27,7 +27,7 @@ const ROOT = path.resolve(HERE, "../..");
 const { chromium } = createRequire(import.meta.url)("playwright");
 const PAGE = pathToFileURL(path.join(ROOT, "one-page-apps/jascon-pack-builder.html")).href;
 const CATALOGUE = path.join(ROOT, "converted_examples/US.SP800-53/sp800-53-core-bundle");
-const SOURCES = path.join(HERE, "sources");
+const SOURCES = path.join(HERE, "inputs");
 
 /* what the source holds, counted from the file itself */
 function sourceCounts(doc) {
@@ -85,7 +85,7 @@ async function importOnce(browser, file, withCatalogue) {
 const browser = await chromium.launch();
 const files = fs.readdirSync(SOURCES).filter(f => f.endsWith(".json")).sort();
 const census = { measured: new Date().toISOString().slice(0, 10),
-  builder: null, inputs: "drafts/cp-advice-1-census/sources/ (see README.md for their origin)", files: [] };
+  builder: null, inputs: "drafts/cp-advice-1-census/inputs/ (see README.md for their origin)", files: [] };
 for (const f of files) {
   const file = path.join(SOURCES, f), bytes = fs.readFileSync(file);
   const doc = JSON.parse(bytes.toString("utf8"));

@@ -1,7 +1,7 @@
 {
  "measured": "2026-11-12",
  "builder": "1.2.0",
- "inputs": "drafts/cp-advice-1-census/sources/ (see README.md for their origin)",
+ "inputs": "drafts/cp-advice-1-census/inputs/ (see README.md for their origin)",
  "files": [
   {
    "file": "example-component-definition-min.json",

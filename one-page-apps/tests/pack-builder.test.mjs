@@ -305,7 +305,7 @@ test("with the SP 800-53 catalogue loaded, the import places every value under t
 test("NIST's example component definitions import with every control resolved and no OSCAL markup left", OPTS, () => withBuilder(async B => {
   const { page, set } = B;
   await set('[data-bind="origin"]', "https://vendor.example");
-  const dir = path.join(ROOT, "drafts/cp-advice-1-census/sources");
+  const dir = path.join(ROOT, "drafts/cp-advice-1-census/inputs");
   for (const f of fs.readdirSync(dir).filter(f => f.endsWith(".json")).sort()) {
     await page.click("#btn-new");
     await set('[data-bind="origin"]', "https://vendor.example");

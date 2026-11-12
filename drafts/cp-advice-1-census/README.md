@@ -12,7 +12,7 @@ the numbers are what a vendor would see.
 
 ## Inputs
 
-`sources/`: the four JSON files of `examples/component-definition/json/` in
+`inputs/`: the four JSON files of `examples/component-definition/json/` in
 `usnistgov/oscal-content`, commit `f0de6d8d8c059d374f15e0ae07508d82e370fc1d`
 (2026-10-22), copied unchanged. NIST's content is in the public domain and
 dedicated under CC0 1.0 (the repository's `LICENSE.md`).
