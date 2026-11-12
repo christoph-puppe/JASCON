@@ -366,6 +366,7 @@ of a model service is not a setting.
 | `ui:lang` | Language of the interface | (empty), `en`, `de` | (empty) | Empty follows the browser. |
 | `ui:contentlang` | Language of the content | text | (empty) | BCP-47 tag picked from the language maps of a bundle, for example de. Empty follows the interface. |
 | `ui:theme` | Colour scheme | `dark`, `light`, `system` | `dark` | System follows the operating system. |
+| `ui:style` | Style | (empty), `classic`, `ledger`, `engraving`, `still-life` | (empty) | Empty follows the style picked on jascon.net in this browser. Classic is the original look; the other three take the palette and type of the website's styles. |
 | `org:ns` | Namespace for new objects | text | `https://example.org/my` | The URI under which this app mints ids, for example https://your.example. Use a name you control. |
 | `org:owner` | Default risk owner | text | (empty) | A party URI, for example https://your.example/party/ciso. Prefilled when a risk is created. |
 | `ai:backend` | Model service | `gemini`, `openrouter`, `openai` | `gemini` | gemini is Google's API, openrouter is OpenRouter, openai is an endpoint of your own that speaks the OpenAI chat-completions protocol. No model is called until you type a key on a page that offers suggestions. |

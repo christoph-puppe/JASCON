@@ -25,7 +25,8 @@
 <link rel="preload" href="assets/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/source-serif-4-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/css/site.css">
-<script>/* scripts are on; colour scheme before the first paint */document.documentElement.className="js";try{var t=localStorage.getItem("jascon-site:theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+<link rel="stylesheet" href="assets/css/styles.css">
+<script>/* scripts are on; colour scheme and style before the first paint */document.documentElement.className="js";try{var t=localStorage.getItem("jascon-site:theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t);var s=localStorage.getItem("jascon-site:style");if(s==="ledger"||s==="engraving"||s==="still-life")document.documentElement.setAttribute("data-style",s)}catch(e){}</script>
 </head>
 <body class="{{ page.body_class }}">
 <a class="skip" href="#main">Skip to the content</a>
@@ -45,6 +46,14 @@
       <a class="nav-ext" href="{{ repo }}" rel="noopener">GitHub</a>
     </nav>
     <div class="bar-end">
+      <label class="style-pick"><span class="sr">Style of this site</span>
+        <select id="style">
+          <option value="">Classic</option>
+          <option value="ledger">Ledger</option>
+          <option value="engraving">Engraving</option>
+          <option value="still-life">Still life</option>
+        </select>
+      </label>
       <button class="icon-btn" id="theme" type="button" aria-label="Switch between light and dark">
         <svg class="i-sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.5v2.6M12 18.9v2.6M2.5 12h2.6M18.9 12h2.6M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
         <svg class="i-moon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M20 14.2A8.2 8.2 0 0 1 9.8 4a8.2 8.2 0 1 0 10.2 10.2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>

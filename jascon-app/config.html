@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Settings · JASCON App</title>
 <link rel="stylesheet" href="jascon-core.css">
-<script>try{var _t=localStorage.getItem("jsc:cfg:ui:theme")||"dark";if(_t!=="system")document.documentElement.setAttribute("data-theme",_t)}catch(e){}</script>
+<link rel="stylesheet" href="jascon-styles.css">
+<script>try{var _t=localStorage.getItem("jsc:cfg:ui:theme")||"dark";if(_t!=="system")document.documentElement.setAttribute("data-theme",_t);var _s=localStorage.getItem("jsc:cfg:ui:style")||localStorage.getItem("jascon-site:style")||"";if(_s==="ledger"||_s==="engraving"||_s==="still-life")document.documentElement.setAttribute("data-style",_s)}catch(e){}</script>
 <style>
 body { overflow: auto; }
 main { max-width: 860px; margin: 0 auto; padding: 22px 22px 60px; display: flex; flex-direction: column; gap: 16px; }
@@ -70,6 +71,8 @@ jscI18n.add("de", {
   "BCP-47 tag picked from the language maps of a bundle, for example de. Empty follows the interface.":
     "BCP-47-Kürzel, das aus den Sprachtabellen eines Bundles gewählt wird, zum Beispiel de. Leer folgt der Oberfläche.",
   "Colour scheme": "Farbschema", "System follows the operating system.": "System folgt dem Betriebssystem.",
+  "Empty follows the style picked on jascon.net in this browser. Classic is the original look; the other three take the palette and type of the website's styles.":
+    "Leer folgt dem Stil, der in diesem Browser auf jascon.net gewählt wurde. Klassisch ist das ursprüngliche Aussehen; die anderen drei übernehmen Farben und Schrift der Stile der Website.",
   "Namespace for new objects": "Namensraum für neue Objekte",
   "The URI under which this app mints ids, for example https://your.example. Use a name you control.":
     "Die URI, unter der diese App Ids vergibt, zum Beispiel https://your.example. Einen Namen verwenden, den man selbst kontrolliert.",
@@ -123,7 +126,7 @@ function renderFields(host, list) {
       input = document.createElement("select");
       for (const v of c.choices) {
         const o = document.createElement("option");
-        o.value = v; o.textContent = v === "" ? T("(follow the browser)") : (c.key === "ui:theme" ? T(v) : v);
+        o.value = v; o.textContent = c.names ? T(c.names[v]) : v === "" ? T("(follow the browser)") : (c.key === "ui:theme" ? T(v) : v);
         input.appendChild(o);
       }
     } else {
@@ -135,6 +138,7 @@ function renderFields(host, list) {
       const v = input.value.trim();
       if (v === c.def) jscCfg.remove(c.key); else jscCfg.set(c.key, v);
       if (c.key === "ui:theme") jscTheme.apply();
+      if (c.key === "ui:style") jscStyle.apply();
       if (c.key === "ui:lang") location.reload();
     });
     const help = document.createElement("div"); help.className = "hint"; help.textContent = T(c.help);

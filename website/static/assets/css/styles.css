@@ -1,0 +1,386 @@
+/* jascon.net - the three alternative styles, chosen with the picker in the
+   header and stored in this browser like the colour scheme.
+
+   No attribute on <html> is the classic look of site.css. data-style on
+   <html> switches to one of three worlds:
+
+     ledger      ruled paper, blue-black ink, one red margin line,
+                 typewriter numerals
+     engraving   laid paper, iron-gall ink, red chalk, Garamond, plate
+                 marks and hatching
+     still-life  chalk, putty and umber, Bodoni over Titillium, tone steps,
+                 no shadows
+
+   Each style redefines every token of site.css three times (light; dark by
+   the button; dark by the system), for the reason site.css gives: CSS cannot
+   share one block between a selector and a media query. Change all three.
+   Code windows stay dark in every style, tinted to the style's ink.
+
+   Fonts load only when a style that uses them is chosen: the browser fetches
+   a face when text is set in it. All are SIL OFL 1.1, served from
+   assets/fonts like the classic three. */
+
+@font-face { font-family: "Barlow"; src: url("../fonts/barlow-latin-400-normal.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Barlow"; src: url("../fonts/barlow-latin-500-normal.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: swap; }
+@font-face { font-family: "Barlow"; src: url("../fonts/barlow-latin-600-normal.woff2") format("woff2"); font-weight: 600 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "Barlow Condensed"; src: url("../fonts/barlow-condensed-latin-500-normal.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: swap; }
+@font-face { font-family: "Barlow Condensed"; src: url("../fonts/barlow-condensed-latin-600-normal.woff2") format("woff2"); font-weight: 600 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "Courier Prime"; src: url("../fonts/courier-prime-latin-400-normal.woff2") format("woff2"); font-weight: 400 500; font-style: normal; font-display: swap; }
+@font-face { font-family: "Courier Prime"; src: url("../fonts/courier-prime-latin-700-normal.woff2") format("woff2"); font-weight: 600 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "EB Garamond"; src: url("../fonts/eb-garamond-latin-wght-normal.woff2") format("woff2"); font-weight: 400 800; font-style: normal; font-display: swap; }
+@font-face { font-family: "EB Garamond"; src: url("../fonts/eb-garamond-latin-wght-italic.woff2") format("woff2"); font-weight: 400 800; font-style: italic; font-display: swap; }
+@font-face { font-family: "Bodoni Moda"; src: url("../fonts/bodoni-moda-latin-wght-normal.woff2") format("woff2"); font-weight: 400 900; font-style: normal; font-display: swap; }
+@font-face { font-family: "Bodoni Moda"; src: url("../fonts/bodoni-moda-latin-wght-italic.woff2") format("woff2"); font-weight: 400 900; font-style: italic; font-display: swap; }
+@font-face { font-family: "Titillium Web"; src: url("../fonts/titillium-web-latin-400-normal.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Titillium Web"; src: url("../fonts/titillium-web-latin-600-normal.woff2") format("woff2"); font-weight: 600 700; font-style: normal; font-display: swap; }
+
+/* ---------- the picker (every style, the classic one included) ---------- */
+.style-pick { display: none; position: relative; color: var(--ink-2); }
+.js .style-pick { display: block; }
+.style-pick select {
+  appearance: none; -webkit-appearance: none; height: 38px; padding: 0 30px 0 12px; cursor: pointer;
+  font: inherit; font-size: 0.86rem; font-weight: 500; color: inherit; background: transparent;
+  border: 1px solid var(--rule); border-radius: 10px;
+}
+.style-pick select:hover { color: var(--ink); border-color: var(--rule-2); }
+.style-pick select option { color: var(--ink); background: var(--card); }
+.style-pick::after {
+  content: ""; position: absolute; right: 13px; top: 50%; width: 6px; height: 6px; pointer-events: none;
+  border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: translateY(-70%) rotate(45deg);
+}
+@media (max-width: 400px) { .style-pick select { padding: 0 24px 0 8px; font-size: 0.8rem; } .style-pick::after { right: 9px; } }
+
+/* ======================================================================
+   LEDGER
+   ====================================================================== */
+:root[data-style="ledger"] {
+  --paper: oklch(0.972 0.008 95); --paper-2: oklch(0.945 0.01 95); --card: oklch(0.992 0.004 95);
+  --ink: oklch(0.27 0.035 262); --ink-2: oklch(0.38 0.03 262); --ink-3: oklch(0.47 0.025 262);
+  --rule: oklch(0.55 0.07 240 / 0.22); --rule-2: oklch(0.5 0.07 240 / 0.42);
+  --accent: oklch(0.52 0.18 27); --accent-2: oklch(0.45 0.17 27); --accent-wash: oklch(0.52 0.18 27 / 0.08); --accent-line: oklch(0.52 0.18 27 / 0.3); --on-accent: oklch(0.99 0.004 95);
+  --green: oklch(0.45 0.09 160); --green-wash: oklch(0.45 0.09 160 / 0.1); --amber: oklch(0.52 0.11 70); --amber-wash: oklch(0.7 0.12 75 / 0.14);
+  --blue: oklch(0.45 0.1 250); --blue-wash: oklch(0.45 0.1 250 / 0.1); --red: oklch(0.5 0.17 18); --red-wash: oklch(0.5 0.17 18 / 0.1);
+  --code-bg: oklch(0.22 0.035 262); --code-bar: oklch(0.26 0.035 262); --code-rule: oklch(0.95 0.01 95 / 0.1);
+  --code-ink: oklch(0.93 0.01 95); --code-dim: oklch(0.72 0.02 250); --code-key: oklch(0.78 0.11 25); --code-str: oklch(0.86 0.07 95); --code-num: oklch(0.82 0.08 200); --code-kw: oklch(0.78 0.08 240);
+  --shadow: 0 1px 0 oklch(0.5 0.07 240 / 0.3), 0 14px 30px -20px oklch(0.27 0.035 262 / 0.35);
+  --shadow-lg: 0 1px 0 oklch(0.5 0.07 240 / 0.3), 0 26px 50px -28px oklch(0.27 0.035 262 / 0.5);
+  --sans: "Barlow", system-ui, sans-serif; --serif: "Barlow Condensed", "Arial Narrow", sans-serif; --mono: "Courier Prime", "Courier New", monospace;
+  --radius: 2px; --lines: oklch(0.55 0.07 240 / 0.16); color-scheme: light;
+}
+:root[data-style="ledger"][data-theme="dark"] {
+  --paper: oklch(0.2 0.03 262); --paper-2: oklch(0.225 0.03 262); --card: oklch(0.245 0.032 262);
+  --ink: oklch(0.94 0.01 95); --ink-2: oklch(0.84 0.012 95); --ink-3: oklch(0.72 0.015 95);
+  --rule: oklch(0.75 0.06 240 / 0.14); --rule-2: oklch(0.75 0.06 240 / 0.3);
+  --accent: oklch(0.7 0.16 27); --accent-2: oklch(0.78 0.13 27); --accent-wash: oklch(0.7 0.16 27 / 0.12); --accent-line: oklch(0.7 0.16 27 / 0.38); --on-accent: oklch(0.18 0.03 262);
+  --green: oklch(0.8 0.1 160); --green-wash: oklch(0.8 0.1 160 / 0.13); --amber: oklch(0.83 0.11 80); --amber-wash: oklch(0.83 0.11 80 / 0.13);
+  --blue: oklch(0.78 0.09 240); --blue-wash: oklch(0.78 0.09 240 / 0.14); --red: oklch(0.74 0.15 20); --red-wash: oklch(0.74 0.15 20 / 0.14);
+  --code-bg: oklch(0.155 0.03 262); --code-bar: oklch(0.185 0.03 262);
+  --shadow: 0 1px 0 oklch(0 0 0 / 0.3), 0 14px 30px -18px oklch(0 0 0 / 0.5);
+  --shadow-lg: 0 1px 0 oklch(0 0 0 / 0.3), 0 26px 50px -24px oklch(0 0 0 / 0.6);
+  --lines: oklch(0.75 0.06 240 / 0.1); color-scheme: dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-style="ledger"]:not([data-theme="light"]) {
+    --paper: oklch(0.2 0.03 262); --paper-2: oklch(0.225 0.03 262); --card: oklch(0.245 0.032 262);
+    --ink: oklch(0.94 0.01 95); --ink-2: oklch(0.84 0.012 95); --ink-3: oklch(0.72 0.015 95);
+    --rule: oklch(0.75 0.06 240 / 0.14); --rule-2: oklch(0.75 0.06 240 / 0.3);
+    --accent: oklch(0.7 0.16 27); --accent-2: oklch(0.78 0.13 27); --accent-wash: oklch(0.7 0.16 27 / 0.12); --accent-line: oklch(0.7 0.16 27 / 0.38); --on-accent: oklch(0.18 0.03 262);
+    --green: oklch(0.8 0.1 160); --green-wash: oklch(0.8 0.1 160 / 0.13); --amber: oklch(0.83 0.11 80); --amber-wash: oklch(0.83 0.11 80 / 0.13);
+    --blue: oklch(0.78 0.09 240); --blue-wash: oklch(0.78 0.09 240 / 0.14); --red: oklch(0.74 0.15 20); --red-wash: oklch(0.74 0.15 20 / 0.14);
+    --code-bg: oklch(0.155 0.03 262); --code-bar: oklch(0.185 0.03 262);
+    --shadow: 0 1px 0 oklch(0 0 0 / 0.3), 0 14px 30px -18px oklch(0 0 0 / 0.5);
+    --shadow-lg: 0 1px 0 oklch(0 0 0 / 0.3), 0 26px 50px -24px oklch(0 0 0 / 0.6);
+    --lines: oklch(0.75 0.06 240 / 0.1); color-scheme: dark;
+  }
+}
+
+/* ======================================================================
+   ENGRAVING
+   ====================================================================== */
+:root[data-style="engraving"] {
+  --paper: oklch(0.945 0.022 85); --paper-2: oklch(0.915 0.026 83); --card: oklch(0.965 0.016 85);
+  --ink: oklch(0.23 0.02 60); --ink-2: oklch(0.35 0.025 60); --ink-3: oklch(0.44 0.025 60);
+  --rule: oklch(0.35 0.02 60 / 0.2); --rule-2: oklch(0.3 0.02 60 / 0.42);
+  --accent: oklch(0.5 0.14 38); --accent-2: oklch(0.43 0.13 38); --accent-wash: oklch(0.5 0.14 38 / 0.09); --accent-line: oklch(0.5 0.14 38 / 0.32); --on-accent: oklch(0.97 0.015 85);
+  --green: oklch(0.45 0.08 135); --green-wash: oklch(0.45 0.08 135 / 0.11); --amber: oklch(0.52 0.1 75); --amber-wash: oklch(0.7 0.1 80 / 0.16);
+  --blue: oklch(0.45 0.07 240); --blue-wash: oklch(0.45 0.07 240 / 0.1); --red: oklch(0.48 0.16 28); --red-wash: oklch(0.48 0.16 28 / 0.1);
+  --code-bg: oklch(0.22 0.025 55); --code-bar: oklch(0.26 0.028 55); --code-rule: oklch(0.93 0.02 85 / 0.1);
+  --code-ink: oklch(0.92 0.02 85); --code-dim: oklch(0.73 0.025 75); --code-key: oklch(0.77 0.11 45); --code-str: oklch(0.8 0.07 130); --code-num: oklch(0.84 0.08 85); --code-kw: oklch(0.78 0.05 230);
+  --shadow: 3px 6px 18px -12px oklch(0.25 0.04 55 / 0.45);
+  --shadow-lg: 8px 18px 44px -22px oklch(0.25 0.04 55 / 0.55);
+  --sans: "EB Garamond", "Iowan Old Style", Georgia, serif; --serif: "EB Garamond", "Iowan Old Style", Georgia, serif; --mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+  --radius: 1px; --chain: oklch(0.5 0.03 70 / 0.05); --laid: oklch(0.5 0.03 70 / 0.025); color-scheme: light;
+}
+:root[data-style="engraving"][data-theme="dark"] {
+  --paper: oklch(0.205 0.025 55); --paper-2: oklch(0.23 0.027 55); --card: oklch(0.25 0.028 55);
+  --ink: oklch(0.93 0.02 85); --ink-2: oklch(0.84 0.022 82); --ink-3: oklch(0.73 0.025 80);
+  --rule: oklch(0.9 0.02 85 / 0.14); --rule-2: oklch(0.9 0.02 85 / 0.3);
+  --accent: oklch(0.72 0.13 42); --accent-2: oklch(0.8 0.1 45); --accent-wash: oklch(0.72 0.13 42 / 0.12); --accent-line: oklch(0.72 0.13 42 / 0.38); --on-accent: oklch(0.18 0.025 55);
+  --green: oklch(0.78 0.09 135); --green-wash: oklch(0.78 0.09 135 / 0.13); --amber: oklch(0.83 0.1 80); --amber-wash: oklch(0.83 0.1 80 / 0.13);
+  --blue: oklch(0.78 0.06 230); --blue-wash: oklch(0.78 0.06 230 / 0.14); --red: oklch(0.74 0.14 30); --red-wash: oklch(0.74 0.14 30 / 0.14);
+  --code-bg: oklch(0.16 0.02 55); --code-bar: oklch(0.19 0.022 55);
+  --shadow: 3px 6px 18px -10px oklch(0 0 0 / 0.5);
+  --shadow-lg: 8px 18px 44px -18px oklch(0 0 0 / 0.65);
+  --chain: oklch(0.9 0.03 80 / 0.035); --laid: oklch(0.9 0.03 80 / 0.018); color-scheme: dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-style="engraving"]:not([data-theme="light"]) {
+    --paper: oklch(0.205 0.025 55); --paper-2: oklch(0.23 0.027 55); --card: oklch(0.25 0.028 55);
+    --ink: oklch(0.93 0.02 85); --ink-2: oklch(0.84 0.022 82); --ink-3: oklch(0.73 0.025 80);
+    --rule: oklch(0.9 0.02 85 / 0.14); --rule-2: oklch(0.9 0.02 85 / 0.3);
+    --accent: oklch(0.72 0.13 42); --accent-2: oklch(0.8 0.1 45); --accent-wash: oklch(0.72 0.13 42 / 0.12); --accent-line: oklch(0.72 0.13 42 / 0.38); --on-accent: oklch(0.18 0.025 55);
+    --green: oklch(0.78 0.09 135); --green-wash: oklch(0.78 0.09 135 / 0.13); --amber: oklch(0.83 0.1 80); --amber-wash: oklch(0.83 0.1 80 / 0.13);
+    --blue: oklch(0.78 0.06 230); --blue-wash: oklch(0.78 0.06 230 / 0.14); --red: oklch(0.74 0.14 30); --red-wash: oklch(0.74 0.14 30 / 0.14);
+    --code-bg: oklch(0.16 0.02 55); --code-bar: oklch(0.19 0.022 55);
+    --shadow: 3px 6px 18px -10px oklch(0 0 0 / 0.5);
+    --shadow-lg: 8px 18px 44px -18px oklch(0 0 0 / 0.65);
+    --chain: oklch(0.9 0.03 80 / 0.035); --laid: oklch(0.9 0.03 80 / 0.018); color-scheme: dark;
+  }
+}
+
+/* ======================================================================
+   STILL LIFE
+   ====================================================================== */
+:root[data-style="still-life"] {
+  --paper: oklch(0.93 0.014 80); --paper-2: oklch(0.885 0.017 78); --card: oklch(0.955 0.01 82);
+  --ink: oklch(0.29 0.02 55); --ink-2: oklch(0.37 0.02 55); --ink-3: oklch(0.43 0.02 55);
+  --rule: oklch(0.29 0.02 55 / 0.14); --rule-2: oklch(0.29 0.02 55 / 0.28);
+  --accent: oklch(0.5 0.09 38); --accent-2: oklch(0.44 0.085 38); --accent-wash: oklch(0.5 0.09 38 / 0.09); --accent-line: oklch(0.5 0.09 38 / 0.3); --on-accent: oklch(0.96 0.01 82);
+  --green: oklch(0.45 0.06 145); --green-wash: oklch(0.45 0.06 145 / 0.12); --amber: oklch(0.5 0.08 75); --amber-wash: oklch(0.7 0.07 80 / 0.18);
+  --blue: oklch(0.46 0.04 230); --blue-wash: oklch(0.46 0.04 230 / 0.12); --red: oklch(0.5 0.12 28); --red-wash: oklch(0.5 0.12 28 / 0.11);
+  --code-bg: oklch(0.28 0.018 55); --code-bar: oklch(0.32 0.02 55); --code-rule: oklch(0.93 0.014 80 / 0.1);
+  --code-ink: oklch(0.92 0.014 80); --code-dim: oklch(0.75 0.018 75); --code-key: oklch(0.81 0.06 40); --code-str: oklch(0.8 0.045 140); --code-num: oklch(0.85 0.06 80); --code-kw: oklch(0.79 0.03 225);
+  --shadow: none; --shadow-lg: none;
+  --sans: "Titillium Web", system-ui, sans-serif; --serif: "Bodoni Moda", Didot, "Bodoni 72", serif; --mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+  --radius: 16px; color-scheme: light;
+}
+:root[data-style="still-life"][data-theme="dark"] {
+  --paper: oklch(0.245 0.012 60); --paper-2: oklch(0.275 0.014 60); --card: oklch(0.29 0.014 60);
+  --ink: oklch(0.93 0.014 80); --ink-2: oklch(0.85 0.015 78); --ink-3: oklch(0.75 0.016 75);
+  --rule: oklch(0.93 0.014 80 / 0.12); --rule-2: oklch(0.93 0.014 80 / 0.26);
+  --accent: oklch(0.75 0.085 40); --accent-2: oklch(0.82 0.07 42); --accent-wash: oklch(0.75 0.085 40 / 0.12); --accent-line: oklch(0.75 0.085 40 / 0.36); --on-accent: oklch(0.22 0.015 55);
+  --green: oklch(0.8 0.06 145); --green-wash: oklch(0.8 0.06 145 / 0.13); --amber: oklch(0.83 0.07 80); --amber-wash: oklch(0.83 0.07 80 / 0.13);
+  --blue: oklch(0.78 0.035 225); --blue-wash: oklch(0.78 0.035 225 / 0.14); --red: oklch(0.75 0.11 30); --red-wash: oklch(0.75 0.11 30 / 0.14);
+  --code-bg: oklch(0.19 0.012 60); --code-bar: oklch(0.22 0.013 60);
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-style="still-life"]:not([data-theme="light"]) {
+    --paper: oklch(0.245 0.012 60); --paper-2: oklch(0.275 0.014 60); --card: oklch(0.29 0.014 60);
+    --ink: oklch(0.93 0.014 80); --ink-2: oklch(0.85 0.015 78); --ink-3: oklch(0.75 0.016 75);
+    --rule: oklch(0.93 0.014 80 / 0.12); --rule-2: oklch(0.93 0.014 80 / 0.26);
+    --accent: oklch(0.75 0.085 40); --accent-2: oklch(0.82 0.07 42); --accent-wash: oklch(0.75 0.085 40 / 0.12); --accent-line: oklch(0.75 0.085 40 / 0.36); --on-accent: oklch(0.22 0.015 55);
+    --green: oklch(0.8 0.06 145); --green-wash: oklch(0.8 0.06 145 / 0.13); --amber: oklch(0.83 0.07 80); --amber-wash: oklch(0.83 0.07 80 / 0.13);
+    --blue: oklch(0.78 0.035 225); --blue-wash: oklch(0.78 0.035 225 / 0.14); --red: oklch(0.75 0.11 30); --red-wash: oklch(0.75 0.11 30 / 0.14);
+    --code-bg: oklch(0.19 0.012 60); --code-bar: oklch(0.22 0.013 60);
+    color-scheme: dark;
+  }
+}
+
+/* ======================================================================
+   What every painter style changes the same way
+   ====================================================================== */
+:root[data-style] body { font-feature-settings: normal; }
+:root[data-style] .site-header { background: var(--paper); backdrop-filter: none; -webkit-backdrop-filter: none; }
+:root[data-style] .hero::before,
+:root[data-style] .page-hero::before { display: none; }
+:root[data-style] .btn-primary { box-shadow: none; }
+:root[data-style] .btn:hover { transform: none; }
+:root[data-style] .mk { background: color-mix(in oklch, var(--code-key) 20%, transparent); box-shadow: 0 0 0 2px color-mix(in oklch, var(--code-key) 20%, transparent); }
+:root[data-style] .cd-req mark { background: color-mix(in oklch, var(--code-key) 22%, transparent); }
+:root[data-style] .cta::before { background: radial-gradient(60% 120% at 100% 0%, color-mix(in oklch, var(--accent) 45%, transparent), transparent 65%); }
+:root[data-style] .card.feature { background: var(--card); }
+
+/* ---------- Ledger ---------- */
+:root[data-style="ledger"] body { line-height: 1.65; }
+/* the ruled sheet: the frame of each page carries the lines, the reading column does not */
+:root[data-style="ledger"] .hero,
+:root[data-style="ledger"] .page-hero,
+:root[data-style="ledger"] .band,
+:root[data-style="ledger"] .site-footer {
+  background-image: linear-gradient(to bottom, transparent 27px, var(--lines) 27px);
+  background-size: 100% 28px;
+}
+/* the red margin line, left of the text column, down the whole page */
+:root[data-style="ledger"] main { position: relative; }
+:root[data-style="ledger"] main::before {
+  content: ""; position: absolute; top: 0; bottom: 0; z-index: 1; pointer-events: none; width: 1px; background: var(--accent); opacity: 0.6;
+  left: max(6px, calc((100% - var(--wrap)) / 2 - 18px));
+}
+:root[data-style="ledger"] h1, :root[data-style="ledger"] h2, :root[data-style="ledger"] .display { font-weight: 600; letter-spacing: -0.004em; line-height: 1.0; }
+:root[data-style="ledger"] .hero h1 { font-size: clamp(2.8rem, 1.4rem + 4.6vw, 5rem); }
+:root[data-style="ledger"] .hero h1 em { font-style: normal; font-weight: 600; }
+:root[data-style="ledger"] .wordmark { font-family: var(--serif); font-weight: 600; font-size: 1.3rem; letter-spacing: 0.08em; }
+:root[data-style="ledger"] .mark .mark-bg { rx: 2px; }
+:root[data-style="ledger"] .brand .mark { border-radius: 2px; }
+:root[data-style="ledger"] .eyebrow { text-transform: none; letter-spacing: 0; font-size: 0.86rem; font-weight: 400; }
+:root[data-style="ledger"] .tier { background: none; padding: 0; border-radius: 0; text-transform: none; letter-spacing: 0; font-size: 0.78rem; font-weight: 400; }
+:root[data-style="ledger"] .tier::before { width: 0.9em; height: 1px; border-radius: 0; }
+:root[data-style="ledger"] .stat-n,
+:root[data-style="ledger"] .finding-n { font-family: var(--mono); font-weight: 700; letter-spacing: -0.03em; }
+:root[data-style="ledger"] .verdict-v,
+:root[data-style="ledger"] .card.feature h3,
+:root[data-style="ledger"] .rule3 h3 { font-weight: 600; letter-spacing: 0; }
+:root[data-style="ledger"] .stats { box-shadow: var(--shadow); }
+:root[data-style="ledger"] thead th { text-transform: none; letter-spacing: 0; font-size: 0.8rem; border-bottom: 2px solid var(--accent); }
+:root[data-style="ledger"] .site-footer nav h2,
+:root[data-style="ledger"] .group-label,
+:root[data-style="ledger"] .type .replaces b,
+:root[data-style="ledger"] .flow-step .where,
+:root[data-style="ledger"] .role .who,
+:root[data-style="ledger"] .role .move b { text-transform: none; letter-spacing: 0; font-size: 0.8rem; }
+:root[data-style="ledger"] .btn,
+:root[data-style="ledger"] .btn-sm,
+:root[data-style="ledger"] .icon-btn,
+:root[data-style="ledger"] .style-pick select,
+:root[data-style="ledger"] .nav a,
+:root[data-style="ledger"] .screen-tab,
+:root[data-style="ledger"] .chips li,
+:root[data-style="ledger"] .chips li span,
+:root[data-style="ledger"] .chain span,
+:root[data-style="ledger"] .copy,
+:root[data-style="ledger"] .demo-btn,
+:root[data-style="ledger"] .cd-field input[type=number],
+:root[data-style="ledger"] .frame-url,
+:root[data-style="ledger"] p code,
+:root[data-style="ledger"] li code,
+:root[data-style="ledger"] td code { border-radius: 2px; }
+:root[data-style="ledger"] .nav a[aria-current="page"] { border-radius: 0; }
+:root[data-style="ledger"] .btn-ghost { background: transparent; border-color: var(--ink); }
+:root[data-style="ledger"] .btn-ghost:hover { background: var(--paper-2); }
+:root[data-style="ledger"] .cta { border-radius: 2px; }
+
+/* ---------- Engraving ---------- */
+:root[data-style="engraving"] body {
+  font-size: 19px; line-height: 1.5; font-variant-numeric: lining-nums;
+  background-image: repeating-linear-gradient(90deg, transparent 0 37px, var(--chain) 37px 39px), repeating-linear-gradient(0deg, transparent 0 2px, var(--laid) 2px 3px);
+}
+:root[data-style="engraving"] h1, :root[data-style="engraving"] h2, :root[data-style="engraving"] .display { font-weight: 500; letter-spacing: -0.012em; line-height: 1.04; }
+:root[data-style="engraving"] h3, :root[data-style="engraving"] h4 { font-weight: 600; letter-spacing: 0; }
+:root[data-style="engraving"] .hero h1 { font-size: clamp(2.8rem, 1.4rem + 4.4vw, 4.8rem); }
+:root[data-style="engraving"] .hero h1 em { font-weight: 400; }
+:root[data-style="engraving"] .wordmark { font-family: var(--serif); font-weight: 500; font-size: 1.36rem; letter-spacing: 0.1em; }
+:root[data-style="engraving"] .mark .mark-bg { rx: 1px; }
+:root[data-style="engraving"] .brand .mark { border-radius: 1px; }
+:root[data-style="engraving"] strong { font-weight: 600; }
+/* the plate: the hero sits in a printed plate with its plate mark */
+:root[data-style="engraving"] .hero-grid {
+  background: var(--card); border: 1px solid var(--rule-2); outline: 1px solid var(--rule); outline-offset: 8px;
+  padding: clamp(22px, 4vw, 52px); box-shadow: var(--shadow-lg);
+}
+:root[data-style="engraving"] .page-hero { border-bottom: 3px double var(--rule-2); }
+/* hatching: section bands open with an engraved strip */
+:root[data-style="engraving"] .band {
+  border-block: 0;
+  background-image: repeating-linear-gradient(-45deg, var(--rule-2) 0 1px, transparent 1px 5px), repeating-linear-gradient(-45deg, var(--rule-2) 0 1px, transparent 1px 5px);
+  background-size: 100% 9px, 100% 9px; background-position: top, bottom; background-repeat: no-repeat;
+}
+:root[data-style="engraving"] .eyebrow { font-family: var(--serif); text-transform: none; font-variant-caps: all-small-caps; letter-spacing: 0.08em; font-size: 1.05rem; font-weight: 500; }
+:root[data-style="engraving"] .tier { background: none; padding: 0; border-radius: 0; font-family: var(--serif); text-transform: none; font-variant-caps: all-small-caps; letter-spacing: 0.07em; font-size: 0.98rem; font-weight: 500; }
+:root[data-style="engraving"] .tier::before { width: 0.42em; height: 0.42em; border-radius: 0; transform: rotate(45deg); }
+:root[data-style="engraving"] .stats { background: transparent; box-shadow: none; border: 0; border-radius: 0; border-top: 2px solid var(--ink); border-bottom: 1px solid var(--ink); }
+:root[data-style="engraving"] .stat { border-left-color: var(--rule-2); }
+:root[data-style="engraving"] .stat-n,
+:root[data-style="engraving"] .finding-n,
+:root[data-style="engraving"] .verdict-v,
+:root[data-style="engraving"] .card.feature h3,
+:root[data-style="engraving"] .rule3 h3 { font-weight: 500; }
+:root[data-style="engraving"] .stat p,
+:root[data-style="engraving"] .card p,
+:root[data-style="engraving"] .flow-step p { font-size: 1.02rem; }
+:root[data-style="engraving"] thead th { font-family: var(--serif); text-transform: none; font-variant-caps: all-small-caps; letter-spacing: 0.06em; font-size: 0.98rem; background: transparent; border-bottom: 1px solid var(--ink); }
+:root[data-style="engraving"] .table-wrap { border: 0; border-top: 2px solid var(--ink); border-radius: 0; background: transparent; }
+:root[data-style="engraving"] .site-footer nav h2,
+:root[data-style="engraving"] .group-label,
+:root[data-style="engraving"] .type .replaces b,
+:root[data-style="engraving"] .flow-step .where,
+:root[data-style="engraving"] .role .who,
+:root[data-style="engraving"] .role .move b { font-family: var(--serif); text-transform: none; font-variant-caps: all-small-caps; letter-spacing: 0.07em; font-size: 0.98rem; }
+:root[data-style="engraving"] .btn,
+:root[data-style="engraving"] .btn-sm,
+:root[data-style="engraving"] .icon-btn,
+:root[data-style="engraving"] .style-pick select,
+:root[data-style="engraving"] .nav a,
+:root[data-style="engraving"] .screen-tab,
+:root[data-style="engraving"] .chips li,
+:root[data-style="engraving"] .chips li span,
+:root[data-style="engraving"] .chain span,
+:root[data-style="engraving"] .copy,
+:root[data-style="engraving"] .demo-btn,
+:root[data-style="engraving"] .cd-field input[type=number],
+:root[data-style="engraving"] .frame-url,
+:root[data-style="engraving"] p code,
+:root[data-style="engraving"] li code,
+:root[data-style="engraving"] td code { border-radius: 1px; }
+:root[data-style="engraving"] .nav a[aria-current="page"] { border-radius: 0; }
+:root[data-style="engraving"] .btn { font-weight: 500; font-size: 1.05rem; }
+:root[data-style="engraving"] .btn-ghost { background: transparent; border-color: var(--ink); }
+:root[data-style="engraving"] .btn-ghost:hover { background: var(--paper-2); }
+:root[data-style="engraving"] .cta { border-radius: 1px; outline: 1px solid var(--rule-2); outline-offset: 6px; }
+
+/* ---------- Still life ---------- */
+:root[data-style="still-life"] body { font-size: 17.5px; }
+:root[data-style="still-life"] h1, :root[data-style="still-life"] h2, :root[data-style="still-life"] .display { font-weight: 400; letter-spacing: -0.02em; line-height: 1.04; }
+:root[data-style="still-life"] h3, :root[data-style="still-life"] h4 { font-weight: 600; letter-spacing: 0; }
+:root[data-style="still-life"] .hero h1 { font-size: clamp(2.8rem, 1.3rem + 4.8vw, 5rem); }
+:root[data-style="still-life"] .hero h1 em { font-weight: 400; }
+:root[data-style="still-life"] .wordmark { font-family: var(--serif); font-weight: 500; font-size: 1.3rem; letter-spacing: 0.04em; }
+:root[data-style="still-life"] strong { font-weight: 600; }
+/* the matte ground: soft, uneven light on the opening of each page */
+:root[data-style="still-life"] .hero,
+:root[data-style="still-life"] .page-hero {
+  background: radial-gradient(70% 60% at 78% 10%, color-mix(in oklch, var(--paper-2) 70%, transparent), transparent 70%),
+              radial-gradient(50% 50% at 10% 90%, color-mix(in oklch, var(--card) 60%, transparent), transparent 70%);
+}
+:root[data-style="still-life"] .page-hero { border-bottom: 0; }
+:root[data-style="still-life"] .band { border-block: 0; }
+/* tone steps instead of lines and shadows */
+:root[data-style="still-life"] .card,
+:root[data-style="still-life"] .stats,
+:root[data-style="still-life"] .layers,
+:root[data-style="still-life"] .lattice,
+:root[data-style="still-life"] .flow,
+:root[data-style="still-life"] .chain-list,
+:root[data-style="still-life"] .table-wrap { border-color: transparent; }
+:root[data-style="still-life"] .band .card,
+:root[data-style="still-life"] .band .stats,
+:root[data-style="still-life"] .band .table-wrap { background: var(--paper); }
+:root[data-style="still-life"] .card.lift:hover { border-color: transparent; background: var(--paper-2); }
+:root[data-style="still-life"] .band .card.lift:hover { background: var(--card); }
+:root[data-style="still-life"] .stat-n,
+:root[data-style="still-life"] .finding-n { font-weight: 400; letter-spacing: -0.02em; }
+:root[data-style="still-life"] .verdict-v,
+:root[data-style="still-life"] .card.feature h3,
+:root[data-style="still-life"] .rule3 h3 { font-weight: 400; }
+:root[data-style="still-life"] .eyebrow { font-family: var(--sans); text-transform: none; letter-spacing: 0.01em; font-size: 0.92rem; font-weight: 600; }
+:root[data-style="still-life"] .eyebrow::before { width: 14px; }
+:root[data-style="still-life"] .tier { font-family: var(--sans); text-transform: none; letter-spacing: 0; font-size: 0.78rem; font-weight: 600; }
+:root[data-style="still-life"] thead th { font-family: var(--sans); text-transform: none; letter-spacing: 0; font-size: 0.82rem; font-weight: 600; }
+:root[data-style="still-life"] .site-footer nav h2,
+:root[data-style="still-life"] .group-label,
+:root[data-style="still-life"] .type .replaces b,
+:root[data-style="still-life"] .flow-step .where,
+:root[data-style="still-life"] .role .who,
+:root[data-style="still-life"] .role .move b { font-family: var(--sans); text-transform: none; letter-spacing: 0.01em; font-size: 0.86rem; font-weight: 600; }
+:root[data-style="still-life"] .btn { border-radius: 999px; }
+:root[data-style="still-life"] .btn-ghost { background: transparent; border-color: var(--rule-2); }
+:root[data-style="still-life"] .btn-ghost:hover { background: var(--paper-2); border-color: var(--rule-2); }
+:root[data-style="still-life"] .style-pick select,
+:root[data-style="still-life"] .icon-btn { border-radius: 999px; }
+:root[data-style="still-life"] .site-header { border-bottom-color: transparent; }
+:root[data-style="still-life"] .site-footer { border-top: 0; }
+
+@media (forced-colors: active) {
+  :root[data-style] .hero, :root[data-style] .page-hero, :root[data-style] .band, :root[data-style] .site-footer, :root[data-style] body { background-image: none; }
+  :root[data-style="ledger"] main::before { display: none; }
+}
+@media (max-width: 640px) {
+  :root[data-style="engraving"] body { font-size: 18px; }
+  :root[data-style="engraving"] .hero-grid { outline-offset: 5px; }
+  :root[data-style="engraving"] .stat { border-left: 0; }
+}
+@media print {
+  :root[data-style] body, :root[data-style] .hero, :root[data-style] .band { background: #fff !important; background-image: none !important; }
+  :root[data-style="ledger"] main::before { display: none; }
+  :root[data-style="engraving"] .hero-grid { outline: 0; box-shadow: none; }
+}

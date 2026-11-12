@@ -65,6 +65,9 @@ const JSC_CFG = [
     label: N("Language of the content"), help: N("BCP-47 tag picked from the language maps of a bundle, for example de. Empty follows the interface.") },
   { key: "ui:theme", def: "dark", choices: ["dark", "light", "system"],
     label: N("Colour scheme"), help: N("System follows the operating system.") },
+  { key: "ui:style", def: "", choices: ["", "classic", "ledger", "engraving", "still-life"],
+    names: { "": N("(as on the website)"), "classic": N("Classic"), "ledger": N("Ledger"), "engraving": N("Engraving"), "still-life": N("Still life") },
+    label: N("Style"), help: N("Empty follows the style picked on jascon.net in this browser. Classic is the original look; the other three take the palette and type of the website's styles.") },
   { key: "org:ns", def: "https://example.org/my", choices: null,
     label: N("Namespace for new objects"), help: N("The URI under which this app mints ids, for example https://your.example. Use a name you control.") },
   { key: "org:owner", def: "", choices: null,
@@ -591,6 +594,8 @@ jscI18n.add("de", {
   "{n} lines": "{n} Zeilen", "no bundle": "kein Bundle", "{n} objects": "{n} Objekte",
   "Set": "Set", "{n} entries, type to filter …": "{n} Einträge filtern …", "Filter the list": "Liste filtern",
   "dark": "dunkel", "light": "hell", "system": "System",
+  "Style": "Stil", "(as on the website)": "(wie auf der Website)", "Classic": "Klassisch", "Ledger": "Kladde",
+  "Engraving": "Kupferstich", "Still life": "Stillleben",
   "jascon-core.css is missing or did not load. Unpack the complete jascon-app folder.":
     "jascon-core.css fehlt oder wurde nicht geladen. Bitte den kompletten Ordner jascon-app entpacken.",
   "Could not read the set: {msg}": "Das Set konnte nicht gelesen werden: {msg}",
@@ -619,6 +624,30 @@ const jscTheme = {
 };
 window.jscTheme = jscTheme;
 jscTheme.apply();
+
+/* ---------- style ----------
+   The look: classic, or one of the three styles of the website (tokens in
+   jascon-styles.css). ui:style empty follows what the website's picker
+   stored in this browser (key jascon-site:style, same origin). Like the
+   theme, each page also sets it in its <head> before the first paint. */
+const jscStyle = {
+  options: ["", "classic", "ledger", "engraving", "still-life"],
+  SITE_KEY: "jascon-site:style",
+  get() { const v = jscCfg.get("ui:style"); return this.options.includes(v) ? v : ""; },
+  /* the style in effect: "" for classic */
+  effective() {
+    let v = this.get();
+    if (v === "") { try { v = localStorage.getItem(this.SITE_KEY) || ""; } catch (e) { v = ""; } }
+    return ["ledger", "engraving", "still-life"].includes(v) ? v : "";
+  },
+  apply(doc) {
+    const root = (doc || document).documentElement, v = this.effective();
+    if (v) root.setAttribute("data-style", v); else root.removeAttribute("data-style");
+  },
+  set(v) { if (v === "") jscCfg.remove("ui:style"); else jscCfg.set("ui:style", v); this.apply(); },
+};
+window.jscStyle = jscStyle;
+jscStyle.apply();
 
 /* ---------- storage ----------
    IndexedDB "jascon-app", one store "files". A record is one file of one set:
@@ -1001,6 +1030,7 @@ const jscPage = {
     window.addEventListener("storage", e => {
       if (e.key === TOUCH || e.key === ACTIVE) this.reload(true);
       if (e.key === PREFIX + "ui:theme") jscTheme.apply();
+      if (e.key === PREFIX + "ui:style" || e.key === jscStyle.SITE_KEY) jscStyle.apply();
       if (e.key === PREFIX + "ui:lang" || e.key === PREFIX + "ui:contentlang") location.reload();
     });
     await this.reload(false);
