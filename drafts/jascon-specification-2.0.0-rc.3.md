@@ -1480,8 +1480,12 @@ the origin its ids share with it. It is *proven* when an Attestation
 beside the manifest has a signer of that origin, binds this manifest's
 digest, and its envelope verifies under a key the user trusts: the two
 words, and the envelope check, that the tier rule uses for a Tailoring
-(D13). A tool shows which of the two it is and never a vendor's name
-without it.
+(D13). As there, a validator that was given no keys reports the binding
+and marks it UNVERIFIED; that is no proof, because anyone can write an
+Attestation that names the vendor as signer. A tool for people shows
+three states and never a vendor's name without one of them: *claimed*,
+*attested, not verified* (the binding without a checked signature) and
+*proven*. Only the last may look like a confirmation.
 
 **Adoption.** The user's Implementation, on the user's component, cites
 the vendor's capability: `<component-id>#<capability-id>` (D6). A

@@ -286,6 +286,8 @@ and `publisher.ref` share one origin. ADVICE-3: no facet on a listed
 object declares a semantics class. The publisher is *claimed* by header
 and origin, *proven* when an Attestation of that origin binds the
 manifest's digest and — in verification mode — its envelope verifies.
+Without trusted keys the binding is reported as unverified: a tool
+shows *attested, not verified*, never proven.
 
 **Kept pack manifest** *(a file beside the manifest, not an object)*:
 `packs/sha256/<hex>` — the vendor's manifest as it arrived, named by the

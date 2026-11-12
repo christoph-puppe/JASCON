@@ -292,8 +292,11 @@ because the manifest is what a signature binds (Chapter 11): vendor and
 release are inside the signed state with no new mechanism. The publisher
 is **claimed** by the header and the origin its ids share with it, and
 **proven** when the vendor's Attestation binds this manifest and its
-envelope verifies — the two words, and the envelope check, you met at the
-Tailoring tier.
+envelope verifies under a key you trust — the two words, and the envelope
+check, you met at the Tailoring tier. Between the two lies a state a tool
+must not dress up: the Attestation binds the manifest, and nobody checked
+the signature because no trusted key was set. Anyone can write such an
+Attestation. Show it as *attested, not verified*, never as proven.
 
 **A recommendation is a capability.** §9.1 said capabilities are what
 component definitions always wanted to be. A capability may now say which

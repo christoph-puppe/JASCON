@@ -109,7 +109,9 @@ verdict is recomputed (CHECK-9). (App. B.1.10)
 publisher, the words of the Tailoring tier: *claimed* by the pack
 header and the origin its ids share with it; *proven* when an
 Attestation of that origin binds the manifest's digest and, in
-verification mode, its envelope verifies. (Ch. 9.7)
+verification mode, its envelope verifies. Without trusted keys the
+binding is reported as unverified, and a tool for people shows
+*attested, not verified*, never proven. (Ch. 9.7)
 
 **Code system** — a versioned closed enumeration (`modality@1`…)
 validated by `code-from`; unknown codes are errors because unpoliced
