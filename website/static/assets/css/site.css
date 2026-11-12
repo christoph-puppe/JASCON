@@ -681,6 +681,7 @@ td.no { color: var(--ink-3); }
   .step { grid-template-columns: minmax(0, 1fr); }
   .step::before { padding-bottom: 8px; }
   .btn-sm.btn-primary { display: none; }
+  .tier { white-space: normal; border-radius: 12px; }
   .hero-actions .btn { flex: 1 1 100%; }
   .window pre { font-size: 0.72rem; padding: 14px 14px 16px; }
   .window-note { display: none; }

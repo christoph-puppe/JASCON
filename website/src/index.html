@@ -16,7 +16,7 @@ nav: home
       </div>
       <div class="hero-status">
         <span><i class="dot"></i>1.0.0 released 22 July 2026</span>
-        <span><i class="dot rc"></i>2.0.0-rc.1 in review</span>
+        <span><i class="dot rc"></i>2.0.0-rc.2 in review</span>
         <span>Independent project, one maintainer</span>
       </div>
     </div>
@@ -111,7 +111,7 @@ nav: home
   "validity": { "num": 24, "unit": "hours" },
   "confidence": "reviewed"
 }</code></pre>
-        <div class="window-foot"><span>proposed type</span><span><b>check-verdict</b> observed 4, the Tailoring binds 4: satisfied</span></div>
+        <div class="window-foot"><span>validate_core.py</span><span><b>check-verdict</b> observed 4, the Tailoring binds 4: satisfied</span></div>
       </div>
     </div>
   </div>
@@ -127,7 +127,7 @@ nav: home
       </div>
       <div class="stat">
         <span class="stat-n">2</span>
-        <p>reference validators with identical counts: Python, and PowerShell 5.1 that runs on a stock Windows machine with nothing installed.</p>
+        <p>reference validators: Python, and PowerShell 5.1 on a stock Windows machine with nothing installed. Identical counts on the 415 vectors of that day; the 27 added since have run in Python only.</p>
         <span class="tier tier-measured">measured 2026-11-11</span>
       </div>
       <div class="stat">
@@ -183,13 +183,13 @@ nav: home
     <div class="section-head reveal">
       <p class="eyebrow"><span class="no">02</span> The model</p>
       <h2>Documents become renderings of a graph</h2>
-      <p class="lede">Ten shallow object types, each with a global identifier, a version and two SHA-256 digests. What every measured framework needs sits in a fixed kernel. What one framework needs sits in a registered facet with a schema.</p>
+      <p class="lede">Eleven shallow object types, each with a global identifier, a version and two SHA-256 digests. What every measured framework needs sits in a fixed kernel. What one framework needs sits in a registered facet with a schema.</p>
     </div>
     <div class="split flip">
       <figure class="reveal">
         <svg class="graph" viewBox="0 0 640 470" role="img" aria-labelledby="graph-title graph-desc">
           <title id="graph-title">The JASCON object graph</title>
-          <desc id="graph-desc">Content types on the left: Tailoring selects a RequirementSet, whose members are Requirements; a Mapping relates Requirements. System types on the right: Implementation, Assessment and Finding refer to a Component. In the middle a Risk justifies the Requirements that treat it, and a proposed Check decides a Requirement for an Assessment. An Attestation binds the graph to the signed document.</desc>
+          <desc id="graph-desc">Content types on the left: Tailoring selects a RequirementSet, whose members are Requirements; a Mapping relates Requirements. System types on the right: Implementation, Assessment and Finding refer to a Component. In the middle a Risk justifies the Requirements that treat it, and a Check decides a Requirement for an Assessment. An Attestation binds the graph to the signed document.</desc>
           <defs>
             <marker id="ah" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="head" d="M0 0 10 5 0 10z"/></marker>
             <marker id="ah-a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="head accent" d="M0 0 10 5 0 10z"/></marker>
@@ -210,8 +210,8 @@ nav: home
           <path class="edge" d="M450 341 192 262" marker-end="url(#ah)"/>
           <path class="edge accent" d="M290 124 177 220" marker-end="url(#ah-a)"/>
           <path class="edge accent" d="M400 95 448 63" marker-end="url(#ah-a)"/>
-          <path class="edge prop" d="M240 245H192" marker-end="url(#ah-p)"/>
-          <path class="edge prop" d="M450 245H402" marker-end="url(#ah-p)"/>
+          <path class="edge accent" d="M240 245H192" marker-end="url(#ah-a)"/>
+          <path class="edge accent" d="M450 245H402" marker-end="url(#ah-a)"/>
           <path class="edge bind" d="M110 364V402M530 364V402"/>
 
           <text class="elabel" x="118" y="104">selects</text>
@@ -227,7 +227,7 @@ nav: home
           <g class="node content"><rect x="30" y="318" width="160" height="46" rx="10"/><text x="44" y="338">Mapping</text><text class="sub" x="44" y="353">a crosswalk edge</text></g>
 
           <g class="node org"><rect x="240" y="78" width="160" height="46" rx="10"/><text x="254" y="98">Risk</text><text class="sub" x="254" y="113">why it is in scope</text></g>
-          <g class="node proposed"><rect x="240" y="222" width="160" height="46" rx="10"/><text x="254" y="242">Check</text><text class="sub" x="254" y="257">proposed: facts, criteria</text></g>
+          <g class="node org"><rect x="240" y="222" width="160" height="46" rx="10"/><text x="254" y="242">Check</text><text class="sub" x="254" y="257">how a machine decides</text></g>
 
           <g class="node"><rect x="450" y="30" width="160" height="46" rx="10"/><text x="464" y="50">Component</text><text class="sub" x="464" y="65">systems, services</text></g>
           <g class="node"><rect x="450" y="126" width="160" height="46" rx="10"/><text x="464" y="146">Implementation</text><text class="sub" x="464" y="161">who satisfies what</text></g>
@@ -238,8 +238,7 @@ nav: home
         </svg>
         <div class="graph-legend">
           <span><i></i>released in 1.0.0</span>
-          <span class="lg-org"><i></i>new in 2.0.0-rc.1</span>
-          <span class="lg-prop"><i></i>proposed (CP-CHECK-1)</span>
+          <span class="lg-org"><i></i>new in the 2.0.0 candidate</span>
           <span class="lg-att"><i></i>signature layer</span>
         </div>
       </figure>
@@ -262,7 +261,7 @@ nav: home
           </div>
         </div>
         <p class="muted">Failures are made unrepresentable where that is possible. A parameter token in prose must name a declared parameter. A tailoring operation addresses a statement by identity, so an upstream erratum cannot repoint it.</p>
-        <a class="link-arrow" href="model.html">The ten types, field by field</a>
+        <a class="link-arrow" href="model.html">The eleven types, field by field</a>
       </div>
     </div>
   </div>
@@ -280,7 +279,7 @@ nav: home
         <div class="card-top"><span class="card-no">ISO/IEC 27001 6.1.3 d</span><span class="tier tier-measured">measured on two bundles</span></div>
         <h3>The Statement of Applicability becomes a computation</h3>
         <p>A Risk names its owner, its treatment decision and the clauses that carry that decision. The primitive <code>risk-coverage</code> then lists every selected requirement that rests on no assessed risk. An auditor used to sample that from a spreadsheet.</p>
-        <p class="how"><b>Mechanism:</b> the Risk type of kernel 2.0.0-rc.1. On the example bundle the validator reports 3 selected, 1 justified, 2 uncovered, and names the two.</p>
+        <p class="how"><b>Mechanism:</b> the Risk type of the 2.0.0 candidate. On the example bundle the validator reports 3 selected, 1 justified, 2 uncovered, and names the two.</p>
       </article>
       <article class="card">
         <div class="card-top"><span class="card-no">Mapping</span><span class="tier tier-measured">measured</span></div>
@@ -336,14 +335,15 @@ nav: home
         <h2>When the assessor is a machine</h2>
         <p class="lede">A scanner that exits with 0 or 1 hides its threshold and ignores the tailoring. A Check publishes the facts a collector reports and the comparisons that decide, and the run record carries the observation.</p>
         <div class="chips">
-          <span class="tier tier-proposed">proposed as the eleventh type</span>
-          <span class="tier tier-measured">{{ n.check_vectors }} vectors, three implementations</span>
+          <span class="tier tier-designed">eleventh type, 2.0.0-rc.2</span>
+          <span class="tier tier-measured">{{ n.check_vectors }} vectors pass in the reference and the app</span>
         </div>
       </div>
       <div class="stack reveal">
         <ul class="ticks">
           <li><b>The Tailoring sets the pass mark.</b> The criteria bind a parameter of the requirement. Tighten it and yesterday's observation is judged again, without a change to the code.</li>
           <li><b>A verdict is recomputed.</b> The validator evaluates the criteria on every recorded observation and rejects a row whose outcome differs.</li>
+          <li><b>A fleet gets a share, never a softer verdict.</b> A check over many resources passes only if every one passes. All are evaluated, and the result reads "12 of 200 not satisfied (6 %)".</li>
           <li><b>Measured fit:</b> 481 of the 510 rules in the CIS Ubuntu 24.04 profiles of ComplianceAsCode fit the declarative form. The other 29 stay manual.</li>
         </ul>
         <a class="link-arrow" href="checks.html">The design, the evidence chain and the open decisions</a>
@@ -474,7 +474,7 @@ nav: home
         <div class="chips" style="margin-top:6px">
           <span class="tier tier-measured">measured</span>
           <span class="tier tier-designed">designed for</span>
-          <span class="tier tier-proposed">proposed</span>
+          <span class="tier tier-open">open</span>
         </div>
         <a class="link-arrow" href="evidence.html">Gates, corpora and limits</a>
       </div>
@@ -492,12 +492,12 @@ nav: home
           <div class="gate-body"><h3>Gates 3 and 4, release 1.0.0</h3><p>SP 800-53 with its baselines, CSF 2.0 and a full SSP-to-POA&amp;M set converted with no change to the kernel schema. Signature verification, a second validator in PowerShell, and the OSCAL round trip.</p></div>
         </div>
         <div class="gate rc">
-          <span class="gate-when">Nov 2026</span><span class="gate-rail"><i></i></span>
-          <div class="gate-body"><h3>2.0.0-rc.1: Risk <span class="tier tier-designed">release candidate</span></h3><p>The tenth type. Every 1.0.0 bundle validates unchanged under the new schema. An external review of the candidate produced 23 new vectors, each failing on the validator as it stood.</p></div>
+          <span class="gate-when">10 Nov 2026</span><span class="gate-rail"><i></i></span>
+          <div class="gate-body"><h3>2.0.0-rc.1: Risk</h3><p>The tenth type. Every 1.0.0 bundle validates unchanged under the new schema. An external review of the candidate produced 23 new vectors, each failing on the validator as it stood.</p></div>
         </div>
-        <div class="gate prop">
-          <span class="gate-when">Nov 2026</span><span class="gate-rail"><i></i></span>
-          <div class="gate-body"><h3>CP-CHECK-1: Check <span class="tier tier-proposed">proposed</span></h3><p>Schema, both validators, {{ n.check_vectors }} vectors and a worked example are in the repository. No census authority encodes a machine-decidable check today, and the proposal says so in its first paragraph. <a href="checks.html">More on checks.</a></p></div>
+        <div class="gate rc">
+          <span class="gate-when">12 Nov 2026</span><span class="gate-rail"><i></i></span>
+          <div class="gate-body"><h3>2.0.0-rc.2: Check <span class="tier tier-designed">release candidate</span></h3><p>The eleventh type, accepted with six decisions on the record. No census authority publishes a machine check, so the promotion rule gained a clause for data that only the consumer of a catalogue holds. {{ n.check_vectors }} vectors; two items block the tag. <a href="checks.html">More on checks.</a></p></div>
         </div>
       </div>
     </div>
@@ -521,7 +521,7 @@ nav: home
       <article class="card role">
         <span class="who">You build tools</span>
         <h3>GRC vendors and platform teams</h3>
-        <p>One JSON Schema, one serialization, nine primitives with a rationale that prints on failure. No metaschema and no profile resolution.</p>
+        <p>One JSON Schema, one serialization, ten primitives with a rationale that prints on failure. No metaschema and no profile resolution.</p>
         <p class="move"><b>First move</b>Clone the conformance corpus and write a validator in your language. The vectors are the referee.</p>
       </article>
       <article class="card role">

@@ -1,6 +1,6 @@
 ---
 title: Evidence: what was measured and what was not | JASCON
-description: The conformance corpus, the two reference validators, the converted catalogues with their licences, the evidence gates, the open limits and the neighbouring formats. Every number is labelled measured, designed for or proposed.
+description: The conformance corpus, the two reference validators, the converted catalogues with their licences, the evidence gates, the open limits and the neighbouring formats. Every number is labelled measured, designed for or open.
 nav: evidence
 ---
 <section class="page-hero">
@@ -11,7 +11,6 @@ nav: evidence
     <div class="chips">
       <span class="tier tier-measured">measured</span>
       <span class="tier tier-designed">designed for</span>
-      <span class="tier tier-proposed">proposed</span>
       <span class="tier tier-open">open</span>
     </div>
   </div>
@@ -29,7 +28,7 @@ nav: evidence
         <ul class="chips">
 {{ html.family_chips }}
         </ul>
-        <p class="small">The released 1.0.0 has 157 vectors in twelve families. <code>risk</code>, <code>kernel</code> and <code>scale</code> came with 2.0.0-rc.1. The 156 <code>check</code> vectors belong to the proposed Check type.</p>
+        <p class="small">The released 1.0.0 has 157 vectors in twelve families. <code>risk</code>, <code>kernel</code> and <code>scale</code> came with 2.0.0-rc.1, the {{ n.check_vectors }} <code>check</code> vectors with 2.0.0-rc.2.</p>
       </div>
       <div class="stack reveal">
         <article class="card">
@@ -38,7 +37,7 @@ nav: evidence
         </article>
         <article class="card">
           <div class="card-top"><h3>validate_core.ps1</h3><span class="tier tier-measured">measured 2026-11-11</span></div>
-          <p>The twin: {{ n.powershell_lines }} lines of Windows PowerShell 5.1 with no dependency, for the machine an auditor already has. It returned the same counts as the Python reference on all {{ n.vectors }} vectors, the five bundles and the example folder.</p>
+          <p>The twin: {{ n.powershell_lines }} lines of Windows PowerShell 5.1 with no dependency, for the machine an auditor already has. On 11 November it returned the same counts as the Python reference on the 415 vectors of that day, the five bundles and the example folder. The 27 vectors added on 12 November are ported and have not run there.</p>
         </article>
         <article class="card">
           <div class="card-top"><h3>A third, in the browser</h3><span class="tier tier-measured">measured</span></div>
@@ -116,11 +115,11 @@ nav: evidence
       </div>
       <div class="gate rc">
         <span class="gate-when">10 Nov 2026</span><span class="gate-rail"><i></i></span>
-        <div class="gate-body"><h3>2.0.0-rc.1: Risk as the tenth type <span class="tier tier-designed">release candidate, not tagged</span></h3><p>All 6,914 objects of the 1.0.0 corpus validate unchanged under the new schema. The type entered as a recorded exception to the promotion rule: no census authority publishes a risk record, because a risk register is the consumer's data. Three standards prescribe the record.</p></div>
+        <div class="gate-body"><h3>2.0.0-rc.1: Risk as the tenth type</h3><p>All 6,914 objects of the 1.0.0 corpus validate unchanged under the new schema. No census authority publishes a risk record, because a risk register is the consumer's data. Three standards require it: ISO/IEC 27001, BSI Standard 200-3 and NIST SP 800-30.</p></div>
       </div>
-      <div class="gate prop">
-        <span class="gate-when">11 Nov 2026</span><span class="gate-rail"><i></i></span>
-        <div class="gate-body"><h3>CP-CHECK-1: Check as the eleventh type <span class="tier tier-proposed">proposed</span></h3><p>Schema, validator, 156 vectors and a worked example with an evidence store. A census of two open check corpora measured the fit: 481 of 510 rules of the CIS Ubuntu 24.04 profiles in ComplianceAsCode, and no comparison in either corpus that needs a regex outside I-Regexp.</p></div>
+      <div class="gate rc">
+        <span class="gate-when">12 Nov 2026</span><span class="gate-rail"><i></i></span>
+        <div class="gate-body"><h3>2.0.0-rc.2: Check as the eleventh type <span class="tier tier-designed">release candidate, not tagged</span></h3><p>Proposed on 11 November with schema, validator, 156 vectors and a census of two open check corpora: 481 of 510 rules of the CIS Ubuntu 24.04 profiles in ComplianceAsCode fit, and no comparison in either corpus needs a regex outside I-Regexp. Accepted the next day with six decisions. The promotion rule gained a clause for types that catalogue authorities do not publish; Risk and Check both enter under it. {{ n.check_vectors }} vectors now.</p></div>
       </div>
     </div>
   </div>
@@ -151,8 +150,12 @@ nav: evidence
         <p>OSCAL's risk data has no owner, no single level and no acceptance date. Risks converted from it cannot leave the state <code>identified</code>, so risk coverage on real converted data shows every requirement as uncovered. Coverage with a treated risk is shown on the example bundle only.</p>
       </div>
       <div class="limit">
-        <h3>Check fails the promotion rule as written <span class="tier tier-proposed">proposed</span></h3>
-        <p>A semantic enters the kernel when two of the three census authorities encode it. None encodes a machine-decidable check. The proposal states this and leaves the decision to the author; 29 of 510 measured rules do not fit its declarative form and stay manual. <a href="checks.html#state">The state in full.</a></p>
+        <h3>Check closes its shape on two platforms <span class="tier tier-open">open</span></h3>
+        <p>The fit of the Check type was counted on Linux hosts and Kubernetes. No check against a cloud API was counted, nothing in the repository runs a collector, and the worked example ran against a stub. 29 of 510 counted rules do not fit the declarative form and stay manual. <a href="checks.html#state">The state in full.</a></p>
+      </div>
+      <div class="limit">
+        <h3>Two items block the 2.0.0 tag <span class="tier tier-open">open, backlog 60 and 61</span></h3>
+        <p>The PowerShell twin has not run with the 27 vectors added on 12 November. And the regular-expression engines implement the grammar file of the IETF working group, which has not been compared with the published text of RFC 9485.</p>
       </div>
       <div class="limit">
         <h3>Known defects in shipped examples <span class="tier tier-open">open, backlog 46 and 55</span></h3>

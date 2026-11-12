@@ -1,17 +1,17 @@
 ---
 title: Checks: when the assessor is a machine | JASCON
-description: The proposed Check type of JASCON. Code collects facts, a closed set of eleven comparators decides, and the evidence is stored under its own hash, so a second party recomputes a machine verdict without running anything. With a live verdict demo, the measured fit on CIS profiles and the state of the proposal.
+description: The Check type of JASCON 2.0.0. Code collects facts, a closed set of twelve comparators decides, and the evidence is stored under its own hash, so a second party recomputes a machine verdict without running anything. With a live verdict demo, the measured fit on CIS profiles and what is open before the tag.
 nav: checks
 ---
 <section class="page-hero">
   <div class="wrap">
-    <p class="eyebrow">Checks &middot; change proposal CP-CHECK-1</p>
+    <p class="eyebrow">Checks &middot; kernel 2.0.0, release candidate</p>
     <h1>When the assessor is a machine</h1>
     <p class="lede">A scanner that exits with 0 or 1 hides its threshold, ignores the tailoring and leaves nothing to re-examine. A Check publishes the facts a collector must report and the comparisons that decide. The run record carries what was observed, so anyone recomputes the verdict from the record.</p>
     <div class="chips">
-      <span class="tier tier-proposed">proposed as the eleventh type</span>
-      <span class="tier tier-measured">{{ n.check_vectors }} vectors pass in three implementations</span>
-      <span class="tier tier-open">in no released kernel</span>
+      <span class="tier tier-designed">eleventh kernel type, 2.0.0-rc.2</span>
+      <span class="tier tier-measured">{{ n.check_vectors }} vectors pass in the reference and the app's port</span>
+      <span class="tier tier-open">2.0.0 is not tagged</span>
     </div>
   </div>
 </section>
@@ -58,7 +58,7 @@ nav: checks
         <p>Named, typed facts such as <code>sshd.maxauthtries</code>: integer. A collector reports effective values, with defaults resolved. An absent key means "looked and did not find".</p>
       </div>
       <div class="flow-step kernel">
-        <span class="where">Kernel: eleven comparators</span>
+        <span class="where">Kernel: twelve comparators</span>
         <h3>Criteria</h3>
         <p>A flat conjunction such as <code>at-most {param}</code>. The expected value is a literal or a parameter of the requirement, so the Tailoring that binds the parameter sets the pass mark.</p>
       </div>
@@ -177,7 +177,7 @@ nav: checks
       <div class="stack-lg reveal">
         <div class="section-head" style="margin-bottom:0">
           <p class="eyebrow"><span class="no">04</span> The comparators</p>
-          <h2>Eleven, and a list of what is left out</h2>
+          <h2>Twelve, and a list of what is left out</h2>
           <p class="lede">The set is small on purpose. A check that does not fit stays manual and is counted.</p>
         </div>
         <ul class="plain">
@@ -186,6 +186,7 @@ nav: checks
           <li>The combination is strong Kleene AND: one definite failure decides, and a failure is never hidden behind an unknown elsewhere.</li>
           <li>An unbound parameter gives inconclusive. A default is never substituted.</li>
           <li><code>at-most</code> never binds a parameter that tightens upward, so that tightening a parameter cannot loosen a check.</li>
+          <li>A check over many resources passes only if every applicable one passes. Every resource is evaluated, none is skipped after the first failure, and the verdict comes with the count and the share: "12 of 200 applicable bucket resources not satisfied (6 %)".</li>
         </ul>
       </div>
       <div class="table-wrap reveal">
@@ -193,6 +194,7 @@ nav: checks
           <thead><tr><th>Operator</th><th>On</th><th>Holds when</th></tr></thead>
           <tbody>
             <tr><th scope="row"><code>equals</code></th><td>one value</td><td>the value equals the expected one; decimals by value</td></tr>
+            <tr><th scope="row"><code>not-equals</code></th><td>one value</td><td>the value differs from the expected one; inconclusive on a missing fact</td></tr>
             <tr><th scope="row"><code>one-of</code></th><td>one value</td><td>the value is in the list</td></tr>
             <tr><th scope="row"><code>at-least</code> <code>at-most</code></th><td>integer, decimal</td><td>ordering; decimals never as floats</td></tr>
             <tr><th scope="row"><code>present</code> <code>absent</code></th><td>any fact</td><td>the key is, or is not, in the observation</td></tr>
@@ -272,8 +274,8 @@ nav: checks
           </ul>
         </div>
         <div class="stack">
-          <h3>What it contradicts</h3>
-          <p class="muted">There is no not-equal. It occurs twice in the OVAL states and 85 times across all kube-bench directories. A twelfth comparator is measured and cheap, and it is an open decision. The 29 rules that do not fit stay manual.</p>
+          <h3>What it corrected</h3>
+          <p class="muted">The set as drafted had no not-equal. The census found it twice in the OVAL states and 85 times across all kube-bench directories, and for a number nothing else says it. It was added on 12 November as the twelfth comparator. The 29 rules that do not fit stay manual.</p>
         </div>
         <a class="link-arrow" href="{{ tree }}/drafts/cp-check-1-census" rel="noopener">Census scripts and raw counts</a>
       </div>
@@ -285,32 +287,46 @@ nav: checks
   <div class="wrap">
     <div class="section-head reveal">
       <p class="eyebrow"><span class="no">07</span> State</p>
-      <h2>Implemented and green, proposed and undecided</h2>
-      <p class="lede">The type is in the schema of the 2.0.0 release candidate and in all three implementations. It is in no released kernel, and the decision to admit it is open.</p>
+      <h2>Accepted for 2.0.0, two items before the tag</h2>
+      <p class="lede">On 12 November 2026 the author decided the open points of the proposal. Check is part of release candidate 2.0.0-rc.2 and goes live with 2.0.0. The candidate is not tagged.</p>
     </div>
     <div class="state-cols reveal">
       <article class="card">
         <div class="card-top"><h3>In the repository</h3><span class="tier tier-measured">measured</span></div>
         <ul class="ticks">
-          <li><b>Schema:</b> the Check shape, the run rows on Assessment, the reference on Finding, the evidence record, and the facet <code>collector@1</code>.</li>
-          <li><b>Rules:</b> CHECK-1 to CHECK-15 and the primitive <code>check-verdict</code>, each with a rationale that prints on failure.</li>
-          <li><b>{{ n.check_vectors }} conformance vectors:</b> passed by the Python reference, by the PowerShell twin on Windows PowerShell 5.1, and by the JavaScript port in the app.</li>
+          <li><b>Schema and rules:</b> the Check shape, the run rows on Assessment, the reference on Finding, the evidence record, the facet <code>collector@1</code>; CHECK-1 to CHECK-15 and the primitive <code>check-verdict</code>, each with a rationale that prints on failure.</li>
+          <li><b>{{ n.check_vectors }} conformance vectors</b> pass in the Python reference and in the app's JavaScript port. Four deliberate breaks of the reference each turn a vector red.</li>
           <li><b>A worked example</b> with two Checks, two runs, a Finding and seven evidence files.</li>
-          <li><b>The app's Checks page:</b> writes checks by hand or lets a language model draft them, one rule at a time or for every automated rule of a CIS import. A draft is judged by the kernel rules and a read-only lint and saved only when you take it.</li>
+          <li><b>Text:</b> specification D24, handbook chapter 10 and the validator chapter, appendices A, B and C, and the skill for coding agents.</li>
+          <li><b>Tools:</b> the app's Checks page writes checks by hand or lets a language model draft them, one rule at a time or for every automated rule of a CIS import. The single-file reader shows Checks and recorded runs.</li>
         </ul>
       </article>
       <article class="card">
-        <div class="card-top"><h3>Missing or undecided</h3><span class="tier tier-open">open</span></div>
+        <div class="card-top"><h3>Open</h3><span class="tier tier-open">open</span></div>
         <ul class="plain">
-          <li><b>No runner.</b> Nothing in the repository executes a collector on a target. The app does not run collectors either.</li>
-          <li><b>No cloud platform measured.</b> The census covers Linux hosts and Kubernetes. A corpus of checks against cloud APIs has not been counted.</li>
-          <li><b>The promotion rule fails.</b> A semantic enters the kernel when two of three census authorities encode it. Here none does. Check would be the second recorded exception after Risk.</li>
-          <li><b>Handbook and specification text</b> for the type are drafted in the proposal and not yet merged. The single-file reader cannot open a bundle with a Check.</li>
-          <li><b>Seven points wait for a decision,</b> among them the not-equal comparator, run rows as kernel field or facet, and whether a check may ship without the catalogue it refers to.</li>
+          <li><b>Blocks the tag: the second validator.</b> The PowerShell twin passed the 156 vectors of the proposal on Windows PowerShell 5.1. The 27 added since (the twelfth comparator, the per-resource counts) are ported there and have not run.</li>
+          <li><b>Blocks the tag: the published grammar.</b> The engines implement the grammar file of the IETF working group. It has not been compared with the published text of RFC 9485.</li>
+          <li><b>No runner.</b> Nothing in the repository executes a collector on a target, and the app does not either. An HTTP collector has no declared request format yet.</li>
+          <li><b>No cloud platform counted.</b> The census covers Linux hosts and Kubernetes. The shape closes at the tag on those two.</li>
+          <li><b>One open choice:</b> whether a Unicode category in a pattern follows the host's database or a pinned table.</li>
         </ul>
       </article>
     </div>
-    <p class="source reveal">The proposal in full, with the alternative that was not taken (criteria in a facet, promotion later): <a href="{{ blob }}/drafts/CP-CHECK-1.md" rel="noopener">drafts/CP-CHECK-1.md</a>.</p>
+
+    <div class="table-wrap reveal" style="margin-top: 18px;">
+      <table>
+        <thead><tr><th>Question put to the author</th><th>Decision of 12 November 2026</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">The promotion rule asks that two of three census authorities encode a type. None encodes a check.</th><td>The rule gained a clause for types that catalogue authorities do not publish: a recognised standard requires the record, or it is established practice shown by two counted open implementations; the other two tests hold; it rides a major version. Risk enters under the first branch, Check under the second.</td></tr>
+          <tr><th scope="row">Run rows: kernel field or facet?</th><td>Kernel field. A verdict is computation, and facets never define computation.</td></tr>
+          <tr><th scope="row">May a Check ship without the requirement it refers to?</th><td>Yes. A check pack for a catalogue that may not be passed on validates on its own.</td></tr>
+          <tr><th scope="row">Land now, or wait for a cloud API census?</th><td>Check goes live with 2.0.0.</td></tr>
+          <tr><th scope="row">A quantifier beside "every resource"?</th><td>None. Every resource is evaluated and recorded, the share of failures is reported, and the check fails.</td></tr>
+          <tr><th scope="row">A twelfth comparator <code>not-equals</code>?</th><td>Added.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="source reveal">The proposal with its census, the alternative that was not taken (criteria in a facet, promotion later) and the record of the decisions: <a href="{{ blob }}/drafts/CP-CHECK-1.md" rel="noopener">drafts/CP-CHECK-1.md</a>. The normative text: <a href="{{ blob }}/drafts/jascon-specification-2.0.0-rc.2.md" rel="noopener">specification 2.0.0-rc.2</a>, D24.</p>
   </div>
 </section>
 
@@ -318,8 +334,8 @@ nav: checks
   <div class="wrap">
     <div class="cta reveal">
       <div>
-        <h2>Review it before the shape is closed</h2>
-        <p>A kernel type is paid for by every validator for ever, and a correction after the tag costs a major version. The proposal needs readers who run scanners for a living: does the fact contract hold for your platform, and which of your checks falls outside eleven comparators?</p>
+        <h2>Review it before the tag closes the shape</h2>
+        <p>A kernel type is paid for by every validator for ever, and a correction after the tag costs a major version. The candidate needs readers who run scanners for a living: does the fact contract hold for your platform, and which of your checks falls outside twelve comparators?</p>
       </div>
       <div class="cta-actions">
         <a class="btn btn-primary" href="{{ blob }}/drafts/CP-CHECK-1.md" rel="noopener">Read CP-CHECK-1 <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>

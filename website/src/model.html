@@ -1,12 +1,12 @@
 ---
-title: The model: ten object types | JASCON
-description: The JASCON kernel in one page. Ten shallow object types, the order of the modal verbs, typed parameters, facets with a contract, two digests per object, three conformance tiers, and where each OSCAL 1.x construct went.
+title: The model: eleven object types | JASCON
+description: The JASCON kernel in one page. Eleven shallow object types, the order of the modal verbs, typed parameters, facets with a contract, two digests per object, three conformance tiers, and where each OSCAL 1.x construct went.
 nav: model
 ---
 <section class="page-hero">
   <div class="wrap">
     <p class="eyebrow">The model</p>
-    <h1>Ten object types and what each one replaces</h1>
+    <h1>Eleven object types and what each one replaces</h1>
     <p class="lede">The kernel holds what three national frameworks were measured to need and nothing else. This page walks through it once. The normative text is the <a href="{{ blob }}/drafts/jascon-specification-1.0.0.md" rel="noopener">specification</a>; the long form with every count is the <a href="{{ tree }}/jascon/references" rel="noopener">handbook</a>.</p>
   </div>
 </section>
@@ -45,7 +45,7 @@ nav: model
     <div class="section-head reveal">
       <p class="eyebrow"><span class="no">02</span> The types</p>
       <h2>Each type exists because a published catalogue demanded it</h2>
-      <p class="lede">Nine types are in the released 1.0.0. Risk is the tenth, in the 2.0.0 release candidate. Check is a proposal. The right column says what the type takes over from OSCAL 1.x or from common practice.</p>
+      <p class="lede">Nine types are in the released 1.0.0. Risk and Check are the tenth and the eleventh, in the 2.0.0 release candidate. The right column says what the type takes over from OSCAL 1.x or from common practice.</p>
     </div>
 
     <div class="reveal">
@@ -76,7 +76,7 @@ nav: model
       <p class="group-label">Organisation: why it is in scope</p>
       <div class="types">
         <div class="type">
-          <h3>Risk <small><span class="tier tier-designed">2.0.0-rc.1</span></small></h3>
+          <h3>Risk <small><span class="tier tier-designed">2.0.0 candidate</span></small></h3>
           <p>The record ISO/IEC 27001 6.1.2 and 6.1.3, BSI Standard 200-3 and NIST SP 800-30 all require: a scenario, an owner, a state, a rating as a level on a named scale, one of four treatment options, and the clauses that carry the treatment. Scoring methods stay outside the kernel. A Risk justifies a requirement once it is assessed and its option chosen.</p>
           <p class="replaces"><b>Takes over</b>The risk register as a spreadsheet and the Statement of Applicability as a document. <code>risk-coverage</code> computes the latter.</p>
         </div>
@@ -115,12 +115,12 @@ nav: model
         </div>
       </div>
 
-      <p class="group-label">Proposed</p>
+      <p class="group-label">Machines: how a requirement is decided</p>
       <div class="types">
         <div class="type">
-          <h3>Check <small><span class="tier tier-proposed">CP-CHECK-1</span></small></h3>
-          <p>A typed contract of the facts a collector reports, and a flat conjunction over eleven comparators that decides pass or fail. Collector code sits in a facet. What does not fit this form stays a manual check. Recorded verdicts are recomputed by the validator, and evidence files are named by their SHA-256.</p>
-          <p class="replaces"><b>Would take over</b>Audit procedures as prose, such as the 291 automated rules of the CIS Ubuntu 24.04 Benchmark that arrive as text a person must read. <a href="checks.html">The design and a live demo.</a></p>
+          <h3>Check <small><span class="tier tier-designed">2.0.0 candidate</span></small></h3>
+          <p>A typed contract of the facts a collector reports, and a flat conjunction over twelve comparators that decides pass or fail. Collector code sits in a facet. What does not fit this form stays a manual check. Recorded verdicts are recomputed by the validator, and evidence files are named by their SHA-256.</p>
+          <p class="replaces"><b>Takes over</b>Audit procedures as prose, such as the 291 automated rules of the CIS Ubuntu 24.04 Benchmark that arrive as text a person must read. <a href="checks.html">The design and a live demo.</a></p>
         </div>
       </div>
     </div>
@@ -223,7 +223,7 @@ nav: model
             <thead><tr><th>Tier</th><th>Promises</th></tr></thead>
             <tbody>
               <tr><th scope="row">Core</th><td>Schema validation of every type, sealed operation, package digests, local reference resolution, and preservation of everything unknown. No semantic computation.</td></tr>
-              <tr><th scope="row">Portable</th><td>Facet validation against pins with the fail-closed gate, semantic digests, deterministic tailoring resolution, lawful bundle composition, risk coverage.</td></tr>
+              <tr><th scope="row">Portable</th><td>Facet validation against pins with the fail-closed gate, semantic digests, deterministic tailoring resolution, lawful bundle composition, risk coverage, and the recomputation of every recorded check verdict.</td></tr>
               <tr><th scope="row">Authority</th><td>Publication duties: governed stable identifiers, alias and lineage records on every reorganisation, both digests per object, a deprecation lifecycle.</td></tr>
             </tbody>
           </table>
@@ -252,7 +252,7 @@ nav: model
           <tr><th scope="row">POA&amp;M</th><td><code>Finding.actions</code> and the Deviation lifecycle.</td></tr>
           <tr><th scope="row">Control mapping model</th><td>The Mapping type.</td></tr>
           <tr><th scope="row">props with <code>ns</code></th><td>A registered facet, an annotation, or nothing: most props imitated a kernel mechanism.</td></tr>
-          <tr><th scope="row">Metaschema, XML, YAML, Schematron</th><td>JSON Schema 2020-12, one serialization, nine rule primitives whose rationale prints on failure.</td></tr>
+          <tr><th scope="row">Metaschema, XML, YAML, Schematron</th><td>JSON Schema 2020-12, one serialization, ten rule primitives whose rationale prints on failure.</td></tr>
         </tbody>
       </table>
     </div>
