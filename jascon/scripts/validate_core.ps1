@@ -3531,9 +3531,10 @@ function Advice-Report([string]$section, [string]$bdir, $manifest, [byte[]]$rawM
     $atts = (New-OMap)
     foreach ($oid in $objs.Keys) { if ($objs[$oid].t -ceq 'attestation') { $atts[[string]$oid] = $objs[$oid] } }
     $isPack = ((Is-Map $manifest) -and (Ck-Truthy $manifest['pack']) -and (Test-Schema $DEFS['contentManifest'] $manifest))
-    if ($isPack -and -not $Flat) {
+    if (($isPack -or (@($ae.packs).Count -gt 0)) -and -not $Flat) {
         # Attestations BESIDE the manifest (D3.1): JSON files in the manifest's own
-        # folder that it does not list and that type as an Attestation
+        # folder that it does not list and that type as an Attestation - a pack's
+        # own, and the vendor's beside a set that kept a pack's manifest
         $listedPaths = New-Object 'System.Collections.Generic.HashSet[string]' ([System.StringComparer]::Ordinal)
         foreach ($e in @($manifest['objects'])) { if ($null -ne $e) { [void]$listedPaths.Add([string]$e['path']) } }
         foreach ($f in (Get-ChildItem $bdir -File -Filter *.json | Sort-Object Name)) {
@@ -3561,7 +3562,7 @@ function Advice-Report([string]$section, [string]$bdir, $manifest, [byte[]]$rawM
         $tag = 'publisher CLAIMED [header and prefix - UNPROVEN]'
         if ($st -ceq 'proven') {
             if ($null -ne $TRUSTED) { $tag = 'publisher PROVEN [attestation binds the manifest + signature VERIFIED]' }
-            else { $tag = 'publisher PROVEN [attestation binds the manifest; UNVERIFIED - run with --trusted-keys]' }
+            else { $tag = 'publisher ATTESTED, NOT VERIFIED [an attestation binds the manifest; no proof without --trusted-keys]' }
         }
         Write-Host "    $($j.where): $($j.pack['id']) release $($j.pack['version']) by $($j.pack['publisher']['ref']) = $tag"
         foreach ($n in $pn) { Write-Host "          $n" }

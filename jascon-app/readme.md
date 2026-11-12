@@ -106,7 +106,7 @@ hand it to the same card; nothing loads a pack over a set. The worked pack
 of the repository is `jascon/example-packs/dbvendor-server-7-advice/`.
 
 **Before anything is written** the card shows the pack: its id, the release,
-the publisher and whether the publisher is claimed or proven, every
+the publisher and how far the publisher is established, every
 Component with its product version, the product of somebody else it
 describes (a relation of type `describes`, shown and never computed with),
 and each capability with its requirement, clauses, text and suggested
@@ -114,12 +114,22 @@ values. The pack is read the way a bundle is checked: every listed file is
 there and has both digests its manifest states, and the manifest pins kernel
 2.0.0.
 
-- *claimed*: the header names the publisher and the ids share its origin.
-- *proven*: an attestation of that origin beside the pack's manifest binds
-  the digest of the manifest. With trusted keys set on the Validate page its
-  envelope must also verify under the signer's key; without keys the
-  signature is reported as unverified. The app never shows a publisher
-  without one of the two words.
+A publisher is shown with one of three words, never as a bare name:
+
+- *proven*, in green: an attestation of the publisher's origin beside the
+  pack's manifest binds the digest of the manifest, a trusted key for its
+  signer is set on the Validate page, and the envelope verifies under it.
+- *attested, not verified*, in amber: such an attestation binds the
+  manifest, and no trusted key is set. Anyone can write an attestation in a
+  vendor's name, so until a signature is checked the publisher is a claim.
+- *claimed*: everything else. The header names the publisher and the ids
+  share its origin; no attestation binds the manifest, or its signature did
+  not verify under the key you trust, and the reason is shown.
+
+The rules answer *claimed* or *proven* as the reference validator does, and
+in a run without keys their *proven* is the second case. `validate_core.py`
+prints it as "ATTESTED, NOT VERIFIED"; the app shows it the same way, on
+every page and in the findings of the Validate page.
 
 **On import** the vendor's Components join the set as the files they are,
 the vendor's manifest is kept unchanged beside the set's own as
@@ -154,7 +164,7 @@ a file that does not match the digests its manifest states, and a pinned
 facet schema the set holds in another version.
 
 **Adoption** is on the Implement page, view *Advice*. It lists the packs of
-the set (id, release, publisher claimed or proven, components) and, for one
+the set (id, release, publisher with one of the three words, components) and, for one
 of your components, every other Component that declares a capability. A
 product's advice applies to your component because the component contains
 the product (ADVICE-7), so the view first makes the product a member of your
@@ -173,7 +183,7 @@ Component is never written by the app.
 set, among them that a kept manifest is named by the digest of its bytes
 (ADVICE-8) and that every object it lists is in the set at that version with
 that semantic digest (ADVICE-9: the vendor's advice was not edited after the
-import), and for every pack whether its publisher is claimed or proven.
+import), and for every pack how far its publisher is established.
 
 **What the app does not do.** It does not write or sign a pack. It does not
 convert an OSCAL component definition into a pack. It keeps no earlier
@@ -431,6 +441,10 @@ A mismatch on an object you edited in the app is reported as an edit. A
 mismatch on an object you did not touch means the file is not the one the
 manifest describes.
 
+A pack manifest the set keeps under `packs/sha256/` is named by the SHA-256
+of its bytes; the same button checks each one against its name, and the
+Validate page reports a mismatch as ADVICE-8.
+
 ## Export
 
 **Export the set as a bundle** downloads a ZIP with the objects, the pinned
@@ -439,10 +453,14 @@ files and a `content-manifest.json`.
 - A set nobody changed leaves byte for byte as it came, with its manifest.
 - A set that was changed gets a new manifest with both digests per object,
   the pins for its scales and facet schemas, and `kernel-version` 2.0.0 when
-  the content needs it (a Risk, a Finding that names risks, or a pinned
-  scale). Its provenance gains the line `edited-with`.
+  the content needs it (a Risk, a Check, check results, a Finding that names
+  risks or a check, a pinned scale, a Component with `product-version` or
+  with clauses on a capability). Its provenance gains the line `edited-with`.
 - An attestation the original manifest did not list stays beside the manifest
   and is not added to it.
+- The pack manifests under `packs/sha256/`, a pack's attestation and its
+  envelope leave as they came, beside the manifest; none of them is listed
+  in it, and the manifest of a set never carries a pack header.
 - Exporting twice gives the same archive.
 
 The Python reference validator checks an exported bundle after unzipping:
@@ -484,15 +502,18 @@ text in that language, the English text is shown, then whatever is there.
 
 ## Limits of this build
 
-- The Validate page is not the reference validator. All sixteen rule
+- The Validate page is not the reference validator. All seventeen rule
   families of `validate_core.py` are ported and run against their conformance
   vectors: canonical form, modality, parameter, tier, tailoring (the
-  operation law), reference, lifecycle, kernel, facet, attestation, risk,
+  operation law), reference, lifecycle, kernel (with the typed fields
+  `Finding.actions[].due` and `Deviation.opened`, named DATE-2 and DATE-1
+  when an object matches no type), facet, attestation, risk,
   scale, DSSE signatures, the composition of two bundles,
-  conditional-apply, and the Check type of `drafts/CP-CHECK-1.md`
-  (I-Regexp, check-verdict, CHECK-1 to CHECK-15 with the evidence chain). What the page does not judge: advice packs (the
-  rules ADVICE-1 to ADVICE-11 of the proposed `drafts/CP-ADVICE-1.md` are not
-  ported, and the app has no import for a pack), conditional-apply
+  conditional-apply, the Check type of `drafts/CP-CHECK-1.md`
+  (I-Regexp, check-verdict, CHECK-1 to CHECK-15 with the evidence chain),
+  and advice packs of `drafts/CP-ADVICE-1.md` (ADVICE-1 to ADVICE-11 with
+  the publisher verdict and the import plan). What the page does not judge:
+  conditional-apply
   instances (no bundle has a place to carry one; the reference validator does
   not run them on a bundle either) and the bytes of a bundle on disk (line
   ends, files the manifest does not list). In a case of doubt run the Python
@@ -511,6 +532,16 @@ text in that language, the English text is shown, then whatever is there.
   list). A file beside the manifest that nothing listed names, such as an
   attestation over the manifest, is not fetched; load the folder or a ZIP for
   those.
+- The pack manifests a set keeps (`packs/sha256/`) and the attestation of a
+  pack's publisher are named by nothing a manifest lists, and a URL names
+  files, not folders. Loading from a URL finds them only where the server
+  lists the folder, as `python -m http.server` does. A request for a listing
+  that is not there shows as an error in the browser's console, so the app
+  asks only where it has a reason: the manifest carries a pack header, or it
+  lists Components under an origin from which it lists nothing else (a pack
+  brings Components and nothing else, all under its publisher's origin).
+  Without a listing nothing is found, a pack from a URL is then *claimed*,
+  and a folder or a ZIP carries these files.
 - Predicate selects of a Tailoring are not evaluated; the selection is then
   shown as open and its count as a lower bound.
 - The Tailor page applies set-modality, set-parameter and replace-prose.
@@ -520,7 +551,8 @@ text in that language, the English text is shown, then whatever is there.
 - The type of an object is recognised by its fields, not by matching it
   against the kernel schema.
 - Files other than text (images, PDF) in a bundle folder are not stored,
-  except a file an attestation names as its envelope, and
+  except a file an attestation names as its envelope and the pack manifests
+  under `packs/sha256/`, and
   are missing from the export. Evidence blobs are kept when they are text
   (and at most 256 KiB when a folder is picked); a blob that is not UTF-8
   text is reported by the Validate page as one it cannot verify, and the
@@ -560,7 +592,9 @@ committed demo, the model access behaves as described above against a
 simulated service (what a request carries, the retry limit, the checks on an
 answer, the key in no storage), the Checks tool goes from a CIS import to
 saved checks against a simulated model and the exported bundle passes the
-reference validator, every page starts in a browser without a script error, every
+reference validator, an advice pack goes from its preview through import and
+adoption to an export the reference validator accepts (in node on the files,
+and in a browser through the pages), every page starts in a browser without a script error, every
 interface string has a German text, and what is generated (the settings table
 above, `jascon-schema.js`, `jascon-presets.js`) matches its source. The second lists
 strings without a German text. The third rewrites the settings table from

@@ -2742,11 +2742,14 @@ def advice_report(section, bdir, manifest, raw_manifest, objs, pinned_decl, enve
         st = pack_publisher(pack, mdig, atts, envelopes=envs, trusted=TRUSTED, notes=pn)
         tag = {"claimed": "publisher CLAIMED [header and prefix - UNPROVEN]",
                "proven": ("publisher PROVEN [attestation binds the manifest + signature VERIFIED]" if TRUSTED is not None
-                          else "publisher PROVEN [attestation binds the manifest; UNVERIFIED - run with --trusted-keys]")}[st]
+                          else "publisher ATTESTED, NOT VERIFIED [an attestation binds the manifest; no proof without --trusted-keys]")}[st]
         print(f"    {where}: {pack['id']} release {pack['version']} by {pack['publisher']['ref']} = {tag}")
         for n in pn: print(f"          {n}")
-    if manifest.get("pack") and VALIDATORS["contentManifest"].is_valid(manifest):
+    is_pack = bool(manifest.get("pack")) and VALIDATORS["contentManifest"].is_valid(manifest)
+    if is_pack or packs:
+        # a pack's own Attestation, and the vendor's beside a set that kept a pack's manifest
         atts.update(beside_attestations(bdir, {e["path"] for e in manifest.get("objects", [])}))
+    if is_pack:
         status(manifest["pack"], pkg_digest(raw_manifest), "pack")
     for name, km in packs:
         status(km["pack"], "sha256:" + name, f"kept pack ({len(km.get('objects', []))} object(s))")

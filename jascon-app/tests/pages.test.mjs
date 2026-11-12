@@ -135,8 +135,11 @@ test("a system built on the Implement page validates; an advice pack is previewe
     await page.locator("#pick-pack-files").setInputFiles(zip);
     await page.locator("#pack-import").waitFor({ timeout: 30000 });
     const preview = await page.locator("#pack-preview").innerText();
-    for (const want of ["https://dbvendor.example/pack/server-7-hardening", "Example DB Vendor Inc.", "https://dbvendor.example/party/vendor", "proven",
+    for (const want of ["https://dbvendor.example/pack/server-7-hardening", "Example DB Vendor Inc.", "https://dbvendor.example/party/vendor", "attested, not verified",
       "product version 7", "cap-tls", "cap-key-rotation", "cap-audit-log", "transport-crypto = \"tls13\"", "statement s2"]) assert.ok(preview.includes(want), `the preview shows ${want}`);
+    /* no trusted key is set: an attestation that binds the manifest is shown as attested, in amber, never as proof */
+    assert.equal(await page.locator("#pack-preview [data-publisher]").getAttribute("data-publisher"), "attested");
+    assert.match(await page.locator("#pack-preview [data-publisher]").getAttribute("style"), /--amber/);
     assert.deepEqual(await stored(), before, "the preview writes nothing");
     await page.locator("#pack-import").click();
     await page.locator("#pack-receipt").waitFor();
@@ -144,7 +147,7 @@ test("a system built on the Implement page validates; an advice pack is previewe
     const after = await stored();
     assert.deepEqual(after.filter(p => !before.includes(p)), ["attestation-dbvendor-server-7-advice.dsse", "attestation-dbvendor-server-7-advice.json",
       "objects/component/server-7.json", "packs/sha256/" + await core.jscSha256(fs.readFileSync(path.join(PACK, "content-manifest.json"), "utf8"))]);
-    assert.match(await page.locator("#pack-list").innerText(), /Server 7 hardening advice[\s\S]*release 3[\s\S]*proven/);
+    assert.match(await page.locator("#pack-list").innerText(), /Server 7 hardening advice[\s\S]*release 3[\s\S]*attested, not verified/);
 
     /* the same file again, through the pack button and through the button that loads a bundle: nothing is written, nothing replaced */
     for (const input of ["#pick-pack-files", "#pick-files"]) {
@@ -157,7 +160,7 @@ test("a system built on the Implement page validates; an advice pack is previewe
     /* adoption: the product becomes a member, and an edge of the user's system cites the vendor's capability */
     await tool("implement");
     await f.locator('.navitem[data-view="advice"]').click();
-    assert.match(await f.locator("#advice [data-pack]").first().innerText(), /release 3[\s\S]*proven/);
+    assert.match(await f.locator("#advice [data-pack]").first().innerText(), /release 3[\s\S]*attested, not verified/);
     await f.locator("#adv-own").selectOption({ label: "Shop" });
     const product = f.locator('[data-product="https://dbvendor.example/component/server-7"]');
     assert.equal(await product.locator("[data-adopt]").count(), 0, "no adoption before the product is a member");
@@ -174,7 +177,8 @@ test("a system built on the Implement page validates; an advice pack is previewe
     assert.deepEqual(cites.find(e => e["satisfied-by"][0]["capability-ref"].endsWith("#cap-tls"))["parameter-bindings"], { "transport-crypto": "tls13" });
     const checked = await validate();
     assert.deepEqual(checked.errors, []);
-    assert.ok(checked.advice.some(r => /kept pack \(1 object\(s\)\).*release 3.*publisher PROVEN/.test(r)), "the check reports the kept pack: " + checked.advice.join(" | "));
+    assert.ok(checked.advice.some(r => /kept pack \(1 object\(s\)\).*release 3.*publisher ATTESTED, NOT VERIFIED/.test(r)), "the check reports the kept pack: " + checked.advice.join(" | "));
+    assert.equal(await f.locator("#out [data-publisher]").getAttribute("data-publisher"), "attested");
 
     /* the export carries the vendor's manifest, and the reference validator accepts the set */
     await tool("home");
@@ -191,6 +195,20 @@ test("a system built on the Implement page validates; an advice pack is previewe
       fs.rmSync(out, { recursive: true });
       assert.match(line, / 0 fail/, run.stdout.slice(-1500));
     }
+
+    /* the publisher is shown as proven, in green, only once a key the user trusts verifies the envelope;
+       the worked pack is signed with the fixture key of the conformance corpus */
+    const signer = "https://dbvendor.example/party/vendor", key = JSON.parse(fs.readFileSync(path.join(ROOT, "jascon/conformance/advice-vectors.json"), "utf8"))["fixture-public-key"];
+    const publisherWith = async keys => {
+      await page.evaluate(k => localStorage.setItem("jsc:cfg:draft:validate:" + jscStore.activeSet(), JSON.stringify({ keys: k ? JSON.stringify(k) : "", other: "" })), keys);
+      await page.reload();
+      await page.locator("#pack-list [data-publisher]").waitFor();
+      return [await page.locator("#pack-list [data-publisher]").getAttribute("data-publisher"), /--green/.test(await page.locator("#pack-list [data-publisher]").getAttribute("style"))];
+    };
+    assert.deepEqual(await publisherWith(null), ["attested", false]);
+    assert.deepEqual(await publisherWith({ [signer]: key }), ["proven", true]);
+    assert.deepEqual(await publisherWith({ [signer]: "00".repeat(32) }), ["claimed", false]);
+    assert.match(await page.locator("#pack-list").innerText(), /not proven by .*no signature verifies under the trusted key/);
     assert.deepEqual(errors, []);
   } finally {
     await browser.close();

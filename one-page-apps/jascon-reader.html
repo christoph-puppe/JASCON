@@ -596,19 +596,21 @@ async function fetchBeside(base, manifest, listed) {
     } catch { /* not a file this reader shows */ }
   }
 }
-/* claimed | proven, structurally (CP-ADVICE-1 §4.2): the publisher of a pack is CLAIMED by the
-   header and the origin its ids share with it; it is PROVEN when an Attestation among the loaded
-   objects, whose signer has that origin, binds the digest of the pack's manifest. This reader
-   verifies no signature and runs none of the ADVICE rules — validate_core.py does. */
+/* claimed | attested (CP-ADVICE-1 §4.2): the publisher of a pack is CLAIMED by the header and the
+   origin its ids share with it. It is ATTESTED, NOT VERIFIED when an Attestation among the loaded
+   objects, whose signer has that origin, binds the digest of the pack's manifest — anyone can
+   write such an Attestation, so that is not proof. PROVEN needs its signature verified under a
+   key the user trusts; this reader takes no keys, verifies no signature and runs none of the
+   ADVICE rules, so it never says proven. validate_core.py --trusted-keys and the app do. */
 function packPublisher(pack, hex) {
   const origin = u => { const p = String(u).split("/"); return String(u).startsWith("http") && p.length >= 3 ? p.slice(0, 3).join("/") : String(u); };
   for (const r of state.objects.values())
-    if (r.type === "attestation" && hex && origin(r.obj.signer || "") === origin(pack.id) && r.obj["content-manifest-digest"] === "sha256:" + hex) return "proven";
+    if (r.type === "attestation" && hex && origin(r.obj.signer || "") === origin(pack.id) && r.obj["content-manifest-digest"] === "sha256:" + hex) return "attested";
   return "claimed";
 }
 const PUBLISHER_NOTE = {
   claimed: "CLAIMED — by the header and the id prefix; no loaded attestation binds this manifest",
-  proven: "PROVEN — an attestation of that origin binds this manifest (its signature is not verified here)",
+  attested: "ATTESTED, NOT VERIFIED — an attestation in that origin's name binds this manifest; this reader checks no signature, so the publisher is a claim until a signature is verified under a key you trust",
 };
 function packLine(pack, hex) {
   if (!pack || typeof pack !== "object" || !pack.id) return "not readable as a pack header";

@@ -94,11 +94,12 @@ jscI18n.add("de", {
   "product version": "Produktversion", "describes": "beschreibt", "pack": "Pack", "release": "Ausgabe", "claimed": "behauptet", "proven": "belegt", "publisher": "Herausgeber",
   "product version, for example 7.2 (optional)": "Produktversion, zum Beispiel 7.2 (optional)",
   "The version of the product the asset is: one text, never parsed, ordered or compared.": "Die Version des Produkts, das das Asset ist: ein Text, der nie zerlegt, geordnet oder verglichen wird.",
-  "claimed by the pack's header and the origin of its ids; not proven": "behauptet durch den Kopf des Packs und den Ursprung seiner Ids; nicht belegt",
-  "proven by an attestation that binds the pack's manifest; its signature is not verified, because no trusted key is set on the Validate page":
-    "belegt durch eine Attestation, die das Manifest des Packs bindet; ihre Signatur ist nicht verifiziert, weil auf der Seite Validieren kein vertrauenswürdiger Schlüssel hinterlegt ist",
-  "proven by an attestation that binds the pack's manifest, with a signature that verifies under the key you trust":
-    "belegt durch eine Attestation, die das Manifest des Packs bindet, mit einer Signatur, die unter dem Schlüssel verifiziert, dem Sie vertrauen",
+  "attested, not verified": "attestiert, nicht verifiziert", "not proven by {what}": "nicht belegt durch {what}",
+  "the pack's header names the publisher and its ids share that origin; nothing proves it": "Der Kopf des Packs nennt den Herausgeber, und seine Ids teilen diesen Ursprung; nichts belegt es",
+  "an attestation in the publisher's name binds the pack's manifest; the signature was not checked because no trusted key is set on the Validate page; until then the publisher is a claim":
+    "Eine Attestation im Namen des Herausgebers bindet das Manifest des Packs; die Signatur wurde nicht geprüft, weil auf der Seite Validieren kein vertrauenswürdiger Schlüssel hinterlegt ist; bis dahin ist der Herausgeber eine Behauptung",
+  "an attestation of the publisher binds the pack's manifest, and its signature verifies under the key you trust":
+    "Eine Attestation des Herausgebers bindet das Manifest des Packs, und ihre Signatur verifiziert unter dem Schlüssel, dem Sie vertrauen",
   "the requirement is not in this set, so the value cannot be checked: shown, not written": "Die Anforderung ist nicht in diesem Set, der Wert lässt sich also nicht prüfen: gezeigt, nicht geschrieben",
   "names no parameter that the covered clauses declare exactly once: shown, not written": "nennt keinen Parameter, den die abgedeckten Klauseln genau einmal deklarieren: gezeigt, nicht geschrieben",
   "is of the wrong kind for the parameter: shown, not written": "hat die falsche Art für den Parameter: gezeigt, nicht geschrieben",
@@ -129,7 +130,13 @@ let G = jscSet.graph, edgeFilter = "";
 let HELD = { packs: [], errors: [] };
 const adv = { own: "", context: {}, resp: "provider", stat: "planned", copy: {} };
 const packOf = id => HELD.packs.find(p => p.objects.includes(id));
-const packBadge = p => { const c = p.status === "proven" ? "green" : "amber"; return `<span class="badge" style="border-color:var(--${c});color:var(--${c})" title="${esc(p.id)}">${esc(T("pack"))} ${esc(TT(p.title) || V.last(p.id))} · ${esc(T("release"))} ${esc(p.version)} · ${esc(T(p.status))}</span>`; };
+/* three words for a publisher (jscPublisherLabel): only a signature that verified under a trusted key is shown as proof */
+const PUBLISHER = {
+  proven: [N("proven"), N("an attestation of the publisher binds the pack's manifest, and its signature verifies under the key you trust")],
+  attested: [N("attested, not verified"), N("an attestation in the publisher's name binds the pack's manifest; the signature was not checked because no trusted key is set on the Validate page; until then the publisher is a claim")],
+  claimed: [N("claimed"), N("the pack's header names the publisher and its ids share that origin; nothing proves it")],
+};
+const packBadge = p => { const c = p.label === "proven" ? "green" : "amber"; return `<span class="badge" data-publisher="${p.label}" style="border-color:var(--${c});color:var(--${c})" title="${esc(p.id)}">${esc(T("pack"))} ${esc(TT(p.title) || V.last(p.id))} · ${esc(T("release"))} ${esc(p.version)} · ${esc(T(PUBLISHER[p.label][0]))}</span>`; };
 const ofType = t => [...G.objects.values()].filter(r => r.type === t);
 const sel = (id, options, current, extra) => `<select id="${id}" ${extra || ""}>${options.map(o => `<option ${o === current ? "selected" : ""}>${esc(o)}</option>`).join("")}</select>`;
 
@@ -302,11 +309,6 @@ function renderBuild() {
    space and in agreement with every Tailoring that binds the parameter.
    Any other suggested value is shown with its reason and not written
    (CP-ADVICE-1 §5, "Not a rule here"). */
-const PUBLISHER = {
-  claimed: N("claimed by the pack's header and the origin of its ids; not proven"),
-  proven: N("proven by an attestation that binds the pack's manifest; its signature is not verified, because no trusted key is set on the Validate page"),
-  verified: N("proven by an attestation that binds the pack's manifest, with a signature that verifies under the key you trust"),
-};
 const NOT_WRITTEN = {
   "no-requirement": N("the requirement is not in this set, so the value cannot be checked: shown, not written"),
   "not-declared": N("names no parameter that the covered clauses declare exactly once: shown, not written"),
@@ -319,9 +321,10 @@ function renderAdvice() {
   const objs = new Map([...G.objects].map(([id, r]) => [id, { type: r.type, obj: r.obj }]));
   const title = id => (G.objects.has(id) ? V.titleOf(G.objects.get(id)) : V.last(id));
   const packs = HELD.packs.map(p => `<div class="stmt" data-pack="${esc(p.id)}"><b>${esc(TT(p.title) || V.last(p.id))}</b> ${V.badge(T("release") + " " + p.version)}
-      <span class="badge" style="border-color:var(--${p.status === "proven" ? "green" : "amber"});color:var(--${p.status === "proven" ? "green" : "amber"})">${esc(T(p.status))}</span>
+      <span class="badge" data-publisher="${p.label}" style="border-color:var(--${p.label === "proven" ? "green" : "amber"});color:var(--${p.label === "proven" ? "green" : "amber"})">${esc(T(PUBLISHER[p.label][0]))}</span>
       <div class="mono" style="font-size:10.5px;color:var(--text-quiet);word-break:break-all">${esc(p.id)}</div>
-      <div class="hint" style="margin-top:4px">${esc(T("publisher"))}: ${(p.publisher || {}).name ? esc(TT(p.publisher.name)) + " · " : ""}<span class="mono">${esc((p.publisher || {}).ref)}</span> · ${esc(T(PUBLISHER[p.verified ? "verified" : p.status]))}</div>
+      <div class="hint" style="margin-top:4px">${esc(T("publisher"))}: ${(p.publisher || {}).name ? esc(TT(p.publisher.name)) + " · " : ""}<span class="mono">${esc((p.publisher || {}).ref)}</span> · ${esc(T(PUBLISHER[p.label][1]))}</div>
+      ${p.why.map(m => `<div class="hint">${esc(T("not proven by {what}", { what: m }))}</div>`).join("")}
       <div style="margin-top:4px">${p.objects.map(id => (G.objects.has(id) ? V.refLink(id, title(id)) : `<span class="mono">${esc(id)}</span>`)).join(" · ")}</div></div>`).join("") +
     HELD.errors.map(([, m]) => `<div class="verdict-bad">✗ ${esc(m)}</div>`).join("") ||
     `<div class="empty">${esc(T("This set holds no advice pack. A pack is imported on the Home page, under Advice packs."))}</div>`;

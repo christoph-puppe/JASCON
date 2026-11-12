@@ -253,13 +253,14 @@ jscI18n.add("de", {
   "{source} is an advice pack: it is shown first and added to the set, never loaded over it": "{source} ist ein Advice Pack: Es wird erst gezeigt und dann zum Set hinzugefügt, nie darüber geladen",
   "{source} holds no content-manifest.json: an advice pack is a bundle, a folder or a ZIP with its manifest": "{source} enthält keine content-manifest.json: Ein Advice Pack ist ein Bundle, ein Ordner oder ein ZIP mit seinem Manifest",
   "URL of the pack (the folder that holds its content-manifest.json)": "URL des Packs (der Ordner mit seiner content-manifest.json)",
-  "claimed": "behauptet", "proven": "belegt", "added": "neu", "changed": "geändert", "removed": "entfernt", "replaced": "ersetzt", "component(s) added": "Komponente(n) hinzugefügt",
-  "claimed: the header names the publisher and the ids share its origin; no attestation beside the manifest binds this manifest, so nothing proves it":
-    "behauptet: Der Kopf nennt den Herausgeber, und die Ids teilen seinen Ursprung; keine Attestation neben dem Manifest bindet dieses Manifest, also belegt es nichts",
-  "proven: an attestation of the publisher binds this manifest; its signature is not verified, because no trusted key is set on the Validate page":
-    "belegt: Eine Attestation des Herausgebers bindet dieses Manifest; ihre Signatur ist nicht verifiziert, weil auf der Seite Validieren kein vertrauenswürdiger Schlüssel hinterlegt ist",
-  "proven: an attestation of the publisher binds this manifest, and its signature verifies under the key you trust":
-    "belegt: Eine Attestation des Herausgebers bindet dieses Manifest, und ihre Signatur verifiziert unter dem Schlüssel, dem Sie vertrauen",
+  "claimed": "behauptet", "proven": "belegt", "attested, not verified": "attestiert, nicht verifiziert",
+  "added": "neu", "changed": "geändert", "removed": "entfernt", "replaced": "ersetzt", "component(s) added": "Komponente(n) hinzugefügt",
+  "the header names the publisher and the ids share its origin; nothing proves it":
+    "Der Kopf nennt den Herausgeber, und die Ids teilen seinen Ursprung; nichts belegt es",
+  "an attestation in the publisher's name binds this manifest; the signature was not checked because no trusted key is set on the Validate page; until then the publisher is a claim":
+    "Eine Attestation im Namen des Herausgebers bindet dieses Manifest; die Signatur wurde nicht geprüft, weil auf der Seite Validieren kein vertrauenswürdiger Schlüssel hinterlegt ist; bis dahin ist der Herausgeber eine Behauptung",
+  "an attestation of the publisher binds this manifest, and its signature verifies under the key you trust":
+    "Eine Attestation des Herausgebers bindet dieses Manifest, und ihre Signatur verifiziert unter dem Schlüssel, dem Sie vertrauen",
   "not proven by {what}": "nicht belegt durch {what}",
   "product version": "Produktversion", "describes": "beschreibt", "declares no capability": "deklariert keine Fähigkeit", "no longer in this release": "nicht mehr in dieser Ausgabe",
   "Not imported: {source}": "Nicht importiert: {source}", "pack": "Pack", "release": "Ausgabe", "publisher": "Herausgeber",
@@ -465,7 +466,6 @@ $("btn-url").addEventListener("click", () => {
    with what changes, and replaces only what the earlier release brought.
    The rules and the plan are jascon-rules.js; this is the dialogue. */
 const V = jscView;
-let shown = null;   // { pack, source } : the pack on show, waiting for a decision
 /* the manifest of a selection, parsed, or null */
 function manifestOf(files) {
   const paths = files.map(f => f.path).filter(p => p === JSC_MANIFEST || p.endsWith("/" + JSC_MANIFEST)).sort((a, b) => a.length - b.length);
@@ -502,7 +502,7 @@ function packPreviewHtml(pack, plan, source) {
   if (!h) return `<div class="wb"><b>${jscEsc(T("Not imported: {source}", { source }))}</b>${lines(plan.errors.map(([, m]) => "✗ " + m), "verdict-bad")}</div>`;
   const head = `<div class="kv">${V.kv(T("pack"), `<span class="mono">${jscEsc(h.id)}</span>`)}
       ${V.kv(T("release"), V.badge(h.version) + (plan.result === "replace" ? ` <span class="hint">${jscEsc(T("another release of a pack this set holds; it holds release {old}. Releases are not ordered: which of the two is newer is yours to say.", { old: plan.previous }))}</span>` : ""))}
-      ${V.kv(T("publisher"), publisherHtml(h, plan.publisher, plan.verified) + lines(plan.publisherNotes.map(m => T("not proven by {what}", { what: m })), "hint"))}
+      ${V.kv(T("publisher"), publisherHtml(h, plan.label, plan.publisherNotes))}
       ${V.kv(T("manifest"), `<span class="mono" style="font-size:10.5px;word-break:break-all">sha256:${jscEsc(pack.digest)}</span>`)}</div>`;
   const title = `<b>${jscEsc(TT(h.title) || V.last(h.id))}</b> <span class="hint">${jscEsc(source)}</span>`;
   if (plan.result === "already-imported") {
@@ -538,17 +538,15 @@ async function offerPack(files, source) {
   const el = $("pack-preview");
   select("home", true);
   const pack = files.length ? await jscAdvicePack(files) : null;
-  if (!pack) { shown = null; el.textContent = ""; hubLog.warn(T("{source} holds no content-manifest.json: an advice pack is a bundle, a folder or a ZIP with its manifest", { source })); return; }
+  if (!pack) { el.textContent = ""; hubLog.warn(T("{source} holds no content-manifest.json: an advice pack is a bundle, a folder or a ZIP with its manifest", { source })); return; }
   const plan = await jscAdviceImport(await jscSet.load(), pack, { trusted: jscTrustedKeys() });
-  shown = { pack, source };
   el.innerHTML = packPreviewHtml(pack, plan, source);
   V.wireRefs(el);
   const h = plan.pack;
   if (plan.result === "already-imported") hubLog.ok(T("Already imported: release {release}", { release: h.version }) + " · " + h.id);
   else if (plan.result === "refused") { hubLog.err(T("pack not imported: {n} reason(s)", { n: plan.errors.length })); plan.errors.forEach(([, m]) => hubLog.err(m)); }
-  else hubLog.info(T("pack {id} release {release}: {n} component(s), publisher {status}. Nothing is written until you confirm.", { id: h.id, release: h.version, n: pack.objs.size, status: T(plan.publisher) }));
-  const close = () => { shown = null; el.textContent = ""; };
-  if ($("pack-cancel")) $("pack-cancel").addEventListener("click", close);
+  else hubLog.info(T("pack {id} release {release}: {n} component(s), publisher {status}. Nothing is written until you confirm.", { id: h.id, release: h.version, n: pack.objs.size, status: T(PUBLISHER[plan.label][0]) }));
+  if ($("pack-cancel")) $("pack-cancel").addEventListener("click", () => { el.textContent = ""; });
   if ($("pack-import")) $("pack-import").addEventListener("click", async () => {
     $("pack-import").disabled = true;
     /* the plan is made again on the set as it is now: another page may have written since the preview */
@@ -564,7 +562,6 @@ async function offerPack(files, source) {
     el.innerHTML = `<div class="wb"><p class="verdict-ok">✓ ${jscEsc(T("imported release {release} of {id}", { release: h.version, id: h.id }))}</p>
       <p class="mono" id="pack-receipt">${jscEsc(receipt.text)}</p>
       <p class="hint">${jscEsc(T("Measured after the write: of the objects of the set that the pack does not own, this many have the semantic digest they had before. That no Tailoring resolves differently follows from ADVICE-1 and was not computed."))}</p></div>`;
-    shown = null;
     $("verify-out").textContent = "";
     await refresh();
   });
@@ -584,7 +581,7 @@ async function renderPacks(g) {
   const name = id => (g.objects.has(id) ? V.refLink(id, V.labelOf(g.objects.get(id))) : `<span class="mono">${jscEsc(id)}</span>`);
   el.innerHTML = held.packs.map(p => `<div class="stmt"><b>${jscEsc(TT(p.title) || V.last(p.id))}</b> ${V.badge(T("release") + " " + p.version)}
       <div class="mono" style="font-size:10.5px;color:var(--text-quiet);word-break:break-all">${jscEsc(p.id)} · packs/sha256/${jscEsc(p.name)}</div>
-      <div style="margin-top:4px">${publisherHtml(p, p.status, p.verified)}</div>
+      <div style="margin-top:4px">${publisherHtml(p, p.label, p.why)}</div>
       <div style="margin-top:4px">${p.objects.map(name).join(" · ")}</div></div>`).join("") +
     held.errors.map(([, m]) => `<div class="verdict-bad">✗ ${jscEsc(m)}</div>`).join("") ||
     `<div class="hint">${jscEsc(T("This set holds no advice pack."))}</div>`;
@@ -755,6 +752,8 @@ async function route() {
   /* a tool in the iframe, or another tab, wrote to the store */
   window.addEventListener("storage", e => {
     if (e.key && e.key.startsWith("jsc:cfg:store:")) refresh();
+    /* the trusted keys are typed on the Validate page and decide what the pack list may call proven */
+    if (e.key && e.key.includes("draft:validate:")) refresh();
     if (e.key === "jsc:cfg:ui:theme") { jscTheme.apply(); syncHeader(); }
   });
   loadHelp();

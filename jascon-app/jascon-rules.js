@@ -2619,9 +2619,10 @@ async function jscCheckGraph(g, verified, opts) {
     const status = await jscPackPublisher(pack, mdigest, atts, verify && { ...verify, notes: why });
     packs.push({ where, name, id: pack.id, version: pack.version, title: pack.title || null, publisher: pack.publisher, status, verified: status === "proven" && !!trusted,
       label: jscPublisherLabel(status, !!trusted, status === "proven" && !!trusted), why, objects: listed });
+    /* the reference's line; without keys neither says PROVEN: an unverified attestation is no proof (jscPublisherLabel) */
     const tag = status === "claimed" ? "publisher CLAIMED [header and prefix - UNPROVEN]"
       : trusted ? "publisher PROVEN [attestation binds the manifest + signature VERIFIED]"
-      : "publisher PROVEN [attestation binds the manifest; UNVERIFIED without trusted keys]";
+      : "publisher ATTESTED, NOT VERIFIED [an attestation binds the manifest; no proof without trusted keys]";
     add("note", "advice", null, `${where}: ${pack.id} release ${pack.version} by ${(pack.publisher || {}).ref} = ${tag}`);
     why.forEach(m => add("note", "advice", null, `${pack.id}: not proven by ${m}`));
   };

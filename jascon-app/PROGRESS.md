@@ -79,8 +79,27 @@ and in `readme.md`; this file says only what is done and what is next.
   a CIS import to saved checks against a simulated Gemini endpoint; the
   exported bundle passes `validate_core.py`. No real service was called.
 
+- Advice packs (build 0.9.3; CP-ADVICE-1, accepted for the 2.0.0 release
+  candidate on 2026-11-12): the seventeenth vector family in
+  `jascon-rules.js` (ADVICE-1..11, the publisher verdict, the import plan;
+  all 74 vectors), the extended kernel pin (a pack header, `statement-ids`
+  on a capability, `product-version`) and DATE-1/DATE-2 with the 14 shape
+  vectors of the kernel family. The kept pack manifests (`packs/sha256/`)
+  survive load from a folder, a ZIP and, where the server lists folders, a
+  URL, and the export. On the Home page a pack is previewed, imported once
+  and replaced by another release with a diff; on the Implement page a
+  recommendation is adopted. `jascon-view.js` renders a Component with its
+  product version and capabilities. Driven in Chromium on the worked pack;
+  the set after import and adoption, exported, gives `validate_core.py`
+  8 pass, 0 fail. The system workbench no longer writes the literal
+  `declared` (see `ERRATA.md`). The reader is at v1.9.0 with the same fix
+  and shows pack headers and kept manifests.
+
 ## Next
 
+- An OSCAL component definition as a third kind on the Import page, written
+  as a pack (CP-ADVICE-1 §9 item 7); the converter it would follow
+  (`convert_cdef.py`) does not exist yet.
 - One real call per service with a key of the user's: the model ids in the
   settings and the request shape were checked against a simulated service
   only (the model documentation could not be reached from the build
@@ -100,6 +119,16 @@ and in `readme.md`; this file says only what is done and what is next.
   envelope only for an attestation the manifest lists, which an attestation
   over the manifest cannot be (D3.1).
 - The IFA bundle's attestation carries a stale digest for `system1234`.
+- Fixed in the reference on 2026-11-12, found while building this: for a
+  bundle folder that keeps a pack, `validate_core.py` did not read the
+  vendor's attestation beside the manifest and reported the kept pack's
+  publisher as CLAIMED. It now reads it, as the app does, and both
+  validators say ATTESTED, NOT VERIFIED where no key was given.
+- Two requirements whose ids end in the same word give the system workbench
+  two Implementations with one id (the id is minted from the asset's title
+  and the last part of the requirement's id); the set then shows one of
+  them and reports the other file as ignored. Older than this build, read
+  from the code and not tried.
 - The shipped `converted_examples/US.SP800-53` bundle was converted from an
   earlier revision of NIST's 5.2.0 file. In it SA-15(13) "Logging Syntax"
   carries the statement of SA-15(12); NIST's current file has it right.

@@ -102,7 +102,8 @@ test("the example folder: its kept pack manifest is loaded, verified against its
   assert.deepEqual(res.findings.filter(f => f.kind === "error"), []);
   assert.equal(res.packs.length, 1);
   assert.deepEqual([res.packs[0].id, res.packs[0].version, res.packs[0].status], ["https://dbvendor.example/pack/server-7-hardening", "3", "proven"]);
-  assert.ok(res.findings.some(f => f.area === "advice" && f.kind === "note" && /kept pack \(1 object\(s\)\).*publisher PROVEN/.test(f.message)));
+  assert.ok(res.findings.some(f => f.area === "advice" && f.kind === "note" && /kept pack \(1 object\(s\)\).*publisher ATTESTED, NOT VERIFIED/.test(f.message)), "without trusted keys the note does not say proven");
+  assert.equal(res.packs[0].label, "attested");
   const built = await core.jscBuildBundle(g);
   assert.equal(built.verbatim, true);
   const file = built.files.find(f => f.path === "packs/sha256/" + kept[0][0]);
@@ -301,6 +302,36 @@ test("adoption: a suggested value is offered only where it fits the declared spa
   assert.deepEqual(edge["parameter-bindings"], { tries: 3 }, "proto is outside the Tailoring and not written; sink was not ticked");
   assert.deepEqual(edge["satisfied-by"], [{ "capability-ref": P + "/comp/product#c" }]);
   assert.equal(rules.jscMatchTypes(edge).join(), "implementation");
+});
+
+/* What a page shows for a publisher. Without a verified signature an
+   Attestation that binds the manifest is no proof (anyone can write one in a
+   vendor's name), so "proven" is shown only in verification mode. The rules'
+   own answer stays claimed | proven, as in validate_core.py. */
+test("the word a page shows for a publisher: proven only with a verified signature, attested without keys, claimed otherwise", async () => {
+  assert.equal(rules.jscPublisherLabel("proven", true, true), "proven");
+  assert.equal(rules.jscPublisherLabel("proven", false, false), "attested");
+  assert.equal(rules.jscPublisherLabel("proven", false, true), "attested", "no trusted key, no proof, whatever else is said");
+  assert.equal(rules.jscPublisherLabel("proven", true, false), "claimed");
+  assert.equal(rules.jscPublisherLabel("claimed", false, false), "claimed");
+  assert.equal(rules.jscPublisherLabel("claimed", true, false), "claimed");
+  /* on the worked pack, whose envelope is signed with the fixture key of the conformance corpus */
+  const signer = "https://dbvendor.example/party/vendor", key = JSON.parse(fs.readFileSync(path.join(ROOT, "jascon/conformance/advice-vectors.json"), "utf8"))["fixture-public-key"];
+  const pack = await rules.jscAdvicePack(readTree(PACK)), g = () => core.jscGraphFrom(recordsOf(baseSet()));
+  const seen = async trusted => { const p = await rules.jscAdviceImport(g(), pack, { trusted }); return [p.publisher, p.verified, p.label, p.publisherNotes.length]; };
+  assert.deepEqual(await seen(null), ["proven", false, "attested", 0], "no keys: the attestation binds the manifest, and that is all");
+  assert.deepEqual(await seen({ [signer]: key }), ["proven", true, "proven", 0], "the signature verifies under the trusted key");
+  assert.deepEqual(await seen({ [signer]: "00".repeat(32) }), ["claimed", false, "claimed", 1], "a signature that does not verify proves nothing, and the reason is kept");
+  assert.deepEqual(await seen({ "https://other.example/party/x": key }), ["claimed", false, "claimed", 1], "keys are set, but none for this signer");
+  const bare = await rules.jscAdvicePack(readTree(PACK).filter(f => !f.path.startsWith("attestation-")));
+  assert.deepEqual([(await rules.jscAdviceImport(g(), bare)).label, (await rules.jscAdviceImport(g(), bare, { trusted: { [signer]: key } })).label], ["claimed", "claimed"]);
+  /* the same three words for the packs a set holds, and in the whole-set check */
+  const set = core.jscGraphFrom(apply(recordsOf(baseSet()), await rules.jscAdviceImport(g(), pack)));
+  assert.deepEqual((await rules.jscAdviceHeld(set, null)).packs.map(p => p.label), ["attested"]);
+  assert.deepEqual((await rules.jscAdviceHeld(set, { [signer]: key })).packs.map(p => p.label), ["proven"]);
+  assert.deepEqual((await rules.jscAdviceHeld(set, { [signer]: "00".repeat(32) })).packs.map(p => [p.label, p.why.length]), [["claimed", 1]]);
+  assert.deepEqual((await rules.jscCheckGraph(set, null)).packs.map(p => p.label), ["attested"]);
+  assert.deepEqual((await rules.jscCheckGraph(set, null, { trusted: { [signer]: key } })).packs.map(p => p.label), ["proven"]);
 });
 
 test("a capability id is derived from the requirement and unique within its component", () => {
