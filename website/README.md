@@ -77,8 +77,14 @@ missing.
 - `<code data-lang="json">` and `<code data-lang="sh">` are coloured by the
   build. In JSON, `«` and `»` mark the part the text points at.
 - The build checks every local link and anchor and stops on a broken one.
-- Styles are one file, `static/assets/css/site.css`, with the colour tokens
-  for light and dark at the top. The violet is the app's accent.
+- Styles are `static/assets/css/site.css`, with the colour tokens for light
+  and dark at the top (the classic look; the violet is the app's accent), and
+  `static/assets/css/styles.css`, three alternative styles a visitor picks in
+  the header: Ledger (`data-style="ledger"`, after Hanne Darboven),
+  Engraving (`engraving`, after Albrecht Dürer) and Still life
+  (`still-life`, after Giorgio Morandi). Each redefines every token of
+  `site.css` and adds its own ground, type and shapes; the choice is stored
+  like the colour scheme. The painters are named here only, not on the site.
 - The app screenshots under `static/assets/img/` are taken from the built
   site at 1280 by 750, device scale 2, and stored as WebP.
 
@@ -131,6 +137,8 @@ never fetched during validation, so nothing breaks while it serves nothing.
 ## Licences
 
 The site's own text, markup, styles and script: Apache-2.0, like the rest of
-the repository. The three typefaces under `static/assets/fonts/` (Inter,
-Source Serif 4, JetBrains Mono; Latin subsets as packaged by Fontsource) are
-under the SIL Open Font License 1.1, in `LICENSE.txt` beside them.
+the repository. The typefaces under `static/assets/fonts/` (Inter, Source
+Serif 4 and JetBrains Mono for the classic look; Barlow, Barlow Condensed,
+Courier Prime, EB Garamond, Bodoni Moda and Titillium Web for the three
+alternative styles; Latin subsets as packaged by Fontsource) are under the
+SIL Open Font License 1.1, in `LICENSE.txt` beside them.

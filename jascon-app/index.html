@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>JASCON App</title>
 <link rel="stylesheet" href="jascon-core.css">
-<script>/* colour scheme before the first paint; jascon-core.js loads at the end */try{var _t=localStorage.getItem("jsc:cfg:ui:theme")||"dark";if(_t!=="system")document.documentElement.setAttribute("data-theme",_t)}catch(e){}</script>
+<link rel="stylesheet" href="jascon-styles.css">
+<script>/* colour scheme before the first paint; jascon-core.js loads at the end */try{var _t=localStorage.getItem("jsc:cfg:ui:theme")||"dark";if(_t!=="system")document.documentElement.setAttribute("data-theme",_t);var _s=localStorage.getItem("jsc:cfg:ui:style")||localStorage.getItem("jascon-site:style")||"";if(_s==="ledger"||_s==="engraving"||_s==="still-life")document.documentElement.setAttribute("data-style",_s)}catch(e){}</script>
 <style>
 /* The hub: a header, one tab per tool, and below them either the Home sheet
    (sets, loading, integrity, export, help) or the chosen tool in an iframe. */
@@ -52,6 +53,7 @@ iframe { width: 100%; height: 100%; border: 0; display: block; }
   <div class="spacer"></div>
   <button id="key-pill" type="button" class="hidden" data-i18n-attr="title" title="A key for a model service is held in the memory of this page. Click to forget it."></button>
   <button id="btn-theme" type="button"></button>
+  <select id="style-select" aria-label="Style" data-i18n-attr="aria-label title" title="Style"></select>
   <button id="btn-lang" type="button" data-i18n-attr="title" title="Switch the language of the interface"></button>
   <a class="btn" href="config.html" data-i18n>Settings</a>
   <a class="btn" id="open-standalone" href="#" target="_blank" rel="noopener" data-i18n-attr="title" title="Open the current tool in its own tab">↗</a>
@@ -310,6 +312,20 @@ $("btn-theme").addEventListener("click", () => {
   try { if ($("app-frame").contentDocument) jscTheme.apply($("app-frame").contentDocument); } catch (e) { /* frame not ready */ }
   syncHeader();
 });
+/* style: the setting ui:style, listed with the names from JSC_CFG */
+(() => {
+  const sel = $("style-select"), cfg = JSC_CFG.find(c => c.key === "ui:style");
+  for (const v of jscStyle.options) {
+    const o = document.createElement("option");
+    o.value = v; o.textContent = T(cfg.names[v]);
+    sel.appendChild(o);
+  }
+  sel.value = jscStyle.get();
+  sel.addEventListener("change", () => {
+    jscStyle.set(sel.value);
+    try { if (frame.contentDocument) jscStyle.apply(frame.contentDocument); } catch (e) { /* frame not ready */ }
+  });
+})();
 $("btn-lang").addEventListener("click", () => {
   jscCfg.set("ui:lang", jscI18n.lang() === "de" ? "en" : "de");
   location.reload();
@@ -755,6 +771,7 @@ async function route() {
     /* the trusted keys are typed on the Validate page and decide what the pack list may call proven */
     if (e.key && e.key.includes("draft:validate:")) refresh();
     if (e.key === "jsc:cfg:ui:theme") { jscTheme.apply(); syncHeader(); }
+    if (e.key === "jsc:cfg:ui:style" || e.key === jscStyle.SITE_KEY) { jscStyle.apply(); $("style-select").value = jscStyle.get(); }
   });
   loadHelp();
 })();

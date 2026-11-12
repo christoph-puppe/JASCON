@@ -2,8 +2,8 @@
 
    Everything here is an addition: with scripts off, every page still reads
    in full (tab panels are all shown, nothing is hidden behind an animation).
-   Nothing is sent anywhere; the only thing stored is the colour scheme you
-   pick, in this browser's localStorage. */
+   Nothing is sent anywhere; the only things stored are the colour scheme and
+   the style you pick, in this browser's localStorage. */
 (function () {
   "use strict";
   var root = document.documentElement;
@@ -19,6 +19,20 @@
       var next = current === "dark" ? "light" : "dark";
       root.setAttribute("data-theme", next);
       try { localStorage.setItem("jascon-site:theme", next); } catch (e) { /* private mode */ }
+    });
+  }
+
+  /* ---- style: classic until one of the three in styles.css is picked ---- */
+  var STYLES = ["ledger", "engraving", "still-life"];
+  var stylePick = $("#style");
+  if (stylePick) {
+    stylePick.value = root.getAttribute("data-style") || "";
+    stylePick.addEventListener("change", function () {
+      var s = STYLES.indexOf(stylePick.value) >= 0 ? stylePick.value : "";
+      if (s) root.setAttribute("data-style", s); else root.removeAttribute("data-style");
+      try {
+        if (s) localStorage.setItem("jascon-site:style", s); else localStorage.removeItem("jascon-site:style");
+      } catch (e) { /* private mode */ }
     });
   }
 

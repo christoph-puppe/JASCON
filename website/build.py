@@ -444,6 +444,22 @@ def copy_tree(src, dst, ignore=None):
     shutil.copytree(src, dst, ignore=ignore, dirs_exist_ok=True)
 
 
+def remove_tree(path):
+    """rmtree that also removes read-only entries.
+
+    On Windows a folder of the repository can carry the read-only attribute;
+    copytree copies it into the output (copystat), and the next build's
+    rmtree then fails with "access denied" on that folder. Clear the mark
+    and try once more."""
+    def clear_and_retry(func, p, _exc):
+        os.chmod(p, 0o700)
+        func(p)
+    if sys.version_info >= (3, 12):
+        shutil.rmtree(path, onexc=clear_and_retry)
+    else:
+        shutil.rmtree(path, onerror=clear_and_retry)
+
+
 def copy_apps(out, facts):
     copy_tree(os.path.join(REPO, "jascon-app"), os.path.join(out, "app"),
               ignore=shutil.ignore_patterns("tests", "tools", "PROGRESS.md", "ERRATA.md"))
@@ -583,7 +599,7 @@ def main():
     site = json.loads(read(SITE))
 
     if os.path.isdir(out):
-        shutil.rmtree(out)
+        remove_tree(out)
     os.makedirs(out)
     copy_tree(STATIC, out)
     ctx = context(facts, site)

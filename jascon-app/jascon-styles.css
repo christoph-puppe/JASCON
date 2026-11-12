@@ -1,0 +1,243 @@
+/* JASCON-App - the three alternative styles of jascon.net, for the tools.
+
+   Every page links this file after jascon-core.css. Without data-style on
+   <html> nothing here applies and the app keeps its classic look. With it,
+   the page takes the palette, type and density of the style, plus one mark
+   of its own; layout, navigation and controls stay as they are.
+
+     ledger      ruled-paper ground, blue-black ink, a red margin line down
+                 the work area, typewriter numerals. The interactive colour
+                 is the ink blue, so red stays free for errors.
+     engraving   laid-paper or copper-plate ground, iron-gall ink, red chalk,
+                 Garamond, cards with a plate mark
+     still-life  chalk, putty and umber, Titillium, tone steps instead of
+                 lines
+
+   The setting is ui:style (jscStyle in jascon-core.js); empty follows the
+   style picked on the website in this browser.
+
+   As in jascon-core.css, dark is the default (:root), light comes through
+   data-theme="light" or the operating system; the light tokens therefore
+   stand twice per style. Change both.
+
+   Fonts: the files of the website, SIL OFL 1.1. The first url is where they
+   are on jascon.net (/assets/fonts beside /app), the second where they are
+   in the repository (website/static/assets/fonts beside jascon-app); the
+   browser takes the first that loads. A face is fetched only when a style
+   that uses it is chosen. */
+
+@font-face { font-family: "Barlow"; src: url("../assets/fonts/barlow-latin-400-normal.woff2") format("woff2"), url("../website/static/assets/fonts/barlow-latin-400-normal.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Barlow"; src: url("../assets/fonts/barlow-latin-500-normal.woff2") format("woff2"), url("../website/static/assets/fonts/barlow-latin-500-normal.woff2") format("woff2"); font-weight: 500; font-display: swap; }
+@font-face { font-family: "Barlow"; src: url("../assets/fonts/barlow-latin-600-normal.woff2") format("woff2"), url("../website/static/assets/fonts/barlow-latin-600-normal.woff2") format("woff2"); font-weight: 600 700; font-display: swap; }
+@font-face { font-family: "Barlow Condensed"; src: url("../assets/fonts/barlow-condensed-latin-600-normal.woff2") format("woff2"), url("../website/static/assets/fonts/barlow-condensed-latin-600-normal.woff2") format("woff2"); font-weight: 600 700; font-display: swap; }
+@font-face { font-family: "Courier Prime"; src: url("../assets/fonts/courier-prime-latin-400-normal.woff2") format("woff2"), url("../website/static/assets/fonts/courier-prime-latin-400-normal.woff2") format("woff2"); font-weight: 400 500; font-display: swap; }
+@font-face { font-family: "Courier Prime"; src: url("../assets/fonts/courier-prime-latin-700-normal.woff2") format("woff2"), url("../website/static/assets/fonts/courier-prime-latin-700-normal.woff2") format("woff2"); font-weight: 600 700; font-display: swap; }
+@font-face { font-family: "EB Garamond"; src: url("../assets/fonts/eb-garamond-latin-wght-normal.woff2") format("woff2"), url("../website/static/assets/fonts/eb-garamond-latin-wght-normal.woff2") format("woff2"); font-weight: 400 800; font-style: normal; font-display: swap; }
+@font-face { font-family: "EB Garamond"; src: url("../assets/fonts/eb-garamond-latin-wght-italic.woff2") format("woff2"), url("../website/static/assets/fonts/eb-garamond-latin-wght-italic.woff2") format("woff2"); font-weight: 400 800; font-style: italic; font-display: swap; }
+@font-face { font-family: "Bodoni Moda"; src: url("../assets/fonts/bodoni-moda-latin-wght-normal.woff2") format("woff2"), url("../website/static/assets/fonts/bodoni-moda-latin-wght-normal.woff2") format("woff2"); font-weight: 400 900; font-display: swap; }
+@font-face { font-family: "Titillium Web"; src: url("../assets/fonts/titillium-web-latin-400-normal.woff2") format("woff2"), url("../website/static/assets/fonts/titillium-web-latin-400-normal.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Titillium Web"; src: url("../assets/fonts/titillium-web-latin-600-normal.woff2") format("woff2"), url("../website/static/assets/fonts/titillium-web-latin-600-normal.woff2") format("woff2"); font-weight: 600 700; font-display: swap; }
+@font-face { font-family: "JetBrains Mono Web"; src: url("../assets/fonts/jetbrains-mono-latin-wght-normal.woff2") format("woff2"), url("../website/static/assets/fonts/jetbrains-mono-latin-wght-normal.woff2") format("woff2"); font-weight: 100 800; font-display: swap; }
+
+/* ======================================================================
+   LEDGER
+   ====================================================================== */
+:root[data-style="ledger"] {
+  --bg-deep: oklch(0.2 0.03 262); --bg-pop: oklch(0.25 0.032 262);
+  --bg-elev-1: oklch(0.94 0.01 95 / 0.035); --bg-elev-2: oklch(0.94 0.01 95 / 0.06); --bg-elev-3: oklch(0.94 0.01 95 / 0.09);
+  --bg-sunken: oklch(0.14 0.03 262 / 0.55); --border-1: oklch(0.75 0.06 240 / 0.16); --border-2: oklch(0.75 0.06 240 / 0.3);
+  --text-primary: oklch(0.94 0.01 95); --text-secondary: oklch(0.82 0.012 95); --text-tertiary: oklch(0.73 0.015 95); --text-quiet: oklch(0.67 0.02 250);
+  --on-accent: oklch(0.16 0.03 262); --accent: oklch(0.76 0.11 245); --accent-soft: oklch(0.76 0.11 245 / 0.15); --accent-glow: oklch(0.76 0.11 245 / 0.4);
+  --red: oklch(0.7 0.17 25); --amber: oklch(0.82 0.12 80); --green: oklch(0.78 0.12 160); --blue: oklch(0.74 0.1 235); --teal: oklch(0.76 0.08 195);
+  --scroll-track: oklch(0.94 0.01 95 / 0.05); --scroll-thumb: oklch(0.94 0.01 95 / 0.25); --scroll-thumb-hover: oklch(0.76 0.11 245 / 0.7);
+  --margin: oklch(0.7 0.16 27 / 0.75); --lines: oklch(0.75 0.06 240 / 0.07);
+  --sans: "Barlow", system-ui, sans-serif; --mono: "Courier Prime", "Courier New", monospace; --display: "Barlow Condensed", "Arial Narrow", sans-serif;
+  color-scheme: dark;
+}
+:root[data-style="ledger"][data-theme="light"] {
+  --bg-deep: oklch(0.972 0.008 95); --bg-pop: oklch(0.992 0.004 95);
+  --bg-elev-1: oklch(0.27 0.035 262 / 0.03); --bg-elev-2: oklch(0.27 0.035 262 / 0.05); --bg-elev-3: oklch(0.27 0.035 262 / 0.085);
+  --bg-sunken: oklch(0.27 0.035 262 / 0.045); --border-1: oklch(0.5 0.07 240 / 0.2); --border-2: oklch(0.5 0.07 240 / 0.38);
+  --text-primary: oklch(0.27 0.035 262); --text-secondary: oklch(0.37 0.03 262); --text-tertiary: oklch(0.45 0.025 262); --text-quiet: oklch(0.52 0.025 262);
+  --on-accent: oklch(0.99 0.004 95); --accent: oklch(0.45 0.13 255); --accent-soft: oklch(0.45 0.13 255 / 0.1); --accent-glow: oklch(0.45 0.13 255 / 0.3);
+  --red: oklch(0.52 0.19 25); --amber: oklch(0.55 0.12 70); --green: oklch(0.47 0.1 160); --blue: oklch(0.47 0.11 245); --teal: oklch(0.48 0.08 195);
+  --scroll-track: oklch(0.27 0.035 262 / 0.06); --scroll-thumb: oklch(0.27 0.035 262 / 0.28); --scroll-thumb-hover: oklch(0.45 0.13 255 / 0.7);
+  --margin: oklch(0.55 0.18 27 / 0.7); --lines: oklch(0.55 0.07 240 / 0.11);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: light) {
+  :root[data-style="ledger"]:not([data-theme="dark"]):not([data-theme="light"]) {
+    --bg-deep: oklch(0.972 0.008 95); --bg-pop: oklch(0.992 0.004 95);
+    --bg-elev-1: oklch(0.27 0.035 262 / 0.03); --bg-elev-2: oklch(0.27 0.035 262 / 0.05); --bg-elev-3: oklch(0.27 0.035 262 / 0.085);
+    --bg-sunken: oklch(0.27 0.035 262 / 0.045); --border-1: oklch(0.5 0.07 240 / 0.2); --border-2: oklch(0.5 0.07 240 / 0.38);
+    --text-primary: oklch(0.27 0.035 262); --text-secondary: oklch(0.37 0.03 262); --text-tertiary: oklch(0.45 0.025 262); --text-quiet: oklch(0.52 0.025 262);
+    --on-accent: oklch(0.99 0.004 95); --accent: oklch(0.45 0.13 255); --accent-soft: oklch(0.45 0.13 255 / 0.1); --accent-glow: oklch(0.45 0.13 255 / 0.3);
+    --red: oklch(0.52 0.19 25); --amber: oklch(0.55 0.12 70); --green: oklch(0.47 0.1 160); --blue: oklch(0.47 0.11 245); --teal: oklch(0.48 0.08 195);
+    --scroll-track: oklch(0.27 0.035 262 / 0.06); --scroll-thumb: oklch(0.27 0.035 262 / 0.28); --scroll-thumb-hover: oklch(0.45 0.13 255 / 0.7);
+    --margin: oklch(0.55 0.18 27 / 0.7); --lines: oklch(0.55 0.07 240 / 0.11);
+    color-scheme: light;
+  }
+}
+
+/* ======================================================================
+   ENGRAVING
+   ====================================================================== */
+:root[data-style="engraving"] {
+  --bg-deep: oklch(0.205 0.025 55); --bg-pop: oklch(0.255 0.028 55);
+  --bg-elev-1: oklch(0.93 0.02 85 / 0.035); --bg-elev-2: oklch(0.93 0.02 85 / 0.06); --bg-elev-3: oklch(0.93 0.02 85 / 0.09);
+  --bg-sunken: oklch(0.15 0.02 55 / 0.55); --border-1: oklch(0.9 0.02 85 / 0.14); --border-2: oklch(0.9 0.02 85 / 0.28);
+  --text-primary: oklch(0.93 0.02 85); --text-secondary: oklch(0.83 0.022 82); --text-tertiary: oklch(0.74 0.025 80); --text-quiet: oklch(0.67 0.025 78);
+  --on-accent: oklch(0.18 0.025 55); --accent: oklch(0.74 0.12 48); --accent-soft: oklch(0.74 0.12 48 / 0.15); --accent-glow: oklch(0.74 0.12 48 / 0.4);
+  --red: oklch(0.7 0.17 20); --amber: oklch(0.83 0.1 85); --green: oklch(0.77 0.09 135); --blue: oklch(0.76 0.06 230); --teal: oklch(0.75 0.06 190);
+  --scroll-track: oklch(0.93 0.02 85 / 0.05); --scroll-thumb: oklch(0.93 0.02 85 / 0.25); --scroll-thumb-hover: oklch(0.74 0.12 48 / 0.7);
+  --chain: oklch(0.9 0.03 80 / 0.03);
+  --sans: "EB Garamond", "Iowan Old Style", Georgia, serif; --mono: "JetBrains Mono Web", "JetBrains Mono", ui-monospace, Consolas, monospace; --display: "EB Garamond", Georgia, serif;
+  color-scheme: dark;
+}
+:root[data-style="engraving"][data-theme="light"] {
+  --bg-deep: oklch(0.945 0.022 85); --bg-pop: oklch(0.97 0.014 85);
+  --bg-elev-1: oklch(0.23 0.02 60 / 0.03); --bg-elev-2: oklch(0.23 0.02 60 / 0.05); --bg-elev-3: oklch(0.23 0.02 60 / 0.085);
+  --bg-sunken: oklch(0.23 0.02 60 / 0.045); --border-1: oklch(0.3 0.02 60 / 0.2); --border-2: oklch(0.3 0.02 60 / 0.38);
+  --text-primary: oklch(0.23 0.02 60); --text-secondary: oklch(0.34 0.025 60); --text-tertiary: oklch(0.42 0.025 60); --text-quiet: oklch(0.49 0.025 60);
+  --on-accent: oklch(0.97 0.015 85); --accent: oklch(0.5 0.13 45); --accent-soft: oklch(0.5 0.13 45 / 0.1); --accent-glow: oklch(0.5 0.13 45 / 0.3);
+  --red: oklch(0.5 0.19 22); --amber: oklch(0.54 0.11 75); --green: oklch(0.45 0.09 135); --blue: oklch(0.45 0.07 240); --teal: oklch(0.46 0.06 190);
+  --scroll-track: oklch(0.23 0.02 60 / 0.06); --scroll-thumb: oklch(0.23 0.02 60 / 0.28); --scroll-thumb-hover: oklch(0.5 0.13 45 / 0.7);
+  --chain: oklch(0.5 0.03 70 / 0.045);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: light) {
+  :root[data-style="engraving"]:not([data-theme="dark"]):not([data-theme="light"]) {
+    --bg-deep: oklch(0.945 0.022 85); --bg-pop: oklch(0.97 0.014 85);
+    --bg-elev-1: oklch(0.23 0.02 60 / 0.03); --bg-elev-2: oklch(0.23 0.02 60 / 0.05); --bg-elev-3: oklch(0.23 0.02 60 / 0.085);
+    --bg-sunken: oklch(0.23 0.02 60 / 0.045); --border-1: oklch(0.3 0.02 60 / 0.2); --border-2: oklch(0.3 0.02 60 / 0.38);
+    --text-primary: oklch(0.23 0.02 60); --text-secondary: oklch(0.34 0.025 60); --text-tertiary: oklch(0.42 0.025 60); --text-quiet: oklch(0.49 0.025 60);
+    --on-accent: oklch(0.97 0.015 85); --accent: oklch(0.5 0.13 45); --accent-soft: oklch(0.5 0.13 45 / 0.1); --accent-glow: oklch(0.5 0.13 45 / 0.3);
+    --red: oklch(0.5 0.19 22); --amber: oklch(0.54 0.11 75); --green: oklch(0.45 0.09 135); --blue: oklch(0.45 0.07 240); --teal: oklch(0.46 0.06 190);
+    --scroll-track: oklch(0.23 0.02 60 / 0.06); --scroll-thumb: oklch(0.23 0.02 60 / 0.28); --scroll-thumb-hover: oklch(0.5 0.13 45 / 0.7);
+    --chain: oklch(0.5 0.03 70 / 0.045);
+    color-scheme: light;
+  }
+}
+
+/* ======================================================================
+   STILL LIFE
+   ====================================================================== */
+:root[data-style="still-life"] {
+  --bg-deep: oklch(0.245 0.012 60); --bg-pop: oklch(0.295 0.014 60);
+  --bg-elev-1: oklch(0.93 0.014 80 / 0.04); --bg-elev-2: oklch(0.93 0.014 80 / 0.065); --bg-elev-3: oklch(0.93 0.014 80 / 0.095);
+  --bg-sunken: oklch(0.19 0.012 60 / 0.55); --border-1: oklch(0.93 0.014 80 / 0.1); --border-2: oklch(0.93 0.014 80 / 0.22);
+  --text-primary: oklch(0.93 0.014 80); --text-secondary: oklch(0.83 0.015 78); --text-tertiary: oklch(0.74 0.016 75); --text-quiet: oklch(0.67 0.016 75);
+  --on-accent: oklch(0.22 0.015 55); --accent: oklch(0.76 0.08 40); --accent-soft: oklch(0.76 0.08 40 / 0.16); --accent-glow: oklch(0.76 0.08 40 / 0.4);
+  --red: oklch(0.72 0.14 25); --amber: oklch(0.83 0.08 80); --green: oklch(0.78 0.07 145); --blue: oklch(0.76 0.04 225); --teal: oklch(0.76 0.04 185);
+  --scroll-track: oklch(0.93 0.014 80 / 0.05); --scroll-thumb: oklch(0.93 0.014 80 / 0.25); --scroll-thumb-hover: oklch(0.76 0.08 40 / 0.7);
+  --sans: "Titillium Web", system-ui, sans-serif; --mono: "JetBrains Mono Web", "JetBrains Mono", ui-monospace, Consolas, monospace; --display: "Bodoni Moda", Didot, serif;
+  color-scheme: dark;
+}
+:root[data-style="still-life"][data-theme="light"] {
+  --bg-deep: oklch(0.93 0.014 80); --bg-pop: oklch(0.96 0.01 82);
+  --bg-elev-1: oklch(0.29 0.02 55 / 0.035); --bg-elev-2: oklch(0.29 0.02 55 / 0.06); --bg-elev-3: oklch(0.29 0.02 55 / 0.09);
+  --bg-sunken: oklch(0.29 0.02 55 / 0.05); --border-1: oklch(0.29 0.02 55 / 0.12); --border-2: oklch(0.29 0.02 55 / 0.24);
+  --text-primary: oklch(0.29 0.02 55); --text-secondary: oklch(0.37 0.02 55); --text-tertiary: oklch(0.43 0.02 55); --text-quiet: oklch(0.49 0.02 55);
+  --on-accent: oklch(0.96 0.01 82); --accent: oklch(0.5 0.09 38); --accent-soft: oklch(0.5 0.09 38 / 0.1); --accent-glow: oklch(0.5 0.09 38 / 0.3);
+  --red: oklch(0.5 0.16 25); --amber: oklch(0.52 0.09 75); --green: oklch(0.45 0.07 145); --blue: oklch(0.46 0.045 230); --teal: oklch(0.47 0.05 190);
+  --scroll-track: oklch(0.29 0.02 55 / 0.06); --scroll-thumb: oklch(0.29 0.02 55 / 0.26); --scroll-thumb-hover: oklch(0.5 0.09 38 / 0.7);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: light) {
+  :root[data-style="still-life"]:not([data-theme="dark"]):not([data-theme="light"]) {
+    --bg-deep: oklch(0.93 0.014 80); --bg-pop: oklch(0.96 0.01 82);
+    --bg-elev-1: oklch(0.29 0.02 55 / 0.035); --bg-elev-2: oklch(0.29 0.02 55 / 0.06); --bg-elev-3: oklch(0.29 0.02 55 / 0.09);
+    --bg-sunken: oklch(0.29 0.02 55 / 0.05); --border-1: oklch(0.29 0.02 55 / 0.12); --border-2: oklch(0.29 0.02 55 / 0.24);
+    --text-primary: oklch(0.29 0.02 55); --text-secondary: oklch(0.37 0.02 55); --text-tertiary: oklch(0.43 0.02 55); --text-quiet: oklch(0.49 0.02 55);
+    --on-accent: oklch(0.96 0.01 82); --accent: oklch(0.5 0.09 38); --accent-soft: oklch(0.5 0.09 38 / 0.1); --accent-glow: oklch(0.5 0.09 38 / 0.3);
+    --red: oklch(0.5 0.16 25); --amber: oklch(0.52 0.09 75); --green: oklch(0.45 0.07 145); --blue: oklch(0.46 0.045 230); --teal: oklch(0.47 0.05 190);
+    --scroll-track: oklch(0.29 0.02 55 / 0.06); --scroll-thumb: oklch(0.29 0.02 55 / 0.26); --scroll-thumb-hover: oklch(0.5 0.09 38 / 0.7);
+    color-scheme: light;
+  }
+}
+
+/* ======================================================================
+   What every style changes the same way: solid surfaces, no glass
+   ====================================================================== */
+:root[data-style] body { font-feature-settings: normal; }
+:root[data-style] .glass { background: var(--bg-pop); }
+:root[data-style] #topbar .brand,
+:root[data-style] header .brand { font-family: var(--display); }
+:root[data-style] .sugg { box-shadow: 0 10px 28px -12px oklch(0 0 0 / 0.35); }
+
+/* ---------- Ledger ---------- */
+:root[data-style="ledger"] body { font-size: 14.5px; }
+/* the ruled sheet behind the work area, and the red margin line down it */
+:root[data-style="ledger"] #main,
+:root[data-style="ledger"] .sheet {
+  background-image:
+    linear-gradient(90deg, transparent 11px, var(--margin) 11px, var(--margin) 12px, transparent 12px),
+    linear-gradient(to bottom, transparent 27px, var(--lines) 27px);
+  background-size: 100% 100%, 100% 28px; background-repeat: no-repeat, repeat; background-attachment: local, local;
+}
+:root[data-style="ledger"] #topbar .brand,
+:root[data-style="ledger"] header .brand { font-weight: 600; font-size: 17px; letter-spacing: 0.06em; }
+:root[data-style="ledger"] .nano,
+:root[data-style="ledger"] table.flat th { text-transform: none; letter-spacing: 0; font-size: 11.5px; }
+:root[data-style="ledger"] table.flat th { border-bottom: 2px solid var(--margin); }
+:root[data-style="ledger"] .card h2 { font-size: 14px; letter-spacing: 0.02em; }
+:root[data-style="ledger"] button, :root[data-style="ledger"] .btn,
+:root[data-style="ledger"] input, :root[data-style="ledger"] select, :root[data-style="ledger"] textarea,
+:root[data-style="ledger"] .glass, :root[data-style="ledger"] .pill, :root[data-style="ledger"] .badge,
+:root[data-style="ledger"] .chip, :root[data-style="ledger"] .fpill, :root[data-style="ledger"] .wbchip,
+:root[data-style="ledger"] .stmt, :root[data-style="ledger"] .facetbox, :root[data-style="ledger"] .annbox,
+:root[data-style="ledger"] .objrow, :root[data-style="ledger"] .navitem, :root[data-style="ledger"] .seg,
+:root[data-style="ledger"] .wb, :root[data-style="ledger"] .statcell, :root[data-style="ledger"] .empty,
+:root[data-style="ledger"] pre.raw, :root[data-style="ledger"] code, :root[data-style="ledger"] .sugg,
+:root[data-style="ledger"] #drop, :root[data-style="ledger"] #home-log { border-radius: 2px; }
+
+/* ---------- Engraving ---------- */
+:root[data-style="engraving"] body {
+  font-size: 15.5px; font-variant-numeric: lining-nums tabular-nums;
+  background-image: repeating-linear-gradient(90deg, transparent 0 37px, var(--chain) 37px 39px);
+}
+:root[data-style="engraving"] .sheet { background-image: repeating-linear-gradient(90deg, transparent 0 37px, var(--chain) 37px 39px); }
+:root[data-style="engraving"] #topbar .brand,
+:root[data-style="engraving"] header .brand { font-weight: 500; font-size: 19px; letter-spacing: 0.08em; }
+/* the plate mark: each card is a printed plate with a second, finer edge */
+:root[data-style="engraving"] .glass { outline: 1px solid var(--border-1); outline-offset: 3px; }
+:root[data-style="engraving"] .nano,
+:root[data-style="engraving"] table.flat th { font-family: var(--sans); text-transform: none; font-variant-caps: all-small-caps; letter-spacing: 0.07em; font-size: 13.5px; }
+:root[data-style="engraving"] table.flat th { border-bottom: 1px solid var(--text-tertiary); }
+:root[data-style="engraving"] .card h2 { font-size: 16px; font-weight: 600; letter-spacing: 0.01em; }
+:root[data-style="engraving"] label,
+:root[data-style="engraving"] .hint { font-size: 13px; }
+:root[data-style="engraving"] button, :root[data-style="engraving"] .btn,
+:root[data-style="engraving"] input, :root[data-style="engraving"] select, :root[data-style="engraving"] textarea,
+:root[data-style="engraving"] .glass, :root[data-style="engraving"] .pill, :root[data-style="engraving"] .badge,
+:root[data-style="engraving"] .chip, :root[data-style="engraving"] .fpill, :root[data-style="engraving"] .wbchip,
+:root[data-style="engraving"] .stmt, :root[data-style="engraving"] .facetbox, :root[data-style="engraving"] .annbox,
+:root[data-style="engraving"] .objrow, :root[data-style="engraving"] .navitem, :root[data-style="engraving"] .seg,
+:root[data-style="engraving"] .wb, :root[data-style="engraving"] .statcell, :root[data-style="engraving"] .empty,
+:root[data-style="engraving"] pre.raw, :root[data-style="engraving"] code, :root[data-style="engraving"] .sugg,
+:root[data-style="engraving"] #drop, :root[data-style="engraving"] #home-log { border-radius: 1px; }
+
+/* ---------- Still life ---------- */
+:root[data-style="still-life"] body { font-size: 14.5px; }
+:root[data-style="still-life"] #topbar .brand,
+:root[data-style="still-life"] header .brand { font-weight: 500; font-size: 19px; letter-spacing: 0.02em; }
+:root[data-style="still-life"] .nano,
+:root[data-style="still-life"] table.flat th { font-family: var(--sans); text-transform: none; letter-spacing: 0.01em; font-size: 12px; font-weight: 600; }
+:root[data-style="still-life"] .card h2 { font-size: 14px; }
+/* tone steps instead of lines */
+:root[data-style="still-life"] .glass,
+:root[data-style="still-life"] .stmt,
+:root[data-style="still-life"] .statcell { border-color: transparent; }
+:root[data-style="still-life"] #topbar,
+:root[data-style="still-life"] header,
+:root[data-style="still-life"] #tabs { border-bottom-color: transparent; }
+:root[data-style="still-life"] #rail { border-right-color: transparent; background: var(--bg-elev-1); }
+:root[data-style="still-life"] .glass { border-radius: 16px; }
+:root[data-style="still-life"] button, :root[data-style="still-life"] .btn,
+:root[data-style="still-life"] .navitem { border-radius: 999px; }
+:root[data-style="still-life"] .seg { border-radius: 999px; }
+:root[data-style="still-life"] input, :root[data-style="still-life"] select, :root[data-style="still-life"] textarea { border-radius: 12px; }
+
+@media (forced-colors: active) {
+  :root[data-style] body, :root[data-style] #main, :root[data-style] .sheet { background-image: none; }
+}
