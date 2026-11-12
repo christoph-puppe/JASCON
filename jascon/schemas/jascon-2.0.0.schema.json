@@ -604,8 +604,7 @@
      "$ref": "#/$defs/uri"
     },
     "opened": {
-     "type": "string",
-     "minLength": 1
+     "$ref": "#/$defs/date"
     },
     "refs": {
      "type": "array",
@@ -1062,6 +1061,10 @@
       "kind": {
        "$ref": "#/$defs/componentKind"
       },
+      "product-version": {
+       "type": "string",
+       "minLength": 1
+      },
       "members": {
        "type": "array",
        "minItems": 1,
@@ -1349,7 +1352,7 @@
           "$ref": "#/$defs/text"
          },
          "due": {
-          "type": "object"
+          "$ref": "#/$defs/due"
          },
          "status": {
           "type": "string"

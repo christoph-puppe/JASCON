@@ -125,6 +125,7 @@ track Sets (20x/Rev5) are built purely from subset-Set members.
 |---|---|---|---|
 | `kind` | ● | code | system · service · software · hardware · policy · process · … (C.6). |
 | `members` | ○ | [{component-ref ●, context ○}] | Composition. |
+| `product-version` | ○ | string | *(2.0.0, CP-ADVICE-1.)* The version of the product this Component describes: one opaque string, never parsed, ordered or compared. `version` counts the revisions of the object, this field names the product's. A Component that carries it needs kernel 2.0.0 (KERNEL-1). Evidence: none counted; entered on the author's decision (specification D22). |
 | `capabilities` | ○ | [{id ●, requirement-ref ○, statement-ids ○, description ○, parameter-bindings ○}] | What the vendor claims — comp-def's replacement (the PR-#8 duplication axis, deleted). Ids are unique within the Component (ADVICE-4). `requirement-ref` names the requirement a capability is about and **resolves if present**: the component asserts support, no system binds it, and a vendor ships without the catalog. In the bundle it is a Requirement, and `statement-ids` *(2.0.0, CP-ADVICE-1, proposed)* name its clauses (ADVICE-5); `statement-ids` without `requirement-ref` is refused. `parameter-bindings` are the values the vendor suggests: each names a parameter declared once on the covered clauses and lies in its declared space (ADVICE-6). Evidence: one component definition in the corpus (IFA, 3 capabilities); the worked advice pack. |
 | `authorizations` | ○ | [{id ●, authority-ref ●, scope-label ○, includes ○[]}] | **Identified** trust contexts; `includes` scopes; absence is silence, and silence is silence (Ch. 9). |
 
@@ -135,7 +136,7 @@ track Sets (20x/Rev5) are built purely from subset-Set members.
 | `component-ref` / `requirement-ref` | ● | URI | The edge's endpoints. |
 | `statement-refs` | ○ | [statement-id] | Clause-level granularity — shared responsibility per clause (KONF.14.1 s1 provider / s2 customer). |
 | `responsibility` | ● | code (C.4) | provider · customer · shared · inherited. |
-| `satisfied-by` | ● | [{capability-ref} \| {inherited-from}] | How. `capability-ref` *(grammar: CP-ADVICE-1, proposed)* is a capability id of the edge's own component, or `<component-id>#<capability-id>`; **closure-required** — the component is in the bundle and declares the capability, and a component other than the edge's own is one of its `members` (ADVICE-7). That second form is how a vendor's advice is adopted. `inherited-from` = {component-ref ●, **basis-ref ●**} — the edge-local boundary rule (D5): every inheritance names the authorization it leans on; chains verify link by link. |
+| `satisfied-by` | ● | [{capability-ref} \| {inherited-from}] | How. `capability-ref` *(grammar: 2.0.0, CP-ADVICE-1)* is a capability id of the edge's own component, or `<component-id>#<capability-id>`; **closure-required** — the component is in the bundle and declares the capability, and a component other than the edge's own is one of its `members` (ADVICE-7). That second form is how a vendor's advice is adopted. `inherited-from` = {component-ref ●, **basis-ref ●**} — the edge-local boundary rule (D5): every inheritance names the authorization it leans on; chains verify link by link. |
 | `parameter-bindings` | ○ | {param: value} | Bound within declared bounds. |
 | `status` | ● | code | planned · partial · implemented · not-applicable. |
 | `evidence-refs` | ○ | [ref] | Pointers, not blobs. |
@@ -161,9 +162,13 @@ parameter values the run used; closure-required and typed (CHECK-12).
 ex-post record points at the ex-ante Risk(s) it materialised against;
 landmark (assessor bundle → organisation register, 2.0.0), but typed: a
 ref that resolves in-bundle must name a Risk (RISK-12) ·
-`actions` ○ [{description ●, due ○ {date | elapsed-duration |
+`actions` ○ [{description ●, due ○ {date | datetime | elapsed-duration |
 calendar-period}, status ●}] — computable deadlines
-(fail-closed without the named calendar) ·
+(fail-closed without the named calendar). `due` is typed since 2.0.0
+(**DATE-2**): a point in time is `{type: date | datetime, value}`, a
+duration `{type, num, unit}` plus `calendar-ref` for a calendar period.
+1.0.0 accepted any string here; a 1.0.0 bundle that wrote one is not a
+2.0.0 bundle ·
 `deviations` ○ [Deviation] — the ex-post channel; the four historical
 FedRAMP deviation props are its `type` values ·
 `check-ref` ○ URI *(2.0.0)* — the Check that raised the finding; typed
@@ -249,8 +254,10 @@ the example bundle, `check-vectors.json` (188).
 `type` ● ∈ false-positive · operational-requirement · risk-adjustment ·
 vendor-dependency · derogation · `state` ● (C.3b: investigating →
 pending → approved | withdrawn) · `rationale` ● · `approver-ref` ● ·
-`opened` ● · `refs` ○. One channel, three moments (Tailoring ·
-Implementation · Finding); Excel dies of enumerated states.
+`opened` ● date · `refs` ○. One channel, three moments (Tailoring ·
+Implementation · Finding); Excel dies of enumerated states. `opened` is
+`YYYY-MM-DD` since 2.0.0 (**DATE-1**); 1.0.0 accepted any string. The
+five values in the shipped bundles and the example folder conform.
 
 ## A.11 Bundle artifacts
 
@@ -265,11 +272,11 @@ stops and names both versions — KERNEL-2) · `objects[]`
 `facet-schemas[]` {id, **exact-version**, digest, path} ● (exact pins,
 never ranges — D3) · `scales[]` ○ {id, **exact-version**, digest, path}
 (2.0.0 — pinned scale definitions, below) · `renderings[]` ○ · provenance ○ ·
-`pack` ○ (2.0.0, CP-ADVICE-1, proposed — the pack header, below). The manifest is
+`pack` ○ (2.0.0, CP-ADVICE-1 — the pack header, below). The manifest is
 the sealed resolver: every reference lands here or validation fails
 with a rationale.
 
-**Pack header** *(2.0.0, CP-ADVICE-1, proposed; in the manifest)*: `kind` ●
+**Pack header** *(2.0.0, CP-ADVICE-1; in the manifest)*: `kind` ●
 code (C.10: `advice`) · `id` ● URI (the pack across its releases) ·
 `version` ● string (the release; opaque, never ordered) · `title` ○ text ·
 `publisher` ● {`ref` ● URI, `name` ○ text}. Closed. A manifest with the
@@ -279,6 +286,8 @@ and `publisher.ref` share one origin. ADVICE-3: no facet on a listed
 object declares a semantics class. The publisher is *claimed* by header
 and origin, *proven* when an Attestation of that origin binds the
 manifest's digest and — in verification mode — its envelope verifies.
+Without trusted keys the binding is reported as unverified: a tool
+shows *attested, not verified*, never proven.
 
 **Kept pack manifest** *(a file beside the manifest, not an object)*:
 `packs/sha256/<hex>` — the vendor's manifest as it arrived, named by the
@@ -288,7 +297,7 @@ that semantic digest (ADVICE-9); one kept manifest per `pack.id`, and no
 object in two (ADVICE-10). Import — the composition of a pack into a
 bundle — adds ids the bundle does not hold and replaces ids an earlier
 release of the same pack brought; nothing else (ADVICE-11). Evidence:
-`advice-vectors.json` (71), the example bundle's kept manifest.
+`advice-vectors.json` (74), the example bundle's kept manifest.
 
 ---
 

@@ -42,3 +42,31 @@ surprise, blunder.
 - **Test.** `tests/rules.test.mjs`, "a whole set: content written in the app
   needs no pin before the export; imported content does"; and
   `tests/checks.test.mjs`, which writes checks into an unpinned set.
+
+## 2026-11-12 · build 0.9.3 · every edge of a system built in the app cited a capability nobody declared
+
+- **Symptom.** *Build a system* on the Implement page wrote
+  `"capability-ref": "declared"` on every Implementation, on Components to
+  which it gave no capability. Since kernel 2.0.0 reads that field (ADVICE-7:
+  a capability-ref names a capability its component declares), every such
+  edge is an error in the reference validator: "cites capability 'declared',
+  which … does not declare". The bundle reader
+  (`one-page-apps/jascon-reader.html`) wrote the same literal.
+- **Cause.** Until CP-ADVICE-1 `capability-ref` was a free string no rule
+  read, and the workbench filled the required field with a placeholder.
+- **Class.** Mismatch: the kernel gave meaning to a field, and a writer of
+  that field was not changed with it. The change proposal named the place
+  (§7, §12); the app was out of its scope then.
+- **Why it was not caught.** No test of the app held an edge to anything
+  beyond the schema, and the schema accepts any string.
+- **Fix.** Each asset declares one capability per requirement attached to
+  it, with an id derived from the requirement and unique within the
+  Component (`jscCapabilityId`, ADVICE-4), and the edge cites that id. The
+  reader does the same since v1.9.0. A set written by an earlier build keeps
+  its edges as they are; the Validate page now names each of them, and
+  saving the system again from the workbench rewrites them.
+- **Test.** `tests/pages.test.mjs`, "a system built on the Implement page
+  validates; …": builds a system in the browser, reads the stored edge and
+  runs the whole-set check; the export of that set passes
+  `validate_core.py`. `tests/advice.test.mjs`, "a capability id is derived
+  from the requirement and unique within its component".

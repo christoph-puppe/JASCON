@@ -1800,7 +1800,7 @@ converter reporting a gap in the source, not repairing it — house rule,
 applied to the fourth authority.
 **Follow-on.** With this decided the 2.0.0 specification text was written
 as a release candidate
-(`drafts/jascon-specification-2.0.0-rc.1.md`; since 2026-11-12 `…-rc.2.md`): D23 carries
+(`drafts/jascon-specification-2.0.0-rc.1.md`; since 2026-11-12 `…-rc.3.md`): D23 carries
 Risk, the rules and this decision.
 
 ## Amendments — the rc.1 review (2026-11-10)
@@ -2080,8 +2080,9 @@ the app's generated `jascon-schema.js` and both validators follow it.
 The change proposal `drafts/CP-CHECK-1.md` put seven points to the
 author. Six were decisions and were answered on 2026-11-12; the seventh
 was a comparison, done the same day (#61, below). This section is the record;
-the specification is `drafts/jascon-specification-2.0.0-rc.2.md`
-(D24 new; D4, D14, D15, D22 amended).
+the specification was `drafts/jascon-specification-2.0.0-rc.2.md`
+(D24 new; D4, D14, D15, D22 amended) and is, since the next section,
+`…-rc.3.md`.
 
 ## D22 rev 4 — the consumer-side clause *(closes #48)*
 
@@ -2183,3 +2184,183 @@ published text could show it.
 **Open after this section:** #60 blocks the tag. #62: an
 `http-api` collector has no declared format, which a runner needs first.
 
+## #60 CLOSED — the twin ran with the changes of 2026-11-12
+
+The three changes of that day (the twelfth comparator, the per-resource
+counts, the surrogate rule) were ported to `validate_core.ps1` without a
+PowerShell runtime and filed as #60. The same day another session, which
+had a Windows machine, merged this state into the advice-pack branch and
+ran the twin on Windows PowerShell 5.1: 518 vectors in 17 families,
+`check: 188 pass, 0 fail`, the five bundles, the worked pack and the
+example folder, bundle by bundle the reference's counts
+(`drafts/CP-ADVICE-1.md` §13.4). That run is what #60 asked for. The
+header of the twin says so now. Nothing from CP-CHECK-1 blocks the tag
+any more.
+**What is open instead.** The advice-pack proposal is on `main` as
+proposed: its manifest header and one capability field are in the 2.0.0
+schema, its eight points for the author are unanswered, the
+specification does not describe it, and the app neither ports its rules
+nor reads a pack (the app's suite names the family as not ported since
+this commit; before, one test failed on `main`, unnoticed because the
+advice session had no Node).
+
+---
+
+# Amendments — CP-ADVICE-1 and the decisions before the tag (2026-11-12): advice packs enter 2.0.0, two dates are typed, four open points close
+
+The author's instruction: "I want CP-ADVICE-1 on track for 2.0.0", and
+to be asked every open question. Twelve were asked: the eight of
+`drafts/CP-ADVICE-1.md` §11 and the four the backlog still held for the
+author (#47a with #52, #50, #51, #59). One follow-up settled the shape of
+the new field. This section is the record; the specification is
+`drafts/jascon-specification-2.0.0-rc.3.md` (D25 new; D3, D5, D6, D8,
+D13, D15, D22, D24 amended).
+
+## The eight decisions on advice packs
+
+| Point | Author | What follows |
+|---|---|---|
+| 1 · the file form | "Bundle only" | A pack is a bundle with a pack header. A bare Component file is not a pack |
+| 2 · what a pack holds | "Components only" | ADVICE-1 as proposed. A pack of Checks would be a second `kind` with rules of its own, later |
+| 3 · `statement-ids` | "Keep it, I overrule D22 because I see great use for it" | The field is in 2.0.0. The specification records it as entered on the author's word, against D22 (below) |
+| 4 · product versions | "A product-version field", then "One opaque string" | `Component.product-version`, a non-empty string. No tool parses, orders or compares it. A Component that carries it needs kernel 2.0.0 (KERNEL-1) |
+| 5 · facets in a pack | "Refuse them in a pack" | ADVICE-3 as proposed |
+| 6 · membership | "Yes, a rule" | ADVICE-7 as proposed, an error |
+| 7 · third parties | "A named relation, defined now" | Stdlib relation type `https://ns.jascon.net/stdlib/relation/describes`: a third party's Component, under its own origin, points at the vendor's Component. Carried and shown, computed by nothing |
+| 8 · earlier releases | "One release per set" | ADVICE-10 as proposed |
+
+## D22 — two fields on the author's word
+
+**What the tests say.** `statement-ids` on a capability and
+`product-version` on a Component are consumer-side data. Test 1 fails:
+no census authority publishes them. The consumer-side clause of rev 4
+is written for types and, read for a field, is not met either: no
+standard is named, and the counted content is one fictional component
+definition by NIST with two clause-level entries. For `product-version`
+nothing was counted.
+**What was decided.** The author keeps `statement-ids` against the
+drafter's recommendation to wait for a census, and adds
+`product-version`. The specification says so in D22 under "Applied at
+2.0.0-rc.3" and does not present either field as passing a test.
+**Why this is recorded as an override and not as a new clause.** One
+decision by the author about two optional fields is no pattern. A clause
+written from it would admit any field anyone finds useful. If a third
+field arrives the same way, the question of a clause is due.
+**Cons, stated.** D22 exists to keep the kernel from growing by
+plausibility. Both fields are plausible and unmeasured. What could
+repair that: a census of public component definitions (CP-ADVICE-1
+§2.3), which nobody has run.
+
+## The four decisions before the tag
+
+| Item | Author | What follows |
+|---|---|---|
+| #47a · #52, the two date fields | "Tighten both now" | `Deviation.opened` is a date (`YYYY-MM-DD`); `Finding.actions[].due` is one of the four typed forms that `review-due` of a Risk already uses: `date`, `datetime`, `elapsed-duration`, or `calendar-period` with its calendar. Refusals are named DATE-1 and DATE-2. The sentence "every 1.0.0 bundle is a 2.0.0 bundle" no longer holds as a property of the schema: it is now a measurement on the five shipped bundles and the example folder, whose five `opened` values and whose `due` values conform |
+| #50, the removed bundles | "Leave history as it is" | No rewrite. Old commits and the `v1.0.0` tag keep the six bundles; every commit id this register cites stays valid |
+| #51, a Tailoring's scope | "No, keep the model" | A Tailoring names no Component. Spec D13 says where scope is recorded instead |
+| #59, Unicode categories | "Follow the host, and say so" | No pinned Unicode version. Spec D24 names the consequence and the way around it |
+
+**Why 2.0.0 is the place for the date change.** Typing a released
+free-text field is a breaking change and rides a major. 2.0.0 is that
+major and is not tagged; after the tag the same change would need 3.0.0.
+**What it costs.** A tool that wrote "Q3" or "next audit" into either
+field under 1.0.0 has to convert the value before its bundle validates
+under 2.0.0. The error names the rule and the field. No such bundle is
+known; none of the shipped ones is affected.
+
+## What was built and measured on 2026-11-12
+
+- **Schema 2.0.0**: `component.product-version`; `finding.actions[].due`
+  and `deviation.opened` typed.
+- **Reference validator**: KERNEL-1 for `product-version`; DATE-1 and
+  DATE-2 named when an object matches no type; a runner for
+  `shape-vectors`. **537 of 537 vectors in 17 families** (`kernel` 11
+  → 25, `advice` 71 → 74), the five bundles, the worked pack and the
+  example folder, ALL GREEN.
+- **Vectors**: two for the pin, fourteen for the shapes, three for a
+  pack with `product-version` and for a third party's pack with and
+  without an id of its own origin.
+- **Mutations**: 28 of 28 in the advice rules still turn a vector red
+  (`drafts/cp-advice-1/mutate.py`); removing the pin for
+  `product-version` turns one kernel vector red.
+- **Worked pack**: the vendor's Component carries `product-version:
+  "7"`, so its semantic digest, the pack's manifest, the kept manifest
+  (`packs/sha256/27bed546…`, before `433f4124…`) and the Attestation
+  were regenerated by `build_example.py`. The signing key is the public
+  fixture key, as before.
+- **PowerShell twin**: ported without a runtime and filed as #63, then
+  executed the same day (next section).
+
+## #63 CLOSED — the twin on Windows PowerShell 5.1, on every change
+
+**What was done.** The port of the three changes was first executed
+under PowerShell 7.4 on Linux, with a stand-in for
+`JavaScriptSerializer`, which exists only in the .NET Framework: 537 of
+537, ALL GREEN, and two deliberate breaks of the new lines turned four
+kernel vectors red. That run shows the port is exercised. It is not the
+runtime the twin is written for.
+**The run that counts.** A workflow, `.github/workflows/validators.yml`,
+runs `validate_core.ps1` on a hosted Windows runner with `powershell.exe`,
+which is Windows PowerShell 5.1. First run, commit `5a75454b`: 537
+vectors in 17 families, `kernel: 25 pass`, `advice: 74 pass`, the five
+bundles, the worked pack and the example folder with the reference's
+counts, ALL GREEN in 64 s
+(https://github.com/christoph-puppe/JASCON/actions/runs/43204019670).
+**Why a workflow and not one more manual run.** #45, #56, #60 and #63
+were the same item four times: a port written without a runtime, waiting
+for someone with a Windows machine. The workflow runs the Python
+reference, the twin and the app's port on every change to what they
+read. A port that was never executed can no longer reach `main`
+unnoticed.
+**Cons, stated.** The measurement now depends on a hosted runner image
+that GitHub changes over time. The summary of each run names the
+PowerShell version it found; the job fails if it is not 5.x.
+
+## The app and the reader, and what building them changed
+
+App build 0.9.3 ports ADVICE-1 to ADVICE-11 (74 vectors, 115 tests in
+its suite) and imports, replaces, refuses and adopts; reader v1.9.0
+shows packs and runs no rule (`drafts/CP-ADVICE-1.md` §14.3;
+specification IV.7).
+**Three states on a screen, two in the rules.** With no trusted key, an
+Attestation that binds a pack's manifest was printed as PROVEN with the
+word UNVERIFIED behind it. On a screen that is a green word over an
+unchecked signature, and such an Attestation costs nothing to forge.
+D25 now names a third display state, *attested, not verified*; the
+validators print it, the result values and the vectors stay as they
+were. **Rejected:** a third result value in `pack_publisher`. It would
+change eight vectors and the tier rule's vocabulary for a distinction
+that only matters where a person reads the output.
+**A defect in the reference.** `validate_bundle` read attestations
+beside the manifest only for a pack's own manifest, so a set that kept a
+pack reported its publisher as claimed although the vendor's Attestation
+lay beside it. Found by the app's port, which reads every attestation
+of a set; fixed in both validators.
+
+**Open after this section.** Nothing blocks the tag, and nothing is left
+for the author to decide before it. Four choices the app made are listed
+for confirmation in `drafts/CP-ADVICE-1.md` §14.3. Work that does not block: #41, #46,
+#47b, #54, #55, #58, #62, #64.
+
+## Census of NIST's example component definitions (2026-11-12)
+
+**What was done.** The four JSON component definitions NIST publishes in
+`usnistgov/oscal-content` (commit `f0de6d8d`, two distinct definitions and
+their minified twins) were run through the pack builder's import, with and
+without the SP 800-53 catalogue (`drafts/cp-advice-1-census/`, by the
+builder's own code in Chromium).
+**What it found.** Five things the first version of the import got wrong or
+kept quiet about: every `source` is a `#uuid` into the back-matter (0 of
+10 implemented requirements resolved without a catalogue); one file cites
+the Rev 4 catalogue and a FedRAMP Rev 4 baseline, whose ids the Rev 5
+conversion does not share; texts carry `{{ insert: param, … }}` markup;
+parameters use Rev 4 ids; one control is implemented twice. Builder 1.2.0
+reads the back-matter (10 of 10 resolved), rewrites the markup, counts
+FedRAMP baselines as SP 800-53 sources and names the rest in its report.
+Each fix has a test and a deliberate defect that turns it red.
+**What it does not change.** D22's record for `statement-ids` and
+`product-version`. The clause-level evidence is the same MongoDB example
+counted before (2 clause entries, 2 values); NIST's second example carries
+neither, and no file carries a product version. Both are examples by the
+format's maintainers. The census that could change D22 is of component
+definitions vendors published, and it is still owed (CP-ADVICE-1 §2.3).

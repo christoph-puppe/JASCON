@@ -16,7 +16,7 @@ nav: home
       </div>
       <div class="hero-status">
         <span><i class="dot"></i>1.0.0 released 22 July 2026</span>
-        <span><i class="dot rc"></i>2.0.0-rc.2 in review</span>
+        <span><i class="dot rc"></i>2.0.0-rc.3 in review</span>
         <span>Independent project, one maintainer</span>
       </div>
     </div>
@@ -127,8 +127,8 @@ nav: home
       </div>
       <div class="stat">
         <span class="stat-n">2</span>
-        <p>reference validators: Python, and PowerShell 5.1 on a stock Windows machine with nothing installed. Identical counts on the 415 vectors of that day; the 32 added since have run in Python only.</p>
-        <span class="tier tier-measured">measured 2026-11-11</span>
+        <p>reference validators with identical counts: Python, and PowerShell 5.1 that runs on a stock Windows machine with nothing installed. Both run on every change.</p>
+        <span class="tier tier-measured">measured 2026-11-12</span>
       </div>
       <div class="stat">
         <span class="stat-n">11</span>
@@ -335,8 +335,8 @@ nav: home
         <h2>When the assessor is a machine</h2>
         <p class="lede">A scanner that exits with 0 or 1 hides its threshold and ignores the tailoring. A Check publishes the facts a collector reports and the comparisons that decide, and the run record carries the observation.</p>
         <div class="chips">
-          <span class="tier tier-designed">eleventh type, 2.0.0-rc.2</span>
-          <span class="tier tier-measured">{{ n.check_vectors }} vectors pass in the reference and the app</span>
+          <span class="tier tier-designed">eleventh type, 2.0.0 candidate</span>
+          <span class="tier tier-measured">{{ n.check_vectors }} vectors pass in three implementations</span>
         </div>
       </div>
       <div class="stack reveal">
@@ -493,15 +493,15 @@ nav: home
         </div>
         <div class="gate rc">
           <span class="gate-when">10 Nov 2026</span><span class="gate-rail"><i></i></span>
-          <div class="gate-body"><h3>2.0.0-rc.1: Risk</h3><p>The tenth type. Every 1.0.0 bundle validates unchanged under the new schema. An external review of the candidate produced 23 new vectors, each failing on the validator as it stood.</p></div>
+          <div class="gate-body"><h3>2.0.0-rc.1: Risk</h3><p>The tenth type. Every bundle of the 1.0.0 corpus validates unchanged under the new schema. An external review of the candidate produced 23 new vectors, each failing on the validator as it stood.</p></div>
         </div>
         <div class="gate rc">
           <span class="gate-when">12 Nov 2026</span><span class="gate-rail"><i></i></span>
-          <div class="gate-body"><h3>2.0.0-rc.2: Check <span class="tier tier-designed">release candidate</span></h3><p>The eleventh type, accepted with six decisions on the record. No census authority publishes a machine check, so the promotion rule gained a clause for data that only the consumer of a catalogue holds. {{ n.check_vectors }} vectors; one item blocks the tag. <a href="checks.html">More on checks.</a></p></div>
+          <div class="gate-body"><h3>2.0.0-rc.2: Check</h3><p>The eleventh type, accepted with six decisions on the record. No census authority publishes a machine check, so the promotion rule gained a clause for data that only the consumer of a catalogue holds. {{ n.check_vectors }} vectors, green in both validators. <a href="checks.html">More on checks.</a></p></div>
         </div>
-        <div class="gate prop">
-          <span class="gate-when">Nov 2026</span><span class="gate-rail"><i></i></span>
-          <div class="gate-body"><h3>CP-ADVICE-1: advice packs <span class="tier tier-proposed">proposed</span></h3><p>Vendor recommendations as a bundle of Components that an import cannot use to change requirements or assessments. Schema, both validators, {{ n.advice_vectors }} vectors and a worked pack are in the repository. The app does not read packs yet.</p></div>
+        <div class="gate rc">
+          <span class="gate-when">12 Nov 2026</span><span class="gate-rail"><i></i></span>
+          <div class="gate-body"><h3>2.0.0-rc.3: advice packs <span class="tier tier-designed">release candidate</span></h3><p>Vendor recommendations as a bundle of Components that an import cannot use to change requirements or assessments. No new type, eleven rules, {{ n.advice_vectors }} vectors and a worked pack, green in both validators. <a href="model.html#advice">More on advice packs.</a></p></div>
         </div>
       </div>
     </div>

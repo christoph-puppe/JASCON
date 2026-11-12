@@ -124,12 +124,15 @@ three fields.
 ## 10.4 Deadlines that compute
 
 Chapter 4 made the promise; findings are where it gets kept. An
-action's `due` is either a plain date, an **elapsed-duration** (the
+action's `due` is either a point in time (`date` or `datetime`, each
+written `{type, value}`), an **elapsed-duration** (the
 American six-hour incident clock — pure physics, computable anywhere),
 or a **calendar-period** like the twenty business days above — which is
 *representable* everywhere but **computable only with its calendar**.
 No `calendar-ref`, no arithmetic: a conformant tool refuses, with a
-printed reason, rather than guessing at holidays.
+printed reason, rather than guessing at holidays. Since 2.0.0 the schema
+accepts nothing else in `due` (DATE-2). 1.0.0 let any string through,
+and "end of Q3" is a deadline no machine can read.
 
 For the consumer seat, this is a one-line acceptance test worth
 running on any toolchain you are sold: two conformant tools, one
@@ -221,6 +224,28 @@ Chapters 6, 9 and 10 so far run in the direction an auditor reads: requirement �
 Four fields carry the chapter's weight. **`treatments[].statement-ids`** is clause precision paying off a fourth time: the risk is treated by *s2*, the customer's rotation clause, and the Implementation (Ch. 9) says s1 is the provider's — so the SoA, the responsibility matrix and the risk register agree to the clause without anyone reconciling three documents. **`rating.scale-ref`** keeps Appendix F Q14's promise: the kernel carries a level and the identity of the scale it is on, and refuses to compare across scales. `likelihood` and `impact` inside the rating are the two inputs every one of the standards names, each again a level on its own named scale; the residual rating carries its own pair, so the register shows what the treatment changed (here: likelihood from `mittel` to `selten`, impact from `existenzbedrohend` to `begrenzt`). How `mittel` and `existenzbedrohend` become `hoch` is the organisation's matrix. It is part of the pinned definition of the level scale, and the validator holds the stated level to it: a rating that contradicts its own table fails, unless it carries an `override-rationale` that says why this one risk departs from it. The scales themselves are the organisation's: the bundle pins a small definition file per scale that lists its levels from lowest to highest, as many as the organisation uses and in its own words, and the validator then refuses a level the scale does not define. **`acceptance`** is the owner's signature on the residual — required the moment the risk is `treated` or `retain`ed, because silent retention is the oldest ISMS defect and a required field is the cheapest cure. **`treatment`** is the one code system two authorities publish verbatim: ISO 31000's avoid · modify · share · retain and 200-3's Vermeidung · Reduktion · Transfer · Akzeptanz are the same four words.
 
 What this makes computable is the sentence every ISO 27001 auditor asks and every ISMS answers with a spreadsheet: *which selected controls rest on no risk?* The `risk-coverage` primitive (B.1.9) resolves each Tailoring's selection and lists, per requirement, the Risks that justify it. A Risk justifies once a treatment decision rests on an assessed risk — `assessed` or `treated`, an option chosen, not a draft — so a three-field stub justifies nothing and is listed as *pending*; a `retired` Risk no longer justifies anything, or a control justified once would stay justified for ever. Where a bundle holds more than one Statement of Applicability, `tailoring-refs` say which one a Risk belongs to. Run on this book's example bundle it reports: three selected, one justified (KONF.14.1 by R-2026-007), two uncovered (ISM-1234, IEC-CSO-IIR). Whether *uncovered* is an error is the program's policy — ISO says yes for every SoA row, BSI says the baseline justifies itself — so the primitive reports and the policy switch (`--require-risk-basis`) decides.
+
+**Controls a law or a contract keeps.** Under the strict switch, a control that is in the Statement of Applicability because a law, a regulator or a customer contract demands it shows as uncovered, and no field on the Tailoring changes that: the specification rejects a selection-basis field until a corpus shows one authored (D23). None is needed. Failing a legal, regulatory or contractual duty is a risk every organisation carries, the one ISO/IEC 27001 Annex A 5.31 exists for, and it is recorded like any other:
+
+```json
+{ "id": "https://cso.example/risk/R-2026-011", "version": "1", "lifecycle": "active",
+  "scenario": { "en": "An incident is identified, but the initial report reaches the agency customers after the deadline their contracts and the authorization set. Missing it breaches that duty and puts the contracts and the authorization at risk." },
+  "owner-ref": "https://cso.example/party/head-of-compliance",
+  "state": "assessed",
+  "tailoring-refs": [ "https://ns.bsi.bund.de/gspp/tailoring/erhoeht" ],
+  "relations": [ { "type": "reference", "ref": "https://cso.example/contract/agency-msa-2026#incident-reporting" } ],
+  "rating": { "level": "hoch", "scale-ref": "https://cso.example/scale/bsi-200-3-matrix",
+              "likelihood": { "level": "mittel", "scale-ref": "https://cso.example/scale/bsi-200-3-eintrittshaeufigkeit" },
+              "impact": { "level": "existenzbedrohend", "scale-ref": "https://cso.example/scale/bsi-200-3-schadenshoehe" } },
+  "treatment": "modify",
+  "treatments": [ { "requirement-ref": "https://ns.fedramp.gov/cr26/req/IEC-CSO-IIR" } ] }
+```
+
+Added to this book's example bundle, it moves the `erhoeht` report to two justified of three. ISM-1234 stays uncovered, and should: no contract clause here asks for limits on privileged access, and a compliance risk that named the control anyway would justify it with words. Three rules keep the pattern honest:
+
+- **One Risk per obligation.** A single "we might breach some law" Risk whose treatments name every uncovered row satisfies the switch and says nothing; the validator cannot tell, a reviewer can. Name the article or the clause in `scenario` and point `relations` at its source: at the law's Requirement if the law is converted into the bundle, at the contract otherwise.
+- **Assessed, with an option.** Like any Risk it justifies only once it is `assessed` or `treated` and carries a `treatment`. Its likelihood is that of the breach being noticed or enforced; its impact is the fine, the penalty clause, the lost customer: real levels on the organisation's scales, not placeholders.
+- **The owner of the duty.** `owner-ref` names whoever answers for the obligation, usually legal or contract management rather than the security team, and it is that owner who accepts the residual.
 
 > **Don't** encode risk acceptance as a Deviation, and don't encode a weakened requirement as a Risk. They are two acts by two roles: the owner accepts a residual (`Risk.acceptance`); an implementer weakens a clause because of it (`Deviation` of type `risk-adjustment`, which SHOULD name the Risk in `refs` — RISK-9). The corpse this honours is OSCAL's `deviation-approved` risk status, which fused the two into one state and lost the owner.
 

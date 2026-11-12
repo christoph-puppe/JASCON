@@ -28,7 +28,7 @@ nav: evidence
         <ul class="chips">
 {{ html.family_chips }}
         </ul>
-        <p class="small">The released 1.0.0 has 157 vectors in twelve families. <code>risk</code>, <code>kernel</code> and <code>scale</code> came with 2.0.0-rc.1, the {{ n.check_vectors }} <code>check</code> vectors with 2.0.0-rc.2. The {{ n.advice_vectors }} <code>advice</code> vectors belong to the proposed advice pack.</p>
+        <p class="small">The released 1.0.0 has 157 vectors in twelve families. <code>risk</code>, <code>kernel</code> and <code>scale</code> came with 2.0.0-rc.1, the {{ n.check_vectors }} <code>check</code> vectors with 2.0.0-rc.2, the {{ n.advice_vectors }} <code>advice</code> vectors with 2.0.0-rc.3.</p>
       </div>
       <div class="stack reveal">
         <article class="card">
@@ -36,12 +36,12 @@ nav: evidence
           <p>The reference: one Python file of {{ n.python_lines }} lines, with <code>jsonschema</code> as its only dependency. It includes canonicalization, both digests, the tailoring law, Ed25519 and DSSE verification, bundle composition, risk coverage and an I-Regexp engine.</p>
         </article>
         <article class="card">
-          <div class="card-top"><h3>validate_core.ps1</h3><span class="tier tier-measured">measured 2026-11-11</span></div>
-          <p>The twin: {{ n.powershell_lines }} lines of Windows PowerShell 5.1 with no dependency, for the machine an auditor already has. On 11 November it returned the same counts as the Python reference on the 415 vectors of that day, the five bundles and the example folder. The 32 vectors added on 12 November are ported and have not run there.</p>
+          <div class="card-top"><h3>validate_core.ps1</h3><span class="tier tier-measured">measured 2026-11-12</span></div>
+          <p>The twin: {{ n.powershell_lines }} lines of Windows PowerShell 5.1 with no dependency, for the machine an auditor already has. On 12 November it returned the same counts as the Python reference on all {{ n.vectors }} vectors, the five bundles, the worked pack and the example folder, on a hosted Windows runner. A <a href="{{ repo }}/actions/workflows/validators.yml" rel="noopener">workflow</a> repeats that run on every change.</p>
         </article>
         <article class="card">
           <div class="card-top"><h3>A third, in the browser</h3><span class="tier tier-measured">measured</span></div>
-          <p>The app's Validate page runs a JavaScript port of the kernel rules against all sixteen vector families. The app's readme lists what it leaves to the Python validator.</p>
+          <p>The app's Validate page runs a JavaScript port of the kernel rules against all {{ n.families }} vector families. The app's readme lists what it leaves to the Python validator.</p>
         </article>
         <p class="small">Line counts use the counter of the gate-4 report: non-blank lines that do not start with <code>#</code>.</p>
       </div>
@@ -119,11 +119,11 @@ nav: evidence
       </div>
       <div class="gate rc">
         <span class="gate-when">12 Nov 2026</span><span class="gate-rail"><i></i></span>
-        <div class="gate-body"><h3>2.0.0-rc.2: Check as the eleventh type <span class="tier tier-designed">release candidate, not tagged</span></h3><p>Proposed on 11 November with schema, validator, 156 vectors and a census of two open check corpora: 481 of 510 rules of the CIS Ubuntu 24.04 profiles in ComplianceAsCode fit, and no comparison in either corpus needs a regex outside I-Regexp. Accepted the next day with six decisions. The promotion rule gained a clause for types that catalogue authorities do not publish; Risk and Check both enter under it. {{ n.check_vectors }} vectors now.</p></div>
+        <div class="gate-body"><h3>2.0.0-rc.2: Check as the eleventh type</h3><p>Proposed on 11 November with schema, validator, 156 vectors and a census of two open check corpora: 481 of 510 rules of the CIS Ubuntu 24.04 profiles in ComplianceAsCode fit, and no comparison in either corpus needs a regex outside I-Regexp. Accepted the next day with six decisions. The promotion rule gained a clause for types that catalogue authorities do not publish; Risk and Check both enter under it. {{ n.check_vectors }} vectors now.</p></div>
       </div>
-      <div class="gate prop">
+      <div class="gate rc">
         <span class="gate-when">12 Nov 2026</span><span class="gate-rail"><i></i></span>
-        <div class="gate-body"><h3>CP-ADVICE-1: advice packs <span class="tier tier-proposed">proposed</span></h3><p>A vendor's recommendations as one published file. Schema, both validators, {{ n.advice_vectors }} vectors and a worked pack with a signed attestation. Run over the shipped bundles, the new rule on <code>capability-ref</code> found one edge in the converted NIST example that cited a capability its own component does not declare. The app does not read packs yet, and no converter from OSCAL component definitions exists.</p></div>
+        <div class="gate-body"><h3>2.0.0-rc.3: advice packs, and two typed dates <span class="tier tier-designed">release candidate, not tagged</span></h3><p>A vendor's recommendations as one published file, accepted with eight decisions on the record: no new type, eleven rules, {{ n.advice_vectors }} vectors and a worked pack with a signed attestation. Run over the shipped bundles, the rule on <code>capability-ref</code> found one edge in the converted NIST example that cited a capability its own component does not declare. On the same day the author closed the four points that were left before the tag. Two fields that 1.0.0 left as free text are now typed, the date a deviation was opened and the due date of an action.</p></div>
       </div>
     </div>
   </div>
@@ -158,12 +158,16 @@ nav: evidence
         <p>The fit of the Check type was counted on Linux hosts and Kubernetes. No check against a cloud API was counted, nothing in the repository runs a collector, and the worked example ran against a stub. 29 of 510 counted rules do not fit the declarative form and stay manual. <a href="checks.html#state">The state in full.</a></p>
       </div>
       <div class="limit">
-        <h3>One item blocks the 2.0.0 tag <span class="tier tier-open">open, backlog 60</span></h3>
-        <p>The PowerShell twin has not run with the 32 vectors added on 12 November. Until it has, the two-implementation gate holds for the state of 11 November only.</p>
+        <h3>2.0.0 is a candidate, not a release <span class="tier tier-open">open</span></h3>
+        <p>Nothing is left to decide, and both validators are green on all {{ n.vectors }} vectors of the candidate. The tag is the author's step and has not been taken. Until then the released version is 1.0.0, and the shapes of 2.0.0 can still change.</p>
       </div>
       <div class="limit">
-        <h3>Advice packs rest on one example file <span class="tier tier-proposed">proposed</span></h3>
-        <p>No catalogue authority publishes vendor advice. For such data the promotion rule asks for a standard that requires the record, or for two open implementations whose content was counted. This proposal has neither: the clause-level field on a capability is backed by a single fictional component definition from NIST's examples, with three recommendations, two clause-level entries and two suggested parameter values. A census of public component definitions is owed before that shape closes.</p>
+        <h3>Not every 1.0.0 bundle is a 2.0.0 bundle <span class="tier tier-measured">decided</span></h3>
+        <p>Until rc.2 the 2.0.0 schema accepted everything 1.0.0 accepted. Since rc.3 the date a deviation was opened must be a date, and the due date of an action a typed point in time or duration. A 1.0.0 bundle with free text in either field has to convert it. All five shipped bundles and the example folder conform. A pattern with a Unicode category follows the Unicode database of the machine it runs on, so a code point assigned later can give two verdicts on two machines; an author who needs one verdict writes the range.</p>
+      </div>
+      <div class="limit">
+        <h3>Advice packs rest on one example file <span class="tier tier-designed">designed for</span></h3>
+        <p>No catalogue authority publishes vendor advice. For such data the promotion rule asks for a standard that requires the record, or for two open implementations whose content was counted. Advice packs have neither. The clause-level field on a capability is backed by a single fictional component definition from NIST's examples, with three recommendations, two clause-level entries and two suggested parameter values; the product-version field is backed by nothing counted. Both entered the kernel on the author's decision against that rule, and the specification records it that way. No vendor has published a pack, the pack builder imports OSCAL component definitions, and NIST's own examples come through without loss of anything a pack can hold, but no component definition a vendor published has been run through it. That census is still owed.</p>
       </div>
       <div class="limit">
         <h3>Known defects in shipped examples <span class="tier tier-open">open, backlog 46 and 55</span></h3>

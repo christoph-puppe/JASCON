@@ -1,0 +1,118 @@
+{
+  "component-definition": {
+    "uuid": "8a3e4c2b-5d71-4f0a-9b62-1c7e5f3a9d04",
+    "metadata": {
+      "title": "Example DB Server 7 component definition",
+      "last-modified": "2026-11-12T10:00:00Z",
+      "version": "2026-11",
+      "oscal-version": "1.1.2",
+      "parties": [
+        { "uuid": "2f9c1d7e-4b3a-4e86-a0d5-6c2b8f1e7a90", "type": "organization", "name": "Example DB Vendor Inc." }
+      ]
+    },
+    "components": [
+      {
+        "uuid": "c41b7e2d-93a5-4d1f-8e60-0b5a2c9f6e13",
+        "type": "software",
+        "title": "Example DB Server 7",
+        "description": "A fictional database server, written for the tests of the JASCON pack builder.",
+        "props": [
+          { "name": "version", "value": "7" },
+          { "name": "asset-type", "value": "database" }
+        ],
+        "responsible-roles": [ { "role-id": "provider", "party-uuids": [ "2f9c1d7e-4b3a-4e86-a0d5-6c2b8f1e7a90" ] } ],
+        "control-implementations": [
+          {
+            "uuid": "e6d2a9f1-7c48-4b05-93ae-5f1c8d2b7a36",
+            "source": "#d0f5b8a2-6c41-4e97-a3b9-5e2c7f1d8a46",
+            "description": "Controls of SP 800-53 Rev 5 the server supports.",
+            "set-parameters": [
+              { "param-id": "sc-08_odp", "values": [ "confidentiality", "integrity" ] }
+            ],
+            "implemented-requirements": [
+              {
+                "uuid": "1b8f3e6a-2d94-4c71-b5e0-7a3c9d1f4e28",
+                "control-id": "sc-8",
+                "description": "The server encrypts every client connection.",
+                "statements": [
+                  { "statement-id": "sc-8_smt", "uuid": "5c2e9a7d-1f36-4b80-9d4a-e7b1c3f5a092", "description": "Set net.tls.mode to requireTLS and disable every protocol below TLS 1.3; this protects the {{ insert: param, sc-08_odp }} of transmitted data." }
+                ]
+              },
+              {
+                "uuid": "9e4a1c7b-6d23-4f58-a0b9-3c8e5d2f1a67",
+                "control-id": "ac-2",
+                "description": "Accounts are managed in the server's user manager.",
+                "set-parameters": [
+                  { "param-id": "ac-02_odp.03", "values": [ "the database administrator" ] }
+                ],
+                "statements": [
+                  { "statement-id": "ac-2_smt.e", "uuid": "7f1d3b9e-2a64-4c05-8e7d-b1a6c9f3e520", "description": "Only the role dbAdmin may create accounts." },
+                  { "statement-id": "ac-2_smt.g", "uuid": "3a9c5e1f-7b28-4d60-b4e3-9f2d7a1c6b85", "description": "Turn on the audit log to monitor account use." }
+                ],
+                "props": [ { "name": "implementation-status", "value": "implemented" } ]
+              },
+              {
+                "uuid": "4d7b2e9a-1c56-4f38-8a0e-6b3d9f1c5e74",
+                "control-id": "ac-2.1",
+                "description": "Accounts can be managed by the server's automation interface.",
+                "set-parameters": [
+                  { "param-id": "ac-2.1_prm_1", "values": [ "the user management API" ] }
+                ]
+              },
+              {
+                "uuid": "a2c6e8f0-3b5d-4a71-9c8e-1f4b7d2a6e93",
+                "control-id": "au-12",
+                "description": "Turn on the audit log with auditLog.destination: file and ship it off the host."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "uuid": "f3e1a5c7-9b2d-4e64-8f0a-2d6c4b8e1a59",
+        "type": "interconnection",
+        "title": "Example DB Backup Link",
+        "description": "The replication link to the backup site.",
+        "control-implementations": [
+          {
+            "uuid": "b7d9f1a3-5c2e-4b86-9a04-8e6c2f4a1d37",
+            "source": "https://backup-standard.example/catalog.json",
+            "description": "Controls of a fictional backup standard.",
+            "implemented-requirements": [
+              {
+                "uuid": "6e8a0c2d-4f71-4b39-b5d6-9a1e3c7f5b02",
+                "control-id": "BAK-1",
+                "description": "Replicate to a second site at least every hour."
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "back-matter": {
+      "resources": [
+        {
+          "uuid": "d0f5b8a2-6c41-4e97-a3b9-5e2c7f1d8a46",
+          "rlinks": [
+            { "href": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json" }
+          ]
+        },
+        {
+          "uuid": "7b3e9d1f-2a58-4c06-b8e4-1f6a3c9e5d27",
+          "title": "Release notes of the server",
+          "rlinks": [ { "href": "https://dbvendor.example/release-notes/7" } ]
+        }
+      ]
+    },
+    "capabilities": [
+      {
+        "uuid": "0c4e6a8b-2d1f-4357-9e8a-b6c4d2f0e1a3",
+        "name": "Encrypted storage",
+        "description": "Server and backup link together.",
+        "incorporates-components": [
+          { "component-uuid": "c41b7e2d-93a5-4d1f-8e60-0b5a2c9f6e13", "description": "the server" }
+        ]
+      }
+    ]
+  }
+}

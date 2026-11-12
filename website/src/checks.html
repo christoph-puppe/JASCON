@@ -9,8 +9,8 @@ nav: checks
     <h1>When the assessor is a machine</h1>
     <p class="lede">A scanner that exits with 0 or 1 hides its threshold, ignores the tailoring and leaves nothing to re-examine. A Check publishes the facts a collector must report and the comparisons that decide. The run record carries what was observed, so anyone recomputes the verdict from the record.</p>
     <div class="chips">
-      <span class="tier tier-designed">eleventh kernel type, 2.0.0-rc.2</span>
-      <span class="tier tier-measured">{{ n.check_vectors }} vectors pass in the reference and the app's port</span>
+      <span class="tier tier-designed">eleventh kernel type, 2.0.0 candidate</span>
+      <span class="tier tier-measured">{{ n.check_vectors }} vectors pass in three implementations</span>
       <span class="tier tier-open">2.0.0 is not tagged</span>
     </div>
   </div>
@@ -287,15 +287,15 @@ nav: checks
   <div class="wrap">
     <div class="section-head reveal">
       <p class="eyebrow"><span class="no">07</span> State</p>
-      <h2>Accepted for 2.0.0, one item before the tag</h2>
-      <p class="lede">On 12 November 2026 the author decided the open points of the proposal. Check is part of release candidate 2.0.0-rc.2 and goes live with 2.0.0. The candidate is not tagged.</p>
+      <h2>Accepted for 2.0.0, green in both validators</h2>
+      <p class="lede">On 12 November 2026 the author decided the open points of the proposal. Check has been part of the release candidate since 2.0.0-rc.2 and goes live with 2.0.0. The candidate, now rc.3, is not tagged.</p>
     </div>
     <div class="state-cols reveal">
       <article class="card">
         <div class="card-top"><h3>In the repository</h3><span class="tier tier-measured">measured</span></div>
         <ul class="ticks">
           <li><b>Schema and rules:</b> the Check shape, the run rows on Assessment, the reference on Finding, the evidence record, the facet <code>collector@1</code>; CHECK-1 to CHECK-15 and the primitive <code>check-verdict</code>, each with a rationale that prints on failure.</li>
-          <li><b>{{ n.check_vectors }} conformance vectors</b> pass in the Python reference and in the app's JavaScript port. Five deliberate breaks of the reference each turn a vector red.</li>
+          <li><b>{{ n.check_vectors }} conformance vectors</b> pass in the Python reference, in the PowerShell twin on Windows PowerShell 5.1 and in the app's JavaScript port. Five deliberate breaks of the reference each turn a vector red.</li>
           <li><b>A worked example</b> with two Checks, two runs, a Finding and seven evidence files.</li>
           <li><b>The grammar of RFC 9485 as published,</b> compared on 12 November. It keeps surrogate code points out of patterns, which the working group's file did not; the three engines were corrected and five vectors pin it.</li>
           <li><b>Text:</b> specification D24, handbook chapter 10 and the validator chapter, appendices A, B and C, and the skill for coding agents.</li>
@@ -305,7 +305,6 @@ nav: checks
       <article class="card">
         <div class="card-top"><h3>Open</h3><span class="tier tier-open">open</span></div>
         <ul class="plain">
-          <li><b>Blocks the tag: the second validator.</b> The PowerShell twin passed the 156 vectors of the proposal on Windows PowerShell 5.1. The 32 added since (the twelfth comparator, the per-resource counts, the surrogate rule) are ported there and have not run.</li>
           <li><b>No runner.</b> Nothing in the repository executes a collector on a target, and the app does not either. An HTTP collector has no declared request format yet.</li>
           <li><b>No cloud platform counted.</b> The census covers Linux hosts and Kubernetes. The shape closes at the tag on those two.</li>
           <li><b>One open choice:</b> whether a Unicode category in a pattern follows the host's database or a pinned table.</li>
@@ -326,7 +325,7 @@ nav: checks
         </tbody>
       </table>
     </div>
-    <p class="source reveal">The proposal with its census, the alternative that was not taken (criteria in a facet, promotion later) and the record of the decisions: <a href="{{ blob }}/drafts/CP-CHECK-1.md" rel="noopener">drafts/CP-CHECK-1.md</a>. The normative text: <a href="{{ blob }}/drafts/jascon-specification-2.0.0-rc.2.md" rel="noopener">specification 2.0.0-rc.2</a>, D24.</p>
+    <p class="source reveal">The proposal with its census, the alternative that was not taken (criteria in a facet, promotion later) and the record of the decisions: <a href="{{ blob }}/drafts/CP-CHECK-1.md" rel="noopener">drafts/CP-CHECK-1.md</a>. The normative text: <a href="{{ blob }}/drafts/jascon-specification-2.0.0-rc.3.md" rel="noopener">specification 2.0.0-rc.3</a>, D24.</p>
   </div>
 </section>
 

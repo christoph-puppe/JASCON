@@ -49,6 +49,7 @@
         <p data-i18n>Tailorings: two operations on one target; a weakening without a Deviation at consumer tier; a parameter value of the wrong kind. Facets: every payload against the standard descriptor or the pinned schema; an unregistered facet fails.</p>
         <p data-i18n>Risks and scales: RISK-1 to RISK-14 with the coverage of the selected requirements, SCALE-1 to SCALE-4 with the matrix.</p>
         <p data-i18n>Signatures: the envelope an attestation names is checked for what it binds, and against the signer's key when you supply trusted keys. The reference validator looks only at attestations the manifest lists; this check looks at every attestation of the set and reports a missing envelope of an unlisted one as a note.</p>
+        <p data-i18n>Advice packs: what a pack may hold (ADVICE-1 to ADVICE-3), capabilities and the edges that cite them (ADVICE-4 to ADVICE-7), and the pack manifests the set keeps under packs/sha256/ against their names and against the objects of the set (ADVICE-8 to ADVICE-10). For every pack the check says how far its publisher is established: proven only with a signature that verifies under a trusted key, attested and not verified without keys, claimed otherwise. ADVICE-11 is asked when a pack is imported, on the Home page.</p>
         <p data-i18n>The composition of two sets has a view of its own.</p>
         <p class="verdict-warn" data-i18n>Not checked: conditional-apply instances. The engine is ported and passes its vectors, but no bundle has a place to carry an instance, here as in the reference validator. The bytes of a bundle on disk (line ends, files the manifest does not list) are judged by the Python validator only. In every case of doubt run jascon/scripts/validate_core.py on the exported bundle; it is the reference.</p>
       </div>
@@ -88,6 +89,9 @@ jscI18n.add("de", {
   "Signatures: the envelope an attestation names is checked for what it binds, and against the signer's key when you supply trusted keys. The reference validator looks only at attestations the manifest lists; this check looks at every attestation of the set and reports a missing envelope of an unlisted one as a note.":
     "Signaturen: Der Umschlag, den eine Attestation nennt, wird darauf geprüft, was er bindet, und gegen den Schlüssel des Signierers, wenn Sie vertrauenswürdige Schlüssel angeben. Der Referenzvalidator betrachtet nur Attestationen, die das Manifest listet; diese Prüfung betrachtet jede Attestation des Sets und meldet einen fehlenden Umschlag einer nicht gelisteten als Hinweis.",
   "The composition of two sets has a view of its own.": "Die Zusammenführung zweier Sets hat eine eigene Ansicht.",
+  "Advice packs: what a pack may hold (ADVICE-1 to ADVICE-3), capabilities and the edges that cite them (ADVICE-4 to ADVICE-7), and the pack manifests the set keeps under packs/sha256/ against their names and against the objects of the set (ADVICE-8 to ADVICE-10). For every pack the check says how far its publisher is established: proven only with a signature that verifies under a trusted key, attested and not verified without keys, claimed otherwise. ADVICE-11 is asked when a pack is imported, on the Home page.":
+    "Advice Packs: was ein Pack enthalten darf (ADVICE-1 bis ADVICE-3), Fähigkeiten und die Kanten, die sie zitieren (ADVICE-4 bis ADVICE-7), und die Pack-Manifeste, die das Set unter packs/sha256/ aufbewahrt, gegen ihre Namen und gegen die Objekte des Sets (ADVICE-8 bis ADVICE-10). Zu jedem Pack sagt die Prüfung, wie weit sein Herausgeber feststeht: belegt nur mit einer Signatur, die unter einem vertrauenswürdigen Schlüssel verifiziert, attestiert und nicht verifiziert ohne Schlüssel, sonst behauptet. ADVICE-11 wird gefragt, wenn ein Pack importiert wird, auf der Übersicht.",
+  "advice": "Advice Packs", "Advice packs": "Advice Packs", "claimed": "behauptet", "proven": "belegt", "attested, not verified": "attestiert, nicht verifiziert", "release": "Ausgabe",
   "Not checked: conditional-apply instances. The engine is ported and passes its vectors, but no bundle has a place to carry an instance, here as in the reference validator. The bytes of a bundle on disk (line ends, files the manifest does not list) are judged by the Python validator only. In every case of doubt run jascon/scripts/validate_core.py on the exported bundle; it is the reference.":
     "Nicht geprüft: conditional-apply-Instanzen. Die Engine ist portiert und besteht ihre Vektoren, aber kein Bundle hat einen Platz für eine Instanz, hier wie im Referenzvalidator. Die Bytes eines Bundles auf der Platte (Zeilenenden, Dateien, die das Manifest nicht listet) beurteilt nur der Python-Validator. In jedem Zweifelsfall jascon/scripts/validate_core.py auf dem exportierten Bundle laufen lassen; er ist die Referenz.",
   "signature": "Signatur", "Signatures": "Signaturen",
@@ -115,7 +119,9 @@ jscI18n.add("de", {
 const $ = id => document.getElementById(id);
 const V = jscView, esc = jscEsc;
 const AREAS = { manifest: N("manifest"), files: N("files"), object: N("object"), digest: N("digest"), reference: N("reference"),
-  tailoring: N("tailoring"), scale: N("scale"), risk: N("risk"), facet: N("facet"), signature: N("signature") };
+  tailoring: N("tailoring"), scale: N("scale"), risk: N("risk"), facet: N("facet"), signature: N("signature"), advice: N("advice") };
+/* the word shown for a pack's publisher (jscPublisherLabel): proven only with a signature that verified under a trusted key */
+const PUBLISHER = { proven: N("proven"), attested: N("attested, not verified"), claimed: N("claimed") };
 let G = jscSet.graph, last = null, filter = { area: "", kind: "", q: "" };
 const ui = V.draft("validate", () => ({ keys: "", other: "" }));
 
@@ -167,6 +173,8 @@ function render() {
     ${errors ? "" : `<p class="verdict-ok" style="margin:6px 0">✓ ${esc(T("No error from the rules this app has ported."))}</p>`}
     ${Object.keys(last.tiers).length ? V.section(T("Tier of the Tailorings"), Object.entries(last.tiers).map(([id, tier]) => `<div>${V.refLink(id, V.last(id))} ${V.badge(tier)}</div>`).join("")) : ""}
     ${Object.keys(last.signatures).length ? V.section(T("Signatures"), Object.entries(last.signatures).map(([id, st]) => `<div>${V.refLink(id, V.last(id))} <span class="${st === "verified" ? "verdict-ok" : st === "error" ? "verdict-bad" : "hint"}">${esc(st)}</span></div>`).join("")) : ""}
+    ${(last.packs || []).length ? V.section(T("Advice packs"), last.packs.map(p => `<div id="pack-${esc(p.name || "own")}"><span class="mono">${esc(p.id)}</span> ${V.badge(T("release") + " " + p.version)}
+      <span data-publisher="${p.label}" class="${p.label === "proven" ? "verdict-ok" : "verdict-warn"}">${esc(T(PUBLISHER[p.label]))}</span> <span class="hint">${esc(p.where)} · ${esc((p.publisher || {}).ref || "")}</span></div>`).join("")) : ""}
     ${all.length ? `<div class="filterrow" style="margin-top:12px"><button type="button" class="fpill ${filter.area ? "" : "on"}" data-area="">${esc(T("all"))} · ${all.length}</button>
         ${Object.entries(byArea).map(([a, n]) => `<button type="button" class="fpill ${filter.area === a ? "on" : ""}" data-area="${esc(a)}">${esc(T(AREAS[a] || a))} · ${n}</button>`).join("")}
         <button type="button" class="fpill ${filter.kind === "error" ? "on" : ""}" data-kind="error">${esc(T("errors"))}</button>

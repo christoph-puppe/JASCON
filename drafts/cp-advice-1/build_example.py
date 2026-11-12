@@ -48,6 +48,7 @@ def put(path, raw):
 component = {
     "id": VEN + "/component/server-7", "version": "2026-10", "label": "Example DB Server 7",
     "lifecycle": "active", "title": {"en": "Example DB Server, release line 7"}, "kind": "software",
+    "product-version": "7",       # opaque text: the product version the advice describes (author decision 2026-11-12)
     "capabilities": [
         {"id": "cap-tls", "requirement-ref": KONF, "statement-ids": ["s1"],
          "description": {"en": "Set net.tls.mode to requireTLS and net.tls.disabledProtocols to TLS1_0,TLS1_1,TLS1_2. "

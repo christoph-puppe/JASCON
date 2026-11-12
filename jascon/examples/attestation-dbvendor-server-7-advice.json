@@ -8,10 +8,10 @@
  "subject-semantic-digests": [
   {
    "id": "https://dbvendor.example/component/server-7",
-   "semantic-digest": "sha256:8bd8d4b3b190f94a4d625161e5e988fbca697bdc3774e54757ac5030425022aa"
+   "semantic-digest": "sha256:a332a7e225e727eca6d1a9487b34cecc22f3021883313749fa35c6e80f4b3684"
   }
  ],
- "content-manifest-digest": "sha256:433f4124ba42ad84971cc9f34c63f78d784a906219204847caa03b3afe790d87",
+ "content-manifest-digest": "sha256:27bed5464b7113e33a4641599b1861def5a24eebed2746fc9547bbd1de0c3eb1",
  "signer": "https://dbvendor.example/party/vendor",
  "timestamp": "2026-10-20T09:00:00Z",
  "envelope-ref": "attestation-dbvendor-server-7-advice.dsse"

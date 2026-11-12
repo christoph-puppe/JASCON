@@ -1,6 +1,21 @@
 # JASCON — "Kernel + Registered Facets"
-## Specification 2.0.0-rc.2
-### release candidate, 2026-11-12 · the 1.0.0 text (released 2026-07-22) amended by CP-RISK-1 (Risk, the tenth kernel type) and CP-CHECK-1 (Check, the eleventh) · NOT tagged — the Python reference and the app's port are green on this candidate; the PowerShell twin has not been executed with the two changes of 2026-11-12 (IV.5b); the tag is the author's decision
+## Specification 2.0.0-rc.3
+### release candidate, 2026-11-12 · the 1.0.0 text (released 2026-07-22) amended by CP-RISK-1 (Risk, the tenth kernel type), CP-CHECK-1 (Check, the eleventh) and CP-ADVICE-1 (advice packs) · NOT tagged — both reference validators are green on this candidate, the PowerShell twin on Windows PowerShell 5.1 (IV.5b); the tag is the author's decision
+
+> **What changed since rc.2 (2026-11-12, the same day).** One decision is
+> new — **D25**, advice packs: a vendor's recommendations as one published
+> file, with rules that keep such a file from changing what is required or
+> how it is assessed. No type and no primitive is added. D3, D5, D6, D8,
+> D13, D15, D22 and D24 were amended in place and marked *(2.0.0-rc.3)*.
+> Three things change released shapes and make this a new candidate: a
+> Component may name the product version it describes (`product-version`);
+> a capability may name clauses (`statement-ids`); and two fields that
+> 1.0.0 left as free text are typed (`Deviation.opened`, the `due` of a
+> Finding's action), which **ends the property that every 1.0.0 bundle is
+> a 2.0.0 bundle** for bundles that used free text there. The author's
+> twelve decisions of that day are in `drafts/CP-ADVICE-1.md` §14 and in
+> the register, "Amendments — CP-ADVICE-1 and the decisions before the
+> tag". The rc.2 file is gone from the tree (git keeps it).
 
 > **What changed since rc.1 (2026-11-12).** One decision is new — **D24**,
 > `Check` as the eleventh kernel type with `check-verdict` as the tenth
@@ -48,22 +63,30 @@
 released; this text adds two kernel types — **Risk** (D23) and **Check**
 (D24) — and the two primitives that compute over them. It is a major version by the rule of
 D22 rev 3, not because anything breaks: all 6,914 objects of the 1.0.0
-corpus validate unchanged under the 2.0.0 schema, so a 1.0.0 bundle is a
-2.0.0 bundle. **Measured at rc.1:** a 258-vector conformance corpus in
+corpus validate unchanged under the 2.0.0 schema. *(2.0.0-rc.3)* That is
+a measurement of the corpus and no longer a property of the schema: a
+1.0.0 bundle that wrote free text into `Deviation.opened` or into the
+`due` of a Finding's action is not a 2.0.0 bundle (D8; the five values
+in the shipped bundles conform). **Measured at rc.1:** a 258-vector conformance corpus in
 fifteen families; the Python reference validator green on it and on
 every bundle that ships; the first Risk corpus (two Risk objects
 converted from an OSCAL POA&M), and what that corpus shows the fourth
 authority's data to lack. **Measured at rc.2 (2026-11-12):** 447 vectors
 in sixteen families (`check`: 188); the Python reference green on them, on
 the five shipped bundles and on the example folder; the app's JavaScript
-port green on the same vectors. **Not yet measured, said here rather than
+port green on the same vectors. **Measured at rc.3 (2026-11-12):** 537
+vectors in seventeen families (`kernel`: 25, `advice`: 74); the Python
+reference and the PowerShell twin (Windows PowerShell 5.1) green on
+them, on the five shipped bundles, the worked advice pack and the example
+folder; the app's JavaScript port green on the same vectors. **Not yet measured, said here rather than
 below the fold:** Risk's two implementations share one author — the
 PowerShell twin, green on 2026-11-11, is independent in language and
-runtime only (IV.5b), and it has not been executed with the twelfth
-comparator and the per-resource counts of D24; Risk and Check entered the
+runtime only (IV.5b); Risk and Check entered the
 kernel under D22's consumer-side clause, which no census authority's data
 supports by construction (D22); Check has a worked example and two counted
-check corpora, and no runner and no converted check corpus (D24); and the coverage figures inherited from 1.0.0 count
+check corpora, and no runner and no converted check corpus (D24); advice
+packs have one worked pack and no pack a vendor published, and two of
+their fields entered against D22 on the author's decision (D25); and the coverage figures inherited from 1.0.0 count
 source *paths* with a declared destination, not values verified to
 arrive (IV.2, R16). Eleven corpora were converted and measured (251,591
 source leaf values at path level, UNMAPPED = 0); **five of the bundles
@@ -86,7 +109,9 @@ history. This release candidate is that text, consolidated: journals
 compacted to IV.6, gate results recorded in IV.5, nothing renumbered.
 For 2.0.0-rc.1 the same discipline: D23 added, five decisions amended in
 place and marked *(2.0.0)*, the gate state in IV.5b. For 2.0.0-rc.2: D24
-added, four decisions amended in place and marked *(2.0.0-rc.2)*.
+added, four decisions amended in place and marked *(2.0.0-rc.2)*. For
+2.0.0-rc.3: D25 added, eight decisions amended in place and marked
+*(2.0.0-rc.3)*.
 
 **North star (session directive, governs every verdict):** *more simple ·
 closer to the needs of the customers · no more props · less need for custom
@@ -104,7 +129,9 @@ review rounds 1–2 (adjudicated, F.6/F.7) + P9 twin adversarial runs
 pass → **1.0.0** → CP-RISK-1 (proposal 2026-11-05; landing review, first
 Risk corpus and the author's decisions 2026-11-10) → 2.0.0-rc.1 →
 CP-CHECK-1 (proposal and census 2026-11-11; the author's decisions
-2026-11-12) → **2.0.0-rc.2**.
+2026-11-12) → 2.0.0-rc.2 → CP-ADVICE-1 (proposal 2026-11-12; the
+author's decisions on it and on the open points before the tag, the same
+day) → **2.0.0-rc.3**.
 
 ---
 
@@ -278,14 +305,16 @@ relation (v0.4 — corrected).
    **Absent means 1.0.0**, so every 1.0.0 manifest stays valid and a
    bundle of 1.0.0 content stays readable by a 1.0.0 tool. Two rules:
    **KERNEL-1** — a bundle that carries content the 1.0.0 kernel cannot
-   type (at 2.0.0: a Risk, or a Finding with `risk-refs`) MUST pin the
-   kernel that can; **KERNEL-2** — a tool that meets a pin it does not
+   type (at 2.0.0: a Risk, a Finding with `risk-refs` or `check-ref`, a
+   Check, an Assessment with `check-results` or `tailoring-ref`, a
+   manifest with a pack header, a Component with `product-version` or
+   with `statement-ids` on a capability) MUST pin the kernel that can; **KERNEL-2** — a tool that meets a pin it does not
    implement MUST stop and name the pinned version and the versions it
    reads. A 1.0.0 tool, whose manifest shape is closed, rejects a pinned
    manifest at the manifest — one file earlier than before, though still
    without a version in its message; the version appears from 2.0.0 tools
-   on. The pin is deliberately not required everywhere: requiring it would
-   end the measured property that a 1.0.0 bundle is a 2.0.0 bundle.
+   on. The pin is deliberately not required everywhere: a bundle of
+   1.0.0 content stays unpinned and readable by a 1.0.0 tool.
 
 7. **Pinned scale definitions *(2.0.0 — author, 2026-11-10)*.** The
    manifest MAY pin scale definitions under `scales`, entry for entry
@@ -310,6 +339,17 @@ relation (v0.4 — corrected).
    `scale-ref` that no pin answers stays a landmark and its levels
    opaque, exactly as before. A manifest that pins scales names kernel
    2.0.0 (KERNEL-1).
+8. **The pack header *(2.0.0-rc.3 — D25)*.** The manifest MAY carry
+   `pack`: `{kind ● (code; today the one value `advice`), id ● URI,
+   version ● string (opaque, never ordered), title ○ text, publisher ●
+   {ref ● URI, name ○ text}}`, closed. A manifest with a pack header is
+   the manifest of a pack and pins kernel 2.0.0 (KERNEL-1). The header
+   sits in the manifest because the manifest is what a signature binds:
+   vendor and release are inside the signed state without a new
+   mechanism. A bundle that imported a pack keeps the pack's manifest,
+   unchanged, beside its own: `packs/sha256/<hex>`, named by the SHA-256
+   of its bytes and never listed, the placement of signature envelopes
+   and of the evidence store (D24).
 
 **Evidence.** Air-gapped estates; registry link-rot; P7's fixed-point proof;
 P6's omitted-vs-empty hash fragmentation; the two-digest necessity
@@ -357,8 +397,18 @@ any authorization MUST carry `basis-ref` — which now points at a specific
 **authorization id**, so a service holding both a JAB P-ATO and an agency
 ATO can be inherited against the right one. Multi-hop chains remain covered
 by induction; D14's one-hop budget intact.
+*(2.0.0-rc.3)* Two optional fields. **`product-version`** on a Component:
+opaque text for the product version the Component describes (`"7"`,
+`"7.2"`). Nothing is ordered or parsed from it; no tool can order the
+version strings of arbitrary vendors. It entered on the author's decision
+of 2026-11-12, without counted evidence: the alternative, one Component
+per product line with the line in the id, needs no field and was the
+drafter's proposal. **`statement-ids`** on a capability: the clauses of
+its `requirement-ref` that the capability is about (ADVICE-5; D25).
 **Rejected (recorded).** Boolean flag (v0.3), defaulted boolean (v0.4 →
-dead), separate System type, multi-hop traversal.
+dead), separate System type, multi-hop traversal. *(2.0.0-rc.3)* A
+structured product block (name, version, vendor) and a list of versions:
+both larger shapes for a question nothing computes on.
 
 ## D6 — One `Implementation` edge (comp-def + SSP implemented-requirements unified).
 Unchanged: `{component-ref, requirement-ref, statement-refs[]?,
@@ -369,6 +419,16 @@ parameter-bindings, status, evidence-refs[], deviations[]}` *(enum and
 public PR #8 retreat; historical Rev4 enums mapping 1:1. Per-clause
 responsibility via `statement-refs` is how shared responsibility actually
 works.
+*(2.0.0-rc.3)* **`capability-ref` has a grammar.** Until now it was a
+free string, written four ways in this repository. A bare capability id
+names a capability of the edge's own component; `<component-id>#<capability-id>`
+names a capability of that component. The reference is closure-required:
+the named component is in the bundle, the capability exists on it, and a
+component other than the edge's own is one of its `members` (ADVICE-7).
+The second form is how a vendor's advice is adopted (D25). It is not
+`inherited-from`, which says that another party performs the control
+under an authorization: a product the user runs is the user's to
+configure, and the vendor only described how.
 
 ## D7 — Attestation: content-manifest binding, **bi-modal verification**, verification contract, provenance map. *(rev. v0.5 — P7-B1 + P6-F1 merged)*
 **Decision.**
@@ -407,6 +467,18 @@ the audited channel for *every* recognized weakening, not only modality.
 whose acceptance it rests on (RISK-9, D23). Accepting a risk and weakening
 a requirement are two acts by two roles; they stay two records that
 reference each other.
+*(2.0.0-rc.3 — author decision 2026-11-12; backlog #52 and #47a)* Two
+fields that 1.0.0 left as free text are typed. `opened` is a date,
+`YYYY-MM-DD` (**DATE-1**), as `Risk.acceptance.date` and
+`provenance.date` are. The `due` of a Finding's action is a typed point
+in time or duration: `date`, `datetime`, `elapsed-duration` or
+`calendar-period` with its calendar (**DATE-2**). The schema enforces
+both; a validator names the rule when an object matches no type for
+this reason. This is the one place where 2.0.0 refuses something 1.0.0
+accepted. Surveyed first: the shipped bundles hold two `opened` values
+and three `due` values, and all five conform. A date that any string
+satisfies cannot be compared, sorted or checked, which is the defect
+this specification counts in others' catalogues.
 
 ## D9 — Statements: identified collection; **normative modality order**; obligated-parties; **elapsed vs. calendar durations**; parameter algebra. *(rev. v0.5 — P8-E2, P7-G on calendars/decimal)* *(rev. v0.6 cycle — R1 #1)*
 **Decision.** As v0.4 (`statements[] {id, modality, obligated-parties[],
@@ -534,6 +606,14 @@ modality):**
 | `add-relation` / `remove-relation` | informative edges are free; **removing a `required` edge ⇒ Deviation** (B.3 — dropping a dependency weakens the graph; enforced since backlog #25). Normative cross-framework claims are Mapping objects, D20, with their own lifecycle |
 | `excludes` | **selection, never weakening — no Deviation** |
 
+**A Tailoring names no Component *(2.0.0-rc.3 — author decision
+2026-11-12; closes backlog #51)*.** The Statement of Applicability is
+joined to what it is for from the other side: a Risk names its Tailoring
+in `tailoring-refs` (D23), and a check run names both its Tailoring
+(`tailoring-ref`) and its subjects (D24). Those are the joins that exist,
+and they are the model. An optional `component-refs` on a Tailoring was
+considered and not added: no corpus demands it.
+
 **Selection edges are typed *(rc.1 review)*.** `selects[].set-ref` names a
 RequirementSet; `excludes[].ref` names a Requirement or a RequirementSet,
 and a Set there excludes its members. Any other target is a validation
@@ -653,6 +733,8 @@ objects — the silent-ignore state P7-B3 exposed is unrepresentable.
 | Registered-facet schema validation · capability declarations · fail-closed | — | Required | Required |
 | Semantic digests (JCS) · `attestation-binds` · `modality-monotonic` · `conditional-apply` · `risk-coverage` *(2.0.0: the report is required; failing on `uncovered` is program policy)* · `check-verdict` *(2.0.0-rc.2: every recorded verdict is recomputed from its recorded observation; running a collector is outside every tier)* | — | Required | Required |
 | Exact facet version+digest pinning; bundle-composition resolution | — | Required | Required |
+| *(2.0.0-rc.3)* Advice packs: what a pack may hold and the kept manifest (ADVICE-1 to ADVICE-3, ADVICE-8 to ADVICE-10, structural, no semantic computation) | Required | Required | Required |
+| *(2.0.0-rc.3)* Capabilities and the edges that cite them (ADVICE-4 to ADVICE-7) · composing a pack into a bundle (ADVICE-11) · the publisher verdict, claimed or proven | — | Required | Required |
 | Publication duties (stable ids, alias/lineage records, both digests, `.well-known`, deprecation lifecycle, calendar refs for calendar-periods) | — | — | Required |
 
 RFC-0024's approved-format slot maps to **Portable**.
@@ -872,6 +954,24 @@ vocabulary, the twelve comparators, onto which every comparison operator
 of both corpora maps. (c): 2.0.0. What the clause does not supply is a
 third counted platform: the fit is measured on Linux hosts and on
 Kubernetes, and on no cloud API (D24, "Cons, stated").
+
+**Applied at 2.0.0-rc.3 — two fields, on the author's word.** The clause
+above is written for types. Advice packs (D25) add no type; they add a
+manifest header and one field on a capability, `statement-ids`, and the
+author added a second field, `product-version` on a Component. For a
+field the three tests are owed all the same. `statement-ids`: test 1
+fails (no census authority publishes vendor recommendations); test 2
+holds (resolving a statement id against a requirement, done today for
+five other shapes); test 3 holds trivially. Read against the consumer-side
+clause it is **not met**: no standard is named, and the counted content
+is one fictional example file where the clause asks for two
+implementations. **The author overruled D22 for this field on
+2026-11-12** ("I see great use for it"). `product-version` has no
+counted evidence at all and is the author's decision of the same day.
+Both are recorded here as what they are: fields that entered the kernel
+against the rule, by the one person who may decide that, with the
+missing evidence named. A census of public component definitions would
+be the evidence; it has not been made.
 
 ## D23 — **`Risk` as the tenth kernel type; `risk-coverage` as the ninth primitive.** *(new, 2.0.0 — CP-RISK-1; author decisions 2026-11-10)*
 **Decision.** A shallow first-class object for the ex-ante risk record —
@@ -1102,8 +1202,9 @@ call it an exception to test 1)*. Corpus-exercised so far: `scenario`,
 corpus scale (the one corpus with Risks carries no Tailoring).
 
 **Version.** A tenth kernel type is a kernel-shape change, and by D22
-rev 3 it rides a major: **2.0.0**. It is a superset in fact — every
-1.0.0-valid object validates unchanged (measured: 6,914 / 6,914) — and
+rev 3 it rides a major: **2.0.0**. Measured at rc.1, every object of the
+1.0.0 corpus validated unchanged (6,914 / 6,914; since rc.3 two fields
+are typed, D8, and the shipped values conform) — and
 the reverse does not hold: a 1.0.0 tool cannot type a Risk. The
 manifest names the kernel since the rc.1 review (D3.6): a bundle that
 carries a Risk pins `kernel-version` 2.0.0, and a tool that does not
@@ -1241,8 +1342,14 @@ not depend on Python, .NET or ECMAScript and a pattern cannot stall a
 validator. The grammar is that of the RFC **as published** (compared on
 2026-11-12): it keeps the surrogate code points U+D800 to U+DFFF out of
 `NormalChar` and `CCchar`, which the working group's file did not, and a
-pattern that holds one is refused. One dependence is left and stated: a general category `\p{..}`
-is read from the host's Unicode database (backlog #59). A pattern is
+pattern that holds one is refused. **Categories follow the host
+*(2.0.0-rc.3 — author decision 2026-11-12; closes backlog #59)*:** a
+general category `\p{..}` is read from the Unicode database of the
+implementation's host. RFC 9485 pins no Unicode version, and the kernel
+does not either. A character assigned between two versions of the
+database can therefore match in one tool and not in another; a check
+whose verdict depends on such a character is fragile, and its author is
+told so here. The vectors use long-assigned characters only. A pattern is
 never a parameter (CHECK-4).
 
 **Rules (normative; Appendix B.1.10 carries the failure messages).**
@@ -1303,8 +1410,8 @@ example's two runs executed the bash collector against a stub `sshd`.
 
 **Version.** An eleventh kernel type rides the same major as the tenth:
 2.0.0 is untagged, and the author set Check up to go live with it
-*(2026-11-12)*. The superset property holds: every object of the five
-shipped bundles and the example folder validates unchanged. A tool that
+*(2026-11-12)*. Every object of the five shipped bundles and the example
+folder validates unchanged. A tool that
 implemented rc.1 claims 2.0.0 and reports a Check as "matches NO type";
 that is tolerable only because nothing was released under 2.0.0.
 
@@ -1322,9 +1429,7 @@ and Kubernetes; no cloud API was counted, and a correction after the tag
 costs a major. 29 of 510 counted rules stay manual. Nothing in the
 repository runs a collector, and `collector@1` carries the source of an
 `http-api` collector as free text, which a runner cannot execute as it
-stands. Until the PowerShell twin has run with the twelfth comparator and
-the per-resource counts, those two have one executed validator and the
-app's port.
+stands. Both validators were written by one author.
 
 **Rejected.** *Criteria in a facet on a Requirement the check author
 owns, promoted later* (an independent design review during planning):
@@ -1339,6 +1444,154 @@ for a catalogue that may not be passed on could not validate. *A general
 regular-expression dialect*: two conformant tools, two verdicts. *OR,
 NOT, arithmetic*: the leash of B.4; what needs them is manual and
 counted.
+
+## D25 — **Advice packs: a vendor's recommendations as one published file.** *(new, 2.0.0-rc.3 — CP-ADVICE-1; author statements and decisions 2026-11-12)*
+**Decision.** A vendor says how its product can meet a requirement, and
+has no way to change the user's requirements or assessments by saying
+so. The carrier exists since 1.0.0: `Component.capabilities[]`. What is
+added is the file a vendor publishes as such, the rules that hold that
+file to being advice, and the record in the user's bundle of which
+vendor's release came in. No kernel type and no primitive is added.
+
+**The file.** An advice pack is a bundle whose manifest carries a pack
+header (D3 item 8) and whose objects are Components. Published as one
+ZIP it is one file; published as a folder it is the same pack. A bare
+Component file is not a pack *(author decision)*: it names no release
+and no publisher and cannot be signed.
+
+```json
+"pack": { "kind": "advice",
+          "id": "https://vendor.example/pack/server-7-hardening",
+          "version": "3",
+          "title": { "en": "Server 7 hardening advice" },
+          "publisher": { "ref": "https://vendor.example/party/vendor",
+                         "name": { "en": "Vendor Inc." } } }
+```
+
+**A recommendation** is a capability with four parts: the requirement
+(`requirement-ref`, resolves if present: a pack ships without the
+catalogue, which the vendor may have no right to pass on), the clauses
+(`statement-ids`), the text for consideration (`description`) and
+suggested parameter values (`parameter-bindings`). The Component may say
+which product version it describes (`product-version`, D5).
+
+**Claimed and proven.** The publisher is *claimed* by the header and by
+the origin its ids share with it. It is *proven* when an Attestation
+beside the manifest has a signer of that origin, binds this manifest's
+digest, and its envelope verifies under a key the user trusts: the two
+words, and the envelope check, that the tier rule uses for a Tailoring
+(D13). As there, a validator that was given no keys reports the binding
+and marks it UNVERIFIED; that is no proof, because anyone can write an
+Attestation that names the vendor as signer. A tool for people shows
+three states and never a vendor's name without one of them: *claimed*,
+*attested, not verified* (the binding without a checked signature) and
+*proven*. Only the last may look like a confirmation.
+
+**Adoption.** The user's Implementation, on the user's component, cites
+the vendor's capability: `<component-id>#<capability-id>` (D6). A
+capability stays a claim. The only statement that a requirement is met
+remains the Implementation edge in the user's namespace.
+
+**Import.** The vendor's Components join the set, and the vendor's
+manifest is kept unchanged as `packs/sha256/<hex>`. There is no separate
+import record: the kept manifest names the vendor, the release and every
+object that came with it, and it is the thing the vendor signed.
+
+| The set holds | Result |
+|---|---|
+| no pack with this `pack.id` | the Components are added, the manifest is kept |
+| the kept manifest of this very file | nothing is written: already imported |
+| a kept manifest with this `pack.id` and another digest | another release: after a preview with a diff, the pack's objects and its kept manifest are replaced |
+| an object with an id from the file that no kept manifest of this pack lists | refused (ADVICE-11) |
+
+Releases are not ordered; a tool says *another* release and shows both.
+One release of a pack is in a set at a time *(author decision)*; history
+is whatever versioning the set itself is kept in.
+
+**The guarantee.** After the import of an advice pack, every object that
+was in the set has the semantic digest it had before, and no Requirement,
+Set, Tailoring, Mapping, Risk, Check, Implementation, Assessment, Finding
+or Attestation was added. The first is compared object by object and
+printed as a receipt; the second is ADVICE-1. It is no promise that
+validation output is the same: references that were landmarks now
+resolve.
+
+**Rules (normative).**
+
+| Id | Rule |
+|---|---|
+| ADVICE-1 | Every object a pack's manifest lists is a Component *(author decision: Components only; a pack of Checks would be a second kind with rules of its own)*. |
+| ADVICE-2 | Every object id, `pack.id` and `pack.publisher.ref` share one origin: a pack cannot carry an object under someone else's identity, and so cannot replace one. |
+| ADVICE-3 | No facet on a pack's object declares a semantics class *(author decision)*; `private:` payloads ride as always. Advice must not reach a computation through a facet. |
+| ADVICE-4 | Capability ids are unique within a Component. |
+| ADVICE-5 | An in-bundle `requirement-ref` of a capability is a Requirement, and `statement-ids` name its statements; `statement-ids` are not allowed without `requirement-ref`. |
+| ADVICE-6 | With the requirement in the bundle, each key of a capability's `parameter-bindings` is a parameter declared on the covered clauses, and the value lies in its declared space. |
+| ADVICE-7 | A `capability-ref` is a capability id of the edge's component, or `<component-id>#<capability-id>`; the named component is in the bundle, the capability exists on it, and a component other than the edge's own is one of its `members` *(author decision: a rule, not a matter of display)*. |
+| ADVICE-8 | A file under `packs/sha256/` is named by the SHA-256 of its bytes, is a content manifest with a pack header, and is not listed in the bundle's manifest. |
+| ADVICE-9 | Every object a kept pack manifest lists is in the bundle at that version with that semantic digest: the advice in the set is what the vendor published, or the set says which object is not. |
+| ADVICE-10 | One kept manifest per `pack.id`; no object is listed by two kept manifests. |
+| ADVICE-11 | Composing a pack into a bundle adds ids the bundle does not hold and replaces ids a kept manifest of the same `pack.id` lists; any other id the bundle already holds is refused. |
+
+Notes, never failures: a capability whose `requirement-ref` is outside
+the bundle (not typed); a publisher that is claimed and not proven; a
+kept manifest whose vendor Attestation is absent. No rule here: a
+suggested value outside what the user's Tailoring allows. The vendor
+cannot know the tailoring; a tool shows the value at adoption and does
+not write it.
+
+**A third party's advice *(author decision)*.** A consultancy or a
+benchmark publisher that writes about someone else's product publishes
+its own Component under its own origin (ADVICE-2 leaves it no other
+way). It says which product it is about with a relation of the stdlib
+type `https://ns.jascon.net/stdlib/relation/describes`, whose `ref` is
+the vendor's Component id. Relation types are the one extensible code
+surface (C.8): tools carry and show the edge and compute nothing from it.
+
+**Evidence — and its tier.** No census authority publishes vendor
+recommendations; they publish catalogues. One component definition is in
+the corpus, a fictional example file by NIST with three recommendations,
+two clause-level entries and two suggested parameter values. The
+handbook's own evidence speaks against a second place where
+implementation is described (Chapter 9.1, the public retreat from
+component definitions), and this decision does not bring one back: a
+capability is a claim, an Implementation is the statement. Tier:
+**designed-for, with one fictional file**. The promotion of
+`statement-ids` rests on the author's decision against D22 (there);
+`product-version` on the author's decision alone. Exercised by vectors
+and by one worked pack signed with the public fixture key: every rule.
+ADVICE-7, run over the shipped bundles, found one defect in a converted
+bundle, which was corrected. Exercised by nothing yet: a pack a vendor
+published.
+
+**Version.** The changes ride 2.0.0. A manifest without `pack` is not a
+pack; a capability without `statement-ids` and a Component without
+`product-version` are valid as before; a `capability-ref` that is a bare
+id of its own component stays valid. ADVICE-7 gives meaning to a string
+that had none and can turn existing content red; it did once.
+
+**Rationale (north star applied).** *Customer:* the operator who buys a
+product and wants the vendor's hardening advice in the same graph as the
+requirement it serves, without the vendor's file being able to move a
+pass mark. *Simplicity:* a header, two fields, eleven rules; the import
+is the composition engine of gate 4 with one lawful replacement. *No
+props / no bespoke:* the document model that gave OSCAL this guarantee is
+replaced by a rule on a bundle.
+**Cons, stated.** Two kernel fields entered without counted evidence.
+The only pack there is was written for this purpose; the pack builder
+imports OSCAL component definitions (IV.7). NIST's example component
+definitions import without loss of anything a pack can hold
+(`drafts/cp-advice-1-census/`); none published by a vendor has been
+imported yet, and that census is what could change the evidence for the
+two fields above. What the app and the reader do
+with a pack is stated in IV.7.
+
+**Rejected.** *The vendor publishes Implementation objects*: an
+Implementation says that a requirement is met, so importing a vendor's
+edges would change what the user's set says is implemented. *Checks in
+an advice pack*: a vendor would ship ways to assess. *A bare Component
+file as a second form*. *A list of product versions, or a product
+block* (D5). *Keeping the manifests of earlier releases in the set*.
+*Leaving membership (ADVICE-7) to what a tool shows*.
 
 ---
 
@@ -1410,6 +1663,33 @@ the Tailoring binds; bind 3 instead, and the unchanged observation of 4
 fails. The example assessed no real host: each run executed the Check's
 bash collector against a stub `sshd`, and every evidence record says so.
 
+## III.7 — A vendor's advice, imported and adopted *(2.0.0-rc.3)*
+
+The pack `…/pack/server-7-hardening`, release 3, holds one Component,
+`…/component/server-7` with `product-version: "7"` and three
+capabilities. `cap-key-rotation` names `KONF.14.1`, clause `s2`, and
+says how the server rotates its certificate. The vendor's Attestation
+and its envelope lie beside the manifest; with the vendor's key trusted,
+the publisher is proven.
+
+After the import the example set holds the vendor's Component byte for
+byte, the vendor's manifest under `packs/sha256/`, and the Attestation.
+Nothing else changed: the receipt reads *unchanged n of n · added 1
+components*. The SaaS lists the server as a member, and one
+Implementation adopts the recommendation:
+
+```json
+"satisfied-by": [ { "capability-ref":
+    "https://dbvendor.example/component/server-7#cap-key-rotation" } ]
+```
+
+Remove the server from the members of the SaaS and that edge fails
+ADVICE-7. Edit the vendor's Component in the set and ADVICE-9 says that
+the advice differs from release 3. Import the same file again and
+nothing is written. The signing key of the worked pack is the corpus
+fixture key, whose seed is public: the example shows the mechanism and
+says nothing about a vendor.
+
 ---
 
 # Part IV — Ledger, risks, gate, changelog
@@ -1450,6 +1730,8 @@ lines, `validate_core.ps1` **2,963**. Against the 30,905 lines of the
 toolchain counted at gate 4 that is ≈14× and ≈10×. Risk, Check, the
 I-Regexp engine, scales and the kernel pin more than doubled both files;
 the ≈30× of 1.0.0 is history. Each validator is still one file.
+*(2.0.0-rc.3)* Advice packs add eleven rules and no type or primitive;
+the files grew again and were not re-counted for this candidate.
 
 ## IV.2 Risk register (delta)
 
@@ -1559,50 +1841,57 @@ ships: the bundles for CIS, CR26, C5, C3A and CyFun are not redistributed
    vectors and the repaired ISM taxonomy lifts the round-trip to
    **5,886/5,886** — re-measured, ALL GREEN in both validators.)*
 
-## IV.5b The 2.0.0 gate — state at rc.2 (2026-11-12)
+## IV.5b The 2.0.0 gate — state at rc.3 (2026-11-12)
 
 The 1.0.0 gate asked for converters, an executable kernel, a lifecycle
-corpus and two implementations. The same four questions, asked of Risk
-and of Check:
+corpus and two implementations. The same four questions, asked of Risk,
+of Check and of advice packs:
 
 1. **Executable kernel + conformance.** ✓ Schema 2.0.0 (eleven types);
-   **447 vectors, 16 families** — the twelve of 1.0.0 (lifecycle 36 → 38
+   **537 vectors, 17 families** — the twelve of 1.0.0 (lifecycle 36 → 38
    with the tenth and the eleventh disjointness case) plus `risk` 73,
-   `kernel` 9 (the manifest pin, D3.6), `scale` 18 (pinned scale
-   definitions, D3.7) and `check` 188 (42 regex · 63 verdict · 7
-   aggregate · 12 share · 20 object · 44 bundle; 156 at the proposal, 27
-   from the decisions of 2026-11-12, 5 from the comparison with the
-   published RFC 9485). Every review correction is pinned
-   by a vector that fails on the validator as first proposed; for the 32,
-   five deliberate breaks of the reference each turn a vector red.
-2. **First implementation.** ✓ `validate_core.py`: 447 / 447, the five
-   shipped bundles (3,715 objects, both digests each), and the example
-   folder (24 objects, two Checks, two runs, the evidence store) — ALL
-   GREEN on 2026-11-12.
-3. **Second implementation.** ◐ `validate_core.ps1` ran on Windows
-   PowerShell 5.1 on 2026-11-11: 415 / 415 in sixteen families with Check
-   as then proposed (`check`: 156), the five bundles and the example
-   folder, every count equal to the Python reference's. The twelfth
-   comparator, the per-resource counts and the surrogate rule (32 vectors)
-   were ported on
-   2026-11-12 **without a runtime and have not been executed** (backlog
-   #60). **This blocks the tag.** Both implementations have one author:
-   their independence is language and runtime. A third, the JavaScript
-   port in `jascon-app/`, passes all sixteen families including the 188.
+   `kernel` 25 (the manifest pin, D3.6: 11; the shapes of the typed date
+   fields and of `product-version`: 14), `scale` 18, `check` 188 (42
+   regex · 63 verdict · 7 aggregate · 12 share · 20 object · 44 bundle)
+   and `advice` 74 (9 shape · 15 pack · 21 graph · 11 kept manifest · 8
+   publisher · 10 import). Every review correction is pinned by a vector
+   that fails on the validator as first proposed; 28 deliberate defects
+   in the advice rules and 5 in the check rules each turn a vector red.
+2. **First implementation.** ✓ `validate_core.py`: 537 / 537, the five
+   shipped bundles (3,715 objects, both digests each), the worked advice
+   pack and the example folder — ALL GREEN on 2026-11-12.
+3. **Second implementation.** ✓ `validate_core.ps1` ran on Windows
+   PowerShell 5.1 on 2026-11-12 on this candidate: 537 / 537 in
+   seventeen families (`kernel: 25`, `advice: 74`), the five bundles,
+   the worked pack and the example folder, every count equal to the
+   Python reference's, ALL GREEN in 64 s (backlog #63, closed). The
+   machine was a hosted Windows runner of GitHub Actions, commit
+   `5a75454b`; the run is public (`https://github.com/christoph-puppe/JASCON/actions/runs/43204019670`).
+   Since that commit the workflow `.github/workflows/validators.yml`
+   runs both validators and the app's port on every change, so this item
+   is a standing measurement and no longer a run somebody has to
+   remember. Earlier the same day the twin had run on a second Windows
+   machine on rc.2 with the advice rules (518 / 518; backlog #60). Both
+   implementations have one author: their independence is language and
+   runtime. A third,
+   the JavaScript port in `jascon-app/`, passes the same vectors in the
+   same workflow; what it leaves to the reference is in its readme.
 4. **Corpus.** ◐ Risk: one, IFA, two Risk objects — enough to exercise
    the record's sourced half and to measure what the source lacks; not
    enough to exercise `rating`, `acceptance`, the later states, or
    `risk-coverage` at scale (D23). The second corpus is named, not
    delivered: a BSI 200-3 risk analysis, or BSI's `Risikomanagement`
-   catalogue, or a real POA&M. Check: none converted. Two check corpora
-   were counted for fit (D24); the worked example ran against a stub; no
-   runner exists.
+   catalogue, or a real POA&M. Check: none converted; two check corpora
+   were counted for fit (D24), the worked example ran against a stub, no
+   runner exists. Advice: one worked pack, written for this purpose; no
+   converter from component definitions, no census of public ones (D25).
 
 Not re-run for this candidate: the OSCAL export suite (its inputs among
 the shipped bundles are byte-identical to 1.0.0; the NIST release schema
-it validates against is not in the repository). Neither Risk nor Check
-has a place in a 1.x *catalog* export; a POA&M-side and an
-assessment-results export belong to the pending lifecycle-export work.
+it validates against is not in the repository). Risk, Check and advice
+have no place in a 1.x *catalog* export; a POA&M-side, an
+assessment-results and a component-definition export belong to the
+pending lifecycle-export work.
 
 ## IV.6 Amendment history (compact)
 
@@ -1636,34 +1925,40 @@ history. The compact line:
 | rc.1 review | 2026-11-10 | External review: nine findings reproduced and fixed — justification needs an assessed treatment decision, `tailoring-refs`, RISK-13/14, typed Tailoring selection edges, withdrawn Tailorings/Requirements, checked dates; the Mapping Model date corrected; `PRIOR-ART.md` | CP-RISK-1 §13 · "Amendments — the rc.1 review" |
 | CP-CHECK-1 | 2026-11-11 | The Check proposal: schema, reference validator, 156 vectors, a worked example with an evidence store, a census of two open check corpora; the PowerShell twin ported and run (415 / 415, #56) | `drafts/CP-CHECK-1.md` |
 | Check accepted | 2026-11-12 | The grammar compared with the published RFC 9485 (surrogate code points refused, #61 closed). Six author decisions: a consumer-side clause for D22 (#48 closed); run rows stay kernel; `requirement-ref` resolves if present; Check goes live with 2.0.0; no new quantifier, but every resource is evaluated and the failing share reported; `not-equals` as the twelfth comparator. 156 → 188 vectors; the reader reads the type (#57 closed) | CP-CHECK-1 §13 · "Amendments — CP-CHECK-1" |
-| **2.0.0-rc.2** | 2026-11-12 | This text: D24 new; D4, D14, D15, D22 amended in place; Risk's exception paragraph replaced by the clause; gate state in IV.5b | this row |
+| **2.0.0-rc.2** | 2026-11-12 | D24 new; D4, D14, D15, D22 amended in place; Risk's exception paragraph replaced by the clause | "Amendments — CP-CHECK-1" |
+| CP-ADVICE-1 | 2026-11-12 | The advice-pack proposal: manifest header, `statement-ids`, the `capability-ref` grammar, ADVICE-1 to ADVICE-11, 71 vectors, a worked pack, the PowerShell twin run on Windows (518 vectors, which also closed #60). ADVICE-7 found one defect in the converted IFA bundle | `drafts/CP-ADVICE-1.md` §13 |
+| Advice accepted · the decisions before the tag | 2026-11-12 | Twelve author decisions. Advice: bundle only; Components only; `statement-ids` kept against D22; `product-version` added; ADVICE-3 and ADVICE-7 kept; a `describes` relation for third parties; one release per set. Before the tag: `Deviation.opened` and the `due` of an action typed (#47a, #52: the superset property ends for free-text dates); history is left as it is (#50); a Tailoring names no Component (#51); Unicode categories follow the host (#59) | CP-ADVICE-1 §14 · "Amendments — CP-ADVICE-1 and the decisions before the tag" |
+| **2.0.0-rc.3** | 2026-11-12 | This text: D25 new; D3, D5, D6, D8, D13, D15, D22, D24 amended in place; gate state in IV.5b | this row |
 
 ## IV.7 Release artifacts (what this candidate ships with)
 
-In the repository at the rc.2 commit. "Green" below means the Python
+In the repository at the rc.3 commit. "Green" below means the Python
 reference validator; the PowerShell twin's state is IV.5b item 3.
 
 - **Kernel schema** `jascon-2.0.0.schema.json` — closed
   shapes, shape-disjoint type inference, 11 types + Deviation + manifest
-  + the evidence record;
+  (with the pack header) + the evidence record;
   the `text` primitive on every human-readable field. A superset of the
-  1.0.0 schema.
+  1.0.0 schema except in two fields, which it types (D8).
 - **Eight stdlib facet descriptors**: the seven of 1.0.0 (incl. the
   normative DSSE envelope profile), unchanged and pinned VERBATIM wherever
   bundled, and `collector@1` *(2.0.0-rc.2)*, which carries collector code
   on a Check and declares `modifies-semantics: []`.
   `risk-analysis@1` is parked, with one measured payload (Appendix D).
-- **Conformance corpus**: **447 vectors, 16 families** (jcs 8 ·
+- **Conformance corpus**: **537 vectors, 17 families** (jcs 8 ·
   modality 21 · parameter 19 · tailoring 19 · attestation 5 · facet 7 ·
   reference 13 · lifecycle 38 · tier 9 · dsse 5 · composition 7 ·
-  conditional 8 · risk 73 · kernel 9 · scale 18 · check 188). In
-  `risk-vectors.json`, `expected-rule` is the portable assertion; in
-  `check-vectors.json`, the outcome, the named CHECK rules and, where
-  given, the per-resource counts.
+  conditional 8 · risk 73 · kernel 25 · scale 18 · check 188 · advice
+  74). In `risk-vectors.json`, `expected-rule` is the portable assertion;
+  in `check-vectors.json` and `advice-vectors.json`, the outcome and the
+  named rules.
+- **A worked advice pack** under `jascon/example-packs/`, and the example
+  folder after importing it.
 - **Two reference validators**: `validate_core.py` (Python, jsonschema
   only) — green; `validate_core.ps1` (PowerShell 5.1, zero dependencies)
-  — green on 2026-11-11 with 415 vectors; the twelfth comparator and the
-  per-resource counts ported and **not executed** (IV.5b item 3).
+  — green on 2026-11-12 on all 537 vectors of this candidate, on Windows
+  PowerShell 5.1 (IV.5b item 3). A workflow runs both, and the app's
+  port, on every change (`.github/workflows/validators.yml`).
 - **Bidirectional export**: `export_oscal.py` — as at 1.0.0 (OSCAL 1.2.2
   out, generic re-import, 5,886/5,886 round-trip measured on the ten
   catalog bundles then present); not re-run.
@@ -1684,14 +1979,53 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
   ch01–ch15 and appendices D–G beside them.
 - **The Decision Rationale Register** —
   `drafts/jascon-decision-rationale-register.md` — and the two
-  change proposals with their records, `drafts/CP-RISK-1.md` and
+  change proposals with their records, `drafts/CP-RISK-1.md`,
   `drafts/CP-CHECK-1.md` (with its census under
-  `drafts/cp-check-1-census/`).
-- **The reader** (`one-page-apps/jascon-reader.html`, v1.8.0) —
+  `drafts/cp-check-1-census/`) and `drafts/CP-ADVICE-1.md` (with the
+  scripts that write its vectors and its worked example under
+  `drafts/cp-advice-1/`).
+- **The reader** (`one-page-apps/jascon-reader.html`, v1.9.0) —
   recognises Risk and Check; it shows recorded verdicts and recomputes
-  none. **The app** (`jascon-app/`, build 0.9.2) writes Checks, drafts
-  them with a model on request and recomputes every recorded verdict; it
-  runs no collector.
+  none. It shows a pack's header, the pack manifests a set keeps and a
+  Component's `product-version`, and checks a kept manifest against its
+  name; it runs no ADVICE rule and checks no signature. **The app**
+  (`jascon-app/`, build 0.9.3) writes Checks, drafts them with a model
+  on request and recomputes every recorded verdict; it runs no
+  collector. It ports ADVICE-1 to ADVICE-11 and passes the 74 advice
+  vectors and the 14 kernel shape vectors (115 tests). It imports a pack
+  from a folder, a ZIP or a URL after a preview, prints the receipt,
+  shows what another release changes and which edges it leaves without
+  a target, and writes an adoption as `<component-id>#<capability-id>`.
+  A publisher is shown as claimed, as attested and not verified, or as
+  proven (D25). Driven in a browser: import, a second import, another
+  release, a refused pack, the three publisher states, adoption, and
+  two exports through the reference validator. Not driven: drag and
+  drop of a pack, and the German texts of the new views on screen.
+- **The pack builder** (`one-page-apps/jascon-pack-builder.html`,
+  v1.2.0) — the vendor's side of D25: one offline HTML file that writes
+  a pack from a form and judges it with the app's kernel code, inlined
+  and held equal to the app's by `one-page-apps/tools/sync-inlined.mjs`
+  in CI. It signs a release with Ed25519 in the browser or prepares the
+  bytes for an external signer, and refuses changed content under the
+  version of an opened release and a changed Component under its old
+  version. Measured by four browser tests: the worked pack, typed in,
+  comes out with its Component byte for byte and its manifest equal but
+  for the provenance line, and the reference reports its signature
+  VERIFIED; signed by `openssl` from the prepared bytes, the same. Since
+  v1.1.0 it imports an OSCAL component definition: one recommendation
+  per implemented requirement, `statements` to clauses, `set-parameters`
+  to suggested values, control ids through the loaded catalogue, the
+  rule of the NIST SP 800-53 conversion or a prefix the vendor gives,
+  and a report of what it could not place and what a pack cannot carry.
+  Measured on a test component definition: with the SP 800-53 catalogue
+  loaded, every clause and suggested value passes ADVICE-5 and ADVICE-6,
+  values set for a whole control implementation land where the catalogue
+  declares them, and Rev 4 parameter ids take the catalogue's names.
+  Run over NIST's example component definitions
+  (`drafts/cp-advice-1-census/`): 10 of 10 implemented requirements
+  resolved without a catalogue, every clause and value carried, Rev 4
+  sources and a control implemented twice named. Seven browser tests;
+  sixteen deliberate defects in the builder each turn one of them red.
 - **License**: Apache-2.0 for the original work (`LICENSE`, `NOTICE`);
   the shipped bundles under their publishers' terms.
 
@@ -1710,36 +2044,39 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
    kernel-shape changes ride major versions under D3.5 governance, and
    the anticipated-convergence path stays closed (D22 rev 3).
 
-## IV.9 From 2.0.0-rc.2 to 2.0.0
+## IV.9 From 2.0.0-rc.3 to 2.0.0
 
 1. **The version** — ✓ decided: 2.0.0 (author, 2026-11-10); it carries
-   Risk and Check (author, 2026-11-12).
+   Risk, Check and advice packs (author, 2026-11-12).
 2. **The Risk rules toward imported data** — ✓ decided: kept strict (D23).
 3. **Licence** — ✓ Apache-2.0; corpus terms reviewed (§2).
-4. **The second implementation** — ◐ ran green on 2026-11-11 (415
-   vectors). ☐ Run `validate_core.ps1` again on Windows PowerShell 5.1
-   with the changes of 2026-11-12; expect `check: 188 pass, 0 fail`, 447
-   in all, and ALL GREEN (backlog #60). **Blocks the tag.**
+4. **The second implementation** — ✓ ran green on 2026-11-11 (415
+   vectors), on 2026-11-12 on rc.2 with the advice rules (518 vectors;
+   backlog #60, closed) and on 2026-11-12 on this candidate (537
+   vectors, Windows PowerShell 5.1 on a hosted runner; backlog #63,
+   closed). It now runs on every change.
 5. **Decided** — ✓ a kernel-version pin in the manifest (#44, D3.6); ✓
    D22 has a consumer-side clause (#48); ✓ the six open points of
-   CP-CHECK-1; ✓ every machine identifier carries `jascon` (register,
-   "Amendments — 2026-11-11"). **Still to decide before the tag** — ☐
-   whether to tighten `Finding.actions[].due`, which would end the
-   superset property (#47a); ☐ whether the removed bundles are purged
-   from history (#50); ☐ an edge from a Tailoring to the Component it is
-   a Statement of Applicability for (#51); ☐ `Deviation.opened` is still
-   a free string (#52); ☐ whether `\p{..}` follows the host's Unicode
-   database or a pinned table (#59).
+   CP-CHECK-1; ✓ the eight of CP-ADVICE-1; ✓ `Deviation.opened` and the
+   `due` of a Finding's action are typed, and the superset property
+   yields to that (#47a, #52; D8); ✓ the removed bundles stay in the
+   history (#50): merging stopped their publication, old commits and the
+   `v1.0.0` tag keep them, and every commit id cited in the register
+   stays valid; ✓ a Tailoring names no Component (#51; D13); ✓ Unicode
+   categories follow the host (#59; D24); ✓ every machine identifier
+   carries `jascon` (register, "Amendments — 2026-11-11"). **Nothing is
+   left to decide before the tag.**
 6. **Work, not decisions** — ✓ the implemented I-Regexp grammar was
-   compared with the published text of RFC 9485 on 2026-11-12: equal
-   except that the RFC keeps surrogate code points out of `NormalChar`
-   and `CCchar`; the engines now refuse them (#61, closed); ☐ value
-   arrival for the other corpora and the re-wording of "converted
-   losslessly" that follows from it (#41); ☐ a real attestation in the
-   example bundle (#46); ☐ `Assessment.method` payloads held to their
-   pinned schema (#55); ☐ a second Risk corpus (IV.5b item 4).
+   compared with the published text of RFC 9485 on 2026-11-12 (#61,
+   closed); ☐ value arrival for the other corpora and the re-wording of
+   "converted losslessly" that follows from it (#41); ☐ a real
+   attestation in the example bundle (#46); ☐ `Assessment.method`
+   payloads held to their pinned schema (#55); ☐ a second Risk corpus
+   (IV.5b item 4).
 7. **Not part of this candidate, named so that nobody reads it as more
    than it is** — a runner that executes collectors and writes evidence;
-   a declared request format for `http-api` collectors in `collector@1`;
-   a census of checks against cloud APIs.
-8. **Tag `v2.0.0`** — on the author's go, after item 4.
+   a declared request format for `http-api` collectors in `collector@1`
+   (#62); a census of checks against cloud APIs; a census of OSCAL
+   component definitions vendors published (NIST's own examples are
+   counted, `drafts/cp-advice-1-census/`).
+8. **Tag `v2.0.0`** — on the author's go. Nothing in this list blocks it.

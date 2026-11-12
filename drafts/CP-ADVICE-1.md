@@ -3,11 +3,13 @@
 **Change proposal · JASCON kernel 2.0.0-rc.1 → 2.0.0 · 2026-11-12**
 **Process:** Chapter 15.4 (evidence in, corpus first, implementations follow). Every rule carries a machine id, a rationale and a failure message that prints on failure.
 **Scope:** content manifest (one optional header), kernel schema (one optional field on a capability, one string grammar), reference validator, conformance corpus, one worked pack, a converter, the app. Handbook, specification, SKILL.md, reader and PowerShell twin: §10, after the author's review.
-**Status (2026-11-12): PROPOSED, on branch `claude/cp-advice-1`, NOT released.** Sections 1 to 12 are the proposal as drafted, before any code: nothing was run for them, and every count in them is read from files in the repository, with the place named. On the same day the kernel side was built: schema, reference validator, 71 vectors, a worked pack and the PowerShell twin are in the repository and green in both implementations. **§13 says what exists, what does not, and what contact with the repository changed.** Where §13 and an earlier section differ, §13 is the state.
+**Status (2026-11-12, later the same day): ACCEPTED by the author for kernel 2.0.0, in release candidate 2.0.0-rc.3; 2.0.0 is not tagged.** The eight open points of §11 are decided (§14), and the specification describes advice packs as decision D25. Where §14 and an earlier section differ, §14 is the state.
+
+**Status before that (2026-11-12): proposed, on branch `claude/cp-advice-1`.** Sections 1 to 12 are the proposal as drafted, before any code: nothing was run for them, and every count in them is read from files in the repository, with the place named. On the same day the kernel side was built: schema, reference validator, 71 vectors, a worked pack and the PowerShell twin are in the repository and green in both implementations. **§13 says what exists, what does not, and what contact with the repository changed.** Where §13 and an earlier section differ, §13 is the state.
 
 **Author statements this proposal implements (2026-11-12):** (1) OSCAL component definitions are worth having for one thing: a vendor supplies recommendations and has no way to change the user's controls or assessments; (2) there is a file the vendor publishes; (3) the user selects it for import; (4) after the import it is clear which vendor, which version and which component; (5) the same file is not imported twice.
 
-**Proposed by the drafter, not decided:** the eight points of §11. The author's instruction of 2026-11-12 was to start implementing; none of the eight was changed, so items 1 to 6 are built as proposed and remain the author's to overturn.
+**Proposed by the drafter, decided since (§14):** the eight points of §11. The author's instruction of 2026-11-12 was to start implementing; none of the eight was changed, so items 1 to 6 are built as proposed and remain the author's to overturn.
 
 ---
 
@@ -312,3 +314,39 @@ What the merge makes of earlier sections:
 - **Line references into the specification** (§2.3, §8) name `jascon-specification-2.0.0-rc.1.md`, which is now `-rc.2.md`; the lines moved.
 - **`SKILL_jascon.zip`.** `main` rebuilt the archive with Check in it. Compared entry by entry, the archive of that commit is exactly the 103 files git tracks under `jascon/`, as blobs. With the rule known, the archive is rebuilt from the merged tree by `drafts/cp-advice-1/build_skill_zip.py`, which makes that comparison first and writes nothing if it fails. The archive now carries the advice pack, its vectors and the handbook text, marked proposed as in the tree.
 - **The website** no longer calls Check proposed. The advice pack is the one entry under "Proposed" on the model page, and its limit on the evidence page is worded against the consumer-side clause.
+
+## 14. The author's decisions (2026-11-12) — accepted for 2.0.0
+
+### 14.1 The eight points of §11
+
+| # | Point | Decision | Effect on the proposal |
+|---|---|---|---|
+| 1 | The file form | **"Bundle only"** | As proposed |
+| 2 | What a pack may hold | **"Components only"** | As proposed |
+| 3 | `statement-ids` | **"Keep it, I overrule D22 because I see great use for it"** | In 2.0.0. Recorded in D22 as entered on the author's word; the census of §2.3 is still not run |
+| 4 | Product versions | **"A product-version field"**, shape **"One opaque string"** | New: `Component.product-version`. The proposal had recommended one Component per product line and no field |
+| 5 | ADVICE-3 | **"Refuse them in a pack"** | As proposed |
+| 6 | ADVICE-7 | **"Yes, a rule"** | As proposed |
+| 7 | Third parties | **"A named relation, defined now"** | New: stdlib relation type `https://ns.jascon.net/stdlib/relation/describes` |
+| 8 | Earlier releases | **"One release per set"** | As proposed |
+
+### 14.2 What changed in the repository
+
+- **`product-version`.** Schema: an optional non-empty string on a Component. KERNEL-1: a Component that carries it needs kernel 2.0.0. No rule reads the value. The worked pack's Component says `"product-version": "7"`; its digest, both manifests, the kept manifest and the Attestation were regenerated.
+- **`describes`.** No schema change: `relations[].type` is the extensible code surface (handbook C.8). Two vectors show a third party's pack about a vendor's product, valid under its own origin and refused (ADVICE-2) under the vendor's.
+- **Vectors.** 71 → **74** (pack 12 → 15).
+- **Specification.** D25 is the decision; D3 item 8 the pack header and the kept manifest; D5 the two fields; D6 the grammar of `capability-ref`; D15 the rules in the matrix; D22 the override; III.7 the worked example.
+- **Measured:** `validate_core.py` 537 of 537 vectors in 17 families, ALL GREEN; 28 of 28 mutations caught. `validate_core.ps1` on Windows PowerShell 5.1, a hosted runner of GitHub Actions: the same 537 vectors and the same bundle counts, ALL GREEN, 64 s (backlog #63, closed; https://github.com/christoph-puppe/JASCON/actions/runs/43204019670).
+
+### 14.3 What §13.3 said does not exist, now
+
+- **The app and the reader**: built on 2026-11-12 (app build 0.9.3, reader v1.9.0). The app ports ADVICE-1 to ADVICE-11 and passes all 74 vectors; it imports a pack from a folder, a ZIP or a URL after a preview and prints the receipt of §4.7; another release shows the capabilities added, removed and changed and the edges of the set that lose their target; adoption on the Implement page writes the full form of §4.4; `packs/sha256/` survives load and export, which §13.3 had found it would not. The literal `"declared"` of §12 is no longer written; sets written by earlier builds keep it until they are saved again, and Validate names each such edge. The reader shows the pack header, kept manifests and `product-version` and runs no ADVICE rule.
+- **Claimed, attested, proven.** §4.2 has two words. Building the app showed that two are one too few for a screen: an Attestation that binds the manifest, with no trusted key to check its signature, is neither a bare claim nor proof, and anyone can write one. The validators keep the two result values and print such a case as ATTESTED, NOT VERIFIED; the app shows three states (specification D25).
+- **A defect in the reference, found by the app's port:** for a bundle folder that keeps a pack, `validate_core.py` and the twin read no attestation beside the manifest and reported the kept pack's publisher as claimed; the example folder, read file by file, was reported correctly. Both read it now.
+- **Choices the app made that the proposal does not settle**, for the author to confirm or overturn: (1) a pack loaded from a URL finds its attestation, and a set its kept manifests, only where the server lists the folder, because a manifest names neither; the website writes such listings for its example folders; (2) the import also refuses a pack whose files do not match its own manifest, a pack without the kernel pin, and a pinned facet schema the set holds at another version; (3) a suggested value is offered for adoption only if it lies in the declared space and on the tight side of what a Tailoring in force binds, otherwise it is shown with the reason and not written; (4) adoption amends an existing edge of the same component, requirement and clauses, and writes a new edge otherwise.
+- **A tool for vendors** (§9 named only the converter): `one-page-apps/jascon-pack-builder.html`, v1.0.0 (v1.2.0 with the import and census below), writes a pack from a form, checks it with the app's own kernel code (inlined, held equal by `one-page-apps/tools/sync-inlined.mjs` in CI), signs it with Ed25519 in the browser or prepares the bytes for `openssl` or a signing service, and refuses changed content under an old release version. The worked pack typed into it comes out with its Component byte for byte; four browser tests in `one-page-apps/tests/` run in CI, and six deliberate defects in the builder each turn one of them red. Not built: key generation (openssl does it) and editing of facets.
+- **The converter of §9**: written into the pack builder, not as `convert_cdef.py`. Version 1.1.0 imports an OSCAL component definition (JSON): one Component per component, one recommendation per implemented requirement, `statements` to `statement-ids` (spelled as `convert_ifa.py` spells them), `set-parameters` to `parameter-bindings`, and a report of what it could not place and of what a pack has no place for (descriptions of components and control implementations, props, links, roles, OSCAL capabilities). Control ids resolve through the loaded catalogue, by the rule of the NIST SP 800-53 conversion, or by a prefix the vendor gives. Measured on a test component definition with the SP 800-53 catalogue loaded: every clause and value passes ADVICE-5 and ADVICE-6. Two browser tests; five deliberate defects in the importer each turn one red. The component-definition *export* is still not written.
+- **A census of NIST's example component definitions** (`drafts/cp-advice-1-census/`, 2026-11-12): the four JSON files of `usnistgov/oscal-content` (two distinct definitions; the `-min` files are minified twins) through the builder's import, with and without the SP 800-53 catalogue. It found five things v1.1.0 got wrong or kept quiet about (sources given as back-matter references, Rev 4 and FedRAMP sources, OSCAL insert markup in texts, Rev 4 parameter ids, a control implemented twice); v1.2.0 fixes or names each, and resolves 10 of 10 implemented requirements without a catalogue. It does not change §2.3 or D22: the clause-level evidence is still the one MongoDB example with 2 clause entries and 2 values, and no file carries a product version.
+- **The census of §2.3**, of component definitions vendors published: still owed. The findings of §12 on `convert_ifa.py` are filed as backlog #64.
+- **Specification text**: written (rc.3).
+- **`SKILL_jascon.zip`**: rebuilt from the tree of this state.

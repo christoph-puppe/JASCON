@@ -502,7 +502,7 @@ The tenth (`check-verdict`, B.1.10) arrived in the same cycle: counts
 (CP-CHECK-1 §2), 188 vectors, and the Python reference with the app's
 port green on them. The PowerShell twin passed the 156 vectors of the
 proposal on 2026-11-11; what came after (the twelfth comparator, the
-per-resource counts, the surrogate rule) is ported there and has not run
-(backlog #60). With it comes a
+per-resource counts, the surrogate rule) ran there on 2026-11-12: 188 of
+188. With it comes a
 second closed set, the twelve comparators, under the same leash: a
 thirteenth is a set version with counts, never a facet.

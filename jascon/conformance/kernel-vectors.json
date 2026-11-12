@@ -1,5 +1,5 @@
 {
- "description": "Kernel-version pin (backlog #44, kernel 2.0.0). A content manifest MAY carry `kernel-version`; absent means 1.0.0 content. KERNEL-1: a bundle whose content needs a later kernel (a Risk object, Finding.risk-refs) MUST pin that kernel. KERNEL-2: a tool that meets a pin it does not implement fails closed and names the pinned version and its own. Each vector: a manifest (objects list left empty - the vector's objects are given beside it), the objects, and the expected number of failures.",
+ "description": "Kernel-version pin (backlog #44, kernel 2.0.0). A content manifest MAY carry `kernel-version`; absent means 1.0.0 content. KERNEL-1: a bundle whose content needs a later kernel (a Risk object, Finding.risk-refs) MUST pin that kernel. KERNEL-2: a tool that meets a pin it does not implement fails closed and names the pinned version and its own. Each vector: a manifest (objects list left empty - the vector's objects are given beside it), the objects, and the expected number of failures. shape-vectors (2.0.0-rc.3): fields that 2.0.0 typed or added on released shapes - Finding.actions[].due and Deviation.opened, free text in 1.0.0 (DATE-2, DATE-1: an invalid vector names its rule in expected-rules), and Component.product-version, an opaque string; `kind` is the type the document must match exactly, or none.",
  "vectors": [
   {
    "name": "unpinned-1.0.0-content",
@@ -326,6 +326,376 @@
     "manifest schema"
    ],
    "rule": "kernel-version is MAJOR.MINOR.PATCH - schema-checked"
+  },
+  {
+   "name": "product-version-unpinned",
+   "manifest": {
+    "manifest-version": "1",
+    "objects": []
+   },
+   "objects": [
+    {
+     "id": "https://org.example/component/db",
+     "version": "1",
+     "lifecycle": "active",
+     "kind": "software",
+     "product-version": "7.2"
+    }
+   ],
+   "expected-fails": 1,
+   "expected-frags": [
+    "product-version",
+    "2.0.0"
+   ]
+  },
+  {
+   "name": "product-version-pinned",
+   "manifest": {
+    "manifest-version": "1",
+    "kernel-version": "2.0.0",
+    "objects": []
+   },
+   "objects": [
+    {
+     "id": "https://org.example/component/db",
+     "version": "1",
+     "lifecycle": "active",
+     "kind": "software",
+     "product-version": "7.2"
+    }
+   ],
+   "expected-fails": 0
+  }
+ ],
+ "shape-vectors": [
+  {
+   "name": "action-due-is-a-date",
+   "kind": "finding",
+   "expected": "valid",
+   "document": {
+    "id": "https://org.example/finding/f",
+    "version": "1",
+    "lifecycle": "active",
+    "assessment-ref": "https://org.example/assessment/a",
+    "requirement-ref": "https://ns.auth.gov/fw/req/1",
+    "state": "open",
+    "actions": [
+     {
+      "description": {
+       "en": "Rotate the key."
+      },
+      "due": {
+       "type": "date",
+       "value": "2026-12-01"
+      },
+      "status": "open"
+     }
+    ]
+   }
+  },
+  {
+   "name": "action-due-is-a-calendar-period",
+   "kind": "finding",
+   "expected": "valid",
+   "document": {
+    "id": "https://org.example/finding/f",
+    "version": "1",
+    "lifecycle": "active",
+    "assessment-ref": "https://org.example/assessment/a",
+    "requirement-ref": "https://ns.auth.gov/fw/req/1",
+    "state": "open",
+    "actions": [
+     {
+      "description": {
+       "en": "Rotate the key."
+      },
+      "due": {
+       "type": "calendar-period",
+       "num": 20,
+       "unit": "bizdays",
+       "calendar-ref": "https://org.example/calendar/work"
+      },
+      "status": "open"
+     }
+    ]
+   }
+  },
+  {
+   "name": "action-due-is-an-elapsed-duration",
+   "kind": "finding",
+   "expected": "valid",
+   "document": {
+    "id": "https://org.example/finding/f",
+    "version": "1",
+    "lifecycle": "active",
+    "assessment-ref": "https://org.example/assessment/a",
+    "requirement-ref": "https://ns.auth.gov/fw/req/1",
+    "state": "open",
+    "actions": [
+     {
+      "description": {
+       "en": "Rotate the key."
+      },
+      "due": {
+       "type": "elapsed-duration",
+       "num": 72,
+       "unit": "hours"
+      },
+      "status": "open"
+     }
+    ]
+   }
+  },
+  {
+   "name": "action-without-due-stays-valid",
+   "kind": "finding",
+   "expected": "valid",
+   "document": {
+    "id": "https://org.example/finding/f",
+    "version": "1",
+    "lifecycle": "active",
+    "assessment-ref": "https://org.example/assessment/a",
+    "requirement-ref": "https://ns.auth.gov/fw/req/1",
+    "state": "open",
+    "actions": [
+     {
+      "description": {
+       "en": "Rotate the key."
+      },
+      "status": "open"
+     }
+    ]
+   }
+  },
+  {
+   "name": "action-due-as-an-untyped-object",
+   "kind": "finding",
+   "expected": "invalid",
+   "expected-rules": [
+    "DATE-2"
+   ],
+   "note": "1.0.0 accepted any object here",
+   "document": {
+    "id": "https://org.example/finding/f",
+    "version": "1",
+    "lifecycle": "active",
+    "assessment-ref": "https://org.example/assessment/a",
+    "requirement-ref": "https://ns.auth.gov/fw/req/1",
+    "state": "open",
+    "actions": [
+     {
+      "description": {
+       "en": "Rotate the key."
+      },
+      "due": {
+       "when": "end of Q3"
+      },
+      "status": "open"
+     }
+    ]
+   }
+  },
+  {
+   "name": "action-due-date-that-is-no-date",
+   "kind": "finding",
+   "expected": "invalid",
+   "expected-rules": [
+    "DATE-2"
+   ],
+   "document": {
+    "id": "https://org.example/finding/f",
+    "version": "1",
+    "lifecycle": "active",
+    "assessment-ref": "https://org.example/assessment/a",
+    "requirement-ref": "https://ns.auth.gov/fw/req/1",
+    "state": "open",
+    "actions": [
+     {
+      "description": {
+       "en": "Rotate the key."
+      },
+      "due": {
+       "type": "date",
+       "value": "Q3 2026"
+      },
+      "status": "open"
+     }
+    ]
+   }
+  },
+  {
+   "name": "action-due-calendar-period-without-its-calendar",
+   "kind": "finding",
+   "expected": "invalid",
+   "expected-rules": [
+    "DATE-2"
+   ],
+   "note": "a business day means nothing without a calendar (D9)",
+   "document": {
+    "id": "https://org.example/finding/f",
+    "version": "1",
+    "lifecycle": "active",
+    "assessment-ref": "https://org.example/assessment/a",
+    "requirement-ref": "https://ns.auth.gov/fw/req/1",
+    "state": "open",
+    "actions": [
+     {
+      "description": {
+       "en": "Rotate the key."
+      },
+      "due": {
+       "type": "calendar-period",
+       "num": 20,
+       "unit": "bizdays"
+      },
+      "status": "open"
+     }
+    ]
+   }
+  },
+  {
+   "name": "deviation-opened-is-a-date",
+   "kind": "finding",
+   "expected": "valid",
+   "document": {
+    "id": "https://org.example/finding/f",
+    "version": "1",
+    "lifecycle": "active",
+    "assessment-ref": "https://org.example/assessment/a",
+    "requirement-ref": "https://ns.auth.gov/fw/req/1",
+    "state": "open",
+    "deviations": [
+     {
+      "type": "operational-requirement",
+      "state": "pending",
+      "rationale": {
+       "en": "Rotation needs a maintenance window."
+      },
+      "approver-ref": "https://org.example/party/ciso",
+      "opened": "2026-07-16"
+     }
+    ]
+   }
+  },
+  {
+   "name": "deviation-opened-as-free-text",
+   "kind": "finding",
+   "expected": "invalid",
+   "expected-rules": [
+    "DATE-1"
+   ],
+   "note": "1.0.0 accepted any non-empty string here",
+   "document": {
+    "id": "https://org.example/finding/f",
+    "version": "1",
+    "lifecycle": "active",
+    "assessment-ref": "https://org.example/assessment/a",
+    "requirement-ref": "https://ns.auth.gov/fw/req/1",
+    "state": "open",
+    "deviations": [
+     {
+      "type": "operational-requirement",
+      "state": "pending",
+      "rationale": {
+       "en": "Rotation needs a maintenance window."
+      },
+      "approver-ref": "https://org.example/party/ciso",
+      "opened": "July 2026"
+     }
+    ]
+   }
+  },
+  {
+   "name": "deviation-opened-with-a-time",
+   "kind": "finding",
+   "expected": "invalid",
+   "expected-rules": [
+    "DATE-1"
+   ],
+   "note": "a date, as Risk.acceptance.date and provenance.date are",
+   "document": {
+    "id": "https://org.example/finding/f",
+    "version": "1",
+    "lifecycle": "active",
+    "assessment-ref": "https://org.example/assessment/a",
+    "requirement-ref": "https://ns.auth.gov/fw/req/1",
+    "state": "open",
+    "deviations": [
+     {
+      "type": "operational-requirement",
+      "state": "pending",
+      "rationale": {
+       "en": "Rotation needs a maintenance window."
+      },
+      "approver-ref": "https://org.example/party/ciso",
+      "opened": "2026-07-16T10:00:00Z"
+     }
+    ]
+   }
+  },
+  {
+   "name": "deviation-opened-impossible-month",
+   "kind": "finding",
+   "expected": "invalid",
+   "expected-rules": [
+    "DATE-1"
+   ],
+   "document": {
+    "id": "https://org.example/finding/f",
+    "version": "1",
+    "lifecycle": "active",
+    "assessment-ref": "https://org.example/assessment/a",
+    "requirement-ref": "https://ns.auth.gov/fw/req/1",
+    "state": "open",
+    "deviations": [
+     {
+      "type": "operational-requirement",
+      "state": "pending",
+      "rationale": {
+       "en": "Rotation needs a maintenance window."
+      },
+      "approver-ref": "https://org.example/party/ciso",
+      "opened": "2026-13-01"
+     }
+    ]
+   }
+  },
+  {
+   "name": "component-with-product-version",
+   "kind": "component",
+   "expected": "valid",
+   "document": {
+    "id": "https://vendor.example/component/server-7",
+    "version": "3",
+    "lifecycle": "active",
+    "kind": "software",
+    "product-version": "7.2"
+   }
+  },
+  {
+   "name": "component-product-version-empty",
+   "kind": "component",
+   "expected": "invalid",
+   "document": {
+    "id": "https://vendor.example/component/server-7",
+    "version": "3",
+    "lifecycle": "active",
+    "kind": "software",
+    "product-version": ""
+   }
+  },
+  {
+   "name": "component-product-version-is-a-string-not-a-number",
+   "kind": "component",
+   "expected": "invalid",
+   "note": "opaque text: nothing is ordered or parsed",
+   "document": {
+    "id": "https://vendor.example/component/server-7",
+    "version": "3",
+    "lifecycle": "active",
+    "kind": "software",
+    "product-version": 7.2
+   }
   }
  ]
 }
