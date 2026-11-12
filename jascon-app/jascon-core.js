@@ -36,7 +36,7 @@
 
 /* ==JSC-PURE-START== */
 
-const JSC_BUILD = "0.9.2";
+const JSC_BUILD = "0.9.3";
 const JSC_TOOL = "JASCON-App " + JSC_BUILD;
 /* The kernel this app writes, and the kernels it reads (KERNEL-2: a tool
    stops at a pin it does not implement and names both). */
@@ -341,15 +341,27 @@ function jscObjectPath(type, id, taken) {
 /* An attestation is listed only if the manifest it came with listed it;
    otherwise it travels beside the manifest (D3.1). */
 const jscBesideManifest = r => r.type === "attestation" && !r.entry;
+/* An object the manifest of the set does not know yet: the app wrote it
+   ("authored"), or it came with an advice pack ("pack") and is the vendor's
+   file byte for byte. Either way the export lists it. */
+const jscAddedHere = r => r.origin === "authored" || r.origin === "pack";
 function jscNeedsKernel2(g) {
   if (g.scales.size) return true;
   for (const r of g.objects.values()) {
     if (r.type === "risk" || r.type === "check") return true;
     if (r.type === "finding" && ((Array.isArray(r.obj["risk-refs"]) && r.obj["risk-refs"].length) || r.obj["check-ref"])) return true;
     if (r.type === "assessment" && (r.obj["check-results"] || r.obj["tailoring-ref"])) return true;
+    /* CP-ADVICE-1 and the author decision of 2026-11-12: clauses on a capability, the product version */
+    if (r.type === "component" && ("product-version" in r.obj ||
+      (Array.isArray(r.obj.capabilities) && r.obj.capabilities.some(c => c && Array.isArray(c["statement-ids"]) && c["statement-ids"].length)))) return true;
   }
   return false;
 }
+/* The pack manifests a set keeps (CP-ADVICE-1 §4.5): the files directly
+   under packs/sha256/ beside the manifest. -> [[file name, text]] */
+const JSC_PACK_STORE_DIR = "packs/sha256/";
+const jscKeptPacks = g => g.aux.filter(a => a.path.startsWith(JSC_PACK_STORE_DIR) && !a.path.slice(JSC_PACK_STORE_DIR.length).includes("/"))
+  .map(a => [a.path.slice(JSC_PACK_STORE_DIR.length), a.text]);
 async function jscBuildBundle(g, provenance) {
   const problems = [];
   const objects = [];
@@ -394,9 +406,13 @@ async function jscBuildBundle(g, provenance) {
    Recomputes both digests of every object and the digest of every pin
    against the manifest the bundle came with.
    -> { objects: Map(id -> {pkg, sem} | null when the manifest does not list it),
-        pins: [{path, ok}], counts: {ok, bad, unlisted, missing} } */
+        pins: [{path, ok}], packs: [{path, ok}], counts: {ok, bad, unlisted, missing} }
+   `packs` are the pack manifests the set keeps under packs/sha256/: each is
+   named by the SHA-256 of its bytes (ADVICE-8), so it is checked against its
+   own name and needs no manifest. */
 async function jscVerify(g, onProgress) {
-  const out = { objects: new Map(), pins: [], counts: { ok: 0, bad: 0, unlisted: 0, missing: 0 } };
+  const out = { objects: new Map(), pins: [], packs: [], counts: { ok: 0, bad: 0, unlisted: 0, missing: 0 } };
+  for (const [name, text] of jscKeptPacks(g)) out.packs.push({ path: JSC_PACK_STORE_DIR + name, ok: await jscSha256(text) === name });
   if (!g.manifest) return out;
   let done = 0;
   for (const id of g.order) {
@@ -467,13 +483,19 @@ const TEXT_FILE = /\.(json|md|txt|csv|html|xml|ya?ml|dsse)$/i;   // .dsse: the e
 /* A content-addressed evidence blob beside the manifest (CP-CHECK-1,
    CHECK-15): its name is the SHA-256 of its bytes and it has no extension. */
 const JSC_EVIDENCE_PATH = /(^|\/)evidence\/sha256\/[0-9a-f]{64}$/;
+/* A pack manifest a set keeps beside its own (CP-ADVICE-1 §4.5, ADVICE-8):
+   the vendor's content manifest, unchanged, named by the SHA-256 of its
+   bytes, without an extension. Every file directly under packs/sha256/ is
+   kept, whatever it is called, so that the check can say which one does not
+   match its name. */
+const JSC_PACK_PATH = /(^|\/)packs\/sha256\/[^/]+$/;
 /* Of everything handed over, the files a set keeps: those with a text
    extension, any file an attestation names as its envelope, whatever it is
-   called, and the blobs of the evidence store. A set holds text only; an
-   evidence blob that is not UTF-8 text cannot be verified here and the check
-   says so. entries: [{path, text}] */
+   called, the blobs of the evidence store and the kept pack manifests. A set
+   holds text only; an evidence blob that is not UTF-8 text cannot be
+   verified here and the check says so. entries: [{path, text}] */
 function jscKeepFiles(entries) {
-  const out = entries.filter(e => TEXT_FILE.test(e.path) || JSC_EVIDENCE_PATH.test(e.path));
+  const out = entries.filter(e => TEXT_FILE.test(e.path) || JSC_EVIDENCE_PATH.test(e.path) || JSC_PACK_PATH.test(e.path));
   const named = new Set(out.flatMap(e => [...e.text.matchAll(/"envelope-ref"\s*:\s*"([^"\\]+)"/g)].map(m => m[1])));
   for (const e of entries) {
     if (!TEXT_FILE.test(e.path) && [...named].some(n => e.path === n || e.path.endsWith("/" + n))) out.push(e);
@@ -519,7 +541,8 @@ if (typeof module !== "undefined" && module.exports) {
   module.exports = { JSC_CFG, N, JSC_BUILD, JSC_TOOL, JSC_KERNEL, JSC_KERNEL_READS, JSC_TYPES, JSC_MANIFEST, JscKernelError,
     jscEsc, jscSlug, jscText, jscInferType, jscIsScale, jscCanonical, jscSha256, jscSha256Js, jscUtf8,
     jscPackageDigest, jscSemanticDigest, jscSerialize, jscNormalizePaths, jscClassifyFiles, jscGraphFrom, jscKeepFiles,
-    jscTypeCounts, jscObjectPath, jscNeedsKernel2, jscBesideManifest, jscBuildBundle, jscVerify, jscCrc32, jscZip, jscUnzip, jscDecode };
+    jscTypeCounts, jscObjectPath, jscNeedsKernel2, jscBesideManifest, jscAddedHere, jscKeptPacks, jscBuildBundle, jscVerify,
+    jscCrc32, jscZip, jscUnzip, jscDecode };
 }
 
 /* ====================================================================
@@ -750,6 +773,15 @@ const jscSet = {
     else await jscStore.remove(this.name, [path]);
     await this.load();
   },
+  /* Applies the plan of jscAdviceImport (jascon-rules.js) to the active set:
+     what an earlier release of the pack brought leaves, the vendor's files
+     join the set as they arrived, and the vendor's manifest is kept under
+     packs/sha256/. Nothing else of the set is touched. */
+  async applyPack(plan) {
+    if (plan.deletes.length) await jscStore.remove(this.name, plan.deletes);
+    await jscStore.putMany(this.name, plan.writes);
+    await this.load();
+  },
   /* -> {name, bytes, verbatim, problems} : the set as a bundle ZIP */
   async exportZip() {
     const built = await jscBuildBundle(this.graph);
@@ -769,7 +801,7 @@ async function jscReadFiles(fileList) {
   for (const f of [...fileList]) {
     const path = f.jscPath || f.webkitRelativePath || f.name;
     if (/\.zip$/i.test(f.name)) all.push(...await jscUnzip(new Uint8Array(await f.arrayBuffer())));
-    else if (TEXT_FILE.test(f.name) || f.size <= 262144) all.push({ path, text: jscDecode(new Uint8Array(await f.arrayBuffer())) });
+    else if (TEXT_FILE.test(f.name) || JSC_PACK_PATH.test(path) || f.size <= 262144) all.push({ path, text: jscDecode(new Uint8Array(await f.arrayBuffer())) });
   }
   return jscKeepFiles(all);
 }
@@ -817,12 +849,56 @@ async function jscFetchBundle(url) {
       try { files.push(await get(p)); } catch (e) { failed.push(e.message); }
     }
   }));
+  /* What lies beside the manifest and is named by nothing it lists: the pack
+     manifests a set keeps (packs/sha256/<hex>, CP-ADVICE-1 §4.5) and the
+     attestation of a pack's publisher. A URL names files, not folders, so
+     these can only be found where the server lists the folder, as python's
+     http.server does. A request for a listing that is not there shows as an
+     error in the browser's console, so the server is asked only where there
+     is a reason: the manifest carries a pack header, or it lists Components
+     under an origin from which it lists nothing else, the mark of a set that
+     holds a pack (a pack brings Components and nothing else, all under its
+     publisher's origin: ADVICE-1, ADVICE-2). Without a listing nothing is
+     found; a folder or a ZIP carries these files. */
+  const listing = async rel => {
+    try {
+      const res = await fetch(new URL(rel, base));
+      if (!res.ok || !/html/i.test(res.headers.get("content-type") || "")) return null;
+      return [...(await res.text()).matchAll(/href="([^"?#]+)"/g)].map(m => { try { return decodeURIComponent(m[1]); } catch (e) { return ""; } });
+    } catch (e) { return null; }
+  };
+  const origin = id => String(id).split("/").slice(0, 3).join("/");
+  const typed = files.slice(1).map(f => { try { const o = JSON.parse(f.text); return [jscInferType(o), o && o.id]; } catch (e) { return [null, null]; } }).filter(([t, id]) => t && typeof id === "string");
+  const others = new Set(typed.filter(([t]) => t !== "component").map(([, id]) => origin(id)));
+  let top = null;
+  if (manifest.pack || typed.some(([t, id]) => t === "component" && !others.has(origin(id)))) {
+    top = await listing("");
+    if (top) {
+      const kept = [];
+      if (top.includes("packs/")) {
+        for (const name of ((await listing(JSC_PACK_STORE_DIR)) || []).filter(n => /^[0-9a-f]{64}$/.test(n)).slice(0, 64)) {
+          try { files.push(await get(JSC_PACK_STORE_DIR + name)); kept.push("sha256:" + name); } catch (e) { failed.push(e.message); }
+        }
+      }
+      /* beside a pack's manifest: its attestations; beside a set's: those that bind a pack manifest it keeps */
+      if (manifest.pack || kept.length) {
+        const beside = top.filter(n => /^[^/]+\.json$/.test(n) && n !== JSC_MANIFEST && !paths.includes(n)).slice(0, 64);
+        for (const name of beside) {
+          try {
+            const f = await get(name), o = JSON.parse(f.text);
+            if (jscInferType(o) === "attestation" && (manifest.pack || kept.includes(o["content-manifest-digest"]))) files.push(f);
+          } catch (e) { /* not a file this app reads */ }
+        }
+      }
+    }
+  }
   /* the envelope of a listed attestation lies beside the manifest and is named only by the attestation */
   for (const f of [...files]) {
     if (!f.text.includes('"envelope-ref"')) continue;
     let ref = null;
     try { ref = JSON.parse(f.text)["envelope-ref"]; } catch (e) { /* not JSON: nothing to follow */ }
     if (typeof ref !== "string" || !ref || /^[a-z]+:|^\/|\.\./i.test(ref) || files.some(x => x.path === ref)) continue;
+    if (top && !top.includes(ref)) continue;   // the folder's listing is known and does not hold it
     try { files.push(await get(ref)); } catch (e) { /* a missing envelope is reported by the check, not by the load */ }
   }
   /* The evidence store lies beside the manifest too, named only by the check
@@ -841,6 +917,18 @@ async function jscFetchBundle(url) {
   await follow(records.flatMap(f => { try { return (JSON.parse(f.text).outputs || []).map(o => "evidence/sha256/" + String(o.digest).replace(/^sha256:/, "")); } catch (e) { return []; } }));
   return { files, failed };
 }
+/* The trusted keys typed on the Validate page for the active set: a map of
+   signer URI to Ed25519 public key in hex, or null when there is none or it
+   cannot be read. Public keys are no secret; the Validate page keeps them
+   in its draft, and they never come from a bundle. */
+function jscTrustedKeys() {
+  try {
+    const text = String((JSON.parse(localStorage.getItem(PREFIX + "draft:validate:" + jscStore.activeSet())) || {}).keys || "").trim();
+    const map = text ? JSON.parse(text) : null;
+    if (!map || typeof map !== "object" || Array.isArray(map)) return null;
+    return Object.values(map).every(k => typeof k === "string" && /^[0-9a-fA-F]{64}$/.test(k)) ? map : null;
+  } catch (e) { return null; }
+}
 function jscDownload(name, data, mime) {
   const a = document.createElement("a");
   a.href = URL.createObjectURL(data instanceof Blob ? data : new Blob([data], { type: mime || "application/octet-stream" }));
@@ -848,7 +936,7 @@ function jscDownload(name, data, mime) {
   document.body.appendChild(a); a.click(); a.remove();
   setTimeout(() => URL.revokeObjectURL(a.href), 4000);
 }
-Object.assign(window, { jscReadFiles, jscReadDrop, jscFetchBundle, jscDownload });
+Object.assign(window, { jscReadFiles, jscReadDrop, jscFetchBundle, jscDownload, jscTrustedKeys });
 
 /* ---------- log console ----------
    Lines written before the page shell exists are kept and shown once it

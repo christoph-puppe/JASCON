@@ -1,6 +1,6 @@
 /* Runs the conformance vectors of jascon/conformance/ against
-   jascon-rules.js, family by family. All sixteen families are ported. A
-   family that is listed in PORTED must pass completely; NOT_PORTED names the families the app does not implement (today: advice)
+   jascon-rules.js, family by family. All seventeen families are ported. A
+   family that is listed in PORTED must pass completely; NOT_PORTED names the families the app does not implement (today: none)
    and stays as the place to name a family that is not ported yet. The last
    test fails when a vector file appears that is in neither list, so a new
    family cannot go unnoticed. */
@@ -20,8 +20,8 @@ const rules = require("../jascon-rules.js");
 const vectors = name => JSON.parse(fs.readFileSync(path.join(CONF, name + "-vectors.json"), "utf8"));
 const asObjs = list => new Map(list.map(o => [o.id, { type: core.jscInferType(o), obj: o }]));
 
-const PORTED = ["attestation", "check", "composition", "conditional", "dsse", "facet", "jcs", "kernel", "lifecycle", "modality", "parameter", "reference", "risk", "scale", "tailoring", "tier"];
-const NOT_PORTED = ["advice"];   // CP-ADVICE-1 (proposed): the app does not read advice packs
+const PORTED = ["advice", "attestation", "check", "composition", "conditional", "dsse", "facet", "jcs", "kernel", "lifecycle", "modality", "parameter", "reference", "risk", "scale", "tailoring", "tier"];
+const NOT_PORTED = [];   // every family of jascon/conformance/ is ported today
 /* Where a vector carries expected-frag (singular), it asserts the wording of
    one Python schema library's diagnostic; the vector files call that
    advisory and expected-rule the portable assertion, and so do these tests.
@@ -176,7 +176,7 @@ test("reference: the number of closure errors of every vector", () => {
 
 test("kernel: the pin rules of every vector", () => {
   const v = vectors("kernel").vectors;
-  assert.equal(v.length, 9);
+  assert.equal(v.length, 11);   // was 9: two more since a capability's statement-ids and a Component's product-version need 2.0.0
   for (const c of v) {
     const objs = rules.jscTypedObjects(c.objects);
     const errs = rules.jscShapeErrors("contentManifest", c.manifest).length ? ["manifest schema violation"] : rules.jscKernelPinErrors(c.manifest, objs);
@@ -184,6 +184,25 @@ test("kernel: the pin rules of every vector", () => {
     assert.equal(objs.size, c.objects.length, c.name + ": every object is typed");
     for (const frag of c["expected-frags"] || []) assert.ok(errs.some(e => e.includes(frag)), `${c.name}: ${frag}`);
   }
+});
+
+/* The closed shapes of fields that 2.0.0 typed or added (Finding.actions[].due,
+   Deviation.opened, Component.product-version). The schema says valid or
+   invalid; an invalid one names its rule, DATE-1 or DATE-2, as the Python
+   runner (run_kernel) asserts it. */
+test("kernel: the shape vectors of the typed fields, with DATE-1 and DATE-2 named on refusal", () => {
+  const v = vectors("kernel")["shape-vectors"];
+  assert.equal(v.length, 14);
+  for (const c of v) {
+    const matched = rules.jscMatchTypes(c.document);
+    assert.equal(matched.length === 1 && matched[0] === c.kind ? "valid" : "invalid", c.expected, c.name);
+    assert.deepEqual([...new Set(rules.jscDateRuleViolations(c.document).map(x => x[0]))].sort(), [...(c["expected-rules"] || [])].sort(), c.name);
+    /* the message of the object check carries the rule and its why */
+    for (const rule of c["expected-rules"] || []) assert.ok(rules.jscObjectErrors(c.document).errors.join(" ").includes(`[${rule}]`), `${c.name}: ${rule} in the message`);
+  }
+  const msg = rules.jscObjectErrors({ id: "https://ex.org/f", version: "1", lifecycle: "active", "assessment-ref": "https://ex.org/a", "requirement-ref": "https://ex.org/r", state: "open",
+    deviations: [{ id: "d1", type: "risk-adjustment", rationale: { en: "x" }, state: "pending", "approver-ref": "https://ex.org/p", opened: "next week" }] }).errors[0];
+  assert.match(msg, /\[DATE-1\] deviations\[0\]\.opened is 'next week' - a Deviation's `opened` is a date, YYYY-MM-DD/);
 });
 
 test("risk: object vectors (shape, with the rule named on refusal)", () => {
@@ -491,6 +510,95 @@ test("check: the CHECK rules every bundle vector names, the evidence chain inclu
     assert.deepEqual([...new Set(res.errors.map(([r]) => r))].sort(), [...new Set(c["expected-rules"])].sort(),
       `${c.name}: ${res.errors.map(([, m]) => m).join(" | ")}`);
     for (const frag of c["expected-notes"] || []) assert.ok(res.notes.some(n => n.includes(frag)), `${c.name}: a note with "${frag}"`);
+  }
+});
+
+/* CP-ADVICE-1. The harness is the reference's (run_advice): a vector's
+   manifest lists its objects by id, and version and digests are computed
+   from the objects as published (_advice_fill); a kept manifest is the
+   canonical form of its filled manifest, named by its SHA-256 unless the
+   vector gives a name or raw text (_advice_kept). Every vector names the
+   exact set of rules a conformant tool reports. */
+const adviceFill = async (manifest, published) => {
+  const byId = new Map((published || []).map(o => [o.id, o])), m = JSON.parse(JSON.stringify(manifest));
+  for (const e of m.objects || []) {
+    const src = byId.get(e.id);
+    if (e["semantic-digest"] === "COMPUTE" && src) e["semantic-digest"] = await core.jscSemanticDigest(src);
+    if (!("version" in e)) e.version = src ? src.version : "1";
+    if (!("package-digest" in e)) e["package-digest"] = "sha256:" + "0".repeat(64);
+    if (!("path" in e)) e.path = "objects/" + e.id.split("/").pop() + ".json";
+  }
+  return m;
+};
+const adviceKept = async list => {
+  const out = [];
+  for (const k of list || []) {
+    const raw = "raw" in k ? k.raw : core.jscCanonical(await adviceFill(k.manifest, k.published));
+    out.push([k.name || await core.jscSha256(raw), raw]);
+  }
+  return out;
+};
+const adviceTyped = (c, list) => {
+  const objs = rules.jscTypedObjects(list);
+  assert.equal(objs.size, list.length, `${c.name}: every object is typed`);
+  return objs;
+};
+const adviceJudge = (c, errs, notes = []) => {
+  assert.deepEqual([...new Set(errs.map(([r]) => r))].sort(), [...new Set(c["expected-rules"] || [])].sort(), `${c.name}: ${errs.map(([, m]) => m).join(" | ")}`);
+  for (const frag of c["expected-frags"] || []) assert.ok(errs.some(([, m]) => m.includes(frag)), `${c.name}: a message with "${frag}"; got ${errs.map(([, m]) => m).join(" | ")}`);
+  for (const frag of c["expected-notes"] || []) assert.ok(notes.some(n => n.includes(frag)), `${c.name}: a note with "${frag}"`);
+};
+test("advice: the family has its 74 vectors", () => {
+  const v = vectors("advice");
+  assert.deepEqual(["shape", "pack", "graph", "kept", "publisher", "import"].map(k => v[k + "-vectors"].length), [9, 15, 21, 11, 8, 10]);
+});
+test("advice: closed shapes - the pack header of a manifest and a capability's statement-ids", () => {
+  for (const c of vectors("advice")["shape-vectors"]) {
+    const matched = rules.jscMatchTypes(c.document);
+    const got = c.kind === "manifest" ? !rules.jscShapeErrors("contentManifest", c.document).length : matched.length === 1 && matched[0] === c.kind;
+    assert.equal(got ? "valid" : "invalid", c.expected, c.name);
+  }
+});
+test("advice: what a pack may hold (ADVICE-1 to ADVICE-3) and that it pins its kernel", async () => {
+  for (const c of vectors("advice")["pack-vectors"]) {
+    const objs = adviceTyped(c, c.objects), m = await adviceFill(c.manifest, c.objects);
+    const errs = rules.jscShapeErrors("contentManifest", m).length ? [["SCHEMA", "manifest schema violation"]]
+      : [...rules.jscPackErrors(m, objs, new Map(Object.entries(c.declared || {}))), ...rules.jscKernelPinErrors(m, objs).map(e => ["KERNEL-1", e])];
+    adviceJudge(c, errs);
+  }
+});
+test("advice: capabilities and the edges that cite them (ADVICE-4 to ADVICE-7)", () => {
+  for (const c of vectors("advice")["graph-vectors"]) {
+    const objs = adviceTyped(c, c.objects), caps = rules.jscCapabilityErrors(objs);
+    adviceJudge(c, [...caps.errors, ...rules.jscCapabilityRefErrors(objs)], caps.notes);
+  }
+});
+test("advice: the pack manifests a set keeps (ADVICE-8 to ADVICE-10)", async () => {
+  for (const c of vectors("advice")["kept-vectors"]) {
+    const objs = adviceTyped(c, c.objects);
+    const res = await rules.jscKeptPackErrors(await adviceKept(c.kept), c.manifest || null, objs);
+    adviceJudge(c, res.errors);
+    if ("expected-packs" in c) assert.equal(res.packs.length, c["expected-packs"], c.name + ": well-formed kept manifests");
+  }
+});
+test("advice: the publisher is claimed or proven, in structural and in verification mode", async () => {
+  for (const c of vectors("advice")["publisher-vectors"]) {
+    const m = await adviceFill(c.manifest, c.published), mdig = "sha256:" + await core.jscSha256(core.jscCanonical(m));
+    const subjects = JSON.parse(JSON.stringify(c.objects));
+    for (const o of subjects) if (o["content-manifest-digest"] === "COMPUTE") o["content-manifest-digest"] = mdig;
+    const objs = adviceTyped(c, subjects);
+    const verify = c["trusted-keys"] !== undefined ? { envelopes: new Map(Object.entries(c.envelopes || {})), trusted: c["trusted-keys"], notes: [] } : null;
+    assert.equal(await rules.jscPackPublisher(m.pack, mdig, objs, verify), c.expected, c.name);
+  }
+});
+test("advice: import (ADVICE-11) - the plan, the same file again, another release, what is refused", async () => {
+  for (const c of vectors("advice")["import-vectors"]) {
+    const aObjs = adviceTyped(c, c.a.objects), bObjs = adviceTyped(c, c.b.objects);
+    const kept = await rules.jscKeptPackErrors(await adviceKept(c.a.kept), null, new Map());
+    const bm = await adviceFill(c.b.manifest, c.b.objects), bdig = await core.jscSha256(core.jscCanonical(bm));
+    const R = rules.jscComposeAdvice(aObjs, kept.packs, bm, bdig, bObjs);
+    for (const k of ["result", "added", "replaced", "removed", "dangling", "unchanged"]) if (k in c.expected) assert.deepEqual(R[k], c.expected[k], `${c.name}: ${k}`);
+    adviceJudge(c, R.errors);
   }
 });
 

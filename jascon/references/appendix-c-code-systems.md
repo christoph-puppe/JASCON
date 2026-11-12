@@ -148,6 +148,12 @@ Stdlib base codes: `related · required · uses-term · reference ·
 schema`. Semantics that compute: removal of a `required`
 edge in a Tailoring ⇒ Deviation (B.3); `uses-term` resolves into
 terminology payloads; the rest are typed navigation.
+**`describes`** *(2.0.0, CP-ADVICE-1; URI-typed:
+`https://ns.jascon.net/stdlib/relation/describes`)* — on a Component,
+pointing at another Component: "this object is about that product". It
+is how a third party's advice names the vendor's product it was written
+for (Chapter 9.7). Carried and displayed, never computed. Observed: 0
+instances in the corpora; two conformance vectors.
 **Removed (v0.6 cycle, backlog #20):** `supersedes` — D2 split that
 conflated concept into `canonical-alias` (identity) and `replaces`
 (lineage) after P7-B4 proved "supersedes = equivalence" unsafe; a
@@ -214,7 +220,7 @@ accept · share · contingency · none`); `transfer` and `share` both land
 on `share`, and `contingency` and `none` have no code here. Zero corpus
 instances of either so far; if one appears it stays in the facet and is
 counted, never coerced.
-**Pack kinds** *(2.0.0, CP-ADVICE-1, proposed)*: `advice` — a closed set
+**Pack kinds** *(2.0.0, CP-ADVICE-1)*: `advice` — a closed set
 of one. The kind is what the pack rules fire on: an `advice` pack holds
 Components only (ADVICE-1). A pack of Checks would be a second code with
 rules of its own, added by the process of C.11, never by reading

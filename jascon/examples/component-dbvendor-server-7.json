@@ -7,6 +7,7 @@
   "en": "Example DB Server, release line 7"
  },
  "kind": "software",
+ "product-version": "7",
  "capabilities": [
   {
    "id": "cap-tls",

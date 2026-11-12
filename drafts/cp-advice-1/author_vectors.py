@@ -99,6 +99,17 @@ shape = [
      "document": clone(VC, capabilities=[clone(CAP_TLS, statement_ids=[])])},
 ]
 
+# ---------- a third party's advice about a vendor's product (author decision 2026-11-12) ----------
+ADV = "https://advisor.example"
+DESCRIBES = "https://ns.jascon.net/stdlib/relation/describes"
+TPC = {"id": ADV + "/component/server-7-hardening", "version": "1", "lifecycle": "active", "kind": "software",
+       "title": {"en": "Hardening advice for Example Server 7"}, "product-version": "7",
+       "relations": [{"type": DESCRIBES, "ref": VC["id"]}],
+       "capabilities": [clone(CAP_TLS, description={"en": "Disable every protocol below TLS 1.3, and test client drivers first."})]}
+TPPACK = {"kind": "advice", "id": ADV + "/pack/server-7-hardening", "version": "1",
+          "title": {"en": "Independent hardening advice for Example Server 7"},
+          "publisher": {"ref": ADV + "/party/advisor", "name": {"en": "Advisor GmbH"}}}
+
 # ---------- what a pack may hold (ADVICE-1..3, KERNEL-1) ----------
 FACET = VEN + "/facet/sizing"
 ASSESS = next(k for k, v in sorted(ns["STDLIB_DECL"].items()) if v)
@@ -129,6 +140,14 @@ pack = [
      "objects": [clone(VC, facets={FACET + "@1": {"cores": 8}})], "expected-rules": []},
     {"name": "private-payload-rides", "manifest": manifest([clone(VC, facets={"private:vendor/sku@1": {"sku": "S7"}})]),
      "objects": [clone(VC, facets={"private:vendor/sku@1": {"sku": "S7"}})], "expected-rules": []},
+    {"name": "pack-names-the-product-version", "note": "product-version is opaque text on a Component; nothing is ordered or parsed (author decision 2026-11-12)",
+     "manifest": manifest([clone(VC, product_version="7.2")]), "objects": [clone(VC, product_version="7.2")], "expected-rules": []},
+    {"name": "third-party-pack-describes-the-vendors-product",
+     "note": "a consultancy publishes its own Component under its own origin (ADVICE-2) and says which product it is about with the stdlib relation `describes`; the vendor's Component need not be in the pack",
+     "manifest": manifest([TPC], TPPACK), "objects": [TPC], "expected-rules": []},
+    {"name": "third-party-pack-under-the-vendors-id", "note": "what `describes` is for: advice about a product is never published under the product's own id",
+     "manifest": manifest([VC], TPPACK), "objects": [VC],
+     "expected-rules": ["ADVICE-2"], "expected-frags": ["is not under the pack's origin"]},
     {"name": "pack-without-a-kernel-pin", "manifest": manifest([VC], kernel=None), "objects": [VC],
      "expected-rules": ["KERNEL-1"], "expected-frags": ["pack header"]},
     {"name": "pack-pinned-to-1.0.0", "manifest": manifest([VC], kernel="1.0.0"), "objects": [VC],

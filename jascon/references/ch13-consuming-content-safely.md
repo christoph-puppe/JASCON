@@ -145,7 +145,7 @@ composition puzzle; and a *major*-line conflict (A pins `@1`, B pins
 vocabularies — consume separately, or wait for the publisher's
 migration path.
 
-**The one lawful replacement** *(CP-ADVICE-1, proposed).* Composition
+**The one lawful replacement** *(2.0.0, CP-ADVICE-1).* Composition
 as described so far never replaces an object: one id at two versions
 is a report. An advice pack is the exception with a boundary. Importing
 one adds the ids your set does not hold; importing *another release of

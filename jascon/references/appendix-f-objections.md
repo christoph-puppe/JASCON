@@ -299,8 +299,8 @@ D21; `supplements` registered as a stdlib relationship extension code,
 D20/C.5 — backlog #5 closed.)*
 
 **Q24. You abolished document models. Is an "advice pack" not a
-component-definition document by another name?** *(CP-ADVICE-1,
-proposed.)*
+component-definition document by another name?** *(2.0.0,
+CP-ADVICE-1.)*
 No new model was added: an advice pack is a bundle, and its objects
 are Components that exist with or without it. What a pack adds is a
 header in the manifest and three rules about what the bundle may
@@ -321,8 +321,10 @@ duplication Chapter 9 opened with: one description of how a
 requirement is met in a vendor artifact, one in the system's own.
 A capability is a claim; it becomes part of your compliance picture
 only when an edge in your namespace cites it. The cost is one field
-(`statement-ids` on a capability) whose evidence is thin — one
-example file — and the proposal says so and marks it separable.
+(`statement-ids` on a capability) whose evidence is thin: one
+example file. The promotion test of Chapter 15 does not admit it; the
+author kept it by decision on 2026-11-12, and the specification records
+it that way (D22) and names the census that could repair it.
 
 ---
 

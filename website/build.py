@@ -35,6 +35,7 @@ import re
 import shutil
 import subprocess
 import sys
+import urllib.parse
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(HERE)
@@ -449,6 +450,9 @@ def copy_apps(out, facts):
     os.makedirs(os.path.join(out, "reader"), exist_ok=True)
     shutil.copy2(os.path.join(REPO, "one-page-apps", "jascon-reader.html"),
                  os.path.join(out, "reader", "index.html"))
+    os.makedirs(os.path.join(out, "pack-builder"), exist_ok=True)
+    shutil.copy2(os.path.join(REPO, "one-page-apps", "jascon-pack-builder.html"),
+                 os.path.join(out, "pack-builder", "index.html"))
     for b in facts["bundles"]:
         corpus_src = os.path.join(REPO, "converted_examples", b["corpus"])
         corpus_dst = os.path.join(out, "converted_examples", b["corpus"])
@@ -467,6 +471,35 @@ def copy_apps(out, facts):
             copy_tree(os.path.join(REPO, "jascon", part), os.path.join(out, "jascon", part))
     for name in ("LICENSE", "NOTICE"):
         shutil.copy2(os.path.join(REPO, name), os.path.join(out, name + ".txt"))
+    # Folder listings for what a manifest does not name. A pack manifest a set
+    # keeps (packs/sha256/<hex>) and the attestation of a pack's publisher lie
+    # beside the manifest; the app and the reader find them by asking the server
+    # for the folder, which a static host answers only with an index.html.
+    listed = [os.path.join(out, "jascon", "examples"),
+              os.path.join(out, "jascon", "examples", "packs", "sha256")]
+    packs_dir = os.path.join(out, "jascon", "example-packs")
+    if os.path.isdir(packs_dir):
+        listed += [os.path.join(packs_dir, d) for d in sorted(os.listdir(packs_dir))
+                   if os.path.isdir(os.path.join(packs_dir, d))]
+    for folder in listed:
+        if os.path.isdir(folder):
+            write_listing(folder)
+
+
+def write_listing(folder):
+    """A plain index.html that lists a folder, as a web server with directory
+    listings would: one link per entry, folders with a trailing slash."""
+    entries = []
+    for name in sorted(os.listdir(folder)):
+        if name == "index.html":
+            continue
+        entries.append(name + "/" if os.path.isdir(os.path.join(folder, name)) else name)
+    links = "\n".join(f'<li><a href="{html.escape(urllib.parse.quote(n))}">{html.escape(n)}</a></li>'
+                      for n in entries)
+    with open(os.path.join(folder, "index.html"), "w", encoding="utf-8", newline="\n") as f:
+        f.write("<!doctype html>\n<html lang=\"en\"><head><meta charset=\"utf-8\">"
+                "<meta name=\"robots\" content=\"noindex\"><title>Files</title></head>\n"
+                f"<body><h1>Files in this folder</h1>\n<ul>\n{links}\n</ul>\n</body></html>\n")
 
 
 def write_meta(out, pages, site):
