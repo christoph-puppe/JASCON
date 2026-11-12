@@ -29,7 +29,7 @@ nav: evidence
         <ul class="chips">
 {{ html.family_chips }}
         </ul>
-        <p class="small">The released 1.0.0 has 157 vectors in twelve families. <code>risk</code>, <code>kernel</code> and <code>scale</code> came with 2.0.0-rc.1. The 156 <code>check</code> vectors belong to the proposed Check type.</p>
+        <p class="small">The released 1.0.0 has 157 vectors in twelve families. <code>risk</code>, <code>kernel</code> and <code>scale</code> came with 2.0.0-rc.1. The 156 <code>check</code> vectors belong to the proposed Check type, the 71 <code>advice</code> vectors to the proposed advice pack.</p>
       </div>
       <div class="stack reveal">
         <article class="card">
@@ -122,6 +122,10 @@ nav: evidence
         <span class="gate-when">11 Nov 2026</span><span class="gate-rail"><i></i></span>
         <div class="gate-body"><h3>CP-CHECK-1: Check as the eleventh type <span class="tier tier-proposed">proposed</span></h3><p>Schema, validator, 156 vectors and a worked example with an evidence store. A census of two open check corpora measured the fit: 481 of 510 rules of the CIS Ubuntu 24.04 profiles in ComplianceAsCode, and no comparison in either corpus that needs a regex outside I-Regexp.</p></div>
       </div>
+      <div class="gate prop">
+        <span class="gate-when">12 Nov 2026</span><span class="gate-rail"><i></i></span>
+        <div class="gate-body"><h3>CP-ADVICE-1: advice packs <span class="tier tier-proposed">proposed</span></h3><p>A vendor's recommendations as one published file. Schema, both validators, 71 vectors and a worked pack with a signed attestation. Run over the shipped bundles, the new rule on <code>capability-ref</code> found one edge in the converted NIST example that cited a capability its own component does not declare. The app does not read packs yet, and no converter from OSCAL component definitions exists.</p></div>
+      </div>
     </div>
   </div>
 </section>
@@ -153,6 +157,10 @@ nav: evidence
       <div class="limit">
         <h3>Check fails the promotion rule as written <span class="tier tier-proposed">proposed</span></h3>
         <p>A semantic enters the kernel when two of the three census authorities encode it. None encodes a machine-decidable check. The proposal states this and leaves the decision to the author; 29 of 510 measured rules do not fit its declarative form and stay manual.</p>
+      </div>
+      <div class="limit">
+        <h3>Advice packs rest on one example file <span class="tier tier-proposed">proposed</span></h3>
+        <p>No census authority publishes vendor advice, so the first test of the promotion rule fails here as it does for Risk and Check. The clause-level field on a capability is backed by a single fictional component definition from NIST's examples: three recommendations, two clause-level entries, two suggested parameter values. A census of public component definitions is owed before that shape closes.</p>
       </div>
       <div class="limit">
         <h3>Known defects in shipped examples <span class="tier tier-open">open, backlog 46 and 55</span></h3>

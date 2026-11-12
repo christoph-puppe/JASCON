@@ -1,11 +1,11 @@
 {
  "measured": {
-  "date": "2026-11-11",
-  "commit": "91e05e79",
+  "date": "2026-11-12",
+  "commit": "d375b8ba",
   "by": "jascon/scripts/validate_core.py"
  },
  "vectors": {
-  "total": 415,
+  "total": 486,
   "families": [
    {
     "name": "jcs",
@@ -70,6 +70,10 @@
    {
     "name": "check",
     "vectors": 156
+   },
+   {
+    "name": "advice",
+    "vectors": 71
    }
   ]
  },
@@ -126,14 +130,14 @@
   }
  ],
  "examples": {
-  "objects": 23,
+  "objects": 26,
   "types": {
    "assessment": 3,
-   "attestation": 1,
+   "attestation": 2,
    "check": 2,
-   "component": 3,
+   "component": 4,
    "finding": 2,
-   "implementation": 1,
+   "implementation": 2,
    "mapping": 1,
    "requirement": 4,
    "risk": 1,
@@ -141,8 +145,14 @@
    "tailoring": 2
   }
  },
+ "example_packs": [
+  {
+   "path": "jascon/example-packs/dbvendor-server-7-advice",
+   "objects": 1
+  }
+ ],
  "validators": {
-  "python_lines": 2185,
-  "powershell_lines": 2900
+  "python_lines": 2600,
+  "powershell_lines": 3422
  }
 }
