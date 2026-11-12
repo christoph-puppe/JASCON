@@ -132,8 +132,8 @@ memorizing: *nothing signed contains its own signature.* Attestations
 live beside the content manifest; a transport wrapper may list both,
 but it is never the signed structure.
 
-The same placement holds one more kind of file *(CP-ADVICE-1,
-proposed)*. A set that imported a vendor's advice pack keeps the
+The same placement holds one more kind of file *(2.0.0,
+CP-ADVICE-1)*. A set that imported a vendor's advice pack keeps the
 vendor's manifest **unchanged**, under `packs/sha256/<hex>`, the name
 being the SHA-256 of its bytes — beside the set's own manifest and
 never listed in it. That name is the digest the vendor's Attestation

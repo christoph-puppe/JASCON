@@ -7,7 +7,7 @@ load-bearing. Where a number appears, it is a measured one.
 
 ---
 
-**Advice pack** *(CP-ADVICE-1, proposed)* — a vendor's recommendations
+**Advice pack** *(2.0.0, CP-ADVICE-1)* — a vendor's recommendations
 as one published file: a bundle whose manifest carries a pack header
 (`kind: advice`, id, version, publisher) and whose objects are
 Components only (ADVICE-1..3). Importing one changes no existing

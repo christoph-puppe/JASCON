@@ -124,12 +124,15 @@ three fields.
 ## 10.4 Deadlines that compute
 
 Chapter 4 made the promise; findings are where it gets kept. An
-action's `due` is either a plain date, an **elapsed-duration** (the
+action's `due` is either a point in time (`date` or `datetime`, each
+written `{type, value}`), an **elapsed-duration** (the
 American six-hour incident clock — pure physics, computable anywhere),
 or a **calendar-period** like the twenty business days above — which is
 *representable* everywhere but **computable only with its calendar**.
 No `calendar-ref`, no arithmetic: a conformant tool refuses, with a
-printed reason, rather than guessing at holidays.
+printed reason, rather than guessing at holidays. Since 2.0.0 the schema
+accepts nothing else in `due` (DATE-2). 1.0.0 let any string through,
+and "end of Q3" is a deadline no machine can read.
 
 For the consumer seat, this is a one-line acceptance test worth
 running on any toolchain you are sold: two conformant tools, one

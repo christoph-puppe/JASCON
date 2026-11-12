@@ -3,11 +3,13 @@
 **Change proposal · JASCON kernel 2.0.0-rc.1 → 2.0.0 · 2026-11-12**
 **Process:** Chapter 15.4 (evidence in, corpus first, implementations follow). Every rule carries a machine id, a rationale and a failure message that prints on failure.
 **Scope:** content manifest (one optional header), kernel schema (one optional field on a capability, one string grammar), reference validator, conformance corpus, one worked pack, a converter, the app. Handbook, specification, SKILL.md, reader and PowerShell twin: §10, after the author's review.
-**Status (2026-11-12): PROPOSED, on branch `claude/cp-advice-1`, NOT released.** Sections 1 to 12 are the proposal as drafted, before any code: nothing was run for them, and every count in them is read from files in the repository, with the place named. On the same day the kernel side was built: schema, reference validator, 71 vectors, a worked pack and the PowerShell twin are in the repository and green in both implementations. **§13 says what exists, what does not, and what contact with the repository changed.** Where §13 and an earlier section differ, §13 is the state.
+**Status (2026-11-12, later the same day): ACCEPTED by the author for kernel 2.0.0, in release candidate 2.0.0-rc.3; 2.0.0 is not tagged.** The eight open points of §11 are decided (§14), and the specification describes advice packs as decision D25. Where §14 and an earlier section differ, §14 is the state.
+
+**Status before that (2026-11-12): proposed, on branch `claude/cp-advice-1`.** Sections 1 to 12 are the proposal as drafted, before any code: nothing was run for them, and every count in them is read from files in the repository, with the place named. On the same day the kernel side was built: schema, reference validator, 71 vectors, a worked pack and the PowerShell twin are in the repository and green in both implementations. **§13 says what exists, what does not, and what contact with the repository changed.** Where §13 and an earlier section differ, §13 is the state.
 
 **Author statements this proposal implements (2026-11-12):** (1) OSCAL component definitions are worth having for one thing: a vendor supplies recommendations and has no way to change the user's controls or assessments; (2) there is a file the vendor publishes; (3) the user selects it for import; (4) after the import it is clear which vendor, which version and which component; (5) the same file is not imported twice.
 
-**Proposed by the drafter, not decided:** the eight points of §11. The author's instruction of 2026-11-12 was to start implementing; none of the eight was changed, so items 1 to 6 are built as proposed and remain the author's to overturn.
+**Proposed by the drafter, decided since (§14):** the eight points of §11. The author's instruction of 2026-11-12 was to start implementing; none of the eight was changed, so items 1 to 6 are built as proposed and remain the author's to overturn.
 
 ---
 
@@ -312,3 +314,33 @@ What the merge makes of earlier sections:
 - **Line references into the specification** (§2.3, §8) name `jascon-specification-2.0.0-rc.1.md`, which is now `-rc.2.md`; the lines moved.
 - **`SKILL_jascon.zip`.** `main` rebuilt the archive with Check in it. Compared entry by entry, the archive of that commit is exactly the 103 files git tracks under `jascon/`, as blobs. With the rule known, the archive is rebuilt from the merged tree by `drafts/cp-advice-1/build_skill_zip.py`, which makes that comparison first and writes nothing if it fails. The archive now carries the advice pack, its vectors and the handbook text, marked proposed as in the tree.
 - **The website** no longer calls Check proposed. The advice pack is the one entry under "Proposed" on the model page, and its limit on the evidence page is worded against the consumer-side clause.
+
+## 14. The author's decisions (2026-11-12) — accepted for 2.0.0
+
+### 14.1 The eight points of §11
+
+| # | Point | Decision | Effect on the proposal |
+|---|---|---|---|
+| 1 | The file form | **"Bundle only"** | As proposed |
+| 2 | What a pack may hold | **"Components only"** | As proposed |
+| 3 | `statement-ids` | **"Keep it, I overrule D22 because I see great use for it"** | In 2.0.0. Recorded in D22 as entered on the author's word; the census of §2.3 is still not run |
+| 4 | Product versions | **"A product-version field"**, shape **"One opaque string"** | New: `Component.product-version`. The proposal had recommended one Component per product line and no field |
+| 5 | ADVICE-3 | **"Refuse them in a pack"** | As proposed |
+| 6 | ADVICE-7 | **"Yes, a rule"** | As proposed |
+| 7 | Third parties | **"A named relation, defined now"** | New: stdlib relation type `https://ns.jascon.net/stdlib/relation/describes` |
+| 8 | Earlier releases | **"One release per set"** | As proposed |
+
+### 14.2 What changed in the repository
+
+- **`product-version`.** Schema: an optional non-empty string on a Component. KERNEL-1: a Component that carries it needs kernel 2.0.0. No rule reads the value. The worked pack's Component says `"product-version": "7"`; its digest, both manifests, the kept manifest and the Attestation were regenerated.
+- **`describes`.** No schema change: `relations[].type` is the extensible code surface (handbook C.8). Two vectors show a third party's pack about a vendor's product, valid under its own origin and refused (ADVICE-2) under the vendor's.
+- **Vectors.** 71 → **74** (pack 12 → 15).
+- **Specification.** D25 is the decision; D3 item 8 the pack header and the kept manifest; D5 the two fields; D6 the grammar of `capability-ref`; D15 the rules in the matrix; D22 the override; III.7 the worked example.
+- **Measured:** `validate_core.py` 537 of 537 vectors in 17 families, ALL GREEN; 28 of 28 mutations caught. The PowerShell twin is ported and **not executed** with `product-version` (backlog #63); its last run is the 518 of §13.4.
+
+### 14.3 What §13.3 said does not exist, now
+
+- **The app and the reader**: §14.4.
+- **No converter, no census**: unchanged. The findings of §12 on `convert_ifa.py` are filed as backlog #64.
+- **Specification text**: written (rc.3).
+- **`SKILL_jascon.zip`**: rebuilt from the tree of this state.

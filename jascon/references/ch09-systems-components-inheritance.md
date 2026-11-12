@@ -265,7 +265,7 @@ executable gate). The kernel keeps only what liability and inheritance
 *compute* on — perimeters, edges, bases — and stays small enough that
 the chain above fits on one page.
 
-## 9.7 Advice: what a vendor may tell you, and what it may not touch *(CP-ADVICE-1, proposed)*
+## 9.7 Advice: what a vendor may tell you, and what it may not touch *(2.0.0, CP-ADVICE-1)*
 
 A vendor knows how its product is hardened. You want that knowledge next
 to your requirements — and you want to be certain that taking it in
@@ -286,7 +286,8 @@ a semantics class (ADVICE-3):
           "publisher": { "ref": "https://dbvendor.example/party/vendor" } }
 ```
 
-Shipped as one ZIP it is one file. The header sits in the manifest
+Shipped as one ZIP it is one file. A bare Component file is not a pack:
+it names no release and no publisher and cannot be signed. The header sits in the manifest
 because the manifest is what a signature binds (Chapter 11): vendor and
 release are inside the signed state with no new mechanism. The publisher
 is **claimed** by the header and the origin its ids share with it, and
@@ -312,6 +313,21 @@ catalog, which the vendor may have no right to pass on. Where the catalog
 *is* in your set, the clauses must exist (ADVICE-5) and a suggested value
 must lie in the declared space (ADVICE-6) — a suggestion the catalog
 cannot accept is the publisher's defect, found before you adopt it.
+
+**Which product, which version.** The vendor's Component may say which
+version of the product it describes:
+
+```json
+{ "id": "https://dbvendor.example/component/server-7",
+  "kind": "software", "product-version": "7" }
+```
+
+`product-version` is one opaque string. No tool parses, orders or
+compares it: "7", "7.2 LTS" and "2026-R2" are equally valid, and whether
+advice for 7 fits your 7.4 is a question for you and the vendor. The
+`version` of the Component counts the revisions of the *advice*; the two
+never meant the same thing, and before this field one of them had no
+place to stand.
 
 **Adopting is yours.** A capability is a claim. Nothing computes on it
 until an Implementation in *your* namespace cites it:
@@ -358,6 +374,21 @@ stays the same: references that were landmarks now resolve. An
 brings will meet §9.4's boundary rule if that Component declares an
 authorization. That is resolves-if-present working as designed.
 
+**A third party's advice.** A consultancy or a benchmark publisher that
+writes about someone else's product cannot use the vendor's ids:
+ADVICE-2 holds every id in a pack to the publisher's origin. It publishes
+its own Component and says which product it is about with a relation
+(C.8):
+
+```json
+"relations": [ { "type": "https://ns.jascon.net/stdlib/relation/describes",
+                 "ref": "https://dbvendor.example/component/server-7" } ]
+```
+
+Tools carry and show that edge and compute nothing from it. To adopt
+such advice, your system lists the third party's Component as a member,
+exactly as it would the vendor's.
+
 > **Don't** take a vendor's Implementation objects in place of its
 > advice. The failure this prevents is the one §9.1 opened with: two
 > descriptions of how a requirement is met, one in a vendor artifact and
@@ -365,10 +396,14 @@ authorization. That is resolves-if-present working as designed.
 > implemented than you implemented. A claim stays a claim until your own
 > edge cites it.
 
-*Evidence tier, stated: one fictional example component definition in the
-corpus (3 recommendations, 2 clause-level entries, 2 suggested
-parameter values); no census authority publishes vendor advice. The
-proposal, its counts and its open points: `drafts/CP-ADVICE-1.md`. Worked
+*Evidence tier, stated: designed for, with one fictional example
+component definition in the corpus (3 recommendations, 2 clause-level
+entries, 2 suggested parameter values); no census authority publishes
+vendor advice. `statement-ids` and `product-version` entered the kernel
+on the author's decision, against the promotion test of Chapter 15
+(specification D22), and no pack published by a vendor has been read
+yet. The proposal, its counts and the author's decisions:
+`drafts/CP-ADVICE-1.md` (§14); the specification: D25. Worked
 files: `example-packs/dbvendor-server-7-advice/` and, in the example
 bundle, the kept manifest, the vendor's Component and the edge that
 adopts `cap-key-rotation`.*

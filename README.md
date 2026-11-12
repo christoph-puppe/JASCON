@@ -14,7 +14,7 @@ contact with real catalogs before it may stay.**
 
 This repository is a working design study, not a slide deck. It contains a
 draft specification with a public decision register, an **executable kernel
-schema** with a **157-vector conformance corpus** (447 in 16 families in the 2.0.0 candidate) and *two* reference
+schema** with a **157-vector conformance corpus** (537 in 17 families in the 2.0.0 candidate) and *two* reference
 validators — Python, and a **zero-dependency PowerShell 5.1 twin that runs
 on a stock Windows box** (the weekend-validator claim, measured,
 crypto engines included) —
@@ -28,7 +28,7 @@ equality against the official NIST schema, and a zero-dependency
 **single-file reader & authoring studio** that turns the whole thing into
 something you can click.
 
-> Status: **1.0.0 released 2026-07-22; 2.0.0-rc.2 on `main`, not
+> Status: **1.0.0 released 2026-07-22; 2.0.0-rc.3 on `main`, not
 > tagged** — evidence-gated, maintained in personal capacity. Where JASCON
 > sits among OSCAL, Gemara, CycloneDX Attestations and the other formats in
 > this space: [`PRIOR-ART.md`](PRIOR-ART.md).
@@ -45,11 +45,50 @@ Stage 5 shows the Risk objects beside the Assessment, its Findings and the
 Attestation; the workbench above them runs a check against the bundle's
 requirements and mints real objects.*
 
-## Unreleased: JASCON 2.0.0 — Risk and Check, the tenth and eleventh kernel types
+## Unreleased: JASCON 2.0.0 — Risk, Check and advice packs
 
-> **State 2026-11-12 — release candidate 2.0.0-rc.2; not tagged.**
+> **State 2026-11-12 — release candidate 2.0.0-rc.3; not tagged.**
 > Everything below this section describes the released **1.0.0**. The
-> candidate adds two kernel types.
+> candidate adds two kernel types, Risk and Check, and advice packs. One
+> thing blocks the tag: the PowerShell twin has to run once more on
+> Windows with the three changes of rc.3 (backlog #63).
+>
+> **Advice packs** ([CP-ADVICE-1](drafts/CP-ADVICE-1.md), accepted by the
+> author on 2026-11-12): a vendor's recommendations as one published
+> file. A pack is a bundle of Components with a pack header in its
+> manifest; a recommendation is a capability that names a requirement,
+> its clauses, a text and suggested parameter values. Eleven rules
+> (ADVICE-1 to ADVICE-11) keep an import from changing a requirement, a
+> tailoring or an assessment, and the vendor's manifest stays in the set
+> as the import record. No new type.
+>
+> - **Measured:** 74 advice vectors (537 in all, 17 families) pass in the
+>   Python reference; 28 deliberate breaks of the reference each turn a
+>   vector red. A worked pack, signed with the public fixture key, and
+>   the example folder after importing it validate. Run over the shipped
+>   bundles, the rule on `capability-ref` found one edge of the IFA
+>   bundle that cited a capability its own component does not declare;
+>   the edge is rewritten.
+> - **Decided on 2026-11-12:** a pack is a bundle and holds Components
+>   only; `statement-ids` on a capability stays, on the author's decision
+>   against the promotion test D22; a Component may name the product
+>   version it describes (`product-version`, one opaque string); a third
+>   party says which product its advice is about with the relation
+>   `describes`; a set holds one release of a pack.
+> - **Decided the same day, before the tag:** `Deviation.opened` and the
+>   `due` of a Finding's action are typed. A 1.0.0 bundle that wrote free
+>   text there is not a 2.0.0 bundle; the shipped bundles conform. The
+>   removed bundles stay in the git history (#50), a Tailoring names no
+>   Component (#51), Unicode categories in a pattern follow the host
+>   (#59).
+> - **Second implementation:** the PowerShell twin ran green on rc.2 with
+>   the advice rules (518 vectors). The changes of rc.3 are ported and
+>   **not executed**.
+> - **Not there:** a pack published by a vendor; a converter from OSCAL
+>   component definitions; a census of public ones. The evidence for
+>   `statement-ids` is one fictional file by NIST.
+> - **Where:** specification D25 and III.7, handbook chapter 9 §9.7,
+>   appendix A.5, [`jascon/example-packs/`](jascon/example-packs/).
 >
 > **Check** ([CP-CHECK-1](drafts/CP-CHECK-1.md), accepted by the author on
 > 2026-11-12): how a machine decides a requirement. Code collects facts,
@@ -57,7 +96,7 @@ requirements and mints real objects.*
 > observation, so any tool recomputes the verdict and a parameter the
 > Tailoring binds sets the pass mark.
 >
-> - **Measured:** 188 check vectors (447 in all, 16 families) pass in the
+> - **Measured:** 188 check vectors (447 in all at rc.2, 16 families) pass in the
 >   Python reference and in the app's port; four deliberate breaks of the
 >   reference each turn a new vector red. Fit, counted on two open check
 >   corpora: 481 of 510 rules of the CIS Ubuntu 24.04 profiles in
@@ -113,12 +152,14 @@ requirements and mints real objects.*
 >   checked against their publishers' terms and six bundles were removed
 >   ("What ships here", below).
 > - **Why 2.0.0:** the released spec says kernel-shape changes ride a
->   *major* (D22 rev 3), and the author kept that rule. It is a major by
->   rule and a superset in fact — every 1.0.0 bundle is a valid 2.0.0
->   bundle; a 1.0.0 *tool* cannot read a bundle that carries a Risk.
+>   *major* (D22 rev 3), and the author kept that rule. Until rc.2 it was
+>   a major by rule and a superset in fact. Since rc.3 two free-text date
+>   fields are typed (above), so a 1.0.0 bundle is a 2.0.0 bundle only if
+>   it wrote dates there; every bundle that ships does. A 1.0.0 *tool*
+>   cannot read a bundle that carries a Risk.
 > - **The specification text:**
->   [`jascon-specification-2.0.0-rc.2.md`](drafts/jascon-specification-2.0.0-rc.2.md)
->   — a release candidate; D23 carries Risk, D24 Check.
+>   [`jascon-specification-2.0.0-rc.3.md`](drafts/jascon-specification-2.0.0-rc.3.md)
+>   — a release candidate; D23 carries Risk, D24 Check, D25 advice packs.
 > - **The kernel names itself:** a manifest may carry `kernel-version`,
 >   and a bundle with content beyond 1.0.0 (a Risk) must — an older tool
 >   then stops with both versions in the message instead of "matches NO
@@ -132,27 +173,12 @@ requirements and mints real objects.*
 >   415/415 vectors in 16 families (`check: 156`), the five bundles and
 >   the example folder with its two Checks and its evidence store, again
 >   the Python reference's counts. On 2026-11-12 Check was accepted and
->   changed in three places (above): the Python reference stands at 447
+>   changed in three places (above): the Python reference stood at 447
 >   vectors, and the twin passed them the same day. The tag is the
->   author's call. See the
+>   author's call, after the run named at the top. See the
 >   [backlog](drafts/jascon-v0.6-spec-feedback-backlog.md)
 >   #41–#50 and the register sections "Amendments — CP-RISK-1" and
 >   "Amendments — the 2.0.0 decision".
-> - **Advice packs, proposed (2026-11-12,
->   [`drafts/CP-ADVICE-1.md`](drafts/CP-ADVICE-1.md)):** a vendor's
->   recommendations as one published file — a bundle of Components with a
->   pack header in its manifest, which an import cannot use to change a
->   requirement, a tailoring or an assessment. No new type. Schema, both
->   validators, 71 vectors and a worked pack are in the repository:
->   after the merge with the 2.0.0-rc.2 state of `main`, 518/518 vectors
->   in 17 families (`check: 188`, `advice: 71`) in `validate_core.py` and
->   in the PowerShell twin, the five bundles, the pack and the example
->   folder, with the same counts in both. Run over the shipped bundles, the new
->   rule on `capability-ref` found one edge of the IFA bundle that cited a
->   capability its own component does not declare; the edge is rewritten.
->   Not done: the app does not read packs, and no converter from OSCAL
->   component definitions exists. Not released; the decisions are the
->   author's.
 
 ## Why this exists
 
@@ -492,7 +518,7 @@ Install by copying the directory into your skills folder, or unpack
 
 ## Read the spec
 
-- [`drafts/jascon-specification-1.0.0.md`](drafts/jascon-specification-1.0.0.md) — the released specification; [`…-2.0.0-rc.2.md`](drafts/jascon-specification-2.0.0-rc.2.md) — the candidate (Risk and Check)
+- [`drafts/jascon-specification-1.0.0.md`](drafts/jascon-specification-1.0.0.md) — the released specification; [`…-2.0.0-rc.3.md`](drafts/jascon-specification-2.0.0-rc.3.md) — the candidate (Risk, Check and advice packs)
 - [`risk-catalogs/`](risk-catalogs/README.md) — prototype: two ready-made lists of typical risks (office IT, industrial plant; English and German) and a tool that imports them into `Risk` objects
 - [`PRIOR-ART.md`](PRIOR-ART.md) — the neighbouring formats, what each already does, and what JASCON does not add
 - [`drafts/jascon-v0.5-specification.md`](drafts/jascon-v0.5-specification.md) — the v0.5 draft (history)
