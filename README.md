@@ -101,6 +101,20 @@ requirements and mints real objects.*
 >   [backlog](drafts/jascon-v0.6-spec-feedback-backlog.md)
 >   #41–#50 and the register sections "Amendments — CP-RISK-1" and
 >   "Amendments — the 2.0.0 decision".
+> - **Advice packs, proposed (2026-11-12,
+>   [`drafts/CP-ADVICE-1.md`](drafts/CP-ADVICE-1.md)):** a vendor's
+>   recommendations as one published file — a bundle of Components with a
+>   pack header in its manifest, which an import cannot use to change a
+>   requirement, a tailoring or an assessment. No new type. Schema, both
+>   validators, 71 vectors and a worked pack are in the repository:
+>   486/486 vectors in 17 families in `validate_core.py` and in the
+>   PowerShell twin, the five bundles, the pack and the example folder,
+>   with the same counts in both. Run over the shipped bundles, the new
+>   rule on `capability-ref` found one edge of the IFA bundle that cited a
+>   capability its own component does not declare; the edge is rewritten.
+>   Not done: the app does not read packs, and no converter from OSCAL
+>   component definitions exists. Not released; the decisions are the
+>   author's.
 
 ## Why this exists
 

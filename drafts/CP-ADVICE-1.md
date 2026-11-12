@@ -3,11 +3,11 @@
 **Change proposal · JASCON kernel 2.0.0-rc.1 → 2.0.0 · 2026-11-12**
 **Process:** Chapter 15.4 (evidence in, corpus first, implementations follow). Every rule carries a machine id, a rationale and a failure message that prints on failure.
 **Scope:** content manifest (one optional header), kernel schema (one optional field on a capability, one string grammar), reference validator, conformance corpus, one worked pack, a converter, the app. Handbook, specification, SKILL.md, reader and PowerShell twin: §10, after the author's review.
-**Status (2026-11-12): PROPOSED, design only.** No schema, no validator code, no vector and no example exists yet. Nothing was run for this proposal; every count below is read from files in the repository, with the place named. The Python interpreter was not available in the drafting environment, so nothing could be recounted by script.
+**Status (2026-11-12): PROPOSED, on branch `claude/cp-advice-1`, NOT released.** Sections 1 to 12 are the proposal as drafted, before any code: nothing was run for them, and every count in them is read from files in the repository, with the place named. On the same day the kernel side was built: schema, reference validator, 71 vectors, a worked pack and the PowerShell twin are in the repository and green in both implementations. **§13 says what exists, what does not, and what contact with the repository changed.** Where §13 and an earlier section differ, §13 is the state.
 
 **Author statements this proposal implements (2026-11-12):** (1) OSCAL component definitions are worth having for one thing: a vendor supplies recommendations and has no way to change the user's controls or assessments; (2) there is a file the vendor publishes; (3) the user selects it for import; (4) after the import it is clear which vendor, which version and which component; (5) the same file is not imported twice.
 
-**Proposed by the drafter, not decided:** the four points of §11.
+**Proposed by the drafter, not decided:** the eight points of §11. The author's instruction of 2026-11-12 was to start implementing; none of the eight was changed, so items 1 to 6 are built as proposed and remain the author's to overturn.
 
 ---
 
@@ -210,7 +210,7 @@ Evidence tier: **one fictional example file** (§2.2). That is thinner than what
 
 ## 9. What ships, what follows
 
-Nothing ships with this proposal. In the order Chapter 15.4 sets:
+Nothing shipped with the proposal as drafted. Steps 2 to 5 and part of step 8 were built on 2026-11-12 (§13). The order Chapter 15.4 sets:
 
 1. **The author's review** of this text and the decisions of §11.
 2. **Corpus first.** `conformance/advice-vectors.json`, at least one red and one green case per rule, among them: a pack with a Tailoring (ADVICE-1); a pack with an object under a foreign origin (ADVICE-2); the same file composed twice, second time a no-op; another release replacing the first, with an edge left dangling; a foreign id collision refused (ADVICE-11); an edited Component under a kept manifest (ADVICE-9); publisher claimed versus proven, with a DSSE envelope.
@@ -255,3 +255,44 @@ Nothing ships with this proposal. In the order Chapter 15.4 sets:
 - **The IFA coverage report claims more than the converter carries.** `ifa-coverage-report.md`:177-181 lists `set-parameters` (×2), `statements[].description` (×2) and `statements[].statement-id` (×2) as L1, "capabilities with requirement-ref". `convert_ifa.py`:250-254 reads `control-id` and `description` of an implemented requirement and nothing below it, and `objects/component/mongodb.json` carries neither a binding nor clause text. The claim comes from one regex over the whole `control-implementations[]` subtree (`convert_ifa.py`:560). The same converter writes `requirement-ref` into the NIST namespace without reading the `source` of the control implementation (:253). **The converter has to change either way:** `set-parameters` fit `parameter-bindings` today, with no schema change; the clause-level text needs §4.3; and the claim table must stop counting what is not carried, whatever §11 item 3 decides. None of it can be done from a checkout alone: the converter reads `sources/nist/`, which is git-ignored and absent here, and its output, the report and the manifest digests change together. It is step 6 of §9.
 - **Appendix A.5 omitted `requirement-ref` of a capability**, which the schema has (:1097) and the IFA bundle uses. *Fixed 2026-11-12 in `jascon/references/appendix-a-shapes.md`; `SKILL_jascon.zip` still holds the old text until it is rebuilt.*
 - **`capability-ref` is written four ways:** a full URI with fragment (`examples/implementation-acme-konf.json`:13), bare ids (four references on three edges of the IFA bundle), the literal `"declared"` the app writes on the edges of a system it creates, whose Components it gives no capability (`jascon-app/implement.html`:220-224), and `"cap"` in validator fixtures. No rule reads the field in `validate_core.py`.
+
+## 13. Landing addendum (2026-11-12) — what was built, and what contact with the repository changed
+
+### 13.1 What is in the repository, green in both implementations
+
+| Artifact | Change |
+|---|---|
+| `schemas/jascon-2.0.0.schema.json` | `contentManifest.pack` (closed: `kind`, `id`, `version`, `title`, `publisher {ref, name}`); `capabilities[].statement-ids` |
+| `scripts/validate_core.py` | ADVICE-1..11 (`pack_errors`, `capability_errors`, `capability_ref_errors`, `kept_pack_errors`, `compose_advice`), `pack_publisher` (claimed or proven), KERNEL-1 extended, attestations beside a pack's manifest are read, `run_advice`, the default run takes every folder under `jascon/example-packs/`, `--import-advice SET PACK` prints the plan and the receipt and writes nothing |
+| `scripts/validate_core.ps1` | the same rules and the same harness; not the `--import-advice` dry run |
+| `conformance/advice-vectors.json` | **71 vectors**: 9 shape, 12 pack, 21 graph, 11 kept manifest, 8 publisher, 10 import |
+| `example-packs/dbvendor-server-7-advice/` | the file a vendor publishes: pack header, one Component with three capabilities, Attestation and DSSE envelope beside the manifest |
+| `examples/` | the set after the import: the vendor's Component byte for byte, the kept manifest under `packs/sha256/`, the vendor's Attestation and envelope, the product as a member of `acme-saas`, one Implementation that adopts `cap-key-rotation` |
+| `references/`, `SKILL.md`, `examples/README_1.md` | Chapter 9.7 (new), 11.2, 13.4, 14.3; Appendix A.5, A.6, A.11; C.10; F Q24 and Q25; G; SKILL Requirement 8a |
+| `website/` | a card on the model page, the OSCAL row, a gate and a limit on the evidence page, a gate on the home page; `build.py --measure` reads the worked pack and copies it to the site; `facts.json` re-measured |
+| `drafts/cp-advice-1/` | `author_vectors.py` (writes the vectors), `build_example.py` (writes the pack and the example set; a second run changes nothing), `mutate.py`, `fix_ifa_capability_ref.py`, `regen_app_schema.py` |
+| `.gitattributes` | the pack, the kept manifest and the envelopes are `-text` |
+
+**Measured on 2026-11-12, one machine:** `validate_core.py` — 486 of 486 vectors in 17 families (`advice: 71`), the five corpus bundles, the worked pack and the example folder, ALL GREEN. `validate_core.ps1` on Windows PowerShell 5.1 — the same 486 vectors and, bundle by bundle, the same pass counts (1,712 · 814 · 136 · 18 · 1,040 · pack 2 · examples 27), ALL GREEN, 191 s. Both report the pack's publisher *proven*; with the fixture key as trusted key the reference validator reports the signature verified.
+
+**Mutations.** 28 deliberate defects, put into the reference validator one at a time, each turn at least one advice vector red (`mutate.py`). Three further guards are not counted: removing them crashes the code behind them, which is not a verdict.
+
+**The signing key of the worked pack is the corpus fixture key**, whose seed is public (`dsse-vectors.json`). The signature shows the mechanism and says nothing about a vendor.
+
+### 13.2 What contact with the repository changed
+
+1. **ADVICE-7 found a defect in a shipped bundle, as §7 said it might.** `impl/saas-ac-2` of the IFA bundle cited the bare id `cap-consumer-ac-2a`. Its own component, `saas`, declares no capability; the capability is declared by `access-control-appliance`, a member of `saas`. That is exactly the case the full form exists for, so the edge now reads `<appliance-id>#cap-consumer-ac-2a`, and `convert_ifa.py` writes it that way. The converter could not be re-run (its sources are git-ignored), so `fix_ifa_capability_ref.py` makes the one change and proves it is the converter's bytes: it first re-serialises the object and the manifest the way the converter's writer does and requires byte identity with the files on disk. The edge is no subject of the bundle's Attestation, so nothing else moved. **ADVICE-7 stays an error.** All other references in the shipped bundles and the example bundle passed unchanged.
+2. **`statement-ids` without `requirement-ref` is a graph rule, not a schema keyword.** §9 item 3 said `dependentRequired`. It is part of ADVICE-5 instead, so that no implementation's schema subset has to grow a keyword for one rule.
+3. **The published pack is not inside `jascon/examples/`.** It is `jascon/example-packs/<name>/`, a bundle folder of its own. A second `content-manifest.json` inside the example folder would be read by the app as the manifest of that folder (§4.5). §9 item 4 is corrected by this.
+4. **An Attestation beside a pack's manifest had no reader.** In a bundle folder the validators loaded listed objects only, and ADVICE-1 forbids a pack to list its Attestation. For a pack, both now read the JSON files of the manifest's own folder that it does not list and that type as an Attestation.
+5. **The receipt does not recompute a Tailoring.** It prints how many objects of the set are untouched and that only Components were added; that no resolved Tailoring changed follows from ADVICE-1 and is said to follow, as §4.7 has it.
+6. **A facet key carries its major line.** The schema requires `@<n>` on every facet key, `private:` ones included; ADVICE-3 skips keys that start with `private:`.
+
+### 13.3 What does not exist
+
+- **The app does not read packs.** No import path, no preview, no adoption, no ADVICE rule in its port. Only `jascon-app/jascon-schema.js` was regenerated, by `regen_app_schema.py`, which stands in for `tools/gen-schema.mjs` and first proves it reproduces the committed file from the committed schemas byte for byte. **No app test was run:** the machine has no Node. Read from the code and not tried: the app keeps text files and the evidence store when it loads a folder (`jascon-core.js`, `jscKeepFiles`), so a set that goes through the app loses `packs/sha256/`. No rule fails then: the kept manifest is simply gone, and with it the record of the import.
+- **No converter.** `convert_cdef.py` and the component-definition export are not written. The IFA conversion still drops clause-level text and suggested values, and its coverage report still counts them as carried (§12).
+- **No census** of public component definitions (§2.3). The evidence for `statement-ids` is still one fictional file.
+- **No specification text** (D3, D5, D6, D15, D22) and no change to the reader.
+- **`SKILL_jascon.zip` is not rebuilt.** Compared with the tree, the archive lacks every file of the proposed Check type (19 files) and holds older validators: it is kept at the state before CP-CHECK-1, whose step 1b reserves it for the author's review. Rebuilding it for advice packs would pull Check in with them. It also still lacks the Appendix A correction of §12.
+- **The findings of §12 are not filed in the backlog.**
