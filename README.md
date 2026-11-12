@@ -7,13 +7,14 @@
 **J**SON **A**ttestable **S**emantic **C**ompliance **O**bject-graph
 **N**otation — *one notation for every standard, in every language.*
 
-**Machine-readable compliance, rebuilt around meaning: nine shallow object
-types (ten on this branch — Risk), two digests, and one house rule — every claim in the spec must survive
+**Machine-readable compliance, rebuilt around meaning: eleven shallow object
+types (nine in the released 1.0.0; Risk and Check in the 2.0.0 candidate),
+two digests, and one house rule — every claim in the spec must survive
 contact with real catalogs before it may stay.**
 
 This repository is a working design study, not a slide deck. It contains a
 draft specification with a public decision register, an **executable kernel
-schema** with a **157-vector conformance corpus** (258 in 15 families on `main`) and *two* reference
+schema** with a **157-vector conformance corpus** (442 in 16 families in the 2.0.0 candidate) and *two* reference
 validators — Python, and a **zero-dependency PowerShell 5.1 twin that runs
 on a stock Windows box** (the weekend-validator claim, measured,
 crypto engines included) —
@@ -27,7 +28,7 @@ equality against the official NIST schema, and a zero-dependency
 **single-file reader & authoring studio** that turns the whole thing into
 something you can click.
 
-> Status: **1.0.0 released 2026-07-22; 2.0.0-rc.1 on this branch, not
+> Status: **1.0.0 released 2026-07-22; 2.0.0-rc.2 on `main`, not
 > tagged** — evidence-gated, maintained in personal capacity. Where JASCON
 > sits among OSCAL, Gemara, CycloneDX Attestations and the other formats in
 > this space: [`PRIOR-ART.md`](PRIOR-ART.md).
@@ -44,10 +45,40 @@ Stage 5 shows the Risk objects beside the Assessment, its Findings and the
 Attestation; the workbench above them runs a check against the bundle's
 requirements and mints real objects.*
 
-## Unreleased on this branch: JASCON 2.0.0 — Risk as a tenth kernel type
+## Unreleased: JASCON 2.0.0 — Risk and Check, the tenth and eleventh kernel types
 
-> **State 2026-11-10 — landed, reviewed, measured; not tagged.** Everything
-> below this section describes the released **1.0.0**. This branch adds
+> **State 2026-11-12 — release candidate 2.0.0-rc.2; not tagged.**
+> Everything below this section describes the released **1.0.0**. The
+> candidate adds two kernel types.
+>
+> **Check** ([CP-CHECK-1](drafts/CP-CHECK-1.md), accepted by the author on
+> 2026-11-12): how a machine decides a requirement. Code collects facts,
+> twelve comparators decide, and an Assessment records each run with the
+> observation, so any tool recomputes the verdict and a parameter the
+> Tailoring binds sets the pass mark.
+>
+> - **Measured:** 183 check vectors (442 in all, 16 families) pass in the
+>   Python reference and in the app's port; four deliberate breaks of the
+>   reference each turn a new vector red. Fit, counted on two open check
+>   corpora: 481 of 510 rules of the CIS Ubuntu 24.04 profiles in
+>   ComplianceAsCode, and the operators of kube-bench `cis-1.12`.
+> - **Decided on 2026-11-12:** D22 gains a consumer-side clause, under
+>   which Risk and Check enter (no exception any more; backlog #48
+>   closed); run rows are a kernel field; a Check may ship without the
+>   catalogue it refers to; `not-equals` is the twelfth comparator; a
+>   per-resource check stays for-all, evaluates every resource and
+>   reports the share that fails.
+> - **Not done, and blocking the tag:** the PowerShell twin has not been
+>   executed with the last two changes (backlog #60), and the I-Regexp
+>   grammar has not been compared with the published RFC 9485 text (#61).
+> - **Not there at all:** a runner. Nothing in this repository executes a
+>   collector; the worked example ran its bash collector against a stub.
+>   The fit was counted on Linux hosts and Kubernetes, on no cloud API.
+> - **Where:** specification D24, handbook chapter 10 §10.7, appendices
+>   A.9c and B.1.10, the Checks page of the app, and
+>   [jascon.net/checks.html](https://jascon.net/checks.html) with a demo.
+>
+> **Risk** — state 2026-11-10: landed, reviewed, measured. The candidate adds
 > [CP-RISK-1](drafts/CP-RISK-1.md): a `Risk` kernel type — the ex-ante
 > record ISO/IEC 27001 6.1.2–6.1.3, BSI 200-3 and SP 800-30 all require —
 > so that a selected requirement can name the risk that justifies it, and
@@ -82,8 +113,8 @@ requirements and mints real objects.*
 >   rule and a superset in fact — every 1.0.0 bundle is a valid 2.0.0
 >   bundle; a 1.0.0 *tool* cannot read a bundle that carries a Risk.
 > - **The specification text:**
->   [`jascon-specification-2.0.0-rc.1.md`](drafts/jascon-specification-2.0.0-rc.1.md)
->   — a release candidate; D23 carries Risk.
+>   [`jascon-specification-2.0.0-rc.2.md`](drafts/jascon-specification-2.0.0-rc.2.md)
+>   — a release candidate; D23 carries Risk, D24 Check.
 > - **The kernel names itself:** a manifest may carry `kernel-version`,
 >   and a bundle with content beyond 1.0.0 (a Risk) must — an older tool
 >   then stops with both versions in the message instead of "matches NO
@@ -92,11 +123,13 @@ requirements and mints real objects.*
 > - **Second implementation, executed (2026-11-11):** the PowerShell twin
 >   ran on Windows PowerShell 5.1 — 258/258 vectors, the five shipped
 >   bundles and the example folder ALL GREEN, the same counts as the
->   Python reference (IV.5b item 3 of the candidate). The proposed Check
+>   Python reference (IV.5b item 3 of the candidate). The Check
 >   type (CP-CHECK-1) was ported to the twin the same day (backlog #56):
 >   415/415 vectors in 16 families (`check: 156`), the five bundles and
 >   the example folder with its two Checks and its evidence store, again
->   the Python reference's counts. The tag is the
+>   the Python reference's counts. On 2026-11-12 Check was accepted and
+>   changed in two places (above): the Python reference stands at 442
+>   vectors, and the twin has not run with them yet. The tag is the
 >   author's call. See the
 >   [backlog](drafts/jascon-v0.6-spec-feedback-backlog.md)
 >   #41–#50 and the register sections "Amendments — CP-RISK-1" and
@@ -379,8 +412,8 @@ you switch on one of the two places that ask a language model (below).
   `convert_nist.py` gives on the same source file; the CIS Benchmark rules
   give what `convert_cis_benchmark.py` gives, shown on a catalog of the same
   shape (the repository carries no CIS Benchmark).
-- **Checks** writes machine checks for technical rules (the proposed Check
-  type of [`drafts/CP-CHECK-1.md`](drafts/CP-CHECK-1.md)): the facts a
+- **Checks** writes machine checks for technical rules (the Check type
+  of kernel 2.0.0, [`drafts/CP-CHECK-1.md`](drafts/CP-CHECK-1.md)): the facts a
   collector reports, the comparisons that decide, the collector code. A
   model can draft them, one rule at a time or for every automated rule of a
   CIS import, in the language you choose (bash, sh, Python, PowerShell,
@@ -397,7 +430,7 @@ you switch on one of the two places that ask a language model (below).
   memory only, and write nothing into the set until you take a suggestion.
 - What a page computes about validity comes from a port of
   `validate_core.py`, run against all sixteen families of the conformance
-  vectors, signatures (Ed25519, verification only) and the proposed checks
+  vectors, signatures (Ed25519, verification only) and checks
   included.
   [`jascon-app/readme.md`](jascon-app/readme.md) says what the app still
   leaves to the Python validator, which stays the reference.
@@ -407,8 +440,8 @@ python -m http.server 8000
 ```
 
 Then open `http://localhost:8000/jascon-app/index.html`. The single-file
-reader above stays as it is, at v1.7.3, as the page that needs no folder
-around it; new work goes into the app.
+reader above stays as the page that needs no folder around it; it is at
+v1.8.0 and reads the Check type. New work goes into the app.
 
 ## The website
 
@@ -440,7 +473,7 @@ Install by copying the directory into your skills folder, or unpack
 
 ## Read the spec
 
-- [`drafts/jascon-specification-1.0.0.md`](drafts/jascon-specification-1.0.0.md) — the released specification; [`…-2.0.0-rc.1.md`](drafts/jascon-specification-2.0.0-rc.1.md) — the candidate on this branch
+- [`drafts/jascon-specification-1.0.0.md`](drafts/jascon-specification-1.0.0.md) — the released specification; [`…-2.0.0-rc.2.md`](drafts/jascon-specification-2.0.0-rc.2.md) — the candidate (Risk and Check)
 - [`risk-catalogs/`](risk-catalogs/README.md) — prototype: two ready-made lists of typical risks (office IT, industrial plant; English and German) and a tool that imports them into `Risk` objects
 - [`PRIOR-ART.md`](PRIOR-ART.md) — the neighbouring formats, what each already does, and what JASCON does not add
 - [`drafts/jascon-v0.5-specification.md`](drafts/jascon-v0.5-specification.md) — the v0.5 draft (history)

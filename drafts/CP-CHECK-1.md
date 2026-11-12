@@ -3,7 +3,9 @@
 **Change proposal · JASCON kernel 2.0.0-rc.1 → 2.0.0 · 2026-11-11**
 **Process:** Chapter 15.4 (evidence in, corpus first, implementations follow). Every rule carries a machine id, a rationale and a failure message that prints on failure.
 **Scope:** kernel schema, reference validator, conformance corpus, example bundle, one stdlib facet. Handbook, specification, SKILL.md, reader and PowerShell twin: §10, after the author's review of this proposal.
-**Status (2026-11-11): PROPOSED, on branch `claude/focused-lovelace-rfcofx`, NOT released.** The schema, the validator, 156 vectors and the worked example are in the repository and green under `validate_core.py`. The PowerShell twin was ported on 2026-11-11 and passes the same 156 vectors (backlog #56). Evidence tier of the promotion: D22 test 1 **fails** (0 of 3 census corpora), test 3 **measured on two non-census corpora** (§2.2: 481 of 510 CIS-profile rules fit; one operator gap, not-equal) — test 1 is the problem §8 puts to the author.
+**Status (2026-11-12): ACCEPTED by the author for kernel 2.0.0, in release candidate 2.0.0-rc.2; 2.0.0 is not tagged.** The six open points of §11 are decided (§13), the D22 clause that admits the type is written (§8.4), and two things changed after the decisions: a twelfth comparator `not-equals`, and the counts a per-resource check reports (§6.2 step 5). 183 check vectors pass in the Python reference and in the app's port; the PowerShell twin carries both changes but has not been executed with them (backlog #60). The text below is the proposal as it stood, corrected in place where the accepted shape differs; each such place says so.
+
+**Status as proposed (2026-11-11): PROPOSED, on branch `claude/focused-lovelace-rfcofx`, NOT released.** The schema, the validator, 156 vectors and the worked example are in the repository and green under `validate_core.py`. The PowerShell twin was ported on 2026-11-11 and passes the same 156 vectors (backlog #56). Evidence tier of the promotion: D22 test 1 **fails** (0 of 3 census corpora), test 3 **measured on two non-census corpora** (§2.2: 481 of 510 CIS-profile rules fit; one operator gap, not-equal) — test 1 is the problem §8 puts to the author.
 
 **Author decisions this proposal implements (2026-11-10/11):** (1) a check is a new kernel type, not a facet; (2) pass or fail is declarative only — code collects facts, a closed set of comparators decides, what does not fit stays manual; (3) **regex is part of that set**; (4) first slice Linux host via bash; (5) first deliverable is this proposal plus model, example and vectors, no runner and no generator.
 
@@ -52,7 +54,7 @@ Features outside I-Regexp, all on the extraction side: `\s` 142, `(?:` 86, `\d` 
 
 **kube-bench `cis-1.12`.** `bin_op`: absent (= and) 77, or 21, and 5. Operators: eq 30, bitmask 16, has 7, nothave 7, gte 4, valid_elements 3, noteq 2; `set: false` (absence) 18, presence only 40. Of the 21 OR checks, 16 are "flag absent OR flag = value" — the default is compliant, which a collector reporting the *effective* value removes — 3 have a single item, 1 is "file not found OR root:root", and 1 (5.1.3) is a genuine OR across two facts. Across all 51 directories: noteq 85, gt 22, lte 1.
 
-**Mapping onto the eleven comparators.** eq/equals → `equals`; gte/≥ → `at-least`; ≤ → `at-most`; valid_elements → `subset-of`; bitmask/bitwise → `subset-of` over a flag set the collector emits; `set: false`/none_exist → `absent`; existence → `present`; regex/pattern match → `matches`; "none satisfy" → `matches-not`. With a workaround: has/nothave → `includes-all`/`excludes-all` if the collector splits the list (in kube-bench they are substring tests); gt/lt → bound ± 1, integers only. **No equivalent:** not-equal, case-insensitive equals, "exactly one exists", OR/XOR/negate across facts, arithmetic. Zero *native* instances in both corpora: `one-of` and `matches-not` — both occur as idioms (`state_operator` OR, literal alternations; `check="none satisfy"`), so neither is deleted.
+**Mapping onto the eleven comparators** *(the set as drafted; `not-equals` was added on 2026-11-12 because of the gap this paragraph names, §13)*. eq/equals → `equals`; gte/≥ → `at-least`; ≤ → `at-most`; valid_elements → `subset-of`; bitmask/bitwise → `subset-of` over a flag set the collector emits; `set: false`/none_exist → `absent`; existence → `present`; regex/pattern match → `matches`; "none satisfy" → `matches-not`. With a workaround: has/nothave → `includes-all`/`excludes-all` if the collector splits the list (in kube-bench they are substring tests); gt/lt → bound ± 1, integers only. **No equivalent:** not-equal, case-insensitive equals, "exactly one exists", OR/XOR/negate across facts, arithmetic. Zero *native* instances in both corpora: `one-of` and `matches-not` — both occur as idioms (`state_operator` OR, literal alternations; `check="none satisfy"`), so neither is deleted.
 
 **Fit per rule (judgement, recorded rule by rule in the census JSON).**
 
@@ -89,7 +91,7 @@ The line is drawn where tools must agree. Two conformant tools given the same Ch
 | the requirement and clauses a check discharges | **collector code** — stdlib facet `collector@1`, on the Check |
 | the platform under test (opaque URI) | runner, scheduler, retries, timeouts in practice |
 | the fact contract: names, types, cardinality | target inventory, hostnames, credentials (never in a bundle) |
-| the criteria: a flat AND over 11 comparators | evidence store backend (directory today, object store later) |
+| the criteria: a flat AND over 12 comparators | evidence store backend (directory today, object store later) |
 | applicability (`applies-when`), per-resource repetition (`each`) | LLM generation, review workflow, generator provenance detail |
 | confidence + provenance of the check | scanner result import (SARIF, HDF, OCSF) |
 | a run's rows: observation, outcome, parameters used, evidence digest | raw evidence bytes (beside the bundle, content-addressed) |
@@ -181,6 +183,7 @@ Rules 1–7 hold a Check to its requirement and to itself; 8–14 hold a run to 
 | Op | Fact | `expected` | Holds when |
 |---|---|---|---|
 | `equals` | one; any type | scalar or param | value equals expected (decimals by value) |
+| `not-equals` *(added 2026-11-12, §13)* | one; any type | scalar or param | value differs from expected (decimals by value); on a missing fact `inconclusive`, never satisfied; for a list, `excludes-all` |
 | `one-of` | one; string, code, integer, decimal | non-empty list or list param | value is in the list |
 | `at-least` / `at-most` | one; integer, decimal | scalar or param | ordering; decimals by value, never as floats |
 | `present` / `absent` | any | — | the key is / is not in the observation |
@@ -197,7 +200,7 @@ No OR, no NOT, no nesting, no arithmetic, no paths, no cross-fact comparison —
 2. `applies-when`: false → `not-applicable`; unknown → `inconclusive`.
 3. Each assertion: undeclared fact, unobserved fact, mistyped value, unbound parameter or mistyped bound value → `inconclusive`. **A default is never substituted** (D9).
 4. Combination is **strong Kleene AND**: one `not-satisfied` decides; else one `inconclusive` decides; else `satisfied`. A definite failure is never hidden behind an unknown elsewhere.
-5. `each`: resources whose `applies-when` is false are skipped; the rest combine by step 4. No applicable resource: `satisfied` if `allow-empty`, else `inconclusive`.
+5. `each`: **every resource is evaluated**; none is skipped after the first failure *(author decision 2026-11-12, §13)*. Resources whose `applies-when` is false are not applicable; the rest combine by step 4, so the outcome stays for-all. No applicable resource: `satisfied` if `allow-empty`, else `inconclusive`. A tool reports, beside the outcome, the counts `applicable`, `not-satisfied`, `inconclusive`, `not-applicable` and the share of not-satisfied resources among the applicable ones as a whole percentage, computed in integer arithmetic so that every tool prints the same number: rounded half up, never 0 while one resource fails and never 100 while one passes. When the outcome is not `satisfied`, the first reason is that count ("3 of 4 applicable file resources not satisfied (75 %)"), followed by one reason per failing resource. The counts are recomputed from the recorded observation, which holds every resource with its facts; they are not stored in the row.
 6. Aggregate over rows (CHECK-10): not-applicable rows are dropped; none left → `inconclusive`.
 
 An absent key means *observed absent*: the collector looked and did not find it. A collector that could not look prints nothing, and the row has no observation. A collector reports **effective** values — defaults resolved, drop-in files merged — because the census shows that most cross-fact ORs in the wild are "setting absent OR setting = value", which an effective value collapses into one comparison.
@@ -244,6 +247,16 @@ The spec answers it. Appendix B.4: *facets instantiate primitives with bound arg
 
 What the kernel route costs is real and belongs in the decision: a shape closed before a census covers more than one platform, so every correction after the tag costs a major.
 
+### 8.4 The clause that admits it *(author decision 2026-11-12; closes backlog #48)*
+
+The author did not take a second exception. D22 gains a consumer-side clause, in the author's words:
+
+> A type that catalogue authorities do not publish may be promoted to the kernel when (a) a recognised standard of the weight of ISO/IEC 27001, or one of the same standing, requires the record, or the record is established practice, shown by at least two independent open implementations whose content was counted; (b) tests 2 and 3 hold, with test 3 measured on at least one corpus; and (c) it rides a major. Name the standard or the counted implementations in the decision register.
+
+**Risk** enters under the first branch of (a): ISO/IEC 27001 6.1.2 and 6.1.3, BSI Standard 200-3, NIST SP 800-30. **Check** enters under the second branch: machine-decidable checks are established practice in posture management and configuration scanning, counted so far on ComplianceAsCode (510 rules, 481 fit) and kube-bench. The "exception" wording for Risk in the specification gives way to a reference to the clause. Test 1 stays as it is for everything authorities do publish.
+
+What the clause does not change: §8.3's cost. The shape closes with two counted platforms, Linux hosts and Kubernetes, and no cloud API.
+
 ## 9. What ships, what follows
 
 **Ships with this proposal (green under `validate_core.py`):**
@@ -270,10 +283,10 @@ The worked example assessed no real host. Each run executed the Check's bash col
 ## 10. Handbook and specification deltas (step 1b, insert text)
 
 ### 10.1 SKILL.md
-Requirement 1: "**eleven** shallow, globally identified objects (…, Risk, **Check**)". New **Requirement 9b: Automated assessment** — "Model a machine check as a `Check`: a typed fact contract (`observes`) and a flat conjunction over the eleven comparators (`criteria`, B.1.10), bound to the requirement's parameters with `{"param": …}`. Collector code rides the Check in `collector@1` and decides nothing. Record runs as `Assessment.check-results` with the observation inline; the validator recomputes every verdict (CHECK-9) and holds the parameters to the named Tailoring (CHECK-12). Patterns are I-Regexp (RFC 9485), whole-value. Evidence is content-addressed beside the bundle (CHECK-15)." Companion: the LNX-SSH-1 files, `conformance/check-vectors.json`.
+Requirement 1: "**eleven** shallow, globally identified objects (…, Risk, **Check**)". New **Requirement 9b: Automated assessment** — "Model a machine check as a `Check`: a typed fact contract (`observes`) and a flat conjunction over the twelve comparators (`criteria`, B.1.10), bound to the requirement's parameters with `{"param": …}`. Collector code rides the Check in `collector@1` and decides nothing. Record runs as `Assessment.check-results` with the observation inline; the validator recomputes every verdict (CHECK-9) and holds the parameters to the named Tailoring (CHECK-12). Patterns are I-Regexp (RFC 9485), whole-value. Evidence is content-addressed beside the bundle (CHECK-15)." Companion: the LNX-SSH-1 files, `conformance/check-vectors.json`.
 
 ### 10.2 Chapter 10 — new §10.7 "Checks: when the assessor is a machine"
-> §10.2 said a verdict without published criteria is an opinion with a stamp. A machine verdict without published criteria is worse: an exit code. The `Check` publishes both halves. `observes` is the contract a collector must honour — fact names and types, nothing about how they are obtained. `criteria` is the pass condition, written in eleven comparators every conformant tool evaluates identically. Between them sits the collector: a shell script, an Ansible task, an API call, carried on the Check in `collector@1` so the check's digest covers the exact code, and deciding nothing.
+> §10.2 said a verdict without published criteria is an opinion with a stamp. A machine verdict without published criteria is worse: an exit code. The `Check` publishes both halves. `observes` is the contract a collector must honour — fact names and types, nothing about how they are obtained. `criteria` is the pass condition, written in twelve comparators every conformant tool evaluates identically. Between them sits the collector: a shell script, an Ansible task, an API call, carried on the Check in `collector@1` so the check's digest covers the exact code, and deciding nothing.
 >
 > The payoff is in the run record. An Assessment carries one row per check, and the row carries the observation itself — `{"sshd.ciphers": ["…", "aes128-cbc"]}` — not just the outcome. A second party recomputes the verdict from that row without running anything, and the validator does exactly that for every row (CHECK-9). The parameter the row was bound to is held to the Tailoring the Assessment names (CHECK-12): tighten `max-auth-tries` from 6 to 4 in the Tailoring, and yesterday's observation of 5 turns from satisfied to not-satisfied without one line of code changing.
 >
@@ -285,7 +298,7 @@ Requirement 1: "**eleven** shallow, globally identified objects (…, Risk, **Ch
 
 ### 10.5 Appendix C
 - **C.12 Fact types:** `string · integer · decimal · boolean · code`, cardinality `one · many`.
-- **C.13 Comparators:** the eleven of §6.1.
+- **C.13 Comparators:** the twelve of §6.1.
 - **C.14 Check outcomes:** `satisfied · not-satisfied · inconclusive · not-applicable` — the three assessment results plus the one a single check needs and an assessment does not.
 - **C.15 Collector runtimes** (in `collector@1`): `sh · bash · powershell · python · ansible · http-api` + URIs.
 
@@ -300,7 +313,7 @@ Requirement 1: "**eleven** shallow, globally identified objects (…, Risk, **Ch
 ### 10.8 Specification
 D4 (eleven types), D14 (one sentence: a regular expression in the I-Regexp dialect, whole-value, is a comparator, not an expression language), D15 (check-verdict is Portable tier, like assessment), D22 (the Check paragraph after the Risk paragraph, or the consumer-side clause #48 decides), new **D24 Check**.
 
-## 11. Open points for the author
+## 11. Open points for the author *(decided on 2026-11-12, see §13; the list stands as it was put)*
 
 1. **The I-Regexp text.** The implemented grammar is the WG repository's ABNF; the published RFC 9485 text could not be fetched here. Compare before the tag.
 2. **D22 / backlog #48** — a second exception, or a consumer-side clause with its own bar (§8.1).
@@ -315,3 +328,33 @@ D4 (eleven types), D14 (one sentence: a regular expression in the I-Regexp diale
 - **#55** `Assessment.method` is never facet-validated, and all three method payloads in the repository fail their own pinned schema: the example's `summary` is a string where the normative schema wants an object; the ch10 sample uses `criteria-ref`, which `additionalProperties: false` rejects; the IFA bundle's `tasks` and `reviewed-controls` are not in its pinned `goodread-ap-stub`. Turning validation on fixes all three in one change; IFA needs a converter re-run whose sources are not in this checkout.
 - **#56** The PowerShell twin does not know Check. Until it is ported, it reports the example bundle's two Checks as matching no type. Joins #45 as a blocker of the tag. *(Closed 2026-11-11: ported, `check: 156 pass, 0 fail` on Windows PowerShell 5.1. Before the port the twin did not report "no type"; it stopped on the schema keyword `not`.)*
 - **#57** The reader cannot open a bundle that holds a Check.
+
+## 13. Decisions of 2026-11-12, and what changed after them
+
+The author answered the open points of §11. Point by point:
+
+| §11 | Question | Decision | Consequence |
+|---|---|---|---|
+| 1 | Compare the implemented I-Regexp grammar with the published RFC 9485 text | **Still open.** No decision was needed, a comparison was. rfc-editor.org and datatracker.ietf.org were not reachable from the build environment on 2026-11-12 either. | Backlog #61. It gates the 2.0.0 tag, not the release candidate. |
+| 2 | D22: a second exception, or a consumer-side clause | **A clause**, in the author's wording (§8.4). | D22 amended in the specification; Risk's "exception" paragraph rewritten; backlog #48 closed. |
+| 3 | Run rows as a kernel field or a stdlib facet | **Kernel field**, as implemented. | None. |
+| 4 | `requirement-ref`: resolves if present, or closure required | **Resolves if present**, as implemented. | None. |
+| 5 | Timing: land at the candidate with this census, or wait for a cloud-API corpus | **"We set it up to become live in 2.0.0."** Check is part of release candidate 2.0.0-rc.2 and of 2.0.0. | The specification is 2.0.0-rc.2, with D24. No cloud-API census is a condition of the tag; the shape closes on two counted platforms, and §8.3 names the price. |
+| 6 | A quantifier beside for-all | **No new quantifier.** "Record all resources and their results, present a % of fails and then fail." | §6.2 step 5 rewritten: every resource is evaluated, the counts and the failing share are reported, the outcome stays for-all. Read as: the row's observation records every resource with its facts, and the per-resource outcomes are recomputed from it, as every verdict is (CHECK-9). No field was added to the row. |
+| 7 | A twelfth comparator `not-equals` | **Add it.** | `checkOp` enum; one evaluation line; it fits one value of any type, takes a literal or a parameter, and is `inconclusive` on a missing fact. For a list, `excludes-all` already says it. |
+
+**What changed in the artifacts after the decisions:**
+
+| Artifact | Change |
+|---|---|
+| `schemas/jascon-2.0.0.schema.json` | `not-equals` in `$defs/checkOp` |
+| `scripts/validate_core.py` | `not-equals`; `check_each`, `percent_share` and the summary reason; a note per per-resource row of a bundle; `share-vectors` and `expected-resources` in `run_check` |
+| `jascon-app/jascon-rules.js`, `jascon-schema.js`, `jascon-ai.js`, `checks.html` | the same in the app's port; the drafting prompt describes the twelfth operator; the tester shows the counts |
+| `scripts/validate_core.ps1` | the same in the twin, **ported without a PowerShell runtime and not yet executed** (backlog #60) |
+| `conformance/check-vectors.json` | 156 → **183**: 8 verdict vectors for `not-equals`, 4 for the counts of a per-resource check, `expected-resources` on those, 12 `share-vectors` for the percentage, 2 object vectors (the twelfth operator is in the closed shape, a thirteenth is not), 1 bundle vector (CHECK-3: `not-equals` does not fit a list fact). Four deliberate breaks of the reference (`!=` read as `==`; a truncating percentage; counting only the first two resources; no `not-equals` on booleans) each turn at least one vector red. |
+| `one-page-apps/jascon-reader.html` | reads the eleventh type (backlog #57) |
+| handbook, specification, SKILL.md, README | step 1b of §9, done on 2026-11-12 |
+
+**Measured after the changes (2026-11-12):** `validate_core.py` ALL GREEN, 442 vectors in 16 families (`check: 183`), the five shipped bundles and the example folder; the app's test suite green with the same vectors. The PowerShell twin's last executed state is the one of 2026-11-11 (415 vectors, `check: 156`).
+
+**Not changed, and why it matters for the next step:** `collector@1` still carries the source of an `http-api` collector as free text. A tool that is to run such a collector needs a declared request format; that is a change to the facet, not to the kernel, and it is the first question of the runner (§9 phase 2).

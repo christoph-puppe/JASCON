@@ -40,7 +40,7 @@ says so."
 
 What each promise contains, and the receipts a buyer asks for:
 
-**Core** promises passive correctness: schema validation of all ten
+**Core** promises passive correctness: schema validation of all eleven
 types, sealed-mode operation, package-digest verification, local
 resolution, the structural primitives, and preservation of everything
 unknown — with *zero* semantic computation. Receipts: a sealed run
@@ -51,7 +51,8 @@ rule ids and printed rationales.
 **Portable** promises meaning handled safely: facet validation against
 pins, capability declarations with the fail-closed gate, semantic
 digests with the JCS guards, the semantic primitives, deterministic
-tailoring resolution, and lawful bundle composition. Receipts:
+tailoring resolution, lawful bundle composition, and (2.0.0) the
+recomputation of every recorded check verdict. Receipts:
 Chapter 13's vendor test (*show me your gate message for a facet you
 don't support*); green JCS vectors including the empty-omission cases;
 a composition report from a real pin conflict. **This is the tier

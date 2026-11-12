@@ -30,7 +30,7 @@ list of things you will **not** build. No bespoke meta-language parser
 — the schemas are plain JSON Schema 2020-12. No profile-resolution
 algebra with merge strategies — global identity deleted the problem.
 No three synchronized serializations — there is one. No
-Schematron-class rule engine — there are nine primitives, five of
+Schematron-class rule engine — there are ten primitives, five of
 which are structural and yours this weekend. The old world's
 implementation cliff is what produced its validator monoculture —
 every constraint dispute bottlenecked on one team, every consumer
@@ -64,7 +64,7 @@ verdicts match, not when you feel done.
 
 ## 12.2 Friday night: schemas and shapes
 
-Load the ten type schemas plus the sub-objects (Deviation,
+Load the eleven type schemas plus the sub-objects (Deviation,
 authorization contexts) and the content-manifest schema. Until the
 gate ships them as artifacts, hand-code them from the specification's
 Appendix A — a bounded evening's work precisely because the shapes are
@@ -72,7 +72,7 @@ shallow.
 
 One data-model decision earns its keep all weekend: implement a
 generic object envelope — id, version, label, aliases, lifecycle,
-`facets`, `annotations`, `relations` — shared by all ten types, with
+`facets`, `annotations`, `relations` — shared by all eleven types, with
 typed payloads per kind. Statements are a first-class list inside
 Requirement, because half the structural rules address them by id.
 
@@ -367,7 +367,66 @@ own data. The reference implementation of this section is about 160
 lines of Python, the closure checks aside; the PowerShell twin carries the same logic and
 passes the same 73 risk vectors (first run on Windows PowerShell 5.1, 2026-11-11).
 
-## 12.8 The harness, and the honest numbers
+## 12.8 A fourth sitting: Check and the verdict *(2.0.0)*
+
+Check is the eleventh type and `check-verdict` the tenth primitive (D24,
+Appendix A.9c, B.1.10). It is the largest addition since Core, and most
+of it is one small engine you must write yourself.
+
+**First, type it.** The Check shape adds three schema keywords to what
+12.7 needed: `oneOf`, `not` and `else`. An assertion with `present` or
+`absent` must carry no `expected`, every other one must, and the
+observation is either `{facts}` or `{resources}`. The PowerShell twin
+stopped at exactly this point before its port, with `schema keyword
+'not' outside the documented subset`.
+
+**Second, write the regular-expression engine. Do not borrow one.**
+`matches` and `matches-not` take I-Regexp (RFC 9485). The temptation is
+to translate the pattern and hand it to your language's engine. That is
+the one thing the specification forbids, because Python, .NET and
+ECMAScript disagree on `\d`, `\w`, `.`, anchors and flags, and a
+backtracking engine can be stalled by a pattern. Parse the grammar
+(a page of ABNF), compile to states, and match by simulating the set of
+live states: linear in program times input. In the reference, parser and
+matcher together are about 200 lines. Three things are the kernel's and
+not the RFC's: the pattern matches the whole value, `^` and `$` are
+ordinary characters, and the limits are 256 characters per pattern,
+1,000 states and 4,096 characters per value. The 37 regex vectors
+include the traps where a host engine answers differently.
+
+**Third, the verdict.** One function over a Check, an observation and
+the bound parameters. An undeclared or unobserved fact, a mistyped
+value or an unbound parameter is `inconclusive`. Never substitute a
+default. Combine by strong Kleene AND: a definite failure decides
+before an unknown does. Decimals compare by value and never as floats.
+With `each`, evaluate every resource, do not stop at the first
+failure, and report the counts and the share:
+
+```
+3 of 4 applicable file resources not satisfied (75 %)
+```
+
+Compute the percentage in integers, `(200·part + whole) div
+(2·whole)`, clamped to 1 and 99 while some but not all resources fail.
+Twelve vectors pin it, so that three implementations print one number.
+
+**Fourth, the rows.** CHECK-8 to CHECK-14 hold a run to its Check: the
+digest, the recomputed outcome, the aggregate, the parameters against
+the named Tailoring, the collector id, the Finding that points back.
+Recompute; do not trust a recorded outcome.
+
+**Fifth, the evidence chain.** CHECK-15 walks from the row to the
+record to the raw outputs in `evidence/sha256/` beside the manifest. A
+file whose name is not the SHA-256 of its bytes fails. A missing raw
+output is a note, withheld, and no failure.
+
+You never run a collector. A validator that executes code from a bundle
+it was asked to check has stopped being a validator.
+
+The corpus for this sitting is `check-vectors.json`: 183 cases, of
+which 37 are for the engine alone.
+
+## 12.9 The harness, and the honest numbers
 
 The specification converted "weekend validator" from slogan to
 **acceptance test**, and the harness is its instrument: two

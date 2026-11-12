@@ -80,12 +80,31 @@ document and its duplication axis. (Ch. 9)
 before designing anything. "When in doubt, count." (Ch. 1; the
 census file)
 
+**Check** — the kernel object that says how a machine decides a
+requirement: the facts a collector must report (`observes`) and the
+comparisons that decide (`criteria`). Eleventh kernel type (2.0.0).
+(Ch. 10 §10.7, App. A.9c)
+
+**check-verdict** — the tenth primitive: the outcome of one Check over
+one recorded observation and the bound parameter values; `satisfied`,
+`not-satisfied`, `inconclusive` or `not-applicable`. Every recorded
+verdict is recomputed (CHECK-9). (App. B.1.10)
+
 **Chrome** — see *Annotation*.
 
 **Code system** — a versioned closed enumeration (`modality@1`…)
 validated by `code-from`; unknown codes are errors because unpoliced
 value spaces fork (measured: `normal-SdT` vs bare `erhöht`).
 (App. C)
+
+**Collector** — the code that observes what a Check declares: a script,
+an Ansible task, an API call. It prints one observation and decides
+nothing. Carried on the Check in the stdlib facet `collector@1`, so the
+Check's digest covers the exact source. (Ch. 10 §10.7, App. A.9c)
+
+**Comparator** — one of the twelve operators a Check's criteria may
+use (`equals`, `not-equals`, `at-most`, `matches`, …); a closed,
+versioned set without OR, NOT or arithmetic. (App. B.1.10, C.13)
 
 **Compatibility facet (`oscal-1x@…`)** — the Level-2 waiting room
 with a clock: preserved, schema-carried, intended-deprecated, residue
@@ -161,6 +180,11 @@ canonicalization, so presence-vs-absence cannot fork digests.
 of truth; valid 1.x is *generated* for regulators during the
 transition; never dual-edited. (Ch. 14.7, 15.5)
 
+**Evidence record** — a file beside the manifest, named by the SHA-256
+of its bytes, that names check, collector, subject and times of one run
+and carries the digests of the observation and of each raw output.
+(App. A.11)
+
 **Evidence tier** — the discipline of labeling every claim measured /
 designed-for / hypothesis, applied to the spec, the stdlib, and this
 book's own appendices. (Ch. 15, App. A.12)
@@ -173,6 +197,10 @@ requirement. (Ch. 6)
 schema-pinned via the manifest, semantics declared
 (`modifies-semantics ⊆ {assessment, tailoring, selection,
 rendering}`). Species: stdlib, framework, compatibility. (Ch. 7)
+
+**Fact contract** — the `observes` list of a Check: the names, types
+and cardinalities of the facts a collector reports. All a collector
+promises. (App. A.9c)
 
 **Fail-closed** — the refusal to guess: a computation of class C
 meeting an undeclared-understood facet of class C halts with a
@@ -210,6 +238,10 @@ mapping, **L2** compatibility facet (clocked), **L3** opaque
 preservation (no semantic claim). Summary claim:
 information-preserving for the supported corpus, per a published
 equivalence relation. (Ch. 14)
+
+**I-Regexp** — the interoperable regular-expression dialect of RFC
+9485, used by `matches` and `matches-not`; whole-value, bounded in
+size, and never handed to a host engine. (App. B.1.10)
 
 **Identity addressing** — operations target
 `requirement-ref + statement-id`, never array positions; survives
@@ -253,6 +285,11 @@ Measured: 111 class-variant ops, zero non-monotone. (Ch. 6, App. B)
 
 **Obligated party** — who a statement binds (`obligated-parties[]`,
 code-or-ref); absorbs CR26 `affects[]`. (Ch. 4)
+
+**Observation** — what one run of a collector reported: `{facts}`, or
+`{resources: [{id, facts}]}` for a per-resource Check. Recorded inline
+in the Assessment's row, so that the verdict can be recomputed.
+(App. A.7, B.1.10)
 
 **Operation** — one of the eight closed tailoring edits
 (set-parameter, set-modality, set-field, replace-prose,

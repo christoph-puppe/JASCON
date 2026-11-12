@@ -4,10 +4,12 @@
 
 **Audience:** [A][C] — assessment programs and assessors who define
 what "checked" means, and the assessed (plus their agencies) who live
-with the results. §10.6 walks one finding through both seats.
+with the results. §10.8 walks one finding through both seats; §10.7 is
+for whoever lets a machine do the checking.
 **Companions:** Specification v0.5 — Appendix A (Assessment, Finding,
 Deviation shapes), D8, D12 (`assessment-criteria@1`), D9
-(calendar-periods).
+(calendar-periods); for §10.7 the 2.0.0 candidate — D24, Appendix A.9c
+and B.1.10.
 
 ---
 
@@ -222,7 +224,86 @@ What this makes computable is the sentence every ISO 27001 auditor asks and ever
 
 > **Don't** encode risk acceptance as a Deviation, and don't encode a weakened requirement as a Risk. They are two acts by two roles: the owner accepts a residual (`Risk.acceptance`); an implementer weakens a clause because of it (`Deviation` of type `risk-adjustment`, which SHOULD name the Risk in `refs` — RISK-9). The corpse this honours is OSCAL's `deviation-approved` risk status, which fused the two into one state and lost the owner.
 
-## 10.7 Worked: one finding, end to end
+## 10.7 Checks: when the assessor is a machine *(2.0.0)*
+
+§10.2 said a verdict without published criteria is an opinion with a
+stamp. A machine verdict without published criteria is worse: it is an
+exit code. The measured case is the CIS Ubuntu 24.04 Benchmark, which
+marks 291 of its 312 rules as automated and carries the pass condition
+of every one as a sentence in an `audit` string.
+
+A **Check** publishes both halves. `observes` is the contract a
+collector must honour: fact names and types, and nothing about how the
+facts are obtained. `criteria` is the pass condition, written in twelve
+comparators that every conformant tool evaluates identically, joined by
+one AND. Between the two sits the collector, a shell script, an Ansible
+task or an API call. It is carried on the Check in the facet
+`collector@1`, so that the Check's digest covers the exact code, and it
+decides nothing.
+
+```json
+{ "id": "https://cso.example/check/LNX-SSH-1-maxauthtries",
+  "requirement-ref": "https://cso.example/req/LNX-SSH-1",
+  "statement-ids": ["s1"],
+  "platform": "https://cso.example/platform/linux-host",
+  "observes": [ { "name": "sshd.maxauthtries", "type": "integer" } ],
+  "criteria": [ { "fact": "sshd.maxauthtries", "op": "at-most",
+                  "expected": { "param": "max-auth-tries" } } ],
+  "confidence": "reviewed",
+  "provenance": { "author-ref": "https://cso.example/party/secops",
+                  "date": "2026-11-11" } }
+```
+
+The payoff is in the run record. An Assessment carries one row per
+check in `check-results`, and the row carries the observation itself,
+`{"sshd.maxauthtries": 4}`, beside the outcome. A second party
+recomputes the verdict from that row without running anything, and the
+validator does so for every row (CHECK-9). The parameter value the run
+used is held to the Tailoring the Assessment names (CHECK-12). Tighten
+`max-auth-tries` from 6 to 4 in the Tailoring, and yesterday's
+observation of 5 turns from satisfied to not-satisfied without one line
+of code changing.
+
+Four outcomes exist: `satisfied`, `not-satisfied`, `inconclusive` and
+`not-applicable`. A missing fact, an unbound parameter or a collector
+that printed nothing gives `inconclusive`; a default is never
+substituted. One definite failure decides over an unknown elsewhere,
+never the other way round. An Assessment's `result` is the aggregate of
+its rows, so an assessment that mixes machine and human judgement is
+two assessments.
+
+A check over many resources (`each`: accounts, files, buckets) holds
+only if every applicable resource passes. Every resource is evaluated
+all the same, none is skipped after the first failure, and a tool
+reports the count and the share with the verdict: "12 of 200 applicable
+bucket resources not satisfied (6 %)". The share tells an operator how
+far from done a fleet is. It never softens the verdict.
+
+What does not fit stays manual, and is counted. Of 510 rules in the CIS
+profiles for Ubuntu 24.04 of ComplianceAsCode, 481 fit this form; 12
+need arithmetic, 9 a comparison between two facts, 6 an OR across
+facts, 2 a version ordering. The set has no OR, no NOT and no nesting on
+purpose (Appendix F, Q24 to Q26).
+
+Evidence lies beside the bundle, every file named by the SHA-256 of its
+bytes. The row points to an evidence record, the record carries the
+digest of the same observation and of each raw output, and an
+Attestation over the Assessment covers the row. Every link verifies
+offline. A raw output deleted under a retention rule is reported as
+withheld; the record stays verifiable.
+
+> **Don't** let the code decide. A script that exits 0 or 1 hides its
+> threshold, ignores the tailoring and leaves nothing to re-examine.
+> The measured neighbour: 291 automated CIS rules whose pass condition
+> reached this format as a sentence.
+
+Two limits belong here. Nothing in this repository runs a collector:
+the worked example executed its bash collector against a stub that
+prints a fixed configuration, and its evidence records say so. And the
+fit was counted on Linux hosts and Kubernetes; no cloud API was counted
+before the shape was closed.
+
+## 10.8 Worked: one finding, end to end
 
 The SaaS from Chapter 9, under a criteria-driven assessment. The
 transport-encryption requirement's clause s1 (provider encrypts)
@@ -243,7 +324,7 @@ fix.
 Three objects, one story, every step citable by id — and not one email
 thread subpoenaed.
 
-## 10.8 Where this leaves you
+## 10.9 Where this leaves you
 
 The chain is built (9), tested, and honest about its gaps (10). What
 nothing so far explains is why anyone *outside* your organization

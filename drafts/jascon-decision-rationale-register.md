@@ -1800,7 +1800,7 @@ converter reporting a gap in the source, not repairing it — house rule,
 applied to the fourth authority.
 **Follow-on.** With this decided the 2.0.0 specification text was written
 as a release candidate
-(`drafts/jascon-specification-2.0.0-rc.1.md`): D23 carries
+(`drafts/jascon-specification-2.0.0-rc.1.md`; since 2026-11-12 `…-rc.2.md`): D23 carries
 Risk, the rules and this decision.
 
 ## Amendments — the rc.1 review (2026-11-10)
@@ -2074,3 +2074,90 @@ sha256('jascon dsse fixture key 1'); all DSSE vectors are re-signed, and
 `wrong-key-fails-signature` now carries a real signature by a second key
 (sha256('jascon dsse wrong key 1')). The schema filename is not hashed;
 the app's generated `jascon-schema.js` and both validators follow it.
+
+# Amendments — CP-CHECK-1 (2026-11-12): Check enters the kernel, D22 gains a consumer-side clause
+
+The change proposal `drafts/CP-CHECK-1.md` put seven points to the
+author. Six were decisions and were answered on 2026-11-12; the seventh
+is a comparison that is still owed (#61). This section is the record;
+the specification is `drafts/jascon-specification-2.0.0-rc.2.md`
+(D24 new; D4, D14, D15, D22 amended).
+
+## D22 rev 4 — the consumer-side clause *(closes #48)*
+
+**Author decision, in the author's words.** "Amend D22 with a
+consumer-side clause and close backlog #48: a type that catalogue
+authorities do not publish may be promoted to the kernel when (a) a
+recognised standard of the weight of ISO/IEC 27001, or one of the same
+standing, requires the record, or the record is established practice,
+shown by at least two independent open implementations whose content was
+counted; (b) tests 2 and 3 hold, with test 3 measured on at least one
+corpus; and (c) it rides a major. Name the standard or the counted
+implementations in the decision register. […] Replace the 'exception'
+wording for Risk in the specification by a reference to the clause. Test
+1 stays as it is for everything authorities do publish."
+
+**Named, as the clause requires.**
+
+| Type | Branch of (a) | The standard, or the counted implementations | (b) | (c) |
+|---|---|---|---|---|
+| Risk (D23) | a recognised standard requires the record | ISO/IEC 27001 6.1.2 and 6.1.3; BSI-Standard 200-3; NIST SP 800-30 | test 2: `risk-coverage`. Test 3: four treatment options, measured on the IFA corpus (ISO and BSI fit one to one; two of OSCAL's seven response types have no code) | 2.0.0 |
+| Check (D24) | established practice, two independent open implementations, content counted | ComplianceAsCode/content at `f0d40648`, the four CIS profiles for Ubuntu 24.04: 510 rules, 481 fit. aquasecurity/kube-bench at `e278a591`, `cfg/cis-1.12`: 103 automated checks, every operator mapped | test 2: `check-verdict`. Test 3: twelve comparators, measured on both | 2.0.0 |
+
+**Rejected.** A second recorded exception: it would have left D22 a
+rule the author overrides, which the proposal's §8.1 called the honest
+description of two exceptions in one release. **Scored.** *Customer:*
+the organisations that keep a risk register and run checks are the
+customers of every catalogue; a rule that could never admit their data
+had a blind side. *Simplicity:* one clause, three conditions, each with
+a countable answer. *Complexity:* the clause is a second door into the
+kernel, and it is narrower than the anticipated-convergence path that
+closed unused at 1.0: no anticipation, a named standard or counted
+content, tests 2 and 3 in force.
+**What it does not settle.** "Of the weight of ISO/IEC 27001" and
+"established practice" are judgements. The clause makes them visible by
+requiring names and counts in this register; it does not make them
+mechanical.
+
+## The six decisions
+
+| Point (CP-CHECK-1 §11) | Decision | Recorded effect |
+|---|---|---|
+| 2 · D22 | a consumer-side clause | above |
+| 3 · run rows | kernel field `Assessment.check-results`, as implemented | none; D24 states the reason (B.4: a facet never defines computation) |
+| 4 · `requirement-ref` | resolves if present, as implemented | none; CHECK-1 |
+| 5 · timing | "we set it up to become live in 2.0.0" | Check is in release candidate rc.2 and in 2.0.0. No cloud-API census is a condition of the tag. The price is in D24, "Cons, stated": the shape closes on Linux hosts and Kubernetes |
+| 6 · quantifier | none added; "record all ressources and their results, present a % of fails and then fail" | B.1.10 step 5: every resource is evaluated; counts and the failing share as a whole percentage; the outcome stays for-all |
+| 7 · `not-equals` | added, the twelfth comparator | schema, three implementations, vectors |
+
+**How decision 6 was read.** The row's observation already records
+every resource with its facts. The per-resource outcomes and the share
+are recomputed from it, as every verdict is (CHECK-9); a stored copy
+would be a second thing to hold to the computation. No field was added
+to the row. If the author meant a stored per-resource result, that is a
+shape change and belongs in before the tag.
+
+**The percentage.** Integer arithmetic, so that three implementations
+print one number: `(200·part + whole) div (2·whole)`, clamped to 1…99
+while `0 < part < whole`. One failing resource in 300 reads 1 %, 299 in
+300 read 99 %. Twelve `share-vectors` pin it.
+
+## What was built and measured on 2026-11-12
+
+- `not-equals`: fits one value of any type; a literal or a parameter;
+  `inconclusive` on a missing fact; CHECK-3 refuses it on a list.
+- `check_each` / `jscCheckEach` / `Check-Each`: the counts of a
+  per-resource check; the first reason of a failing one is the count.
+- Vectors: `check` 156 → 183, the corpus 415 → 442. Four deliberate
+  breaks of the reference each turn at least one new vector red.
+- Python reference: ALL GREEN, 442 vectors, five bundles, the example
+  folder. App: its suite green with the same vectors (build 0.9.2).
+- PowerShell twin: both changes ported, **not executed** (#60).
+- Reader v1.8.0 reads the eleventh type (#57).
+- Handbook: chapter 2, chapter 10 §10.7, appendices A (A.9c), B
+  (B.1.10), C (C.12 to C.15), F (two questions), G; SKILL.md
+  (requirement 9b). Specification 2.0.0-rc.2.
+
+**Open after this section:** #60 and #61 block the tag. #62: an
+`http-api` collector has no declared format, which a runner needs first.
+

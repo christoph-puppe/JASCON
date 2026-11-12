@@ -18,10 +18,10 @@ own material, know where each piece of it belongs: kernel field, set,
 tailoring, facet, annotation, or (most often, as Chapter 1's census
 showed) nowhere, because the mechanism it was imitating now exists.
 
-We will not tour ten types in the abstract. We will start with the
+We will not tour eleven types in the abstract. We will start with the
 smallest real object in the corpus — an Australian control — and keep
 asking one question: *what does reality add next?* Each honest answer
-introduces exactly one type. By the end, all ten have appeared because
+introduces exactly one type. By the end, all eleven have appeared because
 something measured demanded them, which is also how they got into the
 specification in the first place.
 
@@ -228,10 +228,23 @@ may point back with `risk-refs`; a `risk-adjustment` Deviation names the
 Risk it accepts. The Statement of Applicability is then a computation
 (`risk-coverage`, B.1.9), not a spreadsheet (Ch. 10 §10.6).
 
-That is ten: **Requirement, RequirementSet, Tailoring, Mapping** on the
+**Check.** One question is left, and it is the operator's: *how does a
+machine decide this?* The CIS Ubuntu 24.04 Benchmark marks 291 of its 312
+rules as automated and carries every one of them as an `audit` string a
+person has to read. A Check states the facts a collector must report
+(`observes`) and the comparisons that decide (`criteria`: twelve
+comparators, one conjunction). The collector's code rides along in a
+facet and decides nothing. An Assessment records each run with the
+observation itself, so any tool recomputes the verdict, and a parameter
+the Tailoring binds sets the pass mark: tighten it, and yesterday's
+observation is judged again without a line of code changing
+(Ch. 10 §10.7).
+
+That is eleven: **Requirement, RequirementSet, Tailoring, Mapping** on the
 content side; **Component, Implementation, Assessment, Finding** on the
 system side; **Risk** on the organisation's side between the two, saying
-why the content is in scope; **Attestation** bonding all of it to paper.
+why the content is in scope; **Check** beside the Assessment, saying how a
+machine decides; **Attestation** bonding all of it to paper.
 
 ```
             CONTENT                      SYSTEMS
@@ -241,6 +254,7 @@ why the content is in scope; **Attestation** bonding all of it to paper.
   │ RequirementSet      │ Impl │ Implementation ───────┤
   │ Tailoring ──────────┤      │ Assessment            │
   │ Mapping (crosswalks)│      │ Finding               │
+  │ Risk (why in scope) │      │ Check (how decided)   │
   └──────────┬──────────┘      └──────────┬────────────┘
              │        Attestation         │
              └────────── bonds ───────────┘
@@ -289,7 +303,7 @@ use case (`web_name`, `do_not_link` — pure chrome).
 | Profile + resolution spec (merge/keep/combine) | Tailoring: selection + identity-addressed ops; a half-page deterministic algorithm; merge semantics **do not exist** — global identity made them unnecessary | Ch. 6 |
 | Component Definition | `Component.capabilities[]` | Ch. 9 |
 | SSP | Component (+`authorizations[]`, system-context facet) + Implementation edges; the *document* is an L4 rendering, bonded by an Attestation | Ch. 9, 11 |
-| Assessment Plan / Assessment Results | Assessment (methods via `assessment-criteria@1`) / `Assessment.result` + Finding | Ch. 10 |
+| Assessment Plan / Assessment Results | Assessment (methods via `assessment-criteria@1`) / `Assessment.result` + Finding; a machine check with its pass condition is a Check, which 1.x has no model for | Ch. 10 |
 | POA&M | `Finding.actions[]` + Deviation lifecycle | Ch. 10 |
 | Control Mapping Model (OSCAL 1.2.0) | the Mapping type — nine flat fields instead of a document model | Ch. 8 |
 | props + `ns` | registered facets (contracted) · annotations (invisible) · **or nothing** — the >70 % that were kernel deficits | Ch. 7 |
