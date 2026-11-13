@@ -6,7 +6,9 @@
 #               and a re-run of the IFA conversion from its pinned sources,
 #               which must reproduce what is committed
 #   powershell  validate_core.ps1, the twin, on WINDOWS POWERSHELL 5.1
-#               (windows-latest; `shell: powershell` is 5.1, `pwsh` would be 7)
+#               (windows-latest; `shell: powershell` is 5.1, `pwsh` would be 7),
+#               after .github/scripts/lint-twin.ps1 has read its source: no
+#               PowerShell operator may compare two strings (backlog #58)
 #   app         the JavaScript port in jascon-app/ against the same vectors
 #   browser     the app's pages and the pack builder (one-page-apps/) in
 #               Chromium, driven by Playwright, their output held to the
@@ -27,6 +29,7 @@ on:
       - "one-page-apps/**"
       - ".gitattributes"
       - ".github/workflows/validators.yml"
+      - ".github/scripts/**"
   pull_request:
     paths:
       - "jascon/**"
@@ -35,6 +38,7 @@ on:
       - "one-page-apps/**"
       - ".gitattributes"
       - ".github/workflows/validators.yml"
+      - ".github/scripts/**"
   workflow_dispatch:
 
 permissions:
@@ -104,6 +108,11 @@ jobs:
           $v = $PSVersionTable.PSVersion.ToString()
           Write-Host "Windows PowerShell $v, edition $($PSVersionTable.PSEdition)"
           if ($PSVersionTable.PSVersion.Major -ne 5) { Write-Host 'not Windows PowerShell 5.x'; exit 1 }
+      - name: No operator compares two strings (lint-twin.ps1)
+        shell: powershell
+        run: |
+          powershell -NoLogo -NoProfile -ExecutionPolicy Bypass -File .github\scripts\lint-twin.ps1
+          exit $LASTEXITCODE
       - name: validate_core.ps1
         shell: powershell
         run: |

@@ -544,6 +544,60 @@
      ]
     }
    ]
+  },
+  {
+   "name": "soft-hyphen-in-the-origin-is-another-origin",
+   "expected-tier": "consumer",
+   "expected": "invalid",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "X."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/base",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth\u00ad.gov/fw/tailoring/class-b",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/base"
+      }
+     ],
+     "operations": [
+      {
+       "op": "set-modality",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-id": "s1",
+       "modality": "should"
+      }
+     ]
+    }
+   ],
+   "reason": "the Tailoring of same-origin-claim-easing-legal with one character added: U+00AD SOFT HYPHEN in the host of its id. Compared code point by code point its origin is not the origin of the content it selects, so the tier is consumer and the easing without a Deviation fails. A culture-aware comparison ignores the character, calls the origins equal and hands a consumer the authority's exemption from the Deviation duty (D2; backlog #58)"
   }
  ]
 }

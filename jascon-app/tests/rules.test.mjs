@@ -42,7 +42,7 @@ test("parameter: every vector", () => {
 
 test("tier: the derived tier of every vector (structural mode)", async () => {
   const v = vectors("tier").vectors;
-  assert.equal(v.length, 9);
+  assert.equal(v.length, 10);
   for (const c of v) {
     // the vectors carry COMPUTE where a live digest belongs, as the Python runner fills it
     const byId = new Map(c.objects.map(o => [o.id, o]));
@@ -170,7 +170,7 @@ test("a schema keyword this checker does not implement is refused, not skipped",
 
 test("reference: the number of closure errors of every vector", () => {
   const v = vectors("reference").vectors;
-  assert.equal(v.length, 13);
+  assert.equal(v.length, 18);
   for (const c of v) assert.equal(rules.jscClosureErrors(rules.jscTypedObjects(c.objects)).length, c["expected-errors"], c.name);
 });
 
