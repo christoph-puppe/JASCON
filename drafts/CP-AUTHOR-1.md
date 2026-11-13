@@ -172,7 +172,7 @@ Built as proposed; each is the author's to overturn before the tag.
 
 | Step of §9 | Built | Measured |
 |---|---|---|
-| 1 | Schema, reference, vectors, the example folder | 63 new vectors (34 in the new family `author`, 29 in `kernel`), 637 in all in 18 families. All expectations were written before the first run, which passed all 63. 19 deliberate defects in the reference's new code each turn a vector red |
+| 1 | Schema, reference, vectors, the example folder | 63 new vectors at the landing (34 in the new family `author`, 29 in `kernel`). All expectations were written before the first run, which passed all 63. 19 deliberate defects in the reference's new code each turn a vector red. Six more vectors followed the ports (§11.2): 40 in `author`, 643 in all in 18 families |
 | 2 | The PowerShell twin and the app's port (build 0.9.8) | Both give the reference's counts per family and per bundle and its report lines for the example folder and the IFA bundle. The twin was run on PowerShell 7.4; its run on Windows PowerShell 5.1 is the workflow's |
 | 3 | Specification 2.0.0-rc.4 (D26; D8, D13, D23 amended), handbook (appendix A, chapters 6, 10, 12, F.10), the skill (requirement 9c), PRIOR-ART, README, the website in five languages, register, backlog | |
 | 4 | Not built: no tool writes the fields | backlog #69 |
@@ -181,6 +181,9 @@ Built as proposed; each is the author's to overturn before the tag.
 
 - **A writer the count had missed.** §2.2 counted the values the repository holds and found none to change. `convert_cis_benchmark.py` and the app's CIS preset wrote the catalogue's version as the `provenance.date` of a Mapping; the repository holds no CIS bundle, so no such value was counted. Both now write the day of the catalogue's `last-modified`. A count of values answers "what is there"; a typed field also needs "who writes it".
 - **A line break at the end of a value.** `$` in a pattern matches before a final line break in Python and in .NET and not in JavaScript, so the reference and the twin accept `"2026-11-13\n"` as a date and the app does not. This is older than the proposal and reaches every pattern that ends in `$`. Filed as backlog #68; the author's to decide.
+- **Four defects no vector caught.** The twin's port was tested with 37 deliberate defects; four left every vector green: a second counted as a minute, a minute as an hour, a duration rounded up to the next day, and a vector case with an untyped object. No vector used seconds or minutes, and every duration ended at midnight. Five review vectors and one author vector were added; the first three defects now turn one red each in the reference (the fourth is a guard of the runner, not a rule).
+- **The order of the report.** The vectors said "in the order of the ids, compared as strings". Python orders strings by code point, .NET and JavaScript by UTF-16 code unit; the two differ for characters beyond U+FFFF. The reports now follow the canonical form (RFC 8785), by code unit, in all three; the reference was changed, and two vectors hold it.
+- **`--as-of`** accepted `20261113` and `2026-W46-5` in the reference, on Python 3.11 and later. It takes `YYYY-MM-DD` only now, as the twin and the app do.
 - **§5 on the website.** The first English text said neither report fails a bundle unless the caller asks. REVIEW-1 never fails. The translating agent caught it.
 - **§8, the citations.** OSCAL's `risk-log` with `logged-by`, its `origin` with actors and its `deadline` were read in the 1.1.3 metaschema. ISO/IEC 27001 was not read and stays from memory.
 

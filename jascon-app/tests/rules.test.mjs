@@ -287,7 +287,7 @@ const authorTyped = c => {
 const reviewPairs = r => [r.overdue.map(e => [e.id, e.where]), r["not-evaluable"].map(e => [e.id, e.where])];
 test("author: what is missing, one entry per object and rule (AUTHOR-1 to AUTHOR-4)", async () => {
   const v = vectors("author")["author-vectors"];
-  assert.equal(v.length, 17);
+  assert.equal(v.length, 18);
   for (const c of v) {
     const report = await rules.jscAuthorReport(authorTyped(c));
     assert.deepEqual(report.map(e => [e.rule, e.id, e.count]), c.expected, c.name);
@@ -296,7 +296,7 @@ test("author: what is missing, one entry per object and rule (AUTHOR-1 to AUTHOR
 });
 test("author: a review-due that has passed on the day asked about (REVIEW-1)", () => {
   const v = vectors("author")["review-vectors"];
-  assert.equal(v.length, 17);
+  assert.equal(v.length, 22);
   for (const c of v) {
     const r = rules.jscReviewReport(authorTyped(c), c["as-of"]);
     assert.deepEqual(reviewPairs(r), [c["expected-overdue"] || [], c["expected-not-evaluable"] || []], c.name);

@@ -1,5 +1,5 @@
 {
- "description": "Who decided, and when (CP-AUTHOR-1; backlog #65 and #66). The schema leaves `provenance`, a Deviation's `decided` and `review-due` and an authorization's `date` optional; the validator REPORTS what is missing and fails nothing unless asked to. `author-vectors`: each case is a mini-bundle; `expected` is the report, one entry [rule, object id, count] per object and rule, in the order of the object ids (compared as strings) and, for one object, of the rules as listed here: AUTHOR-1 asks a Tailoring at consumer tier for the author of each select, exclude and operation (its own provenance, else the Tailoring's; count = entries without either), AUTHOR-2 asks a Risk, a Finding and an Implementation for provenance, AUTHOR-3 asks an approved or withdrawn Deviation for `decided` (count = Deviations), AUTHOR-4 asks an authorization for its date (count = authorizations). `review-vectors`: REVIEW-1 with the date given in `as-of`; `expected-overdue` and `expected-not-evaluable` list [object id, where], absent means empty. A point in time has passed when its UTC calendar day is before `as-of`; a duration counts from `decided`, else `opened`, on a Deviation and from `acceptance.date` on a Risk; a calendar period is not evaluated. Only an approved Deviation and a Risk still managed are asked. The messages are not part of the assertion.",
+ "description": "Who decided, and when (CP-AUTHOR-1; backlog #65 and #66). The schema leaves `provenance`, a Deviation's `decided` and `review-due` and an authorization's `date` optional; the validator REPORTS what is missing and fails nothing unless asked to. `author-vectors`: each case is a mini-bundle; `expected` is the report, one entry [rule, object id, count] per object and rule, in the order of the object ids by UTF-16 code unit (the order of the canonical form, RFC 8785; it differs from the order by code point for characters beyond U+FFFF) and, for one object, of the rules as listed here: AUTHOR-1 asks a Tailoring at consumer tier for the author of each select, exclude and operation (its own provenance, else the Tailoring's; count = entries without either), AUTHOR-2 asks a Risk, a Finding and an Implementation for provenance, AUTHOR-3 asks an approved or withdrawn Deviation for `decided` (count = Deviations), AUTHOR-4 asks an authorization for its date (count = authorizations). `review-vectors`: REVIEW-1 with the date given in `as-of`; `expected-overdue` and `expected-not-evaluable` list [object id, where], absent means empty. A point in time has passed when its UTC calendar day is before `as-of`; a duration counts from `decided`, else `opened`, on a Deviation and from `acceptance.date` on a Risk; a calendar period is not evaluated. Only an approved Deviation and a Risk still managed are asked. The messages are not part of the assertion.",
  "author-vectors": [
   {
    "name": "a-consumer-tailoring-without-any-author",
@@ -1106,6 +1106,44 @@
      1
     ]
    ]
+  },
+  {
+   "name": "ids-in-the-order-of-their-utf-16-code-units",
+   "objects": [
+    {
+     "id": "https://org.example/risk/\ue000",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "A key is not rotated."
+     },
+     "owner-ref": "https://org.example/party/owner",
+     "state": "identified"
+    },
+    {
+     "id": "https://org.example/risk/\ud83d\ude00",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "A key is not rotated."
+     },
+     "owner-ref": "https://org.example/party/owner",
+     "state": "identified"
+    }
+   ],
+   "expected": [
+    [
+     "AUTHOR-2",
+     "https://org.example/risk/\ud83d\ude00",
+     1
+    ],
+    [
+     "AUTHOR-2",
+     "https://org.example/risk/\ue000",
+     1
+    ]
+   ],
+   "reason": "U+1F600 is written as the surrogate pair D83D DE00 and comes before U+E000 by code unit, after it by code point. The report follows the canonical form (RFC 8785), which orders by code unit; so a tool in a language that sorts strings by code point has to say so"
   }
  ],
  "review-vectors": [
@@ -1861,6 +1899,218 @@
     ],
     [
      "https://org.example/risk/r",
+     "review-due"
+    ]
+   ]
+  },
+  {
+   "name": "a-duration-in-seconds",
+   "as-of": "2026-11-12",
+   "objects": [
+    {
+     "id": "https://org.example/finding/f",
+     "version": "1",
+     "lifecycle": "active",
+     "assessment-ref": "https://org.example/assessment/a",
+     "requirement-ref": "https://ns.auth.gov/fw/req/1",
+     "state": "open",
+     "provenance": {
+      "author-ref": "https://org.example/party/ciso",
+      "date": "2026-11-05"
+     },
+     "deviations": [
+      {
+       "type": "operational-requirement",
+       "state": "approved",
+       "rationale": {
+        "en": "The legacy host cannot."
+       },
+       "approver-ref": "https://org.example/party/ciso",
+       "opened": "2026-11-01",
+       "decided": "2026-11-10",
+       "review-due": {
+        "type": "elapsed-duration",
+        "num": 86400,
+        "unit": "seconds"
+       }
+      }
+     ]
+    }
+   ],
+   "expected-overdue": [
+    [
+     "https://org.example/finding/f",
+     "deviations[0]"
+    ]
+   ],
+   "reason": "86,400 seconds from the start of the 10th end at the start of the 11th"
+  },
+  {
+   "name": "a-duration-in-minutes",
+   "as-of": "2026-11-12",
+   "objects": [
+    {
+     "id": "https://org.example/finding/f",
+     "version": "1",
+     "lifecycle": "active",
+     "assessment-ref": "https://org.example/assessment/a",
+     "requirement-ref": "https://ns.auth.gov/fw/req/1",
+     "state": "open",
+     "provenance": {
+      "author-ref": "https://org.example/party/ciso",
+      "date": "2026-11-05"
+     },
+     "deviations": [
+      {
+       "type": "operational-requirement",
+       "state": "approved",
+       "rationale": {
+        "en": "The legacy host cannot."
+       },
+       "approver-ref": "https://org.example/party/ciso",
+       "opened": "2026-11-01",
+       "decided": "2026-11-10",
+       "review-due": {
+        "type": "elapsed-duration",
+        "num": 1440,
+        "unit": "minutes"
+       }
+      }
+     ]
+    }
+   ],
+   "expected-overdue": [
+    [
+     "https://org.example/finding/f",
+     "deviations[0]"
+    ]
+   ]
+  },
+  {
+   "name": "a-duration-that-ends-within-a-day",
+   "as-of": "2026-11-12",
+   "objects": [
+    {
+     "id": "https://org.example/finding/f",
+     "version": "1",
+     "lifecycle": "active",
+     "assessment-ref": "https://org.example/assessment/a",
+     "requirement-ref": "https://ns.auth.gov/fw/req/1",
+     "state": "open",
+     "provenance": {
+      "author-ref": "https://org.example/party/ciso",
+      "date": "2026-11-05"
+     },
+     "deviations": [
+      {
+       "type": "operational-requirement",
+       "state": "approved",
+       "rationale": {
+        "en": "The legacy host cannot."
+       },
+       "approver-ref": "https://org.example/party/ciso",
+       "opened": "2026-11-01",
+       "decided": "2026-11-10",
+       "review-due": {
+        "type": "elapsed-duration",
+        "num": 36,
+        "unit": "hours"
+       }
+      }
+     ]
+    }
+   ],
+   "expected-overdue": [
+    [
+     "https://org.example/finding/f",
+     "deviations[0]"
+    ]
+   ],
+   "reason": "36 hours from the start of the 10th end at noon on the 11th; the day it falls on is the 11th, not the 12th"
+  },
+  {
+   "name": "the-same-duration-on-the-day-it-ends",
+   "as-of": "2026-11-11",
+   "objects": [
+    {
+     "id": "https://org.example/finding/f",
+     "version": "1",
+     "lifecycle": "active",
+     "assessment-ref": "https://org.example/assessment/a",
+     "requirement-ref": "https://ns.auth.gov/fw/req/1",
+     "state": "open",
+     "provenance": {
+      "author-ref": "https://org.example/party/ciso",
+      "date": "2026-11-05"
+     },
+     "deviations": [
+      {
+       "type": "operational-requirement",
+       "state": "approved",
+       "rationale": {
+        "en": "The legacy host cannot."
+       },
+       "approver-ref": "https://org.example/party/ciso",
+       "opened": "2026-11-01",
+       "decided": "2026-11-10",
+       "review-due": {
+        "type": "elapsed-duration",
+        "num": 36,
+        "unit": "hours"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "overdue-reviews-in-the-order-of-utf-16-code-units",
+   "as-of": "2026-11-13",
+   "objects": [
+    {
+     "id": "https://org.example/risk/\ue000",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "A key is not rotated."
+     },
+     "owner-ref": "https://org.example/party/owner",
+     "state": "identified",
+     "provenance": {
+      "author-ref": "https://org.example/party/ciso",
+      "date": "2026-11-05"
+     },
+     "review-due": {
+      "type": "date",
+      "value": "2026-01-01"
+     }
+    },
+    {
+     "id": "https://org.example/risk/\ud83d\ude00",
+     "version": "1",
+     "lifecycle": "active",
+     "scenario": {
+      "en": "A key is not rotated."
+     },
+     "owner-ref": "https://org.example/party/owner",
+     "state": "identified",
+     "provenance": {
+      "author-ref": "https://org.example/party/ciso",
+      "date": "2026-11-05"
+     },
+     "review-due": {
+      "type": "date",
+      "value": "2026-01-01"
+     }
+    }
+   ],
+   "expected-overdue": [
+    [
+     "https://org.example/risk/\ud83d\ude00",
+     "review-due"
+    ],
+    [
+     "https://org.example/risk/\ue000",
      "review-due"
     ]
    ]

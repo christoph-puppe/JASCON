@@ -97,7 +97,7 @@ and in `readme.md`; this file says only what is done and what is next.
 
 - Who decided, and when (build 0.9.8; CP-AUTHOR-1): the eighteenth vector
   family in `jascon-rules.js` (`jscAuthorReport` for AUTHOR-1..4,
-  `jscReviewReport` with `jscUtcDay` for REVIEW-1; all 34 vectors), the four
+  `jscReviewReport` with `jscUtcDay` for REVIEW-1; all 40 vectors), the four
   new reasons of the kernel pin in `jscKernelNeeded` and in the pin the
   export writes (`jscNeedsKernel2`), DATE-1 on `decided` and DATE-3..5, and
   the 54 vectors of the kernel family. Both reports give the lines

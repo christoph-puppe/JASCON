@@ -11,7 +11,7 @@ digests, shape-disjoint type inference against the kernel JSON Schema
 modality lattice, reference closure, facet enforcement (fail-closed),
 tier derivation (Set-member resolution + DSSE verification mode with a
 dependency-free Ed25519 over System.Numerics.BigInteger), op-law duties,
-D3.5 composition, B.1.8 conditional-apply, and all 16 vector families.
+D3.5 composition, B.1.8 conditional-apply, and all 18 vector families.
 
 Kernel 2.0.0 (CP-RISK-1): Risk is the tenth kernel type - typed by the
 schema (RISK-1..6 are schema conditionals, named on failure by
@@ -101,20 +101,27 @@ findings from this file and from validate_core.py - among them objects
 with members that differ only in case or have an empty name, which
 ConvertFrom-Json could not read at all.
 
-Kernel 2.0.0 (CP-AUTHOR-1, PROPOSED; backlog #65 and #66, ported on
-2026-11-13): who decided, and when. `provenance` {author-ref, date} on a
-Tailoring and its selects, excludes and operations, on a Risk and its
-ratings, on an Implementation and a Finding; `decided` and `review-due` on
-a Deviation; `date` on an authorization. The shapes need no code here:
-this file reads the kernel schema. Ported: KERNEL-1 for the new fields,
-the names DATE-3..5 (and `decided` under DATE-1), the two reports
-AUTHOR-1..4 (Author-Report) and REVIEW-1 (Review-Report), the vector
-family `author`. REVIEW-1 is the one place where this file reads a clock,
-and nothing fails by it. RUN on 2026-11-13 under PowerShell 7.4 on Linux
-with a stand-in for the JSON parser of the .NET Framework: 637 vectors in
-18 families (kernel: 54, author: 34), the bundles, the worked pack and the
-example folder, the same counts and the same AUTHOR and REVIEW lines as
-validate_core.py. NOT YET EXECUTED on Windows PowerShell 5.1.
+Kernel 2.0.0 (CP-AUTHOR-1, specification 2.0.0-rc.4 D26; backlog #65 and
+#66, ported on 2026-11-13): who decided, and when. `provenance`
+{author-ref, date} on a Tailoring and its selects, excludes and
+operations, on a Risk and its ratings, on an Implementation and a Finding;
+`decided` and `review-due` on a Deviation; `date` on an authorization. The
+shapes need no code here: this file reads the kernel schema. Ported:
+KERNEL-1 for the new fields, the names DATE-3..5 (and `decided` under
+DATE-1), the two reports AUTHOR-1..4 (Author-Report) and REVIEW-1
+(Review-Report), the vector family `author`. REVIEW-1 is the one place
+where this file reads a clock, and nothing fails by it. Both reports name
+their objects in the order of the UTF-16 code units of the ids.
+EXECUTED 2026-11-13 on Windows PowerShell 5.1 (the workflow, commit
+e4031a84): the lint, then 637 vectors in 18 families (kernel: 54, author:
+34), the five bundles, the worked pack and the example folder, the same
+counts and the same AUTHOR and REVIEW lines as validate_core.py, ALL GREEN
+in 218 s. Six vectors came after that run, 643 in all (author: 40): a
+duration in seconds, one in minutes, one that ends within a day and the
+same one on the day it ends, and the order of each report. This file
+passes them unchanged under PowerShell 7.4 on Linux, with a stand-in for
+the JSON parser of the .NET Framework; the workflow runs them on Windows
+PowerShell 5.1 with the commit that brought them.
 
 Usage: powershell -ExecutionPolicy Bypass -File validate_core.ps1 [bundle-dirs...]
        -VectorsOnly to skip bundles; -TrustedKeys file.json for verification mode;

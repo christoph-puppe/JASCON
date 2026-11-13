@@ -3254,7 +3254,7 @@ date; the author chose a report. A log inside the object, as OSCAL's
 |---|---|
 | Kernel schema | `provenance` as one definition; optional fields on five types, on the Deviation and on an authorization; three times typed |
 | Reference | `author_report`, `review_report`, the pin for the new fields, DATE-3 to 5; `--require-authors`, `--as-of` |
-| Vectors | a new family, `author`: 17 for the missing-author report, 17 for the review report; `kernel` 25 → 54 (7 for the pin, 22 shapes). 637 in all, 18 families. Every expectation was written before the first run, and the first run passed all 63 |
+| Vectors | a new family, `author`: 17 for the missing-author report, 17 for the review report; `kernel` 25 → 54 (7 for the pin, 22 shapes). 637 in all, 18 families. Every expectation was written before the first run, and the first run passed all 63. After the ports, six more (below): 18 and 22 in `author`, 643 in all |
 | Deliberate defects | 19 in the reference's new code, each turning at least one vector red |
 | Values that had to change | none: 53 assessment times, 19 timestamps and 3 mapping dates in the repository conform |
 | The example folder | 8 objects name their authors and dates; re-pinned; no AUTHOR line, 2 review dates asked, 0 overdue, 1 not evaluable (a calendar period) |
@@ -3290,7 +3290,21 @@ and the vectors, and checked here.
    author's to decide, as #67 was).
 3. *The reader* has its own test for the kernel pin and does not know
    the new fields (#69).
-4. *An English sentence that was wrong.* The website said neither report
+4. *Four defects no vector caught.* The agent that ported the twin
+   tested its port with 37 deliberate defects, and four left every
+   vector green: a second counted as a minute, a minute as an hour, a
+   duration rounded up to the next day, and a case with an untyped
+   object. No vector used seconds or minutes, and every duration ended
+   at midnight. It found them with a differential run against the
+   reference on generated bundles. Five review vectors and one author
+   vector were added; in the reference the first three defects now turn
+   one red each.
+5. *The order of the report.* Python orders strings by code point, .NET
+   and JavaScript by UTF-16 code unit. The reference's two reports now
+   follow the canonical form, by code unit, and two vectors hold all
+   three to it. `--as-of` took `20261113` in the reference; it takes
+   `YYYY-MM-DD` only now.
+6. *An English sentence that was wrong.* The website said neither report
    fails a bundle unless the caller asks for it. REVIEW-1 never fails.
    The agent that translated the page said so; the English and the four
    translations are corrected.

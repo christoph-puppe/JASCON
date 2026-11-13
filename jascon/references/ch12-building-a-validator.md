@@ -305,10 +305,12 @@ DATE-1 covers a Deviation's `decided` too. `kernel-vectors.json` now
 has 18 cases for the pin and 36 `shape-vectors`.
 
 Two reports come with those fields, and neither is a verdict.
-`author-vectors.json` holds 17 cases for the first: one line per object
+`author-vectors.json` holds 18 cases for the first: one line per object
 and rule where an author or a date is missing (AUTHOR-1 to AUTHOR-4),
-objects in the order of their ids. Print them as notes, and offer a
-switch that makes them failures. The other 17 cases are for REVIEW-1: an
+objects in the order of their ids by UTF-16 code unit, the order of the
+canonical form. If your language sorts strings by code point, as Python
+does, sort by the UTF-16 encoding; one case holds an id beyond U+FFFF. Print them as notes, and offer a
+switch that makes them failures. The other 22 cases are for REVIEW-1: an
 approved Deviation or a Risk still managed whose `review-due` has
 passed. This is the one place where your validator reads a clock. Take
 the date of the run in UTC, and take a date from the caller instead when

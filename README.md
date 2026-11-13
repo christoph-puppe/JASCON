@@ -14,7 +14,7 @@ contact with real catalogs before it may stay.**
 
 This repository is a working design study, not a slide deck. It contains a
 draft specification with a public decision register, an **executable kernel
-schema** with a **157-vector conformance corpus** (637 in 18 families in the 2.0.0 candidate) and *two* reference
+schema** with a **157-vector conformance corpus** (643 in 18 families in the 2.0.0 candidate) and *two* reference
 validators — Python, and a **zero-dependency PowerShell 5.1 twin that runs
 on a stock Windows box** (the weekend-validator claim, measured,
 crypto engines included) —
@@ -71,7 +71,7 @@ requirements and mints real objects.*
 >   the date of the run or `--as-of`). `--require-authors` turns the
 >   first into failures; the second never fails, and a Deviation past
 >   its review stays in force until someone acts.
-> - **Measured:** 34 vectors for the two reports and 29 for the pin and
+> - **Measured:** 40 vectors for the two reports and 29 for the pin and
 >   the shapes; nineteen deliberate defects in the reference each turn
 >   one red. The example folder names its authors.
 > - **Not there:** the tools do not write the fields yet. The app and the
@@ -87,7 +87,7 @@ requirements and mints real objects.*
 > tailoring or an assessment, and the vendor's manifest stays in the set
 > as the import record. No new type.
 >
-> - **Measured:** 74 advice vectors (537 in all on 2026-11-12, 637 in 18 families since rc.4) pass in the
+> - **Measured:** 74 advice vectors (537 in all on 2026-11-12, 643 in 18 families since rc.4) pass in the
 >   Python reference; 28 deliberate breaks of the reference each turn a
 >   vector red. A worked pack, signed with the public fixture key, and
 >   the example folder after importing it validate. Run over the shipped

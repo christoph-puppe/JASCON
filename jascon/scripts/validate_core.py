@@ -1532,13 +1532,20 @@ AUTHOR_RULES = {
     "REVIEW-1": "a review-due that has passed is reported, on an approved Deviation and on a Risk still managed - the date exists to be looked at",
 }
 
+def by_code_unit(ids):
+    """ids in the order of their UTF-16 code units - the order RFC 8785 gives
+    the members of the canonical form, and the one a JavaScript or a .NET
+    tool gets from an ordinal sort. Python's own order is by code point,
+    which differs for ids with characters beyond U+FFFF."""
+    return sorted(ids, key=lambda s: s.encode("utf-16-be"))
+
 def author_report(objs, sdig_fn=None, envelopes=None, trusted=None):
     """-> [(rule, object id, count, message)], in the order of the ids.
     AUTHOR-1 asks only a Tailoring at consumer tier (D13: duties bind
     there; an authority's Tailoring is attributed by its origin and its
     Attestation). An entry without `provenance` has its Tailoring's."""
     out = []
-    for oid in sorted(objs):
+    for oid in by_code_unit(objs):
         t, o = objs[oid]
         if t == "tailoring":
             tier = derive_tier(o, objs, sdig_fn or sdig, envelopes=envelopes, trusted=trusted)
@@ -1598,7 +1605,7 @@ def review_report(objs, as_of):
     from `acceptance.date` on a Risk. Asked of an approved Deviation and of
     a Risk still managed; nothing fails by it."""
     dated, overdue, blind = 0, [], []
-    for oid in sorted(objs):
+    for oid in by_code_unit(objs):
         t, o = objs[oid]
         asked = [(w, d["review-due"], d.get("decided") or d.get("opened")) for w, d in deviations_of(t, o)
                  if d.get("state") == "approved" and isinstance(d.get("review-due"), dict)]
@@ -3245,7 +3252,9 @@ if "--require-authors" in _argv:         # policy switch: AUTHOR-1..4 lines beco
     _argv.remove("--require-authors")
 if "--as-of" in _argv:
     _i = _argv.index("--as-of")
-    AS_OF = datetime.date.fromisoformat(_argv[_i + 1])
+    if not VALIDATORS["date"].is_valid(_argv[_i + 1]): sys.exit(f"--as-of {_argv[_i + 1]!r} is not a date, YYYY-MM-DD")
+    try: AS_OF = datetime.date.fromisoformat(_argv[_i + 1])
+    except ValueError: sys.exit(f"--as-of {_argv[_i + 1]!r} is not a day of the calendar")
     _argv = _argv[:_i] + _argv[_i + 2:]
 if "--require-risk-basis" in _argv:      # policy switch: uncovered selections become failures
     REQUIRE_RISK_BASIS = True

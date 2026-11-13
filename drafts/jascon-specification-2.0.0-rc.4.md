@@ -1770,7 +1770,7 @@ decision (the precedent is D25's two fields). Read, not counted: OSCAL
 states who per item in its assessment layer and per document everywhere;
 CISO Assistant carries an expiry on a security exception and logs each
 change. No corpus of consumer Tailorings with authors exists. Measured:
-34 vectors for the two reports and 29 for the pin and the shapes;
+40 vectors for the two reports and 29 for the pin and the shapes;
 nineteen deliberate defects in the reference each turn one red.
 
 ## III.4 — A cross-framework mapping (SCF-shaped)
@@ -2052,9 +2052,9 @@ of Check and of advice packs:
    ids (D2; backlog #45 and #58). No kernel shape and no rule changed by
    these six. With the vectors of the run rules and of NUMBER-1 (IV.6),
    574 in all; both validators and the app's port are green on them.)*
-   *(rc.4, 2026-11-13: an eighteenth family, `author`, with 34 vectors
+   *(rc.4, 2026-11-13: an eighteenth family, `author`, with 40 vectors
    for the two reports of D26, and `kernel` 25 → 54 for the pin and the
-   shapes of its fields: **637 vectors, 18 families**. Nineteen
+   shapes of its fields: **643 vectors, 18 families**. Nineteen
    deliberate defects in the reference's new code each turn one red.)*
 2. **First implementation.** ✓ `validate_core.py`: 537 / 537, the five
    shipped bundles (3,715 objects, both digests each), the worked advice
@@ -2132,7 +2132,7 @@ history. The compact line:
 | The value-level check of the converters | 2026-11-13 | Two more outside reports (issues 32 and 33 in the GitHub tracker): `value_arrival()` matched substrings across one joined string, so the IFA figure of 394 of 835 was too high; and any global check hides a dropped value behind an equal one elsewhere. The helper is `global_occurrence()` now, on typed whole values, with key-only and embedded matches listed apart and not counted: **283 of 835**, 124 content values without an equal, stated as an upper and a lower bound. R16 and IV.5b item 6 amended; backlog #41 re-planned to a ledger of source occurrences per converter. No kernel rule, vector or bundle object changes | "Amendments — the value-level check of the converters" |
 | Outside reports on the run rules | 2026-11-13 | Four reports from outside (issues 23 to 26 in the GitHub tracker), each reproduced: the reference accepted an evidence record outside `evidence/sha256/`, a `collector-id` on a Check without collectors, a row parameter its Check does not read, and a record that binds no observation. CHECK-12, CHECK-13 and CHECK-15 amended in place (D24); the three engines follow; `check` 188 → 199 vectors. After rc.3; the counts in the Status and in IV.5b and IV.7 are those of rc.3 | "Amendments — the outside reports of 2026-11-13" |
 | Code points in the twin · the open backlog | 2026-11-13 | The PowerShell twin compared strings with PowerShell's operators, which fold case and compare under a culture; a Tailoring whose id differed from its content's origin by one U+00AD was read as the authority's own. No operator compares two strings there any more, and a lint that parses the twin keeps it so (#58 closed, with the residue of #45). `reference` 13 → 18 vectors, `tier` 9 → 10; 574 in all. No shape and no rule changed. The same day: the record of catalogue entries that do not apply got a schema, outside the kernel (#54 closed); the two OSCAL response types without a treatment code stay without one (#47b closed, C.10); #65 and #66 accepted for 2.0.0 and not yet landed. After rc.3 | D2 · C.10 · "Amendments — the open backlog before 2.0.0" |
-| **2.0.0-rc.4** | 2026-11-13 | This text: D26 new (who decided, and when); D8, D13 and D23 amended in place. `provenance` optional on a Tailoring and its entries, a Risk and its ratings, an Implementation and a Finding; `decided` and `review-due` on a Deviation; `date` on an authorization; AUTHOR-1 to 4 and REVIEW-1 as reports; three times typed (DATE-3 to 5). A new vector family, `author` (34), and `kernel` 25 → 54; 637 in all, 18 families. Backlog #65 and #66 | D26 · "CP-AUTHOR-1 landed" |
+| **2.0.0-rc.4** | 2026-11-13 | This text: D26 new (who decided, and when); D8, D13 and D23 amended in place. `provenance` optional on a Tailoring and its entries, a Risk and its ratings, an Implementation and a Finding; `decided` and `review-due` on a Deviation; `date` on an authorization; AUTHOR-1 to 4 and REVIEW-1 as reports; three times typed (DATE-3 to 5). A new vector family, `author` (40), and `kernel` 25 → 54; 643 in all, 18 families. Backlog #65 and #66 | D26 · "CP-AUTHOR-1 landed" |
 
 ## IV.7 Release artifacts (what this candidate ships with)
 
@@ -2153,7 +2153,7 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
   modality 21 · parameter 19 · tailoring 19 · attestation 5 · facet 7 ·
   reference 13 · lifecycle 38 · tier 9 · dsse 5 · composition 7 ·
   conditional 8 · risk 73 · kernel 25 · scale 18 · check 188 · advice
-  74; with the amendments after rc.3 in IV.6 and the vectors of rc.4, **637 in 18 families**: `author` 34, `kernel` 54, `reference` 18, `tier` 10, `jcs` 22, `parameter` 21, `check` 203). In `risk-vectors.json`, `expected-rule` is the portable assertion; in `author-vectors.json`, the rule, the object and the count of each report line;
+  74; with the amendments after rc.3 in IV.6 and the vectors of rc.4, **643 in 18 families**: `author` 40, `kernel` 54, `reference` 18, `tier` 10, `jcs` 22, `parameter` 21, `check` 203). In `risk-vectors.json`, `expected-rule` is the portable assertion; in `author-vectors.json`, the rule, the object and the count of each report line;
   in `check-vectors.json` and `advice-vectors.json`, the outcome and the
   named rules.
 - **A worked advice pack** under `jascon/example-packs/`, and the example
