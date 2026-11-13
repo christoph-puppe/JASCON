@@ -2833,9 +2833,106 @@ and is applied class by class. Two classes are under discussion with
 the author: role assignments without a kernel field (40 values) and
 references by uuid whose edge the converter builds by hand (25).
 
+## The carry classes and the references (2026-11-13, later the same day)
+
+The author decided the 272: the seven carry classes as recommended;
+roles at two levels only, on the Component and for the whole scope,
+never per statement, activity, task, capability or user ("each role
+assignment per element would blow up things"); and for the references
+by uuid the recommended solution, resolve where the bundle has the edge,
+carry where it has none. The decisions were applied in steps, one commit
+each. After each step the converter ran twice (identical files), the
+ledger had no failed check, and the reference validator, the converter
+tests and the app's OSCAL tests were green.
+
+**Before the first step, a guard.** The author's observation: the
+converter's report is a historical document, and a breaking change in
+the kernel or the library would go unnoticed. `SOURCES.sha256` in the
+IFA folder pins the seven source files; a CI step downloads them at the
+pinned commit, checks the digests, runs the converter and fails if the
+committed folder is not reproduced byte for byte.
+
+| Step | What was carried, and where | Copied | Transformed | Dropped | Unaccounted |
+|---|---|---:|---:|---:|---:|
+| before | | 235 | 33 | 295 | 272 |
+| Document metadata | title, version, OSCAL version, last-modified, published and remarks of each of the seven documents, as `provenance.source-documents` in the manifest | 262 | 33 | 295 | 245 |
+| Leveraged and leveraging system | one function builds `system@1` for all three plans: ids, status, sensitivity, FIPS-199 impact and information types, boundary, remarks, users | 310 | 33 | 293 | 199 |
+| Inventory | beside `props` and `components`: `prop-classes` (the class of each prop, by name) and `component-props` (the props of each implemented component) | 341 | 33 | 293 | 168 |
+| Component definition (#64) | per capability `statement-ids`, the statement texts under their clause ids, `parameter-bindings` under the catalogue's parameter names; the control implementation's description and source in `component@1` | 342 | 44 | 291 | 158 |
+| Components and roles | `component@1` on every Component: description, purpose, status, props, `responsible-roles`; the scope's roles in `system@1` and in the Assessment's method payload | 388 | 60 | 309 | 78 |
+| Implementation narrative | `implementation@1` on the Implementation: description, remarks, and per statement each component's response with what it says of the export, of what is inherited and of what is satisfied | 404 | 60 | 309 | 62 |
+| Assessment detail | method payload: activities with steps, method and related controls, the results' own activity beside the plan's, tasks, subjects; `observations@1`: description, end, types, subjects, remarks; `finding-target@1`: descriptions and the POA&M item | 441 | 67 | 308 | 19 |
+| References by uuid | lookup maps from source uuid to minted id; each edge is the result of resolving the reference the source gives | 441 | 95 | 296 | 3 |
+
+**Shapes.** Two new facets, one per object type, each with a pinned
+stub schema: `component@1` (`title`, `description`, `purpose`, `status`,
+`props`, `control-implementations[]`, `responsible-roles[]`) and
+`implementation@1` (`description`, `remarks`, `statements[]` of
+`{statement, remarks, responses[]}`, a response being `{component,
+description, export, inherited[], satisfied[]}`). Everything else went
+into facets the corpus had. A role entry is `{role, parties: [landmark
+URI]}`. An assignment the source makes below the two levels is rolled
+up: where its role and party are on the Component or the scope already
+it is linked to them in the ledger, else it joins the list.
+
+**Declared in these steps**, and nothing else: eight role references to
+parties the source defines without a name (the leveraged pair's parties
+have a type and at most a remark; the role is carried without a party),
+and twenty values of the leveraging plan's own entries for the leveraged
+system and its application, for which the provider's Components stand.
+
+**What the steps found.**
+
+1. *The path map, again.* Beside the three claims known from the first
+   run and #64 it said that the activity of the assessment results was
+   "duplicated from AP; carried once" (it is a different activity, a
+   TEST where the plan has an EXAMINE, and was not carried) and that the
+   titles of the POA&M items "ride the Finding titles" (they did not).
+   The texts now say what is written.
+2. *Two edges were wrong.* Resolved from the source, the exported
+   capability `cap-provided-2` belongs to the application component of
+   the leveraged system; the converter had put it on the system
+   Component `csp-iaas`. And the appliance's capability
+   `cap-consumer-ac-2a` carried the `satisfied` text of another
+   component of the same statement. Both follow the source now; the
+   Implementation `csp-iaas-ac-2` cites the capability on
+   `csp-application`. The other hand-wired edges resolved to the value
+   they had.
+3. *One observation, two texts.* The assessment results and the POA&M
+   hold the same observation under one uuid, and its remarks differ by
+   one space before a line break. The deduplication had kept the first
+   and dropped the second unseen. The second is carried under `variants`.
+4. *Source defects, reported and not repaired.* Eight parties without a
+   name. A plan task names an activity by a uuid the plan does not
+   define. The first POA&M item names a risk by a uuid the POA&M does not
+   define (the item is matched to its risk through the observation they
+   share). A `satisfied` entry of the leveraging plan names, as its
+   responsibility, the uuid of an exported capability.
+5. The stub schema of the method payload had not named `tasks` and
+   `reviewed-controls`, which the payload has carried since 1.0.0 (part
+   of #55).
+
+**Still unaccounted: three**, the three dangling references of item 4
+(`ap…tasks[].associated-activities[].activity-uuid`,
+`poam…poam-items[].related-risks[].risk-uuid`,
+`lvg…by-components[].satisfied[].responsibility-uuid`). Nothing is
+invented for them and no drop is declared; that is the author's to
+decide. 15 of the bundle's 17 objects changed in these steps, the two
+Requirements did not; ids and versions are those of the source
+documents, as on every re-run of this converter.
+
+**Not done.** `requirement-ref` of the component definition's
+capabilities is written into the NIST namespace by rule; the `source`
+of the control implementation is carried and does not choose it. The
+converter still writes a party URI `authorizing-official` for the
+authorization that no source value names. The other ten converters have
+no ledger.
+
 ## What it does not change
 
-No kernel shape, rule or vector, no validator, no bundle object. And no
+No kernel shape, rule or vector and no validator. The first decisions
+changed no bundle object; the carry classes, later the same day, changed
+15 of the IFA bundle's 17. And no
 claim of losslessness is added: the specification already said that
 "converted losslessly" is established at path level only.
 
