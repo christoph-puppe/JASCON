@@ -1,8 +1,9 @@
 # The jascon.net site
 
 The public site of the project: six pages (home, the model, checks, evidence,
-get started, join), a legal notice, and a 404 page. It is static, has no
-dependency beyond Python's standard library to build, and sends no request
+get started, join), a legal notice, and a 404 page, in English and in four
+translations (German, Hindi, Japanese, Simplified Chinese). It is static, has
+no dependency beyond Python's standard library to build, and sends no request
 to another host when it is read.
 
 ## Build and look at it
@@ -91,6 +92,28 @@ missing.
 The tone of the text follows the project's house rules: a claim is measured,
 designed for or proposed and says which; limits are stated where the claim is
 made.
+
+## Languages
+
+English is the source. `site.json` lists the languages that are built
+(`"languages"`); each has the words of the layout in `i18n/<lang>.json` and
+its pages in `src/<lang>/`, and is served under `/<lang>/` (`/de/`, `/hi/`,
+`/ja/`, `/zh/`). The header carries a language menu (a `<details>`, so it
+works without scripts), the footer the same links, and every page names its
+translations with `hreflang` links. The app, the reader and the documents in
+the repository stay English.
+
+- A translated page keeps the markup of the English one and changes words
+  only. `i18n/check_translation.py <lang> [page]` compares the two (blocks,
+  elements, `{{ names }}`, code), and the build runs the same check.
+- A translation records in its header the digest of the English page it
+  follows (`source:`). When the English page changes, the build lists the
+  translation as older and the page shows its reader a note with a link to
+  the English page. After the translation is brought up to date:
+  `python3 website/build.py --stamp <lang>/<page>`.
+- Rules and glossary for translators: `i18n/TRANSLATING.md`.
+- The site's faces are Latin subsets. Devanagari and Han/Kana are set in the
+  reader's system faces; `styles.css` names them per language at its end.
 
 ## Publishing on jascon.net with GitHub Pages
 

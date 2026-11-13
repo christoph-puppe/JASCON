@@ -17,7 +17,13 @@ Standard library only. What it does, in order:
 2. Pages. Every src/*.html without a leading underscore is a page: a small
    header (title, description, nav) and a body, set into src/_layout.html.
    `{{ name }}` is replaced from the facts, site.json and the page header;
-   an unknown name stops the build.
+   an unknown name stops the build. The words of the layout come from
+   i18n/<lang>.json. Each further language of site.json "languages" is
+   built into <lang>/ from src/<lang>/<page>.html; a page that has no
+   translation is left out there, and links to it go to the English page.
+   A translation records the digest of the English page it was made from
+   (header line `source:`); when the English page changes, the build says
+   so and the translated page tells its reader.
 3. The app. jascon-app/ is copied to app/, the single-file reader to
    reader/, the redistributable bundles to converted_examples/ with the
    publishers' licence notes beside them, and the example bundle, the
@@ -28,6 +34,7 @@ Standard library only. What it does, in order:
 """
 import argparse
 import datetime
+import hashlib
 import html
 import json
 import os
@@ -37,12 +44,16 @@ import subprocess
 import sys
 import urllib.parse
 
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "i18n"))
+import check_translation  # noqa: E402  (website/i18n/check_translation.py)
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(HERE)
 SRC = os.path.join(HERE, "src")
 STATIC = os.path.join(HERE, "static")
 FACTS = os.path.join(HERE, "facts.json")
 SITE = os.path.join(HERE, "site.json")
+I18N = os.path.join(HERE, "i18n")
 
 VALIDATOR_PY = "jascon/scripts/validate_core.py"
 VALIDATOR_PS = "jascon/scripts/validate_core.ps1"
@@ -191,11 +202,11 @@ def measure():
 
 # ---------------------------------------------------------------- values
 
-def fmt(value):
+def fmt(value, sep=","):
     if isinstance(value, bool):
         return "yes" if value else "no"
     if isinstance(value, int):
-        return f"{value:,}"
+        return f"{value:,}".replace(",", sep)
     return str(value)
 
 
@@ -209,9 +220,13 @@ def lookup(ctx, dotted):
     return cur
 
 
-def fragments(facts):
-    """HTML built from the facts: table rows and lists the pages place."""
+def fragments(facts, T):
+    """HTML built from the facts: table rows and lists the pages place, in
+    the words of one language (T, the strings of i18n/<lang>.json)."""
     e = html.escape
+    b_t = T["build"]
+    sep = T["meta"]["thousands"]
+    num = lambda n: f"{n:,}".replace(",", sep)
     fam = facts["vectors"]["families"]
     family_rows = "\n".join(
         f'<tr><td><code>{e(f["name"])}</code></td><td class="num">{f["vectors"]}</td></tr>'
@@ -220,9 +235,10 @@ def fragments(facts):
         f'<li><code>{e(f["name"])}</code><span>{f["vectors"]}</span></li>' for f in fam)
 
     rows = []
+    plural = "s" if b_t["plural_s"] else ""
     for b in facts["bundles"]:
-        c = CORPORA[b["corpus"]]
-        kinds = " · ".join(f'{n:,} {TYPE_LABELS.get(t, t)}{"" if n == 1 else "s"}' for t, n in
+        c = dict(CORPORA[b["corpus"]], **b_t["corpora"].get(b["corpus"], {}))
+        kinds = " · ".join(f'{num(n)} {TYPE_LABELS.get(t, t)}{"" if n == 1 else plural}' for t, n in
                            sorted(b["types"].items(), key=lambda kv: -kv[1]))
         bundle_dir = b["path"].split("/", 1)[1]
         tool = "assess" if "assessment" in b["types"] else "browse"
@@ -230,11 +246,11 @@ def fragments(facts):
             "<tr>"
             f'<th scope="row"><span class="corpus-id">{e(b["corpus"])}</span>'
             f'{e(c["title"])}<small>{e(c["publisher"])}</small></th>'
-            f'<td class="num">{b["objects"]:,}</td>'
+            f'<td class="num">{num(b["objects"])}</td>'
             f"<td>{e(kinds)}<small>{e(c['note'])}</small></td>"
             f'<td><a href="converted_examples/{e(b["corpus"])}/SOURCE-LICENSE.md">{e(c["licence"])}</a></td>'
             f'<td><a class="open" href="app/index.html#load=../converted_examples/{e(bundle_dir)}/&amp;tool={tool}">'
-            "Open in the app</a></td>"
+            f"{e(b_t['open_in_app'])}</a></td>"
             "</tr>")
     return {
         "family_rows": family_rows,
@@ -243,9 +259,13 @@ def fragments(facts):
     }
 
 
-def context(facts, site):
+def context(facts, site, T):
     shipped_objects = sum(b["objects"] for b in facts["bundles"])
     ctx = {
+        "lang": T["meta"],
+        "t": T["layout"],
+        "script": T["script"],
+        "sep": T["meta"]["thousands"],
         "facts": facts,
         "site": site,
         "repo": site["repo_url"],
@@ -264,12 +284,12 @@ def context(facts, site):
             "advice_vectors": next((f["vectors"] for f in facts["vectors"]["families"]
                                     if f["name"] == "advice"), 0),
         },
-        "html": fragments(facts),
+        "html": fragments(facts, T),
         "demo": demo_digests(),
         "checkdemo": check_demo(),
         "year": str(datetime.date.today().year),
     }
-    ctx["html"]["imprint"] = imprint(site)
+    ctx["html"]["imprint"] = imprint(site, T["build"])
     return ctx
 
 
@@ -300,38 +320,49 @@ def check_demo():
         facts = {}
         for row in a["check-results"]:
             facts.update(row["observation"]["facts"])
-        runs.append({"label": a["label"], "result": a["result"], "facts": facts})
+        date = re.search(r"\d{4}-\d{2}-\d{2}", a["label"])
+        runs.append({"label": a["label"], "date": date.group(0) if date else "",
+                     "result": a["result"], "facts": facts})
     bound = {op["parameter"]: op["value"] for op in tailoring["operations"] if op["op"] == "set-parameter"}
     return {"checks": [{k: c[k] for k in ("id", "title", "statement-ids", "observes", "criteria")} for c in checks],
             "requirement": load("req-acme-lnx-ssh-1.json"), "bound": bound, "runs": runs}
 
 
-def imprint(site):
+def imprint(site, words):
     """The publisher block of legal.html. An address is printed only when
-    site.json holds one; nothing is invented."""
+    site.json holds one; nothing is invented. The country line is written
+    in the page's language (words: the "build" strings of i18n/<lang>.json)."""
     e = html.escape
     imp = site.get("imprint", {})
-    lines = [f"<strong>{e(site['publisher'])}</strong>"] + [e(x) for x in imp.get("address_lines", [])]
+    address = [words["imprint_country"] if x == "Germany" else x for x in imp.get("address_lines", [])]
+    lines = [f"<strong>{e(site['publisher'])}</strong>"] + [e(x) for x in address]
     out = ["<address>" + "<br>".join(lines) + "</address>"]
     if imp.get("email"):
-        out.append(f'<p>E-mail: <a href="mailto:{e(imp["email"])}">{e(imp["email"])}</a></p>')
-    out.append(f'<p>Questions, corrections and objections: <a href="{e(site["repo_url"])}/issues" '
-               'rel="noopener">an issue in the repository</a>.</p>')
+        out.append(f'<p>{e(words["imprint_email"])}: <a href="mailto:{e(imp["email"])}">{e(imp["email"])}</a></p>')
+    out.append(f'<p>{e(words["imprint_questions"])}: <a href="{e(site["repo_url"])}/issues" '
+               f'rel="noopener">{e(words["imprint_issue"])}</a>.</p>')
     if imp.get("responsible_for_content"):
-        out.append(f"<p>Responsible for the content: {e(imp['responsible_for_content'])}</p>")
+        out.append(f"<p>{e(words['imprint_responsible'])}: {e(imp['responsible_for_content'])}</p>")
     return "\n".join(out)
 
 
 # ---------------------------------------------------------------- pages
 
 TOKEN = re.compile(r"\{\{\s*([^{}]+?)\s*\}\}")
+INCLUDE = re.compile(r"\{\{\s*include:([^{}]+?)\s*\}\}")
+
+
+def partial(name, lang):
+    """A partial of src/, in the language's folder when it has one there."""
+    own = os.path.join(SRC, lang, name)
+    return own if lang != "en" and os.path.isfile(own) else os.path.join(SRC, name)
 
 
 def render(text, ctx, where):
     def sub(m):
         key = m.group(1)
         if key.startswith("include:"):
-            return render(read(os.path.join(SRC, key[8:])), ctx, key[8:])
+            return render(read(partial(key[8:], ctx["lang"]["code"])), ctx, key[8:])
         if key.startswith("file:"):
             return html.escape(read(os.path.join(REPO, key[5:])).rstrip("\n"), quote=False)
         if key.startswith("json:"):
@@ -342,7 +373,10 @@ def render(text, ctx, where):
             die(f"{where}: unknown name {{{{ {key} }}}}")
         if key.startswith("html.") or key in ("content",):
             return value
-        return html.escape(fmt(value), quote=True)
+        if key.endswith("_html"):
+            # markup kept in i18n/<lang>.json; its own names are filled in here
+            return render(value, ctx, where + " (" + key + ")")
+        return html.escape(fmt(value, ctx.get("sep", ",")), quote=True)
     return TOKEN.sub(sub, text)
 
 
@@ -409,32 +443,194 @@ def parse_page(path):
     return head, text[m.end():]
 
 
-def build_pages(out, ctx):
+# ---------------------------------------------------------------- languages
+
+def merge(base, over):
+    """over on top of base, key by key; what over lacks stays English."""
+    out = dict(base)
+    for k, v in over.items():
+        out[k] = merge(base[k], v) if isinstance(v, dict) and isinstance(base.get(k), dict) else v
+    return out
+
+
+def load_languages(site):
+    codes = site.get("languages", ["en"])
+    if codes[0] != "en":
+        die('site.json: "languages" starts with "en", the language the pages are written in')
+    english = json.loads(read(os.path.join(I18N, "en.json")))
+    langs = {}
+    for code in codes:
+        path = os.path.join(I18N, code + ".json")
+        if not os.path.isfile(path):
+            die(f"site.json names the language {code}, but i18n/{code}.json is missing")
+        own = json.loads(read(path))
+        if own.get("meta", {}).get("code") != code:
+            die(f"i18n/{code}.json: meta.code is not {code!r}")
+        langs[code] = merge(english, own)
+    return langs
+
+
+def source_digest(name, lang="en"):
+    """What a translation records in its `source:` line: the first twelve
+    hex digits of SHA-256 over the English page with its partials set in,
+    as written, before any name is filled."""
+    text = INCLUDE.sub(lambda m: read(partial(m.group(1), "en")), read(os.path.join(SRC, name)))
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()[:12]
+
+
+def page_names():
+    return sorted(n for n in os.listdir(SRC) if n.endswith(".html") and not n.startswith("_"))
+
+
+def translated(lang):
+    folder = os.path.join(SRC, lang)
+    if lang == "en":
+        return set(page_names())
+    if not os.path.isdir(folder):
+        return set()
+    return {n for n in page_names() if os.path.isfile(os.path.join(folder, n))}
+
+
+def stamp(spec):
+    """--stamp de, --stamp de/index.html: record in the translation that it
+    now follows the English page as it stands."""
+    lang, _, only = spec.partition("/")
+    names = [only] if only else sorted(translated(lang))
+    if lang == "en" or not names:
+        die(f"--stamp {spec}: no translated page there")
+    for name in names:
+        path = os.path.join(SRC, lang, name)
+        if not os.path.isfile(path):
+            die(f"--stamp {spec}: src/{lang}/{name} does not exist")
+        text = read(path)
+        m = re.match(r"\A---\n(.*?)\n---\n", text, re.S)
+        if not m:
+            die(f"src/{lang}/{name}: no header")
+        lines = [l for l in m.group(1).splitlines() if not l.startswith("source:")]
+        lines.append("source: " + source_digest(name))
+        write(path, "---\n" + "\n".join(lines) + "\n---\n" + text[m.end():])
+        print(f"build.py: src/{lang}/{name} follows the English page {source_digest(name)}")
+
+
+ABSOLUTE = re.compile(r"^(?:[a-zA-Z][a-zA-Z0-9+.-]*:|#|/|\.\./)")
+ATTR = re.compile(r'\b(href|src)="([^"]*)"')
+
+
+def relink(page, lang, own_pages):
+    """Pages of a language live one folder down. A link to a page that
+    exists in that language stays as it is; every other relative link
+    (assets, the app, the bundles, an untranslated page) goes one folder up.
+    "@root/" is the site root, for the language links."""
+    up = "" if lang == "en" else "../"
+
+    def fix(m):
+        attr, url = m.group(1), m.group(2)
+        if url.startswith("@root/"):
+            return f'{attr}="{up}{url[6:]}"'
+        if lang == "en" or not url or ABSOLUTE.match(url):
+            return m.group(0)
+        if re.split(r"[#?]", url, maxsplit=1)[0] in own_pages:
+            return m.group(0)
+        return f'{attr}="../{url}"'
+    return ATTR.sub(fix, page)
+
+
+def language_links(name, lang, langs, site):
+    """The language menu, the footer list and the alternate links of a page."""
+    e = html.escape
+    base = site["base_url"].rstrip("/")
+    here = langs[lang]["meta"]
+    items, foot, alts = [], [], []
+    for code, T in langs.items():
+        m = T["meta"]
+        has = name in translated(code)
+        target = name if has else "index.html"
+        folder = "" if code == "en" else code + "/"
+        href = "@root/" + folder + target
+        current = ' aria-current="true"' if code == lang else ""
+        items.append(f'<li><a href="{href}" hreflang="{e(m["hreflang"])}" lang="{e(m["hreflang"])}"{current}>'
+                     f'<span>{e(m["name"])}</span><small>{e(m["short"])}</small></a></li>')
+        foot.append(f'<a href="{href}" hreflang="{e(m["hreflang"])}" lang="{e(m["hreflang"])}"{current}>{e(m["name"])}</a>')
+        if has:
+            alts.append(f'<link rel="alternate" hreflang="{e(m["hreflang"])}" '
+                        f'href="{base}/{folder}{"" if target == "index.html" else target}">')
+    if len(alts) > 1:
+        alts.append(f'<link rel="alternate" hreflang="x-default" href="{base}/{"" if name == "index.html" else name}">')
+    else:
+        alts = []
+    if len(langs) == 1:
+        return {"lang_menu": "", "lang_foot": "", "alternates": ""}
+    menu = ('<details class="lang-pick" id="lang">'
+            f'<summary aria-label="{e(langs[lang]["layout"]["lang_label"])}" title="{e(langs[lang]["layout"]["lang_label"])}">'
+            '<svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" '
+            'stroke="currentColor" stroke-width="1.6"/><path d="M3 12h18M12 3c2.6 2.6 3.9 5.6 3.9 9s-1.3 6.4-3.9 9c-2.6-2.6'
+            '-3.9-5.6-3.9-9s1.3-6.4 3.9-9z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>'
+            f'<span>{e(here["short"])}</span></summary>'
+            '<ul>' + "".join(items) + "</ul></details>")
+    foot = (f'<nav class="foot-langs" aria-label="{e(langs[lang]["layout"]["foot_languages"])}">'
+            + " ".join(foot) + "</nav>")
+    return {"lang_menu": menu, "lang_foot": foot, "alternates": "\n".join(alts)}
+
+
+def build_pages(out, langs, facts, site):
     layout = read(os.path.join(SRC, "_layout.html"))
-    pages = []
-    for name in sorted(os.listdir(SRC)):
-        if name.startswith("_") or not name.endswith(".html"):
-            continue
-        head, body = parse_page(os.path.join(SRC, name))
-        page_ctx = dict(ctx)
-        page_ctx["page"] = {
-            "title": head["title"],
-            "description": head["description"],
-            "file": name,
-            "url": ctx["site"]["base_url"].rstrip("/") + "/" + ("" if name == "index.html" else name),
-            "body_class": head.get("class", ""),
-            "robots": head.get("robots", "index, follow"),
-        }
-        page_ctx["html"] = dict(ctx["html"], base_tag='<base href="/">' if head.get("base") else "")
-        page_ctx["content"] = highlight(render(body, page_ctx, name))
-        page = render(layout, page_ctx, "_layout.html")
-        # the current page in the navigation
-        nav = head.get("nav", "")
-        page = re.sub(r'\sdata-nav="([^"]*)"',
-                      lambda m: ' aria-current="page"' if m.group(1) == nav and nav else "",
-                      page)
-        write(os.path.join(out, name), page)
-        pages.append((name, head))
+    english = {n: parse_page(os.path.join(SRC, n)) for n in page_names()}
+    pages, stale = [], []
+    for lang, T in langs.items():
+        ctx = context(facts, site, T)
+        own_pages = translated(lang)
+        folder = "" if lang == "en" else lang + "/"
+        for name in page_names():
+            if name not in own_pages:
+                continue
+            head, body = english[name]
+            behind = False
+            if lang != "en":
+                own_head, body = parse_page(os.path.join(SRC, lang, name))
+                head = dict(head, title=own_head["title"], description=own_head["description"])
+                behind = own_head.get("source") != source_digest(name)
+                if behind:
+                    stale.append(f"{lang}/{name}")
+                else:
+                    problems = check_translation.compare(lang, name)
+                    if problems:
+                        die(f"src/{lang}/{name} does not have the structure of src/{name} "
+                            "(python3 website/i18n/check_translation.py " + lang + " " + name + "):\n  "
+                            + "\n  ".join(problems))
+            page_ctx = dict(ctx)
+            page_ctx["page"] = {
+                "title": head["title"],
+                "description": head["description"],
+                "file": name,
+                "url": ctx["site"]["base_url"].rstrip("/") + "/" + folder + ("" if name == "index.html" else name),
+                "body_class": head.get("class", ""),
+                "robots": head.get("robots", "index, follow"),
+                "en_href": "@root/" + name,
+            }
+            notes = {
+                "base_tag": '<base href="/">' if head.get("base") else "",
+                "root_attr": "" if lang == "en" else ' data-root="../"',
+                "translated": "" if lang == "en" else
+                    '<p class="foot-i18n">' + render(T["layout"]["translated_html"], page_ctx, name) + "</p>",
+                "stale": "" if not behind else
+                    '<div class="i18n-note" role="note"><div class="wrap"><p>'
+                    + render(T["layout"]["stale_html"], page_ctx, name) + "</p></div></div>",
+            }
+            page_ctx["html"] = dict(ctx["html"], **notes, **language_links(name, lang, langs, site))
+            page_ctx["content"] = highlight(render(body, page_ctx, folder + name))
+            page = render(layout, page_ctx, "_layout.html")
+            # the current page in the navigation
+            nav = head.get("nav", "")
+            page = re.sub(r'\sdata-nav="([^"]*)"',
+                          lambda m: ' aria-current="page"' if m.group(1) == nav and nav else "",
+                          page)
+            page = relink(page, lang, own_pages)
+            write(os.path.join(out, folder, name), page)
+            pages.append((folder + name, head))
+    if stale:
+        print("build.py: note - these translations are older than their English page; they say so "
+              "to the reader until they are brought up to date and stamped (build.py --stamp):\n  "
+              + "\n  ".join(stale))
     return pages
 
 
@@ -525,7 +721,7 @@ def write_meta(out, pages, site):
     for name, head in pages:
         if head.get("robots", "").startswith("noindex") or name == "404.html":
             continue
-        loc = base + "/" + ("" if name == "index.html" else name)
+        loc = base + "/" + re.sub(r"(^|/)index\.html$", r"\1", name)
         urls.append(f"  <url><loc>{loc}</loc><lastmod>{today}</lastmod></url>")
     write(os.path.join(out, "sitemap.xml"),
           '<?xml version="1.0" encoding="UTF-8"?>\n'
@@ -544,10 +740,11 @@ LINK = re.compile(r'(?:href|src)="([^"]+)"')
 
 
 def check_links(out, pages, pages_only):
-    skipped = ("app/", "reader/", "converted_examples/", "jascon/", "LICENSE.txt", "NOTICE.txt")
+    skipped = ("app/", "reader/", "pack-builder/", "converted_examples/", "jascon/", "LICENSE.txt", "NOTICE.txt")
     broken = []
     for name, _ in pages:
         text = read(os.path.join(out, name))
+        here = os.path.dirname(name)
         ids = set(re.findall(r'\sid="([^"]+)"', text))
         for target in LINK.findall(text):
             if target == "/" or re.match(r"^(https?:|mailto:|data:|#$)", target):  # "/" is the <base> of 404.html
@@ -557,6 +754,11 @@ def check_links(out, pages, pages_only):
                 if frag and frag not in ids:
                     broken.append(f"{name}: #{frag} names no id on the page")
                 continue
+            # relative to the page's folder (a language's pages are one down)
+            path = os.path.normpath(os.path.join(here, path)).replace(os.sep, "/")
+            if path.startswith("../"):
+                broken.append(f"{name}: {target} leaves the site")
+                continue
             if pages_only and path.startswith(skipped):
                 continue
             full = os.path.join(out, path)
@@ -564,7 +766,7 @@ def check_links(out, pages, pages_only):
                 full = os.path.join(full, "index.html")
             if not os.path.isfile(full):
                 broken.append(f"{name}: {target} names no file in the output")
-            elif frag and path.endswith(".html") and not path.startswith(("app/", "reader/")):
+            elif frag and path.endswith(".html") and not path.startswith(("app/", "reader/", "pack-builder/")):
                 if f'id="{frag}"' not in read(full):
                     broken.append(f"{name}: {target} names no id in {path}")
     if not pages_only:
@@ -584,7 +786,13 @@ def main():
                     help="run the reference validator and rewrite facts.json")
     ap.add_argument("--pages-only", action="store_true",
                     help="skip the app, the reader and the bundles")
+    ap.add_argument("--stamp", metavar="LANG[/PAGE]",
+                    help="record that the translations of LANG (or one page) follow the English pages "
+                         "as they stand now, then stop")
     args = ap.parse_args()
+    if args.stamp:
+        stamp(args.stamp)
+        return
     out = os.path.abspath(args.out)
     if out in (REPO, HERE) or REPO.startswith(out + os.sep):
         die("--out must not be the repository or a folder above it")
@@ -602,8 +810,8 @@ def main():
         remove_tree(out)
     os.makedirs(out)
     copy_tree(STATIC, out)
-    ctx = context(facts, site)
-    pages = build_pages(out, ctx)
+    langs = load_languages(site)
+    pages = build_pages(out, langs, facts, site)
     if not args.pages_only:
         copy_apps(out, facts)
     write_meta(out, pages, site)
@@ -613,7 +821,7 @@ def main():
         print("build.py: note - site.json has no imprint address; legal.html names the "
               "publisher and the contact only (see website/README.md, 'Before going live')")
     size = sum(os.path.getsize(os.path.join(d, f)) for d, _, fs in os.walk(out) for f in fs)
-    print(f"build.py: {len(pages)} pages, {size / 1e6:.1f} MB in {out} "
+    print(f"build.py: {len(pages)} pages in {len(langs)} languages, {size / 1e6:.1f} MB in {out} "
           f"(facts of {facts['measured']['date']}, commit {facts['measured']['commit']})")
 
 

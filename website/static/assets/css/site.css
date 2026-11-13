@@ -47,8 +47,11 @@
   --code-kw:    oklch(0.76 0.12 235);
   --shadow:     0 1px 2px oklch(0.2 0.03 285 / 0.05), 0 8px 28px oklch(0.2 0.03 285 / 0.07);
   --shadow-lg:  0 2px 4px oklch(0.2 0.03 285 / 0.06), 0 24px 64px oklch(0.2 0.03 285 / 0.14);
-  --sans:  "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --serif: "Source Serif 4", "Iowan Old Style", Georgia, serif;
+  /* --script-sans and --script-serif: the faces for Devanagari, Japanese
+     and Chinese, set per language at the end of styles.css; each ends in a
+     comma, and is empty for English */
+  --sans:  "Inter", var(--script-sans,) system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --serif: "Source Serif 4", var(--script-serif,) "Iowan Old Style", Georgia, serif;
   --mono:  "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   --wrap: 1180px;
   --gutter: clamp(20px, 4vw, 40px);
@@ -198,6 +201,29 @@ small, .small { font-size: 0.86rem; color: var(--ink-3); }
   :root:not([data-theme="light"]) .icon-btn .i-moon { display: block; }
 }
 .menu { display: none; }
+
+/* language: a menu of links in a <details>, so it works without scripts */
+.lang-pick { position: relative; flex: none; }
+.lang-pick svg { flex: none; }
+.lang-pick summary {
+  list-style: none; height: 38px; display: inline-flex; align-items: center; gap: 6px; padding: 0 10px; cursor: pointer;
+  border: 1px solid var(--rule); border-radius: 10px; color: var(--ink-2); font-size: 0.78rem; font-weight: 600; letter-spacing: 0.06em;
+}
+.lang-pick summary::-webkit-details-marker { display: none; }
+.lang-pick summary:hover, .lang-pick[open] summary { color: var(--ink); border-color: var(--rule-2); }
+.lang-pick ul {
+  position: absolute; right: 0; top: calc(100% + 8px); z-index: 60; min-width: 210px; padding: 6px;
+  background: var(--card); border: 1px solid var(--rule); border-radius: 12px; box-shadow: var(--shadow-lg);
+}
+.lang-pick a { display: flex; justify-content: space-between; align-items: baseline; gap: 18px; padding: 9px 12px; border-radius: 8px; text-decoration: none; color: var(--ink-2); font-size: 0.95rem; }
+.lang-pick a:hover { background: var(--accent-wash); color: var(--ink); }
+.lang-pick a[aria-current] { color: var(--ink); font-weight: 600; box-shadow: inset 3px 0 0 var(--accent); }
+.lang-pick a small { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.06em; }
+
+/* a translation older than its English page says so above the content */
+.i18n-note { background: var(--amber-wash); border-bottom: 1px solid var(--rule); color: var(--ink-2); font-size: 0.9rem; }
+.i18n-note p { padding: 11px 0; }
+.i18n-note a { color: var(--ink); font-weight: 600; }
 
 /* ---------- buttons ---------- */
 .btn {
@@ -622,6 +648,8 @@ table.compare tbody tr:last-child td.us { box-shadow: inset 2px 0 0 var(--accent
 .site-footer nav a:hover { color: var(--ink); text-decoration: underline; }
 .foot-base { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--rule-2); display: grid; gap: 10px; font-size: 0.8rem; color: var(--ink-3); max-width: 110ch; }
 .foot-base code { background: none; padding: 0; color: var(--ink-2); }
+.site-footer .foot-langs { display: flex; flex-wrap: wrap; gap: 6px 20px; font-size: 0.9rem; }
+.site-footer .foot-langs a[aria-current] { color: var(--ink); font-weight: 600; text-decoration: none; }
 
 /* ---------- motion ---------- */
 .js .reveal { opacity: 0; transform: translateY(14px); transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1); }
@@ -653,6 +681,18 @@ table.compare tbody tr:last-child td.us { box-shadow: inset 2px 0 0 var(--accent
   .foot-brand { grid-column: 1 / -1; }
   .step-cols { grid-template-columns: minmax(0, 1fr); gap: 16px; }
 }
+/* the navigation folds into the menu button below 860px, and also on a wider
+   screen when its words do not fit in one line (site.js sets .compact on the
+   header; the words differ in length from language to language) */
+.site-header.compact .menu { display: grid; }
+.site-header.compact .bar { gap: 12px; }
+.site-header.compact .nav {
+  position: absolute; left: 0; right: 0; top: 100%; margin: 0; flex-direction: column; align-items: stretch; gap: 2px;
+  background: var(--paper); border-bottom: 1px solid var(--rule); padding: 10px var(--gutter) 18px; display: none; box-shadow: var(--shadow);
+}
+.site-header.compact .nav.open { display: flex; }
+.site-header.compact .nav a { padding: 13px 12px; font-size: 1rem; }
+.site-header.compact .nav a[aria-current="page"] { box-shadow: inset 3px 0 0 var(--accent); border-radius: 0 8px 8px 0; }
 @media (max-width: 860px) {
   .menu { display: grid; }
   .bar { gap: 12px; }
@@ -676,6 +716,8 @@ table.compare tbody tr:last-child td.us { box-shadow: inset 2px 0 0 var(--accent
 }
 @media (max-width: 640px) {
   body { font-size: 16px; }
+  .lang-pick { position: static; }
+  .lang-pick ul { left: var(--gutter); right: var(--gutter); top: 100%; min-width: 0; }
   .g2, .g3, .g4 { grid-template-columns: minmax(0, 1fr); }
   .card.feature { grid-column: auto; }
   .stats { grid-template-columns: minmax(0, 1fr); }
@@ -699,6 +741,22 @@ table.compare tbody tr:last-child td.us { box-shadow: inset 2px 0 0 var(--accent
   .window-note { display: none; }
   .card { padding: 22px; }
   th, td { padding: 12px 14px; }
+}
+/* the header holds the language menu too: tighter on a phone */
+@media (max-width: 480px) {
+  .bar, .site-header.compact .bar { gap: 8px; }
+  .bar-end { gap: 6px; }
+  .lang-pick summary { padding: 0 10px; }
+  .lang-pick summary span { display: none; }
+}
+@media (max-width: 380px) {
+  .site-header .wrap { padding: 0 14px; }
+  .site-header .wordmark { letter-spacing: 0.04em; }
+  .bar-end { gap: 4px; }
+  .bar-end .icon-btn { width: 34px; }
+  .bar-end .lang-pick summary { padding: 0 8px; }
+  .bar-end .style-pick select { padding: 0 20px 0 7px; }
+  .bar-end .style-pick::after { right: 8px; }
 }
 
 @media print {
