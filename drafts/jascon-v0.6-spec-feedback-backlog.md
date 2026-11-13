@@ -47,6 +47,12 @@ the two places where the check of ten features against five neighbours
 found a neighbour ahead (`PRIOR-ART.md`, handbook F.10). Both would change
 a kernel shape, so both need the author. 2.0.0 is not tagged: either can
 still enter it; after the tag, D22 rev 3 makes it a major.
+**An outside report (2026-11-13)**, issue 27 in the GitHub tracker of the
+repository (GitHub's number, not #27 of this file), filed **#67**: the
+number domain of the canonical form is not defined, and the reference
+and the app compute different verdicts and different digests for `1.0`
+and for integers beyond 2^53. The author decided the same day: declare
+the domain. The work is open; proposed before the tag.
 **CP-CHECK-1 (2026-11-11, proposed)** adds
 #55-#57 (#56 closed the same day - the twin knows Check; the port left **#58 · #59**) and makes #48 a decision before the tag: Check would be the
 second consumer-side type admitted against D22 test 1. The eight review findings against the proposal
