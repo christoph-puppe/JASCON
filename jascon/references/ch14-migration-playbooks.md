@@ -252,6 +252,48 @@ option. A Statement of Applicability built on imported OSCAL risks reports
 its controls as uncovered until someone records the level natively. The
 converter reports that gap; it does not close it.
 
+**Who wrote a record, and when (2.0.0-rc.4 — backlog #69).** A converter
+pre-fills `provenance` from the source and lets the caller overwrite it
+(author decision 2026-11-13). OSCAL says who is responsible for a
+document, by role, and when the document was last changed. It does not
+say who wrote one implementation statement, finding or risk. So the most
+a converter can take is the author of the document, and
+`document_author()` in `oscal_conv_lib.py` is the one rule for it: the
+party named as `creator`, else as `prepared-by`, else the one party the
+responsible-parties name at all, else the one party the document
+defines, else the one organization among its parties, else nobody. "The
+one" is exact; two candidates are no answer. The date is the day of the
+document's `last-modified`, which is the latest day the record can have
+been written and not the day it was. `--author-ref` and `--date`
+overwrite either, field by field, on every record of the run; a record
+gets `provenance` only when both are known. The app's importer follows
+the same rule (`jascon-oscal.js`), with the two values in fields the
+user may change before the import.
+
+As run on the IFA corpus: of seven records that may name an author, one
+gets one from its source — the system's Implementation, from the agency
+its plan defines. The plan of action defines no party, and the leveraged
+pair defines parties without a name, so two Implementations, two
+Findings and two Risks say nobody, and the validator reports each
+(AUTHOR-2). The two authorizations carry the day the source states
+(`date-authorized` → `authorizations[].date`). The approved Deviation
+has no day of decision in the source, and none is written (AUTHOR-3).
+
+> **Don't** fill the gap with the person who ran the converter, or with
+> today. An author nobody stated is a false record of a decision, and it
+> silences the one report that would have asked the question. Overwrite
+> when you know who answers for the import, and say that you did.
+
+*(The same re-run moved the Attestation of the ATO out of the object
+list and beside the manifest, where D3.1 puts it: listed, it could only
+bind a list of its own subjects in place of the manifest's digest, and
+one of its three subject digests had matched no object since the text
+of the bundle was language-tagged at the write. The converter now
+checks, before it ends, that the Attestation binds the manifest as
+written and that every payload passes the schema the bundle pins for
+it. No validator reads an Attestation beside the manifest of a bundle
+that is not a pack yet — backlog #46.)*
+
 ## 14.4 Playbook: CR26 and other bespoke JSON
 
 The American corpus converts almost by table lookup, because

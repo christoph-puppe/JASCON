@@ -84,6 +84,23 @@ Requirement, because half the structural rules address them by id.
 > normalize. Model unknown facet payloads as opaque values you can
 > emit unchanged.
 
+> **Don't** hand a schema `pattern` to your language's regular
+> expressions as it stands. JSON Schema says a pattern is ECMA-262, and
+> the hosts differ where the kernel's patterns end: in Python's `re` and
+> in .NET's `Regex`, `$` also matches before one line break that ends
+> the value, and `.` excludes only U+000A where ECMA-262 also excludes
+> U+000D, U+2028 and U+2029. Until 2026-11-13 the reference validator
+> and its PowerShell twin both took `"2026-11-13\n"` for a date and a
+> digest with a line break at its end for a digest; the JavaScript port
+> did not (backlog #68, decided: refuse). Write `$` as the end of the
+> value (`\Z` in Python, `\z` in .NET) and `.` as the class of what is
+> no line terminator, and do the same in every expression of your own
+> that ends in `$`. A version is written in the digits 0-9: `\d` takes
+> the digits of every script in Python and .NET, and none but 0-9 in
+> ECMA-262. Twenty-two vectors hold an implementation to this (in the
+> families `kernel`, `parameter`, `check` and `composition`); fifteen of
+> them failed in both validators before the change.
+
 ## 12.3 Saturday morning: the manifest walk
 
 The bundle is a directory (or archive) plus a content manifest, and

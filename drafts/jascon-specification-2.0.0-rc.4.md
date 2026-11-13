@@ -16,6 +16,10 @@
 > twin (IV.6). The proposal is `drafts/CP-AUTHOR-1.md`; the journal is the
 > register, "Amendments — the open backlog before 2.0.0" and "CP-AUTHOR-1
 > landed". The rc.3 file is gone from the tree (git keeps it).
+> After rc.4, on the same day and again without a new candidate: a
+> pattern is read as its dialect says, so a value that ends in a line
+> break is refused by every tool (D3.10, backlog #68), and the tools
+> write who decided (backlog #69; IV.6).
 
 > **What changed since rc.2 (2026-11-12, the same day).** One decision is
 > new — **D25**, advice packs: a vendor's recommendations as one published
@@ -397,6 +401,33 @@ relation (v0.4 — corrected).
    canonical form itself is unchanged. No shipped object carried a number
    outside the domain (measured before the rule was written, on 3,871
    files, and by the validators after it).
+10. **A pattern is read as its dialect says *(2.0.0 — backlog #68, author
+    2026-11-13: "refuse"; found by the app's port of D26)*.** The kernel
+    schema holds a date, a date-time, a digest, a decimal, a version, a
+    language tag, a facet id and a fact name to a `pattern`. A pattern of
+    a JSON Schema is an ECMA-262 regular expression: `$` is the end of the
+    value, and `.` matches no line terminator (U+000A, U+000D, U+2028,
+    U+2029). A tool evaluates a pattern with that meaning, whatever the
+    regular expressions of its host do with it. Python's `re` and .NET's
+    `Regex` read `$` as "the end, or before one line break that ends the
+    value", and `.` as "anything but U+000A". So the reference validator
+    and its PowerShell twin took `"2026-11-13\n"` for a date and a digest
+    followed by a line break for a digest, and the JavaScript port did
+    not: two tools disagreed on whether an object has a type, and a
+    digest with a line break at its end compares unequal to the one it
+    was meant to be. The rule **rejects and never rewrites** (item 4): a
+    line break is not trimmed. It reaches every expression a tool applies
+    to a value of a bundle, its own included - a decimal parameter value,
+    a decimal fact, an evidence ref, and a pin version, which is written
+    in the digits 0-9 (`\d` is another place where the three hosts
+    differ). It does not reach an id: an id is any non-empty string,
+    compared code point by code point (D2), so an id that ends in a line
+    break is another id, in every tool alike. No shipped value, no
+    example and no earlier vector ended in a line break (measured: every
+    bundle and the example folder pass unchanged). Twenty-two vectors
+    hold the three implementations to it; fifteen failed in the reference
+    and in the twin before the change, and a pin version in the digits of
+    another script was resolved by the one and stopped the other.
 
 **Evidence.** Air-gapped estates; registry link-rot; P7's fixed-point proof;
 P6's omitted-vs-empty hash fragmentation; the two-digest necessity
@@ -2145,6 +2176,8 @@ history. The compact line:
 | The value-level check of the converters | 2026-11-13 | Two more outside reports (issues 32 and 33 in the GitHub tracker): `value_arrival()` matched substrings across one joined string, so the IFA figure of 394 of 835 was too high; and any global check hides a dropped value behind an equal one elsewhere. The helper is `global_occurrence()` now, on typed whole values, with key-only and embedded matches listed apart and not counted: **283 of 835**, 124 content values without an equal, stated as an upper and a lower bound. R16 and IV.5b item 6 amended; backlog #41 re-planned to a ledger of source occurrences per converter. No kernel rule, vector or bundle object changes | "Amendments — the value-level check of the converters" |
 | Outside reports on the run rules | 2026-11-13 | Four reports from outside (issues 23 to 26 in the GitHub tracker), each reproduced: the reference accepted an evidence record outside `evidence/sha256/`, a `collector-id` on a Check without collectors, a row parameter its Check does not read, and a record that binds no observation. CHECK-12, CHECK-13 and CHECK-15 amended in place (D24); the three engines follow; `check` 188 → 199 vectors. After rc.3; the counts in the Status and in IV.5b and IV.7 are those of rc.3 | "Amendments — the outside reports of 2026-11-13" |
 | Code points in the twin · the open backlog | 2026-11-13 | The PowerShell twin compared strings with PowerShell's operators, which fold case and compare under a culture; a Tailoring whose id differed from its content's origin by one U+00AD was read as the authority's own. No operator compares two strings there any more, and a lint that parses the twin keeps it so (#58 closed, with the residue of #45). `reference` 13 → 18 vectors, `tier` 9 → 10; 574 in all. No shape and no rule changed. The same day: the record of catalogue entries that do not apply got a schema, outside the kernel (#54 closed); the two OSCAL response types without a treatment code stay without one (#47b closed, C.10); #65 and #66 accepted for 2.0.0 and not yet landed. After rc.3 | D2 · C.10 · "Amendments — the open backlog before 2.0.0" |
+| A value that ends in a line break | 2026-11-13 | Found by the app's port of D26 and decided by the author ("refuse"): a `pattern` is an ECMA-262 expression, and Python's `re` and .NET's `Regex` read `$` and `.` differently, so the reference and the twin accepted a date, a digest, a decimal and five more values with a line break at the end. **D3.10 new**; both validators translate the two constructs and tighten their own expressions; `kernel` 54 → 71, `parameter` 21 → 22, `check` 203 → 205, `composition` 7 → 9 vectors, 665 in all. No shipped value changes. After rc.4; the counts in the Status are those of rc.4 | "Phase C — the tools write who decided; a line break ends no value" |
+| The tools write who decided | 2026-11-13 | Author: "all converters should pre-fill that data from the source corpus but import tool should be able to overwrite it." One rule for the author of an OSCAL document, in the converter library and in the app's importer; the day of `last-modified` as the date; an overwrite, field by field. The IFA conversion is regenerated: one of seven records gets an author from its source, the two authorizations their date, and the Attestation of the ATO lies beside the manifest and binds its digest (the IFA half of backlog #46). The app's pages write `provenance`, its Validate page shows the two reports, the reader shows the fields. No kernel shape and no rule changes (backlog #69) | same section |
 | **2.0.0-rc.4** | 2026-11-13 | This text: D26 new (who decided, and when); D8, D13 and D23 amended in place. `provenance` optional on a Tailoring and its entries, a Risk and its ratings, an Implementation and a Finding; `decided` and `review-due` on a Deviation; `date` on an authorization; AUTHOR-1 to 4 and REVIEW-1 as reports; three times typed (DATE-3 to 5). A new vector family, `author` (40), and `kernel` 25 → 54; 643 in all, 18 families. Backlog #65 and #66 | D26 · "CP-AUTHOR-1 landed" |
 
 ## IV.7 Release artifacts (what this candidate ships with)
