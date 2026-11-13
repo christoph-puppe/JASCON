@@ -1,0 +1,77 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "https://github.com/christoph-puppe/JASCON/risk-catalogs/schema/not-applicable.draft",
+ "title": "The record of catalogue entries an organisation decided not to import - DRAFT, outside the JASCON kernel",
+ "description": "One file beside a bundle's manifest (risk-catalogs/not-applicable.json). Each row is a decision: this catalogue entry does not apply here, why, who decided it and when. Without the record the completeness check of a risk catalogue cannot tell a decision from a gap (backlog #54). A Tailoring records the same for a requirement in `excludes[].rationale`; the kernel has no such place for a risk, because risk catalogues stay outside it (backlog #53), so the record stays outside too. `entry` is the id of the catalogue entry, a URI, so one file serves every catalogue. `entry-version` is the version of the entry that was judged: a later version of the entry is a reason to look again. `provenance` is spelled as on a kernel Mapping and Check: who decided, and on which day. It is optional here as everywhere, and a row without it is reported, not refused (author decision 2026-11-13).",
+ "type": "object",
+ "additionalProperties": false,
+ "required": [
+  "record-version",
+  "entries"
+ ],
+ "properties": {
+  "record-version": {
+   "const": 1
+  },
+  "entries": {
+   "type": "array",
+   "items": {
+    "$ref": "#/$defs/row"
+   }
+  }
+ },
+ "$defs": {
+  "text": {
+   "type": "object",
+   "minProperties": 1,
+   "propertyNames": {
+    "pattern": "^[a-z]{2,3}(-[a-z0-9]{1,8})*$"
+   },
+   "additionalProperties": {
+    "type": "string",
+    "minLength": 1
+   }
+  },
+  "uri": {
+   "type": "string",
+   "pattern": "^https?://."
+  },
+  "row": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "entry",
+    "rationale"
+   ],
+   "properties": {
+    "entry": {
+     "$ref": "#/$defs/uri"
+    },
+    "entry-version": {
+     "type": "string",
+     "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+    },
+    "rationale": {
+     "$ref": "#/$defs/text"
+    },
+    "provenance": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "author-ref",
+      "date"
+     ],
+     "properties": {
+      "author-ref": {
+       "$ref": "#/$defs/uri"
+      },
+      "date": {
+       "type": "string",
+       "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$"
+      }
+     }
+    }
+   }
+  }
+ }
+}

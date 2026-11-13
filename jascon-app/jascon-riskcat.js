@@ -12,6 +12,12 @@
    Importing twice writes nothing twice: a Risk whose id exists is left as it
    is, because by then it holds the organisation's work.
 
+   Not importing an entry is a decision too. It is recorded in a file beside
+   the bundle's manifest (risk-catalogs/schema/not-applicable.draft.schema.json):
+   the entry, why it does not apply, who decided and when. Inside this file
+   the record is a plain object { entry id: row }; jscNaRead and jscNaWrite
+   are the only two places that know the file's shape.
+
    Ported from risk-catalogs/tools/risk_catalog.py, which is the reference;
    tests/riskcat.test.mjs rebuilds the committed demo with this file. Pure
    functions of plain data; `objs` is a Map of id -> {type, obj}. */
@@ -41,8 +47,33 @@ function jscCatalogSelection(objs, tailoringId) {
   return { selected: s.selected, tailoring: tailoringId, how: `selected by ${tailoringId}` };
 }
 
+/* The file of entries that do not apply -> { entry id: row }.
+   Before 2026-11-13 the file was a map from an entry's id or label to one
+   sentence. Such a file is read as rows that say no author and no date,
+   because none was recorded; a label is resolved through the catalogues the
+   app ships. The next jscNaWrite stores the record in today's shape. */
+function jscNaRead(doc, catalogs, lang) {
+  if (!doc || typeof doc !== "object" || Array.isArray(doc)) return {};
+  if (doc["record-version"] === 1 && Array.isArray(doc.entries)) return Object.fromEntries(doc.entries.map(row => [row.entry, row]));
+  if ("record-version" in doc) return {};          // a later version of the record: not ours to guess at
+  const byLabel = new Map((catalogs || []).flatMap(c => c.entries.map(e => [jscEntryLabel(e), e.id])));
+  const rows = {};
+  for (const [key, why] of Object.entries(doc)) {
+    if (typeof why !== "string" || !why.trim()) continue;
+    const entry = byLabel.get(key) || key;
+    rows[entry] = { entry, rationale: { [lang || "en"]: why } };
+  }
+  return rows;
+}
+
+/* { entry id: row } -> the file, rows in the order of their entry ids so that
+   the same decisions always give the same bytes. */
+function jscNaWrite(rows) {
+  return { "record-version": 1, entries: Object.keys(rows).sort().map(k => rows[k]) };
+}
+
 /* entries -> Risk objects and a report.
-   opts: { org, owner, tailoring, notApplicable: {entry id or label: rationale}, only: Set of entry ids or null }
+   opts: { org, owner, tailoring, notApplicable: { entry id: row }, only: Set of entry ids or null }
    Suggested treatments are kept only where the selection has the
    requirement; the others are named in the report. An entry with a recorded
    reason is not imported. An entry whose Risk id exists is skipped.
@@ -55,8 +86,8 @@ function jscCatalogImport(catalog, entries, objs, opts) {
     imported: [], "not-applicable": [], "suggestions-out-of-scope": {}, "without-treatment": [], "already-there": [] };
   for (const e of entries) {
     if (opts.only && !opts.only.has(e.id)) continue;
-    const label = jscEntryLabel(e), why = na[e.id] || na[label];
-    if (why) { report["not-applicable"].push({ entry: e.id, rationale: why }); continue; }
+    const label = jscEntryLabel(e);
+    if (na[e.id]) { report["not-applicable"].push(na[e.id]); continue; }      // the row as it was recorded
     const id = `${String(opts.org).replace(/\/+$/, "")}/risk/${label}`;
     if (objs.has(id)) { report["already-there"].push(id); continue; }
     const keep = [], dropped = [];
@@ -77,7 +108,8 @@ function jscCatalogImport(catalog, entries, objs, opts) {
 
 /* Which entries does a Risk of the bundle instantiate, which carry a
    recorded reason for not being imported, and which are neither: a gap.
-   -> [{ entry, label, status: "instantiated" | "not-applicable" | "gap", risks: [id], rationale }] */
+   -> [{ entry, label, status: "instantiated" | "not-applicable" | "gap", risks: [id], row }]
+   `row` is the recorded decision of a "not-applicable" entry, else null. */
 function jscCatalogCompleteness(entries, objs, notApplicable) {
   const instantiated = new Map(), na = notApplicable || {};
   for (const [id, r] of objs) {
@@ -87,12 +119,12 @@ function jscCatalogCompleteness(entries, objs, notApplicable) {
     }
   }
   return entries.map(e => {
-    const label = jscEntryLabel(e), why = na[e.id] || na[label];
-    const status = instantiated.has(e.id) ? "instantiated" : why ? "not-applicable" : "gap";
-    return { entry: e, label, status, risks: instantiated.get(e.id) || [], rationale: why || "" };
+    const row = na[e.id] || null;
+    const status = instantiated.has(e.id) ? "instantiated" : row ? "not-applicable" : "gap";
+    return { entry: e, label: jscEntryLabel(e), status, risks: instantiated.get(e.id) || [], row: status === "not-applicable" ? row : null };
   });
 }
 
 if (typeof module !== "undefined" && module.exports) {
-  module.exports = { JSC_INSTANTIATES, jscEntryLabel, jscCatalogSelection, jscCatalogImport, jscCatalogCompleteness };
+  module.exports = { JSC_INSTANTIATES, jscEntryLabel, jscNaRead, jscNaWrite, jscCatalogSelection, jscCatalogImport, jscCatalogCompleteness };
 }
