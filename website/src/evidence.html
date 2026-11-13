@@ -125,6 +125,10 @@ nav: evidence
         <span class="gate-when">12 Nov 2026</span><span class="gate-rail"><i></i></span>
         <div class="gate-body"><h3>2.0.0-rc.3: advice packs, and two typed dates <span class="tier tier-designed">release candidate, not tagged</span></h3><p>A vendor's recommendations as one published file, accepted with eight decisions on the record: no new type, eleven rules, {{ n.advice_vectors }} vectors and a worked pack with a signed attestation. Run over the shipped bundles, the rule on <code>capability-ref</code> found one edge in the converted NIST example that cited a capability its own component does not declare. On the same day the author closed the four points that were left before the tag. Two fields that 1.0.0 left as free text are now typed, the date a deviation was opened and the due date of an action.</p></div>
       </div>
+      <div class="gate rc">
+        <span class="gate-when">13 Nov 2026</span><span class="gate-rail"><i></i></span>
+        <div class="gate-body"><h3>2.0.0-rc.4: who decided, and when <span class="tier tier-designed">release candidate, not tagged</span></h3><p>The comparison with five neighbouring formats found two places where one of them was ahead, and the author decided both the same day. Who decided and when is now spelled one way, <code>provenance</code>, and is optional on a tailoring and each of its entries, on a risk and its ratings, on an implementation and on a finding. A deviation may say when it was decided and when it is due for review. A validator reports what is missing, one line per object and rule, and reports a review date that has passed against the date of the run; neither fails a bundle unless the caller asks for it. No new type and no new primitive: {{ n.author_vectors }} vectors for the two reports, and nineteen deliberate defects in the reference each turn one red. Three times that accepted any string are typed.</p></div>
+      </div>
     </div>
   </div>
 </section>
@@ -159,11 +163,11 @@ nav: evidence
       </div>
       <div class="limit">
         <h3>2.0.0 is a candidate, not a release <span class="tier tier-open">open</span></h3>
-        <p>Two changes the author accepted on 13 November 2026 are not built: a date of review on a Deviation, and the author and date of every recorded decision (backlog 65 and 66). Both change a kernel shape, so the tag waits for them. Both validators are green on all {{ n.vectors }} vectors of the candidate as it stands. Until the tag the released version is 1.0.0, and the shapes of 2.0.0 can still change.</p>
+        <p>Nothing is left to decide, and both validators are green on all {{ n.vectors }} vectors of the candidate. The two changes the author accepted on 13 November 2026 are in it as rc.4; the tools that write the new fields are still to follow. The tag is the author's step and has not been taken. Until then the released version is 1.0.0, and the shapes of 2.0.0 can still change.</p>
       </div>
       <div class="limit">
         <h3>Not every 1.0.0 bundle is a 2.0.0 bundle <span class="tier tier-measured">decided</span></h3>
-        <p>Until rc.2 the 2.0.0 schema accepted everything 1.0.0 accepted. Since rc.3 the date a deviation was opened must be a date, and the due date of an action a typed point in time or duration. A 1.0.0 bundle with free text in either field has to convert it. All five shipped bundles and the example folder conform. A pattern with a Unicode category follows the Unicode database of the machine it runs on, so a code point assigned later can give two verdicts on two machines; an author who needs one verdict writes the range.</p>
+        <p>Until rc.2 the 2.0.0 schema accepted everything 1.0.0 accepted. Since rc.3 the date a deviation was opened must be a date, and the due date of an action a typed point in time or duration. A 1.0.0 bundle with free text in either field has to convert it. Since rc.4 the same holds for the date of a mapping's provenance, the time of an assessment and the timestamp of an attestation. All five shipped bundles and the example folder conform. A pattern with a Unicode category follows the Unicode database of the machine it runs on, so a code point assigned later can give two verdicts on two machines; an author who needs one verdict writes the range.</p>
       </div>
       <div class="limit">
         <h3>Advice packs rest on one example file <span class="tier tier-designed">designed for</span></h3>
@@ -174,8 +178,8 @@ nav: evidence
         <p>The example attestation is illustrative: its subject digests match no example object. The method payload of an Assessment is not yet validated against its pinned facet schema, and the three in the repository would fail.</p>
       </div>
       <div class="limit">
-        <h3>Two places where a neighbour is ahead <span class="tier tier-open">open, backlog 65 and 66</span></h3>
-        <p>The comparison of 13 November 2026 found two. A Deviation records when it was opened and who approved it, and has no expiry; a security exception in CISO Assistant has an expiration date, and a risk in OSCAL a deadline. No tailoring operation records its own author: a weakening needs an approved Deviation, every other change is attributed only through the Tailoring that holds it, where CISO Assistant logs each change. The author decided both on the same day: a Deviation gets an optional date of review, and a decision records who made it and when. Neither is built yet; they are items 65 and 66 of the backlog.</p>
+        <h3>Who decided is recorded, not enforced <span class="tier tier-designed">in rc.4, backlog 65 and 66</span></h3>
+        <p>The comparison of 13 November 2026 found two places where a neighbour was ahead: a Deviation had no expiry, where a security exception in CISO Assistant has an expiration date and a risk in OSCAL a deadline; and no tailoring operation recorded its own author, where CISO Assistant logs each change. Both are in rc.4. The fields are optional: a validator reports a missing author and a review date that has passed, and fails nothing unless the caller asks for it. A Deviation past its review stays in force until someone acts. The author of a version is not a log of every change. And the tools do not write the fields yet: the app and the converters name no author, so the converted NIST example shows ten such report lines.</p>
       </div>
       <div class="limit">
         <h3>Governance is one person <span class="tier tier-open">open</span></h3>

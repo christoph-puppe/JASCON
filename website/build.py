@@ -283,6 +283,8 @@ def context(facts, site, T):
                                    if f["name"] == "check"), 0),
             "advice_vectors": next((f["vectors"] for f in facts["vectors"]["families"]
                                     if f["name"] == "advice"), 0),
+            "author_vectors": next((f["vectors"] for f in facts["vectors"]["families"]
+                                    if f["name"] == "author"), 0),
             **ledger_counts(),
         },
         "html": fragments(facts, T),
