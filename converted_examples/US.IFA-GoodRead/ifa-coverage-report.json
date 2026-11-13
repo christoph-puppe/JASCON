@@ -23,37 +23,37 @@
    "path": "ap.assessment-plan.back-matter.resources[].remarks",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ap.assessment-plan.back-matter.resources[].rlinks[].href",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ap.assessment-plan.back-matter.resources[].rlinks[].media-type",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ap.assessment-plan.back-matter.resources[].title",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ap.assessment-plan.back-matter.resources[].uuid",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ap.assessment-plan.import-ssp.href",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ap.assessment-plan.local-definitions.activities[].description",
@@ -125,145 +125,145 @@
    "path": "ap.assessment-plan.metadata.last-modified",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ap.assessment-plan.metadata.oscal-version",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ap.assessment-plan.metadata.parties[].links[].href",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ap.assessment-plan.metadata.parties[].links[].rel",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ap.assessment-plan.metadata.parties[].member-of-organizations[]",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ap.assessment-plan.metadata.parties[].name",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ap.assessment-plan.metadata.parties[].short-name",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ap.assessment-plan.metadata.parties[].type",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ap.assessment-plan.metadata.parties[].uuid",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ap.assessment-plan.metadata.published",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ap.assessment-plan.metadata.remarks",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ap.assessment-plan.metadata.responsible-parties[].party-uuids[]",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ap.assessment-plan.metadata.responsible-parties[].role-id",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ap.assessment-plan.metadata.revisions[].last-modified",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ap.assessment-plan.metadata.revisions[].links[].href",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ap.assessment-plan.metadata.revisions[].links[].rel",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ap.assessment-plan.metadata.revisions[].oscal-version",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ap.assessment-plan.metadata.revisions[].remarks",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ap.assessment-plan.metadata.revisions[].title",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ap.assessment-plan.metadata.revisions[].version",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ap.assessment-plan.metadata.roles[].id",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ap.assessment-plan.metadata.roles[].title",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ap.assessment-plan.metadata.title",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ap.assessment-plan.metadata.version",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ap.assessment-plan.reviewed-controls.control-selections[].include-controls[].control-id",
@@ -317,37 +317,37 @@
    "path": "ap.assessment-plan.uuid",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ar.assessment-results.back-matter.resources[].rlinks[].href",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ar.assessment-results.back-matter.resources[].rlinks[].media-type",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ar.assessment-results.back-matter.resources[].title",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ar.assessment-results.back-matter.resources[].uuid",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ar.assessment-results.import-ap.href",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ar.assessment-results.local-definitions.activities[].description",
@@ -425,139 +425,139 @@
    "path": "ar.assessment-results.metadata.last-modified",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ar.assessment-results.metadata.oscal-version",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ar.assessment-results.metadata.parties[].links[].href",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ar.assessment-results.metadata.parties[].links[].rel",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ar.assessment-results.metadata.parties[].member-of-organizations[]",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ar.assessment-results.metadata.parties[].name",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ar.assessment-results.metadata.parties[].short-name",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ar.assessment-results.metadata.parties[].type",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ar.assessment-results.metadata.parties[].uuid",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ar.assessment-results.metadata.remarks",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ar.assessment-results.metadata.responsible-parties[].party-uuids[]",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ar.assessment-results.metadata.responsible-parties[].role-id",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ar.assessment-results.metadata.revisions[].last-modified",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ar.assessment-results.metadata.revisions[].links[].href",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ar.assessment-results.metadata.revisions[].links[].rel",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ar.assessment-results.metadata.revisions[].oscal-version",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ar.assessment-results.metadata.revisions[].remarks",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ar.assessment-results.metadata.revisions[].title",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ar.assessment-results.metadata.revisions[].version",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ar.assessment-results.metadata.roles[].id",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ar.assessment-results.metadata.roles[].title",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ar.assessment-results.metadata.title",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ar.assessment-results.metadata.version",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ar.assessment-results.results[].description",
@@ -575,61 +575,61 @@
    "path": "ar.assessment-results.results[].findings[].description",
    "count": 1,
    "level": "L1",
-   "destination": "Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> finding-target@1 facet; related-risks -> Risk.treatments (the risk -> control edge)"
+   "destination": "Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> finding-target@1 facet; related-risks -> Finding.risk-refs (the results' risk resolved to the Risk of its later state in the POA&M); related-observations -> finding-target@1 observations"
   },
   {
    "path": "ar.assessment-results.results[].findings[].implementation-statement-uuid",
    "count": 1,
    "level": "L1",
-   "destination": "Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> finding-target@1 facet; related-risks -> Risk.treatments (the risk -> control edge)"
+   "destination": "Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> finding-target@1 facet; related-risks -> Finding.risk-refs (the results' risk resolved to the Risk of its later state in the POA&M); related-observations -> finding-target@1 observations"
   },
   {
    "path": "ar.assessment-results.results[].findings[].related-observations[].observation-uuid",
    "count": 1,
    "level": "L1",
-   "destination": "Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> finding-target@1 facet; related-risks -> Risk.treatments (the risk -> control edge)"
+   "destination": "Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> finding-target@1 facet; related-risks -> Finding.risk-refs (the results' risk resolved to the Risk of its later state in the POA&M); related-observations -> finding-target@1 observations"
   },
   {
    "path": "ar.assessment-results.results[].findings[].related-risks[].risk-uuid",
    "count": 1,
    "level": "L1",
-   "destination": "Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> finding-target@1 facet; related-risks -> Risk.treatments (the risk -> control edge)"
+   "destination": "Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> finding-target@1 facet; related-risks -> Finding.risk-refs (the results' risk resolved to the Risk of its later state in the POA&M); related-observations -> finding-target@1 observations"
   },
   {
    "path": "ar.assessment-results.results[].findings[].target.description",
    "count": 1,
    "level": "L1",
-   "destination": "Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> finding-target@1 facet; related-risks -> Risk.treatments (the risk -> control edge)"
+   "destination": "Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> finding-target@1 facet; related-risks -> Finding.risk-refs (the results' risk resolved to the Risk of its later state in the POA&M); related-observations -> finding-target@1 observations"
   },
   {
    "path": "ar.assessment-results.results[].findings[].target.status.state",
    "count": 1,
    "level": "L1",
-   "destination": "Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> finding-target@1 facet; related-risks -> Risk.treatments (the risk -> control edge)"
+   "destination": "Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> finding-target@1 facet; related-risks -> Finding.risk-refs (the results' risk resolved to the Risk of its later state in the POA&M); related-observations -> finding-target@1 observations"
   },
   {
    "path": "ar.assessment-results.results[].findings[].target.target-id",
    "count": 1,
    "level": "L1",
-   "destination": "Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> finding-target@1 facet; related-risks -> Risk.treatments (the risk -> control edge)"
+   "destination": "Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> finding-target@1 facet; related-risks -> Finding.risk-refs (the results' risk resolved to the Risk of its later state in the POA&M); related-observations -> finding-target@1 observations"
   },
   {
    "path": "ar.assessment-results.results[].findings[].target.type",
    "count": 1,
    "level": "L1",
-   "destination": "Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> finding-target@1 facet; related-risks -> Risk.treatments (the risk -> control edge)"
+   "destination": "Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> finding-target@1 facet; related-risks -> Finding.risk-refs (the results' risk resolved to the Risk of its later state in the POA&M); related-observations -> finding-target@1 observations"
   },
   {
    "path": "ar.assessment-results.results[].findings[].title",
    "count": 1,
    "level": "L1",
-   "destination": "Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> finding-target@1 facet; related-risks -> Risk.treatments (the risk -> control edge)"
+   "destination": "Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> finding-target@1 facet; related-risks -> Finding.risk-refs (the results' risk resolved to the Risk of its later state in the POA&M); related-observations -> finding-target@1 observations"
   },
   {
    "path": "ar.assessment-results.results[].findings[].uuid",
    "count": 1,
    "level": "L1",
-   "destination": "Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> finding-target@1 facet; related-risks -> Risk.treatments (the risk -> control edge)"
+   "destination": "Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> finding-target@1 facet; related-risks -> Finding.risk-refs (the results' risk resolved to the Risk of its later state in the POA&M); related-observations -> finding-target@1 observations"
   },
   {
    "path": "ar.assessment-results.results[].local-definitions.tasks[].associated-activities[].activity-uuid",
@@ -785,31 +785,31 @@
    "path": "ar.assessment-results.uuid",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "cdef.component-definition.back-matter.resources[].description",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "cdef.component-definition.back-matter.resources[].rlinks[].href",
    "count": 3,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "cdef.component-definition.back-matter.resources[].rlinks[].media-type",
    "count": 3,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "cdef.component-definition.back-matter.resources[].uuid",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "cdef.component-definition.components[].control-implementations[].description",
@@ -887,7 +887,7 @@
    "path": "cdef.component-definition.components[].description",
    "count": 1,
    "level": "L1",
-   "destination": "Component (kind mapped) id/title"
+   "destination": "Component (kind mapped) id/title + component@1 facet (description, purpose)"
   },
   {
    "path": "cdef.component-definition.components[].protocols[].name",
@@ -929,337 +929,337 @@
    "path": "cdef.component-definition.components[].purpose",
    "count": 1,
    "level": "L1",
-   "destination": "Component (kind mapped) id/title"
+   "destination": "Component (kind mapped) id/title + component@1 facet (description, purpose)"
   },
   {
    "path": "cdef.component-definition.components[].responsible-roles[].party-uuids[]",
    "count": 1,
    "level": "L1",
-   "destination": "landmark party URIs (#16: parties stay landmark; roles ride provenance)"
+   "destination": "component@1 responsible-roles: {role, parties: [landmark party URI]} (#16: parties stay landmark)"
   },
   {
    "path": "cdef.component-definition.components[].responsible-roles[].role-id",
    "count": 2,
    "level": "L1",
-   "destination": "landmark party URIs (#16: parties stay landmark; roles ride provenance)"
+   "destination": "component@1 responsible-roles: {role, parties: [landmark party URI]} (#16: parties stay landmark)"
   },
   {
    "path": "cdef.component-definition.components[].title",
    "count": 1,
    "level": "L1",
-   "destination": "Component (kind mapped) id/title"
+   "destination": "Component (kind mapped) id/title + component@1 facet (description, purpose)"
   },
   {
    "path": "cdef.component-definition.components[].type",
    "count": 1,
    "level": "L1",
-   "destination": "Component (kind mapped) id/title"
+   "destination": "Component (kind mapped) id/title + component@1 facet (description, purpose)"
   },
   {
    "path": "cdef.component-definition.components[].uuid",
    "count": 1,
    "level": "L1",
-   "destination": "Component (kind mapped) id/title"
+   "destination": "Component (kind mapped) id/title + component@1 facet (description, purpose)"
   },
   {
    "path": "cdef.component-definition.metadata.last-modified",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "cdef.component-definition.metadata.oscal-version",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "cdef.component-definition.metadata.parties[].links[].href",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "cdef.component-definition.metadata.parties[].links[].rel",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "cdef.component-definition.metadata.parties[].name",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "cdef.component-definition.metadata.parties[].type",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "cdef.component-definition.metadata.parties[].uuid",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "cdef.component-definition.metadata.published",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "cdef.component-definition.metadata.roles[].id",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "cdef.component-definition.metadata.roles[].title",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "cdef.component-definition.metadata.title",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "cdef.component-definition.metadata.version",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "cdef.component-definition.uuid",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "lev.system-security-plan.back-matter.resources[].description",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "lev.system-security-plan.back-matter.resources[].rlinks[].href",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "lev.system-security-plan.back-matter.resources[].rlinks[].media-type",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "lev.system-security-plan.back-matter.resources[].uuid",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "lev.system-security-plan.control-implementation.description",
    "count": 1,
    "level": "L1",
-   "destination": "provider Implementation: export.provided -> capabilities (consumer-inheritable), export.responsibilities -> system@1 customer-responsibilities; statement ids respelled _stmt.->smt. (counted)"
+   "destination": "provider Implementation: export.provided -> capabilities on the Component that exports them (consumer-inheritable), export.responsibilities -> system@1 customer-responsibilities, each naming its capability; the narrative by statement -> implementation@1; statement ids respelled _stmt.->smt. (counted)"
   },
   {
    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].control-id",
    "count": 1,
    "level": "L1",
-   "destination": "provider Implementation: export.provided -> capabilities (consumer-inheritable), export.responsibilities -> system@1 customer-responsibilities; statement ids respelled _stmt.->smt. (counted)"
+   "destination": "provider Implementation: export.provided -> capabilities on the Component that exports them (consumer-inheritable), export.responsibilities -> system@1 customer-responsibilities, each naming its capability; the narrative by statement -> implementation@1; statement ids respelled _stmt.->smt. (counted)"
   },
   {
    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].remarks",
    "count": 1,
    "level": "L1",
-   "destination": "provider Implementation: export.provided -> capabilities (consumer-inheritable), export.responsibilities -> system@1 customer-responsibilities; statement ids respelled _stmt.->smt. (counted)"
+   "destination": "provider Implementation: export.provided -> capabilities on the Component that exports them (consumer-inheritable), export.responsibilities -> system@1 customer-responsibilities, each naming its capability; the narrative by statement -> implementation@1; statement ids respelled _stmt.->smt. (counted)"
   },
   {
    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].set-parameters[].param-id",
    "count": 1,
    "level": "L1",
-   "destination": "provider Implementation: export.provided -> capabilities (consumer-inheritable), export.responsibilities -> system@1 customer-responsibilities; statement ids respelled _stmt.->smt. (counted)"
+   "destination": "provider Implementation: export.provided -> capabilities on the Component that exports them (consumer-inheritable), export.responsibilities -> system@1 customer-responsibilities, each naming its capability; the narrative by statement -> implementation@1; statement ids respelled _stmt.->smt. (counted)"
   },
   {
    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].set-parameters[].values[]",
    "count": 1,
    "level": "L1",
-   "destination": "provider Implementation: export.provided -> capabilities (consumer-inheritable), export.responsibilities -> system@1 customer-responsibilities; statement ids respelled _stmt.->smt. (counted)"
+   "destination": "provider Implementation: export.provided -> capabilities on the Component that exports them (consumer-inheritable), export.responsibilities -> system@1 customer-responsibilities, each naming its capability; the narrative by statement -> implementation@1; statement ids respelled _stmt.->smt. (counted)"
   },
   {
    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].component-uuid",
    "count": 2,
    "level": "L1",
-   "destination": "provider Implementation: export.provided -> capabilities (consumer-inheritable), export.responsibilities -> system@1 customer-responsibilities; statement ids respelled _stmt.->smt. (counted)"
+   "destination": "provider Implementation: export.provided -> capabilities on the Component that exports them (consumer-inheritable), export.responsibilities -> system@1 customer-responsibilities, each naming its capability; the narrative by statement -> implementation@1; statement ids respelled _stmt.->smt. (counted)"
   },
   {
    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].description",
    "count": 2,
    "level": "L1",
-   "destination": "provider Implementation: export.provided -> capabilities (consumer-inheritable), export.responsibilities -> system@1 customer-responsibilities; statement ids respelled _stmt.->smt. (counted)"
+   "destination": "provider Implementation: export.provided -> capabilities on the Component that exports them (consumer-inheritable), export.responsibilities -> system@1 customer-responsibilities, each naming its capability; the narrative by statement -> implementation@1; statement ids respelled _stmt.->smt. (counted)"
   },
   {
    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].export.description",
    "count": 2,
    "level": "L1",
-   "destination": "provider Implementation: export.provided -> capabilities (consumer-inheritable), export.responsibilities -> system@1 customer-responsibilities; statement ids respelled _stmt.->smt. (counted)"
+   "destination": "provider Implementation: export.provided -> capabilities on the Component that exports them (consumer-inheritable), export.responsibilities -> system@1 customer-responsibilities, each naming its capability; the narrative by statement -> implementation@1; statement ids respelled _stmt.->smt. (counted)"
   },
   {
    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].export.provided[].description",
    "count": 2,
    "level": "L1",
-   "destination": "provider Implementation: export.provided -> capabilities (consumer-inheritable), export.responsibilities -> system@1 customer-responsibilities; statement ids respelled _stmt.->smt. (counted)"
+   "destination": "provider Implementation: export.provided -> capabilities on the Component that exports them (consumer-inheritable), export.responsibilities -> system@1 customer-responsibilities, each naming its capability; the narrative by statement -> implementation@1; statement ids respelled _stmt.->smt. (counted)"
   },
   {
    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].export.provided[].responsible-roles[].party-uuids[]",
    "count": 2,
    "level": "L1",
-   "destination": "provider Implementation: export.provided -> capabilities (consumer-inheritable), export.responsibilities -> system@1 customer-responsibilities; statement ids respelled _stmt.->smt. (counted)"
+   "destination": "provider Implementation: export.provided -> capabilities on the Component that exports them (consumer-inheritable), export.responsibilities -> system@1 customer-responsibilities, each naming its capability; the narrative by statement -> implementation@1; statement ids respelled _stmt.->smt. (counted)"
   },
   {
    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].export.provided[].responsible-roles[].role-id",
    "count": 2,
    "level": "L1",
-   "destination": "provider Implementation: export.provided -> capabilities (consumer-inheritable), export.responsibilities -> system@1 customer-responsibilities; statement ids respelled _stmt.->smt. (counted)"
+   "destination": "provider Implementation: export.provided -> capabilities on the Component that exports them (consumer-inheritable), export.responsibilities -> system@1 customer-responsibilities, each naming its capability; the narrative by statement -> implementation@1; statement ids respelled _stmt.->smt. (counted)"
   },
   {
    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].export.provided[].uuid",
    "count": 2,
    "level": "L1",
-   "destination": "provider Implementation: export.provided -> capabilities (consumer-inheritable), export.responsibilities -> system@1 customer-responsibilities; statement ids respelled _stmt.->smt. (counted)"
+   "destination": "provider Implementation: export.provided -> capabilities on the Component that exports them (consumer-inheritable), export.responsibilities -> system@1 customer-responsibilities, each naming its capability; the narrative by statement -> implementation@1; statement ids respelled _stmt.->smt. (counted)"
   },
   {
    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].export.responsibilities[].description",
    "count": 2,
    "level": "L1",
-   "destination": "provider Implementation: export.provided -> capabilities (consumer-inheritable), export.responsibilities -> system@1 customer-responsibilities; statement ids respelled _stmt.->smt. (counted)"
+   "destination": "provider Implementation: export.provided -> capabilities on the Component that exports them (consumer-inheritable), export.responsibilities -> system@1 customer-responsibilities, each naming its capability; the narrative by statement -> implementation@1; statement ids respelled _stmt.->smt. (counted)"
   },
   {
    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].export.responsibilities[].provided-uuid",
    "count": 2,
    "level": "L1",
-   "destination": "provider Implementation: export.provided -> capabilities (consumer-inheritable), export.responsibilities -> system@1 customer-responsibilities; statement ids respelled _stmt.->smt. (counted)"
+   "destination": "provider Implementation: export.provided -> capabilities on the Component that exports them (consumer-inheritable), export.responsibilities -> system@1 customer-responsibilities, each naming its capability; the narrative by statement -> implementation@1; statement ids respelled _stmt.->smt. (counted)"
   },
   {
    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].export.responsibilities[].responsible-roles[].party-uuids[]",
    "count": 2,
    "level": "L1",
-   "destination": "provider Implementation: export.provided -> capabilities (consumer-inheritable), export.responsibilities -> system@1 customer-responsibilities; statement ids respelled _stmt.->smt. (counted)"
+   "destination": "provider Implementation: export.provided -> capabilities on the Component that exports them (consumer-inheritable), export.responsibilities -> system@1 customer-responsibilities, each naming its capability; the narrative by statement -> implementation@1; statement ids respelled _stmt.->smt. (counted)"
   },
   {
    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].export.responsibilities[].responsible-roles[].role-id",
    "count": 2,
    "level": "L1",
-   "destination": "provider Implementation: export.provided -> capabilities (consumer-inheritable), export.responsibilities -> system@1 customer-responsibilities; statement ids respelled _stmt.->smt. (counted)"
+   "destination": "provider Implementation: export.provided -> capabilities on the Component that exports them (consumer-inheritable), export.responsibilities -> system@1 customer-responsibilities, each naming its capability; the narrative by statement -> implementation@1; statement ids respelled _stmt.->smt. (counted)"
   },
   {
    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].export.responsibilities[].uuid",
    "count": 2,
    "level": "L1",
-   "destination": "provider Implementation: export.provided -> capabilities (consumer-inheritable), export.responsibilities -> system@1 customer-responsibilities; statement ids respelled _stmt.->smt. (counted)"
+   "destination": "provider Implementation: export.provided -> capabilities on the Component that exports them (consumer-inheritable), export.responsibilities -> system@1 customer-responsibilities, each naming its capability; the narrative by statement -> implementation@1; statement ids respelled _stmt.->smt. (counted)"
   },
   {
    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].uuid",
    "count": 2,
    "level": "L1",
-   "destination": "provider Implementation: export.provided -> capabilities (consumer-inheritable), export.responsibilities -> system@1 customer-responsibilities; statement ids respelled _stmt.->smt. (counted)"
+   "destination": "provider Implementation: export.provided -> capabilities on the Component that exports them (consumer-inheritable), export.responsibilities -> system@1 customer-responsibilities, each naming its capability; the narrative by statement -> implementation@1; statement ids respelled _stmt.->smt. (counted)"
   },
   {
    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].remarks",
    "count": 1,
    "level": "L1",
-   "destination": "provider Implementation: export.provided -> capabilities (consumer-inheritable), export.responsibilities -> system@1 customer-responsibilities; statement ids respelled _stmt.->smt. (counted)"
+   "destination": "provider Implementation: export.provided -> capabilities on the Component that exports them (consumer-inheritable), export.responsibilities -> system@1 customer-responsibilities, each naming its capability; the narrative by statement -> implementation@1; statement ids respelled _stmt.->smt. (counted)"
   },
   {
    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].statement-id",
    "count": 1,
    "level": "L1",
-   "destination": "provider Implementation: export.provided -> capabilities (consumer-inheritable), export.responsibilities -> system@1 customer-responsibilities; statement ids respelled _stmt.->smt. (counted)"
+   "destination": "provider Implementation: export.provided -> capabilities on the Component that exports them (consumer-inheritable), export.responsibilities -> system@1 customer-responsibilities, each naming its capability; the narrative by statement -> implementation@1; statement ids respelled _stmt.->smt. (counted)"
   },
   {
    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].uuid",
    "count": 1,
    "level": "L1",
-   "destination": "provider Implementation: export.provided -> capabilities (consumer-inheritable), export.responsibilities -> system@1 customer-responsibilities; statement ids respelled _stmt.->smt. (counted)"
+   "destination": "provider Implementation: export.provided -> capabilities on the Component that exports them (consumer-inheritable), export.responsibilities -> system@1 customer-responsibilities, each naming its capability; the narrative by statement -> implementation@1; statement ids respelled _stmt.->smt. (counted)"
   },
   {
    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].uuid",
    "count": 1,
    "level": "L1",
-   "destination": "provider Implementation: export.provided -> capabilities (consumer-inheritable), export.responsibilities -> system@1 customer-responsibilities; statement ids respelled _stmt.->smt. (counted)"
+   "destination": "provider Implementation: export.provided -> capabilities on the Component that exports them (consumer-inheritable), export.responsibilities -> system@1 customer-responsibilities, each naming its capability; the narrative by statement -> implementation@1; statement ids respelled _stmt.->smt. (counted)"
   },
   {
    "path": "lev.system-security-plan.import-profile.href",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "lev.system-security-plan.metadata.last-modified",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "lev.system-security-plan.metadata.oscal-version",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "lev.system-security-plan.metadata.parties[].remarks",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "lev.system-security-plan.metadata.parties[].type",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "lev.system-security-plan.metadata.parties[].uuid",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "lev.system-security-plan.metadata.published",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "lev.system-security-plan.metadata.roles[].id",
    "count": 3,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "lev.system-security-plan.metadata.roles[].title",
    "count": 3,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "lev.system-security-plan.metadata.title",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "lev.system-security-plan.metadata.version",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "lev.system-security-plan.system-characteristics.authorization-boundary.description",
@@ -1409,55 +1409,55 @@
    "path": "lev.system-security-plan.system-implementation.components[].description",
    "count": 2,
    "level": "L1",
-   "destination": "Components (kind mapped: appliance->hardware, application->software)"
+   "destination": "Components (kind mapped: appliance->hardware, application->software) + component@1 facet; the leveraging plan's entries for components of the leveraged system are stood for by the provider's Components (declared)"
   },
   {
    "path": "lev.system-security-plan.system-implementation.components[].props[].name",
    "count": 1,
    "level": "L1",
-   "destination": "Components (kind mapped: appliance->hardware, application->software)"
+   "destination": "Components (kind mapped: appliance->hardware, application->software) + component@1 facet; the leveraging plan's entries for components of the leveraged system are stood for by the provider's Components (declared)"
   },
   {
    "path": "lev.system-security-plan.system-implementation.components[].props[].value",
    "count": 1,
    "level": "L1",
-   "destination": "Components (kind mapped: appliance->hardware, application->software)"
+   "destination": "Components (kind mapped: appliance->hardware, application->software) + component@1 facet; the leveraging plan's entries for components of the leveraged system are stood for by the provider's Components (declared)"
   },
   {
    "path": "lev.system-security-plan.system-implementation.components[].responsible-roles[].party-uuids[]",
    "count": 1,
    "level": "L1",
-   "destination": "Components (kind mapped: appliance->hardware, application->software)"
+   "destination": "Components (kind mapped: appliance->hardware, application->software) + component@1 facet; the leveraging plan's entries for components of the leveraged system are stood for by the provider's Components (declared)"
   },
   {
    "path": "lev.system-security-plan.system-implementation.components[].responsible-roles[].role-id",
    "count": 1,
    "level": "L1",
-   "destination": "Components (kind mapped: appliance->hardware, application->software)"
+   "destination": "Components (kind mapped: appliance->hardware, application->software) + component@1 facet; the leveraging plan's entries for components of the leveraged system are stood for by the provider's Components (declared)"
   },
   {
    "path": "lev.system-security-plan.system-implementation.components[].status.state",
    "count": 2,
    "level": "L1",
-   "destination": "Components (kind mapped: appliance->hardware, application->software)"
+   "destination": "Components (kind mapped: appliance->hardware, application->software) + component@1 facet; the leveraging plan's entries for components of the leveraged system are stood for by the provider's Components (declared)"
   },
   {
    "path": "lev.system-security-plan.system-implementation.components[].title",
    "count": 2,
    "level": "L1",
-   "destination": "Components (kind mapped: appliance->hardware, application->software)"
+   "destination": "Components (kind mapped: appliance->hardware, application->software) + component@1 facet; the leveraging plan's entries for components of the leveraged system are stood for by the provider's Components (declared)"
   },
   {
    "path": "lev.system-security-plan.system-implementation.components[].type",
    "count": 2,
    "level": "L1",
-   "destination": "Components (kind mapped: appliance->hardware, application->software)"
+   "destination": "Components (kind mapped: appliance->hardware, application->software) + component@1 facet; the leveraging plan's entries for components of the leveraged system are stood for by the provider's Components (declared)"
   },
   {
    "path": "lev.system-security-plan.system-implementation.components[].uuid",
    "count": 2,
    "level": "L1",
-   "destination": "Components (kind mapped: appliance->hardware, application->software)"
+   "destination": "Components (kind mapped: appliance->hardware, application->software) + component@1 facet; the leveraging plan's entries for components of the leveraged system are stood for by the provider's Components (declared)"
   },
   {
    "path": "lev.system-security-plan.system-implementation.users[].authorized-privileges[].functions-performed[]",
@@ -1487,229 +1487,229 @@
    "path": "lev.system-security-plan.uuid",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "lvg.system-security-plan.back-matter.resources[].description",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "lvg.system-security-plan.back-matter.resources[].rlinks[].href",
    "count": 5,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "lvg.system-security-plan.back-matter.resources[].rlinks[].media-type",
    "count": 4,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "lvg.system-security-plan.back-matter.resources[].uuid",
    "count": 3,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "lvg.system-security-plan.control-implementation.description",
    "count": 1,
    "level": "L1",
-   "destination": "consumer Implementation: inherited -> satisfied-by inherited-from{component, basis-ref} (D5), satisfied -> consumer capability; responsibility shared"
+   "destination": "consumer Implementation: inherited -> satisfied-by inherited-from{component resolved through the provided capability, basis-ref} (D5), satisfied -> consumer capability; responsibility shared; the narrative by statement, with each inherited/satisfied entry naming its capability -> implementation@1"
   },
   {
    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].control-id",
    "count": 1,
    "level": "L1",
-   "destination": "consumer Implementation: inherited -> satisfied-by inherited-from{component, basis-ref} (D5), satisfied -> consumer capability; responsibility shared"
+   "destination": "consumer Implementation: inherited -> satisfied-by inherited-from{component resolved through the provided capability, basis-ref} (D5), satisfied -> consumer capability; responsibility shared; the narrative by statement, with each inherited/satisfied entry naming its capability -> implementation@1"
   },
   {
    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].remarks",
    "count": 1,
    "level": "L1",
-   "destination": "consumer Implementation: inherited -> satisfied-by inherited-from{component, basis-ref} (D5), satisfied -> consumer capability; responsibility shared"
+   "destination": "consumer Implementation: inherited -> satisfied-by inherited-from{component resolved through the provided capability, basis-ref} (D5), satisfied -> consumer capability; responsibility shared; the narrative by statement, with each inherited/satisfied entry naming its capability -> implementation@1"
   },
   {
    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].set-parameters[].param-id",
    "count": 1,
    "level": "L1",
-   "destination": "consumer Implementation: inherited -> satisfied-by inherited-from{component, basis-ref} (D5), satisfied -> consumer capability; responsibility shared"
+   "destination": "consumer Implementation: inherited -> satisfied-by inherited-from{component resolved through the provided capability, basis-ref} (D5), satisfied -> consumer capability; responsibility shared; the narrative by statement, with each inherited/satisfied entry naming its capability -> implementation@1"
   },
   {
    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].set-parameters[].values[]",
    "count": 1,
    "level": "L1",
-   "destination": "consumer Implementation: inherited -> satisfied-by inherited-from{component, basis-ref} (D5), satisfied -> consumer capability; responsibility shared"
+   "destination": "consumer Implementation: inherited -> satisfied-by inherited-from{component resolved through the provided capability, basis-ref} (D5), satisfied -> consumer capability; responsibility shared; the narrative by statement, with each inherited/satisfied entry naming its capability -> implementation@1"
   },
   {
    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].component-uuid",
    "count": 3,
    "level": "L1",
-   "destination": "consumer Implementation: inherited -> satisfied-by inherited-from{component, basis-ref} (D5), satisfied -> consumer capability; responsibility shared"
+   "destination": "consumer Implementation: inherited -> satisfied-by inherited-from{component resolved through the provided capability, basis-ref} (D5), satisfied -> consumer capability; responsibility shared; the narrative by statement, with each inherited/satisfied entry naming its capability -> implementation@1"
   },
   {
    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].description",
    "count": 3,
    "level": "L1",
-   "destination": "consumer Implementation: inherited -> satisfied-by inherited-from{component, basis-ref} (D5), satisfied -> consumer capability; responsibility shared"
+   "destination": "consumer Implementation: inherited -> satisfied-by inherited-from{component resolved through the provided capability, basis-ref} (D5), satisfied -> consumer capability; responsibility shared; the narrative by statement, with each inherited/satisfied entry naming its capability -> implementation@1"
   },
   {
    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].inherited[].description",
    "count": 1,
    "level": "L1",
-   "destination": "consumer Implementation: inherited -> satisfied-by inherited-from{component, basis-ref} (D5), satisfied -> consumer capability; responsibility shared"
+   "destination": "consumer Implementation: inherited -> satisfied-by inherited-from{component resolved through the provided capability, basis-ref} (D5), satisfied -> consumer capability; responsibility shared; the narrative by statement, with each inherited/satisfied entry naming its capability -> implementation@1"
   },
   {
    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].inherited[].provided-uuid",
    "count": 1,
    "level": "L1",
-   "destination": "consumer Implementation: inherited -> satisfied-by inherited-from{component, basis-ref} (D5), satisfied -> consumer capability; responsibility shared"
+   "destination": "consumer Implementation: inherited -> satisfied-by inherited-from{component resolved through the provided capability, basis-ref} (D5), satisfied -> consumer capability; responsibility shared; the narrative by statement, with each inherited/satisfied entry naming its capability -> implementation@1"
   },
   {
    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].inherited[].uuid",
    "count": 1,
    "level": "L1",
-   "destination": "consumer Implementation: inherited -> satisfied-by inherited-from{component, basis-ref} (D5), satisfied -> consumer capability; responsibility shared"
+   "destination": "consumer Implementation: inherited -> satisfied-by inherited-from{component resolved through the provided capability, basis-ref} (D5), satisfied -> consumer capability; responsibility shared; the narrative by statement, with each inherited/satisfied entry naming its capability -> implementation@1"
   },
   {
    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].responsible-roles[].party-uuids[]",
    "count": 1,
    "level": "L1",
-   "destination": "consumer Implementation: inherited -> satisfied-by inherited-from{component, basis-ref} (D5), satisfied -> consumer capability; responsibility shared"
+   "destination": "consumer Implementation: inherited -> satisfied-by inherited-from{component resolved through the provided capability, basis-ref} (D5), satisfied -> consumer capability; responsibility shared; the narrative by statement, with each inherited/satisfied entry naming its capability -> implementation@1"
   },
   {
    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].responsible-roles[].role-id",
    "count": 1,
    "level": "L1",
-   "destination": "consumer Implementation: inherited -> satisfied-by inherited-from{component, basis-ref} (D5), satisfied -> consumer capability; responsibility shared"
+   "destination": "consumer Implementation: inherited -> satisfied-by inherited-from{component resolved through the provided capability, basis-ref} (D5), satisfied -> consumer capability; responsibility shared; the narrative by statement, with each inherited/satisfied entry naming its capability -> implementation@1"
   },
   {
    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].satisfied[].description",
    "count": 2,
    "level": "L1",
-   "destination": "consumer Implementation: inherited -> satisfied-by inherited-from{component, basis-ref} (D5), satisfied -> consumer capability; responsibility shared"
+   "destination": "consumer Implementation: inherited -> satisfied-by inherited-from{component resolved through the provided capability, basis-ref} (D5), satisfied -> consumer capability; responsibility shared; the narrative by statement, with each inherited/satisfied entry naming its capability -> implementation@1"
   },
   {
    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].satisfied[].responsibility-uuid",
    "count": 2,
    "level": "L1",
-   "destination": "consumer Implementation: inherited -> satisfied-by inherited-from{component, basis-ref} (D5), satisfied -> consumer capability; responsibility shared"
+   "destination": "consumer Implementation: inherited -> satisfied-by inherited-from{component resolved through the provided capability, basis-ref} (D5), satisfied -> consumer capability; responsibility shared; the narrative by statement, with each inherited/satisfied entry naming its capability -> implementation@1"
   },
   {
    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].satisfied[].responsible-roles[].party-uuids[]",
    "count": 1,
    "level": "L1",
-   "destination": "consumer Implementation: inherited -> satisfied-by inherited-from{component, basis-ref} (D5), satisfied -> consumer capability; responsibility shared"
+   "destination": "consumer Implementation: inherited -> satisfied-by inherited-from{component resolved through the provided capability, basis-ref} (D5), satisfied -> consumer capability; responsibility shared; the narrative by statement, with each inherited/satisfied entry naming its capability -> implementation@1"
   },
   {
    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].satisfied[].responsible-roles[].role-id",
    "count": 1,
    "level": "L1",
-   "destination": "consumer Implementation: inherited -> satisfied-by inherited-from{component, basis-ref} (D5), satisfied -> consumer capability; responsibility shared"
+   "destination": "consumer Implementation: inherited -> satisfied-by inherited-from{component resolved through the provided capability, basis-ref} (D5), satisfied -> consumer capability; responsibility shared; the narrative by statement, with each inherited/satisfied entry naming its capability -> implementation@1"
   },
   {
    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].satisfied[].uuid",
    "count": 2,
    "level": "L1",
-   "destination": "consumer Implementation: inherited -> satisfied-by inherited-from{component, basis-ref} (D5), satisfied -> consumer capability; responsibility shared"
+   "destination": "consumer Implementation: inherited -> satisfied-by inherited-from{component resolved through the provided capability, basis-ref} (D5), satisfied -> consumer capability; responsibility shared; the narrative by statement, with each inherited/satisfied entry naming its capability -> implementation@1"
   },
   {
    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].uuid",
    "count": 3,
    "level": "L1",
-   "destination": "consumer Implementation: inherited -> satisfied-by inherited-from{component, basis-ref} (D5), satisfied -> consumer capability; responsibility shared"
+   "destination": "consumer Implementation: inherited -> satisfied-by inherited-from{component resolved through the provided capability, basis-ref} (D5), satisfied -> consumer capability; responsibility shared; the narrative by statement, with each inherited/satisfied entry naming its capability -> implementation@1"
   },
   {
    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].remarks",
    "count": 1,
    "level": "L1",
-   "destination": "consumer Implementation: inherited -> satisfied-by inherited-from{component, basis-ref} (D5), satisfied -> consumer capability; responsibility shared"
+   "destination": "consumer Implementation: inherited -> satisfied-by inherited-from{component resolved through the provided capability, basis-ref} (D5), satisfied -> consumer capability; responsibility shared; the narrative by statement, with each inherited/satisfied entry naming its capability -> implementation@1"
   },
   {
    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].statement-id",
    "count": 1,
    "level": "L1",
-   "destination": "consumer Implementation: inherited -> satisfied-by inherited-from{component, basis-ref} (D5), satisfied -> consumer capability; responsibility shared"
+   "destination": "consumer Implementation: inherited -> satisfied-by inherited-from{component resolved through the provided capability, basis-ref} (D5), satisfied -> consumer capability; responsibility shared; the narrative by statement, with each inherited/satisfied entry naming its capability -> implementation@1"
   },
   {
    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].uuid",
    "count": 1,
    "level": "L1",
-   "destination": "consumer Implementation: inherited -> satisfied-by inherited-from{component, basis-ref} (D5), satisfied -> consumer capability; responsibility shared"
+   "destination": "consumer Implementation: inherited -> satisfied-by inherited-from{component resolved through the provided capability, basis-ref} (D5), satisfied -> consumer capability; responsibility shared; the narrative by statement, with each inherited/satisfied entry naming its capability -> implementation@1"
   },
   {
    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].uuid",
    "count": 1,
    "level": "L1",
-   "destination": "consumer Implementation: inherited -> satisfied-by inherited-from{component, basis-ref} (D5), satisfied -> consumer capability; responsibility shared"
+   "destination": "consumer Implementation: inherited -> satisfied-by inherited-from{component resolved through the provided capability, basis-ref} (D5), satisfied -> consumer capability; responsibility shared; the narrative by statement, with each inherited/satisfied entry naming its capability -> implementation@1"
   },
   {
    "path": "lvg.system-security-plan.import-profile.href",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "lvg.system-security-plan.metadata.last-modified",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "lvg.system-security-plan.metadata.oscal-version",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "lvg.system-security-plan.metadata.parties[].remarks",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "lvg.system-security-plan.metadata.parties[].type",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "lvg.system-security-plan.metadata.parties[].uuid",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "lvg.system-security-plan.metadata.published",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "lvg.system-security-plan.metadata.roles[].id",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "lvg.system-security-plan.metadata.roles[].title",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "lvg.system-security-plan.metadata.title",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "lvg.system-security-plan.metadata.version",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "lvg.system-security-plan.system-characteristics.authorization-boundary.description",
@@ -1859,43 +1859,43 @@
    "path": "lvg.system-security-plan.system-implementation.components[].description",
    "count": 4,
    "level": "L1",
-   "destination": "Components (kind mapped: appliance->hardware, application->software)"
+   "destination": "Components (kind mapped: appliance->hardware, application->software) + component@1 facet; the leveraging plan's entries for components of the leveraged system are stood for by the provider's Components (declared)"
   },
   {
    "path": "lvg.system-security-plan.system-implementation.components[].props[].name",
    "count": 8,
    "level": "L1",
-   "destination": "Components (kind mapped: appliance->hardware, application->software)"
+   "destination": "Components (kind mapped: appliance->hardware, application->software) + component@1 facet; the leveraging plan's entries for components of the leveraged system are stood for by the provider's Components (declared)"
   },
   {
    "path": "lvg.system-security-plan.system-implementation.components[].props[].value",
    "count": 8,
    "level": "L1",
-   "destination": "Components (kind mapped: appliance->hardware, application->software)"
+   "destination": "Components (kind mapped: appliance->hardware, application->software) + component@1 facet; the leveraging plan's entries for components of the leveraged system are stood for by the provider's Components (declared)"
   },
   {
    "path": "lvg.system-security-plan.system-implementation.components[].status.state",
    "count": 4,
    "level": "L1",
-   "destination": "Components (kind mapped: appliance->hardware, application->software)"
+   "destination": "Components (kind mapped: appliance->hardware, application->software) + component@1 facet; the leveraging plan's entries for components of the leveraged system are stood for by the provider's Components (declared)"
   },
   {
    "path": "lvg.system-security-plan.system-implementation.components[].title",
    "count": 4,
    "level": "L1",
-   "destination": "Components (kind mapped: appliance->hardware, application->software)"
+   "destination": "Components (kind mapped: appliance->hardware, application->software) + component@1 facet; the leveraging plan's entries for components of the leveraged system are stood for by the provider's Components (declared)"
   },
   {
    "path": "lvg.system-security-plan.system-implementation.components[].type",
    "count": 4,
    "level": "L1",
-   "destination": "Components (kind mapped: appliance->hardware, application->software)"
+   "destination": "Components (kind mapped: appliance->hardware, application->software) + component@1 facet; the leveraging plan's entries for components of the leveraged system are stood for by the provider's Components (declared)"
   },
   {
    "path": "lvg.system-security-plan.system-implementation.components[].uuid",
    "count": 4,
    "level": "L1",
-   "destination": "Components (kind mapped: appliance->hardware, application->software)"
+   "destination": "Components (kind mapped: appliance->hardware, application->software) + component@1 facet; the leveraging plan's entries for components of the leveraged system are stood for by the provider's Components (declared)"
   },
   {
    "path": "lvg.system-security-plan.system-implementation.leveraged-authorizations[].date-authorized",
@@ -1961,109 +1961,109 @@
    "path": "lvg.system-security-plan.uuid",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "poam.plan-of-action-and-milestones.back-matter.resources[].rlinks[].href",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "poam.plan-of-action-and-milestones.back-matter.resources[].rlinks[].media-type",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "poam.plan-of-action-and-milestones.back-matter.resources[].title",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "poam.plan-of-action-and-milestones.back-matter.resources[].uuid",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "poam.plan-of-action-and-milestones.import-ssp.href",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "poam.plan-of-action-and-milestones.metadata.last-modified",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "poam.plan-of-action-and-milestones.metadata.oscal-version",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "poam.plan-of-action-and-milestones.metadata.published",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "poam.plan-of-action-and-milestones.metadata.revisions[].last-modified",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "poam.plan-of-action-and-milestones.metadata.revisions[].links[].href",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "poam.plan-of-action-and-milestones.metadata.revisions[].links[].rel",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "poam.plan-of-action-and-milestones.metadata.revisions[].oscal-version",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "poam.plan-of-action-and-milestones.metadata.revisions[].remarks",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "poam.plan-of-action-and-milestones.metadata.revisions[].title",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "poam.plan-of-action-and-milestones.metadata.revisions[].version",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "poam.plan-of-action-and-milestones.metadata.title",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "poam.plan-of-action-and-milestones.metadata.version",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "poam.plan-of-action-and-milestones.observations[].collected",
@@ -2129,31 +2129,31 @@
    "path": "poam.plan-of-action-and-milestones.poam-items[].description",
    "count": 2,
    "level": "L1",
-   "destination": "poam-item title and description -> finding-target@1 `poam-item` on the Finding of the risk the item names"
+   "destination": "poam-item title and description -> finding-target@1 `poam-item` on the Finding of the risk the item names; its related-risks and related-observations -> `risks` and `observations` there, resolved (a risk the POA&M does not define stays unaccounted)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.poam-items[].related-observations[].observation-uuid",
    "count": 2,
    "level": "L1",
-   "destination": "poam-item title and description -> finding-target@1 `poam-item` on the Finding of the risk the item names"
+   "destination": "poam-item title and description -> finding-target@1 `poam-item` on the Finding of the risk the item names; its related-risks and related-observations -> `risks` and `observations` there, resolved (a risk the POA&M does not define stays unaccounted)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.poam-items[].related-risks[].risk-uuid",
    "count": 2,
    "level": "L1",
-   "destination": "poam-item title and description -> finding-target@1 `poam-item` on the Finding of the risk the item names"
+   "destination": "poam-item title and description -> finding-target@1 `poam-item` on the Finding of the risk the item names; its related-risks and related-observations -> `risks` and `observations` there, resolved (a risk the POA&M does not define stays unaccounted)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.poam-items[].title",
    "count": 2,
    "level": "L1",
-   "destination": "poam-item title and description -> finding-target@1 `poam-item` on the Finding of the risk the item names"
+   "destination": "poam-item title and description -> finding-target@1 `poam-item` on the Finding of the risk the item names; its related-risks and related-observations -> `risks` and `observations` there, resolved (a risk the POA&M does not define stays unaccounted)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.poam-items[].uuid",
    "count": 2,
    "level": "L1",
-   "destination": "poam-item title and description -> finding-target@1 `poam-item` on the Finding of the risk the item names"
+   "destination": "poam-item title and description -> finding-target@1 `poam-item` on the Finding of the risk the item names; its related-risks and related-observations -> `risks` and `observations` there, resolved (a risk the POA&M does not define stays unaccounted)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.risks[].characterizations[].facets[].name",
@@ -2201,19 +2201,19 @@
    "path": "poam.plan-of-action-and-milestones.risks[].mitigating-factors[].description",
    "count": 1,
    "level": "L1",
-   "destination": "Deviation rationale (RISK-1) + risk-analysis@1 mitigating-factors; observation links -> evidence refs"
+   "destination": "Deviation rationale (RISK-1) + risk-analysis@1 mitigating-factors; related-observations -> risk-analysis@1 observations (evidence URIs) and, for the accepted risk, the Deviation's refs"
   },
   {
    "path": "poam.plan-of-action-and-milestones.risks[].mitigating-factors[].uuid",
    "count": 1,
    "level": "L1",
-   "destination": "Deviation rationale (RISK-1) + risk-analysis@1 mitigating-factors; observation links -> evidence refs"
+   "destination": "Deviation rationale (RISK-1) + risk-analysis@1 mitigating-factors; related-observations -> risk-analysis@1 observations (evidence URIs) and, for the accepted risk, the Deviation's refs"
   },
   {
    "path": "poam.plan-of-action-and-milestones.risks[].related-observations[].observation-uuid",
    "count": 2,
    "level": "L1",
-   "destination": "Deviation rationale (RISK-1) + risk-analysis@1 mitigating-factors; observation links -> evidence refs"
+   "destination": "Deviation rationale (RISK-1) + risk-analysis@1 mitigating-factors; related-observations -> risk-analysis@1 observations (evidence URIs) and, for the accepted risk, the Deviation's refs"
   },
   {
    "path": "poam.plan-of-action-and-milestones.risks[].remediations[].description",
@@ -2327,235 +2327,235 @@
    "path": "poam.plan-of-action-and-milestones.uuid",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ssp.system-security-plan.back-matter.resources[].description",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ssp.system-security-plan.back-matter.resources[].rlinks[].href",
    "count": 3,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ssp.system-security-plan.back-matter.resources[].rlinks[].media-type",
    "count": 3,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ssp.system-security-plan.back-matter.resources[].title",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ssp.system-security-plan.back-matter.resources[].uuid",
    "count": 3,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ssp.system-security-plan.control-implementation.description",
    "count": 1,
    "level": "L1",
-   "destination": "Implementation: requirement-ref = minted AC-6.1 (in-bundle copy), by-component -> capability + satisfied-by, set-parameters -> parameter-bindings (verified against the declared ODPs), implementation-status -> status"
+   "destination": "Implementation: requirement-ref = minted AC-6.1 (in-bundle copy), by-component -> capability + satisfied-by, its component-uuid resolved to component-ref, set-parameters -> parameter-bindings (verified against the declared ODPs), implementation-status -> status; the narrative by statement -> implementation@1"
   },
   {
    "path": "ssp.system-security-plan.control-implementation.implemented-requirements[].by-components[].component-uuid",
    "count": 1,
    "level": "L1",
-   "destination": "Implementation: requirement-ref = minted AC-6.1 (in-bundle copy), by-component -> capability + satisfied-by, set-parameters -> parameter-bindings (verified against the declared ODPs), implementation-status -> status"
+   "destination": "Implementation: requirement-ref = minted AC-6.1 (in-bundle copy), by-component -> capability + satisfied-by, its component-uuid resolved to component-ref, set-parameters -> parameter-bindings (verified against the declared ODPs), implementation-status -> status; the narrative by statement -> implementation@1"
   },
   {
    "path": "ssp.system-security-plan.control-implementation.implemented-requirements[].by-components[].description",
    "count": 1,
    "level": "L1",
-   "destination": "Implementation: requirement-ref = minted AC-6.1 (in-bundle copy), by-component -> capability + satisfied-by, set-parameters -> parameter-bindings (verified against the declared ODPs), implementation-status -> status"
+   "destination": "Implementation: requirement-ref = minted AC-6.1 (in-bundle copy), by-component -> capability + satisfied-by, its component-uuid resolved to component-ref, set-parameters -> parameter-bindings (verified against the declared ODPs), implementation-status -> status; the narrative by statement -> implementation@1"
   },
   {
    "path": "ssp.system-security-plan.control-implementation.implemented-requirements[].by-components[].implementation-status.state",
    "count": 1,
    "level": "L1",
-   "destination": "Implementation: requirement-ref = minted AC-6.1 (in-bundle copy), by-component -> capability + satisfied-by, set-parameters -> parameter-bindings (verified against the declared ODPs), implementation-status -> status"
+   "destination": "Implementation: requirement-ref = minted AC-6.1 (in-bundle copy), by-component -> capability + satisfied-by, its component-uuid resolved to component-ref, set-parameters -> parameter-bindings (verified against the declared ODPs), implementation-status -> status; the narrative by statement -> implementation@1"
   },
   {
    "path": "ssp.system-security-plan.control-implementation.implemented-requirements[].by-components[].uuid",
    "count": 1,
    "level": "L1",
-   "destination": "Implementation: requirement-ref = minted AC-6.1 (in-bundle copy), by-component -> capability + satisfied-by, set-parameters -> parameter-bindings (verified against the declared ODPs), implementation-status -> status"
+   "destination": "Implementation: requirement-ref = minted AC-6.1 (in-bundle copy), by-component -> capability + satisfied-by, its component-uuid resolved to component-ref, set-parameters -> parameter-bindings (verified against the declared ODPs), implementation-status -> status; the narrative by statement -> implementation@1"
   },
   {
    "path": "ssp.system-security-plan.control-implementation.implemented-requirements[].control-id",
    "count": 1,
    "level": "L1",
-   "destination": "Implementation: requirement-ref = minted AC-6.1 (in-bundle copy), by-component -> capability + satisfied-by, set-parameters -> parameter-bindings (verified against the declared ODPs), implementation-status -> status"
+   "destination": "Implementation: requirement-ref = minted AC-6.1 (in-bundle copy), by-component -> capability + satisfied-by, its component-uuid resolved to component-ref, set-parameters -> parameter-bindings (verified against the declared ODPs), implementation-status -> status; the narrative by statement -> implementation@1"
   },
   {
    "path": "ssp.system-security-plan.control-implementation.implemented-requirements[].uuid",
    "count": 1,
    "level": "L1",
-   "destination": "Implementation: requirement-ref = minted AC-6.1 (in-bundle copy), by-component -> capability + satisfied-by, set-parameters -> parameter-bindings (verified against the declared ODPs), implementation-status -> status"
+   "destination": "Implementation: requirement-ref = minted AC-6.1 (in-bundle copy), by-component -> capability + satisfied-by, its component-uuid resolved to component-ref, set-parameters -> parameter-bindings (verified against the declared ODPs), implementation-status -> status; the narrative by statement -> implementation@1"
   },
   {
    "path": "ssp.system-security-plan.control-implementation.set-parameters[].param-id",
    "count": 5,
    "level": "L1",
-   "destination": "Implementation: requirement-ref = minted AC-6.1 (in-bundle copy), by-component -> capability + satisfied-by, set-parameters -> parameter-bindings (verified against the declared ODPs), implementation-status -> status"
+   "destination": "Implementation: requirement-ref = minted AC-6.1 (in-bundle copy), by-component -> capability + satisfied-by, its component-uuid resolved to component-ref, set-parameters -> parameter-bindings (verified against the declared ODPs), implementation-status -> status; the narrative by statement -> implementation@1"
   },
   {
    "path": "ssp.system-security-plan.control-implementation.set-parameters[].values[]",
    "count": 5,
    "level": "L1",
-   "destination": "Implementation: requirement-ref = minted AC-6.1 (in-bundle copy), by-component -> capability + satisfied-by, set-parameters -> parameter-bindings (verified against the declared ODPs), implementation-status -> status"
+   "destination": "Implementation: requirement-ref = minted AC-6.1 (in-bundle copy), by-component -> capability + satisfied-by, its component-uuid resolved to component-ref, set-parameters -> parameter-bindings (verified against the declared ODPs), implementation-status -> status; the narrative by statement -> implementation@1"
   },
   {
    "path": "ssp.system-security-plan.import-profile.href",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ssp.system-security-plan.metadata.last-modified",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ssp.system-security-plan.metadata.oscal-version",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ssp.system-security-plan.metadata.parties[].links[].href",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ssp.system-security-plan.metadata.parties[].links[].rel",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ssp.system-security-plan.metadata.parties[].member-of-organizations[]",
    "count": 3,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ssp.system-security-plan.metadata.parties[].name",
    "count": 4,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ssp.system-security-plan.metadata.parties[].short-name",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ssp.system-security-plan.metadata.parties[].type",
    "count": 4,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ssp.system-security-plan.metadata.parties[].uuid",
    "count": 4,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ssp.system-security-plan.metadata.published",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ssp.system-security-plan.metadata.responsible-parties[].party-uuids[]",
    "count": 3,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ssp.system-security-plan.metadata.responsible-parties[].role-id",
    "count": 3,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ssp.system-security-plan.metadata.revisions[].last-modified",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ssp.system-security-plan.metadata.revisions[].links[].href",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ssp.system-security-plan.metadata.revisions[].links[].rel",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ssp.system-security-plan.metadata.revisions[].oscal-version",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ssp.system-security-plan.metadata.revisions[].published",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ssp.system-security-plan.metadata.revisions[].title",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ssp.system-security-plan.metadata.revisions[].version",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ssp.system-security-plan.metadata.roles[].id",
    "count": 4,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ssp.system-security-plan.metadata.roles[].title",
    "count": 4,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ssp.system-security-plan.metadata.title",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ssp.system-security-plan.metadata.version",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   },
   {
    "path": "ssp.system-security-plan.system-characteristics.authorization-boundary.description",
@@ -2699,43 +2699,43 @@
    "path": "ssp.system-security-plan.system-implementation.components[].description",
    "count": 1,
    "level": "L1",
-   "destination": "Component (kind system) id/title/status"
+   "destination": "Component (kind mapped) id/title + component@1 facet (description, purpose, status, props, responsible-roles)"
   },
   {
    "path": "ssp.system-security-plan.system-implementation.components[].responsible-roles[].party-uuids[]",
    "count": 2,
    "level": "L1",
-   "destination": "Component (kind system) id/title/status"
+   "destination": "Component (kind mapped) id/title + component@1 facet (description, purpose, status, props, responsible-roles)"
   },
   {
    "path": "ssp.system-security-plan.system-implementation.components[].responsible-roles[].role-id",
    "count": 2,
    "level": "L1",
-   "destination": "Component (kind system) id/title/status"
+   "destination": "Component (kind mapped) id/title + component@1 facet (description, purpose, status, props, responsible-roles)"
   },
   {
    "path": "ssp.system-security-plan.system-implementation.components[].status.state",
    "count": 1,
    "level": "L1",
-   "destination": "Component (kind system) id/title/status"
+   "destination": "Component (kind mapped) id/title + component@1 facet (description, purpose, status, props, responsible-roles)"
   },
   {
    "path": "ssp.system-security-plan.system-implementation.components[].title",
    "count": 1,
    "level": "L1",
-   "destination": "Component (kind system) id/title/status"
+   "destination": "Component (kind mapped) id/title + component@1 facet (description, purpose, status, props, responsible-roles)"
   },
   {
    "path": "ssp.system-security-plan.system-implementation.components[].type",
    "count": 1,
    "level": "L1",
-   "destination": "Component (kind system) id/title/status"
+   "destination": "Component (kind mapped) id/title + component@1 facet (description, purpose, status, props, responsible-roles)"
   },
   {
    "path": "ssp.system-security-plan.system-implementation.components[].uuid",
    "count": 1,
    "level": "L1",
-   "destination": "Component (kind system) id/title/status"
+   "destination": "Component (kind mapped) id/title + component@1 facet (description, purpose, status, props, responsible-roles)"
   },
   {
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].description",
@@ -2825,7 +2825,7 @@
    "path": "ssp.system-security-plan.uuid",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports)"
+   "destination": "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and back-matter links are declared drops in the ledger"
   }
  ],
  "objects-emitted": {
@@ -2854,7 +2854,7 @@
   "observation": 9,
   "ap": 16,
   "risk": 14,
-  "finding": 5
+  "finding": 4
  },
  "risk-shape-gaps": {
   "owner absent in source (derived from the SSP `owner` role)": 2,
@@ -2869,8 +2869,8 @@
   "measures": "global occurrence of equal typed values - an upper bound on what was carried, not a trace of each source occurrence",
   "leaf-values": 835,
   "exact": 424,
-  "key-only": 34,
-  "embedded": 46,
+  "key-only": 41,
+  "embedded": 39,
   "absent": {
    "identity": 182,
    "document-metadata": 125,
@@ -2879,6 +2879,13 @@
   "absent-content-prose": 4,
   "key-only-paths": [
    {
+    "path": "ap.assessment-plan.assessment-subjects[].type",
+    "count": 1,
+    "pointers": [
+     "ap#/assessment-plan/assessment-subjects/0/type"
+    ]
+   },
+   {
     "path": "ap.assessment-plan.local-definitions.activities[].props[].name",
     "count": 1,
     "pointers": [
@@ -2886,10 +2893,32 @@
     ]
    },
    {
+    "path": "ap.assessment-plan.tasks[].associated-activities[].subjects[].type",
+    "count": 1,
+    "pointers": [
+     "ap#/assessment-plan/tasks/0/associated-activities/0/subjects/0/type"
+    ]
+   },
+   {
     "path": "ar.assessment-results.local-definitions.activities[].props[].name",
     "count": 1,
     "pointers": [
      "ar#/assessment-results/local-definitions/activities/0/props/0/name"
+    ]
+   },
+   {
+    "path": "ar.assessment-results.results[].local-definitions.tasks[].associated-activities[].subjects[].type",
+    "count": 1,
+    "pointers": [
+     "ar#/assessment-results/results/0/local-definitions/tasks/0/associated-activities/0/subjects/0/type"
+    ]
+   },
+   {
+    "path": "ar.assessment-results.results[].observations[].subjects[].type",
+    "count": 2,
+    "pointers": [
+     "ar#/assessment-results/results/0/observations/0/subjects/0/type",
+     "ar#/assessment-results/results/0/observations/1/subjects/0/type"
     ]
    },
    {
@@ -2907,6 +2936,14 @@
      "lvg#/system-security-plan/system-implementation/components/2/props/0/name",
      "lvg#/system-security-plan/system-implementation/components/2/props/1/name",
      "lvg#/system-security-plan/system-implementation/components/3/props/0/name"
+    ]
+   },
+   {
+    "path": "poam.plan-of-action-and-milestones.observations[].subjects[].type",
+    "count": 2,
+    "pointers": [
+     "poam#/plan-of-action-and-milestones/observations/0/subjects/0/type",
+     "poam#/plan-of-action-and-milestones/observations/1/subjects/0/type"
     ]
    },
    {
@@ -2957,13 +2994,6 @@
   ],
   "embedded-paths": [
    {
-    "path": "ap.assessment-plan.assessment-subjects[].type",
-    "count": 1,
-    "pointers": [
-     "ap#/assessment-plan/assessment-subjects/0/type"
-    ]
-   },
-   {
     "path": "ap.assessment-plan.metadata.parties[].short-name",
     "count": 1,
     "pointers": [
@@ -2993,13 +3023,6 @@
     ]
    },
    {
-    "path": "ap.assessment-plan.tasks[].associated-activities[].subjects[].type",
-    "count": 1,
-    "pointers": [
-     "ap#/assessment-plan/tasks/0/associated-activities/0/subjects/0/type"
-    ]
-   },
-   {
     "path": "ar.assessment-results.metadata.parties[].short-name",
     "count": 1,
     "pointers": [
@@ -3019,21 +3042,6 @@
     "count": 1,
     "pointers": [
      "ar#/assessment-results/metadata/revisions/0/oscal-version"
-    ]
-   },
-   {
-    "path": "ar.assessment-results.results[].local-definitions.tasks[].associated-activities[].subjects[].type",
-    "count": 1,
-    "pointers": [
-     "ar#/assessment-results/results/0/local-definitions/tasks/0/associated-activities/0/subjects/0/type"
-    ]
-   },
-   {
-    "path": "ar.assessment-results.results[].observations[].subjects[].type",
-    "count": 2,
-    "pointers": [
-     "ar#/assessment-results/results/0/observations/0/subjects/0/type",
-     "ar#/assessment-results/results/0/observations/1/subjects/0/type"
     ]
    },
    {
@@ -3143,14 +3151,6 @@
     "pointers": [
      "poam#/plan-of-action-and-milestones/metadata/revisions/0/version",
      "poam#/plan-of-action-and-milestones/metadata/revisions/1/version"
-    ]
-   },
-   {
-    "path": "poam.plan-of-action-and-milestones.observations[].subjects[].type",
-    "count": 2,
-    "pointers": [
-     "poam#/plan-of-action-and-milestones/observations/0/subjects/0/type",
-     "poam#/plan-of-action-and-milestones/observations/1/subjects/0/type"
     ]
    },
    {
@@ -3317,9 +3317,9 @@
   "leaf-values": 835,
   "totals": {
    "copied": 441,
-   "transformed": 67,
-   "intentionally-dropped": 308,
-   "unaccounted": 19
+   "transformed": 95,
+   "intentionally-dropped": 296,
+   "unaccounted": 3
   },
   "verification-failures": 0
  }

@@ -21,6 +21,9 @@
    },
    "mitigating-factors": {
     "type": "array"
+   },
+   "observations": {
+    "type": "array"
    }
   },
   "additionalProperties": false

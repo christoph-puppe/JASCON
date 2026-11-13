@@ -42,32 +42,43 @@
      },
      "responses": [
       {
+       "component": "https://ifa.gov/goodread/component/saas",
        "description": {
         "en": "Response for the \\\"This System\\\" component.\n\nOverall description of how \\\"This System\\\" satisfies AC-2, Part a.\n\nResponse for the \\\"This System\\\" component.\n\nOverall description of how \\\"This System\\\" satisfies AC-2, Part a.\n\nResponse for the \\\"This System\\\" component.\n\nOverall description of how \\\"This System\\\" satisfies AC-2, Part a.\n\nResponse for the \\\"This System\\\" component.\n\nOverall description of how \\\"This System\\\" satisfies AC-2, Part a."
        }
       },
       {
+       "component": "https://ifa.gov/goodread/component/csp-iaas",
        "description": {
         "en": "Describe how this internal virtual appliance satisfies AC-2, Part a."
        },
        "satisfied": [
         {
-         "en": "Description that directly addresses how the consumer responsibility was satisfied."
+         "description": {
+          "en": "Description that directly addresses how the consumer responsibility was satisfied."
+         }
         }
        ]
       },
       {
+       "component": "https://ifa.gov/goodread/component/access-control-appliance",
        "description": {
         "en": " *duplicated/tailored description of what was inherited, and description of what was configured.* \n\nConsumer-appropriate description of what may be inherited.\n\nIn the context of the application component in satisfaction of AC-2, part a."
        },
        "inherited": [
         {
-         "en": "Optional description.\n\n *Possibly duplicated description of what was inherited.* \n\nConsumer-appropriate description of what may be inherited.\n\nIn the context of the application component in satisfaction of AC-2, part a."
+         "capability": "https://ifa.gov/goodread/component/csp-application#cap-provided-2",
+         "description": {
+          "en": "Optional description.\n\n *Possibly duplicated description of what was inherited.* \n\nConsumer-appropriate description of what may be inherited.\n\nIn the context of the application component in satisfaction of AC-2, part a."
+         }
         }
        ],
        "satisfied": [
         {
-         "en": "Description of how the responsibility was satisfied."
+         "capability": "https://ifa.gov/goodread/component/csp-application#cap-provided-2",
+         "description": {
+          "en": "Description of how the responsibility was satisfied."
+         }
         }
        ]
       }

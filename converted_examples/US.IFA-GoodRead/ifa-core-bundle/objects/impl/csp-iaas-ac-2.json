@@ -13,7 +13,7 @@
    "capability-ref": "cap-provided-1"
   },
   {
-   "capability-ref": "cap-provided-2"
+   "capability-ref": "https://ifa.gov/goodread/component/csp-application#cap-provided-2"
   }
  ],
  "parameter-bindings": {
@@ -39,6 +39,7 @@
      },
      "responses": [
       {
+       "component": "https://ifa.gov/goodread/component/csp-iaas",
        "description": {
         "en": "Response for the \\\"This System\\\" component.\n\nOverall description of how \\\"This System\\\" satisfies AC-2, Part a.\n\nResponse for the \\\"This System\\\" component.\n\nOverall description of how \\\"This System\\\" satisfies AC-2, Part a.\n\nResponse for the \\\"This System\\\" component.\n\nOverall description of how \\\"This System\\\" satisfies AC-2, Part a.\n\nResponse for the \\\"This System\\\" component.\n\nOverall description of how \\\"This System\\\" satisfies AC-2, Part a."
        },
@@ -47,6 +48,7 @@
        }
       },
       {
+       "component": "https://ifa.gov/goodread/component/csp-application",
        "description": {
         "en": "Describes how the application satisfies AC-2, Part a."
        },

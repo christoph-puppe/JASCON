@@ -33,11 +33,20 @@
    "target-description": {
     "en": "This is a finding."
    },
+   "observations": [
+    "https://ifa.gov/goodread/evidence/obs-8807eb6e"
+   ],
    "poam-item": {
     "title": "SYSTEM1234 System Engineers Have Over-Privileged Access to Cloud Infrastructure Account",
     "description": {
      "en": "Budget and technical staff allocation are available and designated to fix a misconfiguration of the IAM roles for members of the SYSTEM1234 Product Team in their AwesomeCloud account to implement least privilege as designed."
-    }
+    },
+    "risks": [
+     "https://ifa.gov/goodread/risk/goodread-risk-2"
+    ],
+    "observations": [
+     "https://ifa.gov/goodread/evidence/obs-8807eb6e"
+    ]
    }
   }
  }

@@ -67,6 +67,9 @@
     {
      "en": "The SYSTEM1234 application is designed and implemented to only allow access to the administrative functions for those with PAO staff role via the VPN via network configuration between the IFA Enterprise Support Systems and the SYSTEM1234 AwesomeCloud account. Additionally, the load balanacer configuration only allows access to view shortlinks from the public internet."
     }
+   ],
+   "observations": [
+    "https://ifa.gov/goodread/evidence/obs-0c4de4fc"
    ]
   }
  }

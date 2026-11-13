@@ -3,95 +3,31 @@
  "leaf-values": 835,
  "totals": {
   "copied": 441,
-  "transformed": 67,
-  "intentionally-dropped": 308,
-  "unaccounted": 19
+  "transformed": 95,
+  "intentionally-dropped": 296,
+  "unaccounted": 3
  },
  "verification-failures": [],
  "unaccounted-paths": [
   {
-   "path": "ar.assessment-results.results[].findings[].related-observations[].observation-uuid",
+   "path": "ap.assessment-plan.tasks[].associated-activities[].activity-uuid",
    "count": 1,
    "pointers": [
-    "ar#/assessment-results/results/0/findings/0/related-observations/0/observation-uuid"
-   ]
-  },
-  {
-   "path": "ar.assessment-results.results[].findings[].related-risks[].risk-uuid",
-   "count": 1,
-   "pointers": [
-    "ar#/assessment-results/results/0/findings/0/related-risks/0/risk-uuid"
-   ]
-  },
-  {
-   "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].component-uuid",
-   "count": 2,
-   "pointers": [
-    "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/0/component-uuid",
-    "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/component-uuid"
-   ]
-  },
-  {
-   "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].export.responsibilities[].provided-uuid",
-   "count": 2,
-   "pointers": [
-    "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/0/export/responsibilities/0/provided-uuid",
-    "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/export/responsibilities/0/provided-uuid"
-   ]
-  },
-  {
-   "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].component-uuid",
-   "count": 3,
-   "pointers": [
-    "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/0/component-uuid",
-    "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/component-uuid",
-    "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/2/component-uuid"
-   ]
-  },
-  {
-   "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].inherited[].provided-uuid",
-   "count": 1,
-   "pointers": [
-    "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/2/inherited/0/provided-uuid"
+    "ap#/assessment-plan/tasks/0/associated-activities/0/activity-uuid"
    ]
   },
   {
    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].satisfied[].responsibility-uuid",
-   "count": 2,
+   "count": 1,
    "pointers": [
-    "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/satisfied/0/responsibility-uuid",
-    "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/2/satisfied/0/responsibility-uuid"
-   ]
-  },
-  {
-   "path": "poam.plan-of-action-and-milestones.poam-items[].related-observations[].observation-uuid",
-   "count": 2,
-   "pointers": [
-    "poam#/plan-of-action-and-milestones/poam-items/0/related-observations/0/observation-uuid",
-    "poam#/plan-of-action-and-milestones/poam-items/1/related-observations/0/observation-uuid"
+    "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/satisfied/0/responsibility-uuid"
    ]
   },
   {
    "path": "poam.plan-of-action-and-milestones.poam-items[].related-risks[].risk-uuid",
-   "count": 2,
-   "pointers": [
-    "poam#/plan-of-action-and-milestones/poam-items/0/related-risks/0/risk-uuid",
-    "poam#/plan-of-action-and-milestones/poam-items/1/related-risks/0/risk-uuid"
-   ]
-  },
-  {
-   "path": "poam.plan-of-action-and-milestones.risks[].related-observations[].observation-uuid",
-   "count": 2,
-   "pointers": [
-    "poam#/plan-of-action-and-milestones/risks/0/related-observations/0/observation-uuid",
-    "poam#/plan-of-action-and-milestones/risks/1/related-observations/0/observation-uuid"
-   ]
-  },
-  {
-   "path": "ssp.system-security-plan.control-implementation.implemented-requirements[].by-components[].component-uuid",
    "count": 1,
    "pointers": [
-    "ssp#/system-security-plan/control-implementation/implemented-requirements/0/by-components/0/component-uuid"
+    "poam#/plan-of-action-and-milestones/poam-items/0/related-risks/0/risk-uuid"
    ]
   }
  ],
@@ -1172,6 +1108,11 @@
      "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
      "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1observations@1/observations/2/subjects/0",
      "rule": "observation subject: the Component minted for the SSP component it names"
+    },
+    {
+     "object": "https://ifa.gov/goodread/impl/system1234-ac-6.1",
+     "pointer": "/component-ref",
+     "rule": "the Component minted for the component a reference names by uuid"
     }
    ],
    "outcome": "transformed"
@@ -2480,7 +2421,14 @@
   {
    "source": "ssp#/system-security-plan/control-implementation/implemented-requirements/0/by-components/0/component-uuid",
    "path": "ssp.system-security-plan.control-implementation.implemented-requirements[].by-components[].component-uuid",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/impl/system1234-ac-6.1",
+     "pointer": "/component-ref",
+     "rule": "the Component minted for the component a reference names by uuid"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "ssp#/system-security-plan/control-implementation/implemented-requirements/0/by-components/0/uuid",
@@ -3177,8 +3125,7 @@
   {
    "source": "ap#/assessment-plan/tasks/0/associated-activities/0/activity-uuid",
    "path": "ap.assessment-plan.tasks[].associated-activities[].activity-uuid",
-   "reason": "a reference to an activity the document does not define",
-   "outcome": "intentionally-dropped"
+   "outcome": "unaccounted"
   },
   {
    "source": "ap#/assessment-plan/tasks/0/associated-activities/0/subjects/0/type",
@@ -3902,6 +3849,11 @@
      "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
      "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1observations@1/observations/0/id",
      "rule": "evidence URI from the first eight characters of the observation uuid"
+    },
+    {
+     "object": "https://ifa.gov/goodread/finding/goodread-risk-2",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1finding-target@1/observations/0",
+     "rule": "evidence URI of the observation a reference names by uuid"
     }
    ],
    "outcome": "transformed"
@@ -4116,8 +4068,14 @@
   {
    "source": "ar#/assessment-results/results/0/risks/0/uuid",
    "path": "ar.assessment-results.results[].risks[].uuid",
-   "reason": "the uuid of a source element: JASCON objects get URIs minted from names and titles, the uuid itself is not carried (uuids that ARE carried or resolved have a destination above)",
-   "outcome": "intentionally-dropped"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/finding/goodread-risk-2",
+     "pointer": "/risk-refs/0",
+     "rule": "the Risk of the POA&M risk that carries the later state of the risk a finding names (same description)"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "ar#/assessment-results/results/0/risks/0/title",
@@ -4129,6 +4087,11 @@
    "source": "ar#/assessment-results/results/0/risks/0/description",
    "path": "ar.assessment-results.results[].risks[].description",
    "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/finding/goodread-risk-2",
+     "pointer": "/risk-refs/0",
+     "rule": "the Risk of the POA&M risk that carries the later state of the risk a finding names (same description)"
+    },
     {
      "object": "https://ifa.gov/goodread/risk/goodread-risk-2",
      "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1risk-analysis@1/description/en",
@@ -4231,12 +4194,26 @@
   {
    "source": "ar#/assessment-results/results/0/findings/0/related-observations/0/observation-uuid",
    "path": "ar.assessment-results.results[].findings[].related-observations[].observation-uuid",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/finding/goodread-risk-2",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1finding-target@1/observations/0",
+     "rule": "evidence URI of the observation a reference names by uuid"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "ar#/assessment-results/results/0/findings/0/related-risks/0/risk-uuid",
    "path": "ar.assessment-results.results[].findings[].related-risks[].risk-uuid",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/finding/goodread-risk-2",
+     "pointer": "/risk-refs/0",
+     "rule": "the Risk of the POA&M risk that carries the later state of the risk a finding names (same description)"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "ar#/assessment-results/back-matter/resources/0/uuid",
@@ -4509,7 +4486,17 @@
     {
      "object": "https://ifa.gov/goodread/finding/goodread-risk-1",
      "pointer": "/deviations/0/refs/0",
-     "rule": "evidence URI from the first eight characters of the observation uuid"
+     "rule": "evidence URI of the observation a reference names by uuid"
+    },
+    {
+     "object": "https://ifa.gov/goodread/finding/goodread-risk-1",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1finding-target@1/poam-item/observations/0",
+     "rule": "evidence URI of the observation a reference names by uuid"
+    },
+    {
+     "object": "https://ifa.gov/goodread/risk/goodread-risk-1",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1risk-analysis@1/observations/0",
+     "rule": "evidence URI of the observation a reference names by uuid"
     }
    ],
    "outcome": "transformed"
@@ -4618,6 +4605,16 @@
      "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1observations@1/observations/0/id",
      "rule": "evidence URI from the first eight characters of the observation uuid",
      "via": "the same observation in AR and POA&M (one uuid), kept once"
+    },
+    {
+     "object": "https://ifa.gov/goodread/finding/goodread-risk-2",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1finding-target@1/poam-item/observations/0",
+     "rule": "evidence URI of the observation a reference names by uuid"
+    },
+    {
+     "object": "https://ifa.gov/goodread/risk/goodread-risk-2",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1risk-analysis@1/observations/0",
+     "rule": "evidence URI of the observation a reference names by uuid"
     }
    ],
    "outcome": "transformed"
@@ -5040,13 +5037,31 @@
   {
    "source": "poam#/plan-of-action-and-milestones/risks/0/related-observations/0/observation-uuid",
    "path": "poam.plan-of-action-and-milestones.risks[].related-observations[].observation-uuid",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/finding/goodread-risk-1",
+     "pointer": "/deviations/0/refs/0",
+     "rule": "evidence URI of the observation a reference names by uuid"
+    },
+    {
+     "object": "https://ifa.gov/goodread/risk/goodread-risk-1",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1risk-analysis@1/observations/0",
+     "rule": "evidence URI of the observation a reference names by uuid"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "poam#/plan-of-action-and-milestones/risks/1/uuid",
    "path": "poam.plan-of-action-and-milestones.risks[].uuid",
-   "reason": "the uuid of a source element: JASCON objects get URIs minted from names and titles, the uuid itself is not carried (uuids that ARE carried or resolved have a destination above)",
-   "outcome": "intentionally-dropped"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/finding/goodread-risk-2",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1finding-target@1/poam-item/risks/0",
+     "rule": "the Risk minted for the POA&M risk a reference names by uuid"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "poam#/plan-of-action-and-milestones/risks/1/title",
@@ -5063,6 +5078,11 @@
    "source": "poam#/plan-of-action-and-milestones/risks/1/description",
    "path": "poam.plan-of-action-and-milestones.risks[].description",
    "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/finding/goodread-risk-2",
+     "pointer": "/risk-refs/0",
+     "rule": "the Risk of the POA&M risk that carries the later state of the risk a finding names (same description)"
+    },
     {
      "object": "https://ifa.gov/goodread/risk/goodread-risk-2",
      "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1risk-analysis@1/description/en"
@@ -5334,7 +5354,14 @@
   {
    "source": "poam#/plan-of-action-and-milestones/risks/1/related-observations/0/observation-uuid",
    "path": "poam.plan-of-action-and-milestones.risks[].related-observations[].observation-uuid",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/risk/goodread-risk-2",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1risk-analysis@1/observations/0",
+     "rule": "evidence URI of the observation a reference names by uuid"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "poam#/plan-of-action-and-milestones/poam-items/0/uuid",
@@ -5367,7 +5394,14 @@
   {
    "source": "poam#/plan-of-action-and-milestones/poam-items/0/related-observations/0/observation-uuid",
    "path": "poam.plan-of-action-and-milestones.poam-items[].related-observations[].observation-uuid",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/finding/goodread-risk-1",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1finding-target@1/poam-item/observations/0",
+     "rule": "evidence URI of the observation a reference names by uuid"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "poam#/plan-of-action-and-milestones/poam-items/0/related-risks/0/risk-uuid",
@@ -5405,12 +5439,26 @@
   {
    "source": "poam#/plan-of-action-and-milestones/poam-items/1/related-observations/0/observation-uuid",
    "path": "poam.plan-of-action-and-milestones.poam-items[].related-observations[].observation-uuid",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/finding/goodread-risk-2",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1finding-target@1/poam-item/observations/0",
+     "rule": "evidence URI of the observation a reference names by uuid"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "poam#/plan-of-action-and-milestones/poam-items/1/related-risks/0/risk-uuid",
    "path": "poam.plan-of-action-and-milestones.poam-items[].related-risks[].risk-uuid",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/finding/goodread-risk-2",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1finding-target@1/poam-item/risks/0",
+     "rule": "the Risk minted for the POA&M risk a reference names by uuid"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "poam#/plan-of-action-and-milestones/back-matter/resources/0/uuid",
@@ -5927,8 +5975,19 @@
   {
    "source": "lev#/system-security-plan/system-implementation/components/0/uuid",
    "path": "lev.system-security-plan.system-implementation.components[].uuid",
-   "reason": "the uuid of a source element: JASCON objects get URIs minted from names and titles, the uuid itself is not carried (uuids that ARE carried or resolved have a destination above)",
-   "outcome": "intentionally-dropped"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/impl/csp-iaas-ac-2",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1implementation@1/statements/0/responses/0/component",
+     "rule": "the Component minted for the component a reference names by uuid"
+    },
+    {
+     "object": "https://ifa.gov/goodread/impl/saas-ac-2",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1implementation@1/statements/0/responses/1/component",
+     "rule": "the provider's Component for the leveraged component a reference names (through its inherited-uuid)"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "lev#/system-security-plan/system-implementation/components/0/type",
@@ -5978,8 +6037,14 @@
   {
    "source": "lev#/system-security-plan/system-implementation/components/1/uuid",
    "path": "lev.system-security-plan.system-implementation.components[].uuid",
-   "reason": "the uuid of a source element: JASCON objects get URIs minted from names and titles, the uuid itself is not carried (uuids that ARE carried or resolved have a destination above)",
-   "outcome": "intentionally-dropped"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/impl/csp-iaas-ac-2",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1implementation@1/statements/0/responses/1/component",
+     "rule": "the Component minted for the component a reference names by uuid"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "lev#/system-security-plan/system-implementation/components/1/type",
@@ -6153,7 +6218,14 @@
   {
    "source": "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/0/component-uuid",
    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].component-uuid",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/impl/csp-iaas-ac-2",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1implementation@1/statements/0/responses/0/component",
+     "rule": "the Component minted for the component a reference names by uuid"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/0/uuid",
@@ -6186,8 +6258,14 @@
   {
    "source": "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/0/export/provided/0/uuid",
    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].export.provided[].uuid",
-   "reason": "the uuid of a source element: JASCON objects get URIs minted from names and titles, the uuid itself is not carried (uuids that ARE carried or resolved have a destination above)",
-   "outcome": "intentionally-dropped"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/csp-iaas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/customer-responsibilities/0/capability",
+     "rule": "the exported capability a reference names by its provided-uuid"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/0/export/provided/0/description",
@@ -6226,7 +6304,14 @@
   {
    "source": "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/0/export/responsibilities/0/provided-uuid",
    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].export.responsibilities[].provided-uuid",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/csp-iaas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/customer-responsibilities/0/capability",
+     "rule": "the exported capability a reference names by its provided-uuid"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/0/export/responsibilities/0/description",
@@ -6259,7 +6344,14 @@
   {
    "source": "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/component-uuid",
    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].component-uuid",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/impl/csp-iaas-ac-2",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1implementation@1/statements/0/responses/1/component",
+     "rule": "the Component minted for the component a reference names by uuid"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/uuid",
@@ -6292,16 +6384,37 @@
   {
    "source": "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/export/provided/0/uuid",
    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].export.provided[].uuid",
-   "reason": "the uuid of a source element: JASCON objects get URIs minted from names and titles, the uuid itself is not carried (uuids that ARE carried or resolved have a destination above)",
-   "outcome": "intentionally-dropped"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/csp-iaas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/customer-responsibilities/1/capability",
+     "rule": "the exported capability a reference names by its provided-uuid"
+    },
+    {
+     "object": "https://ifa.gov/goodread/impl/saas-ac-2",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1implementation@1/statements/0/responses/2/inherited/0/capability",
+     "rule": "the exported capability a reference names by its provided-uuid"
+    },
+    {
+     "object": "https://ifa.gov/goodread/impl/saas-ac-2",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1implementation@1/statements/0/responses/2/satisfied/0/capability",
+     "rule": "the exported capability whose customer responsibility a reference names"
+    },
+    {
+     "object": "https://ifa.gov/goodread/impl/saas-ac-2",
+     "pointer": "/satisfied-by/0/inherited-from/component-ref",
+     "rule": "inherited-from: the leveraged system whose component exports the capability a reference names"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/export/provided/0/description",
    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].export.provided[].description",
    "destinations": [
     {
-     "object": "https://ifa.gov/goodread/component/csp-iaas",
-     "pointer": "/capabilities/1/description/en"
+     "object": "https://ifa.gov/goodread/component/csp-application",
+     "pointer": "/capabilities/0/description/en"
     }
    ],
    "outcome": "copied"
@@ -6326,13 +6439,31 @@
   {
    "source": "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/export/responsibilities/0/uuid",
    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].export.responsibilities[].uuid",
-   "reason": "the uuid of a source element: JASCON objects get URIs minted from names and titles, the uuid itself is not carried (uuids that ARE carried or resolved have a destination above)",
-   "outcome": "intentionally-dropped"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/impl/saas-ac-2",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1implementation@1/statements/0/responses/2/satisfied/0/capability",
+     "rule": "the exported capability whose customer responsibility a reference names"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/export/responsibilities/0/provided-uuid",
    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].export.responsibilities[].provided-uuid",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/csp-iaas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/customer-responsibilities/1/capability",
+     "rule": "the exported capability a reference names by its provided-uuid"
+    },
+    {
+     "object": "https://ifa.gov/goodread/impl/saas-ac-2",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1implementation@1/statements/0/responses/2/satisfied/0/capability",
+     "rule": "the exported capability whose customer responsibility a reference names"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/export/responsibilities/0/description",
@@ -6923,8 +7054,14 @@
   {
    "source": "lvg#/system-security-plan/system-implementation/components/0/uuid",
    "path": "lvg.system-security-plan.system-implementation.components[].uuid",
-   "reason": "the uuid of a source element: JASCON objects get URIs minted from names and titles, the uuid itself is not carried (uuids that ARE carried or resolved have a destination above)",
-   "outcome": "intentionally-dropped"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/impl/saas-ac-2",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1implementation@1/statements/0/responses/0/component",
+     "rule": "the Component minted for the component a reference names by uuid"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "lvg#/system-security-plan/system-implementation/components/0/type",
@@ -6974,8 +7111,14 @@
   {
    "source": "lvg#/system-security-plan/system-implementation/components/1/uuid",
    "path": "lvg.system-security-plan.system-implementation.components[].uuid",
-   "reason": "the leveraging plan's own entry for a component of the leveraged system; the provider's Component, converted from the leveraged plan, stands for it",
-   "outcome": "intentionally-dropped"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/impl/saas-ac-2",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1implementation@1/statements/0/responses/1/component",
+     "rule": "the provider's Component for the leveraged component a reference names (through its inherited-uuid)"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "lvg#/system-security-plan/system-implementation/components/1/type",
@@ -7028,8 +7171,14 @@
   {
    "source": "lvg#/system-security-plan/system-implementation/components/1/props/2/value",
    "path": "lvg.system-security-plan.system-implementation.components[].props[].value",
-   "reason": "the leveraging plan's own entry for a component of the leveraged system; the provider's Component, converted from the leveraged plan, stands for it",
-   "outcome": "intentionally-dropped"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/impl/saas-ac-2",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1implementation@1/statements/0/responses/1/component",
+     "rule": "the provider's Component for the leveraged component a reference names (through its inherited-uuid)"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "lvg#/system-security-plan/system-implementation/components/1/status/state",
@@ -7046,8 +7195,14 @@
   {
    "source": "lvg#/system-security-plan/system-implementation/components/2/uuid",
    "path": "lvg.system-security-plan.system-implementation.components[].uuid",
-   "reason": "the uuid of a source element: JASCON objects get URIs minted from names and titles, the uuid itself is not carried (uuids that ARE carried or resolved have a destination above)",
-   "outcome": "intentionally-dropped"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/impl/saas-ac-2",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1implementation@1/statements/0/responses/2/component",
+     "rule": "the Component minted for the component a reference names by uuid"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "lvg#/system-security-plan/system-implementation/components/2/type",
@@ -7301,7 +7456,14 @@
   {
    "source": "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/0/component-uuid",
    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].component-uuid",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/impl/saas-ac-2",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1implementation@1/statements/0/responses/0/component",
+     "rule": "the Component minted for the component a reference names by uuid"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/0/uuid",
@@ -7341,7 +7503,14 @@
   {
    "source": "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/component-uuid",
    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].component-uuid",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/impl/saas-ac-2",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1implementation@1/statements/0/responses/1/component",
+     "rule": "the provider's Component for the leveraged component a reference names (through its inherited-uuid)"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/uuid",
@@ -7376,12 +7545,8 @@
    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].satisfied[].description",
    "destinations": [
     {
-     "object": "https://ifa.gov/goodread/component/access-control-appliance",
-     "pointer": "/capabilities/0/description/en"
-    },
-    {
      "object": "https://ifa.gov/goodread/impl/saas-ac-2",
-     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1implementation@1/statements/0/responses/1/satisfied/0/en"
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1implementation@1/statements/0/responses/1/satisfied/0/description/en"
     }
    ],
    "outcome": "copied"
@@ -7407,7 +7572,14 @@
   {
    "source": "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/2/component-uuid",
    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].component-uuid",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/impl/saas-ac-2",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1implementation@1/statements/0/responses/2/component",
+     "rule": "the Component minted for the component a reference names by uuid"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/2/uuid",
@@ -7435,7 +7607,19 @@
   {
    "source": "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/2/inherited/0/provided-uuid",
    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].inherited[].provided-uuid",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/impl/saas-ac-2",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1implementation@1/statements/0/responses/2/inherited/0/capability",
+     "rule": "the exported capability a reference names by its provided-uuid"
+    },
+    {
+     "object": "https://ifa.gov/goodread/impl/saas-ac-2",
+     "pointer": "/satisfied-by/0/inherited-from/component-ref",
+     "rule": "inherited-from: the leveraged system whose component exports the capability a reference names"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/2/inherited/0/description",
@@ -7443,7 +7627,7 @@
    "destinations": [
     {
      "object": "https://ifa.gov/goodread/impl/saas-ac-2",
-     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1implementation@1/statements/0/responses/2/inherited/0/en"
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1implementation@1/statements/0/responses/2/inherited/0/description/en"
     }
    ],
    "outcome": "copied"
@@ -7457,15 +7641,26 @@
   {
    "source": "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/2/satisfied/0/responsibility-uuid",
    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].satisfied[].responsibility-uuid",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/impl/saas-ac-2",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1implementation@1/statements/0/responses/2/satisfied/0/capability",
+     "rule": "the exported capability whose customer responsibility a reference names"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/2/satisfied/0/description",
    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].satisfied[].description",
    "destinations": [
     {
+     "object": "https://ifa.gov/goodread/component/access-control-appliance",
+     "pointer": "/capabilities/0/description/en"
+    },
+    {
      "object": "https://ifa.gov/goodread/impl/saas-ac-2",
-     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1implementation@1/statements/0/responses/2/satisfied/0/en"
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1implementation@1/statements/0/responses/2/satisfied/0/description/en"
     }
    ],
    "outcome": "copied"

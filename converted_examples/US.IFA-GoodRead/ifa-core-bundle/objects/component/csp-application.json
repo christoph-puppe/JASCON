@@ -7,6 +7,15 @@
   "en": "Application"
  },
  "kind": "software",
+ "capabilities": [
+  {
+   "id": "cap-provided-2",
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-2",
+   "description": {
+    "en": "Consumer-appropriate description of what may be inherited.\n\nIn the context of the application component in satisfaction of AC-2, part a."
+   }
+  }
+ ],
  "facets": {
   "https://ifa.gov/goodread/facet/component@1": {
    "description": {

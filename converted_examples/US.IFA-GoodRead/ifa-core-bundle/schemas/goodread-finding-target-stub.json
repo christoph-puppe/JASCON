@@ -19,6 +19,9 @@
    "target-description": {
     "type": "object"
    },
+   "observations": {
+    "type": "array"
+   },
    "poam-item": {
     "type": "object"
    }
