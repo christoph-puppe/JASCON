@@ -1,0 +1,347 @@
+---
+title: チェック：評価者が機械であるとき | JASCON
+description: JASCON 2.0.0 の Check 型です。コードがファクトを収集し、12 個の比較演算子からなる閉じた集合が判定し、証跡はそれ自身のハッシュで保存されます。そのため別の当事者は、何も実行せずに機械による判定を再計算できます。判定のライブデモ、CIS プロファイルでの実測による適合度、タグ付け前に未解決の点も掲載しています。
+nav: checks
+source: 1d0b6392399b
+---
+<section class="page-hero">
+  <div class="wrap">
+    <p class="eyebrow">チェック &middot; カーネル 2.0.0、リリース候補</p>
+    <h1>評価者が機械であるとき</h1>
+    <p class="lede">終了コード 0 か 1 を返すだけのスキャナーは、しきい値を隠し、テーラリングを無視し、再検証できるものを何も残しません。Check は、コレクターが報告すべきファクトと、判定を下す比較を公開します。実行記録には観測された内容が含まれるため、誰でも記録から判定を再計算できます。</p>
+    <div class="chips">
+      <span class="tier tier-designed">11 番目のカーネル型、2.0.0 候補</span>
+      <span class="tier tier-measured">{{ n.check_vectors }} 件のテストベクトルが 3 つの実装で合格</span>
+      <span class="tier tier-open">2.0.0 は未タグ付け</span>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="gap">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">01</span> ギャップ</p>
+      <h2>自動化は発行元に存在するが、途中で失われる</h2>
+      <p class="lede">JASCON 1.0.0 では、要求事項が評価されたことと、評価者がどう結論付けたかは表現できます。しかし、機械がどう判定するかは表現できません。</p>
+    </div>
+    <div class="findings reveal">
+      <div class="finding">
+        <span class="finding-n">312 件中 291 件</span>
+        <h3>CIS Ubuntu 24.04 Benchmark のルールのうち、自動化対象と指定されたもの</h3>
+        <p>そのすべてが、変換後のバンドルでは、文章中にシェルの抜粋を含む <code>audit</code> 文字列として届きます。合格条件は「verify the output is」のような文であり、人が読まなければなりません。</p>
+      </div>
+      <div class="finding">
+        <span class="finding-n">3 機関中 0</span>
+        <h3>機械判定可能なチェックを符号化している、調査対象の発行機関</h3>
+        <p>ISM、Grundschutz++、SP 800-53 は、手法（検査、インタビュー、テスト）と必要な文書を挙げています。FedRAMP CR26 は、主要なテストを文章で記載しています。いずれも、プログラムが評価できるチェックを規定していません。</p>
+      </div>
+    </div>
+    <p class="source reveal">件数の出典：<a href="{{ blob }}/drafts/CP-CHECK-1.md" rel="noopener">CP-CHECK-1</a> の 2.1 節。変換済みコーパスのカバレッジレポートに基づく。</p>
+  </div>
+</section>
+
+<section class="section band" id="split">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">02</span> 設計</p>
+      <h2>コレクターは観測し、基準が判定する</h2>
+      <p class="lede">境界線は、ツール同士の結果が一致しなければならない箇所に引かれています。仕様に適合する 2 つのツールに同じ Check と同じ観測値を与えれば、同じ判定が返ります。誠実なツールの間で異なっていても判定が変わらないものは、すべてカーネルの外に置かれます。</p>
+    </div>
+    <div class="flow reveal">
+      <div class="flow-step">
+        <span class="where">ファセット（カーネルの外）</span>
+        <h3>コレクター</h3>
+        <p>シェルスクリプト、Ansible タスク、または API 呼び出しです。Check に格納されるため、チェックのダイジェストがコードそのものを対象に含みます。観測値を 1 つ出力するだけで、何も判定しません。</p>
+      </div>
+      <div class="flow-step kernel">
+        <span class="where">カーネル：ファクト契約</span>
+        <h3>観測値</h3>
+        <p><code>sshd.maxauthtries</code>（整数）のように、名前と型を持つファクトです。コレクターは、デフォルト値を解決した実効値を報告します。キーがないことは「調べたが見つからなかった」を意味します。</p>
+      </div>
+      <div class="flow-step kernel">
+        <span class="where">カーネル：12 個の比較演算子</span>
+        <h3>基準</h3>
+        <p><code>at-most {param}</code> のようなフラットな論理積です。期待値はリテラルか要求事項のパラメータであるため、そのパラメータをバインドする Tailoring が合格基準を決めます。</p>
+      </div>
+      <div class="flow-step kernel">
+        <span class="where">カーネル：check-verdict</span>
+        <h3>判定</h3>
+        <p>充足、不充足、判定不能、該当なしのいずれかです。判定は、Check、観測値、バインドされたパラメータだけから決まる純粋関数です。バリデータは記録されたすべての判定を再計算します。</p>
+      </div>
+    </div>
+    <div class="grid g3 reveal" style="margin-top: 18px;">
+      <article class="card">
+        <h3>テーラリングしたパラメータがチェックを調整し直す</h3>
+        <p>Tailoring で <code>max-auth-tries</code> を 6 から 4 に厳しくすると、昨日の観測値 5 は充足から不充足に変わります。コードは 1 行も変わらず、実装者が自分で合格基準を設定することもできません。</p>
+      </article>
+      <article class="card">
+        <h3>判定は信用せず、再計算する</h3>
+        <p>Assessment の行は観測値そのものを保持します。別の当事者がその観測値で基準を評価し、比較します。記録された結果が計算結果と異なれば、検証エラーになります。</p>
+      </article>
+      <article class="card">
+        <h3>記録は観測された内容を示す</h3>
+        <p>失敗した行には <code>sshd.ciphers matches-not ".*-cbc"</code> とあり、観測値は <code>aes128-cbc</code> を含むリストでした。終了コードなら 1 と示すだけだったでしょう。</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="demo">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">03</span> 試してみる</p>
+      <h2>観測値を設定し、合格基準を動かす</h2>
+      <p class="lede">リポジトリの作例です。2 つの条項を持つ 1 つの要求事項、本番ホスト向けの Tailoring、2 つの Check、そして踏み台ホストで記録された 2 回の日次実行からなります。コレクターが観測した値や、Tailoring がバインドする値を変えてみてください。</p>
+    </div>
+{{ include:_check-demo.html }}
+    <div class="split even reveal" style="margin-top: clamp(32px, 4vw, 52px);">
+      <div class="window" data-tabs>
+        <div class="window-bar" role="tablist" aria-label="例のオブジェクト">
+          <span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+          <button class="tab" role="tab" aria-selected="true" data-panel="ck-check">check.json</button>
+          <button class="tab" role="tab" aria-selected="false" data-panel="ck-row">実行の行</button>
+          <button class="tab" role="tab" aria-selected="false" data-panel="ck-finding">finding.json</button>
+        </div>
+        <pre id="ck-check" role="tabpanel" tabindex="0"><code data-lang="json">{
+  "id": "https://cso.example/check/LNX-SSH-1-maxauthtries",
+  "requirement-ref": "https://cso.example/req/LNX-SSH-1",
+  "statement-ids": ["s1"],
+  "platform": "https://cso.example/platform/linux-host",
+  «"observes": [
+    { "name": "sshd.maxauthtries", "type": "integer" }
+  ]»,
+  «"criteria": [
+    { "fact": "sshd.maxauthtries", "op": "at-most",
+      "expected": { "param": "max-auth-tries" } }
+  ]»,
+  "validity": { "num": 24, "unit": "hours" },
+  "confidence": "reviewed",
+  "facets": {
+    "https://ns.jascon.net/stdlib/facet/collector@1": {
+      "collectors": [
+        { "id": "bash", "runtime": "bash", "privileges": "root",
+          "source": "#!/bin/bash\nv=$(sshd -T | awk '$1==\"maxauthtries\"{print $2}') ..." }
+      ]
+    }
+  }
+}</code></pre>
+        <pre id="ck-row" role="tabpanel" tabindex="0"><code data-lang="json">{
+  "check-ref": "https://cso.example/check/LNX-SSH-1-ciphers",
+  "check-digest": "sha256:b5ec275f0904a0a882d27e1434efb28e0595a74c6c0814297b2537fa49833f56",
+  "collector-id": "bash",
+  "outcome": "not-satisfied",
+  "time": "2026-11-03T06:00:04Z",
+  «"observation": {
+    "facts": {
+      "sshd.ciphers": ["chacha20-poly1305@openssh.com",
+                       "aes256-gcm@openssh.com", "aes256-ctr", "aes128-cbc"]
+    }
+  }»,
+  "evidence-record": {
+    "ref": "evidence/sha256/61c0ab97f7c9033b00b61a1eb09b5aa40d648114422ffa040aa779b09a9118fc",
+    "digest": "sha256:61c0ab97f7c9033b00b61a1eb09b5aa40d648114422ffa040aa779b09a9118fc"
+  }
+}</code></pre>
+        <pre id="ck-finding" role="tabpanel" tabindex="0"><code data-lang="json">{
+  "id": "https://cso.example/finding/bastion-01-ssh-cbc",
+  "assessment-ref": "https://cso.example/assessment/bastion-01-2026-11-03",
+  "requirement-ref": "https://cso.example/req/LNX-SSH-1",
+  "statement-ref": "s2",
+  «"check-ref": "https://cso.example/check/LNX-SSH-1-ciphers"»,
+  "state": "closed",
+  "actions": [
+    { "description": { "en": "Remove aes128-cbc from the Ciphers line of sshd_config; the next daily run verifies." },
+      "status": "done" }
+  ]
+}</code></pre>
+        <div class="window-foot"><span>抜粋 &middot; jascon/examples</span></div>
+      </div>
+      <div class="stack-lg">
+        <div class="stack">
+          <h3>サンプルバンドルが記録している内容</h3>
+          <ul class="ticks">
+            <li><b>11月3日：</b>上限 4 回に対して認証試行 4 回で、充足。暗号方式のリストに <code>aes128-cbc</code> が含まれ、不充足。Assessment の結果は、その各行を集約したものです。</li>
+            <li>条項 s2 に対する <b>Finding</b> は、それを提起したチェックを指しています。その対応措置は、当該暗号方式の削除です。</li>
+            <li><b>11月10日：</b>両方の行が充足。Finding はクローズされ、それを検証した実行と関連付けられています。</li>
+          </ul>
+        </div>
+        <p class="muted">この例では、実在のホストは評価していません。各実行では、Check の bash コレクターを変更せずに、固定の設定を出力するスタブの <code>sshd</code> に対して実行しており、すべての証跡記録にその旨が記載されています。</p>
+        <a class="link-arrow" href="app/index.html#load=../jascon/examples/&amp;tool=checks">アプリの Checks ページで例を開く</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="comparators">
+  <div class="wrap">
+    <div class="split">
+      <div class="stack-lg reveal">
+        <div class="section-head" style="margin-bottom:0">
+          <p class="eyebrow"><span class="no">04</span> 比較演算子</p>
+          <h2>12 個の演算子と、含めなかったもののリスト</h2>
+          <p class="lede">この集合は、意図的に小さくしてあります。収まらないチェックは手動のまま残り、その件数が数えられます。</p>
+        </div>
+        <ul class="plain">
+          <li>基準は論理積です。OR も NOT も入れ子もありません。値の選択肢は <code>one-of</code> で表し、否定は演算子の対で表します。</li>
+          <li>算術演算も、2 つのファクト間の比較もありません。数え上げや導出はコレクターの仕事です。</li>
+          <li>結合は強クリーネ論理の AND です。確定した失敗が 1 つあれば結果が決まり、他の箇所にある不明値の陰に失敗が隠れることはありません。</li>
+          <li>バインドされていないパラメータは判定不能になります。デフォルト値で代用されることはありません。</li>
+          <li><code>at-most</code> は、値を大きくするほど厳しくなるパラメータを決してバインドしません。これにより、パラメータを厳しくしてもチェックが緩むことはありません。</li>
+          <li>多数のリソースを対象とするチェックは、該当するすべてのリソースが合格した場合にのみ合格します。すべてのリソースが評価され、最初の失敗の後もスキップされるものはなく、判定には件数と割合が付きます。例：「該当するバケットリソース 200 件中 12 件が不充足（6%）」。</li>
+        </ul>
+      </div>
+      <div class="table-wrap reveal">
+        <table>
+          <thead><tr><th>演算子</th><th>対象</th><th>成立する条件</th></tr></thead>
+          <tbody>
+            <tr><th scope="row"><code>equals</code></th><td>単一の値</td><td>値が期待値と等しい。10 進数は値で比較</td></tr>
+            <tr><th scope="row"><code>not-equals</code></th><td>単一の値</td><td>値が期待値と異なる。ファクトが欠けていれば判定不能</td></tr>
+            <tr><th scope="row"><code>one-of</code></th><td>単一の値</td><td>値がリストに含まれる</td></tr>
+            <tr><th scope="row"><code>at-least</code> <code>at-most</code></th><td>整数、10 進数</td><td>大小比較。10 進数を浮動小数点数として扱うことはない</td></tr>
+            <tr><th scope="row"><code>present</code> <code>absent</code></th><td>任意のファクト</td><td>キーが観測値に含まれる、または含まれない</td></tr>
+            <tr><th scope="row"><code>includes-all</code></th><td>リスト</td><td>列挙した値がすべて現れる</td></tr>
+            <tr><th scope="row"><code>excludes-all</code></th><td>リスト</td><td>列挙した値がどれも現れない</td></tr>
+            <tr><th scope="row"><code>subset-of</code></th><td>リスト</td><td>観測されたすべての値が列挙されている</td></tr>
+            <tr><th scope="row"><code>matches</code> <code>matches-not</code></th><td>文字列、コード</td><td>値全体が I-Regexp パターンに一致する、または一致しない</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="split even reveal" style="margin-top: clamp(40px, 5vw, 64px);">
+      <div class="stack">
+        <h3>正規表現を認める理由</h3>
+        <p class="muted">ハンドブックは式言語を採用していません。式言語では、仕様に適合する 2 つのツールが異なる 2 つの判定を返しうるからです。Python、.NET、JavaScript は、人がよく使う構文、つまり <code>\d</code>、<code>\w</code>、アンカー、フラグ、先読み・後読みで、まさに挙動が食い違います。そのため方言には、IETF が相互運用性のために策定し、JSONPath でも使われている I-Regexp (RFC 9485) を採用しています。</p>
+      </div>
+      <div class="stack">
+        <h3>RFC に加えてカーネルが定めること</h3>
+        <ul class="plain">
+          <li>パターンは値全体に一致します。<code>^</code> と <code>$</code> は通常の文字です。</li>
+          <li>上限：パターンあたり 256 文字、状態数 1,000、値あたり 4,096 文字。これを超えると、その行は判定不能になります。</li>
+          <li>ホストの正規表現エンジンは使いません。各実装は、RFC 9485 が公開している文法を自ら解析し、バックトラックなしでマッチングします。そのため、パターンによってバリデータが停止することはありません。</li>
+          <li>依存が 1 つだけ残っており、それを明記しています。Unicode カテゴリ <code>\p{..}</code> は、ホストのデータベースから読み取られます（バックログ 59）。</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="evidence-chain">
+  <div class="wrap">
+    <div class="split">
+      <div class="section-head reveal" style="margin-bottom:0">
+        <p class="eyebrow"><span class="no">05</span> 証跡</p>
+        <h2>連鎖のどの段もオフラインで検証できる</h2>
+        <p class="lede">証跡は、コンテンツマニフェストの隣にあるディレクトリです。すべてのファイルは、そのバイト列の SHA-256 で命名されます。墨消しはハッシュ計算の前に行われ、生の出力は別ファイルになります。そのため、保存期間に基づいてファイルを削除しても記録は検証可能なままで、バリデータはそのファイルを「非開示」と報告します。</p>
+      </div>
+      <div class="chain-list reveal">
+        <div class="chain-link"><b>Attestation</b><p>Assessment のセマンティックダイジェストを結び付けます。</p></div>
+        <div class="chain-link"><b>Assessment の行</b><p>観測値をインラインで保持するため、そのダイジェストが観測値を対象に含みます。Check を参照とダイジェストの両方で指定します。変更されたチェックは別のチェックです。</p></div>
+        <div class="chain-link"><b>証跡記録</b><p>チェック、コレクター、対象、開始、終了、終了ステータスを示し、同じ観測値のダイジェストを保持します。</p></div>
+        <div class="chain-link"><b>生の出力</b><p>stdout や API レスポンスです。それぞれダイジェストで指定され、メディアタイプ、サイズ、墨消しフラグを伴います。</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="fit">
+  <div class="wrap">
+    <div class="section-head wide reveal">
+      <p class="eyebrow"><span class="no">06</span> 実測による適合度</p>
+      <h2>510 ルール中 481 ルールが宣言的な形式に収まる</h2>
+      <p class="lede">比較演算子の集合は先に起草し、その後で 2 つのオープンなチェックコーパスに対して実測しました。ComplianceAsCode にある Ubuntu 24.04 向けの 4 つの CIS プロファイル（510 ルール）と、kube-bench の CIS 1.12 チェック（自動 103 件、手動 28 件）です。</p>
+    </div>
+    <div class="split even reveal">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>分類</th><th class="num">510 ルール中</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">収まる<small>うち 23 件は、コレクターが実効値を解決し、モードビットをフラグの集合として報告する場合に限る</small></th><td class="num">481</td></tr>
+            <tr><th scope="row">算術演算が必要<small>件数、一意性、現在時刻との比較</small></th><td class="num">12</td></tr>
+            <tr><th scope="row">2 つのファクト間の比較が必要</th><td class="num">9</td></tr>
+            <tr><th scope="row">ファクトをまたぐ OR が必要</th><td class="num">6</td></tr>
+            <tr><th scope="row">バージョンの順序付けが必要</th><td class="num">2</td></tr>
+            <tr><th scope="row">I-Regexp の範囲外の正規表現が必要</th><td class="num">0</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="stack-lg">
+        <div class="stack">
+          <h3>調査からわかること <span class="tier tier-measured">実測、適合は判断による</span></h3>
+          <ul class="plain">
+            <li>比較側は小さく、ロジックは収集側にあります。手書きの OVAL 定義 126 件では、state による比較は、等値が 99 回、パターンが 23 回、大小比較が 41 回でした。</li>
+            <li>491 個の正規表現のうち、比較側にあるのは 23 個です。23 個すべてが I-Regexp の範囲内にあるか、機械的に書き換えられます。</li>
+            <li>kube-bench の OR を含む 21 件のチェックのうち、16 件は「フラグがない、またはフラグが値と等しい」という内容です。実効値を報告するコレクターなら、これらを 1 つの比較にできます。</li>
+          </ul>
+        </div>
+        <div class="stack">
+          <h3>調査によって修正されたこと</h3>
+          <p class="muted">起草時の集合には「等しくない」がありませんでした。調査では、OVAL の state で 2 回、kube-bench の全ディレクトリで 85 回見つかり、数値については他のどの演算子でも表現できません。11月12日に、12 番目の比較演算子として追加されました。収まらない 29 ルールは手動のままです。</p>
+        </div>
+        <a class="link-arrow" href="{{ tree }}/drafts/cp-check-1-census" rel="noopener">調査スクリプトと集計の生データ</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="state">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">07</span> 現状</p>
+      <h2>2.0.0 への採用が決定し、両バリデータでグリーン</h2>
+      <p class="lede">2026年11月12日、作成者が提案の未決事項を決定しました。Check は 2.0.0-rc.2 からリリース候補に含まれており、2.0.0 で正式に導入されます。現在 rc.3 となっている候補は、まだタグ付けされていません。</p>
+    </div>
+    <div class="state-cols reveal">
+      <article class="card">
+        <div class="card-top"><h3>リポジトリにあるもの</h3><span class="tier tier-measured">実測</span></div>
+        <ul class="ticks">
+          <li><b>スキーマとルール：</b>Check の構造、Assessment 上の実行の行、Finding 上の参照、証跡記録、ファセット <code>collector@1</code>。CHECK-1 から CHECK-15 までのルールと、プリミティブ <code>check-verdict</code>。いずれも、失敗時に出力される論拠を持ちます。</li>
+          <li><b>{{ n.check_vectors }} 件の適合性テストベクトル</b>が、Python のリファレンス実装、Windows PowerShell 5.1 上の PowerShell 版姉妹実装、アプリの JavaScript 移植版で合格します。リファレンス実装に意図的な破損を 5 か所入れると、それぞれでいずれかのベクトルが赤になります。</li>
+          <li>2 つの Check、2 回の実行、1 つの Finding、7 つの証跡ファイルからなる<b>作例</b>。</li>
+          <li><b>公開されたとおりの RFC 9485 の文法</b>。11月12日に照合しました。この文法はサロゲートコードポイントをパターンから除外しますが、ワーキンググループのファイルはそうなっていませんでした。3 つのエンジンを修正し、5 つのベクトルでこの挙動を固定しています。</li>
+          <li><b>テキスト：</b>仕様書の D24、ハンドブックの第 10 章とバリデータの章、付録 A、B、C、そしてコーディングエージェント向けのスキル。</li>
+          <li><b>ツール：</b>アプリの Checks ページでは、チェックを手で書くことも、言語モデルに下書きさせることもできます。下書きは 1 ルールずつでも、CIS からインポートしたすべての自動化ルールに対してでも可能です。単一ファイルのリーダーは、Check と記録された実行を表示します。</li>
+        </ul>
+      </article>
+      <article class="card">
+        <div class="card-top"><h3>未解決</h3><span class="tier tier-open">未解決</span></div>
+        <ul class="plain">
+          <li><b>ランナーがない。</b>リポジトリには、ターゲット上でコレクターを実行するものがなく、アプリも実行しません。HTTP コレクターには、宣言されたリクエスト形式がまだありません。</li>
+          <li><b>クラウドプラットフォームは未調査。</b>調査対象は Linux ホストと Kubernetes です。構造は、この 2 つに基づいてタグ付けの時点で確定します。</li>
+          <li><b>未決の選択が 1 つ：</b>パターン中の Unicode カテゴリを、ホストのデータベースに従わせるか、固定されたテーブルに従わせるか。</li>
+        </ul>
+      </article>
+    </div>
+
+    <div class="table-wrap reveal" style="margin-top: 18px;">
+      <table>
+        <thead><tr><th>作成者への質問</th><th>2026年11月12日の決定</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">昇格ルールは、調査対象の 3 機関のうち 2 機関がその型を符号化していることを求める。チェックを符号化している機関はない。</th><td>カタログの発行機関が公開しない型のための条項をルールに追加した。認知された標準がその記録を求めているか、数えられた 2 つのオープンな実装によって示される確立した慣行であること。他の 2 つのテストを満たすこと。メジャーバージョンで導入すること。Risk は 1 つ目の分岐で、Check は 2 つ目の分岐で採用される。</td></tr>
+          <tr><th scope="row">実行の行はカーネルのフィールドか、ファセットか？</th><td>カーネルのフィールド。判定は計算であり、ファセットが計算を定義することはない。</td></tr>
+          <tr><th scope="row">Check は、参照先の要求事項なしで配布してよいか？</th><td>よい。再配布できないカタログ向けのチェックパックも、単独で検証できる。</td></tr>
+          <tr><th scope="row">今すぐ取り込むか、クラウド API の調査を待つか？</th><td>Check は 2.0.0 で正式に導入する。</td></tr>
+          <tr><th scope="row">「すべてのリソース」以外の量化子は必要か？</th><td>設けない。すべてのリソースを評価して記録し、失敗の割合を報告したうえで、チェックは失敗とする。</td></tr>
+          <tr><th scope="row">12 番目の比較演算子 <code>not-equals</code> を加えるか？</th><td>追加した。</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="source reveal">調査を含む提案、採用されなかった代替案（基準をファセットに置き、昇格は後で行う案）、決定の記録：<a href="{{ blob }}/drafts/CP-CHECK-1.md" rel="noopener">drafts/CP-CHECK-1.md</a>。規範テキスト：<a href="{{ blob }}/drafts/jascon-specification-2.0.0-rc.3.md" rel="noopener">仕様書 2.0.0-rc.3</a> の D24。</p>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0">
+  <div class="wrap">
+    <div class="cta reveal">
+      <div>
+        <h2>タグ付けで構造が確定する前にレビューを</h2>
+        <p>カーネルの型は、すべてのバリデータが永久にそのコストを負担します。タグ付け後の修正には、メジャーバージョンが必要です。この候補には、スキャナーの運用を仕事にしている読み手が必要です。ファクト契約はお使いのプラットフォームで成り立つでしょうか。お手元のチェックのうち、12 個の比較演算子に収まらないものはどれでしょうか。</p>
+      </div>
+      <div class="cta-actions">
+        <a class="btn btn-primary" href="{{ blob }}/drafts/CP-CHECK-1.md" rel="noopener">CP-CHECK-1 を読む <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a class="btn btn-ghost" href="app/index.html#load=../jascon/examples/&amp;tool=checks">アプリでチェックを書く <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a class="btn btn-ghost" href="{{ repo }}/issues" rel="noopener">異論を提出する <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>

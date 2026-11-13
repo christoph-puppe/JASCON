@@ -1,0 +1,43 @@
+<div class="demo check-demo reveal" id="check-demo">
+  <div class="demo-edit">
+    <div class="window-bar">
+      <span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span class="window-title">LNX-SSH-1 auf bastion-01</span>
+      <span class="window-note">ausgearbeitetes Beispiel aus dem Repository</span>
+    </div>
+    <div class="cd-body">
+      <div class="cd-req">
+        <span class="cd-k">Die Anforderung</span>
+        <p><b>s1</b> Der SSH-Daemon erlaubt höchstens <mark data-cd="param-text">4</mark> Authentifizierungsversuche je Verbindung.</p>
+        <p><b>s2</b> Der SSH-Daemon bietet keine Chiffre im CBC-Modus an.</p>
+      </div>
+      <div class="cd-field cd-keep">
+        <label for="cd-param"><span class="cd-k">Das Tailoring bindet</span><code>max-auth-tries</code></label>
+        <input id="cd-param" type="number" min="1" max="10" step="1" value="4" inputmode="numeric">
+      </div>
+      <div class="cd-field">
+        <label for="cd-tries"><span class="cd-k">Der Kollektor beobachtete</span><code>sshd.maxauthtries</code></label>
+        <input id="cd-tries" type="number" min="1" max="10" step="1" value="4" inputmode="numeric">
+      </div>
+      <fieldset class="cd-field cd-list">
+        <legend><span class="cd-k">Der Kollektor beobachtete</span><code>sshd.ciphers</code></legend>
+        <div data-cd="ciphers"></div>
+      </fieldset>
+      <div class="cd-presets">
+        <span class="cd-k">Aufgezeichnete Läufe</span>
+        <div data-cd="presets"></div>
+        <button class="demo-btn" type="button" data-cd-silent>Der Kollektor meldet nichts</button>
+      </div>
+    </div>
+  </div>
+  <div class="demo-side">
+    <div class="cd-rows" data-cd="rows" aria-live="polite"></div>
+    <div class="verdict" data-v="full" aria-live="polite">
+      <span class="verdict-k">Ergebnis der Prüfung</span>
+      <span class="verdict-v">&hellip;</span>
+      <p></p>
+    </div>
+    <p class="cd-foot">In Ihrem Browser berechnet von der Portierung von <code>check-verdict</code> in der App, also von dem Code, der die {{ n.check_vectors }} Check-Vektoren besteht. Hier läuft kein Kollektor; die Beobachtung ist die, die Sie eingestellt haben.</p>
+  </div>
+  <script type="application/json" id="check-demo-data">{{ json:checkdemo }}</script>
+</div>

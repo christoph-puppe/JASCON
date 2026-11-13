@@ -64,7 +64,7 @@
   --code-ink: oklch(0.93 0.01 95); --code-dim: oklch(0.72 0.02 250); --code-key: oklch(0.78 0.11 25); --code-str: oklch(0.86 0.07 95); --code-num: oklch(0.82 0.08 200); --code-kw: oklch(0.78 0.08 240);
   --shadow: 0 1px 0 oklch(0.5 0.07 240 / 0.3), 0 14px 30px -20px oklch(0.27 0.035 262 / 0.35);
   --shadow-lg: 0 1px 0 oklch(0.5 0.07 240 / 0.3), 0 26px 50px -28px oklch(0.27 0.035 262 / 0.5);
-  --sans: "Barlow", system-ui, sans-serif; --serif: "Barlow Condensed", "Arial Narrow", sans-serif; --mono: "Courier Prime", "Courier New", monospace;
+  --sans: "Barlow", var(--script-sans,) system-ui, sans-serif; --serif: "Barlow Condensed", "Arial Narrow", var(--script-sans,) sans-serif; --mono: "Courier Prime", "Courier New", monospace;
   --radius: 2px; --lines: oklch(0.55 0.07 240 / 0.16); color-scheme: light;
 }
 :root[data-style="ledger"][data-theme="dark"] {
@@ -108,7 +108,7 @@
   --code-ink: oklch(0.92 0.02 85); --code-dim: oklch(0.73 0.025 75); --code-key: oklch(0.77 0.11 45); --code-str: oklch(0.8 0.07 130); --code-num: oklch(0.84 0.08 85); --code-kw: oklch(0.78 0.05 230);
   --shadow: 3px 6px 18px -12px oklch(0.25 0.04 55 / 0.45);
   --shadow-lg: 8px 18px 44px -22px oklch(0.25 0.04 55 / 0.55);
-  --sans: "EB Garamond", "Iowan Old Style", Georgia, serif; --serif: "EB Garamond", "Iowan Old Style", Georgia, serif; --mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+  --sans: "EB Garamond", var(--script-serif,) "Iowan Old Style", Georgia, serif; --serif: "EB Garamond", var(--script-serif,) "Iowan Old Style", Georgia, serif; --mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
   --radius: 1px; --chain: oklch(0.5 0.03 70 / 0.05); --laid: oklch(0.5 0.03 70 / 0.025); color-scheme: light;
 }
 :root[data-style="engraving"][data-theme="dark"] {
@@ -151,7 +151,7 @@
   --code-bg: oklch(0.28 0.018 55); --code-bar: oklch(0.32 0.02 55); --code-rule: oklch(0.93 0.014 80 / 0.1);
   --code-ink: oklch(0.92 0.014 80); --code-dim: oklch(0.75 0.018 75); --code-key: oklch(0.81 0.06 40); --code-str: oklch(0.8 0.045 140); --code-num: oklch(0.85 0.06 80); --code-kw: oklch(0.79 0.03 225);
   --shadow: none; --shadow-lg: none;
-  --sans: "Titillium Web", system-ui, sans-serif; --serif: "Bodoni Moda", Didot, "Bodoni 72", serif; --mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+  --sans: "Titillium Web", var(--script-sans,) system-ui, sans-serif; --serif: "Bodoni Moda", var(--script-serif,) Didot, "Bodoni 72", serif; --mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
   --radius: 16px; color-scheme: light;
 }
 :root[data-style="still-life"][data-theme="dark"] {
@@ -384,3 +384,44 @@
   :root[data-style="ledger"] main::before { display: none; }
   :root[data-style="engraving"] .hero-grid { outline: 0; box-shadow: none; }
 }
+
+/* the header carries the language menu too: on a narrow phone the larger
+   wordmarks of the three styles give way, as the classic one does in site.css */
+@media (max-width: 380px) {
+  :root[data-style] .site-header .wordmark { font-size: 1.12rem; letter-spacing: 0.03em; }
+}
+
+/* ======================================================================
+   SCRIPTS OTHER THAN LATIN (the pages under /hi/, /ja/ and /zh/)
+   The site's own faces are Latin subsets; Devanagari and Han/Kana come
+   from the faces of the reader's system, named here in order of quality.
+   Each list ends in a comma: it is set into --sans and --serif in front of
+   the generic fallbacks. Italics, tight leading and negative tracking are
+   Latin habits and are undone for these scripts.
+   ====================================================================== */
+:root:lang(hi) {
+  --script-sans: "Noto Sans Devanagari", "Nirmala UI", "Kohinoor Devanagari", "Devanagari Sangam MN", Mangal,;
+  --script-serif: "Noto Serif Devanagari", "Kohinoor Devanagari", "Nirmala UI", "Devanagari Sangam MN", Mangal,;
+}
+:root:lang(ja) {
+  --script-sans: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic UI", "Yu Gothic", YuGothic, Meiryo, "Noto Sans JP", "Noto Sans CJK JP",;
+  --script-serif: "Hiragino Mincho ProN", "Yu Mincho", YuMincho, "Noto Serif JP", "Noto Serif CJK JP", "Yu Gothic", Meiryo,;
+}
+:root:lang(zh) {
+  --script-sans: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", "Noto Sans CJK SC", "Source Han Sans SC",;
+  --script-serif: "Songti SC", STSong, "Noto Serif SC", "Noto Serif CJK SC", "Source Han Serif SC", "Microsoft YaHei",;
+}
+:root:is(:lang(hi), :lang(ja), :lang(zh)) :is(em, i, cite) { font-style: normal; }
+:root:is(:lang(hi), :lang(ja), :lang(zh)) :is(h1, h2, .display) { letter-spacing: 0; line-height: 1.3; }
+:root:is(:lang(hi), :lang(ja), :lang(zh)) :is(h3, h4) { letter-spacing: 0; }
+:root:lang(hi) body { line-height: 1.75; }
+:root:is(:lang(ja), :lang(zh)) body { line-height: 1.8; }
+/* a heading in these scripts is wider per word than in Latin: the hero
+   heading is set smaller, and a long word may break rather than overflow */
+:root:is(:lang(hi), :lang(ja), :lang(zh)) .hero h1 { font-size: clamp(2.1rem, 1.1rem + 2.6vw, 3.1rem); }
+:root:is(:lang(hi), :lang(ja), :lang(zh)) :is(h1, h2, h3, .display) { overflow-wrap: anywhere; }
+/* Japanese: the hero heading breaks between phrases (BudouX in the browser);
+   elsewhere a phrase would widen grid columns on a phone, so other headings
+   break between any two characters, as Japanese text does */
+:root:lang(ja) .hero h1 { word-break: auto-phrase; overflow-wrap: break-word; }
+:root:is(:lang(hi), :lang(ja), :lang(zh)) :is(.eyebrow, thead th, .tier) { letter-spacing: 0.04em; }

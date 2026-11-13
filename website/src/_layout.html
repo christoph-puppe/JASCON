@@ -1,15 +1,18 @@
 <!doctype html>
-<html lang="en">
+<html lang="{{ lang.hreflang }}"{{ html.root_attr }}>
 <head>
 <meta charset="utf-8">
 {{ html.base_tag }}
 <meta name="viewport" content="width=device-width, initial-scale=1">
+{{ html.lang_auto }}
 <title>{{ page.title }}</title>
 <meta name="description" content="{{ page.description }}">
 <meta name="robots" content="{{ page.robots }}">
 <link rel="canonical" href="{{ page.url }}">
+{{ html.alternates }}
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="JASCON">
+<meta property="og:locale" content="{{ lang.og_locale }}">
 <meta property="og:title" content="{{ page.title }}">
 <meta property="og:description" content="{{ page.description }}">
 <meta property="og:url" content="{{ page.url }}">
@@ -29,38 +32,39 @@
 <script>/* scripts are on; colour scheme and style before the first paint */document.documentElement.className="js";try{var t=localStorage.getItem("jascon-site:theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t);var s=localStorage.getItem("jascon-site:style");if(s==="ledger"||s==="engraving"||s==="still-life")document.documentElement.setAttribute("data-style",s)}catch(e){}</script>
 </head>
 <body class="{{ page.body_class }}">
-<a class="skip" href="#main">Skip to the content</a>
+<a class="skip" href="#main">{{ t.skip }}</a>
 
 <header class="site-header">
   <div class="wrap bar">
-    <a class="brand" href="index.html" aria-label="JASCON, home">
+    <a class="brand" href="index.html" aria-label="{{ t.home_label }}">
       <svg class="mark" viewBox="0 0 32 32" width="28" height="28" aria-hidden="true"><rect class="mark-bg" width="32" height="32" rx="7.5"/><g class="mark-fg" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.4 7.6c-2.2 0-2.9 1.2-2.9 3v2.5c0 1.8-.9 2.9-2.5 2.9 1.6 0 2.5 1.1 2.5 2.9v2.5c0 1.8.7 3 2.9 3"/><path d="M19.6 7.6c2.2 0 2.9 1.2 2.9 3v2.5c0 1.8.9 2.9 2.5 2.9-1.6 0-2.5 1.1-2.5 2.9v2.5c0 1.8-.7 3-2.9 3"/><path d="m14.2 18.6 3.6-5.2" stroke-width="1.5"/></g><circle class="mark-dot" cx="14" cy="18.9" r="1.95"/><circle class="mark-dot" cx="18" cy="13.1" r="1.95"/></svg>
       <span class="wordmark">JASCON</span>
     </a>
-    <nav class="nav" id="nav" aria-label="Main">
-      <a href="model.html" data-nav="model">The model</a>
-      <a href="checks.html" data-nav="checks">Checks</a>
-      <a href="evidence.html" data-nav="evidence">Evidence</a>
-      <a href="start.html" data-nav="start">Get started</a>
-      <a href="join.html" data-nav="join">Join</a>
-      <a class="nav-ext" href="{{ repo }}/raw/main/SKILL_jascon.zip" rel="noopener" title="Download the JASCON skill (SKILL_jascon.zip)">Skill</a>
-      <a class="nav-ext" href="{{ repo }}" rel="noopener">GitHub</a>
+    <nav class="nav" id="nav" aria-label="{{ t.nav_label }}">
+      <a href="model.html" data-nav="model">{{ t.nav_model }}</a>
+      <a href="checks.html" data-nav="checks">{{ t.nav_checks }}</a>
+      <a href="evidence.html" data-nav="evidence">{{ t.nav_evidence }}</a>
+      <a href="start.html" data-nav="start">{{ t.nav_start }}</a>
+      <a href="join.html" data-nav="join">{{ t.nav_join }}</a>
+      <a class="nav-ext" href="{{ repo }}/raw/main/SKILL_jascon.zip" rel="noopener" title="{{ t.nav_skill_title }}">{{ t.nav_skill }}</a>
+      <a class="nav-ext" href="{{ repo }}" rel="noopener">{{ t.nav_github }}</a>
     </nav>
     <div class="bar-end">
-      <label class="style-pick"><span class="sr">Style of this site</span>
+      {{ html.lang_menu }}
+      <label class="style-pick"><span class="sr">{{ t.style_label }}</span>
         <select id="style">
-          <option value="">Classic</option>
-          <option value="ledger">Ledger</option>
-          <option value="engraving">Engraving</option>
-          <option value="still-life">Still life</option>
+          <option value="">{{ t.style_classic }}</option>
+          <option value="ledger">{{ t.style_ledger }}</option>
+          <option value="engraving">{{ t.style_engraving }}</option>
+          <option value="still-life">{{ t.style_still_life }}</option>
         </select>
       </label>
-      <button class="icon-btn" id="theme" type="button" aria-label="Switch between light and dark">
+      <button class="icon-btn" id="theme" type="button" aria-label="{{ t.theme_label }}">
         <svg class="i-sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.5v2.6M12 18.9v2.6M2.5 12h2.6M18.9 12h2.6M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
         <svg class="i-moon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M20 14.2A8.2 8.2 0 0 1 9.8 4a8.2 8.2 0 1 0 10.2 10.2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
       </button>
-      <a class="btn btn-primary btn-sm" href="app/index.html">Open the app</a>
-      <button class="icon-btn menu" id="menu" type="button" aria-label="Menu" aria-controls="nav" aria-expanded="false">
+      <a class="btn btn-primary btn-sm" href="app/index.html">{{ t.open_app }}</a>
+      <button class="icon-btn menu" id="menu" type="button" aria-label="{{ t.menu_label }}" aria-controls="nav" aria-expanded="false">
         <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
       </button>
     </div>
@@ -68,6 +72,7 @@
 </header>
 
 <main id="main">
+{{ html.stale }}
 {{ content }}
 </main>
 
@@ -75,45 +80,48 @@
   <div class="wrap">
     <div class="foot-grid">
       <div class="foot-brand">
-        <a class="brand" href="index.html" aria-label="JASCON, home">
+        <a class="brand" href="index.html" aria-label="{{ t.home_label }}">
           <svg class="mark" viewBox="0 0 32 32" width="28" height="28" aria-hidden="true"><rect class="mark-bg" width="32" height="32" rx="7.5"/><g class="mark-fg" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.4 7.6c-2.2 0-2.9 1.2-2.9 3v2.5c0 1.8-.9 2.9-2.5 2.9 1.6 0 2.5 1.1 2.5 2.9v2.5c0 1.8.7 3 2.9 3"/><path d="M19.6 7.6c2.2 0 2.9 1.2 2.9 3v2.5c0 1.8.9 2.9 2.5 2.9-1.6 0-2.5 1.1-2.5 2.9v2.5c0 1.8-.7 3-2.9 3"/><path d="m14.2 18.6 3.6-5.2" stroke-width="1.5"/></g><circle class="mark-dot" cx="14" cy="18.9" r="1.95"/><circle class="mark-dot" cx="18" cy="13.1" r="1.95"/></svg>
           <span class="wordmark">JASCON</span>
         </a>
-        <p>JSON Attestable Semantic Compliance Object-graph Notation. One notation for every standard, in every language.</p>
-        <p class="foot-licence">Specification, schema, validators and app: <a href="LICENSE.txt">Apache License 2.0</a>. Converted catalogues stay under their publishers' terms, see <a href="NOTICE.txt">NOTICE</a>.</p>
+        <p><span lang="en">JSON Attestable Semantic Compliance Object-graph Notation.</span> {{ t.foot_tagline }}</p>
+        <p class="foot-licence">{{ t.foot_licence_html }}</p>
       </div>
-      <nav aria-label="Project">
-        <h2>Project</h2>
-        <a href="model.html">The model</a>
-        <a href="checks.html">Checks</a>
-        <a href="evidence.html">Evidence</a>
-        <a href="evidence.html#limits">What is not proven</a>
-        <a href="evidence.html#prior-art">Prior art</a>
+      <nav aria-label="{{ t.foot_project }}">
+        <h2>{{ t.foot_project }}</h2>
+        <a href="model.html">{{ t.nav_model }}</a>
+        <a href="checks.html">{{ t.nav_checks }}</a>
+        <a href="evidence.html">{{ t.nav_evidence }}</a>
+        <a href="evidence.html#limits">{{ t.foot_not_proven }}</a>
+        <a href="evidence.html#prior-art">{{ t.foot_prior_art }}</a>
       </nav>
-      <nav aria-label="Use">
-        <h2>Use</h2>
-        <a href="start.html">Get started</a>
-        <a href="app/index.html">The app</a>
-        <a href="reader/index.html">The single-file reader</a>
-        <a href="{{ blob }}/drafts/jascon-specification-1.0.0.md" rel="noopener">Specification 1.0.0</a>
-        <a href="{{ tree }}/jascon/references" rel="noopener">Handbook</a>
+      <nav aria-label="{{ t.foot_use }}">
+        <h2>{{ t.foot_use }}</h2>
+        <a href="start.html">{{ t.nav_start }}</a>
+        <a href="app/index.html">{{ t.foot_app }}</a>
+        <a href="reader/index.html">{{ t.foot_reader }}</a>
+        <a href="{{ blob }}/drafts/jascon-specification-1.0.0.md" rel="noopener">{{ t.foot_spec }}</a>
+        <a href="{{ tree }}/jascon/references" rel="noopener">{{ t.foot_handbook }}</a>
       </nav>
-      <nav aria-label="Take part">
-        <h2>Take part</h2>
-        <a href="join.html">Join</a>
-        <a href="{{ repo }}" rel="noopener">GitHub repository</a>
-        <a href="{{ repo }}/issues" rel="noopener">Issues and objections</a>
-        <a href="{{ blob }}/drafts/jascon-decision-rationale-register.md" rel="noopener">Decision register</a>
-        <a href="legal.html">Legal notice and privacy</a>
+      <nav aria-label="{{ t.foot_take_part }}">
+        <h2>{{ t.foot_take_part }}</h2>
+        <a href="join.html">{{ t.nav_join }}</a>
+        <a href="{{ repo }}" rel="noopener">{{ t.foot_repo }}</a>
+        <a href="{{ repo }}/issues" rel="noopener">{{ t.foot_issues }}</a>
+        <a href="{{ blob }}/drafts/jascon-decision-rationale-register.md" rel="noopener">{{ t.foot_register }}</a>
+        <a href="legal.html">{{ t.foot_legal }}</a>
       </nav>
     </div>
     <div class="foot-base">
-      <p>An independent project, maintained in personal capacity. Not affiliated with, approved or endorsed by NIST, BSI, ASD, CCB, CIS or FedRAMP. OSCAL is a NIST project; JASCON reads and writes it.</p>
-      <p class="foot-facts">Numbers marked <span class="tier tier-measured">measured</span> on this site were produced by <code>{{ facts.measured.by }}</code> on {{ facts.measured.date }}, commit <code>{{ facts.measured.commit }}</code>. &copy; {{ year }} {{ site.publisher }}.</p>
+      {{ html.lang_foot }}
+      <p>{{ t.foot_base }}</p>
+      <p class="foot-facts">{{ t.foot_facts_html }} &copy; {{ year }} {{ site.publisher }}.</p>
+      {{ html.translated }}
     </div>
   </div>
 </footer>
 
+<script type="application/json" id="site-strings">{{ json:script }}</script>
 <script src="assets/js/site.js" defer></script>
 </body>
 </html>

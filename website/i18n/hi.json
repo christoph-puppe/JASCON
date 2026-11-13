@@ -1,0 +1,124 @@
+{
+ "meta": {
+  "code": "hi",
+  "hreflang": "hi",
+  "name": "हिन्दी",
+  "short": "HI",
+  "og_locale": "hi_IN",
+  "thousands": ","
+ },
+ "layout": {
+  "skip": "सामग्री पर जाएँ",
+  "home_label": "JASCON, होम",
+  "nav_label": "मुख्य",
+  "nav_model": "मॉडल",
+  "nav_checks": "जाँचें",
+  "nav_evidence": "प्रमाण",
+  "nav_start": "शुरुआत करें",
+  "nav_join": "जुड़ें",
+  "nav_skill": "स्किल",
+  "nav_skill_title": "JASCON स्किल डाउनलोड करें (SKILL_jascon.zip)",
+  "nav_github": "GitHub",
+  "lang_label": "इस साइट की भाषा",
+  "style_label": "इस साइट की शैली",
+  "style_classic": "क्लासिक",
+  "style_ledger": "बहीखाता",
+  "style_engraving": "नक़्क़ाशी",
+  "style_still_life": "स्थिर चित्र",
+  "theme_label": "लाइट और डार्क के बीच बदलें",
+  "open_app": "ऐप खोलें",
+  "menu_label": "मेन्यू",
+  "foot_tagline": "हर मानक के लिए, हर भाषा में, एक ही नोटेशन।",
+  "foot_licence_html": "विनिर्देश, स्कीमा, वैलिडेटर और ऐप: <a href=\"LICENSE.txt\">Apache License 2.0</a>। कन्वर्ट किए गए कैटलॉग अपने प्रकाशकों की शर्तों के अधीन रहते हैं, देखें <a href=\"NOTICE.txt\">NOTICE</a>।",
+  "foot_project": "परियोजना",
+  "foot_not_proven": "क्या सिद्ध नहीं है",
+  "foot_prior_art": "पूर्ववर्ती कार्य",
+  "foot_use": "उपयोग",
+  "foot_app": "ऐप",
+  "foot_reader": "एकल-फ़ाइल रीडर",
+  "foot_spec": "विनिर्देश 1.0.0",
+  "foot_handbook": "हैंडबुक",
+  "foot_take_part": "भाग लें",
+  "foot_repo": "GitHub रिपॉज़िटरी",
+  "foot_issues": "इश्यू और आपत्तियाँ",
+  "foot_register": "निर्णय रजिस्टर",
+  "foot_legal": "कानूनी सूचना और गोपनीयता",
+  "foot_languages": "भाषाएँ",
+  "foot_base": "एक स्वतंत्र परियोजना, जिसका रखरखाव व्यक्तिगत हैसियत से किया जाता है। यह NIST, BSI, ASD, CCB, CIS या FedRAMP से संबद्ध नहीं है, और न ही उनके द्वारा अनुमोदित या समर्थित है। OSCAL, NIST की एक परियोजना है; JASCON इसे पढ़ता और लिखता है।",
+  "foot_facts_html": "इस साइट पर <span class=\"tier tier-measured\">मापा गया</span> चिह्नित संख्याएँ {{ facts.measured.date }} को कमिट <code>{{ facts.measured.commit }}</code> पर <code>{{ facts.measured.by }}</code> द्वारा तैयार की गईं।",
+  "translated_html": "यह पेज <a href=\"{{ page.en_href }}\">अंग्रेज़ी पेज</a> का अनुवाद है, और दोनों में अंतर होने पर अंग्रेज़ी पेज ही मान्य है।",
+  "stale_html": "यह अनुवाद बनने के बाद अंग्रेज़ी पेज बदल चुका है; वर्तमान संस्करण के लिए <a href=\"{{ page.en_href }}\">अंग्रेज़ी पेज</a> देखें।"
+ },
+ "build": {
+  "open_in_app": "ऐप में खोलें",
+  "plural_s": false,
+  "imprint_email": "ई-मेल",
+  "imprint_questions": "प्रश्न, सुधार और आपत्तियाँ",
+  "imprint_issue": "रिपॉज़िटरी में एक इश्यू",
+  "imprint_responsible": "सामग्री के लिए उत्तरदायी",
+  "imprint_country": "जर्मनी",
+  "colon": ": ",
+  "full_stop": "।",
+  "corpora": {
+   "AU.ISM": {
+    "publisher": "Australian Signals Directorate",
+    "note": "1,150 नियंत्रण; वर्गीकरण और Essential Eight की बेसलाइनें Set के रूप में"
+   },
+   "DE.BSI": {
+    "publisher": "BSI, जर्मनी",
+    "note": "जर्मन पाठ, कथन-व्याकरण और सुरक्षा लक्ष्य फ़ेसेट के रूप में"
+   },
+   "US.SP800-53": {
+    "title": "SP 800-53 Rev 5.2.0, 800-53B बेसलाइन सहित",
+    "publisher": "NIST",
+    "note": "कथन-स्तर के पैरामीटर; चार बेसलाइनें सदस्यता Set के रूप में"
+   },
+   "US.CSF": {
+    "publisher": "NIST",
+    "note": "फ़ंक्शन, श्रेणियाँ और उपश्रेणियाँ नेस्टेड Set के रूप में"
+   },
+   "US.IFA-GoodRead": {
+    "title": "OSCAL उदाहरण सिस्टम (SSP, योजना, परिणाम, POA&M)",
+    "publisher": "NIST, काल्पनिक सामग्री",
+    "note": "लाइफ़साइकल टाइप: Component से Attestation तक, दो Risk के साथ"
+   }
+  }
+ },
+ "script": {
+  "copied": "कॉपी हो गया",
+  "unchanged": "अपरिवर्तित",
+  "changed": "परिवर्तित",
+  "na_title": "यहाँ उपलब्ध नहीं",
+  "na_text": "यह ब्राउज़र इस पेज पर SHA-256 उपलब्ध नहीं कराता। साइट को https पर खोलें, या validate_core.py चलाएँ।",
+  "notobj_title": "ऑब्जेक्ट नहीं",
+  "notobj_text": "यह पाठ JSON ऑब्जेक्ट नहीं है, इसलिए डाइजेस्ट बनाने के लिए कोई कैनोनिकल रूप नहीं है। वैलिडेटर यहीं रुक जाता है।",
+  "tamper_title": "Tamper",
+  "tamper_text": "अर्थ बदल गया है। सिमेंटिक डाइजेस्ट अब उस डाइजेस्ट के बराबर नहीं है जिसका नाम अनुप्रमाणन में दिया गया है, इसलिए अनुप्रमाणन इस ऑब्जेक्ट को कवर नहीं करता।",
+  "semantic_title": "Semantic Match",
+  "semantic_text": "बाइट्स बदले हैं, अर्थ नहीं। अनुप्रमाणन अब भी ऑब्जेक्ट को कवर करता है; सत्यापनकर्ता रिपोर्ट करता है कि पैकेजिंग बदली गई थी।",
+  "full_title": "Full Match",
+  "full_text": "बाइट्स और अर्थ वही हैं जो उदाहरण बंडल के कंटेंट मैनिफ़ेस्ट में दर्ज हैं।",
+  "recorded": "दर्ज",
+  "no_engine": "कोई इंजन नहीं",
+  "loading": "लोड हो रहा है",
+  "all_hold": "अवलोकन पर हर मानदंड पूरा होता है",
+  "clause": "खंड",
+  "and": "और",
+  "engine_failed_title": "इंजन नहीं मिला",
+  "engine_failed_text": "निर्णय की गणना ऐप के नियमों से होती है, जो साइट की इस प्रति में शामिल नहीं हैं। इसके बजाय ऐप का Checks पेज खोलें।",
+  "engine_loading_title": "नियम लोड हो रहे हैं",
+  "engine_loading_text": "यह पेज ऐप के कर्नेल नियम एक बार लोड करता है।",
+  "outcome_satisfied": "संतुष्ट",
+  "outcome_not_satisfied": "संतुष्ट नहीं",
+  "outcome_inconclusive": "अनिर्णीत",
+  "outcome_not_applicable": "लागू नहीं",
+  "verdict_satisfied": "दोनों जाँचें पूरी होती हैं। Assessment हर अवलोकन दर्ज करता है, इसलिए कोई दूसरा पक्ष कुछ भी चलाए बिना इसी निर्णय पर पहुँचता है।",
+  "verdict_not_satisfied": "एक निश्चित विफलता समग्र परिणाम तय करती है। विफल पंक्ति उस खंड का नाम बताती है, और उस खंड के विरुद्ध दर्ज Finding वापस इस जाँच की ओर इंगित कर सकता है।",
+  "verdict_other": "अवलोकन नहीं, तो निर्णय नहीं: उसकी जगह कभी कोई डिफ़ॉल्ट मान नहीं रखा जाता। पंक्ति अनिर्णीत के रूप में दर्ज होती है और उसमें एक कारण होना ज़रूरी है।",
+  "run_label": "दैनिक रन {date}",
+  "check_titles": {
+   "https://cso.example/check/LNX-SSH-1-maxauthtries": "sshd: प्रमाणीकरण प्रयास सीमा के भीतर",
+   "https://cso.example/check/LNX-SSH-1-ciphers": "sshd: CBC मोड का कोई सिफ़र प्रस्तावित नहीं"
+  }
+ }
+}

@@ -1,0 +1,352 @@
+---
+title: Das Modell: elf Objekttypen | JASCON
+description: Der JASCON-Kern auf einer Seite. Elf flache Objekttypen, die Ordnung der Modalverben, typisierte Parameter, Facetten mit Vertrag, zwei Digests je Objekt, drei Konformitätsstufen und wo jedes Konstrukt aus OSCAL 1.x geblieben ist.
+nav: model
+source: 20b1275c2e33
+---
+<section class="page-hero">
+  <div class="wrap">
+    <p class="eyebrow">Das Modell</p>
+    <h1>Elf Objekttypen und was jeder von ihnen ersetzt</h1>
+    <p class="lede">Der Kern enthält, was drei nationale Frameworks laut Messung brauchen, und nichts sonst. Diese Seite geht ihn einmal durch. Der normative Text ist die <a href="{{ blob }}/drafts/jascon-specification-1.0.0.md" rel="noopener">Spezifikation</a>; die ausführliche Fassung mit allen Zählungen ist das <a href="{{ tree }}/jascon/references" rel="noopener">Handbuch</a>.</p>
+  </div>
+</section>
+
+<section class="section" id="smallest">
+  <div class="wrap">
+    <div class="split">
+      <div class="stack-lg reveal">
+        <div class="section-head" style="margin-bottom:0">
+          <p class="eyebrow"><span class="no">01</span> Das kleinste Objekt</p>
+          <h2>Eine vollständige Anforderung</h2>
+          <p class="lede">Das ist ein ganzes Objekt, ohne Props, ohne Facetten und ohne umgebendes Dokument. Das Handbuch verwendet es als erstes Beispiel, weil das australische ISM über seine gesamten Erweiterungen hinweg nicht mehr braucht.</p>
+        </div>
+        <ul class="ticks">
+          <li><b><code>id</code></b> ist eine URI unter der eigenen Domain des Herausgebers. Sie wird als Zeichenkette verglichen und nie abgerufen, deshalb funktioniert die Validierung in einem abgeschotteten Netz.</li>
+          <li><b><code>version</code></b> und zwei Digests im Manifest tragen die Historie. Das ISM pflegt für denselben Zweck 2.202 Revisions-Props von Hand.</li>
+          <li><b><code>statements</code></b> ist eine Liste, weil es Klauseln tatsächlich gibt: Grundschutz++ enthält 347 verschachtelte Pseudo-Controls, die nur existieren, um Klauseln adressierbar zu machen.</li>
+          <li><b><code>modality</code></b> und <b><code>obligated-parties</code></b> gehören zur Aussage. Eine Anforderung kann den Betreiber mit MUSS und den Kunden mit SOLLTE binden.</li>
+          <li><b><code>prose</code></b> ist eine Zuordnung von Sprach-Tag zu Text.</li>
+        </ul>
+      </div>
+      <div class="window reveal">
+        <div class="window-bar">
+          <span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="window-title">jascon/examples/req-ism-1234.json</span>
+          <span class="window-note">Text zur Veranschaulichung</span>
+        </div>
+        <pre><code data-lang="json">{{ file:jascon/examples/req-ism-1234.json }}</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="types">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">02</span> Die Typen</p>
+      <h2>Jeder Typ existiert, weil ein veröffentlichter Katalog ihn verlangt hat</h2>
+      <p class="lede">Neun Typen enthält die veröffentlichte Version 1.0.0. Risk und Check sind der zehnte und der elfte, im Release-Kandidaten für 2.0.0. Die rechte Spalte nennt, was der Typ von OSCAL 1.x oder aus gängiger Praxis übernimmt.</p>
+    </div>
+
+    <div class="reveal">
+      <p class="group-label">Inhalt: was verlangt wird</p>
+      <div class="types">
+        <div class="type">
+          <h3>Requirement</h3>
+          <p>Ein Control, eine Regel oder ein Kriterium als Liste von Aussagen mit eigener Kennung. Jede Aussage hat eine Modalität, verpflichtete Parteien, typisierte Parameter und Fließtext. Hinweise und Ziele sind ebenfalls Aussagen, mit der Modalität <code>unspecified</code>, oder sie stehen in einer Framework-Facette.</p>
+          <p class="replaces"><b>Übernimmt</b>Die Controls eines Katalogs und ihre Teile; die Props <code>label</code>, <code>alt-identifier</code> und <code>sort-id</code>.</p>
+        </div>
+        <div class="type">
+          <h3>RequirementSet</h3>
+          <p>Mitgliedschaft, und sonst nichts. Ein Set listet Anforderungen oder andere Sets mit einer Laufnummer auf. Kapitel, Familien, Baselines, Reifegrade und Einstufungskennzeichnungen sind allesamt Sets, und eine Anforderung kann in vielen enthalten sein.</p>
+          <p class="replaces"><b>Übernimmt</b>Gruppen, die Baselines aus aufgelösten Profilen und die Anwendbarkeitsmatrix des ISM mit 5.301 Einträgen.</p>
+        </div>
+        <div class="type">
+          <h3>Tailoring</h3>
+          <p>Eine Auswahl plus eine abgeschlossene Liste von acht Operationen, jede über Identität adressiert: Anforderung, Aussage, Parameter. Nichts wird kopiert. Die Auflösung ist ein einziger deterministischer Durchlauf; Merge-Regeln gibt es nicht, weil globale Kennungen sie überflüssig machen.</p>
+          <p class="replaces"><b>Übernimmt</b>Profile und die Spezifikation der Profilauflösung; eingebettete Varianten je Klasse wie in FedRAMP CR26.</p>
+        </div>
+        <div class="type">
+          <h3>Mapping</h3>
+          <p>Eine Crosswalk-Kante in neun flachen Feldern: Quelle, Ziel, optionaler Bezug auf eine Aussage, Beziehung, Richtung, Vertrauensgrad, Begründung, Herkunft, Nachweise. Die Beziehungscodes folgen NIST IR 8477, ergänzt um <code>supplements</code> für Inhalte, die an einen fremden Katalog angehängt sind.</p>
+          <p class="replaces"><b>Übernimmt</b>Das Control-Mapping-Modell von OSCAL 1.2; Crosswalk-Tabellen.</p>
+        </div>
+      </div>
+
+      <p class="group-label">Organisation: warum es im Geltungsbereich liegt</p>
+      <div class="types">
+        <div class="type">
+          <h3>Risk <small><span class="tier tier-designed">Kandidat für 2.0.0</span></small></h3>
+          <p>Der Datensatz, den ISO/IEC 27001 6.1.2 und 6.1.3, BSI-Standard 200-3 und NIST SP 800-30 übereinstimmend verlangen: ein Szenario, ein Risikoeigentümer, ein Status, eine Bewertung als Stufe auf einer benannten Skala, eine von vier Behandlungsoptionen und die Klauseln, die die Behandlung tragen. Scoring-Methoden bleiben außerhalb des Kerns. Ein Risk begründet eine Anforderung, sobald es bewertet und seine Option gewählt ist.</p>
+          <p class="replaces"><b>Übernimmt</b>Das Risikoregister als Tabellenkalkulation und die Erklärung zur Anwendbarkeit (SoA) als Dokument. <code>risk-coverage</code> berechnet Letztere.</p>
+        </div>
+      </div>
+
+      <p class="group-label">Systeme: was vorhanden ist und was festgestellt wurde</p>
+      <div class="types">
+        <div class="type">
+          <h3>Component</h3>
+          <p>Ein Produkt, ein Dienst, eine Richtlinie, ein Prozess oder ein System, das eine Komponente mit Mitgliedern ist. Autorisierungsgrenzen sind Objekte mit eigener Kennung an der Komponente. Eine fehlende Grenze behauptet nichts.</p>
+          <p class="replaces"><b>Übernimmt</b>Komponentendefinitionen und die Systembeschreibung des SSP.</p>
+        </div>
+        <div class="type">
+          <h3>Implementation</h3>
+          <p>Eine Kante: Diese Komponente erfüllt jene Anforderung, optional jene Aussage, auf diese Weise. Die Verantwortung ist <code>provider</code>, <code>customer</code>, <code>shared</code> oder <code>inherited</code>. Eine geerbte Kante muss die vorgelagerte Komponente und die Autorisierung nennen, auf die sie sich stützt; so wird ein SaaS auf einem PaaS auf einem IaaS Glied für Glied geprüft.</p>
+          <p class="replaces"><b>Übernimmt</b>Die umgesetzten Anforderungen des SSP und die Control-Umsetzungen der Komponentendefinitionen, die dasselbe zweimal sagten.</p>
+        </div>
+        <div class="type">
+          <h3>Assessment</h3>
+          <p>Wer was wie und wann geprüft hat, mit welchem Ergebnis und welchem Nachweis. Die Methode wird über eine registrierte Facette beschrieben.</p>
+          <p class="replaces"><b>Übernimmt</b>Prüfplan und Prüfergebnisse.</p>
+        </div>
+        <div class="type">
+          <h3>Finding</h3>
+          <p>Eine Lücke gegenüber einer Anforderung oder einer Aussage: Status, Maßnahmen mit Fälligkeitsterminen, die ihren Kalender kennen, und Deviations. Eine Deviation ist ein einziger typisierter Datensatz mit einem einzigen Zustandsautomaten (in Untersuchung, ausstehend, genehmigt oder zurückgezogen), überall dort, wo etwas abgeschwächt oder akzeptiert wird.</p>
+          <p class="replaces"><b>Übernimmt</b>POA&amp;M und vier FedRAMP-Erweiterungen, die jeweils denselben Zustandsautomaten kodierten.</p>
+        </div>
+      </div>
+
+      <p class="group-label">Signatur</p>
+      <div class="types">
+        <div class="type">
+          <h3>Attestation</h3>
+          <p>Bindet die semantischen Digests der Objekte, den Digest des Inhaltsmanifests und den Digest des gerenderten Dokuments, das eine Person unterschrieben hat, in einem DSSE-Envelope. Was die Maschine geprüft und was die zur Freigabe befugte Person unterschrieben hat, kann nicht unbemerkt auseinanderlaufen.</p>
+          <p class="replaces"><b>Übernimmt</b>Das signierte PDF, dessen Bezug zu den Daten niemand prüfen kann.</p>
+        </div>
+      </div>
+
+      <p class="group-label">Maschinen: wie über eine Anforderung entschieden wird</p>
+      <div class="types">
+        <div class="type">
+          <h3>Check <small><span class="tier tier-designed">Kandidat für 2.0.0</span></small></h3>
+          <p>Ein typisierter Vertrag über die Fakten, die ein Kollektor meldet, und eine flache Konjunktion über zwölf Komparatoren, die über Bestehen oder Nichtbestehen entscheidet. Der Code des Kollektors steht in einer Facette. Was nicht in diese Form passt, bleibt eine manuelle Prüfung. Aufgezeichnete Urteile rechnet der Validator nach, und Nachweisdateien sind nach ihrem SHA-256 benannt.</p>
+          <p class="replaces"><b>Übernimmt</b>Auditverfahren als Fließtext, etwa die 291 automatisierten Regeln des CIS Ubuntu 24.04 Benchmark, die als Text ankommen, den ein Mensch lesen muss. <a href="checks.html">Das Design und eine Live-Demo.</a></p>
+        </div>
+      </div>
+
+      <p class="group-label">Hersteller: was ein Lieferant empfiehlt</p>
+      <div class="types">
+        <div class="type">
+          <h3>Empfehlungspaket <small><span class="tier tier-designed">kein Typ, Kandidat für 2.0.0</span></small></h3>
+          <p>Ein Bundle, dessen Manifest Herausgeber, Paket und Ausgabe nennt und dessen Objekte ausschließlich Components sind. Die Empfehlungen eines Herstellers sind Fähigkeiten an seiner Component: die Anforderung, die Klauseln, der Text und vorgeschlagene Parameterwerte. Der Import eines Pakets ändert kein Objekt, das ein Set bereits enthält. Eine Empfehlung zählt nichts, bis eine eigene Implementation des Anwenders sie zitiert.</p>
+          <p class="replaces"><b>Übernimmt</b>Die einzige erhaltenswerte Verwendung von Komponentendefinitionen: Ein Hersteller liefert Text zur Erwägung und kann weder Controls noch Prüfungen ändern. <a href="#advice">Wie ein Paket funktioniert.</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="modality">
+  <div class="wrap">
+    <div class="split">
+      <div class="stack-lg reveal">
+        <div class="section-head" style="margin-bottom:0">
+          <p class="eyebrow"><span class="no">03</span> Verbindlichkeit</p>
+          <h2>Die Modalverben haben eine Ordnung, und das Tailoring wird gegen sie geprüft</h2>
+          <p class="lede">Drei Korpora laufen auf dasselbe Feld hinaus: <code>modal_verb</code> in Grundschutz++ (1.006 Vorkommen), <code>force</code> in FedRAMP CR26, der Styleguide des ISM. In JASCON ist es ein im Kern festgelegter Code mit einer Halbordnung.</p>
+        </div>
+        <div class="lattice">
+          <span class="chain-label">Gebote</span>
+          <div class="chain"><span>unspecified</span><i></i><span>may</span><i></i><span>should</span><i></i><span>must</span></div>
+          <span class="chain-label">Verbote</span>
+          <div class="chain"><span>unspecified</span><i></i><span>should-not</span><i></i><span>must-not</span></div>
+          <span class="chain-label">Beschränkung (deutsch DARF NUR)</span>
+          <div class="chain"><span>may</span><i></i><span>may-only</span></div>
+        </div>
+        <p class="muted">Ein Schritt in Pfeilrichtung ist monoton und frei. Ein Schritt gegen sie ist eine Lockerung, und ein Schritt zwischen den Ketten ist ein Achsenwechsel. Ein Tailoring, das der Herausgeber veröffentlicht, darf beides; das Tailoring eines Anwenders braucht für beides eine dokumentierte Deviation mit Genehmiger. Eine Anforderung auszuschließen ist schlichte Auswahl und braucht keine Deviation, denn Baselines bestehen aus Ausschlüssen.</p>
+      </div>
+      <div class="stack-lg reveal">
+        <div class="window">
+          <div class="window-bar">
+            <span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="window-title">eine Operation mit typisierter Frist</span>
+          </div>
+          <pre><code data-lang="json">{
+  "op": "set-parameter",
+  "requirement-ref": "https://ns.fedramp.gov/cr26/req/IEC-CSO-IIR",
+  "statement-id": "s1",
+  "parameter": "iir-deadline",
+  "value": { "type": "duration", "num": 6, "unit": "hours" }
+}</code></pre>
+        </div>
+        <div class="stack">
+          <h3>Parameter sind typisiert</h3>
+          <p class="muted">Zeichenketten, Ganzzahlen, kanonische Dezimalzahlen, Wahrheitswerte, Datumsangaben, URIs und Codes, mit Auswahl, Liste und Bereich als Container. Zeitspannen sind entweder verstrichene Zeit oder ein Kalenderzeitraum, der seinen Kalender nennt, denn eine Frist in Arbeitstagen bedeutet ohne Kalender nichts. Ein Token <code>{param:name}</code> im Fließtext muss auf einen deklarierten Parameter auflösen, und eine Liste ist ein JSON-Array, nie eine Zeichenkette, deren Aufteilung ein Leser kennen muss.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="extension">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">04</span> Erweiterung</p>
+      <h2>Zwei Felder an jedem Objekt tragen alles Übrige</h2>
+      <p class="lede">Mehr als 70 % der 22.000 Props, die in drei nationalen Katalogen gezählt wurden, bilden Mechanismen des Kerns nach: Mitgliedschaft, Reihenfolge, Historie, Aliasse, Klauselstruktur. Der Rest bekommt einen Vertrag.</p>
+    </div>
+    <div class="grid g2 reveal">
+      <article class="card">
+        <div class="card-top"><h3><code>facets</code></h3><span class="tier tier-measured">7 in der Standardbibliothek</span></div>
+        <p>Ein Facettenname löst auf ein JSON Schema auf, das im Manifest des Bundles mit exakter Version und Digest fixiert ist. Der Deskriptor der Facette erklärt, was sie ändert: Prüfung, Tailoring, Auswahl oder Rendering. Ein Tool validiert die Nutzdaten gegen das fixierte Schema. Ein Tool, das auf eine bedeutungstragende Facette trifft, die es nicht implementiert, hält an und gibt den Grund aus.</p>
+        <p class="how"><b>Warum:</b> Drei Tools, die heute auf dasselbe unbekannte Prop treffen, tun drei verschiedene Dinge, und alle drei beanspruchen Konformität.</p>
+      </article>
+      <article class="card">
+        <div class="card-top"><h3><code>annotations</code></h3><span class="tier tier-measured">von Digests ausgenommen</span></div>
+        <p>Eine flache Zuordnung für die Buchführung von Tools und Hinweise zum Rendering: eine Tracker-ID, ein Web-Name, ein Flag „nicht verlinken“. Annotationen liegen per Definition außerhalb jeder Compliance-Berechnung und außerhalb des semantischen Digests, sodass nichts Konformes ihnen Bedeutung entnehmen kann.</p>
+        <p class="how"><b>Warum:</b> Tools brauchen einen Platz für eigene Notizen, der nicht zu einem zweiten, unvalidierten Vokabular werden kann.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="integrity">
+  <div class="wrap">
+    <div class="split even">
+      <div class="stack-lg reveal">
+        <div class="section-head" style="margin-bottom:0">
+          <p class="eyebrow"><span class="no">05</span> Integrität</p>
+          <h2>Zwei Digests je Objekt</h2>
+          <p class="lede">Eine Veröffentlichung ist ein Bundle: Objekte, fixierte Facettenschemas, Renderings und ein Inhaltsmanifest. Die Attestierung liegt neben dem Manifest, denn nichts Signiertes kann seine eigene Signatur enthalten.</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Urteil</th><th>Paket-Digest</th><th>Semantischer Digest</th><th>Bedeutung</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Full Match</th><td class="yes">gleich</td><td class="yes">gleich</td><td>Genau das Paket, das attestiert wurde.</td></tr>
+              <tr><th scope="row">Semantic Match</th><td class="no">abweichend</td><td class="yes">gleich</td><td>Der freigegebene Inhalt, neu verpackt. Die Verifikation weist darauf hin.</td></tr>
+              <tr><th scope="row">Tamper</th><td class="no">beliebig</td><td class="no">abweichend</td><td>Der Inhalt ist nicht der, der freigegeben wurde.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <a class="link-arrow" href="index.html#try">Beide Digests im Browser berechnen</a>
+      </div>
+      <div class="stack-lg reveal">
+        <div class="section-head" style="margin-bottom:0">
+          <p class="eyebrow"><span class="no">06</span> Konformität</p>
+          <h2>Drei Stufen, jede mit Belegen</h2>
+          <p class="lede">Der Anspruch auf eine Stufe wird gegen das öffentliche Konformitätskorpus geprüft. Ein Anspruch ohne Ergebnisse aus dem Korpus ist ein Datenblatt.</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Stufe</th><th>Zusagen</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Core</th><td>Schemavalidierung jedes Typs, Betrieb im abgeschotteten Netz, Paket-Digests, lokale Auflösung von Referenzen und Erhalt alles Unbekannten. Keine semantische Berechnung.</td></tr>
+              <tr><th scope="row">Portable</th><td>Validierung von Facetten gegen ihre fixierten Schemas mit der Fail-Closed-Sperre, semantische Digests, deterministische Auflösung von Tailorings, regelkonforme Zusammensetzung von Bundles, Risikoabdeckung und das Nachrechnen jedes aufgezeichneten Check-Urteils.</td></tr>
+              <tr><th scope="row">Authority</th><td>Pflichten bei der Veröffentlichung: verwaltete stabile Kennungen, Alias- und Herkunftseinträge bei jeder Reorganisation, beide Digests je Objekt, ein Lebenszyklus für Abkündigungen.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="advice">
+  <div class="wrap">
+    <div class="split even">
+      <div class="stack-lg reveal">
+        <div class="section-head" style="margin-bottom:0">
+          <p class="eyebrow"><span class="no">07</span> Herstellerempfehlungen</p>
+          <h2>Ein Hersteller empfiehlt. Die Bestehensgrenze bleibt bei Ihnen.</h2>
+          <p class="lede">Ein Hersteller weiß, wie sein Produkt gehärtet wird. Ein Empfehlungspaket bringt dieses Wissen in den Graphen, neben die Anforderung, der es dient. Elf Regeln, ADVICE-1 bis ADVICE-11, sorgen dafür, dass die Datei eine Empfehlung bleibt.</p>
+        </div>
+        <ul class="ticks">
+          <li><b>Nur Components.</b> Ein Paket, das ein Requirement, ein Tailoring, einen Check oder ein Assessment auflistet, wird abgelehnt. Jede ID darin liegt unter dem eigenen Origin des Herausgebers, deshalb kann das Paket kein Objekt von Ihnen ersetzen.</li>
+          <li><b>Eine Empfehlung ist eine Fähigkeit.</b> Sie nennt die Anforderung, die Klauseln, einen Text und vorgeschlagene Parameterwerte. <code>product-version</code> gibt an, für welche Version des Produkts die Empfehlung gilt.</li>
+          <li><b>Die Übernahme ist Ihre Kante.</b> Ihre Implementation zitiert <code>&lt;component-id&gt;#&lt;capability-id&gt;</code>, und das Produkt muss Mitglied Ihres Systems sein. Bis dahin ist die Fähigkeit eine Behauptung, und keine Berechnung stützt sich auf sie.</li>
+          <li><b>Das Manifest des Herstellers ist die Aufzeichnung des Imports.</b> Es bleibt in Ihrem Set, benannt nach dem SHA-256 seiner Bytes. Dieselbe Datei wird nicht zweimal importiert, eine andere Ausgabe ersetzt nur, was die frühere mitgebracht hat, und nach dem Import bearbeitete Empfehlungen werden gemeldet.</li>
+          <li><b>Behauptet, attestiert oder belegt.</b> Ein Tool zeigt den Herausgeber nur dann als belegt an, wenn die Attestierung des Herstellers das Manifest bindet und sich ihre Signatur mit einem Schlüssel prüfen lässt, dem Sie vertrauen. Eine Attestierung, die niemand geprüft hat, wird als solche angezeigt.</li>
+        </ul>
+        <p class="small"><span class="tier tier-designed">entworfen</span> {{ n.advice_vectors }} Vektoren und ein ausgearbeitetes Paket, signiert mit einem öffentlichen Testschlüssel. Kein Hersteller hat ein Paket veröffentlicht, und das Feld auf Klauselebene stützt sich auf eine einzige fiktive Beispieldatei. <a href="evidence.html#limits">Die Grenzen.</a></p>
+        <a class="link-arrow" href="app/index.html#load=../jascon/example-packs/dbvendor-server-7-advice/">Vorschau des Beispielpakets in der App</a>
+        <a class="link-arrow" href="pack-builder/index.html">Ein Paket schreiben: der Paket-Builder für Hersteller</a>
+      </div>
+      <div class="stack-lg reveal">
+        <div class="window">
+          <div class="window-bar">
+            <span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="window-title">die Component des Herstellers, gekürzt</span>
+            <span class="window-note">ausgearbeitetes Beispiel</span>
+          </div>
+          <pre><code data-lang="json">{
+ "id": "https://dbvendor.example/component/server-7",
+ "version": "2026-10",
+ "kind": "software",
+ «"product-version": "7"»,
+ "capabilities": [
+  {
+   "id": "cap-key-rotation",
+   "requirement-ref": "https://ns.bsi.bund.de/gspp/req/KONF.14.1",
+   «"statement-ids": ["s2"]»,
+   "description": {
+    "en": "Rotate the server certificate and key with the rotateCertificates command; no restart is needed. The vendor suggests an interval of 90 days."
+   }
+  }
+ ]
+}</code></pre>
+        </div>
+        <div class="window">
+          <div class="window-bar">
+            <span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="window-title">Ihre Implementation übernimmt sie</span>
+            <span class="window-note">ausgearbeitetes Beispiel</span>
+          </div>
+          <pre><code data-lang="json">{
+ "id": "https://cso.example/impl/acme--konf-14-1-s2",
+ "component-ref": "https://cso.example/component/acme-saas",
+ "requirement-ref": "https://ns.bsi.bund.de/gspp/req/KONF.14.1",
+ "statement-refs": ["s2"],
+ "satisfied-by": [
+  { «"capability-ref": "https://dbvendor.example/component/server-7#cap-key-rotation"» }
+ ],
+ "status": "planned"
+}</code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="oscal">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">08</span> Für Nutzer von OSCAL 1.x</p>
+      <h2>Wo alles geblieben ist</h2>
+      <p class="lede">OSCAL ist der Ursprung dieser Arbeit und das Format, das JASCON liest und schreibt. Katalog-Bundles werden nach OSCAL 1.2.2 exportiert; wofür OSCAL kein Konstrukt hat, reist in Props mit Namespace mit und kommt beim Import zurück.</p>
+    </div>
+    <div class="table-wrap reveal">
+      <table>
+        <thead><tr><th>OSCAL 1.2.2</th><th>In JASCON</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Katalog: Gruppen, Controls, Teile</th><td>Requirement-Objekte in verschachtelten RequirementSets. Teile vom Typ statement werden zu <code>statements</code>.</td></tr>
+          <tr><th scope="row">Profil und Profilauflösung</th><td>Tailoring: Auswahl plus über Identität adressierte Operationen, aufgelöst durch einen einzigen deterministischen Algorithmus von einer halben Seite.</td></tr>
+          <tr><th scope="row">Komponentendefinition</th><td><code>Component.capabilities</code>, veröffentlicht als <a href="#advice">Empfehlungspaket</a>: ein Bundle aus Components, über das ein Import weder eine Anforderung noch ein Tailoring noch eine Prüfung ändern kann. Der Paket-Builder importiert eine OSCAL-Komponentendefinition und meldet, was in einem Paket keinen Platz hat.</td></tr>
+          <tr><th scope="row">Systemsicherheitsplan</th><td>Component mit <code>authorizations</code>, dazu Implementation-Kanten. Das Dokument ist ein Rendering, gebunden durch eine Attestation.</td></tr>
+          <tr><th scope="row">Prüfplan und Prüfergebnisse</th><td>Assessment mit seiner Methode in einer Facette, seinem Ergebnis und Findings.</td></tr>
+          <tr><th scope="row">POA&amp;M</th><td><code>Finding.actions</code> und der Lebenszyklus der Deviation.</td></tr>
+          <tr><th scope="row">Control-Mapping-Modell</th><td>Der Typ Mapping.</td></tr>
+          <tr><th scope="row">Props mit <code>ns</code></th><td>Eine registrierte Facette, eine Annotation oder nichts: Die meisten Props bildeten einen Mechanismus des Kerns nach.</td></tr>
+          <tr><th scope="row">Metaschema, XML, YAML, Schematron</th><td>JSON Schema 2020-12, eine einzige Serialisierung, zehn Regelprimitive, deren Begründung bei einem Fehlschlag ausgegeben wird.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="source reveal">Die acht Dokumentmodelle von OSCAL, abgebildet auf die Objekttypen, mit Diagrammen: <a href="{{ blob }}/oscal-1x-models-and-jascon.md" rel="noopener">oscal-1x-models-and-jascon.md</a>. Migrationsstufen und Playbooks: <a href="{{ blob }}/jascon/references/ch14-migration-playbooks.md" rel="noopener">Handbuch, Kapitel 14</a>.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="cta reveal">
+      <div>
+        <h2>Eine Stunde lesen, dann ein Bundle öffnen</h2>
+        <p>Kapitel 2 des Handbuchs baut den Kern vom kleinsten echten Objekt aus auf. Die App zeigt dieselben Objekte an SP 800-53, CSF 2.0, dem ISM und Grundschutz++.</p>
+      </div>
+      <div class="cta-actions">
+        <a class="btn btn-primary" href="{{ blob }}/jascon/references/ch02-the-core-in-one-hour.md" rel="noopener">Der Kern in einer Stunde <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a class="btn btn-ghost" href="start.html">Erste Schritte <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>

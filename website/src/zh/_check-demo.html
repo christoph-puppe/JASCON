@@ -1,0 +1,43 @@
+<div class="demo check-demo reveal" id="check-demo">
+  <div class="demo-edit">
+    <div class="window-bar">
+      <span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span class="window-title">bastion-01 上的 LNX-SSH-1</span>
+      <span class="window-note">仓库中的完整示例</span>
+    </div>
+    <div class="cd-body">
+      <div class="cd-req">
+        <span class="cd-k">要求</span>
+        <p><b>s1</b> SSH 守护进程每个连接最多允许 <mark data-cd="param-text">4</mark> 次认证尝试。</p>
+        <p><b>s2</b> SSH 守护进程不提供任何 CBC 模式的加密算法。</p>
+      </div>
+      <div class="cd-field cd-keep">
+        <label for="cd-param"><span class="cd-k">Tailoring 绑定</span><code>max-auth-tries</code></label>
+        <input id="cd-param" type="number" min="1" max="10" step="1" value="4" inputmode="numeric">
+      </div>
+      <div class="cd-field">
+        <label for="cd-tries"><span class="cd-k">采集器观测到</span><code>sshd.maxauthtries</code></label>
+        <input id="cd-tries" type="number" min="1" max="10" step="1" value="4" inputmode="numeric">
+      </div>
+      <fieldset class="cd-field cd-list">
+        <legend><span class="cd-k">采集器观测到</span><code>sshd.ciphers</code></legend>
+        <div data-cd="ciphers"></div>
+      </fieldset>
+      <div class="cd-presets">
+        <span class="cd-k">已记录的运行</span>
+        <div data-cd="presets"></div>
+        <button class="demo-btn" type="button" data-cd-silent>采集器未报告任何内容</button>
+      </div>
+    </div>
+  </div>
+  <div class="demo-side">
+    <div class="cd-rows" data-cd="rows" aria-live="polite"></div>
+    <div class="verdict" data-v="full" aria-live="polite">
+      <span class="verdict-k">评估结果</span>
+      <span class="verdict-v">&hellip;</span>
+      <p></p>
+    </div>
+    <p class="cd-foot">由应用移植的 <code>check-verdict</code> 在您的浏览器中计算，正是这段代码通过了 {{ n.check_vectors }} 个检查测试向量。此处不运行任何采集器；观测值就是您所设定的值。</p>
+  </div>
+  <script type="application/json" id="check-demo-data">{{ json:checkdemo }}</script>
+</div>

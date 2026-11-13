@@ -1,0 +1,124 @@
+{
+ "meta": {
+  "code": "zh",
+  "hreflang": "zh-Hans",
+  "name": "简体中文",
+  "short": "ZH",
+  "og_locale": "zh_CN",
+  "thousands": ","
+ },
+ "layout": {
+  "skip": "跳转到正文",
+  "home_label": "JASCON，首页",
+  "nav_label": "主导航",
+  "nav_model": "模型",
+  "nav_checks": "检查",
+  "nav_evidence": "依据",
+  "nav_start": "快速开始",
+  "nav_join": "参与",
+  "nav_skill": "技能",
+  "nav_skill_title": "下载 JASCON 技能（SKILL_jascon.zip）",
+  "nav_github": "GitHub",
+  "lang_label": "本站语言",
+  "style_label": "本站样式",
+  "style_classic": "经典",
+  "style_ledger": "账簿",
+  "style_engraving": "版画",
+  "style_still_life": "静物",
+  "theme_label": "在浅色和深色之间切换",
+  "open_app": "打开应用",
+  "menu_label": "菜单",
+  "foot_tagline": "一种表示法，涵盖所有标准，支持所有语言。",
+  "foot_licence_html": "规范、Schema、校验器和应用：<a href=\"LICENSE.txt\">Apache License 2.0</a>。已转换的目录仍受其发布者的条款约束，参见 <a href=\"NOTICE.txt\">NOTICE</a>。",
+  "foot_project": "项目",
+  "foot_not_proven": "尚未证明的内容",
+  "foot_prior_art": "现有技术",
+  "foot_use": "使用",
+  "foot_app": "应用",
+  "foot_reader": "单文件阅读器",
+  "foot_spec": "规范 1.0.0",
+  "foot_handbook": "手册",
+  "foot_take_part": "参与方式",
+  "foot_repo": "GitHub 仓库",
+  "foot_issues": "问题与异议",
+  "foot_register": "决策登记册",
+  "foot_legal": "法律声明与隐私",
+  "foot_languages": "语言",
+  "foot_base": "一个以个人身份维护的独立项目。与 NIST、BSI、ASD、CCB、CIS 或 FedRAMP 均无关联，也未获得其批准或认可。OSCAL 是 NIST 的项目；JASCON 可以读写 OSCAL。",
+  "foot_facts_html": "本站标为 <span class=\"tier tier-measured\">实测</span> 的数字，由 <code>{{ facts.measured.by }}</code> 于 {{ facts.measured.date }} 在提交 <code>{{ facts.measured.commit }}</code> 上生成。",
+  "translated_html": "本页译自<a href=\"{{ page.en_href }}\">英文页面</a>。两者如有出入，以英文页面为准。",
+  "stale_html": "本译文完成后，英文页面已有改动。请参阅<a href=\"{{ page.en_href }}\">当前的英文页面</a>。"
+ },
+ "build": {
+  "open_in_app": "在应用中打开",
+  "plural_s": false,
+  "imprint_email": "电子邮件",
+  "imprint_questions": "问题、更正与异议",
+  "imprint_issue": "在仓库中提交 issue",
+  "imprint_responsible": "内容负责人",
+  "imprint_country": "德国",
+  "colon": "：",
+  "full_stop": "。",
+  "corpora": {
+   "AU.ISM": {
+    "publisher": "Australian Signals Directorate",
+    "note": "1,150 项控制措施；按密级划分的基线和 Essential Eight 基线以 Set 表示"
+   },
+   "DE.BSI": {
+    "publisher": "BSI（德国）",
+    "note": "德语正文、陈述语法和保护目标以分面表示"
+   },
+   "US.SP800-53": {
+    "title": "SP 800-53 Rev 5.2.0（含 800-53B 基线）",
+    "publisher": "NIST",
+    "note": "作用范围限定在陈述上的参数；四个基线以成员关系 Set 表示"
+   },
+   "US.CSF": {
+    "publisher": "NIST",
+    "note": "功能、类别和子类别以嵌套的 Set 表示"
+   },
+   "US.IFA-GoodRead": {
+    "title": "OSCAL 示例系统（SSP、计划、结果、POA&M）",
+    "publisher": "NIST（虚构内容）",
+    "note": "生命周期类型：从 Component 到 Attestation，含两个 Risk"
+   }
+  }
+ },
+ "script": {
+  "copied": "已复制",
+  "unchanged": "未改变",
+  "changed": "已改变",
+  "na_title": "此处不可用",
+  "na_text": "此浏览器在本页面上不提供 SHA-256。请通过 https 打开本站，或运行 validate_core.py。",
+  "notobj_title": "不是对象",
+  "notobj_text": "该文本不是 JSON 对象，因此没有可用于计算摘要的规范形式。校验器会在此处停止。",
+  "tamper_title": "Tamper",
+  "tamper_text": "含义已改变。语义摘要不再等于证明中所指定的摘要，因此该证明不再覆盖此对象。",
+  "semantic_title": "Semantic Match",
+  "semantic_text": "字节已改变，含义未变。证明仍然覆盖该对象；验证方会报告封装已被改动。",
+  "full_title": "Full Match",
+  "full_text": "字节与含义均与示例捆绑包内容清单中记录的一致。",
+  "recorded": "已记录",
+  "no_engine": "无引擎",
+  "loading": "加载中",
+  "all_hold": "每个判定条件在该观测值上均成立",
+  "clause": "条款",
+  "and": "且",
+  "engine_failed_title": "未找到引擎",
+  "engine_failed_text": "判定由应用的规则计算，而本站的这份副本不包含这些规则。请改为打开应用的检查（Checks）页面。",
+  "engine_loading_title": "正在加载规则",
+  "engine_loading_text": "本页面会一次性获取应用的内核规则。",
+  "outcome_satisfied": "满足",
+  "outcome_not_satisfied": "不满足",
+  "outcome_inconclusive": "无定论",
+  "outcome_not_applicable": "不适用",
+  "verdict_satisfied": "两项检查均成立。Assessment 记录了每个观测值，因此另一方无需运行任何东西即可得出这一判定。",
+  "verdict_not_satisfied": "一个确定的失败即决定汇总结果。失败的那一行写明了条款，针对该条款的 Finding 可以回指这项检查。",
+  "verdict_other": "没有观测值，就没有判定：绝不会用默认值代替。该行被记录为无定论，并且必须附带理由。",
+  "run_label": "每日运行 {date}",
+  "check_titles": {
+   "https://cso.example/check/LNX-SSH-1-maxauthtries": "sshd：认证尝试次数在上限之内",
+   "https://cso.example/check/LNX-SSH-1-ciphers": "sshd：不提供任何 CBC 模式的密码算法"
+  }
+ }
+}

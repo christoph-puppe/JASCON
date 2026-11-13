@@ -1,0 +1,206 @@
+---
+title: Erste Schritte mit JASCON
+description: Einen nationalen Katalog im Browser öffnen, den Referenzvalidator ausführen, eine erste Anforderung schreiben, OSCAL importieren, die Risikoabdeckung berechnen und den Skill für Coding-Agenten installieren. Jeder Schritt dauert Minuten.
+nav: start
+source: 3645c839ee9b
+---
+<section class="page-hero">
+  <div class="wrap">
+    <p class="eyebrow">Erste Schritte</p>
+    <h1>Vom Browser-Tab zum validierten Bundle</h1>
+    <p class="lede">Sieben Schritte, in der Reihenfolge, in der die meisten sie gehen. Der erste braucht einen Browser. Der zweite braucht Python oder einen Windows-Rechner. Keiner braucht ein Konto, einen Server oder einen Lizenzschlüssel.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="steps">
+
+      <div class="step reveal" id="open">
+        <div class="step-body">
+          <h2>Einen Katalog öffnen, den Sie kennen</h2>
+          <p>Die App lädt ein Bundle über einen Link und behält es in Ihrem Browser. Beginnen Sie mit dem Framework, mit dem Sie arbeiten: Der Objektbrowser bildet seine Filter aus den Daten, deshalb bietet SP 800-53 Familien und Baselines an und Grundschutz++ Modalverben, Schutzziele und Zielobjekte.</p>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Korpus</th><th class="num">Objekte</th><th>Typen</th><th>Lizenz des Inhalts</th><th></th></tr></thead>
+              <tbody>
+{{ html.bundle_rows }}
+              </tbody>
+            </table>
+          </div>
+          <p class="small">Das Beispiel-Bundle des Handbuchs enthält ein Objekt jedes Typs, darunter ein Risk, zwei Tailorings und zwei Checks: <a href="app/index.html#load=../jascon/examples/&amp;tool=browse">das Beispiel-Bundle öffnen</a>. Es gibt außerdem einen <a href="reader/index.html">Reader als Einzeldatei</a> ohne umgebenden Ordner; laden Sie ihn herunter und ziehen Sie einen Bundle-Ordner darauf.</p>
+        </div>
+      </div>
+
+      <div class="step reveal" id="validate">
+        <div class="step-body">
+          <h2>Den Referenzvalidator ausführen</h2>
+          <div class="step-cols">
+            <div class="stack">
+              <p class="muted">Der Validator führt die {{ n.vectors }} Konformitätsvektoren aus und prüft danach jedes Objekt der mitgelieferten Bundles erneut mit beiden Digests. Die letzte Zeile lautet <code>ALL GREEN</code> oder listet jeden Fehlschlag mit seiner Regel und seinem Grund auf.</p>
+              <p class="muted">Übergeben Sie einen oder mehrere Bundle-Ordner, um eigene Inhalte zu validieren. <code>--require-risk-basis</code> macht aus einer ausgewählten Anforderung ohne begründendes Risiko einen Fehlschlag.</p>
+              <p class="muted">Unter Windows erledigt der PowerShell-Zwilling dasselbe mit PowerShell 5.1, ohne dass etwas installiert werden muss. Er braucht Minuten, wo Python Sekunden braucht.</p>
+            </div>
+            <div class="stack">
+              <div class="window cmd">
+                <div class="window-bar"><span class="window-title">Python, mit uv</span></div>
+                <button class="copy" type="button" data-copy="cmd-uv">kopieren</button>
+                <pre id="cmd-uv"><code data-lang="sh">git clone https://github.com/christoph-puppe/JASCON.git
+cd JASCON
+uv run --no-project --with jsonschema python jascon/scripts/validate_core.py</code></pre>
+              </div>
+              <div class="window cmd">
+                <div class="window-bar"><span class="window-title">Python, mit pip</span></div>
+                <button class="copy" type="button" data-copy="cmd-pip">kopieren</button>
+                <pre id="cmd-pip"><code data-lang="sh">pip install jsonschema
+python jascon/scripts/validate_core.py
+# Ihr eigenes Bundle:
+python jascon/scripts/validate_core.py path/to/your-bundle</code></pre>
+              </div>
+              <div class="window cmd">
+                <div class="window-bar"><span class="window-title">Windows PowerShell 5.1, ohne Installation</span></div>
+                <button class="copy" type="button" data-copy="cmd-ps">kopieren</button>
+                <pre id="cmd-ps"><code data-lang="sh">powershell -ExecutionPolicy Bypass -File jascon\scripts\validate_core.ps1</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step reveal" id="write">
+        <div class="step-body">
+          <h2>Eine erste Anforderung schreiben</h2>
+          <div class="step-cols">
+            <div class="stack">
+              <p class="muted">Wählen Sie ein Präfix unter einer Domain, die Sie kontrollieren, und behalten Sie es bei. Kennungen werden als Zeichenketten verglichen und nie abgerufen, deshalb muss unter der Adresse nichts ausgeliefert werden.</p>
+              <p class="muted">Teilen Sie den Text dort in Aussagen auf, wo sich die Verbindlichkeit, die verpflichtete Partei oder ein Parameter ändert. Deklarieren Sie jeden Parameter mit einem Typ und verweisen Sie im Fließtext mit <code>{param:name}</code> darauf.</p>
+              <p class="muted">Die Seite Durchsehen (Browse) der App hat dafür ein Formular unter „Write requirements and sets“. Es deklariert die Parameter, die es im Fließtext findet. Die Seite Übersicht (Home) exportiert den Arbeitsbestand als Bundle mit Manifest und beiden Digests je Objekt.</p>
+              <a class="link-arrow" href="{{ blob }}/jascon/references/ch04-writing-requirements.md" rel="noopener">Handbuch, Kapitel 4: Anforderungen schreiben</a>
+            </div>
+            <div class="window">
+              <div class="window-bar"><span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="window-title">req-backup-1.json</span><span class="window-note">ein erfundenes Beispiel</span></div>
+              <pre><code data-lang="json">{
+  "id": "https://grc.your.example/req/BACKUP-1",
+  "version": "2026-11",
+  "label": "BACKUP-1",
+  "lifecycle": "active",
+  "statements": [
+    { "id": "s1",
+      "modality": "must",
+      "obligated-parties": ["https://grc.your.example/party/operations"],
+      "parameters": [
+        { "name": "restore-interval", "type": "duration" }
+      ],
+      "prose": {
+        "en": "A restore from backup is tested at least every {param:restore-interval}.",
+        "de": "Eine Wiederherstellung aus dem Backup wird mindestens alle {param:restore-interval} getestet."
+      } }
+  ]
+}</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step reveal" id="oscal">
+        <div class="step-body">
+          <h2>Bringen Sie Ihr OSCAL mit und nehmen Sie es wieder mit</h2>
+          <p>Die Seite Importieren (Import) der App liest einen OSCAL-Katalog oder ein OSCAL-Profil und meldet jede Regel, die sie angewandt hat. Regelsätze gibt es für Grundschutz++, SP 800-53 und CIS Benchmarks; ein Katalog anderer Form läuft durch die generischen Regeln, die das, wofür der Kern kein Feld hat, in einer Facette unter Ihrem Namespace bewahren und nichts verwerfen, ohne dass der Bericht eine Zeile dazu enthält. Für die Stapelverarbeitung enthält das Repository elf Konverter in Python, einen je gemessenem Korpus, auf Basis einer gemeinsamen Bibliothek.</p>
+          <p>In der Gegenrichtung schreibt <code>export_oscal.py</code> Kataloge in OSCAL 1.2.2. Die Exporte der mitgelieferten Bundles liegen daneben unter <code>converted_examples/*/oscal-export/</code>. Wofür OSCAL kein Konstrukt hat (Modalität, verpflichtete Parteien, überlappende Mitgliedschaft), reist in Props mit Namespace mit und kommt beim Import zurück.</p>
+          <p><a class="link-arrow" href="app/index.html#import">Die Seite Importieren (Import) öffnen</a></p>
+        </div>
+      </div>
+
+      <div class="step reveal" id="risk">
+        <div class="step-body">
+          <h2>Risiken ergänzen und die Abdeckung berechnen</h2>
+          <div class="step-cols">
+            <div class="stack">
+              <p class="muted">Laden Sie einen Katalog, wählen Sie mit einem Tailoring eine Baseline aus und schreiben Sie auf der Seite Risiko (Risk) die Risiken, die die Auswahl begründen. Die Ansicht Abdeckung (Coverage) listet jede ausgewählte Anforderung auf, die kein bewertetes Risiko nennt.</p>
+              <p class="muted">Zwei prototypische Risikokataloge helfen beim ersten Durchgang: 24 typische Risiken der Büro-IT und 23 einer Industrieanlage, auf Englisch und Deutsch, jeweils mit vorgeschlagenen Controls aus SP 800-53. Der Import kopiert einen Eintrag in ein eigenes Risk; die Entscheidung bleibt bei Ihnen.</p>
+              <a class="link-arrow" href="{{ blob }}/risk-catalogs/README.md" rel="noopener">Die Risikokataloge und ihre Grenzen</a>
+            </div>
+            <div class="window cmd">
+              <div class="window-bar"><span class="window-title">einen Katalog in Ihr Bundle importieren</span></div>
+              <button class="copy" type="button" data-copy="cmd-risk">kopieren</button>
+              <pre id="cmd-risk"><code data-lang="sh">python3 risk-catalogs/tools/risk_catalog.py import risk-catalogs/office-it \
+    --bundle path/to/your-bundle \
+    --org https://grc.your.example \
+    --owner https://grc.your.example/party/ciso \
+    --out path/to/risks</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step reveal" id="check">
+        <div class="step-body">
+          <h2>Eine maschinelle Prüfung schreiben</h2>
+          <p>Für eine technische Regel schreiben Sie auf der Seite Prüfungen (Checks) der App einen Check (Kern 2.0.0, Release-Kandidat): die Fakten, die ein Kollektor meldet, die Vergleiche, die entscheiden, und den Code des Kollektors in bash, sh, Python, PowerShell, Ansible oder als HTTP-Anfrage. Ein Sprachmodell kann Checks entwerfen, Regel für Regel oder für jede automatisierte Regel eines CIS-Imports, sobald Sie einen Schlüssel eingeben. Jeder Entwurf wird von den Kernregeln und einem Lint, der nur liest, beurteilt, und Sie entscheiden, was gespeichert wird. Die App führt keine Kollektoren aus.</p>
+          <p><a class="link-arrow" href="app/index.html#load=../jascon/examples/&amp;tool=checks">Die Seite Prüfungen (Checks) mit dem Beispiel öffnen</a> &nbsp; <a class="link-arrow" href="checks.html">Wie ein Check entscheidet</a></p>
+        </div>
+      </div>
+
+      <div class="step reveal" id="advice">
+        <div class="step-body">
+          <h2>Die Empfehlungen eines Herstellers aufnehmen</h2>
+          <p>Ein Empfehlungspaket ist eine Datei, die ein Hersteller veröffentlicht: Components mit Empfehlungen zu benannten Anforderungen (Kern 2.0.0, Release-Kandidat). Die Seite Übersicht (Home) der App zeigt, was ein Paket enthält, bevor etwas geschrieben wird, sagt, ob sein Herausgeber behauptet, attestiert oder belegt ist, und gibt nach dem Import eine Quittung aus. Auf der Seite Umsetzen (Implement) machen Sie das Produkt zum Mitglied Ihres Systems und übernehmen eine Empfehlung als Ihre eigene Kante. Dieselbe Datei ein zweites Mal schreibt nichts.</p>
+          <p>Das Beispielpaket ist fiktiv und mit einem öffentlichen Testschlüssel signiert. Noch hat kein Hersteller ein Paket veröffentlicht.</p>
+          <p><a class="link-arrow" href="app/index.html#load=../jascon/example-packs/dbvendor-server-7-advice/">Vorschau des Beispielpakets in der App</a> &nbsp; <a class="link-arrow" href="model.html#advice">Wie ein Paket funktioniert</a></p>
+          <h3>Für Hersteller: ein Paket schreiben</h3>
+          <p>Der Paket-Builder ist eine einzelne HTML-Datei, die offline läuft. Sie beschreiben Ihr Produkt und jede Empfehlung in einem Formular; die Seite prüft das Paket mit denselben Regeln, die der Import beim Kunden ausführt, signiert die Ausgabe mit Ihrem Ed25519-Schlüssel oder bereitet die Bytes für openssl oder Ihren Signaturdienst vor und schreibt das ZIP. Ist der Katalog geladen, bietet sie die Klauseln und Parameter jeder Anforderung an und prüft jeden vorgeschlagenen Wert. Eine OSCAL-Komponentendefinition, die Sie bereits haben, wird als Entwurf importiert, mit einem Bericht darüber, was sich nicht zuordnen ließ.</p>
+          <p><a class="link-arrow" href="pack-builder/index.html">Den Paket-Builder öffnen</a> &nbsp; <a class="link-arrow" href="pack-builder/index.html" download="jascon-pack-builder.html">Als einzelne Datei herunterladen</a></p>
+        </div>
+      </div>
+
+      <div class="step reveal" id="agent">
+        <div class="step-body">
+          <h2>Mit einem Coding-Agenten arbeiten</h2>
+          <div class="step-cols">
+            <div class="stack">
+              <p class="muted">Der Ordner <code>jascon/</code> ist ein Skill für Claude: das Handbuch als vierzehn nummerierte Anforderungen, das Kernschema, die Konformitätsvektoren, die Konverter und ein ausgearbeitetes Beispiel-Bundle. Ein Agent, der ihn hat, schreibt Objekte gegen das Schema und lässt den Validator über seine eigene Ausgabe laufen.</p>
+              <p class="muted">Die Arbeitsteilung ist dieselbe wie in der App: Ein Modell entwirft, die Kernregeln entscheiden, ein Mensch nimmt an.</p>
+            </div>
+            <div class="window cmd">
+              <div class="window-bar"><span class="window-title">den Skill installieren</span></div>
+              <button class="copy" type="button" data-copy="cmd-skill">kopieren</button>
+              <pre id="cmd-skill"><code data-lang="sh"># für Ihren Benutzer
+cp -r jascon ~/.claude/skills/jascon
+# oder für ein einzelnes Projekt
+cp -r jascon .claude/skills/jascon</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="reading">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">Lesepfade</p>
+      <h2>Erst Kapitel 2, dann je nach Rolle</h2>
+      <p class="lede">Das Handbuch hat fünfzehn Kapitel und sieben Anhänge. Alle lesen Kapitel 2, das eine Stunde dauert. Danach trennen sich die Wege.</p>
+    </div>
+    <div class="grid g3 reveal">
+      <a class="card lift" href="{{ blob }}/jascon/references/ch03-identity-versions-lifecycle.md" rel="noopener">
+        <span class="card-no">Kapitel 3 bis 8, dann 14</span>
+        <h3>Sie veröffentlichen ein Framework</h3>
+        <p>Identität und Namespaces, Aussagen, Sets und Baselines, Tailoring, Facetten, Mappings. Dann die Migrations-Playbooks, sobald es um einen echten Katalog geht.</p>
+      </a>
+      <a class="card lift" href="{{ blob }}/jascon/references/ch12-building-a-validator.md" rel="noopener">
+        <span class="card-no">Kapitel 3, 12, 13, 11</span>
+        <h3>Sie bauen ein Tool</h3>
+        <p>Identität für das mentale Modell, dann das Validator-Kapitel und sicheres Einlesen. Integrität, bevor irgendetwas mit einer Signatur in Berührung kommt.</p>
+      </a>
+      <a class="card lift" href="{{ blob }}/jascon/references/ch09-systems-components-inheritance.md" rel="noopener">
+        <span class="card-no">Kapitel 9, 10, 11, 15</span>
+        <h3>Sie betreiben, prüfen oder kaufen</h3>
+        <p>Systeme und Vererbung, Prüfung und Abweichungen, was eine Signatur beweist und was Sie aufgrund eines Konformitätsanspruchs verlangen dürfen.</p>
+      </a>
+    </div>
+    <p class="source reveal">Referenz: <a href="{{ blob }}/jascon/references/appendix-a-shapes.md" rel="noopener">die Formen, Feld für Feld</a> &middot; <a href="{{ blob }}/jascon/schemas/jascon-2.0.0.schema.json" rel="noopener">das Kernschema</a> &middot; <a href="{{ blob }}/jascon/references/appendix-f-objections.md" rel="noopener">Einwände und Antworten</a> &middot; <a href="{{ blob }}/jascon/references/appendix-g-glossary.md" rel="noopener">Glossar</a></p>
+  </div>
+</section>

@@ -1,0 +1,124 @@
+---
+title: 参加する：バリデータ、カタログ、異論を持ち寄る | JASCON
+description: JASCON のメンテナーは 1 人で、第三者のユーザーはまだいません。本プロジェクトがフレームワーク発行機関、ツール開発者、GRC エンジニア、監査人に求めること、変更が仕様に取り込まれるまでの流れ、そしてどこから始めればよいかを説明します。
+nav: join
+source: 1f1d09e6b9ec
+---
+<section class="page-hero">
+  <div class="wrap">
+    <p class="eyebrow">参加する</p>
+    <h1>バリデータ、カタログ、あるいは異論を持ち寄る</h1>
+    <p class="lede">コンプライアンスデータの記法の価値は、第二、第三の当事者がそれをどう活かすかで決まります。JASCON には、メンテナーが 1 人、リリース済みの仕様が 1 つあり、リポジトリの外に既知のユーザーはいません。以下に挙げるのは、他の誰かにしかできない作業です。</p>
+  </div>
+</section>
+
+<section class="section" id="needed">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">01</span> 必要なこと</p>
+      <h2>重要度順に並べた 6 つの貢献</h2>
+    </div>
+    <div class="grid g3 reveal">
+      <article class="card feature">
+        <div class="card-top"><span class="card-no">常設の募集</span><span class="tier tier-open">募集中</span></div>
+        <h3>仕様を書いていない人によるバリデータ</h3>
+        <p>仕様書、付録 A〜C、適合性コーパスを使い、既存の 2 つのバリデータを読まずに、好きな言語でバリデータを作成してください。テキストによって実装が一意に決まらなかった箇所は、すべてテキストの欠陥です。審判役はテストベクトルが務め、結果はどちらに転んでも記録されます。</p>
+        <p class="how"><b>出発点：</b><code>jascon/conformance/</code>、<a href="{{ blob }}/jascon/references/ch12-building-a-validator.md" rel="noopener">ハンドブック第 12 章</a>。</p>
+      </article>
+      <article class="card">
+        <div class="card-top"><span class="card-no">発行機関</span></div>
+        <h3>発行元自身が変換したカタログ</h3>
+        <p>変換は 11 件ありますが、すべて本プロジェクトによるものです。発行元は、自らの props が何を表すはずだったかを知っています。書いた本人たちが符号化し直した 10 個の要求事項は、スクリプトで変換した 1,000 個よりも厳しくカーネルを試します。</p>
+        <p class="how"><b>出発点：</b>Import ページ、または<a href="{{ blob }}/jascon/references/ch14-migration-playbooks.md" rel="noopener">第 14 章</a>。</p>
+      </article>
+      <article class="card">
+        <div class="card-top"><span class="card-no">レビュー</span></div>
+        <h3>数値を伴う異論</h3>
+        <p>ハンドブックの付録 F は 33 件の異論に回答し、テキストの変更につながったものを列挙しています。今まさに必要なレビューが 1 つあります。2 つの新しい型 Risk と Check を含む、2.0.0 のリリース候補です。付録 F.10 は、JASCON が Gemara、CycloneDX、XCCDF、CISO Assistant、OSCAL を拡張しない理由を述べています。その回答のどこが誤っているかを指摘するのにふさわしいのは、これらのコミュニティの読者です。</p>
+        <p class="how"><b>出発点：</b><a href="{{ blob }}/drafts/CP-RISK-1.md" rel="noopener">CP-RISK-1</a>、<a href="{{ blob }}/drafts/CP-CHECK-1.md" rel="noopener">CP-CHECK-1</a>、<a href="checks.html#state">Check の現状</a>。</p>
+      </article>
+      <article class="card">
+        <div class="card-top"><span class="card-no">測定</span></div>
+        <h3>残り 10 コーパスでの値の到達</h3>
+        <p>カバレッジはソースパス単位で実測されています。各値が変換先に到達するかどうかは 1 つのコーパスでしか実測されておらず、そのコーパスでは成り立っていません。他のコーパスのソースファイルを持つ人なら、この測定を実行し、何が失われるかを報告できます。</p>
+        <p class="how"><b>出発点：</b>バックログ項目 41、<code>oscal_conv_lib.value_arrival()</code>。</p>
+      </article>
+      <article class="card">
+        <div class="card-top"><span class="card-no">実践</span></div>
+        <h3>この記法で表した実際の ISMS</h3>
+        <p>実在する組織のリスク登録簿、適用宣言書 (SoA)、1 回分の監査サイクルを、Risk、Tailoring、Implementation、Finding として書いたもの。Risk 型は 3 つの標準から導き出したもので、まだ監査人の目を経ていません。</p>
+        <p class="how"><b>出発点：</b>アプリの Risk ページ。匿名化したうえで、収まらなかったものを報告してください。</p>
+      </article>
+      <article class="card">
+        <div class="card-top"><span class="card-no">コード</span></div>
+        <h3>エクスポートとブリッジ</h3>
+        <p>OSCAL のマッピング、プロファイル、SSP の各モデルへのエクスポートがまだありません。証明用の in-toto predicate があれば、既存の検証ツールでも扱えるようになります。<a href="checks.html">Check 型</a>のコレクターを実行するランナーは存在しません。</p>
+        <p class="how"><b>出発点：</b><code>jascon/scripts/export_oscal.py</code>、<a href="{{ blob }}/PRIOR-ART.md" rel="noopener">PRIOR-ART.md</a>。</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="process">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">02</span> 変更が取り込まれるまで</p>
+      <h2>根拠を示し、まずコーパス、実装は後から</h2>
+      <p class="lede">変更プロセスは、ある古い課題トラッカーにあった 1 文への対策として作られています。「このルールがなぜ存在するのか、誰にも説明できない」。</p>
+    </div>
+    <div class="rules3 reveal">
+      <div class="rule3">
+        <span class="no">01</span>
+        <h3>提案は数値から始める</h3>
+        <p>「3 つの発行機関がこれを独立に符号化している」は論拠になります。「エレガントになるだろう」は論拠になりません。項目は根拠とともにバックログに入り、決定登録簿への記載をもってバックログを離れます。却下された代替案も、決定登録簿に記録として残ります。</p>
+      </div>
+      <div class="rule3">
+        <span class="no">02</span>
+        <h3>どのルールも理由を伴う</h3>
+        <p>ルールは機械可読の ID、論拠、失敗時のメッセージを持ち、ルールが失敗すると論拠が出力されます。自らが防いでいる失敗を、実際に数えた事例として挙げられないルールは、削除の候補です。</p>
+      </div>
+      <div class="rule3">
+        <span class="no">03</span>
+        <h3>ギャップはバージョンで埋める</h3>
+        <p>プリミティブ、操作、コード体系は、バージョン付きの閉じた集合です。本当のギャップは、新しい適合性テストベクトルとバージョン番号の決定を伴う変更提案になります。リリースの前には、両方のバリデータが合格しなければなりません。</p>
+      </div>
+    </div>
+    <p class="source reveal">プロセスの全体：<a href="{{ blob }}/jascon/references/ch15-governance-conformance-ecosystem.md" rel="noopener">ハンドブック第 15 章</a>。24 件のすべての決定と、その評点および修正：<a href="{{ blob }}/drafts/jascon-decision-rationale-register.md" rel="noopener">決定登録簿</a>。</p>
+  </div>
+</section>
+
+<section class="section" id="expect">
+  <div class="wrap">
+    <div class="split even">
+      <div class="stack-lg reveal">
+        <div class="section-head" style="margin-bottom:0">
+          <p class="eyebrow"><span class="no">03</span> 期待できること</p>
+          <h2>記録を公開し続ける小さなプロジェクト</h2>
+        </div>
+        <ul class="ticks">
+          <li><b>指摘事項は、記録に残る形で裁定される。</b>確認されたものは修正され、適合性テストベクトルが追加されます。反証されたものは理由とともに書き留められ、反証された状態が保たれます。</li>
+          <li><b>訂正は、訂正対象の主張と同じ重みで扱われる。</b>最初に公開したスキャンでは、ドイツのカタログを入れ子の管理策 347 個分少なく数えていました。訂正は、元の主張と同じ目立ち方で公表しました。</li>
+          <li>仕様、スキーマ、テストベクトル、バリデータ、アプリの<b>ライセンスは Apache 2.0 です</b>。変換済みのカタログには、引き続き各発行元の条件が適用されます。</li>
+          <li><b>応答にかかる時間は 1 人の人間のペースです</b>。メンテナーは個人の立場で活動しており、プロジェクトの背後に組織はありません。</li>
+        </ul>
+      </div>
+      <div class="stack reveal">
+        <article class="card">
+          <h3>Issue を作成する</h3>
+          <p>不具合、異論、質問、変換してほしいカタログがある場合に。何をどこで数えたかを明記してください。</p>
+          <a class="link-arrow" href="{{ repo }}/issues" rel="noopener">GitHub の Issues</a>
+        </article>
+        <article class="card">
+          <h3>プルリクエストを送る</h3>
+          <p>テストベクトル、コンバーター、バリデータやハンドブックの修正の場合に。ルールの変更には、その変更がなければ失敗するテストベクトルを添えてください。</p>
+          <a class="link-arrow" href="{{ repo }}/pulls" rel="noopener">GitHub のプルリクエスト</a>
+        </article>
+        <article class="card">
+          <h3>使って、そう伝える</h3>
+          <p>別の当事者が公開したバンドルは、本プロジェクトが得られる最も強力な根拠です。公開した場合は、リンクを記載した Issue を 1 つ作成していただくだけで十分です。</p>
+          <a class="link-arrow" href="start.html">はじめに</a>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>

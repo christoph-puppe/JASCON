@@ -1,0 +1,352 @@
+---
+title: モデル：11 のオブジェクト型 | JASCON
+description: JASCON のカーネルを 1 ページで説明します。入れ子の浅い 11 のオブジェクト型、法助動詞の順序、型付きパラメータ、契約を伴うファセット、オブジェクトごとの 2 つのダイジェスト、3 つの適合性ティア、そして OSCAL 1.x の各構成要素の移行先です。
+nav: model
+source: 20b1275c2e33
+---
+<section class="page-hero">
+  <div class="wrap">
+    <p class="eyebrow">モデル</p>
+    <h1>11 のオブジェクト型と、それぞれが置き換えるもの</h1>
+    <p class="lede">カーネルが保持するのは、3 つの国家フレームワークを実測して必要と判明したものだけで、それ以外は何も含みません。このページでは、カーネルをひととおり説明します。規範となるテキストは<a href="{{ blob }}/drafts/jascon-specification-1.0.0.md" rel="noopener">仕様書</a>です。すべての数値を含む詳細版は<a href="{{ tree }}/jascon/references" rel="noopener">ハンドブック</a>です。</p>
+  </div>
+</section>
+
+<section class="section" id="smallest">
+  <div class="wrap">
+    <div class="split">
+      <div class="stack-lg reveal">
+        <div class="section-head" style="margin-bottom:0">
+          <p class="eyebrow"><span class="no">01</span> 最小のオブジェクト</p>
+          <h2>完結した 1 つの要求事項</h2>
+          <p class="lede">これで 1 つのオブジェクトの全体です。props もファセットもなく、周囲を囲む文書もありません。ハンドブックがこれを最初の例に使っているのは、オーストラリアの ISM の拡張部分全体が、これ以上のものを必要としないからです。</p>
+        </div>
+        <ul class="ticks">
+          <li><b><code>id</code></b> は、発行機関自身のドメイン配下の URI です。文字列として比較され、取得されることはないため、外部から遮断されたネットワークでも検証が機能します。</li>
+          <li><b><code>version</code></b> と、マニフェスト内の 2 つのダイジェストが履歴を担います。ISM は同じ目的のために、2,202 個の改訂用 props を手作業で維持しています。</li>
+          <li><b><code>statements</code></b> がリストなのは、条項が実際に存在するからです。Grundschutz++ には、条項を参照可能にするためだけに存在する、入れ子になった 347 個の疑似管理策があります。</li>
+          <li><b><code>modality</code></b> と <b><code>obligated-parties</code></b> はステートメントに置かれます。1 つの要求事項で、運用者を MUST で、顧客を SHOULD で拘束できます。</li>
+          <li><b><code>prose</code></b> は、言語タグからテキストへのマップです。</li>
+        </ul>
+      </div>
+      <div class="window reveal">
+        <div class="window-bar">
+          <span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="window-title">jascon/examples/req-ism-1234.json</span>
+          <span class="window-note">本文は例示用</span>
+        </div>
+        <pre><code data-lang="json">{{ file:jascon/examples/req-ism-1234.json }}</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="types">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">02</span> オブジェクト型</p>
+      <h2>どの型も、公開されたカタログが必要としたから存在する</h2>
+      <p class="lede">リリース済みの 1.0.0 には 9 つの型があります。Risk と Check は 10 番目と 11 番目の型で、2.0.0 のリリース候補に含まれます。右の欄は、その型が OSCAL 1.x や一般的な慣行から何を引き継ぐかを示しています。</p>
+    </div>
+
+    <div class="reveal">
+      <p class="group-label">内容：何が求められるか</p>
+      <div class="types">
+        <div class="type">
+          <h3>Requirement</h3>
+          <p>1 つの管理策、ルール、または基準を、識別子付きステートメントのリストとして表します。各ステートメントは、モダリティ、義務を負う当事者、型付きパラメータ、本文を持ちます。ガイダンスや目的もステートメントであり、そのモダリティは <code>unspecified</code> です。あるいは、フレームワーク固有のファセットに置かれます。</p>
+          <p class="replaces"><b>引き継ぐもの</b>カタログの管理策とその parts。props の <code>label</code>、<code>alt-identifier</code>、<code>sort-id</code>。</p>
+        </div>
+        <div class="type">
+          <h3>RequirementSet</h3>
+          <p>所属関係だけを表し、それ以外は何も表しません。Set は、要求事項または他の Set を順序番号付きで列挙します。章、ファミリー、ベースライン、成熟度レベル、機密区分はすべて Set であり、1 つの要求事項が複数の Set に属することもできます。</p>
+          <p class="replaces"><b>引き継ぐもの</b>グループ、解決済みプロファイルによるベースライン、そして ISM の 5,301 項目からなる適用性マトリクス。</p>
+        </div>
+        <div class="type">
+          <h3>Tailoring</h3>
+          <p>選択と、8 種類の操作からなる閉じたリストです。各操作は、要求事項、ステートメント、パラメータという識別子で対象を指定します。何も複製されません。解決は決定的な 1 回の処理で完了します。グローバルな識別子があるためマージ規則は不要であり、存在しません。</p>
+          <p class="replaces"><b>引き継ぐもの</b>プロファイルとプロファイル解決の仕様。FedRAMP CR26 に見られる、クラスごとのインラインの変種。</p>
+        </div>
+        <div class="type">
+          <h3>Mapping</h3>
+          <p>クロスウォークの 1 本のエッジを、9 つのフラットなフィールドで表します。ソース、ターゲット、任意のステートメント範囲、関係、方向、確度、論拠、来歴、証跡です。関係コードは NIST IR 8477 に従い、他者のカタログに付加するコンテンツ用に <code>supplements</code> が加わります。</p>
+          <p class="replaces"><b>引き継ぐもの</b>OSCAL 1.2 の管理策マッピングモデル。クロスウォークのスプレッドシート。</p>
+        </div>
+      </div>
+
+      <p class="group-label">組織：なぜ適用範囲に入るのか</p>
+      <div class="types">
+        <div class="type">
+          <h3>Risk <small><span class="tier tier-designed">2.0.0 候補</span></small></h3>
+          <p>ISO/IEC 27001 の 6.1.2 と 6.1.3、BSI Standard 200-3、NIST SP 800-30 がいずれも求める記録です。シナリオ、所有者、状態、名前の付いた尺度上のレベルとして表す格付け、4 つの対応の選択肢のうちの 1 つ、そして対応を担う条項からなります。スコアリング手法はカーネルの外に置かれます。Risk は、評価され、対応の選択肢が選ばれた時点で、要求事項を正当化するものになります。</p>
+          <p class="replaces"><b>引き継ぐもの</b>スプレッドシートとしてのリスク登録簿と、文書としての適用宣言書 (SoA)。後者は <code>risk-coverage</code> が算出します。</p>
+        </div>
+      </div>
+
+      <p class="group-label">システム：何が導入され、何が見つかったか</p>
+      <div class="types">
+        <div class="type">
+          <h3>Component</h3>
+          <p>製品、サービス、ポリシー、プロセス、またはシステムです。システムとは、メンバーを持つコンポーネントです。認可境界は、コンポーネント上の識別子付きオブジェクトです。境界がなければ、何も主張されません。</p>
+          <p class="replaces"><b>引き継ぐもの</b>コンポーネント定義と、SSP のシステム記述。</p>
+        </div>
+        <div class="type">
+          <h3>Implementation</h3>
+          <p>1 本のエッジです。「このコンポーネントは、この要求事項を（必要ならこのステートメントを）、この方法で満たす」という関係を表します。責任は <code>provider</code>、<code>customer</code>、<code>shared</code>、<code>inherited</code> のいずれかです。継承のエッジは、上流のコンポーネントと、依拠する認可を明示しなければなりません。これにより、IaaS 上の PaaS 上で動く SaaS を、連鎖の 1 段ずつ検証できます。</p>
+          <p class="replaces"><b>引き継ぐもの</b>SSP の実装済み要求事項（implemented requirements）と、コンポーネント定義の管理策実装（control implementations）。この 2 つは同じことを二重に述べていました。</p>
+        </div>
+        <div class="type">
+          <h3>Assessment</h3>
+          <p>誰が、何を、どのように、いつ確認し、どの結果とどの証跡が得られたかを表します。手法は、登録済みのファセットで記述します。</p>
+          <p class="replaces"><b>引き継ぐもの</b>評価計画と評価結果。</p>
+        </div>
+        <div class="type">
+          <h3>Finding</h3>
+          <p>要求事項またはステートメントに対するギャップです。状態、暦を明示した期日付きの対応措置、そして Deviation（逸脱）を持ちます。Deviation は、何かが緩和または受容される場面のすべてで使われる、1 つの状態機械（調査中、保留中、承認済み、撤回済み）を持つ 1 種類の型付きレコードです。</p>
+          <p class="replaces"><b>引き継ぐもの</b>POA&amp;M と、それぞれが同じ状態機械を符号化していた 4 つの FedRAMP 拡張。</p>
+        </div>
+      </div>
+
+      <p class="group-label">署名</p>
+      <div class="types">
+        <div class="type">
+          <h3>Attestation</h3>
+          <p>オブジェクトのセマンティックダイジェスト、コンテンツマニフェストのダイジェスト、そして人が署名したレンダリング済み文書のダイジェストを、DSSE エンベロープの中で結び付けます。機械がチェックした内容と、認可権限者が署名した内容が、気付かれないまま食い違うことはありません。</p>
+          <p class="replaces"><b>引き継ぐもの</b>データとの関係を誰も検証できない、署名済みの PDF。</p>
+        </div>
+      </div>
+
+      <p class="group-label">機械：要求事項をどう判定するか</p>
+      <div class="types">
+        <div class="type">
+          <h3>Check <small><span class="tier tier-designed">2.0.0 候補</span></small></h3>
+          <p>コレクターが報告するファクトの型付き契約と、12 個の比較演算子によるフラットな論理積で、合否を判定します。コレクターのコードはファセットに置かれます。この形式に収まらないものは手動チェックのままです。記録された判定はバリデータが再計算し、証跡ファイルは SHA-256 で命名されます。</p>
+          <p class="replaces"><b>引き継ぐもの</b>文章で書かれた監査手順。たとえば CIS Ubuntu 24.04 Benchmark の 291 個の自動化ルールは、人が読まなければならないテキストとして届きます。<a href="checks.html">設計とライブデモ。</a></p>
+        </div>
+      </div>
+
+      <p class="group-label">ベンダー：供給者が何を推奨するか</p>
+      <div class="types">
+        <div class="type">
+          <h3>アドバイスパック <small><span class="tier tier-designed">型ではない、2.0.0 候補</span></small></h3>
+          <p>マニフェストで発行元、パック、リリースを示し、オブジェクトが Component だけからなるバンドルです。ベンダーの推奨事項は、その Component 上のケイパビリティであり、要求事項、条項、テキスト、推奨パラメータ値を持ちます。パックをインポートしても、セットが既に保持しているオブジェクトは一切変わりません。推奨事項は、ユーザー自身の Implementation が引用するまで、何の効力も持ちません。</p>
+          <p class="replaces"><b>引き継ぐもの</b>コンポーネント定義の用途のうち、残す価値のある唯一のもの。ベンダーは検討用のテキストを提供するだけで、管理策や評価を変更することはできません。<a href="#advice">パックの仕組み。</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="modality">
+  <div class="wrap">
+    <div class="split">
+      <div class="stack-lg reveal">
+        <div class="section-head" style="margin-bottom:0">
+          <p class="eyebrow"><span class="no">03</span> 拘束力</p>
+          <h2>法助動詞には順序があり、テーラリングはその順序に照らしてチェックされる</h2>
+          <p class="lede">3 つのコーパスが、同じフィールドに行き着いています。Grundschutz++ の <code>modal_verb</code>（1,006 件）、FedRAMP CR26 の <code>force</code>、そして ISM のスタイルガイドです。JASCON では、これは半順序を持つカーネル定義のコードです。</p>
+        </div>
+        <div class="lattice">
+          <span class="chain-label">義務</span>
+          <div class="chain"><span>unspecified</span><i></i><span>may</span><i></i><span>should</span><i></i><span>must</span></div>
+          <span class="chain-label">禁止</span>
+          <div class="chain"><span>unspecified</span><i></i><span>should-not</span><i></i><span>must-not</span></div>
+          <span class="chain-label">制限（ドイツ語の DARF NUR）</span>
+          <div class="chain"><span>may</span><i></i><span>may-only</span></div>
+        </div>
+        <p class="muted">矢印の向きに沿った移動は単調であり、自由に行えます。矢印に逆らう移動は緩和であり、チェーン間の移動は軸の変更です。発行機関が公開する Tailoring はどちらも行えますが、利用者側の Tailoring では、どちらの場合も承認者付きの Deviation を記録する必要があります。要求事項の除外は単なる選択であり、Deviation は不要です。ベースラインは除外によって構成されるからです。</p>
+      </div>
+      <div class="stack-lg reveal">
+        <div class="window">
+          <div class="window-bar">
+            <span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="window-title">型付きの期限を持つ操作</span>
+          </div>
+          <pre><code data-lang="json">{
+  "op": "set-parameter",
+  "requirement-ref": "https://ns.fedramp.gov/cr26/req/IEC-CSO-IIR",
+  "statement-id": "s1",
+  "parameter": "iir-deadline",
+  "value": { "type": "duration", "num": 6, "unit": "hours" }
+}</code></pre>
+        </div>
+        <div class="stack">
+          <h3>パラメータには型がある</h3>
+          <p class="muted">文字列、整数、正規形の 10 進数、真偽値、日付、URI、コードがあり、コンテナとして選択、リスト、範囲があります。期間は、経過時間か、暦を明示した暦上の期間のいずれかです。営業日で示す期限は、暦がなければ意味をなさないからです。本文中の <code>{param:name}</code> トークンは宣言済みのパラメータに解決されなければなりません。また、リストは JSON 配列であり、読み手が分割方法を知っていなければならない文字列には決してなりません。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="extension">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">04</span> 拡張</p>
+      <h2>すべてのオブジェクトにある 2 つのメンバーが、それ以外のすべてを担う</h2>
+      <p class="lede">3 つの国家カタログで数えた 22,000 個の props のうち、70% 以上はカーネルの仕組みを模倣しています。所属関係、順序付け、履歴、別名、条項構造です。残りには契約が与えられます。</p>
+    </div>
+    <div class="grid g2 reveal">
+      <article class="card">
+        <div class="card-top"><h3><code>facets</code></h3><span class="tier tier-measured">標準ライブラリに 7 個</span></div>
+        <p>ファセット名は、バンドルのマニフェストで厳密なバージョンとダイジェストによって固定された JSON Schema に解決されます。ファセットの記述子は、それが何を変えるか（評価、テーラリング、選択、レンダリング）を宣言します。ツールは、固定されたスキーマに照らしてペイロードを検証します。意味を持つファセットのうち自身が実装していないものに出会ったツールは、処理を停止して理由を出力します。</p>
+        <p class="how"><b>理由：</b>現在は、1 つの未知の prop に出会った 3 つのツールが 3 通りの異なる動作をし、しかも 3 つとも適合を主張しています。</p>
+      </article>
+      <article class="card">
+        <div class="card-top"><h3><code>annotations</code></h3><span class="tier tier-measured">ダイジェストの対象外</span></div>
+        <p>ツールの管理情報やレンダリングのヒントのためのフラットなマップです。たとえば、トラッカーの ID、Web 用の名前、リンク禁止フラグなどです。annotations は定義上、あらゆるコンプライアンス計算の対象外であり、セマンティックダイジェストにも含まれません。そのため、仕様に適合する実装がそこから意味を読み取ることはありません。</p>
+        <p class="how"><b>理由：</b>ツールには独自のメモを置く場所が必要ですが、その場所が検証されない第 2 の語彙になってはならないからです。</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="integrity">
+  <div class="wrap">
+    <div class="split even">
+      <div class="stack-lg reveal">
+        <div class="section-head" style="margin-bottom:0">
+          <p class="eyebrow"><span class="no">05</span> 完全性</p>
+          <h2>オブジェクトごとに 2 つのダイジェスト</h2>
+          <p class="lede">公開物はバンドルです。オブジェクト、固定されたファセットスキーマ、レンダリング、そして 1 つのコンテンツマニフェストからなります。証明はマニフェストの隣に置かれます。署名されたものが、自分自身の署名を含むことはできないからです。</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>判定</th><th>パッケージダイジェスト</th><th>セマンティックダイジェスト</th><th>意味</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Full Match</th><td class="yes">一致</td><td class="yes">一致</td><td>証明されたパッケージそのもの。</td></tr>
+              <tr><th scope="row">Semantic Match</th><td class="no">不一致</td><td class="yes">一致</td><td>承認された内容を再パッケージしたもの。検証者はその旨を報告する。</td></tr>
+              <tr><th scope="row">Tamper</th><td class="no">任意</td><td class="no">不一致</td><td>内容が承認されたものと異なる。</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <a class="link-arrow" href="index.html#try">ブラウザで両方のダイジェストを計算する</a>
+      </div>
+      <div class="stack-lg reveal">
+        <div class="section-head" style="margin-bottom:0">
+          <p class="eyebrow"><span class="no">06</span> 適合性</p>
+          <h2>3 つのティア、いずれも裏付けを伴う</h2>
+          <p class="lede">ティアの主張は、公開されている適合性コーパスに照らして検証されます。コーパスでの結果を伴わない主張は、ただのデータシートにすぎません。</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>ティア</th><th>約束する内容</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Core</th><td>全型のスキーマ検証、閉域環境での動作、パッケージダイジェスト、ローカルでの参照解決、未知の要素すべての保持。意味に関わる計算は行わない。</td></tr>
+              <tr><th scope="row">Portable</th><td>フェイルクローズのゲートを伴う、固定スキーマに対するファセット検証、セマンティックダイジェスト、決定的なテーラリング解決、規則に適ったバンドル構成、リスクカバレッジ、記録されたすべてのチェック判定の再計算。</td></tr>
+              <tr><th scope="row">Authority</th><td>公開に伴う義務：管理された安定識別子、再編のたびの別名と系譜の記録、オブジェクトごとの両ダイジェスト、非推奨化のライフサイクル。</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="advice">
+  <div class="wrap">
+    <div class="split even">
+      <div class="stack-lg reveal">
+        <div class="section-head" style="margin-bottom:0">
+          <p class="eyebrow"><span class="no">07</span> ベンダーの助言</p>
+          <h2>推奨するのはベンダー、合格基準を決めるのは利用者</h2>
+          <p class="lede">ベンダーは、自社製品をどう堅牢化するかを知っています。アドバイスパックは、その知識を、それが役立つ要求事項の隣に置く形でグラフに取り込みます。ADVICE-1 から ADVICE-11 までの 11 のルールが、このファイルを助言の範囲にとどめます。</p>
+        </div>
+        <ul class="ticks">
+          <li><b>Component のみ。</b>Requirement、Tailoring、Check、Assessment を含むパックは拒否されます。パック内のすべての id は発行元自身のオリジン配下にあるため、利用者のオブジェクトを置き換えることはできません。</li>
+          <li><b>推奨事項はケイパビリティである。</b>推奨事項は、要求事項、条項、テキスト、推奨パラメータ値を示します。<code>product-version</code> は、その助言が製品のどのバージョン向けかを示します。</li>
+          <li><b>採用は利用者のエッジで行う。</b>利用者の Implementation が <code>&lt;component-id&gt;#&lt;capability-id&gt;</code> を引用し、製品は利用者のシステムのメンバーでなければなりません。それまでは、ケイパビリティは主張にすぎず、それに基づく計算は一切行われません。</li>
+          <li><b>ベンダーのマニフェストがインポートの記録になる。</b>マニフェストは、そのバイト列の SHA-256 で命名され、利用者のセットに残ります。同じファイルが二重にインポートされることはなく、別のリリースは以前のリリースが持ち込んだものだけを置き換え、インポート後に編集された助言は報告されます。</li>
+          <li><b>申告のみ、証明付き、実証済み。</b>ツールが発行元を「実証済み」と表示するのは、ベンダーの証明がマニフェストを結び付けており、その署名が利用者の信頼する鍵で検証できる場合だけです。誰もチェックしていない証明は、そのとおりに表示されます。</li>
+        </ul>
+        <p class="small"><span class="tier tier-designed">設計済み</span> {{ n.advice_vectors }} 件のテストベクトルと、公開テスト鍵で署名された作例のパック 1 つがあります。パックを公開したベンダーはまだなく、条項レベルのフィールドは架空の例ファイル 1 つだけに基づいています。<a href="evidence.html#limits">限界について。</a></p>
+        <a class="link-arrow" href="app/index.html#load=../jascon/example-packs/dbvendor-server-7-advice/">アプリで作例のパックをプレビューする</a>
+        <a class="link-arrow" href="pack-builder/index.html">パックを作成する：ベンダー向けビルダー</a>
+      </div>
+      <div class="stack-lg reveal">
+        <div class="window">
+          <div class="window-bar">
+            <span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="window-title">ベンダーの Component（抜粋）</span>
+            <span class="window-note">作例</span>
+          </div>
+          <pre><code data-lang="json">{
+ "id": "https://dbvendor.example/component/server-7",
+ "version": "2026-10",
+ "kind": "software",
+ «"product-version": "7"»,
+ "capabilities": [
+  {
+   "id": "cap-key-rotation",
+   "requirement-ref": "https://ns.bsi.bund.de/gspp/req/KONF.14.1",
+   «"statement-ids": ["s2"]»,
+   "description": {
+    "en": "Rotate the server certificate and key with the rotateCertificates command; no restart is needed. The vendor suggests an interval of 90 days."
+   }
+  }
+ ]
+}</code></pre>
+        </div>
+        <div class="window">
+          <div class="window-bar">
+            <span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="window-title">利用者の Implementation が採用する</span>
+            <span class="window-note">作例</span>
+          </div>
+          <pre><code data-lang="json">{
+ "id": "https://cso.example/impl/acme--konf-14-1-s2",
+ "component-ref": "https://cso.example/component/acme-saas",
+ "requirement-ref": "https://ns.bsi.bund.de/gspp/req/KONF.14.1",
+ "statement-refs": ["s2"],
+ "satisfied-by": [
+  { «"capability-ref": "https://dbvendor.example/component/server-7#cap-key-rotation"» }
+ ],
+ "status": "planned"
+}</code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="oscal">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">08</span> OSCAL 1.x のユーザー向け</p>
+      <h2>すべての移行先</h2>
+      <p class="lede">OSCAL はこの取り組みの出発点であり、JASCON が読み書きする形式です。カタログのバンドルは OSCAL 1.2.2 にエクスポートされます。OSCAL に対応する構成要素がないものは、名前空間付きの props に載せて運ばれ、インポート時に元に戻ります。</p>
+    </div>
+    <div class="table-wrap reveal">
+      <table>
+        <thead><tr><th>OSCAL 1.2.2</th><th>JASCON では</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">カタログ：グループ、管理策、パート</th><td>入れ子の RequirementSet に含まれる Requirement オブジェクト。statement パートは <code>statements</code> になる。</td></tr>
+          <tr><th scope="row">プロファイルとプロファイル解決</th><td>Tailoring：選択と、識別子で対象を指定する操作。半ページ分の決定的なアルゴリズム 1 つで解決される。</td></tr>
+          <tr><th scope="row">コンポーネント定義</th><td><a href="#advice">アドバイスパック</a>として公開される <code>Component.capabilities</code>。Component からなるバンドルであり、インポートによって要求事項、テーラリング、評価を変更することはできない。パックビルダーは OSCAL のコンポーネント定義をインポートし、パックに収まらないものを報告する。</td></tr>
+          <tr><th scope="row">システムセキュリティ計画</th><td><code>authorizations</code> を持つ Component と、Implementation のエッジ。文書はレンダリングであり、Attestation によって結び付けられる。</td></tr>
+          <tr><th scope="row">評価計画と評価結果</th><td>手法をファセットに持つ Assessment、その結果、および Finding。</td></tr>
+          <tr><th scope="row">POA&amp;M</th><td><code>Finding.actions</code> と Deviation のライフサイクル。</td></tr>
+          <tr><th scope="row">管理策マッピングモデル</th><td>Mapping 型。</td></tr>
+          <tr><th scope="row"><code>ns</code> 付きの props</th><td>登録済みのファセット、annotation、または何もなし。props の大半はカーネルの仕組みを模倣していた。</td></tr>
+          <tr><th scope="row">Metaschema、XML、YAML、Schematron</th><td>JSON Schema 2020-12、単一のシリアライゼーション、失敗時に論拠を出力する 10 個のルールプリミティブ。</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="source reveal">OSCAL の 8 つの文書モデルをオブジェクト型に対応付けた図解付きの解説：<a href="{{ blob }}/oscal-1x-models-and-jascon.md" rel="noopener">oscal-1x-models-and-jascon.md</a>。移行レベルとプレイブック：<a href="{{ blob }}/jascon/references/ch14-migration-playbooks.md" rel="noopener">ハンドブック第 14 章</a>。</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="cta reveal">
+      <div>
+        <h2>1 時間読んでから、バンドルを開く</h2>
+        <p>ハンドブックの第 2 章は、実在する最小のオブジェクトから順にカーネルを組み立てていきます。アプリでは、同じオブジェクトを SP 800-53、CSF 2.0、ISM、Grundschutz++ で確認できます。</p>
+      </div>
+      <div class="cta-actions">
+        <a class="btn btn-primary" href="{{ blob }}/jascon/references/ch02-the-core-in-one-hour.md" rel="noopener">1 時間でわかるコア <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a class="btn btn-ghost" href="start.html">はじめに <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>

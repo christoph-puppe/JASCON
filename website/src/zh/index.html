@@ -1,0 +1,557 @@
+---
+title: JASCON：GRC 工程的数据层
+description: JASCON 是一种面向合规数据的开放表示法。标准、裁剪、风险、实施、评估和证明构成一张由类型化、内容寻址的 JSON 对象组成的图，程序可以对其进行校验、比对差异、计算和签名。
+nav: home
+source: 9b517834f1ab
+---
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <p class="eyebrow">开放表示法 &middot; Apache 2.0</p>
+      <h1><em>GRC&nbsp;工程</em>的数据层</h1>
+      <p class="lede">JASCON 将标准、裁剪、风险、实施、评估和证明写成一张由类型化、内容寻址的 JSON 对象构成的图。适用性声明成为一项计算，机器检查成为另一方可以重新计算的结果，捆绑包重新打包之后，签名依然可以验证。</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="app/index.html#load=../converted_examples/US.CSF/csf-core-bundle/&amp;tool=browse">在应用中打开 NIST CSF 2.0
+          <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a class="btn btn-ghost" href="start.html">快速开始</a>
+      </div>
+      <div class="hero-status">
+        <span><i class="dot"></i>1.0.0 于 2026年7月22日发布</span>
+        <span><i class="dot rc"></i>2.0.0-rc.3 评审中</span>
+        <span>独立项目，一位维护者</span>
+      </div>
+    </div>
+
+    <div class="window" data-tabs>
+      <div class="window-bar" role="tablist" aria-label="示例对象">
+        <span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+        <button class="tab" role="tab" aria-selected="true" data-panel="hero-risk">risk.json</button>
+        <button class="tab" role="tab" aria-selected="false" data-panel="hero-req">requirement.json</button>
+        <button class="tab" role="tab" aria-selected="false" data-panel="hero-tailoring">tailoring.json</button>
+        <button class="tab" role="tab" aria-selected="false" data-panel="hero-check">check.json</button>
+        <span class="window-note">节选</span>
+      </div>
+      <div class="panel" id="hero-risk" role="tabpanel" tabindex="0">
+        <pre><code data-lang="json">{
+  "id": "https://cso.example/risk/R-2026-007",
+  "title": {
+    "en": "Tenant data exposure through long-lived KMS keys",
+    "de": "Offenlegung von Mandantendaten durch langlebige KMS-Schlüssel"
+  },
+  "owner-ref": "https://cso.example/party/ciso",
+  "state": "treated",
+  "rating": { "level": "hoch",
+              "scale-ref": "https://cso.example/scale/bsi-200-3-matrix" },
+  "treatment": "modify",
+  «"treatments": [
+    { "requirement-ref": "https://ns.bsi.bund.de/gspp/req/KONF.14.1",
+      "statement-ids": ["s2"] }
+  ]»,
+  "tailoring-refs": ["https://ns.bsi.bund.de/gspp/tailoring/erhoeht"]
+}</code></pre>
+        <div class="window-foot"><span>validate_core.py</span><span><b>risk-coverage</b> erhoeht：已选 3 &middot; 有依据 1 &middot; 未覆盖 2</span></div>
+      </div>
+      <div class="panel" id="hero-req" role="tabpanel" tabindex="0">
+        <pre><code data-lang="json">{
+  "id": "https://ns.bsi.bund.de/gspp/req/KONF.14.1",
+  "version": "2026-07",
+  "label": "KONF.14.1",
+  "statements": [
+    { "id": "s1",
+      «"modality": "may"»,
+      "parameters": [
+        { "name": "transport-crypto", "type": "choice", "cardinality": "one",
+          "choices": [ { "value": "tls13" }, { "value": "tls12-pfs" } ] }
+      ],
+      "prose": { "de": "Konfiguration für Anwendungen KANN Kommunikation beim Transport über Netze nach «{param:transport-crypto}» verschlüsseln." } },
+    { "id": "s2",
+      "modality": "should",
+      "prose": { "de": "Kryptographische Schlüssel SOLLTEN in regelmäßigen Abständen gewechselt werden." } }
+  ],
+  "facets": {
+    "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": { "sec-level": "normal-sdt" }
+  }
+}</code></pre>
+        <div class="window-foot"><span>validate_core.py</span><span><b>prose-params-resolve</b> 每个 {param:} 标记都指向一个已声明的参数</span></div>
+      </div>
+      <div class="panel" id="hero-tailoring" role="tabpanel" tabindex="0">
+        <pre><code data-lang="json">{
+  "id": "https://ns.bsi.bund.de/gspp/tailoring/erhoeht",
+  "version": "2026-07",
+  "title": { "en": "Elevated protection level" },
+  "selects": [
+    { "set-ref": "https://ns.bsi.bund.de/gspp/set/baseline/example" }
+  ],
+  "operations": [
+    { "op": "set-modality",
+      "requirement-ref": "https://ns.bsi.bund.de/gspp/req/KONF.14.1",
+      "statement-id": "s1",
+      «"modality": "must"» },
+    { "op": "set-parameter",
+      "requirement-ref": "https://ns.bsi.bund.de/gspp/req/KONF.14.1",
+      "statement-id": "s1",
+      "parameter": "transport-crypto",
+      "value": "tls13" }
+  ]
+}</code></pre>
+        <div class="window-foot"><span>validate_core.py</span><span><b>modality-monotonic</b> may 改为 must：单调加强，无需 Deviation</span></div>
+      </div>
+      <div class="panel" id="hero-check" role="tabpanel" tabindex="0">
+        <pre><code data-lang="json">{
+  "id": "https://cso.example/check/LNX-SSH-1-maxauthtries",
+  "requirement-ref": "https://cso.example/req/LNX-SSH-1",
+  "statement-ids": ["s1"],
+  "platform": "https://cso.example/platform/linux-host",
+  "observes": [
+    { "name": "sshd.maxauthtries", "type": "integer" }
+  ],
+  «"criteria": [
+    { "fact": "sshd.maxauthtries", "op": "at-most",
+      "expected": { "param": "max-auth-tries" } }
+  ]»,
+  "validity": { "num": 24, "unit": "hours" },
+  "confidence": "reviewed"
+}</code></pre>
+        <div class="window-foot"><span>validate_core.py</span><span><b>check-verdict</b> 观测值为 4，Tailoring 绑定 4：满足</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section tight flush" aria-label="实测">
+  <div class="wrap">
+    <div class="stats reveal">
+      <div class="stat">
+        <span class="stat-n">{{ n.vectors }}<small>/ {{ n.vectors }}</small></span>
+        <p>个一致性测试向量（分属 {{ n.families }} 个族）在参考校验器中全部通过。何为“一致”，由这些测试向量裁定。</p>
+        <span class="tier tier-measured">构建时实测</span>
+      </div>
+      <div class="stat">
+        <span class="stat-n">2</span>
+        <p>个参考校验器，计数完全相同：一个用 Python 编写，另一个用 PowerShell 5.1 编写，可在未安装任何软件的标准 Windows 机器上运行。每次变更时两者都会运行。</p>
+        <span class="tier tier-measured">2026年11月12日实测</span>
+      </div>
+      <div class="stat">
+        <span class="stat-n">11</span>
+        <p>个已发布的框架和生命周期文档集已完成转换，其中包括 ISM、Grundschutz++、SP 800-53、CSF 2.0 和 C5。每条源路径都有一个经计算得出的目标位置。</p>
+        <span class="tier tier-measured">于 1.0.0 实测</span>
+      </div>
+      <div class="stat">
+        <span class="stat-n">5,886</span>
+        <p>个目录对象导出为 OSCAL 1.2.2，经 NIST Schema 校验后重新导入并比对。全部 5,886 个对象的语义摘要均一致。</p>
+        <span class="tier tier-measured">于 1.0.0 实测</span>
+      </div>
+    </div>
+    <p class="stats-note">第一个数字在每次构建本站时重新计算（提交 <code>{{ facts.measured.commit }}</code>）。“每条源路径”指的是路径覆盖：每个值是否真正到达，迄今只在一个语料库上测量过，而在那里有 122 个内容值没有到达。这一点及其他未决问题列在<a href="evidence.html#limits">尚未证明的内容</a>中。</p>
+  </div>
+</section>
+
+<section class="section band" id="compare">
+  <div class="wrap">
+    <div class="section-head wide reveal">
+      <p class="eyebrow"><span class="no">01</span> 现有技术</p>
+      <h2>用户和审计人员需要的十项能力，逐个格式对比</h2>
+      <p class="lede">2026年11月13日，对照五个同类格式的 Schema 和代码进行了核查：OSCAL 1.2.3、Gemara 1.6.0、CycloneDX 1.7.2、CISO Assistant，以及 XCCDF 1.2 与 SCAP 1.4。没有转换任何同类格式的数据。表中每一格说明的是格式本身提供了什么，而不是某个部署用它做了什么。</p>
+    </div>
+    <div class="table-wrap reveal">
+      <table class="compare">
+        <thead><tr><th>有用的能力</th><th class="us" scope="col">JASCON<small>本项目</small></th><th>OSCAL</th><th>Gemara</th><th>CycloneDX</th><th>CISO Assistant</th><th>SCAP / XCCDF</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">按风险选择控制措施 <small>ISO/IEC 27001 6.1.2 和 6.1.3</small></th><td class="us yes">是<small>适用性声明由计算得出；2.0.0 候选</small></td><td class="no">否<small>风险只在评估之后才存在</small></td><td class="part">部分<small>仅通过威胁关联</small></td><td class="no">否</td><td class="part">仅限工具<small>交换格式中没有</small></td><td class="no">否</td></tr>
+          <tr><th scope="row">有记录的风险接受</th><td class="us yes">是<small>批准人、日期、理由；2.0.0 候选</small></td><td class="part">部分<small>没有批准人或日期字段</small></td><td class="part">部分<small>无批准人，无日期</small></td><td class="no">否</td><td class="part">仅限工具<small>批准人、日期、到期时间</small></td><td class="yes">是<small>针对检查结果：授权方、时间、理由</small></td></tr>
+          <tr><th scope="row">每项决定均可追溯</th><td class="us part">部分<small>弱化需要经批准的例外；单项变更不记录作者</small></td><td class="part">部分<small>仅按文档记录人员和时间</small></td><td class="part">部分<small>有理由，无作者</small></td><td class="no">否</td><td class="part">部分<small>有审计日志；不强制填写理由</small></td><td class="part">部分<small>每项变更可附一条备注</small></td></tr>
+          <tr><th scope="row">厂商建议与控制措施相互隔离</th><td class="us yes">是<small>导入时强制执行；2.0.0 候选</small></td><td class="yes">是<small>组件定义；采纳即复制</small></td><td class="part">部分<small>文件分开，但无权限边界</small></td><td class="part">部分<small>同一文件也可以定义标准</small></td><td class="part">部分<small>库更新可能改写评估</small></td><td class="part">部分<small>仍由厂商的检查来判定</small></td></tr>
+          <tr><th scope="row">带期限的例外和发现项</th><td class="us part">部分<small>发现项有类型化的截止日期；例外没有到期时间</small></td><td class="yes">是<small>风险期限、里程碑</small></td><td class="no">否</td><td class="part">部分<small>仅证据有到期时间</small></td><td class="part">仅限工具<small>例外到期时间、截止日期</small></td><td class="no">否</td></tr>
+          <tr><th scope="row">以代码形式表达的自动化检查，可用任意语言编写</th><td class="us yes">是<small>根据观测值重新计算判定；不提供运行器；2.0.0 候选</small></td><td class="part">部分<small>记录运行，无检查逻辑</small></td><td class="part">部分<small>记录运行，逻辑在格式之外</small></td><td class="part">部分<small>以文本形式记录的命令行</small></td><td class="part">部分<small>导入其他工具的结果</small></td><td class="part">部分<small>只有在 SCAP 一致性之外才能使用任意语言</small></td></tr>
+          <tr><th scope="row">从条款到实施、检查运行和证据文件的完整链条</th><td class="us yes">是<small>检查运行：2.0.0 候选</small></td><td class="yes">是<small>证据带哈希</small></td><td class="part">部分<small>无实施记录</small></td><td class="part">部分<small>附件不带哈希</small></td><td class="part">部分<small>工具结果未关联到控制措施</small></td><td class="part">部分<small>文本引用，无哈希</small></td></tr>
+          <tr><th scope="row">一个对象容纳多种语言</th><td class="us yes">是<small>语言映射表</small></td><td class="no">否</td><td class="no">否</td><td class="no">否</td><td class="yes">是<small><code>translations</code> 映射表</small></td><td class="yes">是<small><code>xml:lang</code></small></td></tr>
+          <tr><th scope="row">重新打包后依然有效的签名</th><td class="us yes">是<small>经 OSCAL 往返转换后依然有效</small></td><td class="no">否<small>仅有字节哈希</small></td><td class="no">否<small>对捆绑包字节签名，由工具完成</small></td><td class="part">部分<small>在 XML 和 protobuf 形式中丢失</small></td><td class="no">否</td><td class="part">部分<small>重新缩进即失效</small></td></tr>
+          <tr><th scope="row">可通过分面（facet）扩展 <small>一份强制执行且已锁定的契约，会让不理解它的工具停止</small></th><td class="us yes">是<small>Schema 由摘要锁定；未知语义会使工具停止</small></td><td class="part">部分<small>带命名空间的 prop，背后没有 Schema</small></td><td class="part">部分<small>封闭的 Schema；profile 只能收窄，不能新增</small></td><td class="part">部分<small>字符串属性，注册表可选</small></td><td class="part">仅限工具<small>格式会忽略未知的键</small></td><td class="part">部分<small>外来元素仅作宽松校验</small></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="source reveal"><b>否</b>：已阅读其 Schema，其中没有相应内容。<b>仅限工具</b>：CISO Assistant 应用程序具备该能力，但离开应用程序的库格式不具备。这十行由本项目选定，其中有两行是同类格式领先：JASCON 中的例外没有到期时间，裁剪变更也不记录其自身的作者。多语言、有记录的风险接受、期限和证据链，各自都能在别处找到。但没有一个同类格式能以离开工具的数据形式提供以下任何一项：风险与控制措施选择相关联、可重新计算的检查判定，或者带有锁定契约、会让不理解它的工具停止的扩展。每一格的出处：<a href="{{ blob }}/PRIOR-ART.md" rel="noopener">PRIOR-ART.md</a>。各格式还缺少什么：<a href="evidence.html#prior-art">现有技术</a>。为什么不扩展其中某个格式：<a href="{{ blob }}/jascon/references/appendix-f-objections.md" rel="noopener">手册附录 F.10</a>。</p>
+  </div>
+</section>
+
+<section class="section" id="model">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">02</span> 模型</p>
+      <h2>文档成为图的一种呈现</h2>
+      <p class="lede">十一种浅层对象类型，每个对象都有全局标识符、版本和两个 SHA-256 摘要。所有已实测框架都需要的内容位于固定的内核中；单个框架所需的内容则放在一个已注册、带 Schema 的分面（facet）中。</p>
+    </div>
+    <div class="split flip">
+      <figure class="reveal">
+        <svg class="graph" viewBox="0 0 640 470" role="img" aria-labelledby="graph-title graph-desc">
+          <title id="graph-title">JASCON 对象图</title>
+          <desc id="graph-desc">左侧为内容类型：Tailoring 选择一个 RequirementSet，其成员是 Requirement；Mapping 将 Requirement 相互关联。右侧为系统类型：Implementation、Assessment 和 Finding 引用一个 Component。中间，Risk 为处置它的 Requirement 提供依据，Check 为 Assessment 判定一个 Requirement。Attestation 将这张图绑定到已签署的文档。</desc>
+          <defs>
+            <marker id="ah" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="head" d="M0 0 10 5 0 10z"/></marker>
+            <marker id="ah-a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="head accent" d="M0 0 10 5 0 10z"/></marker>
+            <marker id="ah-p" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="head prop" d="M0 0 10 5 0 10z"/></marker>
+          </defs>
+          <text class="zone" x="30" y="16">内容</text>
+          <text class="zone" x="240" y="16">组织</text>
+          <text class="zone" x="450" y="16">系统</text>
+
+          <path class="edge" d="M110 76V124" marker-end="url(#ah)"/>
+          <path class="edge" d="M110 172V220" marker-end="url(#ah)"/>
+          <path class="edge" d="M110 318V270" marker-end="url(#ah)"/>
+          <path class="edge" d="M30 53C2 53 2 245 28 245" marker-end="url(#ah)"/>
+          <path class="edge" d="M530 126V78" marker-end="url(#ah)"/>
+          <path class="edge" d="M530 318V270" marker-end="url(#ah)"/>
+          <path class="edge" d="M610 245C638 245 638 53 612 53" marker-end="url(#ah)"/>
+          <path class="edge" d="M450 149 192 228" marker-end="url(#ah)"/>
+          <path class="edge" d="M450 341 192 262" marker-end="url(#ah)"/>
+          <path class="edge accent" d="M290 124 177 220" marker-end="url(#ah-a)"/>
+          <path class="edge accent" d="M400 95 448 63" marker-end="url(#ah-a)"/>
+          <path class="edge accent" d="M240 245H192" marker-end="url(#ah-a)"/>
+          <path class="edge accent" d="M450 245H402" marker-end="url(#ah-a)"/>
+          <path class="edge bind" d="M110 364V402M530 364V402"/>
+
+          <text class="elabel" x="118" y="104">选择</text>
+          <text class="elabel" x="118" y="200">成员</text>
+          <text class="elabel" x="118" y="298">关联</text>
+          <text class="elabel accent" x="228" y="166" text-anchor="middle" transform="rotate(-40 228 166)">提供依据</text>
+          <text class="elabel" x="322" y="181" text-anchor="middle" transform="rotate(-17 322 181)">满足</text>
+          <text class="elabel" x="322" y="296" text-anchor="middle" transform="rotate(17 322 296)">针对</text>
+
+          <g class="node content"><rect x="30" y="30" width="160" height="46" rx="10"/><text x="44" y="50">Tailoring</text><text class="sub" x="44" y="65">选择与操作</text></g>
+          <g class="node content"><rect x="30" y="126" width="160" height="46" rx="10"/><text x="44" y="146">RequirementSet</text><text class="sub" x="44" y="161">目录、基线</text></g>
+          <g class="node content"><rect x="30" y="222" width="160" height="46" rx="10"/><text x="44" y="242">Requirement</text><text class="sub" x="44" y="257">带情态的条款</text></g>
+          <g class="node content"><rect x="30" y="318" width="160" height="46" rx="10"/><text x="44" y="338">Mapping</text><text class="sub" x="44" y="353">一条映射对照边</text></g>
+
+          <g class="node org"><rect x="240" y="78" width="160" height="46" rx="10"/><text x="254" y="98">Risk</text><text class="sub" x="254" y="113">为何纳入范围</text></g>
+          <g class="node org"><rect x="240" y="222" width="160" height="46" rx="10"/><text x="254" y="242">Check</text><text class="sub" x="254" y="257">机器如何判定</text></g>
+
+          <g class="node"><rect x="450" y="30" width="160" height="46" rx="10"/><text x="464" y="50">Component</text><text class="sub" x="464" y="65">系统、服务</text></g>
+          <g class="node"><rect x="450" y="126" width="160" height="46" rx="10"/><text x="464" y="146">Implementation</text><text class="sub" x="464" y="161">谁满足什么</text></g>
+          <g class="node"><rect x="450" y="222" width="160" height="46" rx="10"/><text x="464" y="242">Assessment</text><text class="sub" x="464" y="257">方法与结果</text></g>
+          <g class="node"><rect x="450" y="318" width="160" height="46" rx="10"/><text x="464" y="338">Finding</text><text class="sub" x="464" y="353">差距、措施、偏离</text></g>
+
+          <g class="node attest"><rect x="30" y="404" width="580" height="46" rx="10"/><text x="44" y="424">Attestation</text><text class="sub" x="44" y="439">将图的语义摘要绑定到由人签署的文档</text></g>
+        </svg>
+        <div class="graph-legend">
+          <span><i></i>已在 1.0.0 中发布</span>
+          <span class="lg-org"><i></i>2.0.0 候选中新增</span>
+          <span class="lg-att"><i></i>签名层</span>
+        </div>
+      </figure>
+      <div class="stack-lg reveal">
+        <div class="layers compact">
+          <div class="layer l-kernel">
+            <h3><i></i>内核</h3>
+            <p>每个条款的约束力、类型化的参数和期限、成员关系、别名、历史。</p>
+            <p class="contract">规范性且封闭。变更随版本发布。</p>
+          </div>
+          <div class="layer l-facet">
+            <h3><i></i>分面</h3>
+            <p>框架词汇：德语陈述语法、800-53A 目标、保护目标。</p>
+            <p class="contract">已注册，Schema 已锁定。不认识某个分面的工具会停止并说明原因。</p>
+          </div>
+          <div class="layer l-anno">
+            <h3><i></i>注解</h3>
+            <p>跟踪系统 ID、渲染提示、工具自身的记录信息。</p>
+            <p class="contract">不参与任何合规计算，也不计入语义摘要。</p>
+          </div>
+        </div>
+        <p class="muted">凡有可能，错误都被设计为无法表示。正文中的参数标记必须指向一个已声明的参数。裁剪操作按标识定位陈述，因此上游的勘误无法让它改指别处。</p>
+        <a class="link-arrow" href="model.html">逐字段了解十一种类型</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="implications">
+  <div class="wrap">
+    <div class="section-head wide reveal">
+      <p class="eyebrow"><span class="no">03</span> 改变了什么</p>
+      <h2>当合规数据可以被计算时，会带来什么</h2>
+      <p class="lede">GRC 工程像对待任何其他工程制品一样对待合规：版本化、类型化、经过测试并签名。这需要程序能够推理的数据。下面列出八项影响，各附其机制和证据状态。第九项是机器检查，下一节专门介绍。</p>
+    </div>
+    <div class="grid g3 reveal">
+      <article class="card feature">
+        <div class="card-top"><span class="card-no">ISO/IEC 27001 6.1.3 d</span><span class="tier tier-measured">在两个捆绑包上实测</span></div>
+        <h3>适用性声明成为一项计算</h3>
+        <p>Risk 写明其责任人、处置决定以及承载该决定的条款。随后，原语 <code>risk-coverage</code> 会列出每一条没有任何已评估风险作为依据的已选要求。过去，审计人员只能从电子表格中抽样核查这一点。</p>
+        <p class="how"><b>机制：</b>2.0.0 候选中的 Risk 类型。在示例捆绑包上，校验器报告已选 3 项、有依据 1 项、未覆盖 2 项，并指出是哪两项。</p>
+      </article>
+      <article class="card">
+        <div class="card-top"><span class="card-no">Mapping</span><span class="tier tier-measured">实测</span></div>
+        <h3>映射对照是有作者的数据</h3>
+        <p>Mapping 是一个独立的对象：源、目标、关系、置信度和出处，可以细化到单个陈述。第三方的映射对照不属于任何一个目录，可以进行版本管理、比对差异，也可以提出异议。</p>
+        <p class="how"><b>机制：</b>采用 NIST IR 8477 的关系代码。1.0.0 语料库中有 1,008 个 Mapping。</p>
+      </article>
+      <article class="card">
+        <div class="card-top"><span class="card-no">Tailoring</span><span class="tier tier-measured">实测</span></div>
+        <h3>经得起上游新版本的裁剪</h3>
+        <p>Tailoring 按 Set 选择，按标识修改：这条要求、这个陈述、这个参数。加强不受限制；弱化则需要一条有记录的 Deviation（偏离），并依据情态动词的偏序进行检查。</p>
+        <p class="how"><b>机制：</b>八种封闭的操作，确定性的解析，没有合并规则。</p>
+      </article>
+      <article class="card">
+        <div class="card-top"><span class="card-no">Attestation</span><span class="tier tier-measured">实测</span></div>
+        <h3>重新打包后依然有效的签名</h3>
+        <p>证明绑定的是语义摘要。重新缩进文件或添加跟踪系统 ID，判定为 Semantic Match；修改一个情态动词，判定则为 Tamper。</p>
+        <p class="how"><b>机制：</b>包摘要基于字节计算，语义摘要基于规范化内容计算；DSSE 信封，Ed25519。<a href="#try">请在下方亲自试试。</a></p>
+      </article>
+      <article class="card">
+        <div class="card-top"><span class="card-no">内核规则</span><span class="tier tier-measured">实测</span></div>
+        <h3>有效即可检查</h3>
+        <p><code>{param:}</code> 标记必须指向一个已声明且有类型的参数。分面锁定自己的 Schema，并声明它会改变哪些计算。基于这些规则构建的转换器发现了 781 个列表值，某个正在使用的国家级目录把它们塞进了单个以逗号分隔的字符串中。</p>
+        <p class="how"><b>机制：</b>封闭的结构、受约束的标记、失效即停止（fail-closed）的分面。</p>
+      </article>
+      <article class="card">
+        <div class="card-top"><span class="card-no">text</span><span class="tier tier-measured">实测</span></div>
+        <h3>一条要求，所有语言</h3>
+        <p>每个人类可读字段都是一个从 BCP 47 语言标签到文本的映射表。一条德英双语的要求是一个对象、一个标识符，而这正是 NIS2、DORA 和 CRA 在欧盟各官方语言之间所需要的。</p>
+        <p class="how"><b>机制：</b><code>text</code> 原语。Grundschutz++ 捆绑包带有 <code>de</code>。</p>
+      </article>
+      <article class="card">
+        <div class="card-top"><span class="card-no">Implementation</span><span class="tier tier-measured">在一个语料库上实测</span></div>
+        <h3>有明确依据的继承</h3>
+        <p>SaaS 构建在 PaaS 之上，PaaS 又构建在 IaaS 之上：每条继承边都写明上游组件及其所依赖的具体授权。责任按陈述分为提供方、客户、共担或继承。</p>
+        <p class="how"><b>机制：</b>一条带 <code>inherited-from</code> 和 <code>basis-ref</code> 的 Implementation 边，逐个链接进行检查。</p>
+      </article>
+      <article class="card">
+        <div class="card-top"><span class="card-no">退出</span><span class="tier tier-measured">实测</span></div>
+        <h3>退出路径是内置的</h3>
+        <p>目录捆绑包可导出为 OSCAL 1.2.2，通过 NIST Schema 的校验，重新导入后摘要保持不变。参考校验器是一个 {{ n.python_lines }} 行的 Python 文件，一致性由公开的测试向量裁定。</p>
+        <p class="how"><b>机制：</b><code>export_oscal.py</code>、一致性测试语料库、Apache 2.0。</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="checks">
+  <div class="wrap">
+    <div class="split" style="margin-bottom: clamp(36px, 5vw, 56px);">
+      <div class="section-head reveal" style="margin-bottom:0">
+        <p class="eyebrow"><span class="no">04</span> 检查</p>
+        <h2>当评估者是一台机器</h2>
+        <p class="lede">以 0 或 1 退出的扫描器隐藏了它的阈值，也无视裁剪。Check 公开采集器上报的事实和作出判定的比较，运行记录则携带观测值。</p>
+        <div class="chips">
+          <span class="tier tier-designed">第十一种类型，2.0.0 候选</span>
+          <span class="tier tier-measured">{{ n.check_vectors }} 个测试向量在三个实现中通过</span>
+        </div>
+      </div>
+      <div class="stack reveal">
+        <ul class="ticks">
+          <li><b>由 Tailoring 设定合格线。</b>判定条件绑定要求中的一个参数。收紧这个参数，昨天的观测值就会被重新判定，代码无需任何改动。</li>
+          <li><b>判定会被重新计算。</b>校验器对每个已记录的观测值重新求值判定条件，并拒绝结果不一致的记录行。</li>
+          <li><b>成批的资源得到的是一个比例，而不是更宽松的判定。</b>覆盖多个资源的检查，只有在每个资源都通过时才算通过。所有资源都会被评估，结果显示为“200 个中 12 个不满足（6%）”。</li>
+          <li><b>实测适配度：</b>ComplianceAsCode 中 CIS Ubuntu 24.04 配置文件的 510 条规则里，有 481 条适合声明式形式，其余 29 条仍需人工处理。</li>
+        </ul>
+        <a class="link-arrow" href="checks.html">设计、证据链和待定决策</a>
+      </div>
+    </div>
+{{ include:_check-demo.html }}
+  </div>
+</section>
+
+<section class="section band" id="try">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">05</span> 动手试试</p>
+      <h2>先改字节，再改含义</h2>
+      <p class="lede">这是仓库中的一条示例要求，附有其内容清单所记录的两个摘要。您可以直接编辑，也可以使用按钮。两个摘要都在您的浏览器中按照校验器所用的规则计算。</p>
+    </div>
+    <div class="demo reveal" id="digest-demo">
+      <div class="demo-edit">
+        <div class="window-bar">
+          <span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="window-title">jascon/examples/req-ism-1234.json</span>
+          <span class="window-note">可编辑</span>
+        </div>
+        <textarea spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="要求对象，可编辑">{{ file:jascon/examples/req-ism-1234.json }}</textarea>
+      </div>
+      <div class="demo-side">
+        <div class="demo-actions">
+          <p>做些修改</p>
+          <button class="demo-btn" type="button" data-edit="reindent">重新缩进文件 <small>仅字节</small></button>
+          <button class="demo-btn" type="button" data-edit="annotate">添加跟踪系统注解 <small>仅字节</small></button>
+          <button class="demo-btn" type="button" data-edit="reorder">反转成员顺序 <small>仅字节</small></button>
+          <button class="demo-btn" type="button" data-edit="weaken">将“must”弱化为“should” <small>含义</small></button>
+          <button class="demo-btn reset" type="button" data-edit="reset">恢复为经证明的文本</button>
+        </div>
+        <div class="digests" aria-live="polite">
+          <div class="digest">
+            <div class="digest-h"><b>包摘要</b><span data-state="package" class="same">未改变</span></div>
+            <code data-out="package">sha256:&hellip;</code>
+            <small>基于交付字节计算的 SHA-256</small>
+          </div>
+          <div class="digest">
+            <div class="digest-h"><b>语义摘要</b><span data-state="semantic" class="same">未改变</span></div>
+            <code data-out="semantic">sha256:&hellip;</code>
+            <small>基于规范化内容计算的 SHA-256，不含注解</small>
+          </div>
+        </div>
+        <div class="verdict" data-v="full" aria-live="polite">
+          <span class="verdict-k">证明验证的判定</span>
+          <span class="verdict-v">Full Match</span>
+          <p>字节与含义均与示例捆绑包内容清单中记录的一致。</p>
+        </div>
+      </div>
+      <script type="application/json" id="digest-expected">{{ json:demo }}</script>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="app">
+  <div class="wrap">
+    <div class="split even" style="align-items:end; margin-bottom: clamp(32px, 4vw, 52px);">
+      <div class="section-head reveal" style="margin-bottom:0">
+        <p class="eyebrow"><span class="no">06</span> 工具</p>
+        <h2>无需服务器即可运行的应用</h2>
+        <p class="lede">JASCON 应用是一组浏览器页面，无需构建步骤，也没有后端。您加载的捆绑包只保留在您的浏览器中。各标签页按工作顺序排列。</p>
+      </div>
+      <div class="stack reveal">
+        <ul class="ticks">
+          <li><b>导入</b> OSCAL 目录或 profile。Grundschutz++ 规则能够逐个对象地重现随附的捆绑包，以语义摘要为准。</li>
+          <li><b>风险、裁剪、映射、实施、评估：</b>每个页面都会把真实的对象写入工作集，并导出捆绑包，其中每个对象都带有两个摘要。</li>
+          <li><b>草稿来自模型，判定来自内核。</b>输入密钥后，有两个页面可以调用语言模型。草稿由内核规则评判，只有在您采纳时才会保存。</li>
+        </ul>
+      </div>
+    </div>
+    <div class="screens reveal" data-tabs>
+      <div class="screen-tabs" role="tablist" aria-label="应用界面">
+        <button class="screen-tab" role="tab" aria-selected="true" data-panel="screen-browse">浏览</button>
+        <button class="screen-tab" role="tab" aria-selected="false" data-panel="screen-risk">风险</button>
+        <button class="screen-tab" role="tab" aria-selected="false" data-panel="screen-tailor">裁剪</button>
+        <button class="screen-tab" role="tab" aria-selected="false" data-panel="screen-checks">检查</button>
+        <button class="screen-tab" role="tab" aria-selected="false" data-panel="screen-validate">校验</button>
+      </div>
+      <figure class="screen" id="screen-browse" role="tabpanel">
+        <div class="frame">
+          <div class="frame-bar"><span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="frame-url">jascon.net/app/#load=../converted_examples/DE.BSI/bsi-core-bundle/&amp;tool=browse</span></div>
+          <img src="assets/img/app-browse.webp" width="2560" height="1500" loading="lazy" alt="Grundschutz++ 捆绑包上的浏览（Browse）页面：要求列表、由数据生成的十五个筛选器，以及一条已展开的要求，显示其内核字段、分面和注解。">
+        </div>
+        <figcaption><p>在 Grundschutz++ 捆绑包上浏览。筛选器由数据生成：每个重复出现的内核字段和分面值都会成为一个筛选器。内容：BSI，CC BY-SA 4.0。</p><a class="link-arrow" href="app/index.html#load=../converted_examples/DE.BSI/bsi-core-bundle/&amp;tool=browse">打开此视图</a></figcaption>
+      </figure>
+      <figure class="screen" id="screen-risk" role="tabpanel">
+        <div class="frame">
+          <div class="frame-bar"><span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="frame-url">jascon.net/app/#load=../jascon/examples/&amp;tool=risk</span></div>
+          <img src="assets/img/app-risk.webp" width="2560" height="1500" loading="lazy" alt="风险（Risk）页面：一份风险登记册，附有一张在组织自定义量表上绘制的可能性-影响热力图。">
+        </div>
+        <figcaption><p>示例捆绑包上的风险登记册，附有 BSI 200-3 矩阵的热力图。量表归组织所有；内核存储的是等级及其所在的量表。</p><a class="link-arrow" href="app/index.html#load=../jascon/examples/&amp;tool=risk">打开此视图</a></figcaption>
+      </figure>
+      <figure class="screen" id="screen-tailor" role="tabpanel">
+        <div class="frame">
+          <div class="frame-bar"><span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="frame-url">jascon.net/app/#load=../jascon/examples/&amp;tool=tailor</span></div>
+          <img src="assets/img/app-tailor.webp" width="2560" height="1500" loading="lazy" alt="裁剪（Tailor）页面：一个已解析的 Tailoring，每个操作都显示其目标、修改前后的值以及情态次序的判定。">
+        </div>
+        <figcaption><p>一个已解析的 Tailoring：每个操作及其目标、修改前后的值和判定。权威层级由数据推导得出。</p><a class="link-arrow" href="app/index.html#load=../jascon/examples/&amp;tool=tailor">打开此视图</a></figcaption>
+      </figure>
+      <figure class="screen" id="screen-checks" role="tabpanel">
+        <div class="frame">
+          <div class="frame-bar"><span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="frame-url">jascon.net/app/#load=../jascon/examples/&amp;tool=checks</span></div>
+          <img src="assets/img/app-checks.webp" width="2560" height="1500" loading="lazy" alt="检查（Checks）页面：一个已展开的检查，显示其所覆盖要求的条款、所在平台以及其采集器上报的事实。">
+        </div>
+        <figcaption><p>示例捆绑包上的检查页面：采集器上报的事实、作出判定的比较、采集器代码。模型可以起草检查；草稿由内核规则和一个只读的 lint 来评判。应用本身不运行采集器。</p><a class="link-arrow" href="app/index.html#load=../jascon/examples/&amp;tool=checks">打开此视图</a></figcaption>
+      </figure>
+      <figure class="screen" id="screen-validate" role="tabpanel">
+        <div class="frame">
+          <div class="frame-bar"><span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="frame-url">jascon.net/app/#load=../jascon/examples/&amp;tool=validate</span></div>
+          <img src="assets/img/app-validate.webp" width="2560" height="1500" loading="lazy" alt="运行后的校验（Validate）页面：按类型统计的对象数量、没有错误，以及每个 Tailoring 推导出的层级。">
+        </div>
+        <figcaption><p>校验页面运行从参考校验器移植而来的内核规则，每条规则都经过其一致性测试向量的检验。Python 校验器仍是参考实现。</p><a class="link-arrow" href="app/index.html#load=../jascon/examples/&amp;tool=validate">打开此视图</a></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="evidence">
+  <div class="wrap">
+    <div class="split">
+      <div class="section-head reveal" style="margin-bottom:0; position:sticky; top:104px;">
+        <p class="eyebrow"><span class="no">07</span> 依据</p>
+        <h2>每项主张都必须经得起真实目录的检验</h2>
+        <p class="lede">本项目逐一通过证据关口向前推进。只有当某个已发布的目录确实需要时，一项机制才会进入规范；本站上的数字要么经过实测，要么会标明属于其他类别。</p>
+        <div class="chips" style="margin-top:6px">
+          <span class="tier tier-measured">实测</span>
+          <span class="tier tier-designed">已设计</span>
+          <span class="tier tier-open">未决</span>
+        </div>
+        <a class="link-arrow" href="evidence.html">关口、语料库与局限</a>
+      </div>
+      <div class="gates reveal">
+        <div class="gate">
+          <span class="gate-when">2026年年中</span><span class="gate-rail"><i></i></span>
+          <div class="gate-body"><h3>关口 1：普查</h3><p>在绘制架构之前，对 ISM、Grundschutz++ 和 FedRAMP CR26 逐一清点，直到最后一个 prop。在统计的 22,000 个 prop 中，超过 70% 根本无需扩展：它们表达的是成员关系、排序、历史和条款结构。</p></div>
+        </div>
+        <div class="gate">
+          <span class="gate-when">2026年7月</span><span class="gate-rail"><i></i></span>
+          <div class="gate-body"><h3>关口 2：可执行</h3><p>规范性的 JSON Schema、标准库分面、一致性测试语料库，以及一个重新验证每个对象两个摘要的校验器。</p></div>
+        </div>
+        <div class="gate">
+          <span class="gate-when">2026年7月22日</span><span class="gate-rail"><i></i></span>
+          <div class="gate-body"><h3>关口 3 和 4，发布 1.0.0</h3><p>SP 800-53 及其基线、CSF 2.0，以及从 SSP 到 POA&amp;M 的完整文档集均已转换，内核 Schema 无需任何改动。另有签名验证、用 PowerShell 编写的第二个校验器，以及 OSCAL 往返转换。</p></div>
+        </div>
+        <div class="gate rc">
+          <span class="gate-when">2026年11月10日</span><span class="gate-rail"><i></i></span>
+          <div class="gate-body"><h3>2.0.0-rc.1：Risk</h3><p>第十种类型。1.0.0 语料库中的每个捆绑包无需修改即可通过新 Schema 的校验。对该候选版本的一次外部评审产生了 23 个新的测试向量，每一个在当时的校验器上都会失败。</p></div>
+        </div>
+        <div class="gate rc">
+          <span class="gate-when">2026年11月12日</span><span class="gate-rail"><i></i></span>
+          <div class="gate-body"><h3>2.0.0-rc.2：Check</h3><p>第十一种类型，连同六项记录在案的决定一并被接受。普查所涵盖的权威机构都不发布机器检查，因此晋升规则新增了一项条款，适用于只有目录使用方才持有的数据。{{ n.check_vectors }} 个测试向量，在两个校验器中均为绿色。<a href="checks.html">进一步了解检查。</a></p></div>
+        </div>
+        <div class="gate rc">
+          <span class="gate-when">2026年11月12日</span><span class="gate-rail"><i></i></span>
+          <div class="gate-body"><h3>2.0.0-rc.3：建议包 <span class="tier tier-designed">发布候选版</span></h3><p>厂商建议以一个由 Component 组成的捆绑包提供，导入时无法借此修改要求或评估。没有新增类型，包含十一条规则、{{ n.advice_vectors }} 个测试向量和一个完整的示例包，在两个校验器中均为绿色。<a href="model.html#advice">进一步了解建议包。</a></p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="roles">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">08</span> 面向谁</p>
+      <h2>四种角色，各有第一步</h2>
+      <p class="lede">每一步花费一天时间，且无需任何人许可。</p>
+    </div>
+    <div class="grid g4 reveal">
+      <article class="card role">
+        <span class="who">您发布框架</span>
+        <h3>监管机构与标准组织</h3>
+        <p>您的目录保持原有结构。基线成为 Set，变体成为 Tailoring，您的词汇成为带 Schema 的分面。</p>
+        <p class="move"><b>第一步</b>选择一个命名空间，编写一个 Set，并重新编码十条要求。或者在应用的导入（Import）页面中打开您的目录。</p>
+      </article>
+      <article class="card role">
+        <span class="who">您开发工具</span>
+        <h3>GRC 厂商与平台团队</h3>
+        <p>一个 JSON Schema、一种序列化方式、十个原语，每个原语都附有在失败时输出的理由。没有元模式（metaschema），也没有 profile 解析。</p>
+        <p class="move"><b>第一步</b>克隆一致性测试语料库，用您的语言编写一个校验器。测试向量就是裁判。</p>
+      </article>
+      <article class="card role">
+        <span class="who">您负责合规</span>
+        <h3>GRC 工程师、CISO、ISMS 负责人</h3>
+        <p>您的风险登记册、适用性声明、实施说明和发现项都作为文件保存在仓库中，像代码一样接受评审。</p>
+        <p class="move"><b>第一步</b>在应用中加载 SP 800-53 或 Grundschutz++，写下三个风险，然后查看覆盖情况。</p>
+      </article>
+      <article class="card role">
+        <span class="who">您评估或采购</span>
+        <h3>审计师、评估人员、采购人员</h3>
+        <p>您可以在自己的机器上离线验证获批的内容。PowerShell 校验器只需要一台标准 Windows 机器，别无其他要求。</p>
+        <p class="move"><b>第一步</b>向供应商索取一个捆绑包，并对它运行校验器。没有附带语料库测试结果的一致性声明，只应视为产品规格书。</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0">
+  <div class="wrap">
+    <div class="cta reveal">
+      <div>
+        <h2>一位维护者，尚无第三方用户</h2>
+        <p>这是 {{ facts.measured.date }} 时的状态，也是本站存在的原因。最能改变这一状态的是三种贡献：由未参与编写规范的人编写的校验器、由发布者自己转换的目录，以及附带统计数字的异议。</p>
+      </div>
+      <div class="cta-actions">
+        <a class="btn btn-primary" href="join.html">如何参与 <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a class="btn btn-ghost" href="{{ repo }}" rel="noopener">GitHub 上的仓库 <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a class="btn btn-ghost" href="{{ blob }}/drafts/jascon-specification-1.0.0.md" rel="noopener">规范 1.0.0 <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>

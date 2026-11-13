@@ -1,0 +1,557 @@
+---
+title: JASCON：GRC エンジニアリングのためのデータレイヤー
+description: JASCON はコンプライアンスデータのためのオープンな記法です。標準、テーラリング、リスク、実装、評価、証明が、型付きでコンテンツアドレス方式の JSON オブジェクトからなる 1 つのグラフになり、プログラムで検証、差分比較、計算、署名ができるようになります。
+nav: home
+source: 9b517834f1ab
+---
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <p class="eyebrow">オープンな記法 &middot; Apache 2.0</p>
+      <h1><em>GRC エンジニアリング</em>のためのデータレイヤー</h1>
+      <p class="lede">JASCON は、標準、テーラリング、リスク、実装、評価、証明を、型付きでコンテンツアドレス方式の JSON オブジェクトからなる 1 つのグラフとして記述します。適用宣言書 (SoA) は計算で求めるものになり、機械によるチェックは別の当事者が再計算できるものになり、署名はバンドルを再パッケージした後も検証に通ります。</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="app/index.html#load=../converted_examples/US.CSF/csf-core-bundle/&amp;tool=browse">NIST CSF 2.0 でアプリを開く
+          <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a class="btn btn-ghost" href="start.html">はじめに</a>
+      </div>
+      <div class="hero-status">
+        <span><i class="dot"></i>1.0.0：2026年7月22日リリース</span>
+        <span><i class="dot rc"></i>2.0.0-rc.3：レビュー中</span>
+        <span>独立プロジェクト、メンテナー 1 名</span>
+      </div>
+    </div>
+
+    <div class="window" data-tabs>
+      <div class="window-bar" role="tablist" aria-label="オブジェクトの例">
+        <span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+        <button class="tab" role="tab" aria-selected="true" data-panel="hero-risk">risk.json</button>
+        <button class="tab" role="tab" aria-selected="false" data-panel="hero-req">requirement.json</button>
+        <button class="tab" role="tab" aria-selected="false" data-panel="hero-tailoring">tailoring.json</button>
+        <button class="tab" role="tab" aria-selected="false" data-panel="hero-check">check.json</button>
+        <span class="window-note">抜粋</span>
+      </div>
+      <div class="panel" id="hero-risk" role="tabpanel" tabindex="0">
+        <pre><code data-lang="json">{
+  "id": "https://cso.example/risk/R-2026-007",
+  "title": {
+    "en": "Tenant data exposure through long-lived KMS keys",
+    "de": "Offenlegung von Mandantendaten durch langlebige KMS-Schlüssel"
+  },
+  "owner-ref": "https://cso.example/party/ciso",
+  "state": "treated",
+  "rating": { "level": "hoch",
+              "scale-ref": "https://cso.example/scale/bsi-200-3-matrix" },
+  "treatment": "modify",
+  «"treatments": [
+    { "requirement-ref": "https://ns.bsi.bund.de/gspp/req/KONF.14.1",
+      "statement-ids": ["s2"] }
+  ]»,
+  "tailoring-refs": ["https://ns.bsi.bund.de/gspp/tailoring/erhoeht"]
+}</code></pre>
+        <div class="window-foot"><span>validate_core.py</span><span><b>risk-coverage</b> erhoeht：選択 3 &middot; 正当化 1 &middot; 未カバー 2</span></div>
+      </div>
+      <div class="panel" id="hero-req" role="tabpanel" tabindex="0">
+        <pre><code data-lang="json">{
+  "id": "https://ns.bsi.bund.de/gspp/req/KONF.14.1",
+  "version": "2026-07",
+  "label": "KONF.14.1",
+  "statements": [
+    { "id": "s1",
+      «"modality": "may"»,
+      "parameters": [
+        { "name": "transport-crypto", "type": "choice", "cardinality": "one",
+          "choices": [ { "value": "tls13" }, { "value": "tls12-pfs" } ] }
+      ],
+      "prose": { "de": "Konfiguration für Anwendungen KANN Kommunikation beim Transport über Netze nach «{param:transport-crypto}» verschlüsseln." } },
+    { "id": "s2",
+      "modality": "should",
+      "prose": { "de": "Kryptographische Schlüssel SOLLTEN in regelmäßigen Abständen gewechselt werden." } }
+  ],
+  "facets": {
+    "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": { "sec-level": "normal-sdt" }
+  }
+}</code></pre>
+        <div class="window-foot"><span>validate_core.py</span><span><b>prose-params-resolve</b> すべての {param:} トークンが宣言済みのパラメータを指す</span></div>
+      </div>
+      <div class="panel" id="hero-tailoring" role="tabpanel" tabindex="0">
+        <pre><code data-lang="json">{
+  "id": "https://ns.bsi.bund.de/gspp/tailoring/erhoeht",
+  "version": "2026-07",
+  "title": { "en": "Elevated protection level" },
+  "selects": [
+    { "set-ref": "https://ns.bsi.bund.de/gspp/set/baseline/example" }
+  ],
+  "operations": [
+    { "op": "set-modality",
+      "requirement-ref": "https://ns.bsi.bund.de/gspp/req/KONF.14.1",
+      "statement-id": "s1",
+      «"modality": "must"» },
+    { "op": "set-parameter",
+      "requirement-ref": "https://ns.bsi.bund.de/gspp/req/KONF.14.1",
+      "statement-id": "s1",
+      "parameter": "transport-crypto",
+      "value": "tls13" }
+  ]
+}</code></pre>
+        <div class="window-foot"><span>validate_core.py</span><span><b>modality-monotonic</b> may から must へ：単調、Deviation（逸脱）は不要</span></div>
+      </div>
+      <div class="panel" id="hero-check" role="tabpanel" tabindex="0">
+        <pre><code data-lang="json">{
+  "id": "https://cso.example/check/LNX-SSH-1-maxauthtries",
+  "requirement-ref": "https://cso.example/req/LNX-SSH-1",
+  "statement-ids": ["s1"],
+  "platform": "https://cso.example/platform/linux-host",
+  "observes": [
+    { "name": "sshd.maxauthtries", "type": "integer" }
+  ],
+  «"criteria": [
+    { "fact": "sshd.maxauthtries", "op": "at-most",
+      "expected": { "param": "max-auth-tries" } }
+  ]»,
+  "validity": { "num": 24, "unit": "hours" },
+  "confidence": "reviewed"
+}</code></pre>
+        <div class="window-foot"><span>validate_core.py</span><span><b>check-verdict</b> 観測値 4、Tailoring がバインドする値 4：充足</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section tight flush" aria-label="実測値">
+  <div class="wrap">
+    <div class="stats reveal">
+      <div class="stat">
+        <span class="stat-n">{{ n.vectors }}<small>/ {{ n.vectors }}</small></span>
+        <p>{{ n.families }} ファミリーの適合性テストベクトルが、リファレンスバリデータで合格しています。何をもって適合とするかは、テストベクトルが決めます。</p>
+        <span class="tier tier-measured">ビルド時に実測</span>
+      </div>
+      <div class="stat">
+        <span class="stat-n">2</span>
+        <p>結果の件数が一致するリファレンスバリデータ：Python 版と、何もインストールしていない素の Windows マシンで動作する PowerShell 5.1 版です。どちらも変更のたびに実行されます。</p>
+        <span class="tier tier-measured">2026年11月12日に実測</span>
+      </div>
+      <div class="stat">
+        <span class="stat-n">11</span>
+        <p>変換済みの公開フレームワークとライフサイクルセット。ISM、Grundschutz++、SP 800-53、CSF 2.0、C5 を含みます。すべてのソースパスに、算出された変換先があります。</p>
+        <span class="tier tier-measured">1.0.0 時点で実測</span>
+      </div>
+      <div class="stat">
+        <span class="stat-n">5,886</span>
+        <p>OSCAL 1.2.2 へエクスポートし、NIST のスキーマで検証し、再インポートして比較したカタログオブジェクト。5,886 件すべてがセマンティックダイジェストで一致します。</p>
+        <span class="tier tier-measured">1.0.0 時点で実測</span>
+      </div>
+    </div>
+    <p class="stats-note">最初の数値は、このサイトをビルドするたびに再計算されます（コミット <code>{{ facts.measured.commit }}</code>）。「すべてのソースパス」とはパスカバレッジのことです。すべての値が実際に届くかどうかは、これまで 1 つのコーパスでしか実測しておらず、そこでは 122 件のコンテンツ値が届きませんでした。この点とその他の未解決事項は、「<a href="evidence.html#limits">実証されていないこと</a>」に挙げています。</p>
+  </div>
+</section>
+
+<section class="section band" id="compare">
+  <div class="wrap">
+    <div class="section-head wide reveal">
+      <p class="eyebrow"><span class="no">01</span> 先行技術</p>
+      <h2>利用者と監査人に必要な 10 項目を、フォーマットごとに</h2>
+      <p class="lede">2026年11月13日に、近接する 5 つのフォーマット、すなわち OSCAL 1.2.3、Gemara 1.6.0、CycloneDX 1.7.2、CISO Assistant、SCAP 1.4 を伴う XCCDF 1.2 のスキーマとコードに照らして確認しました。これらのフォーマットのデータは変換していません。各セルが示すのは、フォーマットが何を提供するかであり、個々の導入環境でそれがどう使われるかではありません。</p>
+    </div>
+    <div class="table-wrap reveal">
+      <table class="compare">
+        <thead><tr><th>役立つこと</th><th class="us" scope="col">JASCON<small>本プロジェクト</small></th><th>OSCAL</th><th>Gemara</th><th>CycloneDX</th><th>CISO Assistant</th><th>SCAP / XCCDF</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">リスクに基づく管理策の選択 <small>ISO/IEC 27001 6.1.2 および 6.1.3</small></th><td class="us yes">あり<small>適用宣言書を計算で導出。2.0.0 候補</small></td><td class="no">なし<small>リスクは評価の後にしか存在しない</small></td><td class="part">一部<small>脅威を介してのみ結合</small></td><td class="no">なし</td><td class="part">ツールのみ<small>交換フォーマットにはない</small></td><td class="no">なし</td></tr>
+          <tr><th scope="row">リスク受容の記録</th><td class="us yes">あり<small>承認者、日付、論拠。2.0.0 候補</small></td><td class="part">一部<small>承認者や日付のフィールドがない</small></td><td class="part">一部<small>承認者なし、日付なし</small></td><td class="no">なし</td><td class="part">ツールのみ<small>承認者、日付、有効期限</small></td><td class="yes">あり<small>チェック結果について：権限者、時刻、理由</small></td></tr>
+          <tr><th scope="row">すべての決定を追跡できる</th><td class="us part">一部<small>緩和には承認済みの例外が必要。変更ごとの作成者はない</small></td><td class="part">一部<small>誰がいつ、は文書単位のみ</small></td><td class="part">一部<small>論拠はあるが作成者はない</small></td><td class="no">なし</td><td class="part">一部<small>監査ログあり。理由の記入は強制されない</small></td><td class="part">一部<small>変更ごとに任意の備考</small></td></tr>
+          <tr><th scope="row">ベンダーの推奨事項を管理策から分離</th><td class="us yes">あり<small>インポート時に強制。2.0.0 候補</small></td><td class="yes">あり<small>コンポーネント定義。採用はコピーによる</small></td><td class="part">一部<small>ファイルは別だが権限の境界はない</small></td><td class="part">一部<small>1 つのファイルで標準も定義できる</small></td><td class="part">一部<small>ライブラリの更新で評価が書き換わりうる</small></td><td class="part">一部<small>判定するのは依然としてベンダーのチェック</small></td></tr>
+          <tr><th scope="row">期限付きの例外と指摘事項</th><td class="us part">一部<small>指摘事項に型付きの期日あり。例外に有効期限はない</small></td><td class="yes">あり<small>リスクの期限、マイルストーン</small></td><td class="no">なし</td><td class="part">一部<small>証跡の有効期限のみ</small></td><td class="part">ツールのみ<small>例外の有効期限、期日</small></td><td class="no">なし</td></tr>
+          <tr><th scope="row">任意の言語で書ける、コードとしての自動チェック</th><td class="us yes">あり<small>観測値から判定を再計算。ランナーは持たない。2.0.0 候補</small></td><td class="part">一部<small>実行は記録されるが、チェックのロジックはない</small></td><td class="part">一部<small>実行は記録され、ロジックはフォーマットの外</small></td><td class="part">一部<small>テキストとしてのコマンドライン</small></td><td class="part">一部<small>他のツールの結果を取り込む</small></td><td class="part">一部<small>任意の言語は SCAP 適合の範囲外でのみ</small></td></tr>
+          <tr><th scope="row">条項から実装、チェックの実行、証跡ファイルまでをつなぐ 1 本の連鎖</th><td class="us yes">あり<small>チェックの実行は 2.0.0 候補</small></td><td class="yes">あり<small>証跡にハッシュ付き</small></td><td class="part">一部<small>実装の記録がない</small></td><td class="part">一部<small>添付ファイルにハッシュがない</small></td><td class="part">一部<small>ツールの結果が管理策に紐づかない</small></td><td class="part">一部<small>テキストによる参照、ハッシュなし</small></td></tr>
+          <tr><th scope="row">1 つのオブジェクトに複数の言語</th><td class="us yes">あり<small>言語マップ</small></td><td class="no">なし</td><td class="no">なし</td><td class="no">なし</td><td class="yes">あり<small><code>translations</code> マップ</small></td><td class="yes">あり<small><code>xml:lang</code></small></td></tr>
+          <tr><th scope="row">再パッケージ後も有効な署名</th><td class="us yes">あり<small>OSCAL とのラウンドトリップ後も有効</small></td><td class="no">なし<small>バイト列のハッシュのみ</small></td><td class="no">なし<small>バンドルのバイト列にツールで署名</small></td><td class="part">一部<small>XML 形式と protobuf 形式では失われる</small></td><td class="no">なし</td><td class="part">一部<small>インデントの変更で壊れる</small></td></tr>
+          <tr><th scope="row">ファセットによる拡張 <small>強制され、固定され、理解できないツールを停止させる契約</small></th><td class="us yes">あり<small>スキーマをダイジェストで固定。未知のセマンティクスでツールが停止</small></td><td class="part">一部<small>名前空間付きの props。裏付けとなるスキーマはない</small></td><td class="part">一部<small>閉じたスキーマ。プロファイルで絞り込めるが、追加はできない</small></td><td class="part">一部<small>文字列のプロパティ。レジストリは任意</small></td><td class="part">ツールのみ<small>フォーマットは未知のキーを無視</small></td><td class="part">一部<small>外部の要素は緩く検査される</small></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="source reveal"><b>なし</b>：スキーマを読んだうえで、該当するものがなかったことを示します。<b>ツールのみ</b>：CISO Assistant のアプリケーションにはあるものの、アプリケーションの外に出るライブラリフォーマットにはないことを示します。10 の行は本プロジェクトが選んだもので、そのうち 2 つでは近接フォーマットが先行しています。JASCON の例外には有効期限がなく、テーラリングの変更はそれ自体の作成者を記録しません。複数の言語、記録されたリスク受容、期限、証跡の連鎖は、それぞれ他のどこかに存在します。一方、リスクと管理策の選択との結合、再計算されるチェックの判定、理解できないツールを停止させる固定された契約を持つ拡張を、ツールの外に出るデータとして備えている近接フォーマットはありません。各セルの出典：<a href="{{ blob }}/PRIOR-ART.md" rel="noopener">PRIOR-ART.md</a>。各フォーマットに他に欠けているもの：<a href="evidence.html#prior-art">先行技術</a>。それらのいずれかを拡張しない理由：<a href="{{ blob }}/jascon/references/appendix-f-objections.md" rel="noopener">ハンドブック、付録 F.10</a>。</p>
+  </div>
+</section>
+
+<section class="section" id="model">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">02</span> モデル</p>
+      <h2>文書は、グラフをレンダリングしたものになる</h2>
+      <p class="lede">入れ子の浅い 11 のオブジェクト型があり、それぞれがグローバル識別子、バージョン、2 つの SHA-256 ダイジェストを持ちます。実測したすべてのフレームワークが必要とするものは、固定されたカーネルに置かれます。1 つのフレームワークだけが必要とするものは、スキーマを持つ登録済みのファセットに置かれます。</p>
+    </div>
+    <div class="split flip">
+      <figure class="reveal">
+        <svg class="graph" viewBox="0 0 640 470" role="img" aria-labelledby="graph-title graph-desc">
+          <title id="graph-title">JASCON のオブジェクトグラフ</title>
+          <desc id="graph-desc">左は内容の型です。Tailoring が RequirementSet を選択し、そのメンバーは Requirement です。Mapping は Requirement 同士を関連付けます。右はシステムの型です。Implementation、Assessment、Finding が Component を参照します。中央では、Risk がそれに対処する Requirement を正当化し、Check が Assessment のために Requirement を判定します。Attestation は、グラフを署名された文書に結び付けます。</desc>
+          <defs>
+            <marker id="ah" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="head" d="M0 0 10 5 0 10z"/></marker>
+            <marker id="ah-a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="head accent" d="M0 0 10 5 0 10z"/></marker>
+            <marker id="ah-p" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="head prop" d="M0 0 10 5 0 10z"/></marker>
+          </defs>
+          <text class="zone" x="30" y="16">内容</text>
+          <text class="zone" x="240" y="16">組織</text>
+          <text class="zone" x="450" y="16">システム</text>
+
+          <path class="edge" d="M110 76V124" marker-end="url(#ah)"/>
+          <path class="edge" d="M110 172V220" marker-end="url(#ah)"/>
+          <path class="edge" d="M110 318V270" marker-end="url(#ah)"/>
+          <path class="edge" d="M30 53C2 53 2 245 28 245" marker-end="url(#ah)"/>
+          <path class="edge" d="M530 126V78" marker-end="url(#ah)"/>
+          <path class="edge" d="M530 318V270" marker-end="url(#ah)"/>
+          <path class="edge" d="M610 245C638 245 638 53 612 53" marker-end="url(#ah)"/>
+          <path class="edge" d="M450 149 192 228" marker-end="url(#ah)"/>
+          <path class="edge" d="M450 341 192 262" marker-end="url(#ah)"/>
+          <path class="edge accent" d="M290 124 177 220" marker-end="url(#ah-a)"/>
+          <path class="edge accent" d="M400 95 448 63" marker-end="url(#ah-a)"/>
+          <path class="edge accent" d="M240 245H192" marker-end="url(#ah-a)"/>
+          <path class="edge accent" d="M450 245H402" marker-end="url(#ah-a)"/>
+          <path class="edge bind" d="M110 364V402M530 364V402"/>
+
+          <text class="elabel" x="118" y="104">選択</text>
+          <text class="elabel" x="118" y="200">メンバー</text>
+          <text class="elabel" x="118" y="298">関連付け</text>
+          <text class="elabel accent" x="228" y="166" text-anchor="middle" transform="rotate(-40 228 166)">正当化</text>
+          <text class="elabel" x="322" y="181" text-anchor="middle" transform="rotate(-17 322 181)">満たす</text>
+          <text class="elabel" x="322" y="296" text-anchor="middle" transform="rotate(17 322 296)">対象</text>
+
+          <g class="node content"><rect x="30" y="30" width="160" height="46" rx="10"/><text x="44" y="50">Tailoring</text><text class="sub" x="44" y="65">選択と操作</text></g>
+          <g class="node content"><rect x="30" y="126" width="160" height="46" rx="10"/><text x="44" y="146">RequirementSet</text><text class="sub" x="44" y="161">カタログ、ベースライン</text></g>
+          <g class="node content"><rect x="30" y="222" width="160" height="46" rx="10"/><text x="44" y="242">Requirement</text><text class="sub" x="44" y="257">モダリティ付きの条項</text></g>
+          <g class="node content"><rect x="30" y="318" width="160" height="46" rx="10"/><text x="44" y="338">Mapping</text><text class="sub" x="44" y="353">クロスウォークのエッジ</text></g>
+
+          <g class="node org"><rect x="240" y="78" width="160" height="46" rx="10"/><text x="254" y="98">Risk</text><text class="sub" x="254" y="113">適用範囲に入る理由</text></g>
+          <g class="node org"><rect x="240" y="222" width="160" height="46" rx="10"/><text x="254" y="242">Check</text><text class="sub" x="254" y="257">機械による判定の方法</text></g>
+
+          <g class="node"><rect x="450" y="30" width="160" height="46" rx="10"/><text x="464" y="50">Component</text><text class="sub" x="464" y="65">システム、サービス</text></g>
+          <g class="node"><rect x="450" y="126" width="160" height="46" rx="10"/><text x="464" y="146">Implementation</text><text class="sub" x="464" y="161">誰が何を満たすか</text></g>
+          <g class="node"><rect x="450" y="222" width="160" height="46" rx="10"/><text x="464" y="242">Assessment</text><text class="sub" x="464" y="257">手法と結果</text></g>
+          <g class="node"><rect x="450" y="318" width="160" height="46" rx="10"/><text x="464" y="338">Finding</text><text class="sub" x="464" y="353">ギャップ、措置、逸脱</text></g>
+
+          <g class="node attest"><rect x="30" y="404" width="580" height="46" rx="10"/><text x="44" y="424">Attestation</text><text class="sub" x="44" y="439">グラフのセマンティックダイジェストを、人が署名した文書に結び付ける</text></g>
+        </svg>
+        <div class="graph-legend">
+          <span><i></i>1.0.0 でリリース済み</span>
+          <span class="lg-org"><i></i>2.0.0 候補で新規</span>
+          <span class="lg-att"><i></i>署名レイヤー</span>
+        </div>
+      </figure>
+      <div class="stack-lg reveal">
+        <div class="layers compact">
+          <div class="layer l-kernel">
+            <h3><i></i>カーネル</h3>
+            <p>条項ごとの拘束力、型付きのパラメータと期限、所属関係、別名、履歴。</p>
+            <p class="contract">規範的で、閉じています。変更はバージョンの更新とともに行われます。</p>
+          </div>
+          <div class="layer l-facet">
+            <h3><i></i>ファセット</h3>
+            <p>フレームワーク固有の語彙：ドイツ語のステートメント文法、800-53A の評価目的、保護目標。</p>
+            <p class="contract">登録制で、スキーマが固定されています。知らないファセットに出会ったツールは、理由を示して停止します。</p>
+          </div>
+          <div class="layer l-anno">
+            <h3><i></i>アノテーション</h3>
+            <p>トラッカーの ID、レンダリングのヒント、ツールの管理情報。</p>
+            <p class="contract">あらゆるコンプライアンス計算の対象外であり、セマンティックダイジェストにも含まれません。</p>
+          </div>
+        </div>
+        <p class="muted">可能なところでは、誤りをそもそも表現できないようにしています。本文中のパラメータトークンは、宣言済みのパラメータを指していなければなりません。テーラリングの操作はステートメントを識別子で指定するため、上流の正誤表によって参照先がずれることはありません。</p>
+        <a class="link-arrow" href="model.html">11 の型を、フィールドごとに</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="implications">
+  <div class="wrap">
+    <div class="section-head wide reveal">
+      <p class="eyebrow"><span class="no">03</span> 何が変わるか</p>
+      <h2>コンプライアンスデータで計算できるようになると、何が起きるか</h2>
+      <p class="lede">GRC エンジニアリングは、コンプライアンスを他のエンジニアリング成果物と同じように扱います。バージョン管理し、型を付け、テストし、署名するのです。そのためには、プログラムが推論できるデータが必要です。ここでは 8 つの帰結を、それぞれの仕組みと根拠の状況とともに示します。9 つ目の帰結である機械によるチェックは、次のセクションで単独で取り上げます。</p>
+    </div>
+    <div class="grid g3 reveal">
+      <article class="card feature">
+        <div class="card-top"><span class="card-no">ISO/IEC 27001 6.1.3 d</span><span class="tier tier-measured">2 つのバンドルで実測</span></div>
+        <h3>適用宣言書が計算で求められるようになる</h3>
+        <p>Risk は、その所有者、対応の決定、その決定を担う条項を明示します。これを受けて、プリミティブ <code>risk-coverage</code> が、評価済みのリスクのどれにも基づかない選択済みの要求事項をすべて列挙します。これまで監査人は、これをスプレッドシートから抜き取りで確認していました。</p>
+        <p class="how"><b>仕組み：</b>2.0.0 候補の Risk 型。サンプルバンドルでは、バリデータが選択 3 件、正当化 1 件、未カバー 2 件と報告し、その 2 件を名指しします。</p>
+      </article>
+      <article class="card">
+        <div class="card-top"><span class="card-no">Mapping</span><span class="tier tier-measured">実測</span></div>
+        <h3>クロスウォークは作成者を持つデータになる</h3>
+        <p>Mapping はそれ自体が独立したオブジェクトで、個々のステートメントの単位まで、ソース、ターゲット、関係、確度、来歴を持ちます。第三者のクロスウォークはどちらのカタログにも属さず、バージョン管理や差分比較ができ、異論を唱える対象にもなります。</p>
+        <p class="how"><b>仕組み：</b>NIST IR 8477 の関係コード。1.0.0 のコーパスに 1,008 件の Mapping。</p>
+      </article>
+      <article class="card">
+        <div class="card-top"><span class="card-no">Tailoring</span><span class="tier tier-measured">実測</span></div>
+        <h3>上流のリリース後も有効なテーラリング</h3>
+        <p>Tailoring は Set によって選択し、識別子によって変更します。この要求事項の、このステートメントの、このパラメータ、という具合です。強化は自由に行えます。緩和には記録された Deviation が必要で、法助動詞の半順序に照らしてチェックされます。</p>
+        <p class="how"><b>仕組み：</b>8 つの閉じた操作、決定的な解決、マージ規則なし。</p>
+      </article>
+      <article class="card">
+        <div class="card-top"><span class="card-no">Attestation</span><span class="tier tier-measured">実測</span></div>
+        <h3>再パッケージ後も有効な署名</h3>
+        <p>証明が結び付けるのは、セマンティックダイジェストです。ファイルのインデントを変えたり、トラッカーの ID を追加したりしても、判定は Semantic Match です。法助動詞を変えると、判定は Tamper になります。</p>
+        <p class="how"><b>仕組み：</b>バイト列に対するパッケージダイジェストと、正規化したコンテンツに対するセマンティックダイジェスト。DSSE エンベロープ、Ed25519。<a href="#try">下で試せます。</a></p>
+      </article>
+      <article class="card">
+        <div class="card-top"><span class="card-no">カーネル規則</span><span class="tier tier-measured">実測</span></div>
+        <h3>妥当ならチェックできる</h3>
+        <p><code>{param:}</code> トークンは、宣言済みで型付きのパラメータを指していなければなりません。ファセットはスキーマを固定し、どの計算を変えるかを宣言します。これらの規則に基づいて作ったコンバーターは、運用中のある国家カタログがカンマ区切りの単一の文字列に詰め込んでいる 781 個のリスト値を見つけました。</p>
+        <p class="how"><b>仕組み：</b>閉じた形状、束縛されたトークン、フェイルクローズのファセット。</p>
+      </article>
+      <article class="card">
+        <div class="card-top"><span class="card-no">text</span><span class="tier tier-measured">実測</span></div>
+        <h3>1 つの要求事項を、あらゆる言語で</h3>
+        <p>人が読むフィールドはすべて、BCP 47 言語タグからテキストへのマップです。ドイツ語と英語で書かれた要求事項は、1 つの識別子を持つ 1 つのオブジェクトです。これは、NIS2、DORA、CRA が EU の公用語全体にわたって必要とすることになるものです。</p>
+        <p class="how"><b>仕組み：</b><code>text</code> プリミティブ。Grundschutz++ のバンドルは <code>de</code> を持ちます。</p>
+      </article>
+      <article class="card">
+        <div class="card-top"><span class="card-no">Implementation</span><span class="tier tier-measured">1 つのコーパスで実測</span></div>
+        <h3>根拠を明示した継承</h3>
+        <p>IaaS 上の PaaS 上で動く SaaS：継承されたエッジはすべて、上流のコンポーネントと、依拠する特定の認可を明示します。責任はステートメントごとに、プロバイダー、顧客、共有、継承のいずれかとして型付けされます。</p>
+        <p class="how"><b>仕組み：</b><code>inherited-from</code> と <code>basis-ref</code> を持つ 1 本の Implementation エッジ。リンクごとにチェックされます。</p>
+      </article>
+      <article class="card">
+        <div class="card-top"><span class="card-no">出口</span><span class="tier tier-measured">実測</span></div>
+        <h3>出口があらかじめ組み込まれている</h3>
+        <p>カタログのバンドルは、NIST のスキーマで妥当と検証される OSCAL 1.2.2 にエクスポートでき、再インポートすると同じダイジェストに戻ります。リファレンスバリデータは {{ n.python_lines }} 行の単一の Python ファイルで、適合性は公開されたテストベクトルで判定されます。</p>
+        <p class="how"><b>仕組み：</b><code>export_oscal.py</code>、適合性コーパス、Apache 2.0。</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="checks">
+  <div class="wrap">
+    <div class="split" style="margin-bottom: clamp(36px, 5vw, 56px);">
+      <div class="section-head reveal" style="margin-bottom:0">
+        <p class="eyebrow"><span class="no">04</span> チェック</p>
+        <h2>評価者が機械であるとき</h2>
+        <p class="lede">0 か 1 で終了するスキャナーは、しきい値を隠し、テーラリングを無視します。Check は、コレクターが報告するファクトと、判定を下す比較を公開し、実行記録には観測値が残ります。</p>
+        <div class="chips">
+          <span class="tier tier-designed">11 番目の型、2.0.0 候補</span>
+          <span class="tier tier-measured">{{ n.check_vectors }} 件のテストベクトルが 3 つの実装で合格</span>
+        </div>
+      </div>
+      <div class="stack reveal">
+        <ul class="ticks">
+          <li><b>合格基準は Tailoring が決める。</b>基準は要求事項のパラメータに結び付いています。パラメータを厳しくすると、コードを変えることなく、昨日の観測値があらためて判定されます。</li>
+          <li><b>判定は再計算される。</b>バリデータは記録されたすべての観測値について基準を評価し、結果が食い違う行を却下します。</li>
+          <li><b>フリートには割合が示され、判定が甘くなることはない。</b>多数のリソースにまたがるチェックは、すべてが合格した場合にだけ合格します。すべてが評価され、結果は「200 件中 12 件が不充足（6%）」のように表示されます。</li>
+          <li><b>実測による適合度：</b>ComplianceAsCode の CIS Ubuntu 24.04 プロファイルにある 510 のルールのうち、481 が宣言的な形式に収まります。残りの 29 は手動のままです。</li>
+        </ul>
+        <a class="link-arrow" href="checks.html">設計、証跡の連鎖、未決定の事項</a>
+      </div>
+    </div>
+{{ include:_check-demo.html }}
+  </div>
+</section>
+
+<section class="section band" id="try">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">05</span> 試してみる</p>
+      <h2>バイト列を変え、次に意味を変える</h2>
+      <p class="lede">リポジトリにあるサンプルの要求事項と、そのコンテンツマニフェストに記録された 2 つのダイジェストです。編集するか、ボタンを使ってください。どちらのダイジェストも、バリデータと同じ規則でブラウザ内で計算されます。</p>
+    </div>
+    <div class="demo reveal" id="digest-demo">
+      <div class="demo-edit">
+        <div class="window-bar">
+          <span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="window-title">jascon/examples/req-ism-1234.json</span>
+          <span class="window-note">編集可能</span>
+        </div>
+        <textarea spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="要求事項オブジェクト（編集可能）">{{ file:jascon/examples/req-ism-1234.json }}</textarea>
+      </div>
+      <div class="demo-side">
+        <div class="demo-actions">
+          <p>何かを変更する</p>
+          <button class="demo-btn" type="button" data-edit="reindent">ファイルのインデントを変える <small>バイト列のみ</small></button>
+          <button class="demo-btn" type="button" data-edit="annotate">トラッカーのアノテーションを追加する <small>バイト列のみ</small></button>
+          <button class="demo-btn" type="button" data-edit="reorder">メンバーの順序を逆にする <small>バイト列のみ</small></button>
+          <button class="demo-btn" type="button" data-edit="weaken">「must」を「should」に緩める <small>意味</small></button>
+          <button class="demo-btn reset" type="button" data-edit="reset">証明されたテキストに戻す</button>
+        </div>
+        <div class="digests" aria-live="polite">
+          <div class="digest">
+            <div class="digest-h"><b>パッケージダイジェスト</b><span data-state="package" class="same">変更なし</span></div>
+            <code data-out="package">sha256:&hellip;</code>
+            <small>配布されたバイト列に対する SHA-256</small>
+          </div>
+          <div class="digest">
+            <div class="digest-h"><b>セマンティックダイジェスト</b><span data-state="semantic" class="same">変更なし</span></div>
+            <code data-out="semantic">sha256:&hellip;</code>
+            <small>正規化したコンテンツに対する SHA-256（アノテーションを除く）</small>
+          </div>
+        </div>
+        <div class="verdict" data-v="full" aria-live="polite">
+          <span class="verdict-k">証明チェックの判定</span>
+          <span class="verdict-v">Full Match</span>
+          <p>バイト列も意味も、サンプルバンドルのコンテンツマニフェストに記録されたとおりです。</p>
+        </div>
+      </div>
+      <script type="application/json" id="digest-expected">{{ json:demo }}</script>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="app">
+  <div class="wrap">
+    <div class="split even" style="align-items:end; margin-bottom: clamp(32px, 4vw, 52px);">
+      <div class="section-head reveal" style="margin-bottom:0">
+        <p class="eyebrow"><span class="no">06</span> ツール</p>
+        <h2>サーバーなしで動くアプリ</h2>
+        <p class="lede">JASCON アプリは、ビルド工程もバックエンドも持たない一連のブラウザページです。読み込んだバンドルはブラウザ内にとどまります。タブは作業の順序に沿って並んでいます。</p>
+      </div>
+      <div class="stack reveal">
+        <ul class="ticks">
+          <li><b>Import</b> ページで OSCAL のカタログまたはプロファイルを取り込みます。Grundschutz++ 用のルールは、同梱のバンドルをオブジェクト単位で、セマンティックダイジェストまで一致する形で再現します。</li>
+          <li><b>Risk、Tailor、Map、Implement、Assess：</b>どのページも実際のオブジェクトを作業セットに書き込み、オブジェクトごとに両方のダイジェストを付けたバンドルをエクスポートします。</li>
+          <li><b>下書きはモデルから、判定はカーネルから。</b>キーを入力すると、2 つのページで言語モデルに問い合わせることができます。下書きはカーネル規則で判定され、採用したときにだけ保存されます。</li>
+        </ul>
+      </div>
+    </div>
+    <div class="screens reveal" data-tabs>
+      <div class="screen-tabs" role="tablist" aria-label="アプリの画面">
+        <button class="screen-tab" role="tab" aria-selected="true" data-panel="screen-browse">Browse</button>
+        <button class="screen-tab" role="tab" aria-selected="false" data-panel="screen-risk">Risk</button>
+        <button class="screen-tab" role="tab" aria-selected="false" data-panel="screen-tailor">Tailor</button>
+        <button class="screen-tab" role="tab" aria-selected="false" data-panel="screen-checks">Checks</button>
+        <button class="screen-tab" role="tab" aria-selected="false" data-panel="screen-validate">Validate</button>
+      </div>
+      <figure class="screen" id="screen-browse" role="tabpanel">
+        <div class="frame">
+          <div class="frame-bar"><span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="frame-url">jascon.net/app/#load=../converted_examples/DE.BSI/bsi-core-bundle/&amp;tool=browse</span></div>
+          <img src="assets/img/app-browse.webp" width="2560" height="1500" loading="lazy" alt="Grundschutz++ のバンドルを開いた Browse ページ：要求事項の一覧、データから作られた 15 個のフィルター、そしてカーネルフィールド、ファセット、アノテーションとともに開いた 1 件の要求事項。">
+        </div>
+        <figcaption><p>Grundschutz++ のバンドルを開いた Browse ページ。フィルターはデータから作られます。繰り返し現れるカーネルフィールドとファセット値は、それぞれ 1 つのフィルターになります。コンテンツ：BSI、CC BY-SA 4.0。</p><a class="link-arrow" href="app/index.html#load=../converted_examples/DE.BSI/bsi-core-bundle/&amp;tool=browse">この画面を開く</a></figcaption>
+      </figure>
+      <figure class="screen" id="screen-risk" role="tabpanel">
+        <div class="frame">
+          <div class="frame-bar"><span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="frame-url">jascon.net/app/#load=../jascon/examples/&amp;tool=risk</span></div>
+          <img src="assets/img/app-risk.webp" width="2560" height="1500" loading="lazy" alt="Risk ページ：組織が定義する尺度上で、発生可能性と影響度のヒートマップを表示したリスク登録簿。">
+        </div>
+        <figcaption><p>サンプルバンドルのリスク登録簿と、BSI 200-3 のマトリクスによるヒートマップ。尺度は組織が定めるものです。カーネルは、レベルと、それがどの尺度上のものかを保存します。</p><a class="link-arrow" href="app/index.html#load=../jascon/examples/&amp;tool=risk">この画面を開く</a></figcaption>
+      </figure>
+      <figure class="screen" id="screen-tailor" role="tabpanel">
+        <div class="frame">
+          <div class="frame-bar"><span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="frame-url">jascon.net/app/#load=../jascon/examples/&amp;tool=tailor</span></div>
+          <img src="assets/img/app-tailor.webp" width="2560" height="1500" loading="lazy" alt="Tailor ページ：解決済みの Tailoring。各操作について、対象、変更前後の値、モダリティの順序による判定を表示。">
+        </div>
+        <figcaption><p>解決済みの Tailoring。各操作の対象、変更前後、判定を示します。権限のティアはデータから導出されます。</p><a class="link-arrow" href="app/index.html#load=../jascon/examples/&amp;tool=tailor">この画面を開く</a></figcaption>
+      </figure>
+      <figure class="screen" id="screen-checks" role="tabpanel">
+        <div class="frame">
+          <div class="frame-bar"><span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="frame-url">jascon.net/app/#load=../jascon/examples/&amp;tool=checks</span></div>
+          <img src="assets/img/app-checks.webp" width="2560" height="1500" loading="lazy" alt="Checks ページ：1 件のチェックを開き、それが対象とする要求事項の条項、プラットフォーム、コレクターが報告するファクトを表示。">
+        </div>
+        <figcaption><p>サンプルバンドルを開いた Checks ページ。コレクターが報告するファクト、判定を下す比較、コレクターのコードを示します。チェックの下書きはモデルに作らせることができ、その下書きはカーネル規則と読み取り専用の lint が判定します。アプリはコレクターを実行しません。</p><a class="link-arrow" href="app/index.html#load=../jascon/examples/&amp;tool=checks">この画面を開く</a></figcaption>
+      </figure>
+      <figure class="screen" id="screen-validate" role="tabpanel">
+        <div class="frame">
+          <div class="frame-bar"><span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="frame-url">jascon.net/app/#load=../jascon/examples/&amp;tool=validate</span></div>
+          <img src="assets/img/app-validate.webp" width="2560" height="1500" loading="lazy" alt="実行後の Validate ページ：型ごとのオブジェクト数、エラーなし、各 Tailoring の導出されたティア。">
+        </div>
+        <figcaption><p>Validate ページは、リファレンスバリデータから移植したカーネル規則を、それぞれの適合性テストベクトルに対して実行します。リファレンスは引き続き Python のバリデータです。</p><a class="link-arrow" href="app/index.html#load=../jascon/examples/&amp;tool=validate">この画面を開く</a></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="evidence">
+  <div class="wrap">
+    <div class="split">
+      <div class="section-head reveal" style="margin-bottom:0; position:sticky; top:104px;">
+        <p class="eyebrow"><span class="no">07</span> 根拠</p>
+        <h2>すべての主張は、実際のカタログで通用しなければならない</h2>
+        <p class="lede">本プロジェクトは、根拠のゲートを 1 つずつ通過して進みます。仕組みが仕様に入るのは、公開されたカタログがそれを必要とするときです。また、このサイトの数値は、実測値であるか、そうでなければ別のものとして明示されています。</p>
+        <div class="chips" style="margin-top:6px">
+          <span class="tier tier-measured">実測</span>
+          <span class="tier tier-designed">設計済み</span>
+          <span class="tier tier-open">未解決</span>
+        </div>
+        <a class="link-arrow" href="evidence.html">ゲート、コーパス、限界</a>
+      </div>
+      <div class="gates reveal">
+        <div class="gate">
+          <span class="gate-when">2026年半ば</span><span class="gate-rail"><i></i></span>
+          <div class="gate-body"><h3>ゲート 1：調査</h3><p>アーキテクチャを描く前に、ISM、Grundschutz++、FedRAMP CR26 を最後の prop まで棚卸ししました。数えた 22,000 個の props のうち 70% 超は、拡張をまったく必要としませんでした。それらは所属関係、順序付け、履歴、条項構造だったのです。</p></div>
+        </div>
+        <div class="gate">
+          <span class="gate-when">2026年7月</span><span class="gate-rail"><i></i></span>
+          <div class="gate-body"><h3>ゲート 2：実行可能に</h3><p>規範的な JSON Schema、標準ライブラリのファセット、適合性コーパス、そしてすべてのオブジェクトについて両方のダイジェストを再検証するバリデータ。</p></div>
+        </div>
+        <div class="gate">
+          <span class="gate-when">2026年7月22日</span><span class="gate-rail"><i></i></span>
+          <div class="gate-body"><h3>ゲート 3 と 4、1.0.0 のリリース</h3><p>SP 800-53 とそのベースライン、CSF 2.0、SSP から POA&amp;M までの完全なセットを、カーネルスキーマを変更せずに変換しました。署名検証、PowerShell による 2 つ目のバリデータ、OSCAL とのラウンドトリップ。</p></div>
+        </div>
+        <div class="gate rc">
+          <span class="gate-when">2026年11月10日</span><span class="gate-rail"><i></i></span>
+          <div class="gate-body"><h3>2.0.0-rc.1：Risk</h3><p>10 番目の型です。1.0.0 コーパスのすべてのバンドルが、変更なしで新しいスキーマに対して妥当と検証されます。候補版に対する外部レビューで 23 件の新しいテストベクトルが生まれ、そのいずれもその時点のバリデータでは失敗しました。</p></div>
+        </div>
+        <div class="gate rc">
+          <span class="gate-when">2026年11月12日</span><span class="gate-rail"><i></i></span>
+          <div class="gate-body"><h3>2.0.0-rc.2：Check</h3><p>11 番目の型で、6 件の決定を記録に残して採択されました。調査対象の発行機関はいずれも機械チェックを公開していないため、昇格規則に、カタログの利用者だけが保持するデータのための条項が加わりました。{{ n.check_vectors }} 件のテストベクトルが、両方のバリデータで合格しています。<a href="checks.html">チェックの詳細。</a></p></div>
+        </div>
+        <div class="gate rc">
+          <span class="gate-when">2026年11月12日</span><span class="gate-rail"><i></i></span>
+          <div class="gate-body"><h3>2.0.0-rc.3：アドバイスパック <span class="tier tier-designed">リリース候補</span></h3><p>ベンダーの推奨事項を、インポートしても要求事項や評価を変更できない Component のバンドルとして扱います。新しい型はなく、11 の規則、{{ n.advice_vectors }} 件のテストベクトル、作例のパック 1 つで、両方のバリデータで合格しています。<a href="model.html#advice">アドバイスパックの詳細。</a></p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="roles">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">08</span> 誰のためのものか</p>
+      <h2>4 つの立場と、それぞれの最初の一歩</h2>
+      <p class="lede">どれも 1 日で済み、誰の許可も要りません。</p>
+    </div>
+    <div class="grid g4 reveal">
+      <article class="card role">
+        <span class="who">フレームワークを公開する方</span>
+        <h3>発行機関と標準化団体</h3>
+        <p>カタログの構造はそのまま保たれます。ベースラインは Set に、バリエーションは Tailoring に、独自の語彙はスキーマを持つファセットになります。</p>
+        <p class="move"><b>最初の一歩</b>名前空間を決め、Set を 1 つ書き、要求事項を 10 件エンコードし直してみてください。あるいは、Import ページでご自身のカタログを開いてください。</p>
+      </article>
+      <article class="card role">
+        <span class="who">ツールを開発する方</span>
+        <h3>GRC ベンダーとプラットフォームチーム</h3>
+        <p>JSON Schema は 1 つ、シリアライゼーションも 1 つ、そして失敗時に論拠を出力する 10 のプリミティブ。メタスキーマもプロファイル解決もありません。</p>
+        <p class="move"><b>最初の一歩</b>適合性コーパスをクローンし、お使いの言語でバリデータを書いてください。審判役はテストベクトルです。</p>
+      </article>
+      <article class="card role">
+        <span class="who">コンプライアンスを運用する方</span>
+        <h3>GRC エンジニア、CISO、ISMS 責任者</h3>
+        <p>リスク登録簿、適用宣言書、実装ステートメント、指摘事項を、リポジトリ内のファイルとして持ち、コードと同じようにレビューできます。</p>
+        <p class="move"><b>最初の一歩</b>アプリで SP 800-53 か Grundschutz++ を読み込み、リスクを 3 件書いて、カバレッジを確認してください。</p>
+      </article>
+      <article class="card role">
+        <span class="who">評価または調達をする方</span>
+        <h3>監査人、評価者、調達担当</h3>
+        <p>承認された内容を、ご自身のマシンでオフラインのまま検証できます。PowerShell のバリデータに必要なのは、素の Windows マシンだけです。</p>
+        <p class="move"><b>最初の一歩</b>供給者にバンドルを求め、それに対してバリデータを実行してください。コーパスでの結果を伴わない適合の主張は、ただのデータシートとして扱ってください。</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0">
+  <div class="wrap">
+    <div class="cta reveal">
+      <div>
+        <h2>メンテナーは 1 名、第三者の利用者はまだいない</h2>
+        <p>これが {{ facts.measured.date }} 時点の状態であり、このサイトが存在する理由です。これを最も大きく変えるのは、次の 3 つの貢献です。仕様を書いていない人が書いたバリデータ、発行者自身が変換したカタログ、そして件数を添えた異論です。</p>
+      </div>
+      <div class="cta-actions">
+        <a class="btn btn-primary" href="join.html">参加する方法 <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a class="btn btn-ghost" href="{{ repo }}" rel="noopener">GitHub のリポジトリ <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a class="btn btn-ghost" href="{{ blob }}/drafts/jascon-specification-1.0.0.md" rel="noopener">仕様書 1.0.0 <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>

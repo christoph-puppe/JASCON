@@ -1,0 +1,43 @@
+<div class="demo check-demo reveal" id="check-demo">
+  <div class="demo-edit">
+    <div class="window-bar">
+      <span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span class="window-title">bastion-01 पर LNX-SSH-1</span>
+      <span class="window-note">रिपॉज़िटरी का तैयार उदाहरण</span>
+    </div>
+    <div class="cd-body">
+      <div class="cd-req">
+        <span class="cd-k">आवश्यकता</span>
+        <p><b>s1</b> SSH डेमन प्रति कनेक्शन अधिकतम <mark data-cd="param-text">4</mark> प्रमाणीकरण प्रयासों की अनुमति देता है।</p>
+        <p><b>s2</b> SSH डेमन CBC मोड में कोई सिफ़र प्रस्तुत नहीं करता।</p>
+      </div>
+      <div class="cd-field cd-keep">
+        <label for="cd-param"><span class="cd-k">Tailoring द्वारा निर्धारित</span><code>max-auth-tries</code></label>
+        <input id="cd-param" type="number" min="1" max="10" step="1" value="4" inputmode="numeric">
+      </div>
+      <div class="cd-field">
+        <label for="cd-tries"><span class="cd-k">संग्राहक द्वारा देखा गया</span><code>sshd.maxauthtries</code></label>
+        <input id="cd-tries" type="number" min="1" max="10" step="1" value="4" inputmode="numeric">
+      </div>
+      <fieldset class="cd-field cd-list">
+        <legend><span class="cd-k">संग्राहक द्वारा देखा गया</span><code>sshd.ciphers</code></legend>
+        <div data-cd="ciphers"></div>
+      </fieldset>
+      <div class="cd-presets">
+        <span class="cd-k">दर्ज रन</span>
+        <div data-cd="presets"></div>
+        <button class="demo-btn" type="button" data-cd-silent>संग्राहक कुछ भी रिपोर्ट नहीं करता</button>
+      </div>
+    </div>
+  </div>
+  <div class="demo-side">
+    <div class="cd-rows" data-cd="rows" aria-live="polite"></div>
+    <div class="verdict" data-v="full" aria-live="polite">
+      <span class="verdict-k">मूल्यांकन का परिणाम</span>
+      <span class="verdict-v">&hellip;</span>
+      <p></p>
+    </div>
+    <p class="cd-foot">आपके ब्राउज़र में ऐप के <code>check-verdict</code> पोर्ट द्वारा गणना की गई, यानी उसी कोड द्वारा जो {{ n.check_vectors }} जाँच वेक्टर पास करता है। यहाँ कोई संग्राहक नहीं चलता; अवलोकन वही है जो आपने सेट किया।</p>
+  </div>
+  <script type="application/json" id="check-demo-data">{{ json:checkdemo }}</script>
+</div>

@@ -1,0 +1,347 @@
+---
+title: जाँच: जब मूल्यांकनकर्ता एक मशीन हो | JASCON
+description: JASCON 2.0.0 का Check टाइप। कोड तथ्य एकत्र करता है, बारह कम्पैरेटर का एक बंद समुच्चय निर्णय करता है, और साक्ष्य अपने ही हैश के नाम से संग्रहीत होता है, ताकि कोई दूसरा पक्ष कुछ भी चलाए बिना मशीन के निर्णय की पुनर्गणना कर सके। साथ में निर्णय का लाइव डेमो, CIS प्रोफ़ाइलों पर मापी गई उपयुक्तता, और टैग से पहले क्या अभी खुला है।
+nav: checks
+source: 1d0b6392399b
+---
+<section class="page-hero">
+  <div class="wrap">
+    <p class="eyebrow">जाँच &middot; कर्नेल 2.0.0, रिलीज़ कैंडिडेट</p>
+    <h1>जब मूल्यांकनकर्ता एक मशीन हो</h1>
+    <p class="lede">जो स्कैनर एग्ज़िट कोड 0 या 1 देकर समाप्त हो जाता है, वह अपना सीमा-मान (threshold) छिपा लेता है, टेलरिंग को अनदेखा करता है और दोबारा जाँचने के लिए कुछ नहीं छोड़ता। Check उन तथ्यों को प्रकाशित करता है जिनकी रिपोर्ट संग्राहक (collector) को करनी होती है, और उन तुलनाओं को भी जो निर्णय करती हैं। रन रिकॉर्ड में वह दर्ज रहता है जो देखा गया, इसलिए कोई भी उस रिकॉर्ड से निर्णय की पुनर्गणना कर सकता है।</p>
+    <div class="chips">
+      <span class="tier tier-designed">ग्यारहवाँ कर्नेल टाइप, 2.0.0 हेतु प्रस्तावित</span>
+      <span class="tier tier-measured">{{ n.check_vectors }} वेक्टर तीन कार्यान्वयनों में पास</span>
+      <span class="tier tier-open">2.0.0 टैग नहीं हुआ है</span>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="gap">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">01</span> कमी</p>
+      <h2>स्वचालन प्रकाशक के पास मौजूद है और रास्ते में खो जाता है</h2>
+      <p class="lede">JASCON 1.0.0 यह बता सकता है कि किसी आवश्यकता का मूल्यांकन हुआ और मूल्यांकनकर्ता ने क्या तय किया। वह यह नहीं बता सकता कि मशीन निर्णय कैसे करती है।</p>
+    </div>
+    <div class="findings reveal">
+      <div class="finding">
+        <span class="finding-n">312 में से 291</span>
+        <h3>CIS Ubuntu 24.04 Benchmark के नियम स्वचालित (automated) के रूप में चिह्नित हैं</h3>
+        <p>इनमें से हर एक कन्वर्ट किए गए बंडल में एक <code>audit</code> स्ट्रिंग के रूप में आता है, जिसमें गद्य के बीच शेल के अंश होते हैं। पास होने की शर्त "verify the output is" जैसा एक वाक्य है, जिसे किसी व्यक्ति को पढ़ना पड़ता है।</p>
+      </div>
+      <div class="finding">
+        <span class="finding-n">3 में से 0</span>
+        <h3>गणना में शामिल प्राधिकरण मशीन द्वारा तय की जा सकने वाली जाँच एन्कोड करते हैं</h3>
+        <p>ISM, Grundschutz++ और SP 800-53 पद्धतियों (निरीक्षण, साक्षात्कार, परीक्षण) और आवश्यक दस्तावेज़ीकरण का उल्लेख करते हैं। FedRAMP CR26 मुख्य परीक्षणों को गद्य के रूप में रखता है। इनमें से कोई भी ऐसी जाँच निर्दिष्ट नहीं करता जिसका मूल्यांकन कोई प्रोग्राम कर सके।</p>
+      </div>
+    </div>
+    <p class="source reveal">गिनतियाँ: <a href="{{ blob }}/drafts/CP-CHECK-1.md" rel="noopener">CP-CHECK-1</a>, अनुभाग 2.1, कन्वर्ट किए गए कॉर्पस की कवरेज रिपोर्टों से।</p>
+  </div>
+</section>
+
+<section class="section band" id="split">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">02</span> डिज़ाइन</p>
+      <h2>संग्राहक देखता है, मानदंड निर्णय करते हैं</h2>
+      <p class="lede">रेखा वहाँ खींची गई है जहाँ टूल्स का सहमत होना ज़रूरी है। एक ही Check और एक ही अवलोकन मिलने पर दो अनुरूप टूल एक ही निर्णय लौटाते हैं। जो कुछ भी ईमानदार टूल्स के बीच निर्णय बदले बिना अलग हो सकता है, वह सब कर्नेल से बाहर रहता है।</p>
+    </div>
+    <div class="flow reveal">
+      <div class="flow-step">
+        <span class="where">फ़ेसेट, कर्नेल से बाहर</span>
+        <h3>संग्राहक</h3>
+        <p>एक शेल स्क्रिप्ट, Ansible टास्क या API कॉल, जो Check के साथ ही रखा जाता है ताकि जाँच का डाइजेस्ट ठीक उसी कोड को कवर करे। यह एक अवलोकन प्रिंट करता है और कोई निर्णय नहीं करता।</p>
+      </div>
+      <div class="flow-step kernel">
+        <span class="where">कर्नेल: तथ्य अनुबंध</span>
+        <h3>अवलोकन</h3>
+        <p>नामित, टाइप्ड तथ्य, जैसे <code>sshd.maxauthtries</code>: पूर्णांक। संग्राहक डिफ़ॉल्ट मानों को हल करके प्रभावी मान रिपोर्ट करता है। किसी कुंजी के न होने का अर्थ है "देखा, पर नहीं मिला"।</p>
+      </div>
+      <div class="flow-step kernel">
+        <span class="where">कर्नेल: बारह कम्पैरेटर</span>
+        <h3>मानदंड</h3>
+        <p>एक सपाट AND-संयोजन, जैसे <code>at-most {param}</code>। अपेक्षित मान या तो एक लिटरल होता है या आवश्यकता का कोई पैरामीटर, इसलिए जो Tailoring पैरामीटर का मान निर्धारित करता है, वही पास होने की सीमा तय करता है।</p>
+      </div>
+      <div class="flow-step kernel">
+        <span class="where">कर्नेल: check-verdict</span>
+        <h3>निर्णय</h3>
+        <p>संतुष्ट, संतुष्ट नहीं, अनिर्णीत या लागू नहीं: Check, अवलोकन और निर्धारित पैरामीटरों का एक शुद्ध फ़ंक्शन। वैलिडेटर हर दर्ज निर्णय की पुनर्गणना करता है।</p>
+      </div>
+    </div>
+    <div class="grid g3 reveal" style="margin-top: 18px;">
+      <article class="card">
+        <h3>टेलर किया गया पैरामीटर जाँच को नए सिरे से समायोजित करता है</h3>
+        <p>Tailoring में <code>max-auth-tries</code> को 6 से कड़ा करके 4 कर दें, और कल का 5 वाला अवलोकन, जो संतुष्ट था, अब संतुष्ट नहीं रहता। कोड की एक भी पंक्ति नहीं बदलती, और कोई कार्यान्वयनकर्ता अपनी पास होने की सीमा खुद तय नहीं कर सकता।</p>
+      </article>
+      <article class="card">
+        <h3>निर्णय की पुनर्गणना होती है, उस पर यूँ ही भरोसा नहीं किया जाता</h3>
+        <p>Assessment की पंक्ति में स्वयं अवलोकन रहता है। कोई दूसरा पक्ष उस पर मानदंडों का मूल्यांकन करता है और तुलना करता है। दर्ज परिणाम यदि गणना किए गए परिणाम से भिन्न हो, तो यह वैलिडेशन त्रुटि है।</p>
+      </article>
+      <article class="card">
+        <h3>रिकॉर्ड दिखाता है कि क्या देखा गया</h3>
+        <p>विफल पंक्ति में दर्ज होता है <code>sshd.ciphers matches-not ".*-cbc"</code>, और अवलोकन के रूप में ऐसी सूची जिसमें <code>aes128-cbc</code> शामिल है। एग्ज़िट कोड बस 1 बताता।</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="demo">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">03</span> आज़माकर देखें</p>
+      <h2>अवलोकन सेट करें, पास होने की सीमा खिसकाएँ</h2>
+      <p class="lede">रिपॉज़िटरी का तैयार उदाहरण: दो खंडों वाली एक आवश्यकता, प्रोडक्शन होस्ट के लिए एक Tailoring, दो Checks और एक बैस्टियन होस्ट के दो दर्ज दैनिक रन। संग्राहक ने जो देखा, या Tailoring जो मान निर्धारित करता है, उसे बदलकर देखें।</p>
+    </div>
+{{ include:_check-demo.html }}
+    <div class="split even reveal" style="margin-top: clamp(32px, 4vw, 52px);">
+      <div class="window" data-tabs>
+        <div class="window-bar" role="tablist" aria-label="उदाहरण के ऑब्जेक्ट">
+          <span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+          <button class="tab" role="tab" aria-selected="true" data-panel="ck-check">check.json</button>
+          <button class="tab" role="tab" aria-selected="false" data-panel="ck-row">एक रन पंक्ति</button>
+          <button class="tab" role="tab" aria-selected="false" data-panel="ck-finding">finding.json</button>
+        </div>
+        <pre id="ck-check" role="tabpanel" tabindex="0"><code data-lang="json">{
+  "id": "https://cso.example/check/LNX-SSH-1-maxauthtries",
+  "requirement-ref": "https://cso.example/req/LNX-SSH-1",
+  "statement-ids": ["s1"],
+  "platform": "https://cso.example/platform/linux-host",
+  «"observes": [
+    { "name": "sshd.maxauthtries", "type": "integer" }
+  ]»,
+  «"criteria": [
+    { "fact": "sshd.maxauthtries", "op": "at-most",
+      "expected": { "param": "max-auth-tries" } }
+  ]»,
+  "validity": { "num": 24, "unit": "hours" },
+  "confidence": "reviewed",
+  "facets": {
+    "https://ns.jascon.net/stdlib/facet/collector@1": {
+      "collectors": [
+        { "id": "bash", "runtime": "bash", "privileges": "root",
+          "source": "#!/bin/bash\nv=$(sshd -T | awk '$1==\"maxauthtries\"{print $2}') ..." }
+      ]
+    }
+  }
+}</code></pre>
+        <pre id="ck-row" role="tabpanel" tabindex="0"><code data-lang="json">{
+  "check-ref": "https://cso.example/check/LNX-SSH-1-ciphers",
+  "check-digest": "sha256:b5ec275f0904a0a882d27e1434efb28e0595a74c6c0814297b2537fa49833f56",
+  "collector-id": "bash",
+  "outcome": "not-satisfied",
+  "time": "2026-11-03T06:00:04Z",
+  «"observation": {
+    "facts": {
+      "sshd.ciphers": ["chacha20-poly1305@openssh.com",
+                       "aes256-gcm@openssh.com", "aes256-ctr", "aes128-cbc"]
+    }
+  }»,
+  "evidence-record": {
+    "ref": "evidence/sha256/61c0ab97f7c9033b00b61a1eb09b5aa40d648114422ffa040aa779b09a9118fc",
+    "digest": "sha256:61c0ab97f7c9033b00b61a1eb09b5aa40d648114422ffa040aa779b09a9118fc"
+  }
+}</code></pre>
+        <pre id="ck-finding" role="tabpanel" tabindex="0"><code data-lang="json">{
+  "id": "https://cso.example/finding/bastion-01-ssh-cbc",
+  "assessment-ref": "https://cso.example/assessment/bastion-01-2026-11-03",
+  "requirement-ref": "https://cso.example/req/LNX-SSH-1",
+  "statement-ref": "s2",
+  «"check-ref": "https://cso.example/check/LNX-SSH-1-ciphers"»,
+  "state": "closed",
+  "actions": [
+    { "description": { "en": "Remove aes128-cbc from the Ciphers line of sshd_config; the next daily run verifies." },
+      "status": "done" }
+  ]
+}</code></pre>
+        <div class="window-foot"><span>अंश &middot; jascon/examples</span></div>
+      </div>
+      <div class="stack-lg">
+        <div class="stack">
+          <h3>उदाहरण बंडल में क्या दर्ज है</h3>
+          <ul class="ticks">
+            <li><b>3 नवंबर:</b> चार की सीमा के सामने चार प्रमाणीकरण प्रयास, संतुष्ट। सिफ़र सूची में <code>aes128-cbc</code> है, संतुष्ट नहीं। Assessment का परिणाम उसकी पंक्तियों का समेकित परिणाम है।</li>
+            <li>खंड s2 के विरुद्ध <b>एक Finding</b> उस जाँच की ओर इंगित करता है जिसने उसे उठाया। उसकी कार्रवाई: सिफ़र हटाना।</li>
+            <li><b>10 नवंबर:</b> दोनों पंक्तियाँ संतुष्ट। Finding बंद है और उस रन से जुड़ा है जिसने उसका सत्यापन किया।</li>
+          </ul>
+        </div>
+        <p class="muted">इस उदाहरण में किसी वास्तविक होस्ट का मूल्यांकन नहीं हुआ। हर रन ने Check के bash संग्राहक को बिना बदले एक स्टब <code>sshd</code> पर चलाया, जो एक निश्चित कॉन्फ़िगरेशन प्रिंट करता है, और हर साक्ष्य रिकॉर्ड में यह बात दर्ज है।</p>
+        <a class="link-arrow" href="app/index.html#load=../jascon/examples/&amp;tool=checks">उदाहरण को ऐप के Checks पेज में खोलें</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="comparators">
+  <div class="wrap">
+    <div class="split">
+      <div class="stack-lg reveal">
+        <div class="section-head" style="margin-bottom:0">
+          <p class="eyebrow"><span class="no">04</span> कम्पैरेटर</p>
+          <h2>बारह, और जो बाहर रखा गया उसकी सूची</h2>
+          <p class="lede">यह समुच्चय जानबूझकर छोटा रखा गया है। जो जाँच इसमें फ़िट नहीं होती, वह मैनुअल रहती है और गिनी जाती है।</p>
+        </div>
+        <ul class="plain">
+          <li>मानदंड एक AND-संयोजन हैं। कोई OR नहीं, कोई NOT नहीं और कोई नेस्टिंग नहीं; किसी मान के विकल्प <code>one-of</code> से व्यक्त होते हैं, और निषेध ऑपरेटर-युग्मों में रहता है।</li>
+          <li>कोई अंकगणित नहीं और दो तथ्यों के बीच कोई तुलना नहीं। गिनना और व्युत्पन्न करना संग्राहक का काम है।</li>
+          <li>संयोजन strong Kleene AND है: एक निश्चित विफलता निर्णय कर देती है, और किसी विफलता को कहीं और के अज्ञात मान के पीछे कभी छिपाया नहीं जाता।</li>
+          <li>जिस पैरामीटर का मान निर्धारित नहीं है, उससे परिणाम अनिर्णीत होता है। उसकी जगह कभी कोई डिफ़ॉल्ट नहीं रखा जाता।</li>
+          <li><code>at-most</code> कभी ऐसे पैरामीटर से नहीं जुड़ता जो ऊपर की ओर कड़ा होता है, ताकि किसी पैरामीटर को कड़ा करने से कोई जाँच ढीली न हो सके।</li>
+          <li>कई संसाधनों पर लागू जाँच तभी पास होती है जब हर लागू संसाधन पास हो। हर संसाधन का मूल्यांकन होता है, पहली विफलता के बाद किसी को छोड़ा नहीं जाता, और निर्णय के साथ संख्या और अनुपात आता है: "200 लागू bucket संसाधनों में से 12 संतुष्ट नहीं (6 %)"।</li>
+        </ul>
+      </div>
+      <div class="table-wrap reveal">
+        <table>
+          <thead><tr><th>ऑपरेटर</th><th>किस पर</th><th>कब सत्य होता है</th></tr></thead>
+          <tbody>
+            <tr><th scope="row"><code>equals</code></th><td>एक मान</td><td>मान अपेक्षित मान के बराबर है; दशमलव की तुलना मान के आधार पर</td></tr>
+            <tr><th scope="row"><code>not-equals</code></th><td>एक मान</td><td>मान अपेक्षित मान से भिन्न है; तथ्य न होने पर अनिर्णीत</td></tr>
+            <tr><th scope="row"><code>one-of</code></th><td>एक मान</td><td>मान सूची में है</td></tr>
+            <tr><th scope="row"><code>at-least</code> <code>at-most</code></th><td>पूर्णांक, दशमलव</td><td>क्रम की तुलना; दशमलव कभी फ़्लोट के रूप में नहीं</td></tr>
+            <tr><th scope="row"><code>present</code> <code>absent</code></th><td>कोई भी तथ्य</td><td>कुंजी अवलोकन में है, या नहीं है</td></tr>
+            <tr><th scope="row"><code>includes-all</code></th><td>एक सूची</td><td>सूचीबद्ध हर मान मौजूद है</td></tr>
+            <tr><th scope="row"><code>excludes-all</code></th><td>एक सूची</td><td>सूचीबद्ध कोई भी मान मौजूद नहीं है</td></tr>
+            <tr><th scope="row"><code>subset-of</code></th><td>एक सूची</td><td>देखा गया हर मान सूची में है</td></tr>
+            <tr><th scope="row"><code>matches</code> <code>matches-not</code></th><td>स्ट्रिंग, कोड</td><td>पूरा मान किसी I-Regexp पैटर्न से मेल खाता है, या किसी से भी नहीं</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="split even reveal" style="margin-top: clamp(40px, 5vw, 64px);">
+      <div class="stack">
+        <h3>रेगुलर एक्सप्रेशन की अनुमति क्यों है</h3>
+        <p class="muted">हैंडबुक एक्सप्रेशन भाषाओं को अस्वीकार करती है, क्योंकि तब दो अनुरूप टूल दो अलग निर्णय लौटा सकते हैं। Python, .NET और JavaScript ठीक उन्हीं संरचनाओं पर असहमत हैं जिनका लोग सबसे ज़्यादा सहारा लेते हैं: <code>\d</code>, <code>\w</code>, एंकर, फ़्लैग, लुकअराउंड। इसलिए डायलेक्ट I-Regexp (RFC 9485) है, जिसे IETF ने इंटरऑपरेबिलिटी के लिए बनाया है और जिसका उपयोग JSONPath करता है।</p>
+      </div>
+      <div class="stack">
+        <h3>RFC के अलावा कर्नेल क्या तय करता है</h3>
+        <ul class="plain">
+          <li>पैटर्न पूरे मान से मेल खाता है। <code>^</code> और <code>$</code> सामान्य वर्ण हैं।</li>
+          <li>सीमाएँ: प्रति पैटर्न 256 वर्ण, 1,000 अवस्थाएँ, प्रति मान 4,096 वर्ण। इससे आगे पंक्ति अनिर्णीत होती है।</li>
+          <li>होस्ट का regex इंजन इस्तेमाल नहीं होता। हर कार्यान्वयन व्याकरण को स्वयं पार्स करता है, जैसा RFC 9485 उसे प्रकाशित करता है, और बैकट्रैकिंग के बिना मिलान करता है, इसलिए कोई पैटर्न वैलिडेटर को अटका नहीं सकता।</li>
+          <li>एक निर्भरता बची है, और वह घोषित है: Unicode श्रेणी <code>\p{..}</code> होस्ट के डेटाबेस से पढ़ी जाती है (बैकलॉग 59)।</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="evidence-chain">
+  <div class="wrap">
+    <div class="split">
+      <div class="section-head reveal" style="margin-bottom:0">
+        <p class="eyebrow"><span class="no">05</span> साक्ष्य</p>
+        <h2>हर कड़ी ऑफ़लाइन सत्यापित होती है</h2>
+        <p class="lede">साक्ष्य कंटेंट मैनिफ़ेस्ट के बगल में एक डायरेक्टरी है। हर फ़ाइल का नाम उसके बाइट्स के SHA-256 से रखा जाता है। रिडैक्शन हैशिंग से पहले होता है, और कच्चा आउटपुट एक अलग फ़ाइल है, इसलिए रिटेंशन नीति के तहत फ़ाइल हटाने के बाद भी रिकॉर्ड सत्यापन योग्य रहता है: वैलिडेटर उस फ़ाइल को रोकी गई (withheld) बताता है।</p>
+      </div>
+      <div class="chain-list reveal">
+        <div class="chain-link"><b>Attestation</b><p>Assessment के सिमेंटिक डाइजेस्ट को बाँधता है।</p></div>
+        <div class="chain-link"><b>Assessment पंक्ति</b><p>अवलोकन को इनलाइन रखती है, ताकि वही डाइजेस्ट उसे भी कवर करे। यह Check को संदर्भ और डाइजेस्ट, दोनों से पहचानती है: बदली हुई जाँच एक अलग जाँच है।</p></div>
+        <div class="chain-link"><b>साक्ष्य रिकॉर्ड</b><p>जाँच, संग्राहक, विषय (subject), आरंभ, समाप्ति और एग्ज़िट स्टेटस बताता है, और उसी अवलोकन का डाइजेस्ट रखता है।</p></div>
+        <div class="chain-link"><b>कच्चे आउटपुट</b><p>stdout या API रिस्पॉन्स, हर एक अपने डाइजेस्ट के साथ, मीडिया टाइप, आकार और रिडैक्शन फ़्लैग सहित।</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="fit">
+  <div class="wrap">
+    <div class="section-head wide reveal">
+      <p class="eyebrow"><span class="no">06</span> मापी गई उपयुक्तता</p>
+      <h2>510 में से 481 नियम घोषणात्मक रूप में फ़िट होते हैं</h2>
+      <p class="lede">कम्पैरेटर समुच्चय पहले तैयार किया गया और बाद में दो खुले जाँच कॉर्पस के विरुद्ध मापा गया: ComplianceAsCode में Ubuntu 24.04 के लिए चार CIS प्रोफ़ाइल (510 नियम) और kube-bench की CIS 1.12 जाँचें (103 स्वचालित, 28 मैनुअल)।</p>
+    </div>
+    <div class="split even reveal">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>वर्ग</th><th class="num">510 में से नियम</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">फ़िट होते हैं<small>इनमें से 23 केवल तभी, जब संग्राहक प्रभावी मानों को हल करे और mode bits को फ़्लैग-समुच्चय के रूप में रिपोर्ट करे</small></th><td class="num">481</td></tr>
+            <tr><th scope="row">अंकगणित चाहिए<small>गिनती, अद्वितीयता, वर्तमान समय से तुलना</small></th><td class="num">12</td></tr>
+            <tr><th scope="row">दो तथ्यों के बीच तुलना चाहिए</th><td class="num">9</td></tr>
+            <tr><th scope="row">तथ्यों के बीच OR चाहिए</th><td class="num">6</td></tr>
+            <tr><th scope="row">संस्करणों का क्रम चाहिए</th><td class="num">2</td></tr>
+            <tr><th scope="row">I-Regexp से बाहर का regex चाहिए</th><td class="num">0</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="stack-lg">
+        <div class="stack">
+          <h3>गणना क्या दिखाती है <span class="tier tier-measured">मापा गया, उपयुक्तता विवेक से आँकी गई</span></h3>
+          <ul class="plain">
+            <li>तुलना वाला पक्ष छोटा है और तर्क संग्रह वाले पक्ष में रहता है। हाथ से लिखी 126 OVAL परिभाषाओं में स्टेट 99 बार equals से, 23 बार पैटर्न से और 41 बार क्रम से तुलना करते हैं।</li>
+            <li>491 रेगुलर एक्सप्रेशन में से 23 तुलना वाले पक्ष में हैं। सभी 23 I-Regexp के भीतर हैं या उन्हें यांत्रिक रूप से दोबारा लिखा जा सकता है।</li>
+            <li>kube-bench की 21 OR जाँचों में से 16 इस रूप की हैं: "फ़्लैग अनुपस्थित है या फ़्लैग मान के बराबर है"। जो संग्राहक प्रभावी मान रिपोर्ट करता है, वह इन्हें एक ही तुलना में बदल देता है।</li>
+          </ul>
+        </div>
+        <div class="stack">
+          <h3>इसने क्या सुधारा</h3>
+          <p class="muted">मूल मसौदे के समुच्चय में not-equal नहीं था। गणना में यह OVAL स्टेट में दो बार और kube-bench की सभी डायरेक्टरियों में 85 बार मिला, और किसी संख्या के लिए कोई दूसरा कम्पैरेटर यह बात नहीं कह सकता। इसे 12 नवंबर को बारहवें कम्पैरेटर के रूप में जोड़ा गया। जो 29 नियम फ़िट नहीं होते, वे मैनुअल रहते हैं।</p>
+        </div>
+        <a class="link-arrow" href="{{ tree }}/drafts/cp-check-1-census" rel="noopener">गणना की स्क्रिप्ट और मूल आँकड़े</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="state">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">07</span> स्थिति</p>
+      <h2>2.0.0 के लिए स्वीकृत, दोनों वैलिडेटर में हरा संकेत</h2>
+      <p class="lede">12 नवंबर 2026 को लेखक ने प्रस्ताव के खुले बिंदुओं पर निर्णय लिया। Check 2.0.0-rc.2 से रिलीज़ कैंडिडेट का हिस्सा है और 2.0.0 के साथ लागू होगा। कैंडिडेट, जो अब rc.3 है, टैग नहीं हुआ है।</p>
+    </div>
+    <div class="state-cols reveal">
+      <article class="card">
+        <div class="card-top"><h3>रिपॉज़िटरी में</h3><span class="tier tier-measured">मापा गया</span></div>
+        <ul class="ticks">
+          <li><b>स्कीमा और नियम:</b> Check की संरचना, Assessment पर रन पंक्तियाँ, Finding पर संदर्भ, साक्ष्य रिकॉर्ड, फ़ेसेट <code>collector@1</code>; CHECK-1 से CHECK-15 तक और प्रिमिटिव <code>check-verdict</code>, हर एक ऐसे औचित्य के साथ जो विफलता पर प्रिंट होता है।</li>
+          <li><b>{{ n.check_vectors }} अनुरूपता वेक्टर</b> Python संदर्भ कार्यान्वयन में, Windows PowerShell 5.1 पर PowerShell समकक्ष में और ऐप के JavaScript पोर्ट में पास होते हैं। संदर्भ कार्यान्वयन में जानबूझकर की गई पाँच गड़बड़ियों में से हर एक किसी न किसी वेक्टर को लाल कर देती है।</li>
+          <li><b>एक तैयार उदाहरण</b>, जिसमें दो Checks, दो रन, एक Finding और सात साक्ष्य फ़ाइलें हैं।</li>
+          <li><b>RFC 9485 का व्याकरण, जैसा प्रकाशित हुआ,</b> जिससे 12 नवंबर को मिलान किया गया। यह सरोगेट कोड पॉइंट को पैटर्न से बाहर रखता है, जो वर्किंग ग्रुप की फ़ाइल नहीं करती थी; तीनों इंजन सुधारे गए और पाँच वेक्टर इसे पक्का करते हैं।</li>
+          <li><b>पाठ:</b> विनिर्देश D24, हैंडबुक का अध्याय 10 और वैलिडेटर वाला अध्याय, परिशिष्ट A, B और C, और कोडिंग एजेंटों के लिए स्किल।</li>
+          <li><b>टूल:</b> ऐप के Checks पेज पर जाँचें हाथ से लिखी जा सकती हैं या भाषा मॉडल से उनका मसौदा बनवाया जा सकता है, एक बार में एक नियम या किसी CIS इम्पोर्ट के हर स्वचालित नियम के लिए। सिंगल-फ़ाइल रीडर Checks और दर्ज रन दिखाता है।</li>
+        </ul>
+      </article>
+      <article class="card">
+        <div class="card-top"><h3>खुला</h3><span class="tier tier-open">खुला</span></div>
+        <ul class="plain">
+          <li><b>कोई रनर नहीं।</b> रिपॉज़िटरी में कुछ भी किसी लक्ष्य पर संग्राहक नहीं चलाता, और ऐप भी नहीं चलाता। HTTP संग्राहक का अभी कोई घोषित अनुरोध फ़ॉर्मेट नहीं है।</li>
+          <li><b>कोई क्लाउड प्लेटफ़ॉर्म नहीं गिना गया।</b> गणना Linux होस्ट और Kubernetes को कवर करती है। टैग के साथ संरचना इन्हीं दो के आधार पर तय हो जाएगी।</li>
+          <li><b>एक खुला विकल्प:</b> पैटर्न में Unicode श्रेणी होस्ट के डेटाबेस का अनुसरण करे या पिन की गई तालिका का।</li>
+        </ul>
+      </article>
+    </div>
+
+    <div class="table-wrap reveal" style="margin-top: 18px;">
+      <table>
+        <thead><tr><th>लेखक के सामने रखा गया प्रश्न</th><th>12 नवंबर 2026 का निर्णय</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">कर्नेल में टाइप शामिल करने का नियम माँग करता है कि गणना में शामिल तीन में से दो प्राधिकरण उस टाइप को एन्कोड करें। कोई भी प्राधिकरण जाँच को एन्कोड नहीं करता।</th><td>नियम में उन टाइप के लिए एक खंड जोड़ा गया जिन्हें कैटलॉग प्राधिकरण प्रकाशित नहीं करते: कोई मान्यता प्राप्त मानक उस रिकॉर्ड की माँग करता हो, या वह दो गिने गए खुले कार्यान्वयनों से प्रमाणित स्थापित प्रचलन हो; बाक़ी दो कसौटियाँ यथावत लागू रहती हैं; और यह किसी मेजर संस्करण के साथ ही आता है। Risk पहली शाखा के तहत प्रवेश करता है, Check दूसरी के तहत।</td></tr>
+          <tr><th scope="row">रन पंक्तियाँ: कर्नेल फ़ील्ड या फ़ेसेट?</th><td>कर्नेल फ़ील्ड। निर्णय एक गणना है, और फ़ेसेट कभी गणना परिभाषित नहीं करते।</td></tr>
+          <tr><th scope="row">क्या कोई Check उस आवश्यकता के बिना वितरित हो सकता है जिसका वह संदर्भ देता है?</th><td>हाँ। ऐसे कैटलॉग के लिए जाँच पैक, जिसे आगे वितरित नहीं किया जा सकता, अपने आप में वैलिडेट होता है।</td></tr>
+          <tr><th scope="row">अभी शामिल करें, या क्लाउड API की गणना की प्रतीक्षा करें?</th><td>Check 2.0.0 के साथ लागू होगा।</td></tr>
+          <tr><th scope="row">"हर संसाधन" के अलावा कोई परिमाणक (quantifier)?</th><td>कोई नहीं। हर संसाधन का मूल्यांकन होता है और वह दर्ज होता है, विफलताओं का अनुपात रिपोर्ट होता है, और जाँच फ़ेल होती है।</td></tr>
+          <tr><th scope="row">बारहवाँ कम्पैरेटर <code>not-equals</code>?</th><td>जोड़ा गया।</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="source reveal">प्रस्ताव, उसकी गणना, वह विकल्प जो नहीं अपनाया गया (मानदंड एक फ़ेसेट में, कर्नेल में शामिल करना बाद में) और निर्णयों का रिकॉर्ड: <a href="{{ blob }}/drafts/CP-CHECK-1.md" rel="noopener">drafts/CP-CHECK-1.md</a>। बाध्यकारी पाठ: <a href="{{ blob }}/drafts/jascon-specification-2.0.0-rc.3.md" rel="noopener">विनिर्देश 2.0.0-rc.3</a>, D24।</p>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0">
+  <div class="wrap">
+    <div class="cta reveal">
+      <div>
+        <h2>टैग से संरचना तय होने से पहले इसकी समीक्षा करें</h2>
+        <p>कर्नेल टाइप की क़ीमत हर वैलिडेटर हमेशा के लिए चुकाता है, और टैग के बाद सुधार की क़ीमत एक मेजर संस्करण है। कैंडिडेट को ऐसे पाठकों की ज़रूरत है जिनका पेशा ही स्कैनर चलाना है: क्या तथ्य अनुबंध आपके प्लेटफ़ॉर्म पर खरा उतरता है, और आपकी कौन-सी जाँच बारह कम्पैरेटर के दायरे से बाहर पड़ती है?</p>
+      </div>
+      <div class="cta-actions">
+        <a class="btn btn-primary" href="{{ blob }}/drafts/CP-CHECK-1.md" rel="noopener">CP-CHECK-1 पढ़ें <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a class="btn btn-ghost" href="app/index.html#load=../jascon/examples/&amp;tool=checks">ऐप में जाँच लिखें <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a class="btn btn-ghost" href="{{ repo }}/issues" rel="noopener">आपत्ति दर्ज करें <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>

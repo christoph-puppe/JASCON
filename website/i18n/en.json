@@ -1,0 +1,124 @@
+{
+ "meta": {
+  "code": "en",
+  "hreflang": "en",
+  "name": "English",
+  "short": "EN",
+  "og_locale": "en_US",
+  "thousands": ","
+ },
+ "layout": {
+  "skip": "Skip to the content",
+  "home_label": "JASCON, home",
+  "nav_label": "Main",
+  "nav_model": "The model",
+  "nav_checks": "Checks",
+  "nav_evidence": "Evidence",
+  "nav_start": "Get started",
+  "nav_join": "Join",
+  "nav_skill": "Skill",
+  "nav_skill_title": "Download the JASCON skill (SKILL_jascon.zip)",
+  "nav_github": "GitHub",
+  "lang_label": "Language of this site",
+  "style_label": "Style of this site",
+  "style_classic": "Classic",
+  "style_ledger": "Ledger",
+  "style_engraving": "Engraving",
+  "style_still_life": "Still life",
+  "theme_label": "Switch between light and dark",
+  "open_app": "Open the app",
+  "menu_label": "Menu",
+  "foot_tagline": "One notation for every standard, in every language.",
+  "foot_licence_html": "Specification, schema, validators and app: <a href=\"LICENSE.txt\">Apache License 2.0</a>. Converted catalogues stay under their publishers' terms, see <a href=\"NOTICE.txt\">NOTICE</a>.",
+  "foot_project": "Project",
+  "foot_not_proven": "What is not proven",
+  "foot_prior_art": "Prior art",
+  "foot_use": "Use",
+  "foot_app": "The app",
+  "foot_reader": "The single-file reader",
+  "foot_spec": "Specification 1.0.0",
+  "foot_handbook": "Handbook",
+  "foot_take_part": "Take part",
+  "foot_repo": "GitHub repository",
+  "foot_issues": "Issues and objections",
+  "foot_register": "Decision register",
+  "foot_legal": "Legal notice and privacy",
+  "foot_languages": "Languages",
+  "foot_base": "An independent project, maintained in personal capacity. Not affiliated with, approved or endorsed by NIST, BSI, ASD, CCB, CIS or FedRAMP. OSCAL is a NIST project; JASCON reads and writes it.",
+  "foot_facts_html": "Numbers marked <span class=\"tier tier-measured\">measured</span> on this site were produced by <code>{{ facts.measured.by }}</code> on {{ facts.measured.date }}, commit <code>{{ facts.measured.commit }}</code>.",
+  "translated_html": "",
+  "stale_html": ""
+ },
+ "build": {
+  "open_in_app": "Open in the app",
+  "plural_s": true,
+  "imprint_email": "E-mail",
+  "imprint_questions": "Questions, corrections and objections",
+  "imprint_issue": "an issue in the repository",
+  "imprint_responsible": "Responsible for the content",
+  "imprint_country": "Germany",
+  "colon": ": ",
+  "full_stop": ".",
+  "corpora": {
+   "AU.ISM": {
+    "publisher": "Australian Signals Directorate",
+    "note": "1,150 controls; classification and Essential Eight baselines as Sets"
+   },
+   "DE.BSI": {
+    "publisher": "BSI, Germany",
+    "note": "German prose, statement grammar and protection goals as facets"
+   },
+   "US.SP800-53": {
+    "title": "SP 800-53 Rev 5.2.0 with the 800-53B baselines",
+    "publisher": "NIST",
+    "note": "Statement-scoped parameters; four baselines as membership Sets"
+   },
+   "US.CSF": {
+    "publisher": "NIST",
+    "note": "Functions, categories and subcategories as nested Sets"
+   },
+   "US.IFA-GoodRead": {
+    "title": "OSCAL example system (SSP, plan, results, POA&M)",
+    "publisher": "NIST, fictional content",
+    "note": "The lifecycle types: Component to Attestation, with two Risks"
+   }
+  }
+ },
+ "script": {
+  "copied": "copied",
+  "unchanged": "unchanged",
+  "changed": "changed",
+  "na_title": "Not available here",
+  "na_text": "This browser offers no SHA-256 on this page. Open the site over https, or run validate_core.py.",
+  "notobj_title": "Not an object",
+  "notobj_text": "The text is not a JSON object, so there is no canonical form to digest. A validator stops here.",
+  "tamper_title": "Tamper",
+  "tamper_text": "The meaning changed. The semantic digest no longer equals the one the attestation names, so the attestation does not cover this object.",
+  "semantic_title": "Semantic Match",
+  "semantic_text": "The bytes changed, the meaning did not. The attestation still covers the object; the verifier reports that the packaging was altered.",
+  "full_title": "Full Match",
+  "full_text": "Bytes and meaning are the ones recorded in the example bundle's content manifest.",
+  "recorded": "recorded",
+  "no_engine": "no engine",
+  "loading": "loading",
+  "all_hold": "every criterion holds on the observation",
+  "clause": "clause",
+  "and": "and",
+  "engine_failed_title": "Engine not found",
+  "engine_failed_text": "The verdict is computed by the app's rules, which this copy of the site does not include. Open the Checks page of the app instead.",
+  "engine_loading_title": "Loading the rules",
+  "engine_loading_text": "The page fetches the app's kernel rules once.",
+  "outcome_satisfied": "Satisfied",
+  "outcome_not_satisfied": "Not satisfied",
+  "outcome_inconclusive": "Inconclusive",
+  "outcome_not_applicable": "Not applicable",
+  "verdict_satisfied": "Both checks hold. The Assessment records each observation, so a second party reaches this verdict without running anything.",
+  "verdict_not_satisfied": "One definite failure decides the aggregate. The failing row names the clause, and a Finding against that clause can point back to the check.",
+  "verdict_other": "No observation, no verdict: a default is never substituted. The row is recorded as inconclusive and must carry a reason.",
+  "run_label": "Daily run {date}",
+  "check_titles": {
+   "https://cso.example/check/LNX-SSH-1-maxauthtries": "sshd: authentication attempts within the bound",
+   "https://cso.example/check/LNX-SSH-1-ciphers": "sshd: no CBC-mode cipher offered"
+  }
+ }
+}

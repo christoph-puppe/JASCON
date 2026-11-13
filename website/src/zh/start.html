@@ -1,0 +1,206 @@
+---
+title: 快速开始使用 JASCON
+description: 在浏览器中打开一个国家级目录，运行参考校验器，编写第一个要求，导入 OSCAL，计算风险覆盖，并为编码智能体安装技能。每一步只需几分钟。
+nav: start
+source: 3645c839ee9b
+---
+<section class="page-hero">
+  <div class="wrap">
+    <p class="eyebrow">快速开始</p>
+    <h1>从一个浏览器标签页到一个通过校验的捆绑包</h1>
+    <p class="lede">七个步骤，按大多数人采用的顺序排列。第一步需要一个浏览器，第二步需要 Python 或一台 Windows 计算机。任何一步都不需要账号、服务器或许可证密钥。</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="steps">
+
+      <div class="step reveal" id="open">
+        <div class="step-body">
+          <h2>打开一个您熟悉的目录</h2>
+          <p>应用通过链接加载捆绑包，并将其保存在您的浏览器中。从您日常使用的框架开始：对象浏览器根据数据构建筛选条件，因此 SP 800-53 提供控制族和基线，Grundschutz++ 则提供情态动词、保护目标和目标对象。</p>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>语料库</th><th class="num">对象数</th><th>类型</th><th>内容的许可</th><th></th></tr></thead>
+              <tbody>
+{{ html.bundle_rows }}
+              </tbody>
+            </table>
+          </div>
+          <p class="small">手册的示例捆绑包包含每种类型各一个对象，其中有一个 Risk、两个 Tailoring 和两个 Check：<a href="app/index.html#load=../jascon/examples/&amp;tool=browse">打开示例捆绑包</a>。此外还有一个不需要外围文件夹的<a href="reader/index.html">单文件阅读器</a>；下载后，将捆绑包文件夹拖放到它上面即可。</p>
+        </div>
+      </div>
+
+      <div class="step reveal" id="validate">
+        <div class="step-body">
+          <h2>运行参考校验器</h2>
+          <div class="step-cols">
+            <div class="stack">
+              <p class="muted">校验器先运行 {{ n.vectors }} 个一致性测试向量，然后用两个摘要重新验证随附捆绑包中的每个对象。最后一行显示 <code>ALL GREEN</code>，或者逐条列出每一处失败及其规则和原因。</p>
+              <p class="muted">传入一个或多个捆绑包文件夹，即可校验您自己的内容。<code>--require-risk-basis</code> 会把没有风险作为理由的已选要求判为失败。</p>
+              <p class="muted">在 Windows 上，PowerShell 孪生实现无需安装任何东西，即可在 PowerShell 5.1 上完成同样的工作。Python 只需几秒钟，它则需要几分钟。</p>
+            </div>
+            <div class="stack">
+              <div class="window cmd">
+                <div class="window-bar"><span class="window-title">Python，使用 uv</span></div>
+                <button class="copy" type="button" data-copy="cmd-uv">复制</button>
+                <pre id="cmd-uv"><code data-lang="sh">git clone https://github.com/christoph-puppe/JASCON.git
+cd JASCON
+uv run --no-project --with jsonschema python jascon/scripts/validate_core.py</code></pre>
+              </div>
+              <div class="window cmd">
+                <div class="window-bar"><span class="window-title">Python，使用 pip</span></div>
+                <button class="copy" type="button" data-copy="cmd-pip">复制</button>
+                <pre id="cmd-pip"><code data-lang="sh">pip install jsonschema
+python jascon/scripts/validate_core.py
+# your own bundle:
+python jascon/scripts/validate_core.py path/to/your-bundle</code></pre>
+              </div>
+              <div class="window cmd">
+                <div class="window-bar"><span class="window-title">Windows PowerShell 5.1，无需安装</span></div>
+                <button class="copy" type="button" data-copy="cmd-ps">复制</button>
+                <pre id="cmd-ps"><code data-lang="sh">powershell -ExecutionPolicy Bypass -File jascon\scripts\validate_core.ps1</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step reveal" id="write">
+        <div class="step-body">
+          <h2>编写第一个要求</h2>
+          <div class="step-cols">
+            <div class="stack">
+              <p class="muted">在您控制的域名下选择一个前缀，并长期保持不变。标识符按字符串比较，从不联网获取，因此该地址无需提供任何内容。</p>
+              <p class="muted">在约束力、义务方或参数发生变化的地方，将文本拆分为多条陈述。为每个参数声明类型，并在正文中用 <code>{param:name}</code> 引用它。</p>
+              <p class="muted">应用的浏览（Browse）页面在“Write requirements and sets”下提供了用于此目的的表单。它会为正文中找到的参数生成声明。首页（Home）可将工作集导出为捆绑包，附带清单以及每个对象的两个摘要。</p>
+              <a class="link-arrow" href="{{ blob }}/jascon/references/ch04-writing-requirements.md" rel="noopener">手册第 4 章：编写要求</a>
+            </div>
+            <div class="window">
+              <div class="window-bar"><span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="window-title">req-backup-1.json</span><span class="window-note">一个虚构的示例</span></div>
+              <pre><code data-lang="json">{
+  "id": "https://grc.your.example/req/BACKUP-1",
+  "version": "2026-11",
+  "label": "BACKUP-1",
+  "lifecycle": "active",
+  "statements": [
+    { "id": "s1",
+      "modality": "must",
+      "obligated-parties": ["https://grc.your.example/party/operations"],
+      "parameters": [
+        { "name": "restore-interval", "type": "duration" }
+      ],
+      "prose": {
+        "en": "A restore from backup is tested at least every {param:restore-interval}.",
+        "de": "Eine Wiederherstellung aus dem Backup wird mindestens alle {param:restore-interval} getestet."
+      } }
+  ]
+}</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step reveal" id="oscal">
+        <div class="step-body">
+          <h2>带入您的 OSCAL，也能再导出去</h2>
+          <p>应用的导入（Import）页面读取 OSCAL catalog 或 profile，并报告它所应用的每一条规则。针对 Grundschutz++、SP 800-53 和 CIS Benchmarks 已有专用规则集；其他结构的目录则走通用规则：内核中没有对应字段的内容，会保存在您命名空间下的分面（facet）中，任何内容被丢弃时，报告中都会有相应的一行。用于批量处理时，仓库中有十一个 Python 转换器，每个实测语料库一个，共用一个公共库。</p>
+          <p>反方向上，<code>export_oscal.py</code> 可写出 OSCAL 1.2.2 目录。随附捆绑包的导出结果就放在它们旁边，位于 <code>converted_examples/*/oscal-export/</code> 下。OSCAL 中没有对应构造的内容（情态、义务方、重叠的成员关系）借助带命名空间的 props 传递，并在导入时还原。</p>
+          <p><a class="link-arrow" href="app/index.html#import">打开导入页面</a></p>
+        </div>
+      </div>
+
+      <div class="step reveal" id="risk">
+        <div class="step-body">
+          <h2>添加风险并计算覆盖</h2>
+          <div class="step-cols">
+            <div class="stack">
+              <p class="muted">加载一个目录，用 Tailoring 选定基线，然后在风险（Risk）页面中写下作为该选择理由的风险。覆盖（Coverage）视图会列出所有未被任何已评估风险提及的已选要求。</p>
+              <p class="muted">两个原型风险目录可帮助您完成第一轮工作：办公 IT 的 24 个典型风险和工业设施的 23 个典型风险，提供英文和德文版本，每个风险都附有建议的 SP 800-53 控制措施。导入会将某个条目复制为您自己的 Risk；决定权仍在您手中。</p>
+              <a class="link-arrow" href="{{ blob }}/risk-catalogs/README.md" rel="noopener">风险目录及其局限</a>
+            </div>
+            <div class="window cmd">
+              <div class="window-bar"><span class="window-title">将目录导入您的捆绑包</span></div>
+              <button class="copy" type="button" data-copy="cmd-risk">复制</button>
+              <pre id="cmd-risk"><code data-lang="sh">python3 risk-catalogs/tools/risk_catalog.py import risk-catalogs/office-it \
+    --bundle path/to/your-bundle \
+    --org https://grc.your.example \
+    --owner https://grc.your.example/party/ciso \
+    --out path/to/risks</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step reveal" id="check">
+        <div class="step-body">
+          <h2>编写机器检查</h2>
+          <p>对于技术性规则，应用的检查（Checks）页面可以编写 Check（内核 2.0.0，发布候选版）：采集器报告的事实、作出判定的比较，以及采集器代码，可用 bash、sh、Python、PowerShell、Ansible 编写，或采用 HTTP 请求的形式。输入密钥后，语言模型即可起草检查，既可一次一条规则，也可针对一次 CIS 导入中的全部自动化规则。每份草稿都由内核规则和只读 lint 进行评判，保存哪些由您决定。应用不运行采集器。</p>
+          <p><a class="link-arrow" href="app/index.html#load=../jascon/examples/&amp;tool=checks">在示例上打开检查页面</a> &nbsp; <a class="link-arrow" href="checks.html">检查如何作出判定</a></p>
+        </div>
+      </div>
+
+      <div class="step reveal" id="advice">
+        <div class="step-body">
+          <h2>引入厂商的建议</h2>
+          <p>建议包是厂商发布的一个文件：其中是针对具名要求提出建议的 Component（内核 2.0.0，发布候选版）。应用的首页会在写入任何内容之前展示包中的内容，说明其发布方是仅为声称、有证明还是已证实，并在导入后输出一份回执。在实施（Implement）页面上，您将该产品设为您系统的成员，并把一条建议采纳为您自己的边。同一文件第二次导入时不会写入任何内容。</p>
+          <p>示例包是虚构的，以公开的测试密钥签名。目前尚无厂商发布过建议包。</p>
+          <p><a class="link-arrow" href="app/index.html#load=../jascon/example-packs/dbvendor-server-7-advice/">在应用中预览示例包</a> &nbsp; <a class="link-arrow" href="model.html#advice">建议包如何运作</a></p>
+          <h3>面向厂商：编写建议包</h3>
+          <p>建议包构建器是一个可离线运行的 HTML 文件。您在表单中描述自己的产品和每一条建议；页面使用与客户导入时相同的规则检查该包，用您的 Ed25519 密钥为该版本签名，或为 openssl 或您的签名服务准备好待签名的字节，并生成 ZIP 文件。加载目录后，它会列出每个要求的条款和参数供您选择，并检查每一个建议值。您已有的 OSCAL 组件定义会作为草稿导入，并附一份报告，说明哪些内容无法安置。</p>
+          <p><a class="link-arrow" href="pack-builder/index.html">打开建议包构建器</a> &nbsp; <a class="link-arrow" href="pack-builder/index.html" download="jascon-pack-builder.html">下载为单个文件</a></p>
+        </div>
+      </div>
+
+      <div class="step reveal" id="agent">
+        <div class="step-body">
+          <h2>与编码智能体协作</h2>
+          <div class="step-cols">
+            <div class="stack">
+              <p class="muted">文件夹 <code>jascon/</code> 是一个供 Claude 使用的技能（skill）：其中包括以十四条编号要求形式呈现的手册、内核 Schema、一致性测试向量、转换器以及一个完整的示例捆绑包。拥有它的智能体会依据 Schema 编写对象，并对自己的输出运行校验器。</p>
+              <p class="muted">分工与应用中的相同：模型起草，内核规则判定，由人确认接受。</p>
+            </div>
+            <div class="window cmd">
+              <div class="window-bar"><span class="window-title">安装技能</span></div>
+              <button class="copy" type="button" data-copy="cmd-skill">复制</button>
+              <pre id="cmd-skill"><code data-lang="sh"># for your user
+cp -r jascon ~/.claude/skills/jascon
+# or for one project
+cp -r jascon .claude/skills/jascon</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="reading">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">阅读路径</p>
+      <h2>先读第 2 章，再按角色分路</h2>
+      <p class="lede">手册共有十五章和七个附录。所有人都先读第 2 章，大约需要一小时。之后，各条路径分道而行。</p>
+    </div>
+    <div class="grid g3 reveal">
+      <a class="card lift" href="{{ blob }}/jascon/references/ch03-identity-versions-lifecycle.md" rel="noopener">
+        <span class="card-no">第 3 至 8 章，然后第 14 章</span>
+        <h3>您发布一个框架</h3>
+        <p>标识与命名空间、陈述、Set 与基线、裁剪、分面、映射。等到要处理真实的目录时，再读迁移操作指南。</p>
+      </a>
+      <a class="card lift" href="{{ blob }}/jascon/references/ch12-building-a-validator.md" rel="noopener">
+        <span class="card-no">第 3、12、13、11 章</span>
+        <h3>您开发一个工具</h3>
+        <p>先读标识一章以建立心智模型，再读校验器一章和安全使用一章。在涉及任何签名之前，先读完整性一章。</p>
+      </a>
+      <a class="card lift" href="{{ blob }}/jascon/references/ch09-systems-components-inheritance.md" rel="noopener">
+        <span class="card-no">第 9、10、11、15 章</span>
+        <h3>您负责运营、评估或采购</h3>
+        <p>系统与继承、评估与偏离、签名能证实什么，以及一项一致性声明使您有权提出哪些要求。</p>
+      </a>
+    </div>
+    <p class="source reveal">参考资料：<a href="{{ blob }}/jascon/references/appendix-a-shapes.md" rel="noopener">逐字段说明的结构</a> &middot; <a href="{{ blob }}/jascon/schemas/jascon-2.0.0.schema.json" rel="noopener">内核 Schema</a> &middot; <a href="{{ blob }}/jascon/references/appendix-f-objections.md" rel="noopener">异议与答复</a> &middot; <a href="{{ blob }}/jascon/references/appendix-g-glossary.md" rel="noopener">术语表</a></p>
+  </div>
+</section>

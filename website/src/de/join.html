@@ -1,0 +1,124 @@
+---
+title: Mitmachen: einen Validator, einen Katalog oder einen Einwand beitragen | JASCON
+description: JASCON hat einen Maintainer und noch keinen Nutzer von dritter Seite. Was das Projekt von Herausgebern von Frameworks, Tool-Entwicklern, GRC-Engineers und Auditoren braucht, wie eine Änderung in die Spezifikation gelangt und wo Sie anfangen können.
+nav: join
+source: 1f1d09e6b9ec
+---
+<section class="page-hero">
+  <div class="wrap">
+    <p class="eyebrow">Mitmachen</p>
+    <h1>Bringen Sie einen Validator, einen Katalog oder einen Einwand mit</h1>
+    <p class="lede">Eine Notation für Compliance-Daten ist so viel wert, wie die zweite und die dritte Partei aus ihr machen. JASCON hat einen Maintainer, eine veröffentlichte Spezifikation und keinen bekannten Nutzer außerhalb seines Repositorys. Die Arbeit unten ist die Arbeit, die nur jemand anderes leisten kann.</p>
+  </div>
+</section>
+
+<section class="section" id="needed">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">01</span> Was gebraucht wird</p>
+      <h2>Sechs Beiträge, nach Gewicht geordnet</h2>
+    </div>
+    <div class="grid g3 reveal">
+      <article class="card feature">
+        <div class="card-top"><span class="card-no">Die stehende Einladung</span><span class="tier tier-open">offen</span></div>
+        <h3>Ein Validator von jemandem, der die Spezifikation nicht geschrieben hat</h3>
+        <p>Nehmen Sie die Spezifikation, die Anhänge A bis C und das Konformitätskorpus und bauen Sie einen Validator in einer Sprache Ihrer Wahl, ohne die beiden vorhandenen zu lesen. Jede Stelle, an der der Text Ihre Implementierung nicht festgelegt hat, ist ein Mangel des Textes. Die Vektoren sind der Schiedsrichter, und das Ergebnis wird festgehalten, wie auch immer es ausfällt.</p>
+        <p class="how"><b>Einstieg:</b> <code>jascon/conformance/</code>, <a href="{{ blob }}/jascon/references/ch12-building-a-validator.md" rel="noopener">Handbuch, Kapitel 12</a>.</p>
+      </article>
+      <article class="card">
+        <div class="card-top"><span class="card-no">Herausgeber</span></div>
+        <h3>Ein Katalog, konvertiert von seinem eigenen Herausgeber</h3>
+        <p>Es gibt elf Konvertierungen, alle vom Projekt. Ein Herausgeber weiß, was seine Props aussagen sollten. Zehn Anforderungen, neu kodiert von den Menschen, die sie geschrieben haben, prüfen den Kern härter als tausend, die ein Skript konvertiert hat.</p>
+        <p class="how"><b>Einstieg:</b> die Seite Importieren (Import) oder <a href="{{ blob }}/jascon/references/ch14-migration-playbooks.md" rel="noopener">Kapitel 14</a>.</p>
+      </article>
+      <article class="card">
+        <div class="card-top"><span class="card-no">Review</span></div>
+        <h3>Einwände mit Zählungen</h3>
+        <p>Anhang F des Handbuchs beantwortet 33 Einwände und listet die auf, die den Text verändert haben. Ein Review steht jetzt an: der Release-Kandidat für 2.0.0 mit seinen zwei neuen Typen, Risk und Check. Anhang F.10 erklärt, warum JASCON weder Gemara noch CycloneDX, XCCDF, CISO Assistant oder OSCAL erweitert; jemand aus einer dieser Communities ist die richtige Person, um zu sagen, wo diese Antwort falsch ist.</p>
+        <p class="how"><b>Einstieg:</b> <a href="{{ blob }}/drafts/CP-RISK-1.md" rel="noopener">CP-RISK-1</a>, <a href="{{ blob }}/drafts/CP-CHECK-1.md" rel="noopener">CP-CHECK-1</a> und <a href="checks.html#state">der Stand von Check</a>.</p>
+      </article>
+      <article class="card">
+        <div class="card-top"><span class="card-no">Messung</span></div>
+        <h3>Ankunft der Werte in den übrigen zehn Korpora</h3>
+        <p>Die Abdeckung wird nach Quellpfad gemessen. Ob jeder Wert ankommt, ist an einem Korpus gemessen, und dort ist das nicht der Fall. Wer die Quelldateien der anderen hat, kann die Messung durchführen und melden, was verloren geht.</p>
+        <p class="how"><b>Einstieg:</b> Backlog-Eintrag 41, <code>oscal_conv_lib.value_arrival()</code>.</p>
+      </article>
+      <article class="card">
+        <div class="card-top"><span class="card-no">Praxis</span></div>
+        <h3>Ein echtes ISMS in der Notation</h3>
+        <p>Ein Risikoregister, eine Erklärung zur Anwendbarkeit (SoA) und ein Auditzyklus einer realen Organisation, geschrieben als Risks, ein Tailoring, Implementations und Findings. Der Typ Risk wurde aus drei Standards abgeleitet; einem Auditor ist er noch nicht begegnet.</p>
+        <p class="how"><b>Einstieg:</b> die Seite Risiko (Risk) der App; anonymisieren Sie und melden Sie, was nicht gepasst hat.</p>
+      </article>
+      <article class="card">
+        <div class="card-top"><span class="card-no">Code</span></div>
+        <h3>Exporte und Brücken</h3>
+        <p>Es fehlen Exporte in die OSCAL-Modelle für Mapping, Profile und SSP. Ein in-toto-Prädikat für die Attestierung würde vorhandene Verifikationswerkzeuge erreichen. Einen Runner, der die Kollektoren des <a href="checks.html">Typs Check</a> ausführt, gibt es nicht.</p>
+        <p class="how"><b>Einstieg:</b> <code>jascon/scripts/export_oscal.py</code>, <a href="{{ blob }}/PRIOR-ART.md" rel="noopener">PRIOR-ART.md</a>.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="process">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">02</span> Wie eine Änderung hineinkommt</p>
+      <h2>Nachweise hinein, Korpus zuerst, Implementierungen folgen</h2>
+      <p class="lede">Der Änderungsprozess ist gegen einen einzigen Satz aus einem alten Issue-Tracker gebaut: Niemand kann sagen, warum es diese Regel gibt.</p>
+    </div>
+    <div class="rules3 reveal">
+      <div class="rule3">
+        <span class="no">01</span>
+        <h3>Ein Vorschlag beginnt mit Zählungen</h3>
+        <p>„Drei Herausgeber kodieren das unabhängig voneinander“ ist ein Argument. „Es wäre elegant“ ist keines. Ein Punkt kommt mit seinen Nachweisen ins Backlog und verlässt es über einen Eintrag im Entscheidungsregister, in dem die verworfenen Alternativen dokumentiert bleiben.</p>
+      </div>
+      <div class="rule3">
+        <span class="no">02</span>
+        <h3>Jede Regel trägt ihre Begründung</h3>
+        <p>Eine Regel hat eine maschinenlesbare ID, eine Begründung und eine Fehlermeldung, und die Begründung wird ausgegeben, wenn die Regel fehlschlägt. Eine Regel, die den gezählten Fehler nicht benennen kann, den sie verhindert, ist ein Kandidat für die Löschung.</p>
+      </div>
+      <div class="rule3">
+        <span class="no">03</span>
+        <h3>Eine Lücke wird durch eine Version geschlossen</h3>
+        <p>Primitive, Operationen und Codesysteme sind abgeschlossene Mengen mit Versionen. Eine echte Lücke wird zu einem Änderungsvorschlag mit neuen Konformitätsvektoren und einer Entscheidung über die Versionsnummer. Vor einem Release müssen beide Validatoren bestehen.</p>
+      </div>
+    </div>
+    <p class="source reveal">Der Prozess vollständig: <a href="{{ blob }}/jascon/references/ch15-governance-conformance-ecosystem.md" rel="noopener">Handbuch, Kapitel 15</a>. Alle 24 Entscheidungen mit ihren Bewertungen und Änderungen: <a href="{{ blob }}/drafts/jascon-decision-rationale-register.md" rel="noopener">das Entscheidungsregister</a>.</p>
+  </div>
+</section>
+
+<section class="section" id="expect">
+  <div class="wrap">
+    <div class="split even">
+      <div class="stack-lg reveal">
+        <div class="section-head" style="margin-bottom:0">
+          <p class="eyebrow"><span class="no">03</span> Was Sie erwarten können</p>
+          <h2>Ein kleines Projekt, das seine Aufzeichnungen öffentlich führt</h2>
+        </div>
+        <ul class="ticks">
+          <li><b>Über Feststellungen wird dokumentiert entschieden.</b> Eine bestätigte wird behoben und bekommt einen Konformitätsvektor. Eine widerlegte wird mit Begründung festgehalten, damit sie widerlegt bleibt.</li>
+          <li><b>Korrekturen haben das Gewicht der Behauptung, die sie korrigieren.</b> Der erste veröffentlichte Scan hat beim deutschen Katalog 347 verschachtelte Controls zu wenig gezählt; die Korrektur wurde ebenso prominent veröffentlicht.</li>
+          <li><b>Die Lizenz ist Apache 2.0</b> für Spezifikation, Schema, Vektoren, Validatoren und App. Konvertierte Kataloge bleiben unter den Bedingungen ihrer Herausgeber.</li>
+          <li><b>Die Antwortzeiten sind die einer einzelnen Person,</b> die in persönlicher Eigenschaft tätig ist, ohne eine Organisation hinter dem Projekt.</li>
+        </ul>
+      </div>
+      <div class="stack reveal">
+        <article class="card">
+          <h3>Ein Issue eröffnen</h3>
+          <p>Für einen Fehler, einen Einwand, eine Frage oder einen Katalog, den Sie gern konvertiert sähen. Nennen Sie, was Sie gezählt haben und wo.</p>
+          <a class="link-arrow" href="{{ repo }}/issues" rel="noopener">Issues auf GitHub</a>
+        </article>
+        <article class="card">
+          <h3>Einen Pull Request senden</h3>
+          <p>Für einen Vektor, einen Konverter, eine Korrektur an einem Validator oder am Handbuch. Eine Änderung an einer Regel kommt mit den Vektoren, die ohne sie fehlschlagen.</p>
+          <a class="link-arrow" href="{{ repo }}/pulls" rel="noopener">Pull Requests auf GitHub</a>
+        </article>
+        <article class="card">
+          <h3>Nutzen Sie es und sagen Sie es</h3>
+          <p>Ein Bundle, das eine zweite Partei veröffentlicht, ist der stärkste Nachweis, den dieses Projekt bekommen kann. Wenn Sie eines veröffentlichen, genügt ein Issue mit dem Link.</p>
+          <a class="link-arrow" href="start.html">Erste Schritte</a>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>

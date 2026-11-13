@@ -2,13 +2,40 @@
 
    Everything here is an addition: with scripts off, every page still reads
    in full (tab panels are all shown, nothing is hidden behind an animation).
-   Nothing is sent anywhere; the only things stored are the colour scheme and
-   the style you pick, in this browser's localStorage. */
+   Nothing is sent anywhere; the only things stored are the colour scheme,
+   the style and the language you pick, in this browser's localStorage. The words the script
+   writes into a page come from the page (#site-strings, filled by the build
+   from i18n/<lang>.json); the English ones here are the fallback. */
 (function () {
   "use strict";
   var root = document.documentElement;
   var $ = function (sel, el) { return (el || document).querySelector(sel); };
   var $$ = function (sel, el) { return Array.prototype.slice.call((el || document).querySelectorAll(sel)); };
+
+  /* ---- the words of this page's language (i18n/<lang>.json, "script"),
+     and the way up to the site root from a translated page (/de/ etc.) ---- */
+  var T = {};
+  try { T = JSON.parse($("#site-strings").textContent) || {}; } catch (e) { /* the English words below */ }
+  var t = function (key, english) { return typeof T[key] === "string" ? T[key] : english; };
+  var ROOT = root.getAttribute("data-root") || "";
+  var LANG = root.getAttribute("lang") || "en";
+
+  /* ---- a language picked in the menu or the footer is remembered; an
+     English page opens in it from then on (the script in the page head) ---- */
+  $$("a[data-lang]").forEach(function (a) {
+    a.addEventListener("click", function () {
+      try { localStorage.setItem("jascon-site:lang", a.getAttribute("data-lang")); } catch (e) { /* private mode */ }
+    });
+  });
+
+  /* ---- language menu: closes on a click outside it and on Escape ---- */
+  var langPick = $("#lang");
+  if (langPick) {
+    document.addEventListener("click", function (e) { if (!langPick.contains(e.target)) langPick.open = false; });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && langPick.open) { langPick.open = false; $("summary", langPick).focus(); }
+    });
+  }
 
   /* ---- colour scheme: the system's until the button is pressed ---- */
   var themeBtn = $("#theme");
@@ -38,6 +65,20 @@
 
   /* ---- menu on small screens ---- */
   var menu = $("#menu"), nav = $("#nav");
+
+  /* ---- the navigation folds into the menu when its words do not fit:
+     measured, since their length depends on the language ---- */
+  var header = $(".site-header"), bar = $(".bar");
+  if (header && bar && nav) {
+    var fit = function () {
+      if (nav.classList.contains("open")) return;
+      header.classList.remove("compact");
+      if (window.innerWidth > 860 && bar.scrollWidth > bar.clientWidth + 1) header.classList.add("compact");
+    };
+    fit();
+    window.addEventListener("resize", fit);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+  }
   if (menu && nav) {
     menu.addEventListener("click", function () {
       var open = nav.classList.toggle("open");
@@ -81,7 +122,7 @@
         : src.textContent;
       navigator.clipboard.writeText(text.trim()).then(function () {
         var old = btn.textContent;
-        btn.textContent = "copied";
+        btn.textContent = t("copied", "copied");
         setTimeout(function () { btn.textContent = old; }, 1400);
       });
     });
@@ -139,7 +180,7 @@
       });
     };
     var mark = function (el, same) {
-      el.textContent = same ? "unchanged" : "changed";
+      el.textContent = same ? t("unchanged", "unchanged") : t("changed", "changed");
       el.className = same ? "same" : "diff";
     };
     var show = function (kind, title, text) {
@@ -150,7 +191,7 @@
 
     var update = function () {
       if (!(window.crypto && crypto.subtle)) {
-        show("invalid", "Not available here", "This browser offers no SHA-256 on this page. Open the site over https, or run validate_core.py.");
+        show("invalid", t("na_title", "Not available here"), t("na_text", "This browser offers no SHA-256 on this page. Open the site over https, or run validate_core.py."));
         return;
       }
       var text = area.value, obj;
@@ -162,7 +203,7 @@
         if (obj === undefined || obj === null || typeof obj !== "object" || Array.isArray(obj)) {
           out.sem.textContent = "-";
           mark(out.semState, false);
-          show("invalid", "Not an object", "The text is not a JSON object, so there is no canonical form to digest. A validator stops here.");
+          show("invalid", t("notobj_title", "Not an object"), t("notobj_text", "The text is not a JSON object, so there is no canonical form to digest. A validator stops here."));
           return;
         }
         var body = {};
@@ -171,11 +212,11 @@
           out.sem.textContent = sem;
           mark(out.semState, sem === expect.semantic);
           if (sem !== expect.semantic) {
-            show("tamper", "Tamper", "The meaning changed. The semantic digest no longer equals the one the attestation names, so the attestation does not cover this object.");
+            show("tamper", t("tamper_title", "Tamper"), t("tamper_text", "The meaning changed. The semantic digest no longer equals the one the attestation names, so the attestation does not cover this object."));
           } else if (pkg !== expect.package) {
-            show("semantic", "Semantic Match", "The bytes changed, the meaning did not. The attestation still covers the object; the verifier reports that the packaging was altered.");
+            show("semantic", t("semantic_title", "Semantic Match"), t("semantic_text", "The bytes changed, the meaning did not. The attestation still covers the object; the verifier reports that the packaging was altered."));
           } else {
-            show("full", "Full Match", "Bytes and meaning are the ones recorded in the example bundle's content manifest.");
+            show("full", t("full_title", "Full Match"), t("full_text", "Bytes and meaning are the ones recorded in the example bundle's content manifest."));
           }
         });
       });
@@ -252,9 +293,10 @@
       st.silent = false;
     };
     data.runs.forEach(function (run) {
-      var b = make("button", "demo-btn", run.label);
+      var label = run.date && T.run_label ? T.run_label.replace("{date}", run.date) : run.label;
+      var b = make("button", "demo-btn", label);
       b.type = "button";
-      b.appendChild(make("small", "", "recorded: " + run.result));
+      b.appendChild(make("small", "", t("recorded", "recorded") + ": " + run.result));
       b.addEventListener("click", function () { st.param = data.bound[paramName]; load(run); draw(); });
       el.presets.appendChild(b);
     });
@@ -267,7 +309,13 @@
     el.param.addEventListener("input", function () { st.param = clamp(el.param); draw(true); });
     el.tries.addEventListener("input", function () { st.tries = clamp(el.tries); st.silent = false; draw(true); });
 
-    var words = { "satisfied": "Satisfied", "not-satisfied": "Not satisfied", "inconclusive": "Inconclusive", "not-applicable": "Not applicable" };
+    var words = {
+      "satisfied": t("outcome_satisfied", "Satisfied"), "not-satisfied": t("outcome_not_satisfied", "Not satisfied"),
+      "inconclusive": t("outcome_inconclusive", "Inconclusive"), "not-applicable": t("outcome_not_applicable", "Not applicable")
+    };
+    var titleOf = function (check) {
+      return (T.check_titles && T.check_titles[check.id]) || check.title[LANG] || check.title.en;
+    };
     var kind = { "satisfied": "full", "not-satisfied": "tamper", "inconclusive": "invalid", "not-applicable": "semantic" };
     var criterion = function (a) {
       var e = a.expected;
@@ -292,38 +340,38 @@
       data.checks.forEach(function (check) {
         var row = make("div", "cd-row");
         var head = make("div", "cd-row-h");
-        head.appendChild(make("b", "", check.title.en));
+        head.appendChild(make("b", "", titleOf(check)));
         var res = ready ? jscCheckVerdict(check, observation, params) : null;
-        var pill = make("span", "cd-pill", res ? res[0] : st.engine === "failed" ? "no engine" : "loading");
+        var pill = make("span", "cd-pill", res ? res[0] : st.engine === "failed" ? t("no_engine", "no engine") : t("loading", "loading"));
         if (res) { pill.setAttribute("data-o", res[0]); outcomes.push(res[0]); }
         head.appendChild(pill);
         row.appendChild(head);
-        row.appendChild(make("code", "", check.criteria.map(criterion).join(" and ")));
-        row.appendChild(make("small", "", res ? (res[1].length ? res[1].join("; ") : "every criterion holds on the observation")
-          : "clause " + check["statement-ids"].join(", ")));
+        row.appendChild(make("code", "", check.criteria.map(criterion).join(" " + t("and", "and") + " ")));
+        row.appendChild(make("small", "", res ? (res[1].length ? res[1].join("; ") : t("all_hold", "every criterion holds on the observation"))
+          : t("clause", "clause") + " " + check["statement-ids"].join(", ")));
         el.rows.appendChild(row);
       });
       if (!ready) {
         el.verdict.setAttribute("data-v", "invalid");
-        el.v.textContent = st.engine === "failed" ? "Engine not found" : "Loading the rules";
+        el.v.textContent = st.engine === "failed" ? t("engine_failed_title", "Engine not found") : t("engine_loading_title", "Loading the rules");
         el.vp.textContent = st.engine === "failed"
-          ? "The verdict is computed by the app's rules, which this copy of the site does not include. Open the Checks page of the app instead."
-          : "The page fetches the app's kernel rules once.";
+          ? t("engine_failed_text", "The verdict is computed by the app's rules, which this copy of the site does not include. Open the Checks page of the app instead.")
+          : t("engine_loading_text", "The page fetches the app's kernel rules once.");
         return;
       }
       var all = jscCheckAggregate(outcomes);
       el.verdict.setAttribute("data-v", kind[all]);
       el.v.textContent = words[all];
-      el.vp.textContent = all === "satisfied" ? "Both checks hold. The Assessment records each observation, so a second party reaches this verdict without running anything."
-        : all === "not-satisfied" ? "One definite failure decides the aggregate. The failing row names the clause, and a Finding against that clause can point back to the check."
-        : "No observation, no verdict: a default is never substituted. The row is recorded as inconclusive and must carry a reason.";
+      el.vp.textContent = all === "satisfied" ? t("verdict_satisfied", "Both checks hold. The Assessment records each observation, so a second party reaches this verdict without running anything.")
+        : all === "not-satisfied" ? t("verdict_not_satisfied", "One definite failure decides the aggregate. The failing row names the clause, and a Finding against that clause can point back to the check.")
+        : t("verdict_other", "No observation, no verdict: a default is never substituted. The row is recorded as inconclusive and must carry a reason.");
     }
 
     var fetched = false;
     var fetchEngine = function () {
       if (fetched) return;
       fetched = true;
-      var files = ["app/jascon-schema.js", "app/jascon-rules.js"];
+      var files = [ROOT + "app/jascon-schema.js", ROOT + "app/jascon-rules.js"];
       (function next(i) {
         if (i === files.length) { st.engine = "ready"; draw(); return; }
         var sc = document.createElement("script");

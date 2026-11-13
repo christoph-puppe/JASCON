@@ -1,0 +1,347 @@
+---
+title: Checks: wenn der Prüfer eine Maschine ist | JASCON
+description: Der Typ Check von JASCON 2.0.0. Code sammelt Fakten, eine abgeschlossene Menge von zwölf Komparatoren entscheidet, und der Nachweis wird unter seinem eigenen Hash gespeichert, sodass eine zweite Partei ein maschinelles Urteil nachrechnet, ohne etwas auszuführen. Mit einer Live-Demo des Urteils, der gemessenen Passung auf CIS-Profilen und dem, was offen ist, bevor 2.0.0 getaggt wird.
+nav: checks
+source: 1d0b6392399b
+---
+<section class="page-hero">
+  <div class="wrap">
+    <p class="eyebrow">Checks &middot; Kern 2.0.0, Release-Kandidat</p>
+    <h1>Wenn der Prüfer eine Maschine ist</h1>
+    <p class="lede">Ein Scanner, der mit 0 oder 1 endet, verbirgt seinen Schwellenwert, ignoriert das Tailoring und hinterlässt nichts, was sich erneut untersuchen ließe. Ein Check veröffentlicht die Fakten, die ein Kollektor melden muss, und die Vergleiche, die entscheiden. Der Datensatz des Laufs enthält, was beobachtet wurde, sodass jeder das Urteil aus dem Datensatz nachrechnen kann.</p>
+    <div class="chips">
+      <span class="tier tier-designed">elfter Kerntyp, Kandidat für 2.0.0</span>
+      <span class="tier tier-measured">{{ n.check_vectors }} Vektoren bestehen in drei Implementierungen</span>
+      <span class="tier tier-open">2.0.0 ist nicht getaggt</span>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="gap">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">01</span> Die Lücke</p>
+      <h2>Die Automatisierung existiert beim Herausgeber und geht unterwegs verloren</h2>
+      <p class="lede">JASCON 1.0.0 kann sagen, dass eine Anforderung geprüft wurde und zu welchem Schluss der Prüfer kam. Es kann nicht sagen, wie eine Maschine entscheidet.</p>
+    </div>
+    <div class="findings reveal">
+      <div class="finding">
+        <span class="finding-n">291 von 312</span>
+        <h3>Regeln des CIS Ubuntu 24.04 Benchmark sind als automatisiert gekennzeichnet</h3>
+        <p>Jede von ihnen kommt in einem konvertierten Bundle als Zeichenkette <code>audit</code> mit Shell-Auszügen im Fließtext an. Die Bestehensbedingung ist ein Satz wie „verify the output is“, den ein Mensch lesen muss.</p>
+      </div>
+      <div class="finding">
+        <span class="finding-n">0 von 3</span>
+        <h3>in der Erhebung untersuchten Herausgebern kodieren einen maschinell entscheidbaren Check</h3>
+        <p>ISM, Grundschutz++ und SP 800-53 nennen Methoden (Untersuchen, Befragen, Testen) und geforderte Dokumentation. FedRAMP CR26 führt Schlüsseltests als Fließtext. Keiner von ihnen spezifiziert einen Check, den ein Programm auswerten kann.</p>
+      </div>
+    </div>
+    <p class="source reveal">Zählungen: <a href="{{ blob }}/drafts/CP-CHECK-1.md" rel="noopener">CP-CHECK-1</a>, Abschnitt 2.1, aus den Abdeckungsberichten der konvertierten Korpora.</p>
+  </div>
+</section>
+
+<section class="section band" id="split">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">02</span> Das Design</p>
+      <h2>Der Kollektor beobachtet, die Kriterien entscheiden</h2>
+      <p class="lede">Die Grenze verläuft dort, wo Tools übereinstimmen müssen. Zwei konforme Tools, die denselben Check und dieselbe Beobachtung erhalten, liefern dasselbe Urteil. Alles, was sich zwischen redlichen Tools unterscheiden darf, ohne das Urteil zu ändern, bleibt außerhalb des Kerns.</p>
+    </div>
+    <div class="flow reveal">
+      <div class="flow-step">
+        <span class="where">Facette, außerhalb des Kerns</span>
+        <h3>Kollektor</h3>
+        <p>Ein Shell-Skript, ein Ansible-Task oder ein API-Aufruf, im Check mitgeführt, damit der Digest des Checks genau diesen Code abdeckt. Er gibt eine Beobachtung aus und entscheidet nichts.</p>
+      </div>
+      <div class="flow-step kernel">
+        <span class="where">Kern: der Faktenvertrag</span>
+        <h3>Beobachtung</h3>
+        <p>Benannte, typisierte Fakten wie <code>sshd.maxauthtries</code>: Ganzzahl. Ein Kollektor meldet effektive Werte, mit aufgelösten Standardwerten. Ein fehlender Schlüssel bedeutet „gesucht und nicht gefunden“.</p>
+      </div>
+      <div class="flow-step kernel">
+        <span class="where">Kern: zwölf Komparatoren</span>
+        <h3>Kriterien</h3>
+        <p>Eine flache Konjunktion wie <code>at-most {param}</code>. Der erwartete Wert ist ein Literal oder ein Parameter der Anforderung, also legt das Tailoring, das den Parameter bindet, die Bestehensgrenze fest.</p>
+      </div>
+      <div class="flow-step kernel">
+        <span class="where">Kern: check-verdict</span>
+        <h3>Urteil</h3>
+        <p>Erfüllt, nicht erfüllt, nicht eindeutig oder nicht anwendbar: eine reine Funktion des Checks, der Beobachtung und der gebundenen Parameter. Der Validator rechnet jedes aufgezeichnete Urteil nach.</p>
+      </div>
+    </div>
+    <div class="grid g3 reveal" style="margin-top: 18px;">
+      <article class="card">
+        <h3>Ein per Tailoring angepasster Parameter justiert den Check neu</h3>
+        <p>Verschärfen Sie <code>max-auth-tries</code> im Tailoring von 6 auf 4, und die gestrige Beobachtung von 5 wechselt von erfüllt zu nicht erfüllt. Keine Codezeile ändert sich, und wer die Anforderung umsetzt, kann seine Bestehensgrenze nicht selbst festlegen.</p>
+      </article>
+      <article class="card">
+        <h3>Ein Urteil wird nachgerechnet, nie blind übernommen</h3>
+        <p>Die Zeile im Assessment enthält die Beobachtung selbst. Eine zweite Partei wertet die Kriterien darauf aus und vergleicht. Ein aufgezeichnetes Ergebnis, das vom berechneten abweicht, ist ein Validierungsfehler.</p>
+      </article>
+      <article class="card">
+        <h3>Der Datensatz zeigt, was beobachtet wurde</h3>
+        <p>Eine fehlgeschlagene Zeile lautet <code>sshd.ciphers matches-not ".*-cbc"</code>, beobachtet: eine Liste, die <code>aes128-cbc</code> enthält. Ein Exit-Code hätte 1 gesagt.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="demo">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">03</span> Ausprobieren</p>
+      <h2>Beobachtung setzen, Bestehensgrenze verschieben</h2>
+      <p class="lede">Das ausgearbeitete Beispiel aus dem Repository: eine Anforderung mit zwei Klauseln, ein Tailoring für Produktions-Hosts, zwei Checks und zwei aufgezeichnete tägliche Läufe eines Bastion-Hosts. Ändern Sie, was der Kollektor gesehen hat oder was das Tailoring bindet.</p>
+    </div>
+{{ include:_check-demo.html }}
+    <div class="split even reveal" style="margin-top: clamp(32px, 4vw, 52px);">
+      <div class="window" data-tabs>
+        <div class="window-bar" role="tablist" aria-label="Die Objekte des Beispiels">
+          <span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+          <button class="tab" role="tab" aria-selected="true" data-panel="ck-check">check.json</button>
+          <button class="tab" role="tab" aria-selected="false" data-panel="ck-row">eine Laufzeile</button>
+          <button class="tab" role="tab" aria-selected="false" data-panel="ck-finding">finding.json</button>
+        </div>
+        <pre id="ck-check" role="tabpanel" tabindex="0"><code data-lang="json">{
+  "id": "https://cso.example/check/LNX-SSH-1-maxauthtries",
+  "requirement-ref": "https://cso.example/req/LNX-SSH-1",
+  "statement-ids": ["s1"],
+  "platform": "https://cso.example/platform/linux-host",
+  «"observes": [
+    { "name": "sshd.maxauthtries", "type": "integer" }
+  ]»,
+  «"criteria": [
+    { "fact": "sshd.maxauthtries", "op": "at-most",
+      "expected": { "param": "max-auth-tries" } }
+  ]»,
+  "validity": { "num": 24, "unit": "hours" },
+  "confidence": "reviewed",
+  "facets": {
+    "https://ns.jascon.net/stdlib/facet/collector@1": {
+      "collectors": [
+        { "id": "bash", "runtime": "bash", "privileges": "root",
+          "source": "#!/bin/bash\nv=$(sshd -T | awk '$1==\"maxauthtries\"{print $2}') ..." }
+      ]
+    }
+  }
+}</code></pre>
+        <pre id="ck-row" role="tabpanel" tabindex="0"><code data-lang="json">{
+  "check-ref": "https://cso.example/check/LNX-SSH-1-ciphers",
+  "check-digest": "sha256:b5ec275f0904a0a882d27e1434efb28e0595a74c6c0814297b2537fa49833f56",
+  "collector-id": "bash",
+  "outcome": "not-satisfied",
+  "time": "2026-11-03T06:00:04Z",
+  «"observation": {
+    "facts": {
+      "sshd.ciphers": ["chacha20-poly1305@openssh.com",
+                       "aes256-gcm@openssh.com", "aes256-ctr", "aes128-cbc"]
+    }
+  }»,
+  "evidence-record": {
+    "ref": "evidence/sha256/61c0ab97f7c9033b00b61a1eb09b5aa40d648114422ffa040aa779b09a9118fc",
+    "digest": "sha256:61c0ab97f7c9033b00b61a1eb09b5aa40d648114422ffa040aa779b09a9118fc"
+  }
+}</code></pre>
+        <pre id="ck-finding" role="tabpanel" tabindex="0"><code data-lang="json">{
+  "id": "https://cso.example/finding/bastion-01-ssh-cbc",
+  "assessment-ref": "https://cso.example/assessment/bastion-01-2026-11-03",
+  "requirement-ref": "https://cso.example/req/LNX-SSH-1",
+  "statement-ref": "s2",
+  «"check-ref": "https://cso.example/check/LNX-SSH-1-ciphers"»,
+  "state": "closed",
+  "actions": [
+    { "description": { "en": "Remove aes128-cbc from the Ciphers line of sshd_config; the next daily run verifies." },
+      "status": "done" }
+  ]
+}</code></pre>
+        <div class="window-foot"><span>Auszüge &middot; jascon/examples</span></div>
+      </div>
+      <div class="stack-lg">
+        <div class="stack">
+          <h3>Was das Beispiel-Bundle aufzeichnet</h3>
+          <ul class="ticks">
+            <li><b>3. November:</b> vier Authentifizierungsversuche bei einer Obergrenze von vier, erfüllt. Die Chiffrenliste enthält <code>aes128-cbc</code>, nicht erfüllt. Das Ergebnis des Assessments ist die Aggregation seiner Zeilen.</li>
+            <li><b>Ein Finding</b> zu Klausel s2 verweist auf den Check, der es ausgelöst hat. Seine Maßnahme: die Chiffre entfernen.</li>
+            <li><b>10. November:</b> beide Zeilen erfüllt. Das Finding ist geschlossen und bezieht sich auf den Lauf, der es verifiziert hat.</li>
+          </ul>
+        </div>
+        <p class="muted">Das Beispiel hat keinen echten Host geprüft. Jeder Lauf hat den Bash-Kollektor des Checks unverändert gegen einen Stub von <code>sshd</code> ausgeführt, der eine feste Konfiguration ausgibt, und jeder Nachweisdatensatz sagt das.</p>
+        <a class="link-arrow" href="app/index.html#load=../jascon/examples/&amp;tool=checks">Das Beispiel auf der Seite Prüfungen (Checks) der App öffnen</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="comparators">
+  <div class="wrap">
+    <div class="split">
+      <div class="stack-lg reveal">
+        <div class="section-head" style="margin-bottom:0">
+          <p class="eyebrow"><span class="no">04</span> Die Komparatoren</p>
+          <h2>Zwölf, und eine Liste dessen, was draußen bleibt</h2>
+          <p class="lede">Die Menge ist absichtlich klein. Ein Check, der nicht passt, bleibt manuell und wird gezählt.</p>
+        </div>
+        <ul class="plain">
+          <li>Die Kriterien sind eine Konjunktion. Es gibt kein ODER, kein NICHT und keine Verschachtelung; Alternativen für einen Wert sind <code>one-of</code>, und die Negation steckt in den Operatorpaaren.</li>
+          <li>Keine Arithmetik und kein Vergleich zwischen zwei Fakten. Zählen und Ableiten sind Sache des Kollektors.</li>
+          <li>Die Verknüpfung ist das starke Kleene-UND: Ein eindeutiger Fehlschlag entscheidet, und ein Fehlschlag wird nie hinter einem Unbekannten an anderer Stelle versteckt.</li>
+          <li>Ein ungebundener Parameter ergibt „nicht eindeutig“. Ein Standardwert wird nie eingesetzt.</li>
+          <li><code>at-most</code> bindet nie einen Parameter, der nach oben verschärft, damit das Verschärfen eines Parameters keinen Check lockern kann.</li>
+          <li>Ein Check über viele Ressourcen besteht nur, wenn jede anwendbare besteht. Jede Ressource wird ausgewertet, keine wird nach dem ersten Fehlschlag übersprungen, und das Urteil kommt mit Anzahl und Anteil: „12 von 200 anwendbaren Bucket-Ressourcen nicht erfüllt (6 %)“.</li>
+        </ul>
+      </div>
+      <div class="table-wrap reveal">
+        <table>
+          <thead><tr><th>Operator</th><th>Auf</th><th>Gilt, wenn</th></tr></thead>
+          <tbody>
+            <tr><th scope="row"><code>equals</code></th><td>ein Wert</td><td>der Wert gleich dem erwarteten ist; Dezimalzahlen nach Wert</td></tr>
+            <tr><th scope="row"><code>not-equals</code></th><td>ein Wert</td><td>der Wert vom erwarteten abweicht; nicht eindeutig bei fehlendem Fakt</td></tr>
+            <tr><th scope="row"><code>one-of</code></th><td>ein Wert</td><td>der Wert in der Liste steht</td></tr>
+            <tr><th scope="row"><code>at-least</code> <code>at-most</code></th><td>Ganzzahl, Dezimalzahl</td><td>Ordnung; Dezimalzahlen nie als Gleitkommazahlen</td></tr>
+            <tr><th scope="row"><code>present</code> <code>absent</code></th><td>jeder Fakt</td><td>der Schlüssel in der Beobachtung enthalten ist bzw. nicht enthalten ist</td></tr>
+            <tr><th scope="row"><code>includes-all</code></th><td>eine Liste</td><td>jeder aufgeführte Wert vorkommt</td></tr>
+            <tr><th scope="row"><code>excludes-all</code></th><td>eine Liste</td><td>kein aufgeführter Wert vorkommt</td></tr>
+            <tr><th scope="row"><code>subset-of</code></th><td>eine Liste</td><td>jeder beobachtete Wert aufgeführt ist</td></tr>
+            <tr><th scope="row"><code>matches</code> <code>matches-not</code></th><td>Zeichenkette, Code</td><td>der ganze Wert auf ein I-Regexp-Muster passt bzw. keiner passt</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="split even reveal" style="margin-top: clamp(40px, 5vw, 64px);">
+      <div class="stack">
+        <h3>Warum ein regulärer Ausdruck erlaubt ist</h3>
+        <p class="muted">Das Handbuch lehnt Ausdruckssprachen ab, weil zwei konforme Tools dann zwei Urteile liefern können. Python, .NET und JavaScript sind sich genau bei den Konstrukten uneins, zu denen man greift: <code>\d</code>, <code>\w</code>, Anker, Flags, Lookaround. Der Dialekt ist deshalb I-Regexp (RFC 9485), von der IETF für Interoperabilität geschaffen und von JSONPath verwendet.</p>
+      </div>
+      <div class="stack">
+        <h3>Was der Kern über den RFC hinaus festlegt</h3>
+        <ul class="plain">
+          <li>Ein Muster passt auf den ganzen Wert. <code>^</code> und <code>$</code> sind gewöhnliche Zeichen.</li>
+          <li>Grenzen: 256 Zeichen je Muster, 1.000 Zustände, 4.096 Zeichen je Wert. Darüber hinaus ist die Zeile nicht eindeutig.</li>
+          <li>Keine Regex-Engine des Hosts. Jede Implementierung parst die Grammatik selbst, so wie RFC 9485 sie veröffentlicht, und wertet ohne Backtracking aus, sodass ein Muster keinen Validator lahmlegen kann.</li>
+          <li>Eine Abhängigkeit bleibt und ist benannt: Eine Unicode-Kategorie <code>\p{..}</code> wird aus der Datenbank des Hosts gelesen (Backlog 59).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="evidence-chain">
+  <div class="wrap">
+    <div class="split">
+      <div class="section-head reveal" style="margin-bottom:0">
+        <p class="eyebrow"><span class="no">05</span> Nachweise</p>
+        <h2>Jedes Glied lässt sich offline prüfen</h2>
+        <p class="lede">Der Nachweis ist ein Verzeichnis neben dem Inhaltsmanifest. Jede Datei ist nach dem SHA-256 ihrer Bytes benannt. Geschwärzt wird vor dem Hashen, und die Rohausgabe ist eine eigene Datei; so bleibt der Datensatz nach einer Löschung wegen abgelaufener Aufbewahrungsfrist verifizierbar: Der Validator meldet die Datei als zurückgehalten.</p>
+      </div>
+      <div class="chain-list reveal">
+        <div class="chain-link"><b>Attestation</b><p>bindet den semantischen Digest des Assessments.</p></div>
+        <div class="chain-link"><b>Assessment-Zeile</b><p>enthält die Beobachtung inline, sodass dieser Digest sie abdeckt. Sie nennt den Check per Referenz und per Digest: Ein geänderter Check ist ein anderer Check.</p></div>
+        <div class="chain-link"><b>Nachweisdatensatz</b><p>nennt den Check, den Kollektor, den Prüfgegenstand, Start, Ende und Exit-Status und trägt den Digest derselben Beobachtung.</p></div>
+        <div class="chain-link"><b>Rohausgaben</b><p>stdout oder eine API-Antwort, jeweils per Digest, mit Medientyp, Größe und einem Flag für Schwärzung.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="fit">
+  <div class="wrap">
+    <div class="section-head wide reveal">
+      <p class="eyebrow"><span class="no">06</span> Gemessene Passung</p>
+      <h2>481 von 510 Regeln passen in die deklarative Form</h2>
+      <p class="lede">Die Menge der Komparatoren wurde zuerst entworfen und danach gemessen, an zwei offenen Check-Korpora: den vier CIS-Profilen für Ubuntu 24.04 in ComplianceAsCode (510 Regeln) und den CIS-1.12-Checks von kube-bench (103 automatisiert, 28 manuell).</p>
+    </div>
+    <div class="split even reveal">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Klasse</th><th class="num">Regeln von 510</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Passt<small>23 davon nur, wenn der Kollektor effektive Werte auflöst und Modusbits als Flag-Mengen meldet</small></th><td class="num">481</td></tr>
+            <tr><th scope="row">Braucht Arithmetik<small>Zählungen, Eindeutigkeit, Zeit gegenüber jetzt</small></th><td class="num">12</td></tr>
+            <tr><th scope="row">Braucht einen Vergleich zwischen zwei Fakten</th><td class="num">9</td></tr>
+            <tr><th scope="row">Braucht ODER über mehrere Fakten</th><td class="num">6</td></tr>
+            <tr><th scope="row">Braucht eine Ordnung von Versionen</th><td class="num">2</td></tr>
+            <tr><th scope="row">Braucht eine Regex außerhalb von I-Regexp</th><td class="num">0</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="stack-lg">
+        <div class="stack">
+          <h3>Was die Erhebung zeigt <span class="tier tier-measured">gemessen, Passung nach Einschätzung</span></h3>
+          <ul class="plain">
+            <li>Die Vergleichsseite ist klein, die Logik liegt auf der Sammelseite. In 126 handgeschriebenen OVAL-Definitionen vergleichen die States 99-mal auf Gleichheit, 23-mal mit einem Muster und 41-mal mit einer Ordnung.</li>
+            <li>Von 491 regulären Ausdrücken stehen 23 auf der Vergleichsseite. Alle 23 liegen innerhalb von I-Regexp oder lassen sich mechanisch umschreiben.</li>
+            <li>Von den 21 ODER-Checks in kube-bench lauten 16 „Flag fehlt oder Flag gleich Wert“. Ein Kollektor, der den effektiven Wert meldet, macht daraus einen einzigen Vergleich.</li>
+          </ul>
+        </div>
+        <div class="stack">
+          <h3>Was sie korrigiert hat</h3>
+          <p class="muted">Die Menge im Entwurf hatte kein Ungleich. Die Erhebung fand es zweimal in den OVAL-States und 85-mal über alle Verzeichnisse von kube-bench, und bei einer Zahl lässt es sich auf keine andere Weise ausdrücken. Es wurde am 12. November als zwölfter Komparator ergänzt. Die 29 Regeln, die nicht passen, bleiben manuell.</p>
+        </div>
+        <a class="link-arrow" href="{{ tree }}/drafts/cp-check-1-census" rel="noopener">Skripte der Erhebung und Rohzählungen</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="state">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">07</span> Stand</p>
+      <h2>Für 2.0.0 angenommen, grün in beiden Validatoren</h2>
+      <p class="lede">Am 12. November 2026 hat der Autor die offenen Punkte des Vorschlags entschieden. Check ist seit 2.0.0-rc.2 Teil des Release-Kandidaten und geht mit 2.0.0 live. Der Kandidat, jetzt rc.3, ist nicht getaggt.</p>
+    </div>
+    <div class="state-cols reveal">
+      <article class="card">
+        <div class="card-top"><h3>Im Repository</h3><span class="tier tier-measured">gemessen</span></div>
+        <ul class="ticks">
+          <li><b>Schema und Regeln:</b> die Form von Check, die Laufzeilen im Assessment, die Referenz im Finding, der Nachweisdatensatz, die Facette <code>collector@1</code>; CHECK-1 bis CHECK-15 und das Primitiv <code>check-verdict</code>, jeweils mit einer Begründung, die bei einem Fehlschlag ausgegeben wird.</li>
+          <li><b>{{ n.check_vectors }} Konformitätsvektoren</b> bestehen in der Python-Referenz, im PowerShell-Zwilling unter Windows PowerShell 5.1 und in der JavaScript-Portierung der App. Fünf absichtlich eingebaute Fehler in der Referenz färben jeweils einen Vektor rot.</li>
+          <li><b>Ein ausgearbeitetes Beispiel</b> mit zwei Checks, zwei Läufen, einem Finding und sieben Nachweisdateien.</li>
+          <li><b>Die Grammatik von RFC 9485 in der veröffentlichten Fassung,</b> abgeglichen am 12. November. Sie hält Surrogat-Codepoints aus Mustern heraus, was die Datei der Arbeitsgruppe nicht tat; die drei Engines wurden korrigiert, und fünf Vektoren schreiben es fest.</li>
+          <li><b>Text:</b> Spezifikation D24, Handbuchkapitel 10 und das Validator-Kapitel, die Anhänge A, B und C sowie der Skill für Coding-Agenten.</li>
+          <li><b>Werkzeuge:</b> Auf der Seite Prüfungen (Checks) der App schreiben Sie Checks von Hand oder lassen sie von einem Sprachmodell entwerfen, Regel für Regel oder für jede automatisierte Regel eines CIS-Imports. Der Reader als Einzeldatei zeigt Checks und aufgezeichnete Läufe.</li>
+        </ul>
+      </article>
+      <article class="card">
+        <div class="card-top"><h3>Offen</h3><span class="tier tier-open">offen</span></div>
+        <ul class="plain">
+          <li><b>Kein Runner.</b> Nichts im Repository führt einen Kollektor auf einem Zielsystem aus, und die App auch nicht. Ein HTTP-Kollektor hat noch kein deklariertes Anfrageformat.</li>
+          <li><b>Keine Cloud-Plattform gezählt.</b> Die Erhebung umfasst Linux-Hosts und Kubernetes. Mit dem Tag wird die Form auf Grundlage dieser beiden festgeschrieben.</li>
+          <li><b>Eine offene Entscheidung:</b> ob eine Unicode-Kategorie in einem Muster der Datenbank des Hosts folgt oder einer fixierten Tabelle.</li>
+        </ul>
+      </article>
+    </div>
+
+    <div class="table-wrap reveal" style="margin-top: 18px;">
+      <table>
+        <thead><tr><th>Frage an den Autor</th><th>Entscheidung vom 12. November 2026</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Die Aufnahmeregel verlangt, dass zwei von drei Herausgebern der Erhebung einen Typ kodieren. Keiner kodiert einen Check.</th><td>Die Regel erhielt eine Klausel für Typen, die Herausgeber von Katalogen nicht veröffentlichen: Ein anerkannter Standard verlangt den Datensatz, oder er ist etablierte Praxis, belegt durch zwei gezählte offene Implementierungen; die beiden anderen Tests gelten weiter; der Typ kommt mit einer Major-Version. Risk kommt über den ersten Zweig hinein, Check über den zweiten.</td></tr>
+          <tr><th scope="row">Laufzeilen: Kernfeld oder Facette?</th><td>Kernfeld. Ein Urteil ist Berechnung, und Facetten definieren nie Berechnung.</td></tr>
+          <tr><th scope="row">Darf ein Check ohne die Anforderung ausgeliefert werden, auf die er verweist?</th><td>Ja. Ein Check-Paket für einen Katalog, der nicht weitergegeben werden darf, validiert für sich allein.</td></tr>
+          <tr><th scope="row">Jetzt aufnehmen oder auf eine Erhebung von Cloud-APIs warten?</th><td>Check geht mit 2.0.0 live.</td></tr>
+          <tr><th scope="row">Ein Quantor neben „jede Ressource“?</th><td>Keiner. Jede Ressource wird ausgewertet und aufgezeichnet, der Anteil der Fehlschläge wird gemeldet, und der Check schlägt fehl.</td></tr>
+          <tr><th scope="row">Ein zwölfter Komparator <code>not-equals</code>?</th><td>Ergänzt.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="source reveal">Der Vorschlag mit seiner Erhebung, der nicht gewählten Alternative (Kriterien in einer Facette, Aufnahme später) und dem Protokoll der Entscheidungen: <a href="{{ blob }}/drafts/CP-CHECK-1.md" rel="noopener">drafts/CP-CHECK-1.md</a>. Der normative Text: <a href="{{ blob }}/drafts/jascon-specification-2.0.0-rc.3.md" rel="noopener">Spezifikation 2.0.0-rc.3</a>, D24.</p>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0">
+  <div class="wrap">
+    <div class="cta reveal">
+      <div>
+        <h2>Prüfen Sie den Kandidaten, bevor das Tag die Form festschreibt</h2>
+        <p>Für einen Kerntyp zahlt jeder Validator auf Dauer, und eine Korrektur nach dem Tag kostet eine Major-Version. Der Kandidat braucht Leser, die beruflich Scanner betreiben: Hält der Faktenvertrag für Ihre Plattform, und welcher Ihrer Checks fällt aus den zwölf Komparatoren heraus?</p>
+      </div>
+      <div class="cta-actions">
+        <a class="btn btn-primary" href="{{ blob }}/drafts/CP-CHECK-1.md" rel="noopener">CP-CHECK-1 lesen <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a class="btn btn-ghost" href="app/index.html#load=../jascon/examples/&amp;tool=checks">Einen Check in der App schreiben <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a class="btn btn-ghost" href="{{ repo }}/issues" rel="noopener">Einwand einreichen <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>
