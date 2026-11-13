@@ -8,6 +8,7 @@
     {
       "id": "https://paas.example/auth/jab-moderate-2026",
       "authority-ref": "https://ns.fedramp.gov/party/jab",
+      "date": "2026-03-15",
       "scope-label": "FedRAMP Moderate P-ATO"
     }
   ]

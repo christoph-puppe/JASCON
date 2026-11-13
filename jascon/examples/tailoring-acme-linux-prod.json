@@ -2,6 +2,10 @@
  "id": "https://cso.example/tailoring/linux-prod",
  "version": "2026-11",
  "lifecycle": "active",
+ "provenance": {
+  "author-ref": "https://cso.example/party/ciso",
+  "date": "2026-11-02"
+ },
  "title": {
   "en": "Production Linux hosts"
  },
@@ -16,7 +20,11 @@
    "requirement-ref": "https://cso.example/req/LNX-SSH-1",
    "statement-id": "s1",
    "parameter": "max-auth-tries",
-   "value": 4
+   "value": 4,
+   "provenance": {
+    "author-ref": "https://cso.example/party/platform-ops",
+    "date": "2026-11-02"
+   }
   }
  ]
 }

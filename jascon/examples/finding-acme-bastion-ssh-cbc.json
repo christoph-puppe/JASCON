@@ -2,6 +2,10 @@
  "id": "https://cso.example/finding/bastion-01-ssh-cbc",
  "version": "2",
  "lifecycle": "active",
+ "provenance": {
+  "author-ref": "https://cso.example/party/secops",
+  "date": "2026-11-10"
+ },
  "relations": [
   {
    "type": "related",

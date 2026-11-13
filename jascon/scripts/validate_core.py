@@ -37,10 +37,20 @@ Runs, in order:
    hold the vendor's manifest a set keeps under packs/sha256/ to the
    objects in the set; 11 is import. `--import-advice SET PACK` prints
    what an import would do and its receipt, and writes nothing.
+6. WHO DECIDED, AND WHEN (CP-AUTHOR-1): `provenance` {author-ref, date} on
+   a Tailoring and its selects, excludes and operations, on a Risk and
+   its ratings, on an Implementation and a Finding; `decided` and
+   `review-due` on a Deviation; `date` on an authorization. The schema
+   leaves all of it optional. AUTHOR-1..4 REPORT what is missing, one
+   line per object and rule, and `--require-authors` turns the lines
+   into failures. REVIEW-1 reports a `review-due` that has passed, on an
+   approved Deviation and on a Risk still managed. It reads the date of
+   the run (UTC); `--as-of YYYY-MM-DD` sets the date instead. This is the
+   one place where the file reads a clock, and nothing fails by it.
 
 Exit 0 = all green. Usage: uv run --with jsonschema validate_core.py [bundle-dir ...]
 """
-import json, hashlib, os, re, sys, copy, collections, base64
+import json, hashlib, os, re, sys, copy, collections, base64, datetime
 from decimal import Decimal
 import jsonschema
 
@@ -62,6 +72,7 @@ VALIDATORS["contentManifest"] = REGISTRY({"$ref": "#/$defs/contentManifest", "$d
 VALIDATORS["scale"] = REGISTRY({"$ref": "#/$defs/scale", "$defs": SCHEMA["$defs"]})
 VALIDATORS["due"] = REGISTRY({"$ref": "#/$defs/due", "$defs": SCHEMA["$defs"]})
 VALIDATORS["date"] = REGISTRY({"$ref": "#/$defs/date", "$defs": SCHEMA["$defs"]})
+VALIDATORS["dateTime"] = REGISTRY({"$ref": "#/$defs/dateTime", "$defs": SCHEMA["$defs"]})
 # CP-CHECK-1: file shapes beside the bundle, not object types
 VALIDATORS["evidenceRecord"] = REGISTRY({"$ref": "#/$defs/evidenceRecord", "$defs": SCHEMA["$defs"]})
 VALIDATORS["checkObservation"] = REGISTRY({"$ref": "#/$defs/checkObservation", "$defs": SCHEMA["$defs"]})
@@ -998,13 +1009,24 @@ def run_composition():
 KERNEL_VERSION = "2.0.0"
 KERNEL_SUPPORTED = ("1.0.0", "2.0.0")      # 2.0.0 is a superset of 1.0.0, measured
 
+def deviations_of(t, o):
+    """-> [(where, Deviation)]: every Deviation an object carries - in its
+    `deviations` list and, on a Tailoring, inline on an operation."""
+    out = [(f"deviations[{i}]", d) for i, d in enumerate(o.get("deviations") or []) if isinstance(d, dict)]
+    if t == "tailoring":
+        out += [(f"operations[{i}].deviation", op["deviation"]) for i, op in enumerate(o.get("operations") or [])
+                if isinstance(op, dict) and isinstance(op.get("deviation"), dict)]
+    return out
+
 def kernel_needed(objs, manifest=None):
     """-> (minimum kernel version the content needs, the first object that
     needs it). 2.0.0 added the Risk type, Finding.risk-refs, pinned
     scale definitions, the Check type, Assessment.check-results and
     .tailoring-ref, Finding.check-ref, the pack header of a manifest,
-    statement-ids on a capability (CP-ADVICE-1) and product-version on a
-    Component (author decision 2026-11-12)."""
+    statement-ids on a capability (CP-ADVICE-1), product-version on a
+    Component (author decision 2026-11-12), and the fields of CP-AUTHOR-1:
+    `provenance` where 1.0.0 had none, `decided` and `review-due` on a
+    Deviation, `date` on an authorization."""
     if manifest and manifest.get("scales"): return "2.0.0", "the manifest pins scale definitions"
     if manifest and manifest.get("pack"): return "2.0.0", "the manifest carries a pack header"
     for oid in sorted(objs):
@@ -1019,6 +1041,15 @@ def kernel_needed(objs, manifest=None):
             return "2.0.0", f"{oid} names clauses on a capability (statement-ids)"
         if t == "component" and "product-version" in o:
             return "2.0.0", f"{oid} names the product version it describes (product-version)"
+        if t in ("tailoring", "implementation", "finding") and "provenance" in o:
+            return "2.0.0", f"{oid} names its author (provenance)"
+        if t == "tailoring" and any("provenance" in e for k in ("selects", "excludes", "operations")
+                                    for e in o.get(k, []) or [] if isinstance(e, dict)):
+            return "2.0.0", f"{oid} names the author of a select, an exclude or an operation (provenance)"
+        if any("decided" in d or "review-due" in d for _, d in deviations_of(t, o)):
+            return "2.0.0", f"{oid} carries a Deviation with `decided` or `review-due`"
+        if t == "component" and any("date" in a for a in o.get("authorizations", []) or [] if isinstance(a, dict)):
+            return "2.0.0", f"{oid} dates an authorization"
     return "1.0.0", None
 
 def kernel_pin_errors(manifest, objs):
@@ -1234,14 +1265,21 @@ RISK_RULES = {
     "RISK-6": "retention IS acceptance - no silent retention (ISO/IEC 27001 6.1.3 f)",
     "RISK-13": "a residual level is what remains of a level - it presupposes a rating, on the same scale (D23: levels never compare across scales)",
 }
-# ---------------- DATE-1/2: two fields 1.0.0 left as free text ----------------
+# ---------------- DATE-1..5: fields 1.0.0 left as free text ----------------
 # 2.0.0 types them (author decision 2026-11-12, backlog #47a and #52). The
 # schema enforces; this names the rule when an object matches no type, so
 # that a 1.0.0 bundle with a free-text date is told what to correct.
 DATE_RULES = {
-    "DATE-1": "a Deviation's `opened` is a date, YYYY-MM-DD - a date that any string satisfies cannot be compared, sorted or checked",
+    "DATE-1": "a Deviation's `opened` and `decided` are dates, YYYY-MM-DD - a date that any string satisfies cannot be compared, sorted or checked",
     "DATE-2": "the `due` of a Finding's action is a typed point in time or duration (date, datetime, elapsed-duration, calendar-period) - a deadline a machine cannot read is prose",
+    # CP-AUTHOR-1: the "when" of who-and-when
+    "DATE-3": "the `date` of a Mapping's provenance is a date, YYYY-MM-DD",
+    "DATE-4": "the `time` of an Assessment is a date or an RFC 3339 date-time with an offset",
+    "DATE-5": "the `timestamp` of an Attestation is a date or an RFC 3339 date-time with an offset",
 }
+def is_when(v):
+    """a date, or an RFC 3339 date-time with an offset"""
+    return VALIDATORS["date"].is_valid(v) or VALIDATORS["dateTime"].is_valid(v)
 def date_rule_violations(o):
     """-> [(rule id, what is wrong)] for an object that carries Deviations or
     actions. Never used to ACCEPT an object (the schema decides), only to
@@ -1251,8 +1289,9 @@ def date_rule_violations(o):
     def deviations(x, at):
         if isinstance(x, dict):
             for i, dv in enumerate(x.get("deviations") or [] if isinstance(x.get("deviations"), list) else []):
-                if isinstance(dv, dict) and "opened" in dv and not VALIDATORS["date"].is_valid(dv["opened"]):
-                    out.append(("DATE-1", f"{at}deviations[{i}].opened is {dv['opened']!r}"))
+                for field in ("opened", "decided"):
+                    if isinstance(dv, dict) and field in dv and not VALIDATORS["date"].is_valid(dv[field]):
+                        out.append(("DATE-1", f"{at}deviations[{i}].{field} is {dv[field]!r}"))
             for k, v in x.items():
                 if k != "deviations": deviations(v, f"{at}{k}.")
         elif isinstance(x, list):
@@ -1261,6 +1300,14 @@ def date_rule_violations(o):
     for i, a in enumerate(o.get("actions") or [] if isinstance(o.get("actions"), list) else []):
         if isinstance(a, dict) and "due" in a and not VALIDATORS["due"].is_valid(a["due"]):
             out.append(("DATE-2", f"actions[{i}].due is {json.dumps(a['due'], ensure_ascii=False)}"))
+    # the three fields are told apart by the signature of their type
+    prov = o.get("provenance")
+    if "relationship" in o and isinstance(prov, dict) and "date" in prov and not VALIDATORS["date"].is_valid(prov["date"]):
+        out.append(("DATE-3", f"provenance.date is {prov['date']!r}"))
+    if "performer-ref" in o and "time" in o and not is_when(o["time"]):
+        out.append(("DATE-4", f"time is {o['time']!r}"))
+    if "signer" in o and "timestamp" in o and not is_when(o["timestamp"]):
+        out.append(("DATE-5", f"timestamp is {o['timestamp']!r}"))
     return out
 
 def risk_rule_violations(o):
@@ -1472,6 +1519,132 @@ def risk_link_notes(objs):
                 notes.append(f"{oid}: risk-adjustment Deviation references no Risk of this bundle "
                              f"(RISK-9, SHOULD: the adjustment names the risk it accepts)")
     return notes
+
+# ---------------- who decided, and when (CP-AUTHOR-1) ----------------
+# The schema leaves every one of these fields optional: a catalogue
+# authority's content needs none. What is missing is REPORTED, one line per
+# object and rule, and fails nothing unless --require-authors asks for it.
+AUTHOR_RULES = {
+    "AUTHOR-1": "a consumer's Tailoring says who decided each select, exclude and operation - on the entry, or once on the Tailoring",
+    "AUTHOR-2": "a Risk, a Finding and an Implementation say who wrote this version and when (provenance): each records a judgement",
+    "AUTHOR-3": "an approved or withdrawn Deviation says when it was decided (decided); `opened` is when it was asked for",
+    "AUTHOR-4": "an authorization says on which day it was given (date); it already names the authority",
+    "REVIEW-1": "a review-due that has passed is reported, on an approved Deviation and on a Risk still managed - the date exists to be looked at",
+}
+
+def author_report(objs, sdig_fn=None, envelopes=None, trusted=None):
+    """-> [(rule, object id, count, message)], in the order of the ids.
+    AUTHOR-1 asks only a Tailoring at consumer tier (D13: duties bind
+    there; an authority's Tailoring is attributed by its origin and its
+    Attestation). An entry without `provenance` has its Tailoring's."""
+    out = []
+    for oid in sorted(objs):
+        t, o = objs[oid]
+        if t == "tailoring":
+            tier = derive_tier(o, objs, sdig_fn or sdig, envelopes=envelopes, trusted=trusted)
+            if tier == "consumer" and "provenance" not in o:
+                parts, n = [], 0
+                for key, word in (("selects", "select"), ("excludes", "exclude"), ("operations", "operation")):
+                    entries = [e for e in o.get(key, []) or [] if isinstance(e, dict)]
+                    bare = sum(1 for e in entries if "provenance" not in e)
+                    if bare:
+                        n += bare
+                        parts.append(f"{bare} of {len(entries)} {word}(s)")
+                if n:
+                    out.append(("AUTHOR-1", oid, n, f"{oid}: {', '.join(parts)} name no author, and the Tailoring names none (AUTHOR-1)"))
+        if t in ("risk", "finding", "implementation") and "provenance" not in o:
+            out.append(("AUTHOR-2", oid, 1, f"{oid}: this {t.capitalize()} does not say who wrote it and when (AUTHOR-2)"))
+        undated = [w for w, d in deviations_of(t, o) if d.get("state") in ("approved", "withdrawn") and "decided" not in d]
+        if undated:
+            out.append(("AUTHOR-3", oid, len(undated), f"{oid}: {len(undated)} Deviation(s) approved or withdrawn without `decided`: {', '.join(undated)} (AUTHOR-3)"))
+        if t == "component":
+            auths = [a for a in o.get("authorizations", []) or [] if isinstance(a, dict)]
+            bare = [str(a.get("id")) for a in auths if "date" not in a]
+            if bare:
+                out.append(("AUTHOR-4", oid, len(bare), f"{oid}: {len(bare)} authorization(s) without a date: {', '.join(bare)} (AUTHOR-4)"))
+    return out
+
+_DT = re.compile(r"^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.\d+)?(Z|[+-]\d{2}:\d{2})$")
+_ELAPSED = {"seconds": 1, "minutes": 60, "hours": 3600}
+
+def _utc_day(due, start):
+    """-> (the UTC calendar day a `review-due` falls on, None) or (None, why
+    it cannot be evaluated). `start` is the date a duration counts from."""
+    kind = due.get("type")
+    try:
+        if kind == "date":
+            return datetime.date.fromisoformat(due["value"]), None
+        if kind == "datetime":
+            y, mo, d, h, mi, sec, off = _DT.match(due["value"]).groups()
+            minutes = 0 if off == "Z" else (1 if off[0] == "+" else -1) * (int(off[1:3]) * 60 + int(off[4:6]))
+            at = datetime.datetime(int(y), int(mo), int(d), int(h), int(mi), int(sec),
+                                   tzinfo=datetime.timezone(datetime.timedelta(minutes=minutes)))
+            return at.astimezone(datetime.timezone.utc).date(), None
+        if kind == "elapsed-duration":
+            if start is None: return None, "a duration, and no date to count it from"
+            at = datetime.datetime.combine(datetime.date.fromisoformat(start), datetime.time(0), tzinfo=datetime.timezone.utc)
+            return (at + datetime.timedelta(seconds=due["num"] * _ELAPSED[due["unit"]])).date(), None
+        if kind == "calendar-period":
+            return None, f"a calendar period, and this tool has no calendar {due.get('calendar-ref')} (D9: fail-closed without the named calendar)"
+    except (ValueError, OverflowError):
+        return None, "not a day of the calendar"
+    return None, "not a typed review-due"
+
+def review_report(objs, as_of):
+    """REVIEW-1 -> {"dated": n, "overdue": [(object id, where, day)],
+    "not-evaluable": [(object id, where, why)]}. A point in time has passed
+    when its UTC calendar day is before `as_of`; due today is not overdue.
+    A duration counts from `decided`, else `opened`, on a Deviation, and
+    from `acceptance.date` on a Risk. Asked of an approved Deviation and of
+    a Risk still managed; nothing fails by it."""
+    dated, overdue, blind = 0, [], []
+    for oid in sorted(objs):
+        t, o = objs[oid]
+        asked = [(w, d["review-due"], d.get("decided") or d.get("opened")) for w, d in deviations_of(t, o)
+                 if d.get("state") == "approved" and isinstance(d.get("review-due"), dict)]
+        if t == "risk" and risk_is_live(o) and isinstance(o.get("review-due"), dict):
+            asked.append(("review-due", o["review-due"], (o.get("acceptance") or {}).get("date")))
+        for where, due, start in asked:
+            dated += 1
+            day, why = _utc_day(due, start)
+            if day is None: blind.append((oid, where, why))
+            elif day < as_of: overdue.append((oid, where, day.isoformat()))
+    return {"dated": dated, "overdue": overdue, "not-evaluable": blind}
+
+def report_authors_and_reviews(section, objs, envelopes=None):
+    """Prints the two reports for one bundle. AUTHOR lines are notes, or
+    failures under --require-authors; REVIEW lines are always notes."""
+    for rule, _, _, msg in author_report(objs, envelopes=envelopes, trusted=TRUSTED):
+        if REQUIRE_AUTHORS: fail(section, msg)
+        else: print(f"    note: {msg}")
+    r = review_report(objs, AS_OF)
+    if r["dated"]:
+        print(f"    review: {r['dated']} review date(s) asked as of {AS_OF.isoformat()}: "
+              f"{len(r['overdue'])} overdue, {len(r['not-evaluable'])} not evaluable (REVIEW-1)")
+    for oid, where, day in r["overdue"]:
+        print(f"    note: {oid}: {where} was due on {day} (REVIEW-1: overdue; it still holds until someone acts)")
+    for oid, where, why in r["not-evaluable"]:
+        print(f"    note: {oid}: {where} is not evaluated: {why} (REVIEW-1)")
+
+def run_author():
+    v = json.load(open(os.path.join(CONF, "author-vectors.json"), encoding="utf-8"))
+    def typed(case):
+        objs = {}
+        for o in case["objects"]:
+            t = inferType_single(o)
+            if t: objs[o["id"]] = (t, o)
+        return objs if len(objs) == len(case["objects"]) else None
+    for case in v["author-vectors"]:
+        objs = typed(case)
+        got = None if objs is None else [[rule, oid, n] for rule, oid, n, _ in author_report(objs)]
+        if got == case["expected"]: ok("author")
+        else: fail("author", f"{case['name']}: expected {case['expected']}, got {got}")
+    for case in v["review-vectors"]:
+        objs = typed(case)
+        r = None if objs is None else review_report(objs, datetime.date.fromisoformat(case["as-of"]))
+        got = None if r is None else ([[o, w] for o, w, _ in r["overdue"]], [[o, w] for o, w, _ in r["not-evaluable"]])
+        if got == (case.get("expected-overdue", []), case.get("expected-not-evaluable", [])): ok("author")
+        else: fail("author", f"{case['name']}: expected overdue {case.get('expected-overdue', [])} / not evaluable {case.get('expected-not-evaluable', [])}, got {got}")
 
 def run_risk():
     v = json.load(open(os.path.join(CONF, "risk-vectors.json"), encoding="utf-8"))
@@ -2947,6 +3120,7 @@ def validate_bundle(bdir):
     cov, cerrs, cnotes = risk_coverage(bundle_objs, envelopes=envelopes, trusted=TRUSTED)
     for e in cerrs: fail(section, e)
     for n in cnotes + risk_link_notes(bundle_objs): print(f"    note: {n}")
+    report_authors_and_reviews(section, bundle_objs, envelopes)
     # the report is printed where there is a register to report on; the
     # policy switch applies regardless - a bundle with a Tailoring and NO
     # Risk at all is the limiting case of "justified by no Risk", not an
@@ -3047,6 +3221,7 @@ def validate_examples():
     cov, cerrs, cnotes = risk_coverage(exobjs)
     for e in cerrs: fail(section, e)
     for n in cnotes + risk_link_notes(exobjs): print(f"    note: {n}")
+    report_authors_and_reviews(section, exobjs)
     for tid, r in cov["tailorings"].items():
         print(f"    risk-coverage: {tid} [{r['tier']}] selected={r['selected']}"
               f"{'+ (open: predicate select)' if r['open-selection'] else ''} "
@@ -3062,7 +3237,16 @@ def validate_examples():
 # --compose DIR_A DIR_B runs the D3.5 composition engine over two bundles.
 TRUSTED = None
 REQUIRE_RISK_BASIS = False
+REQUIRE_AUTHORS = False
+AS_OF = datetime.datetime.now(datetime.timezone.utc).date()    # REVIEW-1: the date of the run, unless --as-of sets it
 _argv = sys.argv[1:]
+if "--require-authors" in _argv:         # policy switch: AUTHOR-1..4 lines become failures
+    REQUIRE_AUTHORS = True
+    _argv.remove("--require-authors")
+if "--as-of" in _argv:
+    _i = _argv.index("--as-of")
+    AS_OF = datetime.date.fromisoformat(_argv[_i + 1])
+    _argv = _argv[:_i] + _argv[_i + 2:]
 if "--require-risk-basis" in _argv:      # policy switch: uncovered selections become failures
     REQUIRE_RISK_BASIS = True
     _argv.remove("--require-risk-basis")
@@ -3117,8 +3301,8 @@ if "--import-advice" in _argv:
     sys.exit(1 if R["result"] == "refused" else 0)
 
 print("== conformance corpus ==")
-run_jcs(); run_modality(); run_parameters(); run_tailoring(); run_attestation(); run_facets(); run_references(); run_lifecycle(); run_tiers(); run_dsse(); run_composition(); run_conditional(); run_risk(); run_kernel(); run_scale(); run_check(); run_advice()
-for k in ("jcs", "modality", "parameter", "tailoring", "attestation", "facet", "reference", "lifecycle", "tier", "dsse", "composition", "conditional", "risk", "kernel", "scale", "check", "advice"):
+run_jcs(); run_modality(); run_parameters(); run_tailoring(); run_attestation(); run_facets(); run_references(); run_lifecycle(); run_tiers(); run_dsse(); run_composition(); run_conditional(); run_risk(); run_kernel(); run_scale(); run_check(); run_advice(); run_author()
+for k in ("jcs", "modality", "parameter", "tailoring", "attestation", "facet", "reference", "lifecycle", "tier", "dsse", "composition", "conditional", "risk", "kernel", "scale", "check", "advice", "author"):
     print(f"  {k}: {counts[k]} pass, {counts[k + ':FAIL']} fail")
 
 print("== bundles ==")

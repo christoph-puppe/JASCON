@@ -3,6 +3,10 @@
  "version": "2026-07",
  "label": "Erhöht",
  "lifecycle": "active",
+ "provenance": {
+  "author-ref": "https://ns.bsi.bund.de/gspp/party/redaktion",
+  "date": "2026-07-01"
+ },
  "title": {
   "en": "Elevated protection level"
  },

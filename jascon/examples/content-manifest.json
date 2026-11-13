@@ -40,8 +40,8 @@
   {
    "id": "https://ns.bsi.bund.de/gspp/tailoring/erhoeht",
    "version": "2026-07",
-   "package-digest": "sha256:7670cda43d51530d03cdd1e80b1412b46f201aa0a3c86907a1e8aecd33480dd8",
-   "semantic-digest": "sha256:687d6fd01be7053509635126d148b04890695fe28948954b2477dfb42a8c8634",
+   "package-digest": "sha256:b48cefef05306b1a71950fcece08848d6cfe0d6404d37d14810ffda9b75068a0",
+   "semantic-digest": "sha256:b2317bc99b22c85138d7356330b2c00f4b2eb56e43a366590551d7a64a8b235b",
    "path": "tailoring-elevated.json"
   },
   {
@@ -54,8 +54,8 @@
   {
    "id": "https://paas.example/component/platform",
    "version": "2026-06",
-   "package-digest": "sha256:315b34bafc470548ad7c48a2f24c51aa42901d3d4d0d04d9b9319e1f637f4941",
-   "semantic-digest": "sha256:78eb3e77cc6867b34b2d92a49930b47d363c261da575bd442c8c04f5f18db14d",
+   "package-digest": "sha256:9aafe92f0890f15e80bad4f95d83a5153114070848ac4ac40b691a0a24e7e6ca",
+   "semantic-digest": "sha256:295146e38fe9c34b2a567cf370d6ed776f0b673366da62a4ca001fee3eef8f59",
    "path": "component-paas.json"
   },
   {
@@ -68,8 +68,8 @@
   {
    "id": "https://cso.example/impl/acme--konf-14-1",
    "version": "2026-07",
-   "package-digest": "sha256:0014d8e715ded3ffd422b51602971c5922aab67eca2b064596656761126448b2",
-   "semantic-digest": "sha256:7b89f06e6b7cae8758c227083fb07d82cb224c143eece8bc5d72eddd9a0b2cb0",
+   "package-digest": "sha256:c578b17849e6f94fd52ac229cc41a1d46f2703f16960fa3bf47bc0df95c8590a",
+   "semantic-digest": "sha256:d588f8ee6750921d5f615a1c7e575ad56791042158d430e7ad8eaab15daf7e0c",
    "path": "implementation-acme-konf.json"
   },
   {
@@ -82,15 +82,15 @@
   {
    "id": "https://assessor.example/finding/2026-q3-acme-017",
    "version": "1",
-   "package-digest": "sha256:687dcab932374febace2791c0a355df7b38778de9f8ace6217576926c94edc8f",
-   "semantic-digest": "sha256:6208717f2dc1f40fbc849c0091280ae4aaf0f426e84062a652f74103294adf30",
+   "package-digest": "sha256:00146eabf20998402bf0c706c5b82592127a352fc8e123f91653a33169fe27ce",
+   "semantic-digest": "sha256:12fc32d9416d8f7f7da44ae48a32f32e4db79a31bab19bffa6256a2980b24f58",
    "path": "finding-017.json"
   },
   {
    "id": "https://cso.example/risk/R-2026-007",
    "version": "2026-11",
-   "package-digest": "sha256:37321e408f781792b0022260887bf6d05fd1a056925a399997ee814c8a3d5cc4",
-   "semantic-digest": "sha256:e68e638f9e6ed44cea36b7185ea62e84fa9b493f5981b5b5bb949689a07ba611",
+   "package-digest": "sha256:ceecbfa21fc190089a20ff268eb5cdfa9d9517951e4e5941dea4cba1034e839e",
+   "semantic-digest": "sha256:0ad07a647a4d486f202202344657e37166c0e4ebb33fe18c02d4f6b7010d6b9e",
    "path": "risk-acme-kms-key-rotation.json"
   },
   {
@@ -110,8 +110,8 @@
   {
    "id": "https://cso.example/tailoring/linux-prod",
    "version": "2026-11",
-   "package-digest": "sha256:0319a70187e7e5cac1e660af3e5fa42652405f1a390aa55ef2a1d5ee1e353cce",
-   "semantic-digest": "sha256:5a9190647311ac5ab2f929bca50b1a3faf53a94f8b8159e50bc1337f077c17ad",
+   "package-digest": "sha256:74ceacf4531bbf96d7ba3d20ef12ebb2fc3bcdd7b16553ffff1f85e5fb6bc3e5",
+   "semantic-digest": "sha256:5ecb102b31086912ca8cff8ff38426b82366b85db966c44da9e9a7e31caa659b",
    "path": "tailoring-acme-linux-prod.json"
   },
   {
@@ -152,8 +152,8 @@
   {
    "id": "https://cso.example/finding/bastion-01-ssh-cbc",
    "version": "2",
-   "package-digest": "sha256:90842582398eb586b57cbb579808a52b06e6afca813db3f773a2d5ca621eb2f1",
-   "semantic-digest": "sha256:9e6b34dee2dbf814b7dbc32894c27c82584d806e7bb931394deeb025dadd5ccc",
+   "package-digest": "sha256:9b21db63041813f8c02d0dee60f19809ad7ab6b706db3f44c3bb11fe7f9fce7e",
+   "semantic-digest": "sha256:0616c2c400b867ce19610740b7ad5a80781a9df028e1333d48f2ec34512f45af",
    "path": "finding-acme-bastion-ssh-cbc.json"
   },
   {
@@ -166,8 +166,8 @@
   {
    "id": "https://cso.example/impl/acme--konf-14-1-s2",
    "version": "2026-11",
-   "package-digest": "sha256:1d30885cab6f3d4c30d73d50a6c1f608785cd4601cba87b95486d08a8193704f",
-   "semantic-digest": "sha256:c4ef8e52a5e1ddfe4893dc929eb349b583a38a627c045dde26c260328656393a",
+   "package-digest": "sha256:07529e48f71094628c52e1b3be55b5293e3edcd0590e2fd5e1665cdfcc6b4bd5",
+   "semantic-digest": "sha256:318347b9509afe010aa4cad19c17851113697d6efe74fd91be494ae1b5fbb753",
    "path": "implementation-acme-konf-14-1-s2.json"
   }
  ],

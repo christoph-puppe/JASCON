@@ -1,5 +1,5 @@
 {
- "description": "Kernel-version pin (backlog #44, kernel 2.0.0). A content manifest MAY carry `kernel-version`; absent means 1.0.0 content. KERNEL-1: a bundle whose content needs a later kernel (a Risk object, Finding.risk-refs) MUST pin that kernel. KERNEL-2: a tool that meets a pin it does not implement fails closed and names the pinned version and its own. Each vector: a manifest (objects list left empty - the vector's objects are given beside it), the objects, and the expected number of failures. shape-vectors (2.0.0-rc.3): fields that 2.0.0 typed or added on released shapes - Finding.actions[].due and Deviation.opened, free text in 1.0.0 (DATE-2, DATE-1: an invalid vector names its rule in expected-rules), and Component.product-version, an opaque string; `kind` is the type the document must match exactly, or none.",
+ "description": "Kernel-version pin (backlog #44, kernel 2.0.0). A content manifest MAY carry `kernel-version`; absent means 1.0.0 content. KERNEL-1: a bundle whose content needs a later kernel (a Risk object, Finding.risk-refs) MUST pin that kernel. KERNEL-2: a tool that meets a pin it does not implement fails closed and names the pinned version and its own. Each vector: a manifest (objects list left empty - the vector's objects are given beside it), the objects, and the expected number of failures. shape-vectors (2.0.0-rc.3): fields that 2.0.0 typed or added on released shapes - Finding.actions[].due and Deviation.opened, free text in 1.0.0 (DATE-2, DATE-1: an invalid vector names its rule in expected-rules), and Component.product-version, an opaque string; `kind` is the type the document must match exactly, or none. CP-AUTHOR-1 (2026-11-13): the pin vectors hold `provenance` on a Tailoring, an entry of it and an Implementation, `decided` and `review-due` on a Deviation and `date` on an authorization to KERNEL-1; the shape vectors hold the closed `provenance`, the new fields and the three times that any string satisfied until then (DATE-3 a Mapping's provenance date, DATE-4 an Assessment's time, DATE-5 an Attestation's timestamp; DATE-1 now names `decided` too).",
  "vectors": [
   {
    "name": "unpinned-1.0.0-content",
@@ -365,6 +365,415 @@
     }
    ],
    "expected-fails": 0
+  },
+  {
+   "name": "tailoring-provenance-unpinned",
+   "manifest": {
+    "manifest-version": "1",
+    "objects": []
+   },
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "should",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "X."
+       }
+      },
+      {
+       "id": "s2",
+       "modality": "should",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Y."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/base",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/tailoring/t",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/base"
+      }
+     ],
+     "provenance": {
+      "author-ref": "https://org.example/party/ciso",
+      "date": "2026-11-05"
+     }
+    }
+   ],
+   "expected-fails": 1,
+   "expected-frags": [
+    "KERNEL-1",
+    "provenance"
+   ]
+  },
+  {
+   "name": "an-operation's-provenance-unpinned",
+   "manifest": {
+    "manifest-version": "1",
+    "objects": []
+   },
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "should",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "X."
+       }
+      },
+      {
+       "id": "s2",
+       "modality": "should",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Y."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/base",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/tailoring/t",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/base"
+      }
+     ],
+     "operations": [
+      {
+       "op": "set-modality",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-id": "s1",
+       "modality": "must",
+       "provenance": {
+        "author-ref": "https://org.example/party/ciso",
+        "date": "2026-11-05"
+       }
+      }
+     ]
+    }
+   ],
+   "expected-fails": 1,
+   "expected-frags": [
+    "KERNEL-1",
+    "provenance"
+   ]
+  },
+  {
+   "name": "implementation-provenance-unpinned",
+   "manifest": {
+    "manifest-version": "1",
+    "objects": []
+   },
+   "objects": [
+    {
+     "id": "https://org.example/impl/i",
+     "version": "1",
+     "lifecycle": "active",
+     "component-ref": "https://org.example/component/c",
+     "requirement-ref": "https://ns.auth.gov/fw/req/1",
+     "responsibility": "customer",
+     "satisfied-by": [
+      {
+       "capability-ref": "cap"
+      }
+     ],
+     "status": "implemented",
+     "provenance": {
+      "author-ref": "https://org.example/party/ciso",
+      "date": "2026-11-05"
+     }
+    }
+   ],
+   "expected-fails": 1,
+   "expected-frags": [
+    "KERNEL-1",
+    "provenance"
+   ]
+  },
+  {
+   "name": "deviation-decided-unpinned",
+   "manifest": {
+    "manifest-version": "1",
+    "objects": []
+   },
+   "objects": [
+    {
+     "id": "https://org.example/finding/f",
+     "version": "1",
+     "lifecycle": "active",
+     "assessment-ref": "https://org.example/assessment/a",
+     "requirement-ref": "https://ns.auth.gov/fw/req/1",
+     "state": "open",
+     "deviations": [
+      {
+       "type": "operational-requirement",
+       "state": "approved",
+       "rationale": {
+        "en": "The legacy host cannot."
+       },
+       "approver-ref": "https://org.example/party/ciso",
+       "opened": "2026-11-01",
+       "decided": "2026-11-03"
+      }
+     ]
+    }
+   ],
+   "expected-fails": 1,
+   "expected-frags": [
+    "KERNEL-1",
+    "decided"
+   ]
+  },
+  {
+   "name": "deviation-review-due-unpinned",
+   "manifest": {
+    "manifest-version": "1",
+    "objects": []
+   },
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "should",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "X."
+       }
+      },
+      {
+       "id": "s2",
+       "modality": "should",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Y."
+       }
+      }
+     ],
+     "deviations": [
+      {
+       "type": "operational-requirement",
+       "state": "approved",
+       "rationale": {
+        "en": "The legacy host cannot."
+       },
+       "approver-ref": "https://org.example/party/ciso",
+       "opened": "2026-11-01",
+       "review-due": {
+        "type": "date",
+        "value": "2027-01-01"
+       }
+      }
+     ]
+    }
+   ],
+   "expected-fails": 1,
+   "expected-frags": [
+    "KERNEL-1",
+    "review-due"
+   ]
+  },
+  {
+   "name": "authorization-date-unpinned",
+   "manifest": {
+    "manifest-version": "1",
+    "objects": []
+   },
+   "objects": [
+    {
+     "id": "https://org.example/component/c",
+     "version": "1",
+     "lifecycle": "active",
+     "kind": "system",
+     "authorizations": [
+      {
+       "id": "ato-1",
+       "authority-ref": "https://org.example/party/ao",
+       "date": "2026-06-30"
+      }
+     ]
+    }
+   ],
+   "expected-fails": 1,
+   "expected-frags": [
+    "KERNEL-1",
+    "authorization"
+   ]
+  },
+  {
+   "name": "who-and-when-pinned",
+   "manifest": {
+    "manifest-version": "1",
+    "kernel-version": "2.0.0",
+    "objects": []
+   },
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "should",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "X."
+       }
+      },
+      {
+       "id": "s2",
+       "modality": "should",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Y."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/base",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/tailoring/t",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/base"
+      }
+     ],
+     "provenance": {
+      "author-ref": "https://org.example/party/ciso",
+      "date": "2026-11-05"
+     },
+     "operations": [
+      {
+       "op": "set-modality",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-id": "s1",
+       "modality": "must",
+       "provenance": {
+        "author-ref": "https://org.example/party/head-of-ops",
+        "date": "2026-11-12"
+       },
+       "deviation": {
+        "type": "operational-requirement",
+        "state": "approved",
+        "rationale": {
+         "en": "The legacy host cannot."
+        },
+        "approver-ref": "https://org.example/party/ciso",
+        "opened": "2026-11-01",
+        "decided": "2026-11-03",
+        "review-due": {
+         "type": "date",
+         "value": "2027-01-01"
+        }
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://org.example/impl/i",
+     "version": "1",
+     "lifecycle": "active",
+     "component-ref": "https://org.example/component/c",
+     "requirement-ref": "https://ns.auth.gov/fw/req/1",
+     "responsibility": "customer",
+     "satisfied-by": [
+      {
+       "capability-ref": "cap"
+      }
+     ],
+     "status": "implemented",
+     "provenance": {
+      "author-ref": "https://org.example/party/ciso",
+      "date": "2026-11-05"
+     }
+    },
+    {
+     "id": "https://org.example/component/c",
+     "version": "1",
+     "lifecycle": "active",
+     "kind": "system",
+     "authorizations": [
+      {
+       "id": "ato-1",
+       "authority-ref": "https://org.example/party/ao",
+       "date": "2026-06-30"
+      }
+     ]
+    }
+   ],
+   "expected-fails": 0
   }
  ],
  "shape-vectors": [
@@ -695,6 +1104,493 @@
     "lifecycle": "active",
     "kind": "software",
     "product-version": 7.2
+   }
+  },
+  {
+   "name": "tailoring-with-provenance",
+   "kind": "tailoring",
+   "expected": "valid",
+   "document": {
+    "id": "https://org.example/tailoring/t",
+    "version": "1",
+    "lifecycle": "active",
+    "selects": [
+     {
+      "set-ref": "https://ns.auth.gov/fw/set/base"
+     }
+    ],
+    "provenance": {
+     "author-ref": "https://org.example/party/ciso",
+     "date": "2026-11-05"
+    }
+   }
+  },
+  {
+   "name": "provenance-on-a-select-an-exclude-and-an-operation",
+   "kind": "tailoring",
+   "expected": "valid",
+   "document": {
+    "id": "https://org.example/tailoring/t",
+    "version": "1",
+    "lifecycle": "active",
+    "selects": [
+     {
+      "set-ref": "https://ns.auth.gov/fw/set/base",
+      "provenance": {
+       "author-ref": "https://org.example/party/ciso",
+       "date": "2026-11-05"
+      }
+     }
+    ],
+    "excludes": [
+     {
+      "ref": "https://ns.auth.gov/fw/req/1",
+      "provenance": {
+       "author-ref": "https://org.example/party/head-of-ops",
+       "date": "2026-11-12"
+      }
+     }
+    ],
+    "operations": [
+     {
+      "op": "set-modality",
+      "requirement-ref": "https://ns.auth.gov/fw/req/1",
+      "statement-id": "s1",
+      "modality": "must",
+      "provenance": {
+       "author-ref": "https://org.example/party/ciso",
+       "date": "2026-11-05"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "name": "provenance-on-a-predicate-select",
+   "kind": "tailoring",
+   "expected": "valid",
+   "document": {
+    "id": "https://org.example/tailoring/t",
+    "version": "1",
+    "lifecycle": "active",
+    "selects": [
+     {
+      "predicate": {
+       "present": {
+        "path": "facets"
+       }
+      },
+      "provenance": {
+       "author-ref": "https://org.example/party/ciso",
+       "date": "2026-11-05"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "name": "provenance-without-its-date",
+   "kind": "tailoring",
+   "expected": "invalid",
+   "note": "who and when go together",
+   "document": {
+    "id": "https://org.example/tailoring/t",
+    "version": "1",
+    "lifecycle": "active",
+    "selects": [
+     {
+      "set-ref": "https://ns.auth.gov/fw/set/base"
+     }
+    ],
+    "provenance": {
+     "author-ref": "https://org.example/party/ciso"
+    }
+   }
+  },
+  {
+   "name": "provenance-without-its-author",
+   "kind": "tailoring",
+   "expected": "invalid",
+   "document": {
+    "id": "https://org.example/tailoring/t",
+    "version": "1",
+    "lifecycle": "active",
+    "selects": [
+     {
+      "set-ref": "https://ns.auth.gov/fw/set/base"
+     }
+    ],
+    "provenance": {
+     "date": "2026-11-05"
+    }
+   }
+  },
+  {
+   "name": "provenance-date-as-free-text",
+   "kind": "tailoring",
+   "expected": "invalid",
+   "document": {
+    "id": "https://org.example/tailoring/t",
+    "version": "1",
+    "lifecycle": "active",
+    "selects": [
+     {
+      "set-ref": "https://ns.auth.gov/fw/set/base"
+     }
+    ],
+    "provenance": {
+     "author-ref": "https://org.example/party/ciso",
+     "date": "last week"
+    }
+   }
+  },
+  {
+   "name": "provenance-with-another-member",
+   "kind": "tailoring",
+   "expected": "invalid",
+   "note": "the shape is closed",
+   "document": {
+    "id": "https://org.example/tailoring/t",
+    "version": "1",
+    "lifecycle": "active",
+    "selects": [
+     {
+      "set-ref": "https://ns.auth.gov/fw/set/base"
+     }
+    ],
+    "provenance": {
+     "author-ref": "https://org.example/party/ciso",
+     "date": "2026-11-05",
+     "role": "CISO"
+    }
+   }
+  },
+  {
+   "name": "risk-and-its-rating-with-provenance",
+   "kind": "risk",
+   "expected": "valid",
+   "document": {
+    "id": "https://org.example/risk/r",
+    "version": "1",
+    "lifecycle": "active",
+    "scenario": {
+     "en": "A key is not rotated."
+    },
+    "owner-ref": "https://org.example/party/owner",
+    "state": "assessed",
+    "provenance": {
+     "author-ref": "https://org.example/party/ciso",
+     "date": "2026-11-05"
+    },
+    "rating": {
+     "level": "high",
+     "scale-ref": "https://org.example/scale/level",
+     "provenance": {
+      "author-ref": "https://org.example/party/head-of-ops",
+      "date": "2026-11-12"
+     }
+    }
+   }
+  },
+  {
+   "name": "implementation-with-provenance",
+   "kind": "implementation",
+   "expected": "valid",
+   "document": {
+    "id": "https://org.example/impl/i",
+    "version": "1",
+    "lifecycle": "active",
+    "component-ref": "https://org.example/component/c",
+    "requirement-ref": "https://ns.auth.gov/fw/req/1",
+    "responsibility": "customer",
+    "satisfied-by": [
+     {
+      "capability-ref": "cap"
+     }
+    ],
+    "status": "implemented",
+    "provenance": {
+     "author-ref": "https://org.example/party/ciso",
+     "date": "2026-11-05"
+    }
+   }
+  },
+  {
+   "name": "finding-with-provenance",
+   "kind": "finding",
+   "expected": "valid",
+   "document": {
+    "id": "https://org.example/finding/f",
+    "version": "1",
+    "lifecycle": "active",
+    "assessment-ref": "https://org.example/assessment/a",
+    "requirement-ref": "https://ns.auth.gov/fw/req/1",
+    "state": "open",
+    "provenance": {
+     "author-ref": "https://org.example/party/ciso",
+     "date": "2026-11-05"
+    }
+   }
+  },
+  {
+   "name": "deviation-decided-and-review-due",
+   "kind": "finding",
+   "expected": "valid",
+   "document": {
+    "id": "https://org.example/finding/f",
+    "version": "1",
+    "lifecycle": "active",
+    "assessment-ref": "https://org.example/assessment/a",
+    "requirement-ref": "https://ns.auth.gov/fw/req/1",
+    "state": "open",
+    "deviations": [
+     {
+      "type": "operational-requirement",
+      "state": "approved",
+      "rationale": {
+       "en": "The legacy host cannot."
+      },
+      "approver-ref": "https://org.example/party/ciso",
+      "opened": "2026-11-01",
+      "decided": "2026-11-03",
+      "review-due": {
+       "type": "calendar-period",
+       "num": 6,
+       "unit": "months",
+       "calendar-ref": "https://org.example/calendar/isms"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "name": "deviation-decided-as-free-text",
+   "kind": "finding",
+   "expected": "invalid",
+   "expected-rules": [
+    "DATE-1"
+   ],
+   "document": {
+    "id": "https://org.example/finding/f",
+    "version": "1",
+    "lifecycle": "active",
+    "assessment-ref": "https://org.example/assessment/a",
+    "requirement-ref": "https://ns.auth.gov/fw/req/1",
+    "state": "open",
+    "deviations": [
+     {
+      "type": "operational-requirement",
+      "state": "approved",
+      "rationale": {
+       "en": "The legacy host cannot."
+      },
+      "approver-ref": "https://org.example/party/ciso",
+      "opened": "2026-11-01",
+      "decided": "in November"
+     }
+    ]
+   }
+  },
+  {
+   "name": "deviation-review-due-as-free-text",
+   "kind": "finding",
+   "expected": "invalid",
+   "note": "typed as on a Risk; no rule names it",
+   "document": {
+    "id": "https://org.example/finding/f",
+    "version": "1",
+    "lifecycle": "active",
+    "assessment-ref": "https://org.example/assessment/a",
+    "requirement-ref": "https://ns.auth.gov/fw/req/1",
+    "state": "open",
+    "deviations": [
+     {
+      "type": "operational-requirement",
+      "state": "approved",
+      "rationale": {
+       "en": "The legacy host cannot."
+      },
+      "approver-ref": "https://org.example/party/ciso",
+      "opened": "2026-11-01",
+      "review-due": "next spring"
+     }
+    ]
+   }
+  },
+  {
+   "name": "authorization-with-its-date",
+   "kind": "component",
+   "expected": "valid",
+   "document": {
+    "id": "https://org.example/component/c",
+    "version": "1",
+    "lifecycle": "active",
+    "kind": "system",
+    "authorizations": [
+     {
+      "id": "ato-1",
+      "authority-ref": "https://org.example/party/ao",
+      "date": "2026-06-30"
+     }
+    ]
+   }
+  },
+  {
+   "name": "authorization-date-as-free-text",
+   "kind": "component",
+   "expected": "invalid",
+   "document": {
+    "id": "https://org.example/component/c",
+    "version": "1",
+    "lifecycle": "active",
+    "kind": "system",
+    "authorizations": [
+     {
+      "id": "ato-1",
+      "authority-ref": "https://org.example/party/ao",
+      "date": "June"
+     }
+    ]
+   }
+  },
+  {
+   "name": "mapping-provenance-date-as-free-text",
+   "kind": "mapping",
+   "expected": "invalid",
+   "expected-rules": [
+    "DATE-3"
+   ],
+   "document": {
+    "id": "https://org.example/mapping/m",
+    "version": "1",
+    "lifecycle": "active",
+    "source-ref": "https://ns.auth.gov/fw/req/1",
+    "target-ref": "https://ns.auth.gov/fw/req/2",
+    "relationship": "equal",
+    "direction": "bidirectional",
+    "confidence": "draft",
+    "provenance": {
+     "author-ref": "https://org.example/party/ciso",
+     "date": "summer 2026"
+    }
+   }
+  },
+  {
+   "name": "assessment-time-is-a-date",
+   "kind": "assessment",
+   "expected": "valid",
+   "document": {
+    "id": "https://org.example/assessment/a",
+    "version": "1",
+    "lifecycle": "active",
+    "subject-refs": [
+     "https://ns.auth.gov/fw/req/1"
+    ],
+    "method": {
+     "kind": "review"
+    },
+    "performer-ref": "https://org.example/party/assessor",
+    "time": "2026-07-21",
+    "result": "satisfied"
+   }
+  },
+  {
+   "name": "assessment-time-is-a-date-time",
+   "kind": "assessment",
+   "expected": "valid",
+   "document": {
+    "id": "https://org.example/assessment/a",
+    "version": "1",
+    "lifecycle": "active",
+    "subject-refs": [
+     "https://ns.auth.gov/fw/req/1"
+    ],
+    "method": {
+     "kind": "review"
+    },
+    "performer-ref": "https://org.example/party/assessor",
+    "time": "2026-11-03T06:00:05Z",
+    "result": "satisfied"
+   }
+  },
+  {
+   "name": "assessment-time-as-free-text",
+   "kind": "assessment",
+   "expected": "invalid",
+   "expected-rules": [
+    "DATE-4"
+   ],
+   "document": {
+    "id": "https://org.example/assessment/a",
+    "version": "1",
+    "lifecycle": "active",
+    "subject-refs": [
+     "https://ns.auth.gov/fw/req/1"
+    ],
+    "method": {
+     "kind": "review"
+    },
+    "performer-ref": "https://org.example/party/assessor",
+    "time": "Q3 2026",
+    "result": "satisfied"
+   }
+  },
+  {
+   "name": "assessment-time-without-an-offset",
+   "kind": "assessment",
+   "expected": "invalid",
+   "expected-rules": [
+    "DATE-4"
+   ],
+   "note": "RFC 3339: a time without an offset names no instant",
+   "document": {
+    "id": "https://org.example/assessment/a",
+    "version": "1",
+    "lifecycle": "active",
+    "subject-refs": [
+     "https://ns.auth.gov/fw/req/1"
+    ],
+    "method": {
+     "kind": "review"
+    },
+    "performer-ref": "https://org.example/party/assessor",
+    "time": "2026-11-03T06:00:05",
+    "result": "satisfied"
+   }
+  },
+  {
+   "name": "attestation-timestamp-is-a-date-time",
+   "kind": "attestation",
+   "expected": "valid",
+   "document": {
+    "id": "https://org.example/attestation/at",
+    "version": "1",
+    "lifecycle": "active",
+    "subject-semantic-digests": [
+     "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+    ],
+    "content-manifest-digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+    "signer": "https://org.example/party/ao",
+    "timestamp": "2026-07-21T10:00:00Z"
+   }
+  },
+  {
+   "name": "attestation-timestamp-as-free-text",
+   "kind": "attestation",
+   "expected": "invalid",
+   "expected-rules": [
+    "DATE-5"
+   ],
+   "document": {
+    "id": "https://org.example/attestation/at",
+    "version": "1",
+    "lifecycle": "active",
+    "subject-semantic-digests": [
+     "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+    ],
+    "content-manifest-digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+    "signer": "https://org.example/party/ao",
+    "timestamp": "yesterday"
    }
   }
  ]
