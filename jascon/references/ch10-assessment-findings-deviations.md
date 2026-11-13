@@ -197,6 +197,37 @@ actually competent to approve this class of weakness; and do the
 > only question is whether it is typed, queryable, and attached where
 > the weakness lives, or reconstructed from inboxes at audit time.
 
+**A Deviation with a date ahead of it.** *(2.0.0-rc.4, specification
+D26.)* Through rc.3 a Deviation said when it was `opened` and who
+approved it, and nothing more: an exception approved once stayed
+approved, and nobody could list the weakenings that were due for another
+look. Two optional fields close that. `decided` is the day it was
+approved or withdrawn; `opened` stays the day it was asked for.
+`review-due` is typed like a Risk's: a date, a date-time, an elapsed
+duration counted from `decided`, or a calendar period with its
+calendar.
+
+```json
+{ "type": "false-positive", "state": "approved",
+  "rationale": { "en": "Scanner misread KMS export; monthly rotation evidenced in KMS logs." },
+  "approver-ref": "https://assessor.example/party/lead-assessor",
+  "opened": "2026-07-16", "decided": "2026-07-18",
+  "review-due": { "type": "date", "value": "2027-07-18" } }
+```
+
+A validator reads the date of the run and reports every approved
+Deviation whose `review-due` has passed (REVIEW-1). It reports, and
+that is all: the Deviation keeps licensing its weakening until a person
+renews it, withdraws it or lets the Tailoring go. The same report covers
+the `review-due` of a Risk that is still managed.
+
+> **Don't** expect the date to enforce itself. A tool that silently
+> stopped honouring an exception at midnight would change what a bundle
+> means without anyone deciding it. The report puts the overdue ones in
+> front of somebody; the decision stays theirs. And give `--as-of` a
+> date when the answer has to be the same tomorrow, in a test or in an
+> audit of last quarter.
+
 ## 10.6 Risk: the record that comes first
 
 Chapters 6, 9 and 10 so far run in the direction an auditor reads: requirement → implementation → assessment → finding → deviation. An ISMS is written in the other direction, and ISO/IEC 27001 is explicit about the order: identify risks and their owners (6.1.2 c), analyse and evaluate them (6.1.2 d–e), choose a treatment option (6.1.3 a), determine *all* controls necessary (6.1.3 b), compare with Annex A, write the Statement of Applicability with a justification for every inclusion and exclusion (6.1.3 d), obtain the owners' acceptance of the residual (6.1.3 f). BSI-Standard 200-3 is the same procedure with German names — Gefährdungsübersicht, Risikoeinstufung, Risikobehandlung, Konsolidierung — and the same four treatment options. OSCAL 1.x had a `risk` only where an assessor found one; usnistgov/OSCAL #2292 records why that cannot represent an ISO 27001 catalog. The Risk type (App. A.9b) is the missing first record.

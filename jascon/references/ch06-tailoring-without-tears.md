@@ -179,6 +179,36 @@ selected content's origin claims authority; the authority's own
 Attestation over the Tailoring proves it — proof beats prefix; mixed
 or predicate selection is consumer work by definition.
 
+**Who decided it.** *(2.0.0-rc.4, specification D26.)* A weakening has
+always named its approver, through its Deviation. A strengthening, a
+selection and an exclusion named nobody: the comparison with the
+neighbouring formats found that, and an application that logs every
+change was ahead. A Tailoring can now say who wrote it and when, in
+`provenance: {author-ref, date}`, and each select, exclude and operation
+can say the same for itself. An entry that says nothing has its
+Tailoring's author, so a Tailoring by one person names that person once
+and a second decider is named where they decided:
+
+```json
+{ "id": "https://cso.example/tailoring/linux-prod", "version": "2026-11", "lifecycle": "active",
+  "provenance": { "author-ref": "https://cso.example/party/ciso", "date": "2026-11-02" },
+  "selects": [ { "set-ref": "https://cso.example/set/linux-baseline" } ],
+  "operations": [ { "op": "set-parameter", "requirement-ref": "https://cso.example/req/LNX-SSH-1",
+                    "statement-id": "s1", "parameter": "max-auth-tries", "value": 4,
+                    "provenance": { "author-ref": "https://cso.example/party/platform-ops", "date": "2026-11-02" } } ] }
+```
+
+The field is optional, and a validator reports a consumer's Tailoring
+that leaves an entry without an author (AUTHOR-1); `--require-authors`
+makes the report a failure. An authority's Tailoring is not asked: its
+origin and its Attestation say whose it is.
+
+> **Don't** take the author for a signature. `provenance` is a claim
+> inside the object. The semantic digest covers it, so whoever attests
+> the Tailoring attests the claim, and that signature is the proof.
+> And don't take it for a log: a change is a new version, and who made
+> the change is that version's `provenance`.
+
 ## 6.4 Resolution you can memorize
 
 The entire resolution algorithm — the successor to a specification-sized

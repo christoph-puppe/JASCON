@@ -611,8 +611,15 @@ expiry: a security exception in CISO Assistant has an expiration date,
 and a risk in OSCAL a deadline. No tailoring operation records its own
 author: a weakening needs an approved Deviation, every other change is
 attributed only through the Tailoring that holds it, where CISO
-Assistant logs each change with who and when. Both are in the
-spec-feedback backlog, as #65 and #66. Two claims in this project's own survey were also wrong and are
+Assistant logs each change with who and when. Both went into the
+spec-feedback backlog as #65 and #66, and the author decided both the
+same day (specification D26, 2.0.0-rc.4): a Deviation may say when it
+was decided and when it is due for review, and a validator reports the
+day it has passed; a Tailoring and each of its entries, a Risk, an
+Implementation and a Finding may say who decided and when, and a
+validator reports where they do not. What stays behind: the fields are
+optional, the report fails nothing unless asked to, and a version's
+author is not a log of every change. Two claims in this project's own survey were also wrong and are
 corrected in `PRIOR-ART.md`: XCCDF does carry several languages, and
 "no neighbour combines" holds only for risk joined to control selection
 and a recomputed check verdict as data that leaves the tool — the other

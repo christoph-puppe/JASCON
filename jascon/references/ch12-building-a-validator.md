@@ -295,6 +295,29 @@ Deviation's `opened` (DATE-1), the `due` of a Finding's action (DATE-2)
 and `product-version`. The schema refuses; your code only names the
 rule, as for RISK-1 to RISK-6.
 
+*(2.0.0-rc.4, specification D26.)* The pin also holds for the fields
+that say who decided and when: `provenance` on a Tailoring, on one of
+its entries, on an Implementation or a Finding; `decided` or
+`review-due` on a Deviation; `date` on an authorization. Three more
+times are typed and named: a Mapping's `provenance.date` (DATE-3), an
+Assessment's `time` (DATE-4), an Attestation's `timestamp` (DATE-5);
+DATE-1 covers a Deviation's `decided` too. `kernel-vectors.json` now
+has 18 cases for the pin and 36 `shape-vectors`.
+
+Two reports come with those fields, and neither is a verdict.
+`author-vectors.json` holds 17 cases for the first: one line per object
+and rule where an author or a date is missing (AUTHOR-1 to AUTHOR-4),
+objects in the order of their ids. Print them as notes, and offer a
+switch that makes them failures. The other 17 cases are for REVIEW-1: an
+approved Deviation or a Risk still managed whose `review-due` has
+passed. This is the one place where your validator reads a clock. Take
+the date of the run in UTC, and take a date from the caller instead when
+one is given; every vector gives one. Compare calendar days in UTC, so
+that a date-time with an offset lands on the right day; count a
+duration from `decided`, else `opened`, or from a Risk's
+`acceptance.date`; and report a calendar period as not evaluable rather
+than guess at a calendar you do not have. Nothing fails by REVIEW-1.
+
 **Third, close and type the edges.** Four references on a Risk are
 closure-required and typed: `treatments[].requirement-ref` names a
 Requirement, `component-refs` name Components, `tailoring-refs` name

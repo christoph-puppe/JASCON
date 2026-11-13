@@ -1,6 +1,21 @@
 # JASCON — "Kernel + Registered Facets"
-## Specification 2.0.0-rc.3
-### release candidate, 2026-11-12 · the 1.0.0 text (released 2026-07-22) amended by CP-RISK-1 (Risk, the tenth kernel type), CP-CHECK-1 (Check, the eleventh) and CP-ADVICE-1 (advice packs) · NOT tagged — both reference validators are green on this candidate, the PowerShell twin on Windows PowerShell 5.1 (IV.5b); the tag is the author's decision
+## Specification 2.0.0-rc.4
+### release candidate, 2026-11-13 · the 1.0.0 text (released 2026-07-22) amended by CP-RISK-1 (Risk, the tenth kernel type), CP-CHECK-1 (Check, the eleventh), CP-ADVICE-1 (advice packs) and CP-AUTHOR-1 (who decided, and when) · NOT tagged — both reference validators are green on this candidate, the PowerShell twin on Windows PowerShell 5.1 (IV.5b); the tag is the author's decision
+
+> **What changed since rc.3 (2026-11-13).** One decision is new — **D26**:
+> who decided and when is spelled one way, `provenance`, and is optional on
+> the records and decisions that had no place for it; a Deviation may say
+> when it was decided and when it is due for review. No type and no
+> primitive is added. D8, D13 and D23 were amended in place and marked
+> *(2.0.0-rc.4)*. Fields were added to released shapes, and three fields
+> that accepted any string are typed (`Mapping.provenance.date`,
+> `Assessment.time`, `Attestation.timestamp`), so this is a new candidate.
+> After rc.3 and before this decision, three amendments landed without a
+> new candidate: the number domain (D3.9, NUMBER-1), the run rules of
+> CHECK-12, 13 and 15, and the code-point comparisons of the PowerShell
+> twin (IV.6). The proposal is `drafts/CP-AUTHOR-1.md`; the journal is the
+> register, "Amendments — the open backlog before 2.0.0" and "CP-AUTHOR-1
+> landed". The rc.3 file is gone from the tree (git keeps it).
 
 > **What changed since rc.2 (2026-11-12, the same day).** One decision is
 > new — **D25**, advice packs: a vendor's recommendations as one published
@@ -511,6 +526,17 @@ accepted. Surveyed first: the shipped bundles hold two `opened` values
 and three `due` values, and all five conform. A date that any string
 satisfies cannot be compared, sorted or checked, which is the defect
 this specification counts in others' catalogues.
+*(2.0.0-rc.4 — author decision 2026-11-13; backlog #65; D26)* Two
+optional fields. `decided` is the day the Deviation was approved or
+withdrawn, a date; `opened` stays the day it was asked for (AUTHOR-3
+reports an approved or withdrawn Deviation without it). `review-due` says
+when the exception is to be looked at again, typed as on a Risk: a date,
+a date-time, an elapsed duration, or a calendar period with its
+calendar. A validator reports an approved Deviation whose `review-due`
+has passed (**REVIEW-1**, D26). The report fails nothing and changes
+nothing: the Deviation keeps licensing its weakening until someone acts.
+An exception approved once used to stay approved with no date ahead of
+it; the one record that licenses a weakening now has one.
 
 ## D9 — Statements: identified collection; **normative modality order**; obligated-parties; **elapsed vs. calendar durations**; parameter algebra. *(rev. v0.5 — P8-E2, P7-G on calendars/decimal)* *(rev. v0.6 cycle — R1 #1)*
 **Decision.** As v0.4 (`statements[] {id, modality, obligated-parties[],
@@ -680,6 +706,17 @@ converter had to synthesize base prose just to have something to
 `variants` carrier on Requirement — authority-published variance is 1-of-3
 in the census and its mechanism (Tailoring) already exists, so it fails
 the D22 promotion bar on tests 1 and 2.
+
+**Who decided an entry *(2.0.0-rc.4 — author decision 2026-11-13;
+backlog #66; D26)*.** A Tailoring MAY carry `provenance: {author-ref,
+date}`, and so MAY each select, each exclude and each operation. Who
+decided an entry is a function of the object alone: the entry's
+`provenance`, else the Tailoring's, else nobody. A Tailoring written by
+one person names that person once. **AUTHOR-1** reports a Tailoring at
+consumer tier that leaves an entry without an author; an authority's
+Tailoring is attributed by its origin and its Attestation and is not
+asked. `excludes[].rationale` stays optional; `risk-coverage` reports an
+exclude without one at consumer tier, as before.
 
 **The tier anchor — layered (rev. v0.6 cycle — R3 #19; rev 4 at gate
 3).** The tier that decides Deviation duties is DERIVED from data,
@@ -1032,6 +1069,14 @@ the answer to *why is this requirement in scope at all?*
   "review-due": { "type": "calendar-period", "num": 12, "unit": "months",
                   "calendar-ref": "https://cso.example/calendar/isms" } }
 ```
+
+*(2.0.0-rc.4; D26)* A Risk MAY carry `provenance`, and so MAY its
+`rating` and its `residual-rating`; a rating without one has the Risk's.
+A change of a Risk is a new version, and who changed it is that
+version's `provenance`: the kernel keeps no log inside the object.
+`owner-ref` stays who answers for the risk, which is another question.
+**REVIEW-1** reports a Risk still managed whose `review-due` has passed;
+a duration there counts from `acceptance.date`.
 
 Required: `scenario`, `owner-ref`, `state`. `review-due` is a point in
 time (`{type: date | datetime, value}` — `YYYY-MM-DD`, or RFC 3339 with an
@@ -1642,6 +1687,92 @@ corrections: III.2's effectivity dates differentiated
 demonstrates the parameter-bounds rule (setting `iir-deadline` to a value
 outside a declared range would fail without a Deviation). New:
 
+## D26 — **Who decided, and when: one `provenance`; a decision date and a review date on a Deviation.** *(new, 2.0.0-rc.4 — CP-AUTHOR-1; author decisions 2026-11-13; backlog #65 and #66)*
+
+Through rc.3 the kernel recorded a weakening, a selection, a risk level,
+an implementation status and an authorization without a place for who
+decided it or when, and it spelled "who and when" five ways where it did
+have one (`provenance`, `approver-ref` with `opened`, `approver-ref` with
+`date`, `performer-ref` with `time`, `signer` with `timestamp`).
+
+**One spelling.** `provenance: {author-ref, date}`: a URI, compared and
+never resolved (D2), and a date `YYYY-MM-DD`. The shape is closed and
+both members are required when it is present. It is the shape a Mapping
+and a Check already carried.
+
+| Where | Field | Since |
+|---|---|---|
+| Mapping, Check | `provenance`, required | 1.0.0, rc.2 |
+| Tailoring; each select, exclude and operation | `provenance`, optional | rc.4 |
+| Risk; its `rating` and `residual-rating` | `provenance`, optional | rc.4 |
+| Implementation, Finding | `provenance`, optional | rc.4 |
+| Deviation | `decided` (a date) and `review-due`, optional; `approver-ref` and `opened` as before | rc.4 |
+| Component authorization | `date`, optional; `authority-ref` as before | rc.4 |
+| Assessment | `performer-ref`, `time`: a date or an RFC 3339 date-time with an offset | typed in rc.4 |
+| Attestation | `signer`, `timestamp`: the same | typed in rc.4 |
+| Requirement, RequirementSet | none: the publisher is the origin of the id | |
+
+**Two levels.** On a record, `provenance` names who wrote this version
+and when. On a decision inside a record (an entry of a Tailoring, a
+rating of a Risk) it names who decided that entry; an entry without one
+has its record's. A change is a new version. The kernel keeps no log
+inside an object, because a second history inside each version can
+contradict the first.
+
+**A claim, bound by the digest.** `provenance` is part of the semantic
+digest, so an Attestation over a Tailoring binds what the Tailoring says
+about its authors. Proof of who signed stays the signature (D7).
+
+**Reported, not required.** The schema leaves every one of these fields
+optional: a catalogue authority's content needs none of them. A
+validator reports what is missing, one line per object and rule, and
+MUST offer a switch that turns the lines into failures (reference:
+`--require-authors`), as it does for uncovered requirements.
+
+| Rule | Reported when |
+|---|---|
+| **AUTHOR-1** | a Tailoring at consumer tier has a select, an exclude or an operation with no `provenance` of its own and none on the Tailoring |
+| **AUTHOR-2** | a Risk, a Finding or an Implementation carries no `provenance` |
+| **AUTHOR-3** | a Deviation in state `approved` or `withdrawn` carries no `decided` |
+| **AUTHOR-4** | a Component authorization carries no `date` |
+| **REVIEW-1** | the `review-due` of an approved Deviation, or of a Risk still managed, has passed |
+
+**REVIEW-1.** The validator reads the date of the run in UTC; it MUST
+accept a date given by the caller instead (reference: `--as-of
+YYYY-MM-DD`), which is what makes the conformance vectors give the same
+answer every day. A point in time has passed when its UTC calendar day is
+before that date; due today is not overdue. A duration counts from
+`decided`, else `opened`, on a Deviation and from `acceptance.date` on a
+Risk; an elapsed duration is added to the start of that day in UTC. A
+calendar period is not evaluated without its calendar (D9) and is
+reported as such. REVIEW-1 never fails a bundle, with any switch. This is
+the one rule of this specification whose answer depends on the day it is
+asked; no verdict, no digest and no resolution depends on it.
+
+**Three times that any string satisfied are typed.**
+`Mapping.provenance.date` is a date (**DATE-3**); `Assessment.time`
+(**DATE-4**) and `Attestation.timestamp` (**DATE-5**) are a date or an
+RFC 3339 date-time with an offset. DATE-1 now names a Deviation's
+`decided` beside `opened`. As with DATE-1 and DATE-2, the schema refuses
+and the validator names the rule. No value in the repository had to
+change: 53 assessment times, 19 timestamps and 3 mapping dates conform.
+
+**The pin.** A bundle that uses a field added here needs
+`kernel-version: 2.0.0` (KERNEL-1, D3.6).
+
+**Not done, and why.** No requester on a Deviation: asking is not
+deciding. No performer per check result row: a run by someone else is
+another Assessment. No party type (#16). No rule that makes
+`excludes[].rationale` required.
+
+**Evidence tier.** Fields on existing types, entered on the author's
+decision (the precedent is D25's two fields). Read, not counted: OSCAL
+states who per item in its assessment layer and per document everywhere;
+CISO Assistant carries an expiry on a security exception and logs each
+change. No corpus of consumer Tailorings with authors exists. Measured:
+34 vectors for the two reports and 29 for the pin and the shapes;
+nineteen deliberate defects in the reference each turn one red.
+
 ## III.4 — A cross-framework mapping (SCF-shaped)
 
 ```json
@@ -1900,7 +2031,7 @@ ships: the bundles for CIS, CR26, C5, C3A and CyFun are not redistributed
    vectors and the repaired ISM taxonomy lifts the round-trip to
    **5,886/5,886** — re-measured, ALL GREEN in both validators.)*
 
-## IV.5b The 2.0.0 gate — state at rc.3 (2026-11-12)
+## IV.5b The 2.0.0 gate — state at rc.3 (2026-11-12), with what rc.4 added (2026-11-13)
 
 The 1.0.0 gate asked for converters, an executable kernel, a lifecycle
 corpus and two implementations. The same four questions, asked of Risk,
@@ -1921,6 +2052,10 @@ of Check and of advice packs:
    ids (D2; backlog #45 and #58). No kernel shape and no rule changed by
    these six. With the vectors of the run rules and of NUMBER-1 (IV.6),
    574 in all; both validators and the app's port are green on them.)*
+   *(rc.4, 2026-11-13: an eighteenth family, `author`, with 34 vectors
+   for the two reports of D26, and `kernel` 25 → 54 for the pin and the
+   shapes of its fields: **637 vectors, 18 families**. Nineteen
+   deliberate defects in the reference's new code each turn one red.)*
 2. **First implementation.** ✓ `validate_core.py`: 537 / 537, the five
    shipped bundles (3,715 objects, both digests each), the worked advice
    pack and the example folder — ALL GREEN on 2026-11-12.
@@ -1997,10 +2132,11 @@ history. The compact line:
 | The value-level check of the converters | 2026-11-13 | Two more outside reports (issues 32 and 33 in the GitHub tracker): `value_arrival()` matched substrings across one joined string, so the IFA figure of 394 of 835 was too high; and any global check hides a dropped value behind an equal one elsewhere. The helper is `global_occurrence()` now, on typed whole values, with key-only and embedded matches listed apart and not counted: **283 of 835**, 124 content values without an equal, stated as an upper and a lower bound. R16 and IV.5b item 6 amended; backlog #41 re-planned to a ledger of source occurrences per converter. No kernel rule, vector or bundle object changes | "Amendments — the value-level check of the converters" |
 | Outside reports on the run rules | 2026-11-13 | Four reports from outside (issues 23 to 26 in the GitHub tracker), each reproduced: the reference accepted an evidence record outside `evidence/sha256/`, a `collector-id` on a Check without collectors, a row parameter its Check does not read, and a record that binds no observation. CHECK-12, CHECK-13 and CHECK-15 amended in place (D24); the three engines follow; `check` 188 → 199 vectors. After rc.3; the counts in the Status and in IV.5b and IV.7 are those of rc.3 | "Amendments — the outside reports of 2026-11-13" |
 | Code points in the twin · the open backlog | 2026-11-13 | The PowerShell twin compared strings with PowerShell's operators, which fold case and compare under a culture; a Tailoring whose id differed from its content's origin by one U+00AD was read as the authority's own. No operator compares two strings there any more, and a lint that parses the twin keeps it so (#58 closed, with the residue of #45). `reference` 13 → 18 vectors, `tier` 9 → 10; 574 in all. No shape and no rule changed. The same day: the record of catalogue entries that do not apply got a schema, outside the kernel (#54 closed); the two OSCAL response types without a treatment code stay without one (#47b closed, C.10); #65 and #66 accepted for 2.0.0 and not yet landed. After rc.3 | D2 · C.10 · "Amendments — the open backlog before 2.0.0" |
+| **2.0.0-rc.4** | 2026-11-13 | This text: D26 new (who decided, and when); D8, D13 and D23 amended in place. `provenance` optional on a Tailoring and its entries, a Risk and its ratings, an Implementation and a Finding; `decided` and `review-due` on a Deviation; `date` on an authorization; AUTHOR-1 to 4 and REVIEW-1 as reports; three times typed (DATE-3 to 5). A new vector family, `author` (34), and `kernel` 25 → 54; 637 in all, 18 families. Backlog #65 and #66 | D26 · "CP-AUTHOR-1 landed" |
 
 ## IV.7 Release artifacts (what this candidate ships with)
 
-In the repository at the rc.3 commit. "Green" below means the Python
+In the repository at the rc.4 commit. "Green" below means the Python
 reference validator; the PowerShell twin's state is IV.5b item 3.
 
 - **Kernel schema** `jascon-2.0.0.schema.json` — closed
@@ -2017,7 +2153,7 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
   modality 21 · parameter 19 · tailoring 19 · attestation 5 · facet 7 ·
   reference 13 · lifecycle 38 · tier 9 · dsse 5 · composition 7 ·
   conditional 8 · risk 73 · kernel 25 · scale 18 · check 188 · advice
-  74; with the amendments after rc.3 in IV.6, 574 in all). In `risk-vectors.json`, `expected-rule` is the portable assertion;
+  74; with the amendments after rc.3 in IV.6 and the vectors of rc.4, **637 in 18 families**: `author` 34, `kernel` 54, `reference` 18, `tier` 10, `jcs` 22, `parameter` 21, `check` 203). In `risk-vectors.json`, `expected-rule` is the portable assertion; in `author-vectors.json`, the rule, the object and the count of each report line;
   in `check-vectors.json` and `advice-vectors.json`, the outcome and the
   named rules.
 - **A worked advice pack** under `jascon/example-packs/`, and the example
@@ -2117,7 +2253,7 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
    kernel-shape changes ride major versions under D3.5 governance, and
    the anticipated-convergence path stays closed (D22 rev 3).
 
-## IV.9 From 2.0.0-rc.3 to 2.0.0
+## IV.9 From 2.0.0-rc.4 to 2.0.0
 
 1. **The version** — ✓ decided: 2.0.0 (author, 2026-11-10); it carries
    Risk, Check and advice packs (author, 2026-11-12).
@@ -2137,8 +2273,11 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
    `v1.0.0` tag keep them, and every commit id cited in the register
    stays valid; ✓ a Tailoring names no Component (#51; D13); ✓ Unicode
    categories follow the host (#59; D24); ✓ every machine identifier
-   carries `jascon` (register, "Amendments — 2026-11-11"). **Nothing is
-   left to decide before the tag.**
+   carries `jascon` (register, "Amendments — 2026-11-11"); ✓ a Deviation
+   may say when it was decided and when it is due for review, and the
+   records and decisions that named no author may name one (#65, #66;
+   D26; author, 2026-11-13). **Nothing is left to decide before the
+   tag.**
 6. **Work, not decisions** — ✓ the implemented I-Regexp grammar was
    compared with the published text of RFC 9485 on 2026-11-12 (#61,
    closed); ☐ a ledger of source occurrences per converter, and the

@@ -14,7 +14,7 @@ contact with real catalogs before it may stay.**
 
 This repository is a working design study, not a slide deck. It contains a
 draft specification with a public decision register, an **executable kernel
-schema** with a **157-vector conformance corpus** (574 in 17 families in the 2.0.0 candidate) and *two* reference
+schema** with a **157-vector conformance corpus** (637 in 18 families in the 2.0.0 candidate) and *two* reference
 validators — Python, and a **zero-dependency PowerShell 5.1 twin that runs
 on a stock Windows box** (the weekend-validator claim, measured,
 crypto engines included) —
@@ -29,7 +29,7 @@ equality against the official NIST schema, and a zero-dependency
 **single-file reader & authoring studio** that turns the whole thing into
 something you can click.
 
-> Status: **1.0.0 released 2026-07-22; 2.0.0-rc.3 on `main`, not
+> Status: **1.0.0 released 2026-07-22; 2.0.0-rc.4 is the candidate, not
 > tagged** — evidence-gated, maintained in personal capacity. Where JASCON
 > sits among OSCAL, Gemara, CycloneDX Attestations and the other formats in
 > this space: [`PRIOR-ART.md`](PRIOR-ART.md).
@@ -48,14 +48,35 @@ requirements and mints real objects.*
 
 ## Unreleased: JASCON 2.0.0 — Risk, Check and advice packs
 
-> **State 2026-11-12 — release candidate 2.0.0-rc.3; not tagged.**
+> **State 2026-11-13 — release candidate 2.0.0-rc.4; not tagged.**
 > Everything below this section describes the released **1.0.0**. The
 > candidate adds two kernel types, Risk and Check, and advice packs.
-> Both reference validators are green on it. Two changes the author
-> accepted on 2026-11-13 are not built yet, and the tag waits for them:
-> a date of review on a Deviation, and the author and date of every
-> recorded decision (backlog #65 and #66;
-> [the plan](drafts/pre-2.0.0-fix-plan.md)).
+> Both reference validators are green on it, and nothing is left to
+> decide: the tag is the author's call.
+>
+> **Who decided, and when** ([CP-AUTHOR-1](drafts/CP-AUTHOR-1.md),
+> decided by the author on 2026-11-13; release candidate 4): a
+> comparison with five neighbouring formats found two places where one of
+> them was ahead. An approved exception had no date ahead of it, and no
+> tailoring change named its own author.
+>
+> - **Built:** one spelling, `provenance: {author-ref, date}`, optional
+>   on a Tailoring and each of its selects, excludes and operations, on a
+>   Risk and its ratings, on an Implementation and a Finding. A Deviation
+>   may say when it was `decided` and when it is due for review
+>   (`review-due`); an authorization may carry its `date`. Three times
+>   that accepted any string are typed.
+> - **Reported, not enforced:** the validator prints what is missing
+>   (AUTHOR-1 to 4) and which review dates have passed (REVIEW-1, against
+>   the date of the run or `--as-of`). `--require-authors` turns the
+>   first into failures; the second never fails, and a Deviation past
+>   its review stays in force until someone acts.
+> - **Measured:** 34 vectors for the two reports and 29 for the pin and
+>   the shapes; nineteen deliberate defects in the reference each turn
+>   one red. The example folder names its authors.
+> - **Not there:** the tools do not write the fields yet. The app and the
+>   converters name no author, so the converted NIST example shows ten
+>   report lines. A version's author is not a log of every change.
 >
 > **Advice packs** ([CP-ADVICE-1](drafts/CP-ADVICE-1.md), accepted by the
 > author on 2026-11-12): a vendor's recommendations as one published
@@ -66,7 +87,7 @@ requirements and mints real objects.*
 > tailoring or an assessment, and the vendor's manifest stays in the set
 > as the import record. No new type.
 >
-> - **Measured:** 74 advice vectors (537 in all on 2026-11-12, 574 since 2026-11-13; 17 families) pass in the
+> - **Measured:** 74 advice vectors (537 in all on 2026-11-12, 637 in 18 families since rc.4) pass in the
 >   Python reference; 28 deliberate breaks of the reference each turn a
 >   vector red. A worked pack, signed with the public fixture key, and
 >   the example folder after importing it validate. Run over the shipped
@@ -178,12 +199,15 @@ requirements and mints real objects.*
 > - **Why 2.0.0:** the released spec says kernel-shape changes ride a
 >   *major* (D22 rev 3), and the author kept that rule. Until rc.2 it was
 >   a major by rule and a superset in fact. Since rc.3 two free-text date
->   fields are typed (above), so a 1.0.0 bundle is a 2.0.0 bundle only if
->   it wrote dates there; every bundle that ships does. A 1.0.0 *tool*
+>   fields are typed (above), and since rc.4 three more (a Mapping's
+>   provenance date, an Assessment's time, an Attestation's timestamp),
+>   so a 1.0.0 bundle is a 2.0.0 bundle only if it wrote dates and times
+>   there; every bundle that ships does. A 1.0.0 *tool*
 >   cannot read a bundle that carries a Risk.
 > - **The specification text:**
->   [`jascon-specification-2.0.0-rc.3.md`](drafts/jascon-specification-2.0.0-rc.3.md)
->   — a release candidate; D23 carries Risk, D24 Check, D25 advice packs.
+>   [`jascon-specification-2.0.0-rc.4.md`](drafts/jascon-specification-2.0.0-rc.4.md)
+>   — a release candidate; D23 carries Risk, D24 Check, D25 advice packs,
+>   D26 who decided and when.
 > - **The kernel names itself:** a manifest may carry `kernel-version`,
 >   and a bundle with content beyond 1.0.0 (a Risk) must — an older tool
 >   then stops with both versions in the message instead of "matches NO
@@ -593,7 +617,7 @@ Install by copying the directory into your skills folder, or unpack
 
 ## Read the spec
 
-- [`drafts/jascon-specification-1.0.0.md`](drafts/jascon-specification-1.0.0.md) — the released specification; [`…-2.0.0-rc.3.md`](drafts/jascon-specification-2.0.0-rc.3.md) — the candidate (Risk, Check and advice packs)
+- [`drafts/jascon-specification-1.0.0.md`](drafts/jascon-specification-1.0.0.md) — the released specification; [`…-2.0.0-rc.4.md`](drafts/jascon-specification-2.0.0-rc.4.md) — the candidate (Risk, Check, advice packs, who decided and when)
 - [`risk-catalogs/`](risk-catalogs/README.md) — prototype: two ready-made lists of typical risks (office IT, industrial plant; English and German) and a tool that imports them into `Risk` objects
 - [`PRIOR-ART.md`](PRIOR-ART.md) — the neighbouring formats, what each already does, and what JASCON does not add
 - [`drafts/jascon-v0.5-specification.md`](drafts/jascon-v0.5-specification.md) — the v0.5 draft (history)
