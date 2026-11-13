@@ -11,13 +11,13 @@
    "path": "ap.assessment-plan.assessment-subjects[].description",
    "count": 1,
    "level": "L2",
-   "destination": "Assessment.method payload (assessment-plan@1): activities/steps/tasks/subjects/reviewed-controls"
+   "destination": "Assessment.method payload (assessment-plan@1): activities with their steps, method prop and related controls, tasks (each naming its activity by title), subjects, reviewed-controls; roles -> the payload's responsible-roles"
   },
   {
    "path": "ap.assessment-plan.assessment-subjects[].type",
    "count": 1,
    "level": "L2",
-   "destination": "Assessment.method payload (assessment-plan@1): activities/steps/tasks/subjects/reviewed-controls"
+   "destination": "Assessment.method payload (assessment-plan@1): activities with their steps, method prop and related controls, tasks (each naming its activity by title), subjects, reviewed-controls; roles -> the payload's responsible-roles"
   },
   {
    "path": "ap.assessment-plan.back-matter.resources[].remarks",
@@ -59,67 +59,67 @@
    "path": "ap.assessment-plan.local-definitions.activities[].description",
    "count": 1,
    "level": "L2",
-   "destination": "Assessment.method payload (assessment-plan@1): activities/steps/tasks/subjects/reviewed-controls"
+   "destination": "Assessment.method payload (assessment-plan@1): activities with their steps, method prop and related controls, tasks (each naming its activity by title), subjects, reviewed-controls; roles -> the payload's responsible-roles"
   },
   {
    "path": "ap.assessment-plan.local-definitions.activities[].props[].name",
    "count": 1,
    "level": "L2",
-   "destination": "Assessment.method payload (assessment-plan@1): activities/steps/tasks/subjects/reviewed-controls"
+   "destination": "Assessment.method payload (assessment-plan@1): activities with their steps, method prop and related controls, tasks (each naming its activity by title), subjects, reviewed-controls; roles -> the payload's responsible-roles"
   },
   {
    "path": "ap.assessment-plan.local-definitions.activities[].props[].value",
    "count": 1,
    "level": "L2",
-   "destination": "Assessment.method payload (assessment-plan@1): activities/steps/tasks/subjects/reviewed-controls"
+   "destination": "Assessment.method payload (assessment-plan@1): activities with their steps, method prop and related controls, tasks (each naming its activity by title), subjects, reviewed-controls; roles -> the payload's responsible-roles"
   },
   {
    "path": "ap.assessment-plan.local-definitions.activities[].related-controls.control-selections[].include-controls[].control-id",
    "count": 1,
    "level": "L2",
-   "destination": "Assessment.method payload (assessment-plan@1): activities/steps/tasks/subjects/reviewed-controls"
+   "destination": "Assessment.method payload (assessment-plan@1): activities with their steps, method prop and related controls, tasks (each naming its activity by title), subjects, reviewed-controls; roles -> the payload's responsible-roles"
   },
   {
    "path": "ap.assessment-plan.local-definitions.activities[].responsible-roles[].party-uuids[]",
    "count": 1,
    "level": "L2",
-   "destination": "Assessment.method payload (assessment-plan@1): activities/steps/tasks/subjects/reviewed-controls"
+   "destination": "Assessment.method payload (assessment-plan@1): activities with their steps, method prop and related controls, tasks (each naming its activity by title), subjects, reviewed-controls; roles -> the payload's responsible-roles"
   },
   {
    "path": "ap.assessment-plan.local-definitions.activities[].responsible-roles[].role-id",
    "count": 1,
    "level": "L2",
-   "destination": "Assessment.method payload (assessment-plan@1): activities/steps/tasks/subjects/reviewed-controls"
+   "destination": "Assessment.method payload (assessment-plan@1): activities with their steps, method prop and related controls, tasks (each naming its activity by title), subjects, reviewed-controls; roles -> the payload's responsible-roles"
   },
   {
    "path": "ap.assessment-plan.local-definitions.activities[].steps[].description",
    "count": 6,
    "level": "L2",
-   "destination": "Assessment.method payload (assessment-plan@1): activities/steps/tasks/subjects/reviewed-controls"
+   "destination": "Assessment.method payload (assessment-plan@1): activities with their steps, method prop and related controls, tasks (each naming its activity by title), subjects, reviewed-controls; roles -> the payload's responsible-roles"
   },
   {
    "path": "ap.assessment-plan.local-definitions.activities[].steps[].title",
    "count": 6,
    "level": "L2",
-   "destination": "Assessment.method payload (assessment-plan@1): activities/steps/tasks/subjects/reviewed-controls"
+   "destination": "Assessment.method payload (assessment-plan@1): activities with their steps, method prop and related controls, tasks (each naming its activity by title), subjects, reviewed-controls; roles -> the payload's responsible-roles"
   },
   {
    "path": "ap.assessment-plan.local-definitions.activities[].steps[].uuid",
    "count": 6,
    "level": "L2",
-   "destination": "Assessment.method payload (assessment-plan@1): activities/steps/tasks/subjects/reviewed-controls"
+   "destination": "Assessment.method payload (assessment-plan@1): activities with their steps, method prop and related controls, tasks (each naming its activity by title), subjects, reviewed-controls; roles -> the payload's responsible-roles"
   },
   {
    "path": "ap.assessment-plan.local-definitions.activities[].title",
    "count": 1,
    "level": "L2",
-   "destination": "Assessment.method payload (assessment-plan@1): activities/steps/tasks/subjects/reviewed-controls"
+   "destination": "Assessment.method payload (assessment-plan@1): activities with their steps, method prop and related controls, tasks (each naming its activity by title), subjects, reviewed-controls; roles -> the payload's responsible-roles"
   },
   {
    "path": "ap.assessment-plan.local-definitions.activities[].uuid",
    "count": 1,
    "level": "L2",
-   "destination": "Assessment.method payload (assessment-plan@1): activities/steps/tasks/subjects/reviewed-controls"
+   "destination": "Assessment.method payload (assessment-plan@1): activities with their steps, method prop and related controls, tasks (each naming its activity by title), subjects, reviewed-controls; roles -> the payload's responsible-roles"
   },
   {
    "path": "ap.assessment-plan.metadata.last-modified",
@@ -269,49 +269,49 @@
    "path": "ap.assessment-plan.reviewed-controls.control-selections[].include-controls[].control-id",
    "count": 1,
    "level": "L2",
-   "destination": "Assessment.method payload (assessment-plan@1): activities/steps/tasks/subjects/reviewed-controls"
+   "destination": "Assessment.method payload (assessment-plan@1): activities with their steps, method prop and related controls, tasks (each naming its activity by title), subjects, reviewed-controls; roles -> the payload's responsible-roles"
   },
   {
    "path": "ap.assessment-plan.tasks[].associated-activities[].activity-uuid",
    "count": 1,
    "level": "L2",
-   "destination": "Assessment.method payload (assessment-plan@1): activities/steps/tasks/subjects/reviewed-controls"
+   "destination": "Assessment.method payload (assessment-plan@1): activities with their steps, method prop and related controls, tasks (each naming its activity by title), subjects, reviewed-controls; roles -> the payload's responsible-roles"
   },
   {
    "path": "ap.assessment-plan.tasks[].associated-activities[].subjects[].type",
    "count": 1,
    "level": "L2",
-   "destination": "Assessment.method payload (assessment-plan@1): activities/steps/tasks/subjects/reviewed-controls"
+   "destination": "Assessment.method payload (assessment-plan@1): activities with their steps, method prop and related controls, tasks (each naming its activity by title), subjects, reviewed-controls; roles -> the payload's responsible-roles"
   },
   {
    "path": "ap.assessment-plan.tasks[].remarks",
    "count": 1,
    "level": "L2",
-   "destination": "Assessment.method payload (assessment-plan@1): activities/steps/tasks/subjects/reviewed-controls"
+   "destination": "Assessment.method payload (assessment-plan@1): activities with their steps, method prop and related controls, tasks (each naming its activity by title), subjects, reviewed-controls; roles -> the payload's responsible-roles"
   },
   {
    "path": "ap.assessment-plan.tasks[].responsible-roles[].role-id",
    "count": 1,
    "level": "L2",
-   "destination": "Assessment.method payload (assessment-plan@1): activities/steps/tasks/subjects/reviewed-controls"
+   "destination": "Assessment.method payload (assessment-plan@1): activities with their steps, method prop and related controls, tasks (each naming its activity by title), subjects, reviewed-controls; roles -> the payload's responsible-roles"
   },
   {
    "path": "ap.assessment-plan.tasks[].title",
    "count": 1,
    "level": "L2",
-   "destination": "Assessment.method payload (assessment-plan@1): activities/steps/tasks/subjects/reviewed-controls"
+   "destination": "Assessment.method payload (assessment-plan@1): activities with their steps, method prop and related controls, tasks (each naming its activity by title), subjects, reviewed-controls; roles -> the payload's responsible-roles"
   },
   {
    "path": "ap.assessment-plan.tasks[].type",
    "count": 1,
    "level": "L2",
-   "destination": "Assessment.method payload (assessment-plan@1): activities/steps/tasks/subjects/reviewed-controls"
+   "destination": "Assessment.method payload (assessment-plan@1): activities with their steps, method prop and related controls, tasks (each naming its activity by title), subjects, reviewed-controls; roles -> the payload's responsible-roles"
   },
   {
    "path": "ap.assessment-plan.tasks[].uuid",
    "count": 1,
    "level": "L2",
-   "destination": "Assessment.method payload (assessment-plan@1): activities/steps/tasks/subjects/reviewed-controls"
+   "destination": "Assessment.method payload (assessment-plan@1): activities with their steps, method prop and related controls, tasks (each naming its activity by title), subjects, reviewed-controls; roles -> the payload's responsible-roles"
   },
   {
    "path": "ap.assessment-plan.uuid",
@@ -353,73 +353,73 @@
    "path": "ar.assessment-results.local-definitions.activities[].description",
    "count": 1,
    "level": "L2",
-   "destination": "Assessment.method payload (activities duplicated from AP; carried once)"
+   "destination": "Assessment.method payload: the results' own activity (the TEST that was run) beside the plan's, marked source-doc ar"
   },
   {
    "path": "ar.assessment-results.local-definitions.activities[].props[].name",
    "count": 1,
    "level": "L2",
-   "destination": "Assessment.method payload (activities duplicated from AP; carried once)"
+   "destination": "Assessment.method payload: the results' own activity (the TEST that was run) beside the plan's, marked source-doc ar"
   },
   {
    "path": "ar.assessment-results.local-definitions.activities[].props[].value",
    "count": 1,
    "level": "L2",
-   "destination": "Assessment.method payload (activities duplicated from AP; carried once)"
+   "destination": "Assessment.method payload: the results' own activity (the TEST that was run) beside the plan's, marked source-doc ar"
   },
   {
    "path": "ar.assessment-results.local-definitions.activities[].related-controls.control-selections[].include-controls[].control-id",
    "count": 1,
    "level": "L2",
-   "destination": "Assessment.method payload (activities duplicated from AP; carried once)"
+   "destination": "Assessment.method payload: the results' own activity (the TEST that was run) beside the plan's, marked source-doc ar"
   },
   {
    "path": "ar.assessment-results.local-definitions.activities[].responsible-roles[].party-uuids[]",
    "count": 1,
    "level": "L2",
-   "destination": "Assessment.method payload (activities duplicated from AP; carried once)"
+   "destination": "Assessment.method payload: the results' own activity (the TEST that was run) beside the plan's, marked source-doc ar"
   },
   {
    "path": "ar.assessment-results.local-definitions.activities[].responsible-roles[].role-id",
    "count": 1,
    "level": "L2",
-   "destination": "Assessment.method payload (activities duplicated from AP; carried once)"
+   "destination": "Assessment.method payload: the results' own activity (the TEST that was run) beside the plan's, marked source-doc ar"
   },
   {
    "path": "ar.assessment-results.local-definitions.activities[].steps[].description",
    "count": 3,
    "level": "L2",
-   "destination": "Assessment.method payload (activities duplicated from AP; carried once)"
+   "destination": "Assessment.method payload: the results' own activity (the TEST that was run) beside the plan's, marked source-doc ar"
   },
   {
    "path": "ar.assessment-results.local-definitions.activities[].steps[].remarks",
    "count": 2,
    "level": "L2",
-   "destination": "Assessment.method payload (activities duplicated from AP; carried once)"
+   "destination": "Assessment.method payload: the results' own activity (the TEST that was run) beside the plan's, marked source-doc ar"
   },
   {
    "path": "ar.assessment-results.local-definitions.activities[].steps[].title",
    "count": 3,
    "level": "L2",
-   "destination": "Assessment.method payload (activities duplicated from AP; carried once)"
+   "destination": "Assessment.method payload: the results' own activity (the TEST that was run) beside the plan's, marked source-doc ar"
   },
   {
    "path": "ar.assessment-results.local-definitions.activities[].steps[].uuid",
    "count": 3,
    "level": "L2",
-   "destination": "Assessment.method payload (activities duplicated from AP; carried once)"
+   "destination": "Assessment.method payload: the results' own activity (the TEST that was run) beside the plan's, marked source-doc ar"
   },
   {
    "path": "ar.assessment-results.local-definitions.activities[].title",
    "count": 1,
    "level": "L2",
-   "destination": "Assessment.method payload (activities duplicated from AP; carried once)"
+   "destination": "Assessment.method payload: the results' own activity (the TEST that was run) beside the plan's, marked source-doc ar"
   },
   {
    "path": "ar.assessment-results.local-definitions.activities[].uuid",
    "count": 1,
    "level": "L2",
-   "destination": "Assessment.method payload (activities duplicated from AP; carried once)"
+   "destination": "Assessment.method payload: the results' own activity (the TEST that was run) beside the plan's, marked source-doc ar"
   },
   {
    "path": "ar.assessment-results.metadata.last-modified",
@@ -563,13 +563,13 @@
    "path": "ar.assessment-results.results[].description",
    "count": 1,
    "level": "L1",
-   "destination": "Assessment id/title/time"
+   "destination": "Assessment id/title/time (start); description and end -> observations@1"
   },
   {
    "path": "ar.assessment-results.results[].end",
    "count": 1,
    "level": "L1",
-   "destination": "Assessment id/title/time"
+   "destination": "Assessment id/title/time (start); description and end -> observations@1"
   },
   {
    "path": "ar.assessment-results.results[].findings[].description",
@@ -671,61 +671,61 @@
    "path": "ar.assessment-results.results[].observations[].collected",
    "count": 2,
    "level": "L1",
-   "destination": "observations@1 facet + landmark evidence URIs (methods/types/collected/expires carried)"
+   "destination": "observations@1 facet + landmark evidence URIs (methods, types, subjects as Components, collected, expires, remarks)"
   },
   {
    "path": "ar.assessment-results.results[].observations[].description",
    "count": 2,
    "level": "L1",
-   "destination": "observations@1 facet + landmark evidence URIs (methods/types/collected/expires carried)"
+   "destination": "observations@1 facet + landmark evidence URIs (methods, types, subjects as Components, collected, expires, remarks)"
   },
   {
    "path": "ar.assessment-results.results[].observations[].expires",
    "count": 2,
    "level": "L1",
-   "destination": "observations@1 facet + landmark evidence URIs (methods/types/collected/expires carried)"
+   "destination": "observations@1 facet + landmark evidence URIs (methods, types, subjects as Components, collected, expires, remarks)"
   },
   {
    "path": "ar.assessment-results.results[].observations[].methods[]",
    "count": 2,
    "level": "L1",
-   "destination": "observations@1 facet + landmark evidence URIs (methods/types/collected/expires carried)"
+   "destination": "observations@1 facet + landmark evidence URIs (methods, types, subjects as Components, collected, expires, remarks)"
   },
   {
    "path": "ar.assessment-results.results[].observations[].remarks",
    "count": 2,
    "level": "L1",
-   "destination": "observations@1 facet + landmark evidence URIs (methods/types/collected/expires carried)"
+   "destination": "observations@1 facet + landmark evidence URIs (methods, types, subjects as Components, collected, expires, remarks)"
   },
   {
    "path": "ar.assessment-results.results[].observations[].subjects[].subject-uuid",
    "count": 2,
    "level": "L1",
-   "destination": "observations@1 facet + landmark evidence URIs (methods/types/collected/expires carried)"
+   "destination": "observations@1 facet + landmark evidence URIs (methods, types, subjects as Components, collected, expires, remarks)"
   },
   {
    "path": "ar.assessment-results.results[].observations[].subjects[].type",
    "count": 2,
    "level": "L1",
-   "destination": "observations@1 facet + landmark evidence URIs (methods/types/collected/expires carried)"
+   "destination": "observations@1 facet + landmark evidence URIs (methods, types, subjects as Components, collected, expires, remarks)"
   },
   {
    "path": "ar.assessment-results.results[].observations[].title",
    "count": 2,
    "level": "L1",
-   "destination": "observations@1 facet + landmark evidence URIs (methods/types/collected/expires carried)"
+   "destination": "observations@1 facet + landmark evidence URIs (methods, types, subjects as Components, collected, expires, remarks)"
   },
   {
    "path": "ar.assessment-results.results[].observations[].types[]",
    "count": 2,
    "level": "L1",
-   "destination": "observations@1 facet + landmark evidence URIs (methods/types/collected/expires carried)"
+   "destination": "observations@1 facet + landmark evidence URIs (methods, types, subjects as Components, collected, expires, remarks)"
   },
   {
    "path": "ar.assessment-results.results[].observations[].uuid",
    "count": 2,
    "level": "L1",
-   "destination": "observations@1 facet + landmark evidence URIs (methods/types/collected/expires carried)"
+   "destination": "observations@1 facet + landmark evidence URIs (methods, types, subjects as Components, collected, expires, remarks)"
   },
   {
    "path": "ar.assessment-results.results[].reviewed-controls.control-selections[].include-controls[].control-id",
@@ -767,19 +767,19 @@
    "path": "ar.assessment-results.results[].start",
    "count": 1,
    "level": "L1",
-   "destination": "Assessment id/title/time"
+   "destination": "Assessment id/title/time (start); description and end -> observations@1"
   },
   {
    "path": "ar.assessment-results.results[].title",
    "count": 1,
    "level": "L1",
-   "destination": "Assessment id/title/time"
+   "destination": "Assessment id/title/time (start); description and end -> observations@1"
   },
   {
    "path": "ar.assessment-results.results[].uuid",
    "count": 1,
    "level": "L1",
-   "destination": "Assessment id/title/time"
+   "destination": "Assessment id/title/time (start); description and end -> observations@1"
   },
   {
    "path": "ar.assessment-results.uuid",
@@ -2069,91 +2069,91 @@
    "path": "poam.plan-of-action-and-milestones.observations[].collected",
    "count": 2,
    "level": "L1",
-   "destination": "observations@1 facet + landmark evidence URIs (deduped against AR by uuid)"
+   "destination": "observations@1 facet + landmark evidence URIs (deduped against AR by uuid; a field that differs from the AR's copy is kept under `variants`)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.observations[].description",
    "count": 2,
    "level": "L1",
-   "destination": "observations@1 facet + landmark evidence URIs (deduped against AR by uuid)"
+   "destination": "observations@1 facet + landmark evidence URIs (deduped against AR by uuid; a field that differs from the AR's copy is kept under `variants`)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.observations[].expires",
    "count": 1,
    "level": "L1",
-   "destination": "observations@1 facet + landmark evidence URIs (deduped against AR by uuid)"
+   "destination": "observations@1 facet + landmark evidence URIs (deduped against AR by uuid; a field that differs from the AR's copy is kept under `variants`)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.observations[].methods[]",
    "count": 2,
    "level": "L1",
-   "destination": "observations@1 facet + landmark evidence URIs (deduped against AR by uuid)"
+   "destination": "observations@1 facet + landmark evidence URIs (deduped against AR by uuid; a field that differs from the AR's copy is kept under `variants`)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.observations[].remarks",
    "count": 2,
    "level": "L1",
-   "destination": "observations@1 facet + landmark evidence URIs (deduped against AR by uuid)"
+   "destination": "observations@1 facet + landmark evidence URIs (deduped against AR by uuid; a field that differs from the AR's copy is kept under `variants`)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.observations[].subjects[].subject-uuid",
    "count": 2,
    "level": "L1",
-   "destination": "observations@1 facet + landmark evidence URIs (deduped against AR by uuid)"
+   "destination": "observations@1 facet + landmark evidence URIs (deduped against AR by uuid; a field that differs from the AR's copy is kept under `variants`)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.observations[].subjects[].type",
    "count": 2,
    "level": "L1",
-   "destination": "observations@1 facet + landmark evidence URIs (deduped against AR by uuid)"
+   "destination": "observations@1 facet + landmark evidence URIs (deduped against AR by uuid; a field that differs from the AR's copy is kept under `variants`)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.observations[].title",
    "count": 2,
    "level": "L1",
-   "destination": "observations@1 facet + landmark evidence URIs (deduped against AR by uuid)"
+   "destination": "observations@1 facet + landmark evidence URIs (deduped against AR by uuid; a field that differs from the AR's copy is kept under `variants`)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.observations[].types[]",
    "count": 2,
    "level": "L1",
-   "destination": "observations@1 facet + landmark evidence URIs (deduped against AR by uuid)"
+   "destination": "observations@1 facet + landmark evidence URIs (deduped against AR by uuid; a field that differs from the AR's copy is kept under `variants`)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.observations[].uuid",
    "count": 2,
    "level": "L1",
-   "destination": "observations@1 facet + landmark evidence URIs (deduped against AR by uuid)"
+   "destination": "observations@1 facet + landmark evidence URIs (deduped against AR by uuid; a field that differs from the AR's copy is kept under `variants`)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.poam-items[].description",
    "count": 2,
    "level": "L1",
-   "destination": "poam-item titles ride the Finding titles; related-risks/observations resolved by uuid"
+   "destination": "poam-item title and description -> finding-target@1 `poam-item` on the Finding of the risk the item names"
   },
   {
    "path": "poam.plan-of-action-and-milestones.poam-items[].related-observations[].observation-uuid",
    "count": 2,
    "level": "L1",
-   "destination": "poam-item titles ride the Finding titles; related-risks/observations resolved by uuid"
+   "destination": "poam-item title and description -> finding-target@1 `poam-item` on the Finding of the risk the item names"
   },
   {
    "path": "poam.plan-of-action-and-milestones.poam-items[].related-risks[].risk-uuid",
    "count": 2,
    "level": "L1",
-   "destination": "poam-item titles ride the Finding titles; related-risks/observations resolved by uuid"
+   "destination": "poam-item title and description -> finding-target@1 `poam-item` on the Finding of the risk the item names"
   },
   {
    "path": "poam.plan-of-action-and-milestones.poam-items[].title",
    "count": 2,
    "level": "L1",
-   "destination": "poam-item titles ride the Finding titles; related-risks/observations resolved by uuid"
+   "destination": "poam-item title and description -> finding-target@1 `poam-item` on the Finding of the risk the item names"
   },
   {
    "path": "poam.plan-of-action-and-milestones.poam-items[].uuid",
    "count": 2,
    "level": "L1",
-   "destination": "poam-item titles ride the Finding titles; related-risks/observations resolved by uuid"
+   "destination": "poam-item title and description -> finding-target@1 `poam-item` on the Finding of the risk the item names"
   },
   {
    "path": "poam.plan-of-action-and-milestones.risks[].characterizations[].facets[].name",
@@ -2851,9 +2851,10 @@
   "system": 10,
   "component": 8,
   "implementation": 17,
-  "observation": 4,
-  "ap": 7,
-  "risk": 14
+  "observation": 9,
+  "ap": 16,
+  "risk": 14,
+  "finding": 5
  },
  "risk-shape-gaps": {
   "owner absent in source (derived from the SSP `owner` role)": 2,
@@ -2867,15 +2868,15 @@
  "global-occurrence": {
   "measures": "global occurrence of equal typed values - an upper bound on what was carried, not a trace of each source occurrence",
   "leaf-values": 835,
-  "exact": 393,
+  "exact": 424,
   "key-only": 34,
-  "embedded": 51,
+  "embedded": 46,
   "absent": {
    "identity": 182,
    "document-metadata": 125,
-   "content": 50
+   "content": 24
   },
-  "absent-content-prose": 27,
+  "absent-content-prose": 4,
   "key-only-paths": [
    {
     "path": "ap.assessment-plan.local-definitions.activities[].props[].name",
@@ -3036,21 +3037,6 @@
     ]
    },
    {
-    "path": "ar.assessment-results.results[].observations[].types[]",
-    "count": 2,
-    "pointers": [
-     "ar#/assessment-results/results/0/observations/0/types/0",
-     "ar#/assessment-results/results/0/observations/1/types/0"
-    ]
-   },
-   {
-    "path": "ar.assessment-results.results[].risks[].title",
-    "count": 1,
-    "pointers": [
-     "ar#/assessment-results/results/0/risks/0/title"
-    ]
-   },
-   {
     "path": "cdef.component-definition.components[].control-implementations[].implemented-requirements[].control-id",
     "count": 1,
     "pointers": [
@@ -3168,20 +3154,6 @@
     ]
    },
    {
-    "path": "poam.plan-of-action-and-milestones.observations[].types[]",
-    "count": 1,
-    "pointers": [
-     "poam#/plan-of-action-and-milestones/observations/1/types/0"
-    ]
-   },
-   {
-    "path": "poam.plan-of-action-and-milestones.poam-items[].title",
-    "count": 1,
-    "pointers": [
-     "poam#/plan-of-action-and-milestones/poam-items/1/title"
-    ]
-   },
-   {
     "path": "poam.plan-of-action-and-milestones.risks[].characterizations[].origin.actors[].type",
     "count": 2,
     "pointers": [
@@ -3237,114 +3209,10 @@
   ],
   "absent-content-paths": [
    {
-    "path": "ap.assessment-plan.assessment-subjects[].description",
-    "count": 1,
-    "pointers": [
-     "ap#/assessment-plan/assessment-subjects/0/description"
-    ]
-   },
-   {
-    "path": "ap.assessment-plan.tasks[].remarks",
-    "count": 1,
-    "pointers": [
-     "ap#/assessment-plan/tasks/0/remarks"
-    ]
-   },
-   {
-    "path": "ar.assessment-results.local-definitions.activities[].description",
-    "count": 1,
-    "pointers": [
-     "ar#/assessment-results/local-definitions/activities/0/description"
-    ]
-   },
-   {
-    "path": "ar.assessment-results.local-definitions.activities[].steps[].description",
-    "count": 3,
-    "pointers": [
-     "ar#/assessment-results/local-definitions/activities/0/steps/0/description",
-     "ar#/assessment-results/local-definitions/activities/0/steps/1/description",
-     "ar#/assessment-results/local-definitions/activities/0/steps/2/description"
-    ]
-   },
-   {
-    "path": "ar.assessment-results.local-definitions.activities[].steps[].remarks",
-    "count": 2,
-    "pointers": [
-     "ar#/assessment-results/local-definitions/activities/0/steps/0/remarks",
-     "ar#/assessment-results/local-definitions/activities/0/steps/1/remarks"
-    ]
-   },
-   {
-    "path": "ar.assessment-results.local-definitions.activities[].steps[].title",
-    "count": 3,
-    "pointers": [
-     "ar#/assessment-results/local-definitions/activities/0/steps/0/title",
-     "ar#/assessment-results/local-definitions/activities/0/steps/1/title",
-     "ar#/assessment-results/local-definitions/activities/0/steps/2/title"
-    ]
-   },
-   {
-    "path": "ar.assessment-results.local-definitions.activities[].title",
-    "count": 1,
-    "pointers": [
-     "ar#/assessment-results/local-definitions/activities/0/title"
-    ]
-   },
-   {
-    "path": "ar.assessment-results.results[].description",
-    "count": 1,
-    "pointers": [
-     "ar#/assessment-results/results/0/description"
-    ]
-   },
-   {
-    "path": "ar.assessment-results.results[].end",
-    "count": 1,
-    "pointers": [
-     "ar#/assessment-results/results/0/end"
-    ]
-   },
-   {
-    "path": "ar.assessment-results.results[].findings[].description",
-    "count": 1,
-    "pointers": [
-     "ar#/assessment-results/results/0/findings/0/description"
-    ]
-   },
-   {
-    "path": "ar.assessment-results.results[].findings[].target.description",
-    "count": 1,
-    "pointers": [
-     "ar#/assessment-results/results/0/findings/0/target/description"
-    ]
-   },
-   {
     "path": "ar.assessment-results.results[].findings[].target.type",
     "count": 1,
     "pointers": [
      "ar#/assessment-results/results/0/findings/0/target/type"
-    ]
-   },
-   {
-    "path": "ar.assessment-results.results[].local-definitions.tasks[].description",
-    "count": 1,
-    "pointers": [
-     "ar#/assessment-results/results/0/local-definitions/tasks/0/description"
-    ]
-   },
-   {
-    "path": "ar.assessment-results.results[].local-definitions.tasks[].title",
-    "count": 1,
-    "pointers": [
-     "ar#/assessment-results/results/0/local-definitions/tasks/0/title"
-    ]
-   },
-   {
-    "path": "ar.assessment-results.results[].observations[].remarks",
-    "count": 2,
-    "pointers": [
-     "ar#/assessment-results/results/0/observations/0/remarks",
-     "ar#/assessment-results/results/0/observations/1/remarks"
     ]
    },
    {
@@ -3436,36 +3304,6 @@
     ]
    },
    {
-    "path": "poam.plan-of-action-and-milestones.observations[].remarks",
-    "count": 2,
-    "pointers": [
-     "poam#/plan-of-action-and-milestones/observations/0/remarks",
-     "poam#/plan-of-action-and-milestones/observations/1/remarks"
-    ]
-   },
-   {
-    "path": "poam.plan-of-action-and-milestones.observations[].types[]",
-    "count": 1,
-    "pointers": [
-     "poam#/plan-of-action-and-milestones/observations/0/types/0"
-    ]
-   },
-   {
-    "path": "poam.plan-of-action-and-milestones.poam-items[].description",
-    "count": 2,
-    "pointers": [
-     "poam#/plan-of-action-and-milestones/poam-items/0/description",
-     "poam#/plan-of-action-and-milestones/poam-items/1/description"
-    ]
-   },
-   {
-    "path": "poam.plan-of-action-and-milestones.poam-items[].title",
-    "count": 1,
-    "pointers": [
-     "poam#/plan-of-action-and-milestones/poam-items/0/title"
-    ]
-   },
-   {
     "path": "ssp.system-security-plan.system-implementation.components[].type",
     "count": 1,
     "pointers": [
@@ -3478,10 +3316,10 @@
   "file": "ifa-conversion-ledger.json",
   "leaf-values": 835,
   "totals": {
-   "copied": 404,
-   "transformed": 60,
-   "intentionally-dropped": 309,
-   "unaccounted": 62
+   "copied": 441,
+   "transformed": 67,
+   "intentionally-dropped": 308,
+   "unaccounted": 19
   },
   "verification-failures": 0
  }

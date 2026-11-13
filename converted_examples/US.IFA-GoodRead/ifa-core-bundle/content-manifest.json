@@ -76,8 +76,8 @@
   {
    "id": "https://ifa.gov/goodread/assessment/conmon-2023-06",
    "version": "1.0.0",
-   "package-digest": "sha256:9f13e14545f9234f0b93679076923165ed5ba600c4bcf9efe4139cc8149a1c7c",
-   "semantic-digest": "sha256:59757824f35dab52f656d5639d01dd02960f55fa93c33ecdc7be41f94899752d",
+   "package-digest": "sha256:8e4449dd3552d0048e29291e19d5be38aaaeb4a4f8eb8f81b7547a814464a1c9",
+   "semantic-digest": "sha256:5d4d21f948c14b3a7e6573c462bfd59e566c7c7ba207a495be4a9119e212ac09",
    "path": "objects/assessment/conmon-2023-06.json"
   },
   {
@@ -132,15 +132,15 @@
   {
    "id": "https://ifa.gov/goodread/finding/goodread-risk-1",
    "version": "1.2.1",
-   "package-digest": "sha256:34a9dd91c44ca889f383ad566d871545b537d3996bc74ff7652fbacd22ae9d8a",
-   "semantic-digest": "sha256:9432eefaadbfe91c8b24adf20db8f581a8de735ea474533c23811718736151e1",
+   "package-digest": "sha256:9d39ca7402ef06be320bd4534fb64a453a548781d62b95d8c0381413cd4c199e",
+   "semantic-digest": "sha256:94e1d4bb2dc95ff58791c2923143d2548686f5684ccbbd252a8a7a33fbf3418a",
    "path": "objects/finding/goodread-risk-1.json"
   },
   {
    "id": "https://ifa.gov/goodread/finding/goodread-risk-2",
    "version": "1.2.1",
-   "package-digest": "sha256:4cba852f8d1c316b0f387dda1ef8030d629a8a0c8e24c3b8911f24420436e80a",
-   "semantic-digest": "sha256:ae4988fb24d3d813995cd68c443171f108391bdfacfd3f4fbd675184c03c3994",
+   "package-digest": "sha256:b3a963084ea312233e26697bf1ca324e34a98e072a5748ea7bdccf7676986658",
+   "semantic-digest": "sha256:6764ba871f01cfc0ead5b7731a9c12980d8c3b73dfa2175df2c35c3e97b59985",
    "path": "objects/finding/goodread-risk-2.json"
   },
   {
@@ -197,7 +197,7 @@
   {
    "id": "https://ifa.gov/goodread/facet/assessment-plan",
    "exact-version": "1.0.0",
-   "digest": "sha256:14c538458ca1af10d56604fd81d65f29ea025b0b6887c4833a0d59a11912e0a9",
+   "digest": "sha256:2e3f9be3ec93dd5c118f5183518416e7c300233a8b5b272a28857dff114886c3",
    "path": "schemas/goodread-ap-stub.json"
   },
   {
@@ -209,7 +209,7 @@
   {
    "id": "https://ifa.gov/goodread/facet/finding-target",
    "exact-version": "1.0.0",
-   "digest": "sha256:897901b44ef409990e24c7f2170390eeed274c0ec7386dee735b84d6f00bc87e",
+   "digest": "sha256:6ab6701cca420408a3b2bb5564badd6c5fa0dcd62ccda204dbdab4b57b01b02a",
    "path": "schemas/goodread-finding-target-stub.json"
   },
   {
@@ -221,7 +221,7 @@
   {
    "id": "https://ifa.gov/goodread/facet/observations",
    "exact-version": "1.0.0",
-   "digest": "sha256:4d34c9a1d46c062f712079a490df4959c9ba037c04c1938a01f5a434857773f2",
+   "digest": "sha256:7c6f6bbe6b9aa8301dbf68030eec7cbdf674c8cdd9b42607e8c5520fadbd641e",
    "path": "schemas/goodread-observations-stub.json"
   },
   {

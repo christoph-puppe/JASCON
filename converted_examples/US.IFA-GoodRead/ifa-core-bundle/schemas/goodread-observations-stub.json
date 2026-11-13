@@ -7,6 +7,12 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
   "properties": {
+   "description": {
+    "type": "object"
+   },
+   "end": {
+    "type": "string"
+   },
    "observations": {
     "type": "array"
    }

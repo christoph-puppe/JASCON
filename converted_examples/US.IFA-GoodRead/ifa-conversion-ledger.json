@@ -2,137 +2,13 @@
  "measures": "one entry per source leaf value: where it went, checked against the written files",
  "leaf-values": 835,
  "totals": {
-  "copied": 404,
-  "transformed": 60,
-  "intentionally-dropped": 309,
-  "unaccounted": 62
+  "copied": 441,
+  "transformed": 67,
+  "intentionally-dropped": 308,
+  "unaccounted": 19
  },
  "verification-failures": [],
  "unaccounted-paths": [
-  {
-   "path": "ap.assessment-plan.assessment-subjects[].description",
-   "count": 1,
-   "pointers": [
-    "ap#/assessment-plan/assessment-subjects/0/description"
-   ]
-  },
-  {
-   "path": "ap.assessment-plan.local-definitions.activities[].props[].name",
-   "count": 1,
-   "pointers": [
-    "ap#/assessment-plan/local-definitions/activities/0/props/0/name"
-   ]
-  },
-  {
-   "path": "ap.assessment-plan.local-definitions.activities[].props[].value",
-   "count": 1,
-   "pointers": [
-    "ap#/assessment-plan/local-definitions/activities/0/props/0/value"
-   ]
-  },
-  {
-   "path": "ap.assessment-plan.local-definitions.activities[].related-controls.control-selections[].include-controls[].control-id",
-   "count": 1,
-   "pointers": [
-    "ap#/assessment-plan/local-definitions/activities/0/related-controls/control-selections/0/include-controls/0/control-id"
-   ]
-  },
-  {
-   "path": "ap.assessment-plan.tasks[].associated-activities[].activity-uuid",
-   "count": 1,
-   "pointers": [
-    "ap#/assessment-plan/tasks/0/associated-activities/0/activity-uuid"
-   ]
-  },
-  {
-   "path": "ap.assessment-plan.tasks[].remarks",
-   "count": 1,
-   "pointers": [
-    "ap#/assessment-plan/tasks/0/remarks"
-   ]
-  },
-  {
-   "path": "ar.assessment-results.local-definitions.activities[].description",
-   "count": 1,
-   "pointers": [
-    "ar#/assessment-results/local-definitions/activities/0/description"
-   ]
-  },
-  {
-   "path": "ar.assessment-results.local-definitions.activities[].props[].name",
-   "count": 1,
-   "pointers": [
-    "ar#/assessment-results/local-definitions/activities/0/props/0/name"
-   ]
-  },
-  {
-   "path": "ar.assessment-results.local-definitions.activities[].props[].value",
-   "count": 1,
-   "pointers": [
-    "ar#/assessment-results/local-definitions/activities/0/props/0/value"
-   ]
-  },
-  {
-   "path": "ar.assessment-results.local-definitions.activities[].related-controls.control-selections[].include-controls[].control-id",
-   "count": 1,
-   "pointers": [
-    "ar#/assessment-results/local-definitions/activities/0/related-controls/control-selections/0/include-controls/0/control-id"
-   ]
-  },
-  {
-   "path": "ar.assessment-results.local-definitions.activities[].steps[].description",
-   "count": 3,
-   "pointers": [
-    "ar#/assessment-results/local-definitions/activities/0/steps/0/description",
-    "ar#/assessment-results/local-definitions/activities/0/steps/1/description",
-    "ar#/assessment-results/local-definitions/activities/0/steps/2/description"
-   ]
-  },
-  {
-   "path": "ar.assessment-results.local-definitions.activities[].steps[].remarks",
-   "count": 2,
-   "pointers": [
-    "ar#/assessment-results/local-definitions/activities/0/steps/0/remarks",
-    "ar#/assessment-results/local-definitions/activities/0/steps/1/remarks"
-   ]
-  },
-  {
-   "path": "ar.assessment-results.local-definitions.activities[].steps[].title",
-   "count": 3,
-   "pointers": [
-    "ar#/assessment-results/local-definitions/activities/0/steps/0/title",
-    "ar#/assessment-results/local-definitions/activities/0/steps/1/title",
-    "ar#/assessment-results/local-definitions/activities/0/steps/2/title"
-   ]
-  },
-  {
-   "path": "ar.assessment-results.local-definitions.activities[].title",
-   "count": 1,
-   "pointers": [
-    "ar#/assessment-results/local-definitions/activities/0/title"
-   ]
-  },
-  {
-   "path": "ar.assessment-results.results[].description",
-   "count": 1,
-   "pointers": [
-    "ar#/assessment-results/results/0/description"
-   ]
-  },
-  {
-   "path": "ar.assessment-results.results[].end",
-   "count": 1,
-   "pointers": [
-    "ar#/assessment-results/results/0/end"
-   ]
-  },
-  {
-   "path": "ar.assessment-results.results[].findings[].description",
-   "count": 1,
-   "pointers": [
-    "ar#/assessment-results/results/0/findings/0/description"
-   ]
-  },
   {
    "path": "ar.assessment-results.results[].findings[].related-observations[].observation-uuid",
    "count": 1,
@@ -145,65 +21,6 @@
    "count": 1,
    "pointers": [
     "ar#/assessment-results/results/0/findings/0/related-risks/0/risk-uuid"
-   ]
-  },
-  {
-   "path": "ar.assessment-results.results[].findings[].target.description",
-   "count": 1,
-   "pointers": [
-    "ar#/assessment-results/results/0/findings/0/target/description"
-   ]
-  },
-  {
-   "path": "ar.assessment-results.results[].local-definitions.tasks[].associated-activities[].activity-uuid",
-   "count": 1,
-   "pointers": [
-    "ar#/assessment-results/results/0/local-definitions/tasks/0/associated-activities/0/activity-uuid"
-   ]
-  },
-  {
-   "path": "ar.assessment-results.results[].local-definitions.tasks[].description",
-   "count": 1,
-   "pointers": [
-    "ar#/assessment-results/results/0/local-definitions/tasks/0/description"
-   ]
-  },
-  {
-   "path": "ar.assessment-results.results[].local-definitions.tasks[].title",
-   "count": 1,
-   "pointers": [
-    "ar#/assessment-results/results/0/local-definitions/tasks/0/title"
-   ]
-  },
-  {
-   "path": "ar.assessment-results.results[].local-definitions.tasks[].type",
-   "count": 1,
-   "pointers": [
-    "ar#/assessment-results/results/0/local-definitions/tasks/0/type"
-   ]
-  },
-  {
-   "path": "ar.assessment-results.results[].observations[].remarks",
-   "count": 2,
-   "pointers": [
-    "ar#/assessment-results/results/0/observations/0/remarks",
-    "ar#/assessment-results/results/0/observations/1/remarks"
-   ]
-  },
-  {
-   "path": "ar.assessment-results.results[].observations[].subjects[].subject-uuid",
-   "count": 2,
-   "pointers": [
-    "ar#/assessment-results/results/0/observations/0/subjects/0/subject-uuid",
-    "ar#/assessment-results/results/0/observations/1/subjects/0/subject-uuid"
-   ]
-  },
-  {
-   "path": "ar.assessment-results.results[].observations[].types[]",
-   "count": 2,
-   "pointers": [
-    "ar#/assessment-results/results/0/observations/0/types/0",
-    "ar#/assessment-results/results/0/observations/1/types/0"
    ]
   },
   {
@@ -247,38 +64,6 @@
    ]
   },
   {
-   "path": "poam.plan-of-action-and-milestones.observations[].remarks",
-   "count": 2,
-   "pointers": [
-    "poam#/plan-of-action-and-milestones/observations/0/remarks",
-    "poam#/plan-of-action-and-milestones/observations/1/remarks"
-   ]
-  },
-  {
-   "path": "poam.plan-of-action-and-milestones.observations[].subjects[].subject-uuid",
-   "count": 2,
-   "pointers": [
-    "poam#/plan-of-action-and-milestones/observations/0/subjects/0/subject-uuid",
-    "poam#/plan-of-action-and-milestones/observations/1/subjects/0/subject-uuid"
-   ]
-  },
-  {
-   "path": "poam.plan-of-action-and-milestones.observations[].types[]",
-   "count": 2,
-   "pointers": [
-    "poam#/plan-of-action-and-milestones/observations/0/types/0",
-    "poam#/plan-of-action-and-milestones/observations/1/types/0"
-   ]
-  },
-  {
-   "path": "poam.plan-of-action-and-milestones.poam-items[].description",
-   "count": 2,
-   "pointers": [
-    "poam#/plan-of-action-and-milestones/poam-items/0/description",
-    "poam#/plan-of-action-and-milestones/poam-items/1/description"
-   ]
-  },
-  {
    "path": "poam.plan-of-action-and-milestones.poam-items[].related-observations[].observation-uuid",
    "count": 2,
    "pointers": [
@@ -292,14 +77,6 @@
    "pointers": [
     "poam#/plan-of-action-and-milestones/poam-items/0/related-risks/0/risk-uuid",
     "poam#/plan-of-action-and-milestones/poam-items/1/related-risks/0/risk-uuid"
-   ]
-  },
-  {
-   "path": "poam.plan-of-action-and-milestones.poam-items[].title",
-   "count": 2,
-   "pointers": [
-    "poam#/plan-of-action-and-milestones/poam-items/0/title",
-    "poam#/plan-of-action-and-milestones/poam-items/1/title"
    ]
   },
   {
@@ -1374,8 +1151,30 @@
   {
    "source": "ssp#/system-security-plan/system-implementation/components/0/uuid",
    "path": "ssp.system-security-plan.system-implementation.components[].uuid",
-   "reason": "the uuid of a source element: JASCON objects get URIs minted from names and titles, the uuid itself is not carried (uuids that ARE carried or resolved have a destination above)",
-   "outcome": "intentionally-dropped"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1observations@1/observations/0/subjects/0",
+     "rule": "observation subject: the Component minted for the SSP component it names"
+    },
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1observations@1/observations/0/subjects/0",
+     "rule": "observation subject: the Component minted for the SSP component it names",
+     "via": "the same observation in AR and POA&M (one uuid), kept once"
+    },
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1observations@1/observations/1/subjects/0",
+     "rule": "observation subject: the Component minted for the SSP component it names"
+    },
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1observations@1/observations/2/subjects/0",
+     "rule": "observation subject: the Component minted for the SSP component it names"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "ssp#/system-security-plan/system-implementation/components/0/type",
@@ -3095,12 +2894,25 @@
   {
    "source": "ap#/assessment-plan/local-definitions/activities/0/props/0/name",
    "path": "ap.assessment-plan.local-definitions.activities[].props[].name",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/method/https:~1~1ifa.gov~1goodread~1facet~1assessment-plan@1/activities/0/props/method",
+     "as": "key"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ap#/assessment-plan/local-definitions/activities/0/props/0/value",
    "path": "ap.assessment-plan.local-definitions.activities[].props[].value",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/method/https:~1~1ifa.gov~1goodread~1facet~1assessment-plan@1/activities/0/props/method"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ap#/assessment-plan/local-definitions/activities/0/steps/0/uuid",
@@ -3273,7 +3085,13 @@
   {
    "source": "ap#/assessment-plan/local-definitions/activities/0/related-controls/control-selections/0/include-controls/0/control-id",
    "path": "ap.assessment-plan.local-definitions.activities[].related-controls.control-selections[].include-controls[].control-id",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/method/https:~1~1ifa.gov~1goodread~1facet~1assessment-plan@1/activities/0/related-controls/0"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ap#/assessment-plan/local-definitions/activities/0/responsible-roles/0/role-id",
@@ -3320,7 +3138,13 @@
   {
    "source": "ap#/assessment-plan/assessment-subjects/0/description",
    "path": "ap.assessment-plan.assessment-subjects[].description",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/method/https:~1~1ifa.gov~1goodread~1facet~1assessment-plan@1/subjects/0/description/en"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ap#/assessment-plan/tasks/0/uuid",
@@ -3353,7 +3177,8 @@
   {
    "source": "ap#/assessment-plan/tasks/0/associated-activities/0/activity-uuid",
    "path": "ap.assessment-plan.tasks[].associated-activities[].activity-uuid",
-   "outcome": "unaccounted"
+   "reason": "a reference to an activity the document does not define",
+   "outcome": "intentionally-dropped"
   },
   {
    "source": "ap#/assessment-plan/tasks/0/associated-activities/0/subjects/0/type",
@@ -3376,7 +3201,13 @@
   {
    "source": "ap#/assessment-plan/tasks/0/remarks",
    "path": "ap.assessment-plan.tasks[].remarks",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/method/https:~1~1ifa.gov~1goodread~1facet~1assessment-plan@1/tasks/0/remarks/en"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ap#/assessment-plan/back-matter/resources/0/uuid",
@@ -3738,28 +3569,64 @@
   {
    "source": "ar#/assessment-results/local-definitions/activities/0/uuid",
    "path": "ar.assessment-results.local-definitions.activities[].uuid",
-   "reason": "the uuid of a source element: JASCON objects get URIs minted from names and titles, the uuid itself is not carried (uuids that ARE carried or resolved have a destination above)",
-   "outcome": "intentionally-dropped"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/method/https:~1~1ifa.gov~1goodread~1facet~1assessment-plan@1/tasks/1/activities/0",
+     "rule": "task activity: the title of the activity it names by uuid"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "ar#/assessment-results/local-definitions/activities/0/title",
    "path": "ar.assessment-results.local-definitions.activities[].title",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/method/https:~1~1ifa.gov~1goodread~1facet~1assessment-plan@1/activities/1/title"
+    },
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/method/https:~1~1ifa.gov~1goodread~1facet~1assessment-plan@1/tasks/1/activities/0",
+     "rule": "task activity: the title of the activity it names by uuid"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ar#/assessment-results/local-definitions/activities/0/description",
    "path": "ar.assessment-results.local-definitions.activities[].description",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/method/https:~1~1ifa.gov~1goodread~1facet~1assessment-plan@1/activities/1/description/en"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ar#/assessment-results/local-definitions/activities/0/props/0/name",
    "path": "ar.assessment-results.local-definitions.activities[].props[].name",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/method/https:~1~1ifa.gov~1goodread~1facet~1assessment-plan@1/activities/1/props/method",
+     "as": "key"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ar#/assessment-results/local-definitions/activities/0/props/0/value",
    "path": "ar.assessment-results.local-definitions.activities[].props[].value",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/method/https:~1~1ifa.gov~1goodread~1facet~1assessment-plan@1/activities/1/props/method"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ar#/assessment-results/local-definitions/activities/0/steps/0/uuid",
@@ -3770,17 +3637,35 @@
   {
    "source": "ar#/assessment-results/local-definitions/activities/0/steps/0/title",
    "path": "ar.assessment-results.local-definitions.activities[].steps[].title",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/method/https:~1~1ifa.gov~1goodread~1facet~1assessment-plan@1/activities/1/steps/0/title"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ar#/assessment-results/local-definitions/activities/0/steps/0/description",
    "path": "ar.assessment-results.local-definitions.activities[].steps[].description",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/method/https:~1~1ifa.gov~1goodread~1facet~1assessment-plan@1/activities/1/steps/0/description/en"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ar#/assessment-results/local-definitions/activities/0/steps/0/remarks",
    "path": "ar.assessment-results.local-definitions.activities[].steps[].remarks",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/method/https:~1~1ifa.gov~1goodread~1facet~1assessment-plan@1/activities/1/steps/0/remarks/en"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ar#/assessment-results/local-definitions/activities/0/steps/1/uuid",
@@ -3791,17 +3676,35 @@
   {
    "source": "ar#/assessment-results/local-definitions/activities/0/steps/1/title",
    "path": "ar.assessment-results.local-definitions.activities[].steps[].title",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/method/https:~1~1ifa.gov~1goodread~1facet~1assessment-plan@1/activities/1/steps/1/title"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ar#/assessment-results/local-definitions/activities/0/steps/1/description",
    "path": "ar.assessment-results.local-definitions.activities[].steps[].description",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/method/https:~1~1ifa.gov~1goodread~1facet~1assessment-plan@1/activities/1/steps/1/description/en"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ar#/assessment-results/local-definitions/activities/0/steps/1/remarks",
    "path": "ar.assessment-results.local-definitions.activities[].steps[].remarks",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/method/https:~1~1ifa.gov~1goodread~1facet~1assessment-plan@1/activities/1/steps/1/remarks/en"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ar#/assessment-results/local-definitions/activities/0/steps/2/uuid",
@@ -3812,17 +3715,35 @@
   {
    "source": "ar#/assessment-results/local-definitions/activities/0/steps/2/title",
    "path": "ar.assessment-results.local-definitions.activities[].steps[].title",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/method/https:~1~1ifa.gov~1goodread~1facet~1assessment-plan@1/activities/1/steps/2/title"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ar#/assessment-results/local-definitions/activities/0/steps/2/description",
    "path": "ar.assessment-results.local-definitions.activities[].steps[].description",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/method/https:~1~1ifa.gov~1goodread~1facet~1assessment-plan@1/activities/1/steps/2/description/en"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ar#/assessment-results/local-definitions/activities/0/related-controls/control-selections/0/include-controls/0/control-id",
    "path": "ar.assessment-results.local-definitions.activities[].related-controls.control-selections[].include-controls[].control-id",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/method/https:~1~1ifa.gov~1goodread~1facet~1assessment-plan@1/activities/1/related-controls/0"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ar#/assessment-results/local-definitions/activities/0/responsible-roles/0/role-id",
@@ -3869,7 +3790,13 @@
   {
    "source": "ar#/assessment-results/results/0/description",
    "path": "ar.assessment-results.results[].description",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1observations@1/description/en"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ar#/assessment-results/results/0/start",
@@ -3885,7 +3812,13 @@
   {
    "source": "ar#/assessment-results/results/0/end",
    "path": "ar.assessment-results.results[].end",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1observations@1/end"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ar#/assessment-results/results/0/local-definitions/tasks/0/uuid",
@@ -3896,22 +3829,47 @@
   {
    "source": "ar#/assessment-results/results/0/local-definitions/tasks/0/type",
    "path": "ar.assessment-results.results[].local-definitions.tasks[].type",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/method/https:~1~1ifa.gov~1goodread~1facet~1assessment-plan@1/tasks/1/type"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ar#/assessment-results/results/0/local-definitions/tasks/0/title",
    "path": "ar.assessment-results.results[].local-definitions.tasks[].title",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/method/https:~1~1ifa.gov~1goodread~1facet~1assessment-plan@1/tasks/1/title"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ar#/assessment-results/results/0/local-definitions/tasks/0/description",
    "path": "ar.assessment-results.results[].local-definitions.tasks[].description",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/method/https:~1~1ifa.gov~1goodread~1facet~1assessment-plan@1/tasks/1/description/en"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ar#/assessment-results/results/0/local-definitions/tasks/0/associated-activities/0/activity-uuid",
    "path": "ar.assessment-results.results[].local-definitions.tasks[].associated-activities[].activity-uuid",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/method/https:~1~1ifa.gov~1goodread~1facet~1assessment-plan@1/tasks/1/activities/0",
+     "rule": "task activity: the title of the activity it names by uuid"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "ar#/assessment-results/results/0/local-definitions/tasks/0/associated-activities/0/subjects/0/type",
@@ -3984,12 +3942,25 @@
   {
    "source": "ar#/assessment-results/results/0/observations/0/types/0",
    "path": "ar.assessment-results.results[].observations[].types[]",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1observations@1/observations/0/types/0"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ar#/assessment-results/results/0/observations/0/subjects/0/subject-uuid",
    "path": "ar.assessment-results.results[].observations[].subjects[].subject-uuid",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1observations@1/observations/0/subjects/0",
+     "rule": "observation subject: the Component minted for the SSP component it names"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "ar#/assessment-results/results/0/observations/0/subjects/0/type",
@@ -4022,7 +3993,13 @@
   {
    "source": "ar#/assessment-results/results/0/observations/0/remarks",
    "path": "ar.assessment-results.results[].observations[].remarks",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1observations@1/observations/0/remarks/en"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ar#/assessment-results/results/0/observations/1/uuid",
@@ -4077,12 +4054,25 @@
   {
    "source": "ar#/assessment-results/results/0/observations/1/types/0",
    "path": "ar.assessment-results.results[].observations[].types[]",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1observations@1/observations/1/types/0"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ar#/assessment-results/results/0/observations/1/subjects/0/subject-uuid",
    "path": "ar.assessment-results.results[].observations[].subjects[].subject-uuid",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1observations@1/observations/1/subjects/0",
+     "rule": "observation subject: the Component minted for the SSP component it names"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "ar#/assessment-results/results/0/observations/1/subjects/0/type",
@@ -4115,7 +4105,13 @@
   {
    "source": "ar#/assessment-results/results/0/observations/1/remarks",
    "path": "ar.assessment-results.results[].observations[].remarks",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1observations@1/observations/1/remarks/en"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ar#/assessment-results/results/0/risks/0/uuid",
@@ -4173,7 +4169,13 @@
   {
    "source": "ar#/assessment-results/results/0/findings/0/description",
    "path": "ar.assessment-results.results[].findings[].description",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/finding/goodread-risk-2",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1finding-target@1/description/en"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ar#/assessment-results/results/0/findings/0/target/type",
@@ -4195,7 +4197,13 @@
   {
    "source": "ar#/assessment-results/results/0/findings/0/target/description",
    "path": "ar.assessment-results.results[].findings[].target.description",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/finding/goodread-risk-2",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1finding-target@1/target-description/en"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ar#/assessment-results/results/0/findings/0/target/status/state",
@@ -4542,12 +4550,25 @@
   {
    "source": "poam#/plan-of-action-and-milestones/observations/0/types/0",
    "path": "poam.plan-of-action-and-milestones.observations[].types[]",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1observations@1/observations/2/types/0"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "poam#/plan-of-action-and-milestones/observations/0/subjects/0/subject-uuid",
    "path": "poam.plan-of-action-and-milestones.observations[].subjects[].subject-uuid",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1observations@1/observations/2/subjects/0",
+     "rule": "observation subject: the Component minted for the SSP component it names"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "poam#/plan-of-action-and-milestones/observations/0/subjects/0/type",
@@ -4574,7 +4595,13 @@
   {
    "source": "poam#/plan-of-action-and-milestones/observations/0/remarks",
    "path": "poam.plan-of-action-and-milestones.observations[].remarks",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1observations@1/observations/2/remarks/en"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "poam#/plan-of-action-and-milestones/observations/1/uuid",
@@ -4634,12 +4661,27 @@
   {
    "source": "poam#/plan-of-action-and-milestones/observations/1/types/0",
    "path": "poam.plan-of-action-and-milestones.observations[].types[]",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1observations@1/observations/0/types/0",
+     "via": "the same observation in AR and POA&M (one uuid), kept once"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "poam#/plan-of-action-and-milestones/observations/1/subjects/0/subject-uuid",
    "path": "poam.plan-of-action-and-milestones.observations[].subjects[].subject-uuid",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1observations@1/observations/0/subjects/0",
+     "rule": "observation subject: the Component minted for the SSP component it names",
+     "via": "the same observation in AR and POA&M (one uuid), kept once"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "poam#/plan-of-action-and-milestones/observations/1/subjects/0/type",
@@ -4674,7 +4716,13 @@
   {
    "source": "poam#/plan-of-action-and-milestones/observations/1/remarks",
    "path": "poam.plan-of-action-and-milestones.observations[].remarks",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1observations@1/observations/0/variants/0/remarks/en"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "poam#/plan-of-action-and-milestones/risks/0/uuid",
@@ -5297,12 +5345,24 @@
   {
    "source": "poam#/plan-of-action-and-milestones/poam-items/0/title",
    "path": "poam.plan-of-action-and-milestones.poam-items[].title",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/finding/goodread-risk-1",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1finding-target@1/poam-item/title"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "poam#/plan-of-action-and-milestones/poam-items/0/description",
    "path": "poam.plan-of-action-and-milestones.poam-items[].description",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/finding/goodread-risk-1",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1finding-target@1/poam-item/description/en"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "poam#/plan-of-action-and-milestones/poam-items/0/related-observations/0/observation-uuid",
@@ -5323,12 +5383,24 @@
   {
    "source": "poam#/plan-of-action-and-milestones/poam-items/1/title",
    "path": "poam.plan-of-action-and-milestones.poam-items[].title",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/finding/goodread-risk-2",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1finding-target@1/poam-item/title"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "poam#/plan-of-action-and-milestones/poam-items/1/description",
    "path": "poam.plan-of-action-and-milestones.poam-items[].description",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/finding/goodread-risk-2",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1finding-target@1/poam-item/description/en"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "poam#/plan-of-action-and-milestones/poam-items/1/related-observations/0/observation-uuid",

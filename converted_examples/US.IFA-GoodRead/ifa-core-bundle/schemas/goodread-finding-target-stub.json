@@ -12,6 +12,15 @@
    },
    "implementation-statement-uuid": {
     "type": "string"
+   },
+   "description": {
+    "type": "object"
+   },
+   "target-description": {
+    "type": "object"
+   },
+   "poam-item": {
+    "type": "object"
    }
   },
   "additionalProperties": false

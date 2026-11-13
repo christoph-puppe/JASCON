@@ -37,5 +37,15 @@
     "https://ifa.gov/goodread/risk/goodread-risk-1"
    ]
   }
- ]
+ ],
+ "facets": {
+  "https://ifa.gov/goodread/facet/finding-target@1": {
+   "poam-item": {
+    "title": "Update Django Framework Configuration to Disable Default Admin Panel",
+    "description": {
+     "en": "Budget and technical staff are needed to re-design and re-implement a part of the SYSTEM1234 application's use of a web application programming framework to mitigate the risk of low privilege users directly modifying the database of this application. This application is a high-visibility service and integral to future operations of the IFA Office of Public Affairs and its staff."
+    }
+   }
+  }
+ }
 }

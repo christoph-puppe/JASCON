@@ -54,13 +54,81 @@
         "en": "The assessor will confirm with web-based interface and API methods users with the PAO Staff role cannot access the Django admin panel functions and interactively change application's database records."
        }
       }
-     ]
+     ],
+     "props": {
+      "method": "EXAMINE"
+     },
+     "related-controls": [
+      "ac-6.1"
+     ],
+     "source-doc": "ap"
+    },
+    {
+     "title": "Test System Elements for Least Privilege Design and Implementation",
+     "description": {
+      "en": "The activity and it steps will be performed by the assessor via their security automation platform to test least privilege design and implementation of the system's elements, specifically the cloud account infrastructure, as part of continuous monitoring."
+     },
+     "steps": [
+      {
+       "title": "Configure Cross-Account IAM Role Trust for SYSTEM1234 and Assessor AwesomeCloud Accounts",
+       "description": {
+        "en": "The IFA SYSTEM1234 system engineer will coordinate with the assessor's engineering support staff to configure an IAM role trust. A service account for automation with its own role with the assessor's AwesomeCloud account can assume the role for read-only assessor operations within the SYSTEM1234 Product Team's AwesomeCloud account for continuous monitoring of least privilege."
+       },
+       "remarks": {
+        "en": "This step is complete.\n\nSYSTEM1234 Product Team and SCA Engineering Support configured the latter's cross-account role trust and authentication and authorization in to the former's account on May 29, 2023."
+       }
+      },
+      {
+       "title": "Automate Cross-Account Login to SYSTEM1234 AwesomeCloud Account",
+       "description": {
+        "en": "The assessor's security automation platform will create a session from their dedicated will obtain access to the SYSTEM1234 Product Team's AwesomeCloud account with their single sign-on credentials to a read-only assessor role."
+       },
+       "remarks": {
+        "en": "This step is complete.\n\nSYSTEM1234 Product Team and SCA Engineering Support tested scripts from the security automation platform interactively on May 30, 2023, to confirm they work ahead of June 2023 continuous monitoring cycle."
+       }
+      },
+      {
+       "title": "Analyze SYSTEM1234 Developer and System Engineer Roles for Least Privilege",
+       "description": {
+        "en": "Once authenticated and authorized with a cross-account session, the security automation pipeline will execute scripts developed and maintained by the assessor's engineering support staff. It will analyze the permitted actions for the developer and system engineer roles in the SYSTEM1234 Product Team's AwesomeCloud account to confirm they are designed and implement to facilitate only least privilege operation. Examples are included below.\n\n* For the SYSTEM1234 developer role in their AwesomeCloud account, the developer role may only permit the user with this role to check the IP addresses and status of the Awesome Compute Service server instances. This role will not permit the user to create, change, or delete the instances. Similarly, the developer will permit a user to perform actions to see IP addresses of an Awesome Load Balancer instance, but not add, change, or delete the instances.\n* For the SYSTEM1234 system engineer role in their AwesomeCloud account, the system engineer role may only permit actions where the user can add, change, or delete instances for approved services (i.e. Awesome Compute Service, Awesome Load Balancer, et cetera). The role may not permit actions by the user for any other service.\n"
+       }
+      }
+     ],
+     "props": {
+      "method": "TEST"
+     },
+     "related-controls": [
+      "ac-6.1"
+     ],
+     "source-doc": "ar"
     }
    ],
    "tasks": [
     {
      "title": "Examine Least Privilege Design and Implementation",
-     "type": "action"
+     "type": "action",
+     "remarks": {
+      "en": "Per IFA's use of NIST SP-800 53A, the assessor, with the support of the owner, information system security officer, and product team for the IFA SYSTEM1234 project, will examine least privilege design and implementation with the following:\n\n* list of security functions (deployed in hardware, software, and firmware) and security-relevant information for which access must be explicitly authorized;\n* system configuration settings and associated documentation;\n"
+     },
+     "source-doc": "ap"
+    },
+    {
+     "title": "Test System Elements for Least Privilege Design and Implementation",
+     "type": "action",
+     "description": {
+      "en": "The activity and it steps will be performed by the assessor via their security automation platform to test least privilege design and implementation of the system's elements, specifically the cloud account infrastructure, as part of continuous monitoring."
+     },
+     "activities": [
+      "Test System Elements for Least Privilege Design and Implementation"
+     ],
+     "source-doc": "ar"
+    }
+   ],
+   "subjects": [
+    {
+     "description": {
+      "en": "The assessor for the IFA SYSTEM1234 Project, including the application and infrastructure for this information system, are within scope of this assessment."
+     }
     }
    ],
    "reviewed-controls": [
@@ -86,6 +154,10 @@
  ],
  "facets": {
   "https://ifa.gov/goodread/facet/observations@1": {
+   "description": {
+    "en": "Automated monthly continuous monitoring of the SYSTEM1234 information system's cloud infrastructure recorded observations below. Additionally, contingent upon the confidence level of the observations and possible risks, confirmed findings may be opened."
+   },
+   "end": "2023-06-02T08:46:51-04:00",
    "observations": [
     {
      "id": "https://ifa.gov/goodread/evidence/obs-8807eb6e",
@@ -96,9 +168,26 @@
      "methods": [
       "TEST"
      ],
+     "types": [
+      "finding"
+     ],
+     "subjects": [
+      "https://ifa.gov/goodread/component/system1234"
+     ],
      "collected": "2023-06-02T08:31:20-04:00",
      "expires": "2023-07-01T00:00:00-04:00",
-     "source-doc": "ar"
+     "remarks": {
+      "en": "The assessor's security automation platform analyzed all roles specific to the SYSTEM1234 Product Team, not those managed by the Office of Information Technology. The `IFA-SYSTEM1234-SystemEngineer` role in their respective AwesomeCloud account permitted use of the following high-risk actions.\n\n* awesomecloud:auditlog:DeleteAccountAuditLog\n* awesomecloud:secmon:AdministerConfigurations\n\n\nBoth of these actions are overly permissive and not appropriate for the business function of the staff member assigned this role."
+     },
+     "source-doc": "ar",
+     "variants": [
+      {
+       "source-doc": "poam",
+       "remarks": {
+        "en": "The assessor's security automation platform analyzed all roles specific to the SYSTEM1234 Product Team, not those managed by the Office of Information Technology. The `IFA-SYSTEM1234-SystemEngineer` role in their respective AwesomeCloud account permitted use of the following high-risk actions. \n\n* awesomecloud:auditlog:DeleteAccountAuditLog\n* awesomecloud:secmon:AdministerConfigurations\n\n\nBoth of these actions are overly permissive and not appropriate for the business function of the staff member assigned this role."
+       }
+      }
+     ]
     },
     {
      "id": "https://ifa.gov/goodread/evidence/obs-4a2fb32e",
@@ -109,8 +198,17 @@
      "methods": [
       "TEST"
      ],
+     "types": [
+      "finding"
+     ],
+     "subjects": [
+      "https://ifa.gov/goodread/component/system1234"
+     ],
      "collected": "2023-06-02T08:31:20-04:00",
      "expires": "2023-07-01T00:00:00-04:00",
+     "remarks": {
+      "en": "The assessor's security automation platform detected that the developer's role is permitted to perform only permissible actions in the SYSTEM1234 AwesomeCloud account in accordance with the agency's least privilege policy and procedures."
+     },
      "source-doc": "ar"
     },
     {
@@ -122,7 +220,16 @@
      "methods": [
       "EXAMINE"
      ],
+     "types": [
+      "control-objective"
+     ],
+     "subjects": [
+      "https://ifa.gov/goodread/component/system1234"
+     ],
      "collected": "2023-05-19T12:14:16-04:00",
+     "remarks": {
+      "en": "The assessor attempted to access the admin panel while logged into the SYSTEM1234 application as a PAO staff user. They were able to see the admin panel and directly edit database records for the application using the Django Framework's admin panel."
+     },
      "source-doc": "poam"
     }
    ]

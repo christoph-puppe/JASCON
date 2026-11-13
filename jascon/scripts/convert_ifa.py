@@ -571,34 +571,92 @@ for c in CDEF.get("components", []) or []:
 V_AR = AR["metadata"]["version"]
 res = AR["results"][0]
 ASSESS = f"{NS}/assessment/conmon-2023-06"
+source_gaps = collections.Counter()      # references the source leaves dangling, counted for the report
+def subject_ref(ref):
+    """An observation's subject, as the Component minted for the SSP component it names."""
+    if ref != ssp_comp["uuid"]:
+        source_gaps["an observation names a subject the SSP does not define"] += 1
+        led.drop_value(ref, "a reference to a subject the system security plan does not define")
+        return None
+    return D("observation subject: the Component minted for the SSP component it names",
+             lambda r, cu: COMP_SYS if r == cu else None, ref, ssp_comp["uuid"])
 observations = []
 for src, tag in ((res.get("observations", []), "ar"), (POAM.get("observations", []), "poam")):
     for o in src:
+        subjects = [x for x in (subject_ref(sj["subject-uuid"]) for sj in o.get("subjects", []) or []) if x is not None]
         observations.append({"id": D("evidence URI from the first eight characters of the observation uuid",
                                      lambda u: f"{NS}/evidence/obs-{u[:8]}", o["uuid"]),
                              "title": o.get("title"), "description": T(pua_scan(o.get("description", "")), "observation"),
-                             "methods": o.get("methods", []), "collected": o.get("collected"),
+                             "methods": o.get("methods", []),
+                             **({"types": o["types"]} if o.get("types") else {}),
+                             **({"subjects": subjects} if subjects else {}),
+                             "collected": o.get("collected"),
                              **({"expires": o["expires"]} if o.get("expires") else {}),
+                             **({"remarks": T(pua_scan(o["remarks"]), "observation")} if o.get("remarks") else {}),
                              "source-doc": tag})
 # dedupe by uuid (the engineer-role observation appears in both AR and POA&M)
 seen, obs_dedup = {}, []
 for o in observations:
     if o["id"] in seen:
+        kept = seen[o["id"]]
         note(f"observation carried in both AR and POA&M (deduped): {o['title']}")
-        # the ledger links every value of the dropped twin to the kept one, and
-        # checks that the two are equal where they are linked
-        led.same(o, seen[o["id"]], "the same observation in AR and POA&M (one uuid), kept once")
+        # The ledger links every value of the dropped twin to the kept one and
+        # checks that the two are equal. Where the twin says something else,
+        # that is not a duplicate: it is kept beside the first, under
+        # `variants`, with the document it comes from.
+        differs = [k for k in o if k not in ("id", "source-doc") and o[k] != kept.get(k)]
+        led.same({k: v for k, v in o.items() if k not in differs}, kept,
+                 "the same observation in AR and POA&M (one uuid), kept once")
+        if differs:
+            kept.setdefault("variants", []).append({"source-doc": o["source-doc"], **{k: o[k] for k in differs}})
+            note(f"**The two copies of one observation differ** (source finding): `{o['title']}` has the same uuid in "
+                 f"the assessment results and in the POA&M, and its {', '.join('`' + k + '`' for k in differs)} "
+                 f"differ{'s' if len(differs) == 1 else ''} between them. Both are carried.")
         continue
     seen[o["id"]] = o; obs_dedup.append(o)
-ap_payload = {"activities": [{"title": a.get("title"),
-                              "description": T(pua_scan(a.get("description", "")), "ap"),
-                              "steps": [{"title": s.get("title"),
-                                         "description": T(pua_scan(s.get("description", "")), "ap")}
-                                        for s in a.get("steps", []) or []]}
-                             for a in AP.get("local-definitions", {}).get("activities", []) or []],
-              "tasks": [{"title": t.get("title"), "type": t.get("type")} for t in AP.get("tasks", []) or []],
+# The method payload: what the plan lays out and what the results add to it.
+# The results define an activity and a task of their own (the TEST that was
+# run; the plan has the EXAMINE), so both documents contribute, each entry
+# saying which. Until 2026-11-13 only the plan's were written, while the path
+# map said the results' activities were "duplicated from AP; carried once".
+def activity_entry(a, tag):
+    return {"title": a.get("title"),
+            "description": T(pua_scan(a.get("description", "")), "ap"),
+            "steps": [{"title": st.get("title"),
+                       "description": T(pua_scan(st.get("description", "")), "ap"),
+                       **({"remarks": T(pua_scan(st["remarks"]), "ap")} if st.get("remarks") else {})}
+                      for st in a.get("steps", []) or []],
+            **({"props": props_by_name(a["props"], led)} if a.get("props") else {}),
+            "related-controls": [ic["control-id"] for cs in a.get("related-controls", {}).get("control-selections", []) or []
+                                 for ic in cs.get("include-controls", []) or []],
+            "source-doc": tag}
+def task_entry(t, activities, tag):
+    """A task names its activity by uuid; the payload names it by its title."""
+    e = {"title": t.get("title"), "type": t.get("type")}
+    if t.get("description") is not None: e["description"] = T(pua_scan(t["description"]), "ap")
+    named = []
+    for aa in t.get("associated-activities", []) or []:
+        act = next((a for a in activities if a["uuid"] == aa["activity-uuid"]), None)
+        if act is None:
+            source_gaps["a task names an activity its document does not define"] += 1
+            led.drop_value(aa["activity-uuid"], "a reference to an activity the document does not define")
+            continue
+        named.append(D("task activity: the title of the activity it names by uuid",
+                       lambda r, au, title: title if r == au else None, aa["activity-uuid"], act["uuid"], act["title"]))
+    if named: e["activities"] = named
+    if t.get("remarks") is not None: e["remarks"] = T(pua_scan(t["remarks"]), "ap")
+    e["source-doc"] = tag
+    return e
+ap_acts = AP.get("local-definitions", {}).get("activities", []) or []
+ar_acts = AR.get("local-definitions", {}).get("activities", []) or []
+ap_payload = {"activities": [activity_entry(a, "ap") for a in ap_acts] + [activity_entry(a, "ar") for a in ar_acts],
+              "tasks": [task_entry(t, ap_acts, "ap") for t in AP.get("tasks", []) or []] +
+                       [task_entry(t, ar_acts, "ar") for t in res.get("local-definitions", {}).get("tasks", []) or []],
+              "subjects": [{"description": T(pua_scan(sj["description"]), "ap")}
+                           for sj in AP.get("assessment-subjects", []) or [] if sj.get("description") is not None],
               "reviewed-controls": [ic["control-id"] for cs in AP["reviewed-controls"]["control-selections"]
                                     for ic in cs["include-controls"]]}
+if not ap_payload["subjects"]: del ap_payload["subjects"]
 # who assesses: one list for the Assessment, from the plan and the results and from
 # every activity and task below them
 roles_assessment = role_list(ap_payload)
@@ -625,7 +683,9 @@ bundle.add("objects/assessment/conmon-2023-06.json",
                         lambda st: "not-satisfied" if st == "not-satisfied" else "satisfied",
                         finding_src["target"]["status"]["state"]),
             "evidence-refs": [o["id"] for o in obs_dedup],
-            "facets": {F_OBS: {"observations": obs_dedup}}})
+            "facets": {F_OBS: {**({"description": T(pua_scan(res["description"]), "observation")} if res.get("description") else {}),
+                               **({"end": res["end"]} if res.get("end") else {}),
+                               "observations": obs_dedup}}})
 
 # ================= 5. Risks + Findings (POA&M risks, AR finding) =================
 V_POAM = POAM["metadata"]["version"]
@@ -748,6 +808,18 @@ RISK2 = risk_object(rk2, "goodread-risk-2", REQ_AC61)
 RISK1 = risk_object(rk1, "goodread-risk-1", None)
 bundle.add("objects/risk/goodread-risk-2.json", RISK2)
 bundle.add("objects/risk/goodread-risk-1.json", RISK1)
+def poam_item_of(rk):
+    """The POA&M item of a risk, for the Finding of that risk: its title and
+    description. An item names its risk by uuid; where that uuid names no risk
+    of the document (a source defect, counted), the item is the one that
+    shares an observation with the risk."""
+    uuids = lambda xs, key: {x[key] for x in xs or []}
+    item = next((it for it in items if rk["uuid"] in uuids(it.get("related-risks"), "risk-uuid")), None)
+    if item is None:
+        item = next((it for it in items if uuids(it.get("related-observations"), "observation-uuid")
+                     & uuids(rk.get("related-observations"), "observation-uuid")), None)
+    if item is None: return {}
+    return {"poam-item": {"title": item.get("title"), "description": T(pua_scan(item.get("description", "")), "finding")}}
 bundle.add("objects/finding/goodread-risk-2.json",
            {"id": f"{NS}/finding/goodread-risk-2", "version": V_POAM, "lifecycle": "active",
             "title": finding_src.get("title", rk2["title"]),
@@ -756,7 +828,12 @@ bundle.add("objects/finding/goodread-risk-2.json",
             "risk-refs": [RISK2["id"]],
             "actions": actions_of(rk2),
             "facets": {F_FTGT: {"target-objective-id": target_obj,
-                                "implementation-statement-uuid": finding_src.get("implementation-statement-uuid")}}})
+                                "implementation-statement-uuid": finding_src.get("implementation-statement-uuid"),
+                                **({"description": T(pua_scan(finding_src["description"]), "finding")}
+                                   if finding_src.get("description") else {}),
+                                **({"target-description": T(pua_scan(finding_src["target"]["description"]), "finding")}
+                                   if finding_src["target"].get("description") else {}),
+                                **poam_item_of(rk2)}}})
 bundle.add("objects/finding/goodread-risk-1.json",
            {"id": f"{NS}/finding/goodread-risk-1", "version": V_POAM, "lifecycle": "active",
             "title": rk1.get("title", ""),
@@ -773,12 +850,16 @@ bundle.add("objects/finding/goodread-risk-1.json",
                                         POAM.get("observations", [{}])[0].get("collected", "2023-05-19")),
                             "refs": [D("evidence URI from the first eight characters of the observation uuid",
                                        lambda u: f"{NS}/evidence/obs-{u[:8]}", POAM["observations"][0]["uuid"]),
-                                     RISK1["id"]]}]})
+                                     RISK1["id"]]}],
+            **({"facets": {F_FTGT: poam_item_of(rk1)}} if poam_item_of(rk1) else {})})
 
 # every role list is complete now: attach the ones that hold something, before
 # the Attestation digests the system Component
 for holder, roles in ROLE_LISTS:
     if roles: holder["responsible-roles"] = roles
+for gap, n in sorted(source_gaps.items()):
+    note(f"**Dangling reference x{n}** (source finding): {gap}. Nothing is invented for it; the reference is declared "
+         f"in the ledger.")
 for gap, n in sorted(party_gaps.items()):
     note(f"**Parties the source {gap} x{n}** (source finding): a role assignment names a party by uuid, and the "
          f"document {'has no such party' if gap == 'does not define' else 'gives that party no name'} - the leveraged "
@@ -818,18 +899,21 @@ bundle.stub("goodread-system-stub.json", F_SYS.split("@")[0], [],
              "data-flow": {"type": "object"}, "users": {"type": "array"},
              "inventory-items": {"type": "array"}, "customer-responsibilities": {"type": "array"},
              "remarks": {"type": "object"}, "responsible-roles": {"type": "array"}})
-bundle.stub("goodread-observations-stub.json", F_OBS.split("@")[0], [], {"observations": {"type": "array"}})
+bundle.stub("goodread-observations-stub.json", F_OBS.split("@")[0], [],
+            {"description": {"type": "object"}, "end": {"type": "string"}, "observations": {"type": "array"}})
 bundle.stub("goodread-risk-analysis-stub.json", F_RISKA.split("@")[0], [],
             {"risk-status": {"type": "string"}, "description": {"type": "object"},
              "characterizations": {"type": "array"}, "responses": {"type": "array"},
              "mitigating-factors": {"type": "array"}})
 bundle.stub("goodread-finding-target-stub.json", F_FTGT.split("@")[0], [],
             {"target-objective-id": {"type": "string"},
-             "implementation-statement-uuid": {"type": "string"}})
+             "implementation-statement-uuid": {"type": "string"},
+             "description": {"type": "object"}, "target-description": {"type": "object"},
+             "poam-item": {"type": "object"}})
 # `tasks` and `reviewed-controls` were written since 1.0.0 and missing from this pin (backlog #55)
 bundle.stub("goodread-ap-stub.json", F_AP.split("@")[0], [],
-            {"activities": {"type": "array"}, "tasks": {"type": "array"}, "reviewed-controls": {"type": "array"},
-             "responsible-roles": {"type": "array"}})
+            {"activities": {"type": "array"}, "tasks": {"type": "array"}, "subjects": {"type": "array"},
+             "reviewed-controls": {"type": "array"}, "responsible-roles": {"type": "array"}})
 bundle.stub("goodread-protocols-stub.json", F_PROTO.split("@")[0], [], {"protocols": {"type": "array"}})
 bundle.stub("goodread-implementation-stub.json", F_IMPL.split("@")[0], [],
             {"description": {"type": "object"}, "remarks": {"type": "object"}, "statements": {"type": "array"}})
@@ -871,22 +955,24 @@ RULES = [
   "satisfied-by, set-parameters -> parameter-bindings (verified against the declared ODPs), "
   "implementation-status -> status"),
  (r"^ap\.assessment-plan\.(local-definitions|tasks|assessment-subjects|reviewed-controls)", "L2",
-  "Assessment.method payload (assessment-plan@1): activities/steps/tasks/subjects/reviewed-controls"),
+  "Assessment.method payload (assessment-plan@1): activities with their steps, method prop and related controls, "
+  "tasks (each naming its activity by title), subjects, reviewed-controls; roles -> the payload's responsible-roles"),
  (r"^ar\.assessment-results\.results\[\]\.(uuid|title|description|start|end)$", "L1",
-  "Assessment id/title/time"),
+  "Assessment id/title/time (start); description and end -> observations@1"),
  (r"^ar\.assessment-results\.results\[\]\.reviewed-controls\.", "L1", "Assessment subject-refs"),
  (r"^ar\.assessment-results\.results\[\]\.observations\[\]\.", "L1",
-  "observations@1 facet + landmark evidence URIs (methods/types/collected/expires carried)"),
+  "observations@1 facet + landmark evidence URIs (methods, types, subjects as Components, collected, expires, remarks)"),
  (r"^ar\.assessment-results\.results\[\]\.findings\[\]\.", "L1",
   "Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + "
   "implementation-statement-uuid -> finding-target@1 facet; related-risks -> Risk.treatments (the risk -> control edge)"),
  (r"^ar\.assessment-results\.results\[\]\.(risks|local-definitions)", "L1",
   "risk content consolidated with the POA&M risks (same risk graph, later state)"),
  (r"^ar\.assessment-results\.local-definitions\.", "L2",
-  "Assessment.method payload (activities duplicated from AP; carried once)"),
+  "Assessment.method payload: the results' own activity (the TEST that was run) beside the plan's, marked source-doc ar"),
  (r"^poam\.plan-of-action-and-milestones\.(uuid$|system-id)", "L1", "provenance / system id (system@1)"),
  (r"^poam\.plan-of-action-and-milestones\.observations\[\]\.", "L1",
-  "observations@1 facet + landmark evidence URIs (deduped against AR by uuid)"),
+  "observations@1 facet + landmark evidence URIs (deduped against AR by uuid; a field that differs from the "
+  "AR's copy is kept under `variants`)"),
  (r"^poam\.plan-of-action-and-milestones\.risks\[\]\.(uuid|title|statement|status|deadline)$", "L1",
   "Risk id/title; statement -> scenario; deadline -> review-due (datetime); status -> Risk state "
   "(+ verbatim in risk-analysis@1) and Finding state (deviation-approved -> approved Deviation; "
@@ -905,7 +991,7 @@ RULES = [
  (r"^poam\.plan-of-action-and-milestones\.risks\[\]\.(mitigating-factors|related-observations)\[?\]?\.", "L1",
   "Deviation rationale (RISK-1) + risk-analysis@1 mitigating-factors; observation links -> evidence refs"),
  (r"^poam\.plan-of-action-and-milestones\.poam-items\[\]\.", "L1",
-  "poam-item titles ride the Finding titles; related-risks/observations resolved by uuid"),
+  "poam-item title and description -> finding-target@1 `poam-item` on the Finding of the risk the item names"),
  (r"^(lev|lvg)\.system-security-plan\.system-characteristics\.", "L1",
   "provider/consumer Components: system@1 facet, the same content as for the main system "
   "(ids, status, sensitivity, FIPS-199 impact, boundary, remarks)"),

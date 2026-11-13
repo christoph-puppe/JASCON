@@ -20,7 +20,7 @@ Source: **OSCAL IFA GoodRead example set** (SSP v1.1.1 + AP + AR + POA&M) + leve
 - **POA&M risks -> Findings**: RISK-2 (open + planned remediation) -> state in-remediation with actions[] (due = within-date-range.end); RISK-1 (status deviation-approved) -> approved `risk-adjustment` Deviation (rationale = mitigating factor, approver = the SCA division URI) whose `refs` name the Risk (RISK-9). Each Finding carries `risk-refs` to its Risk; the risk@1 framework facet is retired.
 - **Finding target `ac-6.1_obj`** is a 53A OBJECTIVE id - it addresses into the sp800-53a@1 facet of the carried AC-6.1 (kept in finding-target@1.target-objective-id; kernel statement-ref stays statement-scoped).
 - **Parties stay landmark** (#16, D22 0-of-3): performer/signer/approver are minted party URIs, no party objects.
-- **Payload free text language-tagged**: ap x7, component x8, implementation x17, observation x4, risk x14, system x10.
+- **Payload free text language-tagged**: ap x16, component x8, finding x5, implementation x17, observation x9, risk x14, system x10.
 
 ## Findings (computed)
 
@@ -29,35 +29,37 @@ Source: **OSCAL IFA GoodRead example set** (SSP v1.1.1 + AP + AR + POA&M) + leve
 - **Placeholder uuids x4**: every export.provided/responsibility uuid in the leveraged pair is 11111111-... - the provided-uuid dereference is degenerate in source; inheritance wired via the authorization anchor instead.
 - **Unresolved parameter bindings**: ['ac-2_prm_1'] - `ac-2_prm_1` is a Rev-5.1-era param id; Rev 5.2.0 declares the _odp layer instead (the binding is carried verbatim; a resolver follows the odp@1 aggregates map).
 - **Kind mapping**: appliance->hardware x1 (OSCAL free-text component types vs. the kernel's closed componentKind).
-- **Global occurrence (measured; path coverage above is a DECLARATION)**: 393 of 835 source leaf values have an equal value of the same type somewhere in the emitted objects. This is an **upper bound** on what was carried: all sources and all objects share one search space, so one output value satisfies every equal source value, and a value dropped in one place is hidden by an equal value in another. It does not trace an occurrence to its destination. Not counted: 34 values that equal only an output key and 51 that occur only inside a longer output text (candidates, to be argued per path). No equal value anywhere: 182 identity values (uuids/hrefs - re-minted as URIs by design), 125 document-metadata values, and **50 content values (27 of them prose of 40+ characters)** - each either transformed on purpose (a mapped code, a respelled id) or DROPPED. That list is a **lower bound** on the losses, not the complete work queue. `UNMAPPED: 0` sees none of this; the per-path lists, with the indexed pointer of every value, are in the JSON report (`global-occurrence`; backlog #41).
-- **Conversion ledger (measured per source value)**: each of the 835 source leaf values has one entry in `ifa-conversion-ledger.json` saying where it went. **404 copied** (the value stands, with its type, at the destination named, read back from the written file), **60 transformed** (a named rule made the destination from it; the rule was applied to the source again and compared), **309 intentionally dropped** (a stated reason), **62 unaccounted**. Unlike the global figure above, an equal value elsewhere does not count: a value is traced by what the converter did with it. Checks that failed: 0. The unaccounted values are listed by path at the end of this report; they are the work queue of backlog #41.
+- **Global occurrence (measured; path coverage above is a DECLARATION)**: 424 of 835 source leaf values have an equal value of the same type somewhere in the emitted objects. This is an **upper bound** on what was carried: all sources and all objects share one search space, so one output value satisfies every equal source value, and a value dropped in one place is hidden by an equal value in another. It does not trace an occurrence to its destination. Not counted: 34 values that equal only an output key and 46 that occur only inside a longer output text (candidates, to be argued per path). No equal value anywhere: 182 identity values (uuids/hrefs - re-minted as URIs by design), 125 document-metadata values, and **24 content values (4 of them prose of 40+ characters)** - each either transformed on purpose (a mapped code, a respelled id) or DROPPED. That list is a **lower bound** on the losses, not the complete work queue. `UNMAPPED: 0` sees none of this; the per-path lists, with the indexed pointer of every value, are in the JSON report (`global-occurrence`; backlog #41).
+- **Conversion ledger (measured per source value)**: each of the 835 source leaf values has one entry in `ifa-conversion-ledger.json` saying where it went. **441 copied** (the value stands, with its type, at the destination named, read back from the written file), **67 transformed** (a named rule made the destination from it; the rule was applied to the source again and compared), **308 intentionally dropped** (a stated reason), **19 unaccounted**. Unlike the global figure above, an equal value elsewhere does not count: a value is traced by what the converter did with it. Checks that failed: 0. The unaccounted values are listed by path at the end of this report; they are the work queue of backlog #41.
 - **What OSCAL cannot give the Risk shape** (model findings, REPORTED; nothing is invented - the one derived value is the owner): analysed in source (likelihood + impact) but no level: `assessed` unreachable (RISK-2) x2; owner absent in source (derived from the SSP `owner` role) x2; response `accept` without a dated acceptance: `retain` unreachable (RISK-6) x1. Owner source: the SSP `owner` role -> https://ifa.gov/goodread/party/owen-pearson.
 - observation carried in both AR and POA&M (deduped): AwesomeCloud IAM Roles Test - SYSTEM1234 System Engineer Role
+- **The two copies of one observation differ** (source finding): `AwesomeCloud IAM Roles Test - SYSTEM1234 System Engineer Role` has the same uuid in the assessment results and in the POA&M, and its `remarks` differs between them. Both are carried.
+- **Dangling reference x1** (source finding): a task names an activity its document does not define. Nothing is invented for it; the reference is declared in the ledger.
 - **Parties the source defines without a name x8** (source finding): a role assignment names a party by uuid, and the document gives that party no name - the leveraged pair's parties carry a type and at most a remark. The role is carried without a party; the reference is declared in the ledger.
 
 ## Full path map (every source path, its count, its destination)
 
 | path | count | level | destination |
 |---|---:|---|---|
-| `ap.assessment-plan.assessment-subjects[].description` | 1 | L2 | Assessment.method payload (assessment-plan@1): activities/steps/tasks/subjects/reviewed-controls |
-| `ap.assessment-plan.assessment-subjects[].type` | 1 | L2 | Assessment.method payload (assessment-plan@1): activities/steps/tasks/subjects/reviewed-controls |
+| `ap.assessment-plan.assessment-subjects[].description` | 1 | L2 | Assessment.method payload (assessment-plan@1): activities with their steps, method prop and related controls, tasks (each naming its activity by title), subjects, reviewed-controls; roles -> the payload's responsible-roles |
+| `ap.assessment-plan.assessment-subjects[].type` | 1 | L2 | Assessment.method payload (assessment-plan@1): activities with their steps, method prop and related controls, tasks (each naming its activity by title), subjects, reviewed-controls; roles -> the payload's responsible-roles |
 | `ap.assessment-plan.back-matter.resources[].remarks` | 2 | L1 | bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports) |
 | `ap.assessment-plan.back-matter.resources[].rlinks[].href` | 2 | L1 | bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports) |
 | `ap.assessment-plan.back-matter.resources[].rlinks[].media-type` | 2 | L1 | bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports) |
 | `ap.assessment-plan.back-matter.resources[].title` | 2 | L1 | bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports) |
 | `ap.assessment-plan.back-matter.resources[].uuid` | 2 | L1 | bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports) |
 | `ap.assessment-plan.import-ssp.href` | 1 | L1 | bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports) |
-| `ap.assessment-plan.local-definitions.activities[].description` | 1 | L2 | Assessment.method payload (assessment-plan@1): activities/steps/tasks/subjects/reviewed-controls |
-| `ap.assessment-plan.local-definitions.activities[].props[].name` | 1 | L2 | Assessment.method payload (assessment-plan@1): activities/steps/tasks/subjects/reviewed-controls |
-| `ap.assessment-plan.local-definitions.activities[].props[].value` | 1 | L2 | Assessment.method payload (assessment-plan@1): activities/steps/tasks/subjects/reviewed-controls |
-| `ap.assessment-plan.local-definitions.activities[].related-controls.control-selections[].include-controls[].control-id` | 1 | L2 | Assessment.method payload (assessment-plan@1): activities/steps/tasks/subjects/reviewed-controls |
-| `ap.assessment-plan.local-definitions.activities[].responsible-roles[].party-uuids[]` | 1 | L2 | Assessment.method payload (assessment-plan@1): activities/steps/tasks/subjects/reviewed-controls |
-| `ap.assessment-plan.local-definitions.activities[].responsible-roles[].role-id` | 1 | L2 | Assessment.method payload (assessment-plan@1): activities/steps/tasks/subjects/reviewed-controls |
-| `ap.assessment-plan.local-definitions.activities[].steps[].description` | 6 | L2 | Assessment.method payload (assessment-plan@1): activities/steps/tasks/subjects/reviewed-controls |
-| `ap.assessment-plan.local-definitions.activities[].steps[].title` | 6 | L2 | Assessment.method payload (assessment-plan@1): activities/steps/tasks/subjects/reviewed-controls |
-| `ap.assessment-plan.local-definitions.activities[].steps[].uuid` | 6 | L2 | Assessment.method payload (assessment-plan@1): activities/steps/tasks/subjects/reviewed-controls |
-| `ap.assessment-plan.local-definitions.activities[].title` | 1 | L2 | Assessment.method payload (assessment-plan@1): activities/steps/tasks/subjects/reviewed-controls |
-| `ap.assessment-plan.local-definitions.activities[].uuid` | 1 | L2 | Assessment.method payload (assessment-plan@1): activities/steps/tasks/subjects/reviewed-controls |
+| `ap.assessment-plan.local-definitions.activities[].description` | 1 | L2 | Assessment.method payload (assessment-plan@1): activities with their steps, method prop and related controls, tasks (each naming its activity by title), subjects, reviewed-controls; roles -> the payload's responsible-roles |
+| `ap.assessment-plan.local-definitions.activities[].props[].name` | 1 | L2 | Assessment.method payload (assessment-plan@1): activities with their steps, method prop and related controls, tasks (each naming its activity by title), subjects, reviewed-controls; roles -> the payload's responsible-roles |
+| `ap.assessment-plan.local-definitions.activities[].props[].value` | 1 | L2 | Assessment.method payload (assessment-plan@1): activities with their steps, method prop and related controls, tasks (each naming its activity by title), subjects, reviewed-controls; roles -> the payload's responsible-roles |
+| `ap.assessment-plan.local-definitions.activities[].related-controls.control-selections[].include-controls[].control-id` | 1 | L2 | Assessment.method payload (assessment-plan@1): activities with their steps, method prop and related controls, tasks (each naming its activity by title), subjects, reviewed-controls; roles -> the payload's responsible-roles |
+| `ap.assessment-plan.local-definitions.activities[].responsible-roles[].party-uuids[]` | 1 | L2 | Assessment.method payload (assessment-plan@1): activities with their steps, method prop and related controls, tasks (each naming its activity by title), subjects, reviewed-controls; roles -> the payload's responsible-roles |
+| `ap.assessment-plan.local-definitions.activities[].responsible-roles[].role-id` | 1 | L2 | Assessment.method payload (assessment-plan@1): activities with their steps, method prop and related controls, tasks (each naming its activity by title), subjects, reviewed-controls; roles -> the payload's responsible-roles |
+| `ap.assessment-plan.local-definitions.activities[].steps[].description` | 6 | L2 | Assessment.method payload (assessment-plan@1): activities with their steps, method prop and related controls, tasks (each naming its activity by title), subjects, reviewed-controls; roles -> the payload's responsible-roles |
+| `ap.assessment-plan.local-definitions.activities[].steps[].title` | 6 | L2 | Assessment.method payload (assessment-plan@1): activities with their steps, method prop and related controls, tasks (each naming its activity by title), subjects, reviewed-controls; roles -> the payload's responsible-roles |
+| `ap.assessment-plan.local-definitions.activities[].steps[].uuid` | 6 | L2 | Assessment.method payload (assessment-plan@1): activities with their steps, method prop and related controls, tasks (each naming its activity by title), subjects, reviewed-controls; roles -> the payload's responsible-roles |
+| `ap.assessment-plan.local-definitions.activities[].title` | 1 | L2 | Assessment.method payload (assessment-plan@1): activities with their steps, method prop and related controls, tasks (each naming its activity by title), subjects, reviewed-controls; roles -> the payload's responsible-roles |
+| `ap.assessment-plan.local-definitions.activities[].uuid` | 1 | L2 | Assessment.method payload (assessment-plan@1): activities with their steps, method prop and related controls, tasks (each naming its activity by title), subjects, reviewed-controls; roles -> the payload's responsible-roles |
 | `ap.assessment-plan.metadata.last-modified` | 1 | L1 | bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports) |
 | `ap.assessment-plan.metadata.oscal-version` | 1 | L1 | bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports) |
 | `ap.assessment-plan.metadata.parties[].links[].href` | 1 | L1 | bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports) |
@@ -82,32 +84,32 @@ Source: **OSCAL IFA GoodRead example set** (SSP v1.1.1 + AP + AR + POA&M) + leve
 | `ap.assessment-plan.metadata.roles[].title` | 1 | L1 | bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports) |
 | `ap.assessment-plan.metadata.title` | 1 | L1 | bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports) |
 | `ap.assessment-plan.metadata.version` | 1 | L1 | bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports) |
-| `ap.assessment-plan.reviewed-controls.control-selections[].include-controls[].control-id` | 1 | L2 | Assessment.method payload (assessment-plan@1): activities/steps/tasks/subjects/reviewed-controls |
-| `ap.assessment-plan.tasks[].associated-activities[].activity-uuid` | 1 | L2 | Assessment.method payload (assessment-plan@1): activities/steps/tasks/subjects/reviewed-controls |
-| `ap.assessment-plan.tasks[].associated-activities[].subjects[].type` | 1 | L2 | Assessment.method payload (assessment-plan@1): activities/steps/tasks/subjects/reviewed-controls |
-| `ap.assessment-plan.tasks[].remarks` | 1 | L2 | Assessment.method payload (assessment-plan@1): activities/steps/tasks/subjects/reviewed-controls |
-| `ap.assessment-plan.tasks[].responsible-roles[].role-id` | 1 | L2 | Assessment.method payload (assessment-plan@1): activities/steps/tasks/subjects/reviewed-controls |
-| `ap.assessment-plan.tasks[].title` | 1 | L2 | Assessment.method payload (assessment-plan@1): activities/steps/tasks/subjects/reviewed-controls |
-| `ap.assessment-plan.tasks[].type` | 1 | L2 | Assessment.method payload (assessment-plan@1): activities/steps/tasks/subjects/reviewed-controls |
-| `ap.assessment-plan.tasks[].uuid` | 1 | L2 | Assessment.method payload (assessment-plan@1): activities/steps/tasks/subjects/reviewed-controls |
+| `ap.assessment-plan.reviewed-controls.control-selections[].include-controls[].control-id` | 1 | L2 | Assessment.method payload (assessment-plan@1): activities with their steps, method prop and related controls, tasks (each naming its activity by title), subjects, reviewed-controls; roles -> the payload's responsible-roles |
+| `ap.assessment-plan.tasks[].associated-activities[].activity-uuid` | 1 | L2 | Assessment.method payload (assessment-plan@1): activities with their steps, method prop and related controls, tasks (each naming its activity by title), subjects, reviewed-controls; roles -> the payload's responsible-roles |
+| `ap.assessment-plan.tasks[].associated-activities[].subjects[].type` | 1 | L2 | Assessment.method payload (assessment-plan@1): activities with their steps, method prop and related controls, tasks (each naming its activity by title), subjects, reviewed-controls; roles -> the payload's responsible-roles |
+| `ap.assessment-plan.tasks[].remarks` | 1 | L2 | Assessment.method payload (assessment-plan@1): activities with their steps, method prop and related controls, tasks (each naming its activity by title), subjects, reviewed-controls; roles -> the payload's responsible-roles |
+| `ap.assessment-plan.tasks[].responsible-roles[].role-id` | 1 | L2 | Assessment.method payload (assessment-plan@1): activities with their steps, method prop and related controls, tasks (each naming its activity by title), subjects, reviewed-controls; roles -> the payload's responsible-roles |
+| `ap.assessment-plan.tasks[].title` | 1 | L2 | Assessment.method payload (assessment-plan@1): activities with their steps, method prop and related controls, tasks (each naming its activity by title), subjects, reviewed-controls; roles -> the payload's responsible-roles |
+| `ap.assessment-plan.tasks[].type` | 1 | L2 | Assessment.method payload (assessment-plan@1): activities with their steps, method prop and related controls, tasks (each naming its activity by title), subjects, reviewed-controls; roles -> the payload's responsible-roles |
+| `ap.assessment-plan.tasks[].uuid` | 1 | L2 | Assessment.method payload (assessment-plan@1): activities with their steps, method prop and related controls, tasks (each naming its activity by title), subjects, reviewed-controls; roles -> the payload's responsible-roles |
 | `ap.assessment-plan.uuid` | 1 | L1 | bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports) |
 | `ar.assessment-results.back-matter.resources[].rlinks[].href` | 2 | L1 | bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports) |
 | `ar.assessment-results.back-matter.resources[].rlinks[].media-type` | 2 | L1 | bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports) |
 | `ar.assessment-results.back-matter.resources[].title` | 2 | L1 | bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports) |
 | `ar.assessment-results.back-matter.resources[].uuid` | 2 | L1 | bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports) |
 | `ar.assessment-results.import-ap.href` | 1 | L1 | bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports) |
-| `ar.assessment-results.local-definitions.activities[].description` | 1 | L2 | Assessment.method payload (activities duplicated from AP; carried once) |
-| `ar.assessment-results.local-definitions.activities[].props[].name` | 1 | L2 | Assessment.method payload (activities duplicated from AP; carried once) |
-| `ar.assessment-results.local-definitions.activities[].props[].value` | 1 | L2 | Assessment.method payload (activities duplicated from AP; carried once) |
-| `ar.assessment-results.local-definitions.activities[].related-controls.control-selections[].include-controls[].control-id` | 1 | L2 | Assessment.method payload (activities duplicated from AP; carried once) |
-| `ar.assessment-results.local-definitions.activities[].responsible-roles[].party-uuids[]` | 1 | L2 | Assessment.method payload (activities duplicated from AP; carried once) |
-| `ar.assessment-results.local-definitions.activities[].responsible-roles[].role-id` | 1 | L2 | Assessment.method payload (activities duplicated from AP; carried once) |
-| `ar.assessment-results.local-definitions.activities[].steps[].description` | 3 | L2 | Assessment.method payload (activities duplicated from AP; carried once) |
-| `ar.assessment-results.local-definitions.activities[].steps[].remarks` | 2 | L2 | Assessment.method payload (activities duplicated from AP; carried once) |
-| `ar.assessment-results.local-definitions.activities[].steps[].title` | 3 | L2 | Assessment.method payload (activities duplicated from AP; carried once) |
-| `ar.assessment-results.local-definitions.activities[].steps[].uuid` | 3 | L2 | Assessment.method payload (activities duplicated from AP; carried once) |
-| `ar.assessment-results.local-definitions.activities[].title` | 1 | L2 | Assessment.method payload (activities duplicated from AP; carried once) |
-| `ar.assessment-results.local-definitions.activities[].uuid` | 1 | L2 | Assessment.method payload (activities duplicated from AP; carried once) |
+| `ar.assessment-results.local-definitions.activities[].description` | 1 | L2 | Assessment.method payload: the results' own activity (the TEST that was run) beside the plan's, marked source-doc ar |
+| `ar.assessment-results.local-definitions.activities[].props[].name` | 1 | L2 | Assessment.method payload: the results' own activity (the TEST that was run) beside the plan's, marked source-doc ar |
+| `ar.assessment-results.local-definitions.activities[].props[].value` | 1 | L2 | Assessment.method payload: the results' own activity (the TEST that was run) beside the plan's, marked source-doc ar |
+| `ar.assessment-results.local-definitions.activities[].related-controls.control-selections[].include-controls[].control-id` | 1 | L2 | Assessment.method payload: the results' own activity (the TEST that was run) beside the plan's, marked source-doc ar |
+| `ar.assessment-results.local-definitions.activities[].responsible-roles[].party-uuids[]` | 1 | L2 | Assessment.method payload: the results' own activity (the TEST that was run) beside the plan's, marked source-doc ar |
+| `ar.assessment-results.local-definitions.activities[].responsible-roles[].role-id` | 1 | L2 | Assessment.method payload: the results' own activity (the TEST that was run) beside the plan's, marked source-doc ar |
+| `ar.assessment-results.local-definitions.activities[].steps[].description` | 3 | L2 | Assessment.method payload: the results' own activity (the TEST that was run) beside the plan's, marked source-doc ar |
+| `ar.assessment-results.local-definitions.activities[].steps[].remarks` | 2 | L2 | Assessment.method payload: the results' own activity (the TEST that was run) beside the plan's, marked source-doc ar |
+| `ar.assessment-results.local-definitions.activities[].steps[].title` | 3 | L2 | Assessment.method payload: the results' own activity (the TEST that was run) beside the plan's, marked source-doc ar |
+| `ar.assessment-results.local-definitions.activities[].steps[].uuid` | 3 | L2 | Assessment.method payload: the results' own activity (the TEST that was run) beside the plan's, marked source-doc ar |
+| `ar.assessment-results.local-definitions.activities[].title` | 1 | L2 | Assessment.method payload: the results' own activity (the TEST that was run) beside the plan's, marked source-doc ar |
+| `ar.assessment-results.local-definitions.activities[].uuid` | 1 | L2 | Assessment.method payload: the results' own activity (the TEST that was run) beside the plan's, marked source-doc ar |
 | `ar.assessment-results.metadata.last-modified` | 1 | L1 | bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports) |
 | `ar.assessment-results.metadata.oscal-version` | 1 | L1 | bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports) |
 | `ar.assessment-results.metadata.parties[].links[].href` | 1 | L1 | bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports) |
@@ -131,8 +133,8 @@ Source: **OSCAL IFA GoodRead example set** (SSP v1.1.1 + AP + AR + POA&M) + leve
 | `ar.assessment-results.metadata.roles[].title` | 1 | L1 | bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports) |
 | `ar.assessment-results.metadata.title` | 1 | L1 | bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports) |
 | `ar.assessment-results.metadata.version` | 1 | L1 | bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports) |
-| `ar.assessment-results.results[].description` | 1 | L1 | Assessment id/title/time |
-| `ar.assessment-results.results[].end` | 1 | L1 | Assessment id/title/time |
+| `ar.assessment-results.results[].description` | 1 | L1 | Assessment id/title/time (start); description and end -> observations@1 |
+| `ar.assessment-results.results[].end` | 1 | L1 | Assessment id/title/time (start); description and end -> observations@1 |
 | `ar.assessment-results.results[].findings[].description` | 1 | L1 | Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> finding-target@1 facet; related-risks -> Risk.treatments (the risk -> control edge) |
 | `ar.assessment-results.results[].findings[].implementation-statement-uuid` | 1 | L1 | Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> finding-target@1 facet; related-risks -> Risk.treatments (the risk -> control edge) |
 | `ar.assessment-results.results[].findings[].related-observations[].observation-uuid` | 1 | L1 | Finding: target.status -> Assessment result + Finding state; target-id (53A objective) + implementation-statement-uuid -> finding-target@1 facet; related-risks -> Risk.treatments (the risk -> control edge) |
@@ -149,25 +151,25 @@ Source: **OSCAL IFA GoodRead example set** (SSP v1.1.1 + AP + AR + POA&M) + leve
 | `ar.assessment-results.results[].local-definitions.tasks[].title` | 1 | L1 | risk content consolidated with the POA&M risks (same risk graph, later state) |
 | `ar.assessment-results.results[].local-definitions.tasks[].type` | 1 | L1 | risk content consolidated with the POA&M risks (same risk graph, later state) |
 | `ar.assessment-results.results[].local-definitions.tasks[].uuid` | 1 | L1 | risk content consolidated with the POA&M risks (same risk graph, later state) |
-| `ar.assessment-results.results[].observations[].collected` | 2 | L1 | observations@1 facet + landmark evidence URIs (methods/types/collected/expires carried) |
-| `ar.assessment-results.results[].observations[].description` | 2 | L1 | observations@1 facet + landmark evidence URIs (methods/types/collected/expires carried) |
-| `ar.assessment-results.results[].observations[].expires` | 2 | L1 | observations@1 facet + landmark evidence URIs (methods/types/collected/expires carried) |
-| `ar.assessment-results.results[].observations[].methods[]` | 2 | L1 | observations@1 facet + landmark evidence URIs (methods/types/collected/expires carried) |
-| `ar.assessment-results.results[].observations[].remarks` | 2 | L1 | observations@1 facet + landmark evidence URIs (methods/types/collected/expires carried) |
-| `ar.assessment-results.results[].observations[].subjects[].subject-uuid` | 2 | L1 | observations@1 facet + landmark evidence URIs (methods/types/collected/expires carried) |
-| `ar.assessment-results.results[].observations[].subjects[].type` | 2 | L1 | observations@1 facet + landmark evidence URIs (methods/types/collected/expires carried) |
-| `ar.assessment-results.results[].observations[].title` | 2 | L1 | observations@1 facet + landmark evidence URIs (methods/types/collected/expires carried) |
-| `ar.assessment-results.results[].observations[].types[]` | 2 | L1 | observations@1 facet + landmark evidence URIs (methods/types/collected/expires carried) |
-| `ar.assessment-results.results[].observations[].uuid` | 2 | L1 | observations@1 facet + landmark evidence URIs (methods/types/collected/expires carried) |
+| `ar.assessment-results.results[].observations[].collected` | 2 | L1 | observations@1 facet + landmark evidence URIs (methods, types, subjects as Components, collected, expires, remarks) |
+| `ar.assessment-results.results[].observations[].description` | 2 | L1 | observations@1 facet + landmark evidence URIs (methods, types, subjects as Components, collected, expires, remarks) |
+| `ar.assessment-results.results[].observations[].expires` | 2 | L1 | observations@1 facet + landmark evidence URIs (methods, types, subjects as Components, collected, expires, remarks) |
+| `ar.assessment-results.results[].observations[].methods[]` | 2 | L1 | observations@1 facet + landmark evidence URIs (methods, types, subjects as Components, collected, expires, remarks) |
+| `ar.assessment-results.results[].observations[].remarks` | 2 | L1 | observations@1 facet + landmark evidence URIs (methods, types, subjects as Components, collected, expires, remarks) |
+| `ar.assessment-results.results[].observations[].subjects[].subject-uuid` | 2 | L1 | observations@1 facet + landmark evidence URIs (methods, types, subjects as Components, collected, expires, remarks) |
+| `ar.assessment-results.results[].observations[].subjects[].type` | 2 | L1 | observations@1 facet + landmark evidence URIs (methods, types, subjects as Components, collected, expires, remarks) |
+| `ar.assessment-results.results[].observations[].title` | 2 | L1 | observations@1 facet + landmark evidence URIs (methods, types, subjects as Components, collected, expires, remarks) |
+| `ar.assessment-results.results[].observations[].types[]` | 2 | L1 | observations@1 facet + landmark evidence URIs (methods, types, subjects as Components, collected, expires, remarks) |
+| `ar.assessment-results.results[].observations[].uuid` | 2 | L1 | observations@1 facet + landmark evidence URIs (methods, types, subjects as Components, collected, expires, remarks) |
 | `ar.assessment-results.results[].reviewed-controls.control-selections[].include-controls[].control-id` | 1 | L1 | Assessment subject-refs |
 | `ar.assessment-results.results[].risks[].description` | 1 | L1 | risk content consolidated with the POA&M risks (same risk graph, later state) |
 | `ar.assessment-results.results[].risks[].statement` | 1 | L1 | risk content consolidated with the POA&M risks (same risk graph, later state) |
 | `ar.assessment-results.results[].risks[].status` | 1 | L1 | risk content consolidated with the POA&M risks (same risk graph, later state) |
 | `ar.assessment-results.results[].risks[].title` | 1 | L1 | risk content consolidated with the POA&M risks (same risk graph, later state) |
 | `ar.assessment-results.results[].risks[].uuid` | 1 | L1 | risk content consolidated with the POA&M risks (same risk graph, later state) |
-| `ar.assessment-results.results[].start` | 1 | L1 | Assessment id/title/time |
-| `ar.assessment-results.results[].title` | 1 | L1 | Assessment id/title/time |
-| `ar.assessment-results.results[].uuid` | 1 | L1 | Assessment id/title/time |
+| `ar.assessment-results.results[].start` | 1 | L1 | Assessment id/title/time (start); description and end -> observations@1 |
+| `ar.assessment-results.results[].title` | 1 | L1 | Assessment id/title/time (start); description and end -> observations@1 |
+| `ar.assessment-results.results[].uuid` | 1 | L1 | Assessment id/title/time (start); description and end -> observations@1 |
 | `ar.assessment-results.uuid` | 1 | L1 | bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports) |
 | `cdef.component-definition.back-matter.resources[].description` | 1 | L1 | bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports) |
 | `cdef.component-definition.back-matter.resources[].rlinks[].href` | 3 | L1 | bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports) |
@@ -382,21 +384,21 @@ Source: **OSCAL IFA GoodRead example set** (SSP v1.1.1 + AP + AR + POA&M) + leve
 | `poam.plan-of-action-and-milestones.metadata.revisions[].version` | 2 | L1 | bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports) |
 | `poam.plan-of-action-and-milestones.metadata.title` | 1 | L1 | bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports) |
 | `poam.plan-of-action-and-milestones.metadata.version` | 1 | L1 | bundle manifest / L0 provenance (doc identity, parties -> landmark party URIs, imports) |
-| `poam.plan-of-action-and-milestones.observations[].collected` | 2 | L1 | observations@1 facet + landmark evidence URIs (deduped against AR by uuid) |
-| `poam.plan-of-action-and-milestones.observations[].description` | 2 | L1 | observations@1 facet + landmark evidence URIs (deduped against AR by uuid) |
-| `poam.plan-of-action-and-milestones.observations[].expires` | 1 | L1 | observations@1 facet + landmark evidence URIs (deduped against AR by uuid) |
-| `poam.plan-of-action-and-milestones.observations[].methods[]` | 2 | L1 | observations@1 facet + landmark evidence URIs (deduped against AR by uuid) |
-| `poam.plan-of-action-and-milestones.observations[].remarks` | 2 | L1 | observations@1 facet + landmark evidence URIs (deduped against AR by uuid) |
-| `poam.plan-of-action-and-milestones.observations[].subjects[].subject-uuid` | 2 | L1 | observations@1 facet + landmark evidence URIs (deduped against AR by uuid) |
-| `poam.plan-of-action-and-milestones.observations[].subjects[].type` | 2 | L1 | observations@1 facet + landmark evidence URIs (deduped against AR by uuid) |
-| `poam.plan-of-action-and-milestones.observations[].title` | 2 | L1 | observations@1 facet + landmark evidence URIs (deduped against AR by uuid) |
-| `poam.plan-of-action-and-milestones.observations[].types[]` | 2 | L1 | observations@1 facet + landmark evidence URIs (deduped against AR by uuid) |
-| `poam.plan-of-action-and-milestones.observations[].uuid` | 2 | L1 | observations@1 facet + landmark evidence URIs (deduped against AR by uuid) |
-| `poam.plan-of-action-and-milestones.poam-items[].description` | 2 | L1 | poam-item titles ride the Finding titles; related-risks/observations resolved by uuid |
-| `poam.plan-of-action-and-milestones.poam-items[].related-observations[].observation-uuid` | 2 | L1 | poam-item titles ride the Finding titles; related-risks/observations resolved by uuid |
-| `poam.plan-of-action-and-milestones.poam-items[].related-risks[].risk-uuid` | 2 | L1 | poam-item titles ride the Finding titles; related-risks/observations resolved by uuid |
-| `poam.plan-of-action-and-milestones.poam-items[].title` | 2 | L1 | poam-item titles ride the Finding titles; related-risks/observations resolved by uuid |
-| `poam.plan-of-action-and-milestones.poam-items[].uuid` | 2 | L1 | poam-item titles ride the Finding titles; related-risks/observations resolved by uuid |
+| `poam.plan-of-action-and-milestones.observations[].collected` | 2 | L1 | observations@1 facet + landmark evidence URIs (deduped against AR by uuid; a field that differs from the AR's copy is kept under `variants`) |
+| `poam.plan-of-action-and-milestones.observations[].description` | 2 | L1 | observations@1 facet + landmark evidence URIs (deduped against AR by uuid; a field that differs from the AR's copy is kept under `variants`) |
+| `poam.plan-of-action-and-milestones.observations[].expires` | 1 | L1 | observations@1 facet + landmark evidence URIs (deduped against AR by uuid; a field that differs from the AR's copy is kept under `variants`) |
+| `poam.plan-of-action-and-milestones.observations[].methods[]` | 2 | L1 | observations@1 facet + landmark evidence URIs (deduped against AR by uuid; a field that differs from the AR's copy is kept under `variants`) |
+| `poam.plan-of-action-and-milestones.observations[].remarks` | 2 | L1 | observations@1 facet + landmark evidence URIs (deduped against AR by uuid; a field that differs from the AR's copy is kept under `variants`) |
+| `poam.plan-of-action-and-milestones.observations[].subjects[].subject-uuid` | 2 | L1 | observations@1 facet + landmark evidence URIs (deduped against AR by uuid; a field that differs from the AR's copy is kept under `variants`) |
+| `poam.plan-of-action-and-milestones.observations[].subjects[].type` | 2 | L1 | observations@1 facet + landmark evidence URIs (deduped against AR by uuid; a field that differs from the AR's copy is kept under `variants`) |
+| `poam.plan-of-action-and-milestones.observations[].title` | 2 | L1 | observations@1 facet + landmark evidence URIs (deduped against AR by uuid; a field that differs from the AR's copy is kept under `variants`) |
+| `poam.plan-of-action-and-milestones.observations[].types[]` | 2 | L1 | observations@1 facet + landmark evidence URIs (deduped against AR by uuid; a field that differs from the AR's copy is kept under `variants`) |
+| `poam.plan-of-action-and-milestones.observations[].uuid` | 2 | L1 | observations@1 facet + landmark evidence URIs (deduped against AR by uuid; a field that differs from the AR's copy is kept under `variants`) |
+| `poam.plan-of-action-and-milestones.poam-items[].description` | 2 | L1 | poam-item title and description -> finding-target@1 `poam-item` on the Finding of the risk the item names |
+| `poam.plan-of-action-and-milestones.poam-items[].related-observations[].observation-uuid` | 2 | L1 | poam-item title and description -> finding-target@1 `poam-item` on the Finding of the risk the item names |
+| `poam.plan-of-action-and-milestones.poam-items[].related-risks[].risk-uuid` | 2 | L1 | poam-item title and description -> finding-target@1 `poam-item` on the Finding of the risk the item names |
+| `poam.plan-of-action-and-milestones.poam-items[].title` | 2 | L1 | poam-item title and description -> finding-target@1 `poam-item` on the Finding of the risk the item names |
+| `poam.plan-of-action-and-milestones.poam-items[].uuid` | 2 | L1 | poam-item title and description -> finding-target@1 `poam-item` on the Finding of the risk the item names |
 | `poam.plan-of-action-and-milestones.risks[].characterizations[].facets[].name` | 4 | L2 | risk-analysis@1 characterizations (likelihood/impact + scale system, origin actors) - scoring stays out of the kernel (App. F Q14) |
 | `poam.plan-of-action-and-milestones.risks[].characterizations[].facets[].system` | 4 | L2 | risk-analysis@1 characterizations (likelihood/impact + scale system, origin actors) - scoring stays out of the kernel (App. F Q14) |
 | `poam.plan-of-action-and-milestones.risks[].characterizations[].facets[].value` | 4 | L2 | risk-analysis@1 characterizations (likelihood/impact + scale system, origin actors) - scoring stays out of the kernel (App. F Q14) |
@@ -520,44 +522,14 @@ No destination and no declared reason. Each is either carried by a rule the conv
 
 | path | count | first value |
 |---|---:|---|
-| `ap.assessment-plan.assessment-subjects[].description` | 1 | `ap#/assessment-plan/assessment-subjects/0/description` |
-| `ap.assessment-plan.local-definitions.activities[].props[].name` | 1 | `ap#/assessment-plan/local-definitions/activities/0/props/0/name` |
-| `ap.assessment-plan.local-definitions.activities[].props[].value` | 1 | `ap#/assessment-plan/local-definitions/activities/0/props/0/value` |
-| `ap.assessment-plan.local-definitions.activities[].related-controls.control-selections[].include-controls[].control-id` | 1 | `ap#/assessment-plan/local-definitions/activities/0/related-controls/control-selections/0/include-controls/0/control-id` |
-| `ap.assessment-plan.tasks[].associated-activities[].activity-uuid` | 1 | `ap#/assessment-plan/tasks/0/associated-activities/0/activity-uuid` |
-| `ap.assessment-plan.tasks[].remarks` | 1 | `ap#/assessment-plan/tasks/0/remarks` |
-| `ar.assessment-results.local-definitions.activities[].description` | 1 | `ar#/assessment-results/local-definitions/activities/0/description` |
-| `ar.assessment-results.local-definitions.activities[].props[].name` | 1 | `ar#/assessment-results/local-definitions/activities/0/props/0/name` |
-| `ar.assessment-results.local-definitions.activities[].props[].value` | 1 | `ar#/assessment-results/local-definitions/activities/0/props/0/value` |
-| `ar.assessment-results.local-definitions.activities[].related-controls.control-selections[].include-controls[].control-id` | 1 | `ar#/assessment-results/local-definitions/activities/0/related-controls/control-selections/0/include-controls/0/control-id` |
-| `ar.assessment-results.local-definitions.activities[].steps[].description` | 3 | `ar#/assessment-results/local-definitions/activities/0/steps/0/description` |
-| `ar.assessment-results.local-definitions.activities[].steps[].remarks` | 2 | `ar#/assessment-results/local-definitions/activities/0/steps/0/remarks` |
-| `ar.assessment-results.local-definitions.activities[].steps[].title` | 3 | `ar#/assessment-results/local-definitions/activities/0/steps/0/title` |
-| `ar.assessment-results.local-definitions.activities[].title` | 1 | `ar#/assessment-results/local-definitions/activities/0/title` |
-| `ar.assessment-results.results[].description` | 1 | `ar#/assessment-results/results/0/description` |
-| `ar.assessment-results.results[].end` | 1 | `ar#/assessment-results/results/0/end` |
-| `ar.assessment-results.results[].findings[].description` | 1 | `ar#/assessment-results/results/0/findings/0/description` |
 | `ar.assessment-results.results[].findings[].related-observations[].observation-uuid` | 1 | `ar#/assessment-results/results/0/findings/0/related-observations/0/observation-uuid` |
 | `ar.assessment-results.results[].findings[].related-risks[].risk-uuid` | 1 | `ar#/assessment-results/results/0/findings/0/related-risks/0/risk-uuid` |
-| `ar.assessment-results.results[].findings[].target.description` | 1 | `ar#/assessment-results/results/0/findings/0/target/description` |
-| `ar.assessment-results.results[].local-definitions.tasks[].associated-activities[].activity-uuid` | 1 | `ar#/assessment-results/results/0/local-definitions/tasks/0/associated-activities/0/activity-uuid` |
-| `ar.assessment-results.results[].local-definitions.tasks[].description` | 1 | `ar#/assessment-results/results/0/local-definitions/tasks/0/description` |
-| `ar.assessment-results.results[].local-definitions.tasks[].title` | 1 | `ar#/assessment-results/results/0/local-definitions/tasks/0/title` |
-| `ar.assessment-results.results[].local-definitions.tasks[].type` | 1 | `ar#/assessment-results/results/0/local-definitions/tasks/0/type` |
-| `ar.assessment-results.results[].observations[].remarks` | 2 | `ar#/assessment-results/results/0/observations/0/remarks` |
-| `ar.assessment-results.results[].observations[].subjects[].subject-uuid` | 2 | `ar#/assessment-results/results/0/observations/0/subjects/0/subject-uuid` |
-| `ar.assessment-results.results[].observations[].types[]` | 2 | `ar#/assessment-results/results/0/observations/0/types/0` |
 | `lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].component-uuid` | 2 | `lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/0/component-uuid` |
 | `lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].export.responsibilities[].provided-uuid` | 2 | `lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/0/export/responsibilities/0/provided-uuid` |
 | `lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].component-uuid` | 3 | `lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/0/component-uuid` |
 | `lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].inherited[].provided-uuid` | 1 | `lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/2/inherited/0/provided-uuid` |
 | `lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].satisfied[].responsibility-uuid` | 2 | `lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/satisfied/0/responsibility-uuid` |
-| `poam.plan-of-action-and-milestones.observations[].remarks` | 2 | `poam#/plan-of-action-and-milestones/observations/0/remarks` |
-| `poam.plan-of-action-and-milestones.observations[].subjects[].subject-uuid` | 2 | `poam#/plan-of-action-and-milestones/observations/0/subjects/0/subject-uuid` |
-| `poam.plan-of-action-and-milestones.observations[].types[]` | 2 | `poam#/plan-of-action-and-milestones/observations/0/types/0` |
-| `poam.plan-of-action-and-milestones.poam-items[].description` | 2 | `poam#/plan-of-action-and-milestones/poam-items/0/description` |
 | `poam.plan-of-action-and-milestones.poam-items[].related-observations[].observation-uuid` | 2 | `poam#/plan-of-action-and-milestones/poam-items/0/related-observations/0/observation-uuid` |
 | `poam.plan-of-action-and-milestones.poam-items[].related-risks[].risk-uuid` | 2 | `poam#/plan-of-action-and-milestones/poam-items/0/related-risks/0/risk-uuid` |
-| `poam.plan-of-action-and-milestones.poam-items[].title` | 2 | `poam#/plan-of-action-and-milestones/poam-items/0/title` |
 | `poam.plan-of-action-and-milestones.risks[].related-observations[].observation-uuid` | 2 | `poam#/plan-of-action-and-milestones/risks/0/related-observations/0/observation-uuid` |
 | `ssp.system-security-plan.control-implementation.implemented-requirements[].by-components[].component-uuid` | 1 | `ssp#/system-security-plan/control-implementation/implemented-requirements/0/by-components/0/component-uuid` |

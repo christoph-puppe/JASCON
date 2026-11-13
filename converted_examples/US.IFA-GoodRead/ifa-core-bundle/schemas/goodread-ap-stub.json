@@ -13,6 +13,9 @@
    "tasks": {
     "type": "array"
    },
+   "subjects": {
+    "type": "array"
+   },
    "reviewed-controls": {
     "type": "array"
    },
