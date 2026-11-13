@@ -2,7 +2,7 @@
 title: JASCON: die Datenschicht für GRC-Engineering
 description: JASCON ist eine offene Notation für Compliance-Daten. Standards, Tailoring, Risiken, Umsetzungen, Prüfungen und Attestierungen werden zu einem Graphen typisierter, inhaltsadressierter JSON-Objekte, die ein Programm validieren, vergleichen und signieren und mit denen es rechnen kann.
 nav: home
-source: d20b2560bbbc
+source: 86da521823fd
 ---
 <section class="hero">
   <div class="wrap hero-grid">
@@ -17,7 +17,7 @@ source: d20b2560bbbc
       </div>
       <div class="hero-status">
         <span><i class="dot"></i>1.0.0 veröffentlicht am 22. Juli 2026</span>
-        <span><i class="dot rc"></i>2.0.0-rc.3 im Review</span>
+        <span><i class="dot rc"></i>2.0.0-rc.4 im Review</span>
         <span>Unabhängiges Projekt, ein Maintainer</span>
       </div>
     </div>
@@ -159,9 +159,9 @@ source: d20b2560bbbc
         <tbody>
           <tr><th scope="row">Controls nach Risiko ausgewählt <small>ISO/IEC 27001 6.1.2 und 6.1.3</small></th><td class="us yes">ja<small>die Erklärung zur Anwendbarkeit (SoA) wird berechnet; Kandidat für 2.0.0</small></td><td class="no">nein<small>ein Risiko existiert erst nach der Prüfung</small></td><td class="part">teilweise<small>nur über Bedrohungen verknüpft</small></td><td class="no">nein</td><td class="part">nur im Tool<small>nicht im Austauschformat</small></td><td class="no">nein</td></tr>
           <tr><th scope="row">Dokumentierte Risikoakzeptanz</th><td class="us yes">ja<small>Genehmiger, Datum, Begründung; Kandidat für 2.0.0</small></td><td class="part">teilweise<small>kein Feld für Genehmiger oder Datum</small></td><td class="part">teilweise<small>kein Genehmiger, kein Datum</small></td><td class="no">nein</td><td class="part">nur im Tool<small>Genehmiger, Datum, Ablauf</small></td><td class="yes">ja<small>für Check-Ergebnisse: verantwortliche Stelle, Zeitpunkt, Grund</small></td></tr>
-          <tr><th scope="row">Jede Entscheidung nachvollziehbar</th><td class="us part">teilweise<small>Abschwächen erfordert eine genehmigte Ausnahme; kein Autor je Änderung</small></td><td class="part">teilweise<small>wer und wann nur je Dokument</small></td><td class="part">teilweise<small>eine Begründung, kein Autor</small></td><td class="no">nein</td><td class="part">teilweise<small>ein Audit-Log; keine Begründung erzwungen</small></td><td class="part">teilweise<small>eine optionale Bemerkung je Änderung</small></td></tr>
+          <tr><th scope="row">Jede Entscheidung nachvollziehbar</th><td class="us part">teilweise<small>Abschwächen erfordert eine genehmigte Ausnahme; ein Autor je Änderung ist optional und wird gemeldet</small></td><td class="part">teilweise<small>wer und wann nur je Dokument</small></td><td class="part">teilweise<small>eine Begründung, kein Autor</small></td><td class="no">nein</td><td class="part">teilweise<small>ein Audit-Log; keine Begründung erzwungen</small></td><td class="part">teilweise<small>eine optionale Bemerkung je Änderung</small></td></tr>
           <tr><th scope="row">Herstellerempfehlungen getrennt von den Controls</th><td class="us yes">ja<small>beim Import erzwungen; Kandidat für 2.0.0</small></td><td class="yes">ja<small>Komponentendefinitionen; Übernahme ist eine Kopie</small></td><td class="part">teilweise<small>getrennte Dateien, keine Zuständigkeitsgrenze</small></td><td class="part">teilweise<small>eine Datei darf auch den Standard definieren</small></td><td class="part">teilweise<small>ein Bibliotheks-Update kann Prüfungen umschreiben</small></td><td class="part">teilweise<small>die Checks des Herstellers entscheiden weiterhin</small></td></tr>
-          <tr><th scope="row">Ausnahmen und Feststellungen mit Fristen</th><td class="us part">teilweise<small>typisierte Fälligkeitsdaten an Feststellungen; eine Ausnahme hat kein Ablaufdatum</small></td><td class="yes">ja<small>Fristen für Risiken, Meilensteine</small></td><td class="no">nein</td><td class="part">teilweise<small>nur Ablauf von Nachweisen</small></td><td class="part">nur im Tool<small>Ablauf von Ausnahmen, Fälligkeitsdaten</small></td><td class="no">nein</td></tr>
+          <tr><th scope="row">Ausnahmen und Feststellungen mit Fristen</th><td class="us yes">ja<small>typisierte Fälligkeitsdaten; ein Überprüfungsdatum an Ausnahmen, gemeldet, sobald es verstrichen ist</small></td><td class="yes">ja<small>Fristen für Risiken, Meilensteine</small></td><td class="no">nein</td><td class="part">teilweise<small>nur Ablauf von Nachweisen</small></td><td class="part">nur im Tool<small>Ablauf von Ausnahmen, Fälligkeitsdaten</small></td><td class="no">nein</td></tr>
           <tr><th scope="row">Automatisierte Checks als Code, in jeder Sprache</th><td class="us yes">ja<small>Urteil aus der Beobachtung nachgerechnet; kein Runner; Kandidat für 2.0.0</small></td><td class="part">teilweise<small>Läufe erfasst, keine Check-Logik</small></td><td class="part">teilweise<small>Läufe erfasst, Logik außerhalb des Formats</small></td><td class="part">teilweise<small>eine Kommandozeile als Text</small></td><td class="part">teilweise<small>importiert Ergebnisse anderer Tools</small></td><td class="part">teilweise<small>jede Sprache nur außerhalb der SCAP-Konformität</small></td></tr>
           <tr><th scope="row">Eine Kette von der Klausel über Umsetzung und Check-Lauf bis zur Nachweisdatei</th><td class="us yes">ja<small>Check-Läufe: Kandidat für 2.0.0</small></td><td class="yes">ja<small>mit einem Hash über den Nachweis</small></td><td class="part">teilweise<small>kein Umsetzungsdatensatz</small></td><td class="part">teilweise<small>Anhänge tragen keinen Hash</small></td><td class="part">teilweise<small>Tool-Ergebnisse nicht mit Controls verknüpft</small></td><td class="part">teilweise<small>Textverweise, keine Hashes</small></td></tr>
           <tr><th scope="row">Mehrere Sprachen in einem Objekt</th><td class="us yes">ja<small>eine Sprach-Map</small></td><td class="no">nein</td><td class="no">nein</td><td class="no">nein</td><td class="yes">ja<small>eine <code>translations</code>-Map</small></td><td class="yes">ja<small><code>xml:lang</code></small></td></tr>
@@ -170,7 +170,7 @@ source: d20b2560bbbc
         </tbody>
       </table>
     </div>
-    <p class="source reveal"><b>Nein</b>: Das Schema wurde gelesen und enthält nichts dafür. <b>Nur im Tool</b>: Die Anwendung CISO Assistant hat es, das Bibliotheksformat, in dem Daten die Anwendung verlassen, nicht. Die zehn Zeilen hat dieses Projekt ausgewählt, und bei zweien ist ein Nachbar voraus: Eine Ausnahme hat in JASCON kein Ablaufdatum, und keine Änderung im Tailoring hält ihren eigenen Autor fest. Mehrere Sprachen, dokumentierte Akzeptanz, Fristen und die Nachweiskette gibt es jeweils auch anderswo. Kein Nachbar bietet als Daten, die das Tool verlassen, ein mit der Auswahl der Controls verknüpftes Risiko, ein nachgerechnetes Check-Urteil oder eine Erweiterung mit fixiertem Vertrag, die ein Tool stoppt, das sie nicht versteht. Die Quelle jeder Zelle: <a href="{{ blob }}/PRIOR-ART.md" rel="noopener">PRIOR-ART.md</a>. Was jedem Format darüber hinaus fehlt: <a href="evidence.html#prior-art">Stand der Technik</a>. Warum nicht eines davon erweitern: <a href="{{ blob }}/jascon/references/appendix-f-objections.md" rel="noopener">Handbuch, Anhang F.10</a>.</p>
+    <p class="source reveal"><b>Nein</b>: Das Schema wurde gelesen und enthält nichts dafür. <b>Nur im Tool</b>: Die Anwendung CISO Assistant hat es, das Bibliotheksformat, in dem Daten die Anwendung verlassen, nicht. Die zehn Zeilen hat dieses Projekt ausgewählt, und bei zweien war bis zum 13. November 2026 ein Nachbar voraus: Eine Ausnahme hatte in JASCON kein Ablaufdatum, und keine Änderung im Tailoring hielt ihren eigenen Autor fest. Beides ist jetzt im Kandidaten enthalten, als optionale Felder, zu denen ein Validator Meldungen ausgibt. Mehrere Sprachen, dokumentierte Akzeptanz, Fristen und die Nachweiskette gibt es jeweils auch anderswo. Kein Nachbar bietet als Daten, die das Tool verlassen, ein mit der Auswahl der Controls verknüpftes Risiko, ein nachgerechnetes Check-Urteil oder eine Erweiterung mit fixiertem Vertrag, die ein Tool stoppt, das sie nicht versteht. Die Quelle jeder Zelle: <a href="{{ blob }}/PRIOR-ART.md" rel="noopener">PRIOR-ART.md</a>. Was jedem Format darüber hinaus fehlt: <a href="evidence.html#prior-art">Stand der Technik</a>. Warum nicht eines davon erweitern: <a href="{{ blob }}/jascon/references/appendix-f-objections.md" rel="noopener">Handbuch, Anhang F.10</a>.</p>
   </div>
 </section>
 
@@ -498,6 +498,10 @@ source: d20b2560bbbc
         <div class="gate rc">
           <span class="gate-when">12. Nov. 2026</span><span class="gate-rail"><i></i></span>
           <div class="gate-body"><h3>2.0.0-rc.3: Empfehlungspakete <span class="tier tier-designed">Release-Kandidat</span></h3><p>Herstellerempfehlungen als Bundle aus Components, über das ein Import weder Anforderungen noch Prüfungen ändern kann. Kein neuer Typ, elf Regeln, {{ n.advice_vectors }} Vektoren und ein ausgearbeitetes Paket, grün in beiden Validatoren. <a href="model.html#advice">Mehr zu Empfehlungspaketen.</a></p></div>
+        </div>
+        <div class="gate rc">
+          <span class="gate-when">13. Nov. 2026</span><span class="gate-rail"><i></i></span>
+          <div class="gate-body"><h3>2.0.0-rc.4: wer entschieden hat, und wann <span class="tier tier-designed">Release-Kandidat</span></h3><p>Ein Tailoring und jeder seiner Einträge, ein Risiko, eine Umsetzung und eine Feststellung können angeben, wer entschieden hat und wann; eine Ausnahme kann angeben, wann über sie entschieden wurde und wann sie zur Überprüfung fällig ist. All das ist optional. Ein Validator meldet, was fehlt und welche Überprüfungsdaten verstrichen sind, mit {{ n.author_vectors }} Vektoren für die beiden Meldungen. <a href="evidence.html#limits">Was das nicht beweist.</a></p></div>
         </div>
       </div>
     </div>

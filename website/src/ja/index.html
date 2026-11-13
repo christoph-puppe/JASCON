@@ -2,7 +2,7 @@
 title: JASCON：GRC エンジニアリングのためのデータレイヤー
 description: JASCON はコンプライアンスデータのためのオープンな記法です。標準、テーラリング、リスク、実装、評価、証明が、型付きでコンテンツアドレス方式の JSON オブジェクトからなる 1 つのグラフになり、プログラムで検証、差分比較、計算、署名ができるようになります。
 nav: home
-source: d20b2560bbbc
+source: 86da521823fd
 ---
 <section class="hero">
   <div class="wrap hero-grid">
@@ -17,7 +17,7 @@ source: d20b2560bbbc
       </div>
       <div class="hero-status">
         <span><i class="dot"></i>1.0.0：2026年7月22日リリース</span>
-        <span><i class="dot rc"></i>2.0.0-rc.3：レビュー中</span>
+        <span><i class="dot rc"></i>2.0.0-rc.4：レビュー中</span>
         <span>独立プロジェクト、メンテナー 1 名</span>
       </div>
     </div>
@@ -159,9 +159,9 @@ source: d20b2560bbbc
         <tbody>
           <tr><th scope="row">リスクに基づく管理策の選択 <small>ISO/IEC 27001 6.1.2 および 6.1.3</small></th><td class="us yes">あり<small>適用宣言書を計算で導出。2.0.0 候補</small></td><td class="no">なし<small>リスクは評価の後にしか存在しない</small></td><td class="part">一部<small>脅威を介してのみ結合</small></td><td class="no">なし</td><td class="part">ツールのみ<small>交換フォーマットにはない</small></td><td class="no">なし</td></tr>
           <tr><th scope="row">リスク受容の記録</th><td class="us yes">あり<small>承認者、日付、論拠。2.0.0 候補</small></td><td class="part">一部<small>承認者や日付のフィールドがない</small></td><td class="part">一部<small>承認者なし、日付なし</small></td><td class="no">なし</td><td class="part">ツールのみ<small>承認者、日付、有効期限</small></td><td class="yes">あり<small>チェック結果について：権限者、時刻、理由</small></td></tr>
-          <tr><th scope="row">すべての決定を追跡できる</th><td class="us part">一部<small>緩和には承認済みの例外が必要。変更ごとの作成者はない</small></td><td class="part">一部<small>誰がいつ、は文書単位のみ</small></td><td class="part">一部<small>論拠はあるが作成者はない</small></td><td class="no">なし</td><td class="part">一部<small>監査ログあり。理由の記入は強制されない</small></td><td class="part">一部<small>変更ごとに任意の備考</small></td></tr>
+          <tr><th scope="row">すべての決定を追跡できる</th><td class="us part">一部<small>緩和には承認済みの例外が必要。変更ごとの作成者は任意で、報告される</small></td><td class="part">一部<small>誰がいつ、は文書単位のみ</small></td><td class="part">一部<small>論拠はあるが作成者はない</small></td><td class="no">なし</td><td class="part">一部<small>監査ログあり。理由の記入は強制されない</small></td><td class="part">一部<small>変更ごとに任意の備考</small></td></tr>
           <tr><th scope="row">ベンダーの推奨事項を管理策から分離</th><td class="us yes">あり<small>インポート時に強制。2.0.0 候補</small></td><td class="yes">あり<small>コンポーネント定義。採用はコピーによる</small></td><td class="part">一部<small>ファイルは別だが権限の境界はない</small></td><td class="part">一部<small>1 つのファイルで標準も定義できる</small></td><td class="part">一部<small>ライブラリの更新で評価が書き換わりうる</small></td><td class="part">一部<small>判定するのは依然としてベンダーのチェック</small></td></tr>
-          <tr><th scope="row">期限付きの例外と指摘事項</th><td class="us part">一部<small>指摘事項に型付きの期日あり。例外に有効期限はない</small></td><td class="yes">あり<small>リスクの期限、マイルストーン</small></td><td class="no">なし</td><td class="part">一部<small>証跡の有効期限のみ</small></td><td class="part">ツールのみ<small>例外の有効期限、期日</small></td><td class="no">なし</td></tr>
+          <tr><th scope="row">期限付きの例外と指摘事項</th><td class="us yes">あり<small>型付きの期日あり。例外にはレビュー期日があり、過ぎると報告される</small></td><td class="yes">あり<small>リスクの期限、マイルストーン</small></td><td class="no">なし</td><td class="part">一部<small>証跡の有効期限のみ</small></td><td class="part">ツールのみ<small>例外の有効期限、期日</small></td><td class="no">なし</td></tr>
           <tr><th scope="row">任意の言語で書ける、コードとしての自動チェック</th><td class="us yes">あり<small>観測値から判定を再計算。ランナーは持たない。2.0.0 候補</small></td><td class="part">一部<small>実行は記録されるが、チェックのロジックはない</small></td><td class="part">一部<small>実行は記録され、ロジックはフォーマットの外</small></td><td class="part">一部<small>テキストとしてのコマンドライン</small></td><td class="part">一部<small>他のツールの結果を取り込む</small></td><td class="part">一部<small>任意の言語は SCAP 適合の範囲外でのみ</small></td></tr>
           <tr><th scope="row">条項から実装、チェックの実行、証跡ファイルまでをつなぐ 1 本の連鎖</th><td class="us yes">あり<small>チェックの実行は 2.0.0 候補</small></td><td class="yes">あり<small>証跡にハッシュ付き</small></td><td class="part">一部<small>実装の記録がない</small></td><td class="part">一部<small>添付ファイルにハッシュがない</small></td><td class="part">一部<small>ツールの結果が管理策に紐づかない</small></td><td class="part">一部<small>テキストによる参照、ハッシュなし</small></td></tr>
           <tr><th scope="row">1 つのオブジェクトに複数の言語</th><td class="us yes">あり<small>言語マップ</small></td><td class="no">なし</td><td class="no">なし</td><td class="no">なし</td><td class="yes">あり<small><code>translations</code> マップ</small></td><td class="yes">あり<small><code>xml:lang</code></small></td></tr>
@@ -170,7 +170,7 @@ source: d20b2560bbbc
         </tbody>
       </table>
     </div>
-    <p class="source reveal"><b>なし</b>：スキーマを読んだうえで、該当するものがなかったことを示します。<b>ツールのみ</b>：CISO Assistant のアプリケーションにはあるものの、アプリケーションの外に出るライブラリフォーマットにはないことを示します。10 の行は本プロジェクトが選んだもので、そのうち 2 つでは近接フォーマットが先行しています。JASCON の例外には有効期限がなく、テーラリングの変更はそれ自体の作成者を記録しません。複数の言語、記録されたリスク受容、期限、証跡の連鎖は、それぞれ他のどこかに存在します。一方、リスクと管理策の選択との結合、再計算されるチェックの判定、理解できないツールを停止させる固定された契約を持つ拡張を、ツールの外に出るデータとして備えている近接フォーマットはありません。各セルの出典：<a href="{{ blob }}/PRIOR-ART.md" rel="noopener">PRIOR-ART.md</a>。各フォーマットに他に欠けているもの：<a href="evidence.html#prior-art">先行技術</a>。それらのいずれかを拡張しない理由：<a href="{{ blob }}/jascon/references/appendix-f-objections.md" rel="noopener">ハンドブック、付録 F.10</a>。</p>
+    <p class="source reveal"><b>なし</b>：スキーマを読んだうえで、該当するものがなかったことを示します。<b>ツールのみ</b>：CISO Assistant のアプリケーションにはあるものの、アプリケーションの外に出るライブラリフォーマットにはないことを示します。10 の行は本プロジェクトが選んだもので、そのうち 2 つでは 2026年11月13日まで近接フォーマットが先行していました。JASCON の例外には有効期限がなく、テーラリングの変更はそれ自体の作成者を記録していませんでした。現在はどちらも、バリデータが報告の対象とする任意のフィールドとして候補版に入っています。複数の言語、記録されたリスク受容、期限、証跡の連鎖は、それぞれ他のどこかに存在します。一方、リスクと管理策の選択との結合、再計算されるチェックの判定、理解できないツールを停止させる固定された契約を持つ拡張を、ツールの外に出るデータとして備えている近接フォーマットはありません。各セルの出典：<a href="{{ blob }}/PRIOR-ART.md" rel="noopener">PRIOR-ART.md</a>。各フォーマットに他に欠けているもの：<a href="evidence.html#prior-art">先行技術</a>。それらのいずれかを拡張しない理由：<a href="{{ blob }}/jascon/references/appendix-f-objections.md" rel="noopener">ハンドブック、付録 F.10</a>。</p>
   </div>
 </section>
 
@@ -498,6 +498,10 @@ source: d20b2560bbbc
         <div class="gate rc">
           <span class="gate-when">2026年11月12日</span><span class="gate-rail"><i></i></span>
           <div class="gate-body"><h3>2.0.0-rc.3：アドバイスパック <span class="tier tier-designed">リリース候補</span></h3><p>ベンダーの推奨事項を、インポートしても要求事項や評価を変更できない Component のバンドルとして扱います。新しい型はなく、11 の規則、{{ n.advice_vectors }} 件のテストベクトル、作例のパック 1 つで、両方のバリデータで合格しています。<a href="model.html#advice">アドバイスパックの詳細。</a></p></div>
+        </div>
+        <div class="gate rc">
+          <span class="gate-when">2026年11月13日</span><span class="gate-rail"><i></i></span>
+          <div class="gate-body"><h3>2.0.0-rc.4：誰がいつ決定したか <span class="tier tier-designed">リリース候補</span></h3><p>テーラリングとその各エントリ、リスク、実装、指摘事項には、誰がいつ決定したかを記せます。例外には、いつ決定されたかと、いつレビューの期日を迎えるかを記せます。これらはすべて任意です。バリデータは、何が欠けているかと、どのレビュー期日が過ぎたかを報告します。この 2 種類の報告には {{ n.author_vectors }} 件のテストベクトルがあります。<a href="evidence.html#limits">それが実証しないこと。</a></p></div>
         </div>
       </div>
     </div>

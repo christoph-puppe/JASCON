@@ -2,7 +2,7 @@
 title: JASCON：GRC 工程的数据层
 description: JASCON 是一种面向合规数据的开放表示法。标准、裁剪、风险、实施、评估和证明构成一张由类型化、内容寻址的 JSON 对象组成的图，程序可以对其进行校验、比对差异、计算和签名。
 nav: home
-source: d20b2560bbbc
+source: 86da521823fd
 ---
 <section class="hero">
   <div class="wrap hero-grid">
@@ -17,7 +17,7 @@ source: d20b2560bbbc
       </div>
       <div class="hero-status">
         <span><i class="dot"></i>1.0.0 于 2026年7月22日发布</span>
-        <span><i class="dot rc"></i>2.0.0-rc.3 评审中</span>
+        <span><i class="dot rc"></i>2.0.0-rc.4 评审中</span>
         <span>独立项目，一位维护者</span>
       </div>
     </div>
@@ -159,9 +159,9 @@ source: d20b2560bbbc
         <tbody>
           <tr><th scope="row">按风险选择控制措施 <small>ISO/IEC 27001 6.1.2 和 6.1.3</small></th><td class="us yes">是<small>适用性声明由计算得出；2.0.0 候选</small></td><td class="no">否<small>风险只在评估之后才存在</small></td><td class="part">部分<small>仅通过威胁关联</small></td><td class="no">否</td><td class="part">仅限工具<small>交换格式中没有</small></td><td class="no">否</td></tr>
           <tr><th scope="row">有记录的风险接受</th><td class="us yes">是<small>批准人、日期、理由；2.0.0 候选</small></td><td class="part">部分<small>没有批准人或日期字段</small></td><td class="part">部分<small>无批准人，无日期</small></td><td class="no">否</td><td class="part">仅限工具<small>批准人、日期、到期时间</small></td><td class="yes">是<small>针对检查结果：授权方、时间、理由</small></td></tr>
-          <tr><th scope="row">每项决定均可追溯</th><td class="us part">部分<small>弱化需要经批准的例外；单项变更不记录作者</small></td><td class="part">部分<small>仅按文档记录人员和时间</small></td><td class="part">部分<small>有理由，无作者</small></td><td class="no">否</td><td class="part">部分<small>有审计日志；不强制填写理由</small></td><td class="part">部分<small>每项变更可附一条备注</small></td></tr>
+          <tr><th scope="row">每项决定均可追溯</th><td class="us part">部分<small>弱化需要经批准的例外；单项变更的作者为可选，并会被报告</small></td><td class="part">部分<small>仅按文档记录人员和时间</small></td><td class="part">部分<small>有理由，无作者</small></td><td class="no">否</td><td class="part">部分<small>有审计日志；不强制填写理由</small></td><td class="part">部分<small>每项变更可附一条备注</small></td></tr>
           <tr><th scope="row">厂商建议与控制措施相互隔离</th><td class="us yes">是<small>导入时强制执行；2.0.0 候选</small></td><td class="yes">是<small>组件定义；采纳即复制</small></td><td class="part">部分<small>文件分开，但无权限边界</small></td><td class="part">部分<small>同一文件也可以定义标准</small></td><td class="part">部分<small>库更新可能改写评估</small></td><td class="part">部分<small>仍由厂商的检查来判定</small></td></tr>
-          <tr><th scope="row">带期限的例外和发现项</th><td class="us part">部分<small>发现项有类型化的截止日期；例外没有到期时间</small></td><td class="yes">是<small>风险期限、里程碑</small></td><td class="no">否</td><td class="part">部分<small>仅证据有到期时间</small></td><td class="part">仅限工具<small>例外到期时间、截止日期</small></td><td class="no">否</td></tr>
+          <tr><th scope="row">带期限的例外和发现项</th><td class="us yes">是<small>类型化的截止日期；例外有复审日期，逾期后会被报告</small></td><td class="yes">是<small>风险期限、里程碑</small></td><td class="no">否</td><td class="part">部分<small>仅证据有到期时间</small></td><td class="part">仅限工具<small>例外到期时间、截止日期</small></td><td class="no">否</td></tr>
           <tr><th scope="row">以代码形式表达的自动化检查，可用任意语言编写</th><td class="us yes">是<small>根据观测值重新计算判定；不提供运行器；2.0.0 候选</small></td><td class="part">部分<small>记录运行，无检查逻辑</small></td><td class="part">部分<small>记录运行，逻辑在格式之外</small></td><td class="part">部分<small>以文本形式记录的命令行</small></td><td class="part">部分<small>导入其他工具的结果</small></td><td class="part">部分<small>只有在 SCAP 一致性之外才能使用任意语言</small></td></tr>
           <tr><th scope="row">从条款到实施、检查运行和证据文件的完整链条</th><td class="us yes">是<small>检查运行：2.0.0 候选</small></td><td class="yes">是<small>证据带哈希</small></td><td class="part">部分<small>无实施记录</small></td><td class="part">部分<small>附件不带哈希</small></td><td class="part">部分<small>工具结果未关联到控制措施</small></td><td class="part">部分<small>文本引用，无哈希</small></td></tr>
           <tr><th scope="row">一个对象容纳多种语言</th><td class="us yes">是<small>语言映射表</small></td><td class="no">否</td><td class="no">否</td><td class="no">否</td><td class="yes">是<small><code>translations</code> 映射表</small></td><td class="yes">是<small><code>xml:lang</code></small></td></tr>
@@ -170,7 +170,7 @@ source: d20b2560bbbc
         </tbody>
       </table>
     </div>
-    <p class="source reveal"><b>否</b>：已阅读其 Schema，其中没有相应内容。<b>仅限工具</b>：CISO Assistant 应用程序具备该能力，但离开应用程序的库格式不具备。这十行由本项目选定，其中有两行是同类格式领先：JASCON 中的例外没有到期时间，裁剪变更也不记录其自身的作者。多语言、有记录的风险接受、期限和证据链，各自都能在别处找到。但没有一个同类格式能以离开工具的数据形式提供以下任何一项：风险与控制措施选择相关联、可重新计算的检查判定，或者带有锁定契约、会让不理解它的工具停止的扩展。每一格的出处：<a href="{{ blob }}/PRIOR-ART.md" rel="noopener">PRIOR-ART.md</a>。各格式还缺少什么：<a href="evidence.html#prior-art">现有技术</a>。为什么不扩展其中某个格式：<a href="{{ blob }}/jascon/references/appendix-f-objections.md" rel="noopener">手册附录 F.10</a>。</p>
+    <p class="source reveal"><b>否</b>：已阅读其 Schema，其中没有相应内容。<b>仅限工具</b>：CISO Assistant 应用程序具备该能力，但离开应用程序的库格式不具备。这十行由本项目选定，其中有两行在2026年11月13日之前是同类格式领先：JASCON 中的例外当时没有到期时间，裁剪变更也不记录其自身的作者。两者现已作为可选字段进入候选版本，校验器会就这些字段给出报告。多语言、有记录的风险接受、期限和证据链，各自都能在别处找到。但没有一个同类格式能以离开工具的数据形式提供以下任何一项：风险与控制措施选择相关联、可重新计算的检查判定，或者带有锁定契约、会让不理解它的工具停止的扩展。每一格的出处：<a href="{{ blob }}/PRIOR-ART.md" rel="noopener">PRIOR-ART.md</a>。各格式还缺少什么：<a href="evidence.html#prior-art">现有技术</a>。为什么不扩展其中某个格式：<a href="{{ blob }}/jascon/references/appendix-f-objections.md" rel="noopener">手册附录 F.10</a>。</p>
   </div>
 </section>
 
@@ -498,6 +498,10 @@ source: d20b2560bbbc
         <div class="gate rc">
           <span class="gate-when">2026年11月12日</span><span class="gate-rail"><i></i></span>
           <div class="gate-body"><h3>2.0.0-rc.3：建议包 <span class="tier tier-designed">发布候选版</span></h3><p>厂商建议以一个由 Component 组成的捆绑包提供，导入时无法借此修改要求或评估。没有新增类型，包含十一条规则、{{ n.advice_vectors }} 个测试向量和一个完整的示例包，在两个校验器中均为绿色。<a href="model.html#advice">进一步了解建议包。</a></p></div>
+        </div>
+        <div class="gate rc">
+          <span class="gate-when">2026年11月13日</span><span class="gate-rail"><i></i></span>
+          <div class="gate-body"><h3>2.0.0-rc.4：由谁决定，何时决定 <span class="tier tier-designed">发布候选版</span></h3><p>裁剪及其每个条目、风险、实施和发现项都可以写明由谁决定、何时决定；例外可以写明何时作出决定以及何时应当复审。这些全部是可选的。校验器会报告缺失的内容以及哪些复审日期已过，并有 {{ n.author_vectors }} 个测试向量用于这两类报告。<a href="evidence.html#limits">这并未证明的内容。</a></p></div>
         </div>
       </div>
     </div>
