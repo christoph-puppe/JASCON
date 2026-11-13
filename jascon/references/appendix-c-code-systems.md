@@ -217,9 +217,18 @@ OSCAL's response `type` prop carries the option — `mitigate` ×1 →
 acceptance, RISK-6). The fit is not one-to-one in the other direction:
 OSCAL allows seven values for that prop (`avoid · mitigate · transfer ·
 accept · share · contingency · none`); `transfer` and `share` both land
-on `share`, and `contingency` and `none` have no code here. Zero corpus
-instances of either so far; if one appears it stays in the facet and is
-counted, never coerced.
+on `share`, and `contingency` and `none` have no code here. Decided
+2026-11-13 (backlog #47b), and neither gets one. `none` says that no
+option was chosen; a Risk says the same by carrying no `treatment`, so
+the absence of the field is that value. `contingency` is a plan for the
+day the risk materialises and is none of the four options; a fifth code
+needs a counted instance (D22, test 3), and no corpus holds one. In both
+cases a converter writes no `treatment`, leaves the response verbatim in
+its facet and counts it in its report, never coerced. Run on 2026-11-13
+on two copies of the IFA POA&M with one response type changed: the Risk
+carries no `treatment`, the facet carries the type, the bundle
+validates. The question reopens with the first instance in a real
+corpus.
 **Pack kinds** *(2.0.0, CP-ADVICE-1)*: `advice` — a closed set
 of one. The kind is what the pack rules fire on: an `advice` pack holds
 Components only (ADVICE-1). A pack of Checks would be a second code with

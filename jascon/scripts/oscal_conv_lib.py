@@ -199,6 +199,30 @@ def value_arrival(sources, objects):
             "absent-content-prose": prose,
             "absent-content-paths": [{"path": p, "count": n} for p, n in sorted(absent["content"].items())]}
 
+# OSCAL's risk response carries a `type` prop with seven allowed values:
+# avoid, mitigate, transfer, accept, share, contingency, none. C.10 has four
+# treatment options (ISO 31000 6.5.2; one to one with BSI 200-3). Five of
+# the seven are one of the four. The other two are decided (backlog #47b,
+# 2026-11-13) and neither gets a code:
+#   none         the source says that no option was chosen. A Risk says the
+#                same by carrying no `treatment`, so nothing is lost.
+#   contingency  a plan for the day the risk materialises. It is none of the
+#                four options, and no corpus instance has been counted
+#                (D22, test 3: a code needs one).
+# In both cases the response itself stays verbatim in the converter's facet.
+RESPONSE_TREATMENT = {"avoid": "avoid", "mitigate": "modify", "transfer": "share",
+                      "share": "share", "accept": "retain"}
+
+def response_treatment(rtype):
+    """OSCAL risk response type -> (C.10 treatment option or None, a report
+    line saying why there is none, or None). Never guesses: a value outside
+    the five mapped ones gives no option, and the caller counts the line."""
+    if rtype in RESPONSE_TREATMENT:
+        return RESPONSE_TREATMENT[rtype], None
+    if rtype == "none":
+        return None, "response type `none`: the source chose no option, so no `treatment` is written (C.10)"
+    return None, f"response type `{rtype}` has no treatment code (C.10)"
+
 def coverage(paths, rules):
     """rules: list of (regex, level, target). Returns (rows, unmapped)."""
     rows, unmapped = [], []
@@ -254,3 +278,21 @@ def report(md_path, json_path, title, source_line, totals_extra, rule_lines,
     with open(md_path, "w", encoding="utf-8") as f:
         f.write("\n".join(md) + "\n")
     return j
+
+
+def _selftest():
+    """The checks of this library that need no source file. Run as
+    `python3 oscal_conv_lib.py`; CI runs it beside the validator."""
+    # backlog #47b: the two OSCAL response types without a treatment code
+    for rtype, code in RESPONSE_TREATMENT.items():
+        assert response_treatment(rtype) == (code, None), rtype
+    code, why = response_treatment("none")
+    assert code is None and "no `treatment` is written" in why, why
+    code, why = response_treatment("contingency")
+    assert code is None and why == "response type `contingency` has no treatment code (C.10)", why
+    assert response_treatment("mitigation")[0] is None      # a misspelling is not guessed at
+    assert set(RESPONSE_TREATMENT.values()) == {"modify", "retain", "avoid", "share"}   # C.10, all four reachable
+    print("oscal_conv_lib selftest: ok")
+
+if __name__ == "__main__":
+    _selftest()

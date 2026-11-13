@@ -19,7 +19,7 @@ acceptance (`retain` is unreachable). Findings point at their Risk with
 bundle - an authorization package carries its baseline. Coverage target: 0.
 Depends on: convert_nist.py output (run first)."""
 import json, os, re, collections
-from oscal_conv_lib import make_T, slug, Bundle, inventory, coverage, report, semantic_digest, value_arrival
+from oscal_conv_lib import make_T, slug, Bundle, inventory, coverage, report, semantic_digest, value_arrival, response_treatment
 
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 SRCDIR = os.path.join(ROOT, "sources", "nist")
@@ -311,11 +311,8 @@ target_obj = finding_src["target"]["target-id"]           # ac-6.1_obj - the 53A
 
 # --- CP-RISK-1: the ex-ante record. Every field below names its source; what
 # --- the source cannot supply is counted in risk_gaps and printed in the report.
-# OSCAL response `type` prop (allowed: avoid mitigate transfer accept share
-# contingency none) -> C.10 treatment option. `contingency` and `none` have no
-# JASCON code; they stay in the facet and are counted.
-RESPONSE_TREATMENT = {"avoid": "avoid", "mitigate": "modify", "transfer": "share",
-                      "share": "share", "accept": "retain"}
+# OSCAL response `type` prop -> C.10 treatment option: response_treatment() of
+# the library, which also says what happens to the two values without a code.
 risk_gaps = collections.Counter()
 response_types = collections.Counter()
 _owner = next((rp["party-uuids"][0] for rp in SSP["metadata"].get("responsible-parties", []) or []
@@ -369,9 +366,8 @@ def risk_object(rk, name, treats):
         o["component-refs"] = [COMP_SYS]                           # POA&M system-id == the SSP's system id
     rtypes = [r["type"] for r in risk_analysis(rk)["responses"] if r["type"]]
     for rt in rtypes: response_types[rt] += 1
-    tcode = RESPONSE_TREATMENT.get(rtypes[0]) if rtypes else None
-    if rtypes and tcode is None:
-        risk_gaps[f"response type `{rtypes[0]}` has no treatment code (C.10)"] += 1
+    tcode, why_none = response_treatment(rtypes[0]) if rtypes else (None, None)
+    if why_none: risk_gaps[why_none] += 1
     if tcode == "modify" and treats:
         o["treatment"] = "modify"
         o["treatments"] = [{"requirement-ref": treats}]

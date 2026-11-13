@@ -56,6 +56,8 @@ jobs:
         run: |
           set -o pipefail
           python jascon/scripts/validate_core.py | tee run.log
+      - name: Converter library, the checks that need no source file
+        run: python jascon/scripts/oscal_conv_lib.py
       - name: Summary
         if: always()
         run: |
