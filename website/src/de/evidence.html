@@ -2,7 +2,7 @@
 title: Belege: was gemessen wurde und was nicht | JASCON
 description: Das Konformitätskorpus, die beiden Referenzvalidatoren, die konvertierten Kataloge mit ihren Lizenzen, die Nachweis-Gates, die offenen Grenzen und die Nachbarformate. Jede Zahl ist als gemessen, entworfen oder offen gekennzeichnet.
 nav: evidence
-source: 4c8b71feb5e9
+source: f79ab2da6174
 ---
 <section class="page-hero">
   <div class="wrap">
@@ -126,6 +126,10 @@ source: 4c8b71feb5e9
         <span class="gate-when">12. Nov. 2026</span><span class="gate-rail"><i></i></span>
         <div class="gate-body"><h3>2.0.0-rc.3: Empfehlungspakete und zwei typisierte Datumsfelder <span class="tier tier-designed">Release-Kandidat, nicht getaggt</span></h3><p>Die Empfehlungen eines Herstellers als eine veröffentlichte Datei, angenommen mit acht dokumentierten Entscheidungen: kein neuer Typ, elf Regeln, {{ n.advice_vectors }} Vektoren und ein ausgearbeitetes Paket mit signierter Attestierung. Über die mitgelieferten Bundles ausgeführt, fand die Regel zu <code>capability-ref</code> im konvertierten NIST-Beispiel eine Kante, die auf eine Fähigkeit verwies, die ihre eigene Komponente nicht deklariert. Am selben Tag schloss der Autor die vier Punkte, die vor dem Setzen des Release-Tags noch offen waren. Zwei Felder, die 1.0.0 als Freitext ließ, sind nun typisiert: das Datum, an dem eine Abweichung eröffnet wurde, und das Fälligkeitsdatum einer Maßnahme.</p></div>
       </div>
+      <div class="gate rc">
+        <span class="gate-when">13. Nov. 2026</span><span class="gate-rail"><i></i></span>
+        <div class="gate-body"><h3>2.0.0-rc.4: wer entschieden hat, und wann <span class="tier tier-designed">Release-Kandidat, nicht getaggt</span></h3><p>Der Vergleich mit fünf Nachbarformaten fand zwei Stellen, an denen eines von ihnen voraus war, und der Autor hat beide am selben Tag entschieden. Wer entschieden hat und wann, wird nun auf eine einzige Weise geschrieben, <code>provenance</code>, und ist optional an einem Tailoring und jedem seiner Einträge, an einem Risiko und seinen Bewertungen, an einer Umsetzung und an einer Feststellung. Eine Abweichung kann angeben, wann über sie entschieden wurde und wann sie zur Überprüfung fällig ist. Ein Validator meldet, was fehlt, eine Zeile je Objekt und Regel, und meldet ein Überprüfungsdatum, das gemessen am Datum des Laufs verstrichen ist. Ein fehlender Autor lässt ein Bundle nur scheitern, wenn der Aufrufer es verlangt; ein verstrichenes Überprüfungsdatum nie. Kein neuer Typ und kein neues Primitiv: {{ n.author_vectors }} Vektoren für die beiden Meldungen, und neunzehn absichtlich eingebaute Fehler in der Referenz färben jeweils einen rot. Drei Zeitangaben, die jede Zeichenkette akzeptierten, sind typisiert.</p></div>
+      </div>
     </div>
   </div>
 </section>
@@ -160,11 +164,11 @@ source: 4c8b71feb5e9
       </div>
       <div class="limit">
         <h3>2.0.0 ist ein Kandidat, kein Release <span class="tier tier-open">offen</span></h3>
-        <p>Zwei Änderungen, die der Autor am 13. November 2026 angenommen hat, sind nicht gebaut: ein Datum der Überprüfung an einer Deviation sowie Autor und Datum jeder festgehaltenen Entscheidung (Backlog 65 und 66). Beide ändern eine Struktur des Kernels, deshalb wartet das Tag auf sie. Beide Validatoren sind auf allen {{ n.vectors }} Vektoren des Kandidaten in seinem jetzigen Stand grün. Bis zum Tag ist 1.0.0 die veröffentlichte Version, und die Strukturen von 2.0.0 können sich noch ändern.</p>
+        <p>Es bleibt nichts zu entscheiden, und beide Validatoren sind auf allen {{ n.vectors }} Vektoren des Kandidaten grün. Die zwei Änderungen, die der Autor am 13. November 2026 angenommen hat, sind als rc.4 darin enthalten; die Tools, die die neuen Felder schreiben, folgen noch. Das Tag ist der Schritt des Autors, und er ist nicht getan. Bis dahin ist 1.0.0 die veröffentlichte Version, und die Strukturen von 2.0.0 können sich noch ändern.</p>
       </div>
       <div class="limit">
         <h3>Nicht jedes Bundle für 1.0.0 ist ein Bundle für 2.0.0 <span class="tier tier-measured">entschieden</span></h3>
-        <p>Bis rc.2 akzeptierte das Schema von 2.0.0 alles, was 1.0.0 akzeptierte. Seit rc.3 muss das Datum, an dem eine Abweichung eröffnet wurde, ein Datum sein und das Fälligkeitsdatum einer Maßnahme ein typisierter Zeitpunkt oder eine Dauer. Ein Bundle für 1.0.0 mit Freitext in einem dieser Felder muss ihn konvertieren. Alle fünf mitgelieferten Bundles und der Beispielordner sind konform. Ein Muster mit einer Unicode-Kategorie folgt der Unicode-Datenbank der Maschine, auf der es läuft, sodass ein später zugewiesener Codepunkt auf zwei Maschinen zwei Urteile ergeben kann; ein Autor, der ein eindeutiges Urteil braucht, schreibt den Bereich aus.</p>
+        <p>Bis rc.2 akzeptierte das Schema von 2.0.0 alles, was 1.0.0 akzeptierte. Seit rc.3 muss das Datum, an dem eine Abweichung eröffnet wurde, ein Datum sein und das Fälligkeitsdatum einer Maßnahme ein typisierter Zeitpunkt oder eine Dauer. Ein Bundle für 1.0.0 mit Freitext in einem dieser Felder muss ihn konvertieren. Seit rc.4 gilt dasselbe für das Datum der Herkunftsangabe eines Mappings, den Zeitpunkt einer Prüfung und den Zeitstempel einer Attestierung. Alle fünf mitgelieferten Bundles und der Beispielordner sind konform. Ein Muster mit einer Unicode-Kategorie folgt der Unicode-Datenbank der Maschine, auf der es läuft, sodass ein später zugewiesener Codepunkt auf zwei Maschinen zwei Urteile ergeben kann; ein Autor, der ein eindeutiges Urteil braucht, schreibt den Bereich aus.</p>
       </div>
       <div class="limit">
         <h3>Empfehlungspakete stützen sich auf eine einzige Beispieldatei <span class="tier tier-designed">entworfen</span></h3>
@@ -175,8 +179,8 @@ source: 4c8b71feb5e9
         <p>Die Beispiel-Attestierung dient nur der Veranschaulichung: Ihre Subject-Digests passen zu keinem Beispielobjekt. Der Methoden-Payload eines Assessments wird noch nicht gegen sein fixiertes Facettenschema validiert, und die drei im Repository würden daran scheitern.</p>
       </div>
       <div class="limit">
-        <h3>Zwei Stellen, an denen ein Nachbar voraus ist <span class="tier tier-open">offen, Backlog 65 und 66</span></h3>
-        <p>Der Vergleich vom 13. November 2026 fand zwei. Eine Deviation hält fest, wann sie eröffnet und wer sie genehmigt hat, und hat kein Ablaufdatum; eine Sicherheitsausnahme in CISO Assistant hat ein Ablaufdatum und ein Risiko in OSCAL eine Frist. Keine Tailoring-Operation hält ihren eigenen Autor fest: Eine Abschwächung erfordert eine genehmigte Deviation, jede andere Änderung wird nur über das Tailoring zugeordnet, das sie enthält, während CISO Assistant jede Änderung protokolliert. Der Autor hat beide am selben Tag entschieden: Eine Deviation erhält ein optionales Datum der Überprüfung, und eine Entscheidung hält fest, wer sie wann getroffen hat. Gebaut ist noch keines von beiden; es sind die Einträge 65 und 66 im Backlog.</p>
+        <h3>Wer entschieden hat, wird festgehalten, nicht erzwungen <span class="tier tier-designed">in rc.4, Backlog 65 und 66</span></h3>
+        <p>Der Vergleich vom 13. November 2026 fand zwei Stellen, an denen ein Nachbar voraus war: Eine Deviation hatte kein Ablaufdatum, während eine Sicherheitsausnahme in CISO Assistant ein Ablaufdatum hat und ein Risiko in OSCAL eine Frist; und keine Tailoring-Operation hielt ihren eigenen Autor fest, während CISO Assistant jede Änderung protokolliert. Beides ist in rc.4 enthalten. Die Felder sind optional: Ein Validator meldet einen fehlenden Autor, der ein Bundle nur scheitern lässt, wenn der Aufrufer es verlangt, und ein verstrichenes Überprüfungsdatum, das dies nie tut. Eine Deviation, deren Überprüfungsdatum verstrichen ist, bleibt in Kraft, bis jemand handelt. Der Autor einer Version ist kein Protokoll jeder Änderung. Und die Tools schreiben die Felder noch nicht: Die App und die Konverter nennen keinen Autor, sodass das konvertierte NIST-Beispiel zehn solcher Meldungszeilen zeigt.</p>
       </div>
       <div class="limit">
         <h3>Die Governance ist eine Person <span class="tier tier-open">offen</span></h3>

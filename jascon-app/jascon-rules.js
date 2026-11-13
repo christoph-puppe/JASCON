@@ -30,7 +30,10 @@
    sixteenth of the Check type (CP-CHECK-1): I-Regexp,
    check-verdict and CHECK-1..15 with the evidence chain, and the
    seventeenth of advice packs (CP-ADVICE-1): ADVICE-1..11 with the
-   publisher verdict and the import plan. The
+   publisher verdict and the import plan, and the eighteenth of who decided
+   and when (CP-AUTHOR-1): AUTHOR-1..4 and REVIEW-1, two reports that fail
+   nothing. Those two are not part of jscCheckGraph: no page shows them
+   yet. The
    conditional-apply engine is run by nothing but its vectors, here as in
    the reference: no bundle has a place to carry an instance yet.
 
@@ -584,12 +587,30 @@ function jscClosureErrors(objs) {
    Kernel pin (KERNEL-1, KERNEL-2)
    ==================================================================== */
 const JSC_RULES_KERNEL = "2.0.0", JSC_RULES_KERNEL_READS = ["1.0.0", "2.0.0"];
+/* -> [[where, Deviation]]: every Deviation an object carries - in its
+   `deviations` list and, on a Tailoring, inline on an operation. `where` is
+   the place inside the object, with the index the list gives it. */
+function jscDeviationsOf(type, obj) {
+  const out = [];
+  (Array.isArray(obj.deviations) ? obj.deviations : []).forEach((d, i) => { if (jscIsPlainObject(d)) out.push([`deviations[${i}]`, d]); });
+  if (type === "tailoring") {
+    (Array.isArray(obj.operations) ? obj.operations : []).forEach((op, i) => {
+      if (jscIsPlainObject(op) && jscIsPlainObject(op.deviation)) out.push([`operations[${i}].deviation`, op.deviation]);
+    });
+  }
+  return out;
+}
 /* -> [version the content needs, why]. 2.0.0 added the Risk type,
    Finding.risk-refs, pinned scale definitions, the Check type,
    Assessment.check-results and .tailoring-ref, Finding.check-ref, the pack
-   header of a manifest, statement-ids on a capability (CP-ADVICE-1) and
-   product-version on a Component (author decision 2026-11-12). */
+   header of a manifest, statement-ids on a capability (CP-ADVICE-1),
+   product-version on a Component (author decision 2026-11-12), and the
+   fields of CP-AUTHOR-1: `provenance` where 1.0.0 had none, `decided` and
+   `review-due` on a Deviation, `date` on an authorization. jscNeedsKernel2
+   in jascon-core.js decides the pin the export writes and names the same
+   reasons; tests/rules.test.mjs holds the two together. */
 function jscKernelNeeded(objs, manifest) {
+  const entries = v => (Array.isArray(v) ? v : []).filter(jscIsPlainObject);
   if (manifest && (manifest.scales || []).length) return ["2.0.0", "the manifest pins scale definitions"];
   if (manifest && manifest.pack) return ["2.0.0", "the manifest carries a pack header"];
   for (const oid of [...objs.keys()].sort()) {
@@ -601,6 +622,12 @@ function jscKernelNeeded(objs, manifest) {
     if (type === "finding" && obj["check-ref"]) return ["2.0.0", `${oid} carries a check-ref`];
     if (type === "component" && (obj.capabilities || []).some(c => (c["statement-ids"] || []).length)) return ["2.0.0", `${oid} names clauses on a capability (statement-ids)`];
     if (type === "component" && "product-version" in obj) return ["2.0.0", `${oid} names the product version it describes (product-version)`];
+    if (["tailoring", "implementation", "finding"].includes(type) && "provenance" in obj) return ["2.0.0", `${oid} names its author (provenance)`];
+    if (type === "tailoring" && ["selects", "excludes", "operations"].some(k => entries(obj[k]).some(e => "provenance" in e))) {
+      return ["2.0.0", `${oid} names the author of a select, an exclude or an operation (provenance)`];
+    }
+    if (jscDeviationsOf(type, obj).some(([, d]) => "decided" in d || "review-due" in d)) return ["2.0.0", `${oid} carries a Deviation with \`decided\` or \`review-due\``];
+    if (type === "component" && entries(obj.authorizations).some(a => "date" in a)) return ["2.0.0", `${oid} dates an authorization`];
   }
   return ["1.0.0", null];
 }
@@ -764,6 +791,157 @@ function jscRiskLinkNotes(objs) {
     }
   }
   return notes;
+}
+
+/* ====================================================================
+   Who decided, and when (CP-AUTHOR-1): AUTHOR-1..4 and REVIEW-1
+   ====================================================================
+   The port of the reference's section "who decided, and when
+   (CP-AUTHOR-1)". The schema leaves every one of these fields optional: a
+   catalogue authority's content needs none. Two reports say what a reader
+   would look for and not find:
+     jscAuthorReport  what is missing - `provenance` on a consumer's
+                      Tailoring and its entries, on a Risk, a Finding and an
+                      Implementation; `decided` on a decided Deviation; the
+                      `date` of an authorization (AUTHOR-1..4)
+     jscReviewReport  which `review-due` has passed on a given day (REVIEW-1)
+   Neither fails a set. Whether a missing author is a failure is the
+   caller's policy (the reference's --require-authors); an overdue review
+   never is: a Deviation past its review keeps licensing its weakening until
+   someone acts, and the report is how someone finds out.
+   Nothing here reads a clock. The day REVIEW-1 is asked about is an
+   argument, so a set gives the same report every time it is asked about the
+   same day. Days are UTC calendar days throughout, written YYYY-MM-DD. */
+const JSC_AUTHOR_RULES = {
+  "AUTHOR-1": "a consumer's Tailoring says who decided each select, exclude and operation - on the entry, or once on the Tailoring",
+  "AUTHOR-2": "a Risk, a Finding and an Implementation say who wrote this version and when (provenance): each records a judgement",
+  "AUTHOR-3": "an approved or withdrawn Deviation says when it was decided (decided); `opened` is when it was asked for",
+  "AUTHOR-4": "an authorization says on which day it was given (date); it already names the authority",
+  "REVIEW-1": "a review-due that has passed is reported, on an approved Deviation and on a Risk still managed - the date exists to be looked at",
+};
+/* -> [{rule, id, count, message}], one entry per object and rule: the
+   objects in the order of their ids (as strings, by code unit), the rules of
+   one object in the order AUTHOR-1..4. AUTHOR-1 asks only a Tailoring at
+   consumer tier (D13: duties bind there; an authority's Tailoring is
+   attributed by its origin and its Attestation). An entry without
+   `provenance` has its Tailoring's, so a Tailoring that names its author is
+   not asked about its entries. `verify` is jscDeriveTier's: with trusted
+   keys the tier is derived in verification mode. */
+async function jscAuthorReport(objs, verify) {
+  const out = [], entries = v => (Array.isArray(v) ? v : []).filter(jscIsPlainObject);
+  for (const id of [...objs.keys()].sort()) {
+    const { type, obj } = objs.get(id);
+    if (type === "tailoring" && !("provenance" in obj) && await jscDeriveTier(obj, objs, verify && { ...verify, notes: null }) === "consumer") {
+      const parts = [];
+      let count = 0;
+      for (const [key, word] of [["selects", "select"], ["excludes", "exclude"], ["operations", "operation"]]) {
+        const all = entries(obj[key]), bare = all.filter(e => !("provenance" in e)).length;
+        if (bare) { count += bare; parts.push(`${bare} of ${all.length} ${word}(s)`); }
+      }
+      if (count) out.push({ rule: "AUTHOR-1", id, count, message: `${id}: ${parts.join(", ")} name no author, and the Tailoring names none (AUTHOR-1)` });
+    }
+    if (["risk", "finding", "implementation"].includes(type) && !("provenance" in obj)) {
+      out.push({ rule: "AUTHOR-2", id, count: 1, message: `${id}: this ${type[0].toUpperCase() + type.slice(1)} does not say who wrote it and when (AUTHOR-2)` });
+    }
+    const undated = jscDeviationsOf(type, obj).filter(([, d]) => (d.state === "approved" || d.state === "withdrawn") && !("decided" in d)).map(([where]) => where);
+    if (undated.length) {
+      out.push({ rule: "AUTHOR-3", id, count: undated.length, message: `${id}: ${undated.length} Deviation(s) approved or withdrawn without \`decided\`: ${undated.join(", ")} (AUTHOR-3)` });
+    }
+    if (type === "component") {
+      const bare = entries(obj.authorizations).filter(a => !("date" in a)).map(a => String(a.id));
+      if (bare.length) out.push({ rule: "AUTHOR-4", id, count: bare.length, message: `${id}: ${bare.length} authorization(s) without a date: ${bare.join(", ")} (AUTHOR-4)` });
+    }
+  }
+  return out;
+}
+
+/* ---------- REVIEW-1: the day a review-due falls on ----------
+   The calendar is the reference's: the proleptic Gregorian one, years 0001
+   to 9999. A day outside it, or one no month has (the 31st of February), is
+   "not a day of the calendar" and is reported as not evaluable, never moved
+   to the next real day. */
+const JSC_DAY_RE = /^(\d{4})-(\d{2})-(\d{2})$/;
+const JSC_DATETIME_RE = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.\d+)?(Z|[+-]\d{2}:\d{2})$/;
+const JSC_ELAPSED_SECONDS = new Map([["seconds", 1], ["minutes", 60], ["hours", 3600]]);
+const JSC_CALENDAR_DAYS = 3652059;   // 0001-01-01 to 9999-12-31: no duration inside the calendar is longer
+const JSC_NO_SUCH_DAY = "not a day of the calendar";
+/* -> the milliseconds of 00:00 UTC on a calendar day, or null where there is
+   no such day. Date.UTC is not used on purpose: it reads a year below 100 as
+   19xx. setUTCFullYear takes the year as written; like every Date setter it
+   rolls the 31st of February over into March, and the comparison of what
+   was set with what was asked for is what catches that. */
+function jscUtcMidnight(year, month, day) {
+  if (year < 1) return null;
+  const t = new Date(0);
+  t.setUTCFullYear(year, month - 1, day);
+  return t.getUTCFullYear() === year && t.getUTCMonth() === month - 1 && t.getUTCDate() === day ? t.getTime() : null;
+}
+/* YYYY-MM-DD -> the milliseconds of its 00:00 UTC, or null */
+function jscDayMs(text) {
+  const m = typeof text === "string" ? JSC_DAY_RE.exec(text) : null;
+  return m ? jscUtcMidnight(Number(m[1]), Number(m[2]), Number(m[3])) : null;
+}
+/* an instant -> [the UTC day it lies in, null], or [null, why] outside the calendar */
+function jscDayOfMs(ms) {
+  const t = new Date(ms), year = t.getUTCFullYear();
+  return Number.isNaN(year) || year < 1 || year > 9999 ? [null, JSC_NO_SUCH_DAY] : [t.toISOString().slice(0, 10), null];
+}
+/* -> [the UTC calendar day a `review-due` falls on, null] or [null, why it
+   cannot be evaluated]. `start` is the date a duration counts from: an
+   elapsed duration is added to 00:00 UTC of that day. A date-time is read
+   with its offset, so 01:00+02:00 lies in the day before. A calendar period
+   is never evaluated: this tool has no calendar (D9: fail-closed without
+   the named calendar). */
+function jscUtcDay(due, start) {
+  const kind = jscIsPlainObject(due) ? due.type : undefined;
+  if (kind === "date") return jscDayMs(due.value) === null ? [null, JSC_NO_SUCH_DAY] : [due.value, null];
+  if (kind === "datetime") {
+    const m = typeof due.value === "string" ? JSC_DATETIME_RE.exec(due.value) : null;
+    if (!m) return [null, "not a typed review-due"];
+    const [year, month, day, hour, minute, second] = m.slice(1, 7).map(Number), off = m[7];
+    const east = off === "Z" ? 0 : (off[0] === "+" ? 1 : -1) * (Number(off.slice(1, 3)) * 60 + Number(off.slice(4, 6)));   // minutes east of UTC
+    const midnight = jscUtcMidnight(year, month, day);
+    if (midnight === null || hour > 23 || minute > 59 || second > 59 || Math.abs(east) >= 1440) return [null, JSC_NO_SUCH_DAY];
+    return jscDayOfMs(midnight + (hour * 3600 + minute * 60 + second) * 1000 - east * 60000);
+  }
+  if (kind === "elapsed-duration") {
+    if (start === undefined || start === null) return [null, "a duration, and no date to count it from"];
+    const from = jscDayMs(start), per = JSC_ELAPSED_SECONDS.get(due.unit);
+    if (typeof due.num !== "number" || !Number.isFinite(due.num) || per === undefined) return [null, "not a typed review-due"];
+    if (from === null || Math.abs(due.num * per) > JSC_CALENDAR_DAYS * 86400) return [null, JSC_NO_SUCH_DAY];
+    return jscDayOfMs(from + due.num * per * 1000);
+  }
+  if (kind === "calendar-period") {
+    return [null, `a calendar period, and this tool has no calendar ${due["calendar-ref"]} (D9: fail-closed without the named calendar)`];
+  }
+  return [null, "not a typed review-due"];
+}
+/* REVIEW-1 -> { dated: how many review dates were asked, overdue: [{id,
+   where, day}], "not-evaluable": [{id, where, why}] }, the objects in the
+   order of their ids. `asOf` is the day the question is asked about,
+   YYYY-MM-DD; the caller passes today's UTC date (jscToday of the core)
+   when the user names none. A point in time has passed when its UTC
+   calendar day is before `asOf`; due today is not overdue. A duration counts
+   from `decided`, else `opened`, on a Deviation, and from `acceptance.date`
+   on a Risk. Asked of an approved Deviation and of a Risk still managed. */
+function jscReviewReport(objs, asOf) {
+  if (jscDayMs(asOf) === null) throw new Error(`REVIEW-1 is asked about a day, YYYY-MM-DD; got ${JSON.stringify(asOf)}`);
+  const overdue = [], blind = [];
+  let dated = 0;
+  for (const id of [...objs.keys()].sort()) {
+    const { type, obj } = objs.get(id);
+    const asked = jscDeviationsOf(type, obj).filter(([, d]) => d.state === "approved" && jscIsPlainObject(d["review-due"]))
+      .map(([where, d]) => [where, d["review-due"], d.decided || d.opened]);
+    if (type === "risk" && jscRiskIsLive(obj) && jscIsPlainObject(obj["review-due"])) asked.push(["review-due", obj["review-due"], (obj.acceptance || {}).date]);
+    for (const [where, due, start] of asked) {
+      dated++;
+      const [day, why] = jscUtcDay(due, start);
+      if (day === null) blind.push({ id, where, why });
+      /* both are YYYY-MM-DD with a four-digit year, so the order of the strings is the order of the days */
+      else if (day < asOf) overdue.push({ id, where, day });
+    }
+  }
+  return { dated, overdue, "not-evaluable": blind };
 }
 
 /* ====================================================================
@@ -963,15 +1141,19 @@ function jscOptionalEmptyViolations(obj, path = "$") {
   }
   return out;
 }
-/* DATE-1 and DATE-2: two fields 1.0.0 left as free text and 2.0.0 types
-   (author decision 2026-11-12). The schema enforces; this names the rule
-   when an object matches no type, so that a 1.0.0 bundle with a free-text
-   date is told what to correct. */
+/* DATE-1 to DATE-5: fields 1.0.0 left as free text and 2.0.0 types (author
+   decision 2026-11-12; DATE-3 to DATE-5 and `decided` with CP-AUTHOR-1, the
+   "when" of who-and-when). The schema enforces; this names the rule when an
+   object matches no type, so that a 1.0.0 bundle with a free-text date is
+   told what to correct. */
 const JSC_DATE_RULES = {
-  "DATE-1": "a Deviation's `opened` is a date, YYYY-MM-DD - a date that any string satisfies cannot be compared, sorted or checked",
+  "DATE-1": "a Deviation's `opened` and `decided` are dates, YYYY-MM-DD - a date that any string satisfies cannot be compared, sorted or checked",
   "DATE-2": "the `due` of a Finding's action is a typed point in time or duration (date, datetime, elapsed-duration, calendar-period) - a deadline a machine cannot read is prose",
+  "DATE-3": "the `date` of a Mapping's provenance is a date, YYYY-MM-DD",
+  "DATE-4": "the `time` of an Assessment is a date or an RFC 3339 date-time with an offset",
+  "DATE-5": "the `timestamp` of an Attestation is a date or an RFC 3339 date-time with an offset",
 };
-/* a value as Python's repr prints it, for the message of DATE-1 */
+/* a value as Python's repr prints it, for the messages of the DATE rules */
 function jscPyRepr(v) {
   if (typeof v === "string") return v.includes("'") && !v.includes('"') ? `"${v.replace(/\\/g, "\\\\")}"` : `'${v.replace(/\\/g, "\\\\").replace(/'/g, "\\'")}'`;
   if (v === null || v === undefined) return "None";
@@ -980,16 +1162,20 @@ function jscPyRepr(v) {
   if (jscIsPlainObject(v)) return "{" + Object.entries(v).map(([k, x]) => jscPyRepr(k) + ": " + jscPyRepr(x)).join(", ") + "}";
   return String(v);
 }
-/* -> [[rule id, what is wrong]] for an object that carries Deviations or
-   actions. It explains a refusal; it never accepts (the schema decides). */
+/* -> [[rule id, what is wrong]] for an object that carries Deviations,
+   actions or one of the three typed times. It explains a refusal; it never
+   accepts (the schema decides). */
 function jscDateRuleViolations(o) {
   const out = [];
   if (!jscIsPlainObject(o)) return out;
   const valid = (shape, v) => !jscSchemaCheck({ $ref: "#/$defs/" + shape }, v, jscRulesSchema.JSC_SCHEMA).errors.length;
+  const isWhen = v => valid("date", v) || valid("dateTime", v);   // a date, or an RFC 3339 date-time with an offset
   const deviations = (x, at) => {
     if (jscIsPlainObject(x)) {
       (Array.isArray(x.deviations) ? x.deviations : []).forEach((dv, i) => {
-        if (jscIsPlainObject(dv) && "opened" in dv && !valid("date", dv.opened)) out.push(["DATE-1", `${at}deviations[${i}].opened is ${jscPyRepr(dv.opened)}`]);
+        for (const field of ["opened", "decided"]) {
+          if (jscIsPlainObject(dv) && field in dv && !valid("date", dv[field])) out.push(["DATE-1", `${at}deviations[${i}].${field} is ${jscPyRepr(dv[field])}`]);
+        }
       });
       for (const [k, v] of Object.entries(x)) if (k !== "deviations") deviations(v, `${at}${k}.`);
     } else if (Array.isArray(x)) x.forEach((v, i) => deviations(v, at ? `${at.slice(0, -1)}[${i}].` : `[${i}].`));
@@ -998,6 +1184,11 @@ function jscDateRuleViolations(o) {
   (Array.isArray(o.actions) ? o.actions : []).forEach((a, i) => {
     if (jscIsPlainObject(a) && "due" in a && !valid("due", a.due)) out.push(["DATE-2", `actions[${i}].due is ${jscPyJson(a.due, true)}`]);
   });
+  /* the three fields are told apart by the signature of their type */
+  const prov = o.provenance;
+  if ("relationship" in o && jscIsPlainObject(prov) && "date" in prov && !valid("date", prov.date)) out.push(["DATE-3", `provenance.date is ${jscPyRepr(prov.date)}`]);
+  if ("performer-ref" in o && "time" in o && !isWhen(o.time)) out.push(["DATE-4", `time is ${jscPyRepr(o.time)}`]);
+  if ("signer" in o && "timestamp" in o && !isWhen(o.timestamp)) out.push(["DATE-5", `timestamp is ${jscPyRepr(o.timestamp)}`]);
   return out;
 }
 /* What is wrong with one object, without looking at any other.
@@ -1014,7 +1205,7 @@ function jscObjectErrors(obj) {
       if (jscIsPlainObject(obj) && ("scenario" in obj || "owner-ref" in obj)) {
         best += jscRiskRuleViolations(obj).map(([rule, what]) => ` [${rule}] ${what} - ${JSC_RISK_RULES[rule]}`).join("");
       }
-      /* two fields that 1.0.0 left as free text and 2.0.0 types */
+      /* the fields that 1.0.0 left as free text and 2.0.0 types */
       best += jscDateRuleViolations(obj).map(([rule, what]) => ` [${rule}] ${what} - ${JSC_DATE_RULES[rule]}`).join("");
     }
     return { type: null, errors: [...errors, `matches ${matches.length ? matches.join(" and ") : "NO type"}${best}`] };
@@ -2736,8 +2927,8 @@ if (typeof module !== "undefined" && module.exports) {
     jscDecimalCompare, jscExpandRefs, jscSetParents, jscSelection, jscUriOrigin, jscDeriveTier, jscTargetKey,
     jscResolveTailoring, jscTextify, JSC_NEXT, jscCanMove, jscComposeRelationship,
     jscSchemaCheck, jscShapeErrors, jscMatchTypes, jscTypeOf, jscTypedObjects, JSC_KERNEL_TYPES, JSC_RISK_RULES, jscClosureErrors,
-    jscKernelNeeded, jscKernelPinErrors, jscRiskRuleViolations, jscRiskIsLive, jscRiskJustifies, JSC_NO_TAILORING, jscRiskCoverage,
-    jscRiskLinkNotes, jscScaleDefinitionErrors, jscMatrixErrors, jscRiskLevels, jscMatrixCell, jscScaleErrors, jscCheckScales,
+    jscDeviationsOf, jscKernelNeeded, jscKernelPinErrors, jscRiskRuleViolations, jscRiskIsLive, jscRiskJustifies, JSC_NO_TAILORING, jscRiskCoverage,
+    jscRiskLinkNotes, JSC_AUTHOR_RULES, jscAuthorReport, jscUtcDay, jscReviewReport, jscScaleDefinitionErrors, jscMatrixErrors, jscRiskLevels, jscMatrixCell, jscScaleErrors, jscCheckScales,
     jscOptionalEmptyViolations, JSC_NUMBER_RULES, jscNumberSpellingViolations, jscNumberViolations, jscInNumberDomain, jscNumberError, jscObjectErrors, jscFacetErrors, jscTailoringDutyErrors, jscAttestationVerdict, jscCheckGraph,
     JSC_DSSE_PAYLOAD_TYPE, jscEd25519Verify, jscVerifyEnvelope, jscSemver, jscCompose, jscComposeSide, jscPathGet, jscEvalPredicate, jscConditionalApply,
     JSC_CHECK_RULES, JSC_CHECK_OPS, JscIRegexpError, jscIreCompile, jscIreFullMatch, jscCheckVerdict, jscCheckEach, jscCheckEachSummary, jscPercentShare, jscCheckAggregate, jscCheckParamDecls,

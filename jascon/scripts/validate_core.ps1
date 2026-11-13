@@ -1569,6 +1569,215 @@ function Risk-Basis-Fail([string]$tid, [string]$q) {
     return "FAIL [risk-coverage] $tid  selected $q`n  justified by no Risk`n  rationale: ISO/IEC 27001 6.1.3 d - inclusion in the Statement of Applicability carries its justification"
 }
 
+# ---------------- who decided, and when (CP-AUTHOR-1) ----------------
+# The port of the section of the same name in validate_core.py. The schema
+# leaves every one of these fields optional: a catalogue authority's
+# content needs none. What is missing is REPORTED, one line per object and
+# rule (Author-Report), and fails nothing unless -RequireAuthors asks for
+# it. REVIEW-1 (Review-Report) reports a `review-due` that has passed, on
+# an approved Deviation and on a Risk still managed, against the date of
+# the run in UTC or -AsOf; nothing fails by it, with or without the switch.
+$AUTHOR_RULES = Ord-Table @{
+    'AUTHOR-1' = 'a consumer''s Tailoring says who decided each select, exclude and operation - on the entry, or once on the Tailoring'
+    'AUTHOR-2' = 'a Risk, a Finding and an Implementation say who wrote this version and when (provenance): each records a judgement'
+    'AUTHOR-3' = 'an approved or withdrawn Deviation says when it was decided (decided); `opened` is when it was asked for'
+    'AUTHOR-4' = 'an authorization says on which day it was given (date); it already names the authority'
+    'REVIEW-1' = 'a review-due that has passed is reported, on an approved Deviation and on a Risk still managed - the date exists to be looked at'
+}
+# -> @{w; d} for every Deviation an object carries: in its `deviations`
+# list and, on a Tailoring, inline on an operation. `w` says where.
+function Deviations-Of([string]$t, $o) {
+    $out = New-Object System.Collections.ArrayList
+    if (Is-List $o['deviations']) {
+        $i = 0
+        foreach ($d in $o['deviations']) {
+            if (Is-Map $d) { [void]$out.Add(@{w = "deviations[$i]"; d = $d}) }
+            $i++
+        }
+    }
+    if ([string]::Equals($t, 'tailoring', $ORD) -and (Is-List $o['operations'])) {
+        $i = 0
+        foreach ($op in $o['operations']) {
+            if ((Is-Map $op) -and (Is-Map $op['deviation'])) { [void]$out.Add(@{w = "operations[$i].deviation"; d = $op['deviation']}) }
+            $i++
+        }
+    }
+    return ,$out
+}
+# -> @{rule; id; n; msg}, one per object and rule, in the ordinal order of
+# the ids and, for one object, of the rules. AUTHOR-1 asks only a Tailoring
+# at consumer tier (D13: duties bind there; an authority's Tailoring is
+# attributed by its origin and its Attestation). An entry without
+# `provenance` has its Tailoring's.
+function Author-Report($objs, $envelopes, $trusted) {
+    $out = New-Object System.Collections.ArrayList
+    $ids = New-Object System.Collections.ArrayList
+    foreach ($oid in $objs.Keys) { [void]$ids.Add([string]$oid) }
+    foreach ($oid in (Sorted-Ordinal $ids)) {
+        $t = $objs[$oid].t; $o = $objs[$oid].o
+        if ([string]::Equals($t, 'tailoring', $ORD)) {
+            $tier = Derive-Tier $o $objs $envelopes $trusted
+            if ([string]::Equals($tier, 'consumer', $ORD) -and -not $o.Contains('provenance')) {
+                $parts = New-Object System.Collections.ArrayList
+                $n = 0
+                foreach ($kw in @(@('selects', 'select'), @('excludes', 'exclude'), @('operations', 'operation'))) {
+                    $entries = 0; $bare = 0
+                    if (Is-List $o[$kw[0]]) {
+                        foreach ($e in $o[$kw[0]]) {
+                            if (-not (Is-Map $e)) { continue }
+                            $entries++
+                            if (-not $e.Contains('provenance')) { $bare++ }
+                        }
+                    }
+                    if ($bare -gt 0) { $n += $bare; [void]$parts.Add("$bare of $entries $($kw[1])(s)") }
+                }
+                if ($n -gt 0) {
+                    [void]$out.Add(@{rule = 'AUTHOR-1'; id = $oid; n = $n; msg = "${oid}: $(@($parts) -join ', ') name no author, and the Tailoring names none (AUTHOR-1)"}) }
+            }
+        }
+        $word = $null
+        if ([string]::Equals($t, 'risk', $ORD)) { $word = 'Risk' }
+        elseif ([string]::Equals($t, 'finding', $ORD)) { $word = 'Finding' }
+        elseif ([string]::Equals($t, 'implementation', $ORD)) { $word = 'Implementation' }
+        if (($null -ne $word) -and -not $o.Contains('provenance')) {
+            [void]$out.Add(@{rule = 'AUTHOR-2'; id = $oid; n = 1; msg = "${oid}: this $word does not say who wrote it and when (AUTHOR-2)"}) }
+        if ($o.Contains('deviations') -or [string]::Equals($t, 'tailoring', $ORD)) {
+            $undated = New-Object System.Collections.ArrayList
+            foreach ($wd in (Deviations-Of $t $o)) {
+                $st = $wd.d['state']
+                if (([string]::Equals($st, 'approved', $ORD) -or [string]::Equals($st, 'withdrawn', $ORD)) -and -not $wd.d.Contains('decided')) {
+                    [void]$undated.Add($wd.w) }
+            }
+            if ($undated.Count -gt 0) {
+                [void]$out.Add(@{rule = 'AUTHOR-3'; id = $oid; n = $undated.Count; msg = "${oid}: $($undated.Count) Deviation(s) approved or withdrawn without ``decided``: $(@($undated) -join ', ') (AUTHOR-3)"}) }
+        }
+        if ([string]::Equals($t, 'component', $ORD) -and (Is-List $o['authorizations'])) {
+            $bare = New-Object System.Collections.ArrayList
+            foreach ($a in $o['authorizations']) {
+                if ((Is-Map $a) -and -not $a.Contains('date')) { [void]$bare.Add([string]$a['id']) } }
+            if ($bare.Count -gt 0) {
+                [void]$out.Add(@{rule = 'AUTHOR-4'; id = $oid; n = $bare.Count; msg = "${oid}: $($bare.Count) authorization(s) without a date: $(@($bare) -join ', ') (AUTHOR-4)"}) }
+        }
+    }
+    return ,$out
+}
+# REVIEW-1 reads days. A day is a [datetime] at 00:00:00 UTC; every text is
+# parsed with an explicit format under the invariant culture, never the
+# culture of the machine.
+function Parse-Day($s) {    # 'YYYY-MM-DD' -> the day, or $null when it is not a day of the calendar
+    if (-not ($s -is [string])) { return $null }
+    $d = [datetime]::MinValue
+    if (-not [datetime]::TryParseExact($s, 'yyyy-MM-dd', $INV, [System.Globalization.DateTimeStyles]::None, [ref]$d)) { return $null }
+    return [datetime]::SpecifyKind($d, [System.DateTimeKind]::Utc)
+}
+# an RFC 3339 date-time: the wall clock, fractional seconds (which never
+# move the day), and the offset - Z, +hh:mm or -hh:mm
+$REVIEW_DT_RX = New-Object System.Text.RegularExpressions.Regex '^([0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2})(?:\.[0-9]+)?(Z|[+-][0-9]{2}:[0-9]{2})$'
+$ELAPSED_SECONDS = Ord-Table @{seconds = 1; minutes = 60; hours = 3600}
+# -> @{day; why}: the UTC calendar day a `review-due` falls on, or $null
+# and why it cannot be evaluated. $start is the date a duration counts from.
+function Utc-Day($due, $start) {
+    $kind = $due['type']
+    $noDay = @{day = $null; why = 'not a day of the calendar'}
+    if ([string]::Equals($kind, 'date', $ORD)) {
+        $day = Parse-Day $due['value']
+        if ($null -eq $day) { return $noDay }
+        return @{day = $day; why = $null}
+    }
+    if ([string]::Equals($kind, 'datetime', $ORD)) {
+        if (-not ($due['value'] -is [string])) { return $noDay }
+        $m = $REVIEW_DT_RX.Match($due['value'])
+        if (-not $m.Success) { return $noDay }
+        $at = [datetime]::MinValue
+        if (-not [datetime]::TryParseExact($m.Groups[1].Value, "yyyy-MM-dd'T'HH:mm:ss", $INV, [System.Globalization.DateTimeStyles]::None, [ref]$at)) { return $noDay }
+        $off = $m.Groups[2].Value
+        $minutes = 0
+        if (-not [string]::Equals($off, 'Z', $ORD)) {
+            $minutes = ([int]::Parse($off.Substring(1, 2), $INV) * 60) + [int]::Parse($off.Substring(4, 2), $INV)
+            if ($minutes -ge 1440) { return $noDay }       # an offset is less than a day
+            if ($off.StartsWith('-', $ORD)) { $minutes = -$minutes }
+        }
+        # the wall clock is $minutes ahead of UTC; a result outside the years 1..9999 throws
+        try { $utc = [datetime]::SpecifyKind($at, [System.DateTimeKind]::Utc).AddMinutes(-$minutes) } catch { return $noDay }
+        return @{day = $utc.Date; why = $null}
+    }
+    if ([string]::Equals($kind, 'elapsed-duration', $ORD)) {
+        if ($null -eq $start) { return @{day = $null; why = 'a duration, and no date to count it from'} }
+        $from = Parse-Day $start
+        if ($null -eq $from) { return $noDay }
+        $unit = [string]$due['unit']
+        if (-not $ELAPSED_SECONDS.ContainsKey($unit)) { return @{day = $null; why = 'not a typed review-due'} }
+        # added to 00:00:00 UTC of the start date: whole days of seconds move the day
+        try {
+            $seconds = [decimal]$due['num'] * [decimal]$ELAPSED_SECONDS[$unit]
+            $day = $from.AddDays([double][decimal]::Floor($seconds / 86400))
+        } catch { return $noDay }
+        return @{day = $day; why = $null}
+    }
+    if ([string]::Equals($kind, 'calendar-period', $ORD)) {
+        return @{day = $null; why = "a calendar period, and this tool has no calendar $($due['calendar-ref']) (D9: fail-closed without the named calendar)"}
+    }
+    return @{day = $null; why = 'not a typed review-due'}
+}
+# REVIEW-1 -> @{dated; overdue; blind}: how many review dates were asked,
+# the overdue ones @{id; w; day} and the not evaluable ones @{id; w; why}.
+# A point in time has passed when its UTC calendar day is before $asOfDay; due
+# today is not overdue. A duration counts from `decided`, else `opened`, on
+# a Deviation, and from `acceptance.date` on a Risk. Asked of an approved
+# Deviation and of a Risk still managed, in the ordinal order of the ids,
+# then of Deviations-Of, the Risk's own `review-due` last.
+function Review-Report($objs, [datetime]$asOfDay) {
+    $dated = 0
+    $overdue = New-Object System.Collections.ArrayList
+    $blind = New-Object System.Collections.ArrayList
+    $ids = New-Object System.Collections.ArrayList
+    foreach ($oid in $objs.Keys) { [void]$ids.Add([string]$oid) }
+    foreach ($oid in (Sorted-Ordinal $ids)) {
+        $t = $objs[$oid].t; $o = $objs[$oid].o
+        $asked = New-Object System.Collections.ArrayList
+        if ($o.Contains('deviations') -or [string]::Equals($t, 'tailoring', $ORD)) {
+            foreach ($wd in (Deviations-Of $t $o)) {
+                $d = $wd.d
+                if ((-not [string]::Equals($d['state'], 'approved', $ORD)) -or -not (Is-Map $d['review-due'])) { continue }
+                $start = $d['decided']
+                if (-not (Ck-Truthy $start)) { $start = $d['opened'] }
+                [void]$asked.Add(@{w = $wd.w; due = $d['review-due']; start = $start})
+            }
+        }
+        if ([string]::Equals($t, 'risk', $ORD) -and (Risk-Is-Live $o) -and (Is-Map $o['review-due'])) {
+            $start = $null
+            if (Is-Map $o['acceptance']) { $start = $o['acceptance']['date'] }
+            [void]$asked.Add(@{w = 'review-due'; due = $o['review-due']; start = $start})
+        }
+        foreach ($a in $asked) {
+            $dated++
+            $r = Utc-Day $a.due $a.start
+            if ($null -eq $r.day) { [void]$blind.Add(@{id = $oid; w = $a.w; why = $r.why}) }
+            elseif ($r.day -lt $asOfDay) { [void]$overdue.Add(@{id = $oid; w = $a.w; day = $r.day.ToString('yyyy-MM-dd', $INV)}) }
+        }
+    }
+    return @{dated = $dated; overdue = $overdue; blind = $blind}
+}
+# REVIEW-1 reads the date of the run, in UTC, unless -AsOf sets it. This is
+# the one place where this file reads a clock.
+$AS_OF = [datetime]::UtcNow.Date
+if (-not (Str-Eq $AsOf '')) {
+    $AS_OF = Parse-Day $AsOf
+    if ($null -eq $AS_OF) { throw "-AsOf '$AsOf' is not a date, YYYY-MM-DD" }
+}
+# Prints the two reports for one bundle. AUTHOR lines are notes, or
+# failures under -RequireAuthors; REVIEW lines are always notes.
+function Report-Authors-And-Reviews([string]$section, $objs, $envelopes) {
+    foreach ($a in (Author-Report $objs $envelopes $TRUSTED)) {
+        if ($RequireAuthors) { FAIL $section $a.msg } else { Write-Host "    note: $($a.msg)" }
+    }
+    $r = Review-Report $objs $AS_OF
+    if ($r.dated -gt 0) {
+        Write-Host "    review: $($r.dated) review date(s) asked as of $($AS_OF.ToString('yyyy-MM-dd', $INV)): $($r.overdue.Count) overdue, $($r.blind.Count) not evaluable (REVIEW-1)" }
+    foreach ($x in $r.overdue) { Write-Host "    note: $($x.id): $($x.w) was due on $($x.day) (REVIEW-1: overdue; it still holds until someone acts)" }
+    foreach ($x in $r.blind) { Write-Host "    note: $($x.id): $($x.w) is not evaluated: $($x.why) (REVIEW-1)" }
+}
+
 $COUNTS = (New-Map)
 $FAILURES = New-Object System.Collections.ArrayList
 function OK([string]$section) { if (-not $COUNTS.ContainsKey($section)) { $COUNTS[$section] = 0 }; $COUNTS[$section]++ }
@@ -2165,6 +2374,49 @@ function Run-Scale {
             if (-not $hit) { $okc = $false } }
         if ($case.Contains('expected-notes') -and $wantNotes -eq 0 -and $se.notes.Count -gt 0) { $okc = $false }
         if ($okc) { OK 'scale' } else { FAIL 'scale' "$($case['name']): expected $exp, got $(@($errs) -join ' ~ ') | notes: $(@($se.notes) -join ' ~ ')" }
+    }
+}
+
+# CP-AUTHOR-1: `author-vectors` hold Author-Report to [rule, object id,
+# count] in order; `review-vectors` hold Review-Report, run with the
+# vector's `as-of`, to [object id, where] for the overdue and for the not
+# evaluable (absent = empty). A vector whose objects do not all get a type
+# fails. The lists are compared in their canonical form: order, text and
+# number alike.
+function Run-Author {
+    $v = Load-Vectors 'author-vectors.json'
+    foreach ($case in $v['author-vectors']) {
+        $objs = To-Objs $case['objects']
+        $got = $null
+        if ($objs.Count -eq @($case['objects']).Count) {
+            $got = New-Object System.Collections.ArrayList
+            foreach ($a in (Author-Report $objs $null $null)) { [void]$got.Add(@($a.rule, $a.id, $a.n)) }
+        }
+        $gotText = Format-Canonical $got
+        $wantText = Format-Canonical $case['expected']
+        if (Str-Eq $gotText $wantText) { OK 'author' }
+        else { FAIL 'author' "$($case['name']): expected $wantText, got $gotText" }
+    }
+    foreach ($case in $v['review-vectors']) {
+        $objs = To-Objs $case['objects']
+        $asOfDay = Parse-Day $case['as-of']
+        $got = $null
+        if (($objs.Count -eq @($case['objects']).Count) -and ($null -ne $asOfDay)) {
+            $r = Review-Report $objs $asOfDay
+            $over = New-Object System.Collections.ArrayList
+            foreach ($x in $r.overdue) { [void]$over.Add(@($x.id, $x.w)) }
+            $blind = New-Object System.Collections.ArrayList
+            foreach ($x in $r.blind) { [void]$blind.Add(@($x.id, $x.w)) }
+            $got = @($over, $blind)
+        }
+        $wantOver = New-Object System.Collections.ArrayList
+        if ($case.Contains('expected-overdue')) { $wantOver = $case['expected-overdue'] }
+        $wantBlind = New-Object System.Collections.ArrayList
+        if ($case.Contains('expected-not-evaluable')) { $wantBlind = $case['expected-not-evaluable'] }
+        $gotText = Format-Canonical $got
+        $wantText = Format-Canonical @($wantOver, $wantBlind)
+        if (Str-Eq $gotText $wantText) { OK 'author' }
+        else { FAIL 'author' "$($case['name']): as of $($case['as-of']) expected [overdue, not evaluable] $wantText, got $gotText" }
     }
 }
 
@@ -4026,6 +4278,8 @@ function Validate-Bundle([string]$bdir, [switch]$Flat) {
     foreach ($e in $rc.errs) { FAIL $section $e }
     foreach ($n in $rc.notes) { Write-Host "    note: $n" }
     foreach ($n in (Risk-Link-Notes $bundleObjs)) { Write-Host "    note: $n" }
+    # CP-AUTHOR-1: AUTHOR-1..4 (notes, or failures under -RequireAuthors) and REVIEW-1 (always notes)
+    Report-Authors-And-Reviews $section $bundleObjs $envelopes
     # the policy switch applies even where the bundle carries no Risk at all
     if ($rc.risks -gt 0 -or $RequireRiskBasis) {
         foreach ($tid in @($rc.report.Keys)) {
@@ -4075,9 +4329,9 @@ $SW = [System.Diagnostics.Stopwatch]::StartNew()
 Write-Host '== conformance corpus (validate_core.ps1 - the weekend implementation) =='
 Run-Jcs; Run-Modality; Run-Parameters; Run-Tailoring; Run-Attestation; Run-Facets
 Run-References; Run-Lifecycle; Run-Tiers; Run-Dsse; Run-Composition; Run-Conditional
-Run-Risk; Run-Kernel; Run-Scale; Run-Check; Run-Advice
+Run-Risk; Run-Kernel; Run-Scale; Run-Check; Run-Advice; Run-Author
 $FAMILIES = @('jcs', 'modality', 'parameter', 'tailoring', 'attestation', 'facet',
-              'reference', 'lifecycle', 'tier', 'dsse', 'composition', 'conditional', 'risk', 'kernel', 'scale', 'check', 'advice')
+              'reference', 'lifecycle', 'tier', 'dsse', 'composition', 'conditional', 'risk', 'kernel', 'scale', 'check', 'advice', 'author')
 foreach ($k in $FAMILIES) {
     $p = 0; if ($COUNTS.ContainsKey($k)) { $p = $COUNTS[$k] }
     $f = 0; if ($COUNTS.ContainsKey("${k}:FAIL")) { $f = $COUNTS["${k}:FAIL"] }

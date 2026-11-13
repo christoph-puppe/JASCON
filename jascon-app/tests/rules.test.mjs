@@ -1,5 +1,5 @@
 /* Runs the conformance vectors of jascon/conformance/ against
-   jascon-rules.js, family by family. All seventeen families are ported. A
+   jascon-rules.js, family by family. All eighteen families are ported. A
    family that is listed in PORTED must pass completely; NOT_PORTED names the families the app does not implement (today: none)
    and stays as the place to name a family that is not ported yet. The last
    test fails when a vector file appears that is in neither list, so a new
@@ -9,6 +9,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
 import nodeCrypto from "node:crypto";
+import { spawnSync } from "node:child_process";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 
@@ -20,7 +21,7 @@ const rules = require("../jascon-rules.js");
 const vectors = name => JSON.parse(fs.readFileSync(path.join(CONF, name + "-vectors.json"), "utf8"));
 const asObjs = list => new Map(list.map(o => [o.id, { type: core.jscInferType(o), obj: o }]));
 
-const PORTED = ["advice", "attestation", "check", "composition", "conditional", "dsse", "facet", "jcs", "kernel", "lifecycle", "modality", "parameter", "reference", "risk", "scale", "tailoring", "tier"];
+const PORTED = ["advice", "attestation", "author", "check", "composition", "conditional", "dsse", "facet", "jcs", "kernel", "lifecycle", "modality", "parameter", "reference", "risk", "scale", "tailoring", "tier"];
 const NOT_PORTED = [];   // every family of jascon/conformance/ is ported today
 /* Where a vector carries expected-frag (singular), it asserts the wording of
    one Python schema library's diagnostic; the vector files call that
@@ -176,7 +177,7 @@ test("reference: the number of closure errors of every vector", () => {
 
 test("kernel: the pin rules of every vector", () => {
   const v = vectors("kernel").vectors;
-  assert.equal(v.length, 11);   // was 9: two more since a capability's statement-ids and a Component's product-version need 2.0.0
+  assert.equal(v.length, 18);   // was 11: seven more with CP-AUTHOR-1 (provenance, a Deviation's decided and review-due, an authorization's date)
   for (const c of v) {
     const objs = rules.jscTypedObjects(c.objects);
     const errs = rules.jscShapeErrors("contentManifest", c.manifest).length ? ["manifest schema violation"] : rules.jscKernelPinErrors(c.manifest, objs);
@@ -187,12 +188,16 @@ test("kernel: the pin rules of every vector", () => {
 });
 
 /* The closed shapes of fields that 2.0.0 typed or added (Finding.actions[].due,
-   Deviation.opened, Component.product-version). The schema says valid or
-   invalid; an invalid one names its rule, DATE-1 or DATE-2, as the Python
-   runner (run_kernel) asserts it. */
-test("kernel: the shape vectors of the typed fields, with DATE-1 and DATE-2 named on refusal", () => {
+   Deviation.opened, Component.product-version, and with CP-AUTHOR-1 the
+   closed `provenance`, a Deviation's `decided` and `review-due`, the date of
+   an authorization and the three times any string satisfied until then).
+   The schema says valid or invalid; an invalid one names exactly the rules
+   of its `expected-rules`, DATE-1 to DATE-5, as the Python runner
+   (run_kernel) asserts it - and no rule where the vector names none. */
+test("kernel: the shape vectors of the typed fields, with DATE-1 to DATE-5 named on refusal", () => {
   const v = vectors("kernel")["shape-vectors"];
-  assert.equal(v.length, 14);
+  assert.equal(v.length, 36);
+  assert.deepEqual([...new Set(v.flatMap(c => c["expected-rules"] || []))].sort(), ["DATE-1", "DATE-2", "DATE-3", "DATE-4", "DATE-5"], "every DATE rule has a vector that names it");
   for (const c of v) {
     const matched = rules.jscMatchTypes(c.document);
     assert.equal(matched.length === 1 && matched[0] === c.kind ? "valid" : "invalid", c.expected, c.name);
@@ -202,7 +207,34 @@ test("kernel: the shape vectors of the typed fields, with DATE-1 and DATE-2 name
   }
   const msg = rules.jscObjectErrors({ id: "https://ex.org/f", version: "1", lifecycle: "active", "assessment-ref": "https://ex.org/a", "requirement-ref": "https://ex.org/r", state: "open",
     deviations: [{ id: "d1", type: "risk-adjustment", rationale: { en: "x" }, state: "pending", "approver-ref": "https://ex.org/p", opened: "next week" }] }).errors[0];
-  assert.match(msg, /\[DATE-1\] deviations\[0\]\.opened is 'next week' - a Deviation's `opened` is a date, YYYY-MM-DD/);
+  assert.match(msg, /\[DATE-1\] deviations\[0\]\.opened is 'next week' - a Deviation's `opened` and `decided` are dates, YYYY-MM-DD/);
+  /* the wording of the four that came with CP-AUTHOR-1: the place, the value as the reference prints it, the rule's why */
+  const said = c => rules.jscObjectErrors(v.find(x => x.name === c).document).errors.join(" ");
+  assert.match(said("deviation-decided-as-free-text"), /\[DATE-1\] deviations\[0\]\.decided is '[^']+' - a Deviation's `opened` and `decided` are dates/);
+  assert.match(said("mapping-provenance-date-as-free-text"), /\[DATE-3\] provenance\.date is '[^']+' - the `date` of a Mapping's provenance is a date, YYYY-MM-DD/);
+  assert.match(said("assessment-time-without-an-offset"), /\[DATE-4\] time is '[^']+' - the `time` of an Assessment is a date or an RFC 3339 date-time with an offset/);
+  assert.match(said("attestation-timestamp-as-free-text"), /\[DATE-5\] timestamp is '[^']+' - the `timestamp` of an Attestation is a date or an RFC 3339 date-time with an offset/);
+});
+
+/* The export writes the kernel pin from jscNeedsKernel2 (jascon-core.js); the
+   whole-set check holds a set to KERNEL-1 with jscKernelNeeded. The same
+   reasons stand in two files. Every object set of the kernel and author
+   families, and every valid shape document on its own, gets the same answer
+   from both - otherwise the app exports a set that its own rules, and the
+   reference, refuse for want of the pin. */
+test("kernel: the pin the export writes (jscNeedsKernel2) is the pin KERNEL-1 asks for (jscKernelNeeded)", () => {
+  const k = vectors("kernel"), a = vectors("author");
+  const sets = [...k.vectors.map(c => [c.name, c.objects]), ...k["shape-vectors"].filter(c => c.expected === "valid").map(c => [c.name, [c.document]]),
+    ...[...a["author-vectors"], ...a["review-vectors"]].map(c => [c.name, c.objects])];
+  let needing = 0;
+  for (const [name, list] of sets) {
+    const typed = rules.jscTypedObjects(list);
+    assert.equal(typed.size, list.length, name + ": every object is typed");
+    const asked = rules.jscKernelNeeded(typed)[0] === "2.0.0";
+    assert.equal(core.jscNeedsKernel2({ scales: new Map(), objects: asObjs(list) }), asked, name);
+    needing += asked ? 1 : 0;
+  }
+  assert.ok(needing > 0 && needing < sets.length, "both answers occur among the sets");
 });
 
 test("risk: object vectors (shape, with the rule named on refusal)", () => {
@@ -239,6 +271,136 @@ test("risk: bundle vectors (closure, typed edges, coverage, RISK-11, notes)", as
       if ("pending" in want) assert.deepEqual(keys(got.pending), [...want.pending].sort(), `${c.name}: pending of ${tid}`);
     }
   }
+});
+
+/* CP-AUTHOR-1: who decided, and when. `expected` of an author vector is the
+   whole report as [rule, object id, count], in its order. A review vector
+   gives the day it is asked about (`as-of`) and names the overdue and the
+   not-evaluable places as [object id, where], absent meaning none. A case
+   whose objects do not all get a type fails, as in the reference's runner
+   (run_author). The messages are not part of the vectors' assertion. */
+const authorTyped = c => {
+  const objs = rules.jscTypedObjects(c.objects);
+  assert.equal(objs.size, c.objects.length, `${c.name}: every object is typed`);
+  return objs;
+};
+const reviewPairs = r => [r.overdue.map(e => [e.id, e.where]), r["not-evaluable"].map(e => [e.id, e.where])];
+test("author: what is missing, one entry per object and rule (AUTHOR-1 to AUTHOR-4)", async () => {
+  const v = vectors("author")["author-vectors"];
+  assert.equal(v.length, 17);
+  for (const c of v) {
+    const report = await rules.jscAuthorReport(authorTyped(c));
+    assert.deepEqual(report.map(e => [e.rule, e.id, e.count]), c.expected, c.name);
+    for (const e of report) assert.ok(e.rule in rules.JSC_AUTHOR_RULES && e.message.startsWith(e.id + ": ") && e.message.endsWith(`(${e.rule})`), `${c.name}: ${e.message}`);
+  }
+});
+test("author: a review-due that has passed on the day asked about (REVIEW-1)", () => {
+  const v = vectors("author")["review-vectors"];
+  assert.equal(v.length, 17);
+  for (const c of v) {
+    const r = rules.jscReviewReport(authorTyped(c), c["as-of"]);
+    assert.deepEqual(reviewPairs(r), [c["expected-overdue"] || [], c["expected-not-evaluable"] || []], c.name);
+    assert.ok(r.dated >= r.overdue.length + r["not-evaluable"].length, c.name + ": every place reported was asked");
+  }
+});
+/* What the vectors leave to the platform. JavaScript's Date reads a year
+   below 100 as 19xx, rolls the 31st of February over into March and offers
+   local time beside UTC; the reference's calendar ends at 0001 and 9999,
+   where Python raises. Each line is what validate_core.py's _utc_day gives. */
+test("REVIEW-1: the day a review-due falls on - leap days, the ends of the calendar, offsets, durations", () => {
+  const NO = "not a day of the calendar", day = (due, start) => rules.jscUtcDay(due, start);
+  const date = value => day({ type: "date", value }), at = value => day({ type: "datetime", value });
+  const after = (num, unit, start) => day({ type: "elapsed-duration", num, unit }, start);
+  for (const ok of ["2024-02-29", "2000-02-29", "0001-01-01", "0099-12-31", "9999-12-31"]) assert.deepEqual(date(ok), [ok, null], ok);
+  for (const bad of ["2026-02-29", "1900-02-29", "2026-02-31", "2026-04-31", "0000-01-01", "2026-00-10", "2026-13-01", "2026-11-00", "next week"]) assert.deepEqual(date(bad), [null, NO], bad);
+  /* a date-time is an instant: its day is the UTC day, whatever the offset says the local day is */
+  assert.deepEqual(at("2026-11-13T00:30:00+02:00"), ["2026-11-12", null]);
+  assert.deepEqual(at("2026-11-12T23:30:00-05:00"), ["2026-11-13", null]);
+  assert.deepEqual(at("2026-11-12T23:59:59.999Z"), ["2026-11-12", null]);
+  assert.deepEqual(at("2026-12-31T23:00:00-01:00"), ["2027-01-01", null]);
+  assert.deepEqual(at("2024-03-01T00:00:00+00:01"), ["2024-02-29", null]);
+  assert.deepEqual(at("0050-06-01T12:00:00Z"), ["0050-06-01", null], "a year below 100 is that year, not 19xx");
+  assert.deepEqual(at("2026-02-31T10:00:00Z"), [null, NO]);
+  assert.deepEqual(at("0001-01-01T00:00:00+01:00"), [null, NO], "the instant lies before the calendar begins");
+  assert.deepEqual(at("9999-12-31T23:30:00-01:00"), [null, NO], "the instant lies after the calendar ends");
+  /* an elapsed duration is added to 00:00 UTC of the day it counts from */
+  assert.deepEqual(after(86399, "seconds", "2026-11-12"), ["2026-11-12", null]);
+  assert.deepEqual(after(86400, "seconds", "2026-11-12"), ["2026-11-13", null]);
+  assert.deepEqual(after(1440, "minutes", "2026-12-31"), ["2027-01-01", null]);
+  assert.deepEqual(after(24, "hours", "2024-02-28"), ["2024-02-29", null]);
+  assert.deepEqual(after(24, "hours", "2026-02-28"), ["2026-03-01", null]);
+  assert.deepEqual(after(24, "hours", "2026-02-31"), [null, NO], "the day it counts from is no day");
+  assert.deepEqual(after(24, "hours", "9999-12-31"), [null, NO]);
+  assert.deepEqual(after(9007199254740991, "hours", "2026-11-12"), [null, NO], "the largest number a bundle may carry");
+  assert.deepEqual(after(24, "hours", undefined), [null, "a duration, and no date to count it from"]);
+  assert.match(day({ type: "calendar-period", num: 1, unit: "months", "calendar-ref": "https://org.example/cal" }, "2026-11-12")[1], /no calendar https:\/\/org\.example\/cal \(D9/);
+  assert.deepEqual(day({ type: "fortnight", num: 1 }, "2026-11-12"), [null, "not a typed review-due"]);
+  /* the day asked about is an argument the caller owes; a day that is none is refused, not rolled over */
+  for (const bad of [undefined, "", "13.11.2026", "2026-02-31", "2026-11-13T00:00:00Z"]) assert.throws(() => rules.jscReviewReport(new Map(), bad), /REVIEW-1 is asked about a day/, String(bad));
+  assert.deepEqual(rules.jscReviewReport(new Map(), "2026-11-13"), { dated: 0, overdue: [], "not-evaluable": [] });
+});
+test("REVIEW-1: the report does not depend on the time zone of the machine", () => {
+  const v = vectors("author")["review-vectors"], was = process.env.TZ;
+  const run = () => JSON.stringify([v.map(c => rules.jscReviewReport(rules.jscTypedObjects(c.objects), c["as-of"])),
+    ["2026-11-13T00:30:00+02:00", "2026-11-12T23:30:00-05:00", "2026-01-01T00:00:00Z", "2026-12-31T23:59:59Z"].map(value => rules.jscUtcDay({ type: "datetime", value })),
+    rules.jscUtcDay({ type: "elapsed-duration", num: 24, unit: "hours" }, "2026-12-31"), rules.jscUtcDay({ type: "date", value: "2026-03-01" })]);
+  try {
+    process.env.TZ = "UTC";
+    const utc = run();
+    /* fourteen hours ahead of UTC and eleven behind: local midnight is another UTC day in both */
+    for (const zone of ["Pacific/Kiritimati", "Pacific/Pago_Pago"]) {
+      process.env.TZ = zone;
+      assert.notEqual(new Date(Date.UTC(2026, 10, 13)).getHours(), 0, zone + ": the zone took effect");
+      assert.equal(run(), utc, zone);
+    }
+  } finally {
+    if (was === undefined) delete process.env.TZ; else process.env.TZ = was;
+  }
+});
+
+/* The two reports on the two folders the reference prints them for. A set is
+   read as the app reads it (a graph from the folder's files), so this is the
+   map a page will pass. The expectation is what validate_core.py printed for
+   these folders with --as-of 2026-11-13; the next test asks it again. */
+const EXAMPLES = path.resolve(CONF, "../examples"), IFA = path.resolve(CONF, "../../converted_examples/US.IFA-GoodRead/ifa-core-bundle");
+const folderTree = (dir, prefix = "") => fs.readdirSync(dir).sort().flatMap(n => fs.statSync(path.join(dir, n)).isDirectory()
+  ? folderTree(path.join(dir, n), prefix + n + "/") : [{ path: prefix + n, text: core.jscDecode(fs.readFileSync(path.join(dir, n))) }]);
+const folderObjects = dir => core.jscGraphFrom(core.jscClassifyFiles(folderTree(dir)).records).objects;
+test("author and review on the example folder and the IFA bundle, as of 2026-11-13: what the reference reports", async () => {
+  const ex = folderObjects(EXAMPLES), exReview = rules.jscReviewReport(ex, "2026-11-13");
+  assert.deepEqual(await rules.jscAuthorReport(ex), [], "the example folder names its authors");
+  assert.equal(exReview.dated, 2);
+  assert.deepEqual(exReview.overdue, []);
+  assert.deepEqual(exReview["not-evaluable"].map(e => [e.id, e.where]), [["https://cso.example/risk/R-2026-007", "review-due"]]);
+  assert.match(exReview["not-evaluable"][0].why, /^a calendar period, and this tool has no calendar https:\/\/cso\.example\/calendar\/isms /);
+  const G = "https://ifa.gov/goodread/", ifa = folderObjects(IFA);
+  assert.deepEqual((await rules.jscAuthorReport(ifa)).map(e => [e.rule, e.id, e.count]), [
+    ["AUTHOR-4", G + "component/csp-iaas", 1], ["AUTHOR-4", G + "component/system1234", 1],
+    ["AUTHOR-2", G + "finding/goodread-risk-1", 1], ["AUTHOR-3", G + "finding/goodread-risk-1", 1], ["AUTHOR-2", G + "finding/goodread-risk-2", 1],
+    ["AUTHOR-2", G + "impl/csp-iaas-ac-2", 1], ["AUTHOR-2", G + "impl/saas-ac-2", 1], ["AUTHOR-2", G + "impl/system1234-ac-6.1", 1],
+    ["AUTHOR-2", G + "risk/goodread-risk-1", 1], ["AUTHOR-2", G + "risk/goodread-risk-2", 1]]);
+  assert.deepEqual(rules.jscReviewReport(ifa, "2026-11-13"), { dated: 2, "not-evaluable": [], overdue: [
+    { id: G + "risk/goodread-risk-1", where: "review-due", day: "2024-01-01" }, { id: G + "risk/goodread-risk-2", where: "review-due", day: "2023-06-23" }] });
+});
+const pythonWithJsonschema = spawnSync("python3", ["-c", "import jsonschema"], { encoding: "utf8" }).status === 0;
+test("author and review: the reference validator prints the same lines for the two folders", { skip: !pythonWithJsonschema && "python3 with jsonschema is not installed" }, async () => {
+  const AS_OF = "2026-11-13";
+  /* the lines of report_authors_and_reviews, from the app's two reports */
+  const lines = async objs => {
+    const r = rules.jscReviewReport(objs, AS_OF);
+    return [...(await rules.jscAuthorReport(objs)).map(e => `note: ${e.message}`),
+      ...(r.dated ? [`review: ${r.dated} review date(s) asked as of ${AS_OF}: ${r.overdue.length} overdue, ${r["not-evaluable"].length} not evaluable (REVIEW-1)`] : []),
+      ...r.overdue.map(e => `note: ${e.id}: ${e.where} was due on ${e.day} (REVIEW-1: overdue; it still holds until someone acts)`),
+      ...r["not-evaluable"].map(e => `note: ${e.id}: ${e.where} is not evaluated: ${e.why} (REVIEW-1)`)];
+  };
+  /* one run: the bundle named on the command line, then the example folder, each above its summary line */
+  const run = spawnSync("python3", [path.resolve(CONF, "../scripts/validate_core.py"), "--as-of", AS_OF, IFA], { encoding: "utf8" });
+  assert.equal(run.status, 0, run.stdout.slice(-2000) + run.stderr.slice(-2000));
+  const out = run.stdout.split(/\r?\n/), from = out.indexOf("== bundles =="), ifaEnd = out.findIndex(l => /^ {2}\S*ifa-core-bundle: \d+ pass/.test(l)), exEnd = out.findIndex(l => l.startsWith("  skill-examples: "));
+  assert.ok(from >= 0 && ifaEnd > from && exEnd > ifaEnd, "the output has its two sections");
+  const said = part => part.map(l => l.trim()).filter(l => /\((AUTHOR-[1-4]|REVIEW-1)[):]/.test(l));
+  assert.deepEqual(await lines(folderObjects(IFA)), said(out.slice(from, ifaEnd)), "the IFA bundle");
+  assert.deepEqual(await lines(folderObjects(EXAMPLES)), said(out.slice(ifaEnd, exEnd)), "the example folder");
 });
 
 test("scale: every vector (definition, matrix, levels, residual, SCALE-4)", () => {

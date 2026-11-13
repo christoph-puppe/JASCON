@@ -36,7 +36,7 @@
 
 /* ==JSC-PURE-START== */
 
-const JSC_BUILD = "0.9.7";
+const JSC_BUILD = "0.9.8";
 const JSC_TOOL = "JASCON-App " + JSC_BUILD;
 /* The kernel this app writes, and the kernels it reads (KERNEL-2: a tool
    stops at a pin it does not implement and names both). */
@@ -353,8 +353,12 @@ const jscBesideManifest = r => r.type === "attestation" && !r.entry;
    ("authored"), or it came with an advice pack ("pack") and is the vendor's
    file byte for byte. Either way the export lists it. */
 const jscAddedHere = r => r.origin === "authored" || r.origin === "pack";
+/* Does the content need kernel 2.0.0? The export writes the pin from this. The
+   reasons are those of jscKernelNeeded in jascon-rules.js (KERNEL-1), read on
+   the types the graph gave its objects; tests/rules.test.mjs compares the two. */
 function jscNeedsKernel2(g) {
   if (g.scales.size) return true;
+  const entries = v => (Array.isArray(v) ? v : []).filter(x => x && typeof x === "object" && !Array.isArray(x));
   for (const r of g.objects.values()) {
     if (r.type === "risk" || r.type === "check") return true;
     if (r.type === "finding" && ((Array.isArray(r.obj["risk-refs"]) && r.obj["risk-refs"].length) || r.obj["check-ref"])) return true;
@@ -362,6 +366,13 @@ function jscNeedsKernel2(g) {
     /* CP-ADVICE-1 and the author decision of 2026-11-12: clauses on a capability, the product version */
     if (r.type === "component" && ("product-version" in r.obj ||
       (Array.isArray(r.obj.capabilities) && r.obj.capabilities.some(c => c && Array.isArray(c["statement-ids"]) && c["statement-ids"].length)))) return true;
+    /* CP-AUTHOR-1: `provenance` where 1.0.0 had none, a Deviation's `decided` and `review-due` (in the
+       `deviations` list of any object and inline on a Tailoring's operation), the `date` of an authorization */
+    if (["tailoring", "implementation", "finding"].includes(r.type) && "provenance" in r.obj) return true;
+    const ops = r.type === "tailoring" ? entries(r.obj.operations) : [];
+    if (r.type === "tailoring" && [...entries(r.obj.selects), ...entries(r.obj.excludes), ...ops].some(e => "provenance" in e)) return true;
+    if ([...entries(r.obj.deviations), ...entries(ops.map(op => op.deviation))].some(d => "decided" in d || "review-due" in d)) return true;
+    if (r.type === "component" && entries(r.obj.authorizations).some(a => "date" in a)) return true;
   }
   return false;
 }
