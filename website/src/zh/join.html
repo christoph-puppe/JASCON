@@ -1,0 +1,123 @@
+---
+title: 参与：带来一个校验器、一个目录或一条异议 | JASCON
+description: JASCON 目前只有一名维护者，尚无第三方用户。本项目需要框架权威机构、工具开发者、GRC 工程师和审核员提供什么，变更如何进入规范，以及从哪里入手。
+nav: join
+---
+<section class="page-hero">
+  <div class="wrap">
+    <p class="eyebrow">参与</p>
+    <h1>带来一个校验器、一个目录或一条异议</h1>
+    <p class="lede">一种合规数据表示法的价值，取决于第二方和第三方能用它做成什么。JASCON 只有一名维护者和一份已发布的规范，在其仓库之外尚无已知用户。下面列出的，正是只有他人才能完成的工作。</p>
+  </div>
+</section>
+
+<section class="section" id="needed">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">01</span> 需要什么</p>
+      <h2>六项贡献，按分量排序</h2>
+    </div>
+    <div class="grid g3 reveal">
+      <article class="card feature">
+        <div class="card-top"><span class="card-no">长期有效的邀请</span><span class="tier tier-open">开放中</span></div>
+        <h3>由非规范作者编写的校验器</h3>
+        <p>拿着规范、附录 A 至 C 和一致性测试语料库，在不阅读现有两个校验器的前提下，用您选择的语言构建一个校验器。凡是文本未能决定您实现方式的地方，都是文本的缺陷。测试向量是裁判，无论结果如何，都会被记录在案。</p>
+        <p class="how"><b>起点：</b><code>jascon/conformance/</code>、<a href="{{ blob }}/jascon/references/ch12-building-a-validator.md" rel="noopener">手册第 12 章</a>。</p>
+      </article>
+      <article class="card">
+        <div class="card-top"><span class="card-no">权威机构</span></div>
+        <h3>由发布方自行转换的目录</h3>
+        <p>现有十一份转换结果，全部出自本项目。发布方知道自己的 props 本意要表达什么。由编写者亲自重新编码的十个要求，对内核的考验比用脚本转换的一千个要求更严苛。</p>
+        <p class="how"><b>起点：</b>导入（Import）页面，或<a href="{{ blob }}/jascon/references/ch14-migration-playbooks.md" rel="noopener">第 14 章</a>。</p>
+      </article>
+      <article class="card">
+        <div class="card-top"><span class="card-no">评审</span></div>
+        <h3>有统计数字支撑的异议</h3>
+        <p>手册附录 F 答复了 33 条异议，并列出了其中促成文本修改的那些。眼下有一项评审亟待进行：包含 Risk 和 Check 两种新类型的 2.0.0 发布候选版。附录 F.10 说明了 JASCON 为何不扩展 Gemara、CycloneDX、XCCDF、CISO Assistant 或 OSCAL；来自这些社区的读者，正是指出这一回答错在哪里的合适人选。</p>
+        <p class="how"><b>起点：</b><a href="{{ blob }}/drafts/CP-RISK-1.md" rel="noopener">CP-RISK-1</a>、<a href="{{ blob }}/drafts/CP-CHECK-1.md" rel="noopener">CP-CHECK-1</a> 以及<a href="checks.html#state">Check 的现状</a>。</p>
+      </article>
+      <article class="card">
+        <div class="card-top"><span class="card-no">测量</span></div>
+        <h3>其余十个语料库上的值到达情况</h3>
+        <p>覆盖率按源路径测量。每个值是否完整到达，只在一个语料库上测量过，而在那里并非每个值都能到达。持有其他语料库源文件的人可以运行这项测量，并报告丢失了什么。</p>
+        <p class="how"><b>起点：</b>待办事项 41，<code>oscal_conv_lib.value_arrival()</code>。</p>
+      </article>
+      <article class="card">
+        <div class="card-top"><span class="card-no">实践</span></div>
+        <h3>用这种表示法描述一个真实的 ISMS</h3>
+        <p>一个真实组织的风险登记册、适用性声明（SoA）和一个审核周期，写成 Risk、Tailoring、Implementation 和 Finding。Risk 类型源自三项标准，还从未经过审核员的检验。</p>
+        <p class="how"><b>起点：</b>应用的风险（Risk）页面；匿名化后，报告哪些内容无法适配。</p>
+      </article>
+      <article class="card">
+        <div class="card-top"><span class="card-no">代码</span></div>
+        <h3>导出与桥接</h3>
+        <p>目前还缺少向 OSCAL mapping、profile 和 SSP 模型的导出。为证明定义一个 in-toto predicate，就能对接现有的验证工具。用于执行 <a href="checks.html">Check 类型</a>采集器的运行器尚不存在。</p>
+        <p class="how"><b>起点：</b><code>jascon/scripts/export_oscal.py</code>、<a href="{{ blob }}/PRIOR-ART.md" rel="noopener">PRIOR-ART.md</a>。</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="process">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">02</span> 变更如何进入</p>
+      <h2>以证据为入口，语料库先行，实现随后</h2>
+      <p class="lede">变更流程的设计，正是为了杜绝一个旧问题跟踪系统中的一句话：没有人说得清这条规则为什么存在。</p>
+    </div>
+    <div class="rules3 reveal">
+      <div class="rule3">
+        <span class="no">01</span>
+        <h3>提案以统计数字开头</h3>
+        <p>“三个权威机构各自独立地编码了这一点”是一个论据。“这样会很优雅”则不是。一个事项带着证据进入待办列表，并通过决策登记册中的一条记录离开，被否决的备选方案也会留存在记录中。</p>
+      </div>
+      <div class="rule3">
+        <span class="no">02</span>
+        <h3>每条规则都带有其理由</h3>
+        <p>一条规则有机器标识、理由和失败消息，规则失败时会输出其理由。说不出自己所防范的、有统计依据的失败的规则，就是删除的候选对象。</p>
+      </div>
+      <div class="rule3">
+        <span class="no">03</span>
+        <h3>缺口通过版本来弥补</h3>
+        <p>原语、操作和代码体系都是带版本的封闭集合。一个真正的缺口会成为一份变更提案，附带新的一致性测试向量以及关于版本号的决定。发布之前，两个校验器都必须通过。</p>
+      </div>
+    </div>
+    <p class="source reveal">完整流程：<a href="{{ blob }}/jascon/references/ch15-governance-conformance-ecosystem.md" rel="noopener">手册第 15 章</a>。全部 24 项决策及其评分与修订：<a href="{{ blob }}/drafts/jascon-decision-rationale-register.md" rel="noopener">决策登记册</a>。</p>
+  </div>
+</section>
+
+<section class="section" id="expect">
+  <div class="wrap">
+    <div class="split even">
+      <div class="stack-lg reveal">
+        <div class="section-head" style="margin-bottom:0">
+          <p class="eyebrow"><span class="no">03</span> 可以期待什么</p>
+          <h2>一个公开全部记录的小项目</h2>
+        </div>
+        <ul class="ticks">
+          <li><b>发现项在公开记录中裁决。</b>经确认的会被修复，并获得一个一致性测试向量。被驳回的会连同理由一起记录下来，使其始终保持被驳回的状态。</li>
+          <li><b>更正与其所更正的说法分量相当。</b>首次公布的扫描结果少计了德国目录中的 347 个嵌套控制措施；更正以同样醒目的方式发布。</li>
+          <li><b>许可证为 Apache 2.0</b>，适用于规范、Schema、测试向量、校验器和应用。转换后的目录仍受其发布方条款约束。</li>
+          <li><b>响应时间取决于一个人：</b>维护者以个人身份工作，项目背后没有任何组织。</li>
+        </ul>
+      </div>
+      <div class="stack reveal">
+        <article class="card">
+          <h3>提交 issue</h3>
+          <p>用于报告缺陷、提出异议、提问，或提出您希望转换的目录。请说明您统计了什么、在哪里统计的。</p>
+          <a class="link-arrow" href="{{ repo }}/issues" rel="noopener">GitHub 上的 Issues</a>
+        </article>
+        <article class="card">
+          <h3>发送拉取请求</h3>
+          <p>用于提交测试向量、转换器，或对校验器、手册的修正。对规则的修改须附带在没有该修改时会失败的测试向量。</p>
+          <a class="link-arrow" href="{{ repo }}/pulls" rel="noopener">GitHub 上的拉取请求</a>
+        </article>
+        <article class="card">
+          <h3>使用它，并告诉我们</h3>
+          <p>由第二方发布的捆绑包，是本项目所能获得的最有力证据。如果您发布了一个，提交一个附带链接的 issue 即可。</p>
+          <a class="link-arrow" href="start.html">快速开始</a>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>

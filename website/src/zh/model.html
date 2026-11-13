@@ -1,0 +1,351 @@
+---
+title: 模型：十一种对象类型 | JASCON
+description: 一页看懂 JASCON 内核：十一种浅层对象类型、情态动词的次序、类型化参数、带契约的分面（facet）、每个对象的两个摘要、三个一致性等级，以及每个 OSCAL 1.x 构造的去向。
+nav: model
+---
+<section class="page-hero">
+  <div class="wrap">
+    <p class="eyebrow">模型</p>
+    <h1>十一种对象类型，以及每种类型取代了什么</h1>
+    <p class="lede">内核只包含经实测确认三个国家级框架所需的内容，此外别无他物。本页将其完整梳理一遍。规范性文本见<a href="{{ blob }}/drafts/jascon-specification-1.0.0.md" rel="noopener">规范</a>；包含全部统计数字的详细版本见<a href="{{ tree }}/jascon/references" rel="noopener">手册</a>。</p>
+  </div>
+</section>
+
+<section class="section" id="smallest">
+  <div class="wrap">
+    <div class="split">
+      <div class="stack-lg reveal">
+        <div class="section-head" style="margin-bottom:0">
+          <p class="eyebrow"><span class="no">01</span> 最小的对象</p>
+          <h2>一个完整的要求</h2>
+          <p class="lede">这是一个完整的对象：没有 props，没有分面（facet），外面也没有包裹任何文档。手册把它用作第一个示例，因为澳大利亚 ISM 的全部扩展面所需的也不过如此。</p>
+        </div>
+        <ul class="ticks">
+          <li><b><code>id</code></b> 是权威机构自有域名下的 URI。它按字符串比较，从不联网获取，因此在封闭网络中也能进行校验。</li>
+          <li><b><code>version</code></b> 与清单中的两个摘要共同承载历史。ISM 为同一目的手工维护着 2,202 个修订 props。</li>
+          <li><b><code>statements</code></b> 是一个列表，因为条款确实存在：Grundschutz++ 中有 347 个嵌套的伪控制措施，它们存在的唯一目的就是让条款可以被寻址。</li>
+          <li><b><code>modality</code></b> 和 <b><code>obligated-parties</code></b> 位于陈述上。同一个要求可以用 MUST 约束运营方，同时用 SHOULD 约束客户。</li>
+          <li><b><code>prose</code></b> 是从语言标签到文本的映射。</li>
+        </ul>
+      </div>
+      <div class="window reveal">
+        <div class="window-bar">
+          <span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="window-title">jascon/examples/req-ism-1234.json</span>
+          <span class="window-note">示意文本</span>
+        </div>
+        <pre><code data-lang="json">{{ file:jascon/examples/req-ism-1234.json }}</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="types">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">02</span> 类型</p>
+      <h2>每种类型之所以存在，都是因为某个已发布的目录需要它</h2>
+      <p class="lede">已发布的 1.0.0 包含九种类型。Risk 和 Check 是第十和第十一种，位于 2.0.0 发布候选版中。右栏说明该类型取代了 OSCAL 1.x 或通行做法中的哪些内容。</p>
+    </div>
+
+    <div class="reveal">
+      <p class="group-label">内容：要求什么</p>
+      <div class="types">
+        <div class="type">
+          <h3>Requirement</h3>
+          <p>一项控制措施、规则或准则，表示为一组带标识的陈述。每条陈述都有情态、义务方、类型化参数和正文。指南和目标也是陈述，其情态为 <code>unspecified</code>；或者它们放在某个框架分面中。</p>
+          <p class="replaces"><b>取代</b>Catalog 中的控制措施及其组成部分（parts）；<code>label</code>、<code>alt-identifier</code> 和 <code>sort-id</code> 这几个 props。</p>
+        </div>
+        <div class="type">
+          <h3>RequirementSet</h3>
+          <p>只表达成员关系，别无其他。一个 Set 列出若干要求或其他 Set，并附带序号。章节、控制族、基线、成熟度级别和密级标记都是 Set，一个要求可以同时属于多个 Set。</p>
+          <p class="replaces"><b>取代</b>Groups、经解析的 profile 基线，以及 ISM 中包含 5,301 个条目的适用性矩阵。</p>
+        </div>
+        <div class="type">
+          <h3>Tailoring</h3>
+          <p>一次选择，加上一个由八种操作构成的封闭列表，每种操作都按标识寻址：要求、陈述、参数。不复制任何内容。解析是一次确定性的遍历；没有合并规则，因为全局标识符使其变得多余。</p>
+          <p class="replaces"><b>取代</b>Profile 以及 profile 解析规范；FedRAMP CR26 中那种按类别内联的变体。</p>
+        </div>
+        <div class="type">
+          <h3>Mapping</h3>
+          <p>一条映射对照边，由九个扁平字段组成：源、目标、可选的陈述范围、关系、方向、置信度、理由、出处。关系代码遵循 NIST IR 8477，另加 <code>supplements</code>，用于附加到他方目录上的内容。</p>
+          <p class="replaces"><b>取代</b>OSCAL 1.2 的控制措施映射模型；映射对照电子表格。</p>
+        </div>
+      </div>
+
+      <p class="group-label">组织：为什么纳入范围</p>
+      <div class="types">
+        <div class="type">
+          <h3>Risk <small><span class="tier tier-designed">2.0.0 候选</span></small></h3>
+          <p>ISO/IEC 27001 的 6.1.2 与 6.1.3、BSI Standard 200-3 以及 NIST SP 800-30 都要求的那份记录：一个场景、一名责任人、一个状态、一个以具名量表上的等级表示的评级、四种处置选项之一，以及承载该处置的条款。评分方法留在内核之外。一个 Risk 经过评估并选定处置选项后，即可作为选择某个要求的理由。</p>
+          <p class="replaces"><b>取代</b>以电子表格形式存在的风险登记册，以及以文档形式存在的适用性声明（SoA）。<code>risk-coverage</code> 可计算出后者。</p>
+        </div>
+      </div>
+
+      <p class="group-label">系统：已落实了什么，发现了什么</p>
+      <div class="types">
+        <div class="type">
+          <h3>Component</h3>
+          <p>一个产品、服务、策略、流程，或一个系统——系统即带有成员的组件。授权边界是组件上带标识的对象。缺失的边界不作任何断言。</p>
+          <p class="replaces"><b>取代</b>组件定义（component definition）以及 SSP 中的系统描述。</p>
+        </div>
+        <div class="type">
+          <h3>Implementation</h3>
+          <p>一条边：这个组件以这种方式满足那个要求，并可选择精确到那条陈述。责任为 <code>provider</code>、<code>customer</code>、<code>shared</code> 或 <code>inherited</code>。继承的边必须指明上游组件及其所依赖的授权，这样，构建在 PaaS 之上、而 PaaS 又构建在 IaaS 之上的 SaaS，就能逐环进行检查。</p>
+          <p class="replaces"><b>取代</b>SSP 中的 implemented requirements 与组件定义中的 control implementations——两者把同一件事说了两遍。</p>
+        </div>
+        <div class="type">
+          <h3>Assessment</h3>
+          <p>谁在何时、以何种方式检查了什么，结果如何，依据哪些证据。方法通过一个已注册的分面来描述。</p>
+          <p class="replaces"><b>取代</b>评估计划（assessment plan）和评估结果（assessment results）。</p>
+        </div>
+        <div class="type">
+          <h3>Finding</h3>
+          <p>相对于某个要求或某条陈述的差距：状态、带截止日期的整改措施（截止日期注明所依据的日历），以及 Deviation（偏离）。凡有内容被削弱或被接受之处，Deviation 都是同一种类型化记录，使用同一个状态机（调查中、待批、已批准或已撤回）。</p>
+          <p class="replaces"><b>取代</b>POA&amp;M，以及四个各自编码了同一个状态机的 FedRAMP 扩展。</p>
+        </div>
+      </div>
+
+      <p class="group-label">签名</p>
+      <div class="types">
+        <div class="type">
+          <h3>Attestation</h3>
+          <p>在一个 DSSE 信封中，绑定各对象的语义摘要、内容清单的摘要，以及由人签署的那份渲染文档的摘要。机器所检查的内容与授权官员所签署的内容，不可能在无人察觉的情况下彼此偏离。</p>
+          <p class="replaces"><b>取代</b>那份已签名、却谁也无法验证其与数据之间关系的 PDF。</p>
+        </div>
+      </div>
+
+      <p class="group-label">机器：如何判定一个要求</p>
+      <div class="types">
+        <div class="type">
+          <h3>Check <small><span class="tier tier-designed">2.0.0 候选</span></small></h3>
+          <p>一份关于采集器所报告事实的类型化契约，加上一个基于十二种比较算子的扁平合取式，用来判定通过或不通过。采集器代码放在分面中。不符合这种形式的，仍为人工检查。已记录的判定由校验器重新计算，证据文件以其 SHA-256 命名。</p>
+          <p class="replaces"><b>取代</b>以正文形式书写的审核步骤，例如 CIS Ubuntu 24.04 Benchmark 中的 291 条自动化规则，它们以必须由人阅读的文本形式交付。<a href="checks.html">设计说明与实时演示。</a></p>
+        </div>
+      </div>
+
+      <p class="group-label">厂商：供应商推荐什么</p>
+      <div class="types">
+        <div class="type">
+          <h3>建议包 <small><span class="tier tier-designed">非类型，2.0.0 候选</span></small></h3>
+          <p>一种捆绑包：其清单写明发布方、包名和版本，其中的对象只能是 Component。厂商的建议是其 Component 上的能力（capabilities）：要求、条款、文本以及建议的参数值。导入建议包不会改变对象集中已有的任何对象。在用户自己的 Implementation 引用某条建议之前，这条建议不产生任何效力。</p>
+          <p class="replaces"><b>取代</b>组件定义唯一值得保留的用途：厂商提供文本供参考，但不能改变控制措施或评估。<a href="#advice">建议包如何运作。</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="modality">
+  <div class="wrap">
+    <div class="split">
+      <div class="stack-lg reveal">
+        <div class="section-head" style="margin-bottom:0">
+          <p class="eyebrow"><span class="no">03</span> 约束力</p>
+          <h2>情态动词有次序，裁剪要据此检查</h2>
+          <p class="lede">三个语料库不约而同地指向同一个字段：Grundschutz++ 中的 <code>modal_verb</code>（1,006 处）、FedRAMP CR26 中的 <code>force</code>、ISM 的写作风格指南。在 JASCON 中，它是一个带偏序的内核代码。</p>
+        </div>
+        <div class="lattice">
+          <span class="chain-label">义务</span>
+          <div class="chain"><span>unspecified</span><i></i><span>may</span><i></i><span>should</span><i></i><span>must</span></div>
+          <span class="chain-label">禁止</span>
+          <div class="chain"><span>unspecified</span><i></i><span>should-not</span><i></i><span>must-not</span></div>
+          <span class="chain-label">限制（德语 DARF NUR）</span>
+          <div class="chain"><span>may</span><i></i><span>may-only</span></div>
+        </div>
+        <p class="muted">沿箭头方向移动是单调的，可自由进行。逆箭头方向移动是一种放宽，在链与链之间移动则是一种轴向变更。由权威机构发布的 Tailoring 两者都可以做；使用方的 Tailoring 做其中任何一种，都需要一条记录在案、带审批人的 Deviation。排除某个要求只是普通的选择，无需 Deviation，因为基线本身就是由排除构成的。</p>
+      </div>
+      <div class="stack-lg reveal">
+        <div class="window">
+          <div class="window-bar">
+            <span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="window-title">一个带类型化截止期限的操作</span>
+          </div>
+          <pre><code data-lang="json">{
+  "op": "set-parameter",
+  "requirement-ref": "https://ns.fedramp.gov/cr26/req/IEC-CSO-IIR",
+  "statement-id": "s1",
+  "parameter": "iir-deadline",
+  "value": { "type": "duration", "num": 6, "unit": "hours" }
+}</code></pre>
+        </div>
+        <div class="stack">
+          <h3>参数是有类型的</h3>
+          <p class="muted">字符串、整数、规范化小数、布尔值、日期、URI 和代码，并以选项、列表和区间作为容器。时长要么是经过的时间，要么是注明所用日历的日历周期，因为以工作日计的截止期限，没有日历就毫无意义。正文中的 <code>{param:name}</code> 标记必须解析到一个已声明的参数；列表是 JSON 数组，绝不是需要读者自己知道如何拆分的字符串。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="extension">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">04</span> 扩展</p>
+      <h2>每个对象上的两个成员承载其余一切</h2>
+      <p class="lede">在三个国家级目录中统计到的 22,000 个 props 里，超过 70% 是在模仿内核机制：成员关系、排序、历史、别名、条款结构。其余部分则获得一份契约。</p>
+    </div>
+    <div class="grid g2 reveal">
+      <article class="card">
+        <div class="card-top"><h3><code>facets</code></h3><span class="tier tier-measured">标准库中有 7 个</span></div>
+        <p>分面名称解析为一个 JSON Schema，该 Schema 在捆绑包的清单中以精确版本和摘要锁定。分面的描述符声明它会改变什么：评估、裁剪、选择或渲染。工具依据锁定的 Schema 校验载荷。工具若遇到一个承载语义、但自身并未实现的分面，就会停止并输出原因。</p>
+        <p class="how"><b>原因：</b>如今，三个工具遇到同一个未知 prop，会做出三种不同的处理，而三者都声称符合规范。</p>
+      </article>
+      <article class="card">
+        <div class="card-top"><h3><code>annotations</code></h3><span class="tier tier-measured">不计入摘要</span></div>
+        <p>一个扁平映射，用于工具自身的簿记信息和渲染提示：跟踪系统 id、网页名称、“不要链接”标志。按定义，注释位于一切合规计算之外，也位于语义摘要之外，因此任何符合规范的实现都不能从中读出含义。</p>
+        <p class="how"><b>原因：</b>工具需要一个存放自身备注的地方，而这个地方又不能演变成第二套未经校验的词汇。</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="integrity">
+  <div class="wrap">
+    <div class="split even">
+      <div class="stack-lg reveal">
+        <div class="section-head" style="margin-bottom:0">
+          <p class="eyebrow"><span class="no">05</span> 完整性</p>
+          <h2>每个对象两个摘要</h2>
+          <p class="lede">一次发布就是一个捆绑包：对象、锁定的分面 Schema、渲染件以及一份内容清单。证明放在清单旁边，因为任何被签名的内容都不可能包含它自己的签名。</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>判定</th><th>包摘要</th><th>语义摘要</th><th>含义</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Full Match</th><td class="yes">相同</td><td class="yes">相同</td><td>正是当初被证明的那个包。</td></tr>
+              <tr><th scope="row">Semantic Match</th><td class="no">不同</td><td class="yes">相同</td><td>已批准的内容，经过了重新打包。验证方会如实指出这一点。</td></tr>
+              <tr><th scope="row">Tamper</th><td class="no">任意</td><td class="no">不同</td><td>内容不是当初批准的内容。</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <a class="link-arrow" href="index.html#try">在浏览器中计算这两个摘要</a>
+      </div>
+      <div class="stack-lg reveal">
+        <div class="section-head" style="margin-bottom:0">
+          <p class="eyebrow"><span class="no">06</span> 一致性</p>
+          <h2>三个等级，各有凭据</h2>
+          <p class="lede">等级声明要对照公开的一致性测试语料库进行检验。没有语料库测试结果的声明，只不过是一份产品规格表。</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>等级</th><th>承诺</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Core（核心级）</th><td>每种类型的 Schema 校验、在封闭网络中的运行、包摘要、本地引用解析，以及对一切未知内容的保留。不做语义计算。</td></tr>
+              <tr><th scope="row">Portable（可移植级）</th><td>依据锁定版本进行分面校验（含 fail-closed 闸门）、语义摘要、确定性的裁剪解析、合乎规则的捆绑包组合、风险覆盖，以及对每一个已记录检查判定的重新计算。</td></tr>
+              <tr><th scope="row">Authority（权威机构级）</th><td>发布义务：受治理的稳定标识符、每次重组时的别名与沿袭记录、每个对象的两个摘要、弃用生命周期。</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="advice">
+  <div class="wrap">
+    <div class="split even">
+      <div class="stack-lg reveal">
+        <div class="section-head" style="margin-bottom:0">
+          <p class="eyebrow"><span class="no">07</span> 厂商建议</p>
+          <h2>厂商提出建议，及格线仍由您来定。</h2>
+          <p class="lede">厂商了解自己的产品该如何加固。建议包把这些知识带入对象图，放在它所服务的要求旁边。ADVICE-1 至 ADVICE-11 这十一条规则确保该文件始终只是建议。</p>
+        </div>
+        <ul class="ticks">
+          <li><b>只能包含 Component。</b>列出 Requirement、Tailoring、Check 或 Assessment 的建议包会被拒绝。其中每个 id 都位于发布方自己的源（origin）之下，因此无法替换您的任何对象。</li>
+          <li><b>一条建议就是一项能力。</b>它指明要求、条款、一段文本以及建议的参数值。<code>product-version</code> 说明该建议适用于产品的哪个版本。</li>
+          <li><b>采纳是您自己的边。</b>您的 Implementation 引用 <code>&lt;component-id&gt;#&lt;capability-id&gt;</code>，并且该产品必须是您系统的成员。在此之前，该能力只是一种声称，不参与任何计算。</li>
+          <li><b>厂商的清单就是导入记录。</b>它保留在您的对象集中，以其字节的 SHA-256 命名。同一文件不会被导入两次；新版本只替换旧版本带入的内容；导入后被编辑过的建议会被报告出来。</li>
+          <li><b>声称、有证明，还是已证实。</b>只有当厂商的证明绑定了该清单、且其签名能用您信任的密钥验证通过时，工具才会把发布方显示为“已证实”。无人核验过的证明，会如实显示为未经核验。</li>
+        </ul>
+        <p class="small"><span class="tier tier-designed">已设计</span> 目前有 {{ n.advice_vectors }} 个测试向量和一个以公开测试密钥签名的示例包。尚无厂商发布过建议包，条款级字段仅基于一个虚构的示例文件。<a href="evidence.html#limits">局限所在。</a></p>
+        <a class="link-arrow" href="app/index.html#load=../jascon/example-packs/dbvendor-server-7-advice/">在应用中预览示例包</a>
+        <a class="link-arrow" href="pack-builder/index.html">编写建议包：面向厂商的构建器</a>
+      </div>
+      <div class="stack-lg reveal">
+        <div class="window">
+          <div class="window-bar">
+            <span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="window-title">厂商的 Component（节选）</span>
+            <span class="window-note">完整示例</span>
+          </div>
+          <pre><code data-lang="json">{
+ "id": "https://dbvendor.example/component/server-7",
+ "version": "2026-10",
+ "kind": "software",
+ «"product-version": "7"»,
+ "capabilities": [
+  {
+   "id": "cap-key-rotation",
+   "requirement-ref": "https://ns.bsi.bund.de/gspp/req/KONF.14.1",
+   «"statement-ids": ["s2"]»,
+   "description": {
+    "en": "Rotate the server certificate and key with the rotateCertificates command; no restart is needed. The vendor suggests an interval of 90 days."
+   }
+  }
+ ]
+}</code></pre>
+        </div>
+        <div class="window">
+          <div class="window-bar">
+            <span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="window-title">您的 Implementation 采纳了它</span>
+            <span class="window-note">完整示例</span>
+          </div>
+          <pre><code data-lang="json">{
+ "id": "https://cso.example/impl/acme--konf-14-1-s2",
+ "component-ref": "https://cso.example/component/acme-saas",
+ "requirement-ref": "https://ns.bsi.bund.de/gspp/req/KONF.14.1",
+ "statement-refs": ["s2"],
+ "satisfied-by": [
+  { «"capability-ref": "https://dbvendor.example/component/server-7#cap-key-rotation"» }
+ ],
+ "status": "planned"
+}</code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="oscal">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">08</span> 致 OSCAL 1.x 用户</p>
+      <h2>各部分的去向</h2>
+      <p class="lede">OSCAL 是这项工作的起点，也是 JASCON 读写的格式。目录捆绑包可导出为 OSCAL 1.2.2；OSCAL 中没有对应构造的内容，借助带命名空间的 props 携带，并在导入时还原。</p>
+    </div>
+    <div class="table-wrap reveal">
+      <table>
+        <thead><tr><th>OSCAL 1.2.2</th><th>在 JASCON 中</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Catalog：groups、controls、parts</th><td>嵌套在 RequirementSet 中的 Requirement 对象。statement 类型的 part 变为 <code>statements</code>。</td></tr>
+          <tr><th scope="row">Profile 及 profile 解析</th><td>Tailoring：选择加上按标识寻址的操作，由一个篇幅仅半页的确定性算法解析。</td></tr>
+          <tr><th scope="row">组件定义（component definition）</th><td><code>Component.capabilities</code>，以<a href="#advice">建议包</a>形式发布：一个由 Component 组成的捆绑包，无法借由导入来改变任何要求、裁剪或评估。建议包构建器可导入 OSCAL 组件定义，并报告哪些内容在建议包中没有位置。</td></tr>
+          <tr><th scope="row">系统安全计划（system security plan）</th><td>带 <code>authorizations</code> 的 Component，加上 Implementation 边。文档只是一种渲染件，由 Attestation 绑定。</td></tr>
+          <tr><th scope="row">评估计划与评估结果（assessment plan and results）</th><td>Assessment（其方法放在分面中）及其结果，以及 Finding。</td></tr>
+          <tr><th scope="row">POA&amp;M</th><td><code>Finding.actions</code> 与 Deviation 生命周期。</td></tr>
+          <tr><th scope="row">控制措施映射模型（control mapping model）</th><td>Mapping 类型。</td></tr>
+          <tr><th scope="row">带 <code>ns</code> 的 props</th><td>一个已注册的分面、一条注释，或什么都不需要：大多数 props 只是在模仿某种内核机制。</td></tr>
+          <tr><th scope="row">Metaschema、XML、YAML、Schematron</th><td>JSON Schema 2020-12、单一序列化格式、十个规则原语，其理由会在失败时输出。</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="source reveal">OSCAL 的八种文档模型如何映射到各对象类型（附图）：<a href="{{ blob }}/oscal-1x-models-and-jascon.md" rel="noopener">oscal-1x-models-and-jascon.md</a>。迁移级别与迁移操作指南：<a href="{{ blob }}/jascon/references/ch14-migration-playbooks.md" rel="noopener">手册第 14 章</a>。</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="cta reveal">
+      <div>
+        <h2>花一小时阅读，然后打开一个捆绑包</h2>
+        <p>手册第 2 章从最小的真实对象出发，逐步构建出整个内核。应用在 SP 800-53、CSF 2.0、ISM 和 Grundschutz++ 上展示同样的对象。</p>
+      </div>
+      <div class="cta-actions">
+        <a class="btn btn-primary" href="{{ blob }}/jascon/references/ch02-the-core-in-one-hour.md" rel="noopener">一小时读懂内核 <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a class="btn btn-ghost" href="start.html">快速开始 <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>

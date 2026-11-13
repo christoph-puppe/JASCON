@@ -1,0 +1,346 @@
+---
+title: 检查：当评估者是一台机器 | JASCON
+description: JASCON 2.0.0 的 Check 类型。代码采集事实，由一个封闭的、包含十二种比较算子的集合作出判定，证据以其自身的哈希存储，因此第二方无需运行任何程序即可重新计算机器判定。附实时判定演示、在 CIS profile 上实测的适配度，以及打标签之前仍待解决的问题。
+nav: checks
+---
+<section class="page-hero">
+  <div class="wrap">
+    <p class="eyebrow">检查 &middot; 内核 2.0.0，发布候选版</p>
+    <h1>当评估者是一台机器</h1>
+    <p class="lede">一个只以 0 或 1 退出的扫描器，会隐藏自己的阈值、忽略裁剪，也不留下任何可供复查的东西。Check 公开采集器必须报告的事实，以及作出判定的比较。运行记录携带了观测到的内容，因此任何人都能根据记录重新计算判定。</p>
+    <div class="chips">
+      <span class="tier tier-designed">第十一种内核类型，2.0.0 候选</span>
+      <span class="tier tier-measured">{{ n.check_vectors }} 个测试向量在三个实现中均通过</span>
+      <span class="tier tier-open">2.0.0 尚未打标签</span>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="gap">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">01</span> 缺口</p>
+      <h2>自动化在发布方那里是存在的，却在传递途中丢失了</h2>
+      <p class="lede">JASCON 1.0.0 能够表达某个要求已被评估，以及评估者得出了什么结论，却无法表达机器如何作出判定。</p>
+    </div>
+    <div class="findings reveal">
+      <div class="finding">
+        <span class="finding-n">312 条中的 291 条</span>
+        <h3>CIS Ubuntu 24.04 Benchmark 规则被标记为自动化</h3>
+        <p>这些规则无一例外地以 <code>audit</code> 字符串的形式进入转换后的捆绑包，shell 片段夹杂在正文中。通过条件是诸如“verify the output is”这样的句子，必须由人来阅读。</p>
+      </div>
+      <div class="finding">
+        <span class="finding-n">3 个中的 0 个</span>
+        <h3>普查所涵盖的权威机构编码了机器可判定的检查</h3>
+        <p>ISM、Grundschutz++ 和 SP 800-53 列出了方法（审查、访谈、测试）和所需文档。FedRAMP CR26 以正文形式给出关键测试。它们都没有规定一个可由程序求值的检查。</p>
+      </div>
+    </div>
+    <p class="source reveal">统计数字：<a href="{{ blob }}/drafts/CP-CHECK-1.md" rel="noopener">CP-CHECK-1</a> 第 2.1 节，来自已转换语料库的覆盖率报告。</p>
+  </div>
+</section>
+
+<section class="section band" id="split">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">02</span> 设计</p>
+      <h2>采集器负责观测，判定条件负责判定</h2>
+      <p class="lede">界线划在工具之间必须达成一致的地方。两个符合规范的工具，给定同一个 Check 和同一个观测值，会返回相同的判定。凡是可以在诚实的工具之间有所不同、而又不改变判定的东西，都留在内核之外。</p>
+    </div>
+    <div class="flow reveal">
+      <div class="flow-step">
+        <span class="where">分面，位于内核之外</span>
+        <h3>采集器</h3>
+        <p>一个 shell 脚本、一个 Ansible 任务或一次 API 调用，随 Check 一起携带，使该检查的摘要覆盖确切的代码。它输出一个观测值，不作任何判定。</p>
+      </div>
+      <div class="flow-step kernel">
+        <span class="where">内核：事实契约</span>
+        <h3>观测值</h3>
+        <p>具名、有类型的事实，例如 <code>sshd.maxauthtries</code>：整数。采集器报告的是生效值，并已解析默认值。缺失的键表示“查找过，但未找到”。</p>
+      </div>
+      <div class="flow-step kernel">
+        <span class="where">内核：十二种比较算子</span>
+        <h3>判定条件</h3>
+        <p>一个扁平的合取式，例如 <code>at-most {param}</code>。期望值是一个字面量或该要求的一个参数，因此由绑定该参数的 Tailoring 设定及格线。</p>
+      </div>
+      <div class="flow-step kernel">
+        <span class="where">内核：check-verdict</span>
+        <h3>判定</h3>
+        <p>满足、不满足、无定论或不适用：它是 Check、观测值和已绑定参数的纯函数。校验器会重新计算每一个已记录的判定。</p>
+      </div>
+    </div>
+    <div class="grid g3 reveal" style="margin-top: 18px;">
+      <article class="card">
+        <h3>裁剪后的参数会重新调校检查</h3>
+        <p>在 Tailoring 中把 <code>max-auth-tries</code> 从 6 收紧到 4，昨天观测到的 5 就会从“满足”变为“不满足”。没有任何一行代码改变，实施方也无法自行设定及格线。</p>
+      </article>
+      <article class="card">
+        <h3>判定要重新计算，从不直接采信</h3>
+        <p>Assessment 的记录行中保存着观测值本身。第二方据此对判定条件求值并加以比较。已记录的结果若与计算结果不同，即为校验错误。</p>
+      </article>
+      <article class="card">
+        <h3>记录显示观测到了什么</h3>
+        <p>一条未通过的记录行写着 <code>sshd.ciphers matches-not ".*-cbc"</code>，观测到的是一个包含 <code>aes128-cbc</code> 的列表。换作退出码，就只有一个 1。</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="demo">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">03</span> 动手试试</p>
+      <h2>设定观测值，移动及格线</h2>
+      <p class="lede">仓库中的完整示例：一个包含两个条款的要求、一个面向生产主机的 Tailoring、两个 Check，以及一台堡垒机的两次已记录的每日运行。您可以修改采集器看到的内容，或 Tailoring 绑定的值。</p>
+    </div>
+{{ include:_check-demo.html }}
+    <div class="split even reveal" style="margin-top: clamp(32px, 4vw, 52px);">
+      <div class="window" data-tabs>
+        <div class="window-bar" role="tablist" aria-label="示例中的对象">
+          <span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+          <button class="tab" role="tab" aria-selected="true" data-panel="ck-check">check.json</button>
+          <button class="tab" role="tab" aria-selected="false" data-panel="ck-row">一条运行记录行</button>
+          <button class="tab" role="tab" aria-selected="false" data-panel="ck-finding">finding.json</button>
+        </div>
+        <pre id="ck-check" role="tabpanel" tabindex="0"><code data-lang="json">{
+  "id": "https://cso.example/check/LNX-SSH-1-maxauthtries",
+  "requirement-ref": "https://cso.example/req/LNX-SSH-1",
+  "statement-ids": ["s1"],
+  "platform": "https://cso.example/platform/linux-host",
+  «"observes": [
+    { "name": "sshd.maxauthtries", "type": "integer" }
+  ]»,
+  «"criteria": [
+    { "fact": "sshd.maxauthtries", "op": "at-most",
+      "expected": { "param": "max-auth-tries" } }
+  ]»,
+  "validity": { "num": 24, "unit": "hours" },
+  "confidence": "reviewed",
+  "facets": {
+    "https://ns.jascon.net/stdlib/facet/collector@1": {
+      "collectors": [
+        { "id": "bash", "runtime": "bash", "privileges": "root",
+          "source": "#!/bin/bash\nv=$(sshd -T | awk '$1==\"maxauthtries\"{print $2}') ..." }
+      ]
+    }
+  }
+}</code></pre>
+        <pre id="ck-row" role="tabpanel" tabindex="0"><code data-lang="json">{
+  "check-ref": "https://cso.example/check/LNX-SSH-1-ciphers",
+  "check-digest": "sha256:b5ec275f0904a0a882d27e1434efb28e0595a74c6c0814297b2537fa49833f56",
+  "collector-id": "bash",
+  "outcome": "not-satisfied",
+  "time": "2026-11-03T06:00:04Z",
+  «"observation": {
+    "facts": {
+      "sshd.ciphers": ["chacha20-poly1305@openssh.com",
+                       "aes256-gcm@openssh.com", "aes256-ctr", "aes128-cbc"]
+    }
+  }»,
+  "evidence-record": {
+    "ref": "evidence/sha256/61c0ab97f7c9033b00b61a1eb09b5aa40d648114422ffa040aa779b09a9118fc",
+    "digest": "sha256:61c0ab97f7c9033b00b61a1eb09b5aa40d648114422ffa040aa779b09a9118fc"
+  }
+}</code></pre>
+        <pre id="ck-finding" role="tabpanel" tabindex="0"><code data-lang="json">{
+  "id": "https://cso.example/finding/bastion-01-ssh-cbc",
+  "assessment-ref": "https://cso.example/assessment/bastion-01-2026-11-03",
+  "requirement-ref": "https://cso.example/req/LNX-SSH-1",
+  "statement-ref": "s2",
+  «"check-ref": "https://cso.example/check/LNX-SSH-1-ciphers"»,
+  "state": "closed",
+  "actions": [
+    { "description": { "en": "Remove aes128-cbc from the Ciphers line of sshd_config; the next daily run verifies." },
+      "status": "done" }
+  ]
+}</code></pre>
+        <div class="window-foot"><span>节选 &middot; jascon/examples</span></div>
+      </div>
+      <div class="stack-lg">
+        <div class="stack">
+          <h3>示例捆绑包记录了什么</h3>
+          <ul class="ticks">
+            <li><b>11月3日：</b>4 次认证尝试，上限为 4，满足。加密算法列表包含 <code>aes128-cbc</code>，不满足。该 Assessment 的结果是其各记录行的汇总。</li>
+            <li><b>一个 Finding</b> 针对条款 s2，指向引发它的那个检查。其整改措施：移除该加密算法。</li>
+            <li><b>11月10日：</b>两条记录行均满足。该 Finding 已关闭，并关联到验证它的那次运行。</li>
+          </ul>
+        </div>
+        <p class="muted">该示例并未评估任何真实主机。每次运行都原样执行了 Check 中的 bash 采集器，执行对象是一个输出固定配置的 <code>sshd</code> 桩程序，每条证据记录都如实注明了这一点。</p>
+        <a class="link-arrow" href="app/index.html#load=../jascon/examples/&amp;tool=checks">在应用的检查（Checks）页面中打开该示例</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="comparators">
+  <div class="wrap">
+    <div class="split">
+      <div class="stack-lg reveal">
+        <div class="section-head" style="margin-bottom:0">
+          <p class="eyebrow"><span class="no">04</span> 比较算子</p>
+          <h2>十二种，外加一份被排除内容的清单</h2>
+          <p class="lede">这个集合是有意保持精简的。不符合的检查仍为人工检查，并计入统计。</p>
+        </div>
+        <ul class="plain">
+          <li>判定条件是一个合取式。没有 OR，没有 NOT，也没有嵌套；一个值的多个备选用 <code>one-of</code> 表示，否定则体现在成对的算子中。</li>
+          <li>没有算术运算，也不在两个事实之间进行比较。计数和推导是采集器的工作。</li>
+          <li>组合方式是强 Kleene 逻辑的 AND：一个确定的失败即决定结果，失败永远不会被别处的未知值掩盖。</li>
+          <li>未绑定的参数得出“无定论”。绝不会代入默认值。</li>
+          <li><code>at-most</code> 绝不绑定向上收紧的参数，这样收紧参数就不可能放宽检查。</li>
+          <li>涉及多个资源的检查，只有在每个适用资源都通过时才算通过。每个资源都会被求值，不会在第一次失败后跳过其余资源，判定还附带数量和占比：“200 个适用的存储桶资源中有 12 个不满足（6%）”。</li>
+        </ul>
+      </div>
+      <div class="table-wrap reveal">
+        <table>
+          <thead><tr><th>算子</th><th>作用对象</th><th>成立条件</th></tr></thead>
+          <tbody>
+            <tr><th scope="row"><code>equals</code></th><td>单个值</td><td>该值等于期望值；小数按数值比较</td></tr>
+            <tr><th scope="row"><code>not-equals</code></th><td>单个值</td><td>该值不同于期望值；事实缺失时为无定论</td></tr>
+            <tr><th scope="row"><code>one-of</code></th><td>单个值</td><td>该值在列表中</td></tr>
+            <tr><th scope="row"><code>at-least</code> <code>at-most</code></th><td>整数、小数</td><td>大小比较；小数绝不按浮点数处理</td></tr>
+            <tr><th scope="row"><code>present</code> <code>absent</code></th><td>任意事实</td><td>该键在观测值中存在，或不存在</td></tr>
+            <tr><th scope="row"><code>includes-all</code></th><td>列表</td><td>所列的每个值都出现</td></tr>
+            <tr><th scope="row"><code>excludes-all</code></th><td>列表</td><td>所列的值均未出现</td></tr>
+            <tr><th scope="row"><code>subset-of</code></th><td>列表</td><td>观测到的每个值都在所列范围内</td></tr>
+            <tr><th scope="row"><code>matches</code> <code>matches-not</code></th><td>字符串、代码</td><td>整个值与某个 I-Regexp 模式匹配，或者没有任何模式匹配</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="split even reveal" style="margin-top: clamp(40px, 5vw, 64px);">
+      <div class="stack">
+        <h3>为什么允许使用正则表达式</h3>
+        <p class="muted">手册拒绝使用表达式语言，因为那样一来，两个符合规范的工具可能返回两个不同的判定。Python、.NET 和 JavaScript 恰恰在人们最常用的构造上存在分歧：<code>\d</code>、<code>\w</code>、锚点、标志、环视。因此选用的方言是 I-Regexp（RFC 9485），它由 IETF 为互操作性而制定，并被 JSONPath 采用。</p>
+      </div>
+      <div class="stack">
+        <h3>内核在 RFC 之外还规定了什么</h3>
+        <ul class="plain">
+          <li>模式匹配整个值。<code>^</code> 和 <code>$</code> 是普通字符。</li>
+          <li>限制：每个模式 256 个字符、1,000 个状态，每个值 4,096 个字符。超出限制时，该记录行的结果为无定论。</li>
+          <li>不使用宿主引擎。每个实现都按照 RFC 9485 公布的语法自行解析，并以无回溯方式匹配，因此任何模式都无法让校验器卡死。</li>
+          <li>仍保留一项依赖，并已明确说明：Unicode 类别 <code>\p{..}</code> 从宿主的数据库中读取（待办事项 59）。</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="evidence-chain">
+  <div class="wrap">
+    <div class="split">
+      <div class="section-head reveal" style="margin-bottom:0">
+        <p class="eyebrow"><span class="no">05</span> 证据</p>
+        <h2>每一环都可离线验证</h2>
+        <p class="lede">证据是内容清单旁边的一个目录。每个文件都以其字节的 SHA-256 命名。脱敏在计算哈希之前进行，原始输出是单独的文件，因此按保留期限删除文件后，记录依然可以验证：校验器会将该文件报告为“不予提供”。</p>
+      </div>
+      <div class="chain-list reveal">
+        <div class="chain-link"><b>Attestation</b><p>绑定 Assessment 的语义摘要。</p></div>
+        <div class="chain-link"><b>Assessment 记录行</b><p>以内联方式保存观测值，因此该摘要也覆盖了观测值。它同时通过引用和摘要指明所用的 Check：检查一旦改变，就是另一个检查。</p></div>
+        <div class="chain-link"><b>证据记录</b><p>写明检查、采集器、被检对象、开始与结束时间以及退出状态，并携带同一观测值的摘要。</p></div>
+        <div class="chain-link"><b>原始输出</b><p>stdout 或 API 响应，各以摘要标识，并附媒体类型、大小和脱敏标志。</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="fit">
+  <div class="wrap">
+    <div class="section-head wide reveal">
+      <p class="eyebrow"><span class="no">06</span> 实测适配度</p>
+      <h2>510 条规则中有 481 条符合声明式形式</h2>
+      <p class="lede">比较算子集合是先起草、后测量的，测量对象是两个公开的检查语料库：ComplianceAsCode 中面向 Ubuntu 24.04 的四个 CIS profile（510 条规则），以及 kube-bench 的 CIS 1.12 检查（103 项自动化、28 项人工）。</p>
+    </div>
+    <div class="split even reveal">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>类别</th><th class="num">规则数（共 510 条）</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">符合<small>其中 23 条仅在采集器解析生效值、并以标志集合报告模式位时才符合</small></th><td class="num">481</td></tr>
+            <tr><th scope="row">需要算术运算<small>计数、唯一性、与当前时间比较</small></th><td class="num">12</td></tr>
+            <tr><th scope="row">需要在两个事实之间比较</th><td class="num">9</td></tr>
+            <tr><th scope="row">需要跨事实的 OR</th><td class="num">6</td></tr>
+            <tr><th scope="row">需要版本排序</th><td class="num">2</td></tr>
+            <tr><th scope="row">需要 I-Regexp 之外的正则表达式</th><td class="num">0</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="stack-lg">
+        <div class="stack">
+          <h3>普查显示了什么 <span class="tier tier-measured">实测，适配与否凭人工判断</span></h3>
+          <ul class="plain">
+            <li>比较这一侧很小，逻辑都在采集这一侧。在 126 个手写的 OVAL 定义中，各 state 使用相等比较 99 次、使用模式 23 次、使用大小比较 41 次。</li>
+            <li>在 491 个正则表达式中，有 23 个位于比较一侧。这 23 个全部落在 I-Regexp 范围之内，或可机械地改写。</li>
+            <li>在 kube-bench 的 21 个 OR 检查中，有 16 个的含义是“标志缺失，或标志等于某值”。一个报告生效值的采集器可以把它们变成一次比较。</li>
+          </ul>
+        </div>
+        <div class="stack">
+          <h3>它纠正了什么</h3>
+          <p class="muted">起草时的集合中没有“不等于”。普查在 OVAL 的 state 中发现了 2 处，在 kube-bench 的所有目录中共发现 85 处；而对于数值，没有其他算子能表达这一点。它于 11月12日作为第十二种比较算子加入。不符合的 29 条规则仍为人工检查。</p>
+        </div>
+        <a class="link-arrow" href="{{ tree }}/drafts/cp-check-1-census" rel="noopener">普查脚本与原始统计数据</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="state">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">07</span> 状态</p>
+      <h2>已被 2.0.0 接受，两个校验器均全部通过</h2>
+      <p class="lede">2026年11月12日，作者对该提案的未决问题作出了决定。自 2.0.0-rc.2 起，Check 已成为发布候选版的一部分，并将随 2.0.0 正式生效。该候选版目前为 rc.3，尚未打标签。</p>
+    </div>
+    <div class="state-cols reveal">
+      <article class="card">
+        <div class="card-top"><h3>已在仓库中</h3><span class="tier tier-measured">实测</span></div>
+        <ul class="ticks">
+          <li><b>Schema 与规则：</b>Check 的结构、Assessment 上的运行记录行、Finding 上的引用、证据记录、分面 <code>collector@1</code>；CHECK-1 至 CHECK-15 以及原语 <code>check-verdict</code>，每一项都带有在失败时输出的理由。</li>
+          <li><b>{{ n.check_vectors }} 个一致性测试向量</b>在 Python 参考实现、运行于 Windows PowerShell 5.1 的 PowerShell 孪生实现以及应用的 JavaScript 移植版中均通过。对参考实现故意制造的五处破坏，每一处都会让一个向量变红。</li>
+          <li><b>一个完整示例</b>，包含两个 Check、两次运行、一个 Finding 和七个证据文件。</li>
+          <li><b>按 RFC 9485 公布原文的语法，</b>已于 11月12日比对。该语法把代理码位（surrogate code points）排除在模式之外，而工作组的文件没有做到这一点；三个引擎均已修正，并有五个向量将其固定下来。</li>
+          <li><b>文本：</b>规范 D24、手册第 10 章与校验器一章、附录 A、B 和 C，以及面向编码智能体的技能（skill）。</li>
+          <li><b>工具：</b>应用的检查页面可以手工编写检查，也可以让语言模型起草，既可一次一条规则，也可针对一次 CIS 导入中的全部自动化规则。单文件阅读器可显示 Check 和已记录的运行。</li>
+        </ul>
+      </article>
+      <article class="card">
+        <div class="card-top"><h3>未决事项</h3><span class="tier tier-open">未决</span></div>
+        <ul class="plain">
+          <li><b>没有运行器。</b>仓库中没有任何东西会在目标上执行采集器，应用也不会。HTTP 采集器尚无已声明的请求格式。</li>
+          <li><b>尚未统计任何云平台。</b>普查覆盖 Linux 主机和 Kubernetes。打标签时，结构将基于这两者定型。</li>
+          <li><b>一项待定选择：</b>模式中的 Unicode 类别是遵循宿主的数据库，还是遵循一张锁定的表。</li>
+        </ul>
+      </article>
+    </div>
+
+    <div class="table-wrap reveal" style="margin-top: 18px;">
+      <table>
+        <thead><tr><th>向作者提出的问题</th><th>2026年11月12日的决定</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">晋升规则要求普查所涵盖的三个权威机构中有两个对某种类型进行了编码。而没有任何一个编码了检查。</th><td>该规则针对目录权威机构不发布的类型新增了一个条款：要么有公认标准要求该记录，要么它是经两个已统计的开放实现证实的既定做法；另外两项检验仍须满足；它须随主版本引入。Risk 依据第一个分支纳入，Check 依据第二个分支纳入。</td></tr>
+          <tr><th scope="row">运行记录行：内核字段还是分面？</th><td>内核字段。判定是计算，而分面从不定义计算。</td></tr>
+          <tr><th scope="row">Check 能否不附带其所引用的要求而单独发布？</th><td>可以。针对不得再分发的目录的检查包，可以独立通过校验。</td></tr>
+          <tr><th scope="row">现在落地，还是等待云 API 普查？</th><td>Check 随 2.0.0 正式生效。</td></tr>
+          <tr><th scope="row">除“每个资源”之外，是否还要另一个量词？</th><td>不需要。每个资源都被求值并记录，报告失败占比，且检查判为不通过。</td></tr>
+          <tr><th scope="row">是否增加第十二种比较算子 <code>not-equals</code>？</th><td>已增加。</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="source reveal">提案及其普查、未被采纳的备选方案（判定条件放在分面中，日后再晋升）以及决定记录：<a href="{{ blob }}/drafts/CP-CHECK-1.md" rel="noopener">drafts/CP-CHECK-1.md</a>。规范性文本：<a href="{{ blob }}/drafts/jascon-specification-2.0.0-rc.3.md" rel="noopener">规范 2.0.0-rc.3</a>，D24。</p>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0">
+  <div class="wrap">
+    <div class="cta reveal">
+      <div>
+        <h2>在打标签将结构定型之前审阅它</h2>
+        <p>每一种内核类型，都要由所有校验器永久地为之付出代价；打标签之后再修正，则要付出一个主版本的代价。候选版需要以运行扫描器为职业的读者来审阅：事实契约对您的平台是否成立？您的哪些检查落在十二种比较算子之外？</p>
+      </div>
+      <div class="cta-actions">
+        <a class="btn btn-primary" href="{{ blob }}/drafts/CP-CHECK-1.md" rel="noopener">阅读 CP-CHECK-1 <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a class="btn btn-ghost" href="app/index.html#load=../jascon/examples/&amp;tool=checks">在应用中编写检查 <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a class="btn btn-ghost" href="{{ repo }}/issues" rel="noopener">提出异议 <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,43 @@
+<div class="demo check-demo reveal" id="check-demo">
+  <div class="demo-edit">
+    <div class="window-bar">
+      <span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span class="window-title">bastion-01 上の LNX-SSH-1</span>
+      <span class="window-note">リポジトリの作例</span>
+    </div>
+    <div class="cd-body">
+      <div class="cd-req">
+        <span class="cd-k">要求事項</span>
+        <p><b>s1</b> SSH デーモンは、1 接続あたりの認証試行を最大 <mark data-cd="param-text">4</mark> 回まで許可する。</p>
+        <p><b>s2</b> SSH デーモンは、CBC モードの暗号方式を提供しない。</p>
+      </div>
+      <div class="cd-field cd-keep">
+        <label for="cd-param"><span class="cd-k">Tailoring がバインドする値</span><code>max-auth-tries</code></label>
+        <input id="cd-param" type="number" min="1" max="10" step="1" value="4" inputmode="numeric">
+      </div>
+      <div class="cd-field">
+        <label for="cd-tries"><span class="cd-k">コレクターの観測値</span><code>sshd.maxauthtries</code></label>
+        <input id="cd-tries" type="number" min="1" max="10" step="1" value="4" inputmode="numeric">
+      </div>
+      <fieldset class="cd-field cd-list">
+        <legend><span class="cd-k">コレクターの観測値</span><code>sshd.ciphers</code></legend>
+        <div data-cd="ciphers"></div>
+      </fieldset>
+      <div class="cd-presets">
+        <span class="cd-k">記録された実行</span>
+        <div data-cd="presets"></div>
+        <button class="demo-btn" type="button" data-cd-silent>コレクターが何も報告しない</button>
+      </div>
+    </div>
+  </div>
+  <div class="demo-side">
+    <div class="cd-rows" data-cd="rows" aria-live="polite"></div>
+    <div class="verdict" data-v="full" aria-live="polite">
+      <span class="verdict-k">評価の結果</span>
+      <span class="verdict-v">&hellip;</span>
+      <p></p>
+    </div>
+    <p class="cd-foot">アプリに移植された <code>check-verdict</code> によって、ブラウザ内で計算しています。これは {{ n.check_vectors }} 件のチェック用テストベクトルに合格するコードです。ここではコレクターは実行されず、観測値は入力した値です。</p>
+  </div>
+  <script type="application/json" id="check-demo-data">{{ json:checkdemo }}</script>
+</div>

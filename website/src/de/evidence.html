@@ -1,0 +1,187 @@
+---
+title: Belege: was gemessen wurde und was nicht | JASCON
+description: Das Konformitätskorpus, die beiden Referenzvalidatoren, die konvertierten Kataloge mit ihren Lizenzen, die Nachweis-Gates, die offenen Grenzen und die Nachbarformate. Jede Zahl ist als gemessen, entworfen oder offen gekennzeichnet.
+nav: evidence
+---
+<section class="page-hero">
+  <div class="wrap">
+    <p class="eyebrow">Belege</p>
+    <h1>Was gemessen wurde, woran, und was nicht</h1>
+    <p class="lede">Drei Regeln bestimmen das Projekt. Jede Behauptung ist als gemessen, entworfen oder hypothetisch gekennzeichnet. Kein Mechanismus kommt in die Spezifikation ohne einen veröffentlichten Katalog, der ihn verlangt. Jedes Verbot benennt den gezählten Fehler, den es verhindert. Diese Seite wendet die erste Regel auf das Projekt selbst an.</p>
+    <div class="chips">
+      <span class="tier tier-measured">gemessen</span>
+      <span class="tier tier-designed">entworfen</span>
+      <span class="tier tier-open">offen</span>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="conformance">
+  <div class="wrap">
+    <div class="split">
+      <div class="stack-lg reveal">
+        <div class="section-head" style="margin-bottom:0">
+          <p class="eyebrow"><span class="no">01</span> Konformität</p>
+          <h2>Die Testsuite ist der Schiedsrichter der Spezifikation</h2>
+          <p class="lede">Ein Tool ist konform, wenn das Korpus es sagt. Am {{ facts.measured.date }}, bei Commit <code>{{ facts.measured.commit }}</code>, bestand der Referenzvalidator {{ n.vectors }} von {{ n.vectors }} Vektoren in {{ n.families }} Familien und prüfte beide Digests von {{ n.shipped_objects }} Objekten in den {{ n.bundles }} Bundles nach, die diese Website ausliefert.</p>
+        </div>
+        <ul class="chips">
+{{ html.family_chips }}
+        </ul>
+        <p class="small">Das veröffentlichte Release 1.0.0 hat 157 Vektoren in zwölf Familien. <code>risk</code>, <code>kernel</code> und <code>scale</code> kamen mit 2.0.0-rc.1 hinzu, die {{ n.check_vectors }} <code>check</code>-Vektoren mit 2.0.0-rc.2, die {{ n.advice_vectors }} <code>advice</code>-Vektoren mit 2.0.0-rc.3.</p>
+      </div>
+      <div class="stack reveal">
+        <article class="card">
+          <div class="card-top"><h3>validate_core.py</h3><span class="tier tier-measured">beim Build gemessen</span></div>
+          <p>Die Referenz: eine Python-Datei mit {{ n.python_lines }} Zeilen und <code>jsonschema</code> als einziger Abhängigkeit. Sie enthält die Kanonisierung, beide Digests, das Tailoring-Gesetz, die Prüfung von Ed25519 und DSSE, die Zusammensetzung von Bundles, die Risikoabdeckung und eine I-Regexp-Engine.</p>
+        </article>
+        <article class="card">
+          <div class="card-top"><h3>validate_core.ps1</h3><span class="tier tier-measured">gemessen am 12. November 2026</span></div>
+          <p>Der Zwilling: {{ n.powershell_lines }} Zeilen Windows PowerShell 5.1 ohne Abhängigkeiten, für den Rechner, den ein Auditor ohnehin hat. Am 12. November lieferte er auf einem gehosteten Windows-Runner dieselben Zählergebnisse wie die Python-Referenz, für alle {{ n.vectors }} Vektoren, die fünf Bundles, das ausgearbeitete Paket und den Beispielordner. Ein <a href="{{ repo }}/actions/workflows/validators.yml" rel="noopener">Workflow</a> wiederholt diesen Lauf bei jeder Änderung.</p>
+        </article>
+        <article class="card">
+          <div class="card-top"><h3>Ein dritter, im Browser</h3><span class="tier tier-measured">gemessen</span></div>
+          <p>Die Seite Validate der App führt eine JavaScript-Portierung der Kernregeln gegen alle {{ n.families }} Vektorfamilien aus. Das Readme der App führt auf, was sie dem Python-Validator überlässt.</p>
+        </article>
+        <p class="small">Die Zeilenzahlen folgen der Zählweise des Berichts zu Gate 4: nicht leere Zeilen, die nicht mit <code>#</code> beginnen.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="corpora">
+  <div class="wrap">
+    <div class="section-head wide reveal">
+      <p class="eyebrow"><span class="no">02</span> Korpora</p>
+      <h2>Elf Konvertierungen gemessen, fünf weitergegeben</h2>
+      <p class="lede">Jeder Konverter schreibt einen Abdeckungsbericht, der jede Regel mit ihrer Anzahl angibt und Mängel der Quelle meldet, ohne sie zu reparieren. Fünf Bundles dürfen nach den Bedingungen ihrer Herausgeber weiterverbreitet werden und werden hier ausgeliefert. Sie können jedes davon in der App öffnen.</p>
+    </div>
+    <div class="table-wrap reveal">
+      <table>
+        <thead><tr><th>Korpus</th><th class="num">Objekte</th><th>Typen</th><th>Lizenz des Inhalts</th><th></th></tr></thead>
+        <tbody>
+{{ html.bundle_rows }}
+        </tbody>
+      </table>
+    </div>
+    <p class="source reveal">Objektzahlen beim Build gemessen. Kein Herausgeber hat diese Konvertierungen erstellt, geprüft oder gebilligt. Die Apache-Lizenz des Projekts gilt nicht für die Bundles; für sie gilt der Lizenzhinweis neben dem jeweiligen Bundle.</p>
+
+    <div class="split even reveal" style="margin-top: clamp(40px, 5vw, 64px);">
+      <div class="stack">
+        <h3>Gemessen, nicht weitergegeben</h3>
+        <p class="muted">Sechs weitere Korpora wurden für 1.0.0 konvertiert und gemessen. Ihre Bundles wurden am 10. November 2026 nach einer Durchsicht der Bedingungen der Herausgeber aus dem Repository entfernt. Die Konverter und Abdeckungsberichte bleiben, sodass jeder, der die Quelldatei nutzen darf, das Bundle reproduzieren kann.</p>
+        <ul class="plain">
+          <li>CIS Controls v8.1 und der CIS Ubuntu 24.04 LTS Benchmark: Die Bedingungen verbieten abgeleitete Werke.</li>
+          <li>BSI C5:2026, BSI C3A und die belgischen CyberFundamentals 2025: Es wurde keine Lizenzangabe gefunden.</li>
+          <li>FedRAMP CR26: ein Werk der US-Regierung, dessen Repository keine Lizenz angibt.</li>
+        </ul>
+      </div>
+      <div class="stack">
+        <h3>Die Messung zu 1.0.0 <span class="tier tier-measured">22. Juli 2026</span></h3>
+        <ul class="plain">
+          <li>Elf Bundles, 6.914 Objekte, beide Digests je Objekt nachgeprüft.</li>
+          <li>251.591 Blattwerte in den Quellen, jeder Quellpfad mit deklariertem Ziel.</li>
+          <li>Export von zehn Katalog-Bundles nach OSCAL 1.2.2: gültig gegen das Release-Schema von NIST, 5.886 von 5.886 Objekten nach dem Reimport gleich nach semantischem Digest.</li>
+          <li>Größe im Vergleich zu den Quellen: ISM 29 % kleiner, Grundschutz++ 50 % kleiner, CR26 55 % größer. Das Format ist kleiner, wo eine Quelle redundant ist, und größer, wo ein eigens entwickeltes Format knapp war.</li>
+        </ul>
+        <a class="link-arrow" href="{{ blob }}/drafts/gate-4-measurement.md" rel="noopener">Der Messbericht zu Gate 4</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="gates">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">03</span> Gates</p>
+      <h2>Mit Erzählungen allein kommt nichts voran</h2>
+    </div>
+    <div class="gates reveal">
+      <div class="gate">
+        <span class="gate-when">Mitte 2026</span><span class="gate-rail"><i></i></span>
+        <div class="gate-body"><h3>Gate 1: die Erhebung <span class="tier tier-measured">abgeschlossen</span></h3><p>Das ISM (1.150 Controls, 8.958 Props), Grundschutz++ (13.315 Props) und FedRAMP CR26 (246 Regeln, keine Props) wurden inventarisiert, bevor die Architektur entworfen wurde. Der Kern ist das, was alle drei der Messung nach brauchen.</p></div>
+      </div>
+      <div class="gate">
+        <span class="gate-when">Juli 2026</span><span class="gate-rail"><i></i></span>
+        <div class="gate-body"><h3>Gate 2: ausführbar <span class="tier tier-measured">abgeschlossen</span></h3><p>Das normative JSON Schema mit geschlossenen, einander ausschließenden Strukturen, sieben Facettendeskriptoren der Standardbibliothek, das Konformitätskorpus und der Referenzvalidator.</p></div>
+      </div>
+      <div class="gate">
+        <span class="gate-when">22. Juli 2026</span><span class="gate-rail"><i></i></span>
+        <div class="gate-body"><h3>Gate 3: der Kundentest <span class="tier tier-measured">abgeschlossen</span></h3><p>SP 800-53 Rev 5.2.0 mit den vier Baselines aus 800-53B, CSF 2.0 und ein vollständiger Lebenszyklus-Datensatz aus SSP, Prüfplan, Prüfergebnissen und POA&amp;M. Am Kernschema war keine Änderung nötig. Das Korpus deckte zwei Mängel im Referenzvalidator auf, die behoben wurden.</p></div>
+      </div>
+      <div class="gate">
+        <span class="gate-when">22. Juli 2026</span><span class="gate-rail"><i></i></span>
+        <div class="gate-body"><h3>Gate 4: die Engines und Release 1.0.0 <span class="tier tier-measured">abgeschlossen</span></h3><p>DSSE-Signaturprüfung mit einem Ed25519 ohne Abhängigkeiten, Zusammensetzung von Bundles, die bedingte Regel, der PowerShell-Zwilling und der bidirektionale OSCAL-Export. Die Spezifikation durchlief ein adversariales Review im Repository und eine externe Durchsicht; über jede Feststellung wurde dokumentiert entschieden. Eine Korrektur stellte 239 Taxonomie-Sets des ISM wieder her, die ein Konverter stillschweigend zusammengeführt hatte.</p></div>
+      </div>
+      <div class="gate rc">
+        <span class="gate-when">10. Nov. 2026</span><span class="gate-rail"><i></i></span>
+        <div class="gate-body"><h3>2.0.0-rc.1: Risk als zehnter Typ</h3><p>Alle 6.914 Objekte des Korpus von 1.0.0 validieren unverändert unter dem neuen Schema. Keine der in der Erhebung erfassten Behörden veröffentlicht einen Risikodatensatz, denn ein Risikoregister sind Daten des Anwenders. Drei Standards verlangen ihn: ISO/IEC 27001, BSI-Standard 200-3 und NIST SP 800-30.</p></div>
+      </div>
+      <div class="gate rc">
+        <span class="gate-when">12. Nov. 2026</span><span class="gate-rail"><i></i></span>
+        <div class="gate-body"><h3>2.0.0-rc.2: Check als elfter Typ</h3><p>Vorgeschlagen am 11. November mit Schema, Validator, 156 Vektoren und einer Erhebung über zwei offene Check-Korpora: 481 von 510 Regeln der CIS-Profile für Ubuntu 24.04 in ComplianceAsCode passen, und kein Vergleich in einem der beiden Korpora braucht einen regulären Ausdruck außerhalb von I-Regexp. Am nächsten Tag mit sechs Entscheidungen angenommen. Die Aufnahmeregel erhielt eine Klausel für Typen, die Katalogbehörden nicht veröffentlichen; Risk und Check kommen beide über sie in den Kern. Inzwischen {{ n.check_vectors }} Vektoren.</p></div>
+      </div>
+      <div class="gate rc">
+        <span class="gate-when">12. Nov. 2026</span><span class="gate-rail"><i></i></span>
+        <div class="gate-body"><h3>2.0.0-rc.3: Empfehlungspakete und zwei typisierte Datumsfelder <span class="tier tier-designed">Release-Kandidat, nicht getaggt</span></h3><p>Die Empfehlungen eines Herstellers als eine veröffentlichte Datei, angenommen mit acht dokumentierten Entscheidungen: kein neuer Typ, elf Regeln, {{ n.advice_vectors }} Vektoren und ein ausgearbeitetes Paket mit signierter Attestierung. Über die mitgelieferten Bundles ausgeführt, fand die Regel zu <code>capability-ref</code> im konvertierten NIST-Beispiel eine Kante, die auf eine Fähigkeit verwies, die ihre eigene Komponente nicht deklariert. Am selben Tag schloss der Autor die vier Punkte, die vor dem Setzen des Release-Tags noch offen waren. Zwei Felder, die 1.0.0 als Freitext ließ, sind nun typisiert: das Datum, an dem eine Abweichung eröffnet wurde, und das Fälligkeitsdatum einer Maßnahme.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="limits">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">04</span> Grenzen</p>
+      <h2>Was nicht bewiesen ist</h2>
+      <p class="lede">Das sind die offenen Punkte am {{ facts.measured.date }}. Jeder davon ist zugleich eine Stelle, an der Arbeit von außen mehr zählt als die des Maintainers.</p>
+    </div>
+    <div class="limits reveal">
+      <div class="limit">
+        <h3>Kein Nutzer von außen <span class="tier tier-open">offen</span></h3>
+        <p>Eine Suche am 10. November 2026 fand keine Erwähnung von JASCON außerhalb des eigenen Repositorys. Keine Behörde veröffentlicht darin, und kein Hersteller liest es. Die gemessenen Konvertierungen und die in veröffentlichten Katalogen gefundenen Mängel lassen sich nutzen, ohne das Format zu übernehmen.</p>
+      </div>
+      <div class="limit">
+        <h3>Ein Autor hinter beiden Validatoren <span class="tier tier-open">offen</span></h3>
+        <p>Die Python-Referenz und der PowerShell-Zwilling wurden vom Autor des Projekts mit KI-Unterstützung aus denselben Quellen geschrieben. Ihre Unabhängigkeit beschränkt sich auf Sprache und Laufzeitumgebung. Das Gate misst, ob die Spezifikation eine Implementierung festlegt. Es misst nicht, was ein Fremder an einem Wochenende daraus macht.</p>
+      </div>
+      <div class="limit">
+        <h3>Abgedeckte Pfade heißen nicht, dass die Werte ankommen <span class="tier tier-open">offen, Backlog 41</span></h3>
+        <p>Die Abdeckungsberichte zählen Quellpfade mit deklariertem Ziel. Ob jeder Wert ankommt, wurde an einem Korpus gemessen, dem NIST-Beispielsystem: 394 von 835 Blattwerten kommen wörtlich im Bundle vor, und 122 inhaltliche Werte kommen überhaupt nicht an. Die übrigen zehn Korpora sind nicht gemessen.</p>
+      </div>
+      <div class="limit">
+        <h3>Das erste Risk-Korpus bleibt in seinem ersten Zustand <span class="tier tier-open">offen</span></h3>
+        <p>Die Risikodaten von OSCAL haben keinen Eigentümer, keine einzelne Stufe und kein Akzeptanzdatum. Daraus konvertierte Risiken können den Zustand <code>identified</code> nicht verlassen, daher zeigt die Risikoabdeckung auf echten konvertierten Daten jede Anforderung als nicht abgedeckt. Abdeckung mit einem behandelten Risiko ist nur am Beispiel-Bundle zu sehen.</p>
+      </div>
+      <div class="limit">
+        <h3>Check legt seine Struktur anhand von zwei Plattformen fest <span class="tier tier-open">offen</span></h3>
+        <p>Die Passung des Typs Check wurde auf Linux-Hosts und Kubernetes gezählt. Kein Check gegen eine Cloud-API wurde gezählt, nichts im Repository führt einen Kollektor aus, und das ausgearbeitete Beispiel lief gegen einen Stub. 29 von 510 gezählten Regeln passen nicht in die deklarative Form und bleiben manuell. <a href="checks.html#state">Der vollständige Stand.</a></p>
+      </div>
+      <div class="limit">
+        <h3>2.0.0 ist ein Kandidat, kein Release <span class="tier tier-open">offen</span></h3>
+        <p>Es ist nichts mehr zu entscheiden, und beide Validatoren sind auf allen {{ n.vectors }} Vektoren des Kandidaten grün. Das Setzen des Tags ist Sache des Autors und ist noch nicht erfolgt. Bis dahin ist 1.0.0 die veröffentlichte Version, und die Strukturen von 2.0.0 können sich noch ändern.</p>
+      </div>
+      <div class="limit">
+        <h3>Nicht jedes Bundle für 1.0.0 ist ein Bundle für 2.0.0 <span class="tier tier-measured">entschieden</span></h3>
+        <p>Bis rc.2 akzeptierte das Schema von 2.0.0 alles, was 1.0.0 akzeptierte. Seit rc.3 muss das Datum, an dem eine Abweichung eröffnet wurde, ein Datum sein und das Fälligkeitsdatum einer Maßnahme ein typisierter Zeitpunkt oder eine Dauer. Ein Bundle für 1.0.0 mit Freitext in einem dieser Felder muss ihn konvertieren. Alle fünf mitgelieferten Bundles und der Beispielordner sind konform. Ein Muster mit einer Unicode-Kategorie folgt der Unicode-Datenbank der Maschine, auf der es läuft, sodass ein später zugewiesener Codepunkt auf zwei Maschinen zwei Urteile ergeben kann; ein Autor, der ein eindeutiges Urteil braucht, schreibt den Bereich aus.</p>
+      </div>
+      <div class="limit">
+        <h3>Empfehlungspakete stützen sich auf eine einzige Beispieldatei <span class="tier tier-designed">entworfen</span></h3>
+        <p>Keine Katalogbehörde veröffentlicht Herstellerempfehlungen. Für solche Daten verlangt die Aufnahmeregel einen Standard, der den Datensatz fordert, oder zwei offene Implementierungen, deren Inhalt gezählt wurde. Empfehlungspakete haben weder das eine noch das andere. Das Feld auf Klauselebene an einer Fähigkeit stützt sich auf eine einzige fiktive Komponentendefinition aus den Beispielen von NIST, mit drei Empfehlungen, zwei Einträgen auf Klauselebene und zwei vorgeschlagenen Parameterwerten; das Feld für die Produktversion stützt sich auf nichts Gezähltes. Beide kamen auf Entscheidung des Autors entgegen dieser Regel in den Kern, und die Spezifikation hält es so fest. Kein Hersteller hat ein Paket veröffentlicht; der Paket-Builder importiert OSCAL-Komponentendefinitionen, und die Beispiele von NIST kommen durch, ohne dass etwas verloren geht, das ein Paket aufnehmen kann, aber keine von einem Hersteller veröffentlichte Komponentendefinition ist bisher durch ihn gelaufen. Diese Erhebung steht noch aus.</p>
+      </div>
+      <div class="limit">
+        <h3>Bekannte Mängel in mitgelieferten Beispielen <span class="tier tier-open">offen, Backlog 46 und 55</span></h3>
+        <p>Die Beispiel-Attestierung dient nur der Veranschaulichung: Ihre Subject-Digests passen zu keinem Beispielobjekt. Der Methoden-Payload eines Assessments wird noch nicht gegen sein fixiertes Facettenschema validiert, und die drei im Repository würden daran scheitern.</p>
+      </div>
+      <div class="limit">
+        <h3>Zwei Stellen, an denen ein Nachbar voraus ist <span class="tier tier-open">offen, Backlog 65 und 66</span></h3>
+        <p>Der Vergleich vom 13. November 2026 fand zwei. Eine Deviation hält fest, wann sie eröffnet und wer sie genehmigt hat, und hat kein Ablaufdatum; eine Sicherheitsausnahme in CISO Assistant hat ein Ablaufdatum und ein Risiko in OSCAL eine Frist. Keine Tailoring-Operation hält ihren eigenen Autor fest: Eine Abschwächung erfordert eine genehmigte Deviation, jede andere Änderung wird nur über das Tailoring zugeordnet, das sie enthält, während CISO Assistant jede Änderung protokolliert. Beide stehen als Einträge 65 und 66 im Backlog; jeder erfordert eine Entscheidung des Autors.</p>
+      </div>
+      <div class="limit">
+        <h3>Die Governance ist eine Person <span class="tier tier-open">offen</span></h3>
+        <p>Das Handbuch beschreibt eine föderierte Registry und einen Verwalter für die Standardbibliothek. Beides gibt es nicht. Heute gibt es einen Maintainer, der als Privatperson handelt, ein öffentliches Entscheidungsregister und das Konformitätskorpus.</p>
+      </div>
+    </div>
+    <p class="source reveal">Die vollständige Liste mit Zahlen: <a href="{{ blob }}/drafts/jascon-v0.6-spec-feedback-backlog.md" rel="noopener">das Backlog der Rückmeldungen zur Spezifikation</a>. Einträge kommen mit Nachweisen hinein und verlassen es über einen Eintrag im <a href="{{ blob }}/drafts/jascon-decision-rationale-register.md" rel="noopener">Entscheidungsregister</a>.</p>
+  </div>
+</section>

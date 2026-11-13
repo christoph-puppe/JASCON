@@ -1,0 +1,556 @@
+---
+title: JASCON: GRC इंजीनियरिंग के लिए डेटा लेयर
+description: JASCON अनुपालन डेटा के लिए एक खुला नोटेशन है। मानक, टेलरिंग, जोखिम, कार्यान्वयन, मूल्यांकन और अनुप्रमाणन टाइप्ड, कंटेंट-एड्रेस्ड JSON ऑब्जेक्ट का एक ग्राफ़ बन जाते हैं, जिसे कोई प्रोग्राम वैलिडेट कर सकता है, जिसके संस्करणों का अंतर निकाल सकता है, जिस पर गणना कर सकता है और जिस पर हस्ताक्षर कर सकता है।
+nav: home
+---
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <p class="eyebrow">खुला नोटेशन &middot; Apache 2.0</p>
+      <h1><em>GRC&nbsp;इंजीनियरिंग</em> के लिए डेटा लेयर</h1>
+      <p class="lede">JASCON मानकों, टेलरिंग, जोखिमों, कार्यान्वयनों, मूल्यांकनों और अनुप्रमाणनों को टाइप्ड, कंटेंट-एड्रेस्ड JSON ऑब्जेक्ट के एक ग्राफ़ के रूप में लिखता है। प्रयोज्यता विवरण (SoA) एक गणना बन जाता है, मशीन जाँच ऐसी चीज़ बन जाती है जिसकी पुनर्गणना कोई दूसरा पक्ष कर सके, और बंडल को दोबारा पैकेज करने के बाद भी हस्ताक्षर सत्यापित होता है।</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="app/index.html#load=../converted_examples/US.CSF/csf-core-bundle/&amp;tool=browse">NIST CSF 2.0 पर ऐप खोलें
+          <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a class="btn btn-ghost" href="start.html">शुरुआत करें</a>
+      </div>
+      <div class="hero-status">
+        <span><i class="dot"></i>1.0.0, 22 जुलाई 2026 को जारी</span>
+        <span><i class="dot rc"></i>2.0.0-rc.3 समीक्षाधीन</span>
+        <span>स्वतंत्र परियोजना, एक मेंटेनर</span>
+      </div>
+    </div>
+
+    <div class="window" data-tabs>
+      <div class="window-bar" role="tablist" aria-label="उदाहरण ऑब्जेक्ट">
+        <span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+        <button class="tab" role="tab" aria-selected="true" data-panel="hero-risk">risk.json</button>
+        <button class="tab" role="tab" aria-selected="false" data-panel="hero-req">requirement.json</button>
+        <button class="tab" role="tab" aria-selected="false" data-panel="hero-tailoring">tailoring.json</button>
+        <button class="tab" role="tab" aria-selected="false" data-panel="hero-check">check.json</button>
+        <span class="window-note">अंश</span>
+      </div>
+      <div class="panel" id="hero-risk" role="tabpanel" tabindex="0">
+        <pre><code data-lang="json">{
+  "id": "https://cso.example/risk/R-2026-007",
+  "title": {
+    "en": "Tenant data exposure through long-lived KMS keys",
+    "de": "Offenlegung von Mandantendaten durch langlebige KMS-Schlüssel"
+  },
+  "owner-ref": "https://cso.example/party/ciso",
+  "state": "treated",
+  "rating": { "level": "hoch",
+              "scale-ref": "https://cso.example/scale/bsi-200-3-matrix" },
+  "treatment": "modify",
+  «"treatments": [
+    { "requirement-ref": "https://ns.bsi.bund.de/gspp/req/KONF.14.1",
+      "statement-ids": ["s2"] }
+  ]»,
+  "tailoring-refs": ["https://ns.bsi.bund.de/gspp/tailoring/erhoeht"]
+}</code></pre>
+        <div class="window-foot"><span>validate_core.py</span><span><b>risk-coverage</b> erhoeht: चयनित 3 &middot; औचित्य सहित 1 &middot; बिना कवरेज 2</span></div>
+      </div>
+      <div class="panel" id="hero-req" role="tabpanel" tabindex="0">
+        <pre><code data-lang="json">{
+  "id": "https://ns.bsi.bund.de/gspp/req/KONF.14.1",
+  "version": "2026-07",
+  "label": "KONF.14.1",
+  "statements": [
+    { "id": "s1",
+      «"modality": "may"»,
+      "parameters": [
+        { "name": "transport-crypto", "type": "choice", "cardinality": "one",
+          "choices": [ { "value": "tls13" }, { "value": "tls12-pfs" } ] }
+      ],
+      "prose": { "de": "Konfiguration für Anwendungen KANN Kommunikation beim Transport über Netze nach «{param:transport-crypto}» verschlüsseln." } },
+    { "id": "s2",
+      "modality": "should",
+      "prose": { "de": "Kryptographische Schlüssel SOLLTEN in regelmäßigen Abständen gewechselt werden." } }
+  ],
+  "facets": {
+    "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": { "sec-level": "normal-sdt" }
+  }
+}</code></pre>
+        <div class="window-foot"><span>validate_core.py</span><span><b>prose-params-resolve</b> हर {param:} टोकन किसी घोषित पैरामीटर का नाम देता है</span></div>
+      </div>
+      <div class="panel" id="hero-tailoring" role="tabpanel" tabindex="0">
+        <pre><code data-lang="json">{
+  "id": "https://ns.bsi.bund.de/gspp/tailoring/erhoeht",
+  "version": "2026-07",
+  "title": { "en": "Elevated protection level" },
+  "selects": [
+    { "set-ref": "https://ns.bsi.bund.de/gspp/set/baseline/example" }
+  ],
+  "operations": [
+    { "op": "set-modality",
+      "requirement-ref": "https://ns.bsi.bund.de/gspp/req/KONF.14.1",
+      "statement-id": "s1",
+      «"modality": "must"» },
+    { "op": "set-parameter",
+      "requirement-ref": "https://ns.bsi.bund.de/gspp/req/KONF.14.1",
+      "statement-id": "s1",
+      "parameter": "transport-crypto",
+      "value": "tls13" }
+  ]
+}</code></pre>
+        <div class="window-foot"><span>validate_core.py</span><span><b>modality-monotonic</b> may से must: मोनोटोन, Deviation की ज़रूरत नहीं</span></div>
+      </div>
+      <div class="panel" id="hero-check" role="tabpanel" tabindex="0">
+        <pre><code data-lang="json">{
+  "id": "https://cso.example/check/LNX-SSH-1-maxauthtries",
+  "requirement-ref": "https://cso.example/req/LNX-SSH-1",
+  "statement-ids": ["s1"],
+  "platform": "https://cso.example/platform/linux-host",
+  "observes": [
+    { "name": "sshd.maxauthtries", "type": "integer" }
+  ],
+  «"criteria": [
+    { "fact": "sshd.maxauthtries", "op": "at-most",
+      "expected": { "param": "max-auth-tries" } }
+  ]»,
+  "validity": { "num": 24, "unit": "hours" },
+  "confidence": "reviewed"
+}</code></pre>
+        <div class="window-foot"><span>validate_core.py</span><span><b>check-verdict</b> अवलोकित 4, Tailoring 4 तय करता है: संतुष्ट</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section tight flush" aria-label="मापा गया">
+  <div class="wrap">
+    <div class="stats reveal">
+      <div class="stat">
+        <span class="stat-n">{{ n.vectors }}<small>/ {{ n.vectors }}</small></span>
+        <p>अनुरूपता वेक्टर, {{ n.families }} परिवारों में, संदर्भ वैलिडेटर में पास होते हैं। अनुरूप होने का अर्थ क्या है, यह वेक्टर तय करते हैं।</p>
+        <span class="tier tier-measured">बिल्ड पर मापा गया</span>
+      </div>
+      <div class="stat">
+        <span class="stat-n">2</span>
+        <p>संदर्भ वैलिडेटर, एक जैसी गिनतियों के साथ: Python, और PowerShell 5.1, जो बिना कुछ इंस्टॉल किए एक सामान्य Windows मशीन पर चलता है। दोनों हर बदलाव पर चलते हैं।</p>
+        <span class="tier tier-measured">2026-11-12 को मापा गया</span>
+      </div>
+      <div class="stat">
+        <span class="stat-n">11</span>
+        <p>प्रकाशित फ़्रेमवर्क और लाइफ़साइकल सेट रूपांतरित किए गए, जिनमें ISM, Grundschutz++, SP 800-53, CSF 2.0 और C5 शामिल हैं। हर स्रोत पाथ का एक परिकलित गंतव्य है।</p>
+        <span class="tier tier-measured">1.0.0 पर मापा गया</span>
+      </div>
+      <div class="stat">
+        <span class="stat-n">5,886</span>
+        <p>कैटलॉग ऑब्जेक्ट OSCAL 1.2.2 में एक्सपोर्ट किए गए, NIST स्कीमा के विरुद्ध वैलिडेट किए गए, फिर से इम्पोर्ट करके तुलना की गई। सभी 5,886 सिमेंटिक डाइजेस्ट के अनुसार समान हैं।</p>
+        <span class="tier tier-measured">1.0.0 पर मापा गया</span>
+      </div>
+    </div>
+    <p class="stats-note">पहला आँकड़ा हर बार इस साइट के बिल्ड होने पर फिर से परिकलित होता है (कमिट <code>{{ facts.measured.commit }}</code>)। "हर स्रोत पाथ" का अर्थ पाथ कवरेज है: हर मान वास्तव में पहुँचता है या नहीं, यह अब तक केवल एक कॉर्पस पर मापा गया है, और वहाँ 122 सामग्री-मान नहीं पहुँचे। यह और बाक़ी खुले बिंदु <a href="evidence.html#limits">क्या सिद्ध नहीं है</a> के अंतर्गत सूचीबद्ध हैं।</p>
+  </div>
+</section>
+
+<section class="section band" id="compare">
+  <div class="wrap">
+    <div class="section-head wide reveal">
+      <p class="eyebrow"><span class="no">01</span> पूर्ववर्ती कार्य</p>
+      <h2>उपयोगकर्ताओं और ऑडिटरों की दस ज़रूरतें, फ़ॉर्मेट-दर-फ़ॉर्मेट</h2>
+      <p class="lede">13 नवंबर 2026 को पाँच पड़ोसी फ़ॉर्मेटों के स्कीमा और कोड के आधार पर जाँचा गया: OSCAL 1.2.3, Gemara 1.6.0, CycloneDX 1.7.2, CISO Assistant और SCAP 1.4 के साथ XCCDF 1.2। किसी पड़ोसी फ़ॉर्मेट का डेटा रूपांतरित नहीं किया गया। हर सेल बताता है कि कोई फ़ॉर्मेट क्या प्रदान करता है, यह नहीं कि कोई डिप्लॉयमेंट उसके साथ क्या करता है।</p>
+    </div>
+    <div class="table-wrap reveal">
+      <table class="compare">
+        <thead><tr><th>क्या मदद करता है</th><th class="us" scope="col">JASCON<small>यह परियोजना</small></th><th>OSCAL</th><th>Gemara</th><th>CycloneDX</th><th>CISO Assistant</th><th>SCAP / XCCDF</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">जोखिम के आधार पर चुने गए नियंत्रण <small>ISO/IEC 27001 6.1.2 और 6.1.3</small></th><td class="us yes">हाँ<small>प्रयोज्यता विवरण की गणना होती है; 2.0.0 हेतु प्रस्तावित</small></td><td class="no">नहीं<small>जोखिम केवल मूल्यांकन के बाद अस्तित्व में आता है</small></td><td class="part">आंशिक<small>केवल खतरों के ज़रिए जुड़ा</small></td><td class="no">नहीं</td><td class="part">केवल टूल में<small>एक्सचेंज फ़ॉर्मेट में नहीं</small></td><td class="no">नहीं</td></tr>
+          <tr><th scope="row">दर्ज जोखिम स्वीकृति</th><td class="us yes">हाँ<small>अनुमोदक, तिथि, तर्क; 2.0.0 हेतु प्रस्तावित</small></td><td class="part">आंशिक<small>अनुमोदक या तिथि के लिए कोई फ़ील्ड नहीं</small></td><td class="part">आंशिक<small>न अनुमोदक, न तिथि</small></td><td class="no">नहीं</td><td class="part">केवल टूल में<small>अनुमोदक, तिथि, समाप्ति</small></td><td class="yes">हाँ<small>जाँच परिणामों के लिए: प्राधिकारी, समय, कारण</small></td></tr>
+          <tr><th scope="row">हर निर्णय की ट्रेसबिलिटी</th><td class="us part">आंशिक<small>कमज़ोर करने के लिए अनुमोदित अपवाद चाहिए; हर बदलाव का लेखक दर्ज नहीं</small></td><td class="part">आंशिक<small>कौन और कब, केवल प्रति दस्तावेज़</small></td><td class="part">आंशिक<small>एक तर्क, कोई लेखक नहीं</small></td><td class="no">नहीं</td><td class="part">आंशिक<small>एक ऑडिट लॉग; कारण अनिवार्य नहीं</small></td><td class="part">आंशिक<small>हर बदलाव पर एक वैकल्पिक टिप्पणी</small></td></tr>
+          <tr><th scope="row">वेंडर की अनुशंसाएँ नियंत्रणों से अलग</th><td class="us yes">हाँ<small>इम्पोर्ट के समय लागू; 2.0.0 हेतु प्रस्तावित</small></td><td class="yes">हाँ<small>कंपोनेंट डेफ़िनिशन; अपनाने का अर्थ है प्रति बनाना</small></td><td class="part">आंशिक<small>अलग फ़ाइलें, कोई प्राधिकार-सीमा नहीं</small></td><td class="part">आंशिक<small>एक ही फ़ाइल मानक को भी परिभाषित कर सकती है</small></td><td class="part">आंशिक<small>लाइब्रेरी अपडेट मूल्यांकनों को फिर से लिख सकता है</small></td><td class="part">आंशिक<small>फ़ैसला फिर भी वेंडर की जाँचें करती हैं</small></td></tr>
+          <tr><th scope="row">समय-सीमा वाले अपवाद और निष्कर्ष</th><td class="us part">आंशिक<small>निष्कर्षों पर टाइप्ड नियत तिथियाँ; अपवाद की कोई समाप्ति नहीं</small></td><td class="yes">हाँ<small>जोखिमों की समय-सीमाएँ, माइलस्टोन</small></td><td class="no">नहीं</td><td class="part">आंशिक<small>केवल साक्ष्य की समाप्ति</small></td><td class="part">केवल टूल में<small>अपवाद की समाप्ति, नियत तिथियाँ</small></td><td class="no">नहीं</td></tr>
+          <tr><th scope="row">कोड के रूप में स्वचालित जाँचें, किसी भी भाषा में</th><td class="us yes">हाँ<small>अवलोकन से निर्णय की पुनर्गणना; कोई रनर नहीं; 2.0.0 हेतु प्रस्तावित</small></td><td class="part">आंशिक<small>रन दर्ज होते हैं, जाँच का लॉजिक नहीं</small></td><td class="part">आंशिक<small>रन दर्ज होते हैं, लॉजिक फ़ॉर्मेट के बाहर</small></td><td class="part">आंशिक<small>टेक्स्ट के रूप में एक कमांड लाइन</small></td><td class="part">आंशिक<small>अन्य टूल के परिणाम इम्पोर्ट करता है</small></td><td class="part">आंशिक<small>कोई भी भाषा केवल SCAP अनुरूपता के बाहर</small></td></tr>
+          <tr><th scope="row">खंड से कार्यान्वयन, जाँच-रन और साक्ष्य फ़ाइल तक एक ही शृंखला</th><td class="us yes">हाँ<small>जाँच-रन: 2.0.0 हेतु प्रस्तावित</small></td><td class="yes">हाँ<small>साक्ष्य पर हैश के साथ</small></td><td class="part">आंशिक<small>कोई कार्यान्वयन रिकॉर्ड नहीं</small></td><td class="part">आंशिक<small>अटैचमेंट पर कोई हैश नहीं</small></td><td class="part">आंशिक<small>टूल के परिणाम नियंत्रणों से जुड़े नहीं</small></td><td class="part">आंशिक<small>टेक्स्ट संदर्भ, कोई हैश नहीं</small></td></tr>
+          <tr><th scope="row">एक ऑब्जेक्ट में कई भाषाएँ</th><td class="us yes">हाँ<small>एक भाषा-मैप</small></td><td class="no">नहीं</td><td class="no">नहीं</td><td class="no">नहीं</td><td class="yes">हाँ<small>एक <code>translations</code> मैप</small></td><td class="yes">हाँ<small><code>xml:lang</code></small></td></tr>
+          <tr><th scope="row">दोबारा पैकेज करने के बाद भी टिका रहने वाला हस्ताक्षर</th><td class="us yes">हाँ<small>OSCAL से होकर राउंड ट्रिप के बाद भी</small></td><td class="no">नहीं<small>केवल बाइट हैश</small></td><td class="no">नहीं<small>बंडल के बाइट्स, टूलिंग द्वारा हस्ताक्षरित</small></td><td class="part">आंशिक<small>XML और protobuf रूपों में खो जाता है</small></td><td class="no">नहीं</td><td class="part">आंशिक<small>फिर से इंडेंट करने पर टूट जाता है</small></td></tr>
+          <tr><th scope="row">फ़ेसेट के ज़रिए विस्तार-योग्य <small>एक अनुबंध जो लागू किया जाता है, पिन किया जाता है, और उसे न समझने वाले टूल को रोक देता है</small></th><td class="us yes">हाँ<small>स्कीमा डाइजेस्ट से पिन; अज्ञात सिमेंटिक्स पर टूल रुक जाता है</small></td><td class="part">आंशिक<small>नेमस्पेस वाले props, उनके पीछे कोई स्कीमा नहीं</small></td><td class="part">आंशिक<small>बंद स्कीमा; प्रोफ़ाइल सीमित कर सकता है, जोड़ नहीं सकता</small></td><td class="part">आंशिक<small>स्ट्रिंग प्रॉपर्टी, वैकल्पिक रजिस्ट्री</small></td><td class="part">केवल टूल में<small>फ़ॉर्मेट अज्ञात कुंजियों को अनदेखा करता है</small></td><td class="part">आंशिक<small>बाहरी नेमस्पेस के एलिमेंट की ढीली जाँच</small></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="source reveal"><b>नहीं</b>: स्कीमा पढ़ा गया और उसमें इसके लिए कुछ नहीं है। <b>केवल टूल में</b>: CISO Assistant एप्लिकेशन में यह है, पर एप्लिकेशन से बाहर जाने वाले लाइब्रेरी फ़ॉर्मेट में नहीं। ये दस पंक्तियाँ इस परियोजना ने चुनी हैं, और इनमें से दो पर एक पड़ोसी फ़ॉर्मेट आगे है: JASCON में अपवाद की कोई समाप्ति नहीं होती, और कोई भी टेलरिंग बदलाव अपना लेखक दर्ज नहीं करता। कई भाषाएँ, दर्ज स्वीकृति, समय-सीमाएँ और साक्ष्य-शृंखला, इनमें से हर एक कहीं और भी मौजूद है। टूल से बाहर जाने वाले डेटा के रूप में किसी भी पड़ोसी फ़ॉर्मेट में न तो नियंत्रणों के चयन से जुड़ा जोखिम है, न पुनर्गणित जाँच-निर्णय, और न ही पिन किए गए अनुबंध वाला ऐसा विस्तार जो उसे न समझने वाले टूल को रोक दे। हर सेल का स्रोत: <a href="{{ blob }}/PRIOR-ART.md" rel="noopener">PRIOR-ART.md</a>। हर फ़ॉर्मेट में और क्या कमी है: <a href="evidence.html#prior-art">पूर्ववर्ती कार्य</a>। इनमें से किसी एक का विस्तार क्यों नहीं: <a href="{{ blob }}/jascon/references/appendix-f-objections.md" rel="noopener">हैंडबुक, परिशिष्ट F.10</a>।</p>
+  </div>
+</section>
+
+<section class="section" id="model">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">02</span> मॉडल</p>
+      <h2>दस्तावेज़ एक ग्राफ़ के रेंडर किए गए रूप बन जाते हैं</h2>
+      <p class="lede">ग्यारह उथले ऑब्जेक्ट टाइप, हर एक के साथ एक वैश्विक पहचानकर्ता, एक संस्करण और दो SHA-256 डाइजेस्ट। जिसकी ज़रूरत हर मापे गए फ़्रेमवर्क को है, वह एक स्थिर कर्नेल में रहता है। जिसकी ज़रूरत केवल एक फ़्रेमवर्क को है, वह स्कीमा सहित एक पंजीकृत फ़ेसेट में रहता है।</p>
+    </div>
+    <div class="split flip">
+      <figure class="reveal">
+        <svg class="graph" viewBox="0 0 640 470" role="img" aria-labelledby="graph-title graph-desc">
+          <title id="graph-title">JASCON ऑब्जेक्ट ग्राफ़</title>
+          <desc id="graph-desc">बाईं ओर सामग्री टाइप: Tailoring एक RequirementSet को चुनता है, जिसके सदस्य Requirement हैं; एक Mapping, Requirement को आपस में जोड़ता है। दाईं ओर सिस्टम टाइप: Implementation, Assessment और Finding एक Component का संदर्भ देते हैं। बीच में एक Risk उन Requirement का औचित्य देता है जो उसका उपचार करती हैं, और एक Check किसी Assessment के लिए एक Requirement पर निर्णय करता है। एक Attestation ग्राफ़ को हस्ताक्षरित दस्तावेज़ से बाँधता है।</desc>
+          <defs>
+            <marker id="ah" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="head" d="M0 0 10 5 0 10z"/></marker>
+            <marker id="ah-a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="head accent" d="M0 0 10 5 0 10z"/></marker>
+            <marker id="ah-p" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="head prop" d="M0 0 10 5 0 10z"/></marker>
+          </defs>
+          <text class="zone" x="30" y="16">सामग्री</text>
+          <text class="zone" x="240" y="16">संगठन</text>
+          <text class="zone" x="450" y="16">सिस्टम</text>
+
+          <path class="edge" d="M110 76V124" marker-end="url(#ah)"/>
+          <path class="edge" d="M110 172V220" marker-end="url(#ah)"/>
+          <path class="edge" d="M110 318V270" marker-end="url(#ah)"/>
+          <path class="edge" d="M30 53C2 53 2 245 28 245" marker-end="url(#ah)"/>
+          <path class="edge" d="M530 126V78" marker-end="url(#ah)"/>
+          <path class="edge" d="M530 318V270" marker-end="url(#ah)"/>
+          <path class="edge" d="M610 245C638 245 638 53 612 53" marker-end="url(#ah)"/>
+          <path class="edge" d="M450 149 192 228" marker-end="url(#ah)"/>
+          <path class="edge" d="M450 341 192 262" marker-end="url(#ah)"/>
+          <path class="edge accent" d="M290 124 177 220" marker-end="url(#ah-a)"/>
+          <path class="edge accent" d="M400 95 448 63" marker-end="url(#ah-a)"/>
+          <path class="edge accent" d="M240 245H192" marker-end="url(#ah-a)"/>
+          <path class="edge accent" d="M450 245H402" marker-end="url(#ah-a)"/>
+          <path class="edge bind" d="M110 364V402M530 364V402"/>
+
+          <text class="elabel" x="118" y="104">चुनता है</text>
+          <text class="elabel" x="118" y="200">सदस्य</text>
+          <text class="elabel" x="118" y="298">जोड़ता है</text>
+          <text class="elabel accent" x="228" y="166" text-anchor="middle" transform="rotate(-40 228 166)">औचित्य देता है</text>
+          <text class="elabel" x="322" y="181" text-anchor="middle" transform="rotate(-17 322 181)">पूरा करता है</text>
+          <text class="elabel" x="322" y="296" text-anchor="middle" transform="rotate(17 322 296)">के विरुद्ध</text>
+
+          <g class="node content"><rect x="30" y="30" width="160" height="46" rx="10"/><text x="44" y="50">Tailoring</text><text class="sub" x="44" y="65">चयन और ऑपरेशन</text></g>
+          <g class="node content"><rect x="30" y="126" width="160" height="46" rx="10"/><text x="44" y="146">RequirementSet</text><text class="sub" x="44" y="161">कैटलॉग, बेसलाइन</text></g>
+          <g class="node content"><rect x="30" y="222" width="160" height="46" rx="10"/><text x="44" y="242">Requirement</text><text class="sub" x="44" y="257">मोडैलिटी सहित खंड</text></g>
+          <g class="node content"><rect x="30" y="318" width="160" height="46" rx="10"/><text x="44" y="338">Mapping</text><text class="sub" x="44" y="353">एक क्रॉसवॉक कड़ी</text></g>
+
+          <g class="node org"><rect x="240" y="78" width="160" height="46" rx="10"/><text x="254" y="98">Risk</text><text class="sub" x="254" y="113">दायरे में क्यों है</text></g>
+          <g class="node org"><rect x="240" y="222" width="160" height="46" rx="10"/><text x="254" y="242">Check</text><text class="sub" x="254" y="257">मशीन कैसे तय करती है</text></g>
+
+          <g class="node"><rect x="450" y="30" width="160" height="46" rx="10"/><text x="464" y="50">Component</text><text class="sub" x="464" y="65">सिस्टम, सेवाएँ</text></g>
+          <g class="node"><rect x="450" y="126" width="160" height="46" rx="10"/><text x="464" y="146">Implementation</text><text class="sub" x="464" y="161">कौन क्या पूरा करता है</text></g>
+          <g class="node"><rect x="450" y="222" width="160" height="46" rx="10"/><text x="464" y="242">Assessment</text><text class="sub" x="464" y="257">पद्धति और परिणाम</text></g>
+          <g class="node"><rect x="450" y="318" width="160" height="46" rx="10"/><text x="464" y="338">Finding</text><text class="sub" x="464" y="353">कमी, कार्रवाइयाँ, विचलन</text></g>
+
+          <g class="node attest"><rect x="30" y="404" width="580" height="46" rx="10"/><text x="44" y="424">Attestation</text><text class="sub" x="44" y="439">ग्राफ़ के सिमेंटिक डाइजेस्ट को उस दस्तावेज़ से बाँधता है जिस पर किसी व्यक्ति ने हस्ताक्षर किए</text></g>
+        </svg>
+        <div class="graph-legend">
+          <span><i></i>1.0.0 में जारी</span>
+          <span class="lg-org"><i></i>नया, 2.0.0 हेतु प्रस्तावित</span>
+          <span class="lg-att"><i></i>हस्ताक्षर लेयर</span>
+        </div>
+      </figure>
+      <div class="stack-lg reveal">
+        <div class="layers compact">
+          <div class="layer l-kernel">
+            <h3><i></i>कर्नेल</h3>
+            <p>हर खंड की बाध्यता, टाइप्ड पैरामीटर और समय-सीमाएँ, सदस्यता, उपनाम, इतिहास।</p>
+            <p class="contract">मानकीय और बंद। बदलाव केवल नए संस्करण के साथ आते हैं।</p>
+          </div>
+          <div class="layer l-facet">
+            <h3><i></i>फ़ेसेट</h3>
+            <p>फ़्रेमवर्क की शब्दावली: जर्मन कथन-व्याकरण, 800-53A के उद्देश्य, सुरक्षा लक्ष्य।</p>
+            <p class="contract">पंजीकृत, स्कीमा पिन किया हुआ। जो टूल किसी फ़ेसेट को नहीं जानता, वह कारण बताकर रुक जाता है।</p>
+          </div>
+          <div class="layer l-anno">
+            <h3><i></i>एनोटेशन</h3>
+            <p>ट्रैकर id, रेंडरिंग संकेत, टूल का लेखा-जोखा।</p>
+            <p class="contract">हर अनुपालन गणना से बाहर, और सिमेंटिक डाइजेस्ट से भी बाहर।</p>
+          </div>
+        </div>
+        <p class="muted">जहाँ संभव है, वहाँ विफलताओं को व्यक्त करना ही असंभव बना दिया गया है। पाठ में मौजूद पैरामीटर टोकन को किसी घोषित पैरामीटर का नाम देना होगा। टेलरिंग ऑपरेशन किसी कथन को उसकी पहचान से संबोधित करता है, इसलिए अपस्ट्रीम का कोई शुद्धिपत्र उसे किसी दूसरे कथन की ओर नहीं मोड़ सकता।</p>
+        <a class="link-arrow" href="model.html">ग्यारह टाइप, फ़ील्ड-दर-फ़ील्ड</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="implications">
+  <div class="wrap">
+    <div class="section-head wide reveal">
+      <p class="eyebrow"><span class="no">03</span> क्या बदलता है</p>
+      <h2>जब अनुपालन डेटा पर गणना की जा सके, तब क्या होता है</h2>
+      <p class="lede">GRC इंजीनियरिंग अनुपालन को किसी भी दूसरे इंजीनियरिंग आर्टिफ़ैक्ट की तरह बरतती है: संस्करणबद्ध, टाइप्ड, परीक्षित और हस्ताक्षरित। इसके लिए ऐसा डेटा चाहिए जिस पर कोई प्रोग्राम तर्क कर सके। आठ परिणाम, हर एक अपने तंत्र और अपने साक्ष्य की स्थिति के साथ। नौवाँ परिणाम, मशीन जाँच, अगले अनुभाग में अलग से है।</p>
+    </div>
+    <div class="grid g3 reveal">
+      <article class="card feature">
+        <div class="card-top"><span class="card-no">ISO/IEC 27001 6.1.3 d</span><span class="tier tier-measured">दो बंडलों पर मापा गया</span></div>
+        <h3>प्रयोज्यता विवरण एक गणना बन जाता है</h3>
+        <p>एक Risk अपने स्वामी, अपने उपचार-निर्णय और उस निर्णय को लागू करने वाले खंडों का नाम देता है। फिर प्रिमिटिव <code>risk-coverage</code> हर उस चयनित आवश्यकता को सूचीबद्ध करता है जो किसी मूल्यांकित जोखिम पर आधारित नहीं है। पहले ऑडिटर इसे किसी स्प्रेडशीट से नमूने लेकर जाँचता था।</p>
+        <p class="how"><b>तंत्र:</b> 2.0.0 के प्रस्तावित संस्करण का Risk टाइप। उदाहरण बंडल पर वैलिडेटर 3 चयनित, 1 औचित्य सहित, 2 बिना कवरेज बताता है, और उन दो के नाम देता है।</p>
+      </article>
+      <article class="card">
+        <div class="card-top"><span class="card-no">Mapping</span><span class="tier tier-measured">मापा गया</span></div>
+        <h3>क्रॉसवॉक ऐसा डेटा है जिसका एक लेखक है</h3>
+        <p>Mapping अपने आप में एक ऑब्जेक्ट है: स्रोत, लक्ष्य, संबंध, विश्वसनीयता-स्तर और उत्पत्ति, एक-एक कथन के स्तर तक। किसी तीसरे पक्ष का क्रॉसवॉक दोनों में से किसी भी कैटलॉग का हिस्सा नहीं होता; उसके संस्करण बनाए जा सकते हैं, उनमें अंतर निकाला जा सकता है और उस पर विवाद उठाया जा सकता है।</p>
+        <p class="how"><b>तंत्र:</b> NIST IR 8477 के संबंध-कोड। 1.0.0 कॉर्पस में 1,008 Mapping।</p>
+      </article>
+      <article class="card">
+        <div class="card-top"><span class="card-no">Tailoring</span><span class="tier tier-measured">मापा गया</span></div>
+        <h3>ऐसी टेलरिंग जो अपस्ट्रीम रिलीज़ के बाद भी टिकी रहे</h3>
+        <p>Tailoring, Set के आधार पर चुनता है और पहचान के आधार पर बदलता है: यह आवश्यकता, यह कथन, यह पैरामीटर। सख़्त करने पर कोई रोक नहीं है। कमज़ोर करने के लिए एक दर्ज Deviation चाहिए, जिसे मोडल क्रियाओं के एक आंशिक क्रम के विरुद्ध जाँचा जाता है।</p>
+        <p class="how"><b>तंत्र:</b> आठ बंद ऑपरेशन, नियतात्मक रिज़ॉल्यूशन, कोई मर्ज नियम नहीं।</p>
+      </article>
+      <article class="card">
+        <div class="card-top"><span class="card-no">Attestation</span><span class="tier tier-measured">मापा गया</span></div>
+        <h3>दोबारा पैकेज करने के बाद भी टिका रहने वाला हस्ताक्षर</h3>
+        <p>अनुप्रमाणन सिमेंटिक डाइजेस्ट को बाँधता है। किसी फ़ाइल को फिर से इंडेंट करें या कोई ट्रैकर id जोड़ें, तो निर्णय Semantic Match होता है। कोई मोडल क्रिया बदलें, तो निर्णय Tamper होता है।</p>
+        <p class="how"><b>तंत्र:</b> बाइट्स पर पैकेज डाइजेस्ट, कैनोनिकल सामग्री पर सिमेंटिक डाइजेस्ट; DSSE एनवेलप, Ed25519। <a href="#try">नीचे आज़माएँ।</a></p>
+      </article>
+      <article class="card">
+        <div class="card-top"><span class="card-no">कर्नेल नियम</span><span class="tier tier-measured">मापा गया</span></div>
+        <h3>वैध का अर्थ है जाँचने योग्य</h3>
+        <p><code>{param:}</code> टोकन को किसी घोषित, टाइप्ड पैरामीटर का नाम देना होगा। फ़ेसेट अपना स्कीमा पिन करता है और घोषित करता है कि वह कौन-सी गणनाएँ बदलता है। इन नियमों पर बने कन्वर्टर को 781 ऐसे सूची-मान मिले, जिन्हें प्रोडक्शन में चल रहा एक राष्ट्रीय कैटलॉग एकल, कॉमा से अलग की गई स्ट्रिंग में भर देता है।</p>
+        <p class="how"><b>तंत्र:</b> बंद संरचनाएँ, बँधे हुए टोकन, फ़ेल-क्लोज़्ड फ़ेसेट।</p>
+      </article>
+      <article class="card">
+        <div class="card-top"><span class="card-no">text</span><span class="tier tier-measured">मापा गया</span></div>
+        <h3>एक आवश्यकता, हर भाषा</h3>
+        <p>हर मानव-पठनीय फ़ील्ड BCP 47 भाषा टैग से पाठ तक का एक मैप है। जर्मन और अंग्रेज़ी में लिखी एक आवश्यकता, एक पहचानकर्ता वाला एक ही ऑब्जेक्ट है, और यूरोपीय संघ की आधिकारिक भाषाओं में NIS2, DORA और CRA को ठीक यही चाहिए होगा।</p>
+        <p class="how"><b>तंत्र:</b> <code>text</code> प्रिमिटिव। Grundschutz++ बंडल में <code>de</code> है।</p>
+      </article>
+      <article class="card">
+        <div class="card-top"><span class="card-no">Implementation</span><span class="tier tier-measured">एक कॉर्पस पर मापा गया</span></div>
+        <h3>नामित आधार वाला इनहेरिटेंस</h3>
+        <p>एक SaaS, जो एक PaaS पर चलता है, जो एक IaaS पर चलता है: हर इनहेरिटेड कड़ी अपस्ट्रीम कंपोनेंट और उस विशिष्ट प्राधिकरण का नाम देती है जिस पर वह टिकी है। ज़िम्मेदारी हर कथन के लिए टाइप्ड है: प्रदाता, ग्राहक, साझा या इनहेरिटेड।</p>
+        <p class="how"><b>तंत्र:</b> <code>inherited-from</code> और <code>basis-ref</code> वाली एक Implementation कड़ी, जिसे कड़ी-दर-कड़ी जाँचा जाता है।</p>
+      </article>
+      <article class="card">
+        <div class="card-top"><span class="card-no">निकास</span><span class="tier tier-measured">मापा गया</span></div>
+        <h3>बाहर निकलने का रास्ता अंतर्निहित है</h3>
+        <p>कैटलॉग बंडल OSCAL 1.2.2 में एक्सपोर्ट होते हैं, जो NIST के स्कीमा के विरुद्ध वैलिडेट होता है और फिर से इम्पोर्ट करने पर वही डाइजेस्ट देता है। संदर्भ वैलिडेटर {{ n.python_lines }} पंक्तियों की एक Python फ़ाइल है, और अनुरूपता का निर्णय सार्वजनिक वेक्टर करते हैं।</p>
+        <p class="how"><b>तंत्र:</b> <code>export_oscal.py</code>, अनुरूपता कॉर्पस, Apache 2.0।</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="checks">
+  <div class="wrap">
+    <div class="split" style="margin-bottom: clamp(36px, 5vw, 56px);">
+      <div class="section-head reveal" style="margin-bottom:0">
+        <p class="eyebrow"><span class="no">04</span> जाँचें</p>
+        <h2>जब मूल्यांकनकर्ता एक मशीन हो</h2>
+        <p class="lede">जो स्कैनर 0 या 1 के साथ समाप्त होता है, वह अपनी सीमा-रेखा छिपाता है और टेलरिंग को अनदेखा करता है। Check वे तथ्य प्रकाशित करता है जिन्हें संग्राहक (collector) रिपोर्ट करता है, और वे तुलनाएँ भी जो निर्णय करती हैं; रन रिकॉर्ड में अवलोकन दर्ज रहता है।</p>
+        <div class="chips">
+          <span class="tier tier-designed">ग्यारहवाँ टाइप, 2.0.0 हेतु प्रस्तावित</span>
+          <span class="tier tier-measured">{{ n.check_vectors }} वेक्टर तीन कार्यान्वयनों में पास</span>
+        </div>
+      </div>
+      <div class="stack reveal">
+        <ul class="ticks">
+          <li><b>पास होने की सीमा Tailoring तय करता है।</b> मानदंड आवश्यकता के एक पैरामीटर से बँधे होते हैं। उसे सख़्त करें, तो कल के अवलोकन को फिर से परखा जाता है, कोड में कोई बदलाव किए बिना।</li>
+          <li><b>निर्णय की पुनर्गणना होती है।</b> वैलिडेटर हर दर्ज अवलोकन पर मानदंड लागू करके देखता है और उस पंक्ति को अस्वीकार कर देता है जिसका परिणाम भिन्न हो।</li>
+          <li><b>फ़्लीट को अनुपात मिलता है, कभी नरम निर्णय नहीं।</b> कई संसाधनों पर चलने वाली जाँच तभी पास होती है जब हर संसाधन पास हो। सभी को परखा जाता है, और परिणाम कुछ इस तरह होता है: "200 में से 12 संतुष्ट नहीं (6 %)"।</li>
+          <li><b>मापी गई अनुकूलता:</b> ComplianceAsCode के CIS Ubuntu 24.04 प्रोफ़ाइलों के 510 नियमों में से 481 घोषणात्मक रूप में फ़िट होते हैं। बाक़ी 29 मैनुअल रहते हैं।</li>
+        </ul>
+        <a class="link-arrow" href="checks.html">डिज़ाइन, साक्ष्य-शृंखला और खुले निर्णय</a>
+      </div>
+    </div>
+{{ include:_check-demo.html }}
+  </div>
+</section>
+
+<section class="section band" id="try">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">05</span> आज़माएँ</p>
+      <h2>पहले बाइट्स बदलें, फिर अर्थ</h2>
+      <p class="lede">रिपॉज़िटरी से एक उदाहरण आवश्यकता, उन दो डाइजेस्ट के साथ जिन्हें उसका कंटेंट मैनिफ़ेस्ट दर्ज करता है। इसे संपादित करें या बटनों का उपयोग करें। दोनों डाइजेस्ट आपके ब्राउज़र में उसी नियम से परिकलित होते हैं जिसका उपयोग वैलिडेटर करता है।</p>
+    </div>
+    <div class="demo reveal" id="digest-demo">
+      <div class="demo-edit">
+        <div class="window-bar">
+          <span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="window-title">jascon/examples/req-ism-1234.json</span>
+          <span class="window-note">संपादन योग्य</span>
+        </div>
+        <textarea spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="आवश्यकता ऑब्जेक्ट, संपादन योग्य">{{ file:jascon/examples/req-ism-1234.json }}</textarea>
+      </div>
+      <div class="demo-side">
+        <div class="demo-actions">
+          <p>कुछ बदलें</p>
+          <button class="demo-btn" type="button" data-edit="reindent">फ़ाइल को फिर से इंडेंट करें <small>केवल बाइट्स</small></button>
+          <button class="demo-btn" type="button" data-edit="annotate">एक ट्रैकर एनोटेशन जोड़ें <small>केवल बाइट्स</small></button>
+          <button class="demo-btn" type="button" data-edit="reorder">सदस्यों का क्रम उलटें <small>केवल बाइट्स</small></button>
+          <button class="demo-btn" type="button" data-edit="weaken">"must" को कमज़ोर करके "should" करें <small>अर्थ</small></button>
+          <button class="demo-btn reset" type="button" data-edit="reset">अनुप्रमाणित पाठ पर वापस जाएँ</button>
+        </div>
+        <div class="digests" aria-live="polite">
+          <div class="digest">
+            <div class="digest-h"><b>पैकेज डाइजेस्ट</b><span data-state="package" class="same">अपरिवर्तित</span></div>
+            <code data-out="package">sha256:&hellip;</code>
+            <small>वितरित बाइट्स पर SHA-256</small>
+          </div>
+          <div class="digest">
+            <div class="digest-h"><b>सिमेंटिक डाइजेस्ट</b><span data-state="semantic" class="same">अपरिवर्तित</span></div>
+            <code data-out="semantic">sha256:&hellip;</code>
+            <small>कैनोनिकल सामग्री पर SHA-256, एनोटेशन छोड़कर</small>
+          </div>
+        </div>
+        <div class="verdict" data-v="full" aria-live="polite">
+          <span class="verdict-k">अनुप्रमाणन जाँच का निर्णय</span>
+          <span class="verdict-v">Full Match</span>
+          <p>बाइट्स और अर्थ वही हैं जो उदाहरण बंडल के कंटेंट मैनिफ़ेस्ट में दर्ज हैं।</p>
+        </div>
+      </div>
+      <script type="application/json" id="digest-expected">{{ json:demo }}</script>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="app">
+  <div class="wrap">
+    <div class="split even" style="align-items:end; margin-bottom: clamp(32px, 4vw, 52px);">
+      <div class="section-head reveal" style="margin-bottom:0">
+        <p class="eyebrow"><span class="no">06</span> टूल</p>
+        <h2>सर्वर के बिना काम करने वाला ऐप</h2>
+        <p class="lede">JASCON ऐप ब्राउज़र पेजों का एक समूह है, जिसमें न कोई बिल्ड चरण है और न कोई बैकएंड। आप जो बंडल लोड करते हैं, वह आपके ब्राउज़र में ही रहता है। टैब काम के क्रम का अनुसरण करते हैं।</p>
+      </div>
+      <div class="stack reveal">
+        <ul class="ticks">
+          <li><b>Import</b> पेज पर कोई OSCAL कैटलॉग या प्रोफ़ाइल इम्पोर्ट करें। Grundschutz++ के नियम साथ दिए गए बंडल को सिमेंटिक डाइजेस्ट के अनुसार ऑब्जेक्ट-दर-ऑब्जेक्ट दोबारा बना देते हैं।</li>
+          <li><b>Risk, Tailor, Map, Implement, Assess:</b> हर पेज वर्किंग सेट में वास्तविक ऑब्जेक्ट लिखता है और हर ऑब्जेक्ट के दोनों डाइजेस्ट के साथ एक बंडल एक्सपोर्ट करता है।</li>
+          <li><b>ड्राफ़्ट मॉडल से, निर्णय कर्नेल से।</b> आपके कुंजी दर्ज करने के बाद दो पेज किसी भाषा मॉडल से पूछ सकते हैं। ड्राफ़्ट को कर्नेल नियम परखते हैं, और वह तभी सहेजा जाता है जब आप उसे स्वीकार करें।</li>
+        </ul>
+      </div>
+    </div>
+    <div class="screens reveal" data-tabs>
+      <div class="screen-tabs" role="tablist" aria-label="ऐप की स्क्रीनें">
+        <button class="screen-tab" role="tab" aria-selected="true" data-panel="screen-browse">Browse</button>
+        <button class="screen-tab" role="tab" aria-selected="false" data-panel="screen-risk">Risk</button>
+        <button class="screen-tab" role="tab" aria-selected="false" data-panel="screen-tailor">Tailor</button>
+        <button class="screen-tab" role="tab" aria-selected="false" data-panel="screen-checks">Checks</button>
+        <button class="screen-tab" role="tab" aria-selected="false" data-panel="screen-validate">Validate</button>
+      </div>
+      <figure class="screen" id="screen-browse" role="tabpanel">
+        <div class="frame">
+          <div class="frame-bar"><span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="frame-url">jascon.net/app/#load=../converted_examples/DE.BSI/bsi-core-bundle/&amp;tool=browse</span></div>
+          <img src="assets/img/app-browse.webp" width="2560" height="1500" loading="lazy" alt="Grundschutz++ बंडल पर Browse पेज: आवश्यकताओं की सूची, डेटा से बने पंद्रह फ़िल्टर, और एक खुली हुई आवश्यकता, उसके कर्नेल फ़ील्ड, फ़ेसेट और एनोटेशन के साथ।">
+        </div>
+        <figcaption><p>Grundschutz++ बंडल पर Browse। फ़िल्टर डेटा से बनते हैं: हर कर्नेल फ़ील्ड और हर बार-बार आने वाला फ़ेसेट मान एक फ़िल्टर बन जाता है। सामग्री: BSI, CC BY-SA 4.0।</p><a class="link-arrow" href="app/index.html#load=../converted_examples/DE.BSI/bsi-core-bundle/&amp;tool=browse">यह व्यू खोलें</a></figcaption>
+      </figure>
+      <figure class="screen" id="screen-risk" role="tabpanel">
+        <div class="frame">
+          <div class="frame-bar"><span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="frame-url">jascon.net/app/#load=../jascon/examples/&amp;tool=risk</span></div>
+          <img src="assets/img/app-risk.webp" width="2560" height="1500" loading="lazy" alt="Risk पेज: एक रजिस्टर, जिसमें संगठन द्वारा परिभाषित स्केल पर संभावना बनाम प्रभाव का हीट मैप है।">
+        </div>
+        <figcaption><p>उदाहरण बंडल पर जोखिम रजिस्टर, BSI 200-3 मैट्रिक्स के हीट मैप के साथ। स्केल संगठन के अपने होते हैं; कर्नेल स्तर को और उस स्केल को संग्रहीत करता है जिस पर वह स्तर है।</p><a class="link-arrow" href="app/index.html#load=../jascon/examples/&amp;tool=risk">यह व्यू खोलें</a></figcaption>
+      </figure>
+      <figure class="screen" id="screen-tailor" role="tabpanel">
+        <div class="frame">
+          <div class="frame-bar"><span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="frame-url">jascon.net/app/#load=../jascon/examples/&amp;tool=tailor</span></div>
+          <img src="assets/img/app-tailor.webp" width="2560" height="1500" loading="lazy" alt="Tailor पेज: रिज़ॉल्व किया गया एक Tailoring, हर ऑपरेशन अपने लक्ष्य, पहले और बाद के मान, और मोडैलिटी-क्रम के निर्णय के साथ।">
+        </div>
+        <figcaption><p>रिज़ॉल्व किया गया एक Tailoring: हर ऑपरेशन अपने लक्ष्य, पहले और बाद की स्थिति, और निर्णय के साथ। प्राधिकार-स्तर डेटा से व्युत्पन्न होता है।</p><a class="link-arrow" href="app/index.html#load=../jascon/examples/&amp;tool=tailor">यह व्यू खोलें</a></figcaption>
+      </figure>
+      <figure class="screen" id="screen-checks" role="tabpanel">
+        <div class="frame">
+          <div class="frame-bar"><span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="frame-url">jascon.net/app/#load=../jascon/examples/&amp;tool=checks</span></div>
+          <img src="assets/img/app-checks.webp" width="2560" height="1500" loading="lazy" alt="Checks पेज: एक खुली हुई जाँच, उस आवश्यकता के खंडों के साथ जिसे वह कवर करती है, उसका प्लेटफ़ॉर्म और वे तथ्य जिन्हें उसका संग्राहक रिपोर्ट करता है।">
+        </div>
+        <figcaption><p>उदाहरण बंडल पर Checks पेज: संग्राहक द्वारा रिपोर्ट किए जाने वाले तथ्य, निर्णय करने वाली तुलनाएँ, संग्राहक का कोड। कोई मॉडल जाँच का ड्राफ़्ट बना सकता है; उस ड्राफ़्ट को कर्नेल नियम और एक रीड-ओनली लिंट परखते हैं। ऐप संग्राहक नहीं चलाता।</p><a class="link-arrow" href="app/index.html#load=../jascon/examples/&amp;tool=checks">यह व्यू खोलें</a></figcaption>
+      </figure>
+      <figure class="screen" id="screen-validate" role="tabpanel">
+        <div class="frame">
+          <div class="frame-bar"><span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="frame-url">jascon.net/app/#load=../jascon/examples/&amp;tool=validate</span></div>
+          <img src="assets/img/app-validate.webp" width="2560" height="1500" loading="lazy" alt="एक रन के बाद Validate पेज: टाइप के अनुसार ऑब्जेक्ट की गिनती, कोई त्रुटि नहीं, और हर Tailoring का व्युत्पन्न स्तर।">
+        </div>
+        <figcaption><p>Validate संदर्भ वैलिडेटर से पोर्ट किए गए कर्नेल नियम चलाता है, हर नियम को उसके अनुरूपता वेक्टरों के विरुद्ध। Python वैलिडेटर ही संदर्भ बना रहता है।</p><a class="link-arrow" href="app/index.html#load=../jascon/examples/&amp;tool=validate">यह व्यू खोलें</a></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="evidence">
+  <div class="wrap">
+    <div class="split">
+      <div class="section-head reveal" style="margin-bottom:0; position:sticky; top:104px;">
+        <p class="eyebrow"><span class="no">07</span> प्रमाण</p>
+        <h2>हर दावे को वास्तविक कैटलॉग की कसौटी पर खरा उतरना होगा</h2>
+        <p class="lede">परियोजना साक्ष्य-गेटों से होकर आगे बढ़ती है। कोई तंत्र विनिर्देश में तभी आता है जब कोई प्रकाशित कैटलॉग उसकी माँग करे, और इस साइट पर हर संख्या या तो मापी गई है या उस पर कोई दूसरा लेबल लगा है।</p>
+        <div class="chips" style="margin-top:6px">
+          <span class="tier tier-measured">मापा गया</span>
+          <span class="tier tier-designed">डिज़ाइन किया गया</span>
+          <span class="tier tier-open">खुला</span>
+        </div>
+        <a class="link-arrow" href="evidence.html">गेट, कॉर्पस और सीमाएँ</a>
+      </div>
+      <div class="gates reveal">
+        <div class="gate">
+          <span class="gate-when">मध्य 2026</span><span class="gate-rail"><i></i></span>
+          <div class="gate-body"><h3>गेट 1: सेंसस</h3><p>आर्किटेक्चर बनाने से पहले ISM, Grundschutz++ और FedRAMP CR26 की आख़िरी prop तक सूची बनाई गई। गिने गए 22,000 props में से 70 % से अधिक को किसी विस्तार की ज़रूरत ही नहीं थी: वे सदस्यता, क्रम, इतिहास और खंड-संरचना थे।</p></div>
+        </div>
+        <div class="gate">
+          <span class="gate-when">जुलाई 2026</span><span class="gate-rail"><i></i></span>
+          <div class="gate-body"><h3>गेट 2: निष्पादन योग्य</h3><p>एक मानकीय JSON Schema, स्टैंडर्ड-लाइब्रेरी फ़ेसेट, एक अनुरूपता कॉर्पस और एक वैलिडेटर, जो हर ऑब्जेक्ट के दोनों डाइजेस्ट फिर से सत्यापित करता है।</p></div>
+        </div>
+        <div class="gate">
+          <span class="gate-when">22 जुलाई 2026</span><span class="gate-rail"><i></i></span>
+          <div class="gate-body"><h3>गेट 3 और 4, रिलीज़ 1.0.0</h3><p>अपनी बेसलाइनों सहित SP 800-53, CSF 2.0 और SSP से POA&amp;M तक का एक पूरा सेट, कर्नेल स्कीमा में कोई बदलाव किए बिना रूपांतरित। हस्ताक्षर सत्यापन, PowerShell में दूसरा वैलिडेटर, और OSCAL राउंड ट्रिप।</p></div>
+        </div>
+        <div class="gate rc">
+          <span class="gate-when">10 नवंबर 2026</span><span class="gate-rail"><i></i></span>
+          <div class="gate-body"><h3>2.0.0-rc.1: Risk</h3><p>दसवाँ टाइप। 1.0.0 कॉर्पस का हर बंडल नए स्कीमा के तहत बिना बदलाव वैलिडेट होता है। प्रस्तावित संस्करण की एक बाहरी समीक्षा से 23 नए वेक्टर निकले, जिनमें से हर एक उस समय के वैलिडेटर पर विफल होता था।</p></div>
+        </div>
+        <div class="gate rc">
+          <span class="gate-when">12 नवंबर 2026</span><span class="gate-rail"><i></i></span>
+          <div class="gate-body"><h3>2.0.0-rc.2: Check</h3><p>ग्यारहवाँ टाइप, छह दर्ज निर्णयों के साथ स्वीकृत। सेंसस में शामिल कोई भी प्राधिकरण मशीन जाँच प्रकाशित नहीं करता, इसलिए प्रमोशन नियम में उस डेटा के लिए एक खंड जोड़ा गया जो केवल कैटलॉग के उपभोक्ता के पास होता है। {{ n.check_vectors }} वेक्टर, दोनों वैलिडेटरों में हरे। <a href="checks.html">जाँचों पर और जानकारी।</a></p></div>
+        </div>
+        <div class="gate rc">
+          <span class="gate-when">12 नवंबर 2026</span><span class="gate-rail"><i></i></span>
+          <div class="gate-body"><h3>2.0.0-rc.3: एडवाइस पैक <span class="tier tier-designed">रिलीज़ कैंडिडेट</span></h3><p>वेंडर की अनुशंसाएँ, Component के एक ऐसे बंडल के रूप में जिसके इम्पोर्ट से आवश्यकताएँ या मूल्यांकन नहीं बदले जा सकते। कोई नया टाइप नहीं, ग्यारह नियम, {{ n.advice_vectors }} वेक्टर और एक तैयार उदाहरण पैक, दोनों वैलिडेटरों में हरे। <a href="model.html#advice">एडवाइस पैक पर और जानकारी।</a></p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="roles">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">08</span> यह किसके लिए है</p>
+      <h2>चार भूमिकाएँ, हर एक का एक पहला क़दम</h2>
+      <p class="lede">इनमें से हर एक में एक दिन लगता है और किसी की अनुमति की ज़रूरत नहीं होती।</p>
+    </div>
+    <div class="grid g4 reveal">
+      <article class="card role">
+        <span class="who">आप एक फ़्रेमवर्क प्रकाशित करते हैं</span>
+        <h3>प्राधिकरण और मानक निकाय</h3>
+        <p>आपका कैटलॉग अपनी संरचना बनाए रखता है। बेसलाइनें Set बनती हैं, वेरिएंट Tailoring बनते हैं, और आपकी शब्दावली स्कीमा सहित एक फ़ेसेट बनती है।</p>
+        <p class="move"><b>पहला क़दम</b>एक नेमस्पेस चुनें, एक Set लिखें और दस आवश्यकताओं को फिर से एनकोड करें। या Import पेज में अपना कैटलॉग खोलें।</p>
+      </article>
+      <article class="card role">
+        <span class="who">आप टूल बनाते हैं</span>
+        <h3>GRC वेंडर और प्लेटफ़ॉर्म टीमें</h3>
+        <p>एक JSON Schema, एक सीरियलाइज़ेशन, दस प्रिमिटिव, जिनका तर्क विफलता पर प्रिंट होता है। न कोई मेटास्कीमा, न प्रोफ़ाइल रिज़ॉल्यूशन।</p>
+        <p class="move"><b>पहला क़दम</b>अनुरूपता कॉर्पस क्लोन करें और अपनी भाषा में एक वैलिडेटर लिखें। वेक्टर ही निर्णायक हैं।</p>
+      </article>
+      <article class="card role">
+        <span class="who">आप अनुपालन संभालते हैं</span>
+        <h3>GRC इंजीनियर, CISO, ISMS स्वामी</h3>
+        <p>आपका जोखिम रजिस्टर, प्रयोज्यता विवरण, कार्यान्वयन विवरण और निष्कर्ष, एक रिपॉज़िटरी में फ़ाइलों के रूप में, जिनकी समीक्षा कोड की तरह होती है।</p>
+        <p class="move"><b>पहला क़दम</b>ऐप में SP 800-53 या Grundschutz++ लोड करें, तीन जोखिम लिखें और कवरेज देखें।</p>
+      </article>
+      <article class="card role">
+        <span class="who">आप मूल्यांकन या ख़रीद करते हैं</span>
+        <h3>ऑडिटर, मूल्यांकनकर्ता, ख़रीद विभाग</h3>
+        <p>जो अनुमोदित हुआ, उसे आप अपनी ही मशीन पर, ऑफ़लाइन सत्यापित करते हैं। PowerShell वैलिडेटर को एक सामान्य Windows मशीन चाहिए, और कुछ नहीं।</p>
+        <p class="move"><b>पहला क़दम</b>किसी आपूर्तिकर्ता से एक बंडल माँगें और उस पर वैलिडेटर चलाएँ। कॉर्पस परिणामों के बिना अनुरूपता के दावे को एक डेटाशीट जितना ही मानें।</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0">
+  <div class="wrap">
+    <div class="cta reveal">
+      <div>
+        <h2>एक मेंटेनर, और अभी तक कोई तृतीय-पक्ष उपयोगकर्ता नहीं</h2>
+        <p>{{ facts.measured.date }} को यही स्थिति है, और यही इस साइट के होने का कारण है। तीन योगदान इसे सबसे ज़्यादा बदलेंगे: ऐसा वैलिडेटर जिसे किसी ऐसे व्यक्ति ने लिखा हो जिसने विनिर्देश नहीं लिखा, अपने ही प्रकाशक द्वारा रूपांतरित कोई कैटलॉग, और गिनती के साथ आने वाली आपत्तियाँ।</p>
+      </div>
+      <div class="cta-actions">
+        <a class="btn btn-primary" href="join.html">कैसे भाग लें <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a class="btn btn-ghost" href="{{ repo }}" rel="noopener">GitHub पर रिपॉज़िटरी <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a class="btn btn-ghost" href="{{ blob }}/drafts/jascon-specification-1.0.0.md" rel="noopener">विनिर्देश 1.0.0 <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>

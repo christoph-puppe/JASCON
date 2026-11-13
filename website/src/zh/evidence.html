@@ -1,0 +1,269 @@
+---
+title: 依据：哪些经过实测，哪些没有 | JASCON
+description: 一致性测试语料库、两个参考校验器、已转换的目录及其许可证、证据关口、尚未解决的局限以及同类格式。每个数字都标明为实测、已设计或未决。
+nav: evidence
+---
+<section class="page-hero">
+  <div class="wrap">
+    <p class="eyebrow">依据</p>
+    <h1>测量了什么、在什么上测量，以及哪些没有测量</h1>
+    <p class="lede">本项目遵循三条规则。每项主张都标明为实测、已设计或假设。没有已发布目录的需要，任何机制都不会进入规范。每一项禁止性规定都写明它所防止的、经过统计的失败。本页把第一条规则应用于本项目自身。</p>
+    <div class="chips">
+      <span class="tier tier-measured">实测</span>
+      <span class="tier tier-designed">已设计</span>
+      <span class="tier tier-open">未决</span>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="conformance">
+  <div class="wrap">
+    <div class="split">
+      <div class="stack-lg reveal">
+        <div class="section-head" style="margin-bottom:0">
+          <p class="eyebrow"><span class="no">01</span> 一致性</p>
+          <h2>测试集是规范的裁判</h2>
+          <p class="lede">一个工具是否一致，由测试语料库说了算。{{ facts.measured.date }}，在提交 <code>{{ facts.measured.commit }}</code> 上，参考校验器通过了分属 {{ n.families }} 个族的 {{ n.vectors }} 个测试向量中的全部 {{ n.vectors }} 个，并重新验证了本站提供的 {{ n.bundles }} 个捆绑包中 {{ n.shipped_objects }} 个对象的两个摘要。</p>
+        </div>
+        <ul class="chips">
+{{ html.family_chips }}
+        </ul>
+        <p class="small">已发布的 1.0.0 包含十二个族共 157 个测试向量。<code>risk</code>、<code>kernel</code> 和 <code>scale</code> 随 2.0.0-rc.1 加入，{{ n.check_vectors }} 个 <code>check</code> 测试向量随 2.0.0-rc.2 加入，{{ n.advice_vectors }} 个 <code>advice</code> 测试向量随 2.0.0-rc.3 加入。</p>
+      </div>
+      <div class="stack reveal">
+        <article class="card">
+          <div class="card-top"><h3>validate_core.py</h3><span class="tier tier-measured">构建时实测</span></div>
+          <p>参考实现：一个 {{ n.python_lines }} 行的 Python 文件，唯一的依赖是 <code>jsonschema</code>。它包含规范化、两种摘要、裁剪法则、Ed25519 和 DSSE 验证、捆绑包组合、风险覆盖以及一个 I-Regexp 引擎。</p>
+        </article>
+        <article class="card">
+          <div class="card-top"><h3>validate_core.ps1</h3><span class="tier tier-measured">2026年11月12日实测</span></div>
+          <p>孪生实现：{{ n.powershell_lines }} 行 Windows PowerShell 5.1 代码，没有任何依赖，面向审计人员手头已有的机器。11月12日，它在一个托管的 Windows 运行器上，对全部 {{ n.vectors }} 个测试向量、五个捆绑包、完整示例包和示例文件夹返回了与 Python 参考实现相同的计数。一个<a href="{{ repo }}/actions/workflows/validators.yml" rel="noopener">工作流</a>会在每次变更时重复这次运行。</p>
+        </article>
+        <article class="card">
+          <div class="card-top"><h3>第三个，在浏览器中</h3><span class="tier tier-measured">实测</span></div>
+          <p>应用的校验页面运行内核规则的 JavaScript 移植版本，覆盖全部 {{ n.families }} 个测试向量族。应用的 readme 列出了它留给 Python 校验器处理的内容。</p>
+        </article>
+        <p class="small">行数采用关口 4 报告的计数方法：统计非空且不以 <code>#</code> 开头的行。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="corpora">
+  <div class="wrap">
+    <div class="section-head wide reveal">
+      <p class="eyebrow"><span class="no">02</span> 语料库</p>
+      <h2>十一次转换经过实测，其中五个对外提供</h2>
+      <p class="lede">每个转换器都会生成一份覆盖报告，列出每条规则及其计数，并报告源数据中的缺陷而不加修复。根据发布者的条款，有五个捆绑包允许再分发，本站提供这些捆绑包。您可以在应用中打开其中任何一个。</p>
+    </div>
+    <div class="table-wrap reveal">
+      <table>
+        <thead><tr><th>语料库</th><th class="num">对象数</th><th>类型</th><th>内容许可证</th><th></th></tr></thead>
+        <tbody>
+{{ html.bundle_rows }}
+        </tbody>
+      </table>
+    </div>
+    <p class="source reveal">对象数量在构建时实测。这些转换均非由发布者制作、审阅或认可。本项目的 Apache 许可证不适用于这些捆绑包；适用的是每个捆绑包旁附的许可说明。</p>
+
+    <div class="split even reveal" style="margin-top: clamp(40px, 5vw, 64px);">
+      <div class="stack">
+        <h3>已实测，未对外提供</h3>
+        <p class="muted">另有六个语料库为 1.0.0 进行了转换和实测。在审查了发布者的条款之后，它们的捆绑包于 2026年11月10日从仓库中移除。转换器和覆盖报告仍然保留，因此任何有权获取源文件的人都可以重新生成这些捆绑包。</p>
+        <ul class="plain">
+          <li>CIS Controls v8.1 和 CIS Ubuntu 24.04 LTS Benchmark：其条款禁止衍生作品。</li>
+          <li>BSI C5:2026、BSI C3A 和比利时 CyberFundamentals 2025：未找到许可声明。</li>
+          <li>FedRAMP CR26：美国政府作品，其仓库未声明许可证。</li>
+        </ul>
+      </div>
+      <div class="stack">
+        <h3>1.0.0 的测量 <span class="tier tier-measured">2026年7月22日</span></h3>
+        <ul class="plain">
+          <li>十一个捆绑包，6,914 个对象，每个对象的两个摘要均经重新验证。</li>
+          <li>源数据中共有 251,591 个叶值，每条源路径都有一个已声明的目标位置。</li>
+          <li>十个目录捆绑包导出为 OSCAL 1.2.2：通过 NIST 发布版 Schema 的校验，重新导入后，5,886 个对象中有 5,886 个语义摘要一致。</li>
+          <li>与源数据相比的体积：ISM 缩小 29%，Grundschutz++ 缩小 50%，CR26 增大 55%。源数据冗余时，本格式更小；原有的定制格式本就简洁时，本格式更大。</li>
+        </ul>
+        <a class="link-arrow" href="{{ blob }}/drafts/gate-4-measurement.md" rel="noopener">关口 4 测量报告</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="gates">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">03</span> 关口</p>
+      <h2>仅凭叙述，什么都无法过关</h2>
+    </div>
+    <div class="gates reveal">
+      <div class="gate">
+        <span class="gate-when">2026年年中</span><span class="gate-rail"><i></i></span>
+        <div class="gate-body"><h3>关口 1：普查 <span class="tier tier-measured">已完成</span></h3><p>在绘制架构之前，对 ISM（1,150 项控制措施，8,958 个 prop）、Grundschutz++（13,315 个 prop）和 FedRAMP CR26（246 条规则，没有 prop）进行了清点。内核就是经测量这三者都需要的内容。</p></div>
+      </div>
+      <div class="gate">
+        <span class="gate-when">2026年7月</span><span class="gate-rail"><i></i></span>
+        <div class="gate-body"><h3>关口 2：可执行 <span class="tier tier-measured">已完成</span></h3><p>具有封闭且互斥结构的规范性 JSON Schema、七个标准库分面描述符、一致性测试语料库和参考校验器。</p></div>
+      </div>
+      <div class="gate">
+        <span class="gate-when">2026年7月22日</span><span class="gate-rail"><i></i></span>
+        <div class="gate-body"><h3>关口 3：客户测试 <span class="tier tier-measured">已完成</span></h3><p>SP 800-53 Rev 5.2.0 及四个 800-53B 基线、CSF 2.0，以及由 SSP、评估计划、评估结果和 POA&amp;M 组成的完整生命周期文档集。内核 Schema 无需任何改动。该语料库暴露了参考校验器中的两个缺陷，均已修复。</p></div>
+      </div>
+      <div class="gate">
+        <span class="gate-when">2026年7月22日</span><span class="gate-rail"><i></i></span>
+        <div class="gate-body"><h3>关口 4：引擎，以及发布 1.0.0 <span class="tier tier-measured">已完成</span></h3><p>基于无依赖 Ed25519 实现的 DSSE 签名验证、捆绑包组合、条件规则、PowerShell 孪生实现以及双向 OSCAL 导出。规范经历了仓库内的对抗性评审和一轮外部审阅；每个发现项都有记录在案的裁定。其中一项修复找回了 239 个被某个转换器悄无声息地合并掉的 ISM 分类体系集合。</p></div>
+      </div>
+      <div class="gate rc">
+        <span class="gate-when">2026年11月10日</span><span class="gate-rail"><i></i></span>
+        <div class="gate-body"><h3>2.0.0-rc.1：Risk 成为第十种类型</h3><p>1.0.0 语料库的全部 6,914 个对象无需修改即可通过新 Schema 的校验。普查所涵盖的权威机构都不发布风险记录，因为风险登记册是使用方自己的数据。有三项标准要求具备这种记录：ISO/IEC 27001、BSI Standard 200-3 和 NIST SP 800-30。</p></div>
+      </div>
+      <div class="gate rc">
+        <span class="gate-when">2026年11月12日</span><span class="gate-rail"><i></i></span>
+        <div class="gate-body"><h3>2.0.0-rc.2：Check 成为第十一种类型</h3><p>11月11日提出，附带 Schema、校验器、156 个测试向量，以及对两个开放检查语料库的普查：ComplianceAsCode 中 CIS Ubuntu 24.04 配置文件的 510 条规则里有 481 条适配，且两个语料库中没有任何比较需要 I-Regexp 之外的正则表达式。次日连同六项决定被接受。晋升规则新增了一项条款，适用于目录权威机构不发布的类型；Risk 和 Check 都依据这一条款进入。目前共有 {{ n.check_vectors }} 个测试向量。</p></div>
+      </div>
+      <div class="gate rc">
+        <span class="gate-when">2026年11月12日</span><span class="gate-rail"><i></i></span>
+        <div class="gate-body"><h3>2.0.0-rc.3：建议包，以及两个类型化日期 <span class="tier tier-designed">发布候选版，尚未打标签</span></h3><p>厂商建议以单个发布文件的形式提供，连同八项记录在案的决定被接受：没有新增类型，包含十一条规则、{{ n.advice_vectors }} 个测试向量，以及一个带签名证明的完整示例包。在随附的捆绑包上运行时，关于 <code>capability-ref</code> 的规则在转换后的 NIST 示例中发现了一条边，它引用了其所属组件并未声明的能力。同一天，作者关闭了打标签前剩下的四个问题。1.0.0 中作为自由文本的两个字段现已类型化：偏离的登记日期和措施的截止日期。</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="limits">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">04</span> 局限</p>
+      <h2>尚未证明的内容</h2>
+      <p class="lede">以下是截至 {{ facts.measured.date }} 的未决问题。每一项同时也是外部贡献比维护者本人的工作更有分量的地方。</p>
+    </div>
+    <div class="limits reveal">
+      <div class="limit">
+        <h3>没有第三方用户 <span class="tier tier-open">未决</span></h3>
+        <p>2026年11月10日的一次搜索显示，除其自身仓库外，没有任何地方提到 JASCON。没有权威机构用它发布内容，也没有厂商读取它。已实测的转换结果以及在已发布目录中发现的缺陷，无需采用该格式即可使用。</p>
+      </div>
+      <div class="limit">
+        <h3>两个校验器出自同一位作者 <span class="tier tier-open">未决</span></h3>
+        <p>Python 参考实现和 PowerShell 孪生实现均由项目作者在 AI 辅助下依据同一批资料编写。二者的独立性仅限于编程语言和运行时。该关口衡量的是规范能否确定一个实现，而不是衡量一个陌生人用一个周末能做出什么。</p>
+      </div>
+      <div class="limit">
+        <h3>路径覆盖不等于值到达 <span class="tier tier-open">未决，待办 41</span></h3>
+        <p>覆盖报告统计的是具有已声明目标位置的源路径。每个值是否真正到达，只在一个语料库上测量过，即 NIST 示例系统：835 个叶值中有 394 个原样出现在捆绑包中，另有 122 个内容值根本没有到达。其余十个语料库尚未测量。</p>
+      </div>
+      <div class="limit">
+        <h3>第一个 Risk 语料库停留在初始状态 <span class="tier tier-open">未决</span></h3>
+        <p>OSCAL 的风险数据没有责任人、没有单一等级，也没有接受日期。从中转换得到的风险无法离开 <code>identified</code> 状态，因此在真实的转换数据上，风险覆盖会把每条要求都显示为未覆盖。带有已处置风险的覆盖情况仅在示例捆绑包上展示。</p>
+      </div>
+      <div class="limit">
+        <h3>Check 的结构仅基于两个平台定型 <span class="tier tier-open">未决</span></h3>
+        <p>Check 类型的适配度只在 Linux 主机和 Kubernetes 上统计过。没有统计过任何针对云 API 的检查，仓库中没有任何东西运行采集器，完整示例是针对一个桩（stub）运行的。在统计的 510 条规则中，有 29 条不适合声明式形式，仍需人工处理。<a href="checks.html#state">查看完整现状。</a></p>
+      </div>
+      <div class="limit">
+        <h3>2.0.0 是候选版本，而非正式发布 <span class="tier tier-open">未决</span></h3>
+        <p>已没有待决事项，两个校验器在候选版本的全部 {{ n.vectors }} 个测试向量上均为绿色。打标签是作者要做的一步，目前尚未进行。在此之前，已发布的版本是 1.0.0，2.0.0 的结构仍可能变化。</p>
+      </div>
+      <div class="limit">
+        <h3>并非每个 1.0.0 捆绑包都是 2.0.0 捆绑包 <span class="tier tier-measured">已决定</span></h3>
+        <p>在 rc.2 之前，2.0.0 Schema 接受 1.0.0 所接受的一切。从 rc.3 起，偏离的登记日期必须是一个日期，措施的截止日期必须是类型化的时间点或时长。在这两个字段中任一使用自由文本的 1.0.0 捆绑包都必须进行转换。随附的五个捆绑包和示例文件夹全部符合要求。含 Unicode 类别的模式遵循其运行机器上的 Unicode 数据库，因此一个较晚才分配的码位可能在两台机器上得出两种判定；需要唯一判定的作者应写出字符范围。</p>
+      </div>
+      <div class="limit">
+        <h3>建议包仅以一个示例文件为依据 <span class="tier tier-designed">已设计</span></h3>
+        <p>没有任何目录权威机构发布厂商建议。对于此类数据，晋升规则要求：要么有一项标准规定必须具备此记录，要么有两个内容经过统计的开放实现。建议包两者都没有。能力上的条款级字段仅以 NIST 示例中的一个虚构组件定义为依据，其中有三条建议、两个条款级条目和两个建议参数值；产品版本字段则没有任何经过统计的依据。两者均由作者在违背该规则的情况下决定纳入内核，规范也如实记录了这一点。尚无厂商发布过建议包；建议包构建器可以导入 OSCAL 组件定义，NIST 自己的示例在导入时不会丢失建议包能够容纳的任何内容，但还没有任何由厂商发布的组件定义经过它的处理。这项普查仍有待完成。</p>
+      </div>
+      <div class="limit">
+        <h3>随附示例中的已知缺陷 <span class="tier tier-open">未决，待办 46 和 55</span></h3>
+        <p>示例证明仅作说明之用：其主体摘要与任何示例对象都不匹配。Assessment 的方法载荷尚未按其锁定的分面 Schema 进行校验，而仓库中现有的三个都会校验失败。</p>
+      </div>
+      <div class="limit">
+        <h3>同类格式领先的两处 <span class="tier tier-open">未决，待办 65 和 66</span></h3>
+        <p>2026年11月13日的比较发现了两处。Deviation 记录了它的登记时间和批准人，但没有到期时间；而 CISO Assistant 中的安全例外有到期日期，OSCAL 中的风险有期限。裁剪操作不记录其自身的作者：弱化需要一条经批准的 Deviation，其他每项变更只能通过包含它的 Tailoring 来归属作者，而 CISO Assistant 会记录每一项变更。两者均已作为第 65 和 66 项列入待办清单，各自都需要作者作出决定。</p>
+      </div>
+      <div class="limit">
+        <h3>治理只靠一个人 <span class="tier tier-open">未决</span></h3>
+        <p>手册描述了一个联邦式注册中心和一位标准库管理人。两者都还不存在。目前只有一位以个人身份工作的维护者、一份公开的决策登记册，以及一致性测试语料库。</p>
+      </div>
+    </div>
+    <p class="source reveal">带计数的完整队列：<a href="{{ blob }}/drafts/jascon-v0.6-spec-feedback-backlog.md" rel="noopener">规范反馈待办清单</a>。条目凭证据进入，并通过<a href="{{ blob }}/drafts/jascon-decision-rationale-register.md" rel="noopener">决策登记册</a>中的一条记录退出。</p>
+  </div>
+</section>
+
+<section class="section" id="prior-art">
+  <div class="wrap">
+    <div class="section-head wide reveal">
+      <p class="eyebrow"><span class="no">05</span> 现有技术</p>
+      <h2>同类格式缺少什么</h2>
+      <p class="lede">分两轮完成。前五行于 2026年11月13日对照指定版本的 Schema 或代码进行了核查：OSCAL 1.2.3、Gemara 1.6.0、CycloneDX 1.7.2、CISO Assistant，以及 XCCDF 1.2 与 SCAP 1.4。其下各行来自 11月10日的调研，资料取自公开仓库；无法访问一手站点时，则取自二手来源。没有转换任何同类格式的数据，因此表中每一格说明的是格式本身提供了什么，而不是某个部署用它做了什么。</p>
+    </div>
+    <div class="table-wrap reveal">
+      <table>
+        <thead><tr><th>格式</th><th>涵盖内容</th><th>缺少内容</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">OSCAL (NIST)</th><td>目录（catalog）、profile、组件定义、系统安全计划、评估计划与评估结果、POA&amp;M，以及自 1.2.0 起的控制措施映射。从控制措施到带哈希的证据文件的完整链条；风险上的期限；一个无法修改目录的厂商模型</td><td>风险只存在于评估结果和 POA&amp;M 中，从不与它本可作为依据的选择并列。profile 变更不记录作者。没有任何结构能承载第二种语言。没有原生签名：上游拒绝了内联签名（issue 245），只剩下字节哈希。扩展 prop 带有一个无人校验的命名空间字符串，而为 SP 800-53 编写的核心约束也会约束其他框架（#2118、#2112）</td></tr>
+          <tr><th scope="row">Gemara (OpenSSF)</th><td>分层目录，涵盖指南、控制措施、威胁、风险和能力；带有类型化关系、强度和置信度的映射文档；证据带摘要的评估日志；以 CUE 编写的 Schema。被 FINOS Common Cloud Controls 和 OpenSSF OSPS Baseline 采用</td><td>没有第二种语言的正文。发现项或豁免没有截止日期或到期时间。没有实施记录：模型为其指定了一个层级，却没有提供 Schema。接受风险时没有批准人或日期。签名覆盖的是已发布捆绑包的字节，由工具在 Schema 之外完成。Schema 是封闭的：CUE profile 可以收窄它们，但不能新增字段。策略和风险 Schema 被标记为实验性</td></tr>
+          <tr><th scope="row">CycloneDX Attestations (OWASP, ECMA-424)</th><td>以数据表示的标准；映射到主张与反主张的要求、带作者和到期时间的证据、带签署人的确认声明（affirmation）。基于规范化 JSON 的逐对象签名，重新缩进后依然有效</td><td>没有风险对象，没有裁剪记录，没有语言映射表。证据附件不带哈希。签名只存在于 JSON 形式中：XML Schema 和 protobuf 定义中都没有它的位置。签署人和确认声明都不带日期。扩展是名称/值字符串，其注册表是可选的</td></tr>
+          <tr><th scope="row">CISO Assistant (intuitem)</th><td>在工具中：与控制措施关联的风险场景、适用性声明导出、带批准人、日期和到期时间的风险接受、带到期日期的安全例外、审计日志。在库格式中：200 多个框架、参考控制措施、风险矩阵、基于集合论的映射、每个对象的 <code>translations</code> 映射表</td><td>风险接受、例外和适用性声明都留在应用程序内；它们通过备份导出离开应用程序，而不是通过库格式。没有签名：字节哈希只用于去重。库更新可能改写已有的评估。要求上没有附加检查逻辑。导入器会忽略它不认识的库键</td></tr>
+          <tr><th scope="row">SCAP、XCCDF、OVAL</th><td>以 XML 表示的检查单和检查语言。Tailoring 文件可在不编辑厂商基准的情况下修改它；override 记录授权方、时间和理由；标题和描述按语言重复；数据流可以签名和会签</td><td>没有风险记录。没有截止日期、到期时间或豁免类型。采集项不带哈希。单项裁剪变更没有作者，而且可以在不给出理由的情况下降低严重程度。重新缩进已签名的数据流会破坏签名。符合一致性要求的检查只有 OVAL 和 OCIL；任意语言的脚本只能通过 OpenSCAP 扩展运行。外部命名空间中的元素只有在恰好有 Schema 可用时才会被校验</td></tr>
+          <tr><th scope="row">监管机构格式</th><td>FedRAMP 的合并规则以 JSON 及 JSON Schema 提供；BSI C5:2026 以 YAML 提供；Grundschutz++ 和 ISM 以 OSCAL 目录和 profile 提供</td><td>每个发布者一种方言，各自以自己的方式组织情态、期限和适用性。C5 以单独的文件分别提供德文和英文；Grundschutz++ 把它的词汇保存在没有任何校验器读取的 prop 中</td></tr>
+          <tr><th scope="row">映射语义</th><td>NIST IR 8477 的关系样式；Secure Controls Framework 的 STRM；OWASP OpenCRE</td><td>IR 8477 定义的是关系，而不是文件格式。SCF 以电子表格和 PDF 发布其映射，只把它的目录导出为 OSCAL。OpenCRE 是一种中心辐射式的要求图，而不是目录格式</td></tr>
+          <tr><th scope="row">in-toto 与 SCITT</th><td>带有经审核谓词（predicate）的签名证明，用于来源出处、验证汇总、测试结果和 SBOM；基于已签名声明的 IETF 透明性服务</td><td>没有任何 in-toto 谓词用于证明控制措施或要求。SCITT 是一种透明性架构，而不是合规模型</td></tr>
+          <tr><th scope="row">Heimdall Data Format、OCSF、SARIF</th><td>检查和扫描的结果</td><td>它们承载的是检查发现了什么，而不是标准要求什么</td></tr>
+          <tr><th scope="row">NIST IR 8286</th><td>风险登记册和风险详细记录的 Schema</td><td>没有从风险到控制措施选择的边</td></tr>
+          <tr><th scope="row">OpenControl、Compliance Masonry</th><td>YAML 格式的标准和组件叙述</td><td>自 2023 年以来没有实质性活动</td></tr>
+          <tr><th scope="row">ISO/IEC 27001 与 27002、IEC 62443、PCI DSS</th><td>标准本身</td><td>没有官方的机器可读版本；SCF 和 CISO Assistant 中有第三方的转写版本</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="section-head reveal" style="margin-top: clamp(40px, 5vw, 64px); margin-bottom: 24px;">
+      <h3>JASCON 从中借鉴了什么</h3>
+      <p class="muted">JASCON 的大部分内容并不新。下面每项特性都能在某个同类格式中找到先例。</p>
+    </div>
+    <div class="table-wrap reveal">
+      <table>
+        <thead><tr><th>JASCON 特性</th><th>最接近的现有技术</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">每个陈述的结构化情态</th><td>Grundschutz++ 的情态动词词汇；FedRAMP 规则的关键词；OpenSSF OSPS Baseline</td></tr>
+          <tr><th scope="row">以语言映射表表示的正文</th><td>CISO Assistant 库格式的 <code>translations</code> 映射表；XCCDF 中重复的标题和描述上的 <code>xml:lang</code></td></tr>
+          <tr><th scope="row">以成员关系表示的基线</th><td>OSCAL profile；XCCDF profile</td></tr>
+          <tr><th scope="row">以封闭操作列表表示的裁剪</th><td>OSCAL profile 的 <code>alter</code> 和 <code>set-parameter</code>；XCCDF 的 <code>refine-value</code></td></tr>
+          <tr><th scope="row">类型化的跨框架映射</th><td>NIST IR 8477；Secure Controls Framework 的 STRM；OSCAL 1.2 映射模型；Gemara 映射文档</td></tr>
+          <tr><th scope="row">类型化、受 Schema 约束的扩展</th><td>CISO Assistant 内的类型化自定义字段；收窄 Gemara 封闭 Schema 的 CUE profile，OSPS Baseline 即是如此；带命名空间但无类型的 OSCAL prop；外部命名空间中仅作宽松校验的 XCCDF 元素</td></tr>
+          <tr><th scope="row">从组件到发现项的链条</th><td>OSCAL 生命周期模型；CycloneDX 声明（declarations）</td></tr>
+          <tr><th scope="row">针对要求的签名证明</th><td>CycloneDX 的确认声明及基于规范化 JSON 的签名（ECMA-424）；已签名和会签的 SCAP 数据流；in-toto 的 DSSE 信封</td></tr>
+          <tr><th scope="row">风险记录</th><td>OSCAL 的 <code>risk</code> 组件（assembly），属事后记录；Gemara 风险目录；CISO Assistant 内的风险场景和风险接受；NIST IR 8286</td></tr>
+          <tr><th scope="row">厂商建议与控制措施相互隔离</th><td>OSCAL 组件定义；XCCDF Tailoring 文件，它不改动厂商的基准</td></tr>
+          <tr><th scope="row">有批准人的例外记录</th><td>XCCDF 的 <code>override</code>，含授权方、时间和理由；CISO Assistant 中的安全例外；OSCAL 上的 FedRAMP 偏离 prop</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="split even reveal" style="margin-top: clamp(40px, 5vw, 64px);">
+      <div class="stack">
+        <h3>尚未发现任何同类格式兼具的特性</h3>
+        <ul class="ticks">
+          <li><b>每个对象两个摘要</b>，一个基于交付的字节，一个基于规范化内容，使证明在重新打包后依然有效。</li>
+          <li><b>情态的偏序</b>，裁剪依据它进行检查，弱化必须经由一条有记录的 Deviation。</li>
+          <li><b>与控制措施选择相关联的风险记录</b>，从而能够计算出哪些要求没有任何风险作为依据。</li>
+          <li><b>失效即停止（fail-closed）的扩展</b>：扩展声明它会改变哪些计算，不理解它的工具必须停止。</li>
+        </ul>
+      </div>
+      <div class="stack">
+        <h3>这一主张的适用范围</h3>
+        <p class="muted">这四项各自都有部分先例。该主张针对的是它们的组合，其可靠程度取决于调研的充分程度。Gemara 和 CycloneDX Attestations 是最接近的同类格式，来自这两个社区的读者都会问，JASCON 为什么不去扩展他们的格式；手册在<a href="{{ blob }}/jascon/references/appendix-f-objections.md" rel="noopener">附录 F.10</a> 中作了回答。证明方面的差距很小：in-toto 没有用于证明要求的谓词，而若将 JASCON 证明表达为这样一个谓词，便可接入现有的验证器生态。对用户和审计人员重要的十项特性，在<a href="index.html#compare">首页</a>上进行了比较。</p>
+        <a class="link-arrow" href="{{ blob }}/PRIOR-ART.md" rel="noopener">PRIOR-ART.md，含来源</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="cta reveal">
+      <div>
+        <h2>一行命令复现判定</h2>
+        <p>克隆仓库并运行校验器。它会执行一致性测试语料库，然后用两个摘要重新验证每个随附捆绑包中的每个对象。它需要 Python 和 <code style="color:inherit;background:none;padding:0">jsonschema</code>。</p>
+      </div>
+      <div class="cta-actions">
+        <a class="btn btn-primary" href="start.html#validate">命令 <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a class="btn btn-ghost" href="join.html">发现缺陷，提交报告 <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>

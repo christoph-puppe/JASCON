@@ -1,0 +1,205 @@
+---
+title: JASCON をはじめる
+description: 国家カタログをブラウザで開き、リファレンスバリデータを実行し、最初の要求事項を書き、OSCAL をインポートし、リスクカバレッジを算出し、コーディングエージェント用のスキルをインストールします。どの手順も数分で終わります。
+nav: start
+---
+<section class="page-hero">
+  <div class="wrap">
+    <p class="eyebrow">はじめに</p>
+    <h1>ブラウザのタブから、検証済みのバンドルまで</h1>
+    <p class="lede">多くの人がたどる順に、7 つの手順を示します。最初の手順に必要なのはブラウザです。2 番目の手順には Python か Windows マシンが必要です。どの手順にも、アカウント、サーバー、ライセンスキーは不要です。</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="steps">
+
+      <div class="step reveal" id="open">
+        <div class="step-body">
+          <h2>なじみのあるカタログを開く</h2>
+          <p>アプリはリンクからバンドルを読み込み、ブラウザ内に保持します。普段使っているフレームワークから始めてください。オブジェクトブラウザはデータからフィルターを構築するため、SP 800-53 ではファミリーとベースライン、Grundschutz++ では法助動詞、保護目標、対象オブジェクトがフィルターとして提示されます。</p>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>コーパス</th><th class="num">オブジェクト数</th><th>型</th><th>コンテンツのライセンス</th><th></th></tr></thead>
+              <tbody>
+{{ html.bundle_rows }}
+              </tbody>
+            </table>
+          </div>
+          <p class="small">ハンドブックのサンプルバンドルには、すべての型のオブジェクトが含まれており、その中には Risk 1 つ、Tailoring 2 つ、Check 2 つもあります：<a href="app/index.html#load=../jascon/examples/&amp;tool=browse">サンプルバンドルを開く</a>。フォルダーを伴わない<a href="reader/index.html">単一ファイルのリーダー</a>もあります。ダウンロードして、バンドルのフォルダーをその上にドロップしてください。</p>
+        </div>
+      </div>
+
+      <div class="step reveal" id="validate">
+        <div class="step-body">
+          <h2>リファレンスバリデータを実行する</h2>
+          <div class="step-cols">
+            <div class="stack">
+              <p class="muted">バリデータは {{ n.vectors }} 件の適合性テストベクトルを実行し、続いて同梱バンドルのすべてのオブジェクトを両方のダイジェストで再検証します。最終行には <code>ALL GREEN</code> と表示されるか、失敗が 1 件ずつ、そのルールと理由とともに列挙されます。</p>
+              <p class="muted">独自のコンテンツを検証するには、1 つ以上のバンドルフォルダーを引数に渡します。<code>--require-risk-basis</code> を指定すると、正当化するリスクのない選択済みの要求事項が失敗として扱われます。</p>
+              <p class="muted">Windows では、PowerShell 版の姉妹実装が、何もインストールせずに PowerShell 5.1 上で同じ処理を行います。Python なら数秒で終わる処理に、数分かかります。</p>
+            </div>
+            <div class="stack">
+              <div class="window cmd">
+                <div class="window-bar"><span class="window-title">Python（uv を使用）</span></div>
+                <button class="copy" type="button" data-copy="cmd-uv">コピー</button>
+                <pre id="cmd-uv"><code data-lang="sh">git clone https://github.com/christoph-puppe/JASCON.git
+cd JASCON
+uv run --no-project --with jsonschema python jascon/scripts/validate_core.py</code></pre>
+              </div>
+              <div class="window cmd">
+                <div class="window-bar"><span class="window-title">Python（pip を使用）</span></div>
+                <button class="copy" type="button" data-copy="cmd-pip">コピー</button>
+                <pre id="cmd-pip"><code data-lang="sh">pip install jsonschema
+python jascon/scripts/validate_core.py
+# your own bundle:
+python jascon/scripts/validate_core.py path/to/your-bundle</code></pre>
+              </div>
+              <div class="window cmd">
+                <div class="window-bar"><span class="window-title">Windows PowerShell 5.1（インストール不要）</span></div>
+                <button class="copy" type="button" data-copy="cmd-ps">コピー</button>
+                <pre id="cmd-ps"><code data-lang="sh">powershell -ExecutionPolicy Bypass -File jascon\scripts\validate_core.ps1</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step reveal" id="write">
+        <div class="step-body">
+          <h2>最初の要求事項を書く</h2>
+          <div class="step-cols">
+            <div class="stack">
+              <p class="muted">自分が管理するドメイン配下のプレフィックスを選び、それを使い続けてください。識別子は文字列として比較され、取得されることはないため、そのアドレスで何かを配信する必要はありません。</p>
+              <p class="muted">拘束力、義務を負う当事者、またはパラメータが変わる箇所で、テキストをステートメントに分割します。各パラメータを型付きで宣言し、本文中では <code>{param:name}</code> で参照します。</p>
+              <p class="muted">アプリの Browse ページには、そのためのフォームが「Write requirements and sets」の下にあります。このフォームは、本文中に見つけたパラメータを宣言します。Home ページは、作業中のセットを、マニフェストとオブジェクトごとの両ダイジェストを備えたバンドルとしてエクスポートします。</p>
+              <a class="link-arrow" href="{{ blob }}/jascon/references/ch04-writing-requirements.md" rel="noopener">ハンドブック第 4 章：要求事項の書き方</a>
+            </div>
+            <div class="window">
+              <div class="window-bar"><span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="window-title">req-backup-1.json</span><span class="window-note">架空の例</span></div>
+              <pre><code data-lang="json">{
+  "id": "https://grc.your.example/req/BACKUP-1",
+  "version": "2026-11",
+  "label": "BACKUP-1",
+  "lifecycle": "active",
+  "statements": [
+    { "id": "s1",
+      "modality": "must",
+      "obligated-parties": ["https://grc.your.example/party/operations"],
+      "parameters": [
+        { "name": "restore-interval", "type": "duration" }
+      ],
+      "prose": {
+        "en": "A restore from backup is tested at least every {param:restore-interval}.",
+        "de": "Eine Wiederherstellung aus dem Backup wird mindestens alle {param:restore-interval} getestet."
+      } }
+  ]
+}</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step reveal" id="oscal">
+        <div class="step-body">
+          <h2>OSCAL を持ち込み、また取り出す</h2>
+          <p>アプリの Import ページは、OSCAL のカタログまたはプロファイルを読み込み、適用したすべてのルールを報告します。ルールセットは Grundschutz++、SP 800-53、CIS Benchmarks 向けに用意されています。それ以外の形のカタログには汎用ルールが適用されます。汎用ルールは、カーネルに対応するフィールドがないものを利用者の名前空間のファセットに保持し、レポートに記載せずに何かを捨てることはありません。バッチ処理用には、実測した各コーパスに 1 つずつ、共通ライブラリ上に構築された 11 個の Python 製コンバーターがリポジトリにあります。</p>
+          <p>逆方向には、<code>export_oscal.py</code> が OSCAL 1.2.2 のカタログを書き出します。同梱バンドルのエクスポート結果は、各バンドルの隣の <code>converted_examples/*/oscal-export/</code> にあります。OSCAL に対応する構成要素がないもの（モダリティ、義務を負う当事者、重複する所属関係）は、名前空間付きの props に載せて運ばれ、インポート時に元に戻ります。</p>
+          <p><a class="link-arrow" href="app/index.html#import">Import ページを開く</a></p>
+        </div>
+      </div>
+
+      <div class="step reveal" id="risk">
+        <div class="step-body">
+          <h2>リスクを追加し、カバレッジを算出する</h2>
+          <div class="step-cols">
+            <div class="stack">
+              <p class="muted">カタログを読み込み、Tailoring でベースラインを選択し、その選択を正当化するリスクを Risk ページで書きます。Coverage ビューには、評価済みのどのリスクにも挙げられていない選択済みの要求事項が、すべて一覧表示されます。</p>
+              <p class="muted">最初の洗い出しには、試作版のリスクカタログ 2 つが役立ちます。オフィス IT の典型的なリスク 24 件と、産業プラントのリスク 23 件で、英語とドイツ語で書かれ、それぞれに推奨される SP 800-53 の管理策が付いています。インポートすると、項目が利用者自身の Risk にコピーされます。判断は利用者に委ねられたままです。</p>
+              <a class="link-arrow" href="{{ blob }}/risk-catalogs/README.md" rel="noopener">リスクカタログとその限界</a>
+            </div>
+            <div class="window cmd">
+              <div class="window-bar"><span class="window-title">カタログをバンドルにインポートする</span></div>
+              <button class="copy" type="button" data-copy="cmd-risk">コピー</button>
+              <pre id="cmd-risk"><code data-lang="sh">python3 risk-catalogs/tools/risk_catalog.py import risk-catalogs/office-it \
+    --bundle path/to/your-bundle \
+    --org https://grc.your.example \
+    --owner https://grc.your.example/party/ciso \
+    --out path/to/risks</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step reveal" id="check">
+        <div class="step-body">
+          <h2>機械によるチェックを書く</h2>
+          <p>技術的なルールについては、アプリの Checks ページで Check（カーネル 2.0.0、リリース候補）を書けます。コレクターが報告するファクト、判定を下す比較、そして bash、sh、Python、PowerShell、Ansible、または HTTP リクエストとしてのコレクターコードです。キーを入力すれば、言語モデルにチェックを下書きさせることもできます。下書きは 1 ルールずつでも、CIS からインポートしたすべての自動化ルールに対してでも可能です。各下書きはカーネルのルールと読み取り専用の lint で判定され、何を保存するかは利用者が決めます。アプリはコレクターを実行しません。</p>
+          <p><a class="link-arrow" href="app/index.html#load=../jascon/examples/&amp;tool=checks">例を読み込んで Checks ページを開く</a> &nbsp; <a class="link-arrow" href="checks.html">チェックが判定を下す仕組み</a></p>
+        </div>
+      </div>
+
+      <div class="step reveal" id="advice">
+        <div class="step-body">
+          <h2>ベンダーの助言を取り込む</h2>
+          <p>アドバイスパックは、ベンダーが公開するファイルです。特定の要求事項に対する推奨事項を持つ Component からなります（カーネル 2.0.0、リリース候補）。アプリの Home ページは、何かが書き込まれる前にパックの内容を表示し、発行元が「申告のみ」「証明付き」「実証済み」のどれであるかを示し、インポート後には受領記録を出力します。Implement ページでは、製品を自分のシステムのメンバーにし、推奨事項を自分のエッジとして採用します。同じファイルを 2 回目にインポートしても、何も書き込まれません。</p>
+          <p>作例のパックは架空のもので、公開テスト鍵で署名されています。パックを公開したベンダーはまだありません。</p>
+          <p><a class="link-arrow" href="app/index.html#load=../jascon/example-packs/dbvendor-server-7-advice/">アプリで作例のパックをプレビューする</a> &nbsp; <a class="link-arrow" href="model.html#advice">パックの仕組み</a></p>
+          <h3>ベンダー向け：パックを作成する</h3>
+          <p>パックビルダーは、オフラインで動作する 1 つの HTML ファイルです。製品と各推奨事項をフォームに記述すると、ページは顧客側のインポートと同じルールでパックをチェックし、リリースに自社の Ed25519 鍵で署名するか、openssl や自社の署名サービス用にバイト列を準備して、ZIP を書き出します。カタログを読み込んでおけば、各要求事項の条項とパラメータを選択肢として示し、すべての推奨値をチェックします。既にお持ちの OSCAL コンポーネント定義は下書きとしてインポートされ、配置できなかったものがレポートされます。</p>
+          <p><a class="link-arrow" href="pack-builder/index.html">パックビルダーを開く</a> &nbsp; <a class="link-arrow" href="pack-builder/index.html" download="jascon-pack-builder.html">1 つのファイルとしてダウンロードする</a></p>
+        </div>
+      </div>
+
+      <div class="step reveal" id="agent">
+        <div class="step-body">
+          <h2>コーディングエージェントと作業する</h2>
+          <div class="step-cols">
+            <div class="stack">
+              <p class="muted">フォルダー <code>jascon/</code> は Claude 用のスキルです。番号付きの 14 項目の要求事項としてまとめたハンドブック、カーネルスキーマ、適合性テストベクトル、コンバーター、作例のバンドルが含まれます。これを持つエージェントは、スキーマに沿ってオブジェクトを書き、自分の出力に対してバリデータを実行します。</p>
+              <p class="muted">役割分担はアプリと同じです。モデルが下書きし、カーネルのルールが判定し、人が承認します。</p>
+            </div>
+            <div class="window cmd">
+              <div class="window-bar"><span class="window-title">スキルをインストールする</span></div>
+              <button class="copy" type="button" data-copy="cmd-skill">コピー</button>
+              <pre id="cmd-skill"><code data-lang="sh"># for your user
+cp -r jascon ~/.claude/skills/jascon
+# or for one project
+cp -r jascon .claude/skills/jascon</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="reading">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">読み進め方</p>
+      <h2>まず第 2 章、その後は立場別に</h2>
+      <p class="lede">ハンドブックは 15 章と 7 つの付録からなります。第 2 章は全員が読みます。所要時間は 1 時間です。その後は、立場によって道が分かれます。</p>
+    </div>
+    <div class="grid g3 reveal">
+      <a class="card lift" href="{{ blob }}/jascon/references/ch03-identity-versions-lifecycle.md" rel="noopener">
+        <span class="card-no">第 3〜8 章、次に第 14 章</span>
+        <h3>フレームワークを公開する</h3>
+        <p>識別子と名前空間、ステートメント、Set とベースライン、テーラリング、ファセット、マッピング。カタログが実際のものになったら、移行プレイブックへ進みます。</p>
+      </a>
+      <a class="card lift" href="{{ blob }}/jascon/references/ch12-building-a-validator.md" rel="noopener">
+        <span class="card-no">第 3、12、13、11 章</span>
+        <h3>ツールを開発する</h3>
+        <p>メンタルモデルをつかむために識別子の章、次にバリデータの章と安全な取り込みの章。署名に関わる作業の前に、完全性の章を読みます。</p>
+      </a>
+      <a class="card lift" href="{{ blob }}/jascon/references/ch09-systems-components-inheritance.md" rel="noopener">
+        <span class="card-no">第 9、10、11、15 章</span>
+        <h3>運用、評価、または調達する</h3>
+        <p>システムと継承、評価と逸脱、署名が証明するもの、そして適合性の主張があれば何を要求できるか。</p>
+      </a>
+    </div>
+    <p class="source reveal">リファレンス：<a href="{{ blob }}/jascon/references/appendix-a-shapes.md" rel="noopener">オブジェクトの構造（フィールドごと）</a> &middot; <a href="{{ blob }}/jascon/schemas/jascon-2.0.0.schema.json" rel="noopener">カーネルスキーマ</a> &middot; <a href="{{ blob }}/jascon/references/appendix-f-objections.md" rel="noopener">異論と回答</a> &middot; <a href="{{ blob }}/jascon/references/appendix-g-glossary.md" rel="noopener">用語集</a></p>
+  </div>
+</section>
