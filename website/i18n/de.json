@@ -105,7 +105,7 @@
   "clause": "Klausel",
   "and": "und",
   "engine_failed_title": "Engine nicht gefunden",
-  "engine_failed_text": "Das Urteil wird von den Regeln der App berechnet, die diese Kopie der Website nicht enthält. Öffnen Sie stattdessen die Seite Checks der App.",
+  "engine_failed_text": "Das Urteil wird von den Regeln der App berechnet, die diese Kopie der Website nicht enthält. Öffnen Sie stattdessen die Seite Prüfungen (Checks) der App.",
   "engine_loading_title": "Die Regeln werden geladen",
   "engine_loading_text": "Die Seite lädt die Kernregeln der App einmalig.",
   "outcome_satisfied": "Erfüllt",
