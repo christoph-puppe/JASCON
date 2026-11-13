@@ -122,6 +122,19 @@ same one on the day it ends, and the order of each report. This file
 passes them unchanged under PowerShell 7.4 on Linux, with a stand-in for
 the JSON parser of the .NET Framework; the workflow runs them on Windows
 PowerShell 5.1 with the commit that brought them.
+CHANGED 2026-11-13 (backlog #68, decided by the author: refuse): a value
+that ends in a line break is not the value without it. A schema `pattern`
+is read as ECMA-262 reads it, which is what JSON Schema says it is
+(Ecma-Pattern: `$` is the end of the value, `.` matches no line
+terminator), and this file's own expressions end in \z. A pin version is
+written in the digits 0-9. Twenty-two vectors came with the change, 665 in
+all (kernel: 71, parameter: 22, check: 205, composition: 9). Before it,
+fifteen of them failed here and in validate_core.py alike - a date, a
+date-time, a digest, a language tag, a facet id, a fact name, a decimal
+and an evidence ref with a line break at the end were accepted - and a
+pin version in the digits of another script stopped this file with a
+conversion error. Run under PowerShell 7.4 on Linux; the workflow runs it
+on Windows PowerShell 5.1.
 
 Usage: powershell -ExecutionPolicy Bypass -File validate_core.ps1 [bundle-dirs...]
        -VectorsOnly to skip bundles; -TrustedKeys file.json for verification mode;
@@ -347,6 +360,36 @@ $KNOWN_KW = @('$ref', 'allOf', 'anyOf', 'oneOf', 'not', 'if', 'then', 'else', 'c
               'properties', 'additionalProperties', 'unevaluatedProperties', 'items',
               'minItems', 'maxItems', 'minLength', 'maxLength', 'minProperties', 'pattern',
               'propertyNames', 'minimum', 'maximum')
+# Backlog #68. A `pattern` of a JSON Schema is an ECMA-262 regular expression
+# (JSON Schema 2020-12, Core 6.4), and .NET reads two things differently that
+# the kernel's patterns use: `$` also matches before one line break that ends
+# the value, where ECMA-262 means the end of the value; and `.` matches every
+# character but U+000A, where ECMA-262 also excludes U+000D, U+2028 and
+# U+2029. So "2026-11-13" followed by a line break was a date here.
+# Ecma-Pattern writes the pattern so that .NET reads both as ECMA-262 does:
+# `$` becomes \z and `.` the class of what is no line terminator. An escape
+# is copied with its next character, and inside [...] nothing is an operator.
+# Nothing else is translated: \d, \w, \s and \b keep .NET's meaning, and no
+# pattern of the kernel schema or of the standard library uses one.
+function Ecma-Pattern([string]$p) {
+    $sb = New-Object System.Text.StringBuilder
+    $inClass = $false; $i = 0
+    while ($i -lt $p.Length) {
+        $c = [int]$p[$i]
+        if ($c -eq 92) {                                        # \
+            [void]$sb.Append($p[$i])
+            if (($i + 1) -lt $p.Length) { [void]$sb.Append($p[$i + 1]) }
+            $i += 2; continue
+        }
+        if ($inClass) { if ($c -eq 93) { $inClass = $false }; [void]$sb.Append($p[$i]) }
+        elseif ($c -eq 91) { $inClass = $true; [void]$sb.Append($p[$i]) }
+        elseif ($c -eq 36) { [void]$sb.Append('\z') }                     # $
+        elseif ($c -eq 46) { [void]$sb.Append('[^\n\r\u2028\u2029]') }    # .
+        else { [void]$sb.Append($p[$i]) }
+        $i++
+    }
+    return $sb.ToString()
+}
 function Resolve-Ref([string]$ref) {
     if (-not $ref.StartsWith('#/$defs/')) { throw "unsupported `$ref: $ref" }
     return $DEFS[$ref.Substring(8)]
@@ -474,7 +517,7 @@ function Test-Schema($sch, $v) {
             if ($isStr) {
                 $pt = $sch['pattern']; $rx = $null
                 if (-not $script:TsRegex.TryGetValue($pt, [ref]$rx)) {
-                    $rx = New-Object System.Text.RegularExpressions.Regex $pt
+                    $rx = New-Object System.Text.RegularExpressions.Regex (Ecma-Pattern $pt)
                     $script:TsRegex[$pt] = $rx }
                 if (-not $rx.IsMatch($v)) { return $false } }
         }
@@ -724,7 +767,7 @@ function Param-Check($decl, $value) {
         # D3.4 canonical form (rev P10 #37): no leading zeros, no negative
         # zero; bounds compare exactly via [decimal] (double loses precision)
         if (-not ($value -is [string])) { return 'invalid' }
-        if (-not [System.Text.RegularExpressions.Regex]::IsMatch($value, '^(-?[1-9][0-9]*(\.[0-9]+)?|0(\.[0-9]+)?|-0\.[0-9]*[1-9][0-9]*)$')) { return 'invalid' }
+        if (-not [System.Text.RegularExpressions.Regex]::IsMatch($value, '^(-?[1-9][0-9]*(\.[0-9]+)?|0(\.[0-9]+)?|-0\.[0-9]*[1-9][0-9]*)\z')) { return 'invalid' }
         $d = [decimal]::Parse($value, $INV)
         if ($decl.Contains('min') -and $d -lt [decimal]::Parse([string]$decl['min'], $INV)) { return 'deviation-required' }
         if ($decl.Contains('max') -and $d -gt [decimal]::Parse([string]$decl['max'], $INV)) { return 'deviation-required' }
@@ -1162,7 +1205,9 @@ function Duty-Errors($objs, $pinnedDecl, $envelopes, $trusted) {
 
 # ---------------- composition (D3.5) ----------------
 function Semver([string]$v) {
-    $m = [System.Text.RegularExpressions.Regex]::Match($v, '^(\d+)\.(\d+)\.(\d+)$')
+    # the digits 0-9 and \z: .NET's \d also takes the digits of other scripts, which [int] then
+    # cannot read, and its $ also matches before a final line break (#68)
+    $m = [System.Text.RegularExpressions.Regex]::Match($v, '^([0-9]+)\.([0-9]+)\.([0-9]+)\z')
     if (-not $m.Success) { return $null }
     return @([int]$m.Groups[1].Value, [int]$m.Groups[2].Value, [int]$m.Groups[3].Value)
 }
@@ -1681,7 +1726,7 @@ function Parse-Day($s) {    # 'YYYY-MM-DD' -> the day, or $null when it is not a
 }
 # an RFC 3339 date-time: the wall clock, fractional seconds (which never
 # move the day), and the offset - Z, +hh:mm or -hh:mm
-$REVIEW_DT_RX = New-Object System.Text.RegularExpressions.Regex '^([0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2})(?:\.[0-9]+)?(Z|[+-][0-9]{2}:[0-9]{2})$'
+$REVIEW_DT_RX = New-Object System.Text.RegularExpressions.Regex '^([0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2})(?:\.[0-9]+)?(Z|[+-][0-9]{2}:[0-9]{2})\z'
 $ELAPSED_SECONDS = Ord-Table @{seconds = 1; minutes = 60; hours = 3600}
 # -> @{day; why}: the UTC calendar day a `review-due` falls on, or $null
 # and why it cannot be evaluated. $start is the date a duration counts from.
@@ -2507,7 +2552,7 @@ function Run-Risk {
 # "a" there, while validate_core.py compares code points.
 $CK_SAT = 'satisfied'; $CK_NOT = 'not-satisfied'; $CK_INC = 'inconclusive'; $CK_NA = 'not-applicable'
 $COLLECTOR_FACET = 'https://ns.jascon.net/stdlib/facet/collector'
-$DECIMAL_RX = '^(-?[1-9][0-9]*(\.[0-9]+)?|0(\.[0-9]+)?|-0\.[0-9]*[1-9][0-9]*)$'
+$DECIMAL_RX = '^(-?[1-9][0-9]*(\.[0-9]+)?|0(\.[0-9]+)?|-0\.[0-9]*[1-9][0-9]*)\z'
 $CHECK_RULES = @{
     'CHECK-1'  = 'a check discharges a requirement; when that requirement is in the bundle the edge is typed and the clauses it names exist'
     'CHECK-2'  = 'every assertion reads a fact the check declares, and a fact is declared once - the fact contract is all a collector promises'
@@ -3299,7 +3344,7 @@ function Ck-Load($ctx, $dref, [string]$what) {
     # the store has one layout: a file is named by the SHA-256 of its bytes. A
     # relative ref anywhere else is refused before it is read, so no tool that
     # walks the store can miss a blob another tool accepted.
-    $m = [System.Text.RegularExpressions.Regex]::Match($ref, '^evidence/sha256/([0-9a-f]{64})$')
+    $m = [System.Text.RegularExpressions.Regex]::Match($ref, '^evidence/sha256/([0-9a-f]{64})\z')
     if (-not $m.Success) {
         Ck-Bad $ctx.E 'CHECK-15' $ctx.oid "$($ctx.at): $what ref $ref is outside the store - a ref is evidence/sha256/<the 64 hex digits of its digest>"; return $null }
     if (-not (Ck-SEq ('sha256:' + $m.Groups[1].Value) $want)) {

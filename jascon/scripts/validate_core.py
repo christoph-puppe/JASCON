@@ -56,7 +56,9 @@ import jsonschema
 
 # canonical decimal string (D3.4; rev P10 #37: leading zeros AND negative
 # zero are non-canonical spellings — one value, one spelling)
-DECIMAL_RE = r"^(-?[1-9][0-9]*(\.[0-9]+)?|0(\.[0-9]+)?|-0\.[0-9]*[1-9][0-9]*)$"
+# `\Z`, not `$`: Python's `$` also matches before a line break that ends the
+# value, so "1.5\n" would be a decimal here and in no ECMA-262 engine (#68).
+DECIMAL_RE = r"^(-?[1-9][0-9]*(\.[0-9]+)?|0(\.[0-9]+)?|-0\.[0-9]*[1-9][0-9]*)\Z"
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.normpath(os.path.join(HERE, "..", ".."))
@@ -66,7 +68,43 @@ CONF = os.path.join(SKILL, "conformance")
 
 TYPES = ["requirement", "requirementSet", "tailoring", "mapping", "component",
          "implementation", "assessment", "finding", "attestation", "risk", "check"]
-REGISTRY = jsonschema.validators.Draft202012Validator
+
+# A `pattern` of a JSON Schema is an ECMA-262 regular expression (JSON Schema
+# 2020-12, Core 6.4 with Validation 6.3.3), and jsonschema hands it to
+# Python's `re` unchanged. The two dialects read two things differently that
+# the kernel's patterns use (backlog #68):
+#   `$`  ECMA-262: the end of the value.  Python: also before one line break
+#        that ends the value - so "2026-11-13\n" was a date here, and a
+#        digest with a line break at its end a digest.
+#   `.`  ECMA-262: any character but U+000A, U+000D, U+2028, U+2029.
+#        Python: any character but U+000A.
+# ecma_pattern() writes the pattern so that `re` reads both as ECMA-262 does.
+# Nothing else is translated: a class escape (\d \w \s \b) keeps the meaning
+# its host gives it, and no pattern of the kernel schema or of the standard
+# library uses one. The PowerShell twin does the same for .NET; the app runs
+# the patterns in the dialect they were written in.
+def ecma_pattern(p):
+    out, i, in_class = [], 0, False
+    while i < len(p):
+        c = p[i]
+        if c == "\\":                       # an escape: the next character is not an operator
+            out.append(p[i:i + 2]); i += 2; continue
+        if in_class: in_class = c != "]"
+        elif c == "[": in_class = True
+        elif c == "$": c = r"\Z"
+        elif c == ".": c = "[^\n\r\u2028\u2029]"
+        out.append(c); i += 1
+    return "".join(out)
+
+_ECMA_RX = {}
+def _pattern(validator, pattern, instance, schema):
+    if not validator.is_type(instance, "string"): return
+    rx = _ECMA_RX.get(pattern)
+    if rx is None: rx = _ECMA_RX[pattern] = re.compile(ecma_pattern(pattern))
+    if not rx.search(instance):
+        yield jsonschema.ValidationError(f"{instance!r} does not match {pattern!r}")
+
+REGISTRY = jsonschema.validators.extend(jsonschema.validators.Draft202012Validator, {"pattern": _pattern})
 VALIDATORS = {t: REGISTRY({"$ref": f"#/$defs/{t}", "$defs": SCHEMA["$defs"]}) for t in TYPES}
 VALIDATORS["contentManifest"] = REGISTRY({"$ref": "#/$defs/contentManifest", "$defs": SCHEMA["$defs"]})
 VALIDATORS["scale"] = REGISTRY({"$ref": "#/$defs/scale", "$defs": SCHEMA["$defs"]})
@@ -545,7 +583,7 @@ def verify_envelope(env, att, trusted):
 # deterministically to the highest pinned minor with both payload sets
 # re-validated — incompatibility is a reported error, never a silent pick."
 def _semver(v):
-    m = re.fullmatch(r"(\d+)\.(\d+)\.(\d+)", str(v))
+    m = re.fullmatch(r"([0-9]+)\.([0-9]+)\.([0-9]+)", str(v))
     return tuple(int(x) for x in m.groups()) if m else None
 
 def compose(a_objs, a_pins, b_objs, b_pins):
@@ -1571,7 +1609,7 @@ def author_report(objs, sdig_fn=None, envelopes=None, trusted=None):
                 out.append(("AUTHOR-4", oid, len(bare), f"{oid}: {len(bare)} authorization(s) without a date: {', '.join(bare)} (AUTHOR-4)"))
     return out
 
-_DT = re.compile(r"^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.\d+)?(Z|[+-]\d{2}:\d{2})$")
+_DT = re.compile(r"^([0-9]{4})-([0-9]{2})-([0-9]{2})T([0-9]{2}):([0-9]{2}):([0-9]{2})(?:\.[0-9]+)?(Z|[+-][0-9]{2}:[0-9]{2})\Z")
 _ELAPSED = {"seconds": 1, "minutes": 60, "hours": 3600}
 
 def _utc_day(due, start):
@@ -2242,7 +2280,7 @@ def _evidence_chain(oid, at, a, row, read):
         # the store has one layout: a file is named by the SHA-256 of its bytes.
         # A relative ref anywhere else is refused before it is read, so no tool
         # that walks the store can miss a blob another tool accepted.
-        m = re.match(r"^evidence/sha256/([0-9a-f]{64})$", ref)
+        m = re.match(r"^evidence/sha256/([0-9a-f]{64})\Z", ref)      # \Z: a ref that ends in a line break is another ref (#68)
         if not m:
             bad(f"{what} ref {ref} is outside the store - a ref is evidence/sha256/<the 64 hex digits of its digest>"); return None
         if "sha256:" + m.group(1) != want:

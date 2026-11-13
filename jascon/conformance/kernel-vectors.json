@@ -1,5 +1,5 @@
 {
- "description": "Kernel-version pin (backlog #44, kernel 2.0.0). A content manifest MAY carry `kernel-version`; absent means 1.0.0 content. KERNEL-1: a bundle whose content needs a later kernel (a Risk object, Finding.risk-refs) MUST pin that kernel. KERNEL-2: a tool that meets a pin it does not implement fails closed and names the pinned version and its own. Each vector: a manifest (objects list left empty - the vector's objects are given beside it), the objects, and the expected number of failures. shape-vectors (2.0.0-rc.3): fields that 2.0.0 typed or added on released shapes - Finding.actions[].due and Deviation.opened, free text in 1.0.0 (DATE-2, DATE-1: an invalid vector names its rule in expected-rules), and Component.product-version, an opaque string; `kind` is the type the document must match exactly, or none. CP-AUTHOR-1 (2026-11-13): the pin vectors hold `provenance` on a Tailoring, an entry of it and an Implementation, `decided` and `review-due` on a Deviation and `date` on an authorization to KERNEL-1; the shape vectors hold the closed `provenance`, the new fields and the three times that any string satisfied until then (DATE-3 a Mapping's provenance date, DATE-4 an Assessment's time, DATE-5 an Attestation's timestamp; DATE-1 now names `decided` too).",
+ "description": "Kernel-version pin (backlog #44, kernel 2.0.0). A content manifest MAY carry `kernel-version`; absent means 1.0.0 content. KERNEL-1: a bundle whose content needs a later kernel (a Risk object, Finding.risk-refs) MUST pin that kernel. KERNEL-2: a tool that meets a pin it does not implement fails closed and names the pinned version and its own. Each vector: a manifest (objects list left empty - the vector's objects are given beside it), the objects, and the expected number of failures. shape-vectors (2.0.0-rc.3): fields that 2.0.0 typed or added on released shapes - Finding.actions[].due and Deviation.opened, free text in 1.0.0 (DATE-2, DATE-1: an invalid vector names its rule in expected-rules), and Component.product-version, an opaque string; `kind` is the type the document must match exactly, or none. CP-AUTHOR-1 (2026-11-13): the pin vectors hold `provenance` on a Tailoring, an entry of it and an Implementation, `decided` and `review-due` on a Deviation and `date` on an authorization to KERNEL-1; the shape vectors hold the closed `provenance`, the new fields and the three times that any string satisfied until then (DATE-3 a Mapping's provenance date, DATE-4 an Assessment's time, DATE-5 an Attestation's timestamp; DATE-1 now names `decided` too). Backlog #68 (2026-11-13): a `pattern` of this schema is an ECMA-262 regular expression, as JSON Schema says - `$` is the end of the value and `.` matches no line terminator (U+000A, U+000D, U+2028, U+2029). The shape vectors hold a date, a date-time, a digest, a language tag, a facet id, a fact name and a decimal default that end in a line break to `invalid`, and a relation type with a line terminator after `https://`; one pin vector holds a `kernel-version` that ends in a line break to a manifest that is refused. Python's `re` and .NET's `Regex` accept each of them when a pattern is handed over unchanged.",
  "vectors": [
   {
    "name": "unpinned-1.0.0-content",
@@ -774,6 +774,37 @@
     }
    ],
    "expected-fails": 0
+  },
+  {
+   "name": "pin-ends-in-a-line-break",
+   "manifest": {
+    "manifest-version": "1",
+    "kernel-version": "2.0.0\n",
+    "objects": []
+   },
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Requirement 1."
+       }
+      }
+     ]
+    }
+   ],
+   "expected-fails": 1,
+   "expected-frags": [
+    "manifest schema"
+   ]
   }
  ],
  "shape-vectors": [
@@ -1591,6 +1622,427 @@
     "content-manifest-digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
     "signer": "https://org.example/party/ao",
     "timestamp": "yesterday"
+   }
+  },
+  {
+   "name": "a-date-that-ends-in-a-line-break",
+   "kind": "finding",
+   "expected": "invalid",
+   "expected-rules": [
+    "DATE-2"
+   ],
+   "document": {
+    "id": "https://org.example/finding/f",
+    "version": "1",
+    "lifecycle": "active",
+    "assessment-ref": "https://org.example/assessment/a",
+    "requirement-ref": "https://ns.auth.gov/fw/req/1",
+    "state": "open",
+    "actions": [
+     {
+      "description": {
+       "en": "Rotate the key."
+      },
+      "due": {
+       "type": "date",
+       "value": "2026-12-01\n"
+      },
+      "status": "open"
+     }
+    ]
+   }
+  },
+  {
+   "name": "a-date-time-that-ends-in-a-line-break",
+   "kind": "attestation",
+   "expected": "invalid",
+   "expected-rules": [
+    "DATE-5"
+   ],
+   "document": {
+    "id": "https://org.example/attestation/at",
+    "version": "1",
+    "lifecycle": "active",
+    "subject-semantic-digests": [
+     "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+    ],
+    "content-manifest-digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+    "signer": "https://org.example/party/ao",
+    "timestamp": "2026-07-21T10:00:00Z\n"
+   }
+  },
+  {
+   "name": "mapping-provenance-date-is-a-date",
+   "kind": "mapping",
+   "expected": "valid",
+   "document": {
+    "id": "https://org.example/mapping/m",
+    "version": "1",
+    "lifecycle": "active",
+    "source-ref": "https://ns.auth.gov/fw/req/1",
+    "target-ref": "https://ns.auth.gov/fw/req/2",
+    "relationship": "equal",
+    "direction": "bidirectional",
+    "confidence": "draft",
+    "provenance": {
+     "author-ref": "https://org.example/party/ciso",
+     "date": "2026-11-13"
+    }
+   }
+  },
+  {
+   "name": "a-mapping-date-that-ends-in-a-line-break",
+   "kind": "mapping",
+   "expected": "invalid",
+   "expected-rules": [
+    "DATE-3"
+   ],
+   "document": {
+    "id": "https://org.example/mapping/m",
+    "version": "1",
+    "lifecycle": "active",
+    "source-ref": "https://ns.auth.gov/fw/req/1",
+    "target-ref": "https://ns.auth.gov/fw/req/2",
+    "relationship": "equal",
+    "direction": "bidirectional",
+    "confidence": "draft",
+    "provenance": {
+     "author-ref": "https://org.example/party/ciso",
+     "date": "2026-11-13\n"
+    }
+   }
+  },
+  {
+   "name": "a-digest-that-ends-in-a-line-break",
+   "kind": "attestation",
+   "expected": "invalid",
+   "document": {
+    "id": "https://org.example/attestation/at",
+    "version": "1",
+    "lifecycle": "active",
+    "subject-semantic-digests": [
+     "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+    ],
+    "content-manifest-digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111\n",
+    "signer": "https://org.example/party/ao",
+    "timestamp": "2026-07-21T10:00:00Z"
+   }
+  },
+  {
+   "name": "a-language-tag-that-ends-in-a-line-break",
+   "kind": "requirement",
+   "expected": "invalid",
+   "document": {
+    "id": "https://ns.auth.gov/fw/req/1",
+    "version": "1",
+    "lifecycle": "active",
+    "statements": [
+     {
+      "id": "s1",
+      "modality": "must",
+      "obligated-parties": [
+       "https://ns.auth.gov/fw/p/o"
+      ],
+      "prose": {
+       "en\n": "Requirement 1."
+      }
+     }
+    ]
+   }
+  },
+  {
+   "name": "a-facet-id-ends-in-its-version",
+   "kind": "requirement",
+   "expected": "valid",
+   "document": {
+    "id": "https://ns.auth.gov/fw/req/1",
+    "version": "1",
+    "lifecycle": "active",
+    "statements": [
+     {
+      "id": "s1",
+      "modality": "must",
+      "obligated-parties": [
+       "https://ns.auth.gov/fw/p/o"
+      ],
+      "prose": {
+       "en": "Requirement 1."
+      }
+     }
+    ],
+    "facets": {
+     "https://org.example/facet/x@1": {}
+    }
+   }
+  },
+  {
+   "name": "a-facet-id-that-ends-in-a-line-break",
+   "kind": "requirement",
+   "expected": "invalid",
+   "document": {
+    "id": "https://ns.auth.gov/fw/req/1",
+    "version": "1",
+    "lifecycle": "active",
+    "statements": [
+     {
+      "id": "s1",
+      "modality": "must",
+      "obligated-parties": [
+       "https://ns.auth.gov/fw/p/o"
+      ],
+      "prose": {
+       "en": "Requirement 1."
+      }
+     }
+    ],
+    "facets": {
+     "https://org.example/facet/x@1\n": {}
+    }
+   }
+  },
+  {
+   "name": "a-relation-type-is-a-uri",
+   "kind": "requirement",
+   "expected": "valid",
+   "document": {
+    "id": "https://ns.auth.gov/fw/req/1",
+    "version": "1",
+    "lifecycle": "active",
+    "statements": [
+     {
+      "id": "s1",
+      "modality": "must",
+      "obligated-parties": [
+       "https://ns.auth.gov/fw/p/o"
+      ],
+      "prose": {
+       "en": "Requirement 1."
+      }
+     }
+    ],
+    "relations": [
+     {
+      "type": "https://org.example/relation/implements",
+      "ref": "https://ns.auth.gov/fw/req/2"
+     }
+    ]
+   }
+  },
+  {
+   "name": "a-relation-type-with-a-line-feed-after-the-slashes",
+   "kind": "requirement",
+   "expected": "invalid",
+   "document": {
+    "id": "https://ns.auth.gov/fw/req/1",
+    "version": "1",
+    "lifecycle": "active",
+    "statements": [
+     {
+      "id": "s1",
+      "modality": "must",
+      "obligated-parties": [
+       "https://ns.auth.gov/fw/p/o"
+      ],
+      "prose": {
+       "en": "Requirement 1."
+      }
+     }
+    ],
+    "relations": [
+     {
+      "type": "https://\norg.example/relation/implements",
+      "ref": "https://ns.auth.gov/fw/req/2"
+     }
+    ]
+   }
+  },
+  {
+   "name": "a-relation-type-with-a-carriage-return-after-the-slashes",
+   "kind": "requirement",
+   "expected": "invalid",
+   "document": {
+    "id": "https://ns.auth.gov/fw/req/1",
+    "version": "1",
+    "lifecycle": "active",
+    "statements": [
+     {
+      "id": "s1",
+      "modality": "must",
+      "obligated-parties": [
+       "https://ns.auth.gov/fw/p/o"
+      ],
+      "prose": {
+       "en": "Requirement 1."
+      }
+     }
+    ],
+    "relations": [
+     {
+      "type": "https://\rorg.example/relation/implements",
+      "ref": "https://ns.auth.gov/fw/req/2"
+     }
+    ]
+   }
+  },
+  {
+   "name": "a-relation-type-with-a-line-separator-after-the-slashes",
+   "kind": "requirement",
+   "expected": "invalid",
+   "document": {
+    "id": "https://ns.auth.gov/fw/req/1",
+    "version": "1",
+    "lifecycle": "active",
+    "statements": [
+     {
+      "id": "s1",
+      "modality": "must",
+      "obligated-parties": [
+       "https://ns.auth.gov/fw/p/o"
+      ],
+      "prose": {
+       "en": "Requirement 1."
+      }
+     }
+    ],
+    "relations": [
+     {
+      "type": "https:// org.example/relation/implements",
+      "ref": "https://ns.auth.gov/fw/req/2"
+     }
+    ]
+   }
+  },
+  {
+   "name": "a-relation-type-with-a-paragraph-separator-after-the-slashes",
+   "kind": "requirement",
+   "expected": "invalid",
+   "document": {
+    "id": "https://ns.auth.gov/fw/req/1",
+    "version": "1",
+    "lifecycle": "active",
+    "statements": [
+     {
+      "id": "s1",
+      "modality": "must",
+      "obligated-parties": [
+       "https://ns.auth.gov/fw/p/o"
+      ],
+      "prose": {
+       "en": "Requirement 1."
+      }
+     }
+    ],
+    "relations": [
+     {
+      "type": "https:// org.example/relation/implements",
+      "ref": "https://ns.auth.gov/fw/req/2"
+     }
+    ]
+   }
+  },
+  {
+   "name": "a-fact-name-that-ends-in-a-line-break",
+   "kind": "check",
+   "expected": "invalid",
+   "document": {
+    "id": "https://ex.org/check/ssh-1-maxauthtries",
+    "version": "1",
+    "lifecycle": "active",
+    "requirement-ref": "https://ex.org/req/ssh-1",
+    "statement-ids": [
+     "s1"
+    ],
+    "platform": "https://ex.org/platform/linux-host",
+    "observes": [
+     {
+      "name": "sshd.maxauthtries\n",
+      "type": "integer"
+     }
+    ],
+    "criteria": [
+     {
+      "fact": "sshd.maxauthtries\n",
+      "op": "at-most",
+      "expected": {
+       "param": "max-auth-tries"
+      }
+     }
+    ],
+    "confidence": "reviewed",
+    "provenance": {
+     "author-ref": "https://ex.org/party/secops",
+     "date": "2026-11-11"
+    },
+    "facets": {
+     "https://ns.jascon.net/stdlib/facet/collector@1": {
+      "collectors": [
+       {
+        "id": "bash",
+        "runtime": "bash",
+        "privileges": "root",
+        "source": "#!/bin/bash\nv=$(sshd -T | awk '$1==\"maxauthtries\"{print $2}')\n[ -n \"$v\" ] && printf '{\"facts\":{\"sshd.maxauthtries\":%s}}\\n' \"$v\" || echo '{\"facts\":{}}'\n"
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "name": "a-decimal-default",
+   "kind": "requirement",
+   "expected": "valid",
+   "document": {
+    "id": "https://ns.auth.gov/fw/req/1",
+    "version": "1",
+    "lifecycle": "active",
+    "statements": [
+     {
+      "id": "s1",
+      "modality": "must",
+      "obligated-parties": [
+       "https://ns.auth.gov/fw/p/o"
+      ],
+      "prose": {
+       "en": "Uptime is at least {param:uptime} percent."
+      },
+      "parameters": [
+       {
+        "name": "uptime",
+        "type": "decimal",
+        "default": "99.95"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "a-decimal-default-that-ends-in-a-line-break",
+   "kind": "requirement",
+   "expected": "invalid",
+   "document": {
+    "id": "https://ns.auth.gov/fw/req/1",
+    "version": "1",
+    "lifecycle": "active",
+    "statements": [
+     {
+      "id": "s1",
+      "modality": "must",
+      "obligated-parties": [
+       "https://ns.auth.gov/fw/p/o"
+      ],
+      "prose": {
+       "en": "Uptime is at least {param:uptime} percent."
+      },
+      "parameters": [
+       {
+        "name": "uptime",
+        "type": "decimal",
+        "default": "99.95\n"
+       }
+      ]
+     }
+    ]
    }
   }
  ]

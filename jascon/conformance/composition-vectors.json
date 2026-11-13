@@ -1,5 +1,5 @@
 {
- "description": "Bundle-composition vectors (gate 4, D3.5 / backlog #18): pins in one major line resolve to the highest minor with BOTH payload sets re-validated under the winner; major clashes, re-validation failures, and object-identity collisions are reported errors, never silent picks.",
+ "description": "Bundle-composition vectors (gate 4, D3.5 / backlog #18): pins in one major line resolve to the highest minor with BOTH payload sets re-validated under the winner; major clashes, re-validation failures, and object-identity collisions are reported errors, never silent picks. Backlog #68: a pin version is three numbers in the digits 0-9 and nothing after them - a line break at the end or a digit of another script makes it a non-semver pin.",
  "vectors": [
   {
    "name": "minor-minor-resolves-to-highest",
@@ -523,6 +523,186 @@
     "https://x.example/facet/f": "1.2.0",
     "https://x.example/facet/f2": "3.1.0"
    }
+  },
+  {
+   "name": "a-pin-version-that-ends-in-a-line-break-is-no-version",
+   "a": {
+    "pins": {
+     "https://x.example/facet/f": {
+      "version": "1.2.0",
+      "schema": {
+       "type": "object",
+       "properties": {
+        "a": {
+         "type": "string"
+        }
+       },
+       "additionalProperties": true
+      }
+     }
+    },
+    "objects": [
+     {
+      "id": "https://x.example/req/1",
+      "version": "1",
+      "lifecycle": "active",
+      "statements": [
+       {
+        "id": "s1",
+        "modality": "must",
+        "obligated-parties": [
+         "https://x.example/p/o"
+        ],
+        "prose": {
+         "en": "X."
+        }
+       }
+      ],
+      "facets": {
+       "https://x.example/facet/f@1": {
+        "a": "x"
+       }
+      }
+     }
+    ]
+   },
+   "b": {
+    "pins": {
+     "https://x.example/facet/f": {
+      "version": "1.3.0\n",
+      "schema": {
+       "type": "object",
+       "properties": {
+        "a": {
+         "type": "string"
+        }
+       },
+       "required": [
+        "a"
+       ],
+       "additionalProperties": false
+      }
+     }
+    },
+    "objects": [
+     {
+      "id": "https://x.example/req/2",
+      "version": "1",
+      "lifecycle": "active",
+      "statements": [
+       {
+        "id": "s1",
+        "modality": "must",
+        "obligated-parties": [
+         "https://x.example/p/o"
+        ],
+        "prose": {
+         "en": "X."
+        }
+       }
+      ],
+      "facets": {
+       "https://x.example/facet/f@1": {
+        "a": "y"
+       }
+      }
+     }
+    ]
+   },
+   "expected-errors": [
+    "non-semver pin"
+   ],
+   "note": "Backlog #68: `1.3.0` followed by a line break is not the version 1.3.0. An engine whose `$` also matches before a final line break would resolve to it."
+  },
+  {
+   "name": "a-pin-version-in-other-digits-is-no-version",
+   "a": {
+    "pins": {
+     "https://x.example/facet/f": {
+      "version": "1.2.0",
+      "schema": {
+       "type": "object",
+       "properties": {
+        "a": {
+         "type": "string"
+        }
+       },
+       "additionalProperties": true
+      }
+     }
+    },
+    "objects": [
+     {
+      "id": "https://x.example/req/1",
+      "version": "1",
+      "lifecycle": "active",
+      "statements": [
+       {
+        "id": "s1",
+        "modality": "must",
+        "obligated-parties": [
+         "https://x.example/p/o"
+        ],
+        "prose": {
+         "en": "X."
+        }
+       }
+      ],
+      "facets": {
+       "https://x.example/facet/f@1": {
+        "a": "x"
+       }
+      }
+     }
+    ]
+   },
+   "b": {
+    "pins": {
+     "https://x.example/facet/f": {
+      "version": "1.٣.0",
+      "schema": {
+       "type": "object",
+       "properties": {
+        "a": {
+         "type": "string"
+        }
+       },
+       "required": [
+        "a"
+       ],
+       "additionalProperties": false
+      }
+     }
+    },
+    "objects": [
+     {
+      "id": "https://x.example/req/2",
+      "version": "1",
+      "lifecycle": "active",
+      "statements": [
+       {
+        "id": "s1",
+        "modality": "must",
+        "obligated-parties": [
+         "https://x.example/p/o"
+        ],
+        "prose": {
+         "en": "X."
+        }
+       }
+      ],
+      "facets": {
+       "https://x.example/facet/f@1": {
+        "a": "y"
+       }
+      }
+     }
+    ]
+   },
+   "expected-errors": [
+    "non-semver pin"
+   ],
+   "note": "Backlog #68: a version is written in the digits 0-9. U+0663 is a decimal digit to the `\\d` of Python and of .NET and no digit to the `\\d` of ECMA-262; three engines must not read three things."
   }
  ]
 }

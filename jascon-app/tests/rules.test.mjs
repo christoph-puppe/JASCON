@@ -37,7 +37,7 @@ test("modality: every vector", () => {
 
 test("parameter: every vector", () => {
   const v = vectors("parameter").vectors;
-  assert.equal(v.length, 21);
+  assert.equal(v.length, 22);   // 22nd: a decimal that ends in a line break (#68)
   for (const c of v) assert.equal(rules.jscParamCheck(c.parameter, c.value), c.verdict, c.name);
 });
 
@@ -177,7 +177,7 @@ test("reference: the number of closure errors of every vector", () => {
 
 test("kernel: the pin rules of every vector", () => {
   const v = vectors("kernel").vectors;
-  assert.equal(v.length, 18);   // was 11: seven more with CP-AUTHOR-1 (provenance, a Deviation's decided and review-due, an authorization's date)
+  assert.equal(v.length, 19);   // was 11: seven more with CP-AUTHOR-1 (provenance, a Deviation's decided and review-due, an authorization's date); the 19th is a pin that ends in a line break (#68)
   for (const c of v) {
     const objs = rules.jscTypedObjects(c.objects);
     const errs = rules.jscShapeErrors("contentManifest", c.manifest).length ? ["manifest schema violation"] : rules.jscKernelPinErrors(c.manifest, objs);
@@ -196,7 +196,7 @@ test("kernel: the pin rules of every vector", () => {
    (run_kernel) asserts it - and no rule where the vector names none. */
 test("kernel: the shape vectors of the typed fields, with DATE-1 to DATE-5 named on refusal", () => {
   const v = vectors("kernel")["shape-vectors"];
-  assert.equal(v.length, 36);
+  assert.equal(v.length, 52);   // 16 more with #68: values that end in a line break, a relation type with a line terminator, and their valid twins
   assert.deepEqual([...new Set(v.flatMap(c => c["expected-rules"] || []))].sort(), ["DATE-1", "DATE-2", "DATE-3", "DATE-4", "DATE-5"], "every DATE rule has a vector that names it");
   for (const c of v) {
     const matched = rules.jscMatchTypes(c.document);
@@ -569,7 +569,7 @@ test("a whole set: the example folder, checked as a bundle, passes as it passes 
 
 test("composition: every vector, as the reference runner judges it", () => {
   const v = vectors("composition").vectors;
-  assert.equal(v.length, 7);
+  assert.equal(v.length, 9);   // two more with #68: a pin version that ends in a line break, and one in other digits
   for (const c of v) {
     const side = x => [(x.objects || []).map(o => [o.id, o]), x.pins || {}];
     const { resolutions, errors } = rules.jscCompose(...side(c.a), ...side(c.b));
