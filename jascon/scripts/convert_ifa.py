@@ -105,6 +105,18 @@ def pua_scan(v):
         n_pua += sum(1 for ch in v if 0xE000 <= ord(ch) <= 0xF8FF)
     return v
 
+# Two rules the script applies in several places, stated once. Each is a
+# plain function of the source value, so the ledger can apply it again.
+def kind_of(component):
+    """Component.kind from the OSCAL component `type` (KIND_MAP, defined below)."""
+    return D("component kind from the OSCAL component type (KIND_MAP)", lambda t: KIND_MAP[t], component["type"])
+def req_of(control_id):
+    """The Requirement a lower-case OSCAL control id names in the carried SP 800-53 bundle."""
+    return D("requirement URI from the control id",
+             lambda c: f"https://ns.nist.gov/sp800-53/req/{c.upper()}", control_id)
+KIND_MAP = {"this-system": "system", "system": "system", "software": "software",
+            "application": "software", "appliance": "hardware", "service": "service"}
+
 # ---------- parties (landmark URIs by #16 - no party objects) ----------
 def party_uri(doc, uuid, default_slug):
     for p in doc["metadata"].get("parties", []) or []:
@@ -131,7 +143,7 @@ sys_inv = [{"description": pua_scan(i.get("description")),
            for i in SSP["system-implementation"].get("inventory-items", []) or []]
 ssp_comp = SSP["system-implementation"]["components"][0]
 comp_sys = {"id": COMP_SYS, "version": V_SSP, "label": sc["system-name"], "lifecycle": "active",
-            "title": ssp_comp.get("title", sc["system-name"]), "kind": "system",
+            "title": ssp_comp.get("title", sc["system-name"]), "kind": kind_of(ssp_comp),
             "capabilities": [],
             "authorizations": [{"id": AUTH_ATO,
                                 "authority-ref": f"{NS}/party/authorizing-official",
@@ -155,7 +167,9 @@ comp_sys = {"id": COMP_SYS, "version": V_SSP, "label": sc["system-name"], "lifec
 # implemented-requirement ac-6.1 -> capability + Implementation
 ir = SSP["control-implementation"]["implemented-requirements"][0]
 bc = ir["by-components"][0]
-comp_sys["capabilities"].append({"id": "cap-ac-6.1", "requirement-ref": REQ_AC61,
+REQ_IR = req_of(ir["control-id"])        # the implemented requirement names its control: ac-6.1
+assert REQ_IR == REQ_AC61, f"the SSP implements {ir['control-id']}, the bundle carries {REQ_AC61}"
+comp_sys["capabilities"].append({"id": "cap-ac-6.1", "requirement-ref": REQ_IR,
                                  "description": pua_scan(bc.get("description", ""))})
 pbind = {sp["param-id"]: (sp["values"][0] if len(sp["values"]) == 1 else sp["values"])
          for sp in SSP["control-implementation"].get("set-parameters", [])}
@@ -168,7 +182,7 @@ bundle.add("objects/component/system1234.json", comp_sys)
 IMPL_SYS = f"{NS}/impl/system1234-ac-6.1"
 bundle.add("objects/impl/system1234-ac-6-1.json",
            {"id": IMPL_SYS, "version": V_SSP, "lifecycle": "active",
-            "component-ref": COMP_SYS, "requirement-ref": REQ_AC61,
+            "component-ref": COMP_SYS, "requirement-ref": REQ_IR,
             "responsibility": "provider",
             "satisfied-by": [{"capability-ref": "cap-ac-6.1"}],
             "parameter-bindings": pbind,
@@ -199,7 +213,8 @@ for st in lev_ir.get("statements", []) or []:
 la = (LVG["system-implementation"].get("leveraged-authorizations") or [{}])[0]
 bundle.add("objects/component/csp-iaas.json",
            {"id": COMP_IAAS, "version": V_LEV, "label": LEV["system-characteristics"]["system-name"],
-            "lifecycle": "active", "title": LEV["metadata"]["title"], "kind": "system",
+            "lifecycle": "active", "title": LEV["metadata"]["title"],
+            "kind": kind_of(next(c for c in LEV["system-implementation"]["components"] if c["type"] == "this-system")),
             "members": [{"component-ref": COMP_APP, "context": "application"}],
             "capabilities": lev_caps,
             "authorizations": [{"id": AUTH_CSP,
@@ -213,9 +228,7 @@ bundle.add("objects/component/csp-iaas.json",
 app_comp = next(c for c in LEV["system-implementation"]["components"] if c["type"] != "this-system")
 bundle.add("objects/component/csp-application.json",
            {"id": COMP_APP, "version": V_LEV, "label": app_comp.get("title", "Application"),
-            "lifecycle": "active", "title": app_comp.get("title", "Application"), "kind": "software"})
-KIND_MAP = {"this-system": "system", "system": "system", "software": "software",
-            "application": "software", "appliance": "hardware", "service": "service"}
+            "lifecycle": "active", "title": app_comp.get("title", "Application"), "kind": kind_of(app_comp)})
 kind_mapped = collections.Counter()
 appl = next(c for c in LVG["system-implementation"]["components"] if c["type"] == "appliance")
 kind_mapped["appliance->hardware"] += 1
@@ -223,7 +236,7 @@ appl_title = D("title without the decoration asterisks", lambda t: t.strip(" *")
 bundle.add("objects/component/access-control-appliance.json",
            {"id": COMP_APPL, "version": V_LVG, "label": appl_title,
             "lifecycle": "active", "title": appl_title,
-            "kind": D("component kind from the OSCAL component type (KIND_MAP)", lambda t: KIND_MAP[t], appl["type"]),
+            "kind": kind_of(appl),
             "capabilities": [{"id": "cap-consumer-ac-2a", "requirement-ref": REQ_AC2,
                               "description": pua_scan(next((sa.get("description", "")
                                   for st in LVG["control-implementation"]["implemented-requirements"][0].get("statements", [])
@@ -231,7 +244,8 @@ bundle.add("objects/component/access-control-appliance.json",
 bundle.add("objects/component/saas.json",
            {"id": COMP_SAAS, "version": V_LVG,
             "label": LVG["system-characteristics"]["system-name"], "lifecycle": "active",
-            "title": LVG["metadata"]["title"], "kind": "system",
+            "title": LVG["metadata"]["title"],
+            "kind": kind_of(next(c for c in LVG["system-implementation"]["components"] if c["type"] == "this-system")),
             "members": [{"component-ref": COMP_IAAS, "context": "leveraged system"},
                         {"component-ref": COMP_APPL, "context": "internal appliance"}],
             "facets": {F_SYS: {"description": T(pua_scan(LVG["system-characteristics"].get("description", "")), "system")}}})
@@ -275,9 +289,7 @@ for c in CDEF.get("components", []) or []:
     for ci in c.get("control-implementations", []) or []:
         for cir in ci.get("implemented-requirements", []) or []:
             caps.append({"id": D("capability id from the control id", lambda c: f"cap-{slug(c)}", cir.get("control-id", "x")),
-                         "requirement-ref": D("requirement URI from the control id",
-                                              lambda c: f"https://ns.nist.gov/sp800-53/req/{c.upper()}",
-                                              cir.get("control-id", "")),
+                         "requirement-ref": req_of(cir.get("control-id", "")),
                          "description": pua_scan(cir.get("description", ""))})
     kind = D("component kind from the OSCAL component type (KIND_MAP)", lambda t: KIND_MAP.get(t, "software"),
              c.get("type", "software"))
@@ -323,10 +335,14 @@ ap_payload = {"activities": [{"title": a.get("title"),
               "reviewed-controls": [ic["control-id"] for cs in AP["reviewed-controls"]["control-selections"]
                                     for ic in cs["include-controls"]]}
 finding_src = res["findings"][0]
+# the result reviews one control, and it is the one the Assessment is about
+reviewed = [req_of(ic["control-id"]) for cs in res["reviewed-controls"]["control-selections"]
+            for ic in cs["include-controls"]]
+assert reviewed == [REQ_AC61], f"the assessment result reviews {reviewed}, the bundle carries {REQ_AC61}"
 bundle.add("objects/assessment/conmon-2023-06.json",
            {"id": ASSESS, "version": V_AR, "lifecycle": "active",
             "title": res.get("title", AR["metadata"]["title"]),
-            "subject-refs": [COMP_SYS, REQ_AC61],
+            "subject-refs": [COMP_SYS, *reviewed],
             "method": {F_AP: ap_payload},
             "performer-ref": party_uri(AR, AR["metadata"]["responsible-parties"][0]["party-uuids"][0], "assessor")
                              if AR["metadata"].get("responsible-parties") else f"{NS}/party/assessor",
@@ -398,8 +414,9 @@ def risk_object(rk, name, treats):
     if o["state"] == "identified":
         if rk.get("characterizations"):
             risk_gaps["analysed in source (likelihood + impact) but no level: `assessed` unreachable (RISK-2)"] += 1
-    if _poam_sys and _poam_sys in _ssp_sys:
-        o["component-refs"] = [COMP_SYS]                           # POA&M system-id == the SSP's system id
+    if _poam_sys and _poam_sys in _ssp_sys:                        # POA&M system-id == the SSP's system id
+        o["component-refs"] = [D("the system Component, because the POA&M's system-id is an id of the SSP's system",
+                                 lambda sid: COMP_SYS if sid in _ssp_sys else None, _poam_sys)]
     rtypes = [r["type"] for r in risk_analysis(rk)["responses"] if r["type"]]
     for rt in rtypes: response_types[rt] += 1
     tcode = RESPONSE_TREATMENT.get(rtypes[0]) if rtypes else None
@@ -442,6 +459,14 @@ def actions_of(rk):
 # RISK-2 continues the AR finding (same observation); RISK-1 is POA&M-only (Django panel)
 rk2 = next(r for r in risks.values() if "Engineers" in r["title"])
 rk1 = next(r for r in risks.values() if r is not rk2)
+# The assessment results carry the same risk in its earlier state (the path
+# map: "consolidated with the POA&M risks"). Where its text equals the POA&M
+# risk's, the ledger links it to what is kept; where it differs (the title
+# gained a prefix, the status moved on), a drop below says why.
+for ar_risk in res.get("risks", []) or []:
+    for field in ("title", "statement", "description"):
+        if field in ar_risk and ar_risk[field] == rk2.get(field):
+            led.same(ar_risk[field], rk2[field], "the same risk in the assessment results and in the POA&M, kept once")
 sca = rk1["characterizations"][0]["facets"][0]["system"]   # https://ifa.gov/division/ociso/sca
 # The AR finding (target: an AC-6(1) objective) names this risk through
 # related-risks - that is the source's own risk -> control edge.
@@ -616,6 +641,27 @@ VA = global_occurrence(list(led.docs.items()), list(bundle.objects.values()))
 # stays unaccounted until somebody decides it, path by path.
 led.drop(r"\.uuid$", "the uuid of a source element: JASCON objects get URIs minted from names and titles, "
                      "the uuid itself is not carried (uuids that ARE carried or resolved have a destination above)")
+# Decided by the author on 2026-11-13, class by class (register, "Amendments -
+# the value-level check of the converters"). A drop applies only to a value
+# that reached no destination, so a party name that became a landmark URI
+# stays a transformation. Role assignments and references by uuid are NOT
+# covered here: they are open and stay unaccounted.
+led.drop(r"\.metadata\.revisions\[\]\.",
+         "revision history of the source document: bookkeeping of the source, which the manifest pins by commit")
+led.drop(r"\.metadata\.(parties|roles)\[\]\.",
+         "the source's directory of parties and roles: a party is a landmark URI and there is no party object "
+         "(register, backlog #16); the name of a party the bundle refers to has a destination above")
+led.drop(r"\.back-matter\.|\.import-(ap|ssp|profile)\.href$|\.leveraged-authorizations\[\]\.links\[\]\.",
+         "a link to another serialisation of the source, to an imported document or to the catalogue: the bundle "
+         "carries the Requirements themselves and its objects refer to one another by id")
+led.drop(r"(\.subjects\[\]\.type|\.assessment-subjects\[\]\.type|\.actors\[\]\.type|\.target\.type|\.identifier-type)$",
+         "a type tag of a structural element: the bundle says by its shape what kind of thing the element is")
+led.drop(r"\.risks\[\]\.remediations\[\]\.props\[\]\.name$",
+         "the prop name `type` is the selector by which the response type is found; the value is carried, "
+         "under the field the converter names `type`")
+led.drop(r"^ar\.assessment-results\.results\[\]\.risks\[\]\.",
+         "the assessment results hold the earlier state of a risk the POA&M carries in its later state; "
+         "text equal to the POA&M's is linked to it above, the rest is superseded")
 LEDGER = led.account(bundle.out, {**bundle.objects, "content-manifest.json": manifest})
 with open(os.path.join(OUTDIR, "ifa-conversion-ledger.json"), "w", encoding="utf-8") as f:
     json.dump(LEDGER, f, indent=1, ensure_ascii=False); f.write("\n")

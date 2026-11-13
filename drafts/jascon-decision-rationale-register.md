@@ -2798,6 +2798,41 @@ decided path by path without touching a page or a translation.
 already stated. Declaring the rest "intentional" would have produced a
 small number and no knowledge.
 
+**The first decisions on the unaccounted values (2026-11-13, the
+author; applied the same day).** The 471 were put to the author in
+fifteen classes, each with a recommended outcome. Accepted as
+recommended and applied, none of them with a change to the bundle:
+
+| Class | Values | Outcome |
+|---|---:|---|
+| Revision history of the source documents | 56 | declared drop: bookkeeping of the source, which the manifest pins by commit |
+| Directory of parties and roles | 61 | declared drop: a party is a landmark URI and there is no party object (#16); a party name the bundle refers to stays a transformation |
+| Back-matter resources and import links | 58 | declared drop: links to other serialisations, to imported documents and to the catalogue the bundle carries as Requirements |
+| Type tags of structural elements | 11 | declared drop: the bundle says by its shape what the element is |
+| The prop name that selects a response type | 2 | declared drop: the value is carried under the field the converter names `type` |
+| The risk in the assessment results | 4 | its description equals the POA&M risk's and is linked to it; title, statement and status are the earlier state and are dropped as superseded (the POA&M title gained a prefix, its statement lost a misspelt word) |
+| Values the converter already used | 7 | stated as rules: component `type` to `kind` for the four Components that had a constant kind, the control id of the SSP's implemented requirement and of the reviewed controls to the Requirement, the POA&M `system-id` to `component-refs` |
+
+**The ledger since: 235 copied, 33 transformed, 295 dropped for a
+declared reason, 272 unaccounted, 0 failed checks.** A drop applies only
+to a value without a destination; the comparison of the ledger before
+and after shows no value of another class among the newly dropped.
+
+Four values of the "already used" class turned out not to be used and
+stay unaccounted: the `related-controls` control id of the activities
+in the assessment plan and the assessment results, and the `type` of
+two components of the leveraging SSP (its copy of the leveraged system
+and of the leveraged application), which the converter does not emit.
+
+**Open.** Seven classes to carry (the characteristics of the leveraged
+and the leveraging system, the component definition's control detail,
+component descriptions and props, inventory prop classes, the
+implementation narrative, assessment detail, document metadata into the
+manifest's provenance): accepted in principle, each changes the bundle
+and is applied class by class. Two classes are under discussion with
+the author: role assignments without a kernel field (40 values) and
+references by uuid whose edge the converter builds by hand (25).
+
 ## What it does not change
 
 No kernel shape, rule or vector, no validator, no bundle object. And no
