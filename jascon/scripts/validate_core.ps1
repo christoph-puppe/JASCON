@@ -101,12 +101,31 @@ findings from this file and from validate_core.py - among them objects
 with members that differ only in case or have an empty name, which
 ConvertFrom-Json could not read at all.
 
+Kernel 2.0.0 (CP-AUTHOR-1, PROPOSED; backlog #65 and #66, ported on
+2026-11-13): who decided, and when. `provenance` {author-ref, date} on a
+Tailoring and its selects, excludes and operations, on a Risk and its
+ratings, on an Implementation and a Finding; `decided` and `review-due` on
+a Deviation; `date` on an authorization. The shapes need no code here:
+this file reads the kernel schema. Ported: KERNEL-1 for the new fields,
+the names DATE-3..5 (and `decided` under DATE-1), the two reports
+AUTHOR-1..4 (Author-Report) and REVIEW-1 (Review-Report), the vector
+family `author`. REVIEW-1 is the one place where this file reads a clock,
+and nothing fails by it. RUN on 2026-11-13 under PowerShell 7.4 on Linux
+with a stand-in for the JSON parser of the .NET Framework: 637 vectors in
+18 families (kernel: 54, author: 34), the bundles, the worked pack and the
+example folder, the same counts and the same AUTHOR and REVIEW lines as
+validate_core.py. NOT YET EXECUTED on Windows PowerShell 5.1.
+
 Usage: powershell -ExecutionPolicy Bypass -File validate_core.ps1 [bundle-dirs...]
        -VectorsOnly to skip bundles; -TrustedKeys file.json for verification mode;
-       -RequireRiskBasis turns uncovered selections into failures (policy switch).
+       -RequireRiskBasis turns uncovered selections into failures (policy switch);
+       -RequireAuthors turns the AUTHOR-1..4 lines into failures (policy switch);
+       -AsOf YYYY-MM-DD sets the date REVIEW-1 compares a review-due with
+       (default: the date of the run, in UTC).
 #>
 [CmdletBinding()]
-param([string[]]$Bundles = @(), [switch]$VectorsOnly, [string]$TrustedKeys = "", [switch]$RequireRiskBasis)
+param([string[]]$Bundles = @(), [switch]$VectorsOnly, [string]$TrustedKeys = "", [switch]$RequireRiskBasis,
+      [switch]$RequireAuthors, [string]$AsOf = "")
 
 $ErrorActionPreference = "Stop"
 Add-Type -AssemblyName System.Numerics
@@ -1862,6 +1881,30 @@ function Kernel-Pin-Errors($manifest, $objs) {
                 $why = "$oid names the product version it describes (product-version)" }
             if ($null -ne $why) { break }
         }
+        # CP-AUTHOR-1: `provenance` where 1.0.0 had none, `decided` and
+        # `review-due` on a Deviation, `date` on an authorization
+        if (([string]::Equals($t, 'tailoring', $ORD) -or [string]::Equals($t, 'implementation', $ORD) -or [string]::Equals($t, 'finding', $ORD)) -and $o.Contains('provenance')) {
+            $why = "$oid names its author (provenance)"; break }
+        if ([string]::Equals($t, 'tailoring', $ORD)) {
+            foreach ($k in @('selects', 'excludes', 'operations')) {
+                if (-not (Is-List $o[$k])) { continue }
+                foreach ($e in $o[$k]) {
+                    if ((Is-Map $e) -and $e.Contains('provenance')) {
+                        $why = "$oid names the author of a select, an exclude or an operation (provenance)" } }
+            }
+            if ($null -ne $why) { break }
+        }
+        if ($o.Contains('deviations') -or [string]::Equals($t, 'tailoring', $ORD)) {
+            foreach ($wd in (Deviations-Of $t $o)) {
+                if ($wd.d.Contains('decided') -or $wd.d.Contains('review-due')) {
+                    $why = "$oid carries a Deviation with ``decided`` or ``review-due``" } }
+            if ($null -ne $why) { break }
+        }
+        if ([string]::Equals($t, 'component', $ORD) -and (Is-List $o['authorizations'])) {
+            foreach ($a in $o['authorizations']) {
+                if ((Is-Map $a) -and $a.Contains('date')) { $why = "$oid dates an authorization" } }
+            if ($null -ne $why) { break }
+        }
     }
     if ($null -ne $why -and -not [string]::Equals($pin, '2.0.0', $ORD)) {
         $said = 'pins no kernel-version'
@@ -1870,18 +1913,28 @@ function Kernel-Pin-Errors($manifest, $objs) {
     }
     return ,$errs
 }
-# DATE-1/2: two fields 1.0.0 left as free text and 2.0.0 types (author
+# DATE-1..5: fields 1.0.0 left as free text and 2.0.0 types (author
 # decision 2026-11-12, backlog #47a and #52): Deviation.opened is a date,
-# the due of a Finding's action a typed point in time or duration. The
-# schema enforces; this names the rule when an object matches no type, so
-# that a 1.0.0 bundle with a free-text date is told what to correct. It
-# never ACCEPTS anything.
+# the due of a Finding's action a typed point in time or duration. With
+# CP-AUTHOR-1, the "when" of who-and-when: DATE-1 also names a Deviation's
+# `decided`; DATE-3 the `date` of a Mapping's provenance (a date); DATE-4
+# the `time` of an Assessment and DATE-5 the `timestamp` of an Attestation
+# (a date or an RFC 3339 date-time with an offset). The schema enforces;
+# this names the rule when an object matches no type, so that a 1.0.0
+# bundle with a free-text date is told what to correct. It never ACCEPTS
+# anything.
+function Is-When($v) {      # a date, or an RFC 3339 date-time with an offset
+    return ((Test-Schema $DEFS['date'] $v) -or (Test-Schema $DEFS['dateTime'] $v))
+}
 function Date-Walk($x, $out) {
     if (Is-Map $x) {
         if ($x.Contains('deviations') -and (Is-List $x['deviations'])) {
             foreach ($dv in $x['deviations']) {
-                if ((Is-Map $dv) -and $dv.Contains('opened') -and -not (Test-Schema $DEFS['date'] $dv['opened'])) {
-                    if (-not $out.Contains('DATE-1')) { [void]$out.Add('DATE-1') } }
+                if (-not (Is-Map $dv)) { continue }
+                foreach ($field in @('opened', 'decided')) {
+                    if ($dv.Contains($field) -and -not (Test-Schema $DEFS['date'] $dv[$field])) {
+                        if (-not $out.Contains('DATE-1')) { [void]$out.Add('DATE-1') } }
+                }
             }
         }
         foreach ($k in @($x.Keys)) { if (-not [string]::Equals($k, 'deviations', $ORD)) { Date-Walk $x[$k] $out } }
@@ -1899,6 +1952,12 @@ function Date-Rule-Violations($o) {
                 if (-not $out.Contains('DATE-2')) { [void]$out.Add('DATE-2') } }
         }
     }
+    # the three fields are told apart by the signature of their type
+    $prov = $o['provenance']
+    if ($o.Contains('relationship') -and (Is-Map $prov) -and $prov.Contains('date') -and -not (Test-Schema $DEFS['date'] $prov['date'])) {
+        [void]$out.Add('DATE-3') }
+    if ($o.Contains('performer-ref') -and $o.Contains('time') -and -not (Is-When $o['time'])) { [void]$out.Add('DATE-4') }
+    if ($o.Contains('signer') -and $o.Contains('timestamp') -and -not (Is-When $o['timestamp'])) { [void]$out.Add('DATE-5') }
     return ,$out
 }
 function Run-Kernel {
@@ -3800,7 +3859,7 @@ function Validate-Object([string]$section, [string]$path, $obj) {
             if (@($rv).Count -gt 0) { $why = " - FAIL [$(@($rv) -join '] [')]" }
         }
         if (@($m).Count -eq 0) {
-            $dv = Date-Rule-Violations $obj      # two fields that 1.0.0 left as free text and 2.0.0 types
+            $dv = Date-Rule-Violations $obj      # fields that 1.0.0 left as free text and 2.0.0 types (DATE-1..5)
             if (@($dv).Count -gt 0) { $why = "$why - FAIL [$(@($dv) -join '] [')] a date field of 1.0.0 is typed in 2.0.0" }
         }
         FAIL $section "${path}: matches [$(@($m) -join ',')]$why"
