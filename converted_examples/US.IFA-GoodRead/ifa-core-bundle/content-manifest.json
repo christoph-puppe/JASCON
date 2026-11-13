@@ -65,12 +65,12 @@
     "published": "2026-05-13T12:30:10.00000-00:00"
    }
   ],
-  "converter": "convert_ifa.py v0.3 (a repeated prop name keeps every value; conversion ledger)",
+  "converter": "convert_ifa.py v0.4 (provenance pre-filled from the source documents; the Attestation beside the manifest; conversion ledger)",
   "carried-requirements": [
    "https://ns.nist.gov/sp800-53/req/AC-6.1",
    "https://ns.nist.gov/sp800-53/req/AC-2"
   ],
-  "attestation-note": "content-manifest-digest = sha256 over the JSON array of {id, semantic-digest} subject entries (deterministic mini-manifest)"
+  "attestation-note": "the Attestation of the ATO is the file attestation-ifa-ato.json beside this manifest; it is not listed here, because it binds the digest of this file (D3.1)"
  },
  "objects": [
   {
@@ -79,13 +79,6 @@
    "package-digest": "sha256:8e4449dd3552d0048e29291e19d5be38aaaeb4a4f8eb8f81b7547a814464a1c9",
    "semantic-digest": "sha256:5d4d21f948c14b3a7e6573c462bfd59e566c7c7ba207a495be4a9119e212ac09",
    "path": "objects/assessment/conmon-2023-06.json"
-  },
-  {
-   "id": "https://ifa.gov/goodread/attestation/ifa-ato",
-   "version": "1.1.1",
-   "package-digest": "sha256:3080f61af70a6be8c694712c7ffdf9fafa049954436811e8c44ae3143d45bf70",
-   "semantic-digest": "sha256:f8e5d666e80b6347db5fde29ea46434f8f85438d9aeee20f513471de9e93acf4",
-   "path": "objects/attestation/ifa-ato.json"
   },
   {
    "id": "https://ifa.gov/goodread/component/access-control-appliance",
@@ -104,8 +97,8 @@
   {
    "id": "https://ifa.gov/goodread/component/csp-iaas",
    "version": "1.0.0",
-   "package-digest": "sha256:67686fdb4d683218558453f734077edd9fa2eb0926a1158fa5071fe217f8aca6",
-   "semantic-digest": "sha256:9a26c8ea65da3803e2758fe5f6d868f5321bff46c4df3722ce888a49d62fb833",
+   "package-digest": "sha256:a3a838ed44e8511e6996081b75bfbaf83558209522fc000ca9936bd59de2a220",
+   "semantic-digest": "sha256:f0b2bded888aba21080234177fc37351c5525596aeeb971e7babf0402b6e16bd",
    "path": "objects/component/csp-iaas.json"
   },
   {
@@ -125,8 +118,8 @@
   {
    "id": "https://ifa.gov/goodread/component/system1234",
    "version": "1.1.1",
-   "package-digest": "sha256:afdcf2dba72637ff4821dc6e4441bc5981dd5d83f39c91642518f2171d057d27",
-   "semantic-digest": "sha256:ec5abee77c80a2cf51ca2b8dba0d33ce3190300b72eabfbae4f24975be47a96f",
+   "package-digest": "sha256:b23ff3e5bd7766500116d215354601a4e33c545f434968c84fc2ed468be95892",
+   "semantic-digest": "sha256:6b18825c002f6efc28bec859f0905f19436d02d79758d2dc61b884169efcf2e4",
    "path": "objects/component/system1234.json"
   },
   {
@@ -160,8 +153,8 @@
   {
    "id": "https://ifa.gov/goodread/impl/system1234-ac-6.1",
    "version": "1.1.1",
-   "package-digest": "sha256:b0310d3695c79bc36d87e70420dea33ae45ecd775fbb003f4ce37226916209e5",
-   "semantic-digest": "sha256:957af20000b1240c4e4ae4e76590e7a4c52f2aeddbb0ae38d72f92399c49055c",
+   "package-digest": "sha256:0c497c05abfebd843ad6f9a9c24b4cee1426c1c707218559040516bc667a975a",
+   "semantic-digest": "sha256:30c85d363fe959f2c18735c3a66f6fdf261a27381a489350581a9556596fa577",
    "path": "objects/impl/system1234-ac-6-1.json"
   },
   {
@@ -197,7 +190,7 @@
   {
    "id": "https://ifa.gov/goodread/facet/assessment-plan",
    "exact-version": "1.0.0",
-   "digest": "sha256:2e3f9be3ec93dd5c118f5183518416e7c300233a8b5b272a28857dff114886c3",
+   "digest": "sha256:20d7718224abd1fdcf46e8bf4fa36867ceb87f8d29e3b55a761b2f0e5c645c9f",
    "path": "schemas/goodread-ap-stub.json"
   },
   {

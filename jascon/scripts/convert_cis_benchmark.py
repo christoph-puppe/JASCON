@@ -5,9 +5,15 @@ criteria@1, method automated|manual); back-matter PROFILE resources +
 per-rule reference links -> Level 1/2 Server/Workstation baseline Sets
 (the ISM applicability pattern, benchmark edition); CIS_Controls links ->
 Mapping objects into the CIS Controls corpus (v8 targets resolve to the
-sibling bundle; v7 targets minted under a v7 namespace). Target: 0."""
-import json, os, re, collections
-from oscal_conv_lib import make_T, slug, Bundle, inventory, coverage, report
+sibling bundle; v7 targets minted under a v7 namespace). Target: 0.
+
+A Mapping's `provenance` is pre-filled from the source: CIS as the author,
+the day of the catalog's last-modified as the date. `--author-ref URI` and
+`--date YYYY-MM-DD` overwrite either, on every Mapping (backlog #69)."""
+import json, os, re, sys, collections
+from oscal_conv_lib import make_T, slug, Bundle, inventory, coverage, report, document_day, provenance, provenance_override
+
+OVERRIDE = provenance_override(sys.argv[1:])     # (author, date) the caller wants on every Mapping, or (None, None)
 
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 SRC = os.path.join(ROOT, "sources", "CIS Ubuntu Linux 24.04 LTS Benchmark.json")
@@ -32,12 +38,15 @@ VER = cat["metadata"]["version"]
 # holds that field to a date (DATE-3) and refuses such a Mapping. A catalog
 # with cross-references and no such date is refused here, with the reason:
 # no day is invented for it.
-_RELEASED = str(cat["metadata"].get("last-modified") or "")[:10]
-def released():
-    if not re.fullmatch(r"[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])", _RELEASED):
+def mapping_provenance():
+    """Who stated a cross-reference and when: CIS, on the day of the release -
+    or what the caller gave in their place. A Mapping requires both."""
+    p = provenance(f"{NS}/party/cis", document_day(cat["metadata"]), OVERRIDE)
+    if p is None:
         raise SystemExit("the catalog's metadata.last-modified does not begin with a date, so its CIS Controls "
-                         "cross-references cannot be dated (a Mapping's provenance.date is a date, DATE-3)")
-    return _RELEASED
+                         "cross-references cannot be dated (a Mapping's provenance.date is a date, DATE-3); "
+                         "--date gives one")
+    return p
 
 paths = collections.Counter()
 inventory({"catalog": cat}, "cisb", paths)
@@ -138,7 +147,7 @@ def convert_control(c):
                             "relationship": "supports", "direction": "source-to-target",
                             "confidence": "draft",
                             "rationale": "Imported from the CIS Benchmark's CIS Controls cross-reference; the source carried no typed relationship (handbook 8.6).",
-                            "provenance": {"author-ref": f"{NS}/party/cis", "date": released()}})
+                            "provenance": mapping_provenance()})
                 mappings += 1
                 if map_v7_flag: map_v7 += 1
                 else: map_v8 += 1

@@ -150,7 +150,7 @@ test("schema matching agrees with the type every shipped object was given by its
   const ROOT = path.resolve(CONF, "../..");
   const dir = path.join(ROOT, "converted_examples/US.IFA-GoodRead/ifa-core-bundle/objects");
   const files = fs.readdirSync(dir, { recursive: true }).filter(f => String(f).endsWith(".json"));
-  assert.ok(files.length >= 17);
+  assert.ok(files.length >= 16);   // 16 since 2026-11-13: the Attestation lies beside the manifest, not under objects/ (D3.1, backlog #46)
   for (const f of files) {
     const o = JSON.parse(fs.readFileSync(path.join(dir, String(f)), "utf8"));
     assert.equal(rules.jscTypeOf(o), core.jscInferType(o), String(f));
@@ -375,10 +375,12 @@ test("author and review on the example folder and the IFA bundle, as of 2026-11-
   assert.deepEqual(exReview["not-evaluable"].map(e => [e.id, e.where]), [["https://cso.example/risk/R-2026-007", "review-due"]]);
   assert.match(exReview["not-evaluable"][0].why, /^a calendar period, and this tool has no calendar https:\/\/cso\.example\/calendar\/isms /);
   const G = "https://ifa.gov/goodread/", ifa = folderObjects(IFA);
+  /* seven lines since the converter pre-fills from the source (backlog #69): the two authorizations carry the
+     date the source states, and the system's Implementation the author its plan names. The plan of action
+     names no party and the leveraged pair no party with a name, so their records still say nobody. */
   assert.deepEqual((await rules.jscAuthorReport(ifa)).map(e => [e.rule, e.id, e.count]), [
-    ["AUTHOR-4", G + "component/csp-iaas", 1], ["AUTHOR-4", G + "component/system1234", 1],
     ["AUTHOR-2", G + "finding/goodread-risk-1", 1], ["AUTHOR-3", G + "finding/goodread-risk-1", 1], ["AUTHOR-2", G + "finding/goodread-risk-2", 1],
-    ["AUTHOR-2", G + "impl/csp-iaas-ac-2", 1], ["AUTHOR-2", G + "impl/saas-ac-2", 1], ["AUTHOR-2", G + "impl/system1234-ac-6.1", 1],
+    ["AUTHOR-2", G + "impl/csp-iaas-ac-2", 1], ["AUTHOR-2", G + "impl/saas-ac-2", 1],
     ["AUTHOR-2", G + "risk/goodread-risk-1", 1], ["AUTHOR-2", G + "risk/goodread-risk-2", 1]]);
   assert.deepEqual(rules.jscReviewReport(ifa, "2026-11-13"), { dated: 2, "not-evaluable": [], overdue: [
     { id: G + "risk/goodread-risk-1", where: "review-due", day: "2024-01-01" }, { id: G + "risk/goodread-risk-2", where: "review-due", day: "2023-06-23" }] });

@@ -26,7 +26,8 @@
   {
    "id": "auth-csp-iaas-2018",
    "authority-ref": "https://ifa.gov/goodread/party/csp-authorizing-official",
-   "scope-label": "CSP IaaS [Leveraged System] (2018-01-01)"
+   "scope-label": "CSP IaaS [Leveraged System] (2018-01-01)",
+   "date": "2018-01-01"
   }
  ],
  "facets": {

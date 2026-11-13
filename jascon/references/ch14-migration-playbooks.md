@@ -110,12 +110,12 @@ unresolved, and nothing is invented for them. Keep roles at two levels,
 the Component and the whole scope; an assignment below that is rolled up
 and linked to them, because a role per statement, task and capability
 multiplies entries without adding a fact. The ledger of that conversion
-now reads 441 copied, 95 transformed, 299 dropped for a declared reason,
+now reads 442 copied, 95 transformed, 298 dropped for a declared reason,
 none unaccounted and no failed check.
 
 > **Don't** read "none unaccounted" as "lossless". It says that every
 > source value has a destination, a named rule or a stated reason. Here
-> 299 values are not in the bundle, by decisions that are written down.
+> 298 values are not in the bundle, by decisions that are written down.
 > And the ledger runs one way: it follows source values into the bundle.
 > A value the converter writes on its own has no entry — in this
 > conversion three party URIs that no source names — so the report has

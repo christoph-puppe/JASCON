@@ -27,5 +27,9 @@
     "en": "This is the control implementation for the application and infrastructure that compose to the IFA SYSTEM1234 Project's system."
    }
   }
+ },
+ "provenance": {
+  "author-ref": "https://ifa.gov/goodread/party/important-federal-agency",
+  "date": "2026-05-12"
  }
 }

@@ -4,8 +4,15 @@
 subsets/classes/types -> nested Sets; class variance -> Tailorings (computable
 deltas) + L2 class-variants payloads (full fidelity); FRD -> terminology;
 CTL Rev5 overlay -> parked L2 (resolves at gate item 3). Coverage target: 0."""
-import json, hashlib, os, re, copy, collections, shutil
+import json, hashlib, os, re, sys, copy, collections, shutil
 from oscal_conv_lib import BUNDLE_NEWLINE   # one byte spelling on every OS (D3.1)
+from oscal_conv_lib import provenance, provenance_override
+
+# A Mapping's `provenance` is pre-filled from the source (FedRAMP, the day of
+# info.last_updated); --author-ref URI and --date YYYY-MM-DD overwrite either
+# on every Mapping (backlog #69). Not run since the change: the source file
+# is not in the repository.
+OVERRIDE=provenance_override(sys.argv[1:])
 
 ROOT=os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)),"..",".."))
 SRC=os.path.join(ROOT,"sources","cr_fedramp-consolidated-rules.json")
@@ -258,7 +265,7 @@ def convert_ksi(catid,cat,iid,ind):
            "source-ref":uri,"target-ref":f"{NIST}/{tid}",
            "relationship":"supports","direction":"source-to-target","confidence":"draft",
            "rationale":"Imported from CR26 KSI control list; the source carried no typed relationship (handbook 8.6).",
-           "provenance":{"author-ref":f"{NS}/party/fedramp","date":d["info"]["last_updated"]}}
+           "provenance":provenance(f"{NS}/party/fedramp",d["info"]["last_updated"],OVERRIDE)}
         objects[f"objects/map/{slug(iid)}--{slug(ctl)}.json"]=m; mappings+=1
     return uri
 

@@ -20,7 +20,8 @@
   {
    "id": "auth-ifa-ato",
    "authority-ref": "https://ifa.gov/goodread/party/authorizing-official",
-   "scope-label": "ATO 2025-05-19 (moderate)"
+   "scope-label": "ATO 2025-05-19 (moderate)",
+   "date": "2025-05-19"
   }
  ],
  "facets": {

@@ -13,6 +13,7 @@ five false arrivals and one false absence. Standard library only."""
 import copy, json, os, sys, tempfile, unittest
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from oscal_conv_lib import global_occurrence, Ledger, props_by_name, slug, RESPONSE_TREATMENT, response_treatment
+from oscal_conv_lib import document_author, document_day, provenance, provenance_override, needs_kernel_2
 
 
 def measure(source, output):
@@ -279,6 +280,133 @@ class Backlog47bResponseTypes(unittest.TestCase):
 
     def test_backlog_47b_a_misspelled_type_is_not_guessed_at(self):
         self.assertIsNone(response_treatment("mitigation")[0])
+
+
+class Backlog69WhoWroteItAndWhen(unittest.TestCase):
+    """A converter pre-fills `provenance` from what the source document says
+    about itself, and the caller may overwrite it (author decision
+    2026-11-13). The rule for the author of an OSCAL document is one rule,
+    in this library and in the app's importer (jascon-oscal.js); the table
+    below is the same table on both sides."""
+    A = {"uuid": "a", "type": "person", "name": "Amy Assessor"}
+    B = {"uuid": "b", "type": "person", "name": "Owen Pearson"}
+    O = {"uuid": "o", "type": "organization", "name": "Important Federal Agency"}
+    P = {"uuid": "p", "type": "organization", "name": "Assessors Inc."}
+    N = {"uuid": "n", "type": "person"}                          # defined without a name
+
+    def who(self, rps, parties):
+        meta = {"responsible-parties": [{"role-id": r, "party-uuids": us} for r, us in rps]}
+        if parties is not None: meta["parties"] = parties
+        got = document_author(meta)
+        return None if got is None else got["uuid"]
+
+    def test_backlog_69_the_document_author_table(self):
+        A, B, O, P, N = self.A, self.B, self.O, self.P, self.N
+        table = [
+            ("a creator is the author", [("creator", ["a"]), ("contact", ["b"])], [A, B], "a"),
+            ("prepared-by, where no creator is named", [("prepared-by", ["a"]), ("owner", ["b"])], [A, B], "a"),
+            ("two creators are no answer; prepared-by is asked next", [("creator", ["a", "b"]), ("prepared-by", ["b"])], [A, B], "b"),
+            ("the one party any role names", [("assessor", ["a"])], [A, O], "a"),
+            ("several responsible people: the one organization", [("owner", ["a"]), ("developer", ["b"])], [A, B, O], "o"),
+            ("several responsible people and no organization", [("owner", ["a"]), ("developer", ["b"])], [A, B], None),
+            ("several responsible people and two organizations", [("owner", ["a"]), ("developer", ["b"])], [A, B, O, P], None),
+            ("no role, one party", [], [A], "a"),
+            ("no role, two people", [], [A, B], None),
+            ("no role, two people and one organization", [], [A, B, O], "o"),
+            ("no parties at all", [], None, None),
+            ("a creator the document does not define is nobody; the one party stands", [("creator", ["x"])], [A], "a"),
+            ("a party without a name cannot be named by a URI", [("assessor", ["n"])], [N, O], None),
+            ("a uuid the document does not define is not counted", [("assessor", ["x", "a"])], [A, B], "a"),
+        ]
+        for what, rps, parties, want in table:
+            self.assertEqual(self.who(rps, parties), want, what)
+
+    def test_backlog_69_the_day_is_the_date_of_last_modified_or_nothing(self):
+        self.assertEqual(document_day({"last-modified": "2026-05-12T10:26:16.00000-00:00"}), "2026-05-12")
+        self.assertEqual(document_day({"last-modified": "2026-05-12"}), "2026-05-12")
+        for bad in ("2026-13-01T00:00:00Z", "12 May 2026", "", None, 20260512, "2026-05-1"):
+            self.assertIsNone(document_day({"last-modified": bad}), repr(bad))
+        self.assertIsNone(document_day({}))
+
+    def test_backlog_69_the_caller_overwrites_field_by_field(self):
+        src = ("https://ifa.gov/party/amy", "2026-05-12")
+        self.assertEqual(provenance(*src), {"author-ref": src[0], "date": src[1]})
+        self.assertEqual(provenance(*src, override=("https://org.example/party/ciso", None)),
+                         {"author-ref": "https://org.example/party/ciso", "date": "2026-05-12"})
+        self.assertEqual(provenance(*src, override=(None, "2026-11-13")),
+                         {"author-ref": src[0], "date": "2026-11-13"})
+        self.assertEqual(provenance(None, None, override=("https://org.example/party/ciso", "2026-11-13")),
+                         {"author-ref": "https://org.example/party/ciso", "date": "2026-11-13"})
+
+    def test_backlog_69_no_provenance_without_both_an_author_and_a_date(self):
+        self.assertIsNone(provenance(None, "2026-05-12"))
+        self.assertIsNone(provenance("https://ifa.gov/party/amy", None))
+        self.assertIsNone(provenance(None, None, override=("https://org.example/party/ciso", None)))
+        self.assertIsNone(provenance(None, None))
+
+    def test_backlog_69_the_two_arguments_are_read_and_held_to_their_types(self):
+        self.assertEqual(provenance_override([]), (None, None))
+        self.assertEqual(provenance_override(["--author-ref", "https://org.example/party/ciso"]),
+                         ("https://org.example/party/ciso", None))
+        self.assertEqual(provenance_override(["--date", "2026-11-13", "--author-ref", "https://org.example/party/ciso"]),
+                         ("https://org.example/party/ciso", "2026-11-13"))
+        for bad in (["--date", "13.11.2026"], ["--date", "2026-11-13\n"], ["--date", "2026-02-30"], ["--date", "2026-1-3"], ["--date"],
+                    ["--author-ref", "the CISO"], ["--author-ref", ""], ["--author-ref"]):
+            with self.assertRaises(SystemExit, msg=repr(bad)): provenance_override(bad)
+
+    def test_backlog_69_other_arguments_are_left_to_the_converter(self):
+        self.assertEqual(provenance_override(["--out", "/tmp/x", "--date", "2026-11-13"]), (None, "2026-11-13"))
+
+
+class Backlog69ThePinAWriterSets(unittest.TestCase):
+    """Bundle.write pins kernel 2.0.0 when the content needs it. The rule is
+    the validator's (kernel_needed); the library's copy is held to the pin
+    vectors of the conformance corpus, so the two cannot drift apart
+    unnoticed."""
+    def test_backlog_69_the_library_pins_what_the_pin_vectors_say_needs_a_pin(self):
+        here = os.path.dirname(os.path.abspath(__file__))
+        with open(os.path.join(here, "..", "conformance", "kernel-vectors.json"), encoding="utf-8") as f:
+            vectors = json.load(f)["vectors"]
+        asked = 0
+        for v in vectors:
+            m = v["manifest"]
+            if m.get("scales") or m.get("pack"): continue          # reasons a manifest carries; Bundle.write writes neither
+            frags = " ".join(v.get("expected-frags") or [])
+            if "KERNEL-1" in frags:
+                self.assertTrue(needs_kernel_2(v["objects"]), v["name"]); asked += 1
+            elif not v.get("expected-fails") and m.get("kernel-version") in (None, "1.0.0"):
+                self.assertFalse(needs_kernel_2(v["objects"]), v["name"]); asked += 1
+            elif not v.get("expected-fails") and m.get("kernel-version") == "2.0.0":
+                # a pinned vector is content that needs its pin, except the one that pins 2.0.0 on 1.0.0 content
+                asked += 1
+        self.assertGreaterEqual(asked, 15, "the pin vectors were not found")
+
+    def test_backlog_69_each_reason_for_a_pin_is_known(self):
+        req = {"id": "https://x/req/1", "version": "1", "lifecycle": "active", "statements": []}
+        self.assertFalse(needs_kernel_2([req]))
+        self.assertFalse(needs_kernel_2([{"id": "https://x/map/1", "relationship": "equal",
+                                          "provenance": {"author-ref": "https://x/p", "date": "2026-11-13"}}]))
+        reasons = {
+            "a Risk": {"scenario": "s", "owner-ref": "https://x/p"},
+            "risk-refs": {"assessment-ref": "a", "risk-refs": ["https://x/risk/1"]},
+            "check-ref": {"assessment-ref": "a", "check-ref": "https://x/check/1"},
+            "a Check": {"criteria": [], "observes": []},
+            "check results": {"performer-ref": "p", "check-results": [{}]},
+            "a tailoring-ref on an Assessment": {"performer-ref": "p", "tailoring-ref": "https://x/t"},
+            "product-version": {"kind": "software", "product-version": "7"},
+            "statement-ids on a capability": {"kind": "software", "capabilities": [{"id": "c", "statement-ids": ["s1"]}]},
+            "a dated authorization": {"kind": "system", "authorizations": [{"id": "a", "date": "2026-06-30"}]},
+            "provenance on an Implementation": {"component-ref": "c", "requirement-ref": "r", "provenance": {}},
+            "provenance on a Finding": {"assessment-ref": "a", "provenance": {}},
+            "provenance on a Tailoring": {"selects": [], "provenance": {}},
+            "provenance on a select": {"selects": [{"set-ref": "s", "provenance": {}}]},
+            "provenance on an operation": {"selects": [], "operations": [{"op": "set-parameter", "provenance": {}}]},
+            "a Deviation with decided": {"assessment-ref": "a", "deviations": [{"decided": "2026-11-13"}]},
+            "a Deviation with review-due": {"assessment-ref": "a", "deviations": [{"review-due": {}}]},
+            "a Deviation on an operation": {"selects": [], "operations": [{"deviation": {"decided": "2026-11-13"}}]},
+        }
+        for what, o in reasons.items():
+            self.assertTrue(needs_kernel_2([req, o]), what)
 
 
 if __name__ == "__main__":

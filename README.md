@@ -21,7 +21,7 @@ crypto engines included) —
 **eleven framework and lifecycle corpora converted at 100 % declared path
 coverage** (251,591 source leaf values, every source path with a computed
 destination; where every *value* went is traced on one corpus so far,
-where 536 of 835 are carried and 299 dropped for a declared reason —
+where 537 of 835 are carried and 298 dropped for a declared reason —
 backlog #41 — including NIST
 SP 800-53 Rev 5, its 800-53B baselines, and CSF 2.0), a **bidirectional
 OSCAL 1.2.2 export** that round-trips 5,886/5,886 objects to semantic-digest
@@ -190,8 +190,8 @@ requirements and mints real objects.*
 >   single level and no acceptance date, so the first Risk corpus cannot
 >   leave the `identified` state; and the coverage reports count source
 >   *paths*, not values that arrive. On the IFA corpus a ledger follows
->   every source value: of 835, 441 are copied, 95 transformed by a named
->   rule and 299 dropped for a declared reason, none unaccounted. That is
+>   every source value: of 835, 442 are copied, 95 transformed by a named
+>   rule and 298 dropped for a declared reason, none unaccounted. That is
 >   not "lossless", and the other ten corpora have no ledger (backlog
 >   #41). A workflow step reproduces the IFA conversion from its pinned
 >   sources on every change.

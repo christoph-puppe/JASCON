@@ -17,13 +17,39 @@ acceptance (`retain` is unreachable). Findings point at their Risk with
 `risk-refs`; the risk@1 framework facet is retired. Referenced Requirements
 (AC-6.1, AC-2) ride along as byte-identical copies from the US.SP800-53
 bundle - an authorization package carries its baseline. Coverage target: 0.
-Depends on: convert_nist.py output (run first)."""
-import json, os, re, collections
+Depends on: convert_nist.py output (run first).
+
+Who wrote a record, and when (backlog #69, kernel 2.0.0-rc.4): an
+Implementation, a Finding and a Risk get `provenance` pre-filled from what
+their source document says about itself - its author by the rule
+document_author() of the library, the day of its last-modified - and an
+authorization gets the date the source states for it. Where a document
+names nobody, the record gets nothing and the report says so. The caller
+may overwrite both for every record:
+
+    convert_ifa.py [--author-ref URI] [--date YYYY-MM-DD] [--out DIR]
+
+Without arguments the run reproduces the committed conversion byte for
+byte; the Validators workflow holds it to that. --out writes the conversion
+somewhere else, which is where a run with an overwrite belongs.
+
+The Attestation of the ATO is written BESIDE the manifest and binds that
+manifest's digest (D3.1; backlog #46). Until 2026-11-13 it was an object
+the manifest listed, so it could only digest a list of its own subjects in
+place of the manifest."""
+import json, os, re, sys, collections, hashlib
+import jsonschema
 from oscal_conv_lib import make_T, slug, Bundle, inventory, coverage, report, semantic_digest, global_occurrence, Ledger, props_by_name, response_treatment
+from oscal_conv_lib import document_author, document_day, is_day, provenance, provenance_override, textify
 
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 SRCDIR = os.path.join(ROOT, "sources", "nist")
 OUTDIR = os.path.join(ROOT, "converted_examples", "US.IFA-GoodRead")
+ARGV = sys.argv[1:]
+OVERRIDE = provenance_override(ARGV)        # (author, date) the caller wants on every record, or (None, None)
+if "--out" in ARGV:
+    if ARGV.index("--out") + 1 >= len(ARGV): raise SystemExit("--out needs a directory")
+    OUTDIR = os.path.abspath(ARGV[ARGV.index("--out") + 1])
 NISTB = os.path.join(ROOT, "converted_examples", "US.SP800-53", "sp800-53-core-bundle")
 NS = "https://ifa.gov/goodread"          # the source's own (fictional) agency domain
 F_SYS = f"{NS}/facet/system@1"
@@ -192,6 +218,37 @@ def component_facet(doc, comp, own_title=True):
     add_roles(roles, doc, comp.get("responsible-roles"), "the component")
     return f, roles
 
+# ---------- who wrote a record, and when (backlog #69) ----------
+# Pre-filled from what the record's source document says about itself: its
+# author by document_author() of the library, the day of its last-modified.
+# An OSCAL document names who is responsible for it, not who wrote one of its
+# statements, so the document's author is the most the source gives - and
+# the day is the latest day the record can have been written, not the day it
+# was. Where the document names nobody the record gets no `provenance`: the
+# validator reports it (AUTHOR-2) and the report of this run counts it.
+# --author-ref and --date overwrite, field by field, on every record.
+PROVENANCE = collections.Counter()      # how each record's `provenance` came about, for the report
+def provenance_of(doc, record):
+    """-> {author-ref, date} for `record`, a record taken from `doc`, or None."""
+    meta = doc["metadata"]
+    author = day = None
+    if not OVERRIDE[0]:
+        party = document_author(meta)
+        if party is not None:
+            author = D("the author of a record: the party its document names as author, as a landmark URI from the party's name",
+                       lambda name: f"{NS}/party/{slug(name)}", party["name"])
+    if not OVERRIDE[1] and document_day(meta):
+        day = D("the date of a record: the day of its document's last-modified", lambda lm: lm[:10], meta["last-modified"])
+    p = provenance(author, day, OVERRIDE)
+    if p is None: PROVENANCE["none"] += 1; NO_AUTHOR.append(record)
+    elif OVERRIDE[0] or OVERRIDE[1]: PROVENANCE["overwritten by the caller"] += 1
+    else: PROVENANCE["from the source"] += 1
+    return p
+NO_AUTHOR = []
+def authorized_on(value):
+    """The day the source states for an authorization -> {date}, if it is a date; else nothing."""
+    return {"date": value} if is_day(value) else {}
+
 # ---------- references by uuid, resolved ----------
 # OSCAL links its elements by uuid. Until 2026-11-13 this script followed none
 # of those links: it built the edges of the bundle by hand for this one
@@ -348,7 +405,8 @@ comp_sys = {"id": COMP_SYS, "version": V_SSP, "label": sc["system-name"], "lifec
                                 "authority-ref": f"{NS}/party/authorizing-official",
                                 "scope-label": D("ATO scope label: date authorized and sensitivity level",
                                                  lambda d, l: f"ATO {d} ({l})",
-                                                 sc.get("date-authorized", "?"), sc.get("security-sensitivity-level", "?"))}],
+                                                 sc.get("date-authorized", "?"), sc.get("security-sensitivity-level", "?")),
+                                **authorized_on(sc.get("date-authorized"))}],
             "facets": {F_SYS: sysf_ssp, F_COMP: compf_ssp}}
 
 # implemented-requirement ac-6.1 -> capability + Implementation
@@ -376,7 +434,8 @@ bundle.add("objects/impl/system1234-ac-6-1.json",
             "parameter-bindings": pbind,
             "status": bc.get("implementation-status", {}).get("state", "implemented"),
             "evidence-refs": [D("document reference from the SSP's uuid", lambda u: f"{NS}/doc/ssp-{u}", SSP["uuid"])],
-            "facets": {F_IMPL: implementation_facet(SSP, ir)}})
+            "facets": {F_IMPL: implementation_facet(SSP, ir)},
+            **({"provenance": pv} if (pv := provenance_of(SSP, IMPL_SYS)) else {})})
 
 # ================= 2. leveraged / leveraging pair (D5) =================
 V_LEV, V_LVG = LEV["metadata"]["version"], LVG["metadata"]["version"]
@@ -468,7 +527,8 @@ bundle.add("objects/component/csp-iaas.json",
                                 "scope-label": D("leveraged authorization scope label: its title and date",
                                                  lambda t, d: f"{t} ({d})",
                                                  la.get("title", "CSP IaaS leveraged authorization"),
-                                                 la.get("date-authorized", "?"))}],
+                                                 la.get("date-authorized", "?")),
+                                **authorized_on(la.get("date-authorized"))}],
             "facets": {F_SYS: {**system_facet(LEV), "customer-responsibilities": lev_resp}, F_COMP: compf_iaas}})
 bundle.add("objects/component/csp-application.json",
            {"id": COMP_APP, "version": V_LEV, "label": app_comp.get("title", "Application"),
@@ -522,7 +582,8 @@ bundle.add("objects/impl/saas-ac-2.json",
             "parameter-bindings": lvg_bind,
             "status": "implemented",
             "evidence-refs": [D("document reference from the SSP's uuid", lambda u: f"{NS}/doc/ssp-{u}", LVG["uuid"])],
-            "facets": {F_IMPL: implementation_facet(LVG, lvg_ir)}})
+            "facets": {F_IMPL: implementation_facet(LVG, lvg_ir)},
+            **({"provenance": pv} if (pv := provenance_of(LVG, f"{NS}/impl/saas-ac-2")) else {})})
 lev_sids = sorted({stmt_norm(st.get("statement-id"), lev_ir["control-id"])
                    for st in lev_ir.get("statements", []) or [] if st.get("statement-id")})
 lev_bind = {sp["param-id"]: (sp["values"][0] if len(sp["values"]) == 1 else sp["values"])
@@ -537,7 +598,8 @@ bundle.add("objects/impl/csp-iaas-ac-2.json",
             "parameter-bindings": lev_bind,
             "status": "implemented",
             "evidence-refs": [D("document reference from the SSP's uuid", lambda u: f"{NS}/doc/ssp-{u}", LEV["uuid"])],
-            "facets": {F_IMPL: implementation_facet(LEV, lev_ir)}})
+            "facets": {F_IMPL: implementation_facet(LEV, lev_ir)},
+            **({"provenance": pv} if (pv := provenance_of(LEV, f"{NS}/impl/csp-iaas-ac-2")) else {})})
 
 # ================= 3. component-definition example =================
 # The mapping is the one of the pack builder's OSCAL import
@@ -859,6 +921,8 @@ def risk_object(rk, name, treats):
     if rk.get("deadline"):
         o["review-due"] = {"type": "datetime", "value": rk["deadline"]}   # OSCAL deadline: date-time-with-timezone
     o["facets"] = {F_RISKA: risk_analysis(rk)}
+    pv = provenance_of(POAM, o["id"])
+    if pv: o["provenance"] = pv
     return o
 
 def actions_of(rk):
@@ -950,7 +1014,8 @@ bundle.add("objects/finding/goodread-risk-2.json",
                                 **({"target-description": T(pua_scan(finding_src["target"]["description"]), "finding")}
                                    if finding_src["target"].get("description") else {}),
                                 **({"observations": finding2_obs} if finding2_obs else {}),
-                                **item2}}})
+                                **item2}},
+            **({"provenance": pv} if (pv := provenance_of(POAM, f"{NS}/finding/goodread-risk-2")) else {})})
 bundle.add("objects/finding/goodread-risk-1.json",
            {"id": f"{NS}/finding/goodread-risk-1", "version": V_POAM, "lifecycle": "active",
             "title": rk1.get("title", ""),
@@ -966,10 +1031,10 @@ bundle.add("objects/finding/goodread-risk-1.json",
                             "opened": D("date part of the observation's collected timestamp", lambda c: c[:10],
                                         dev_obs.get("collected", "2023-05-19")),
                             "refs": [evidence_ref(dev_ref, POAM["observations"]), RISK1["id"]]}],
-            **({"facets": {F_FTGT: item1}} if item1 else {})})
+            **({"facets": {F_FTGT: item1}} if item1 else {}),
+            **({"provenance": pv} if (pv := provenance_of(POAM, f"{NS}/finding/goodread-risk-1")) else {})})
 
-# every role list is complete now: attach the ones that hold something, before
-# the Attestation digests the system Component
+# every role list is complete now: attach the ones that hold something
 for holder, roles in ROLE_LISTS:
     if roles: holder["responsible-roles"] = roles
 for gap, n in sorted(source_gaps.items()):
@@ -988,22 +1053,6 @@ for gap, n in sorted(party_gaps.items()):
          f"document {'has no such party' if gap == 'does not define' else 'gives that party no name'} - the leveraged "
          f"pair's parties carry a type and at most a remark. The role is carried without a party; the reference is "
          f"declared in the ledger.")
-
-# ================= 6. Attestation (the ATO as attestation) =================
-ato_subjects = [{"id": o["id"], "semantic-digest": semantic_digest(o)}
-                for rel, o in sorted(bundle.objects.items())
-                if o["id"] in (COMP_SYS, IMPL_SYS, REQ_AC61)]
-mini_manifest = json.dumps(ato_subjects, separators=(",", ":"), ensure_ascii=False).encode()
-import hashlib
-bundle.add("objects/attestation/ifa-ato.json",
-           {"id": f"{NS}/attestation/ifa-ato", "version": V_SSP, "lifecycle": "active",
-            "title": D("attestation title naming the system",
-                       lambda n: f"IFA ATO for {n} (modeled from SSP date-authorized)", sc["system-name"]),
-            "subject-semantic-digests": ato_subjects,
-            "content-manifest-digest": "sha256:" + hashlib.sha256(mini_manifest).hexdigest(),
-            "signer": f"{NS}/party/authorizing-official",
-            "timestamp": D("ATO timestamp: midnight UTC of the date authorized", lambda d: f"{d}T00:00:00Z",
-                           sc.get("date-authorized", "2025-05-19"))})
 
 # ---------- stubs + write ----------
 # carried Requirements bring their facet pins along (#17 fail-closed:
@@ -1033,10 +1082,34 @@ bundle.stub("goodread-finding-target-stub.json", F_FTGT.split("@")[0], [],
              "implementation-statement-uuid": {"type": "string"},
              "description": {"type": "object"}, "target-description": {"type": "object"},
              "observations": {"type": "array"}, "poam-item": {"type": "object"}})
-# `tasks` and `reviewed-controls` were written since 1.0.0 and missing from this pin (backlog #55)
+# The schema of the Assessment's method payload (backlog #55). `tasks` and
+# `reviewed-controls` were written since 1.0.0 and missing from this pin
+# until 2026-11-13; since then it named the five members and said of each
+# only that it is an array. It now says what an entry is, closed at every
+# level, so that a payload this script writes is held to its own pin (the
+# check after the write). No validator holds a method payload to its pin
+# yet: that half of #55 is open.
+_STR = {"type": "string"}
+_TEXT = {"type": "object", "minProperties": 1, "additionalProperties": {"type": "string"}}     # a language map
+_FROM = {"enum": ["ap", "ar"]}                    # the plan or the results: which document an entry is from
+def _entry(required, properties):
+    return {"type": "array", "items": {"type": "object", "additionalProperties": False,
+                                       "required": required, "properties": properties}}
 bundle.stub("goodread-ap-stub.json", F_AP.split("@")[0], [],
-            {"activities": {"type": "array"}, "tasks": {"type": "array"}, "subjects": {"type": "array"},
-             "reviewed-controls": {"type": "array"}, "responsible-roles": {"type": "array"}})
+            {"activities": _entry(["title", "description", "steps", "related-controls", "source-doc"],
+                                  {"title": _STR, "description": _TEXT,
+                                   "steps": _entry(["title", "description"],
+                                                   {"title": _STR, "description": _TEXT, "remarks": _TEXT}),
+                                   "props": {"type": "object",
+                                             "additionalProperties": {"anyOf": [_STR, {"type": "array", "items": _STR}]}},
+                                   "related-controls": {"type": "array", "items": _STR},
+                                   "source-doc": _FROM}),
+             "tasks": _entry(["title", "type", "source-doc"],
+                             {"title": _STR, "type": _STR, "description": _TEXT,
+                              "activities": {"type": "array", "items": _STR}, "remarks": _TEXT, "source-doc": _FROM}),
+             "subjects": _entry(["description"], {"description": _TEXT}),
+             "reviewed-controls": {"type": "array", "items": _STR},
+             "responsible-roles": _entry(["role"], {"role": _STR, "parties": {"type": "array", "items": _STR}})})
 bundle.stub("goodread-protocols-stub.json", F_PROTO.split("@")[0], [], {"protocols": {"type": "array"}})
 bundle.stub("goodread-implementation-stub.json", F_IMPL.split("@")[0], [],
             {"description": {"type": "object"}, "remarks": {"type": "object"}, "statements": {"type": "array"}})
@@ -1055,10 +1128,78 @@ manifest = bundle.write({"source": "OSCAL IFA GoodRead example set (SSP 1.1.1, A
               "source-oscal-version": SSP["metadata"]["oscal-version"],
               "source-commit": "usnistgov/oscal-content@9402f031 (2026-07-14; the state fetched 2026-07-22)",
               "source-documents": source_documents,
-              "converter": "convert_ifa.py v0.3 (a repeated prop name keeps every value; conversion ledger)",
+              "converter": "convert_ifa.py v0.4 (provenance pre-filled from the source documents; "
+                           "the Attestation beside the manifest; conversion ledger)",
               "carried-requirements": carried,
-              "attestation-note": "content-manifest-digest = sha256 over the JSON array of "
-                                  "{id, semantic-digest} subject entries (deterministic mini-manifest)"})
+              "attestation-note": "the Attestation of the ATO is the file attestation-ifa-ato.json beside this "
+                                  "manifest; it is not listed here, because it binds the digest of this file (D3.1)"})
+
+# ================= 6. Attestation (the ATO as attestation), beside the manifest =================
+# D3.1: an Attestation binds the manifest by the digest of the manifest's
+# bytes, so the manifest cannot list it - nothing that is signed contains its
+# own signature. It is written after the manifest, into the manifest's
+# folder. Until 2026-11-13 it was an object of the bundle and bound "a
+# deterministic mini-manifest", the list of its own three subjects; and it
+# took the system Component's digest before the bundle's free text was
+# language-tagged at the write, so one of its three subject digests matched
+# no object of the bundle (measured on the committed conversion, backlog #46).
+ATTESTATION_FILE = "attestation-ifa-ato.json"
+_written = {e["id"]: e["semantic-digest"] for e in manifest["objects"]}
+with open(os.path.join(bundle.out, "content-manifest.json"), "rb") as f:
+    _manifest_digest = "sha256:" + hashlib.sha256(f.read()).hexdigest()
+attestation = {"id": f"{NS}/attestation/ifa-ato", "version": V_SSP, "lifecycle": "active",
+               "title": D("attestation title naming the system",
+                          lambda n: f"IFA ATO for {n} (modeled from SSP date-authorized)", sc["system-name"]),
+               "subject-semantic-digests": [{"id": e["id"], "semantic-digest": e["semantic-digest"]}
+                                            for e in manifest["objects"] if e["id"] in (COMP_SYS, IMPL_SYS, REQ_AC61)],
+               "content-manifest-digest": _manifest_digest,
+               "signer": f"{NS}/party/authorizing-official",
+               "timestamp": D("ATO timestamp: midnight UTC of the date authorized", lambda d: f"{d}T00:00:00Z",
+                              sc.get("date-authorized", "2025-05-19"))}
+textify(attestation, bundle.lang)
+bundle._w(ATTESTATION_FILE, attestation)
+
+# ---------- what was written is held to what it claims ----------
+# Three things no validator checks for this bundle today, checked here so
+# that the conversion cannot be committed without them:
+#   - every facet payload and the method payload pass the schema the bundle pins for them;
+#   - every subject of the Attestation is an object of the bundle, with that semantic digest;
+#   - the Attestation binds the digest of the manifest as it lies on disk.
+def _self_check():
+    pins = {sd["id"]: jsonschema.Draft202012Validator(sd["schema"]) for sd in bundle.schemas.values()}
+    wrong = []
+    for rel, o in bundle.objects.items():
+        for member in ("facets", "method"):
+            for fid, payload in (o.get(member) or {}).items():
+                pin = pins.get(fid.rsplit("@", 1)[0])
+                if pin is None: wrong.append(f"{rel}: {member} {fid} has no pinned schema"); continue
+                for e in pin.iter_errors(payload):
+                    wrong.append(f"{rel}: {member} {fid}: {e.message[:120]} at /{'/'.join(map(str, e.absolute_path))}")
+    subjects = attestation["subject-semantic-digests"]
+    if len(subjects) != 3: wrong.append(f"{ATTESTATION_FILE}: {len(subjects)} of its 3 subjects are objects of the bundle")
+    for sj in subjects:
+        if _written.get(sj["id"]) != sj["semantic-digest"]:
+            wrong.append(f"{ATTESTATION_FILE}: subject {sj['id']} does not carry the digest of the bundle's object")
+    with open(os.path.join(bundle.out, "content-manifest.json"), "rb") as f:
+        if "sha256:" + hashlib.sha256(f.read()).hexdigest() != attestation["content-manifest-digest"]:
+            wrong.append(f"{ATTESTATION_FILE}: content-manifest-digest is not the digest of content-manifest.json")
+    if any(e["path"].startswith("objects/attestation/") for e in manifest["objects"]):
+        wrong.append("the manifest lists an Attestation (D3.1)")
+    if wrong: raise SystemExit("convert_ifa.py wrote a bundle that does not hold what it claims:\n  " + "\n  ".join(wrong))
+_self_check()
+note(f"**Who wrote a record, and when x{sum(PROVENANCE.values())}** (backlog #69): `provenance` on the Implementations, the "
+     f"Findings and the Risks - {PROVENANCE['from the source']} from the source, {PROVENANCE['overwritten by the caller']} "
+     f"overwritten by the caller, {PROVENANCE['none']} without. From the source means: the author is the party the record's "
+     f"document names as its author (a `creator`, else who prepared it, else the one responsible party, else the one party, "
+     f"else the one organization), and the date is the day of that document's `last-modified`. That is the latest day the "
+     f"record can have been written, not the day it was: OSCAL dates the document, not its statements. "
+     + (f"Without an author, because their documents name none the rule can take (the plan of action defines no party; the "
+        f"leveraged pair defines parties without a name): {', '.join(x.rsplit('/', 2)[-2] + '/' + x.rsplit('/', 1)[-1] for x in NO_AUTHOR)}. "
+        f"Nothing is invented for them; the validator reports each (AUTHOR-2). " if NO_AUTHOR else "")
+     + "`--author-ref` and `--date` overwrite both, field by field, on every record.")
+note("**Authorization dates x2**: `date-authorized` of the system and of the leveraged authorization -> "
+     "`authorizations[].date`. **The day a Deviation was decided x0**: the plan of action says that the risk's deviation is "
+     "approved and not when; `decided` is not written (AUTHOR-3).")
 
 # ---------- coverage ----------
 RULES = [
@@ -1184,7 +1325,7 @@ led.drop(r"\.risks\[\]\.remediations\[\]\.props\[\]\.name$",
 led.drop(r"^ar\.assessment-results\.results\[\]\.risks\[\]\.",
          "the assessment results hold the earlier state of a risk the POA&M carries in its later state; "
          "text equal to the POA&M's is linked to it above, the rest is superseded")
-LEDGER = led.account(bundle.out, {**bundle.objects, "content-manifest.json": manifest})
+LEDGER = led.account(bundle.out, {**bundle.objects, "content-manifest.json": manifest, ATTESTATION_FILE: attestation})
 with open(os.path.join(OUTDIR, "ifa-conversion-ledger.json"), "w", encoding="utf-8") as f:
     json.dump(LEDGER, f, indent=1, ensure_ascii=False); f.write("\n")
 LT = LEDGER["totals"]
@@ -1197,15 +1338,17 @@ j = report(
     f"Source: **OSCAL IFA GoodRead example set** (SSP v{V_SSP} + AP + AR + POA&M) + "
     f"leveraged/leveraging SSP pair + component-definition example (usnistgov/oscal-content; "
     f"FICTIONAL example content by NIST). Census: `drafts/gate-3-census.md` §4.",
-    [f"- Objects emitted: " + ", ".join(f"{v} {k}" for k, v in sorted(types.items())) +
+    [f"- Objects emitted: " + ", ".join(f"{v} {k}" for k, v in sorted(types.items())) + ", and 1 attestation beside the manifest" +
      f" - the five lifecycle types and the Risk type (kernel 2.0.0) at document scale, manifest with both digests.",
      f"- Carried Requirements (closure): {', '.join(carried)} - byte-identical copies from the "
      f"US.SP800-53 bundle; an authorization package carries its baseline."],
     [f"- **SSP -> Component + Implementation**: by-component -> capability + satisfied-by; "
      f"5 set-parameters bind the REAL minted AC-6.1 ODPs (unresolved bindings: {unresolved_bind or 'none'}).",
-     f"- **date-authorized -> Component.authorizations + Attestation**: the ATO modeled as an "
-     f"attestation over {{system Component, Implementation, AC-6.1}} semantic digests; unsigned "
-     f"(envelope-ref absent) - signature verification is gate-4 (backlog #24).",
+     f"- **date-authorized -> Component.authorizations (with its `date`) + Attestation**: the ATO modeled as an "
+     f"Attestation beside the manifest (`{ATTESTATION_FILE}`, not listed in it: D3.1). It binds the digest of the "
+     f"manifest and the semantic digests of {{system Component, Implementation, AC-6.1}}; this script checks both "
+     f"against what it wrote. Unsigned (no envelope). No validator reads an Attestation beside the manifest of a "
+     f"bundle that is not a pack yet (backlog #46).",
      f"- **Leveraged/leveraging pair -> D5 inheritance**: consumer Implementation satisfied-by "
      f"inherited-from{{csp-iaas, {AUTH_CSP}}} - basis-ref names the provider Component's authorization "
      f"(edge-local closure enforced by the validator); provider export.provided -> capabilities, "

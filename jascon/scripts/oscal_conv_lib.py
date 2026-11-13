@@ -77,6 +77,40 @@ def semantic_digest(obj):
     c = json.dumps(_canon(o), separators=(",", ":"), ensure_ascii=False).encode("utf-8")
     return "sha256:" + hashlib.sha256(c).hexdigest()
 
+def needs_kernel_2(objects):
+    """True when one of the objects carries what the 1.0.0 kernel cannot
+    type, so that the manifest must pin `kernel-version` 2.0.0 (KERNEL-1).
+    The rule is `kernel_needed` of validate_core.py; this is its copy for a
+    writer that has no schema at hand, so it tells the types apart by the
+    fields only they carry. test_oscal_conv_lib.py holds it to the pin
+    vectors of the conformance corpus.
+
+    Until 2026-11-13 this test knew a Risk and `risk-refs` and nothing else:
+    a converter that had written a Check, a `product-version` or a
+    `provenance` on an Implementation would have shipped a bundle the
+    validator refuses."""
+    def deviations(o):
+        out = [d for d in o.get("deviations") or [] if isinstance(d, dict)]
+        if "selects" in o:                                   # a Tailoring carries them inline on an operation too
+            out += [op["deviation"] for op in o.get("operations") or []
+                    if isinstance(op, dict) and isinstance(op.get("deviation"), dict)]
+        return out
+    for o in objects:
+        if "scenario" in o and "owner-ref" in o: return True                      # a Risk
+        if o.get("risk-refs") or o.get("check-ref"): return True                  # a Finding that names one, or a Check
+        if "criteria" in o and "observes" in o: return True                       # a Check
+        if "performer-ref" in o and (o.get("check-results") or o.get("tailoring-ref")): return True
+        if "kind" in o:                                                           # a Component
+            if "product-version" in o: return True
+            if any(c.get("statement-ids") for c in o.get("capabilities") or [] if isinstance(c, dict)): return True
+            if any("date" in a for a in o.get("authorizations") or [] if isinstance(a, dict)): return True
+        # `provenance` is 1.0.0 on a Mapping (which has a relationship) and came with the Check
+        if "provenance" in o and "relationship" not in o: return True
+        if "selects" in o and any("provenance" in e for k in ("selects", "excludes", "operations")
+                                  for e in o.get(k) or [] if isinstance(e, dict)): return True
+        if any("decided" in d or "review-due" in d for d in deviations(o)): return True
+    return False
+
 class Bundle:
     def __init__(self, out_dir, lang="en"):
         self.out = out_dir
@@ -132,7 +166,7 @@ class Bundle:
         # backlog #44: content beyond the 1.0.0 kernel names its kernel
         # (KERNEL-1). Bundles without it stay unpinned - byte-identical to
         # their 1.0.0 conversion and readable by a 1.0.0 tool.
-        if any(("scenario" in o and "owner-ref" in o) or o.get("risk-refs") for o in self.objects.values()):
+        if needs_kernel_2(self.objects.values()):
             manifest["kernel-version"] = "2.0.0"
         manifest.update({"provenance": provenance,
                     "objects": [{"id": o["id"], "version": o["version"],
@@ -531,6 +565,91 @@ def response_treatment(rtype):
     if rtype == "none":
         return None, "response type `none`: the source chose no option, so no `treatment` is written (C.10)"
     return None, f"response type `{rtype}` has no treatment code (C.10)"
+
+# ---------- who wrote a record, and when (backlog #69) ----------
+# The kernel has one place for it since 2.0.0-rc.4: `provenance`
+# {author-ref, date}, optional on a Tailoring and its entries, a Risk and
+# its ratings, an Implementation, a Finding, a Mapping and a Check. A
+# converter pre-fills it from what the source says and lets the caller
+# overwrite it (author decision 2026-11-13: "all converters should pre-fill
+# that data from the source corpus but import tool should be able to
+# overwrite it"). Nothing is invented: where the source names nobody, or no
+# day, the record gets no `provenance` and the validator reports it
+# (AUTHOR-1 to 4).
+#
+# An OSCAL document says who is responsible for it in its metadata, by role,
+# and when it was last changed. It does not say who wrote one statement of
+# it. The author of the document is therefore the most a converter can
+# pre-fill for a record taken from it, and the day of `last-modified` the
+# latest day the record can have been written. The rule below is the same
+# rule in jascon-app/jascon-oscal.js; the test table is shared.
+_DAY = re.compile(r"[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])\Z")
+
+def document_author(metadata):
+    """-> the party (the entry of `metadata.parties`) an OSCAL document names
+    as its author, or None.
+      1. the one party named for the role `creator`, else for `prepared-by`;
+      2. else the one party that the responsible-parties name at all;
+      3. else the one party the document defines;
+      4. else the one organization among the parties it defines;
+      5. else nobody.
+    "The one" is exact: two candidates are no answer, and the next step is
+    asked. A uuid the document does not define names nobody. A party without
+    a name cannot be named by a landmark URI, so it is nobody too."""
+    plist = [x for x in metadata.get("parties", []) or [] if isinstance(x, dict)]
+    def defined(uuid): return next((x for x in plist if x.get("uuid") == uuid), None)
+    def named(role=None):
+        seen = []
+        for rp in metadata.get("responsible-parties", []) or []:
+            if role is None or rp.get("role-id") == role:
+                for u in rp.get("party-uuids", []) or []:
+                    if defined(u) is not None and u not in seen: seen.append(u)
+        return seen
+    pick = None
+    for got in (named("creator"), named("prepared-by"), named()):
+        if len(got) == 1: pick = defined(got[0]); break
+    if pick is None and len(plist) == 1: pick = plist[0]
+    if pick is None:
+        orgs = [x for x in plist if x.get("type") == "organization"]
+        if len(orgs) == 1: pick = orgs[0]
+    return pick if pick is not None and pick.get("name") else None
+
+def is_day(value):
+    """True for a string that is a date as the kernel writes one, YYYY-MM-DD."""
+    return isinstance(value, str) and bool(_DAY.match(value))
+
+def document_day(metadata):
+    """-> the day of the document's `last-modified`, as the document wrote it
+    (its first ten characters), or None when they are not a date."""
+    lm = metadata.get("last-modified")
+    return lm[:10] if isinstance(lm, str) and _DAY.match(lm[:10]) else None
+
+def provenance(author, date, override=(None, None)):
+    """What the source states, overwritten field by field by what the caller
+    gave. -> {author-ref, date}, or None unless both are known: the kernel's
+    `provenance` is closed and requires both."""
+    a, d = override[0] or author, override[1] or date
+    return {"author-ref": a, "date": d} if a and d else None
+
+def provenance_override(argv):
+    """Reads `--author-ref URI` and `--date YYYY-MM-DD` from a converter's
+    arguments -> (author or None, date or None). Other arguments are left to
+    the converter. A value that is not what it must be stops the run: an
+    overwrite the caller asked for is never dropped silently."""
+    author = date = None
+    for i, a in enumerate(argv):
+        if a not in ("--author-ref", "--date"): continue
+        if i + 1 >= len(argv): raise SystemExit(f"{a} needs a value")
+        v = argv[i + 1]
+        if a == "--author-ref":
+            if not re.match(r"https?://[^\s]+\Z", v): raise SystemExit(f"--author-ref {v!r} is not an http(s) URI of a party")
+            author = v
+        else:
+            if not _DAY.match(v): raise SystemExit(f"--date {v!r} is not a date, YYYY-MM-DD")
+            try: time.strptime(v, "%Y-%m-%d")
+            except ValueError: raise SystemExit(f"--date {v!r} is not a day of the calendar")
+            date = v
+    return author, date
 
 def coverage(paths, rules):
     """rules: list of (regex, level, target). Returns (rows, unmapped)."""

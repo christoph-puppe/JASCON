@@ -2834,8 +2834,7 @@
   "impl": 3,
   "assessment": 1,
   "risk": 2,
-  "finding": 2,
-  "attestation": 1
+  "finding": 2
  },
  "carried-requirements": [
   "https://ns.nist.gov/sp800-53/req/AC-6.1",
@@ -2868,9 +2867,9 @@
  "global-occurrence": {
   "measures": "global occurrence of equal typed values - an upper bound on what was carried, not a trace of each source occurrence",
   "leaf-values": 835,
-  "exact": 424,
+  "exact": 425,
   "key-only": 41,
-  "embedded": 39,
+  "embedded": 38,
   "absent": {
    "identity": 182,
    "document-metadata": 125,
@@ -3118,13 +3117,6 @@
     ]
    },
    {
-    "path": "lvg.system-security-plan.system-implementation.leveraged-authorizations[].date-authorized",
-    "count": 1,
-    "pointers": [
-     "lvg#/system-security-plan/system-implementation/leveraged-authorizations/0/date-authorized"
-    ]
-   },
-   {
     "path": "lvg.system-security-plan.system-implementation.leveraged-authorizations[].title",
     "count": 1,
     "pointers": [
@@ -3316,9 +3308,9 @@
   "file": "ifa-conversion-ledger.json",
   "leaf-values": 835,
   "totals": {
-   "copied": 441,
+   "copied": 442,
    "transformed": 95,
-   "intentionally-dropped": 299,
+   "intentionally-dropped": 298,
    "unaccounted": 0
   },
   "verification-failures": 0

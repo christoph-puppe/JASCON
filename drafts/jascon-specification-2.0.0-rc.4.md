@@ -1923,8 +1923,11 @@ reads 124 and 283. And it is a global check: 283 is an upper bound on
 what was carried, since one value in the bundle answers for every equal
 value in the source. The same day a **ledger** traced every source value
 of this corpus through the converter. After the author's decisions it
-reads 441 copied, 95 transformed by a named rule, 299 dropped for a
-declared reason, **none unaccounted**. Three of the drops are references
+reads 442 copied, 95 transformed by a named rule, 298 dropped for a
+declared reason, **none unaccounted** (441 and 299 until 2026-11-13:
+since then the day of the leveraged authorization is copied into a field
+of its own, and the agency's name, dropped until then, makes the author
+of one Implementation; D26). Three of the drops are references
 that name nothing their source defines, declared as defects of the
 source. The path map reads 835 of 835 for the same conversion.
 The first run read 232 copied and 473 unaccounted and found a value the

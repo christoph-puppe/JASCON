@@ -2,9 +2,9 @@
  "measures": "one entry per source leaf value: where it went, checked against the written files",
  "leaf-values": 835,
  "totals": {
-  "copied": 441,
+  "copied": 442,
   "transformed": 95,
-  "intentionally-dropped": 299,
+  "intentionally-dropped": 298,
   "unaccounted": 0
  },
  "verification-failures": [],
@@ -51,6 +51,11 @@
     {
      "object": "content-manifest.json",
      "pointer": "/provenance/source-documents/0/last-modified"
+    },
+    {
+     "object": "https://ifa.gov/goodread/impl/system1234-ac-6.1",
+     "pointer": "/provenance/date",
+     "rule": "the date of a record: the day of its document's last-modified"
     }
    ],
    "outcome": "copied"
@@ -61,15 +66,11 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/objects/1/version"
+     "pointer": "/objects/11/version"
     },
     {
      "object": "content-manifest.json",
-     "pointer": "/objects/12/version"
-    },
-    {
-     "object": "content-manifest.json",
-     "pointer": "/objects/7/version"
+     "pointer": "/objects/6/version"
     },
     {
      "object": "content-manifest.json",
@@ -400,8 +401,14 @@
   {
    "source": "ssp#/system-security-plan/metadata/parties/3/name",
    "path": "ssp.system-security-plan.metadata.parties[].name",
-   "reason": "the source's directory of parties and roles: a party is a landmark URI and there is no party object (register, backlog #16); the name of a party the bundle refers to has a destination above",
-   "outcome": "intentionally-dropped"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/impl/system1234-ac-6.1",
+     "pointer": "/provenance/author-ref",
+     "rule": "the author of a record: the party its document names as author, as a landmark URI from the party's name"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "ssp#/system-security-plan/metadata/parties/3/short-name",
@@ -563,6 +570,10 @@
      "object": "https://ifa.gov/goodread/attestation/ifa-ato",
      "pointer": "/timestamp",
      "rule": "ATO timestamp: midnight UTC of the date authorized"
+    },
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/authorizations/0/date"
     },
     {
      "object": "https://ifa.gov/goodread/component/system1234",
@@ -4287,19 +4298,19 @@
    "destinations": [
     {
      "object": "content-manifest.json",
+     "pointer": "/objects/14/version"
+    },
+    {
+     "object": "content-manifest.json",
      "pointer": "/objects/15/version"
     },
     {
      "object": "content-manifest.json",
-     "pointer": "/objects/16/version"
+     "pointer": "/objects/7/version"
     },
     {
      "object": "content-manifest.json",
      "pointer": "/objects/8/version"
-    },
-    {
-     "object": "content-manifest.json",
-     "pointer": "/objects/9/version"
     },
     {
      "object": "content-manifest.json",
@@ -5537,7 +5548,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/objects/10/version"
+     "pointer": "/objects/2/version"
     },
     {
      "object": "content-manifest.json",
@@ -5545,7 +5556,7 @@
     },
     {
      "object": "content-manifest.json",
-     "pointer": "/objects/4/version"
+     "pointer": "/objects/9/version"
     },
     {
      "object": "content-manifest.json",
@@ -6586,15 +6597,15 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/objects/11/version"
+     "pointer": "/objects/1/version"
     },
     {
      "object": "content-manifest.json",
-     "pointer": "/objects/2/version"
+     "pointer": "/objects/10/version"
     },
     {
      "object": "content-manifest.json",
-     "pointer": "/objects/6/version"
+     "pointer": "/objects/5/version"
     },
     {
      "object": "content-manifest.json",
@@ -6986,11 +6997,15 @@
    "destinations": [
     {
      "object": "https://ifa.gov/goodread/component/csp-iaas",
+     "pointer": "/authorizations/0/date"
+    },
+    {
+     "object": "https://ifa.gov/goodread/component/csp-iaas",
      "pointer": "/authorizations/0/scope-label",
      "rule": "leveraged authorization scope label: its title and date"
     }
    ],
-   "outcome": "transformed"
+   "outcome": "copied"
   },
   {
    "source": "lvg#/system-security-plan/system-implementation/users/0/uuid",
@@ -7797,7 +7812,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/objects/5/version"
+     "pointer": "/objects/4/version"
     },
     {
      "object": "content-manifest.json",
@@ -7899,7 +7914,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/objects/5/id",
+     "pointer": "/objects/4/id",
      "rule": "component id from its title"
     },
     {
