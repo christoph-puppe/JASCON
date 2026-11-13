@@ -3215,3 +3215,104 @@ runs, 61.7 to 62.7), about a tenth more. The hosted Windows runners do
 not show it: main's twin took 118 s on the run that closed #67 and 201 s
 on the merge of pull request 35, the rewritten twin 159 s. Between
 hosted runs the machine varies more than the change costs.
+
+## CP-AUTHOR-1 landed — who decided, and when *(2026-11-13; closes #65 and #66; specification D26, release candidate 4)*
+
+**Author decisions, in the author's words.** "#65 stays optional, fix
+it." "#66 need the author! we need authors for every part where a
+decision is made, a check done, a risk changed etc! fix it." On the
+plan's three open points: "1 report, 2 provenance, 3 read the clock then
+report." Then: "start phase B".
+
+**What was decided by them.** One spelling for who and when,
+`provenance: {author-ref, date}`, optional on the records and decisions
+that had no place for it. A missing author is a report line, and a
+switch makes the lines failures. A Deviation may say when it was decided
+and when it is due for review; the validator reads the date of the run
+and reports a review that has passed, and nothing fails by it.
+
+**What the proposal added on its own** (`drafts/CP-AUTHOR-1.md` §10),
+built as proposed and the author's to overturn before the tag: REVIEW-1
+covers a Risk's `review-due` as well as a Deviation's; three times that
+accepted any string are typed (a Mapping's provenance date, an
+Assessment's time, an Attestation's timestamp); an authorization may
+carry its date (AUTHOR-4); `excludes[].rationale` stays optional; an
+entry without `provenance` has its record's; no requester on a
+Deviation, no performer per check row, no log inside an object.
+
+**Rejected.** The backlog row's option (b) for #66, "the history of a
+Tailoring is its versions", as the whole answer: it stays true and is
+now the reason there is no log, but the author wanted the author of a
+decision in the record. A review date that stops an exception from
+licensing its weakening: the plan had proposed it for runs with a given
+date; the author chose a report. A log inside the object, as OSCAL's
+`risk-log`: two histories can disagree.
+
+**Built and measured.**
+
+| What | Measured |
+|---|---|
+| Kernel schema | `provenance` as one definition; optional fields on five types, on the Deviation and on an authorization; three times typed |
+| Reference | `author_report`, `review_report`, the pin for the new fields, DATE-3 to 5; `--require-authors`, `--as-of` |
+| Vectors | a new family, `author`: 17 for the missing-author report, 17 for the review report; `kernel` 25 → 54 (7 for the pin, 22 shapes). 637 in all, 18 families. Every expectation was written before the first run, and the first run passed all 63 |
+| Deliberate defects | 19 in the reference's new code, each turning at least one vector red |
+| Values that had to change | none: 53 assessment times, 19 timestamps and 3 mapping dates in the repository conform |
+| The example folder | 8 objects name their authors and dates; re-pinned; no AUTHOR line, 2 review dates asked, 0 overdue, 1 not evaluable (a calendar period) |
+| The IFA bundle | unchanged: 10 AUTHOR lines, 2 Risks overdue since 2023 and 2024. With `--require-authors` it fails 10 times and the example folder passes |
+
+**The ports.** Both were written by agents from the reference's commit
+and the vectors, and checked here.
+
+- *The app* (build 0.9.8): `jscAuthorReport`, `jscReviewReport`,
+  `jscUtcDay`; the four new reasons of the pin in the rules and in the
+  pin the export writes. 133 tests, 129 pass, 4 skipped as before; the
+  browser tests 10 of 10. Both reports give the reference's lines for
+  the example folder and the IFA bundle. The agent reports 45 deliberate
+  defects, each turning a test red, and the day computation equal to the
+  reference's on 300,000 generated values under three time zones; those
+  scripts are outside the repository and were not run again here.
+- *The twin*: the same counts as the reference in every family and for
+  every bundle, and the same 15 report lines, on PowerShell 7.4 here;
+  the lint passes. The run on Windows PowerShell 5.1 is the workflow's.
+
+**What the ports found.**
+
+1. *A writer that the count had missed.* `convert_cis_benchmark.py` and
+   the app's CIS preset wrote the catalogue's version as the
+   `provenance.date` of every Mapping. The proposal had counted the
+   values the repository holds; it holds no CIS bundle, by its terms.
+   Both now write the day of the catalogue's `last-modified` and refuse
+   a catalogue with cross-references and no such date. The count of §2.2
+   was true and was not the question: the question was who writes the
+   field.
+2. *A line break at the end of a value* passes a pattern in the
+   reference and in the twin and is refused by the app (#68, filed; the
+   author's to decide, as #67 was).
+3. *The reader* has its own test for the kernel pin and does not know
+   the new fields (#69).
+4. *An English sentence that was wrong.* The website said neither report
+   fails a bundle unless the caller asks for it. REVIEW-1 never fails.
+   The agent that translated the page said so; the English and the four
+   translations are corrected.
+
+**Read, as the proposal's §8 promised, and not read.** OSCAL 1.1.3,
+`oscal_assessment-common_metaschema.xml` at tag `v1.1.3`: a `risk-log`
+whose entries carry `logged-by`, an `origin` with its actors, and a
+`deadline` on a risk, a date-time with a time zone. That citation is
+read now. ISO/IEC 27001:2022 clauses 7.5.2 and 6.1.3 f were not read:
+the text is not at hand, and the citation stays from memory.
+
+**What it does not show.** No tool writes the fields (#69), so the only
+bundle with authors is the example folder, written by hand. No corpus of
+consumer Tailorings with authors exists; the fields are in the kernel on
+the author's decision. The author of a version is not a log of every
+change. A report nobody reads changes nothing: REVIEW-1 puts an overdue
+exception in front of whoever runs the validator, and leaves it in
+force.
+
+**Scored.** *Customer:* the auditor's two questions, who decided this
+and is this exception still wanted, have a field and a report each.
+*Simplicity:* one shape where there were five spellings, and inheritance
+from the record so that one author is named once. *Complexity:* the
+validator reads a clock for the first time; the answer of one report
+depends on the day, and no verdict, digest or resolution does.
