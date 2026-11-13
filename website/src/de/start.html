@@ -73,7 +73,7 @@ python jascon/scripts/validate_core.py path/to/your-bundle</code></pre>
             <div class="stack">
               <p class="muted">Wählen Sie ein Präfix unter einer Domain, die Sie kontrollieren, und behalten Sie es bei. Kennungen werden als Zeichenketten verglichen und nie abgerufen, deshalb muss unter der Adresse nichts ausgeliefert werden.</p>
               <p class="muted">Teilen Sie den Text dort in Aussagen auf, wo sich die Verbindlichkeit, die verpflichtete Partei oder ein Parameter ändert. Deklarieren Sie jeden Parameter mit einem Typ und verweisen Sie im Fließtext mit <code>{param:name}</code> darauf.</p>
-              <p class="muted">Die Seite Browse der App hat dafür ein Formular unter „Write requirements and sets“. Es deklariert die Parameter, die es im Fließtext findet. Die Seite Home exportiert den Arbeitsbestand als Bundle mit Manifest und beiden Digests je Objekt.</p>
+              <p class="muted">Die Seite Durchsehen (Browse) der App hat dafür ein Formular unter „Write requirements and sets“. Es deklariert die Parameter, die es im Fließtext findet. Die Seite Übersicht (Home) exportiert den Arbeitsbestand als Bundle mit Manifest und beiden Digests je Objekt.</p>
               <a class="link-arrow" href="{{ blob }}/jascon/references/ch04-writing-requirements.md" rel="noopener">Handbuch, Kapitel 4: Anforderungen schreiben</a>
             </div>
             <div class="window">
@@ -104,9 +104,9 @@ python jascon/scripts/validate_core.py path/to/your-bundle</code></pre>
       <div class="step reveal" id="oscal">
         <div class="step-body">
           <h2>Bringen Sie Ihr OSCAL mit und nehmen Sie es wieder mit</h2>
-          <p>Die Seite Import der App liest einen OSCAL-Katalog oder ein OSCAL-Profil und meldet jede Regel, die sie angewandt hat. Regelsätze gibt es für Grundschutz++, SP 800-53 und CIS Benchmarks; ein Katalog anderer Form läuft durch die generischen Regeln, die das, wofür der Kern kein Feld hat, in einer Facette unter Ihrem Namespace bewahren und nichts verwerfen, ohne dass der Bericht eine Zeile dazu enthält. Für die Stapelverarbeitung enthält das Repository elf Konverter in Python, einen je gemessenem Korpus, auf Basis einer gemeinsamen Bibliothek.</p>
+          <p>Die Seite Importieren (Import) der App liest einen OSCAL-Katalog oder ein OSCAL-Profil und meldet jede Regel, die sie angewandt hat. Regelsätze gibt es für Grundschutz++, SP 800-53 und CIS Benchmarks; ein Katalog anderer Form läuft durch die generischen Regeln, die das, wofür der Kern kein Feld hat, in einer Facette unter Ihrem Namespace bewahren und nichts verwerfen, ohne dass der Bericht eine Zeile dazu enthält. Für die Stapelverarbeitung enthält das Repository elf Konverter in Python, einen je gemessenem Korpus, auf Basis einer gemeinsamen Bibliothek.</p>
           <p>In der Gegenrichtung schreibt <code>export_oscal.py</code> Kataloge in OSCAL 1.2.2. Die Exporte der mitgelieferten Bundles liegen daneben unter <code>converted_examples/*/oscal-export/</code>. Wofür OSCAL kein Konstrukt hat (Modalität, verpflichtete Parteien, überlappende Mitgliedschaft), reist in Props mit Namespace mit und kommt beim Import zurück.</p>
-          <p><a class="link-arrow" href="app/index.html#import">Die Seite Import öffnen</a></p>
+          <p><a class="link-arrow" href="app/index.html#import">Die Seite Importieren (Import) öffnen</a></p>
         </div>
       </div>
 
@@ -115,7 +115,7 @@ python jascon/scripts/validate_core.py path/to/your-bundle</code></pre>
           <h2>Risiken ergänzen und die Abdeckung berechnen</h2>
           <div class="step-cols">
             <div class="stack">
-              <p class="muted">Laden Sie einen Katalog, wählen Sie mit einem Tailoring eine Baseline aus und schreiben Sie auf der Seite Risk die Risiken, die die Auswahl begründen. Die Ansicht Coverage listet jede ausgewählte Anforderung auf, die kein bewertetes Risiko nennt.</p>
+              <p class="muted">Laden Sie einen Katalog, wählen Sie mit einem Tailoring eine Baseline aus und schreiben Sie auf der Seite Risiko (Risk) die Risiken, die die Auswahl begründen. Die Ansicht Abdeckung (Coverage) listet jede ausgewählte Anforderung auf, die kein bewertetes Risiko nennt.</p>
               <p class="muted">Zwei prototypische Risikokataloge helfen beim ersten Durchgang: 24 typische Risiken der Büro-IT und 23 einer Industrieanlage, auf Englisch und Deutsch, jeweils mit vorgeschlagenen Controls aus SP 800-53. Der Import kopiert einen Eintrag in ein eigenes Risk; die Entscheidung bleibt bei Ihnen.</p>
               <a class="link-arrow" href="{{ blob }}/risk-catalogs/README.md" rel="noopener">Die Risikokataloge und ihre Grenzen</a>
             </div>
@@ -135,15 +135,15 @@ python jascon/scripts/validate_core.py path/to/your-bundle</code></pre>
       <div class="step reveal" id="check">
         <div class="step-body">
           <h2>Eine maschinelle Prüfung schreiben</h2>
-          <p>Für eine technische Regel schreiben Sie auf der Seite Checks der App einen Check (Kern 2.0.0, Release-Kandidat): die Fakten, die ein Kollektor meldet, die Vergleiche, die entscheiden, und den Code des Kollektors in bash, sh, Python, PowerShell, Ansible oder als HTTP-Anfrage. Ein Sprachmodell kann Checks entwerfen, Regel für Regel oder für jede automatisierte Regel eines CIS-Imports, sobald Sie einen Schlüssel eingeben. Jeder Entwurf wird von den Kernregeln und einem Lint, der nur liest, beurteilt, und Sie entscheiden, was gespeichert wird. Die App führt keine Kollektoren aus.</p>
-          <p><a class="link-arrow" href="app/index.html#load=../jascon/examples/&amp;tool=checks">Die Seite Checks mit dem Beispiel öffnen</a> &nbsp; <a class="link-arrow" href="checks.html">Wie ein Check entscheidet</a></p>
+          <p>Für eine technische Regel schreiben Sie auf der Seite Prüfungen (Checks) der App einen Check (Kern 2.0.0, Release-Kandidat): die Fakten, die ein Kollektor meldet, die Vergleiche, die entscheiden, und den Code des Kollektors in bash, sh, Python, PowerShell, Ansible oder als HTTP-Anfrage. Ein Sprachmodell kann Checks entwerfen, Regel für Regel oder für jede automatisierte Regel eines CIS-Imports, sobald Sie einen Schlüssel eingeben. Jeder Entwurf wird von den Kernregeln und einem Lint, der nur liest, beurteilt, und Sie entscheiden, was gespeichert wird. Die App führt keine Kollektoren aus.</p>
+          <p><a class="link-arrow" href="app/index.html#load=../jascon/examples/&amp;tool=checks">Die Seite Prüfungen (Checks) mit dem Beispiel öffnen</a> &nbsp; <a class="link-arrow" href="checks.html">Wie ein Check entscheidet</a></p>
         </div>
       </div>
 
       <div class="step reveal" id="advice">
         <div class="step-body">
           <h2>Die Empfehlungen eines Herstellers aufnehmen</h2>
-          <p>Ein Empfehlungspaket ist eine Datei, die ein Hersteller veröffentlicht: Components mit Empfehlungen zu benannten Anforderungen (Kern 2.0.0, Release-Kandidat). Die Seite Home der App zeigt, was ein Paket enthält, bevor etwas geschrieben wird, sagt, ob sein Herausgeber behauptet, attestiert oder belegt ist, und gibt nach dem Import eine Quittung aus. Auf der Seite Implement machen Sie das Produkt zum Mitglied Ihres Systems und übernehmen eine Empfehlung als Ihre eigene Kante. Dieselbe Datei ein zweites Mal schreibt nichts.</p>
+          <p>Ein Empfehlungspaket ist eine Datei, die ein Hersteller veröffentlicht: Components mit Empfehlungen zu benannten Anforderungen (Kern 2.0.0, Release-Kandidat). Die Seite Übersicht (Home) der App zeigt, was ein Paket enthält, bevor etwas geschrieben wird, sagt, ob sein Herausgeber behauptet, attestiert oder belegt ist, und gibt nach dem Import eine Quittung aus. Auf der Seite Umsetzen (Implement) machen Sie das Produkt zum Mitglied Ihres Systems und übernehmen eine Empfehlung als Ihre eigene Kante. Dieselbe Datei ein zweites Mal schreibt nichts.</p>
           <p>Das Beispielpaket ist fiktiv und mit einem öffentlichen Testschlüssel signiert. Noch hat kein Hersteller ein Paket veröffentlicht.</p>
           <p><a class="link-arrow" href="app/index.html#load=../jascon/example-packs/dbvendor-server-7-advice/">Vorschau des Beispielpakets in der App</a> &nbsp; <a class="link-arrow" href="model.html#advice">Wie ein Paket funktioniert</a></p>
           <h3>Für Hersteller: ein Paket schreiben</h3>
