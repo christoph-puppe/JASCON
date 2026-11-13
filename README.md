@@ -90,7 +90,9 @@ requirements and mints real objects.*
 >   vectors, the bundles, the pack and the example folder with the
 >   reference's counts (backlog #63, closed). Since 2026-11-13 no
 >   PowerShell operator compares two strings in the twin: every such
->   comparison is a code-point comparison (backlog #58, closed). A
+>   comparison is a code-point comparison (backlog #58, closed), and
+>   it ran green on all 574 vectors that day
+>   ([run](https://github.com/christoph-puppe/JASCON/actions/runs/43492500585)). A
 >   [workflow](.github/workflows/validators.yml) now runs both validators
 >   and the app's port on every change.
 > - **Not there:** a pack published by a vendor; a converter from OSCAL

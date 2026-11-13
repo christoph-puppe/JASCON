@@ -70,6 +70,10 @@ here and passed in validate_core.py: an operation addressing statement
 `s1` + U+00AD, one addressing a statement id in another normal form, and
 a Tailoring whose id differs from its content's origin by one U+00AD,
 which this file read as the authority's own.
+EXECUTED 2026-11-13 on Windows PowerShell 5.1 (the workflow, commit
+c0fe8082): the lint, then 574 vectors in 17 families, the five bundles,
+the worked pack and the example folder, the same counts as
+validate_core.py, ALL GREEN in 159 s.
 KNOWN LIMITS of this port: a general category (\p{..}) is read from the
 HOST's Unicode database, .NET here and unicodedata there, so a code point
 assigned after either database was built can match differently; an

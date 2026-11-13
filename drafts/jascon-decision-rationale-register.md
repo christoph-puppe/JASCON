@@ -3192,3 +3192,26 @@ vector count of today; that day it was 537. The sentence now carries no
 date. The same page and the README said that nothing is left to decide
 before the tag and that items 65 and 66 need the author's decision; both
 were decided on 13 November and neither is built.
+
+### Published, and run on Windows PowerShell 5.1 (2026-11-13)
+
+A rebased branch is published by replacing what was pushed. The
+session's permissions refused that, and the author chose the other way:
+one merge commit that joins the commits as they were pushed with their
+rebased versions and takes the rebased tree unchanged. Nothing was
+discarded; each commit of phase A is in the history twice.
+
+On that commit (`c0fe8082`) the workflow ran all four jobs green: the
+reference with the library's tests and the guard that reproduces the IFA
+conversion from its pinned sources; the app's port; the pages in a
+browser; and the twin on Windows PowerShell 5.1, the lint first, then
+574 vectors in 17 families, the five bundles, the worked pack and the
+example folder with the reference's counts, ALL GREEN in 159 s
+(https://github.com/christoph-puppe/JASCON/actions/runs/43492500585).
+
+**What the rewrite costs.** Timed here on PowerShell 7.4 on one
+machine: main's twin 56 s (one run), the rewritten twin 62 s (three
+runs, 61.7 to 62.7), about a tenth more. The hosted Windows runners do
+not show it: main's twin took 118 s on the run that closed #67 and 201 s
+on the merge of pull request 35, the rewritten twin 159 s. Between
+hosted runs the machine varies more than the change costs.
