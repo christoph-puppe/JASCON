@@ -183,3 +183,38 @@ surprise, blunder.
   that writes 10.0 is an error although the parsed object is fine"; three
   verdict vectors, two parameter vectors and one bundle vector in the
   shared corpus.
+
+## 2026-11-13 · build 0.9.8 · a CIS import wrote the benchmark's version as the date of every Mapping
+
+- **Symptom.** With the kernel schema of CP-AUTHOR-1 a CIS Benchmark import
+  made Mappings that match no type: `provenance.date is '0.0.0-synthetic'`
+  on the test catalog, the benchmark's version on a real one (DATE-3). The
+  app's own rules reported each as an error and `validate_core.py` refused
+  the exported set. Found when the regenerated schema turned two tests red:
+  the Checks tool's walk from a CIS import to an export, and the CIS test
+  of the import.
+- **Cause.** The preset follows `convert_cis_benchmark.py` line by line, and
+  the converter writes `"date": VER`, the catalog's `metadata.version`.
+  Until CP-AUTHOR-1 a Mapping's `provenance.date` was any non-empty string
+  and no rule read it.
+- **Class.** Mismatch: the kernel typed a field, and a writer of that field
+  was not changed with it, as with `capability-ref` on 2026-11-12. The
+  change proposal counted the values the repository holds (§2.2, all
+  conform); the repository carries no CIS bundle (CIS terms), so this
+  writer was not among them.
+- **Why it was not caught.** The preset was tested for agreement with its
+  converter by semantic digest, and the two agreed. That every object is
+  one kernel type was asserted too, and held for as long as the date was
+  free text.
+- **Fix.** The preset writes the day of the catalog's
+  `metadata.last-modified`, the date OSCAL gives a release
+  (`convert_cr26.py` dates its Mappings with its source's `last_updated` in
+  the same way). A catalog that has cross-references and no such date is
+  refused with the reason. `convert_cis_benchmark.py` was changed the same
+  day and writes the same day, with the same refusal; preset and converter
+  agree again by semantic digest.
+- **Test.** `tests/oscal.test.mjs`, "ERRATA 2026-11-13 (DATE-3): a CIS
+  import dates its Mappings with the day of the catalog's last-modified,
+  never with its version". The comparison with the converter in the same
+  file holds every object to the converter's semantic digest, as before.
+  `tests/checks.test.mjs` runs the reference validator on the exported set.

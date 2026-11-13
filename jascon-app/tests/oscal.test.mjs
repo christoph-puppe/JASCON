@@ -219,7 +219,12 @@ test("NIST preset: the rules on a small catalog", () => {
 /* CIS preset. The catalog (tests/cis-synthetic.mjs) is written in the shape
    of the CIS OSCAL export; its text is invented. The Python converter is run
    on it in a throwaway copy of the scripts, and every object the preset makes
-   must carry the semantic digest the converter's manifest states. */
+   must carry the semantic digest the converter's manifest states.
+
+   Until 2026-11-13 both wrote the catalog's version as the
+   `provenance.date` of a Mapping, which kernel 2.0.0 refuses since it holds
+   that field to a date (DATE-3; ERRATA.md). Both now write the day of the
+   catalog's `last-modified`, and the digests agree without exception. */
 const python = spawnSync("python3", ["--version"]).status === 0;
 test("CIS preset: on a catalog of the benchmark's shape, every object has the semantic digest of convert_cis_benchmark.py", { skip: !python && "python3 is not installed" }, async () => {
   const src = cisSynthetic();
@@ -252,6 +257,24 @@ test("CIS preset: on a catalog of the benchmark's shape, every object has the se
     const objs = rules.jscTypedObjects(out.objects.map(o => o.obj));
     assert.equal(objs.size, out.objects.length, "every object is one kernel type");
   } finally { fs.rmSync(tmp, { recursive: true, force: true }); }
+});
+/* ERRATA 2026-11-13: the preset wrote the catalog's version as the date of a
+   Mapping's provenance; since kernel 2.0.0 types that date (DATE-3), such a
+   Mapping matches no type. Needs no converter and no source file. */
+test("ERRATA 2026-11-13 (DATE-3): a CIS import dates its Mappings with the day of the catalog's last-modified, never with its version", () => {
+  const src = cisSynthetic(), out = oscal.jscOscalImportCatalog(src, { preset: "cis-benchmark" });
+  const maps = out.objects.filter(o => o.path.startsWith("objects/map/"));
+  assert.equal(maps.length, 4);
+  assert.equal(src.catalog.metadata["last-modified"], "2026-11-11T00:00:00Z");
+  for (const m of maps) assert.equal(m.obj.provenance.date, "2026-11-11", m.path);
+  assert.deepEqual(maps.flatMap(m => rules.jscDateRuleViolations(m.obj)), []);
+  assert.equal(rules.jscTypedObjects(out.objects.map(o => o.obj)).size, out.objects.length, "every object is one kernel type");
+  /* without a date to give, the cross-references are refused with the reason; a catalog that has none imports */
+  const undated = cisSynthetic();
+  delete undated.catalog.metadata["last-modified"];
+  assert.throws(() => oscal.jscOscalImportCatalog(undated, { preset: "cis-benchmark" }), /last-modified does not begin with a date.*DATE-3/);
+  for (const g of undated.catalog.groups) for (const sub of [g, ...(g.groups || [])]) for (const c of sub.controls || []) c.parts = c.parts.filter(p => p.class !== "CIS_Controls");
+  assert.equal(oscal.jscOscalImportCatalog(undated, { preset: "cis-benchmark" }).objects.filter(o => o.path.startsWith("objects/map/")).length, 0);
 });
 test("CIS preset: the namespace is the converter's for its benchmark and derived from the title for any other", () => {
   assert.equal(oscal.jscCisNamespace({ metadata: { title: "CIS Ubuntu Linux 24.04 LTS Benchmark" } }), "https://ns.cisecurity.org/benchmark/ubuntu-24.04-lts");

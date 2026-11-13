@@ -26,6 +26,19 @@ T = make_T("en", lang_wraps)
 cat = json.load(open(SRC, encoding="utf-8"))["catalog"]
 VER = cat["metadata"]["version"]
 
+# The day CIS stated its cross-references: the release's `last-modified`, a
+# date-time, cut to its date. Until 2026-11-13 this converter wrote the
+# catalog's VERSION as the `provenance.date` of a Mapping; kernel 2.0.0-rc.4
+# holds that field to a date (DATE-3) and refuses such a Mapping. A catalog
+# with cross-references and no such date is refused here, with the reason:
+# no day is invented for it.
+_RELEASED = str(cat["metadata"].get("last-modified") or "")[:10]
+def released():
+    if not re.fullmatch(r"[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])", _RELEASED):
+        raise SystemExit("the catalog's metadata.last-modified does not begin with a date, so its CIS Controls "
+                         "cross-references cannot be dated (a Mapping's provenance.date is a date, DATE-3)")
+    return _RELEASED
+
 paths = collections.Counter()
 inventory({"catalog": cat}, "cisb", paths)
 
@@ -125,7 +138,7 @@ def convert_control(c):
                             "relationship": "supports", "direction": "source-to-target",
                             "confidence": "draft",
                             "rationale": "Imported from the CIS Benchmark's CIS Controls cross-reference; the source carried no typed relationship (handbook 8.6).",
-                            "provenance": {"author-ref": f"{NS}/party/cis", "date": VER}})
+                            "provenance": {"author-ref": f"{NS}/party/cis", "date": released()}})
                 mappings += 1
                 if map_v7_flag: map_v7 += 1
                 else: map_v8 += 1

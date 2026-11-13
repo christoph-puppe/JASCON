@@ -863,7 +863,6 @@ async function jscAuthorReport(objs, verify) {
 const JSC_DAY_RE = /^(\d{4})-(\d{2})-(\d{2})$/;
 const JSC_DATETIME_RE = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.\d+)?(Z|[+-]\d{2}:\d{2})$/;
 const JSC_ELAPSED_SECONDS = new Map([["seconds", 1], ["minutes", 60], ["hours", 3600]]);
-const JSC_CALENDAR_DAYS = 3652059;   // 0001-01-01 to 9999-12-31: no duration inside the calendar is longer
 const JSC_NO_SUCH_DAY = "not a day of the calendar";
 /* -> the milliseconds of 00:00 UTC on a calendar day, or null where there is
    no such day. Date.UTC is not used on purpose: it reads a year below 100 as
@@ -881,7 +880,9 @@ function jscDayMs(text) {
   const m = typeof text === "string" ? JSC_DAY_RE.exec(text) : null;
   return m ? jscUtcMidnight(Number(m[1]), Number(m[2]), Number(m[3])) : null;
 }
-/* an instant -> [the UTC day it lies in, null], or [null, why] outside the calendar */
+/* an instant -> [the UTC day it lies in, null], or [null, why] outside the
+   calendar. An instant beyond what a Date holds (some 270,000 years either
+   way) has no year at all, and is outside all the more. */
 function jscDayOfMs(ms) {
   const t = new Date(ms), year = t.getUTCFullYear();
   return Number.isNaN(year) || year < 1 || year > 9999 ? [null, JSC_NO_SUCH_DAY] : [t.toISOString().slice(0, 10), null];
@@ -908,8 +909,7 @@ function jscUtcDay(due, start) {
     if (start === undefined || start === null) return [null, "a duration, and no date to count it from"];
     const from = jscDayMs(start), per = JSC_ELAPSED_SECONDS.get(due.unit);
     if (typeof due.num !== "number" || !Number.isFinite(due.num) || per === undefined) return [null, "not a typed review-due"];
-    if (from === null || Math.abs(due.num * per) > JSC_CALENDAR_DAYS * 86400) return [null, JSC_NO_SUCH_DAY];
-    return jscDayOfMs(from + due.num * per * 1000);
+    return from === null ? [null, JSC_NO_SUCH_DAY] : jscDayOfMs(from + due.num * per * 1000);
   }
   if (kind === "calendar-period") {
     return [null, `a calendar period, and this tool has no calendar ${due["calendar-ref"]} (D9: fail-closed without the named calendar)`];
@@ -936,8 +936,8 @@ function jscReviewReport(objs, asOf) {
     for (const [where, due, start] of asked) {
       dated++;
       const [day, why] = jscUtcDay(due, start);
+      /* `day` and `asOf` are YYYY-MM-DD with a four-digit year, so the order of the strings is the order of the days */
       if (day === null) blind.push({ id, where, why });
-      /* both are YYYY-MM-DD with a four-digit year, so the order of the strings is the order of the days */
       else if (day < asOf) overdue.push({ id, where, day });
     }
   }

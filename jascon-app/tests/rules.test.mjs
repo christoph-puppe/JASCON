@@ -320,7 +320,7 @@ test("REVIEW-1: the day a review-due falls on - leap days, the ends of the calen
   assert.deepEqual(at("2026-12-31T23:00:00-01:00"), ["2027-01-01", null]);
   assert.deepEqual(at("2024-03-01T00:00:00+00:01"), ["2024-02-29", null]);
   assert.deepEqual(at("0050-06-01T12:00:00Z"), ["0050-06-01", null], "a year below 100 is that year, not 19xx");
-  assert.deepEqual(at("2026-02-31T10:00:00Z"), [null, NO]);
+  for (const bad of ["2026-02-31T10:00:00Z", "2026-11-13T24:00:00Z", "2026-11-13T23:60:00Z", "2026-11-13T23:59:60Z", "2026-11-13T12:00:00+24:00"]) assert.deepEqual(at(bad), [null, NO], bad);
   assert.deepEqual(at("0001-01-01T00:00:00+01:00"), [null, NO], "the instant lies before the calendar begins");
   assert.deepEqual(at("9999-12-31T23:30:00-01:00"), [null, NO], "the instant lies after the calendar ends");
   /* an elapsed duration is added to 00:00 UTC of the day it counts from */
@@ -339,7 +339,7 @@ test("REVIEW-1: the day a review-due falls on - leap days, the ends of the calen
   for (const bad of [undefined, "", "13.11.2026", "2026-02-31", "2026-11-13T00:00:00Z"]) assert.throws(() => rules.jscReviewReport(new Map(), bad), /REVIEW-1 is asked about a day/, String(bad));
   assert.deepEqual(rules.jscReviewReport(new Map(), "2026-11-13"), { dated: 0, overdue: [], "not-evaluable": [] });
 });
-test("REVIEW-1: the report does not depend on the time zone of the machine", () => {
+test("REVIEW-1: the report does not depend on the time zone of the machine", t => {
   const v = vectors("author")["review-vectors"], was = process.env.TZ;
   const run = () => JSON.stringify([v.map(c => rules.jscReviewReport(rules.jscTypedObjects(c.objects), c["as-of"])),
     ["2026-11-13T00:30:00+02:00", "2026-11-12T23:30:00-05:00", "2026-01-01T00:00:00Z", "2026-12-31T23:59:59Z"].map(value => rules.jscUtcDay({ type: "datetime", value })),
@@ -350,7 +350,8 @@ test("REVIEW-1: the report does not depend on the time zone of the machine", () 
     /* fourteen hours ahead of UTC and eleven behind: local midnight is another UTC day in both */
     for (const zone of ["Pacific/Kiritimati", "Pacific/Pago_Pago"]) {
       process.env.TZ = zone;
-      assert.notEqual(new Date(Date.UTC(2026, 10, 13)).getHours(), 0, zone + ": the zone took effect");
+      /* a node without time zone data stays in UTC whatever TZ says; the test would then prove nothing */
+      if (new Date(Date.UTC(2026, 10, 13)).getHours() === 0) return t.skip(`this node does not switch to ${zone} at run time`);
       assert.equal(run(), utc, zone);
     }
   } finally {

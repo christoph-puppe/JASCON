@@ -536,7 +536,14 @@ function jscImportGeneric(cat, opts) {
    for that title this preset mints the same, and tests/oscal.test.mjs
    compares every object by semantic digest with the converter's output on a
    synthetic catalog of the same shape. For any other benchmark the
-   namespace is derived from the title and can be changed on the page. */
+   namespace is derived from the title and can be changed on the page.
+
+   The `provenance.date` of a Mapping is the day of the catalog's
+   `last-modified`, the date OSCAL gives a release; a catalog that has
+   cross-references and no such date is refused with that reason. Until
+   2026-11-13 preset and converter wrote the catalog's version there, which
+   kernel 2.0.0 refuses since it holds that field to a date (DATE-3;
+   ERRATA.md). */
 const JSC_CIS = { cisc8: "https://ns.cisecurity.org/controls/v8", cisc7: "https://ns.cisecurity.org/controls/v7", key: "cisb", lang: "en",
   F_ACRIT: "https://ns.jascon.net/stdlib/facet/assessment-criteria@1", COMPAT: "https://ns.jascon.net/compat/oscal-1x@1",
   KNOWN: { "CIS Ubuntu Linux 24.04 LTS Benchmark": "https://ns.cisecurity.org/benchmark/ubuntu-24.04-lts" } };
@@ -562,6 +569,8 @@ function jscImportCis(cat, opts) {
     return "document";
   };
   const profileMembers = new Map();
+  /* the day CIS stated its cross-references: the release's last-modified, a date-time, cut to its date */
+  const released = String(cat.metadata["last-modified"] || "").slice(0, 10);
   let seq = 0;
   const nseq = () => (seq += 10);
   function control(c) {
@@ -597,11 +606,14 @@ function jscImportCis(cat, opts) {
             target = `${C.cisc8}/req/cisc-${String(Number(pp[0])).padStart(3, "0")}${pp.length > 1 ? "." + String(Number(pp[1])).padStart(3, "0") : ""}`;
             report.mappings.v8++;
           } else { target = `${C.cisc7}/req/${num}`; report.mappings.v7++; }
+          if (!/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/.test(released)) {
+            throw new Error("the catalog's metadata.last-modified does not begin with a date, so its CIS Controls cross-references cannot be dated (a Mapping's provenance.date is a date, DATE-3)");
+          }
           const tail = `${jscOscalSlug(c.id)}--v${ver}-${jscOscalSlug(num)}`;
           objects.push({ path: `objects/map/${tail}.json`, obj: { id: `${ns}/map/${tail}`, version, lifecycle: "active",
             "source-ref": rid, "target-ref": target, relationship: "supports", direction: "source-to-target", confidence: "draft",
             rationale: L("Imported from the CIS Benchmark's CIS Controls cross-reference; the source carried no typed relationship (handbook 8.6)."),
-            provenance: { "author-ref": `${ns}/party/cis`, date: version } } });
+            provenance: { "author-ref": `${ns}/party/cis`, date: released } } });
         }
       } else if (p.name === "guidance" && p.class === "References") {
         xrefs.push(...(p.props || []).filter(x => x.name === "marking" && x.class === "Reference").map(x => x.value));

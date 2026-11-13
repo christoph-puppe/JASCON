@@ -459,7 +459,10 @@ files and a `content-manifest.json`.
   the pins for its scales and facet schemas, and `kernel-version` 2.0.0 when
   the content needs it (a Risk, a Check, check results, a Finding that names
   risks or a check, a pinned scale, a Component with `product-version` or
-  with clauses on a capability). Its provenance gains the line `edited-with`.
+  with clauses on a capability; `provenance` on a Tailoring, on one of its
+  selects, excludes or operations, on an Implementation or a Finding; a
+  Deviation with `decided` or `review-due`; an authorization with a `date`).
+  Its provenance gains the line `edited-with`.
 - An attestation the original manifest did not list stays beside the manifest
   and is not added to it.
 - The pack manifests under `packs/sha256/`, a pack's attestation and its
@@ -507,24 +510,31 @@ text in that language, the English text is shown, then whatever is there.
 
 ## Limits of this build
 
-- The Validate page is not the reference validator. All seventeen rule
+- The Validate page is not the reference validator. All eighteen rule
   families of `validate_core.py` are ported and run against their conformance
   vectors: canonical form (with the number domain, NUMBER-1: the text of
   every file is held to it, because the browser's parser reads `1.0` as 1
   and rounds an integer beyond 2^53), modality, parameter, tier, tailoring (the
-  operation law), reference, lifecycle, kernel (with the typed fields
-  `Finding.actions[].due` and `Deviation.opened`, named DATE-2 and DATE-1
-  when an object matches no type), facet, attestation, risk,
+  operation law), reference, lifecycle, kernel (with the typed dates and
+  times, from `Finding.actions[].due` to `Attestation.timestamp`, named
+  DATE-1 to DATE-5 when an object matches no type), facet, attestation, risk,
   scale, DSSE signatures, the composition of two bundles,
   conditional-apply, the Check type of `drafts/CP-CHECK-1.md`
   (I-Regexp, check-verdict, CHECK-1 to CHECK-15 with the evidence chain),
-  and advice packs of `drafts/CP-ADVICE-1.md` (ADVICE-1 to ADVICE-11 with
-  the publisher verdict and the import plan). What the page does not judge:
+  advice packs of `drafts/CP-ADVICE-1.md` (ADVICE-1 to ADVICE-11 with
+  the publisher verdict and the import plan), and who decided and when of
+  `drafts/CP-AUTHOR-1.md` (AUTHOR-1 to AUTHOR-4, what is missing, and
+  REVIEW-1, which review date has passed on a given day; two reports that
+  fail nothing). What the page does not judge:
   conditional-apply
   instances (no bundle has a place to carry one; the reference validator does
   not run them on a bundle either) and the bytes of a bundle on disk (line
-  ends, files the manifest does not list). In a case of doubt run the Python
-  validator on the export; where the two disagree, the app is wrong.
+  ends, files the manifest does not list). What it does not show yet: the two
+  reports of CP-AUTHOR-1. The rules compute them (`jscAuthorReport`,
+  `jscReviewReport` in `jascon-rules.js`) and agree with the reference on the
+  example folder and the IFA bundle; no page asks for them in this build. In
+  a case of doubt run the Python validator on the export; where the two
+  disagree, the app is wrong.
 - Signatures: Ed25519 over a DSSE envelope, verification only. A key is
   trusted because you say so on the Validate page, never because a bundle
   carries it. The app cannot sign. The reference validator looks at the

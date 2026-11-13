@@ -95,8 +95,23 @@ and in `readme.md`; this file says only what is done and what is next.
   `declared` (see `ERRATA.md`). The reader is at v1.9.0 with the same fix
   and shows pack headers and kept manifests.
 
+- Who decided, and when (build 0.9.8; CP-AUTHOR-1): the eighteenth vector
+  family in `jascon-rules.js` (`jscAuthorReport` for AUTHOR-1..4,
+  `jscReviewReport` with `jscUtcDay` for REVIEW-1; all 34 vectors), the four
+  new reasons of the kernel pin in `jscKernelNeeded` and in the pin the
+  export writes (`jscNeedsKernel2`), DATE-1 on `decided` and DATE-3..5, and
+  the 54 vectors of the kernel family. Both reports give the lines
+  `validate_core.py --as-of 2026-11-13` prints for the example folder and
+  the IFA bundle; the day computation gave the reference's answer on 300,000
+  generated cases, in three time zones, and both reports its answer on
+  20,000 generated bundles (scripts outside the repository). No page shows
+  the reports yet. The CIS preset dates its Mappings (see `ERRATA.md`).
+
 ## Next
 
+- The two reports of CP-AUTHOR-1 on the Validate page (the day asked about
+  defaults to `jscToday()`, which is the UTC date), and the fields on the
+  pages that write the objects (CP-AUTHOR-1 §9 step 4).
 - An OSCAL component definition as a third kind on the Import page, written
   as a pack (CP-ADVICE-1 §9 item 7); the converter it would follow
   (`convert_cdef.py`) does not exist yet.
