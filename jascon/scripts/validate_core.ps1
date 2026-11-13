@@ -1577,6 +1577,8 @@ function Risk-Basis-Fail([string]$tid, [string]$q) {
 # it. REVIEW-1 (Review-Report) reports a `review-due` that has passed, on
 # an approved Deviation and on a Risk still managed, against the date of
 # the run in UTC or -AsOf; nothing fails by it, with or without the switch.
+# The rules in one place, as validate_core.py keeps them (AUTHOR_RULES); the
+# messages below carry the rule id and do not quote this text.
 $AUTHOR_RULES = Ord-Table @{
     'AUTHOR-1' = 'a consumer''s Tailoring says who decided each select, exclude and operation - on the entry, or once on the Tailoring'
     'AUTHOR-2' = 'a Risk, a Finding and an Implementation say who wrote this version and when (provenance): each records a judgement'
@@ -1707,10 +1709,14 @@ function Utc-Day($due, $start) {
         if ($null -eq $from) { return $noDay }
         $unit = [string]$due['unit']
         if (-not $ELAPSED_SECONDS.ContainsKey($unit)) { return @{day = $null; why = 'not a typed review-due'} }
-        # added to 00:00:00 UTC of the start date: whole days of seconds move the day
+        # added to 00:00:00 UTC of the start date: whole days of seconds move
+        # the day. The years 1..9999 hold 3652059 days; a duration longer
+        # than that, or one that ends after them, falls on no day.
         try {
             $seconds = [decimal]$due['num'] * [decimal]$ELAPSED_SECONDS[$unit]
-            $day = $from.AddDays([double][decimal]::Floor($seconds / 86400))
+            $days = [decimal]::Floor($seconds / 86400)
+            if (($days -gt 3652058) -or ($days -lt -3652058)) { return $noDay }
+            $day = $from.AddDays([double]$days)
         } catch { return $noDay }
         return @{day = $day; why = $null}
     }
