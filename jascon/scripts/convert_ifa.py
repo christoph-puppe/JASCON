@@ -168,9 +168,14 @@ def system_facet(doc):
                               for a in u.get("authorized-privileges", []) or []]
         users.append(user)
     if users: f["users"] = users
+    # `props` and `components` mean what they meant; the class of each prop
+    # and the props of each implemented component stand beside them
+    # (`component-props` has one entry per entry of `components`, in order)
     inventory = [{"description": pua_scan(i.get("description")),
                   "props": props_by_name(i.get("props"), led),       # a repeated name keeps every value
-                  "components": [c["component-uuid"] for c in i.get("implemented-components", []) or []]}
+                  "prop-classes": props_by_name(i.get("props"), led, field="class"),
+                  "components": [c["component-uuid"] for c in i.get("implemented-components", []) or []],
+                  "component-props": [props_by_name(c.get("props"), led) for c in i.get("implemented-components", []) or []]}
                  for i in si.get("inventory-items", []) or []]
     if inventory: f["inventory-items"] = inventory
     return f
@@ -590,7 +595,8 @@ RULES = [
   "(ids, status, sensitivity, FIPS-199 impact, boundary/network/data-flow, language-tagged)"),
  (r"^ssp\.system-security-plan\.system-implementation\.users\[\]\.", "L2", "system@1 facet users[]"),
  (r"^ssp\.system-security-plan\.system-implementation\.inventory-items\[\]\.", "L2",
-  "system@1 facet inventory-items[] (asset props carried verbatim)"),
+  "system@1 facet inventory-items[] (props by name, their classes in `prop-classes`, the props of each "
+  "implemented component in `component-props`)"),
  (r"^ssp\.system-security-plan\.system-implementation\.components\[\]\.", "L1",
   "Component (kind system) id/title/status"),
  (r"^ssp\.system-security-plan\.control-implementation\.", "L1",

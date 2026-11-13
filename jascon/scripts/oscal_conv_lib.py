@@ -467,10 +467,12 @@ class Ledger:
                 "unaccounted-paths": [{"path": p, "count": len(w), "pointers": w} for p, w in sorted(unaccounted.items())],
                 "entries": entries}
 
-def props_by_name(props, ledger=None):
+def props_by_name(props, ledger=None, field="value"):
     """OSCAL props [{name, value}, ...] -> {name: value}. A name that repeats
     keeps EVERY value, as a list in source order - the rule parameter
     bindings already follow (one value as it is, several as a list).
+    `field` picks another member of the prop instead of its value (`class`);
+    a prop without that member is left out.
 
     Until 2026-11-13 the IFA converter wrote `{p["name"]: p["value"] for p in
     props}`. A dict keeps one value per key, so of two `ipv4-address` props of
@@ -480,7 +482,8 @@ def props_by_name(props, ledger=None):
     stands for it."""
     out = {}
     for p in props or []:
-        name, value = p["name"], p["value"]
+        if field not in p: continue
+        name, value = p["name"], p[field]
         if name not in out:
             out[name] = value; continue
         if ledger is not None:

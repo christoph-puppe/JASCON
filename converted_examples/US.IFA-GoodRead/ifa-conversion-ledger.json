@@ -2,10 +2,10 @@
  "measures": "one entry per source leaf value: where it went, checked against the written files",
  "leaf-values": 835,
  "totals": {
-  "copied": 310,
+  "copied": 341,
   "transformed": 33,
   "intentionally-dropped": 293,
-  "unaccounted": 199
+  "unaccounted": 168
  },
  "verification-failures": [],
  "unaccounted-paths": [
@@ -785,55 +785,6 @@
    "count": 1,
    "pointers": [
     "ssp#/system-security-plan/system-implementation/components/0/status/state"
-   ]
-  },
-  {
-   "path": "ssp.system-security-plan.system-implementation.inventory-items[].implemented-components[].props[].name",
-   "count": 6,
-   "pointers": [
-    "ssp#/system-security-plan/system-implementation/inventory-items/0/implemented-components/0/props/0/name",
-    "ssp#/system-security-plan/system-implementation/inventory-items/1/implemented-components/0/props/0/name",
-    "ssp#/system-security-plan/system-implementation/inventory-items/2/implemented-components/0/props/0/name",
-    "ssp#/system-security-plan/system-implementation/inventory-items/3/implemented-components/0/props/0/name",
-    "ssp#/system-security-plan/system-implementation/inventory-items/4/implemented-components/0/props/0/name",
-    "ssp#/system-security-plan/system-implementation/inventory-items/5/implemented-components/0/props/0/name"
-   ]
-  },
-  {
-   "path": "ssp.system-security-plan.system-implementation.inventory-items[].implemented-components[].props[].value",
-   "count": 6,
-   "pointers": [
-    "ssp#/system-security-plan/system-implementation/inventory-items/0/implemented-components/0/props/0/value",
-    "ssp#/system-security-plan/system-implementation/inventory-items/1/implemented-components/0/props/0/value",
-    "ssp#/system-security-plan/system-implementation/inventory-items/2/implemented-components/0/props/0/value",
-    "ssp#/system-security-plan/system-implementation/inventory-items/3/implemented-components/0/props/0/value",
-    "ssp#/system-security-plan/system-implementation/inventory-items/4/implemented-components/0/props/0/value",
-    "ssp#/system-security-plan/system-implementation/inventory-items/5/implemented-components/0/props/0/value"
-   ]
-  },
-  {
-   "path": "ssp.system-security-plan.system-implementation.inventory-items[].props[].class",
-   "count": 19,
-   "pointers": [
-    "ssp#/system-security-plan/system-implementation/inventory-items/0/props/0/class",
-    "ssp#/system-security-plan/system-implementation/inventory-items/0/props/1/class",
-    "ssp#/system-security-plan/system-implementation/inventory-items/0/props/2/class",
-    "ssp#/system-security-plan/system-implementation/inventory-items/1/props/0/class",
-    "ssp#/system-security-plan/system-implementation/inventory-items/1/props/1/class",
-    "ssp#/system-security-plan/system-implementation/inventory-items/1/props/2/class",
-    "ssp#/system-security-plan/system-implementation/inventory-items/2/props/0/class",
-    "ssp#/system-security-plan/system-implementation/inventory-items/2/props/1/class",
-    "ssp#/system-security-plan/system-implementation/inventory-items/2/props/2/class",
-    "ssp#/system-security-plan/system-implementation/inventory-items/3/props/0/class",
-    "ssp#/system-security-plan/system-implementation/inventory-items/3/props/1/class",
-    "ssp#/system-security-plan/system-implementation/inventory-items/4/props/0/class",
-    "ssp#/system-security-plan/system-implementation/inventory-items/4/props/1/class",
-    "ssp#/system-security-plan/system-implementation/inventory-items/4/props/2/class",
-    "ssp#/system-security-plan/system-implementation/inventory-items/4/props/3/class",
-    "ssp#/system-security-plan/system-implementation/inventory-items/4/props/4/class",
-    "ssp#/system-security-plan/system-implementation/inventory-items/5/props/0/class",
-    "ssp#/system-security-plan/system-implementation/inventory-items/5/props/1/class",
-    "ssp#/system-security-plan/system-implementation/inventory-items/5/props/2/class"
    ]
   },
   {
@@ -1876,6 +1827,11 @@
    "destinations": [
     {
      "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/0/prop-classes/software-name",
+     "as": "key"
+    },
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
      "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/0/props/software-name",
      "as": "key"
     }
@@ -1896,12 +1852,23 @@
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/0/props/0/class",
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].props[].class",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/0/prop-classes/software-name"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/0/props/1/name",
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].props[].name",
    "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/0/prop-classes/software-version",
+     "as": "key"
+    },
     {
      "object": "https://ifa.gov/goodread/component/system1234",
      "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/0/props/software-version",
@@ -1924,12 +1891,23 @@
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/0/props/1/class",
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].props[].class",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/0/prop-classes/software-version"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/0/props/2/name",
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].props[].name",
    "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/0/prop-classes/asset-type",
+     "as": "key"
+    },
     {
      "object": "https://ifa.gov/goodread/component/system1234",
      "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/0/props/asset-type",
@@ -1952,7 +1930,13 @@
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/0/props/2/class",
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].props[].class",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/0/prop-classes/asset-type"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/0/implemented-components/0/component-uuid",
@@ -1968,12 +1952,25 @@
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/0/implemented-components/0/props/0/name",
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].implemented-components[].props[].name",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/0/component-props/0/asset-id",
+     "as": "key"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/0/implemented-components/0/props/0/value",
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].implemented-components[].props[].value",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/0/component-props/0/asset-id"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/1/uuid",
@@ -1998,6 +1995,11 @@
    "destinations": [
     {
      "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/1/prop-classes/software-name",
+     "as": "key"
+    },
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
      "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/1/props/software-name",
      "as": "key"
     }
@@ -2018,12 +2020,23 @@
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/1/props/0/class",
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].props[].class",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/1/prop-classes/software-name"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/1/props/1/name",
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].props[].name",
    "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/1/prop-classes/software-version",
+     "as": "key"
+    },
     {
      "object": "https://ifa.gov/goodread/component/system1234",
      "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/1/props/software-version",
@@ -2046,12 +2059,23 @@
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/1/props/1/class",
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].props[].class",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/1/prop-classes/software-version"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/1/props/2/name",
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].props[].name",
    "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/1/prop-classes/asset-type",
+     "as": "key"
+    },
     {
      "object": "https://ifa.gov/goodread/component/system1234",
      "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/1/props/asset-type",
@@ -2074,7 +2098,13 @@
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/1/props/2/class",
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].props[].class",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/1/prop-classes/asset-type"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/1/implemented-components/0/component-uuid",
@@ -2090,12 +2120,25 @@
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/1/implemented-components/0/props/0/name",
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].implemented-components[].props[].name",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/1/component-props/0/asset-id",
+     "as": "key"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/1/implemented-components/0/props/0/value",
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].implemented-components[].props[].value",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/1/component-props/0/asset-id"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/2/uuid",
@@ -2120,6 +2163,11 @@
    "destinations": [
     {
      "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/2/prop-classes/software-name",
+     "as": "key"
+    },
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
      "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/2/props/software-name",
      "as": "key"
     }
@@ -2140,12 +2188,23 @@
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/2/props/0/class",
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].props[].class",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/2/prop-classes/software-name"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/2/props/1/name",
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].props[].name",
    "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/2/prop-classes/software-version",
+     "as": "key"
+    },
     {
      "object": "https://ifa.gov/goodread/component/system1234",
      "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/2/props/software-version",
@@ -2168,12 +2227,23 @@
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/2/props/1/class",
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].props[].class",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/2/prop-classes/software-version"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/2/props/2/name",
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].props[].name",
    "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/2/prop-classes/asset-type",
+     "as": "key"
+    },
     {
      "object": "https://ifa.gov/goodread/component/system1234",
      "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/2/props/asset-type",
@@ -2196,7 +2266,13 @@
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/2/props/2/class",
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].props[].class",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/2/prop-classes/asset-type"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/2/implemented-components/0/component-uuid",
@@ -2212,12 +2288,25 @@
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/2/implemented-components/0/props/0/name",
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].implemented-components[].props[].name",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/2/component-props/0/asset-id",
+     "as": "key"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/2/implemented-components/0/props/0/value",
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].implemented-components[].props[].value",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/2/component-props/0/asset-id"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/3/uuid",
@@ -2242,6 +2331,11 @@
    "destinations": [
     {
      "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/3/prop-classes/software-name",
+     "as": "key"
+    },
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
      "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/3/props/software-name",
      "as": "key"
     }
@@ -2262,12 +2356,23 @@
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/3/props/0/class",
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].props[].class",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/3/prop-classes/software-name"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/3/props/1/name",
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].props[].name",
    "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/3/prop-classes/asset-type",
+     "as": "key"
+    },
     {
      "object": "https://ifa.gov/goodread/component/system1234",
      "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/3/props/asset-type",
@@ -2290,7 +2395,13 @@
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/3/props/1/class",
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].props[].class",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/3/prop-classes/asset-type"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/3/implemented-components/0/component-uuid",
@@ -2306,12 +2417,25 @@
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/3/implemented-components/0/props/0/name",
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].implemented-components[].props[].name",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/3/component-props/0/asset-id",
+     "as": "key"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/3/implemented-components/0/props/0/value",
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].implemented-components[].props[].value",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/3/component-props/0/asset-id"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/4/uuid",
@@ -2336,6 +2460,11 @@
    "destinations": [
     {
      "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/4/prop-classes/asset-id",
+     "as": "key"
+    },
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
      "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/4/props/asset-id",
      "as": "key"
     }
@@ -2356,12 +2485,23 @@
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/4/props/0/class",
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].props[].class",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/4/prop-classes/asset-id"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/4/props/1/name",
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].props[].name",
    "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/4/prop-classes/ipv4-address",
+     "as": "key"
+    },
     {
      "object": "https://ifa.gov/goodread/component/system1234",
      "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/4/props/ipv4-address",
@@ -2384,12 +2524,36 @@
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/4/props/1/class",
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].props[].class",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/4/prop-classes/ipv4-address/0"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/4/props/2/name",
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].props[].name",
    "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/4/prop-classes/ipv4-address",
+     "as": "key",
+     "via": "a prop name that repeats is one key; its values are listed in source order"
+    },
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/4/prop-classes/ipv4-address",
+     "as": "key",
+     "via": "a prop name that repeats is one key; its values are listed in source order"
+    },
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/4/props/ipv4-address",
+     "as": "key",
+     "via": "a prop name that repeats is one key; its values are listed in source order"
+    },
     {
      "object": "https://ifa.gov/goodread/component/system1234",
      "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/4/props/ipv4-address",
@@ -2413,12 +2577,23 @@
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/4/props/2/class",
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].props[].class",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/4/prop-classes/ipv4-address/1"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/4/props/3/name",
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].props[].name",
    "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/4/prop-classes/uri",
+     "as": "key"
+    },
     {
      "object": "https://ifa.gov/goodread/component/system1234",
      "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/4/props/uri",
@@ -2441,12 +2616,23 @@
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/4/props/3/class",
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].props[].class",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/4/prop-classes/uri"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/4/props/4/name",
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].props[].name",
    "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/4/prop-classes/asset-type",
+     "as": "key"
+    },
     {
      "object": "https://ifa.gov/goodread/component/system1234",
      "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/4/props/asset-type",
@@ -2469,7 +2655,13 @@
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/4/props/4/class",
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].props[].class",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/4/prop-classes/asset-type"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/4/implemented-components/0/component-uuid",
@@ -2485,12 +2677,25 @@
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/4/implemented-components/0/props/0/name",
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].implemented-components[].props[].name",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/4/component-props/0/asset-id",
+     "as": "key"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/4/implemented-components/0/props/0/value",
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].implemented-components[].props[].value",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/4/component-props/0/asset-id"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/5/uuid",
@@ -2515,6 +2720,11 @@
    "destinations": [
     {
      "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/5/prop-classes/asset-type",
+     "as": "key"
+    },
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
      "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/5/props/asset-type",
      "as": "key"
     }
@@ -2535,12 +2745,23 @@
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/5/props/0/class",
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].props[].class",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/5/prop-classes/asset-type"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/5/props/1/name",
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].props[].name",
    "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/5/prop-classes/asset-id",
+     "as": "key"
+    },
     {
      "object": "https://ifa.gov/goodread/component/system1234",
      "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/5/props/asset-id",
@@ -2563,12 +2784,23 @@
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/5/props/1/class",
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].props[].class",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/5/prop-classes/asset-id"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/5/props/2/name",
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].props[].name",
    "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/5/prop-classes/uri",
+     "as": "key"
+    },
     {
      "object": "https://ifa.gov/goodread/component/system1234",
      "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/5/props/uri",
@@ -2591,7 +2823,13 @@
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/5/props/2/class",
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].props[].class",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/5/prop-classes/uri"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/5/implemented-components/0/component-uuid",
@@ -2607,12 +2845,25 @@
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/5/implemented-components/0/props/0/name",
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].implemented-components[].props[].name",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/5/component-props/0/asset-id",
+     "as": "key"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/5/implemented-components/0/props/0/value",
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].implemented-components[].props[].value",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/5/component-props/0/asset-id"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ssp#/system-security-plan/control-implementation/description",

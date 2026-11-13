@@ -83,8 +83,8 @@
   {
    "id": "https://ifa.gov/goodread/attestation/ifa-ato",
    "version": "1.1.1",
-   "package-digest": "sha256:563c28cc6a976ea7769b0809876ad2d6dab766962ab95ca505a68fc40fe05f54",
-   "semantic-digest": "sha256:0b1734cf4da4302dd3806b3bdda766dbbd0bf3e4b96fa36681a6715122e32291",
+   "package-digest": "sha256:8fc4673f7c4f6869f6da9a3a3a59a048d54bd6ad44a07dcfa3b8ebdbf16a168c",
+   "semantic-digest": "sha256:1a21ca1d1db0af1331da89ffb5f3303c6fd6cfa1960828e376ac73e325896030",
    "path": "objects/attestation/ifa-ato.json"
   },
   {
@@ -125,8 +125,8 @@
   {
    "id": "https://ifa.gov/goodread/component/system1234",
    "version": "1.1.1",
-   "package-digest": "sha256:10e812c37ad39ce48708cabea87371c3c300c57630a8744ce0fdfbf46bb7f24d",
-   "semantic-digest": "sha256:c9a2b540d0d0a6da0c727d190e25e4799942d358a97c34ab82fbb0a68bb2110e",
+   "package-digest": "sha256:2877ca3b0bf06549bef04a517f1ce48a18779e6e23a5d6389e7abf9a7e8159cc",
+   "semantic-digest": "sha256:85f0aa576ae6f8ceb52cf8cbef07ab4928c18774de18315dd2065ddecb320805",
    "path": "objects/component/system1234.json"
   },
   {

@@ -2741,49 +2741,49 @@
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].description",
    "count": 6,
    "level": "L2",
-   "destination": "system@1 facet inventory-items[] (asset props carried verbatim)"
+   "destination": "system@1 facet inventory-items[] (props by name, their classes in `prop-classes`, the props of each implemented component in `component-props`)"
   },
   {
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].implemented-components[].component-uuid",
    "count": 6,
    "level": "L2",
-   "destination": "system@1 facet inventory-items[] (asset props carried verbatim)"
+   "destination": "system@1 facet inventory-items[] (props by name, their classes in `prop-classes`, the props of each implemented component in `component-props`)"
   },
   {
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].implemented-components[].props[].name",
    "count": 6,
    "level": "L2",
-   "destination": "system@1 facet inventory-items[] (asset props carried verbatim)"
+   "destination": "system@1 facet inventory-items[] (props by name, their classes in `prop-classes`, the props of each implemented component in `component-props`)"
   },
   {
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].implemented-components[].props[].value",
    "count": 6,
    "level": "L2",
-   "destination": "system@1 facet inventory-items[] (asset props carried verbatim)"
+   "destination": "system@1 facet inventory-items[] (props by name, their classes in `prop-classes`, the props of each implemented component in `component-props`)"
   },
   {
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].props[].class",
    "count": 19,
    "level": "L2",
-   "destination": "system@1 facet inventory-items[] (asset props carried verbatim)"
+   "destination": "system@1 facet inventory-items[] (props by name, their classes in `prop-classes`, the props of each implemented component in `component-props`)"
   },
   {
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].props[].name",
    "count": 19,
    "level": "L2",
-   "destination": "system@1 facet inventory-items[] (asset props carried verbatim)"
+   "destination": "system@1 facet inventory-items[] (props by name, their classes in `prop-classes`, the props of each implemented component in `component-props`)"
   },
   {
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].props[].value",
    "count": 19,
    "level": "L2",
-   "destination": "system@1 facet inventory-items[] (asset props carried verbatim)"
+   "destination": "system@1 facet inventory-items[] (props by name, their classes in `prop-classes`, the props of each implemented component in `component-props`)"
   },
   {
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].uuid",
    "count": 6,
    "level": "L2",
-   "destination": "system@1 facet inventory-items[] (asset props carried verbatim)"
+   "destination": "system@1 facet inventory-items[] (props by name, their classes in `prop-classes`, the props of each implemented component in `component-props`)"
   },
   {
    "path": "ssp.system-security-plan.system-implementation.users[].authorized-privileges[].functions-performed[]",
@@ -2865,13 +2865,13 @@
  "global-occurrence": {
   "measures": "global occurrence of equal typed values - an upper bound on what was carried, not a trace of each source occurrence",
   "leaf-values": 835,
-  "exact": 310,
+  "exact": 330,
   "key-only": 29,
   "embedded": 77,
   "absent": {
    "identity": 190,
    "document-metadata": 125,
-   "content": 104
+   "content": 84
   },
   "absent-content-prose": 51,
   "key-only-paths": [
@@ -3771,38 +3771,6 @@
     ]
    },
    {
-    "path": "ssp.system-security-plan.system-implementation.inventory-items[].implemented-components[].props[].value",
-    "count": 6,
-    "pointers": [
-     "ssp#/system-security-plan/system-implementation/inventory-items/0/implemented-components/0/props/0/value",
-     "ssp#/system-security-plan/system-implementation/inventory-items/1/implemented-components/0/props/0/value",
-     "ssp#/system-security-plan/system-implementation/inventory-items/2/implemented-components/0/props/0/value",
-     "ssp#/system-security-plan/system-implementation/inventory-items/3/implemented-components/0/props/0/value",
-     "ssp#/system-security-plan/system-implementation/inventory-items/4/implemented-components/0/props/0/value",
-     "ssp#/system-security-plan/system-implementation/inventory-items/5/implemented-components/0/props/0/value"
-    ]
-   },
-   {
-    "path": "ssp.system-security-plan.system-implementation.inventory-items[].props[].class",
-    "count": 14,
-    "pointers": [
-     "ssp#/system-security-plan/system-implementation/inventory-items/0/props/0/class",
-     "ssp#/system-security-plan/system-implementation/inventory-items/0/props/1/class",
-     "ssp#/system-security-plan/system-implementation/inventory-items/0/props/2/class",
-     "ssp#/system-security-plan/system-implementation/inventory-items/1/props/0/class",
-     "ssp#/system-security-plan/system-implementation/inventory-items/1/props/1/class",
-     "ssp#/system-security-plan/system-implementation/inventory-items/1/props/2/class",
-     "ssp#/system-security-plan/system-implementation/inventory-items/4/props/0/class",
-     "ssp#/system-security-plan/system-implementation/inventory-items/4/props/1/class",
-     "ssp#/system-security-plan/system-implementation/inventory-items/4/props/2/class",
-     "ssp#/system-security-plan/system-implementation/inventory-items/4/props/3/class",
-     "ssp#/system-security-plan/system-implementation/inventory-items/4/props/4/class",
-     "ssp#/system-security-plan/system-implementation/inventory-items/5/props/0/class",
-     "ssp#/system-security-plan/system-implementation/inventory-items/5/props/1/class",
-     "ssp#/system-security-plan/system-implementation/inventory-items/5/props/2/class"
-    ]
-   },
-   {
     "path": "ssp.system-security-plan.system-implementation.users[].role-ids[]",
     "count": 1,
     "pointers": [
@@ -3815,10 +3783,10 @@
   "file": "ifa-conversion-ledger.json",
   "leaf-values": 835,
   "totals": {
-   "copied": 310,
+   "copied": 341,
    "transformed": 33,
    "intentionally-dropped": 293,
-   "unaccounted": 199
+   "unaccounted": 168
   },
   "verification-failures": 0
  }

@@ -211,6 +211,8 @@ class Issue33Ledger(unittest.TestCase):
         self.assertEqual(props_by_name(source["props"]),
                          {"asset-type": "appliance", "ipv4-address": ["172.1.2.3", "1.1.2.3", "10.0.0.9"]})
         self.assertEqual(props_by_name(None), {})
+        classed = [{"name": "a", "value": "1", "class": "x"}, {"name": "b", "value": "2"}, {"name": "a", "value": "3", "class": "y"}]
+        self.assertEqual(props_by_name(classed, field="class"), {"a": ["x", "y"]}, "another member of the prop; props without it are left out")
         def convert(src, led):
             return {"o/a.json": {"id": "https://ex.org/a", "props": props_by_name(src["props"], led)}}
         r = self.run_ledger(source, convert)

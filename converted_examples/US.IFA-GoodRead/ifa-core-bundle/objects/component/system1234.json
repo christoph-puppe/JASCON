@@ -135,8 +135,18 @@
       "software-version": "1.0.0",
       "asset-type": "web-server"
      },
+     "prop-classes": {
+      "software-name": "webserver-application",
+      "software-version": "webserver-application",
+      "asset-type": "webserver-application"
+     },
      "components": [
       "551b9706-d6a4-4d25-8207-f2ccec548b89"
+     ],
+     "component-props": [
+      {
+       "asset-id": "IFAGOV-SYSTEM1234"
+      }
      ]
     },
     {
@@ -146,8 +156,18 @@
       "software-version": "4.2.1",
       "asset-type": "web-server"
      },
+     "prop-classes": {
+      "software-name": "webserver-framework",
+      "software-version": "webserver-framework",
+      "asset-type": "webserver-framework"
+     },
      "components": [
       "551b9706-d6a4-4d25-8207-f2ccec548b89"
+     ],
+     "component-props": [
+      {
+       "asset-id": "IFAGOV-SYSTEM1234"
+      }
      ]
     },
     {
@@ -157,8 +177,18 @@
       "software-version": "15.3",
       "asset-type": "database"
      },
+     "prop-classes": {
+      "software-name": "database",
+      "software-version": "database",
+      "asset-type": "database"
+     },
      "components": [
       "551b9706-d6a4-4d25-8207-f2ccec548b89"
+     ],
+     "component-props": [
+      {
+       "asset-id": "IFAGOV-SYSTEM1234"
+      }
      ]
     },
     {
@@ -167,8 +197,17 @@
       "software-name": "Red Hat Enterprise Linux 9",
       "asset-type": "operating-system"
      },
+     "prop-classes": {
+      "software-name": "operating-system",
+      "asset-type": "operating-system"
+     },
      "components": [
       "551b9706-d6a4-4d25-8207-f2ccec548b89"
+     ],
+     "component-props": [
+      {
+       "asset-id": "IFAGOV-SYSTEM1234"
+      }
      ]
     },
     {
@@ -182,8 +221,22 @@
       "uri": "instance-abcd1234.acs.awsomecloud.systems",
       "asset-type": "appliance"
      },
+     "prop-classes": {
+      "asset-id": "linux-server",
+      "ipv4-address": [
+       "linux-server",
+       "linux-server"
+      ],
+      "uri": "linux-server",
+      "asset-type": "linux-server"
+     },
      "components": [
       "551b9706-d6a4-4d25-8207-f2ccec548b89"
+     ],
+     "component-props": [
+      {
+       "asset-id": "IFAGOV-SYSTEM1234"
+      }
      ]
     },
     {
@@ -193,8 +246,18 @@
       "asset-id": "instance-defg7890",
       "uri": "https://instance-defg7890.alb.awsomecloud.systems"
      },
+     "prop-classes": {
+      "asset-type": "network-load-balancer",
+      "asset-id": "linux-server",
+      "uri": "network-load-balancer"
+     },
      "components": [
       "551b9706-d6a4-4d25-8207-f2ccec548b89"
+     ],
+     "component-props": [
+      {
+       "asset-id": "IFAGOV-SYSTEM1234"
+      }
      ]
     }
    ]
