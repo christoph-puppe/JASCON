@@ -19,7 +19,7 @@ acceptance (`retain` is unreachable). Findings point at their Risk with
 bundle - an authorization package carries its baseline. Coverage target: 0.
 Depends on: convert_nist.py output (run first)."""
 import json, os, re, collections
-from oscal_conv_lib import make_T, slug, Bundle, inventory, coverage, report, semantic_digest, value_arrival
+from oscal_conv_lib import make_T, slug, Bundle, inventory, coverage, report, semantic_digest, global_occurrence
 
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 SRCDIR = os.path.join(ROOT, "sources", "nist")
@@ -563,9 +563,12 @@ RULES = [
   "Component (kind mapped) id/title"),
 ]
 rows, unmapped = coverage(paths, RULES)
-# value arrival (measured, not declared): the path map above says where each
-# source path is MEANT to go; this says how many values actually got there
-VA = value_arrival([("ssp", {"system-security-plan": SSP}), ("ap", {"assessment-plan": AP}),
+# global occurrence (measured, not declared): the path map above says where
+# each source path is MEANT to go; this counts the source values that have an
+# equal value SOMEWHERE in the output. It is an upper bound on what was
+# carried and does not trace an occurrence to its destination (see
+# oscal_conv_lib.global_occurrence).
+VA = global_occurrence([("ssp", {"system-security-plan": SSP}), ("ap", {"assessment-plan": AP}),
                     ("ar", {"assessment-results": AR}), ("poam", {"plan-of-action-and-milestones": POAM}),
                     ("lev", {"system-security-plan": LEV}), ("lvg", {"system-security-plan": LVG}),
                     ("cdef", {"component-definition": CDEF})], list(bundle.objects.values()))
@@ -625,13 +628,19 @@ j = report(
       f"(the binding is carried verbatim; a resolver follows the odp@1 aggregates map)." if unresolved_bind else "."),
      f"- **Kind mapping**: " + (", ".join(f"{k} x{v}" for k, v in kind_mapped.items()) or "none") +
      f" (OSCAL free-text component types vs. the kernel's closed componentKind).",
-     f"- **Value arrival (measured; path coverage above is a DECLARATION)**: {VA['arrived-verbatim']:,} of "
-     f"{VA['leaf-values']:,} source leaf values occur verbatim in the emitted objects. Absent: "
+     f"- **Global occurrence (measured; path coverage above is a DECLARATION)**: {VA['exact']:,} of "
+     f"{VA['leaf-values']:,} source leaf values have an equal value of the same type somewhere in the emitted "
+     f"objects. This is an **upper bound** on what was carried: all sources and all objects share one search "
+     f"space, so one output value satisfies every equal source value, and a value dropped in one place is hidden "
+     f"by an equal value in another. It does not trace an occurrence to its destination. Not counted: "
+     f"{VA['key-only']} values that equal only an output key and {VA['embedded']} that occur only inside a longer "
+     f"output text (candidates, to be argued per path). No equal value anywhere: "
      f"{VA['absent']['identity']} identity values (uuids/hrefs - re-minted as URIs by design), "
      f"{VA['absent']['document-metadata']} document-metadata values, and **{VA['absent']['content']} content "
      f"values ({VA['absent-content-prose']} of them prose of 40+ characters)** - each either transformed on "
-     f"purpose (a mapped code, a respelled id) or DROPPED. `UNMAPPED: 0` does not see the difference; the "
-     f"per-path list is in the JSON report (`value-arrival`) and is the work queue (backlog #41).",
+     f"purpose (a mapped code, a respelled id) or DROPPED. That list is a **lower bound** on the losses, not "
+     f"the complete work queue. `UNMAPPED: 0` sees none of this; the per-path lists, with the indexed pointer "
+     f"of every value, are in the JSON report (`global-occurrence`; backlog #41).",
      f"- **What OSCAL cannot give the Risk shape** (model findings, REPORTED; nothing is invented - the one derived value is the owner): " +
      "; ".join(f"{k} x{v}" for k, v in sorted(risk_gaps.items())) +
      f". Owner source: the SSP `owner` role -> {RISK_OWNER}.",
@@ -642,12 +651,12 @@ j = report(
      "placeholder-uuids": uuid_placeholder, "unresolved-bindings": unresolved_bind,
      "lang-wraps": dict(lang_wraps),
      "risk-shape-gaps": dict(risk_gaps), "response-types": dict(response_types),
-     "value-arrival": VA})
+     "global-occurrence": VA})
 print(f"objects: {sum(types.values())} {dict(types)}")
 print(f"leaves: {j['totals']['leaf-values']:,}  mapped: {j['totals']['mapped']:,}  "
       f"UNMAPPED: {j['totals']['unmapped']}")
-print(f"value arrival: {VA['arrived-verbatim']}/{VA['leaf-values']} verbatim; absent content values: "
-      f"{VA['absent']['content']} ({VA['absent-content-prose']} prose)")
+print(f"global occurrence: {VA['exact']}/{VA['leaf-values']} exact (upper bound); key-only {VA['key-only']}, "
+      f"embedded {VA['embedded']}; absent content values: {VA['absent']['content']} ({VA['absent-content-prose']} prose)")
 print(f"respell: {n_stmt_respell}  pua: {n_pua}  placeholder-uuids: {uuid_placeholder}  "
       f"unresolved-bindings: {unresolved_bind}")
 if unmapped:

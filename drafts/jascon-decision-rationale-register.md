@@ -2632,3 +2632,105 @@ than a sequence. A sentence in the specification promised a domain and a
 vector for it, and nobody had held the corpus to that sentence. The
 report came from someone who asked what the schema allows instead of
 what the examples contain.
+
+# Amendments — the value-level check of the converters (2026-11-13): #41 re-planned
+
+Two more reports from the same outside reporter, issues 32 and 33 in the
+GitHub tracker, both about `oscal_conv_lib.value_arrival()`: the helper
+behind L-2 above and the sentence "394 of 835 leaf values occur verbatim"
+in the IFA coverage report, on the website and in backlog #41. Neither
+touches the kernel, a validator or a bundle.
+
+## Issue 32 — the helper counted what had not arrived
+
+`value_arrival()` joined every output key and scalar into one string,
+turned every scalar into text, left nulls out and tested substring
+membership. Six one-leaf cases, reproduced as reported:
+
+| Source | Output | Old result | Why |
+|---|---|---|---|
+| `"open"` | `"not-open"` | arrived | a substring of another value |
+| `1` | `10` | arrived | a number as text, inside a longer number |
+| `true` | `"true"` | arrived | a boolean as text, against a string |
+| `"alpha\nnext"` | value `"alpha"`, key `"next"` | arrived | the match spans two tokens across the joining newline |
+| `""` | no output | arrived | the empty string is in every string |
+| `null` | `null` | absent | nulls never entered the search text |
+
+Five of the six make the figure too high. Class: algorithm. The helper
+had no test; it was written during the CP-RISK-1 landing to expose a
+weakness of the path-level reports and was itself never held to a case
+with a known answer.
+
+## Issue 33 — what no global check can show
+
+All sources and all emitted objects share one search space, and one
+output value satisfies every equal source value. Two controls with the
+same description, the second dropped: 4 of 4 arrived, nothing absent. The
+reporter is exact about it: the helper did what its docstring said, and
+the fault is in the words around it. `convert_ifa.py` called the result
+"how many values actually got there" and the report called its absent
+list "the work queue". Backlog #41 planned to wire this helper into every
+converter and to re-word "converted losslessly" from it. That plan would
+have replaced one overstatement with another.
+
+## The author's decisions (2026-11-13)
+
+1. **Exact, typed, whole values.** Strings, numbers, booleans and null
+   match only their own type and only as a whole.
+2. **Keep what a substring match knows, apart.** A value that occurs
+   only inside a longer output text (a remark appended to a description)
+   and a value that equals only an output key (a prop name that became a
+   facet key) are listed as candidates and not counted.
+3. **Name the measure for what it is.** `global_occurrence()`. Its count
+   is an upper bound on what was carried; its absent list is a lower
+   bound on the losses and not the complete queue. Diagnostics keep the
+   array index (indexed JSON Pointers).
+4. **Correct the figure where it is published, then measure again.**
+5. **A ledger of source occurrences is the measurement a lossless claim
+   needs**: one entry per source leaf with its destination and outcome.
+   The IFA converter first; the others corpus by corpus. Not taken: a
+   count of occurrences on both sides. It would flag the fixture without
+   saying which occurrence is gone, and every legitimate deduplication
+   would read as a loss.
+6. **Tracked in #41**, re-planned, not in a new entry. **It does not
+   block the tag**: no kernel rule depends on it.
+
+## What changed, and what was measured
+
+- `oscal_conv_lib.py`: `value_arrival()` is `global_occurrence()`.
+  `test_oscal_conv_lib.py`, twelve tests named after the two issues, among
+  them one that asserts the known limit (the dropped description still
+  reads 4 of 4); the workflow's Python job runs them.
+- The IFA sources were fetched again from the pinned commit
+  (`usnistgov/oscal-content@9402f031`, seven files). **The unchanged
+  converter first reproduced the committed bundle and both reports byte
+  for byte**, 394 of 835 included, so the re-measurement is of the same
+  input.
+- Re-measured: **283 of 835** source leaf values have an equal typed
+  value somewhere in the bundle. 29 equal only a key of the output, all
+  of them prop names under five paths; whether such a name became that
+  key is for the ledger to say. 80 occur only inside a longer text. Without any equal: 194 identity
+  values, 125 document-metadata values, **124 content values, 63 of them
+  prose of 40 characters or more**. The old reading was 111 too high.
+- The bundle is unchanged: 17 objects, the same digests. Only the two
+  coverage reports differ.
+- Corrected where the figure stood: the IFA coverage report, the website
+  (`evidence.html`, in five languages), specification R16, IV.5b item 6
+  and IV.7, backlog #41.
+- L-2 above and backlog #41 said 120 document-metadata values were
+  absent. The generated report said 125, and 394 + 194 + 125 + 122 is
+  835; 120 was a slip in the prose. L-2 stays as written and is corrected
+  by this section.
+
+## What it does not change
+
+No kernel shape, rule or vector, no validator, no bundle object. And no
+claim of losslessness is added: the specification already said that
+"converted losslessly" is established at path level only.
+
+## Lesson
+
+A check written to expose an unverified claim was itself unverified. It
+was believed because it brought bad news: 394 of 835 looked like a harsh
+number, so nobody asked whether it was too kind. A measurement gets a
+test with a known answer before its first number is published.

@@ -1781,11 +1781,16 @@ CIS corpora converted and measured (Controls v8.1; Ubuntu 24.04
 Benchmark with 635 mappings and recovered profile baselines).
 *(2.0.0)* **R16** — coverage is path-level: the conversion reports count
 source paths with a declared destination, not values verified to arrive.
-A value-arrival check on the one corpus measured so far (IFA) finds 122
-content values, 63 of them prose, that do not occur verbatim in the
-bundle; under `poam.risks[]` alone thirteen had never arrived at 1.0.0,
-the risk response type among them. Some absences are deliberate
-transformations; the other ten corpora are unmeasured. "Converted
+A value-level check on the one corpus measured so far (IFA) finds 124
+content values, 63 of them prose, that have no equal value anywhere in
+the bundle; under `poam.risks[]` alone thirteen had never arrived at
+1.0.0, the risk response type among them. Some absences are deliberate
+transformations; the other ten corpora are unmeasured. *(rev.
+2026-11-13, two outside reports: the check had matched substrings and
+read 122 absent and 394 of 835 arrived; with typed, whole values it
+reads 124 and 283. And it is a global check: 283 is an upper bound on
+what was carried, since one value in the bundle answers for every equal
+value in the source. No measurement of single values exists yet.)* "Converted
 losslessly" is established at path level only (backlog #41). **R17** —
 redistribution: six of the eleven measured bundles cannot be shipped
 (§2); the shipped evidence base no longer exercises Tailoring or Mapping
@@ -1967,6 +1972,7 @@ history. The compact line:
 | Advice accepted · the decisions before the tag | 2026-11-12 | Twelve author decisions. Advice: bundle only; Components only; `statement-ids` kept against D22; `product-version` added; ADVICE-3 and ADVICE-7 kept; a `describes` relation for third parties; one release per set. Before the tag: `Deviation.opened` and the `due` of an action typed (#47a, #52: the superset property ends for free-text dates); history is left as it is (#50); a Tailoring names no Component (#51); Unicode categories follow the host (#59) | CP-ADVICE-1 §14 · "Amendments — CP-ADVICE-1 and the decisions before the tag" |
 | **2.0.0-rc.3** | 2026-11-12 | This text: D25 new; D3, D5, D6, D8, D13, D15, D22, D24 amended in place; gate state in IV.5b | this row |
 | The number domain | 2026-11-13 | A fifth outside report (issue 27 in the GitHub tracker) showed the reference and the app computing two verdicts and two semantic digests for integers beyond 2^53 and for `1.0`. D3 item 3 had named a "permitted number domain" that no text defined. **D3.9 new, NUMBER-1:** integers in plain digits, of magnitude at most 2^53 − 1; rejected, never rewritten; D24's evaluation step 3 amended. `jcs` 8 → 22 vectors, `parameter` 19 → 21, `check` 199 → 203; 568 in all. Backlog #67 closed. After rc.3 | D3.9 · "Amendments — the number domain" |
+| The value-level check of the converters | 2026-11-13 | Two more outside reports (issues 32 and 33 in the GitHub tracker): `value_arrival()` matched substrings across one joined string, so the IFA figure of 394 of 835 was too high; and any global check hides a dropped value behind an equal one elsewhere. The helper is `global_occurrence()` now, on typed whole values, with key-only and embedded matches listed apart and not counted: **283 of 835**, 124 content values without an equal, stated as an upper and a lower bound. R16 and IV.5b item 6 amended; backlog #41 re-planned to a ledger of source occurrences per converter. No kernel rule, vector or bundle object changes | "Amendments — the value-level check of the converters" |
 | Outside reports on the run rules | 2026-11-13 | Four reports from outside (issues 23 to 26 in the GitHub tracker), each reproduced: the reference accepted an evidence record outside `evidence/sha256/`, a `collector-id` on a Check without collectors, a row parameter its Check does not read, and a record that binds no observation. CHECK-12, CHECK-13 and CHECK-15 amended in place (D24); the three engines follow; `check` 188 → 199 vectors. After rc.3; the counts in the Status and in IV.5b and IV.7 are those of rc.3 | "Amendments — the outside reports of 2026-11-13" |
 
 ## IV.7 Release artifacts (what this candidate ships with)
@@ -2002,8 +2008,11 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
   out, generic re-import, 5,886/5,886 round-trip measured on the ten
   catalog bundles then present); not re-run.
 - **Converters for all eleven corpora** under `jascon/scripts/`, writing
-  one byte spelling on every OS; `oscal_conv_lib.value_arrival()` for the
-  value-level check (wired into the IFA report so far).
+  one byte spelling on every OS; `oscal_conv_lib.global_occurrence()` for
+  the value-level check (wired into the IFA report so far). *(rev.
+  2026-11-13: until then `value_arrival()`, which matched substrings and
+  overstated the figure; and the check is global, an upper bound on what
+  was carried, not a trace of each value — backlog #41.)*
 - **Five corpus bundles** under `converted_examples/` — AU.ISM, DE.BSI,
   US.SP800-53, US.CSF, US.IFA-GoodRead: 3,715 manifest-listed objects,
   both SHA-256 digests re-verified per object, stored as the digested
@@ -2107,8 +2116,10 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
    left to decide before the tag.**
 6. **Work, not decisions** — ✓ the implemented I-Regexp grammar was
    compared with the published text of RFC 9485 on 2026-11-12 (#61,
-   closed); ☐ value arrival for the other corpora and the re-wording of
-   "converted losslessly" that follows from it (#41); ☐ a real
+   closed); ☐ a ledger of source occurrences per converter, the IFA
+   converter first, and the re-wording of "converted losslessly" that
+   follows from it (#41, re-planned on 2026-11-13: the global check that
+   was to be rolled out cannot show that a single value arrived); ☐ a real
    attestation in the example bundle (#46); ☐ `Assessment.method`
    payloads held to their pinned schema (#55); ☐ a second Risk corpus
    (IV.5b item 4).

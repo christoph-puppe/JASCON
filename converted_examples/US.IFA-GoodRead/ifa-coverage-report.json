@@ -2862,303 +2862,1107 @@
   "mitigate": 1,
   "accept": 1
  },
- "value-arrival": {
+ "global-occurrence": {
+  "measures": "global occurrence of equal typed values - an upper bound on what was carried, not a trace of each source occurrence",
   "leaf-values": 835,
-  "arrived-verbatim": 394,
+  "exact": 283,
+  "key-only": 29,
+  "embedded": 80,
   "absent": {
    "identity": 194,
    "document-metadata": 125,
-   "content": 122
+   "content": 124
   },
   "absent-content-prose": 63,
-  "absent-content-paths": [
+  "key-only-paths": [
    {
-    "path": "ap.assessment-plan.assessment-subjects[].description",
-    "count": 1
+    "path": "ap.assessment-plan.local-definitions.activities[].props[].name",
+    "count": 1,
+    "pointers": [
+     "ap#/assessment-plan/local-definitions/activities/0/props/0/name"
+    ]
    },
    {
-    "path": "ap.assessment-plan.tasks[].remarks",
-    "count": 1
+    "path": "ar.assessment-results.local-definitions.activities[].props[].name",
+    "count": 1,
+    "pointers": [
+     "ar#/assessment-results/local-definitions/activities/0/props/0/name"
+    ]
    },
    {
-    "path": "ar.assessment-results.local-definitions.activities[].description",
-    "count": 1
+    "path": "poam.plan-of-action-and-milestones.risks[].remediations[].props[].name",
+    "count": 2,
+    "pointers": [
+     "poam#/plan-of-action-and-milestones/risks/0/remediations/0/props/0/name",
+     "poam#/plan-of-action-and-milestones/risks/1/remediations/0/props/0/name"
+    ]
    },
    {
-    "path": "ar.assessment-results.local-definitions.activities[].steps[].description",
-    "count": 3
+    "path": "ssp.system-security-plan.system-implementation.inventory-items[].implemented-components[].props[].name",
+    "count": 6,
+    "pointers": [
+     "ssp#/system-security-plan/system-implementation/inventory-items/0/implemented-components/0/props/0/name",
+     "ssp#/system-security-plan/system-implementation/inventory-items/1/implemented-components/0/props/0/name",
+     "ssp#/system-security-plan/system-implementation/inventory-items/2/implemented-components/0/props/0/name",
+     "ssp#/system-security-plan/system-implementation/inventory-items/3/implemented-components/0/props/0/name",
+     "ssp#/system-security-plan/system-implementation/inventory-items/4/implemented-components/0/props/0/name",
+     "ssp#/system-security-plan/system-implementation/inventory-items/5/implemented-components/0/props/0/name"
+    ]
    },
    {
-    "path": "ar.assessment-results.local-definitions.activities[].steps[].remarks",
-    "count": 2
+    "path": "ssp.system-security-plan.system-implementation.inventory-items[].props[].name",
+    "count": 19,
+    "pointers": [
+     "ssp#/system-security-plan/system-implementation/inventory-items/0/props/0/name",
+     "ssp#/system-security-plan/system-implementation/inventory-items/0/props/1/name",
+     "ssp#/system-security-plan/system-implementation/inventory-items/0/props/2/name",
+     "ssp#/system-security-plan/system-implementation/inventory-items/1/props/0/name",
+     "ssp#/system-security-plan/system-implementation/inventory-items/1/props/1/name",
+     "ssp#/system-security-plan/system-implementation/inventory-items/1/props/2/name",
+     "ssp#/system-security-plan/system-implementation/inventory-items/2/props/0/name",
+     "ssp#/system-security-plan/system-implementation/inventory-items/2/props/1/name",
+     "ssp#/system-security-plan/system-implementation/inventory-items/2/props/2/name",
+     "ssp#/system-security-plan/system-implementation/inventory-items/3/props/0/name",
+     "ssp#/system-security-plan/system-implementation/inventory-items/3/props/1/name",
+     "ssp#/system-security-plan/system-implementation/inventory-items/4/props/0/name",
+     "ssp#/system-security-plan/system-implementation/inventory-items/4/props/1/name",
+     "ssp#/system-security-plan/system-implementation/inventory-items/4/props/2/name",
+     "ssp#/system-security-plan/system-implementation/inventory-items/4/props/3/name",
+     "ssp#/system-security-plan/system-implementation/inventory-items/4/props/4/name",
+     "ssp#/system-security-plan/system-implementation/inventory-items/5/props/0/name",
+     "ssp#/system-security-plan/system-implementation/inventory-items/5/props/1/name",
+     "ssp#/system-security-plan/system-implementation/inventory-items/5/props/2/name"
+    ]
+   }
+  ],
+  "embedded-paths": [
+   {
+    "path": "ap.assessment-plan.assessment-subjects[].type",
+    "count": 1,
+    "pointers": [
+     "ap#/assessment-plan/assessment-subjects/0/type"
+    ]
    },
    {
-    "path": "ar.assessment-results.local-definitions.activities[].steps[].title",
-    "count": 3
+    "path": "ap.assessment-plan.local-definitions.activities[].responsible-roles[].role-id",
+    "count": 1,
+    "pointers": [
+     "ap#/assessment-plan/local-definitions/activities/0/responsible-roles/0/role-id"
+    ]
    },
    {
-    "path": "ar.assessment-results.local-definitions.activities[].title",
-    "count": 1
+    "path": "ap.assessment-plan.metadata.parties[].short-name",
+    "count": 1,
+    "pointers": [
+     "ap#/assessment-plan/metadata/parties/1/short-name"
+    ]
    },
    {
-    "path": "ar.assessment-results.results[].description",
-    "count": 1
+    "path": "ap.assessment-plan.metadata.parties[].type",
+    "count": 2,
+    "pointers": [
+     "ap#/assessment-plan/metadata/parties/0/type",
+     "ap#/assessment-plan/metadata/parties/1/type"
+    ]
    },
    {
-    "path": "ar.assessment-results.results[].end",
-    "count": 1
+    "path": "ap.assessment-plan.metadata.responsible-parties[].role-id",
+    "count": 1,
+    "pointers": [
+     "ap#/assessment-plan/metadata/responsible-parties/0/role-id"
+    ]
    },
    {
-    "path": "ar.assessment-results.results[].findings[].description",
-    "count": 1
+    "path": "ap.assessment-plan.metadata.revisions[].oscal-version",
+    "count": 1,
+    "pointers": [
+     "ap#/assessment-plan/metadata/revisions/0/oscal-version"
+    ]
    },
    {
-    "path": "ar.assessment-results.results[].findings[].target.description",
-    "count": 1
+    "path": "ap.assessment-plan.metadata.revisions[].version",
+    "count": 1,
+    "pointers": [
+     "ap#/assessment-plan/metadata/revisions/0/version"
+    ]
    },
    {
-    "path": "ar.assessment-results.results[].local-definitions.tasks[].description",
-    "count": 1
+    "path": "ap.assessment-plan.metadata.roles[].id",
+    "count": 1,
+    "pointers": [
+     "ap#/assessment-plan/metadata/roles/0/id"
+    ]
    },
    {
-    "path": "ar.assessment-results.results[].local-definitions.tasks[].title",
-    "count": 1
+    "path": "ap.assessment-plan.tasks[].associated-activities[].subjects[].type",
+    "count": 1,
+    "pointers": [
+     "ap#/assessment-plan/tasks/0/associated-activities/0/subjects/0/type"
+    ]
    },
    {
-    "path": "ar.assessment-results.results[].observations[].remarks",
-    "count": 2
+    "path": "ap.assessment-plan.tasks[].responsible-roles[].role-id",
+    "count": 1,
+    "pointers": [
+     "ap#/assessment-plan/tasks/0/responsible-roles/0/role-id"
+    ]
    },
    {
-    "path": "ar.assessment-results.results[].risks[].statement",
-    "count": 1
+    "path": "ar.assessment-results.local-definitions.activities[].responsible-roles[].role-id",
+    "count": 1,
+    "pointers": [
+     "ar#/assessment-results/local-definitions/activities/0/responsible-roles/0/role-id"
+    ]
    },
    {
-    "path": "ar.assessment-results.results[].risks[].status",
-    "count": 1
+    "path": "ar.assessment-results.metadata.parties[].short-name",
+    "count": 1,
+    "pointers": [
+     "ar#/assessment-results/metadata/parties/1/short-name"
+    ]
    },
    {
-    "path": "cdef.component-definition.components[].control-implementations[].description",
-    "count": 1
+    "path": "ar.assessment-results.metadata.parties[].type",
+    "count": 2,
+    "pointers": [
+     "ar#/assessment-results/metadata/parties/0/type",
+     "ar#/assessment-results/metadata/parties/1/type"
+    ]
    },
    {
-    "path": "cdef.component-definition.components[].control-implementations[].implemented-requirements[].set-parameters[].values[]",
-    "count": 1
+    "path": "ar.assessment-results.metadata.responsible-parties[].role-id",
+    "count": 1,
+    "pointers": [
+     "ar#/assessment-results/metadata/responsible-parties/0/role-id"
+    ]
    },
    {
-    "path": "cdef.component-definition.components[].control-implementations[].implemented-requirements[].statements[].description",
-    "count": 2
+    "path": "ar.assessment-results.metadata.revisions[].oscal-version",
+    "count": 1,
+    "pointers": [
+     "ar#/assessment-results/metadata/revisions/0/oscal-version"
+    ]
    },
    {
-    "path": "cdef.component-definition.components[].control-implementations[].source",
-    "count": 1
+    "path": "ar.assessment-results.metadata.roles[].id",
+    "count": 1,
+    "pointers": [
+     "ar#/assessment-results/metadata/roles/0/id"
+    ]
    },
    {
-    "path": "cdef.component-definition.components[].description",
-    "count": 1
+    "path": "ar.assessment-results.results[].local-definitions.tasks[].associated-activities[].subjects[].type",
+    "count": 1,
+    "pointers": [
+     "ar#/assessment-results/results/0/local-definitions/tasks/0/associated-activities/0/subjects/0/type"
+    ]
    },
    {
-    "path": "cdef.component-definition.components[].purpose",
-    "count": 1
+    "path": "ar.assessment-results.results[].observations[].subjects[].type",
+    "count": 2,
+    "pointers": [
+     "ar#/assessment-results/results/0/observations/0/subjects/0/type",
+     "ar#/assessment-results/results/0/observations/1/subjects/0/type"
+    ]
    },
    {
-    "path": "lev.system-security-plan.control-implementation.description",
-    "count": 1
+    "path": "ar.assessment-results.results[].observations[].types[]",
+    "count": 2,
+    "pointers": [
+     "ar#/assessment-results/results/0/observations/0/types/0",
+     "ar#/assessment-results/results/0/observations/1/types/0"
+    ]
    },
    {
-    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].remarks",
-    "count": 1
+    "path": "ar.assessment-results.results[].risks[].title",
+    "count": 1,
+    "pointers": [
+     "ar#/assessment-results/results/0/risks/0/title"
+    ]
    },
    {
-    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].description",
-    "count": 2
+    "path": "cdef.component-definition.components[].control-implementations[].implemented-requirements[].control-id",
+    "count": 1,
+    "pointers": [
+     "cdef#/component-definition/components/0/control-implementations/0/implemented-requirements/0/control-id"
+    ]
    },
    {
-    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].export.description",
-    "count": 2
+    "path": "cdef.component-definition.components[].control-implementations[].implemented-requirements[].statements[].responsible-roles[].role-id",
+    "count": 1,
+    "pointers": [
+     "cdef#/component-definition/components/0/control-implementations/0/implemented-requirements/1/statements/0/responsible-roles/0/role-id"
+    ]
    },
    {
-    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].remarks",
-    "count": 1
+    "path": "cdef.component-definition.components[].responsible-roles[].role-id",
+    "count": 1,
+    "pointers": [
+     "cdef#/component-definition/components/0/responsible-roles/1/role-id"
+    ]
    },
    {
-    "path": "lev.system-security-plan.system-characteristics.authorization-boundary.description",
-    "count": 1
+    "path": "cdef.component-definition.metadata.oscal-version",
+    "count": 1,
+    "pointers": [
+     "cdef#/component-definition/metadata/oscal-version"
+    ]
    },
    {
-    "path": "lev.system-security-plan.system-characteristics.remarks",
-    "count": 1
+    "path": "cdef.component-definition.metadata.parties[].type",
+    "count": 1,
+    "pointers": [
+     "cdef#/component-definition/metadata/parties/0/type"
+    ]
    },
    {
-    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].availability-impact.adjustment-justification",
-    "count": 1
+    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].control-id",
+    "count": 1,
+    "pointers": [
+     "lev#/system-security-plan/control-implementation/implemented-requirements/0/control-id"
+    ]
    },
    {
-    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].categorizations[].information-type-ids[]",
-    "count": 1
+    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].export.responsibilities[].responsible-roles[].role-id",
+    "count": 2,
+    "pointers": [
+     "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/0/export/responsibilities/0/responsible-roles/0/role-id",
+     "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/export/responsibilities/0/responsible-roles/0/role-id"
+    ]
    },
    {
-    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].confidentiality-impact.adjustment-justification",
-    "count": 1
+    "path": "lev.system-security-plan.metadata.parties[].type",
+    "count": 2,
+    "pointers": [
+     "lev#/system-security-plan/metadata/parties/0/type",
+     "lev#/system-security-plan/metadata/parties/1/type"
+    ]
    },
    {
-    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].description",
-    "count": 1
+    "path": "lev.system-security-plan.metadata.roles[].id",
+    "count": 2,
+    "pointers": [
+     "lev#/system-security-plan/metadata/roles/0/id",
+     "lev#/system-security-plan/metadata/roles/1/id"
+    ]
    },
    {
-    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].integrity-impact.adjustment-justification",
-    "count": 1
+    "path": "lev.system-security-plan.metadata.roles[].title",
+    "count": 1,
+    "pointers": [
+     "lev#/system-security-plan/metadata/roles/0/title"
+    ]
    },
    {
-    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].title",
-    "count": 1
+    "path": "lev.system-security-plan.system-implementation.components[].props[].value",
+    "count": 1,
+    "pointers": [
+     "lev#/system-security-plan/system-implementation/components/1/props/0/value"
+    ]
    },
    {
-    "path": "lev.system-security-plan.system-implementation.components[].description",
-    "count": 2
+    "path": "lev.system-security-plan.system-implementation.components[].responsible-roles[].role-id",
+    "count": 1,
+    "pointers": [
+     "lev#/system-security-plan/system-implementation/components/1/responsible-roles/0/role-id"
+    ]
    },
    {
-    "path": "lev.system-security-plan.system-implementation.components[].props[].name",
-    "count": 1
+    "path": "lev.system-security-plan.system-implementation.users[].authorized-privileges[].title",
+    "count": 1,
+    "pointers": [
+     "lev#/system-security-plan/system-implementation/users/0/authorized-privileges/0/title"
+    ]
    },
    {
-    "path": "lev.system-security-plan.system-implementation.components[].title",
-    "count": 1
+    "path": "lev.system-security-plan.system-implementation.users[].role-ids[]",
+    "count": 1,
+    "pointers": [
+     "lev#/system-security-plan/system-implementation/users/0/role-ids/0"
+    ]
    },
    {
-    "path": "lev.system-security-plan.system-implementation.components[].type",
-    "count": 1
+    "path": "lev.system-security-plan.uuid",
+    "count": 1,
+    "pointers": [
+     "lev#/system-security-plan/uuid"
+    ]
    },
    {
-    "path": "lev.system-security-plan.system-implementation.users[].authorized-privileges[].functions-performed[]",
-    "count": 1
+    "path": "lvg.system-security-plan.back-matter.resources[].uuid",
+    "count": 1,
+    "pointers": [
+     "lvg#/system-security-plan/back-matter/resources/2/uuid"
+    ]
    },
    {
-    "path": "lvg.system-security-plan.control-implementation.description",
-    "count": 1
+    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].control-id",
+    "count": 1,
+    "pointers": [
+     "lvg#/system-security-plan/control-implementation/implemented-requirements/0/control-id"
+    ]
    },
    {
-    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].remarks",
-    "count": 1
+    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].responsible-roles[].role-id",
+    "count": 1,
+    "pointers": [
+     "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/0/responsible-roles/0/role-id"
+    ]
    },
    {
-    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].description",
-    "count": 3
+    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].satisfied[].responsible-roles[].role-id",
+    "count": 1,
+    "pointers": [
+     "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/satisfied/0/responsible-roles/0/role-id"
+    ]
    },
    {
-    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].inherited[].description",
-    "count": 1
+    "path": "lvg.system-security-plan.metadata.parties[].type",
+    "count": 2,
+    "pointers": [
+     "lvg#/system-security-plan/metadata/parties/0/type",
+     "lvg#/system-security-plan/metadata/parties/1/type"
+    ]
    },
    {
-    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].satisfied[].description",
-    "count": 1
+    "path": "lvg.system-security-plan.metadata.roles[].id",
+    "count": 1,
+    "pointers": [
+     "lvg#/system-security-plan/metadata/roles/0/id"
+    ]
    },
    {
-    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].remarks",
-    "count": 1
-   },
-   {
-    "path": "lvg.system-security-plan.system-characteristics.authorization-boundary.description",
-    "count": 1
-   },
-   {
-    "path": "lvg.system-security-plan.system-characteristics.remarks",
-    "count": 1
-   },
-   {
-    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].availability-impact.adjustment-justification",
-    "count": 1
-   },
-   {
-    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].categorizations[].information-type-ids[]",
-    "count": 1
-   },
-   {
-    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].confidentiality-impact.adjustment-justification",
-    "count": 1
-   },
-   {
-    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].description",
-    "count": 1
-   },
-   {
-    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].integrity-impact.adjustment-justification",
-    "count": 1
-   },
-   {
-    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].title",
-    "count": 1
-   },
-   {
-    "path": "lvg.system-security-plan.system-implementation.components[].description",
-    "count": 4
-   },
-   {
-    "path": "lvg.system-security-plan.system-implementation.components[].props[].name",
-    "count": 8
+    "path": "lvg.system-security-plan.metadata.roles[].title",
+    "count": 1,
+    "pointers": [
+     "lvg#/system-security-plan/metadata/roles/0/title"
+    ]
    },
    {
     "path": "lvg.system-security-plan.system-implementation.components[].props[].value",
-    "count": 7
+    "count": 1,
+    "pointers": [
+     "lvg#/system-security-plan/system-implementation/components/2/props/0/value"
+    ]
    },
    {
-    "path": "lvg.system-security-plan.system-implementation.components[].title",
-    "count": 3
+    "path": "lvg.system-security-plan.system-implementation.leveraged-authorizations[].date-authorized",
+    "count": 1,
+    "pointers": [
+     "lvg#/system-security-plan/system-implementation/leveraged-authorizations/0/date-authorized"
+    ]
    },
    {
-    "path": "lvg.system-security-plan.system-implementation.components[].type",
-    "count": 1
+    "path": "lvg.system-security-plan.system-implementation.leveraged-authorizations[].title",
+    "count": 1,
+    "pointers": [
+     "lvg#/system-security-plan/system-implementation/leveraged-authorizations/0/title"
+    ]
    },
    {
-    "path": "lvg.system-security-plan.system-implementation.leveraged-authorizations[].links[].rel",
-    "count": 1
+    "path": "lvg.system-security-plan.system-implementation.users[].authorized-privileges[].title",
+    "count": 1,
+    "pointers": [
+     "lvg#/system-security-plan/system-implementation/users/0/authorized-privileges/0/title"
+    ]
    },
    {
-    "path": "lvg.system-security-plan.system-implementation.users[].authorized-privileges[].functions-performed[]",
-    "count": 1
+    "path": "lvg.system-security-plan.system-implementation.users[].role-ids[]",
+    "count": 1,
+    "pointers": [
+     "lvg#/system-security-plan/system-implementation/users/0/role-ids/0"
+    ]
    },
    {
-    "path": "poam.plan-of-action-and-milestones.observations[].remarks",
-    "count": 2
+    "path": "lvg.system-security-plan.uuid",
+    "count": 1,
+    "pointers": [
+     "lvg#/system-security-plan/uuid"
+    ]
+   },
+   {
+    "path": "poam.plan-of-action-and-milestones.metadata.revisions[].oscal-version",
+    "count": 1,
+    "pointers": [
+     "poam#/plan-of-action-and-milestones/metadata/revisions/0/oscal-version"
+    ]
+   },
+   {
+    "path": "poam.plan-of-action-and-milestones.metadata.revisions[].version",
+    "count": 2,
+    "pointers": [
+     "poam#/plan-of-action-and-milestones/metadata/revisions/0/version",
+     "poam#/plan-of-action-and-milestones/metadata/revisions/1/version"
+    ]
+   },
+   {
+    "path": "poam.plan-of-action-and-milestones.observations[].subjects[].type",
+    "count": 2,
+    "pointers": [
+     "poam#/plan-of-action-and-milestones/observations/0/subjects/0/type",
+     "poam#/plan-of-action-and-milestones/observations/1/subjects/0/type"
+    ]
    },
    {
     "path": "poam.plan-of-action-and-milestones.observations[].types[]",
-    "count": 1
-   },
-   {
-    "path": "poam.plan-of-action-and-milestones.poam-items[].description",
-    "count": 2
+    "count": 1,
+    "pointers": [
+     "poam#/plan-of-action-and-milestones/observations/1/types/0"
+    ]
    },
    {
     "path": "poam.plan-of-action-and-milestones.poam-items[].title",
-    "count": 1
+    "count": 1,
+    "pointers": [
+     "poam#/plan-of-action-and-milestones/poam-items/1/title"
+    ]
    },
    {
-    "path": "ssp.system-security-plan.control-implementation.description",
-    "count": 1
+    "path": "poam.plan-of-action-and-milestones.risks[].characterizations[].origin.actors[].type",
+    "count": 2,
+    "pointers": [
+     "poam#/plan-of-action-and-milestones/risks/0/characterizations/0/origin/actors/0/type",
+     "poam#/plan-of-action-and-milestones/risks/1/characterizations/0/origin/actors/0/type"
+    ]
    },
    {
-    "path": "ssp.system-security-plan.system-implementation.components[].description",
-    "count": 1
+    "path": "ssp.system-security-plan.metadata.parties[].short-name",
+    "count": 1,
+    "pointers": [
+     "ssp#/system-security-plan/metadata/parties/3/short-name"
+    ]
    },
    {
-    "path": "ssp.system-security-plan.system-implementation.components[].type",
-    "count": 1
+    "path": "ssp.system-security-plan.metadata.parties[].type",
+    "count": 4,
+    "pointers": [
+     "ssp#/system-security-plan/metadata/parties/0/type",
+     "ssp#/system-security-plan/metadata/parties/1/type",
+     "ssp#/system-security-plan/metadata/parties/2/type",
+     "ssp#/system-security-plan/metadata/parties/3/type"
+    ]
    },
    {
-    "path": "ssp.system-security-plan.system-implementation.inventory-items[].implemented-components[].props[].value",
-    "count": 6
+    "path": "ssp.system-security-plan.metadata.responsible-parties[].role-id",
+    "count": 2,
+    "pointers": [
+     "ssp#/system-security-plan/metadata/responsible-parties/0/role-id",
+     "ssp#/system-security-plan/metadata/responsible-parties/1/role-id"
+    ]
    },
    {
-    "path": "ssp.system-security-plan.system-implementation.inventory-items[].props[].class",
-    "count": 14
+    "path": "ssp.system-security-plan.metadata.revisions[].oscal-version",
+    "count": 1,
+    "pointers": [
+     "ssp#/system-security-plan/metadata/revisions/1/oscal-version"
+    ]
    },
    {
-    "path": "ssp.system-security-plan.system-implementation.inventory-items[].props[].value",
-    "count": 1
+    "path": "ssp.system-security-plan.metadata.revisions[].version",
+    "count": 1,
+    "pointers": [
+     "ssp#/system-security-plan/metadata/revisions/1/version"
+    ]
+   },
+   {
+    "path": "ssp.system-security-plan.metadata.roles[].id",
+    "count": 2,
+    "pointers": [
+     "ssp#/system-security-plan/metadata/roles/0/id",
+     "ssp#/system-security-plan/metadata/roles/1/id"
+    ]
+   },
+   {
+    "path": "ssp.system-security-plan.metadata.roles[].title",
+    "count": 1,
+    "pointers": [
+     "ssp#/system-security-plan/metadata/roles/3/title"
+    ]
+   },
+   {
+    "path": "ssp.system-security-plan.system-implementation.components[].responsible-roles[].role-id",
+    "count": 1,
+    "pointers": [
+     "ssp#/system-security-plan/system-implementation/components/0/responsible-roles/0/role-id"
+    ]
    },
    {
     "path": "ssp.system-security-plan.system-implementation.users[].role-ids[]",
-    "count": 1
+    "count": 1,
+    "pointers": [
+     "ssp#/system-security-plan/system-implementation/users/0/role-ids/0"
+    ]
+   },
+   {
+    "path": "ssp.system-security-plan.uuid",
+    "count": 1,
+    "pointers": [
+     "ssp#/system-security-plan/uuid"
+    ]
+   }
+  ],
+  "absent-content-paths": [
+   {
+    "path": "ap.assessment-plan.assessment-subjects[].description",
+    "count": 1,
+    "pointers": [
+     "ap#/assessment-plan/assessment-subjects/0/description"
+    ]
+   },
+   {
+    "path": "ap.assessment-plan.tasks[].remarks",
+    "count": 1,
+    "pointers": [
+     "ap#/assessment-plan/tasks/0/remarks"
+    ]
+   },
+   {
+    "path": "ar.assessment-results.local-definitions.activities[].description",
+    "count": 1,
+    "pointers": [
+     "ar#/assessment-results/local-definitions/activities/0/description"
+    ]
+   },
+   {
+    "path": "ar.assessment-results.local-definitions.activities[].steps[].description",
+    "count": 3,
+    "pointers": [
+     "ar#/assessment-results/local-definitions/activities/0/steps/0/description",
+     "ar#/assessment-results/local-definitions/activities/0/steps/1/description",
+     "ar#/assessment-results/local-definitions/activities/0/steps/2/description"
+    ]
+   },
+   {
+    "path": "ar.assessment-results.local-definitions.activities[].steps[].remarks",
+    "count": 2,
+    "pointers": [
+     "ar#/assessment-results/local-definitions/activities/0/steps/0/remarks",
+     "ar#/assessment-results/local-definitions/activities/0/steps/1/remarks"
+    ]
+   },
+   {
+    "path": "ar.assessment-results.local-definitions.activities[].steps[].title",
+    "count": 3,
+    "pointers": [
+     "ar#/assessment-results/local-definitions/activities/0/steps/0/title",
+     "ar#/assessment-results/local-definitions/activities/0/steps/1/title",
+     "ar#/assessment-results/local-definitions/activities/0/steps/2/title"
+    ]
+   },
+   {
+    "path": "ar.assessment-results.local-definitions.activities[].title",
+    "count": 1,
+    "pointers": [
+     "ar#/assessment-results/local-definitions/activities/0/title"
+    ]
+   },
+   {
+    "path": "ar.assessment-results.results[].description",
+    "count": 1,
+    "pointers": [
+     "ar#/assessment-results/results/0/description"
+    ]
+   },
+   {
+    "path": "ar.assessment-results.results[].end",
+    "count": 1,
+    "pointers": [
+     "ar#/assessment-results/results/0/end"
+    ]
+   },
+   {
+    "path": "ar.assessment-results.results[].findings[].description",
+    "count": 1,
+    "pointers": [
+     "ar#/assessment-results/results/0/findings/0/description"
+    ]
+   },
+   {
+    "path": "ar.assessment-results.results[].findings[].target.description",
+    "count": 1,
+    "pointers": [
+     "ar#/assessment-results/results/0/findings/0/target/description"
+    ]
+   },
+   {
+    "path": "ar.assessment-results.results[].findings[].target.type",
+    "count": 1,
+    "pointers": [
+     "ar#/assessment-results/results/0/findings/0/target/type"
+    ]
+   },
+   {
+    "path": "ar.assessment-results.results[].local-definitions.tasks[].description",
+    "count": 1,
+    "pointers": [
+     "ar#/assessment-results/results/0/local-definitions/tasks/0/description"
+    ]
+   },
+   {
+    "path": "ar.assessment-results.results[].local-definitions.tasks[].title",
+    "count": 1,
+    "pointers": [
+     "ar#/assessment-results/results/0/local-definitions/tasks/0/title"
+    ]
+   },
+   {
+    "path": "ar.assessment-results.results[].observations[].remarks",
+    "count": 2,
+    "pointers": [
+     "ar#/assessment-results/results/0/observations/0/remarks",
+     "ar#/assessment-results/results/0/observations/1/remarks"
+    ]
+   },
+   {
+    "path": "ar.assessment-results.results[].risks[].statement",
+    "count": 1,
+    "pointers": [
+     "ar#/assessment-results/results/0/risks/0/statement"
+    ]
+   },
+   {
+    "path": "ar.assessment-results.results[].risks[].status",
+    "count": 1,
+    "pointers": [
+     "ar#/assessment-results/results/0/risks/0/status"
+    ]
+   },
+   {
+    "path": "cdef.component-definition.components[].control-implementations[].description",
+    "count": 1,
+    "pointers": [
+     "cdef#/component-definition/components/0/control-implementations/0/description"
+    ]
+   },
+   {
+    "path": "cdef.component-definition.components[].control-implementations[].implemented-requirements[].set-parameters[].values[]",
+    "count": 2,
+    "pointers": [
+     "cdef#/component-definition/components/0/control-implementations/0/implemented-requirements/0/set-parameters/0/values/0",
+     "cdef#/component-definition/components/0/control-implementations/0/implemented-requirements/1/set-parameters/0/values/0"
+    ]
+   },
+   {
+    "path": "cdef.component-definition.components[].control-implementations[].implemented-requirements[].statements[].description",
+    "count": 2,
+    "pointers": [
+     "cdef#/component-definition/components/0/control-implementations/0/implemented-requirements/0/statements/0/description",
+     "cdef#/component-definition/components/0/control-implementations/0/implemented-requirements/1/statements/0/description"
+    ]
+   },
+   {
+    "path": "cdef.component-definition.components[].control-implementations[].source",
+    "count": 1,
+    "pointers": [
+     "cdef#/component-definition/components/0/control-implementations/0/source"
+    ]
+   },
+   {
+    "path": "cdef.component-definition.components[].description",
+    "count": 1,
+    "pointers": [
+     "cdef#/component-definition/components/0/description"
+    ]
+   },
+   {
+    "path": "cdef.component-definition.components[].purpose",
+    "count": 1,
+    "pointers": [
+     "cdef#/component-definition/components/0/purpose"
+    ]
+   },
+   {
+    "path": "lev.system-security-plan.control-implementation.description",
+    "count": 1,
+    "pointers": [
+     "lev#/system-security-plan/control-implementation/description"
+    ]
+   },
+   {
+    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].remarks",
+    "count": 1,
+    "pointers": [
+     "lev#/system-security-plan/control-implementation/implemented-requirements/0/remarks"
+    ]
+   },
+   {
+    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].description",
+    "count": 2,
+    "pointers": [
+     "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/0/description",
+     "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/description"
+    ]
+   },
+   {
+    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].export.description",
+    "count": 2,
+    "pointers": [
+     "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/0/export/description",
+     "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/export/description"
+    ]
+   },
+   {
+    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].remarks",
+    "count": 1,
+    "pointers": [
+     "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/remarks"
+    ]
+   },
+   {
+    "path": "lev.system-security-plan.system-characteristics.authorization-boundary.description",
+    "count": 1,
+    "pointers": [
+     "lev#/system-security-plan/system-characteristics/authorization-boundary/description"
+    ]
+   },
+   {
+    "path": "lev.system-security-plan.system-characteristics.remarks",
+    "count": 1,
+    "pointers": [
+     "lev#/system-security-plan/system-characteristics/remarks"
+    ]
+   },
+   {
+    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].availability-impact.adjustment-justification",
+    "count": 1,
+    "pointers": [
+     "lev#/system-security-plan/system-characteristics/system-information/information-types/0/availability-impact/adjustment-justification"
+    ]
+   },
+   {
+    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].categorizations[].information-type-ids[]",
+    "count": 1,
+    "pointers": [
+     "lev#/system-security-plan/system-characteristics/system-information/information-types/0/categorizations/0/information-type-ids/0"
+    ]
+   },
+   {
+    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].confidentiality-impact.adjustment-justification",
+    "count": 1,
+    "pointers": [
+     "lev#/system-security-plan/system-characteristics/system-information/information-types/0/confidentiality-impact/adjustment-justification"
+    ]
+   },
+   {
+    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].description",
+    "count": 1,
+    "pointers": [
+     "lev#/system-security-plan/system-characteristics/system-information/information-types/0/description"
+    ]
+   },
+   {
+    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].integrity-impact.adjustment-justification",
+    "count": 1,
+    "pointers": [
+     "lev#/system-security-plan/system-characteristics/system-information/information-types/0/integrity-impact/adjustment-justification"
+    ]
+   },
+   {
+    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].title",
+    "count": 1,
+    "pointers": [
+     "lev#/system-security-plan/system-characteristics/system-information/information-types/0/title"
+    ]
+   },
+   {
+    "path": "lev.system-security-plan.system-implementation.components[].description",
+    "count": 2,
+    "pointers": [
+     "lev#/system-security-plan/system-implementation/components/0/description",
+     "lev#/system-security-plan/system-implementation/components/1/description"
+    ]
+   },
+   {
+    "path": "lev.system-security-plan.system-implementation.components[].props[].name",
+    "count": 1,
+    "pointers": [
+     "lev#/system-security-plan/system-implementation/components/1/props/0/name"
+    ]
+   },
+   {
+    "path": "lev.system-security-plan.system-implementation.components[].title",
+    "count": 1,
+    "pointers": [
+     "lev#/system-security-plan/system-implementation/components/0/title"
+    ]
+   },
+   {
+    "path": "lev.system-security-plan.system-implementation.components[].type",
+    "count": 1,
+    "pointers": [
+     "lev#/system-security-plan/system-implementation/components/0/type"
+    ]
+   },
+   {
+    "path": "lev.system-security-plan.system-implementation.users[].authorized-privileges[].functions-performed[]",
+    "count": 1,
+    "pointers": [
+     "lev#/system-security-plan/system-implementation/users/0/authorized-privileges/0/functions-performed/0"
+    ]
+   },
+   {
+    "path": "lvg.system-security-plan.control-implementation.description",
+    "count": 1,
+    "pointers": [
+     "lvg#/system-security-plan/control-implementation/description"
+    ]
+   },
+   {
+    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].remarks",
+    "count": 1,
+    "pointers": [
+     "lvg#/system-security-plan/control-implementation/implemented-requirements/0/remarks"
+    ]
+   },
+   {
+    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].description",
+    "count": 3,
+    "pointers": [
+     "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/0/description",
+     "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/description",
+     "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/2/description"
+    ]
+   },
+   {
+    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].inherited[].description",
+    "count": 1,
+    "pointers": [
+     "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/2/inherited/0/description"
+    ]
+   },
+   {
+    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].satisfied[].description",
+    "count": 1,
+    "pointers": [
+     "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/2/satisfied/0/description"
+    ]
+   },
+   {
+    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].remarks",
+    "count": 1,
+    "pointers": [
+     "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/remarks"
+    ]
+   },
+   {
+    "path": "lvg.system-security-plan.system-characteristics.authorization-boundary.description",
+    "count": 1,
+    "pointers": [
+     "lvg#/system-security-plan/system-characteristics/authorization-boundary/description"
+    ]
+   },
+   {
+    "path": "lvg.system-security-plan.system-characteristics.remarks",
+    "count": 1,
+    "pointers": [
+     "lvg#/system-security-plan/system-characteristics/remarks"
+    ]
+   },
+   {
+    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].availability-impact.adjustment-justification",
+    "count": 1,
+    "pointers": [
+     "lvg#/system-security-plan/system-characteristics/system-information/information-types/0/availability-impact/adjustment-justification"
+    ]
+   },
+   {
+    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].categorizations[].information-type-ids[]",
+    "count": 1,
+    "pointers": [
+     "lvg#/system-security-plan/system-characteristics/system-information/information-types/0/categorizations/0/information-type-ids/0"
+    ]
+   },
+   {
+    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].confidentiality-impact.adjustment-justification",
+    "count": 1,
+    "pointers": [
+     "lvg#/system-security-plan/system-characteristics/system-information/information-types/0/confidentiality-impact/adjustment-justification"
+    ]
+   },
+   {
+    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].description",
+    "count": 1,
+    "pointers": [
+     "lvg#/system-security-plan/system-characteristics/system-information/information-types/0/description"
+    ]
+   },
+   {
+    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].integrity-impact.adjustment-justification",
+    "count": 1,
+    "pointers": [
+     "lvg#/system-security-plan/system-characteristics/system-information/information-types/0/integrity-impact/adjustment-justification"
+    ]
+   },
+   {
+    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].title",
+    "count": 1,
+    "pointers": [
+     "lvg#/system-security-plan/system-characteristics/system-information/information-types/0/title"
+    ]
+   },
+   {
+    "path": "lvg.system-security-plan.system-implementation.components[].description",
+    "count": 4,
+    "pointers": [
+     "lvg#/system-security-plan/system-implementation/components/0/description",
+     "lvg#/system-security-plan/system-implementation/components/1/description",
+     "lvg#/system-security-plan/system-implementation/components/2/description",
+     "lvg#/system-security-plan/system-implementation/components/3/description"
+    ]
+   },
+   {
+    "path": "lvg.system-security-plan.system-implementation.components[].props[].name",
+    "count": 8,
+    "pointers": [
+     "lvg#/system-security-plan/system-implementation/components/1/props/0/name",
+     "lvg#/system-security-plan/system-implementation/components/1/props/1/name",
+     "lvg#/system-security-plan/system-implementation/components/1/props/2/name",
+     "lvg#/system-security-plan/system-implementation/components/2/props/0/name",
+     "lvg#/system-security-plan/system-implementation/components/2/props/1/name",
+     "lvg#/system-security-plan/system-implementation/components/3/props/0/name",
+     "lvg#/system-security-plan/system-implementation/components/3/props/1/name",
+     "lvg#/system-security-plan/system-implementation/components/3/props/2/name"
+    ]
+   },
+   {
+    "path": "lvg.system-security-plan.system-implementation.components[].props[].value",
+    "count": 7,
+    "pointers": [
+     "lvg#/system-security-plan/system-implementation/components/1/props/0/value",
+     "lvg#/system-security-plan/system-implementation/components/1/props/1/value",
+     "lvg#/system-security-plan/system-implementation/components/1/props/2/value",
+     "lvg#/system-security-plan/system-implementation/components/2/props/1/value",
+     "lvg#/system-security-plan/system-implementation/components/3/props/0/value",
+     "lvg#/system-security-plan/system-implementation/components/3/props/1/value",
+     "lvg#/system-security-plan/system-implementation/components/3/props/2/value"
+    ]
+   },
+   {
+    "path": "lvg.system-security-plan.system-implementation.components[].title",
+    "count": 3,
+    "pointers": [
+     "lvg#/system-security-plan/system-implementation/components/0/title",
+     "lvg#/system-security-plan/system-implementation/components/1/title",
+     "lvg#/system-security-plan/system-implementation/components/3/title"
+    ]
+   },
+   {
+    "path": "lvg.system-security-plan.system-implementation.components[].type",
+    "count": 1,
+    "pointers": [
+     "lvg#/system-security-plan/system-implementation/components/0/type"
+    ]
+   },
+   {
+    "path": "lvg.system-security-plan.system-implementation.leveraged-authorizations[].links[].rel",
+    "count": 1,
+    "pointers": [
+     "lvg#/system-security-plan/system-implementation/leveraged-authorizations/0/links/0/rel"
+    ]
+   },
+   {
+    "path": "lvg.system-security-plan.system-implementation.users[].authorized-privileges[].functions-performed[]",
+    "count": 1,
+    "pointers": [
+     "lvg#/system-security-plan/system-implementation/users/0/authorized-privileges/0/functions-performed/0"
+    ]
+   },
+   {
+    "path": "poam.plan-of-action-and-milestones.observations[].remarks",
+    "count": 2,
+    "pointers": [
+     "poam#/plan-of-action-and-milestones/observations/0/remarks",
+     "poam#/plan-of-action-and-milestones/observations/1/remarks"
+    ]
+   },
+   {
+    "path": "poam.plan-of-action-and-milestones.observations[].types[]",
+    "count": 1,
+    "pointers": [
+     "poam#/plan-of-action-and-milestones/observations/0/types/0"
+    ]
+   },
+   {
+    "path": "poam.plan-of-action-and-milestones.poam-items[].description",
+    "count": 2,
+    "pointers": [
+     "poam#/plan-of-action-and-milestones/poam-items/0/description",
+     "poam#/plan-of-action-and-milestones/poam-items/1/description"
+    ]
+   },
+   {
+    "path": "poam.plan-of-action-and-milestones.poam-items[].title",
+    "count": 1,
+    "pointers": [
+     "poam#/plan-of-action-and-milestones/poam-items/0/title"
+    ]
+   },
+   {
+    "path": "ssp.system-security-plan.control-implementation.description",
+    "count": 1,
+    "pointers": [
+     "ssp#/system-security-plan/control-implementation/description"
+    ]
+   },
+   {
+    "path": "ssp.system-security-plan.system-implementation.components[].description",
+    "count": 1,
+    "pointers": [
+     "ssp#/system-security-plan/system-implementation/components/0/description"
+    ]
+   },
+   {
+    "path": "ssp.system-security-plan.system-implementation.components[].type",
+    "count": 1,
+    "pointers": [
+     "ssp#/system-security-plan/system-implementation/components/0/type"
+    ]
+   },
+   {
+    "path": "ssp.system-security-plan.system-implementation.inventory-items[].implemented-components[].props[].value",
+    "count": 6,
+    "pointers": [
+     "ssp#/system-security-plan/system-implementation/inventory-items/0/implemented-components/0/props/0/value",
+     "ssp#/system-security-plan/system-implementation/inventory-items/1/implemented-components/0/props/0/value",
+     "ssp#/system-security-plan/system-implementation/inventory-items/2/implemented-components/0/props/0/value",
+     "ssp#/system-security-plan/system-implementation/inventory-items/3/implemented-components/0/props/0/value",
+     "ssp#/system-security-plan/system-implementation/inventory-items/4/implemented-components/0/props/0/value",
+     "ssp#/system-security-plan/system-implementation/inventory-items/5/implemented-components/0/props/0/value"
+    ]
+   },
+   {
+    "path": "ssp.system-security-plan.system-implementation.inventory-items[].props[].class",
+    "count": 14,
+    "pointers": [
+     "ssp#/system-security-plan/system-implementation/inventory-items/0/props/0/class",
+     "ssp#/system-security-plan/system-implementation/inventory-items/0/props/1/class",
+     "ssp#/system-security-plan/system-implementation/inventory-items/0/props/2/class",
+     "ssp#/system-security-plan/system-implementation/inventory-items/1/props/0/class",
+     "ssp#/system-security-plan/system-implementation/inventory-items/1/props/1/class",
+     "ssp#/system-security-plan/system-implementation/inventory-items/1/props/2/class",
+     "ssp#/system-security-plan/system-implementation/inventory-items/4/props/0/class",
+     "ssp#/system-security-plan/system-implementation/inventory-items/4/props/1/class",
+     "ssp#/system-security-plan/system-implementation/inventory-items/4/props/2/class",
+     "ssp#/system-security-plan/system-implementation/inventory-items/4/props/3/class",
+     "ssp#/system-security-plan/system-implementation/inventory-items/4/props/4/class",
+     "ssp#/system-security-plan/system-implementation/inventory-items/5/props/0/class",
+     "ssp#/system-security-plan/system-implementation/inventory-items/5/props/1/class",
+     "ssp#/system-security-plan/system-implementation/inventory-items/5/props/2/class"
+    ]
+   },
+   {
+    "path": "ssp.system-security-plan.system-implementation.inventory-items[].props[].value",
+    "count": 1,
+    "pointers": [
+     "ssp#/system-security-plan/system-implementation/inventory-items/4/props/1/value"
+    ]
+   },
+   {
+    "path": "ssp.system-security-plan.system-implementation.users[].role-ids[]",
+    "count": 1,
+    "pointers": [
+     "ssp#/system-security-plan/system-implementation/users/1/role-ids/0"
+    ]
    }
   ]
  }

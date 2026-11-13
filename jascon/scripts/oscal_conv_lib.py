@@ -153,51 +153,105 @@ def inventory(node, prefix, counter, normalize=lambda p: p):
     else:
         counter[normalize(prefix)] += 1
 
-def value_arrival(sources, objects):
-    """Path coverage says where a source value is DECLARED to go; this checks
-    that it ARRIVED. For every leaf value of every source document: does it
-    occur verbatim somewhere in the emitted objects (keys included, so a
-    value that became a facet key counts)? A value that does not is either
-    TRANSFORMED on purpose (a mapped code, a respelled id, a minted URI) or
-    DROPPED - the report lists them so the difference is argued per path
-    instead of assumed. Introduced with the CP-RISK-1 re-run, where the
-    path-level report read 835/835 while 13 content values under
-    poam.risks[] - the risk response type among them - had never arrived.
-    sources: [(tag, document)]. Returns a JSON-able dict."""
-    def leaves(n, p):
+def _pointer(parts):
+    """RFC 6901 JSON Pointer for a path of keys and array indices."""
+    return "".join("/" + str(x).replace("~", "~0").replace("/", "~1") for x in parts)
+
+def _token(v):
+    """A scalar with its JSON type, so that 1, "1", true and "true" are four
+    values (in Python True == 1 and they hash alike)."""
+    if v is None: return ("null", None)
+    if isinstance(v, bool): return ("boolean", v)
+    if isinstance(v, str): return ("string", v)
+    return ("number", json.dumps(v))
+
+def global_occurrence(sources, objects):
+    """For every scalar leaf of every source document: is there an EQUAL value
+    anywhere in the emitted objects? sources: [(tag, document)]; -> JSON-able dict.
+
+    What this measures, and what it does not. Path coverage says where a
+    source value is DECLARED to go. This looks at values, but globally: all
+    sources and all emitted objects share one search space, and one output
+    value satisfies every equal source value. So
+      - `exact` is an UPPER bound on what was carried. It cannot show that a
+        given occurrence arrived: a description dropped from one control is
+        hidden by the same text on another (GitHub issue 33).
+      - `absent` is a LOWER bound on what was lost or transformed, never the
+        complete work queue.
+    Accounting for each source occurrence is the conversion ledger's job
+    (`Ledger` below), not this function's.
+
+    Matching is on complete, typed scalars (GitHub issue 32; until 2026-11-13
+    this function was `value_arrival` and searched one joined string, so
+    "open" arrived in "not-open", 1 in 10, true in "true", "" in anything,
+    and a null never):
+      exact      an output VALUE of the same JSON type equals it
+      key-only   a string that equals an output KEY and no output value. A
+                 value can become a key (a facet keyed by name), but without
+                 a declared mapping that is a candidate, not an arrival
+      embedded   a non-empty string that occurs only INSIDE a longer output
+                 string value (a remark appended to a description). A
+                 candidate too
+      absent     none of these
+    Only `exact` counts. Every leaf not `exact` is listed with its indexed
+    JSON Pointer, grouped by its path with array positions collapsed."""
+    def leaves(n, parts):
         if isinstance(n, dict):
-            for k, v in n.items(): yield from leaves(v, f"{p}.{k}")
+            for k, v in n.items(): yield from leaves(v, parts + [k])
         elif isinstance(n, list):
-            for v in n: yield from leaves(v, f"{p}[]")
-        else: yield p, n
-    def strings(n):
+            for i, v in enumerate(n): yield from leaves(v, parts + [i])
+        else: yield parts, n
+    values, keys = set(), set()
+    def collect(n):
         if isinstance(n, dict):
-            for k, v in n.items(): yield k; yield from strings(v)
+            for k, v in n.items(): keys.add(k); collect(v)
         elif isinstance(n, list):
-            for v in n: yield from strings(v)
-        elif isinstance(n, str): yield n
-        elif n is not None: yield json.dumps(n)
-    hay = "\n".join(s for o in objects for s in strings(o))
-    total = present = 0
+            for v in n: collect(v)
+        else: values.add(_token(n))
+    for o in objects: collect(o)
+    out_strings = [v for t, v in values if t == "string"]
+    # one haystack for the embedded test; the separator cannot occur in a
+    # source string that is tested against it (those fall back to the loop)
+    SEP = "\x00"
+    hay = SEP.join(out_strings)
+    def embedded(sv):
+        if not sv: return False            # the empty string is inside every string and proves nothing
+        if SEP in sv: return any(sv in t for t in out_strings)
+        return sv in hay
+    counts = collections.Counter()
     absent = {"identity": collections.Counter(), "document-metadata": collections.Counter(),
               "content": collections.Counter()}
-    prose = 0
+    listed = {"key-only": collections.defaultdict(list), "embedded": collections.defaultdict(list),
+              "absent-content": collections.defaultdict(list)}
+    total = prose = 0
     for tag, doc in sources:
-        for p, v in leaves(doc, tag):
+        for parts, v in leaves(doc, []):
             total += 1
-            sv = v if isinstance(v, str) else json.dumps(v)
-            if sv in hay:
-                present += 1; continue
-            if re.search(r"(uuids?(\[\])?|href|\.id|-id)$", p): kind = "identity"
-            elif ".metadata." in p or ".back-matter." in p: kind = "document-metadata"
+            tok = _token(v)
+            path = tag + "".join("[]" if isinstance(x, int) else "." + x for x in parts)
+            where = f"{tag}#{_pointer(parts)}"
+            if tok in values:
+                counts["exact"] += 1; continue
+            if tok[0] == "string" and v in keys:
+                counts["key-only"] += 1; listed["key-only"][path].append(where); continue
+            if tok[0] == "string" and embedded(v):
+                counts["embedded"] += 1; listed["embedded"][path].append(where); continue
+            if re.search(r"(uuids?(\[\])?|href|\.id|-id)$", path): kind = "identity"
+            elif ".metadata." in path or ".back-matter." in path: kind = "document-metadata"
             else:
                 kind = "content"
-                if len(sv) >= 40: prose += 1
-            absent[kind][p] += 1
-    return {"leaf-values": total, "arrived-verbatim": present,
+                if isinstance(v, str) and len(v) >= 40: prose += 1
+                listed["absent-content"][path].append(where)
+            absent[kind][path] += 1
+    def rows(d): return [{"path": p, "count": len(w), "pointers": w} for p, w in sorted(d.items())]
+    return {"measures": "global occurrence of equal typed values - an upper bound on what was carried, "
+                        "not a trace of each source occurrence",
+            "leaf-values": total, "exact": counts["exact"],
+            "key-only": counts["key-only"], "embedded": counts["embedded"],
             "absent": {k: sum(c.values()) for k, c in absent.items()},
             "absent-content-prose": prose,
-            "absent-content-paths": [{"path": p, "count": n} for p, n in sorted(absent["content"].items())]}
+            "key-only-paths": rows(listed["key-only"]), "embedded-paths": rows(listed["embedded"]),
+            "absent-content-paths": rows(listed["absent-content"])}
 
 def coverage(paths, rules):
     """rules: list of (regex, level, target). Returns (rows, unmapped)."""
