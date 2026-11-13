@@ -2473,7 +2473,10 @@ to, inside the digest an Attestation signs.
   builder's inlined copy), `validate_core.ps1`: the four rules and their
   messages. The twin was ported without a runtime; a PowerShell runtime
   could not be installed in the session that wrote it, so its run is the
-  workflow's on Windows PowerShell 5.1.
+  workflow's: Windows PowerShell 5.1 on a hosted runner, commit
+  `33901767`, `check: 199 pass, 0 fail`, the bundles, the pack and the
+  example folder with the reference's counts, ALL GREEN in 183 s
+  (https://github.com/christoph-puppe/JASCON/actions/runs/43423027413).
 - `check-vectors.json`: 188 → **199**, eleven bundle vectors (44 → 55).
   Ten fail on the reference as it was. The eleventh is the legitimate
   case: a run that observed nothing, with a record that binds nothing.
@@ -2507,3 +2510,125 @@ found the gaps was a reader holding the code to the sentences of the
 rule table: "equal" means the key sets too, and "names a collector of
 the Check" has an answer when the Check has none. Every negative vector
 before this day changed a value; none removed a field or added a key.
+
+# Amendments — the number domain (2026-11-13): D3 item 9, NUMBER-1 (#67 closed)
+
+The fifth of the outside reports of 2026-11-13 (issue 27 in the GitHub
+tracker of the repository; not #27 of the backlog) was filed as a defect
+of `check-verdict`. Reproducing it showed a hole in D3.
+
+## What was reported, and what the reproduction added
+
+Reported: a Check that expects `9007199254740992`, on an observation of
+`9007199254740993`. The reference says `not-satisfied`; the app says
+`satisfied`, because `JSON.parse` rounds the fact to the expected value.
+
+Found while reproducing it, same JSON text in both engines:
+
+| Input | Reference (Python) | App (JavaScript) |
+|---|---|---|
+| `1.0` or `1e3` on an `integer` fact | `inconclusive` | `satisfied` |
+| canonical form of `{"n":9007199254740993}` | `…993` | `…992` |
+| canonical form of `{"n":1.0}` | `{"n":1.0}` | `{"n":1}` |
+
+So the defect is not in the tenth primitive. Every integer of the kernel
+had two readings, and with them every semantic digest that covers one: an
+Attestation could verify in one tool and fail in the other. D3 item 3 has
+said since v0.5 that the vectors cover "the permitted number domain". No
+text defined a domain, and `jcs-vectors.json` held no number. The comment
+on `jscCanonical` in the app claimed the two engines "agree on everything
+the schema allows"; the schema type `integer` allows `1.0` and any size.
+
+## The author's decisions (2026-11-13)
+
+1. **Declare the domain.** A JSON number in a bundle is an integer of
+   magnitude at most 2^53 − 1. Not taken: exact integer parsing in the
+   app. It needs a parser of its own in every JavaScript tool and goes
+   against RFC 8785, which rests on IEEE doubles.
+2. **One spelling: plain digits.** `1.0`, `1e3` and `-0` are refused.
+   The first answer in the tracker had `1.0` read as the integer 1 and
+   written `1` in the canonical form, as RFC 8785 serialises it. That is
+   a rewrite at digest time. This register rejected exactly that for
+   #37(e): "never-normalize is the D3.4 discipline", and the canonical
+   spelling is held by validation. There is a second reason. A reading by
+   value depends on how each engine turns a text into a float: Python and
+   JavaScript read `0.99999999999999999` as 1, and the twin's parser
+   is expected to return a decimal that is not 1 (inferred from how that
+   parser types numbers; not run). A rule on the text has no such edge. The answer
+   in the tracker was amended, with the reason.
+3. **The whole file, annotations included.** The rule exists for digests
+   and verdicts, and annotations are in neither. It still covers them,
+   so that a tool can check a file without knowing where annotations
+   are, and so that five engines implement one pattern. A fraction in an
+   annotation is written as a string.
+4. **It blocks the tag.** After 2.0.0, narrowing the domain would change
+   which objects are valid.
+
+## The rule
+
+D3 item 9. **NUMBER-1:** a JSON number is an integer in plain digits, of
+magnitude at most 2^53 − 1 (9007199254740991): no fraction, no exponent,
+no `-0`. It holds for the content manifest, every object, every pinned
+definition, every evidence record and observation file. It is refused,
+never rewritten. A quantity that does not fit is a `decimal`, a string,
+which the comparators compare exactly. D24, evaluation step 3: an
+`integer` fact outside the domain is mistyped, so `check-verdict` is
+`inconclusive` in every engine.
+
+Two checks in every engine, because a parser forgets the spelling: the
+text of a file where it is read, and the value of an object wherever it
+is held without its text. Which one does the work differs by language.
+JavaScript sees neither `1.0` nor `-0` after parsing and needs the text
+for both. Python keeps `1.0` as a float and needs the text only for
+`-0`. The pattern is the same in all: strings are consumed whole, the
+remaining number tokens are compared as text, and no float takes part.
+
+## What changed, and what was measured
+
+- `validate_core.py`, `validate_core.ps1`, the app's `jascon-rules.js`
+  (build 0.9.6; the pack builder carries the same code), the reader
+  (v1.10.0, on the files it verifies). The canonical form is unchanged in
+  all of them: inside the domain they agree without help.
+- Vectors: `jcs` 8 → **22** (14 `number-text` vectors, which carry JSON
+  texts, because a vector file cannot hold `1.0` as a number: the
+  harness's own parser would have read it), `parameter` 19 → **21**,
+  `check` 199 → **203** (three verdicts, among them the reported pair, and
+  one bundle with an observation file that writes `4.0`). **568 vectors
+  in 17 families.**
+- Deliberate breaks of the reference: accepting `-0`; a range one wider;
+  an integer fact without the range; an integer parameter without the
+  range; a tokenizer that looks into strings; evidence files left out.
+  Each turns at least one vector red. A seventh, accepting a fraction in
+  the text, stays green in the reference, where the value check catches
+  the float; the app's test "JSON.parse alone would let every spelling
+  and the reported integer through" covers it where it matters.
+- Shipped content: no object changes. Before the rule was written, a
+  scan of 3,871 JSON files found 11 numbers outside the domain, all
+  `coverage-pct: 100.0` in the converters' coverage reports, which are
+  not JASCON objects. With the rule on, the five bundles, the worked pack
+  and the example folder validate as before.
+- The PowerShell twin, ported without a runtime, ran on Windows PowerShell 5.1 on a hosted runner at commit `30892353`: 568 vectors in 17 families (`jcs: 22`, `parameter: 21`, `check: 203`), the five bundles, the worked pack and the example folder with the counts of the reference, ALL GREEN in 118 s (https://github.com/christoph-puppe/JASCON/actions/runs/43426147785).
+- Specification D3 (items 3 and 9) and D24; handbook Chapters 10, 11 and
+  12 and Appendices A, B, C and G; SKILL.md, whose vector count had
+  stood at "258 in 15 families" since rc.1; the app's errata.
+
+## Cons, stated
+
+- A tool that writes JSON through a float type (`json.dumps(1.0)`, and
+  the defaults of several languages) now produces invalid bundles. That
+  is the point of the rule, and it will be met in the field.
+- A JavaScript tool cannot enforce the rule on parsed values alone. It
+  has to keep the text, or accept that it checks the range and not the
+  spelling.
+- An annotation cannot hold a fraction as a number.
+- The rule is not expressible in JSON Schema, so the kernel schema does
+  not carry it; it is a rule of the validator, like empty-omission.
+
+## Lesson
+
+The reference and its port agreed on every vector for four months. They
+were tested against one another, with vectors that held no number larger
+than a sequence. A sentence in the specification promised a domain and a
+vector for it, and nobody had held the corpus to that sentence. The
+report came from someone who asked what the schema allows instead of
+what the examples contain.
