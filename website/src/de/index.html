@@ -1,0 +1,118 @@
+---
+title: JASCON: die Datenschicht für GRC-Engineering
+description: JASCON ist eine offene Notation für Compliance-Daten. Standards, Tailoring, Risiken, Umsetzungen, Prüfungen und Attestierungen werden zu einem Graphen typisierter, inhaltsadressierter JSON-Objekte, die ein Programm validieren, vergleichen und signieren und mit denen es rechnen kann.
+nav: home
+---
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <p class="eyebrow">Offene Notation &middot; Apache 2.0</p>
+      <h1>Die Datenschicht für <em>GRC-Engineering</em></h1>
+      <p class="lede">JASCON schreibt Standards, Tailoring, Risiken, Umsetzungen, Prüfungen und Attestierungen als einen einzigen Graphen typisierter, inhaltsadressierter JSON-Objekte. Eine Erklärung zur Anwendbarkeit (SoA) wird zur Berechnung, eine maschinelle Prüfung zu etwas, das eine zweite Partei nachrechnen kann, und eine Signatur lässt sich auch dann noch verifizieren, wenn das Bundle neu verpackt wurde.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="app/index.html#load=../converted_examples/US.CSF/csf-core-bundle/&amp;tool=browse">Die App mit NIST CSF 2.0 öffnen
+          <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a class="btn btn-ghost" href="start.html">Erste Schritte</a>
+      </div>
+      <div class="hero-status">
+        <span><i class="dot"></i>1.0.0 veröffentlicht am 22. Juli 2026</span>
+        <span><i class="dot rc"></i>2.0.0-rc.3 im Review</span>
+        <span>Unabhängiges Projekt, ein Maintainer</span>
+      </div>
+    </div>
+
+    <div class="window" data-tabs>
+      <div class="window-bar" role="tablist" aria-label="Beispielobjekte">
+        <span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+        <button class="tab" role="tab" aria-selected="true" data-panel="hero-risk">risk.json</button>
+        <button class="tab" role="tab" aria-selected="false" data-panel="hero-req">requirement.json</button>
+        <button class="tab" role="tab" aria-selected="false" data-panel="hero-tailoring">tailoring.json</button>
+        <button class="tab" role="tab" aria-selected="false" data-panel="hero-check">check.json</button>
+        <span class="window-note">Auszüge</span>
+      </div>
+      <div class="panel" id="hero-risk" role="tabpanel" tabindex="0">
+        <pre><code data-lang="json">{
+  "id": "https://cso.example/risk/R-2026-007",
+  "title": {
+    "en": "Tenant data exposure through long-lived KMS keys",
+    "de": "Offenlegung von Mandantendaten durch langlebige KMS-Schlüssel"
+  },
+  "owner-ref": "https://cso.example/party/ciso",
+  "state": "treated",
+  "rating": { "level": "hoch",
+              "scale-ref": "https://cso.example/scale/bsi-200-3-matrix" },
+  "treatment": "modify",
+  «"treatments": [
+    { "requirement-ref": "https://ns.bsi.bund.de/gspp/req/KONF.14.1",
+      "statement-ids": ["s2"] }
+  ]»,
+  "tailoring-refs": ["https://ns.bsi.bund.de/gspp/tailoring/erhoeht"]
+}</code></pre>
+        <div class="window-foot"><span>validate_core.py</span><span><b>risk-coverage</b> erhoeht: ausgewählt 3 &middot; begründet 1 &middot; nicht abgedeckt 2</span></div>
+      </div>
+      <div class="panel" id="hero-req" role="tabpanel" tabindex="0">
+        <pre><code data-lang="json">{
+  "id": "https://ns.bsi.bund.de/gspp/req/KONF.14.1",
+  "version": "2026-07",
+  "label": "KONF.14.1",
+  "statements": [
+    { "id": "s1",
+      «"modality": "may"»,
+      "parameters": [
+        { "name": "transport-crypto", "type": "choice", "cardinality": "one",
+          "choices": [ { "value": "tls13" }, { "value": "tls12-pfs" } ] }
+      ],
+      "prose": { "de": "Konfiguration für Anwendungen KANN Kommunikation beim Transport über Netze nach «{param:transport-crypto}» verschlüsseln." } },
+    { "id": "s2",
+      "modality": "should",
+      "prose": { "de": "Kryptographische Schlüssel SOLLTEN in regelmäßigen Abständen gewechselt werden." } }
+  ],
+  "facets": {
+    "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": { "sec-level": "normal-sdt" }
+  }
+}</code></pre>
+        <div class="window-foot"><span>validate_core.py</span><span><b>prose-params-resolve</b> jedes {param:}-Token benennt einen deklarierten Parameter</span></div>
+      </div>
+      <div class="panel" id="hero-tailoring" role="tabpanel" tabindex="0">
+        <pre><code data-lang="json">{
+  "id": "https://ns.bsi.bund.de/gspp/tailoring/erhoeht",
+  "version": "2026-07",
+  "title": { "en": "Elevated protection level" },
+  "selects": [
+    { "set-ref": "https://ns.bsi.bund.de/gspp/set/baseline/example" }
+  ],
+  "operations": [
+    { "op": "set-modality",
+      "requirement-ref": "https://ns.bsi.bund.de/gspp/req/KONF.14.1",
+      "statement-id": "s1",
+      «"modality": "must"» },
+    { "op": "set-parameter",
+      "requirement-ref": "https://ns.bsi.bund.de/gspp/req/KONF.14.1",
+      "statement-id": "s1",
+      "parameter": "transport-crypto",
+      "value": "tls13" }
+  ]
+}</code></pre>
+        <div class="window-foot"><span>validate_core.py</span><span><b>modality-monotonic</b> von may zu must: monoton, keine Deviation nötig</span></div>
+      </div>
+      <div class="panel" id="hero-check" role="tabpanel" tabindex="0">
+        <pre><code data-lang="json">{
+  "id": "https://cso.example/check/LNX-SSH-1-maxauthtries",
+  "requirement-ref": "https://cso.example/req/LNX-SSH-1",
+  "statement-ids": ["s1"],
+  "platform": "https://cso.example/platform/linux-host",
+  "observes": [
+    { "name": "sshd.maxauthtries", "type": "integer" }
+  ],
+  «"criteria": [
+    { "fact": "sshd.maxauthtries", "op": "at-most",
+      "expected": { "param": "max-auth-tries" } }
+  ]»,
+  "validity": { "num": 24, "unit": "hours" },
+  "confidence": "reviewed"
+}</code></pre>
+        <div class="window-foot"><span>validate_core.py</span><span><b>check-verdict</b> beobachtet 4, das Tailoring legt 4 fest: erfüllt</span></div>
+      </div>
+    </div>
+  </div>
+</section>
