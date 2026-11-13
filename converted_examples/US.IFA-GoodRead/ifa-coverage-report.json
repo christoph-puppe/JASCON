@@ -815,73 +815,73 @@
    "path": "cdef.component-definition.components[].control-implementations[].description",
    "count": 1,
    "level": "L1",
-   "destination": "capabilities with requirement-ref (landmark - the component asserts support, no system binds it)"
+   "destination": "capabilities with requirement-ref (landmark - the component asserts support, no system binds it): statements -> statement-ids and clause texts, set-parameters -> parameter-bindings under the catalogue's names; the control implementation's description and source -> component@1"
   },
   {
    "path": "cdef.component-definition.components[].control-implementations[].implemented-requirements[].control-id",
    "count": 3,
    "level": "L1",
-   "destination": "capabilities with requirement-ref (landmark - the component asserts support, no system binds it)"
+   "destination": "capabilities with requirement-ref (landmark - the component asserts support, no system binds it): statements -> statement-ids and clause texts, set-parameters -> parameter-bindings under the catalogue's names; the control implementation's description and source -> component@1"
   },
   {
    "path": "cdef.component-definition.components[].control-implementations[].implemented-requirements[].description",
    "count": 3,
    "level": "L1",
-   "destination": "capabilities with requirement-ref (landmark - the component asserts support, no system binds it)"
+   "destination": "capabilities with requirement-ref (landmark - the component asserts support, no system binds it): statements -> statement-ids and clause texts, set-parameters -> parameter-bindings under the catalogue's names; the control implementation's description and source -> component@1"
   },
   {
    "path": "cdef.component-definition.components[].control-implementations[].implemented-requirements[].set-parameters[].param-id",
    "count": 2,
    "level": "L1",
-   "destination": "capabilities with requirement-ref (landmark - the component asserts support, no system binds it)"
+   "destination": "capabilities with requirement-ref (landmark - the component asserts support, no system binds it): statements -> statement-ids and clause texts, set-parameters -> parameter-bindings under the catalogue's names; the control implementation's description and source -> component@1"
   },
   {
    "path": "cdef.component-definition.components[].control-implementations[].implemented-requirements[].set-parameters[].values[]",
    "count": 2,
    "level": "L1",
-   "destination": "capabilities with requirement-ref (landmark - the component asserts support, no system binds it)"
+   "destination": "capabilities with requirement-ref (landmark - the component asserts support, no system binds it): statements -> statement-ids and clause texts, set-parameters -> parameter-bindings under the catalogue's names; the control implementation's description and source -> component@1"
   },
   {
    "path": "cdef.component-definition.components[].control-implementations[].implemented-requirements[].statements[].description",
    "count": 2,
    "level": "L1",
-   "destination": "capabilities with requirement-ref (landmark - the component asserts support, no system binds it)"
+   "destination": "capabilities with requirement-ref (landmark - the component asserts support, no system binds it): statements -> statement-ids and clause texts, set-parameters -> parameter-bindings under the catalogue's names; the control implementation's description and source -> component@1"
   },
   {
    "path": "cdef.component-definition.components[].control-implementations[].implemented-requirements[].statements[].responsible-roles[].role-id",
    "count": 1,
    "level": "L1",
-   "destination": "capabilities with requirement-ref (landmark - the component asserts support, no system binds it)"
+   "destination": "capabilities with requirement-ref (landmark - the component asserts support, no system binds it): statements -> statement-ids and clause texts, set-parameters -> parameter-bindings under the catalogue's names; the control implementation's description and source -> component@1"
   },
   {
    "path": "cdef.component-definition.components[].control-implementations[].implemented-requirements[].statements[].statement-id",
    "count": 2,
    "level": "L1",
-   "destination": "capabilities with requirement-ref (landmark - the component asserts support, no system binds it)"
+   "destination": "capabilities with requirement-ref (landmark - the component asserts support, no system binds it): statements -> statement-ids and clause texts, set-parameters -> parameter-bindings under the catalogue's names; the control implementation's description and source -> component@1"
   },
   {
    "path": "cdef.component-definition.components[].control-implementations[].implemented-requirements[].statements[].uuid",
    "count": 2,
    "level": "L1",
-   "destination": "capabilities with requirement-ref (landmark - the component asserts support, no system binds it)"
+   "destination": "capabilities with requirement-ref (landmark - the component asserts support, no system binds it): statements -> statement-ids and clause texts, set-parameters -> parameter-bindings under the catalogue's names; the control implementation's description and source -> component@1"
   },
   {
    "path": "cdef.component-definition.components[].control-implementations[].implemented-requirements[].uuid",
    "count": 3,
    "level": "L1",
-   "destination": "capabilities with requirement-ref (landmark - the component asserts support, no system binds it)"
+   "destination": "capabilities with requirement-ref (landmark - the component asserts support, no system binds it): statements -> statement-ids and clause texts, set-parameters -> parameter-bindings under the catalogue's names; the control implementation's description and source -> component@1"
   },
   {
    "path": "cdef.component-definition.components[].control-implementations[].source",
    "count": 1,
    "level": "L1",
-   "destination": "capabilities with requirement-ref (landmark - the component asserts support, no system binds it)"
+   "destination": "capabilities with requirement-ref (landmark - the component asserts support, no system binds it): statements -> statement-ids and clause texts, set-parameters -> parameter-bindings under the catalogue's names; the control implementation's description and source -> component@1"
   },
   {
    "path": "cdef.component-definition.components[].control-implementations[].uuid",
    "count": 1,
    "level": "L1",
-   "destination": "capabilities with requirement-ref (landmark - the component asserts support, no system binds it)"
+   "destination": "capabilities with requirement-ref (landmark - the component asserts support, no system binds it): statements -> statement-ids and clause texts, set-parameters -> parameter-bindings under the catalogue's names; the control implementation's description and source -> component@1"
   },
   {
    "path": "cdef.component-definition.components[].description",
@@ -2849,6 +2849,7 @@
  ],
  "lang-wraps": {
   "system": 10,
+  "component": 1,
   "observation": 4,
   "ap": 7,
   "risk": 14
@@ -2865,15 +2866,15 @@
  "global-occurrence": {
   "measures": "global occurrence of equal typed values - an upper bound on what was carried, not a trace of each source occurrence",
   "leaf-values": 835,
-  "exact": 330,
+  "exact": 332,
   "key-only": 29,
-  "embedded": 77,
+  "embedded": 79,
   "absent": {
-   "identity": 190,
+   "identity": 189,
    "document-metadata": 125,
-   "content": 84
+   "content": 81
   },
-  "absent-content-prose": 51,
+  "absent-content-prose": 49,
   "key-only-paths": [
    {
     "path": "ap.assessment-plan.local-definitions.activities[].props[].name",
@@ -3085,6 +3086,14 @@
     "count": 1,
     "pointers": [
      "cdef#/component-definition/components/0/control-implementations/0/implemented-requirements/0/control-id"
+    ]
+   },
+   {
+    "path": "cdef.component-definition.components[].control-implementations[].implemented-requirements[].description",
+    "count": 2,
+    "pointers": [
+     "cdef#/component-definition/components/0/control-implementations/0/implemented-requirements/0/description",
+     "cdef#/component-definition/components/0/control-implementations/0/implemented-requirements/1/description"
     ]
    },
    {
@@ -3507,21 +3516,6 @@
     ]
    },
    {
-    "path": "cdef.component-definition.components[].control-implementations[].description",
-    "count": 1,
-    "pointers": [
-     "cdef#/component-definition/components/0/control-implementations/0/description"
-    ]
-   },
-   {
-    "path": "cdef.component-definition.components[].control-implementations[].implemented-requirements[].set-parameters[].values[]",
-    "count": 2,
-    "pointers": [
-     "cdef#/component-definition/components/0/control-implementations/0/implemented-requirements/0/set-parameters/0/values/0",
-     "cdef#/component-definition/components/0/control-implementations/0/implemented-requirements/1/set-parameters/0/values/0"
-    ]
-   },
-   {
     "path": "cdef.component-definition.components[].control-implementations[].implemented-requirements[].statements[].description",
     "count": 2,
     "pointers": [
@@ -3783,10 +3777,10 @@
   "file": "ifa-conversion-ledger.json",
   "leaf-values": 835,
   "totals": {
-   "copied": 341,
-   "transformed": 33,
-   "intentionally-dropped": 293,
-   "unaccounted": 168
+   "copied": 342,
+   "transformed": 44,
+   "intentionally-dropped": 291,
+   "unaccounted": 158
   },
   "verification-failures": 0
  }

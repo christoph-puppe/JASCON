@@ -111,8 +111,8 @@
   {
    "id": "https://ifa.gov/goodread/component/mongodb",
    "version": "20231012",
-   "package-digest": "sha256:fa8c03733fbf569de6dcb1d16a03dbec67d64c83466c58161ce80a4d84fc20c6",
-   "semantic-digest": "sha256:4eb2e60875b5a86c4ce73c655065b0fd36883a69a00c899aa862b0f27678c913",
+   "package-digest": "sha256:b7bddf7d8cc10889c42dd8cd5556736ec8222cc211df6f3ec6d7b83fe23f9ad8",
+   "semantic-digest": "sha256:9ab6dd6b5ecb89b6d293a89c2c66b0744a88e5490f1cc5c64065b07d44d5939d",
    "path": "objects/component/mongodb.json"
   },
   {
@@ -199,6 +199,12 @@
    "exact-version": "1.0.0",
    "digest": "sha256:f429717108872f328d58973596565ee421d75800c2411687d16d45ffe58038a2",
    "path": "schemas/goodread-ap-stub.json"
+  },
+  {
+   "id": "https://ifa.gov/goodread/facet/component",
+   "exact-version": "1.0.0",
+   "digest": "sha256:64a0c9ca3d4cca90e6df76c4297c391c549d58f564aa78ad2e345f8c0267d2ff",
+   "path": "schemas/goodread-component-stub.json"
   },
   {
    "id": "https://ifa.gov/goodread/facet/finding-target",

@@ -2,10 +2,10 @@
  "measures": "one entry per source leaf value: where it went, checked against the written files",
  "leaf-values": 835,
  "totals": {
-  "copied": 341,
-  "transformed": 33,
-  "intentionally-dropped": 293,
-  "unaccounted": 168
+  "copied": 342,
+  "transformed": 44,
+  "intentionally-dropped": 291,
+  "unaccounted": 158
  },
  "verification-failures": [],
  "unaccounted-paths": [
@@ -263,56 +263,10 @@
    ]
   },
   {
-   "path": "cdef.component-definition.components[].control-implementations[].description",
-   "count": 1,
-   "pointers": [
-    "cdef#/component-definition/components/0/control-implementations/0/description"
-   ]
-  },
-  {
-   "path": "cdef.component-definition.components[].control-implementations[].implemented-requirements[].set-parameters[].param-id",
-   "count": 2,
-   "pointers": [
-    "cdef#/component-definition/components/0/control-implementations/0/implemented-requirements/0/set-parameters/0/param-id",
-    "cdef#/component-definition/components/0/control-implementations/0/implemented-requirements/1/set-parameters/0/param-id"
-   ]
-  },
-  {
-   "path": "cdef.component-definition.components[].control-implementations[].implemented-requirements[].set-parameters[].values[]",
-   "count": 2,
-   "pointers": [
-    "cdef#/component-definition/components/0/control-implementations/0/implemented-requirements/0/set-parameters/0/values/0",
-    "cdef#/component-definition/components/0/control-implementations/0/implemented-requirements/1/set-parameters/0/values/0"
-   ]
-  },
-  {
-   "path": "cdef.component-definition.components[].control-implementations[].implemented-requirements[].statements[].description",
-   "count": 2,
-   "pointers": [
-    "cdef#/component-definition/components/0/control-implementations/0/implemented-requirements/0/statements/0/description",
-    "cdef#/component-definition/components/0/control-implementations/0/implemented-requirements/1/statements/0/description"
-   ]
-  },
-  {
    "path": "cdef.component-definition.components[].control-implementations[].implemented-requirements[].statements[].responsible-roles[].role-id",
    "count": 1,
    "pointers": [
     "cdef#/component-definition/components/0/control-implementations/0/implemented-requirements/1/statements/0/responsible-roles/0/role-id"
-   ]
-  },
-  {
-   "path": "cdef.component-definition.components[].control-implementations[].implemented-requirements[].statements[].statement-id",
-   "count": 2,
-   "pointers": [
-    "cdef#/component-definition/components/0/control-implementations/0/implemented-requirements/0/statements/0/statement-id",
-    "cdef#/component-definition/components/0/control-implementations/0/implemented-requirements/1/statements/0/statement-id"
-   ]
-  },
-  {
-   "path": "cdef.component-definition.components[].control-implementations[].source",
-   "count": 1,
-   "pointers": [
-    "cdef#/component-definition/components/0/control-implementations/0/source"
    ]
   },
   {
@@ -7785,12 +7739,25 @@
   {
    "source": "cdef#/component-definition/components/0/control-implementations/0/source",
    "path": "cdef.component-definition.components[].control-implementations[].source",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/mongodb",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1component@1/control-implementations/0/source",
+     "rule": "control-implementation source: the back-matter resource it names, by its JSON link"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "cdef#/component-definition/components/0/control-implementations/0/description",
    "path": "cdef.component-definition.components[].control-implementations[].description",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/mongodb",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1component@1/control-implementations/0/description/en"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "cdef#/component-definition/components/0/control-implementations/0/implemented-requirements/0/uuid",
@@ -7804,6 +7771,11 @@
    "destinations": [
     {
      "object": "https://ifa.gov/goodread/component/mongodb",
+     "pointer": "/capabilities/0/description/en",
+     "rule": "capability text: the requirement's description, then each statement's text under its clause id; OSCAL parameter insertions respelled {param:<catalogue name>}"
+    },
+    {
+     "object": "https://ifa.gov/goodread/component/mongodb",
      "pointer": "/capabilities/0/id",
      "rule": "capability id from the control id"
     },
@@ -7811,6 +7783,11 @@
      "object": "https://ifa.gov/goodread/component/mongodb",
      "pointer": "/capabilities/0/requirement-ref",
      "rule": "requirement URI from the control id"
+    },
+    {
+     "object": "https://ifa.gov/goodread/component/mongodb",
+     "pointer": "/capabilities/0/statement-ids/0",
+     "rule": "statement id without the control prefix, in the catalogue's spelling (stmt -> smt)"
     }
    ],
    "outcome": "transformed"
@@ -7821,25 +7798,52 @@
    "destinations": [
     {
      "object": "https://ifa.gov/goodread/component/mongodb",
-     "pointer": "/capabilities/0/description/en"
+     "pointer": "/capabilities/0/description/en",
+     "rule": "capability text: the requirement's description, then each statement's text under its clause id; OSCAL parameter insertions respelled {param:<catalogue name>}"
+    }
+   ],
+   "outcome": "transformed"
+  },
+  {
+   "source": "cdef#/component-definition/components/0/control-implementations/0/implemented-requirements/0/set-parameters/0/param-id",
+   "path": "cdef.component-definition.components[].control-implementations[].implemented-requirements[].set-parameters[].param-id",
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/mongodb",
+     "pointer": "/capabilities/0/parameter-bindings/sc-08_odp",
+     "as": "key",
+     "rule": "parameter name as the catalogue declares it (the OSCAL param-id is one of its alt-identifiers)"
+    }
+   ],
+   "outcome": "transformed"
+  },
+  {
+   "source": "cdef#/component-definition/components/0/control-implementations/0/implemented-requirements/0/set-parameters/0/values/0",
+   "path": "cdef.component-definition.components[].control-implementations[].implemented-requirements[].set-parameters[].values[]",
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/mongodb",
+     "pointer": "/capabilities/0/parameter-bindings/sc-08_odp/0"
     }
    ],
    "outcome": "copied"
   },
   {
-   "source": "cdef#/component-definition/components/0/control-implementations/0/implemented-requirements/0/set-parameters/0/param-id",
-   "path": "cdef.component-definition.components[].control-implementations[].implemented-requirements[].set-parameters[].param-id",
-   "outcome": "unaccounted"
-  },
-  {
-   "source": "cdef#/component-definition/components/0/control-implementations/0/implemented-requirements/0/set-parameters/0/values/0",
-   "path": "cdef.component-definition.components[].control-implementations[].implemented-requirements[].set-parameters[].values[]",
-   "outcome": "unaccounted"
-  },
-  {
    "source": "cdef#/component-definition/components/0/control-implementations/0/implemented-requirements/0/statements/0/statement-id",
    "path": "cdef.component-definition.components[].control-implementations[].implemented-requirements[].statements[].statement-id",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/mongodb",
+     "pointer": "/capabilities/0/description/en",
+     "rule": "capability text: the requirement's description, then each statement's text under its clause id; OSCAL parameter insertions respelled {param:<catalogue name>}"
+    },
+    {
+     "object": "https://ifa.gov/goodread/component/mongodb",
+     "pointer": "/capabilities/0/statement-ids/0",
+     "rule": "statement id without the control prefix, in the catalogue's spelling (stmt -> smt)"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "cdef#/component-definition/components/0/control-implementations/0/implemented-requirements/0/statements/0/uuid",
@@ -7850,7 +7854,14 @@
   {
    "source": "cdef#/component-definition/components/0/control-implementations/0/implemented-requirements/0/statements/0/description",
    "path": "cdef.component-definition.components[].control-implementations[].implemented-requirements[].statements[].description",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/mongodb",
+     "pointer": "/capabilities/0/description/en",
+     "rule": "capability text: the requirement's description, then each statement's text under its clause id; OSCAL parameter insertions respelled {param:<catalogue name>}"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "cdef#/component-definition/components/0/control-implementations/0/implemented-requirements/1/uuid",
@@ -7864,6 +7875,11 @@
    "destinations": [
     {
      "object": "https://ifa.gov/goodread/component/mongodb",
+     "pointer": "/capabilities/1/description/en",
+     "rule": "capability text: the requirement's description, then each statement's text under its clause id; OSCAL parameter insertions respelled {param:<catalogue name>}"
+    },
+    {
+     "object": "https://ifa.gov/goodread/component/mongodb",
      "pointer": "/capabilities/1/id",
      "rule": "capability id from the control id"
     },
@@ -7871,6 +7887,11 @@
      "object": "https://ifa.gov/goodread/component/mongodb",
      "pointer": "/capabilities/1/requirement-ref",
      "rule": "requirement URI from the control id"
+    },
+    {
+     "object": "https://ifa.gov/goodread/component/mongodb",
+     "pointer": "/capabilities/1/statement-ids/0",
+     "rule": "statement id without the control prefix, in the catalogue's spelling (stmt -> smt)"
     }
    ],
    "outcome": "transformed"
@@ -7881,25 +7902,52 @@
    "destinations": [
     {
      "object": "https://ifa.gov/goodread/component/mongodb",
-     "pointer": "/capabilities/1/description/en"
+     "pointer": "/capabilities/1/description/en",
+     "rule": "capability text: the requirement's description, then each statement's text under its clause id; OSCAL parameter insertions respelled {param:<catalogue name>}"
+    }
+   ],
+   "outcome": "transformed"
+  },
+  {
+   "source": "cdef#/component-definition/components/0/control-implementations/0/implemented-requirements/1/set-parameters/0/param-id",
+   "path": "cdef.component-definition.components[].control-implementations[].implemented-requirements[].set-parameters[].param-id",
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/mongodb",
+     "pointer": "/capabilities/1/parameter-bindings/sc-08.01_odp",
+     "as": "key",
+     "rule": "parameter name as the catalogue declares it (the OSCAL param-id is one of its alt-identifiers)"
+    }
+   ],
+   "outcome": "transformed"
+  },
+  {
+   "source": "cdef#/component-definition/components/0/control-implementations/0/implemented-requirements/1/set-parameters/0/values/0",
+   "path": "cdef.component-definition.components[].control-implementations[].implemented-requirements[].set-parameters[].values[]",
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/mongodb",
+     "pointer": "/capabilities/1/parameter-bindings/sc-08.01_odp/0"
     }
    ],
    "outcome": "copied"
   },
   {
-   "source": "cdef#/component-definition/components/0/control-implementations/0/implemented-requirements/1/set-parameters/0/param-id",
-   "path": "cdef.component-definition.components[].control-implementations[].implemented-requirements[].set-parameters[].param-id",
-   "outcome": "unaccounted"
-  },
-  {
-   "source": "cdef#/component-definition/components/0/control-implementations/0/implemented-requirements/1/set-parameters/0/values/0",
-   "path": "cdef.component-definition.components[].control-implementations[].implemented-requirements[].set-parameters[].values[]",
-   "outcome": "unaccounted"
-  },
-  {
    "source": "cdef#/component-definition/components/0/control-implementations/0/implemented-requirements/1/statements/0/statement-id",
    "path": "cdef.component-definition.components[].control-implementations[].implemented-requirements[].statements[].statement-id",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/mongodb",
+     "pointer": "/capabilities/1/description/en",
+     "rule": "capability text: the requirement's description, then each statement's text under its clause id; OSCAL parameter insertions respelled {param:<catalogue name>}"
+    },
+    {
+     "object": "https://ifa.gov/goodread/component/mongodb",
+     "pointer": "/capabilities/1/statement-ids/0",
+     "rule": "statement id without the control prefix, in the catalogue's spelling (stmt -> smt)"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "cdef#/component-definition/components/0/control-implementations/0/implemented-requirements/1/statements/0/uuid",
@@ -7910,7 +7958,14 @@
   {
    "source": "cdef#/component-definition/components/0/control-implementations/0/implemented-requirements/1/statements/0/description",
    "path": "cdef.component-definition.components[].control-implementations[].implemented-requirements[].statements[].description",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/mongodb",
+     "pointer": "/capabilities/1/description/en",
+     "rule": "capability text: the requirement's description, then each statement's text under its clause id; OSCAL parameter insertions respelled {param:<catalogue name>}"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "cdef#/component-definition/components/0/control-implementations/0/implemented-requirements/1/statements/0/responsible-roles/0/role-id",
@@ -7954,8 +8009,14 @@
   {
    "source": "cdef#/component-definition/back-matter/resources/0/uuid",
    "path": "cdef.component-definition.back-matter.resources[].uuid",
-   "reason": "the uuid of a source element: JASCON objects get URIs minted from names and titles, the uuid itself is not carried (uuids that ARE carried or resolved have a destination above)",
-   "outcome": "intentionally-dropped"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/mongodb",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1component@1/control-implementations/0/source",
+     "rule": "control-implementation source: the back-matter resource it names, by its JSON link"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "cdef#/component-definition/back-matter/resources/0/description",
@@ -7978,8 +8039,14 @@
   {
    "source": "cdef#/component-definition/back-matter/resources/0/rlinks/1/href",
    "path": "cdef.component-definition.back-matter.resources[].rlinks[].href",
-   "reason": "a link to another serialisation of the source, to an imported document or to the catalogue: the bundle carries the Requirements themselves and its objects refer to one another by id",
-   "outcome": "intentionally-dropped"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/mongodb",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1component@1/control-implementations/0/source",
+     "rule": "control-implementation source: the back-matter resource it names, by its JSON link"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "cdef#/component-definition/back-matter/resources/0/rlinks/1/media-type",

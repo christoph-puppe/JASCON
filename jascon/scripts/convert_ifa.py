@@ -32,6 +32,7 @@ F_RISKA = f"{NS}/facet/risk-analysis@1"    # L2 holding pen for the parked stdli
 F_FTGT = f"{NS}/facet/finding-target@1"    # the Finding-side residue of the retired risk@1 facet
 F_AP = f"{NS}/facet/assessment-plan@1"
 F_PROTO = f"{NS}/facet/protocols@1"
+F_COMP = f"{NS}/facet/component@1"        # what OSCAL says of a component and the kernel has no field for
 
 lang_wraps = collections.Counter()
 T = make_T("en", lang_wraps)
@@ -309,14 +310,104 @@ bundle.add("objects/impl/csp-iaas-ac-2.json",
             "evidence-refs": [D("document reference from the SSP's uuid", lambda u: f"{NS}/doc/ssp-{u}", LEV["uuid"])]})
 
 # ================= 3. component-definition example =================
+# The mapping is the one of the pack builder's OSCAL import
+# (one-page-apps/jascon-pack-builder.html, importOscal; CP-ADVICE-1 section 9):
+# one capability per implemented requirement; its statements become
+# `statement-ids` in the catalogue's spelling and their texts follow the
+# requirement's text, each under its clause id; `set-parameters` become
+# `parameter-bindings` under the name the catalogue declares; OSCAL's
+# `{{ insert: param, x }}` becomes `{param:<that name>}`. The catalogue is
+# the SP 800-53 conversion in this repository. Until 2026-11-13 this section
+# read the control id and the description and nothing below them, while the
+# path map counted the rest as carried (backlog #64).
+INSERT = re.compile(r"\{\{\s*insert:\s*param,\s*([^}\s]+)\s*\}\}")
+def nist_req(control_id):
+    """The Requirement the SP 800-53 conversion holds for an OSCAL control id, or None."""
+    p = os.path.join(NISTB, "objects", "req", slug(control_id) + ".json")
+    return json.load(open(p, encoding="utf-8")) if os.path.exists(p) else None
+def param_name(req, pid):
+    """A parameter name as the catalogue declares it: the id itself, or the
+    declared name whose alt-identifiers list it (the Rev 4 `_prm_` ids)."""
+    if not req: return pid
+    names = [p["name"] for st in req.get("statements", []) for p in st.get("parameters", [])]
+    if pid in names: return pid
+    def walk(v):
+        if isinstance(v, dict):
+            for k, x in v.items():
+                if k in names and isinstance(x, dict) and pid in (x.get("alt-identifiers") or []): return k
+                hit = walk(x)
+                if hit: return hit
+        elif isinstance(v, list):
+            for x in v:
+                hit = walk(x)
+                if hit: return hit
+        return None
+    return walk(req.get("facets")) or pid
+def capability_text(req):
+    """-> the pure rule that writes a capability's text from the implemented
+    requirement's description, its control id, and (statement-id, text) pairs."""
+    unmark = lambda t: INSERT.sub(lambda m: "{param:%s}" % param_name(req, m.group(1)), t)
+    def text(description, control_id, *pairs):
+        parts = [unmark(description)] if description else []
+        parts += [f"{_stmt_norm(sid, control_id)}: {unmark(d)}" for sid, d in zip(pairs[0::2], pairs[1::2]) if d]
+        return "\n\n".join(parts)
+    return text
 V_CDEF = CDEF["metadata"]["version"]
+cdef_resources = {r["uuid"]: r for r in CDEF.get("back-matter", {}).get("resources", []) or []}
+cdef_stats = collections.Counter()
 for c in CDEF.get("components", []) or []:
-    caps = []
+    caps, control_impls = [], []
     for ci in c.get("control-implementations", []) or []:
+        entry = {"description": T(pua_scan(ci.get("description", "")), "component")}
+        # `source` is a link into the back-matter; what it names is carried, by its JSON link
+        res = cdef_resources.get(ci.get("source", "")[1:]) if ci.get("source", "").startswith("#") else None
+        if res and res.get("rlinks"):
+            href = next((l["href"] for l in res["rlinks"] if l["href"].lower().endswith(".json")), res["rlinks"][0]["href"])
+            entry["source"] = D("control-implementation source: the back-matter resource it names, by its JSON link",
+                                lambda ref, rid, h: h if ref == "#" + rid else None, ci["source"], res["uuid"], href)
+            if not re.search(r"800-53", href):
+                note(f"control implementation of {c.get('title')} names {href}; its requirement-refs are minted in the "
+                     f"SP 800-53 namespace all the same")
+        elif ci.get("source"):
+            entry["source"] = ci["source"]
+        control_impls.append(entry)
+        if ci.get("set-parameters"):
+            note(f"{len(ci['set-parameters'])} set-parameters on a whole control implementation are not placed "
+                 f"(the pack builder puts them where the catalogue declares the parameter)")
         for cir in ci.get("implemented-requirements", []) or []:
-            caps.append({"id": D("capability id from the control id", lambda c: f"cap-{slug(c)}", cir.get("control-id", "x")),
-                         "requirement-ref": req_of(cir.get("control-id", "")),
-                         "description": pua_scan(cir.get("description", ""))})
+            cid = cir.get("control-id", "")
+            req = nist_req(cid)
+            statements = [st for st in cir.get("statements", []) or [] if st.get("statement-id")]
+            sids = []
+            for st in statements:
+                sid = stmt_norm(st["statement-id"], cid)
+                if sid not in sids: sids.append(sid)
+            description = cir.get("description", "")
+            rule = capability_text(req)
+            pairs = [x for st in statements for x in (st["statement-id"], st.get("description", ""))]
+            if rule(description, cid, *pairs) != description:      # something is joined or respelled: say so
+                description = D("capability text: the requirement's description, then each statement's text under "
+                                "its clause id; OSCAL parameter insertions respelled {param:<catalogue name>}",
+                                rule, description, cid, *pairs)
+            bindings = {}
+            for sp in cir.get("set-parameters", []) or []:
+                pid, values = sp["param-id"], sp.get("values", [])
+                name = pid if param_name(req, pid) == pid else \
+                    D("parameter name as the catalogue declares it (the OSCAL param-id is one of its alt-identifiers)",
+                      lambda p, req=req: param_name(req, p), pid)
+                decl = next((p for st in (req or {}).get("statements", []) for p in st.get("parameters", [])
+                             if p["name"] == name), None)
+                many = bool(decl and decl.get("type") == "choice" and decl.get("cardinality") == "many")
+                bindings[name] = values if many or len(values) != 1 else values[0]
+                cdef_stats["bindings"] += 1
+                if req is None or decl is None: cdef_stats["bindings the catalogue does not declare"] += 1
+            cap = {"id": D("capability id from the control id", lambda c: f"cap-{slug(c)}", cir.get("control-id", "x")),
+                   "requirement-ref": req_of(cid)}
+            if sids: cap["statement-ids"] = sids
+            cap["description"] = pua_scan(description)
+            if bindings: cap["parameter-bindings"] = bindings
+            caps.append(cap)
+            cdef_stats["clauses"] += len(sids)
     kind = D("component kind from the OSCAL component type (KIND_MAP)", lambda t: KIND_MAP.get(t, "software"),
              c.get("type", "software"))
     obj = {"id": D("component id from its title", lambda t: f"{NS}/component/{slug(t)}", c.get("title", "component")),
@@ -325,7 +416,8 @@ for c in CDEF.get("components", []) or []:
     if caps: obj["capabilities"] = caps
     protos = [{"name": p.get("name"), "title": p.get("title"),
                "port-ranges": p.get("port-ranges", [])} for p in c.get("protocols", []) or []]
-    if protos: obj["facets"] = {F_PROTO: {"protocols": protos}}
+    if protos: obj.setdefault("facets", {})[F_PROTO] = {"protocols": protos}
+    if control_impls: obj.setdefault("facets", {})[F_COMP] = {"control-implementations": control_impls}
     bundle.add(f"objects/component/{slug(c.get('title', 'component'))}.json", obj)
 
 # ================= 4. Assessment (AR result; AP as method) =================
@@ -570,6 +662,7 @@ bundle.stub("goodread-finding-target-stub.json", F_FTGT.split("@")[0], [],
              "implementation-statement-uuid": {"type": "string"}})
 bundle.stub("goodread-ap-stub.json", F_AP.split("@")[0], [], {"activities": {"type": "array"}})
 bundle.stub("goodread-protocols-stub.json", F_PROTO.split("@")[0], [], {"protocols": {"type": "array"}})
+bundle.stub("goodread-component-stub.json", F_COMP.split("@")[0], [], {"control-implementations": {"type": "array"}})
 # what each source document says about itself, handed on as it stands: the
 # bundle's objects come from seven documents, and the manifest names them
 DOC_META = ("title", "version", "oscal-version", "last-modified", "published", "remarks")
@@ -658,7 +751,9 @@ RULES = [
  (r"^cdef\.component-definition\.components\[\]\.responsible-roles\[\]\.", "L1",
   "landmark party URIs (#16: parties stay landmark; roles ride provenance)"),
  (r"^cdef\.component-definition\.components\[\]\.control-implementations\[\]\.", "L1",
-  "capabilities with requirement-ref (landmark - the component asserts support, no system binds it)"),
+  "capabilities with requirement-ref (landmark - the component asserts support, no system binds it): statements -> "
+  "statement-ids and clause texts, set-parameters -> parameter-bindings under the catalogue's names; the control "
+  "implementation's description and source -> component@1"),
  (r"^cdef\.component-definition\.components\[\]\.(uuid|type|title|description|purpose)$", "L1",
   "Component (kind mapped) id/title"),
 ]
