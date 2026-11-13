@@ -6,6 +6,65 @@
   "source-note": "FICTIONAL example content by NIST; converted as the gate-3 lifecycle corpus",
   "source-oscal-version": "1.1.3",
   "source-commit": "usnistgov/oscal-content@9402f031 (2026-07-14; the state fetched 2026-07-22)",
+  "source-documents": [
+   {
+    "file": "ifa_ssp.json",
+    "title": "IFA SYSTEM1234 System Security Plan",
+    "version": "1.1.1",
+    "oscal-version": "1.1.3",
+    "last-modified": "2026-05-12T10:26:16.00000-00:00",
+    "published": "2026-05-13T12:30:10.00000-00:00"
+   },
+   {
+    "file": "ifa_assessment-plan.json",
+    "title": "IFA SYSTEM1234 Assessment Plan",
+    "version": "1.1.0",
+    "oscal-version": "1.2.2",
+    "last-modified": "2026-05-12T02:36:09.00000-00:00",
+    "published": "2026-05-13T12:30:00.00000-00:00",
+    "remarks": "In this version of the artifact, the content was updated to OSCAL v1.2.2."
+   },
+   {
+    "file": "ifa_assessment-results.json",
+    "title": "IFA SYSTEM1234 Assessment Results",
+    "version": "1.0.0",
+    "oscal-version": "1.2.2",
+    "last-modified": "2026-05-12T02:46:09.00000-00:00",
+    "remarks": "In this version of the artifact, the content was updated to OSCAL v1.1.3 and the system name was changed. Imported Assessment Plan was corrected. Other enhancements were implemented."
+   },
+   {
+    "file": "ifa_plan-of-action-and-milestones.json",
+    "title": "IFA SYSTEM1234 Plan of Action and Milestones (POAM)",
+    "version": "1.2.1",
+    "oscal-version": "1.2.2",
+    "last-modified": "2026-05-12T02:46:09.00000-00:00",
+    "published": "2026-05-13T12:30:10.00000-00:00"
+   },
+   {
+    "file": "oscal_leveraged-example_ssp.json",
+    "title": "CSP IaaS System Security Plan",
+    "version": "1.0.0",
+    "oscal-version": "1.2.2",
+    "last-modified": "2026-05-12T10:16:01.00000-00:00",
+    "published": "2026-05-13T12:30:10.00000-00:00"
+   },
+   {
+    "file": "oscal_leveraging-example_ssp.json",
+    "title": "Leveraging SaaS System Security Plan",
+    "version": "1.0.0",
+    "oscal-version": "1.2.2",
+    "last-modified": "2026-05-12T10:16:01.00000-00:00",
+    "published": "2026-05-13T12:30:10.00000-00:00"
+   },
+   {
+    "file": "example-component-definition.json",
+    "title": "MongoDB Component Definition Example",
+    "version": "20231012",
+    "oscal-version": "1.1.2",
+    "last-modified": "2026-05-12T09:16:10.00000-00:00",
+    "published": "2026-05-13T12:30:10.00000-00:00"
+   }
+  ],
   "converter": "convert_ifa.py v0.3 (a repeated prop name keeps every value; conversion ledger)",
   "carried-requirements": [
    "https://ns.nist.gov/sp800-53/req/AC-6.1",

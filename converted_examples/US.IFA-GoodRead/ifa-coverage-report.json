@@ -3963,10 +3963,10 @@
   "file": "ifa-conversion-ledger.json",
   "leaf-values": 835,
   "totals": {
-   "copied": 235,
+   "copied": 262,
    "transformed": 33,
    "intentionally-dropped": 295,
-   "unaccounted": 272
+   "unaccounted": 245
   },
   "verification-failures": 0
  }

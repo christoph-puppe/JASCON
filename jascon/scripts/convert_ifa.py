@@ -47,9 +47,12 @@ T = make_T("en", lang_wraps)
 led = Ledger()
 D = led.derive
 
+SOURCE_FILES = []        # (file name, document) in the order loaded, for the manifest's provenance
 def load(tag, fn, key):
     doc = json.load(open(os.path.join(SRCDIR, fn), encoding="utf-8"))
-    return led.source(tag, {key: doc[key]})[key]
+    tracked = led.source(tag, {key: doc[key]})[key]
+    SOURCE_FILES.append((fn, tracked))
+    return tracked
 
 SSP = load("ssp", "ifa_ssp.json", "system-security-plan")
 AP = load("ap", "ifa_assessment-plan.json", "assessment-plan")
@@ -543,11 +546,17 @@ bundle.stub("goodread-finding-target-stub.json", F_FTGT.split("@")[0], [],
              "implementation-statement-uuid": {"type": "string"}})
 bundle.stub("goodread-ap-stub.json", F_AP.split("@")[0], [], {"activities": {"type": "array"}})
 bundle.stub("goodread-protocols-stub.json", F_PROTO.split("@")[0], [], {"protocols": {"type": "array"}})
+# what each source document says about itself, handed on as it stands: the
+# bundle's objects come from seven documents, and the manifest names them
+DOC_META = ("title", "version", "oscal-version", "last-modified", "published", "remarks")
+source_documents = [{"file": fn, **{k: doc["metadata"][k] for k in DOC_META if k in doc["metadata"]}}
+                    for fn, doc in SOURCE_FILES]
 manifest = bundle.write({"source": "OSCAL IFA GoodRead example set (SSP 1.1.1, AP, AR, POA&M) + leveraged/"
                         "leveraging SSP pair + component-definition example (usnistgov/oscal-content)",
               "source-note": "FICTIONAL example content by NIST; converted as the gate-3 lifecycle corpus",
               "source-oscal-version": SSP["metadata"]["oscal-version"],
               "source-commit": "usnistgov/oscal-content@9402f031 (2026-07-14; the state fetched 2026-07-22)",
+              "source-documents": source_documents,
               "converter": "convert_ifa.py v0.3 (a repeated prop name keeps every value; conversion ledger)",
               "carried-requirements": carried,
               "attestation-note": "content-manifest-digest = sha256 over the JSON array of "

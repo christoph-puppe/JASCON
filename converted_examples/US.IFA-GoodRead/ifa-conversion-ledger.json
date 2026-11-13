@@ -2,10 +2,10 @@
  "measures": "one entry per source leaf value: where it went, checked against the written files",
  "leaf-values": 835,
  "totals": {
-  "copied": 235,
+  "copied": 262,
   "transformed": 33,
   "intentionally-dropped": 295,
-  "unaccounted": 272
+  "unaccounted": 245
  },
  "verification-failures": [],
  "unaccounted-paths": [
@@ -52,34 +52,6 @@
    ]
   },
   {
-   "path": "ap.assessment-plan.metadata.last-modified",
-   "count": 1,
-   "pointers": [
-    "ap#/assessment-plan/metadata/last-modified"
-   ]
-  },
-  {
-   "path": "ap.assessment-plan.metadata.oscal-version",
-   "count": 1,
-   "pointers": [
-    "ap#/assessment-plan/metadata/oscal-version"
-   ]
-  },
-  {
-   "path": "ap.assessment-plan.metadata.published",
-   "count": 1,
-   "pointers": [
-    "ap#/assessment-plan/metadata/published"
-   ]
-  },
-  {
-   "path": "ap.assessment-plan.metadata.remarks",
-   "count": 1,
-   "pointers": [
-    "ap#/assessment-plan/metadata/remarks"
-   ]
-  },
-  {
    "path": "ap.assessment-plan.metadata.responsible-parties[].party-uuids[]",
    "count": 1,
    "pointers": [
@@ -91,20 +63,6 @@
    "count": 1,
    "pointers": [
     "ap#/assessment-plan/metadata/responsible-parties/0/role-id"
-   ]
-  },
-  {
-   "path": "ap.assessment-plan.metadata.title",
-   "count": 1,
-   "pointers": [
-    "ap#/assessment-plan/metadata/title"
-   ]
-  },
-  {
-   "path": "ap.assessment-plan.metadata.version",
-   "count": 1,
-   "pointers": [
-    "ap#/assessment-plan/metadata/version"
    ]
   },
   {
@@ -204,38 +162,10 @@
    ]
   },
   {
-   "path": "ar.assessment-results.metadata.last-modified",
-   "count": 1,
-   "pointers": [
-    "ar#/assessment-results/metadata/last-modified"
-   ]
-  },
-  {
-   "path": "ar.assessment-results.metadata.oscal-version",
-   "count": 1,
-   "pointers": [
-    "ar#/assessment-results/metadata/oscal-version"
-   ]
-  },
-  {
-   "path": "ar.assessment-results.metadata.remarks",
-   "count": 1,
-   "pointers": [
-    "ar#/assessment-results/metadata/remarks"
-   ]
-  },
-  {
    "path": "ar.assessment-results.metadata.responsible-parties[].role-id",
    "count": 1,
    "pointers": [
     "ar#/assessment-results/metadata/responsible-parties/0/role-id"
-   ]
-  },
-  {
-   "path": "ar.assessment-results.metadata.title",
-   "count": 1,
-   "pointers": [
-    "ar#/assessment-results/metadata/title"
    ]
   },
   {
@@ -415,34 +345,6 @@
    ]
   },
   {
-   "path": "cdef.component-definition.metadata.last-modified",
-   "count": 1,
-   "pointers": [
-    "cdef#/component-definition/metadata/last-modified"
-   ]
-  },
-  {
-   "path": "cdef.component-definition.metadata.oscal-version",
-   "count": 1,
-   "pointers": [
-    "cdef#/component-definition/metadata/oscal-version"
-   ]
-  },
-  {
-   "path": "cdef.component-definition.metadata.published",
-   "count": 1,
-   "pointers": [
-    "cdef#/component-definition/metadata/published"
-   ]
-  },
-  {
-   "path": "cdef.component-definition.metadata.title",
-   "count": 1,
-   "pointers": [
-    "cdef#/component-definition/metadata/title"
-   ]
-  },
-  {
    "path": "lev.system-security-plan.control-implementation.description",
    "count": 1,
    "pointers": [
@@ -525,27 +427,6 @@
    "count": 1,
    "pointers": [
     "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/remarks"
-   ]
-  },
-  {
-   "path": "lev.system-security-plan.metadata.last-modified",
-   "count": 1,
-   "pointers": [
-    "lev#/system-security-plan/metadata/last-modified"
-   ]
-  },
-  {
-   "path": "lev.system-security-plan.metadata.oscal-version",
-   "count": 1,
-   "pointers": [
-    "lev#/system-security-plan/metadata/oscal-version"
-   ]
-  },
-  {
-   "path": "lev.system-security-plan.metadata.published",
-   "count": 1,
-   "pointers": [
-    "lev#/system-security-plan/metadata/published"
    ]
   },
   {
@@ -864,27 +745,6 @@
    ]
   },
   {
-   "path": "lvg.system-security-plan.metadata.last-modified",
-   "count": 1,
-   "pointers": [
-    "lvg#/system-security-plan/metadata/last-modified"
-   ]
-  },
-  {
-   "path": "lvg.system-security-plan.metadata.oscal-version",
-   "count": 1,
-   "pointers": [
-    "lvg#/system-security-plan/metadata/oscal-version"
-   ]
-  },
-  {
-   "path": "lvg.system-security-plan.metadata.published",
-   "count": 1,
-   "pointers": [
-    "lvg#/system-security-plan/metadata/published"
-   ]
-  },
-  {
    "path": "lvg.system-security-plan.system-characteristics.authorization-boundary.description",
    "count": 1,
    "pointers": [
@@ -1125,34 +985,6 @@
    ]
   },
   {
-   "path": "poam.plan-of-action-and-milestones.metadata.last-modified",
-   "count": 1,
-   "pointers": [
-    "poam#/plan-of-action-and-milestones/metadata/last-modified"
-   ]
-  },
-  {
-   "path": "poam.plan-of-action-and-milestones.metadata.oscal-version",
-   "count": 1,
-   "pointers": [
-    "poam#/plan-of-action-and-milestones/metadata/oscal-version"
-   ]
-  },
-  {
-   "path": "poam.plan-of-action-and-milestones.metadata.published",
-   "count": 1,
-   "pointers": [
-    "poam#/plan-of-action-and-milestones/metadata/published"
-   ]
-  },
-  {
-   "path": "poam.plan-of-action-and-milestones.metadata.title",
-   "count": 1,
-   "pointers": [
-    "poam#/plan-of-action-and-milestones/metadata/title"
-   ]
-  },
-  {
    "path": "poam.plan-of-action-and-milestones.observations[].remarks",
    "count": 2,
    "pointers": [
@@ -1231,20 +1063,6 @@
    ]
   },
   {
-   "path": "ssp.system-security-plan.metadata.last-modified",
-   "count": 1,
-   "pointers": [
-    "ssp#/system-security-plan/metadata/last-modified"
-   ]
-  },
-  {
-   "path": "ssp.system-security-plan.metadata.published",
-   "count": 1,
-   "pointers": [
-    "ssp#/system-security-plan/metadata/published"
-   ]
-  },
-  {
    "path": "ssp.system-security-plan.metadata.responsible-parties[].party-uuids[]",
    "count": 2,
    "pointers": [
@@ -1259,13 +1077,6 @@
     "ssp#/system-security-plan/metadata/responsible-parties/0/role-id",
     "ssp#/system-security-plan/metadata/responsible-parties/1/role-id",
     "ssp#/system-security-plan/metadata/responsible-parties/2/role-id"
-   ]
-  },
-  {
-   "path": "ssp.system-security-plan.metadata.title",
-   "count": 1,
-   "pointers": [
-    "ssp#/system-security-plan/metadata/title"
    ]
   },
   {
@@ -1372,17 +1183,35 @@
   {
    "source": "ssp#/system-security-plan/metadata/title",
    "path": "ssp.system-security-plan.metadata.title",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "content-manifest.json",
+     "pointer": "/provenance/source-documents/0/title"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ssp#/system-security-plan/metadata/published",
    "path": "ssp.system-security-plan.metadata.published",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "content-manifest.json",
+     "pointer": "/provenance/source-documents/0/published"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ssp#/system-security-plan/metadata/last-modified",
    "path": "ssp.system-security-plan.metadata.last-modified",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "content-manifest.json",
+     "pointer": "/provenance/source-documents/0/last-modified"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ssp#/system-security-plan/metadata/version",
@@ -1399,6 +1228,10 @@
     {
      "object": "content-manifest.json",
      "pointer": "/objects/7/version"
+    },
+    {
+     "object": "content-manifest.json",
+     "pointer": "/provenance/source-documents/0/version"
     },
     {
      "object": "https://ifa.gov/goodread/attestation/ifa-ato",
@@ -1419,6 +1252,10 @@
    "source": "ssp#/system-security-plan/metadata/oscal-version",
    "path": "ssp.system-security-plan.metadata.oscal-version",
    "destinations": [
+    {
+     "object": "content-manifest.json",
+     "pointer": "/provenance/source-documents/0/oscal-version"
+    },
     {
      "object": "content-manifest.json",
      "pointer": "/provenance/source-oscal-version"
@@ -3356,27 +3193,57 @@
   {
    "source": "ap#/assessment-plan/metadata/title",
    "path": "ap.assessment-plan.metadata.title",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "content-manifest.json",
+     "pointer": "/provenance/source-documents/1/title"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ap#/assessment-plan/metadata/published",
    "path": "ap.assessment-plan.metadata.published",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "content-manifest.json",
+     "pointer": "/provenance/source-documents/1/published"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ap#/assessment-plan/metadata/last-modified",
    "path": "ap.assessment-plan.metadata.last-modified",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "content-manifest.json",
+     "pointer": "/provenance/source-documents/1/last-modified"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ap#/assessment-plan/metadata/version",
    "path": "ap.assessment-plan.metadata.version",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "content-manifest.json",
+     "pointer": "/provenance/source-documents/1/version"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ap#/assessment-plan/metadata/oscal-version",
    "path": "ap.assessment-plan.metadata.oscal-version",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "content-manifest.json",
+     "pointer": "/provenance/source-documents/1/oscal-version"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ap#/assessment-plan/metadata/revisions/0/title",
@@ -3547,7 +3414,13 @@
   {
    "source": "ap#/assessment-plan/metadata/remarks",
    "path": "ap.assessment-plan.metadata.remarks",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "content-manifest.json",
+     "pointer": "/provenance/source-documents/1/remarks"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ap#/assessment-plan/import-ssp/href",
@@ -3916,12 +3789,24 @@
   {
    "source": "ar#/assessment-results/metadata/title",
    "path": "ar.assessment-results.metadata.title",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "content-manifest.json",
+     "pointer": "/provenance/source-documents/2/title"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ar#/assessment-results/metadata/last-modified",
    "path": "ar.assessment-results.metadata.last-modified",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "content-manifest.json",
+     "pointer": "/provenance/source-documents/2/last-modified"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ar#/assessment-results/metadata/version",
@@ -3930,6 +3815,10 @@
     {
      "object": "content-manifest.json",
      "pointer": "/objects/0/version"
+    },
+    {
+     "object": "content-manifest.json",
+     "pointer": "/provenance/source-documents/2/version"
     },
     {
      "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
@@ -3941,7 +3830,13 @@
   {
    "source": "ar#/assessment-results/metadata/oscal-version",
    "path": "ar.assessment-results.metadata.oscal-version",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "content-manifest.json",
+     "pointer": "/provenance/source-documents/2/oscal-version"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ar#/assessment-results/metadata/revisions/0/title",
@@ -4131,7 +4026,13 @@
   {
    "source": "ar#/assessment-results/metadata/remarks",
    "path": "ar.assessment-results.metadata.remarks",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "content-manifest.json",
+     "pointer": "/provenance/source-documents/2/remarks"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ar#/assessment-results/import-ap/href",
@@ -4676,17 +4577,35 @@
   {
    "source": "poam#/plan-of-action-and-milestones/metadata/title",
    "path": "poam.plan-of-action-and-milestones.metadata.title",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "content-manifest.json",
+     "pointer": "/provenance/source-documents/3/title"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "poam#/plan-of-action-and-milestones/metadata/published",
    "path": "poam.plan-of-action-and-milestones.metadata.published",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "content-manifest.json",
+     "pointer": "/provenance/source-documents/3/published"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "poam#/plan-of-action-and-milestones/metadata/last-modified",
    "path": "poam.plan-of-action-and-milestones.metadata.last-modified",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "content-manifest.json",
+     "pointer": "/provenance/source-documents/3/last-modified"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "poam#/plan-of-action-and-milestones/metadata/version",
@@ -4707,6 +4626,10 @@
     {
      "object": "content-manifest.json",
      "pointer": "/objects/9/version"
+    },
+    {
+     "object": "content-manifest.json",
+     "pointer": "/provenance/source-documents/3/version"
     },
     {
      "object": "https://ifa.gov/goodread/finding/goodread-risk-1",
@@ -4730,7 +4653,13 @@
   {
    "source": "poam#/plan-of-action-and-milestones/metadata/oscal-version",
    "path": "poam.plan-of-action-and-milestones.metadata.oscal-version",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "content-manifest.json",
+     "pointer": "/provenance/source-documents/3/oscal-version"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "poam#/plan-of-action-and-milestones/metadata/revisions/0/title",
@@ -5760,6 +5689,10 @@
    "path": "lev.system-security-plan.metadata.title",
    "destinations": [
     {
+     "object": "content-manifest.json",
+     "pointer": "/provenance/source-documents/4/title"
+    },
+    {
      "object": "https://ifa.gov/goodread/component/csp-iaas",
      "pointer": "/title/en"
     }
@@ -5769,12 +5702,24 @@
   {
    "source": "lev#/system-security-plan/metadata/published",
    "path": "lev.system-security-plan.metadata.published",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "content-manifest.json",
+     "pointer": "/provenance/source-documents/4/published"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lev#/system-security-plan/metadata/last-modified",
    "path": "lev.system-security-plan.metadata.last-modified",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "content-manifest.json",
+     "pointer": "/provenance/source-documents/4/last-modified"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lev#/system-security-plan/metadata/version",
@@ -5791,6 +5736,10 @@
     {
      "object": "content-manifest.json",
      "pointer": "/objects/4/version"
+    },
+    {
+     "object": "content-manifest.json",
+     "pointer": "/provenance/source-documents/4/version"
     },
     {
      "object": "https://ifa.gov/goodread/component/csp-application",
@@ -5810,7 +5759,13 @@
   {
    "source": "lev#/system-security-plan/metadata/oscal-version",
    "path": "lev.system-security-plan.metadata.oscal-version",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "content-manifest.json",
+     "pointer": "/provenance/source-documents/4/oscal-version"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lev#/system-security-plan/metadata/roles/0/id",
@@ -6421,6 +6376,10 @@
    "path": "lvg.system-security-plan.metadata.title",
    "destinations": [
     {
+     "object": "content-manifest.json",
+     "pointer": "/provenance/source-documents/5/title"
+    },
+    {
      "object": "https://ifa.gov/goodread/component/saas",
      "pointer": "/title/en"
     }
@@ -6430,12 +6389,24 @@
   {
    "source": "lvg#/system-security-plan/metadata/published",
    "path": "lvg.system-security-plan.metadata.published",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "content-manifest.json",
+     "pointer": "/provenance/source-documents/5/published"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lvg#/system-security-plan/metadata/last-modified",
    "path": "lvg.system-security-plan.metadata.last-modified",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "content-manifest.json",
+     "pointer": "/provenance/source-documents/5/last-modified"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lvg#/system-security-plan/metadata/version",
@@ -6452,6 +6423,10 @@
     {
      "object": "content-manifest.json",
      "pointer": "/objects/6/version"
+    },
+    {
+     "object": "content-manifest.json",
+     "pointer": "/provenance/source-documents/5/version"
     },
     {
      "object": "https://ifa.gov/goodread/component/access-control-appliance",
@@ -6471,7 +6446,13 @@
   {
    "source": "lvg#/system-security-plan/metadata/oscal-version",
    "path": "lvg.system-security-plan.metadata.oscal-version",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "content-manifest.json",
+     "pointer": "/provenance/source-documents/5/oscal-version"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lvg#/system-security-plan/metadata/roles/0/id",
@@ -7227,17 +7208,35 @@
   {
    "source": "cdef#/component-definition/metadata/title",
    "path": "cdef.component-definition.metadata.title",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "content-manifest.json",
+     "pointer": "/provenance/source-documents/6/title"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "cdef#/component-definition/metadata/published",
    "path": "cdef.component-definition.metadata.published",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "content-manifest.json",
+     "pointer": "/provenance/source-documents/6/published"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "cdef#/component-definition/metadata/last-modified",
    "path": "cdef.component-definition.metadata.last-modified",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "content-manifest.json",
+     "pointer": "/provenance/source-documents/6/last-modified"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "cdef#/component-definition/metadata/version",
@@ -7246,6 +7245,10 @@
     {
      "object": "content-manifest.json",
      "pointer": "/objects/5/version"
+    },
+    {
+     "object": "content-manifest.json",
+     "pointer": "/provenance/source-documents/6/version"
     },
     {
      "object": "https://ifa.gov/goodread/component/mongodb",
@@ -7257,7 +7260,13 @@
   {
    "source": "cdef#/component-definition/metadata/oscal-version",
    "path": "cdef.component-definition.metadata.oscal-version",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "content-manifest.json",
+     "pointer": "/provenance/source-documents/6/oscal-version"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "cdef#/component-definition/metadata/roles/0/id",
