@@ -1,6 +1,6 @@
 # Plan — the open backlog before 2.0.0
 
-### 2026-11-13 · branch `claude/sleepy-planck-g6w3h3` · a plan, nothing in it is built yet
+### 2026-11-13 · branch `claude/sleepy-planck-g6w3h3` · phase A is built (§8); phases B to E are a plan; §9 says what another session's work on main changed in it
 
 Input: the ten open rows of `jascon-v0.6-spec-feedback-backlog.md` and the
 residue of #45, with the author's dispositions of 2026-11-13. Every
@@ -198,7 +198,24 @@ read and says where no count exists:
   in the repository. The decision rests on the author's word and the
   standards named.
 
-### 3.7 Open points for the author
+### 3.7 The author's answers (2026-11-13)
+
+The three points below were open when this plan was written. The author
+answered the same day, and §3.3 and §3.4 are to be read with these
+answers:
+
+1. **Report.** AUTHOR-1 to 4 are report lines. A missing author fails
+   nothing by default; a flag, `--require-authors`, turns the lines into
+   failures, as `--require-risk-basis` does for uncovered requirements.
+2. **`provenance`.** One spelling, `provenance: {author-ref, date}`.
+3. **Read the clock, then report.** The validator reads the date of the
+   run and reports every approved Deviation past its `review-due`. The
+   lapse is a report line and fails nothing; the Deviation keeps
+   licensing its weakening until someone acts. `--as-of YYYY-MM-DD`
+   stays as the way to fix the date, which the conformance vectors need
+   in order to give the same answer every day.
+
+The points as they were put:
 
 1. **Fail or report.** The plan lets AUTHOR-1 to 4 fail a consumer's
    bundle. The alternative is the pattern of `--require-risk-basis`: a
@@ -407,6 +424,9 @@ Untouched, as decided. It becomes work when a runner exists.
 
 ## 7. Found on the way (not filed, not fixed)
 
+More was found while building phase A; the register entry "Amendments —
+the open backlog before 2.0.0" lists it.
+
 - `Finding.actions[].status` is a free string; the corpus holds
   `planned`, `done` and `closed` (**measured**). An action also names
   nobody who is to carry it out.
@@ -418,3 +438,45 @@ Untouched, as decided. It becomes work when a runner exists.
 - The backlog file itself: its title says v0.6, its opening paragraphs
   are not in the order of the dates, and rows #63 to #66 stand below the
   standing rule that ends the file.
+
+## 8. Phase A as built (2026-11-13)
+
+The author's "start phase A" came with the three answers of §3.7. The
+commits are on this branch; the register entry has the measurements.
+
+| # | Built | Differs from the plan above |
+|---|---|---|
+| 54 | The record has a schema; the tool and the app (build 0.9.7) read and write it; the demo is rebuilt | No `catalog`, no `tailoring-ref`: the app keeps one file for all catalogues and nothing reads a scope, so a row names its entry by id and carries `entry-version`. No `review-due` yet: it follows the rule phase B gives a Deviation. A row without an author is reported, not refused, as answer 1 says. The tool refuses the old map; the app reads it |
+| 47b | Decided as recommended; the mapping moved into the converter library, with four tests in the library's test file, which CI runs | The two synthetic cases were run once through the whole converter, on copies of the POA&M. Only the mapping is a repeatable test, because the converter runs only with its sources |
+| 45 | Two vectors | none |
+| 58 | No operator compares two strings; the lint parses the twin with PowerShell's parser | The class was about twice the size the row gave: `-eq`, `-ne` and `-contains` fold case as well, and they were the larger half. 371 comparisons changed, not 201. The lint is a PowerShell script in `.github/scripts/`, not a text search, and the ordering operators get a weaker test than equality. Four vectors, not two; three of the six failed on the twin before the change |
+
+What phase A showed for the later phases:
+
+- **The IFA sources are at hand.** The seven files are public at the
+  pinned commit, and the unchanged converter reproduces the committed
+  bundle and both reports byte for byte from them (**measured**). Phase
+  C can run in a cloud session.
+- **The twin can be run here.** PowerShell 7.4 on Linux with a stand-in
+  for the one .NET Framework class gives the reference's counts in about
+  a minute. It is not the proof: the first version of the lint ran green
+  here and stopped on Windows PowerShell 5.1. The workflow's run stays
+  the record.
+- **Totals.** 543 vectors when phase A was built; 574 after the rebase
+  onto main (§9). Phase B adds its own.
+
+## 9. After the rebase onto main (2026-11-13)
+
+While phase A was built, another session landed 29 commits on main. The
+branch was rebased onto them; the register entry "The rebase onto main"
+says what overlapped and how it was settled. For the plan above:
+
+| Plan | Changed by main's work |
+|---|---|
+| §5.2, #64 | **Done by the other session.** The converter maps the component definition as the pack builder does. One point of §5.2 is not done and the row says so: `requirement-ref` is still written into the NIST namespace by rule |
+| §6.1, #41 | **Begun.** The measure was wrong in the way step 2 suspected and is replaced: typed whole values (`global_occurrence`) and a ledger that traces every source value to where it went. The IFA corpus is accounted for value by value: 0 unaccounted, 0 failed checks (**measured** after the rebase). Three dangling references of the source are declared as source defects. The other ten converters have no ledger |
+| §2, phase C | Shrinks to the IFA half of #46 (the attestation is still listed in its own manifest, **read**) and the IFA payload of #55, plus the authors phase B makes the converter write. The workflow now reproduces the IFA conversion from its pinned sources on every change, so any of these is a deliberate, visible change of the committed bundle |
+| §3, phase B | NUMBER-1 landed (#67): a number in a bundle is an integer in plain digits. The shapes of §3.2 hold no number, so nothing changes. The conformance total phase B starts from is 574, and the app's build is 0.9.7 |
+| §5.3, #58 | Applied again on main's twin after the rebase, by the same two scripts. Main's twin, unchanged, fails the same three vectors |
+
+Open after the rebase: #41, #46, #55, #62, #65, #66.

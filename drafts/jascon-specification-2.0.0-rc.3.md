@@ -1916,6 +1916,11 @@ of Check and of advice packs:
    publisher · 10 import). Every review correction is pinned by a vector
    that fails on the validator as first proposed; 28 deliberate defects
    in the advice rules and 5 in the check rules each turn a vector red.
+   *(After rc.3, 2026-11-13: `reference` 13 → 18 and `tier` 9 → 10:
+   ids that differ in case, by U+00AD or by normal form are different
+   ids (D2; backlog #45 and #58). No kernel shape and no rule changed by
+   these six. With the vectors of the run rules and of NUMBER-1 (IV.6),
+   574 in all; both validators and the app's port are green on them.)*
 2. **First implementation.** ✓ `validate_core.py`: 537 / 537, the five
    shipped bundles (3,715 objects, both digests each), the worked advice
    pack and the example folder — ALL GREEN on 2026-11-12.
@@ -1991,6 +1996,7 @@ history. The compact line:
 | The number domain | 2026-11-13 | A fifth outside report (issue 27 in the GitHub tracker) showed the reference and the app computing two verdicts and two semantic digests for integers beyond 2^53 and for `1.0`. D3 item 3 had named a "permitted number domain" that no text defined. **D3.9 new, NUMBER-1:** integers in plain digits, of magnitude at most 2^53 − 1; rejected, never rewritten; D24's evaluation step 3 amended. `jcs` 8 → 22 vectors, `parameter` 19 → 21, `check` 199 → 203; 568 in all. Backlog #67 closed. After rc.3 | D3.9 · "Amendments — the number domain" |
 | The value-level check of the converters | 2026-11-13 | Two more outside reports (issues 32 and 33 in the GitHub tracker): `value_arrival()` matched substrings across one joined string, so the IFA figure of 394 of 835 was too high; and any global check hides a dropped value behind an equal one elsewhere. The helper is `global_occurrence()` now, on typed whole values, with key-only and embedded matches listed apart and not counted: **283 of 835**, 124 content values without an equal, stated as an upper and a lower bound. R16 and IV.5b item 6 amended; backlog #41 re-planned to a ledger of source occurrences per converter. No kernel rule, vector or bundle object changes | "Amendments — the value-level check of the converters" |
 | Outside reports on the run rules | 2026-11-13 | Four reports from outside (issues 23 to 26 in the GitHub tracker), each reproduced: the reference accepted an evidence record outside `evidence/sha256/`, a `collector-id` on a Check without collectors, a row parameter its Check does not read, and a record that binds no observation. CHECK-12, CHECK-13 and CHECK-15 amended in place (D24); the three engines follow; `check` 188 → 199 vectors. After rc.3; the counts in the Status and in IV.5b and IV.7 are those of rc.3 | "Amendments — the outside reports of 2026-11-13" |
+| Code points in the twin · the open backlog | 2026-11-13 | The PowerShell twin compared strings with PowerShell's operators, which fold case and compare under a culture; a Tailoring whose id differed from its content's origin by one U+00AD was read as the authority's own. No operator compares two strings there any more, and a lint that parses the twin keeps it so (#58 closed, with the residue of #45). `reference` 13 → 18 vectors, `tier` 9 → 10; 574 in all. No shape and no rule changed. The same day: the record of catalogue entries that do not apply got a schema, outside the kernel (#54 closed); the two OSCAL response types without a treatment code stay without one (#47b closed, C.10); #65 and #66 accepted for 2.0.0 and not yet landed. After rc.3 | D2 · C.10 · "Amendments — the open backlog before 2.0.0" |
 
 ## IV.7 Release artifacts (what this candidate ships with)
 
@@ -2011,7 +2017,7 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
   modality 21 · parameter 19 · tailoring 19 · attestation 5 · facet 7 ·
   reference 13 · lifecycle 38 · tier 9 · dsse 5 · composition 7 ·
   conditional 8 · risk 73 · kernel 25 · scale 18 · check 188 · advice
-  74). In `risk-vectors.json`, `expected-rule` is the portable assertion;
+  74; with the amendments after rc.3 in IV.6, 574 in all). In `risk-vectors.json`, `expected-rule` is the portable assertion;
   in `check-vectors.json` and `advice-vectors.json`, the outcome and the
   named rules.
 - **A worked advice pack** under `jascon/example-packs/`, and the example
