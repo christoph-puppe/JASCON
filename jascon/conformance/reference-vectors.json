@@ -470,6 +470,262 @@
    ],
    "expected-errors": 1,
    "reason": "P10 #39 (D21): the degenerate one-Set cycle"
+  },
+  {
+   "name": "ids-differing-in-case-are-two-objects",
+   "objects": [
+    {
+     "id": "https://ex.org/req/A",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "should",
+       "obligated-parties": [
+        "https://ex.org/p/o"
+       ],
+       "prose": {
+        "en": "X."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/req/a",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s2",
+       "modality": "should",
+       "obligated-parties": [
+        "https://ex.org/p/o"
+       ],
+       "prose": {
+        "en": "X."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/set/1",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ex.org/req/A",
+       "sequence": 10
+      },
+      {
+       "ref": "https://ex.org/req/a",
+       "sequence": 20
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/t/1",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ex.org/set/1"
+      }
+     ],
+     "operations": [
+      {
+       "op": "set-modality",
+       "requirement-ref": "https://ex.org/req/A",
+       "statement-id": "s1",
+       "modality": "must"
+      },
+      {
+       "op": "set-modality",
+       "requirement-ref": "https://ex.org/req/a",
+       "statement-id": "s2",
+       "modality": "must"
+      }
+     ]
+    }
+   ],
+   "expected-errors": 0,
+   "reason": "D2: ids are compared as strings, so .../req/A and .../req/a are two Requirements. Each has one statement the other lacks, and one operation addresses each; a tool that keys objects without regard to case loses one of the two and reports a ghost statement (backlog #45)"
+  },
+  {
+   "name": "member-ref-in-another-case-dangles",
+   "objects": [
+    {
+     "id": "https://ex.org/req/a",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "should",
+       "obligated-parties": [
+        "https://ex.org/p/o"
+       ],
+       "prose": {
+        "en": "X."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/set/1",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ex.org/req/A",
+       "sequence": 10
+      }
+     ]
+    }
+   ],
+   "expected-errors": 1,
+   "reason": "only .../req/a exists; a member ref .../req/A names nothing. The case the PowerShell twin resolved before its maps were keyed ordinally (backlog #45)"
+  },
+  {
+   "name": "member-ref-with-a-soft-hyphen-dangles",
+   "objects": [
+    {
+     "id": "https://ex.org/req/a",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "should",
+       "obligated-parties": [
+        "https://ex.org/p/o"
+       ],
+       "prose": {
+        "en": "X."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/set/1",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ex.org/req/a\u00ad",
+       "sequence": 10
+      }
+     ]
+    }
+   ],
+   "expected-errors": 1,
+   "reason": "the member ref ends in U+00AD SOFT HYPHEN, which a culture-aware comparison ignores. Compared code point by code point it is another id, and it names nothing (D2; backlog #58)"
+  },
+  {
+   "name": "statement-id-with-a-soft-hyphen-names-no-statement",
+   "objects": [
+    {
+     "id": "https://ex.org/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "should",
+       "obligated-parties": [
+        "https://ex.org/p/o"
+       ],
+       "prose": {
+        "en": "X."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/set/1",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ex.org/req/1",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/t/1",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ex.org/set/1"
+      }
+     ],
+     "operations": [
+      {
+       "op": "set-modality",
+       "requirement-ref": "https://ex.org/req/1",
+       "statement-id": "s1\u00ad",
+       "modality": "must"
+      }
+     ]
+    }
+   ],
+   "expected-errors": 1,
+   "reason": "the operation's statement-id is s1 followed by U+00AD; the Requirement has s1. A culture-aware comparison calls them equal, a code-point comparison does not: the operation addresses a ghost statement (backlog #58)"
+  },
+  {
+   "name": "statement-id-in-another-normal-form-names-no-statement",
+   "objects": [
+    {
+     "id": "https://ex.org/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "caf\u00e9",
+       "modality": "should",
+       "obligated-parties": [
+        "https://ex.org/p/o"
+       ],
+       "prose": {
+        "en": "X."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/set/1",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ex.org/req/1",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/t/1",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ex.org/set/1"
+      }
+     ],
+     "operations": [
+      {
+       "op": "set-modality",
+       "requirement-ref": "https://ex.org/req/1",
+       "statement-id": "cafe\u0301",
+       "modality": "must"
+      }
+     ]
+    }
+   ],
+   "expected-errors": 1,
+   "reason": "the Requirement's statement id ends in U+00E9; the operation's ends in e followed by U+0301 COMBINING ACUTE ACCENT. The two look the same and are canonically equivalent; they are not the same string, and nothing here normalizes (D3.4; backlog #58)"
   }
  ]
 }
