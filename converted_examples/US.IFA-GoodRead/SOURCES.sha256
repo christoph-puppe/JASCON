@@ -1,0 +1,25 @@
+# The seven source files of this conversion, pinned.
+#
+# convert_ifa.py reads them from sources/nist/ (git-ignored). The Validators
+# workflow downloads them from the base below, checks them against this list
+# with `sha256sum -c`, runs the converter and fails if the conversion in this
+# folder comes out different. The bundle, the two coverage reports and the
+# ledger are therefore a reproducible record: a change of the kernel, of
+# oscal_conv_lib.py or of the converter that would alter them is noticed.
+#
+# base: https://raw.githubusercontent.com/usnistgov/oscal-content/9402f031/
+# path: examples/component-definition/json/example-component-definition.json
+# path: examples/ap/json/ifa_assessment-plan.json
+# path: examples/ar/json/ifa_assessment-results.json
+# path: examples/poam/json/ifa_plan-of-action-and-milestones.json
+# path: examples/ssp/json/ifa_ssp.json
+# path: examples/ssp/json/oscal_leveraged-example_ssp.json
+# path: examples/ssp/json/oscal_leveraging-example_ssp.json
+#
+01f3d038884c895c15cf68150e598f6f353e8bc73a4988d542301fd2c784127a  example-component-definition.json
+66380f4279eb60905f7ec2684b5f885ee1743d648cf6315acaddaaf232d4501d  ifa_assessment-plan.json
+b7e429db3f25f9a70b2da549dbdf70ab28ab70250c0377dc8a93612da711a455  ifa_assessment-results.json
+1d5cb45cce37adaa53cb994564f747a0d9559bae0747a780d6035bd9e16dbe14  ifa_plan-of-action-and-milestones.json
+b46a629d42a5bc10acef5b1b6c63ccbc60007712646b3812f8afdffa4b1fb176  ifa_ssp.json
+e01794dd4b4d88d87d3a197ff91e2bee9e24b6f7b92b9ba0ca83d0a2e6a7a45c  oscal_leveraged-example_ssp.json
+4a9756449f93ea088a619e6642fe40ef11de2c71426dc58e7a109b08e289d900  oscal_leveraging-example_ssp.json
