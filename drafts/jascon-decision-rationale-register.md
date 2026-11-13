@@ -2928,6 +2928,30 @@ converter still writes a party URI `authorizing-official` for the
 authorization that no source value names. The other ten converters have
 no ledger.
 
+## The last three, and what the ledger cannot see (2026-11-13, the author's two decisions)
+
+1. **The three dangling references are declared as defects of the
+   source.** The activity a task of the assessment plan names, the risk
+   the first POA&M item names, and the responsibility one `satisfied`
+   entry names do not exist in their documents. No edge is derived and
+   none is invented; the ledger gives each the reason, and the report
+   lists them as source findings. **The ledger reads 441 copied, 95
+   transformed, 299 dropped for a declared reason, 0 unaccounted, 0
+   failed checks.**
+2. **The party URIs without a source stay, and the report says so.**
+   `authority-ref` of the two authorizations and the Attestation's
+   `signer` are written as `authorizing-official` and
+   `csp-authorizing-official`. None of the plans defines such a role.
+   The ledger follows source values into the bundle; it has no entry for
+   a value the converter writes on its own. That direction, every bundle
+   value traced back to a source value or to a stated constant, is not
+   measured.
+
+"0 unaccounted" therefore means: every source value has a destination,
+a named rule or a stated reason. It does not mean lossless. 299 values
+are not in the bundle, by decisions that are now written down, and three
+values are in the bundle that no source gave.
+
 ## What it does not change
 
 No kernel shape, rule or vector and no validator. The first decisions

@@ -3318,8 +3318,8 @@
   "totals": {
    "copied": 441,
    "transformed": 95,
-   "intentionally-dropped": 296,
-   "unaccounted": 3
+   "intentionally-dropped": 299,
+   "unaccounted": 0
   },
   "verification-failures": 0
  }

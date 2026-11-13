@@ -4,33 +4,11 @@
  "totals": {
   "copied": 441,
   "transformed": 95,
-  "intentionally-dropped": 296,
-  "unaccounted": 3
+  "intentionally-dropped": 299,
+  "unaccounted": 0
  },
  "verification-failures": [],
- "unaccounted-paths": [
-  {
-   "path": "ap.assessment-plan.tasks[].associated-activities[].activity-uuid",
-   "count": 1,
-   "pointers": [
-    "ap#/assessment-plan/tasks/0/associated-activities/0/activity-uuid"
-   ]
-  },
-  {
-   "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].satisfied[].responsibility-uuid",
-   "count": 1,
-   "pointers": [
-    "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/satisfied/0/responsibility-uuid"
-   ]
-  },
-  {
-   "path": "poam.plan-of-action-and-milestones.poam-items[].related-risks[].risk-uuid",
-   "count": 1,
-   "pointers": [
-    "poam#/plan-of-action-and-milestones/poam-items/0/related-risks/0/risk-uuid"
-   ]
-  }
- ],
+ "unaccounted-paths": [],
  "entries": [
   {
    "source": "ssp#/system-security-plan/uuid",
@@ -3125,7 +3103,8 @@
   {
    "source": "ap#/assessment-plan/tasks/0/associated-activities/0/activity-uuid",
    "path": "ap.assessment-plan.tasks[].associated-activities[].activity-uuid",
-   "outcome": "unaccounted"
+   "reason": "a defect of the source: a task names an activity its document does not define; no edge can be derived from it and none is invented",
+   "outcome": "intentionally-dropped"
   },
   {
    "source": "ap#/assessment-plan/tasks/0/associated-activities/0/subjects/0/type",
@@ -5406,7 +5385,8 @@
   {
    "source": "poam#/plan-of-action-and-milestones/poam-items/0/related-risks/0/risk-uuid",
    "path": "poam.plan-of-action-and-milestones.poam-items[].related-risks[].risk-uuid",
-   "outcome": "unaccounted"
+   "reason": "a defect of the source: a POA&M item names a risk the POA&M does not define; no edge can be derived from it and none is invented",
+   "outcome": "intentionally-dropped"
   },
   {
    "source": "poam#/plan-of-action-and-milestones/poam-items/1/uuid",
@@ -7538,7 +7518,8 @@
   {
    "source": "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/satisfied/0/responsibility-uuid",
    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].satisfied[].responsibility-uuid",
-   "outcome": "unaccounted"
+   "reason": "a defect of the source: a satisfied entry names a responsibility the leveraged plan does not define (the uuid is an exported capability's); no edge can be derived from it and none is invented",
+   "outcome": "intentionally-dropped"
   },
   {
    "source": "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/satisfied/0/description",

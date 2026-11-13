@@ -198,14 +198,16 @@ def component_facet(doc, comp, own_title=True):
 # example set. Each edge is now derived from the reference the source gives:
 # the uuid is looked up among the elements the script minted an id for, and
 # the rule fails unless the reference and the element's uuid are the same.
-# A reference that names nothing the document defines is declared and counted.
+# A reference that names nothing the document defines is declared as a defect
+# of the source (author's decision 2026-11-13) and counted for the report.
 COMPONENTS = {}     # component uuid -> (that uuid, the Component id minted for it, further inputs of the rule)
 PROVIDED = {}       # provided uuid of an exported capability -> (that uuid, "<component id>#<capability id>")
 RESPONSIBILITIES = {}   # responsibility uuid -> (that uuid, its provided-uuid reference)
 def dangling(ref, what):
-    """A reference that names nothing its source defines. Nothing is invented for it and
-    nothing is declared for it: it is counted for the report and stays unaccounted in the ledger."""
+    """A reference that names nothing its source defines. Nothing is invented for it: no edge
+    is derived. It is declared in the ledger with that reason and counted for the report."""
     source_gaps[what] += 1
+    led.drop_value(ref, f"a defect of the source: {what}; no edge can be derived from it and none is invented")
     return None
 def component_ref(ref):
     """-> the Component minted for the component a reference names."""
@@ -975,8 +977,16 @@ bundle.add("objects/finding/goodread-risk-1.json",
 for holder, roles in ROLE_LISTS:
     if roles: holder["responsible-roles"] = roles
 for gap, n in sorted(source_gaps.items()):
-    note(f"**Dangling reference x{n}** (source finding): {gap}. Nothing is invented for it and no drop is declared: "
-         f"the reference stays unaccounted in the ledger until it is decided.")
+    note(f"**Dangling reference x{n}** (source finding): {gap}. Nothing is invented for it; the ledger declares the "
+         f"reference as a defect of the source.")
+# What the ledger cannot see: it follows source values into the bundle, not the
+# other way. These three values are written by this script with nothing in the
+# source behind them (the SSP defines no such role). Left as they are and said
+# here (author's decision 2026-11-13).
+note(f"**Values without a source x3**: `authority-ref` of the two authorizations and the Attestation's `signer` are "
+     f"written as `{NS}/party/authorizing-official` and `{NS}/party/csp-authorizing-official`. No source value "
+     f"stands behind them: none of the plans defines an authorizing official. The conversion ledger traces source "
+     f"values into the bundle and does not list values the converter writes on its own.")
 for gap, n in sorted(party_gaps.items()):
     note(f"**Parties the source {gap} x{n}** (source finding): a role assignment names a party by uuid, and the "
          f"document {'has no such party' if gap == 'does not define' else 'gives that party no name'} - the leveraged "
