@@ -42,6 +42,9 @@
    },
    "customer-responsibilities": {
     "type": "array"
+   },
+   "remarks": {
+    "type": "object"
    }
   },
   "additionalProperties": false

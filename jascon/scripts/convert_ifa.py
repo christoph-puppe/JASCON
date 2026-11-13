@@ -136,14 +136,45 @@ V_SSP = SSP["metadata"]["version"]
 sc = SSP["system-characteristics"]
 COMP_SYS = f"{NS}/component/system1234"
 AUTH_ATO = "auth-ifa-ato"
-sys_users = [{"title": u.get("title"), "description": pua_scan(u.get("description")),
-              "privileges": [{"title": a.get("title"), "functions": a.get("functions-performed", [])}
-                             for a in u.get("authorized-privileges", []) or []]}
-             for u in SSP["system-implementation"].get("users", []) or []]
-sys_inv = [{"description": pua_scan(i.get("description")),
-            "props": props_by_name(i.get("props"), led),       # a repeated name keeps every value
-            "components": [c["component-uuid"] for c in i.get("implemented-components", []) or []]}
-           for i in SSP["system-implementation"].get("inventory-items", []) or []]
+def system_facet(doc):
+    """The system@1 facet of one system security plan: what its
+    system-characteristics say (ids, status, sensitivity, impact, boundary,
+    the narratives) and its users with their privileges. One function for the
+    main system, the leveraged and the leveraging one. Until 2026-11-13 only
+    the main system got all of this, while the path map said the other two
+    carried their FIPS-199 levels. A key is written only where the source has
+    the value, so nothing is filled in."""
+    sc, si, f = doc["system-characteristics"], doc["system-implementation"], {}
+    text = lambda v: T(pua_scan(v), "system")
+    def put(key, value, wrap=lambda v: v):
+        if value is not None: f[key] = wrap(value)
+    put("system-ids", sc.get("system-ids"))
+    put("description", sc.get("description"), text)
+    put("status", sc.get("status", {}).get("state"))
+    put("sensitivity", sc.get("security-sensitivity-level"))
+    put("date-authorized", sc.get("date-authorized"))
+    f["impact"] = {"information-types": sc.get("system-information", {}).get("information-types", []),
+                   "security-impact-level": sc.get("security-impact-level", {})}
+    put("boundary", sc.get("authorization-boundary", {}).get("description"), text)
+    put("network-architecture", sc.get("network-architecture", {}).get("description"), text)
+    put("data-flow", sc.get("data-flow", {}).get("description"), text)
+    put("remarks", sc.get("remarks"), text)
+    users = []
+    for u in si.get("users", []) or []:
+        user = {}
+        if u.get("title") is not None: user["title"] = u["title"]
+        if u.get("description") is not None: user["description"] = pua_scan(u["description"])
+        user["privileges"] = [{"title": a.get("title"), "functions": a.get("functions-performed", [])}
+                              for a in u.get("authorized-privileges", []) or []]
+        users.append(user)
+    if users: f["users"] = users
+    inventory = [{"description": pua_scan(i.get("description")),
+                  "props": props_by_name(i.get("props"), led),       # a repeated name keeps every value
+                  "components": [c["component-uuid"] for c in i.get("implemented-components", []) or []]}
+                 for i in si.get("inventory-items", []) or []]
+    if inventory: f["inventory-items"] = inventory
+    return f
+
 ssp_comp = SSP["system-implementation"]["components"][0]
 comp_sys = {"id": COMP_SYS, "version": V_SSP, "label": sc["system-name"], "lifecycle": "active",
             "title": ssp_comp.get("title", sc["system-name"]), "kind": kind_of(ssp_comp),
@@ -153,19 +184,7 @@ comp_sys = {"id": COMP_SYS, "version": V_SSP, "label": sc["system-name"], "lifec
                                 "scope-label": D("ATO scope label: date authorized and sensitivity level",
                                                  lambda d, l: f"ATO {d} ({l})",
                                                  sc.get("date-authorized", "?"), sc.get("security-sensitivity-level", "?"))}],
-            "facets": {F_SYS: {
-                "system-ids": sc.get("system-ids", []),
-                "description": T(pua_scan(sc.get("description", "")), "system"),
-                "status": sc.get("status", {}).get("state"),
-                "sensitivity": sc.get("security-sensitivity-level"),
-                "date-authorized": sc.get("date-authorized"),
-                "impact": {"information-types": sc.get("system-information", {}).get("information-types", []),
-                           "security-impact-level": sc.get("security-impact-level", {})},
-                "boundary": T(pua_scan(sc.get("authorization-boundary", {}).get("description", "")), "system"),
-                "network-architecture": T(pua_scan(sc.get("network-architecture", {}).get("description", "")), "system"),
-                "data-flow": T(pua_scan(sc.get("data-flow", {}).get("description", "")), "system"),
-                "users": sys_users,
-                "inventory-items": sys_inv}}}
+            "facets": {F_SYS: system_facet(SSP)}}
 
 # implemented-requirement ac-6.1 -> capability + Implementation
 ir = SSP["control-implementation"]["implemented-requirements"][0]
@@ -226,8 +245,7 @@ bundle.add("objects/component/csp-iaas.json",
                                                  lambda t, d: f"{t} ({d})",
                                                  la.get("title", "CSP IaaS leveraged authorization"),
                                                  la.get("date-authorized", "?"))}],
-            "facets": {F_SYS: {"customer-responsibilities": lev_resp,
-                               "description": T(pua_scan(LEV["system-characteristics"].get("description", "")), "system")}}})
+            "facets": {F_SYS: {**system_facet(LEV), "customer-responsibilities": lev_resp}}})
 app_comp = next(c for c in LEV["system-implementation"]["components"] if c["type"] != "this-system")
 bundle.add("objects/component/csp-application.json",
            {"id": COMP_APP, "version": V_LEV, "label": app_comp.get("title", "Application"),
@@ -251,7 +269,7 @@ bundle.add("objects/component/saas.json",
             "kind": kind_of(next(c for c in LVG["system-implementation"]["components"] if c["type"] == "this-system")),
             "members": [{"component-ref": COMP_IAAS, "context": "leveraged system"},
                         {"component-ref": COMP_APPL, "context": "internal appliance"}],
-            "facets": {F_SYS: {"description": T(pua_scan(LVG["system-characteristics"].get("description", "")), "system")}}})
+            "facets": {F_SYS: system_facet(LVG)}})
 lvg_ir = LVG["control-implementation"]["implemented-requirements"][0]
 lvg_sids = sorted({stmt_norm(st.get("statement-id"), lvg_ir["control-id"])
                    for st in lvg_ir.get("statements", []) or [] if st.get("statement-id")})
@@ -535,7 +553,8 @@ bundle.stub("goodread-system-stub.json", F_SYS.split("@")[0], [],
              "date-authorized": {"type": "string"}, "impact": {"type": "object"},
              "boundary": {"type": "object"}, "network-architecture": {"type": "object"},
              "data-flow": {"type": "object"}, "users": {"type": "array"},
-             "inventory-items": {"type": "array"}, "customer-responsibilities": {"type": "array"}})
+             "inventory-items": {"type": "array"}, "customer-responsibilities": {"type": "array"},
+             "remarks": {"type": "object"}})
 bundle.stub("goodread-observations-stub.json", F_OBS.split("@")[0], [], {"observations": {"type": "array"}})
 bundle.stub("goodread-risk-analysis-stub.json", F_RISKA.split("@")[0], [],
             {"risk-status": {"type": "string"}, "description": {"type": "object"},
@@ -615,7 +634,8 @@ RULES = [
  (r"^poam\.plan-of-action-and-milestones\.poam-items\[\]\.", "L1",
   "poam-item titles ride the Finding titles; related-risks/observations resolved by uuid"),
  (r"^(lev|lvg)\.system-security-plan\.system-characteristics\.", "L1",
-  "provider/consumer Components: system@1 facet (description, FIPS-199 carried)"),
+  "provider/consumer Components: system@1 facet, the same content as for the main system "
+  "(ids, status, sensitivity, FIPS-199 impact, boundary, remarks)"),
  (r"^(lev|lvg)\.system-security-plan\.system-implementation\.components\[\]\.", "L1",
   "Components (kind mapped: appliance->hardware, application->software)"),
  (r"^lvg\.system-security-plan\.system-implementation\.(users|leveraged-authorizations)\[\]\.", "L1",

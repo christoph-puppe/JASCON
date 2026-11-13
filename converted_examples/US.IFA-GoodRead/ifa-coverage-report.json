@@ -1265,145 +1265,145 @@
    "path": "lev.system-security-plan.system-characteristics.authorization-boundary.description",
    "count": 1,
    "level": "L1",
-   "destination": "provider/consumer Components: system@1 facet (description, FIPS-199 carried)"
+   "destination": "provider/consumer Components: system@1 facet, the same content as for the main system (ids, status, sensitivity, FIPS-199 impact, boundary, remarks)"
   },
   {
    "path": "lev.system-security-plan.system-characteristics.description",
    "count": 1,
    "level": "L1",
-   "destination": "provider/consumer Components: system@1 facet (description, FIPS-199 carried)"
+   "destination": "provider/consumer Components: system@1 facet, the same content as for the main system (ids, status, sensitivity, FIPS-199 impact, boundary, remarks)"
   },
   {
    "path": "lev.system-security-plan.system-characteristics.remarks",
    "count": 1,
    "level": "L1",
-   "destination": "provider/consumer Components: system@1 facet (description, FIPS-199 carried)"
+   "destination": "provider/consumer Components: system@1 facet, the same content as for the main system (ids, status, sensitivity, FIPS-199 impact, boundary, remarks)"
   },
   {
    "path": "lev.system-security-plan.system-characteristics.security-impact-level.security-objective-availability",
    "count": 1,
    "level": "L1",
-   "destination": "provider/consumer Components: system@1 facet (description, FIPS-199 carried)"
+   "destination": "provider/consumer Components: system@1 facet, the same content as for the main system (ids, status, sensitivity, FIPS-199 impact, boundary, remarks)"
   },
   {
    "path": "lev.system-security-plan.system-characteristics.security-impact-level.security-objective-confidentiality",
    "count": 1,
    "level": "L1",
-   "destination": "provider/consumer Components: system@1 facet (description, FIPS-199 carried)"
+   "destination": "provider/consumer Components: system@1 facet, the same content as for the main system (ids, status, sensitivity, FIPS-199 impact, boundary, remarks)"
   },
   {
    "path": "lev.system-security-plan.system-characteristics.security-impact-level.security-objective-integrity",
    "count": 1,
    "level": "L1",
-   "destination": "provider/consumer Components: system@1 facet (description, FIPS-199 carried)"
+   "destination": "provider/consumer Components: system@1 facet, the same content as for the main system (ids, status, sensitivity, FIPS-199 impact, boundary, remarks)"
   },
   {
    "path": "lev.system-security-plan.system-characteristics.security-sensitivity-level",
    "count": 1,
    "level": "L1",
-   "destination": "provider/consumer Components: system@1 facet (description, FIPS-199 carried)"
+   "destination": "provider/consumer Components: system@1 facet, the same content as for the main system (ids, status, sensitivity, FIPS-199 impact, boundary, remarks)"
   },
   {
    "path": "lev.system-security-plan.system-characteristics.status.state",
    "count": 1,
    "level": "L1",
-   "destination": "provider/consumer Components: system@1 facet (description, FIPS-199 carried)"
+   "destination": "provider/consumer Components: system@1 facet, the same content as for the main system (ids, status, sensitivity, FIPS-199 impact, boundary, remarks)"
   },
   {
    "path": "lev.system-security-plan.system-characteristics.system-ids[].id",
    "count": 1,
    "level": "L1",
-   "destination": "provider/consumer Components: system@1 facet (description, FIPS-199 carried)"
+   "destination": "provider/consumer Components: system@1 facet, the same content as for the main system (ids, status, sensitivity, FIPS-199 impact, boundary, remarks)"
   },
   {
    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].availability-impact.adjustment-justification",
    "count": 1,
    "level": "L1",
-   "destination": "provider/consumer Components: system@1 facet (description, FIPS-199 carried)"
+   "destination": "provider/consumer Components: system@1 facet, the same content as for the main system (ids, status, sensitivity, FIPS-199 impact, boundary, remarks)"
   },
   {
    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].availability-impact.base",
    "count": 1,
    "level": "L1",
-   "destination": "provider/consumer Components: system@1 facet (description, FIPS-199 carried)"
+   "destination": "provider/consumer Components: system@1 facet, the same content as for the main system (ids, status, sensitivity, FIPS-199 impact, boundary, remarks)"
   },
   {
    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].availability-impact.selected",
    "count": 1,
    "level": "L1",
-   "destination": "provider/consumer Components: system@1 facet (description, FIPS-199 carried)"
+   "destination": "provider/consumer Components: system@1 facet, the same content as for the main system (ids, status, sensitivity, FIPS-199 impact, boundary, remarks)"
   },
   {
    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].categorizations[].information-type-ids[]",
    "count": 1,
    "level": "L1",
-   "destination": "provider/consumer Components: system@1 facet (description, FIPS-199 carried)"
+   "destination": "provider/consumer Components: system@1 facet, the same content as for the main system (ids, status, sensitivity, FIPS-199 impact, boundary, remarks)"
   },
   {
    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].categorizations[].system",
    "count": 1,
    "level": "L1",
-   "destination": "provider/consumer Components: system@1 facet (description, FIPS-199 carried)"
+   "destination": "provider/consumer Components: system@1 facet, the same content as for the main system (ids, status, sensitivity, FIPS-199 impact, boundary, remarks)"
   },
   {
    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].confidentiality-impact.adjustment-justification",
    "count": 1,
    "level": "L1",
-   "destination": "provider/consumer Components: system@1 facet (description, FIPS-199 carried)"
+   "destination": "provider/consumer Components: system@1 facet, the same content as for the main system (ids, status, sensitivity, FIPS-199 impact, boundary, remarks)"
   },
   {
    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].confidentiality-impact.base",
    "count": 1,
    "level": "L1",
-   "destination": "provider/consumer Components: system@1 facet (description, FIPS-199 carried)"
+   "destination": "provider/consumer Components: system@1 facet, the same content as for the main system (ids, status, sensitivity, FIPS-199 impact, boundary, remarks)"
   },
   {
    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].confidentiality-impact.selected",
    "count": 1,
    "level": "L1",
-   "destination": "provider/consumer Components: system@1 facet (description, FIPS-199 carried)"
+   "destination": "provider/consumer Components: system@1 facet, the same content as for the main system (ids, status, sensitivity, FIPS-199 impact, boundary, remarks)"
   },
   {
    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].description",
    "count": 1,
    "level": "L1",
-   "destination": "provider/consumer Components: system@1 facet (description, FIPS-199 carried)"
+   "destination": "provider/consumer Components: system@1 facet, the same content as for the main system (ids, status, sensitivity, FIPS-199 impact, boundary, remarks)"
   },
   {
    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].integrity-impact.adjustment-justification",
    "count": 1,
    "level": "L1",
-   "destination": "provider/consumer Components: system@1 facet (description, FIPS-199 carried)"
+   "destination": "provider/consumer Components: system@1 facet, the same content as for the main system (ids, status, sensitivity, FIPS-199 impact, boundary, remarks)"
   },
   {
    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].integrity-impact.base",
    "count": 1,
    "level": "L1",
-   "destination": "provider/consumer Components: system@1 facet (description, FIPS-199 carried)"
+   "destination": "provider/consumer Components: system@1 facet, the same content as for the main system (ids, status, sensitivity, FIPS-199 impact, boundary, remarks)"
   },
   {
    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].integrity-impact.selected",
    "count": 1,
    "level": "L1",
-   "destination": "provider/consumer Components: system@1 facet (description, FIPS-199 carried)"
+   "destination": "provider/consumer Components: system@1 facet, the same content as for the main system (ids, status, sensitivity, FIPS-199 impact, boundary, remarks)"
   },
   {
    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].title",
    "count": 1,
    "level": "L1",
-   "destination": "provider/consumer Components: system@1 facet (description, FIPS-199 carried)"
+   "destination": "provider/consumer Components: system@1 facet, the same content as for the main system (ids, status, sensitivity, FIPS-199 impact, boundary, remarks)"
   },
   {
    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].uuid",
    "count": 1,
    "level": "L1",
-   "destination": "provider/consumer Components: system@1 facet (description, FIPS-199 carried)"
+   "destination": "provider/consumer Components: system@1 facet, the same content as for the main system (ids, status, sensitivity, FIPS-199 impact, boundary, remarks)"
   },
   {
    "path": "lev.system-security-plan.system-characteristics.system-name",
    "count": 1,
    "level": "L1",
-   "destination": "provider/consumer Components: system@1 facet (description, FIPS-199 carried)"
+   "destination": "provider/consumer Components: system@1 facet, the same content as for the main system (ids, status, sensitivity, FIPS-199 impact, boundary, remarks)"
   },
   {
    "path": "lev.system-security-plan.system-implementation.components[].description",
@@ -1715,145 +1715,145 @@
    "path": "lvg.system-security-plan.system-characteristics.authorization-boundary.description",
    "count": 1,
    "level": "L1",
-   "destination": "provider/consumer Components: system@1 facet (description, FIPS-199 carried)"
+   "destination": "provider/consumer Components: system@1 facet, the same content as for the main system (ids, status, sensitivity, FIPS-199 impact, boundary, remarks)"
   },
   {
    "path": "lvg.system-security-plan.system-characteristics.description",
    "count": 1,
    "level": "L1",
-   "destination": "provider/consumer Components: system@1 facet (description, FIPS-199 carried)"
+   "destination": "provider/consumer Components: system@1 facet, the same content as for the main system (ids, status, sensitivity, FIPS-199 impact, boundary, remarks)"
   },
   {
    "path": "lvg.system-security-plan.system-characteristics.remarks",
    "count": 1,
    "level": "L1",
-   "destination": "provider/consumer Components: system@1 facet (description, FIPS-199 carried)"
+   "destination": "provider/consumer Components: system@1 facet, the same content as for the main system (ids, status, sensitivity, FIPS-199 impact, boundary, remarks)"
   },
   {
    "path": "lvg.system-security-plan.system-characteristics.security-impact-level.security-objective-availability",
    "count": 1,
    "level": "L1",
-   "destination": "provider/consumer Components: system@1 facet (description, FIPS-199 carried)"
+   "destination": "provider/consumer Components: system@1 facet, the same content as for the main system (ids, status, sensitivity, FIPS-199 impact, boundary, remarks)"
   },
   {
    "path": "lvg.system-security-plan.system-characteristics.security-impact-level.security-objective-confidentiality",
    "count": 1,
    "level": "L1",
-   "destination": "provider/consumer Components: system@1 facet (description, FIPS-199 carried)"
+   "destination": "provider/consumer Components: system@1 facet, the same content as for the main system (ids, status, sensitivity, FIPS-199 impact, boundary, remarks)"
   },
   {
    "path": "lvg.system-security-plan.system-characteristics.security-impact-level.security-objective-integrity",
    "count": 1,
    "level": "L1",
-   "destination": "provider/consumer Components: system@1 facet (description, FIPS-199 carried)"
+   "destination": "provider/consumer Components: system@1 facet, the same content as for the main system (ids, status, sensitivity, FIPS-199 impact, boundary, remarks)"
   },
   {
    "path": "lvg.system-security-plan.system-characteristics.security-sensitivity-level",
    "count": 1,
    "level": "L1",
-   "destination": "provider/consumer Components: system@1 facet (description, FIPS-199 carried)"
+   "destination": "provider/consumer Components: system@1 facet, the same content as for the main system (ids, status, sensitivity, FIPS-199 impact, boundary, remarks)"
   },
   {
    "path": "lvg.system-security-plan.system-characteristics.status.state",
    "count": 1,
    "level": "L1",
-   "destination": "provider/consumer Components: system@1 facet (description, FIPS-199 carried)"
+   "destination": "provider/consumer Components: system@1 facet, the same content as for the main system (ids, status, sensitivity, FIPS-199 impact, boundary, remarks)"
   },
   {
    "path": "lvg.system-security-plan.system-characteristics.system-ids[].id",
    "count": 1,
    "level": "L1",
-   "destination": "provider/consumer Components: system@1 facet (description, FIPS-199 carried)"
+   "destination": "provider/consumer Components: system@1 facet, the same content as for the main system (ids, status, sensitivity, FIPS-199 impact, boundary, remarks)"
   },
   {
    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].availability-impact.adjustment-justification",
    "count": 1,
    "level": "L1",
-   "destination": "provider/consumer Components: system@1 facet (description, FIPS-199 carried)"
+   "destination": "provider/consumer Components: system@1 facet, the same content as for the main system (ids, status, sensitivity, FIPS-199 impact, boundary, remarks)"
   },
   {
    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].availability-impact.base",
    "count": 1,
    "level": "L1",
-   "destination": "provider/consumer Components: system@1 facet (description, FIPS-199 carried)"
+   "destination": "provider/consumer Components: system@1 facet, the same content as for the main system (ids, status, sensitivity, FIPS-199 impact, boundary, remarks)"
   },
   {
    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].availability-impact.selected",
    "count": 1,
    "level": "L1",
-   "destination": "provider/consumer Components: system@1 facet (description, FIPS-199 carried)"
+   "destination": "provider/consumer Components: system@1 facet, the same content as for the main system (ids, status, sensitivity, FIPS-199 impact, boundary, remarks)"
   },
   {
    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].categorizations[].information-type-ids[]",
    "count": 1,
    "level": "L1",
-   "destination": "provider/consumer Components: system@1 facet (description, FIPS-199 carried)"
+   "destination": "provider/consumer Components: system@1 facet, the same content as for the main system (ids, status, sensitivity, FIPS-199 impact, boundary, remarks)"
   },
   {
    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].categorizations[].system",
    "count": 1,
    "level": "L1",
-   "destination": "provider/consumer Components: system@1 facet (description, FIPS-199 carried)"
+   "destination": "provider/consumer Components: system@1 facet, the same content as for the main system (ids, status, sensitivity, FIPS-199 impact, boundary, remarks)"
   },
   {
    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].confidentiality-impact.adjustment-justification",
    "count": 1,
    "level": "L1",
-   "destination": "provider/consumer Components: system@1 facet (description, FIPS-199 carried)"
+   "destination": "provider/consumer Components: system@1 facet, the same content as for the main system (ids, status, sensitivity, FIPS-199 impact, boundary, remarks)"
   },
   {
    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].confidentiality-impact.base",
    "count": 1,
    "level": "L1",
-   "destination": "provider/consumer Components: system@1 facet (description, FIPS-199 carried)"
+   "destination": "provider/consumer Components: system@1 facet, the same content as for the main system (ids, status, sensitivity, FIPS-199 impact, boundary, remarks)"
   },
   {
    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].confidentiality-impact.selected",
    "count": 1,
    "level": "L1",
-   "destination": "provider/consumer Components: system@1 facet (description, FIPS-199 carried)"
+   "destination": "provider/consumer Components: system@1 facet, the same content as for the main system (ids, status, sensitivity, FIPS-199 impact, boundary, remarks)"
   },
   {
    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].description",
    "count": 1,
    "level": "L1",
-   "destination": "provider/consumer Components: system@1 facet (description, FIPS-199 carried)"
+   "destination": "provider/consumer Components: system@1 facet, the same content as for the main system (ids, status, sensitivity, FIPS-199 impact, boundary, remarks)"
   },
   {
    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].integrity-impact.adjustment-justification",
    "count": 1,
    "level": "L1",
-   "destination": "provider/consumer Components: system@1 facet (description, FIPS-199 carried)"
+   "destination": "provider/consumer Components: system@1 facet, the same content as for the main system (ids, status, sensitivity, FIPS-199 impact, boundary, remarks)"
   },
   {
    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].integrity-impact.base",
    "count": 1,
    "level": "L1",
-   "destination": "provider/consumer Components: system@1 facet (description, FIPS-199 carried)"
+   "destination": "provider/consumer Components: system@1 facet, the same content as for the main system (ids, status, sensitivity, FIPS-199 impact, boundary, remarks)"
   },
   {
    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].integrity-impact.selected",
    "count": 1,
    "level": "L1",
-   "destination": "provider/consumer Components: system@1 facet (description, FIPS-199 carried)"
+   "destination": "provider/consumer Components: system@1 facet, the same content as for the main system (ids, status, sensitivity, FIPS-199 impact, boundary, remarks)"
   },
   {
    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].title",
    "count": 1,
    "level": "L1",
-   "destination": "provider/consumer Components: system@1 facet (description, FIPS-199 carried)"
+   "destination": "provider/consumer Components: system@1 facet, the same content as for the main system (ids, status, sensitivity, FIPS-199 impact, boundary, remarks)"
   },
   {
    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].uuid",
    "count": 1,
    "level": "L1",
-   "destination": "provider/consumer Components: system@1 facet (description, FIPS-199 carried)"
+   "destination": "provider/consumer Components: system@1 facet, the same content as for the main system (ids, status, sensitivity, FIPS-199 impact, boundary, remarks)"
   },
   {
    "path": "lvg.system-security-plan.system-characteristics.system-name",
    "count": 1,
    "level": "L1",
-   "destination": "provider/consumer Components: system@1 facet (description, FIPS-199 carried)"
+   "destination": "provider/consumer Components: system@1 facet, the same content as for the main system (ids, status, sensitivity, FIPS-199 impact, boundary, remarks)"
   },
   {
    "path": "lvg.system-security-plan.system-implementation.components[].description",
@@ -2848,7 +2848,7 @@
   "ac-2_prm_1"
  ],
  "lang-wraps": {
-  "system": 6,
+  "system": 10,
   "observation": 4,
   "ap": 7,
   "risk": 14
@@ -2865,15 +2865,15 @@
  "global-occurrence": {
   "measures": "global occurrence of equal typed values - an upper bound on what was carried, not a trace of each source occurrence",
   "leaf-values": 835,
-  "exact": 284,
+  "exact": 310,
   "key-only": 29,
-  "embedded": 80,
+  "embedded": 77,
   "absent": {
-   "identity": 194,
+   "identity": 190,
    "document-metadata": 125,
-   "content": 123
+   "content": 104
   },
-  "absent-content-prose": 63,
+  "absent-content-prose": 51,
   "key-only-paths": [
    {
     "path": "ap.assessment-plan.local-definitions.activities[].props[].name",
@@ -3147,13 +3147,6 @@
     ]
    },
    {
-    "path": "lev.system-security-plan.metadata.roles[].title",
-    "count": 1,
-    "pointers": [
-     "lev#/system-security-plan/metadata/roles/0/title"
-    ]
-   },
-   {
     "path": "lev.system-security-plan.system-implementation.components[].props[].value",
     "count": 1,
     "pointers": [
@@ -3165,13 +3158,6 @@
     "count": 1,
     "pointers": [
      "lev#/system-security-plan/system-implementation/components/1/responsible-roles/0/role-id"
-    ]
-   },
-   {
-    "path": "lev.system-security-plan.system-implementation.users[].authorized-privileges[].title",
-    "count": 1,
-    "pointers": [
-     "lev#/system-security-plan/system-implementation/users/0/authorized-privileges/0/title"
     ]
    },
    {
@@ -3232,10 +3218,10 @@
     ]
    },
    {
-    "path": "lvg.system-security-plan.metadata.roles[].title",
+    "path": "lvg.system-security-plan.system-implementation.components[].props[].name",
     "count": 1,
     "pointers": [
-     "lvg#/system-security-plan/metadata/roles/0/title"
+     "lvg#/system-security-plan/system-implementation/components/2/props/1/name"
     ]
    },
    {
@@ -3257,13 +3243,6 @@
     "count": 1,
     "pointers": [
      "lvg#/system-security-plan/system-implementation/leveraged-authorizations/0/title"
-    ]
-   },
-   {
-    "path": "lvg.system-security-plan.system-implementation.users[].authorized-privileges[].title",
-    "count": 1,
-    "pointers": [
-     "lvg#/system-security-plan/system-implementation/users/0/authorized-privileges/0/title"
     ]
    },
    {
@@ -3609,62 +3588,6 @@
     ]
    },
    {
-    "path": "lev.system-security-plan.system-characteristics.authorization-boundary.description",
-    "count": 1,
-    "pointers": [
-     "lev#/system-security-plan/system-characteristics/authorization-boundary/description"
-    ]
-   },
-   {
-    "path": "lev.system-security-plan.system-characteristics.remarks",
-    "count": 1,
-    "pointers": [
-     "lev#/system-security-plan/system-characteristics/remarks"
-    ]
-   },
-   {
-    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].availability-impact.adjustment-justification",
-    "count": 1,
-    "pointers": [
-     "lev#/system-security-plan/system-characteristics/system-information/information-types/0/availability-impact/adjustment-justification"
-    ]
-   },
-   {
-    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].categorizations[].information-type-ids[]",
-    "count": 1,
-    "pointers": [
-     "lev#/system-security-plan/system-characteristics/system-information/information-types/0/categorizations/0/information-type-ids/0"
-    ]
-   },
-   {
-    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].confidentiality-impact.adjustment-justification",
-    "count": 1,
-    "pointers": [
-     "lev#/system-security-plan/system-characteristics/system-information/information-types/0/confidentiality-impact/adjustment-justification"
-    ]
-   },
-   {
-    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].description",
-    "count": 1,
-    "pointers": [
-     "lev#/system-security-plan/system-characteristics/system-information/information-types/0/description"
-    ]
-   },
-   {
-    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].integrity-impact.adjustment-justification",
-    "count": 1,
-    "pointers": [
-     "lev#/system-security-plan/system-characteristics/system-information/information-types/0/integrity-impact/adjustment-justification"
-    ]
-   },
-   {
-    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].title",
-    "count": 1,
-    "pointers": [
-     "lev#/system-security-plan/system-characteristics/system-information/information-types/0/title"
-    ]
-   },
-   {
     "path": "lev.system-security-plan.system-implementation.components[].description",
     "count": 2,
     "pointers": [
@@ -3691,13 +3614,6 @@
     "count": 1,
     "pointers": [
      "lev#/system-security-plan/system-implementation/components/0/type"
-    ]
-   },
-   {
-    "path": "lev.system-security-plan.system-implementation.users[].authorized-privileges[].functions-performed[]",
-    "count": 1,
-    "pointers": [
-     "lev#/system-security-plan/system-implementation/users/0/authorized-privileges/0/functions-performed/0"
     ]
    },
    {
@@ -3745,62 +3661,6 @@
     ]
    },
    {
-    "path": "lvg.system-security-plan.system-characteristics.authorization-boundary.description",
-    "count": 1,
-    "pointers": [
-     "lvg#/system-security-plan/system-characteristics/authorization-boundary/description"
-    ]
-   },
-   {
-    "path": "lvg.system-security-plan.system-characteristics.remarks",
-    "count": 1,
-    "pointers": [
-     "lvg#/system-security-plan/system-characteristics/remarks"
-    ]
-   },
-   {
-    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].availability-impact.adjustment-justification",
-    "count": 1,
-    "pointers": [
-     "lvg#/system-security-plan/system-characteristics/system-information/information-types/0/availability-impact/adjustment-justification"
-    ]
-   },
-   {
-    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].categorizations[].information-type-ids[]",
-    "count": 1,
-    "pointers": [
-     "lvg#/system-security-plan/system-characteristics/system-information/information-types/0/categorizations/0/information-type-ids/0"
-    ]
-   },
-   {
-    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].confidentiality-impact.adjustment-justification",
-    "count": 1,
-    "pointers": [
-     "lvg#/system-security-plan/system-characteristics/system-information/information-types/0/confidentiality-impact/adjustment-justification"
-    ]
-   },
-   {
-    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].description",
-    "count": 1,
-    "pointers": [
-     "lvg#/system-security-plan/system-characteristics/system-information/information-types/0/description"
-    ]
-   },
-   {
-    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].integrity-impact.adjustment-justification",
-    "count": 1,
-    "pointers": [
-     "lvg#/system-security-plan/system-characteristics/system-information/information-types/0/integrity-impact/adjustment-justification"
-    ]
-   },
-   {
-    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].title",
-    "count": 1,
-    "pointers": [
-     "lvg#/system-security-plan/system-characteristics/system-information/information-types/0/title"
-    ]
-   },
-   {
     "path": "lvg.system-security-plan.system-implementation.components[].description",
     "count": 4,
     "pointers": [
@@ -3812,13 +3672,12 @@
    },
    {
     "path": "lvg.system-security-plan.system-implementation.components[].props[].name",
-    "count": 8,
+    "count": 7,
     "pointers": [
      "lvg#/system-security-plan/system-implementation/components/1/props/0/name",
      "lvg#/system-security-plan/system-implementation/components/1/props/1/name",
      "lvg#/system-security-plan/system-implementation/components/1/props/2/name",
      "lvg#/system-security-plan/system-implementation/components/2/props/0/name",
-     "lvg#/system-security-plan/system-implementation/components/2/props/1/name",
      "lvg#/system-security-plan/system-implementation/components/3/props/0/name",
      "lvg#/system-security-plan/system-implementation/components/3/props/1/name",
      "lvg#/system-security-plan/system-implementation/components/3/props/2/name"
@@ -3858,13 +3717,6 @@
     "count": 1,
     "pointers": [
      "lvg#/system-security-plan/system-implementation/leveraged-authorizations/0/links/0/rel"
-    ]
-   },
-   {
-    "path": "lvg.system-security-plan.system-implementation.users[].authorized-privileges[].functions-performed[]",
-    "count": 1,
-    "pointers": [
-     "lvg#/system-security-plan/system-implementation/users/0/authorized-privileges/0/functions-performed/0"
     ]
    },
    {
@@ -3963,10 +3815,10 @@
   "file": "ifa-conversion-ledger.json",
   "leaf-values": 835,
   "totals": {
-   "copied": 262,
+   "copied": 310,
    "transformed": 33,
-   "intentionally-dropped": 295,
-   "unaccounted": 245
+   "intentionally-dropped": 293,
+   "unaccounted": 199
   },
   "verification-failures": 0
  }

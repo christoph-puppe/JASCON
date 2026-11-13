@@ -2,10 +2,10 @@
  "measures": "one entry per source leaf value: where it went, checked against the written files",
  "leaf-values": 835,
  "totals": {
-  "copied": 262,
+  "copied": 310,
   "transformed": 33,
-  "intentionally-dropped": 295,
-  "unaccounted": 245
+  "intentionally-dropped": 293,
+  "unaccounted": 199
  },
  "verification-failures": [],
  "unaccounted-paths": [
@@ -430,153 +430,6 @@
    ]
   },
   {
-   "path": "lev.system-security-plan.system-characteristics.authorization-boundary.description",
-   "count": 1,
-   "pointers": [
-    "lev#/system-security-plan/system-characteristics/authorization-boundary/description"
-   ]
-  },
-  {
-   "path": "lev.system-security-plan.system-characteristics.remarks",
-   "count": 1,
-   "pointers": [
-    "lev#/system-security-plan/system-characteristics/remarks"
-   ]
-  },
-  {
-   "path": "lev.system-security-plan.system-characteristics.security-impact-level.security-objective-availability",
-   "count": 1,
-   "pointers": [
-    "lev#/system-security-plan/system-characteristics/security-impact-level/security-objective-availability"
-   ]
-  },
-  {
-   "path": "lev.system-security-plan.system-characteristics.security-impact-level.security-objective-confidentiality",
-   "count": 1,
-   "pointers": [
-    "lev#/system-security-plan/system-characteristics/security-impact-level/security-objective-confidentiality"
-   ]
-  },
-  {
-   "path": "lev.system-security-plan.system-characteristics.security-impact-level.security-objective-integrity",
-   "count": 1,
-   "pointers": [
-    "lev#/system-security-plan/system-characteristics/security-impact-level/security-objective-integrity"
-   ]
-  },
-  {
-   "path": "lev.system-security-plan.system-characteristics.security-sensitivity-level",
-   "count": 1,
-   "pointers": [
-    "lev#/system-security-plan/system-characteristics/security-sensitivity-level"
-   ]
-  },
-  {
-   "path": "lev.system-security-plan.system-characteristics.status.state",
-   "count": 1,
-   "pointers": [
-    "lev#/system-security-plan/system-characteristics/status/state"
-   ]
-  },
-  {
-   "path": "lev.system-security-plan.system-characteristics.system-ids[].id",
-   "count": 1,
-   "pointers": [
-    "lev#/system-security-plan/system-characteristics/system-ids/0/id"
-   ]
-  },
-  {
-   "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].availability-impact.adjustment-justification",
-   "count": 1,
-   "pointers": [
-    "lev#/system-security-plan/system-characteristics/system-information/information-types/0/availability-impact/adjustment-justification"
-   ]
-  },
-  {
-   "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].availability-impact.base",
-   "count": 1,
-   "pointers": [
-    "lev#/system-security-plan/system-characteristics/system-information/information-types/0/availability-impact/base"
-   ]
-  },
-  {
-   "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].availability-impact.selected",
-   "count": 1,
-   "pointers": [
-    "lev#/system-security-plan/system-characteristics/system-information/information-types/0/availability-impact/selected"
-   ]
-  },
-  {
-   "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].categorizations[].information-type-ids[]",
-   "count": 1,
-   "pointers": [
-    "lev#/system-security-plan/system-characteristics/system-information/information-types/0/categorizations/0/information-type-ids/0"
-   ]
-  },
-  {
-   "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].categorizations[].system",
-   "count": 1,
-   "pointers": [
-    "lev#/system-security-plan/system-characteristics/system-information/information-types/0/categorizations/0/system"
-   ]
-  },
-  {
-   "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].confidentiality-impact.adjustment-justification",
-   "count": 1,
-   "pointers": [
-    "lev#/system-security-plan/system-characteristics/system-information/information-types/0/confidentiality-impact/adjustment-justification"
-   ]
-  },
-  {
-   "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].confidentiality-impact.base",
-   "count": 1,
-   "pointers": [
-    "lev#/system-security-plan/system-characteristics/system-information/information-types/0/confidentiality-impact/base"
-   ]
-  },
-  {
-   "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].confidentiality-impact.selected",
-   "count": 1,
-   "pointers": [
-    "lev#/system-security-plan/system-characteristics/system-information/information-types/0/confidentiality-impact/selected"
-   ]
-  },
-  {
-   "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].description",
-   "count": 1,
-   "pointers": [
-    "lev#/system-security-plan/system-characteristics/system-information/information-types/0/description"
-   ]
-  },
-  {
-   "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].integrity-impact.adjustment-justification",
-   "count": 1,
-   "pointers": [
-    "lev#/system-security-plan/system-characteristics/system-information/information-types/0/integrity-impact/adjustment-justification"
-   ]
-  },
-  {
-   "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].integrity-impact.base",
-   "count": 1,
-   "pointers": [
-    "lev#/system-security-plan/system-characteristics/system-information/information-types/0/integrity-impact/base"
-   ]
-  },
-  {
-   "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].integrity-impact.selected",
-   "count": 1,
-   "pointers": [
-    "lev#/system-security-plan/system-characteristics/system-information/information-types/0/integrity-impact/selected"
-   ]
-  },
-  {
-   "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].title",
-   "count": 1,
-   "pointers": [
-    "lev#/system-security-plan/system-characteristics/system-information/information-types/0/title"
-   ]
-  },
-  {
    "path": "lev.system-security-plan.system-implementation.components[].description",
    "count": 2,
    "pointers": [
@@ -625,20 +478,6 @@
    "count": 1,
    "pointers": [
     "lev#/system-security-plan/system-implementation/components/0/title"
-   ]
-  },
-  {
-   "path": "lev.system-security-plan.system-implementation.users[].authorized-privileges[].functions-performed[]",
-   "count": 1,
-   "pointers": [
-    "lev#/system-security-plan/system-implementation/users/0/authorized-privileges/0/functions-performed/0"
-   ]
-  },
-  {
-   "path": "lev.system-security-plan.system-implementation.users[].authorized-privileges[].title",
-   "count": 1,
-   "pointers": [
-    "lev#/system-security-plan/system-implementation/users/0/authorized-privileges/0/title"
    ]
   },
   {
@@ -745,153 +584,6 @@
    ]
   },
   {
-   "path": "lvg.system-security-plan.system-characteristics.authorization-boundary.description",
-   "count": 1,
-   "pointers": [
-    "lvg#/system-security-plan/system-characteristics/authorization-boundary/description"
-   ]
-  },
-  {
-   "path": "lvg.system-security-plan.system-characteristics.remarks",
-   "count": 1,
-   "pointers": [
-    "lvg#/system-security-plan/system-characteristics/remarks"
-   ]
-  },
-  {
-   "path": "lvg.system-security-plan.system-characteristics.security-impact-level.security-objective-availability",
-   "count": 1,
-   "pointers": [
-    "lvg#/system-security-plan/system-characteristics/security-impact-level/security-objective-availability"
-   ]
-  },
-  {
-   "path": "lvg.system-security-plan.system-characteristics.security-impact-level.security-objective-confidentiality",
-   "count": 1,
-   "pointers": [
-    "lvg#/system-security-plan/system-characteristics/security-impact-level/security-objective-confidentiality"
-   ]
-  },
-  {
-   "path": "lvg.system-security-plan.system-characteristics.security-impact-level.security-objective-integrity",
-   "count": 1,
-   "pointers": [
-    "lvg#/system-security-plan/system-characteristics/security-impact-level/security-objective-integrity"
-   ]
-  },
-  {
-   "path": "lvg.system-security-plan.system-characteristics.security-sensitivity-level",
-   "count": 1,
-   "pointers": [
-    "lvg#/system-security-plan/system-characteristics/security-sensitivity-level"
-   ]
-  },
-  {
-   "path": "lvg.system-security-plan.system-characteristics.status.state",
-   "count": 1,
-   "pointers": [
-    "lvg#/system-security-plan/system-characteristics/status/state"
-   ]
-  },
-  {
-   "path": "lvg.system-security-plan.system-characteristics.system-ids[].id",
-   "count": 1,
-   "pointers": [
-    "lvg#/system-security-plan/system-characteristics/system-ids/0/id"
-   ]
-  },
-  {
-   "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].availability-impact.adjustment-justification",
-   "count": 1,
-   "pointers": [
-    "lvg#/system-security-plan/system-characteristics/system-information/information-types/0/availability-impact/adjustment-justification"
-   ]
-  },
-  {
-   "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].availability-impact.base",
-   "count": 1,
-   "pointers": [
-    "lvg#/system-security-plan/system-characteristics/system-information/information-types/0/availability-impact/base"
-   ]
-  },
-  {
-   "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].availability-impact.selected",
-   "count": 1,
-   "pointers": [
-    "lvg#/system-security-plan/system-characteristics/system-information/information-types/0/availability-impact/selected"
-   ]
-  },
-  {
-   "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].categorizations[].information-type-ids[]",
-   "count": 1,
-   "pointers": [
-    "lvg#/system-security-plan/system-characteristics/system-information/information-types/0/categorizations/0/information-type-ids/0"
-   ]
-  },
-  {
-   "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].categorizations[].system",
-   "count": 1,
-   "pointers": [
-    "lvg#/system-security-plan/system-characteristics/system-information/information-types/0/categorizations/0/system"
-   ]
-  },
-  {
-   "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].confidentiality-impact.adjustment-justification",
-   "count": 1,
-   "pointers": [
-    "lvg#/system-security-plan/system-characteristics/system-information/information-types/0/confidentiality-impact/adjustment-justification"
-   ]
-  },
-  {
-   "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].confidentiality-impact.base",
-   "count": 1,
-   "pointers": [
-    "lvg#/system-security-plan/system-characteristics/system-information/information-types/0/confidentiality-impact/base"
-   ]
-  },
-  {
-   "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].confidentiality-impact.selected",
-   "count": 1,
-   "pointers": [
-    "lvg#/system-security-plan/system-characteristics/system-information/information-types/0/confidentiality-impact/selected"
-   ]
-  },
-  {
-   "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].description",
-   "count": 1,
-   "pointers": [
-    "lvg#/system-security-plan/system-characteristics/system-information/information-types/0/description"
-   ]
-  },
-  {
-   "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].integrity-impact.adjustment-justification",
-   "count": 1,
-   "pointers": [
-    "lvg#/system-security-plan/system-characteristics/system-information/information-types/0/integrity-impact/adjustment-justification"
-   ]
-  },
-  {
-   "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].integrity-impact.base",
-   "count": 1,
-   "pointers": [
-    "lvg#/system-security-plan/system-characteristics/system-information/information-types/0/integrity-impact/base"
-   ]
-  },
-  {
-   "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].integrity-impact.selected",
-   "count": 1,
-   "pointers": [
-    "lvg#/system-security-plan/system-characteristics/system-information/information-types/0/integrity-impact/selected"
-   ]
-  },
-  {
-   "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].title",
-   "count": 1,
-   "pointers": [
-    "lvg#/system-security-plan/system-characteristics/system-information/information-types/0/title"
-   ]
-  },
-  {
    "path": "lvg.system-security-plan.system-implementation.components[].description",
    "count": 4,
    "pointers": [
@@ -961,20 +653,6 @@
    "count": 1,
    "pointers": [
     "lvg#/system-security-plan/system-implementation/leveraged-authorizations/0/party-uuid"
-   ]
-  },
-  {
-   "path": "lvg.system-security-plan.system-implementation.users[].authorized-privileges[].functions-performed[]",
-   "count": 1,
-   "pointers": [
-    "lvg#/system-security-plan/system-implementation/users/0/authorized-privileges/0/functions-performed/0"
-   ]
-  },
-  {
-   "path": "lvg.system-security-plan.system-implementation.users[].authorized-privileges[].title",
-   "count": 1,
-   "pointers": [
-    "lvg#/system-security-plan/system-implementation/users/0/authorized-privileges/0/title"
    ]
   },
   {
@@ -5842,7 +5520,13 @@
   {
    "source": "lev#/system-security-plan/system-characteristics/system-ids/0/id",
    "path": "lev.system-security-plan.system-characteristics.system-ids[].id",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/csp-iaas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/system-ids/0/id"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lev#/system-security-plan/system-characteristics/system-name",
@@ -5869,108 +5553,233 @@
   {
    "source": "lev#/system-security-plan/system-characteristics/security-sensitivity-level",
    "path": "lev.system-security-plan.system-characteristics.security-sensitivity-level",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/csp-iaas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/sensitivity"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lev#/system-security-plan/system-characteristics/system-information/information-types/0/uuid",
    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].uuid",
-   "reason": "the uuid of a source element: JASCON objects get URIs minted from names and titles, the uuid itself is not carried (uuids that ARE carried or resolved have a destination above)",
-   "outcome": "intentionally-dropped"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/csp-iaas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/impact/information-types/0/uuid"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lev#/system-security-plan/system-characteristics/system-information/information-types/0/title",
    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].title",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/csp-iaas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/impact/information-types/0/title"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lev#/system-security-plan/system-characteristics/system-information/information-types/0/description",
    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].description",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/csp-iaas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/impact/information-types/0/description"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lev#/system-security-plan/system-characteristics/system-information/information-types/0/categorizations/0/system",
    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].categorizations[].system",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/csp-iaas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/impact/information-types/0/categorizations/0/system"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lev#/system-security-plan/system-characteristics/system-information/information-types/0/categorizations/0/information-type-ids/0",
    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].categorizations[].information-type-ids[]",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/csp-iaas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/impact/information-types/0/categorizations/0/information-type-ids/0"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lev#/system-security-plan/system-characteristics/system-information/information-types/0/confidentiality-impact/base",
    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].confidentiality-impact.base",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/csp-iaas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/impact/information-types/0/confidentiality-impact/base"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lev#/system-security-plan/system-characteristics/system-information/information-types/0/confidentiality-impact/selected",
    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].confidentiality-impact.selected",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/csp-iaas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/impact/information-types/0/confidentiality-impact/selected"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lev#/system-security-plan/system-characteristics/system-information/information-types/0/confidentiality-impact/adjustment-justification",
    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].confidentiality-impact.adjustment-justification",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/csp-iaas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/impact/information-types/0/confidentiality-impact/adjustment-justification"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lev#/system-security-plan/system-characteristics/system-information/information-types/0/integrity-impact/base",
    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].integrity-impact.base",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/csp-iaas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/impact/information-types/0/integrity-impact/base"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lev#/system-security-plan/system-characteristics/system-information/information-types/0/integrity-impact/selected",
    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].integrity-impact.selected",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/csp-iaas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/impact/information-types/0/integrity-impact/selected"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lev#/system-security-plan/system-characteristics/system-information/information-types/0/integrity-impact/adjustment-justification",
    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].integrity-impact.adjustment-justification",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/csp-iaas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/impact/information-types/0/integrity-impact/adjustment-justification"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lev#/system-security-plan/system-characteristics/system-information/information-types/0/availability-impact/base",
    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].availability-impact.base",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/csp-iaas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/impact/information-types/0/availability-impact/base"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lev#/system-security-plan/system-characteristics/system-information/information-types/0/availability-impact/selected",
    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].availability-impact.selected",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/csp-iaas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/impact/information-types/0/availability-impact/selected"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lev#/system-security-plan/system-characteristics/system-information/information-types/0/availability-impact/adjustment-justification",
    "path": "lev.system-security-plan.system-characteristics.system-information.information-types[].availability-impact.adjustment-justification",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/csp-iaas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/impact/information-types/0/availability-impact/adjustment-justification"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lev#/system-security-plan/system-characteristics/security-impact-level/security-objective-confidentiality",
    "path": "lev.system-security-plan.system-characteristics.security-impact-level.security-objective-confidentiality",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/csp-iaas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/impact/security-impact-level/security-objective-confidentiality"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lev#/system-security-plan/system-characteristics/security-impact-level/security-objective-integrity",
    "path": "lev.system-security-plan.system-characteristics.security-impact-level.security-objective-integrity",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/csp-iaas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/impact/security-impact-level/security-objective-integrity"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lev#/system-security-plan/system-characteristics/security-impact-level/security-objective-availability",
    "path": "lev.system-security-plan.system-characteristics.security-impact-level.security-objective-availability",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/csp-iaas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/impact/security-impact-level/security-objective-availability"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lev#/system-security-plan/system-characteristics/status/state",
    "path": "lev.system-security-plan.system-characteristics.status.state",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/csp-iaas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/status"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lev#/system-security-plan/system-characteristics/authorization-boundary/description",
    "path": "lev.system-security-plan.system-characteristics.authorization-boundary.description",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/csp-iaas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/boundary/en"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lev#/system-security-plan/system-characteristics/remarks",
    "path": "lev.system-security-plan.system-characteristics.remarks",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/csp-iaas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/remarks/en"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lev#/system-security-plan/system-implementation/users/0/uuid",
@@ -5986,12 +5795,24 @@
   {
    "source": "lev#/system-security-plan/system-implementation/users/0/authorized-privileges/0/title",
    "path": "lev.system-security-plan.system-implementation.users[].authorized-privileges[].title",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/csp-iaas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/users/0/privileges/0/title"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lev#/system-security-plan/system-implementation/users/0/authorized-privileges/0/functions-performed/0",
    "path": "lev.system-security-plan.system-implementation.users[].authorized-privileges[].functions-performed[]",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/csp-iaas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/users/0/privileges/0/functions/0"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lev#/system-security-plan/system-implementation/components/0/uuid",
@@ -6511,7 +6332,13 @@
   {
    "source": "lvg#/system-security-plan/system-characteristics/system-ids/0/id",
    "path": "lvg.system-security-plan.system-characteristics.system-ids[].id",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/saas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/system-ids/0/id"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lvg#/system-security-plan/system-characteristics/system-name",
@@ -6538,108 +6365,233 @@
   {
    "source": "lvg#/system-security-plan/system-characteristics/security-sensitivity-level",
    "path": "lvg.system-security-plan.system-characteristics.security-sensitivity-level",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/saas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/sensitivity"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lvg#/system-security-plan/system-characteristics/system-information/information-types/0/uuid",
    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].uuid",
-   "reason": "the uuid of a source element: JASCON objects get URIs minted from names and titles, the uuid itself is not carried (uuids that ARE carried or resolved have a destination above)",
-   "outcome": "intentionally-dropped"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/saas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/impact/information-types/0/uuid"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lvg#/system-security-plan/system-characteristics/system-information/information-types/0/title",
    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].title",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/saas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/impact/information-types/0/title"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lvg#/system-security-plan/system-characteristics/system-information/information-types/0/description",
    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].description",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/saas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/impact/information-types/0/description"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lvg#/system-security-plan/system-characteristics/system-information/information-types/0/categorizations/0/system",
    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].categorizations[].system",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/saas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/impact/information-types/0/categorizations/0/system"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lvg#/system-security-plan/system-characteristics/system-information/information-types/0/categorizations/0/information-type-ids/0",
    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].categorizations[].information-type-ids[]",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/saas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/impact/information-types/0/categorizations/0/information-type-ids/0"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lvg#/system-security-plan/system-characteristics/system-information/information-types/0/confidentiality-impact/base",
    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].confidentiality-impact.base",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/saas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/impact/information-types/0/confidentiality-impact/base"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lvg#/system-security-plan/system-characteristics/system-information/information-types/0/confidentiality-impact/selected",
    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].confidentiality-impact.selected",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/saas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/impact/information-types/0/confidentiality-impact/selected"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lvg#/system-security-plan/system-characteristics/system-information/information-types/0/confidentiality-impact/adjustment-justification",
    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].confidentiality-impact.adjustment-justification",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/saas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/impact/information-types/0/confidentiality-impact/adjustment-justification"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lvg#/system-security-plan/system-characteristics/system-information/information-types/0/integrity-impact/base",
    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].integrity-impact.base",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/saas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/impact/information-types/0/integrity-impact/base"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lvg#/system-security-plan/system-characteristics/system-information/information-types/0/integrity-impact/selected",
    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].integrity-impact.selected",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/saas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/impact/information-types/0/integrity-impact/selected"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lvg#/system-security-plan/system-characteristics/system-information/information-types/0/integrity-impact/adjustment-justification",
    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].integrity-impact.adjustment-justification",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/saas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/impact/information-types/0/integrity-impact/adjustment-justification"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lvg#/system-security-plan/system-characteristics/system-information/information-types/0/availability-impact/base",
    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].availability-impact.base",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/saas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/impact/information-types/0/availability-impact/base"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lvg#/system-security-plan/system-characteristics/system-information/information-types/0/availability-impact/selected",
    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].availability-impact.selected",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/saas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/impact/information-types/0/availability-impact/selected"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lvg#/system-security-plan/system-characteristics/system-information/information-types/0/availability-impact/adjustment-justification",
    "path": "lvg.system-security-plan.system-characteristics.system-information.information-types[].availability-impact.adjustment-justification",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/saas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/impact/information-types/0/availability-impact/adjustment-justification"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lvg#/system-security-plan/system-characteristics/security-impact-level/security-objective-confidentiality",
    "path": "lvg.system-security-plan.system-characteristics.security-impact-level.security-objective-confidentiality",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/saas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/impact/security-impact-level/security-objective-confidentiality"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lvg#/system-security-plan/system-characteristics/security-impact-level/security-objective-integrity",
    "path": "lvg.system-security-plan.system-characteristics.security-impact-level.security-objective-integrity",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/saas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/impact/security-impact-level/security-objective-integrity"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lvg#/system-security-plan/system-characteristics/security-impact-level/security-objective-availability",
    "path": "lvg.system-security-plan.system-characteristics.security-impact-level.security-objective-availability",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/saas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/impact/security-impact-level/security-objective-availability"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lvg#/system-security-plan/system-characteristics/status/state",
    "path": "lvg.system-security-plan.system-characteristics.status.state",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/saas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/status"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lvg#/system-security-plan/system-characteristics/authorization-boundary/description",
    "path": "lvg.system-security-plan.system-characteristics.authorization-boundary.description",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/saas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/boundary/en"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lvg#/system-security-plan/system-characteristics/remarks",
    "path": "lvg.system-security-plan.system-characteristics.remarks",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/saas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/remarks/en"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lvg#/system-security-plan/system-implementation/leveraged-authorizations/0/uuid",
@@ -6702,12 +6654,24 @@
   {
    "source": "lvg#/system-security-plan/system-implementation/users/0/authorized-privileges/0/title",
    "path": "lvg.system-security-plan.system-implementation.users[].authorized-privileges[].title",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/saas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/users/0/privileges/0/title"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lvg#/system-security-plan/system-implementation/users/0/authorized-privileges/0/functions-performed/0",
    "path": "lvg.system-security-plan.system-implementation.users[].authorized-privileges[].functions-performed[]",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/saas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/users/0/privileges/0/functions/0"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lvg#/system-security-plan/system-implementation/components/0/uuid",
