@@ -175,7 +175,10 @@
      "description": "This inventory item is an instance from the AWSomeCloud AWSome Compute Service (ACS) Service. It is a Linux server.",
      "props": {
       "asset-id": "instance-abcd1234",
-      "ipv4-address": "1.1.2.3",
+      "ipv4-address": [
+       "172.1.2.3",
+       "1.1.2.3"
+      ],
       "uri": "instance-abcd1234.acs.awsomecloud.systems",
       "asset-type": "appliance"
      },

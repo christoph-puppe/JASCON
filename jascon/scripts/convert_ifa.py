@@ -19,7 +19,7 @@ acceptance (`retain` is unreachable). Findings point at their Risk with
 bundle - an authorization package carries its baseline. Coverage target: 0.
 Depends on: convert_nist.py output (run first)."""
 import json, os, re, collections
-from oscal_conv_lib import make_T, slug, Bundle, inventory, coverage, report, semantic_digest, global_occurrence, Ledger
+from oscal_conv_lib import make_T, slug, Bundle, inventory, coverage, report, semantic_digest, global_occurrence, Ledger, props_by_name
 
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 SRCDIR = os.path.join(ROOT, "sources", "nist")
@@ -126,7 +126,7 @@ sys_users = [{"title": u.get("title"), "description": pua_scan(u.get("descriptio
                              for a in u.get("authorized-privileges", []) or []]}
              for u in SSP["system-implementation"].get("users", []) or []]
 sys_inv = [{"description": pua_scan(i.get("description")),
-            "props": {p["name"]: p["value"] for p in i.get("props", []) or []},
+            "props": props_by_name(i.get("props"), led),       # a repeated name keeps every value
             "components": [c["component-uuid"] for c in i.get("implemented-components", []) or []]}
            for i in SSP["system-implementation"].get("inventory-items", []) or []]
 ssp_comp = SSP["system-implementation"]["components"][0]
@@ -523,7 +523,7 @@ manifest = bundle.write({"source": "OSCAL IFA GoodRead example set (SSP 1.1.1, A
               "source-note": "FICTIONAL example content by NIST; converted as the gate-3 lifecycle corpus",
               "source-oscal-version": SSP["metadata"]["oscal-version"],
               "source-commit": "usnistgov/oscal-content@9402f031 (2026-07-14; the state fetched 2026-07-22)",
-              "converter": "convert_ifa.py v0.2 (CP-RISK-1 re-run: POA&M risks -> Risk objects)",
+              "converter": "convert_ifa.py v0.3 (a repeated prop name keeps every value; conversion ledger)",
               "carried-requirements": carried,
               "attestation-note": "content-manifest-digest = sha256 over the JSON array of "
                                   "{id, semantic-digest} subject entries (deterministic mini-manifest)"})

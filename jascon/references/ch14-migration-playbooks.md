@@ -85,7 +85,8 @@ and compared; and every entry is checked against the written files.
 > them never carried. The ledger of the same conversion (2026-11-13)
 > reads 232 copied, 26 transformed, 104 identifiers dropped by a declared
 > rule and **473 unaccounted**, and it found an address that the
-> converter overwrote because two props shared a name. An equal value
+> converter overwrote because two props shared a name (fixed the same
+> day: a repeated name keeps every value). An equal value
 > elsewhere proves nothing; follow the value.
 
 ## 14.2 Playbook: OSCAL 1.x catalogs and profiles

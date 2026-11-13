@@ -2,7 +2,7 @@
 title: 依据：哪些经过实测，哪些没有 | JASCON
 description: 一致性测试语料库、两个参考校验器、已转换的目录及其许可证、证据关口、尚未解决的局限以及同类格式。每个数字都标明为实测、已设计或未决。
 nav: evidence
-source: 5a87047e9a48
+source: b72ba9a0a5ba
 ---
 <section class="page-hero">
   <div class="wrap">
@@ -148,7 +148,7 @@ source: 5a87047e9a48
       </div>
       <div class="limit">
         <h3>路径覆盖不等于值到达 <span class="tier tier-open">未决，待办 41</span></h3>
-        <p>覆盖报告统计的是具有已声明目标位置的源路径。每个值是否到达，只在一个语料库（NIST 示例系统）上用台账逐值追踪过，该台账跟踪每个源值在转换器中的去向：835 个叶值中，258 个被携带（232 个原样复制，26 个经由具名规则转换），104 个标识符按设计舍弃，473 个去向不明：既没有目标位置，也没有说明原因。其余十个语料库尚未测量。</p>
+        <p>覆盖报告统计的是具有已声明目标位置的源路径。每个值是否到达，只在一个语料库（NIST 示例系统）上用台账逐值追踪过，该台账跟踪每个源值在转换器中的去向：{{ n.ledger_values }} 个叶值中，{{ n.ledger_carried }} 个被携带（{{ n.ledger_copied }} 个原样复制，{{ n.ledger_transformed }} 个经由具名规则转换），{{ n.ledger_dropped }} 个在说明原因后舍弃，{{ n.ledger_unaccounted }} 个去向不明：既没有目标位置，也没有说明原因。其余十个语料库尚未测量。</p>
       </div>
       <div class="limit">
         <h3>第一个 Risk 语料库停留在初始状态 <span class="tier tier-open">未决</span></h3>

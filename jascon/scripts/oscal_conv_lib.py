@@ -467,6 +467,28 @@ class Ledger:
                 "unaccounted-paths": [{"path": p, "count": len(w), "pointers": w} for p, w in sorted(unaccounted.items())],
                 "entries": entries}
 
+def props_by_name(props, ledger=None):
+    """OSCAL props [{name, value}, ...] -> {name: value}. A name that repeats
+    keeps EVERY value, as a list in source order - the rule parameter
+    bindings already follow (one value as it is, several as a list).
+
+    Until 2026-11-13 the IFA converter wrote `{p["name"]: p["value"] for p in
+    props}`. A dict keeps one value per key, so of two `ipv4-address` props of
+    one inventory item the first address was overwritten and the bundle
+    shipped without it. The conversion ledger found it: one value with no
+    destination. With a ledger, the repeated name is linked to the key that
+    stands for it."""
+    out = {}
+    for p in props or []:
+        name, value = p["name"], p["value"]
+        if name not in out:
+            out[name] = value; continue
+        if ledger is not None:
+            key = next(k for k in out if k == name)          # the key object the dict already holds
+            ledger.same(name, key, "a prop name that repeats is one key; its values are listed in source order")
+        out[name] = out[name] + [value] if isinstance(out[name], list) else [out[name], value]
+    return out
+
 def coverage(paths, rules):
     """rules: list of (regex, level, target). Returns (rows, unmapped)."""
     rows, unmapped = [], []

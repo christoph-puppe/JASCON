@@ -2781,6 +2781,19 @@ equal those of the main system, and only the main system's are carried.
    status and type. Many will be deliberate. None is declared, and the
    ledger does not guess.
 
+**The lost address, fixed (the same day, on the author's word).**
+`oscal_conv_lib.props_by_name`: a prop name that repeats keeps every
+value, as a list in source order, which is what parameter bindings
+already do with several values. Item 4 now carries `["172.1.2.3",
+"1.1.2.3"]`. Three files of the IFA bundle changed: the system Component,
+the Attestation whose subject it is, and the manifest. The Component
+keeps its id and its version (the SSP's `1.1.1`), as every re-run of
+this converter has; whoever pinned its earlier semantic digest holds a digest
+of the object with the address missing. The ledger reads 234 copied and
+471 unaccounted since. The website's sentence now takes the ledger's
+counts from the converter's report at build time, so the 471 can be
+decided path by path without touching a page or a translation.
+
 **Not done, on purpose.** Only one drop is declared, the one the report
 already stated. Declaring the rest "intentional" would have produced a
 small number and no knowledge.

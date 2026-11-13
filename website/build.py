@@ -283,6 +283,7 @@ def context(facts, site, T):
                                    if f["name"] == "check"), 0),
             "advice_vectors": next((f["vectors"] for f in facts["vectors"]["families"]
                                     if f["name"] == "advice"), 0),
+            **ledger_counts(),
         },
         "html": fragments(facts, T),
         "demo": demo_digests(),
@@ -291,6 +292,21 @@ def context(facts, site, T):
     }
     ctx["html"]["imprint"] = imprint(site, T["build"])
     return ctx
+
+
+IFA_REPORT = os.path.join("converted_examples", "US.IFA-GoodRead", "ifa-coverage-report.json")
+
+
+def ledger_counts():
+    """The conversion ledger of the one corpus that has one (backlog #41), read
+    from the report its converter wrote. The pages name these counts and never
+    type them, so the unaccounted values can be decided path by path without
+    touching a page or a translation."""
+    ledger = json.loads(read(os.path.join(REPO, IFA_REPORT)))["ledger"]
+    t = ledger["totals"]
+    return {"ledger_values": ledger["leaf-values"], "ledger_copied": t["copied"],
+            "ledger_transformed": t["transformed"], "ledger_carried": t["copied"] + t["transformed"],
+            "ledger_dropped": t["intentionally-dropped"], "ledger_unaccounted": t["unaccounted"]}
 
 
 DEMO_FILE = "req-ism-1234.json"

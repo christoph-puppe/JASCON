@@ -12,7 +12,7 @@ string and tested substring membership, so the six cases of issue 32 gave
 five false arrivals and one false absence. Standard library only."""
 import copy, json, os, sys, tempfile, unittest
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from oscal_conv_lib import global_occurrence, Ledger, slug
+from oscal_conv_lib import global_occurrence, Ledger, props_by_name, slug
 
 
 def measure(source, output):
@@ -203,6 +203,23 @@ class Issue33Ledger(unittest.TestCase):
         # names keeps the first key and the last value - one name and one value are lost
         self.assertEqual((e["src#/props/1/name"]["outcome"], e["src#/props/1/value"]["outcome"]), ("copied", "unaccounted"))
         self.assertEqual((e["src#/props/2/name"]["outcome"], e["src#/props/2/value"]["outcome"]), ("unaccounted", "copied"))
+
+    def test_a_repeated_prop_name_keeps_every_value(self):
+        # the fix for what the test above shows (the IFA inventory, item 4)
+        source = {"props": [{"name": "asset-type", "value": "appliance"}, {"name": "ipv4-address", "value": "172.1.2.3"},
+                            {"name": "ipv4-address", "value": "1.1.2.3"}, {"name": "ipv4-address", "value": "10.0.0.9"}]}
+        self.assertEqual(props_by_name(source["props"]),
+                         {"asset-type": "appliance", "ipv4-address": ["172.1.2.3", "1.1.2.3", "10.0.0.9"]})
+        self.assertEqual(props_by_name(None), {})
+        def convert(src, led):
+            return {"o/a.json": {"id": "https://ex.org/a", "props": props_by_name(src["props"], led)}}
+        r = self.run_ledger(source, convert)
+        self.assertEqual(r["totals"], {"copied": 8, "transformed": 0, "intentionally-dropped": 0, "unaccounted": 0})
+        e = {x["source"]: x for x in r["entries"]}
+        self.assertEqual(e["src#/props/1/value"]["destinations"], [{"object": "https://ex.org/a", "pointer": "/props/ipv4-address/0"}])
+        self.assertEqual(e["src#/props/3/value"]["destinations"], [{"object": "https://ex.org/a", "pointer": "/props/ipv4-address/2"}])
+        self.assertEqual(e["src#/props/2/name"]["destinations"], [{"object": "https://ex.org/a", "pointer": "/props/ipv4-address", "as": "key",
+                         "via": "a prop name that repeats is one key; its values are listed in source order"}])
 
     def test_a_drop_is_declared_with_its_reason_and_never_overrides_a_destination(self):
         source = {"uuid": "u-1", "items": [{"uuid": "u-2", "title": "kept"}, {"uuid": "u-3", "title": "lost"}]}

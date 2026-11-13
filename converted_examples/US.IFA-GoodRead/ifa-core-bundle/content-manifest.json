@@ -6,7 +6,7 @@
   "source-note": "FICTIONAL example content by NIST; converted as the gate-3 lifecycle corpus",
   "source-oscal-version": "1.1.3",
   "source-commit": "usnistgov/oscal-content@9402f031 (2026-07-14; the state fetched 2026-07-22)",
-  "converter": "convert_ifa.py v0.2 (CP-RISK-1 re-run: POA&M risks -> Risk objects)",
+  "converter": "convert_ifa.py v0.3 (a repeated prop name keeps every value; conversion ledger)",
   "carried-requirements": [
    "https://ns.nist.gov/sp800-53/req/AC-6.1",
    "https://ns.nist.gov/sp800-53/req/AC-2"
@@ -24,8 +24,8 @@
   {
    "id": "https://ifa.gov/goodread/attestation/ifa-ato",
    "version": "1.1.1",
-   "package-digest": "sha256:3cfe411191c52551b766ce9b1070de637d5ba7e9a5a41e19abf3d71f8a37bf71",
-   "semantic-digest": "sha256:e134eea346da385a90c139e110e6e4ac031c7a7da3c2def8230b633954e02a62",
+   "package-digest": "sha256:563c28cc6a976ea7769b0809876ad2d6dab766962ab95ca505a68fc40fe05f54",
+   "semantic-digest": "sha256:0b1734cf4da4302dd3806b3bdda766dbbd0bf3e4b96fa36681a6715122e32291",
    "path": "objects/attestation/ifa-ato.json"
   },
   {
@@ -66,8 +66,8 @@
   {
    "id": "https://ifa.gov/goodread/component/system1234",
    "version": "1.1.1",
-   "package-digest": "sha256:319141128570de26d487bf072ba1a5a49d62c9d0b07e2e0e0fd9aa0cb5574143",
-   "semantic-digest": "sha256:8185bd7ac90008db09f3ef8e862d82a0001b374259a0acc152ecc41119fb7cdf",
+   "package-digest": "sha256:10e812c37ad39ce48708cabea87371c3c300c57630a8744ce0fdfbf46bb7f24d",
+   "semantic-digest": "sha256:c9a2b540d0d0a6da0c727d190e25e4799942d358a97c34ab82fbb0a68bb2110e",
    "path": "objects/component/system1234.json"
   },
   {

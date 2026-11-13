@@ -2865,13 +2865,13 @@
  "global-occurrence": {
   "measures": "global occurrence of equal typed values - an upper bound on what was carried, not a trace of each source occurrence",
   "leaf-values": 835,
-  "exact": 283,
+  "exact": 284,
   "key-only": 29,
   "embedded": 80,
   "absent": {
    "identity": 194,
    "document-metadata": 125,
-   "content": 124
+   "content": 123
   },
   "absent-content-prose": 63,
   "key-only-paths": [
@@ -3951,13 +3951,6 @@
     ]
    },
    {
-    "path": "ssp.system-security-plan.system-implementation.inventory-items[].props[].value",
-    "count": 1,
-    "pointers": [
-     "ssp#/system-security-plan/system-implementation/inventory-items/4/props/1/value"
-    ]
-   },
-   {
     "path": "ssp.system-security-plan.system-implementation.users[].role-ids[]",
     "count": 1,
     "pointers": [
@@ -3970,10 +3963,10 @@
   "file": "ifa-conversion-ledger.json",
   "leaf-values": 835,
   "totals": {
-   "copied": 232,
+   "copied": 234,
    "transformed": 26,
    "intentionally-dropped": 104,
-   "unaccounted": 473
+   "unaccounted": 471
   },
   "verification-failures": 0
  }

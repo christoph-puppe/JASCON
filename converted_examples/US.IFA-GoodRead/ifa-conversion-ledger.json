@@ -2,10 +2,10 @@
  "measures": "one entry per source leaf value: where it went, checked against the written files",
  "leaf-values": 835,
  "totals": {
-  "copied": 232,
+  "copied": 234,
   "transformed": 26,
   "intentionally-dropped": 104,
-  "unaccounted": 473
+  "unaccounted": 471
  },
  "verification-failures": [],
  "unaccounted-paths": [
@@ -2237,20 +2237,6 @@
    ]
   },
   {
-   "path": "ssp.system-security-plan.system-implementation.inventory-items[].props[].name",
-   "count": 1,
-   "pointers": [
-    "ssp#/system-security-plan/system-implementation/inventory-items/4/props/2/name"
-   ]
-  },
-  {
-   "path": "ssp.system-security-plan.system-implementation.inventory-items[].props[].value",
-   "count": 1,
-   "pointers": [
-    "ssp#/system-security-plan/system-implementation/inventory-items/4/props/1/value"
-   ]
-  },
-  {
    "path": "ssp.system-security-plan.system-implementation.users[].role-ids[]",
    "count": 2,
    "pointers": [
@@ -3718,7 +3704,13 @@
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/4/props/1/value",
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].props[].value",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/4/props/ipv4-address/0"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/4/props/1/class",
@@ -3728,7 +3720,15 @@
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/4/props/2/name",
    "path": "ssp.system-security-plan.system-implementation.inventory-items[].props[].name",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/4/props/ipv4-address",
+     "as": "key",
+     "via": "a prop name that repeats is one key; its values are listed in source order"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/4/props/2/value",
@@ -3736,7 +3736,7 @@
    "destinations": [
     {
      "object": "https://ifa.gov/goodread/component/system1234",
-     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/4/props/ipv4-address"
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/inventory-items/4/props/ipv4-address/1"
     }
    ],
    "outcome": "copied"
