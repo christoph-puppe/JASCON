@@ -583,6 +583,12 @@ def response_treatment(rtype):
 # pre-fill for a record taken from it, and the day of `last-modified` the
 # latest day the record can have been written. The rule below is the same
 # rule in jascon-app/jascon-oscal.js; the test table is shared.
+# What it rests on: OSCAL 1.1.3 defines the role ids `creator` ("the person
+# or organization that created this content") and `prepared-by` ("... that
+# prepared this content") for a document's metadata (read 2026-11-13:
+# oscal_metadata_metaschema.xml at tag v1.1.3). Steps 2 to 4 are not
+# OSCAL's: they are this library's reading of a document that uses neither
+# role, and they give an answer only where exactly one candidate exists.
 _DAY = re.compile(r"[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])\Z")
 
 def document_author(metadata):
