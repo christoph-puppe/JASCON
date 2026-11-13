@@ -154,7 +154,9 @@ run was bound to), `observation` ○ inline *or* `observation-ref` ○
 {ref, digest}, `evidence-record` ○ {ref, digest}, `reason` ○ text. The
 observation is inline by default, so the Assessment's semantic digest
 covers what was observed. With rows, `result` is their aggregate
-(CHECK-10) · `tailoring-ref` ○ URI *(2.0.0)* — the Tailoring whose bound
+(CHECK-10). `parameters` names only parameters the Check reads; a
+`collector-id` names a collector the Check declares (CHECK-12,
+CHECK-13) · `tailoring-ref` ○ URI *(2.0.0)* — the Tailoring whose bound
 parameter values the run used; closure-required and typed (CHECK-12).
 
 **Finding:** `assessment-ref` ● · `requirement-ref` ● ·
@@ -247,7 +249,7 @@ facet `collector@1` (Appendix D), `{collectors: [{id ●, runtime ●
 inline so that the Check's digest covers the exact source, and declared
 `[]` because nothing in it changes what passing means. Credentials and
 target inventory never appear in a bundle. Evidence: the two Checks of
-the example bundle, `check-vectors.json` (188).
+the example bundle, `check-vectors.json` (199).
 
 ## A.10 Sub-object: Deviation
 
@@ -328,6 +330,11 @@ SHA-256 of its bytes, the same placement as signature envelopes. An
 `note`. The chain: an Attestation binds the Assessment's semantic
 digest; the row holds the observation and the record's digest; the
 record holds the digest of the same observation and of each raw output.
+A reference into the store is `evidence/sha256/<hex>` and nothing else;
+a reference with a URI scheme is a landmark that a validator notes and
+does not resolve. Row and record name the same collector, or both name
+none. A row carries an observation exactly when its record carries
+`observation-digest`: a run that observed nothing has neither.
 Redaction happens before hashing. A raw output that is gone is reported
 as withheld and is no failure (CHECK-15). Evidence: seven files in the
 example bundle.

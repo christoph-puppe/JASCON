@@ -160,7 +160,7 @@ details[open]>summary{margin-bottom:6px}
 /* ==INLINE core== */
 /* ==JSC-PURE-START== */
 
-const JSC_BUILD = "0.9.4";
+const JSC_BUILD = "0.9.5";
 const JSC_TOOL = "JASCON-App " + JSC_BUILD;
 /* The kernel this app writes, and the kernels it reads (KERNEL-2: a tool
    stops at a pin it does not implement and names both). */
@@ -2050,10 +2050,10 @@ const JSC_CHECK_RULES = {
   "CHECK-9": "a recorded outcome is the one check-verdict computes from the recorded observation - verdicts are recomputed, never taken on trust",
   "CHECK-10": "an assessment that carries check results has one row per check, and its result is their aggregate: any not-satisfied, else any inconclusive or none applicable, else satisfied",
   "CHECK-11": "no observation, no verdict: a row without one is inconclusive and says why",
-  "CHECK-12": "a run's parameter values are the ones the Tailoring it names binds - an implementer does not set its own pass mark",
-  "CHECK-13": "a result's collector-id names a collector of the check",
+  "CHECK-12": "a row names only parameters its check reads, and their values are the ones the Tailoring it names binds - an implementer does not set its own pass mark",
+  "CHECK-13": "a result's collector-id names a collector the check declares",
   "CHECK-14": "a Finding raised by a check is about the requirement - and the clause - that check discharges",
-  "CHECK-15": "evidence is content-addressed and stays inside the bundle's store: every digest in the chain verifies against the bytes, and a record describes the run it is attached to",
+  "CHECK-15": "evidence is content-addressed and stays inside the bundle's store, evidence/sha256/: every digest in the chain verifies against the bytes, and a record describes the run it is attached to - its check, its collector and its observation",
 };
 const JSC_SAT = "satisfied", JSC_NOT = "not-satisfied", JSC_INC = "inconclusive", JSC_NA = "not-applicable";
 const JSC_COLLECTOR_FACET = "https://ns.jascon.net/stdlib/facet/collector";
@@ -2439,6 +2439,8 @@ function jscCheckObjectErrors(oid, o, objs) {
 }
 
 /* ---------- CHECK-8..15: runs, Findings, evidence ---------- */
+/* -> the parameter names the check's assertions bind with {"param": ...} */
+const jscCheckReads = check => new Set([...check.criteria, ...(check["applies-when"] || [])].filter(a => jscIsPlainObject(a.expected)).map(a => a.expected.param));
 const JSC_UNBOUND = Symbol("unbound");   // "this Tailoring binds no value", distinct from every JSON value
 function jscTailoringBindings(check, tail, objs) {
   const out = new Map(), decls = jscCheckParamDecls(check, objs) || new Map();
@@ -2466,8 +2468,12 @@ async function jscEvidenceChain(oid, at, a, row, read) {
     const ref = dref.ref, want = dref.digest;
     if (/^[A-Za-z][A-Za-z0-9+.-]*:/.test(ref)) { notes.push(`${oid}: ${at}: ${what} ${ref} is a URI - not resolvable offline`); return null; }
     if (ref.startsWith("/") || ref.replace(/\\/g, "/").split("/").includes("..")) { bad(`${what} ref ${ref} leaves the bundle`); return null; }
+    /* the store has one layout: a file is named by the SHA-256 of its bytes. A
+       relative ref anywhere else is refused before it is read, so no tool that
+       walks the store can miss a blob another tool accepted. */
     const m = JSC_EVIDENCE_REF.exec(ref);
-    if (m && "sha256:" + m[1] !== want) { bad(`${what} ${ref} is stored under another digest than the recorded ${want}`); return null; }
+    if (!m) { bad(`${what} ref ${ref} is outside the store - a ref is evidence/sha256/<the 64 hex digits of its digest>`); return null; }
+    if ("sha256:" + m[1] !== want) { bad(`${what} ${ref} is stored under another digest than the recorded ${want}`); return null; }
     const text = read(ref);
     if (text === null || text === undefined) { notes.push(`${oid}: ${at}: ${what} ${ref} withheld - not in the bundle's store`); return null; }
     if (await jscRulesPackageDigest(text) !== want) {
@@ -2493,10 +2499,19 @@ async function jscEvidenceChain(oid, at, a, row, read) {
     if (shape.length) { bad(`evidence record: ${shape[0]}`); rec = null; }
     if (rec !== null) {
       if (rec["check-ref"] !== row["check-ref"] || rec["check-digest"] !== row["check-digest"]) bad("the evidence record is about another check, or another version of it");
-      if (row["collector-id"] && rec["collector-id"] && rec["collector-id"] !== row["collector-id"]) bad(`the evidence record names collector '${rec["collector-id"]}', the row '${row["collector-id"]}'`);
+      /* row and record are two statements about one run: what one says of the
+         collector and of the observation, the other says too. A field left out
+         on one side is a difference, never a reason to skip. */
+      const named = (v, what) => v ? `${what} '${v}'` : `no ${what}`;
+      const rc = rec["collector-id"], wc = row["collector-id"];
+      if ((rc || wc) && rc !== wc) bad(`the evidence record names ${named(rc, "collector")}, the row ${named(wc, "collector")}`);
       if (!a["subject-refs"].includes(rec["subject-ref"])) bad(`the evidence record's subject ${rec["subject-ref"]} is not a subject of the assessment`);
       const seen = row.observation !== undefined ? row.observation : obs;
-      if (rec["observation-digest"] && seen !== null && seen !== undefined && await jscRulesSemanticDigest(seen) !== rec["observation-digest"]) bad("the evidence record binds another observation than the row records");
+      const rowHas = row.observation !== undefined || row["observation-ref"] !== undefined, bound = rec["observation-digest"];
+      if (rowHas && !bound) bad("the row records an observation, the evidence record binds none (no observation-digest)");
+      else if (bound && !rowHas) bad("the evidence record binds an observation, the row records none");
+      else if (bound && (seen === null || seen === undefined)) notes.push(`${oid}: ${at}: the observation is not available here - the evidence record's binding to it is not verified`);
+      else if (bound && await jscRulesSemanticDigest(seen) !== bound) bad("the evidence record binds another observation than the row records");
       for (const out of rec.outputs) await load({ ref: "evidence/sha256/" + out.digest.replace(/^sha256:/, ""), digest: out.digest }, `output '${out.name}'`);
     }
   }
@@ -2546,10 +2561,16 @@ async function jscCheckErrors(objs, read) {
         if (!c) { notes.push(`${oid}: ${at}: check ${cref} is not in this bundle - verdict not recomputed`); continue; }
         if (c.type !== "check") { bad("CHECK-8", oid, `${at}: check-ref resolves to a ${c.type}, not a Check`); continue; }
         if (row["check-digest"] !== await jscRulesSemanticDigest(c.obj)) bad("CHECK-8", oid, `${at}: check-digest does not match ${cref} - the check changed after the run`);
+        /* a check without the collector facet declares no collector, so any
+           collector-id on its rows names code the check's digest does not cover */
         const cols = ((c.obj.facets || {})[JSC_COLLECTOR_FACET + "@1"] || {}).collectors;
-        if (row["collector-id"] && Array.isArray(cols) && !cols.some(x => x && x.id === row["collector-id"])) bad("CHECK-13", oid, `${at}: collector-id '${row["collector-id"]}' names no collector of ${cref}`);
+        const declared = Array.isArray(cols) ? cols.filter(x => x).map(x => x.id) : [];
+        if (row["collector-id"] && !declared.includes(row["collector-id"])) bad("CHECK-13", oid, `${at}: collector-id '${row["collector-id"]}' names no collector of ${cref}${declared.length ? "" : " - the check declares none"}`);
+        /* a name no assertion reads cannot be verified, with or without a
+           Tailoring - and the row is inside the digest an Attestation signs */
+        const have = row.parameters || {}, reads = jscCheckReads(c.obj);
+        for (const pn of Object.keys(have).filter(k => !reads.has(k)).sort()) bad("CHECK-12", oid, `${at}: the row records parameter '${pn}', which ${cref} does not read`);
         if (tail) {
-          const have = row.parameters || {};
           for (const [pn, want] of jscTailoringBindings(c.obj, tail, objs)) {
             const got = Object.prototype.hasOwnProperty.call(have, pn);
             if (want === JSC_UNBOUND && got) bad("CHECK-12", oid, `${at}: the run used ${pn}=${JSON.stringify(have[pn])}, but ${o["tailoring-ref"]} binds no value for it`);

@@ -1474,10 +1474,10 @@ CHECK_RULES = {
     "CHECK-9": "a recorded outcome is the one check-verdict computes from the recorded observation - verdicts are recomputed, never taken on trust",
     "CHECK-10": "an assessment that carries check results has one row per check, and its result is their aggregate: any not-satisfied, else any inconclusive or none applicable, else satisfied",
     "CHECK-11": "no observation, no verdict: a row without one is inconclusive and says why",
-    "CHECK-12": "a run's parameter values are the ones the Tailoring it names binds - an implementer does not set its own pass mark",
-    "CHECK-13": "a result's collector-id names a collector of the check",
+    "CHECK-12": "a row names only parameters its check reads, and their values are the ones the Tailoring it names binds - an implementer does not set its own pass mark",
+    "CHECK-13": "a result's collector-id names a collector the check declares",
     "CHECK-14": "a Finding raised by a check is about the requirement - and the clause - that check discharges",
-    "CHECK-15": "evidence is content-addressed and stays inside the bundle's store: every digest in the chain verifies against the bytes, and a record describes the run it is attached to",
+    "CHECK-15": "evidence is content-addressed and stays inside the bundle's store, evidence/sha256/: every digest in the chain verifies against the bytes, and a record describes the run it is attached to - its check, its collector and its observation",
 }
 
 # -- I-Regexp (RFC 9485) for matches / matches-not --
@@ -1943,6 +1943,11 @@ def check_object_errors(oid, o, objs):
 
 MISSING = object()       # "this Tailoring binds no value" - distinct from any JSON value
 
+def _check_reads(check):
+    """-> the parameter names the check's assertions bind with {"param": ...}"""
+    return {a["expected"]["param"] for a in check["criteria"] + (check.get("applies-when") or [])
+            if isinstance(a.get("expected"), dict)}
+
 def _tailoring_bindings(check, tail, objs):
     """-> {parameter: value or MISSING} that the Tailoring binds for the
     parameters this check reads."""
@@ -1959,6 +1964,9 @@ def _tailoring_bindings(check, tail, objs):
                 out[pn] = op["value"]
     return out
 
+def _named(v, what):
+    return f"{what} '{v}'" if v else f"no {what}"
+
 def _evidence_chain(oid, at, a, row, read):
     """CHECK-15: row -> evidence record -> raw outputs, and observation-ref.
     read(ref) -> bytes, or None when the store does not hold it.
@@ -1971,8 +1979,13 @@ def _evidence_chain(oid, at, a, row, read):
             notes.append(f"{oid}: {at}: {what} {ref} is a URI - not resolvable offline"); return None
         if ref.startswith("/") or ".." in ref.replace("\\", "/").split("/"):
             bad(f"{what} ref {ref} leaves the bundle"); return None
+        # the store has one layout: a file is named by the SHA-256 of its bytes.
+        # A relative ref anywhere else is refused before it is read, so no tool
+        # that walks the store can miss a blob another tool accepted.
         m = re.match(r"^evidence/sha256/([0-9a-f]{64})$", ref)
-        if m and "sha256:" + m.group(1) != want:
+        if not m:
+            bad(f"{what} ref {ref} is outside the store - a ref is evidence/sha256/<the 64 hex digits of its digest>"); return None
+        if "sha256:" + m.group(1) != want:
             bad(f"{what} {ref} is stored under another digest than the recorded {want}"); return None
         raw = read(ref)
         if raw is None:
@@ -2003,12 +2016,24 @@ def _evidence_chain(oid, at, a, row, read):
         if rec is not None:
             if rec["check-ref"] != row["check-ref"] or rec["check-digest"] != row["check-digest"]:
                 bad("the evidence record is about another check, or another version of it")
-            if row.get("collector-id") and rec.get("collector-id") and rec["collector-id"] != row["collector-id"]:
-                bad(f"the evidence record names collector '{rec['collector-id']}', the row '{row['collector-id']}'")
+            # row and record are two statements about one run: what one says of
+            # the collector and of the observation, the other says too. A field
+            # left out on one side is a difference, never a reason to skip.
+            rc, wc = rec.get("collector-id"), row.get("collector-id")
+            if (rc or wc) and rc != wc:
+                bad(f"the evidence record names {_named(rc, 'collector')}, the row {_named(wc, 'collector')}")
             if rec["subject-ref"] not in a["subject-refs"]:
                 bad(f"the evidence record's subject {rec['subject-ref']} is not a subject of the assessment")
             seen = row.get("observation") if row.get("observation") is not None else obs
-            if rec.get("observation-digest") and seen is not None and sdig(seen) != rec["observation-digest"]:
+            row_has = row.get("observation") is not None or row.get("observation-ref") is not None
+            bound = rec.get("observation-digest")
+            if row_has and not bound:
+                bad("the row records an observation, the evidence record binds none (no observation-digest)")
+            elif bound and not row_has:
+                bad("the evidence record binds an observation, the row records none")
+            elif bound and seen is None:
+                notes.append(f"{oid}: {at}: the observation is not available here - the evidence record's binding to it is not verified")
+            elif bound and sdig(seen) != bound:
                 bad("the evidence record binds another observation than the row records")
             for out in rec["outputs"]:
                 load({"ref": "evidence/sha256/" + out["digest"].split(":", 1)[1], "digest": out["digest"]},
@@ -2062,12 +2087,19 @@ def check_errors(objs, read=None):
                     bad("CHECK-8", oid, f"{at}: check-ref resolves to a {c[0]}, not a Check"); continue
                 if row["check-digest"] != sdig(c[1]):
                     bad("CHECK-8", oid, f"{at}: check-digest does not match {cref} - the check changed after the run")
+                # a check without the collector facet declares no collector, so
+                # any collector-id on its rows names code the check's digest does not cover
                 cols = ((c[1].get("facets") or {}).get(COLLECTOR_FACET + "@1") or {}).get("collectors")
-                if row.get("collector-id") and isinstance(cols, list) and \
-                        row["collector-id"] not in {x.get("id") for x in cols if isinstance(x, dict)}:
-                    bad("CHECK-13", oid, f"{at}: collector-id '{row['collector-id']}' names no collector of {cref}")
+                declared = {x.get("id") for x in cols if isinstance(x, dict)} if isinstance(cols, list) else set()
+                if row.get("collector-id") and row["collector-id"] not in declared:
+                    bad("CHECK-13", oid, f"{at}: collector-id '{row['collector-id']}' names no collector of {cref}"
+                                         f"{'' if declared else ' - the check declares none'}")
+                # a name no assertion reads cannot be verified, with or without a
+                # Tailoring - and the row is inside the digest an Attestation signs
+                have = row.get("parameters") or {}
+                for pn in sorted(set(have) - _check_reads(c[1])):
+                    bad("CHECK-12", oid, f"{at}: the row records parameter '{pn}', which {cref} does not read")
                 if tail is not None:
-                    have = row.get("parameters") or {}
                     for pn, want in _tailoring_bindings(c[1], tail, objs).items():
                         if want is MISSING and pn in have:
                             bad("CHECK-12", oid, f"{at}: the run used {pn}={have[pn]!r}, but {o['tailoring-ref']} binds no value for it")

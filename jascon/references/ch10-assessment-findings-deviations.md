@@ -314,7 +314,10 @@ Evidence lies beside the bundle, every file named by the SHA-256 of its
 bytes. The row points to an evidence record, the record carries the
 digest of the same observation and of each raw output, and an
 Attestation over the Assessment covers the row. Every link verifies
-offline. A raw output deleted under a retention rule is reported as
+offline. Row and record are two statements about one run and must
+agree: a record that binds an observation the row does not carry fails,
+and so does a row whose record binds none. Otherwise a failing
+observation could be dropped and the run reported as inconclusive. A raw output deleted under a retention rule is reported as
 withheld; the record stays verifiable.
 
 > **Don't** let the code decide. A script that exits 0 or 1 hides its

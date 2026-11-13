@@ -358,3 +358,18 @@ The author answered the open points of §11. Point by point:
 **Measured after the changes (2026-11-12):** `validate_core.py` ALL GREEN, 447 vectors in 16 families (`check: 188`), the five shipped bundles and the example folder; the app's test suite green with the same vectors. The PowerShell twin's last executed state is the one of 2026-11-11 (415 vectors, `check: 156`).
 
 **Not changed, and why it matters for the next step:** `collector@1` still carries the source of an `http-api` collector as free text. A tool that is to run such a collector needs a declared request format; that is a change to the facet, not to the kernel, and it is the first question of the runner (§9 phase 2).
+
+## 14. Outside reports of 2026-11-13, and what changed after them
+
+Four defects in the rules of §5 were reported from outside (issues 23 to 26 in the GitHub tracker of the repository) and reproduced on the reference validator. The table of §5 stands as it was proposed; the rules as they now read are in the specification (D24) and in Appendix B.
+
+| Rule | §5 said | The reference did | Now |
+|---|---|---|---|
+| CHECK-12 | each row's `parameters` equal what the Tailoring binds | compared only the parameters the Check reads; an extra name on the row passed | a row names only parameters its Check reads, with or without `tailoring-ref` |
+| CHECK-13 | `collector-id` names a collector of the Check | skipped the comparison when the Check had no `collector@1` | a Check without the facet declares no collector |
+| CHECK-15 | evidence refs stay in the store | accepted any relative path inside the bundle whose bytes matched the digest | a relative ref is `evidence/sha256/<hex>`; a ref with a URI scheme is a note |
+| CHECK-15 | a record names the row's collector and binds the row's observation | compared collector and `observation-digest` only when both sides carried them | row and record name the same collector or both none; a row carries an observation exactly when its record carries `observation-digest` |
+
+`conformance/check-vectors.json`: 188 → **199** (eleven bundle vectors; ten fail on the reference as it was, one is the legitimate run that observed nothing). The decisions and the lesson are in the register, "Amendments — the outside reports of 2026-11-13". A fifth report, on integers beyond 2^53, is not a Check defect but a missing number domain in the canonical form: backlog #67.
+
+For §9 phase 2 this settles what a runner writes: references in the store's one layout, a `collector-id` the Check declares, only the parameters the Check reads, and a record that binds the observation exactly when there is one.

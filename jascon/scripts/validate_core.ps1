@@ -2029,10 +2029,10 @@ $CHECK_RULES = @{
     'CHECK-9'  = 'a recorded outcome is the one check-verdict computes from the recorded observation - verdicts are recomputed, never taken on trust'
     'CHECK-10' = 'an assessment that carries check results has one row per check, and its result is their aggregate: any not-satisfied, else any inconclusive or none applicable, else satisfied'
     'CHECK-11' = 'no observation, no verdict: a row without one is inconclusive and says why'
-    'CHECK-12' = 'a run''s parameter values are the ones the Tailoring it names binds - an implementer does not set its own pass mark'
-    'CHECK-13' = 'a result''s collector-id names a collector of the check'
+    'CHECK-12' = 'a row names only parameters its check reads, and their values are the ones the Tailoring it names binds - an implementer does not set its own pass mark'
+    'CHECK-13' = 'a result''s collector-id names a collector the check declares'
     'CHECK-14' = 'a Finding raised by a check is about the requirement - and the clause - that check discharges'
-    'CHECK-15' = 'evidence is content-addressed and stays inside the bundle''s store: every digest in the chain verifies against the bytes, and a record describes the run it is attached to'
+    'CHECK-15' = 'evidence is content-addressed and stays inside the bundle''s store, evidence/sha256/: every digest in the chain verifies against the bytes, and a record describes the run it is attached to - its check, its collector and its observation'
 }
 
 # -- I-Regexp (RFC 9485) for matches / matches-not --
@@ -2743,6 +2743,15 @@ function Check-Object-Errors([string]$oid, $o, $objs) {
     }
     return ,$errList
 }
+function Ck-Reads($check) {
+    # -> the parameter names the check's assertions bind with {"param": ...}
+    $out = New-Object 'System.Collections.Generic.HashSet[string]'
+    foreach ($key in @('criteria', 'applies-when')) {
+        foreach ($a in @($check[$key])) {
+            if (($null -ne $a) -and (Is-Map $a['expected'])) { [void]$out.Add([string]$a['expected']['param']) } }
+    }
+    return ,$out
+}
 $CK_MISSING = New-Object object    # "this Tailoring binds no value" - distinct from any JSON value
 function Ck-TailoringBindings($check, $tail, $objs) {
     # -> ordered map parameter -> value or $CK_MISSING, for the parameters this check reads
@@ -2794,8 +2803,13 @@ function Ck-Load($ctx, $dref, [string]$what) {
         [void]$ctx.notes.Add("$pre$what $ref is a URI - not resolvable offline"); return $null }
     if ($ref.StartsWith('/') -or ($ref.Replace('\', '/').Split('/') -ccontains '..')) {
         Ck-Bad $ctx.E 'CHECK-15' $ctx.oid "$($ctx.at): $what ref $ref leaves the bundle"; return $null }
+    # the store has one layout: a file is named by the SHA-256 of its bytes. A
+    # relative ref anywhere else is refused before it is read, so no tool that
+    # walks the store can miss a blob another tool accepted.
     $m = [System.Text.RegularExpressions.Regex]::Match($ref, '^evidence/sha256/([0-9a-f]{64})$')
-    if ($m.Success -and -not (Ck-SEq ('sha256:' + $m.Groups[1].Value) $want)) {
+    if (-not $m.Success) {
+        Ck-Bad $ctx.E 'CHECK-15' $ctx.oid "$($ctx.at): $what ref $ref is outside the store - a ref is evidence/sha256/<the 64 hex digits of its digest>"; return $null }
+    if (-not (Ck-SEq ('sha256:' + $m.Groups[1].Value) $want)) {
         Ck-Bad $ctx.E 'CHECK-15' $ctx.oid "$($ctx.at): $what $ref is stored under another digest than the recorded $want"; return $null }
     $raw = Store-Read $ctx.store $ref
     if ($null -eq $raw) {
@@ -2804,6 +2818,7 @@ function Ck-Load($ctx, $dref, [string]$what) {
         Ck-Bad $ctx.E 'CHECK-15' $ctx.oid "$($ctx.at): $what $ref does not match its digest"; return $null }
     return ,$raw
 }
+function Ck-Named($v, [string]$what) { if (Ck-Truthy $v) { return "$what '$v'" }; return "no $what" }
 function Evidence-Chain([string]$oid, [string]$at, $a, $row, $store, $errList, $notes) {
     # CHECK-15: row -> evidence record -> raw outputs, and observation-ref.
     # -> the observation loaded from observation-ref, or $null
@@ -2830,14 +2845,26 @@ function Evidence-Chain([string]$oid, [string]$at, $a, $row, $store, $errList, $
         if ($null -ne $rec) {
             if (-not (Ck-SEq $rec['check-ref'] $row['check-ref']) -or -not (Ck-SEq $rec['check-digest'] $row['check-digest'])) {
                 Ck-Bad $errList 'CHECK-15' $oid "${at}: the evidence record is about another check, or another version of it" }
-            if ((Ck-Truthy $row['collector-id']) -and (Ck-Truthy $rec['collector-id']) -and -not (Ck-SEq $rec['collector-id'] $row['collector-id'])) {
-                Ck-Bad $errList 'CHECK-15' $oid "${at}: the evidence record names collector '$($rec['collector-id'])', the row '$($row['collector-id'])'" }
+            # row and record are two statements about one run: what one says of
+            # the collector and of the observation, the other says too. A field
+            # left out on one side is a difference, never a reason to skip.
+            $rc = $rec['collector-id']; $wc = $row['collector-id']
+            if (((Ck-Truthy $rc) -or (Ck-Truthy $wc)) -and -not (Ck-SEq $rc $wc)) {
+                Ck-Bad $errList 'CHECK-15' $oid "${at}: the evidence record names $(Ck-Named $rc 'collector'), the row $(Ck-Named $wc 'collector')" }
             $isSubject = $false
             foreach ($s in @($a['subject-refs'])) { if (Ck-SEq $s $rec['subject-ref']) { $isSubject = $true } }
             if (-not $isSubject) {
                 Ck-Bad $errList 'CHECK-15' $oid "${at}: the evidence record's subject $($rec['subject-ref']) is not a subject of the assessment" }
             $seen = $obs; if ($null -ne $row['observation']) { $seen = $row['observation'] }
-            if ((Ck-Truthy $rec['observation-digest']) -and $null -ne $seen -and -not (Ck-SEq (SDig $seen) $rec['observation-digest'])) {
+            $rowHas = ($null -ne $row['observation']) -or ($null -ne $row['observation-ref'])
+            $bound = Ck-Truthy $rec['observation-digest']
+            if ($rowHas -and -not $bound) {
+                Ck-Bad $errList 'CHECK-15' $oid "${at}: the row records an observation, the evidence record binds none (no observation-digest)"
+            } elseif ($bound -and -not $rowHas) {
+                Ck-Bad $errList 'CHECK-15' $oid "${at}: the evidence record binds an observation, the row records none"
+            } elseif ($bound -and $null -eq $seen) {
+                [void]$notes.Add("${oid}: ${at}: the observation is not available here - the evidence record's binding to it is not verified")
+            } elseif ($bound -and -not (Ck-SEq (SDig $seen) $rec['observation-digest'])) {
                 Ck-Bad $errList 'CHECK-15' $oid "${at}: the evidence record binds another observation than the row records" }
             foreach ($out in $rec['outputs']) {
                 $dg = [string]$out['digest']
@@ -2908,13 +2935,26 @@ function Check-Errors($objs, $store) {
                     Ck-Bad $errList 'CHECK-8' $oid "${at}: check-digest does not match $cref - the check changed after the run" }
                 $cols = $null
                 if ((Is-Map $c.o['facets']) -and (Is-Map $c.o['facets']["$COLLECTOR_FACET@1"])) { $cols = $c.o['facets']["$COLLECTOR_FACET@1"]['collectors'] }
-                if ((Ck-Truthy $row['collector-id']) -and (Is-List $cols)) {
+                # a check without the collector facet declares no collector, so any
+                # collector-id on its rows names code the check's digest does not cover
+                $declared = New-Object System.Collections.ArrayList
+                if (Is-List $cols) { foreach ($x in $cols) { if (Is-Map $x) { [void]$declared.Add($x['id']) } } }
+                if (Ck-Truthy $row['collector-id']) {
                     $known = $false
-                    foreach ($x in $cols) { if ((Is-Map $x) -and (Ck-SEq $x['id'] $row['collector-id'])) { $known = $true } }
-                    if (-not $known) { Ck-Bad $errList 'CHECK-13' $oid "${at}: collector-id '$($row['collector-id'])' names no collector of $cref" }
+                    foreach ($x in $declared) { if (Ck-SEq $x $row['collector-id']) { $known = $true } }
+                    if (-not $known) {
+                        $none = ''; if ($declared.Count -eq 0) { $none = ' - the check declares none' }
+                        Ck-Bad $errList 'CHECK-13' $oid "${at}: collector-id '$($row['collector-id'])' names no collector of $cref$none" }
                 }
+                # a name no assertion reads cannot be verified, with or without a
+                # Tailoring - and the row is inside the digest an Attestation signs
+                $have = $row['parameters']; if (-not (Is-Map $have)) { $have = (New-OMap) }
+                $reads = Ck-Reads $c.o
+                $extra = New-Object 'System.Collections.Generic.List[string]'
+                foreach ($k in @($have.Keys)) { if (-not $reads.Contains([string]$k)) { $extra.Add([string]$k) } }
+                $extra.Sort([System.StringComparer]::Ordinal)
+                foreach ($pn in $extra) { Ck-Bad $errList 'CHECK-12' $oid "${at}: the row records parameter '$pn', which $cref does not read" }
                 if ($null -ne $tail) {
-                    $have = $row['parameters']; if (-not (Is-Map $have)) { $have = (New-OMap) }
                     $bind = Ck-TailoringBindings $c.o $tail $objs
                     foreach ($pn in @($bind.Keys)) {
                         $want = $bind[[string]$pn]

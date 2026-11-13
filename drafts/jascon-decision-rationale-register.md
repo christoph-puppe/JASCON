@@ -2418,3 +2418,92 @@ objects and digests are unchanged.
 **Lesson, for §14.5.** A finding about a source is tested against the
 source's own notation before it goes to the authors' queue. This one was
 not, for four months.
+
+# Amendments — the outside reports of 2026-11-13: four gaps in the run rules
+
+On 2026-11-13 eight issues arrived in the GitHub tracker of the
+repository from one outside reporter, written against commit `9e84c2ca`:
+five defects (issues 23 to 27) and three requests (28 to 30). GitHub's
+numbers are not the numbers of the backlog. This section records the four
+defects in CHECK-12, CHECK-13 and CHECK-15. The fifth, the number domain,
+is backlog #67 and has its own entry when it closes.
+
+## What was reported, and what the reproduction showed
+
+All four were reproduced on the reference validator before anything was
+answered, each on the conformance vector "CHECK-15 satisfied: row ->
+record -> raw output, every digest verifies":
+
+| Issue | The reference accepted | The rule as written |
+|---|---|---|
+| 23 | an evidence record at `alternate/<hex>`, its digest intact | CHECK-15: evidence references stay in the store, `evidence/sha256/<hex>` |
+| 24 | `collector-id: "bash"` on a row whose Check has no `collector@1` | CHECK-13: the id names a collector of the Check |
+| 25 | `"unbound-extra": 999` among a row's `parameters` | CHECK-12: the row's parameters equal what the Tailoring binds |
+| 26 | a record without `observation-digest` on a row with an observation | CHECK-15: the record binds the row's observation |
+
+None of them changes a recomputed verdict or lets a digest pass that
+does not verify. Each lets a run record claim something no rule holds it
+to, inside the digest an Attestation signs.
+
+## The author's decisions (2026-11-13)
+
+1. **Issue 23.** A relative reference is `evidence/sha256/<hex>` or it
+   fails. A reference with a URI scheme stays a note: it was in the code
+   and pinned by a vector, and the specification now says so.
+2. **Issue 24.** A Check without the facet declares no collector. A
+   runner that brings its own collector leaves `collector-id` out.
+3. **Issue 25, wider than asked.** A row names only parameters its Check
+   reads, with or without `tailoring-ref`. The report asked for the case
+   with a Tailoring. A name no assertion reads cannot be verified in
+   either case, and two tools would record one run with two digests.
+4. **Issue 26, in both directions.** A row with an observation needs a
+   record with its `observation-digest`; a row without one needs a record
+   without. The second direction was not reported and is the more serious:
+   a failing observation could be dropped and the run reported as
+   `inconclusive` while the record showed that something was observed.
+   `observation-digest` stays optional in the schema, because a run that
+   observed nothing has nothing to digest.
+5. **The collector, found while testing issue 24.** A record that names
+   a collector on a row that names none passed. Row and record now name
+   the same collector, or both none. Closed with issue 26.
+
+## What changed
+
+- `validate_core.py`, `jascon-rules.js` (app build 0.9.5, and the pack
+  builder's inlined copy), `validate_core.ps1`: the four rules and their
+  messages. The twin was ported without a runtime; a PowerShell runtime
+  could not be installed in the session that wrote it, so its run is the
+  workflow's on Windows PowerShell 5.1.
+- `check-vectors.json`: 188 → **199**, eleven bundle vectors (44 → 55).
+  Ten fail on the reference as it was. The eleventh is the legitimate
+  case: a run that observed nothing, with a record that binds nothing.
+- Specification: CHECK-12, CHECK-13, CHECK-15 and the evidence paragraph
+  of D24, amended in place with the date. Handbook: Chapter 10 §10.7,
+  Chapter 12 (the fourth and fifth sitting, with a "Don't"), Appendix A
+  (A.7, the evidence store), Appendix B (the rule table), Appendix D
+  (`collector@1`). `jascon-app/ERRATA.md` has the entry.
+
+## What it does not change
+
+No shape and no schema. No shipped object: the five bundles, the worked
+pack and the example folder pass as before, because none of their rows
+carries an unread parameter, an undeclared collector, a reference outside
+the store or a record that disagrees with its row (scanned before the
+change, validated after it).
+
+## Open after this section
+
+Backlog #67 (the number domain; blocks the tag by the author's word of
+2026-11-13). Issues 28 to 30 are requests and were answered in the
+tracker: history for the manual check and a read-only comparison of runs,
+a coverage view built from existing primitives, and the runner of
+CP-CHECK-1 §9 phase 2, which follows the fixes.
+
+## Lesson
+
+The three engines agreed and all three were wrong, because two are
+ports of the first. Agreement between ports measures the port. What
+found the gaps was a reader holding the code to the sentences of the
+rule table: "equal" means the key sets too, and "names a collector of
+the Check" has an answer when the Check has none. Every negative vector
+before this day changed a value; none removed a field or added a key.

@@ -1368,10 +1368,10 @@ never a parameter (CHECK-4).
 | CHECK-9 | A row's outcome equals `check-verdict` over its observation and parameters. |
 | CHECK-10 | One row per check; `Assessment.result` is the aggregate of the rows. |
 | CHECK-11 | A row without an observation is `inconclusive` and carries a `reason`. |
-| CHECK-12 | `tailoring-ref` resolves to a Tailoring, and each row's `parameters` equal what it binds: an implementer does not set its own pass mark. |
-| CHECK-13 | A row's `collector-id` names a collector of the Check. |
+| CHECK-12 | `tailoring-ref` resolves to a Tailoring. A row names only parameters its Check reads through `{"param": …}`, with or without a `tailoring-ref`; with one, their values equal what the Tailoring binds: an implementer does not set its own pass mark. *(rev. 2026-11-13: a name the Check does not read fails; before, it was ignored.)* |
+| CHECK-13 | A row's `collector-id` names a collector the Check declares. A Check without `collector@1` declares none. *(rev. 2026-11-13)* |
 | CHECK-14 | A Finding's in-bundle `check-ref` is a Check about the same requirement and a covered clause. |
-| CHECK-15 | Evidence references stay in the store beside the manifest and every digest verifies; a missing raw blob is reported as withheld and is no failure. |
+| CHECK-15 | Evidence references stay in the store beside the manifest: a relative reference is `evidence/sha256/<hex>`, with `<hex>` the digest it records, and every digest verifies. A reference with a URI scheme is a landmark, noted and not resolved. Row and record describe one run: they name the same check, digest and collector, the record's subject is a subject of the Assessment, and a row carries an observation exactly when its record carries an `observation-digest`, which is that observation's semantic digest. A missing blob is reported as withheld and is no failure. *(rev. 2026-11-13: the store layout, the collector and the observation binding are enforced in both directions.)* |
 
 **The run record is kernel *(author decision 2026-11-12)*.** The rows are
 a field of Assessment and not a facet under `method`. A declarative
@@ -1386,6 +1386,9 @@ Attestation over the Assessment binds what was observed.
 none listed in the manifest. An evidence record (`$defs/evidenceRecord`)
 names check, digest, collector, subject, times and exit status, and
 carries the digest of the same observation and of each raw output.
+A run that observed nothing has a record without `observation-digest`
+and a row without an observation; the field is optional in the schema
+for that case alone (CHECK-15).
 Redaction happens before hashing.
 
 **The kernel pin.** KERNEL-1 extends: a bundle that carries a Check, an
@@ -1930,6 +1933,7 @@ history. The compact line:
 | CP-ADVICE-1 | 2026-11-12 | The advice-pack proposal: manifest header, `statement-ids`, the `capability-ref` grammar, ADVICE-1 to ADVICE-11, 71 vectors, a worked pack, the PowerShell twin run on Windows (518 vectors, which also closed #60). ADVICE-7 found one defect in the converted IFA bundle | `drafts/CP-ADVICE-1.md` §13 |
 | Advice accepted · the decisions before the tag | 2026-11-12 | Twelve author decisions. Advice: bundle only; Components only; `statement-ids` kept against D22; `product-version` added; ADVICE-3 and ADVICE-7 kept; a `describes` relation for third parties; one release per set. Before the tag: `Deviation.opened` and the `due` of an action typed (#47a, #52: the superset property ends for free-text dates); history is left as it is (#50); a Tailoring names no Component (#51); Unicode categories follow the host (#59) | CP-ADVICE-1 §14 · "Amendments — CP-ADVICE-1 and the decisions before the tag" |
 | **2.0.0-rc.3** | 2026-11-12 | This text: D25 new; D3, D5, D6, D8, D13, D15, D22, D24 amended in place; gate state in IV.5b | this row |
+| Outside reports on the run rules | 2026-11-13 | Four reports from outside (issues 23 to 26 in the GitHub tracker), each reproduced: the reference accepted an evidence record outside `evidence/sha256/`, a `collector-id` on a Check without collectors, a row parameter its Check does not read, and a record that binds no observation. CHECK-12, CHECK-13 and CHECK-15 amended in place (D24); the three engines follow; `check` 188 → 199 vectors. After rc.3; the counts in the Status and in IV.5b and IV.7 are those of rc.3 | "Amendments — the outside reports of 2026-11-13" |
 
 ## IV.7 Release artifacts (what this candidate ships with)
 

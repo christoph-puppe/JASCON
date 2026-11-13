@@ -10090,6 +10090,2275 @@
     "evidence/sha256/393c95aad3f8f5b2e920fbba38870d5b63ce953104bf44fe5b96dd320ddcbf06": "{\n \"record-version\": \"1\",\n \"check-ref\": \"https://ex.org/check/ssh-1-maxauthtries\",\n \"check-digest\": \"sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435\",\n \"collector-id\": \"bash\",\n \"subject-ref\": \"https://ex.org/component/host-1\",\n \"started\": \"2026-11-11T08:59:58Z\",\n \"finished\": \"2026-11-11T09:00:00Z\",\n \"exit-status\": 0,\n \"observation-digest\": \"sha256:5f3420c588b7473d556377c58e60156f217c43679d8f2cb5c319d21c87849483\",\n \"outputs\": [\n  {\n   \"name\": \"stdout\",\n   \"digest\": \"sha256:8a4d9980a72c9267e5e6487141fdfa7c639b4381dd0a58d53ac033ad751d1c31\",\n   \"media-type\": \"text/plain\"\n  }\n ]\n}\n",
     "evidence/sha256/8a4d9980a72c9267e5e6487141fdfa7c639b4381dd0a58d53ac033ad751d1c31": "maxauthtries 4\nciphers aes256-gcm@openssh.com,aes256-ctr\n"
    }
+  },
+  {
+   "name": "CHECK-15: a record outside the store, although its digest verifies",
+   "objects": [
+    {
+     "id": "https://ex.org/req/ssh-1",
+     "version": "1",
+     "lifecycle": "active",
+     "title": {
+      "en": "SSH hardening"
+     },
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ex.org/party/ops"
+       ],
+       "prose": {
+        "en": "The SSH daemon allows at most {param:max-auth-tries} authentication attempts per connection."
+       },
+       "parameters": [
+        {
+         "name": "max-auth-tries",
+         "type": "integer",
+         "tightening": "lower",
+         "min": 1,
+         "max": 10
+        }
+       ]
+      },
+      {
+       "id": "s2",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ex.org/party/ops"
+       ],
+       "prose": {
+        "en": "The SSH daemon offers no cipher in CBC mode."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/set/linux",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ex.org/req/ssh-1",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/tailoring/strict",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ex.org/set/linux"
+      }
+     ],
+     "operations": [
+      {
+       "op": "set-parameter",
+       "requirement-ref": "https://ex.org/req/ssh-1",
+       "statement-id": "s1",
+       "parameter": "max-auth-tries",
+       "value": 4
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/tailoring/standard",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ex.org/set/linux"
+      }
+     ],
+     "operations": [
+      {
+       "op": "set-parameter",
+       "requirement-ref": "https://ex.org/req/ssh-1",
+       "statement-id": "s1",
+       "parameter": "max-auth-tries",
+       "value": 6
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/check/ssh-1-maxauthtries",
+     "version": "1",
+     "lifecycle": "active",
+     "requirement-ref": "https://ex.org/req/ssh-1",
+     "statement-ids": [
+      "s1"
+     ],
+     "platform": "https://ex.org/platform/linux-host",
+     "observes": [
+      {
+       "name": "sshd.maxauthtries",
+       "type": "integer"
+      }
+     ],
+     "criteria": [
+      {
+       "fact": "sshd.maxauthtries",
+       "op": "at-most",
+       "expected": {
+        "param": "max-auth-tries"
+       }
+      }
+     ],
+     "confidence": "reviewed",
+     "provenance": {
+      "author-ref": "https://ex.org/party/secops",
+      "date": "2026-11-11"
+     },
+     "facets": {
+      "https://ns.jascon.net/stdlib/facet/collector@1": {
+       "collectors": [
+        {
+         "id": "bash",
+         "runtime": "bash",
+         "privileges": "root",
+         "source": "#!/bin/bash\nv=$(sshd -T | awk '$1==\"maxauthtries\"{print $2}')\n[ -n \"$v\" ] && printf '{\"facts\":{\"sshd.maxauthtries\":%s}}\\n' \"$v\" || echo '{\"facts\":{}}'\n"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "id": "https://ex.org/check/ssh-1-ciphers",
+     "version": "1",
+     "lifecycle": "active",
+     "requirement-ref": "https://ex.org/req/ssh-1",
+     "statement-ids": [
+      "s2"
+     ],
+     "platform": "https://ex.org/platform/linux-host",
+     "observes": [
+      {
+       "name": "sshd.ciphers",
+       "type": "code",
+       "cardinality": "many"
+      }
+     ],
+     "criteria": [
+      {
+       "fact": "sshd.ciphers",
+       "op": "matches-not",
+       "expected": ".*-cbc"
+      }
+     ],
+     "confidence": "reviewed",
+     "provenance": {
+      "author-ref": "https://ex.org/party/secops",
+      "date": "2026-11-11"
+     }
+    },
+    {
+     "id": "https://ex.org/assessment/ok",
+     "version": "1",
+     "lifecycle": "active",
+     "subject-refs": [
+      "https://ex.org/component/host-1"
+     ],
+     "method": {
+      "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+       "method": "automated"
+      }
+     },
+     "performer-ref": "https://ex.org/party/runner",
+     "time": "2026-11-11T09:00:00Z",
+     "result": "satisfied",
+     "check-results": [
+      {
+       "check-ref": "https://ex.org/check/ssh-1-maxauthtries",
+       "check-digest": "sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435",
+       "outcome": "satisfied",
+       "time": "2026-11-11T09:00:00Z",
+       "collector-id": "bash",
+       "parameters": {
+        "max-auth-tries": 4
+       },
+       "observation": {
+        "facts": {
+         "sshd.maxauthtries": 4
+        }
+       },
+       "evidence-record": {
+        "ref": "alternate/393c95aad3f8f5b2e920fbba38870d5b63ce953104bf44fe5b96dd320ddcbf06",
+        "digest": "sha256:393c95aad3f8f5b2e920fbba38870d5b63ce953104bf44fe5b96dd320ddcbf06"
+       }
+      }
+     ],
+     "tailoring-ref": "https://ex.org/tailoring/strict"
+    }
+   ],
+   "expected-rules": [
+    "CHECK-15"
+   ],
+   "store": {
+    "evidence/sha256/8a4d9980a72c9267e5e6487141fdfa7c639b4381dd0a58d53ac033ad751d1c31": "maxauthtries 4\nciphers aes256-gcm@openssh.com,aes256-ctr\n",
+    "alternate/393c95aad3f8f5b2e920fbba38870d5b63ce953104bf44fe5b96dd320ddcbf06": "{\n \"record-version\": \"1\",\n \"check-ref\": \"https://ex.org/check/ssh-1-maxauthtries\",\n \"check-digest\": \"sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435\",\n \"collector-id\": \"bash\",\n \"subject-ref\": \"https://ex.org/component/host-1\",\n \"started\": \"2026-11-11T08:59:58Z\",\n \"finished\": \"2026-11-11T09:00:00Z\",\n \"exit-status\": 0,\n \"observation-digest\": \"sha256:5f3420c588b7473d556377c58e60156f217c43679d8f2cb5c319d21c87849483\",\n \"outputs\": [\n  {\n   \"name\": \"stdout\",\n   \"digest\": \"sha256:8a4d9980a72c9267e5e6487141fdfa7c639b4381dd0a58d53ac033ad751d1c31\",\n   \"media-type\": \"text/plain\"\n  }\n ]\n}\n"
+   }
+  },
+  {
+   "name": "CHECK-15: an observation by reference outside the store",
+   "objects": [
+    {
+     "id": "https://ex.org/req/ssh-1",
+     "version": "1",
+     "lifecycle": "active",
+     "title": {
+      "en": "SSH hardening"
+     },
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ex.org/party/ops"
+       ],
+       "prose": {
+        "en": "The SSH daemon allows at most {param:max-auth-tries} authentication attempts per connection."
+       },
+       "parameters": [
+        {
+         "name": "max-auth-tries",
+         "type": "integer",
+         "tightening": "lower",
+         "min": 1,
+         "max": 10
+        }
+       ]
+      },
+      {
+       "id": "s2",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ex.org/party/ops"
+       ],
+       "prose": {
+        "en": "The SSH daemon offers no cipher in CBC mode."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/set/linux",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ex.org/req/ssh-1",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/tailoring/strict",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ex.org/set/linux"
+      }
+     ],
+     "operations": [
+      {
+       "op": "set-parameter",
+       "requirement-ref": "https://ex.org/req/ssh-1",
+       "statement-id": "s1",
+       "parameter": "max-auth-tries",
+       "value": 4
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/tailoring/standard",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ex.org/set/linux"
+      }
+     ],
+     "operations": [
+      {
+       "op": "set-parameter",
+       "requirement-ref": "https://ex.org/req/ssh-1",
+       "statement-id": "s1",
+       "parameter": "max-auth-tries",
+       "value": 6
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/check/ssh-1-maxauthtries",
+     "version": "1",
+     "lifecycle": "active",
+     "requirement-ref": "https://ex.org/req/ssh-1",
+     "statement-ids": [
+      "s1"
+     ],
+     "platform": "https://ex.org/platform/linux-host",
+     "observes": [
+      {
+       "name": "sshd.maxauthtries",
+       "type": "integer"
+      }
+     ],
+     "criteria": [
+      {
+       "fact": "sshd.maxauthtries",
+       "op": "at-most",
+       "expected": {
+        "param": "max-auth-tries"
+       }
+      }
+     ],
+     "confidence": "reviewed",
+     "provenance": {
+      "author-ref": "https://ex.org/party/secops",
+      "date": "2026-11-11"
+     },
+     "facets": {
+      "https://ns.jascon.net/stdlib/facet/collector@1": {
+       "collectors": [
+        {
+         "id": "bash",
+         "runtime": "bash",
+         "privileges": "root",
+         "source": "#!/bin/bash\nv=$(sshd -T | awk '$1==\"maxauthtries\"{print $2}')\n[ -n \"$v\" ] && printf '{\"facts\":{\"sshd.maxauthtries\":%s}}\\n' \"$v\" || echo '{\"facts\":{}}'\n"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "id": "https://ex.org/check/ssh-1-ciphers",
+     "version": "1",
+     "lifecycle": "active",
+     "requirement-ref": "https://ex.org/req/ssh-1",
+     "statement-ids": [
+      "s2"
+     ],
+     "platform": "https://ex.org/platform/linux-host",
+     "observes": [
+      {
+       "name": "sshd.ciphers",
+       "type": "code",
+       "cardinality": "many"
+      }
+     ],
+     "criteria": [
+      {
+       "fact": "sshd.ciphers",
+       "op": "matches-not",
+       "expected": ".*-cbc"
+      }
+     ],
+     "confidence": "reviewed",
+     "provenance": {
+      "author-ref": "https://ex.org/party/secops",
+      "date": "2026-11-11"
+     }
+    },
+    {
+     "id": "https://ex.org/assessment/ok",
+     "version": "1",
+     "lifecycle": "active",
+     "subject-refs": [
+      "https://ex.org/component/host-1"
+     ],
+     "method": {
+      "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+       "method": "automated"
+      }
+     },
+     "performer-ref": "https://ex.org/party/runner",
+     "time": "2026-11-11T09:00:00Z",
+     "result": "satisfied",
+     "check-results": [
+      {
+       "check-ref": "https://ex.org/check/ssh-1-maxauthtries",
+       "check-digest": "sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435",
+       "outcome": "satisfied",
+       "time": "2026-11-11T09:00:00Z",
+       "collector-id": "bash",
+       "parameters": {
+        "max-auth-tries": 4
+       },
+       "evidence-record": {
+        "ref": "evidence/sha256/393c95aad3f8f5b2e920fbba38870d5b63ce953104bf44fe5b96dd320ddcbf06",
+        "digest": "sha256:393c95aad3f8f5b2e920fbba38870d5b63ce953104bf44fe5b96dd320ddcbf06"
+       },
+       "observation-ref": {
+        "ref": "observations/7f8c24ac3a5b85dab8973484dc16ebdc890250f431d8e591161f3a33621fe137",
+        "digest": "sha256:7f8c24ac3a5b85dab8973484dc16ebdc890250f431d8e591161f3a33621fe137"
+       }
+      }
+     ],
+     "tailoring-ref": "https://ex.org/tailoring/strict"
+    }
+   ],
+   "expected-rules": [
+    "CHECK-15"
+   ],
+   "store": {
+    "evidence/sha256/393c95aad3f8f5b2e920fbba38870d5b63ce953104bf44fe5b96dd320ddcbf06": "{\n \"record-version\": \"1\",\n \"check-ref\": \"https://ex.org/check/ssh-1-maxauthtries\",\n \"check-digest\": \"sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435\",\n \"collector-id\": \"bash\",\n \"subject-ref\": \"https://ex.org/component/host-1\",\n \"started\": \"2026-11-11T08:59:58Z\",\n \"finished\": \"2026-11-11T09:00:00Z\",\n \"exit-status\": 0,\n \"observation-digest\": \"sha256:5f3420c588b7473d556377c58e60156f217c43679d8f2cb5c319d21c87849483\",\n \"outputs\": [\n  {\n   \"name\": \"stdout\",\n   \"digest\": \"sha256:8a4d9980a72c9267e5e6487141fdfa7c639b4381dd0a58d53ac033ad751d1c31\",\n   \"media-type\": \"text/plain\"\n  }\n ]\n}\n",
+    "evidence/sha256/8a4d9980a72c9267e5e6487141fdfa7c639b4381dd0a58d53ac033ad751d1c31": "maxauthtries 4\nciphers aes256-gcm@openssh.com,aes256-ctr\n",
+    "observations/7f8c24ac3a5b85dab8973484dc16ebdc890250f431d8e591161f3a33621fe137": "{\n \"facts\": {\n  \"sshd.maxauthtries\": 4\n }\n}"
+   }
+  },
+  {
+   "name": "CHECK-13: a collector-id on a check that declares no collector",
+   "objects": [
+    {
+     "id": "https://ex.org/req/ssh-1",
+     "version": "1",
+     "lifecycle": "active",
+     "title": {
+      "en": "SSH hardening"
+     },
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ex.org/party/ops"
+       ],
+       "prose": {
+        "en": "The SSH daemon allows at most {param:max-auth-tries} authentication attempts per connection."
+       },
+       "parameters": [
+        {
+         "name": "max-auth-tries",
+         "type": "integer",
+         "tightening": "lower",
+         "min": 1,
+         "max": 10
+        }
+       ]
+      },
+      {
+       "id": "s2",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ex.org/party/ops"
+       ],
+       "prose": {
+        "en": "The SSH daemon offers no cipher in CBC mode."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/set/linux",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ex.org/req/ssh-1",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/tailoring/strict",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ex.org/set/linux"
+      }
+     ],
+     "operations": [
+      {
+       "op": "set-parameter",
+       "requirement-ref": "https://ex.org/req/ssh-1",
+       "statement-id": "s1",
+       "parameter": "max-auth-tries",
+       "value": 4
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/tailoring/standard",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ex.org/set/linux"
+      }
+     ],
+     "operations": [
+      {
+       "op": "set-parameter",
+       "requirement-ref": "https://ex.org/req/ssh-1",
+       "statement-id": "s1",
+       "parameter": "max-auth-tries",
+       "value": 6
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/check/ssh-1-maxauthtries",
+     "version": "1",
+     "lifecycle": "active",
+     "requirement-ref": "https://ex.org/req/ssh-1",
+     "statement-ids": [
+      "s1"
+     ],
+     "platform": "https://ex.org/platform/linux-host",
+     "observes": [
+      {
+       "name": "sshd.maxauthtries",
+       "type": "integer"
+      }
+     ],
+     "criteria": [
+      {
+       "fact": "sshd.maxauthtries",
+       "op": "at-most",
+       "expected": {
+        "param": "max-auth-tries"
+       }
+      }
+     ],
+     "confidence": "reviewed",
+     "provenance": {
+      "author-ref": "https://ex.org/party/secops",
+      "date": "2026-11-11"
+     }
+    },
+    {
+     "id": "https://ex.org/check/ssh-1-ciphers",
+     "version": "1",
+     "lifecycle": "active",
+     "requirement-ref": "https://ex.org/req/ssh-1",
+     "statement-ids": [
+      "s2"
+     ],
+     "platform": "https://ex.org/platform/linux-host",
+     "observes": [
+      {
+       "name": "sshd.ciphers",
+       "type": "code",
+       "cardinality": "many"
+      }
+     ],
+     "criteria": [
+      {
+       "fact": "sshd.ciphers",
+       "op": "matches-not",
+       "expected": ".*-cbc"
+      }
+     ],
+     "confidence": "reviewed",
+     "provenance": {
+      "author-ref": "https://ex.org/party/secops",
+      "date": "2026-11-11"
+     }
+    },
+    {
+     "id": "https://ex.org/assessment/ok",
+     "version": "1",
+     "lifecycle": "active",
+     "subject-refs": [
+      "https://ex.org/component/host-1"
+     ],
+     "method": {
+      "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+       "method": "automated"
+      }
+     },
+     "performer-ref": "https://ex.org/party/runner",
+     "time": "2026-11-11T09:00:00Z",
+     "result": "satisfied",
+     "check-results": [
+      {
+       "check-ref": "https://ex.org/check/ssh-1-maxauthtries",
+       "check-digest": "sha256:c1ca8689f6552ca809f2590cac978a8937e594cd3b0d4abfaa9f06de00914e27",
+       "outcome": "satisfied",
+       "time": "2026-11-11T09:00:00Z",
+       "collector-id": "bash",
+       "parameters": {
+        "max-auth-tries": 4
+       },
+       "observation": {
+        "facts": {
+         "sshd.maxauthtries": 4
+        }
+       }
+      }
+     ],
+     "tailoring-ref": "https://ex.org/tailoring/strict"
+    }
+   ],
+   "expected-rules": [
+    "CHECK-13"
+   ]
+  },
+  {
+   "name": "CHECK-12: a row parameter its check does not read",
+   "objects": [
+    {
+     "id": "https://ex.org/req/ssh-1",
+     "version": "1",
+     "lifecycle": "active",
+     "title": {
+      "en": "SSH hardening"
+     },
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ex.org/party/ops"
+       ],
+       "prose": {
+        "en": "The SSH daemon allows at most {param:max-auth-tries} authentication attempts per connection."
+       },
+       "parameters": [
+        {
+         "name": "max-auth-tries",
+         "type": "integer",
+         "tightening": "lower",
+         "min": 1,
+         "max": 10
+        }
+       ]
+      },
+      {
+       "id": "s2",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ex.org/party/ops"
+       ],
+       "prose": {
+        "en": "The SSH daemon offers no cipher in CBC mode."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/set/linux",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ex.org/req/ssh-1",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/tailoring/strict",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ex.org/set/linux"
+      }
+     ],
+     "operations": [
+      {
+       "op": "set-parameter",
+       "requirement-ref": "https://ex.org/req/ssh-1",
+       "statement-id": "s1",
+       "parameter": "max-auth-tries",
+       "value": 4
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/tailoring/standard",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ex.org/set/linux"
+      }
+     ],
+     "operations": [
+      {
+       "op": "set-parameter",
+       "requirement-ref": "https://ex.org/req/ssh-1",
+       "statement-id": "s1",
+       "parameter": "max-auth-tries",
+       "value": 6
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/check/ssh-1-maxauthtries",
+     "version": "1",
+     "lifecycle": "active",
+     "requirement-ref": "https://ex.org/req/ssh-1",
+     "statement-ids": [
+      "s1"
+     ],
+     "platform": "https://ex.org/platform/linux-host",
+     "observes": [
+      {
+       "name": "sshd.maxauthtries",
+       "type": "integer"
+      }
+     ],
+     "criteria": [
+      {
+       "fact": "sshd.maxauthtries",
+       "op": "at-most",
+       "expected": {
+        "param": "max-auth-tries"
+       }
+      }
+     ],
+     "confidence": "reviewed",
+     "provenance": {
+      "author-ref": "https://ex.org/party/secops",
+      "date": "2026-11-11"
+     },
+     "facets": {
+      "https://ns.jascon.net/stdlib/facet/collector@1": {
+       "collectors": [
+        {
+         "id": "bash",
+         "runtime": "bash",
+         "privileges": "root",
+         "source": "#!/bin/bash\nv=$(sshd -T | awk '$1==\"maxauthtries\"{print $2}')\n[ -n \"$v\" ] && printf '{\"facts\":{\"sshd.maxauthtries\":%s}}\\n' \"$v\" || echo '{\"facts\":{}}'\n"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "id": "https://ex.org/check/ssh-1-ciphers",
+     "version": "1",
+     "lifecycle": "active",
+     "requirement-ref": "https://ex.org/req/ssh-1",
+     "statement-ids": [
+      "s2"
+     ],
+     "platform": "https://ex.org/platform/linux-host",
+     "observes": [
+      {
+       "name": "sshd.ciphers",
+       "type": "code",
+       "cardinality": "many"
+      }
+     ],
+     "criteria": [
+      {
+       "fact": "sshd.ciphers",
+       "op": "matches-not",
+       "expected": ".*-cbc"
+      }
+     ],
+     "confidence": "reviewed",
+     "provenance": {
+      "author-ref": "https://ex.org/party/secops",
+      "date": "2026-11-11"
+     }
+    },
+    {
+     "id": "https://ex.org/assessment/ok",
+     "version": "1",
+     "lifecycle": "active",
+     "subject-refs": [
+      "https://ex.org/component/host-1"
+     ],
+     "method": {
+      "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+       "method": "automated"
+      }
+     },
+     "performer-ref": "https://ex.org/party/runner",
+     "time": "2026-11-11T09:00:00Z",
+     "result": "satisfied",
+     "check-results": [
+      {
+       "check-ref": "https://ex.org/check/ssh-1-maxauthtries",
+       "check-digest": "sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435",
+       "outcome": "satisfied",
+       "time": "2026-11-11T09:00:00Z",
+       "collector-id": "bash",
+       "parameters": {
+        "max-auth-tries": 4,
+        "unbound-extra": 999
+       },
+       "observation": {
+        "facts": {
+         "sshd.maxauthtries": 4
+        }
+       },
+       "evidence-record": {
+        "ref": "evidence/sha256/393c95aad3f8f5b2e920fbba38870d5b63ce953104bf44fe5b96dd320ddcbf06",
+        "digest": "sha256:393c95aad3f8f5b2e920fbba38870d5b63ce953104bf44fe5b96dd320ddcbf06"
+       }
+      }
+     ],
+     "tailoring-ref": "https://ex.org/tailoring/strict"
+    }
+   ],
+   "expected-rules": [
+    "CHECK-12"
+   ],
+   "store": {
+    "evidence/sha256/393c95aad3f8f5b2e920fbba38870d5b63ce953104bf44fe5b96dd320ddcbf06": "{\n \"record-version\": \"1\",\n \"check-ref\": \"https://ex.org/check/ssh-1-maxauthtries\",\n \"check-digest\": \"sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435\",\n \"collector-id\": \"bash\",\n \"subject-ref\": \"https://ex.org/component/host-1\",\n \"started\": \"2026-11-11T08:59:58Z\",\n \"finished\": \"2026-11-11T09:00:00Z\",\n \"exit-status\": 0,\n \"observation-digest\": \"sha256:5f3420c588b7473d556377c58e60156f217c43679d8f2cb5c319d21c87849483\",\n \"outputs\": [\n  {\n   \"name\": \"stdout\",\n   \"digest\": \"sha256:8a4d9980a72c9267e5e6487141fdfa7c639b4381dd0a58d53ac033ad751d1c31\",\n   \"media-type\": \"text/plain\"\n  }\n ]\n}\n",
+    "evidence/sha256/8a4d9980a72c9267e5e6487141fdfa7c639b4381dd0a58d53ac033ad751d1c31": "maxauthtries 4\nciphers aes256-gcm@openssh.com,aes256-ctr\n"
+   }
+  },
+  {
+   "name": "CHECK-12: a parameter the check does not read, with no Tailoring named",
+   "objects": [
+    {
+     "id": "https://ex.org/req/ssh-1",
+     "version": "1",
+     "lifecycle": "active",
+     "title": {
+      "en": "SSH hardening"
+     },
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ex.org/party/ops"
+       ],
+       "prose": {
+        "en": "The SSH daemon allows at most {param:max-auth-tries} authentication attempts per connection."
+       },
+       "parameters": [
+        {
+         "name": "max-auth-tries",
+         "type": "integer",
+         "tightening": "lower",
+         "min": 1,
+         "max": 10
+        }
+       ]
+      },
+      {
+       "id": "s2",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ex.org/party/ops"
+       ],
+       "prose": {
+        "en": "The SSH daemon offers no cipher in CBC mode."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/set/linux",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ex.org/req/ssh-1",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/tailoring/strict",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ex.org/set/linux"
+      }
+     ],
+     "operations": [
+      {
+       "op": "set-parameter",
+       "requirement-ref": "https://ex.org/req/ssh-1",
+       "statement-id": "s1",
+       "parameter": "max-auth-tries",
+       "value": 4
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/tailoring/standard",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ex.org/set/linux"
+      }
+     ],
+     "operations": [
+      {
+       "op": "set-parameter",
+       "requirement-ref": "https://ex.org/req/ssh-1",
+       "statement-id": "s1",
+       "parameter": "max-auth-tries",
+       "value": 6
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/check/ssh-1-maxauthtries",
+     "version": "1",
+     "lifecycle": "active",
+     "requirement-ref": "https://ex.org/req/ssh-1",
+     "statement-ids": [
+      "s1"
+     ],
+     "platform": "https://ex.org/platform/linux-host",
+     "observes": [
+      {
+       "name": "sshd.maxauthtries",
+       "type": "integer"
+      }
+     ],
+     "criteria": [
+      {
+       "fact": "sshd.maxauthtries",
+       "op": "at-most",
+       "expected": {
+        "param": "max-auth-tries"
+       }
+      }
+     ],
+     "confidence": "reviewed",
+     "provenance": {
+      "author-ref": "https://ex.org/party/secops",
+      "date": "2026-11-11"
+     },
+     "facets": {
+      "https://ns.jascon.net/stdlib/facet/collector@1": {
+       "collectors": [
+        {
+         "id": "bash",
+         "runtime": "bash",
+         "privileges": "root",
+         "source": "#!/bin/bash\nv=$(sshd -T | awk '$1==\"maxauthtries\"{print $2}')\n[ -n \"$v\" ] && printf '{\"facts\":{\"sshd.maxauthtries\":%s}}\\n' \"$v\" || echo '{\"facts\":{}}'\n"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "id": "https://ex.org/check/ssh-1-ciphers",
+     "version": "1",
+     "lifecycle": "active",
+     "requirement-ref": "https://ex.org/req/ssh-1",
+     "statement-ids": [
+      "s2"
+     ],
+     "platform": "https://ex.org/platform/linux-host",
+     "observes": [
+      {
+       "name": "sshd.ciphers",
+       "type": "code",
+       "cardinality": "many"
+      }
+     ],
+     "criteria": [
+      {
+       "fact": "sshd.ciphers",
+       "op": "matches-not",
+       "expected": ".*-cbc"
+      }
+     ],
+     "confidence": "reviewed",
+     "provenance": {
+      "author-ref": "https://ex.org/party/secops",
+      "date": "2026-11-11"
+     }
+    },
+    {
+     "id": "https://ex.org/assessment/x",
+     "version": "1",
+     "lifecycle": "active",
+     "subject-refs": [
+      "https://ex.org/component/host-1"
+     ],
+     "method": {
+      "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+       "method": "automated"
+      }
+     },
+     "performer-ref": "https://ex.org/party/runner",
+     "time": "2026-11-11T09:00:00Z",
+     "result": "satisfied",
+     "check-results": [
+      {
+       "check-ref": "https://ex.org/check/ssh-1-maxauthtries",
+       "check-digest": "sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435",
+       "outcome": "satisfied",
+       "time": "2026-11-11T09:00:00Z",
+       "collector-id": "bash",
+       "parameters": {
+        "max-auth-tries": 6,
+        "unbound-extra": 999
+       },
+       "observation": {
+        "facts": {
+         "sshd.maxauthtries": 5
+        }
+       }
+      }
+     ]
+    }
+   ],
+   "expected-rules": [
+    "CHECK-12"
+   ],
+   "expected-notes": [
+    "performer's statement"
+   ]
+  },
+  {
+   "name": "CHECK-15: the row records an observation, the record binds none",
+   "objects": [
+    {
+     "id": "https://ex.org/req/ssh-1",
+     "version": "1",
+     "lifecycle": "active",
+     "title": {
+      "en": "SSH hardening"
+     },
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ex.org/party/ops"
+       ],
+       "prose": {
+        "en": "The SSH daemon allows at most {param:max-auth-tries} authentication attempts per connection."
+       },
+       "parameters": [
+        {
+         "name": "max-auth-tries",
+         "type": "integer",
+         "tightening": "lower",
+         "min": 1,
+         "max": 10
+        }
+       ]
+      },
+      {
+       "id": "s2",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ex.org/party/ops"
+       ],
+       "prose": {
+        "en": "The SSH daemon offers no cipher in CBC mode."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/set/linux",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ex.org/req/ssh-1",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/tailoring/strict",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ex.org/set/linux"
+      }
+     ],
+     "operations": [
+      {
+       "op": "set-parameter",
+       "requirement-ref": "https://ex.org/req/ssh-1",
+       "statement-id": "s1",
+       "parameter": "max-auth-tries",
+       "value": 4
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/tailoring/standard",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ex.org/set/linux"
+      }
+     ],
+     "operations": [
+      {
+       "op": "set-parameter",
+       "requirement-ref": "https://ex.org/req/ssh-1",
+       "statement-id": "s1",
+       "parameter": "max-auth-tries",
+       "value": 6
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/check/ssh-1-maxauthtries",
+     "version": "1",
+     "lifecycle": "active",
+     "requirement-ref": "https://ex.org/req/ssh-1",
+     "statement-ids": [
+      "s1"
+     ],
+     "platform": "https://ex.org/platform/linux-host",
+     "observes": [
+      {
+       "name": "sshd.maxauthtries",
+       "type": "integer"
+      }
+     ],
+     "criteria": [
+      {
+       "fact": "sshd.maxauthtries",
+       "op": "at-most",
+       "expected": {
+        "param": "max-auth-tries"
+       }
+      }
+     ],
+     "confidence": "reviewed",
+     "provenance": {
+      "author-ref": "https://ex.org/party/secops",
+      "date": "2026-11-11"
+     },
+     "facets": {
+      "https://ns.jascon.net/stdlib/facet/collector@1": {
+       "collectors": [
+        {
+         "id": "bash",
+         "runtime": "bash",
+         "privileges": "root",
+         "source": "#!/bin/bash\nv=$(sshd -T | awk '$1==\"maxauthtries\"{print $2}')\n[ -n \"$v\" ] && printf '{\"facts\":{\"sshd.maxauthtries\":%s}}\\n' \"$v\" || echo '{\"facts\":{}}'\n"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "id": "https://ex.org/check/ssh-1-ciphers",
+     "version": "1",
+     "lifecycle": "active",
+     "requirement-ref": "https://ex.org/req/ssh-1",
+     "statement-ids": [
+      "s2"
+     ],
+     "platform": "https://ex.org/platform/linux-host",
+     "observes": [
+      {
+       "name": "sshd.ciphers",
+       "type": "code",
+       "cardinality": "many"
+      }
+     ],
+     "criteria": [
+      {
+       "fact": "sshd.ciphers",
+       "op": "matches-not",
+       "expected": ".*-cbc"
+      }
+     ],
+     "confidence": "reviewed",
+     "provenance": {
+      "author-ref": "https://ex.org/party/secops",
+      "date": "2026-11-11"
+     }
+    },
+    {
+     "id": "https://ex.org/assessment/ok",
+     "version": "1",
+     "lifecycle": "active",
+     "subject-refs": [
+      "https://ex.org/component/host-1"
+     ],
+     "method": {
+      "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+       "method": "automated"
+      }
+     },
+     "performer-ref": "https://ex.org/party/runner",
+     "time": "2026-11-11T09:00:00Z",
+     "result": "satisfied",
+     "check-results": [
+      {
+       "check-ref": "https://ex.org/check/ssh-1-maxauthtries",
+       "check-digest": "sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435",
+       "outcome": "satisfied",
+       "time": "2026-11-11T09:00:00Z",
+       "collector-id": "bash",
+       "parameters": {
+        "max-auth-tries": 4
+       },
+       "observation": {
+        "facts": {
+         "sshd.maxauthtries": 4
+        }
+       },
+       "evidence-record": {
+        "ref": "evidence/sha256/58fcfdcef45f3741bd7d5895d88d67a7bf600105d222f1675cc8bc554e21abcd",
+        "digest": "sha256:58fcfdcef45f3741bd7d5895d88d67a7bf600105d222f1675cc8bc554e21abcd"
+       }
+      }
+     ],
+     "tailoring-ref": "https://ex.org/tailoring/strict"
+    }
+   ],
+   "expected-rules": [
+    "CHECK-15"
+   ],
+   "store": {
+    "evidence/sha256/8a4d9980a72c9267e5e6487141fdfa7c639b4381dd0a58d53ac033ad751d1c31": "maxauthtries 4\nciphers aes256-gcm@openssh.com,aes256-ctr\n",
+    "evidence/sha256/58fcfdcef45f3741bd7d5895d88d67a7bf600105d222f1675cc8bc554e21abcd": "{\n \"record-version\": \"1\",\n \"check-ref\": \"https://ex.org/check/ssh-1-maxauthtries\",\n \"check-digest\": \"sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435\",\n \"collector-id\": \"bash\",\n \"subject-ref\": \"https://ex.org/component/host-1\",\n \"started\": \"2026-11-11T08:59:58Z\",\n \"finished\": \"2026-11-11T09:00:00Z\",\n \"exit-status\": 0,\n \"outputs\": [\n  {\n   \"name\": \"stdout\",\n   \"digest\": \"sha256:8a4d9980a72c9267e5e6487141fdfa7c639b4381dd0a58d53ac033ad751d1c31\",\n   \"media-type\": \"text/plain\"\n  }\n ]\n}"
+   }
+  },
+  {
+   "name": "CHECK-15: the record binds an observation the row does not record",
+   "objects": [
+    {
+     "id": "https://ex.org/req/ssh-1",
+     "version": "1",
+     "lifecycle": "active",
+     "title": {
+      "en": "SSH hardening"
+     },
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ex.org/party/ops"
+       ],
+       "prose": {
+        "en": "The SSH daemon allows at most {param:max-auth-tries} authentication attempts per connection."
+       },
+       "parameters": [
+        {
+         "name": "max-auth-tries",
+         "type": "integer",
+         "tightening": "lower",
+         "min": 1,
+         "max": 10
+        }
+       ]
+      },
+      {
+       "id": "s2",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ex.org/party/ops"
+       ],
+       "prose": {
+        "en": "The SSH daemon offers no cipher in CBC mode."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/set/linux",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ex.org/req/ssh-1",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/tailoring/strict",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ex.org/set/linux"
+      }
+     ],
+     "operations": [
+      {
+       "op": "set-parameter",
+       "requirement-ref": "https://ex.org/req/ssh-1",
+       "statement-id": "s1",
+       "parameter": "max-auth-tries",
+       "value": 4
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/tailoring/standard",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ex.org/set/linux"
+      }
+     ],
+     "operations": [
+      {
+       "op": "set-parameter",
+       "requirement-ref": "https://ex.org/req/ssh-1",
+       "statement-id": "s1",
+       "parameter": "max-auth-tries",
+       "value": 6
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/check/ssh-1-maxauthtries",
+     "version": "1",
+     "lifecycle": "active",
+     "requirement-ref": "https://ex.org/req/ssh-1",
+     "statement-ids": [
+      "s1"
+     ],
+     "platform": "https://ex.org/platform/linux-host",
+     "observes": [
+      {
+       "name": "sshd.maxauthtries",
+       "type": "integer"
+      }
+     ],
+     "criteria": [
+      {
+       "fact": "sshd.maxauthtries",
+       "op": "at-most",
+       "expected": {
+        "param": "max-auth-tries"
+       }
+      }
+     ],
+     "confidence": "reviewed",
+     "provenance": {
+      "author-ref": "https://ex.org/party/secops",
+      "date": "2026-11-11"
+     },
+     "facets": {
+      "https://ns.jascon.net/stdlib/facet/collector@1": {
+       "collectors": [
+        {
+         "id": "bash",
+         "runtime": "bash",
+         "privileges": "root",
+         "source": "#!/bin/bash\nv=$(sshd -T | awk '$1==\"maxauthtries\"{print $2}')\n[ -n \"$v\" ] && printf '{\"facts\":{\"sshd.maxauthtries\":%s}}\\n' \"$v\" || echo '{\"facts\":{}}'\n"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "id": "https://ex.org/check/ssh-1-ciphers",
+     "version": "1",
+     "lifecycle": "active",
+     "requirement-ref": "https://ex.org/req/ssh-1",
+     "statement-ids": [
+      "s2"
+     ],
+     "platform": "https://ex.org/platform/linux-host",
+     "observes": [
+      {
+       "name": "sshd.ciphers",
+       "type": "code",
+       "cardinality": "many"
+      }
+     ],
+     "criteria": [
+      {
+       "fact": "sshd.ciphers",
+       "op": "matches-not",
+       "expected": ".*-cbc"
+      }
+     ],
+     "confidence": "reviewed",
+     "provenance": {
+      "author-ref": "https://ex.org/party/secops",
+      "date": "2026-11-11"
+     }
+    },
+    {
+     "id": "https://ex.org/assessment/ok",
+     "version": "1",
+     "lifecycle": "active",
+     "subject-refs": [
+      "https://ex.org/component/host-1"
+     ],
+     "method": {
+      "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+       "method": "automated"
+      }
+     },
+     "performer-ref": "https://ex.org/party/runner",
+     "time": "2026-11-11T09:00:00Z",
+     "result": "inconclusive",
+     "check-results": [
+      {
+       "check-ref": "https://ex.org/check/ssh-1-maxauthtries",
+       "check-digest": "sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435",
+       "outcome": "inconclusive",
+       "time": "2026-11-11T09:00:00Z",
+       "collector-id": "bash",
+       "parameters": {
+        "max-auth-tries": 4
+       },
+       "evidence-record": {
+        "ref": "evidence/sha256/393c95aad3f8f5b2e920fbba38870d5b63ce953104bf44fe5b96dd320ddcbf06",
+        "digest": "sha256:393c95aad3f8f5b2e920fbba38870d5b63ce953104bf44fe5b96dd320ddcbf06"
+       },
+       "reason": {
+        "en": "sshd -T exited 255: no host keys"
+       }
+      }
+     ],
+     "tailoring-ref": "https://ex.org/tailoring/strict"
+    }
+   ],
+   "expected-rules": [
+    "CHECK-15"
+   ],
+   "store": {
+    "evidence/sha256/393c95aad3f8f5b2e920fbba38870d5b63ce953104bf44fe5b96dd320ddcbf06": "{\n \"record-version\": \"1\",\n \"check-ref\": \"https://ex.org/check/ssh-1-maxauthtries\",\n \"check-digest\": \"sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435\",\n \"collector-id\": \"bash\",\n \"subject-ref\": \"https://ex.org/component/host-1\",\n \"started\": \"2026-11-11T08:59:58Z\",\n \"finished\": \"2026-11-11T09:00:00Z\",\n \"exit-status\": 0,\n \"observation-digest\": \"sha256:5f3420c588b7473d556377c58e60156f217c43679d8f2cb5c319d21c87849483\",\n \"outputs\": [\n  {\n   \"name\": \"stdout\",\n   \"digest\": \"sha256:8a4d9980a72c9267e5e6487141fdfa7c639b4381dd0a58d53ac033ad751d1c31\",\n   \"media-type\": \"text/plain\"\n  }\n ]\n}\n",
+    "evidence/sha256/8a4d9980a72c9267e5e6487141fdfa7c639b4381dd0a58d53ac033ad751d1c31": "maxauthtries 4\nciphers aes256-gcm@openssh.com,aes256-ctr\n"
+   }
+  },
+  {
+   "name": "CHECK-15 satisfied: a run that observed nothing - no observation, no observation-digest",
+   "objects": [
+    {
+     "id": "https://ex.org/req/ssh-1",
+     "version": "1",
+     "lifecycle": "active",
+     "title": {
+      "en": "SSH hardening"
+     },
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ex.org/party/ops"
+       ],
+       "prose": {
+        "en": "The SSH daemon allows at most {param:max-auth-tries} authentication attempts per connection."
+       },
+       "parameters": [
+        {
+         "name": "max-auth-tries",
+         "type": "integer",
+         "tightening": "lower",
+         "min": 1,
+         "max": 10
+        }
+       ]
+      },
+      {
+       "id": "s2",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ex.org/party/ops"
+       ],
+       "prose": {
+        "en": "The SSH daemon offers no cipher in CBC mode."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/set/linux",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ex.org/req/ssh-1",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/tailoring/strict",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ex.org/set/linux"
+      }
+     ],
+     "operations": [
+      {
+       "op": "set-parameter",
+       "requirement-ref": "https://ex.org/req/ssh-1",
+       "statement-id": "s1",
+       "parameter": "max-auth-tries",
+       "value": 4
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/tailoring/standard",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ex.org/set/linux"
+      }
+     ],
+     "operations": [
+      {
+       "op": "set-parameter",
+       "requirement-ref": "https://ex.org/req/ssh-1",
+       "statement-id": "s1",
+       "parameter": "max-auth-tries",
+       "value": 6
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/check/ssh-1-maxauthtries",
+     "version": "1",
+     "lifecycle": "active",
+     "requirement-ref": "https://ex.org/req/ssh-1",
+     "statement-ids": [
+      "s1"
+     ],
+     "platform": "https://ex.org/platform/linux-host",
+     "observes": [
+      {
+       "name": "sshd.maxauthtries",
+       "type": "integer"
+      }
+     ],
+     "criteria": [
+      {
+       "fact": "sshd.maxauthtries",
+       "op": "at-most",
+       "expected": {
+        "param": "max-auth-tries"
+       }
+      }
+     ],
+     "confidence": "reviewed",
+     "provenance": {
+      "author-ref": "https://ex.org/party/secops",
+      "date": "2026-11-11"
+     },
+     "facets": {
+      "https://ns.jascon.net/stdlib/facet/collector@1": {
+       "collectors": [
+        {
+         "id": "bash",
+         "runtime": "bash",
+         "privileges": "root",
+         "source": "#!/bin/bash\nv=$(sshd -T | awk '$1==\"maxauthtries\"{print $2}')\n[ -n \"$v\" ] && printf '{\"facts\":{\"sshd.maxauthtries\":%s}}\\n' \"$v\" || echo '{\"facts\":{}}'\n"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "id": "https://ex.org/check/ssh-1-ciphers",
+     "version": "1",
+     "lifecycle": "active",
+     "requirement-ref": "https://ex.org/req/ssh-1",
+     "statement-ids": [
+      "s2"
+     ],
+     "platform": "https://ex.org/platform/linux-host",
+     "observes": [
+      {
+       "name": "sshd.ciphers",
+       "type": "code",
+       "cardinality": "many"
+      }
+     ],
+     "criteria": [
+      {
+       "fact": "sshd.ciphers",
+       "op": "matches-not",
+       "expected": ".*-cbc"
+      }
+     ],
+     "confidence": "reviewed",
+     "provenance": {
+      "author-ref": "https://ex.org/party/secops",
+      "date": "2026-11-11"
+     }
+    },
+    {
+     "id": "https://ex.org/assessment/ok",
+     "version": "1",
+     "lifecycle": "active",
+     "subject-refs": [
+      "https://ex.org/component/host-1"
+     ],
+     "method": {
+      "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+       "method": "automated"
+      }
+     },
+     "performer-ref": "https://ex.org/party/runner",
+     "time": "2026-11-11T09:00:00Z",
+     "result": "inconclusive",
+     "check-results": [
+      {
+       "check-ref": "https://ex.org/check/ssh-1-maxauthtries",
+       "check-digest": "sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435",
+       "outcome": "inconclusive",
+       "time": "2026-11-11T09:00:00Z",
+       "collector-id": "bash",
+       "parameters": {
+        "max-auth-tries": 4
+       },
+       "evidence-record": {
+        "ref": "evidence/sha256/2965cd398d5435ce610f816da0eb852d6de6a90f0e88f8979251eec8f10160c9",
+        "digest": "sha256:2965cd398d5435ce610f816da0eb852d6de6a90f0e88f8979251eec8f10160c9"
+       },
+       "reason": {
+        "en": "sshd -T exited 255: no host keys"
+       }
+      }
+     ],
+     "tailoring-ref": "https://ex.org/tailoring/strict"
+    }
+   ],
+   "expected-rules": [],
+   "store": {
+    "evidence/sha256/ac166f0d247ca32eeb20e23f12ab6b49d3a6278e01e8cdfd8b1750575fffd56a": "sshd: no hostkeys available -- exiting.\n",
+    "evidence/sha256/2965cd398d5435ce610f816da0eb852d6de6a90f0e88f8979251eec8f10160c9": "{\n \"record-version\": \"1\",\n \"check-ref\": \"https://ex.org/check/ssh-1-maxauthtries\",\n \"check-digest\": \"sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435\",\n \"collector-id\": \"bash\",\n \"subject-ref\": \"https://ex.org/component/host-1\",\n \"started\": \"2026-11-11T08:59:58Z\",\n \"finished\": \"2026-11-11T09:00:00Z\",\n \"exit-status\": 255,\n \"outputs\": [\n  {\n   \"name\": \"stderr\",\n   \"digest\": \"sha256:ac166f0d247ca32eeb20e23f12ab6b49d3a6278e01e8cdfd8b1750575fffd56a\",\n   \"media-type\": \"text/plain\"\n  }\n ]\n}"
+   }
+  },
+  {
+   "name": "CHECK-15: the row names a collector, the record none",
+   "objects": [
+    {
+     "id": "https://ex.org/req/ssh-1",
+     "version": "1",
+     "lifecycle": "active",
+     "title": {
+      "en": "SSH hardening"
+     },
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ex.org/party/ops"
+       ],
+       "prose": {
+        "en": "The SSH daemon allows at most {param:max-auth-tries} authentication attempts per connection."
+       },
+       "parameters": [
+        {
+         "name": "max-auth-tries",
+         "type": "integer",
+         "tightening": "lower",
+         "min": 1,
+         "max": 10
+        }
+       ]
+      },
+      {
+       "id": "s2",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ex.org/party/ops"
+       ],
+       "prose": {
+        "en": "The SSH daemon offers no cipher in CBC mode."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/set/linux",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ex.org/req/ssh-1",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/tailoring/strict",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ex.org/set/linux"
+      }
+     ],
+     "operations": [
+      {
+       "op": "set-parameter",
+       "requirement-ref": "https://ex.org/req/ssh-1",
+       "statement-id": "s1",
+       "parameter": "max-auth-tries",
+       "value": 4
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/tailoring/standard",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ex.org/set/linux"
+      }
+     ],
+     "operations": [
+      {
+       "op": "set-parameter",
+       "requirement-ref": "https://ex.org/req/ssh-1",
+       "statement-id": "s1",
+       "parameter": "max-auth-tries",
+       "value": 6
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/check/ssh-1-maxauthtries",
+     "version": "1",
+     "lifecycle": "active",
+     "requirement-ref": "https://ex.org/req/ssh-1",
+     "statement-ids": [
+      "s1"
+     ],
+     "platform": "https://ex.org/platform/linux-host",
+     "observes": [
+      {
+       "name": "sshd.maxauthtries",
+       "type": "integer"
+      }
+     ],
+     "criteria": [
+      {
+       "fact": "sshd.maxauthtries",
+       "op": "at-most",
+       "expected": {
+        "param": "max-auth-tries"
+       }
+      }
+     ],
+     "confidence": "reviewed",
+     "provenance": {
+      "author-ref": "https://ex.org/party/secops",
+      "date": "2026-11-11"
+     },
+     "facets": {
+      "https://ns.jascon.net/stdlib/facet/collector@1": {
+       "collectors": [
+        {
+         "id": "bash",
+         "runtime": "bash",
+         "privileges": "root",
+         "source": "#!/bin/bash\nv=$(sshd -T | awk '$1==\"maxauthtries\"{print $2}')\n[ -n \"$v\" ] && printf '{\"facts\":{\"sshd.maxauthtries\":%s}}\\n' \"$v\" || echo '{\"facts\":{}}'\n"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "id": "https://ex.org/check/ssh-1-ciphers",
+     "version": "1",
+     "lifecycle": "active",
+     "requirement-ref": "https://ex.org/req/ssh-1",
+     "statement-ids": [
+      "s2"
+     ],
+     "platform": "https://ex.org/platform/linux-host",
+     "observes": [
+      {
+       "name": "sshd.ciphers",
+       "type": "code",
+       "cardinality": "many"
+      }
+     ],
+     "criteria": [
+      {
+       "fact": "sshd.ciphers",
+       "op": "matches-not",
+       "expected": ".*-cbc"
+      }
+     ],
+     "confidence": "reviewed",
+     "provenance": {
+      "author-ref": "https://ex.org/party/secops",
+      "date": "2026-11-11"
+     }
+    },
+    {
+     "id": "https://ex.org/assessment/ok",
+     "version": "1",
+     "lifecycle": "active",
+     "subject-refs": [
+      "https://ex.org/component/host-1"
+     ],
+     "method": {
+      "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+       "method": "automated"
+      }
+     },
+     "performer-ref": "https://ex.org/party/runner",
+     "time": "2026-11-11T09:00:00Z",
+     "result": "satisfied",
+     "check-results": [
+      {
+       "check-ref": "https://ex.org/check/ssh-1-maxauthtries",
+       "check-digest": "sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435",
+       "outcome": "satisfied",
+       "time": "2026-11-11T09:00:00Z",
+       "collector-id": "bash",
+       "parameters": {
+        "max-auth-tries": 4
+       },
+       "observation": {
+        "facts": {
+         "sshd.maxauthtries": 4
+        }
+       },
+       "evidence-record": {
+        "ref": "evidence/sha256/3876ce1a1af565b7a6c3bcb8463eb832667bc11f4bfca26726847145d571da30",
+        "digest": "sha256:3876ce1a1af565b7a6c3bcb8463eb832667bc11f4bfca26726847145d571da30"
+       }
+      }
+     ],
+     "tailoring-ref": "https://ex.org/tailoring/strict"
+    }
+   ],
+   "expected-rules": [
+    "CHECK-15"
+   ],
+   "store": {
+    "evidence/sha256/8a4d9980a72c9267e5e6487141fdfa7c639b4381dd0a58d53ac033ad751d1c31": "maxauthtries 4\nciphers aes256-gcm@openssh.com,aes256-ctr\n",
+    "evidence/sha256/3876ce1a1af565b7a6c3bcb8463eb832667bc11f4bfca26726847145d571da30": "{\n \"record-version\": \"1\",\n \"check-ref\": \"https://ex.org/check/ssh-1-maxauthtries\",\n \"check-digest\": \"sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435\",\n \"subject-ref\": \"https://ex.org/component/host-1\",\n \"started\": \"2026-11-11T08:59:58Z\",\n \"finished\": \"2026-11-11T09:00:00Z\",\n \"exit-status\": 0,\n \"observation-digest\": \"sha256:5f3420c588b7473d556377c58e60156f217c43679d8f2cb5c319d21c87849483\",\n \"outputs\": [\n  {\n   \"name\": \"stdout\",\n   \"digest\": \"sha256:8a4d9980a72c9267e5e6487141fdfa7c639b4381dd0a58d53ac033ad751d1c31\",\n   \"media-type\": \"text/plain\"\n  }\n ]\n}"
+   }
+  },
+  {
+   "name": "CHECK-15: the record names a collector, the row none",
+   "objects": [
+    {
+     "id": "https://ex.org/req/ssh-1",
+     "version": "1",
+     "lifecycle": "active",
+     "title": {
+      "en": "SSH hardening"
+     },
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ex.org/party/ops"
+       ],
+       "prose": {
+        "en": "The SSH daemon allows at most {param:max-auth-tries} authentication attempts per connection."
+       },
+       "parameters": [
+        {
+         "name": "max-auth-tries",
+         "type": "integer",
+         "tightening": "lower",
+         "min": 1,
+         "max": 10
+        }
+       ]
+      },
+      {
+       "id": "s2",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ex.org/party/ops"
+       ],
+       "prose": {
+        "en": "The SSH daemon offers no cipher in CBC mode."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/set/linux",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ex.org/req/ssh-1",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/tailoring/strict",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ex.org/set/linux"
+      }
+     ],
+     "operations": [
+      {
+       "op": "set-parameter",
+       "requirement-ref": "https://ex.org/req/ssh-1",
+       "statement-id": "s1",
+       "parameter": "max-auth-tries",
+       "value": 4
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/tailoring/standard",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ex.org/set/linux"
+      }
+     ],
+     "operations": [
+      {
+       "op": "set-parameter",
+       "requirement-ref": "https://ex.org/req/ssh-1",
+       "statement-id": "s1",
+       "parameter": "max-auth-tries",
+       "value": 6
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/check/ssh-1-maxauthtries",
+     "version": "1",
+     "lifecycle": "active",
+     "requirement-ref": "https://ex.org/req/ssh-1",
+     "statement-ids": [
+      "s1"
+     ],
+     "platform": "https://ex.org/platform/linux-host",
+     "observes": [
+      {
+       "name": "sshd.maxauthtries",
+       "type": "integer"
+      }
+     ],
+     "criteria": [
+      {
+       "fact": "sshd.maxauthtries",
+       "op": "at-most",
+       "expected": {
+        "param": "max-auth-tries"
+       }
+      }
+     ],
+     "confidence": "reviewed",
+     "provenance": {
+      "author-ref": "https://ex.org/party/secops",
+      "date": "2026-11-11"
+     },
+     "facets": {
+      "https://ns.jascon.net/stdlib/facet/collector@1": {
+       "collectors": [
+        {
+         "id": "bash",
+         "runtime": "bash",
+         "privileges": "root",
+         "source": "#!/bin/bash\nv=$(sshd -T | awk '$1==\"maxauthtries\"{print $2}')\n[ -n \"$v\" ] && printf '{\"facts\":{\"sshd.maxauthtries\":%s}}\\n' \"$v\" || echo '{\"facts\":{}}'\n"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "id": "https://ex.org/check/ssh-1-ciphers",
+     "version": "1",
+     "lifecycle": "active",
+     "requirement-ref": "https://ex.org/req/ssh-1",
+     "statement-ids": [
+      "s2"
+     ],
+     "platform": "https://ex.org/platform/linux-host",
+     "observes": [
+      {
+       "name": "sshd.ciphers",
+       "type": "code",
+       "cardinality": "many"
+      }
+     ],
+     "criteria": [
+      {
+       "fact": "sshd.ciphers",
+       "op": "matches-not",
+       "expected": ".*-cbc"
+      }
+     ],
+     "confidence": "reviewed",
+     "provenance": {
+      "author-ref": "https://ex.org/party/secops",
+      "date": "2026-11-11"
+     }
+    },
+    {
+     "id": "https://ex.org/assessment/ok",
+     "version": "1",
+     "lifecycle": "active",
+     "subject-refs": [
+      "https://ex.org/component/host-1"
+     ],
+     "method": {
+      "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+       "method": "automated"
+      }
+     },
+     "performer-ref": "https://ex.org/party/runner",
+     "time": "2026-11-11T09:00:00Z",
+     "result": "satisfied",
+     "check-results": [
+      {
+       "check-ref": "https://ex.org/check/ssh-1-maxauthtries",
+       "check-digest": "sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435",
+       "outcome": "satisfied",
+       "time": "2026-11-11T09:00:00Z",
+       "parameters": {
+        "max-auth-tries": 4
+       },
+       "observation": {
+        "facts": {
+         "sshd.maxauthtries": 4
+        }
+       },
+       "evidence-record": {
+        "ref": "evidence/sha256/393c95aad3f8f5b2e920fbba38870d5b63ce953104bf44fe5b96dd320ddcbf06",
+        "digest": "sha256:393c95aad3f8f5b2e920fbba38870d5b63ce953104bf44fe5b96dd320ddcbf06"
+       }
+      }
+     ],
+     "tailoring-ref": "https://ex.org/tailoring/strict"
+    }
+   ],
+   "expected-rules": [
+    "CHECK-15"
+   ],
+   "store": {
+    "evidence/sha256/393c95aad3f8f5b2e920fbba38870d5b63ce953104bf44fe5b96dd320ddcbf06": "{\n \"record-version\": \"1\",\n \"check-ref\": \"https://ex.org/check/ssh-1-maxauthtries\",\n \"check-digest\": \"sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435\",\n \"collector-id\": \"bash\",\n \"subject-ref\": \"https://ex.org/component/host-1\",\n \"started\": \"2026-11-11T08:59:58Z\",\n \"finished\": \"2026-11-11T09:00:00Z\",\n \"exit-status\": 0,\n \"observation-digest\": \"sha256:5f3420c588b7473d556377c58e60156f217c43679d8f2cb5c319d21c87849483\",\n \"outputs\": [\n  {\n   \"name\": \"stdout\",\n   \"digest\": \"sha256:8a4d9980a72c9267e5e6487141fdfa7c639b4381dd0a58d53ac033ad751d1c31\",\n   \"media-type\": \"text/plain\"\n  }\n ]\n}\n",
+    "evidence/sha256/8a4d9980a72c9267e5e6487141fdfa7c639b4381dd0a58d53ac033ad751d1c31": "maxauthtries 4\nciphers aes256-gcm@openssh.com,aes256-ctr\n"
+   }
+  },
+  {
+   "name": "an observation by reference that is withheld: the binding is noted, not verified",
+   "objects": [
+    {
+     "id": "https://ex.org/req/ssh-1",
+     "version": "1",
+     "lifecycle": "active",
+     "title": {
+      "en": "SSH hardening"
+     },
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ex.org/party/ops"
+       ],
+       "prose": {
+        "en": "The SSH daemon allows at most {param:max-auth-tries} authentication attempts per connection."
+       },
+       "parameters": [
+        {
+         "name": "max-auth-tries",
+         "type": "integer",
+         "tightening": "lower",
+         "min": 1,
+         "max": 10
+        }
+       ]
+      },
+      {
+       "id": "s2",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ex.org/party/ops"
+       ],
+       "prose": {
+        "en": "The SSH daemon offers no cipher in CBC mode."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/set/linux",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ex.org/req/ssh-1",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/tailoring/strict",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ex.org/set/linux"
+      }
+     ],
+     "operations": [
+      {
+       "op": "set-parameter",
+       "requirement-ref": "https://ex.org/req/ssh-1",
+       "statement-id": "s1",
+       "parameter": "max-auth-tries",
+       "value": 4
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/tailoring/standard",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ex.org/set/linux"
+      }
+     ],
+     "operations": [
+      {
+       "op": "set-parameter",
+       "requirement-ref": "https://ex.org/req/ssh-1",
+       "statement-id": "s1",
+       "parameter": "max-auth-tries",
+       "value": 6
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/check/ssh-1-maxauthtries",
+     "version": "1",
+     "lifecycle": "active",
+     "requirement-ref": "https://ex.org/req/ssh-1",
+     "statement-ids": [
+      "s1"
+     ],
+     "platform": "https://ex.org/platform/linux-host",
+     "observes": [
+      {
+       "name": "sshd.maxauthtries",
+       "type": "integer"
+      }
+     ],
+     "criteria": [
+      {
+       "fact": "sshd.maxauthtries",
+       "op": "at-most",
+       "expected": {
+        "param": "max-auth-tries"
+       }
+      }
+     ],
+     "confidence": "reviewed",
+     "provenance": {
+      "author-ref": "https://ex.org/party/secops",
+      "date": "2026-11-11"
+     },
+     "facets": {
+      "https://ns.jascon.net/stdlib/facet/collector@1": {
+       "collectors": [
+        {
+         "id": "bash",
+         "runtime": "bash",
+         "privileges": "root",
+         "source": "#!/bin/bash\nv=$(sshd -T | awk '$1==\"maxauthtries\"{print $2}')\n[ -n \"$v\" ] && printf '{\"facts\":{\"sshd.maxauthtries\":%s}}\\n' \"$v\" || echo '{\"facts\":{}}'\n"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "id": "https://ex.org/check/ssh-1-ciphers",
+     "version": "1",
+     "lifecycle": "active",
+     "requirement-ref": "https://ex.org/req/ssh-1",
+     "statement-ids": [
+      "s2"
+     ],
+     "platform": "https://ex.org/platform/linux-host",
+     "observes": [
+      {
+       "name": "sshd.ciphers",
+       "type": "code",
+       "cardinality": "many"
+      }
+     ],
+     "criteria": [
+      {
+       "fact": "sshd.ciphers",
+       "op": "matches-not",
+       "expected": ".*-cbc"
+      }
+     ],
+     "confidence": "reviewed",
+     "provenance": {
+      "author-ref": "https://ex.org/party/secops",
+      "date": "2026-11-11"
+     }
+    },
+    {
+     "id": "https://ex.org/assessment/ok",
+     "version": "1",
+     "lifecycle": "active",
+     "subject-refs": [
+      "https://ex.org/component/host-1"
+     ],
+     "method": {
+      "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+       "method": "automated"
+      }
+     },
+     "performer-ref": "https://ex.org/party/runner",
+     "time": "2026-11-11T09:00:00Z",
+     "result": "satisfied",
+     "check-results": [
+      {
+       "check-ref": "https://ex.org/check/ssh-1-maxauthtries",
+       "check-digest": "sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435",
+       "outcome": "satisfied",
+       "time": "2026-11-11T09:00:00Z",
+       "collector-id": "bash",
+       "parameters": {
+        "max-auth-tries": 4
+       },
+       "evidence-record": {
+        "ref": "evidence/sha256/393c95aad3f8f5b2e920fbba38870d5b63ce953104bf44fe5b96dd320ddcbf06",
+        "digest": "sha256:393c95aad3f8f5b2e920fbba38870d5b63ce953104bf44fe5b96dd320ddcbf06"
+       },
+       "observation-ref": {
+        "ref": "evidence/sha256/7f8c24ac3a5b85dab8973484dc16ebdc890250f431d8e591161f3a33621fe137",
+        "digest": "sha256:7f8c24ac3a5b85dab8973484dc16ebdc890250f431d8e591161f3a33621fe137"
+       }
+      }
+     ],
+     "tailoring-ref": "https://ex.org/tailoring/strict"
+    }
+   ],
+   "expected-rules": [],
+   "store": {
+    "evidence/sha256/393c95aad3f8f5b2e920fbba38870d5b63ce953104bf44fe5b96dd320ddcbf06": "{\n \"record-version\": \"1\",\n \"check-ref\": \"https://ex.org/check/ssh-1-maxauthtries\",\n \"check-digest\": \"sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435\",\n \"collector-id\": \"bash\",\n \"subject-ref\": \"https://ex.org/component/host-1\",\n \"started\": \"2026-11-11T08:59:58Z\",\n \"finished\": \"2026-11-11T09:00:00Z\",\n \"exit-status\": 0,\n \"observation-digest\": \"sha256:5f3420c588b7473d556377c58e60156f217c43679d8f2cb5c319d21c87849483\",\n \"outputs\": [\n  {\n   \"name\": \"stdout\",\n   \"digest\": \"sha256:8a4d9980a72c9267e5e6487141fdfa7c639b4381dd0a58d53ac033ad751d1c31\",\n   \"media-type\": \"text/plain\"\n  }\n ]\n}\n",
+    "evidence/sha256/8a4d9980a72c9267e5e6487141fdfa7c639b4381dd0a58d53ac033ad751d1c31": "maxauthtries 4\nciphers aes256-gcm@openssh.com,aes256-ctr\n"
+   },
+   "expected-notes": [
+    "withheld",
+    "binding to it is not verified"
+   ]
   }
  ]
 }

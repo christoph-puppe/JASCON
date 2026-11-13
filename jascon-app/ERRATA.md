@@ -101,3 +101,41 @@ surprise, blunder.
 - **Test.** `tests/oscal.test.mjs`, "BSI preset: …": the packed values per
   prop (tags 125, threats 616, target_object_categories 40), 221 slots and
   none away from an insertion.
+
+## 2026-11-13 · build 0.9.5 · four run rules skipped their comparison when a field was left out
+
+- **Symptom.** The Validate page, like the reference validator it is ported
+  from, accepted four things the specification forbids: an evidence record
+  at `alternate/<hex>` instead of `evidence/sha256/<hex>`; a `collector-id`
+  on a row whose Check has no `collector@1` facet; a row parameter
+  (`"unbound-extra": 999`) that its Check does not read; an evidence record
+  without `observation-digest` on a row that carries an observation. Reported
+  from outside as issues 23 to 26 in the GitHub tracker, each with a
+  reproduction on the conformance vector "CHECK-15 satisfied: row -> record
+  -> raw output". Two neighbours of the same kind turned up while fixing
+  them: a record that names a collector on a row that names none, and a
+  record with an `observation-digest` on a row without an observation.
+- **Cause.** Each comparison stood behind a guard that asked whether the
+  optional field was there: the path was held to the digest only if it
+  already had the store's form, the collector was looked up only if the
+  facet existed, row and record were compared only where both carried the
+  field, and the parameters were walked from the Check's side only.
+- **Class.** Forgotten: the case "the field is absent on one side" was
+  handled as "nothing to check" in four places. The port copied the
+  reference line by line, so the app, the reference and the PowerShell twin
+  agreed with one another and all three were wrong.
+- **Why it was not caught.** Every negative vector changed a value and none
+  removed a field or added a key; the engines were tested against one
+  another and not against the wording of the rules.
+- **Fix.** A relative evidence reference outside `evidence/sha256/` fails
+  CHECK-15 before it is read. A Check without the facet declares no
+  collector (CHECK-13). A row names only parameters its Check reads, with
+  or without a Tailoring (CHECK-12). Row and record name the same collector
+  or both none, and a row carries an observation exactly when its record
+  carries an `observation-digest` (CHECK-15). The same in
+  `validate_core.py` and `validate_core.ps1`.
+- **Test.** `tests/rules.test.mjs`, "check: the CHECK rules every bundle
+  vector names, the evidence chain included", with eleven new bundle vectors
+  in `check-vectors.json` (188 to 199). Ten of them fail on the rules as
+  they were; the eleventh is the legitimate case, a run that observed
+  nothing.

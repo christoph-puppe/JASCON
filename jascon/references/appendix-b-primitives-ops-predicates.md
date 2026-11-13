@@ -364,10 +364,10 @@ the host's Unicode database (backlog #59).
 | CHECK-9 | A row's outcome equals `check-verdict` over its observation and parameters. | `recorded satisfied, check-verdict computes not-satisfied (sshd.maxauthtries at-most 4: observed 5)` |
 | CHECK-10 | One row per check; `Assessment.result` is the aggregate of the rows. | `result is satisfied, the aggregate of its check results is not-satisfied` |
 | CHECK-11 | A row without an observation is `inconclusive` and carries a `reason`. | `no observation, yet the outcome is satisfied and no reason is given` |
-| CHECK-12 | `tailoring-ref` resolves to a Tailoring; each row's `parameters` equal what it binds. | `the run used max-auth-tries=6, <tailoring> binds 4` |
-| CHECK-13 | A row's `collector-id` names a collector of the Check. | `collector-id 'python' names no collector of <check>` |
+| CHECK-12 | `tailoring-ref` resolves to a Tailoring. A row names only parameters its Check reads, with or without a `tailoring-ref`; with one, their values equal what it binds. | `the run used max-auth-tries=6, <tailoring> binds 4` · `the row records parameter 'unbound-extra', which <check> does not read` |
+| CHECK-13 | A row's `collector-id` names a collector the Check declares; a Check without `collector@1` declares none. | `collector-id 'python' names no collector of <check>` |
 | CHECK-14 | A Finding's in-bundle `check-ref` is a Check about the same requirement and a covered clause. | `statement-ref 's2' is not a clause check <check> covers` |
-| CHECK-15 | Evidence references stay in the store; every digest verifies; a record names the row's check, digest, collector and subject, and binds the row's observation. | `output 'stdout' evidence/sha256/2d66… does not match its digest` |
+| CHECK-15 | A relative evidence reference is `evidence/sha256/<hex>` with `<hex>` its recorded digest; every digest verifies; row and record name the same check, digest and collector, the record's subject is a subject of the Assessment, and a row carries an observation exactly when its record carries an `observation-digest`. | `output 'stdout' evidence/sha256/2d66… does not match its digest` · `evidence record ref alternate/393c… is outside the store` · `the row records an observation, the evidence record binds none` |
 
 Notes, never failures: a row whose Check is outside the bundle (*not
 recomputed*); a row with `parameters` and no `tailoring-ref` (*the
@@ -380,7 +380,7 @@ an `audit` string. An exit code hides its threshold, cannot be reached
 by a tailored parameter and leaves a bit where an observation should be.
 **Measured fit:** 481 of 510 rules of the CIS Ubuntu 24.04 profiles of
 ComplianceAsCode; the operators of kube-bench `cis-1.12` map onto the
-set (CP-CHECK-1 §2.2). **Exercised:** `check-vectors.json`, 188 cases;
+set (CP-CHECK-1 §2.2). **Exercised:** `check-vectors.json`, 199 cases;
 the worked example LNX-SSH-1 with two runs.
 
 ## B.2 The three predicates (shared vocabulary, one leash)
