@@ -2722,6 +2722,69 @@ have replaced one overstatement with another.
   835; 120 was a slip in the prose. L-2 stays as written and is corrected
   by this section.
 
+## The ledger, and its first run (the same day)
+
+**How it works.** `oscal_conv_lib.Ledger` does not search for values. A
+converter loads its sources through it, and every string and integer leaf
+then carries its origin (document and indexed JSON Pointer) for as long
+as the converter hands it on unchanged. After the bundle is written,
+every output leaf and every output key that still is such a value is a
+copy with a known source and a known destination. Any computation
+returns a plain value and so loses the origin by itself; the converter
+states those at the place they happen, with `derive(rule, function,
+inputs)`, and the ledger applies the function to the source again and
+compares. A deduplication is declared with `same(dropped, kept, rule)`
+and holds only if the two are equal. A drop is declared with a pattern
+and a reason. Every entry is checked against the files on disk. What is
+left is `unaccounted`. Tracing is by object identity, so an equal value
+elsewhere cannot stand in for a lost one: the reporter's fixture names
+`/controls/1/description`, with an unrelated equal value and an equal
+key in the output, and is a test.
+
+**What it cost.** The IFA converter keeps its structure: one changed
+loader, 22 places where a computed value is now stated with its
+rule, one `same()` at the existing deduplication, one declared drop. The
+bundle and its manifest are byte for byte what they were.
+
+**First run, IFA (835 source leaf values):**
+
+| Outcome | Count | |
+|---|---:|---|
+| copied | 232 | 265 destinations, 25 of them keys, 5 of them through the deduplicated observation |
+| transformed | 26 | 18 named rules, each applied again to the source and compared |
+| intentionally dropped | 104 | one declared rule: the uuid of a source element is not carried (the report's standing statement since 1.0.0) |
+| **unaccounted** | **473** | 296 paths; the work queue |
+| failed checks | 0 | |
+
+The path map of the same conversion reads 835 of 835, UNMAPPED 0. The
+corrected global check reads 283. The ledger reads 258 carried. 61 of
+the unaccounted values have an equal value somewhere in the bundle,
+which is exactly what the global check counted and the second report
+predicted: the impact levels of the leveraged and the leveraging system
+equal those of the main system, and only the main system's are carried.
+
+**What the first run found, beyond the number:**
+
+1. **The path map declares destinations the converter does not write.**
+   Its rule for the system characteristics of the leveraged and the
+   leveraging SSP says "system@1 facet (description, FIPS-199 carried)";
+   the code carries the description. Its rule for inventory items says
+   "asset props carried verbatim"; the props of `implemented-components`
+   (6 names, 6 values) are not carried.
+2. **A value is lost in the shipped bundle.** Inventory item 4 has two
+   props named `ipv4-address`. The converter builds a dict from prop
+   names, so `172.1.2.3` is overwritten by `1.1.2.3`. No earlier report
+   could see it. It is not fixed here: the fix changes a bundle object
+   and its digests, which is the author's call.
+3. Most of the 473 are document metadata (revisions, parties, roles),
+   back-matter resources, role and party references, and component
+   status and type. Many will be deliberate. None is declared, and the
+   ledger does not guess.
+
+**Not done, on purpose.** Only one drop is declared, the one the report
+already stated. Declaring the rest "intentional" would have produced a
+small number and no knowledge.
+
 ## What it does not change
 
 No kernel shape, rule or vector, no validator, no bundle object. And no

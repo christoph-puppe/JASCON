@@ -1790,7 +1790,10 @@ transformations; the other ten corpora are unmeasured. *(rev.
 read 122 absent and 394 of 835 arrived; with typed, whole values it
 reads 124 and 283. And it is a global check: 283 is an upper bound on
 what was carried, since one value in the bundle answers for every equal
-value in the source. No measurement of single values exists yet.)* "Converted
+value in the source. The same day a **ledger** traced every source value
+of this corpus through the converter: 232 copied, 26 transformed by a
+named rule, 104 identifiers dropped by a declared rule, **473
+unaccounted**. The path map reads 835 of 835 for the same conversion.)* "Converted
 losslessly" is established at path level only (backlog #41). **R17** —
 redistribution: six of the eleven measured bundles cannot be shipped
 (§2); the shipped evidence base no longer exercises Tailoring or Mapping
@@ -2012,7 +2015,9 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
   the value-level check (wired into the IFA report so far). *(rev.
   2026-11-13: until then `value_arrival()`, which matched substrings and
   overstated the figure; and the check is global, an upper bound on what
-  was carried, not a trace of each value — backlog #41.)*
+  was carried, not a trace of each value — backlog #41. `Ledger` in the
+  same file traces each source value to its destination; wired into the
+  IFA converter, which writes `ifa-conversion-ledger.json`.)*
 - **Five corpus bundles** under `converted_examples/` — AU.ISM, DE.BSI,
   US.SP800-53, US.CSF, US.IFA-GoodRead: 3,715 manifest-listed objects,
   both SHA-256 digests re-verified per object, stored as the digested
@@ -2116,10 +2121,12 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
    left to decide before the tag.**
 6. **Work, not decisions** — ✓ the implemented I-Regexp grammar was
    compared with the published text of RFC 9485 on 2026-11-12 (#61,
-   closed); ☐ a ledger of source occurrences per converter, the IFA
-   converter first, and the re-wording of "converted losslessly" that
-   follows from it (#41, re-planned on 2026-11-13: the global check that
-   was to be rolled out cannot show that a single value arrived); ☐ a real
+   closed); ☐ a ledger of source occurrences per converter, and the
+   re-wording of "converted losslessly" that follows from it (#41,
+   re-planned on 2026-11-13: the global check that was to be rolled out
+   cannot show that a single value arrived; ✓ the ledger exists and the
+   IFA converter is wired, 473 of its 835 source values are unaccounted;
+   ☐ those 473 decided path by path, ☐ the other ten converters); ☐ a real
    attestation in the example bundle (#46); ☐ `Assessment.method`
    payloads held to their pinned schema (#55); ☐ a second Risk corpus
    (IV.5b item 4).

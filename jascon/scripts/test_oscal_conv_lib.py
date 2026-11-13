@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-"""Regression tests for oscal_conv_lib.global_occurrence, the value-level
-measurement of the converters' coverage reports.
+"""Regression tests for the two value-level measurements of the converters'
+coverage reports in oscal_conv_lib: global_occurrence (is there an equal
+value anywhere) and Ledger (where did each source value go).
 
     python3 jascon/scripts/test_oscal_conv_lib.py
 
@@ -9,9 +10,9 @@ in the GitHub tracker of the repository, 2026-11-13). Until that day the
 function was `value_arrival`: it joined every output key and scalar into one
 string and tested substring membership, so the six cases of issue 32 gave
 five false arrivals and one false absence. Standard library only."""
-import os, sys, unittest
+import copy, json, os, sys, tempfile, unittest
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from oscal_conv_lib import global_occurrence
+from oscal_conv_lib import global_occurrence, Ledger, slug
 
 
 def measure(source, output):
@@ -99,6 +100,129 @@ class Issue33WhatTheMeasureCannotSee(unittest.TestCase):
         self.assertEqual(r["leaf-values"], r["exact"] + r["key-only"] + r["embedded"] + sum(r["absent"].values()))
         self.assertEqual((r["exact"], r["key-only"], r["embedded"]), (1, 1, 1))
         self.assertEqual(r["absent"], {"identity": 1, "document-metadata": 1, "content": 1})
+
+
+class Issue33Ledger(unittest.TestCase):
+    """The ledger traces a value by what the converter did with it (object
+    identity), never by equal text. `convert` plays a converter: it gets the
+    tracked source and the ledger and returns {relpath: object}."""
+
+    SOURCE = {"controls": [{"id": "a", "description": "Same text"}, {"id": "b", "description": "Same text"}]}
+
+    def run_ledger(self, source, convert, tamper=None):
+        led = Ledger()
+        objects = convert(led.source("src", source), led)
+        with tempfile.TemporaryDirectory() as out:
+            for rel, obj in objects.items():
+                os.makedirs(os.path.dirname(os.path.join(out, rel)), exist_ok=True)
+                written = tamper(rel, json.loads(json.dumps(obj))) if tamper else obj
+                with open(os.path.join(out, rel), "w", encoding="utf-8") as f: json.dump(written, f)
+            return led.account(out, objects)
+
+    @staticmethod
+    def outcomes(result):
+        return {e["source"]: e["outcome"] for e in result["entries"]}
+
+    def test_issue_33_the_dropped_description_is_unaccounted_whatever_else_is_equal(self):
+        def convert(src, led):
+            a, b = src["controls"]
+            return {"o/a.json": {"id": a["id"], "description": a["description"]},
+                    # b's description is dropped; an unrelated equal value and an equal key do not save it
+                    "o/b.json": {"id": b["id"], "title": "Same text", "Same text": 1}}
+        r = self.run_ledger(self.SOURCE, convert)
+        self.assertEqual(self.outcomes(r), {"src#/controls/0/id": "copied", "src#/controls/0/description": "copied",
+                                            "src#/controls/1/id": "copied", "src#/controls/1/description": "unaccounted"})
+        self.assertEqual(r["unaccounted-paths"],
+                         [{"path": "src.controls[].description", "count": 1, "pointers": ["src#/controls/1/description"]}])
+        self.assertEqual(r["totals"], {"copied": 3, "transformed": 0, "intentionally-dropped": 0, "unaccounted": 1})
+        # the global check, on the same data, sees nothing wrong
+        self.assertEqual(global_occurrence([("src", self.SOURCE)], [{"id": "a", "description": "Same text"}, {"id": "b"}])["exact"], 4)
+
+    def test_issue_33_a_declared_deduplication_accounts_for_the_dropped_twin(self):
+        def convert(src, led):
+            a, b = ({"description": c["description"]} for c in src["controls"])
+            led.same(b, a, "both controls carry one shared description, kept once")
+            return {"o/shared.json": {"id": "https://ex.org/shared", **a}}
+        r = self.run_ledger(self.SOURCE, convert)
+        twin = next(e for e in r["entries"] if e["source"] == "src#/controls/1/description")
+        self.assertEqual(twin["outcome"], "copied")
+        self.assertEqual(twin["destinations"], [{"object": "https://ex.org/shared", "pointer": "/description",
+                                                 "via": "both controls carry one shared description, kept once"}])
+
+    def test_issue_33_a_deduplication_of_unequal_values_is_refused(self):
+        source = {"controls": [{"description": "one text"}, {"description": "another text"}]}
+        def convert(src, led):
+            a, b = ({"description": c["description"]} for c in src["controls"])
+            led.same(b, a, "claimed to be the same")
+            return {"o/x.json": {"id": "https://ex.org/x", **a}}
+        r = self.run_ledger(source, convert)
+        self.assertEqual(self.outcomes(r)["src#/controls/1/description"], "unaccounted")
+        self.assertEqual([f["source"] for f in r["verification-failures"]], ["src#/controls/1/description"])
+
+    def test_a_transformation_is_named_and_applied_again_to_the_source(self):
+        def convert(src, led):
+            c = src["controls"][0]
+            return {"o/a.json": {"id": led.derive("id from the control id", lambda i: "https://ex.org/" + slug(i), c["id"]),
+                                 "label": led.derive("two values joined", lambda i, d: f"{i}: {d}", c["id"], c["description"])}}
+        r = self.run_ledger(self.SOURCE, convert)
+        e = {x["source"]: x for x in r["entries"]}
+        self.assertEqual(e["src#/controls/0/id"]["outcome"], "transformed")
+        self.assertEqual([d["rule"] for d in e["src#/controls/0/id"]["destinations"]], ["id from the control id", "two values joined"])
+        self.assertEqual(e["src#/controls/0/description"]["destinations"],
+                         [{"object": "https://ex.org/a", "pointer": "/label", "rule": "two values joined"}])
+        self.assertEqual(r["verification-failures"], [])
+
+    def test_a_plain_string_operation_loses_the_origin_until_it_is_stated(self):
+        # the property the whole design rests on: computing a value un-tracks it
+        def convert(src, led):
+            c = src["controls"][0]
+            return {"o/a.json": {"id": "https://ex.org/a", "upper": c["description"].upper(), "sliced": c["id"][:1]}}
+        r = self.run_ledger(self.SOURCE, convert)
+        self.assertEqual(self.outcomes(r)["src#/controls/0/description"], "unaccounted")
+        self.assertEqual(self.outcomes(r)["src#/controls/0/id"], "unaccounted")
+
+    def test_every_claim_is_checked_against_the_written_file(self):
+        def convert(src, led):
+            c = src["controls"][0]
+            return {"o/a.json": {"id": "https://ex.org/a", "description": c["description"],
+                                 "ref": led.derive("id from the control id", lambda i: "https://ex.org/" + i, c["id"])}}
+        def tamper(rel, obj):
+            obj["description"] = "Same text."; obj["ref"] = "https://ex.org/b"; return obj
+        r = self.run_ledger(self.SOURCE, convert, tamper)
+        self.assertEqual(sorted(f["source"] for f in r["verification-failures"]), ["src#/controls/0/description", "src#/controls/0/id"])
+        self.assertEqual(self.outcomes(r)["src#/controls/0/description"], "unaccounted")
+
+    def test_a_value_that_became_a_key_names_that_key(self):
+        source = {"props": [{"name": "asset-type", "value": "appliance"}, {"name": "ipv4", "value": "10.0.0.1"}, {"name": "ipv4", "value": "10.0.0.2"}]}
+        def convert(src, led):
+            return {"o/a.json": {"id": "https://ex.org/a", "props": {p["name"]: p["value"] for p in src["props"]}}}
+        r = self.run_ledger(source, convert)
+        e = {x["source"]: x for x in r["entries"]}
+        self.assertEqual(e["src#/props/0/name"]["destinations"], [{"object": "https://ex.org/a", "pointer": "/props/asset-type", "as": "key"}])
+        # found on the IFA inventory, 2026-11-13: a dict built from repeated prop
+        # names keeps the first key and the last value - one name and one value are lost
+        self.assertEqual((e["src#/props/1/name"]["outcome"], e["src#/props/1/value"]["outcome"]), ("copied", "unaccounted"))
+        self.assertEqual((e["src#/props/2/name"]["outcome"], e["src#/props/2/value"]["outcome"]), ("unaccounted", "copied"))
+
+    def test_a_drop_is_declared_with_its_reason_and_never_overrides_a_destination(self):
+        source = {"uuid": "u-1", "items": [{"uuid": "u-2", "title": "kept"}, {"uuid": "u-3", "title": "lost"}]}
+        def convert(src, led):
+            led.drop(r"\.uuid$", "identity is re-minted")
+            return {"o/a.json": {"id": "https://ex.org/a", "title": src["items"][0]["title"], "source-uuid": src["items"][0]["uuid"]}}
+        r = self.run_ledger(source, convert)
+        e = {x["source"]: x for x in r["entries"]}
+        self.assertEqual((e["src#/uuid"]["outcome"], e["src#/uuid"]["reason"]), ("intentionally-dropped", "identity is re-minted"))
+        self.assertEqual(e["src#/items/0/uuid"]["outcome"], "copied", "a carried uuid is a copy, whatever the drop rule says")
+        self.assertEqual(e["src#/items/1/title"]["outcome"], "unaccounted", "a drop covers only what it names")
+        self.assertEqual(sum(r["totals"].values()), r["leaf-values"])
+
+    def test_tracking_changes_nothing_that_is_written(self):
+        source = {"n": 27017, "s": "text", "nested": [{"k": "v"}]}
+        led = Ledger(); tracked = led.source("src", source)
+        self.assertEqual(json.dumps(tracked), json.dumps(source))
+        self.assertIs(copy.deepcopy(tracked["s"]), tracked["s"], "a copy keeps the trace")
+        self.assertEqual((type(tracked["n"] + 1), type(tracked["s"].strip())), (int, str), "a computed value is plain")
+        with self.assertRaises(TypeError): led.derive("to a list", lambda s: [s], tracked["s"])
 
 
 if __name__ == "__main__":

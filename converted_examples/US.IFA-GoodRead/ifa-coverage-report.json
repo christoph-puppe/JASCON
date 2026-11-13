@@ -3965,5 +3965,16 @@
     ]
    }
   ]
+ },
+ "ledger": {
+  "file": "ifa-conversion-ledger.json",
+  "leaf-values": 835,
+  "totals": {
+   "copied": 232,
+   "transformed": 26,
+   "intentionally-dropped": 104,
+   "unaccounted": 473
+  },
+  "verification-failures": 0
  }
 }
