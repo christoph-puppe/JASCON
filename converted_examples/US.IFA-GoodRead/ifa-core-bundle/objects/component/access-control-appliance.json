@@ -12,8 +12,20 @@
    "id": "cap-consumer-ac-2a",
    "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-2",
    "description": {
-    "en": "Description that directly addresses how the consumer responsibility was satisfied."
+    "en": "Description of how the responsibility was satisfied."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ifa.gov/goodread/facet/component@1": {
+   "description": {
+    "en": "An access control virtual appliance that performs XYZ functions."
+   },
+   "status": "operational",
+   "props": {
+    "implementation-point": "internal",
+    "virtual": "yes"
+   }
+  }
+ }
 }

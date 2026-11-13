@@ -20,13 +20,6 @@
    "description": {
     "en": "Consumer-appropriate description of what a leveraging system may inherit from THIS SYSTEM in the context of satisfying satisfaction of AC-2, part a."
    }
-  },
-  {
-   "id": "cap-provided-2",
-   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-2",
-   "description": {
-    "en": "Consumer-appropriate description of what may be inherited.\n\nIn the context of the application component in satisfaction of AC-2, part a."
-   }
   }
  ],
  "authorizations": [
@@ -38,17 +31,99 @@
  ],
  "facets": {
   "https://ifa.gov/goodread/facet/system@1": {
-   "customer-responsibilities": [
+   "system-ids": [
     {
-     "description": "Leveraging system's responsibilities with respect to inheriting this capability.\n\nIn the context of the application component in satisfaction of AC-2, part a."
-    },
-    {
-     "description": "Leveraging system's responsibilities with respect to inheriting this capability.\n\nIn the context of the application component in satisfaction of AC-2, part a."
+     "id": "csp_iaas_system"
     }
    ],
    "description": {
     "en": "An example of three customers leveraging an authorized SaaS, which is running on an authorized IaaS.\n\n```\n\nCust-A    Cust-B    Cust-C\n  |         |         |\n  +---------+---------+\n            |\n  +-------------------+\n  |  Leveraging SaaS  |\n  +-------------------+\n            |\n            |\n  +-------------------+\n  |  Leveraged IaaS   |\n  |    this file      |\n  +-------------------+\n            \n```\n\nIn this example, the IaaS SSP specifies customer responsibilities for certain controls.\n\nThe SaaS must address these for the control to be fully satisfied.\n\nThe SaaS provider may either implement these directly or pass the responsibility on to their customers. Both may be necessary.\n\nFor any given control, the Leveraged IaaS SSP must describe:\n\n1. HOW the IaaS is directly satisfying the control\n1. WHAT responsibilities are left for the Leveraging SaaS (or their customers) to implement.\n\n\nFor any given control, the Leveraging SaaS SSP must describe:\n\n1. WHAT is being inherited from the underlying IaaS\n1. HOW the SaaS is directly satisfying the control.\n1. WHAT responsibilities are left for the SaaS customers to implement. (The SaaS customers are Cust-A, B and C)\n"
-   }
+   },
+   "status": "operational",
+   "sensitivity": "low",
+   "impact": {
+    "information-types": [
+     {
+      "uuid": "11111111-0000-4000-9000-200000000000",
+      "title": "System and Network Monitoring",
+      "description": "This IaaS system handles information pertaining to audit events.",
+      "categorizations": [
+       {
+        "system": "https://doi.org/10.6028/NIST.SP.800-60v2r1",
+        "information-type-ids": [
+         "C.3.5.8"
+        ]
+       }
+      ],
+      "confidentiality-impact": {
+       "base": "fips-199-moderate",
+       "selected": "fips-199-low",
+       "adjustment-justification": "This impact has been adjusted to low as an example of how to perform this type of adjustment."
+      },
+      "integrity-impact": {
+       "base": "fips-199-moderate",
+       "selected": "fips-199-low",
+       "adjustment-justification": "This impact has been adjusted to low as an example of how to perform this type of adjustment."
+      },
+      "availability-impact": {
+       "base": "fips-199-moderate",
+       "selected": "fips-199-low",
+       "adjustment-justification": "This impact has been adjusted to low as an example of how to perform this type of adjustment."
+      }
+     }
+    ],
+    "security-impact-level": {
+     "security-objective-confidentiality": "fips-199-low",
+     "security-objective-integrity": "fips-199-low",
+     "security-objective-availability": "fips-199-low"
+    }
+   },
+   "boundary": {
+    "en": "The hardware and software supporting the virtualized infrastructure supporting the IaaS."
+   },
+   "remarks": {
+    "en": "Most system-characteristics content does not support the example, and is included to meet the minimum SSP syntax requirements."
+   },
+   "users": [
+    {
+     "privileges": [
+      {
+       "title": "Administrator",
+       "functions": [
+        "Manages the components within the IaaS."
+       ]
+      }
+     ]
+    }
+   ],
+   "customer-responsibilities": [
+    {
+     "description": "Leveraging system's responsibilities with respect to inheriting this capability.\n\nIn the context of the application component in satisfaction of AC-2, part a.",
+     "capability": "https://ifa.gov/goodread/component/csp-iaas#cap-provided-1"
+    },
+    {
+     "description": "Leveraging system's responsibilities with respect to inheriting this capability.\n\nIn the context of the application component in satisfaction of AC-2, part a.",
+     "capability": "https://ifa.gov/goodread/component/csp-application#cap-provided-2"
+    }
+   ]
+  },
+  "https://ifa.gov/goodread/facet/component@1": {
+   "title": "This System",
+   "description": {
+    "en": "This Leveraged IaaS.\n\nThe entire system as depicted in the system authorization boundary"
+   },
+   "status": "operational",
+   "responsible-roles": [
+    {
+     "role": "admin"
+    },
+    {
+     "role": "poc-for-customers"
+    },
+    {
+     "role": "customer"
+    }
+   ]
   }
  }
 }

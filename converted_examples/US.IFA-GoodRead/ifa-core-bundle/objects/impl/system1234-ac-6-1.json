@@ -20,5 +20,12 @@
  "status": "implemented",
  "evidence-refs": [
   "https://ifa.gov/goodread/doc/ssp-cef90dc9-2745-4c59-90b6-f82f6a96dad7"
- ]
+ ],
+ "facets": {
+  "https://ifa.gov/goodread/facet/implementation@1": {
+   "description": {
+    "en": "This is the control implementation for the application and infrastructure that compose to the IFA SYSTEM1234 Project's system."
+   }
+  }
+ }
 }

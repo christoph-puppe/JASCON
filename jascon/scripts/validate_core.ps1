@@ -533,7 +533,7 @@ function Number-Spelling-Violations([string]$text) {
     foreach ($m in $NUMBER_TOKEN_RX.Matches($bare)) {
         $tok = [string]$m.Value
         $digits = $tok.TrimStart('-')
-        if ((-not $NUMBER_PLAIN_RX.IsMatch($tok)) -or ($tok -ceq '-0') -or ($digits.Length -gt $NUMBER_MAX_DIGITS.Length) -or
+        if ((-not $NUMBER_PLAIN_RX.IsMatch($tok)) -or [string]::Equals($tok, '-0', [System.StringComparison]::Ordinal) -or ($digits.Length -gt $NUMBER_MAX_DIGITS.Length) -or
             (($digits.Length -eq $NUMBER_MAX_DIGITS.Length) -and ([string]::CompareOrdinal($digits, $NUMBER_MAX_DIGITS) -gt 0))) {
             [void]$out.Add($tok) }
     }
@@ -1514,10 +1514,13 @@ function Run-Jcs {
             # number: its own parser would have read it already)
             $text = [string]$case['number-text']
             $val = Parse-Json $text
-            $verdict = 'valid'
-            if (((Number-Spelling-Violations $text).Count -gt 0) -or ((Number-Violations $val).Count -gt 0)) { $verdict = 'invalid' }
-            $got = ''; if ($verdict -eq 'valid') { $got = Canonical $val }
-            if (($verdict -eq $case['expected']) -and (($verdict -eq 'invalid') -or ($got -ceq $case['canonical-text']))) { OK 'jcs' }
+            # no operator compares two strings here (D2: code point by code point, never under a culture)
+            $isValid = (((Number-Spelling-Violations $text).Count -eq 0) -and ((Number-Violations $val).Count -eq 0))
+            $verdict = 'invalid'; if ($isValid) { $verdict = 'valid' }
+            $got = ''; if ($isValid) { $got = Canonical $val }
+            $asExpected = [string]::Equals($verdict, [string]$case['expected'], [System.StringComparison]::Ordinal)
+            $sameForm = (-not $isValid) -or [string]::Equals($got, [string]$case['canonical-text'], [System.StringComparison]::Ordinal)
+            if ($asExpected -and $sameForm) { OK 'jcs' }
             else { FAIL 'jcs' "$($case['name']): expected $($case['expected']), got $verdict $got" }
         }
     }

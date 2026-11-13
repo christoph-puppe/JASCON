@@ -9,6 +9,18 @@
   "properties": {
    "activities": {
     "type": "array"
+   },
+   "tasks": {
+    "type": "array"
+   },
+   "subjects": {
+    "type": "array"
+   },
+   "reviewed-controls": {
+    "type": "array"
+   },
+   "responsible-roles": {
+    "type": "array"
    }
   },
   "additionalProperties": false

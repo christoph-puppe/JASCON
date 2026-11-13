@@ -46,6 +46,11 @@ reads its report and rewrites `facts.json`. If the validator is not ALL GREEN
 the build stops and writes nothing. The publishing workflow always measures,
 so the site shows the counts of the commit it was built from.
 
+The counts of the conversion ledger on the evidence page (`{{ n.ledger_* }}`)
+are read at build time from
+`converted_examples/US.IFA-GoodRead/ifa-coverage-report.json`, the report the
+IFA converter writes.
+
 Numbers the build cannot recompute are dated in the text: the 1.0.0
 measurement of 22 July 2026 (eleven corpora, 251,591 leaf values, the
 5,886-object OSCAL round trip) and the counts from the census. When one of

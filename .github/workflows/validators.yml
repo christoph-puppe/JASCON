@@ -3,6 +3,8 @@
 # Four jobs, one per implementation and one for the pages:
 #   python      validate_core.py, the reference (Ubuntu, Python 3.12), and the
 #               tests of the converter library (test_oscal_conv_lib.py)
+#               and a re-run of the IFA conversion from its pinned sources,
+#               which must reproduce what is committed
 #   powershell  validate_core.ps1, the twin, on WINDOWS POWERSHELL 5.1
 #               (windows-latest; `shell: powershell` is 5.1, `pwsh` would be 7)
 #   app         the JavaScript port in jascon-app/ against the same vectors
@@ -59,6 +61,28 @@ jobs:
           python jascon/scripts/validate_core.py | tee run.log
       - name: Converter library (the value-level measurement of the coverage reports)
         run: python jascon/scripts/test_oscal_conv_lib.py
+      - name: The IFA conversion is reproducible from its pinned sources
+        # The bundle, the coverage reports and the ledger under
+        # converted_examples/US.IFA-GoodRead are a record of one conversion.
+        # They change only when somebody means to change them: the sources
+        # are fetched at their pinned commit, checked against SOURCES.sha256,
+        # converted again, and the result must be byte for byte what is
+        # committed.
+        run: |
+          set -euo pipefail
+          list=converted_examples/US.IFA-GoodRead/SOURCES.sha256
+          base=$(sed -n 's/^# base: //p' "$list")
+          mkdir -p sources/nist
+          sed -n 's/^# path: //p' "$list" | while read -r p; do
+            curl -sSfL --retry 3 -o "sources/nist/$(basename "$p")" "$base$p"
+          done
+          (cd sources/nist && sha256sum -c "$GITHUB_WORKSPACE/$list")
+          python jascon/scripts/convert_ifa.py
+          if [ -n "$(git status --porcelain -- converted_examples/US.IFA-GoodRead)" ]; then
+            echo "convert_ifa.py no longer reproduces the committed conversion:"
+            git --no-pager diff --stat -- converted_examples/US.IFA-GoodRead
+            exit 1
+          fi
       - name: Summary
         if: always()
         run: |

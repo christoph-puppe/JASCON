@@ -12,7 +12,7 @@ string and tested substring membership, so the six cases of issue 32 gave
 five false arrivals and one false absence. Standard library only."""
 import copy, json, os, sys, tempfile, unittest
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from oscal_conv_lib import global_occurrence, Ledger, slug
+from oscal_conv_lib import global_occurrence, Ledger, props_by_name, slug
 
 
 def measure(source, output):
@@ -204,6 +204,25 @@ class Issue33Ledger(unittest.TestCase):
         self.assertEqual((e["src#/props/1/name"]["outcome"], e["src#/props/1/value"]["outcome"]), ("copied", "unaccounted"))
         self.assertEqual((e["src#/props/2/name"]["outcome"], e["src#/props/2/value"]["outcome"]), ("unaccounted", "copied"))
 
+    def test_a_repeated_prop_name_keeps_every_value(self):
+        # the fix for what the test above shows (the IFA inventory, item 4)
+        source = {"props": [{"name": "asset-type", "value": "appliance"}, {"name": "ipv4-address", "value": "172.1.2.3"},
+                            {"name": "ipv4-address", "value": "1.1.2.3"}, {"name": "ipv4-address", "value": "10.0.0.9"}]}
+        self.assertEqual(props_by_name(source["props"]),
+                         {"asset-type": "appliance", "ipv4-address": ["172.1.2.3", "1.1.2.3", "10.0.0.9"]})
+        self.assertEqual(props_by_name(None), {})
+        classed = [{"name": "a", "value": "1", "class": "x"}, {"name": "b", "value": "2"}, {"name": "a", "value": "3", "class": "y"}]
+        self.assertEqual(props_by_name(classed, field="class"), {"a": ["x", "y"]}, "another member of the prop; props without it are left out")
+        def convert(src, led):
+            return {"o/a.json": {"id": "https://ex.org/a", "props": props_by_name(src["props"], led)}}
+        r = self.run_ledger(source, convert)
+        self.assertEqual(r["totals"], {"copied": 8, "transformed": 0, "intentionally-dropped": 0, "unaccounted": 0})
+        e = {x["source"]: x for x in r["entries"]}
+        self.assertEqual(e["src#/props/1/value"]["destinations"], [{"object": "https://ex.org/a", "pointer": "/props/ipv4-address/0"}])
+        self.assertEqual(e["src#/props/3/value"]["destinations"], [{"object": "https://ex.org/a", "pointer": "/props/ipv4-address/2"}])
+        self.assertEqual(e["src#/props/2/name"]["destinations"], [{"object": "https://ex.org/a", "pointer": "/props/ipv4-address", "as": "key",
+                         "via": "a prop name that repeats is one key; its values are listed in source order"}])
+
     def test_a_drop_is_declared_with_its_reason_and_never_overrides_a_destination(self):
         source = {"uuid": "u-1", "items": [{"uuid": "u-2", "title": "kept"}, {"uuid": "u-3", "title": "lost"}]}
         def convert(src, led):
@@ -215,6 +234,19 @@ class Issue33Ledger(unittest.TestCase):
         self.assertEqual(e["src#/items/0/uuid"]["outcome"], "copied", "a carried uuid is a copy, whatever the drop rule says")
         self.assertEqual(e["src#/items/1/title"]["outcome"], "unaccounted", "a drop covers only what it names")
         self.assertEqual(sum(r["totals"].values()), r["leaf-values"])
+
+    def test_one_value_is_dropped_by_name_not_by_path(self):
+        source = {"roles": [{"role": "admin", "party": "p-1"}, {"role": "owner", "party": "p-2"}]}
+        def convert(src, led):
+            led.drop_value(src["roles"][1]["party"], "the party record has no name")
+            led.drop_value(src["roles"][0]["role"], "never applies: the value has a destination")
+            return {"o/a.json": {"id": "https://ex.org/a", "roles": [r["role"] for r in src["roles"]]}}
+        r = self.run_ledger(source, convert)
+        e = {x["source"]: x for x in r["entries"]}
+        self.assertEqual((e["src#/roles/1/party"]["outcome"], e["src#/roles/1/party"]["reason"]),
+                         ("intentionally-dropped", "the party record has no name"))
+        self.assertEqual(e["src#/roles/0/party"]["outcome"], "unaccounted", "the same path, another value: not covered")
+        self.assertEqual(e["src#/roles/0/role"]["outcome"], "copied")
 
     def test_tracking_changes_nothing_that_is_written(self):
         source = {"n": 27017, "s": "text", "nested": [{"k": "v"}]}

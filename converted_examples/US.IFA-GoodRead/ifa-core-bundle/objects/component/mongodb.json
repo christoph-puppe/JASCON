@@ -11,15 +11,31 @@
   {
    "id": "cap-sc-8",
    "requirement-ref": "https://ns.nist.gov/sp800-53/req/SC-8",
+   "statement-ids": [
+    "smt"
+   ],
    "description": {
-    "en": "MongoDB's implementation of SC-8 control. The details of the implementation are provided at the statement level."
+    "en": "MongoDB's implementation of SC-8 control. The details of the implementation are provided at the statement level.\n\nsmt: MongoDB implements TLS 1.x to protect the {param:sc-08_odp} of transmitted data by encrypting data in transit, preventing unauthorized disclosure or changes to information during transmission."
+   },
+   "parameter-bindings": {
+    "sc-08_odp": [
+     "confidentiality"
+    ]
    }
   },
   {
    "id": "cap-sc-8-1",
    "requirement-ref": "https://ns.nist.gov/sp800-53/req/SC-8.1",
+   "statement-ids": [
+    "smt"
+   ],
    "description": {
-    "en": "MongoDB implements cryptographic mechanisms (TLS 1.x) to provide cryptographic protection for data in transit."
+    "en": "MongoDB implements cryptographic mechanisms (TLS 1.x) to provide cryptographic protection for data in transit.\n\nsmt: To implement cryptographic mechanisms (aka enable TLS 1.x) to {param:sc-08.01_odp}, customers need to set the `PEMKeyFile` option in the configuration file `/etc/mongod.conf` to the certificate file's path and restart the component."
+   },
+   "parameter-bindings": {
+    "sc-08.01_odp": [
+     "prevent unauthorized disclosure of information"
+    ]
    }
   },
   {
@@ -65,6 +81,33 @@
        "transport": "TCP"
       }
      ]
+    }
+   ]
+  },
+  "https://ifa.gov/goodread/facet/component@1": {
+   "description": {
+    "en": "MongoDB is a source-available, cross-platform document-oriented database program. Classified as a NoSQL database program, MongoDB uses JSON-like documents with optional schemas."
+   },
+   "purpose": {
+    "en": "Provides a NoSQL database service"
+   },
+   "control-implementations": [
+    {
+     "description": {
+      "en": "MongoDB control implementations for NIST SP 800-53 revision 5."
+     },
+     "source": "../../../nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_MODERATE-baseline_profile.json"
+    }
+   ],
+   "responsible-roles": [
+    {
+     "role": "provider",
+     "parties": [
+      "https://ifa.gov/goodread/party/mongodb"
+     ]
+    },
+    {
+     "role": "customer"
     }
    ]
   }

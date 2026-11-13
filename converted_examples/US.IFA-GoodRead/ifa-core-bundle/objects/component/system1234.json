@@ -135,8 +135,18 @@
       "software-version": "1.0.0",
       "asset-type": "web-server"
      },
+     "prop-classes": {
+      "software-name": "webserver-application",
+      "software-version": "webserver-application",
+      "asset-type": "webserver-application"
+     },
      "components": [
       "551b9706-d6a4-4d25-8207-f2ccec548b89"
+     ],
+     "component-props": [
+      {
+       "asset-id": "IFAGOV-SYSTEM1234"
+      }
      ]
     },
     {
@@ -146,8 +156,18 @@
       "software-version": "4.2.1",
       "asset-type": "web-server"
      },
+     "prop-classes": {
+      "software-name": "webserver-framework",
+      "software-version": "webserver-framework",
+      "asset-type": "webserver-framework"
+     },
      "components": [
       "551b9706-d6a4-4d25-8207-f2ccec548b89"
+     ],
+     "component-props": [
+      {
+       "asset-id": "IFAGOV-SYSTEM1234"
+      }
      ]
     },
     {
@@ -157,8 +177,18 @@
       "software-version": "15.3",
       "asset-type": "database"
      },
+     "prop-classes": {
+      "software-name": "database",
+      "software-version": "database",
+      "asset-type": "database"
+     },
      "components": [
       "551b9706-d6a4-4d25-8207-f2ccec548b89"
+     ],
+     "component-props": [
+      {
+       "asset-id": "IFAGOV-SYSTEM1234"
+      }
      ]
     },
     {
@@ -167,20 +197,46 @@
       "software-name": "Red Hat Enterprise Linux 9",
       "asset-type": "operating-system"
      },
+     "prop-classes": {
+      "software-name": "operating-system",
+      "asset-type": "operating-system"
+     },
      "components": [
       "551b9706-d6a4-4d25-8207-f2ccec548b89"
+     ],
+     "component-props": [
+      {
+       "asset-id": "IFAGOV-SYSTEM1234"
+      }
      ]
     },
     {
      "description": "This inventory item is an instance from the AWSomeCloud AWSome Compute Service (ACS) Service. It is a Linux server.",
      "props": {
       "asset-id": "instance-abcd1234",
-      "ipv4-address": "1.1.2.3",
+      "ipv4-address": [
+       "172.1.2.3",
+       "1.1.2.3"
+      ],
       "uri": "instance-abcd1234.acs.awsomecloud.systems",
       "asset-type": "appliance"
      },
+     "prop-classes": {
+      "asset-id": "linux-server",
+      "ipv4-address": [
+       "linux-server",
+       "linux-server"
+      ],
+      "uri": "linux-server",
+      "asset-type": "linux-server"
+     },
      "components": [
       "551b9706-d6a4-4d25-8207-f2ccec548b89"
+     ],
+     "component-props": [
+      {
+       "asset-id": "IFAGOV-SYSTEM1234"
+      }
      ]
     },
     {
@@ -190,9 +246,62 @@
       "asset-id": "instance-defg7890",
       "uri": "https://instance-defg7890.alb.awsomecloud.systems"
      },
+     "prop-classes": {
+      "asset-type": "network-load-balancer",
+      "asset-id": "linux-server",
+      "uri": "network-load-balancer"
+     },
      "components": [
       "551b9706-d6a4-4d25-8207-f2ccec548b89"
+     ],
+     "component-props": [
+      {
+       "asset-id": "IFAGOV-SYSTEM1234"
+      }
      ]
+    }
+   ],
+   "responsible-roles": [
+    {
+     "role": "owner",
+     "parties": [
+      "https://ifa.gov/goodread/party/owen-pearson"
+     ]
+    },
+    {
+     "role": "developer",
+     "parties": [
+      "https://ifa.gov/goodread/party/juno-styles"
+     ]
+    },
+    {
+     "role": "system-engineer",
+     "parties": [
+      "https://ifa.gov/goodread/party/xavier-jones"
+     ]
+    }
+   ]
+  },
+  "https://ifa.gov/goodread/facet/component@1": {
+   "description": {
+    "en": "IFA develops, operates, and maintains the SYSTEM1234 link shortener system "
+   },
+   "status": "operational",
+   "responsible-roles": [
+    {
+     "role": "developer",
+     "parties": [
+      "https://ifa.gov/goodread/party/juno-styles"
+     ]
+    },
+    {
+     "role": "system-engineer",
+     "parties": [
+      "https://ifa.gov/goodread/party/xavier-jones"
+     ]
+    },
+    {
+     "role": "public-affairs-office"
     }
    ]
   }

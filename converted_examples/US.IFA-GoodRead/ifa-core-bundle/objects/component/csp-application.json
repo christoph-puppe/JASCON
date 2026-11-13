@@ -6,5 +6,36 @@
  "title": {
   "en": "Application"
  },
- "kind": "software"
+ "kind": "software",
+ "capabilities": [
+  {
+   "id": "cap-provided-2",
+   "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-2",
+   "description": {
+    "en": "Consumer-appropriate description of what may be inherited.\n\nIn the context of the application component in satisfaction of AC-2, part a."
+   }
+  }
+ ],
+ "facets": {
+  "https://ifa.gov/goodread/facet/component@1": {
+   "description": {
+    "en": "An application within the IaaS, exposed to SaaS customers and their downstream customers.\n\nThis Leveraged IaaS maintains aspects of the application.\n\nThe Leveraging SaaS maintains aspects of their assigned portion of the application.\n\nThe customers of the Leveraging SaaS maintain aspects of their sub-assigned portions of the application."
+   },
+   "status": "operational",
+   "props": {
+    "implementation-point": "internal"
+   },
+   "responsible-roles": [
+    {
+     "role": "admin"
+    },
+    {
+     "role": "poc-for-customers"
+    },
+    {
+     "role": "customer"
+    }
+   ]
+  }
+ }
 }

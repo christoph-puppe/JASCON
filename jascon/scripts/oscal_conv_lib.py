@@ -278,7 +278,8 @@ def global_occurrence(sources, objects):
 #                          named (read back from the written file)
 #   transformed            a named rule produced the destination from it; the
 #                          rule was applied again to the source and compared
-#   intentionally-dropped  no destination, and a drop() declaration says why
+#   intentionally-dropped  no destination, and a drop() or drop_value()
+#                          declaration says why
 #   unaccounted            none of these - the work queue
 # A value that was deduplicated is linked to what was kept with same(); its
 # outcome is then the kept value's, marked `via`.
@@ -336,6 +337,7 @@ class Ledger:
         self.docs = {}          # tag -> the source document as loaded (never tracked)
         self.leaves = []        # (tag, parts) of every source leaf, in document order
         self._drops = []        # (compiled regex over the collapsed path, reason)
+        self._value_drops = {}  # (tag, parts) -> reason, for a single source leaf
         self._same = []         # (dropped tracked value, kept tracked value, rule)
 
     def source(self, tag, doc):
@@ -363,6 +365,19 @@ class Ledger:
         """Declare that source leaves whose collapsed path matches `pattern`
         are not carried, and why. Applies only where no destination exists."""
         self._drops.append((re.compile(pattern), reason))
+
+    def drop_value(self, value, reason):
+        """Declare that THIS source value (a tracked value, or a structure of
+        them) is not carried, and why. For a decision that depends on the
+        value and not on its path: one party reference among many names a
+        party without a name. Like drop(), it applies only where no
+        destination exists."""
+        if isinstance(value, dict):
+            for v in value.values(): self.drop_value(v, reason)
+        elif isinstance(value, list):
+            for v in value: self.drop_value(v, reason)
+        elif isinstance(value, _Tracked) and value._rule is None:
+            for origin in value._origins: self._value_drops.setdefault(origin, reason)
 
     def same(self, dropped, kept, rule):
         """Deduplication: `dropped` and `kept` are two structures the converter
@@ -453,7 +468,8 @@ class Ledger:
                 outcome = "copied" if any("rule" not in d for d in dests) else "transformed"
                 entry["destinations"] = sorted(dests, key=lambda d: (d["object"] or "", d["pointer"]))
             else:
-                reason = next((why for rx, why in self._drops if rx.search(path)), None)
+                reason = self._value_drops.get(origin)
+                if reason is None: reason = next((why for rx, why in self._drops if rx.search(path)), None)
                 if reason is not None:
                     outcome, entry["reason"] = "intentionally-dropped", reason
                 else:
@@ -466,6 +482,31 @@ class Ledger:
                 "verification-failures": failures,
                 "unaccounted-paths": [{"path": p, "count": len(w), "pointers": w} for p, w in sorted(unaccounted.items())],
                 "entries": entries}
+
+def props_by_name(props, ledger=None, field="value"):
+    """OSCAL props [{name, value}, ...] -> {name: value}. A name that repeats
+    keeps EVERY value, as a list in source order - the rule parameter
+    bindings already follow (one value as it is, several as a list).
+    `field` picks another member of the prop instead of its value (`class`);
+    a prop without that member is left out.
+
+    Until 2026-11-13 the IFA converter wrote `{p["name"]: p["value"] for p in
+    props}`. A dict keeps one value per key, so of two `ipv4-address` props of
+    one inventory item the first address was overwritten and the bundle
+    shipped without it. The conversion ledger found it: one value with no
+    destination. With a ledger, the repeated name is linked to the key that
+    stands for it."""
+    out = {}
+    for p in props or []:
+        if field not in p: continue
+        name, value = p["name"], p[field]
+        if name not in out:
+            out[name] = value; continue
+        if ledger is not None:
+            key = next(k for k in out if k == name)          # the key object the dict already holds
+            ledger.same(name, key, "a prop name that repeats is one key; its values are listed in source order")
+        out[name] = out[name] + [value] if isinstance(out[name], list) else [out[name], value]
+    return out
 
 def coverage(paths, rules):
     """rules: list of (regex, level, target). Returns (rows, unmapped)."""

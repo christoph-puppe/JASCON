@@ -2781,13 +2781,182 @@ equal those of the main system, and only the main system's are carried.
    status and type. Many will be deliberate. None is declared, and the
    ledger does not guess.
 
+**The lost address, fixed (the same day, on the author's word).**
+`oscal_conv_lib.props_by_name`: a prop name that repeats keeps every
+value, as a list in source order, which is what parameter bindings
+already do with several values. Item 4 now carries `["172.1.2.3",
+"1.1.2.3"]`. Three files of the IFA bundle changed: the system Component,
+the Attestation whose subject it is, and the manifest. The Component
+keeps its id and its version (the SSP's `1.1.1`), as every re-run of
+this converter has; whoever pinned its earlier semantic digest holds a digest
+of the object with the address missing. The ledger reads 234 copied and
+471 unaccounted since. The website's sentence now takes the ledger's
+counts from the converter's report at build time, so the 471 can be
+decided path by path without touching a page or a translation.
+
 **Not done, on purpose.** Only one drop is declared, the one the report
 already stated. Declaring the rest "intentional" would have produced a
 small number and no knowledge.
 
+**The first decisions on the unaccounted values (2026-11-13, the
+author; applied the same day).** The 471 were put to the author in
+fifteen classes, each with a recommended outcome. Accepted as
+recommended and applied, none of them with a change to the bundle:
+
+| Class | Values | Outcome |
+|---|---:|---|
+| Revision history of the source documents | 56 | declared drop: bookkeeping of the source, which the manifest pins by commit |
+| Directory of parties and roles | 61 | declared drop: a party is a landmark URI and there is no party object (#16); a party name the bundle refers to stays a transformation |
+| Back-matter resources and import links | 58 | declared drop: links to other serialisations, to imported documents and to the catalogue the bundle carries as Requirements |
+| Type tags of structural elements | 11 | declared drop: the bundle says by its shape what the element is |
+| The prop name that selects a response type | 2 | declared drop: the value is carried under the field the converter names `type` |
+| The risk in the assessment results | 4 | its description equals the POA&M risk's and is linked to it; title, statement and status are the earlier state and are dropped as superseded (the POA&M title gained a prefix, its statement lost a misspelt word) |
+| Values the converter already used | 7 | stated as rules: component `type` to `kind` for the four Components that had a constant kind, the control id of the SSP's implemented requirement and of the reviewed controls to the Requirement, the POA&M `system-id` to `component-refs` |
+
+**The ledger since: 235 copied, 33 transformed, 295 dropped for a
+declared reason, 272 unaccounted, 0 failed checks.** A drop applies only
+to a value without a destination; the comparison of the ledger before
+and after shows no value of another class among the newly dropped.
+
+Four values of the "already used" class turned out not to be used and
+stay unaccounted: the `related-controls` control id of the activities
+in the assessment plan and the assessment results, and the `type` of
+two components of the leveraging SSP (its copy of the leveraged system
+and of the leveraged application), which the converter does not emit.
+
+**Open.** Seven classes to carry (the characteristics of the leveraged
+and the leveraging system, the component definition's control detail,
+component descriptions and props, inventory prop classes, the
+implementation narrative, assessment detail, document metadata into the
+manifest's provenance): accepted in principle, each changes the bundle
+and is applied class by class. Two classes are under discussion with
+the author: role assignments without a kernel field (40 values) and
+references by uuid whose edge the converter builds by hand (25).
+
+## The carry classes and the references (2026-11-13, later the same day)
+
+The author decided the 272: the seven carry classes as recommended;
+roles at two levels only, on the Component and for the whole scope,
+never per statement, activity, task, capability or user ("each role
+assignment per element would blow up things"); and for the references
+by uuid the recommended solution, resolve where the bundle has the edge,
+carry where it has none. The decisions were applied in steps, one commit
+each. After each step the converter ran twice (identical files), the
+ledger had no failed check, and the reference validator, the converter
+tests and the app's OSCAL tests were green.
+
+**Before the first step, a guard.** The author's observation: the
+converter's report is a historical document, and a breaking change in
+the kernel or the library would go unnoticed. `SOURCES.sha256` in the
+IFA folder pins the seven source files; a CI step downloads them at the
+pinned commit, checks the digests, runs the converter and fails if the
+committed folder is not reproduced byte for byte.
+
+| Step | What was carried, and where | Copied | Transformed | Dropped | Unaccounted |
+|---|---|---:|---:|---:|---:|
+| before | | 235 | 33 | 295 | 272 |
+| Document metadata | title, version, OSCAL version, last-modified, published and remarks of each of the seven documents, as `provenance.source-documents` in the manifest | 262 | 33 | 295 | 245 |
+| Leveraged and leveraging system | one function builds `system@1` for all three plans: ids, status, sensitivity, FIPS-199 impact and information types, boundary, remarks, users | 310 | 33 | 293 | 199 |
+| Inventory | beside `props` and `components`: `prop-classes` (the class of each prop, by name) and `component-props` (the props of each implemented component) | 341 | 33 | 293 | 168 |
+| Component definition (#64) | per capability `statement-ids`, the statement texts under their clause ids, `parameter-bindings` under the catalogue's parameter names; the control implementation's description and source in `component@1` | 342 | 44 | 291 | 158 |
+| Components and roles | `component@1` on every Component: description, purpose, status, props, `responsible-roles`; the scope's roles in `system@1` and in the Assessment's method payload | 388 | 60 | 309 | 78 |
+| Implementation narrative | `implementation@1` on the Implementation: description, remarks, and per statement each component's response with what it says of the export, of what is inherited and of what is satisfied | 404 | 60 | 309 | 62 |
+| Assessment detail | method payload: activities with steps, method and related controls, the results' own activity beside the plan's, tasks, subjects; `observations@1`: description, end, types, subjects, remarks; `finding-target@1`: descriptions and the POA&M item | 441 | 67 | 308 | 19 |
+| References by uuid | lookup maps from source uuid to minted id; each edge is the result of resolving the reference the source gives | 441 | 95 | 296 | 3 |
+
+**Shapes.** Two new facets, one per object type, each with a pinned
+stub schema: `component@1` (`title`, `description`, `purpose`, `status`,
+`props`, `control-implementations[]`, `responsible-roles[]`) and
+`implementation@1` (`description`, `remarks`, `statements[]` of
+`{statement, remarks, responses[]}`, a response being `{component,
+description, export, inherited[], satisfied[]}`). Everything else went
+into facets the corpus had. A role entry is `{role, parties: [landmark
+URI]}`. An assignment the source makes below the two levels is rolled
+up: where its role and party are on the Component or the scope already
+it is linked to them in the ledger, else it joins the list.
+
+**Declared in these steps**, and nothing else: eight role references to
+parties the source defines without a name (the leveraged pair's parties
+have a type and at most a remark; the role is carried without a party),
+and twenty values of the leveraging plan's own entries for the leveraged
+system and its application, for which the provider's Components stand.
+
+**What the steps found.**
+
+1. *The path map, again.* Beside the three claims known from the first
+   run and #64 it said that the activity of the assessment results was
+   "duplicated from AP; carried once" (it is a different activity, a
+   TEST where the plan has an EXAMINE, and was not carried) and that the
+   titles of the POA&M items "ride the Finding titles" (they did not).
+   The texts now say what is written.
+2. *Two edges were wrong.* Resolved from the source, the exported
+   capability `cap-provided-2` belongs to the application component of
+   the leveraged system; the converter had put it on the system
+   Component `csp-iaas`. And the appliance's capability
+   `cap-consumer-ac-2a` carried the `satisfied` text of another
+   component of the same statement. Both follow the source now; the
+   Implementation `csp-iaas-ac-2` cites the capability on
+   `csp-application`. The other hand-wired edges resolved to the value
+   they had.
+3. *One observation, two texts.* The assessment results and the POA&M
+   hold the same observation under one uuid, and its remarks differ by
+   one space before a line break. The deduplication had kept the first
+   and dropped the second unseen. The second is carried under `variants`.
+4. *Source defects, reported and not repaired.* Eight parties without a
+   name. A plan task names an activity by a uuid the plan does not
+   define. The first POA&M item names a risk by a uuid the POA&M does not
+   define (the item is matched to its risk through the observation they
+   share). A `satisfied` entry of the leveraging plan names, as its
+   responsibility, the uuid of an exported capability.
+5. The stub schema of the method payload had not named `tasks` and
+   `reviewed-controls`, which the payload has carried since 1.0.0 (part
+   of #55).
+
+**Still unaccounted: three**, the three dangling references of item 4
+(`ap…tasks[].associated-activities[].activity-uuid`,
+`poam…poam-items[].related-risks[].risk-uuid`,
+`lvg…by-components[].satisfied[].responsibility-uuid`). Nothing is
+invented for them and no drop is declared; that is the author's to
+decide. 15 of the bundle's 17 objects changed in these steps, the two
+Requirements did not; ids and versions are those of the source
+documents, as on every re-run of this converter.
+
+**Not done.** `requirement-ref` of the component definition's
+capabilities is written into the NIST namespace by rule; the `source`
+of the control implementation is carried and does not choose it. The
+converter still writes a party URI `authorizing-official` for the
+authorization that no source value names. The other ten converters have
+no ledger.
+
+## The last three, and what the ledger cannot see (2026-11-13, the author's two decisions)
+
+1. **The three dangling references are declared as defects of the
+   source.** The activity a task of the assessment plan names, the risk
+   the first POA&M item names, and the responsibility one `satisfied`
+   entry names do not exist in their documents. No edge is derived and
+   none is invented; the ledger gives each the reason, and the report
+   lists them as source findings. **The ledger reads 441 copied, 95
+   transformed, 299 dropped for a declared reason, 0 unaccounted, 0
+   failed checks.**
+2. **The party URIs without a source stay, and the report says so.**
+   `authority-ref` of the two authorizations and the Attestation's
+   `signer` are written as `authorizing-official` and
+   `csp-authorizing-official`. None of the plans defines such a role.
+   The ledger follows source values into the bundle; it has no entry for
+   a value the converter writes on its own. That direction, every bundle
+   value traced back to a source value or to a stated constant, is not
+   measured.
+
+"0 unaccounted" therefore means: every source value has a destination,
+a named rule or a stated reason. It does not mean lossless. 299 values
+are not in the bundle, by decisions that are now written down, and three
+values are in the bundle that no source gave.
+
 ## What it does not change
 
-No kernel shape, rule or vector, no validator, no bundle object. And no
+No kernel shape, rule or vector and no validator. The first decisions
+changed no bundle object; the carry classes, later the same day, changed
+15 of the IFA bundle's 17. And no
 claim of losslessness is added: the specification already said that
 "converted losslessly" is established at path level only.
 

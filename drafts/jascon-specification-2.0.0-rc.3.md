@@ -1791,9 +1791,23 @@ read 122 absent and 394 of 835 arrived; with typed, whole values it
 reads 124 and 283. And it is a global check: 283 is an upper bound on
 what was carried, since one value in the bundle answers for every equal
 value in the source. The same day a **ledger** traced every source value
-of this corpus through the converter: 232 copied, 26 transformed by a
-named rule, 104 identifiers dropped by a declared rule, **473
-unaccounted**. The path map reads 835 of 835 for the same conversion.)* "Converted
+of this corpus through the converter. After the author's decisions it
+reads 441 copied, 95 transformed by a named rule, 299 dropped for a
+declared reason, **none unaccounted**. Three of the drops are references
+that name nothing their source defines, declared as defects of the
+source. The path map reads 835 of 835 for the same conversion.
+The first run read 232 copied and 473 unaccounted and found a value the
+converter had overwritten, one of two addresses of an inventory item;
+that is fixed. The author then decided the unaccounted values class by
+class. Revision history, the directory of parties and roles, back-matter
+and import links and type tags are declared drops. Seven classes are
+carried and changed 15 of the bundle's 17 objects: the detail of the
+leveraged and the leveraging system, of the components, of the control
+implementations and of the assessment, in facets; roles at two levels,
+the Component and the whole scope. References by uuid are resolved to
+the objects they name, which showed two edges the converter had wired
+against its source; both follow the source now. The three values left
+are references that name nothing their source defines.)* "Converted
 losslessly" is established at path level only (backlog #41). **R17** —
 redistribution: six of the eleven measured bundles cannot be shipped
 (§2); the shipped evidence base no longer exercises Tailoring or Mapping
@@ -2125,8 +2139,10 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
    re-wording of "converted losslessly" that follows from it (#41,
    re-planned on 2026-11-13: the global check that was to be rolled out
    cannot show that a single value arrived; ✓ the ledger exists and the
-   IFA converter is wired, 473 of its 835 source values are unaccounted;
-   ☐ those 473 decided path by path, ☐ the other ten converters); ☐ a real
+   IFA converter is wired; ✓ its unaccounted values were decided class by
+   class on 2026-11-13, none of its 835 source values is unaccounted,
+   and the three references that name nothing their source defines are
+   declared as defects of the source; ☐ the other ten converters); ☐ a real
    attestation in the example bundle (#46); ☐ `Assessment.method`
    payloads held to their pinned schema (#55); ☐ a second Risk corpus
    (IV.5b item 4).
