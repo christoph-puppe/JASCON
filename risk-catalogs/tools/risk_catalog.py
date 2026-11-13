@@ -17,6 +17,12 @@ acceptance). IMPORT copies entries into kernel Risk objects:
 Import is a copy. Nothing references an entry at run time, so a new
 catalogue version cannot change a risk the organisation already owns.
 
+Not importing an entry is a decision too. The organisation records it in a
+file beside its bundle (`schema/not-applicable.draft.schema.json`): the
+entry, why it does not apply, who decided and when. `completeness` reads
+that record to tell a decision from a gap, and names every row that says
+no author.
+
 Commands:
   validate     <catalog-dir> [--bundle DIR]
   import       <catalog-dir> --bundle DIR --org PREFIX --owner URI --out DIR
@@ -24,12 +30,14 @@ Commands:
   completeness <catalog-dir> --risks DIR [--not-applicable FILE]
 
 Needs: Python 3.8+, jsonschema. Outside the kernel on purpose: the entry
-shape is `schema/risk-catalog.draft.schema.json`, a draft.
+shape is `schema/risk-catalog.draft.schema.json` and the record of entries
+that do not apply is `schema/not-applicable.draft.schema.json`, both drafts.
 """
 import argparse, json, os, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 SCHEMA_PATH = os.path.join(HERE, "..", "schema", "risk-catalog.draft.schema.json")
+NA_SCHEMA_PATH = os.path.join(HERE, "..", "schema", "not-applicable.draft.schema.json")
 INSTANTIATES = "https://github.com/christoph-puppe/JASCON/risk-catalogs/relation/instantiates"
 
 
@@ -128,13 +136,30 @@ def selection(objs, tailoring_id):
 
 
 def load_not_applicable(path):
-    """{entry id or label: rationale} - the organisation's recorded reasons
-    for NOT importing an entry. Without it, 'not imported' is just a gap."""
+    """-> {entry id: row} - the organisation's recorded decisions NOT to
+    import an entry. Without the record, 'not imported' is just a gap.
+    The file is held to its schema and an entry may be decided once."""
     if not path: return {}
-    na = load_json(path)
-    bad = [k for k, v in na.items() if not isinstance(v, str) or not v.strip()]
-    if bad: sys.exit(f"--not-applicable: entries without a rationale: {bad}")
-    return na
+    import jsonschema
+    doc = load_json(path)
+    if not isinstance(doc, dict) or "record-version" not in doc:
+        sys.exit("--not-applicable: this is not the record of schema/not-applicable.draft.schema.json. "
+                 "A file written before 2026-11-13 is a map from an entry to a sentence; the record now "
+                 "names the entry, the rationale, who decided and when. Rewrite the file in that shape; "
+                 "the app reads the old map and writes the record when an entry is next recorded there.")
+    err = next(jsonschema.Draft202012Validator(load_json(NA_SCHEMA_PATH)).iter_errors(doc), None)
+    if err:
+        sys.exit(f"--not-applicable: {err.message[:140]} @ {'/'.join(map(str, err.absolute_path)) or '(root)'}")
+    rows = {}
+    for row in doc["entries"]:
+        if row["entry"] in rows: sys.exit(f"--not-applicable: {row['entry']} is decided twice")
+        rows[row["entry"]] = row
+    return rows
+
+
+def one_language(text):
+    """A text in English, else in the first language it has."""
+    return text.get("en") or next(iter(text.values()))
 
 
 def cmd_validate(a):
@@ -172,9 +197,8 @@ def cmd_import(a):
     suggested_in_scope = set()
     for e in entries:
         label = e.get("label") or e["id"].rsplit("/", 1)[-1]
-        why = na.get(e["id"]) or na.get(label)
-        if why:
-            report["not-applicable"].append({"entry": e["id"], "rationale": why})
+        if e["id"] in na:
+            report["not-applicable"].append(na[e["id"]])      # the row as it was recorded
             continue
         keep, dropped = [], []
         for st in e.get("suggested-treatments", []):
@@ -220,15 +244,24 @@ def cmd_completeness(a):
             for rel in o.get("relations", []):
                 if rel.get("type") == INSTANTIATES:
                     instantiated.setdefault(rel["ref"], []).append(o["id"])
-    gaps = 0
+    gaps, unsigned = 0, []
     for e in entries:
         label = e.get("label") or e["id"].rsplit("/", 1)[-1]
         if e["id"] in instantiated: continue
-        why = na.get(e["id"]) or na.get(label)
-        if why: print(f"n/a   {label}: {why}")
+        row = na.get(e["id"])
+        if row:
+            who = row.get("provenance")
+            if not who: unsigned.append(label)
+            signed = f"{who['author-ref']}, {who['date']}" if who else "no author recorded"
+            print(f"n/a   {label}: {one_language(row['rationale'])} [{signed}]")
         else:
             gaps += 1
-            print(f"GAP   {label}: {e['title'].get('en') or next(iter(e['title'].values()))}")
+            print(f"GAP   {label}: {one_language(e['title'])}")
+    # a row for an entry this catalogue does not hold belongs to another
+    # catalogue, or its id is misspelled; then the entry it meant is a GAP above
+    elsewhere = sorted(set(na) - {e["id"] for e in entries})
+    if elsewhere: print(f"note  {len(elsewhere)} recorded row(s) name no entry of this catalogue: {elsewhere}")
+    if unsigned: print(f"note  {len(unsigned)} decision(s) name no author: {unsigned}")
     print(f"{cat['id']} {cat['version']}: {len(entries)} entries, {len(instantiated)} instantiated, "
           f"{len(entries) - len(instantiated) - gaps} not applicable, {gaps} gap(s)")
     return 1 if gaps else 0

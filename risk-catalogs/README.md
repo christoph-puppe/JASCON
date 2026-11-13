@@ -71,7 +71,34 @@ it.
 Two more commands: `validate <catalog-dir> [--bundle DIR]` checks the
 catalogue against its schema and its suggestions against a bundle;
 `completeness <catalog-dir> --risks DIR [--not-applicable FILE]` lists the
-entries that no Risk instantiates and no recorded reason excludes.
+entries that no Risk instantiates and no recorded decision excludes.
+
+## The record of entries that do not apply
+
+Not importing an entry is a decision, and the record says who made it:
+
+```json
+{ "record-version": 1,
+  "entries": [
+    { "entry": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-23",
+      "entry-version": "0.1.0",
+      "rationale": { "en": "Public AI services are blocked at the web proxy and no licence for one exists." },
+      "provenance": { "author-ref": "https://org.example/party/ciso", "date": "2026-11-10" } } ] }
+```
+
+Its shape is `schema/not-applicable.draft.schema.json`. `entry` is the
+entry's id, so one file serves every catalogue. `entry-version` is the
+version that was judged; a later version of the entry is a reason to look
+again. `provenance` is spelled as on a kernel Mapping and Check. A row
+without it is accepted and reported: `completeness` prints `[no author
+recorded]` beside it and counts such rows in a note. A row that names no
+entry of the catalogue is reported too, since a misspelled id would
+otherwise pass in silence. The tool refuses a file that does not fit the
+schema and a file that decides one entry twice.
+
+The record has no `review-due` yet. How a date of review is evaluated is
+being decided for the kernel's Deviation (backlog #65); the record takes
+the field over once that rule exists.
 
 ## The demo, measured
 
@@ -116,8 +143,9 @@ the Tailoring, the not-applicable record and the import report.
    lives in a side file here. Without it, the completeness check cannot
    tell a decision from a gap. A Tailoring records the same thing for
    requirements (`excludes[].rationale`); nothing does for risks. With
-   catalogues outside the kernel the record stays a side file; its shape
-   is still to be defined (backlog #54).
+   catalogues outside the kernel the record stays a side file. **Defined
+   2026-11-13** (backlog #54, closed): see "The record of entries that do
+   not apply" above.
 3. **A risk list does not justify a baseline.** 24 entries name 78 of 287
    selected controls. Under a policy that demands a risk basis for every
    control (`--require-risk-basis`), 209 stay uncovered however carefully

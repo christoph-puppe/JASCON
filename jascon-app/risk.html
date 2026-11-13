@@ -80,7 +80,9 @@
 
    The record of catalogue entries that do not apply is kept beside the
    manifest as risk-catalogs/not-applicable.json; the kernel has no place for
-   it (backlog #54).
+   it (backlog #54). Each row names the entry, the reason, who decided and
+   on which day; the party in the Owner field of the catalogue view is
+   written as the one who decided.
 
    Suggestions from a language model are the last view and the only part of
    the page that sends anything anywhere; see the comment above renderModel.
@@ -151,7 +153,7 @@ jscI18n.add("de", {
   "Set a default risk owner in the settings, or enter one here.": "In den Einstellungen einen Standard-Risikoeigner setzen oder hier einen eintragen.",
   "Entry": "Eintrag", "Category": "Kategorie", "Suggested": "Vorgeschlagen", "Status": "Status", "{k} of {n} in the selection": "{k} von {n} in der Auswahl",
   "imported": "importiert", "not applicable": "nicht anwendbar", "gap": "Lücke", "Import": "Importieren", "why does it not apply?": "warum trifft es nicht zu?",
-  "Record as not applicable": "Als nicht anwendbar festhalten", "undo": "zurücknehmen", "Import every gap": "Alle Lücken importieren",
+  "Record as not applicable": "Als nicht anwendbar festhalten", "undo": "zurücknehmen", "no author recorded": "kein Urheber festgehalten", "Import every gap": "Alle Lücken importieren",
   "entries": "Einträge", "gaps": "Lücken", "A reason is needed to record an entry as not applicable.": "Um einen Eintrag als nicht anwendbar festzuhalten, braucht es einen Grund.",
   "imported {n} risk(s); {d} suggested treatment(s) dropped; {b} risk(s) without any treatment": "{n} Risiko/Risiken importiert; {d} vorgeschlagene Behandlung(en) entfallen; {b} Risiko/Risiken ohne Behandlung",
   "import failed: {msg}": "Import fehlgeschlagen: {msg}",
@@ -640,7 +642,7 @@ function renderCoverage() {
 }
 
 /* ====================== catalogues ====================== */
-const notApplicable = () => { const f = G.aux.find(a => a.path === NA_PATH); try { return f ? JSON.parse(f.text) : {}; } catch (e) { return {}; } };
+const notApplicable = () => { const f = G.aux.find(a => a.path === NA_PATH); try { return f ? jscNaRead(JSON.parse(f.text), JSC_PRESETS.catalogs, jscI18n.contentLang()) : {}; } catch (e) { return {}; } };
 function renderCatalogue() {
   const el = $("catalogue"), d = ui.data;
   const cat = JSC_PRESETS.catalogs.find(c => c.catalog.id === d.catalog) || JSC_PRESETS.catalogs[0];
@@ -663,11 +665,11 @@ function renderCatalogue() {
       return `<tr><td><b class="mono">${esc(r.label)}</b> ${esc(TT(r.entry.title))}<div class="hint">${esc(TT(r.entry.scenario))}</div></td>
         <td>${V.badge(r.entry.category)}<div class="hint">${esc((r.entry.impacts || []).join(", "))}</div></td>
         <td class="hint">${esc(T("{k} of {n} in the selection", { k: inSel, n: sug.length }))}</td>
-        <td><span class="${STATUS[r.status][1]}">${esc(T(STATUS[r.status][0]))}</span>${r.risks.map(id => `<div>${V.refLink(id, V.last(id))}</div>`).join("")}${r.rationale ? `<div class="hint">${esc(r.rationale)}</div>` : ""}</td>
+        <td><span class="${STATUS[r.status][1]}">${esc(T(STATUS[r.status][0]))}</span>${r.risks.map(id => `<div>${V.refLink(id, V.last(id))}</div>`).join("")}${r.row ? `<div class="hint">${esc(TT(r.row.rationale))}</div><div class="hint">${r.row.provenance ? `${esc(r.row.provenance["author-ref"])}, ${esc(r.row.provenance.date)}` : `<span class="verdict-warn">${esc(T("no author recorded"))}</span>`}</div>` : ""}</td>
         <td>${r.status === "gap" ? `<button type="button" class="small" data-import="${esc(r.entry.id)}" ${sel.error ? "disabled" : ""}>${esc(T("Import"))}</button>
             <div class="wbrow" style="margin:4px 0 0"><input type="text" data-why="${esc(r.entry.id)}" placeholder="${esc(T("why does it not apply?"))}" aria-label="${esc(T("why does it not apply?"))}" value="${esc(naWhy[r.entry.id] || "")}" style="min-width:200px">
             <button type="button" class="small" data-na="${esc(r.entry.id)}">${esc(T("Record as not applicable"))}</button></div>`
-          : r.status === "not-applicable" ? `<button type="button" class="small" data-undo="${esc(r.label)}" data-undoid="${esc(r.entry.id)}">${esc(T("undo"))}</button>` : ""}</td></tr>`; }).join("")}</table>`;
+          : r.status === "not-applicable" ? `<button type="button" class="small" data-undo="${esc(r.entry.id)}">${esc(T("undo"))}</button>` : ""}</td></tr>`; }).join("")}</table>`;
   V.wireRefs(el);
   const on = (selector, event, fn) => el.querySelectorAll(selector).forEach(n => n.addEventListener(event, () => fn(n)));
   on("#c-cat", "change", n => { d.catalog = n.value; ui.save(); renderCatalogue(); });
@@ -686,14 +688,17 @@ function renderCatalogue() {
   };
   on("[data-import]", "click", n => doImport(new Set([n.dataset.import])));
   on("#c-all", "click", () => doImport(new Set(rows.filter(r => r.status === "gap").map(r => r.entry.id))));
-  const saveNa = async next => { await jscSet.saveAux(NA_PATH, Object.keys(next).length ? jscSerialize(next) : ""); await jscPage.refresh(); };
+  const saveNa = async next => { await jscSet.saveAux(NA_PATH, Object.keys(next).length ? jscSerialize(jscNaWrite(next)) : ""); await jscPage.refresh(); };
   on("[data-na]", "click", n => {
-    const why = (naWhy[n.dataset.na] || "").trim();
+    const id = n.dataset.na, why = (naWhy[id] || "").trim(), who = $("c-owner").value.trim();
     if (!why) { $("c-err").textContent = T("A reason is needed to record an entry as not applicable."); return; }
-    delete naWhy[n.dataset.na];
-    saveNa({ ...na, [n.dataset.na]: why });
+    if (!/^https?:\/\/./.test(who)) { $("c-err").textContent = T("Set a default risk owner in the settings, or enter one here."); return; }
+    delete naWhy[id];
+    const entry = cat.entries.find(e => e.id === id);
+    saveNa({ ...na, [id]: { entry: id, "entry-version": entry.version, rationale: { [jscI18n.contentLang()]: why },
+      provenance: { "author-ref": who, date: new Date().toISOString().slice(0, 10) } } });
   });
-  on("[data-undo]", "click", n => { const next = { ...na }; delete next[n.dataset.undo]; delete next[n.dataset.undoid]; saveNa(next); });
+  on("[data-undo]", "click", n => { const next = { ...na }; delete next[n.dataset.undo]; saveNa(next); });
 }
 
 /* ====================== suggestions from a model ======================

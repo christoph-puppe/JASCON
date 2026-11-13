@@ -23,7 +23,9 @@ function sp80053() {
 }
 const office = JSC_PRESETS.catalogs.find(c => c.catalog.id.endsWith("/office-it"));
 const tailoring = json(path.join(DEMO, "tailoring-soa-office-it.json"));
-const notApplicable = json(path.join(DEMO, "not-applicable.json"));
+const NA_FILE = path.join(DEMO, "not-applicable.json");
+const notApplicable = riskcat.jscNaRead(json(NA_FILE), JSC_PRESETS.catalogs, "en");
+const OFF23 = office.entries.find(e => e.label === "OFF-23");
 const committed = new Map(fs.readdirSync(path.join(DEMO, "risks")).sort().map(f => { const o = json(path.join(DEMO, "risks", f)); return [o.id, o]; }));
 
 test("importing the office-IT catalogue reproduces the committed demo", () => {
@@ -77,6 +79,33 @@ test("completeness: an entry is instantiated, recorded as not applicable, or a g
   assert.equal(withRecord.filter(x => x.status === "not-applicable").length, 1);
   assert.equal(withRecord.filter(x => x.status === "gap").length, 0);
   assert.equal(riskcat.jscCatalogCompleteness(office.entries, objs, {}).filter(x => x.status === "gap").length, 1);
+});
+
+test("the record of entries that do not apply: its schema, its bytes, and the map of before 2026-11-13 (backlog #54)", () => {
+  const schema = json(path.join(ROOT, "risk-catalogs/schema/not-applicable.draft.schema.json"));
+  const committed = json(NA_FILE);
+  assert.deepEqual(rules.jscSchemaCheck(schema, committed, schema).errors, [], "the committed record fits its schema");
+  // reading and writing the committed record gives its bytes back
+  assert.equal(core.jscSerialize(riskcat.jscNaWrite(notApplicable)), fs.readFileSync(NA_FILE, "utf8"));
+  const row = notApplicable[OFF23.id];
+  assert.deepEqual(row.provenance, { "author-ref": "https://org.example/party/ciso", date: "2026-11-10" });
+  // the schema refuses what the record must not be
+  const bad = doc => rules.jscSchemaCheck(schema, doc, schema).errors.length > 0;
+  assert.ok(bad({ "OFF-23": "a sentence" }), "the old map is not the record");
+  assert.ok(bad({ "record-version": 1, entries: [{ ...row, rationale: "a sentence" }] }), "a rationale is a text in a language");
+  assert.ok(bad({ "record-version": 1, entries: [{ ...row, provenance: { "author-ref": "https://org.example/party/ciso" } }] }), "an author without a date");
+  assert.ok(bad({ "record-version": 1, entries: [{ ...row, provenance: { ...row.provenance, date: "last week" } }] }), "a date any string satisfies");
+  assert.ok(!bad({ "record-version": 1, entries: [{ entry: row.entry, rationale: row.rationale }] }), "a row without an author is reported, not refused");
+  // the old map: a label is resolved to the entry's id, and nobody is invented as its author
+  const old = riskcat.jscNaRead({ "OFF-23": "Blocked at the proxy.", [office.entries[0].id]: "Not our business." }, JSC_PRESETS.catalogs, "de");
+  assert.deepEqual(old[OFF23.id], { entry: OFF23.id, rationale: { de: "Blocked at the proxy." } });
+  assert.deepEqual(old[office.entries[0].id], { entry: office.entries[0].id, rationale: { de: "Not our business." } });
+  assert.deepEqual(rules.jscSchemaCheck(schema, riskcat.jscNaWrite(old), schema).errors, [], "what the old map becomes fits the schema");
+  const rows = riskcat.jscCatalogCompleteness(office.entries, new Map(), old);
+  assert.equal(rows.filter(x => x.status === "not-applicable").length, 2);
+  assert.equal(rows.find(x => x.entry.id === OFF23.id).row.provenance, undefined);
+  // a record of a version this build does not know is not guessed at
+  assert.deepEqual(riskcat.jscNaRead({ "record-version": 2, entries: [row] }, JSC_PRESETS.catalogs, "en"), {});
 });
 
 test("the shipped scale presets pass the scale rules, matrices included", () => {

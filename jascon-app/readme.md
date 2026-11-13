@@ -7,7 +7,7 @@ have to switch on yourself: the suggestions of the Risk page and the drafts
 of the Checks page send text to a model service once you type a key (see
 "Suggestions from a model").
 
-State: build 0.9.4. This build has the frame (the hub, the settings page and
+State: build 0.9.5. This build has the frame (the hub, the settings page and
 the shared core) and nine tool pages, in the order of the work: Import,
 Browse, Risk, Tailor, Map, Implement, Checks, Assess and Validate. One view of the Risk page and
 the drafting of the Checks page can ask a language model; nothing else in
@@ -317,8 +317,12 @@ failures; without it they are a line of the report.
 industrial plant. Importing an entry copies it into a risk of your own with
 state identified and lifecycle draft, keeps the suggested requirements the
 selection contains and names the entry it came from. A risk that exists is
-never overwritten by an import. An entry that does not apply is recorded with
-its reason in `risk-catalogs/not-applicable.json` beside the manifest.
+never overwritten by an import. An entry that does not apply is recorded in
+`risk-catalogs/not-applicable.json` beside the manifest: the entry and its
+version, the reason, and who decided on which day. The party in the Owner
+field of the view is written as the one who decided. A file from before
+build 0.9.5, a map from an entry to a sentence, is still read; its rows show
+"no author recorded" until they are recorded again.
 
 ## Checks
 
