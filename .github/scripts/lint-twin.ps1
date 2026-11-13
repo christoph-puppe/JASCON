@@ -42,9 +42,17 @@ Usage:  powershell -File .github\scripts\lint-twin.ps1 [path-to-ps1]
 Exit code 1 and one line per violation when the rule is broken.
 #>
 [CmdletBinding()]
-param([string]$Path = (Join-Path (Split-Path -Parent (Split-Path -Parent $PSScriptRoot)) 'jascon/scripts/validate_core.ps1'))
+param([string]$Path = '')
 
 $ErrorActionPreference = 'Stop'
+if (-not $Path) {
+    # The default is worked out here and from $MyInvocation, as validate_core.ps1
+    # does. In a param() default, Windows PowerShell 5.1 has not set
+    # $PSScriptRoot yet; PowerShell 7 has, so the first version of this
+    # script ran on 7 and stopped on 5.1 (2026-11-13).
+    $here = Split-Path -Parent $MyInvocation.MyCommand.Path
+    $Path = Join-Path (Split-Path -Parent (Split-Path -Parent $here)) 'jascon/scripts/validate_core.ps1'
+}
 $tokens = $null; $parseErrors = $null
 $ast = [System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path $Path).Path, [ref]$tokens, [ref]$parseErrors)
 if ($parseErrors.Count -gt 0) { Write-Host "lint-twin: $Path does not parse: $($parseErrors[0].Message)"; exit 2 }
