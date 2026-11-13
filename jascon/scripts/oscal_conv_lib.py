@@ -153,51 +153,319 @@ def inventory(node, prefix, counter, normalize=lambda p: p):
     else:
         counter[normalize(prefix)] += 1
 
-def value_arrival(sources, objects):
-    """Path coverage says where a source value is DECLARED to go; this checks
-    that it ARRIVED. For every leaf value of every source document: does it
-    occur verbatim somewhere in the emitted objects (keys included, so a
-    value that became a facet key counts)? A value that does not is either
-    TRANSFORMED on purpose (a mapped code, a respelled id, a minted URI) or
-    DROPPED - the report lists them so the difference is argued per path
-    instead of assumed. Introduced with the CP-RISK-1 re-run, where the
-    path-level report read 835/835 while 13 content values under
-    poam.risks[] - the risk response type among them - had never arrived.
-    sources: [(tag, document)]. Returns a JSON-able dict."""
-    def leaves(n, p):
+def _pointer(parts):
+    """RFC 6901 JSON Pointer for a path of keys and array indices."""
+    return "".join("/" + str(x).replace("~", "~0").replace("/", "~1") for x in parts)
+
+def _token(v):
+    """A scalar with its JSON type, so that 1, "1", true and "true" are four
+    values (in Python True == 1 and they hash alike)."""
+    if v is None: return ("null", None)
+    if isinstance(v, bool): return ("boolean", v)
+    if isinstance(v, str): return ("string", v)
+    return ("number", json.dumps(v))
+
+def global_occurrence(sources, objects):
+    """For every scalar leaf of every source document: is there an EQUAL value
+    anywhere in the emitted objects? sources: [(tag, document)]; -> JSON-able dict.
+
+    What this measures, and what it does not. Path coverage says where a
+    source value is DECLARED to go. This looks at values, but globally: all
+    sources and all emitted objects share one search space, and one output
+    value satisfies every equal source value. So
+      - `exact` is an UPPER bound on what was carried. It cannot show that a
+        given occurrence arrived: a description dropped from one control is
+        hidden by the same text on another (GitHub issue 33).
+      - `absent` is a LOWER bound on what was lost or transformed, never the
+        complete work queue.
+    Accounting for each source occurrence is the conversion ledger's job
+    (`Ledger` below), not this function's.
+
+    Matching is on complete, typed scalars (GitHub issue 32; until 2026-11-13
+    this function was `value_arrival` and searched one joined string, so
+    "open" arrived in "not-open", 1 in 10, true in "true", "" in anything,
+    and a null never):
+      exact      an output VALUE of the same JSON type equals it
+      key-only   a string that equals an output KEY and no output value. A
+                 value can become a key (a facet keyed by name), but without
+                 a declared mapping that is a candidate, not an arrival
+      embedded   a non-empty string that occurs only INSIDE a longer output
+                 string value (a remark appended to a description). A
+                 candidate too
+      absent     none of these
+    Only `exact` counts. Every leaf not `exact` is listed with its indexed
+    JSON Pointer, grouped by its path with array positions collapsed."""
+    def leaves(n, parts):
         if isinstance(n, dict):
-            for k, v in n.items(): yield from leaves(v, f"{p}.{k}")
+            for k, v in n.items(): yield from leaves(v, parts + [k])
         elif isinstance(n, list):
-            for v in n: yield from leaves(v, f"{p}[]")
-        else: yield p, n
-    def strings(n):
+            for i, v in enumerate(n): yield from leaves(v, parts + [i])
+        else: yield parts, n
+    values, keys = set(), set()
+    def collect(n):
         if isinstance(n, dict):
-            for k, v in n.items(): yield k; yield from strings(v)
+            for k, v in n.items(): keys.add(k); collect(v)
         elif isinstance(n, list):
-            for v in n: yield from strings(v)
-        elif isinstance(n, str): yield n
-        elif n is not None: yield json.dumps(n)
-    hay = "\n".join(s for o in objects for s in strings(o))
-    total = present = 0
+            for v in n: collect(v)
+        else: values.add(_token(n))
+    for o in objects: collect(o)
+    out_strings = [v for t, v in values if t == "string"]
+    # one haystack for the embedded test; the separator cannot occur in a
+    # source string that is tested against it (those fall back to the loop)
+    SEP = "\x00"
+    hay = SEP.join(out_strings)
+    def embedded(sv):
+        if not sv: return False            # the empty string is inside every string and proves nothing
+        if SEP in sv: return any(sv in t for t in out_strings)
+        return sv in hay
+    counts = collections.Counter()
     absent = {"identity": collections.Counter(), "document-metadata": collections.Counter(),
               "content": collections.Counter()}
-    prose = 0
+    listed = {"key-only": collections.defaultdict(list), "embedded": collections.defaultdict(list),
+              "absent-content": collections.defaultdict(list)}
+    total = prose = 0
     for tag, doc in sources:
-        for p, v in leaves(doc, tag):
+        for parts, v in leaves(doc, []):
             total += 1
-            sv = v if isinstance(v, str) else json.dumps(v)
-            if sv in hay:
-                present += 1; continue
-            if re.search(r"(uuids?(\[\])?|href|\.id|-id)$", p): kind = "identity"
-            elif ".metadata." in p or ".back-matter." in p: kind = "document-metadata"
+            tok = _token(v)
+            path = tag + "".join("[]" if isinstance(x, int) else "." + x for x in parts)
+            where = f"{tag}#{_pointer(parts)}"
+            if tok in values:
+                counts["exact"] += 1; continue
+            if tok[0] == "string" and v in keys:
+                counts["key-only"] += 1; listed["key-only"][path].append(where); continue
+            if tok[0] == "string" and embedded(v):
+                counts["embedded"] += 1; listed["embedded"][path].append(where); continue
+            if re.search(r"(uuids?(\[\])?|href|\.id|-id)$", path): kind = "identity"
+            elif ".metadata." in path or ".back-matter." in path: kind = "document-metadata"
             else:
                 kind = "content"
-                if len(sv) >= 40: prose += 1
-            absent[kind][p] += 1
-    return {"leaf-values": total, "arrived-verbatim": present,
+                if isinstance(v, str) and len(v) >= 40: prose += 1
+                listed["absent-content"][path].append(where)
+            absent[kind][path] += 1
+    def rows(d): return [{"path": p, "count": len(w), "pointers": w} for p, w in sorted(d.items())]
+    return {"measures": "global occurrence of equal typed values - an upper bound on what was carried, "
+                        "not a trace of each source occurrence",
+            "leaf-values": total, "exact": counts["exact"],
+            "key-only": counts["key-only"], "embedded": counts["embedded"],
             "absent": {k: sum(c.values()) for k, c in absent.items()},
             "absent-content-prose": prose,
-            "absent-content-paths": [{"path": p, "count": n} for p, n in sorted(absent["content"].items())]}
+            "key-only-paths": rows(listed["key-only"]), "embedded-paths": rows(listed["embedded"]),
+            "absent-content-paths": rows(listed["absent-content"])}
+
+# ---------------- the conversion ledger ----------------
+# global_occurrence() above cannot say where a value went. The ledger can,
+# because the converter's own values tell it: every scalar read from a source
+# document carries its origin (document tag + JSON Pointer) for as long as the
+# converter hands it on unchanged. After the bundle is written, every output
+# leaf and key that still is such a value is a COPY, with a known source and
+# a known destination. Whatever the converter computes (an id minted from a
+# title, a code looked up in a table, two titles joined) loses its origin by
+# itself, because Python returns a plain string from every string operation;
+# the converter states those with derive(), which names the rule and keeps
+# the function, so the transformation can be applied again and compared.
+#
+#   led = Ledger()
+#   SSP = led.source("ssp", json.load(...))          # same data, origins attached
+#   ...build the objects as before...
+#   uri = led.derive("party-uri", lambda n: f"{NS}/party/{slug(n)}", party["name"])
+#   led.drop(r"\.metadata\.last-modified$", "document bookkeeping, not content")
+#   bundle.write(...)
+#   result = led.account(bundle.out, bundle.objects)
+#
+# One entry per source leaf, in document order, with exactly one outcome:
+#   copied                 the value stands, typed-equal, at each destination
+#                          named (read back from the written file)
+#   transformed            a named rule produced the destination from it; the
+#                          rule was applied again to the source and compared
+#   intentionally-dropped  no destination, and a drop() declaration says why
+#   unaccounted            none of these - the work queue
+# A value that was deduplicated is linked to what was kept with same(); its
+# outcome is then the kept value's, marked `via`.
+#
+# Invariant the accounting relies on: a tracked value is immutable and is
+# never rebuilt on the way (deepcopy returns the same object), so "is this
+# output leaf a tracked value" is a question of object identity, never of
+# equal text. That is what makes it immune to the two defects of the global
+# check: an equal value elsewhere proves nothing here.
+#
+# Limits. Only strings and integers can carry an origin (bool and None cannot
+# be subclassed); such a source leaf is `unaccounted` until a drop() covers
+# it. A value used only to DECIDE something (a status compared in an `if`)
+# leaves no trace either: state it with derive() on what it decided.
+
+class _Tracked:
+    """Mixin of a scalar that knows where it came from.
+    _origins: ((tag, parts), ...) the source leaves it stands for
+    _rule:    None for a copy, the rule's name for a derived value
+    _inputs:  for a derived value, the arguments the rule was called with"""
+    __slots__ = ()
+    def __deepcopy__(self, memo): return self      # immutable: identity is the trace
+    def __copy__(self): return self
+
+class _TStr(_Tracked, str):
+    def __new__(cls, value, origins=(), rule=None, fn=None, inputs=()):
+        self = str.__new__(cls, value)
+        self._origins, self._rule, self._fn, self._inputs = tuple(origins), rule, fn, tuple(inputs)
+        return self
+
+class _TInt(_Tracked, int):
+    def __new__(cls, value, origins=(), rule=None, fn=None, inputs=()):
+        self = int.__new__(cls, value)
+        self._origins, self._rule, self._fn, self._inputs = tuple(origins), rule, fn, tuple(inputs)
+        return self
+
+def _track(value, origins, rule=None, fn=None, inputs=()):
+    if isinstance(value, bool) or value is None: return value      # cannot carry an origin
+    if isinstance(value, str): return _TStr(value, origins, rule, fn, inputs)
+    if isinstance(value, int): return _TInt(value, origins, rule, fn, inputs)
+    return value
+
+def _plain(v):
+    """A tracked value as the plain scalar it is (for typed comparison)."""
+    if isinstance(v, _TStr): return str.__str__(v)
+    if isinstance(v, _TInt): return int(v)
+    return v
+
+def _at(doc, parts):
+    for x in parts: doc = doc[x]
+    return doc
+
+class Ledger:
+    def __init__(self):
+        self.docs = {}          # tag -> the source document as loaded (never tracked)
+        self.leaves = []        # (tag, parts) of every source leaf, in document order
+        self._drops = []        # (compiled regex over the collapsed path, reason)
+        self._same = []         # (dropped tracked value, kept tracked value, rule)
+
+    def source(self, tag, doc):
+        """-> a copy of `doc` whose string and integer leaves carry their origin."""
+        assert tag not in self.docs, f"source tag {tag} used twice"
+        self.docs[tag] = doc
+        def walk(n, parts):
+            if isinstance(n, dict): return {k: walk(v, parts + (k,)) for k, v in n.items()}
+            if isinstance(n, list): return [walk(v, parts + (i,)) for i, v in enumerate(n)]
+            self.leaves.append((tag, parts))
+            return _track(n, [(tag, parts)])
+        return walk(doc, ())
+
+    def derive(self, rule, fn, *inputs):
+        """-> fn(*inputs), carrying the origins of every tracked input. The
+        function is kept: account() calls it again on the source's own values."""
+        value = fn(*inputs)
+        if isinstance(value, bool) or not isinstance(value, (str, int)):
+            raise TypeError(f"rule {rule}: a derived value must be a string or an integer to carry its origin, "
+                            f"got {type(value).__name__}")
+        origins = [o for x in inputs if isinstance(x, _Tracked) for o in x._origins]
+        return _track(_plain(value), origins, rule, fn, inputs)
+
+    def drop(self, pattern, reason):
+        """Declare that source leaves whose collapsed path matches `pattern`
+        are not carried, and why. Applies only where no destination exists."""
+        self._drops.append((re.compile(pattern), reason))
+
+    def same(self, dropped, kept, rule):
+        """Deduplication: `dropped` and `kept` are two structures the converter
+        built from two source occurrences of one thing, and only `kept` goes
+        into the bundle. Links every tracked leaf of `dropped` to its
+        counterpart in `kept`, so the dropped occurrence is accounted for by
+        the retained one - if the two are equal, which account() checks."""
+        def walk(a, b, at):
+            if isinstance(a, dict) and isinstance(b, dict):
+                for k in a:
+                    if k in b: walk(a[k], b[k], f"{at}/{k}")
+            elif isinstance(a, list) and isinstance(b, list):
+                for i, (x, y) in enumerate(zip(a, b)): walk(x, y, f"{at}/{i}")
+            elif isinstance(a, _Tracked) and isinstance(b, _Tracked):
+                self._same.append((a, b, rule))
+        walk(dropped, kept, "")
+
+    @staticmethod
+    def collapsed(tag, parts):
+        return tag + "".join("[]" if isinstance(x, int) else "." + x for x in parts)
+
+    def account(self, out_dir, objects):
+        """objects: {relpath: object} as written under out_dir. Reads every
+        file back and checks each claim against it. -> JSON-able dict."""
+        # 1. where does every tracked value stand in the written bundle?
+        found = collections.defaultdict(list)       # id(tracked value) -> [(value, destination)]
+        written = {}
+        def walk(n, rel, oid, parts):
+            if isinstance(n, dict):
+                for k, v in n.items():
+                    if isinstance(k, _Tracked):
+                        found[id(k)].append((k, {"object": oid, "file": rel, "pointer": _pointer(parts + [k]), "as": "key"}))
+                    walk(v, rel, oid, parts + [k])
+            elif isinstance(n, list):
+                for i, v in enumerate(n): walk(v, rel, oid, parts + [i])
+            elif isinstance(n, _Tracked):
+                found[id(n)].append((n, {"object": oid, "file": rel, "pointer": _pointer(parts), "as": "value"}))
+        for rel, obj in sorted(objects.items()):
+            with open(os.path.join(out_dir, rel), encoding="utf-8") as f: written[rel] = json.load(f)
+            walk(obj, rel, obj.get("id") or rel, [])       # the manifest has no id: it is named by its path
+        # 2. per source leaf: the tracked values that stand for it, directly or through same()
+        by_origin = collections.defaultdict(list)   # (tag, parts) -> [(tracked value, destination, via)]
+        for hits in found.values():
+            for value, dest in hits:
+                for origin in value._origins: by_origin[origin].append((value, dest, None))
+        for dropped, kept, rule in self._same:
+            for value, dest in found.get(id(kept), []):
+                for origin in dropped._origins:
+                    by_origin[origin].append((dropped if dropped._rule else value, dest, rule))
+        # 3. check every claim against the file on disk, and classify
+        failures = []
+        def on_disk(dest):
+            parts = [x.replace("~1", "/").replace("~0", "~") for x in dest["pointer"].split("/")[1:]]
+            node = written[dest["file"]]
+            for i, x in enumerate(parts):
+                if dest["as"] == "key" and i == len(parts) - 1:
+                    return x if isinstance(node, dict) and x in node else KeyError
+                node = node[int(x)] if isinstance(node, list) else node[x]
+            return node
+        def holds(value, origin, dest):
+            """does the destination hold what this tracked value claims?"""
+            there = on_disk(dest)
+            if value._rule is None:
+                want = _at(self.docs[origin[0]], origin[1])               # a copy: the source's own value
+            else:
+                want = fresh(value)                                       # a rule: applied to the source again
+            return _token(_plain(want)) == _token(there)
+        def fresh(x):
+            """the value of x recomputed from the source documents alone"""
+            if not isinstance(x, _Tracked): return x
+            if x._rule is None: return _at(self.docs[x._origins[0][0]], x._origins[0][1])
+            return x._fn(*[fresh(i) for i in x._inputs])
+        entries, totals = [], collections.Counter()
+        unaccounted = collections.defaultdict(list)
+        for tag, parts in self.leaves:
+            origin, path = (tag, parts), self.collapsed(tag, parts)
+            entry = {"source": f"{tag}#{_pointer(parts)}", "path": path}
+            dests, outcome = [], None
+            for value, dest, via in by_origin.get(origin, []):
+                d = {"object": dest["object"], "pointer": dest["pointer"]}
+                if dest["as"] == "key": d["as"] = "key"
+                if value._rule: d["rule"] = value._rule
+                if via: d["via"] = via
+                if not holds(value, origin, dest):
+                    failures.append({"source": entry["source"], **d}); continue
+                dests.append(d)
+            if dests:
+                outcome = "copied" if any("rule" not in d for d in dests) else "transformed"
+                entry["destinations"] = sorted(dests, key=lambda d: (d["object"] or "", d["pointer"]))
+            else:
+                reason = next((why for rx, why in self._drops if rx.search(path)), None)
+                if reason is not None:
+                    outcome, entry["reason"] = "intentionally-dropped", reason
+                else:
+                    outcome = "unaccounted"; unaccounted[path].append(entry["source"])
+            entry["outcome"] = outcome; totals[outcome] += 1
+            entries.append(entry)
+        return {"measures": "one entry per source leaf value: where it went, checked against the written files",
+                "leaf-values": len(self.leaves),
+                "totals": {k: totals[k] for k in ("copied", "transformed", "intentionally-dropped", "unaccounted")},
+                "verification-failures": failures,
+                "unaccounted-paths": [{"path": p, "count": len(w), "pointers": w} for p, w in sorted(unaccounted.items())],
+                "entries": entries}
 
 def coverage(paths, rules):
     """rules: list of (regex, level, target). Returns (rows, unmapped)."""

@@ -158,7 +158,8 @@ runtime still validates, recomputes and renders.
 is `sh · bash · powershell · python · ansible · http-api` or a
 namespaced URI (C.15). One Check may carry several collectors for the
 same fact contract; a run names the one it used (`collector-id`,
-CHECK-13).
+CHECK-13). A Check without this facet declares no collector, and a run
+of it leaves `collector-id` out.
 
 In the field, from the example bundle (the only bundle that carries
 one; no converted corpus does):

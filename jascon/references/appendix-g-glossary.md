@@ -274,7 +274,14 @@ Requirement (± statements), responsibility, satisfied-by
 
 **JCS** — RFC 8785 JSON Canonicalization Scheme: one byte sequence
 per data value; the semantic digest's foundation, with the
-empty-omission and decimal-as-string guards on top. (Ch. 11)
+empty-omission, decimal-as-string and number-domain guards on top.
+(Ch. 11)
+
+**Number domain** *(2.0.0)* — the JSON numbers a bundle may carry:
+integers in plain digits, of magnitude at most 2^53 − 1; no fraction,
+no exponent, no `-0` (NUMBER-1). Outside it two tools read one file as
+two values. Refused, never rewritten; what does not fit is a decimal
+string. (Ch. 11, Ch. 12)
 
 **Kept pack manifest** — the vendor's content manifest as it arrived,
 kept in the importing set under `packs/sha256/<hex>` (the name is the

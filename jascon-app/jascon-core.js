@@ -36,7 +36,7 @@
 
 /* ==JSC-PURE-START== */
 
-const JSC_BUILD = "0.9.4";
+const JSC_BUILD = "0.9.6";
 const JSC_TOOL = "JASCON-App " + JSC_BUILD;
 /* The kernel this app writes, and the kernels it reads (KERNEL-2: a tool
    stops at a pin it does not implement and names both). */
@@ -144,8 +144,13 @@ const jscIsFacetDescriptor = o => !!o && typeof o === "object" && typeof o.id ==
    without its top-level `annotations`, keys sorted, no whitespace. Key order
    is JavaScript's default string order (UTF-16 code units), the same order
    the Python validator sorts by. Numbers: JSON.stringify writes 1.0 as 1
-   where Python writes 1.0; kernel content carries decimals as strings for
-   that reason, so the two agree on everything the schema allows. */
+   where Python writes 1.0, and JSON.parse rounds an integer beyond 2^53.
+   The two agree only inside the number domain (NUMBER-1, D3.9): integers in
+   plain digits, of magnitude at most 2^53 - 1. This function does not check
+   that; jscNumberError in jascon-rules.js does, on the text and on the
+   value, and a file outside the domain is an error before its digest counts.
+   (This comment said the two agree on everything the schema allows. The
+   schema type `integer` allows 1.0 and 9007199254740993 - errata 2026-11-13.) */
 function jscCanonical(obj) {
   const sort = o => {
     if (Array.isArray(o)) return o.map(sort);

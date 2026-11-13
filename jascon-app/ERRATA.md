@@ -101,3 +101,85 @@ surprise, blunder.
 - **Test.** `tests/oscal.test.mjs`, "BSI preset: …": the packed values per
   prop (tags 125, threats 616, target_object_categories 40), 221 slots and
   none away from an insertion.
+
+## 2026-11-13 · build 0.9.5 · four run rules skipped their comparison when a field was left out
+
+- **Symptom.** The Validate page, like the reference validator it is ported
+  from, accepted four things the specification forbids: an evidence record
+  at `alternate/<hex>` instead of `evidence/sha256/<hex>`; a `collector-id`
+  on a row whose Check has no `collector@1` facet; a row parameter
+  (`"unbound-extra": 999`) that its Check does not read; an evidence record
+  without `observation-digest` on a row that carries an observation. Reported
+  from outside as issues 23 to 26 in the GitHub tracker, each with a
+  reproduction on the conformance vector "CHECK-15 satisfied: row -> record
+  -> raw output". Two neighbours of the same kind turned up while fixing
+  them: a record that names a collector on a row that names none, and a
+  record with an `observation-digest` on a row without an observation.
+- **Cause.** Each comparison stood behind a guard that asked whether the
+  optional field was there: the path was held to the digest only if it
+  already had the store's form, the collector was looked up only if the
+  facet existed, row and record were compared only where both carried the
+  field, and the parameters were walked from the Check's side only.
+- **Class.** Forgotten: the case "the field is absent on one side" was
+  handled as "nothing to check" in four places. The port copied the
+  reference line by line, so the app, the reference and the PowerShell twin
+  agreed with one another and all three were wrong.
+- **Why it was not caught.** Every negative vector changed a value and none
+  removed a field or added a key; the engines were tested against one
+  another and not against the wording of the rules.
+- **Fix.** A relative evidence reference outside `evidence/sha256/` fails
+  CHECK-15 before it is read. A Check without the facet declares no
+  collector (CHECK-13). A row names only parameters its Check reads, with
+  or without a Tailoring (CHECK-12). Row and record name the same collector
+  or both none, and a row carries an observation exactly when its record
+  carries an `observation-digest` (CHECK-15). The same in
+  `validate_core.py` and `validate_core.ps1`.
+- **Test.** `tests/rules.test.mjs`, "check: the CHECK rules every bundle
+  vector names, the evidence chain included", with eleven new bundle vectors
+  in `check-vectors.json` (188 to 199). Ten of them fail on the rules as
+  they were; the eleventh is the legitimate case, a run that observed
+  nothing.
+
+## 2026-11-13 · build 0.9.6 · the app and the reference read the same number as two values
+
+- **Symptom.** For the same JSON text the Validate page and `validate_core.py`
+  disagreed. A Check that expects `9007199254740992`, on an observation of
+  `9007199254740993`: the reference said `not-satisfied`, the app
+  `satisfied`. `1.0` or `1e3` on an `integer` fact: the reference said
+  `inconclusive`, the app `satisfied`. The semantic digest differed as well:
+  the reference hashed `{"n":9007199254740993}` and `{"n":1.0}` as written,
+  the app as `...992` and `1`. So an Attestation could verify in one tool
+  and fail in the other. Reported from outside as issue 27 in the GitHub
+  tracker, for the first of these; the other two were found while
+  reproducing it.
+- **Cause.** `JSON.parse` returns doubles: an integer beyond 2^53 is rounded
+  and the fraction of `1.0` is gone before any rule sees the value. The
+  specification named a "permitted number domain" (D3 item 3) and defined
+  none, and `jcs-vectors.json` held no number. The comment on
+  `jscCanonical` said the two engines "agree on everything the schema
+  allows"; the schema type `integer` allows both `1.0` and large values.
+- **Class.** Mismatch: two modules disagreed on a contract, here on what a
+  JSON number is. The contract was missing from the specification, so
+  neither side was wrong against it.
+- **Why it was not caught.** The canonical form of the app was tested
+  against the reference's vectors, and no vector held a number outside the
+  small integers. A vector file could not have held `1.0` as a number
+  anyway: the test's own parser would have read it as 1.
+- **Fix.** The specification states the domain (D3 item 9, NUMBER-1): a JSON
+  number is an integer in plain digits, of magnitude at most 2^53 - 1; it is
+  refused, never rewritten. `jascon-rules.js` checks the text of every file
+  of a set (`jscNumberSpellingViolations`, where `1.0`, `1e3` and `-0` are
+  still visible) and the value of every object (`jscNumberViolations`); an
+  `integer` fact or parameter outside the domain is mistyped, so
+  `check-verdict` is `inconclusive`. Evidence records and observation files
+  are held to the same rule. The reader (v1.10.0) reports it when it
+  verifies digests. The canonical form itself is unchanged: inside the
+  domain the engines agree. The comment on `jscCanonical` is corrected.
+- **Test.** `tests/rules.test.mjs`: "jcs: canonical form, optional
+  containers that must be absent instead of empty, and the number domain"
+  (14 `number-text` vectors, which carry JSON texts), "NUMBER-1 (errata
+  2026-11-13): JSON.parse alone would let every spelling and the reported
+  integer through", and "NUMBER-1 (errata 2026-11-13): a whole set - a file
+  that writes 10.0 is an error although the parsed object is fine"; three
+  verdict vectors, two parameter vectors and one bundle vector in the
+  shared corpus.

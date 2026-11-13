@@ -1,15 +1,15 @@
 {
  "measured": {
-  "date": "2026-11-12",
-  "commit": "092b7353",
+  "date": "2026-11-13",
+  "commit": "30892353",
   "by": "jascon/scripts/validate_core.py"
  },
  "vectors": {
-  "total": 537,
+  "total": 568,
   "families": [
    {
     "name": "jcs",
-    "vectors": 8
+    "vectors": 22
    },
    {
     "name": "modality",
@@ -17,7 +17,7 @@
    },
    {
     "name": "parameter",
-    "vectors": 19
+    "vectors": 21
    },
    {
     "name": "tailoring",
@@ -69,7 +69,7 @@
    },
    {
     "name": "check",
-    "vectors": 188
+    "vectors": 203
    },
    {
     "name": "advice",
@@ -152,7 +152,7 @@
   }
  ],
  "validators": {
-  "python_lines": 2696,
-  "powershell_lines": 3556
+  "python_lines": 2780,
+  "powershell_lines": 3669
  }
 }

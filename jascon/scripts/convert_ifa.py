@@ -19,7 +19,7 @@ acceptance (`retain` is unreachable). Findings point at their Risk with
 bundle - an authorization package carries its baseline. Coverage target: 0.
 Depends on: convert_nist.py output (run first)."""
 import json, os, re, collections
-from oscal_conv_lib import make_T, slug, Bundle, inventory, coverage, report, semantic_digest, value_arrival
+from oscal_conv_lib import make_T, slug, Bundle, inventory, coverage, report, semantic_digest, global_occurrence, Ledger
 
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 SRCDIR = os.path.join(ROOT, "sources", "nist")
@@ -36,16 +36,28 @@ F_PROTO = f"{NS}/facet/protocols@1"
 lang_wraps = collections.Counter()
 T = make_T("en", lang_wraps)
 
-def load(fn, key):
-    return json.load(open(os.path.join(SRCDIR, fn), encoding="utf-8"))[key]
+# The conversion ledger (oscal_conv_lib.Ledger): every scalar of the seven
+# source documents carries its origin from here on. A value handed on
+# unchanged is recorded as a copy when the bundle is accounted for at the
+# end; a value this script computes is stated where it is computed, with
+# D(rule, function, inputs...), so that the rule can be applied again and
+# compared. What reaches no destination and has no declared reason is listed
+# as unaccounted. Nothing here changes what is written: the bundle is byte
+# for byte the one the script wrote before the ledger existed.
+led = Ledger()
+D = led.derive
 
-SSP = load("ifa_ssp.json", "system-security-plan")
-AP = load("ifa_assessment-plan.json", "assessment-plan")
-AR = load("ifa_assessment-results.json", "assessment-results")
-POAM = load("ifa_plan-of-action-and-milestones.json", "plan-of-action-and-milestones")
-LEV = load("oscal_leveraged-example_ssp.json", "system-security-plan")
-LVG = load("oscal_leveraging-example_ssp.json", "system-security-plan")
-CDEF = load("example-component-definition.json", "component-definition")
+def load(tag, fn, key):
+    doc = json.load(open(os.path.join(SRCDIR, fn), encoding="utf-8"))
+    return led.source(tag, {key: doc[key]})[key]
+
+SSP = load("ssp", "ifa_ssp.json", "system-security-plan")
+AP = load("ap", "ifa_assessment-plan.json", "assessment-plan")
+AR = load("ar", "ifa_assessment-results.json", "assessment-results")
+POAM = load("poam", "ifa_plan-of-action-and-milestones.json", "plan-of-action-and-milestones")
+LEV = load("lev", "oscal_leveraged-example_ssp.json", "system-security-plan")
+LVG = load("lvg", "oscal_leveraging-example_ssp.json", "system-security-plan")
+CDEF = load("cdef", "example-component-definition.json", "component-definition")
 
 paths = collections.Counter()
 for pfx, doc, key in [("ssp", SSP, "system-security-plan"), ("ap", AP, "assessment-plan"),
@@ -72,14 +84,18 @@ REQ_AC2 = f"https://ns.nist.gov/sp800-53/req/AC-2"
 
 # statement-id spelling: the SSP pair writes `ac-2_stmt.a`, the catalog `ac-2_smt.a`
 n_stmt_respell = 0
+def _stmt_norm(sid, cid):
+    """pure: the ledger applies it again when it checks the destination"""
+    s = sid
+    if s.startswith(cid + "_"): s = s[len(cid) + 1:]
+    if s.startswith("stmt"): s = "smt" + s[4:]
+    return s
 def stmt_norm(sid, cid):
     global n_stmt_respell
     if not sid: return None
-    s = sid
-    if s.startswith(cid + "_"): s = s[len(cid) + 1:]
-    if s.startswith("stmt"):
-        s = "smt" + s[4:]; n_stmt_respell += 1
-    return s
+    s = sid[len(cid) + 1:] if sid.startswith(cid + "_") else sid
+    if s.startswith("stmt"): n_stmt_respell += 1
+    return D("statement id without the control prefix, in the catalogue's spelling (stmt -> smt)", _stmt_norm, sid, cid)
 
 # PUA codepoints in source text (the soware defect)
 n_pua = 0
@@ -93,7 +109,11 @@ def pua_scan(v):
 def party_uri(doc, uuid, default_slug):
     for p in doc["metadata"].get("parties", []) or []:
         if p["uuid"] == uuid:
-            return f"{NS}/party/{slug(p.get('name', default_slug))}"
+            # three source values meet here: the reference, the uuid of the party
+            # it names, and that party's name. The rule fails if the two uuids differ.
+            return D("party reference resolved by uuid; landmark URI from the party's name",
+                     lambda ref, pid, name: f"{NS}/party/{slug(name)}" if ref == pid else None,
+                     uuid, p["uuid"], p.get("name", default_slug))
     return f"{NS}/party/{default_slug}"
 
 # ================= 1. the GoodRead system (SSP) =================
@@ -115,8 +135,9 @@ comp_sys = {"id": COMP_SYS, "version": V_SSP, "label": sc["system-name"], "lifec
             "capabilities": [],
             "authorizations": [{"id": AUTH_ATO,
                                 "authority-ref": f"{NS}/party/authorizing-official",
-                                "scope-label": f"ATO {sc.get('date-authorized', '?')} "
-                                               f"({sc.get('security-sensitivity-level', '?')})"}],
+                                "scope-label": D("ATO scope label: date authorized and sensitivity level",
+                                                 lambda d, l: f"ATO {d} ({l})",
+                                                 sc.get("date-authorized", "?"), sc.get("security-sensitivity-level", "?"))}],
             "facets": {F_SYS: {
                 "system-ids": sc.get("system-ids", []),
                 "description": T(pua_scan(sc.get("description", "")), "system"),
@@ -152,7 +173,7 @@ bundle.add("objects/impl/system1234-ac-6-1.json",
             "satisfied-by": [{"capability-ref": "cap-ac-6.1"}],
             "parameter-bindings": pbind,
             "status": bc.get("implementation-status", {}).get("state", "implemented"),
-            "evidence-refs": [f"{NS}/doc/ssp-{SSP['uuid']}"]})
+            "evidence-refs": [D("document reference from the SSP's uuid", lambda u: f"{NS}/doc/ssp-{u}", SSP["uuid"])]})
 
 # ================= 2. leveraged / leveraging pair (D5) =================
 V_LEV, V_LVG = LEV["metadata"]["version"], LVG["metadata"]["version"]
@@ -183,8 +204,10 @@ bundle.add("objects/component/csp-iaas.json",
             "capabilities": lev_caps,
             "authorizations": [{"id": AUTH_CSP,
                                 "authority-ref": f"{NS}/party/csp-authorizing-official",
-                                "scope-label": f"{la.get('title', 'CSP IaaS leveraged authorization')} "
-                                               f"({la.get('date-authorized', '?')})"}],
+                                "scope-label": D("leveraged authorization scope label: its title and date",
+                                                 lambda t, d: f"{t} ({d})",
+                                                 la.get("title", "CSP IaaS leveraged authorization"),
+                                                 la.get("date-authorized", "?"))}],
             "facets": {F_SYS: {"customer-responsibilities": lev_resp,
                                "description": T(pua_scan(LEV["system-characteristics"].get("description", "")), "system")}}})
 app_comp = next(c for c in LEV["system-implementation"]["components"] if c["type"] != "this-system")
@@ -196,9 +219,11 @@ KIND_MAP = {"this-system": "system", "system": "system", "software": "software",
 kind_mapped = collections.Counter()
 appl = next(c for c in LVG["system-implementation"]["components"] if c["type"] == "appliance")
 kind_mapped["appliance->hardware"] += 1
+appl_title = D("title without the decoration asterisks", lambda t: t.strip(" *"), appl.get("title", ""))
 bundle.add("objects/component/access-control-appliance.json",
-           {"id": COMP_APPL, "version": V_LVG, "label": appl.get("title", "").strip(" *"),
-            "lifecycle": "active", "title": appl.get("title", "").strip(" *"), "kind": "hardware",
+           {"id": COMP_APPL, "version": V_LVG, "label": appl_title,
+            "lifecycle": "active", "title": appl_title,
+            "kind": D("component kind from the OSCAL component type (KIND_MAP)", lambda t: KIND_MAP[t], appl["type"]),
             "capabilities": [{"id": "cap-consumer-ac-2a", "requirement-ref": REQ_AC2,
                               "description": pua_scan(next((sa.get("description", "")
                                   for st in LVG["control-implementation"]["implemented-requirements"][0].get("statements", [])
@@ -227,7 +252,7 @@ bundle.add("objects/impl/saas-ac-2.json",
                              {"capability-ref": f"{COMP_APPL}#cap-consumer-ac-2a"}],
             "parameter-bindings": lvg_bind,
             "status": "implemented",
-            "evidence-refs": [f"{NS}/doc/ssp-{LVG['uuid']}"]})
+            "evidence-refs": [D("document reference from the SSP's uuid", lambda u: f"{NS}/doc/ssp-{u}", LVG["uuid"])]})
 lev_sids = sorted({stmt_norm(st.get("statement-id"), lev_ir["control-id"])
                    for st in lev_ir.get("statements", []) or [] if st.get("statement-id")})
 lev_bind = {sp["param-id"]: (sp["values"][0] if len(sp["values"]) == 1 else sp["values"])
@@ -241,7 +266,7 @@ bundle.add("objects/impl/csp-iaas-ac-2.json",
             "satisfied-by": [{"capability-ref": c["id"]} for c in lev_caps],
             "parameter-bindings": lev_bind,
             "status": "implemented",
-            "evidence-refs": [f"{NS}/doc/ssp-{LEV['uuid']}"]})
+            "evidence-refs": [D("document reference from the SSP's uuid", lambda u: f"{NS}/doc/ssp-{u}", LEV["uuid"])]})
 
 # ================= 3. component-definition example =================
 V_CDEF = CDEF["metadata"]["version"]
@@ -249,11 +274,14 @@ for c in CDEF.get("components", []) or []:
     caps = []
     for ci in c.get("control-implementations", []) or []:
         for cir in ci.get("implemented-requirements", []) or []:
-            caps.append({"id": f"cap-{slug(cir.get('control-id', 'x'))}",
-                         "requirement-ref": f"https://ns.nist.gov/sp800-53/req/{cir.get('control-id', '').upper()}",
+            caps.append({"id": D("capability id from the control id", lambda c: f"cap-{slug(c)}", cir.get("control-id", "x")),
+                         "requirement-ref": D("requirement URI from the control id",
+                                              lambda c: f"https://ns.nist.gov/sp800-53/req/{c.upper()}",
+                                              cir.get("control-id", "")),
                          "description": pua_scan(cir.get("description", ""))})
-    kind = KIND_MAP.get(c.get("type", "software"), "software")
-    obj = {"id": f"{NS}/component/{slug(c.get('title', 'component'))}",
+    kind = D("component kind from the OSCAL component type (KIND_MAP)", lambda t: KIND_MAP.get(t, "software"),
+             c.get("type", "software"))
+    obj = {"id": D("component id from its title", lambda t: f"{NS}/component/{slug(t)}", c.get("title", "component")),
            "version": V_CDEF, "label": c.get("title", ""), "lifecycle": "active",
            "title": c.get("title", ""), "kind": kind}
     if caps: obj["capabilities"] = caps
@@ -269,18 +297,22 @@ ASSESS = f"{NS}/assessment/conmon-2023-06"
 observations = []
 for src, tag in ((res.get("observations", []), "ar"), (POAM.get("observations", []), "poam")):
     for o in src:
-        observations.append({"id": f"{NS}/evidence/obs-{o['uuid'][:8]}",
+        observations.append({"id": D("evidence URI from the first eight characters of the observation uuid",
+                                     lambda u: f"{NS}/evidence/obs-{u[:8]}", o["uuid"]),
                              "title": o.get("title"), "description": T(pua_scan(o.get("description", "")), "observation"),
                              "methods": o.get("methods", []), "collected": o.get("collected"),
                              **({"expires": o["expires"]} if o.get("expires") else {}),
                              "source-doc": tag})
 # dedupe by uuid (the engineer-role observation appears in both AR and POA&M)
-seen, obs_dedup = set(), []
+seen, obs_dedup = {}, []
 for o in observations:
     if o["id"] in seen:
         note(f"observation carried in both AR and POA&M (deduped): {o['title']}")
+        # the ledger links every value of the dropped twin to the kept one, and
+        # checks that the two are equal where they are linked
+        led.same(o, seen[o["id"]], "the same observation in AR and POA&M (one uuid), kept once")
         continue
-    seen.add(o["id"]); obs_dedup.append(o)
+    seen[o["id"]] = o; obs_dedup.append(o)
 ap_payload = {"activities": [{"title": a.get("title"),
                               "description": T(pua_scan(a.get("description", "")), "ap"),
                               "steps": [{"title": s.get("title"),
@@ -299,7 +331,9 @@ bundle.add("objects/assessment/conmon-2023-06.json",
             "performer-ref": party_uri(AR, AR["metadata"]["responsible-parties"][0]["party-uuids"][0], "assessor")
                              if AR["metadata"].get("responsible-parties") else f"{NS}/party/assessor",
             "time": res.get("start", "2023-06-02"),
-            "result": "not-satisfied" if finding_src["target"]["status"]["state"] == "not-satisfied" else "satisfied",
+            "result": D("assessment result from the finding's target status",
+                        lambda st: "not-satisfied" if st == "not-satisfied" else "satisfied",
+                        finding_src["target"]["status"]["state"]),
             "evidence-refs": [o["id"] for o in obs_dedup],
             "facets": {F_OBS: {"observations": obs_dedup}}})
 
@@ -359,10 +393,9 @@ def risk_object(rk, name, treats):
     # state: `closed` retires; every other OSCAL status is at most `identified`,
     # because assessed/treated require a rating (RISK-2) and an OSCAL
     # characterization carries likelihood and impact, never the level.
-    if rk.get("status") == "closed":
-        o["state"] = "retired"
-    else:
-        o["state"] = "identified"
+    o["state"] = D("Risk state from the OSCAL risk status (closed -> retired, anything else -> identified)",
+                   lambda st: "retired" if st == "closed" else "identified", rk.get("status"))
+    if o["state"] == "identified":
         if rk.get("characterizations"):
             risk_gaps["analysed in source (likelihood + impact) but no level: `assessed` unreachable (RISK-2)"] += 1
     if _poam_sys and _poam_sys in _ssp_sys:
@@ -372,11 +405,12 @@ def risk_object(rk, name, treats):
     tcode = RESPONSE_TREATMENT.get(rtypes[0]) if rtypes else None
     if rtypes and tcode is None:
         risk_gaps[f"response type `{rtypes[0]}` has no treatment code (C.10)"] += 1
+    treatment = lambda: D("treatment option from the response type (C.10)", lambda t: RESPONSE_TREATMENT[t], rtypes[0])
     if tcode == "modify" and treats:
-        o["treatment"] = "modify"
+        o["treatment"] = treatment()
         o["treatments"] = [{"requirement-ref": treats}]
     elif tcode == "avoid":
-        o["treatment"] = "avoid"
+        o["treatment"] = treatment()
     elif tcode == "retain":
         # RISK-6: retain requires acceptance{approver-ref, date, rationale}. The
         # source has the rationale (the response narrative) and names the
@@ -398,7 +432,8 @@ def actions_of(rk):
     for rm in rk.get("remediations", []) or []:
         for t in rm.get("tasks", []) or []:
             due = t.get("timing", {}).get("within-date-range", {}).get("end")
-            a = {"description": f"{rm.get('title', '')}: {t.get('title', '')}",
+            a = {"description": D("action description: remediation title, then task title",
+                                  lambda r, k: f"{r}: {k}", rm.get("title", ""), t.get("title", "")),
                  "status": rm.get("lifecycle", "planned")}
             if due: a["due"] = {"type": "datetime", "value": due}
             out.append(a)
@@ -435,8 +470,11 @@ bundle.add("objects/finding/goodread-risk-1.json",
                             "rationale": pua_scan(rk1.get("mitigating-factors", [{}])[0].get("description",
                                           "Risk accepted per POA&M deviation approval.")),
                             "approver-ref": sca,
-                            "opened": (POAM.get("observations", [{}])[0].get("collected", "2023-05-19"))[:10],
-                            "refs": [f"{NS}/evidence/obs-{POAM['observations'][0]['uuid'][:8]}", RISK1["id"]]}]})
+                            "opened": D("date part of the observation's collected timestamp", lambda c: c[:10],
+                                        POAM.get("observations", [{}])[0].get("collected", "2023-05-19")),
+                            "refs": [D("evidence URI from the first eight characters of the observation uuid",
+                                       lambda u: f"{NS}/evidence/obs-{u[:8]}", POAM["observations"][0]["uuid"]),
+                                     RISK1["id"]]}]})
 
 # ================= 6. Attestation (the ATO as attestation) =================
 ato_subjects = [{"id": o["id"], "semantic-digest": semantic_digest(o)}
@@ -446,11 +484,13 @@ mini_manifest = json.dumps(ato_subjects, separators=(",", ":"), ensure_ascii=Fal
 import hashlib
 bundle.add("objects/attestation/ifa-ato.json",
            {"id": f"{NS}/attestation/ifa-ato", "version": V_SSP, "lifecycle": "active",
-            "title": f"IFA ATO for {sc['system-name']} (modeled from SSP date-authorized)",
+            "title": D("attestation title naming the system",
+                       lambda n: f"IFA ATO for {n} (modeled from SSP date-authorized)", sc["system-name"]),
             "subject-semantic-digests": ato_subjects,
             "content-manifest-digest": "sha256:" + hashlib.sha256(mini_manifest).hexdigest(),
             "signer": f"{NS}/party/authorizing-official",
-            "timestamp": f"{sc.get('date-authorized', '2025-05-19')}T00:00:00Z"})
+            "timestamp": D("ATO timestamp: midnight UTC of the date authorized", lambda d: f"{d}T00:00:00Z",
+                           sc.get("date-authorized", "2025-05-19"))})
 
 # ---------- stubs + write ----------
 # carried Requirements bring their facet pins along (#17 fail-closed:
@@ -478,7 +518,7 @@ bundle.stub("goodread-finding-target-stub.json", F_FTGT.split("@")[0], [],
              "implementation-statement-uuid": {"type": "string"}})
 bundle.stub("goodread-ap-stub.json", F_AP.split("@")[0], [], {"activities": {"type": "array"}})
 bundle.stub("goodread-protocols-stub.json", F_PROTO.split("@")[0], [], {"protocols": {"type": "array"}})
-bundle.write({"source": "OSCAL IFA GoodRead example set (SSP 1.1.1, AP, AR, POA&M) + leveraged/"
+manifest = bundle.write({"source": "OSCAL IFA GoodRead example set (SSP 1.1.1, AP, AR, POA&M) + leveraged/"
                         "leveraging SSP pair + component-definition example (usnistgov/oscal-content)",
               "source-note": "FICTIONAL example content by NIST; converted as the gate-3 lifecycle corpus",
               "source-oscal-version": SSP["metadata"]["oscal-version"],
@@ -563,12 +603,23 @@ RULES = [
   "Component (kind mapped) id/title"),
 ]
 rows, unmapped = coverage(paths, RULES)
-# value arrival (measured, not declared): the path map above says where each
-# source path is MEANT to go; this says how many values actually got there
-VA = value_arrival([("ssp", {"system-security-plan": SSP}), ("ap", {"assessment-plan": AP}),
-                    ("ar", {"assessment-results": AR}), ("poam", {"plan-of-action-and-milestones": POAM}),
-                    ("lev", {"system-security-plan": LEV}), ("lvg", {"system-security-plan": LVG}),
-                    ("cdef", {"component-definition": CDEF})], list(bundle.objects.values()))
+# global occurrence (measured, not declared): the path map above says where
+# each source path is MEANT to go; this counts the source values that have an
+# equal value SOMEWHERE in the output. It is an upper bound on what was
+# carried and does not trace an occurrence to its destination (see
+# oscal_conv_lib.global_occurrence).
+VA = global_occurrence(list(led.docs.items()), list(bundle.objects.values()))
+
+# the ledger: one entry per source value, each checked against the files just
+# written. The one declared drop restates what the coverage report has said
+# since 1.0.0 (identity is re-minted); everything else without a destination
+# stays unaccounted until somebody decides it, path by path.
+led.drop(r"\.uuid$", "the uuid of a source element: JASCON objects get URIs minted from names and titles, "
+                     "the uuid itself is not carried (uuids that ARE carried or resolved have a destination above)")
+LEDGER = led.account(bundle.out, {**bundle.objects, "content-manifest.json": manifest})
+with open(os.path.join(OUTDIR, "ifa-conversion-ledger.json"), "w", encoding="utf-8") as f:
+    json.dump(LEDGER, f, indent=1, ensure_ascii=False); f.write("\n")
+LT = LEDGER["totals"]
 
 types = collections.Counter(rel.split("/")[1] for rel in bundle.objects)
 j = report(
@@ -625,13 +676,27 @@ j = report(
       f"(the binding is carried verbatim; a resolver follows the odp@1 aggregates map)." if unresolved_bind else "."),
      f"- **Kind mapping**: " + (", ".join(f"{k} x{v}" for k, v in kind_mapped.items()) or "none") +
      f" (OSCAL free-text component types vs. the kernel's closed componentKind).",
-     f"- **Value arrival (measured; path coverage above is a DECLARATION)**: {VA['arrived-verbatim']:,} of "
-     f"{VA['leaf-values']:,} source leaf values occur verbatim in the emitted objects. Absent: "
+     f"- **Global occurrence (measured; path coverage above is a DECLARATION)**: {VA['exact']:,} of "
+     f"{VA['leaf-values']:,} source leaf values have an equal value of the same type somewhere in the emitted "
+     f"objects. This is an **upper bound** on what was carried: all sources and all objects share one search "
+     f"space, so one output value satisfies every equal source value, and a value dropped in one place is hidden "
+     f"by an equal value in another. It does not trace an occurrence to its destination. Not counted: "
+     f"{VA['key-only']} values that equal only an output key and {VA['embedded']} that occur only inside a longer "
+     f"output text (candidates, to be argued per path). No equal value anywhere: "
      f"{VA['absent']['identity']} identity values (uuids/hrefs - re-minted as URIs by design), "
      f"{VA['absent']['document-metadata']} document-metadata values, and **{VA['absent']['content']} content "
      f"values ({VA['absent-content-prose']} of them prose of 40+ characters)** - each either transformed on "
-     f"purpose (a mapped code, a respelled id) or DROPPED. `UNMAPPED: 0` does not see the difference; the "
-     f"per-path list is in the JSON report (`value-arrival`) and is the work queue (backlog #41).",
+     f"purpose (a mapped code, a respelled id) or DROPPED. That list is a **lower bound** on the losses, not "
+     f"the complete work queue. `UNMAPPED: 0` sees none of this; the per-path lists, with the indexed pointer "
+     f"of every value, are in the JSON report (`global-occurrence`; backlog #41).",
+     f"- **Conversion ledger (measured per source value)**: each of the {LEDGER['leaf-values']:,} source leaf values "
+     f"has one entry in `ifa-conversion-ledger.json` saying where it went. **{LT['copied']} copied** (the value "
+     f"stands, with its type, at the destination named, read back from the written file), "
+     f"**{LT['transformed']} transformed** (a named rule made the destination from it; the rule was applied to the "
+     f"source again and compared), **{LT['intentionally-dropped']} intentionally dropped** (a stated reason), "
+     f"**{LT['unaccounted']} unaccounted**. Unlike the global figure above, an equal value elsewhere does not count: "
+     f"a value is traced by what the converter did with it. Checks that failed: {len(LEDGER['verification-failures'])}. "
+     f"The unaccounted values are listed by path at the end of this report; they are the work queue of backlog #41.",
      f"- **What OSCAL cannot give the Risk shape** (model findings, REPORTED; nothing is invented - the one derived value is the owner): " +
      "; ".join(f"{k} x{v}" for k, v in sorted(risk_gaps.items())) +
      f". Owner source: the SSP `owner` role -> {RISK_OWNER}.",
@@ -642,12 +707,22 @@ j = report(
      "placeholder-uuids": uuid_placeholder, "unresolved-bindings": unresolved_bind,
      "lang-wraps": dict(lang_wraps),
      "risk-shape-gaps": dict(risk_gaps), "response-types": dict(response_types),
-     "value-arrival": VA})
+     "global-occurrence": VA,
+     "ledger": {"file": "ifa-conversion-ledger.json", "leaf-values": LEDGER["leaf-values"], "totals": LT,
+                "verification-failures": len(LEDGER["verification-failures"])}})
+with open(os.path.join(OUTDIR, "ifa-coverage-report.md"), "a", encoding="utf-8") as f:
+    f.write("\n## Unaccounted source values (conversion ledger)\n\n"
+            "No destination and no declared reason. Each is either carried by a rule the converter does not state "
+            "yet, or dropped without a decision. Pointers to every single value are in `ifa-conversion-ledger.json`.\n\n"
+            "| path | count | first value |\n|---|---:|---|\n" +
+            "".join(f"| `{u['path']}` | {u['count']} | `{u['pointers'][0]}` |\n" for u in LEDGER["unaccounted-paths"]))
 print(f"objects: {sum(types.values())} {dict(types)}")
 print(f"leaves: {j['totals']['leaf-values']:,}  mapped: {j['totals']['mapped']:,}  "
       f"UNMAPPED: {j['totals']['unmapped']}")
-print(f"value arrival: {VA['arrived-verbatim']}/{VA['leaf-values']} verbatim; absent content values: "
-      f"{VA['absent']['content']} ({VA['absent-content-prose']} prose)")
+print(f"global occurrence: {VA['exact']}/{VA['leaf-values']} exact (upper bound); key-only {VA['key-only']}, "
+      f"embedded {VA['embedded']}; absent content values: {VA['absent']['content']} ({VA['absent-content-prose']} prose)")
+print(f"ledger: copied {LT['copied']}, transformed {LT['transformed']}, intentionally dropped "
+      f"{LT['intentionally-dropped']}, unaccounted {LT['unaccounted']}; failed checks {len(LEDGER['verification-failures'])}")
 print(f"respell: {n_stmt_respell}  pua: {n_pua}  placeholder-uuids: {uuid_placeholder}  "
       f"unresolved-bindings: {unresolved_bind}")
 if unmapped:

@@ -59,13 +59,20 @@ annotations removed*. It answers *"is this the meaning that was
 approved?"* — stable across re-serialization, annotation hygiene, and
 repackaging, and it is what attestations bind as their subjects.
 
-Canonicalization is RFC 8785 (JCS) with two determinism guards the
+Canonicalization is RFC 8785 (JCS) with three determinism guards the
 conformance corpus tests explicitly, because each was a reviewer-found
 fragmentation vector: **empty-omission** — structurally optional
 arrays and objects with zero elements MUST be omitted before JCS, so
 Tool A's `"aliases": []` and Tool B's omitted field hash identically —
-and **decimal-as-canonical-string**, so no IEEE float representation
-ever leaks into a hash.
+**decimal-as-canonical-string**, so no IEEE float representation
+ever leaks into a hash — and the **number domain** *(2.0.0, NUMBER-1)*:
+a JSON number is an integer in plain digits, of magnitude at most
+2^53 − 1. Beyond that a double no longer holds every integer, and a
+JavaScript tool reads `9007199254740993` as `…992` where Python reads it
+exactly: one file, two digests. `1.0`, `1e3` and `-0` are second
+spellings of 1, 1000 and 0, which one tool hashes as written and another
+does not. A validator refuses such a number; it does not rewrite it. What
+does not fit is a decimal, a string.
 
 > **Don't** improvise integrity by hashing files ad hoc. The failure
 > this prevents came out of the design's own cross-examination: byte

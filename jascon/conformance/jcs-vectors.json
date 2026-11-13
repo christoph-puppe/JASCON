@@ -1,5 +1,5 @@
 {
-  "description": "Canonical-form vectors (D3): SHA-256 over JCS-compatible serialization (sorted keys, no insignificant whitespace, minimal escaping, UTF-8) of the object minus `annotations`. Pre-normalization rule (D3.3): structurally OPTIONAL arrays/objects with zero elements MUST be absent - their presence is a validation error, so canonicalization never sees them; structurally REQUIRED fields remain even when empty. Decimals are canonical strings (D3.4), never IEEE floats.",
+  "description": "Canonical-form vectors (D3): SHA-256 over JCS-compatible serialization (sorted keys, no insignificant whitespace, minimal escaping, UTF-8) of the object minus `annotations`. Pre-normalization rule (D3.3): structurally OPTIONAL arrays/objects with zero elements MUST be absent - their presence is a validation error, so canonicalization never sees them; structurally REQUIRED fields remain even when empty. Decimals are canonical strings (D3.4), never IEEE floats. The number domain (D3.9, NUMBER-1): a JSON number is an integer in plain digits, of magnitude at most 2^53 - 1 - no fraction, no exponent, no -0. A vector with `number-text` carries a JSON TEXT (a vector file cannot carry 1.0 as a number: its own parser has read it already); an implementation reports it valid or invalid, and for a valid text its canonical form equals `canonical-text`. The rule rejects and never rewrites.",
   "vectors": [
     {
       "name": "key-sorting-and-compaction",
@@ -53,6 +53,93 @@
         "title": "Placeholder set", "members": [] },
       "expected": "valid",
       "reason": "`members` is structurally REQUIRED on RequirementSet - it remains even when empty; only optional empties are omitted (measured live: the C5 GC domain Set)"
+    },
+    {
+      "name": "number-integers-in-plain-digits",
+      "number-text": "{\"a\":0,\"b\":-1,\"c\":[10,200]}",
+      "expected": "valid",
+      "canonical-text": "{\"a\":0,\"b\":-1,\"c\":[10,200]}",
+      "reason": "the whole domain is written one way: an optional minus and digits"
+    },
+    {
+      "name": "number-largest-magnitude",
+      "number-text": "{\"hi\":9007199254740991,\"lo\":-9007199254740991}",
+      "expected": "valid",
+      "canonical-text": "{\"hi\":9007199254740991,\"lo\":-9007199254740991}",
+      "reason": "2^53 - 1 on both sides: the largest integers every IEEE double holds exactly, with its neighbours"
+    },
+    {
+      "name": "number-like-text-inside-strings-is-text",
+      "number-text": "{\"k\\\"1.0\":\"1.0, -0 and 1e3 \\\\\\\" 2.5\",\"n\":1}",
+      "expected": "valid",
+      "canonical-text": "{\"k\\\"1.0\":\"1.0, -0 and 1e3 \\\\\\\" 2.5\",\"n\":1}",
+      "reason": "the rule reads number tokens, not digits: a key or a string value may say 1.0, even after an escaped quote"
+    },
+    {
+      "name": "number-one-beyond-the-range",
+      "number-text": "{\"n\":9007199254740992}",
+      "expected": "invalid",
+      "reason": "2^53: exact in a double, but its successor is not - the range ends one below"
+    },
+    {
+      "name": "number-negative-beyond-the-range",
+      "number-text": "{\"n\":-9007199254740992}",
+      "expected": "invalid",
+      "reason": "the range is symmetric"
+    },
+    {
+      "name": "number-reported-9007199254740993",
+      "number-text": "{\"n\":9007199254740993}",
+      "expected": "invalid",
+      "reason": "the reported case: JavaScript reads it as 9007199254740992, Python exactly - two digests, two verdicts"
+    },
+    {
+      "name": "number-twenty-digits",
+      "number-text": "{\"n\":100000000000000000000}",
+      "expected": "invalid",
+      "reason": "compared as text: no implementation needs big integers to refuse it"
+    },
+    {
+      "name": "number-fraction-zero",
+      "number-text": "{\"n\":1.0}",
+      "expected": "invalid",
+      "reason": "a second spelling of 1 - one tool hashes 1.0, another 1; rejected, never rewritten (D3.4)"
+    },
+    {
+      "name": "number-exponent",
+      "number-text": "{\"n\":1e3}",
+      "expected": "invalid",
+      "reason": "a second spelling of 1000"
+    },
+    {
+      "name": "number-exponent-capital",
+      "number-text": "{\"n\":1E3}",
+      "expected": "invalid",
+      "reason": "a second spelling of 1000"
+    },
+    {
+      "name": "number-negative-zero",
+      "number-text": "{\"n\":-0}",
+      "expected": "invalid",
+      "reason": "a second spelling of 0, and the one a parser that keeps integers cannot see"
+    },
+    {
+      "name": "number-fraction",
+      "number-text": "{\"n\":0.5}",
+      "expected": "invalid",
+      "reason": "a fraction is a decimal, and a decimal is a string (D3.4)"
+    },
+    {
+      "name": "number-nested",
+      "number-text": "{\"a\":[1,{\"b\":[2,3.0]}]}",
+      "expected": "invalid",
+      "reason": "every number of the text, at any depth"
+    },
+    {
+      "name": "number-in-annotations-too",
+      "number-text": "{\"id\":\"https://ex.org/req/1\",\"version\":\"1\",\"annotations\":{\"alpha\":0.5}}",
+      "expected": "invalid",
+      "reason": "the rule is on the file, not on the semantic domain: a tool checks it without knowing where annotations are"
     }
   ]
 }

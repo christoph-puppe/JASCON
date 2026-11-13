@@ -2418,3 +2418,382 @@ objects and digests are unchanged.
 **Lesson, for §14.5.** A finding about a source is tested against the
 source's own notation before it goes to the authors' queue. This one was
 not, for four months.
+
+# Amendments — the outside reports of 2026-11-13: four gaps in the run rules
+
+On 2026-11-13 eight issues arrived in the GitHub tracker of the
+repository from one outside reporter, written against commit `9e84c2ca`:
+five defects (issues 23 to 27) and three requests (28 to 30). GitHub's
+numbers are not the numbers of the backlog. This section records the four
+defects in CHECK-12, CHECK-13 and CHECK-15. The fifth, the number domain,
+is backlog #67 and has its own entry when it closes.
+
+## What was reported, and what the reproduction showed
+
+All four were reproduced on the reference validator before anything was
+answered, each on the conformance vector "CHECK-15 satisfied: row ->
+record -> raw output, every digest verifies":
+
+| Issue | The reference accepted | The rule as written |
+|---|---|---|
+| 23 | an evidence record at `alternate/<hex>`, its digest intact | CHECK-15: evidence references stay in the store, `evidence/sha256/<hex>` |
+| 24 | `collector-id: "bash"` on a row whose Check has no `collector@1` | CHECK-13: the id names a collector of the Check |
+| 25 | `"unbound-extra": 999` among a row's `parameters` | CHECK-12: the row's parameters equal what the Tailoring binds |
+| 26 | a record without `observation-digest` on a row with an observation | CHECK-15: the record binds the row's observation |
+
+None of them changes a recomputed verdict or lets a digest pass that
+does not verify. Each lets a run record claim something no rule holds it
+to, inside the digest an Attestation signs.
+
+## The author's decisions (2026-11-13)
+
+1. **Issue 23.** A relative reference is `evidence/sha256/<hex>` or it
+   fails. A reference with a URI scheme stays a note: it was in the code
+   and pinned by a vector, and the specification now says so.
+2. **Issue 24.** A Check without the facet declares no collector. A
+   runner that brings its own collector leaves `collector-id` out.
+3. **Issue 25, wider than asked.** A row names only parameters its Check
+   reads, with or without `tailoring-ref`. The report asked for the case
+   with a Tailoring. A name no assertion reads cannot be verified in
+   either case, and two tools would record one run with two digests.
+4. **Issue 26, in both directions.** A row with an observation needs a
+   record with its `observation-digest`; a row without one needs a record
+   without. The second direction was not reported and is the more serious:
+   a failing observation could be dropped and the run reported as
+   `inconclusive` while the record showed that something was observed.
+   `observation-digest` stays optional in the schema, because a run that
+   observed nothing has nothing to digest.
+5. **The collector, found while testing issue 24.** A record that names
+   a collector on a row that names none passed. Row and record now name
+   the same collector, or both none. Closed with issue 26.
+
+## What changed
+
+- `validate_core.py`, `jascon-rules.js` (app build 0.9.5, and the pack
+  builder's inlined copy), `validate_core.ps1`: the four rules and their
+  messages. The twin was ported without a runtime; a PowerShell runtime
+  could not be installed in the session that wrote it, so its run is the
+  workflow's: Windows PowerShell 5.1 on a hosted runner, commit
+  `33901767`, `check: 199 pass, 0 fail`, the bundles, the pack and the
+  example folder with the reference's counts, ALL GREEN in 183 s
+  (https://github.com/christoph-puppe/JASCON/actions/runs/43423027413).
+- `check-vectors.json`: 188 → **199**, eleven bundle vectors (44 → 55).
+  Ten fail on the reference as it was. The eleventh is the legitimate
+  case: a run that observed nothing, with a record that binds nothing.
+- Specification: CHECK-12, CHECK-13, CHECK-15 and the evidence paragraph
+  of D24, amended in place with the date. Handbook: Chapter 10 §10.7,
+  Chapter 12 (the fourth and fifth sitting, with a "Don't"), Appendix A
+  (A.7, the evidence store), Appendix B (the rule table), Appendix D
+  (`collector@1`). `jascon-app/ERRATA.md` has the entry.
+
+## What it does not change
+
+No shape and no schema. No shipped object: the five bundles, the worked
+pack and the example folder pass as before, because none of their rows
+carries an unread parameter, an undeclared collector, a reference outside
+the store or a record that disagrees with its row (scanned before the
+change, validated after it).
+
+## Open after this section
+
+Backlog #67 (the number domain; blocks the tag by the author's word of
+2026-11-13). Issues 28 to 30 are requests and were answered in the
+tracker: history for the manual check and a read-only comparison of runs,
+a coverage view built from existing primitives, and the runner of
+CP-CHECK-1 §9 phase 2, which follows the fixes.
+
+## Lesson
+
+The three engines agreed and all three were wrong, because two are
+ports of the first. Agreement between ports measures the port. What
+found the gaps was a reader holding the code to the sentences of the
+rule table: "equal" means the key sets too, and "names a collector of
+the Check" has an answer when the Check has none. Every negative vector
+before this day changed a value; none removed a field or added a key.
+
+# Amendments — the number domain (2026-11-13): D3 item 9, NUMBER-1 (#67 closed)
+
+The fifth of the outside reports of 2026-11-13 (issue 27 in the GitHub
+tracker of the repository; not #27 of the backlog) was filed as a defect
+of `check-verdict`. Reproducing it showed a hole in D3.
+
+## What was reported, and what the reproduction added
+
+Reported: a Check that expects `9007199254740992`, on an observation of
+`9007199254740993`. The reference says `not-satisfied`; the app says
+`satisfied`, because `JSON.parse` rounds the fact to the expected value.
+
+Found while reproducing it, same JSON text in both engines:
+
+| Input | Reference (Python) | App (JavaScript) |
+|---|---|---|
+| `1.0` or `1e3` on an `integer` fact | `inconclusive` | `satisfied` |
+| canonical form of `{"n":9007199254740993}` | `…993` | `…992` |
+| canonical form of `{"n":1.0}` | `{"n":1.0}` | `{"n":1}` |
+
+So the defect is not in the tenth primitive. Every integer of the kernel
+had two readings, and with them every semantic digest that covers one: an
+Attestation could verify in one tool and fail in the other. D3 item 3 has
+said since v0.5 that the vectors cover "the permitted number domain". No
+text defined a domain, and `jcs-vectors.json` held no number. The comment
+on `jscCanonical` in the app claimed the two engines "agree on everything
+the schema allows"; the schema type `integer` allows `1.0` and any size.
+
+## The author's decisions (2026-11-13)
+
+1. **Declare the domain.** A JSON number in a bundle is an integer of
+   magnitude at most 2^53 − 1. Not taken: exact integer parsing in the
+   app. It needs a parser of its own in every JavaScript tool and goes
+   against RFC 8785, which rests on IEEE doubles.
+2. **One spelling: plain digits.** `1.0`, `1e3` and `-0` are refused.
+   The first answer in the tracker had `1.0` read as the integer 1 and
+   written `1` in the canonical form, as RFC 8785 serialises it. That is
+   a rewrite at digest time. This register rejected exactly that for
+   #37(e): "never-normalize is the D3.4 discipline", and the canonical
+   spelling is held by validation. There is a second reason. A reading by
+   value depends on how each engine turns a text into a float: Python and
+   JavaScript read `0.99999999999999999` as 1, and the twin's parser
+   is expected to return a decimal that is not 1 (inferred from how that
+   parser types numbers; not run). A rule on the text has no such edge. The answer
+   in the tracker was amended, with the reason.
+3. **The whole file, annotations included.** The rule exists for digests
+   and verdicts, and annotations are in neither. It still covers them,
+   so that a tool can check a file without knowing where annotations
+   are, and so that five engines implement one pattern. A fraction in an
+   annotation is written as a string.
+4. **It blocks the tag.** After 2.0.0, narrowing the domain would change
+   which objects are valid.
+
+## The rule
+
+D3 item 9. **NUMBER-1:** a JSON number is an integer in plain digits, of
+magnitude at most 2^53 − 1 (9007199254740991): no fraction, no exponent,
+no `-0`. It holds for the content manifest, every object, every pinned
+definition, every evidence record and observation file. It is refused,
+never rewritten. A quantity that does not fit is a `decimal`, a string,
+which the comparators compare exactly. D24, evaluation step 3: an
+`integer` fact outside the domain is mistyped, so `check-verdict` is
+`inconclusive` in every engine.
+
+Two checks in every engine, because a parser forgets the spelling: the
+text of a file where it is read, and the value of an object wherever it
+is held without its text. Which one does the work differs by language.
+JavaScript sees neither `1.0` nor `-0` after parsing and needs the text
+for both. Python keeps `1.0` as a float and needs the text only for
+`-0`. The pattern is the same in all: strings are consumed whole, the
+remaining number tokens are compared as text, and no float takes part.
+
+## What changed, and what was measured
+
+- `validate_core.py`, `validate_core.ps1`, the app's `jascon-rules.js`
+  (build 0.9.6; the pack builder carries the same code), the reader
+  (v1.10.0, on the files it verifies). The canonical form is unchanged in
+  all of them: inside the domain they agree without help.
+- Vectors: `jcs` 8 → **22** (14 `number-text` vectors, which carry JSON
+  texts, because a vector file cannot hold `1.0` as a number: the
+  harness's own parser would have read it), `parameter` 19 → **21**,
+  `check` 199 → **203** (three verdicts, among them the reported pair, and
+  one bundle with an observation file that writes `4.0`). **568 vectors
+  in 17 families.**
+- Deliberate breaks of the reference: accepting `-0`; a range one wider;
+  an integer fact without the range; an integer parameter without the
+  range; a tokenizer that looks into strings; evidence files left out.
+  Each turns at least one vector red. A seventh, accepting a fraction in
+  the text, stays green in the reference, where the value check catches
+  the float; the app's test "JSON.parse alone would let every spelling
+  and the reported integer through" covers it where it matters.
+- Shipped content: no object changes. Before the rule was written, a
+  scan of 3,871 JSON files found 11 numbers outside the domain, all
+  `coverage-pct: 100.0` in the converters' coverage reports, which are
+  not JASCON objects. With the rule on, the five bundles, the worked pack
+  and the example folder validate as before.
+- The PowerShell twin, ported without a runtime, ran on Windows PowerShell 5.1 on a hosted runner at commit `30892353`: 568 vectors in 17 families (`jcs: 22`, `parameter: 21`, `check: 203`), the five bundles, the worked pack and the example folder with the counts of the reference, ALL GREEN in 118 s (https://github.com/christoph-puppe/JASCON/actions/runs/43426147785).
+- Specification D3 (items 3 and 9) and D24; handbook Chapters 10, 11 and
+  12 and Appendices A, B, C and G; SKILL.md, whose vector count had
+  stood at "258 in 15 families" since rc.1; the app's errata.
+
+## Cons, stated
+
+- A tool that writes JSON through a float type (`json.dumps(1.0)`, and
+  the defaults of several languages) now produces invalid bundles. That
+  is the point of the rule, and it will be met in the field.
+- A JavaScript tool cannot enforce the rule on parsed values alone. It
+  has to keep the text, or accept that it checks the range and not the
+  spelling.
+- An annotation cannot hold a fraction as a number.
+- The rule is not expressible in JSON Schema, so the kernel schema does
+  not carry it; it is a rule of the validator, like empty-omission.
+
+## Lesson
+
+The reference and its port agreed on every vector for four months. They
+were tested against one another, with vectors that held no number larger
+than a sequence. A sentence in the specification promised a domain and a
+vector for it, and nobody had held the corpus to that sentence. The
+report came from someone who asked what the schema allows instead of
+what the examples contain.
+
+# Amendments — the value-level check of the converters (2026-11-13): #41 re-planned
+
+Two more reports from the same outside reporter, issues 32 and 33 in the
+GitHub tracker, both about `oscal_conv_lib.value_arrival()`: the helper
+behind L-2 above and the sentence "394 of 835 leaf values occur verbatim"
+in the IFA coverage report, on the website and in backlog #41. Neither
+touches the kernel, a validator or a bundle.
+
+## Issue 32 — the helper counted what had not arrived
+
+`value_arrival()` joined every output key and scalar into one string,
+turned every scalar into text, left nulls out and tested substring
+membership. Six one-leaf cases, reproduced as reported:
+
+| Source | Output | Old result | Why |
+|---|---|---|---|
+| `"open"` | `"not-open"` | arrived | a substring of another value |
+| `1` | `10` | arrived | a number as text, inside a longer number |
+| `true` | `"true"` | arrived | a boolean as text, against a string |
+| `"alpha\nnext"` | value `"alpha"`, key `"next"` | arrived | the match spans two tokens across the joining newline |
+| `""` | no output | arrived | the empty string is in every string |
+| `null` | `null` | absent | nulls never entered the search text |
+
+Five of the six make the figure too high. Class: algorithm. The helper
+had no test; it was written during the CP-RISK-1 landing to expose a
+weakness of the path-level reports and was itself never held to a case
+with a known answer.
+
+## Issue 33 — what no global check can show
+
+All sources and all emitted objects share one search space, and one
+output value satisfies every equal source value. Two controls with the
+same description, the second dropped: 4 of 4 arrived, nothing absent. The
+reporter is exact about it: the helper did what its docstring said, and
+the fault is in the words around it. `convert_ifa.py` called the result
+"how many values actually got there" and the report called its absent
+list "the work queue". Backlog #41 planned to wire this helper into every
+converter and to re-word "converted losslessly" from it. That plan would
+have replaced one overstatement with another.
+
+## The author's decisions (2026-11-13)
+
+1. **Exact, typed, whole values.** Strings, numbers, booleans and null
+   match only their own type and only as a whole.
+2. **Keep what a substring match knows, apart.** A value that occurs
+   only inside a longer output text (a remark appended to a description)
+   and a value that equals only an output key (a prop name that became a
+   facet key) are listed as candidates and not counted.
+3. **Name the measure for what it is.** `global_occurrence()`. Its count
+   is an upper bound on what was carried; its absent list is a lower
+   bound on the losses and not the complete queue. Diagnostics keep the
+   array index (indexed JSON Pointers).
+4. **Correct the figure where it is published, then measure again.**
+5. **A ledger of source occurrences is the measurement a lossless claim
+   needs**: one entry per source leaf with its destination and outcome.
+   The IFA converter first; the others corpus by corpus. Not taken: a
+   count of occurrences on both sides. It would flag the fixture without
+   saying which occurrence is gone, and every legitimate deduplication
+   would read as a loss.
+6. **Tracked in #41**, re-planned, not in a new entry. **It does not
+   block the tag**: no kernel rule depends on it.
+
+## What changed, and what was measured
+
+- `oscal_conv_lib.py`: `value_arrival()` is `global_occurrence()`.
+  `test_oscal_conv_lib.py`, twelve tests named after the two issues, among
+  them one that asserts the known limit (the dropped description still
+  reads 4 of 4); the workflow's Python job runs them.
+- The IFA sources were fetched again from the pinned commit
+  (`usnistgov/oscal-content@9402f031`, seven files). **The unchanged
+  converter first reproduced the committed bundle and both reports byte
+  for byte**, 394 of 835 included, so the re-measurement is of the same
+  input.
+- Re-measured: **283 of 835** source leaf values have an equal typed
+  value somewhere in the bundle. 29 equal only a key of the output, all
+  of them prop names under five paths; whether such a name became that
+  key is for the ledger to say. 80 occur only inside a longer text. Without any equal: 194 identity
+  values, 125 document-metadata values, **124 content values, 63 of them
+  prose of 40 characters or more**. The old reading was 111 too high.
+- The bundle is unchanged: 17 objects, the same digests. Only the two
+  coverage reports differ.
+- Corrected where the figure stood: the IFA coverage report, the website
+  (`evidence.html`, in five languages), specification R16, IV.5b item 6
+  and IV.7, backlog #41.
+- L-2 above and backlog #41 said 120 document-metadata values were
+  absent. The generated report said 125, and 394 + 194 + 125 + 122 is
+  835; 120 was a slip in the prose. L-2 stays as written and is corrected
+  by this section.
+
+## The ledger, and its first run (the same day)
+
+**How it works.** `oscal_conv_lib.Ledger` does not search for values. A
+converter loads its sources through it, and every string and integer leaf
+then carries its origin (document and indexed JSON Pointer) for as long
+as the converter hands it on unchanged. After the bundle is written,
+every output leaf and every output key that still is such a value is a
+copy with a known source and a known destination. Any computation
+returns a plain value and so loses the origin by itself; the converter
+states those at the place they happen, with `derive(rule, function,
+inputs)`, and the ledger applies the function to the source again and
+compares. A deduplication is declared with `same(dropped, kept, rule)`
+and holds only if the two are equal. A drop is declared with a pattern
+and a reason. Every entry is checked against the files on disk. What is
+left is `unaccounted`. Tracing is by object identity, so an equal value
+elsewhere cannot stand in for a lost one: the reporter's fixture names
+`/controls/1/description`, with an unrelated equal value and an equal
+key in the output, and is a test.
+
+**What it cost.** The IFA converter keeps its structure: one changed
+loader, 22 places where a computed value is now stated with its
+rule, one `same()` at the existing deduplication, one declared drop. The
+bundle and its manifest are byte for byte what they were.
+
+**First run, IFA (835 source leaf values):**
+
+| Outcome | Count | |
+|---|---:|---|
+| copied | 232 | 265 destinations, 25 of them keys, 5 of them through the deduplicated observation |
+| transformed | 26 | 18 named rules, each applied again to the source and compared |
+| intentionally dropped | 104 | one declared rule: the uuid of a source element is not carried (the report's standing statement since 1.0.0) |
+| **unaccounted** | **473** | 296 paths; the work queue |
+| failed checks | 0 | |
+
+The path map of the same conversion reads 835 of 835, UNMAPPED 0. The
+corrected global check reads 283. The ledger reads 258 carried. 61 of
+the unaccounted values have an equal value somewhere in the bundle,
+which is exactly what the global check counted and the second report
+predicted: the impact levels of the leveraged and the leveraging system
+equal those of the main system, and only the main system's are carried.
+
+**What the first run found, beyond the number:**
+
+1. **The path map declares destinations the converter does not write.**
+   Its rule for the system characteristics of the leveraged and the
+   leveraging SSP says "system@1 facet (description, FIPS-199 carried)";
+   the code carries the description. Its rule for inventory items says
+   "asset props carried verbatim"; the props of `implemented-components`
+   (6 names, 6 values) are not carried.
+2. **A value is lost in the shipped bundle.** Inventory item 4 has two
+   props named `ipv4-address`. The converter builds a dict from prop
+   names, so `172.1.2.3` is overwritten by `1.1.2.3`. No earlier report
+   could see it. It is not fixed here: the fix changes a bundle object
+   and its digests, which is the author's call.
+3. Most of the 473 are document metadata (revisions, parties, roles),
+   back-matter resources, role and party references, and component
+   status and type. Many will be deliberate. None is declared, and the
+   ledger does not guess.
+
+**Not done, on purpose.** Only one drop is declared, the one the report
+already stated. Declaring the rest "intentional" would have produced a
+small number and no knowledge.
+
+## What it does not change
+
+No kernel shape, rule or vector, no validator, no bundle object. And no
+claim of losslessness is added: the specification already said that
+"converted losslessly" is established at path level only.
+
+## Lesson
+
+A check written to expose an unverified claim was itself unverified. It
+was believed because it brought bad news: 394 of 835 looked like a harsh
+number, so nobody asked whether it was too kind. A measurement gets a
+test with a known answer before its first number is published.

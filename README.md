@@ -14,7 +14,7 @@ contact with real catalogs before it may stay.**
 
 This repository is a working design study, not a slide deck. It contains a
 draft specification with a public decision register, an **executable kernel
-schema** with a **157-vector conformance corpus** (537 in 17 families in the 2.0.0 candidate) and *two* reference
+schema** with a **157-vector conformance corpus** (568 in 17 families in the 2.0.0 candidate) and *two* reference
 validators — Python, and a **zero-dependency PowerShell 5.1 twin that runs
 on a stock Windows box** (the weekend-validator claim, measured,
 crypto engines included) —
@@ -117,6 +117,15 @@ requirements and mints real objects.*
 >   PowerShell 5.1 with the changes of 2026-11-12 the same day:
 >   `check: 188 pass, 0 fail`, every count equal to the reference's
 >   (backlog #60, closed).
+> - **Reported from outside on 2026-11-13:** five defects (issues 23 to 27
+>   in the tracker), each reproduced before it was answered. Four run
+>   rules skipped a comparison when an optional field was left out
+>   (CHECK-12, CHECK-13, CHECK-15). The fifth showed that the canonical
+>   form had no number domain: the reference and the app read `1.0` and
+>   integers beyond 2^53 as two values, with two digests and two verdicts.
+>   NUMBER-1 now states the domain: integers in plain digits, of magnitude
+>   at most 2^53 − 1, refused and never rewritten (backlog #67, closed).
+>   568 vectors in 17 families (`check`: 203, `jcs`: 22). The twin ran green on all of them on Windows PowerShell 5.1 ([run](https://github.com/christoph-puppe/JASCON/actions/runs/43426147785)).
 > - **Not there at all:** a runner. Nothing in this repository executes a
 >   collector; the worked example ran its bash collector against a stub.
 >   The fit was counted on Linux hosts and Kubernetes, on no cloud API.

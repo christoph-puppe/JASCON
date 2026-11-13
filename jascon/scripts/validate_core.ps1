@@ -502,6 +502,92 @@ function Optional-Empty-Violations($obj, [string]$path = '$') {
     return ,$out
 }
 
+# ---------------- the number domain (D3.9, NUMBER-1) ----------------
+# A JSON number in a bundle is an integer written in plain digits, of
+# magnitude at most 2^53 - 1. Two reasons, one rule. RANGE: beyond 2^53 a
+# double no longer holds every integer, so a JavaScript tool reads
+# 9007199254740993 as ...992 while this parser keeps it as an Int64 - two
+# digests, two verdicts for one file. SPELLING: `1.0`, `1e3` and `-0` are
+# second spellings of 1, 1000 and 0; this parser reads 1.0 as a decimal and
+# would hash it as written, a JavaScript one as `1`. The rule rejects; it
+# never rewrites (D3.4).
+#
+# Two checks, because the spelling is gone once a text is parsed (-0 arrives
+# here as the Int32 0):
+#   Number-Spelling-Violations   wherever a bundle file is read
+#   Number-Violations            on every object, and in check-verdict
+# A fraction is a `decimal`, which is a string.
+$NUMBER_MAX = [long]9007199254740991
+$NUMBER_MAX_DIGITS = '9007199254740991'
+$NUMBER_RULE = 'a JSON number is an integer in plain digits, of magnitude at most 2^53 - 1 (9007199254740991) - no fraction, no exponent, no -0; a number two tools read differently has two digests and two verdicts'
+# strings are taken out first, in one call, so that digits inside them are
+# never looked at and the loop below sees number tokens only
+$JSON_STRING_RX = New-Object System.Text.RegularExpressions.Regex '"[^"\\]*(?:\\.[^"\\]*)*"'
+$NUMBER_TOKEN_RX = New-Object System.Text.RegularExpressions.Regex '-?[0-9][0-9.eE+-]*'
+$NUMBER_PLAIN_RX = New-Object System.Text.RegularExpressions.Regex '^-?(?:0|[1-9][0-9]*)\z'
+function Number-Spelling-Violations([string]$text) {
+    # $text: a JSON text. -> the number tokens that break NUMBER-1, as written.
+    # The digits are compared as text, so no float takes part in the decision.
+    $out = New-Object System.Collections.ArrayList
+    $bare = $JSON_STRING_RX.Replace($text, '""')
+    foreach ($m in $NUMBER_TOKEN_RX.Matches($bare)) {
+        $tok = [string]$m.Value
+        $digits = $tok.TrimStart('-')
+        if ((-not $NUMBER_PLAIN_RX.IsMatch($tok)) -or ($tok -ceq '-0') -or ($digits.Length -gt $NUMBER_MAX_DIGITS.Length) -or
+            (($digits.Length -eq $NUMBER_MAX_DIGITS.Length) -and ([string]::CompareOrdinal($digits, $NUMBER_MAX_DIGITS) -gt 0))) {
+            [void]$out.Add($tok) }
+    }
+    return ,$out
+}
+function In-Number-Domain($x) {
+    if (($x -is [bool]) -or -not (($x -is [int]) -or ($x -is [long]))) { return $false }
+    $n = [long]$x
+    return (($n -le $NUMBER_MAX) -and ($n -ge (-$NUMBER_MAX)))
+}
+function Number-Walk($obj, [string]$path, $out) {
+    # a parsed JSON value is null, a string, a bool, a map, a list - or a
+    # number, which is the only value type left
+    if ($obj -is [System.Collections.IDictionary]) {
+        foreach ($k in $obj.Keys) {
+            $v = $obj[$k]
+            if (($null -eq $v) -or ($v -is [string]) -or ($v -is [bool])) { continue }
+            if ($v -is [System.ValueType]) {
+                if (-not (In-Number-Domain $v)) { [void]$out.Add("$path.$k = $(Format-Canonical $v)") }
+            } else { Number-Walk $v "$path.$k" $out }
+        }
+    } elseif (($obj -is [System.Collections.IEnumerable]) -and -not ($obj -is [string])) {
+        $i = 0
+        foreach ($v in $obj) {
+            if (($null -ne $v) -and -not ($v -is [string]) -and -not ($v -is [bool])) {
+                if ($v -is [System.ValueType]) {
+                    if (-not (In-Number-Domain $v)) { [void]$out.Add("$path[$i] = $(Format-Canonical $v)") }
+                } else { Number-Walk $v "$path[$i]" $out }
+            }
+            $i++
+        }
+    }
+}
+function Number-Violations($obj, [string]$path = '$') {
+    # the backstop for values that never were a text here (vectors)
+    $out = New-Object System.Collections.ArrayList
+    Number-Walk $obj $path $out
+    return ,$out
+}
+function Number-Problems($raw, $obj) {
+    # -> what breaks NUMBER-1 in one bundle file: its bytes if given, else its value
+    $bad = New-Object System.Collections.ArrayList
+    if ($null -ne $raw) {
+        foreach ($t in (Number-Spelling-Violations ([System.Text.Encoding]::UTF8.GetString($raw)))) { [void]$bad.Add("written as $t") } }
+    if (($bad.Count -eq 0) -and ($null -ne $obj)) { foreach ($v in (Number-Violations $obj)) { [void]$bad.Add($v) } }
+    return ,$bad
+}
+function Number-Failures([string]$section, [string]$rel, $raw, $obj) {
+    $bad = Number-Problems $raw $obj
+    if ($bad.Count -gt 0) {
+        $more = ''; if ($bad.Count -gt 1) { $more = " (and $($bad.Count - 1) more)" }
+        FAIL $section "${rel}: [NUMBER-1] $($bad[0])$more - $NUMBER_RULE" }
+}
+
 # ---------------- modality lattice ----------------
 $OBL = @{unspecified = 0; may = 1; should = 2; must = 3}
 $PRO = @{unspecified = 0; 'should-not' = 1; 'must-not' = 2}
@@ -535,7 +621,7 @@ function Param-Check($decl, $value) {
         if ($allowed -ccontains $value) { return 'valid' } else { return 'deviation-required' }
     }
     if ($t -eq 'integer') {
-        if (-not (($value -is [int]) -or ($value -is [long])) -or ($value -is [bool])) { return 'invalid' }
+        if (-not (In-Number-Domain $value)) { return 'invalid' }      # NUMBER-1: beyond 2^53 two tools read two values
         if ($decl.Contains('min') -and $value -lt $decl['min']) { return 'deviation-required' }
         if ($decl.Contains('max') -and $value -gt $decl['max']) { return 'deviation-required' }
         return 'valid'
@@ -1423,6 +1509,16 @@ function Run-Jcs {
             $viol = Optional-Empty-Violations $case['authoring-input']
             $verdict = 'valid'; if (@($viol).Count -gt 0) { $verdict = 'invalid' }
             if ($verdict -eq $case['expected']) { OK 'jcs' } else { FAIL 'jcs' "$($case['name']): got $verdict" }
+        } elseif ($case.Contains('number-text')) {
+            # NUMBER-1 on a JSON text (a vector file cannot carry 1.0 as a
+            # number: its own parser would have read it already)
+            $text = [string]$case['number-text']
+            $val = Parse-Json $text
+            $verdict = 'valid'
+            if (((Number-Spelling-Violations $text).Count -gt 0) -or ((Number-Violations $val).Count -gt 0)) { $verdict = 'invalid' }
+            $got = ''; if ($verdict -eq 'valid') { $got = Canonical $val }
+            if (($verdict -eq $case['expected']) -and (($verdict -eq 'invalid') -or ($got -ceq $case['canonical-text']))) { OK 'jcs' }
+            else { FAIL 'jcs' "$($case['name']): expected $($case['expected']), got $verdict $got" }
         }
     }
 }
@@ -2029,10 +2125,10 @@ $CHECK_RULES = @{
     'CHECK-9'  = 'a recorded outcome is the one check-verdict computes from the recorded observation - verdicts are recomputed, never taken on trust'
     'CHECK-10' = 'an assessment that carries check results has one row per check, and its result is their aggregate: any not-satisfied, else any inconclusive or none applicable, else satisfied'
     'CHECK-11' = 'no observation, no verdict: a row without one is inconclusive and says why'
-    'CHECK-12' = 'a run''s parameter values are the ones the Tailoring it names binds - an implementer does not set its own pass mark'
-    'CHECK-13' = 'a result''s collector-id names a collector of the check'
+    'CHECK-12' = 'a row names only parameters its check reads, and their values are the ones the Tailoring it names binds - an implementer does not set its own pass mark'
+    'CHECK-13' = 'a result''s collector-id names a collector the check declares'
     'CHECK-14' = 'a Finding raised by a check is about the requirement - and the clause - that check discharges'
-    'CHECK-15' = 'evidence is content-addressed and stays inside the bundle''s store: every digest in the chain verifies against the bytes, and a record describes the run it is attached to'
+    'CHECK-15' = 'evidence is content-addressed and stays inside the bundle''s store, evidence/sha256/: every digest in the chain verifies against the bytes, and a record describes the run it is attached to - its check, its collector and its observation'
 }
 
 # -- I-Regexp (RFC 9485) for matches / matches-not --
@@ -2405,7 +2501,7 @@ function Ck-Truthy($v) {    # Python truthiness of a JSON value
 function Ck-SEq($a, $b) { return (($a -is [string]) -and ($b -is [string]) -and [string]::Equals([string]$a, [string]$b, [System.StringComparison]::Ordinal)) }
 function Ck-Show($v) { return (Format-Canonical $v) }
 function Ck-FactOk([string]$ft, $x) {
-    if ($ft -ceq 'integer') { return ((($x -is [int]) -or ($x -is [long])) -and -not ($x -is [bool])) }
+    if ($ft -ceq 'integer') { return (In-Number-Domain $x) }     # NUMBER-1: no verdict from a value two tools read differently
     if ($ft -ceq 'decimal') { return (($x -is [string]) -and [System.Text.RegularExpressions.Regex]::IsMatch($x, $DECIMAL_RX)) }
     if ($ft -ceq 'boolean') { return ($x -is [bool]) }
     return ($x -is [string])          # string, code
@@ -2743,6 +2839,15 @@ function Check-Object-Errors([string]$oid, $o, $objs) {
     }
     return ,$errList
 }
+function Ck-Reads($check) {
+    # -> the parameter names the check's assertions bind with {"param": ...}
+    $out = New-Object 'System.Collections.Generic.HashSet[string]'
+    foreach ($key in @('criteria', 'applies-when')) {
+        foreach ($a in @($check[$key])) {
+            if (($null -ne $a) -and (Is-Map $a['expected'])) { [void]$out.Add([string]$a['expected']['param']) } }
+    }
+    return ,$out
+}
 $CK_MISSING = New-Object object    # "this Tailoring binds no value" - distinct from any JSON value
 function Ck-TailoringBindings($check, $tail, $objs) {
     # -> ordered map parameter -> value or $CK_MISSING, for the parameters this check reads
@@ -2794,8 +2899,13 @@ function Ck-Load($ctx, $dref, [string]$what) {
         [void]$ctx.notes.Add("$pre$what $ref is a URI - not resolvable offline"); return $null }
     if ($ref.StartsWith('/') -or ($ref.Replace('\', '/').Split('/') -ccontains '..')) {
         Ck-Bad $ctx.E 'CHECK-15' $ctx.oid "$($ctx.at): $what ref $ref leaves the bundle"; return $null }
+    # the store has one layout: a file is named by the SHA-256 of its bytes. A
+    # relative ref anywhere else is refused before it is read, so no tool that
+    # walks the store can miss a blob another tool accepted.
     $m = [System.Text.RegularExpressions.Regex]::Match($ref, '^evidence/sha256/([0-9a-f]{64})$')
-    if ($m.Success -and -not (Ck-SEq ('sha256:' + $m.Groups[1].Value) $want)) {
+    if (-not $m.Success) {
+        Ck-Bad $ctx.E 'CHECK-15' $ctx.oid "$($ctx.at): $what ref $ref is outside the store - a ref is evidence/sha256/<the 64 hex digits of its digest>"; return $null }
+    if (-not (Ck-SEq ('sha256:' + $m.Groups[1].Value) $want)) {
         Ck-Bad $ctx.E 'CHECK-15' $ctx.oid "$($ctx.at): $what $ref is stored under another digest than the recorded $want"; return $null }
     $raw = Store-Read $ctx.store $ref
     if ($null -eq $raw) {
@@ -2804,6 +2914,14 @@ function Ck-Load($ctx, $dref, [string]$what) {
         Ck-Bad $ctx.E 'CHECK-15' $ctx.oid "$($ctx.at): $what $ref does not match its digest"; return $null }
     return ,$raw
 }
+function Ck-Numbers($ctx, $raw, $value, [string]$what) {
+    # NUMBER-1 on an evidence file -> $true when it holds; a file that breaks it is not used
+    $bad = Number-Problems $raw $value
+    if ($bad.Count -eq 0) { return $true }
+    [void]$ctx.E.Add(@{rule = 'NUMBER-1'; msg = "$($ctx.oid): $($ctx.at): ${what}: $($bad[0]) (NUMBER-1: $NUMBER_RULE)"})
+    return $false
+}
+function Ck-Named($v, [string]$what) { if (Ck-Truthy $v) { return "$what '$v'" }; return "no $what" }
 function Evidence-Chain([string]$oid, [string]$at, $a, $row, $store, $errList, $notes) {
     # CHECK-15: row -> evidence record -> raw outputs, and observation-ref.
     # -> the observation loaded from observation-ref, or $null
@@ -2814,6 +2932,7 @@ function Evidence-Chain([string]$oid, [string]$at, $a, $row, $store, $errList, $
         if ($null -ne $raw) {
             try { $obs = Ck-Json-Bytes $raw }
             catch { Ck-Bad $errList 'CHECK-15' $oid "${at}: observation file unreadable: $($_.Exception.Message)"; $obs = $null }
+            if ($null -ne $obs -and -not (Ck-Numbers $ctx $raw $obs 'observation file')) { $obs = $null }
             if ($null -ne $obs -and -not (Test-Schema $DEFS['checkObservation'] $obs)) {
                 Ck-Bad $errList 'CHECK-15' $oid "${at}: the observation file is not an observation"; $obs = $null }
         }
@@ -2825,19 +2944,32 @@ function Evidence-Chain([string]$oid, [string]$at, $a, $row, $store, $errList, $
             try { $rec = Ck-Json-Bytes $raw }
             catch { Ck-Bad $errList 'CHECK-15' $oid "${at}: evidence record unreadable: $($_.Exception.Message)"; $rec = $null }
         }
+        if ($null -ne $rec -and -not (Ck-Numbers $ctx $raw $rec 'evidence record')) { $rec = $null }
         if ($null -ne $rec -and -not (Test-Schema $DEFS['evidenceRecord'] $rec)) {
             Ck-Bad $errList 'CHECK-15' $oid "${at}: evidence record violates its schema"; $rec = $null }
         if ($null -ne $rec) {
             if (-not (Ck-SEq $rec['check-ref'] $row['check-ref']) -or -not (Ck-SEq $rec['check-digest'] $row['check-digest'])) {
                 Ck-Bad $errList 'CHECK-15' $oid "${at}: the evidence record is about another check, or another version of it" }
-            if ((Ck-Truthy $row['collector-id']) -and (Ck-Truthy $rec['collector-id']) -and -not (Ck-SEq $rec['collector-id'] $row['collector-id'])) {
-                Ck-Bad $errList 'CHECK-15' $oid "${at}: the evidence record names collector '$($rec['collector-id'])', the row '$($row['collector-id'])'" }
+            # row and record are two statements about one run: what one says of
+            # the collector and of the observation, the other says too. A field
+            # left out on one side is a difference, never a reason to skip.
+            $rc = $rec['collector-id']; $wc = $row['collector-id']
+            if (((Ck-Truthy $rc) -or (Ck-Truthy $wc)) -and -not (Ck-SEq $rc $wc)) {
+                Ck-Bad $errList 'CHECK-15' $oid "${at}: the evidence record names $(Ck-Named $rc 'collector'), the row $(Ck-Named $wc 'collector')" }
             $isSubject = $false
             foreach ($s in @($a['subject-refs'])) { if (Ck-SEq $s $rec['subject-ref']) { $isSubject = $true } }
             if (-not $isSubject) {
                 Ck-Bad $errList 'CHECK-15' $oid "${at}: the evidence record's subject $($rec['subject-ref']) is not a subject of the assessment" }
             $seen = $obs; if ($null -ne $row['observation']) { $seen = $row['observation'] }
-            if ((Ck-Truthy $rec['observation-digest']) -and $null -ne $seen -and -not (Ck-SEq (SDig $seen) $rec['observation-digest'])) {
+            $rowHas = ($null -ne $row['observation']) -or ($null -ne $row['observation-ref'])
+            $bound = Ck-Truthy $rec['observation-digest']
+            if ($rowHas -and -not $bound) {
+                Ck-Bad $errList 'CHECK-15' $oid "${at}: the row records an observation, the evidence record binds none (no observation-digest)"
+            } elseif ($bound -and -not $rowHas) {
+                Ck-Bad $errList 'CHECK-15' $oid "${at}: the evidence record binds an observation, the row records none"
+            } elseif ($bound -and $null -eq $seen) {
+                [void]$notes.Add("${oid}: ${at}: the observation is not available here - the evidence record's binding to it is not verified")
+            } elseif ($bound -and -not (Ck-SEq (SDig $seen) $rec['observation-digest'])) {
                 Ck-Bad $errList 'CHECK-15' $oid "${at}: the evidence record binds another observation than the row records" }
             foreach ($out in $rec['outputs']) {
                 $dg = [string]$out['digest']
@@ -2908,13 +3040,26 @@ function Check-Errors($objs, $store) {
                     Ck-Bad $errList 'CHECK-8' $oid "${at}: check-digest does not match $cref - the check changed after the run" }
                 $cols = $null
                 if ((Is-Map $c.o['facets']) -and (Is-Map $c.o['facets']["$COLLECTOR_FACET@1"])) { $cols = $c.o['facets']["$COLLECTOR_FACET@1"]['collectors'] }
-                if ((Ck-Truthy $row['collector-id']) -and (Is-List $cols)) {
+                # a check without the collector facet declares no collector, so any
+                # collector-id on its rows names code the check's digest does not cover
+                $declared = New-Object System.Collections.ArrayList
+                if (Is-List $cols) { foreach ($x in $cols) { if (Is-Map $x) { [void]$declared.Add($x['id']) } } }
+                if (Ck-Truthy $row['collector-id']) {
                     $known = $false
-                    foreach ($x in $cols) { if ((Is-Map $x) -and (Ck-SEq $x['id'] $row['collector-id'])) { $known = $true } }
-                    if (-not $known) { Ck-Bad $errList 'CHECK-13' $oid "${at}: collector-id '$($row['collector-id'])' names no collector of $cref" }
+                    foreach ($x in $declared) { if (Ck-SEq $x $row['collector-id']) { $known = $true } }
+                    if (-not $known) {
+                        $none = ''; if ($declared.Count -eq 0) { $none = ' - the check declares none' }
+                        Ck-Bad $errList 'CHECK-13' $oid "${at}: collector-id '$($row['collector-id'])' names no collector of $cref$none" }
                 }
+                # a name no assertion reads cannot be verified, with or without a
+                # Tailoring - and the row is inside the digest an Attestation signs
+                $have = $row['parameters']; if (-not (Is-Map $have)) { $have = (New-OMap) }
+                $reads = Ck-Reads $c.o
+                $extra = New-Object 'System.Collections.Generic.List[string]'
+                foreach ($k in @($have.Keys)) { if (-not $reads.Contains([string]$k)) { $extra.Add([string]$k) } }
+                $extra.Sort([System.StringComparer]::Ordinal)
+                foreach ($pn in $extra) { Ck-Bad $errList 'CHECK-12' $oid "${at}: the row records parameter '$pn', which $cref does not read" }
                 if ($null -ne $tail) {
-                    $have = $row['parameters']; if (-not (Is-Map $have)) { $have = (New-OMap) }
                     $bind = Ck-TailoringBindings $c.o $tail $objs
                     foreach ($pn in @($bind.Keys)) {
                         $want = $bind[[string]$pn]
@@ -3573,6 +3718,7 @@ function Advice-Report([string]$section, [string]$bdir, $manifest, [byte[]]$rawM
 $TRUSTED = $null
 if ($TrustedKeys -ne '') { $TRUSTED = Read-Json $TrustedKeys }
 function Validate-Object([string]$section, [string]$path, $obj) {
+    Number-Failures $section $path $null $obj
     $m = Infer-Types $obj
     if (@($m).Count -ne 1) {
         $why = ''
@@ -3624,6 +3770,7 @@ function Validate-Bundle([string]$bdir, [switch]$Flat) {
     if (-not (Test-Path $mpath)) { FAIL $section 'no content-manifest.json'; return }
     $manifest = Read-Json $mpath
     $rawManifest = [System.IO.File]::ReadAllBytes($mpath)
+    Number-Failures $section 'content-manifest.json' $rawManifest $manifest
     if (Test-Schema $DEFS['contentManifest'] $manifest) { OK $section } else { FAIL $section 'manifest schema violation' }
     $typec = (New-Map)
     $seenIds = (New-Map)
@@ -3634,6 +3781,7 @@ function Validate-Bundle([string]$bdir, [switch]$Flat) {
         $raw = [System.IO.File]::ReadAllBytes($fp)
         if ((Sha256-Hex $raw) -cne $entry['package-digest']) { FAIL $section "$($entry['path']): package-digest mismatch" }
         $obj = Read-Json $fp
+        Number-Failures $section $entry['path'] $raw $null      # the spelling; Validate-Object holds the value
         if ((SDig $obj) -cne $entry['semantic-digest']) { FAIL $section "$($entry['path']): semantic-digest mismatch" }
         $t = Validate-Object $section $entry['path'] $obj
         if ($null -ne $t) {
@@ -3658,6 +3806,7 @@ function Validate-Bundle([string]$bdir, [switch]$Flat) {
         foreach ($f in (Get-ChildItem $bdir -File -Filter *.json | Sort-Object Name)) {
             if ($skip.Contains($f.Name)) { continue }
             $obj = Read-Json $f.FullName
+            Number-Failures $section $f.Name ([System.IO.File]::ReadAllBytes($f.FullName)) $null
             $t = Validate-Object $section $f.Name $obj
             if ($t -ne 'attestation') {
                 if ($null -ne $t) { FAIL $section "$($f.Name): on disk but not in manifest" }
@@ -3679,6 +3828,7 @@ function Validate-Bundle([string]$bdir, [switch]$Flat) {
         $raw = [System.IO.File]::ReadAllBytes($fp)
         if ((Sha256-Hex $raw) -cne $fe['digest']) { FAIL $section "$($fe['path']): pinned facet schema digest mismatch" }
         $sd = Read-Json $fp
+        Number-Failures $section $fe['path'] $raw $sd
         $sch = $sd['schema']; if ($null -eq $sch) { $sch = [ordered]@{type = 'object'} }
         $pinned[$sd['id']] = $sch
         # P10 #29: the pin's declaration feeds the attach/detach op-law; a
@@ -3730,6 +3880,7 @@ function Validate-Bundle([string]$bdir, [switch]$Flat) {
         $sraw = [System.IO.File]::ReadAllBytes($sfp)
         if ((Sha256-Hex $sraw) -cne $sp['digest']) { FAIL $section "$($sp['path']): pinned scale definition digest mismatch" }
         $sdef = Read-Json $sfp
+        Number-Failures $section $sp['path'] $sraw $sdef
         $sde = Scale-Definition-Errors $sdef $sp
         foreach ($e in $sde) { FAIL $section $e }
         if ($sde.Count -eq 0) { $scaleDefs[[string]$sdef['id']] = $sdef }

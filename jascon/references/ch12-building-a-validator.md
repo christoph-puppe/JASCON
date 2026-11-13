@@ -170,13 +170,35 @@ experienced from the implementer's chair.
 Portable is a different kind of work — smaller in code than Core's
 schemas, heavier in care — and its build order matters.
 
-**First, canonicalization.** RFC 8785 (JCS) plus the two determinism
+**First, canonicalization.** RFC 8785 (JCS) plus the three determinism
 guards, test-vector-driven: the **empty-omission** normalization
 (structurally optional arrays/objects with zero elements are omitted
 before JCS — the corpus vectors exist because two honest tools
-otherwise fork digests on `"aliases": []` versus absence) and
-**decimal-as-canonical-string**. With JCS green, semantic digests are
-one function.
+otherwise fork digests on `"aliases": []` versus absence),
+**decimal-as-canonical-string**, and the **number domain** (NUMBER-1):
+a JSON number is an integer in plain digits, of magnitude at most
+2^53 − 1. With JCS green, semantic digests are one function.
+
+The number domain needs two checks, and which one does the work depends
+on your language. Your parser forgets how a number was written:
+JavaScript reads `1.0` as 1 and `9007199254740993` as `…992`; Python
+keeps `1.0` as a float and the large integer exact, but reads `-0` as 0;
+.NET reads `1.0` as a decimal. So check the **text** of every bundle
+file you read, and the **value** of every object you hold without its
+text. For the text, one pattern is enough once the file parsed as JSON:
+`"[^"\\]*(?:\\.[^"\\]*)*"|-?[0-9][0-9.eE+-]*` consumes strings whole and
+leaves the number tokens. A token is valid if it matches
+`-?(0|[1-9][0-9]*)`, is not `-0`, and its digits are not longer or, at
+sixteen digits, not greater than `9007199254740991` compared as text.
+No float takes part. Refuse; never rewrite. The corpus carries these as
+JSON texts (`number-text` in `jcs-vectors.json`), because a vector file
+cannot hold `1.0` as a number: your own parser would have read it.
+
+> **Don't** test your canonical form only against another port of
+> itself. The reference and its JavaScript port agreed on every vector
+> for four months and disagreed on `{"n": 1.0}` and on every integer
+> beyond 2^53, because no vector held one. The specification had named a
+> "permitted number domain" since v0.5 and defined none.
 
 **Second, the facet layer and the gate.** Load facet schemas from the
 manifest's pins — verifying *exact version and digest*, because the
@@ -403,7 +425,8 @@ vectors include the traps where a host engine answers differently.
 
 **Third, the verdict.** One function over a Check, an observation and
 the bound parameters. An undeclared or unobserved fact, a mistyped
-value or an unbound parameter is `inconclusive`. Never substitute a
+value or an unbound parameter is `inconclusive`; an `integer` fact
+outside the number domain is mistyped. Never substitute a
 default. Combine by strong Kleene AND: a definite failure decides
 before an unknown does. Decimals compare by value and never as floats.
 With `each`, evaluate every resource, do not stop at the first
@@ -420,17 +443,31 @@ Twelve vectors pin it, so that three implementations print one number.
 **Fourth, the rows.** CHECK-8 to CHECK-14 hold a run to its Check: the
 digest, the recomputed outcome, the aggregate, the parameters against
 the named Tailoring, the collector id, the Finding that points back.
-Recompute; do not trust a recorded outcome.
+Recompute; do not trust a recorded outcome. Compare key sets, not only
+the keys you came for: a row names only parameters its Check reads, with
+or without a Tailoring, and a `collector-id` on a Check that declares no
+collector names nothing.
 
 **Fifth, the evidence chain.** CHECK-15 walks from the row to the
 record to the raw outputs in `evidence/sha256/` beside the manifest. A
-file whose name is not the SHA-256 of its bytes fails. A missing raw
-output is a note, withheld, and no failure.
+file whose name is not the SHA-256 of its bytes fails, and so does a
+relative reference to any other place, before you read it. A reference
+with a URI scheme is a note. A missing raw output is a note, withheld,
+and no failure. Row and record agree on the collector and on the
+observation: a row with an observation needs a record with its
+`observation-digest`, a row without one a record without.
+
+> **Don't** let an optional field switch a comparison off. The first
+> reference validator compared collector and observation digest only
+> when both sides carried them, and looked up a collector only when the
+> Check had the facet. Four outside reports of 2026-11-13 were this one
+> mistake: a field left out is a difference to report, never a reason to
+> skip.
 
 You never run a collector. A validator that executes code from a bundle
 it was asked to check has stopped being a validator.
 
-The corpus for this sitting is `check-vectors.json`: 188 cases, of
+The corpus for this sitting is `check-vectors.json`: 203 cases, of
 which 42 are for the engine alone.
 
 ## 12.8b A short fifth sitting: advice packs *(2.0.0)*

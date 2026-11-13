@@ -63,6 +63,31 @@ relation** — a defined relation, never a magic word (§14.7).
 > list, not in the void, and each is checked against the source's own
 > notation before it goes there.
 
+A coverage report has two depths, and only the second one supports a
+claim about values. The **path map** says where each source path is
+*declared* to go; a converter can declare a destination and never write
+to it. The **conversion ledger** says where each source *value* went: one
+entry per source leaf, keyed by document and indexed JSON Pointer, with
+the destination and one of four outcomes: `copied`, `transformed` by a
+named rule, `intentionally-dropped` with a reason, or `unaccounted`.
+`oscal_conv_lib.Ledger` builds it from what the converter does. Every
+scalar read from a source carries its origin for as long as it is handed
+on unchanged; what the converter computes is stated at the place it is
+computed, with the function, which is then applied again to the source
+and compared; and every entry is checked against the written files.
+
+> **Don't** measure arrival by looking for an equal value in the output.
+> This project did, on its one corpus with a value-level figure: 835
+> source values, a path map that read 835 of 835, and a check that found
+> 394 of them "arrived". That check matched substrings ("open" inside
+> "not-open") and, once corrected to 283, still counted every value that
+> happened to equal another: three systems rated `fips-199-low`, two of
+> them never carried. The ledger of the same conversion (2026-11-13)
+> reads 232 copied, 26 transformed, 104 identifiers dropped by a declared
+> rule and **473 unaccounted**, and it found an address that the
+> converter overwrote because two props shared a name. An equal value
+> elsewhere proves nothing; follow the value.
+
 ## 14.2 Playbook: OSCAL 1.x catalogs and profiles
 
 **Controls.** Each becomes a Requirement; **nested controls become

@@ -160,7 +160,7 @@ details[open]>summary{margin-bottom:6px}
 /* ==INLINE core== */
 /* ==JSC-PURE-START== */
 
-const JSC_BUILD = "0.9.4";
+const JSC_BUILD = "0.9.6";
 const JSC_TOOL = "JASCON-App " + JSC_BUILD;
 /* The kernel this app writes, and the kernels it reads (KERNEL-2: a tool
    stops at a pin it does not implement and names both). */
@@ -268,8 +268,13 @@ const jscIsFacetDescriptor = o => !!o && typeof o === "object" && typeof o.id ==
    without its top-level `annotations`, keys sorted, no whitespace. Key order
    is JavaScript's default string order (UTF-16 code units), the same order
    the Python validator sorts by. Numbers: JSON.stringify writes 1.0 as 1
-   where Python writes 1.0; kernel content carries decimals as strings for
-   that reason, so the two agree on everything the schema allows. */
+   where Python writes 1.0, and JSON.parse rounds an integer beyond 2^53.
+   The two agree only inside the number domain (NUMBER-1, D3.9): integers in
+   plain digits, of magnitude at most 2^53 - 1. This function does not check
+   that; jscNumberError in jascon-rules.js does, on the text and on the
+   value, and a file outside the domain is an error before its digest counts.
+   (This comment said the two agree on everything the schema allows. The
+   schema type `integer` allows 1.0 and 9007199254740993 - errata 2026-11-13.) */
 function jscCanonical(obj) {
   const sort = o => {
     if (Array.isArray(o)) return o.map(sort);
@@ -780,7 +785,7 @@ function jscParamCheck(decl, value) {
     return allowed.includes(value) ? "valid" : "deviation-required";
   }
   if (t === "integer") {
-    if (typeof value !== "number" || !Number.isInteger(value)) return "invalid";
+    if (typeof value !== "number" || !Number.isSafeInteger(value)) return "invalid";   // NUMBER-1: beyond 2^53 two tools read two values
     if ("min" in decl && value < decl.min) return "deviation-required";
     if ("max" in decl && value > decl.max) return "deviation-required";
     return "valid";
@@ -1586,6 +1591,53 @@ const JSC_OPTIONAL_CONTAINERS = new Set(["aliases", "canonical-alias", "replaces
   "deviations", "excludes", "source-scope", "target-scope", "evidence-refs", "statement-refs", "capabilities", "authorizations",
   "actions", "choices", "threat-refs", "component-refs", "treatments", "risk-refs", "tailoring-refs",
   "statement-ids", "applies-when", "check-results", "derived-from"]);
+/* ---------- the number domain (D3.9, NUMBER-1) ----------
+   A JSON number in a bundle is an integer written in plain digits, of
+   magnitude at most 2^53 - 1. Two reasons, one rule. RANGE: beyond 2^53 a
+   double no longer holds every integer, so JSON.parse reads 9007199254740993
+   as ...992 while the Python reference reads it exactly - two digests, two
+   verdicts for one file. SPELLING: `1.0`, `1e3` and `-0` are second spellings
+   of 1, 1000 and 0; JSON.stringify writes `1` where the reference hashes
+   `1.0` as written. The rule rejects; it never rewrites (D3.4).
+
+   Two checks, because JSON.parse forgets the spelling:
+     jscNumberSpellingViolations(text)  wherever a bundle file is read as text
+     jscNumberViolations(value)         on every object, and in check-verdict
+   A fraction is a `decimal`, which is a string. */
+const JSC_NUMBER_RULES = {
+  "NUMBER-1": "a JSON number is an integer in plain digits, of magnitude at most 2^53 - 1 (9007199254740991) - " +
+    "no fraction, no exponent, no -0; a number two tools read differently has two digests and two verdicts",
+};
+/* one pass over a text that already parsed as JSON: strings are consumed whole
+   (digits inside them are never looked at), everything else that starts like
+   a number is a number token. The digits are compared as text. */
+const JSC_NUMBER_TOKEN = /"[^"\\]*(?:\\.[^"\\]*)*"|-?[0-9][0-9.eE+-]*/g;
+const JSC_NUMBER_PLAIN = /^-?(?:0|[1-9][0-9]*)$/, JSC_NUMBER_MAX_DIGITS = "9007199254740991";
+function jscNumberSpellingViolations(text) {
+  const out = [];
+  for (const tok of String(text).match(JSC_NUMBER_TOKEN) || []) {
+    if (tok[0] === '"') continue;
+    const digits = tok.replace(/^-/, "");
+    if (!JSC_NUMBER_PLAIN.test(tok) || tok === "-0" || digits.length > JSC_NUMBER_MAX_DIGITS.length ||
+        (digits.length === JSC_NUMBER_MAX_DIGITS.length && digits > JSC_NUMBER_MAX_DIGITS)) out.push(tok);
+  }
+  return out;
+}
+const jscInNumberDomain = x => typeof x === "number" && Number.isSafeInteger(x);
+/* the backstop for values that never were a text here (vectors, objects the app built) */
+function jscNumberViolations(obj, path = "$") {
+  const out = [];
+  if (Array.isArray(obj)) obj.forEach((v, i) => out.push(...jscNumberViolations(v, `${path}[${i}]`)));
+  else if (jscIsPlainObject(obj)) for (const [k, v] of Object.entries(obj)) out.push(...jscNumberViolations(v, `${path}.${k}`));
+  else if (typeof obj === "number" && !jscInNumberDomain(obj)) out.push(`${path} = ${obj}`);
+  return out;
+}
+/* -> the NUMBER-1 message for one bundle file, or null: its text if given, else its value */
+function jscNumberError(text, obj) {
+  let bad = typeof text === "string" ? jscNumberSpellingViolations(text).map(t => `written as ${t}`) : [];
+  if (!bad.length && obj !== undefined) bad = jscNumberViolations(obj);
+  return bad.length ? `[NUMBER-1] ${bad[0]}${bad.length > 1 ? ` (and ${bad.length - 1} more)` : ""} - ${JSC_NUMBER_RULES["NUMBER-1"]}` : null;
+}
 function jscOptionalEmptyViolations(obj, path = "$") {
   const out = [];
   if (Array.isArray(obj)) obj.forEach((v, i) => out.push(...jscOptionalEmptyViolations(v, `${path}[${i}]`)));
@@ -1637,7 +1689,8 @@ function jscDateRuleViolations(o) {
 /* What is wrong with one object, without looking at any other.
    -> { type: its one kernel type or null, errors: [string] } */
 function jscObjectErrors(obj) {
-  const matches = jscMatchTypes(obj), errors = [];
+  const matches = jscMatchTypes(obj), errors = [], number = jscNumberError(null, obj);
+  if (number) errors.push(number);
   if (matches.length !== 1) {
     let best = "";
     if (!matches.length) {
@@ -1650,7 +1703,7 @@ function jscObjectErrors(obj) {
       /* two fields that 1.0.0 left as free text and 2.0.0 types */
       best += jscDateRuleViolations(obj).map(([rule, what]) => ` [${rule}] ${what} - ${JSC_DATE_RULES[rule]}`).join("");
     }
-    return { type: null, errors: [`matches ${matches.length ? matches.join(" and ") : "NO type"}${best}`] };
+    return { type: null, errors: [...errors, `matches ${matches.length ? matches.join(" and ") : "NO type"}${best}`] };
   }
   const empty = jscOptionalEmptyViolations(obj);
   if (empty.length) errors.push(`optional empty containers present: ${empty.join(", ")}`);
@@ -2050,10 +2103,10 @@ const JSC_CHECK_RULES = {
   "CHECK-9": "a recorded outcome is the one check-verdict computes from the recorded observation - verdicts are recomputed, never taken on trust",
   "CHECK-10": "an assessment that carries check results has one row per check, and its result is their aggregate: any not-satisfied, else any inconclusive or none applicable, else satisfied",
   "CHECK-11": "no observation, no verdict: a row without one is inconclusive and says why",
-  "CHECK-12": "a run's parameter values are the ones the Tailoring it names binds - an implementer does not set its own pass mark",
-  "CHECK-13": "a result's collector-id names a collector of the check",
+  "CHECK-12": "a row names only parameters its check reads, and their values are the ones the Tailoring it names binds - an implementer does not set its own pass mark",
+  "CHECK-13": "a result's collector-id names a collector the check declares",
   "CHECK-14": "a Finding raised by a check is about the requirement - and the clause - that check discharges",
-  "CHECK-15": "evidence is content-addressed and stays inside the bundle's store: every digest in the chain verifies against the bytes, and a record describes the run it is attached to",
+  "CHECK-15": "evidence is content-addressed and stays inside the bundle's store, evidence/sha256/: every digest in the chain verifies against the bytes, and a record describes the run it is attached to - its check, its collector and its observation",
 };
 const JSC_SAT = "satisfied", JSC_NOT = "not-satisfied", JSC_INC = "inconclusive", JSC_NA = "not-applicable";
 const JSC_COLLECTOR_FACET = "https://ns.jascon.net/stdlib/facet/collector";
@@ -2243,7 +2296,7 @@ const JSC_CHECK_OPS = {   // which comparators fit which fact; present / absent 
 const JSC_CHECK_LIST_OPS = ["one-of", "includes-all", "excludes-all", "subset-of"];
 const JSC_CHECK_PATTERN_OPS = ["matches", "matches-not"];
 function jscFactOk(type, x) {
-  if (type === "integer") return typeof x === "number" && Number.isInteger(x);
+  if (type === "integer") return jscInNumberDomain(x);   // NUMBER-1: no verdict from a value two tools read differently
   if (type === "decimal") return typeof x === "string" && JSC_DECIMAL_RE.test(x);
   if (type === "boolean") return typeof x === "boolean";
   return typeof x === "string";   // string, code
@@ -2439,6 +2492,8 @@ function jscCheckObjectErrors(oid, o, objs) {
 }
 
 /* ---------- CHECK-8..15: runs, Findings, evidence ---------- */
+/* -> the parameter names the check's assertions bind with {"param": ...} */
+const jscCheckReads = check => new Set([...check.criteria, ...(check["applies-when"] || [])].filter(a => jscIsPlainObject(a.expected)).map(a => a.expected.param));
 const JSC_UNBOUND = Symbol("unbound");   // "this Tailoring binds no value", distinct from every JSON value
 function jscTailoringBindings(check, tail, objs) {
   const out = new Map(), decls = jscCheckParamDecls(check, objs) || new Map();
@@ -2462,12 +2517,22 @@ async function jscEvidenceChain(oid, at, a, row, read) {
   const E = [], notes = [];
   let obs = null;
   const bad = msg => E.push(["CHECK-15", `${oid}: ${at}: ${msg} (CHECK-15: ${JSC_CHECK_RULES["CHECK-15"]})`]);
+  /* NUMBER-1 on an evidence file -> true when it holds; a file that breaks it is not used */
+  const numbers = (text, value, what) => {
+    const wrong = jscNumberError(text, value);
+    if (wrong) E.push(["NUMBER-1", `${oid}: ${at}: ${what}: ${wrong.replace(/^\[NUMBER-1\] /, "").replace(/ - .*$/, "")} (NUMBER-1: ${JSC_NUMBER_RULES["NUMBER-1"]})`]);
+    return !wrong;
+  };
   const load = async (dref, what) => {
     const ref = dref.ref, want = dref.digest;
     if (/^[A-Za-z][A-Za-z0-9+.-]*:/.test(ref)) { notes.push(`${oid}: ${at}: ${what} ${ref} is a URI - not resolvable offline`); return null; }
     if (ref.startsWith("/") || ref.replace(/\\/g, "/").split("/").includes("..")) { bad(`${what} ref ${ref} leaves the bundle`); return null; }
+    /* the store has one layout: a file is named by the SHA-256 of its bytes. A
+       relative ref anywhere else is refused before it is read, so no tool that
+       walks the store can miss a blob another tool accepted. */
     const m = JSC_EVIDENCE_REF.exec(ref);
-    if (m && "sha256:" + m[1] !== want) { bad(`${what} ${ref} is stored under another digest than the recorded ${want}`); return null; }
+    if (!m) { bad(`${what} ref ${ref} is outside the store - a ref is evidence/sha256/<the 64 hex digits of its digest>`); return null; }
+    if ("sha256:" + m[1] !== want) { bad(`${what} ${ref} is stored under another digest than the recorded ${want}`); return null; }
     const text = read(ref);
     if (text === null || text === undefined) { notes.push(`${oid}: ${at}: ${what} ${ref} withheld - not in the bundle's store`); return null; }
     if (await jscRulesPackageDigest(text) !== want) {
@@ -2482,6 +2547,7 @@ async function jscEvidenceChain(oid, at, a, row, read) {
     const text = await load(row["observation-ref"], "observation");
     if (text !== null) {
       try { obs = JSON.parse(text); } catch (ex) { bad(`observation file unreadable: ${ex.message}`); }
+      if (obs !== null && !numbers(text, obs, "observation file")) obs = null;
       if (obs !== null && jscShapeErrors("checkObservation", obs).length) { bad("the observation file is not an observation"); obs = null; }
     }
   }
@@ -2489,14 +2555,24 @@ async function jscEvidenceChain(oid, at, a, row, read) {
     const text = await load(row["evidence-record"], "evidence record");
     let rec = null;
     if (text !== null) { try { rec = JSON.parse(text); } catch (ex) { bad(`evidence record unreadable: ${ex.message}`); } }
+    if (rec !== null && !numbers(text, rec, "evidence record")) rec = null;
     const shape = rec !== null ? jscShapeErrors("evidenceRecord", rec) : [];
     if (shape.length) { bad(`evidence record: ${shape[0]}`); rec = null; }
     if (rec !== null) {
       if (rec["check-ref"] !== row["check-ref"] || rec["check-digest"] !== row["check-digest"]) bad("the evidence record is about another check, or another version of it");
-      if (row["collector-id"] && rec["collector-id"] && rec["collector-id"] !== row["collector-id"]) bad(`the evidence record names collector '${rec["collector-id"]}', the row '${row["collector-id"]}'`);
+      /* row and record are two statements about one run: what one says of the
+         collector and of the observation, the other says too. A field left out
+         on one side is a difference, never a reason to skip. */
+      const named = (v, what) => v ? `${what} '${v}'` : `no ${what}`;
+      const rc = rec["collector-id"], wc = row["collector-id"];
+      if ((rc || wc) && rc !== wc) bad(`the evidence record names ${named(rc, "collector")}, the row ${named(wc, "collector")}`);
       if (!a["subject-refs"].includes(rec["subject-ref"])) bad(`the evidence record's subject ${rec["subject-ref"]} is not a subject of the assessment`);
       const seen = row.observation !== undefined ? row.observation : obs;
-      if (rec["observation-digest"] && seen !== null && seen !== undefined && await jscRulesSemanticDigest(seen) !== rec["observation-digest"]) bad("the evidence record binds another observation than the row records");
+      const rowHas = row.observation !== undefined || row["observation-ref"] !== undefined, bound = rec["observation-digest"];
+      if (rowHas && !bound) bad("the row records an observation, the evidence record binds none (no observation-digest)");
+      else if (bound && !rowHas) bad("the evidence record binds an observation, the row records none");
+      else if (bound && (seen === null || seen === undefined)) notes.push(`${oid}: ${at}: the observation is not available here - the evidence record's binding to it is not verified`);
+      else if (bound && await jscRulesSemanticDigest(seen) !== bound) bad("the evidence record binds another observation than the row records");
       for (const out of rec.outputs) await load({ ref: "evidence/sha256/" + out.digest.replace(/^sha256:/, ""), digest: out.digest }, `output '${out.name}'`);
     }
   }
@@ -2546,10 +2622,16 @@ async function jscCheckErrors(objs, read) {
         if (!c) { notes.push(`${oid}: ${at}: check ${cref} is not in this bundle - verdict not recomputed`); continue; }
         if (c.type !== "check") { bad("CHECK-8", oid, `${at}: check-ref resolves to a ${c.type}, not a Check`); continue; }
         if (row["check-digest"] !== await jscRulesSemanticDigest(c.obj)) bad("CHECK-8", oid, `${at}: check-digest does not match ${cref} - the check changed after the run`);
+        /* a check without the collector facet declares no collector, so any
+           collector-id on its rows names code the check's digest does not cover */
         const cols = ((c.obj.facets || {})[JSC_COLLECTOR_FACET + "@1"] || {}).collectors;
-        if (row["collector-id"] && Array.isArray(cols) && !cols.some(x => x && x.id === row["collector-id"])) bad("CHECK-13", oid, `${at}: collector-id '${row["collector-id"]}' names no collector of ${cref}`);
+        const declared = Array.isArray(cols) ? cols.filter(x => x).map(x => x.id) : [];
+        if (row["collector-id"] && !declared.includes(row["collector-id"])) bad("CHECK-13", oid, `${at}: collector-id '${row["collector-id"]}' names no collector of ${cref}${declared.length ? "" : " - the check declares none"}`);
+        /* a name no assertion reads cannot be verified, with or without a
+           Tailoring - and the row is inside the digest an Attestation signs */
+        const have = row.parameters || {}, reads = jscCheckReads(c.obj);
+        for (const pn of Object.keys(have).filter(k => !reads.has(k)).sort()) bad("CHECK-12", oid, `${at}: the row records parameter '${pn}', which ${cref} does not read`);
         if (tail) {
-          const have = row.parameters || {};
           for (const [pn, want] of jscTailoringBindings(c.obj, tail, objs)) {
             const got = Object.prototype.hasOwnProperty.call(have, pn);
             if (want === JSC_UNBOUND && got) bad("CHECK-12", oid, `${at}: the run used ${pn}=${JSON.stringify(have[pn])}, but ${o["tailoring-ref"]} binds no value for it`);
@@ -3213,9 +3295,16 @@ async function jscCheckGraph(g, verified, opts) {
     }
   } else add("note", "manifest", null, "the set has no content manifest; digests and pins cannot be checked until it is exported");
   g.problems.forEach(m => add("error", "files", null, m));
+  /* NUMBER-1 on the text of every file: JSON.parse has already forgotten how
+     a number was written, so the spelling is read from the text the set holds */
+  const spelled = (text, area, object, path) => { const m = jscNumberError(text); if (m) add("error", area, object, `${path}: ${m}`); };
+  if (g.manifestText) spelled(g.manifestText, "manifest", null, "content-manifest.json");
+  for (const sc of g.scales.values()) spelled(sc.text, "files", null, sc.path);
+  for (const fs of g.facetSchemas) spelled(fs.text, "files", null, fs.path);
 
   const objs = new Map();
   for (const [id, r] of g.objects) {
+    spelled(r.text, "object", id, r.path);
     const res = jscObjectErrors(r.obj);
     res.errors.forEach(m => add("error", "object", id, m));
     if (res.type) { objs.set(id, { type: res.type, obj: r.obj }); types[res.type] = (types[res.type] || 0) + 1; }
@@ -3335,7 +3424,7 @@ if (typeof module !== "undefined" && module.exports) {
     jscSchemaCheck, jscShapeErrors, jscMatchTypes, jscTypeOf, jscTypedObjects, JSC_KERNEL_TYPES, JSC_RISK_RULES, jscClosureErrors,
     jscKernelNeeded, jscKernelPinErrors, jscRiskRuleViolations, jscRiskIsLive, jscRiskJustifies, JSC_NO_TAILORING, jscRiskCoverage,
     jscRiskLinkNotes, jscScaleDefinitionErrors, jscMatrixErrors, jscRiskLevels, jscMatrixCell, jscScaleErrors, jscCheckScales,
-    jscOptionalEmptyViolations, jscObjectErrors, jscFacetErrors, jscTailoringDutyErrors, jscAttestationVerdict, jscCheckGraph,
+    jscOptionalEmptyViolations, JSC_NUMBER_RULES, jscNumberSpellingViolations, jscNumberViolations, jscInNumberDomain, jscNumberError, jscObjectErrors, jscFacetErrors, jscTailoringDutyErrors, jscAttestationVerdict, jscCheckGraph,
     JSC_DSSE_PAYLOAD_TYPE, jscEd25519Verify, jscVerifyEnvelope, jscSemver, jscCompose, jscComposeSide, jscPathGet, jscEvalPredicate, jscConditionalApply,
     JSC_CHECK_RULES, JSC_CHECK_OPS, JscIRegexpError, jscIreCompile, jscIreFullMatch, jscCheckVerdict, jscCheckEach, jscCheckEachSummary, jscPercentShare, jscCheckAggregate, jscCheckParamDecls,
     jscCheckObjectErrors, jscCheckErrors,

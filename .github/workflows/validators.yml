@@ -1,7 +1,8 @@
 # Runs the reference validators on every change to what they read.
 #
 # Four jobs, one per implementation and one for the pages:
-#   python      validate_core.py, the reference (Ubuntu, Python 3.12)
+#   python      validate_core.py, the reference (Ubuntu, Python 3.12), and the
+#               tests of the converter library (test_oscal_conv_lib.py)
 #   powershell  validate_core.ps1, the twin, on WINDOWS POWERSHELL 5.1
 #               (windows-latest; `shell: powershell` is 5.1, `pwsh` would be 7)
 #   app         the JavaScript port in jascon-app/ against the same vectors
@@ -56,6 +57,8 @@ jobs:
         run: |
           set -o pipefail
           python jascon/scripts/validate_core.py | tee run.log
+      - name: Converter library (the value-level measurement of the coverage reports)
+        run: python jascon/scripts/test_oscal_conv_lib.py
       - name: Summary
         if: always()
         run: |

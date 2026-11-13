@@ -279,7 +279,8 @@ relation (v0.4 — corrected).
 3. **JCS pre-normalization (P6-F3):** before JCS serialization, all
    structurally optional arrays/objects containing zero elements MUST be
    omitted. Normative test vectors cover this and the permitted number
-   domain.
+   domain. *(rev. 2026-11-13: the domain this sentence names was stated
+   nowhere and no vector covered it; item 9 states it, backlog #67.)*
 4. **`decimal` is a canonical decimal string** (lexically defined scale/
    precision), never an IEEE-754 number — two tools MUST derive identical
    digests and values (P7-G on decimals). **Canonical form (rev. v0.6 cycle
@@ -351,6 +352,36 @@ relation (v0.4 — corrected).
    unchanged, beside its own: `packs/sha256/<hex>`, named by the SHA-256
    of its bytes and never listed, the placement of signature envelopes
    and of the evidence store (D24).
+
+9. **The number domain *(2.0.0 — backlog #67, author 2026-11-13; found
+   by an outside report)*.** A JSON number in a bundle is an **integer
+   written in plain digits, of magnitude at most 2^53 − 1**
+   (9007199254740991): an optional minus, then `0` or a digit other than
+   zero followed by digits. No fraction, no exponent, no `-0`.
+   **NUMBER-1** — any other number is a validation error: in the content
+   manifest, in every object, in every pinned definition and in every
+   evidence record and observation file, annotations included, and before
+   a digest is compared or a verdict computed. Two reasons, one rule.
+   *Range:* beyond 2^53 an IEEE double no longer holds every integer; a
+   JavaScript tool reads `9007199254740993` as `…992`, a tool with exact
+   integers reads it as written, and the same file has two semantic
+   digests and two verdicts. *Spelling:* `1.0`, `1e3` and `-0` are second
+   spellings of 1, 1000 and 0; one tool hashes `1.0` as written, another
+   hashes `1`. The rule **rejects and never rewrites** (item 4's
+   discipline: one value, one spelling, and the spelling is held by
+   validation, not repaired at digest time). A tool checks the spelling on
+   the text of a file, because a parser forgets it, and the value wherever
+   it holds a value without its text. The rule is on the file and not on
+   the semantic domain, so that a tool can check it without knowing where
+   `annotations` are; a fraction in an annotation is written as a string.
+   A quantity that does not fit (a count in nanoseconds, a 64-bit
+   identifier, a fraction) is a `decimal`, which is a string and compares
+   exactly (item 4). Raw outputs in the evidence store are bytes to the
+   kernel; the rule does not reach them. Inside the domain the canonical
+   form of every implementation agrees without help, which is why the
+   canonical form itself is unchanged. No shipped object carried a number
+   outside the domain (measured before the rule was written, on 3,871
+   files, and by the validators after it).
 
 **Evidence.** Air-gapped estates; registry link-rot; P7's fixed-point proof;
 P6's omitted-vs-empty hash fragmentation; the two-digest necessity
@@ -1309,7 +1340,9 @@ not-satisfied · inconclusive · not-applicable`, with reasons.
 2. `applies-when` false: `not-applicable`; unknown: `inconclusive`.
 3. An undeclared or unobserved fact, a mistyped value, an unbound
    parameter or a mistyped bound value: `inconclusive`. A default is never
-   substituted (D9).
+   substituted (D9). An `integer` fact outside the number domain (D3.9)
+   is mistyped: no engine returns `satisfied` or `not-satisfied` from a
+   value another engine reads differently *(rev. 2026-11-13)*.
 4. The assertions combine by strong Kleene AND: one `not-satisfied`
    decides; else one `inconclusive` decides; else `satisfied`.
 5. With `each`, **every resource is evaluated** and none is skipped after
@@ -1368,10 +1401,10 @@ never a parameter (CHECK-4).
 | CHECK-9 | A row's outcome equals `check-verdict` over its observation and parameters. |
 | CHECK-10 | One row per check; `Assessment.result` is the aggregate of the rows. |
 | CHECK-11 | A row without an observation is `inconclusive` and carries a `reason`. |
-| CHECK-12 | `tailoring-ref` resolves to a Tailoring, and each row's `parameters` equal what it binds: an implementer does not set its own pass mark. |
-| CHECK-13 | A row's `collector-id` names a collector of the Check. |
+| CHECK-12 | `tailoring-ref` resolves to a Tailoring. A row names only parameters its Check reads through `{"param": …}`, with or without a `tailoring-ref`; with one, their values equal what the Tailoring binds: an implementer does not set its own pass mark. *(rev. 2026-11-13: a name the Check does not read fails; before, it was ignored.)* |
+| CHECK-13 | A row's `collector-id` names a collector the Check declares. A Check without `collector@1` declares none. *(rev. 2026-11-13)* |
 | CHECK-14 | A Finding's in-bundle `check-ref` is a Check about the same requirement and a covered clause. |
-| CHECK-15 | Evidence references stay in the store beside the manifest and every digest verifies; a missing raw blob is reported as withheld and is no failure. |
+| CHECK-15 | Evidence references stay in the store beside the manifest: a relative reference is `evidence/sha256/<hex>`, with `<hex>` the digest it records, and every digest verifies. A reference with a URI scheme is a landmark, noted and not resolved. Row and record describe one run: they name the same check, digest and collector, the record's subject is a subject of the Assessment, and a row carries an observation exactly when its record carries an `observation-digest`, which is that observation's semantic digest. A missing blob is reported as withheld and is no failure. *(rev. 2026-11-13: the store layout, the collector and the observation binding are enforced in both directions.)* |
 
 **The run record is kernel *(author decision 2026-11-12)*.** The rows are
 a field of Assessment and not a facet under `method`. A declarative
@@ -1386,6 +1419,9 @@ Attestation over the Assessment binds what was observed.
 none listed in the manifest. An evidence record (`$defs/evidenceRecord`)
 names check, digest, collector, subject, times and exit status, and
 carries the digest of the same observation and of each raw output.
+A run that observed nothing has a record without `observation-digest`
+and a row without an observation; the field is optional in the schema
+for that case alone (CHECK-15).
 Redaction happens before hashing.
 
 **The kernel pin.** KERNEL-1 extends: a bundle that carries a Check, an
@@ -1745,11 +1781,19 @@ CIS corpora converted and measured (Controls v8.1; Ubuntu 24.04
 Benchmark with 635 mappings and recovered profile baselines).
 *(2.0.0)* **R16** — coverage is path-level: the conversion reports count
 source paths with a declared destination, not values verified to arrive.
-A value-arrival check on the one corpus measured so far (IFA) finds 122
-content values, 63 of them prose, that do not occur verbatim in the
-bundle; under `poam.risks[]` alone thirteen had never arrived at 1.0.0,
-the risk response type among them. Some absences are deliberate
-transformations; the other ten corpora are unmeasured. "Converted
+A value-level check on the one corpus measured so far (IFA) finds 124
+content values, 63 of them prose, that have no equal value anywhere in
+the bundle; under `poam.risks[]` alone thirteen had never arrived at
+1.0.0, the risk response type among them. Some absences are deliberate
+transformations; the other ten corpora are unmeasured. *(rev.
+2026-11-13, two outside reports: the check had matched substrings and
+read 122 absent and 394 of 835 arrived; with typed, whole values it
+reads 124 and 283. And it is a global check: 283 is an upper bound on
+what was carried, since one value in the bundle answers for every equal
+value in the source. The same day a **ledger** traced every source value
+of this corpus through the converter: 232 copied, 26 transformed by a
+named rule, 104 identifiers dropped by a declared rule, **473
+unaccounted**. The path map reads 835 of 835 for the same conversion.)* "Converted
 losslessly" is established at path level only (backlog #41). **R17** —
 redistribution: six of the eleven measured bundles cannot be shipped
 (§2); the shipped evidence base no longer exercises Tailoring or Mapping
@@ -1930,6 +1974,9 @@ history. The compact line:
 | CP-ADVICE-1 | 2026-11-12 | The advice-pack proposal: manifest header, `statement-ids`, the `capability-ref` grammar, ADVICE-1 to ADVICE-11, 71 vectors, a worked pack, the PowerShell twin run on Windows (518 vectors, which also closed #60). ADVICE-7 found one defect in the converted IFA bundle | `drafts/CP-ADVICE-1.md` §13 |
 | Advice accepted · the decisions before the tag | 2026-11-12 | Twelve author decisions. Advice: bundle only; Components only; `statement-ids` kept against D22; `product-version` added; ADVICE-3 and ADVICE-7 kept; a `describes` relation for third parties; one release per set. Before the tag: `Deviation.opened` and the `due` of an action typed (#47a, #52: the superset property ends for free-text dates); history is left as it is (#50); a Tailoring names no Component (#51); Unicode categories follow the host (#59) | CP-ADVICE-1 §14 · "Amendments — CP-ADVICE-1 and the decisions before the tag" |
 | **2.0.0-rc.3** | 2026-11-12 | This text: D25 new; D3, D5, D6, D8, D13, D15, D22, D24 amended in place; gate state in IV.5b | this row |
+| The number domain | 2026-11-13 | A fifth outside report (issue 27 in the GitHub tracker) showed the reference and the app computing two verdicts and two semantic digests for integers beyond 2^53 and for `1.0`. D3 item 3 had named a "permitted number domain" that no text defined. **D3.9 new, NUMBER-1:** integers in plain digits, of magnitude at most 2^53 − 1; rejected, never rewritten; D24's evaluation step 3 amended. `jcs` 8 → 22 vectors, `parameter` 19 → 21, `check` 199 → 203; 568 in all. Backlog #67 closed. After rc.3 | D3.9 · "Amendments — the number domain" |
+| The value-level check of the converters | 2026-11-13 | Two more outside reports (issues 32 and 33 in the GitHub tracker): `value_arrival()` matched substrings across one joined string, so the IFA figure of 394 of 835 was too high; and any global check hides a dropped value behind an equal one elsewhere. The helper is `global_occurrence()` now, on typed whole values, with key-only and embedded matches listed apart and not counted: **283 of 835**, 124 content values without an equal, stated as an upper and a lower bound. R16 and IV.5b item 6 amended; backlog #41 re-planned to a ledger of source occurrences per converter. No kernel rule, vector or bundle object changes | "Amendments — the value-level check of the converters" |
+| Outside reports on the run rules | 2026-11-13 | Four reports from outside (issues 23 to 26 in the GitHub tracker), each reproduced: the reference accepted an evidence record outside `evidence/sha256/`, a `collector-id` on a Check without collectors, a row parameter its Check does not read, and a record that binds no observation. CHECK-12, CHECK-13 and CHECK-15 amended in place (D24); the three engines follow; `check` 188 → 199 vectors. After rc.3; the counts in the Status and in IV.5b and IV.7 are those of rc.3 | "Amendments — the outside reports of 2026-11-13" |
 
 ## IV.7 Release artifacts (what this candidate ships with)
 
@@ -1964,8 +2011,13 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
   out, generic re-import, 5,886/5,886 round-trip measured on the ten
   catalog bundles then present); not re-run.
 - **Converters for all eleven corpora** under `jascon/scripts/`, writing
-  one byte spelling on every OS; `oscal_conv_lib.value_arrival()` for the
-  value-level check (wired into the IFA report so far).
+  one byte spelling on every OS; `oscal_conv_lib.global_occurrence()` for
+  the value-level check (wired into the IFA report so far). *(rev.
+  2026-11-13: until then `value_arrival()`, which matched substrings and
+  overstated the figure; and the check is global, an upper bound on what
+  was carried, not a trace of each value — backlog #41. `Ledger` in the
+  same file traces each source value to its destination; wired into the
+  IFA converter, which writes `ifa-conversion-ledger.json`.)*
 - **Five corpus bundles** under `converted_examples/` — AU.ISM, DE.BSI,
   US.SP800-53, US.CSF, US.IFA-GoodRead: 3,715 manifest-listed objects,
   both SHA-256 digests re-verified per object, stored as the digested
@@ -2069,8 +2121,12 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
    left to decide before the tag.**
 6. **Work, not decisions** — ✓ the implemented I-Regexp grammar was
    compared with the published text of RFC 9485 on 2026-11-12 (#61,
-   closed); ☐ value arrival for the other corpora and the re-wording of
-   "converted losslessly" that follows from it (#41); ☐ a real
+   closed); ☐ a ledger of source occurrences per converter, and the
+   re-wording of "converted losslessly" that follows from it (#41,
+   re-planned on 2026-11-13: the global check that was to be rolled out
+   cannot show that a single value arrived; ✓ the ledger exists and the
+   IFA converter is wired, 473 of its 835 source values are unaccounted;
+   ☐ those 473 decided path by path, ☐ the other ten converters); ☐ a real
    attestation in the example bundle (#46); ☐ `Assessment.method`
    payloads held to their pinned schema (#55); ☐ a second Risk corpus
    (IV.5b item 4).
