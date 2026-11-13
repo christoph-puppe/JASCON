@@ -83,8 +83,8 @@
   {
    "id": "https://ifa.gov/goodread/attestation/ifa-ato",
    "version": "1.1.1",
-   "package-digest": "sha256:7c46ef9fc1f6676ac0762e2dec6f8b09df9ba91bf10dfa13cd1e3397b2f356da",
-   "semantic-digest": "sha256:46fe7c7ce2bc44dd0526c615b71c6b46ab8d8110324182d9d286add6c3074793",
+   "package-digest": "sha256:3080f61af70a6be8c694712c7ffdf9fafa049954436811e8c44ae3143d45bf70",
+   "semantic-digest": "sha256:f8e5d666e80b6347db5fde29ea46434f8f85438d9aeee20f513471de9e93acf4",
    "path": "objects/attestation/ifa-ato.json"
   },
   {
@@ -146,22 +146,22 @@
   {
    "id": "https://ifa.gov/goodread/impl/csp-iaas-ac-2",
    "version": "1.0.0",
-   "package-digest": "sha256:795793c016534ef781dc9fc6e6d3586850ab6edc0d40932585d17d5ad737c8e3",
-   "semantic-digest": "sha256:cd7ba7f3b75c49939e63f220a44916747ccada77e808027266619ef40c576854",
+   "package-digest": "sha256:116947290b9d641b24df7b7b7ec111d6d05423c6245d8e6313e107f027aa59bd",
+   "semantic-digest": "sha256:e5af3f76647f2917821da044e6efa83c7cb1ae75d736b8a9d671f509c7c01218",
    "path": "objects/impl/csp-iaas-ac-2.json"
   },
   {
    "id": "https://ifa.gov/goodread/impl/saas-ac-2",
    "version": "1.0.0",
-   "package-digest": "sha256:136a90be01467ce382ab6a85bb00d1bf942119d526e2d33c5ae64b37394c792f",
-   "semantic-digest": "sha256:b19e521c62a43c944b3db8c41efc5c66318eff3e2b8421cd48373ba7756b5d9d",
+   "package-digest": "sha256:6d17c60fb7fa7a15add9d9169f5234bd1a60da3a9f6f220c78cedff8da3a8db2",
+   "semantic-digest": "sha256:cd498bd6d0a5898865722bc27053383c22ee3e48592246f797f7a5bca85941f6",
    "path": "objects/impl/saas-ac-2.json"
   },
   {
    "id": "https://ifa.gov/goodread/impl/system1234-ac-6.1",
    "version": "1.1.1",
-   "package-digest": "sha256:8a4b2b6c113926fdd42bf109c46f1ab8b8e08837e1d3c917f249cc47bbd75fb8",
-   "semantic-digest": "sha256:313b33933f2612afa47f6fed4fc092b695ddbfc69d593f550a490b56640b84be",
+   "package-digest": "sha256:b0310d3695c79bc36d87e70420dea33ae45ecd775fbb003f4ce37226916209e5",
+   "semantic-digest": "sha256:957af20000b1240c4e4ae4e76590e7a4c52f2aeddbb0ae38d72f92399c49055c",
    "path": "objects/impl/system1234-ac-6-1.json"
   },
   {
@@ -211,6 +211,12 @@
    "exact-version": "1.0.0",
    "digest": "sha256:897901b44ef409990e24c7f2170390eeed274c0ec7386dee735b84d6f00bc87e",
    "path": "schemas/goodread-finding-target-stub.json"
+  },
+  {
+   "id": "https://ifa.gov/goodread/facet/implementation",
+   "exact-version": "1.0.0",
+   "digest": "sha256:8610385cf8cbeef2fd9370701fc93caa2d86e587affb644d3db63c0c539c5498",
+   "path": "schemas/goodread-implementation-stub.json"
   },
   {
    "id": "https://ifa.gov/goodread/facet/observations",

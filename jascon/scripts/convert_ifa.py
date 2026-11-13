@@ -33,6 +33,7 @@ F_FTGT = f"{NS}/facet/finding-target@1"    # the Finding-side residue of the ret
 F_AP = f"{NS}/facet/assessment-plan@1"
 F_PROTO = f"{NS}/facet/protocols@1"
 F_COMP = f"{NS}/facet/component@1"        # what OSCAL says of a component and the kernel has no field for
+F_IMPL = f"{NS}/facet/implementation@1"   # the narrative of a control implementation, by statement
 
 lang_wraps = collections.Counter()
 T = make_T("en", lang_wraps)
@@ -190,6 +191,41 @@ def component_facet(doc, comp, own_title=True):
     add_roles(roles, doc, comp.get("responsible-roles"), "the component")
     return f, roles
 
+# ---------- the narrative of a control implementation ----------
+def implementation_facet(doc, ir):
+    """implementation@1: the texts an SSP writes about how one control is
+    implemented, kept under the statement they belong to. An Implementation
+    says THAT a requirement is met and by what; these say how, in the
+    source's words: the remark on the control, per statement its remark and
+    each component's response with what it exports, inherits and satisfies.
+    (What is exported as a capability or as a customer responsibility has its
+    kernel place and is not repeated here.) A key is written only where the
+    source has the text."""
+    text = lambda v: T(pua_scan(v), "implementation")
+    f = {}
+    if doc["control-implementation"].get("description") is not None:
+        f["description"] = text(doc["control-implementation"]["description"])
+    if ir.get("remarks") is not None: f["remarks"] = text(ir["remarks"])
+    statements = []
+    for st in ir.get("statements", []) or []:
+        entry = {"statement": D("statement id without the control prefix, in the catalogue's spelling (stmt -> smt)",
+                                _stmt_norm, st["statement-id"], ir["control-id"])}
+        if st.get("remarks") is not None: entry["remarks"] = text(st["remarks"])
+        responses = []
+        for b in st.get("by-components", []) or []:
+            r = {}
+            if b.get("description") is not None: r["description"] = text(b["description"])
+            if b.get("export", {}).get("description") is not None: r["export"] = text(b["export"]["description"])
+            inherited = [text(x["description"]) for x in b.get("inherited", []) or [] if x.get("description") is not None]
+            satisfied = [text(x["description"]) for x in b.get("satisfied", []) or [] if x.get("description") is not None]
+            if inherited: r["inherited"] = inherited
+            if satisfied: r["satisfied"] = satisfied
+            responses.append(r)
+        if responses: entry["responses"] = responses
+        statements.append(entry)
+    if statements: f["statements"] = statements
+    return f
+
 # ================= 1. the GoodRead system (SSP) =================
 V_SSP = SSP["metadata"]["version"]
 sc = SSP["system-characteristics"]
@@ -278,7 +314,8 @@ bundle.add("objects/impl/system1234-ac-6-1.json",
             "satisfied-by": [{"capability-ref": "cap-ac-6.1"}],
             "parameter-bindings": pbind,
             "status": bc.get("implementation-status", {}).get("state", "implemented"),
-            "evidence-refs": [D("document reference from the SSP's uuid", lambda u: f"{NS}/doc/ssp-{u}", SSP["uuid"])]})
+            "evidence-refs": [D("document reference from the SSP's uuid", lambda u: f"{NS}/doc/ssp-{u}", SSP["uuid"])],
+            "facets": {F_IMPL: implementation_facet(SSP, ir)}})
 
 # ================= 2. leveraged / leveraging pair (D5) =================
 V_LEV, V_LVG = LEV["metadata"]["version"], LVG["metadata"]["version"]
@@ -395,7 +432,8 @@ bundle.add("objects/impl/saas-ac-2.json",
                              {"capability-ref": f"{COMP_APPL}#cap-consumer-ac-2a"}],
             "parameter-bindings": lvg_bind,
             "status": "implemented",
-            "evidence-refs": [D("document reference from the SSP's uuid", lambda u: f"{NS}/doc/ssp-{u}", LVG["uuid"])]})
+            "evidence-refs": [D("document reference from the SSP's uuid", lambda u: f"{NS}/doc/ssp-{u}", LVG["uuid"])],
+            "facets": {F_IMPL: implementation_facet(LVG, lvg_ir)}})
 lev_sids = sorted({stmt_norm(st.get("statement-id"), lev_ir["control-id"])
                    for st in lev_ir.get("statements", []) or [] if st.get("statement-id")})
 lev_bind = {sp["param-id"]: (sp["values"][0] if len(sp["values"]) == 1 else sp["values"])
@@ -409,7 +447,8 @@ bundle.add("objects/impl/csp-iaas-ac-2.json",
             "satisfied-by": [{"capability-ref": c["id"]} for c in lev_caps],
             "parameter-bindings": lev_bind,
             "status": "implemented",
-            "evidence-refs": [D("document reference from the SSP's uuid", lambda u: f"{NS}/doc/ssp-{u}", LEV["uuid"])]})
+            "evidence-refs": [D("document reference from the SSP's uuid", lambda u: f"{NS}/doc/ssp-{u}", LEV["uuid"])],
+            "facets": {F_IMPL: implementation_facet(LEV, lev_ir)}})
 
 # ================= 3. component-definition example =================
 # The mapping is the one of the pack builder's OSCAL import
@@ -792,6 +831,8 @@ bundle.stub("goodread-ap-stub.json", F_AP.split("@")[0], [],
             {"activities": {"type": "array"}, "tasks": {"type": "array"}, "reviewed-controls": {"type": "array"},
              "responsible-roles": {"type": "array"}})
 bundle.stub("goodread-protocols-stub.json", F_PROTO.split("@")[0], [], {"protocols": {"type": "array"}})
+bundle.stub("goodread-implementation-stub.json", F_IMPL.split("@")[0], [],
+            {"description": {"type": "object"}, "remarks": {"type": "object"}, "statements": {"type": "array"}})
 bundle.stub("goodread-component-stub.json", F_COMP.split("@")[0], [],
             {"title": {"type": "string"}, "description": {"type": "object"}, "purpose": {"type": "object"},
              "status": {"type": "string"}, "props": {"type": "object"}, "responsible-roles": {"type": "array"},

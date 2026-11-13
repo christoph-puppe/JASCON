@@ -2850,6 +2850,7 @@
  "lang-wraps": {
   "system": 10,
   "component": 8,
+  "implementation": 17,
   "observation": 4,
   "ap": 7,
   "risk": 14
@@ -2866,15 +2867,15 @@
  "global-occurrence": {
   "measures": "global occurrence of equal typed values - an upper bound on what was carried, not a trace of each source occurrence",
   "leaf-values": 835,
-  "exact": 377,
+  "exact": 393,
   "key-only": 34,
   "embedded": 51,
   "absent": {
    "identity": 182,
    "document-metadata": 125,
-   "content": 66
+   "content": 50
   },
-  "absent-content-prose": 43,
+  "absent-content-prose": 27,
   "key-only-paths": [
    {
     "path": "ap.assessment-plan.local-definitions.activities[].props[].name",
@@ -3376,91 +3377,10 @@
     ]
    },
    {
-    "path": "lev.system-security-plan.control-implementation.description",
-    "count": 1,
-    "pointers": [
-     "lev#/system-security-plan/control-implementation/description"
-    ]
-   },
-   {
-    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].remarks",
-    "count": 1,
-    "pointers": [
-     "lev#/system-security-plan/control-implementation/implemented-requirements/0/remarks"
-    ]
-   },
-   {
-    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].description",
-    "count": 2,
-    "pointers": [
-     "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/0/description",
-     "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/description"
-    ]
-   },
-   {
-    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].export.description",
-    "count": 2,
-    "pointers": [
-     "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/0/export/description",
-     "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/export/description"
-    ]
-   },
-   {
-    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].remarks",
-    "count": 1,
-    "pointers": [
-     "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/remarks"
-    ]
-   },
-   {
     "path": "lev.system-security-plan.system-implementation.components[].type",
     "count": 1,
     "pointers": [
      "lev#/system-security-plan/system-implementation/components/0/type"
-    ]
-   },
-   {
-    "path": "lvg.system-security-plan.control-implementation.description",
-    "count": 1,
-    "pointers": [
-     "lvg#/system-security-plan/control-implementation/description"
-    ]
-   },
-   {
-    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].remarks",
-    "count": 1,
-    "pointers": [
-     "lvg#/system-security-plan/control-implementation/implemented-requirements/0/remarks"
-    ]
-   },
-   {
-    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].description",
-    "count": 3,
-    "pointers": [
-     "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/0/description",
-     "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/description",
-     "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/2/description"
-    ]
-   },
-   {
-    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].inherited[].description",
-    "count": 1,
-    "pointers": [
-     "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/2/inherited/0/description"
-    ]
-   },
-   {
-    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].satisfied[].description",
-    "count": 1,
-    "pointers": [
-     "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/2/satisfied/0/description"
-    ]
-   },
-   {
-    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].remarks",
-    "count": 1,
-    "pointers": [
-     "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/remarks"
     ]
    },
    {
@@ -3546,13 +3466,6 @@
     ]
    },
    {
-    "path": "ssp.system-security-plan.control-implementation.description",
-    "count": 1,
-    "pointers": [
-     "ssp#/system-security-plan/control-implementation/description"
-    ]
-   },
-   {
     "path": "ssp.system-security-plan.system-implementation.components[].type",
     "count": 1,
     "pointers": [
@@ -3565,10 +3478,10 @@
   "file": "ifa-conversion-ledger.json",
   "leaf-values": 835,
   "totals": {
-   "copied": 388,
+   "copied": 404,
    "transformed": 60,
    "intentionally-dropped": 309,
-   "unaccounted": 78
+   "unaccounted": 62
   },
   "verification-failures": 0
  }

@@ -25,5 +25,55 @@
  "status": "implemented",
  "evidence-refs": [
   "https://ifa.gov/goodread/doc/ssp-0e6c0e99-0dac-458d-b82f-bf85d6ccc521"
- ]
+ ],
+ "facets": {
+  "https://ifa.gov/goodread/facet/implementation@1": {
+   "description": {
+    "en": "This is a collection of control responses."
+   },
+   "remarks": {
+    "en": "The organization:\n\na. Identifies and selects the following types of information system accounts to support organizational missions/business functions: [Assignment: organization-defined information system account types];\n\nb. Assigns account managers for information system accounts;\n\nc. Establishes conditions for group and role membership;\n\nOmitted: d. through j."
+   },
+   "statements": [
+    {
+     "statement": "smt.a",
+     "remarks": {
+      "en": "a. Identifies and selects the following types of information system accounts to support organizational missions/business functions: [Assignment: privileged and non-privileged];"
+     },
+     "responses": [
+      {
+       "description": {
+        "en": "Response for the \\\"This System\\\" component.\n\nOverall description of how \\\"This System\\\" satisfies AC-2, Part a.\n\nResponse for the \\\"This System\\\" component.\n\nOverall description of how \\\"This System\\\" satisfies AC-2, Part a.\n\nResponse for the \\\"This System\\\" component.\n\nOverall description of how \\\"This System\\\" satisfies AC-2, Part a.\n\nResponse for the \\\"This System\\\" component.\n\nOverall description of how \\\"This System\\\" satisfies AC-2, Part a."
+       }
+      },
+      {
+       "description": {
+        "en": "Describe how this internal virtual appliance satisfies AC-2, Part a."
+       },
+       "satisfied": [
+        {
+         "en": "Description that directly addresses how the consumer responsibility was satisfied."
+        }
+       ]
+      },
+      {
+       "description": {
+        "en": " *duplicated/tailored description of what was inherited, and description of what was configured.* \n\nConsumer-appropriate description of what may be inherited.\n\nIn the context of the application component in satisfaction of AC-2, part a."
+       },
+       "inherited": [
+        {
+         "en": "Optional description.\n\n *Possibly duplicated description of what was inherited.* \n\nConsumer-appropriate description of what may be inherited.\n\nIn the context of the application component in satisfaction of AC-2, part a."
+        }
+       ],
+       "satisfied": [
+        {
+         "en": "Description of how the responsibility was satisfied."
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ }
 }

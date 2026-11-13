@@ -2,10 +2,10 @@
  "measures": "one entry per source leaf value: where it went, checked against the written files",
  "leaf-values": 835,
  "totals": {
-  "copied": 388,
+  "copied": 404,
   "transformed": 60,
   "intentionally-dropped": 309,
-  "unaccounted": 78
+  "unaccounted": 62
  },
  "verification-failures": [],
  "unaccounted-paths": [
@@ -207,20 +207,6 @@
    ]
   },
   {
-   "path": "lev.system-security-plan.control-implementation.description",
-   "count": 1,
-   "pointers": [
-    "lev#/system-security-plan/control-implementation/description"
-   ]
-  },
-  {
-   "path": "lev.system-security-plan.control-implementation.implemented-requirements[].remarks",
-   "count": 1,
-   "pointers": [
-    "lev#/system-security-plan/control-implementation/implemented-requirements/0/remarks"
-   ]
-  },
-  {
    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].component-uuid",
    "count": 2,
    "pointers": [
@@ -229,48 +215,11 @@
    ]
   },
   {
-   "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].description",
-   "count": 2,
-   "pointers": [
-    "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/0/description",
-    "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/description"
-   ]
-  },
-  {
-   "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].export.description",
-   "count": 2,
-   "pointers": [
-    "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/0/export/description",
-    "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/export/description"
-   ]
-  },
-  {
    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].export.responsibilities[].provided-uuid",
    "count": 2,
    "pointers": [
     "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/0/export/responsibilities/0/provided-uuid",
     "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/export/responsibilities/0/provided-uuid"
-   ]
-  },
-  {
-   "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].remarks",
-   "count": 1,
-   "pointers": [
-    "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/remarks"
-   ]
-  },
-  {
-   "path": "lvg.system-security-plan.control-implementation.description",
-   "count": 1,
-   "pointers": [
-    "lvg#/system-security-plan/control-implementation/description"
-   ]
-  },
-  {
-   "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].remarks",
-   "count": 1,
-   "pointers": [
-    "lvg#/system-security-plan/control-implementation/implemented-requirements/0/remarks"
    ]
   },
   {
@@ -283,33 +232,10 @@
    ]
   },
   {
-   "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].description",
-   "count": 3,
-   "pointers": [
-    "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/0/description",
-    "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/description",
-    "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/2/description"
-   ]
-  },
-  {
-   "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].inherited[].description",
-   "count": 1,
-   "pointers": [
-    "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/2/inherited/0/description"
-   ]
-  },
-  {
    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].inherited[].provided-uuid",
    "count": 1,
    "pointers": [
     "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/2/inherited/0/provided-uuid"
-   ]
-  },
-  {
-   "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].satisfied[].description",
-   "count": 1,
-   "pointers": [
-    "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/2/satisfied/0/description"
    ]
   },
   {
@@ -318,13 +244,6 @@
    "pointers": [
     "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/satisfied/0/responsibility-uuid",
     "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/2/satisfied/0/responsibility-uuid"
-   ]
-  },
-  {
-   "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].remarks",
-   "count": 1,
-   "pointers": [
-    "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/remarks"
    ]
   },
   {
@@ -389,13 +308,6 @@
    "pointers": [
     "poam#/plan-of-action-and-milestones/risks/0/related-observations/0/observation-uuid",
     "poam#/plan-of-action-and-milestones/risks/1/related-observations/0/observation-uuid"
-   ]
-  },
-  {
-   "path": "ssp.system-security-plan.control-implementation.description",
-   "count": 1,
-   "pointers": [
-    "ssp#/system-security-plan/control-implementation/description"
    ]
   },
   {
@@ -2620,7 +2532,13 @@
   {
    "source": "ssp#/system-security-plan/control-implementation/description",
    "path": "ssp.system-security-plan.control-implementation.description",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/impl/system1234-ac-6.1",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1implementation@1/description/en"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ssp#/system-security-plan/control-implementation/set-parameters/0/param-id",
@@ -6083,7 +6001,13 @@
   {
    "source": "lev#/system-security-plan/control-implementation/description",
    "path": "lev.system-security-plan.control-implementation.description",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/impl/csp-iaas-ac-2",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1implementation@1/description/en"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lev#/system-security-plan/control-implementation/implemented-requirements/0/uuid",
@@ -6095,6 +6019,11 @@
    "source": "lev#/system-security-plan/control-implementation/implemented-requirements/0/control-id",
    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].control-id",
    "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/impl/csp-iaas-ac-2",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1implementation@1/statements/0/statement",
+     "rule": "statement id without the control prefix, in the catalogue's spelling (stmt -> smt)"
+    },
     {
      "object": "https://ifa.gov/goodread/impl/csp-iaas-ac-2",
      "pointer": "/statement-refs/0",
@@ -6132,6 +6061,11 @@
    "destinations": [
     {
      "object": "https://ifa.gov/goodread/impl/csp-iaas-ac-2",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1implementation@1/statements/0/statement",
+     "rule": "statement id without the control prefix, in the catalogue's spelling (stmt -> smt)"
+    },
+    {
+     "object": "https://ifa.gov/goodread/impl/csp-iaas-ac-2",
      "pointer": "/statement-refs/0",
      "rule": "statement id without the control prefix, in the catalogue's spelling (stmt -> smt)"
     }
@@ -6158,12 +6092,24 @@
   {
    "source": "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/0/description",
    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].description",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/impl/csp-iaas-ac-2",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1implementation@1/statements/0/responses/0/description/en"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/0/export/description",
    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].export.description",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/impl/csp-iaas-ac-2",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1implementation@1/statements/0/responses/0/export/en"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/0/export/provided/0/uuid",
@@ -6252,12 +6198,24 @@
   {
    "source": "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/description",
    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].description",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/impl/csp-iaas-ac-2",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1implementation@1/statements/0/responses/1/description/en"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/export/description",
    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].export.description",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/impl/csp-iaas-ac-2",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1implementation@1/statements/0/responses/1/export/en"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/export/provided/0/uuid",
@@ -6335,12 +6293,24 @@
   {
    "source": "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/remarks",
    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].remarks",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/impl/csp-iaas-ac-2",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1implementation@1/statements/0/remarks/en"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lev#/system-security-plan/control-implementation/implemented-requirements/0/remarks",
    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].remarks",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/impl/csp-iaas-ac-2",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1implementation@1/remarks/en"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lev#/system-security-plan/back-matter/resources/0/uuid",
@@ -7179,7 +7149,13 @@
   {
    "source": "lvg#/system-security-plan/control-implementation/description",
    "path": "lvg.system-security-plan.control-implementation.description",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/impl/saas-ac-2",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1implementation@1/description/en"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lvg#/system-security-plan/control-implementation/implemented-requirements/0/uuid",
@@ -7191,6 +7167,11 @@
    "source": "lvg#/system-security-plan/control-implementation/implemented-requirements/0/control-id",
    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].control-id",
    "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/impl/saas-ac-2",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1implementation@1/statements/0/statement",
+     "rule": "statement id without the control prefix, in the catalogue's spelling (stmt -> smt)"
+    },
     {
      "object": "https://ifa.gov/goodread/impl/saas-ac-2",
      "pointer": "/statement-refs/0",
@@ -7228,6 +7209,11 @@
    "destinations": [
     {
      "object": "https://ifa.gov/goodread/impl/saas-ac-2",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1implementation@1/statements/0/statement",
+     "rule": "statement id without the control prefix, in the catalogue's spelling (stmt -> smt)"
+    },
+    {
+     "object": "https://ifa.gov/goodread/impl/saas-ac-2",
      "pointer": "/statement-refs/0",
      "rule": "statement id without the control prefix, in the catalogue's spelling (stmt -> smt)"
     }
@@ -7254,7 +7240,13 @@
   {
    "source": "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/0/description",
    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].description",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/impl/saas-ac-2",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1implementation@1/statements/0/responses/0/description/en"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/0/responsible-roles/0/role-id",
@@ -7288,7 +7280,13 @@
   {
    "source": "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/description",
    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].description",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/impl/saas-ac-2",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1implementation@1/statements/0/responses/1/description/en"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/satisfied/0/uuid",
@@ -7308,6 +7306,10 @@
     {
      "object": "https://ifa.gov/goodread/component/access-control-appliance",
      "pointer": "/capabilities/0/description/en"
+    },
+    {
+     "object": "https://ifa.gov/goodread/impl/saas-ac-2",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1implementation@1/statements/0/responses/1/satisfied/0/en"
     }
    ],
    "outcome": "copied"
@@ -7344,7 +7346,13 @@
   {
    "source": "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/2/description",
    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].description",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/impl/saas-ac-2",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1implementation@1/statements/0/responses/2/description/en"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/2/inherited/0/uuid",
@@ -7360,7 +7368,13 @@
   {
    "source": "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/2/inherited/0/description",
    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].inherited[].description",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/impl/saas-ac-2",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1implementation@1/statements/0/responses/2/inherited/0/en"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/2/satisfied/0/uuid",
@@ -7376,17 +7390,35 @@
   {
    "source": "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/2/satisfied/0/description",
    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].satisfied[].description",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/impl/saas-ac-2",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1implementation@1/statements/0/responses/2/satisfied/0/en"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/remarks",
    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].remarks",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/impl/saas-ac-2",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1implementation@1/statements/0/remarks/en"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lvg#/system-security-plan/control-implementation/implemented-requirements/0/remarks",
    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].remarks",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/impl/saas-ac-2",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1implementation@1/remarks/en"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lvg#/system-security-plan/back-matter/resources/0/uuid",

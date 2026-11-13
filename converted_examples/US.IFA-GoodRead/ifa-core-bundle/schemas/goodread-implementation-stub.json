@@ -1,0 +1,22 @@
+{
+ "id": "https://ifa.gov/goodread/facet/implementation",
+ "version": "1.0.0",
+ "modifies-semantics": [],
+ "note": "NORMATIVE pinned payload schema (backlog #26): closed shape - unknown keys are rejected, never smuggled",
+ "schema": {
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+   "description": {
+    "type": "object"
+   },
+   "remarks": {
+    "type": "object"
+   },
+   "statements": {
+    "type": "array"
+   }
+  },
+  "additionalProperties": false
+ }
+}

@@ -22,5 +22,41 @@
  "status": "implemented",
  "evidence-refs": [
   "https://ifa.gov/goodread/doc/ssp-c2c2f46c-3b36-4abe-84b8-139c00d8a8ec"
- ]
+ ],
+ "facets": {
+  "https://ifa.gov/goodread/facet/implementation@1": {
+   "description": {
+    "en": "This is a collection of control responses."
+   },
+   "remarks": {
+    "en": "The organization:\n\na. Identifies and selects the following types of information system accounts to support organizational missions/business functions: [Assignment: organization-defined information system account types];\n\nb. Assigns account managers for information system accounts;\n\nc. Establishes conditions for group and role membership;\n\nd. through j. omitted"
+   },
+   "statements": [
+    {
+     "statement": "smt.a",
+     "remarks": {
+      "en": "a. Identifies and selects the following types of information system accounts to support organizational missions/business functions: [Assignment: privileged and non-privileged];"
+     },
+     "responses": [
+      {
+       "description": {
+        "en": "Response for the \\\"This System\\\" component.\n\nOverall description of how \\\"This System\\\" satisfies AC-2, Part a.\n\nResponse for the \\\"This System\\\" component.\n\nOverall description of how \\\"This System\\\" satisfies AC-2, Part a.\n\nResponse for the \\\"This System\\\" component.\n\nOverall description of how \\\"This System\\\" satisfies AC-2, Part a.\n\nResponse for the \\\"This System\\\" component.\n\nOverall description of how \\\"This System\\\" satisfies AC-2, Part a."
+       },
+       "export": {
+        "en": "Optional description about what is being exported."
+       }
+      },
+      {
+       "description": {
+        "en": "Describes how the application satisfies AC-2, Part a."
+       },
+       "export": {
+        "en": "Optional description about what is being exported."
+       }
+      }
+     ]
+    }
+   ]
+  }
+ }
 }

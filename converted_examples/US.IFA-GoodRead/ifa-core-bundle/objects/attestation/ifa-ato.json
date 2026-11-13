@@ -12,14 +12,14 @@
   },
   {
    "id": "https://ifa.gov/goodread/impl/system1234-ac-6.1",
-   "semantic-digest": "sha256:313b33933f2612afa47f6fed4fc092b695ddbfc69d593f550a490b56640b84be"
+   "semantic-digest": "sha256:957af20000b1240c4e4ae4e76590e7a4c52f2aeddbb0ae38d72f92399c49055c"
   },
   {
    "id": "https://ns.nist.gov/sp800-53/req/AC-6.1",
    "semantic-digest": "sha256:21637d8ecfe2f6255b6d385528772eac9ca7605d64c72d3d7666e1428c67ca3b"
   }
  ],
- "content-manifest-digest": "sha256:c2e8f92952325dd3668e7423ba88a46e029b37383572fe679f53aef0d0809e9c",
+ "content-manifest-digest": "sha256:782678eab99985fa3de52ef39aec3da22bd18ee117c3f7b918656acdd37847bf",
  "signer": "https://ifa.gov/goodread/party/authorizing-official",
  "timestamp": "2025-05-19T00:00:00Z"
 }
