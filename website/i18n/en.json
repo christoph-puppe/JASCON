@@ -57,12 +57,29 @@
   "imprint_issue": "an issue in the repository",
   "imprint_responsible": "Responsible for the content",
   "imprint_country": "Germany",
+  "colon": ": ",
+  "full_stop": ".",
   "corpora": {
-   "AU.ISM": {"publisher": "Australian Signals Directorate", "note": "1,150 controls; classification and Essential Eight baselines as Sets"},
-   "DE.BSI": {"publisher": "BSI, Germany", "note": "German prose, statement grammar and protection goals as facets"},
-   "US.SP800-53": {"publisher": "NIST", "note": "Statement-scoped parameters; four baselines as membership Sets"},
-   "US.CSF": {"publisher": "NIST", "note": "Functions, categories and subcategories as nested Sets"},
-   "US.IFA-GoodRead": {"publisher": "NIST, fictional content", "note": "The lifecycle types: Component to Attestation, with two Risks"}
+   "AU.ISM": {
+    "publisher": "Australian Signals Directorate",
+    "note": "1,150 controls; classification and Essential Eight baselines as Sets"
+   },
+   "DE.BSI": {
+    "publisher": "BSI, Germany",
+    "note": "German prose, statement grammar and protection goals as facets"
+   },
+   "US.SP800-53": {
+    "publisher": "NIST",
+    "note": "Statement-scoped parameters; four baselines as membership Sets"
+   },
+   "US.CSF": {
+    "publisher": "NIST",
+    "note": "Functions, categories and subcategories as nested Sets"
+   },
+   "US.IFA-GoodRead": {
+    "publisher": "NIST, fictional content",
+    "note": "The lifecycle types: Component to Attestation, with two Risks"
+   }
   }
  },
  "script": {

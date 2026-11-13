@@ -1,0 +1,130 @@
+---
+title: 根拠：何を実測し、何を実測していないか | JASCON
+description: 適合性コーパス、2 つのリファレンスバリデータ、変換したカタログとそのライセンス、根拠のゲート、未解決の限界、近接するフォーマット。すべての数値に、実測、設計済み、未解決のいずれかのラベルを付けています。
+nav: evidence
+---
+<section class="page-hero">
+  <div class="wrap">
+    <p class="eyebrow">根拠</p>
+    <h1>何を、何に対して実測し、何を実測していないか</h1>
+    <p class="lede">本プロジェクトは 3 つの規則に従います。すべての主張に、実測、設計済み、仮説のいずれかのラベルを付けます。公開されたカタログが必要としない仕組みは、仕様に入れません。すべての禁止事項は、それが防ぐ失敗を、実際に数えた事例として示します。このページは、最初の規則を本プロジェクト自身に適用したものです。</p>
+    <div class="chips">
+      <span class="tier tier-measured">実測</span>
+      <span class="tier tier-designed">設計済み</span>
+      <span class="tier tier-open">未解決</span>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="conformance">
+  <div class="wrap">
+    <div class="split">
+      <div class="stack-lg reveal">
+        <div class="section-head" style="margin-bottom:0">
+          <p class="eyebrow"><span class="no">01</span> 適合性</p>
+          <h2>テストスイートが仕様の審判役</h2>
+          <p class="lede">ツールが適合しているかどうかは、コーパスが決めます。{{ facts.measured.date }}、コミット <code>{{ facts.measured.commit }}</code> の時点で、リファレンスバリデータは {{ n.families }} ファミリーのテストベクトル {{ n.vectors }} 件中 {{ n.vectors }} 件に合格し、このサイトで配布している {{ n.bundles }} 個のバンドルに含まれる {{ n.shipped_objects }} 件のオブジェクトについて、両方のダイジェストを再検証しました。</p>
+        </div>
+        <ul class="chips">
+{{ html.family_chips }}
+        </ul>
+        <p class="small">リリース済みの 1.0.0 には、12 ファミリーに 157 件のテストベクトルがあります。<code>risk</code>、<code>kernel</code>、<code>scale</code> は 2.0.0-rc.1 で、{{ n.check_vectors }} 件の <code>check</code> ベクトルは 2.0.0-rc.2 で、{{ n.advice_vectors }} 件の <code>advice</code> ベクトルは 2.0.0-rc.3 で加わりました。</p>
+      </div>
+      <div class="stack reveal">
+        <article class="card">
+          <div class="card-top"><h3>validate_core.py</h3><span class="tier tier-measured">ビルド時に実測</span></div>
+          <p>リファレンス実装です。{{ n.python_lines }} 行の単一の Python ファイルで、依存関係は <code>jsonschema</code> だけです。正規化、両方のダイジェスト、テーラリング則、Ed25519 と DSSE の検証、バンドルの合成、リスクカバレッジ、I-Regexp エンジンを含みます。</p>
+        </article>
+        <article class="card">
+          <div class="card-top"><h3>validate_core.ps1</h3><span class="tier tier-measured">2026年11月12日に実測</span></div>
+          <p>双子の実装です。依存関係のない {{ n.powershell_lines }} 行の Windows PowerShell 5.1 で、監査人がすでに持っているマシンのためのものです。11月12日、ホスト型の Windows ランナー上で、全 {{ n.vectors }} 件のテストベクトル、5 つのバンドル、作例のパック、サンプルフォルダについて、Python のリファレンスと同じ件数を返しました。<a href="{{ repo }}/actions/workflows/validators.yml" rel="noopener">ワークフロー</a>が、変更のたびにこの実行を繰り返します。</p>
+        </article>
+        <article class="card">
+          <div class="card-top"><h3>3 つ目はブラウザの中に</h3><span class="tier tier-measured">実測</span></div>
+          <p>アプリの Validate ページは、カーネル規則を JavaScript に移植したものを、{{ n.families }} のテストベクトルファミリーすべてに対して実行します。Python のバリデータに任せている部分は、アプリの readme に一覧があります。</p>
+        </article>
+        <p class="small">行数はゲート 4 報告書と同じ数え方によるもので、空行と <code>#</code> で始まる行を除いた行数です。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="corpora">
+  <div class="wrap">
+    <div class="section-head wide reveal">
+      <p class="eyebrow"><span class="no">02</span> コーパス</p>
+      <h2>11 件の変換を実測し、5 件を再配布</h2>
+      <p class="lede">各コンバーターはカバレッジ報告書を出力します。報告書は、すべての規則をその件数とともに記載し、ソースの欠陥を修正せずに報告します。5 つのバンドルは発行者の条件のもとで再配布が認められており、ここで配布しています。どれもアプリで開けます。</p>
+    </div>
+    <div class="table-wrap reveal">
+      <table>
+        <thead><tr><th>コーパス</th><th class="num">オブジェクト数</th><th>型</th><th>コンテンツのライセンス</th><th></th></tr></thead>
+        <tbody>
+{{ html.bundle_rows }}
+        </tbody>
+      </table>
+    </div>
+    <p class="source reveal">オブジェクト数はビルド時に実測。これらの変換を作成、レビュー、承認した発行者はありません。本プロジェクトの Apache ライセンスはバンドルには適用されず、各バンドルに付属するライセンス注記が適用されます。</p>
+
+    <div class="split even reveal" style="margin-top: clamp(40px, 5vw, 64px);">
+      <div class="stack">
+        <h3>実測したが、再配布していないもの</h3>
+        <p class="muted">さらに 6 つのコーパスを 1.0.0 に向けて変換し、実測しました。それらのバンドルは、発行者の利用条件を見直した結果、2026年11月10日にリポジトリから削除しました。コンバーターとカバレッジ報告書は残しているため、ソースファイルを利用する権利を持つ人なら誰でもバンドルを再現できます。</p>
+        <ul class="plain">
+          <li>CIS Controls v8.1 と CIS Ubuntu 24.04 LTS Benchmark：利用条件が二次的著作物を禁じている。</li>
+          <li>BSI C5:2026、BSI C3A、ベルギーの CyberFundamentals 2025：ライセンスの記載が見つからなかった。</li>
+          <li>FedRAMP CR26：米国政府の著作物で、そのリポジトリにはライセンスの記載がない。</li>
+        </ul>
+      </div>
+      <div class="stack">
+        <h3>1.0.0 の実測 <span class="tier tier-measured">2026年7月22日</span></h3>
+        <ul class="plain">
+          <li>11 のバンドル、6,914 件のオブジェクト。オブジェクトごとに両方のダイジェストを再検証。</li>
+          <li>ソース内のリーフ値 251,591 件。すべてのソースパスに宣言済みの変換先がある。</li>
+          <li>10 のカタログバンドルを OSCAL 1.2.2 へエクスポート：NIST のリリース版スキーマに対して妥当。再インポート後、5,886 件中 5,886 件のオブジェクトがセマンティックダイジェストで一致。</li>
+          <li>ソースと比べたサイズ：ISM は 29% 小さく、Grundschutz++ は 50% 小さく、CR26 は 55% 大きい。ソースが冗長な場合は小さくなり、独自フォーマットが簡潔だった場合は大きくなる。</li>
+        </ul>
+        <a class="link-arrow" href="{{ blob }}/drafts/gate-4-measurement.md" rel="noopener">ゲート 4 の実測報告書</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="gates">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">03</span> ゲート</p>
+      <h2>言葉だけで先へ進むものはない</h2>
+    </div>
+    <div class="gates reveal">
+      <div class="gate">
+        <span class="gate-when">2026年半ば</span><span class="gate-rail"><i></i></span>
+        <div class="gate-body"><h3>ゲート 1：全数調査 <span class="tier tier-measured">完了</span></h3><p>アーキテクチャを描く前に、ISM（管理策 1,150 件、prop 8,958 個）、Grundschutz++（prop 13,315 個）、FedRAMP CR26（ルール 246 件、prop なし）を棚卸ししました。カーネルは、この 3 つすべてが必要とすると実測されたものです。</p></div>
+      </div>
+      <div class="gate">
+        <span class="gate-when">2026年7月</span><span class="gate-rail"><i></i></span>
+        <div class="gate-body"><h3>ゲート 2：実行可能に <span class="tier tier-measured">完了</span></h3><p>閉じた、相互に排他的な形状を持つ規範的な JSON Schema、7 つの標準ライブラリのファセット記述子、適合性コーパス、リファレンスバリデータ。</p></div>
+      </div>
+      <div class="gate">
+        <span class="gate-when">2026年7月22日</span><span class="gate-rail"><i></i></span>
+        <div class="gate-body"><h3>ゲート 3：顧客テスト <span class="tier tier-measured">完了</span></h3><p>SP 800-53 Rev 5.2.0 と 800-53B の 4 つのベースライン、CSF 2.0、そして SSP、評価計画、評価結果、POA&amp;M からなる完全なライフサイクルセット。カーネルスキーマの変更は必要ありませんでした。このコーパスによってリファレンスバリデータの欠陥が 2 件見つかり、修正しました。</p></div>
+      </div>
+      <div class="gate">
+        <span class="gate-when">2026年7月22日</span><span class="gate-rail"><i></i></span>
+        <div class="gate-body"><h3>ゲート 4：エンジン群と 1.0.0 のリリース <span class="tier tier-measured">完了</span></h3><p>依存関係のない Ed25519 による DSSE 署名検証、バンドルの合成、条件付き規則、PowerShell の双子、OSCAL との双方向エクスポート。仕様はリポジトリ内での敵対的レビューと外部レビューを経ており、指摘事項はすべて記録に残して裁定しました。ある修正により、コンバーターが警告なしに統合していた ISM の分類セット 239 件が復元されました。</p></div>
+      </div>
+      <div class="gate rc">
+        <span class="gate-when">2026年11月10日</span><span class="gate-rail"><i></i></span>
+        <div class="gate-body"><h3>2.0.0-rc.1：10 番目の型としての Risk</h3><p>1.0.0 コーパスの 6,914 件のオブジェクトはすべて、変更なしで新しいスキーマに対して妥当と検証されます。リスク登録簿は利用者側のデータであるため、全数調査の対象とした機関はいずれもリスクの記録を公開していません。それを要求している標準は 3 つあります。ISO/IEC 27001、BSI Standard 200-3、NIST SP 800-30 です。</p></div>
+      </div>
+      <div class="gate rc">
+        <span class="gate-when">2026年11月12日</span><span class="gate-rail"><i></i></span>
+        <div class="gate-body"><h3>2.0.0-rc.2：11 番目の型としての Check</h3><p>11月11日に、スキーマ、バリデータ、156 件のテストベクトル、そして公開されている 2 つのチェックコーパスの全数調査とともに提案しました。ComplianceAsCode の CIS Ubuntu 24.04 プロファイルにある 510 のルールのうち 481 が形式に収まり、どちらのコーパスにも、I-Regexp の範囲を超える正規表現を必要とする比較はありませんでした。翌日、6 件の決定とともに採択されました。昇格規則には、カタログを発行する機関が公開しない型のための条項が加わり、Risk と Check はいずれもこの条項のもとで採用されています。現在のテストベクトルは {{ n.check_vectors }} 件です。</p></div>
+      </div>
+      <div class="gate rc">
+        <span class="gate-when">2026年11月12日</span><span class="gate-rail"><i></i></span>
+        <div class="gate-body"><h3>2.0.0-rc.3：アドバイスパックと、型付きになった 2 つの日付 <span class="tier tier-designed">リリース候補、タグ未付与</span></h3><p>ベンダーの推奨事項を 1 つの公開ファイルとして扱う仕組みで、8 件の決定を記録に残して採択されました。新しい型はなく、11 の規則、{{ n.advice_vectors }} 件のテストベクトル、署名付きの証明を備えた作例のパックがあります。同梱のバンドルに対して実行したところ、<code>capability-ref</code> に関する規則が、変換した NIST の例の中に、自身のコンポーネントが宣言していないケイパビリティを参照するエッジを 1 本見つけました。同じ日に作者は、タグ付けの前に残っていた 4 つの論点を閉じました。1.0.0 では自由記述のままだった 2 つのフィールド、すなわち逸脱を起票した日付と措置の期日が、型付きになりました。</p></div>
+      </div>
+    </div>
+  </div>
+</section>

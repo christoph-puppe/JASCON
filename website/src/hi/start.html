@@ -1,0 +1,205 @@
+---
+title: JASCON के साथ शुरुआत करें
+description: ब्राउज़र में कोई राष्ट्रीय कैटलॉग खोलें, संदर्भ वैलिडेटर चलाएँ, पहली आवश्यकता लिखें, OSCAL इम्पोर्ट करें, जोखिम कवरेज की गणना करें और कोडिंग एजेंटों के लिए स्किल इंस्टॉल करें। हर चरण में कुछ ही मिनट लगते हैं।
+nav: start
+---
+<section class="page-hero">
+  <div class="wrap">
+    <p class="eyebrow">शुरुआत करें</p>
+    <h1>ब्राउज़र टैब से वैलिडेट किए गए बंडल तक</h1>
+    <p class="lede">सात चरण, उसी क्रम में जिसमें अधिकांश लोग उन्हें पूरा करते हैं। पहले के लिए ब्राउज़र चाहिए। दूसरे के लिए Python या Windows मशीन चाहिए। किसी के लिए भी खाता, सर्वर या लाइसेंस कुंजी नहीं चाहिए।</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="steps">
+
+      <div class="step reveal" id="open">
+        <div class="step-body">
+          <h2>ऐसा कैटलॉग खोलें जिसे आप जानते हैं</h2>
+          <p>ऐप एक लिंक से बंडल लोड करता है और उसे आपके ब्राउज़र में ही रखता है। उस फ़्रेमवर्क से शुरुआत करें जिसके साथ आप काम करते हैं: ऑब्जेक्ट ब्राउज़र अपने फ़िल्टर डेटा से बनाता है, इसलिए SP 800-53 में फ़ैमिली और बेसलाइन के फ़िल्टर मिलते हैं और Grundschutz++ में मोडल क्रियाओं, सुरक्षा उद्देश्यों और लक्ष्य ऑब्जेक्टों के।</p>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>कॉर्पस</th><th class="num">ऑब्जेक्ट</th><th>प्रकार</th><th>सामग्री का लाइसेंस</th><th></th></tr></thead>
+              <tbody>
+{{ html.bundle_rows }}
+              </tbody>
+            </table>
+          </div>
+          <p class="small">हैंडबुक के उदाहरण बंडल में हर प्रकार का एक ऑब्जेक्ट है, जिसमें एक Risk, दो Tailorings और दो Checks भी शामिल हैं: <a href="app/index.html#load=../jascon/examples/&amp;tool=browse">उदाहरण बंडल खोलें</a>। एक <a href="reader/index.html">सिंगल-फ़ाइल रीडर</a> भी उपलब्ध है, जिसके आसपास कोई फ़ोल्डर नहीं होता; उसे डाउनलोड करें और उस पर कोई बंडल फ़ोल्डर ड्रॉप करें।</p>
+        </div>
+      </div>
+
+      <div class="step reveal" id="validate">
+        <div class="step-body">
+          <h2>संदर्भ वैलिडेटर चलाएँ</h2>
+          <div class="step-cols">
+            <div class="stack">
+              <p class="muted">वैलिडेटर {{ n.vectors }} अनुरूपता वेक्टर चलाता है, फिर साथ में दिए गए बंडलों के हर ऑब्जेक्ट को दोनों डाइजेस्ट से दोबारा सत्यापित करता है। आख़िरी पंक्ति में <code>ALL GREEN</code> लिखा होता है, या फिर हर विफलता उसके नियम और कारण के साथ सूचीबद्ध होती है।</p>
+              <p class="muted">अपनी सामग्री वैलिडेट करने के लिए एक या अधिक बंडल फ़ोल्डर आर्गुमेंट के रूप में दें। <code>--require-risk-basis</code> ऐसी हर चयनित आवश्यकता को विफलता बना देता है जिसका औचित्य सिद्ध करने वाला कोई जोखिम न हो।</p>
+              <p class="muted">Windows पर PowerShell समकक्ष यही काम PowerShell 5.1 पर, बिना कुछ इंस्टॉल किए, करता है। जहाँ Python को कुछ सेकंड लगते हैं, वहाँ इसे कुछ मिनट लगते हैं।</p>
+            </div>
+            <div class="stack">
+              <div class="window cmd">
+                <div class="window-bar"><span class="window-title">Python, uv के साथ</span></div>
+                <button class="copy" type="button" data-copy="cmd-uv">कॉपी</button>
+                <pre id="cmd-uv"><code data-lang="sh">git clone https://github.com/christoph-puppe/JASCON.git
+cd JASCON
+uv run --no-project --with jsonschema python jascon/scripts/validate_core.py</code></pre>
+              </div>
+              <div class="window cmd">
+                <div class="window-bar"><span class="window-title">Python, pip के साथ</span></div>
+                <button class="copy" type="button" data-copy="cmd-pip">कॉपी</button>
+                <pre id="cmd-pip"><code data-lang="sh">pip install jsonschema
+python jascon/scripts/validate_core.py
+# आपका अपना बंडल:
+python jascon/scripts/validate_core.py path/to/your-bundle</code></pre>
+              </div>
+              <div class="window cmd">
+                <div class="window-bar"><span class="window-title">Windows PowerShell 5.1, बिना इंस्टॉलेशन</span></div>
+                <button class="copy" type="button" data-copy="cmd-ps">कॉपी</button>
+                <pre id="cmd-ps"><code data-lang="sh">powershell -ExecutionPolicy Bypass -File jascon\scripts\validate_core.ps1</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step reveal" id="write">
+        <div class="step-body">
+          <h2>पहली आवश्यकता लिखें</h2>
+          <div class="step-cols">
+            <div class="stack">
+              <p class="muted">ऐसे डोमेन के अंतर्गत एक प्रीफ़िक्स चुनें जिस पर आपका अधिकार हो, और उसे बनाए रखें। पहचानकर्ताओं की तुलना स्ट्रिंग के रूप में होती है और उन्हें कभी नेटवर्क से प्राप्त नहीं किया जाता, इसलिए उस पते पर कुछ भी उपलब्ध होना ज़रूरी नहीं।</p>
+              <p class="muted">पाठ को वहाँ कथनों में बाँटें जहाँ बाध्यता, बाध्य पक्ष या कोई पैरामीटर बदलता है। हर पैरामीटर को एक टाइप के साथ घोषित करें और पाठ में <code>{param:name}</code> से उसका संदर्भ दें।</p>
+              <p class="muted">ऐप के Browse पेज पर इसके लिए "Write requirements and sets" के अंतर्गत एक फ़ॉर्म है। यह पाठ में मिले पैरामीटर स्वयं घोषित कर देता है। Home पेज वर्किंग सेट को एक बंडल के रूप में एक्सपोर्ट करता है, जिसमें मैनिफ़ेस्ट और हर ऑब्जेक्ट के दोनों डाइजेस्ट होते हैं।</p>
+              <a class="link-arrow" href="{{ blob }}/jascon/references/ch04-writing-requirements.md" rel="noopener">हैंडबुक, अध्याय 4: आवश्यकताएँ लिखना</a>
+            </div>
+            <div class="window">
+              <div class="window-bar"><span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="window-title">req-backup-1.json</span><span class="window-note">एक काल्पनिक उदाहरण</span></div>
+              <pre><code data-lang="json">{
+  "id": "https://grc.your.example/req/BACKUP-1",
+  "version": "2026-11",
+  "label": "BACKUP-1",
+  "lifecycle": "active",
+  "statements": [
+    { "id": "s1",
+      "modality": "must",
+      "obligated-parties": ["https://grc.your.example/party/operations"],
+      "parameters": [
+        { "name": "restore-interval", "type": "duration" }
+      ],
+      "prose": {
+        "en": "A restore from backup is tested at least every {param:restore-interval}.",
+        "de": "Eine Wiederherstellung aus dem Backup wird mindestens alle {param:restore-interval} getestet."
+      } }
+  ]
+}</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step reveal" id="oscal">
+        <div class="step-body">
+          <h2>अपना OSCAL लाएँ, और उसे वापस भी निकालें</h2>
+          <p>ऐप का Import पेज OSCAL कैटलॉग या प्रोफ़ाइल पढ़ता है और लागू किए गए हर नियम की रिपोर्ट देता है। Grundschutz++, SP 800-53 और CIS Benchmarks के लिए नियम-समुच्चय मौजूद हैं; किसी अन्य संरचना वाला कैटलॉग सामान्य (generic) नियमों से होकर गुज़रता है, जो कर्नेल में फ़ील्ड न होने वाली हर चीज़ को आपके नेमस्पेस के अंतर्गत एक फ़ेसेट में रखते हैं, और रिपोर्ट में एक पंक्ति दर्ज किए बिना कुछ भी नहीं छोड़ते। बैच कार्य के लिए रिपॉज़िटरी में Python में ग्यारह कन्वर्टर हैं, हर मापे गए कॉर्पस के लिए एक, जो एक साझा लाइब्रेरी पर आधारित हैं।</p>
+          <p>दूसरी दिशा में, <code>export_oscal.py</code> OSCAL 1.2.2 कैटलॉग लिखता है। साथ में दिए गए बंडलों के एक्सपोर्ट उन्हीं के बगल में <code>converted_examples/*/oscal-export/</code> के अंतर्गत रखे हैं। जिसके लिए OSCAL में कोई संरचना नहीं है (मोडैलिटी, बाध्य पक्ष, अतिव्यापी सदस्यता), वह नेमस्पेस वाले props में जाता है और इम्पोर्ट पर वापस आ जाता है।</p>
+          <p><a class="link-arrow" href="app/index.html#import">Import पेज खोलें</a></p>
+        </div>
+      </div>
+
+      <div class="step reveal" id="risk">
+        <div class="step-body">
+          <h2>जोखिम जोड़ें और कवरेज की गणना करें</h2>
+          <div class="step-cols">
+            <div class="stack">
+              <p class="muted">कोई कैटलॉग लोड करें, Tailoring से एक बेसलाइन चुनें, और Risk पेज पर वे जोखिम लिखें जो इस चयन का औचित्य सिद्ध करते हैं। Coverage व्यू हर उस चयनित आवश्यकता को सूचीबद्ध करता है जिसका नाम किसी भी मूल्यांकित जोखिम में नहीं है।</p>
+              <p class="muted">दो प्रोटोटाइप जोखिम कैटलॉग पहले दौर में मदद करते हैं: ऑफ़िस IT के 24 सामान्य जोखिम और एक औद्योगिक संयंत्र के 23 जोखिम, अंग्रेज़ी और जर्मन में, हर एक के साथ सुझाए गए SP 800-53 नियंत्रण। इम्पोर्ट किसी प्रविष्टि को आपके अपने Risk में कॉपी करता है; निर्णय आपका ही रहता है।</p>
+              <a class="link-arrow" href="{{ blob }}/risk-catalogs/README.md" rel="noopener">जोखिम कैटलॉग और उनकी सीमाएँ</a>
+            </div>
+            <div class="window cmd">
+              <div class="window-bar"><span class="window-title">किसी कैटलॉग को अपने बंडल में इम्पोर्ट करें</span></div>
+              <button class="copy" type="button" data-copy="cmd-risk">कॉपी</button>
+              <pre id="cmd-risk"><code data-lang="sh">python3 risk-catalogs/tools/risk_catalog.py import risk-catalogs/office-it \
+    --bundle path/to/your-bundle \
+    --org https://grc.your.example \
+    --owner https://grc.your.example/party/ciso \
+    --out path/to/risks</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step reveal" id="check">
+        <div class="step-body">
+          <h2>मशीन जाँच लिखें</h2>
+          <p>किसी तकनीकी नियम के लिए ऐप का Checks पेज एक Check (कर्नेल 2.0.0, रिलीज़ कैंडिडेट) लिखता है: संग्राहक (collector) जिन तथ्यों की रिपोर्ट करता है, निर्णय करने वाली तुलनाएँ, और bash, sh, Python, PowerShell, Ansible में या HTTP अनुरोध के रूप में संग्राहक का कोड। कुंजी दर्ज करने के बाद एक भाषा मॉडल जाँचों का मसौदा बना सकता है, एक बार में एक नियम या किसी CIS इम्पोर्ट के हर स्वचालित नियम के लिए। हर मसौदे को कर्नेल नियम और केवल-पढ़ने वाला (read-only) lint परखते हैं, और क्या सहेजा जाए, यह आप तय करते हैं। ऐप संग्राहक नहीं चलाता।</p>
+          <p><a class="link-arrow" href="app/index.html#load=../jascon/examples/&amp;tool=checks">उदाहरण पर Checks पेज खोलें</a> &nbsp; <a class="link-arrow" href="checks.html">जाँच निर्णय कैसे करती है</a></p>
+        </div>
+      </div>
+
+      <div class="step reveal" id="advice">
+        <div class="step-body">
+          <h2>किसी वेंडर की सलाह शामिल करें</h2>
+          <p>सलाह पैक वह फ़ाइल है जिसे कोई वेंडर प्रकाशित करता है: नामित आवश्यकताओं के लिए अनुशंसाओं वाले Components (कर्नेल 2.0.0, रिलीज़ कैंडिडेट)। ऐप का Home पेज कुछ भी लिखे जाने से पहले दिखाता है कि पैक में क्या है, बताता है कि उसका प्रकाशक दावा किया गया है, अनुप्रमाणित है या सिद्ध है, और इम्पोर्ट के बाद एक रसीद प्रिंट करता है। Implement पेज पर आप उत्पाद को अपने सिस्टम का सदस्य बनाते हैं और किसी अनुशंसा को अपनी एज के रूप में अपनाते हैं। वही फ़ाइल दूसरी बार इम्पोर्ट करने पर कुछ नहीं लिखा जाता।</p>
+          <p>उदाहरण पैक काल्पनिक है और सार्वजनिक टेस्ट कुंजी से हस्ताक्षरित है। अभी तक किसी वेंडर ने पैक प्रकाशित नहीं किया है।</p>
+          <p><a class="link-arrow" href="app/index.html#load=../jascon/example-packs/dbvendor-server-7-advice/">ऐप में उदाहरण पैक का पूर्वावलोकन करें</a> &nbsp; <a class="link-arrow" href="model.html#advice">पैक कैसे काम करता है</a></p>
+          <h3>वेंडरों के लिए: पैक लिखें</h3>
+          <p>पैक बिल्डर एक HTML फ़ाइल है जो ऑफ़लाइन चलती है। आप एक फ़ॉर्म में अपने उत्पाद और हर अनुशंसा का वर्णन करते हैं; पेज पैक को उन्हीं नियमों से जाँचता है जो ग्राहक का इम्पोर्ट चलाता है, रिलीज़ पर आपकी Ed25519 कुंजी से हस्ताक्षर करता है या openssl अथवा आपकी साइनिंग सेवा के लिए बाइट्स तैयार करता है, और ZIP लिखता है। कैटलॉग लोड होने पर यह हर आवश्यकता के खंड और पैरामीटर सुझाता है और हर सुझाए गए मान की जाँच करता है। आपके पास पहले से मौजूद OSCAL कंपोनेंट डेफ़िनिशन एक मसौदे के रूप में इम्पोर्ट होती है, साथ में एक रिपोर्ट भी मिलती है कि कौन-सी चीज़ें कहीं रखी नहीं जा सकीं।</p>
+          <p><a class="link-arrow" href="pack-builder/index.html">पैक बिल्डर खोलें</a> &nbsp; <a class="link-arrow" href="pack-builder/index.html" download="jascon-pack-builder.html">इसे एक फ़ाइल के रूप में डाउनलोड करें</a></p>
+        </div>
+      </div>
+
+      <div class="step reveal" id="agent">
+        <div class="step-body">
+          <h2>कोडिंग एजेंट के साथ काम करें</h2>
+          <div class="step-cols">
+            <div class="stack">
+              <p class="muted">फ़ोल्डर <code>jascon/</code> Claude के लिए एक स्किल है: चौदह क्रमांकित आवश्यकताओं के रूप में हैंडबुक, कर्नेल स्कीमा, अनुरूपता वेक्टर, कन्वर्टर और एक विस्तृत उदाहरण बंडल। जिस एजेंट के पास यह स्किल है, वह स्कीमा के अनुसार ऑब्जेक्ट लिखता है और अपने ही आउटपुट पर वैलिडेटर चलाता है।</p>
+              <p class="muted">काम का बँटवारा वही है जो ऐप में है: मॉडल मसौदा बनाता है, कर्नेल नियम निर्णय करते हैं, व्यक्ति स्वीकार करता है।</p>
+            </div>
+            <div class="window cmd">
+              <div class="window-bar"><span class="window-title">स्किल इंस्टॉल करें</span></div>
+              <button class="copy" type="button" data-copy="cmd-skill">कॉपी</button>
+              <pre id="cmd-skill"><code data-lang="sh"># आपके उपयोगकर्ता खाते के लिए
+cp -r jascon ~/.claude/skills/jascon
+# या किसी एक प्रोजेक्ट के लिए
+cp -r jascon .claude/skills/jascon</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="reading">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">पढ़ने के रास्ते</p>
+      <h2>पहले अध्याय 2, फिर अपनी भूमिका के अनुसार</h2>
+      <p class="lede">हैंडबुक में पंद्रह अध्याय और सात परिशिष्ट हैं। हर कोई अध्याय 2 पढ़ता है, जिसमें एक घंटा लगता है। उसके बाद रास्ते अलग हो जाते हैं।</p>
+    </div>
+    <div class="grid g3 reveal">
+      <a class="card lift" href="{{ blob }}/jascon/references/ch03-identity-versions-lifecycle.md" rel="noopener">
+        <span class="card-no">अध्याय 3 से 8, फिर 14</span>
+        <h3>आप फ़्रेमवर्क प्रकाशित करते हैं</h3>
+        <p>पहचान और नेमस्पेस, कथन, Sets और बेसलाइन, टेलरिंग, फ़ेसेट, मैपिंग। फिर, जब कैटलॉग असली हो, माइग्रेशन प्लेबुक।</p>
+      </a>
+      <a class="card lift" href="{{ blob }}/jascon/references/ch12-building-a-validator.md" rel="noopener">
+        <span class="card-no">अध्याय 3, 12, 13, 11</span>
+        <h3>आप टूल बनाते हैं</h3>
+        <p>मानसिक मॉडल के लिए पहचान, फिर वैलिडेटर वाला अध्याय और सुरक्षित उपभोग। हस्ताक्षर से जुड़ा कोई भी काम करने से पहले अखंडता।</p>
+      </a>
+      <a class="card lift" href="{{ blob }}/jascon/references/ch09-systems-components-inheritance.md" rel="noopener">
+        <span class="card-no">अध्याय 9, 10, 11, 15</span>
+        <h3>आप संचालन, मूल्यांकन या ख़रीद करते हैं</h3>
+        <p>सिस्टम और इनहेरिटेंस, मूल्यांकन और विचलन, हस्ताक्षर क्या सिद्ध करता है, और अनुरूपता का दावा आपको क्या माँगने का अधिकार देता है।</p>
+      </a>
+    </div>
+    <p class="source reveal">संदर्भ: <a href="{{ blob }}/jascon/references/appendix-a-shapes.md" rel="noopener">संरचनाएँ, फ़ील्ड-दर-फ़ील्ड</a> &middot; <a href="{{ blob }}/jascon/schemas/jascon-2.0.0.schema.json" rel="noopener">कर्नेल स्कीमा</a> &middot; <a href="{{ blob }}/jascon/references/appendix-f-objections.md" rel="noopener">आपत्तियाँ और उत्तर</a> &middot; <a href="{{ blob }}/jascon/references/appendix-g-glossary.md" rel="noopener">शब्दावली</a></p>
+  </div>
+</section>

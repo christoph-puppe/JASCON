@@ -337,12 +337,13 @@ def imprint(site, words):
     address = [words["imprint_country"] if x == "Germany" else x for x in imp.get("address_lines", [])]
     lines = [f"<strong>{e(site['publisher'])}</strong>"] + [e(x) for x in address]
     out = ["<address>" + "<br>".join(lines) + "</address>"]
+    colon, stop = e(words["colon"]), e(words["full_stop"])
     if imp.get("email"):
-        out.append(f'<p>{e(words["imprint_email"])}: <a href="mailto:{e(imp["email"])}">{e(imp["email"])}</a></p>')
-    out.append(f'<p>{e(words["imprint_questions"])}: <a href="{e(site["repo_url"])}/issues" '
-               f'rel="noopener">{e(words["imprint_issue"])}</a>.</p>')
+        out.append(f'<p>{e(words["imprint_email"])}{colon}<a href="mailto:{e(imp["email"])}">{e(imp["email"])}</a></p>')
+    out.append(f'<p>{e(words["imprint_questions"])}{colon}<a href="{e(site["repo_url"])}/issues" '
+               f'rel="noopener">{e(words["imprint_issue"])}</a>{stop}</p>')
     if imp.get("responsible_for_content"):
-        out.append(f"<p>{e(words['imprint_responsible'])}: {e(imp['responsible_for_content'])}</p>")
+        out.append(f"<p>{e(words['imprint_responsible'])}{colon}{e(imp['responsible_for_content'])}</p>")
     return "\n".join(out)
 
 

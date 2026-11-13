@@ -185,3 +185,85 @@ nav: evidence
     <p class="source reveal">Die vollständige Liste mit Zahlen: <a href="{{ blob }}/drafts/jascon-v0.6-spec-feedback-backlog.md" rel="noopener">das Backlog der Rückmeldungen zur Spezifikation</a>. Einträge kommen mit Nachweisen hinein und verlassen es über einen Eintrag im <a href="{{ blob }}/drafts/jascon-decision-rationale-register.md" rel="noopener">Entscheidungsregister</a>.</p>
   </div>
 </section>
+
+<section class="section" id="prior-art">
+  <div class="wrap">
+    <div class="section-head wide reveal">
+      <p class="eyebrow"><span class="no">05</span> Stand der Technik</p>
+      <h2>Was den Nachbarformaten fehlt</h2>
+      <p class="lede">Zwei Durchgänge. Die ersten fünf Zeilen wurden am 13. November 2026 anhand des Schemas oder des Codes in einer benannten Version geprüft: OSCAL 1.2.3, Gemara 1.6.0, CycloneDX 1.7.2, CISO Assistant sowie XCCDF 1.2 mit SCAP 1.4. Die Zeilen darunter stammen aus der Recherche vom 10. November, gelesen aus öffentlichen Repositorys und, wo eine Primärquelle nicht erreichbar war, aus Sekundärquellen. Daten der Nachbarformate wurden nicht konvertiert; eine Zelle sagt also, was ein Format bietet, nicht, was ein konkreter Einsatz daraus macht.</p>
+    </div>
+    <div class="table-wrap reveal">
+      <table>
+        <thead><tr><th>Format</th><th>Was es abdeckt</th><th>Was ihm fehlt</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">OSCAL (NIST)</th><td>Katalog, Profil, Komponentendefinition, Systemsicherheitsplan, Prüfplan und Prüfergebnisse, POA&amp;M und seit 1.2.0 Control-Mapping. Eine vollständige Kette vom Control bis zur Nachweisdatei mit Hash; Fristen für Risiken; ein Herstellermodell, das keinen Katalog verändern kann</td><td>Ein Risiko existiert nur in Prüfergebnissen und POA&amp;M, nie neben der Auswahl, die es begründen würde. Keine Änderung an einem Profil hält einen Autor fest. Kein Konstrukt trägt eine zweite Sprache. Kein natives Signieren: Inline-Signaturen wurden upstream abgelehnt (Issue 245), es bleiben Byte-Hashes. Erweiterungs-Props tragen einen Namespace-String, den nichts validiert, und für SP 800-53 geschriebene Kern-Constraints binden andere Frameworks (#2118, #2112)</td></tr>
+          <tr><th scope="row">Gemara (OpenSSF)</th><td>Geschichtete Kataloge für Leitlinien, Controls, Bedrohungen, Risiken und Fähigkeiten; Mapping-Dokumente mit typisierten Beziehungen, Stärke und Konfidenz; Evaluationsprotokolle, deren Nachweise einen Digest tragen; Schemas in CUE. Genutzt von FINOS Common Cloud Controls und der OpenSSF OSPS Baseline</td><td>Kein Fließtext in einer zweiten Sprache. Kein Fälligkeits- oder Ablaufdatum an einer Feststellung oder einer Ausnahme. Kein Umsetzungsdatensatz: Das Modell benennt eine Schicht dafür und liefert kein Schema. Ein Risiko wird ohne Genehmiger und ohne Datum akzeptiert. Die Signatur deckt die Bytes des veröffentlichten Bundles ab und wird von Werkzeugen außerhalb des Schemas erzeugt. Die Schemas sind geschlossen: Ein CUE-Profil kann sie einschränken, aber kein Feld hinzufügen. Die Schemas für Policy und Risiko sind als experimentell gekennzeichnet</td></tr>
+          <tr><th scope="row">CycloneDX Attestations (OWASP, ECMA-424)</th><td>Standards als Daten; Anforderungen, die Behauptungen und Gegenbehauptungen zugeordnet sind, Nachweise mit Autor und Ablaufdatum, eine Bestätigung mit Unterzeichnern. Signaturen je Objekt über kanonisches JSON, die ein Neueinrücken überstehen</td><td>Kein Risikoobjekt, keine Aufzeichnung des Tailorings, keine Sprach-Map. Nachweisanhänge tragen keinen Hash. Die Signatur gibt es nur in der JSON-Form: Das XML-Schema und die Protobuf-Definition haben keinen Platz dafür. Weder Unterzeichner noch Bestätigung tragen ein Datum. Erweiterungen sind Name/Wert-Strings mit optionaler Registry</td></tr>
+          <tr><th scope="row">CISO Assistant (intuitem)</th><td>Im Tool: mit Controls verknüpfte Risikoszenarien, ein Export der Erklärung zur Anwendbarkeit (SoA), Risikoakzeptanz mit Genehmiger, Datum und Ablauf, Sicherheitsausnahmen mit Ablaufdatum, ein Audit-Log. Im Bibliotheksformat: mehr als 200 Frameworks, Referenz-Controls, Risikomatrizen, mengentheoretische Mappings, eine <code>translations</code>-Map je Objekt</td><td>Risikoakzeptanz, Ausnahmen und die Erklärung zur Anwendbarkeit bleiben in der Anwendung; sie verlassen sie über einen Backup-Export, nicht über das Bibliotheksformat. Kein Signieren: Byte-Hashes zur Deduplizierung. Ein Bibliotheks-Update kann bestehende Prüfungen umschreiben. Keine Check-Logik an einer Anforderung. Der Importer ignoriert Bibliotheksschlüssel, die er nicht kennt</td></tr>
+          <tr><th scope="row">SCAP, XCCDF, OVAL</th><td>Checklisten und Check-Sprachen in XML. Eine Tailoring-Datei ändert den Benchmark eines Herstellers, ohne ihn zu bearbeiten; ein Override hält verantwortliche Stelle, Zeitpunkt und Grund fest; Titel und Beschreibungen wiederholen sich je Sprache; ein Data Stream kann signiert und gegengezeichnet werden</td><td>Kein Risikodatensatz. Kein Fälligkeitsdatum, kein Ablaufdatum, kein Waiver-Typ. Kein Hash an einem erfassten Item. Kein Autor an einer einzelnen Tailoring-Änderung, und ein Schweregrad lässt sich ohne Angabe von Gründen herabsetzen. Neues Einrücken eines signierten Streams macht die Signatur ungültig. Konforme Checks sind OVAL und OCIL; ein Skript in beliebiger Sprache läuft nur über eine Erweiterung von OpenSCAP. Elemente in einem fremden Namespace werden nur geprüft, wenn zufällig ein Schema zur Hand ist</td></tr>
+          <tr><th scope="row">Formate der Regulierer</th><td>Die konsolidierten Regeln von FedRAMP als JSON mit JSON Schema; BSI C5:2026 als YAML; Grundschutz++ und das ISM als OSCAL-Kataloge und -Profile</td><td>Ein Dialekt je Herausgeber, jeder strukturiert Modalität, Fristen und Anwendbarkeit auf eigene Weise. C5 liefert Deutsch und Englisch als getrennte Dateien; Grundschutz++ hält seine Vokabulare in Props, die kein Validator liest</td></tr>
+          <tr><th scope="row">Mapping-Semantik</th><td>Die Beziehungsarten von NIST IR 8477; das STRM des Secure Controls Framework; OWASP OpenCRE</td><td>IR 8477 definiert Beziehungen, kein Dateiformat. SCF veröffentlicht seine Mappings als Tabellen und PDF und exportiert nur seinen Katalog nach OSCAL. OpenCRE ist ein sternförmiger Anforderungsgraph (Hub and Spoke), kein Katalogformat</td></tr>
+          <tr><th scope="row">in-toto und SCITT</th><td>Signierte Attestierungen mit geprüften Prädikaten für Herkunft, Verifikationszusammenfassungen, Testergebnisse und SBOMs; IETF-Transparenzdienste über signierte Aussagen</td><td>Kein in-toto-Prädikat attestiert ein Control oder eine Anforderung. SCITT ist eine Architektur für Transparenz, kein Compliance-Modell</td></tr>
+          <tr><th scope="row">Heimdall Data Format, OCSF, SARIF</th><td>Ergebnisse von Checks und Scans</td><td>Sie enthalten, was ein Check gefunden hat, nicht, was ein Standard verlangt</td></tr>
+          <tr><th scope="row">NIST IR 8286</th><td>Schemas für Risikoregister und Risikodetaildatensätze</td><td>Keine Kante von einem Risiko zur Auswahl der Controls</td></tr>
+          <tr><th scope="row">OpenControl, Compliance Masonry</th><td>Standards und Komponentenbeschreibungen in YAML</td><td>Seit 2023 keine nennenswerte Aktivität</td></tr>
+          <tr><th scope="row">ISO/IEC 27001 und 27002, IEC 62443, PCI DSS</th><td>Die Standards selbst</td><td>Keine offizielle maschinenlesbare Ausgabe; Aufbereitungen Dritter gibt es in SCF und CISO Assistant</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="section-head reveal" style="margin-top: clamp(40px, 5vw, 64px); margin-bottom: 24px;">
+      <h3>Was JASCON von ihnen übernimmt</h3>
+      <p class="muted">Das meiste an JASCON ist nicht neu. Jedes der folgenden Merkmale hat ein Vorbild in einem Nachbarformat.</p>
+    </div>
+    <div class="table-wrap reveal">
+      <table>
+        <thead><tr><th>Merkmal von JASCON</th><th>Nächstliegender Stand der Technik</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Strukturierte Modalität je Aussage</th><td>Das Modalverb-Vokabular von Grundschutz++; die Schlüsselwörter der FedRAMP-Regeln; die OpenSSF OSPS Baseline</td></tr>
+          <tr><th scope="row">Fließtext als Sprach-Map</th><td>Die <code>translations</code>-Map im Bibliotheksformat von CISO Assistant; <code>xml:lang</code> an wiederholten Titeln und Beschreibungen in XCCDF</td></tr>
+          <tr><th scope="row">Baselines als Mitgliedschaft</th><td>OSCAL-Profile; XCCDF-Profile</td></tr>
+          <tr><th scope="row">Tailoring als geschlossene Liste von Operationen</th><td><code>alter</code> und <code>set-parameter</code> in OSCAL-Profilen; <code>refine-value</code> in XCCDF</td></tr>
+          <tr><th scope="row">Typisierte Mappings zwischen Frameworks</th><td>NIST IR 8477; das STRM des Secure Controls Framework; das Mapping-Modell von OSCAL 1.2; Mapping-Dokumente von Gemara</td></tr>
+          <tr><th scope="row">Typisierte, schemagebundene Erweiterungen</th><td>Typisierte benutzerdefinierte Felder in CISO Assistant; CUE-Profile, die die geschlossenen Schemas von Gemara einschränken, wie es die OSPS Baseline tut; OSCAL-Props mit Namespaces, untypisiert; XCCDF-Elemente in fremden Namespaces, lax validiert</td></tr>
+          <tr><th scope="row">Kette von der Komponente bis zur Feststellung</th><td>Die Lebenszyklusmodelle von OSCAL; CycloneDX-Deklarationen</td></tr>
+          <tr><th scope="row">Signierte Attestierung über Anforderungen</th><td>Bestätigungen und Signaturen über kanonisches JSON in CycloneDX (ECMA-424); signierte und gegengezeichnete SCAP-Data-Streams; der DSSE-Envelope von in-toto</td></tr>
+          <tr><th scope="row">Ein Risikodatensatz</th><td>Das <code>risk</code>-Assembly von OSCAL, nachträglich; der Risikokatalog von Gemara; Risikoszenarien und Risikoakzeptanz in CISO Assistant; NIST IR 8286</td></tr>
+          <tr><th scope="row">Herstellerempfehlungen getrennt von den Controls</th><td>OSCAL-Komponentendefinitionen; die XCCDF-Tailoring-Datei, die den Benchmark eines Herstellers unberührt lässt</td></tr>
+          <tr><th scope="row">Eine dokumentierte Ausnahme mit Genehmiger</th><td>Das <code>override</code> von XCCDF mit verantwortlicher Stelle, Zeitpunkt und Grund; Sicherheitsausnahmen in CISO Assistant; die Deviation-Props von FedRAMP in OSCAL</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="split even reveal" style="margin-top: clamp(40px, 5vw, 64px);">
+      <div class="stack">
+        <h3>Was sich bei keinem Nachbarn in Kombination fand</h3>
+        <ul class="ticks">
+          <li><b>Zwei Digests je Objekt</b>, einer über die ausgelieferten Bytes und einer über den kanonischen Inhalt, sodass eine Attestierung ein Umverpacken übersteht.</li>
+          <li><b>Eine Halbordnung der Modalität</b>, gegen die das Tailoring geprüft wird, wobei jede Abschwächung über eine dokumentierte Deviation läuft.</li>
+          <li><b>Ein mit der Auswahl der Controls verknüpfter Risikodatensatz</b>, sodass die Anforderungen, die auf keinem Risiko beruhen, berechnet werden.</li>
+          <li><b>Erweiterungen nach dem Fail-Closed-Prinzip</b>: Eine Erweiterung deklariert, welche Berechnungen sie verändert, und ein Tool, das sie nicht versteht, muss anhalten.</li>
+        </ul>
+      </div>
+      <div class="stack">
+        <h3>Wie weit diese Aussage reicht</h3>
+        <p class="muted">Für jedes der vier gibt es teilweise Vorbilder. Die Aussage betrifft die Kombination und ist nur so belastbar wie die Recherche. Gemara und CycloneDX Attestations sind die nächsten Nachbarn, und wer aus einer dieser Communitys kommt, wird fragen, warum JASCON nicht deren Format erweitert; das Handbuch antwortet in <a href="{{ blob }}/jascon/references/appendix-f-objections.md" rel="noopener">Anhang F.10</a>. Die Lücke bei der Attestierung ist schmal: in-toto hat kein Prädikat, das eine Anforderung attestiert, und eine als solches Prädikat ausgedrückte JASCON-Attestierung würde ein bestehendes Ökosystem von Verifizierern erreichen. Die zehn Merkmale, auf die es Anwendern und Auditoren ankommt, werden <a href="index.html#compare">auf der Startseite</a> verglichen.</p>
+        <a class="link-arrow" href="{{ blob }}/PRIOR-ART.md" rel="noopener">PRIOR-ART.md, mit Quellen</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="cta reveal">
+      <div>
+        <h2>Das Urteil mit einer Zeile reproduzieren</h2>
+        <p>Klonen Sie das Repository und starten Sie den Validator. Er führt das Konformitätskorpus aus und prüft dann jedes Objekt jedes mitgelieferten Bundles mit beiden Digests nach. Er braucht Python und <code style="color:inherit;background:none;padding:0">jsonschema</code>.</p>
+      </div>
+      <div class="cta-actions">
+        <a class="btn btn-primary" href="start.html#validate">Der Befehl <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a class="btn btn-ghost" href="join.html">Einen Mangel finden und melden <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>

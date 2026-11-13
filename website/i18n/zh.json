@@ -57,12 +57,29 @@
   "imprint_issue": "在仓库中提交 issue",
   "imprint_responsible": "内容负责人",
   "imprint_country": "德国",
+  "colon": "：",
+  "full_stop": "。",
   "corpora": {
-   "AU.ISM": {"publisher": "Australian Signals Directorate", "note": "1,150 项控制措施；按密级划分的基线和 Essential Eight 基线以 Set 表示"},
-   "DE.BSI": {"publisher": "BSI（德国）", "note": "德语正文、陈述语法和保护目标以分面表示"},
-   "US.SP800-53": {"publisher": "NIST", "note": "作用范围限定在陈述上的参数；四个基线以成员关系 Set 表示"},
-   "US.CSF": {"publisher": "NIST", "note": "功能、类别和子类别以嵌套的 Set 表示"},
-   "US.IFA-GoodRead": {"publisher": "NIST（虚构内容）", "note": "生命周期类型：从 Component 到 Attestation，含两个 Risk"}
+   "AU.ISM": {
+    "publisher": "Australian Signals Directorate",
+    "note": "1,150 项控制措施；按密级划分的基线和 Essential Eight 基线以 Set 表示"
+   },
+   "DE.BSI": {
+    "publisher": "BSI（德国）",
+    "note": "德语正文、陈述语法和保护目标以分面表示"
+   },
+   "US.SP800-53": {
+    "publisher": "NIST",
+    "note": "作用范围限定在陈述上的参数；四个基线以成员关系 Set 表示"
+   },
+   "US.CSF": {
+    "publisher": "NIST",
+    "note": "功能、类别和子类别以嵌套的 Set 表示"
+   },
+   "US.IFA-GoodRead": {
+    "publisher": "NIST（虚构内容）",
+    "note": "生命周期类型：从 Component 到 Attestation，含两个 Risk"
+   }
   }
  },
  "script": {
@@ -91,11 +108,11 @@
   "engine_loading_text": "本页面会一次性获取应用的内核规则。",
   "outcome_satisfied": "满足",
   "outcome_not_satisfied": "不满足",
-  "outcome_inconclusive": "无法判定",
+  "outcome_inconclusive": "无定论",
   "outcome_not_applicable": "不适用",
   "verdict_satisfied": "两项检查均成立。Assessment 记录了每个观测值，因此另一方无需运行任何东西即可得出这一判定。",
   "verdict_not_satisfied": "一个确定的失败即决定汇总结果。失败的那一行写明了条款，针对该条款的 Finding 可以回指这项检查。",
-  "verdict_other": "没有观测值，就没有判定：绝不会用默认值代替。该行被记录为无法判定，并且必须附带理由。",
+  "verdict_other": "没有观测值，就没有判定：绝不会用默认值代替。该行被记录为无定论，并且必须附带理由。",
   "run_label": "每日运行 {date}",
   "check_titles": {
    "https://cso.example/check/LNX-SSH-1-maxauthtries": "sshd：认证尝试次数在上限之内",

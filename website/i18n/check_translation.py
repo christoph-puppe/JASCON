@@ -51,7 +51,9 @@ class Shape(html.parser.HTMLParser):
         if tag in BLOCK:
             self.blocks.append((tag, kept))
         if tag in VERBATIM and self.buf is None:
-            self.buf = (tag, [], kept)
+            self.buf = [tag, [], False]
+        if self.buf is not None and tag == "code" and ("data-lang", "sh") in kept:
+            self.buf[2] = True  # a shell block, also when a <pre> holds it
         if tag not in VOID:
             self.stack.append(tag)
 
@@ -65,9 +67,9 @@ class Shape(html.parser.HTMLParser):
             while self.stack and self.stack.pop() != tag:
                 pass
         if self.buf is not None and tag == self.buf[0] and tag not in self.stack:
-            kind, parts, attrs = self.buf
+            kind, parts, shell = self.buf
             text = "".join(parts)
-            if ("data-lang", "sh") in attrs:
+            if shell:
                 text = "\n".join(l for l in text.split("\n") if not l.lstrip().startswith("#"))
             self.verbatim[(kind, text.strip())] += 1
             self.buf = None
