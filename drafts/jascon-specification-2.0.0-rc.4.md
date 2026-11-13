@@ -2090,6 +2090,11 @@ of Check and of advice packs:
    for the two reports of D26, and `kernel` 25 → 54 for the pin and the
    shapes of its fields: **643 vectors, 18 families**. Nineteen
    deliberate defects in the reference's new code each turn one red.)*
+   *(After rc.4, 2026-11-13: 22 vectors for D3.10 — `kernel` 54 → 71,
+   `parameter` 21 → 22, `check` 203 → 205, `composition` 7 → 9:
+   **665 vectors**. Fifteen of them failed in both validators before
+   the change, and one stopped the twin; twelve deliberate defects in
+   the two fixes each turn a vector red or stop the run.)*
 2. **First implementation.** ✓ `validate_core.py`: 537 / 537, the five
    shipped bundles (3,715 objects, both digests each), the worked advice
    pack and the example folder — ALL GREEN on 2026-11-12.
@@ -2199,14 +2204,14 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
   modality 21 · parameter 19 · tailoring 19 · attestation 5 · facet 7 ·
   reference 13 · lifecycle 38 · tier 9 · dsse 5 · composition 7 ·
   conditional 8 · risk 73 · kernel 25 · scale 18 · check 188 · advice
-  74; with the amendments after rc.3 in IV.6 and the vectors of rc.4, **643 in 18 families**: `author` 40, `kernel` 54, `reference` 18, `tier` 10, `jcs` 22, `parameter` 21, `check` 203). In `risk-vectors.json`, `expected-rule` is the portable assertion; in `author-vectors.json`, the rule, the object and the count of each report line;
+  74; with the amendments after rc.3 in IV.6 and the vectors of rc.4, **643 in 18 families**: `author` 40, `kernel` 54, `reference` 18, `tier` 10, `jcs` 22, `parameter` 21, `check` 203; and with the vectors of D3.10 after rc.4, **665**: `kernel` 71, `parameter` 22, `check` 205, `composition` 9). In `risk-vectors.json`, `expected-rule` is the portable assertion; in `author-vectors.json`, the rule, the object and the count of each report line;
   in `check-vectors.json` and `advice-vectors.json`, the outcome and the
   named rules.
 - **A worked advice pack** under `jascon/example-packs/`, and the example
   folder after importing it.
 - **Two reference validators**: `validate_core.py` (Python, jsonschema
   only) — green; `validate_core.ps1` (PowerShell 5.1, zero dependencies)
-  — green on 2026-11-13 on all 643 vectors of this candidate, on Windows
+  — green on 2026-11-13 on all 665 vectors of this candidate, on Windows
   PowerShell 5.1 (IV.5b item 3). A workflow runs both, and the app's
   port, on every change (`.github/workflows/validators.yml`).
 - **Bidirectional export**: `export_oscal.py` — as at 1.0.0 (OSCAL 1.2.2
