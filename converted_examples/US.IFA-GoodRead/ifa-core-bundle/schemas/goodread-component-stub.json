@@ -7,6 +7,24 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
   "properties": {
+   "title": {
+    "type": "string"
+   },
+   "description": {
+    "type": "object"
+   },
+   "purpose": {
+    "type": "object"
+   },
+   "status": {
+    "type": "string"
+   },
+   "props": {
+    "type": "object"
+   },
+   "responsible-roles": {
+    "type": "array"
+   },
    "control-implementations": {
     "type": "array"
    }

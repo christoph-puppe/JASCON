@@ -84,6 +84,18 @@
      ]
     }
    ]
+  },
+  "https://ifa.gov/goodread/facet/component@1": {
+   "title": " **THIS SYSTEM (SaaS)** ",
+   "description": {
+    "en": "This Leveraging SaaS.\n\nThe entire system as depicted in the system authorization boundary"
+   },
+   "status": "operational",
+   "responsible-roles": [
+    {
+     "role": "admin"
+    }
+   ]
   }
  }
 }

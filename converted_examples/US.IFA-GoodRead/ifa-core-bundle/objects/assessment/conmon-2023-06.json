@@ -65,6 +65,14 @@
    ],
    "reviewed-controls": [
     "ac-6.1"
+   ],
+   "responsible-roles": [
+    {
+     "role": "assessor",
+     "parties": [
+      "https://ifa.gov/goodread/party/amy-assessor"
+     ]
+    }
    ]
   }
  },

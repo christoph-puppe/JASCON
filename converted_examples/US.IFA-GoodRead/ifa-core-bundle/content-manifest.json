@@ -76,57 +76,57 @@
   {
    "id": "https://ifa.gov/goodread/assessment/conmon-2023-06",
    "version": "1.0.0",
-   "package-digest": "sha256:7426a18e5b2f341e470f2348ca1dd3631e63f039f8a14e287a923af2211bbf75",
-   "semantic-digest": "sha256:78cfd69424369edc36628e5e4f3615005d242a7fcfeb8090fe2257a4b24d30f8",
+   "package-digest": "sha256:9f13e14545f9234f0b93679076923165ed5ba600c4bcf9efe4139cc8149a1c7c",
+   "semantic-digest": "sha256:59757824f35dab52f656d5639d01dd02960f55fa93c33ecdc7be41f94899752d",
    "path": "objects/assessment/conmon-2023-06.json"
   },
   {
    "id": "https://ifa.gov/goodread/attestation/ifa-ato",
    "version": "1.1.1",
-   "package-digest": "sha256:8fc4673f7c4f6869f6da9a3a3a59a048d54bd6ad44a07dcfa3b8ebdbf16a168c",
-   "semantic-digest": "sha256:1a21ca1d1db0af1331da89ffb5f3303c6fd6cfa1960828e376ac73e325896030",
+   "package-digest": "sha256:7c46ef9fc1f6676ac0762e2dec6f8b09df9ba91bf10dfa13cd1e3397b2f356da",
+   "semantic-digest": "sha256:46fe7c7ce2bc44dd0526c615b71c6b46ab8d8110324182d9d286add6c3074793",
    "path": "objects/attestation/ifa-ato.json"
   },
   {
    "id": "https://ifa.gov/goodread/component/access-control-appliance",
    "version": "1.0.0",
-   "package-digest": "sha256:e81c84d8ad4348e3d918e779ffc9aa41d8a4e817b7e905200b93f0127a5368e7",
-   "semantic-digest": "sha256:b4862a6be18e5ceb9472ff445162435761087f1a91c694f033fb72042b72167c",
+   "package-digest": "sha256:cebdadc92fe1881d82659dfa6dc13cf7a049fa2bee3157047cc47f37af07fc98",
+   "semantic-digest": "sha256:eb71e5505b9da87647b6203c42a4e6b97e28cb4f8abb263880705fef102c209a",
    "path": "objects/component/access-control-appliance.json"
   },
   {
    "id": "https://ifa.gov/goodread/component/csp-application",
    "version": "1.0.0",
-   "package-digest": "sha256:2018799408292828504c67051d2636a4ae2268ff692790b4c33c7ea49a2f25ac",
-   "semantic-digest": "sha256:9bbf2e70598c8d0d6eeecbcdf3a92865b1ee06cb7b410d4843b1926e4c9b1a0d",
+   "package-digest": "sha256:3e6ead654eda545c326533ed3d980c729eec602a4ca6c78acf98a4c1df87a9cd",
+   "semantic-digest": "sha256:214a2deb5c006b7ea7ac049bbc1a9547fc6865e0d83112467bad3969bf741ee3",
    "path": "objects/component/csp-application.json"
   },
   {
    "id": "https://ifa.gov/goodread/component/csp-iaas",
    "version": "1.0.0",
-   "package-digest": "sha256:84d60864331344032396935be059be379ee9e11948d17d401783684214e9ce70",
-   "semantic-digest": "sha256:992eff1ee0e793a3fcc210a83303a330f9389da66b68c4dd5cfec2e90f29b259",
+   "package-digest": "sha256:efb2ef25a01879b7f3c130f5dfd5b2d4f2a156470f671fa9bd612c00a95fa55b",
+   "semantic-digest": "sha256:8fce8ffdfa3ccee2cf81211780799c0013e7f577a9f9d8ba32f6f13a3da0f126",
    "path": "objects/component/csp-iaas.json"
   },
   {
    "id": "https://ifa.gov/goodread/component/mongodb",
    "version": "20231012",
-   "package-digest": "sha256:b7bddf7d8cc10889c42dd8cd5556736ec8222cc211df6f3ec6d7b83fe23f9ad8",
-   "semantic-digest": "sha256:9ab6dd6b5ecb89b6d293a89c2c66b0744a88e5490f1cc5c64065b07d44d5939d",
+   "package-digest": "sha256:63aeeb6e037838a08160593a58a6ce4f0117b3e6307b22d96135a29c1360191b",
+   "semantic-digest": "sha256:06ede60e2b444f322a72d29390113789d5973bdabc2920fb876539f68fe93584",
    "path": "objects/component/mongodb.json"
   },
   {
    "id": "https://ifa.gov/goodread/component/saas",
    "version": "1.0.0",
-   "package-digest": "sha256:ae6d6856b03f9d4a6f5f592dfa1279ab45ca7f2f641cfc19ccf377914acf8933",
-   "semantic-digest": "sha256:4f8a1b3f80109014a67d6e9be8398cb6d9567269c83ebed15c810f6c17bfd92c",
+   "package-digest": "sha256:578c35f73c20e89451b35dfa34c1117dec7879ddc54a6787428234438dadc729",
+   "semantic-digest": "sha256:d05366e8a75c8fec51ee0e8527cc1210cbe525511e37a7bf91967c62b18f6fd2",
    "path": "objects/component/saas.json"
   },
   {
    "id": "https://ifa.gov/goodread/component/system1234",
    "version": "1.1.1",
-   "package-digest": "sha256:2877ca3b0bf06549bef04a517f1ce48a18779e6e23a5d6389e7abf9a7e8159cc",
-   "semantic-digest": "sha256:85f0aa576ae6f8ceb52cf8cbef07ab4928c18774de18315dd2065ddecb320805",
+   "package-digest": "sha256:afdcf2dba72637ff4821dc6e4441bc5981dd5d83f39c91642518f2171d057d27",
+   "semantic-digest": "sha256:ec5abee77c80a2cf51ca2b8dba0d33ce3190300b72eabfbae4f24975be47a96f",
    "path": "objects/component/system1234.json"
   },
   {
@@ -197,13 +197,13 @@
   {
    "id": "https://ifa.gov/goodread/facet/assessment-plan",
    "exact-version": "1.0.0",
-   "digest": "sha256:f429717108872f328d58973596565ee421d75800c2411687d16d45ffe58038a2",
+   "digest": "sha256:14c538458ca1af10d56604fd81d65f29ea025b0b6887c4833a0d59a11912e0a9",
    "path": "schemas/goodread-ap-stub.json"
   },
   {
    "id": "https://ifa.gov/goodread/facet/component",
    "exact-version": "1.0.0",
-   "digest": "sha256:64a0c9ca3d4cca90e6df76c4297c391c549d58f564aa78ad2e345f8c0267d2ff",
+   "digest": "sha256:bd6b730d76b2765ab157b6271f44750e1200ad1929a76de2ddd0f1eb61a2bd04",
    "path": "schemas/goodread-component-stub.json"
   },
   {
@@ -233,7 +233,7 @@
   {
    "id": "https://ifa.gov/goodread/facet/system",
    "exact-version": "1.0.0",
-   "digest": "sha256:35d25b379a768b2c56251ebc7867e99891c3b962d6981f782d1bd55402b2fd7f",
+   "digest": "sha256:50eb24078476824d1810de0aa17fe477fd88739c170a8c309eb284cc236009a6",
    "path": "schemas/goodread-system-stub.json"
   },
   {

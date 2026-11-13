@@ -278,7 +278,8 @@ def global_occurrence(sources, objects):
 #                          named (read back from the written file)
 #   transformed            a named rule produced the destination from it; the
 #                          rule was applied again to the source and compared
-#   intentionally-dropped  no destination, and a drop() declaration says why
+#   intentionally-dropped  no destination, and a drop() or drop_value()
+#                          declaration says why
 #   unaccounted            none of these - the work queue
 # A value that was deduplicated is linked to what was kept with same(); its
 # outcome is then the kept value's, marked `via`.
@@ -336,6 +337,7 @@ class Ledger:
         self.docs = {}          # tag -> the source document as loaded (never tracked)
         self.leaves = []        # (tag, parts) of every source leaf, in document order
         self._drops = []        # (compiled regex over the collapsed path, reason)
+        self._value_drops = {}  # (tag, parts) -> reason, for a single source leaf
         self._same = []         # (dropped tracked value, kept tracked value, rule)
 
     def source(self, tag, doc):
@@ -363,6 +365,19 @@ class Ledger:
         """Declare that source leaves whose collapsed path matches `pattern`
         are not carried, and why. Applies only where no destination exists."""
         self._drops.append((re.compile(pattern), reason))
+
+    def drop_value(self, value, reason):
+        """Declare that THIS source value (a tracked value, or a structure of
+        them) is not carried, and why. For a decision that depends on the
+        value and not on its path: one party reference among many names a
+        party without a name. Like drop(), it applies only where no
+        destination exists."""
+        if isinstance(value, dict):
+            for v in value.values(): self.drop_value(v, reason)
+        elif isinstance(value, list):
+            for v in value: self.drop_value(v, reason)
+        elif isinstance(value, _Tracked) and value._rule is None:
+            for origin in value._origins: self._value_drops.setdefault(origin, reason)
 
     def same(self, dropped, kept, rule):
         """Deduplication: `dropped` and `kept` are two structures the converter
@@ -453,7 +468,8 @@ class Ledger:
                 outcome = "copied" if any("rule" not in d for d in dests) else "transformed"
                 entry["destinations"] = sorted(dests, key=lambda d: (d["object"] or "", d["pointer"]))
             else:
-                reason = next((why for rx, why in self._drops if rx.search(path)), None)
+                reason = self._value_drops.get(origin)
+                if reason is None: reason = next((why for rx, why in self._drops if rx.search(path)), None)
                 if reason is not None:
                     outcome, entry["reason"] = "intentionally-dropped", reason
                 else:

@@ -6,5 +6,27 @@
  "title": {
   "en": "Application"
  },
- "kind": "software"
+ "kind": "software",
+ "facets": {
+  "https://ifa.gov/goodread/facet/component@1": {
+   "description": {
+    "en": "An application within the IaaS, exposed to SaaS customers and their downstream customers.\n\nThis Leveraged IaaS maintains aspects of the application.\n\nThe Leveraging SaaS maintains aspects of their assigned portion of the application.\n\nThe customers of the Leveraging SaaS maintain aspects of their sub-assigned portions of the application."
+   },
+   "status": "operational",
+   "props": {
+    "implementation-point": "internal"
+   },
+   "responsible-roles": [
+    {
+     "role": "admin"
+    },
+    {
+     "role": "poc-for-customers"
+    },
+    {
+     "role": "customer"
+    }
+   ]
+  }
+ }
 }

@@ -2,10 +2,10 @@
  "measures": "one entry per source leaf value: where it went, checked against the written files",
  "leaf-values": 835,
  "totals": {
-  "copied": 342,
-  "transformed": 44,
-  "intentionally-dropped": 291,
-  "unaccounted": 158
+  "copied": 388,
+  "transformed": 60,
+  "intentionally-dropped": 309,
+  "unaccounted": 78
  },
  "verification-failures": [],
  "unaccounted-paths": [
@@ -38,34 +38,6 @@
    ]
   },
   {
-   "path": "ap.assessment-plan.local-definitions.activities[].responsible-roles[].party-uuids[]",
-   "count": 1,
-   "pointers": [
-    "ap#/assessment-plan/local-definitions/activities/0/responsible-roles/0/party-uuids/0"
-   ]
-  },
-  {
-   "path": "ap.assessment-plan.local-definitions.activities[].responsible-roles[].role-id",
-   "count": 1,
-   "pointers": [
-    "ap#/assessment-plan/local-definitions/activities/0/responsible-roles/0/role-id"
-   ]
-  },
-  {
-   "path": "ap.assessment-plan.metadata.responsible-parties[].party-uuids[]",
-   "count": 1,
-   "pointers": [
-    "ap#/assessment-plan/metadata/responsible-parties/0/party-uuids/0"
-   ]
-  },
-  {
-   "path": "ap.assessment-plan.metadata.responsible-parties[].role-id",
-   "count": 1,
-   "pointers": [
-    "ap#/assessment-plan/metadata/responsible-parties/0/role-id"
-   ]
-  },
-  {
    "path": "ap.assessment-plan.tasks[].associated-activities[].activity-uuid",
    "count": 1,
    "pointers": [
@@ -77,13 +49,6 @@
    "count": 1,
    "pointers": [
     "ap#/assessment-plan/tasks/0/remarks"
-   ]
-  },
-  {
-   "path": "ap.assessment-plan.tasks[].responsible-roles[].role-id",
-   "count": 1,
-   "pointers": [
-    "ap#/assessment-plan/tasks/0/responsible-roles/0/role-id"
    ]
   },
   {
@@ -112,20 +77,6 @@
    "count": 1,
    "pointers": [
     "ar#/assessment-results/local-definitions/activities/0/related-controls/control-selections/0/include-controls/0/control-id"
-   ]
-  },
-  {
-   "path": "ar.assessment-results.local-definitions.activities[].responsible-roles[].party-uuids[]",
-   "count": 1,
-   "pointers": [
-    "ar#/assessment-results/local-definitions/activities/0/responsible-roles/0/party-uuids/0"
-   ]
-  },
-  {
-   "path": "ar.assessment-results.local-definitions.activities[].responsible-roles[].role-id",
-   "count": 1,
-   "pointers": [
-    "ar#/assessment-results/local-definitions/activities/0/responsible-roles/0/role-id"
    ]
   },
   {
@@ -159,13 +110,6 @@
    "count": 1,
    "pointers": [
     "ar#/assessment-results/local-definitions/activities/0/title"
-   ]
-  },
-  {
-   "path": "ar.assessment-results.metadata.responsible-parties[].role-id",
-   "count": 1,
-   "pointers": [
-    "ar#/assessment-results/metadata/responsible-parties/0/role-id"
    ]
   },
   {
@@ -263,42 +207,6 @@
    ]
   },
   {
-   "path": "cdef.component-definition.components[].control-implementations[].implemented-requirements[].statements[].responsible-roles[].role-id",
-   "count": 1,
-   "pointers": [
-    "cdef#/component-definition/components/0/control-implementations/0/implemented-requirements/1/statements/0/responsible-roles/0/role-id"
-   ]
-  },
-  {
-   "path": "cdef.component-definition.components[].description",
-   "count": 1,
-   "pointers": [
-    "cdef#/component-definition/components/0/description"
-   ]
-  },
-  {
-   "path": "cdef.component-definition.components[].purpose",
-   "count": 1,
-   "pointers": [
-    "cdef#/component-definition/components/0/purpose"
-   ]
-  },
-  {
-   "path": "cdef.component-definition.components[].responsible-roles[].party-uuids[]",
-   "count": 1,
-   "pointers": [
-    "cdef#/component-definition/components/0/responsible-roles/0/party-uuids/0"
-   ]
-  },
-  {
-   "path": "cdef.component-definition.components[].responsible-roles[].role-id",
-   "count": 2,
-   "pointers": [
-    "cdef#/component-definition/components/0/responsible-roles/0/role-id",
-    "cdef#/component-definition/components/0/responsible-roles/1/role-id"
-   ]
-  },
-  {
    "path": "lev.system-security-plan.control-implementation.description",
    "count": 1,
    "pointers": [
@@ -337,22 +245,6 @@
    ]
   },
   {
-   "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].export.provided[].responsible-roles[].party-uuids[]",
-   "count": 2,
-   "pointers": [
-    "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/0/export/provided/0/responsible-roles/0/party-uuids/0",
-    "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/export/provided/0/responsible-roles/0/party-uuids/0"
-   ]
-  },
-  {
-   "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].export.provided[].responsible-roles[].role-id",
-   "count": 2,
-   "pointers": [
-    "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/0/export/provided/0/responsible-roles/0/role-id",
-    "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/export/provided/0/responsible-roles/0/role-id"
-   ]
-  },
-  {
    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].export.responsibilities[].provided-uuid",
    "count": 2,
    "pointers": [
@@ -361,84 +253,10 @@
    ]
   },
   {
-   "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].export.responsibilities[].responsible-roles[].party-uuids[]",
-   "count": 2,
-   "pointers": [
-    "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/0/export/responsibilities/0/responsible-roles/0/party-uuids/0",
-    "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/export/responsibilities/0/responsible-roles/0/party-uuids/0"
-   ]
-  },
-  {
-   "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].export.responsibilities[].responsible-roles[].role-id",
-   "count": 2,
-   "pointers": [
-    "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/0/export/responsibilities/0/responsible-roles/0/role-id",
-    "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/export/responsibilities/0/responsible-roles/0/role-id"
-   ]
-  },
-  {
    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].remarks",
    "count": 1,
    "pointers": [
     "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/remarks"
-   ]
-  },
-  {
-   "path": "lev.system-security-plan.system-implementation.components[].description",
-   "count": 2,
-   "pointers": [
-    "lev#/system-security-plan/system-implementation/components/0/description",
-    "lev#/system-security-plan/system-implementation/components/1/description"
-   ]
-  },
-  {
-   "path": "lev.system-security-plan.system-implementation.components[].props[].name",
-   "count": 1,
-   "pointers": [
-    "lev#/system-security-plan/system-implementation/components/1/props/0/name"
-   ]
-  },
-  {
-   "path": "lev.system-security-plan.system-implementation.components[].props[].value",
-   "count": 1,
-   "pointers": [
-    "lev#/system-security-plan/system-implementation/components/1/props/0/value"
-   ]
-  },
-  {
-   "path": "lev.system-security-plan.system-implementation.components[].responsible-roles[].party-uuids[]",
-   "count": 1,
-   "pointers": [
-    "lev#/system-security-plan/system-implementation/components/1/responsible-roles/0/party-uuids/0"
-   ]
-  },
-  {
-   "path": "lev.system-security-plan.system-implementation.components[].responsible-roles[].role-id",
-   "count": 1,
-   "pointers": [
-    "lev#/system-security-plan/system-implementation/components/1/responsible-roles/0/role-id"
-   ]
-  },
-  {
-   "path": "lev.system-security-plan.system-implementation.components[].status.state",
-   "count": 2,
-   "pointers": [
-    "lev#/system-security-plan/system-implementation/components/0/status/state",
-    "lev#/system-security-plan/system-implementation/components/1/status/state"
-   ]
-  },
-  {
-   "path": "lev.system-security-plan.system-implementation.components[].title",
-   "count": 1,
-   "pointers": [
-    "lev#/system-security-plan/system-implementation/components/0/title"
-   ]
-  },
-  {
-   "path": "lev.system-security-plan.system-implementation.users[].role-ids[]",
-   "count": 1,
-   "pointers": [
-    "lev#/system-security-plan/system-implementation/users/0/role-ids/0"
    ]
   },
   {
@@ -488,20 +306,6 @@
    ]
   },
   {
-   "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].responsible-roles[].party-uuids[]",
-   "count": 1,
-   "pointers": [
-    "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/0/responsible-roles/0/party-uuids/0"
-   ]
-  },
-  {
-   "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].responsible-roles[].role-id",
-   "count": 1,
-   "pointers": [
-    "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/0/responsible-roles/0/role-id"
-   ]
-  },
-  {
    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].satisfied[].description",
    "count": 1,
    "pointers": [
@@ -517,103 +321,10 @@
    ]
   },
   {
-   "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].satisfied[].responsible-roles[].party-uuids[]",
-   "count": 1,
-   "pointers": [
-    "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/satisfied/0/responsible-roles/0/party-uuids/0"
-   ]
-  },
-  {
-   "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].satisfied[].responsible-roles[].role-id",
-   "count": 1,
-   "pointers": [
-    "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/satisfied/0/responsible-roles/0/role-id"
-   ]
-  },
-  {
    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].remarks",
    "count": 1,
    "pointers": [
     "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/remarks"
-   ]
-  },
-  {
-   "path": "lvg.system-security-plan.system-implementation.components[].description",
-   "count": 4,
-   "pointers": [
-    "lvg#/system-security-plan/system-implementation/components/0/description",
-    "lvg#/system-security-plan/system-implementation/components/1/description",
-    "lvg#/system-security-plan/system-implementation/components/2/description",
-    "lvg#/system-security-plan/system-implementation/components/3/description"
-   ]
-  },
-  {
-   "path": "lvg.system-security-plan.system-implementation.components[].props[].name",
-   "count": 8,
-   "pointers": [
-    "lvg#/system-security-plan/system-implementation/components/1/props/0/name",
-    "lvg#/system-security-plan/system-implementation/components/1/props/1/name",
-    "lvg#/system-security-plan/system-implementation/components/1/props/2/name",
-    "lvg#/system-security-plan/system-implementation/components/2/props/0/name",
-    "lvg#/system-security-plan/system-implementation/components/2/props/1/name",
-    "lvg#/system-security-plan/system-implementation/components/3/props/0/name",
-    "lvg#/system-security-plan/system-implementation/components/3/props/1/name",
-    "lvg#/system-security-plan/system-implementation/components/3/props/2/name"
-   ]
-  },
-  {
-   "path": "lvg.system-security-plan.system-implementation.components[].props[].value",
-   "count": 8,
-   "pointers": [
-    "lvg#/system-security-plan/system-implementation/components/1/props/0/value",
-    "lvg#/system-security-plan/system-implementation/components/1/props/1/value",
-    "lvg#/system-security-plan/system-implementation/components/1/props/2/value",
-    "lvg#/system-security-plan/system-implementation/components/2/props/0/value",
-    "lvg#/system-security-plan/system-implementation/components/2/props/1/value",
-    "lvg#/system-security-plan/system-implementation/components/3/props/0/value",
-    "lvg#/system-security-plan/system-implementation/components/3/props/1/value",
-    "lvg#/system-security-plan/system-implementation/components/3/props/2/value"
-   ]
-  },
-  {
-   "path": "lvg.system-security-plan.system-implementation.components[].status.state",
-   "count": 4,
-   "pointers": [
-    "lvg#/system-security-plan/system-implementation/components/0/status/state",
-    "lvg#/system-security-plan/system-implementation/components/1/status/state",
-    "lvg#/system-security-plan/system-implementation/components/2/status/state",
-    "lvg#/system-security-plan/system-implementation/components/3/status/state"
-   ]
-  },
-  {
-   "path": "lvg.system-security-plan.system-implementation.components[].title",
-   "count": 3,
-   "pointers": [
-    "lvg#/system-security-plan/system-implementation/components/0/title",
-    "lvg#/system-security-plan/system-implementation/components/1/title",
-    "lvg#/system-security-plan/system-implementation/components/3/title"
-   ]
-  },
-  {
-   "path": "lvg.system-security-plan.system-implementation.components[].type",
-   "count": 2,
-   "pointers": [
-    "lvg#/system-security-plan/system-implementation/components/1/type",
-    "lvg#/system-security-plan/system-implementation/components/3/type"
-   ]
-  },
-  {
-   "path": "lvg.system-security-plan.system-implementation.leveraged-authorizations[].party-uuid",
-   "count": 1,
-   "pointers": [
-    "lvg#/system-security-plan/system-implementation/leveraged-authorizations/0/party-uuid"
-   ]
-  },
-  {
-   "path": "lvg.system-security-plan.system-implementation.users[].role-ids[]",
-   "count": 1,
-   "pointers": [
-    "lvg#/system-security-plan/system-implementation/users/0/role-ids/0"
    ]
   },
   {
@@ -692,61 +403,6 @@
    "count": 1,
    "pointers": [
     "ssp#/system-security-plan/control-implementation/implemented-requirements/0/by-components/0/component-uuid"
-   ]
-  },
-  {
-   "path": "ssp.system-security-plan.metadata.responsible-parties[].party-uuids[]",
-   "count": 2,
-   "pointers": [
-    "ssp#/system-security-plan/metadata/responsible-parties/1/party-uuids/0",
-    "ssp#/system-security-plan/metadata/responsible-parties/2/party-uuids/0"
-   ]
-  },
-  {
-   "path": "ssp.system-security-plan.metadata.responsible-parties[].role-id",
-   "count": 3,
-   "pointers": [
-    "ssp#/system-security-plan/metadata/responsible-parties/0/role-id",
-    "ssp#/system-security-plan/metadata/responsible-parties/1/role-id",
-    "ssp#/system-security-plan/metadata/responsible-parties/2/role-id"
-   ]
-  },
-  {
-   "path": "ssp.system-security-plan.system-implementation.components[].description",
-   "count": 1,
-   "pointers": [
-    "ssp#/system-security-plan/system-implementation/components/0/description"
-   ]
-  },
-  {
-   "path": "ssp.system-security-plan.system-implementation.components[].responsible-roles[].party-uuids[]",
-   "count": 2,
-   "pointers": [
-    "ssp#/system-security-plan/system-implementation/components/0/responsible-roles/0/party-uuids/0",
-    "ssp#/system-security-plan/system-implementation/components/0/responsible-roles/1/party-uuids/0"
-   ]
-  },
-  {
-   "path": "ssp.system-security-plan.system-implementation.components[].responsible-roles[].role-id",
-   "count": 2,
-   "pointers": [
-    "ssp#/system-security-plan/system-implementation/components/0/responsible-roles/0/role-id",
-    "ssp#/system-security-plan/system-implementation/components/0/responsible-roles/1/role-id"
-   ]
-  },
-  {
-   "path": "ssp.system-security-plan.system-implementation.components[].status.state",
-   "count": 1,
-   "pointers": [
-    "ssp#/system-security-plan/system-implementation/components/0/status/state"
-   ]
-  },
-  {
-   "path": "ssp.system-security-plan.system-implementation.users[].role-ids[]",
-   "count": 2,
-   "pointers": [
-    "ssp#/system-security-plan/system-implementation/users/0/role-ids/0",
-    "ssp#/system-security-plan/system-implementation/users/1/role-ids/0"
    ]
   }
  ],
@@ -983,6 +639,11 @@
    "path": "ssp.system-security-plan.metadata.parties[].uuid",
    "destinations": [
     {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/responsible-roles/0/parties/0",
+     "rule": "party reference resolved by uuid; landmark URI from the party's name"
+    },
+    {
      "object": "https://ifa.gov/goodread/risk/goodread-risk-1",
      "pointer": "/owner-ref",
      "rule": "party reference resolved by uuid; landmark URI from the party's name"
@@ -1006,6 +667,11 @@
    "path": "ssp.system-security-plan.metadata.parties[].name",
    "destinations": [
     {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/responsible-roles/0/parties/0",
+     "rule": "party reference resolved by uuid; landmark URI from the party's name"
+    },
+    {
      "object": "https://ifa.gov/goodread/risk/goodread-risk-1",
      "pointer": "/owner-ref",
      "rule": "party reference resolved by uuid; landmark URI from the party's name"
@@ -1027,8 +693,19 @@
   {
    "source": "ssp#/system-security-plan/metadata/parties/1/uuid",
    "path": "ssp.system-security-plan.metadata.parties[].uuid",
-   "reason": "the uuid of a source element: JASCON objects get URIs minted from names and titles, the uuid itself is not carried (uuids that ARE carried or resolved have a destination above)",
-   "outcome": "intentionally-dropped"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1component@1/responsible-roles/0/parties/0",
+     "rule": "party reference resolved by uuid; landmark URI from the party's name"
+    },
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/responsible-roles/1/parties/0",
+     "rule": "party reference resolved by uuid; landmark URI from the party's name"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "ssp#/system-security-plan/metadata/parties/1/type",
@@ -1039,8 +716,19 @@
   {
    "source": "ssp#/system-security-plan/metadata/parties/1/name",
    "path": "ssp.system-security-plan.metadata.parties[].name",
-   "reason": "the source's directory of parties and roles: a party is a landmark URI and there is no party object (register, backlog #16); the name of a party the bundle refers to has a destination above",
-   "outcome": "intentionally-dropped"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1component@1/responsible-roles/0/parties/0",
+     "rule": "party reference resolved by uuid; landmark URI from the party's name"
+    },
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/responsible-roles/1/parties/0",
+     "rule": "party reference resolved by uuid; landmark URI from the party's name"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "ssp#/system-security-plan/metadata/parties/1/member-of-organizations/0",
@@ -1051,8 +739,19 @@
   {
    "source": "ssp#/system-security-plan/metadata/parties/2/uuid",
    "path": "ssp.system-security-plan.metadata.parties[].uuid",
-   "reason": "the uuid of a source element: JASCON objects get URIs minted from names and titles, the uuid itself is not carried (uuids that ARE carried or resolved have a destination above)",
-   "outcome": "intentionally-dropped"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1component@1/responsible-roles/1/parties/0",
+     "rule": "party reference resolved by uuid; landmark URI from the party's name"
+    },
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/responsible-roles/2/parties/0",
+     "rule": "party reference resolved by uuid; landmark URI from the party's name"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "ssp#/system-security-plan/metadata/parties/2/type",
@@ -1063,8 +762,19 @@
   {
    "source": "ssp#/system-security-plan/metadata/parties/2/name",
    "path": "ssp.system-security-plan.metadata.parties[].name",
-   "reason": "the source's directory of parties and roles: a party is a landmark URI and there is no party object (register, backlog #16); the name of a party the bundle refers to has a destination above",
-   "outcome": "intentionally-dropped"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1component@1/responsible-roles/1/parties/0",
+     "rule": "party reference resolved by uuid; landmark URI from the party's name"
+    },
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/responsible-roles/2/parties/0",
+     "rule": "party reference resolved by uuid; landmark URI from the party's name"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "ssp#/system-security-plan/metadata/parties/2/member-of-organizations/0",
@@ -1111,12 +821,23 @@
   {
    "source": "ssp#/system-security-plan/metadata/responsible-parties/0/role-id",
    "path": "ssp.system-security-plan.metadata.responsible-parties[].role-id",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/responsible-roles/0/role"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ssp#/system-security-plan/metadata/responsible-parties/0/party-uuids/0",
    "path": "ssp.system-security-plan.metadata.responsible-parties[].party-uuids[]",
    "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/responsible-roles/0/parties/0",
+     "rule": "party reference resolved by uuid; landmark URI from the party's name"
+    },
     {
      "object": "https://ifa.gov/goodread/risk/goodread-risk-1",
      "pointer": "/owner-ref",
@@ -1133,22 +854,48 @@
   {
    "source": "ssp#/system-security-plan/metadata/responsible-parties/1/role-id",
    "path": "ssp.system-security-plan.metadata.responsible-parties[].role-id",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/responsible-roles/1/role"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ssp#/system-security-plan/metadata/responsible-parties/1/party-uuids/0",
    "path": "ssp.system-security-plan.metadata.responsible-parties[].party-uuids[]",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/responsible-roles/1/parties/0",
+     "rule": "party reference resolved by uuid; landmark URI from the party's name"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "ssp#/system-security-plan/metadata/responsible-parties/2/role-id",
    "path": "ssp.system-security-plan.metadata.responsible-parties[].role-id",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/responsible-roles/2/role"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ssp#/system-security-plan/metadata/responsible-parties/2/party-uuids/0",
    "path": "ssp.system-security-plan.metadata.responsible-parties[].party-uuids[]",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1system@1/responsible-roles/2/parties/0",
+     "rule": "party reference resolved by uuid; landmark URI from the party's name"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "ssp#/system-security-plan/import-profile/href",
@@ -1460,7 +1207,14 @@
   {
    "source": "ssp#/system-security-plan/system-implementation/users/0/role-ids/0",
    "path": "ssp.system-security-plan.system-implementation.users[].role-ids[]",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1component@1/responsible-roles/0/role",
+     "via": "a role assigned at a user, carried once per Component or scope"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ssp#/system-security-plan/system-implementation/users/0/authorized-privileges/0/title",
@@ -1581,7 +1335,13 @@
   {
    "source": "ssp#/system-security-plan/system-implementation/users/1/role-ids/0",
    "path": "ssp.system-security-plan.system-implementation.users[].role-ids[]",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1component@1/responsible-roles/2/role"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ssp#/system-security-plan/system-implementation/users/1/authorized-privileges/0/title",
@@ -1731,32 +1491,70 @@
   {
    "source": "ssp#/system-security-plan/system-implementation/components/0/description",
    "path": "ssp.system-security-plan.system-implementation.components[].description",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1component@1/description/en"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ssp#/system-security-plan/system-implementation/components/0/status/state",
    "path": "ssp.system-security-plan.system-implementation.components[].status.state",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1component@1/status"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ssp#/system-security-plan/system-implementation/components/0/responsible-roles/0/role-id",
    "path": "ssp.system-security-plan.system-implementation.components[].responsible-roles[].role-id",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1component@1/responsible-roles/0/role"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ssp#/system-security-plan/system-implementation/components/0/responsible-roles/0/party-uuids/0",
    "path": "ssp.system-security-plan.system-implementation.components[].responsible-roles[].party-uuids[]",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1component@1/responsible-roles/0/parties/0",
+     "rule": "party reference resolved by uuid; landmark URI from the party's name"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "ssp#/system-security-plan/system-implementation/components/0/responsible-roles/1/role-id",
    "path": "ssp.system-security-plan.system-implementation.components[].responsible-roles[].role-id",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1component@1/responsible-roles/1/role"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ssp#/system-security-plan/system-implementation/components/0/responsible-roles/1/party-uuids/0",
    "path": "ssp.system-security-plan.system-implementation.components[].responsible-roles[].party-uuids[]",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/system1234",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1component@1/responsible-roles/1/parties/0",
+     "rule": "party reference resolved by uuid; landmark URI from the party's name"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "ssp#/system-security-plan/system-implementation/inventory-items/0/uuid",
@@ -3227,8 +3025,20 @@
   {
    "source": "ap#/assessment-plan/metadata/parties/0/uuid",
    "path": "ap.assessment-plan.metadata.parties[].uuid",
-   "reason": "the uuid of a source element: JASCON objects get URIs minted from names and titles, the uuid itself is not carried (uuids that ARE carried or resolved have a destination above)",
-   "outcome": "intentionally-dropped"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/method/https:~1~1ifa.gov~1goodread~1facet~1assessment-plan@1/responsible-roles/0/parties/0",
+     "rule": "party reference resolved by uuid; landmark URI from the party's name"
+    },
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/method/https:~1~1ifa.gov~1goodread~1facet~1assessment-plan@1/responsible-roles/0/parties/0",
+     "rule": "party reference resolved by uuid; landmark URI from the party's name",
+     "via": "a role assigned at an activity, carried once per Component or scope"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "ap#/assessment-plan/metadata/parties/0/type",
@@ -3239,8 +3049,20 @@
   {
    "source": "ap#/assessment-plan/metadata/parties/0/name",
    "path": "ap.assessment-plan.metadata.parties[].name",
-   "reason": "the source's directory of parties and roles: a party is a landmark URI and there is no party object (register, backlog #16); the name of a party the bundle refers to has a destination above",
-   "outcome": "intentionally-dropped"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/method/https:~1~1ifa.gov~1goodread~1facet~1assessment-plan@1/responsible-roles/0/parties/0",
+     "rule": "party reference resolved by uuid; landmark URI from the party's name"
+    },
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/method/https:~1~1ifa.gov~1goodread~1facet~1assessment-plan@1/responsible-roles/0/parties/0",
+     "rule": "party reference resolved by uuid; landmark URI from the party's name",
+     "via": "a role assigned at an activity, carried once per Component or scope"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "ap#/assessment-plan/metadata/parties/0/member-of-organizations/0",
@@ -3287,12 +3109,25 @@
   {
    "source": "ap#/assessment-plan/metadata/responsible-parties/0/role-id",
    "path": "ap.assessment-plan.metadata.responsible-parties[].role-id",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/method/https:~1~1ifa.gov~1goodread~1facet~1assessment-plan@1/responsible-roles/0/role"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ap#/assessment-plan/metadata/responsible-parties/0/party-uuids/0",
    "path": "ap.assessment-plan.metadata.responsible-parties[].party-uuids[]",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/method/https:~1~1ifa.gov~1goodread~1facet~1assessment-plan@1/responsible-roles/0/parties/0",
+     "rule": "party reference resolved by uuid; landmark URI from the party's name"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "ap#/assessment-plan/metadata/remarks",
@@ -3525,12 +3360,27 @@
   {
    "source": "ap#/assessment-plan/local-definitions/activities/0/responsible-roles/0/role-id",
    "path": "ap.assessment-plan.local-definitions.activities[].responsible-roles[].role-id",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/method/https:~1~1ifa.gov~1goodread~1facet~1assessment-plan@1/responsible-roles/0/role",
+     "via": "a role assigned at an activity, carried once per Component or scope"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ap#/assessment-plan/local-definitions/activities/0/responsible-roles/0/party-uuids/0",
    "path": "ap.assessment-plan.local-definitions.activities[].responsible-roles[].party-uuids[]",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/method/https:~1~1ifa.gov~1goodread~1facet~1assessment-plan@1/responsible-roles/0/parties/0",
+     "rule": "party reference resolved by uuid; landmark URI from the party's name",
+     "via": "a role assigned at an activity, carried once per Component or scope"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "ap#/assessment-plan/reviewed-controls/control-selections/0/include-controls/0/control-id",
@@ -3596,7 +3446,14 @@
   {
    "source": "ap#/assessment-plan/tasks/0/responsible-roles/0/role-id",
    "path": "ap.assessment-plan.tasks[].responsible-roles[].role-id",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/method/https:~1~1ifa.gov~1goodread~1facet~1assessment-plan@1/responsible-roles/0/role",
+     "via": "a role assigned at a task, carried once per Component or scope"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ap#/assessment-plan/tasks/0/remarks",
@@ -3823,6 +3680,18 @@
    "destinations": [
     {
      "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/method/https:~1~1ifa.gov~1goodread~1facet~1assessment-plan@1/responsible-roles/0/parties/0",
+     "rule": "party reference resolved by uuid; landmark URI from the party's name",
+     "via": "a role assigned at the assessment results, carried once per Component or scope"
+    },
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/method/https:~1~1ifa.gov~1goodread~1facet~1assessment-plan@1/responsible-roles/0/parties/0",
+     "rule": "party reference resolved by uuid; landmark URI from the party's name",
+     "via": "a role assigned at an activity, carried once per Component or scope"
+    },
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
      "pointer": "/performer-ref",
      "rule": "party reference resolved by uuid; landmark URI from the party's name"
     }
@@ -3839,6 +3708,18 @@
    "source": "ar#/assessment-results/metadata/parties/0/name",
    "path": "ar.assessment-results.metadata.parties[].name",
    "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/method/https:~1~1ifa.gov~1goodread~1facet~1assessment-plan@1/responsible-roles/0/parties/0",
+     "rule": "party reference resolved by uuid; landmark URI from the party's name",
+     "via": "a role assigned at the assessment results, carried once per Component or scope"
+    },
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/method/https:~1~1ifa.gov~1goodread~1facet~1assessment-plan@1/responsible-roles/0/parties/0",
+     "rule": "party reference resolved by uuid; landmark URI from the party's name",
+     "via": "a role assigned at an activity, carried once per Component or scope"
+    },
     {
      "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
      "pointer": "/performer-ref",
@@ -3892,12 +3773,25 @@
   {
    "source": "ar#/assessment-results/metadata/responsible-parties/0/role-id",
    "path": "ar.assessment-results.metadata.responsible-parties[].role-id",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/method/https:~1~1ifa.gov~1goodread~1facet~1assessment-plan@1/responsible-roles/0/role",
+     "via": "a role assigned at the assessment results, carried once per Component or scope"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ar#/assessment-results/metadata/responsible-parties/0/party-uuids/0",
    "path": "ar.assessment-results.metadata.responsible-parties[].party-uuids[]",
    "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/method/https:~1~1ifa.gov~1goodread~1facet~1assessment-plan@1/responsible-roles/0/parties/0",
+     "rule": "party reference resolved by uuid; landmark URI from the party's name",
+     "via": "a role assigned at the assessment results, carried once per Component or scope"
+    },
     {
      "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
      "pointer": "/performer-ref",
@@ -4015,12 +3909,27 @@
   {
    "source": "ar#/assessment-results/local-definitions/activities/0/responsible-roles/0/role-id",
    "path": "ar.assessment-results.local-definitions.activities[].responsible-roles[].role-id",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/method/https:~1~1ifa.gov~1goodread~1facet~1assessment-plan@1/responsible-roles/0/role",
+     "via": "a role assigned at an activity, carried once per Component or scope"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "ar#/assessment-results/local-definitions/activities/0/responsible-roles/0/party-uuids/0",
    "path": "ar.assessment-results.local-definitions.activities[].responsible-roles[].party-uuids[]",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
+     "pointer": "/method/https:~1~1ifa.gov~1goodread~1facet~1assessment-plan@1/responsible-roles/0/parties/0",
+     "rule": "party reference resolved by uuid; landmark URI from the party's name",
+     "via": "a role assigned at an activity, carried once per Component or scope"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "ar#/assessment-results/results/0/uuid",
@@ -5995,7 +5904,13 @@
   {
    "source": "lev#/system-security-plan/system-implementation/users/0/role-ids/0",
    "path": "lev.system-security-plan.system-implementation.users[].role-ids[]",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/csp-iaas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1component@1/responsible-roles/0/role"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lev#/system-security-plan/system-implementation/users/0/authorized-privileges/0/title",
@@ -6040,17 +5955,35 @@
   {
    "source": "lev#/system-security-plan/system-implementation/components/0/title",
    "path": "lev.system-security-plan.system-implementation.components[].title",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/csp-iaas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1component@1/title"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lev#/system-security-plan/system-implementation/components/0/description",
    "path": "lev.system-security-plan.system-implementation.components[].description",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/csp-iaas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1component@1/description/en"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lev#/system-security-plan/system-implementation/components/0/status/state",
    "path": "lev.system-security-plan.system-implementation.components[].status.state",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/csp-iaas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1component@1/status"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lev#/system-security-plan/system-implementation/components/1/uuid",
@@ -6088,32 +6021,64 @@
   {
    "source": "lev#/system-security-plan/system-implementation/components/1/description",
    "path": "lev.system-security-plan.system-implementation.components[].description",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/csp-application",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1component@1/description/en"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lev#/system-security-plan/system-implementation/components/1/props/0/name",
    "path": "lev.system-security-plan.system-implementation.components[].props[].name",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/csp-application",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1component@1/props/implementation-point",
+     "as": "key"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lev#/system-security-plan/system-implementation/components/1/props/0/value",
    "path": "lev.system-security-plan.system-implementation.components[].props[].value",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/csp-application",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1component@1/props/implementation-point"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lev#/system-security-plan/system-implementation/components/1/status/state",
    "path": "lev.system-security-plan.system-implementation.components[].status.state",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/csp-application",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1component@1/status"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lev#/system-security-plan/system-implementation/components/1/responsible-roles/0/role-id",
    "path": "lev.system-security-plan.system-implementation.components[].responsible-roles[].role-id",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/csp-application",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1component@1/responsible-roles/0/role"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lev#/system-security-plan/system-implementation/components/1/responsible-roles/0/party-uuids/0",
    "path": "lev.system-security-plan.system-implementation.components[].responsible-roles[].party-uuids[]",
-   "outcome": "unaccounted"
+   "reason": "a reference to a party the source defines without a name: no landmark URI can name it, so its role is carried without a party",
+   "outcome": "intentionally-dropped"
   },
   {
    "source": "lev#/system-security-plan/control-implementation/description",
@@ -6220,12 +6185,19 @@
   {
    "source": "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/0/export/provided/0/responsible-roles/0/role-id",
    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].export.provided[].responsible-roles[].role-id",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/csp-iaas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1component@1/responsible-roles/1/role"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/0/export/provided/0/responsible-roles/0/party-uuids/0",
    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].export.provided[].responsible-roles[].party-uuids[]",
-   "outcome": "unaccounted"
+   "reason": "a reference to a party the source defines without a name: no landmark URI can name it, so its role is carried without a party",
+   "outcome": "intentionally-dropped"
   },
   {
    "source": "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/0/export/responsibilities/0/uuid",
@@ -6252,12 +6224,19 @@
   {
    "source": "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/0/export/responsibilities/0/responsible-roles/0/role-id",
    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].export.responsibilities[].responsible-roles[].role-id",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/csp-iaas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1component@1/responsible-roles/2/role"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/0/export/responsibilities/0/responsible-roles/0/party-uuids/0",
    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].export.responsibilities[].responsible-roles[].party-uuids[]",
-   "outcome": "unaccounted"
+   "reason": "a reference to a party the source defines without a name: no landmark URI can name it, so its role is carried without a party",
+   "outcome": "intentionally-dropped"
   },
   {
    "source": "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/component-uuid",
@@ -6300,12 +6279,19 @@
   {
    "source": "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/export/provided/0/responsible-roles/0/role-id",
    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].export.provided[].responsible-roles[].role-id",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/csp-application",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1component@1/responsible-roles/1/role"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/export/provided/0/responsible-roles/0/party-uuids/0",
    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].export.provided[].responsible-roles[].party-uuids[]",
-   "outcome": "unaccounted"
+   "reason": "a reference to a party the source defines without a name: no landmark URI can name it, so its role is carried without a party",
+   "outcome": "intentionally-dropped"
   },
   {
    "source": "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/export/responsibilities/0/uuid",
@@ -6332,12 +6318,19 @@
   {
    "source": "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/export/responsibilities/0/responsible-roles/0/role-id",
    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].export.responsibilities[].responsible-roles[].role-id",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/csp-application",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1component@1/responsible-roles/2/role"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/export/responsibilities/0/responsible-roles/0/party-uuids/0",
    "path": "lev.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].export.responsibilities[].responsible-roles[].party-uuids[]",
-   "outcome": "unaccounted"
+   "reason": "a reference to a party the source defines without a name: no landmark URI can name it, so its role is carried without a party",
+   "outcome": "intentionally-dropped"
   },
   {
    "source": "lev#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/remarks",
@@ -6831,7 +6824,8 @@
   {
    "source": "lvg#/system-security-plan/system-implementation/leveraged-authorizations/0/party-uuid",
    "path": "lvg.system-security-plan.system-implementation.leveraged-authorizations[].party-uuid",
-   "outcome": "unaccounted"
+   "reason": "a reference to a party the source defines without a name: no landmark URI can name it, so its role is carried without a party",
+   "outcome": "intentionally-dropped"
   },
   {
    "source": "lvg#/system-security-plan/system-implementation/leveraged-authorizations/0/date-authorized",
@@ -6854,7 +6848,13 @@
   {
    "source": "lvg#/system-security-plan/system-implementation/users/0/role-ids/0",
    "path": "lvg.system-security-plan.system-implementation.users[].role-ids[]",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/saas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1component@1/responsible-roles/0/role"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lvg#/system-security-plan/system-implementation/users/0/authorized-privileges/0/title",
@@ -6899,73 +6899,107 @@
   {
    "source": "lvg#/system-security-plan/system-implementation/components/0/title",
    "path": "lvg.system-security-plan.system-implementation.components[].title",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/saas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1component@1/title"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lvg#/system-security-plan/system-implementation/components/0/description",
    "path": "lvg.system-security-plan.system-implementation.components[].description",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/saas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1component@1/description/en"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lvg#/system-security-plan/system-implementation/components/0/status/state",
    "path": "lvg.system-security-plan.system-implementation.components[].status.state",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/saas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1component@1/status"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lvg#/system-security-plan/system-implementation/components/1/uuid",
    "path": "lvg.system-security-plan.system-implementation.components[].uuid",
-   "reason": "the uuid of a source element: JASCON objects get URIs minted from names and titles, the uuid itself is not carried (uuids that ARE carried or resolved have a destination above)",
+   "reason": "the leveraging plan's own entry for a component of the leveraged system; the provider's Component, converted from the leveraged plan, stands for it",
    "outcome": "intentionally-dropped"
   },
   {
    "source": "lvg#/system-security-plan/system-implementation/components/1/type",
    "path": "lvg.system-security-plan.system-implementation.components[].type",
-   "outcome": "unaccounted"
+   "reason": "the leveraging plan's own entry for a component of the leveraged system; the provider's Component, converted from the leveraged plan, stands for it",
+   "outcome": "intentionally-dropped"
   },
   {
    "source": "lvg#/system-security-plan/system-implementation/components/1/title",
    "path": "lvg.system-security-plan.system-implementation.components[].title",
-   "outcome": "unaccounted"
+   "reason": "the leveraging plan's own entry for a component of the leveraged system; the provider's Component, converted from the leveraged plan, stands for it",
+   "outcome": "intentionally-dropped"
   },
   {
    "source": "lvg#/system-security-plan/system-implementation/components/1/description",
    "path": "lvg.system-security-plan.system-implementation.components[].description",
-   "outcome": "unaccounted"
+   "reason": "the leveraging plan's own entry for a component of the leveraged system; the provider's Component, converted from the leveraged plan, stands for it",
+   "outcome": "intentionally-dropped"
   },
   {
    "source": "lvg#/system-security-plan/system-implementation/components/1/props/0/name",
    "path": "lvg.system-security-plan.system-implementation.components[].props[].name",
-   "outcome": "unaccounted"
+   "reason": "the leveraging plan's own entry for a component of the leveraged system; the provider's Component, converted from the leveraged plan, stands for it",
+   "outcome": "intentionally-dropped"
   },
   {
    "source": "lvg#/system-security-plan/system-implementation/components/1/props/0/value",
    "path": "lvg.system-security-plan.system-implementation.components[].props[].value",
-   "outcome": "unaccounted"
+   "reason": "the leveraging plan's own entry for a component of the leveraged system; the provider's Component, converted from the leveraged plan, stands for it",
+   "outcome": "intentionally-dropped"
   },
   {
    "source": "lvg#/system-security-plan/system-implementation/components/1/props/1/name",
    "path": "lvg.system-security-plan.system-implementation.components[].props[].name",
-   "outcome": "unaccounted"
+   "reason": "the leveraging plan's own entry for a component of the leveraged system; the provider's Component, converted from the leveraged plan, stands for it",
+   "outcome": "intentionally-dropped"
   },
   {
    "source": "lvg#/system-security-plan/system-implementation/components/1/props/1/value",
    "path": "lvg.system-security-plan.system-implementation.components[].props[].value",
-   "outcome": "unaccounted"
+   "reason": "the leveraging plan's own entry for a component of the leveraged system; the provider's Component, converted from the leveraged plan, stands for it",
+   "outcome": "intentionally-dropped"
   },
   {
    "source": "lvg#/system-security-plan/system-implementation/components/1/props/2/name",
    "path": "lvg.system-security-plan.system-implementation.components[].props[].name",
-   "outcome": "unaccounted"
+   "reason": "the leveraging plan's own entry for a component of the leveraged system; the provider's Component, converted from the leveraged plan, stands for it",
+   "outcome": "intentionally-dropped"
   },
   {
    "source": "lvg#/system-security-plan/system-implementation/components/1/props/2/value",
    "path": "lvg.system-security-plan.system-implementation.components[].props[].value",
-   "outcome": "unaccounted"
+   "reason": "the leveraging plan's own entry for a component of the leveraged system; the provider's Component, converted from the leveraged plan, stands for it",
+   "outcome": "intentionally-dropped"
   },
   {
    "source": "lvg#/system-security-plan/system-implementation/components/1/status/state",
    "path": "lvg.system-security-plan.system-implementation.components[].status.state",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/csp-iaas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1component@1/status",
+     "via": "the leveraging plan's entry for a leveraged component; the provider's Component stands for it"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lvg#/system-security-plan/system-implementation/components/2/uuid",
@@ -7005,88 +7039,142 @@
   {
    "source": "lvg#/system-security-plan/system-implementation/components/2/description",
    "path": "lvg.system-security-plan.system-implementation.components[].description",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/access-control-appliance",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1component@1/description/en"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lvg#/system-security-plan/system-implementation/components/2/props/0/name",
    "path": "lvg.system-security-plan.system-implementation.components[].props[].name",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/access-control-appliance",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1component@1/props/implementation-point",
+     "as": "key"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lvg#/system-security-plan/system-implementation/components/2/props/0/value",
    "path": "lvg.system-security-plan.system-implementation.components[].props[].value",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/access-control-appliance",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1component@1/props/implementation-point"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lvg#/system-security-plan/system-implementation/components/2/props/1/name",
    "path": "lvg.system-security-plan.system-implementation.components[].props[].name",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/access-control-appliance",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1component@1/props/virtual",
+     "as": "key"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lvg#/system-security-plan/system-implementation/components/2/props/1/value",
    "path": "lvg.system-security-plan.system-implementation.components[].props[].value",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/access-control-appliance",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1component@1/props/virtual"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lvg#/system-security-plan/system-implementation/components/2/status/state",
    "path": "lvg.system-security-plan.system-implementation.components[].status.state",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/access-control-appliance",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1component@1/status"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lvg#/system-security-plan/system-implementation/components/3/uuid",
    "path": "lvg.system-security-plan.system-implementation.components[].uuid",
-   "reason": "the uuid of a source element: JASCON objects get URIs minted from names and titles, the uuid itself is not carried (uuids that ARE carried or resolved have a destination above)",
+   "reason": "the leveraging plan's own entry for a component of the leveraged system; the provider's Component, converted from the leveraged plan, stands for it",
    "outcome": "intentionally-dropped"
   },
   {
    "source": "lvg#/system-security-plan/system-implementation/components/3/type",
    "path": "lvg.system-security-plan.system-implementation.components[].type",
-   "outcome": "unaccounted"
+   "reason": "the leveraging plan's own entry for a component of the leveraged system; the provider's Component, converted from the leveraged plan, stands for it",
+   "outcome": "intentionally-dropped"
   },
   {
    "source": "lvg#/system-security-plan/system-implementation/components/3/title",
    "path": "lvg.system-security-plan.system-implementation.components[].title",
-   "outcome": "unaccounted"
+   "reason": "the leveraging plan's own entry for a component of the leveraged system; the provider's Component, converted from the leveraged plan, stands for it",
+   "outcome": "intentionally-dropped"
   },
   {
    "source": "lvg#/system-security-plan/system-implementation/components/3/description",
    "path": "lvg.system-security-plan.system-implementation.components[].description",
-   "outcome": "unaccounted"
+   "reason": "the leveraging plan's own entry for a component of the leveraged system; the provider's Component, converted from the leveraged plan, stands for it",
+   "outcome": "intentionally-dropped"
   },
   {
    "source": "lvg#/system-security-plan/system-implementation/components/3/props/0/name",
    "path": "lvg.system-security-plan.system-implementation.components[].props[].name",
-   "outcome": "unaccounted"
+   "reason": "the leveraging plan's own entry for a component of the leveraged system; the provider's Component, converted from the leveraged plan, stands for it",
+   "outcome": "intentionally-dropped"
   },
   {
    "source": "lvg#/system-security-plan/system-implementation/components/3/props/0/value",
    "path": "lvg.system-security-plan.system-implementation.components[].props[].value",
-   "outcome": "unaccounted"
+   "reason": "the leveraging plan's own entry for a component of the leveraged system; the provider's Component, converted from the leveraged plan, stands for it",
+   "outcome": "intentionally-dropped"
   },
   {
    "source": "lvg#/system-security-plan/system-implementation/components/3/props/1/name",
    "path": "lvg.system-security-plan.system-implementation.components[].props[].name",
-   "outcome": "unaccounted"
+   "reason": "the leveraging plan's own entry for a component of the leveraged system; the provider's Component, converted from the leveraged plan, stands for it",
+   "outcome": "intentionally-dropped"
   },
   {
    "source": "lvg#/system-security-plan/system-implementation/components/3/props/1/value",
    "path": "lvg.system-security-plan.system-implementation.components[].props[].value",
-   "outcome": "unaccounted"
+   "reason": "the leveraging plan's own entry for a component of the leveraged system; the provider's Component, converted from the leveraged plan, stands for it",
+   "outcome": "intentionally-dropped"
   },
   {
    "source": "lvg#/system-security-plan/system-implementation/components/3/props/2/name",
    "path": "lvg.system-security-plan.system-implementation.components[].props[].name",
-   "outcome": "unaccounted"
+   "reason": "the leveraging plan's own entry for a component of the leveraged system; the provider's Component, converted from the leveraged plan, stands for it",
+   "outcome": "intentionally-dropped"
   },
   {
    "source": "lvg#/system-security-plan/system-implementation/components/3/props/2/value",
    "path": "lvg.system-security-plan.system-implementation.components[].props[].value",
-   "outcome": "unaccounted"
+   "reason": "the leveraging plan's own entry for a component of the leveraged system; the provider's Component, converted from the leveraged plan, stands for it",
+   "outcome": "intentionally-dropped"
   },
   {
    "source": "lvg#/system-security-plan/system-implementation/components/3/status/state",
    "path": "lvg.system-security-plan.system-implementation.components[].status.state",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/csp-application",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1component@1/status",
+     "via": "the leveraging plan's entry for a leveraged component; the provider's Component stands for it"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lvg#/system-security-plan/control-implementation/description",
@@ -7171,12 +7259,20 @@
   {
    "source": "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/0/responsible-roles/0/role-id",
    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].responsible-roles[].role-id",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/saas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1component@1/responsible-roles/0/role",
+     "via": "a role assigned at a response by the component, carried once per Component or scope"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/0/responsible-roles/0/party-uuids/0",
    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].responsible-roles[].party-uuids[]",
-   "outcome": "unaccounted"
+   "reason": "a reference to a party the source defines without a name: no landmark URI can name it, so its role is carried without a party",
+   "outcome": "intentionally-dropped"
   },
   {
    "source": "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/component-uuid",
@@ -7219,12 +7315,20 @@
   {
    "source": "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/satisfied/0/responsible-roles/0/role-id",
    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].satisfied[].responsible-roles[].role-id",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/saas",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1component@1/responsible-roles/0/role",
+     "via": "a role assigned at a satisfied responsibility, carried once per Component or scope"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/satisfied/0/responsible-roles/0/party-uuids/0",
    "path": "lvg.system-security-plan.control-implementation.implemented-requirements[].statements[].by-components[].satisfied[].responsible-roles[].party-uuids[]",
-   "outcome": "unaccounted"
+   "reason": "a reference to a party the source defines without a name: no landmark URI can name it, so its role is carried without a party",
+   "outcome": "intentionally-dropped"
   },
   {
    "source": "lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/2/component-uuid",
@@ -7452,8 +7556,14 @@
   {
    "source": "cdef#/component-definition/metadata/parties/0/uuid",
    "path": "cdef.component-definition.metadata.parties[].uuid",
-   "reason": "the uuid of a source element: JASCON objects get URIs minted from names and titles, the uuid itself is not carried (uuids that ARE carried or resolved have a destination above)",
-   "outcome": "intentionally-dropped"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/mongodb",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1component@1/responsible-roles/0/parties/0",
+     "rule": "party reference resolved by uuid; landmark URI from the party's name"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "cdef#/component-definition/metadata/parties/0/type",
@@ -7464,8 +7574,14 @@
   {
    "source": "cdef#/component-definition/metadata/parties/0/name",
    "path": "cdef.component-definition.metadata.parties[].name",
-   "reason": "the source's directory of parties and roles: a party is a landmark URI and there is no party object (register, backlog #16); the name of a party the bundle refers to has a destination above",
-   "outcome": "intentionally-dropped"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/mongodb",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1component@1/responsible-roles/0/parties/0",
+     "rule": "party reference resolved by uuid; landmark URI from the party's name"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "cdef#/component-definition/metadata/parties/0/links/0/href",
@@ -7525,27 +7641,58 @@
   {
    "source": "cdef#/component-definition/components/0/description",
    "path": "cdef.component-definition.components[].description",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/mongodb",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1component@1/description/en"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "cdef#/component-definition/components/0/purpose",
    "path": "cdef.component-definition.components[].purpose",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/mongodb",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1component@1/purpose/en"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "cdef#/component-definition/components/0/responsible-roles/0/role-id",
    "path": "cdef.component-definition.components[].responsible-roles[].role-id",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/mongodb",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1component@1/responsible-roles/0/role"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "cdef#/component-definition/components/0/responsible-roles/0/party-uuids/0",
    "path": "cdef.component-definition.components[].responsible-roles[].party-uuids[]",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/mongodb",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1component@1/responsible-roles/0/parties/0",
+     "rule": "party reference resolved by uuid; landmark URI from the party's name"
+    }
+   ],
+   "outcome": "transformed"
   },
   {
    "source": "cdef#/component-definition/components/0/responsible-roles/1/role-id",
    "path": "cdef.component-definition.components[].responsible-roles[].role-id",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/mongodb",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1component@1/responsible-roles/1/role"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "cdef#/component-definition/components/0/protocols/0/uuid",
@@ -7970,7 +8117,14 @@
   {
    "source": "cdef#/component-definition/components/0/control-implementations/0/implemented-requirements/1/statements/0/responsible-roles/0/role-id",
    "path": "cdef.component-definition.components[].control-implementations[].implemented-requirements[].statements[].responsible-roles[].role-id",
-   "outcome": "unaccounted"
+   "destinations": [
+    {
+     "object": "https://ifa.gov/goodread/component/mongodb",
+     "pointer": "/facets/https:~1~1ifa.gov~1goodread~1facet~1component@1/responsible-roles/1/role",
+     "via": "a role assigned at a statement, carried once per Component or scope"
+    }
+   ],
+   "outcome": "copied"
   },
   {
    "source": "cdef#/component-definition/components/0/control-implementations/0/implemented-requirements/2/uuid",

@@ -85,12 +85,29 @@
    ]
   },
   "https://ifa.gov/goodread/facet/component@1": {
+   "description": {
+    "en": "MongoDB is a source-available, cross-platform document-oriented database program. Classified as a NoSQL database program, MongoDB uses JSON-like documents with optional schemas."
+   },
+   "purpose": {
+    "en": "Provides a NoSQL database service"
+   },
    "control-implementations": [
     {
      "description": {
       "en": "MongoDB control implementations for NIST SP 800-53 revision 5."
      },
      "source": "../../../nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_MODERATE-baseline_profile.json"
+    }
+   ],
+   "responsible-roles": [
+    {
+     "role": "provider",
+     "parties": [
+      "https://ifa.gov/goodread/party/mongodb"
+     ]
+    },
+    {
+     "role": "customer"
     }
    ]
   }

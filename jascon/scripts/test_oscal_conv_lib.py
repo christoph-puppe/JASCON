@@ -235,6 +235,19 @@ class Issue33Ledger(unittest.TestCase):
         self.assertEqual(e["src#/items/1/title"]["outcome"], "unaccounted", "a drop covers only what it names")
         self.assertEqual(sum(r["totals"].values()), r["leaf-values"])
 
+    def test_one_value_is_dropped_by_name_not_by_path(self):
+        source = {"roles": [{"role": "admin", "party": "p-1"}, {"role": "owner", "party": "p-2"}]}
+        def convert(src, led):
+            led.drop_value(src["roles"][1]["party"], "the party record has no name")
+            led.drop_value(src["roles"][0]["role"], "never applies: the value has a destination")
+            return {"o/a.json": {"id": "https://ex.org/a", "roles": [r["role"] for r in src["roles"]]}}
+        r = self.run_ledger(source, convert)
+        e = {x["source"]: x for x in r["entries"]}
+        self.assertEqual((e["src#/roles/1/party"]["outcome"], e["src#/roles/1/party"]["reason"]),
+                         ("intentionally-dropped", "the party record has no name"))
+        self.assertEqual(e["src#/roles/0/party"]["outcome"], "unaccounted", "the same path, another value: not covered")
+        self.assertEqual(e["src#/roles/0/role"]["outcome"], "copied")
+
     def test_tracking_changes_nothing_that_is_written(self):
         source = {"n": 27017, "s": "text", "nested": [{"k": "v"}]}
         led = Ledger(); tracked = led.source("src", source)

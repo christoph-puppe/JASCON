@@ -132,6 +132,64 @@ def party_uri(doc, uuid, default_slug):
                      uuid, p["uuid"], p.get("name", default_slug))
     return f"{NS}/party/{default_slug}"
 
+# ---------- roles: per Component and for the whole scope ----------
+# OSCAL assigns roles at every level: to the document, to a component, to a
+# statement, an exported capability, an activity, a task, a user. The bundle
+# carries them at TWO levels only (author decision 2026-11-13): on the
+# Component, in component@1, and for the whole scope, in system@1 of the
+# system Component and in the method payload of the Assessment. An
+# assignment made below those levels is rolled up to the Component it sits
+# under, or to the scope where it has none: if that role and party is there
+# already the lower occurrence is linked to it (Ledger.same), else it joins
+# the list. One entry per role: {role, parties: [landmark URI, ...]}.
+# A party the source defines without a name, or does not define, cannot be
+# named by a landmark URI: the role is carried without it, the reference is
+# declared, and the gap is counted as a finding about the source.
+party_gaps = collections.Counter()
+ROLE_LISTS = []        # (the facet or payload that will hold the list, the list): attached when every roll-up is done
+def role_list(holder):
+    roles = []; ROLE_LISTS.append((holder, roles)); return roles
+def party_ref(doc, ref):
+    """-> the landmark URI of the party `ref` names in `doc`, or None."""
+    party = next((p for p in doc["metadata"].get("parties", []) or [] if p["uuid"] == ref), None)
+    if party is None or not party.get("name"):
+        gap = "does not define" if party is None else "defines without a name"
+        party_gaps[gap] += 1
+        led.drop_value(ref, f"a reference to a party the source {gap}: no landmark URI can name it, "
+                            f"so its role is carried without a party")
+        return None
+    return D("party reference resolved by uuid; landmark URI from the party's name",
+             lambda r, pid, name: f"{NS}/party/{slug(name)}" if r == pid else None, ref, party["uuid"], party["name"])
+def add_roles(roles, doc, assignments, where):
+    """Adds OSCAL role assignments ({role-id, party-uuids?}) to a role list."""
+    rule = f"a role assigned at {where}, carried once per Component or scope"
+    for a in assignments or []:
+        entry = next((e for e in roles if e["role"] == a["role-id"]), None)
+        if entry is None:
+            entry = {"role": a["role-id"]}; roles.append(entry)
+        else:
+            led.same(a["role-id"], entry["role"], rule)
+        for ref in a.get("party-uuids", []) or []:
+            uri = party_ref(doc, ref)
+            if uri is None: continue
+            kept = next((u for u in entry.get("parties", []) if u == uri), None)
+            if kept is None: entry.setdefault("parties", []).append(uri)
+            else: led.same(uri, kept, rule)
+def component_facet(doc, comp, own_title=True):
+    """component@1: what OSCAL says of a component and the kernel has no field
+    for. -> (the facet, its role list). `own_title` is False where the
+    Component's kernel title comes from elsewhere and this one would be lost."""
+    f = {}
+    if not own_title and comp.get("title") is not None: f["title"] = comp["title"]
+    if comp.get("description") is not None: f["description"] = T(pua_scan(comp["description"]), "component")
+    if comp.get("purpose") is not None: f["purpose"] = T(pua_scan(comp["purpose"]), "component")
+    if comp.get("status", {}).get("state") is not None: f["status"] = comp["status"]["state"]
+    props = props_by_name(comp.get("props"), led)
+    if props: f["props"] = props
+    roles = role_list(f)
+    add_roles(roles, doc, comp.get("responsible-roles"), "the component")
+    return f, roles
+
 # ================= 1. the GoodRead system (SSP) =================
 V_SSP = SSP["metadata"]["version"]
 sc = SSP["system-characteristics"]
@@ -182,6 +240,11 @@ def system_facet(doc):
     return f
 
 ssp_comp = SSP["system-implementation"]["components"][0]
+sysf_ssp = system_facet(SSP)
+compf_ssp, roles_ssp = component_facet(SSP, ssp_comp)
+add_roles(role_list(sysf_ssp), SSP, SSP["metadata"].get("responsible-parties"), "the document")
+add_roles(roles_ssp, SSP, [{"role-id": r} for u in SSP["system-implementation"].get("users", []) or []
+                           for r in u.get("role-ids", []) or []], "a user")
 comp_sys = {"id": COMP_SYS, "version": V_SSP, "label": sc["system-name"], "lifecycle": "active",
             "title": ssp_comp.get("title", sc["system-name"]), "kind": kind_of(ssp_comp),
             "capabilities": [],
@@ -190,7 +253,7 @@ comp_sys = {"id": COMP_SYS, "version": V_SSP, "label": sc["system-name"], "lifec
                                 "scope-label": D("ATO scope label: date authorized and sensitivity level",
                                                  lambda d, l: f"ATO {d} ({l})",
                                                  sc.get("date-authorized", "?"), sc.get("security-sensitivity-level", "?"))}],
-            "facets": {F_SYS: system_facet(SSP)}}
+            "facets": {F_SYS: sysf_ssp, F_COMP: compf_ssp}}
 
 # implemented-requirement ac-6.1 -> capability + Implementation
 ir = SSP["control-implementation"]["implemented-requirements"][0]
@@ -239,10 +302,49 @@ for st in lev_ir.get("statements", []) or []:
             if rs["uuid"].startswith("11111111"): uuid_placeholder += 1
             lev_resp.append({"description": pua_scan(rs.get("description", ""))})
 la = (LVG["system-implementation"].get("leveraged-authorizations") or [{}])[0]
+lev_sys_comp = next(c for c in LEV["system-implementation"]["components"] if c["type"] == "this-system")
+app_comp = next(c for c in LEV["system-implementation"]["components"] if c["type"] != "this-system")
+lvg_sys_comp = next(c for c in LVG["system-implementation"]["components"] if c["type"] == "this-system")
+appl = next(c for c in LVG["system-implementation"]["components"] if c["type"] == "appliance")
+compf_iaas, roles_iaas = component_facet(LEV, lev_sys_comp, own_title=False)     # its title is the document's
+compf_app, roles_app = component_facet(LEV, app_comp)
+compf_saas, roles_saas = component_facet(LVG, lvg_sys_comp, own_title=False)
+compf_appl, roles_appl = component_facet(LVG, appl)
+for doc, roles in ((LEV, roles_iaas), (LVG, roles_saas)):
+    add_roles(roles, doc, [{"role-id": r} for u in doc["system-implementation"].get("users", []) or []
+                           for r in u.get("role-ids", []) or []], "a user")
+# roles below the component: a response by a component, what it exports, what it satisfies.
+# Each goes to the Component the response is by; the leveraging plan's own entries for the
+# leveraged system and application are not Components here, so theirs go to the leveraging system.
+for doc, fallback, lookup in ((LEV, roles_iaas, {lev_sys_comp["uuid"]: roles_iaas, app_comp["uuid"]: roles_app}),
+                              (LVG, roles_saas, {lvg_sys_comp["uuid"]: roles_saas, appl["uuid"]: roles_appl})):
+    for st in doc["control-implementation"]["implemented-requirements"][0].get("statements", []) or []:
+        for b in st.get("by-components", []) or []:
+            roles = lookup.get(b.get("component-uuid"), fallback)
+            add_roles(roles, doc, b.get("responsible-roles"), "a response by the component")
+            for pv in b.get("export", {}).get("provided", []) or []:
+                add_roles(roles, doc, pv.get("responsible-roles"), "an exported capability")
+            for rs in b.get("export", {}).get("responsibilities", []) or []:
+                add_roles(roles, doc, rs.get("responsible-roles"), "an exported responsibility")
+            for sa in b.get("satisfied", []) or []:
+                add_roles(roles, doc, sa.get("responsible-roles"), "a satisfied responsibility")
+if la.get("party-uuid") is not None: party_ref(LVG, la["party-uuid"])     # the authorization's party: named or declared
+# The leveraging plan lists the leveraged system and its application as components of its
+# own. The provider's Components, converted from the leveraged plan, stand for them: a value
+# that equals the provider's is linked to it, the rest is declared.
+for stand_in in LVG["system-implementation"]["components"]:
+    inherited = props_by_name(stand_in.get("props")).get("inherited-uuid")
+    provider = next((c for c in LEV["system-implementation"]["components"] if c["uuid"] == inherited), None)
+    if provider is None: continue
+    if stand_in.get("status", {}).get("state") == provider.get("status", {}).get("state"):
+        led.same(stand_in["status"]["state"], provider["status"]["state"],
+                 "the leveraging plan's entry for a leveraged component; the provider's Component stands for it")
+    led.drop_value(stand_in, "the leveraging plan's own entry for a component of the leveraged system; the provider's "
+                             "Component, converted from the leveraged plan, stands for it")
 bundle.add("objects/component/csp-iaas.json",
            {"id": COMP_IAAS, "version": V_LEV, "label": LEV["system-characteristics"]["system-name"],
             "lifecycle": "active", "title": LEV["metadata"]["title"],
-            "kind": kind_of(next(c for c in LEV["system-implementation"]["components"] if c["type"] == "this-system")),
+            "kind": kind_of(lev_sys_comp),
             "members": [{"component-ref": COMP_APP, "context": "application"}],
             "capabilities": lev_caps,
             "authorizations": [{"id": AUTH_CSP,
@@ -251,13 +353,12 @@ bundle.add("objects/component/csp-iaas.json",
                                                  lambda t, d: f"{t} ({d})",
                                                  la.get("title", "CSP IaaS leveraged authorization"),
                                                  la.get("date-authorized", "?"))}],
-            "facets": {F_SYS: {**system_facet(LEV), "customer-responsibilities": lev_resp}}})
-app_comp = next(c for c in LEV["system-implementation"]["components"] if c["type"] != "this-system")
+            "facets": {F_SYS: {**system_facet(LEV), "customer-responsibilities": lev_resp}, F_COMP: compf_iaas}})
 bundle.add("objects/component/csp-application.json",
            {"id": COMP_APP, "version": V_LEV, "label": app_comp.get("title", "Application"),
-            "lifecycle": "active", "title": app_comp.get("title", "Application"), "kind": kind_of(app_comp)})
+            "lifecycle": "active", "title": app_comp.get("title", "Application"), "kind": kind_of(app_comp),
+            "facets": {F_COMP: compf_app}})
 kind_mapped = collections.Counter()
-appl = next(c for c in LVG["system-implementation"]["components"] if c["type"] == "appliance")
 kind_mapped["appliance->hardware"] += 1
 appl_title = D("title without the decoration asterisks", lambda t: t.strip(" *"), appl.get("title", ""))
 bundle.add("objects/component/access-control-appliance.json",
@@ -267,15 +368,16 @@ bundle.add("objects/component/access-control-appliance.json",
             "capabilities": [{"id": "cap-consumer-ac-2a", "requirement-ref": REQ_AC2,
                               "description": pua_scan(next((sa.get("description", "")
                                   for st in LVG["control-implementation"]["implemented-requirements"][0].get("statements", [])
-                                  for b in st.get("by-components", []) for sa in b.get("satisfied", []) or []), ""))}]})
+                                  for b in st.get("by-components", []) for sa in b.get("satisfied", []) or []), ""))}],
+            "facets": {F_COMP: compf_appl}})
 bundle.add("objects/component/saas.json",
            {"id": COMP_SAAS, "version": V_LVG,
             "label": LVG["system-characteristics"]["system-name"], "lifecycle": "active",
             "title": LVG["metadata"]["title"],
-            "kind": kind_of(next(c for c in LVG["system-implementation"]["components"] if c["type"] == "this-system")),
+            "kind": kind_of(lvg_sys_comp),
             "members": [{"component-ref": COMP_IAAS, "context": "leveraged system"},
                         {"component-ref": COMP_APPL, "context": "internal appliance"}],
-            "facets": {F_SYS: system_facet(LVG)}})
+            "facets": {F_SYS: system_facet(LVG), F_COMP: compf_saas}})
 lvg_ir = LVG["control-implementation"]["implemented-requirements"][0]
 lvg_sids = sorted({stmt_norm(st.get("statement-id"), lvg_ir["control-id"])
                    for st in lvg_ir.get("statements", []) or [] if st.get("statement-id")})
@@ -417,7 +519,13 @@ for c in CDEF.get("components", []) or []:
     protos = [{"name": p.get("name"), "title": p.get("title"),
                "port-ranges": p.get("port-ranges", [])} for p in c.get("protocols", []) or []]
     if protos: obj.setdefault("facets", {})[F_PROTO] = {"protocols": protos}
-    if control_impls: obj.setdefault("facets", {})[F_COMP] = {"control-implementations": control_impls}
+    compf, roles = component_facet(CDEF, c)
+    for ci in c.get("control-implementations", []) or []:
+        for cir in ci.get("implemented-requirements", []) or []:
+            for st in cir.get("statements", []) or []:
+                add_roles(roles, CDEF, st.get("responsible-roles"), "a statement")
+    if control_impls: compf["control-implementations"] = control_impls
+    obj.setdefault("facets", {})[F_COMP] = compf
     bundle.add(f"objects/component/{slug(c.get('title', 'component'))}.json", obj)
 
 # ================= 4. Assessment (AR result; AP as method) =================
@@ -452,6 +560,15 @@ ap_payload = {"activities": [{"title": a.get("title"),
               "tasks": [{"title": t.get("title"), "type": t.get("type")} for t in AP.get("tasks", []) or []],
               "reviewed-controls": [ic["control-id"] for cs in AP["reviewed-controls"]["control-selections"]
                                     for ic in cs["include-controls"]]}
+# who assesses: one list for the Assessment, from the plan and the results and from
+# every activity and task below them
+roles_assessment = role_list(ap_payload)
+for doc, what in ((AP, "the assessment plan"), (AR, "the assessment results")):
+    add_roles(roles_assessment, doc, doc["metadata"].get("responsible-parties"), what)
+    for a in doc.get("local-definitions", {}).get("activities", []) or []:
+        add_roles(roles_assessment, doc, a.get("responsible-roles"), "an activity")
+for t in (AP.get("tasks", []) or []) + (res.get("local-definitions", {}).get("tasks", []) or []):
+    add_roles(roles_assessment, AP, t.get("responsible-roles"), "a task")
 finding_src = res["findings"][0]
 # the result reviews one control, and it is the one the Assessment is about
 reviewed = [req_of(ic["control-id"]) for cs in res["reviewed-controls"]["control-selections"]
@@ -619,6 +736,16 @@ bundle.add("objects/finding/goodread-risk-1.json",
                                        lambda u: f"{NS}/evidence/obs-{u[:8]}", POAM["observations"][0]["uuid"]),
                                      RISK1["id"]]}]})
 
+# every role list is complete now: attach the ones that hold something, before
+# the Attestation digests the system Component
+for holder, roles in ROLE_LISTS:
+    if roles: holder["responsible-roles"] = roles
+for gap, n in sorted(party_gaps.items()):
+    note(f"**Parties the source {gap} x{n}** (source finding): a role assignment names a party by uuid, and the "
+         f"document {'has no such party' if gap == 'does not define' else 'gives that party no name'} - the leveraged "
+         f"pair's parties carry a type and at most a remark. The role is carried without a party; the reference is "
+         f"declared in the ledger.")
+
 # ================= 6. Attestation (the ATO as attestation) =================
 ato_subjects = [{"id": o["id"], "semantic-digest": semantic_digest(o)}
                 for rel, o in sorted(bundle.objects.items())
@@ -651,7 +778,7 @@ bundle.stub("goodread-system-stub.json", F_SYS.split("@")[0], [],
              "boundary": {"type": "object"}, "network-architecture": {"type": "object"},
              "data-flow": {"type": "object"}, "users": {"type": "array"},
              "inventory-items": {"type": "array"}, "customer-responsibilities": {"type": "array"},
-             "remarks": {"type": "object"}})
+             "remarks": {"type": "object"}, "responsible-roles": {"type": "array"}})
 bundle.stub("goodread-observations-stub.json", F_OBS.split("@")[0], [], {"observations": {"type": "array"}})
 bundle.stub("goodread-risk-analysis-stub.json", F_RISKA.split("@")[0], [],
             {"risk-status": {"type": "string"}, "description": {"type": "object"},
@@ -660,9 +787,15 @@ bundle.stub("goodread-risk-analysis-stub.json", F_RISKA.split("@")[0], [],
 bundle.stub("goodread-finding-target-stub.json", F_FTGT.split("@")[0], [],
             {"target-objective-id": {"type": "string"},
              "implementation-statement-uuid": {"type": "string"}})
-bundle.stub("goodread-ap-stub.json", F_AP.split("@")[0], [], {"activities": {"type": "array"}})
+# `tasks` and `reviewed-controls` were written since 1.0.0 and missing from this pin (backlog #55)
+bundle.stub("goodread-ap-stub.json", F_AP.split("@")[0], [],
+            {"activities": {"type": "array"}, "tasks": {"type": "array"}, "reviewed-controls": {"type": "array"},
+             "responsible-roles": {"type": "array"}})
 bundle.stub("goodread-protocols-stub.json", F_PROTO.split("@")[0], [], {"protocols": {"type": "array"}})
-bundle.stub("goodread-component-stub.json", F_COMP.split("@")[0], [], {"control-implementations": {"type": "array"}})
+bundle.stub("goodread-component-stub.json", F_COMP.split("@")[0], [],
+            {"title": {"type": "string"}, "description": {"type": "object"}, "purpose": {"type": "object"},
+             "status": {"type": "string"}, "props": {"type": "object"}, "responsible-roles": {"type": "array"},
+             "control-implementations": {"type": "array"}})
 # what each source document says about itself, handed on as it stands: the
 # bundle's objects come from seven documents, and the manifest names them
 DOC_META = ("title", "version", "oscal-version", "last-modified", "published", "remarks")

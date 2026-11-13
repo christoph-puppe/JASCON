@@ -260,6 +260,49 @@
       }
      ]
     }
+   ],
+   "responsible-roles": [
+    {
+     "role": "owner",
+     "parties": [
+      "https://ifa.gov/goodread/party/owen-pearson"
+     ]
+    },
+    {
+     "role": "developer",
+     "parties": [
+      "https://ifa.gov/goodread/party/juno-styles"
+     ]
+    },
+    {
+     "role": "system-engineer",
+     "parties": [
+      "https://ifa.gov/goodread/party/xavier-jones"
+     ]
+    }
+   ]
+  },
+  "https://ifa.gov/goodread/facet/component@1": {
+   "description": {
+    "en": "IFA develops, operates, and maintains the SYSTEM1234 link shortener system "
+   },
+   "status": "operational",
+   "responsible-roles": [
+    {
+     "role": "developer",
+     "parties": [
+      "https://ifa.gov/goodread/party/juno-styles"
+     ]
+    },
+    {
+     "role": "system-engineer",
+     "parties": [
+      "https://ifa.gov/goodread/party/xavier-jones"
+     ]
+    },
+    {
+     "role": "public-affairs-office"
+    }
    ]
   }
  }

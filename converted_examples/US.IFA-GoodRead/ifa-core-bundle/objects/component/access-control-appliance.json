@@ -15,5 +15,17 @@
     "en": "Description that directly addresses how the consumer responsibility was satisfied."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ifa.gov/goodread/facet/component@1": {
+   "description": {
+    "en": "An access control virtual appliance that performs XYZ functions."
+   },
+   "status": "operational",
+   "props": {
+    "implementation-point": "internal",
+    "virtual": "yes"
+   }
+  }
+ }
 }

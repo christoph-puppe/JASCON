@@ -111,6 +111,24 @@
      "description": "Leveraging system's responsibilities with respect to inheriting this capability.\n\nIn the context of the application component in satisfaction of AC-2, part a."
     }
    ]
+  },
+  "https://ifa.gov/goodread/facet/component@1": {
+   "title": "This System",
+   "description": {
+    "en": "This Leveraged IaaS.\n\nThe entire system as depicted in the system authorization boundary"
+   },
+   "status": "operational",
+   "responsible-roles": [
+    {
+     "role": "admin"
+    },
+    {
+     "role": "poc-for-customers"
+    },
+    {
+     "role": "customer"
+    }
+   ]
   }
  }
 }

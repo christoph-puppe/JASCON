@@ -45,6 +45,9 @@
    },
    "remarks": {
     "type": "object"
+   },
+   "responsible-roles": {
+    "type": "array"
    }
   },
   "additionalProperties": false
