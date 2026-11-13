@@ -65,7 +65,7 @@ nav: checks
       <div class="flow-step kernel">
         <span class="where">Kern: check-verdict</span>
         <h3>Urteil</h3>
-        <p>Erfüllt, nicht erfüllt, unbestimmt oder nicht anwendbar: eine reine Funktion des Checks, der Beobachtung und der gebundenen Parameter. Der Validator rechnet jedes aufgezeichnete Urteil nach.</p>
+        <p>Erfüllt, nicht erfüllt, nicht eindeutig oder nicht anwendbar: eine reine Funktion des Checks, der Beobachtung und der gebundenen Parameter. Der Validator rechnet jedes aufgezeichnete Urteil nach.</p>
       </div>
     </div>
     <div class="grid g3 reveal" style="margin-top: 18px;">
@@ -159,8 +159,8 @@ nav: checks
         <div class="stack">
           <h3>Was das Beispiel-Bundle aufzeichnet</h3>
           <ul class="ticks">
-            <li><b>3. November:</b> vier Authentifizierungsversuche bei einer Obergrenze von vier, erfüllt. Die Cipher-Liste enthält <code>aes128-cbc</code>, nicht erfüllt. Das Ergebnis des Assessments ist die Zusammenfassung seiner Zeilen.</li>
-            <li><b>Ein Finding</b> zu Klausel s2 verweist auf den Check, der es ausgelöst hat. Seine Maßnahme: die Cipher entfernen.</li>
+            <li><b>3. November:</b> vier Authentifizierungsversuche bei einer Obergrenze von vier, erfüllt. Die Chiffrenliste enthält <code>aes128-cbc</code>, nicht erfüllt. Das Ergebnis des Assessments ist die Aggregation seiner Zeilen.</li>
+            <li><b>Ein Finding</b> zu Klausel s2 verweist auf den Check, der es ausgelöst hat. Seine Maßnahme: die Chiffre entfernen.</li>
             <li><b>10. November:</b> beide Zeilen erfüllt. Das Finding ist geschlossen und bezieht sich auf den Lauf, der es verifiziert hat.</li>
           </ul>
         </div>
@@ -184,7 +184,7 @@ nav: checks
           <li>Die Kriterien sind eine Konjunktion. Es gibt kein ODER, kein NICHT und keine Verschachtelung; Alternativen für einen Wert sind <code>one-of</code>, und die Negation steckt in den Operatorpaaren.</li>
           <li>Keine Arithmetik und kein Vergleich zwischen zwei Fakten. Zählen und Ableiten sind Sache des Kollektors.</li>
           <li>Die Verknüpfung ist das starke Kleene-UND: Ein eindeutiger Fehlschlag entscheidet, und ein Fehlschlag wird nie hinter einem Unbekannten an anderer Stelle versteckt.</li>
-          <li>Ein ungebundener Parameter ergibt „unbestimmt“. Ein Standardwert wird nie eingesetzt.</li>
+          <li>Ein ungebundener Parameter ergibt „nicht eindeutig“. Ein Standardwert wird nie eingesetzt.</li>
           <li><code>at-most</code> bindet nie einen Parameter, der nach oben verschärft, damit das Verschärfen eines Parameters keinen Check lockern kann.</li>
           <li>Ein Check über viele Ressourcen besteht nur, wenn jede anwendbare besteht. Jede Ressource wird ausgewertet, keine wird nach dem ersten Fehlschlag übersprungen, und das Urteil kommt mit Anzahl und Anteil: „12 von 200 anwendbaren Bucket-Ressourcen nicht erfüllt (6 %)“.</li>
         </ul>
@@ -194,7 +194,7 @@ nav: checks
           <thead><tr><th>Operator</th><th>Auf</th><th>Gilt, wenn</th></tr></thead>
           <tbody>
             <tr><th scope="row"><code>equals</code></th><td>ein Wert</td><td>der Wert gleich dem erwarteten ist; Dezimalzahlen nach Wert</td></tr>
-            <tr><th scope="row"><code>not-equals</code></th><td>ein Wert</td><td>der Wert vom erwarteten abweicht; unbestimmt bei fehlendem Fakt</td></tr>
+            <tr><th scope="row"><code>not-equals</code></th><td>ein Wert</td><td>der Wert vom erwarteten abweicht; nicht eindeutig bei fehlendem Fakt</td></tr>
             <tr><th scope="row"><code>one-of</code></th><td>ein Wert</td><td>der Wert in der Liste steht</td></tr>
             <tr><th scope="row"><code>at-least</code> <code>at-most</code></th><td>Ganzzahl, Dezimalzahl</td><td>Ordnung; Dezimalzahlen nie als Gleitkommazahlen</td></tr>
             <tr><th scope="row"><code>present</code> <code>absent</code></th><td>jeder Fakt</td><td>der Schlüssel in der Beobachtung enthalten ist bzw. nicht enthalten ist</td></tr>
@@ -216,7 +216,7 @@ nav: checks
         <h3>Was der Kern über den RFC hinaus festlegt</h3>
         <ul class="plain">
           <li>Ein Muster passt auf den ganzen Wert. <code>^</code> und <code>$</code> sind gewöhnliche Zeichen.</li>
-          <li>Grenzen: 256 Zeichen je Muster, 1.000 Zustände, 4.096 Zeichen je Wert. Darüber hinaus ist die Zeile unbestimmt.</li>
+          <li>Grenzen: 256 Zeichen je Muster, 1.000 Zustände, 4.096 Zeichen je Wert. Darüber hinaus ist die Zeile nicht eindeutig.</li>
           <li>Keine Regex-Engine des Hosts. Jede Implementierung parst die Grammatik selbst, so wie RFC 9485 sie veröffentlicht, und wertet ohne Backtracking aus, sodass ein Muster keinen Validator lahmlegen kann.</li>
           <li>Eine Abhängigkeit bleibt und ist benannt: Eine Unicode-Kategorie <code>\p{..}</code> wird aus der Datenbank des Hosts gelesen (Backlog 59).</li>
         </ul>
@@ -299,7 +299,7 @@ nav: checks
           <li><b>Ein ausgearbeitetes Beispiel</b> mit zwei Checks, zwei Läufen, einem Finding und sieben Nachweisdateien.</li>
           <li><b>Die Grammatik von RFC 9485 in der veröffentlichten Fassung,</b> abgeglichen am 12. November. Sie hält Surrogat-Codepoints aus Mustern heraus, was die Datei der Arbeitsgruppe nicht tat; die drei Engines wurden korrigiert, und fünf Vektoren schreiben es fest.</li>
           <li><b>Text:</b> Spezifikation D24, Handbuchkapitel 10 und das Validator-Kapitel, die Anhänge A, B und C sowie der Skill für Coding-Agenten.</li>
-          <li><b>Werkzeuge:</b> Auf der Seite Checks der App schreiben Sie Checks von Hand oder lassen sie von einem Sprachmodell entwerfen, Regel für Regel oder für jede automatisierte Regel eines CIS-Imports. Der Einzeldatei-Reader zeigt Checks und aufgezeichnete Läufe.</li>
+          <li><b>Werkzeuge:</b> Auf der Seite Checks der App schreiben Sie Checks von Hand oder lassen sie von einem Sprachmodell entwerfen, Regel für Regel oder für jede automatisierte Regel eines CIS-Imports. Der Reader als Einzeldatei zeigt Checks und aufgezeichnete Läufe.</li>
         </ul>
       </article>
       <article class="card">

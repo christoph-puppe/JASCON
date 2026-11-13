@@ -93,7 +93,7 @@ nav: home
       "value": "tls13" }
   ]
 }</code></pre>
-        <div class="window-foot"><span>validate_core.py</span><span><b>modality-monotonic</b> may から must へ：単調、Deviation は不要</span></div>
+        <div class="window-foot"><span>validate_core.py</span><span><b>modality-monotonic</b> may から must へ：単調、Deviation（逸脱）は不要</span></div>
       </div>
       <div class="panel" id="hero-check" role="tabpanel" tabindex="0">
         <pre><code data-lang="json">{
@@ -111,7 +111,7 @@ nav: home
   "validity": { "num": 24, "unit": "hours" },
   "confidence": "reviewed"
 }</code></pre>
-        <div class="window-foot"><span>validate_core.py</span><span><b>check-verdict</b> 観測値 4、Tailoring の設定値 4：充足</span></div>
+        <div class="window-foot"><span>validate_core.py</span><span><b>check-verdict</b> 観測値 4、Tailoring がバインドする値 4：充足</span></div>
       </div>
     </div>
   </div>
@@ -279,13 +279,13 @@ nav: home
       <article class="card">
         <div class="card-top"><span class="card-no">Mapping</span><span class="tier tier-measured">実測</span></div>
         <h3>クロスウォークは作成者を持つデータになる</h3>
-        <p>Mapping はそれ自体が独立したオブジェクトで、個々のステートメントの単位まで、ソース、ターゲット、関係、確度、来歴を持ちます。第三者のクロスウォークはどちらのカタログにも属さず、バージョン管理、差分比較、異議申し立ての対象にできます。</p>
+        <p>Mapping はそれ自体が独立したオブジェクトで、個々のステートメントの単位まで、ソース、ターゲット、関係、確度、来歴を持ちます。第三者のクロスウォークはどちらのカタログにも属さず、バージョン管理や差分比較ができ、異論を唱える対象にもなります。</p>
         <p class="how"><b>仕組み：</b>NIST IR 8477 の関係コード。1.0.0 のコーパスに 1,008 件の Mapping。</p>
       </article>
       <article class="card">
         <div class="card-top"><span class="card-no">Tailoring</span><span class="tier tier-measured">実測</span></div>
         <h3>上流のリリース後も有効なテーラリング</h3>
-        <p>Tailoring は Set によって選択し、識別子によって変更します。この要求事項の、このステートメントの、このパラメータ、という具合です。強化は自由に行えます。緩和には記録された Deviation（逸脱）が必要で、法助動詞の半順序に照らしてチェックされます。</p>
+        <p>Tailoring は Set によって選択し、識別子によって変更します。この要求事項の、このステートメントの、このパラメータ、という具合です。強化は自由に行えます。緩和には記録された Deviation が必要で、法助動詞の半順序に照らしてチェックされます。</p>
         <p class="how"><b>仕組み：</b>8 つの閉じた操作、決定的な解決、マージ規則なし。</p>
       </article>
       <article class="card">
@@ -328,7 +328,7 @@ nav: home
       <div class="section-head reveal" style="margin-bottom:0">
         <p class="eyebrow"><span class="no">04</span> チェック</p>
         <h2>評価者が機械であるとき</h2>
-        <p class="lede">0 か 1 で終了するスキャナーは、しきい値を隠し、テーラリングを無視します。Check は、コレクターが報告するファクトと、合否を決める比較を公開し、実行記録には観測値が残ります。</p>
+        <p class="lede">0 か 1 で終了するスキャナーは、しきい値を隠し、テーラリングを無視します。Check は、コレクターが報告するファクトと、判定を下す比較を公開し、実行記録には観測値が残ります。</p>
         <div class="chips">
           <span class="tier tier-designed">11 番目の型、2.0.0 候補</span>
           <span class="tier tier-measured">{{ n.check_vectors }} 件のテストベクトルが 3 つの実装で合格</span>
@@ -336,10 +336,10 @@ nav: home
       </div>
       <div class="stack reveal">
         <ul class="ticks">
-          <li><b>合格ラインは Tailoring が決める。</b>判定基準は要求事項のパラメータに結び付いています。パラメータを厳しくすると、コードを変えることなく、昨日の観測値があらためて判定されます。</li>
-          <li><b>判定は再計算される。</b>バリデータは記録されたすべての観測値について判定基準を評価し、結果が食い違う行を却下します。</li>
+          <li><b>合格基準は Tailoring が決める。</b>基準は要求事項のパラメータに結び付いています。パラメータを厳しくすると、コードを変えることなく、昨日の観測値があらためて判定されます。</li>
+          <li><b>判定は再計算される。</b>バリデータは記録されたすべての観測値について基準を評価し、結果が食い違う行を却下します。</li>
           <li><b>フリートには割合が示され、判定が甘くなることはない。</b>多数のリソースにまたがるチェックは、すべてが合格した場合にだけ合格します。すべてが評価され、結果は「200 件中 12 件が不充足（6%）」のように表示されます。</li>
-          <li><b>実測した適合状況：</b>ComplianceAsCode の CIS Ubuntu 24.04 プロファイルにある 510 のルールのうち、481 が宣言的な形式に収まります。残りの 29 は手動のままです。</li>
+          <li><b>実測による適合度：</b>ComplianceAsCode の CIS Ubuntu 24.04 プロファイルにある 510 のルールのうち、481 が宣言的な形式に収まります。残りの 29 は手動のままです。</li>
         </ul>
         <a class="link-arrow" href="checks.html">設計、証跡の連鎖、未決定の事項</a>
       </div>
@@ -351,7 +351,7 @@ nav: home
 <section class="section band" id="try">
   <div class="wrap">
     <div class="section-head reveal">
-      <p class="eyebrow"><span class="no">05</span> 試す</p>
+      <p class="eyebrow"><span class="no">05</span> 試してみる</p>
       <h2>バイト列を変え、次に意味を変える</h2>
       <p class="lede">リポジトリにあるサンプルの要求事項と、そのコンテンツマニフェストに記録された 2 つのダイジェストです。編集するか、ボタンを使ってください。どちらのダイジェストも、バリデータと同じ規則でブラウザ内で計算されます。</p>
     </div>
@@ -446,7 +446,7 @@ nav: home
           <div class="frame-bar"><span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="frame-url">jascon.net/app/#load=../jascon/examples/&amp;tool=checks</span></div>
           <img src="assets/img/app-checks.webp" width="2560" height="1500" loading="lazy" alt="Checks ページ：1 件のチェックを開き、それが対象とする要求事項の条項、プラットフォーム、コレクターが報告するファクトを表示。">
         </div>
-        <figcaption><p>サンプルバンドルを開いた Checks ページ。コレクターが報告するファクト、合否を決める比較、コレクターのコードを示します。チェックの下書きはモデルに作らせることができ、その下書きはカーネル規則と読み取り専用の lint が判定します。アプリはコレクターを実行しません。</p><a class="link-arrow" href="app/index.html#load=../jascon/examples/&amp;tool=checks">この画面を開く</a></figcaption>
+        <figcaption><p>サンプルバンドルを開いた Checks ページ。コレクターが報告するファクト、判定を下す比較、コレクターのコードを示します。チェックの下書きはモデルに作らせることができ、その下書きはカーネル規則と読み取り専用の lint が判定します。アプリはコレクターを実行しません。</p><a class="link-arrow" href="app/index.html#load=../jascon/examples/&amp;tool=checks">この画面を開く</a></figcaption>
       </figure>
       <figure class="screen" id="screen-validate" role="tabpanel">
         <div class="frame">
@@ -476,7 +476,7 @@ nav: home
       <div class="gates reveal">
         <div class="gate">
           <span class="gate-when">2026年半ば</span><span class="gate-rail"><i></i></span>
-          <div class="gate-body"><h3>ゲート 1：全数調査</h3><p>アーキテクチャを描く前に、ISM、Grundschutz++、FedRAMP CR26 を最後の prop まで棚卸ししました。数えた 22,000 個の props のうち 70% 超は、拡張をまったく必要としませんでした。それらは所属関係、順序付け、履歴、条項構造だったのです。</p></div>
+          <div class="gate-body"><h3>ゲート 1：調査</h3><p>アーキテクチャを描く前に、ISM、Grundschutz++、FedRAMP CR26 を最後の prop まで棚卸ししました。数えた 22,000 個の props のうち 70% 超は、拡張をまったく必要としませんでした。それらは所属関係、順序付け、履歴、条項構造だったのです。</p></div>
         </div>
         <div class="gate">
           <span class="gate-when">2026年7月</span><span class="gate-rail"><i></i></span>
@@ -492,7 +492,7 @@ nav: home
         </div>
         <div class="gate rc">
           <span class="gate-when">2026年11月12日</span><span class="gate-rail"><i></i></span>
-          <div class="gate-body"><h3>2.0.0-rc.2：Check</h3><p>11 番目の型で、6 件の決定を記録に残して採択されました。全数調査の対象とした機関はいずれも機械チェックを公開していないため、昇格規則に、カタログの利用者だけが保持するデータのための条項が加わりました。{{ n.check_vectors }} 件のテストベクトルが、両方のバリデータで合格しています。<a href="checks.html">チェックの詳細。</a></p></div>
+          <div class="gate-body"><h3>2.0.0-rc.2：Check</h3><p>11 番目の型で、6 件の決定を記録に残して採択されました。調査対象の発行機関はいずれも機械チェックを公開していないため、昇格規則に、カタログの利用者だけが保持するデータのための条項が加わりました。{{ n.check_vectors }} 件のテストベクトルが、両方のバリデータで合格しています。<a href="checks.html">チェックの詳細。</a></p></div>
         </div>
         <div class="gate rc">
           <span class="gate-when">2026年11月12日</span><span class="gate-rail"><i></i></span>
@@ -513,7 +513,7 @@ nav: home
     <div class="grid g4 reveal">
       <article class="card role">
         <span class="who">フレームワークを公開する方</span>
-        <h3>当局と標準化団体</h3>
+        <h3>発行機関と標準化団体</h3>
         <p>カタログの構造はそのまま保たれます。ベースラインは Set に、バリエーションは Tailoring に、独自の語彙はスキーマを持つファセットになります。</p>
         <p class="move"><b>最初の一歩</b>名前空間を決め、Set を 1 つ書き、要求事項を 10 件エンコードし直してみてください。あるいは、Import ページでご自身のカタログを開いてください。</p>
       </article>
@@ -544,7 +544,7 @@ nav: home
     <div class="cta reveal">
       <div>
         <h2>メンテナーは 1 名、第三者の利用者はまだいない</h2>
-        <p>これが {{ facts.measured.date }} 時点の状態であり、このサイトが存在する理由です。これを最も大きく変えるのは、次の 3 つの貢献です。仕様を書いていない人が書いたバリデータ、発行者自身が変換したカタログ、そして件数を添えた異議です。</p>
+        <p>これが {{ facts.measured.date }} 時点の状態であり、このサイトが存在する理由です。これを最も大きく変えるのは、次の 3 つの貢献です。仕様を書いていない人が書いたバリデータ、発行者自身が変換したカタログ、そして件数を添えた異論です。</p>
       </div>
       <div class="cta-actions">
         <a class="btn btn-primary" href="join.html">参加する方法 <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>

@@ -24,7 +24,7 @@ nav: model
           <li><b><code>id</code></b> ist eine URI unter der eigenen Domain des Herausgebers. Sie wird als Zeichenkette verglichen und nie abgerufen, deshalb funktioniert die Validierung in einem abgeschotteten Netz.</li>
           <li><b><code>version</code></b> und zwei Digests im Manifest tragen die Historie. Das ISM pflegt für denselben Zweck 2.202 Revisions-Props von Hand.</li>
           <li><b><code>statements</code></b> ist eine Liste, weil es Klauseln tatsächlich gibt: Grundschutz++ enthält 347 verschachtelte Pseudo-Controls, die nur existieren, um Klauseln adressierbar zu machen.</li>
-          <li><b><code>modality</code></b> und <b><code>obligated-parties</code></b> stehen an der Aussage. Eine Anforderung kann den Betreiber mit MUSS und den Kunden mit SOLLTE binden.</li>
+          <li><b><code>modality</code></b> und <b><code>obligated-parties</code></b> gehören zur Aussage. Eine Anforderung kann den Betreiber mit MUSS und den Kunden mit SOLLTE binden.</li>
           <li><b><code>prose</code></b> ist eine Zuordnung von Sprach-Tag zu Text.</li>
         </ul>
       </div>
@@ -68,7 +68,7 @@ nav: model
         </div>
         <div class="type">
           <h3>Mapping</h3>
-          <p>Eine Crosswalk-Kante in neun flachen Feldern: Quelle, Ziel, optionaler Bezug auf eine Aussage, Beziehung, Richtung, Vertrauensgrad, Begründung, Herkunft. Die Beziehungscodes folgen NIST IR 8477, ergänzt um <code>supplements</code> für Inhalte, die an einen fremden Katalog angehängt sind.</p>
+          <p>Eine Crosswalk-Kante in neun flachen Feldern: Quelle, Ziel, optionaler Bezug auf eine Aussage, Beziehung, Richtung, Vertrauensgrad, Begründung, Herkunft, Nachweise. Die Beziehungscodes folgen NIST IR 8477, ergänzt um <code>supplements</code> für Inhalte, die an einen fremden Katalog angehängt sind.</p>
           <p class="replaces"><b>Übernimmt</b>Das Control-Mapping-Modell von OSCAL 1.2; Crosswalk-Tabellen.</p>
         </div>
       </div>
@@ -188,7 +188,7 @@ nav: model
     <div class="grid g2 reveal">
       <article class="card">
         <div class="card-top"><h3><code>facets</code></h3><span class="tier tier-measured">7 in der Standardbibliothek</span></div>
-        <p>Ein Facettenname löst auf ein JSON Schema auf, das im Manifest des Bundles mit exakter Version und Digest fixiert ist. Ihr Deskriptor erklärt, was die Facette ändert: Prüfung, Tailoring, Auswahl oder Rendering. Ein Tool validiert die Nutzdaten gegen das fixierte Schema. Ein Tool, das auf eine bedeutungstragende Facette trifft, die es nicht implementiert, hält an und gibt den Grund aus.</p>
+        <p>Ein Facettenname löst auf ein JSON Schema auf, das im Manifest des Bundles mit exakter Version und Digest fixiert ist. Der Deskriptor der Facette erklärt, was sie ändert: Prüfung, Tailoring, Auswahl oder Rendering. Ein Tool validiert die Nutzdaten gegen das fixierte Schema. Ein Tool, das auf eine bedeutungstragende Facette trifft, die es nicht implementiert, hält an und gibt den Grund aus.</p>
         <p class="how"><b>Warum:</b> Drei Tools, die heute auf dasselbe unbekannte Prop treffen, tun drei verschiedene Dinge, und alle drei beanspruchen Konformität.</p>
       </article>
       <article class="card">

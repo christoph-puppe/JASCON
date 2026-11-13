@@ -156,7 +156,7 @@ nav: home
       <table class="compare">
         <thead><tr><th>Was hilft</th><th class="us" scope="col">JASCON<small>dieses Projekt</small></th><th>OSCAL</th><th>Gemara</th><th>CycloneDX</th><th>CISO Assistant</th><th>SCAP / XCCDF</th></tr></thead>
         <tbody>
-          <tr><th scope="row">Controls nach Risiko ausgewählt <small>ISO/IEC 27001 6.1.2 und 6.1.3</small></th><td class="us yes">ja<small>die Erklärung zur Anwendbarkeit (SoA) wird berechnet; Kandidat für 2.0.0</small></td><td class="no">nein<small>ein Risiko entsteht erst nach der Prüfung</small></td><td class="part">teilweise<small>nur über Bedrohungen verknüpft</small></td><td class="no">nein</td><td class="part">nur im Tool<small>nicht im Austauschformat</small></td><td class="no">nein</td></tr>
+          <tr><th scope="row">Controls nach Risiko ausgewählt <small>ISO/IEC 27001 6.1.2 und 6.1.3</small></th><td class="us yes">ja<small>die Erklärung zur Anwendbarkeit (SoA) wird berechnet; Kandidat für 2.0.0</small></td><td class="no">nein<small>ein Risiko existiert erst nach der Prüfung</small></td><td class="part">teilweise<small>nur über Bedrohungen verknüpft</small></td><td class="no">nein</td><td class="part">nur im Tool<small>nicht im Austauschformat</small></td><td class="no">nein</td></tr>
           <tr><th scope="row">Dokumentierte Risikoakzeptanz</th><td class="us yes">ja<small>Genehmiger, Datum, Begründung; Kandidat für 2.0.0</small></td><td class="part">teilweise<small>kein Feld für Genehmiger oder Datum</small></td><td class="part">teilweise<small>kein Genehmiger, kein Datum</small></td><td class="no">nein</td><td class="part">nur im Tool<small>Genehmiger, Datum, Ablauf</small></td><td class="yes">ja<small>für Check-Ergebnisse: verantwortliche Stelle, Zeitpunkt, Grund</small></td></tr>
           <tr><th scope="row">Jede Entscheidung nachvollziehbar</th><td class="us part">teilweise<small>Abschwächen erfordert eine genehmigte Ausnahme; kein Autor je Änderung</small></td><td class="part">teilweise<small>wer und wann nur je Dokument</small></td><td class="part">teilweise<small>eine Begründung, kein Autor</small></td><td class="no">nein</td><td class="part">teilweise<small>ein Audit-Log; keine Begründung erzwungen</small></td><td class="part">teilweise<small>eine optionale Bemerkung je Änderung</small></td></tr>
           <tr><th scope="row">Herstellerempfehlungen getrennt von den Controls</th><td class="us yes">ja<small>beim Import erzwungen; Kandidat für 2.0.0</small></td><td class="yes">ja<small>Komponentendefinitionen; Übernahme ist eine Kopie</small></td><td class="part">teilweise<small>getrennte Dateien, keine Zuständigkeitsgrenze</small></td><td class="part">teilweise<small>eine Datei darf auch den Standard definieren</small></td><td class="part">teilweise<small>ein Bibliotheks-Update kann Prüfungen umschreiben</small></td><td class="part">teilweise<small>die Checks des Herstellers entscheiden weiterhin</small></td></tr>
@@ -255,7 +255,7 @@ nav: home
             <p class="contract">Außerhalb jeder Compliance-Berechnung und außerhalb des semantischen Digests.</p>
           </div>
         </div>
-        <p class="muted">Fehler werden, wo immer möglich, gar nicht erst darstellbar. Ein Parameter-Token im Fließtext muss einen deklarierten Parameter benennen. Eine Tailoring-Operation adressiert eine Aussage über deren Identität, sodass ein Erratum des Herausgebers sie nicht auf etwas anderes umlenken kann.</p>
+        <p class="muted">Wo es möglich ist, sind Fehler gar nicht erst darstellbar. Ein Parameter-Token im Fließtext muss einen deklarierten Parameter benennen. Eine Tailoring-Operation adressiert eine Aussage über deren Identität, sodass ein Erratum des Herausgebers sie nicht auf etwas anderes umlenken kann.</p>
         <a class="link-arrow" href="model.html">Die elf Typen, Feld für Feld</a>
       </div>
     </div>
@@ -273,12 +273,12 @@ nav: home
       <article class="card feature">
         <div class="card-top"><span class="card-no">ISO/IEC 27001 6.1.3 d</span><span class="tier tier-measured">an zwei Bundles gemessen</span></div>
         <h3>Die Erklärung zur Anwendbarkeit wird zur Berechnung</h3>
-        <p>Ein Risk benennt seinen Eigentümer, seine Behandlungsentscheidung und die Klauseln, die diese Entscheidung tragen. Das Primitiv <code>risk-coverage</code> listet dann jede ausgewählte Anforderung auf, die auf keinem bewerteten Risiko beruht. Bisher hat ein Auditor das stichprobenartig in einer Tabellenkalkulation geprüft.</p>
+        <p>Ein Risk benennt seinen Eigentümer, seine Behandlungsentscheidung und die Klauseln, die diese Entscheidung tragen. Das Primitiv <code>risk-coverage</code> listet dann jede ausgewählte Anforderung auf, die auf keinem bewerteten Risiko beruht. Bisher hat ein Auditor das anhand von Stichproben aus einer Tabelle geprüft.</p>
         <p class="how"><b>Mechanismus:</b> der Typ Risk des Kandidaten für 2.0.0. Für das Beispiel-Bundle meldet der Validator 3 ausgewählt, 1 begründet, 2 nicht abgedeckt und benennt die beiden.</p>
       </article>
       <article class="card">
         <div class="card-top"><span class="card-no">Mapping</span><span class="tier tier-measured">gemessen</span></div>
-        <h3>Ein Crosswalk wird zu Daten mit Autor</h3>
+        <h3>Ein Crosswalk ist ein Datensatz mit Autor</h3>
         <p>Ein Mapping ist ein eigenes Objekt: Quelle, Ziel, Beziehung, Konfidenz und Herkunft, bis hinunter zur einzelnen Aussage. Der Crosswalk eines Dritten gehört zu keinem der beiden Kataloge und lässt sich versionieren, per Diff vergleichen und anfechten.</p>
         <p class="how"><b>Mechanismus:</b> Beziehungscodes aus NIST IR 8477. 1.008 Mappings im Korpus von 1.0.0.</p>
       </article>
@@ -526,7 +526,7 @@ nav: home
       <article class="card role">
         <span class="who">Sie verantworten Compliance</span>
         <h3>GRC-Engineers, CISOs, ISMS-Verantwortliche</h3>
-        <p>Ihr Risikoregister, Ihre Erklärung zur Anwendbarkeit, Ihre Umsetzungsbeschreibungen und Feststellungen als Dateien in einem Repository, geprüft wie Code im Review.</p>
+        <p>Ihr Risikoregister, Ihre Erklärung zur Anwendbarkeit, Ihre Umsetzungsbeschreibungen und Feststellungen als Dateien in einem Repository, die wie Code reviewt werden.</p>
         <p class="move"><b>Erster Schritt</b>Laden Sie SP 800-53 oder Grundschutz++ in die App, schreiben Sie drei Risiken und lesen Sie die Abdeckung ab.</p>
       </article>
       <article class="card role">

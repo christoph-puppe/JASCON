@@ -99,7 +99,7 @@ nav: evidence
     <div class="gates reveal">
       <div class="gate">
         <span class="gate-when">2026年半ば</span><span class="gate-rail"><i></i></span>
-        <div class="gate-body"><h3>ゲート 1：全数調査 <span class="tier tier-measured">完了</span></h3><p>アーキテクチャを描く前に、ISM（管理策 1,150 件、prop 8,958 個）、Grundschutz++（prop 13,315 個）、FedRAMP CR26（ルール 246 件、prop なし）を棚卸ししました。カーネルは、この 3 つすべてが必要とすると実測されたものです。</p></div>
+        <div class="gate-body"><h3>ゲート 1：調査 <span class="tier tier-measured">完了</span></h3><p>アーキテクチャを描く前に、ISM（管理策 1,150 件、prop 8,958 個）、Grundschutz++（prop 13,315 個）、FedRAMP CR26（ルール 246 件、prop なし）を棚卸ししました。カーネルは、この 3 つすべてが必要とすると実測されたものです。</p></div>
       </div>
       <div class="gate">
         <span class="gate-when">2026年7月</span><span class="gate-rail"><i></i></span>
@@ -115,15 +115,154 @@ nav: evidence
       </div>
       <div class="gate rc">
         <span class="gate-when">2026年11月10日</span><span class="gate-rail"><i></i></span>
-        <div class="gate-body"><h3>2.0.0-rc.1：10 番目の型としての Risk</h3><p>1.0.0 コーパスの 6,914 件のオブジェクトはすべて、変更なしで新しいスキーマに対して妥当と検証されます。リスク登録簿は利用者側のデータであるため、全数調査の対象とした機関はいずれもリスクの記録を公開していません。それを要求している標準は 3 つあります。ISO/IEC 27001、BSI Standard 200-3、NIST SP 800-30 です。</p></div>
+        <div class="gate-body"><h3>2.0.0-rc.1：10 番目の型としての Risk</h3><p>1.0.0 コーパスの 6,914 件のオブジェクトはすべて、変更なしで新しいスキーマに対して妥当と検証されます。リスク登録簿は利用者側のデータであるため、調査対象の発行機関はいずれもリスクの記録を公開していません。それを要求している標準は 3 つあります。ISO/IEC 27001、BSI Standard 200-3、NIST SP 800-30 です。</p></div>
       </div>
       <div class="gate rc">
         <span class="gate-when">2026年11月12日</span><span class="gate-rail"><i></i></span>
-        <div class="gate-body"><h3>2.0.0-rc.2：11 番目の型としての Check</h3><p>11月11日に、スキーマ、バリデータ、156 件のテストベクトル、そして公開されている 2 つのチェックコーパスの全数調査とともに提案しました。ComplianceAsCode の CIS Ubuntu 24.04 プロファイルにある 510 のルールのうち 481 が形式に収まり、どちらのコーパスにも、I-Regexp の範囲を超える正規表現を必要とする比較はありませんでした。翌日、6 件の決定とともに採択されました。昇格規則には、カタログを発行する機関が公開しない型のための条項が加わり、Risk と Check はいずれもこの条項のもとで採用されています。現在のテストベクトルは {{ n.check_vectors }} 件です。</p></div>
+        <div class="gate-body"><h3>2.0.0-rc.2：11 番目の型としての Check</h3><p>11月11日に、スキーマ、バリデータ、156 件のテストベクトル、そして公開されている 2 つのチェックコーパスの調査とともに提案しました。ComplianceAsCode の CIS Ubuntu 24.04 プロファイルにある 510 のルールのうち 481 が形式に収まり、どちらのコーパスにも、I-Regexp の範囲を超える正規表現を必要とする比較はありませんでした。翌日、6 件の決定とともに採択されました。昇格規則には、カタログの発行機関が公開しない型のための条項が加わり、Risk と Check はいずれもこの条項のもとで採用されています。現在のテストベクトルは {{ n.check_vectors }} 件です。</p></div>
       </div>
       <div class="gate rc">
         <span class="gate-when">2026年11月12日</span><span class="gate-rail"><i></i></span>
         <div class="gate-body"><h3>2.0.0-rc.3：アドバイスパックと、型付きになった 2 つの日付 <span class="tier tier-designed">リリース候補、タグ未付与</span></h3><p>ベンダーの推奨事項を 1 つの公開ファイルとして扱う仕組みで、8 件の決定を記録に残して採択されました。新しい型はなく、11 の規則、{{ n.advice_vectors }} 件のテストベクトル、署名付きの証明を備えた作例のパックがあります。同梱のバンドルに対して実行したところ、<code>capability-ref</code> に関する規則が、変換した NIST の例の中に、自身のコンポーネントが宣言していないケイパビリティを参照するエッジを 1 本見つけました。同じ日に作者は、タグ付けの前に残っていた 4 つの論点を閉じました。1.0.0 では自由記述のままだった 2 つのフィールド、すなわち逸脱を起票した日付と措置の期日が、型付きになりました。</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="limits">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">04</span> 限界</p>
+      <h2>実証されていないこと</h2>
+      <p class="lede">以下は {{ facts.measured.date }} 時点の未解決事項です。いずれも、メンテナー自身の作業よりも外部からの作業の方が大きな意味を持つ領域でもあります。</p>
+    </div>
+    <div class="limits reveal">
+      <div class="limit">
+        <h3>第三者の利用者がいない <span class="tier tier-open">未解決</span></h3>
+        <p>2026年11月10日に検索したところ、JASCON 自身のリポジトリ以外で JASCON への言及は見つかりませんでした。JASCON で公開している発行機関はなく、JASCON を読み込むベンダーもありません。実測した変換結果や、公開カタログで見つかった欠陥は、このフォーマットを採用しなくても利用できます。</p>
+      </div>
+      <div class="limit">
+        <h3>両方のバリデータの作者が同じ 1 人 <span class="tier tier-open">未解決</span></h3>
+        <p>Python のリファレンスと PowerShell の双子は、どちらもプロジェクトの作者が AI の支援を受けて、同じソースから書いたものです。両者の独立性は、言語とランタイムに限られます。このゲートが測るのは、仕様によって実装が一意に決まるかどうかです。見知らぬ誰かが週末に実装できるかどうかは測っていません。</p>
+      </div>
+      <div class="limit">
+        <h3>パスカバレッジは値の到達ではない <span class="tier tier-open">未解決、バックログ 41</span></h3>
+        <p>カバレッジ報告書が数えているのは、宣言済みの変換先を持つソースパスです。個々の値が実際に到達するかどうかは、NIST のサンプルシステムという 1 つのコーパスでのみ実測しました。835 件のリーフ値のうち 394 件がバンドル内にそのままの形で現れ、122 件のコンテンツ値はまったく到達しません。残りの 10 のコーパスは未実測です。</p>
+      </div>
+      <div class="limit">
+        <h3>最初の Risk コーパスは最初の状態のまま <span class="tier tier-open">未解決</span></h3>
+        <p>OSCAL のリスクデータには、所有者も、単一のレベルも、受容日もありません。そこから変換したリスクは状態 <code>identified</code> から先に進めないため、実際に変換したデータでのリスクカバレッジでは、すべての要求事項が未カバーと表示されます。対応済みのリスクによるカバレッジは、サンプルバンドルでのみ示しています。</p>
+      </div>
+      <div class="limit">
+        <h3>Check の形状は 2 つのプラットフォームで確定したもの <span class="tier tier-open">未解決</span></h3>
+        <p>Check 型への適合度は、Linux ホストと Kubernetes で数えました。クラウド API に対するチェックは数えておらず、リポジトリ内にコレクターを実行するものはなく、作例はスタブに対して実行したものです。数えた 510 のルールのうち 29 は宣言的な形式に収まらず、手動のままです。<a href="checks.html#state">現状の詳細。</a></p>
+      </div>
+      <div class="limit">
+        <h3>2.0.0 は候補であり、リリースではない <span class="tier tier-open">未解決</span></h3>
+        <p>決めるべきことは残っておらず、両方のバリデータは候補版の全 {{ n.vectors }} 件のテストベクトルで合格しています。タグ付けは作者が行う手順で、まだ行われていません。それまではリリース版は 1.0.0 であり、2.0.0 の形状はまだ変わる可能性があります。</p>
+      </div>
+      <div class="limit">
+        <h3>1.0.0 のバンドルがすべて 2.0.0 のバンドルとは限らない <span class="tier tier-measured">決定済み</span></h3>
+        <p>rc.2 までは、2.0.0 のスキーマは 1.0.0 が受け入れるものをすべて受け入れていました。rc.3 以降、逸脱を起票した日付は日付でなければならず、措置の期日は型付きの時点または期間でなければなりません。どちらかのフィールドに自由記述を持つ 1.0.0 のバンドルは、それを変換する必要があります。同梱の 5 つのバンドルとサンプルフォルダはすべて適合しています。Unicode カテゴリを含むパターンは、実行するマシンの Unicode データベースに従います。そのため、後から割り当てられたコードポイントについては、2 台のマシンで判定が 2 つに分かれることがあります。判定を 1 つにする必要がある作者は、範囲を明示して書きます。</p>
+      </div>
+      <div class="limit">
+        <h3>アドバイスパックの裏付けは 1 つのサンプルファイルだけ <span class="tier tier-designed">設計済み</span></h3>
+        <p>ベンダーの助言を公開しているカタログ発行機関はありません。こうしたデータについて、昇格規則は、その記録を要求する標準か、内容を数えた 2 つのオープンな実装のいずれかを求めます。アドバイスパックにはそのどちらもありません。ケイパビリティに付く条項レベルのフィールドの裏付けは、NIST の例にある架空のコンポーネント定義 1 つだけで、そこには推奨事項が 3 件、条項レベルのエントリが 2 件、推奨パラメータ値が 2 件あります。製品バージョンのフィールドには、数えた裏付けがまったくありません。どちらもこの規則に反して作者の判断でカーネルに入ったものであり、仕様にもそのとおり記録されています。パックを公開したベンダーはまだありません。パックビルダーは OSCAL のコンポーネント定義をインポートし、NIST 自身の例は、パックが保持できる内容を何も失わずに取り込めます。しかし、ベンダーが公開したコンポーネント定義はまだ 1 つも通していません。その調査は、まだ果たされていません。</p>
+      </div>
+      <div class="limit">
+        <h3>同梱サンプルの既知の欠陥 <span class="tier tier-open">未解決、バックログ 46 と 55</span></h3>
+        <p>サンプルの証明は説明用のものです。そのサブジェクトのダイジェストは、どのサンプルオブジェクトとも一致しません。Assessment の手法ペイロードは、固定されたファセットスキーマに対してまだ検証されておらず、リポジトリにある 3 件は検証すれば失敗します。</p>
+      </div>
+      <div class="limit">
+        <h3>近接フォーマットが先行している 2 つの点 <span class="tier tier-open">未解決、バックログ 65 と 66</span></h3>
+        <p>2026年11月13日の比較で、2 つの点が見つかりました。Deviation（逸脱）は、起票された時点と承認者を記録しますが、有効期限はありません。一方、CISO Assistant のセキュリティ例外には有効期限があり、OSCAL のリスクには期限があります。また、テーラリングの操作はそれ自体の作成者を記録しません。緩和には承認済みの Deviation が必要ですが、それ以外の変更は、その変更を含む Tailoring を通じてしか作成者をたどれません。CISO Assistant では、変更が 1 件ずつログに記録されます。どちらもバックログの項目 65 と 66 として登録されており、それぞれ作者の判断を必要とします。</p>
+      </div>
+      <div class="limit">
+        <h3>ガバナンスは 1 人 <span class="tier tier-open">未解決</span></h3>
+        <p>ハンドブックは、連合型のレジストリと、標準ライブラリの管理者を記述しています。どちらも存在しません。現時点にあるのは、個人の立場で活動するメンテナー 1 名、公開の決定登録簿、そして適合性コーパスです。</p>
+      </div>
+    </div>
+    <p class="source reveal">件数付きの全キュー：<a href="{{ blob }}/drafts/jascon-v0.6-spec-feedback-backlog.md" rel="noopener">仕様フィードバックのバックログ</a>。項目は根拠とともに登録され、<a href="{{ blob }}/drafts/jascon-decision-rationale-register.md" rel="noopener">決定登録簿</a>への記載を経て外れます。</p>
+  </div>
+</section>
+
+<section class="section" id="prior-art">
+  <div class="wrap">
+    <div class="section-head wide reveal">
+      <p class="eyebrow"><span class="no">05</span> 先行技術</p>
+      <h2>近接フォーマットに欠けているもの</h2>
+      <p class="lede">調査は 2 回に分けて行いました。最初の 5 行は、2026年11月13日に、特定のバージョンのスキーマまたはコードに照らして確認したものです。対象は OSCAL 1.2.3、Gemara 1.6.0、CycloneDX 1.7.2、CISO Assistant、SCAP 1.4 を伴う XCCDF 1.2 です。その下の行は 11月10日の調査によるもので、公開リポジトリから読み取り、一次情報のサイトにアクセスできなかった場合は二次情報源に拠っています。近接フォーマットのデータは変換していないため、各セルが示すのは、フォーマットが何を提供するかであり、個々の導入環境でそれがどう使われるかではありません。</p>
+    </div>
+    <div class="table-wrap reveal">
+      <table>
+        <thead><tr><th>フォーマット</th><th>扱う範囲</th><th>欠けているもの</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">OSCAL (NIST)</th><td>カタログ、プロファイル、コンポーネント定義、システムセキュリティ計画、評価計画と評価結果、POA&amp;M、そして 1.2.0 以降は管理策マッピング。管理策からハッシュ付きの証跡ファイルまでの完全な連鎖。リスクの期限。カタログを変更できないベンダーモデル</td><td>リスクは評価結果と POA&amp;M の中にしか存在せず、それが正当化するはずの選択と並んで置かれることはない。プロファイルの変更は作成者を記録しない。第二言語を保持する構造がない。ネイティブの署名がない：インライン署名は上流で却下され（issue 245）、残るのはバイト列のハッシュのみ。拡張 props は、何も検証しない名前空間文字列を持つ。SP 800-53 向けに書かれたコアの制約が、他のフレームワークも拘束する（#2118、#2112）</td></tr>
+          <tr><th scope="row">Gemara (OpenSSF)</th><td>ガイダンス、管理策、脅威、リスク、ケイパビリティの階層化されたカタログ。型付きの関係、強度、確度を持つマッピング文書。証跡にダイジェストが付く評価ログ。CUE によるスキーマ。FINOS Common Cloud Controls と OpenSSF OSPS Baseline が使用</td><td>第二言語の本文がない。指摘事項や適用除外に期日も有効期限もない。実装の記録がない：モデルはそのためのレイヤーを挙げているが、スキーマは提供していない。リスクは承認者も日付もなしに受容される。署名は公開バンドルのバイト列が対象で、スキーマの外でツールが行う。スキーマは閉じている：CUE プロファイルで絞り込むことはできるが、フィールドは追加できない。ポリシーとリスクのスキーマは実験的と明記されている</td></tr>
+          <tr><th scope="row">CycloneDX Attestations (OWASP, ECMA-424)</th><td>データとしての標準。クレームと反対クレームに対応付けられた要求事項、作成者と有効期限を持つ証跡、署名者を伴う確約（affirmation）。正規化 JSON に対するオブジェクト単位の署名で、インデントの変更後も有効</td><td>リスクオブジェクトも、テーラリングの記録も、言語マップもない。証跡の添付ファイルにハッシュがない。署名は JSON 形式にしか存在しない：XML スキーマと protobuf 定義には署名を置く場所がない。署名者にも確約にも日付がない。拡張は名前と値の文字列で、そのレジストリは任意</td></tr>
+          <tr><th scope="row">CISO Assistant (intuitem)</th><td>ツール内：管理策に紐づくリスクシナリオ、適用宣言書 (SoA) のエクスポート、承認者・日付・有効期限付きのリスク受容、有効期限付きのセキュリティ例外、監査ログ。ライブラリフォーマット内：200 を超えるフレームワーク、参照管理策、リスクマトリクス、集合論に基づくマッピング、オブジェクトごとの <code>translations</code> マップ</td><td>リスク受容、例外、適用宣言書はアプリケーション内にとどまり、外に出るのはライブラリフォーマットではなくバックアップのエクスポートを通じてのみ。署名はない：重複排除のためのバイト列ハッシュのみ。ライブラリの更新で既存の評価が書き換わりうる。要求事項に付随するチェックのロジックがない。インポーターは未知のライブラリキーを無視する</td></tr>
+          <tr><th scope="row">SCAP, XCCDF, OVAL</th><td>XML によるチェックリストとチェック言語。Tailoring ファイルは、ベンダーのベンチマークを編集せずに変更できる。override は権限者、時刻、理由を記録する。タイトルと説明は言語ごとに繰り返し記述できる。データストリームには署名と副署ができる</td><td>リスクの記録がない。期日、有効期限、免除の型がない。収集した項目にハッシュがない。個々のテーラリング変更に作成者がなく、重大度を理由なしに引き下げられる。署名済みストリームのインデントを変えると署名が壊れる。適合するチェックは OVAL と OCIL で、任意の言語のスクリプトは OpenSCAP の拡張を通じてしか実行できない。外部の名前空間の要素は、たまたまスキーマが手元にある場合にしか検査されない</td></tr>
+          <tr><th scope="row">規制当局のフォーマット</th><td>JSON Schema 付きの JSON による FedRAMP の統合ルール。YAML による BSI C5:2026。OSCAL のカタログとプロファイルによる Grundschutz++ と ISM</td><td>発行者ごとに方言があり、それぞれがモダリティ、期限、適用範囲を独自の方法で構造化している。C5 はドイツ語版と英語版を別ファイルで配布。Grundschutz++ は語彙を、どのバリデータも読まない props に保持している</td></tr>
+          <tr><th scope="row">マッピングのセマンティクス</th><td>NIST IR 8477 の関係スタイル。Secure Controls Framework の STRM。OWASP OpenCRE</td><td>IR 8477 が定義するのは関係であり、ファイルフォーマットではない。SCF はマッピングをスプレッドシートと PDF で公開し、OSCAL にエクスポートするのはカタログのみ。OpenCRE はハブ・アンド・スポーク型の要求事項グラフであり、カタログフォーマットではない</td></tr>
+          <tr><th scope="row">in-toto と SCITT</th><td>来歴、検証サマリー、テスト結果、SBOM のための精査済み predicate を持つ署名付きの証明。署名付きステートメントに対する IETF の透明性サービス</td><td>管理策や要求事項を証明する in-toto の predicate はない。SCITT は透明性のためのアーキテクチャであり、コンプライアンスモデルではない</td></tr>
+          <tr><th scope="row">Heimdall Data Format, OCSF, SARIF</th><td>チェックとスキャンの結果</td><td>チェックが何を見つけたかを運ぶもので、標準が何を要求するかではない</td></tr>
+          <tr><th scope="row">NIST IR 8286</th><td>リスク登録簿とリスク詳細記録のスキーマ</td><td>リスクから管理策の選択へのエッジがない</td></tr>
+          <tr><th scope="row">OpenControl, Compliance Masonry</th><td>YAML による標準とコンポーネントの説明文</td><td>2023 年以降、目立った活動がない</td></tr>
+          <tr><th scope="row">ISO/IEC 27001 と 27002、IEC 62443、PCI DSS</th><td>標準そのもの</td><td>公式の機械可読版がない。SCF と CISO Assistant に第三者による表現がある</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="section-head reveal" style="margin-top: clamp(40px, 5vw, 64px); margin-bottom: 24px;">
+      <h3>JASCON がこれらから取り入れたもの</h3>
+      <p class="muted">JASCON の大部分は新しいものではありません。以下の各機能には、近接フォーマットに先例があります。</p>
+    </div>
+    <div class="table-wrap reveal">
+      <table>
+        <thead><tr><th>JASCON の機能</th><th>最も近い先行技術</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">ステートメントごとの構造化されたモダリティ</th><td>Grundschutz++ の法助動詞の語彙。FedRAMP ルールのキーワード。OpenSSF OSPS Baseline</td></tr>
+          <tr><th scope="row">言語マップとしての本文</th><td>CISO Assistant のライブラリフォーマットの <code>translations</code> マップ。XCCDF で繰り返し記述されるタイトルと説明に付く <code>xml:lang</code></td></tr>
+          <tr><th scope="row">所属関係としてのベースライン</th><td>OSCAL のプロファイル。XCCDF のプロファイル</td></tr>
+          <tr><th scope="row">閉じた操作リストとしてのテーラリング</th><td>OSCAL プロファイルの <code>alter</code> と <code>set-parameter</code>。XCCDF の <code>refine-value</code></td></tr>
+          <tr><th scope="row">フレームワーク間の型付きマッピング</th><td>NIST IR 8477。Secure Controls Framework の STRM。OSCAL 1.2 のマッピングモデル。Gemara のマッピング文書</td></tr>
+          <tr><th scope="row">型付きでスキーマに拘束される拡張</th><td>CISO Assistant 内の型付きカスタムフィールド。OSPS Baseline のように、Gemara の閉じたスキーマを絞り込む CUE プロファイル。名前空間付きだが型のない OSCAL の props。外部の名前空間にあり、緩く検証される XCCDF の要素</td></tr>
+          <tr><th scope="row">コンポーネントから指摘事項までの連鎖</th><td>OSCAL のライフサイクルモデル。CycloneDX の宣言（declarations）</td></tr>
+          <tr><th scope="row">要求事項に対する署名付きの証明</th><td>CycloneDX の確約と、正規化 JSON に対する署名（ECMA-424）。署名と副署が付いた SCAP データストリーム。in-toto の DSSE エンベロープ</td></tr>
+          <tr><th scope="row">リスクの記録</th><td>事後的なものとしての OSCAL の <code>risk</code> アセンブリ。Gemara のリスクカタログ。CISO Assistant 内のリスクシナリオとリスク受容。NIST IR 8286</td></tr>
+          <tr><th scope="row">管理策から分離されたベンダーの助言</th><td>OSCAL のコンポーネント定義。ベンダーのベンチマークに手を加えない XCCDF の Tailoring ファイル</td></tr>
+          <tr><th scope="row">承認者付きで記録された例外</th><td>権限者、時刻、理由を持つ XCCDF の <code>override</code>。CISO Assistant のセキュリティ例外。OSCAL 上の FedRAMP の逸脱 props</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="split even reveal" style="margin-top: clamp(40px, 5vw, 64px);">
+      <div class="stack">
+        <h3>どの近接フォーマットにも、組み合わせとしては見つからなかったもの</h3>
+        <ul class="ticks">
+          <li><b>オブジェクトごとに 2 つのダイジェスト</b>。1 つは配布されたバイト列に対するもの、もう 1 つは正規化されたコンテンツに対するもので、これにより証明が再パッケージ後も有効であり続けます。</li>
+          <li><b>モダリティの半順序</b>。テーラリングはこれに照らしてチェックされ、緩和は記録された Deviation を経由しなければなりません。</li>
+          <li><b>管理策の選択に結び付いたリスクの記録</b>。これにより、どのリスクにも基づかない要求事項が計算で求められます。</li>
+          <li><b>フェイルクローズする拡張</b>：拡張はどの計算を変えるかを宣言し、それを理解できないツールは停止しなければなりません。</li>
+        </ul>
+      </div>
+      <div class="stack">
+        <h3>この主張がどこまで成り立つか</h3>
+        <p class="muted">4 つのいずれにも部分的な先例があります。この主張は組み合わせに関するもので、その強さは調査の確かさを超えるものではありません。最も近いのは Gemara と CycloneDX Attestations であり、どちらのコミュニティの読者も、なぜ JASCON は自分たちのフォーマットを拡張しないのかと問うでしょう。ハンドブックの<a href="{{ blob }}/jascon/references/appendix-f-objections.md" rel="noopener">付録 F.10</a>がそれに答えています。証明に関するギャップは小さなものです。in-toto には要求事項を証明する predicate がなく、JASCON の証明を predicate として表現すれば、既存の検証者エコシステムに届くはずです。利用者と監査人にとって重要な 10 の機能は、<a href="index.html#compare">トップページ</a>で比較しています。</p>
+        <a class="link-arrow" href="{{ blob }}/PRIOR-ART.md" rel="noopener">PRIOR-ART.md（出典付き）</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="cta reveal">
+      <div>
+        <h2>判定を 1 行で再現する</h2>
+        <p>リポジトリをクローンしてバリデータを実行してください。バリデータは適合性コーパスを実行したうえで、同梱のすべてのバンドルのすべてのオブジェクトを、両方のダイジェストで再検証します。必要なのは Python と <code style="color:inherit;background:none;padding:0">jsonschema</code> です。</p>
+      </div>
+      <div class="cta-actions">
+        <a class="btn btn-primary" href="start.html#validate">コマンド <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a class="btn btn-ghost" href="join.html">欠陥を見つけて報告する <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       </div>
     </div>
   </div>

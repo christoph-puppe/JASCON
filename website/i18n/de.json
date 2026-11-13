@@ -1,0 +1,122 @@
+{
+ "meta": {
+  "code": "de",
+  "hreflang": "de",
+  "name": "Deutsch",
+  "short": "DE",
+  "og_locale": "de_DE",
+  "thousands": "."
+ },
+ "layout": {
+  "skip": "Zum Inhalt springen",
+  "home_label": "JASCON, Startseite",
+  "nav_label": "Hauptnavigation",
+  "nav_model": "Das Modell",
+  "nav_checks": "Checks",
+  "nav_evidence": "Belege",
+  "nav_start": "Erste Schritte",
+  "nav_join": "Mitmachen",
+  "nav_skill": "Skill",
+  "nav_skill_title": "Den JASCON-Skill herunterladen (SKILL_jascon.zip)",
+  "nav_github": "GitHub",
+  "lang_label": "Sprache dieser Website",
+  "style_label": "Stil dieser Website",
+  "style_classic": "Klassisch",
+  "style_ledger": "Hauptbuch",
+  "style_engraving": "Kupferstich",
+  "style_still_life": "Stillleben",
+  "theme_label": "Zwischen hell und dunkel wechseln",
+  "open_app": "App öffnen",
+  "menu_label": "Menü",
+  "foot_tagline": "Eine Notation für jeden Standard, in jeder Sprache.",
+  "foot_licence_html": "Spezifikation, Schema, Validatoren und App: <a href=\"LICENSE.txt\">Apache License 2.0</a>. Konvertierte Kataloge bleiben unter den Bedingungen ihrer Herausgeber, siehe <a href=\"NOTICE.txt\">NOTICE</a>.",
+  "foot_project": "Projekt",
+  "foot_not_proven": "Was nicht bewiesen ist",
+  "foot_prior_art": "Stand der Technik",
+  "foot_use": "Nutzung",
+  "foot_app": "Die App",
+  "foot_reader": "Der Reader als Einzeldatei",
+  "foot_spec": "Spezifikation 1.0.0",
+  "foot_handbook": "Handbuch",
+  "foot_take_part": "Mitwirken",
+  "foot_repo": "GitHub-Repository",
+  "foot_issues": "Issues und Einwände",
+  "foot_register": "Entscheidungsregister",
+  "foot_legal": "Impressum und Datenschutz",
+  "foot_languages": "Sprachen",
+  "foot_base": "Ein unabhängiges Projekt, privat gepflegt. Nicht verbunden mit NIST, BSI, ASD, CCB, CIS oder FedRAMP und von diesen weder genehmigt noch befürwortet. OSCAL ist ein Projekt des NIST; JASCON liest und schreibt es.",
+  "foot_facts_html": "Zahlen, die auf dieser Website als <span class=\"tier tier-measured\">gemessen</span> gekennzeichnet sind, wurden am {{ facts.measured.date }} von <code>{{ facts.measured.by }}</code> erzeugt, Commit <code>{{ facts.measured.commit }}</code>.",
+  "translated_html": "Diese Seite ist eine Übersetzung der <a href=\"{{ page.en_href }}\">englischen Seite</a>. Wo beide voneinander abweichen, gilt die englische Seite.",
+  "stale_html": "Die englische Seite wurde geändert, seit diese Übersetzung entstanden ist: <a href=\"{{ page.en_href }}\">zur aktuellen englischen Seite</a>."
+ },
+ "build": {
+  "open_in_app": "In der App öffnen",
+  "plural_s": true,
+  "imprint_email": "E-Mail",
+  "imprint_questions": "Fragen, Korrekturen und Einwände",
+  "imprint_issue": "ein Issue im Repository",
+  "imprint_responsible": "Verantwortlich für den Inhalt",
+  "imprint_country": "Deutschland",
+  "colon": ": ",
+  "full_stop": ".",
+  "corpora": {
+   "AU.ISM": {
+    "publisher": "Australian Signals Directorate",
+    "note": "1.150 Controls; Baselines nach Einstufung und Essential Eight als Sets"
+   },
+   "DE.BSI": {
+    "publisher": "BSI, Deutschland",
+    "note": "Fließtext auf Deutsch, Satzgrammatik und Schutzziele als Facetten"
+   },
+   "US.SP800-53": {
+    "publisher": "NIST",
+    "note": "Parameter mit Geltung je Aussage; vier Baselines als Mitgliedschafts-Sets"
+   },
+   "US.CSF": {
+    "publisher": "NIST",
+    "note": "Funktionen, Kategorien und Unterkategorien als verschachtelte Sets"
+   },
+   "US.IFA-GoodRead": {
+    "publisher": "NIST, fiktive Inhalte",
+    "note": "Die Lebenszyklustypen von Component bis Attestation, mit zwei Risks"
+   }
+  }
+ },
+ "script": {
+  "copied": "kopiert",
+  "unchanged": "unverändert",
+  "changed": "verändert",
+  "na_title": "Hier nicht verfügbar",
+  "na_text": "Dieser Browser bietet auf dieser Seite kein SHA-256 an. Öffnen Sie die Website über https oder führen Sie validate_core.py aus.",
+  "notobj_title": "Kein Objekt",
+  "notobj_text": "Der Text ist kein JSON-Objekt, daher gibt es keine kanonische Form, über die sich ein Digest bilden ließe. Ein Validator bricht hier ab.",
+  "tamper_title": "Tamper",
+  "tamper_text": "Die Bedeutung hat sich geändert. Der semantische Digest stimmt nicht mehr mit dem überein, den die Attestierung nennt, daher deckt die Attestierung dieses Objekt nicht ab.",
+  "semantic_title": "Semantic Match",
+  "semantic_text": "Die Bytes haben sich geändert, die Bedeutung nicht. Die Attestierung deckt das Objekt weiterhin ab; der Verifizierer meldet, dass die Verpackung verändert wurde.",
+  "full_title": "Full Match",
+  "full_text": "Bytes und Bedeutung entsprechen denen, die das Inhaltsmanifest des Beispiel-Bundles festhält.",
+  "recorded": "aufgezeichnet",
+  "no_engine": "keine Engine",
+  "loading": "wird geladen",
+  "all_hold": "jedes Kriterium ist für die Beobachtung erfüllt",
+  "clause": "Klausel",
+  "and": "und",
+  "engine_failed_title": "Engine nicht gefunden",
+  "engine_failed_text": "Das Urteil wird von den Regeln der App berechnet, die diese Kopie der Website nicht enthält. Öffnen Sie stattdessen die Seite Checks der App.",
+  "engine_loading_title": "Die Regeln werden geladen",
+  "engine_loading_text": "Die Seite lädt die Kernregeln der App einmalig.",
+  "outcome_satisfied": "Erfüllt",
+  "outcome_not_satisfied": "Nicht erfüllt",
+  "outcome_inconclusive": "Nicht eindeutig",
+  "outcome_not_applicable": "Nicht anwendbar",
+  "verdict_satisfied": "Beide Checks sind erfüllt. Das Assessment hält jede Beobachtung fest, sodass eine zweite Partei zu diesem Urteil gelangt, ohne etwas auszuführen.",
+  "verdict_not_satisfied": "Schon ein eindeutiges Nichterfüllen entscheidet das Gesamtergebnis. Die nicht erfüllte Zeile benennt die Klausel, und ein Finding zu dieser Klausel kann auf den Check zurückverweisen.",
+  "verdict_other": "Keine Beobachtung, kein Urteil: Ein Standardwert wird nie ersatzweise eingesetzt. Die Zeile wird als nicht eindeutig erfasst und muss eine Begründung enthalten.",
+  "run_label": "Täglicher Lauf {date}",
+  "check_titles": {
+   "https://cso.example/check/LNX-SSH-1-maxauthtries": "sshd: Authentifizierungsversuche innerhalb der Grenze",
+   "https://cso.example/check/LNX-SSH-1-ciphers": "sshd: keine Chiffre im CBC-Modus angeboten"
+  }
+ }
+}

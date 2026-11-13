@@ -100,8 +100,11 @@ English is the source. `site.json` lists the languages that are built
 its pages in `src/<lang>/`, and is served under `/<lang>/` (`/de/`, `/hi/`,
 `/ja/`, `/zh/`). The header carries a language menu (a `<details>`, so it
 works without scripts), the footer the same links, and every page names its
-translations with `hreflang` links. The app, the reader and the documents in
-the repository stay English.
+translations with `hreflang` links. The app speaks English and German (it
+follows the browser, or its own setting); the reader, the pack builder and the
+documents in the repository are English. Where a page points to a screen of
+the app, the German pages give the app's German name with the English one in
+brackets, the other languages the English name.
 
 Which language a visit opens in: an English page moves to its translation in
 the language last picked in the menu (stored in the browser), or, before any

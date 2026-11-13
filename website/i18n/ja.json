@@ -1,0 +1,122 @@
+{
+ "meta": {
+  "code": "ja",
+  "hreflang": "ja",
+  "name": "日本語",
+  "short": "JA",
+  "og_locale": "ja_JP",
+  "thousands": ","
+ },
+ "layout": {
+  "skip": "本文へスキップ",
+  "home_label": "JASCON、ホーム",
+  "nav_label": "メイン",
+  "nav_model": "モデル",
+  "nav_checks": "チェック",
+  "nav_evidence": "根拠",
+  "nav_start": "はじめに",
+  "nav_join": "参加する",
+  "nav_skill": "スキル",
+  "nav_skill_title": "JASCON スキルをダウンロード（SKILL_jascon.zip）",
+  "nav_github": "GitHub",
+  "lang_label": "このサイトの言語",
+  "style_label": "このサイトのスタイル",
+  "style_classic": "クラシック",
+  "style_ledger": "台帳",
+  "style_engraving": "版画",
+  "style_still_life": "静物画",
+  "theme_label": "ライトとダークを切り替える",
+  "open_app": "アプリを開く",
+  "menu_label": "メニュー",
+  "foot_tagline": "あらゆる標準を、あらゆる言語で、1 つの記法に。",
+  "foot_licence_html": "仕様、スキーマ、バリデータ、アプリ：<a href=\"LICENSE.txt\">Apache License 2.0</a>。変換したカタログは各発行者の条件に従います。<a href=\"NOTICE.txt\">NOTICE</a> をご覧ください。",
+  "foot_project": "プロジェクト",
+  "foot_not_proven": "実証されていないこと",
+  "foot_prior_art": "先行技術",
+  "foot_use": "利用",
+  "foot_app": "アプリ",
+  "foot_reader": "単一ファイルのリーダー",
+  "foot_spec": "仕様書 1.0.0",
+  "foot_handbook": "ハンドブック",
+  "foot_take_part": "参加",
+  "foot_repo": "GitHub リポジトリ",
+  "foot_issues": "Issue と異論",
+  "foot_register": "決定登録簿",
+  "foot_legal": "法的表示とプライバシー",
+  "foot_languages": "言語",
+  "foot_base": "個人の立場で維持している独立したプロジェクトです。NIST、BSI、ASD、CCB、CIS、FedRAMP のいずれとも提携関係になく、これらによる承認や推奨も受けていません。OSCAL は NIST のプロジェクトであり、JASCON は OSCAL を読み書きします。",
+  "foot_facts_html": "このサイトで<span class=\"tier tier-measured\">実測</span>と記した数値は、{{ facts.measured.date }} にコミット <code>{{ facts.measured.commit }}</code> の <code>{{ facts.measured.by }}</code> が算出したものです。",
+  "translated_html": "このページは<a href=\"{{ page.en_href }}\">英語版のページ</a>の翻訳です。両者の内容が異なる場合は、英語版が優先されます。",
+  "stale_html": "この翻訳の作成後に、英語版のページが更新されています。最新の内容は<a href=\"{{ page.en_href }}\">英語版のページ</a>をご覧ください。"
+ },
+ "build": {
+  "open_in_app": "アプリで開く",
+  "plural_s": false,
+  "imprint_email": "メール",
+  "imprint_questions": "質問、訂正、異論",
+  "imprint_issue": "リポジトリの Issue",
+  "imprint_responsible": "コンテンツの責任者",
+  "imprint_country": "ドイツ",
+  "colon": "：",
+  "full_stop": "。",
+  "corpora": {
+   "AU.ISM": {
+    "publisher": "Australian Signals Directorate",
+    "note": "管理策 1,150 件。機密区分と Essential Eight のベースラインを Set として表現"
+   },
+   "DE.BSI": {
+    "publisher": "BSI（ドイツ）",
+    "note": "ドイツ語の本文。ステートメント文法と保護目標はファセットとして表現"
+   },
+   "US.SP800-53": {
+    "publisher": "NIST",
+    "note": "ステートメント単位のパラメータ。4 つのベースラインを所属関係の Set として表現"
+   },
+   "US.CSF": {
+    "publisher": "NIST",
+    "note": "機能、カテゴリー、サブカテゴリーを入れ子の Set として表現"
+   },
+   "US.IFA-GoodRead": {
+    "publisher": "NIST（架空のコンテンツ）",
+    "note": "ライフサイクルの型：Component から Attestation まで。2 件の Risk を含む"
+   }
+  }
+ },
+ "script": {
+  "copied": "コピーしました",
+  "unchanged": "変更なし",
+  "changed": "変更あり",
+  "na_title": "ここでは利用できません",
+  "na_text": "このブラウザでは、このページで SHA-256 を利用できません。https でサイトを開くか、validate_core.py を実行してください。",
+  "notobj_title": "オブジェクトではありません",
+  "notobj_text": "テキストが JSON オブジェクトではないため、ダイジェストを計算する正規形がありません。バリデータはここで停止します。",
+  "tamper_title": "Tamper",
+  "tamper_text": "意味が変わりました。セマンティックダイジェストが証明に記載されたものと一致しなくなったため、証明はこのオブジェクトには及びません。",
+  "semantic_title": "Semantic Match",
+  "semantic_text": "バイト列は変わりましたが、意味は変わっていません。証明は引き続きこのオブジェクトに及びます。検証者は、パッケージングが変更されたことを報告します。",
+  "full_title": "Full Match",
+  "full_text": "バイト列も意味も、サンプルバンドルのコンテンツマニフェストに記録されたとおりです。",
+  "recorded": "記録",
+  "no_engine": "エンジンなし",
+  "loading": "読み込み中",
+  "all_hold": "観測値ですべての基準が成立",
+  "clause": "条項",
+  "and": "かつ",
+  "engine_failed_title": "エンジンが見つかりません",
+  "engine_failed_text": "判定はアプリの規則で計算しますが、このサイトのコピーにはその規則が含まれていません。代わりにアプリの Checks ページを開いてください。",
+  "engine_loading_title": "規則を読み込み中",
+  "engine_loading_text": "このページは、アプリのカーネル規則を一度だけ取得します。",
+  "outcome_satisfied": "充足",
+  "outcome_not_satisfied": "不充足",
+  "outcome_inconclusive": "判定不能",
+  "outcome_not_applicable": "該当なし",
+  "verdict_satisfied": "両方のチェックが成立しています。Assessment が各観測値を記録しているため、別の当事者も何も実行せずにこの判定に到達できます。",
+  "verdict_not_satisfied": "確定した失敗が 1 つあれば、集約結果が決まります。失敗した行は条項を示し、その条項に対する Finding はこのチェックを参照できます。",
+  "verdict_other": "観測値がなければ判定もありません。デフォルト値で代用することはありません。その行は判定不能として記録され、理由を記載しなければなりません。",
+  "run_label": "日次実行 {date}",
+  "check_titles": {
+   "https://cso.example/check/LNX-SSH-1-maxauthtries": "sshd：認証試行回数が上限以内",
+   "https://cso.example/check/LNX-SSH-1-ciphers": "sshd：CBC モードの暗号方式を提供しない"
+  }
+ }
+}
