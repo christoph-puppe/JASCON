@@ -1,11 +1,11 @@
 {
  "measured": {
   "date": "2026-11-13",
-  "commit": "30892353",
+  "commit": "994a423b",
   "by": "jascon/scripts/validate_core.py"
  },
  "vectors": {
-  "total": 568,
+  "total": 574,
   "families": [
    {
     "name": "jcs",
@@ -33,7 +33,7 @@
    },
    {
     "name": "reference",
-    "vectors": 13
+    "vectors": 18
    },
    {
     "name": "lifecycle",
@@ -41,7 +41,7 @@
    },
    {
     "name": "tier",
-    "vectors": 9
+    "vectors": 10
    },
    {
     "name": "dsse",
@@ -153,6 +153,6 @@
  ],
  "validators": {
   "python_lines": 2780,
-  "powershell_lines": 3669
+  "powershell_lines": 3711
  }
 }
