@@ -103,6 +103,16 @@ works without scripts), the footer the same links, and every page names its
 translations with `hreflang` links. The app, the reader and the documents in
 the repository stay English.
 
+Which language a visit opens in: an English page moves to its translation in
+the language last picked in the menu (stored in the browser), or, before any
+pick and only on arrival from another site, in the first language of the
+browser's list that the site offers. English, no match, or no translation of
+that page keeps the English page. A translated page never moves, so a shared
+link stays in its language, and a link within the site never moves either.
+The script is in the head of each English page (`AUTO_LANGUAGE` in
+`build.py`); traditional Chinese (`zh-Hant`, `zh-TW`, `zh-HK`) is not taken
+for the simplified pages.
+
 - A translated page keeps the markup of the English one and changes words
   only. `i18n/check_translation.py <lang> [page]` compares the two (blocks,
   elements, `{{ names }}`, code), and the build runs the same check.

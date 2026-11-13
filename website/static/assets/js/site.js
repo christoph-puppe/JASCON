@@ -2,8 +2,8 @@
 
    Everything here is an addition: with scripts off, every page still reads
    in full (tab panels are all shown, nothing is hidden behind an animation).
-   Nothing is sent anywhere; the only things stored are the colour scheme and
-   the style you pick, in this browser's localStorage. The words the script
+   Nothing is sent anywhere; the only things stored are the colour scheme,
+   the style and the language you pick, in this browser's localStorage. The words the script
    writes into a page come from the page (#site-strings, filled by the build
    from i18n/<lang>.json); the English ones here are the fallback. */
 (function () {
@@ -19,6 +19,14 @@
   var t = function (key, english) { return typeof T[key] === "string" ? T[key] : english; };
   var ROOT = root.getAttribute("data-root") || "";
   var LANG = root.getAttribute("lang") || "en";
+
+  /* ---- a language picked in the menu or the footer is remembered; an
+     English page opens in it from then on (the script in the page head) ---- */
+  $$("a[data-lang]").forEach(function (a) {
+    a.addEventListener("click", function () {
+      try { localStorage.setItem("jascon-site:lang", a.getAttribute("data-lang")); } catch (e) { /* private mode */ }
+    });
+  });
 
   /* ---- language menu: closes on a click outside it and on Escape ---- */
   var langPick = $("#lang");

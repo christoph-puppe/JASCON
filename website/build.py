@@ -548,9 +548,9 @@ def language_links(name, lang, langs, site):
         folder = "" if code == "en" else code + "/"
         href = "@root/" + folder + target
         current = ' aria-current="true"' if code == lang else ""
-        items.append(f'<li><a href="{href}" hreflang="{e(m["hreflang"])}" lang="{e(m["hreflang"])}"{current}>'
+        items.append(f'<li><a href="{href}" hreflang="{e(m["hreflang"])}" lang="{e(m["hreflang"])}" data-lang="{code}"{current}>'
                      f'<span>{e(m["name"])}</span><small>{e(m["short"])}</small></a></li>')
-        foot.append(f'<a href="{href}" hreflang="{e(m["hreflang"])}" lang="{e(m["hreflang"])}"{current}>{e(m["name"])}</a>')
+        foot.append(f'<a href="{href}" hreflang="{e(m["hreflang"])}" lang="{e(m["hreflang"])}" data-lang="{code}"{current}>{e(m["name"])}</a>')
         if has:
             alts.append(f'<link rel="alternate" hreflang="{e(m["hreflang"])}" '
                         f'href="{base}/{folder}{"" if target == "index.html" else target}">')
@@ -559,7 +559,7 @@ def language_links(name, lang, langs, site):
     else:
         alts = []
     if len(langs) == 1:
-        return {"lang_menu": "", "lang_foot": "", "alternates": ""}
+        return {"lang_menu": "", "lang_foot": "", "alternates": "", "lang_auto": ""}
     menu = ('<details class="lang-pick" id="lang">'
             f'<summary aria-label="{e(langs[lang]["layout"]["lang_label"])}" title="{e(langs[lang]["layout"]["lang_label"])}">'
             '<svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" '
@@ -569,7 +569,35 @@ def language_links(name, lang, langs, site):
             '<ul>' + "".join(items) + "</ul></details>")
     foot = (f'<nav class="foot-langs" aria-label="{e(langs[lang]["layout"]["foot_languages"])}">'
             + " ".join(foot) + "</nav>")
-    return {"lang_menu": menu, "lang_foot": foot, "alternates": "\n".join(alts)}
+    return {"lang_menu": menu, "lang_foot": foot, "alternates": "\n".join(alts),
+            "lang_auto": auto_language(name, lang, langs)}
+
+
+# The language a visit opens in. Only an English page moves, and only to a
+# translation of itself: to the language picked in the menu (stored by
+# site.js), or, before any pick and on arrival from another site, to the
+# first language of the browser's list that the site offers. English, or no
+# match, keeps the page. A translated page never moves, so a shared link
+# stays in its language; a link within the site never moves either.
+# Traditional Chinese (zh-Hant, -TW, -HK, -MO) is not taken for zh.
+AUTO_LANGUAGE = (
+    '<script>/* language: the one picked in the menu, else the browser\'s; English if none */'
+    '(function(){var to=%s,pick=null;'
+    'try{pick=localStorage.getItem("jascon-site:lang")}catch(e){}'
+    'if(!pick){try{if(document.referrer&&new URL(document.referrer).origin===location.origin)return}catch(e){}'
+    'var ls=navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language||""];'
+    'for(var i=0;i<ls.length&&!pick;i++){var l=String(ls[i]).toLowerCase(),p=l.split("-")[0];'
+    'if(p==="en")pick="en";else if(p==="zh"){if(!/hant|-tw|-hk|-mo/.test(l))pick="zh"}else if(to[p])pick=p}}'
+    'if(pick&&to[pick])location.replace(to[pick]+location.hash)})()</script>')
+
+
+def auto_language(name, lang, langs):
+    if lang != "en" or len(langs) == 1:
+        return ""
+    targets = {code: f"{code}/{name}" for code in langs if code != "en" and name in translated(code)}
+    if not targets:
+        return ""
+    return AUTO_LANGUAGE % json.dumps(targets, separators=(",", ":"))
 
 
 def build_pages(out, langs, facts, site):
@@ -616,7 +644,10 @@ def build_pages(out, langs, facts, site):
                     '<div class="i18n-note" role="note"><div class="wrap"><p>'
                     + render(T["layout"]["stale_html"], page_ctx, name) + "</p></div></div>",
             }
-            page_ctx["html"] = dict(ctx["html"], **notes, **language_links(name, lang, langs, site))
+            links = language_links(name, lang, langs, site)
+            if head.get("base") or head.get("robots", "").startswith("noindex"):
+                links["lang_auto"] = ""  # the 404 page stays where the visitor is
+            page_ctx["html"] = dict(ctx["html"], **notes, **links)
             page_ctx["content"] = highlight(render(body, page_ctx, folder + name))
             page = render(layout, page_ctx, "_layout.html")
             # the current page in the navigation
