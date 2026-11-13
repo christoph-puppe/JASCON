@@ -244,7 +244,7 @@ What this changes in the claims above:
 - **Where JASCON is behind:** a Deviation has no expiry (CISO Assistant's
   security exceptions and OSCAL's risk deadlines do), and no tailoring
   operation records its own author (CISO Assistant's audit log does).
-  Both are candidates for the backlog.
+  Both are in the spec-feedback backlog: #65 and #66 (2026-11-13).
 
 ## What follows for JASCON
 
