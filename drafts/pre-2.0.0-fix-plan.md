@@ -1,6 +1,6 @@
 # Plan — the open backlog before 2.0.0
 
-### 2026-11-13 · branch `claude/sleepy-planck-g6w3h3` · phase A is built (§8); phases B to E are a plan; §9 says what another session's work on main changed in it
+### 2026-11-13 · branch `claude/sleepy-planck-g6w3h3` · phases A and B are built (§8, §10); C to E are a plan; §9 says what another session's work on main changed in it
 
 Input: the ten open rows of `jascon-v0.6-spec-feedback-backlog.md` and the
 residue of #45, with the author's dispositions of 2026-11-13. Every
@@ -480,3 +480,30 @@ says what overlapped and how it was settled. For the plan above:
 | §5.3, #58 | Applied again on main's twin after the rebase, by the same two scripts. Main's twin, unchanged, fails the same three vectors |
 
 Open after the rebase: #41, #46, #55, #62, #65, #66.
+
+## 10. Phase B as built (2026-11-13)
+
+The author: "start phase B". The change proposal is
+`drafts/CP-AUTHOR-1.md`; its §11 and the register entry "CP-AUTHOR-1
+landed" hold the measurements. Against §3 of this plan:
+
+| Plan, §3 | Built |
+|---|---|
+| §3.2, the model | As planned, with the three answers of §3.7. `provenance` on a Tailoring and its entries, a Risk and its ratings, an Implementation, a Finding; `decided` and `review-due` on a Deviation; `date` on an authorization; three times typed |
+| §3.3, the rules | Four, not five: AUTHOR-1 (a consumer's Tailoring), AUTHOR-2 (Risk, Finding, Implementation), AUTHOR-3 (a decided Deviation), AUTHOR-4 (an authorization). The planned rule on `excludes[].rationale` was dropped: `risk-coverage` already reports it. All are report lines |
+| §3.4, the review date | REVIEW-1 reads the date of the run and reports; `--as-of` sets the date. It also covers a Risk's `review-due`. The word is "overdue", because `risk-coverage` uses "lapsed" for something else |
+| §3.5, what the landing touches | Schema, three validators, vectors, examples and texts are done. The tools that write the fields are not: backlog #69, which takes over the rest of this row and of phase C |
+
+What phase B showed for what is left:
+
+- **#68 is new and needs the author.** A value ending in a line break is
+  a date for two validators and not for the third.
+- **Phase C is now #69 with the IFA half of #46 and the IFA payload of
+  #55.** One question in it is the author's: whether the IFA converter
+  derives a record's author from the document's parties.
+- **Counting values is not enough when a field is typed.** The CIS
+  converter wrote a version into a field that now takes a date, and no
+  value in the repository showed it. For #41 and #55 the same holds:
+  look at the writers, not only at what they wrote here.
+
+Open after phase B: #41, #46, #55, #62, #68, #69.

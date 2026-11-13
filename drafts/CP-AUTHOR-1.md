@@ -3,7 +3,7 @@
 **Change proposal · JASCON kernel 2.0.0-rc.3 → 2.0.0 · 2026-11-13**
 **Process:** Chapter 15.4 (evidence in, corpus first, implementations follow). Every rule carries a machine id, a rationale and a message that prints.
 **Scope:** kernel schema (optional fields on five types and one sub-object, three typed time fields), reference validator, conformance corpus, the example folder, the PowerShell twin, the app's port. Tools that write the new fields, the specification as 2.0.0-rc.4, handbook, website: §9.
-**Status: ACCEPTED in its three main points by the author on 2026-11-13, before this text was written; being built.** Backlog #65 and #66. The points this text adds on its own are listed in §10 and marked there; they are built as proposed and remain the author's to overturn.
+**Status: LANDED on 2026-11-13 as specification D26 in release candidate 2.0.0-rc.4; 2.0.0 is not tagged.** Backlog #65 and #66 are closed. The three main points were accepted by the author before this text was written. The points this text adds on its own are listed in §10; they are built as proposed and remain the author's to overturn. §11 says what was built and what building it changed. Where §11 and an earlier section differ, §11 is the state.
 
 **Author statements this proposal implements (2026-11-13):**
 (1) "#65 stays optional, fix it."
@@ -165,3 +165,28 @@ Built as proposed; each is the author's to overturn before the tag.
 5. **No requester on a Deviation, no performer per check result row, no log.** A Deviation's request is not a decision; a run by someone else is another Assessment; the history is the versions.
 6. **An entry without `provenance` has its record's.** The alternative, every entry names its author, repeats one name down a Tailoring.
 7. **The decision's number.** D26 by count. The register once used "D26" as a label for backlog #26 (P10 #33 e); the specification never did.
+
+## 11. Landing addendum (2026-11-13) — what was built, and what contact with the repository changed
+
+### 11.1 What is in the repository
+
+| Step of §9 | Built | Measured |
+|---|---|---|
+| 1 | Schema, reference, vectors, the example folder | 63 new vectors (34 in the new family `author`, 29 in `kernel`), 637 in all in 18 families. All expectations were written before the first run, which passed all 63. 19 deliberate defects in the reference's new code each turn a vector red |
+| 2 | The PowerShell twin and the app's port (build 0.9.8) | Both give the reference's counts per family and per bundle and its report lines for the example folder and the IFA bundle. The twin was run on PowerShell 7.4; its run on Windows PowerShell 5.1 is the workflow's |
+| 3 | Specification 2.0.0-rc.4 (D26; D8, D13, D23 amended), handbook (appendix A, chapters 6, 10, 12, F.10), the skill (requirement 9c), PRIOR-ART, README, the website in five languages, register, backlog | |
+| 4 | Not built: no tool writes the fields | backlog #69 |
+
+### 11.2 What contact with the repository changed
+
+- **A writer the count had missed.** §2.2 counted the values the repository holds and found none to change. `convert_cis_benchmark.py` and the app's CIS preset wrote the catalogue's version as the `provenance.date` of a Mapping; the repository holds no CIS bundle, so no such value was counted. Both now write the day of the catalogue's `last-modified`. A count of values answers "what is there"; a typed field also needs "who writes it".
+- **A line break at the end of a value.** `$` in a pattern matches before a final line break in Python and in .NET and not in JavaScript, so the reference and the twin accept `"2026-11-13\n"` as a date and the app does not. This is older than the proposal and reaches every pattern that ends in `$`. Filed as backlog #68; the author's to decide.
+- **§5 on the website.** The first English text said neither report fails a bundle unless the caller asks. REVIEW-1 never fails. The translating agent caught it.
+- **§8, the citations.** OSCAL's `risk-log` with `logged-by`, its `origin` with actors and its `deadline` were read in the 1.1.3 metaschema. ISO/IEC 27001 was not read and stays from memory.
+
+### 11.3 What does not exist
+
+- A tool that writes `provenance`, `decided`, `review-due` or an authorization's `date` (#69). The example folder was given its authors by hand.
+- A page of the app that shows the two reports. The rules compute them.
+- A corpus of authored consumer Tailorings.
+- Authors in the IFA bundle: it shows 10 AUTHOR lines and 2 overdue reviews. Its sources state the day of two authorizations and, per document, responsible parties and a last-modified date; they name no author per implementation, finding or risk. Whether the converter derives one from the document's parties is the author's to decide.
