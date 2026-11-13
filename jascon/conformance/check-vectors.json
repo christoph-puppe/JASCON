@@ -1,5 +1,5 @@
 {
- "description": "CP-CHECK-1 vectors (kernel 2.0.0). regex-vectors: the I-Regexp dialect (RFC 9485 ABNF) - valid patterns with strings that must and must not match WHOLE-value, and patterns every implementation must refuse, each with why; several are dialect traps where Python re, .NET or ECMAScript would answer differently. A pattern that no JSON text may carry (a lone surrogate code point) is given in `pattern-codepoints`, and `pattern` then only describes it. verdict-vectors: check-verdict (B.1.10) over {check (observes, criteria, applies-when?, each?), observation, parameters?} -> one of satisfied | not-satisfied | inconclusive | not-applicable; strong Kleene AND; an unbound parameter is inconclusive (D9). expected-resources, where a vector carries it, are the counts of a per-resource check (B.1.10 step 5): every resource is evaluated, and the share of not-satisfied ones is a whole percentage in integer arithmetic. share-vectors: that percentage for {part, whole} - rounded half up, never 0 while part > 0, never 100 while part < whole. aggregate-vectors: Assessment.result from row outcomes (CHECK-10). object-vectors: closed shapes - an object must match exactly the named type, or none. bundle-vectors: the CHECK-n rule ids a conformant tool names for the bundle (exact set; expected-notes are substrings of notes); `store` is an in-memory evidence store, path -> UTF-8 text. Check digests are semantic digests computed by the reference canonical form; editing a vector Check without recomputing its digest makes CHECK-8 fire.",
+ "description": "CP-CHECK-1 vectors (kernel 2.0.0). regex-vectors: the I-Regexp dialect (RFC 9485 ABNF) - valid patterns with strings that must and must not match WHOLE-value, and patterns every implementation must refuse, each with why; several are dialect traps where Python re, .NET or ECMAScript would answer differently. A pattern that no JSON text may carry (a lone surrogate code point) is given in `pattern-codepoints`, and `pattern` then only describes it. verdict-vectors: check-verdict (B.1.10) over {check (observes, criteria, applies-when?, each?), observation, parameters?} -> one of satisfied | not-satisfied | inconclusive | not-applicable; strong Kleene AND; an unbound parameter is inconclusive (D9). expected-resources, where a vector carries it, are the counts of a per-resource check (B.1.10 step 5): every resource is evaluated, and the share of not-satisfied ones is a whole percentage in integer arithmetic. share-vectors: that percentage for {part, whole} - rounded half up, never 0 while part > 0, never 100 while part < whole. aggregate-vectors: Assessment.result from row outcomes (CHECK-10). object-vectors: closed shapes - an object must match exactly the named type, or none. bundle-vectors: the CHECK-n rule ids a conformant tool names for the bundle (exact set; expected-notes are substrings of notes); `store` is an in-memory evidence store, path -> UTF-8 text. Check digests are semantic digests computed by the reference canonical form; editing a vector Check without recomputing its digest makes CHECK-8 fire. An evidence file is a bundle file: a number in it that breaks NUMBER-1 (D3.9) is named as that rule, and the file is not used.",
  "regex-vectors": [
   {
    "pattern": "[0-7]{3}",
@@ -2307,6 +2307,78 @@
     "not-applicable": 1,
     "percent-not-satisfied": 0
    }
+  },
+  {
+   "name": "an integer fact at the edge of the number domain (2^53 - 1)",
+   "check": {
+    "observes": [
+     {
+      "name": "n",
+      "type": "integer"
+     }
+    ],
+    "criteria": [
+     {
+      "fact": "n",
+      "op": "equals",
+      "expected": 9007199254740991
+     }
+    ]
+   },
+   "observation": {
+    "facts": {
+     "n": 9007199254740991
+    }
+   },
+   "expected": "satisfied"
+  },
+  {
+   "name": "an integer fact one beyond the number domain is no integer: inconclusive (NUMBER-1)",
+   "check": {
+    "observes": [
+     {
+      "name": "n",
+      "type": "integer"
+     }
+    ],
+    "criteria": [
+     {
+      "fact": "n",
+      "op": "equals",
+      "expected": 9007199254740991
+     }
+    ]
+   },
+   "observation": {
+    "facts": {
+     "n": 9007199254740992
+    }
+   },
+   "expected": "inconclusive"
+  },
+  {
+   "name": "the reported pair, 9007199254740993 against 9007199254740992: inconclusive in every engine, never satisfied (NUMBER-1)",
+   "check": {
+    "observes": [
+     {
+      "name": "n",
+      "type": "integer"
+     }
+    ],
+    "criteria": [
+     {
+      "fact": "n",
+      "op": "equals",
+      "expected": 9007199254740992
+     }
+    ]
+   },
+   "observation": {
+    "facts": {
+     "n": 9007199254740993
+    }
+   },
+   "expected": "inconclusive"
   }
  ],
  "aggregate-vectors": [
@@ -12358,6 +12430,218 @@
    "expected-notes": [
     "withheld",
     "binding to it is not verified"
+   ]
+  },
+  {
+   "name": "NUMBER-1: an observation file that writes an integer as 4.0",
+   "objects": [
+    {
+     "id": "https://ex.org/req/ssh-1",
+     "version": "1",
+     "lifecycle": "active",
+     "title": {
+      "en": "SSH hardening"
+     },
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ex.org/party/ops"
+       ],
+       "prose": {
+        "en": "The SSH daemon allows at most {param:max-auth-tries} authentication attempts per connection."
+       },
+       "parameters": [
+        {
+         "name": "max-auth-tries",
+         "type": "integer",
+         "tightening": "lower",
+         "min": 1,
+         "max": 10
+        }
+       ]
+      },
+      {
+       "id": "s2",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ex.org/party/ops"
+       ],
+       "prose": {
+        "en": "The SSH daemon offers no cipher in CBC mode."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/set/linux",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ex.org/req/ssh-1",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/tailoring/strict",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ex.org/set/linux"
+      }
+     ],
+     "operations": [
+      {
+       "op": "set-parameter",
+       "requirement-ref": "https://ex.org/req/ssh-1",
+       "statement-id": "s1",
+       "parameter": "max-auth-tries",
+       "value": 4
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/tailoring/standard",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ex.org/set/linux"
+      }
+     ],
+     "operations": [
+      {
+       "op": "set-parameter",
+       "requirement-ref": "https://ex.org/req/ssh-1",
+       "statement-id": "s1",
+       "parameter": "max-auth-tries",
+       "value": 6
+      }
+     ]
+    },
+    {
+     "id": "https://ex.org/check/ssh-1-maxauthtries",
+     "version": "1",
+     "lifecycle": "active",
+     "requirement-ref": "https://ex.org/req/ssh-1",
+     "statement-ids": [
+      "s1"
+     ],
+     "platform": "https://ex.org/platform/linux-host",
+     "observes": [
+      {
+       "name": "sshd.maxauthtries",
+       "type": "integer"
+      }
+     ],
+     "criteria": [
+      {
+       "fact": "sshd.maxauthtries",
+       "op": "at-most",
+       "expected": {
+        "param": "max-auth-tries"
+       }
+      }
+     ],
+     "confidence": "reviewed",
+     "provenance": {
+      "author-ref": "https://ex.org/party/secops",
+      "date": "2026-11-11"
+     },
+     "facets": {
+      "https://ns.jascon.net/stdlib/facet/collector@1": {
+       "collectors": [
+        {
+         "id": "bash",
+         "runtime": "bash",
+         "privileges": "root",
+         "source": "#!/bin/bash\nv=$(sshd -T | awk '$1==\"maxauthtries\"{print $2}')\n[ -n \"$v\" ] && printf '{\"facts\":{\"sshd.maxauthtries\":%s}}\\n' \"$v\" || echo '{\"facts\":{}}'\n"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "id": "https://ex.org/check/ssh-1-ciphers",
+     "version": "1",
+     "lifecycle": "active",
+     "requirement-ref": "https://ex.org/req/ssh-1",
+     "statement-ids": [
+      "s2"
+     ],
+     "platform": "https://ex.org/platform/linux-host",
+     "observes": [
+      {
+       "name": "sshd.ciphers",
+       "type": "code",
+       "cardinality": "many"
+      }
+     ],
+     "criteria": [
+      {
+       "fact": "sshd.ciphers",
+       "op": "matches-not",
+       "expected": ".*-cbc"
+      }
+     ],
+     "confidence": "reviewed",
+     "provenance": {
+      "author-ref": "https://ex.org/party/secops",
+      "date": "2026-11-11"
+     }
+    },
+    {
+     "id": "https://ex.org/assessment/ok",
+     "version": "1",
+     "lifecycle": "active",
+     "subject-refs": [
+      "https://ex.org/component/host-1"
+     ],
+     "method": {
+      "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+       "method": "automated"
+      }
+     },
+     "performer-ref": "https://ex.org/party/runner",
+     "time": "2026-11-11T09:00:00Z",
+     "result": "satisfied",
+     "check-results": [
+      {
+       "check-ref": "https://ex.org/check/ssh-1-maxauthtries",
+       "check-digest": "sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435",
+       "outcome": "satisfied",
+       "time": "2026-11-11T09:00:00Z",
+       "collector-id": "bash",
+       "parameters": {
+        "max-auth-tries": 4
+       },
+       "evidence-record": {
+        "ref": "evidence/sha256/393c95aad3f8f5b2e920fbba38870d5b63ce953104bf44fe5b96dd320ddcbf06",
+        "digest": "sha256:393c95aad3f8f5b2e920fbba38870d5b63ce953104bf44fe5b96dd320ddcbf06"
+       },
+       "observation-ref": {
+        "ref": "evidence/sha256/cda2db2b60e2bf2522771f48e3e85d5400f26117c646cc8a046f73477d994b01",
+        "digest": "sha256:cda2db2b60e2bf2522771f48e3e85d5400f26117c646cc8a046f73477d994b01"
+       }
+      }
+     ],
+     "tailoring-ref": "https://ex.org/tailoring/strict"
+    }
+   ],
+   "expected-rules": [
+    "NUMBER-1"
+   ],
+   "store": {
+    "evidence/sha256/393c95aad3f8f5b2e920fbba38870d5b63ce953104bf44fe5b96dd320ddcbf06": "{\n \"record-version\": \"1\",\n \"check-ref\": \"https://ex.org/check/ssh-1-maxauthtries\",\n \"check-digest\": \"sha256:35db979b7a8de3abde3b3eddc33df5c6bf6188c48ef115b3ab35cfaf0c2ae435\",\n \"collector-id\": \"bash\",\n \"subject-ref\": \"https://ex.org/component/host-1\",\n \"started\": \"2026-11-11T08:59:58Z\",\n \"finished\": \"2026-11-11T09:00:00Z\",\n \"exit-status\": 0,\n \"observation-digest\": \"sha256:5f3420c588b7473d556377c58e60156f217c43679d8f2cb5c319d21c87849483\",\n \"outputs\": [\n  {\n   \"name\": \"stdout\",\n   \"digest\": \"sha256:8a4d9980a72c9267e5e6487141fdfa7c639b4381dd0a58d53ac033ad751d1c31\",\n   \"media-type\": \"text/plain\"\n  }\n ]\n}\n",
+    "evidence/sha256/8a4d9980a72c9267e5e6487141fdfa7c639b4381dd0a58d53ac033ad751d1c31": "maxauthtries 4\nciphers aes256-gcm@openssh.com,aes256-ctr\n",
+    "evidence/sha256/cda2db2b60e2bf2522771f48e3e85d5400f26117c646cc8a046f73477d994b01": "{\"facts\":{\"sshd.maxauthtries\":4.0}}\n"
+   },
+   "expected-notes": [
+    "verdict not recomputed"
    ]
   }
  ]

@@ -315,7 +315,10 @@ comparison between two facts: the leash of B.4, applied once more.
 3. An undeclared fact, an unobserved fact, a mistyped value, an unbound
    parameter or a mistyped bound value: `inconclusive`. **A default is
    never substituted** (D9). `not-equals` on a missing fact is
-   `inconclusive` as well, never satisfied.
+   `inconclusive` as well, never satisfied. An `integer` fact outside
+   the number domain (NUMBER-1: plain digits, magnitude at most 2^53 − 1)
+   is mistyped: beyond that, two engines read two values, and neither
+   may return `satisfied` or `not-satisfied` from it.
 4. **Strong Kleene AND:** one `not-satisfied` decides; else one
    `inconclusive` decides; else `satisfied`. A definite failure is never
    hidden behind an unknown elsewhere.
@@ -380,7 +383,7 @@ an `audit` string. An exit code hides its threshold, cannot be reached
 by a tailored parameter and leaves a bit where an observation should be.
 **Measured fit:** 481 of 510 rules of the CIS Ubuntu 24.04 profiles of
 ComplianceAsCode; the operators of kube-bench `cis-1.12` map onto the
-set (CP-CHECK-1 §2.2). **Exercised:** `check-vectors.json`, 199 cases;
+set (CP-CHECK-1 §2.2). **Exercised:** `check-vectors.json`, 203 cases;
 the worked example LNX-SSH-1 with two runs.
 
 ## B.2 The three predicates (shared vocabulary, one leash)

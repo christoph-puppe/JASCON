@@ -314,7 +314,10 @@ Evidence lies beside the bundle, every file named by the SHA-256 of its
 bytes. The row points to an evidence record, the record carries the
 digest of the same observation and of each raw output, and an
 Attestation over the Assessment covers the row. Every link verifies
-offline. Row and record are two statements about one run and must
+offline. A collector prints integers in plain digits and nothing
+beyond 2^53 − 1; a larger count, a 64-bit identifier or a fraction is a
+`decimal` fact and printed as a string, because two tools would read the
+bare number as two values (NUMBER-1). Row and record are two statements about one run and must
 agree: a record that binds an observation the row does not carry fails,
 and so does a row whose record binds none. Otherwise a failing
 observation could be dropped and the run reported as inconclusive. A raw output deleted under a retention rule is reported as

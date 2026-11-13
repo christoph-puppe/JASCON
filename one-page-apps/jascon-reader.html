@@ -1271,6 +1271,27 @@ function renderLattice() {
     `<text x="12" y="20" fill="oklch(0.55 0.02 280)" font-size="9" letter-spacing="1">▲ UP = TIGHTEN (FREE) · DOWN/ACROSS = WEAKEN (DEVIATION)</text>`;
 }
 
+/* ---------- the number domain (v1.10.0; NUMBER-1, specification D3.9) ----------
+   A JSON number in a bundle is an integer in plain digits, of magnitude at
+   most 2^53 - 1. JSON.parse reads 9007199254740993 as ...992 and 1.0 as 1,
+   so this page would compute another semantic digest than a tool that keeps
+   the number as written. The check reads the file's TEXT: strings are
+   consumed whole, every other token that starts like a number is one, and
+   its digits are compared as text. The same rule and the same pattern as in
+   validate_core.py, validate_core.ps1 and the app (jascon-rules.js). */
+const NUMBER_TOKEN = /"[^"\\]*(?:\\.[^"\\]*)*"|-?[0-9][0-9.eE+-]*/g;
+const NUMBER_PLAIN = /^-?(?:0|[1-9][0-9]*)$/, NUMBER_MAX_DIGITS = "9007199254740991";
+function numberSpellingViolations(text) {
+  const out = [];
+  for (const tok of String(text).match(NUMBER_TOKEN) || []) {
+    if (tok[0] === '"') continue;
+    const digits = tok.replace(/^-/, "");
+    if (!NUMBER_PLAIN.test(tok) || tok === "-0" || digits.length > NUMBER_MAX_DIGITS.length ||
+        (digits.length === NUMBER_MAX_DIGITS.length && digits > NUMBER_MAX_DIGITS)) out.push(tok);
+  }
+  return out;
+}
+
 /* ---------- verify ---------- */
 async function verifyAll() {
   if (!state.manifest) return;
@@ -1278,9 +1299,15 @@ async function verifyAll() {
   const ids = state.order.filter(id => state.objects.get(id)?.entry);
   l.info(`verifying ${ids.length} objects — package + semantic digests…`);
   const t0 = performance.now();
-  let ok = 0, bad = 0, i = 0;
+  let ok = 0, bad = 0, i = 0, numBad = 0;
+  const numbers = path => {     // NUMBER-1 on the text of one file
+    const f = state.files.get(path), wrong = f ? numberSpellingViolations(f.text) : [];
+    if (wrong.length) { numBad++; l.err(`NUMBER-1: ${path} writes a number as ${wrong[0]}${wrong.length > 1 ? ` (and ${wrong.length - 1} more)` : ""} - a number is an integer in plain digits, at most 2^53 - 1; this page and other tools would read it differently`); }
+  };
+  numbers("content-manifest.json");
   for (const id of ids) {
     const r = state.objects.get(id);
+    numbers(r.path);
     const pkg = "sha256:" + await sha256hex(state.files.get(r.path).bytes);
     const sem = "sha256:" + await sha256hex(canonical(r.obj));
     const res = { pkg: pkg === r.entry["package-digest"], sem: sem === r.entry["semantic-digest"] };
@@ -1311,8 +1338,9 @@ async function verifyAll() {
   const ms = Math.round(performance.now() - t0);
   (bad ? l.err : l.ok)(`digest verification: ${ok} ok, ${bad} mismatches in ${ms}ms`);
   $("pill-verify").classList.remove("hidden");
-  $("pill-verify").textContent = (bad ? `✗ ${bad} digest mismatches` : `✓ ${ok} objects verified`) + (evBad ? ` · ✗ ${evBad} evidence file(s)` : "") + (pkBad ? ` · ✗ ${pkBad} kept pack manifest(s)` : "");
-  $("pill-verify").style.color = bad || evBad || pkBad ? "var(--red)" : "var(--green)";
+  if (numBad) l.err(`number domain: ${numBad} file(s) break NUMBER-1`);
+  $("pill-verify").textContent = (bad ? `✗ ${bad} digest mismatches` : `✓ ${ok} objects verified`) + (evBad ? ` · ✗ ${evBad} evidence file(s)` : "") + (pkBad ? ` · ✗ ${pkBad} kept pack manifest(s)` : "") + (numBad ? ` · ✗ ${numBad} file(s) with a number outside the domain` : "");
+  $("pill-verify").style.color = bad || evBad || pkBad || numBad ? "var(--red)" : "var(--green)";
   renderList();
   if (state.selected) openObject(state.selected);
 }
@@ -2627,7 +2655,7 @@ renderLattice();
 restoreWorkspaceObjects();
 renderStages();
 setView("overview");
-l.info("JASCON Bundle Reader v1.9.0 · build 2026-11-12 — everything runs locally, nothing leaves this page");
+l.info("JASCON Bundle Reader v1.10.0 · build 2026-11-13 — everything runs locally, nothing leaves this page");
 l.info("open a bundle folder (contains content-manifest.json + objects/) or drop it here — or serve the repo over http and deep-link: #load=<bundle-url>&view=stage:tailor");
 
 /* deep links: #load=<bundle-url>&view=<view> — shareable when served over http(s) */

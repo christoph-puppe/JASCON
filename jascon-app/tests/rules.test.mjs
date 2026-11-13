@@ -36,7 +36,7 @@ test("modality: every vector", () => {
 
 test("parameter: every vector", () => {
   const v = vectors("parameter").vectors;
-  assert.equal(v.length, 19);
+  assert.equal(v.length, 21);
   for (const c of v) assert.equal(rules.jscParamCheck(c.parameter, c.value), c.verdict, c.name);
 });
 
@@ -272,13 +272,38 @@ test("the example bundle: its scales, its matrix and its Risk agree, and coverag
   assert.equal(cov.report.risks, 1);
 });
 
-test("jcs: canonical form, and optional containers that must be absent instead of empty", () => {
+test("jcs: canonical form, optional containers that must be absent instead of empty, and the number domain", () => {
   const v = vectors("jcs").vectors;
-  assert.equal(v.length, 8);
+  assert.equal(v.length, 22);
   for (const c of v) {
     if (c.canonical != null) assert.equal(core.jscCanonical(c.input), c.canonical, c.name);
-    else assert.equal(rules.jscOptionalEmptyViolations(c["authoring-input"]).length ? "invalid" : "valid", c.expected, c.name);
+    else if ("authoring-input" in c) assert.equal(rules.jscOptionalEmptyViolations(c["authoring-input"]).length ? "invalid" : "valid", c.expected, c.name);
+    else {
+      /* NUMBER-1 (errata 2026-11-13): the vector is a JSON text, because JSON.parse reads 1.0 as 1 */
+      const text = c["number-text"], value = JSON.parse(text);
+      const verdict = rules.jscNumberSpellingViolations(text).length || rules.jscNumberViolations(value).length ? "invalid" : "valid";
+      assert.equal(verdict, c.expected, c.name);
+      if (verdict === "valid") assert.equal(core.jscCanonical(value), c["canonical-text"], c.name);
+    }
   }
+});
+test("NUMBER-1 (errata 2026-11-13): JSON.parse alone would let every spelling and the reported integer through", () => {
+  /* why the rule needs the text: after parsing, these are indistinguishable from valid numbers */
+  for (const text of ['{"n":1.0}', '{"n":1e3}', '{"n":-0}']) {
+    assert.equal(rules.jscNumberViolations(JSON.parse(text)).length, 0, `${text}: the value alone looks fine`);
+    assert.equal(rules.jscNumberSpellingViolations(text).length, 1, `${text}: the text is refused`);
+  }
+  /* the reported case: the parser rounds, and the value check still refuses, because the result is past the range */
+  assert.equal(JSON.parse("9007199254740993"), 9007199254740992);
+  assert.equal(rules.jscNumberViolations(JSON.parse('{"n":9007199254740993}')).length, 1);
+  const check = { observes: [{ name: "n", type: "integer" }], criteria: [{ fact: "n", op: "equals", expected: 9007199254740992 }] };
+  assert.equal(rules.jscCheckVerdict(check, JSON.parse('{"facts":{"n":9007199254740993}}'), null)[0], "inconclusive");
+  /* an object and a whole file */
+  const req = { id: "https://ex.org/req/1", version: "1", lifecycle: "active", statements: [{ id: "s1", modality: "must", "obligated-parties": ["https://ex.org/party/o"],
+    prose: { en: "At most {param:n}." }, parameters: [{ name: "n", type: "integer", max: 9007199254740992 }] }] };
+  assert.match(rules.jscObjectErrors(req).errors.join(" | "), /\[NUMBER-1\] \$\.statements\[0\]\.parameters\[0\]\.max/);
+  assert.match(rules.jscNumberError('{"id":"x","annotations":{"alpha":0.5}}'), /\[NUMBER-1\] written as 0\.5/);
+  assert.equal(rules.jscNumberError('{"s":"1.0 and -0","n":7}'), null);
 });
 
 test("facet: every vector (stdlib, pinned, private, unregistered)", () => {
@@ -625,4 +650,21 @@ test("a whole set: content written in the app needs no pin before the export; im
   g.objects.get(check.id).origin = "imported";
   const res2 = await rules.jscCheckGraph(g, null);
   assert.ok(res2.findings.some(f => f.area === "manifest" && f.kind === "error" && /KERNEL-1/.test(f.message)), "the same Check, imported, needs the pin");
+});
+
+test("NUMBER-1 (errata 2026-11-13): a whole set - a file that writes 10.0 is an error although the parsed object is fine", async () => {
+  const P = "https://ex.org";
+  const req = { id: P + "/r", version: "1", lifecycle: "active", statements: [{ id: "s1", modality: "must", "obligated-parties": [P + "/p"], prose: { en: "X." } }] };
+  const set = { id: P + "/s", version: "1", lifecycle: "active", members: [{ ref: P + "/r", sequence: 10 }] };
+  const files = text => [{ path: "content-manifest.json", text: JSON.stringify({ "manifest-version": "1", objects: [] }) },
+    { path: "objects/r.json", text: JSON.stringify(req) }, { path: "objects/s.json", text }];
+  const numberErrors = async text => (await rules.jscCheckGraph(core.jscGraphFrom(core.jscClassifyFiles(files(text)).records), null))
+    .findings.filter(f => f.kind === "error" && /NUMBER-1/.test(f.message));
+  assert.deepEqual(await numberErrors(JSON.stringify(set)), []);
+  const spelled = await numberErrors(JSON.stringify(set).replace('"sequence":10', '"sequence":10.0'));
+  assert.equal(spelled.length, 1);
+  assert.equal(spelled[0].object, set.id);
+  assert.match(spelled[0].message, /objects\/s\.json: \[NUMBER-1\] written as 10\.0/);
+  const large = await numberErrors(JSON.stringify(set).replace('"sequence":10', '"sequence":9007199254740993'));
+  assert.ok(large.length >= 1 && /written as 9007199254740993/.test(large[0].message));
 });

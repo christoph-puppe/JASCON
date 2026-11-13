@@ -139,3 +139,47 @@ surprise, blunder.
   in `check-vectors.json` (188 to 199). Ten of them fail on the rules as
   they were; the eleventh is the legitimate case, a run that observed
   nothing.
+
+## 2026-11-13 · build 0.9.6 · the app and the reference read the same number as two values
+
+- **Symptom.** For the same JSON text the Validate page and `validate_core.py`
+  disagreed. A Check that expects `9007199254740992`, on an observation of
+  `9007199254740993`: the reference said `not-satisfied`, the app
+  `satisfied`. `1.0` or `1e3` on an `integer` fact: the reference said
+  `inconclusive`, the app `satisfied`. The semantic digest differed as well:
+  the reference hashed `{"n":9007199254740993}` and `{"n":1.0}` as written,
+  the app as `...992` and `1`. So an Attestation could verify in one tool
+  and fail in the other. Reported from outside as issue 27 in the GitHub
+  tracker, for the first of these; the other two were found while
+  reproducing it.
+- **Cause.** `JSON.parse` returns doubles: an integer beyond 2^53 is rounded
+  and the fraction of `1.0` is gone before any rule sees the value. The
+  specification named a "permitted number domain" (D3 item 3) and defined
+  none, and `jcs-vectors.json` held no number. The comment on
+  `jscCanonical` said the two engines "agree on everything the schema
+  allows"; the schema type `integer` allows both `1.0` and large values.
+- **Class.** Mismatch: two modules disagreed on a contract, here on what a
+  JSON number is. The contract was missing from the specification, so
+  neither side was wrong against it.
+- **Why it was not caught.** The canonical form of the app was tested
+  against the reference's vectors, and no vector held a number outside the
+  small integers. A vector file could not have held `1.0` as a number
+  anyway: the test's own parser would have read it as 1.
+- **Fix.** The specification states the domain (D3 item 9, NUMBER-1): a JSON
+  number is an integer in plain digits, of magnitude at most 2^53 - 1; it is
+  refused, never rewritten. `jascon-rules.js` checks the text of every file
+  of a set (`jscNumberSpellingViolations`, where `1.0`, `1e3` and `-0` are
+  still visible) and the value of every object (`jscNumberViolations`); an
+  `integer` fact or parameter outside the domain is mistyped, so
+  `check-verdict` is `inconclusive`. Evidence records and observation files
+  are held to the same rule. The reader (v1.10.0) reports it when it
+  verifies digests. The canonical form itself is unchanged: inside the
+  domain the engines agree. The comment on `jscCanonical` is corrected.
+- **Test.** `tests/rules.test.mjs`: "jcs: canonical form, optional
+  containers that must be absent instead of empty, and the number domain"
+  (14 `number-text` vectors, which carry JSON texts), "NUMBER-1 (errata
+  2026-11-13): JSON.parse alone would let every spelling and the reported
+  integer through", and "NUMBER-1 (errata 2026-11-13): a whole set - a file
+  that writes 10.0 is an error although the parsed object is fine"; three
+  verdict vectors, two parameter vectors and one bundle vector in the
+  shared corpus.

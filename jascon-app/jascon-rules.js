@@ -99,7 +99,7 @@ function jscParamCheck(decl, value) {
     return allowed.includes(value) ? "valid" : "deviation-required";
   }
   if (t === "integer") {
-    if (typeof value !== "number" || !Number.isInteger(value)) return "invalid";
+    if (typeof value !== "number" || !Number.isSafeInteger(value)) return "invalid";   // NUMBER-1: beyond 2^53 two tools read two values
     if ("min" in decl && value < decl.min) return "deviation-required";
     if ("max" in decl && value > decl.max) return "deviation-required";
     return "valid";
@@ -905,6 +905,53 @@ const JSC_OPTIONAL_CONTAINERS = new Set(["aliases", "canonical-alias", "replaces
   "deviations", "excludes", "source-scope", "target-scope", "evidence-refs", "statement-refs", "capabilities", "authorizations",
   "actions", "choices", "threat-refs", "component-refs", "treatments", "risk-refs", "tailoring-refs",
   "statement-ids", "applies-when", "check-results", "derived-from"]);
+/* ---------- the number domain (D3.9, NUMBER-1) ----------
+   A JSON number in a bundle is an integer written in plain digits, of
+   magnitude at most 2^53 - 1. Two reasons, one rule. RANGE: beyond 2^53 a
+   double no longer holds every integer, so JSON.parse reads 9007199254740993
+   as ...992 while the Python reference reads it exactly - two digests, two
+   verdicts for one file. SPELLING: `1.0`, `1e3` and `-0` are second spellings
+   of 1, 1000 and 0; JSON.stringify writes `1` where the reference hashes
+   `1.0` as written. The rule rejects; it never rewrites (D3.4).
+
+   Two checks, because JSON.parse forgets the spelling:
+     jscNumberSpellingViolations(text)  wherever a bundle file is read as text
+     jscNumberViolations(value)         on every object, and in check-verdict
+   A fraction is a `decimal`, which is a string. */
+const JSC_NUMBER_RULES = {
+  "NUMBER-1": "a JSON number is an integer in plain digits, of magnitude at most 2^53 - 1 (9007199254740991) - " +
+    "no fraction, no exponent, no -0; a number two tools read differently has two digests and two verdicts",
+};
+/* one pass over a text that already parsed as JSON: strings are consumed whole
+   (digits inside them are never looked at), everything else that starts like
+   a number is a number token. The digits are compared as text. */
+const JSC_NUMBER_TOKEN = /"[^"\\]*(?:\\.[^"\\]*)*"|-?[0-9][0-9.eE+-]*/g;
+const JSC_NUMBER_PLAIN = /^-?(?:0|[1-9][0-9]*)$/, JSC_NUMBER_MAX_DIGITS = "9007199254740991";
+function jscNumberSpellingViolations(text) {
+  const out = [];
+  for (const tok of String(text).match(JSC_NUMBER_TOKEN) || []) {
+    if (tok[0] === '"') continue;
+    const digits = tok.replace(/^-/, "");
+    if (!JSC_NUMBER_PLAIN.test(tok) || tok === "-0" || digits.length > JSC_NUMBER_MAX_DIGITS.length ||
+        (digits.length === JSC_NUMBER_MAX_DIGITS.length && digits > JSC_NUMBER_MAX_DIGITS)) out.push(tok);
+  }
+  return out;
+}
+const jscInNumberDomain = x => typeof x === "number" && Number.isSafeInteger(x);
+/* the backstop for values that never were a text here (vectors, objects the app built) */
+function jscNumberViolations(obj, path = "$") {
+  const out = [];
+  if (Array.isArray(obj)) obj.forEach((v, i) => out.push(...jscNumberViolations(v, `${path}[${i}]`)));
+  else if (jscIsPlainObject(obj)) for (const [k, v] of Object.entries(obj)) out.push(...jscNumberViolations(v, `${path}.${k}`));
+  else if (typeof obj === "number" && !jscInNumberDomain(obj)) out.push(`${path} = ${obj}`);
+  return out;
+}
+/* -> the NUMBER-1 message for one bundle file, or null: its text if given, else its value */
+function jscNumberError(text, obj) {
+  let bad = typeof text === "string" ? jscNumberSpellingViolations(text).map(t => `written as ${t}`) : [];
+  if (!bad.length && obj !== undefined) bad = jscNumberViolations(obj);
+  return bad.length ? `[NUMBER-1] ${bad[0]}${bad.length > 1 ? ` (and ${bad.length - 1} more)` : ""} - ${JSC_NUMBER_RULES["NUMBER-1"]}` : null;
+}
 function jscOptionalEmptyViolations(obj, path = "$") {
   const out = [];
   if (Array.isArray(obj)) obj.forEach((v, i) => out.push(...jscOptionalEmptyViolations(v, `${path}[${i}]`)));
@@ -956,7 +1003,8 @@ function jscDateRuleViolations(o) {
 /* What is wrong with one object, without looking at any other.
    -> { type: its one kernel type or null, errors: [string] } */
 function jscObjectErrors(obj) {
-  const matches = jscMatchTypes(obj), errors = [];
+  const matches = jscMatchTypes(obj), errors = [], number = jscNumberError(null, obj);
+  if (number) errors.push(number);
   if (matches.length !== 1) {
     let best = "";
     if (!matches.length) {
@@ -969,7 +1017,7 @@ function jscObjectErrors(obj) {
       /* two fields that 1.0.0 left as free text and 2.0.0 types */
       best += jscDateRuleViolations(obj).map(([rule, what]) => ` [${rule}] ${what} - ${JSC_DATE_RULES[rule]}`).join("");
     }
-    return { type: null, errors: [`matches ${matches.length ? matches.join(" and ") : "NO type"}${best}`] };
+    return { type: null, errors: [...errors, `matches ${matches.length ? matches.join(" and ") : "NO type"}${best}`] };
   }
   const empty = jscOptionalEmptyViolations(obj);
   if (empty.length) errors.push(`optional empty containers present: ${empty.join(", ")}`);
@@ -1562,7 +1610,7 @@ const JSC_CHECK_OPS = {   // which comparators fit which fact; present / absent 
 const JSC_CHECK_LIST_OPS = ["one-of", "includes-all", "excludes-all", "subset-of"];
 const JSC_CHECK_PATTERN_OPS = ["matches", "matches-not"];
 function jscFactOk(type, x) {
-  if (type === "integer") return typeof x === "number" && Number.isInteger(x);
+  if (type === "integer") return jscInNumberDomain(x);   // NUMBER-1: no verdict from a value two tools read differently
   if (type === "decimal") return typeof x === "string" && JSC_DECIMAL_RE.test(x);
   if (type === "boolean") return typeof x === "boolean";
   return typeof x === "string";   // string, code
@@ -1783,6 +1831,12 @@ async function jscEvidenceChain(oid, at, a, row, read) {
   const E = [], notes = [];
   let obs = null;
   const bad = msg => E.push(["CHECK-15", `${oid}: ${at}: ${msg} (CHECK-15: ${JSC_CHECK_RULES["CHECK-15"]})`]);
+  /* NUMBER-1 on an evidence file -> true when it holds; a file that breaks it is not used */
+  const numbers = (text, value, what) => {
+    const wrong = jscNumberError(text, value);
+    if (wrong) E.push(["NUMBER-1", `${oid}: ${at}: ${what}: ${wrong.replace(/^\[NUMBER-1\] /, "").replace(/ - .*$/, "")} (NUMBER-1: ${JSC_NUMBER_RULES["NUMBER-1"]})`]);
+    return !wrong;
+  };
   const load = async (dref, what) => {
     const ref = dref.ref, want = dref.digest;
     if (/^[A-Za-z][A-Za-z0-9+.-]*:/.test(ref)) { notes.push(`${oid}: ${at}: ${what} ${ref} is a URI - not resolvable offline`); return null; }
@@ -1807,6 +1861,7 @@ async function jscEvidenceChain(oid, at, a, row, read) {
     const text = await load(row["observation-ref"], "observation");
     if (text !== null) {
       try { obs = JSON.parse(text); } catch (ex) { bad(`observation file unreadable: ${ex.message}`); }
+      if (obs !== null && !numbers(text, obs, "observation file")) obs = null;
       if (obs !== null && jscShapeErrors("checkObservation", obs).length) { bad("the observation file is not an observation"); obs = null; }
     }
   }
@@ -1814,6 +1869,7 @@ async function jscEvidenceChain(oid, at, a, row, read) {
     const text = await load(row["evidence-record"], "evidence record");
     let rec = null;
     if (text !== null) { try { rec = JSON.parse(text); } catch (ex) { bad(`evidence record unreadable: ${ex.message}`); } }
+    if (rec !== null && !numbers(text, rec, "evidence record")) rec = null;
     const shape = rec !== null ? jscShapeErrors("evidenceRecord", rec) : [];
     if (shape.length) { bad(`evidence record: ${shape[0]}`); rec = null; }
     if (rec !== null) {
@@ -2553,9 +2609,16 @@ async function jscCheckGraph(g, verified, opts) {
     }
   } else add("note", "manifest", null, "the set has no content manifest; digests and pins cannot be checked until it is exported");
   g.problems.forEach(m => add("error", "files", null, m));
+  /* NUMBER-1 on the text of every file: JSON.parse has already forgotten how
+     a number was written, so the spelling is read from the text the set holds */
+  const spelled = (text, area, object, path) => { const m = jscNumberError(text); if (m) add("error", area, object, `${path}: ${m}`); };
+  if (g.manifestText) spelled(g.manifestText, "manifest", null, "content-manifest.json");
+  for (const sc of g.scales.values()) spelled(sc.text, "files", null, sc.path);
+  for (const fs of g.facetSchemas) spelled(fs.text, "files", null, fs.path);
 
   const objs = new Map();
   for (const [id, r] of g.objects) {
+    spelled(r.text, "object", id, r.path);
     const res = jscObjectErrors(r.obj);
     res.errors.forEach(m => add("error", "object", id, m));
     if (res.type) { objs.set(id, { type: res.type, obj: r.obj }); types[res.type] = (types[res.type] || 0) + 1; }
@@ -2675,7 +2738,7 @@ if (typeof module !== "undefined" && module.exports) {
     jscSchemaCheck, jscShapeErrors, jscMatchTypes, jscTypeOf, jscTypedObjects, JSC_KERNEL_TYPES, JSC_RISK_RULES, jscClosureErrors,
     jscKernelNeeded, jscKernelPinErrors, jscRiskRuleViolations, jscRiskIsLive, jscRiskJustifies, JSC_NO_TAILORING, jscRiskCoverage,
     jscRiskLinkNotes, jscScaleDefinitionErrors, jscMatrixErrors, jscRiskLevels, jscMatrixCell, jscScaleErrors, jscCheckScales,
-    jscOptionalEmptyViolations, jscObjectErrors, jscFacetErrors, jscTailoringDutyErrors, jscAttestationVerdict, jscCheckGraph,
+    jscOptionalEmptyViolations, JSC_NUMBER_RULES, jscNumberSpellingViolations, jscNumberViolations, jscInNumberDomain, jscNumberError, jscObjectErrors, jscFacetErrors, jscTailoringDutyErrors, jscAttestationVerdict, jscCheckGraph,
     JSC_DSSE_PAYLOAD_TYPE, jscEd25519Verify, jscVerifyEnvelope, jscSemver, jscCompose, jscComposeSide, jscPathGet, jscEvalPredicate, jscConditionalApply,
     JSC_CHECK_RULES, JSC_CHECK_OPS, JscIRegexpError, jscIreCompile, jscIreFullMatch, jscCheckVerdict, jscCheckEach, jscCheckEachSummary, jscPercentShare, jscCheckAggregate, jscCheckParamDecls,
     jscCheckObjectErrors, jscCheckErrors,

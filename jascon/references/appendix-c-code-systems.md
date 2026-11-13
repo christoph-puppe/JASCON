@@ -247,6 +247,10 @@ proposal with counts.
 **C.12 Fact types:** `string · integer · decimal · boolean · code`, with
 the cardinality `one · many`. A decimal is the canonical decimal string
 of the kernel and compares by value; a JSON float is no decimal fact.
+An integer is a JSON number in the number domain (NUMBER-1): plain
+digits, magnitude at most 2^53 − 1. A count in nanoseconds, a 64-bit
+identifier or any fraction is declared `decimal` and reported as a
+string.
 
 **C.13 Comparators** (twelve): `equals · not-equals · one-of · at-least ·
 at-most · present · absent · includes-all · excludes-all · subset-of ·

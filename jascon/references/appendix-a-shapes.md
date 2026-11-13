@@ -60,7 +60,7 @@ type-specific fields —
 |---|---|---|
 | `string` | — | BSI params ×147 (label/default first-class since the v0.6 cycle — D9 rev, backlog #1; the L2 `param-extras` residue ×179 drains at the next converter run). |
 | `choice` | `choices[]{value,label}` ●, `cardinality` (one \| many) | the fused-alternatives lesson ("TLS 1.3 *oder* …"). |
-| `integer` | `min?`, `max?` | ODP bounds. |
+| `integer` | `min?`, `max?` | ODP bounds. An integer is in the number domain: plain digits, magnitude at most 2^53 − 1 (NUMBER-1, D3.9); a larger quantity is a `decimal`. |
 | `decimal` | canonical **string** value, `min?`, `max?` | JCS float hazard (D3). |
 | `elapsed-duration` | `num` ●, `unit` ● ∈ seconds·minutes·hours | CR26 clocks that run through weekends. |
 | `calendar-period` | `num` ●, `unit` ● ∈ days·bizdays·weeks·months·years, `calendar-ref` ● | CR26 bizdays; fail-closed without the calendar. True unit-class crossings measured: **0** (51 first-pass flags were base-absent variants, resolved by the D13 rev — authority-tier ceremony; duration-union question closed no-change, backlog #3). |
@@ -249,7 +249,7 @@ facet `collector@1` (Appendix D), `{collectors: [{id ●, runtime ●
 inline so that the Check's digest covers the exact source, and declared
 `[]` because nothing in it changes what passing means. Credentials and
 target inventory never appear in a bundle. Evidence: the two Checks of
-the example bundle, `check-vectors.json` (199).
+the example bundle, `check-vectors.json` (203).
 
 ## A.10 Sub-object: Deviation
 

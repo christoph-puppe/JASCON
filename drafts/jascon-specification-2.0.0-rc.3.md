@@ -279,7 +279,8 @@ relation (v0.4 — corrected).
 3. **JCS pre-normalization (P6-F3):** before JCS serialization, all
    structurally optional arrays/objects containing zero elements MUST be
    omitted. Normative test vectors cover this and the permitted number
-   domain.
+   domain. *(rev. 2026-11-13: the domain this sentence names was stated
+   nowhere and no vector covered it; item 9 states it, backlog #67.)*
 4. **`decimal` is a canonical decimal string** (lexically defined scale/
    precision), never an IEEE-754 number — two tools MUST derive identical
    digests and values (P7-G on decimals). **Canonical form (rev. v0.6 cycle
@@ -351,6 +352,36 @@ relation (v0.4 — corrected).
    unchanged, beside its own: `packs/sha256/<hex>`, named by the SHA-256
    of its bytes and never listed, the placement of signature envelopes
    and of the evidence store (D24).
+
+9. **The number domain *(2.0.0 — backlog #67, author 2026-11-13; found
+   by an outside report)*.** A JSON number in a bundle is an **integer
+   written in plain digits, of magnitude at most 2^53 − 1**
+   (9007199254740991): an optional minus, then `0` or a digit other than
+   zero followed by digits. No fraction, no exponent, no `-0`.
+   **NUMBER-1** — any other number is a validation error: in the content
+   manifest, in every object, in every pinned definition and in every
+   evidence record and observation file, annotations included, and before
+   a digest is compared or a verdict computed. Two reasons, one rule.
+   *Range:* beyond 2^53 an IEEE double no longer holds every integer; a
+   JavaScript tool reads `9007199254740993` as `…992`, a tool with exact
+   integers reads it as written, and the same file has two semantic
+   digests and two verdicts. *Spelling:* `1.0`, `1e3` and `-0` are second
+   spellings of 1, 1000 and 0; one tool hashes `1.0` as written, another
+   hashes `1`. The rule **rejects and never rewrites** (item 4's
+   discipline: one value, one spelling, and the spelling is held by
+   validation, not repaired at digest time). A tool checks the spelling on
+   the text of a file, because a parser forgets it, and the value wherever
+   it holds a value without its text. The rule is on the file and not on
+   the semantic domain, so that a tool can check it without knowing where
+   `annotations` are; a fraction in an annotation is written as a string.
+   A quantity that does not fit (a count in nanoseconds, a 64-bit
+   identifier, a fraction) is a `decimal`, which is a string and compares
+   exactly (item 4). Raw outputs in the evidence store are bytes to the
+   kernel; the rule does not reach them. Inside the domain the canonical
+   form of every implementation agrees without help, which is why the
+   canonical form itself is unchanged. No shipped object carried a number
+   outside the domain (measured before the rule was written, on 3,871
+   files, and by the validators after it).
 
 **Evidence.** Air-gapped estates; registry link-rot; P7's fixed-point proof;
 P6's omitted-vs-empty hash fragmentation; the two-digest necessity
@@ -1309,7 +1340,9 @@ not-satisfied · inconclusive · not-applicable`, with reasons.
 2. `applies-when` false: `not-applicable`; unknown: `inconclusive`.
 3. An undeclared or unobserved fact, a mistyped value, an unbound
    parameter or a mistyped bound value: `inconclusive`. A default is never
-   substituted (D9).
+   substituted (D9). An `integer` fact outside the number domain (D3.9)
+   is mistyped: no engine returns `satisfied` or `not-satisfied` from a
+   value another engine reads differently *(rev. 2026-11-13)*.
 4. The assertions combine by strong Kleene AND: one `not-satisfied`
    decides; else one `inconclusive` decides; else `satisfied`.
 5. With `each`, **every resource is evaluated** and none is skipped after
@@ -1933,6 +1966,7 @@ history. The compact line:
 | CP-ADVICE-1 | 2026-11-12 | The advice-pack proposal: manifest header, `statement-ids`, the `capability-ref` grammar, ADVICE-1 to ADVICE-11, 71 vectors, a worked pack, the PowerShell twin run on Windows (518 vectors, which also closed #60). ADVICE-7 found one defect in the converted IFA bundle | `drafts/CP-ADVICE-1.md` §13 |
 | Advice accepted · the decisions before the tag | 2026-11-12 | Twelve author decisions. Advice: bundle only; Components only; `statement-ids` kept against D22; `product-version` added; ADVICE-3 and ADVICE-7 kept; a `describes` relation for third parties; one release per set. Before the tag: `Deviation.opened` and the `due` of an action typed (#47a, #52: the superset property ends for free-text dates); history is left as it is (#50); a Tailoring names no Component (#51); Unicode categories follow the host (#59) | CP-ADVICE-1 §14 · "Amendments — CP-ADVICE-1 and the decisions before the tag" |
 | **2.0.0-rc.3** | 2026-11-12 | This text: D25 new; D3, D5, D6, D8, D13, D15, D22, D24 amended in place; gate state in IV.5b | this row |
+| The number domain | 2026-11-13 | A fifth outside report (issue 27 in the GitHub tracker) showed the reference and the app computing two verdicts and two semantic digests for integers beyond 2^53 and for `1.0`. D3 item 3 had named a "permitted number domain" that no text defined. **D3.9 new, NUMBER-1:** integers in plain digits, of magnitude at most 2^53 − 1; rejected, never rewritten; D24's evaluation step 3 amended. `jcs` 8 → 22 vectors, `parameter` 19 → 21, `check` 199 → 203; 568 in all. Backlog #67 closed. After rc.3 | D3.9 · "Amendments — the number domain" |
 | Outside reports on the run rules | 2026-11-13 | Four reports from outside (issues 23 to 26 in the GitHub tracker), each reproduced: the reference accepted an evidence record outside `evidence/sha256/`, a `collector-id` on a Check without collectors, a row parameter its Check does not read, and a record that binds no observation. CHECK-12, CHECK-13 and CHECK-15 amended in place (D24); the three engines follow; `check` 188 → 199 vectors. After rc.3; the counts in the Status and in IV.5b and IV.7 are those of rc.3 | "Amendments — the outside reports of 2026-11-13" |
 
 ## IV.7 Release artifacts (what this candidate ships with)

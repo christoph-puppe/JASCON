@@ -275,6 +275,25 @@
    },
    "value": "-0.5",
    "verdict": "valid"
+  },
+  {
+   "name": "integer-beyond-the-number-domain",
+   "parameter": {
+    "name": "retention-ns",
+    "type": "integer"
+   },
+   "value": 9007199254740992,
+   "verdict": "invalid",
+   "note": "NUMBER-1 (D3.9): beyond 2^53 - 1 two tools read two values; such a quantity is bound as a decimal string"
+  },
+  {
+   "name": "integer-at-the-edge-of-the-number-domain",
+   "parameter": {
+    "name": "retention-ns",
+    "type": "integer"
+   },
+   "value": 9007199254740991,
+   "verdict": "valid"
   }
  ]
 }

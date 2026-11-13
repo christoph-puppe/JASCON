@@ -7,7 +7,7 @@ have to switch on yourself: the suggestions of the Risk page and the drafts
 of the Checks page send text to a model service once you type a key (see
 "Suggestions from a model").
 
-State: build 0.9.5. This build has the frame (the hub, the settings page and
+State: build 0.9.6. This build has the frame (the hub, the settings page and
 the shared core) and nine tool pages, in the order of the work: Import,
 Browse, Risk, Tailor, Map, Implement, Checks, Assess and Validate. One view of the Risk page and
 the drafting of the Checks page can ask a language model; nothing else in
@@ -505,7 +505,9 @@ text in that language, the English text is shown, then whatever is there.
 
 - The Validate page is not the reference validator. All seventeen rule
   families of `validate_core.py` are ported and run against their conformance
-  vectors: canonical form, modality, parameter, tier, tailoring (the
+  vectors: canonical form (with the number domain, NUMBER-1: the text of
+  every file is held to it, because the browser's parser reads `1.0` as 1
+  and rounds an integer beyond 2^53), modality, parameter, tier, tailoring (the
   operation law), reference, lifecycle, kernel (with the typed fields
   `Finding.actions[].due` and `Deviation.opened`, named DATE-2 and DATE-1
   when an object matches no type), facet, attestation, risk,

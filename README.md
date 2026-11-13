@@ -14,7 +14,7 @@ contact with real catalogs before it may stay.**
 
 This repository is a working design study, not a slide deck. It contains a
 draft specification with a public decision register, an **executable kernel
-schema** with a **157-vector conformance corpus** (537 in 17 families in the 2.0.0 candidate) and *two* reference
+schema** with a **157-vector conformance corpus** (568 in 17 families in the 2.0.0 candidate) and *two* reference
 validators — Python, and a **zero-dependency PowerShell 5.1 twin that runs
 on a stock Windows box** (the weekend-validator claim, measured,
 crypto engines included) —

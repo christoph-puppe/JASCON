@@ -690,6 +690,71 @@ def optional_empty_violations(obj, path="$"):
             out += optional_empty_violations(v, f"{path}[{i}]")
     return out
 
+# ---------------- the number domain (D3.9, NUMBER-1) ----------------
+# A JSON number in a bundle is an integer written in plain digits, of
+# magnitude at most 2^53 - 1. Two reasons, one rule. RANGE: beyond 2^53 an
+# IEEE double no longer holds every integer, so a JavaScript tool reads
+# 9007199254740993 as ...992 while Python reads it exactly - two digests,
+# two verdicts for one file. SPELLING: `1.0`, `1e3` and `-0` are second
+# spellings of 1, 1000 and 0; this validator would hash `1.0` as written,
+# a JavaScript one as `1`. The rule rejects; it never rewrites (D3.4: one
+# value, one spelling, and the spelling rides validation, not the digest).
+#
+# Two checks, because the spelling is gone once a text is parsed:
+#   number_spelling_violations(text)  wherever a bundle file is read
+#   number_violations(value)          on every object, and in check-verdict
+# A fraction is a `decimal`, which is a string.
+NUMBER_MAX = 2 ** 53 - 1
+NUMBER_RULES = {
+    "NUMBER-1": "a JSON number is an integer in plain digits, of magnitude at most 2^53 - 1 (9007199254740991) - "
+                "no fraction, no exponent, no -0; a number two tools read differently has two digests and two verdicts",
+}
+# one pass over a text that already parsed as JSON: strings are consumed
+# whole (so digits inside them are never looked at), everything else that
+# starts like a number is a number token
+_NUMBER_TOKEN = re.compile(r'"[^"\\]*(?:\\.[^"\\]*)*"|-?[0-9][0-9.eE+-]*')
+_NUMBER_PLAIN = re.compile(r"-?(?:0|[1-9][0-9]*)\Z")
+_NUMBER_MAX_DIGITS = str(NUMBER_MAX)
+
+def number_spelling_violations(text):
+    """text: a JSON text. -> the number tokens that break NUMBER-1, as written.
+    Compares digits as text, so no float ever takes part in the decision."""
+    out = []
+    for m in _NUMBER_TOKEN.finditer(text):
+        tok = m.group(0)
+        if tok[0] == '"': continue
+        digits = tok.lstrip("-")
+        if (not _NUMBER_PLAIN.match(tok) or tok == "-0" or len(digits) > len(_NUMBER_MAX_DIGITS)
+                or (len(digits) == len(_NUMBER_MAX_DIGITS) and digits > _NUMBER_MAX_DIGITS)):
+            out.append(tok)
+    return out
+
+def in_number_domain(x):
+    return isinstance(x, int) and not isinstance(x, bool) and -NUMBER_MAX <= x <= NUMBER_MAX
+
+def number_violations(obj, path="$"):
+    """-> where a parsed value holds a number outside the domain. The backstop
+    for values that never were a text here (vectors, objects a tool built)."""
+    out = []
+    if isinstance(obj, dict):
+        for k, v in obj.items(): out += number_violations(v, f"{path}.{k}")
+    elif isinstance(obj, list):
+        for i, v in enumerate(obj): out += number_violations(v, f"{path}[{i}]")
+    elif isinstance(obj, (int, float)) and not isinstance(obj, bool) and not in_number_domain(obj):
+        out.append(f"{path} = {obj!r}")
+    return out
+
+def number_failures(section, rel, raw=None, obj=None):
+    """Reports NUMBER-1 for one bundle file: its text if given, its value if given."""
+    bad = []
+    if raw is not None:
+        bad = [f"written as {t}" for t in number_spelling_violations(raw.decode("utf-8", "replace"))]
+    if not bad and obj is not None:
+        bad = number_violations(obj)
+    if bad:
+        more = f" (and {len(bad) - 1} more)" if len(bad) > 1 else ""
+        fail(section, f"{rel}: [NUMBER-1] {bad[0]}{more} - {NUMBER_RULES['NUMBER-1']}")
+
 # ---------------- modality lattice ----------------
 OBL = {"unspecified": 0, "may": 1, "should": 2, "must": 3}
 PRO = {"unspecified": 0, "should-not": 1, "must-not": 2}
@@ -721,7 +786,7 @@ def param_check(decl, value):
             return "valid" if all(v in allowed for v in value) else "deviation-required"
         return "valid" if value in allowed else "deviation-required"
     if t == "integer":
-        if not isinstance(value, int) or isinstance(value, bool): return "invalid"
+        if not in_number_domain(value): return "invalid"      # NUMBER-1: beyond 2^53 two tools read two values
         if "min" in decl and value < decl["min"]: return "deviation-required"
         if "max" in decl and value > decl["max"]: return "deviation-required"
         return "valid"
@@ -761,6 +826,15 @@ def run_jcs():
             verdict = "invalid" if viol else "valid"
             if verdict == case["expected"]: ok("jcs")
             else: fail("jcs", f"{name}: expected {case['expected']}, got {verdict} ({viol})")
+        elif "number-text" in case:
+            # NUMBER-1 on a JSON text (a vector file cannot carry `1.0` as a
+            # number: its own parser would have read it already)
+            text = case["number-text"]
+            viol = number_spelling_violations(text) or number_violations(json.loads(text))
+            verdict = "invalid" if viol else "valid"
+            got = canonical(json.loads(text)) if verdict == "valid" else None
+            if verdict == case["expected"] and (verdict == "invalid" or got == case["canonical-text"]): ok("jcs")
+            else: fail("jcs", f"{name}: expected {case['expected']} {case.get('canonical-text', '')}, got {verdict} {got or viol}")
 
 def run_modality():
     v = json.load(open(os.path.join(CONF, "modality-vectors.json"), encoding="utf-8"))
@@ -1111,6 +1185,7 @@ def load_scale_pins(bdir, manifest, section):
         try: sd = json.loads(raw.decode("utf-8"))
         except Exception as e:
             fail(section, f"{pin['path']}: pinned scale definition unreadable: {e}"); continue
+        number_failures(section, pin["path"], raw, sd)
         errs = scale_definition_errors(sd, pin)
         for e in errs: fail(section, e)
         if not errs: scales[sd["id"]] = sd
@@ -1723,7 +1798,7 @@ CHECK_LIST_OPS = {"one-of", "includes-all", "excludes-all", "subset-of"}
 CHECK_PATTERN_OPS = {"matches", "matches-not"}
 
 def _fact_ok(ftype, x):
-    if ftype == "integer": return isinstance(x, int) and not isinstance(x, bool)
+    if ftype == "integer": return in_number_domain(x)     # NUMBER-1: no verdict from a value two tools read differently
     if ftype == "decimal": return isinstance(x, str) and re.match(DECIMAL_RE, x) is not None
     if ftype == "boolean": return isinstance(x, bool)
     return isinstance(x, str)          # string, code
@@ -1973,6 +2048,11 @@ def _evidence_chain(oid, at, a, row, read):
     -> (observation loaded from observation-ref or None, [(rule, msg)], [note])"""
     E, notes, obs = [], [], None
     def bad(msg): E.append(("CHECK-15", f"{oid}: {at}: {msg} (CHECK-15: {CHECK_RULES['CHECK-15']})"))
+    def numbers(raw, value, what):
+        """NUMBER-1 on an evidence file -> True when it holds; a file that breaks it is not used"""
+        wrong = [f"written as {t}" for t in number_spelling_violations(raw.decode("utf-8", "replace"))] or number_violations(value)
+        if wrong: E.append(("NUMBER-1", f"{oid}: {at}: {what}: {wrong[0]} (NUMBER-1: {NUMBER_RULES['NUMBER-1']})"))
+        return not wrong
     def load(dref, what):
         ref, want = dref["ref"], dref["digest"]
         if re.match(r"^[A-Za-z][A-Za-z0-9+.-]*:", ref):
@@ -2000,6 +2080,7 @@ def _evidence_chain(oid, at, a, row, read):
                 obs = json.loads(raw.decode("utf-8"))
             except Exception as ex:
                 bad(f"observation file unreadable: {ex}")
+            if obs is not None and not numbers(raw, obs, "observation file"): obs = None
             if obs is not None and not VALIDATORS["checkObservation"].is_valid(obs):
                 bad("the observation file is not an observation"); obs = None
     if row.get("evidence-record"):
@@ -2010,6 +2091,7 @@ def _evidence_chain(oid, at, a, row, read):
                 rec = json.loads(raw.decode("utf-8"))
             except Exception as ex:
                 bad(f"evidence record unreadable: {ex}")
+        if rec is not None and not numbers(raw, rec, "evidence record"): rec = None
         if rec is not None and not VALIDATORS["evidenceRecord"].is_valid(rec):
             e = next(VALIDATORS["evidenceRecord"].iter_errors(rec))
             bad(f"evidence record: {e.message[:100]} @ {'/'.join(map(str, e.absolute_path))}"); rec = None
@@ -2672,6 +2754,7 @@ def infer_type(obj):
     return matches
 
 def validate_object(section, path, obj):
+    number_failures(section, path, obj=obj)
     matches = infer_type(obj)
     if len(matches) != 1:
         best = ""
@@ -2730,6 +2813,7 @@ def load_facet_pins(bdir, manifest, section):
             fail(section, f"{fe['path']}: pinned facet schema digest mismatch{eol_hint(raw, fe['digest'])}")
         try:
             sd = json.loads(raw.decode("utf-8"))
+            number_failures(section, fe["path"], raw, sd)
             pinned[sd["id"]] = REGISTRY(sd.get("schema", {"type": "object"}))
             # P10 #29: the pin's declaration feeds the attach/detach op-law;
             # a pin that omits it is dangerous-by-default (D10: all four)
@@ -2793,6 +2877,7 @@ def validate_bundle(bdir):
         fail(section, "no content-manifest.json"); return
     raw_manifest = open(mpath, "rb").read()
     manifest = json.loads(raw_manifest.decode("utf-8"))
+    number_failures(section, "content-manifest.json", raw_manifest, manifest)
     if not VALIDATORS["contentManifest"].is_valid(manifest):
         e = next(VALIDATORS["contentManifest"].iter_errors(manifest))
         fail(section, f"manifest schema: {e.message[:120]} @ {'/'.join(map(str, e.absolute_path))}")
@@ -2810,6 +2895,7 @@ def validate_bundle(bdir):
         if pkg_digest(raw) != entry["package-digest"]:
             fail(section, f"{rel}: package-digest mismatch{eol_hint(raw, entry['package-digest'])}")
         obj = json.loads(raw.decode("utf-8"))
+        number_failures(section, rel, raw)       # the spelling; validate_object holds the value
         if sdig(obj) != entry["semantic-digest"]:
             fail(section, f"{rel}: semantic-digest mismatch")
         t = validate_object(section, rel, obj)
@@ -2916,6 +3002,7 @@ def validate_examples():
     # Attestations live BESIDE the manifest (D3.1) and are not listed.
     raw_manifest = open(os.path.join(exdir, "content-manifest.json"), "rb").read()
     manifest = json.loads(raw_manifest.decode("utf-8"))
+    number_failures(section, "content-manifest.json", raw_manifest, manifest)
     if VALIDATORS["contentManifest"].is_valid(manifest): ok(section)
     else: fail(section, "content-manifest.json: manifest schema violation")
     listed = {e["path"]: e for e in manifest.get("objects", [])}
@@ -2929,6 +3016,7 @@ def validate_examples():
             continue
         raw = open(os.path.join(exdir, fn), "rb").read()
         obj = json.loads(raw.decode("utf-8"))
+        number_failures(section, fn, raw)
         t = validate_object(section, fn, obj)
         if t:
             typec[t] += 1
