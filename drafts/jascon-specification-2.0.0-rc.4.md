@@ -2059,6 +2059,8 @@ of Check and of advice packs:
 2. **First implementation.** ✓ `validate_core.py`: 537 / 537, the five
    shipped bundles (3,715 objects, both digests each), the worked advice
    pack and the example folder — ALL GREEN on 2026-11-12.
+   *(rc.4, 2026-11-13: 643 / 643, the same bundles, pack and folder, ALL
+   GREEN in the workflow run of item 3.)*
 3. **Second implementation.** ✓ `validate_core.ps1` ran on Windows
    PowerShell 5.1 on 2026-11-12 on this candidate: 537 / 537 in
    seventeen families (`kernel: 25`, `advice: 74`), the five bundles,
@@ -2075,6 +2077,14 @@ of Check and of advice packs:
    runtime. A third,
    the JavaScript port in `jascon-app/`, passes the same vectors in the
    same workflow; what it leaves to the reference is in its readme.
+   *(rc.4, 2026-11-13: the workflow ran the twin on Windows PowerShell
+   5.1 twice. At commit `e4031a84`: the lint, then 637 / 637 in eighteen
+   families, ALL GREEN in 218 s (`https://github.com/christoph-puppe/JASCON/actions/runs/43502988692`).
+   At commit `82721959`, with the six vectors that the ports' deliberate
+   defects had shown missing: 643 / 643 (`kernel: 54`, `author: 40`),
+   the five bundles, the worked pack and the example folder, every
+   count and each of the 15 AUTHOR and REVIEW lines equal to the Python
+   reference's, ALL GREEN in 213 s (`https://github.com/christoph-puppe/JASCON/actions/runs/43504417645`).)*
 4. **Corpus.** ◐ Risk: one, IFA, two Risk objects — enough to exercise
    the record's sourced half and to measure what the source lacks; not
    enough to exercise `rating`, `acceptance`, the later states, or
@@ -2160,7 +2170,7 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
   folder after importing it.
 - **Two reference validators**: `validate_core.py` (Python, jsonschema
   only) — green; `validate_core.ps1` (PowerShell 5.1, zero dependencies)
-  — green on 2026-11-12 on all 537 vectors of this candidate, on Windows
+  — green on 2026-11-13 on all 643 vectors of this candidate, on Windows
   PowerShell 5.1 (IV.5b item 3). A workflow runs both, and the app's
   port, on every change (`.github/workflows/validators.yml`).
 - **Bidirectional export**: `export_oscal.py` — as at 1.0.0 (OSCAL 1.2.2

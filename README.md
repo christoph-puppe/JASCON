@@ -113,7 +113,9 @@ requirements and mints real objects.*
 >   PowerShell operator compares two strings in the twin: every such
 >   comparison is a code-point comparison (backlog #58, closed), and
 >   it ran green on all 574 vectors that day
->   ([run](https://github.com/christoph-puppe/JASCON/actions/runs/43492500585)). A
+>   ([run](https://github.com/christoph-puppe/JASCON/actions/runs/43492500585)),
+>   and on all 643 of rc.4 later the same day
+>   ([run](https://github.com/christoph-puppe/JASCON/actions/runs/43504417645)). A
 >   [workflow](.github/workflows/validators.yml) now runs both validators
 >   and the app's port on every change.
 > - **Not there:** a pack published by a vendor; a converter from OSCAL

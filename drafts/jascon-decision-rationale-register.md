@@ -3273,7 +3273,11 @@ and the vectors, and checked here.
   scripts are outside the repository and were not run again here.
 - *The twin*: the same counts as the reference in every family and for
   every bundle, and the same 15 report lines, on PowerShell 7.4 here;
-  the lint passes. The run on Windows PowerShell 5.1 is the workflow's.
+  the lint passes. On Windows PowerShell 5.1 the workflow ran it twice:
+  at `e4031a84` on 637 vectors, ALL GREEN in 218 s, and at `82721959`
+  on the 643 that the six later vectors make, ALL GREEN in 213 s,
+  with the reference's counts and its 15 report lines both times
+  (**read** from the logs of runs 43502988692 and 43504417645).
 
 **What the ports found.**
 

@@ -493,6 +493,7 @@ landed" hold the measurements. Against §3 of this plan:
 | §3.3, the rules | Four, not five: AUTHOR-1 (a consumer's Tailoring), AUTHOR-2 (Risk, Finding, Implementation), AUTHOR-3 (a decided Deviation), AUTHOR-4 (an authorization). The planned rule on `excludes[].rationale` was dropped: `risk-coverage` already reports it. All are report lines |
 | §3.4, the review date | REVIEW-1 reads the date of the run and reports; `--as-of` sets the date. It also covers a Risk's `review-due`. The word is "overdue", because `risk-coverage` uses "lapsed" for something else |
 | §3.5, what the landing touches | Schema, three validators, vectors, examples and texts are done. The tools that write the fields are not: backlog #69, which takes over the rest of this row and of phase C |
+| §2, the workflow | **Read** from its logs: the twin on Windows PowerShell 5.1 at `82721959`, the lint and then 643 vectors in 18 families, the bundles, the pack and the example folder with the reference's counts and its 15 report lines, ALL GREEN in 213 s; the reference, the app's port and the pages green in the same run (43504417645) |
 
 What phase B showed for what is left:
 

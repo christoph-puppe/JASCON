@@ -150,7 +150,7 @@ D22 governs types. For fields on existing types the register has a precedent, "D
 | Step | What | State |
 |---|---|---|
 | 1 | Schema, reference validator, the vectors, the example folder | this landing |
-| 2 | PowerShell twin, the app's port of the rules | this landing; run on Windows PowerShell 5.1 by the workflow |
+| 2 | PowerShell twin, the app's port of the rules | this landing; run on Windows PowerShell 5.1 by the workflow (§11) |
 | 3 | Specification 2.0.0-rc.4, handbook, website, README, register, backlog | this landing |
 | 4 | Tools that write the fields: the app's pages (a "who am I" setting), the reader's display, the catalogue import, the IFA converter | follows; until then the IFA bundle and the catalogue demo show AUTHOR lines, which is what the rule is for |
 
@@ -173,7 +173,7 @@ Built as proposed; each is the author's to overturn before the tag.
 | Step of §9 | Built | Measured |
 |---|---|---|
 | 1 | Schema, reference, vectors, the example folder | 63 new vectors at the landing (34 in the new family `author`, 29 in `kernel`). All expectations were written before the first run, which passed all 63. 19 deliberate defects in the reference's new code each turn a vector red. Six more vectors followed the ports (§11.2): 40 in `author`, 643 in all in 18 families |
-| 2 | The PowerShell twin and the app's port (build 0.9.8) | Both give the reference's counts per family and per bundle and its report lines for the example folder and the IFA bundle. The twin was run on PowerShell 7.4; its run on Windows PowerShell 5.1 is the workflow's |
+| 2 | The PowerShell twin and the app's port (build 0.9.8) | Both give the reference's counts per family and per bundle and its report lines for the example folder and the IFA bundle. The twin was run on PowerShell 7.4 here, and by the workflow on Windows PowerShell 5.1: 637 vectors at `e4031a84` in 218 s, 643 at `82721959` in 213 s, ALL GREEN both times with the reference's counts and report lines |
 | 3 | Specification 2.0.0-rc.4 (D26; D8, D13, D23 amended), handbook (appendix A, chapters 6, 10, 12, F.10), the skill (requirement 9c), PRIOR-ART, README, the website in five languages, register, backlog | |
 | 4 | Not built: no tool writes the fields | backlog #69 |
 
