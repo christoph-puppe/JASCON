@@ -1858,6 +1858,12 @@ of Check and of advice packs:
    publisher · 10 import). Every review correction is pinned by a vector
    that fails on the validator as first proposed; 28 deliberate defects
    in the advice rules and 5 in the check rules each turn a vector red.
+   *(After rc.3, 2026-11-13: 543 vectors. `reference` 13 → 18 and `tier`
+   9 → 10: ids that differ in case, by U+00AD or by normal form are
+   different ids (D2; backlog #45 and #58). No kernel shape and no rule
+   changed. Both validators and the app's port are green on the 543;
+   the twin on Windows PowerShell 5.1, after its string comparisons
+   were made ordinal.)*
 2. **First implementation.** ✓ `validate_core.py`: 537 / 537, the five
    shipped bundles (3,715 objects, both digests each), the worked advice
    pack and the example folder — ALL GREEN on 2026-11-12.
@@ -1950,7 +1956,7 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
   modality 21 · parameter 19 · tailoring 19 · attestation 5 · facet 7 ·
   reference 13 · lifecycle 38 · tier 9 · dsse 5 · composition 7 ·
   conditional 8 · risk 73 · kernel 25 · scale 18 · check 188 · advice
-  74). In `risk-vectors.json`, `expected-rule` is the portable assertion;
+  74; since 2026-11-13 reference 18 and tier 10, 543 in all). In `risk-vectors.json`, `expected-rule` is the portable assertion;
   in `check-vectors.json` and `advice-vectors.json`, the outcome and the
   named rules.
 - **A worked advice pack** under `jascon/example-packs/`, and the example

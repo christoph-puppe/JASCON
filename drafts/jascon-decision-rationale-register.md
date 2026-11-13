@@ -2418,3 +2418,147 @@ objects and digests are unchanged.
 **Lesson, for §14.5.** A finding about a source is tested against the
 source's own notation before it goes to the authors' queue. This one was
 not, for four months.
+
+## Amendments — the open backlog before 2.0.0 (2026-11-13)
+
+**Author decisions, in the author's words.** On the ten open rows and
+the residue of #45: "#65 stays optional, fix it. #66 need the author! we
+need authors for every part where a decision is made, a check done, a
+risk changed etc! fix it. #41 keep in backlog, this is complex, but
+include in Plan. #55 keep in backlog, this is complex, but include in
+Plan. #46 recommend something to fix it, plan. #64 recommend something
+to fix it, plan. #58 recommend something to fix it, plan. #62 keep in
+backlog. #54 fix it. #47 recommend something to fix it, plan. #45
+recommend something to fix it, plan." On the three points the plan left
+open for #65 and #66: "1 report, 2 provenance, 3 read the clock then
+report. start phase A".
+
+**What the three answers settle.** (1) A missing author is a report
+line; a flag turns the lines into failures, as `--require-risk-basis`
+does for uncovered requirements. (2) Who and when is spelled one way,
+`provenance: {author-ref, date}`, the shape a Mapping and a Check
+already carry. (3) The validator reads the date of the run and reports
+an approved Deviation past its `review-due`; the lapse fails nothing and
+the Deviation keeps licensing its weakening. The plan is
+`drafts/pre-2.0.0-fix-plan.md`. #65 and #66 change kernel shapes and
+land together as one change proposal; until then both rows stay open and
+the tag waits. Nothing of the two is built.
+
+**Rejected.** For #66, the backlog row's option (b), "no field: the
+history of a Tailoring is its versions". The author wants the author of
+a decision in the record. For a lapsed Deviation, the plan's proposal to
+judge a lapse only against a date the caller passes and to let it fail
+the Deviation duty: the author wants the clock read and the lapse
+reported.
+
+### #54 CLOSED — the record of entries that do not apply
+
+The side file was a map from an entry's label to a sentence. It is a
+record with a schema now,
+`risk-catalogs/schema/not-applicable.draft.schema.json`: per row the
+entry's id and version, the rationale as a text, and `provenance`. One
+file serves every catalogue, because a row names its entry by id.
+**Built.** `risk_catalog.py` holds the file to the schema, refuses an
+entry decided twice, and reports a row without an author and a row that
+names no entry of the catalogue. The app (build 0.9.5) writes the record
+with the party of the Owner field and the day, and reads the old map as
+rows that say no author. **Measured.** The demo, rebuilt: 24 entries, 23
+imported, 1 not applicable, 0 gaps with the record and 1 without, as
+before; the imported Risks are byte-identical. Five refusals and reports
+tried on the command line; the page driven in a browser (record, refuse
+without a reason, refuse without a party, undo, an old map).
+**Departures from the plan's sketch.** No `catalog` at the top and no
+`tailoring-ref`: the app keeps one file for all catalogues, and nothing
+reads a scope. No `review-due`: how a date of review is evaluated is
+being decided for the Deviation (#65), and the record takes the field
+over once that rule exists.
+
+### #47b CLOSED — `none` and `contingency`
+
+OSCAL allows seven values for the type of a risk response; C.10 has four
+treatment options. `none` says that no option was chosen, and a Risk
+says the same by carrying no `treatment`. `contingency` is a plan for
+the day the risk materialises, none of the four options; a fifth code
+needs a counted instance (D22, test 3) and no corpus holds one. Neither
+gets a code. **Built.** The mapping moved from `convert_ifa.py` into
+`oscal_conv_lib.py` (`response_treatment`), with a self-test the
+workflow runs. **Measured.** The IFA converter, run from the public
+sources at the pinned commit `usnistgov/oscal-content@9402f031`,
+reproduces the committed bundle and both reports byte for byte, before
+the change and after it. Run on two copies of the POA&M with the one
+`mitigate` changed to `none` and to `contingency`: the Risk carries no
+`treatment`, the facet carries the type, the report counts it, the
+bundle validates. **What it shows on the side.** The IFA sources can be
+fetched and the conversion repeated in a cloud session; rows #41, #46
+and #64 said the sources were not at hand.
+
+### #58 CLOSED, and the residue of #45 — the twin compares no two strings with a PowerShell operator
+
+**The class was larger than the row.** The row named `-ceq`, `-cne` and
+`-ccontains` on ids: 201 uses. Counted with PowerShell's own parser,
+403 comparisons were not provably free of strings: 371 tests of
+equality or membership and 32 ordering comparisons, which all order
+numbers. `-eq`, `-ne` and `-contains` are the larger half of the 371
+and the worse one: they fold case and compare under a culture. Three neighbours belong to the class: lookup
+tables written as `@{}`, whose keys fold case; a `switch` over a
+schema's type names; and a membership test on choice values that let
+the number 1 pass for the string "1".
+**Built.** 354 comparisons became `[string]::Equals(a, b, $ORD)` where
+one side is a literal, `Str-Eq` or `Str-In` elsewhere; 17 more were
+changed by hand (booleans and integers compared as what they are, the
+choice values), and so were the tables and the `switch`. The rewrite was done by a
+script that walks the syntax tree, innermost expression first. A helper
+function was measured before it was chosen against: about 15 µs a call
+on PowerShell 7.4, 27 times the operator; the inline call costs less
+than `-eq`. `.github/scripts/lint-twin.ps1` parses the twin and fails
+the build when an operator could meet two strings; the PowerShell job
+runs it before the validator.
+**Measured.** Six vectors, 543 in all (reference 13 → 18, tier 9 → 10).
+The reference and the app's port passed all six unchanged. The twin
+failed three before the change: an operation addressing statement `s1`
+followed by U+00AD, one addressing a statement id in another normal
+form, and a Tailoring whose id differs from its content's origin by one
+U+00AD. It read that Tailoring as authority-claimed, which exempts it
+from the Deviation duty. After the change the twin's output is the
+earlier output line for line, apart from the two family counts. Four
+deliberate breaks were each caught: two by the lint and by vectors, one
+by vectors alone (the helper made culture-aware inside, which no lint of
+operators can see), one by the lint alone (the `switch` put back, which
+no vector exercises). On Windows PowerShell 5.1, in the workflow at
+commit `fb95f436`: the lint, then 543 vectors in 17 families
+(`reference: 18`, `tier: 10`), bundle by bundle the reference's counts
+(1,712 · 814 · 136 · 18 · 1,040 · pack 2 · examples 27), ALL GREEN in
+72 s (https://github.com/christoph-puppe/JASCON/actions/runs/43451843097).
+The run of 2026-11-12 took 64 s. Timed here once each on PowerShell
+7.4, the whole run went from 59 s to 64 s; the inline comparison is
+faster than `-eq` and slower than `-ceq`.
+**What it does not show.** The lint cannot see what a variable holds.
+`$a -eq $b` is refused even for two numbers; `$x -eq 5` is accepted
+although PowerShell compares as strings when `$x` is one; two string
+variables compared with `-lt` would pass, since the ordering operators
+are refused only on a literal or a `[string]` cast. The lint's header
+says so.
+**Found while testing.** The first version of the lint took its default
+path from `$PSScriptRoot` inside `param()`. PowerShell 7.4 has set the
+variable there; Windows PowerShell 5.1 has not, and the job stopped
+before the lint read a line. A second-implementation check that had
+only run on the wrong runtime: the mistake of #45 and #60, repeated
+within the hour and caught by the workflow those rows left behind.
+
+**Found on the way (not filed, not fixed).**
+- A `set-parameter` operation that names a parameter its statement does
+  not declare is accepted by all three implementations; closure checks
+  the statement, not the parameter.
+- The reference compares choice values with Python's `in`, which counts
+  `true` as 1. The twin now does the same on purpose.
+- `Finding.actions[].status` is a free string (`planned`, `done` and
+  `closed` in the shipped data), and an action names nobody who is to
+  carry it out.
+- `Deviation.approver-ref` is required in every state, so a Deviation
+  under investigation must already name its approver.
+- `Mapping.provenance.date`, `Assessment.time` and
+  `Attestation.timestamp` accept any string. D8 names `provenance.date`
+  among the typed dates; for a Mapping it is not. The plan types all
+  three with #66.
+- The backlog row of #55 says the example's `summary` is a string; in
+  today's tree it is a language map.

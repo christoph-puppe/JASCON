@@ -14,7 +14,7 @@ contact with real catalogs before it may stay.**
 
 This repository is a working design study, not a slide deck. It contains a
 draft specification with a public decision register, an **executable kernel
-schema** with a **157-vector conformance corpus** (537 in 17 families in the 2.0.0 candidate) and *two* reference
+schema** with a **157-vector conformance corpus** (543 in 17 families in the 2.0.0 candidate) and *two* reference
 validators — Python, and a **zero-dependency PowerShell 5.1 twin that runs
 on a stock Windows box** (the weekend-validator claim, measured,
 crypto engines included) —
@@ -62,7 +62,7 @@ requirements and mints real objects.*
 > tailoring or an assessment, and the vendor's manifest stays in the set
 > as the import record. No new type.
 >
-> - **Measured:** 74 advice vectors (537 in all, 17 families) pass in the
+> - **Measured:** 74 advice vectors (537 in all on 2026-11-12, 543 since 2026-11-13; 17 families) pass in the
 >   Python reference; 28 deliberate breaks of the reference each turn a
 >   vector red. A worked pack, signed with the public fixture key, and
 >   the example folder after importing it validate. Run over the shipped
@@ -84,7 +84,9 @@ requirements and mints real objects.*
 > - **Second implementation:** the PowerShell twin ran on Windows
 >   PowerShell 5.1 on a hosted runner of GitHub Actions: 537 of 537
 >   vectors, the bundles, the pack and the example folder with the
->   reference's counts (backlog #63, closed). A
+>   reference's counts (backlog #63, closed); 543 of 543 on 2026-11-13,
+>   after every string comparison in the twin was made a code-point
+>   comparison (backlog #58, closed). A
 >   [workflow](.github/workflows/validators.yml) now runs both validators
 >   and the app's port on every change.
 > - **Not there:** a pack published by a vendor; a converter from OSCAL
