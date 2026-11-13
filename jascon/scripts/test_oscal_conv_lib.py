@@ -12,7 +12,7 @@ string and tested substring membership, so the six cases of issue 32 gave
 five false arrivals and one false absence. Standard library only."""
 import copy, json, os, sys, tempfile, unittest
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from oscal_conv_lib import global_occurrence, Ledger, props_by_name, slug
+from oscal_conv_lib import global_occurrence, Ledger, props_by_name, slug, RESPONSE_TREATMENT, response_treatment
 
 
 def measure(source, output):
@@ -255,6 +255,30 @@ class Issue33Ledger(unittest.TestCase):
         self.assertIs(copy.deepcopy(tracked["s"]), tracked["s"], "a copy keeps the trace")
         self.assertEqual((type(tracked["n"] + 1), type(tracked["s"].strip())), (int, str), "a computed value is plain")
         with self.assertRaises(TypeError): led.derive("to a list", lambda s: [s], tracked["s"])
+
+
+class Backlog47bResponseTypes(unittest.TestCase):
+    """OSCAL allows seven values for the type of a risk response; C.10 has
+    four treatment options. Five of the seven are one of the four. `none`
+    and `contingency` get no code (backlog #47b, decided 2026-11-13): the
+    converter writes no `treatment` and counts the response."""
+
+    def test_backlog_47b_the_five_mapped_types_reach_all_four_options(self):
+        for rtype, code in RESPONSE_TREATMENT.items():
+            self.assertEqual(response_treatment(rtype), (code, None), rtype)
+        self.assertEqual(set(RESPONSE_TREATMENT.values()), {"modify", "retain", "avoid", "share"})
+
+    def test_backlog_47b_none_gives_no_option_and_says_that_none_was_chosen(self):
+        code, why = response_treatment("none")
+        self.assertIsNone(code)
+        self.assertIn("no `treatment` is written", why)
+
+    def test_backlog_47b_contingency_gives_no_option_and_is_counted_as_uncoded(self):
+        self.assertEqual(response_treatment("contingency"),
+                         (None, "response type `contingency` has no treatment code (C.10)"))
+
+    def test_backlog_47b_a_misspelled_type_is_not_guessed_at(self):
+        self.assertIsNone(response_treatment("mitigation")[0])
 
 
 if __name__ == "__main__":

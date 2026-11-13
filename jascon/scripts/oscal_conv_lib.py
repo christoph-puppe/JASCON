@@ -508,6 +508,30 @@ def props_by_name(props, ledger=None, field="value"):
         out[name] = out[name] + [value] if isinstance(out[name], list) else [out[name], value]
     return out
 
+# OSCAL's risk response carries a `type` prop with seven allowed values:
+# avoid, mitigate, transfer, accept, share, contingency, none. C.10 has four
+# treatment options (ISO 31000 6.5.2; one to one with BSI 200-3). Five of
+# the seven are one of the four. The other two are decided (backlog #47b,
+# 2026-11-13) and neither gets a code:
+#   none         the source says that no option was chosen. A Risk says the
+#                same by carrying no `treatment`, so nothing is lost.
+#   contingency  a plan for the day the risk materialises. It is none of the
+#                four options, and no corpus instance has been counted
+#                (D22, test 3: a code needs one).
+# In both cases the response itself stays verbatim in the converter's facet.
+RESPONSE_TREATMENT = {"avoid": "avoid", "mitigate": "modify", "transfer": "share",
+                      "share": "share", "accept": "retain"}
+
+def response_treatment(rtype):
+    """OSCAL risk response type -> (C.10 treatment option or None, a report
+    line saying why there is none, or None). Never guesses: a value outside
+    the five mapped ones gives no option, and the caller counts the line."""
+    if rtype in RESPONSE_TREATMENT:
+        return RESPONSE_TREATMENT[rtype], None
+    if rtype == "none":
+        return None, "response type `none`: the source chose no option, so no `treatment` is written (C.10)"
+    return None, f"response type `{rtype}` has no treatment code (C.10)"
+
 def coverage(paths, rules):
     """rules: list of (regex, level, target). Returns (rows, unmapped)."""
     rows, unmapped = [], []
