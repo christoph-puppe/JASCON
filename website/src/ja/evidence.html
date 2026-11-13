@@ -2,7 +2,7 @@
 title: 根拠：何を実測し、何を実測していないか | JASCON
 description: 適合性コーパス、2 つのリファレンスバリデータ、変換したカタログとそのライセンス、根拠のゲート、未解決の限界、近接するフォーマット。すべての数値に、実測、設計済み、未解決のいずれかのラベルを付けています。
 nav: evidence
-source: b72ba9a0a5ba
+source: 4c8b71feb5e9
 ---
 <section class="page-hero">
   <div class="wrap">
@@ -38,7 +38,7 @@ source: b72ba9a0a5ba
         </article>
         <article class="card">
           <div class="card-top"><h3>validate_core.ps1</h3><span class="tier tier-measured">2026年11月12日に実測</span></div>
-          <p>双子の実装です。依存関係のない {{ n.powershell_lines }} 行の Windows PowerShell 5.1 で、監査人がすでに持っているマシンのためのものです。11月12日、ホスト型の Windows ランナー上で、全 {{ n.vectors }} 件のテストベクトル、5 つのバンドル、作例のパック、サンプルフォルダについて、Python のリファレンスと同じ件数を返しました。<a href="{{ repo }}/actions/workflows/validators.yml" rel="noopener">ワークフロー</a>が、変更のたびにこの実行を繰り返します。</p>
+          <p>双子の実装です。依存関係のない {{ n.powershell_lines }} 行の Windows PowerShell 5.1 で、監査人がすでに持っているマシンのためのものです。ホスト型の Windows ランナー上で、全 {{ n.vectors }} 件のテストベクトル、5 つのバンドル、作例のパック、サンプルフォルダについて、Python のリファレンスと同じ件数を返します。<a href="{{ repo }}/actions/workflows/validators.yml" rel="noopener">ワークフロー</a>が、変更のたびにこの実行を繰り返します。</p>
         </article>
         <article class="card">
           <div class="card-top"><h3>3 つ目はブラウザの中に</h3><span class="tier tier-measured">実測</span></div>
@@ -148,7 +148,7 @@ source: b72ba9a0a5ba
       </div>
       <div class="limit">
         <h3>パスカバレッジは値の到達ではない <span class="tier tier-open">未解決、バックログ 41</span></h3>
-        <p>カバレッジ報告書が数えているのは、宣言済みの変換先を持つソースパスです。個々の値が到達するかどうかは、NIST のサンプルシステムという 1 つのコーパスでのみ、各ソース値を変換処理の中で追跡する台帳によって確認しました。{{ n.ledger_values }} 件のリーフ値のうち、{{ n.ledger_carried }} 件が引き継がれ（{{ n.ledger_copied }} 件はそのまま複製、{{ n.ledger_transformed }} 件は名前付きの規則による変換）、{{ n.ledger_dropped }} 件は理由を明示したうえで引き継がず、{{ n.ledger_unaccounted }} 件は未説明です。変換先も、明示された理由もありません。残りの 10 のコーパスは未実測です。</p>
+        <p>カバレッジ報告書が数えているのは、宣言済みの変換先を持つソースパスです。個々の値が到達するかどうかは、NIST のサンプルシステムという 1 つのコーパスでのみ、各ソース値を変換処理の中で追跡する台帳によって確認しました。{{ n.ledger_values }} 件のリーフ値のうち、{{ n.ledger_carried }} 件が引き継がれ（{{ n.ledger_copied }} 件はそのまま複製、{{ n.ledger_transformed }} 件は名前付きの規則による変換）、{{ n.ledger_dropped }} 件は理由を明示したうえで引き継がず、{{ n.ledger_unaccounted }} 件は未説明です。変換先も、明示された理由もありません。説明がついていることは、引き継がれていることと同じではありません。引き継がなかった値はバンドルに含まれておらず、それは書面に残された判断によるものです。また、台帳は、変換処理が独自に書き込む値を逆方向にはたどりません。ワークフローは、変更のたびに、固定したソースファイルからこの変換を再現します。残りの 10 のコーパスは未実測です。</p>
       </div>
       <div class="limit">
         <h3>最初の Risk コーパスは最初の状態のまま <span class="tier tier-open">未解決</span></h3>
@@ -160,7 +160,7 @@ source: b72ba9a0a5ba
       </div>
       <div class="limit">
         <h3>2.0.0 は候補であり、リリースではない <span class="tier tier-open">未解決</span></h3>
-        <p>決めるべきことは残っておらず、両方のバリデータは候補版の全 {{ n.vectors }} 件のテストベクトルで合格しています。タグ付けは作者が行う手順で、まだ行われていません。それまではリリース版は 1.0.0 であり、2.0.0 の形状はまだ変わる可能性があります。</p>
+        <p>作者が 2026年11月13日に採用した 2 つの変更は、まだ実装されていません。Deviation に対するレビュー期日と、記録されるすべての判断の作成者と日付です（バックログ 65 と 66）。どちらもカーネルの形状を変えるため、タグ付けはこれらを待っています。両方のバリデータは、現状の候補版の全 {{ n.vectors }} 件のテストベクトルで合格しています。タグ付けまではリリース版は 1.0.0 であり、2.0.0 の形状はまだ変わる可能性があります。</p>
       </div>
       <div class="limit">
         <h3>1.0.0 のバンドルがすべて 2.0.0 のバンドルとは限らない <span class="tier tier-measured">決定済み</span></h3>
@@ -176,7 +176,7 @@ source: b72ba9a0a5ba
       </div>
       <div class="limit">
         <h3>近接フォーマットが先行している 2 つの点 <span class="tier tier-open">未解決、バックログ 65 と 66</span></h3>
-        <p>2026年11月13日の比較で、2 つの点が見つかりました。Deviation（逸脱）は、起票された時点と承認者を記録しますが、有効期限はありません。一方、CISO Assistant のセキュリティ例外には有効期限があり、OSCAL のリスクには期限があります。また、テーラリングの操作はそれ自体の作成者を記録しません。緩和には承認済みの Deviation が必要ですが、それ以外の変更は、その変更を含む Tailoring を通じてしか作成者をたどれません。CISO Assistant では、変更が 1 件ずつログに記録されます。どちらもバックログの項目 65 と 66 として登録されており、それぞれ作者の判断を必要とします。</p>
+        <p>2026年11月13日の比較で、2 つの点が見つかりました。Deviation（逸脱）は、起票された時点と承認者を記録しますが、有効期限はありません。一方、CISO Assistant のセキュリティ例外には有効期限があり、OSCAL のリスクには期限があります。また、テーラリングの操作はそれ自体の作成者を記録しません。緩和には承認済みの Deviation が必要ですが、それ以外の変更は、その変更を含む Tailoring を通じてしか作成者をたどれません。CISO Assistant では、変更が 1 件ずつログに記録されます。作者は同じ日に両方について判断しました。Deviation には任意のレビュー期日を持たせ、判断には、誰がいつ下したかを記録します。どちらもまだ実装されておらず、バックログの項目 65 と 66 です。</p>
       </div>
       <div class="limit">
         <h3>ガバナンスは 1 人 <span class="tier tier-open">未解決</span></h3>

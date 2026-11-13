@@ -141,7 +141,7 @@ nav: home
         <span class="tier tier-measured">measured at 1.0.0</span>
       </div>
     </div>
-    <p class="stats-note">The first figure is recomputed whenever this site is built (commit <code>{{ facts.measured.commit }}</code>). "Every source path" is path coverage: whether every value arrives was measured on one corpus so far, and there 122 content values did not. That and the other open points are listed under <a href="evidence.html#limits">what is not proven</a>.</p>
+    <p class="stats-note">The first figure is recomputed whenever this site is built (commit <code>{{ facts.measured.commit }}</code>). "Every source path" is path coverage: whether every value arrives was traced on one corpus so far; there {{ n.ledger_carried }} of {{ n.ledger_values }} source values are carried and {{ n.ledger_dropped }} are dropped for a stated reason. That and the other open points are listed under <a href="evidence.html#limits">what is not proven</a>.</p>
   </div>
 </section>
 

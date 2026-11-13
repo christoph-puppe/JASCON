@@ -3151,3 +3151,44 @@ half of #46 and the IFA payload of #55. #41 has its first corpus
 accounted for value by value; the other ten converters have no ledger.
 The plan's remark that the old measure counts a short value as arrived
 by accident was the defect issue 32 reported and main fixed.
+
+### The fixes of pull request 35 after the rebase, and where they are written down (2026-11-13)
+
+The author, after the rebase: "in #35 we fixed a lot, make sure those
+fixes stand and are covered in skill, handbook and website!"
+
+**They stand.** Pull request 35 changed 44 files. On the rebased branch
+35 of them are byte for byte main's: the IFA bundle, its ledger, both
+coverage reports, the seven pinned stub schemas, `SOURCES.sha256`, the
+website's build script. The other nine differ where this branch meant
+them to (the workflow, the converter's three lines on the treatment
+option, the library and its tests, the twin, the records, the archive).
+Run on the rebased tree: the ledger reads 441 copied, 95 transformed,
+299 dropped, 0 unaccounted, 0 failed checks; the conversion is
+reproduced from the pinned sources without a changed byte; the
+library's 27 tests pass, the repeated prop name among them. The pull
+request named three overlaps with this branch in advance: the lint
+against the twin's new code, the treatment table joined by hand, and
+the build number and totals. Each came out as it said.
+
+**Where they were not written down.**
+
+| Place | Before | Now |
+|---|---|---|
+| The skill (`SKILL.md`, requirement 13) | three converters; no ledger, no library, no test file | the two depths of a coverage report and their gates, "none unaccounted is not lossless", `props_by_name`, references resolved and not typed in, pinned sources; `convert_ifa.py`, `oscal_conv_lib.py` and its tests listed |
+| Handbook 14.1 | the ledger's first reading, 473 unaccounted | what became of the 473: carry, resolve, drop with the reason, declare; roles at two levels; two rules, on "lossless" and on a conversion nobody reproduces |
+| Handbook 14.2 | #64 open: "leaves 2 clause-level texts and 2 parameter values behind" | closed, with the one difference that remains |
+| Website, home page | "122 content values did not" arrive, a figure of the measure issue 32 refuted | the ledger's counts, filled by the build |
+| Website, join page | "there it does not hold"; start at `oscal_conv_lib.value_arrival()`, a function removed in pull request 34 | the ledger; start at `oscal_conv_lib.Ledger` and `convert_ifa.py` |
+| Website, evidence page | the ledger counts, without what they do not say | accounted for is not carried; the conversion is reproduced on every change |
+| README | "does not hold there"; "122 content values do not" | the ledger's counts and the guard |
+
+The website's changes are in all five languages; each translation has
+the structure of its English page and is stamped against it.
+
+**Stale for another reason, and corrected on the way.** The evidence
+page dated the twin's run to 12 November and let the build fill in the
+vector count of today; that day it was 537. The sentence now carries no
+date. The same page and the README said that nothing is left to decide
+before the tag and that items 65 and 66 need the author's decision; both
+were decided on 13 November and neither is built.

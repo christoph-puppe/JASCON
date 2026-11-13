@@ -20,8 +20,9 @@ on a stock Windows box** (the weekend-validator claim, measured,
 crypto engines included) —
 **eleven framework and lifecycle corpora converted at 100 % declared path
 coverage** (251,591 source leaf values, every source path with a computed
-destination; whether every *value* arrives is measured on one corpus so
-far and does not hold there — backlog #41 — including NIST
+destination; where every *value* went is traced on one corpus so far,
+where 536 of 835 are carried and 299 dropped for a declared reason —
+backlog #41 — including NIST
 SP 800-53 Rev 5, its 800-53B baselines, and CSF 2.0), a **bidirectional
 OSCAL 1.2.2 export** that round-trips 5,886/5,886 objects to semantic-digest
 equality against the official NIST schema, and a zero-dependency
@@ -50,8 +51,11 @@ requirements and mints real objects.*
 > **State 2026-11-12 — release candidate 2.0.0-rc.3; not tagged.**
 > Everything below this section describes the released **1.0.0**. The
 > candidate adds two kernel types, Risk and Check, and advice packs.
-> Both reference validators are green on it, and nothing is left to
-> decide: the tag is the author's call.
+> Both reference validators are green on it. Two changes the author
+> accepted on 2026-11-13 are not built yet, and the tag waits for them:
+> a date of review on a Deviation, and the author and date of every
+> recorded decision (backlog #65 and #66;
+> [the plan](drafts/pre-2.0.0-fix-plan.md)).
 >
 > **Advice packs** ([CP-ADVICE-1](drafts/CP-ADVICE-1.md), accepted by the
 > author on 2026-11-12): a vendor's recommendations as one published
@@ -160,8 +164,12 @@ requirements and mints real objects.*
 > - **Reported, not smoothed over:** OSCAL's risk data has no owner, no
 >   single level and no acceptance date, so the first Risk corpus cannot
 >   leave the `identified` state; and the coverage reports count source
->   *paths*, not values that arrive — on the IFA corpus 122 content values
->   do not (the other ten corpora are unmeasured).
+>   *paths*, not values that arrive. On the IFA corpus a ledger follows
+>   every source value: of 835, 441 are copied, 95 transformed by a named
+>   rule and 299 dropped for a declared reason, none unaccounted. That is
+>   not "lossless", and the other ten corpora have no ledger (backlog
+>   #41). A workflow step reproduces the IFA conversion from its pinned
+>   sources on every change.
 > - **Licences:** the repository is Apache-2.0; the converted corpora were
 >   checked against their publishers' terms and six bundles were removed
 >   ("What ships here", below).
@@ -383,7 +391,7 @@ changes forced):
 |---|---|---|---|
 | [US.SP800-53](converted_examples/US.SP800-53/sp800-53-coverage-report.md) | NIST SP 800-53 Rev 5.2.0 catalog + four 800-53B baseline profiles, OSCAL 1.2.2 | 1,014 Requirements (1,600 statement-scoped ODP params, SP 800-53A layer as facet) · 25 Sets (20 families + 4 baselines + root); 182 withdrawn tombstones inverted onto successor `replaces[]` | 115,680 / 115,680 |
 | [US.CSF](converted_examples/US.CSF/csf-coverage-report.md) | NIST CSF 2.0, OSCAL 1.2.2 | 106 Requirements · 29 Sets (functions → categories → subcategories, 3-level nesting); 91 withdrawn (12 categories + 79 subcategories) inverted | 4,726 / 4,726 |
-| [US.IFA-GoodRead](converted_examples/US.IFA-GoodRead/ifa-coverage-report.md) | OSCAL IFA GoodRead example set (SSP + AP + AR + POA&M) + leveraged/leveraging SSP pair + component-definition | 6 Components · 3 Implementations (D5 `inherited-from` with basis-ref) · 1 Assessment · 2 Findings (one approved risk-adjustment Deviation) · 1 Attestation (the ATO) · 2 carried Requirements | 835 / 835 |
+| [US.IFA-GoodRead](converted_examples/US.IFA-GoodRead/ifa-coverage-report.md) | OSCAL IFA GoodRead example set (SSP + AP + AR + POA&M) + leveraged/leveraging SSP pair + component-definition | 6 Components · 3 Implementations (D5 `inherited-from` with basis-ref) · 1 Assessment · 2 Findings (one approved risk-adjustment Deviation) · 2 Risks · 1 Attestation (the ATO) · 2 carried Requirements | 835 / 835 |
 
 Each conversion ships a computed coverage report that declares every rule with
 counts and **reports source defects rather than repairing them** — the BSI run

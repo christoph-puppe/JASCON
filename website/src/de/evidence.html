@@ -2,7 +2,7 @@
 title: Belege: was gemessen wurde und was nicht | JASCON
 description: Das Konformitätskorpus, die beiden Referenzvalidatoren, die konvertierten Kataloge mit ihren Lizenzen, die Nachweis-Gates, die offenen Grenzen und die Nachbarformate. Jede Zahl ist als gemessen, entworfen oder offen gekennzeichnet.
 nav: evidence
-source: b72ba9a0a5ba
+source: 4c8b71feb5e9
 ---
 <section class="page-hero">
   <div class="wrap">
@@ -38,7 +38,7 @@ source: b72ba9a0a5ba
         </article>
         <article class="card">
           <div class="card-top"><h3>validate_core.ps1</h3><span class="tier tier-measured">gemessen am 12. November 2026</span></div>
-          <p>Der Zwilling: {{ n.powershell_lines }} Zeilen Windows PowerShell 5.1 ohne Abhängigkeiten, für den Rechner, den ein Auditor ohnehin hat. Am 12. November lieferte er auf einem gehosteten Windows-Runner dieselben Zählergebnisse wie die Python-Referenz, für alle {{ n.vectors }} Vektoren, die fünf Bundles, das ausgearbeitete Paket und den Beispielordner. Ein <a href="{{ repo }}/actions/workflows/validators.yml" rel="noopener">Workflow</a> wiederholt diesen Lauf bei jeder Änderung.</p>
+          <p>Der Zwilling: {{ n.powershell_lines }} Zeilen Windows PowerShell 5.1 ohne Abhängigkeiten, für den Rechner, den ein Auditor ohnehin hat. Auf einem gehosteten Windows-Runner liefert er dieselben Zählergebnisse wie die Python-Referenz, für alle {{ n.vectors }} Vektoren, die fünf Bundles, das ausgearbeitete Paket und den Beispielordner. Ein <a href="{{ repo }}/actions/workflows/validators.yml" rel="noopener">Workflow</a> wiederholt diesen Lauf bei jeder Änderung.</p>
         </article>
         <article class="card">
           <div class="card-top"><h3>Ein dritter, im Browser</h3><span class="tier tier-measured">gemessen</span></div>
@@ -148,7 +148,7 @@ source: b72ba9a0a5ba
       </div>
       <div class="limit">
         <h3>Pfadabdeckung heißt nicht, dass die Werte ankommen <span class="tier tier-open">offen, Backlog 41</span></h3>
-        <p>Die Abdeckungsberichte zählen Quellpfade mit deklariertem Ziel. Ob jeder Wert ankommt, wurde an einem Korpus nachverfolgt, dem NIST-Beispielsystem, mit einem Protokoll, das jeden Quellwert durch den Konverter verfolgt: Von {{ n.ledger_values }} Blattwerten werden {{ n.ledger_carried }} übertragen ({{ n.ledger_copied }} kopiert, {{ n.ledger_transformed }} über eine benannte Regel), {{ n.ledger_dropped }} entfallen mit angegebenem Grund, und {{ n.ledger_unaccounted }} sind ungeklärt: kein Ziel und kein angegebener Grund. Die übrigen zehn Korpora sind nicht gemessen.</p>
+        <p>Die Abdeckungsberichte zählen Quellpfade mit deklariertem Ziel. Ob jeder Wert ankommt, wurde an einem Korpus nachverfolgt, dem NIST-Beispielsystem, mit einem Protokoll, das jeden Quellwert durch den Konverter verfolgt: Von {{ n.ledger_values }} Blattwerten werden {{ n.ledger_carried }} übertragen ({{ n.ledger_copied }} kopiert, {{ n.ledger_transformed }} über eine benannte Regel), {{ n.ledger_dropped }} entfallen mit angegebenem Grund, und {{ n.ledger_unaccounted }} sind ungeklärt: kein Ziel und kein angegebener Grund. Geklärt heißt nicht übertragen: Ein entfallener Wert steht nicht im Bundle, aufgrund einer Entscheidung, die niedergeschrieben ist, und das Protokoll verfolgt nicht zurück, was ein Konverter von sich aus schreibt. Der Workflow reproduziert diese Konvertierung bei jeder Änderung aus ihren festgeschriebenen Quelldateien. Die übrigen zehn Korpora sind nicht gemessen.</p>
       </div>
       <div class="limit">
         <h3>Das erste Risk-Korpus bleibt in seinem ersten Zustand <span class="tier tier-open">offen</span></h3>
@@ -160,7 +160,7 @@ source: b72ba9a0a5ba
       </div>
       <div class="limit">
         <h3>2.0.0 ist ein Kandidat, kein Release <span class="tier tier-open">offen</span></h3>
-        <p>Es ist nichts mehr zu entscheiden, und beide Validatoren sind auf allen {{ n.vectors }} Vektoren des Kandidaten grün. Das Setzen des Tags ist Sache des Autors und ist noch nicht erfolgt. Bis dahin ist 1.0.0 die veröffentlichte Version, und die Strukturen von 2.0.0 können sich noch ändern.</p>
+        <p>Zwei Änderungen, die der Autor am 13. November 2026 angenommen hat, sind nicht gebaut: ein Datum der Überprüfung an einer Deviation sowie Autor und Datum jeder festgehaltenen Entscheidung (Backlog 65 und 66). Beide ändern eine Struktur des Kernels, deshalb wartet das Tag auf sie. Beide Validatoren sind auf allen {{ n.vectors }} Vektoren des Kandidaten in seinem jetzigen Stand grün. Bis zum Tag ist 1.0.0 die veröffentlichte Version, und die Strukturen von 2.0.0 können sich noch ändern.</p>
       </div>
       <div class="limit">
         <h3>Nicht jedes Bundle für 1.0.0 ist ein Bundle für 2.0.0 <span class="tier tier-measured">entschieden</span></h3>
@@ -176,7 +176,7 @@ source: b72ba9a0a5ba
       </div>
       <div class="limit">
         <h3>Zwei Stellen, an denen ein Nachbar voraus ist <span class="tier tier-open">offen, Backlog 65 und 66</span></h3>
-        <p>Der Vergleich vom 13. November 2026 fand zwei. Eine Deviation hält fest, wann sie eröffnet und wer sie genehmigt hat, und hat kein Ablaufdatum; eine Sicherheitsausnahme in CISO Assistant hat ein Ablaufdatum und ein Risiko in OSCAL eine Frist. Keine Tailoring-Operation hält ihren eigenen Autor fest: Eine Abschwächung erfordert eine genehmigte Deviation, jede andere Änderung wird nur über das Tailoring zugeordnet, das sie enthält, während CISO Assistant jede Änderung protokolliert. Beide stehen als Einträge 65 und 66 im Backlog; jeder erfordert eine Entscheidung des Autors.</p>
+        <p>Der Vergleich vom 13. November 2026 fand zwei. Eine Deviation hält fest, wann sie eröffnet und wer sie genehmigt hat, und hat kein Ablaufdatum; eine Sicherheitsausnahme in CISO Assistant hat ein Ablaufdatum und ein Risiko in OSCAL eine Frist. Keine Tailoring-Operation hält ihren eigenen Autor fest: Eine Abschwächung erfordert eine genehmigte Deviation, jede andere Änderung wird nur über das Tailoring zugeordnet, das sie enthält, während CISO Assistant jede Änderung protokolliert. Der Autor hat beide am selben Tag entschieden: Eine Deviation erhält ein optionales Datum der Überprüfung, und eine Entscheidung hält fest, wer sie wann getroffen hat. Gebaut ist noch keines von beiden; es sind die Einträge 65 und 66 im Backlog.</p>
       </div>
       <div class="limit">
         <h3>Die Governance ist eine Person <span class="tier tier-open">offen</span></h3>

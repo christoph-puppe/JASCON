@@ -89,6 +89,46 @@ and compared; and every entry is checked against the written files.
 > day: a repeated name keeps every value). An equal value
 > elsewhere proves nothing; follow the value.
 
+The 473 were then decided, class by class, and the decisions are the
+part another converter can reuse. **Carry** what the bundle has a place
+for. The leveraged and the leveraging system got what the main system
+had; the inventory kept the class of each prop; the component definition
+its clause texts and parameter values; each Component its description,
+status, props and roles; the Implementation its narrative, statement by
+statement; the Assessment its activities, tasks and observations; and
+each source document its title, version and dates in the manifest's
+`provenance`. **Resolve** what the source states as a reference: an edge
+is the result of looking up the uuid the source gives, never a value
+typed into the converter. Four hand-wired edges resolved to what they
+had been. Two were wrong in a bundle that had shipped: a capability sat
+on the wrong Component, and another carried the text of a neighbouring
+component. **Drop** by class and with the reason: revision history, the
+directory of parties and roles, back-matter and import links, type tags,
+the uuids of source elements. **Declare** what the source gets wrong:
+three references that name nothing their document defines stay
+unresolved, and nothing is invented for them. Keep roles at two levels,
+the Component and the whole scope; an assignment below that is rolled up
+and linked to them, because a role per statement, task and capability
+multiplies entries without adding a fact. The ledger of that conversion
+now reads 441 copied, 95 transformed, 299 dropped for a declared reason,
+none unaccounted and no failed check.
+
+> **Don't** read "none unaccounted" as "lossless". It says that every
+> source value has a destination, a named rule or a stated reason. Here
+> 299 values are not in the bundle, by decisions that are written down.
+> And the ledger runs one way: it follows source values into the bundle.
+> A value the converter writes on its own has no entry — in this
+> conversion three party URIs that no source names — so the report has
+> to say it in words.
+
+> **Don't** let a conversion become a historical document. Pin the
+> source files by digest and reproduce the conversion on every change of
+> the kernel, the library or the converter: fetch, check the digests,
+> convert, and compare byte for byte with what is committed. This
+> project's workflow does that for the one corpus with a ledger
+> (`SOURCES.sha256` beside the bundle). A report nobody reproduces
+> describes a converter that may no longer exist.
+
 ## 14.2 Playbook: OSCAL 1.x catalogs and profiles
 
 **Controls.** Each becomes a Requirement; **nested controls become
@@ -156,11 +196,13 @@ reports what it could not place. Three things in real files to expect: a
 `source` that is a `#uuid` into the back-matter rather than a URL, Rev 4
 sources whose control and parameter ids are not the Rev 5 conversion's,
 and OSCAL's `{{ insert: param, … }}` markup inside the texts; the import
-handles or names each (`drafts/cp-advice-1-census/`). The older conversion in the repository,
-of NIST's example file inside the IFA corpus, still carries the
-control-level description only and leaves 2 clause-level texts and 2
-parameter values behind, although its coverage report counts them as
-carried (backlog #64). Chapter 9.7; `drafts/CP-ADVICE-1.md` §12.)* **Assessment plans and
+handles or names each (`drafts/cp-advice-1-census/`). The conversion in the repository,
+of NIST's example file inside the IFA corpus, has followed the same
+mapping since 2026-11-13 (backlog #64, closed). Until then it carried
+the control-level description only, while its coverage report counted 2
+clause-level texts and 2 parameter values as carried. One difference
+remains: it writes `requirement-ref` into the NIST namespace by rule and
+carries the `source` of the control implementation beside it. Chapter 9.7; `drafts/CP-ADVICE-1.md` §12.)* **Assessment plans and
 results** become Assessment objects (methods via
 `assessment-criteria`) and Findings; **POA&M items** become
 `Finding.actions[]` with computable due dates; and the four
@@ -178,7 +220,8 @@ deletion.
 OSCAL type is date-time-with-timezone); the POA&M `system-id` →
 `component-refs`; the response's `type` prop → `treatment` (`mitigate` →
 `modify`, `accept` → `retain`, `transfer`/`share` → `share`, `avoid` →
-`avoid`); the assessment finding's `related-risks` edge → `treatments[]`;
+`avoid`; `none` and `contingency` have no code and give no `treatment`,
+C.10); the assessment finding's `related-risks` edge → `treatments[]`;
 `threat-ids` → `threat-refs` (none in the corpus). `remediations` stay
 `Finding.actions[]`; `related-observations` ride the Finding's evidence;
 the Finding gains `risk-refs`. `characterizations`, `mitigating-factors`,

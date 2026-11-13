@@ -86,12 +86,14 @@ You must strictly adhere to the guidelines detailed in the handbook chapters and
 - **Reference Document:** [Chapter 13 — Consuming Content Safely](references/ch13-consuming-content-safely.md)
 
 ### Requirement 13: Migration Playbooks
-- **Description:** Translate OSCAL 1.x structures (catalogs, profiles, SSPs, etc.) or legacy formats to JASCON objects preserving semantic equivalence.
-- **Reference Document:** [Chapter 14 — Migration Playbooks](references/ch14-migration-playbooks.md)
+- **Description:** Translate OSCAL 1.x structures (catalogs, profiles, SSPs, etc.) or legacy formats to JASCON objects preserving semantic equivalence. A converter reports at two depths. The **path map** says where each source path is declared to go; its gate is no unmapped path. The **conversion ledger** says where each source value went: `copied`, `transformed` by a named rule that is applied again and compared, `intentionally-dropped` with a reason, or `unaccounted`; its gate is none unaccounted and no failed check. Only the ledger supports a claim about values, and "none unaccounted" is not "lossless": a dropped value is a decision that is written down. Read props with `props_by_name` (a repeated name keeps every value), resolve the source's own references instead of typing edges into the converter, declare a reference that names nothing as a defect of the source, and pin the source files by digest so that the conversion can be reproduced on every change.
+- **Reference Document:** [Chapter 14 — Migration Playbooks](references/ch14-migration-playbooks.md) (14.1: the two depths of a coverage report, and what became of the unaccounted values of the first ledger)
 - **Migration Scripts:**
   - [convert_ism.py](scripts/convert_ism.py) — ISM (OSCAL 1.1.x catalog) to JASCON bundle converter.
   - [convert_bsi.py](scripts/convert_bsi.py) — BSI Grundschutz++ + MS-TLS (OSCAL 1.1.3) to JASCON bundle converter.
   - [convert_cr26.py](scripts/convert_cr26.py) — FedRAMP CR26 (bespoke JSON) to JASCON bundle converter.
+  - [convert_ifa.py](scripts/convert_ifa.py) — an OSCAL lifecycle set (SSP, assessment plan and results, POA&M, a leveraged pair, a component definition) to a lifecycle bundle. The one converter with a ledger: 835 source values, none unaccounted.
+  - [oscal_conv_lib.py](scripts/oscal_conv_lib.py) — what the converters share: the bundle writer, the path inventory, `Ledger`, `global_occurrence` (an upper bound only: is there an equal value anywhere), `props_by_name`, `response_treatment` (OSCAL response type to treatment option). [test_oscal_conv_lib.py](scripts/test_oscal_conv_lib.py) holds its regression tests.
 
 ### Requirement 14: Governance and Ecosystem
 - **Description:** Adhere to conformance tiers, deprecation policies, registry usage, and the anti-#2118 change proposal workflow.
@@ -158,3 +160,5 @@ The [scripts/](scripts/) directory contains automated scripts for migrating lega
 - [convert_ism.py](scripts/convert_ism.py) — Translates ISM OSCAL 1.1.x catalogs into a JASCON bundle and generates a computed coverage report.
 - [convert_bsi.py](scripts/convert_bsi.py) — Converts BSI Grundschutz++ + MS-TLS OSCAL 1.1.3 content into JASCON. Handles nested pseudo-controls, splitting them into statements and mapping grammar, security objectives, assessment criteria, and taxonomy facets.
 - [convert_cr26.py](scripts/convert_cr26.py) — Processes FedRAMP CR26 bespoke JSON into a JASCON bundle, converting rules and KSIs into Requirements and Mapping objects.
+- [convert_ifa.py](scripts/convert_ifa.py) — Converts NIST's example lifecycle set (SSP, assessment plan and results, POA&M, the leveraged and the leveraging SSP, a component definition) into Components, Implementations, an Assessment, Findings, Risks and an Attestation. It writes a path map and a conversion ledger that accounts for each of the 835 source values; it reads its seven source files from `sources/nist/`, and the project's workflow reproduces the committed bundle from them on every change.
+- [oscal_conv_lib.py](scripts/oscal_conv_lib.py) — Shared by every converter: bundle writing with both digests, the path inventory and coverage, the conversion ledger (`Ledger`), `props_by_name`, `global_occurrence` and `response_treatment`. Run [test_oscal_conv_lib.py](scripts/test_oscal_conv_lib.py) after changing it.
