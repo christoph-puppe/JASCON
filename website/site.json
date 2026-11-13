@@ -3,8 +3,18 @@
  "base_url": "https://jascon.net",
  "repo_url": "https://github.com/christoph-puppe/JASCON",
  "publisher": "Christoph Puppe",
+ "languages": [
+  "en",
+  "de",
+  "hi",
+  "ja",
+  "zh"
+ ],
  "imprint": {
-  "address_lines": ["99096 Erfurt", "Germany"],
+  "address_lines": [
+   "99096 Erfurt",
+   "Germany"
+  ],
   "email": "",
   "responsible_for_content": ""
  }

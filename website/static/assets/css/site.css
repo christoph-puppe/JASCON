@@ -749,14 +749,16 @@ table.compare tbody tr:last-child td.us { box-shadow: inset 2px 0 0 var(--accent
   .lang-pick summary { padding: 0 10px; }
   .lang-pick summary span { display: none; }
 }
-@media (max-width: 380px) {
-  .site-header .wrap { padding: 0 14px; }
-  .site-header .wordmark { letter-spacing: 0.04em; }
+@media (max-width: 420px) {
   .bar-end { gap: 4px; }
   .bar-end .icon-btn { width: 34px; }
   .bar-end .lang-pick summary { padding: 0 8px; }
   .bar-end .style-pick select { padding: 0 20px 0 7px; }
   .bar-end .style-pick::after { right: 8px; }
+}
+@media (max-width: 380px) {
+  .site-header .wrap { padding: 0 14px; }
+  .site-header .wordmark { letter-spacing: 0.04em; }
 }
 
 @media print {
