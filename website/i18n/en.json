@@ -69,6 +69,7 @@
     "note": "German prose, statement grammar and protection goals as facets"
    },
    "US.SP800-53": {
+    "title": "SP 800-53 Rev 5.2.0 with the 800-53B baselines",
     "publisher": "NIST",
     "note": "Statement-scoped parameters; four baselines as membership Sets"
    },
@@ -77,6 +78,7 @@
     "note": "Functions, categories and subcategories as nested Sets"
    },
    "US.IFA-GoodRead": {
+    "title": "OSCAL example system (SSP, plan, results, POA&M)",
     "publisher": "NIST, fictional content",
     "note": "The lifecycle types: Component to Attestation, with two Risks"
    }

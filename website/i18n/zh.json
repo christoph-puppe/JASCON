@@ -69,6 +69,7 @@
     "note": "德语正文、陈述语法和保护目标以分面表示"
    },
    "US.SP800-53": {
+    "title": "SP 800-53 Rev 5.2.0（含 800-53B 基线）",
     "publisher": "NIST",
     "note": "作用范围限定在陈述上的参数；四个基线以成员关系 Set 表示"
    },
@@ -77,6 +78,7 @@
     "note": "功能、类别和子类别以嵌套的 Set 表示"
    },
    "US.IFA-GoodRead": {
+    "title": "OSCAL 示例系统（SSP、计划、结果、POA&M）",
     "publisher": "NIST（虚构内容）",
     "note": "生命周期类型：从 Component 到 Attestation，含两个 Risk"
    }

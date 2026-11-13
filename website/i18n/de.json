@@ -69,6 +69,7 @@
     "note": "Fließtext auf Deutsch, Satzgrammatik und Schutzziele als Facetten"
    },
    "US.SP800-53": {
+    "title": "SP 800-53 Rev 5.2.0 mit den Baselines aus 800-53B",
     "publisher": "NIST",
     "note": "Parameter mit Geltung je Aussage; vier Baselines als Mitgliedschafts-Sets"
    },
@@ -77,6 +78,7 @@
     "note": "Funktionen, Kategorien und Unterkategorien als verschachtelte Sets"
    },
    "US.IFA-GoodRead": {
+    "title": "OSCAL-Beispielsystem (SSP, Plan, Ergebnisse, POA&M)",
     "publisher": "NIST, fiktive Inhalte",
     "note": "Die Lebenszyklustypen von Component bis Attestation, mit zwei Risks"
    }

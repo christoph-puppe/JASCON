@@ -182,7 +182,7 @@ nav: evidence
         <p>ハンドブックは、連合型のレジストリと、標準ライブラリの管理者を記述しています。どちらも存在しません。現時点にあるのは、個人の立場で活動するメンテナー 1 名、公開の決定登録簿、そして適合性コーパスです。</p>
       </div>
     </div>
-    <p class="source reveal">件数付きの全キュー：<a href="{{ blob }}/drafts/jascon-v0.6-spec-feedback-backlog.md" rel="noopener">仕様フィードバックのバックログ</a>。項目は根拠とともに登録され、<a href="{{ blob }}/drafts/jascon-decision-rationale-register.md" rel="noopener">決定登録簿</a>への記載を経て外れます。</p>
+    <p class="source reveal">件数付きの全キュー：<a href="{{ blob }}/drafts/jascon-v0.6-spec-feedback-backlog.md" rel="noopener">仕様フィードバックのバックログ</a>。項目は根拠とともに登録され、<a href="{{ blob }}/drafts/jascon-decision-rationale-register.md" rel="noopener">決定登録簿</a>への記載をもってキューから外れます。</p>
   </div>
 </section>
 
@@ -201,13 +201,13 @@ nav: evidence
           <tr><th scope="row">Gemara (OpenSSF)</th><td>ガイダンス、管理策、脅威、リスク、ケイパビリティの階層化されたカタログ。型付きの関係、強度、確度を持つマッピング文書。証跡にダイジェストが付く評価ログ。CUE によるスキーマ。FINOS Common Cloud Controls と OpenSSF OSPS Baseline が使用</td><td>第二言語の本文がない。指摘事項や適用除外に期日も有効期限もない。実装の記録がない：モデルはそのためのレイヤーを挙げているが、スキーマは提供していない。リスクは承認者も日付もなしに受容される。署名は公開バンドルのバイト列が対象で、スキーマの外でツールが行う。スキーマは閉じている：CUE プロファイルで絞り込むことはできるが、フィールドは追加できない。ポリシーとリスクのスキーマは実験的と明記されている</td></tr>
           <tr><th scope="row">CycloneDX Attestations (OWASP, ECMA-424)</th><td>データとしての標準。クレームと反対クレームに対応付けられた要求事項、作成者と有効期限を持つ証跡、署名者を伴う確約（affirmation）。正規化 JSON に対するオブジェクト単位の署名で、インデントの変更後も有効</td><td>リスクオブジェクトも、テーラリングの記録も、言語マップもない。証跡の添付ファイルにハッシュがない。署名は JSON 形式にしか存在しない：XML スキーマと protobuf 定義には署名を置く場所がない。署名者にも確約にも日付がない。拡張は名前と値の文字列で、そのレジストリは任意</td></tr>
           <tr><th scope="row">CISO Assistant (intuitem)</th><td>ツール内：管理策に紐づくリスクシナリオ、適用宣言書 (SoA) のエクスポート、承認者・日付・有効期限付きのリスク受容、有効期限付きのセキュリティ例外、監査ログ。ライブラリフォーマット内：200 を超えるフレームワーク、参照管理策、リスクマトリクス、集合論に基づくマッピング、オブジェクトごとの <code>translations</code> マップ</td><td>リスク受容、例外、適用宣言書はアプリケーション内にとどまり、外に出るのはライブラリフォーマットではなくバックアップのエクスポートを通じてのみ。署名はない：重複排除のためのバイト列ハッシュのみ。ライブラリの更新で既存の評価が書き換わりうる。要求事項に付随するチェックのロジックがない。インポーターは未知のライブラリキーを無視する</td></tr>
-          <tr><th scope="row">SCAP, XCCDF, OVAL</th><td>XML によるチェックリストとチェック言語。Tailoring ファイルは、ベンダーのベンチマークを編集せずに変更できる。override は権限者、時刻、理由を記録する。タイトルと説明は言語ごとに繰り返し記述できる。データストリームには署名と副署ができる</td><td>リスクの記録がない。期日、有効期限、免除の型がない。収集した項目にハッシュがない。個々のテーラリング変更に作成者がなく、重大度を理由なしに引き下げられる。署名済みストリームのインデントを変えると署名が壊れる。適合するチェックは OVAL と OCIL で、任意の言語のスクリプトは OpenSCAP の拡張を通じてしか実行できない。外部の名前空間の要素は、たまたまスキーマが手元にある場合にしか検査されない</td></tr>
+          <tr><th scope="row">SCAP、XCCDF、OVAL</th><td>XML によるチェックリストとチェック言語。Tailoring ファイルは、ベンダーのベンチマークを編集せずに変更できる。override は権限者、時刻、理由を記録する。タイトルと説明は言語ごとに繰り返し記述できる。データストリームには署名と副署ができる</td><td>リスクの記録がない。期日、有効期限、免除の型がない。収集した項目にハッシュがない。個々のテーラリング変更に作成者がなく、重大度を理由なしに引き下げられる。署名済みストリームのインデントを変えると署名が壊れる。適合するチェックは OVAL と OCIL で、任意の言語のスクリプトは OpenSCAP の拡張を通じてしか実行できない。外部の名前空間の要素は、たまたまスキーマが手元にある場合にしか検査されない</td></tr>
           <tr><th scope="row">規制当局のフォーマット</th><td>JSON Schema 付きの JSON による FedRAMP の統合ルール。YAML による BSI C5:2026。OSCAL のカタログとプロファイルによる Grundschutz++ と ISM</td><td>発行者ごとに方言があり、それぞれがモダリティ、期限、適用範囲を独自の方法で構造化している。C5 はドイツ語版と英語版を別ファイルで配布。Grundschutz++ は語彙を、どのバリデータも読まない props に保持している</td></tr>
           <tr><th scope="row">マッピングのセマンティクス</th><td>NIST IR 8477 の関係スタイル。Secure Controls Framework の STRM。OWASP OpenCRE</td><td>IR 8477 が定義するのは関係であり、ファイルフォーマットではない。SCF はマッピングをスプレッドシートと PDF で公開し、OSCAL にエクスポートするのはカタログのみ。OpenCRE はハブ・アンド・スポーク型の要求事項グラフであり、カタログフォーマットではない</td></tr>
           <tr><th scope="row">in-toto と SCITT</th><td>来歴、検証サマリー、テスト結果、SBOM のための精査済み predicate を持つ署名付きの証明。署名付きステートメントに対する IETF の透明性サービス</td><td>管理策や要求事項を証明する in-toto の predicate はない。SCITT は透明性のためのアーキテクチャであり、コンプライアンスモデルではない</td></tr>
-          <tr><th scope="row">Heimdall Data Format, OCSF, SARIF</th><td>チェックとスキャンの結果</td><td>チェックが何を見つけたかを運ぶもので、標準が何を要求するかではない</td></tr>
+          <tr><th scope="row">Heimdall Data Format、OCSF、SARIF</th><td>チェックとスキャンの結果</td><td>チェックが何を見つけたかを運ぶもので、標準が何を要求するかではない</td></tr>
           <tr><th scope="row">NIST IR 8286</th><td>リスク登録簿とリスク詳細記録のスキーマ</td><td>リスクから管理策の選択へのエッジがない</td></tr>
-          <tr><th scope="row">OpenControl, Compliance Masonry</th><td>YAML による標準とコンポーネントの説明文</td><td>2023 年以降、目立った活動がない</td></tr>
+          <tr><th scope="row">OpenControl、Compliance Masonry</th><td>YAML による標準とコンポーネントの説明文</td><td>2023 年以降、目立った活動がない</td></tr>
           <tr><th scope="row">ISO/IEC 27001 と 27002、IEC 62443、PCI DSS</th><td>標準そのもの</td><td>公式の機械可読版がない。SCF と CISO Assistant に第三者による表現がある</td></tr>
         </tbody>
       </table>
@@ -246,7 +246,7 @@ nav: evidence
       </div>
       <div class="stack">
         <h3>この主張がどこまで成り立つか</h3>
-        <p class="muted">4 つのいずれにも部分的な先例があります。この主張は組み合わせに関するもので、その強さは調査の確かさを超えるものではありません。最も近いのは Gemara と CycloneDX Attestations であり、どちらのコミュニティの読者も、なぜ JASCON は自分たちのフォーマットを拡張しないのかと問うでしょう。ハンドブックの<a href="{{ blob }}/jascon/references/appendix-f-objections.md" rel="noopener">付録 F.10</a>がそれに答えています。証明に関するギャップは小さなものです。in-toto には要求事項を証明する predicate がなく、JASCON の証明を predicate として表現すれば、既存の検証者エコシステムに届くはずです。利用者と監査人にとって重要な 10 の機能は、<a href="index.html#compare">トップページ</a>で比較しています。</p>
+        <p class="muted">4 つのいずれにも部分的な先例があります。この主張は組み合わせに関するもので、その強さは調査の確かさを超えるものではありません。最も近いのは Gemara と CycloneDX Attestations であり、どちらのコミュニティの読者も、なぜ JASCON は自分たちのフォーマットを拡張しないのかと問うでしょう。ハンドブックの<a href="{{ blob }}/jascon/references/appendix-f-objections.md" rel="noopener">付録 F.10</a> がそれに答えています。証明に関するギャップは小さなものです。in-toto には要求事項を証明する predicate がなく、JASCON の証明を predicate として表現すれば、既存の検証者のエコシステムに届くことになります。利用者と監査人にとって重要な 10 の機能は、<a href="index.html#compare">トップページ</a>で比較しています。</p>
         <a class="link-arrow" href="{{ blob }}/PRIOR-ART.md" rel="noopener">PRIOR-ART.md（出典付き）</a>
       </div>
     </div>
