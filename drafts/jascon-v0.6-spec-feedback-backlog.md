@@ -103,13 +103,15 @@ blocks the tag by a decision recorded so far.
 **Phase D (2026-11-14)**: the author decided #70 ("refuse if no party is
 named") and said of the removed corpora that their sources could be
 downloaded for the tests. **#70 is closed** in the app and the reader.
-**#46 is closed**: every Attestation read with a bundle is held to what
-it binds, in the reference, the twin, the app and the reader; the example
-Attestation is real (register, "Phase D"). The CR26 source was downloaded
+**#46**: every Attestation read with a bundle is held to what it binds
+in the reference, with 19 vectors, and the example Attestation is real;
+the ports to the twin, the app and the reader are being built, and the
+row stays open until they have run. The CR26 source was downloaded
 and its converter run: **#73** (the converter is behind its publication
 and the kernel). **#74** asks what #70 leaves open for the converters:
 the obligated party they write is not in their sources.
-Open now: #41, #55, #62, #71, #72, #73, #74. #74 needs the author.
+Open now: #41, #46 (the ports), #55, #62, #71, #72, #73, #74. #74 needs
+the author.
 **CP-CHECK-1 (2026-11-11, proposed)** adds
 #55-#57 (#56 closed the same day - the twin knows Check; the port left **#58 · #59**) and makes #48 a decision before the tag: Check would be the
 second consumer-side type admitted against D22 test 1. The eight review findings against the proposal
