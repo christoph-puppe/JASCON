@@ -1,5 +1,10 @@
 # Declared drops, for the author's decision (phase E, 2026-11-14)
 
+> **Closed the same day.** The author decided every row below
+> (`entscheidungen-phase-e.md`, E1 to E7 and R1, R2), and each decision
+> is built: all six ledgers read 0 dropped and 0 unaccounted. The list
+> stays as the record of what was asked.
+
 The author's rule of 2026-11-14: "Real content is never dropped. [...]
 What may stay out of a bundle is only what is not content: a name that
 merely selects a field, a namespace, an id that is rebuilt exactly from
