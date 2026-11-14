@@ -2238,15 +2238,18 @@ function Listed-Attestation-Errors($objs) {
     # MANIFEST-1 (D3.11; backlog #75) -> one error per Attestation among the
     # objects a content manifest lists, in the ordinal order of the ids.
     # objs: those objects, id -> @{t; o}. D3.1 excludes Attestations from the
-    # content manifest by definition: an Attestation binds the digest of the
-    # manifest's bytes, so a manifest that lists one cannot be the manifest
-    # it binds. What the Attestation binds, whether it names an envelope and
-    # what its lifecycle is change nothing; its binding is still computed
-    # and reported (Binds-Report), a Semantic Match at best.
+    # content manifest by definition. One that binds this manifest could not
+    # be listed by it without changing the digest it binds; one that binds a
+    # pack manifest the bundle keeps has no such cycle, and the rule holds
+    # for it all the same. What the Attestation binds, whether it names an
+    # envelope and what its lifecycle is change nothing; its binding is still
+    # computed and reported (Binds-Report): never a Full Match of the
+    # manifest that lists it, and for a kept pack manifest a Full Match of
+    # that, refused here beside it.
     $errs = New-Object System.Collections.ArrayList
     foreach ($oid in (Sorted-Ordinal $objs.Keys)) {
         if ([string]::Equals($objs[$oid].t, 'attestation', $ORD)) {
-            [void]$errs.Add("${oid}: an Attestation is listed in the content manifest (MANIFEST-1: Attestations are excluded from the content manifest by definition, D3.1 - an Attestation lies beside the manifest it binds, and a manifest that lists one cannot be that manifest)")
+            [void]$errs.Add("${oid}: an Attestation is listed in the content manifest (MANIFEST-1: Attestations are excluded from the content manifest by definition, D3.1 - an Attestation lies beside a manifest and is never an entry of one)")
         }
     }
     return ,$errs

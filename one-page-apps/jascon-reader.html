@@ -808,7 +808,7 @@ function listedAttestationErrors(objs) {
   const listed = new Map((objs || []).filter(isRecord).map(o => [String(o.id), o]));
   return [...listed.keys()].sort().filter(id => inferType(listed.get(id)) === "attestation")
     .map(id => `${id}: an Attestation is listed in the content manifest (MANIFEST-1: Attestations are excluded from the content manifest by definition, ` +
-      `D3.1 - an Attestation lies beside the manifest it binds, and a manifest that lists one cannot be that manifest)`);
+      `D3.1 - an Attestation lies beside a manifest and is never an entry of one)`);
 }
 /* ==READER-PURE-END== */
 
@@ -2234,7 +2234,7 @@ function attestationWhere(r) {
   const name = r.path.slice((state.prefix || "").length);
   if (r.beside) return `beside the manifest, as <span class="mono">${esc(name)}</span> — not listed, as D3.1 requires: it binds the digest of the manifest's bytes`;
   if (r.entry) return `<span class="verdict-bad" data-where-listed>listed by the manifest</span>, as <span class="mono">${esc(r.entry.path)}</span> — D3.1 excludes that: ` +
-    `an Attestation lies beside the manifest it binds, and a manifest that lists one cannot be that manifest (MANIFEST-1). It is held to what it binds all the same`;
+    `an Attestation lies beside a manifest and is never an entry of one (MANIFEST-1). It is held to what it binds all the same`;
   if (r.path === "(pasted)") return "pasted — it did not come with the loaded bundle";
   if (r.path === "(workspace)") return "from the workspace — it did not come with the loaded bundle";
   return `a file the manifest does not list and that does not lie beside it (<span class="mono">${esc(name)}</span>) — not read with the bundle`;

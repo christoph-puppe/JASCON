@@ -631,7 +631,7 @@ test("MANIFEST-1: all 8 vectors; one failure per Attestation among the objects a
   const att = { id: "https://a.example/attestation/x", version: "1", lifecycle: "withdrawn", "subject-semantic-digests": ["sha256:" + "0".repeat(64)],
     "content-manifest-digest": "sha256:" + "1".repeat(64), signer: "https://a.example/p", timestamp: "2026-11-14T09:00:00Z" };
   assert.deepEqual(rules.jscListedAttestationErrors(rules.jscTypedObjects([att])), ["https://a.example/attestation/x: an Attestation is listed in the content manifest " +
-    "(MANIFEST-1: Attestations are excluded from the content manifest by definition, D3.1 - an Attestation lies beside the manifest it binds, and a manifest that lists one cannot be that manifest)"]);
+    "(MANIFEST-1: Attestations are excluded from the content manifest by definition, D3.1 - an Attestation lies beside a manifest and is never an entry of one)"]);
 });
 
 /* The reference sees a bundle on disk. A set is a bundle that was loaded and may have been written to since, so
@@ -708,7 +708,7 @@ test("attestation-binds on a set: as loaded it is held to the manifest it came w
   manifest.objects.push({ id: AID, version: ifaAtt.version, path: attPath, "package-digest": await core.jscPackageDigest(attText), "semantic-digest": await core.jscSemanticDigest(ifaAtt) });
   const listing = () => arrived().map(r => (r.kind === "manifest" ? { ...r, text: core.jscSerialize(manifest) } : r.id === AID ? { ...r, path: attPath } : r));
   const MANIFEST_1 = `${AID}: an Attestation is listed in the content manifest (MANIFEST-1: Attestations are excluded from the content manifest by definition, D3.1 - ` +
-    "an Attestation lies beside the manifest it binds, and a manifest that lists one cannot be that manifest)";
+    "an Attestation lies beside a manifest and is never an entry of one)";
   const refused = await binds(listing()), line = b => b.lines.find(l => l.id === AID);
   assert.deepEqual([refused.basis, line(refused).listed, line(refused)["manifest-1"]], ["loaded", "refused", MANIFEST_1]);
   assert.deepEqual(said(refused, AID), ["line", "SEMANTIC MATCH [3 subject(s) of this bundle; another manifest: the content is proven, the packaging was altered]"],

@@ -266,12 +266,17 @@ issues a new version, or the Attestation leaves the bundle.
 Where the Attestation lies is a rule of its own. It lies beside the
 manifest, and the manifest does not list it: an object a content
 manifest lists is not an Attestation, in any bundle (**MANIFEST-1**,
-specification D3, item 11). The reason is arithmetic. An Attestation
-binds the digest of the manifest's bytes, and a manifest that lists the
-Attestation carries the Attestation's digests, so the two can never
-agree: a listed Attestation is a Semantic Match at best. What it binds,
-whether it is signed and whether it is still claimed change nothing
-about the rule.
+specification D3, item 11). For an Attestation that binds the manifest
+it comes with, the reason is arithmetic. It binds the digest of the
+manifest's bytes, and a manifest that lists the Attestation carries the
+Attestation's digests, so the two can never agree: such an Attestation
+is never a Full Match of the manifest that lists it. A vendor's
+Attestation in a consumer's bundle binds the vendor's manifest, which
+the bundle keeps, and has no such cycle; listed, it is still a Full
+Match of that manifest, and the bundle fails all the same. The rule
+draws the line by kind, so that a tool knows where to look for an
+Attestation before it asks what it binds. What it binds, whether it is
+signed and whether it is still claimed change nothing about the rule.
 
 > **Don't** enter an Attestation in the manifest because it is a file
 > of the bundle like the others. Until 2026-11-14 only a pack's manifest

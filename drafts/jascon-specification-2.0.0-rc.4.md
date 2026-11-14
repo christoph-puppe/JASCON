@@ -444,8 +444,12 @@ relation (v0.4 — corrected).
     bundle. The rule asks where an Attestation lies and nothing else:
     what it binds, whether it names an envelope and what its lifecycle is
     change nothing. A listed Attestation is still read and held to what
-    it binds (D7); it is a Semantic Match at best, because a manifest
-    that lists an Attestation cannot be the manifest that Attestation
+    it binds (D7). It is never a Full Match of the manifest that lists
+    it, because a manifest that lists an Attestation cannot be the
+    manifest that Attestation binds; one that binds a pack manifest the
+    bundle keeps has no such cycle, is a Full Match of that manifest,
+    and is refused all the same: the rule draws the line by kind, so
+    that a tool knows where an Attestation lies before it asks what it
     binds. In a pack both rules speak, ADVICE-1 and this one. The rule
     does not name the signature envelope, because the manifest has no
     place where a tool would take one for an object: an envelope entered

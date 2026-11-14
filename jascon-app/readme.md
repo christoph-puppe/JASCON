@@ -700,8 +700,10 @@ reference's failure with `error:` before it.
 pack's manifest was held to it, by ADVICE-1). For a set whose manifest
 lists one the Validate page shows the reference's failure beside the
 Attestation's line, and the Assess page the same; the Attestation is still
-held to what it binds, which is a Semantic Match at best, because a
-manifest that lists it cannot be the one it binds. The app repairs nothing
+held to what it binds: never a Full Match of the manifest that lists it,
+because a manifest that lists it cannot be the one it binds (one that
+binds a pack manifest the set keeps is a Full Match of that, and is
+refused all the same). The app repairs nothing
 in silence. When such a bundle arrives the hub says so and keeps it as it
 came. What an export does with it is said under "Export". On the Validate
 page a set that listed an Attestation and was then changed is compared, as

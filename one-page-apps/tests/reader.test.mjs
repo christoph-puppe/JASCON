@@ -1220,7 +1220,7 @@ function referenceAttested(dir) {
 const WORD = { "full-match": "FULL MATCH", "semantic-match": "SEMANTIC MATCH", fail: "DOES NOT BIND" };
 /* MANIFEST-1 as the reference words it, after the id of the Attestation */
 const MANIFEST_1 = ": an Attestation is listed in the content manifest (MANIFEST-1: Attestations are excluded from the content manifest by definition, " +
-  "D3.1 - an Attestation lies beside the manifest it binds, and a manifest that lists one cannot be that manifest)";
+  "D3.1 - an Attestation lies beside a manifest and is never an entry of one)";
 /* What the page says about the Attestations of one bundle folder, held to itself and to the reference: the word
    and its colour follow the verdict; a failure is shown exactly where the line is the reference's failure; every
    line and every envelope is read as the reference reads it; an Attestation the manifest lists carries the
@@ -1565,7 +1565,7 @@ test("an export never lists an Attestation: it is written beside the manifest, a
     shown = await R.attested();
     assert.deepEqual(shown.map(a => [a.verdict, a.fails, a.manifest, a.listed, a.listedError]), [["semantic-match", "false", "other", "true", att.id + MANIFEST_1]]);
     asTheReference(shown, listing, "a manifest that lists its Attestation");
-    assert.match(await R.text(page.locator("#view-stagefn [data-attestation]")), /where it lies listed by the manifest, as objects\/att\/attestation-ato\.json — D3\.1 excludes that: an Attestation lies beside the manifest it binds, and a manifest that lists one cannot be that manifest \(MANIFEST-1\)\. It is held to what it binds all the same/);
+    assert.match(await R.text(page.locator("#view-stagefn [data-attestation]")), /where it lies listed by the manifest, as objects\/att\/attestation-ato\.json — D3\.1 excludes that: an Attestation lies beside a manifest and is never an entry of one \(MANIFEST-1\)\. It is held to what it binds all the same/);
     await R.view("overview");
     assert.deepEqual([await R.text(page.locator("#ov-listed")), await R.text(page.locator("#ov-beside"))], ["4", "0"]);
     assert.match(await R.text(page.locator("[data-ov-binds]")), /^SEMANTIC MATCH \(another manifest\) · \S+ ✗ listed by the manifest \(MANIFEST-1\)$/);
@@ -1716,7 +1716,7 @@ test("MANIFEST-1 on the page: a manifest that lists an Attestation fails in the 
     const card = page.locator("#view-stagefn [data-attestation]");
     assert.deepEqual(await card.locator("[data-binds-listed]").evaluateAll(l => l.map(e => [e.className, e.textContent])), [["verdict-bad", "· ✗ and the manifest lists it: the bundle fails (MANIFEST-1)"]]);
     assert.match(await R.text(card), /SEMANTIC MATCH · ✗ and the manifest lists it: the bundle fails \(MANIFEST-1\) — every subject matches and the Attestation binds another manifest: .* The manifest that lists it is never the one it binds; the failure here is the listing /);
-    assert.match(await R.text(card), /where it lies listed by the manifest, as objects\/attestation\/attestation-ifa-ato\.json — D3\.1 excludes that: an Attestation lies beside the manifest it binds, and a manifest that lists one cannot be that manifest \(MANIFEST-1\)\. It is held to what it binds all the same/);
+    assert.match(await R.text(card), /where it lies listed by the manifest, as objects\/attestation\/attestation-ifa-ato\.json — D3\.1 excludes that: an Attestation lies beside a manifest and is never an entry of one \(MANIFEST-1\)\. It is held to what it binds all the same/);
     assert.equal(await card.locator("[data-where-listed]").getAttribute("class"), "verdict-bad");
     /* the console says it as an error, in the reference's words */
     assert.deepEqual(await page.locator("#log > div.l-err").evaluateAll(l => l.map(e => e.textContent.replace(/^[\d:.]+/, ""))), [AID + MANIFEST_1]);

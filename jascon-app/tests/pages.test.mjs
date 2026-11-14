@@ -478,7 +478,7 @@ async function listedCopy(dir, attFile, tmp) {
   return copy;
 }
 const MANIFEST_1 = id => `${id}: an Attestation is listed in the content manifest (MANIFEST-1: Attestations are excluded from the content manifest by definition, D3.1 - ` +
-  "an Attestation lies beside the manifest it binds, and a manifest that lists one cannot be that manifest)";
+  "an Attestation lies beside a manifest and is never an entry of one)";
 
 test("MANIFEST-1: a set whose manifest lists an Attestation fails as the reference fails the folder, in a pack with ADVICE-1 beside it; unchanged it leaves as it came; changed, the export leaves the Attestation out and says so", { skip: needs }, async t => {
   const tmp = [], rules = createRequire(import.meta.url)("../jascon-rules.js");
@@ -510,7 +510,7 @@ test("MANIFEST-1: a set whose manifest lists an Attestation fails as the referen
     await validatePage(s, { asOf: AS_OF_46, requireAuthors: false });
     const refused = await attestationsShown(s);
     assert.equal(refused.basis, "loaded");
-    assert.deepEqual(refused.lines.map(l => [l.kind, l.text]), asShown(ref), "the binding is still shown: a Semantic Match at best");
+    assert.deepEqual(refused.lines.map(l => [l.kind, l.text]), asShown(ref), "the binding is still shown: a Semantic Match here, since the manifest that lists it is not the one it binds");
     assert.deepEqual(refused.lines.map(l => [l.listed, l.listedText]), [["refused", "error: " + MANIFEST_1(IFA_ATT)]]);
     assert.deepEqual(refused.errors.map(m => `${IFA_ATT}: ${m}`), ref.failures, "one error, the reference's");
     /* the Assess page says the same about the Attestation */

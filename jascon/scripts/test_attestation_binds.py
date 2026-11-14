@@ -201,7 +201,10 @@ class AttestationBesideTheManifest(unittest.TestCase):
     @unittest.skipIf(TWIN, "with a bundle named, the twin does not read the example folder; its default run does")
     def test_backlog_75_the_example_folder_is_held_to_it_too(self):
         # The reference reads jascon/examples beside its own file. A copy of the reference in a small tree of its own
-        # reads a changed copy of the folder: the folder's own Attestation entered in its manifest, both digests right.
+        # reads a changed copy of the folder: both of its Attestations entered in its manifest, both digests right.
+        # The folder's own binds the folder's manifest, which now lists it and is another manifest for that: a
+        # Semantic Match. The vendor's binds the pack manifest the folder keeps, which did not change: still a Full
+        # Match of that. Both are refused. The rule is about where an Attestation lies, not about what it binds.
         sys.path.insert(0, HERE)
         from oscal_conv_lib import semantic_digest
         mirror = os.path.join(self.tmp, "mirror")
@@ -209,22 +212,26 @@ class AttestationBesideTheManifest(unittest.TestCase):
             shutil.copytree(os.path.join(ROOT, "jascon", part), os.path.join(mirror, "jascon", part))
         os.makedirs(os.path.join(mirror, "jascon", "scripts"))
         shutil.copy2(os.path.join(HERE, "validate_core.py"), os.path.join(mirror, "jascon", "scripts", "validate_core.py"))
-        ex, name, aid = os.path.join(mirror, "jascon", "examples"), "attestation-acme-2026.json", "https://agency-x.example/attestation/acme-2026"
-        with open(os.path.join(ex, name), "rb") as f: raw = f.read()
-        att = json.loads(raw.decode("utf-8"))
-        self.assertEqual(att["id"], aid)
+        ex, own = os.path.join(mirror, "jascon", "examples"), "https://agency-x.example/attestation/acme-2026"
         m = read_json(os.path.join(ex, "content-manifest.json"))
-        m["objects"].append({"id": aid, "version": att["version"], "path": name,
-                             "package-digest": "sha256:" + hashlib.sha256(raw).hexdigest(), "semantic-digest": semantic_digest(att)})
+        for name, aid in (("attestation-acme-2026.json", own), (PACK_ATT, VID)):
+            with open(os.path.join(ex, name), "rb") as f: raw = f.read()
+            att = json.loads(raw.decode("utf-8"))
+            self.assertEqual(att["id"], aid)
+            m["objects"].append({"id": aid, "version": att["version"], "path": name,
+                                 "package-digest": "sha256:" + hashlib.sha256(raw).hexdigest(), "semantic-digest": semantic_digest(att)})
         write_json(os.path.join(ex, "content-manifest.json"), m)
         r = subprocess.run([sys.executable, os.path.join(mirror, "jascon", "scripts", "validate_core.py"),
                             os.path.join(self.tmp, "c07-no-attestation"), "--as-of", AS_OF],
                            capture_output=True, text=True, encoding="utf-8", errors="replace", cwd=mirror)
         out = r.stdout.replace("\r\n", "\n")
         self.assertEqual(r.returncode, 1, out[-800:])
-        self.assertIn("skill-examples: 27 pass, 1 fail", out)
-        self.assertIn(f"[skill-examples] {aid}: an Attestation is listed in the content manifest (MANIFEST-1", out)
-        self.assertRegex(out, r"(?m)^1 FAILURES:$")          # this one and no other: the copied bundle beside it is clean
+        self.assertIn("skill-examples: 27 pass, 2 fail", out)
+        for aid in (own, VID):
+            self.assertIn(f"[skill-examples] {aid}: an Attestation is listed in the content manifest (MANIFEST-1", out)
+        self.assertIn(f"binds: {own} = SEMANTIC MATCH [3 subject(s) of this bundle; another manifest: the content is proven, the packaging was altered]", out)
+        self.assertIn(f"binds: {VID} = FULL MATCH [1 subject(s) of this bundle; a pack manifest this bundle keeps]", out)
+        self.assertRegex(out, r"(?m)^2 FAILURES:$")          # these two and no other: the copied bundle beside it is clean
 
     def test_backlog_46_the_failures_are_these_and_no_others(self):
         failed = {name for name, (_, bad) in self.counts.items() if bad}

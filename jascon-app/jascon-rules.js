@@ -1621,7 +1621,7 @@ function jscBindsReport(atts, manifestDigest, delivered, keptPacks) {
    objs: Map(id -> {type, obj}), the objects a manifest lists.
    -> [error], one per listed Attestation, in the order of the ids */
 const JSC_MANIFEST_RULES = {
-  "MANIFEST-1": "Attestations are excluded from the content manifest by definition, D3.1 - an Attestation lies beside the manifest it binds, and a manifest that lists one cannot be that manifest",
+  "MANIFEST-1": "Attestations are excluded from the content manifest by definition, D3.1 - an Attestation lies beside a manifest and is never an entry of one",
 };
 const jscListedAttestationErrors = objs => [...objs.keys()].sort().filter(id => objs.get(id).type === "attestation")
   .map(id => `${id}: an Attestation is listed in the content manifest (MANIFEST-1: ${JSC_MANIFEST_RULES["MANIFEST-1"]})`);

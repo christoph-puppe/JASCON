@@ -1133,16 +1133,21 @@ def listed_attestation_errors(objs):
     """MANIFEST-1 (D3.11) -> [error], one per Attestation among the objects a
     content manifest lists. objs: those objects, id -> (type, obj).
 
-    D3.1 excludes Attestations from the content manifest by definition: an
-    Attestation binds the digest of the manifest's bytes, so a manifest
-    that lists one cannot be the manifest it binds. The rule is about where
-    an Attestation lies and asks nothing else of it: what it binds, whether
-    it names an envelope and what its lifecycle is change nothing. The
-    binding of a listed Attestation is still computed and reported
-    (attestation_binds): it is a Semantic Match at best."""
+    D3.1 excludes Attestations from the content manifest by definition. For
+    an Attestation that binds this manifest the reason is arithmetic: it
+    binds the digest of the manifest's bytes, so a manifest that lists it
+    cannot be the manifest it binds. For one that binds another manifest -
+    a vendor's, which the bundle keeps under packs/ - there is no such
+    cycle, and the rule holds all the same: it is about where an
+    Attestation lies and asks nothing else of it. What it binds, whether it
+    names an envelope and what its lifecycle is change nothing. The binding
+    of a listed Attestation is still computed and reported
+    (attestation_binds). It is never a Full Match of the manifest that
+    lists it; one that binds a kept pack manifest is a Full Match of that,
+    and is refused here beside it."""
     return [f"{oid}: an Attestation is listed in the content manifest (MANIFEST-1: Attestations are excluded "
-            f"from the content manifest by definition, D3.1 - an Attestation lies beside the manifest it "
-            f"binds, and a manifest that lists one cannot be that manifest)"
+            f"from the content manifest by definition, D3.1 - an Attestation lies beside a manifest and is "
+            f"never an entry of one)"
             for oid in by_code_unit(objs) if objs[oid][0] == "attestation"]
 
 def kernel_pin_errors(manifest, objs):
