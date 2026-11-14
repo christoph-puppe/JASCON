@@ -160,7 +160,7 @@ details[open]>summary{margin-bottom:6px}
 /* ==INLINE core== */
 /* ==JSC-PURE-START== */
 
-const JSC_BUILD = "0.9.10";
+const JSC_BUILD = "0.9.11";
 const JSC_TOOL = "JASCON-App " + JSC_BUILD;
 /* The kernel this app writes, and the kernels it reads (KERNEL-2: a tool
    stops at a pin it does not implement and names both). */
@@ -393,9 +393,11 @@ function jscClassifyFiles(files) {
 /* -> graph {
      manifest, manifestText,
      objects: Map(id -> {obj, type, path, text, origin, entry}), order: [id],
-     scales: Map(id -> {def, path, text, pin}),
-     facetSchemas: [{def, path, text, pin}], aux: [{path, text}], problems }
+     scales: Map(id -> {def, path, text, origin, pin}),
+     facetSchemas: [{def, path, text, origin, pin}], aux: [{path, text}], problems }
    `entry` and `pin` are the manifest's lines for that file, or null.
+   `origin` is "imported" for a file that arrived with a bundle and
+   "authored" or "pack" for one that was written here since.
    `order` is manifest order, then everything the manifest does not list,
    by path. */
 function jscGraphFrom(records) {
@@ -415,9 +417,9 @@ function jscGraphFrom(records) {
     let json;
     try { json = JSON.parse(r.text); } catch (e) { g.problems.push(`${r.path}: not JSON`); continue; }
     if (r.kind === "scale") {
-      g.scales.set(json.id, { def: json, path: r.path, text: r.text, pin: scaleLines.get(r.path) || null });
+      g.scales.set(json.id, { def: json, path: r.path, text: r.text, origin: r.origin || "imported", pin: scaleLines.get(r.path) || null });
     } else if (r.kind === "facet-schema") {
-      g.facetSchemas.push({ def: json, path: r.path, text: r.text, pin: facetLines.get(r.path) || null });
+      g.facetSchemas.push({ def: json, path: r.path, text: r.text, origin: r.origin || "imported", pin: facetLines.get(r.path) || null });
     } else {
       const id = json.id || r.path;
       if (g.objects.has(id)) { g.problems.push(`${r.path}: id ${id} is already defined by ${g.objects.get(id).path}; second file ignored`); continue; }
@@ -2211,6 +2213,162 @@ const jscAttestationVerdict = (signed, delivered) =>
   delivered.semantic !== signed.semantic ? "tamper" : delivered.package === signed.package ? "full-match" : "semantic-match";
 
 /* ====================================================================
+   attestation-binds, applied to a bundle (Appendix B.1.7; backlog #46)
+   ====================================================================
+   Port of attestation_binds and binds_report of validate_core.py, held to
+   the `binds-vectors` of attestation-vectors.json.
+
+   The primitive is (attestation, bundle) -> Full Match | Semantic Match |
+   fail. The bundle's side is three things: the semantic digests of the
+   objects the manifest lists, the digest of the manifest's bytes as
+   delivered, and the digests of the pack manifests the bundle keeps
+   (packs/sha256/, D25). An Attestation beside the manifest is no object of
+   the manifest and so no subject of anything.
+
+   Each subject is judged against the listed objects:
+     match    an object carries the signed semantic digest: the object of
+              that id where the subject names one, any object where it is a
+              bare digest;
+     differs  the object of that id carries another digest: its normative
+              content changed after signing;
+     absent   no object of that id, or no object with that digest.
+   The manifest the Attestation binds is `this` one, a `kept-pack` or an
+   `other`.
+     full-match      every subject matches, and the manifest is this one or
+                     a kept pack's;
+     semantic-match  every subject matches, and the manifest is another: the
+                     content is proven, the packaging was altered (D7).
+                     Reported, never a failure and never Full;
+     fail            anything else, an Attestation without a subject too.
+   The verdict is about digests. Whether the signature is valid is the
+   envelope's matter (jscVerifyEnvelope) and is reported beside it.
+
+   `fails`: a `fail` fails the bundle while the Attestation is still claimed,
+   lifecycle `active`. A draft is not issued yet, and a deprecated or
+   withdrawn one is kept for the record; each is reported with its verdict
+   and fails nothing. Otherwise a set whose attested object was changed could
+   never validate again, however openly the Attestation was withdrawn.
+
+   delivered: Map(id -> semantic digest) of the objects the manifest lists
+   (jscSemanticDigests); keptPacks: ["sha256:<hex>"].
+   -> { verdict, manifest, subjects: [{status, id or null, signed,
+        delivered or null}] in the Attestation's order, fails } */
+const jscBindsNone = v => (v === undefined ? null : v);
+function jscAttestationBinds(att, manifestDigest, delivered, keptPacks) {
+  const carried = new Set(delivered.values()), subjects = [];
+  const named = att["subject-semantic-digests"];
+  for (const sj of Array.isArray(named) ? named : []) {
+    if (jscIsPlainObject(sj)) {
+      const id = jscBindsNone(sj.id), signed = jscBindsNone(sj["semantic-digest"]);
+      const have = typeof id === "string" && delivered.has(id) ? delivered.get(id) : null;
+      subjects.push({ status: have === null ? "absent" : have === signed ? "match" : "differs", id, signed, delivered: have });
+    } else {
+      subjects.push(carried.has(sj) ? { status: "match", id: null, signed: sj, delivered: sj } : { status: "absent", id: null, signed: sj, delivered: null });
+    }
+  }
+  const bound = jscBindsNone(att["content-manifest-digest"]);
+  const manifest = bound === jscBindsNone(manifestDigest) ? "this" : (keptPacks || []).includes(bound) ? "kept-pack" : "other";
+  const verdict = !subjects.length || subjects.some(s => s.status !== "match") ? "fail" : manifest === "other" ? "semantic-match" : "full-match";
+  return { verdict, manifest, subjects, fails: verdict === "fail" && att.lifecycle === "active" };
+}
+/* objs: Map(id -> {type, obj}) -> Map(id -> semantic digest) */
+async function jscSemanticDigests(objs) {
+  const out = new Map();
+  for (const [id, r] of objs) out.set(id, await jscRulesSemanticDigest(r.obj));
+  return out;
+}
+/* One entry per Attestation, in the order of the ids (by UTF-16 code unit,
+   which is the order of a JavaScript sort), each with the line the reference
+   prints or the failure it lists, word for word.
+   atts: Map(id -> Attestation object).
+   -> [{ id, lifecycle, signed, verdict, manifest, subjects, fails,
+         kind: "line" | "failure", text }] */
+const JSC_BINDS_MANIFEST = { this: "this manifest", "kept-pack": "a pack manifest this bundle keeps", other: "another manifest" };
+function jscBindsReport(atts, manifestDigest, delivered, keptPacks) {
+  const out = [];
+  for (const id of [...atts.keys()].sort()) {
+    const att = atts.get(id), r = jscAttestationBinds(att, manifestDigest, delivered, keptPacks);
+    const n = r.subjects.length, what = JSC_BINDS_MANIFEST[r.manifest], lifecycle = jscBindsNone(att.lifecycle);
+    let kind = "line", text;
+    if (r.verdict === "full-match") text = `binds: ${id} = FULL MATCH [${n} subject(s) of this bundle; ${what}]`;
+    else if (r.verdict === "semantic-match") text = `binds: ${id} = SEMANTIC MATCH [${n} subject(s) of this bundle; ${what}: the content is proven, the packaging was altered]`;
+    else {
+      const lines = r.subjects.filter(s => s.status !== "match").map(s => `subject ${s.id || s.signed}: ` +
+        (s.status === "differs" ? `recomputed semantic digest ${s.delivered}, signed ${s.signed}` : s.id ? "not an object of this bundle" : "no object of this bundle carries it"));
+      const why = (lines.length ? lines : ["it names no subject"]).join("; ");
+      if (r.fails) {
+        kind = "failure";
+        text = `[attestation-binds] ${id}: ${why} - ${what} (B.1.7: an Attestation binds what is delivered, or it fails; a changed subject is normative content changed after signing)`;
+      } else text = `binds: ${id} = DOES NOT BIND [lifecycle ${lifecycle === null ? "None" : lifecycle}: reported, not a failure] ${why} - ${what}`;
+    }
+    /* `signed`: the Attestation names an envelope. Its canonical form is the envelope's payload, so a signed
+       Attestation cannot be changed without breaking the signature, its lifecycle included: withdrawing it is
+       the signer's act. A page offers that for an unsigned one only. */
+    out.push({ id, lifecycle, signed: typeof att["envelope-ref"] === "string" && att["envelope-ref"] !== "", ...r, kind, text });
+  }
+  return out;
+}
+/* What the Attestations of a set bind: the primitive applied to the set a
+   page holds (jscCheckGraph, and the Assess page for one Attestation).
+
+   The reference only ever sees a bundle on disk. A set is a bundle that was
+   loaded and may have been written to since, so the first question is which
+   bundle the comparison is made against. `basis` answers it, and a page says
+   it beside the lines:
+
+     "loaded"  The set is the bundle as it was loaded: nothing in it was
+               written in this app. The manifest is the one it came with (the
+               set keeps its bytes) and the objects are those that manifest
+               lists. This is what the reference says about the folder.
+     "export"  Something was written here since (an object, a scale, a pack
+               that was imported), or the set never had a manifest. The
+               manifest it came with no longer describes it, and no manifest
+               has been written yet. The comparison is made against the
+               bundle an export would write now: the manifest jscBuildBundle
+               computes, which is the same bytes on every export of the same
+               set, and the objects it lists. This is what the reference will
+               say about the exported folder.
+
+   Why not hold an edited set to the manifest it came with: an object written
+   here is not listed there, so an Attestation that names it would be "absent"
+   and fail, for no other reason than that this app has not written a manifest
+   yet. And why not call an old Attestation a failure after an edit: it bound
+   the manifest that was loaded; against the next manifest that is "another
+   manifest", a Semantic Match while its subjects are unchanged, which is what
+   B.1.7 calls it. A subject that was changed is a real failure on either
+   basis, while the Attestation is active.
+
+   A set that is as loaded but damaged (a digest that does not match, a file
+   the manifest does not list) stays on "loaded": the reference judges that
+   folder against its own manifest too. An object removed here leaves no
+   trace in the set, so such a set is read as loaded as well; the missing
+   object is an error of its own.
+
+   g: the graph; objs: Map(id -> {type, obj}), the typed objects of the set.
+   -> { basis, "manifest-digest", "loaded-manifest-digest" (or null),
+        "kept-packs": [digest], lines: jscBindsReport }
+      A set without an Attestation has basis null and no line: nothing was
+      compared, and nothing is said. */
+async function jscSetBinds(g, objs) {
+  const atts = new Map([...objs].filter(([, r]) => r.type === "attestation").map(([id, r]) => [id, r.obj]));
+  /* no Attestation, nothing to compare: the digests of a large set are not computed for an empty answer */
+  if (!atts.size) return { basis: null, "manifest-digest": null, "loaded-manifest-digest": null, "kept-packs": [], lines: [] };
+  const built = await jscRulesBuildBundle(g);
+  const loaded = typeof g.manifestText === "string" ? await jscRulesPackageDigest(g.manifestText) : null;
+  /* written here, of what a manifest covers: an Attestation beside the manifest is not part of it, so one that was
+     written here (set to withdrawn, say) changes nothing about which manifest describes the set */
+  const written = [...g.objects.values()].some(r => jscRulesAdded(r) && !jscRulesBeside(r)) || [...g.scales.values(), ...g.facetSchemas].some(jscRulesAdded);
+  const basis = g.manifest && (built.verbatim || !written) ? "loaded" : "export";
+  const digest = basis === "loaded" ? loaded : await jscRulesPackageDigest(built.files[0].text);
+  /* the objects the manifest lists: on "loaded" those with a line in it, on "export" all but the Attestations beside it */
+  const isListed = r => !!r && (basis === "loaded" ? !!r.entry : !jscRulesBeside(r));
+  const listed = new Map([...objs].filter(([id]) => isListed(g.objects.get(id))));
+  const kept = jscRulesKeptPacks(g).map(([name]) => "sha256:" + name);
+  return { basis, "manifest-digest": digest, "loaded-manifest-digest": loaded, "kept-packs": kept,
+    lines: jscBindsReport(atts, digest, await jscSemanticDigests(listed), kept) };
+}
+
+/* ====================================================================
    Signatures: DSSE envelopes over attestations (backlog #24)
    ====================================================================
    The standard facet dsse-envelope@1 fixes what is signed (the
@@ -3675,6 +3833,7 @@ function jscAdviceEdge(objs, ownId, productId, capability, opts) {
                   lines: jscAuthorReviewLines, the two reports in the reference's words },
         types: {type: count}, tiers: {tailoring id: tier}, coverage: report,
         signatures: {attestation id: "verified"|"unverified"|"error"|"missing"|"unsigned"},
+        binds: jscSetBinds, what every Attestation of the set binds and against which bundle that was asked,
         packs: [{ where, name: the kept file's name or null, id, version, title, publisher,
                   status: "claimed"|"proven", verified, label: "proven"|"attested"|"claimed",
                   why: [string], objects: [id] }] } */
@@ -3735,10 +3894,10 @@ async function jscCheckGraph(g, verified, opts) {
     if (verified.counts.missing) add("error", "manifest", null, `${verified.counts.missing} object(s) listed but missing`);
   }
   /* Envelopes: an attestation names a file beside the manifest; nothing signed contains its own signature.
-     The reference validator looks only at attestations the manifest lists, and an attestation over the
-     manifest cannot be listed in it (D3.1). This check looks at every attestation of the set. So that it
-     raises no error the reference does not, an envelope that is missing for an unlisted attestation is a
-     note; one that is there and does not bind or verify is an error in both cases. */
+     Every attestation of the set is looked at: those beside the manifest, where D3.1 puts them, and any the
+     manifest lists. The reference does the same since 2026-11-14 (backlog #46); until then it read the
+     envelope only of an attestation the manifest lists, and this check made a missing envelope of an
+     unlisted one a note so as to raise no error the reference did not. It is an error in both now. */
   const envelopes = new Map(), signatures = {};
   for (const id of [...objs.keys()].sort()) {
     const r = objs.get(id), ref = r.obj["envelope-ref"];
@@ -3746,9 +3905,8 @@ async function jscCheckGraph(g, verified, opts) {
     if (!ref) { signatures[id] = "unsigned"; add("note", "signature", id, "no envelope (unsigned attestation)"); continue; }
     const file = g.aux.find(a => a.path === ref);
     if (!file) {
-      const listed = !!(g.objects.get(id) || {}).entry;
       signatures[id] = "missing";
-      add(listed ? "error" : "note", "signature", id, `envelope-ref '${ref}' does not resolve beside the manifest`);
+      add("error", "signature", id, `envelope-ref '${ref}' does not resolve beside the manifest`);
       continue;
     }
     let env;
@@ -3759,6 +3917,10 @@ async function jscCheckGraph(g, verified, opts) {
     if (res.status === "error") add("error", "signature", id, `dsse: ${res.detail}`);
     else add("note", "signature", id, res.status === "verified" ? "signature VERIFIED (Ed25519)" : `signature UNVERIFIED - ${res.detail}`);
   }
+  /* attestation-binds (B.1.7; backlog #46): every Attestation of the set is held to its subjects and to the
+     manifest it binds. A line of the reference is a note; what the reference lists as a failure is an error. */
+  const binds = await jscSetBinds(g, objs);
+  for (const l of binds.lines) add(l.kind === "failure" ? "error" : "note", "attestation", l.id, l.kind === "failure" ? l.text : l.text.slice(`binds: ${l.id} = `.length));
   const verify = trusted ? { envelopes, trusted } : null;
   pass("reference", "error")(jscClosureErrors(objs));
   const pinnedSchemas = new Map(), pinnedDecl = new Map();
@@ -3823,11 +3985,12 @@ async function jscCheckGraph(g, verified, opts) {
   const authors = await jscAuthorReport(objs, verify), review = asOf ? jscReviewReport(objs, asOf) : null;
   const lines = jscAuthorReviewLines(authors, review || { dated: 0, overdue: [], "not-evaluable": [] }, asOf, requireAuthors);
   for (const l of lines) add(l.kind === "error" ? "error" : "note", l.rule === "REVIEW-1" ? "review" : "author", l.object, l.object ? strip(l.text) : l.text);
-  return { findings, types, tiers, coverage: cov.report, signatures, packs,
+  return { findings, types, tiers, coverage: cov.report, signatures, packs, binds,
     report: { "as-of": asOf, "require-authors": requireAuthors, authors, review, lines } };
 }
 const jscRulesBeside = r => r.type === "attestation" && !r.entry;
 const jscRulesKeptPacks = jscRulesCore ? jscRulesCore.jscKeptPacks : g => jscKeptPacks(g);
+const jscRulesBuildBundle = jscRulesCore ? jscRulesCore.jscBuildBundle : (g, provenance) => jscBuildBundle(g, provenance);
 /* an object the set's manifest does not know yet because it was written here, or came with an advice pack */
 const jscRulesAdded = r => r.origin === "authored" || r.origin === "pack";
 
@@ -3839,7 +4002,8 @@ if (typeof module !== "undefined" && module.exports) {
     jscDeviationsOf, jscKernelNeeded, jscKernelPinErrors, jscRiskRuleViolations, jscRiskIsLive, jscRiskJustifies, JSC_NO_TAILORING, jscRiskCoverage,
     jscRiskLinkNotes, JSC_AUTHOR_RULES, jscAuthorReport, jscUtcDay, jscReviewReport, jscAuthorReviewLines,
     jscPartyRef, jscIsDate, jscProvenance, jscImportProvenance, jscAuthorRecord, jscAuthorTailoring, jscAuthorRisk, jscDecideDeviation, jscScaleDefinitionErrors, jscMatrixErrors, jscRiskLevels, jscMatrixCell, jscScaleErrors, jscCheckScales,
-    jscOptionalEmptyViolations, JSC_NUMBER_RULES, jscNumberSpellingViolations, jscNumberViolations, jscInNumberDomain, jscNumberError, jscObjectErrors, jscFacetErrors, jscTailoringDutyErrors, jscAttestationVerdict, jscCheckGraph,
+    jscOptionalEmptyViolations, JSC_NUMBER_RULES, jscNumberSpellingViolations, jscNumberViolations, jscInNumberDomain, jscNumberError, jscObjectErrors, jscFacetErrors, jscTailoringDutyErrors, jscAttestationVerdict,
+    jscAttestationBinds, jscSemanticDigests, JSC_BINDS_MANIFEST, jscBindsReport, jscSetBinds, jscCheckGraph,
     JSC_DSSE_PAYLOAD_TYPE, jscEd25519Verify, jscVerifyEnvelope, jscSemver, jscCompose, jscComposeSide, jscPathGet, jscEvalPredicate, jscConditionalApply,
     JSC_CHECK_RULES, JSC_CHECK_OPS, JscIRegexpError, jscIreCompile, jscIreFullMatch, jscCheckVerdict, jscCheckEach, jscCheckEachSummary, jscPercentShare, jscCheckAggregate, jscCheckParamDecls,
     jscCheckObjectErrors, jscCheckErrors,

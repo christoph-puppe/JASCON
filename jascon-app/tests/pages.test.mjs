@@ -18,6 +18,7 @@ import http from "node:http";
 import os from "node:os";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
+import crypto from "node:crypto";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 
@@ -28,9 +29,15 @@ let chromium = null;
 try { ({ chromium } = createRequire(import.meta.url)("playwright")); } catch (e) { /* skipped below */ }
 
 const MIME = { ".html": "text/html", ".js": "text/javascript", ".css": "text/css", ".json": "application/json", ".md": "text/markdown" };
-function serve() {
+/* `list`: answer a folder with a listing of its files, as `python -m http.server` does; without it a folder is a 404 */
+function serve(list) {
   const server = http.createServer((req, res) => {
     const file = path.join(ROOT, decodeURIComponent(new URL(req.url, "http://x").pathname));
+    if (list && file.startsWith(ROOT) && fs.existsSync(file) && fs.statSync(file).isDirectory()) {
+      res.writeHead(200, { "content-type": "text/html; charset=utf-8" });
+      res.end("<ul>" + fs.readdirSync(file).sort().map(n => `<li><a href="${encodeURIComponent(n)}${fs.statSync(path.join(file, n)).isDirectory() ? "/" : ""}">${n}</a></li>`).join("") + "</ul>");
+      return;
+    }
     if (!file.startsWith(ROOT) || !fs.existsSync(file) || fs.statSync(file).isDirectory()) { res.writeHead(404); res.end(); return; }
     res.writeHead(200, { "content-type": MIME[path.extname(file)] || "application/octet-stream" });
     fs.createReadStream(file).pipe(res);
@@ -53,8 +60,8 @@ const jsonFile = (name, obj) => ({ name, mimeType: "application/json", buffer: B
 const pythonWithJsonschema = spawnSync("python3", ["-c", "import jsonschema"]).status === 0;
 const needs = !chromium ? "Playwright with Chromium is not installed" : !pythonWithJsonschema ? "python3 with jsonschema is not installed" : false;
 /* a browser on the app -> { page, base, errors, close() }; a dialog nobody expects is an error */
-async function session() {
-  const server = await serve(), base = `http://127.0.0.1:${server.address().port}/jascon-app/`;
+async function session(opts = {}) {
+  const server = await serve(opts.list), base = `http://127.0.0.1:${server.address().port}/jascon-app/`;
   const browser = await chromium.launch(), page = await (await browser.newContext({ acceptDownloads: true })).newPage(), errors = [];
   page.on("pageerror", e => errors.push(`${page.url().split("/").pop()}: ${e.message}`));
   page.on("console", m => { if (m.type() === "error") errors.push(`${page.url().split("/").pop()}: ${m.text()}`); });
@@ -111,11 +118,31 @@ function referenceRun(dir, flags) {
   /* the bundle named on the command line is judged first: its summary is the first one after the heading */
   const lines = run.stdout.split(/\r?\n/), from = lines.indexOf("== bundles =="), end = lines.findIndex((l, i) => i > from && /^ {2}\S.*: \d+ pass, \d+ fail {2}\{/.test(l));
   assert.ok(from >= 0 && end > from, "the reference printed a summary for the bundle:\n" + run.stdout.slice(-1500) + run.stderr.slice(-1500));
-  const summary = lines[end].trim(), section = `- [${summary.match(/^(.*?): \d+ pass, \d+ fail/)[1]}] `;
+  const summary = lines[end].trim(), section = `- [${summary.match(/^(.*?): \d+ pass, \d+ fail/)[1]}] `, above = lines.slice(from, end).map(l => l.trim());
   return { green: run.status === 0 && /\nALL GREEN\s*$/.test(run.stdout), summary,
-    said: lines.slice(from, end).map(l => l.trim()).filter(l => /\((AUTHOR-[1-4]|REVIEW-1)[):]/.test(l)),
+    said: above.filter(l => /\((AUTHOR-[1-4]|REVIEW-1)[):]/.test(l)),
+    /* backlog #46: what every Attestation binds, the state of its envelope, and how many objects of which type were counted */
+    binds: above.filter(l => l.startsWith("binds: ")), dsse: above.filter(l => l.startsWith("dsse: ")),
+    types: JSON.parse(summary.slice(summary.indexOf("{")).replace(/'/g, '"')), pass: +summary.match(/: (\d+) pass,/)[1],
     failures: lines.map(l => l.trim()).filter(l => l.startsWith(section)).map(l => l.slice(section.length)), stdout: run.stdout };
 }
+/* What the Validate page shows about the Attestations of the set after a check: the sentence on what was compared,
+   every line as shown, and from the result the page holds the envelope lines in the reference's spelling, the
+   counts by type and the errors. */
+async function attestationsShown(s) {
+  const p = s.page, box = p.locator("#report-binds");
+  return { basis: await box.count() ? await box.locator("[data-binds-basis]").getAttribute("data-binds-basis") : null,
+    said: await box.count() ? await box.locator("[data-binds-basis]").innerText() : "",
+    lines: await p.locator("#report-binds [data-binds]").evaluateAll(list => list.map(n => ({ kind: n.dataset.binds, verdict: n.dataset.verdict,
+      text: n.querySelector("[data-binds-text]").textContent, advice: (n.querySelector("[data-binds-advice]") || { textContent: "" }).textContent }))),
+    ...await p.evaluate(() => ({ types: last.types, objects: jscSet.graph.objects.size,
+      dsse: last.findings.filter(f => f.area === "signature").map(f => `dsse: ${f.object} = ${f.message}`),
+      errors: last.findings.filter(f => f.kind === "error").map(f => f.message),
+      rows: last.findings.filter(f => f.area === "attestation").map(f => [f.kind, f.object, f.message]) })) };
+}
+/* a line as the page shows it, from the reference's: a failure is listed without the word, a line is printed as it is */
+const asShown = ref => [...ref.binds.map(l => ["line", l]), ...ref.failures.filter(m => m.startsWith("[attestation-binds] ")).map(m => ["failure", "error: " + m])];
+const sortedTypes = t => Object.fromEntries(Object.entries(t).sort(([a], [b]) => (a < b ? -1 : 1)));
 /* the lines of the two reports as the Validate page shows them, for the day and the switch given */
 async function validatePage(s, { asOf, requireAuthors } = {}) {
   await open(s, "validate.html");
@@ -270,6 +297,10 @@ test("a system built on the Implement page validates; an advice pack is previewe
     assert.deepEqual(checked.errors, []);
     assert.ok(checked.advice.some(r => /kept pack \(1 object\(s\)\).*release 3.*publisher ATTESTED, NOT VERIFIED/.test(r)), "the check reports the kept pack: " + checked.advice.join(" | "));
     assert.equal(await f.locator("#out [data-publisher]").getAttribute("data-publisher"), "attested");
+    /* backlog #46: the vendor's Attestation came with the pack and binds the pack manifest the set keeps */
+    const bindsShown = await f.locator("#report-binds [data-binds-text]").allTextContents();
+    assert.deepEqual(bindsShown, [`binds: ${VENDOR_ATT} = FULL MATCH [1 subject(s) of this bundle; a pack manifest this bundle keeps]`]);
+    assert.equal(await f.locator("#report-binds [data-binds-basis]").getAttribute("data-binds-basis"), "none", "a set built here has no manifest yet; the page compares with the one an export writes");
 
     /* the export carries the vendor's manifest, and the reference validator accepts the set */
     await tool("home");
@@ -282,9 +313,10 @@ test("a system built on the Implement page validates; an advice pack is previewe
       for (const x of files) { fs.mkdirSync(path.dirname(path.join(out, x.path)), { recursive: true }); fs.writeFileSync(path.join(out, x.path), x.text); }
       const dir = path.join(out, fs.readdirSync(out)[0]);
       const run = spawnSync("python3", [path.join(ROOT, "jascon/scripts/validate_core.py"), dir], { encoding: "utf8" });
-      const line = run.stdout.split("\n").find(l => l.includes(path.basename(out))) || "";
+      const lines = run.stdout.split("\n"), line = lines.find(l => l.includes(path.basename(out))) || "";
       fs.rmSync(out, { recursive: true });
       assert.match(line, / 0 fail/, run.stdout.slice(-1500));
+      assert.deepEqual(lines.slice(0, lines.indexOf(line)).map(l => l.trim()).filter(l => l.startsWith("binds: ")), bindsShown, "what the page said about the Attestation is what the reference prints for the exported folder");
     }
 
     /* the publisher is shown as proven, in green, only once a key the user trusts verifies the envelope;
@@ -347,6 +379,245 @@ test("Validate: the AUTHOR and REVIEW lines are the reference validator's, for t
      bundle misses seven (ten until its converter pre-filled what the source states, 2026-11-13), and its two review
      dates of 2023 and 2024 are overdue or not with the day asked about */
   assert.deepEqual(counts, { [`examples ${AS_OF}`]: [0, 2], "examples 2023-06-24": [0, 2], [`ifa ${AS_OF}`]: [7, 3], "ifa 2023-06-24": [7, 2] });
+});
+
+/* ====================================================================
+   An Attestation is held to what it binds (backlog #46)
+   ====================================================================
+   The reference prints one line per Attestation it reads with a bundle, or
+   lists one failure. The app must say the same about the same folder, word
+   for word, and count the same objects. The folders are read as they lie.
+   The hub never loads an advice pack over a set (it offers it for import),
+   so the pack folder is held to the reference through the rules, on its
+   graph, and in the browser the way a user gets one: imported and exported. */
+const AS_OF_46 = "2026-11-14", PACK = path.join(ROOT, "jascon/example-packs/dbvendor-server-7-advice"), FIXTURE_KEYS = path.join(ROOT, "jascon/conformance/fixture-trusted-keys.json");
+const ACME_ATT = "https://agency-x.example/attestation/acme-2026", VENDOR_ATT = "https://dbvendor.example/attestation/server-7-hardening-3", IFA_ATT = "https://ifa.gov/goodread/attestation/ifa-ato";
+const B17 = "(B.1.7: an Attestation binds what is delivered, or it fails; a changed subject is normative content changed after signing)";
+const nodeSha256 = bytes => crypto.createHash("sha256").update(bytes).digest("hex");
+const byText = pairs => [...pairs].sort((a, b) => (a[1] < b[1] ? -1 : a[1] > b[1] ? 1 : 0));
+
+test("Validate: what every Attestation binds is the reference's line for three folders as they lie; counts and envelopes agree; with the fixture keys both signatures of the example folder verify", { skip: needs }, async t => {
+  const rules = createRequire(import.meta.url)("../jascon-rules.js"), keys = JSON.parse(fs.readFileSync(FIXTURE_KEYS, "utf8")), measured = {};
+  const graphOf = dir => core.jscGraphFrom(core.jscClassifyFiles(core.jscKeepFiles(tree(dir))).records);
+  /* 1. the rules on the graph of each folder, without keys and with them */
+  for (const [dir, name] of [[EX, "examples"], [IFA, "ifa"], [PACK, "pack"]]) {
+    for (const trusted of [null, keys]) {
+      const ref = referenceRun(dir, ["--as-of", AS_OF_46, ...(trusted ? ["--trusted-keys", FIXTURE_KEYS] : [])]);
+      const g = graphOf(dir), res = await rules.jscCheckGraph(g, await core.jscVerify(g), { asOf: AS_OF_46, trusted });
+      assert.ok(ref.green, name);
+      assert.equal(res.binds.basis, "loaded", name);
+      assert.deepEqual(res.binds.lines.map(l => [l.kind, l.text]), asShown(ref), name + ": the lines");
+      assert.deepEqual(res.findings.filter(f => f.area === "signature").map(f => `dsse: ${f.object} = ${f.message}`), ref.dsse, name + ": the envelopes");
+      assert.deepEqual(sortedTypes(res.types), sortedTypes(ref.types), name + ": the counts by type");
+      assert.equal(g.objects.size + 1, ref.pass, name + ": the reference counts every object and the manifest");
+      assert.deepEqual(res.findings.filter(f => f.kind === "error"), [], name);
+      measured[name + (trusted ? " with keys" : "")] = [ref.pass, ...ref.binds.map(l => l.replace(/^binds: \S+ = /, "").replace(/ \[.*; /, " [").replace(/\]$/, "]")), ...ref.dsse.map(l => l.replace(/^dsse: \S+ = /, "").split(" - ")[0])];
+    }
+  }
+  t.diagnostic("validate_core.py --as-of 2026-11-14, pass count, binds and dsse per folder: " + JSON.stringify(measured));
+  assert.deepEqual(measured, {
+    examples: [27, "FULL MATCH [this manifest]", "FULL MATCH [a pack manifest this bundle keeps]", "signature UNVERIFIED", "signature UNVERIFIED"],
+    "examples with keys": [27, "FULL MATCH [this manifest]", "FULL MATCH [a pack manifest this bundle keeps]", "signature VERIFIED (Ed25519)", "signature VERIFIED (Ed25519)"],
+    ifa: [18, "FULL MATCH [this manifest]", "no envelope (unsigned attestation)"], "ifa with keys": [18, "FULL MATCH [this manifest]", "no envelope (unsigned attestation)"],
+    pack: [3, "FULL MATCH [this manifest]", "signature UNVERIFIED"], "pack with keys": [3, "FULL MATCH [this manifest]", "signature VERIFIED (Ed25519)"],
+  });
+
+  /* 2. the Validate page, for the two folders the hub loads as a set */
+  for (const [dir, name] of [[EX, "examples"], [IFA, "ifa"]]) {
+    const s = await session(), p = s.page;
+    try {
+      await load(s, zipOf(dir, name));
+      const ref = referenceRun(dir, ["--as-of", AS_OF_46]);
+      await validatePage(s, { asOf: AS_OF_46, requireAuthors: false });
+      const shown = await attestationsShown(s);
+      assert.equal(shown.basis, "loaded");
+      assert.match(shown.said, /^Compared with the bundle as it was loaded: the manifest this set came with \(sha256:[0-9a-f]{12}…\) and the objects it lists\.$/);
+      assert.deepEqual(shown.lines.map(l => [l.kind, l.text]), asShown(ref), name + ": the page's lines are the reference's");
+      assert.ok(shown.lines.every(l => l.verdict === "full-match" && l.advice === ""), "a Full Match needs no advice");
+      assert.deepEqual(shown.rows, ref.binds.map(l => ["note", l.match(/^binds: (\S+) = /)[1], l.replace(/^binds: \S+ = /, "")]), "the same in the table of findings");
+      assert.deepEqual(shown.dsse, ref.dsse);
+      assert.deepEqual(sortedTypes(shown.types), sortedTypes(ref.types));
+      assert.equal(shown.objects + 1, ref.pass);
+      assert.equal(+(await p.locator("#out .chip b").first().innerText()), shown.objects, "the count the page states is the count of objects, the Attestation beside the manifest among them");
+      assert.deepEqual(shown.errors, []);
+      if (name === "examples") {
+        /* verification mode: the public key of the corpus fixture, for the two signers of the folder */
+        await p.locator("#keys-box summary").click();
+        await p.locator("#keys").fill(fs.readFileSync(FIXTURE_KEYS, "utf8"));
+        assert.match(await p.locator("#keys-state").innerText(), /^2 trusted key\(s\): the check runs in verification mode$/);
+        const withKeys = referenceRun(dir, ["--as-of", AS_OF_46, "--trusted-keys", FIXTURE_KEYS]);
+        await validatePage(s, { asOf: AS_OF_46, requireAuthors: false });
+        const verified = await attestationsShown(s);
+        assert.deepEqual(verified.dsse, withKeys.dsse);
+        assert.deepEqual(verified.dsse, [`dsse: ${ACME_ATT} = signature VERIFIED (Ed25519)`, `dsse: ${VENDOR_ATT} = signature VERIFIED (Ed25519)`]);
+        assert.deepEqual(await p.locator("[data-signature] span").allInnerTexts(), ["verified", "verified"]);
+        assert.deepEqual(verified.lines.map(l => [l.kind, l.text]), asShown(withKeys), "the verdict is about digests: keys change nothing in it");
+        assert.equal(await p.locator("[data-publisher]").getAttribute("data-publisher"), "proven");
+        assert.deepEqual(verified.errors, []);
+      }
+      assert.deepEqual(s.errors, []);
+    } finally { await s.close(); }
+  }
+});
+
+test("a bundle from a URL: where the server lists the folder, the Attestations beside the manifest are read and held to what they bind; where it does not, the hub says that none was looked for", { skip: needs }, async () => {
+  /* the example folder keeps a vendor's pack, which is the app's reason to ask the server for a listing */
+  let s = await session({ list: true });
+  try {
+    await s.page.goto(s.base + "index.html#load=../jascon/examples/");
+    await s.page.waitForFunction(() => document.querySelector("#home-log .l-ok"), null, { timeout: 60000 });
+    assert.equal(await s.page.locator("#home-log .l-info", { hasText: "was not looked for" }).count(), 0);
+    const ref = referenceRun(EX, ["--as-of", AS_OF_46]);
+    await validatePage(s, { asOf: AS_OF_46, requireAuthors: false });
+    const shown = await attestationsShown(s);
+    assert.deepEqual(shown.lines.map(l => [l.kind, l.text]), asShown(ref), "both Attestations were fetched: the set's own, which binds its manifest, and the vendor's");
+    assert.deepEqual(shown.dsse, ref.dsse, "and their envelopes");
+    assert.equal(shown.objects + 1, ref.pass);
+    assert.deepEqual(shown.errors, []);
+    assert.deepEqual(s.errors, []);
+  } finally { await s.close(); }
+  /* no listing is asked of a server for a bundle that keeps no pack: the IFA bundle arrives without its Attestation, and the hub says so */
+  s = await session();
+  try {
+    await s.page.goto(s.base + "index.html#load=../converted_examples/US.IFA-GoodRead/ifa-core-bundle/");
+    await s.page.waitForFunction(() => document.querySelector("#home-log .l-ok"), null, { timeout: 60000 });
+    assert.equal(await s.page.locator("#home-log .l-info").last().innerText().then(x => x.replace(/^\d\d:\d\d:\d\d/, "")),
+      "From a URL only the files a manifest names are fetched. An Attestation beside the manifest was not looked for, so none is held to what it binds; load the folder or a ZIP for that.");
+    await validatePage(s, { asOf: AS_OF_46, requireAuthors: false });
+    const shown = await attestationsShown(s);
+    assert.deepEqual([shown.objects, shown.basis, shown.lines], [16, null, []], "sixteen objects and no Attestation: the page claims nothing about one");
+    assert.deepEqual(s.errors, []);
+  } finally { await s.close(); }
+});
+
+test("Attestations of a set that was changed: the page compares with the bundle an export would write and says so; a changed subject fails until the Attestation is taken out or, unsigned, withdrawn; no export lists an Attestation", { skip: needs }, async t => {
+  const tmp = [];
+  t.after(() => { for (const d of tmp) fs.rmSync(d, { recursive: true, force: true }); });
+  /* the save every page uses, on one object of the set: the stored object with some fields replaced */
+  const change = (s, id, fields) => s.page.evaluate(async ([id, fields]) => { await jscSet.load(); await jscSet.saveObjects([{ ...jscSet.graph.objects.get(id).obj, ...fields }]); }, [id, fields]);
+  const checked = async s => { await validatePage(s, { asOf: AS_OF_46, requireAuthors: false }); return attestationsShown(s); };
+  /* the exported folder, what the reference says about it, and that no Attestation is in its manifest while each travels beside it */
+  const shipped = async (s, attestations) => {
+    const x = await exported(s); tmp.push(x.out);
+    const here = fs.readdirSync(x.dir);
+    assert.deepEqual(x.manifest.objects.filter(e => /\/attestation\//.test(e.id) || /attestation/.test(e.path)), [], "the manifest lists no Attestation (D3.1)");
+    for (const [file, envelope] of attestations) { assert.ok(here.includes(file), file + " travels beside the manifest"); if (envelope) assert.ok(here.includes(envelope), envelope + " travels with it"); }
+    assert.deepEqual(here.filter(f => /attestation/.test(f)).sort(), attestations.flat().filter(Boolean).sort(), "and no other Attestation or envelope does");
+    return { ...x, ref: referenceRun(x.dir, ["--as-of", AS_OF_46]) };
+  };
+  const assessCard = async (s, id) => {
+    await open(s, "assess.html", "board");
+    const card = s.page.locator(`[data-att-card="${id}"]`);
+    await card.locator("[data-att]").click();
+    await card.locator("[data-binds]").waitFor();
+    return card;
+  };
+  const SAAS = "https://cso.example/component/acme-saas", ACME_FILES = [["attestation-acme-2026.json", "attestation-acme-2026.dsse"], ["attestation-dbvendor-server-7-advice.json", "attestation-dbvendor-server-7-advice.dsse"]];
+
+  /* ---- the example folder: two signed Attestations, one over the set's manifest, one over a pack manifest the set keeps ---- */
+  let s = await session(), p = s.page;
+  try {
+    await load(s, zipOf(EX, "examples"));
+    /* a. nothing changed: the export is the bundle that was loaded, manifest and all */
+    const same = await shipped(s, ACME_FILES);
+    assert.equal(fs.readFileSync(path.join(same.dir, "content-manifest.json"), "utf8"), fs.readFileSync(path.join(EX, "content-manifest.json"), "utf8"), "the manifest leaves as it came");
+    assert.ok(fs.existsSync(path.join(same.dir, "packs/sha256/27bed5464b7113e33a4641599b1861def5a24eebed2746fc9547bbd1de0c3eb1")), "the kept pack manifest travels too");
+    assert.ok(same.ref.green);
+    assert.deepEqual(same.ref.binds, referenceRun(EX, ["--as-of", AS_OF_46]).binds);
+
+    /* b. an object that no Attestation names is changed: the manifest the set came with no longer describes it */
+    await open(s, "validate.html");
+    await change(s, LNX, { title: { en: "SSH hardening for Linux hosts (reworded)" } });
+    const reworded = await checked(s);
+    assert.equal(reworded.basis, "changed");
+    assert.match(reworded.said, /^This set was changed in this app after it was loaded, so the manifest it came with \(sha256:10ff89bd3c32…\) no longer describes it\. Compared with the bundle an export would write now: its manifest \(sha256:[0-9a-f]{12}…\) and the objects it lists\./);
+    assert.deepEqual(reworded.lines.map(l => [l.kind, l.verdict, l.text]), [
+      ["line", "semantic-match", `binds: ${ACME_ATT} = SEMANTIC MATCH [3 subject(s) of this bundle; another manifest: the content is proven, the packaging was altered]`],
+      ["line", "full-match", `binds: ${VENDOR_ATT} = FULL MATCH [1 subject(s) of this bundle; a pack manifest this bundle keeps]`]]);
+    assert.match(reworded.lines[0].advice, /^No failure: every subject is as it was signed\./);
+    assert.deepEqual(reworded.errors, [], "an Attestation that bound the manifest that was loaded is no failure after an edit elsewhere");
+    const second = await shipped(s, ACME_FILES);
+    assert.ok(second.ref.green);
+    assert.deepEqual(reworded.lines.map(l => [l.kind, l.text]), asShown(second.ref), "what the page said before the export is what the reference says about the exported folder");
+    assert.match(reworded.said, new RegExp("its manifest \\(" + ("sha256:" + nodeSha256(fs.readFileSync(path.join(second.dir, "content-manifest.json")))).slice(0, 19) + "…\\)"), "and the manifest it named is the one that was written");
+
+    /* c. a subject of the set's own Attestation is changed: that is a failure, on the page and for the reference */
+    await open(s, "validate.html");
+    await change(s, SAAS, { title: { en: "Acme SaaS platform (renamed after it was authorized)" } });
+    const renamed = await checked(s);
+    assert.equal(renamed.lines[0].kind, "failure");
+    assert.match(renamed.lines[0].text, new RegExp(`^error: \\[attestation-binds\\] ${ACME_ATT.replace(/[.]/g, "\\.")}: subject ${SAAS.replace(/[.]/g, "\\.")}: recomputed semantic digest sha256:[0-9a-f]{64}, signed sha256:86b98185aa0eef19e6d1fde05853a401b34b1d08dab67756fb05e103f9db19df - another manifest \\(B\\.1\\.7: `));
+    assert.match(renamed.lines[0].advice, /^What can be done: the signer issues the Attestation again for the content as it is now, or the Attestation is taken out of the set \(Assess page\)\. It names an envelope, so it is signed/);
+    assert.doesNotMatch(renamed.lines[0].advice, /set to withdrawn/, "withdrawing a signed Attestation is the signer's act and is not offered");
+    assert.deepEqual(renamed.errors, [renamed.lines[0].text.slice("error: ".length)]);
+    const third = await shipped(s, ACME_FILES);
+    assert.equal(third.ref.green, false, "the reference fails the exported folder");
+    assert.deepEqual(byText(renamed.lines.map(l => [l.kind, l.text])), byText(asShown(third.ref)), "with the failure the page showed, word for word");
+    assert.deepEqual(third.ref.failures.length, 1, "and with nothing else");
+
+    /* d. the Assess page says the same about that Attestation, and offers what can be done here: for a signed one, taking it out */
+    const card = await assessCard(s, ACME_ATT);
+    assert.equal(await card.locator("[data-binds-text]").innerText(), renamed.lines[0].text);
+    assert.deepEqual([await card.locator("[data-att-remove]").count(), await card.locator("[data-att-withdraw]").count()], [1, 0]);
+    const fine = await assessCard(s, VENDOR_ATT);
+    assert.equal(await fine.locator("[data-binds-text]").innerText(), `binds: ${VENDOR_ATT} = FULL MATCH [1 subject(s) of this bundle; a pack manifest this bundle keeps]`);
+    assert.equal(await fine.locator("button").count(), 0, "nothing is offered for an Attestation that binds");
+    await (await assessCard(s, ACME_ATT)).locator("[data-att-remove]").click();
+    await p.locator(`[data-att-card="${VENDOR_ATT}"]`).waitFor();
+    await p.waitForFunction(id => !document.querySelector(`[data-att-card="${id}"]`), ACME_ATT);
+    assert.deepEqual(await p.evaluate(async () => (await jscStore.files(jscStore.activeSet())).map(r => r.path).filter(x => /attestation/.test(x)).sort()),
+      ["attestation-dbvendor-server-7-advice.dsse", "attestation-dbvendor-server-7-advice.json"], "the Attestation and the envelope that signed it left the set");
+    const without = await checked(s);
+    assert.deepEqual(without.lines.map(l => l.text), [`binds: ${VENDOR_ATT} = FULL MATCH [1 subject(s) of this bundle; a pack manifest this bundle keeps]`]);
+    assert.deepEqual(without.errors, []);
+    const fourth = await shipped(s, ACME_FILES.slice(1));
+    assert.ok(fourth.ref.green, "taken out, the changed component fails nothing: " + fourth.ref.stdout.slice(-800));
+    assert.deepEqual(without.lines.map(l => [l.kind, l.text]), asShown(fourth.ref));
+    assert.deepEqual(s.errors, []);
+  } finally { await s.close(); }
+
+  /* ---- the IFA bundle: one unsigned Attestation ---- */
+  const IMPL = "https://ifa.gov/goodread/impl/system1234-ac-6.1";
+  s = await session(); p = s.page;
+  try {
+    await load(s, zipOf(IFA, "ifa"));
+    const before = await assessCard(s, IFA_ATT);
+    assert.equal(await before.locator("[data-binds-text]").innerText(), `binds: ${IFA_ATT} = FULL MATCH [3 subject(s) of this bundle; this manifest]`);
+    await change(s, IMPL, { status: "planned" });
+    const changed = await checked(s);
+    assert.equal(changed.lines[0].kind, "failure");
+    assert.match(changed.lines[0].advice, /because it names no envelope and is unsigned, it is set to withdrawn \(both on the Assess page\)/);
+    const failing = await shipped(s, [["attestation-ifa-ato.json", null]]);
+    assert.equal(failing.ref.green, false);
+    assert.deepEqual(changed.lines.map(l => [l.kind, l.text]), asShown(failing.ref));
+    /* unsigned, it can be set to withdrawn here; after that the verdict is reported and fails nothing */
+    const card = await assessCard(s, IFA_ATT);
+    assert.deepEqual([await card.locator("[data-att-remove]").count(), await card.locator("[data-att-withdraw]").count()], [1, 1]);
+    await card.locator("[data-att-withdraw]").click();
+    await p.locator(`[data-att-card="${IFA_ATT}"] .badge`, { hasText: "withdrawn" }).waitFor();
+    const withdrawn = await checked(s);
+    assert.deepEqual(withdrawn.lines.map(l => [l.kind, l.verdict]), [["line", "fail"]]);
+    assert.match(withdrawn.lines[0].text, new RegExp(`^binds: ${IFA_ATT.replace(/[.]/g, "\\.")} = DOES NOT BIND \\[lifecycle withdrawn: reported, not a failure\\] subject ${IMPL.replace(/[.]/g, "\\.")}: recomputed semantic digest sha256:[0-9a-f]{64}, signed sha256:30c85d363fe959f2c18735c3a66f6fdf261a27381a489350581a9556596fa577 - another manifest$`));
+    assert.equal(withdrawn.lines[0].advice, "Reported and no failure: the Attestation is not active, so nothing is claimed with it.");
+    assert.deepEqual(withdrawn.errors, []);
+    const passing = await shipped(s, [["attestation-ifa-ato.json", null]]);
+    assert.ok(passing.ref.green, passing.ref.stdout.slice(-800));
+    assert.deepEqual(withdrawn.lines.map(l => [l.kind, l.text]), asShown(passing.ref));
+    assert.equal(passing.ref.pass, 18, "the withdrawn Attestation is still an object the reference counts");
+    assert.deepEqual(s.errors, []);
+  } finally { await s.close(); }
+
+  /* ---- ERRATA 2026-11-14: a subject that is not in the set. Until build 0.9.11 the Assess page called this a Full Match ---- */
+  s = await session(); p = s.page;
+  try {
+    await load(s, zipOf(IFA, "ifa"));
+    await open(s, "assess.html", "board");
+    await p.evaluate(async () => { await jscSet.load(); await jscSet.removeObjects(["https://ns.nist.gov/sp800-53/req/AC-6.1"]); });
+    const card = await assessCard(s, IFA_ATT);
+    assert.equal(await card.locator("[data-binds]").getAttribute("data-verdict"), "fail");
+    assert.equal(await card.locator("[data-binds-text]").innerText(), `error: [attestation-binds] ${IFA_ATT}: subject https://ns.nist.gov/sp800-53/req/AC-6.1: not an object of this bundle - this manifest ${B17}`);
+    assert.deepEqual(s.errors, []);
+  } finally { await s.close(); }
 });
 
 /* ====================================================================

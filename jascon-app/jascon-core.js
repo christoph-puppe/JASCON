@@ -36,7 +36,7 @@
 
 /* ==JSC-PURE-START== */
 
-const JSC_BUILD = "0.9.10";
+const JSC_BUILD = "0.9.11";
 const JSC_TOOL = "JASCON-App " + JSC_BUILD;
 /* The kernel this app writes, and the kernels it reads (KERNEL-2: a tool
    stops at a pin it does not implement and names both). */
@@ -269,9 +269,11 @@ function jscClassifyFiles(files) {
 /* -> graph {
      manifest, manifestText,
      objects: Map(id -> {obj, type, path, text, origin, entry}), order: [id],
-     scales: Map(id -> {def, path, text, pin}),
-     facetSchemas: [{def, path, text, pin}], aux: [{path, text}], problems }
+     scales: Map(id -> {def, path, text, origin, pin}),
+     facetSchemas: [{def, path, text, origin, pin}], aux: [{path, text}], problems }
    `entry` and `pin` are the manifest's lines for that file, or null.
+   `origin` is "imported" for a file that arrived with a bundle and
+   "authored" or "pack" for one that was written here since.
    `order` is manifest order, then everything the manifest does not list,
    by path. */
 function jscGraphFrom(records) {
@@ -291,9 +293,9 @@ function jscGraphFrom(records) {
     let json;
     try { json = JSON.parse(r.text); } catch (e) { g.problems.push(`${r.path}: not JSON`); continue; }
     if (r.kind === "scale") {
-      g.scales.set(json.id, { def: json, path: r.path, text: r.text, pin: scaleLines.get(r.path) || null });
+      g.scales.set(json.id, { def: json, path: r.path, text: r.text, origin: r.origin || "imported", pin: scaleLines.get(r.path) || null });
     } else if (r.kind === "facet-schema") {
-      g.facetSchemas.push({ def: json, path: r.path, text: r.text, pin: facetLines.get(r.path) || null });
+      g.facetSchemas.push({ def: json, path: r.path, text: r.text, origin: r.origin || "imported", pin: facetLines.get(r.path) || null });
     } else {
       const id = json.id || r.path;
       if (g.objects.has(id)) { g.problems.push(`${r.path}: id ${id} is already defined by ${g.objects.get(id).path}; second file ignored`); continue; }
@@ -881,7 +883,9 @@ async function jscReadDrop(dataTransfer) {
   return jscReadFiles(files);
 }
 /* Fetches a bundle folder over http(s): the manifest, then every file it
-   lists, sixteen at a time. file:// blocks fetch by design. */
+   lists, sixteen at a time. file:// blocks fetch by design.
+   -> { files, failed: [message], beside: was the folder read for files that
+        nothing names (an Attestation beside the manifest, kept packs) } */
 async function jscFetchBundle(url) {
   let base = new URL(String(url).trim().replace(/content-manifest\.json$/, ""), location.href);
   if (!base.pathname.endsWith("/")) base = new URL(base.href + "/");
@@ -933,15 +937,15 @@ async function jscFetchBundle(url) {
           try { files.push(await get(JSC_PACK_STORE_DIR + name)); kept.push("sha256:" + name); } catch (e) { failed.push(e.message); }
         }
       }
-      /* beside a pack's manifest: its attestations; beside a set's: those that bind a pack manifest it keeps */
-      if (manifest.pack || kept.length) {
-        const beside = top.filter(n => /^[^/]+\.json$/.test(n) && n !== JSC_MANIFEST && !paths.includes(n)).slice(0, 64);
-        for (const name of beside) {
-          try {
-            const f = await get(name), o = JSON.parse(f.text);
-            if (jscInferType(o) === "attestation" && (manifest.pack || kept.includes(o["content-manifest-digest"]))) files.push(f);
-          } catch (e) { /* not a file this app reads */ }
-        }
+      /* Beside the manifest: every Attestation, whatever manifest it binds. Each is held to what it binds
+         (backlog #46), a set's own as a vendor's. Until build 0.9.11 only those were taken that bind a pack's
+         manifest, so the Attestation over the set's own manifest was left behind although the folder was read. */
+      const beside = top.filter(n => /^[^/]+\.json$/.test(n) && n !== JSC_MANIFEST && !paths.includes(n)).slice(0, 64);
+      for (const name of beside) {
+        try {
+          const f = await get(name), o = JSON.parse(f.text);
+          if (jscInferType(o) === "attestation") files.push(f);
+        } catch (e) { /* not a file this app reads */ }
       }
     }
   }
@@ -968,7 +972,9 @@ async function jscFetchBundle(url) {
   const rows = files.flatMap(f => { try { return JSON.parse(f.text)["check-results"] || []; } catch (e) { return []; } });
   const records = await follow(rows.flatMap(r => [r && (r["evidence-record"] || {}).ref, r && (r["observation-ref"] || {}).ref]));
   await follow(records.flatMap(f => { try { return (JSON.parse(f.text).outputs || []).map(o => "evidence/sha256/" + String(o.digest).replace(/^sha256:/, "")); } catch (e) { return []; } }));
-  return { files, failed };
+  /* `beside`: was the manifest's folder read for files nothing names? False where the server was not asked for
+     a listing or gave none; an Attestation beside the manifest is then not in the set, and the hub says so. */
+  return { files, failed, beside: !!top };
 }
 /* The trusted keys typed on the Validate page for the active set: a map of
    signer URI to Ed25519 public key in hex, or null when there is none or it
