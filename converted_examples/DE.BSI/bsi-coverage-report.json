@@ -33,6 +33,12 @@
   "origin": "converter-default",
   "converter-default": "https://ns.bsi.bund.de/gspp/party/institution"
  },
+ "lifecycle-default": {
+  "value": "active",
+  "origin": "converter-default",
+  "objects": 1287,
+  "source-states": 0
+ },
  "packed-list-values": {
   "tags": {
    "props": 470,
@@ -3233,10 +3239,10 @@
   "file": "bsi-conversion-ledger.json",
   "leaf-values": 49431,
   "totals": {
-   "copied": 22626,
+   "copied": 22632,
    "transformed": 11795,
    "not-content": 15004,
-   "intentionally-dropped": 6,
+   "intentionally-dropped": 0,
    "unaccounted": 0
   },
   "verification-failures": 0,
@@ -3355,60 +3361,18 @@
     "kind": "namespace",
     "rule": "the namespace of a prop is the one this mapping is written for (PROP_NS)",
     "source-values": 12009
+   },
+   {
+    "kind": "orphan",
+    "rule": "a back-matter resource that nothing in the document refers to: nobody can reach it, and it is not carried",
+    "source-values": 0
    }
   ],
-  "declared-drops": [
-   {
-    "path": "gspp.catalog.back-matter.resources[].rlinks[].hashes[].algorithm",
-    "count": 1,
-    "reason": "as decided for IFA on 2026-11-13: a back-matter resource that no link of a control names. A link that names a resource is written with the address the resource gives, and that address then has a destination",
-    "example": "gspp#/catalog/back-matter/resources/0/rlinks/0/hashes/0/algorithm",
-    "example-value": "MD5",
-    "reading": "content: a reference of the catalogue to another document, with its title, address and digest. The root Set now carries the metadata link that names this resource by `#uuid`, and without the resource that link names nothing"
-   },
-   {
-    "path": "gspp.catalog.back-matter.resources[].rlinks[].hashes[].value",
-    "count": 1,
-    "reason": "as decided for IFA on 2026-11-13: a back-matter resource that no link of a control names. A link that names a resource is written with the address the resource gives, and that address then has a destination",
-    "example": "gspp#/catalog/back-matter/resources/0/rlinks/0/hashes/0/value",
-    "example-value": "c91280d3504b9c81c5ceaf5bdaee5c7f",
-    "reading": "content: a reference of the catalogue to another document, with its title, address and digest. The root Set now carries the metadata link that names this resource by `#uuid`, and without the resource that link names nothing"
-   },
-   {
-    "path": "gspp.catalog.back-matter.resources[].rlinks[].href",
-    "count": 1,
-    "reason": "as decided for IFA on 2026-11-13: a back-matter resource that no link of a control names. A link that names a resource is written with the address the resource gives, and that address then has a destination",
-    "example": "gspp#/catalog/back-matter/resources/0/rlinks/0/href",
-    "example-value": "https://www.bsi.bund.de/DE/Themen/Unternehmen-und-Organisationen/Standards-und-Zertifizierung/IT-Grundschutz/it-grundschutz_node.html",
-    "reading": "content: a reference of the catalogue to another document, with its title, address and digest. The root Set now carries the metadata link that names this resource by `#uuid`, and without the resource that link names nothing"
-   },
-   {
-    "path": "gspp.catalog.back-matter.resources[].title",
-    "count": 1,
-    "reason": "as decided for IFA on 2026-11-13: a back-matter resource that no link of a control names. A link that names a resource is written with the address the resource gives, and that address then has a destination",
-    "example": "gspp#/catalog/back-matter/resources/0/title",
-    "example-value": "BSI IT-Grundschutz Edition 2023",
-    "reading": "content: a reference of the catalogue to another document, with its title, address and digest. The root Set now carries the metadata link that names this resource by `#uuid`, and without the resource that link names nothing"
-   },
-   {
-    "path": "gspp.catalog.back-matter.resources[].uuid",
-    "count": 1,
-    "reason": "as decided for IFA on 2026-11-13: a back-matter resource that no link of a control names. A link that names a resource is written with the address the resource gives, and that address then has a destination",
-    "example": "gspp#/catalog/back-matter/resources/0/uuid",
-    "example-value": "bf7510ca-fb0f-4182-af9f-b3c61db3187a",
-    "reading": "content: a reference of the catalogue to another document, with its title, address and digest. The root Set now carries the metadata link that names this resource by `#uuid`, and without the resource that link names nothing"
-   },
-   {
-    "path": "gspp.catalog.uuid",
-    "count": 1,
-    "reason": "as decided for IFA on 2026-11-13: the uuid of a source element, here of the catalogue document itself: JASCON objects get URIs minted from ids and titles, the uuid is not carried",
-    "example": "gspp#/catalog/uuid",
-    "example-value": "73f2d8f6-5a98-4e81-b600-b709e372e9cf",
-    "reading": "content: it identifies this document, and nothing in the bundle lets a reader rebuild it, so it is no id that is rebuilt exactly"
-   }
-  ],
+  "declared-drops": [],
   "carried-as-the-source-holds-it": {
-   "metadata": 1
+   "back-matter": 1,
+   "metadata": 1,
+   "uuid": 1
   },
   "bundle-read-back": {
    "controls": 999,
@@ -3438,7 +3402,7 @@
   },
   "written-without-a-source-value": {
    "objects": {
-    "leaf-values": 32904,
+    "leaf-values": 32910,
     "without-a-source-value": 5790,
     "by-place": {
      "/id": 1,
@@ -3450,8 +3414,8 @@
     }
    },
    "schemas": {
-    "leaf-values": 94,
-    "without-a-source-value": 92
+    "leaf-values": 105,
+    "without-a-source-value": 103
    },
    "manifest": {
     "leaf-values": 6467,
@@ -3478,32 +3442,32 @@
   {
    "path": "catalog.back-matter.resources[].rlinks[].hashes[].algorithm",
    "count": 1,
-   "level": "-",
-   "destination": "a resource that a link of a control names by #uuid gives that link its address (relations[].ref) and is carried whole on the root Set (compat `back-matter`); a resource no link of a control names is not carried: a declared drop, listed in the report for the author's decision"
+   "level": "L2",
+   "destination": "a resource that something in the document refers to by #uuid (a link of a control, which also takes its address from it as relations[].ref, or a link of the metadata) is carried whole on the root Set (compat `back-matter`); a resource nothing refers to is an orphan and is not carried (a rule the ledger checks)"
   },
   {
    "path": "catalog.back-matter.resources[].rlinks[].hashes[].value",
    "count": 1,
-   "level": "-",
-   "destination": "a resource that a link of a control names by #uuid gives that link its address (relations[].ref) and is carried whole on the root Set (compat `back-matter`); a resource no link of a control names is not carried: a declared drop, listed in the report for the author's decision"
+   "level": "L2",
+   "destination": "a resource that something in the document refers to by #uuid (a link of a control, which also takes its address from it as relations[].ref, or a link of the metadata) is carried whole on the root Set (compat `back-matter`); a resource nothing refers to is an orphan and is not carried (a rule the ledger checks)"
   },
   {
    "path": "catalog.back-matter.resources[].rlinks[].href",
    "count": 1,
-   "level": "-",
-   "destination": "a resource that a link of a control names by #uuid gives that link its address (relations[].ref) and is carried whole on the root Set (compat `back-matter`); a resource no link of a control names is not carried: a declared drop, listed in the report for the author's decision"
+   "level": "L2",
+   "destination": "a resource that something in the document refers to by #uuid (a link of a control, which also takes its address from it as relations[].ref, or a link of the metadata) is carried whole on the root Set (compat `back-matter`); a resource nothing refers to is an orphan and is not carried (a rule the ledger checks)"
   },
   {
    "path": "catalog.back-matter.resources[].title",
    "count": 1,
-   "level": "-",
-   "destination": "a resource that a link of a control names by #uuid gives that link its address (relations[].ref) and is carried whole on the root Set (compat `back-matter`); a resource no link of a control names is not carried: a declared drop, listed in the report for the author's decision"
+   "level": "L2",
+   "destination": "a resource that something in the document refers to by #uuid (a link of a control, which also takes its address from it as relations[].ref, or a link of the metadata) is carried whole on the root Set (compat `back-matter`); a resource nothing refers to is an orphan and is not carried (a rule the ledger checks)"
   },
   {
    "path": "catalog.back-matter.resources[].uuid",
    "count": 1,
-   "level": "-",
-   "destination": "a resource that a link of a control names by #uuid gives that link its address (relations[].ref) and is carried whole on the root Set (compat `back-matter`); a resource no link of a control names is not carried: a declared drop, listed in the report for the author's decision"
+   "level": "L2",
+   "destination": "a resource that something in the document refers to by #uuid (a link of a control, which also takes its address from it as relations[].ref, or a link of the metadata) is carried whole on the root Set (compat `back-matter`); a resource nothing refers to is an orphan and is not carried (a rule the ledger checks)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].class",
@@ -3623,7 +3587,7 @@
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].params[].label",
    "count": 4,
    "level": "L1",
-   "destination": "parameter label / default - first-class since the D9 rev (backlog #1); more than one value: all of them in compat param-extras"
+   "destination": "parameter label / default - first-class since the D9 rev (backlog #1); more than one value: all of them in compat param-extras; an empty label, which is no label of the kernel: compat param-extras"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].params[].props[].name",
@@ -3725,7 +3689,7 @@
    "path": "catalog.groups[].groups[].controls[].controls[].params[].label",
    "count": 73,
    "level": "L1",
-   "destination": "parameter label / default - first-class since the D9 rev (backlog #1); more than one value: all of them in compat param-extras"
+   "destination": "parameter label / default - first-class since the D9 rev (backlog #1); more than one value: all of them in compat param-extras; an empty label, which is no label of the kernel: compat param-extras"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].params[].props[].name",
@@ -3743,7 +3707,7 @@
    "path": "catalog.groups[].groups[].controls[].controls[].params[].values[]",
    "count": 1,
    "level": "L1",
-   "destination": "parameter label / default - first-class since the D9 rev (backlog #1); more than one value: all of them in compat param-extras"
+   "destination": "parameter label / default - first-class since the D9 rev (backlog #1); more than one value: all of them in compat param-extras; an empty label, which is no label of the kernel: compat param-extras"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].parts[].id",
@@ -3833,7 +3797,7 @@
    "path": "catalog.groups[].groups[].controls[].params[].label",
    "count": 144,
    "level": "L1",
-   "destination": "parameter label / default - first-class since the D9 rev (backlog #1); more than one value: all of them in compat param-extras"
+   "destination": "parameter label / default - first-class since the D9 rev (backlog #1); more than one value: all of them in compat param-extras; an empty label, which is no label of the kernel: compat param-extras"
   },
   {
    "path": "catalog.groups[].groups[].controls[].params[].props[].name",
@@ -3851,7 +3815,7 @@
    "path": "catalog.groups[].groups[].controls[].params[].values[]",
    "count": 1,
    "level": "L1",
-   "destination": "parameter label / default - first-class since the D9 rev (backlog #1); more than one value: all of them in compat param-extras"
+   "destination": "parameter label / default - first-class since the D9 rev (backlog #1); more than one value: all of them in compat param-extras; an empty label, which is no label of the kernel: compat param-extras"
   },
   {
    "path": "catalog.groups[].groups[].controls[].parts[].id",
@@ -4084,8 +4048,8 @@
   {
    "path": "catalog.uuid",
    "count": 1,
-   "level": "-",
-   "destination": "not carried: a declared drop, listed in the report for the author's decision"
+   "level": "L2",
+   "destination": "root Set, compat oscal-1x `uuid`: the uuid of the source document"
   }
  ]
 }

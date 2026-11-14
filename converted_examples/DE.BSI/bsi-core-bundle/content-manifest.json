@@ -11,7 +11,7 @@
     "date": "2026-07-16"
    }
   ],
-  "converter": "convert_bsi.py v0.3 (single-catalog: MS-TLS dropped by decision 2026-07-21; every control is a Requirement of its own since 2026-11-14)"
+  "converter": "convert_bsi.py v0.4 (single-catalog: MS-TLS dropped by decision 2026-07-21; every control is a Requirement of its own since 2026-11-14)"
  },
  "objects": [
   {
@@ -8662,8 +8662,8 @@
   {
    "id": "https://ns.bsi.bund.de/gspp/set/tax/root",
    "version": "2026-07-16T05:11:52.605669+00:00",
-   "package-digest": "sha256:8accc4cf1719ad11312513265f9bf6a3d283d2854e4e21633965e97a63f133df",
-   "semantic-digest": "sha256:20fc1d7760f1ff325cb25b31b0905f99f7d1b87a8035cc8bc2145abf18cc4490",
+   "package-digest": "sha256:7ebee15091abafa43e8f1bd95021d24e4b4335f9b2982116a2ca76d0ab43c8fe",
+   "semantic-digest": "sha256:33a41511a625139acf5840e3f32ec0c0a979f6eb6e2e8eccc15e43c98a367014",
    "path": "objects/gspp/set-tax-root.json"
   },
   {
@@ -9045,9 +9045,9 @@
   },
   {
    "id": "https://ns.jascon.net/compat/oscal-1x",
-   "exact-version": "1.0.0",
-   "digest": "sha256:2756cbe1db176e973eb61897f528f2de0636171b366c88ef93fc6cc0d8afdd74",
-   "path": "schemas/oscal-1x-compat-1.0.0-stub.json"
+   "exact-version": "1.1.0",
+   "digest": "sha256:a40334b73fd7ac9e70359d4784f94c5c03c48e9baea7a40ad37717238323f9cb",
+   "path": "schemas/oscal-1x-compat-1.1.0.json"
   },
   {
    "id": "https://ns.jascon.net/stdlib/facet/security-objectives",

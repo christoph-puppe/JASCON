@@ -236,20 +236,13 @@ class TheGrundschutzConverter(unittest.TestCase):
         # the name `guidance` is the key of the narrative payload: carried
         self.assertEqual(sum(r["count"] for (p, o), r in rows.items() if p.endswith(".parts[].name") and o == "copied"), n)
 
-    def test_the_declared_drops_that_remain_are_the_two_of_before_and_no_other(self):
-        dropped = {(d["path"], d["count"]) for d in self.plain["report"]["ledger"]["declared-drops"]}
-        self.assertEqual(dropped, {("gspp.catalog.uuid", 1), ("gspp.catalog.back-matter.resources[].uuid", 1),
-                                   ("gspp.catalog.back-matter.resources[].title", 1),
-                                   ("gspp.catalog.back-matter.resources[].rlinks[].href", 1),
-                                   ("gspp.catalog.back-matter.resources[].rlinks[].hashes[].algorithm", 1),
-                                   ("gspp.catalog.back-matter.resources[].rlinks[].hashes[].value", 1)})
-        for d in self.plain["report"]["ledger"]["declared-drops"]:
-            self.assertTrue(d["reason"].startswith("as decided for IFA on 2026-11-13: "), d)
-            self.assertTrue(d["reading"].startswith("content"), "the reading is given, the decision is the author's")
-            self.assertIn("example-value", d)
-        self.assertEqual(self.plain["ledger"]["totals"]["intentionally-dropped"], 6)
+    def test_no_drop_is_declared_and_the_documents_uuid_is_carried(self):
+        # until 2026-11-14 two drops were declared (the uuid of the document, a resource no control names); the author decided both
+        self.assertEqual((self.plain["report"]["ledger"]["declared-drops"], self.plain["ledger"]["totals"]["intentionally-dropped"]), ([], 0))
+        self.assertEqual(self.plain["objects"][f"{NS}/set/tax/root"]["facets"][COMPAT]["uuid"], catalogue()["catalog"]["uuid"])
+        self.assertEqual(self.plain["report"]["lifecycle-default"]["origin"], "converter-default")
         with open(os.path.join(HERE, "convert_bsi.py"), encoding="utf-8") as f: code = f.read()
-        self.assertEqual((code.count("led.drop("), code.count("led.drop_value(")), (1, 1), "no drop is added to the two that were declared")
+        self.assertEqual((code.count("led.drop("), code.count("led.drop_value(")), (1, 0), "the one call left declares the drops of DROPS, which is empty")
 
     def test_the_gate_is_the_last_statement_of_the_converter(self):
         with open(os.path.join(HERE, "convert_bsi.py"), encoding="utf-8") as f: tree = ast.parse(f.read())
@@ -333,7 +326,7 @@ class TheGrundschutzConverter(unittest.TestCase):
         root = run["objects"][f"{NS}/set/tax/root"]
         self.assertEqual(root["title"], {"de": meta["title"]}); self.assertEqual(root["version"], meta["version"])
         self.assertEqual(root["facets"][COMPAT]["metadata"], {k: v for k, v in meta.items() if k not in ("title", "version")})
-        self.assertEqual(list(root["facets"][COMPAT]), ["metadata", "back-matter"])
+        self.assertEqual(list(root["facets"][COMPAT]), ["metadata", "uuid", "back-matter"])
         source = run["manifest"]["provenance"]["sources"][0]
         self.assertEqual(source, {"key": "gspp", "title": meta["title"], "version": meta["version"], "oscal-version": "1.1.3",
                                   "author-ref": f"{NS}/party/niemand-e-v", "date": "2026-11-14"})
@@ -352,12 +345,17 @@ class TheGrundschutzConverter(unittest.TestCase):
                          "a missing value is a line of the report at most, never a refusal, and nothing is made up")
         self.assertEqual(run["objects"][f"{NS}/set/tax/root"]["facets"][COMPAT]["metadata"]["last-modified"], "irgendwann")
 
-    def test_a_resource_a_link_names_is_carried_and_the_other_stays_a_declared_drop(self):
+    def test_a_resource_something_refers_to_is_carried_and_an_orphan_stays_out(self):
         run = self.plain
         root = run["objects"][f"{NS}/set/tax/root"]
-        self.assertEqual(root["facets"][COMPAT]["back-matter"],
-                         {"resources": [{"uuid": RES_B, "title": "Ein benanntes Werk", "rlinks": [{"href": "https://example.org/benannt"}]}]})
+        # one is named by a link of a control, the other by a link of the metadata: both are carried as the source holds them
+        self.assertEqual(root["facets"][COMPAT]["back-matter"], catalogue()["catalog"]["back-matter"])
         self.assertEqual(self.req(run, "PR.1.2")["relations"][0], {"type": "reference", "ref": "https://example.org/benannt"})
+        doc = catalogue(); doc["catalog"]["back-matter"]["resources"].append({"uuid": "cccccccc-0000-4000-8000-000000000003", "title": "Niemand nennt es"})
+        run = self.convert(doc)
+        self.assertEqual((run["done"].returncode, run["ledger"]["totals"]["unaccounted"]), (0, 0), run["done"].stderr[-400:])
+        self.assertEqual(len(run["objects"][f"{NS}/set/tax/root"]["facets"][COMPAT]["back-matter"]["resources"]), 2)
+        self.assertEqual({x["kind"] for x in self.rows(run)[("gspp.catalog.back-matter.resources[].title", "not-content")]["rules"]}, {"orphan"})
 
     # ---------------- what the mapping does not read is carried ----------------
     def test_what_the_mapping_does_not_read_is_carried_as_the_source_holds_it(self):
@@ -403,7 +401,7 @@ class TheGrundschutzConverter(unittest.TestCase):
         self.assertEqual(rows[(C + ".parts[].id", "copied")]["count"], 2, "the id the rule does not give, and the id of the part it does not read")
         self.assertEqual(run["report"]["ledger"]["carried-as-the-source-holds-it"],
                          {"catalog": 1, "back-matter": 1, "control": 1, "group": 1, "links": 1, "metadata": 1,
-                          "param-extras beyond the alt-identifier": 1, "parts": 1, "props": 2})
+                          "param-extras beyond the alt-identifier": 1, "parts": 1, "props": 2, "uuid": 1})
 
     # ---------------- deliberate defects: each ends the run with a non-zero exit code ----------------
     def refused(self, changes, *words, source=None, before=None):

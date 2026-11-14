@@ -139,6 +139,26 @@
      }
     ],
     "remarks": "Der Grundschutz++ ist eine vom Bundesamt für Sicherheit in der Informationstechnik (BSI) entwickelte und frei verfügbare Vorgehensweise um ein ganzheitliches Informationssicherheits-Managementsystem (ISMS) in Institutionen zu errichten und erhalten. Dieser Katalog enthält sowohl die Anforderungen zur Umsetzung der Grundschutz-Methodik als auch die konkreten technisch-organisatorischen Anforderungen die zur Absicherung erforderlich sind."
+   },
+   "uuid": "73f2d8f6-5a98-4e81-b600-b709e372e9cf",
+   "back-matter": {
+    "resources": [
+     {
+      "uuid": "bf7510ca-fb0f-4182-af9f-b3c61db3187a",
+      "title": "BSI IT-Grundschutz Edition 2023",
+      "rlinks": [
+       {
+        "href": "https://www.bsi.bund.de/DE/Themen/Unternehmen-und-Organisationen/Standards-und-Zertifizierung/IT-Grundschutz/it-grundschutz_node.html",
+        "hashes": [
+         {
+          "algorithm": "MD5",
+          "value": "c91280d3504b9c81c5ceaf5bdaee5c7f"
+         }
+        ]
+       }
+      ]
+     }
+    ]
    }
   }
  }

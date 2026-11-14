@@ -43,6 +43,7 @@ the reports and the record are written, so that a failed run says why."""
 import json, hashlib, os, re, sys, copy, collections, decimal
 from oscal_conv_lib import Bundle, BUNDLE_NEWLINE, Ledger, ledger_by_path, ledger_gate
 from oscal_conv_lib import document_author, document_day
+from oscal_conv_lib import referred_to, lifecycle_default_record, lifecycle_default_line
 from oscal_conv_lib import known_arguments, out_dir, obligated_party, obligated_party_line, obligated_party_record
 
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
@@ -149,7 +150,8 @@ N_STM_ID = "the id of a statement part is its control's id and `_stm`"
 N_GDN_ID = "the id of a guidance part is its control's id and `_gdn`"
 N_PART = "the name `statement` of a part selects the part whose prose and props become the statement"
 N_NS = "the namespace of a prop is the one this mapping is written for (PROP_NS)"
-NO_CONTENT = [("rebuilt-id",N_STM_ID),("rebuilt-id",N_GDN_ID),("selector",N_PART),("namespace",N_NS)]
+R_ORPHAN = "a back-matter resource that nothing in the document refers to: nobody can reach it, and it is not carried"
+NO_CONTENT = [("rebuilt-id",N_STM_ID),("rebuilt-id",N_GDN_ID),("selector",N_PART),("namespace",N_NS),("orphan",R_ORPHAN)]
 
 # The name of a prop decides the field its value is written to. As a table,
 # so that the ledger follows a name to the key it selected.
@@ -187,7 +189,7 @@ GROUP_MEMBERS = ("id","title","props","groups","controls")
 PARAM_MEMBERS = ("id","label","values","props")
 CATALOG_MEMBERS = ("uuid","metadata","groups","controls","back-matter")
 # the members of the compat facet, in the order they are written
-COMPAT_MEMBERS = ("metadata","back-matter","catalog","param-extras","props","parts","links","control","group")
+COMPAT_MEMBERS = ("metadata","uuid","back-matter","catalog","param-extras","props","parts","links","control","group")
 
 def field(prop):
     """the key a prop's value is written under: the name itself where the
@@ -259,25 +261,11 @@ def read_props(node,names,unread,members=("name","ns","value")):
         if "ns" in p: led.namespace(p["ns"],N_NS,[PROP_NS[p["name"]]],p["name"])
     return got
 
-# Declared drops. Two are left of those declared on 2026-11-14, and both
-# stay declared: the author goes through every declared drop and decides
-# which is content (brief of the rework, rule 4). No drop is added, and a
-# value that is neither carried nor one of the three classes above is
-# unaccounted and ends the run. `reading`: this script's reading under the
-# author's rule, for the table in the report; the decision is the author's.
-IFA = "as decided for IFA on 2026-11-13: "
-DROP_RESOURCE = IFA + ("a back-matter resource that no link of a control names. A link that names a resource is "
-                       "written with the address the resource gives, and that address then has a destination")
-DROP_UUID = IFA + ("the uuid of a source element, here of the catalogue document itself: JASCON objects get URIs "
-                   "minted from ids and titles, the uuid is not carried")
-DROPS = [       # (pattern over the ledger's path or None for a drop declared value by value, reason, reading)
- (None, DROP_RESOURCE,
-  "content: a reference of the catalogue to another document, with its title, address and digest. The root Set "
-  "now carries the metadata link that names this resource by `#uuid`, and without the resource that link names nothing"),
- (r"^[^.]+\.catalog\.uuid$", DROP_UUID,
-  "content: it identifies this document, and nothing in the bundle lets a reader rebuild it, so it is no id "
-  "that is rebuilt exactly"),
-]
+# Declared drops: none since 2026-11-14. The author decided the two that were
+# left: the uuid of the document is carried, and so is a back-matter
+# resource that something in the document refers to; a resource nothing
+# refers to is an orphan and stays out by a rule the ledger checks.
+DROPS = []      # (pattern over the ledger's path or None for a drop declared value by value, reason, reading)
 for pattern,reason,_ in DROPS:
     if pattern: led.drop(pattern,reason)
 
@@ -328,12 +316,12 @@ RULES = [       # (source path, level, sentence, outcomes, places)
   at(COMPAT_AT+r"/metadata/parties/\[\]/name",SOURCES_AT+r"/author-ref")),
  (r"^catalog\.metadata\.", "L2", "root Set, compat oscal-1x `metadata`: the member as the source holds it", CARRIED,
   at(COMPAT_AT+r"/metadata/.*")),
- (r"^catalog\.uuid$", "-", "not carried: a declared drop, listed in the report for the author's decision", DROPPED, None),
- (r"^catalog\.back-matter\.", "-",
-  "a resource that a link of a control names by #uuid gives that link its address (relations[].ref) and is "
-  "carried whole on the root Set (compat `back-matter`); a resource no link of a control names is not carried: a "
-  "declared drop, listed in the report for the author's decision", CARRIED+DROPPED,
-  at(r"/relations/\[\]/ref",COMPAT_AT+r"/back-matter/.*")),
+ (r"^catalog\.uuid$", "L2", "root Set, compat oscal-1x `uuid`: the uuid of the source document", CARRIED, at(COMPAT_AT+r"/uuid")),
+ (r"^catalog\.back-matter\.", "L2",
+  "a resource that something in the document refers to by #uuid (a link of a control, which also takes its "
+  "address from it as relations[].ref, or a link of the metadata) is carried whole on the root Set (compat "
+  "`back-matter`); a resource nothing refers to is an orphan and is not carried (a rule the ledger checks)",
+  CARRIED+NOT_CONTENT, at(r"/relations/\[\]/ref",COMPAT_AT+r"/back-matter/.*")),
  (r"^catalog(\.groups\[\])+\.id$", "L1", "taxonomy Set of the group: its id, its file, and where it is listed", CARRIED,
   at(*OBJECT_AT)),
  (r"^catalog(\.groups\[\])+\.title$", "L1", "taxonomy Set of the group: its title", CARRIED, at(r"/title/de")),
@@ -355,8 +343,8 @@ RULES = [       # (source path, level, sentence, outcomes, places)
   at(r"/statements/\[\]/parameters/\[\]/name",COMPAT_AT+r"/param-extras/\{param\}")),
  (C+r"\.params\[\]\.(label|values\[\])$", "L1",
   "parameter label / default - first-class since the D9 rev (backlog #1); more than one value: all of them in "
-  "compat param-extras", CARRIED,
-  at(r"/statements/\[\]/parameters/\[\]/(label|default)",COMPAT_AT+r"/param-extras/\{param\}/values/\[\]")),
+  "compat param-extras; an empty label, which is no label of the kernel: compat param-extras", CARRIED,
+  at(r"/statements/\[\]/parameters/\[\]/(label|default)",COMPAT_AT+r"/param-extras/\{param\}/(label|values/\[\])")),
  (C+r"\.params\[\]\.props\[\]\.(name|value)$", "L2", "compat oscal-1x: param-extras (param alt-identifier only)", CARRIED,
   at(COMPAT_AT+r"/param-extras/\{param\}/(alt-identifier|props/.*)")),
  (C+r"\.props\[\]\.ns$", "-",
@@ -758,13 +746,15 @@ for key,fn,ns in SOURCES:
     # itself (dates, the OSCAL version, props, links, roles, parties,
     # responsible parties, remarks) has no member in the kernel and stands
     # under the compat facet's `metadata`, in the source's own shape, the
-    # source's values as they are. A back-matter resource that a link of a
-    # control names is carried whole beside it.
+    # source's values as they are. The uuid of the document stands beside
+    # it, and so does every back-matter resource that something in the
+    # document refers to (a link of a control or of the metadata).
     root={"id":f"{ns}/set/tax/root","version":version,"lifecycle":"active","title":meta["title"],"members":top}
     rfound={}
     mrest={k:v for k,v in meta.items() if k not in ("title","version")}
     if mrest: rfound["metadata"]=mrest
-    named=[r for r in resources if r["uuid"] in resources_named]
+    if "uuid" in cat: rfound["uuid"]=cat["uuid"]
+    named=[r for r in resources if r["uuid"] in resources_named or referred_to(cat,r)]
     if named: rfound["back-matter"]={"resources":named}
     crest={k:v for k,v in cat.items() if k not in CATALOG_MEMBERS}
     if crest: rfound["catalog"]=crest
@@ -773,9 +763,9 @@ for key,fn,ns in SOURCES:
         for k in rfound: as_held[k]+=1
     add_object(f"objects/{key}/set-tax-root.json",root)
     all_ids[key]=ids
-    # a back-matter resource that no link of a control named: the declared drop, value by value
+    # a back-matter resource nothing refers to: an orphan, by the ledger's rule
     for r in resources:
-        if r.get("uuid") not in resources_named: led.drop_value(r,DROP_RESOURCE)
+        if not any(r is n for n in named): led.orphan(r["uuid"],R_ORPHAN)
 
 for (key,lvl),b in sorted(baseline.items()):
     add_object(b["set"]["file"],{
@@ -793,16 +783,13 @@ bundle.pin_stdlib("assessment-criteria-1.0.0.json")
 bundle.stub("gspp-narrative-1.0.0-stub.json","https://ns.bsi.bund.de/facet/gspp-narrative",[],
      {"by-statement":{"type":"object"},"description":{"type":"object"}})
 # the compat facet: what OSCAL says and neither the kernel nor a standard facet has a member for
-bundle.stub("oscal-1x-compat-1.0.0-stub.json","https://ns.jascon.net/compat/oscal-1x",[],
-     {"metadata":{"type":"object"},"back-matter":{"type":"object"},"catalog":{"type":"object"},
-      "param-extras":{"type":"object"},"props":{"type":"array"},"parts":{"type":"array"},
-      "links":{"type":"array"},"control":{"type":"object"},"group":{"type":"object"}})
+bundle.pin_compat()     # the one schema of every converter (1.1.0); until 2026-11-14 this converter pinned one of its own
 
 led.resolve(objects)        # a boolean of the source is written as a plain boolean, and the ledger knows where
 for rel,o in objects.items(): bundle.add(rel,o)
 manifest=bundle.write({"sources":[{"key":k,"title":t,"version":v,"oscal-version":o,**provenance_of[k]}
                for k,t,v,o in catalogs_meta],
-               "converter":"convert_bsi.py v0.3 (single-catalog: MS-TLS dropped by decision 2026-07-21; "
+               "converter":"convert_bsi.py v0.4 (single-catalog: MS-TLS dropped by decision 2026-07-21; "
                            "every control is a Requirement of its own since 2026-11-14)"})
 
 # ---------- the ledger's account ----------
@@ -987,6 +974,7 @@ j={"sources":[{"key":k,"title":t,"version":v} for k,t,v,_ in catalogs_meta],
               "baseline-sets":len(baseline),"root-sets":len(SOURCES)},
    "modality":dict(modality_count),"unknown-modal-verbs":dict(unknown_modal),
    "obligated-party":obligated_party_record(PARTY,PARTY_ORIGIN,PARTY_DEFAULT),
+   "lifecycle-default":lifecycle_default_record(bundle.objects,()),      # the catalogue states no status on anything
    "packed-list-values":{n:{"props":list_props[n],"packed":len(packed[n]),"values":packed[n]}
                          for n in LIST_PROPS},
    "parameter-slots":{"slots":len(slots),
@@ -1048,6 +1036,7 @@ md.append(f"- **Modality** from `modal_verb` (code map incl. DARF NUR -> may-onl
           + ", ".join(f"{k} x{v}" for k,v in sorted(modality_count.items(),key=lambda x:-x[1]))
           + (f"; unknown verbs: {dict(unknown_modal)}" if unknown_modal else "; no unknown verbs") + ".")
 md.append(obligated_party_line(PARTY,PARTY_ORIGIN,PARTY_DEFAULT,PARTY_WHY))
+md.append(lifecycle_default_line(lifecycle_default_record(bundle.objects,())))
 md.append(f"- **Every control is a Requirement of its own**, at every depth, with its own statement (id `smt`), "
           f"parameters, props and links. BSI nests controls for grouping only (the author, 2026-11-14), so the "
           f"nesting is carried as grouping: a control that has nested controls ({BACK['controls-with-nested-controls']}) "
@@ -1152,8 +1141,9 @@ md.append(f"- **Carried as the source holds it** (compat facet `oscal-1x@1`), be
           + (", and on x" + ", x".join(f"{n} object(s) `{k}`" for k,n in sorted(as_held.items()) if k!="metadata")
              if set(as_held)-{"metadata"} else "; in this catalogue nothing else: the mapping reads every prop, "
              "part and member the controls and groups hold") + ".")
-md.append(f"- **Declared drops that remain: {LT['intentionally-dropped']:,}**, in the table at the end of this "
-          f"report. They stay declared until the author has gone through them.")
+md.append(f"- **Declared drops: {LT['intentionally-dropped']:,}.** The author decided the two that were left on "
+          f"2026-11-14: the uuid of the document and a back-matter resource something refers to are carried; a "
+          f"resource nothing refers to stays out as an orphan, by a rule the ledger checks.")
 md.append(f"- **The written bundle, read back and held against the source** (counted from the files on disk and "
           f"from the source as loaded): {BACK['controls']:,} controls at all depths -> {BACK['requirements']:,} "
           f"Requirements, {BACK['requirements-of-a-control']:,} of them of a control, "
@@ -1207,12 +1197,9 @@ if unmapped:
     md.append("| path | count |\n|---|---:|")
     for p,n in unmapped: md.append(f"| `{p}` | {n} |")
 else: md.append("*(none)*")
-md.append("\n## Declared drops that remain (for the author's decision)\n")
-md.append(f"{LT['intentionally-dropped']:,} values. They were declared on 2026-11-14 as classes decided for the IFA "
-          f"corpus and stay declared until the author has gone through them; this run adds none. The last column "
-          f"is this converter's reading under the author's rule of 2026-11-14 (content is never dropped; no "
-          f"content is only a name that selects a field, a namespace, an id that is rebuilt exactly). The decision "
-          f"is the author's.\n")
+md.append("\n## Declared drops that remain\n")
+md.append(f"{LT['intentionally-dropped']:,} values. A value that reached no destination, for a declared reason; "
+          f"none is left since the author's decisions of 2026-11-14.\n")
 if dropped_rows:
     md.append("| source path | count | declared reason | example value | reading |\n|---|---:|---|---|---|")
     for d in dropped_rows:

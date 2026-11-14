@@ -2,10 +2,10 @@
  "measures": "one row per source path and outcome; every source leaf value was traced and checked against the written files in the run that wrote this record, and is counted in one row",
  "leaf-values": 49431,
  "totals": {
-  "copied": 22626,
+  "copied": 22632,
   "transformed": 11795,
   "not-content": 15004,
-  "intentionally-dropped": 6,
+  "intentionally-dropped": 0,
   "unaccounted": 0
  },
  "verification-failures": [],
@@ -13,60 +13,60 @@
  "paths": [
   {
    "path": "gspp.catalog.back-matter.resources[].rlinks[].hashes[].algorithm",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 1,
    "example": "gspp#/catalog/back-matter/resources/0/rlinks/0/hashes/0/algorithm",
-   "reasons": [
+   "to": [
     {
-     "reason": "as decided for IFA on 2026-11-13: a back-matter resource that no link of a control names. A link that names a resource is written with the address the resource gives, and that address then has a destination",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/back-matter/resources/[]/rlinks/[]/hashes/[]/algorithm",
      "count": 1
     }
    ]
   },
   {
    "path": "gspp.catalog.back-matter.resources[].rlinks[].hashes[].value",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 1,
    "example": "gspp#/catalog/back-matter/resources/0/rlinks/0/hashes/0/value",
-   "reasons": [
+   "to": [
     {
-     "reason": "as decided for IFA on 2026-11-13: a back-matter resource that no link of a control names. A link that names a resource is written with the address the resource gives, and that address then has a destination",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/back-matter/resources/[]/rlinks/[]/hashes/[]/value",
      "count": 1
     }
    ]
   },
   {
    "path": "gspp.catalog.back-matter.resources[].rlinks[].href",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 1,
    "example": "gspp#/catalog/back-matter/resources/0/rlinks/0/href",
-   "reasons": [
+   "to": [
     {
-     "reason": "as decided for IFA on 2026-11-13: a back-matter resource that no link of a control names. A link that names a resource is written with the address the resource gives, and that address then has a destination",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/back-matter/resources/[]/rlinks/[]/href",
      "count": 1
     }
    ]
   },
   {
    "path": "gspp.catalog.back-matter.resources[].title",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 1,
    "example": "gspp#/catalog/back-matter/resources/0/title",
-   "reasons": [
+   "to": [
     {
-     "reason": "as decided for IFA on 2026-11-13: a back-matter resource that no link of a control names. A link that names a resource is written with the address the resource gives, and that address then has a destination",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/back-matter/resources/[]/title",
      "count": 1
     }
    ]
   },
   {
    "path": "gspp.catalog.back-matter.resources[].uuid",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 1,
    "example": "gspp#/catalog/back-matter/resources/0/uuid",
-   "reasons": [
+   "to": [
     {
-     "reason": "as decided for IFA on 2026-11-13: a back-matter resource that no link of a control names. A link that names a resource is written with the address the resource gives, and that address then has a destination",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/back-matter/resources/[]/uuid",
      "count": 1
     }
    ]
@@ -2377,12 +2377,12 @@
   },
   {
    "path": "gspp.catalog.uuid",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 1,
    "example": "gspp#/catalog/uuid",
-   "reasons": [
+   "to": [
     {
-     "reason": "as decided for IFA on 2026-11-13: the uuid of a source element, here of the catalogue document itself: JASCON objects get URIs minted from ids and titles, the uuid is not carried",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/uuid",
      "count": 1
     }
    ]
