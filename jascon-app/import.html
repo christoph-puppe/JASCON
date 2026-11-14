@@ -43,10 +43,10 @@
         <p data-i18n>A catalog. Each control becomes a Requirement, each group a Set, and the catalog itself the root Set. The text of the statement part becomes the clauses; an insert of a parameter becomes a {param:} token, and the parameter is declared on the clause that names it. A link to another control becomes a relation.</p>
         <p data-i18n>The generic rules make every nested control a Requirement of its own, with a relation to its parent. The modality is unspecified, because OSCAL has no field for the binding force. Props and parts the kernel has no field for are held verbatim in a facet under your namespace, with a pinned schema; nothing is dropped without a line in the report.</p>
         <p data-i18n>The preset for the BSI Anwenderkatalog Grundschutz++ follows the converter of this repository: every control, a nested one too, is a Requirement of its own with its own links, and a control with nested controls also gives a Set that groups it with them, because BSI nests controls for grouping only. The modal verb becomes the modality, the BSI props go to the standard facets, and the security level becomes baseline Sets. What the rules do not read is carried as the source holds it, in the compat facet. Its ids are minted under the namespace the converter uses.</p>
-        <p data-i18n>The preset for NIST SP 800-53 Rev 5 follows the converter of this repository: a withdrawn control is not converted and its successor names it; every statement item with prose is a clause with modality must; assessment objectives and methods, the administrative data of parameters and the guidance go to facets under the NIST namespace. The baselines are profiles and are imported as profiles.</p>
+        <p data-i18n>The preset for NIST SP 800-53 Rev 5 follows the converter of this repository: a withdrawn control that names a successor is not converted, and the successor names it; one that names none is a Requirement with lifecycle withdrawn. Every statement item with prose is a clause with modality must; the assessment objectives, each with the statement it assesses, the methods, the administrative data of parameters with their formal labels, and the guidance go to facets under the NIST namespace; the back-matter resources and what the catalog says of itself stand on the root Set. The baselines are profiles and are imported as profiles.</p>
         <p data-i18n>The preset for a CIS Benchmark follows the converter of this repository: every rule is a Requirement with one clause, whose text is the rule's title because the export leaves the statement empty; the audit and remediation text and the marking automated or manual go to the facet assessment-criteria; the profiles become baseline Sets and the CIS Controls cross-references Mappings. The Checks tool drafts machine checks from the audit text.</p>
         <p data-i18n>A profile. The controls it includes become a Set, and a Tailoring selects that Set. Excluded controls become excludes. A set-parameter becomes an operation on every clause that declares the parameter, if the value lies in the declared space; a value outside it needs a Deviation and is listed, not written.</p>
-        <p data-i18n>Not carried, and counted in the report: alters, the merge directive, pattern matching, the inclusion of child controls. An alter changes text, and somebody has to decide whether that is editorial or substantive; use the Tailor tool for it.</p>
+        <p data-i18n>Not carried, and counted in the report: alters, pattern matching, the inclusion of child controls. An alter changes text, and somebody has to decide whether that is editorial or substantive; use the Tailor tool for it. What the profile says of itself and its merge directive stand on its Set, in the compat facet; where the set pins no schema for that facet, the import brings one.</p>
         <p data-i18n>A profile's Tailoring names who wrote the profile and when, as the source states it: the party its metadata names as creator or as prepared-by, else the one party that holds any role, else its one party, else its one organisation; and the day of its last change. The two fields above the import show both and can be typed over. Without an author or without a day nothing is written about who decided, and the import goes ahead. A CIS Benchmark's cross-references keep CIS as their author.</p>
         <p data-i18n>Imported content stays under its publisher's terms. State them in the field for the licence; they are written into the provenance of the bundle.</p>
       </div>
@@ -96,8 +96,9 @@ jscI18n.add("de", {
   "carried as the source holds it, in the compat facet (objects, by member)": "so mitgeführt, wie die Quelle es enthält, im Compat-Facet (Objekte, nach Element)",
   "A profile. The controls it includes become a Set, and a Tailoring selects that Set. Excluded controls become excludes. A set-parameter becomes an operation on every clause that declares the parameter, if the value lies in the declared space; a value outside it needs a Deviation and is listed, not written.":
     "Ein Profil. Die eingeschlossenen Controls werden ein Set, und ein Tailoring wählt dieses Set. Ausgeschlossene Controls werden Excludes. Ein set-parameter wird eine Operation auf jeder Klausel, die den Parameter deklariert, sofern der Wert im deklarierten Raum liegt; ein Wert außerhalb braucht eine Deviation und wird aufgelistet, nicht geschrieben.",
-  "Not carried, and counted in the report: alters, the merge directive, pattern matching, the inclusion of child controls. An alter changes text, and somebody has to decide whether that is editorial or substantive; use the Tailor tool for it.":
-    "Nicht übernommen und im Bericht gezählt: alters, die merge-Direktive, Musterabgleich, das Einschließen von Kind-Controls. Ein alter ändert Text, und jemand muss entscheiden, ob das redaktionell oder inhaltlich ist; dafür das Tailoring-Werkzeug verwenden.",
+  "Not carried, and counted in the report: alters, pattern matching, the inclusion of child controls. An alter changes text, and somebody has to decide whether that is editorial or substantive; use the Tailor tool for it. What the profile says of itself and its merge directive stand on its Set, in the compat facet; where the set pins no schema for that facet, the import brings one.":
+    "Nicht übernommen und im Bericht gezählt: alters, Musterabgleich, das Einschließen von Kind-Controls. Ein alter ändert Text, und jemand muss entscheiden, ob das redaktionell oder inhaltlich ist; dafür das Tailoring-Werkzeug verwenden. Was das Profil über sich selbst sagt, und seine merge-Direktive stehen an seinem Set, im Compat-Facet; pinnt das Set kein Schema für dieses Facet, bringt der Import eines mit.",
+  "carried on the profile's Set, in the compat facet": "am Set des Profils mitgeführt, im Compat-Facet",
   "Imported content stays under its publisher's terms. State them in the field for the licence; they are written into the provenance of the bundle.":
     "Importierte Inhalte bleiben unter den Bedingungen ihres Herausgebers. Bitte im Feld für die Lizenz angeben; sie werden in die Herkunftsangabe des Bundles geschrieben.",
   "{name}: not JSON ({msg})": "{name}: kein JSON ({msg})", "{name}: an OSCAL {kind}. This page imports catalogs and profiles.": "{name}: ein OSCAL-{kind}. Diese Seite importiert Kataloge und Profile.",
@@ -108,10 +109,12 @@ jscI18n.add("de", {
   "withdrawn controls, not converted; the successor names them in replaces": "zurückgezogene Controls, nicht konvertiert; der Nachfolger nennt sie in replaces",
   "parameters no clause inserts (declared on the first clause)": "Parameter, die keine Klausel einsetzt (an der ersten Klausel deklariert)",
   "clauses that insert another control's parameter": "Klauseln, die den Parameter eines anderen Controls einsetzen",
-  "links to a withdrawn or missing control (dropped)": "Verweise auf ein zurückgezogenes oder fehlendes Control (entfallen)",
+  "links of a control that become no relation, by rel": "Links eines Controls, die keine Relation werden, nach rel",
+  "props the rules do not read (not carried), by name, class and namespace": "Props, die die Regeln nicht lesen (nicht übernommen), nach Name, Klasse und Namensraum",
+  "withdrawn controls that name no successor: Requirements with lifecycle withdrawn": "zurückgezogene Controls ohne Nachfolger: Anforderungen mit dem Lebenszyklus withdrawn",
   "withdrawn controls whose successor is withdrawn or missing": "zurückgezogene Controls, deren Nachfolger zurückgezogen ist oder fehlt",
-  "The preset for NIST SP 800-53 Rev 5 follows the converter of this repository: a withdrawn control is not converted and its successor names it; every statement item with prose is a clause with modality must; assessment objectives and methods, the administrative data of parameters and the guidance go to facets under the NIST namespace. The baselines are profiles and are imported as profiles.":
-    "Das Preset für NIST SP 800-53 Rev 5 folgt dem Konverter dieses Repositorys: Ein zurückgezogenes Control wird nicht konvertiert, sein Nachfolger nennt es; jedes Statement-Element mit Text ist eine Klausel mit Modalität must; Prüfziele und -methoden, die Verwaltungsdaten der Parameter und die Guidance gehen in Facets unter dem NIST-Namensraum. Die Baselines sind Profile und werden als Profile importiert.", "generic": "generisch",
+  "The preset for NIST SP 800-53 Rev 5 follows the converter of this repository: a withdrawn control that names a successor is not converted, and the successor names it; one that names none is a Requirement with lifecycle withdrawn. Every statement item with prose is a clause with modality must; the assessment objectives, each with the statement it assesses, the methods, the administrative data of parameters with their formal labels, and the guidance go to facets under the NIST namespace; the back-matter resources and what the catalog says of itself stand on the root Set. The baselines are profiles and are imported as profiles.":
+    "Das Preset für NIST SP 800-53 Rev 5 folgt dem Konverter dieses Repositorys: Ein zurückgezogenes Control, das einen Nachfolger nennt, wird nicht konvertiert, und der Nachfolger nennt es; eines, das keinen nennt, wird eine Anforderung mit dem Lebenszyklus withdrawn. Jedes Statement-Element mit Text ist eine Klausel mit Modalität must; die Prüfziele, jedes mit dem Statement, das es prüft, die Prüfmethoden, die Verwaltungsdaten der Parameter mit ihren formalen Labels und die Guidance gehen in Facets unter dem NIST-Namensraum; die Back-Matter-Ressourcen und was der Katalog über sich selbst sagt, stehen am Wurzel-Set. Die Baselines sind Profile und werden als Profile importiert.", "generic": "generisch",
   "Namespace for the ids": "Namensraum für die Ids",
   "The preset for a CIS Benchmark follows the converter of this repository: every rule is a Requirement with one clause, whose text is the rule's title because the export leaves the statement empty; the audit and remediation text and the marking automated or manual go to the facet assessment-criteria; the profiles become baseline Sets and the CIS Controls cross-references Mappings. The Checks tool drafts machine checks from the audit text.":
     "Das Preset für einen CIS Benchmark folgt dem Konverter dieses Repositorys: Jede Regel wird eine Anforderung mit einer Klausel, deren Text der Titel der Regel ist, weil der Export das Statement leer lässt; Audit- und Remediation-Text und die Kennzeichnung automated oder manual gehen in das Facet assessment-criteria; die Profile werden Baseline-Sets und die Querverweise auf die CIS Controls Mappings. Das Werkzeug Prüfungen entwirft aus dem Audit-Text maschinelle Prüfungen.",
@@ -266,9 +269,11 @@ function reportHtml() {
         ${row("parameter slots not where the prose inserts a parameter", (r["parameter-slots-not-at-insert"] || []).length ? capped(r["parameter-slots-not-at-insert"].map(d => `${d.control} ${d.prop}`), 6) : "")}
         ${row("parameters no clause names", r["parameters-unreferenced"] ? String(r["parameters-unreferenced"]) : "")}
         ${row("withdrawn controls, not converted; the successor names them in replaces", r["withdrawn-not-converted"] ? String(r["withdrawn-not-converted"]) : "")}
+        ${row("withdrawn controls that name no successor: Requirements with lifecycle withdrawn", (r["withdrawn-without-successor"] || []).length ? capped(r["withdrawn-without-successor"]) : "")}
         ${row("parameters no clause inserts (declared on the first clause)", r["parameters-without-insertion"] ? String(r["parameters-without-insertion"]) : "")}
         ${row("clauses that insert another control's parameter", (r["parameters-from-another-control"] || []).length ? capped(r["parameters-from-another-control"].map(x => x.join(" ← "))) : "")}
-        ${row("links to a withdrawn or missing control (dropped)", r["related-to-withdrawn-or-missing"] ? String(r["related-to-withdrawn-or-missing"]) : "")}
+        ${row("links of a control that become no relation, by rel", Object.keys(r["links-not-written"] || {}).length ? counts(r["links-not-written"]) : "")}
+        ${row("props the rules do not read (not carried), by name, class and namespace", Object.keys(r["props-not-read"] || {}).length ? counts(r["props-not-read"]) : "")}
         ${row("withdrawn controls whose successor is withdrawn or missing", [...(r["withdrawn-into-withdrawn"] || []), ...(r["withdrawn-target-missing"] || [])].length ? capped([...r["withdrawn-into-withdrawn"], ...r["withdrawn-target-missing"]].map(x => x.join(" → "))) : "")}
         ${row("links without a target", r["links-without-target"] ? String(r["links-without-target"]) : "")}
         ${row("Props held in the facet", Object.keys(r["props-held"] || {}).length ? counts(r["props-held"]) : "")}
@@ -280,6 +285,7 @@ function reportHtml() {
         ${row("Controls that match more than one requirement", r.ambiguous.length ? capped(r.ambiguous) : "")}
         ${row("Parameters not found", r["parameters-not-found"].length ? capped(r["parameters-not-found"]) : "")}
         ${row("Values outside the declared space (need a Deviation; not written)", r["parameters-outside-declared-space"].length ? capped(r["parameters-outside-declared-space"].map(x => `${x.parameter} = ${JSON.stringify(x.value)}`)) : "")}
+        ${row("carried on the profile's Set, in the compat facet", (r["held-in-compat"] || []).length ? capped(r["held-in-compat"]) : "")}
         ${row("Not carried", Object.keys(r["not-carried"]).length ? counts(r["not-carried"]) : "")}</div>`;
   /* who decided and when, on the records of this import that can carry it: where it came from */
   const who = r.provenance.records, carrying = who["from-source"] + who["from-caller"] + who.none;
@@ -383,7 +389,7 @@ function run() {
   }
   try {
     result = kind === "catalog" ? jscOscalImportCatalog(doc, opts)
-      : { ...jscOscalImportProfile(doc, { ...opts, catalogSet: opts.catalogSet || null, objs: G.objects }), facetSchemas: [] };
+      : jscOscalImportProfile(doc, { ...opts, catalogSet: opts.catalogSet || null, objs: G.objects, facetSchemas: G.facetSchemas.map(x => x.def) });
     result.invalid = invalid(result.objects);
   } catch (e) { result = null; jscLog.err(T("import failed: {msg}", { msg: e.message })); }
   render();
@@ -391,7 +397,12 @@ function run() {
 async function write() {
   if (!result.objects.length) { $("write-err").textContent = T("The import produced nothing to write."); return; }
   if (result.invalid.length) { $("write-err").textContent = T("{n} of {total} objects are not valid; nothing was written.", { n: result.invalid.length, total: result.objects.length }); return; }
-  if (kind === "profile") { await jscSet.saveObjects(result.objects.map(o => o.obj)); result = null; await jscPage.refresh(); return; }
+  /* a profile joins the active set; where its Set carries the compat facet and the set pins no schema for it, the
+     schema comes first, so that the Set never stands in the set without it */
+  if (kind === "profile") {
+    if (result.facetSchemas.length) await jscSet.saveFacetSchemas(result.facetSchemas);
+    await jscSet.saveObjects(result.objects.map(o => o.obj)); result = null; await jscPage.refresh(); return;
+  }
   /* a catalog is a bundle of its own: its files, and a manifest whose provenance names the source */
   const set = (opts.set || "catalog").slice(0, 60), held = (await jscStore.files(set)).length;
   if (held && !confirm(T("Set \"{set}\" holds {n} file(s). Replace them with this catalog?", { set, n: held }))) return;

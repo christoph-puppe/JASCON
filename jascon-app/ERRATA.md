@@ -505,3 +505,46 @@ surprise, blunder.
   bundle, 1,287 of 1,287", and two tests on a catalogue written for the
   tests, one of them against `convert_bsi.py` run on it.
 
+## 2026-11-14 · build 0.9.15 · the SP 800-53 preset and the profile import dropped content without a line
+
+- **Symptom.** Measured with build 0.9.14 on the pinned SP 800-53 5.2.0
+  catalogue, against this build: 1,035 objects for 1,037. The two withdrawn
+  controls that name no successor, CP-10(3) and SC-19, were written nowhere,
+  with their titles, labels and statements. Not read: the 3,707
+  `assessment-for` links by which an objective names the statement it
+  assesses, and the 1,458 formal SP 800-53A labels of the parameters. 525
+  markdown links in 159 objects were cut to their text, so their targets
+  were lost. The 201 back-matter resources were written in a shape of the
+  app's own (title, citation, first link), sorted by title, without their
+  uuids, so that no `(#uuid)` could name one. The overview of the PM family
+  became `guidance` without its title. What the catalogue says of itself
+  beside its title and version was not carried. Two `related` links to a
+  withdrawn control were dropped. 172 lineage annotations carried the
+  zero-padded label (`AC-02(10)`) instead of the one a reader sees
+  (`AC-2(10)`), because a prop was read by its name whatever its class.
+  The profile import did not carry a profile's metadata beside the author
+  and the day, and only counted its merge directive.
+- **Cause.** The preset followed `convert_nist.py` v0.1, which read the same
+  less and dropped the same. The rule that content is never dropped
+  (2026-11-14) was not yet written into either.
+- **Class.** Algorithm: the mapping read less than the source states and
+  dropped the rest without a line.
+- **Why it was not caught.** The preset was held to the converter's bundle
+  by semantic digest, and the converter lost the same; the test let four
+  objects differ besides, because the bundle had been converted from an
+  earlier file than the one at hand.
+- **Fix.** The preset follows `convert_nist.py` v0.2 (see `readme.md`,
+  "Importing OSCAL"); a prop is read in exactly the class and namespace the
+  converter reads. The profile import writes a profile's metadata and merge
+  directive on its Set in the compat facet, as the converter does on a
+  baseline Set. Measured: 1,037 of 1,037 objects have the semantic digest
+  and the bytes of the committed bundle, which is converted from the pinned
+  file since 2026-11-14.
+- **Test.** `tests/oscal.test.mjs`, "NIST preset: the objects of the
+  committed SP 800-53 bundle, 1,037 of 1,037 …", "NIST preset: the rules on
+  a small catalog", "NIST preset and profile import: … convert_nist.py"
+  (the converter run on a catalogue written for the tests), "profile: NIST
+  MODERATE selects the members … and its Set carries what the converter's
+  baseline Set carries", and the part of "profile: excludes, …" on a
+  profile's own Set.
+

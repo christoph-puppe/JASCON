@@ -36,7 +36,7 @@
 
 /* ==JSC-PURE-START== */
 
-const JSC_BUILD = "0.9.14";
+const JSC_BUILD = "0.9.15";
 const JSC_TOOL = "JASCON-App " + JSC_BUILD;
 /* The kernel this app writes, and the kernels it reads (KERNEL-2: a tool
    stops at a pin it does not implement and names both). */
@@ -853,6 +853,12 @@ const jscSet = {
     await jscStore.remove(this.name, paths);
     await this.load();
     jscLog.ok(T("removed {n} object(s) from set \"{set}\"", { n: paths.length, set: this.name }));
+  },
+  /* Facet schemas the set pins, each a file of its own ([{path, def}], as an import returns them); a file of the same
+     path is overwritten. The export pins every facet schema of the set. */
+  async saveFacetSchemas(list) {
+    await jscStore.putMany(this.name, list.map(f => ({ path: f.path, text: jscSerialize(f.def), kind: "facet-schema", type: null, id: f.def.id, origin: "authored" })));
+    await this.load();
   },
   /* A scale is a pinned file, not an object; its path follows its id. */
   async saveScale(def) {

@@ -23,12 +23,17 @@
               a holding facet, verbatim, so nothing is dropped silently.
               Who the statements bind is the caller's to name (opts.party);
               without a party the import is refused (backlog #70).
-   nist-sp800-53  The rules of convert_nist.py for NIST SP 800-53 Rev 5:
-              withdrawn controls folded into `replaces`, statement items as
-              clauses, SP 800-53A objectives and methods, parameter data and
-              guidance in facets. On the same source file its objects equal
-              the Python converter's. It makes no baseline Sets; a baseline
-              is a profile and is imported as one.
+   nist-sp800-53  The rules of convert_nist.py v0.2 for NIST SP 800-53 Rev 5:
+              a withdrawn control with a successor folded into its
+              `replaces`, one without a Requirement with lifecycle
+              `withdrawn`; statement items as clauses; SP 800-53A objectives
+              (each with the statement it assesses) and methods, parameter
+              data with the formal labels, and guidance in facets; the
+              back-matter resources and the document's metadata on the root
+              Set. On the pinned source file its objects equal the committed
+              bundle's. It makes no baseline Sets; a baseline is a profile
+              and is imported as one, and the profile's metadata and merge
+              directive stand on its Set as on the converter's baseline Set.
    cis-benchmark  The rules of convert_cis_benchmark.py for a CIS Benchmark:
               one Requirement per rule, audit and remediation text with the
               automated/manual marking in assessment-criteria@1 (what the
@@ -233,11 +238,18 @@ function jscOscalProvenanceReport(stated, given, from, n) {
 }
 
 /* A pinned facet schema with a closed shape, as the converters write it. */
-function jscFacetStub(name, id, modifies, properties) {
+function jscFacetStub(name, id, modifies, properties, note) {
   return { path: `schemas/${name}`, def: { id, version: "1.0.0", "modifies-semantics": modifies,
-    note: "NORMATIVE pinned payload schema (backlog #26): closed shape - unknown keys are rejected, never smuggled",
+    note: note || "NORMATIVE pinned payload schema (backlog #26): closed shape - unknown keys are rejected, never smuggled",
     schema: { $schema: "https://json-schema.org/draft/2020-12/schema", type: "object", properties, additionalProperties: false } } };
 }
+/* The compat facet as convert_nist.py pins it: what of an OSCAL document the kernel has no member for, on the Set that
+   stands for the document (its `metadata`, a profile's `merge`), and the `class` of a control where no rule gives it.
+   The NIST preset pins it, and so does a profile import into a set that pins no schema for that facet. (convert_bsi.py
+   pins a schema of its own under the same id and version, with other members; that is the converters' to settle.) */
+const JSC_OSCAL_COMPAT = "https://ns.jascon.net/compat/oscal-1x";
+const jscOscalCompatStub = () => jscFacetStub("oscal-1x-compat-1.0.0-stub.json", JSC_OSCAL_COMPAT, [], { metadata: { type: "object" }, merge: { type: "object" }, class: { type: "string" } },
+  "NORMATIVE pinned payload schema (backlog #26): what of an OSCAL document the kernel has no member for, in the source's own shape - the document `metadata` and a profile's `merge` on the Set that stands for the document, the `class` of a control where no rule gives it");
 function jscStdlibPin(shortName) {
   const def = jscOscalSchema.JSC_STDLIB.find(d => d.id.endsWith("/" + shortName));
   if (!def) throw new Error(`stdlib facet ${shortName} is not in jascon-schema.js`);
@@ -563,38 +575,64 @@ function jscImportBsi(cat, party) {
 }
 
 /* ====================================================================
-   NIST SP 800-53 Rev 5 (after convert_nist.py v0.1)
+   NIST SP 800-53 Rev 5 (after convert_nist.py v0.2)
    ====================================================================
-   Families become Sets under one root Set. A live control or enhancement
-   becomes a Requirement: its statement and every item below it that has
-   prose becomes one statement, modality `must` by the corpus rule, bound to
-   the parties its implementation-level props name. A parameter is declared
-   on the statement whose prose inserts it; one that no statement inserts is
-   declared on the first. Guidance, the SP 800-53A objectives and methods,
-   the administrative data of parameters and the RMF marker go into facets.
-   A withdrawn control is not converted; its successor names it in
-   `replaces`, with the withdrawn label and title kept as an annotation.
+   Families become Sets under one root Set. A control or enhancement in
+   force becomes a Requirement: its statement and every item below it that
+   has prose becomes one statement, modality `must` by the corpus rule, bound
+   to the parties its implementation-level props name. A parameter is
+   declared on the statement whose prose inserts it; one that no statement
+   inserts is declared on the first. Guidance, the SP 800-53A objectives and
+   methods, the administrative data of parameters (the formal SP 800-53A
+   label among them) and the RMF marker go into facets; each objective names
+   the statement it assesses (`assessment-for`, with the Requirement where
+   the statement is another control's).
+   A withdrawn control that names a successor is no object: the successor
+   names it in `replaces`, with the withdrawn control's label (the one
+   without a class) and title kept as an annotation. A withdrawn control
+   that names none is a Requirement with lifecycle `withdrawn`, the
+   source's own word; its statement says why it was withdrawn and states no
+   obligation, so its modality is `unspecified`, and it binds the preset's
+   party, since the source names none.
+   The root Set carries the back-matter resources as the source writes them
+   (references@1) and what the document says of itself beside its title and
+   version (the compat facet, `metadata`). A markdown link in a text stays
+   as the source wrote it; `(#uuid)` names a resource of references@1.
+   A prop is read where its name, its class and its namespace are exactly
+   those the converter reads (no class and no namespace where it names
+   none), as convert_nist.py does; every other prop is counted in the
+   report (`props-not-read`).
+   Before build 0.9.15 this preset followed convert_nist.py v0.1 and lost
+   content on the way (ERRATA.md).
 
    The baselines are profiles of their own and are imported as profiles;
    this preset makes no baseline Set. */
 const JSC_NIST = { ns: "https://ns.nist.gov/sp800-53", key: "sp800-53", lang: "en", rmf: "http://csrc.nist.gov/ns/rmf" };
 function jscImportNist(cat, party) {
-  const NS = JSC_NIST.ns, version = cat.metadata.version;
-  const F = { narr: `${NS}/facet/narrative@1`, a: `${NS}/facet/sp800-53a@1`, odp: `${NS}/facet/odp@1`, rmf: `${NS}/facet/rmf@1`, ref: `${NS}/facet/references@1` };
+  const NS = JSC_NIST.ns, RMF = JSC_NIST.rmf, version = cat.metadata.version;
+  const F = { narr: `${NS}/facet/narrative@1`, a: `${NS}/facet/sp800-53a@1`, odp: `${NS}/facet/odp@1`, rmf: `${NS}/facet/rmf@1`, ref: `${NS}/facet/references@1`,
+    compat: JSC_OSCAL_COMPAT + "@1" };
   const T = v => ({ en: v });
-  const props = (c, name, ns, cls) => (c.props || []).filter(p => p.name === name && (ns === undefined || p.ns === ns) && (cls === undefined || p.class === cls)).map(p => p.value);
-  const prop = (c, name, ns, cls) => { const v = props(c, name, ns, cls); return v.length ? v[0] : null; };
+  const text = v => (typeof v === "string" ? T(v) : v);               // a title: text where it is a string, as the converters' textify
+  const none = v => (v === undefined ? null : v);
+  /* the values of the props of `node` with exactly this name, class and namespace (null: the prop has none) */
+  const props = (node, name, cls = null, ns = null) => ((node && node.props) || []).filter(p => p.name === name && none(p.class) === cls && none(p.ns) === ns).map(p => p.value);
+  const prop = (node, name, cls, ns) => { const v = props(node, name, cls, ns); return v.length ? v[0] : null; };
   const mint = id => `${NS}/req/${String(id).toUpperCase()}`;
-  /* {{ insert: param, x }} -> {param:x}; a markdown link to an anchor -> its text */
-  const rewrite = (prose, used) => String(prose || "")
-    .replace(/\{\{\s*insert:\s*param,\s*([a-z0-9._-]+)\s*\}\}/g, (m, id) => { if (used) used.add(id); return `{param:${id}}`; })
-    .replace(/\[([^\]]+)\]\(#[a-zA-Z0-9._-]+\)/g, "$1");
+  const unhash = href => String(href || "").replace(/^#+/, "");
+  /* {{ insert: param, x }} -> {param:x}; `used` collects the parameters inserted. A markdown link stays as the source wrote it. */
+  const rewrite = (prose, used) => String(prose || "").replace(/\{\{\s*insert:\s*param,\s*([a-z0-9._-]+)\s*\}\}/g, (m, id) => { if (used) used.add(id); return `{param:${id}}`; });
   const byCode = (a, b) => (a < b ? -1 : a > b ? 1 : 0);
-  const report = { preset: "nist-sp800-53", controls: 0, statements: 0, "controls-without-a-stated-party": 0, "withdrawn-not-converted": 0, "parameters-from-another-control": [],
-    "parameters-without-insertion": 0, "related-to-withdrawn-or-missing": 0, "references-unresolved": 0, "withdrawn-into-withdrawn": [], "withdrawn-target-missing": [] };
+  const clone = x => JSON.parse(JSON.stringify(x));
+  const count = (map, k) => map.set(k, (map.get(k) || 0) + 1);
+  const notWritten = new Map();                                        // rel -> links of a written control that become no relation
+  const report = { preset: "nist-sp800-53", controls: 0, statements: 0, "controls-without-a-stated-party": 0, "withdrawn-not-converted": 0, "withdrawn-without-successor": [],
+    "parameters-from-another-control": [], "parameters-without-insertion": 0, "assessment-for": 0, "formal-odp-labels": 0, "links-not-written": {}, "props-not-read": {},
+    "withdrawn-into-withdrawn": [], "withdrawn-target-missing": [] };
 
-  const res = new Map((((cat["back-matter"] || {}).resources) || []).map(r => [r.uuid,
-    { title: r.title || "", citation: (r.citation || {}).text || "", url: ((r.rlinks || [{}])[0] || {}).href || "" }]));
+  const resources = ((cat["back-matter"] || {}).resources) || [];
+  const res = new Map(resources.map(r => [r.uuid, r]));
+  const resUrl = uuid => ((res.get(uuid).rlinks || [{}])[0] || {}).href || "";          // the first link of a resource
   /* every control at any depth, with the top group it stands under */
   const controls = [];
   const walkControl = (c, top) => { controls.push({ c, top }); for (const s of c.controls || []) walkControl(s, top); };
@@ -602,11 +640,14 @@ function jscImportNist(cat, party) {
   for (const g of cat.groups || []) walkGroup(g, null);
   for (const c of cat.controls || []) walkControl(c, null);
   const byId = new Map(controls.map(x => [x.c.id, x.c]));
+  /* the one status the rules know is `withdrawn`, the kernel's own word; a control called otherwise is not written as something it is not called */
+  const unknownStatus = [...new Set(controls.map(x => prop(x.c, "status")).filter(s => s !== null && s !== "withdrawn").map(String))].sort(byCode);
+  if (unknownStatus.length) throw new Error(`the catalog gives controls the status ${JSON.stringify(unknownStatus)}; these rules know \`withdrawn\` only and write no lifecycle the source does not state`);
   const withdrawn = new Set(controls.filter(x => prop(x.c, "status") === "withdrawn").map(x => x.c.id));
-  const live = controls.filter(x => !withdrawn.has(x.c.id));
   const groupsById = new Map((cat.groups || []).map(g => [g.id, g]));
   const paramsGlobal = new Map(controls.flatMap(x => (x.c.params || []).map(pm => [pm.id, pm])));
-  report["withdrawn-not-converted"] = withdrawn.size;
+  /* the class of a control where the rule gives it from the id (or it has none); another one is written in the compat facet */
+  const classGiven = c => c.class === undefined || c.class === null || c.class === (String(c.id).includes(".") ? "SP800-53-enhancement" : "SP800-53");
 
   /* a withdrawn control points at its successor; the kernel records it on the successor */
   const MODE = { "incorporated-into": "merged-into", "moved-to": "renamed" };
@@ -614,22 +655,42 @@ function jscImportNist(cat, party) {
   const push = (map, key, e) => map.set(key, [...(map.get(key) || []), e]);
   for (const { c } of controls) {
     if (!withdrawn.has(c.id)) continue;
+    let landed = 0;
+    const plain = prop(c, "label"), label = plain !== null ? plain : String(c.id).toUpperCase(), classOk = classGiven(c);
     for (const l of c.links || []) {
-      const href = String(l.href || "").replace(/^#+/, "");
-      if (!(l.rel in MODE)) continue;
+      if (!Object.prototype.hasOwnProperty.call(MODE, l.rel)) continue;
+      const href = unhash(l.href);
       let target = href, into = null;
-      if (href.includes("_smt")) { const at = href.indexOf("_smt"); target = href.slice(0, at); into = "smt" + href.split("_smt")[1]; }   // a statement of the successor
-      const e = { ref: mint(c.id), mode: MODE[l.rel], label: prop(c, "label") || c.id.toUpperCase(), title: c.title || "" };
+      if (href.includes("_smt")) { target = href.split("_smt")[0]; into = "smt" + href.split("_smt")[1]; }   // a statement of the successor
+      const e = { ref: mint(c.id), mode: MODE[l.rel], label, title: c.title === undefined ? "" : c.title };
       if (into) e.into = into;
-      if (withdrawn.has(target)) report["withdrawn-into-withdrawn"].push([c.id, target]);
-      else if (byId.has(target)) push(succ, target, e);
-      else if (groupsById.has(target)) push(famSucc, target, e);   // moved to a whole family
+      if (!classOk) e.class = c.class;
+      if (withdrawn.has(target)) { report["withdrawn-into-withdrawn"].push([c.id, target]); continue; }
+      if (byId.has(target)) { push(succ, target, e); landed++; }
+      else if (groupsById.has(target)) { push(famSucc, target, e); landed++; }    // moved to a whole family
       else report["withdrawn-target-missing"].push([c.id, href]);
     }
+    if (!landed) report["withdrawn-without-successor"].push(c.id);
   }
+  const tombstones = new Set([...withdrawn].filter(id => !report["withdrawn-without-successor"].includes(id)));
+  report["withdrawn-not-converted"] = tombstones.size;
+  /* The props these rules read, by where they stand: [name, class, namespace], none where omitted. convert_nist.py reads
+     exactly these; a prop of another name, class or namespace it does not carry, and its ledger ends the run on it
+     (measured on a catalogue written for the tests). The preset writes what the converter writes and counts every other
+     prop in the report, so that none is left out without a line. */
+  const READ = { control: [["label"], ["label", "zero-padded"], ["label", "sp800-53a"], ["sort-id"], ["status"], ["implementation-level", null, RMF], ["contributes-to-assurance", null, RMF]],
+    group: [["label"]], param: [["alt-identifier"], ["alt-label", "sp800-53"], ["aggregates", null, RMF], ["label", "sp800-53a"]],
+    part: [["label"], ["label", "sp800-53a"], ["method", null, RMF]] };
+  const notRead = new Map();
+  const unread = (node, where) => { for (const p of node.props || []) if (!READ[where].some(([n, c = null, s = null]) => p.name === n && none(p.class) === c && none(p.ns) === s)) count(notRead, `${p.name}${p.class ? ` [${p.class}]` : ""}${p.ns ? ` (${p.ns})` : ""}`); };
+  const unreadParts = node => { for (const pt of node.parts || []) { unread(pt, "part"); unreadParts(pt); } };
+  const unreadGroup = g => { unread(g, "group"); unreadParts(g); for (const s of g.groups || []) unreadGroup(s); };
+  for (const g of cat.groups || []) unreadGroup(g);
+  for (const { c } of controls) { unread(c, "control"); unreadParts(c); for (const pm of c.params || []) unread(pm, "param"); }
+  report["props-not-read"] = Object.fromEntries(notRead);
   const lineage = (o, entries) => {
     o.replaces = entries.map(e => ({ ref: e.ref, mode: e.mode }));
-    o.annotations = { "nist-withdrawal": entries.map(e => Object.fromEntries(Object.entries(e).filter(([k]) => ["ref", "label", "title", "into", "mode"].includes(k)))) };
+    o.annotations = { "nist-withdrawal": entries.map(e => Object.fromEntries(Object.entries(e).filter(([k]) => ["ref", "label", "title", "into", "mode", "class"].includes(k)))) };
   };
   const paramDecl = pm => {
     const d = { name: pm.id };
@@ -641,20 +702,32 @@ function jscImportNist(cat, party) {
     if (pm.label) d.label = pm.label;
     return d;
   };
-  const objTree = (pt, used) => {
+  /* the statement an assessment objective assesses, as its link states it: the statement id, and the Requirement where it is another control's */
+  const assessed = (l, cid) => {
+    const target = unhash(l.href);
+    if (!target.includes("_smt")) return null;
+    const a = {};
+    if (target.split("_smt")[0] !== cid) a["requirement-ref"] = mint(target.split("_smt")[0]);
+    a["statement-id"] = "smt" + target.split("_smt")[1];
+    return a;
+  };
+  const objTree = (pt, used, cid) => {
     const node = {};
     if (pt.id) node.id = pt.id;
-    const lab = prop(pt, "label", undefined, "sp800-53a");
+    const lab = prop(pt, "label", "sp800-53a");
     if (lab) node.label = lab;
+    const links = (pt.links || []).filter(l => l.rel === "assessment-for").map(l => assessed(l, cid)).filter(Boolean);
+    if (links.length) { node["assessment-for"] = links; report["assessment-for"] += links.length; }
     if (pt.prose) node.prose = T(rewrite(pt.prose, used));
-    const kids = (pt.parts || []).map(s => objTree(s, used));
+    const kids = (pt.parts || []).map(s => objTree(s, used, cid));
     if (kids.length) node.children = kids;
     return node;
   };
+  const paragraphs = prose => String(prose || "").split(/\n\s*\n/).map(x => x.trim()).filter(Boolean);
   const methodsOf = (c, used) => (c.parts || []).filter(pt => pt.name === "assessment-method").map(pt => {
-    const m = { method: prop(pt, "method"), label: prop(pt, "label", undefined, "sp800-53a") };
-    const objs = (pt.parts || []).filter(s => s.name === "assessment-objects").map(s => s.prose || "");
-    if (objs.length) m.objects = objs[0].split(/\n\s*\n/).filter(x => x.trim()).map(x => T(rewrite(x.trim(), used)));
+    const m = { method: prop(pt, "method", null, RMF), label: prop(pt, "label", "sp800-53a") };
+    const objs = (pt.parts || []).filter(s => s.name === "assessment-objects");
+    if (objs.length) m.objects = paragraphs(objs[0].prose).map(x => T(rewrite(x, used)));
     return Object.fromEntries(Object.entries(m).filter(([, v]) => (Array.isArray(v) ? v.length : v)));
   });
   /* the statement part and every part below it that has prose, in document order */
@@ -664,20 +737,24 @@ function jscImportNist(cat, party) {
     return out;
   };
 
-  const objects = [];
-  for (const { c } of live) {
+  const objects = [], written = controls.filter(x => !tombstones.has(x.c.id));
+  for (const { c } of written) {
     const cid = c.id, params = new Map((c.params || []).map(pm => [pm.id, pm]));
-    const plain = ((c.props || []).find(p => p.name === "label" && !p.class) || { value: cid.toUpperCase() }).value;
+    /* lifecycle: the source's word where it states a status; a control it calls nothing is in force */
+    const status = prop(c, "status"), lifecycle = status !== null ? status : "active";
+    const plain = prop(c, "label"), label = plain !== null ? plain : String(cid).toUpperCase();
     /* a level the control states is the source's and stays; where it states none, the party of the import (the preset's
        default, <ns>/party/organization, unless the caller named another) */
-    const levels = props(c, "implementation-level", JSC_NIST.rmf);
+    const levels = props(c, "implementation-level", null, RMF);
     const parties = levels.length ? levels.map(v => `${NS}/party/${v}`) : [party], stmts = [], declared = new Set();
     if (!levels.length) report["controls-without-a-stated-party"]++;
+    /* a control in force is read as `must` (the corpus rule); the statement of a withdrawn one states no obligation */
+    const modality = status === null ? "must" : "unspecified";
     for (const pt of flatStatements(c)) {
       const used = new Set(), prose = rewrite(pt.prose, used);
       let sid = pt.id === undefined ? `${cid}_smt` : pt.id;
       if (sid.startsWith(cid + "_")) sid = sid.slice(cid.length + 1);
-      const s = { id: sid, modality: "must", "obligated-parties": parties, prose: { en: prose } }, decls = [];
+      const s = { id: sid, modality, "obligated-parties": parties, prose: { en: prose } }, decls = [];
       for (const u of [...used].sort(byCode)) {
         if (params.has(u)) decls.push(paramDecl(params.get(u)));
         else if (paramsGlobal.has(u)) { decls.push(paramDecl(paramsGlobal.get(u))); report["parameters-from-another-control"].push([cid, u]); }   // the source inserts another control's parameter
@@ -691,68 +768,91 @@ function jscImportNist(cat, party) {
       stmts[0].parameters = [...(stmts[0].parameters || []), ...[...rest].sort(byCode).map(p => paramDecl(params.get(p)))];
       report["parameters-without-insertion"] += rest.length;
     }
-    const req = { id: mint(cid), version, label: plain, lifecycle: "active", title: T(c.title === undefined ? cid : c.title), statements: stmts };
+    const req = { id: mint(cid), version, label, lifecycle, title: text(c.title === undefined ? cid : c.title), statements: stmts };
     const facets = {};
     const guidance = (c.parts || []).filter(p => p.name === "guidance" && p.prose).map(p => T(rewrite(p.prose)));
     if (guidance.length) facets[F.narr] = { guidance };
     const usedF = new Set();
-    const objectives = (c.parts || []).filter(p => p.name === "assessment-objective").map(p => objTree(p, usedF)), methods = methodsOf(c, usedF);
+    const objectives = (c.parts || []).filter(p => p.name === "assessment-objective").map(p => objTree(p, usedF, cid)), methods = methodsOf(c, usedF);
     if (objectives.length || methods.length) facets[F.a] = { ...(objectives.length ? { objectives } : {}), ...(methods.length ? { methods } : {}) };
     const admin = {};
     for (const [pid, pm] of params) {
-      const a = {}, pv = name => (pm.props || []).filter(p => p.name === name).map(p => p.value);
-      if ((pm.guidelines || []).length) a.guidelines = pm.guidelines.map(g => T(rewrite(g.prose || "")));
-      if (pv("alt-identifier").length) a["alt-identifiers"] = pv("alt-identifier");
-      if (pv("alt-label")[0]) a["alt-label"] = pv("alt-label")[0];
-      if (pv("aggregates").length) a.aggregates = pv("aggregates");
+      const a = {};
+      if ((pm.guidelines || []).length) a.guidelines = pm.guidelines.map(g => T(rewrite(g.prose)));
+      const alts = props(pm, "alt-identifier");
+      if (alts.length) a["alt-identifiers"] = alts;
+      const alt = prop(pm, "alt-label", "sp800-53");
+      if (alt) a["alt-label"] = alt;
+      const aggs = props(pm, "aggregates", null, RMF);
+      if (aggs.length) a.aggregates = aggs;
+      const formal = prop(pm, "label", "sp800-53a");                  // the formal ODP label, as the source gives it
+      if (formal) { a["sp800-53a-label"] = formal; report["formal-odp-labels"]++; }
       if (Object.keys(a).length) admin[pid] = a;
     }
     if (Object.keys(admin).length) facets[F.odp] = { params: admin };
-    if (prop(c, "contributes-to-assurance", JSC_NIST.rmf) === "true") facets[F.rmf] = { "contributes-to-assurance": true };
+    for (const v of props(c, "contributes-to-assurance", null, RMF)) if (v === "true" || v === "false") facets[F.rmf] = { "contributes-to-assurance": v === "true" };
+    if (!classGiven(c)) facets[F.compat] = { class: c.class };      // a class the rule does not give is written as the source gives it
     if (Object.keys(facets).length) req.facets = facets;
+    /* a link to a control (a withdrawn one too: its URI names it in the successor's `replaces`) is a relation of its own rel;
+       a reference link, the first link of the resource it names; a relation the control states twice is written once */
     const rels = [], seen = new Set();
-    const rel = (type, ref) => { if (!seen.has(type + "\n" + ref)) { seen.add(type + "\n" + ref); rels.push({ type, ref }); } };
     for (const l of c.links || []) {
-      const href = String(l.href || "").replace(/^#+/, "");
-      if (l.rel === "related" && byId.has(href) && !withdrawn.has(href)) rel("related", mint(href));
-      else if (l.rel === "related") report["related-to-withdrawn-or-missing"]++;
-      else if (l.rel === "required" && byId.has(href)) rel("required", mint(href));
-      else if (l.rel === "reference" && res.has(href) && res.get(href).url) rel("reference", res.get(href).url);
-      else if (l.rel === "reference") report["references-unresolved"]++;
+      const href = unhash(l.href);
+      let r = null;
+      if ((l.rel === "related" || l.rel === "required") && byId.has(href)) r = { type: l.rel, ref: mint(href) };
+      else if (l.rel === "reference" && res.has(href) && resUrl(href)) r = { type: "reference", ref: resUrl(href) };
+      else count(notWritten, l.rel === undefined ? "(no rel)" : String(l.rel));
+      if (r && !seen.has(r.type + "\n" + r.ref)) { seen.add(r.type + "\n" + r.ref); rels.push(r); }
     }
     if (rels.length) req.relations = rels;
     if (succ.has(cid)) lineage(req, succ.get(cid));
     objects.push({ path: `objects/req/${jscOscalSlug(cid)}.json`, obj: req });
     report.controls++; report.statements += stmts.length;
   }
+  report["links-not-written"] = Object.fromEntries(notWritten);
 
-  const rootMembers = [];
+  const rootMembers = [], sortKey = cid => prop(byId.get(cid), "sort-id") || cid;
   for (const g of cat.groups || []) {
-    const sortId = id => prop(byId.get(id), "sort-id") || id;
-    const fam = live.filter(x => x.top && x.top.id === g.id).map(x => x.c.id).sort((a, b) => byCode(sortId(a), sortId(b)));
+    const fam = written.filter(x => x.top && x.top.id === g.id).map(x => x.c.id).sort((a, b) => byCode(sortKey(a), sortKey(b)));
     const id = `${NS}/set/family/${g.id}`;
-    const set = { id, version, lifecycle: "active", title: T(g.title === undefined ? g.id : g.title), label: prop(g, "label") || g.id.toUpperCase(),
+    const set = { id, version, lifecycle: "active", title: text(g.title === undefined ? g.id : g.title), label: prop(g, "label") || String(g.id).toUpperCase(),
       members: fam.map((cid, i) => ({ ref: mint(cid), sequence: (i + 1) * 10 })) };
+    /* a family's overview, with its title */
     const overview = (g.parts || []).filter(p => p.name === "overview");
-    if (overview.length) set.facets = { [F.narr]: { guidance: overview.map(p => T(rewrite(p.prose || ""))) } };
+    if (overview.length) set.facets = { [F.narr]: { overview: overview.map(p => ({ ...(p.title ? { title: T(p.title) } : {}), ...(p.prose ? { prose: T(rewrite(p.prose)) } : {}) })) } };
     if (famSucc.has(g.id)) lineage(set, famSucc.get(g.id));
     objects.push({ path: `objects/set/family-${jscOscalSlug(g.id)}.json`, obj: set });
     rootMembers.push({ ref: id, sequence: rootMembers.length * 10 + 10 });
   }
-  const resources = [...res.values()].sort((a, b) => byCode(a.title, b.title)).map(r => Object.fromEntries(Object.entries(r).filter(([, v]) => v)));
-  objects.push({ path: "objects/set/root.json", obj: { id: `${NS}/set/root`, version, lifecycle: "active", title: T(cat.metadata.title), members: rootMembers,
-    facets: { [F.ref]: { resources } } } });
+  /* the root Set stands for the document: its title and version are kernel members; the back-matter resources as the source
+     writes them, and everything else the document says of itself, in facets */
+  const root = { id: `${NS}/set/root`, version, lifecycle: "active", title: text(cat.metadata.title), members: rootMembers }, rootFacets = {};
+  if (resources.length) rootFacets[F.ref] = { resources: clone(resources) };
+  const meta = Object.fromEntries(Object.entries(cat.metadata).filter(([k]) => k !== "title" && k !== "version"));
+  if (Object.keys(meta).length) rootFacets[F.compat] = { metadata: clone(meta) };
+  if (Object.keys(rootFacets).length) root.facets = rootFacets;
+  objects.push({ path: "objects/set/root.json", obj: root });
 
   const base = f => f.replace(/@1$/, "");
+  const strings = (...names) => Object.fromEntries(names.map(n => [n, { type: "string" }]));
+  const resource = { type: "object", additionalProperties: false, required: ["uuid"], properties: { ...strings("uuid", "title", "description", "remarks"),
+    props: { type: "array", items: { type: "object", additionalProperties: false, required: ["name", "value"], properties: strings("name", "uuid", "ns", "value", "class", "group", "remarks") } },
+    citation: { type: "object" },
+    rlinks: { type: "array", items: { type: "object", additionalProperties: false, required: ["href"], properties: strings("href", "media-type") } } } };
   const facetSchemas = [
-    jscFacetStub("sp800-53-narrative-stub.json", base(F.narr), [], { guidance: { type: "array" } }),
+    jscFacetStub("sp800-53-narrative-stub.json", base(F.narr), [], { guidance: { type: "array" }, overview: { type: "array" } }),
     jscFacetStub("sp800-53a-stub.json", base(F.a), [], { objectives: { type: "array" }, methods: { type: "array" } }),
     jscFacetStub("sp800-53-odp-stub.json", base(F.odp), [], { params: { type: "object" } }),
     jscFacetStub("sp800-53-rmf-stub.json", base(F.rmf), [], { "contributes-to-assurance": { type: "boolean" } }),
-    jscFacetStub("sp800-53-references-stub.json", base(F.ref), [], { resources: { type: "array" } }),
+    jscFacetStub("sp800-53-references-stub.json", base(F.ref), [], { resources: { type: "array", items: resource } },
+      "NORMATIVE pinned payload schema (backlog #26): the back-matter resources of the catalogue, as the source writes them; a link `(#uuid)` in a text of the bundle names the resource with that uuid"),
+    jscOscalCompatStub(),
   ];
-  const provenance = { sources: [{ key: JSC_NIST.key, title: cat.metadata.title, version, "oscal-version": cat.metadata["oscal-version"] }],
-    converter: "JASCON-App OSCAL import, preset nist-sp800-53 (the rules of convert_nist.py v0.1, without the baseline Sets)",
+  /* who wrote the document and when, by the rule of backlog #69, as the converter's manifest names them; nothing is made up */
+  const author = jscOscalAuthorRef(cat.metadata, NS), day = jscOscalDate(cat.metadata);
+  const provenance = { sources: [{ key: JSC_NIST.key, title: cat.metadata.title, version, "oscal-version": cat.metadata["oscal-version"],
+    ...(author ? { "author-ref": author } : {}), ...(day ? { date: day } : {}) }],
+    converter: "JASCON-App OSCAL import, preset nist-sp800-53 (the rules of convert_nist.py v0.2, without the baseline Sets)",
     "namespace-note": "https://ns.nist.gov/sp800-53 is minted to match the mapping endpoints of the corpus; pending a URI published by NIST" };
   return { objects, facetSchemas, provenance, report };
 }
@@ -1087,16 +1187,26 @@ function jscOscalGuessPreset(doc) {
    case, because converters differ in it).
    Carried: include-controls.with-ids, include-all, exclude-controls.with-ids,
    set-parameters. Reported and not carried: matching patterns,
-   with-child-controls, alters, merge - the kernel has no place for a merge
-   directive, and an alter is a change of text that somebody has to decide
-   is editorial or substantive.
+   with-child-controls, alters - an alter is a change of text that somebody
+   has to decide is editorial or substantive.
+   What the profile says of itself beside its title and version (its
+   `metadata`) and how it merges what it selects (`merge`) stand on the Set
+   of the profile, in the compat facet and in the source's own shape, as
+   convert_nist.py writes them on a baseline Set (since build 0.9.15; until
+   then they were not carried, and the merge directive was only counted).
+   The set must pin a schema for that facet that names the member:
+   opts.facetSchemas are the defs the set pins. Where it pins none, the
+   import brings the one convert_nist.py pins (`facetSchemas` of the
+   result); where it pins one without the member, the member is not carried
+   and the report says why. A profile that makes no Set of its own (an
+   include-all only) has no place for them, and the report says so.
    The Tailoring names who wrote the profile and when (`provenance`), by the
    rule above jscOscalAuthorParty; opts.authorRef and opts.date replace what
    the document states, field by field, and without both nothing is written.
    The author stands on the Tailoring; its selects, excludes and operations
    inherit it. The Set of the profile carries none: the kernel has no
    provenance on a RequirementSet.
-   -> { objects: [{path, obj}], report } */
+   -> { objects: [{path, obj}], facetSchemas: [{path, def}], report } */
 function jscOscalImportProfile(doc, opts) {
   const p = doc && doc.profile;
   if (!p || !p.metadata) throw new Error("this is not an OSCAL profile: no profile.metadata");
@@ -1132,11 +1242,26 @@ function jscOscalImportProfile(doc, opts) {
     for (const cid of withIds(imp["exclude-controls"])) { const id = resolve(cid); if (id && !excludes.includes(id)) excludes.push(id); }
   }
   report.included = members.length; report.excluded = excludes.length;
+  /* the profile's own metadata beside title and version, and its merge directive: on the Set, in the compat facet */
+  const held = {}, meta = Object.fromEntries(Object.entries(p.metadata).filter(([k]) => k !== "title" && k !== "version"));
+  if (Object.keys(meta).length) held.metadata = meta;
+  if ("merge" in p) held.merge = p.merge;
+  const pinned = (opts.facetSchemas || []).find(d => d && d.id === JSC_OSCAL_COMPAT && d.version === "1.0.0");
+  const room = Object.keys(((pinned || jscOscalCompatStub().def).schema || {}).properties || {});     // the members the facet may hold in this set
+  const compat = {}, facetSchemas = [];
+  report["held-in-compat"] = [];
+  for (const [k, v] of Object.entries(held)) {
+    const what = k === "merge" && v && typeof v === "object" ? `merge (${Object.keys(v).join(", ")})` : k;
+    if (!members.length) note(`${what}: the profile makes no Set of its own to carry it`);
+    else if (!room.includes(k)) note(`${what}: the set pins ${JSC_OSCAL_COMPAT} without it`);
+    else { compat[k] = JSON.parse(JSON.stringify(v)); report["held-in-compat"].push(k); }
+  }
+  if (Object.keys(compat).length && !pinned) facetSchemas.push(jscOscalCompatStub());
   const out = [];
   if (members.length) {
     const setId = `${ns}/set/profile/${name}`;
     out.push({ path: `objects/set/profile-${name}.json`, obj: { id: setId, version, lifecycle: "active", title: { [lang]: title },
-      members: members.map((ref, i) => ({ ref, sequence: (i + 1) * 10 })) } });
+      members: members.map((ref, i) => ({ ref, sequence: (i + 1) * 10 })), ...(Object.keys(compat).length ? { facets: { [JSC_OSCAL_COMPAT + "@1"]: compat } } : {}) } });
     selects.unshift({ "set-ref": setId });
   }
   /* set-parameters: one operation for every clause that declares the parameter */
@@ -1161,7 +1286,6 @@ function jscOscalImportProfile(doc, opts) {
   }
   report["parameters-set"] = operations.length;
   for (const a of (p.modify || {}).alters || []) note((a.adds ? "alters with adds" : "") + (a.adds && a.removes ? " and " : "") + (a.removes ? "alters with removes" : "") || "alters");
-  if (p.merge) note("merge (" + Object.keys(p.merge).join(", ") + ")");
   const stated = { "author-ref": jscOscalAuthorRef(p.metadata, ns), date: jscOscalDate(p.metadata) }, given = jscOscalGiven(opts);
   const who = jscOscalRules.jscImportProvenance(stated, given);
   if (selects.length) {
@@ -1172,7 +1296,7 @@ function jscOscalImportProfile(doc, opts) {
     out.push({ path: `objects/tailoring/${name}.json`, obj: t });
   }
   report.provenance = jscOscalProvenanceReport(stated, given, who.from, selects.length ? 1 : 0);
-  return { objects: out, report };
+  return { objects: out, facetSchemas, report };
 }
 const jscOscalRules = (typeof module !== "undefined" && module.exports) ? require("./jascon-rules.js") : { jscExpandRefs, jscParamCheck, jscIsDate, jscImportProvenance, jscPartyRef };
 
