@@ -538,6 +538,28 @@ and in `readme.md`; this file says only what is done and what is next.
   example folder now brings the compat schema with it (its profile has
   metadata), and the reference finds that export green as before.
 
+- Both presets follow the author's decisions of phase E (build 0.9.16;
+  `convert_bsi.py` v0.4, the SP 800-53 converter's round of 2026-11-14):
+  one compat schema, `oscal-1x-compat-1.1.0.json`, pinned by both presets
+  and brought by the profile import where a set pins none (the case of a
+  pinned schema without `merge` is gone with it); the document's uuid on
+  the root Set; a back-matter resource nothing refers to is not carried;
+  every withdrawn SP 800-53 control a Requirement with a statement made
+  from its links where the source gives none, and no `nist-withdrawal`
+  annotation; the print labels of SI-2(7) and a reference to a resource
+  without a link in the compat facet; a profile's uuid, imports and
+  back-matter on its Set.
+
+  Measured on the pinned sources: Grundschutz++ 1,287 of 1,287 objects,
+  SP 800-53 1,217 of 1,217 (the bundle's 1,221 without the 4 baseline
+  Sets), each by semantic digest and by bytes, line ends aside; all pinned
+  schemas byte-equal. Both converters, run on the test catalogues, now end
+  with 0, and the tests no longer tolerate a failure. The party tests'
+  digests were taken anew: Grundschutz++ 1,360 objects, 999 statements;
+  SP 800-53 1,217 and 2,100. 8 deliberate defects on the new logic: 7 red
+  at once; the eighth (a resource counted as referred to by its own text)
+  is red since the orphan of the test catalogue names itself.
+
 ## Next
 
 - An OSCAL component definition as a third kind on the Import page, written

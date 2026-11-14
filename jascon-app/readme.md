@@ -7,7 +7,7 @@ have to switch on yourself: the suggestions of the Risk page and the drafts
 of the Checks page send text to a model service once you type a key (see
 "Suggestions from a model").
 
-State: build 0.9.15. This build has the frame (the hub, the settings page and
+State: build 0.9.16. This build has the frame (the hub, the settings page and
 the shared core) and nine tool pages, in the order of the work: Import,
 Browse, Risk, Tailor, Map, Implement, Checks, Assess and Validate. One view of the Risk page and
 the drafting of the Checks page can ask a language model; nothing else in
@@ -28,7 +28,11 @@ preset makes every control, a nested one too, a Requirement of its own with
 its own links, and carries what it does not read as the source holds it
 (see "Importing OSCAL"). Since 0.9.15 the SP 800-53 preset follows
 `convert_nist.py` v0.2 and no longer loses content, and an imported
-profile's Set carries the profile's metadata and merge directive.
+profile's Set carries the profile's metadata and merge directive. Since
+0.9.16 both presets follow the author's decisions of phase E: every
+withdrawn SP 800-53 control is a Requirement, the document's uuid stands
+on the root Set, a back-matter resource nothing refers to is not carried,
+and the compat facet has one schema (`oscal-1x-compat-1.1.0.json`).
 
 ## Start
 
@@ -375,23 +379,25 @@ and the licence you state. Three sets of rules:
   does not run without it. Until build 0.9.10 these rules wrote
   `<namespace>/party/organization` on every clause without asking.
 
-- *NIST SP 800-53 Rev 5*, the rules of `convert_nist.py` v0.2: a withdrawn
-  control that names a successor is not converted, and the successor names
-  it in `replaces`, with the label a reader sees and the title in an
-  annotation; one that names none (CP-10(3) and SC-19 in 5.2.0) is a
-  Requirement with lifecycle `withdrawn`, whose statement is `unspecified`.
+- *NIST SP 800-53 Rev 5*, the rules of `convert_nist.py`: every withdrawn
+  control (182 in 5.2.0) is a Requirement with lifecycle `withdrawn` in its
+  family Set, whose statement is `unspecified`; a successor it names names
+  it in `replaces`, and where the source gives it no statement, its one
+  statement is made from its links ("Incorporated into AC-2k.").
   Every statement item with prose is a clause with modality `must`. SP
   800-53A objectives, each with the statement it assesses
   (`assessment-for`), and methods, the administrative data of parameters
   with their formal SP 800-53A labels, and the guidance go to facets under
   the NIST namespace; a markdown link in a text stays as NIST wrote it. The
-  root Set carries the back-matter resources as the source writes them and,
-  in the compat facet, what the catalog says of itself. A prop is read in
+  root Set carries the back-matter resources something in the catalog
+  refers to, as the source writes them (178 of 201; an orphan is not
+  carried) and, in the compat facet, the catalog's uuid and what it says of
+  itself. A prop is read in
   exactly the class and namespace the converter reads; any other prop is
   not carried, as by the converter, whose ledger then fails its run, and
   the report counts it. On the pinned source
   file (`converted_examples/US.SP800-53/SOURCES.sha256`) every one of its
-  1,037 objects has the semantic digest and the bytes of the committed
+  1,217 objects has the semantic digest and the bytes of the committed
   bundle, and the manifest's source entry names the author and the day as
   the converter's does. Until build 0.9.14 the preset followed v0.1 of the
   converter and lost content on the way (`ERRATA.md`). The preset makes no
@@ -450,12 +456,12 @@ got `--obligated-party` for the same):
 With the default left as it is, an import writes the objects it wrote
 before, byte for byte. Measured: one SHA-256 over every file of an import,
 held by a test, taken with build 0.9.11 for a catalog of a CIS Benchmark's
-shape written for the tests (17 objects), with build 0.9.14 for the BSI
-catalog the repository carries (1,360 objects, 999 statements), and with
-build 0.9.15 for the NIST catalog there (1,037 objects, 1,920 statements).
-The BSI and NIST digests were taken anew because each preset and its
-catalog changed on 2026-11-14 (BSI 811 objects and 651 statements before,
-NIST 1,035 and 1,918). The manifest of the new set differs from an
+shape written for the tests (17 objects), and with build 0.9.16 for the
+BSI catalog the repository carries (1,360 objects, 999 statements) and the
+NIST catalog there (1,217 objects, 2,100 statements). The BSI and NIST
+digests were taken anew because the presets and those catalogs changed on
+2026-11-14 (first BSI 811 objects and 651 statements, NIST 1,035 and
+1,918; then NIST 1,037 and 1,920). The manifest of the new set differs from an
 earlier build's in the line that names the tool and its build, as with
 every build. CIS as the author of its Mappings (`…/party/cis`) is another
 matter: the source states it, and the author fields above overwrite it.
@@ -478,7 +484,7 @@ the control's id, without regard to case.
 | a value outside the declared space | listed in the report, not written: it needs a Deviation |
 | `alters`, pattern matching, child controls | counted in the report, not carried |
 | `metadata`: parties, their roles, `last-modified` | `provenance` on the Tailoring: who wrote the profile and when |
-| `metadata` beside the title and version, and `merge` | on the profile's Set, in the compat facet `oscal-1x@1`, as the source holds them (since 0.9.15, as `convert_nist.py` writes them on a baseline Set). A set that pins no schema for that facet gets the one `convert_nist.py` pins; one that pins it without `merge` keeps the metadata only, and the report says so. A profile without a Set of its own (an `include-all` only) carries neither, and the report says so |
+| `metadata` beside the title and version, the `uuid`, the `href` of each import, the back-matter resources, and `merge` | on the profile's Set, in the compat facet `oscal-1x@1`, as the source holds them, as `convert_nist.py` writes them on a baseline Set (metadata and merge since 0.9.15, the rest since 0.9.16). A set that pins no compat schema 1.1.0 gets it. A profile without a Set of its own (an `include-all` only) carries none of them, and the report says so |
 
 **Who wrote an OSCAL document, and when.** The page shows both before the
 import, in two fields you can type over. The author is one party of the
