@@ -18,10 +18,9 @@ that is now no content by a rule the ledger checks (a name that selects,
 a namespace, an id rebuilt exactly). Those are counted in each ledger
 record under `not-content`, with the rule.
 
-Status: IFA, ISM, CSF and Grundschutz++ are final on the session
-branch. CR26 is verified by an agent and not merged yet (it is merged and
-converted again after SP 800-53, whose bundle it reads); its rows are
-the agent's counts. SP 800-53 follows when its rework is merged.
+Status: all six are merged on the session branch (SP 800-53 at
+729c7734, CR26 at 61589048). The CR26 rows are the verifying agent's
+counts; the ledger record committed with the merge has the same totals.
 
 ## Summary
 
@@ -31,19 +30,24 @@ the agent's counts. SP 800-53 follows when its rework is merged.
 | AU.ISM | 36,161 | 1 | 1 |
 | US.CSF | 4,726 | 182 | 95, and the 87 names that go with 87 of them |
 | DE.BSI | 49,431 | 6 | 6 |
-| US.SP800-53 | 115,680 | *pending* | |
+| US.SP800-53 | 115,680 | 407 | 44; 180 more are of a class the rule does not name (see the table); 183 names go with those values |
 | FedRAMP-CR26 | 7,532 | 992 | 992 |
 
 Three classes recur across corpora, so one decision may settle several
 rows:
 
-- **A. The uuid of the source document** (`catalog.uuid`): ISM, CSF,
-  Grundschutz++, and the documents' own uuids among IFA's 84.
+- **A. The uuid of the source document** (`catalog.uuid`,
+  `profile.uuid`): ISM, CSF, Grundschutz++, SP 800-53 (the catalogue
+  and its four profiles), and the documents' own uuids among IFA's 84.
 - **B. Back-matter resources that no link of a control names** (CSF 4
   uuids and 3 media types; Grundschutz++ one whole resource). In both
   corpora the root Set now carries the metadata links that name these
   resources by uuid, so without them the links resolve to nothing in the
-  bundle.
+  bundle. SP 800-53 is the exception that shows the question: the brief
+  I wrote told its agent to keep resources in the source's shape with
+  their uuids, as the ISM does, so its catalogue's 23 resource uuids and
+  2 media types, declared drops before, are carried now; the four
+  profiles' resources (one each) are still declared drops.
 - **C. IFA's classes decided on 2026-11-13** (revision history,
   directory of parties and roles, links to other serialisations, type
   tags, uuids). They were decided before the rule of 2026-11-14; under
@@ -97,6 +101,21 @@ Counts by the agent that verified the rework (not merged yet).
 | 957 (475 entries) | `FRD.data.all.*.updated[]` (date 85, comment 85, issue 1), `FRR.*.data.*.*.*.updated[]` (date 303, comment 303, issue 5), `KSI.*.indicators.*.updated[]` (date 87, comment 87, issue 1) | update history of the entry; carried in no object and not in the manifest | `cr26#/FRD/data/all/FRD-ACV/updated/0/date` = `2026-06-24` | content: on which day an entry changed and why, some with an issue number; the bundle holds only the publication's day. The one entry of the CTL overlay that has a history (IA-05, 2 values) is carried, so the same kind of value is carried in one place and dropped in three | |
 | 35 (one flow, family IEC) | `FRR.*.info.flows[]` (activity 1, description 1, nodes 8, steps' description 7, from 9, to 9) | process-flow diagrams: linked resources, not requirement data (D17) | `cr26#/FRR/IEC/info/flows/0/steps/0/to` = `IEC-CSO-EFR` | content: the diagram is written out in the source (activity, nodes, steps that name rules in order), not linked, so the declared reason does not fit | |
 
-## US.SP800-53
+## US.SP800-53 (115,680 values; 407 declared drops)
 
-Pending: the rework is being finished.
+Counts read from the committed record (merge 729c7734); readings by the
+agent that finished the rework.
+
+| Values | Path | Declared reason | Example | Reading (agent) | Decision |
+|---:|---|---|---|---|---|
+| 180 | `...controls[].props[].value` and `...controls[].controls[].props[].value` (23 + 157) | a withdrawn control is dropped as a tombstone; its lineage is inverted onto the successor | `withdrawn` (AC-2(10)) | not content: the successor's `replaces[]` and the annotation say "withdrawn" by where they stand. But it is a value that decides the representation, which is none of the three classes; either that class is admitted or the word is carried | |
+| 180 | `...props[].name` (23 + 157) | goes with the value above | `status` | not content: it selects the value above and shares its fate | |
+| 12 | `{high,low,moderate,privacy}.profile.back-matter.resources[].rlinks[].href` | a back-matter resource or an import link (as decided for IFA) | `../../../../nist.gov/SP800-53/rev5/xml/...catalog.xml` | content: which document, in three formats, the baseline selects from | |
+| 12 | `...profile.back-matter.resources[].rlinks[].media-type` | as above | `application/oscal.catalog+xml` | content | |
+| 4 | `...profile.back-matter.resources[].description` | as above | "NIST Special Publication 800-53 Revision 5..." | content | |
+| 4 | `...profile.back-matter.resources[].uuid` | as above | `84cbf061-...` | content together with the import link it resolves; nothing rebuilds it | |
+| 4 | `...profile.imports[].href` | profile resolution mechanics; the selection is the Set | `#84cbf061-...` | content: what the profile imports | |
+| 4 | `...profile.uuid` | the uuid of a source document (as decided for IFA) | `201765f8-...` | content: the document's identity; nothing rebuilds it | |
+| 1 | `nist.catalog.uuid` | as above | `ea7c7688-...` | content: as above | |
+| 3 | `...parts[].parts[].props[].value` | the print label of a statement item is derivable | `a.` on si-2.7_smt.a/b/c | content: SI-2(7) prints `a.` where every other enhancement prints `(a)`; the rule gives `(a)`, so this one is not rebuilt | |
+| 3 | `...parts[].parts[].props[].name` | goes with the value above | `label` | not content: shares the fate of the row above | |

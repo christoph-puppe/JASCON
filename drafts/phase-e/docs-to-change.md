@@ -64,7 +64,36 @@ SP 800-53 and CR26 land, so totals are written only at the end.
     right: mapping `placeholder` to `active` in the converter's table
     passes the ledger and only the converter's test catches it. The
     CR26 agent suggests a library check that each destination a
-    path-map row names is reached.
+    path-map row names is reached;
+  - SP 800-53: `assessment-for` does not fit the standard
+    assessment-criteria@1 (`by-statement` keys only the host
+    Requirement's kernel statements; 217 links name a statement part as
+    a whole, 6 leave the control, 1,087 objectives name another
+    statement than their parent; its `objectives` are untyped and it
+    has no member for the methods). D10 requires a payload that
+    addresses single statements to be keyed `by-statement`; the pinned
+    sp800-53a@1 writes `statement-id` inside a tree, so neither D10 nor
+    the standard facet has a form for it (3,707 links);
+  - SP 800-53: a withdrawn control without a successor must carry a
+    statement with modality and obligated party; cp-10.3 and sc-19 get
+    `unspecified` and the converter's default party;
+  - SP 800-53: a statement has no label member (1,122 item print
+    labels); a parameter has one `label` only (1,458 formal ODP labels
+    in odp@1);
+  - SP 800-53: two `related` relations name an object that does not
+    exist (au-9 and au-5.4 to AU-15, which moved to AU-5(5)); relations
+    are not closure-required, so the validator passes;
+  - the compat facet `https://ns.jascon.net/compat/oscal-1x`, version
+    1.0.0, is pinned with four different closed schemas (ISM,
+    Grundschutz++, CSF, SP 800-53);
+  - a manifest has one provenance: the four SP 800-53 profiles' author
+    and day stand only in their compat metadata;
+  - the ledger has no checked class for "a value that decides the
+    representation" (the 180 `withdrawn` status words of SP 800-53);
+  - SP 800-53: the brief I wrote made its agent carry the catalogue's
+    back-matter uuids and media types (25 values) that CSF and
+    Grundschutz++ still declare as drops: one decision on class B of
+    the declared-drops list settles all three.
 
 ## 2. README.md
 
@@ -72,6 +101,9 @@ SP 800-53 and CR26 land, so totals are written only at the end.
 |---|---|---|
 | 482 | AU.ISM row: "1,150 Requirements · 561 Sets": now 581 Sets | read |
 | 482 (DE.BSI row) | "651 Requirements carrying 999 statements · 221 params · 162 Sets": now 999 Requirements, one statement each, 288 Sets (126 of them the grouping of a control with nested controls) | read |
+| 504 | US.SP800-53: "1,014 Requirements ... 182 withdrawn tombstones": now 1,016 Requirements (cp-10.3 and sc-19 with lifecycle `withdrawn`), 180 withdrawn controls inverted | reported |
+| 600-601 | "the NIST SP 800-53 rules give what `convert_nist.py` gives": true again only once the app's SP 800-53 preset follows the rework | reported |
+| 21-25, 27 | "traced on one corpus so far"; "5,886/5,886": today's export run gives 4,198 of 4,198 on four corpora (measured). Wrong before phase E | reported (count measured) |
 | 505 | US.CSF: "106 Requirements · 29 Sets ... 91 withdrawn ... inverted": now 33 Sets; 87 withdrawn items inverted, 4 categories objects with lifecycle `withdrawn` | reported |
 | 261 | "6,916 objects in eleven bundles": ISM +20, CSF +4, Grundschutz++ +474, SP 800-53 and CR26 pending | reported |
 | 397-399 | totals over the bundles (6,914 objects, 4,583 Requirements, 1,066 Sets) | reported |
@@ -90,6 +122,8 @@ SP 800-53 and CR26 land, so totals are written only at the end.
 | 2002 | "ISM −29 %" | reported |
 | 2390 | "3,714 manifest-listed objects" | reported |
 | 2003 | "CR26 +55 %" (as README 408). Wrong before phase E | reported |
+| 930, 2149, 2375 | "5,886" round trip: 4,198 on four corpora today. Wrong before phase E | reported |
+| 2029-2033, 2059 | "the one corpus measured so far ... the other ten corpora are unmeasured"; "established at path level only": six corpora have a ledger now | reported |
 | 2276-2277, 2401-2402 | "two reports": the CR26 step compares three files, the two reports and the ledger record. Wrong before phase E | reported |
 | IV.5b, IV.6, IV.7, IV.9 | the phase E state: the ledger, the gate, R16 "converted losslessly", the twin's runs on Windows PowerShell 5.1 for #55 | (to write) |
 | older versions (`jascon-specification-1.0.0.md:125`, `jascon-v0.5-specification.md:90, 821`) | the same clause-granularity row; "106 Requirements + 29 Sets". Historical documents: the author decides whether they change | reported |
@@ -111,6 +145,8 @@ SP 800-53 and CR26 land, so totals are written only at the end.
 | appendix-f-objections.md:374 | "CR26 +55 %". Wrong before phase E | reported |
 | ch14-migration-playbooks.md §14.4 (298-318) | CR26: no word on status → lifecycle or on the KSI category ids; line 307 "`updated[]` → L0 versions plus manifest release notes" is wrong (the history is a declared drop); line 313 "`do_not_link` → annotations" is wrong (it goes to `terminology@1`) | reported |
 | appendix-a-shapes.md:20, 27 (and 21, 23) | 20: CR26 `updated[]` "absorbed" by `version`: it is dropped (475 entries, 957 values); 27: `do_not_link` cited as an annotation; 21 (aliases) and 23 (lifecycle) could cite the new CR26 cases | reported |
+| ch14-migration-playbooks.md:71-72, 80, 104-106 | "four outcomes"; "its one corpus"; revision history and the directory of parties are dropped by class (SP 800-53 now carries them) | reported |
+| appendix-d-stdlib-catalog.md D.10 | the compat residue table has no SP 800-53 row (5 Sets) | reported |
 | appendix-d-stdlib-catalog.md:222 | the CTL overlay "parked until...": drained into operations since gate 3. Wrong before phase E | reported |
 
 ## 5. Website (website/)
@@ -122,13 +158,15 @@ SP 800-53 and CR26 land, so totals are written only at the end.
 | src/evidence.html:154-159 and the four translations | the ledger sentence ("the ledgers found values that are lost all the same", "unaccounted, with no destination") and the table header need the fifth outcome and the new state | read |
 | src/index.html:144 and the four translations | the stats note on the ledger | read |
 | src/model.html:26 and the four translations | "Grundschutz++ contains 347 nested pseudo-controls that exist only to make clauses addressable" (see section 1) | read |
-| facts.json | AU.ISM 1,711 / 561 → 1,731 / 581; DE.BSI 813 / 651 / 162 → 1,287 / 999 / 288; US.CSF 135 / 29 → 139 / 33; re-measure with `python3 website/build.py --measure` after the last merge | reported (numbers checked against the bundles by me) |
+| src/evidence.html:84, src/index.html:139-140 and the translations | the export round-trip figure and the ledger lines (reported by the SP 800-53 agent) | reported |
+| facts.json | AU.ISM 1,711 / 561 → 1,731 / 581; DE.BSI 813 / 651 / 162 → 1,287 / 999 / 288; US.CSF 135 / 29 → 139 / 33; US.SP800-53 1,039 / 1,014 → 1,041 / 1,016; re-measure with `python3 website/build.py --measure` after the last merge | reported (numbers checked against the bundles by me) |
 
 ## 6. Elsewhere in the repository
 
 | Where | What is wrong | Source |
 |---|---|---|
 | .github/workflows/validators.yml:194-196 | the CR26 step's comment names four ledger outcomes; `not-content` is missing | reported |
+| jascon/SKILL.md:96, 102 | "four outcomes"; "the one converter with a ledger" (convert_nist.py not listed) | reported |
 | jascon/SKILL.md:168 | convert_bsi.py "Handles nested pseudo-controls, splitting them into statements" | read |
 | SKILL_jascon.zip | stale against the converters and tests | read |
 | drafts/gate-4-measurement.md:14 | "ISM round-trips 1,711/1,711": now 1,731/1,731 (measured, c310ab37) | reported (new count measured) |
@@ -137,4 +175,5 @@ SP 800-53 and CR26 land, so totals are written only at the end.
 | converted_examples/DE.BSI/oscal-export/geman.bsi-catalog.json | an older file the export script does not write | read |
 | drafts/jascon-decision-rationale-register.md:144; backlog row #41 | nested controls as statements; the BSI figures | reported |
 | DEEP_RESEARCH_REVIEW.md:90, 97 | nested controls as statements | reported |
+| jascon-app/readme.md:361-367, 426-427 | withdrawn controls not converted; "1,035 objects equal"; 1,035 objects, 1,918 statements (the SP 800-53 preset) | reported |
 | jascon-app: jascon-oscal.js:9-14, 376; readme.md:344; import.html:45, 93; PROGRESS.md:30; tests/oscal.test.mjs | the app's Grundschutz++ preset and its texts: being brought in line with the converter (author, 2026-11-14: "A. Bring both presets in line with the Python converters"); the SP 800-53 preset follows after that converter's rework | reported |
