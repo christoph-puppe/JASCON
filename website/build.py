@@ -139,6 +139,28 @@ def git(*args):
         return ""
 
 
+def listed_objects(bundle, counts):
+    """(objects the manifest lists, Attestations beside it) of a bundle the
+    validator found green.
+
+    A bundle's objects, as the pages count them, are the entries of its
+    manifest: those are the objects whose two digests the validator
+    recomputed. Since 2026-11-14 the validator also types and counts the
+    Attestations that lie beside a manifest (D3.1; backlog #46). They are no
+    entry of the manifest and have no pair of digests in it, so a page that
+    says "both digests of N objects" must not count them. A listed
+    Attestation is a failure of the run, and the run is green, so every
+    Attestation the report counts lies beside the manifest. The manifest is
+    read as well, and the two counts must agree."""
+    beside = counts.pop("attestation", 0)
+    manifest = json.loads(read(os.path.join(REPO, bundle, "content-manifest.json")))
+    listed = len(manifest["objects"])
+    if listed != sum(counts.values()):
+        die(f"{bundle}: its manifest lists {listed} objects, the validator typed "
+            f"{sum(counts.values())} beside {beside} Attestation(s)")
+    return listed, beside
+
+
 def measure():
     """Run the reference validator and read its report."""
     print("build.py: running", VALIDATOR_PY, "...")
@@ -170,13 +192,15 @@ def measure():
                 example_types = counts
             elif name.startswith("jascon/example-packs/"):
                 # the skill's worked advice pack(s) (CP-ADVICE-1): examples, not a corpus
-                packs.append({"path": name, "objects": sum(counts.values())})
+                listed, beside = listed_objects(name, counts)
+                packs.append({"path": name, "objects": listed, "attestations": beside})
             else:
                 corpus = name.split("/")[1]
                 if corpus not in CORPORA:
                     die(f"bundle {name} has no entry in CORPORA; add its title and licence")
-                bundles.append({"corpus": corpus, "path": name,
-                                "objects": sum(counts.values()), "types": counts})
+                listed, beside = listed_objects(name, counts)
+                bundles.append({"corpus": corpus, "path": name, "objects": listed,
+                                "attestations": beside, "types": counts})
     if not families or not bundles:
         die("could not read the validator's report; its output format changed")
 

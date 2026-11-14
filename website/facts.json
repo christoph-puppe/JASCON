@@ -1,11 +1,11 @@
 {
  "measured": {
   "date": "2026-11-14",
-  "commit": "f4c32fb8",
+  "commit": "d3d04b73",
   "by": "jascon/scripts/validate_core.py"
  },
  "vectors": {
-  "total": 665,
+  "total": 684,
   "families": [
    {
     "name": "jcs",
@@ -25,7 +25,7 @@
    },
    {
     "name": "attestation",
-    "vectors": 5
+    "vectors": 24
    },
    {
     "name": "facet",
@@ -86,6 +86,7 @@
    "corpus": "AU.ISM",
    "path": "converted_examples/AU.ISM/ism-core-bundle",
    "objects": 1711,
+   "attestations": 0,
    "types": {
     "requirement": 1150,
     "requirementSet": 561
@@ -95,6 +96,7 @@
    "corpus": "DE.BSI",
    "path": "converted_examples/DE.BSI/bsi-core-bundle",
    "objects": 813,
+   "attestations": 0,
    "types": {
     "requirement": 651,
     "requirementSet": 162
@@ -104,6 +106,7 @@
    "corpus": "US.CSF",
    "path": "converted_examples/US.CSF/csf-core-bundle",
    "objects": 135,
+   "attestations": 0,
    "types": {
     "requirement": 106,
     "requirementSet": 29
@@ -113,6 +116,7 @@
    "corpus": "US.IFA-GoodRead",
    "path": "converted_examples/US.IFA-GoodRead/ifa-core-bundle",
    "objects": 16,
+   "attestations": 1,
    "types": {
     "assessment": 1,
     "component": 6,
@@ -126,6 +130,7 @@
    "corpus": "US.SP800-53",
    "path": "converted_examples/US.SP800-53/sp800-53-core-bundle",
    "objects": 1039,
+   "attestations": 0,
    "types": {
     "requirement": 1014,
     "requirementSet": 25
@@ -151,11 +156,12 @@
  "example_packs": [
   {
    "path": "jascon/example-packs/dbvendor-server-7-advice",
-   "objects": 1
+   "objects": 1,
+   "attestations": 1
   }
  ],
  "validators": {
-  "python_lines": 2977,
-  "powershell_lines": 4016
+  "python_lines": 3072,
+  "powershell_lines": 4209
  }
 }
