@@ -1,0 +1,2243 @@
+{
+ "measures": "one row per source path and outcome; every source leaf value was traced and checked against the written files in the run that wrote this record, and is counted in one row",
+ "leaf-values": 49431,
+ "totals": {
+  "copied": 22879,
+  "transformed": 11372,
+  "intentionally-dropped": 13020,
+  "unaccounted": 2160
+ },
+ "verification-failures": [],
+ "unaccounted-paths": [
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].controls[].controls[].parts[].id",
+   "count": 4,
+   "pointers": [
+    "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/controls/0/parts/0/id",
+    "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/controls/0/parts/1/id",
+    "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/controls/1/parts/0/id"
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].controls[].links[].href",
+   "count": 8,
+   "pointers": [
+    "gspp#/catalog/groups/1/groups/1/controls/0/controls/3/controls/0/links/0/href",
+    "gspp#/catalog/groups/1/groups/1/controls/0/controls/3/controls/0/links/1/href",
+    "gspp#/catalog/groups/1/groups/1/controls/0/controls/3/controls/0/links/2/href"
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].controls[].links[].rel",
+   "count": 8,
+   "pointers": [
+    "gspp#/catalog/groups/1/groups/1/controls/0/controls/3/controls/0/links/0/rel",
+    "gspp#/catalog/groups/1/groups/1/controls/0/controls/3/controls/0/links/1/rel",
+    "gspp#/catalog/groups/1/groups/1/controls/0/controls/3/controls/0/links/2/rel"
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].controls[].parts[].id",
+   "count": 37,
+   "pointers": [
+    "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/parts/0/id",
+    "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/parts/1/id",
+    "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/1/parts/0/id"
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].links[].href",
+   "count": 67,
+   "pointers": [
+    "gspp#/catalog/groups/0/groups/4/controls/0/controls/3/links/0/href",
+    "gspp#/catalog/groups/0/groups/6/controls/0/controls/0/links/0/href",
+    "gspp#/catalog/groups/0/groups/6/controls/0/controls/1/links/0/href"
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].links[].rel",
+   "count": 67,
+   "pointers": [
+    "gspp#/catalog/groups/0/groups/4/controls/0/controls/3/links/0/rel",
+    "gspp#/catalog/groups/0/groups/6/controls/0/controls/0/links/0/rel",
+    "gspp#/catalog/groups/0/groups/6/controls/0/controls/1/links/0/rel"
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].parts[].id",
+   "count": 653,
+   "pointers": [
+    "gspp#/catalog/groups/0/groups/2/controls/0/controls/0/parts/0/id",
+    "gspp#/catalog/groups/0/groups/2/controls/0/controls/0/parts/1/id",
+    "gspp#/catalog/groups/0/groups/2/controls/0/controls/1/parts/0/id"
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].parts[].id",
+   "count": 1302,
+   "pointers": [
+    "gspp#/catalog/groups/0/groups/0/controls/0/parts/0/id",
+    "gspp#/catalog/groups/0/groups/0/controls/0/parts/1/id",
+    "gspp#/catalog/groups/0/groups/0/controls/1/parts/0/id"
+   ]
+  },
+  {
+   "path": "gspp.catalog.metadata.last-modified",
+   "count": 1,
+   "pointers": [
+    "gspp#/catalog/metadata/last-modified"
+   ]
+  },
+  {
+   "path": "gspp.catalog.metadata.links[].href",
+   "count": 1,
+   "pointers": [
+    "gspp#/catalog/metadata/links/0/href"
+   ]
+  },
+  {
+   "path": "gspp.catalog.metadata.links[].rel",
+   "count": 1,
+   "pointers": [
+    "gspp#/catalog/metadata/links/0/rel"
+   ]
+  },
+  {
+   "path": "gspp.catalog.metadata.links[].text",
+   "count": 1,
+   "pointers": [
+    "gspp#/catalog/metadata/links/0/text"
+   ]
+  },
+  {
+   "path": "gspp.catalog.metadata.props[].name",
+   "count": 3,
+   "pointers": [
+    "gspp#/catalog/metadata/props/0/name",
+    "gspp#/catalog/metadata/props/1/name",
+    "gspp#/catalog/metadata/props/2/name"
+   ]
+  },
+  {
+   "path": "gspp.catalog.metadata.props[].ns",
+   "count": 1,
+   "pointers": [
+    "gspp#/catalog/metadata/props/1/ns"
+   ]
+  },
+  {
+   "path": "gspp.catalog.metadata.props[].value",
+   "count": 3,
+   "pointers": [
+    "gspp#/catalog/metadata/props/0/value",
+    "gspp#/catalog/metadata/props/1/value",
+    "gspp#/catalog/metadata/props/2/value"
+   ]
+  },
+  {
+   "path": "gspp.catalog.metadata.remarks",
+   "count": 1,
+   "pointers": [
+    "gspp#/catalog/metadata/remarks"
+   ]
+  },
+  {
+   "path": "gspp.catalog.metadata.responsible-parties[].party-uuids[]",
+   "count": 1,
+   "pointers": [
+    "gspp#/catalog/metadata/responsible-parties/0/party-uuids/0"
+   ]
+  },
+  {
+   "path": "gspp.catalog.metadata.responsible-parties[].role-id",
+   "count": 1,
+   "pointers": [
+    "gspp#/catalog/metadata/responsible-parties/0/role-id"
+   ]
+  }
+ ],
+ "paths": [
+  {
+   "path": "gspp.catalog.back-matter.resources[].rlinks[].hashes[].algorithm",
+   "outcome": "intentionally-dropped",
+   "count": 1,
+   "example": "gspp#/catalog/back-matter/resources/0/rlinks/0/hashes/0/algorithm",
+   "reasons": [
+    {
+     "reason": "as decided for IFA on 2026-11-13: a back-matter resource that no link of a control names. A link that names a resource is written with the address the resource gives, and that address then has a destination",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.back-matter.resources[].rlinks[].hashes[].value",
+   "outcome": "intentionally-dropped",
+   "count": 1,
+   "example": "gspp#/catalog/back-matter/resources/0/rlinks/0/hashes/0/value",
+   "reasons": [
+    {
+     "reason": "as decided for IFA on 2026-11-13: a back-matter resource that no link of a control names. A link that names a resource is written with the address the resource gives, and that address then has a destination",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.back-matter.resources[].rlinks[].href",
+   "outcome": "intentionally-dropped",
+   "count": 1,
+   "example": "gspp#/catalog/back-matter/resources/0/rlinks/0/href",
+   "reasons": [
+    {
+     "reason": "as decided for IFA on 2026-11-13: a back-matter resource that no link of a control names. A link that names a resource is written with the address the resource gives, and that address then has a destination",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.back-matter.resources[].title",
+   "outcome": "intentionally-dropped",
+   "count": 1,
+   "example": "gspp#/catalog/back-matter/resources/0/title",
+   "reasons": [
+    {
+     "reason": "as decided for IFA on 2026-11-13: a back-matter resource that no link of a control names. A link that names a resource is written with the address the resource gives, and that address then has a destination",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.back-matter.resources[].uuid",
+   "outcome": "intentionally-dropped",
+   "count": 1,
+   "example": "gspp#/catalog/back-matter/resources/0/uuid",
+   "reasons": [
+    {
+     "reason": "as decided for IFA on 2026-11-13: a back-matter resource that no link of a control names. A link that names a resource is written with the address the resource gives, and that address then has a destination",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].class",
+   "outcome": "copied",
+   "count": 651,
+   "example": "gspp#/catalog/groups/0/groups/0/controls/0/class",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/smt/class",
+     "count": 651
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].class",
+   "outcome": "copied",
+   "count": 327,
+   "example": "gspp#/catalog/groups/0/groups/2/controls/0/controls/0/class",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/{statement}/class",
+     "count": 327
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].controls[].class",
+   "outcome": "copied",
+   "count": 19,
+   "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/class",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/{statement}/class",
+     "count": 19
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].controls[].controls[].class",
+   "outcome": "copied",
+   "count": 2,
+   "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/controls/0/class",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/{statement}/class",
+     "count": 2
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].controls[].controls[].id",
+   "outcome": "copied",
+   "count": 2,
+   "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/controls/0/id",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-narrative@1/by-statement/{statement}",
+     "count": 2,
+     "as": "key"
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/{statement}",
+     "count": 2,
+     "as": "key"
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1assessment-criteria@1/by-statement/{statement}",
+     "count": 1,
+     "as": "key"
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/{statement}",
+     "count": 2,
+     "as": "key"
+    },
+    {
+     "pointer": "/statements/[]/id",
+     "count": 2
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].controls[].controls[].parts[].id",
+   "outcome": "unaccounted",
+   "count": 4,
+   "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/controls/0/parts/0/id"
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].controls[].controls[].parts[].name",
+   "outcome": "copied",
+   "count": 2,
+   "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/controls/0/parts/1/name",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-narrative@1/by-statement/{statement}/guidance",
+     "count": 2,
+     "as": "key"
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].controls[].controls[].parts[].name",
+   "outcome": "intentionally-dropped",
+   "count": 2,
+   "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/controls/0/parts/0/name",
+   "reasons": [
+    {
+     "reason": "as decided for IFA on 2026-11-13: a type tag of a structural element: the part named `statement` is an entry of `statements[]`, and the bundle says by its shape what kind of thing it is",
+     "count": 2
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].controls[].controls[].parts[].props[].name",
+   "outcome": "copied",
+   "count": 2,
+   "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/controls/0/parts/0/props/0/name",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/{statement}/result",
+     "count": 2,
+     "as": "key"
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].controls[].controls[].parts[].props[].name",
+   "outcome": "transformed",
+   "count": 5,
+   "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/controls/0/parts/0/props/1/name",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1assessment-criteria@1/by-statement/{statement}/required-documentation",
+     "count": 1,
+     "as": "key",
+     "rule": "field name from the prop name (FIELD)"
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/{statement}/action",
+     "count": 2,
+     "as": "key",
+     "rule": "field name from the prop name (FIELD)"
+    },
+    {
+     "pointer": "/statements/[]/modality",
+     "count": 2,
+     "as": "key",
+     "rule": "field name from the prop name (FIELD)"
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].controls[].controls[].parts[].props[].ns",
+   "outcome": "intentionally-dropped",
+   "count": 7,
+   "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/controls/0/parts/0/props/0/ns",
+   "reasons": [
+    {
+     "reason": "the path map of this converter says so (absorbed): the namespace of a prop is the address of the CSV list its value is taken from; the pinned facet schema stands in its place, the address is not carried",
+     "count": 7
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].controls[].controls[].parts[].props[].value",
+   "outcome": "copied",
+   "count": 5,
+   "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/controls/0/parts/0/props/0/value",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1assessment-criteria@1/by-statement/{statement}/required-documentation/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/{statement}/action",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/{statement}/result",
+     "count": 2
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].controls[].controls[].parts[].props[].value",
+   "outcome": "transformed",
+   "count": 2,
+   "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/controls/0/parts/0/props/2/value",
+   "to": [
+    {
+     "pointer": "/statements/[]/modality",
+     "count": 2,
+     "rule": "modality code from the modal verb (MODAL)"
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].controls[].controls[].parts[].prose",
+   "outcome": "copied",
+   "count": 4,
+   "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/controls/0/parts/0/prose",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-narrative@1/by-statement/{statement}/guidance/de",
+     "count": 2
+    },
+    {
+     "pointer": "/statements/[]/prose/de",
+     "count": 2
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].controls[].controls[].props[].name",
+   "outcome": "copied",
+   "count": 2,
+   "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/controls/0/props/0/name",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/{statement}/alt-identifier",
+     "count": 2,
+     "as": "key"
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].controls[].controls[].props[].name",
+   "outcome": "transformed",
+   "count": 4,
+   "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/controls/0/props/1/name",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/{statement}/effort",
+     "count": 2,
+     "as": "key",
+     "rule": "field name from the prop name (FIELD)"
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/{statement}/sec-level",
+     "count": 2,
+     "as": "key",
+     "rule": "field name from the prop name (FIELD)"
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].controls[].controls[].props[].ns",
+   "outcome": "intentionally-dropped",
+   "count": 4,
+   "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/controls/0/props/1/ns",
+   "reasons": [
+    {
+     "reason": "the path map of this converter says so (absorbed): the namespace of a prop is the address of the CSV list its value is taken from; the pinned facet schema stands in its place, the address is not carried",
+     "count": 4
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].controls[].controls[].props[].value",
+   "outcome": "copied",
+   "count": 4,
+   "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/controls/0/props/0/value",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/{statement}/alt-identifier",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/{statement}/sec-level",
+     "count": 2
+    },
+    {
+     "pointer": "/schema/properties/observed-sec-levels/enum/[]",
+     "count": 2,
+     "rule": "a sec_level value as an entry of the enum of observed values in the pinned taxonomy schema",
+     "via": "a value observed more than once is listed once"
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].controls[].controls[].props[].value",
+   "outcome": "transformed",
+   "count": 2,
+   "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/controls/0/props/2/value",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/{statement}/effort",
+     "count": 2,
+     "rule": "effort level as an integer"
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].controls[].controls[].title",
+   "outcome": "copied",
+   "count": 2,
+   "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/controls/0/title",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/{statement}/title",
+     "count": 2
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].controls[].id",
+   "outcome": "copied",
+   "count": 19,
+   "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/id",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-narrative@1/by-statement/{statement}",
+     "count": 18,
+     "as": "key"
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/{statement}",
+     "count": 19,
+     "as": "key"
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1assessment-criteria@1/by-statement/{statement}",
+     "count": 18,
+     "as": "key"
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/{statement}",
+     "count": 13,
+     "as": "key"
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/{statement}",
+     "count": 19,
+     "as": "key"
+    },
+    {
+     "pointer": "/statements/[]/id",
+     "count": 19
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].controls[].links[].href",
+   "outcome": "unaccounted",
+   "count": 8,
+   "example": "gspp#/catalog/groups/1/groups/1/controls/0/controls/3/controls/0/links/0/href"
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].controls[].links[].rel",
+   "outcome": "unaccounted",
+   "count": 8,
+   "example": "gspp#/catalog/groups/1/groups/1/controls/0/controls/3/controls/0/links/0/rel"
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].controls[].params[].id",
+   "outcome": "copied",
+   "count": 4,
+   "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/params/0/id",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/param-extras/{param}",
+     "count": 4,
+     "as": "key"
+    },
+    {
+     "pointer": "/statements/[]/parameters/[]/name",
+     "count": 4
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].controls[].params[].label",
+   "outcome": "copied",
+   "count": 4,
+   "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/params/0/label",
+   "to": [
+    {
+     "pointer": "/statements/[]/parameters/[]/label",
+     "count": 4
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].controls[].params[].props[].name",
+   "outcome": "copied",
+   "count": 4,
+   "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/params/0/props/0/name",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/param-extras/{param}/alt-identifier",
+     "count": 4,
+     "as": "key"
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].controls[].params[].props[].value",
+   "outcome": "copied",
+   "count": 4,
+   "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/params/0/props/0/value",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/param-extras/{param}/alt-identifier",
+     "count": 4
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].controls[].parts[].id",
+   "outcome": "unaccounted",
+   "count": 37,
+   "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/parts/0/id"
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].controls[].parts[].name",
+   "outcome": "copied",
+   "count": 18,
+   "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/parts/1/name",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-narrative@1/by-statement/{statement}/guidance",
+     "count": 18,
+     "as": "key"
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].controls[].parts[].name",
+   "outcome": "intentionally-dropped",
+   "count": 19,
+   "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/parts/0/name",
+   "reasons": [
+    {
+     "reason": "as decided for IFA on 2026-11-13: a type tag of a structural element: the part named `statement` is an entry of `statements[]`, and the bundle says by its shape what kind of thing it is",
+     "count": 19
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].controls[].parts[].props[].name",
+   "outcome": "copied",
+   "count": 19,
+   "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/parts/0/props/1/name",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/{statement}/result",
+     "count": 19,
+     "as": "key"
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].controls[].parts[].props[].name",
+   "outcome": "transformed",
+   "count": 76,
+   "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/parts/0/props/0/name",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1assessment-criteria@1/by-statement/{statement}/required-documentation",
+     "count": 18,
+     "as": "key",
+     "rule": "field name from the prop name (FIELD)"
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/{statement}/action",
+     "count": 19,
+     "as": "key",
+     "rule": "field name from the prop name (FIELD)"
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/{statement}/result-specification",
+     "count": 10,
+     "as": "key",
+     "rule": "field name from the prop name (FIELD)"
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/{statement}/target-object-categories",
+     "count": 10,
+     "as": "key",
+     "rule": "field name from the prop name (FIELD)"
+    },
+    {
+     "pointer": "/statements/[]/modality",
+     "count": 19,
+     "as": "key",
+     "rule": "field name from the prop name (FIELD)"
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].controls[].parts[].props[].ns",
+   "outcome": "intentionally-dropped",
+   "count": 95,
+   "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/parts/0/props/0/ns",
+   "reasons": [
+    {
+     "reason": "the path map of this converter says so (absorbed): the namespace of a prop is the address of the CSV list its value is taken from; the pinned facet schema stands in its place, the address is not carried",
+     "count": 95
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].controls[].parts[].props[].value",
+   "outcome": "copied",
+   "count": 76,
+   "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/parts/0/props/0/value",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1assessment-criteria@1/by-statement/{statement}/required-documentation/[]",
+     "count": 18
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/{statement}/action",
+     "count": 19
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/{statement}/result",
+     "count": 19
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/{statement}/result-specification",
+     "count": 10
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/{statement}/target-object-categories/[]",
+     "count": 10
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].controls[].parts[].props[].value",
+   "outcome": "transformed",
+   "count": 19,
+   "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/parts/0/props/4/value",
+   "to": [
+    {
+     "pointer": "/statements/[]/modality",
+     "count": 19,
+     "rule": "modality code from the modal verb (MODAL)"
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].controls[].parts[].prose",
+   "outcome": "copied",
+   "count": 33,
+   "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/parts/1/prose",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-narrative@1/by-statement/{statement}/guidance/de",
+     "count": 18
+    },
+    {
+     "pointer": "/statements/[]/prose/de",
+     "count": 15
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].controls[].parts[].prose",
+   "outcome": "transformed",
+   "count": 4,
+   "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/parts/0/prose",
+   "to": [
+    {
+     "pointer": "/statements/[]/prose/de",
+     "count": 4,
+     "rule": "statement prose with every {{ insert: param, x }} rewritten to {param:x}"
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].controls[].props[].name",
+   "outcome": "copied",
+   "count": 80,
+   "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/props/0/name",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/{statement}/alt-identifier",
+     "count": 19,
+     "as": "key"
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/{statement}/tags",
+     "count": 9,
+     "as": "key"
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/{statement}/authenticity",
+     "count": 13,
+     "as": "key"
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/{statement}/availability",
+     "count": 13,
+     "as": "key"
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/{statement}/confidentiality",
+     "count": 13,
+     "as": "key"
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/{statement}/integrity",
+     "count": 13,
+     "as": "key"
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].controls[].props[].name",
+   "outcome": "transformed",
+   "count": 51,
+   "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/props/1/name",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/{statement}/effort",
+     "count": 19,
+     "as": "key",
+     "rule": "field name from the prop name (FIELD)"
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/{statement}/sec-level",
+     "count": 19,
+     "as": "key",
+     "rule": "field name from the prop name (FIELD)"
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/{statement}/threat-refs",
+     "count": 13,
+     "as": "key",
+     "rule": "field name from the prop name (FIELD)"
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].controls[].props[].ns",
+   "outcome": "intentionally-dropped",
+   "count": 112,
+   "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/props/1/ns",
+   "reasons": [
+    {
+     "reason": "the path map of this converter says so (absorbed): the namespace of a prop is the address of the CSV list its value is taken from; the pinned facet schema stands in its place, the address is not carried",
+     "count": 112
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].controls[].props[].value",
+   "outcome": "copied",
+   "count": 98,
+   "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/props/0/value",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/{statement}/alt-identifier",
+     "count": 19
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/{statement}/sec-level",
+     "count": 19
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/{statement}/tags/[]",
+     "count": 8
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/{statement}/authenticity",
+     "count": 13
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/{statement}/availability",
+     "count": 13
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/{statement}/confidentiality",
+     "count": 13
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/{statement}/integrity",
+     "count": 13
+    },
+    {
+     "pointer": "/schema/properties/observed-sec-levels/enum/[]",
+     "count": 1,
+     "rule": "a sec_level value as an entry of the enum of observed values in the pinned taxonomy schema"
+    },
+    {
+     "pointer": "/schema/properties/observed-sec-levels/enum/[]",
+     "count": 18,
+     "rule": "a sec_level value as an entry of the enum of observed values in the pinned taxonomy schema",
+     "via": "a value observed more than once is listed once"
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].controls[].props[].value",
+   "outcome": "transformed",
+   "count": 33,
+   "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/props/2/value",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/{statement}/effort",
+     "count": 19,
+     "rule": "effort level as an integer"
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/{statement}/tags/[]",
+     "count": 2,
+     "rule": "one term of a list packed into one string (split on commas, trimmed)"
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/{statement}/threat-refs/[]",
+     "count": 29,
+     "rule": "threat URI from one term of the threats list (split on commas, trimmed, spaces to hyphens)"
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].controls[].title",
+   "outcome": "copied",
+   "count": 19,
+   "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/title",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/{statement}/title",
+     "count": 19
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].id",
+   "outcome": "copied",
+   "count": 327,
+   "example": "gspp#/catalog/groups/0/groups/2/controls/0/controls/0/id",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-narrative@1/by-statement/{statement}",
+     "count": 326,
+     "as": "key"
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/{statement}",
+     "count": 327,
+     "as": "key"
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1assessment-criteria@1/by-statement/{statement}",
+     "count": 321,
+     "as": "key"
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/{statement}",
+     "count": 292,
+     "as": "key"
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/{statement}",
+     "count": 327,
+     "as": "key"
+    },
+    {
+     "pointer": "/statements/[]/id",
+     "count": 327
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].links[].href",
+   "outcome": "unaccounted",
+   "count": 67,
+   "example": "gspp#/catalog/groups/0/groups/4/controls/0/controls/3/links/0/href"
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].links[].rel",
+   "outcome": "unaccounted",
+   "count": 67,
+   "example": "gspp#/catalog/groups/0/groups/4/controls/0/controls/3/links/0/rel"
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].params[].id",
+   "outcome": "copied",
+   "count": 73,
+   "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/params/0/id",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/param-extras/{param}",
+     "count": 73,
+     "as": "key"
+    },
+    {
+     "pointer": "/statements/[]/parameters/[]/name",
+     "count": 73
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].params[].label",
+   "outcome": "copied",
+   "count": 73,
+   "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/params/0/label",
+   "to": [
+    {
+     "pointer": "/statements/[]/parameters/[]/label",
+     "count": 73
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].params[].props[].name",
+   "outcome": "copied",
+   "count": 73,
+   "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/params/0/props/0/name",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/param-extras/{param}/alt-identifier",
+     "count": 73,
+     "as": "key"
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].params[].props[].value",
+   "outcome": "copied",
+   "count": 73,
+   "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/params/0/props/0/value",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/param-extras/{param}/alt-identifier",
+     "count": 73
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].params[].values[]",
+   "outcome": "copied",
+   "count": 1,
+   "example": "gspp#/catalog/groups/15/groups/0/controls/0/controls/3/params/0/values/0",
+   "to": [
+    {
+     "pointer": "/statements/[]/parameters/[]/default",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].parts[].id",
+   "outcome": "unaccounted",
+   "count": 653,
+   "example": "gspp#/catalog/groups/0/groups/2/controls/0/controls/0/parts/0/id"
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].parts[].name",
+   "outcome": "copied",
+   "count": 326,
+   "example": "gspp#/catalog/groups/0/groups/2/controls/0/controls/0/parts/1/name",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-narrative@1/by-statement/{statement}/guidance",
+     "count": 326,
+     "as": "key"
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].parts[].name",
+   "outcome": "intentionally-dropped",
+   "count": 327,
+   "example": "gspp#/catalog/groups/0/groups/2/controls/0/controls/0/parts/0/name",
+   "reasons": [
+    {
+     "reason": "as decided for IFA on 2026-11-13: a type tag of a structural element: the part named `statement` is an entry of `statements[]`, and the bundle says by its shape what kind of thing it is",
+     "count": 327
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].parts[].props[].name",
+   "outcome": "copied",
+   "count": 327,
+   "example": "gspp#/catalog/groups/0/groups/2/controls/0/controls/0/parts/0/props/1/name",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/{statement}/result",
+     "count": 327,
+     "as": "key"
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].parts[].props[].name",
+   "outcome": "transformed",
+   "count": 1305,
+   "example": "gspp#/catalog/groups/0/groups/2/controls/0/controls/0/parts/0/props/0/name",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1assessment-criteria@1/by-statement/{statement}/required-documentation",
+     "count": 321,
+     "as": "key",
+     "rule": "field name from the prop name (FIELD)"
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/{statement}/action",
+     "count": 327,
+     "as": "key",
+     "rule": "field name from the prop name (FIELD)"
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/{statement}/result-specification",
+     "count": 138,
+     "as": "key",
+     "rule": "field name from the prop name (FIELD)"
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/{statement}/target-object-categories",
+     "count": 192,
+     "as": "key",
+     "rule": "field name from the prop name (FIELD)"
+    },
+    {
+     "pointer": "/statements/[]/modality",
+     "count": 327,
+     "as": "key",
+     "rule": "field name from the prop name (FIELD)"
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].parts[].props[].ns",
+   "outcome": "intentionally-dropped",
+   "count": 1632,
+   "example": "gspp#/catalog/groups/0/groups/2/controls/0/controls/0/parts/0/props/0/ns",
+   "reasons": [
+    {
+     "reason": "the path map of this converter says so (absorbed): the namespace of a prop is the address of the CSV list its value is taken from; the pinned facet schema stands in its place, the address is not carried",
+     "count": 1632
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].parts[].props[].value",
+   "outcome": "copied",
+   "count": 1305,
+   "example": "gspp#/catalog/groups/0/groups/2/controls/0/controls/0/parts/0/props/0/value",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1assessment-criteria@1/by-statement/{statement}/required-documentation/[]",
+     "count": 321
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/{statement}/action",
+     "count": 327
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/{statement}/result",
+     "count": 327
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/{statement}/result-specification",
+     "count": 138
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/{statement}/target-object-categories/[]",
+     "count": 192
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].parts[].props[].value",
+   "outcome": "transformed",
+   "count": 327,
+   "example": "gspp#/catalog/groups/0/groups/2/controls/0/controls/0/parts/0/props/3/value",
+   "to": [
+    {
+     "pointer": "/statements/[]/modality",
+     "count": 327,
+     "rule": "modality code from the modal verb (MODAL)"
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].parts[].prose",
+   "outcome": "copied",
+   "count": 587,
+   "example": "gspp#/catalog/groups/0/groups/2/controls/0/controls/0/parts/0/prose",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-narrative@1/by-statement/{statement}/guidance/de",
+     "count": 326
+    },
+    {
+     "pointer": "/statements/[]/prose/de",
+     "count": 261
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].parts[].prose",
+   "outcome": "transformed",
+   "count": 66,
+   "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/parts/0/prose",
+   "to": [
+    {
+     "pointer": "/statements/[]/prose/de",
+     "count": 66,
+     "rule": "statement prose with every {{ insert: param, x }} rewritten to {param:x}"
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].props[].name",
+   "outcome": "copied",
+   "count": 1643,
+   "example": "gspp#/catalog/groups/0/groups/2/controls/0/controls/0/props/0/name",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/{statement}/alt-identifier",
+     "count": 327,
+     "as": "key"
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/{statement}/tags",
+     "count": 148,
+     "as": "key"
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/{statement}/authenticity",
+     "count": 292,
+     "as": "key"
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/{statement}/availability",
+     "count": 292,
+     "as": "key"
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/{statement}/confidentiality",
+     "count": 292,
+     "as": "key"
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/{statement}/integrity",
+     "count": 292,
+     "as": "key"
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].props[].name",
+   "outcome": "transformed",
+   "count": 946,
+   "example": "gspp#/catalog/groups/0/groups/2/controls/0/controls/0/props/1/name",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/{statement}/effort",
+     "count": 327,
+     "as": "key",
+     "rule": "field name from the prop name (FIELD)"
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/{statement}/sec-level",
+     "count": 327,
+     "as": "key",
+     "rule": "field name from the prop name (FIELD)"
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/{statement}/threat-refs",
+     "count": 292,
+     "as": "key",
+     "rule": "field name from the prop name (FIELD)"
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].props[].ns",
+   "outcome": "intentionally-dropped",
+   "count": 2262,
+   "example": "gspp#/catalog/groups/0/groups/2/controls/0/controls/0/props/1/ns",
+   "reasons": [
+    {
+     "reason": "the path map of this converter says so (absorbed): the namespace of a prop is the address of the CSV list its value is taken from; the pinned facet schema stands in its place, the address is not carried",
+     "count": 2262
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].props[].value",
+   "outcome": "copied",
+   "count": 1936,
+   "example": "gspp#/catalog/groups/0/groups/2/controls/0/controls/0/props/0/value",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/{statement}/alt-identifier",
+     "count": 327
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/{statement}/sec-level",
+     "count": 327
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/{statement}/tags/[]",
+     "count": 114
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/{statement}/authenticity",
+     "count": 292
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/{statement}/availability",
+     "count": 292
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/{statement}/confidentiality",
+     "count": 292
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/{statement}/integrity",
+     "count": 292
+    },
+    {
+     "pointer": "/schema/properties/observed-sec-levels/enum/[]",
+     "count": 327,
+     "rule": "a sec_level value as an entry of the enum of observed values in the pinned taxonomy schema",
+     "via": "a value observed more than once is listed once"
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].props[].value",
+   "outcome": "transformed",
+   "count": 653,
+   "example": "gspp#/catalog/groups/0/groups/2/controls/0/controls/0/props/2/value",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/{statement}/effort",
+     "count": 327,
+     "rule": "effort level as an integer"
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/{statement}/tags/[]",
+     "count": 73,
+     "rule": "one term of a list packed into one string (split on commas, trimmed)"
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/{statement}/threat-refs/[]",
+     "count": 655,
+     "rule": "threat URI from one term of the threats list (split on commas, trimmed, spaces to hyphens)"
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].controls[].title",
+   "outcome": "copied",
+   "count": 327,
+   "example": "gspp#/catalog/groups/0/groups/2/controls/0/controls/0/title",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/{statement}/title",
+     "count": 327
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].id",
+   "outcome": "copied",
+   "count": 651,
+   "example": "gspp#/catalog/groups/0/groups/0/controls/0/id",
+   "to": [
+    {
+     "pointer": "/id",
+     "count": 651,
+     "rule": "requirement URI from the control id"
+    },
+    {
+     "pointer": "/label",
+     "count": 651
+    },
+    {
+     "pointer": "/members/[]/ref",
+     "count": 1302,
+     "rule": "requirement URI from the control id"
+    },
+    {
+     "pointer": "/objects/[]/id",
+     "count": 651,
+     "rule": "requirement URI from the control id"
+    },
+    {
+     "pointer": "/objects/[]/path",
+     "count": 651,
+     "rule": "file path of a Requirement from the control id"
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].links[].href",
+   "outcome": "transformed",
+   "count": 191,
+   "example": "gspp#/catalog/groups/0/groups/1/controls/0/links/0/href",
+   "to": [
+    {
+     "pointer": "/relations/[]/ref",
+     "count": 191,
+     "rule": "requirement URI from a link to a control (#id)"
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].links[].rel",
+   "outcome": "copied",
+   "count": 191,
+   "example": "gspp#/catalog/groups/0/groups/1/controls/0/links/0/rel",
+   "to": [
+    {
+     "pointer": "/relations/[]/type",
+     "count": 191
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].params[].id",
+   "outcome": "copied",
+   "count": 144,
+   "example": "gspp#/catalog/groups/0/groups/0/controls/0/params/0/id",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/param-extras/{param}",
+     "count": 144,
+     "as": "key"
+    },
+    {
+     "pointer": "/statements/[]/parameters/[]/name",
+     "count": 144
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].params[].label",
+   "outcome": "copied",
+   "count": 144,
+   "example": "gspp#/catalog/groups/0/groups/0/controls/0/params/0/label",
+   "to": [
+    {
+     "pointer": "/statements/[]/parameters/[]/label",
+     "count": 144
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].params[].props[].name",
+   "outcome": "copied",
+   "count": 144,
+   "example": "gspp#/catalog/groups/0/groups/0/controls/0/params/0/props/0/name",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/param-extras/{param}/alt-identifier",
+     "count": 144,
+     "as": "key"
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].params[].props[].value",
+   "outcome": "copied",
+   "count": 144,
+   "example": "gspp#/catalog/groups/0/groups/0/controls/0/params/0/props/0/value",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/param-extras/{param}/alt-identifier",
+     "count": 144
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].params[].values[]",
+   "outcome": "copied",
+   "count": 1,
+   "example": "gspp#/catalog/groups/0/groups/0/controls/0/params/0/values/0",
+   "to": [
+    {
+     "pointer": "/statements/[]/parameters/[]/default",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].parts[].id",
+   "outcome": "unaccounted",
+   "count": 1302,
+   "example": "gspp#/catalog/groups/0/groups/0/controls/0/parts/0/id"
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].parts[].name",
+   "outcome": "copied",
+   "count": 651,
+   "example": "gspp#/catalog/groups/0/groups/0/controls/0/parts/1/name",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-narrative@1/by-statement/smt/guidance",
+     "count": 651,
+     "as": "key"
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].parts[].name",
+   "outcome": "intentionally-dropped",
+   "count": 651,
+   "example": "gspp#/catalog/groups/0/groups/0/controls/0/parts/0/name",
+   "reasons": [
+    {
+     "reason": "as decided for IFA on 2026-11-13: a type tag of a structural element: the part named `statement` is an entry of `statements[]`, and the bundle says by its shape what kind of thing it is",
+     "count": 651
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].parts[].props[].name",
+   "outcome": "copied",
+   "count": 651,
+   "example": "gspp#/catalog/groups/0/groups/0/controls/0/parts/0/props/1/name",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/smt/result",
+     "count": 651,
+     "as": "key"
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].parts[].props[].name",
+   "outcome": "transformed",
+   "count": 2657,
+   "example": "gspp#/catalog/groups/0/groups/0/controls/0/parts/0/props/0/name",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1assessment-criteria@1/by-statement/smt/required-documentation",
+     "count": 620,
+     "as": "key",
+     "rule": "field name from the prop name (FIELD)"
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/smt/action",
+     "count": 651,
+     "as": "key",
+     "rule": "field name from the prop name (FIELD)"
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/smt/result-specification",
+     "count": 303,
+     "as": "key",
+     "rule": "field name from the prop name (FIELD)"
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/smt/target-object-categories",
+     "count": 432,
+     "as": "key",
+     "rule": "field name from the prop name (FIELD)"
+    },
+    {
+     "pointer": "/statements/[]/modality",
+     "count": 651,
+     "as": "key",
+     "rule": "field name from the prop name (FIELD)"
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].parts[].props[].ns",
+   "outcome": "intentionally-dropped",
+   "count": 3308,
+   "example": "gspp#/catalog/groups/0/groups/0/controls/0/parts/0/props/0/ns",
+   "reasons": [
+    {
+     "reason": "the path map of this converter says so (absorbed): the namespace of a prop is the address of the CSV list its value is taken from; the pinned facet schema stands in its place, the address is not carried",
+     "count": 3308
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].parts[].props[].value",
+   "outcome": "copied",
+   "count": 2617,
+   "example": "gspp#/catalog/groups/0/groups/0/controls/0/parts/0/props/0/value",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1assessment-criteria@1/by-statement/smt/required-documentation/[]",
+     "count": 620
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/smt/action",
+     "count": 651
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/smt/result",
+     "count": 651
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/smt/result-specification",
+     "count": 303
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/smt/target-object-categories/[]",
+     "count": 392
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].parts[].props[].value",
+   "outcome": "transformed",
+   "count": 691,
+   "example": "gspp#/catalog/groups/0/groups/0/controls/0/parts/0/props/4/value",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/smt/target-object-categories/[]",
+     "count": 80,
+     "rule": "one term of a list packed into one string (split on commas, trimmed)"
+    },
+    {
+     "pointer": "/statements/[]/modality",
+     "count": 651,
+     "rule": "modality code from the modal verb (MODAL)"
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].parts[].prose",
+   "outcome": "copied",
+   "count": 1164,
+   "example": "gspp#/catalog/groups/0/groups/0/controls/0/parts/1/prose",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-narrative@1/by-statement/smt/guidance/de",
+     "count": 651
+    },
+    {
+     "pointer": "/statements/[]/prose/de",
+     "count": 513
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].parts[].prose",
+   "outcome": "transformed",
+   "count": 138,
+   "example": "gspp#/catalog/groups/0/groups/0/controls/0/parts/0/prose",
+   "to": [
+    {
+     "pointer": "/statements/[]/prose/de",
+     "count": 138,
+     "rule": "statement prose with every {{ insert: param, x }} rewritten to {param:x}"
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].props[].name",
+   "outcome": "copied",
+   "count": 2692,
+   "example": "gspp#/catalog/groups/0/groups/2/controls/0/props/3/name",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/smt/tags",
+     "count": 313,
+     "as": "key"
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/smt/authenticity",
+     "count": 594,
+     "as": "key"
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/smt/availability",
+     "count": 595,
+     "as": "key"
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/smt/confidentiality",
+     "count": 595,
+     "as": "key"
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/smt/integrity",
+     "count": 595,
+     "as": "key"
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].props[].name",
+   "outcome": "transformed",
+   "count": 2548,
+   "example": "gspp#/catalog/groups/0/groups/0/controls/0/props/0/name",
+   "to": [
+    {
+     "pointer": "/aliases/[]/scheme",
+     "count": 651,
+     "rule": "alias scheme from the prop name (ALIAS_SCHEME)"
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/smt/effort",
+     "count": 651,
+     "as": "key",
+     "rule": "field name from the prop name (FIELD)"
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/smt/sec-level",
+     "count": 651,
+     "as": "key",
+     "rule": "field name from the prop name (FIELD)"
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/smt/threat-refs",
+     "count": 595,
+     "as": "key",
+     "rule": "field name from the prop name (FIELD)"
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].props[].ns",
+   "outcome": "intentionally-dropped",
+   "count": 4589,
+   "example": "gspp#/catalog/groups/0/groups/0/controls/0/props/1/ns",
+   "reasons": [
+    {
+     "reason": "the path map of this converter says so (absorbed): the namespace of a prop is the address of the CSV list its value is taken from; the pinned facet schema stands in its place, the address is not carried",
+     "count": 4589
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].props[].value",
+   "outcome": "copied",
+   "count": 3904,
+   "example": "gspp#/catalog/groups/0/groups/0/controls/0/props/0/value",
+   "to": [
+    {
+     "pointer": "/aliases/[]/value",
+     "count": 651
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/smt/sec-level",
+     "count": 651
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/smt/tags/[]",
+     "count": 223
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/smt/authenticity",
+     "count": 594
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/smt/availability",
+     "count": 595
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/smt/confidentiality",
+     "count": 595
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/smt/integrity",
+     "count": 595
+    },
+    {
+     "pointer": "/id",
+     "count": 2,
+     "rule": "baseline Set URI from the sec_level of a top-level control"
+    },
+    {
+     "pointer": "/id",
+     "count": 649,
+     "rule": "baseline Set URI from the sec_level of a top-level control",
+     "via": "the top-level controls of one sec_level name one baseline Set, written once"
+    },
+    {
+     "pointer": "/objects/[]/id",
+     "count": 2,
+     "rule": "baseline Set URI from the sec_level of a top-level control"
+    },
+    {
+     "pointer": "/objects/[]/id",
+     "count": 649,
+     "rule": "baseline Set URI from the sec_level of a top-level control",
+     "via": "the top-level controls of one sec_level name one baseline Set, written once"
+    },
+    {
+     "pointer": "/objects/[]/path",
+     "count": 2,
+     "rule": "file path of a baseline Set from the sec_level of a top-level control"
+    },
+    {
+     "pointer": "/objects/[]/path",
+     "count": 649,
+     "rule": "file path of a baseline Set from the sec_level of a top-level control",
+     "via": "the top-level controls of one sec_level name one baseline Set, written once"
+    },
+    {
+     "pointer": "/schema/properties/observed-sec-levels/enum/[]",
+     "count": 1,
+     "rule": "a sec_level value as an entry of the enum of observed values in the pinned taxonomy schema"
+    },
+    {
+     "pointer": "/schema/properties/observed-sec-levels/enum/[]",
+     "count": 650,
+     "rule": "a sec_level value as an entry of the enum of observed values in the pinned taxonomy schema",
+     "via": "a value observed more than once is listed once"
+    },
+    {
+     "pointer": "/title/de",
+     "count": 2,
+     "rule": "baseline Set title from the sec_level of a top-level control"
+    },
+    {
+     "pointer": "/title/de",
+     "count": 649,
+     "rule": "baseline Set title from the sec_level of a top-level control",
+     "via": "the top-level controls of one sec_level name one baseline Set, written once"
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].props[].value",
+   "outcome": "transformed",
+   "count": 1336,
+   "example": "gspp#/catalog/groups/0/groups/0/controls/0/props/2/value",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/smt/effort",
+     "count": 651,
+     "rule": "effort level as an integer"
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/smt/tags/[]",
+     "count": 202,
+     "rule": "one term of a list packed into one string (split on commas, trimmed)"
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/smt/threat-refs/[]",
+     "count": 1279,
+     "rule": "threat URI from one term of the threats list (split on commas, trimmed, spaces to hyphens)"
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].controls[].title",
+   "outcome": "copied",
+   "count": 651,
+   "example": "gspp#/catalog/groups/0/groups/0/controls/0/title",
+   "to": [
+    {
+     "pointer": "/title/de",
+     "count": 651
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].id",
+   "outcome": "transformed",
+   "count": 139,
+   "example": "gspp#/catalog/groups/0/groups/0/id",
+   "to": [
+    {
+     "pointer": "/id",
+     "count": 139,
+     "rule": "taxonomy Set URI from the group id"
+    },
+    {
+     "pointer": "/members/[]/ref",
+     "count": 139,
+     "rule": "taxonomy Set URI from the group id"
+    },
+    {
+     "pointer": "/objects/[]/id",
+     "count": 139,
+     "rule": "taxonomy Set URI from the group id"
+    },
+    {
+     "pointer": "/objects/[]/path",
+     "count": 139,
+     "rule": "file path of a taxonomy Set from the group id"
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].props[].name",
+   "outcome": "copied",
+   "count": 139,
+   "example": "gspp#/catalog/groups/0/groups/0/props/0/name",
+   "to": [
+    {
+     "pointer": "/label",
+     "count": 139,
+     "as": "key"
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].props[].name",
+   "outcome": "transformed",
+   "count": 139,
+   "example": "gspp#/catalog/groups/0/groups/0/props/1/name",
+   "to": [
+    {
+     "pointer": "/aliases/[]/scheme",
+     "count": 139,
+     "rule": "alias scheme from the prop name (ALIAS_SCHEME)"
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].props[].value",
+   "outcome": "copied",
+   "count": 278,
+   "example": "gspp#/catalog/groups/0/groups/0/props/0/value",
+   "to": [
+    {
+     "pointer": "/aliases/[]/value",
+     "count": 139
+    },
+    {
+     "pointer": "/label",
+     "count": 139
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].groups[].title",
+   "outcome": "copied",
+   "count": 139,
+   "example": "gspp#/catalog/groups/0/groups/0/title",
+   "to": [
+    {
+     "pointer": "/title/de",
+     "count": 139
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].id",
+   "outcome": "transformed",
+   "count": 20,
+   "example": "gspp#/catalog/groups/0/id",
+   "to": [
+    {
+     "pointer": "/id",
+     "count": 20,
+     "rule": "taxonomy Set URI from the group id"
+    },
+    {
+     "pointer": "/members/[]/ref",
+     "count": 20,
+     "rule": "taxonomy Set URI from the group id"
+    },
+    {
+     "pointer": "/objects/[]/id",
+     "count": 20,
+     "rule": "taxonomy Set URI from the group id"
+    },
+    {
+     "pointer": "/objects/[]/path",
+     "count": 20,
+     "rule": "file path of a taxonomy Set from the group id"
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].props[].name",
+   "outcome": "copied",
+   "count": 20,
+   "example": "gspp#/catalog/groups/0/props/0/name",
+   "to": [
+    {
+     "pointer": "/label",
+     "count": 20,
+     "as": "key"
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].props[].name",
+   "outcome": "transformed",
+   "count": 20,
+   "example": "gspp#/catalog/groups/0/props/1/name",
+   "to": [
+    {
+     "pointer": "/aliases/[]/scheme",
+     "count": 20,
+     "rule": "alias scheme from the prop name (ALIAS_SCHEME)"
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].props[].remarks",
+   "outcome": "copied",
+   "count": 20,
+   "example": "gspp#/catalog/groups/0/props/0/remarks",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-narrative@1/description/de",
+     "count": 20
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].props[].value",
+   "outcome": "copied",
+   "count": 40,
+   "example": "gspp#/catalog/groups/0/props/0/value",
+   "to": [
+    {
+     "pointer": "/aliases/[]/value",
+     "count": 20
+    },
+    {
+     "pointer": "/label",
+     "count": 20
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.groups[].title",
+   "outcome": "copied",
+   "count": 20,
+   "example": "gspp#/catalog/groups/0/title",
+   "to": [
+    {
+     "pointer": "/title/de",
+     "count": 20
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.metadata.last-modified",
+   "outcome": "unaccounted",
+   "count": 1,
+   "example": "gspp#/catalog/metadata/last-modified"
+  },
+  {
+   "path": "gspp.catalog.metadata.links[].href",
+   "outcome": "unaccounted",
+   "count": 1,
+   "example": "gspp#/catalog/metadata/links/0/href"
+  },
+  {
+   "path": "gspp.catalog.metadata.links[].rel",
+   "outcome": "unaccounted",
+   "count": 1,
+   "example": "gspp#/catalog/metadata/links/0/rel"
+  },
+  {
+   "path": "gspp.catalog.metadata.links[].text",
+   "outcome": "unaccounted",
+   "count": 1,
+   "example": "gspp#/catalog/metadata/links/0/text"
+  },
+  {
+   "path": "gspp.catalog.metadata.oscal-version",
+   "outcome": "copied",
+   "count": 1,
+   "example": "gspp#/catalog/metadata/oscal-version",
+   "to": [
+    {
+     "pointer": "/provenance/sources/[]/oscal-version",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.metadata.parties[].email-addresses[]",
+   "outcome": "intentionally-dropped",
+   "count": 1,
+   "example": "gspp#/catalog/metadata/parties/0/email-addresses/0",
+   "reasons": [
+    {
+     "reason": "as decided for IFA on 2026-11-13: the source's directory of parties and roles: a party is a landmark URI and there is no party object (register, backlog #16)",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.metadata.parties[].name",
+   "outcome": "intentionally-dropped",
+   "count": 1,
+   "example": "gspp#/catalog/metadata/parties/0/name",
+   "reasons": [
+    {
+     "reason": "as decided for IFA on 2026-11-13: the source's directory of parties and roles: a party is a landmark URI and there is no party object (register, backlog #16)",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.metadata.parties[].type",
+   "outcome": "intentionally-dropped",
+   "count": 1,
+   "example": "gspp#/catalog/metadata/parties/0/type",
+   "reasons": [
+    {
+     "reason": "as decided for IFA on 2026-11-13: the source's directory of parties and roles: a party is a landmark URI and there is no party object (register, backlog #16)",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.metadata.parties[].uuid",
+   "outcome": "intentionally-dropped",
+   "count": 1,
+   "example": "gspp#/catalog/metadata/parties/0/uuid",
+   "reasons": [
+    {
+     "reason": "as decided for IFA on 2026-11-13: the source's directory of parties and roles: a party is a landmark URI and there is no party object (register, backlog #16)",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.metadata.props[].name",
+   "outcome": "unaccounted",
+   "count": 3,
+   "example": "gspp#/catalog/metadata/props/0/name"
+  },
+  {
+   "path": "gspp.catalog.metadata.props[].ns",
+   "outcome": "unaccounted",
+   "count": 1,
+   "example": "gspp#/catalog/metadata/props/1/ns"
+  },
+  {
+   "path": "gspp.catalog.metadata.props[].value",
+   "outcome": "unaccounted",
+   "count": 3,
+   "example": "gspp#/catalog/metadata/props/0/value"
+  },
+  {
+   "path": "gspp.catalog.metadata.remarks",
+   "outcome": "unaccounted",
+   "count": 1,
+   "example": "gspp#/catalog/metadata/remarks"
+  },
+  {
+   "path": "gspp.catalog.metadata.responsible-parties[].party-uuids[]",
+   "outcome": "unaccounted",
+   "count": 1,
+   "example": "gspp#/catalog/metadata/responsible-parties/0/party-uuids/0"
+  },
+  {
+   "path": "gspp.catalog.metadata.responsible-parties[].role-id",
+   "outcome": "unaccounted",
+   "count": 1,
+   "example": "gspp#/catalog/metadata/responsible-parties/0/role-id"
+  },
+  {
+   "path": "gspp.catalog.metadata.roles[].id",
+   "outcome": "intentionally-dropped",
+   "count": 1,
+   "example": "gspp#/catalog/metadata/roles/0/id",
+   "reasons": [
+    {
+     "reason": "as decided for IFA on 2026-11-13: the source's directory of parties and roles: a party is a landmark URI and there is no party object (register, backlog #16)",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.metadata.roles[].title",
+   "outcome": "intentionally-dropped",
+   "count": 1,
+   "example": "gspp#/catalog/metadata/roles/0/title",
+   "reasons": [
+    {
+     "reason": "as decided for IFA on 2026-11-13: the source's directory of parties and roles: a party is a landmark URI and there is no party object (register, backlog #16)",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.metadata.title",
+   "outcome": "copied",
+   "count": 1,
+   "example": "gspp#/catalog/metadata/title",
+   "to": [
+    {
+     "pointer": "/provenance/sources/[]/title",
+     "count": 1
+    },
+    {
+     "pointer": "/title/de",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.metadata.version",
+   "outcome": "copied",
+   "count": 1,
+   "example": "gspp#/catalog/metadata/version",
+   "to": [
+    {
+     "pointer": "/objects/[]/version",
+     "count": 813
+    },
+    {
+     "pointer": "/provenance/sources/[]/version",
+     "count": 1
+    },
+    {
+     "pointer": "/version",
+     "count": 813
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.uuid",
+   "outcome": "intentionally-dropped",
+   "count": 1,
+   "example": "gspp#/catalog/uuid",
+   "reasons": [
+    {
+     "reason": "as decided for IFA on 2026-11-13: the uuid of a source element, here of the catalogue document itself: JASCON objects get URIs minted from ids and titles, the uuid is not carried",
+     "count": 1
+    }
+   ]
+  }
+ ]
+}

@@ -3225,37 +3225,240 @@
  "tag-value-inconsistencies": {
   "Compliance Management": 6
  },
+ "ledger": {
+  "file": "bsi-conversion-ledger.json",
+  "leaf-values": 49431,
+  "totals": {
+   "copied": 22879,
+   "transformed": 11372,
+   "intentionally-dropped": 13020,
+   "unaccounted": 2160
+  },
+  "verification-failures": 0,
+  "files-read-back": 820,
+  "names-that-select-a-field": {
+   "copied-as-a-key-only": 6793,
+   "transformed-to-a-field-name-or-scheme": 7751
+  },
+  "rules": [
+   {
+    "rule": "requirement URI from the control id",
+    "source-values": 651
+   },
+   {
+    "rule": "file path of a Requirement from the control id",
+    "source-values": 651
+   },
+   {
+    "rule": "requirement URI from a link to a control (#id)",
+    "source-values": 191
+   },
+   {
+    "rule": "a link that names a back-matter resource (#uuid): the address the resource gives",
+    "source-values": 0
+   },
+   {
+    "rule": "taxonomy Set URI from the group id",
+    "source-values": 159
+   },
+   {
+    "rule": "file path of a taxonomy Set from the group id",
+    "source-values": 159
+   },
+   {
+    "rule": "baseline Set URI from the sec_level of a top-level control",
+    "source-values": 651
+   },
+   {
+    "rule": "baseline Set title from the sec_level of a top-level control",
+    "source-values": 651
+   },
+   {
+    "rule": "file path of a baseline Set from the sec_level of a top-level control",
+    "source-values": 651
+   },
+   {
+    "rule": "a sec_level value as an entry of the enum of observed values in the pinned taxonomy schema",
+    "source-values": 999
+   },
+   {
+    "rule": "statement prose with every {{ insert: param, x }} rewritten to {param:x}",
+    "source-values": 208
+   },
+   {
+    "rule": "modality code from the modal verb (MODAL)",
+    "source-values": 999
+   },
+   {
+    "rule": "one term of a list packed into one string (split on commas, trimmed)",
+    "source-values": 165
+   },
+   {
+    "rule": "threat URI from one term of the threats list (split on commas, trimmed, spaces to hyphens)",
+    "source-values": 900
+   },
+   {
+    "rule": "effort level as an integer",
+    "source-values": 999
+   },
+   {
+    "rule": "field name from the prop name (FIELD)",
+    "source-values": 6941
+   },
+   {
+    "rule": "alias scheme from the prop name (ALIAS_SCHEME)",
+    "source-values": 810
+   }
+  ],
+  "declared-drops": {
+   "path-map": {
+    "case": "the path map of this converter already said that the path is not carried",
+    "count": 12009,
+    "reasons": [
+     {
+      "reason": "the path map of this converter says so (absorbed): the namespace of a prop is the address of the CSV list its value is taken from; the pinned facet schema stands in its place, the address is not carried",
+      "count": 12009
+     }
+    ]
+   },
+   "ifa": {
+    "case": "a class the author decided for the IFA corpus on 2026-11-13",
+    "count": 1011,
+    "reasons": [
+     {
+      "reason": "as decided for IFA on 2026-11-13: the source's directory of parties and roles: a party is a landmark URI and there is no party object (register, backlog #16)",
+      "count": 6
+     },
+     {
+      "reason": "as decided for IFA on 2026-11-13: a back-matter resource that no link of a control names. A link that names a resource is written with the address the resource gives, and that address then has a destination",
+      "count": 5
+     },
+     {
+      "reason": "as decided for IFA on 2026-11-13: a type tag of a structural element: the part named `statement` is an entry of `statements[]`, and the bundle says by its shape what kind of thing it is",
+      "count": 999
+     },
+     {
+      "reason": "as decided for IFA on 2026-11-13: the uuid of a source element, here of the catalogue document itself: JASCON objects get URIs minted from ids and titles, the uuid is not carried",
+      "count": 1
+     }
+    ]
+   }
+  },
+  "path-map-corrected": [
+   {
+    "paths": "catalog.uuid, catalog.metadata.*",
+    "said": "bundle manifest / L0 provenance",
+    "found": "only title, version and oscal-version reach the manifest",
+    "values-not-in-the-bundle": 21
+   },
+   {
+    "paths": "catalog.back-matter.*",
+    "said": "resolution key for #uuid links -> external URL; resolved into relations / dropped-declared",
+    "found": "a resource that no link of a control names is not resolved, and nothing of it is carried",
+    "values-not-in-the-bundle": 5
+   },
+   {
+    "paths": "links[] of a nested control",
+    "said": "relations[] {type=rel, ref}",
+    "found": "only the links of a top-level control are read; those of a nested control are lost",
+    "values-not-in-the-bundle": 150
+   },
+   {
+    "paths": "parts[].id, parts[].name",
+    "said": "statement/guidance part identity -> statement id / narrative key",
+    "found": "the id of a part is written nowhere; of the names, `guidance` becomes a key and `statement` does not",
+    "values-not-in-the-bundle": 2995
+   }
+  ],
+  "path-map-against-ledger": {
+   "values-that-disagree": 0,
+   "rows": []
+  },
+  "lost": {
+   "links-of-nested-controls": {
+    "links": 75,
+    "controls": 60,
+    "source-values": 150,
+    "first": "gspp#/catalog/groups/1/groups/1/controls/0/controls/3/controls/0/links/0/href"
+   }
+  },
+  "links-to-a-nested-control": {
+   "links": 34,
+   "of": 191,
+   "first": [
+    "GC.7.2",
+    "required",
+    "GC.7.1.2"
+   ],
+   "links-to-no-control": 0
+  },
+  "written-without-a-source-value": {
+   "objects": {
+    "leaf-values": 28845,
+    "without-a-source-value": 4146,
+    "by-place": {
+     "/id": 1,
+     "/lifecycle": 813,
+     "/members/[]/sequence": 1461,
+     "/statements/[]/id": 651,
+     "/statements/[]/obligated-parties/[]": 999,
+     "/statements/[]/parameters/[]/type": 221
+    }
+   },
+   "schemas": {
+    "leaf-values": 86,
+    "without-a-source-value": 84
+   },
+   "manifest": {
+    "leaf-values": 4095,
+    "without-a-source-value": 1655,
+    "by-place": {
+     "/facet-schemas/[]/digest": 6,
+     "/facet-schemas/[]/exact-version": 6,
+     "/facet-schemas/[]/id": 6,
+     "/facet-schemas/[]/path": 6,
+     "/manifest-version": 1,
+     "/objects/[]/id": 1,
+     "/objects/[]/package-digest": 813,
+     "/objects/[]/path": 1,
+     "/objects/[]/semantic-digest": 813,
+     "/provenance/converter": 1,
+     "/provenance/sources/[]/key": 1
+    }
+   }
+  }
+ },
  "unmapped-paths": [],
  "path-map": [
   {
    "path": "catalog.back-matter.resources[].rlinks[].hashes[].algorithm",
    "count": 1,
-   "level": "L1",
-   "destination": "source-document reference (title/rlink) -> resolved into relations / dropped-declared"
+   "level": "-",
+   "destination": "a resource that a link of a control names by #uuid gives that link its address (relations[].ref); a resource no link of a control names is not carried (declared drop in the ledger)"
   },
   {
    "path": "catalog.back-matter.resources[].rlinks[].hashes[].value",
    "count": 1,
-   "level": "L1",
-   "destination": "source-document reference (title/rlink) -> resolved into relations / dropped-declared"
+   "level": "-",
+   "destination": "a resource that a link of a control names by #uuid gives that link its address (relations[].ref); a resource no link of a control names is not carried (declared drop in the ledger)"
   },
   {
    "path": "catalog.back-matter.resources[].rlinks[].href",
    "count": 1,
-   "level": "L1",
-   "destination": "source-document reference (title/rlink) -> resolved into relations / dropped-declared"
+   "level": "-",
+   "destination": "a resource that a link of a control names by #uuid gives that link its address (relations[].ref); a resource no link of a control names is not carried (declared drop in the ledger)"
   },
   {
    "path": "catalog.back-matter.resources[].title",
    "count": 1,
-   "level": "L1",
-   "destination": "source-document reference (title/rlink) -> resolved into relations / dropped-declared"
+   "level": "-",
+   "destination": "a resource that a link of a control names by #uuid gives that link its address (relations[].ref); a resource no link of a control names is not carried (declared drop in the ledger)"
   },
   {
    "path": "catalog.back-matter.resources[].uuid",
    "count": 1,
-   "level": "L1",
-   "destination": "resolution key for #uuid links -> external URL"
+   "level": "-",
+   "destination": "a resource that a link of a control names by #uuid gives that link its address (relations[].ref); a resource no link of a control names is not carried (declared drop in the ledger)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].class",
@@ -3290,14 +3493,14 @@
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].controls[].parts[].id",
    "count": 4,
-   "level": "L1",
-   "destination": "statement/guidance part identity -> statement id / narrative key"
+   "level": "-",
+   "destination": "not carried and not decided: the id of a part (the control id with `_stm` or `_gdn`) is written nowhere; the statement id is `smt` or the id of the nested control (unaccounted in the ledger)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].controls[].parts[].name",
    "count": 4,
    "level": "L1",
-   "destination": "statement/guidance part identity -> statement id / narrative key"
+   "destination": "`guidance` -> the key of the gspp-narrative payload; `statement` -> not carried, the part is an entry of statements[] (declared drop in the ledger)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].controls[].parts[].props[].name",
@@ -3308,8 +3511,8 @@
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].controls[].parts[].props[].ns",
    "count": 7,
-   "level": "L1",
-   "destination": "absorbed: CSV-link namespaces replaced by pinned facet schemas"
+   "level": "-",
+   "destination": "not carried (absorbed): CSV-link namespaces replaced by pinned facet schemas (declared drop in the ledger)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].controls[].parts[].props[].value",
@@ -3332,8 +3535,8 @@
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].controls[].props[].ns",
    "count": 4,
-   "level": "L1",
-   "destination": "absorbed: CSV-link namespaces replaced by pinned facet schemas"
+   "level": "-",
+   "destination": "not carried (absorbed): CSV-link namespaces replaced by pinned facet schemas (declared drop in the ledger)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].controls[].props[].value",
@@ -3356,14 +3559,14 @@
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].links[].href",
    "count": 8,
-   "level": "L1",
-   "destination": "relations[] {type=rel, ref} (#control -> req URI; #uuid -> back-matter URL)"
+   "level": "-",
+   "destination": "NOT CARRIED: the links of a nested control are not read (found by the ledger; unaccounted)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].links[].rel",
    "count": 8,
-   "level": "L1",
-   "destination": "relations[] {type=rel, ref} (#control -> req URI; #uuid -> back-matter URL)"
+   "level": "-",
+   "destination": "NOT CARRIED: the links of a nested control are not read (found by the ledger; unaccounted)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].params[].id",
@@ -3392,14 +3595,14 @@
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].parts[].id",
    "count": 37,
-   "level": "L1",
-   "destination": "statement/guidance part identity -> statement id / narrative key"
+   "level": "-",
+   "destination": "not carried and not decided: the id of a part (the control id with `_stm` or `_gdn`) is written nowhere; the statement id is `smt` or the id of the nested control (unaccounted in the ledger)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].parts[].name",
    "count": 37,
    "level": "L1",
-   "destination": "statement/guidance part identity -> statement id / narrative key"
+   "destination": "`guidance` -> the key of the gspp-narrative payload; `statement` -> not carried, the part is an entry of statements[] (declared drop in the ledger)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].parts[].props[].name",
@@ -3410,8 +3613,8 @@
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].parts[].props[].ns",
    "count": 95,
-   "level": "L1",
-   "destination": "absorbed: CSV-link namespaces replaced by pinned facet schemas"
+   "level": "-",
+   "destination": "not carried (absorbed): CSV-link namespaces replaced by pinned facet schemas (declared drop in the ledger)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].parts[].props[].value",
@@ -3434,8 +3637,8 @@
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].props[].ns",
    "count": 112,
-   "level": "L1",
-   "destination": "absorbed: CSV-link namespaces replaced by pinned facet schemas"
+   "level": "-",
+   "destination": "not carried (absorbed): CSV-link namespaces replaced by pinned facet schemas (declared drop in the ledger)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].props[].value",
@@ -3458,14 +3661,14 @@
   {
    "path": "catalog.groups[].groups[].controls[].controls[].links[].href",
    "count": 67,
-   "level": "L1",
-   "destination": "relations[] {type=rel, ref} (#control -> req URI; #uuid -> back-matter URL)"
+   "level": "-",
+   "destination": "NOT CARRIED: the links of a nested control are not read (found by the ledger; unaccounted)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].links[].rel",
    "count": 67,
-   "level": "L1",
-   "destination": "relations[] {type=rel, ref} (#control -> req URI; #uuid -> back-matter URL)"
+   "level": "-",
+   "destination": "NOT CARRIED: the links of a nested control are not read (found by the ledger; unaccounted)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].params[].id",
@@ -3500,14 +3703,14 @@
   {
    "path": "catalog.groups[].groups[].controls[].controls[].parts[].id",
    "count": 653,
-   "level": "L1",
-   "destination": "statement/guidance part identity -> statement id / narrative key"
+   "level": "-",
+   "destination": "not carried and not decided: the id of a part (the control id with `_stm` or `_gdn`) is written nowhere; the statement id is `smt` or the id of the nested control (unaccounted in the ledger)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].parts[].name",
    "count": 653,
    "level": "L1",
-   "destination": "statement/guidance part identity -> statement id / narrative key"
+   "destination": "`guidance` -> the key of the gspp-narrative payload; `statement` -> not carried, the part is an entry of statements[] (declared drop in the ledger)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].parts[].props[].name",
@@ -3518,8 +3721,8 @@
   {
    "path": "catalog.groups[].groups[].controls[].controls[].parts[].props[].ns",
    "count": 1632,
-   "level": "L1",
-   "destination": "absorbed: CSV-link namespaces replaced by pinned facet schemas"
+   "level": "-",
+   "destination": "not carried (absorbed): CSV-link namespaces replaced by pinned facet schemas (declared drop in the ledger)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].parts[].props[].value",
@@ -3542,8 +3745,8 @@
   {
    "path": "catalog.groups[].groups[].controls[].controls[].props[].ns",
    "count": 2262,
-   "level": "L1",
-   "destination": "absorbed: CSV-link namespaces replaced by pinned facet schemas"
+   "level": "-",
+   "destination": "not carried (absorbed): CSV-link namespaces replaced by pinned facet schemas (declared drop in the ledger)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].props[].value",
@@ -3608,14 +3811,14 @@
   {
    "path": "catalog.groups[].groups[].controls[].parts[].id",
    "count": 1302,
-   "level": "L1",
-   "destination": "statement/guidance part identity -> statement id / narrative key"
+   "level": "-",
+   "destination": "not carried and not decided: the id of a part (the control id with `_stm` or `_gdn`) is written nowhere; the statement id is `smt` or the id of the nested control (unaccounted in the ledger)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].parts[].name",
    "count": 1302,
    "level": "L1",
-   "destination": "statement/guidance part identity -> statement id / narrative key"
+   "destination": "`guidance` -> the key of the gspp-narrative payload; `statement` -> not carried, the part is an entry of statements[] (declared drop in the ledger)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].parts[].props[].name",
@@ -3626,8 +3829,8 @@
   {
    "path": "catalog.groups[].groups[].controls[].parts[].props[].ns",
    "count": 3308,
-   "level": "L1",
-   "destination": "absorbed: CSV-link namespaces replaced by pinned facet schemas"
+   "level": "-",
+   "destination": "not carried (absorbed): CSV-link namespaces replaced by pinned facet schemas (declared drop in the ledger)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].parts[].props[].value",
@@ -3650,8 +3853,8 @@
   {
    "path": "catalog.groups[].groups[].controls[].props[].ns",
    "count": 4589,
-   "level": "L1",
-   "destination": "absorbed: CSV-link namespaces replaced by pinned facet schemas"
+   "level": "-",
+   "destination": "not carried (absorbed): CSV-link namespaces replaced by pinned facet schemas (declared drop in the ledger)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].props[].value",
@@ -3722,122 +3925,122 @@
   {
    "path": "catalog.metadata.last-modified",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "-",
+   "destination": "not carried and not decided: last-modified, props, links, remarks, responsible-parties (unaccounted in the ledger)"
   },
   {
    "path": "catalog.metadata.links[].href",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "-",
+   "destination": "not carried and not decided: last-modified, props, links, remarks, responsible-parties (unaccounted in the ledger)"
   },
   {
    "path": "catalog.metadata.links[].rel",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "-",
+   "destination": "not carried and not decided: last-modified, props, links, remarks, responsible-parties (unaccounted in the ledger)"
   },
   {
    "path": "catalog.metadata.links[].text",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "-",
+   "destination": "not carried and not decided: last-modified, props, links, remarks, responsible-parties (unaccounted in the ledger)"
   },
   {
    "path": "catalog.metadata.oscal-version",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "destination": "manifest provenance.sources[] (title, version, oscal-version); version -> `version` of every object; title -> title of the root Set"
   },
   {
    "path": "catalog.metadata.parties[].email-addresses[]",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "-",
+   "destination": "not carried: the source's directory of parties and roles (declared drop in the ledger)"
   },
   {
    "path": "catalog.metadata.parties[].name",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "-",
+   "destination": "not carried: the source's directory of parties and roles (declared drop in the ledger)"
   },
   {
    "path": "catalog.metadata.parties[].type",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "-",
+   "destination": "not carried: the source's directory of parties and roles (declared drop in the ledger)"
   },
   {
    "path": "catalog.metadata.parties[].uuid",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "-",
+   "destination": "not carried: the source's directory of parties and roles (declared drop in the ledger)"
   },
   {
    "path": "catalog.metadata.props[].name",
    "count": 3,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "-",
+   "destination": "not carried and not decided: last-modified, props, links, remarks, responsible-parties (unaccounted in the ledger)"
   },
   {
    "path": "catalog.metadata.props[].ns",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "-",
+   "destination": "not carried and not decided: last-modified, props, links, remarks, responsible-parties (unaccounted in the ledger)"
   },
   {
    "path": "catalog.metadata.props[].value",
    "count": 3,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "-",
+   "destination": "not carried and not decided: last-modified, props, links, remarks, responsible-parties (unaccounted in the ledger)"
   },
   {
    "path": "catalog.metadata.remarks",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "-",
+   "destination": "not carried and not decided: last-modified, props, links, remarks, responsible-parties (unaccounted in the ledger)"
   },
   {
    "path": "catalog.metadata.responsible-parties[].party-uuids[]",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "-",
+   "destination": "not carried and not decided: last-modified, props, links, remarks, responsible-parties (unaccounted in the ledger)"
   },
   {
    "path": "catalog.metadata.responsible-parties[].role-id",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "-",
+   "destination": "not carried and not decided: last-modified, props, links, remarks, responsible-parties (unaccounted in the ledger)"
   },
   {
    "path": "catalog.metadata.roles[].id",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "-",
+   "destination": "not carried: the source's directory of parties and roles (declared drop in the ledger)"
   },
   {
    "path": "catalog.metadata.roles[].title",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "-",
+   "destination": "not carried: the source's directory of parties and roles (declared drop in the ledger)"
   },
   {
    "path": "catalog.metadata.title",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "destination": "manifest provenance.sources[] (title, version, oscal-version); version -> `version` of every object; title -> title of the root Set"
   },
   {
    "path": "catalog.metadata.version",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "destination": "manifest provenance.sources[] (title, version, oscal-version); version -> `version` of every object; title -> title of the root Set"
   },
   {
    "path": "catalog.uuid",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "-",
+   "destination": "not carried: the uuid of the source document (declared drop in the ledger)"
   }
  ]
 }
