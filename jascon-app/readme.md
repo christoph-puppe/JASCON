@@ -7,7 +7,7 @@ have to switch on yourself: the suggestions of the Risk page and the drafts
 of the Checks page send text to a model service once you type a key (see
 "Suggestions from a model").
 
-State: build 0.9.17. This build has the frame (the hub, the settings page and
+State: build 0.9.18. This build has the frame (the hub, the settings page and
 the shared core) and nine tool pages, in the order of the work: Import,
 Browse, Risk, Tailor, Map, Implement, Checks, Assess and Validate. One view of the Risk page and
 the drafting of the Checks page can ask a language model; nothing else in
@@ -86,7 +86,7 @@ is saved to the set at once; the other open tools reload.
 | Tool | Shows | Writes |
 |---|---|---|
 | Import | An OSCAL catalog or profile and the report of its import | Requirements and Sets from a catalog, as a set of its own; a Set and a Tailoring from a profile |
-| Browse | The catalogue as a tree of Sets, every object with type filters and with the filters found in the loaded requirements, statistics | A Requirement (every `{param:}` token is declared as a parameter), a Set |
+| Browse | The catalogue as a tree of Sets, every object with type filters and with the filters found in the loaded requirements, statistics. An object whose lifecycle is `withdrawn` is left out of the tree and the list until the switch "withdrawn" shows it; it stays in the set (build 0.9.18) | A Requirement (every `{param:}` token is declared as a parameter), a Set |
 | Risk | The register with a heat map, the scales and their matrix, the coverage of the selected requirements, the risk catalogues | A Risk; a scale; the record of catalogue entries that do not apply |
 | Tailor | Each Tailoring resolved: selection, operations with before and after, lattice verdict, derived tier | A Tailoring; the decision on a Deviation it carries; the resolved requirements as a package of their own |
 | Map | The mappings as a table, with targets outside the set marked | A Mapping, also to a target outside the set |

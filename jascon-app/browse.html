@@ -111,6 +111,11 @@ jscI18n.add("de", {
   "shown above": "oben schon gezeigt", "nesting deeper than 8 levels is not shown": "Schachtelung tiefer als 8 Ebenen wird nicht gezeigt",
   "nothing matches": "nichts passt", "and {n} more; narrow the search": "und {n} weitere; Suche eingrenzen", "any": "beliebig",
   "clear the filters": "Filter leeren", "these filters match requirements only": "diese Filter treffen nur Anforderungen",
+  "withdrawn · {n} hidden": "zurückgezogen · {n} ausgeblendet", "withdrawn · {n} shown": "zurückgezogen · {n} eingeblendet",
+  "{n} withdrawn not shown": "{n} zurückgezogene nicht gezeigt",
+  "{n} withdrawn object(s) match and are not shown": "{n} zurückgezogene(s) Objekt(e) passen und werden nicht gezeigt",
+  "Withdrawn objects stay in the set. This page leaves them out of its list and its tree until they are shown.":
+    "Zurückgezogene Objekte bleiben im Set. Diese Seite lässt sie aus ihrer Liste und ihrem Baum, bis sie eingeblendet sind.",
   "Objects by type": "Objekte nach Typ", "objects": "Objekte", "Modality of {n} statements": "Modalität von {n} Statements",
   "Lifecycle, parameters, languages": "Lifecycle, Parameter, Sprachen", "typed parameters": "typisierte Parameter", "prose languages": "Sprachen der Prosa",
   "New requirement": "Neue Anforderung", "Title": "Titel", "Modality": "Modalität", "Language": "Sprache", "Obligated party": "Verpflichtete Partei",
@@ -129,7 +134,11 @@ jscI18n.add("de", {
 
 const $ = id => document.getElementById(id);
 const V = jscView, esc = jscEsc;
-const state = { types: new Set(), q: "", dims: {}, selected: null };
+/* showWithdrawn (build 0.9.18; backlog #87): an object whose lifecycle is `withdrawn` stays in the set and
+   is left out of this page's list and tree until the user asks for it. Since phase E every withdrawn item
+   of a catalogue is an object (182 of the 1,196 Requirements of SP 800-53, 79 of the 185 of the CSF). */
+const state = { types: new Set(), q: "", dims: {}, selected: null, showWithdrawn: false };
+const withdrawn = r => !!r && r.obj.lifecycle === "withdrawn";
 const draft = V.draft("browse", () => ({ members: [], title: "", prose: "", modality: "must", lang: jscI18n.contentLang(), obligated: "", setTitle: "" }));
 let G = jscSet.graph;
 /* Who a statement binds. The kernel requires `obligated-parties` on every
@@ -154,6 +163,7 @@ function renderCatalog() {
   const node = (ref, depth) => {
     const r = G.objects.get(ref);
     if (!r) return `<div class="leaf">${V.refLink(ref)}</div>`;
+    if (withdrawn(r) && !state.showWithdrawn) return "";
     if (r.type === "requirement") {
       const n = r.obj.statements.length;
       return `<div class="leaf">${V.typeGlyph("requirement")} ${V.refLink(ref, V.labelOf(r))} ${r.obj.statements.slice(0, 3).map(s => V.modBadge(s.modality)).join("")}<span class="cnt">${n > 1 ? esc(T("{n} statements", { n })) : ""}</span></div>`;
@@ -163,8 +173,9 @@ function renderCatalog() {
     const again = shown.has(ref);
     shown.add(ref);
     const mem = r.obj.members || [];
+    const left = state.showWithdrawn ? 0 : mem.filter(m => withdrawn(G.objects.get(m.ref))).length;
     return `<details ${depth === 0 && roots.length <= 4 ? "open" : ""}><summary>${V.typeGlyph("requirementSet")} ${V.refLink(ref, V.titleOf(r))}
-      <span class="cnt">${esc(T("{n} members · {r} requirements", { n: mem.length, r: jscExpandRefs([ref], G.objects).size }))}</span></summary>
+      <span class="cnt">${esc(T("{n} members · {r} requirements", { n: mem.length, r: jscExpandRefs([ref], G.objects).size }))}${left ? " · " + esc(T("{n} withdrawn not shown", { n: left })) : ""}</span></summary>
       ${again ? `<div class="leaf cnt">${esc(T("shown above"))}</div>` : mem.map(m => node(m.ref, depth + 1)).join("")}</details>`;
   };
   const baseline = roots.filter(r => /baseline|profile|class|marker|ig[0-9]/.test(r.obj.id)), tax = roots.filter(r => !baseline.includes(r));
@@ -177,7 +188,8 @@ function renderCatalog() {
 }
 
 /* ---------- objects: filters, list, detail ---------- */
-function visibleIds() {
+/* what the type pills, the dimension filters and the search leave; visibleIds leaves out the withdrawn ones unless asked */
+function matchingIds() {
   const q = state.q.toLowerCase(), dims = Object.entries(state.dims).filter(([, v]) => v);
   const idx = dims.length ? V.dimIndex() : null;
   return G.order.filter(id => {
@@ -190,6 +202,7 @@ function visibleIds() {
     return !q || id.toLowerCase().includes(q) || (r.obj.label || "").toLowerCase().includes(q) || TT(r.obj.title).toLowerCase().includes(q);
   });
 }
+const visibleIds = () => (state.showWithdrawn ? matchingIds() : matchingIds().filter(id => !withdrawn(G.objects.get(id))));
 function renderFilters() {
   const counts = jscTypeCounts(G);
   $("typefilters").innerHTML = JSC_TYPES.filter(t => counts[t]).map(t =>
@@ -198,6 +211,13 @@ function renderFilters() {
     state.types.has(b.dataset.t) ? state.types.delete(b.dataset.t) : state.types.add(b.dataset.t);
     renderObjects();
   }));
+  /* the lifecycle switch, only where the set holds a withdrawn object */
+  const gone = [...G.objects.values()].filter(withdrawn).length;
+  if (gone) {
+    $("typefilters").insertAdjacentHTML("beforeend", ` <button type="button" class="fpill ${state.showWithdrawn ? "on" : ""}" id="life-withdrawn" aria-pressed="${state.showWithdrawn}"
+      title="${esc(T("Withdrawn objects stay in the set. This page leaves them out of its list and its tree until they are shown."))}">${esc(T(state.showWithdrawn ? "withdrawn · {n} shown" : "withdrawn · {n} hidden", { n: gone }))}</button>`);
+    $("life-withdrawn").addEventListener("click", () => { state.showWithdrawn = !state.showWithdrawn; renderCatalog(); renderObjects(); });
+  }
   const idx = counts.requirement ? V.dimIndex() : null, active = Object.values(state.dims).some(Boolean);
   $("dimfilters").innerHTML = idx ? idx.usable.map(([k, vals]) => {
     const opts = [...vals.entries()].sort((a, b) => b[1] - a[1]).map(([v, n]) =>
@@ -208,14 +228,15 @@ function renderFilters() {
   if ($("dim-clear")) $("dim-clear").addEventListener("click", () => { state.dims = {}; renderObjects(); });
 }
 function renderList() {
-  const ids = visibleIds(), cap = 400;
+  const ids = visibleIds(), cap = 400, hidden = state.showWithdrawn ? 0 : matchingIds().length - ids.length;
   $("nc-objects").textContent = G.objects.size || "";
   $("objlist").innerHTML = (ids.slice(0, cap).map(id => {
     const r = G.objects.get(id);
     return `<div class="objrow ${state.selected === id ? "active" : ""}" data-id="${esc(id)}" tabindex="0" role="button">
       <div class="t">${V.typeGlyph(r.type)} ${esc(V.labelOf(r))}</div><div class="s">${esc(id)}</div></div>`;
   }).join("") || `<div class="hint">${esc(T("nothing matches"))}</div>`) +
-    (ids.length > cap ? `<div class="hint" style="padding:8px">${esc(T("and {n} more; narrow the search", { n: ids.length - cap }))}</div>` : "");
+    (ids.length > cap ? `<div class="hint" style="padding:8px">${esc(T("and {n} more; narrow the search", { n: ids.length - cap }))}</div>` : "") +
+    (hidden ? `<div class="hint" id="withdrawn-hint" style="padding:8px">${esc(T("{n} withdrawn object(s) match and are not shown", { n: hidden }))}</div>` : "");
   $("objlist").querySelectorAll(".objrow").forEach(el => {
     const go = () => select(el.dataset.id);
     el.addEventListener("click", go);

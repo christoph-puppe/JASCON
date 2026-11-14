@@ -572,6 +572,35 @@ and in `readme.md`; this file says only what is done and what is next.
   give what they expect, and a whole set made of the first vector gets one
   note and no error with authors required.
 
+- The Browse page leaves out what was withdrawn until it is asked for (build
+  0.9.18; backlog #87). Since phase E every withdrawn item of a catalogue is
+  an object: 182 of the 1,196 Requirements of SP 800-53, and 79 of the 185
+  Requirements and 12 of the 41 Sets of the CSF. An object whose lifecycle is
+  `withdrawn` is left out of the list of objects and of the catalogue tree.
+  A switch beside the type filters, shown only where the set holds such an
+  object, says how many there are and shows them. A Set in the tree says
+  how many of its members are not shown, and the list says how many
+  withdrawn objects match a search and are not shown. Nothing is taken out
+  of the set; a link to a withdrawn object opens it as before. The backlog
+  named the hub; the hub lists no objects, so the switch is on the page
+  that does. The other pages list requirements as before.
+
+  Measured in a browser on the committed CSF bundle: 135 of 226 rows with
+  the switch off and none of them withdrawn, 226 with it on; a search for
+  the id of one withdrawn Requirement gives no row and the line "1
+  withdrawn object(s) match and are not shown", and the row once the
+  switch is on; the tree holds no withdrawn object with the switch off;
+  the files of the set are the same before and after.
+
+  Looked at and not changed (backlog #92, the app's part): a number the
+  source writes as `1.0` or `1e16` reaches a preset as an integer, where
+  `convert_bsi.py` writes a decimal string. Measured on NIST's schema of the
+  catalogue model (OSCAL 1.2.2, the file the export step pins): it types no
+  number anywhere (34 objects, 83 arrays, 10 strings), and every object is
+  closed or a choice of closed ones. A catalogue that holds a number is
+  therefore not an OSCAL catalogue, and for one that is, the preset and the
+  converter cannot differ in this. The comment at `jscBsiHeld` stands.
+
 ## Next
 
 - An OSCAL component definition as a third kind on the Import page, written
@@ -691,6 +720,8 @@ and in `readme.md`; this file says only what is done and what is next.
     converter writes the string "1.0". The same for a float without a
     fraction such as `1e16`. Read, not measured: no catalogue at hand has
     such a number, and the kernel spells a fraction as a decimal string.
+    Measured on 2026-11-14 (build 0.9.18): NIST's schema of the catalogue
+    model types no number, so no OSCAL catalogue has one. Not changed.
   - The OSCAL export of the Grundschutz++ bundle, read by the preset, gives
     1,360 objects and modality `unspecified` on every statement: the export
     writes the modality and the obligated party in props of its own names

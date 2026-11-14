@@ -1442,6 +1442,59 @@ test("Browse and Import: who a statement binds is named by the user; empty, the 
   }
 });
 
+/* ---------- Browse: what was withdrawn (backlog #87; build 0.9.18) ----------
+   Since phase E every withdrawn item of a catalogue is an object. The page
+   leaves them out of its list and its tree until the user asks, and takes
+   nothing out of the set. The numbers are counted from the committed CSF
+   bundle, so the test follows the bundle. */
+test("Browse: withdrawn objects are left out of the list and the tree until they are shown, and stay in the set", { skip: needs }, async () => {
+  const CSF = path.join(ROOT, "converted_examples/US.CSF/csf-core-bundle");
+  const objs = tree(CSF).filter(f => f.path.startsWith("objects/")).map(f => JSON.parse(f.text));
+  const total = objs.length, gone = objs.filter(o => o.lifecycle === "withdrawn"), goneIds = new Set(gone.map(o => o.id));
+  assert.ok(gone.length > 0 && gone.length < total, "the bundle holds withdrawn objects and others");
+  const s = await session(), p = s.page;
+  try {
+    await load(s, zipOf(CSF, "csf-core-bundle"));
+    await open(s, "browse.html", "objects");
+    const before = await snapshot(s);
+    const rows = () => p.locator("#objlist .objrow").evaluateAll(els => els.map(e => e.dataset.id));
+    const sw = p.locator("#life-withdrawn");
+    assert.equal(await sw.innerText(), `withdrawn · ${gone.length} hidden`);
+    assert.equal(await sw.getAttribute("aria-pressed"), "false");
+    const hiddenRows = await rows();
+    assert.equal(hiddenRows.length, total - gone.length);
+    assert.equal(hiddenRows.filter(id => goneIds.has(id)).length, 0, "no withdrawn object is in the list");
+    assert.equal(await p.locator("#withdrawn-hint").innerText(), `${gone.length} withdrawn object(s) match and are not shown`);
+    /* a search that only a withdrawn object answers says so, and does not say that nothing matches alone */
+    const one = gone.find(o => o.statements);
+    await type(p.locator("#search"), one.id);
+    await p.locator("#search").press("Enter");
+    await p.waitForFunction(() => document.querySelectorAll("#objlist .objrow").length === 0);
+    assert.equal(await p.locator("#withdrawn-hint").innerText(), "1 withdrawn object(s) match and are not shown");
+    await sw.click();
+    assert.deepEqual(await rows(), [one.id], "shown on request");
+    assert.equal(await sw.innerText(), `withdrawn · ${gone.length} shown`);
+    assert.equal(await p.locator("#withdrawn-hint").count(), 0);
+    await type(p.locator("#search"), "");
+    await p.locator("#search").press("Enter");
+    await p.waitForFunction(n => document.querySelectorAll("#objlist .objrow").length === n, total);
+    /* the tree: with the switch on, every withdrawn member has its leaf; off, none, and the Set says how many it leaves out */
+    await p.locator('.navitem[data-view="catalog"]').click();
+    const leaves = () => p.locator("#catalog [data-ref]").evaluateAll(els => els.map(e => e.dataset.ref));
+    const shownLeaves = await leaves();
+    assert.ok(shownLeaves.some(id => goneIds.has(id)), "the tree shows withdrawn members when asked");
+    await p.locator('.navitem[data-view="objects"]').click();
+    await p.locator("#life-withdrawn").click();
+    await p.locator('.navitem[data-view="catalog"]').click();
+    const hiddenLeaves = await leaves();
+    assert.equal(hiddenLeaves.filter(id => goneIds.has(id)).length, 0, "no withdrawn object in the tree");
+    assert.ok(hiddenLeaves.length < shownLeaves.length);
+    assert.match(await p.locator("#catalog").innerText(), /\d+ withdrawn not shown/);
+    assert.deepEqual(await snapshot(s), before, "the set is as it was: the switch changes what the page shows");
+    assert.deepEqual(s.errors, []);
+  } finally { await s.close(); }
+});
+
 test("Risk: an empty owner refuses the risk and the catalogue import; the approver of an acceptance starts empty, also with \"Who am I\" and a default owner set; named, both are written as named", { skip: needs }, async t => {
   const s = await session(), tmp = [], p = s.page, CISO = "https://org.example/party/ciso";
   try {
