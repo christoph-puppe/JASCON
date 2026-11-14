@@ -126,21 +126,39 @@ The German taxonomy cluster, by the numbers: `sec_level` ×998,
 whole.
 
 **The descriptor**, published at
-`https://ns.bsi.bund.de/.well-known/jascon-facets/gspp-taxonomy/1.0.0/`:
+`https://ns.bsi.bund.de/.well-known/jascon-facets/gspp-taxonomy/1.1.0/`:
 
 ```json
 { "id": "https://ns.bsi.bund.de/facet/gspp-taxonomy",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "modifies-semantics": ["selection"],
   "schema": { "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object", "additionalProperties": false,
     "properties": {
-      "sec-level":     { "enum": ["normal-sdt", "erhoeht-sdt"] },
-      "effort":        { "type": "integer", "minimum": 1, "maximum": 5 },
-      "tags":          { "type": "array", "items": {"type": "string"} },
-      "documentation": { "type": "array",
-                         "items": {"enum": ["konfigurationshistorie", "…"]} } } } }
+      "by-statement": { "type": "object", "additionalProperties": {
+        "type": "object", "additionalProperties": false,
+        "properties": {
+          "class":     { "type": "string", "minLength": 1 },
+          "sec-level": { "enum": ["normal-SdT", "erhöht"] },
+          "effort":    { "type": "integer", "minimum": 0, "maximum": 5 },
+          "tags":      { "type": "array", "minItems": 1,
+                         "items": {"type": "string", "minLength": 1} } } } } } } }
 ```
+
+This is the file the Grundschutz++ converter pins and the example
+folder pins, byte for byte. The two levels and the range of the effort
+are the publisher's: BSI keeps one list per property beside its
+catalogue, and `security_level.csv` holds `normal-SdT` and `erhöht`,
+`effort_level.csv` 0 to 5. A lesson stands behind the version number.
+Until 2026-11-14 this section showed a descriptor 1.0.0 written by hand
+before the catalogue was read: its levels were spelled as nobody spells
+them (`normal-sdt`, `erhoeht-sdt`), its effort began at 1 where 148
+requirements state 0, and it keyed nothing by statement. The converter
+pinned another schema under the same id and version, an open object
+whose only enum was made from the values the catalogue happened to
+hold. Two schemas under one name, and neither held a real payload to
+anything. Take your vocabulary from the publisher's list, type what the
+payload carries, and give a schema that changes a new version (§7.4).
 
 **The declaration, reasoned.** Why `["selection"]` and nothing else?
 Because the security level is precisely what German baselines select by
@@ -158,9 +176,16 @@ ignorance would mean error. That is declaration craft in one example:
 ```json
 "facets": {
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
-    "sec-level": "normal-sdt", "effort": 2,
-    "tags": ["produktbeschreibung", "cryptography", "zero-trust"] } }
+    "by-statement": {
+      "s1": { "sec-level": "normal-SdT", "effort": 2,
+              "tags": ["produktbeschreibung", "cryptography", "zero-trust"] },
+      "s2": { "sec-level": "normal-SdT", "effort": 2,
+              "tags": ["cryptography"] } } } }
 ```
+
+The keys under `by-statement` are statement ids, and a validator holds
+them to the statements the Requirement has (D10): a clause keeps its own
+level, and a key that names no clause is an error.
 
 **The before/after ledger.** 3,431 props → one descriptor plus typed
 payloads. `tags` is an *array* — the corpus's comma-joined strings

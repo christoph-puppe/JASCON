@@ -95,8 +95,8 @@ Every bundle carries one:
       "path": "objects/acme-saas.json" }, … ],
   "facet-schemas": [
     { "id": "https://ns.bsi.bund.de/facet/gspp-taxonomy",
-      "exact-version": "1.0.0", "digest": "sha256:…",
-      "path": "schemas/gspp-taxonomy-1.0.0.json" } ],
+      "exact-version": "1.1.0", "digest": "sha256:…",
+      "path": "schemas/gspp-taxonomy-1.1.0.json" } ],
   "renderings": [ { "path": "render/authorization.pdf",
                     "digest": "sha256:…" } ] }
 ```

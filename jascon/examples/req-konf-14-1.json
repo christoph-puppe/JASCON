@@ -61,13 +61,24 @@
  ],
  "facets": {
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
-   "sec-level": "normal-sdt",
-   "effort": 2,
-   "tags": [
-    "produktbeschreibung",
-    "cryptography",
-    "zero-trust"
-   ]
+   "by-statement": {
+    "s1": {
+     "sec-level": "normal-SdT",
+     "effort": 2,
+     "tags": [
+      "produktbeschreibung",
+      "cryptography",
+      "zero-trust"
+     ]
+    },
+    "s2": {
+     "sec-level": "normal-SdT",
+     "effort": 2,
+     "tags": [
+      "cryptography"
+     ]
+    }
+   }
   }
  },
  "annotations": {

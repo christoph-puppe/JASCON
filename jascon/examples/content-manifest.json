@@ -5,8 +5,8 @@
   {
    "id": "https://ns.bsi.bund.de/gspp/req/KONF.14.1",
    "version": "2026-07",
-   "package-digest": "sha256:0b827943c752f4e292b50f975f6361badf85854e0a74440a78ae084cec2b5c91",
-   "semantic-digest": "sha256:6d9a22885ddaa2c6f164ad70dcb3e67d5afe6f569d0d8795f5f34553d4d46b17",
+   "package-digest": "sha256:89f82dda173d9a7e8c0aa37e9cf98fbeae6354de5de6b980d58639f6b4c82c0b",
+   "semantic-digest": "sha256:af6e1897cd84fddb4e34f7f4fd7d064d6e01b7c601cfbb7d269d0cfcb331caa9",
    "path": "req-konf-14-1.json"
   },
   {
@@ -174,9 +174,9 @@
  "facet-schemas": [
   {
    "id": "https://ns.bsi.bund.de/facet/gspp-taxonomy",
-   "exact-version": "1.0.0",
-   "digest": "sha256:d026566e91267371cdde4d09ded434dd538f9a239fab150f490e5498b624f0da",
-   "path": "gspp-taxonomy-1.0.0.json"
+   "exact-version": "1.1.0",
+   "digest": "sha256:dec55b90827a9a5b5f1d7906c09183387db1127aa5908ba4fab93b12b77c8aab",
+   "path": "gspp-taxonomy-1.1.0.json"
   },
   {
    "id": "https://ns.jascon.net/stdlib/facet/assessment-criteria",

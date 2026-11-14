@@ -5,8 +5,12 @@
 
 Run from the repository root. Reads every facet schema a converted bundle
 under converted_examples/ pins, every descriptor of the standard library
-(jascon/schemas/stdlib), and the pins of any bundle folder named as an
-argument (the CR26 bundle, which is converted in the workflow and not
+(jascon/schemas/stdlib), the schemas the manifest of the example folder and
+of each example pack pins (jascon/examples, jascon/example-packs/*; since
+2026-11-14, backlog #94: until then the example folder pinned
+gspp-taxonomy 1.0.0 with another schema than the Grundschutz++ bundle and
+this check did not look there), and the pins of any bundle folder named as
+an argument (the CR26 bundle, which is converted in the workflow and not
 committed). Each is held to the record .github/pinned-schemas.json: for
 every id and version, the digest of what the schema says (its `schema` and
 its `modifies-semantics`, in canonical form).
@@ -44,6 +48,12 @@ def main(argv):
     extra = [a for a in argv if a != "--write"]
     files = sorted(glob.glob(os.path.join("converted_examples", "*", "*-bundle", "schemas", "*.json"))
                    + glob.glob(os.path.join("jascon", "schemas", "stdlib", "*.json")))
+    # a folder whose manifest names its pins by path: the example folder and the example packs
+    for folder in [os.path.join("jascon", "examples")] + sorted(glob.glob(os.path.join("jascon", "example-packs", "*"))):
+        mp = os.path.join(folder, "content-manifest.json")
+        if not os.path.exists(mp): continue
+        with open(mp, encoding="utf-8") as fh: pins = json.load(fh).get("facet-schemas", []) or []
+        files += sorted(os.path.join(folder, e["path"]) for e in pins)
     for folder in extra:
         found = sorted(glob.glob(os.path.join(folder, "schemas", "*.json")))
         if not found: print(f"{folder}: no pinned schema found under schemas/"); return 1

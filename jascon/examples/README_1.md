@@ -38,7 +38,7 @@ and not tagged. Its rows are marked (2.0.0) below.*
 | — *(2.0.0)* | The published pack | `../example-packs/dbvendor-server-7-advice/` | the file a vendor publishes: a bundle whose manifest carries the pack header and lists Components only. `validate_core.py --import-advice jascon/examples jascon/example-packs/dbvendor-server-7-advice` answers *already-imported* |
 | 9 | Attestation | `attestation-acme-2026.json` + `.dsse` | *beside* the manifest, never inside. Three subjects by id and **semantic** digest (the Acme SaaS Component, its Implementation of KONF.14.1, the 2026 Q3 Assessment), the digest of `content-manifest.json`, the rendering block, and a DSSE envelope. The validator reports **FULL MATCH**, and with `--trusted-keys jascon/conformance/fixture-trusted-keys.json` the signature verified. Signed with the corpus FIXTURE key, whose seed is public - the mechanism, not an agency. Issued by `drafts/phase-d/attest_example.py`; run it again after any change to this folder |
 | — | Content manifest | `content-manifest.json` | both digests per object, exact-pinned facet schemas, rendering digest |
-| — | Facet descriptors | `gspp-taxonomy-1.0.0.json`, `assessment-criteria-1.0.0.json` | a custom facet descriptor, and a stdlib descriptor pinned **verbatim** (D26) |
+| — | Facet descriptors | `gspp-taxonomy-1.1.0.json`, `assessment-criteria-1.0.0.json` | a custom facet descriptor (the file the Grundschutz++ converter pins, byte for byte), and a stdlib descriptor pinned **verbatim** (D26) |
 | — | Rendering (L4) | `authorization-summary.md` | the "document as view", digest-bound by the attestation |
 
 ## Self-consistency properties (deliberate)

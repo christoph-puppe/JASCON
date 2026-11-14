@@ -68,13 +68,13 @@ specification's rationale-on-failure rule already supplies the spine:
 
 ```
 HALT tailoring-resolution (class: selection)
-  blocked by: https://ns.bsi.bund.de/facet/gspp-taxonomy@1 (pinned 1.0.0)
+  blocked by: https://ns.bsi.bund.de/facet/gspp-taxonomy@1 (pinned 1.1.0)
               declared modifies-semantics: [selection]
   this tool understands: [ …list… ]  — not this facet
   ways forward:
     · enable support: declare the facet in this tool's capabilities
     · narrow scope:   re-run selection excluding subjects carrying it
-    · ask the source: descriptor at manifest path schemas/gspp-taxonomy-1.0.0.json
+    · ask the source: descriptor at manifest path schemas/gspp-taxonomy-1.1.0.json
 ```
 
 What was attempted (class and operation); what blocks it (facet ids,

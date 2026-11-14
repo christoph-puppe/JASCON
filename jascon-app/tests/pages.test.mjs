@@ -228,7 +228,7 @@ test("a system built on the Implement page validates; an advice pack is previewe
     await page.goto(base + "index.html");
     await page.waitForFunction(() => document.querySelector("#help h1"));
     await page.evaluate(() => localStorage.setItem("jsc:cfg:ui:lang", "en"));
-    await page.locator("#pick-files").setInputFiles([path.join(EX, "req-konf-14-1.json"), path.join(EX, "gspp-taxonomy-1.0.0.json")]);
+    await page.locator("#pick-files").setInputFiles([path.join(EX, "req-konf-14-1.json"), path.join(EX, "gspp-taxonomy-1.1.0.json")]);
     await page.waitForFunction(() => document.querySelector("#home-log .l-ok"));
 
     /* a system, built the way the page builds one: every edge cites a capability its asset declares */
@@ -826,7 +826,7 @@ test("Tailor: the author of a save stands on the Tailoring; a second author does
    bundle the reference refuses (KERNEL-1). */
 test("the export pins kernel 2.0.0 exactly when a page named an author, and the reference accepts the set either way", { skip: needs }, async t => {
   const s = await session(), tmp = [], KONF = "https://ns.bsi.bund.de/gspp/req/KONF.14.1";
-  const loose = ["req-konf-14-1.json", "req-ism-1234.json", "req-iec-cso-iir.json", "set-crypto.json", "set-baseline.json", "gspp-taxonomy-1.0.0.json"].map(f => path.join(EX, f));
+  const loose = ["req-konf-14-1.json", "req-ism-1234.json", "req-iec-cso-iir.json", "set-crypto.json", "set-baseline.json", "gspp-taxonomy-1.1.0.json"].map(f => path.join(EX, f));
   try {
     await load(s, loose);
     const p = s.page;

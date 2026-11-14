@@ -313,9 +313,11 @@ registration number — the smell §14.6 warns about.
 
 Authorities mint their own, registered and pinned like anything else.
 The gate produced five real ones: **`gspp-taxonomy@1`**
-(sec-level/effort/tags/class/practice — sample from KONF.14.1:
-`{"sec-level": "normal-SdT", "effort": 2, "tags": ["Produktbeschreibung",
-"Cryptography", "Zero Trust"], ...}`), **`gspp-narrative@1`**
+(class/sec-level/effort/tags, keyed by statement; since version 1.1.0
+typed, with the publisher's two levels and an effort of 0 to 5 — sample
+from KONF.14.1: `{"by-statement": {"smt": {"class":
+"BSI-Stand-der-Technik-Kernel", "sec-level": "normal-SdT", "effort": 2,
+"tags": ["Produktbeschreibung", "Cryptography"]}}}`), **`gspp-narrative@1`**
 (guidance + layer descriptions), **`cr26/scope@1`** (subset
 applicability — sample: `{"types": ["20x","Rev5"], "paths":
 ["Program","Agency"], "classes": ["B","C","D"], "affects":
