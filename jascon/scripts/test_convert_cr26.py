@@ -23,12 +23,18 @@ were changed in one place, to see the run stop where it must.
 Since 2026-11-14 the converter keeps a ledger of every source value
 (backlog #41), and its record is compared with the committed one by the
 workflow. What this file holds of it: that the record counts every source
-value once and under the path map's paths; that a drop is declared only
-where the path map says the path is not carried; that a row of the path map
-which names a destination has every value there that can be followed; that
-the 52 values the ledger cannot follow (a flag or a fraction carries no
-origin) stand in the bundle, each read at its place; and that a claim of the
-ledger which does not hold against the written files fails the run.
+value once and under the path map's paths; that nothing is unaccounted and
+no claim fails; that a drop is declared only where the path map says the
+path is not carried, and a row which names a destination has every value
+there; that a flag and a fraction stand in the bundle, each read at its
+place; and that a value the converter does not write, or a claim that does
+not hold against the written files, ends the run with 1.
+
+And of the losses the ledger found (author, 2026-11-14): the status of a
+family or of a KSI category is mapped to the kernel's lifecycle by one rule,
+on the document's Set and on every object made from the document, with the
+source's word beside it on the Set; no object of a document the source does
+not call stable is written active; the id of a KSI category is carried.
 
 Standard library only. Every run writes into a temporary directory."""
 import copy, decimal, hashlib, json, os, re, shutil, subprocess, sys, tempfile, unittest
@@ -388,38 +394,46 @@ class TheLedger(Converted):
         self.assertGreater(dropped, 0, "the path map declares no drop: nothing was tested")
         self.assertEqual(dropped, self.ledger["totals"]["intentionally-dropped"])
 
-    def test_a_row_that_names_a_destination_has_every_value_there_that_can_be_followed(self):
-        no_origin = {r["path"]: r["count"] for r in self.report["ledger"]["values-that-cannot-carry-an-origin"]["by-path"]}
-        listed = {u["path"]: u for u in self.ledger["unaccounted-paths"]}
+    def test_a_row_that_names_a_destination_has_every_value_there(self):
         for r in self.rows:
             level = self.map[r["path"]]["level"]
-            self.assertIn(level, ("L1", "L2", "declared-drop", "undecided"), r["path"])
-            if level == "undecided":
-                self.assertEqual(r["outcome"], "unaccounted", f"{r['path']}: the path map says nothing is written")
-            elif level in ("L1", "L2") and r["outcome"] == "unaccounted":
-                # the row names a destination: only a value that cannot carry an origin may be without one in the ledger
-                self.assertEqual(r["count"], no_origin.get(r["path"]), f"{r['path']}: a value has no destination")
-                for pointer in listed[r["path"]]["pointers"]:
-                    self.assertIsInstance(self.at(pointer), (bool, decimal.Decimal), pointer)
+            self.assertIn(level, ("L1", "L2", "declared-drop"), r["path"])
+            if level in ("L1", "L2"):
+                self.assertIn(r["outcome"], ("copied", "transformed"), f"{r['path']}: the path map names a destination")
+                self.assertGreater(len(r["to"]), 0, r["path"])
         self.assertEqual(self.report["ledger"]["path-map-rows-the-ledger-contradicts"], [])
         self.assertIn("path-map rows contradicted 0", self.stdout)
+
+    def test_nothing_is_unaccounted_and_nothing_is_called_no_content(self):
+        t = self.ledger["totals"]
+        self.assertEqual(list(t), ["copied", "transformed", "not-content", "intentionally-dropped", "unaccounted"])
+        self.assertEqual((t["unaccounted"], self.ledger["unaccounted-paths"], self.report["ledger"]["unaccounted"]), (0, [], []))
+        # this source has no name that only selects a field, no namespace and no id that is rebuilt: nothing may hide there
+        self.assertEqual((t["not-content"], self.report["ledger"]["not-content"]), (0, []))
+        self.assertNotIn("UNACCOUNTED", self.stdout)
+
+    def test_the_declared_drops_are_listed_with_a_reading_and_an_example_that_is_no_prose(self):
+        drops = self.report["ledger"]["declared-drops"]
+        self.assertEqual(sum(x["source-values"] for x in drops), self.ledger["totals"]["intentionally-dropped"])
+        self.assertEqual({x["reason"] for x in drops}, {r["destination"] for r in self.report["path-map"] if r["level"] == "declared-drop"})
+        for x in drops:
+            self.assertEqual(sum(q["count"] for q in x["paths"]), x["source-values"], x["reason"])
+            self.assertTrue(x["reading"].startswith(("content", "not content, because")), x["reading"])
+            self.assertIn(x["reading"], self.md)
+            if "value" in x["example"]:
+                self.assertEqual(self.at(x["example"]["source"]), x["example"]["value"])
+                self.assertNotIn(" ", str(x["example"]["value"]))
 
     def test_the_report_says_what_the_record_says(self):
         L, t = self.report["ledger"], self.ledger["totals"]
         self.assertEqual((L["file"], L["leaf-values"], L["totals"]), ("cr26-conversion-ledger.json", self.ledger["leaf-values"], t))
-        self.assertEqual(L["unaccounted"]["no-origin"] + L["unaccounted"]["written-nowhere"], t["unaccounted"])
-        self.assertEqual(sum(u["count"] for u in L["unaccounted"]["by-path"]), t["unaccounted"])
-        self.assertEqual(sum(x["source-values"] for x in L["declared-drops"]), t["intentionally-dropped"])
+        self.assertEqual(sum(u["count"] for u in L["unaccounted"]), t["unaccounted"])
+        self.assertEqual(sum(x["source-values"] for x in L["not-content"]), t["not-content"])
         self.assertEqual({x["rule"] for x in L["rules"]}, {d["rule"] for r in self.rows for d in r.get("to", []) if "rule" in d})
-        for words in (f"**{t['copied']:,} copied**", f"**{t['transformed']:,} transformed**",
+        for words in (f"**{t['copied']:,} copied**", f"**{t['transformed']:,} transformed**", f"**{t['not-content']:,} no content**",
                       f"**{t['intentionally-dropped']:,} dropped for a declared reason**", f"**{t['unaccounted']:,} unaccounted**"):
             self.assertIn(words, self.md)
         for x in L["rules"]: self.assertIn(f"| {x['rule']} | {x['source-values']:,} |", self.md)
-
-    def test_unaccounted_values_are_printed_and_do_not_fail_the_run(self):
-        if self.ledger["totals"]["unaccounted"]:        # the run this class reads ended with exit code 0 (setUp)
-            self.assertIn("UNACCOUNTED", self.stdout)
-            for u in self.ledger["unaccounted-paths"]: self.assertIn(u["path"], self.stdout)
 
     def test_the_reports_and_the_record_print_no_phrase_of_the_publication(self):
         phrases = set()        # a key of the source with a space in it: the label of a node of a flow diagram
@@ -448,11 +462,12 @@ class TheLedger(Converted):
         self.assertEqual(carried["no-source-value"], carried["leaf-values"], "an object copied from another bundle has no value of this source")
 
 
-class WhatTheLedgerCannotFollow(Converted):
-    """A flag or a fraction cannot carry an origin, so the ledger lists it as
-    unaccounted wherever it went. Each of them is read here at the place the
-    converter writes it. A flag or a fraction this class does not read fails
-    the count at the end, so what the report says of them stays true."""
+class FlagsAndFractions(Converted):
+    """A flag and a fraction are content like a string. Until 2026-11-14 the
+    ledger could not follow them and read all 52 as unaccounted. Each of them
+    is read here at the place the converter writes it, with no help of the
+    ledger; a flag or a fraction this class does not read fails the count at
+    the end. That the ledger follows them too is the total of the record."""
     def test_every_flag_and_every_fraction_of_the_source_stands_in_the_bundle(self):
         seen, root = [], self.objs[f"{NS}/set/root"]["facets"]
         # the glossary: do_not_link in terminology@1, ignore_in_terms beside it, the block's own members in glossary-info
@@ -489,9 +504,108 @@ class WhatTheLedgerCannotFollow(Converted):
                 "number that is no integer": sum(1 for _, what in seen if what == "fraction"), "null": 0}
         self.assertEqual(read, every, "a flag or a fraction of the source stands on a path this test does not read")
         self.assertGreater(every["boolean"], 0); self.assertGreater(every["number that is no integer"], 0)
-        L = self.report["ledger"]
-        self.assertEqual(L["values-that-cannot-carry-an-origin"]["by-kind"], {k: n for k, n in every.items() if n})
-        self.assertEqual(L["unaccounted"]["no-origin"], sum(every.values()))
+        self.assertEqual(self.report["ledger"]["nulls-in-the-source"], every["null"])
+        self.assertEqual(self.ledger["totals"]["unaccounted"], 0)
+        decimal_rule = [d for r in self.ledger["paths"] for d in r.get("to", []) if d.get("rule", "").startswith("decimal string")]
+        self.assertEqual(sum(d["count"] for d in decimal_rule), every["number that is no integer"], "a fraction is written by the rule the ledger checks")
+
+
+class StatusAndLifecycle(Converted):
+    """The publisher gives a family and a KSI category the status of a
+    document: stable, placeholder or empty. The kernel's lifecycle knows
+    draft, active, deprecated, withdrawn. The converter maps by one rule and
+    keeps the source's word; the rule is stated here a second time, from the
+    author's decision and not from the converter's table."""
+    RULE = {"stable": "active", "placeholder": "draft", "empty": "draft"}
+
+    def documents(self):
+        """(the document's Set, its status, the ids of the objects made from the document)"""
+        for fk, fam in self.src["FRR"].items():
+            made = set()
+            for track in fam["data"].values():
+                for subset in track.values():
+                    for rid, r in subset.items():
+                        made.add(f"{NS}/req/{rid}")
+                        made.update(f"{NS}/map/{slug(rid)}--{slug(c)}" for c in r.get("controls") or [])
+            made.update(i for i in self.objs if i.startswith(f"{NS}/set/subset/{slug(fk)}-"))
+            yield f"{NS}/set/tax/{slug(fk)}", fam["info"].get("status"), made
+        for ck, theme in self.src["KSI"].items():
+            made = set()
+            for iid, ind in theme["indicators"].items():
+                made.add(f"{NS}/ksi/{iid}")
+                made.update(f"{NS}/map/{slug(iid)}--{slug(c)}" for c in ind.get("controls") or [])
+            yield f"{NS}/set/ksi/{slug(ck)}", theme.get("status"), made
+
+    def test_the_set_of_a_document_has_the_lifecycle_of_the_rule_and_the_sources_word_beside_it(self):
+        n = 0
+        for set_id, status, _ in self.documents():
+            self.assertIn(status, self.RULE, set_id)
+            o = self.objs[set_id]
+            self.assertEqual(o["lifecycle"], self.RULE[status], set_id)
+            self.assertEqual(o["facets"][NARR].get("status"), status, set_id)
+            n += 1
+        self.assertEqual(n, len(self.src["FRR"]) + len(self.src["KSI"]))
+
+    def test_every_object_made_from_a_document_follows_the_documents_status(self):
+        covered = set()
+        for set_id, status, made in self.documents():
+            self.assertGreater(len(made), 0, set_id)
+            for i in made:
+                self.assertEqual(self.objs[i]["lifecycle"], self.RULE[status], f"{i}: its document is {status}")
+            self.assertEqual(covered & made, set(), "an object is made from one document")
+            covered |= made | {set_id}
+        # every Requirement and every Mapping of the publication is an object of a document
+        for i, o in self.objs.items():
+            if i.startswith((f"{NS}/req/", f"{NS}/ksi/", f"{NS}/map/")): self.assertIn(i, covered)
+
+    def test_nothing_of_a_document_the_source_does_not_call_stable_is_written_active(self):
+        for set_id, status, made in self.documents():
+            if status != "stable":
+                for i in made | {set_id}: self.assertNotEqual(self.objs[i]["lifecycle"], "active", i)
+
+    def test_the_report_counts_the_lifecycles_as_the_bundle_has_them(self):
+        got = {}
+        for o in self.objs.values(): got[o["lifecycle"]] = got.get(o["lifecycle"], 0) + 1
+        said = {}
+        for x in self.report["lifecycle"]["objects"]: said[x["lifecycle"]] = said.get(x["lifecycle"], 0) + x["count"]
+        self.assertEqual(said, got)
+        self.assertEqual(self.report["lifecycle"]["rule"], self.RULE)
+        from_status = sum(x["count"] for x in self.report["lifecycle"]["objects"] if x["origin"] == "from the status of a document")
+        self.assertEqual(from_status, sum(len(made) + 1 for _, _, made in self.documents()))
+
+
+class KsiCategoryIds(Converted):
+    def test_the_id_of_a_ksi_category_is_an_alias_of_its_set(self):
+        n = 0
+        for ck, theme in self.src["KSI"].items():
+            aliases = self.objs[f"{NS}/set/ksi/{slug(ck)}"].get("aliases", [])
+            self.assertEqual([a["value"] for a in aliases], [theme["id"]], ck)
+            self.assertEqual({a["scheme"] for a in aliases}, {"fedramp-cr26:KSI.id"}, ck)
+            n += 1
+        self.assertGreater(n, 0, "the source has no KSI category: nothing was tested")
+
+
+class CarriedRequirements(Converted):
+    """The Rev 5 Requirements the overlay tailors are carried as the SP 800-53
+    bundle has them, and so are the pins of their facets."""
+    NIST_BUNDLE = os.path.join(ROOT, "converted_examples", "US.SP800-53", "sp800-53-core-bundle")
+
+    def test_a_carried_requirement_and_the_pins_of_its_facets_are_the_sp800_53_bundles_own(self):
+        theirs = read_json(os.path.join(self.NIST_BUNDLE, "content-manifest.json"))
+        their_path = {e["id"]: e["path"] for e in theirs["objects"]}
+        their_pin = {s["id"]: s["path"] for s in theirs["facet-schemas"]}
+        mine = read_json(os.path.join(self.bundle, "content-manifest.json"))
+        my_pin = {s["id"]: s["path"] for s in mine["facet-schemas"]}
+        carried = [i for i in self.objs if i.startswith(NIST + "/")]
+        self.assertGreater(len(carried), 0, "no Requirement is carried: nothing was tested")
+        for i in carried:
+            self.assertEqual(self.objs[i], read_json(os.path.join(self.NIST_BUNDLE, *their_path[i].split("/"))), i)
+            for key in self.objs[i].get("facets", {}):
+                fid = key.rsplit("@", 1)[0]
+                self.assertIn(fid, my_pin, f"{i}: no pin for {key}")
+                with open(os.path.join(self.bundle, *my_pin[fid].split("/")), "rb") as a, \
+                     open(os.path.join(self.NIST_BUNDLE, *their_pin[fid].split("/")), "rb") as b:
+                    self.assertEqual(a.read(), b.read(), f"{fid}: the pin is not the SP 800-53 bundle's")
 
 
 class Arguments(unittest.TestCase):
@@ -525,8 +639,11 @@ class ChangedSource(unittest.TestCase):
         scripts = os.path.join(cls.root, "jascon", "scripts"); os.makedirs(scripts)
         for name in ("convert_cr26.py", "oscal_conv_lib.py"): shutil.copy(os.path.join(HERE, name), scripts)
         shutil.copytree(os.path.join(ROOT, "jascon", "schemas", "stdlib"), os.path.join(cls.root, "jascon", "schemas", "stdlib"))
-        nist = ("converted_examples", "US.SP800-53", "sp800-53-core-bundle", "objects", "req")
-        shutil.copytree(os.path.join(ROOT, *nist), os.path.join(cls.root, *nist))
+        # of the SP 800-53 bundle the converter reads the Requirements, the manifest and the pinned schemas
+        nist = ("converted_examples", "US.SP800-53", "sp800-53-core-bundle")
+        shutil.copytree(os.path.join(ROOT, *nist, "objects", "req"), os.path.join(cls.root, *nist, "objects", "req"))
+        shutil.copytree(os.path.join(ROOT, *nist, "schemas"), os.path.join(cls.root, *nist, "schemas"))
+        shutil.copy(os.path.join(ROOT, *nist, "content-manifest.json"), os.path.join(cls.root, *nist))
         os.makedirs(os.path.join(cls.root, "sources"))
         cls.converter = os.path.join(scripts, "convert_cr26.py")
         cls.source = os.path.join(cls.root, "sources", "cr_fedramp-consolidated-rules.json")
@@ -603,12 +720,14 @@ class ChangedSource(unittest.TestCase):
     def test_without_the_source_the_run_says_where_to_get_it(self):
         self.stops(None, "SOURCES.sha256")
 
-    def test_a_value_the_converter_does_not_write_is_unaccounted_and_the_run_does_not_fail(self):
+    def test_a_value_the_converter_does_not_write_is_unaccounted_and_the_run_ends_with_1(self):
         # The glossary block gets a member. The path map has a row for everything under FRD.info (glossary-info),
         # so the gate UNMAPPED = 0 is open; the converter copies six named members, and this one it does not write.
+        # "A converter run with an unaccounted value exits non-zero" (author, 2026-11-14).
         def change(src): src["FRD"]["info"]["a_member_of_a_later_publication"] = "x"
         code, out, err, d = self.run_on(change)
-        self.assertEqual(code, 0, err)
+        self.assertEqual(code, 1, out)
+        self.assertIn("1 source value(s) unaccounted", err)
         self.assertIn("UNMAPPED: 0", out); self.assertIn("UNACCOUNTED", out); self.assertIn("PATH MAP CONTRADICTED", out)
         path = "cr26.FRD.info.a_member_of_a_later_publication"
         self.assertEqual(read_json(os.path.join(d, "cr26-coverage-report.json"))["ledger"]["path-map-rows-the-ledger-contradicts"],
@@ -616,13 +735,46 @@ class ChangedSource(unittest.TestCase):
         ledger = read_json(os.path.join(d, "cr26-conversion-ledger.json"))
         self.assertIn({"path": path, "count": 1, "pointers": ["cr26#/FRD/info/a_member_of_a_later_publication"]},
                       ledger["unaccounted-paths"])
-        # one value more is unaccounted than on the unchanged source, and the report of this run says this run's number
+        # the run wrote all the same, and its report says this run's number, not the committed one
+        self.assertEqual(ledger["totals"]["unaccounted"], 1)
+        with open(os.path.join(d, "cr26-coverage-report.md"), encoding="utf-8") as f: self.assertIn("**1 unaccounted**", f.read())
+        self.assertTrue(os.path.isfile(os.path.join(d, "cr26-core-bundle", "content-manifest.json")))
+
+    def test_a_flag_the_converter_does_not_write_is_unaccounted_too(self):
+        # until 2026-11-14 the ledger could not follow a flag, and a lost one looked like every carried one
+        def change(src): src["FRD"]["info"]["a_flag_of_a_later_publication"] = True
+        code, out, err, d = self.run_on(change)
+        self.assertEqual(code, 1, out); self.assertIn("1 source value(s) unaccounted", err)
+
+    def test_a_family_marked_placeholder_is_not_written_active(self):
+        # a family the source calls stable is made a placeholder: its Set, its subset Sets, its rules and their Mappings
+        # change their lifecycle with it, and nothing else does
+        fk = next(k for k, f in self.original["FRR"].items() if f["info"].get("status") == "stable"
+                  and any(r.get("controls") for t in f["data"].values() for sub in t.values() for r in sub.values()))
+        def change(src): src["FRR"][fk]["info"]["status"] = "placeholder"
+        code, out, err, d = self.run_on(change)
+        self.assertEqual(code, 0, err)
         code, _, err, unchanged = self.run_on(lambda src: None)
         self.assertEqual(code, 0, err)
-        before = read_json(os.path.join(unchanged, "cr26-conversion-ledger.json"))["totals"]["unaccounted"]
-        self.assertEqual(ledger["totals"]["unaccounted"], before + 1)
-        with open(os.path.join(d, "cr26-coverage-report.md"), encoding="utf-8") as f:
-            self.assertIn(f"**{before + 1:,} unaccounted**", f.read())
+        new, old = objects(os.path.join(d, "cr26-core-bundle")), objects(os.path.join(unchanged, "cr26-core-bundle"))
+        self.assertEqual(set(new), set(old))
+        fam = self.original["FRR"][fk]
+        made = {f"{NS}/set/tax/{slug(fk)}"} | {i for i in new if i.startswith(f"{NS}/set/subset/{slug(fk)}-")}
+        for track in fam["data"].values():
+            for subset in track.values():
+                for rid, r in subset.items():
+                    made.add(f"{NS}/req/{rid}"); made.update(f"{NS}/map/{slug(rid)}--{slug(c)}" for c in r.get("controls") or [])
+        self.assertGreater(len([i for i in made if "/map/" in i]), 0)
+        for i in new:
+            if i in made: self.assertEqual((old[i]["lifecycle"], new[i]["lifecycle"]), ("active", "draft"), i)
+            else: self.assertEqual(new[i]["lifecycle"], old[i]["lifecycle"], i)
+        self.assertEqual(new[f"{NS}/set/tax/{slug(fk)}"]["facets"][NARR]["status"], "placeholder")
+
+    def test_a_status_the_converter_has_no_rule_for_stops_the_run(self):
+        def change(src): next(iter(src["FRR"].values()))["info"]["status"] = "retired"
+        self.stops(change, "retired", "guesses at no other word")
+        def change_theme(src): next(iter(src["KSI"].values()))["status"] = "retired"
+        self.stops(change_theme, "retired")
 
     def test_a_claim_of_the_ledger_that_does_not_hold_is_a_failed_run(self):
         # The ledger reads every file back. Here the converter is made to write another modality into the files
@@ -635,7 +787,7 @@ class ChangedSource(unittest.TestCase):
             f.write(text.replace(writes, 'f.write(json.dumps(o,indent=1,ensure_ascii=False).replace(\'"must"\',\'"should"\')+"\\n")'))
         code, out, err, d = self.run_on(lambda src: None, converter=changed)
         self.assertEqual(code, 1, err)
-        self.assertIn("do not hold against the written files", err)
+        self.assertIn("claim(s) that do not hold", err)
         self.assertIn("LEDGER CLAIMS THAT DO NOT HOLD", out)
         ledger = read_json(os.path.join(d, "cr26-conversion-ledger.json"))        # written all the same: it says which claims
         musts = sum(1 for _, r in rules(self.original) if r.get("force") == "MUST")

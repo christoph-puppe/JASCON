@@ -7,20 +7,20 @@
   "unmapped": 0,
   "coverage-pct": 100.0,
   "mapped-by-level": {
-   "L1": 4681,
+   "L1": 4718,
    "L2": 1822,
-   "declared-drop": 992,
-   "undecided": 37
+   "declared-drop": 992
   }
  },
  "ledger": {
   "file": "cr26-conversion-ledger.json",
   "leaf-values": 7532,
   "totals": {
-   "copied": 4467,
-   "transformed": 1984,
+   "copied": 4553,
+   "transformed": 1987,
+   "not-content": 0,
    "intentionally-dropped": 992,
-   "unaccounted": 89
+   "unaccounted": 0
   },
   "verification-failures": 0,
   "rules": [
@@ -45,8 +45,20 @@
     "source-values": 5
    },
    {
+    "rule": "decimal string of a number that is no integer (the kernel's spelling of a fraction, D3.9)",
+    "source-values": 3
+   },
+   {
     "rule": "duration type from the unit of the timeframe",
     "source-values": 23
+   },
+   {
+    "rule": "lifecycle of an object made from a document (a subset Set, a rule or an indicator, a Mapping of its control links), from the document's status (stable: active; placeholder, empty: draft)",
+    "source-values": 27
+   },
+   {
+    "rule": "lifecycle of the Set that stands for a document, from the document's status (stable: active; placeholder, empty: draft)",
+    "source-values": 27
    },
    {
     "rule": "modality from the force word (code map)",
@@ -69,169 +81,114 @@
     "source-values": 1
    }
   ],
+  "not-content": [],
   "declared-drops": [
    {
     "reason": "process-flow diagrams: linked resources, not requirement data (D17)",
-    "source-values": 35
+    "source-values": 35,
+    "paths": [
+     {
+      "path": "cr26.FRR.*.info.flows[].activity",
+      "count": 1
+     },
+     {
+      "path": "cr26.FRR.*.info.flows[].description",
+      "count": 1
+     },
+     {
+      "path": "cr26.FRR.*.info.flows[].nodes.*",
+      "count": 8
+     },
+     {
+      "path": "cr26.FRR.*.info.flows[].steps[].description",
+      "count": 7
+     },
+     {
+      "path": "cr26.FRR.*.info.flows[].steps[].from",
+      "count": 9
+     },
+     {
+      "path": "cr26.FRR.*.info.flows[].steps[].to",
+      "count": 9
+     }
+    ],
+    "example": {
+     "source": "cr26#/FRR/IEC/info/flows/0/steps/0/to",
+     "value": "IEC-CSO-EFR"
+    },
+    "reading": "content: the diagram is written out in the source itself (an activity, its description, nodes and steps that name rules in their order and say on which answer one follows the other) and nothing in the bundle holds it"
    },
    {
     "reason": "update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read \"history -> L0\" until 2026-11-14)",
-    "source-values": 957
+    "source-values": 957,
+    "paths": [
+     {
+      "path": "cr26.FRD.data.all.*.updated[].comment",
+      "count": 85
+     },
+     {
+      "path": "cr26.FRD.data.all.*.updated[].date",
+      "count": 85
+     },
+     {
+      "path": "cr26.FRD.data.all.*.updated[].issue",
+      "count": 1
+     },
+     {
+      "path": "cr26.FRR.*.data.*.*.*.updated[].comment",
+      "count": 303
+     },
+     {
+      "path": "cr26.FRR.*.data.*.*.*.updated[].date",
+      "count": 303
+     },
+     {
+      "path": "cr26.FRR.*.data.*.*.*.updated[].issue",
+      "count": 5
+     },
+     {
+      "path": "cr26.KSI.*.indicators.*.updated[].comment",
+      "count": 87
+     },
+     {
+      "path": "cr26.KSI.*.indicators.*.updated[].date",
+      "count": 87
+     },
+     {
+      "path": "cr26.KSI.*.indicators.*.updated[].issue",
+      "count": 1
+     }
+    ],
+    "example": {
+     "source": "cr26#/FRD/data/all/FRD-ACV/updated/0/date",
+     "value": "2026-06-24"
+    },
+    "reading": "content: an entry says on which day a term, a rule or an indicator was changed and why, some with the number of an issue; the bundle holds the day of the publication and nothing of an entry's own history"
    }
   ],
-  "unaccounted": {
-   "no-origin": 52,
-   "written-nowhere": 37,
-   "by-path": [
-    {
-     "path": "cr26.FRD.data.all.*.do_not_link",
-     "count": 9,
-     "example": "cr26#/FRD/data/all/FRD-ADV/do_not_link",
-     "class": "no origin"
-    },
-    {
-     "path": "cr26.FRD.data.all.*.ignore_in_terms",
-     "count": 9,
-     "example": "cr26#/FRD/data/all/FRD-ADV/ignore_in_terms",
-     "class": "no origin"
-    },
-    {
-     "path": "cr26.FRD.info.effective.date.grace.until_next_assessment",
-     "count": 1,
-     "example": "cr26#/FRD/info/effective/date/grace/until_next_assessment",
-     "class": "no origin"
-    },
-    {
-     "path": "cr26.FRR.*.data.*.*.*.notification[].optional",
-     "count": 3,
-     "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/notification/2/optional",
-     "class": "no origin"
-    },
-    {
-     "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.3.iir.timeframe_num",
-     "count": 1,
-     "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/varies_by_class/d/pain_timeframes/3/iir/timeframe_num",
-     "class": "no origin"
-    },
-    {
-     "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.4.iir.timeframe_num",
-     "count": 1,
-     "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/varies_by_class/d/pain_timeframes/4/iir/timeframe_num",
-     "class": "no origin"
-    },
-    {
-     "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.5.iir.timeframe_num",
-     "count": 1,
-     "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/varies_by_class/d/pain_timeframes/5/iir/timeframe_num",
-     "class": "no origin"
-    },
-    {
-     "path": "cr26.FRR.*.info.20x.effective.date.grace.until_next_assessment",
-     "count": 10,
-     "example": "cr26#/FRR/CCM/info/20x/effective/date/grace/until_next_assessment",
-     "class": "no origin"
-    },
-    {
-     "path": "cr26.FRR.*.info.effective.date.grace.until_next_assessment",
-     "count": 7,
-     "example": "cr26#/FRR/AFC/info/effective/date/grace/until_next_assessment",
-     "class": "no origin"
-    },
-    {
-     "path": "cr26.FRR.*.info.rev5.effective.date.grace.until_next_assessment",
-     "count": 10,
-     "example": "cr26#/FRR/CCM/info/rev5/effective/date/grace/until_next_assessment",
-     "class": "no origin"
-    },
-    {
-     "path": "cr26.FRR.*.info.status",
-     "count": 17,
-     "example": "cr26#/FRR/AFC/info/status",
-     "class": "not carried"
-    },
-    {
-     "path": "cr26.KSI.*.id",
-     "count": 10,
-     "example": "cr26#/KSI/CED/id",
-     "class": "not carried"
-    },
-    {
-     "path": "cr26.KSI.*.status",
-     "count": 10,
-     "example": "cr26#/KSI/CED/status",
-     "class": "not carried"
-    }
-   ]
-  },
-  "values-that-cannot-carry-an-origin": {
-   "by-kind": {
-    "boolean": 49,
-    "number that is no integer": 3
-   },
-   "by-path": [
-    {
-     "path": "cr26.FRD.data.all.*.do_not_link",
-     "count": 9
-    },
-    {
-     "path": "cr26.FRD.data.all.*.ignore_in_terms",
-     "count": 9
-    },
-    {
-     "path": "cr26.FRD.info.effective.date.grace.until_next_assessment",
-     "count": 1
-    },
-    {
-     "path": "cr26.FRR.*.data.*.*.*.notification[].optional",
-     "count": 3
-    },
-    {
-     "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.3.iir.timeframe_num",
-     "count": 1
-    },
-    {
-     "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.4.iir.timeframe_num",
-     "count": 1
-    },
-    {
-     "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.5.iir.timeframe_num",
-     "count": 1
-    },
-    {
-     "path": "cr26.FRR.*.info.20x.effective.date.grace.until_next_assessment",
-     "count": 10
-    },
-    {
-     "path": "cr26.FRR.*.info.effective.date.grace.until_next_assessment",
-     "count": 7
-    },
-    {
-     "path": "cr26.FRR.*.info.rev5.effective.date.grace.until_next_assessment",
-     "count": 10
-    }
-   ]
-  },
+  "unaccounted": [],
+  "nulls-in-the-source": 0,
   "path-map-rows-the-ledger-contradicts": [],
   "written-values-with-no-source-value": [
    {
     "written-as": "Mapping",
     "leaf-values": 7172,
-    "no-source-value": 4564
+    "no-source-value": 3912
    },
    {
     "written-as": "Requirement (KSI)",
     "leaf-values": 594,
-    "no-source-value": 361
+    "no-source-value": 315
    },
    {
     "written-as": "Requirement (rule)",
     "leaf-values": 6439,
-    "no-source-value": 1897
+    "no-source-value": 1646
    },
    {
     "written-as": "Set",
-    "leaf-values": 2989,
-    "no-source-value": 1556
+    "leaf-values": 3036,
+    "no-source-value": 1437
    },
    {
     "written-as": "Tailoring",
@@ -257,8 +214,54 @@
   "tailorings": 5,
   "total": 1054
  },
+ "lifecycle": {
+  "status-of-the-source": [
+   {
+    "document": "KSI category",
+    "status": "stable",
+    "count": 10
+   },
+   {
+    "document": "family",
+    "status": "placeholder",
+    "count": 1
+   },
+   {
+    "document": "family",
+    "status": "stable",
+    "count": 16
+   }
+  ],
+  "rule": {
+   "stable": "active",
+   "placeholder": "draft",
+   "empty": "draft"
+  },
+  "objects": [
+   {
+    "lifecycle": "active",
+    "origin": "as the SP 800-53 bundle has it",
+    "count": 14
+   },
+   {
+    "lifecycle": "active",
+    "origin": "from the status of a document",
+    "count": 998
+   },
+   {
+    "lifecycle": "draft",
+    "origin": "from the status of a document",
+    "count": 28
+   },
+   {
+    "lifecycle": "active",
+    "origin": "the converter's own",
+    "count": 14
+   }
+  ]
+ },
  "bundle": {
-  "content-manifest-digest": "sha256:9cdf86017d4e42f17d6edf507d53d30eb44d11f309ab8f0d8e28df13c1a545bd",
+  "content-manifest-digest": "sha256:193c6362654f3e969dbd46180b03cf2614aaf7bbaa210044312401eed9b8b710",
   "objects": 1054,
   "facet-schemas": 11
  },
@@ -1616,8 +1619,8 @@
   {
    "path": "cr26.FRR.*.info.status",
    "count": 17,
-   "level": "undecided",
-   "destination": "no destination: every family Set is written `lifecycle: active`, whatever the status says (the map read \"lifecycle\" until 2026-11-14; the ledger found nothing written)"
+   "level": "L1",
+   "destination": "the family Set's `lifecycle` by the rule for a document's status, the lifecycle of every object made from the family (subset Sets, rules, Mappings of their control links), and the word itself in narrative@1 of the family Set: status"
   },
   {
    "path": "cr26.FRR.*.info.subsets.*.applicability.affects[]",
@@ -1670,8 +1673,8 @@
   {
    "path": "cr26.KSI.*.id",
    "count": 10,
-   "level": "undecided",
-   "destination": "no destination: the id of a KSI category Set is minted from the key the category stands under, and the category's own `id` is another string (the map read \"id\" until 2026-11-14; the ledger found nothing written)"
+   "level": "L1",
+   "destination": "KSI category Set: aliases[] (the theme's own id; the Set's URI is minted from the key the theme stands under)"
   },
   {
    "path": "cr26.KSI.*.indicators.*.controls[]",
@@ -1725,25 +1728,25 @@
    "path": "cr26.KSI.*.name",
    "count": 10,
    "level": "L1",
-   "destination": "KSI category Set: title/annotations/label"
+   "destination": "KSI category Set: title / annotations.web_name / label"
   },
   {
    "path": "cr26.KSI.*.short_name",
    "count": 10,
    "level": "L1",
-   "destination": "KSI category Set: title/annotations/label"
+   "destination": "KSI category Set: title / annotations.web_name / label"
   },
   {
    "path": "cr26.KSI.*.status",
    "count": 10,
-   "level": "undecided",
-   "destination": "no destination: every KSI category Set is written `lifecycle: active`, whatever the status says (the map read \"lifecycle\" until 2026-11-14; the ledger found nothing written)"
+   "level": "L1",
+   "destination": "the KSI category Set's `lifecycle` by the rule for a document's status, the lifecycle of its indicators and of the Mappings of their control links, and the word itself in narrative@1 of the category Set: status"
   },
   {
    "path": "cr26.KSI.*.web_name",
    "count": 10,
    "level": "L1",
-   "destination": "KSI category Set: title/annotations/label"
+   "destination": "KSI category Set: title / annotations.web_name / label"
   },
   {
    "path": "cr26.info.default_artifacts.FRR[]",
