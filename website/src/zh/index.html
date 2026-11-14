@@ -2,7 +2,7 @@
 title: JASCON：GRC 工程的数据层
 description: JASCON 是一种面向合规数据的开放表示法。标准、裁剪、风险、实施、评估和证明构成一张由类型化、内容寻址的 JSON 对象组成的图，程序可以对其进行校验、比对差异、计算和签名。
 nav: home
-source: 86da521823fd
+source: e1f019493265
 ---
 <section class="hero">
   <div class="wrap hero-grid">
@@ -142,7 +142,7 @@ source: 86da521823fd
         <span class="tier tier-measured">于 1.0.0 实测</span>
       </div>
     </div>
-    <p class="stats-note">第一个数字在每次构建本站时重新计算（提交 <code>{{ facts.measured.commit }}</code>）。“每条源路径”指的是路径覆盖：每个值是否真正到达，迄今只在一个语料库上追踪过；在那里，{{ n.ledger_values }} 个源值中有 {{ n.ledger_carried }} 个被携带，{{ n.ledger_dropped }} 个在说明原因后舍弃。这一点及其他未决问题列在<a href="evidence.html#limits">尚未证明的内容</a>中。</p>
+    <p class="stats-note">第一个数字在每次构建本站时重新计算（提交 <code>{{ facts.measured.commit }}</code>）。“每条源路径”指的是路径覆盖：每个值是否真正到达，迄今在 {{ n.ledger_corpora }} 个语料库上用台账追踪过；在那里，{{ n.ledger_values }} 个源值中有 {{ n.ledger_carried }} 个被携带，{{ n.ledger_dropped }} 个在说明原因后舍弃，{{ n.ledger_unaccounted }} 个去向不明。这一点及其他未决问题列在<a href="evidence.html#limits">尚未证明的内容</a>中。</p>
   </div>
 </section>
 

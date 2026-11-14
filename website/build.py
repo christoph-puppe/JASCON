@@ -283,6 +283,7 @@ def fragments(facts, T):
         "family_rows": family_rows,
         "family_chips": family_chips,
         "bundle_rows": "\n".join(rows),
+        "ledger_rows": ledger_rows(sep),
     }
 
 
@@ -323,19 +324,55 @@ def context(facts, site, T):
     return ctx
 
 
-IFA_REPORT = os.path.join("converted_examples", "US.IFA-GoodRead", "ifa-coverage-report.json")
+
+
+def ledgers():
+    """The conversion ledgers (backlog #41), read from the coverage reports the
+    converters wrote: one per corpus whose converter follows every source
+    value into the bundle. -> [(corpus, ledger)], and the number of corpora
+    whose report has none."""
+    found, without = [], 0
+    root = os.path.join(REPO, "converted_examples")
+    for corpus in sorted(os.listdir(root)):
+        reports = [f for f in sorted(os.listdir(os.path.join(root, corpus))) if f.endswith("-coverage-report.json")]
+        if not reports:
+            continue
+        ledger = json.loads(read(os.path.join(root, corpus, reports[0]))).get("ledger")
+        if ledger is None:
+            without += 1
+            continue
+        t = ledger["totals"]
+        if sum(t.values()) != ledger["leaf-values"]:
+            die(f"{corpus}: the ledger's totals do not add up to its leaf values")
+        if ledger["verification-failures"]:
+            die(f"{corpus}: the ledger records {ledger['verification-failures']} failed check(s)")
+        found.append((corpus, ledger))
+    if not found:
+        die("no coverage report carries a ledger")
+    return found, without
 
 
 def ledger_counts():
-    """The conversion ledger of the one corpus that has one (backlog #41), read
-    from the report its converter wrote. The pages name these counts and never
-    type them, so the unaccounted values can be decided path by path without
-    touching a page or a translation."""
-    ledger = json.loads(read(os.path.join(REPO, IFA_REPORT)))["ledger"]
-    t = ledger["totals"]
-    return {"ledger_values": ledger["leaf-values"], "ledger_copied": t["copied"],
+    """What the pages say about the ledgers, summed over the corpora that
+    have one. The pages name these counts and never type them, so a decision
+    about an unaccounted value changes no page and no translation."""
+    found, without = ledgers()
+    t = {k: sum(l["totals"][k] for _, l in found) for k in ("copied", "transformed", "intentionally-dropped", "unaccounted")}
+    return {"ledger_corpora": len(found), "ledger_unmeasured": without,
+            "ledger_values": sum(l["leaf-values"] for _, l in found), "ledger_copied": t["copied"],
             "ledger_transformed": t["transformed"], "ledger_carried": t["copied"] + t["transformed"],
             "ledger_dropped": t["intentionally-dropped"], "ledger_unaccounted": t["unaccounted"]}
+
+
+def ledger_rows(sep):
+    """One table row per corpus with a ledger; the header is in each page."""
+    rows = []
+    for corpus, l in ledgers()[0]:
+        t = l["totals"]
+        cells = [l["leaf-values"], t["copied"], t["transformed"], t["intentionally-dropped"], t["unaccounted"]]
+        rows.append('<tr><th scope="row"><span class="corpus-id">' + html.escape(corpus) + "</span></th>"
+                    + "".join('<td class="num">' + f"{n:,}".replace(",", sep) + "</td>" for n in cells) + "</tr>")
+    return "\n".join(rows)
 
 
 DEMO_FILE = "req-ism-1234.json"

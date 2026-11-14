@@ -2,7 +2,7 @@
 title: Belege: was gemessen wurde und was nicht | JASCON
 description: Das Konformitätskorpus, die beiden Referenzvalidatoren, die konvertierten Kataloge mit ihren Lizenzen, die Nachweis-Gates, die offenen Grenzen und die Nachbarformate. Jede Zahl ist als gemessen, entworfen oder offen gekennzeichnet.
 nav: evidence
-source: 647889e2ab38
+source: e6a1aec28b4e
 ---
 <section class="page-hero">
   <div class="wrap">
@@ -152,7 +152,15 @@ source: 647889e2ab38
       </div>
       <div class="limit">
         <h3>Pfadabdeckung heißt nicht, dass die Werte ankommen <span class="tier tier-open">offen, Backlog 41</span></h3>
-        <p>Die Abdeckungsberichte zählen Quellpfade mit deklariertem Ziel. Ob jeder Wert ankommt, wurde an einem Korpus nachverfolgt, dem NIST-Beispielsystem, mit einem Protokoll, das jeden Quellwert durch den Konverter verfolgt: Von {{ n.ledger_values }} Blattwerten werden {{ n.ledger_carried }} übertragen ({{ n.ledger_copied }} kopiert, {{ n.ledger_transformed }} über eine benannte Regel), {{ n.ledger_dropped }} entfallen mit angegebenem Grund, und {{ n.ledger_unaccounted }} sind ungeklärt: kein Ziel und kein angegebener Grund. Geklärt heißt nicht übertragen: Ein entfallener Wert steht nicht im Bundle, aufgrund einer Entscheidung, die niedergeschrieben ist, und das Protokoll verfolgt nicht zurück, was ein Konverter von sich aus schreibt. Der Workflow reproduziert diese Konvertierung bei jeder Änderung aus ihren festgeschriebenen Quelldateien. Die übrigen zehn Korpora sind nicht gemessen.</p>
+        <p>Die Abdeckungsberichte zählen Quellpfade mit deklariertem Ziel. Ob jeder Wert ankommt, wird an {{ n.ledger_corpora }} Korpora nachverfolgt, mit einem Protokoll, das jeden Quellwert durch den Konverter verfolgt: Von {{ n.ledger_values }} Blattwerten werden {{ n.ledger_carried }} übertragen ({{ n.ledger_copied }} kopiert, {{ n.ledger_transformed }} über eine benannte Regel), {{ n.ledger_dropped }} entfallen mit angegebenem Grund, und {{ n.ledger_unaccounted }} sind ungeklärt: kein Ziel und kein angegebener Grund. Jede Pfadkarte dieser Korpora weist 100 % aus; die Protokolle haben dennoch Werte gefunden, die verloren gehen. Geklärt heißt nicht übertragen: Ein entfallener Wert steht nicht im Bundle, aufgrund einer Entscheidung, die niedergeschrieben ist, und das Protokoll verfolgt nicht zurück, was ein Konverter von sich aus schreibt. Der Workflow reproduziert diese Konvertierungen bei jeder Änderung aus ihren festgeschriebenen Quelldateien. Die übrigen {{ n.ledger_unmeasured }} Korpora sind nicht gemessen.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Korpus</th><th class="num">Quellwerte</th><th class="num">Kopiert</th><th class="num">Über eine benannte Regel</th><th class="num">Entfallen, Grund angegeben</th><th class="num">Ungeklärt</th></tr></thead>
+            <tbody>
+{{ html.ledger_rows }}
+            </tbody>
+          </table>
+        </div>
       </div>
       <div class="limit">
         <h3>Das erste Risk-Korpus bleibt in seinem ersten Zustand <span class="tier tier-open">offen</span></h3>

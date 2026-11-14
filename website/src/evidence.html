@@ -151,7 +151,15 @@ nav: evidence
       </div>
       <div class="limit">
         <h3>Path coverage is not value arrival <span class="tier tier-open">open, backlog 41</span></h3>
-        <p>The coverage reports count source paths with a declared destination. Whether each value arrives was traced on one corpus, the NIST example system, with a ledger that follows every source value through the converter: of {{ n.ledger_values }} leaf values, {{ n.ledger_carried }} are carried ({{ n.ledger_copied }} copied, {{ n.ledger_transformed }} by a named rule), {{ n.ledger_dropped }} are dropped for a stated reason, and {{ n.ledger_unaccounted }} are unaccounted, with no destination and no stated reason. Accounted for is not the same as carried: a dropped value is not in the bundle, by a decision that is written down, and the ledger does not trace back what a converter writes on its own. The workflow reproduces this conversion from its pinned source files on every change. The other ten corpora are unmeasured.</p>
+        <p>The coverage reports count source paths with a declared destination. Whether each value arrives is traced on {{ n.ledger_corpora }} corpora, with a ledger that follows every source value through the converter: of {{ n.ledger_values }} leaf values, {{ n.ledger_carried }} are carried ({{ n.ledger_copied }} copied, {{ n.ledger_transformed }} by a named rule), {{ n.ledger_dropped }} are dropped for a stated reason, and {{ n.ledger_unaccounted }} are unaccounted, with no destination and no stated reason. Every path map of these corpora reads 100 %; the ledgers found values that are lost all the same. Accounted for is not the same as carried: a dropped value is not in the bundle, by a decision that is written down, and the ledger does not trace back what a converter writes on its own. The workflow reproduces these conversions from their pinned source files on every change. The other {{ n.ledger_unmeasured }} corpora are unmeasured.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Corpus</th><th class="num">Source values</th><th class="num">Copied</th><th class="num">By a named rule</th><th class="num">Dropped, reason stated</th><th class="num">Unaccounted</th></tr></thead>
+            <tbody>
+{{ html.ledger_rows }}
+            </tbody>
+          </table>
+        </div>
       </div>
       <div class="limit">
         <h3>The first Risk corpus stays in its first state <span class="tier tier-open">open</span></h3>

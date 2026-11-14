@@ -2,7 +2,7 @@
 title: 依据：哪些经过实测，哪些没有 | JASCON
 description: 一致性测试语料库、两个参考校验器、已转换的目录及其许可证、证据关口、尚未解决的局限以及同类格式。每个数字都标明为实测、已设计或未决。
 nav: evidence
-source: 647889e2ab38
+source: e6a1aec28b4e
 ---
 <section class="page-hero">
   <div class="wrap">
@@ -152,7 +152,15 @@ source: 647889e2ab38
       </div>
       <div class="limit">
         <h3>路径覆盖不等于值到达 <span class="tier tier-open">未决，待办 41</span></h3>
-        <p>覆盖报告统计的是具有已声明目标位置的源路径。每个值是否到达，只在一个语料库（NIST 示例系统）上用台账逐值追踪过，该台账跟踪每个源值在转换器中的去向：{{ n.ledger_values }} 个叶值中，{{ n.ledger_carried }} 个被携带（{{ n.ledger_copied }} 个原样复制，{{ n.ledger_transformed }} 个经由具名规则转换），{{ n.ledger_dropped }} 个在说明原因后舍弃，{{ n.ledger_unaccounted }} 个去向不明：既没有目标位置，也没有说明原因。去向已说明并不等于已被携带：被舍弃的值不在捆绑包中，这出自一项有书面记录的决定；台账也不会反向追溯转换器自行写入的内容。工作流会在每次变更时，用固定版本的源文件重现这次转换。其余十个语料库尚未测量。</p>
+        <p>覆盖报告统计的是具有已声明目标位置的源路径。每个值是否到达，目前在 {{ n.ledger_corpora }} 个语料库上用台账逐值追踪，该台账跟踪每个源值在转换器中的去向：{{ n.ledger_values }} 个叶值中，{{ n.ledger_carried }} 个被携带（{{ n.ledger_copied }} 个原样复制，{{ n.ledger_transformed }} 个经由具名规则转换），{{ n.ledger_dropped }} 个在说明原因后舍弃，{{ n.ledger_unaccounted }} 个去向不明：既没有目标位置，也没有说明原因。这些语料库的路径映射全部显示 100 %；台账仍然发现了丢失的值。去向已说明并不等于已被携带：被舍弃的值不在捆绑包中，这出自一项有书面记录的决定；台账也不会反向追溯转换器自行写入的内容。工作流会在每次变更时，用固定版本的源文件重现这些转换。其余 {{ n.ledger_unmeasured }} 个语料库尚未测量。</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>语料库</th><th class="num">源值</th><th class="num">原样复制</th><th class="num">经由具名规则</th><th class="num">舍弃并说明原因</th><th class="num">去向不明</th></tr></thead>
+            <tbody>
+{{ html.ledger_rows }}
+            </tbody>
+          </table>
+        </div>
       </div>
       <div class="limit">
         <h3>第一个 Risk 语料库停留在初始状态 <span class="tier tier-open">未决</span></h3>

@@ -2,7 +2,7 @@
 title: JASCON: die Datenschicht für GRC-Engineering
 description: JASCON ist eine offene Notation für Compliance-Daten. Standards, Tailoring, Risiken, Umsetzungen, Prüfungen und Attestierungen werden zu einem Graphen typisierter, inhaltsadressierter JSON-Objekte, die ein Programm validieren, vergleichen und signieren und mit denen es rechnen kann.
 nav: home
-source: 86da521823fd
+source: e1f019493265
 ---
 <section class="hero">
   <div class="wrap hero-grid">
@@ -142,7 +142,7 @@ source: 86da521823fd
         <span class="tier tier-measured">gemessen bei 1.0.0</span>
       </div>
     </div>
-    <p class="stats-note">Die erste Zahl wird bei jedem Build dieser Website neu berechnet (Commit <code>{{ facts.measured.commit }}</code>). „Jeder Quellpfad“ meint Pfadabdeckung: Ob auch jeder Wert ankommt, wurde bisher an einem Korpus nachverfolgt; dort werden {{ n.ledger_carried }} von {{ n.ledger_values }} Quellwerten übertragen, und {{ n.ledger_dropped }} entfallen mit angegebenem Grund. Dies und die übrigen offenen Punkte stehen unter <a href="evidence.html#limits">Was nicht bewiesen ist</a>.</p>
+    <p class="stats-note">Die erste Zahl wird bei jedem Build dieser Website neu berechnet (Commit <code>{{ facts.measured.commit }}</code>). „Jeder Quellpfad“ meint Pfadabdeckung: Ob auch jeder Wert ankommt, verfolgt ein Protokoll bisher an {{ n.ledger_corpora }} Korpora; dort werden {{ n.ledger_carried }} von {{ n.ledger_values }} Quellwerten übertragen, {{ n.ledger_dropped }} entfallen mit angegebenem Grund, und {{ n.ledger_unaccounted }} sind ungeklärt. Dies und die übrigen offenen Punkte stehen unter <a href="evidence.html#limits">Was nicht bewiesen ist</a>.</p>
   </div>
 </section>
 
