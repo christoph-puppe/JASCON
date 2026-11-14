@@ -224,8 +224,11 @@ The heuristic, suitable for printing above the release manager's desk:
 ## 3.6 Lifecycle: four states, and whom each protects
 
 `draft → active → deprecated → withdrawn`, with one meaning each:
-**draft** may change without lineage records and must not be cited by
-anything claiming conformance; **active** is the promise in force;
+**draft** may change without lineage records and binds nobody yet. It may
+be implemented and assessed all the same, voluntarily: whoever does so
+answers a text that may still change (CR26 publishes one family as a
+placeholder; its rules convert as `draft` and can be answered like any
+other). **active** is the promise in force;
 **deprecated** remains fully consumable — implementations against it stay
 valid — but tools surface the warning and the `replaces` trail to
 successors; **withdrawn** exists for historical reference only, and new
@@ -264,5 +267,5 @@ still in 2040.
 Next: Chapter 4 — writing the requirements themselves. The modality
 lattice finally gives *DARF NUR* a machine-checkable meaning, the
 American force-field distribution shows you what a healthy modality mix
-looks like, and the 347 German pseudo-controls demonstrate exactly when
-one requirement should become several statements.
+looks like, and the lettered items of SP 800-53 show when one requirement
+carries several statements.

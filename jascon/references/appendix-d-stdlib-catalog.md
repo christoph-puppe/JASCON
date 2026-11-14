@@ -221,6 +221,25 @@ its descriptor and a residue KPI per release (§14.6).
 | CR26 | 29 + 5 objects | rule & KSI `class-variants` (full variant fidelity; feeds the open D13 ceremony question) |
 | CR26 | 79 entries | the CTL Rev5 overlay — parked until the NIST catalog conversion (gate 3) supplies statement addresses |
 
+**Measured again on 2026-11-14.** The author's rule of that day, *real
+content is never dropped*, moved every source value without a kernel
+place into this facet, and it has one schema now: every converter pins
+the same file, version 1.1.0 (`oscal_conv_lib.compat_schema`); until then
+five converters pinned five schemas under one id and version 1.0.0.
+Objects that carry it, read from the committed bundles: ISM 1,641
+(`props` on 1,101 Requirements, the control's own revision and month of
+change; `group-parts` on 539 Sets; the document's `metadata` and `uuid`
+on the root); Grundschutz++ 209 (`param-extras` on 208 Requirements;
+`metadata`, `uuid` and one `back-matter` resource on the root); CSF 1
+(the root); SP 800-53 6 (the root and the four baseline Sets: `metadata`,
+`uuid`, `back-matter`, `imports`, `merge`; and the three print labels of
+SI-2(7) in `parts`); IFA 13 (`uuid` of the source element an object is
+made from). CR26, counted on a bundle converted here: `history` on 291
+Requirements, `flows` on one family Set, `class-variants` on 28 rules
+and 5 indicators. Of the CTL overlay, the ODP assignments left the facet
+at gate 3 (they are operations of a Tailoring); its guidance is still
+here. The exits are filed as backlog #80 to #85.
+
 Every row has a named exit: a spec decision, a facet graduation, or a
 gate-3 dependency. A row without an exit would be a prop with a
 registration number — the smell §14.6 warns about.

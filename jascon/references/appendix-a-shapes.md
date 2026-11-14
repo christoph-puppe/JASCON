@@ -17,14 +17,14 @@ prose here is explanatory, the conformance corpus is definitive.
 | Field | | Type | Meaning & evidence |
 |---|---|---|---|
 | `id` | ● | URI string | Globally unique, authority-minted, never resolved by tools (string comparison only, D2). Evidence: the twin-catalog collision — 11 shared id strings across two BSI publications, only 1 prose-identical. |
-| `version` | ● | string | Object-level version; format is the authority's (dates, semver, timestamps all observed). Absorbs `revision`/`updated` props (ISM ×2,202; CR26 `updated[]` ×377+). |
+| `version` | ● | string | Object-level version; format is the authority's (dates, semver, timestamps all observed). In a converted bundle it is the catalogue's release, on every object. It does not absorb a source's own per-object revision or change history: the ISM's `revision`/`updated` (×2,202) and CR26's `updated[]` (475 entries) are carried in facets, as the source writes them (corrected 2026-11-14; backlog #81). |
 | `label` | ○ | string | Human display handle. Evidence: ISM `label` ×49 + 1,101 id-derived; BSI group labels ×162; CR26 rule ids as labels. |
 | `aliases` | ○ | [{scheme, value}] | Other names, with provenance. Absorbs `alt-identifier` (BSI ×1,219 incl. params), FRD `alts` (×188, in-payload). |
 | `lifecycle` | ● | code (A → C.2) | draft · active · deprecated · withdrawn. |
 | `title` | ○ | text | Display title — `text` = `{BCP-47: string}` (#12 delivered; D9 rev 2: EU standards must be available in all 27 official languages). All kernel human-readable fields (title, rationale, description) are `text`; identifiers and labels stay strings. |
 | `relations` | ○ | [{type, ref}] | Typed outbound links: base codes `related`, `required`, `uses-term`, `reference`, `schema` (C.8; `supersedes` removed v0.6 — backlog #20); extension types SHOULD be namespaced URIs (schema constraint pending the converter rerun that migrates the corpus's bare-word `sharpens` ×28). Evidence: BSI links ×197+67; CR26 `related` ×23, `schema` ×24, `terms` ×222. |
 | `facets` | ○ | {facet-uri@major: payload} | Registered extensions; schema-pinned via manifest; semantics per declaration (D10). |
-| `annotations` | ○ | {string: any} | Chrome. Compliance-invisible, digest-excluded, strippable. Evidence: `web_name`, `do_not_link` (CR26). |
+| `annotations` | ○ | {string: any} | Chrome. Compliance-invisible, digest-excluded, strippable. Evidence: `web_name` (CR26). |
 
 **Canonical-alias & replaces** (identity events, on the *new* object):
 `canonical-alias` ○ {of: URI} — same content, new home (rebrand/domain
@@ -38,7 +38,7 @@ registry-rot corpse; ISM's own OCR→ISM renumbering history.
 
 | Field | | Type | Meaning & evidence |
 |---|---|---|---|
-| `statements` | ● | [Statement] | The clause layer. Evidence: 347 BSI nested pseudo-controls (nesting measured to depth 3–4) → 1,015 statements in the converted bundle. |
+| `statements` | ● | [Statement] | The clause layer. Evidence: SP 800-53, where 284 of 1,196 Requirements carry more than one statement (2,100 statements in the bundle) and implementations and 3,707 assessment objectives address them one at a time. (Until 2026-11-14 the evidence named here was Grundschutz++'s nested controls; they are Requirements of their own.) |
 
 **Statement:**
 

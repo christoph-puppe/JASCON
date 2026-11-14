@@ -66,9 +66,10 @@ field absorbs: 1,219 German `alt-identifier` props, 188 American glossary
 aliases. Without a sanctioned channel, those props return on day one.
 
 **`statements[]`** is a list even when it holds one entry, because
-clauses are real: the German catalog contains **347 nested
-pseudo-controls** that exist *only* because its authors needed
-independently addressable clauses and the old model gave them none. Each
+clauses are addressed one at a time: SP 800-53 writes a control as items
+a., b., c., an implementation answers them singly, and each of the
+**3,707 assessment objectives** of SP 800-53A names the statement it
+assesses. Each
 statement carries its own **`modality`** — the census's strongest
 three-way convergence (German `modal_verb` ×1,006; the American `force`
 field, distribution MUST 189 / SHOULD 84 / MAY 39 / MUST NOT 11 /

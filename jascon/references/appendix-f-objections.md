@@ -148,9 +148,13 @@ versioned" is *for*.
 ## F.3 "You didn't go far enough" — the scope objections
 
 **Q13. Where's the process/workflow model? Compliance is workflows.**
-Declared non-goal (D17), with a corpse: the one process-flow
-structure in the census (`flows[]`, ×1) is a *diagram*, and diagrams
-are linked resources, not requirement data. The state machines the
+Declared non-goal (D17): the format defines no process model. What a
+source says is carried all the same. The one process-flow structure in
+the census (`flows[]`, ×1, in CR26) is written out in the source — an
+activity, its nodes, its steps — and since 2026-11-14 it stands on its
+family's Set as the source writes it. Until then it was dropped as "a
+diagram, a linked resource", which it is not (the author's rule of that
+day: real content is never dropped). The state machines the
 model does own — Deviation, Finding — are the ones three authorities
 encode as data. BPM engines exist; this is their input, not their
 competitor.
@@ -164,8 +168,10 @@ The German corpus answers in both directions. With grammar: 1,006
 machine-decomposed clauses, QA-checkable, defect-findable (the 9
 clauses that say MUSS without a `modal_verb` were found *because*
 grammar is data). Without: ISM's
-1,149 declarative statements convert at Core tier with zero facets
-and zero loss. Mandatory grammar would have made the second corpus a
+1,149 declarative statements convert at Core tier with no facet that
+says what a statement asks, and with no value lost (the ledger reads 0
+dropped and 0 unaccounted of 36,161; the compat facet on 1,101 controls
+carries their own revision and month of change). Mandatory grammar would have made the second corpus a
 second-class citizen — R2 accepts the bifurcation because the
 alternative excludes half the world's authoring cultures.
 
