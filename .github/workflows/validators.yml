@@ -156,20 +156,24 @@ jobs:
           US.CSF convert_csf.py
           US.SP800-53 convert_nist.py
           EOF
-      - name: The CR26 conversion runs on its pinned source and reproduces its coverage reports
+      - name: The CR26 conversion runs on its pinned source and reproduces its coverage reports and its ledger
         # FedRAMP's rules file is not redistributed (converted_examples/
         # FedRAMP-CR26/NOT-REDISTRIBUTED.md): neither the source nor the
-        # bundle is in the repository, and the two coverage reports are the
-        # record of the conversion. The source is fetched at the publisher's
-        # tag, checked against SOURCES.sha256 and converted into a temporary
-        # directory. The converter must exit 0, which it does only when
-        # every source leaf has a declared destination; the reference
-        # validator must pass the bundle; and the two reports must be byte
-        # for byte what is committed. They state the digest of the bundle's
-        # manifest, so a bundle that differs in one byte fails here too.
-        # The step writes the downloaded file under the git-ignored sources/
-        # and a log beside run.log, nothing into the conversion's folder,
-        # and it commits nothing. Last, the converter's own test.
+        # bundle is in the repository, and the two coverage reports and the
+        # conversion ledger are the record of the conversion. The source is
+        # fetched at the publisher's tag, checked against SOURCES.sha256 and
+        # converted into a temporary directory. The converter must exit 0,
+        # which it does only when every source leaf has a declared
+        # destination and every claim of its ledger holds against the files
+        # it wrote; the reference validator must pass the bundle; and the
+        # two reports and the ledger record (one row per source path and
+        # outcome: copied, transformed, dropped for a declared reason,
+        # unaccounted; backlog #41) must be byte for byte what is committed.
+        # The reports state the digest of the bundle's manifest, so a bundle
+        # that differs in one byte fails here too. The step writes the
+        # downloaded file under the git-ignored sources/ and a log beside
+        # run.log, nothing into the conversion's folder, and it commits
+        # nothing. Last, the converter's own test.
         run: |
           set -euo pipefail
           dir=converted_examples/FedRAMP-CR26
@@ -183,7 +187,7 @@ jobs:
           out=$(mktemp -d)
           python jascon/scripts/convert_cr26.py --out "$out"
           python jascon/scripts/validate_core.py "$out/cr26-core-bundle" | tee cr26.log
-          for f in cr26-coverage-report.md cr26-coverage-report.json; do
+          for f in cr26-coverage-report.md cr26-coverage-report.json cr26-conversion-ledger.json; do
             if ! cmp "$out/$f" "$dir/$f"; then
               echo "convert_cr26.py no longer reproduces the committed $f:"
               diff "$dir/$f" "$out/$f" | head -40 || true

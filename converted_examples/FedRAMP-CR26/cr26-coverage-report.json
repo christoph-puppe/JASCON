@@ -5,7 +5,250 @@
   "leaf-values": 7532,
   "mapped": 7532,
   "unmapped": 0,
-  "coverage-pct": 100.0
+  "coverage-pct": 100.0,
+  "mapped-by-level": {
+   "L1": 4681,
+   "L2": 1822,
+   "declared-drop": 992,
+   "undecided": 37
+  }
+ },
+ "ledger": {
+  "file": "cr26-conversion-ledger.json",
+  "leaf-values": 7532,
+  "totals": {
+   "copied": 4467,
+   "transformed": 1984,
+   "intentionally-dropped": 992,
+   "unaccounted": 89
+  },
+  "verification-failures": 0,
+  "rules": [
+   {
+    "rule": "Mapping id from its owner's id and the control id",
+    "source-values": 652
+   },
+   {
+    "rule": "Requirement URI from the id of a related rule",
+    "source-values": 78
+   },
+   {
+    "rule": "SP 800-53 Requirement URI from the control id",
+    "source-values": 652
+   },
+   {
+    "rule": "base prose of a rule that states its text by class only, from its name",
+    "source-values": 28
+   },
+   {
+    "rule": "base prose of an indicator that states its text by class only, from its name",
+    "source-values": 5
+   },
+   {
+    "rule": "duration type from the unit of the timeframe",
+    "source-values": 23
+   },
+   {
+    "rule": "modality from the force word (code map)",
+    "source-values": 324
+   },
+   {
+    "rule": "one selection of a multi-select that the source writes as one string",
+    "source-values": 3
+   },
+   {
+    "rule": "party URI from a name in affects",
+    "source-values": 245
+   },
+   {
+    "rule": "term URI from the term's name, by the glossary's headwords and alternatives",
+    "source-values": 789
+   },
+   {
+    "rule": "title of one track's share of a subset, from the subset's name",
+    "source-values": 1
+   }
+  ],
+  "declared-drops": [
+   {
+    "reason": "process-flow diagrams: linked resources, not requirement data (D17)",
+    "source-values": 35
+   },
+   {
+    "reason": "update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read \"history -> L0\" until 2026-11-14)",
+    "source-values": 957
+   }
+  ],
+  "unaccounted": {
+   "no-origin": 52,
+   "written-nowhere": 37,
+   "by-path": [
+    {
+     "path": "cr26.FRD.data.all.*.do_not_link",
+     "count": 9,
+     "example": "cr26#/FRD/data/all/FRD-ADV/do_not_link",
+     "class": "no origin"
+    },
+    {
+     "path": "cr26.FRD.data.all.*.ignore_in_terms",
+     "count": 9,
+     "example": "cr26#/FRD/data/all/FRD-ADV/ignore_in_terms",
+     "class": "no origin"
+    },
+    {
+     "path": "cr26.FRD.info.effective.date.grace.until_next_assessment",
+     "count": 1,
+     "example": "cr26#/FRD/info/effective/date/grace/until_next_assessment",
+     "class": "no origin"
+    },
+    {
+     "path": "cr26.FRR.*.data.*.*.*.notification[].optional",
+     "count": 3,
+     "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/notification/2/optional",
+     "class": "no origin"
+    },
+    {
+     "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.3.iir.timeframe_num",
+     "count": 1,
+     "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/varies_by_class/d/pain_timeframes/3/iir/timeframe_num",
+     "class": "no origin"
+    },
+    {
+     "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.4.iir.timeframe_num",
+     "count": 1,
+     "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/varies_by_class/d/pain_timeframes/4/iir/timeframe_num",
+     "class": "no origin"
+    },
+    {
+     "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.5.iir.timeframe_num",
+     "count": 1,
+     "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/varies_by_class/d/pain_timeframes/5/iir/timeframe_num",
+     "class": "no origin"
+    },
+    {
+     "path": "cr26.FRR.*.info.20x.effective.date.grace.until_next_assessment",
+     "count": 10,
+     "example": "cr26#/FRR/CCM/info/20x/effective/date/grace/until_next_assessment",
+     "class": "no origin"
+    },
+    {
+     "path": "cr26.FRR.*.info.effective.date.grace.until_next_assessment",
+     "count": 7,
+     "example": "cr26#/FRR/AFC/info/effective/date/grace/until_next_assessment",
+     "class": "no origin"
+    },
+    {
+     "path": "cr26.FRR.*.info.rev5.effective.date.grace.until_next_assessment",
+     "count": 10,
+     "example": "cr26#/FRR/CCM/info/rev5/effective/date/grace/until_next_assessment",
+     "class": "no origin"
+    },
+    {
+     "path": "cr26.FRR.*.info.status",
+     "count": 17,
+     "example": "cr26#/FRR/AFC/info/status",
+     "class": "not carried"
+    },
+    {
+     "path": "cr26.KSI.*.id",
+     "count": 10,
+     "example": "cr26#/KSI/CED/id",
+     "class": "not carried"
+    },
+    {
+     "path": "cr26.KSI.*.status",
+     "count": 10,
+     "example": "cr26#/KSI/CED/status",
+     "class": "not carried"
+    }
+   ]
+  },
+  "values-that-cannot-carry-an-origin": {
+   "by-kind": {
+    "boolean": 49,
+    "number that is no integer": 3
+   },
+   "by-path": [
+    {
+     "path": "cr26.FRD.data.all.*.do_not_link",
+     "count": 9
+    },
+    {
+     "path": "cr26.FRD.data.all.*.ignore_in_terms",
+     "count": 9
+    },
+    {
+     "path": "cr26.FRD.info.effective.date.grace.until_next_assessment",
+     "count": 1
+    },
+    {
+     "path": "cr26.FRR.*.data.*.*.*.notification[].optional",
+     "count": 3
+    },
+    {
+     "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.3.iir.timeframe_num",
+     "count": 1
+    },
+    {
+     "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.4.iir.timeframe_num",
+     "count": 1
+    },
+    {
+     "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.5.iir.timeframe_num",
+     "count": 1
+    },
+    {
+     "path": "cr26.FRR.*.info.20x.effective.date.grace.until_next_assessment",
+     "count": 10
+    },
+    {
+     "path": "cr26.FRR.*.info.effective.date.grace.until_next_assessment",
+     "count": 7
+    },
+    {
+     "path": "cr26.FRR.*.info.rev5.effective.date.grace.until_next_assessment",
+     "count": 10
+    }
+   ]
+  },
+  "path-map-rows-the-ledger-contradicts": [],
+  "written-values-with-no-source-value": [
+   {
+    "written-as": "Mapping",
+    "leaf-values": 7172,
+    "no-source-value": 4564
+   },
+   {
+    "written-as": "Requirement (KSI)",
+    "leaf-values": 594,
+    "no-source-value": 361
+   },
+   {
+    "written-as": "Requirement (rule)",
+    "leaf-values": 6439,
+    "no-source-value": 1897
+   },
+   {
+    "written-as": "Set",
+    "leaf-values": 2989,
+    "no-source-value": 1556
+   },
+   {
+    "written-as": "Tailoring",
+    "leaf-values": 541,
+    "no-source-value": 393
+   },
+   {
+    "written-as": "carried Rev 5 Requirement",
+    "leaf-values": 972,
+    "no-source-value": 972
+   },
+   {
+    "written-as": "manifest",
+    "leaf-values": 5319,
+    "no-source-value": 3624
+   }
+  ]
  },
  "objects": {
   "requirements(rules+ksi)": 291,
@@ -197,20 +440,20 @@
   {
    "path": "cr26.FRD.data.all.*.updated[].comment",
    "count": 85,
-   "level": "L1",
-   "destination": "history -> L0 (values not object-carried; counted)"
+   "level": "declared-drop",
+   "destination": "update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read \"history -> L0\" until 2026-11-14)"
   },
   {
    "path": "cr26.FRD.data.all.*.updated[].date",
    "count": 85,
-   "level": "L1",
-   "destination": "history -> L0 (values not object-carried; counted)"
+   "level": "declared-drop",
+   "destination": "update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read \"history -> L0\" until 2026-11-14)"
   },
   {
    "path": "cr26.FRD.data.all.*.updated[].issue",
    "count": 1,
-   "level": "L1",
-   "destination": "history -> L0 (values not object-carried; counted)"
+   "level": "declared-drop",
+   "destination": "update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read \"history -> L0\" until 2026-11-14)"
   },
   {
    "path": "cr26.FRD.info.effective.current_status",
@@ -306,13 +549,13 @@
    "path": "cr26.FRR.*.data.*.*.*.corrective_actions[]",
    "count": 12,
    "level": "L1",
-   "destination": "narrative@1 / reporting-obligation@1 payload fields"
+   "destination": "narrative@1: note / notes / danger / corrective-actions"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.danger",
    "count": 3,
    "level": "L1",
-   "destination": "narrative@1 / reporting-obligation@1 payload fields"
+   "destination": "narrative@1: note / notes / danger / corrective-actions"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.examples[].examples[]",
@@ -336,13 +579,13 @@
    "path": "cr26.FRR.*.data.*.*.*.following_information[]",
    "count": 208,
    "level": "L1",
-   "destination": "narrative@1 / reporting-obligation@1 payload fields"
+   "destination": "reporting-obligation@1: following-information / following-information-bullets"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.following_information_bullets[]",
    "count": 11,
    "level": "L1",
-   "destination": "narrative@1 / reporting-obligation@1 payload fields"
+   "destination": "reporting-obligation@1: following-information / following-information-bullets"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.force",
@@ -360,13 +603,13 @@
    "path": "cr26.FRR.*.data.*.*.*.note",
    "count": 57,
    "level": "L1",
-   "destination": "narrative@1 / reporting-obligation@1 payload fields"
+   "destination": "narrative@1: note / notes / danger / corrective-actions"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.notes[]",
    "count": 62,
    "level": "L1",
-   "destination": "narrative@1 / reporting-obligation@1 payload fields"
+   "destination": "narrative@1: note / notes / danger / corrective-actions"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.notification[].method",
@@ -402,13 +645,13 @@
    "path": "cr26.FRR.*.data.*.*.*.reference",
    "count": 6,
    "level": "L1",
-   "destination": "relations schema/reference -> external URL"
+   "destination": "narrative@1: reference, the label of the citation (the map read \"relations ... -> external URL\" until 2026-11-14; the URL of the relation is reference_url)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.reference_url",
    "count": 6,
    "level": "L1",
-   "destination": "relations schema/reference -> external URL"
+   "destination": "relation `schema` / `reference` -> the external URL"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.related[]",
@@ -467,20 +710,20 @@
   {
    "path": "cr26.FRR.*.data.*.*.*.updated[].comment",
    "count": 303,
-   "level": "L1",
-   "destination": "history -> L0 (counted)"
+   "level": "declared-drop",
+   "destination": "update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read \"history -> L0\" until 2026-11-14)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.updated[].date",
    "count": 303,
-   "level": "L1",
-   "destination": "history -> L0 (counted)"
+   "level": "declared-drop",
+   "destination": "update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read \"history -> L0\" until 2026-11-14)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.updated[].issue",
    "count": 5,
-   "level": "L1",
-   "destination": "history -> L0 (counted)"
+   "level": "declared-drop",
+   "destination": "update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read \"history -> L0\" until 2026-11-14)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.artifacts.all[]",
@@ -1109,14 +1352,14 @@
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.timeframe_num",
    "count": 51,
-   "level": "L1",
-   "destination": "class Tailoring op set-parameter when unit-class matches base; else L2 (counted)"
+   "level": "L2",
+   "destination": "class-variants payload; and a class Tailoring op set-parameter where the rule itself states a timeframe of the same unit class - the conversion rules above count the ops (the row was marked L1 until 2026-11-14, though a value reaches an operation only in that case)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.timeframe_type",
    "count": 51,
-   "level": "L1",
-   "destination": "class Tailoring op set-parameter when unit-class matches base; else L2 (counted)"
+   "level": "L2",
+   "destination": "class-variants payload; and a class Tailoring op set-parameter where the rule itself states a timeframe of the same unit class - the conversion rules above count the ops (the row was marked L1 until 2026-11-14, though a value reaches an operation only in that case)"
   },
   {
    "path": "cr26.FRR.*.info.20x.effective.current_status",
@@ -1251,50 +1494,8 @@
    "destination": "process-flow diagrams: linked resources, not requirement data (D17)"
   },
   {
-   "path": "cr26.FRR.*.info.flows[].nodes.An incident is identified",
-   "count": 1,
-   "level": "declared-drop",
-   "destination": "process-flow diagrams: linked resources, not requirement data (D17)"
-  },
-  {
-   "path": "cr26.FRR.*.info.flows[].nodes.IEC-CSO-DPR",
-   "count": 1,
-   "level": "declared-drop",
-   "destination": "process-flow diagrams: linked resources, not requirement data (D17)"
-  },
-  {
-   "path": "cr26.FRR.*.info.flows[].nodes.IEC-CSO-EFI",
-   "count": 1,
-   "level": "declared-drop",
-   "destination": "process-flow diagrams: linked resources, not requirement data (D17)"
-  },
-  {
-   "path": "cr26.FRR.*.info.flows[].nodes.IEC-CSO-EFR",
-   "count": 1,
-   "level": "declared-drop",
-   "destination": "process-flow diagrams: linked resources, not requirement data (D17)"
-  },
-  {
-   "path": "cr26.FRR.*.info.flows[].nodes.IEC-CSO-FIR",
-   "count": 1,
-   "level": "declared-drop",
-   "destination": "process-flow diagrams: linked resources, not requirement data (D17)"
-  },
-  {
-   "path": "cr26.FRR.*.info.flows[].nodes.IEC-CSO-IIR",
-   "count": 1,
-   "level": "declared-drop",
-   "destination": "process-flow diagrams: linked resources, not requirement data (D17)"
-  },
-  {
-   "path": "cr26.FRR.*.info.flows[].nodes.IEC-CSO-OIR",
-   "count": 1,
-   "level": "declared-drop",
-   "destination": "process-flow diagrams: linked resources, not requirement data (D17)"
-  },
-  {
-   "path": "cr26.FRR.*.info.flows[].nodes.Incident Evaluation and Communication are complete.",
-   "count": 1,
+   "path": "cr26.FRR.*.info.flows[].nodes.*",
+   "count": 8,
    "level": "declared-drop",
    "destination": "process-flow diagrams: linked resources, not requirement data (D17)"
   },
@@ -1320,7 +1521,7 @@
    "path": "cr26.FRR.*.info.name",
    "count": 17,
    "level": "L1",
-   "destination": "family Set: title/label/lifecycle"
+   "destination": "family Set: title/label"
   },
   {
    "path": "cr26.FRR.*.info.purpose",
@@ -1410,13 +1611,13 @@
    "path": "cr26.FRR.*.info.short_name",
    "count": 17,
    "level": "L1",
-   "destination": "family Set: title/label/lifecycle"
+   "destination": "family Set: title/label"
   },
   {
    "path": "cr26.FRR.*.info.status",
    "count": 17,
-   "level": "L1",
-   "destination": "family Set: title/label/lifecycle"
+   "level": "undecided",
+   "destination": "no destination: every family Set is written `lifecycle: active`, whatever the status says (the map read \"lifecycle\" until 2026-11-14; the ledger found nothing written)"
   },
   {
    "path": "cr26.FRR.*.info.subsets.*.applicability.affects[]",
@@ -1469,8 +1670,8 @@
   {
    "path": "cr26.KSI.*.id",
    "count": 10,
-   "level": "L1",
-   "destination": "KSI category Set: id/title/label/annotations/lifecycle"
+   "level": "undecided",
+   "destination": "no destination: the id of a KSI category Set is minted from the key the category stands under, and the category's own `id` is another string (the map read \"id\" until 2026-11-14; the ledger found nothing written)"
   },
   {
    "path": "cr26.KSI.*.indicators.*.controls[]",
@@ -1499,20 +1700,20 @@
   {
    "path": "cr26.KSI.*.indicators.*.updated[].comment",
    "count": 87,
-   "level": "L1",
-   "destination": "history -> L0 (counted)"
+   "level": "declared-drop",
+   "destination": "update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read \"history -> L0\" until 2026-11-14)"
   },
   {
    "path": "cr26.KSI.*.indicators.*.updated[].date",
    "count": 87,
-   "level": "L1",
-   "destination": "history -> L0 (counted)"
+   "level": "declared-drop",
+   "destination": "update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read \"history -> L0\" until 2026-11-14)"
   },
   {
    "path": "cr26.KSI.*.indicators.*.updated[].issue",
    "count": 1,
-   "level": "L1",
-   "destination": "history -> L0 (counted)"
+   "level": "declared-drop",
+   "destination": "update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read \"history -> L0\" until 2026-11-14)"
   },
   {
    "path": "cr26.KSI.*.indicators.*.varies_by_class.*.statement",
@@ -1524,25 +1725,25 @@
    "path": "cr26.KSI.*.name",
    "count": 10,
    "level": "L1",
-   "destination": "KSI category Set: id/title/label/annotations/lifecycle"
+   "destination": "KSI category Set: title/annotations/label"
   },
   {
    "path": "cr26.KSI.*.short_name",
    "count": 10,
    "level": "L1",
-   "destination": "KSI category Set: id/title/label/annotations/lifecycle"
+   "destination": "KSI category Set: title/annotations/label"
   },
   {
    "path": "cr26.KSI.*.status",
    "count": 10,
-   "level": "L1",
-   "destination": "KSI category Set: id/title/label/annotations/lifecycle"
+   "level": "undecided",
+   "destination": "no destination: every KSI category Set is written `lifecycle: active`, whatever the status says (the map read \"lifecycle\" until 2026-11-14; the ledger found nothing written)"
   },
   {
    "path": "cr26.KSI.*.web_name",
    "count": 10,
    "level": "L1",
-   "destination": "KSI category Set: id/title/label/annotations/lifecycle"
+   "destination": "KSI category Set: title/annotations/label"
   },
   {
    "path": "cr26.info.default_artifacts.FRR[]",
@@ -1560,25 +1761,25 @@
    "path": "cr26.info.description",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance; description -> narrative on corpus root"
+   "destination": "narrative@1 on the corpus root Set: description"
   },
   {
    "path": "cr26.info.last_updated",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance; description -> narrative on corpus root"
+   "destination": "the manifest's provenance (last_updated) and the date of every Mapping's provenance"
   },
   {
    "path": "cr26.info.title",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance; description -> narrative on corpus root"
+   "destination": "the manifest's provenance (source) and the title of the corpus root Set"
   },
   {
    "path": "cr26.info.version",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance; description -> narrative on corpus root"
+   "destination": "the manifest's provenance (source-version) and `version` of every object made from the publication"
   }
  ]
 }

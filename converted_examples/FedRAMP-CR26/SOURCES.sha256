@@ -5,11 +5,11 @@
 # The Validators workflow downloads it from the base below, checks it against
 # this list with `sha256sum -c`, runs the converter into a temporary
 # directory, runs the reference validator on the bundle and fails if the two
-# coverage reports come out different from the ones in this folder. The
-# reports are therefore a reproducible record of one conversion of one
-# publication: a change of the kernel, of oscal_conv_lib.py or of the
-# converter that would alter them is noticed. The bundle is written and
-# checked there and never committed.
+# coverage reports or the conversion ledger come out different from the ones
+# in this folder. The three files are therefore a reproducible record of one
+# conversion of one publication: a change of the kernel, of oscal_conv_lib.py
+# or of the converter that would alter them is noticed. The bundle is written
+# and checked there and never committed.
 #
 # The base is the publisher's own tag for publication 2026.11.02.01 in
 # github.com/FedRAMP/rules, not a commit id. A tag can be moved by its owner;

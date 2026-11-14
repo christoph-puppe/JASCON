@@ -29,24 +29,32 @@ basis sufficient), reverting that one commit restores the bundle, its
 export, the README screenshot and the deep link, byte for byte.
 
 **What remains.** The converter (`jascon/scripts/convert_cr26.py`), its
-test (`jascon/scripts/test_convert_cr26.py`), the coverage report in this
-directory — source *paths*, counts and conversion rules; it reproduces no
-text of the publication — and `SOURCES.sha256`, which names the
-publisher's file and its digest.
+test (`jascon/scripts/test_convert_cr26.py`), the coverage report and the
+conversion ledger in this directory — source *paths*, pointers made of
+ids, counts and conversion rules; they reproduce no text of the
+publication — and `SOURCES.sha256`, which names the publisher's file and
+its digest.
 
 **The measurement, of version 2026.11.02.01.** 291 Requirements ·
 652 Mappings · 92 Sets · 5 Tailorings (4 class variants and the Rev 5 ODP
-overlay) · 7,532 / 7,532 source leaf values with a declared destination ·
-the reference validator passes the bundle (measured 2026-11-14). The
-report of version 2026.07.14.01 is in the history of this directory:
-292 Requirements, 373 Mappings, 7,294 / 7,294.
+overlay) · the reference validator passes the bundle (measured
+2026-11-14). All 7,532 source leaf values stand on a path the path map
+knows. What became of each value is the conversion ledger's to say
+(`cr26-conversion-ledger.json`, backlog #41; measured 2026-11-14):
+4,467 copied, 1,984 transformed by a named rule, 992 not carried for a
+declared reason, 89 unaccounted. Of the 89, 52 are flags and fractions,
+which the ledger cannot follow and the converter's test reads at their
+places, and 37 are written nowhere and undecided. The report of version
+2026.07.14.01 is in the history of this directory: 292 Requirements,
+373 Mappings, 7,294 / 7,294 leaf values on a mapped path.
 
 **Reproducible by anyone,** and the Validators workflow repeats it on
 every change it watches: fetch the file `SOURCES.sha256` names, check its
 digest, place it at `sources/cr_fedramp-consolidated-rules.json`, and run
 the converter with `--out` and a directory of your own (it needs the
-US.SP800-53 bundle, which ships here). The two coverage reports come out
-byte for byte as they are here, and they state the digest of the bundle's
-manifest: a run that reproduces them has reproduced the bundle. Without
+US.SP800-53 bundle, which ships here). The two coverage reports and the
+ledger come out byte for byte as they are here, and the reports state the
+digest of the bundle's manifest: a run that reproduces them has reproduced
+the bundle. Without
 `--out` the converter writes the bundle into this directory, where it
 must not be committed.
