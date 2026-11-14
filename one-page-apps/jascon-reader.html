@@ -444,6 +444,7 @@ const state = {
   listedErrors: [],        // one message per Attestation the loaded manifest lists (MANIFEST-1)
   pinnedFacets: new Map(), // id -> path of the facet schemas the loaded manifest pins
   methodErrors: [],        // one message per key of a listed object's `method` that no facet registers (D10)
+  facetErrors: [],         // one message per key of a listed object's `facets` that no facet registers (D10; v1.16.0)
   envelopes: new Map(),    // relpath -> {text, bytes} — the files Attestations name in `envelope-ref`, beside the manifest; never objects
   binds: new Map(),        // attestation id -> what it binds of the loaded bundle (attestationBinds), with its line and its envelope's state
   bindsRun: 0,             // which run of judgeAttestations the verdicts in `binds` are from
@@ -845,6 +846,49 @@ function methodKeyErrors(obj, pinned, path) {
   return !isRecord(method) ? [] : Object.keys(method).filter(key => facetHome(key, pinned) === null)
     .map(key => `${path ?? obj.id}: method '${key}' is no registered facet - not stdlib, not pinned in the manifest, not private: (an Assessment's method is a facet payload and fails closed, D10)`);
 }
+/* -> [message], one per key of `obj.facets` that no facet registers (v1.16.0; D10), in the reference's
+   words and in the order of the keys. The keys of `facets` are resolved by the rule the keys of `method`
+   are (facetHome, above), as facet_errors in validate_core.py resolves both. Until 1.15.0 the page held
+   `method` to that rule and `facets` to none: every key was shown as a registered extension. A payload
+   that violates its facet's schema is not found here either. */
+function facetKeyErrors(obj, pinned, path) {
+  const facets = isRecord(obj) ? obj.facets : null;
+  return !isRecord(facets) ? [] : Object.keys(facets).filter(key => facetHome(key, pinned) === null)
+    .map(key => `${path ?? obj.id}: unregistered facet '${key}' — not stdlib, not pinned in the manifest, not private: (dangerous-by-default, D10)`);
+}
+/* ---------- closure-required references (v1.16.0) ----------
+   The references the reference requires to resolve inside a bundle (`need` in closure_errors of
+   validate_core.py): a Set's members, a Tailoring's selects set-ref, excludes ref and operations
+   requirement-ref, an Implementation's component-ref and requirement-ref, a Finding's assessment-ref and
+   requirement-ref, a Risk's treatments requirement-ref, component-refs and tailoring-refs. Only that
+   they resolve: what a reference resolves to (the typed checks) and the other rules of closure_errors
+   are not ported. A reference that is absent is not asked for (the kernel schema requires it; this page
+   runs no kernel schema). Until 1.15.0 an export whose Finding named a requirement of the loaded bundle
+   was said to pass validate_core.py, which fails it on exactly this.
+   `objs`: the objects of the bundle. -> [message], in the order of the objects and of their references */
+function closureNeedErrors(objs) {
+  const list = (objs || []).filter(isRecord), ids = new Set(list.map(o => o.id)), errs = [];
+  const each = v => Array.isArray(v) ? v.filter(x => x !== undefined) : [];
+  for (const o of list) {
+    const need = (ref, what) => { if (ref !== undefined && !ids.has(ref)) errs.push(`${o.id}: closure-required ${what} does not resolve in-bundle: ${ref}`); };
+    switch (inferType(o)) {
+      case "requirementSet": for (const m of each(o.members)) need(m?.ref, "member ref"); break;
+      case "tailoring":
+        for (const x of each(o.selects)) if (isRecord(x) && "set-ref" in x) need(x["set-ref"], "selects set-ref");
+        for (const x of each(o.excludes)) need(x?.ref, "excludes ref");
+        for (const x of each(o.operations)) need(x?.["requirement-ref"], "operation requirement-ref");
+        break;
+      case "implementation": need(o["component-ref"], "component-ref"); need(o["requirement-ref"], "requirement-ref"); break;
+      case "finding": need(o["assessment-ref"], "assessment-ref"); need(o["requirement-ref"], "requirement-ref"); break;
+      case "risk":
+        for (const x of each(o.treatments)) need(x?.["requirement-ref"], "treatments requirement-ref (RISK-7)");
+        for (const x of each(o["component-refs"])) need(x, "component-refs (RISK-7)");
+        for (const x of each(o["tailoring-refs"])) need(x, "tailoring-refs (RISK-7)");
+        break;
+    }
+  }
+  return errs;
+}
 /* What the Assess workbench states as its method: a person answers each requirement in a form, which
    is a manual assessment under the standard assessment-criteria facet (its descriptor knows `method`:
    manual or automated). Until 1.14.0 it wrote { kind: "manual-check", note: "authored in JASCON
@@ -863,7 +907,7 @@ const isEarlierWorkbenchMethod = m => isRecord(m) && Object.keys(m).sort().join(
 /* The version is stated once. Until 1.10.0 it stood in three places - the pill of the top bar, the
    `converter` line of every manifest written here, and the first line of the console - and they had
    come apart: 1.9.1, 1.9.1 and 1.10.0. */
-const READER_VERSION = "1.15.0", READER_BUILD = "2026-11-14";
+const READER_VERSION = "1.16.0", READER_BUILD = "2026-11-14";
 const READER_ID = "jascon-reader.html v" + READER_VERSION;
 $("pill-version").textContent = `v${READER_VERSION} · build ${READER_BUILD}`;
 /* URL loading — works when this page and the bundle are served over http(s)
@@ -1094,7 +1138,7 @@ function indexBundle() {
   state.objects.clear(); state.order = []; state.manifest = null;
   state.manifestByPath.clear(); state.verify = null; state.selected = null;
   state.browserDims = {}; state.stopped = null; state.pinErrors = []; state.listedErrors = [];
-  state.pinnedFacets = new Map(); state.methodErrors = [];
+  state.pinnedFacets = new Map(); state.methodErrors = []; state.facetErrors = [];
   state.binds = new Map(); state.missingEntries = 0;
   /* The detail that is up belongs to the bundle before (v1.14.0): it is taken down with it. Until 1.13.0 it stayed,
      and since 1.13.0 the detail of an Attestation says what it binds of a bundle - of one no longer loaded. */
@@ -1180,6 +1224,10 @@ function indexBundle() {
     state.pinnedFacets = pinnedFacets(state.manifest, path => state.files.get(prefix + path)?.text);
     state.methodErrors = state.order.map(id => state.objects.get(id)).filter(r => r && r.entry).flatMap(r => methodKeyErrors(r.obj, state.pinnedFacets));
     for (const e of state.methodErrors) l.err(e);
+    /* the keys of `facets` of every object the manifest lists, by the same rule (v1.16.0; D10). Until 1.15.0
+       they were not looked at. The payloads are not checked here either. */
+    state.facetErrors = state.order.map(id => state.objects.get(id)).filter(r => r && r.entry).flatMap(r => facetKeyErrors(r.obj, state.pinnedFacets));
+    for (const e of state.facetErrors) l.err(e);
   }
   for (const p of [...state.evidence.keys()]) if (!p.startsWith(prefix + "evidence/sha256/")) state.evidence.delete(p);   // only the store beside THIS manifest
   if (state.evidence.size) l.info(`evidence store: ${state.evidence.size} file(s) beside the manifest — content-addressed (evidence/sha256/<hex>), not manifest entries`);
@@ -1330,6 +1378,8 @@ function renderOverview() {
     rows.push(kvRow("attestations beside the manifest", besideSummaryHtml(tally)));
     if (state.methodErrors.length) rows.push(kvRow("methods of assessments", state.methodErrors.map(e => `<div class="verdict-bad" data-method-error>✗ ${esc(e)}</div>`).join("") +
       `<div class="hint">an Assessment's method is a facet payload (D10): a key no facet registers fails the bundle in a validator</div>`));
+    if (state.facetErrors.length) rows.push(kvRow("facets of objects", state.facetErrors.map(e => `<div class="verdict-bad" data-facet-error>✗ ${esc(e)}</div>`).join("") +
+      `<div class="hint">a key of facets names a facet (D10): a key no facet registers fails the bundle in a validator</div>`));
     if (tally.other) rows.push(kvRow("other objects", `<span id="ov-other">${tally.other}</span> <span class="hint">— not listed by the manifest: pasted, written in a workbench, or a file that lies elsewhere</span>`));
   } else add("objects", `${state.objects.size} — no manifest is loaded, so nothing is listed and no Attestation is held to anything`);
   add("evidence store", state.evidence.size ? `${state.evidence.size} file(s) beside the manifest (not manifest entries)` : "");
@@ -1585,10 +1635,21 @@ function commonHead(r) {
   <div class="mono" style="font-size:10.5px;color:var(--text-quiet);word-break:break-all">${esc(o.id)}</div>
   <div class="hint" style="margin-top:6px">${esc(t.what)}</div>`;
 }
+/* Facets (v1.16.0; D10): for every key, where the facet it names is registered - the standard library, a
+   schema this bundle pins, `private:`, or nowhere, which a validator refuses in the words shown - then the
+   payload, and that this page does not check it, as for an Assessment's method. Until 1.15.0 the section
+   was headed "registered extensions (schema-pinned; declared semantics)" whatever the key. */
 function facetsHtml(o) {
-  if (!o.facets) return "";
-  return `<div class="nano sectionlabel">Facets — registered extensions (schema-pinned; declared semantics)</div>` +
+  if (!isRecord(o.facets)) return "";
+  const errors = facetKeyErrors(o, state.pinnedFacets);
+  const said = {
+    stdlib: "a facet of the standard library. A validator holds this payload to the facet's descriptor; this page carries no schema validator and does not check it.",
+    pinned: key => `a facet this bundle pins (${state.pinnedFacets.get(facetBase(key))}). A validator holds this payload to that schema; this page carries no schema validator and does not check it.`,
+    private: "private: kept, and ignored by every validator by definition. Nothing checks this payload.",
+  };
+  return `<div class="nano sectionlabel">Facets — extensions (D10): each key names a facet, and where it is registered is said per key</div>` +
     Object.entries(o.facets).map(([fid, payload]) => {
+      const home = facetHome(fid, state.pinnedFacets) || "none";
       let inner;
       if (payload && payload["by-statement"]) {
         inner = `<div class="hint" style="margin-bottom:4px">keyed by-statement — each key MUST name a statement of this object</div>` +
@@ -1596,7 +1657,14 @@ function facetsHtml(o) {
             `<div style="margin:6px 0"><span class="badge">stmt ${esc(sid)}</span>${prettyVal(pv, 1)}</div>`).join("");
       } else if (fid === COLLECTOR_FACET && Array.isArray(payload?.collectors)) inner = collectorsHtml(payload);
       else inner = prettyVal(payload, 1);
-      return `<div class="facetbox"><div class="mono" style="font-size:10.5px;color:var(--accent);margin-bottom:6px">${esc(fid)}</div>${inner}</div>`;
+      return `<div class="facetbox" data-facet-key="${esc(fid)}" data-facet-home="${home}">
+        <div style="margin-bottom:6px"><span class="mono" style="font-size:10.5px;color:var(--accent)">${esc(fid)}</span>
+          <span class="badge" ${home === "none" ? `style="border-color:var(--red);color:var(--red)"` : ""}>${home === "none" ? "✗ " : ""}${METHOD_HOME[home]}</span></div>
+        ${home === "none" ? `<div class="verdict-bad mono" style="font-size:10.5px;word-break:break-all;margin-bottom:6px" data-facet-error>${esc(errors.find(e => e.includes(`: unregistered facet '${fid}' `)))}</div>` : ""}
+        ${home === "none" && state.pinnedFacets.missing?.has(facetBase(fid)) ? `<div class="hint verdict-warn" style="margin-bottom:6px" data-facet-pin-missing>The manifest pins this facet, and its schema file ${esc(state.pinnedFacets.missing.get(facetBase(fid)))} was not read: a pin without its file registers nothing.</div>` : ""}
+        ${inner}
+        ${home === "none" ? "" : `<div class="hint" style="margin-top:6px" data-facet-unchecked>${esc(typeof said[home] === "function" ? said[home](fid) : said[home])}</div>`}
+      </div>`;
     }).join("");
 }
 function annotationsHtml(o) {
@@ -2714,6 +2782,10 @@ async function buildWorkspaceBundleFiles(objs, provenance) {
      library and the facet schemas THIS export pins */
   const pins = pinnedFacets(manifest, path => { const f = files.find(x => x.name === path); return f && new TextDecoder().decode(f.bytes); });
   for (const e of objs.flatMap(o => methodKeyErrors(o, pins))) { l.err("in this export — " + e); files.fails.push(e); }
+  /* the keys of `facets` by the same rule, and the references the reference requires to resolve in-bundle
+     (v1.16.0): an object of the workspace may name one of the loaded bundle, which this export does not hold */
+  for (const e of objs.flatMap(o => facetKeyErrors(o, pins))) { l.err("in this export — " + e); files.fails.push(e); }
+  for (const e of closureNeedErrors(objs)) { l.err("in this export — " + e); files.fails.push(e); }
   if (attestations.length) {
     const manifestDigest = "sha256:" + await sha256hex(manifestBytes);
     for (const a of attestations.sort((x, y) => (x.id < y.id ? -1 : x.id > y.id ? 1 : 0))) {
@@ -2732,6 +2804,9 @@ function exportAttestationNote(files) {
   return (files.attestations ? ` + ${files.attestations} Attestation(s) beside the manifest, not listed (D3.1)` : "") +
     (loaded ? ` — the ${loaded} Attestation(s) of the loaded bundle are not carried: they bind that delivery, and this export delivers other objects` : "");
 }
+/* The last line of an export (v1.16.0): where this page found nothing, it says what it checked. Until 1.15.0
+   it said "passes validate_core.py", and an export whose Finding named a requirement of the loaded bundle
+   was said to pass where the reference fails it (closure-required requirement-ref). */
 async function exportWorkspaceBundle() {
   const objs = workspaceObjects();
   if (!objs.length) { l.warn("workspace is empty — use 'Add to graph' in a workbench first"); return; }
@@ -2745,7 +2820,8 @@ async function exportWorkspaceBundle() {
   a.download = "workspace-bundle.zip"; a.click();
   setTimeout(() => URL.revokeObjectURL(a.href), 5000);
   (files.fails.length ? l.err : l.ok)(`workspace bundle exported: ${files.listed} objects + content-manifest with both digests${exportAttestationNote(files)} (${(zip.length / 1024).toFixed(1)} kB zip) — loads back into this reader and ` +
-    (files.fails.length ? `validate_core.py fails it: ${files.fails.length} line(s) above say why` : "passes validate_core.py"));
+    (files.fails.length ? `validate_core.py fails it: ${files.fails.length} line(s) above say why`
+      : "nothing fails in what this page checks (closure-required references, facet and method keys, Attestations); it runs no kernel schema and checks no facet payload"));
 }
 /* The approver of a Deviation (v1.12.0; backlog #70): required by the kernel, and named by a person.
    The field starts empty, for every Deviation anew, and not from the author either: a pre-filled
