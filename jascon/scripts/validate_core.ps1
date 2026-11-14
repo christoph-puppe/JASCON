@@ -182,9 +182,14 @@ Usage: powershell -ExecutionPolicy Bypass -File validate_core.ps1 [bundle-dirs..
        -AsOf YYYY-MM-DD sets the date REVIEW-1 compares a review-due with
        (default: the date of the run, in UTC).
 #>
-[CmdletBinding()]
-param([string[]]$Bundles = @(), [switch]$VectorsOnly, [string]$TrustedKeys = "", [switch]$RequireRiskBasis,
-      [switch]$RequireAuthors, [string]$AsOf = "")
+# Every argument without a name is a bundle folder. Until 2026-11-14 only
+# the first was: parameters were bound by position, so in
+# `validate_core.ps1 a b` the folder `b` was taken for the file of trusted
+# keys and the run stopped trying to read it. Found when the end-to-end
+# test of attestation-binds handed this file nine folders at once.
+[CmdletBinding(PositionalBinding = $false)]
+param([Parameter(ValueFromRemainingArguments = $true)][string[]]$Bundles = @(), [switch]$VectorsOnly, [string]$TrustedKeys = "",
+      [switch]$RequireRiskBasis, [switch]$RequireAuthors, [string]$AsOf = "")
 
 $ErrorActionPreference = "Stop"
 Add-Type -AssemblyName System.Numerics

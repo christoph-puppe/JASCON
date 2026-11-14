@@ -9,7 +9,8 @@
 #   powershell  validate_core.ps1, the twin, on WINDOWS POWERSHELL 5.1
 #               (windows-latest; `shell: powershell` is 5.1, `pwsh` would be 7),
 #               after .github/scripts/lint-twin.ps1 has read its source: no
-#               PowerShell operator may compare two strings (backlog #58)
+#               PowerShell operator may compare two strings (backlog #58);
+#               then the attestation check end to end, on changed bundles
 #   app         the JavaScript port in jascon-app/ against the same vectors
 #   browser     the app's pages, the pack builder and the reader
 #               (one-page-apps/) in Chromium, driven by Playwright, their
@@ -127,6 +128,16 @@ jobs:
         shell: powershell
         run: |
           powershell -NoLogo -NoProfile -ExecutionPolicy Bypass -File jascon\scripts\validate_core.ps1 | Tee-Object -FilePath run.log
+          exit $LASTEXITCODE
+      - name: attestation-binds on a bundle, end to end, with the twin
+        # The same nine changed copies the reference is run on, in one run of
+        # the twin: every repository bundle is a Full Match, so the lines for a
+        # Semantic Match, for an Attestation that does not bind and for a
+        # failure are printed on Windows PowerShell 5.1 only here.
+        shell: powershell
+        run: |
+          $env:JASCON_TWIN = 'powershell -NoLogo -NoProfile -ExecutionPolicy Bypass -File jascon\scripts\validate_core.ps1'
+          python jascon\scripts\test_attestation_binds.py
           exit $LASTEXITCODE
       - name: Summary
         if: always()
