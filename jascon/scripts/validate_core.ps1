@@ -135,6 +135,45 @@ and an evidence ref with a line break at the end were accepted - and a
 pin version in the digits of another script stopped this file with a
 conversion error. Run under PowerShell 7.4 on Linux; the workflow runs it
 on Windows PowerShell 5.1.
+CHANGED 2026-11-14 (backlog #46): an Attestation read with a bundle is
+held to what it binds (Appendix B.1.7). Ported from validate_core.py:
+Attestation-Binds (every subject is match, differs or absent against the
+objects the manifest lists; the manifest bound is this one, a pack manifest
+the bundle keeps, or another; Full Match, Semantic Match or fail),
+Binds-Report (one line per Attestation; a `fail` verdict fails the bundle
+while the Attestation's lifecycle is `active` and is reported otherwise)
+and the `binds-vectors` of attestation-vectors.json. Attestations beside a
+manifest are read with every bundle and no longer for a pack only
+(Beside-Attestation-Files): typed, counted, held to their envelope, and
+handed to the tier derivation, the op-law duties, the risk coverage and the
+author report. The example folder is held to its envelopes as a bundle is:
+a missing one was a note here and is a failure now, as in validate_core.py.
+Nineteen vectors came with the change, 684 in all (attestation: 24); the
+IFA bundle counts 18 again and the worked pack 3. Before the change this
+file passed the five older vectors, counted 17 and 2 and printed no line
+about a binding.
+Run under PowerShell 7.4 on Linux, with a stand-in for the JSON parser of
+the .NET Framework: the lint, then the 684 vectors in 18 families, the five
+bundles, the worked pack and the example folder, in structural and in
+verification mode (conformance/fixture-trusted-keys.json) - the same counts
+and the same dsse and binds lines as validate_core.py, ALL GREEN. Run the
+same way on bundles made for the purpose and not kept in the repository:
+23 copies of the IFA bundle, all but one changed in one respect each, a
+bundle whose Tailoring only the Attestation beside the manifest makes
+authority-proven, and two changed example folders, one of them with the
+example Attestation as it was shipped before 2026-11-14, which fails twice
+here as it does in validate_core.py (the envelope, the binding). There the
+counts, the dsse and binds lines and the list of failures were the same as
+those of validate_core.py, in both modes. Not run on Windows PowerShell 5.1
+when this was written; the workflow runs it there.
+NOT EXERCISED by a vector or a bundle of the repository: the lines for a
+Semantic Match and for an Attestation that does not bind, and the failure
+(every bundle here is a Full Match; the vectors hold the verdict, not the
+words); an Attestation without a subject (the schema asks for one, so only
+the vector runner could meet it, and no vector has one); a case of the
+binds-vectors with an object that does not type; the order of two ids or
+two file names that differ in a character beyond U+FFFF. The bundles made
+for the run exercised all of these but the two that only a vector can.
 
 Usage: powershell -ExecutionPolicy Bypass -File validate_core.ps1 [bundle-dirs...]
        -VectorsOnly to skip bundles; -TrustedKeys file.json for verification mode;
@@ -1387,6 +1426,19 @@ function Sorted-Ordinal($list) {
     [Array]::Sort($a, [System.StringComparer]::Ordinal)
     return ,$a
 }
+# The order of Python's sorted(): by code point. It is the ordinal order
+# except where a name has a character beyond U+FFFF, which UTF-16 writes as
+# two code units from D800 on and so puts before U+E000..U+FFFF. Used only
+# where validate_core.py sorts that way and the order is printed or recorded;
+# everything else in this file sorts with Sorted-Ordinal, as by_code_unit()
+# does there. The key is the UTF-32 form, big end first, written in hex.
+function Sorted-CodePoint($list) {
+    $a = @($list | ForEach-Object { [string]$_ })
+    $utf32 = New-Object System.Text.UTF32Encoding($true, $false)
+    $keys = @($a | ForEach-Object { [System.BitConverter]::ToString($utf32.GetBytes($_)) })
+    [Array]::Sort($keys, $a, [System.StringComparer]::Ordinal)
+    return ,$a
+}
 function Same-Set($a, $b) {
     $x = New-Object System.Collections.ArrayList
     foreach ($i in @($a)) { if ($null -ne $i) { [void]$x.Add([string]$i) } }
@@ -1932,7 +1984,8 @@ function Run-Tailoring {
     }
 }
 function Run-Attestation {
-    foreach ($case in (Load-Vectors 'attestation-vectors.json')['vectors']) {
+    $v = Load-Vectors 'attestation-vectors.json'
+    foreach ($case in $v['vectors']) {
         $sc = $case['scenario']
         $signedSem = SDig $sc['subject']
         $delivered = Copy-Deep $sc['subject']
@@ -1945,6 +1998,28 @@ function Run-Attestation {
         if (-not (Str-Eq $delSem $signedSem)) { $got = 'tamper' }
         elseif (-not [string]::Equals($mut, 'reindent', $ORD) -and -not [string]::Equals($mut, 'annotation-added', $ORD)) { $got = 'full-match' }
         if (Str-Eq $got $case['expected']) { OK 'attestation' } else { FAIL 'attestation' "$($case['name']): expected $($case['expected']), got $got" }
+    }
+    # the primitive applied to a bundle (backlog #46): the verdict, which
+    # manifest is bound, and what became of every subject, in their order.
+    # Every object of a case must type, or the case fails.
+    if (Is-List $v['binds-vectors']) {
+        foreach ($case in $v['binds-vectors']) {
+            $objs = To-Objs $case['objects']
+            $r = Attestation-Binds $case['attestation'] $case['manifest-digest'] $objs $case['kept-packs']
+            $got = New-Object System.Collections.ArrayList
+            foreach ($s in $r.subjects) { [void]$got.Add($s.st) }
+            $want = $case['expected-subjects']
+            $same = (Str-Eq $r.verdict $case['expected']) -and (Str-Eq $r.manifest $case['expected-manifest'])
+            if (-not (Is-List $want) -or (@($want).Count -ne $got.Count)) { $same = $false }
+            else { for ($i = 0; $i -lt $got.Count; $i++) { if (-not (Str-Eq $got[$i] $want[$i])) { $same = $false } } }
+            $wantFails = $case['expected-failure']
+            if (-not ($wantFails -is [bool]) -or ([bool]$wantFails -ne [bool]$r.fails)) { $same = $false }
+            if ($same -and ($objs.Count -eq @($case['objects']).Count)) { OK 'attestation' }
+            else {
+                FAIL 'attestation' ("binds $($case['name']): expected $($case['expected']) / $($case['expected-manifest']) / [$(@($want) -join ', ')] / fails=$wantFails, " +
+                                    "got $($r.verdict) / $($r.manifest) / [$(@($got) -join ', ')] / fails=$($r.fails); $($objs.Count) of $(@($case['objects']).Count) object(s) typed")
+            }
+        }
     }
 }
 function Run-Facets {
@@ -4119,16 +4194,10 @@ function Advice-Report([string]$section, [string]$bdir, $manifest, [byte[]]$rawM
     foreach ($oid in $objs.Keys) { if ([string]::Equals($objs[$oid].t, 'attestation', $ORD)) { $atts[[string]$oid] = $objs[$oid] } }
     $isPack = ((Is-Map $manifest) -and (Ck-Truthy $manifest['pack']) -and (Test-Schema $DEFS['contentManifest'] $manifest))
     if (($isPack -or (@($ae.packs).Count -gt 0)) -and -not $Flat) {
-        # Attestations BESIDE the manifest (D3.1): JSON files in the manifest's own
-        # folder that it does not list and that type as an Attestation - a pack's
-        # own, and the vendor's beside a set that kept a pack's manifest
+        # a pack's own Attestation, and the vendor's beside a set that kept a pack's manifest
         $listedPaths = New-Object 'System.Collections.Generic.HashSet[string]' ([System.StringComparer]::Ordinal)
         foreach ($e in @($manifest['objects'])) { if ($null -ne $e) { [void]$listedPaths.Add([string]$e['path']) } }
-        foreach ($f in (Get-ChildItem $bdir -File -Filter *.json | Sort-Object Name)) {
-            if ([string]::Equals($f.Name, 'content-manifest.json', $ORD) -or $listedPaths.Contains($f.Name)) { continue }
-            try { $o = Read-Json $f.FullName } catch { continue }
-            if ((Is-Map $o) -and ([string]::Equals((Infer-Single $o), 'attestation', $ORD))) { $atts[[string]$o['id']] = @{t = 'attestation'; o = $o} }
-        }
+        foreach ($bf in (Beside-Attestation-Files $bdir $listedPaths)) { $atts[[string]$bf.o['id']] = @{t = 'attestation'; o = $bf.o} }
     }
     $envs = (New-Map)
     if ($null -ne $envelopes) { foreach ($k in $envelopes.Keys) { $envs[[string]$k] = $envelopes[$k] } }
@@ -4153,6 +4222,142 @@ function Advice-Report([string]$section, [string]$bdir, $manifest, [byte[]]$rawM
         }
         Write-Host "    $($j.where): $($j.pack['id']) release $($j.pack['version']) by $($j.pack['publisher']['ref']) = $tag"
         foreach ($n in $pn) { Write-Host "          $n" }
+    }
+}
+
+# ---------------- attestation-binds, applied to a bundle (Appendix B.1.7; backlog #46) ----------------
+# The port of the section of the same name in validate_core.py. The
+# primitive is (attestation, bundle) -> Full Match | Semantic Match | fail.
+# Until 2026-11-14 this file did not apply it to a bundle: an Attestation
+# was read for its envelope, for a Tailoring's tier and for a pack's
+# publisher, and never held to its subjects.
+#
+# Each subject is judged against the objects the manifest lists:
+#   match    an object carries the signed semantic digest - the object of
+#            that id where the subject names one, any object where it is a
+#            bare digest;
+#   differs  the object of that id carries another digest: its normative
+#            content changed after signing;
+#   absent   no object of that id, or no object with that digest: what is
+#            not delivered cannot be recomputed.
+# The manifest the Attestation binds is `this` one (the digest of its bytes
+# as delivered), a `kept-pack` (a vendor's manifest the bundle keeps under
+# packs/sha256/, D25) or an `other`.
+#   Full Match      every subject matches, and the manifest is this one or a
+#                   kept pack's;
+#   Semantic Match  every subject matches, and the manifest is another: the
+#                   content is proven, the packaging was altered (D7) -
+#                   reported, never a failure and never Full;
+#   fail            anything else, an Attestation without a subject included.
+# The verdict is about digests. Whether the signature is valid is the
+# envelope's matter and is reported beside it.
+#
+# A `fail` verdict fails the bundle when the Attestation is still claimed:
+# lifecycle `active`. A draft is not issued yet, and a deprecated or
+# withdrawn one is kept for the record; each is reported with its verdict
+# and fails nothing (validate_core.py: argued there, the primitive does not
+# speak of lifecycle).
+function Beside-Attestation-Files([string]$bdir, $listedPaths) {
+    # -> list of @{name; raw; o}: the Attestations BESIDE the manifest (D3.1) -
+    # JSON files in the manifest's own folder that it does not list and that
+    # type as an Attestation, in the order of their names (by code point, as
+    # validate_core.py sorts them). An Attestation binds the digest of the
+    # manifest's bytes, so the manifest cannot list it; this is where every
+    # bundle keeps one. A file that is not UTF-8 JSON is no Attestation and
+    # is passed over, as validate_core.py passes over it. A hidden file is
+    # read like any other (-Force), as os.listdir() lists it there.
+    $out = New-Object System.Collections.ArrayList
+    $byName = (New-Map)
+    foreach ($f in (Get-ChildItem $bdir -File -Filter *.json -Force)) {
+        # the provider's filter folds case on Windows; the reference asks for the ending as written
+        if (-not $f.Name.EndsWith('.json', $ORD)) { continue }
+        if ([string]::Equals($f.Name, 'content-manifest.json', $ORD) -or $listedPaths.Contains($f.Name)) { continue }
+        $byName[$f.Name] = $f.FullName
+    }
+    foreach ($name in (Sorted-CodePoint $byName.Keys)) {
+        try {
+            $raw = [System.IO.File]::ReadAllBytes($byName[$name])
+            $o = Ck-Json-Bytes $raw
+        } catch { continue }
+        if ((Is-Map $o) -and [string]::Equals((Infer-Single $o), 'attestation', $ORD)) { [void]$out.Add(@{name = $name; raw = $raw; o = $o}) }
+    }
+    return ,$out
+}
+function Attestation-Binds($att, $manifestDigest, $objs, $keptPacks) {
+    # -> @{verdict; manifest; subjects; fails}. subjects: one @{st; id; signed;
+    # have} per subject, in the Attestation's order - the status, the id it
+    # names or $null, the signed digest, the delivered digest or $null.
+    # objs: id -> @{t; o}, the objects the manifest lists. keptPacks: the
+    # digests of the pack manifests the bundle keeps.
+    $delivered = (New-Map)
+    $carried = New-Object 'System.Collections.Generic.HashSet[string]' ([System.StringComparer]::Ordinal)
+    foreach ($oid in $objs.Keys) {
+        $d = SDig $objs[$oid].o
+        $delivered[[string]$oid] = $d
+        [void]$carried.Add($d)
+    }
+    $subjects = New-Object System.Collections.ArrayList
+    if (Is-List $att['subject-semantic-digests']) {
+        foreach ($sj in $att['subject-semantic-digests']) {
+            if (Is-Map $sj) {
+                # a subject that names an id is compared with the object of that id, and with no other
+                $sid = $sj['id']; $signed = $sj['semantic-digest']
+                $have = $null
+                if (($sid -is [string]) -and $delivered.ContainsKey($sid)) { $have = $delivered[$sid] }
+                $st = 'differs'
+                if ($null -eq $have) { $st = 'absent' } elseif (Str-Eq $have $signed) { $st = 'match' }
+                [void]$subjects.Add(@{st = $st; id = $sid; signed = $signed; have = $have})
+            }
+            elseif (($sj -is [string]) -and $carried.Contains($sj)) { [void]$subjects.Add(@{st = 'match'; id = $null; signed = $sj; have = $sj}) }
+            else { [void]$subjects.Add(@{st = 'absent'; id = $null; signed = $sj; have = $null}) }
+        }
+    }
+    $bound = $att['content-manifest-digest']
+    $manifest = 'other'
+    if (Str-Eq $bound $manifestDigest) { $manifest = 'this' }
+    elseif (Str-In $keptPacks $bound) { $manifest = 'kept-pack' }
+    $allMatch = ($subjects.Count -gt 0)
+    foreach ($s in $subjects) { if (-not [string]::Equals($s.st, 'match', $ORD)) { $allMatch = $false } }
+    $verdict = 'fail'
+    if ($allMatch) {
+        if ([string]::Equals($manifest, 'other', $ORD)) { $verdict = 'semantic-match' } else { $verdict = 'full-match' }
+    }
+    $fails = ([string]::Equals($verdict, 'fail', $ORD) -and [string]::Equals($att['lifecycle'], 'active', $ORD))
+    return @{verdict = $verdict; manifest = $manifest; subjects = $subjects; fails = $fails}
+}
+$BINDS_MANIFEST = Ord-Table @{'this' = 'this manifest'; 'kept-pack' = 'a pack manifest this bundle keeps'; 'other' = 'another manifest'}
+function Binds-Report([string]$section, $atts, $manifestDigest, $objs, $kept) {
+    # One line per Attestation read with a bundle, in the ordinal order of
+    # the ids; a `fail` verdict fails the bundle, in the words of Appendix
+    # B.1.7. atts: id -> object. kept: what Read-Kept-Packs returns - a kept
+    # manifest is known by its name, as in validate_core.py.
+    $packs = New-Object System.Collections.ArrayList
+    foreach ($k in @($kept)) { if ($null -ne $k) { [void]$packs.Add('sha256:' + [string]$k.name) } }
+    foreach ($aid in (Sorted-Ordinal $atts.Keys)) {
+        $r = Attestation-Binds $atts[$aid] $manifestDigest $objs $packs
+        $n = $r.subjects.Count; $what = $BINDS_MANIFEST[$r.manifest]
+        if ([string]::Equals($r.verdict, 'full-match', $ORD)) {
+            Write-Host "    binds: $aid = FULL MATCH [$n subject(s) of this bundle; $what]" }
+        elseif ([string]::Equals($r.verdict, 'semantic-match', $ORD)) {
+            Write-Host "    binds: $aid = SEMANTIC MATCH [$n subject(s) of this bundle; ${what}: the content is proven, the packaging was altered]" }
+        else {
+            $lines = New-Object System.Collections.ArrayList
+            foreach ($s in $r.subjects) {
+                if ([string]::Equals($s.st, 'match', $ORD)) { continue }
+                $named = Ck-Truthy $s.id
+                $who = $s.signed; if ($named) { $who = $s.id }
+                if ([string]::Equals($s.st, 'differs', $ORD)) { $why = "recomputed semantic digest $($s.have), signed $($s.signed)" }
+                elseif ($named) { $why = 'not an object of this bundle' }
+                else { $why = 'no object of this bundle carries it' }
+                [void]$lines.Add("subject ${who}: $why")
+            }
+            if ($lines.Count -eq 0) { [void]$lines.Add('it names no subject') }
+            $detail = @($lines) -join '; '
+            if ($r.fails) {
+                FAIL $section "[attestation-binds] ${aid}: $detail - $what (B.1.7: an Attestation binds what is delivered, or it fails; a changed subject is normative content changed after signing)" }
+            else {
+                Write-Host "    binds: $aid = DOES NOT BIND [lifecycle $($atts[$aid]['lifecycle']): reported, not a failure] $detail - $what" }
+        }
     }
 }
 
@@ -4205,6 +4410,18 @@ function Validate-Object([string]$section, [string]$path, $obj) {
     }
     return $t
 }
+# The envelope of one Attestation: envelope-ref resolves to a file BESIDE
+# the manifest (nothing signed contains its own signature, D3). A ref that
+# does not resolve fails, and so does a file that is not JSON. -> $true
+# when the envelope was read into $envelopes.
+function Read-Envelope([string]$section, [string]$bdir, [string]$oid, $att, $envelopes) {
+    $ref = [string]$att['envelope-ref']
+    $ep = Join-Path $bdir $ref
+    if (-not (Test-Path $ep)) { FAIL $section "${oid}: envelope-ref '$ref' does not resolve beside the manifest"; return $false }
+    try { $envelopes[$ref] = Read-Json $ep }
+    catch { FAIL $section "${ref}: envelope unreadable: $($_.Exception.Message)"; return $false }
+    return $true
+}
 function Validate-Bundle([string]$bdir, [switch]$Flat) {
     $section = $bdir.Replace($ROOT, '').TrimStart('\').Replace('\', '/')
     Write-Host "  -> $section"   # sign of life: big bundles run minutes with no output (P10 user report)
@@ -4235,11 +4452,18 @@ function Validate-Bundle([string]$bdir, [switch]$Flat) {
         $seenIds[$obj['id']] = $entry['path']
         if ($null -ne $t) { $bundleObjs[$obj['id']] = @{t = $t; o = $obj} }
     }
+    # $listedObjs is what the manifest lists, and what attestation-binds
+    # judges a subject against. In a bundle that is $bundleObjs; in a flat
+    # folder $bundleObjs goes on to take the unlisted Attestations as well,
+    # as `exobjs` does in validate_examples().
+    $listedObjs = $bundleObjs
     # A flat folder (jascon\examples) keeps its objects beside the manifest,
     # as validate_examples() in validate_core.py reads it: every other .json
     # there is an object; an Attestation may stay unlisted (D3.1: it lives
     # BESIDE the manifest), anything else unlisted fails.
     if ($Flat) {
+        $listedObjs = (New-OMap)
+        foreach ($oid in $bundleObjs.Keys) { $listedObjs[$oid] = $bundleObjs[$oid] }
         $skip = New-Object 'System.Collections.Generic.HashSet[string]'
         [void]$skip.Add('content-manifest.json')
         foreach ($entry in $manifest['objects']) { [void]$skip.Add($entry['path']) }
@@ -4283,35 +4507,67 @@ function Validate-Bundle([string]$bdir, [switch]$Flat) {
             if (-not (Str-Eq (Format-Canonical $sch) (Format-Canonical $STDLIB[$sd['id']]))) {
                 FAIL $section "$($fe['path']): pin of stdlib facet $($sd['id']) DIVERGES from the normative descriptor (D26)" } }
     }
-    $envelopes = (New-Map)
-    foreach ($oid in $bundleObjs.Keys) {
-        $e = $bundleObjs[$oid]
-        if (-not [string]::Equals($e.t, 'attestation', $ORD) -or -not $e.o.Contains('envelope-ref')) { continue }
-        $ep = Join-Path $bdir $e.o['envelope-ref']
-        if (Test-Path $ep) {
-            try { $envelopes[$e.o['envelope-ref']] = Read-Json $ep }
-            catch { FAIL $section "$($e.o['envelope-ref']): envelope unreadable: $($_.Exception.Message)" }
+    # Attestations BESIDE the manifest (D3.1) are read with every bundle
+    # (backlog #46). Until 2026-11-14 they were read for a pack only, in
+    # Advice-Report, so a bundle's own Attestation - which cannot be listed,
+    # because it binds the manifest's digest - was not typed, not held to its
+    # envelope and never seen by the tier derivation. They are objects the run
+    # validates and counts; they are not objects of the manifest, so
+    # $bundleObjs stays what the manifest lists and $withAtts adds them where
+    # a rule asks who attested what. A flat folder has read them already.
+    $listedPaths = New-Object 'System.Collections.Generic.HashSet[string]' ([System.StringComparer]::Ordinal)
+    foreach ($entry in $manifest['objects']) { [void]$listedPaths.Add($entry['path']) }
+    $withAtts = $bundleObjs
+    if (-not $Flat) {
+        $withAtts = (New-OMap)
+        foreach ($oid in $bundleObjs.Keys) { $withAtts[$oid] = $bundleObjs[$oid] }
+        foreach ($bf in (Beside-Attestation-Files $bdir $listedPaths)) {
+            Number-Failures $section $bf.name $bf.raw $null     # the spelling; Validate-Object holds the value
+            $t = Validate-Object $section $bf.name $bf.o
+            if (-not [string]::Equals($t, 'attestation', $ORD)) { continue }
+            if (-not $typec.ContainsKey($t)) { $typec[$t] = 0 }
+            $typec[$t]++
+            $bid = $bf.o['id']
+            if ($seenIds.ContainsKey($bid)) { FAIL $section "$($bf.name): object id already used by $($seenIds[$bid])" }
+            $seenIds[$bid] = $bf.name
+            $withAtts[$bid] = @{t = $t; o = $bf.o}
         }
-        elseif ($Flat) {
-            # validate_examples() resolves no envelopes; a note keeps the twins on one verdict
-            Write-Host "    note: ${oid}: envelope-ref '$($e.o['envelope-ref'])' does not resolve beside the manifest (not checked for the example folder, as in validate_core.py)" }
-        else { FAIL $section "${oid}: envelope-ref '$($e.o['envelope-ref'])' does not resolve beside the manifest" }
     }
-    # every Attestation's envelope is checked, not only the ones a Tier
-    # derivation happens to consult (validate_core.py: a broken envelope fails)
-    foreach ($oid in ($bundleObjs.Keys | Sort-Object)) {
-        $e = $bundleObjs[$oid]
-        if (-not [string]::Equals($e.t, 'attestation', $ORD)) { continue }
-        if (-not $e.o.Contains('envelope-ref')) { Write-Host "    dsse: $oid = no envelope (unsigned attestation)"; continue }
-        $envObj = $envelopes[$e.o['envelope-ref']]
-        if ($null -eq $envObj) { continue }
-        $vr = Verify-Envelope $envObj $e.o $TRUSTED
+    # DSSE envelopes (#24), of every Attestation read with the bundle and not
+    # only of the ones a tier derivation happens to consult. A flat folder is
+    # held to them as a bundle is (backlog #46; until 2026-11-14 a ref that
+    # did not resolve there was a note, as validate_examples() read none).
+    # The two readers of validate_core.py differ in the order, and this
+    # follows each: validate_bundle() resolves every envelope in the order
+    # the objects were read and then verifies in the order of the ids by code
+    # point; validate_examples() does both for one Attestation after the
+    # other, in the order of the ids by UTF-16 code unit.
+    $envelopes = (New-Map)
+    $attIds = New-Object System.Collections.ArrayList
+    foreach ($oid in $withAtts.Keys) { if ([string]::Equals($withAtts[$oid].t, 'attestation', $ORD)) { [void]$attIds.Add([string]$oid) } }
+    $attOrder = Sorted-Ordinal $attIds
+    if (-not $Flat) {
+        $attOrder = Sorted-CodePoint $attIds
+        foreach ($oid in $attIds) {
+            if (Ck-Truthy $withAtts[$oid].o['envelope-ref']) { [void](Read-Envelope $section $bdir $oid $withAtts[$oid].o $envelopes) } }
+    }
+    foreach ($oid in $attOrder) {
+        $att = $withAtts[$oid].o
+        if (-not (Ck-Truthy $att['envelope-ref'])) { Write-Host "    dsse: $oid = no envelope (unsigned attestation)"; continue }
+        if ($Flat) { if (-not (Read-Envelope $section $bdir $oid $att $envelopes)) { continue } }
+        elseif ($null -eq $envelopes[[string]$att['envelope-ref']]) { continue }
+        $vr = Verify-Envelope $envelopes[[string]$att['envelope-ref']] $att $TRUSTED
         if ([string]::Equals($vr[0], 'error', $ORD)) { FAIL $section "${oid}: dsse: $($vr[1])"; Write-Host "    dsse: $oid = FAIL - $($vr[1])" }
         elseif ([string]::Equals($vr[0], 'verified', $ORD)) { Write-Host "    dsse: $oid = signature VERIFIED (Ed25519)" }
         else { Write-Host "    dsse: $oid = signature UNVERIFIED - $($vr[1])" }
     }
+    # attestation-binds (B.1.7): every Attestation read with the bundle is
+    # held to its subjects and to the manifest it binds
+    $atts = (New-OMap)
+    foreach ($oid in $attIds) { $atts[$oid] = $withAtts[$oid].o }
+    Binds-Report $section $atts (Sha256-Hex $rawManifest) $listedObjs (Read-Kept-Packs $bdir)
     foreach ($e in (Closure-Errors $bundleObjs)) { FAIL $section $e }
-    foreach ($e in (Duty-Errors $bundleObjs $pinnedDecl $envelopes $TRUSTED)) { FAIL $section $e }
+    foreach ($e in (Duty-Errors $withAtts $pinnedDecl $envelopes $TRUSTED)) { FAIL $section $e }
     foreach ($e in (Kernel-Pin-Errors $manifest $bundleObjs)) { FAIL $section $e }
     # pinned scale definitions: SCALE-1 on each pin, SCALE-2/3 on the Risks
     $scaleDefs = (New-Map)
@@ -4332,12 +4588,12 @@ function Validate-Bundle([string]$bdir, [switch]$Flat) {
     foreach ($e in $se.errs) { FAIL $section $e }
     foreach ($n in $se.notes) { Write-Host "    note: $n" }
     # CP-RISK-1: B.1.9 risk-coverage report (+ RISK-11 errors), RISK-9/10 notes
-    $rc = Risk-Coverage $bundleObjs $envelopes $TRUSTED
+    $rc = Risk-Coverage $withAtts $envelopes $TRUSTED
     foreach ($e in $rc.errs) { FAIL $section $e }
     foreach ($n in $rc.notes) { Write-Host "    note: $n" }
     foreach ($n in (Risk-Link-Notes $bundleObjs)) { Write-Host "    note: $n" }
     # CP-AUTHOR-1: AUTHOR-1..4 (notes, or failures under -RequireAuthors) and REVIEW-1 (always notes)
-    Report-Authors-And-Reviews $section $bundleObjs $envelopes
+    Report-Authors-And-Reviews $section $withAtts $envelopes
     # the policy switch applies even where the bundle carries no Risk at all
     if ($rc.risks -gt 0 -or $RequireRiskBasis) {
         foreach ($tid in @($rc.report.Keys)) {
@@ -4363,14 +4619,12 @@ function Validate-Bundle([string]$bdir, [switch]$Flat) {
     Advice-Report $section $bdir $manifest $rawManifest $bundleObjs $pinnedDecl $envelopes -Flat:$Flat
     foreach ($oid in $bundleObjs.Keys) {
         if ([string]::Equals($bundleObjs[$oid].t, 'tailoring', $ORD)) {
-            $tier = Derive-Tier $bundleObjs[$oid].o $bundleObjs $envelopes $TRUSTED
+            $tier = Derive-Tier $bundleObjs[$oid].o $withAtts $envelopes $TRUSTED
             Write-Host "    tier: $oid = $tier"
         }
     }
     # on-disk vs manifest (a flat folder was checked above); one set lookup
-    # per file - the nested loop was quadratic, 2.9 M compares on the ISM bundle
-    $listedPaths = New-Object 'System.Collections.Generic.HashSet[string]' ([System.StringComparer]::Ordinal)
-    foreach ($entry in $manifest['objects']) { [void]$listedPaths.Add($entry['path']) }
+    # per file ($listedPaths) - the nested loop was quadratic, 2.9 M compares on the ISM bundle
     foreach ($f in (Get-ChildItem (Join-Path $bdir 'objects') -Recurse -Filter *.json -ErrorAction SilentlyContinue)) {
         $rel = $f.FullName.Substring($bdir.Length + 1).Replace('\', '/')
         if (-not $listedPaths.Contains($rel)) { FAIL $section "${rel}: on disk but not in manifest" }
