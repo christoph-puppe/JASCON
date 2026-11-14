@@ -136,6 +136,88 @@ test("BSI preset: a nested control is a Requirement of its own with its own link
   assert.deepEqual(byId.get(`${NS}/set/tax/root`).facets, { "https://ns.jascon.net/compat/oscal-1x@1": { metadata: rest } });
 });
 
+/* What the pinned catalogue does not hold. The rule is that content is not dropped: what the mapping does not read
+   is carried as the source holds it, in the compat facet. The expectations are read from convert_bsi.py v0.3; the
+   converter reads its one pinned source and could not be run on this catalog. */
+test("BSI preset: what the mapping does not read is carried as the source holds it; a prop counts only in its namespace; a group without controls and a control outside a group are kept", () => {
+  const NS = "https://ns.bsi.bund.de/gspp", CSV = "https://github.com/BSI-Bund/Stand-der-Technik-Bibliothek/tree/main/Dokumentation/namespaces/", COMPAT = "https://ns.jascon.net/compat/oscal-1x@1";
+  const RES = "11111111-2222-4333-8444-555555555555";
+  const cat = { catalog: { uuid: "c-1", remarks: "a note on the catalogue",
+    metadata: { title: "Anwenderkatalog Grundschutz++ (Probe)", version: "9", "oscal-version": "1.1.3", "last-modified": "2026-11-14T10:00:00Z",
+      roles: [{ id: "creator", title: "Creator" }], parties: [{ uuid: "p-1", type: "organization", name: "Bundesamt für Größe und Maß" }], "responsible-parties": [{ "role-id": "creator", "party-uuids": ["p-1"] }] },
+    "back-matter": { resources: [{ uuid: RES, title: "A standard", rlinks: [{ href: "https://standards.example/a" }] }, { uuid: "99999999-2222-4333-8444-555555555555", title: "Named by nobody" }] },
+    groups: [
+      { id: "EMPTY", title: "A practice without controls", props: [{ name: "label", value: "EMPTY", remarks: "What the practice is about." }, { name: "label", ns: "https://other.example/ns", value: "another label" }, { name: "colour", value: "blue" }], weight: 0.25 },
+      { id: "X", title: "A practice", props: [{ name: "label", value: "old X" }, { name: "label", value: "X" }, { name: "alt-identifier", value: "g-uuid" }], controls: [
+        { id: "X.1", class: "x", title: "One", status: "new",
+          props: [{ name: "alt-identifier", value: "u-1" }, { name: "sec_level", ns: CSV + "security_level.csv", value: "normal-SdT" }, { name: "sec_level", ns: "https://other.example/ns", value: "geheim" },
+            { name: "tags", ns: CSV + "tags.csv", value: "a, b" }, { name: "tags", ns: CSV + "tags.csv", value: "c", class: "late" }, { name: "weight", value: "heavy" }],
+          params: [{ id: "x.1-prm1", label: "", values: ["one", "two"], props: [{ name: "alt-identifier", value: "pu-1" }, { name: "unit", value: "days" }], usage: "free" }],
+          parts: [{ id: "X.1_stm", name: "statement", prose: "X MUSS {{ insert: param, x.1-prm1 }} tun.", title: "a title on the part",
+              props: [{ name: "modal_verb", ns: CSV + "modal_verbs.csv", value: "MUSS" }, { name: "modal_verb", value: "KANN" }, { name: "documentation", ns: CSV + "documentation_guidelines.csv", value: " , " }] },
+            { id: "X.1_gdn", name: "guidance", prose: "Why.", class: "hint" }, { id: "X.1_other", name: "example", prose: "For instance." }],
+          links: [{ href: "#X.2", rel: "required", text: "see also" }, { href: "#" + RES, rel: "reference" }, { href: "https://elsewhere.example/doc" }],
+          controls: [{ id: "X.1.1", title: "Nested", props: [{ name: "modal_verb", ns: CSV + "modal_verbs.csv", value: "MUSS" }], parts: [{ id: "elsewhere", name: "statement", prose: "Nested MUSS.", props: [{ name: "modal_verb", ns: CSV + "modal_verbs.csv", value: "WIRD" }] }] }] },
+        { id: "X.2", title: "Two", parts: [{ name: "guidance" }] }] }],
+    controls: [{ id: "LOOSE.1", title: "In no group", parts: [{ id: "LOOSE.1_stm", name: "statement", prose: "Loose SOLLTE." }] }] } };
+  const before = JSON.stringify(cat), out = oscal.jscOscalImportCatalog(cat, { preset: "bsi-gspp" });
+  assert.equal(JSON.stringify(cat), before, "the source is not changed by the import");
+  const byId = new Map(out.objects.map(o => [o.obj.id, o.obj])), req = id => byId.get(`${NS}/req/${id}`), set = id => byId.get(`${NS}/set/tax/${id}`);
+  assert.deepEqual(out.objects.map(o => o.path), ["set-tax-empty", "req-x-1", "req-x-1-1", "set-tax-x-1", "req-x-2", "set-tax-x", "req-loose-1", "set-tax-root", "set-baseline-normal-sdt"].map(n => `objects/gspp/${n}.json`));
+  /* a prop is read in its own namespace only; one of the same name in another, an earlier one of a name that repeats,
+     one that holds a further member and one the mapping does not know are carried whole */
+  const x1 = req("X.1"), c = x1.facets[COMPAT];
+  assert.deepEqual(x1.facets["https://ns.bsi.bund.de/facet/gspp-taxonomy@1"]["by-statement"].smt, { class: "x", "sec-level": "normal-SdT", tags: ["c"] }, "the last tags prop is read");
+  assert.deepEqual(c.props, [{ name: "sec_level", ns: "https://other.example/ns", value: "geheim" }, { name: "tags", ns: CSV + "tags.csv", value: "a, b" },
+    { name: "tags", ns: CSV + "tags.csv", value: "c", class: "late" }, { name: "weight", value: "heavy" }]);
+  assert.deepEqual(Object.keys(c), ["param-extras", "props", "parts", "links", "control"], "the members of the compat facet in the converter's order");
+  assert.deepEqual(c["param-extras"], { "x.1-prm1": { "alt-identifier": "pu-1", values: ["one", "two"], label: "", props: [{ name: "unit", value: "days" }], usage: "free" } });
+  assert.deepEqual(x1.statements[0].parameters, [{ name: "x.1-prm1", type: "string", default: "one" }]);
+  /* of a part that is read, what is left; a part of another name, whole; the id of a part only where it is not the control's id and the suffix */
+  assert.deepEqual(c.parts, [{ name: "statement", title: "a title on the part", props: [{ name: "modal_verb", value: "KANN" }, { name: "documentation", ns: CSV + "documentation_guidelines.csv", value: " , " }] },
+    { name: "guidance", class: "hint" }, { id: "X.1_other", name: "example", prose: "For instance." }]);
+  assert.deepEqual(x1.facets["https://ns.jascon.net/stdlib/facet/assessment-criteria@1"]["by-statement"].smt, { "required-documentation": [] }, "a list prop without a term gives an empty list, and its value is carried");
+  /* a link is a relation; one that says more is carried whole beside it; one that names a back-matter resource gives the address the resource gives */
+  assert.deepEqual(x1.relations, [{ type: "required", ref: `${NS}/req/X.2` }, { type: "reference", ref: "https://standards.example/a" }, { type: "related", ref: "https://elsewhere.example/doc" }]);
+  assert.deepEqual(c.links, [{ href: "#X.2", rel: "required", text: "see also" }]);
+  assert.deepEqual(c.control, { status: "new" });
+  /* a nested control: its statement part is the one named `statement`; a verb outside the table is `unspecified` and carried; a modal_verb on the control is not the statement's */
+  const nested = req("X.1.1");
+  assert.deepEqual([nested.statements[0].modality, nested.statements[0].prose], ["unspecified", { de: "Nested MUSS." }]);
+  assert.deepEqual(nested.facets[COMPAT], { props: [{ name: "modal_verb", ns: CSV + "modal_verbs.csv", value: "MUSS" }], parts: [{ id: "elsewhere", name: "statement", props: [{ name: "modal_verb", ns: CSV + "modal_verbs.csv", value: "WIRD" }] }] });
+  assert.deepEqual(out.report["unknown-modal-verbs"], { WIRD: 1 });
+  assert.deepEqual(req("X.2").facets[COMPAT], { parts: [{ name: "guidance" }] }, "a guidance without a prose is not read and is carried whole");
+  assert.equal(req("X.2").statements[0].prose.de, "", "a control without a statement part has an empty statement");
+  /* a group: the last label without a namespace is read, the others are carried; a member the mapping does not know is
+     carried, a fraction as a decimal string; a group without controls gives a Set without members */
+  assert.deepEqual(set("empty"), { id: `${NS}/set/tax/empty`, version: "9", lifecycle: "active", title: { de: "A practice without controls" }, members: [], label: "EMPTY",
+    facets: { "https://ns.bsi.bund.de/facet/gspp-narrative@1": { description: { de: "What the practice is about." } },
+      [COMPAT]: { props: [{ name: "label", ns: "https://other.example/ns", value: "another label" }, { name: "colour", value: "blue" }], group: { weight: "0.25" } } } });
+  assert.deepEqual([set("x").label, set("x").aliases, set("x").facets[COMPAT]], ["X", [{ scheme: "bsi-uuid", value: "g-uuid" }], { props: [{ name: "label", value: "old X" }] }]);
+  /* one counter for the run, step 10, taken when an entry is appended: the empty group is 10, then the control's own
+     Requirement, its nested control, the grouping Set after its members, the next control, the group, the loose control */
+  assert.deepEqual(set("x-1").members, [{ ref: `${NS}/req/X.1`, sequence: 20 }, { ref: `${NS}/req/X.1.1`, sequence: 30 }]);
+  assert.deepEqual(set("x").members, [{ ref: `${NS}/set/tax/x-1`, sequence: 40 }, { ref: `${NS}/req/X.2`, sequence: 50 }], "the grouping Set stands where the control stood, numbered after its members");
+  /* the root: the groups, then a control that stands in no group; what the document says of itself; a resource that a link names, whole */
+  const root = set("root");
+  assert.deepEqual(root.members, [{ ref: `${NS}/set/tax/empty`, sequence: 10 }, { ref: `${NS}/set/tax/x`, sequence: 60 }, { ref: `${NS}/req/LOOSE.1`, sequence: 70 }]);
+  const { title, version, ...meta } = cat.catalog.metadata;
+  assert.deepEqual(root.facets[COMPAT], { metadata: meta, "back-matter": { resources: [cat.catalog["back-matter"].resources[0]] }, catalog: { remarks: "a note on the catalogue" } });
+  /* who wrote the document: the party's name in ASCII as a German reader writes it, then the slug */
+  assert.deepEqual(out.provenance.sources, [{ key: "gspp", title: "Anwenderkatalog Grundschutz++ (Probe)", version: "9", "oscal-version": "1.1.3",
+    "author-ref": `${NS}/party/bundesamt-fuer-groesse-und-mass`, date: "2026-11-14" }]);
+  assert.deepEqual(out.report["carried-as-the-source-holds-it"], { "param-extras beyond the alt-identifier": 1, props: 4, parts: 3, links: 1, control: 1, group: 1, metadata: 1, "back-matter": 1, catalog: 1 });
+  /* Every object is a valid kernel object but one, and the pinned compat schema accepts every compat payload. The one:
+     a control without a statement prose gives a statement with an empty prose, here as in the converter, and the kernel
+     refuses an empty text. Nothing is dropped and nothing is made up; the Import page then writes nothing and says how
+     many objects are not valid. The pinned catalogue has no such control. */
+  for (const o of out.objects) {
+    assert.deepEqual(rules.jscObjectErrors(o.obj).errors, o.obj.id === `${NS}/req/X.2` ? ["matches NO type (closest requirement: /statements/0/prose/de: matches none of the allowed shapes)"] : [], o.path);
+  }
+  const pinned = new Map(out.facetSchemas.map(f => [f.def.id, f.def.schema]));
+  assert.deepEqual(rules.jscFacetErrors(out.objects.map(o => [o.obj.id, o.obj]), pinned), []);
+});
+
 test("generic rules: NIST SP 800-53 becomes valid kernel objects whose references close", { skip: missing(NIST_SRC) }, () => {
   const src = json(NIST_SRC);
   assert.equal(oscal.jscOscalGuessPreset(src), "nist-sp800-53", "the catalog has a preset of its own; the generic rules are run here on purpose");
