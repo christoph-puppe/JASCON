@@ -47,6 +47,7 @@ from oscal_conv_lib import BUNDLE_NEWLINE   # one byte spelling on every OS (D3.
 from oscal_conv_lib import provenance, provenance_override
 from oscal_conv_lib import obligated_party, obligated_party_line, obligated_party_record
 from oscal_conv_lib import Ledger, ledger_by_path, ledger_gate, needs_kernel_2
+from oscal_conv_lib import COMPAT_FILE, compat_schema, lifecycle_default_record, lifecycle_default_line
 
 NS="https://ns.fedramp.gov/cr26"; NIST="https://ns.nist.gov/sp800-53/req"
 ARGV=sys.argv[1:]
@@ -239,21 +240,15 @@ KSI="cr26.KSI.*.indicators.*"; KVAR=KSI+".varies_by_class.*"
 # claim that does not hold, and the run ends with 1 on a value that is
 # neither carried nor dropped for a declared reason (backlog #41).
 #
-# The two drops are the ones declared before the author's rule of 2026-11-14
-# ("real content is never dropped"). They are neither a name that selects, nor
-# a namespace, nor an id that is rebuilt, so no checked rule takes their
-# place; whether they are content is the author's to decide, and the report
-# lists them with the converter's reading (DROP_READING).
+# No drop is declared since 2026-11-14: the author decided the two that were
+# left. The update history of an entry is carried with the entry, and the
+# process flow of a family, which the source writes out, on the family's Set.
 DROP="declared-drop"
-HISTORY=("update history of the entry (date, comment, issue): its entries are counted in the report, the values are "
-         "carried in no object and not in the manifest (the map read \"history -> L0\" until 2026-11-14)")
-FLOWS="process-flow diagrams: linked resources, not requirement data (D17)"
-DROP_READING={
- HISTORY:"content: an entry says on which day a term, a rule or an indicator was changed and why, some with the "
-         "number of an issue; the bundle holds the day of the publication and nothing of an entry's own history",
- FLOWS:"content: the diagram is written out in the source itself (an activity, its description, nodes and steps "
-       "that name rules in their order and say on which answer one follows the other) and nothing in the bundle holds it",
-}
+DROP_READING={}
+def add_history(obj,entries):
+    """The update history of a rule or an indicator (date, comment, issue), as the source writes it: the kernel
+    has the version of an object and no member for what changed when, so it stands in the compat facet."""
+    if entries: obj.setdefault("facets",{}).setdefault(F_COMPAT,{})["history"]=entries
 RULES=[
  (r"^cr26\.info\.title$","L1","the manifest's provenance (source) and the title of the corpus root Set"),
  (r"^cr26\.info\.description$","L1","narrative@1 on the corpus root Set: description"),
@@ -263,14 +258,14 @@ RULES=[
  (r"^cr26\.FRD\.info\.","L1","terminology@1 glossary-info on the corpus root Set"),
  (r"^cr26\.FRD\.data\.all\.\*\.(term|definition|tag|alts\[\]|note|notes\[\]|do_not_link|reference|reference_url)$","L1","terminology@1 payload per term (alts, links, chrome flags inside payload)"),
  (r"^cr26\.FRD\.data\.all\.\*\.ignore_in_terms$","L1","narrative@1 on the corpus root Set: ignore-in-terms {term id: flag} (terminology@1 has do-not-link and no member for this one)"),
- (r"^cr26\.FRD\.data\.all\.\*\.updated\[\]\.",DROP,HISTORY),
+ (r"^cr26\.FRD\.data\.all\.\*\.updated\[\]\.","L2","narrative@1 on the corpus root Set: term-updated {term id: the entries as the source writes them} (terminology@1 has no member for the history of a term)"),
  (r"^cr26\.FRR\.\*\.info\.(name|short_name)$","L1","family Set: title/label"),
  (r"^cr26\.FRR\.\*\.info\.status$","L1","the family Set's `lifecycle` by the rule for a document's status, the lifecycle of every object made from the family (subset Sets, rules, Mappings of their control links), and the word itself in narrative@1 of the family Set: status"),
  (r"^cr26\.FRR\.\*\.info\.web_name$","L1","family Set annotations.web_name (chrome)"),
  (r"^cr26\.FRR\.\*\.info\.(purpose|tag)$","L1","family Set: narrative description / scope tag"),
  (r"^cr26\.FRR\.\*\.info\.(20x|rev5)\.subsets\.","L1","framework-specific subset declarations -> track subset Sets (title/description/scope) [corrected per FedRAMP #153]"),
  (r"^cr26\.FRR\.\*\.info\.(effective|20x|rev5)\.","L1","effectivity@1 on family Set (default / per-track)"),
- (r"^cr26\.FRR\.\*\.info\.flows\[\]",DROP,FLOWS),
+ (r"^cr26\.FRR\.\*\.info\.flows\[\]","L2","compat facet on the family Set: flows, as the source writes them (D17 as amended on 2026-11-14: a flow the source writes out is carried)"),
  (r"^cr26\.FRR\.\*\.info\.subsets\.\*\.(name|description)$","L1","subset Set: title / narrative description"),
  (r"^cr26\.FRR\.\*\.info\.subsets\.\*\.applicability\.","L1","scope@1 on subset Set (types/paths/classes/affects) + class & type Set composition"),
  (re.escape(RULE)+r"\.name$","L1","Requirement.title"),
@@ -281,7 +276,7 @@ RULES=[
  (re.escape(RULE)+r"\.(timeframe_num|timeframe_type)$","L1","statement parameter 'timeframe' (elapsed-duration or calendar-period, by unit); timeframe_type is the unit of every timeframe parameter of the rule"),
  (re.escape(RULE)+r"\.timeframe_num_(min|max)$","L1","statement parameters 'timeframe-min' / 'timeframe-max': a range is its two bounds, each a duration of the kernel (unit from timeframe_type)"),
  (re.escape(RULE)+r"\.controls\[\]$","L1","Mapping objects (relationship supports; 8.6 untyped-import rule), as for a KSI"),
- (re.escape(RULE)+r"\.updated\[\]\.",DROP,HISTORY),
+ (re.escape(RULE)+r"\.updated\[\]\.","L2","compat facet on the rule's Requirement: history, the entries as the source writes them"),
  (re.escape(RULE)+r"\.(note|notes\[\]|danger|corrective_actions\[\])$","L1","narrative@1: note / notes / danger / corrective-actions"),
  (re.escape(RULE)+r"\.(following_information\[\]|following_information_bullets\[\])$","L1","reporting-obligation@1: following-information / following-information-bullets"),
  (re.escape(RULE)+r"\.examples\[\]\.(id|examples\[\]|key_tests\[\])$","L1","assessment-criteria@1: examples[] {id, examples, key-tests} - the KSI-shaped test data"),
@@ -300,7 +295,7 @@ RULES=[
  (re.escape(KSI)+r"\.statement$","L1","KSI statements[0].prose.en (modality unspecified: indicator language)"),
  (re.escape(KSI)+r"\.controls\[\]$","L1","Mapping objects (relationship supports; 8.6 untyped-import rule)"),
  (re.escape(KSI)+r"\.terms\[\]$","L1","relations uses-term"),
- (re.escape(KSI)+r"\.updated\[\]\.",DROP,HISTORY),
+ (re.escape(KSI)+r"\.updated\[\]\.","L2","compat facet on the indicator's Requirement: history, the entries as the source writes them"),
  (re.escape(KVAR)+r"\.","L2","class-variants payload on the KSI Requirement"),
  (r"^cr26\.KSI\.\*\.(name|web_name|short_name)$","L1","KSI category Set: title / annotations.web_name / label"),
  (r"^cr26\.KSI\.\*\.id$","L1","KSI category Set: aliases[] (the theme's own id; the Set's URI is minted from the key the theme stands under)"),
@@ -530,6 +525,7 @@ def convert_rule(fam,trk,subk,rid,r,status):
                     ops_emitted["set-parameter"]+=1
                 else:
                     counters["timeframe-unitclass-crossings"]+=1
+    add_history(req,r.get("updated"))
     objects[f"objects/req/{slug(rid)}.json"]=req
     n=mappings
     control_mappings(rid,uri,r.get("controls"),
@@ -556,6 +552,7 @@ def convert_ksi(catid,cat,iid,ind):
             park(ind["varies_by_class"],f"cr26.KSI.{catid}.indicators.{iid}.varies_by_class")}}
         counters["ksi-class-variant"]+=1
     counters["updated-entries"]+=len(ind.get("updated",[]) or [])
+    add_history(req,ind.get("updated"))
     objects[f"objects/ksi/{slug(iid)}.json"]=req
     n=mappings
     control_mappings(iid,uri,ind.get("controls"),
@@ -642,7 +639,8 @@ for fk,f in d["FRR"].items():
     for trk in ("20x","rev5"):
         if fi.get(trk): eff[trk]=fi[trk].get("effective",fi[trk])
     if eff: fobj["facets"][F_EFF]=eff
-    if fi.get("flows"): counters["flows-dropped"]+=len(fi["flows"])
+    if fi.get("flows"):
+        fobj["facets"][F_COMPAT]={"flows":fi["flows"]}; counters["flows"]+=len(fi["flows"])
     objects[f"objects/set/tax-{slug(fk)}.json"]=fobj
     fam_entries.append({"ref":furi,"sequence":nseq()})
 for c,mem in sorted(class_members.items()):
@@ -669,7 +667,7 @@ for ck,cat in d["KSI"].items():
     objects[f"objects/set/ksi-{slug(ck)}.json"]=cobj
     ksi_cat_entries.append({"ref":curi,"sequence":nseq()})
 # terminology container
-terms_payload={}; ignore_in_terms={}
+terms_payload={}; ignore_in_terms={}; term_updated={}
 for tid,t in d["FRD"]["data"]["all"].items():
     e={"term":t["term"],"definition":T(t["definition"],"definition")}
     for k,dk in [("tag","tag"),("alts","aliases"),
@@ -687,6 +685,7 @@ for tid,t in d["FRD"]["data"]["all"].items():
             raise SystemExit(f"{tid}: ignore_in_terms is {t['ignore_in_terms']!r}; the converter knows a boolean")
         ignore_in_terms[tid]=t["ignore_in_terms"]
     counters["updated-entries"]+=len(t.get("updated",[]) or [])
+    if t.get("updated"): term_updated[tid]=t["updated"]
     counters["term-alts"]+=len(t.get("alts",[]) or [])
     terms_payload[tid]=e
 frd_i=d["FRD"]["info"]
@@ -772,7 +771,8 @@ objects["objects/set/root.json"]={"id":f"{NS}/set/root","version":VER,"lifecycle
     "members":fam_entries+ksi_cat_entries+[
         {"ref":f"{NS}/set/ctl-overlay","sequence":nseq()}],
     "facets":{F_NARR:{"description":T(d["info"]["description"],"description"),
-                      **({"ignore-in-terms":ignore_in_terms} if ignore_in_terms else {})},
+                      **({"ignore-in-terms":ignore_in_terms} if ignore_in_terms else {}),
+                      **({"term-updated":term_updated} if term_updated else {})},
               F_ACRIT:{"default-artifacts":d["info"]["default_artifacts"]},
               F_TERM:glossary}}
 for c,t in class_tailorings.items():
@@ -850,8 +850,15 @@ stub("schemas/cr26-narrative-stub.json",F_NARR.split("@")[0],[],
                         "name":{"type":"object","additionalProperties":{"type":"string"}},
                         "optional":{"const":True}}}},
       # the glossary's second flag, by term id (on the Set that hosts terminology@1)
-      "ignore-in-terms":{"type":"object","minProperties":1,"additionalProperties":{"type":"boolean"}}})
-stub("schemas/oscal-1x-compat-stub.json",F_COMPAT.split("@")[0],[],{"class-variants":{"type":"object"},"ctl":{"type":"object"}})
+      "ignore-in-terms":{"type":"object","minProperties":1,"additionalProperties":{"type":"boolean"}},
+      # the update history of a term, by term id, the entries as the source writes them
+      "term-updated":{"type":"object","minProperties":1,"additionalProperties":{"type":"array"}}})
+# the one compat schema of every converter (1.1.0); until 2026-11-14 this converter pinned one of its own
+_theirs=carried_pins.pop(F_COMPAT.split("@")[0],None)     # a carried Requirement that uses the compat facet brings its pin
+if _theirs is not None and _theirs[1]!=compat_schema():
+    raise SystemExit("the SP 800-53 bundle pins a compat schema that is not the one schema of this repository's converters "
+                     "(oscal_conv_lib.compat_schema, 1.1.0): a carried Requirement would be held to two schemas of one id")
+w("schemas/"+COMPAT_FILE,compat_schema()); pinned.append("schemas/"+COMPAT_FILE)
 # the pins the carried Rev 5 Requirements bring, as the SP 800-53 bundle holds them
 for _fid,(_path,_desc) in sorted(carried_pins.items()):
     if _path in pinned: raise SystemExit(f"two pinned schemas would be written to {_path}")
@@ -880,7 +887,7 @@ manifest={"manifest-version":"1"}
 if needs_kernel_2(objects.values()): manifest["kernel-version"]="2.0.0"
 manifest.update({
  "provenance":{"source":d["info"]["title"],"source-version":VER,
-               "last_updated":d["info"]["last_updated"],"converter":"convert_cr26.py v0.1"},
+               "last_updated":d["info"]["last_updated"],"converter":"convert_cr26.py v0.2"},
  "objects":[{"id":o["id"],"version":o["version"],"package-digest":shaf(rel),
              "semantic-digest":sdig(o),"path":rel} for rel,o in sorted(objects.items())],
  "facet-schemas":[]})
@@ -1045,6 +1052,10 @@ for _o in objects.values():
     _origin=("from the status of a document" if _o["id"] in _from_status else
              "as the SP 800-53 bundle has it" if _o["id"].startswith(NIST+"/") else "the converter's own")
     lifecycle_by_origin[(_origin,_o["lifecycle"])]+=1
+# `active` on an object whose status no document of the source states is the converter's default (the author's
+# decision of 2026-11-14): the objects made for the publication as a whole, and the carried Rev 5 Requirements,
+# on which the SP 800-53 converter wrote it as its own default
+LIFECYCLE_DEFAULT=lifecycle_default_record(objects,_from_status)
 status_words=collections.Counter()
 for _f in led.docs["cr26"]["FRR"].values(): status_words[("family",_f["info"].get("status"))]+=1
 for _c in led.docs["cr26"]["KSI"].values(): status_words[("KSI category",_c.get("status"))]+=1
@@ -1064,6 +1075,7 @@ j={"source":d["info"]["title"],"version":VER,
                                                      "no-source-value":own_values[k]} for k in sorted(bundle_leaves)]},
    "objects":{"requirements(rules+ksi)":nreq,"mappings":mappings,"sets":nset,
               "tailorings":ntail,"total":len(objects)},
+   "lifecycle-default":LIFECYCLE_DEFAULT,
    "lifecycle":{"status-of-the-source":[{"document":k,"status":s,"count":n} for (k,s),n in sorted(status_words.items(),key=str)],
                 "rule":dict(STATUS_LIFECYCLE),
                 "objects":[{"lifecycle":l,"origin":o,"count":n} for (o,l),n in sorted(lifecycle_by_origin.items())]},
@@ -1133,6 +1145,7 @@ md=[f"# CR26 -> Semantic Core: Coverage Report (computed)\n",
  f"every id of this bundle is minted from a key of the source.",
  f"- **affects[] -> obligated-parties[]** (parties minted as codes); subset applicability -> scope@1 on subset Sets "
  f"and composed **class Sets (a-d)** and **type Sets (20x/Rev5)** - sets-of-sets (D21).",
+ lifecycle_default_line(LIFECYCLE_DEFAULT),
  obligated_party_line(PARTY,PARTY_ORIGIN,PARTY_DEFAULT,
      why="a KSI has no `affects` and its statement names no actor; the converter reads an indicator as a "
          "statement about the cloud service offering, which is its provider's to meet",
@@ -1182,14 +1195,17 @@ md=[f"# CR26 -> Semantic Core: Coverage Report (computed)\n",
  f"(it declares that it alters what passing means) and has no member for the flag. The entry goes whole, with its "
  f"flag, to narrative@1 as `optional-notification`; reporting-obligation@1 keeps the other entries of the rule.",
  f"- **rule/KSI term names resolved to FRD ids** via the term+alias index (unresolved x{counters.get('unresolved-terms',0)} kept as slugs, counted).",
- f"- **updated[]** (entries counted: {counters.get('updated-entries',0)}): the update history of a term, a rule or an "
- f"indicator is not carried, in no object and not in the manifest. The path map declares the drop. Until 2026-11-14 "
- f"this line read \"updated[] -> L0\" and the rows were marked L1; the ledger found none of the values written.",
+ f"- **updated[]** (entries counted: {counters.get('updated-entries',0)}): the update history of a rule or an indicator "
+ f"stands on its Requirement, in the compat facet under `history`; that of a term on the corpus root Set, in "
+ f"narrative@1 under `term-updated`, by term id; each entry as the source writes it. Until 2026-11-14 it was a "
+ f"declared drop; the author decided that it is carried.",
  f"- **CTL Rev5 overlay ({counters.get('ctl-overlays',0)} entries)**: the guidance and the update history of an entry "
  f"are parked L2 on /set/ctl-overlay. Its ODP assignments are not parked: they are the operations of the "
  f"`rev5-odp-overlay` Tailoring (the line on the drained assignments above). Until 2026-11-14 this line read as if "
  f"the assignments were parked too and waited for gate item 3; the ledger finds each of them in an operation.",
- f"- **flows dropped-declared** x{counters.get('flows-dropped',0)} (D17); dangling related refs x{dangling_related}.",
+ f"- **flows** x{counters.get('flows',0)}: a process flow the source writes out (activity, nodes, steps) stands on "
+ f"its family's Set, in the compat facet under `flows`, as the source writes it (until 2026-11-14 a declared drop, "
+ f"by D17); dangling related refs x{dangling_related}.",
  f"- **Payload free text language-tagged** per corpus language (`{{en: ...}}`), harmonized 2026-07-21 (backlog #12): "
  +", ".join(f"{k} x{v}" for k,v in sorted(lang_wraps.items()))+". "
  f"Left bare by the label/identifier rule: term headwords x{len(terms_payload)}, glossary-info block metadata, "

@@ -6,9 +6,9 @@ Source: **FedRAMP Consolidated Rules for 2026** v2026.11.02.01 (bespoke JSON; no
 
 - Source leaf values inventoried (id-normalized paths): **7,532**
 - Mapped: **7,532** -> **UNMAPPED: 0** -> coverage **100.0 %**
-- "Mapped" means that the path has a row in the path map below, not that its values are in the bundle. Of the 7,532: **6,540** on rows that name a destination (L1 4,718, L2 1,822), **992** on rows that declare the path not carried. What arrived, value by value, is the ledger's to say (below): 4,553 copied, 1,987 transformed, 0 no content by a checked rule, 992 dropped for a declared reason, 0 unaccounted.
+- "Mapped" means that the path has a row in the path map below, not that its values are in the bundle. Of the 7,532: **7,532** on rows that name a destination (L1 4,718, L2 2,814), **0** on rows that declare the path not carried. What arrived, value by value, is the ledger's to say (below): 5,545 copied, 1,987 transformed, 0 no content by a checked rule, 0 dropped for a declared reason, 0 unaccounted.
 - Emitted: **291 Requirements** (FRR rules + KSIs), **652 Mapping objects**, **92 Sets** (17 families, 56 subsets, 4 classes, 2 tracks, 10 KSI categories, and 3: the root, the CTL overlay, the Set of the carried Rev 5 Requirements), **5 Tailorings** (4 class variants and the Rev 5 ODP overlay), manifest with both digests, 11 pinned stubs.
-- The bundle as written: `content-manifest.json` is `sha256:8cbcbb26eecfe4bef979f5121e10695de55b6210cff6f73d1ac8c2d052caf595`. The manifest lists both digests of each of its 1,054 objects (291 Requirements of the publication, 14 carried Rev 5 Requirements, the Mappings, Sets and Tailorings) and the digest of each pinned schema, so this value stands for every byte of the bundle. The bundle is not in the repository; a run that reproduces this report has reproduced the bundle.
+- The bundle as written: `content-manifest.json` is `sha256:3ec1a52ed4971738ed621ca01a3df59ce13553702a1d3c01184bd867df7a4798`. The manifest lists both digests of each of its 1,054 objects (291 Requirements of the publication, 14 carried Rev 5 Requirements, the Mappings, Sets and Tailorings) and the digest of each pinned schema, so this value stands for every byte of the bundle. The bundle is not in the repository; a run that reproduces this report has reproduced the bundle.
 
 ## Conversion rules (declared, counted)
 
@@ -16,6 +16,7 @@ Source: **FedRAMP Consolidated Rules for 2026** v2026.11.02.01 (bespoke JSON; no
 - **status -> lifecycle**, by rule. The source gives a family and a KSI category the status of a document, in three words (its schema: stable, placeholder, empty): KSI category `stable` x10; family `placeholder` x1; family `stable` x16. The kernel's lifecycle knows draft, active, deprecated, withdrawn. The converter's mapping: `stable` -> `active`, `placeholder` -> `draft`, `empty` -> `draft`; a word outside the three stops the run. `stable` is the source's word for a document that is settled; `placeholder` and `empty` say that it is not, and `draft` is the only state of the kernel that says so. The source's own word is kept beside the mapped state, in narrative@1 of the Set that stands for the document (`status`): the kernel has no place for it. The status is the document's, and a document of this source is its rules or indicators, none of which has a status of its own; the lifecycle of every object made from a document therefore follows the document's status - its Set, its subset Sets, its rules or indicators and the Mappings of their control links. Objects by lifecycle and where it comes from: `active` x14 as the SP 800-53 bundle has it; `active` x998 from the status of a document; `draft` x28 from the status of a document; `active` x14 the converter's own. Until 2026-11-14 the converter read no status and wrote `active` on every object. The converter's own `active` stands on the objects it makes for the publication as a whole (the root, the class and track Sets, the CTL overlay and the Set of the carried Rev 5 Requirements, the Tailorings), for which the source states no status.
 - **The id of a KSI category** (x10) is carried as an alias of the category's Set (`aliases`, scheme `fedramp-cr26:KSI.id`). The Set's own URI is minted from the key the category stands under, as every id of this bundle is minted from a key of the source.
 - **affects[] -> obligated-parties[]** (parties minted as codes); subset applicability -> scope@1 on subset Sets and composed **class Sets (a-d)** and **type Sets (20x/Rev5)** - sets-of-sets (D21).
+- **Lifecycle**: `active` on 28 object(s) is the converter's default and not a value of the source: the kernel requires a lifecycle on every object, and a published catalogue is taken to be in force. On 1,026 object(s) the lifecycle is the source's own status, mapped by a rule.
 - **Obligated party**: `https://ns.fedramp.gov/cr26/party/provider` on every statement for which the source names no party; where it names one (in `affects` of a rule), that one is written. `https://ns.fedramp.gov/cr26/party/provider` is the converter's default and not a value of the source; `--obligated-party URI` writes another. Why this default: a KSI has no `affects` and its statement names no actor; the converter reads an indicator as a statement about the cloud service offering, which is its provider's to meet. Statements with a party from `affects`: x245; with this party: x46 (every KSI, and a rule only if it names nobody).
 - **timeframe_num/type -> statement parameter** 'timeframe' (elapsed vs calendar split; calendar-ref minted; tightening: lower). Class variants: set-parameter when unit-class matches; **true unit-class crossings x0** (base-absent variant timeframes x51 counted separately) stay in the L2 class-variants payload - spec-feedback: candidate D9 duration-union question.
 - **timeframe_num_min / timeframe_num_max -> statement parameters** 'timeframe-min' and 'timeframe-max' (bounds written: x2). A rule states one timeframe or a range. The kernel's durations have one `num`, and its `range` is a container of scalars, which a duration is not (D9); a range is therefore its two bounds, each a duration with the unit of timeframe_type and, for a calendar unit, the calendar. Tightening is declared `higher` for the floor and `lower` for the ceiling: a window narrows when its floor rises or its ceiling falls. The two directions are the converter's reading, as `lower` is for a single timeframe; the source states none.
@@ -26,9 +27,9 @@ Source: **FedRAMP Consolidated Rules for 2026** v2026.11.02.01 (bespoke JSON; no
 - **CTL ODP assignments DRAINED (backlog #10, gate 3)**: 16 set-parameter ops on the `rev5-odp-overlay` Tailoring, each addressed (requirement-ref, statement-id, parameter) via the DECLARING statement of the Rev 5.2.0 ODP (measured: no ODP is declared in two statements); 14 tailored Rev 5 Requirements carried in-bundle as byte-identical copies (closure; the authorization-package pattern). CTL guidance entries stay parked L2 - supplemental prose on external controls is D20 supplements territory, not ODP addressing. Multi-select serialization normalized x3 (FedRAMP flattens many-cardinality selections into prose strings 'a; b' / 'a, b and c'; every part matches a declared NIST choice -> list value; REPORTED upstream). Residual choice conflicts: none.
 - **notification/following_information -> reporting-obligation@1**; artifacts.all and examples -> assessment-criteria@1; note/notes/danger/corrective_actions -> narrative@1. **A notification the source marks `optional`** (x3) is no duty, and reporting-obligation@1 lists duties (it declares that it alters what passing means) and has no member for the flag. The entry goes whole, with its flag, to narrative@1 as `optional-notification`; reporting-obligation@1 keeps the other entries of the rule.
 - **rule/KSI term names resolved to FRD ids** via the term+alias index (unresolved x0 kept as slugs, counted).
-- **updated[]** (entries counted: 475): the update history of a term, a rule or an indicator is not carried, in no object and not in the manifest. The path map declares the drop. Until 2026-11-14 this line read "updated[] -> L0" and the rows were marked L1; the ledger found none of the values written.
+- **updated[]** (entries counted: 475): the update history of a rule or an indicator stands on its Requirement, in the compat facet under `history`; that of a term on the corpus root Set, in narrative@1 under `term-updated`, by term id; each entry as the source writes it. Until 2026-11-14 it was a declared drop; the author decided that it is carried.
 - **CTL Rev5 overlay (79 entries)**: the guidance and the update history of an entry are parked L2 on /set/ctl-overlay. Its ODP assignments are not parked: they are the operations of the `rev5-odp-overlay` Tailoring (the line on the drained assignments above). Until 2026-11-14 this line read as if the assignments were parked too and waited for gate item 3; the ledger finds each of them in an operation.
-- **flows dropped-declared** x1 (D17); dangling related refs x0.
+- **flows** x1: a process flow the source writes out (activity, nodes, steps) stands on its family's Set, in the compat facet under `flows`, as the source writes it (until 2026-11-14 a declared drop, by D17); dangling related refs x0.
 - **Payload free text language-tagged** per corpus language (`{en: ...}`), harmonized 2026-07-21 (backlog #12): corrective-actions x8, danger x3, definition x81, description x72, guidance x66, note x86, notes x29, notification-name x31. Left bare by the label/identifier rule: term headwords x81, glossary-info block metadata, reference/schema-name citation labels, following-information sentence lists (kernel `text` decision pending, backlog #12). Left as-source by the verbatim rule: free text quoted inside L2 `class-variants` payloads (per-class descriptions/notes, e.g. pain_timeframes[].fir.description) - preserved-in-full waiting rooms are quotations, not authored payload (report, never repair); they drain with the payloads themselves. Stub-file `note` annotations are schema metadata, not corpus content.
 
 ## Findings (computed)
@@ -43,10 +44,10 @@ Source: **FedRAMP Consolidated Rules for 2026** v2026.11.02.01 (bespoke JSON; no
 
 The path map says where a source path is declared to go. The ledger follows each of the 7,532 source leaf values, flags and fractions among them: a value the converter hands on unchanged carries its origin into the bundle, a value it computes is stated as a named rule, and after the bundle is written every claim is read back from the files. `cr26-conversion-ledger.json` holds the result, one row per source path and outcome (backlog #41). Real content is never dropped (author, 2026-11-14): a value is carried, or it is no content by a rule the ledger checks, and a run with one unaccounted value ends with 1.
 
-- **4,553 copied**: the value stands, with its type, at the destination named.
+- **5,545 copied**: the value stands, with its type, at the destination named.
 - **1,987 transformed** by a named rule; the rule was applied to the source again and the result compared with the file. A value that is copied to one place and transformed for another counts as copied.
 - **0 no content** by a checked rule (a name that only selects a field, a namespace, an id that is rebuilt exactly from another value). This source has no value of the three kinds, and the converter declares none.
-- **992 dropped for a declared reason**: the two classes that were declared before the author's rule, exactly the paths the path map marks `declared-drop`. Neither is one of the three kinds above. Whether they are content is the author's to decide; they are listed below with the converter's reading.
+- **0 dropped for a declared reason**: the two classes that were declared before the author's rule, exactly the paths the path map marks `declared-drop`. Neither is one of the three kinds above. Whether they are content is the author's to decide; they are listed below with the converter's reading.
 - **0 unaccounted**: no destination and no declared reason.
 - Claims that did not hold against the written files: **0**.
 - Rows of the path map that the ledger contradicts (a destination named and a value of the path written nowhere; a path declared not carried and written all the same; a row marked L1 whose values stand only in the parked L2 payload): **0**.
@@ -84,8 +85,7 @@ Declared before 2026-11-14 and left declared: the author decides whether a class
 
 | source paths | values | declared reason | example | reading |
 |---|---:|---|---|---|
-| `cr26.FRR.*.info.flows[].activity` x1<br>`cr26.FRR.*.info.flows[].description` x1<br>`cr26.FRR.*.info.flows[].nodes.*` x8<br>`cr26.FRR.*.info.flows[].steps[].description` x7<br>`cr26.FRR.*.info.flows[].steps[].from` x9<br>`cr26.FRR.*.info.flows[].steps[].to` x9 | 35 | process-flow diagrams: linked resources, not requirement data (D17) | `cr26#/FRR/IEC/info/flows/0/steps/0/to` = `IEC-CSO-EFR` | content: the diagram is written out in the source itself (an activity, its description, nodes and steps that name rules in their order and say on which answer one follows the other) and nothing in the bundle holds it |
-| `cr26.FRD.data.all.*.updated[].comment` x85<br>`cr26.FRD.data.all.*.updated[].date` x85<br>`cr26.FRD.data.all.*.updated[].issue` x1<br>`cr26.FRR.*.data.*.*.*.updated[].comment` x303<br>`cr26.FRR.*.data.*.*.*.updated[].date` x303<br>`cr26.FRR.*.data.*.*.*.updated[].issue` x5<br>`cr26.KSI.*.indicators.*.updated[].comment` x87<br>`cr26.KSI.*.indicators.*.updated[].date` x87<br>`cr26.KSI.*.indicators.*.updated[].issue` x1 | 957 | update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read "history -> L0" until 2026-11-14) | `cr26#/FRD/data/all/FRD-ACV/updated/0/date` = `2026-06-24` | content: an entry says on which day a term, a rule or an indicator was changed and why, some with the number of an issue; the bundle holds the day of the publication and nothing of an entry's own history |
+| *(none)* | 0 | | | |
 
 ### Unaccounted
 
@@ -102,13 +102,13 @@ The ledger follows source values into the bundle, not the bundle back to the sou
 | written as | leaf values | with no source value behind them |
 |---|---:|---:|
 | Mapping | 7,172 | 3,912 |
-| Requirement (KSI) | 594 | 315 |
-| Requirement (rule) | 6,439 | 1,646 |
-| Set | 3,036 | 1,437 |
+| Requirement (KSI) | 769 | 315 |
+| Requirement (rule) | 7,050 | 1,646 |
+| Set | 3,242 | 1,437 |
 | Tailoring | 541 | 393 |
-| carried Rev 5 Requirement | 1,040 | 1,040 |
+| carried Rev 5 Requirement | 1,004 | 1,004 |
 | manifest | 5,319 | 3,624 |
-| **all** | **24,141** | **12,367** |
+| **all** | **25,097** | **12,331** |
 
 ## Full path map
 | path | count | level | destination |
@@ -131,9 +131,9 @@ The ledger follows source values into the bundle, not the bundle back to the sou
 | `cr26.FRD.data.all.*.reference_url` | 9 | L1 | terminology@1 payload per term (alts, links, chrome flags inside payload) |
 | `cr26.FRD.data.all.*.tag` | 57 | L1 | terminology@1 payload per term (alts, links, chrome flags inside payload) |
 | `cr26.FRD.data.all.*.term` | 81 | L1 | terminology@1 payload per term (alts, links, chrome flags inside payload) |
-| `cr26.FRD.data.all.*.updated[].comment` | 85 | declared-drop | update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read "history -> L0" until 2026-11-14) |
-| `cr26.FRD.data.all.*.updated[].date` | 85 | declared-drop | update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read "history -> L0" until 2026-11-14) |
-| `cr26.FRD.data.all.*.updated[].issue` | 1 | declared-drop | update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read "history -> L0" until 2026-11-14) |
+| `cr26.FRD.data.all.*.updated[].comment` | 85 | L2 | narrative@1 on the corpus root Set: term-updated {term id: the entries as the source writes them} (terminology@1 has no member for the history of a term) |
+| `cr26.FRD.data.all.*.updated[].date` | 85 | L2 | narrative@1 on the corpus root Set: term-updated {term id: the entries as the source writes them} (terminology@1 has no member for the history of a term) |
+| `cr26.FRD.data.all.*.updated[].issue` | 1 | L2 | narrative@1 on the corpus root Set: term-updated {term id: the entries as the source writes them} (terminology@1 has no member for the history of a term) |
 | `cr26.FRD.info.effective.current_status` | 1 | L1 | terminology@1 glossary-info on the corpus root Set |
 | `cr26.FRD.info.effective.date.grace.default` | 1 | L1 | terminology@1 glossary-info on the corpus root Set |
 | `cr26.FRD.info.effective.date.grace.until_next_assessment` | 1 | L1 | terminology@1 glossary-info on the corpus root Set |
@@ -176,9 +176,9 @@ The ledger follows source values into the bundle, not the bundle back to the sou
 | `cr26.FRR.*.data.*.*.*.timeframe_num_max` | 1 | L1 | statement parameters 'timeframe-min' / 'timeframe-max': a range is its two bounds, each a duration of the kernel (unit from timeframe_type) |
 | `cr26.FRR.*.data.*.*.*.timeframe_num_min` | 1 | L1 | statement parameters 'timeframe-min' / 'timeframe-max': a range is its two bounds, each a duration of the kernel (unit from timeframe_type) |
 | `cr26.FRR.*.data.*.*.*.timeframe_type` | 23 | L1 | statement parameter 'timeframe' (elapsed-duration or calendar-period, by unit); timeframe_type is the unit of every timeframe parameter of the rule |
-| `cr26.FRR.*.data.*.*.*.updated[].comment` | 303 | declared-drop | update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read "history -> L0" until 2026-11-14) |
-| `cr26.FRR.*.data.*.*.*.updated[].date` | 303 | declared-drop | update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read "history -> L0" until 2026-11-14) |
-| `cr26.FRR.*.data.*.*.*.updated[].issue` | 5 | declared-drop | update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read "history -> L0" until 2026-11-14) |
+| `cr26.FRR.*.data.*.*.*.updated[].comment` | 303 | L2 | compat facet on the rule's Requirement: history, the entries as the source writes them |
+| `cr26.FRR.*.data.*.*.*.updated[].date` | 303 | L2 | compat facet on the rule's Requirement: history, the entries as the source writes them |
+| `cr26.FRR.*.data.*.*.*.updated[].issue` | 5 | L2 | compat facet on the rule's Requirement: history, the entries as the source writes them |
 | `cr26.FRR.*.data.*.*.*.varies_by_class.*.artifacts.all[]` | 31 | L2 | class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question) |
 | `cr26.FRR.*.data.*.*.*.varies_by_class.*.following_information[]` | 57 | L2 | class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question) |
 | `cr26.FRR.*.data.*.*.*.varies_by_class.*.force` | 107 | L1 | class Tailoring op set-modality (monotone) OR + converter Deviation when easing (counted) |
@@ -305,12 +305,12 @@ The ledger follows source values into the bundle, not the bundle back to the sou
 | `cr26.FRR.*.info.effective.date.obtain` | 7 | L1 | effectivity@1 on family Set (default / per-track) |
 | `cr26.FRR.*.info.effective.date.optional_adoption` | 5 | L1 | effectivity@1 on family Set (default / per-track) |
 | `cr26.FRR.*.info.effective.is` | 7 | L1 | effectivity@1 on family Set (default / per-track) |
-| `cr26.FRR.*.info.flows[].activity` | 1 | declared-drop | process-flow diagrams: linked resources, not requirement data (D17) |
-| `cr26.FRR.*.info.flows[].description` | 1 | declared-drop | process-flow diagrams: linked resources, not requirement data (D17) |
-| `cr26.FRR.*.info.flows[].nodes.*` | 8 | declared-drop | process-flow diagrams: linked resources, not requirement data (D17) |
-| `cr26.FRR.*.info.flows[].steps[].description` | 7 | declared-drop | process-flow diagrams: linked resources, not requirement data (D17) |
-| `cr26.FRR.*.info.flows[].steps[].from` | 9 | declared-drop | process-flow diagrams: linked resources, not requirement data (D17) |
-| `cr26.FRR.*.info.flows[].steps[].to` | 9 | declared-drop | process-flow diagrams: linked resources, not requirement data (D17) |
+| `cr26.FRR.*.info.flows[].activity` | 1 | L2 | compat facet on the family Set: flows, as the source writes them (D17 as amended on 2026-11-14: a flow the source writes out is carried) |
+| `cr26.FRR.*.info.flows[].description` | 1 | L2 | compat facet on the family Set: flows, as the source writes them (D17 as amended on 2026-11-14: a flow the source writes out is carried) |
+| `cr26.FRR.*.info.flows[].nodes.*` | 8 | L2 | compat facet on the family Set: flows, as the source writes them (D17 as amended on 2026-11-14: a flow the source writes out is carried) |
+| `cr26.FRR.*.info.flows[].steps[].description` | 7 | L2 | compat facet on the family Set: flows, as the source writes them (D17 as amended on 2026-11-14: a flow the source writes out is carried) |
+| `cr26.FRR.*.info.flows[].steps[].from` | 9 | L2 | compat facet on the family Set: flows, as the source writes them (D17 as amended on 2026-11-14: a flow the source writes out is carried) |
+| `cr26.FRR.*.info.flows[].steps[].to` | 9 | L2 | compat facet on the family Set: flows, as the source writes them (D17 as amended on 2026-11-14: a flow the source writes out is carried) |
 | `cr26.FRR.*.info.name` | 17 | L1 | family Set: title/label |
 | `cr26.FRR.*.info.purpose` | 17 | L1 | family Set: narrative description / scope tag |
 | `cr26.FRR.*.info.rev5.effective.current_status` | 10 | L1 | effectivity@1 on family Set (default / per-track) |
@@ -341,9 +341,9 @@ The ledger follows source values into the bundle, not the bundle back to the sou
 | `cr26.KSI.*.indicators.*.name` | 46 | L1 | KSI Requirement.title |
 | `cr26.KSI.*.indicators.*.statement` | 41 | L1 | KSI statements[0].prose.en (modality unspecified: indicator language) |
 | `cr26.KSI.*.indicators.*.terms[]` | 85 | L1 | relations uses-term |
-| `cr26.KSI.*.indicators.*.updated[].comment` | 87 | declared-drop | update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read "history -> L0" until 2026-11-14) |
-| `cr26.KSI.*.indicators.*.updated[].date` | 87 | declared-drop | update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read "history -> L0" until 2026-11-14) |
-| `cr26.KSI.*.indicators.*.updated[].issue` | 1 | declared-drop | update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read "history -> L0" until 2026-11-14) |
+| `cr26.KSI.*.indicators.*.updated[].comment` | 87 | L2 | compat facet on the indicator's Requirement: history, the entries as the source writes them |
+| `cr26.KSI.*.indicators.*.updated[].date` | 87 | L2 | compat facet on the indicator's Requirement: history, the entries as the source writes them |
+| `cr26.KSI.*.indicators.*.updated[].issue` | 1 | L2 | compat facet on the indicator's Requirement: history, the entries as the source writes them |
 | `cr26.KSI.*.indicators.*.varies_by_class.*.statement` | 10 | L2 | class-variants payload on the KSI Requirement |
 | `cr26.KSI.*.name` | 10 | L1 | KSI category Set: title / annotations.web_name / label |
 | `cr26.KSI.*.short_name` | 10 | L1 | KSI category Set: title / annotations.web_name / label |

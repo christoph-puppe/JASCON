@@ -8,18 +8,17 @@
   "coverage-pct": 100.0,
   "mapped-by-level": {
    "L1": 4718,
-   "L2": 1822,
-   "declared-drop": 992
+   "L2": 2814
   }
  },
  "ledger": {
   "file": "cr26-conversion-ledger.json",
   "leaf-values": 7532,
   "totals": {
-   "copied": 4553,
+   "copied": 5545,
    "transformed": 1987,
    "not-content": 0,
-   "intentionally-dropped": 992,
+   "intentionally-dropped": 0,
    "unaccounted": 0
   },
   "verification-failures": 0,
@@ -82,90 +81,7 @@
    }
   ],
   "not-content": [],
-  "declared-drops": [
-   {
-    "reason": "process-flow diagrams: linked resources, not requirement data (D17)",
-    "source-values": 35,
-    "paths": [
-     {
-      "path": "cr26.FRR.*.info.flows[].activity",
-      "count": 1
-     },
-     {
-      "path": "cr26.FRR.*.info.flows[].description",
-      "count": 1
-     },
-     {
-      "path": "cr26.FRR.*.info.flows[].nodes.*",
-      "count": 8
-     },
-     {
-      "path": "cr26.FRR.*.info.flows[].steps[].description",
-      "count": 7
-     },
-     {
-      "path": "cr26.FRR.*.info.flows[].steps[].from",
-      "count": 9
-     },
-     {
-      "path": "cr26.FRR.*.info.flows[].steps[].to",
-      "count": 9
-     }
-    ],
-    "example": {
-     "source": "cr26#/FRR/IEC/info/flows/0/steps/0/to",
-     "value": "IEC-CSO-EFR"
-    },
-    "reading": "content: the diagram is written out in the source itself (an activity, its description, nodes and steps that name rules in their order and say on which answer one follows the other) and nothing in the bundle holds it"
-   },
-   {
-    "reason": "update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read \"history -> L0\" until 2026-11-14)",
-    "source-values": 957,
-    "paths": [
-     {
-      "path": "cr26.FRD.data.all.*.updated[].comment",
-      "count": 85
-     },
-     {
-      "path": "cr26.FRD.data.all.*.updated[].date",
-      "count": 85
-     },
-     {
-      "path": "cr26.FRD.data.all.*.updated[].issue",
-      "count": 1
-     },
-     {
-      "path": "cr26.FRR.*.data.*.*.*.updated[].comment",
-      "count": 303
-     },
-     {
-      "path": "cr26.FRR.*.data.*.*.*.updated[].date",
-      "count": 303
-     },
-     {
-      "path": "cr26.FRR.*.data.*.*.*.updated[].issue",
-      "count": 5
-     },
-     {
-      "path": "cr26.KSI.*.indicators.*.updated[].comment",
-      "count": 87
-     },
-     {
-      "path": "cr26.KSI.*.indicators.*.updated[].date",
-      "count": 87
-     },
-     {
-      "path": "cr26.KSI.*.indicators.*.updated[].issue",
-      "count": 1
-     }
-    ],
-    "example": {
-     "source": "cr26#/FRD/data/all/FRD-ACV/updated/0/date",
-     "value": "2026-06-24"
-    },
-    "reading": "content: an entry says on which day a term, a rule or an indicator was changed and why, some with the number of an issue; the bundle holds the day of the publication and nothing of an entry's own history"
-   }
-  ],
+  "declared-drops": [],
   "unaccounted": [],
   "nulls-in-the-source": 0,
   "path-map-rows-the-ledger-contradicts": [],
@@ -177,17 +93,17 @@
    },
    {
     "written-as": "Requirement (KSI)",
-    "leaf-values": 594,
+    "leaf-values": 769,
     "no-source-value": 315
    },
    {
     "written-as": "Requirement (rule)",
-    "leaf-values": 6439,
+    "leaf-values": 7050,
     "no-source-value": 1646
    },
    {
     "written-as": "Set",
-    "leaf-values": 3036,
+    "leaf-values": 3242,
     "no-source-value": 1437
    },
    {
@@ -197,8 +113,8 @@
    },
    {
     "written-as": "carried Rev 5 Requirement",
-    "leaf-values": 1040,
-    "no-source-value": 1040
+    "leaf-values": 1004,
+    "no-source-value": 1004
    },
    {
     "written-as": "manifest",
@@ -213,6 +129,12 @@
   "sets": 92,
   "tailorings": 5,
   "total": 1054
+ },
+ "lifecycle-default": {
+  "value": "active",
+  "origin": "converter-default",
+  "objects": 28,
+  "source-states": 1026
  },
  "lifecycle": {
   "status-of-the-source": [
@@ -261,7 +183,7 @@
   ]
  },
  "bundle": {
-  "content-manifest-digest": "sha256:8cbcbb26eecfe4bef979f5121e10695de55b6210cff6f73d1ac8c2d052caf595",
+  "content-manifest-digest": "sha256:3ec1a52ed4971738ed621ca01a3df59ce13553702a1d3c01184bd867df7a4798",
   "objects": 1054,
   "facet-schemas": 11
  },
@@ -288,7 +210,7 @@
   "track-rules-rev5": 12,
   "track-rules-20x": 8,
   "optional-notifications": 3,
-  "flows-dropped": 1,
+  "flows": 1,
   "statements-party-fallback": 46,
   "ksi-control-mappings": 558,
   "ksi-class-variant": 5,
@@ -443,20 +365,20 @@
   {
    "path": "cr26.FRD.data.all.*.updated[].comment",
    "count": 85,
-   "level": "declared-drop",
-   "destination": "update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read \"history -> L0\" until 2026-11-14)"
+   "level": "L2",
+   "destination": "narrative@1 on the corpus root Set: term-updated {term id: the entries as the source writes them} (terminology@1 has no member for the history of a term)"
   },
   {
    "path": "cr26.FRD.data.all.*.updated[].date",
    "count": 85,
-   "level": "declared-drop",
-   "destination": "update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read \"history -> L0\" until 2026-11-14)"
+   "level": "L2",
+   "destination": "narrative@1 on the corpus root Set: term-updated {term id: the entries as the source writes them} (terminology@1 has no member for the history of a term)"
   },
   {
    "path": "cr26.FRD.data.all.*.updated[].issue",
    "count": 1,
-   "level": "declared-drop",
-   "destination": "update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read \"history -> L0\" until 2026-11-14)"
+   "level": "L2",
+   "destination": "narrative@1 on the corpus root Set: term-updated {term id: the entries as the source writes them} (terminology@1 has no member for the history of a term)"
   },
   {
    "path": "cr26.FRD.info.effective.current_status",
@@ -713,20 +635,20 @@
   {
    "path": "cr26.FRR.*.data.*.*.*.updated[].comment",
    "count": 303,
-   "level": "declared-drop",
-   "destination": "update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read \"history -> L0\" until 2026-11-14)"
+   "level": "L2",
+   "destination": "compat facet on the rule's Requirement: history, the entries as the source writes them"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.updated[].date",
    "count": 303,
-   "level": "declared-drop",
-   "destination": "update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read \"history -> L0\" until 2026-11-14)"
+   "level": "L2",
+   "destination": "compat facet on the rule's Requirement: history, the entries as the source writes them"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.updated[].issue",
    "count": 5,
-   "level": "declared-drop",
-   "destination": "update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read \"history -> L0\" until 2026-11-14)"
+   "level": "L2",
+   "destination": "compat facet on the rule's Requirement: history, the entries as the source writes them"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.artifacts.all[]",
@@ -1487,38 +1409,38 @@
   {
    "path": "cr26.FRR.*.info.flows[].activity",
    "count": 1,
-   "level": "declared-drop",
-   "destination": "process-flow diagrams: linked resources, not requirement data (D17)"
+   "level": "L2",
+   "destination": "compat facet on the family Set: flows, as the source writes them (D17 as amended on 2026-11-14: a flow the source writes out is carried)"
   },
   {
    "path": "cr26.FRR.*.info.flows[].description",
    "count": 1,
-   "level": "declared-drop",
-   "destination": "process-flow diagrams: linked resources, not requirement data (D17)"
+   "level": "L2",
+   "destination": "compat facet on the family Set: flows, as the source writes them (D17 as amended on 2026-11-14: a flow the source writes out is carried)"
   },
   {
    "path": "cr26.FRR.*.info.flows[].nodes.*",
    "count": 8,
-   "level": "declared-drop",
-   "destination": "process-flow diagrams: linked resources, not requirement data (D17)"
+   "level": "L2",
+   "destination": "compat facet on the family Set: flows, as the source writes them (D17 as amended on 2026-11-14: a flow the source writes out is carried)"
   },
   {
    "path": "cr26.FRR.*.info.flows[].steps[].description",
    "count": 7,
-   "level": "declared-drop",
-   "destination": "process-flow diagrams: linked resources, not requirement data (D17)"
+   "level": "L2",
+   "destination": "compat facet on the family Set: flows, as the source writes them (D17 as amended on 2026-11-14: a flow the source writes out is carried)"
   },
   {
    "path": "cr26.FRR.*.info.flows[].steps[].from",
    "count": 9,
-   "level": "declared-drop",
-   "destination": "process-flow diagrams: linked resources, not requirement data (D17)"
+   "level": "L2",
+   "destination": "compat facet on the family Set: flows, as the source writes them (D17 as amended on 2026-11-14: a flow the source writes out is carried)"
   },
   {
    "path": "cr26.FRR.*.info.flows[].steps[].to",
    "count": 9,
-   "level": "declared-drop",
-   "destination": "process-flow diagrams: linked resources, not requirement data (D17)"
+   "level": "L2",
+   "destination": "compat facet on the family Set: flows, as the source writes them (D17 as amended on 2026-11-14: a flow the source writes out is carried)"
   },
   {
    "path": "cr26.FRR.*.info.name",
@@ -1703,20 +1625,20 @@
   {
    "path": "cr26.KSI.*.indicators.*.updated[].comment",
    "count": 87,
-   "level": "declared-drop",
-   "destination": "update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read \"history -> L0\" until 2026-11-14)"
+   "level": "L2",
+   "destination": "compat facet on the indicator's Requirement: history, the entries as the source writes them"
   },
   {
    "path": "cr26.KSI.*.indicators.*.updated[].date",
    "count": 87,
-   "level": "declared-drop",
-   "destination": "update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read \"history -> L0\" until 2026-11-14)"
+   "level": "L2",
+   "destination": "compat facet on the indicator's Requirement: history, the entries as the source writes them"
   },
   {
    "path": "cr26.KSI.*.indicators.*.updated[].issue",
    "count": 1,
-   "level": "declared-drop",
-   "destination": "update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read \"history -> L0\" until 2026-11-14)"
+   "level": "L2",
+   "destination": "compat facet on the indicator's Requirement: history, the entries as the source writes them"
   },
   {
    "path": "cr26.KSI.*.indicators.*.varies_by_class.*.statement",

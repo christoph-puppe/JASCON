@@ -381,18 +381,16 @@ class TheLedger(Converted):
         self.assertEqual(self.report["ledger"]["verification-failures"], 0)
         self.assertIn("failed checks 0", self.stdout)
 
-    def test_a_drop_is_declared_exactly_where_the_path_map_says_the_path_is_not_carried(self):
-        dropped = 0
+    def test_no_drop_is_declared_and_the_history_and_the_flow_are_carried(self):
+        # until 2026-11-14 the path map declared two drops (the update history of an entry, 957 values, and the one
+        # process flow, 35); the author decided that both are carried
         for r in self.rows:
-            row = self.map[r["path"]]
-            if row["level"] == "declared-drop":
-                self.assertEqual(r["outcome"], "intentionally-dropped", r["path"])
-                self.assertEqual(r["reasons"], [{"reason": row["destination"], "count": r["count"]}], r["path"])
-                dropped += r["count"]
-            else:
-                self.assertNotEqual(r["outcome"], "intentionally-dropped", r["path"])
-        self.assertGreater(dropped, 0, "the path map declares no drop: nothing was tested")
-        self.assertEqual(dropped, self.ledger["totals"]["intentionally-dropped"])
+            self.assertNotEqual(self.map[r["path"]]["level"], "declared-drop", r["path"])
+            self.assertNotEqual(r["outcome"], "intentionally-dropped", r["path"])
+        self.assertEqual(self.ledger["totals"]["intentionally-dropped"], 0)
+        carried = lambda part: sum(r["count"] for r in self.rows if part in r["path"] and r["outcome"] == "copied")
+        # 957 of terms, rules and indicators, and the 2 of the one CTL entry with a history, which were carried before
+        self.assertEqual((carried(".updated[]."), carried(".info.flows[]")), (957 + 2, 35))
 
     def test_a_row_that_names_a_destination_has_every_value_there(self):
         for r in self.rows:
@@ -816,23 +814,26 @@ class ChangedSource(unittest.TestCase):
         pin = next(x for x in read_json(os.path.join(bundle, "content-manifest.json"))["facet-schemas"] if x["id"] == fid)
         self.assertIn("a-later-member", read_json(os.path.join(bundle, *pin["path"].split("/")))["schema"]["properties"])
 
-    def test_a_facet_this_converter_writes_too_gets_one_schema_that_knows_both_shapes(self):
+    def test_a_carried_requirement_that_uses_the_compat_facet_is_held_to_the_one_schema(self):
+        # since 2026-11-14 every converter of the repository pins one compat schema (1.1.0); until then this converter
+        # merged its own compat schema with the one a carried Requirement brought
         def change(nist):
-            with open(os.path.join(nist, "schemas", "compat-of-a-later-conversion.json"), "w", encoding="utf-8") as f:
-                json.dump({"id": COMPAT.rsplit("@", 1)[0], "version": "1.0.0", "modifies-semantics": [],
-                           "schema": {"type": "object", "properties": {"labels": {"type": "object"}}, "additionalProperties": False}}, f)
-            self.rewrite(os.path.join(nist, "content-manifest.json"), lambda m: m["facet-schemas"].append(
-                {"id": COMPAT.rsplit("@", 1)[0], "exact-version": "1.0.0", "digest": "sha256:" + "0" * 64,
-                 "path": "schemas/compat-of-a-later-conversion.json"}))
-            self.rewrite(os.path.join(nist, *self.CARRIED_FILE), lambda o: o["facets"].update({COMPAT: {"labels": {"formal": "x"}}}))
+            self.rewrite(os.path.join(nist, *self.CARRIED_FILE), lambda o: o["facets"].update({COMPAT: {"uuid": "x"}}))
         code, out, err, d = self.run_on_changed_sp800_53(change)
         self.assertEqual(code, 0, err)
         bundle = os.path.join(d, "cr26-core-bundle")
         pins = [x for x in read_json(os.path.join(bundle, "content-manifest.json"))["facet-schemas"] if x["id"] == COMPAT.rsplit("@", 1)[0]]
-        self.assertEqual(len(pins), 1, "one facet, one pin")
-        known = read_json(os.path.join(bundle, *pins[0]["path"].split("/")))["schema"]["properties"]
-        self.assertLessEqual({"class-variants", "ctl", "labels"}, set(known))
-        self.assertEqual(objects(bundle)[f"{NIST}/{self.CARRIED}"]["facets"][COMPAT], {"labels": {"formal": "x"}})
+        self.assertEqual([(x["exact-version"], x["path"]) for x in pins], [("1.1.0", "schemas/oscal-1x-compat-1.1.0.json")], "one facet, one pin")
+        self.assertEqual(objects(bundle)[f"{NIST}/{self.CARRIED}"]["facets"][COMPAT], {"uuid": "x"})
+
+    def test_a_compat_schema_of_another_kind_in_the_sp800_53_bundle_stops_the_run(self):
+        def change(nist):
+            self.rewrite(os.path.join(nist, "schemas", "oscal-1x-compat-1.1.0.json"),
+                         lambda sc: sc["schema"]["properties"].update({"labels": {"type": "object"}}))
+            self.rewrite(os.path.join(nist, *self.CARRIED_FILE), lambda o: o["facets"].update({COMPAT: {"labels": {"formal": "x"}}}))
+        code, out, err, d = self.run_on_changed_sp800_53(change)
+        self.assertNotEqual(code, 0)
+        self.assertIn("pins a compat schema that is not the one schema of this repository's converters", err)
 
     def test_a_carried_requirement_with_a_facet_nobody_pins_stops_the_run(self):
         def change(nist):

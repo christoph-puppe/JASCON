@@ -2,10 +2,10 @@
  "measures": "one row per source path and outcome; every source leaf value was traced and checked against the written files in the run that wrote this record, and is counted in one row",
  "leaf-values": 7532,
  "totals": {
-  "copied": 4553,
+  "copied": 5545,
   "transformed": 1987,
   "not-content": 0,
-  "intentionally-dropped": 992,
+  "intentionally-dropped": 0,
   "unaccounted": 0
  },
  "verification-failures": [],
@@ -258,36 +258,676 @@
   },
   {
    "path": "cr26.FRD.data.all.*.updated[].comment",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 85,
    "example": "cr26#/FRD/data/all/FRD-ACV/updated/0/comment",
-   "reasons": [
+   "to": [
     {
-     "reason": "update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read \"history -> L0\" until 2026-11-14)",
-     "count": 85
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-AAP/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-ACV/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-ADP/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-ADV/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-AGY/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-ANA/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-ANP/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-ART/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-ASR/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-CCC/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-CCL/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-CPF/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-CPH/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-CRD/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-CRP/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-CSO/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-CTY/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-DCE/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-DCF/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-DFT/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-DTM/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-FCD/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-FCR/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-FCT/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-FIN/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-FIR/[]/comment",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-FMV/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-FPR/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-FPV/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-FRA/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-FRI/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-FSI/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-HAN/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-IFA/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-IIR/[]/comment",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-INC/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-INT/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-IRS/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-IRV/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-KEV/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-LEV/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-LKY/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-MAS/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-MAY/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-MBI/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-MCE/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-MGN/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-MNT/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-MRD/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-MST/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-NCE/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-OCR/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-ODV/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-OIR/[]/comment",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-ONC/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-PAC/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-PAI/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-PER/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-PFA/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-PMV/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-PRO/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-PRV/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-QTR/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-RGL/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-RMV/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-RSP/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-RTR/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-SCT/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-SDR/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-SGC/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-SHD/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-SNT/[]/comment",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-TLA/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-TPR/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-TRC/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-TRF/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-VLD/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-VLN/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-VLR/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-VRF/[]/comment",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-VUL/[]/comment",
+     "count": 1
     }
    ]
   },
   {
    "path": "cr26.FRD.data.all.*.updated[].date",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 85,
    "example": "cr26#/FRD/data/all/FRD-ACV/updated/0/date",
-   "reasons": [
+   "to": [
     {
-     "reason": "update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read \"history -> L0\" until 2026-11-14)",
-     "count": 85
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-AAP/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-ACV/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-ADP/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-ADV/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-AGY/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-ANA/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-ANP/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-ART/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-ASR/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-CCC/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-CCL/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-CPF/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-CPH/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-CRD/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-CRP/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-CSO/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-CTY/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-DCE/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-DCF/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-DFT/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-DTM/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-FCD/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-FCR/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-FCT/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-FIN/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-FIR/[]/date",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-FMV/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-FPR/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-FPV/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-FRA/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-FRI/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-FSI/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-HAN/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-IFA/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-IIR/[]/date",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-INC/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-INT/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-IRS/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-IRV/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-KEV/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-LEV/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-LKY/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-MAS/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-MAY/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-MBI/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-MCE/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-MGN/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-MNT/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-MRD/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-MST/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-NCE/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-OCR/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-ODV/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-OIR/[]/date",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-ONC/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-PAC/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-PAI/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-PER/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-PFA/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-PMV/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-PRO/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-PRV/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-QTR/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-RGL/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-RMV/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-RSP/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-RTR/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-SCT/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-SDR/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-SGC/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-SHD/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-SNT/[]/date",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-TLA/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-TPR/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-TRC/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-TRF/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-VLD/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-VLN/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-VLR/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-VRF/[]/date",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-VUL/[]/date",
+     "count": 1
     }
    ]
   },
   {
    "path": "cr26.FRD.data.all.*.updated[].issue",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 1,
    "example": "cr26#/FRD/data/all/FRD-MAS/updated/0/issue",
-   "reasons": [
+   "to": [
     {
-     "reason": "update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read \"history -> L0\" until 2026-11-14)",
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-MAS/[]/issue",
      "count": 1
     }
    ]
@@ -839,36 +1479,36 @@
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.updated[].comment",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 303,
    "example": "cr26#/FRR/AFC/data/all/FRP/AFC-FRP-VRE/updated/0/comment",
-   "reasons": [
+   "to": [
     {
-     "reason": "update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read \"history -> L0\" until 2026-11-14)",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/history/[]/comment",
      "count": 303
     }
    ]
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.updated[].date",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 303,
    "example": "cr26#/FRR/AFC/data/all/FRP/AFC-FRP-VRE/updated/0/date",
-   "reasons": [
+   "to": [
     {
-     "reason": "update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read \"history -> L0\" until 2026-11-14)",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/history/[]/date",
      "count": 303
     }
    ]
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.updated[].issue",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 5,
    "example": "cr26#/FRR/FRC/data/all/CLA/FRC-CLA-MFR/updated/0/issue",
-   "reasons": [
+   "to": [
     {
-     "reason": "update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read \"history -> L0\" until 2026-11-14)",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/history/[]/issue",
      "count": 5
     }
    ]
@@ -2431,72 +3071,100 @@
   },
   {
    "path": "cr26.FRR.*.info.flows[].activity",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 1,
    "example": "cr26#/FRR/IEC/info/flows/0/activity",
-   "reasons": [
+   "to": [
     {
-     "reason": "process-flow diagrams: linked resources, not requirement data (D17)",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/flows/[]/activity",
      "count": 1
     }
    ]
   },
   {
    "path": "cr26.FRR.*.info.flows[].description",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 1,
    "example": "cr26#/FRR/IEC/info/flows/0/description",
-   "reasons": [
+   "to": [
     {
-     "reason": "process-flow diagrams: linked resources, not requirement data (D17)",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/flows/[]/description",
      "count": 1
     }
    ]
   },
   {
    "path": "cr26.FRR.*.info.flows[].nodes.*",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 8,
    "example": "cr26#/FRR/IEC/info/flows/0/nodes/*",
-   "reasons": [
+   "to": [
     {
-     "reason": "process-flow diagrams: linked resources, not requirement data (D17)",
-     "count": 8
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/flows/[]/nodes/*",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/flows/[]/nodes/IEC-CSO-DPR",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/flows/[]/nodes/IEC-CSO-EFI",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/flows/[]/nodes/IEC-CSO-EFR",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/flows/[]/nodes/IEC-CSO-FIR",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/flows/[]/nodes/IEC-CSO-IIR",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/flows/[]/nodes/IEC-CSO-OIR",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/flows/[]/nodes/*",
+     "count": 1
     }
    ]
   },
   {
    "path": "cr26.FRR.*.info.flows[].steps[].description",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 7,
    "example": "cr26#/FRR/IEC/info/flows/0/steps/1/description",
-   "reasons": [
+   "to": [
     {
-     "reason": "process-flow diagrams: linked resources, not requirement data (D17)",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/flows/[]/steps/[]/description",
      "count": 7
     }
    ]
   },
   {
    "path": "cr26.FRR.*.info.flows[].steps[].from",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 9,
    "example": "cr26#/FRR/IEC/info/flows/0/steps/0/from",
-   "reasons": [
+   "to": [
     {
-     "reason": "process-flow diagrams: linked resources, not requirement data (D17)",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/flows/[]/steps/[]/from",
      "count": 9
     }
    ]
   },
   {
    "path": "cr26.FRR.*.info.flows[].steps[].to",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 9,
    "example": "cr26#/FRR/IEC/info/flows/0/steps/0/to",
-   "reasons": [
+   "to": [
     {
-     "reason": "process-flow diagrams: linked resources, not requirement data (D17)",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/flows/[]/steps/[]/to",
      "count": 9
     }
    ]
@@ -2895,36 +3563,36 @@
   },
   {
    "path": "cr26.KSI.*.indicators.*.updated[].comment",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 87,
    "example": "cr26#/KSI/CED/indicators/KSI-CED-RAT/updated/0/comment",
-   "reasons": [
+   "to": [
     {
-     "reason": "update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read \"history -> L0\" until 2026-11-14)",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/history/[]/comment",
      "count": 87
     }
    ]
   },
   {
    "path": "cr26.KSI.*.indicators.*.updated[].date",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 87,
    "example": "cr26#/KSI/CED/indicators/KSI-CED-RAT/updated/0/date",
-   "reasons": [
+   "to": [
     {
-     "reason": "update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read \"history -> L0\" until 2026-11-14)",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/history/[]/date",
      "count": 87
     }
    ]
   },
   {
    "path": "cr26.KSI.*.indicators.*.updated[].issue",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 1,
    "example": "cr26#/KSI/SCR/indicators/KSI-SCR-MIT/updated/0/issue",
-   "reasons": [
+   "to": [
     {
-     "reason": "update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read \"history -> L0\" until 2026-11-14)",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/history/[]/issue",
      "count": 1
     }
    ]

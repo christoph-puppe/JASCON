@@ -41,11 +41,10 @@ overlay) · the reference validator passes the bundle (measured
 2026-11-14). All 7,532 source leaf values stand on a path the path map
 knows. What became of each value is the conversion ledger's to say
 (`cr26-conversion-ledger.json`, backlog #41; measured 2026-11-14):
-4,553 copied, 1,987 transformed by a named rule, none unaccounted, and
-992 not carried for a reason declared before the author's rule that real
-content is never dropped: the update history of an entry (957) and the
-process-flow diagrams (35). Whether those two are content is the author's
-to decide; the report lists them. The report of version
+5,545 copied, 1,987 transformed by a named rule, none dropped and none
+unaccounted. The two drops that were declared until 2026-11-14, the
+update history of an entry (957 values) and the one process flow (35),
+are carried since the author decided so on that day. The report of version
 2026.07.14.01 is in the history of this directory: 292 Requirements,
 373 Mappings, 7,294 / 7,294 leaf values on a mapped path.
 

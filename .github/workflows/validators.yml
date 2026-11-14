@@ -192,8 +192,9 @@ jobs:
         # destination and every claim of its ledger holds against the files
         # it wrote; the reference validator must pass the bundle; and the
         # two reports and the ledger record (one row per source path and
-        # outcome: copied, transformed, dropped for a declared reason,
-        # unaccounted; backlog #41) must be byte for byte what is committed.
+        # outcome: copied, transformed, no content by a checked rule, dropped
+        # for a declared reason, unaccounted; backlog #41) must be byte for
+        # byte what is committed.
         # The reports state the digest of the bundle's manifest, so a bundle
         # that differs in one byte fails here too. The step writes the
         # downloaded file under the git-ignored sources/ and a log beside
