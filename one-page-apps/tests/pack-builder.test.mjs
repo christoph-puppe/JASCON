@@ -95,7 +95,16 @@ const unzip = async file => (await core.jscUnzip(fs.readFileSync(file))).map(f =
 test("the worked pack, typed in and signed, is the worked pack; the app's import reads it as proven; the reference verifies the signature", OPTS, () => withBuilder(async B => {
   const { page, set } = B;
   await set('[data-bind="origin"]', "https://dbvendor.example");
-  assert.equal(await page.locator('[data-bind="publisher.ref"]').inputValue(), VENDOR, "the publisher id follows the origin");
+  /* the publisher is a party, and the page names none: an origin typed does not make one (backlog #70) */
+  assert.equal(await page.locator('[data-bind="publisher.ref"]').inputValue(), "", "the origin does not fill in a publisher nobody named");
+  assert.match(await B.status(), /Publisher id is empty\. A pack names the party that publishes it, under your origin \(ADVICE-2\); this page does not supply one\./);
+  await set('[data-bind="publisher.ref"]', "https://dbvendor.example/party/vendor");
+  assert.doesNotMatch(await B.status(), /Publisher id is empty/);
+  /* a publisher that was typed still moves with the origin, as every identifier under it does */
+  await set('[data-bind="origin"]', "https://db.example");
+  assert.equal(await page.locator('[data-bind="publisher.ref"]').inputValue(), "https://db.example/party/vendor");
+  await set('[data-bind="origin"]', "https://dbvendor.example");
+  assert.equal(await page.locator('[data-bind="publisher.ref"]').inputValue(), VENDOR);
   await set('[data-bind="pack.id"]', "https://dbvendor.example/pack/server-7-hardening");
   await set('[data-bind="pack.version"]', "3");
   await set('[data-bind="pack.title"][data-lang="en"]', "Server 7 hardening advice");
@@ -236,6 +245,7 @@ const capsOf = c => Object.fromEntries((c.capabilities || []).map(k => [k["requi
 test("an OSCAL component definition becomes Components and recommendations; what a pack cannot carry is named", OPTS, () => withBuilder(async B => {
   const { page, set } = B;
   await set('[data-bind="origin"]', "https://dbvendor.example");
+  await set('[data-bind="publisher.ref"]', VENDOR);   // named here: the page supplies no publisher
   B.answers.push("https://backup-standard.example/req/");
   await page.setInputFiles("#pick-oscal", CDEF);
   await B.settle();
@@ -280,6 +290,7 @@ test("with the SP 800-53 catalogue loaded, the import places every value under t
   await B.settle();
   assert.match(await page.locator("#cat-state").innerText(), /^1014 requirement\(s\)/);
   await set('[data-bind="origin"]', "https://dbvendor.example");
+  await set('[data-bind="publisher.ref"]', VENDOR);   // named here: the page supplies no publisher
   B.answers.push("");                    // the backup standard stays unresolved: its recommendation is set by hand
   await page.setInputFiles("#pick-oscal", CDEF);
   await B.settle();

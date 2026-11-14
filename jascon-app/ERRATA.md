@@ -271,3 +271,68 @@ surprise, blunder.
   this erratum's date; the same four in
   `jascon/scripts/test_oscal_conv_lib.py`. The comparison itself was run
   from scripts outside the repository.
+
+## 2026-11-14 · build 0.9.10 · where the kernel requires a party and nobody was named, a page wrote one of its own
+
+- **Symptom.** Objects written in the app named parties nobody had named.
+  A Mapping saved with an empty author field carried
+  `<namespace>/party/author`, a Check `<namespace>/party/check-author`, an
+  Assessment `<namespace>/party/assessor` as its performer, a Deviation
+  `<namespace>/party/ciso` as its approver, a Requirement written on the
+  Browse page `<namespace>/party/organisation` as the party it binds, and
+  every clause of a catalog imported by the generic OSCAL rules
+  `<namespace>/party/organization`. The advice pack builder filled an
+  empty publisher id with `<origin>/party/vendor` when an origin was
+  typed, and that party went into the header and into the signature. Every
+  one of these objects was valid. Found by reading the pages while the
+  setting "Who am I" was built (backlog #70); the first four were read in
+  the pages then, the last three were found by searching every page for a
+  party made from a fixed word. Measured for four of the seven by the
+  tests that failed when the words were removed: one test saved a model's
+  drafts of checks, one added a Deviation, one wrote an Assessment and two
+  built an advice pack, and none of them had named the party that was
+  written.
+- **Cause.** The kernel requires these fields, a form field can be empty,
+  and the pages closed the gap with a default: a word in the form's draft
+  (`author`, `assessor`, `ciso`, `organisation`) that was minted into a
+  party id on save, or a literal in the code. The word was shown in the
+  field, so it looked like a value somebody had chosen.
+- **Class.** A made-up value in a required field: the object is valid, the
+  statement in it is false, and no validator can tell, because a
+  placeholder party has the shape of a real one.
+- **Why it was not caught.** Every check the app and the reference run
+  asks whether a party is there, and it was. The tests of the pages left
+  these fields alone and compared what came out with what the page had
+  put in. For the optional `provenance` the question had been asked and
+  answered the day before (nothing is made up, a missing author is a
+  report line); nobody had asked it for the fields the kernel requires.
+- **Fix.** Author decision of 2026-11-14: refuse if no party is named.
+  A page writes a party only from what was typed or from a setting the
+  user made. With the field empty it refuses the save, says which field is
+  empty and that the kernel requires it, and changes nothing. An author
+  and a performer start from the setting "Who am I", a Risk's owner from
+  the setting "Default risk owner"; an approver and an obligated party
+  start empty, always. What is typed is read by one function for every
+  party field (`jscPartyRef`): a URI as it is, a short name as
+  `<namespace>/party/<name>`. The function has no default. The Risk page
+  never made up an owner or an approver; it now says a missing one in the
+  same words as the other pages and not in the schema's. A draft check a
+  model wrote is saved under the author named when it is taken. Not fixed,
+  and not fixable from inside the app: a set written with an older build
+  keeps the parties that build made up, and nothing in the object marks
+  them. Left as they are: the parties the three import presets write for a
+  publisher's corpus, which are the Python converters' rules.
+- **Test.** `tests/pages.test.mjs`, the five tests after the comment "No
+  page writes a party nobody named (backlog #70)": for each field an empty
+  one refuses the save and the set is the same file for file, a named
+  party is written as named, an emptied field stays empty, and the
+  approver starts empty with "Who am I" set. Each exports its set and runs
+  `validate_core.py --require-authors --as-of 2026-11-14` on it.
+  `tests/authors.test.mjs`, "no page mints a party from a word of its own
+  (backlog #70)", reads the sources: no party id is built from a literal
+  word outside the converter presets, which it lists by name.
+  `tests/checks.test.mjs` (no draft is asked for or taken without an
+  author), `tests/ai.test.mjs` (a model's draft of a risk without an
+  owner), `tests/oscal.test.mjs` (the generic rules refuse without a
+  party), `one-page-apps/tests/pack-builder.test.mjs` (an origin typed
+  makes no publisher).

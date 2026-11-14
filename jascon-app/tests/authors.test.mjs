@@ -50,6 +50,67 @@ test("provenance: an author and a date, or nothing", () => {
   }
 });
 
+/* ---------- a party the user names (backlog #70) ----------
+   One rule for what a typed party becomes, in every field of the app that
+   takes one. A word the page supplies is not a party anybody named, so the
+   rule has no default: nothing typed gives nothing. */
+test("a typed party: a URI as it is, a short name as a party under the namespace, nothing as nothing", () => {
+  const NS = "https://org.example", P = rules.jscPartyRef;
+  assert.equal(P("https://org.example/party/alice", NS), "https://org.example/party/alice");
+  assert.equal(P("  https://other.example/people/bob  ", NS), "https://other.example/people/bob", "a URI is trimmed and not touched otherwise");
+  assert.equal(P("urn:example:party:carol", NS), "urn:example:party:carol");
+  assert.equal(P("mailto:ciso@org.example", NS), "mailto:ciso@org.example");
+  /* a short name is the user's word for a party of their own: it is minted the way the app mints every id */
+  assert.equal(P("ciso", NS), "https://org.example/party/ciso");
+  assert.equal(P("Jane Roe", NS), "https://org.example/party/jane-roe");
+  assert.equal(P("Head of Ops (EMEA)", NS + "/"), "https://org.example/party/head-of-ops-emea", "the namespace is used without its closing slash");
+  assert.equal(P("ciso: the boss", NS), "https://org.example/party/ciso-the-boss", "a colon inside a phrase does not make it a URI");
+  assert.equal(P("ciso", NS), core.jscSlug("ciso") && `${NS}/party/${core.jscSlug("ciso")}`, "the slug is the core's");
+  /* nothing typed, or nothing a party could be made of: no party, and no word of the page's in its place */
+  for (const nothing of ["", "   ", "\t\n", null, undefined, 7, {}, "!!!", "—", " .. "]) assert.equal(P(nothing, NS), "", JSON.stringify(nothing));
+  /* without a namespace a short name cannot become a party; a URI still can */
+  assert.equal(P("ciso", ""), "");
+  assert.equal(P("https://org.example/party/alice", ""), "https://org.example/party/alice");
+});
+
+/* No page and no script of the app writes a party the user did not name. The four placeholders of before build
+   0.9.10 were each a party minted from a word in the code (`…/party/author`, `…/party/check-author`,
+   `…/party/assessor`, `…/party/ciso`), and a fifth was the obligated party `…/party/organisation` of a
+   Requirement written on the Browse page. This test reads the sources: a party is minted in one place only,
+   jscPartyRef, from what was typed. The parties the import presets write for a publisher's corpus are the
+   converters' rules (jascon/scripts/convert_*.py) and are listed here by name, so that a new one is seen. */
+test("no page mints a party from a word of its own (backlog #70)", () => {
+  const APP = path.join(ROOT, "jascon-app");
+  const sources = fs.readdirSync(APP).filter(f => /\.html$/.test(f) || /^jascon-.*\.js$/.test(f)).filter(f => !["jascon-schema.js", "jascon-presets.js"].includes(f)).sort();
+  assert.ok(sources.includes("map.html") && sources.includes("jascon-oscal.js") && sources.length >= 18, sources.join(" "));
+  /* string literals and comments say what a party looks like; code is what writes one */
+  const code = text => text.replace(/\/\*[\s\S]*?\*\//g, "").replace(/placeholder="[^"]*"/g, "").replace(/placeholder='[^']*'/g, "");
+  const found = [];
+  for (const f of sources) {
+    const text = code(fs.readFileSync(path.join(APP, f), "utf8"));
+    /* 1. a party id is never minted with mintId: that is how a fixed word became a party */
+    for (const m of text.matchAll(/mintId\(\s*["']party["'][^)]*\)/g)) found.push(`${f}: ${m[0]}`);
+    /* 2. no template or string that ends a namespace with /party/<a fixed word> */
+    for (const m of text.matchAll(/\/party\/([a-z][a-z-]*)[`"']/g)) found.push(`${f}: /party/${m[1]}`);
+  }
+  const CONVERTERS = ["jascon-oscal.js: /party/institution", "jascon-oscal.js: /party/system-administrator", "jascon-oscal.js: /party/cis", "jascon-oscal.js: /party/cis"];
+  assert.deepEqual(found.sort(), CONVERTERS.sort(), "a party written from a word in the code");
+  /* 3. a party made through a template: jscPartyRef, from the name that was typed, is the one place for the pages. The
+     OSCAL import has two more, both read from the source: the document's author, from the name of a party the document
+     defines, and the NIST preset's implementation levels. Where a control states no level that preset writes
+     "organization", as convert_nist.py does; it is listed here so that it is seen. */
+  const templates = sources.flatMap(f => [...code(fs.readFileSync(path.join(APP, f), "utf8")).matchAll(/\/party\/\$\{([^}]*)\}/g)].map(m => `${f}: ${m[1]}`));
+  assert.deepEqual(templates, ["jascon-oscal.js: jscOscalSlug(party.name)", "jascon-oscal.js: v", "jascon-rules.js: slug"]);
+  assert.equal([...code(fs.readFileSync(path.join(APP, "jascon-oscal.js"), "utf8")).matchAll(/levels = \["organization"\]/g)].length, 1);
+  /* 4. no form starts a party field from a word: the drafts of the pages hold no such default */
+  for (const [f, word] of [["assess.html", /performer:\s*"[a-z]/], ["browse.html", /party:\s*"[a-z]/], ["map.html", /author:\s*"[a-z]/], ["tailor.html", /devApprover\s*\|\|\s*"/]]) {
+    assert.equal(word.test(fs.readFileSync(path.join(APP, f), "utf8")), false, `${f} starts a party field from a word`);
+  }
+  /* 5. the advice pack builder is a page of its own with the same duty: an origin typed does not make a publisher */
+  const builder = code(fs.readFileSync(path.join(ROOT, "one-page-apps/jascon-pack-builder.html"), "utf8"));
+  assert.deepEqual([...builder.matchAll(/["'`]\/party\/([a-z][a-z-]*)["'`]/g)].map(m => m[1]), [], "the pack builder writes a party from a word");
+});
+
 test("an import: what the caller gives replaces what the source states, field by field; no provenance without both", () => {
   const stated = { "author-ref": "https://publisher.example", date: "2026-11-10" };
   const P = rules.jscImportProvenance;

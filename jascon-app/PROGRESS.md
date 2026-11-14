@@ -158,6 +158,65 @@ and in `readme.md`; this file says only what is done and what is next.
   at hand (the tests write their own). The Python converters' side of the
   document-author rule is somebody else's work and was not compared.
 
+- No page writes a party nobody named (build 0.9.10; backlog #70; author
+  decision of 2026-11-14: refuse if no party is named):
+  - `jscPartyRef` in `jascon-rules.js` is the one reading of a typed party:
+    a URI as it is, a short name as `<namespace>/party/<name>`, nothing as
+    nothing. It has no default. `jascon-view.js` has the field for a party
+    the kernel requires (`requiredParty`) and the sentence every refusal
+    ends with (`missingParty`). The shared author field serves a Mapping
+    and a Check as a required field and says so in its hint.
+  - The placeholders are gone: `…/party/author` (Map),
+    `…/party/check-author` (Checks, also on a draft a model wrote),
+    `…/party/assessor` (Assess), `…/party/ciso` (Tailor),
+    `…/party/organisation` (Browse), `…/party/organization` (the generic
+    OSCAL import, which got a field *Who the statements bind*), and
+    `<origin>/party/vendor` in the advice pack builder (its version
+    1.2.1). Each of these places refuses an empty field, names it, and
+    changes nothing.
+  - An author and a performer start from *Who am I*. An approver starts
+    empty, always, and so does the party a statement binds. An emptied
+    field stays empty.
+  - The Risk page never made up an owner or an approver. It now says a
+    missing one in the page's words and not the schema's, reads a typed
+    name as the other pages do, and keeps an emptied owner field empty in
+    its catalogue and model views.
+  - The optional author of a Tailoring, a Risk, an Implementation and a
+    Finding is unchanged: empty writes none and stops nothing. The comment
+    above `jscPartyRef` says why the two differ.
+  - Left as they are, by intent: the parties the BSI, NIST and CIS presets
+    write (`…/party/institution`, the implementation levels or
+    `…/party/organization`, `…/party/system-administrator`,
+    `…/party/cis`). They are the rules of the Python converters, which the
+    presets are held equal to. Whether a converter may default a party is
+    a question for the converters.
+
+  Measured: the Map, Checks, Assess, Tailor, Browse, Import and Risk pages
+  and the pack builder were driven in headless Chromium. For each required
+  field a test leaves it empty, sees the refusal with the field's name,
+  and compares every file of the set before and after; then names a party
+  and reads it back as named. Six sets exported after that give
+  `validate_core.py --require-authors --as-of 2026-11-14` ALL GREEN without
+  an AUTHOR line (28, 27, 26, 26, 4 and 27 pass, 0 fail; with the reference
+  as it was changed while this was built, to hold an Attestation read with
+  a bundle to what it binds, the same six sets give 30, 29, 28, 28, 4 and
+  29 pass, 0 fail, measured on a trial merge). Three tests of
+  the app and two of the pack builder had relied on a placeholder and
+  failed when it went; each now names its party. 57 deliberate defects
+  were each tried: 56 turned a test red at once. One did not, an approver
+  carried over from the last Deviation to the next, changed where the form
+  is reset after an add; that change alone cannot be seen, because
+  choosing a statement rebuilds the operation. Changed in the three places
+  that carry the approver over together, it turns a test red since the
+  test adds a second Deviation on the same requirement. A change that
+  breaks nothing was run as a control and stayed green. Six defects of
+  build 0.9.9 whose code was rewritten were run again and are red. Read
+  and not measured: nothing was tried in a browser other than Chromium.
+  Four tests are skipped where the BSI and NIST source files are absent,
+  as they are here; one of them runs the generic rules over the NIST
+  catalog and was changed to name the party the rules used to supply, so
+  its result should be the one it had, and that was not run.
+
 ## Next
 
 - An OSCAL component definition as a third kind on the Import page, written
@@ -213,13 +272,23 @@ and in `readme.md`; this file says only what is done and what is next.
     and the user gave none, each from a short name the form shows:
     `…/party/author` on a Mapping, `…/party/check-author` on a Check,
     `…/party/assessor` as the performer of an Assessment, `…/party/ciso` as
-    the approver of a Deviation. The first two are now used only where the
-    setting *Who am I* is empty. Whether a required party may be a
-    placeholder is the author's to decide; decision 1 of 2026-11-13 speaks
-    of the optional fields.
+    the approver of a Deviation. Decided on 2026-11-14 and fixed in build
+    0.9.10, with three more of the kind (see Done and `ERRATA.md`).
   - The record of catalogue entries that do not apply names the party of
-    the Owner field as the one who decided, not the party of *Who am I*.
-    Left as it was.
+    the Owner field as the one who decided, not the party of *Who am I*,
+    and refuses the record without an owner, although its schema leaves
+    who decided optional. Left as it was in 0.9.10 too: the party is one
+    the user named, for another role, and the record is not a kernel
+    object. It is the rule of 2026-11-13 (a missing author is no refusal)
+    that it does not follow.
+- Found with build 0.9.10:
+  - A set written with an older build keeps the parties that build made
+    up. `…/party/author` in a stored Mapping looks like any other party;
+    the app has no list of the words and does not search for them.
+  - The NIST preset writes `…/party/organization` for a control that
+    states no implementation level, as `convert_nist.py` does and counts
+    in its report. By the rule of #70 that is a party the source did not
+    name. It is the converter's rule and was not changed here.
 
 ## Open
 

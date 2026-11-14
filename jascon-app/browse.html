@@ -118,6 +118,9 @@ jscI18n.add("de", {
   "Add the requirement": "Anforderung hinzufügen", "New set": "Neues Set", "type to add a member (requirement or set)": "tippen, um ein Mitglied hinzuzufügen (Anforderung oder Set)",
   "no member chosen yet": "noch kein Mitglied gewählt", "Add the set": "Set hinzufügen",
   "Title and statement are both needed.": "Titel und Statement werden beide gebraucht.",
+  "who does it bind? (needed)": "wen bindet sie? (nötig)",
+  "No obligated party is named. The kernel requires obligated-parties on every statement, so nothing was saved. The field “Obligated party” is empty.":
+    "Es ist keine verpflichtete Partei genannt. Der Kernel verlangt obligated-parties an jedem Statement; deshalb wurde nichts gespeichert. Das Feld „Verpflichtete Partei“ ist leer.",
   "A set needs a title and at least one member.": "Ein Set braucht einen Titel und mindestens ein Mitglied.",
   "declared {n} parameter(s) from the {param:} tokens of the statement": "{n} Parameter aus den {param:}-Token des Statements deklariert",
   "An object with the id {id} exists already; choose another title.": "Ein Objekt mit der Id {id} gibt es schon; einen anderen Titel wählen.",
@@ -127,8 +130,18 @@ jscI18n.add("de", {
 const $ = id => document.getElementById(id);
 const V = jscView, esc = jscEsc;
 const state = { types: new Set(), q: "", dims: {}, selected: null };
-const draft = V.draft("browse", () => ({ members: [], title: "", prose: "", modality: "must", lang: jscI18n.contentLang(), party: "organisation", setTitle: "" }));
+const draft = V.draft("browse", () => ({ members: [], title: "", prose: "", modality: "must", lang: jscI18n.contentLang(), obligated: "", setTitle: "" }));
 let G = jscSet.graph;
+/* Who a statement binds. The kernel requires `obligated-parties` on every
+   statement, so the page refuses to add a requirement while the field is
+   empty. The field starts empty: who a requirement binds is said by whoever
+   writes it, and is not the person at the page. It takes a URI or a short
+   name ("operator" becomes <namespace>/party/operator). Until build 0.9.10
+   the field started from the word "organisation" and the page wrote
+   <namespace>/party/organisation, a party nobody had named (backlog #70;
+   ERRATA.md). A draft stored by an earlier build holds that word under
+   another key (`party`); it is not read any more. */
+const NO_OBLIGATED = N("No obligated party is named. The kernel requires obligated-parties on every statement, so nothing was saved. The field “Obligated party” is empty.");
 const ofType = t => [...G.objects.values()].filter(r => r.type === t);
 
 /* ---------- catalogue: the Sets as a tree ---------- */
@@ -254,7 +267,7 @@ function renderAuthor() {
       <div class="wbrow"><label for="au-title">${esc(T("Title"))}</label><input type="text" id="au-title" value="${esc(d.title)}" style="min-width:240px">
         <label for="au-mod">${esc(T("Modality"))}</label><select id="au-mod">${JSC_MODALITIES.map(m => `<option ${d.modality === m ? "selected" : ""}>${m}</option>`).join("")}</select>
         <label for="au-lang">${esc(T("Language"))}</label><input type="text" id="au-lang" value="${esc(d.lang)}" style="width:56px;min-width:56px">
-        <label for="au-party">${esc(T("Obligated party"))}</label><input type="text" id="au-party" value="${esc(d.party)}" style="width:140px"></div>
+        <label for="au-party">${esc(T("Obligated party"))}</label><input type="text" id="au-party" aria-required="true" value="${esc(V.partyRef(d.obligated))}" placeholder="${esc(T("who does it bind? (needed)"))}" style="min-width:220px"></div>
       <div class="wbrow"><textarea id="au-prose" aria-label="${esc(T("The normative sentence. Name a parameter as {param:name}."))}" placeholder="${esc(T("The normative sentence. Name a parameter as {param:name}."))}" style="flex-basis:100%">${esc(d.prose)}</textarea></div>
       <div class="wbrow"><button type="button" class="primary" id="au-addreq">${esc(T("Add the requirement"))}</button><span class="verdict-bad" id="au-err" role="alert"></span></div></div>
     <div class="wb"><div class="nano" style="margin-bottom:8px">${esc(T("New set"))}</div>
@@ -263,9 +276,11 @@ function renderAuthor() {
       <div>${d.members.map(id => `<span class="wbchip">${esc(G.objects.has(id) ? V.labelOf(G.objects.get(id)) : id)}<span class="x" data-del="${esc(id)}" role="button" tabindex="0">✕</span></span>`).join("") || `<span class="hint">${esc(T("no member chosen yet"))}</span>`}</div>
       <div class="wbrow"><button type="button" class="primary" id="au-addset">${esc(T("Add the set"))}</button><span class="verdict-bad" id="au-seterr" role="alert"></span></div></div>`;
   const el = $("author");
-  for (const [id, key] of [["au-title", "title"], ["au-mod", "modality"], ["au-lang", "lang"], ["au-party", "party"], ["au-prose", "prose"], ["au-settitle", "setTitle"]]) {
+  for (const [id, key] of [["au-title", "title"], ["au-mod", "modality"], ["au-lang", "lang"], ["au-prose", "prose"], ["au-settitle", "setTitle"]]) {
     el.querySelector("#" + id).addEventListener("change", e => { d[key] = e.target.value; draft.save(); });
   }
+  /* the obligated party as typed; the field then shows the party that will be written */
+  el.querySelector("#au-party").addEventListener("change", e => { d.obligated = e.target.value.trim(); e.target.value = V.partyRef(d.obligated); draft.save(); });
   V.wirePicker(el, "au-mem", ["requirement", "requirementSet"], id => { if (!d.members.includes(id)) d.members.push(id); draft.save(); renderAuthor(); });
   el.querySelectorAll("[data-del]").forEach(x => x.addEventListener("click", () => { d.members = d.members.filter(m => m !== x.dataset.del); draft.save(); renderAuthor(); }));
   el.querySelector("#au-addreq").addEventListener("click", async () => {
@@ -273,8 +288,11 @@ function renderAuthor() {
     if (!title || !text) { err.textContent = T("Title and statement are both needed."); return; }
     const id = jscSet.mintId("req", title);
     if (G.objects.has(id)) { err.textContent = T("An object with the id {id} exists already; choose another title.", { id }); return; }
+    /* required by the kernel: refused while nobody is named, and nothing is written (backlog #70) */
+    const obligated = V.partyRef(d.obligated);
+    if (!obligated) { err.textContent = V.missingParty(NO_OBLIGATED); return; }
     const tokens = [...new Set([...text.matchAll(/\{param:([^}]+)\}/g)].map(m => m[1]))];
-    const st = { id: "s1", modality: d.modality, "obligated-parties": [jscSet.mintId("party", d.party || "organisation")], prose: { [lang]: text } };
+    const st = { id: "s1", modality: d.modality, "obligated-parties": [obligated], prose: { [lang]: text } };
     if (tokens.length) st.parameters = tokens.map(name => ({ name, type: "string" }));   // every {param:} token is declared
     await jscSet.saveObjects([{ id, version: "1", label: jscSlug(title).toUpperCase().slice(0, 24), lifecycle: "draft", title: { [lang]: title }, statements: [st] }]);
     if (tokens.length) jscLog.info(T("declared {n} parameter(s) from the {param:} tokens of the statement", { n: tokens.length }));

@@ -394,6 +394,7 @@ test("Tailor: the author of a save stands on the Tailoring; a second author does
     await p.locator("#op-modality").selectOption("should");
     await p.locator("#dev-type").selectOption("operational-requirement");
     await type(p.locator("#dev-rationale"), "The legacy jump host cannot be changed before its replacement.");
+    await type(p.locator("#dev-approver"), "https://org.example/party/ciso");   // the approver is named here; the page supplies none (backlog #70)
     await p.locator("#op-add").click();
     await p.locator("#t-save").click();
     await p.locator("#resolve .filterrow").waitFor();
@@ -492,6 +493,8 @@ test("the export pins kernel 2.0.0 exactly when a page named an author, and the 
       await open(s, "assess.html", "check");
       await type(p.locator("#a-label"), "audit-1");
       await p.locator("#a-scope").selectOption("all");
+      /* the performer is required and the page supplies none: named here on the first pass, "Who am I" on the second (backlog #70) */
+      if (!(await p.locator("#a-perf").inputValue())) await type(p.locator("#a-perf"), "https://org.example/party/assessor");
       if (await p.locator(`[data-answer="${KONF}"][data-result="not-satisfied"]`).getAttribute("aria-pressed") !== "true") await p.locator(`[data-answer="${KONF}"][data-result="not-satisfied"]`).click();
       await p.locator("#a-write").click();
       await p.locator("#board .kanban").waitFor();
@@ -805,6 +808,362 @@ test("Import, Map and Checks: a profile's Tailoring names the document's author 
     await p.locator("#e-save").click();
     await p.locator("#log .l-ok", { hasText: "saved check" }).first().waitFor();
     assert.deepEqual((await stored(s, "check")).find(c => c.id === OTHER).provenance, { "author-ref": "https://cso.example/party/secops", date: day });
+    assert.deepEqual(s.errors, []);
+  } finally {
+    for (const d of tmp) fs.rmSync(d, { recursive: true, force: true });
+    await s.close();
+  }
+});
+
+/* ====================================================================
+   No page writes a party nobody named (backlog #70)
+   ====================================================================
+   Author decision of 2026-11-14: "refuse if no party is named". Where the
+   kernel requires a party (the author of a Mapping and of a Check, the
+   performer of an Assessment, the approver of a Deviation, who a statement
+   binds) a page refuses the save while the field is empty, says which
+   field the kernel requires, and changes nothing. Until build 0.9.10 each
+   of these pages wrote a party made from a word of its own.
+
+   Each test below asks the same three things of a field: empty, the save
+   is refused and the set is byte for byte what it was; a party that is
+   named is written as named (a URI as it is, a short name as a party under
+   the namespace); and the field starts where it should. The exported set
+   goes to the reference with --require-authors.
+
+   The optional author of a Tailoring, a Risk, an Implementation and a
+   Finding is another matter and stays as it was: empty writes none and
+   the save goes ahead. The tests above hold that; one line here does too. */
+const AS_OF_70 = "2026-11-14", NS = "https://example.org/my", KONF_REQ = "https://ns.bsi.bund.de/gspp/req/KONF.14.1";
+/* every file of the active set with its text: what "the set is unchanged" is measured on */
+const snapshot = s => s.page.evaluate(async () => (await jscStore.files(jscStore.activeSet())).map(r => [r.path, r.text]).sort());
+const HOW = "Name a party: a URI, or a short name, which becomes a party under your namespace.";
+const greenWithAuthors = (s, t, tmp, what) => exported(s).then(x => { tmp.push(x.out); const ref = reference(x.dir, ["--require-authors", "--as-of", AS_OF_70], t, what); assert.ok(ref.green, ref.stdout.slice(-2500)); assert.deepEqual(ref.said.filter(l => /AUTHOR/.test(l)), []); return ref; });
+
+test("Map and Checks: an empty author refuses the save and changes nothing; a named author is written as named", { skip: needs }, async t => {
+  const s = await session(), tmp = [], p = s.page, ISM = "https://ns.cyber.gov.au/ism/req/ISM-1234";
+  try {
+    await load(s, zipOf(EX, "examples"));
+    const day = await today(s);
+
+    /* --- a Mapping. Nobody is named in this browser: the field is empty, not a word of the page's --- */
+    await open(s, "map.html", "write");
+    assert.equal(await p.locator("#m-author").inputValue(), "");
+    assert.match(await p.locator('[data-author-hint="required"]').innerText(), /the kernel requires an author here/);
+    await pick(s, "m-src", "LNX", LNX);
+    await pick(s, "m-tgt", "KONF", KONF_REQ);
+    const before = await snapshot(s);
+    await p.locator("#m-add").click();
+    assert.equal(await p.locator("#m-err").innerText(), "No author is named. The kernel requires provenance.author-ref on a Mapping, so nothing was saved. The field “Author” is empty. " + HOW);
+    assert.deepEqual(await snapshot(s), before, "a refused mapping leaves the set as it was");
+    assert.equal(await p.locator("#m-author").inputValue(), "", "and the field is not filled behind the user's back");
+    /* a short name the user types is a party of their own; the field shows the URI that will be written */
+    await type(p.locator("#m-author"), "Jane Roe");
+    assert.equal(await p.locator("#m-author").inputValue(), NS + "/party/jane-roe");
+    await p.locator("#m-add").click();
+    await p.locator("#table table.flat").waitFor();
+    const mapping = async from => (await stored(s, "mapping")).find(m => m.id.startsWith(NS + "/map/") && m["source-ref"] === from);   // the example folder has a mapping of its own
+    assert.deepEqual((await mapping(LNX)).provenance, { "author-ref": NS + "/party/jane-roe", date: day });
+    /* a URI is written as it is */
+    await p.locator('.navitem[data-view="write"]').click();
+    await type(p.locator("#m-author"), "https://other.example/people/bob");
+    await pick(s, "m-src", "KONF", KONF_REQ);
+    await pick(s, "m-tgt", "ISM", ISM);
+    await p.locator("#m-add").click();
+    await p.locator("#table table.flat").waitFor();
+    assert.deepEqual((await mapping(KONF_REQ)).provenance, { "author-ref": "https://other.example/people/bob", date: day });
+
+    /* --- a Check, written in the editor --- */
+    await open(s, "checks.html", "edit");
+    assert.equal(await p.locator("#e-author").inputValue(), "", "a new check starts from the setting, and the setting is empty");
+    await pick(s, "e-req", "LNX", LNX);
+    await type(p.locator('[data-row="observes"][data-i="0"] [data-k="name"]'), "sshd.loglevel");
+    await p.locator('[data-row="criteria"][data-i="0"] [data-k="fact"]').selectOption("sshd.loglevel");
+    await type(p.locator('[data-row="criteria"][data-i="0"] [data-k="expected"]'), '"INFO"');
+    const said = () => p.locator("#e-form .verdict-bad").allInnerTexts(), checks = async () => (await stored(s, "check")).length;
+    assert.deepEqual(await said(), ["✗ No author is named. The kernel requires provenance.author-ref on a Check, so the check cannot be saved. The field “Author” is empty. " + HOW], "the missing author is the one thing the form has against the check");
+    assert.ok(await p.locator("#e-save").isDisabled(), "and the check cannot be saved");
+    assert.equal(await checks(), 2);
+    await type(p.locator("#e-author"), "secops team");
+    assert.equal(await p.locator("#e-author").inputValue(), NS + "/party/secops-team");
+    assert.deepEqual(await said(), []);
+    await p.locator("#e-save").click();
+    await p.locator("#log .l-ok", { hasText: "saved check" }).first().waitFor();
+    const written = (await stored(s, "check")).find(c => c.id.startsWith(NS + "/check/"));
+    assert.deepEqual(written.provenance, { "author-ref": NS + "/party/secops-team", date: day });
+    /* the author emptied again: it stays empty, and the check that is now in the set cannot be saved over without one */
+    await type(p.locator("#e-author"), "");
+    assert.equal(await p.locator("#e-author").inputValue(), "", "an emptied field is not filled with the author the check names");
+    assert.ok(await p.locator("#e-save").isDisabled());
+    assert.equal((await said()).length, 1);
+
+    await greenWithAuthors(s, t, tmp, "the example folder with two Mappings and a Check, each by a named author");
+
+    /* --- with "Who am I" set, both fields start from it; emptied, they stay empty and the save is refused --- */
+    await iAm(s, ALICE);
+    await open(s, "map.html", "write");
+    assert.equal(await p.locator("#m-author").inputValue(), ALICE);
+    await type(p.locator("#m-author"), "");
+    await pick(s, "m-src", "ISM", ISM);
+    await pick(s, "m-tgt", "LNX", LNX);
+    const set = await snapshot(s);
+    await p.locator("#m-add").click();
+    assert.match(await p.locator("#m-err").innerText(), /^No author is named\. The kernel requires provenance\.author-ref on a Mapping/);
+    assert.equal(await p.locator("#m-author").inputValue(), "", "the setting does not come back into a field the user emptied");
+    assert.deepEqual(await snapshot(s), set);
+    assert.deepEqual(s.errors, []);
+  } finally {
+    for (const d of tmp) fs.rmSync(d, { recursive: true, force: true });
+    await s.close();
+  }
+});
+
+test("Assess: an empty performer refuses the check and writes nothing; the performer starts from \"Who am I\"; an empty author of the Findings stops nothing", { skip: needs }, async t => {
+  const s = await session(), tmp = [], p = s.page;
+  try {
+    await load(s, zipOf(EX, "examples"));
+    const day = await today(s);
+    const fill = async () => { await type(p.locator("#a-label"), "audit-70"); await p.locator("#a-scope").selectOption("all"); await p.locator(`[data-answer="${KONF_REQ}"][data-result="not-satisfied"]`).click(); };
+    const asmt = async () => (await stored(s, "assessment")).find(a => a.id.endsWith("/asmt/audit-70"));
+
+    /* nobody is named in this browser: the performer field is empty, and so is the author field of the same form */
+    await open(s, "assess.html", "check");
+    assert.deepEqual([await p.locator("#a-perf").inputValue(), await p.locator("#a-author").inputValue()], ["", ""]);
+    await fill();
+    const before = await snapshot(s);
+    await p.locator("#a-write").click();
+    assert.equal(await p.locator("#a-err").innerText(), "No performer is named. The kernel requires performer-ref on an Assessment, so nothing was written. The field “Performer” is empty. " + HOW);
+    assert.deepEqual(await snapshot(s), before, "a refused check leaves the set as it was: no Assessment, no Finding");
+    assert.equal(await p.locator("#a-perf").inputValue(), "");
+    /* the performer named, the author of the Findings still empty: the check is written. The first field the kernel
+       requires, the second it does not: the Assessment names its performer, the Finding names no author */
+    await type(p.locator("#a-perf"), "Jane Roe");
+    assert.equal(await p.locator("#a-perf").inputValue(), NS + "/party/jane-roe");
+    await p.locator("#a-write").click();
+    await p.locator("#board .kanban").waitFor();
+    assert.equal((await asmt())["performer-ref"], NS + "/party/jane-roe");
+    const finding = async () => (await stored(s, "finding")).find(f => f["assessment-ref"].endsWith("/asmt/audit-70"));
+    assert.equal("provenance" in await finding(), false, "an empty author writes none, and stopped nothing");
+
+    /* with "Who am I": the performer starts from it, because who sits at the page performs the check; a URI is written as it is */
+    await iAm(s, ALICE);
+    await open(s, "assess.html", "check");
+    assert.deepEqual([await p.locator("#a-perf").inputValue(), await p.locator("#a-author").inputValue()], [ALICE, ALICE]);
+    await p.locator("#a-write").click();
+    await p.locator("#board .kanban").waitFor();
+    assert.equal((await asmt())["performer-ref"], ALICE);
+    assert.deepEqual((await finding()).provenance, { "author-ref": ALICE, date: day });
+    /* emptied, it stays empty and the check is refused, although the setting names somebody */
+    await open(s, "assess.html", "check");
+    await type(p.locator("#a-perf"), "");
+    const set = await snapshot(s);
+    await p.locator("#a-write").click();
+    assert.match(await p.locator("#a-err").innerText(), /^No performer is named\. The kernel requires performer-ref on an Assessment/);
+    assert.equal(await p.locator("#a-perf").inputValue(), "");
+    assert.deepEqual(await snapshot(s), set);
+
+    await greenWithAuthors(s, t, tmp, "the example folder with a check performed and its Finding raised by a named party");
+    assert.deepEqual(s.errors, []);
+  } finally {
+    for (const d of tmp) fs.rmSync(d, { recursive: true, force: true });
+    await s.close();
+  }
+});
+
+test("Tailor: the approver of a Deviation starts empty, also with \"Who am I\" set; empty, the operation is refused; named, it is written as named", { skip: needs }, async t => {
+  const s = await session(), tmp = [], p = s.page;
+  try {
+    await iAm(s, ALICE);
+    await load(s, zipOf(EX, "examples"));
+    await open(s, "tailor.html", "write");
+    await type(p.locator("#t-label"), "eased-hosts");
+    await pick(s, "t-sel", "linux", LINUX_SET);
+    /* `sameRequirement`: the form still holds the requirement of the operation just added, and it is not chosen again */
+    const ease = async (statement, why, sameRequirement) => {
+      if (!sameRequirement) await pick(s, "t-req", "LNX", LNX);
+      await p.locator("#op-stmt").selectOption(statement);
+      await p.locator("#op-modality").selectOption("should");
+      await p.locator("#dev-type").selectOption("operational-requirement");
+      await type(p.locator("#dev-rationale"), why);
+    };
+    const operations = () => p.locator("[data-delop]").count();
+    /* the author of the Tailoring starts from the setting; the approver does not: who approves an exception is not
+       whoever types it, and a pre-filled approver would record self-approval by default */
+    await ease("s1", "The legacy jump host cannot be changed before its replacement.");
+    assert.equal(await p.locator("#t-author").inputValue(), ALICE);
+    assert.equal(await p.locator("#dev-approver").inputValue(), "", "the approver starts empty, whoever sits at the page");
+    const before = await snapshot(s);
+    await p.locator("#op-add").click();
+    assert.equal(await p.locator("#op-err").innerText(), "No approver is named. The kernel requires approver-ref on a Deviation, so the operation was not added. The field “approver” is empty. " + HOW);
+    assert.equal(await operations(), 0, "the operation was not added");
+    assert.deepEqual(await snapshot(s), before);
+    /* a short name is the user's word for a party of their own: "ciso" typed is a party the user named */
+    await type(p.locator("#dev-approver"), "ciso");
+    assert.equal(await p.locator("#dev-approver").inputValue(), NS + "/party/ciso");
+    await p.locator("#op-add").click();
+    assert.equal(await operations(), 1);
+    /* the next Deviation starts empty again, on the same requirement too: an approver is named per exception, and the
+       one of the last exception is not carried over */
+    await ease("s2", "The cipher list is fixed by the appliance vendor.", true);
+    assert.equal(await p.locator("#dev-approver").inputValue(), "");
+    await p.locator("#op-add").click();
+    assert.match(await p.locator("#op-err").innerText(), /^No approver is named\./);
+    assert.equal(await operations(), 1);
+    await type(p.locator("#dev-approver"), "https://other.example/people/bob");
+    await p.locator("#op-add").click();
+    assert.equal(await operations(), 2);
+    await p.locator("#t-save").click();
+    await p.locator("#resolve .filterrow").waitFor();
+    const saved = (await stored(s, "tailoring")).find(x => x.label === "eased-hosts");
+    assert.deepEqual(saved.operations.map(o => [o.deviation["approver-ref"], o.deviation.state]), [[NS + "/party/ciso", "pending"], ["https://other.example/people/bob", "pending"]]);
+    assert.equal(saved.provenance["author-ref"], ALICE);
+
+    await greenWithAuthors(s, t, tmp, "the example folder with a Tailoring whose two Deviations each name their approver");
+    assert.deepEqual(s.errors, []);
+  } finally {
+    for (const d of tmp) fs.rmSync(d, { recursive: true, force: true });
+    await s.close();
+  }
+});
+
+test("Browse and Import: who a statement binds is named by the user; empty, the requirement and the import are refused", { skip: needs }, async t => {
+  const s = await session(), tmp = [], p = s.page;
+  /* a catalog no preset knows: the generic rules read it */
+  const catalog = jsonFile("house-rules.json", { catalog: { uuid: "c-1", metadata: { title: "House rules", version: "1", "oscal-version": "1.1.2", "last-modified": "2026-11-14T00:00:00Z" },
+    groups: [{ id: "g1", title: "Doors", controls: [{ id: "hr-1", title: "Lock the door", parts: [{ id: "hr-1_smt", name: "statement", prose: "The last person to leave locks the door." }] }] }] } });
+  try {
+    await iAm(s, ALICE);
+    await load(s, zipOf(EX, "examples"));
+    /* --- a Requirement written on the Browse page --- */
+    await open(s, "browse.html", "author");
+    await type(p.locator("#au-title"), "Lock the door");
+    await type(p.locator("#au-prose"), "The last person to leave locks the door.");
+    assert.equal(await p.locator("#au-party").inputValue(), "", "who a requirement binds is not the person at the page: the field starts empty");
+    const before = await snapshot(s);
+    await p.locator("#au-addreq").click();
+    assert.equal(await p.locator("#au-err").innerText(), "No obligated party is named. The kernel requires obligated-parties on every statement, so nothing was saved. The field “Obligated party” is empty. " + HOW);
+    assert.deepEqual(await snapshot(s), before);
+    await type(p.locator("#au-party"), "all staff");
+    assert.equal(await p.locator("#au-party").inputValue(), NS + "/party/all-staff");
+    await p.locator("#au-addreq").click();
+    await p.waitForFunction(async () => (await jscStore.files(jscStore.activeSet())).some(r => r.id && r.id.endsWith("/req/lock-the-door")));
+    const req = (await stored(s, "requirement")).find(r => r.id.endsWith("/req/lock-the-door"));
+    assert.deepEqual(req.statements.map(st => st["obligated-parties"]), [[NS + "/party/all-staff"]]);
+    await greenWithAuthors(s, t, tmp, "the example folder with a Requirement that binds a named party");
+
+    /* --- a catalog imported by the generic rules --- */
+    await open(s, "import.html");
+    await p.locator("#pick").setInputFiles(catalog);
+    await p.locator("#run").waitFor();
+    assert.equal(await p.locator("#o-preset").inputValue(), "generic");
+    assert.equal(await p.locator("#o-party").inputValue(), "");
+    const set = await snapshot(s);
+    await p.locator("#run").click();
+    assert.match(await p.locator("#run-err").innerText(), /^No party is named that the statements bind\. The kernel requires obligated-parties on every statement and OSCAL has no field for it, so the import did not run\./);
+    assert.equal(await p.locator("#write").count(), 0, "nothing was imported, so there is nothing to write");
+    assert.deepEqual(await snapshot(s), set);
+    await type(p.locator("#o-party"), "all staff");
+    const ns = await p.locator("#o-ns").inputValue();
+    assert.equal(await p.locator("#o-party").inputValue(), ns + "/party/all-staff", "a short name becomes a party under the namespace of the import");
+    await p.locator("#run").click();
+    await p.locator("#write").click();
+    await p.locator("#log .l-ok", { hasText: "wrote" }).first().waitFor();
+    const imported = (await stored(s, "requirement"));
+    assert.deepEqual(imported.map(r => r.statements.map(st => st["obligated-parties"])), [[[ns + "/party/all-staff"]]]);
+    assert.equal(JSON.stringify(imported).includes("/party/organization"), false, "the word the rules used to supply is not written");
+    await greenWithAuthors(s, t, tmp, "a catalog of one control imported by the generic rules");
+    assert.deepEqual(s.errors, []);
+  } finally {
+    for (const d of tmp) fs.rmSync(d, { recursive: true, force: true });
+    await s.close();
+  }
+});
+
+test("Risk: an empty owner refuses the risk and the catalogue import; the approver of an acceptance starts empty, also with \"Who am I\" and a default owner set; named, both are written as named", { skip: needs }, async t => {
+  const s = await session(), tmp = [], p = s.page, CISO = "https://org.example/party/ciso";
+  try {
+    await load(s, zipOf(EX, "examples"));
+    const problems = () => p.locator("#edit .problems .verdict-bad").allInnerTexts();
+    const risk = async label => (await stored(s, "risk")).find(r => r.label === label);
+    const NO_OWNER = "✗ error: No owner is named. The kernel requires owner-ref on a Risk, so the risk cannot be saved. The field “Owner” is empty. " + HOW;
+    const NO_APPROVER = "✗ error: No approver is named. The kernel requires approver-ref on the acceptance of a Risk, so the risk cannot be saved. The field “Approver” is empty. " + HOW;
+
+    /* --- no default owner is set: the owner field is empty, the risk cannot be saved, and the page says it in its own words --- */
+    await open(s, "risk.html", "register");
+    await p.locator("#new-risk").click();
+    await type(p.locator("#r-label"), "R-70");
+    await type(p.locator("#r-scenario"), "A door is left open overnight.");
+    assert.equal(await p.locator("#r-owner").inputValue(), "");
+    assert.deepEqual(await problems(), [NO_OWNER], "one line, and not the schema's “is too short” beside it");
+    assert.ok(await p.locator("#r-save").isDisabled());
+    assert.equal(await risk("R-70"), undefined);
+    await type(p.locator("#r-owner"), "facility manager");
+    assert.equal(await p.locator("#r-owner").inputValue(), NS + "/party/facility-manager", "a short name becomes a party under the namespace, here as on every page");
+    assert.deepEqual(await problems(), []);
+    /* an acceptance is begun: the approver is required from then on, and nothing has filled the field */
+    await type(p.locator("#r-accdate"), "2026-11-14");
+    await type(p.locator("#r-accwhy"), "The door is inside the guarded perimeter.");
+    assert.equal(await p.locator("#r-approver").inputValue(), "");
+    assert.deepEqual(await problems(), [NO_APPROVER]);
+    assert.ok(await p.locator("#r-save").isDisabled());
+    await type(p.locator("#r-approver"), "site director");
+    assert.equal(await p.locator("#r-approver").inputValue(), NS + "/party/site-director");
+    assert.deepEqual(await problems(), []);
+    await p.locator("#r-save").click();
+    await p.locator("#register table.flat").waitFor();
+    assert.deepEqual([(await risk("R-70"))["owner-ref"], (await risk("R-70")).acceptance["approver-ref"]], [NS + "/party/facility-manager", NS + "/party/site-director"]);
+    assert.equal("provenance" in await risk("R-70"), false, "the author field was empty too: that one is optional, so none is written and the save went ahead");
+    /* the owner emptied on a risk that is in the set: it stays empty, and the stored risk is not written over */
+    await p.locator(`[data-risk="${(await risk("R-70")).id}"]`).click();
+    await type(p.locator("#r-owner"), "");
+    assert.equal(await p.locator("#r-owner").inputValue(), "");
+    assert.deepEqual(await problems(), [NO_OWNER]);
+    assert.ok(await p.locator("#r-save").isDisabled());
+    assert.equal((await risk("R-70"))["owner-ref"], NS + "/party/facility-manager");
+
+    /* --- the catalogue: without an owner nothing is imported --- */
+    await p.locator('.navitem[data-view="catalogue"]').click();
+    assert.equal(await p.locator("#c-owner").inputValue(), "");
+    const before = await snapshot(s);
+    await p.locator("[data-import]").first().click();
+    assert.equal(await p.locator("#c-err").innerText(), "No owner is named. The kernel requires owner-ref on a Risk, so nothing was imported. The field “Owner” is empty. " + HOW);
+    assert.deepEqual(await snapshot(s), before);
+
+    /* --- with "Who am I" and a default owner set: the owner starts from the setting that is made for it, the approver from nothing --- */
+    await iAm(s, ALICE);
+    await type(p.locator('[id="cfg-org:owner"]'), CISO);
+    await open(s, "risk.html", "register");
+    await p.locator("#new-risk").click();
+    await type(p.locator("#r-label"), "R-71");
+    await type(p.locator("#r-scenario"), "A visitor badge is not returned.");
+    assert.deepEqual([await p.locator("#r-owner").inputValue(), await p.locator("#r-author").inputValue(), await p.locator("#r-approver").inputValue()], [CISO, ALICE, ""],
+      "the approver is not who sits at the page and not the owner, unless somebody says so");
+    await type(p.locator("#r-accdate"), "2026-11-14");
+    await type(p.locator("#r-accwhy"), "Badges expire at midnight.");
+    assert.deepEqual(await problems(), [NO_APPROVER]);
+    await type(p.locator("#r-approver"), "https://other.example/people/bob");
+    await p.locator("#r-save").click();
+    await p.locator("#register table.flat").waitFor();
+    const written = await risk("R-71");
+    assert.deepEqual([written["owner-ref"], written.acceptance["approver-ref"], written.provenance["author-ref"]], [CISO, "https://other.example/people/bob", ALICE]);
+    /* the first risk, saved again by alice: it names her now, and keeps the owner and the approver it was given */
+    await p.locator(`[data-risk="${(await risk("R-70")).id}"]`).click();
+    await type(p.locator("#r-title"), "Door left open");
+    await p.locator("#r-save").click();
+    await p.locator("#register table.flat").waitFor();
+    const again = await risk("R-70");
+    assert.deepEqual([again["owner-ref"], again.acceptance["approver-ref"], again.provenance["author-ref"]], [NS + "/party/facility-manager", NS + "/party/site-director", ALICE]);
+    /* the catalogue's owner field starts from the same setting; emptied, it stays empty and the import is refused */
+    await p.locator('.navitem[data-view="catalogue"]').click();
+    assert.equal(await p.locator("#c-owner").inputValue(), CISO);
+    await type(p.locator("#c-owner"), "");
+    const set = await snapshot(s);
+    await p.locator("[data-import]").first().click();
+    assert.match(await p.locator("#c-err").innerText(), /^No owner is named\. The kernel requires owner-ref on a Risk, so nothing was imported\./);
+    assert.equal(await p.locator("#c-owner").inputValue(), "", "the setting does not come back into a field the user emptied");
+    assert.deepEqual(await snapshot(s), set);
+
+    await greenWithAuthors(s, t, tmp, "the example folder with two Risks whose owner and approver were named on the page");
     assert.deepEqual(s.errors, []);
   } finally {
     for (const d of tmp) fs.rmSync(d, { recursive: true, force: true });

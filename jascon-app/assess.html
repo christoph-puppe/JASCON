@@ -95,6 +95,8 @@ jscI18n.add("de", {
   "assessment {id}: {result}, {n} finding(s)": "Assessment {id}: {result}, {n} Feststellung(en)",
   "kept {n} finding(s) of an earlier run that were already moved on": "{n} Feststellung(en) eines früheren Laufs behalten, die schon weiterbearbeitet wurden",
   "Remediate: {title}": "Beheben: {title}",
+  "No performer is named. The kernel requires performer-ref on an Assessment, so nothing was written. The field “Performer” is empty.":
+    "Es ist kein Prüfer genannt. Der Kernel verlangt performer-ref an einem Assessment; deshalb wurde nichts geschrieben. Das Feld „Prüfer“ ist leer.",
   "Written on a Finding you move or whose Deviation you decide here: that is a new version of the Finding, and it is yours.":
     "Wird an einer Feststellung geschrieben, die Sie hier verschieben oder deren Deviation Sie hier entscheiden: Das ist eine neue Version der Feststellung, und sie ist Ihre.",
 });
@@ -104,8 +106,22 @@ const V = jscView, esc = jscEsc;
 const RESULTS = ["satisfied", "not-satisfied", "inconclusive"];
 const RESULT_COLOR = { satisfied: "var(--green)", "not-satisfied": "var(--red)", inconclusive: "var(--amber)" };
 const RESULT_LABEL = { satisfied: N("satisfied"), "not-satisfied": N("not satisfied"), inconclusive: N("inconclusive") };
-const draft = V.draft("assess", () => ({ label: "check-" + jscToday(), scope: "", performer: "assessor", results: {}, q: "" }));
+const draft = V.draft("assess", () => ({ label: "check-" + jscToday(), scope: "", results: {}, q: "" }));
 let G = jscSet.graph;
+/* The performer of a check. The kernel requires `performer-ref` on an
+   Assessment: without it the object is not valid, so the page refuses to
+   write the check while the field is empty, and writes nothing. The field
+   starts from the setting "Who am I", because whoever sits at this page
+   performs the check; it takes a URI or a short name, and an emptied field
+   stays empty. Until build 0.9.10 the field started from the word
+   "assessor" and the page wrote <namespace>/party/assessor, a party nobody
+   had named (backlog #70; ERRATA.md). A draft stored by an earlier build
+   may still hold that word; it is not read any more.
+   This is not the author field of the same form: that one is the optional
+   `provenance` of the Findings, and an empty author there writes none and
+   stops nothing. One field the kernel requires, the other it does not. */
+const PERFORMER = V.requiredParty(jscWhoAmI);
+const NO_PERFORMER = N("No performer is named. The kernel requires performer-ref on an Assessment, so nothing was written. The field “Performer” is empty.");
 const ofType = t => [...G.objects.values()].filter(r => r.type === t);
 const name = ref => (G.objects.has(ref) ? V.labelOf(G.objects.get(ref)) : V.last(ref));
 
@@ -210,7 +226,7 @@ function renderCheck() {
   el.innerHTML = `<div class="wb">
     <div class="wbrow"><label for="a-label">${esc(T("Label of the check"))}</label><input type="text" id="a-label" value="${esc(d.label)}" style="width:170px">
       <label for="a-scope">${esc(T("Scope"))}</label><select id="a-scope" style="max-width:380px">${all.map(s => `<option value="${esc(s.key)}" ${s.key === cur.key ? "selected" : ""}>${esc(s.label)}</option>`).join("")}</select>
-      <label for="a-perf">${esc(T("Performer"))}</label><input type="text" id="a-perf" value="${esc(d.performer)}" style="width:130px">
+      <label for="a-perf">${esc(T("Performer"))}</label>${PERFORMER.html("a-perf", "min-width:240px;max-width:360px")}
       <input type="search" id="a-q" placeholder="${esc(T("filter"))}" aria-label="${esc(T("filter"))}" value="${esc(d.q)}" style="width:150px"></div>
     <div class="wbrow">${V.authorLabel("a-author")}${V.authorInput("a-author")}</div>
     <div class="wbrow"><span class="chip"><b>${answered}/${reqs.length}</b>${esc(T("checked"))}</span>
@@ -226,7 +242,7 @@ function renderCheck() {
   const again = () => { draft.save(); renderCheck(); };
   el.querySelector("#a-label").addEventListener("change", e => { d.label = e.target.value.trim() || d.label; draft.save(); });
   el.querySelector("#a-scope").addEventListener("change", e => { d.scope = e.target.value; again(); });
-  el.querySelector("#a-perf").addEventListener("change", e => { d.performer = e.target.value; draft.save(); });
+  PERFORMER.wire(el, "a-perf");
   let timer;
   el.querySelector("#a-q").addEventListener("input", e => { d.q = e.target.value; clearTimeout(timer); timer = setTimeout(() => { again(); $("a-q").focus(); }, 300); });
   el.querySelectorAll("[data-answer]").forEach(b => b.addEventListener("click", () => {
@@ -242,10 +258,13 @@ function renderCheck() {
 async function writeCheck(scope, reqs) {
   const d = draft.data, c = tally(reqs), lang = jscI18n.contentLang();
   if (!(c.satisfied + c["not-satisfied"] + c.inconclusive)) { $("a-err").textContent = T("Answer at least one requirement first."); return; }
+  /* required by the kernel: refused while nobody is named, before anything is written (backlog #70) */
+  const performer = PERFORMER.ref();
+  if (!performer) { $("a-err").textContent = V.missingParty(NO_PERFORMER); return; }
   const result = c["not-satisfied"] ? "not-satisfied" : (c.inconclusive || c.satisfied < reqs.length) ? "inconclusive" : "satisfied";
   const asmtId = jscSet.mintId("asmt", d.label);
   const asmt = { id: asmtId, version: "1", lifecycle: "draft", title: { [lang]: `${d.label}: ${scope.label}` }, "subject-refs": reqs,
-    method: { kind: "manual-check", tool: JSC_TOOL }, "performer-ref": jscSet.mintId("party", d.performer || "assessor"),
+    method: { kind: "manual-check", tool: JSC_TOOL }, "performer-ref": performer,
     time: new Date().toISOString(), result };
   const failed = reqs.filter(id => (d.results[id] || {}).result === "not-satisfied");
   const findingId = rid => jscSet.mintId("finding", d.label + "-" + V.last(rid));

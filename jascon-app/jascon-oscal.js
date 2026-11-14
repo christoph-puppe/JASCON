@@ -17,6 +17,8 @@
               is a clause; the modality is `unspecified`, because OSCAL has
               no field for it; every prop and every other part is carried in
               a holding facet, verbatim, so nothing is dropped silently.
+              Who the statements bind is the caller's to name (opts.party);
+              without a party the import is refused (backlog #70).
    nist-sp800-53  The rules of convert_nist.py for NIST SP 800-53 Rev 5:
               withdrawn controls folded into `replaces`, statement items as
               clauses, SP 800-53A objectives and methods, parameter data and
@@ -90,7 +92,7 @@ function jscBackMatter(doc) {
    document writes it; an offset is not applied.
 
    The party becomes a URI the way this file mints every party
-   (`<ns>/party/cis`, `<ns>/party/organization`): `<ns>/party/<slug of the
+   (`<ns>/party/cis`, `<ns>/party/institution`): `<ns>/party/<slug of the
    party's name>`, under the namespace of the import and with the
    converters' slug. convert_ifa.py names the parties of a role assignment
    the same way. A name is a string that is not empty. */
@@ -513,10 +515,21 @@ function jscImportNist(cat) {
 /* ====================================================================
    Any other catalog
    ==================================================================== */
-/* opts: { ns, lang, key } - the namespace the ids are minted under, the
-   language of the catalog's prose, and a short name for the paths. */
+/* opts: { ns, lang, key, party } - the namespace the ids are minted under,
+   the language of the catalog's prose, a short name for the paths, and the
+   party the statements bind.
+   The kernel requires on every statement who it binds (`obligated-parties`)
+   and OSCAL has no field for it. The presets for a publisher's corpus take
+   the party from their converter, which knows the corpus. These rules know
+   nothing about the catalog, so the caller names the party: a URI, or a
+   short name that becomes <ns>/party/<slug> (jscPartyRef, the rule of every
+   page). Without one the import is refused. Until build 0.9.10 these rules
+   wrote <ns>/party/organization on every clause, a party nobody had named
+   (backlog #70; ERRATA.md). */
 function jscImportGeneric(cat, opts) {
   const ns = String(opts.ns).replace(/\/+$/, ""), lang = opts.lang || "en", key = jscOscalSlug(opts.key || "catalog");
+  const obligated = jscOscalRules.jscPartyRef(opts.party, ns);
+  if (!obligated) throw new Error("the import names no party the statements bind: the kernel requires obligated-parties on every statement, and OSCAL has no field for it");
   const version = String(cat.metadata.version || "1"), bm = jscBackMatter(cat), objects = [];
   const F_HOLD = `${ns}/facet/oscal-import@1`, KNOWN_REL = ["related", "required", "uses-term", "reference", "schema"];
   const report = { preset: "generic", controls: 0, statements: 0, "controls-without-prose": [], "props-held": {}, "parts-held": {},
@@ -557,7 +570,7 @@ function jscImportGeneric(cat, opts) {
       let sid = cl.id;
       for (let n = 2; seen.has(sid); n++) sid = `${cl.id}-${n}`;
       seen.add(sid);
-      const st = { id: sid, modality: "unspecified", "obligated-parties": [`${ns}/party/organization`], prose: { [lang]: cl.prose } };
+      const st = { id: sid, modality: "unspecified", "obligated-parties": [obligated], prose: { [lang]: cl.prose } };
       const tokens = [...new Set([...cl.prose.matchAll(/\{param:([^}]+)\}/g)].map(m => m[1]))];
       const declared = tokens.map(t => { used.add(t); return params.has(t) ? paramOf(params.get(t)) : { name: t, type: "string" }; });   // every token is declared (prose-params-resolve)
       if (declared.length) st.parameters = declared;
@@ -912,7 +925,7 @@ function jscOscalImportProfile(doc, opts) {
   report.provenance = jscOscalProvenanceReport(stated, given, who.from, selects.length ? 1 : 0);
   return { objects: out, report };
 }
-const jscOscalRules = (typeof module !== "undefined" && module.exports) ? require("./jascon-rules.js") : { jscExpandRefs, jscParamCheck, jscIsDate, jscImportProvenance };
+const jscOscalRules = (typeof module !== "undefined" && module.exports) ? require("./jascon-rules.js") : { jscExpandRefs, jscParamCheck, jscIsDate, jscImportProvenance, jscPartyRef };
 
 /* What kind of OSCAL document a parsed file is: its single root key. */
 function jscOscalKind(doc) {

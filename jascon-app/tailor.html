@@ -99,12 +99,26 @@ jscI18n.add("de", {
   "This is a weakening. Give the Deviation a rationale.": "Das ist eine Abschwächung. Der Deviation eine Begründung geben.",
   "Prose is needed.": "Prosa wird gebraucht.", "Select at least one Set first.": "Zuerst mindestens ein Set auswählen.",
   "operation added: {op} on {target}": "Operation hinzugefügt: {op} auf {target}",
-  "Deviations of this Tailoring": "Deviations dieses Tailorings",
+  "Deviations of this Tailoring": "Deviations dieses Tailorings", "who approves? (needed)": "wer genehmigt? (nötig)",
+  "No approver is named. The kernel requires approver-ref on a Deviation, so the operation was not added. The field “approver” is empty.":
+    "Es ist niemand genannt, der genehmigt. Der Kernel verlangt approver-ref an einer Deviation; deshalb wurde die Operation nicht hinzugefügt. Das Feld „genehmigt von“ ist leer.",
 });
 
 const $ = id => document.getElementById(id);
 const V = jscView, esc = jscEsc;
 const DEVIATION_TYPES = ["risk-adjustment", "operational-requirement", "false-positive", "vendor-dependency", "derogation"];
+/* The approver of a Deviation. The kernel requires `approver-ref`: a
+   Deviation that names nobody is not valid, so the page refuses to add the
+   operation while the field is empty. The field starts EMPTY, always, also
+   when the setting "Who am I" is set: who approves an exception is not the
+   person typing unless they say so, and a pre-filled approver would record
+   self-approval by default. It takes a URI or a short name. Until build
+   0.9.10 the field showed the word "ciso" and the page wrote
+   <namespace>/party/ciso, a party nobody had named (backlog #70; ERRATA.md).
+   This is not the author field under the form: that one is the optional
+   `provenance` of the Tailoring, and an empty author there writes none and
+   stops nothing. One field the kernel requires, the other it does not. */
+const NO_APPROVER = N("No approver is named. The kernel requires approver-ref on a Deviation, so the operation was not added. The field “approver” is empty.");
 const fresh = () => ({ label: "my-tailoring", selects: [], excludes: [], operations: [], op: {} });
 const draft = V.draft("tailor", fresh);
 let G = jscSet.graph, picked = null;
@@ -287,7 +301,7 @@ function renderWrite() {
     ${cur ? `<div class="wbrow">${cur.payloadHtml}</div><div class="wbrow">${cur.verdictHtml}</div>
       ${cur.needsDeviation && !cur.invalid ? `<div class="devbox"><span class="nano" style="color:var(--amber)">${esc(T("A Deviation is needed: this is the audited way to weaken"))}</span>
         <div class="wbrow"><label for="dev-type">${esc(T("type"))}</label><select id="dev-type">${DEVIATION_TYPES.map(t => `<option ${d.op.devType === t ? "selected" : ""}>${t}</option>`).join("")}</select>
-          <label for="dev-approver">${esc(T("approver"))}</label><input type="text" id="dev-approver" value="${esc(d.op.devApprover || "ciso")}" style="width:120px">
+          <label for="dev-approver">${esc(T("approver"))}</label><input type="text" id="dev-approver" aria-required="true" value="${esc(V.partyRef(d.op.devApprover))}" placeholder="${esc(T("who approves? (needed)"))}" style="min-width:220px">
           <input type="text" id="dev-rationale" placeholder="${esc(T("rationale (needed)"))}" aria-label="${esc(T("rationale (needed)"))}" value="${esc(d.op.devRationale || "")}" style="flex:1;min-width:220px"></div></div>` : ""}
       <div class="wbrow"><button type="button" class="primary" id="op-add" ${cur.invalid ? "disabled" : ""}>${esc(T("Add the operation"))}</button><span class="verdict-bad" id="op-err" role="alert"></span></div>` : ""}
     <div style="margin-top:8px">${d.operations.map((o, i) => `<div class="wbchip"><span class="badge" style="border-color:var(--amber);color:var(--amber)">${esc(o.op)}</span>
@@ -317,7 +331,10 @@ function renderWrite() {
   bind("op-kind", v => { d.op = { req: d.op.req, stmt: d.op.stmt, kind: v }; }, true);
   for (const [id, key] of [["op-modality", "modality"], ["op-param", "param"], ["op-value", "value"], ["op-valuex", "valuex"], ["op-num", "num"],
     ["op-unit", "unit"], ["op-lang", "lang"], ["op-intent", "intent"], ["op-prose", "prose"]]) bind(id, v => { d.op[key] = v; }, true);
-  for (const [id, key] of [["dev-type", "devType"], ["dev-approver", "devApprover"], ["dev-rationale", "devRationale"]]) bind(id, v => { d.op[key] = v; });
+  for (const [id, key] of [["dev-type", "devType"], ["dev-rationale", "devRationale"]]) bind(id, v => { d.op[key] = v; });
+  /* the approver as typed; the field then shows the party that will be written (a short name becomes a party under the namespace) */
+  const approverField = el.querySelector("#dev-approver");
+  if (approverField) approverField.addEventListener("change", () => { d.op.devApprover = approverField.value.trim(); approverField.value = V.partyRef(d.op.devApprover); draft.save(); });
   const add = el.querySelector("#op-add");
   if (add) add.addEventListener("click", () => {
     const c = draftOperation(), err = el.querySelector("#op-err");
@@ -325,8 +342,11 @@ function renderWrite() {
     if (d.operations.some(o => jscTargetKey(o) === jscTargetKey(c.op))) { err.textContent = T("Two operations on one target in one Tailoring are an error. Chain Tailorings to override."); return; }
     if (c.needsDeviation) {
       if (!(d.op.devRationale || "").trim()) { err.textContent = T("This is a weakening. Give the Deviation a rationale."); return; }
+      /* required by the kernel: refused while nobody is named, and the operation is not added (backlog #70) */
+      const approver = V.partyRef(d.op.devApprover);
+      if (!approver) { err.textContent = V.missingParty(NO_APPROVER); return; }
       c.op.deviation = { type: d.op.devType || DEVIATION_TYPES[0], state: "pending", rationale: { [jscI18n.contentLang()]: d.op.devRationale.trim() },
-        "approver-ref": jscSet.mintId("party", d.op.devApprover || "approver"), opened: jscToday() };
+        "approver-ref": approver, opened: jscToday() };
     }
     d.operations.push(c.op);
     jscLog.ok(T("operation added: {op} on {target}", { op: c.op.op, target: V.labelOf(c.req) + " " + c.stmt.id }));
