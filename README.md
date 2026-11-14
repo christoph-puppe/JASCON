@@ -20,9 +20,10 @@ on a stock Windows box** (the weekend-validator claim, measured,
 crypto engines included) —
 **eleven framework and lifecycle corpora converted at 100 % declared path
 coverage** (251,591 source leaf values, every source path with a computed
-destination; where every *value* went is traced on one corpus so far,
-where 537 of 835 are carried and 298 dropped for a declared reason —
-backlog #41 — including NIST
+destination; where every *value* went is traced by a ledger on six of
+them: of 214,365 source values, 126,105 are carried and 88,260 are no
+content by a rule the ledger checks, none is dropped and none
+unaccounted — including NIST
 SP 800-53 Rev 5, its 800-53B baselines, and CSF 2.0), a **bidirectional
 OSCAL 1.2.2 export** that round-trips 5,886/5,886 objects to semantic-digest
 equality against the official NIST schema, and a zero-dependency
@@ -48,7 +49,7 @@ semantic digest of each of its three subjects and the digest of the
 manifest's bytes, and says what the reference validator says: FULL MATCH.
 The Attestation is unsigned (the converter models it from the
 authorization date of the SSP), and the page says that too; it takes no
-key and has no word for a signature that holds. (Reader 1.14.0,
+key and has no word for a signature that holds. (Reader 1.16.0,
 2026-11-14, loaded from `python -m http.server`, which lists the folder.
 The bundle's manifest lists 16 objects. The stage names Risk in its
 heading and lists none; the two Risk objects are in the object browser —
@@ -114,8 +115,9 @@ backlog #71.)*
 >   That party is the converter's default and not a value of the source,
 >   its coverage report says so, and `--obligated-party URI` writes
 >   another; the app's import presets show the default and take another.
->   Of the 4,173 statements in the four shipped catalogue bundles, 2,255
->   carry a converter's party and 1,918 what the source states.
+>   Of the 4,434 statements in the four shipped catalogue bundles, 2,516
+>   carry a converter's party and 1,918 what the source states (counted
+>   again on 2026-11-14, after every withdrawn item became an object).
 > - **The shipped conversions are reproducible** (2026-11-14): the
 >   workflow fetches each source at its pinned tag or commit, converts
 >   again and fails when a shipped bundle or its report differs from
@@ -273,11 +275,20 @@ backlog #71.)*
 > - **Reported, not smoothed over:** OSCAL's risk data has no owner, no
 >   single level and no acceptance date, so the first Risk corpus cannot
 >   leave the `identified` state; and the coverage reports count source
->   *paths*, not values that arrive. On the IFA corpus a ledger follows
->   every source value: of 835, 442 are copied, 95 transformed by a named
->   rule and 298 dropped for a declared reason, none unaccounted. That is
->   not "lossless", and the other ten corpora have no ledger (backlog
->   #41). A workflow step reproduces the IFA conversion from its pinned
+>   *paths*, not values that arrive. Since 2026-11-14 a ledger follows
+>   every source value on six corpora (IFA, ISM, Grundschutz++, CSF,
+>   SP 800-53, CR26): of 214,365 values, 75,603 are copied, 50,502 made
+>   by a named rule that is applied again and compared, and 88,260 are
+>   no content by a rule the ledger checks (a name that only selects a
+>   field, a namespace, an id that can be rebuilt exactly, a back-matter
+>   resource nothing refers to). None is dropped and none unaccounted,
+>   and a converter run with an unaccounted value ends with 1. The first
+>   ledgers had found values that were lost behind path maps of 100 %;
+>   the author's rule of that day is "real content is never dropped",
+>   and each loss is carried now. A ledger holds a rule to what it wrote,
+>   not to whether the rule is right. The corpora whose sources are not
+>   in the repository have no ledger (backlog #41, closed for the six).
+>   The workflow reproduces the six conversions from their pinned
 >   sources on every change.
 > - **Licences:** the repository is Apache-2.0; the converted corpora were
 >   checked against their publishers' terms and six bundles were removed
@@ -478,8 +489,8 @@ The census corpora (gate 1 — the evidence base the architecture was derived fr
 
 | Corpus | Source | Emitted | Coverage |
 |---|---|---|---|
-| [AU.ISM](converted_examples/AU.ISM/ism-coverage-report.md) | ACSC ISM, OSCAL 1.1.2 catalog, 1,150 controls | 1,150 Requirements · 561 Sets (P10 fix pass recovered 239 taxonomy sets a slug collision had silently merged) | 36,161 / 36,161 leaf values |
-| [DE.BSI](converted_examples/DE.BSI/bsi-coverage-report.md) | Grundschutz++ v2026-07-16, OSCAL 1.1.3 (MS-TLS dropped by decision — defects reported to BSI) | 651 Requirements carrying 999 statements · 221 params with label/default · 162 Sets | 49,431 / 49,431 |
+| [AU.ISM](converted_examples/AU.ISM/ism-coverage-report.md) | ACSC ISM, OSCAL 1.1.2 catalog, 1,150 controls | 1,150 Requirements · 581 Sets (every group of the source is a Set since 2026-11-14; P10 fix pass recovered 239 taxonomy sets a slug collision had silently merged) | 36,161 / 36,161 leaf values |
+| [DE.BSI](converted_examples/DE.BSI/bsi-coverage-report.md) | Grundschutz++ v2026-07-16, OSCAL 1.1.3 (MS-TLS dropped by decision — defects reported to BSI) | 999 Requirements, one for every control at every depth (since 2026-11-14; until then a nested control was a statement of its parent, and its links were lost) · 221 params with label/default · 288 Sets (159 groups, 126 groupings of a control with the controls nested in it, 2 baselines, the root) | 49,431 / 49,431 |
 | † [FedRAMP-CR26](converted_examples/FedRAMP-CR26/cr26-coverage-report.md) | CR26 bespoke JSON, v2026.11.02.01 (measured again on 2026-11-14; the census of July was of v2026.07.14.01: 292 Requirements · 373 Mappings · 4 Tailorings, 7,294 / 7,294) | 291 Requirements · 652 Mappings · 92 Sets · 5 Tailorings | 7,532 / 7,532 |
 
 Validation corpora (converted 2026-07-21; the model held without kernel
@@ -501,8 +512,8 @@ changes forced):
 
 | Corpus | Source | Emitted | Coverage |
 |---|---|---|---|
-| [US.SP800-53](converted_examples/US.SP800-53/sp800-53-coverage-report.md) | NIST SP 800-53 Rev 5.2.0 catalog + four 800-53B baseline profiles, OSCAL 1.2.2 | 1,014 Requirements (1,600 statement-scoped ODP params, SP 800-53A layer as facet) · 25 Sets (20 families + 4 baselines + root); 182 withdrawn tombstones inverted onto successor `replaces[]` | 115,680 / 115,680 |
-| [US.CSF](converted_examples/US.CSF/csf-coverage-report.md) | NIST CSF 2.0, OSCAL 1.2.2 | 106 Requirements · 29 Sets (functions → categories → subcategories, 3-level nesting); 91 withdrawn (12 categories + 79 subcategories) inverted | 4,726 / 4,726 |
+| [US.SP800-53](converted_examples/US.SP800-53/sp800-53-coverage-report.md) | NIST SP 800-53 Rev 5.2.0 catalog + four 800-53B baseline profiles, OSCAL 1.2.2 | 1,196 Requirements (1,600 statement-scoped ODP params, SP 800-53A layer as facet with its 3,707 assessment-for links) · 25 Sets (20 families + 4 baselines + root); the 182 withdrawn controls are Requirements with lifecycle `withdrawn` since 2026-11-14, and the 180 that name a successor stand in its `replaces[]` | 115,680 / 115,680 |
+| [US.CSF](converted_examples/US.CSF/csf-coverage-report.md) | NIST CSF 2.0, OSCAL 1.2.2 | 185 Requirements · 41 Sets (functions → categories → subcategories, 3-level nesting); the 91 withdrawn items (12 categories + 79 subcategories) are objects with lifecycle `withdrawn` since 2026-11-14, and the 87 that name a successor stand in its `replaces[]` | 4,726 / 4,726 |
 | [US.IFA-GoodRead](converted_examples/US.IFA-GoodRead/ifa-coverage-report.md) | OSCAL IFA GoodRead example set (SSP + AP + AR + POA&M) + leveraged/leveraging SSP pair + component-definition | 6 Components · 3 Implementations (D5 `inherited-from` with basis-ref) · 1 Assessment · 2 Findings (one approved risk-adjustment Deviation) · 2 Risks · 1 Attestation (the ATO) · 2 carried Requirements | 835 / 835 |
 
 Each conversion ships a computed coverage report that declares every rule with
@@ -552,7 +563,10 @@ the five stages of the compliance graph *functional*, not diagrammatic:
   real Assessment and Finding objects.
 - **Export a real bundle** — the workspace leaves as a ZIP with a
   content-manifest carrying both digests per object: re-loadable here,
-  verifiable by `validate_core.py`. Authored objects persist across reloads.
+  verifiable by `validate_core.py`. The reader checks part of what the
+  validator checks (references that must resolve in the bundle, facet and
+  method keys, Attestations) and says so; it runs no kernel schema.
+  Authored objects persist across reloads.
 
 ![Object browser on the Grundschutz++ corpus (content: BSI, CC BY-SA 4.0): fifteen auto-populated filter dimensions — modality, threats, target-object categories, tags, required documentation, C-I-A-Auth objectives, effort, class, security level — every vocabulary the corpus actually carries](docs/img/reader-browser-facets.png)
 
@@ -598,7 +612,8 @@ you switch on one of the two places that ask a language model (below).
 - **Import** reads an OSCAL catalog or profile; everything after it works on
   JASCON. The BSI Grundschutz++ rules reproduce the shipped `DE.BSI` bundle
   object for object, by semantic digest; the NIST SP 800-53 rules give what
-  `convert_nist.py` gives on the same source file; the CIS Benchmark rules
+  `convert_nist.py` gives on the same source file (1,217 of its 1,221
+  objects: the four baseline Sets come from importing the profiles); the CIS Benchmark rules
   give what `convert_cis_benchmark.py` gives, shown on a catalog of the same
   shape (the repository carries no CIS Benchmark).
 - **Checks** writes machine checks for technical rules (the Check type
