@@ -16,6 +16,7 @@ from oscal_conv_lib import global_occurrence, Ledger, props_by_name, slug, RESPO
 from oscal_conv_lib import document_author, document_day, provenance, provenance_override, needs_kernel_2
 from oscal_conv_lib import known_arguments, out_dir
 from oscal_conv_lib import obligated_party, obligated_party_line, obligated_party_record
+from oscal_conv_lib import ledger_by_path
 
 
 def measure(source, output):
@@ -502,6 +503,48 @@ class Backlog75NoManifestListsAnAttestation(unittest.TestCase):
         comp = {"id": "https://a.example/attestation/not-one", "version": "1", "lifecycle": "active", "kind": "system", "title": "A component"}
         b.add("objects/component/c.json", comp)                 # the shape decides, not the id
         self.assertEqual(list(b.objects), ["objects/component/c.json"])
+
+class Backlog41TheLedgerOfALargeCorpus(unittest.TestCase):
+    """ledger_by_path: the record of a corpus too large for one entry per
+    leaf value. It counts the entries Ledger.account() checked; it adds
+    nothing and loses no leaf."""
+    def run_ledger(self):
+        src = {"controls": [{"id": "a-1", "title": "First", "class": "x", "note": "kept nowhere", "uuid": "u1"},
+                            {"id": "a-2", "title": "Second", "class": "x", "note": "kept nowhere too", "uuid": "u2"},
+                            {"id": "a-3", "title": "Third", "class": "y", "uuid": "u3"}]}
+        led = Ledger(); doc = led.source("cat", copy.deepcopy(src))
+        led.drop(r"\.uuid$", "an identity of the source document, not content")
+        objs = {}
+        for i, c in enumerate(doc["controls"]):
+            objs[f"objects/req/{c['id']}.json"] = {"id": led.derive("id-rule", lambda v: "https://x.example/req/" + v, c["id"]),
+                                                   "statements": [{"prose": {"en": c["title"]}}], "tags": [c["class"]]}
+        out = tempfile.mkdtemp()
+        for rel, o in objs.items():
+            os.makedirs(os.path.dirname(os.path.join(out, rel)), exist_ok=True)
+            with open(os.path.join(out, rel), "w", encoding="utf-8") as f: json.dump(o, f)
+        return led.account(out, objs)
+
+    def test_backlog_41_one_row_per_path_and_outcome_and_every_leaf_counted_once(self):
+        full = self.run_ledger()
+        before = json.dumps(full, sort_keys=True)
+        short = ledger_by_path(full, examples=1)
+        self.assertEqual(json.dumps(full, sort_keys=True), before)                  # the per-leaf ledger is not touched
+        self.assertEqual(short["leaf-values"], 14)
+        self.assertEqual(short["totals"], full["totals"])
+        self.assertEqual(short["totals"], {"copied": 6, "transformed": 3, "intentionally-dropped": 3, "unaccounted": 2})
+        self.assertEqual(sum(r["count"] for r in short["paths"]), 14)
+        rows = {(r["path"], r["outcome"]): r for r in short["paths"]}
+        self.assertEqual(len(rows), len(short["paths"]))                            # one row per path and outcome
+        self.assertEqual(rows[("cat.controls[].title", "copied")]["count"], 3)
+        self.assertEqual(rows[("cat.controls[].title", "copied")]["to"], [{"pointer": "/statements/[]/prose/en", "count": 3}])
+        self.assertEqual(rows[("cat.controls[].title", "copied")]["example"], "cat#/controls/0/title")
+        self.assertEqual(rows[("cat.controls[].id", "transformed")]["to"], [{"pointer": "/id", "count": 3, "rule": "id-rule"}])
+        self.assertEqual(rows[("cat.controls[].uuid", "intentionally-dropped")]["reasons"],
+                         [{"reason": "an identity of the source document, not content", "count": 3}])
+        self.assertEqual(rows[("cat.controls[].note", "unaccounted")]["count"], 2)
+        self.assertNotIn("to", rows[("cat.controls[].note", "unaccounted")])
+        self.assertEqual(short["unaccounted-paths"], [{"path": "cat.controls[].note", "count": 2, "pointers": ["cat#/controls/0/note"]}])
+        self.assertNotIn("entries", short)
 
 if __name__ == "__main__":
     unittest.main()

@@ -553,6 +553,63 @@ class Ledger:
                 "unaccounted-paths": [{"path": p, "count": len(w), "pointers": w} for p, w in sorted(unaccounted.items())],
                 "entries": entries}
 
+def ledger_by_path(result, examples=3):
+    """The ledger of a large corpus in the size of its path map: one row per
+    source path and outcome, where Ledger.account() gives one entry per
+    source leaf value (backlog #41, phase E).
+
+    account() traces and checks every leaf; for the IFA corpus its 835
+    entries are the committed record. SP 800-53 has 115,680 leaf values, and
+    a record of one entry each would be some fifty megabytes. This keeps what
+    the entries say and drops what repeats: for every source path and
+    outcome the number of leaf values, the first of them as an example, and
+    where they went - the destination pointers with their array indices
+    collapsed to `[]`, each with its count and, for a transformed value, its
+    rule - or why they were dropped. Nothing is estimated: every row is a
+    count over entries that account() checked against the written files, and
+    the counts add up to `leaf-values`.
+
+    `unaccounted-paths` keeps the first `examples` pointers of each path and
+    the count; the per-leaf list is in the run that wrote it, not in the
+    record. -> a JSON-able dict."""
+    rows, order = {}, []
+    for e in result["entries"]:
+        key = (e["path"], e["outcome"])
+        r = rows.get(key)
+        if r is None:
+            r = rows[key] = {"path": e["path"], "outcome": e["outcome"], "count": 0, "example": e["source"],
+                             "_to": collections.Counter(), "_why": collections.Counter()}
+            order.append(key)
+        r["count"] += 1
+        if "reason" in e: r["_why"][e["reason"]] += 1
+        for d in e.get("destinations", []):
+            where = re.sub(r"/[0-9]+(?=/|$)", "/[]", d["pointer"])
+            r["_to"][(where, d.get("as", "value"), d.get("rule", ""), d.get("via", ""))] += 1
+    paths = []
+    for key in sorted(order):
+        r = rows[key]
+        row = {"path": r["path"], "outcome": r["outcome"], "count": r["count"], "example": r["example"]}
+        if r["_to"]:
+            row["to"] = []
+            for (where, as_, rule, via), n in sorted(r["_to"].items()):
+                d = {"pointer": where, "count": n}
+                if as_ != "value": d["as"] = as_
+                if rule: d["rule"] = rule
+                if via: d["via"] = via
+                row["to"].append(d)
+        if r["_why"]:
+            row["reasons"] = [{"reason": why, "count": n} for why, n in sorted(r["_why"].items())]
+        paths.append(row)
+    assert sum(r["count"] for r in paths) == result["leaf-values"]
+    return {"measures": "one row per source path and outcome; every source leaf value was traced and checked "
+                        "against the written files in the run that wrote this record, and is counted in one row",
+            "leaf-values": result["leaf-values"],
+            "totals": dict(result["totals"]),
+            "verification-failures": list(result["verification-failures"]),
+            "unaccounted-paths": [{"path": u["path"], "count": u["count"], "pointers": u["pointers"][:examples]}
+                                  for u in result["unaccounted-paths"]],
+            "paths": paths}
+
 def props_by_name(props, ledger=None, field="value"):
     """OSCAL props [{name, value}, ...] -> {name: value}. A name that repeats
     keeps EVERY value, as a list in source order - the rule parameter
