@@ -39,10 +39,19 @@ SOURCES = [("gspp", os.path.join(ROOT, "sources", "Grundschutz++-catalog.json"),
 # Whom a statement binds is not a value of this source (backlog #74). One
 # party is written for the run, minted under the namespace of the one
 # catalogue the converter reads (single-catalog mode).
+#
+# Every statement of the catalogue names a subject before its modal verb
+# ("Governance und Compliance MUSS ..."): 999 of 999 statements, 123
+# distinct subjects, 365 of them the title of an enclosing group (measured
+# on the pinned catalogue, backlog #77). The author decided on 2026-11-14
+# that this subject is the practice the institution runs and not a party.
+# So it is not written to `obligated-parties`, and the party stays the
+# institution, or whoever the caller names.
 PARTY_DEFAULT = f"{NS}/party/institution"
 PARTY, PARTY_ORIGIN = obligated_party(ARGV, PARTY_DEFAULT)      # (party, "converter-default" | "caller")
 PARTY_WHY = ("the catalogue carries no party on a control; `Institution` is the word its prose uses for "
-             "the organisation that applies it")
+             "the organisation that applies it. The subject a statement names before its modal verb is the "
+             "practice that organisation runs, not a party (decided by the author on 2026-11-14)")
 if any(ns != NS for _, _, ns in SOURCES):
     raise SystemExit("one obligated party is written for the run; a catalogue under another namespace needs its own")
 CENSUS = {"version": "2026-07-03", "controls": 998, "packed-tags-gspp": 125,

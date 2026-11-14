@@ -4226,3 +4226,31 @@ deleted commit turns it red for a reason that is not the repository's);
 and two
 converters now carry choices about a publication that its publisher did
 not make.
+
+### The author's answers to what that work asked *(2026-11-14, the same day; closes #76, #77 and #78)*
+
+"1 leave it out, 2 practice not party, 3 keep."
+
+1. **#76 — the CIS Controls are not converted by the workflow.** The
+   step stays unmerged. The notice in the corpus folder says that it was
+   built and left out, so that the next person who finds the publisher's
+   file at a stable address reads the terms before the step is proposed
+   again. The converter stays changed for #74 and unrun; its two reports
+   stay those of July.
+2. **#77 — the subject of a Grundschutz++ statement is the practice.**
+   "Governance und Compliance MUSS …" names the practice the institution
+   runs, not a party the kernel would call obliged. The converter's
+   default party stands, and `--obligated-party` is the remedy where
+   another organisation applies the catalogue. Written above the default
+   in `convert_bsi.py` and into the line of its coverage report
+   (**measured**: regenerated from the pinned catalogue, one line of the
+   report differs and no file of the bundle).
+3. **#78 — the CR26 converter's three readings are kept**: a rule's
+   control links are Mappings by the rule for a KSI's; a range of days
+   is two parameters that tighten in opposite directions; an optional
+   notification is carried whole in the converter's own facet. They were
+   **argued** by the agent that built them; they are decided now. No
+   kernel shape and no standard facet changes: one corpus is no evidence
+   for either (D22).
+
+Open after this: #41, #55, #62, #71, #72, #79. None needs the author.

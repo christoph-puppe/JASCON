@@ -17,3 +17,15 @@ reproduces no text of the publication.
 and is reproducible by anyone entitled to that file: obtain it from the
 publisher under the publisher's terms, place it at `sources/CIS Controls.json`,
 and run the converter.
+
+**The project's workflow does not run this conversion.** The four shipped
+catalogue conversions and the CR26 conversion are run again on every
+change from sources pinned by address and digest. A step that would do
+the same here, converting the publisher's file and discarding the result,
+was built on 2026-11-14 and left out by the author's decision the same
+day ("leave it out"; backlog #76). The question the step raised: the
+terms quoted above forbid creating a derivative work, and the step would
+have made one on every change, if only to discard it.
+The converter has changed since the measurement (it takes
+`--obligated-party` and `--out`, backlog #74) and was not run by this
+project after that change.

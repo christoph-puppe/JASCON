@@ -618,10 +618,12 @@ What it showed for what is left:
   committed.** Thirteen of the CR26 agent's first 24 deliberate defects
   were caught by nothing. The report now carries the digest of the
   bundle's manifest. This is #41 again, and phase E starts from it.
-- **Two rows need the author:** #76 (a workflow step that converts the
-  CIS Controls is built and not merged: a question about the
-  publisher's terms) and #77 (Grundschutz++ names a subject in every
-  statement).
+- **Two rows needed the author, and a third had three readings for
+  the author to accept or overturn.** Answered the same day: "1 leave it out,
+  2 practice not party, 3 keep". #76: the step that converts the CIS
+  Controls stays out of the workflow. #77: the subject a Grundschutz++
+  statement names is the practice, not a party, so the converter's
+  default stands. #78: the CR26 converter's readings are kept.
 - **Phase E is unchanged:** #41 and the validator half of #55.
 
-Open after this: #41, #55, #62, #71, #72, #76, #77, #78, #79.
+Open after this: #41, #55, #62, #71, #72, #79. None needs the author.

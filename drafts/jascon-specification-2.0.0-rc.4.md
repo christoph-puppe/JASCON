@@ -2480,7 +2480,14 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
    cheaper before the tag than after it.)*
    *(The same day, decided by the author: #75, "refusal in all" —
    MANIFEST-1, D3.11; #74, the obligated party a converter writes where
-   its source names none is an argument with a named default.)*
+   its source names none is an argument with a named default. Three
+   questions that work raised were answered the same day and change no
+   shape and no rule: the workflow does not convert a corpus whose terms
+   forbid a derivative work (#76); the subject a Grundschutz++ statement
+   names is the practice, not a party (#77); the CR26 converter's
+   readings of a duration range, an optional notification and a rule's
+   control links are kept (#78). Nothing is left to decide before the
+   tag.)*
 6. **Work, not decisions** — ✓ the implemented I-Regexp grammar was
    compared with the published text of RFC 9485 on 2026-11-12 (#61,
    closed); ☐ a ledger of source occurrences per converter, and the

@@ -59,11 +59,12 @@ backlog #71.)*
 > **State 2026-11-14 — release candidate 2.0.0-rc.4; not tagged.**
 > Everything below this section describes the released **1.0.0**. The
 > candidate adds two kernel types, Risk and Check, and advice packs.
-> Both reference validators are green on it. Two questions wait for the
-> author, neither about the kernel (backlog #76: whether the workflow
-> may convert the CIS Controls and discard the result; #77: whether the
-> subject a Grundschutz++ statement names is an obligated party); the
-> tag is the author's call.
+> Both reference validators are green on it, and no question waits for
+> the author: the tag is the author's call. (The last three were
+> answered on 2026-11-14 — the workflow does not convert the CIS
+> Controls, the subject a Grundschutz++ statement names is the practice
+> and not a party, and the CR26 converter's readings are kept; backlog
+> #76 to #78.)
 >
 > **Who decided, and when** ([CP-AUTHOR-1](drafts/CP-AUTHOR-1.md),
 > decided by the author on 2026-11-13; release candidate 4): a
