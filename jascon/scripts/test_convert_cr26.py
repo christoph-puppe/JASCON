@@ -753,6 +753,30 @@ class ChangedSource(unittest.TestCase):
                             return
         self.stops(change, "an id occurs twice")
 
+    def test_a_value_that_stands_where_the_path_map_does_not_say_ends_the_run_with_1(self):
+        """backlog #89: the ledger holds a rule to what it wrote; the table beside the path map (HELD) says where
+        the values of a row stand, and the library's path_map_check holds the record of the run against it"""
+        with open(self.converter, encoding="utf-8") as f: code = f.read()
+        row = ' (r"^cr26\\.info\\.title$", CARRIED, (_SOURCE + r"/title", r"/title/en")),\n'
+        self.assertEqual(code.count(row), 1)
+        def run(name, text):
+            changed = os.path.join(os.path.dirname(self.converter), f"convert_cr26_{name}.py")
+            with open(changed, "w", encoding="utf-8") as f: f.write(text)
+            return self.run_on(lambda src: None, converter=changed)
+        # the table names another place for the title than the converter writes
+        code_, out, err, d = run("place", code.replace(row, row.replace('r"/title/en"', 'r"/title/de"')))
+        self.assertEqual(code_, 1, out)
+        self.assertIn("1 value(s) of cr26.info.title stand at /title/en, a place the path map does not name for that path", err)
+        self.assertEqual(read_json(os.path.join(d, "cr26-conversion-ledger.json"))["totals"]["unaccounted"], 0, "the ledger alone lets it through")
+        # a row that allows another outcome than the record measured
+        code_, out, err, d = run("outcome", code.replace(row, row.replace("CARRIED", '("not-content",)')))
+        self.assertEqual(code_, 1, out)
+        self.assertIn("1 value(s) of cr26.info.title are copied, and the path map allows not-content there", err)
+        # a row of the table taken out
+        code_, out, err, d = run("row", code.replace(row, ""))
+        self.assertEqual(code_, 1, out)
+        self.assertIn("the table of outcomes and places (HELD) has 51 row(s) and the path map 52; they differ first at row 0", err)
+
     def test_without_the_source_the_run_says_where_to_get_it(self):
         self.stops(None, "SOURCES.sha256")
 

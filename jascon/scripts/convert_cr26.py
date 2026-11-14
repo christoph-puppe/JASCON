@@ -47,6 +47,7 @@ from oscal_conv_lib import BUNDLE_NEWLINE   # one byte spelling on every OS (D3.
 from oscal_conv_lib import provenance, provenance_override
 from oscal_conv_lib import obligated_party, obligated_party_line, obligated_party_record
 from oscal_conv_lib import Ledger, ledger_by_path, ledger_gate, needs_kernel_2
+from oscal_conv_lib import path_map_check, held_row, held_rows_match
 from oscal_conv_lib import COMPAT_FILE, compat_schema, lifecycle_default_record, lifecycle_default_line
 from oscal_conv_lib import ASSESSMENT_CRITERIA_FILE
 
@@ -313,6 +314,108 @@ RULES=[
  (r"^cr26\.KSI\.\*\.status$","L1","the KSI category Set's `lifecycle` by the rule for a document's status, the lifecycle of its indicators and of the Mappings of their control links, and the word itself in narrative@1 of the category Set: status"),
  (r"^cr26\.CTL\.\*\.\*\.parameters\[\]\.","L1","CTL ODP assignments -> set-parameter ops on the rev5-odp-overlay Tailoring, statement-addressed via the declaring statement; tailored Rev 5 Requirements carried in-bundle (backlog #10 DRAINED, gate 3)"),
  (r"^cr26\.CTL\.\*\.\*\.","L2","CTL guidance/variants: parked payload on /cr26/set/ctl-overlay - FedRAMP supplemental prose on external controls (D20 supplements territory, not ODP addressing)"),
+]
+# What the ledger may find for the values of each row (backlog #89): one
+# entry per row of RULES, in its order - the row's pattern, the outcomes its
+# level allows, and the places its values stand at, as the record writes
+# them: a JSON Pointer into the object, array positions as `[]`, a payload
+# keyed by a source value under the name the record gives the key, a key that
+# is a phrase of the publication as `*`. After the account the record is
+# held against this table, and a value with another outcome or at another
+# place ends the run (path_map_check). The entries are what the record of the
+# pinned publication measured; the row of the per-class artifacts, which that
+# publication does not use, is written from its sentence.
+CARRIED=("copied","transformed")
+_ACRIT = r"/facets/https:~1~1ns\.jascon\.net~1stdlib~1facet~1assessment-criteria@1"
+_COMPAT = r"/facets/https:~1~1ns\.jascon\.net~1compat~1oscal-1x@1"
+_EFFECT = r"/facets/https:~1~1ns\.jascon\.net~1stdlib~1facet~1effectivity@1"
+_NARR = r"/facets/https:~1~1ns\.fedramp\.gov~1cr26~1facet~1narrative@1"
+_REPORT = r"/facets/https:~1~1ns\.jascon\.net~1stdlib~1facet~1reporting-obligation@1"
+_SCOPE = r"/facets/https:~1~1ns\.fedramp\.gov~1cr26~1facet~1scope@1"
+_SOURCE = r"/provenance/sources/\[\]"
+_TERMS = r"/facets/https:~1~1ns\.jascon\.net~1stdlib~1facet~1terminology@1"
+HELD = [
+ (r"^cr26\.info\.title$", CARRIED, (_SOURCE + r"/title", r"/title/en")),
+ (r"^cr26\.info\.description$", CARRIED, (_NARR + r"/description/en",)),
+ (r"^cr26\.info\.version$", CARRIED, (r"/objects/\[\]/version", _SOURCE + r"/version", r"/version")),
+ (r"^cr26\.info\.last_updated$", CARRIED, (r"/provenance/date", _SOURCE + r"/date")),
+ (r"^cr26\.info\.default_artifacts\.", CARRIED, (_ACRIT + r"/default-artifacts/FRR/\[\]", _ACRIT + r"/default-artifacts/KSI/\[\]")),
+ (r"^cr26\.FRD\.info\.", CARRIED, (_TERMS + r"/glossary-info(/.*)?",)),
+ (r"^cr26\.FRD\.data\.all\.\*\.(term|definition|tag|alts\[\]|note|notes\[\]|do_not_link|reference|reference_url)$", CARRIED,
+  (_TERMS + r"/terms(/.*)?",)),
+ (r"^cr26\.FRD\.data\.all\.\*\.ignore_in_terms$", CARRIED, (_NARR + r"/ignore-in-terms/\{term-id\}",)),
+ (r"^cr26\.FRD\.data\.all\.\*\.updated\[\]\.", CARRIED, (_NARR + r"/term-updated(/.*)?",)),
+ (r"^cr26\.FRR\.\*\.info\.(name|short_name)$", CARRIED, (r"/label", r"/title/en")),
+ (r"^cr26\.FRR\.\*\.info\.status$", CARRIED, (_NARR + r"/status", r"/lifecycle")),
+ (r"^cr26\.FRR\.\*\.info\.web_name$", CARRIED, (r"/annotations/web_name",)),
+ (r"^cr26\.FRR\.\*\.info\.(purpose|tag)$", CARRIED, (_NARR + r"/description/en", _SCOPE + r"/tag")),
+ (r"^cr26\.FRR\.\*\.info\.(20x|rev5)\.subsets\.", CARRIED,
+  (_NARR + r"/description/en",
+   _SCOPE + r"/affects/\[\]",
+   _SCOPE + r"/classes/\[\]",
+   _SCOPE + r"/paths/\[\]",
+   _SCOPE + r"/types/\[\]",
+   r"/title/en")),
+ (r"^cr26\.FRR\.\*\.info\.(effective|20x|rev5)\.", CARRIED, (_EFFECT + r"/20x(/.*)?", _EFFECT + r"/default(/.*)?", _EFFECT + r"/rev5(/.*)?")),
+ (r"^cr26\.FRR\.\*\.info\.flows\[\]", CARRIED, (_COMPAT + r"/flows(/.*)?",)),
+ (r"^cr26\.FRR\.\*\.info\.subsets\.\*\.(name|description)$", CARRIED, (_NARR + r"/description/en", r"/title/en")),
+ (r"^cr26\.FRR\.\*\.info\.subsets\.\*\.applicability\.", CARRIED,
+  (_SCOPE + r"/affects/\[\]",
+   _SCOPE + r"/classes/\[\]",
+   _SCOPE + r"/paths/\[\]",
+   _SCOPE + r"/types/\[\]")),
+ (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.name$", CARRIED, (r"/statements/\[\]/prose/en", r"/title/en")),
+ (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.statement$", CARRIED, (r"/statements/\[\]/prose/en",)),
+ (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.force$", CARRIED, (r"/statements/\[\]/modality",)),
+ (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.affects\[\]$", CARRIED, (r"/statements/\[\]/obligated-parties/\[\]",)),
+ (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.terms\[\]$", CARRIED, (r"/relations/\[\]/ref",)),
+ (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.(timeframe_num|timeframe_type)$", CARRIED,
+  (r"/statements/\[\]/parameters/\[\]/num",
+   r"/statements/\[\]/parameters/\[\]/type",
+   r"/statements/\[\]/parameters/\[\]/unit")),
+ (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.timeframe_num_(min|max)$", CARRIED, (r"/statements/\[\]/parameters/\[\]/num",)),
+ (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.controls\[\]$", CARRIED, (r"/id", r"/objects/\[\]/id", r"/target-ref")),
+ (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.updated\[\]\.", CARRIED, (r"/history/\[\]/comment/en", r"/history/\[\]/date", r"/history/\[\]/ref")),
+ (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.(note|notes\[\]|danger|corrective_actions\[\])$", CARRIED,
+  (_NARR + r"/corrective-actions/en/\[\]",
+   _NARR + r"/danger/en",
+   _NARR + r"/note/en",
+   _NARR + r"/notes/en/\[\]")),
+ (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.(following_information\[\]|following_information_bullets\[\])$", CARRIED,
+  (_REPORT + r"/following-information-bullets/\[\]",
+   _REPORT + r"/following-information/\[\]")),
+ (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.examples\[\]\.(id|examples\[\]|key_tests\[\])$", CARRIED,
+  (_ACRIT + r"/examples/\[\]/examples/\[\]",
+   _ACRIT + r"/examples/\[\]/id",
+   _ACRIT + r"/examples/\[\]/key-tests/\[\]")),
+ (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.schema\.(name|url)$", CARRIED, (_NARR + r"/schema-name", r"/relations/\[\]/ref")),
+ (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.notification\[\]\.(party|method|target|name)$", CARRIED,
+  (_NARR + r"/optional-notification(/.*)?",
+   _REPORT + r"/notification(/.*)?")),
+ (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.notification\[\]\.optional$", CARRIED, (_NARR + r"/optional-notification/\[\]/optional",)),
+ (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.artifacts\.all\[\]$", CARRIED, (_ACRIT + r"/required-artifacts/\[\]",)),
+ (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.artifacts\.[a-d]\[\]$", CARRIED, (_COMPAT + r"/class-variants(/.*)?",)),   # from the sentence: no value of the pinned source
+ (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.related\[\]$", CARRIED, (r"/relations/\[\]/ref",)),
+ (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.(schema|reference_url)$", CARRIED, (r"/relations/\[\]/ref",)),
+ (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.reference$", CARRIED, (_NARR + r"/reference",)),
+ (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.varies_by_class\.\*\.force$", CARRIED,
+  (_COMPAT + r"/class-variants/\{class\}/force",
+   r"/operations/\[\]/modality")),
+ (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.varies_by_class\.\*\.(timeframe_num|timeframe_type)$", CARRIED,
+  (_COMPAT + r"/class-variants/\{class\}/timeframe_num",
+   _COMPAT + r"/class-variants/\{class\}/timeframe_type")),
+ (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.varies_by_class\.\*\.", CARRIED, (_COMPAT + r"/class-variants(/.*)?",)),
+ (r"cr26\.KSI\.\*\.indicators\.\*\.name$", CARRIED, (r"/statements/\[\]/prose/en", r"/title/en")),
+ (r"cr26\.KSI\.\*\.indicators\.\*\.statement$", CARRIED, (r"/statements/\[\]/prose/en",)),
+ (r"cr26\.KSI\.\*\.indicators\.\*\.controls\[\]$", CARRIED, (r"/id", r"/objects/\[\]/id", r"/target-ref")),
+ (r"cr26\.KSI\.\*\.indicators\.\*\.terms\[\]$", CARRIED, (r"/relations/\[\]/ref",)),
+ (r"cr26\.KSI\.\*\.indicators\.\*\.updated\[\]\.", CARRIED, (r"/history/\[\]/comment/en", r"/history/\[\]/date", r"/history/\[\]/ref")),
+ (r"cr26\.KSI\.\*\.indicators\.\*\.varies_by_class\.\*\.", CARRIED, (_COMPAT + r"/class-variants/\{class\}/statement",)),
+ (r"^cr26\.KSI\.\*\.(name|web_name|short_name)$", CARRIED, (r"/annotations/web_name", r"/label", r"/title/en")),
+ (r"^cr26\.KSI\.\*\.id$", CARRIED, (r"/aliases/\[\]/value",)),
+ (r"^cr26\.KSI\.\*\.status$", CARRIED, (_NARR + r"/status", r"/lifecycle")),
+ (r"^cr26\.CTL\.\*\.\*\.parameters\[\]\.", CARRIED, (r"/operations/\[\]/parameter", r"/operations/\[\]/value", r"/operations/\[\]/value/\[\]")),
+ (r"^cr26\.CTL\.\*\.\*\.", CARRIED, (_COMPAT + r"/ctl(/.*)?",)),
 ]
 def dest(p):
     for pat,l,t in RULES:
@@ -1037,6 +1140,14 @@ for _row in LEDGER_RECORD["paths"]:
     _row["example"]=_no_phrase(_row["example"])
     for _d in _row.get("to",[]): _d["pointer"]=_no_phrase(_d["pointer"])
 for _u in LEDGER_RECORD["unaccounted-paths"]: _u["pointers"]=[_no_phrase(x) for x in _u["pointers"]]
+# the path map held against the record (backlog #89): an outcome a row does not allow, a place it does not name
+_misaligned=held_rows_match(HELD,[r[0] for r in RULES])
+if _misaligned: MAP_NOT_HELD=[_misaligned]
+else:
+    def _held_row(path):
+        q=normalize(path)
+        return held_row(HELD,next((i for i,r in enumerate(RULES) if re.search(r[0],q)),None))
+    MAP_NOT_HELD=path_map_check(LEDGER_RECORD["paths"],_held_row)["sentences"]
 os.makedirs(OUTDIR,exist_ok=True)
 with open(os.path.join(OUTDIR,LEDGER_FILE),"w",encoding="utf-8",newline="\n") as f:
     json.dump(LEDGER_RECORD,f,indent=1,ensure_ascii=False); f.write("\n")
@@ -1336,5 +1447,10 @@ if unmapped:
                      f"destination (gate: UNMAPPED = 0). The bundle is not a complete conversion of this source. The "
                      f"conversion ledger of this run: {len(LFAIL)} claim(s) that do not hold, {LT['unaccounted']} source "
                      f"value(s) unaccounted.")
+if MAP_NOT_HELD:
+    for x in MAP_NOT_HELD: print("  PATH MAP NOT HELD",x,file=sys.stderr)
+    sys.stdout.flush()
+    raise SystemExit(f"convert_cr26.py: {len(MAP_NOT_HELD)} disagreement(s) between the path map and the record of this run: "
+                     f"a value has an outcome its row does not allow, or stands at a place its row does not name")
 sys.stdout.flush()
 ledger_gate(LEDGER,"convert_cr26.py")
