@@ -369,3 +369,61 @@ surprise, blunder.
   page shows the reference's failure, "not an object of this bundle".
   `tests/rules.test.mjs`, "attestation-binds on a bundle: all 19 vectors
   …".
+
+## 2026-11-14 · build 0.9.12 · an unchanged set got a new manifest on export when its manifest had the keys of a line in another order
+
+- **Symptom.** A bundle whose manifest listed one object as `id`,
+  `version`, `path`, then the two digests, loaded and exported without a
+  change, left with a manifest written by the app and the log line "new
+  manifest with both digests per object". Measured while MANIFEST-1 was
+  built: a test loaded such a bundle (the reference's own test writes its
+  changed copies in that order) and expected the manifest to leave as it
+  came; it did not. With build 0.9.12 that would also have taken a listed
+  Attestation out of the manifest of a set nobody had touched.
+- **Cause.** The export asks whether the manifest it computes "says the
+  same" as the one the set came with, and passes the old one through if
+  so. It compared the two as `JSON.stringify` writes them, and that keeps
+  the order in which keys were written. The app writes the digests before
+  `path`.
+- **Class.** Equality asked of a spelling where it was meant of a value.
+- **Why it was not caught.** Every bundle of the repository and every
+  bundle the app writes has its lines in the app's order, so the two
+  spellings always agreed. No test loaded a manifest written by another
+  hand.
+- **Fix.** The comparison is made on the canonical form (keys sorted). The
+  order of the lines still counts; the order of the keys in a line does
+  not.
+- **Test.** `tests/rules.test.mjs`, "attestation-binds on a set: …", the
+  part on MANIFEST-1: the unchanged set leaves with its manifest, text for
+  text. `tests/pages.test.mjs`, "MANIFEST-1: …": the exported manifest is
+  the one that was loaded.
+
+## 2026-11-14 · build 0.9.12 · a preset wrote a party its source does not state, and did not say that the party was its own
+
+- **Symptom.** A catalog imported with the BSI, NIST or CIS preset bound
+  every statement to one party (`…/party/institution`,
+  `…/party/organization` where a control states no level,
+  `…/party/system-administrator`). The source names none of them. The
+  form showed nothing about it, the report did not mention it, and no
+  field could put another party there. Recorded in build 0.9.10 as left
+  alone, because the presets follow their converters (backlog #70).
+- **Cause.** The kernel requires `obligated-parties`, a catalog seldom
+  says whom it binds, and the converters each settled on one party for
+  their corpus. The presets are ports of the converters and took the party
+  over as a literal in the code.
+- **Class.** A made-up value in a required field, as in the erratum of
+  build 0.9.10, in the one place that was then left: the value is
+  reasonable, and it is the tool's and not the source's.
+- **Why it was not caught.** The presets are held to their converters by
+  semantic digest, so they could not differ from them, and the converters
+  did the same. It took a decision, not a test.
+- **Fix.** Author decision of 2026-11-14 (backlog #74): an argument with a
+  named default. The Import page shows the party before the import and
+  calls it the preset's default; another party, an http(s) URI, takes its
+  place; an empty or malformed field refuses the import; a level a control
+  states stays the source's; the report and, for an entered party, the
+  manifest of the new set say who chose.
+- **Test.** `tests/oscal.test.mjs`, the three tests that begin "the
+  obligated party of": the bytes of build 0.9.11 with the default left
+  alone, the caller's party and the refusals, and the NIST level that
+  stays. `tests/pages.test.mjs`, "Import: a preset's party …".
