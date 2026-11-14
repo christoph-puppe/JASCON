@@ -80,6 +80,13 @@ let G = jscSet.graph;
 const opt = (value, text, current) => `<option value="${esc(value)}" ${value === current ? "selected" : ""}>${esc(text)}</option>`;
 const chip = (n, label, cls) => `<span class="chip"><b class="${cls || ""}">${esc(n)}</b>${esc(T(label))}</span>`;
 const orgNs = () => jscCfg.get("org:ns").replace(/\/+$/, "") || "https://example.org/my";
+/* The author a new check starts with: the setting "Who am I". The kernel
+   requires `provenance` on a Check, so a check cannot be saved without an
+   author; only where the setting is empty the page falls back to the party
+   it always wrote, <namespace>/party/check-author. The form shows the
+   author before a check is saved, and a draft a model wrote names the same
+   party: whoever takes the draft answers for it. */
+const defaultAuthor = () => jscWhoAmI() || orgNs() + "/party/check-author";
 const reqOf = id => { const r = G.objects.get(id); return r && r.type === "requirement" ? r.obj : null; };
 const lang = () => jscI18n.contentLang();
 
@@ -184,7 +191,8 @@ function startEdit(checkId, reqId) {
   if (checkId) {
     const c = G.objects.get(checkId).obj, cols = ((c.facets || {})[JSC_CHECKS.COLLECTOR] || {}).collectors || [];
     ui.data.edit = { existing: checkId, reqId: c["requirement-ref"], statementIds: [...(c["statement-ids"] || [])], platform: c.platform,
-      confidence: c.confidence, lifecycle: c.lifecycle, authorRef: (c.provenance || {})["author-ref"] || "",
+      /* a save writes today's date, so the author offered is who edits now; without the setting, the author the check names */
+      confidence: c.confidence, lifecycle: c.lifecycle, authorRef: jscWhoAmI() || (c.provenance || {})["author-ref"] || "",
       observes: c.observes.map(f => ({ name: f.name, type: f.type, cardinality: f.cardinality || "one", description: TT(f.description) })),
       criteria: c.criteria.map(a => ({ fact: a.fact, op: a.op, expected: a.expected === undefined ? "" : JSON.stringify(a.expected) })),
       applies: (c["applies-when"] || []).map(a => ({ fact: a.fact, op: a.op, expected: a.expected === undefined ? "" : JSON.stringify(a.expected) })),
@@ -196,7 +204,7 @@ function startEdit(checkId, reqId) {
   } else {
     const req = reqOf(reqId);
     ui.data.edit = { existing: null, reqId: reqId || "", statementIds: [], platform: req ? jscChecksPlatform(req.id, orgNs()) : "",
-      confidence: "draft", lifecycle: "draft", authorRef: orgNs() + "/party/check-author",
+      confidence: "draft", lifecycle: "draft", authorRef: defaultAuthor(),
       observes: [{ name: "", type: "string", cardinality: "one", description: "" }], criteria: [{ fact: "", op: "equals", expected: "" }], applies: [],
       each: { on: false, resource: "", allowEmpty: false }, validity: { on: false, num: 24, unit: "hours" },
       collectors: [blankCollector("bash")], keep: {}, description: "", runtime: "bash", ai: null, tester: { observation: "", params: "", tailoring: "" } };
@@ -424,7 +432,7 @@ async function askOne(req, rule, statementIds, runtime, platform, description, c
   const src = auditText(rule) || description || "";
   const derivedFrom = src ? { ref: req.id, digest: "sha256:" + await jscSha256(src) } : null;
   const built = jscChecksFromAnswer(got.answer, { req, statementIds, platform, runtime, lang: lang(), date: jscToday(),
-    id: jscChecksMintId(orgNs(), req, runtime, taken), authorRef: orgNs() + "/party/check-author", drafter: `${cfg.backend}/${cfg.model}`, derivedFrom });
+    id: jscChecksMintId(orgNs(), req, runtime, taken), authorRef: defaultAuthor(), drafter: `${cfg.backend}/${cfg.model}`, derivedFrom });
   taken.add(built.check ? built.check.id : "");
   return { ...built, cached: got.cached, errors: built.check ? judge(built.check) : [] };
 }

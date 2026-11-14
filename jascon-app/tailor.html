@@ -53,7 +53,16 @@
    of a modality, a parameter value outside its declared space and a
    substantive change of prose each need a Deviation with a rationale; a
    value of the wrong kind is refused; a second operation on one target is
-   refused. Derives from the tailor stage of the bundle reader. */
+   refused. Derives from the tailor stage of the bundle reader.
+
+   Who decided (D26): the form shows the author a save will write, from the
+   setting "Who am I". The author stands once on the Tailoring. When a
+   Tailoring of the same id is saved by somebody else, or on another day,
+   the entries that are unchanged keep the author they had: the old one is
+   written onto each before the Tailoring gets its new one
+   (jscAuthorTailoring). Without an author the Tailoring is saved all the
+   same and names none. A Deviation the page wrote as pending is decided in
+   the first view; the day it was decided is written with it. */
 jscI18n.add("de", {
   "Tailor": "Tailoring", "Tailorings": "Tailorings", "Write a Tailoring": "Tailoring schreiben",
   "A Tailoring selects by Set, excludes, and changes requirements by operations that name the requirement and the statement. Nothing is copied.":
@@ -90,6 +99,7 @@ jscI18n.add("de", {
   "This is a weakening. Give the Deviation a rationale.": "Das ist eine Abschwächung. Der Deviation eine Begründung geben.",
   "Prose is needed.": "Prosa wird gebraucht.", "Select at least one Set first.": "Zuerst mindestens ein Set auswählen.",
   "operation added: {op} on {target}": "Operation hinzugefügt: {op} auf {target}",
+  "Deviations of this Tailoring": "Deviations dieses Tailorings",
 });
 
 const $ = id => document.getElementById(id);
@@ -136,6 +146,9 @@ async function renderResolve() {
       <td><div class="diffrow"><div>${before}</div><div class="arrow">▶</div><div>${after}</div></div></td>
       <td>${verdict}${carriesDeviation(op) ? ` <span class="badge" style="border-color:var(--red);color:var(--red)">${esc(T("Deviation attached"))}</span>` : ""}</td></tr>`;
   }).join("");
+  /* the Deviations this Tailoring carries inline: decided here, with the day (D26) */
+  const devs = (o.operations || []).map((op, i) => [op, i]).filter(([op]) => op.deviation && typeof op.deviation === "object");
+  const name = id => (G.objects.has(id) ? V.labelOf(G.objects.get(id)) : V.last(id));
   const cards = [...res.touched.entries()].slice(0, 40).map(([id, log]) => `<div class="stmt">${V.refLink(id, V.labelOf(G.objects.get(id)))}
     ${log.map(n => `<div class="diffrow" style="margin-top:4px"><div>${n.what === "modality" ? V.modBadge(n.from) : mono(n.from ?? "—")}</div><div class="arrow">▶</div>
       <div>${n.what === "modality" ? V.modBadge(n.to) : mono(n.to)} <span class="hint">${esc(n.statement)} · ${esc(n.what)}${n.parameter ? " " + esc(n.parameter) : ""}</span>
@@ -149,12 +162,25 @@ async function renderResolve() {
     ${[...res.errors, ...res.notes].map(e => `<div class="${res.errors.includes(e) ? "verdict-bad" : "hint"}">${esc(e)}</div>`).join("")}
     <table class="flat" style="margin-top:8px"><tr><th>${esc(T("Operation"))}</th><th>${esc(T("Target"))}</th><th>${esc(T("Before and after"))}</th><th>${esc(T("Verdict"))}</th></tr>
       ${rows || `<tr><td colspan="4" class="hint">${esc(T("no operations"))}</td></tr>`}</table>
+    ${devs.length ? `<div class="nano sectionlabel">${esc(T("Deviations of this Tailoring"))}</div>
+      <div class="wbrow">${V.authorLabel("d-author")}${V.authorInput("d-author")}</div>
+      ${devs.map(([op, i]) => `<div class="stmt">${V.refLink(op["requirement-ref"], name(op["requirement-ref"]))} ${op["statement-id"] ? V.badge(op["statement-id"]) : ""}
+        <span class="hint">${esc(TT(op.deviation.rationale))}</span>${V.deviationHtml(op.deviation, o.id + "|" + i)}</div>`).join("")}` : ""}
     <div class="nano sectionlabel">${esc(T("Resolved requirements"))}</div>
     <div class="wbrow"><button type="button" class="primary" id="export-resolved" ${res.errors.length ? "disabled" : ""}>${esc(T("Export the resolved package (.zip)"))}</button></div>
     ${cards || `<span class="hint">${esc(T("no operation changes a requirement"))}</span>`}`;
   V.wireRefs($("resolve"));
   $("resolve").querySelectorAll("[data-pick]").forEach(b => b.addEventListener("click", () => { picked = b.dataset.pick; renderResolve(); }));
   $("export-resolved").addEventListener("click", () => exportResolved(o, res));
+  V.wireAuthor($("resolve"));
+  V.wireDeviations($("resolve"), key => ((o.operations || [])[+key.slice(o.id.length + 1)] || {}).deviation, renderResolve, async (key, deviation, show) => {
+    const next = JSON.parse(JSON.stringify(o));
+    next.operations[+key.slice(o.id.length + 1)].deviation = deviation;
+    const saved = jscAuthorTailoring(next, o, V.provenance()), wrong = jscShapeErrors("tailoring", saved);
+    if (wrong.length) { show(wrong[0]); return false; }
+    await jscSet.saveObjects([saved]);
+    await jscPage.refresh();
+  });
 }
 /* The selected requirements as the Tailoring leaves them: a bundle of their
    own, whose provenance names the Tailoring (Appendix B step 4). */
@@ -236,6 +262,12 @@ function buildTailoring() {
   o.operations = JSON.parse(JSON.stringify(d.operations));
   return o;
 }
+/* the Tailoring as it is saved: what the form built, with the author of this save and without taking over what an earlier author decided */
+const stored = id => { const r = G.objects.get(id); return r && r.type === "tailoring" ? r.obj : null; };
+function finalTailoring() {
+  const o = buildTailoring();
+  return jscAuthorTailoring(o, stored(o.id), V.provenance());
+}
 function renderWrite() {
   const d = draft.data, cur = draftOperation(), el = $("write");
   const scope = jscSelection({ id: "draft", selects: d.selects.map(s => ({ "set-ref": s })), excludes: d.excludes }, G.objects).selected;
@@ -261,12 +293,14 @@ function renderWrite() {
     <div style="margin-top:8px">${d.operations.map((o, i) => `<div class="wbchip"><span class="badge" style="border-color:var(--amber);color:var(--amber)">${esc(o.op)}</span>
       ${esc(name(o["requirement-ref"]))} · ${esc(o["statement-id"])}${o.modality ? " → " + esc(o.modality) : ""}${o.parameter ? ` ⚙ ${esc(o.parameter)}=${esc(JSON.stringify(o.value))}` : ""}
       ${o.deviation ? `<span class="verdict-warn">⚑</span>` : ""}${x("data-delop", i)}</div>`).join("") || `<span class="hint">${esc(T("no operation yet"))}</span>`}</div>
-    <div class="wbrow" style="border-top:1px solid var(--border-1);padding-top:10px">
+    <div class="wbrow" style="border-top:1px solid var(--border-1);padding-top:10px">${V.authorLabel("t-author")}${V.authorInput("t-author")}</div>
+    <div class="wbrow">
       <button type="button" class="primary" id="t-save">${esc(T("Save the Tailoring to the set"))}</button>
       <button type="button" id="t-download">${esc(T("Download as JSON"))}</button><button type="button" id="t-clear">${esc(T("Clear"))}</button>
       <span class="verdict-bad" id="t-err" role="alert"></span></div></div>`;
 
   const again = () => { draft.save(); renderWrite(); };
+  V.wireAuthor(el);
   const bind = (id, set, rerender) => { const n = el.querySelector("#" + id); if (n) n.addEventListener("change", () => { set(n.value); draft.save(); if (rerender) renderWrite(); }); };
   bind("t-label", v => { d.label = v.trim() || d.label; });
   bind("t-exwhy", v => { d.exwhy = v; });
@@ -301,13 +335,13 @@ function renderWrite() {
   });
   el.querySelector("#t-save").addEventListener("click", async () => {
     if (!d.selects.length) { el.querySelector("#t-err").textContent = T("Select at least one Set first."); return; }
-    const o = buildTailoring();
+    const o = finalTailoring();
     await jscSet.saveObjects([o]);
     picked = o.id;
     await jscPage.refresh();
     jscPage.show("resolve");
   });
-  el.querySelector("#t-download").addEventListener("click", () => jscDownload(jscSlug(d.label) + ".json", jscSerialize(buildTailoring()), "application/json"));
+  el.querySelector("#t-download").addEventListener("click", () => jscDownload(jscSlug(d.label) + ".json", jscSerialize(finalTailoring()), "application/json"));
   el.querySelector("#t-clear").addEventListener("click", () => { draft.reset(); renderWrite(); });
 }
 

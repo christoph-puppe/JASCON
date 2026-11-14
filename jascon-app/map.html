@@ -52,7 +52,7 @@ jscI18n.add("de", {
   "Targets outside this set": "Ziele außerhalb dieses Sets",
   "type to choose the source requirement": "tippen, um die Quell-Anforderung zu wählen", "whole requirement": "ganze Anforderung",
   "Scope": "Geltung", "choose from the set, or paste a URI and press Enter": "aus dem Set wählen oder eine URI einfügen und Enter drücken",
-  "Rationale: why does this relationship hold?": "Begründung: Warum gilt diese Beziehung?", "Author (party)": "Autor (Partei)",
+  "Rationale: why does this relationship hold?": "Begründung: Warum gilt diese Beziehung?", "Author (party URI)": "Autor (Party-URI)",
   "Add the mapping": "Mapping hinzufügen", "Choose a source requirement.": "Eine Quell-Anforderung wählen.",
   "Choose a target, or paste a URI and press Enter.": "Ein Ziel wählen oder eine URI einfügen und Enter drücken.",
   "A mapping with the id {id} exists already.": "Ein Mapping mit der Id {id} gibt es schon.",
@@ -70,6 +70,17 @@ const REL_HINT = { equal: N("The strongest claim. Use it only when the two say t
 const draft = V.draft("map", () => ({ source: null, scope: "", target: null, relationship: "supports", confidence: "draft", rationale: "", author: "author" }));
 const filter = { rel: "", q: "" };
 let G = jscSet.graph;
+/* The author of a mapping, as the URI that is written. The kernel requires
+   `provenance` on a Mapping, so this page cannot save one without an author.
+   What was typed in the field wins: a URI as it is, a short name as a party
+   under the namespace of the set. Otherwise the setting "Who am I". Only
+   where that is not set either, the page falls back to the party it always
+   wrote, <namespace>/party/author; the field shows it before it is saved. */
+function authorRef() {
+  const d = draft.data, typed = (d.authorRef || "").trim();
+  if (typed) return /^[a-z][a-z0-9+.-]*:/i.test(typed) ? typed : jscSet.mintId("party", typed);
+  return jscWhoAmI() || jscSet.mintId("party", d.author || "author");
+}
 
 function renderTable() {
   const all = [...G.objects.values()].filter(r => r.type === "mapping");
@@ -114,7 +125,7 @@ function renderWrite() {
     <div class="wbrow"><label>${esc(T("Target"))}</label>${V.pickerHtml("m-tgt", T("choose from the set, or paste a URI and press Enter"))}
       ${d.target ? `<span class="wbchip">${esc(tgt ? V.labelOf(tgt) : d.target)}${tgt ? "" : " " + V.badge(T("external"))}<span class="x" id="m-cleartgt" role="button" tabindex="0" aria-label="✕">✕</span></span>` : ""}</div>
     <div class="wbrow"><label for="m-conf">${esc(T("Confidence"))}</label>${sel("m-conf", ["draft", "reviewed", "authoritative"], d.confidence)}
-      <label for="m-author">${esc(T("Author (party)"))}</label><input type="text" id="m-author" value="${esc(d.author)}" style="width:140px">
+      <label for="m-author">${esc(T("Author (party URI)"))}</label><input type="url" id="m-author" value="${esc(authorRef())}" style="min-width:260px">
       <input type="text" id="m-rat" placeholder="${esc(T("Rationale: why does this relationship hold?"))}" aria-label="${esc(T("Rationale: why does this relationship hold?"))}" value="${esc(d.rationale)}" style="flex:1;min-width:240px"></div>
     <div class="wbrow"><button type="button" class="primary" id="m-add">${esc(T("Add the mapping"))}</button><span class="verdict-bad" id="m-err" role="alert"></span></div></div>`;
   const again = () => { draft.save(); renderWrite(); };
@@ -125,10 +136,12 @@ function renderWrite() {
     if (e.key === "Enter" && /^https?:\/\/./.test(v)) { d.target = v; again(); }
   });
   if (el.querySelector("#m-cleartgt")) el.querySelector("#m-cleartgt").addEventListener("click", () => { d.target = null; again(); });
-  for (const [id, key, rerender] of [["m-scope", "scope"], ["m-rel", "relationship", true], ["m-conf", "confidence"], ["m-author", "author"], ["m-rat", "rationale"]]) {
+  for (const [id, key, rerender] of [["m-scope", "scope"], ["m-rel", "relationship", true], ["m-conf", "confidence"], ["m-rat", "rationale"]]) {
     const n = el.querySelector("#" + id);
     if (n) n.addEventListener("change", () => { d[key] = n.value; draft.save(); if (rerender) renderWrite(); });
   }
+  /* an emptied author field goes back to what the page would write on its own */
+  el.querySelector("#m-author").addEventListener("change", e => { const v = e.target.value.trim(); if (v) d.authorRef = v; else delete d.authorRef; draft.save(); renderWrite(); });
   el.querySelector("#m-add").addEventListener("click", async () => {
     const err = el.querySelector("#m-err");
     if (!d.source) { err.textContent = T("Choose a source requirement."); return; }
@@ -139,7 +152,7 @@ function renderWrite() {
       relationship: d.relationship, direction: "source-to-target", confidence: d.confidence };
     if (d.scope) m["source-scope"] = ["statement:" + d.scope];
     if (d.rationale.trim()) m.rationale = { [jscI18n.contentLang()]: d.rationale.trim() };
-    m.provenance = { "author-ref": jscSet.mintId("party", d.author || "author"), date: jscToday() };
+    m.provenance = { "author-ref": authorRef(), date: jscToday() };
     await jscSet.saveObjects([m]);
     Object.assign(d, { source: null, scope: "", target: null, rationale: "" });
     draft.save();
