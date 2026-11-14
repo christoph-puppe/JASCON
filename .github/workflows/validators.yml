@@ -10,9 +10,9 @@
 #               after .github/scripts/lint-twin.ps1 has read its source: no
 #               PowerShell operator may compare two strings (backlog #58)
 #   app         the JavaScript port in jascon-app/ against the same vectors
-#   browser     the app's pages and the pack builder (one-page-apps/) in
-#               Chromium, driven by Playwright, their output held to the
-#               reference validator
+#   browser     the app's pages, the pack builder and the reader
+#               (one-page-apps/) in Chromium, driven by Playwright, their
+#               output held to the reference validator
 #
 # Each job fails unless its validator ends ALL GREEN. The counts are written
 # to the job summary, so a run is a dated record of what passed where
@@ -148,7 +148,7 @@ jobs:
         run: node --test "jascon-app/tests/*.test.mjs"
 
   browser:
-    name: Pages in a browser (app and pack builder)
+    name: Pages in a browser (app, pack builder and reader)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

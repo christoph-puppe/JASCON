@@ -152,7 +152,7 @@ D22 governs types. For fields on existing types the register has a precedent, "D
 | 1 | Schema, reference validator, the vectors, the example folder | this landing |
 | 2 | PowerShell twin, the app's port of the rules | this landing; run on Windows PowerShell 5.1 by the workflow (§11) |
 | 3 | Specification 2.0.0-rc.4, handbook, website, README, register, backlog | this landing |
-| 4 | Tools that write the fields: the app's pages (a "who am I" setting), the reader's display, the catalogue import, the IFA converter | follows; until then the IFA bundle and the catalogue demo show AUTHOR lines, which is what the rule is for |
+| 4 | Tools that write the fields: the app's pages (a "who am I" setting), the reader's display, the catalogue import, the IFA converter | done 2026-11-14 (backlog #69, closed; register, "Phase C"). Converters and imports pre-fill from the source and take an overwrite, on the author's decision of 2026-11-13. The IFA bundle shows 7 AUTHOR lines where it showed 10: its sources name an author for one of seven records |
 
 ## 10. Points this text adds on its own
 
@@ -193,3 +193,16 @@ Built as proposed; each is the author's to overturn before the tag.
 - A page of the app that shows the two reports. The rules compute them.
 - A corpus of authored consumer Tailorings.
 - Authors in the IFA bundle: it shows 10 AUTHOR lines and 2 overdue reviews. Its sources state the day of two authorizations and, per document, responsible parties and a last-modified date; they name no author per implementation, finding or risk. Whether the converter derives one from the document's parties is the author's to decide.
+
+### 11.4 What exists since phase C (2026-11-14)
+
+§11.3 describes the day of the landing. Since then (backlog #69, closed;
+register, "Phase C — the tools write who decided; a line break ends no
+value"):
+
+- The app writes `provenance`, `decided` and `review-due` and shows the two reports on its Validate page; the reader shows who decided. An authorization's `date` is written by the IFA converter only: no page edits a Component's authorizations.
+- The author answered the question §11.3 ends on: converters pre-fill a record's author from the source and an import may overwrite it. The rule for the author of an OSCAL document is `document_author()` in `oscal_conv_lib.py`, the same in the app's importer.
+- The IFA bundle shows 7 AUTHOR lines and 2 overdue reviews. One of its seven records gets an author from its source.
+- Backlog #68, the line break at the end of a value, is closed: specification D3.10.
+- The author kept the seven points of §10 ("keep", 2026-11-13).
+- Still not there: a corpus of authored consumer Tailorings.

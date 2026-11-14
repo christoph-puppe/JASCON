@@ -3334,3 +3334,245 @@ and is this exception still wanted, have a field and a report each.
 from the record so that one author is named once. *Complexity:* the
 validator reads a clock for the first time; the answer of one report
 depends on the day, and no verdict, digest or resolution does.
+
+
+## Phase C — the tools write who decided; a line break ends no value *(2026-11-13 and 14; closes #68 and #69; narrows #46 and #55; files #70 to #72; no new candidate)*
+
+**Author decisions, in the author's words.** On the three points left
+after CP-AUTHOR-1: "#68 refuse". "all converters should pre-fil that
+data from the source corpus but import tool should be able to overwrite
+it." "keep" (the seven points of CP-AUTHOR-1 §10 that this session had
+added on its own). Then: "go for phase C".
+
+**What was decided by them.** A value that ends in a line break is
+refused by every tool, and never trimmed. A converter and an import
+write who wrote a record and when from what the source says, and the
+person who imports may put other values in their place. Nothing follows
+from "keep" but that CP-AUTHOR-1 §10 stands as written.
+
+### #68 — a pattern is read as its dialect says
+
+**Measured before anything was changed.** Twenty-two vectors were
+written first. The unchanged reference failed 15 of them, and so did the
+unchanged twin, the same 15: a date, a date-time, a Mapping's date, a
+digest, a language tag, a facet id, a fact name and a decimal default
+with a line break at the end were typed (8), a `kernel-version` with one
+was read as a version the tool does not implement instead of a manifest
+that is refused (1), a relation type with U+000D, U+2028 or U+2029 after
+`https://` was accepted (3), a decimal parameter value with a line break
+was valid (1), a decimal fact with one gave the verdict `satisfied` (1),
+and an evidence ref with one was followed to its file (1). A pin version
+`1.` U+0663 `.0` was resolved by the old reference and stopped the old
+twin with a conversion error. The app passed all 22 unchanged.
+
+**The cause.** JSON Schema says a `pattern` is an ECMA-262 regular
+expression (**read**: JSON Schema 2020-12, Core 6.4). jsonschema hands it
+to Python's `re`, and the twin handed it to .NET's `Regex`. Both read `$`
+as "the end, or before one line break that ends the value", and `.` as
+"anything but U+000A"; ECMA-262 reads the first as the end and excludes
+four line terminators from the second (**measured** on Python 3.13,
+PowerShell 7.4 and Node 22, and on Windows PowerShell 5.1 by the
+workflow). The same habit was in five expressions of the validators'
+own.
+
+**Built.** `ecma_pattern()` in the reference and `Ecma-Pattern` in the
+twin write `$` as the end of the value and `.` as the class of what is
+no line terminator, before a pattern reaches the host. The reference
+does it by replacing the `pattern` keyword of its JSON Schema validator
+class, so every schema it evaluates is covered: the kernel's, the
+standard library's and a bundle's pins. Their own expressions end in
+`\Z` and `\z`; a version is read in the digits 0-9. Specification D3.10
+states the rule; handbook 12.2 warns the next implementer.
+
+| What | Measured |
+|---|---|
+| Vectors | `kernel` 54 → 71, `parameter` 21 → 22, `check` 203 → 205, `composition` 7 → 9: 665 in 18 families |
+| Reference, twin (PowerShell 7.4), app | all 665; the bundles, the pack and the example folder unchanged, so no shipped value ended in a line break |
+| Twin on Windows PowerShell 5.1 | run 43525817858 at `8e75213a`: the lint, 665 vectors, ALL GREEN in 73 s (**read** from the log) |
+| Deliberate defects | 12, five in the reference and seven in the twin; each turns a vector red or stops the run |
+
+**Not translated, and said in both files.** `\d`, `\w`, `\s` and `\b`
+keep the meaning of the host inside a pinned schema. No pattern of the
+kernel schema or the standard library uses one (**measured**: none
+found). An id is not held to a pattern: it is any non-empty string, so
+an id that ends in a line break is another id, in every tool alike.
+
+**Scored.** *Customer:* a digest copied with its line break out of a
+terminal no longer compares unequal in one tool and equal in none; it is
+refused by all. *Simplicity:* no new rule id and no schema change; the
+schema already said it. *Complexity:* two validators carry twenty lines
+that translate a pattern, and whoever builds a fourth must know why.
+
+### #69 — the converters
+
+**The rule for the author of an OSCAL document.** One function,
+`document_author()` in `oscal_conv_lib.py`, and the same rule in the
+app's importer: the party named as `creator`, else as `prepared-by`,
+else the one party the responsible-parties name at all, else the one
+party the document defines, else the one organization among its parties,
+else nobody. The first two steps rest on OSCAL: its metadata defines
+those role ids as "the person or organization that created this content"
+and "... that prepared this content" (**read**:
+`oscal_metadata_metaschema.xml` at tag `v1.1.3`). The other three are
+**argued**: they are this project's reading of a document that uses
+neither role, and they answer only where exactly one candidate exists.
+The date is the day of the document's `last-modified`, as the document
+writes it. It is the latest day a record can have been written, not the
+day it was; OSCAL dates the document, not its statements.
+
+**As run on the IFA corpus (measured).** Seven records may name an
+author: three Implementations, two Findings, two Risks. One gets one
+from its source, the system's Implementation, from the agency its plan
+defines (rule step 4). The plan of action defines no party at all; the
+leveraged pair defines parties without a name. Six records say nobody,
+and the validator reports each. Both authorizations carry the day the
+source states. The approved Deviation has no day of decision in the
+source, and none is written. AUTHOR lines for the bundle: 10 → 7.
+`--author-ref` and `--date` put the caller's values on all seven; with
+`--require-authors` the bundle then fails once, on the Deviation, which
+an overwrite of who wrote a record does not date.
+
+**What the re-run found.**
+
+1. *The Attestation of the ATO bound nothing it claimed, for one of
+   three subjects.* It was an object the manifest listed (against D3.1),
+   so it could only digest a list of its own subjects in place of the
+   manifest. And it took the system Component's digest before the
+   bundle's text was language-tagged at the write: that digest matched
+   no object of the bundle (**measured**; untagging the title and the
+   capability descriptions reproduces the old digest). It is written
+   after the manifest now, beside it, and the converter checks the three
+   subject digests and the manifest digest against what it wrote. This
+   is the IFA half of #46.
+2. *The library's kernel pin knew two of the eleven reasons an object can give.*
+   `Bundle.write` pinned kernel 2.0.0 for a Risk and for `risk-refs`. A
+   converter that had written a Check, a `product-version` or the
+   `provenance` of this change on an Implementation would have shipped a
+   bundle the validator refuses (KERNEL-1). The IFA bundle was pinned
+   only because it holds Risks. `needs_kernel_2()` knows every reason
+   and is held to the pin vectors of the conformance corpus. The reader
+   had the same gap (#69, its row); a third copy of one rule had gone
+   the same way.
+3. *All three method payloads of #55 pass their schemas today*
+   (**measured** 2026-11-14). The IFA pin says what an entry is now, and
+   the converter checks all 25 facet and method payloads against their
+   pins. #55 is the validators only.
+
+| What | Measured |
+|---|---|
+| Library tests | 35, among them the author table (18 cases), the overwrite, the two arguments, the pin against 19 pin vectors |
+| IFA conversion | 16 objects and the Attestation; ledger 442 copied, 95 transformed, 298 dropped, 0 unaccounted (441 / 95 / 299 before: the leveraged authorization's date is copied into a field of its own, and the agency's name, dropped until then, makes one author) |
+| Reference and twin on the new bundle | ALL GREEN, 17 pass, the same 12 report lines |
+| Reproducible | the workflow converts again from the pinned sources and compares byte for byte: green (run 43527685655) |
+| Deliberate defects | 19, fifteen in the library and four in the converter; two were not caught at first (an undefined uuid, a date such as `2026-1-3`), and each got a test |
+| CIS benchmark converter | run on the synthetic catalog of the app's tests, with each combination of the two arguments |
+| CR26 converter | **not run**: its source is not in the repository |
+
+### #69 — the app (build 0.9.9), by an agent, merged and checked here
+
+One setting, *Who am I*. The Tailor, Risk, Implement and Assess pages
+write `provenance` with it and the day; an empty author field writes
+none and never blocks a save. When a Tailoring changes hands, an entry
+that had no author of its own and did not change gets the old
+Tailoring-level author written on it, so the second author does not take
+over what the first decided; the same for an unchanged rating of a Risk.
+A Deviation decided in the app gets `decided` and may get `review-due`.
+The Validate page shows the reference's AUTHOR and REVIEW lines, with a
+day to judge by and a switch that makes the AUTHOR lines failures.
+Imports pre-fill and the user may overwrite: a profile's Tailoring from
+the author rule, the CIS Mappings as before, and a risk catalogue's
+Risks from its publisher and a new optional `released` day of the
+catalogue (`risk_catalog.py import --author-ref --date` in Python).
+
+**Measured here after the merge:** 150 tests, 146 pass, 4 skipped for
+sources the repository does not carry; 16 of 16 browser tests; the five
+generated-file checks; the rebuilt demo bundle gives the reference 1,065
+pass, 0 fail with `--require-authors`. **Reported by the agent and not
+repeated here:** five sets exported from the pages give the reference
+ALL GREEN with `--require-authors`; the Validate page shows the
+reference's lines in eight cases; 67 deliberate defects, 66 red at once
+and one after two cases were added.
+
+**What the merge found.** The two versions of the author rule were put
+to 4,000 generated documents. They named a different author for 41, all
+of one kind: `metadata.parties` defined one uuid twice. The app counted
+it once and kept its last definition; the library counted list entries
+and looked up the first. The text both were written to did not say. Both
+take the first definition now, and an entry without a uuid is no party;
+0 differences after it (`jascon-app/ERRATA.md`, 2026-11-14). Two
+implementations with one shared table of thirteen cases had each passed
+their own tests.
+
+### #69 — the reader (1.11.0), by an agent, merged and run here
+
+The reader had a test of its own for the kernel pin, `needs2`, that knew
+a Risk and `risk-refs`. `kernelNeeded` is a port of the reference's
+`kernel_needed`, reason for reason; a node test reads the function out
+of the single HTML file by two markers and holds it to the 19 pin
+vectors, so the reader stays one file with no build step. A loaded
+bundle is held to it too, and at a pin the page does not read it stops
+and names both versions (KERNEL-2). The specification requires that of a
+tool, and the reader had not done it. The page shows who decided and
+when on a Tailoring and each of its entries, a Risk and its ratings, an
+Implementation and a Finding, with an entry's inherited author marked as
+inherited; a Deviation's `decided` and `review-due`; an authorization's
+`date`. A record without the field says that nobody is named. Its three
+workbenches take one optional author and write `provenance` only when
+one is given.
+
+**Measured here after the merge:** 25 of 25 browser tests (9 for the
+app's pages, 7 for the pack builder, 9 for the reader). **Reported by
+the agent and not repeated here:** 92 deliberate defects, each red in at
+least one test, one of them only after a test was added; the reference
+ALL GREEN on four exports, one of which it had refused before ("matches
+NO type", "unregistered facet": the reader exported a plain-text title
+and pinned no facet schema); for the IFA bundle the page shows 1 record
+with an author and 6 without, the reference 7 AUTHOR lines, compared
+object by object. The pack builder was run and not edited: the worked
+pack gives no AUTHOR line, because a pack holds Components only and its
+form writes no authorizations.
+
+### What the decision costs, said plainly
+
+- **A pre-filled author is the document's, not the record's.** The
+  agency is written as the author of the system's Implementation because
+  it is the one organization its plan defines. Nobody at the agency is
+  on record as having written that statement.
+- **A pre-filled author silences the report.** An imported catalogue
+  Risk names the catalogue's publisher, so AUTHOR-2 says nothing about
+  it, although nobody in the organisation has put a name to the risk. A
+  profile imported as a consumer's Tailoring names the profile's author,
+  so AUTHOR-1 says nothing. Both follow from the decision; the app's
+  import shows the two values before it writes them, and the overwrite
+  is one field away.
+- **The day is the document's.** The IFA sources were last modified in
+  May 2026 and speak of 2023. The one pre-filled record says 2026-05-12.
+- **Where the kernel requires an author, the app still makes one up**
+  when the user named none: a Mapping, a Check, an Assessment's
+  performer, a Deviation's approver (#70; the author's to decide).
+
+### Found and not fixed
+
+#70 (above). #71, seven defects of the app and the reader: a click
+right after typing is lost on both Tailor forms; an edited Check breaks
+the Assessment that ran it, without a word from the page; the reader
+drops authored objects from its graph when a bundle is loaded; its
+resolved package applies three of the eight operation kinds and skips
+the rest without saying so (**read** by the agent in the code, not run;
+the one to run first). #72: a pin version beyond 2^31 stops the twin,
+beyond 2^53 the app reads it imprecisely. No validator reads an Attestation
+beside the manifest of a bundle that is not a pack (#46). No validator
+holds a method payload to its schema (#55). The pages do not raise an
+object's `version` on a save. The agents' deliberate defects were not
+repeated here. The Hindi, Japanese and Chinese sentences of the website
+were written in this session and have had no second reader.
+
+**Scored.** *Customer:* an auditor who opens a bundle made with the app
+sees who decided each entry of a Tailoring, also after a second person
+edited it, and sees which exceptions are overdue on the page where the
+bundle is checked. *Simplicity:* one rule for a document's author in two
+languages, one place in the app that decides what is written, one switch
+and one day on the Validate page. *Complexity:* the pre-fill is a
+convention about OSCAL metadata that OSCAL does not make, and it can be
+wrong about a document; the overwrite is the answer to that, and it
+depends on somebody using it.

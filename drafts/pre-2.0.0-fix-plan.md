@@ -1,6 +1,6 @@
 # Plan — the open backlog before 2.0.0
 
-### 2026-11-13 · branch `claude/sleepy-planck-g6w3h3` · phases A and B are built (§8, §10); C to E are a plan; §9 says what another session's work on main changed in it
+### 2026-11-14 · branch `claude/sleepy-planck-g6w3h3` · phases A, B and C are built (§8, §10, §11); D and E are a plan; §9 says what another session's work on main changed in it
 
 Input: the ten open rows of `jascon-v0.6-spec-feedback-backlog.md` and the
 residue of #45, with the author's dispositions of 2026-11-13. Every
@@ -508,3 +508,38 @@ What phase B showed for what is left:
   look at the writers, not only at what they wrote here.
 
 Open after phase B: #41, #46, #55, #62, #68, #69.
+
+## 11. Phase C as built (2026-11-13 and 14)
+
+The author: "#68 refuse", "all converters should pre-fil that data from
+the source corpus but import tool should be able to overwrite it",
+"keep", "go for phase C". The register entry "Phase C — the tools write
+who decided; a line break ends no value" holds the measurements. Against
+this plan:
+
+| Plan | Built |
+|---|---|
+| §2, phase C: one IFA re-run with #64, the IFA half of #46, the IFA payload of #55 and the authors | One re-run. #64 was closed before it. The Attestation lies beside the manifest and binds it. The method payload already passed its pin (**measured**); the pin now says what an entry is. Authors: by rule from the source, which gives one of seven |
+| §10, "#68 is new and needs the author" | Decided and closed in the same phase: specification D3.10, 22 vectors, both validators |
+| §3.5, the tools that write the fields | Converters, the app (0.9.9), the risk-catalogue import and the reader (1.11.0). Two agents built the app's and the reader's part in worktrees; both were merged and run here |
+| §3.5, "the pack builder is checked against AUTHOR-3" | Checked against all four: a pack holds Components only and the builder's form writes no authorizations, so no AUTHOR rule reaches what it writes (**measured** by the agent: no AUTHOR line for the worked pack) |
+
+What phase C showed for what is left:
+
+- **Phase D got larger by one sentence.** The check that keeps the
+  example attestation real should read the Attestation beside every
+  bundle's manifest, not only the example folder's: the IFA Attestation
+  is checked by its converter and by no validator (#46).
+- **Phase E got smaller.** #55 is the validators only: all three
+  payloads pass their schemas today (**measured**).
+- **A rule written twice needs a third reader.** The author rule in
+  Python and in JavaScript passed the same table on both sides and
+  differed on 41 of 4,000 generated documents. The kernel pin was written
+  three times (validator, converter library, reader) and two of the
+  copies knew two reasons. Where a rule lives in two languages, the test
+  that counts is the one that puts both to the same generated input, or
+  holds both to the same vectors.
+- **New rows:** #70 needs the author (a placeholder party where the
+  kernel requires one), #71 and #72 are work.
+
+Open after phase C: #41, #46, #55, #62, #70, #71, #72.

@@ -77,6 +77,9 @@ requirements and mints real objects.*
 > - **Written by the tools** (backlog #69, 2026-11-14): the app has one
 >   setting, *Who am I*; its Tailor, Risk, Implement and Assess pages
 >   write `provenance` with it, and its Validate page shows both reports.
+>   The reader (1.11.0) shows who decided each entry, marks what an
+>   entry inherits from its record, and pins the kernel by the
+>   validator's own reasons.
 >   Converters and imports pre-fill who and when from the source, and
 >   whoever imports may overwrite both. A source gives little: OSCAL
 >   names who is responsible for a document, not who wrote one of its
