@@ -38,9 +38,15 @@ body{background:var(--bg-deep);color:var(--text-primary);font:14px/1.55 Inter,sy
 .nano{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-quiet)}
 .glass{background:var(--bg-elev-1);border:1px solid var(--border-1);backdrop-filter:blur(20px);border-radius:12px}
 
-#app{position:relative;z-index:1;display:grid;grid-template-rows:62px 1fr 210px;height:100vh}
+#app{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:62px 1fr 210px;height:100vh}
 #topbar{display:flex;align-items:center;gap:14px;padding:0 20px;background:var(--bg-elev-1);border-bottom:1px solid var(--border-1);backdrop-filter:blur(20px)}
-#topbar .brand{font-weight:700;font-size:15px}
+#topbar .brand{font-weight:700;font-size:15px;white-space:nowrap;flex:none}
+/* The bundle's name is as long as its source says. It gives way with an ellipsis and keeps the whole text in its
+   title; the tagline beside the brand gives way before it. Until 1.12.0 nothing gave way, and a long name made the
+   page wider than the window (the IFA bundle: 1750 px in 1500). */
+#topbar .pill{min-width:0;overflow:hidden;text-overflow:ellipsis;flex:none}
+#topbar .brand + .pill{flex:0 1000 auto}
+#topbar #pill-bundle{flex:0 1 auto}
 #topbar .brand span{color:var(--accent)}
 .pill{font-family:'JetBrains Mono',monospace;font-size:10.5px;padding:3px 10px;border-radius:999px;border:1px solid var(--border-2);color:var(--text-tertiary);white-space:nowrap}
 .pill.on{border-color:var(--accent);color:var(--accent)}
@@ -210,11 +216,11 @@ svg text{font-family:'JetBrains Mono',monospace}
         <div class="nano">Load</div>
         <button class="primary" id="btn-folder">⤒ Open bundle folder…</button>
         <input type="file" id="folderpick" webkitdirectory multiple class="hidden">
-        <input type="file" id="filepick" accept=".json" multiple class="hidden">
+        <input type="file" id="filepick" accept=".json,.dsse" multiple class="hidden">
         <button id="btn-files">◇ Open JSON file(s)…</button>
         <button id="btn-paste">✎ Paste an object…</button>
         <button id="btn-url">⇩ Load from URL…</button>
-        <div class="hint" style="margin-top:6px">or drop a bundle folder / JSON files anywhere on this page. Served over http? Deep-link a bundle: <span class="mono">#load=&lt;bundle-url&gt;&amp;view=stage:tailor</span></div>
+        <div class="hint" style="margin-top:6px">or drop a bundle folder / JSON files anywhere on this page. Served over http? Deep-link a bundle: <span class="mono">#load=&lt;bundle-url&gt;&amp;view=stage:tailor</span>; add <span class="mono">&amp;attestation=&lt;file&gt;</span> where the server lists no folders</div>
       </div>
       <div class="railgroup">
         <div class="nano">Views</div>
@@ -435,14 +441,22 @@ const state = {
   verify: null,            // id -> {pkg:bool, sem:bool}
   stopped: null,           // the message of a kernel pin this page does not read (KERNEL-2): nothing of that bundle is shown
   pinErrors: [],           // the loaded manifest's pin against the content it lists (KERNEL-1)
+  envelopes: new Map(),    // relpath -> {text, bytes} — the files Attestations name in `envelope-ref`, beside the manifest; never objects
+  binds: new Map(),        // attestation id -> what it binds of the loaded bundle (attestationBinds), with its line and its envelope's state
+  bindsRun: 0,             // which run of judgeAttestations the verdicts in `binds` are from
+  beside: null,            // how a load that had no folder looked for what lies beside the manifest: {how: "listing" | "named" | "no-listing" | "files", …}; null for a folder
+  missingEntries: 0,       // manifest entries whose file was not loaded
+  view: "overview",        // the view that is up
 };
 
 /* ==READER-PURE-START== */
 /* The part of this page that touches neither the document nor its state: type
    inference, the kernel pin, who decided an entry, what a workbench writes
-   about that, and the parties the kernel requires. It stands between two
+   about that, the parties the kernel requires, and what an Attestation binds
+   of a bundle (with the canonical form and the digest). It stands between two
    markers so that one-page-apps/tests/reader.test.mjs can read it out of this
-   file and run it in node against jascon/conformance/kernel-vectors.json.
+   file and run it in node against the vectors of jascon/conformance (kernel
+   and attestation).
    Nothing here is generated, and the page needs no build step. */
 
 /* a path segment from a text: lower case, a-z and 0-9, everything else a hyphen; "x" where nothing is left (an id needs a segment) */
@@ -651,7 +665,6 @@ function requiredParty(kind, name, ns) {
   return { refused: (typed ? `${r.field} "${typed}" names no party (a URI, or a name with a letter a-z or a digit, does)` : `${r.field} is empty`) +
     ` — the kernel requires ${r.of} to name ${r.names}; ${r.unwritten}` };
 }
-/* ==READER-PURE-END== */
 
 /* ---------- canonical form + sha256 ---------- */
 function canonical(obj) {
@@ -706,17 +719,89 @@ function sha256Fallback(bytes) {
   }
   return H.map(x => (x >>> 0).toString(16).padStart(8, "0")).join("");
 }
+/* the semantic digest of an object: SHA-256 over its canonical form, annotations excluded */
+async function semanticDigest(obj) { return "sha256:" + await sha256hex(canonical(obj)); }
+
+/* ---------- attestation-binds, applied to a bundle (v1.13.0; Appendix B.1.7, backlog #46) ----------
+   The port of attestation_binds in validate_core.py: (attestation, bundle) -> Full Match | Semantic
+   Match | fail. The bundle's side of it is the semantic digests of the objects the manifest lists,
+   the digest of the manifest's bytes as delivered, and the digests of the pack manifests the bundle
+   keeps (packs/sha256/, D25). Each subject is one of three things:
+     match    the object of that id carries the signed digest; for a subject given as a bare digest,
+              any listed object carries it
+     differs  the object of that id carries another digest: its content changed after signing
+     absent   no object of that id, or no object with that digest: what is not delivered cannot be
+              recomputed
+   The manifest bound is `this` one, a `kept-pack` or an `other`.
+     Full Match      every subject matches, and the manifest is this one or a kept pack's
+     Semantic Match  every subject matches, and the manifest is another: the content is proven, the
+                     packaging was altered (D7) - reported, never a failure and never Full
+     fail            anything else, an Attestation without a subject included
+   A `fail` fails the bundle while the Attestation is still claimed (lifecycle `active`). A draft, a
+   deprecated or a withdrawn one is reported with its verdict and fails nothing. The verdict is about
+   digests; whether the signature is valid is the envelope's matter (envelopeState, below).
+   `delivered`: Map(id -> semantic digest) of the objects the manifest lists; `keptPacks`: their digests.
+   -> { verdict, manifest, subjects: [{ status, id | null, signed, delivered | null }], fails } */
+function attestationBinds(att, manifestDigest, delivered, keptPacks) {
+  const carried = new Set(delivered.values());
+  const subjects = (Array.isArray(att["subject-semantic-digests"]) ? att["subject-semantic-digests"] : []).map(sj => {
+    if (!isRecord(sj)) return carried.has(sj) ? { status: "match", id: null, signed: sj, delivered: sj } : { status: "absent", id: null, signed: sj, delivered: null };
+    const signed = sj["semantic-digest"], have = delivered.get(sj.id);
+    return { status: have === undefined ? "absent" : have === signed ? "match" : "differs", id: sj.id ?? null, signed, delivered: have ?? null };
+  });
+  const bound = att["content-manifest-digest"];
+  const manifest = bound === manifestDigest ? "this" : [...(keptPacks || [])].includes(bound) ? "kept-pack" : "other";
+  const verdict = !subjects.length || subjects.some(s => s.status !== "match") ? "fail" : manifest === "other" ? "semantic-match" : "full-match";
+  return { verdict, manifest, subjects, fails: verdict === "fail" && att.lifecycle === "active" };
+}
+/* The line the reference prints about it (binds_report), word for word: a `binds:` line, or the
+   failure where the bundle fails. The tests compare this line with the reference's own. */
+const BINDS_MANIFEST = { this: "this manifest", "kept-pack": "a pack manifest this bundle keeps", other: "another manifest" };
+function bindsLine(att, r) {
+  const n = r.subjects.length, what = BINDS_MANIFEST[r.manifest];
+  if (r.verdict === "full-match") return `binds: ${att.id} = FULL MATCH [${n} subject(s) of this bundle; ${what}]`;
+  if (r.verdict === "semantic-match") return `binds: ${att.id} = SEMANTIC MATCH [${n} subject(s) of this bundle; ${what}: the content is proven, the packaging was altered]`;
+  const lines = r.subjects.filter(s => s.status !== "match").map(s => `subject ${s.id || s.signed}: ` +
+    (s.status === "differs" ? `recomputed semantic digest ${s.delivered}, signed ${s.signed}` : s.id ? "not an object of this bundle" : "no object of this bundle carries it"));
+  const why = (lines.length ? lines : ["it names no subject"]).join("; ");
+  return r.fails
+    ? `[attestation-binds] ${att.id}: ${why} - ${what} (B.1.7: an Attestation binds what is delivered, or it fails; a changed subject is normative content changed after signing)`
+    : `binds: ${att.id} = DOES NOT BIND [lifecycle ${att.lifecycle}: reported, not a failure] ${why} - ${what}`;
+}
+/* The envelope of an Attestation, as far as it can be read without a key (the keyless part of
+   verify_envelope in validate_core.py). An Attestation names its envelope in `envelope-ref`, a file
+   beside the manifest; the envelope's payload is the Attestation's canonical form. So an Attestation
+   that was edited after signing - its lifecycle included - no longer matches its envelope, with or
+   without a key. This page takes no key and verifies no signature: the best it says is UNVERIFIED.
+   `envelopeText`: the text of the file `envelope-ref` names, or undefined where it was not loaded.
+   -> { state: "none" | "missing" | "fail" | "unverified", detail } */
+const DSSE_PAYLOAD_TYPE = "application/vnd.jascon.attestation+json";
+const BASE64_STRICT = /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/;
+function envelopeState(att, envelopeText) {
+  const ref = att["envelope-ref"], fail = detail => ({ state: "fail", detail });
+  if (!given(ref)) return { state: "none", detail: "no envelope (unsigned attestation)" };
+  if (typeof envelopeText !== "string") return { state: "missing", detail: `envelope-ref '${ref}' does not resolve beside the manifest` };
+  let env;
+  try { env = JSON.parse(envelopeText); } catch (e) { return fail("envelope unreadable"); }
+  if (!isRecord(env)) return fail("envelope unreadable");
+  if (env.payloadType !== DSSE_PAYLOAD_TYPE) return fail("wrong payloadType");
+  if (typeof env.payload !== "string" || !BASE64_STRICT.test(env.payload)) return fail("payload is not valid base64");
+  const want = new TextEncoder().encode(canonical(att)), got = atob(env.payload);
+  if (got.length !== want.length || want.some((b, i) => got.charCodeAt(i) !== b)) return fail("payload != the Attestation's canonical form (attestation-binds)");
+  return { state: "unverified", detail: "signature UNVERIFIED - this page takes no key and verifies no signature" };
+}
+/* ==READER-PURE-END== */
 
 /* ---------- loading ---------- */
 /* The version is stated once. Until 1.10.0 it stood in three places - the pill of the top bar, the
    `converter` line of every manifest written here, and the first line of the console - and they had
    come apart: 1.9.1, 1.9.1 and 1.10.0. */
-const READER_VERSION = "1.12.0", READER_BUILD = "2026-11-14";
+const READER_VERSION = "1.13.0", READER_BUILD = "2026-11-14";
 const READER_ID = "jascon-reader.html v" + READER_VERSION;
 $("pill-version").textContent = `v${READER_VERSION} · build ${READER_BUILD}`;
 /* URL loading — works when this page and the bundle are served over http(s)
    (e.g. `python -m http.server` from the repo root); file:// blocks fetch by design. */
-async function loadFromUrl(input) {
+async function loadFromUrl(input, named = []) {
   let base;
   try { base = new URL(String(input).trim().replace(/content-manifest\.json$/, ""), location.href); }
   catch { l.err("not a URL: " + input); return false; }
@@ -757,28 +842,39 @@ async function loadFromUrl(input) {
   await Promise.all(workers);
   if (failed) l.warn(`${failed} file(s) failed to fetch — loading what arrived`);
   l.ok(`bundle fetched in ${Math.round(performance.now() - t0)} ms`);
-  state.evidence.clear(); state.packs.clear();
-  await fetchBeside(base, manifest, [...paths, ...(manifest.scales || []).map(s => s.path)]);
+  state.evidence.clear(); state.packs.clear(); state.envelopes.clear();
+  await fetchBeside(base, [...paths, ...(manifest.scales || []).map(s => s.path)], named);
   indexBundle();
   await fetchEvidence(base);
   return true;
 }
-/* Advice packs (v1.9.0, CP-ADVICE-1 §4.5): a set keeps the manifest of every pack it imported,
-   unchanged, as packs/sha256/<hex> beside its own manifest — named by the SHA-256 of its bytes and
-   never listed. The attestation of a pack's publisher lies beside the manifest too. A folder load
-   finds both. A URL names files, not folders, so a URL load can find them only where the server
-   lists the folder (python's http.server does), and asking for a listing that is not there shows
-   as an error in the browser console. So the server is asked only where there is a reason: the
-   manifest carries a pack header, or it lists Components under an origin from which it lists
-   nothing else — the mark of a set that holds a pack (a pack brings Components and nothing else,
-   all under its publisher's origin: ADVICE-1, ADVICE-2). Without a listing nothing is found. */
+/* What lies beside a manifest and is named by nothing the manifest lists (v1.13.0; backlog #46):
+   the Attestations of the bundle (D3.1: an Attestation binds the digest of the manifest's bytes, so
+   the manifest cannot list it), the envelopes they name, and the pack manifests a set keeps
+   (packs/sha256/<hex>, CP-ADVICE-1 §4.5; named by the SHA-256 of their bytes). A folder load has
+   them all. A URL names files, not folders, so a URL load has two ways to an Attestation, and it
+   guesses no file name:
+   - the link names it: #load=<bundle-url>&attestation=<file>[,<file>…], or the second question of
+     "Load from URL…";
+   - the server lists the folder, as python's http.server does and as a static site does with an
+     index.html of links: every .json there that the manifest does not list is fetched (64 at
+     most), and those that type as an Attestation are kept. A page counts as a listing of the
+     folder only when it links content-manifest.json, which lies in that folder: any other page a
+     server sends for the folder would pass for a folder that was looked into.
+   A pack manifest the bundle keeps is named by the SHA-256 of its bytes (D25), and that is the
+   digest an Attestation of the pack binds. So where the server lists nothing, the manifest an
+   Attestation binds is asked for under the name its digest gives it, unless it is this bundle's own;
+   where it is not there, the Attestation binds another manifest. That is no guess either.
+   Until 1.12.0 the server was asked only for a pack or a set that holds one, because a request for
+   a listing that is not there shows as an error in the browser's console. Now any bundle may have
+   an Attestation beside its manifest, and nothing in the manifest says so: the folder is asked for
+   once with every load. Where the server lists nothing and the link names nothing, none is found,
+   and the page says that it could not look (state.beside) instead of showing a bundle as if it had
+   none. An envelope is fetched under the name its Attestation gives it. */
 const PACK_RE = /(^|\/)packs\/sha256\/[^/]+$/;
-async function fetchBeside(base, manifest, listed) {
-  const origin = id => String(id).split("/").slice(0, 3).join("/");
-  const typed = [...state.files].filter(([p]) => p !== "content-manifest.json")
-    .map(([, f]) => { try { const o = JSON.parse(f.text); return [inferType(o), o && o.id]; } catch { return [null, null]; } }).filter(([t, id]) => t && typeof id === "string");
-  const others = new Set(typed.filter(([t]) => t !== "component").map(([, id]) => origin(id)));
-  if (!manifest.pack && !typed.some(([t, id]) => t === "component" && !others.has(origin(id)))) return;
+const besideName = name => typeof name === "string" && !!name && !/^[a-z][a-z0-9+.-]*:|^\/|(^|\/)\.\.(\/|$)|\\/i.test(name);   // a relative name that stays in the manifest's folder tree
+const besideNames = text => String(text || "").split(",").map(x => x.trim()).filter(Boolean);
+async function fetchBeside(base, listed, named) {
   const listing = async rel => {
     try {
       const r = await fetch(new URL(rel, base));
@@ -787,18 +883,58 @@ async function fetchBeside(base, manifest, listed) {
     } catch { return null; }
   };
   const get = async rel => { const r = await fetch(new URL(rel, base)); if (!r.ok) throw new Error("HTTP " + r.status); return new Uint8Array(await r.arrayBuffer()); };
-  const top = await listing("");
-  if (!top) { l.info("this server lists no folders — pack manifests kept beside the manifest (packs/sha256/) and attestations beside it cannot be found from a URL; open the folder instead"); return; }
-  const kept = [];
-  if (top.includes("packs/")) for (const name of ((await listing("packs/sha256/")) || []).filter(n => /^[0-9a-f]{64}$/.test(n)).slice(0, 64)) {
-    try { state.packs.set("packs/sha256/" + name, { bytes: await get("packs/sha256/" + name) }); kept.push("sha256:" + name); } catch (e) { l.warn(`fetch packs/sha256/${name}: ${e.message}`); }
+  const keep = (name, bytes) => {   // an Attestation is kept among the files; anything else is not a file this page shows
+    const text = new TextDecoder().decode(bytes);
+    try { if (inferType(JSON.parse(text)) !== "attestation") return false; } catch { return false; }
+    state.files.set(name, { text, bytes });
+    return true;
+  };
+  const page = await listing(""), top = page && page.includes("content-manifest.json") ? page : null;
+  let looked = 0, found = 0;
+  if (top) {
+    if (top.includes("packs/")) for (const name of ((await listing("packs/sha256/")) || []).filter(n => /^[0-9a-f]{64}$/.test(n)).sort().slice(0, 64)) {
+      try { state.packs.set("packs/sha256/" + name, { bytes: await get("packs/sha256/" + name) }); } catch (e) { l.warn(`fetch packs/sha256/${name}: ${e.message}`); }
+    }
+    for (const name of top.filter(n => /^[^/]+\.json$/.test(n) && n !== "content-manifest.json" && !listed.includes(n)).sort().slice(0, 64)) {
+      looked++;
+      try { if (keep(name, await get(name))) found++; } catch (e) { l.warn(`fetch ${name}: ${e.message}`); }
+    }
   }
-  if (!manifest.pack && !kept.length) return;
-  for (const name of top.filter(n => /^[^/]+\.json$/.test(n) && n !== "content-manifest.json" && !listed.includes(n)).slice(0, 64)) {
+  const read = [], refused = [];   // of the names given: those read as an Attestation, and [name, why not]
+  const refuse = (name, why) => { refused.push([name, why]); l.err(`${name}: named as an Attestation beside the manifest — ${why}`); };
+  for (const name of [...new Set(named || [])]) {
+    if (!besideName(name) || name.includes("/")) { refuse(name, "an Attestation beside the manifest is named by its file name, without a folder"); continue; }
+    if (name === "content-manifest.json" || listed.includes(name)) { refuse(name, "the manifest lists this file, so it does not lie beside it"); continue; }
+    if (state.files.has(name)) { read.push(name); continue; }   // the listing had it
     try {
-      const bytes = await get(name), text = new TextDecoder().decode(bytes), o = JSON.parse(text);
-      if (inferType(o) === "attestation" && (manifest.pack || kept.includes(o["content-manifest-digest"]))) state.files.set(name, { text, bytes });
-    } catch { /* not a file this reader shows */ }
+      if (keep(name, await get(name))) { read.push(name); found++; }
+      else refuse(name, "the file is no Attestation");
+    } catch (e) { refuse(name, `not fetched (${e.message})`); }
+  }
+  state.beside = { how: top ? "listing" : read.length || refused.length ? "named" : "no-listing", looked, named: read, refused };
+  if (top) l.info(`beside the manifest: the server lists the folder — ${looked} .json file(s) there that the manifest does not list, ${found} Attestation(s) among what was fetched`);
+  else if (read.length || refused.length) l.info(`beside the manifest: this server lists no folders — of ${read.length + refused.length} file(s) named, ${read.length} read as an Attestation`);
+  else l.warn("this server lists no folders: an Attestation beside the manifest cannot be found from a URL, and neither can a pack manifest the bundle keeps. Name the Attestation in the link — #load=<bundle-url>&attestation=<file name> — or open the folder");
+  if (!top) {
+    const own = "sha256:" + await sha256hex(state.files.get("content-manifest.json").bytes);
+    for (const [, f] of [...state.files]) {
+      if (!f.text.includes('"content-manifest-digest"')) continue;
+      let bound = null;
+      try { bound = JSON.parse(f.text)["content-manifest-digest"]; } catch { /* not JSON: nothing to follow */ }
+      const hex = /^sha256:([0-9a-f]{64})$/.exec(typeof bound === "string" ? bound : "")?.[1];
+      if (!hex || bound === own || state.packs.has("packs/sha256/" + hex)) continue;
+      try { state.packs.set("packs/sha256/" + hex, { bytes: await get("packs/sha256/" + hex) }); l.info(`kept pack manifest packs/sha256/${hex.slice(0, 12)}… found under the name an Attestation's digest gives it`); }
+      catch { /* not kept here: the Attestation binds another manifest */ }
+    }
+  }
+  /* the envelope of an Attestation lies beside the manifest and is named only by the Attestation */
+  for (const [, f] of [...state.files]) {
+    if (!f.text.includes('"envelope-ref"')) continue;
+    let ref = null;
+    try { ref = JSON.parse(f.text)["envelope-ref"]; } catch { /* not JSON: nothing to follow */ }
+    if (!besideName(ref) || state.envelopes.has(ref) || state.files.has(ref)) continue;
+    try { const bytes = await get(ref); state.envelopes.set(ref, { bytes, text: new TextDecoder().decode(bytes) }); }
+    catch { /* said where the Attestation is shown: its envelope does not resolve */ }
   }
 }
 /* claimed | attested (CP-ADVICE-1 §4.2): the publisher of a pack is CLAIMED by the header and the
@@ -846,6 +982,13 @@ async function fetchEvidence(base) {
     (withheld ? ` (${withheld} withheld or not served — a note, not a failure)` : ""));
   renderOverview();
 }
+/* The manifest of what was loaded: the one highest up and, of several at one depth, the first by code
+   unit - never the one whose file happened to arrive first (v1.13.0; the lesson of 2026-11-14). */
+function manifestPathOf(paths) {
+  const depth = p => p.split("/").length;
+  return [...paths].filter(p => p.endsWith("content-manifest.json"))
+    .sort((a, b) => depth(a) - depth(b) || (a < b ? -1 : a > b ? 1 : 0))[0] || null;
+}
 async function loadFileList(fileList) {
   const relOf = f => (f.webkitRelativePath || f.name).split("/").slice(1).join("/") || f.name;
   const evid = [...fileList].filter(f => EVIDENCE_RE.test(relOf(f)));
@@ -853,7 +996,10 @@ async function loadFileList(fileList) {
   const files = [...fileList].filter(f => f.name.endsWith(".json") && !PACK_RE.test(relOf(f)));
   if (!files.length) { l.warn("no .json files in selection"); return; }
   l.info(`reading ${files.length} json file(s)…`);
-  state.files.clear(); state.evidence.clear(); state.packs.clear();
+  state.files.clear(); state.evidence.clear(); state.packs.clear(); state.envelopes.clear();
+  /* files opened one by one come without their folders (v1.13.0): which of them lie beside the manifest is then
+     taken from the manifest alone, and a pack manifest the bundle keeps (packs/sha256/) cannot be among them */
+  state.beside = [...fileList].some(f => (f.webkitRelativePath || "").includes("/")) ? null : { how: "files" };
   for (const f of files) {
     const rel = relOf(f);
     const bytes = new Uint8Array(await f.arrayBuffer());
@@ -861,14 +1007,27 @@ async function loadFileList(fileList) {
   }
   for (const f of evid) state.evidence.set(relOf(f), { bytes: new Uint8Array(await f.arrayBuffer()) });
   for (const f of kept) state.packs.set(relOf(f), { bytes: new Uint8Array(await f.arrayBuffer()) });
+  /* Envelopes (v1.13.0): the file an Attestation names in `envelope-ref` lies beside the manifest and
+     is no JSON object of the bundle. It is read where the selection holds it under that name. */
+  const manifestPath = manifestPathOf(state.files.keys()), prefix = manifestPath ? manifestPath.slice(0, -"content-manifest.json".length) : "";
+  const byRel = new Map([...fileList].map(f => [relOf(f), f]));
+  for (const [, f] of [...state.files]) {
+    if (!f.text.includes('"envelope-ref"')) continue;
+    let ref = null;
+    try { ref = JSON.parse(f.text)["envelope-ref"]; } catch { /* not JSON: nothing to follow */ }
+    const at = besideName(ref) ? prefix + ref : null;
+    if (!at || !byRel.has(at) || state.envelopes.has(at) || state.files.has(at)) continue;
+    const bytes = new Uint8Array(await byRel.get(at).arrayBuffer());
+    state.envelopes.set(at, { bytes, text: new TextDecoder().decode(bytes) });
+  }
   indexBundle();
 }
 function indexBundle() {
   state.objects.clear(); state.order = []; state.manifest = null;
   state.manifestByPath.clear(); state.verify = null; state.selected = null;
   state.browserDims = {}; state.stopped = null; state.pinErrors = [];
-  let manifestPath = null;
-  for (const p of state.files.keys()) if (p.endsWith("content-manifest.json")) { manifestPath = p; break; }
+  state.binds = new Map(); state.missingEntries = 0;
+  const manifestPath = manifestPathOf(state.files.keys());
   const prefix = manifestPath ? manifestPath.slice(0, -"content-manifest.json".length) : "";
   state.prefix = prefix;
   state.manifestBytes = manifestPath ? state.files.get(manifestPath).bytes : null;
@@ -887,9 +1046,10 @@ function indexBundle() {
     $("pill-bundle").textContent = "not read · kernel-version " + JSON.stringify(state.manifest["kernel-version"]);
     $("pill-bundle").classList.remove("on"); $("pill-bundle").style.color = "var(--red)";
     state.manifest = null; state.manifestBytes = null; state.manifestByPath.clear(); state.manifestHex = null;
-    state.evidence.clear(); state.packs.clear();
+    state.evidence.clear(); state.packs.clear(); state.envelopes.clear();
     state.graphGen++;
     $("btn-verify").disabled = true;
+    judgeAttestations();
     renderAll();
     setView("overview");
     return;
@@ -908,8 +1068,12 @@ function indexBundle() {
     try { obj = JSON.parse(f.text); } catch (e) { l.err(`parse ${p}: ${e.message}`); failed++; continue; }
     const t = inferType(obj);
     if (!t || t === "manifest") { unknown++; l.debug(`skipped ${p}: not a kernel object`); continue; }
-    const id = obj.id || p;
-    state.objects.set(id, { obj, path: p, type: t, entry: state.manifestByPath.get(p) || null });
+    const id = obj.id || p, entry = state.manifestByPath.get(p) || null;
+    /* An Attestation BESIDE the manifest (D3.1; v1.13.0): a file in the manifest's own folder that the
+       manifest does not list and that types as an Attestation - the reference's rule. It is shown and
+       held to what it binds, and it is not one of the objects the manifest lists. */
+    const beside = !!state.manifest && !entry && t === "attestation" && p.startsWith(prefix) && !p.slice(prefix.length).includes("/");
+    state.objects.set(id, { obj, path: p, type: t, entry, beside });
     parsed++;
   }
   const entries = state.manifest?.objects || null;
@@ -917,12 +1081,14 @@ function indexBundle() {
     ? entries.map(e => { const rec = [...state.objects.values()].find(r => r.path === prefix + e.path); return rec?.obj.id; }).filter(Boolean)
     : [...state.objects.keys()];
   for (const id of state.objects.keys()) if (!state.order.includes(id)) state.order.push(id);
+  const tally = bundleTally();
   if (entries) {
-    const missing = entries.length - state.order.length;
-    if (missing > 0) l.warn(`${missing} manifest entries have no file in the selection`);
+    state.missingEntries = entries.length - tally.listed;
+    if (state.missingEntries > 0) l.warn(`${state.missingEntries} manifest entries have no file in the selection`);
   }
   state.graphGen++;
-  l.ok(`indexed ${parsed} objects (${failed} parse failures, ${unknown} non-kernel files skipped)`);
+  l.ok(`indexed ${parsed} objects (${failed} parse failures, ${unknown} non-kernel files skipped)` +
+    (state.manifest ? ` — ${tally.listed} the manifest lists, ${tally.beside} Attestation(s) beside the manifest${tally.other ? `, ${tally.other} other(s) it does not list` : ""}` : ""));
   const counts = typeCounts();
   l.info("types: " + Object.entries(counts).map(([k, v]) => `${k} ${v}`).join(" · "));
   /* KERNEL-1 (v1.11.0): the pin against the objects the manifest lists. Reported, and the bundle is
@@ -947,11 +1113,70 @@ function indexBundle() {
     sha256hex(bytes).then(hex => { if (state.manifestBytes === bytes) { state.manifestHex = hex; renderOverview(); } });   // unless another bundle was loaded meanwhile
   }
   const prov = state.manifest?.provenance || {};
-  $("pill-bundle").textContent = (prov.source || prov.sources?.[0]?.title || "bundle") + " · " + parsed + " objects";
+  /* how many of each, then the name: the name is as long as its source says, and it is the name that gives way */
+  $("pill-bundle").textContent = (state.manifest
+    ? `${tally.listed} object${tally.listed === 1 ? "" : "s"} · ` + (tally.beside ? `${tally.beside} attestation${tally.beside > 1 ? "s" : ""} beside the manifest`
+        : state.beside?.how === "no-listing" ? "attestations beside the manifest not looked for" : "no attestation beside the manifest") + (tally.other ? ` · ${tally.other} not listed` : "")
+    : parsed + " objects") + " · " + (prov.source || prov.sources?.[0]?.title || "bundle");
+  $("pill-bundle").title = $("pill-bundle").textContent;
   $("pill-bundle").classList.add("on"); $("pill-bundle").style.color = "";
   $("btn-verify").disabled = !state.manifest || !state.objects.size;
   renderAll();
   setView("stages");
+  judgeAttestations();
+}
+/* How many of the loaded objects the manifest lists, how many are Attestations beside it, and how
+   many are neither (a file the manifest does not list, a pasted or an authored object). */
+function bundleTally() {
+  const n = { listed: 0, beside: 0, other: 0 };
+  for (const r of state.objects.values()) n[r.entry ? "listed" : r.beside ? "beside" : "other"]++;
+  return n;
+}
+/* Every Attestation in the graph is held to the loaded bundle (v1.13.0; Appendix B.1.7, backlog #46).
+   The verdict needs digests, which the browser computes asynchronously, so it arrives after the
+   bundle is shown: `document.body.dataset.binds` is "pending" until then and "done" after. Only the
+   digests the subjects ask for are computed - those of the objects they name and, where a subject is
+   a bare digest, of every object the manifest lists.
+   An Attestation is READ WITH THE BUNDLE when it lies beside the manifest or the manifest lists it:
+   for these the reference validator prints the line shown here, and an active one that does not bind
+   fails the bundle. A pasted or an authored Attestation is held to the bundle all the same and fails
+   nothing: it did not come with it. Without a manifest there is no bundle to hold anything to. */
+const envelopeTextOf = att => { const at = besideName(att["envelope-ref"]) ? (state.prefix || "") + att["envelope-ref"] : null;
+  return at ? (state.envelopes.get(at) || state.files.get(at) || {}).text : undefined; };
+async function judgeAttestations() {
+  const run = ++state.bindsRun;
+  document.body.dataset.binds = "pending";
+  const atts = [...state.objects.values()].filter(r => r.type === "attestation").sort((a, b) => (a.obj.id < b.obj.id ? -1 : a.obj.id > b.obj.id ? 1 : 0));
+  const binds = new Map();
+  let manifestDigest = null;
+  if (atts.length && state.manifestBytes) {
+    manifestDigest = "sha256:" + await sha256hex(state.manifestBytes);
+    const subjects = atts.flatMap(r => Array.isArray(r.obj["subject-semantic-digests"]) ? r.obj["subject-semantic-digests"] : []);
+    const all = subjects.some(sj => !isRecord(sj)), named = new Set(subjects.filter(isRecord).map(sj => sj.id));
+    const delivered = new Map();
+    for (const r of state.objects.values()) if (r.entry && (all || named.has(r.obj.id))) delivered.set(r.obj.id, await semanticDigest(r.obj));
+    const kept = [...state.packs.keys()].map(p => "sha256:" + p.split("/").pop());
+    for (const r of atts) {
+      const b = attestationBinds(r.obj, manifestDigest, delivered, kept);
+      b.withBundle = !!r.entry || !!r.beside;
+      b.line = bindsLine(r.obj, b);
+      b.envelope = envelopeState(r.obj, envelopeTextOf(r.obj));
+      binds.set(r.obj.id, b);
+    }
+  }
+  if (run !== state.bindsRun) return;   // another bundle was loaded, or the graph changed, meanwhile
+  state.binds = binds; state.manifestDigest = manifestDigest;
+  for (const [id, b] of binds) {
+    if (!b.withBundle) { l.info(`${b.line.replace(/^binds: |^\[attestation-binds\] /, "not read with this bundle, held to it all the same: ")}`); continue; }
+    (b.verdict === "full-match" ? l.ok : b.fails ? l.err : l.warn)(b.line);
+    if (b.envelope.state === "fail" || b.envelope.state === "missing") l.err(`dsse: ${id} = FAIL - ${b.envelope.detail}`);
+    else l.info(`dsse: ${id} = ${b.envelope.detail}`);
+  }
+  document.body.dataset.binds = "done";
+  renderOverview();
+  if (state.view === "stage:assess") renderStageFn("assess");
+  renderList();
+  if (state.view === "browser" && state.objects.get(state.selected)?.type === "attestation") showDetail(state.selected);
 }
 /* #12 text primitive (v1.6.1): kernel human-readable fields are {BCP-47: string}.
    tt() renders them; textifyJs() wraps authored strings at export time. */
@@ -995,8 +1220,15 @@ function renderOverview() {
   if (state.manifest) rows.push(kvRow("kernel version", `<span id="ov-kernel">${state.manifest["kernel-version"] !== undefined
       ? esc(state.manifest["kernel-version"]) : `<span class="hint">none pinned — absent means 1.0.0 content</span>`}</span>` +
     state.pinErrors.map(e => `<div class="verdict-bad" data-pin-error>✗ ${esc(e)}</div>`).join("")));
-  add("objects", String(state.objects.size));
-  add("manifest entries", state.manifest ? String(state.manifest.objects.length) : "—");
+  /* how many of each (v1.13.0): the objects the manifest lists, the Attestations beside it, and the rest.
+     Until 1.12.0 one row counted every loaded object, an Attestation beside the manifest among them. */
+  const tally = bundleTally();
+  if (state.manifest) {
+    rows.push(kvRow("objects the manifest lists", `<span id="ov-listed">${tally.listed}</span> <span class="hint">of ${state.manifest.objects?.length ?? 0} manifest entries</span>` +
+      (state.missingEntries > 0 ? ` <span class="verdict-warn">— ${state.missingEntries} not loaded</span>` : "")));
+    rows.push(kvRow("attestations beside the manifest", besideSummaryHtml(tally)));
+    if (tally.other) rows.push(kvRow("other objects", `<span id="ov-other">${tally.other}</span> <span class="hint">— not listed by the manifest: pasted, written in a workbench, or a file that lies elsewhere</span>`));
+  } else add("objects", `${state.objects.size} — no manifest is loaded, so nothing is listed and no Attestation is held to anything`);
   add("evidence store", state.evidence.size ? `${state.evidence.size} file(s) beside the manifest (not manifest entries)` : "");
   /* CP-ADVICE-1: the pack header of this bundle, and the pack manifests it keeps (which vendor, which release) */
   if (state.manifest?.pack) add("advice pack", packLine(state.manifest.pack, state.manifestHex) + (state.manifestHex ? "" : " (digesting the manifest…)"));
@@ -1004,6 +1236,7 @@ function renderOverview() {
     add("kept pack manifest", `${packLine(f.pack, p.split("/").pop())} · ${f.objects} object(s) listed · ${p.slice((state.prefix || "").length, (state.prefix || "").length + 26)}…` +
       (f.ok === false ? " · ✗ DOES NOT MATCH ITS NAME (ADVICE-8)" : f.ok ? " · ✓ matches its name" : ""));
   $("ov-kv").innerHTML = rows.join("");
+  wireRefs($("ov-kv"));
   $("ov-schemas").innerHTML = (state.manifest?.["facet-schemas"] || [])
     .map(s => `<div class="mono" style="font-size:11px;margin:3px 0">◇ ${esc(s.id)} <span style="color:var(--text-quiet)">@${esc(s["exact-version"])} · ${esc((s.digest || "").slice(0, 23))}…</span></div>`)
     .join("") || `<span class="hint">none pinned</span>`;
@@ -1088,11 +1321,17 @@ function renderList() {
     const vmark = v ? (v.pkg && v.sem ? ` <span style="color:var(--green)">✓</span>` : ` <span style="color:var(--red)">✗</span>`) : "";
     return `<div class="objrow ${state.selected === id ? "active" : ""}" data-id="${esc(id)}">
       <div class="t"><span style="color:${TYPES[r.type].color}">${TYPES[r.type].glyph}</span> ${esc(r.obj.label || tt(r.obj.title) || id.split("/").pop())}${vmark}</div>
-      <div class="s">${esc(id)}</div></div>`;
+      <div class="s">${esc(id)}</div>${r.type === "attestation" ? attestationMark(r) : ""}</div>`;
   }).join("");
   $("objlist").innerHTML = (rows || `<div class="hint">nothing matches</div>`) +
     (ids.length > cap ? `<div class="hint" style="padding:8px">…and ${ids.length - cap} more — narrow the search</div>` : "");
   document.querySelectorAll(".objrow").forEach(el => el.onclick = () => { openObject(el.dataset.id); });
+}
+/* an Attestation in the list: where it lies and what it binds, in the same words as its detail */
+function attestationMark(r) {
+  const b = state.binds.get(r.obj.id), fails = b && b.fails && b.withBundle;
+  return `<div class="s" data-list-binds="${b ? b.verdict : state.manifestBytes ? "pending" : "not-judged"}"><span class="${!b ? "" : b.verdict === "full-match" ? "verdict-ok" : fails ? "verdict-bad" : "verdict-warn"}">` +
+    `${r.beside ? "beside the manifest · " : ""}${b ? BINDS_WORD[b.verdict] : state.manifestBytes ? "…" : "not held to a bundle"}</span></div>`;
 }
 function renderBrowser() { renderFilters(); renderList(); }
 
@@ -1526,6 +1765,14 @@ function openObject(id) {
   if (!r) { l.warn("ref not in bundle: " + id); return; }
   state.selected = id;
   setView("browser");
+  showDetail(id);
+  renderList();
+  $("detail").scrollTop = 0;
+}
+/* the detail of one object, drawn where it is: no change of view, of the list or of the scroll position */
+function showDetail(id) {
+  const r = state.objects.get(id);
+  if (!r) return;
   let body = commonHead(r);
   if (r.type === "requirement") body += renderRequirement(r);
   else if (r.type === "requirementSet") body += renderSet(r);
@@ -1537,13 +1784,12 @@ function openObject(id) {
   else if (r.type === "finding") body += renderFinding(r);
   else if (r.type === "risk") body += renderRisk(r);
   else if (r.type === "implementation") body += renderImplementation(r);
+  else if (r.type === "attestation") body += renderAttestation(r);
   else body += renderGeneric(r);
   body += aliasesHtml(r.obj) + relationsHtml(r.obj) + facetsHtml(r.obj) + annotationsHtml(r.obj) + digestRow(r);
   body += `<details style="margin-top:12px"><summary>raw JSON</summary><pre class="raw">${esc(JSON.stringify(r.obj, null, 1))}</pre></details>`;
   $("detail").innerHTML = body;
   wireRefs($("detail"));
-  renderList();
-  $("detail").scrollTop = 0;
 }
 
 /* ---------- stats ---------- */
@@ -1936,38 +2182,95 @@ function renderStageImplement() {
      ${impls.length ? `<table class="flat"><tr><th>component</th><th>requirement · clause</th><th>responsibility</th><th>satisfied by</th><th>status</th><th style="white-space:nowrap">written by · when</th><th></th></tr>${implRows}</table>` : '<span class="hint">none</span>'}`;
 }
 
-/* S5 · Assess & Attest: results board + bi-modal verification */
-async function verifyAttestation(attId, btn) {
-  const a = state.objects.get(attId)?.obj; if (!a) return;
-  btn.disabled = true; btn.textContent = "verifying…";
-  let subjOk = 0, subjBad = 0, subjUnknown = 0;
-  for (const s of a["subject-semantic-digests"] || []) {
-    const id = typeof s === "object" ? s.id : null;
-    const want = typeof s === "object" ? s["semantic-digest"] : s;
-    const target = id ? state.objects.get(id) : null;
-    if (!target) { subjUnknown++; continue; }
-    const got = "sha256:" + await sha256hex(canonical(target.obj));
-    got === want ? subjOk++ : subjBad++;
-  }
-  let manifestState = "unknown";
-  if (a["content-manifest-digest"] && state.manifestBytes) {
-    const got = "sha256:" + await sha256hex(state.manifestBytes);
-    manifestState = got === a["content-manifest-digest"] ? "match" : "differs";
-  }
-  let verdict, cls;
-  if (subjBad) { verdict = "TAMPER — a subject's meaning changed after signing"; cls = "verdict-bad"; }
-  else if (subjUnknown && !subjOk) { verdict = "UNKNOWN — subjects not in this bundle"; cls = "hint"; }
-  else if (manifestState === "match") { verdict = "FULL MATCH — bytes and meaning exactly as signed"; cls = "verdict-ok"; }
-  else if (manifestState === "differs") { verdict = "SEMANTIC MATCH — meaning intact, package repackaged"; cls = "verdict-warn"; }
-  else { verdict = "SEMANTIC MATCH (subjects) — manifest digest not comparable here"; cls = "verdict-warn"; }
-  btn.outerHTML = `<span class="${cls}" style="font-weight:600">${esc(verdict)}</span>
-    <span class="hint">subjects: ${subjOk} ok · ${subjBad} tampered · ${subjUnknown} not in bundle</span>`;
-  l[subjBad ? "err" : "ok"](`attestation ${attId}: ${verdict}`);
+/* ---------- an Attestation and what it binds: display (v1.13.0; Appendix B.1.7, backlog #46) ----------
+   The words are the reference's: FULL MATCH, SEMANTIC MATCH, DOES NOT BIND. Beside the verdict stand
+   the line the reference prints, every subject with the signed and the delivered digest, the manifest
+   that is bound, the state of the envelope, and where the Attestation lies. Until 1.12.0 a button
+   computed a verdict of this page's own: it compared a subject with any object of the graph, called a
+   subject that was not there "unknown" and a changed one "tamper", and knew no kept pack manifest.
+   A signature nobody verified is never called valid. This page takes no key, so the best an envelope
+   gets here is UNVERIFIED; what it can say without a key is whether the envelope is this
+   Attestation's at all (its payload is the Attestation's canonical form).
+   The data-* attributes are what the tests read. */
+const BINDS_WORD = { "full-match": "FULL MATCH", "semantic-match": "SEMANTIC MATCH", fail: "DOES NOT BIND" };
+const SUBJECT_C = { match: "var(--green)", differs: "var(--red)", absent: "var(--red)" };
+function attestationWhere(r) {
+  const name = r.path.slice((state.prefix || "").length);
+  if (r.beside) return `beside the manifest, as <span class="mono">${esc(name)}</span> — not listed, as D3.1 requires: it binds the digest of the manifest's bytes`;
+  if (r.entry) return `listed by the manifest, as <span class="mono">${esc(r.entry.path)}</span> — D3.1 puts an Attestation beside the manifest; it is held to what it binds all the same`;
+  if (r.path === "(pasted)") return "pasted — it did not come with the loaded bundle";
+  if (r.path === "(workspace)") return "from the workspace — it did not come with the loaded bundle";
+  return `a file the manifest does not list and that does not lie beside it (<span class="mono">${esc(name)}</span>) — not read with the bundle`;
 }
+function envelopeHtml(b, att) {
+  const e = b ? b.envelope : envelopeState(att, envelopeTextOf(att));
+  const bad = e.state === "fail" || e.state === "missing";
+  return `<span data-envelope="${e.state}" class="${bad ? "verdict-bad" : e.state === "unverified" ? "verdict-warn" : "hint"}">${bad ? "FAIL - " : ""}${esc(e.detail)}</span>` +
+    (e.state === "unverified" ? ` <span class="hint">— the envelope <span class="mono">${esc(att["envelope-ref"])}</span> is this Attestation's: its payload is the Attestation's canonical form. validate_core.py --trusted-keys verifies the signature.</span>` : "") +
+    (e.state === "missing" ? ` <span class="hint">— no file of that name ${state.beside?.how === "files" ? "is among the files that were opened" : "was found beside the manifest"}</span>` : "") +
+    (e.state === "fail" && e.detail.startsWith("payload != ") ? ` <span class="hint">— the envelope <span class="mono">${esc(att["envelope-ref"])}</span> signs another text: an Attestation that was changed after signing, its lifecycle included, no longer matches its envelope</span>` : "");
+}
+function bindsHtml(r, head = "") {
+  const a = r.obj, b = state.binds.get(a.id);
+  const signature = kvRow("signature", envelopeHtml(b, a)), where = kvRow("where it lies", attestationWhere(r));
+  if (!state.manifestBytes) return `<div class="stmt" data-attestation="${esc(a.id)}" data-binds="not-judged">${head}<b>NOT HELD TO A BUNDLE</b>
+      <span class="hint">— no manifest is loaded, so nothing delivered is there to compare its subjects with</span>
+      <div class="kv" style="margin-top:8px">${signature}${where}</div></div>`;
+  if (!b) return `<div class="stmt" data-attestation="${esc(a.id)}" data-binds="pending">${head}<span class="hint">being held to the bundle…</span></div>`;
+  const fails = b.fails && b.withBundle;
+  const cls = b.verdict === "full-match" ? "verdict-ok" : fails ? "verdict-bad" : "verdict-warn";
+  const says = b.verdict === "full-match" ? `every subject is an object of this bundle with the signed digest, and the Attestation binds ${BINDS_MANIFEST[b.manifest]}`
+    : b.verdict === "semantic-match" ? "every subject matches and the Attestation binds another manifest: the content is proven, the packaging was altered. Reported; not a failure, and not a Full Match"
+    : fails ? "a failure: the Attestation is active, and validate_core.py fails the bundle for it — provided the kernel schema accepts the file as an Attestation, which this page does not check"
+    : b.fails ? "the Attestation is active; it was not read with this bundle, so it fails none"
+    : `reported, not a failure: lifecycle ${a.lifecycle}`;
+  const subjects = b.subjects.map(sj => `<tr data-subject="${sj.status}">
+      <td><span class="badge" style="border-color:${SUBJECT_C[sj.status]};color:${SUBJECT_C[sj.status]}">${sj.status}</span></td>
+      <td>${sj.id ? refOrOutside(sj.id) : `<span class="hint">a bare digest: any object the manifest lists may carry it</span>`}</td>
+      <td class="mono" style="font-size:10.5px;word-break:break-all" data-signed>${esc(sj.signed)}</td>
+      <td class="mono" style="font-size:10.5px;word-break:break-all" data-delivered>${sj.delivered ? esc(sj.delivered) : `<span class="hint">${sj.id ? "not an object the manifest lists" : "no listed object carries it"}</span>`}</td></tr>`).join("");
+  const todo = fails ? `<div class="hint" style="margin-top:8px" data-binds-todo>What can be done: the signer issues the Attestation again (a new version, signed again), or it is taken out of the bundle. ` +
+    (given(a["envelope-ref"]) ? "Setting its lifecycle to withdrawn is no way out for this one: it names an envelope, and an Attestation that was edited no longer matches its envelope."
+      : "This one names no envelope, so setting its lifecycle to withdrawn is a way out as well: it is then reported and fails nothing.") + `</div>` : "";
+  return `<div class="stmt" data-attestation="${esc(a.id)}" data-binds="${b.verdict}" data-binds-manifest="${b.manifest}" data-binds-fails="${fails}">
+    ${head}<b class="${cls}" data-binds-word>${BINDS_WORD[b.verdict]}</b>${b.envelope.state === "fail" || b.envelope.state === "missing" ? ` <b class="verdict-bad" data-binds-envelope>· ✗ and its envelope fails (below)</b>` : ""} <span class="hint">— ${esc(says)}</span>
+    <div class="mono" style="font-size:10.5px;color:var(--text-quiet);margin-top:4px;word-break:break-all" data-binds-line title="the line validate_core.py prints for this Attestation">${esc(b.line)}</div>
+    ${b.subjects.length ? `<table class="flat" style="margin-top:8px"><tr><th>subject</th><th>object</th><th>signed semantic digest</th><th>delivered</th></tr>${subjects}</table>` : `<div class="verdict-bad" style="margin-top:8px">it names no subject</div>`}
+    ${state.missingEntries > 0 ? `<div class="hint verdict-warn">${state.missingEntries} object(s) the manifest lists were not loaded: a subject shown as absent may be one of them</div>` : ""}
+    <div class="kv" style="margin-top:8px">
+      ${kvRow("manifest bound", `<span class="mono" style="font-size:10.5px;word-break:break-all">${esc(a["content-manifest-digest"])}</span> = <b>${BINDS_MANIFEST[b.manifest]}</b>` +
+        (b.manifest === "other" ? ` <span class="hint">— this bundle's manifest is <span class="mono">${esc(state.manifestDigest)}</span></span>` : "") +
+        (b.manifest === "other" && state.beside?.how === "files" ? ` <span class="hint verdict-warn" data-binds-caveat>— the files were opened without their folder, so a pack manifest the bundle keeps was not looked for</span>` : ""))}
+      ${signature}${where}
+    </div>${todo}</div>`;
+}
+function renderAttestation(r) {
+  return `<div class="nano sectionlabel">What it binds of this bundle — attestation-binds (Appendix B.1.7)</div>${bindsHtml(r)}` + renderGeneric(r);
+}
+/* the Attestations beside the manifest, for the overview: how many, how a URL load looked for them, and each verdict */
+function besideSummaryHtml(tally) {
+  const how = state.beside, read = [...state.objects.values()].filter(r => r.type === "attestation" && (r.beside || r.entry))
+    .sort((a, b) => (a.obj.id < b.obj.id ? -1 : a.obj.id > b.obj.id ? 1 : 0));
+  const looked = !how ? "" : how.how === "listing" ? ` <span class="hint" data-beside="listing">— the server lists the folder: ${how.looked} .json file(s) there that the manifest does not list were read</span>`
+    : how.how === "files" ? ` <span class="hint" data-beside="files">— files were opened without their folder: those among them that the manifest does not list and that are Attestations. A pack manifest the bundle keeps (packs/sha256/) is found only in an opened folder</span>`
+    : how.how === "named" ? ` <span class="hint" data-beside="named">— this server lists no folders; read what was named${how.named.length ? ": " + esc(how.named.join(", ")) : " — nothing"}</span>` +
+        how.refused.map(([name, why]) => `<div class="verdict-bad" data-beside-refused>✗ ${esc(name)}: ${esc(why)}</div>`).join("")
+    : ` <span class="verdict-warn" data-beside="no-listing">— not looked for: this server lists no folders, and nothing was named. Add &amp;attestation=&lt;file name&gt; to the link, or open the folder</span>`;
+  return `<span id="ov-beside">${tally.beside}</span> <span class="hint">— not listed: an Attestation binds the digest of the manifest's bytes (D3.1)</span>${looked}` +
+    read.map(r => {
+      const b = state.binds.get(r.obj.id), fails = b && b.fails, unsigned = b && (b.envelope.state === "fail" || b.envelope.state === "missing");
+      return `<div data-ov-binds="${b ? b.verdict : "pending"}" class="${!b ? "hint" : b.verdict === "full-match" ? "verdict-ok" : fails ? "verdict-bad" : "verdict-warn"}">` +
+        `${b ? (fails ? "✗ " : "") + BINDS_WORD[b.verdict] + (b.verdict === "fail" ? (fails ? " — a failure" : " — reported, not a failure") : ` (${BINDS_MANIFEST[b.manifest]})`) : "…"} · ` +
+        `<a class="reflink" data-ref="${esc(r.obj.id)}">${esc(r.obj.id)}</a>${r.beside ? "" : ` <span class="hint">(listed by the manifest)</span>`}` +
+        (unsigned ? ` <span class="verdict-bad" data-ov-envelope>✗ its envelope: FAIL - ${esc(b.envelope.detail)}</span>` : "") + `</div>`;
+    }).join("");
+}
+/* S5 · Assess & Attest: results board, and what each Attestation binds */
 function renderStageAssess() {
   const asmts = [...state.objects.values()].filter(r => r.type === "assessment");
   const finds = [...state.objects.values()].filter(r => r.type === "finding");
-  const atts = [...state.objects.values()].filter(r => r.type === "attestation");
+  const atts = [...state.objects.values()].filter(r => r.type === "attestation")
+    .sort((a, b) => (a.obj.id < b.obj.id ? -1 : a.obj.id > b.obj.id ? 1 : 0));   // by id, as the reference reports them
   const checks = [...state.objects.values()].filter(r => r.type === "check");
   if (!asmts.length && !finds.length && !atts.length && !checks.length)
     return stageHead("assess") + wbAssessHtml() +
@@ -2002,17 +2305,15 @@ function renderStageAssess() {
         ${(f.obj.actions || []).map(ac => `<div class="hint">▸ ${esc(tt(ac.description))} ${ac.due ? `<span class="badge" title="deadline">${esc(JSON.stringify(ac.due))}</span>` : ""} <span class="badge">${esc(ac.status)}</span></div>`).join("")}
         ${(f.obj.deviations || []).map(d => `<div class="hint verdict-warn">${deviationLine(d)}</div>`).join("")}
       </div>`).join("") + `</div>`).join("") + `</div>`;
-  const attCards = atts.map(a => `<div class="stmt">
+  const attCards = atts.map(a => bindsHtml(a, `<div style="margin-bottom:6px">
     <span class="badge" style="border-color:${TYPES.attestation.color}">✦ attestation</span>
-    <a class="reflink" data-ref="${esc(a.obj.id)}"><b>${esc(a.obj.title || a.obj.label || a.obj.id.split("/").pop())}</b></a>
-    <span class="hint">signer ${esc((a.obj.signer || "").split("/").pop())} · ${esc(a.obj.timestamp || "")}</span>
-    <div style="margin-top:6px"><button class="primary" data-att="${esc(a.obj.id)}">◉ Verify bi-modal</button>
-    <span class="hint"> Full Match = bytes as signed · Semantic Match = meaning intact through repackaging · Tamper = meaning changed</span></div></div>`).join("");
+    <a class="reflink" data-ref="${esc(a.obj.id)}"><b>${esc(tt(a.obj.title) || a.obj.label || a.obj.id.split("/").pop())}</b></a>
+    <span class="hint">signer ${esc(String(a.obj.signer || "").split("/").pop())} · ${esc(a.obj.timestamp || "")} · lifecycle ${esc(a.obj.lifecycle || "—")}</span></div>`)).join("");
   return stageHead("assess") + wbAssessHtml() +
     (checks.length ? `<div class="nano sectionlabel">Checks (${checks.length}) — what a machine observes and which criteria must hold; outcomes are the recorded ones, nothing is run or recomputed here</div>${cCards}` : "") +
     (asmts.length ? `<div class="nano sectionlabel">Assessments (${asmts.length})</div>${aCards}` : "") +
     (finds.length ? `<div class="nano sectionlabel">Findings (${finds.length}) — dispositions are Deviations, deadlines live in actions[].due</div>${kanban}` : "") +
-    (atts.length ? `<div class="nano sectionlabel">Attestations (${atts.length})</div>${attCards}` : "");
+    (atts.length ? `<div class="nano sectionlabel">Attestations (${atts.length}) — what each binds of this bundle (attestation-binds, Appendix B.1.7), computed when the bundle is loaded and worded as the reference validator words it</div>${attCards}` : "");
 }
 
 /* ---------- zip writer (STORE, no deps) ---------- */
@@ -2159,6 +2460,7 @@ function addToGraph(objs, opts = {}) {
   }
   if (!opts.ephemeral) saveWork();
   renderAll();
+  judgeAttestations();
 }
 function restoreWorkspaceObjects() {
   if (work.created?.length) {
@@ -2167,8 +2469,9 @@ function restoreWorkspaceObjects() {
   }
 }
 function workspaceObjects() {
+  /* an Attestation leaves as it is held: it is a signed statement, and a rewritten one is another */
   return state.order.map(id => state.objects.get(id))
-    .filter(r => r && r.path === "(workspace)").map(r => textifyJs(JSON.parse(JSON.stringify(r.obj))));
+    .filter(r => r && r.path === "(workspace)").map(r => r.type === "attestation" ? JSON.parse(JSON.stringify(r.obj)) : textifyJs(JSON.parse(JSON.stringify(r.obj))));
 }
 async function buildWorkspaceBundleFiles(objs, provenance) {
   const enc = new TextEncoder();
@@ -2183,7 +2486,7 @@ async function buildWorkspaceBundleFiles(objs, provenance) {
     objects: [], "facet-schemas": [] };
   const DIR = { requirement: "req", requirementSet: "set", tailoring: "tailoring",
     mapping: "map", component: "comp", implementation: "impl",
-    assessment: "asmt", finding: "finding", attestation: "att", risk: "risk", check: "check" };
+    assessment: "asmt", finding: "finding", risk: "risk", check: "check" };   // no folder for an Attestation: it is not an object the manifest lists (below)
   /* Facet schemas (v1.11.0): an object that leaves with a registered facet needs that facet's schema
      pinned beside it, or a validator refuses the facet as unregistered (D10). The pin and the schema
      file are those of the loaded bundle, unchanged. Until 1.10.0 no export pinned one, so the
@@ -2196,18 +2499,51 @@ async function buildWorkspaceBundleFiles(objs, provenance) {
     manifest["facet-schemas"].push(pin);
     files.push({ name: pin.path, bytes: f.bytes });
   }
+  /* An Attestation is never listed (D3.1; v1.13.0, backlog #46): it binds the digest of the manifest's
+     bytes, so a manifest that listed it would have to hold its own digest. It is written beside the
+     manifest, where a validator looks for it. Until 1.12.0 it was written under objects/att/ and
+     listed. What it binds of THIS export is computed here and said in the reference's words: the
+     manifest is new, so at best a Semantic Match. The workspace holds objects and no envelope files,
+     so a signed Attestation leaves without its envelope, and the line below says that a validator
+     fails the export for it. */
+  const delivered = new Map(), attestations = [];
   for (const o of objs) {
     const t = inferType(o);
-    const rel = `objects/${DIR[t] || "obj"}/${slug(o.id.split("/").slice(-2).join("-"))}.json`;
     const bytes = enc.encode(JSON.stringify(o, null, 1) + "\n");
+    if (t === "attestation") {
+      let rel = `attestation-${slug(o.id.split("/").pop())}.json`;
+      for (let n = 2; files.some(f => f.name === rel); n++) rel = `attestation-${slug(o.id.split("/").pop())}-${n}.json`;
+      files.push({ name: rel, bytes });
+      attestations.push(o);
+      continue;
+    }
+    const rel = `objects/${DIR[t] || "obj"}/${slug(o.id.split("/").slice(-2).join("-"))}.json`;
+    const semantic = await semanticDigest(o);
     files.push({ name: rel, bytes });
+    delivered.set(o.id, semantic);
     manifest.objects.push({ id: o.id, version: o.version,
-      "package-digest": "sha256:" + await sha256hex(bytes),
-      "semantic-digest": "sha256:" + await sha256hex(canonical(o)), path: rel });
+      "package-digest": "sha256:" + await sha256hex(bytes), "semantic-digest": semantic, path: rel });
   }
-  files.push({ name: "content-manifest.json",
-    bytes: enc.encode(JSON.stringify(manifest, null, 1) + "\n") });
+  const manifestBytes = enc.encode(JSON.stringify(manifest, null, 1) + "\n");
+  files.push({ name: "content-manifest.json", bytes: manifestBytes });
+  files.listed = manifest.objects.length; files.attestations = attestations.length; files.fails = [];
+  if (attestations.length) {
+    const manifestDigest = "sha256:" + await sha256hex(manifestBytes);
+    for (const a of attestations.sort((x, y) => (x.id < y.id ? -1 : x.id > y.id ? 1 : 0))) {
+      const b = attestationBinds(a, manifestDigest, delivered, []), line = bindsLine(a, b), e = envelopeState(a, undefined);
+      (b.fails ? l.err : l.warn)("in this export — " + line);
+      if (b.fails) files.fails.push(line);
+      if (e.state === "missing") { l.err(`in this export — dsse: ${a.id} = FAIL - ${e.detail} (the workspace holds no envelope files)`); files.fails.push(`dsse: ${a.id} = FAIL - ${e.detail}`); }
+      else l.info(`in this export — dsse: ${a.id} = ${e.detail}`);
+    }
+  }
   return files;
+}
+/* what the last line of an export says about the Attestations: those it wrote, and those of the loaded bundle it did not */
+function exportAttestationNote(files) {
+  const loaded = [...state.objects.values()].filter(r => r.type === "attestation" && (r.beside || r.entry)).length;
+  return (files.attestations ? ` + ${files.attestations} Attestation(s) beside the manifest, not listed (D3.1)` : "") +
+    (loaded ? ` — the ${loaded} Attestation(s) of the loaded bundle are not carried: they bind that delivery, and this export delivers other objects` : "");
 }
 async function exportWorkspaceBundle() {
   const objs = workspaceObjects();
@@ -2221,7 +2557,8 @@ async function exportWorkspaceBundle() {
   a.href = URL.createObjectURL(new Blob([zip], { type: "application/zip" }));
   a.download = "workspace-bundle.zip"; a.click();
   setTimeout(() => URL.revokeObjectURL(a.href), 5000);
-  l.ok(`workspace bundle exported: ${objs.length} objects + content-manifest with both digests (${(zip.length / 1024).toFixed(1)} kB zip) — loads back into this reader and passes validate_core.py`);
+  (files.fails.length ? l.err : l.ok)(`workspace bundle exported: ${files.listed} objects + content-manifest with both digests${exportAttestationNote(files)} (${(zip.length / 1024).toFixed(1)} kB zip) — loads back into this reader and ` +
+    (files.fails.length ? `validate_core.py fails it: ${files.fails.length} line(s) above say why` : "passes validate_core.py"));
 }
 /* The approver of a Deviation (v1.12.0; backlog #70): required by the kernel, and named by a person.
    The field starts empty, for every Deviation anew, and not from the author either: a pre-filled
@@ -3014,7 +3351,7 @@ async function exportResolved(tObj) {
   a.href = URL.createObjectURL(new Blob([zip], { type: "application/zip" }));
   a.download = slug(tObj.label || "resolved") + "-resolved.zip"; a.click();
   setTimeout(() => URL.revokeObjectURL(a.href), 5000);
-  l.ok(`resolved package exported: ${objs.length} requirements, fresh manifest, provenance records the Tailoring (Appendix B step 4)`);
+  l.ok(`resolved package exported: ${objs.length} requirements, fresh manifest, provenance records the Tailoring (Appendix B step 4)${exportAttestationNote(files)}`);
 }
 function resolvedPreviewHtml(tObj) {
   const { scope, resolved, touched, errors } = resolveTailoring(tObj);
@@ -3046,7 +3383,6 @@ function renderStageFn(key) {
   const mq = el.querySelector("#mapq");
   if (mq) mq.oninput = e => { state.stageSel = state.stageSel || {}; state.stageSel.mapQ = e.target.value;
     clearTimeout(state._mqT); state._mqT = setTimeout(() => renderStageFn("map"), 250); };
-  el.querySelectorAll("[data-att]").forEach(b => b.onclick = () => verifyAttestation(b.dataset.att, b));
   if (key === "author") wireAuthorWb(el);
   if (key === "tailor") {
     wireTailorWb(el);
@@ -3072,6 +3408,7 @@ function renderNavCounts() {
 
 /* ---------- views + wiring ---------- */
 function setView(v) {
+  state.view = v;
   document.querySelectorAll(".navitem").forEach(el => el.classList.toggle("active", el.dataset.view === v));
   const stage = v.startsWith("stage:") ? v.slice(6) : null;
   for (const id of ["overview","stages","stagefn","browser","stats","legend"])
@@ -3090,7 +3427,9 @@ $("btn-verify").onclick = verifyAll;
 $("search").oninput = e => { state.search = e.target.value; renderList(); };
 $("btn-url").onclick = () => {
   const u = prompt("Bundle URL — a folder containing content-manifest.json (absolute, or relative to this page):", "../converted_examples/");
-  if (u) loadFromUrl(u);
+  if (!u) return;
+  const named = prompt("Attestation file(s) beside that manifest — by file name, separated by commas. A manifest does not list its Attestation, and a URL has no folder to look into. Leave empty to ask the server for a listing of the folder:", "");
+  loadFromUrl(u, besideNames(named));
 };
 $("btn-paste").onclick = () => {
   const txt = prompt("Paste one JASCON object (JSON):");
@@ -3104,6 +3443,7 @@ $("btn-paste").onclick = () => {
     if (!state.order.includes(id)) state.order.push(id);
     l.ok(`pasted object accepted as ${t}: ${id}`);
     renderAll(); openObject(id);
+    judgeAttestations();
   } catch (e) { l.err("paste parse failed: " + e.message); }
 };
 
@@ -3111,10 +3451,8 @@ $("btn-paste").onclick = () => {
 async function walkEntry(entry, out) {
   if (entry.isFile) {
     const f = await new Promise((res, rej) => entry.file(res, rej));
-    if (f.name.endsWith(".json") || EVIDENCE_RE.test(entry.fullPath) || PACK_RE.test(entry.fullPath)) {
-      Object.defineProperty(f, "webkitRelativePath", { value: entry.fullPath.replace(/^\//, "") });
-      out.push(f);
-    }
+    Object.defineProperty(f, "webkitRelativePath", { value: entry.fullPath.replace(/^\//, "") });
+    out.push(f);   // every file: an envelope is found by the name its Attestation gives it, and loadFileList reads only what it needs
   } else if (entry.isDirectory) {
     const reader = entry.createReader();
     let batch;
@@ -3135,7 +3473,7 @@ document.body.addEventListener("drop", async e => {
     if (entry) await walkEntry(entry, out);
     else { const f = it.getAsFile?.(); if (f?.name.endsWith(".json")) out.push(f); }
   }
-  if (out.length) loadFileList(out); else l.warn("drop contained no .json files");
+  if (out.some(f => f.name.endsWith(".json"))) loadFileList(out); else l.warn("drop contained no .json files");
 });
 
 /* splitter */
@@ -3175,7 +3513,7 @@ l.info("open a bundle folder (contains content-manifest.json + objects/) or drop
     if (wantView && document.querySelector(`.navitem[data-view="${CSS.escape(wantView)}"]`)) setView(wantView);
     else if (wantView) l.warn("unknown view in #fragment: " + wantView);
   };
-  if (frag.get("load")) loadFromUrl(frag.get("load")).then(applyView);
+  if (frag.get("load")) loadFromUrl(frag.get("load"), besideNames(frag.get("attestation"))).then(applyView);
   else applyView();
 })();
 if (!crypto.subtle) l.warn("crypto.subtle unavailable in this context — digest verification uses the JS fallback (slower)");
