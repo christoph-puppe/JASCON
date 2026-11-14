@@ -14,7 +14,7 @@ contact with real catalogs before it may stay.**
 
 This repository is a working design study, not a slide deck. It contains a
 draft specification with a public decision register, an **executable kernel
-schema** with a **157-vector conformance corpus** (665 in 18 families in the 2.0.0 candidate) and *two* reference
+schema** with a **157-vector conformance corpus** (684 in 18 families in the 2.0.0 candidate) and *two* reference
 validators — Python, and a **zero-dependency PowerShell 5.1 twin that runs
 on a stock Windows box** (the weekend-validator claim, measured,
 crypto engines included) —
@@ -91,9 +91,16 @@ backlog #71.)*
 >   gets an author and seven report lines remain.
 > - **Not there:** a version's author is not a log of every change. An
 >   author taken from a source is the document's, under the document's
->   date. Where the kernel requires an author (a Mapping, a Check) and
->   the user named none, the app writes a placeholder party (backlog
->   #70).
+>   date.
+> - **No tool invents a party** (backlog #70, decided by the author on
+>   2026-11-14: "refuse if no party is named"): where the kernel
+>   requires one — a Mapping's and a Check's author, an Assessment's
+>   performer, a Deviation's approver, the obligated party of a
+>   statement — and the user named none, the app and the reader wrote
+>   one made from a word. They refuse the save now and say which field
+>   is missing; an approver always starts empty. Objects written before
+>   keep the made-up parties, and ten converters still write an
+>   obligated party their source does not state (backlog #74, open).
 > - **One value, one spelling, once more** (backlog #68, 2026-11-13): a
 >   date, a digest or a decimal that ends in a line break was accepted
 >   by two of the three implementations, because Python and .NET read
@@ -109,7 +116,7 @@ backlog #71.)*
 > tailoring or an assessment, and the vendor's manifest stays in the set
 > as the import record. No new type.
 >
-> - **Measured:** 74 advice vectors (537 in all on 2026-11-12, 665 in 18 families since 2026-11-13) pass in the
+> - **Measured:** 74 advice vectors (537 in all on 2026-11-12, 684 in 18 families since 2026-11-14) pass in the
 >   Python reference; 28 deliberate breaks of the reference each turn a
 >   vector red. A worked pack, signed with the public fixture key, and
 >   the example folder after importing it validate. Run over the shipped

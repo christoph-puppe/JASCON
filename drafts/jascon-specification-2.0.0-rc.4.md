@@ -2128,11 +2128,20 @@ of Check and of advice packs:
    **665 vectors**. Fifteen of them failed in both validators before
    the change, and one stopped the twin; twelve deliberate defects in
    the two fixes each turn a vector red or stop the run.)*
+   *(2026-11-14: 19 vectors for `attestation-binds` applied to a bundle
+   (D7 as amended; IV.6) — `attestation` 5 → 24: **684 vectors**. Their
+   expectations were written before the code. Sixteen deliberate
+   defects in the reference each turn a vector or the end-to-end test
+   `test_attestation_binds.py` red; the last was caught by nothing until
+   a test was added for it.)*
 2. **First implementation.** ✓ `validate_core.py`: 537 / 537, the five
    shipped bundles (3,715 objects, both digests each), the worked advice
    pack and the example folder — ALL GREEN on 2026-11-12.
    *(rc.4, 2026-11-13: 643 / 643, the same bundles, pack and folder, ALL
    GREEN in the workflow run of item 3.)*
+   *(2026-11-14: 684 / 684, the same bundles, pack and folder, each
+   Attestation read with them a Full Match, ALL GREEN in the workflow
+   runs of item 3.)*
 3. **Second implementation.** ✓ `validate_core.ps1` ran on Windows
    PowerShell 5.1 on 2026-11-12 on this candidate: 537 / 537 in
    seventeen families (`kernel: 25`, `advice: 74`), the five bundles,
@@ -2172,6 +2181,19 @@ of Check and of advice packs:
    red in the browser job: the reader showed another Tailoring first on
    the runner than on the machine its test was written on (register,
    "Phase C").)*
+   *(2026-11-14, `attestation-binds` on a bundle: at commit `57c3e235`
+   the twin ran on Windows PowerShell 5.1 on 684 / 684
+   (`attestation: 24`), the five bundles, the worked pack and the
+   example folder, the four binds lines of the run FULL MATCH as in the
+   reference, ALL GREEN in 220 s. In the same job the end-to-end test
+   drove the twin over nine changed copies of a bundle and a pack — a
+   subject of another digest, a subject not delivered, another
+   manifest, a withdrawn Attestation, a signed one edited — 11 tests,
+   one skipped by design, in 81 s; the reference job runs the same test
+   against `validate_core.py` (`https://github.com/christoph-puppe/JASCON/actions/runs/43550048312`). The run before it was
+   red in that step: the twin called every object of a bundle "on disk
+   but not in manifest" when the bundle's folder was named by a short
+   path, a defect older than the port (register, "Phase D").)*
 4. **Corpus.** ◐ Risk: one, IFA, two Risk objects — enough to exercise
    the record's sourced half and to measure what the source lacks; not
    enough to exercise `rating`, `acceptance`, the later states, or
@@ -2254,14 +2276,14 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
   modality 21 · parameter 19 · tailoring 19 · attestation 5 · facet 7 ·
   reference 13 · lifecycle 38 · tier 9 · dsse 5 · composition 7 ·
   conditional 8 · risk 73 · kernel 25 · scale 18 · check 188 · advice
-  74; with the amendments after rc.3 in IV.6 and the vectors of rc.4, **643 in 18 families**: `author` 40, `kernel` 54, `reference` 18, `tier` 10, `jcs` 22, `parameter` 21, `check` 203; and with the vectors of D3.10 after rc.4, **665**: `kernel` 71, `parameter` 22, `check` 205, `composition` 9). In `risk-vectors.json`, `expected-rule` is the portable assertion; in `author-vectors.json`, the rule, the object and the count of each report line;
+  74; with the amendments after rc.3 in IV.6 and the vectors of rc.4, **643 in 18 families**: `author` 40, `kernel` 54, `reference` 18, `tier` 10, `jcs` 22, `parameter` 21, `check` 203; and with the vectors of D3.10 after rc.4, **665**: `kernel` 71, `parameter` 22, `check` 205, `composition` 9; and with the vectors of D7 as amended on 2026-11-14, **684**: `attestation` 24). In `risk-vectors.json`, `expected-rule` is the portable assertion; in `author-vectors.json`, the rule, the object and the count of each report line;
   in `check-vectors.json` and `advice-vectors.json`, the outcome and the
   named rules.
 - **A worked advice pack** under `jascon/example-packs/`, and the example
   folder after importing it.
 - **Two reference validators**: `validate_core.py` (Python, jsonschema
   only) — green; `validate_core.ps1` (PowerShell 5.1, zero dependencies)
-  — green on 2026-11-13 on all 665 vectors of this candidate, on Windows
+  — green on 2026-11-14 on all 684 vectors of this candidate, on Windows
   PowerShell 5.1 (IV.5b item 3). A workflow runs both, and the app's
   port, on every change (`.github/workflows/validators.yml`).
 - **Bidirectional export**: `export_oscal.py` — as at 1.0.0 (OSCAL 1.2.2

@@ -164,16 +164,31 @@ authority-proven, and two changed example folders, one of them with the
 example Attestation as it was shipped before 2026-11-14, which fails twice
 here as it does in validate_core.py (the envelope, the binding). There the
 counts, the dsse and binds lines and the list of failures were the same as
-those of validate_core.py, in both modes. Not run on Windows PowerShell 5.1
-when this was written; the workflow runs it there.
-NOT EXERCISED by a vector or a bundle of the repository: the lines for a
-Semantic Match and for an Attestation that does not bind, and the failure
-(every bundle here is a Full Match; the vectors hold the verdict, not the
-words); an Attestation without a subject (the schema asks for one, so only
-the vector runner could meet it, and no vector has one); a case of the
-binds-vectors with an object that does not type; the order of two ids or
-two file names that differ in a character beyond U+FFFF. The bundles made
-for the run exercised all of these but the two that only a vector can.
+those of validate_core.py, in both modes.
+EXECUTED 2026-11-14 on Windows PowerShell 5.1 (the workflow, commit
+57c3e235, run 43550048312): the lint, then 684 vectors in 18 families
+(attestation: 24), the five bundles (the IFA bundle 18), the worked pack
+(3) and the example folder (27), the four binds lines of the run FULL
+MATCH, ALL GREEN in 220 s. In the same job test_attestation_binds.py drove this file over
+nine changed copies of the IFA bundle and the worked pack: 11 tests, one
+skipped by design, in 81 s. That is where the lines for a Semantic Match,
+for a withdrawn Attestation that does not bind and for the failure are
+printed on Windows PowerShell 5.1, and where the worked pack is verified
+with the fixture key.
+FOUND by that test, both older than the port: parameters were bound by
+position (see below), and a bundle folder named by a short (8.3) path or
+with a trailing separator made every object "on disk but not in manifest",
+because the relative path was cut at the length of the folder's name as
+the caller had spelled it (the run before, 43549065626, was red by it).
+The on-disk check takes each path from .NET's enumeration of
+`<bundle>/objects` now, and the test names one folder with a trailing
+separator.
+NOT EXERCISED by a vector, a bundle of the repository or that test: an
+Attestation without a subject (the schema asks for one, so only the vector
+runner could meet it, and no vector has one); a case of the binds-vectors
+with an object that does not type; the order of two ids or two file names
+that differ in a character beyond U+FFFF. The bundles made for the run on
+Linux exercised the third.
 
 Usage: powershell -ExecutionPolicy Bypass -File validate_core.ps1 [bundle-dirs...]
        -VectorsOnly to skip bundles; -TrustedKeys file.json for verification mode;
