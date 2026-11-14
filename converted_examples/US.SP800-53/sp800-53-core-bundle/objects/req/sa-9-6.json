@@ -31,6 +31,11 @@
     {
      "id": "sa-9.6_obj",
      "label": "SA-09(06)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "exclusive control of cryptographic keys is maintained for encrypted material stored or transmitted through an external system."
      }

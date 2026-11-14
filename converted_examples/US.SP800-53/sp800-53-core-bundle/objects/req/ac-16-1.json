@@ -73,10 +73,20 @@
     {
      "id": "ac-16.1_obj",
      "label": "AC-16(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ac-16.1_obj-1",
        "label": "AC-16(01)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "security attributes are dynamically associated with {param:ac-16.01_odp.01} in accordance with the following security policies as information is created and combined: {param:ac-16.01_odp.05};"
        }
@@ -84,6 +94,11 @@
       {
        "id": "ac-16.1_obj-2",
        "label": "AC-16(01)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "security attributes are dynamically associated with {param:ac-16.01_odp.02} in accordance with the following security policies as information is created and combined: {param:ac-16.01_odp.05};"
        }
@@ -91,6 +106,11 @@
       {
        "id": "ac-16.1_obj-3",
        "label": "AC-16(01)[03]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "privacy attributes are dynamically associated with {param:ac-16.01_odp.03} in accordance with the following privacy policies as information is created and combined: {param:ac-16.01_odp.06};"
        }
@@ -98,6 +118,11 @@
       {
        "id": "ac-16.1_obj-4",
        "label": "AC-16(01)[04]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "privacy attributes are dynamically associated with {param:ac-16.01_odp.04} in accordance with the following privacy policies as information is created and combined: {param:ac-16.01_odp.06}."
        }
@@ -183,42 +208,48 @@
       {
        "en": "subjects with which security attributes are to be dynamically associated as information is created and combined are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-16(01)_ODP[01]"
     },
     "ac-16.01_odp.02": {
      "guidelines": [
       {
        "en": "objects with which security attributes are to be dynamically associated as information is created and combined are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-16(01)_ODP[02]"
     },
     "ac-16.01_odp.03": {
      "guidelines": [
       {
        "en": "subjects with which privacy attributes are to be dynamically associated as information is created and combined are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-16(01)_ODP[03]"
     },
     "ac-16.01_odp.04": {
      "guidelines": [
       {
        "en": "objects with which privacy attributes are to be dynamically associated as information is created and combined are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-16(01)_ODP[04]"
     },
     "ac-16.01_odp.05": {
      "guidelines": [
       {
        "en": "security policies requiring dynamic association of security attributes with subjects and objects are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-16(01)_ODP[05]"
     },
     "ac-16.01_odp.06": {
      "guidelines": [
       {
        "en": "privacy policies requiring dynamic association of privacy attributes with subjects and objects are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-16(01)_ODP[06]"
     }
    }
   }

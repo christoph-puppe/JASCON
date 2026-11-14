@@ -38,6 +38,11 @@
     {
      "id": "sc-16.3_obj",
      "label": "SC-16(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:sc-16.03_odp} are implemented to bind security and privacy attributes to transmitted information."
      }
@@ -107,7 +112,8 @@
      ],
      "alt-identifiers": [
       "sc-16.3_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-16(03)_ODP"
     }
    }
   }

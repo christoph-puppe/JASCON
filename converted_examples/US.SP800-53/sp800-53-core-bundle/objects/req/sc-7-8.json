@@ -43,6 +43,11 @@
     {
      "id": "sc-7.8_obj",
      "label": "SC-07(08)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:sc-07.08_odp.01} is routed to {param:sc-07.08_odp.02} through authenticated proxy servers at managed interfaces."
      }
@@ -121,7 +126,8 @@
      ],
      "alt-identifiers": [
       "sc-7.8_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-07(08)_ODP[01]"
     },
     "sc-07.08_odp.02": {
      "guidelines": [
@@ -131,7 +137,8 @@
      ],
      "alt-identifiers": [
       "sc-7.8_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SC-07(08)_ODP[02]"
     }
    }
   }

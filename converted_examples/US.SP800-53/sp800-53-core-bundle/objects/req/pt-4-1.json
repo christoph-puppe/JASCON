@@ -38,6 +38,11 @@
     {
      "id": "pt-4.1_obj",
      "label": "PT-04(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:pt-04.01_odp} are provided to allow individuals to tailor processing permissions to selected elements of personally identifiable information."
      }
@@ -110,7 +115,8 @@
      ],
      "alt-identifiers": [
       "pt-4.1_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PT-04(01)_ODP"
     }
    }
   }

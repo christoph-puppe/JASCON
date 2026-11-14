@@ -43,6 +43,11 @@
     {
      "id": "pe-4_obj",
      "label": "PE-04",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "physical access to {param:pe-04_odp.01} within organizational facilities is controlled using {param:pe-04_odp.02}."
      }
@@ -112,7 +117,8 @@
      ],
      "alt-identifiers": [
       "pe-4_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PE-04_ODP[01]"
     },
     "pe-04_odp.02": {
      "guidelines": [
@@ -122,7 +128,8 @@
      ],
      "alt-identifiers": [
       "pe-4_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "PE-04_ODP[02]"
     }
    }
   }

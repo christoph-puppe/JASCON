@@ -31,10 +31,20 @@
     {
      "id": "sc-21_obj",
      "label": "SC-21",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sc-21_obj-1",
        "label": "SC-21[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "data origin authentication is requested for the name/address resolution responses that the system receives from authoritative sources;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "sc-21_obj-2",
        "label": "SC-21[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "data origin authentication is performed on the name/address resolution responses that the system receives from authoritative sources;"
        }
@@ -49,6 +64,11 @@
       {
        "id": "sc-21_obj-3",
        "label": "SC-21[03]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "data integrity verification is requested for the name/address resolution responses that the system receives from authoritative sources;"
        }
@@ -56,6 +76,11 @@
       {
        "id": "sc-21_obj-4",
        "label": "SC-21[04]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "data integrity verification is performed on the name/address resolution responses that the system receives from authoritative sources."
        }
@@ -143,7 +168,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/SC-21.1",
     "mode": "merged-into",
-    "label": "SC-21(01)",
+    "label": "SC-21(1)",
     "title": "Data Origin and Integrity"
    }
   ]

@@ -31,6 +31,11 @@
     {
      "id": "ca-7.1_obj",
      "label": "CA-07(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "independent assessors or assessment teams are employed to monitor the controls in the system on an ongoing basis."
      }

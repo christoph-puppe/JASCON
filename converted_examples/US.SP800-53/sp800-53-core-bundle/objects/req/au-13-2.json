@@ -38,6 +38,11 @@
     {
      "id": "au-13.2_obj",
      "label": "AU-13(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the list of open-source information sites being monitored is reviewed {param:au-13.02_odp}."
      }
@@ -110,7 +115,8 @@
      ],
      "alt-identifiers": [
       "au-13.2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AU-13(02)_ODP"
     }
    }
   },

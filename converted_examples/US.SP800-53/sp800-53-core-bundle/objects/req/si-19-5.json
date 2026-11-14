@@ -32,10 +32,20 @@
     {
      "id": "si-19.5_obj",
      "label": "SI-19(05)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "si-19.5_obj-1",
        "label": "SI-19(05)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "numerical data is manipulated so that no individual or organization is identifiable in the results of the analysis;"
        }
@@ -43,6 +53,11 @@
       {
        "id": "si-19.5_obj-2",
        "label": "SI-19(05)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "contingency tables are manipulated so that no individual or organization is identifiable in the results of the analysis;"
        }
@@ -50,6 +65,11 @@
       {
        "id": "si-19.5_obj-3",
        "label": "SI-19(05)[03]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "statistical findings are manipulated so that no individual or organization is identifiable in the results of the analysis."
        }

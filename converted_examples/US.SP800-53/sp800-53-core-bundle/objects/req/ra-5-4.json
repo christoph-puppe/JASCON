@@ -38,10 +38,20 @@
     {
      "id": "ra-5.4_obj",
      "label": "RA-05(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ra-5.4_obj-1",
        "label": "RA-05(04)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "information about the system is discoverable;"
        }
@@ -49,6 +59,11 @@
       {
        "id": "ra-5.4_obj-2",
        "label": "RA-05(04)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "{param:ra-05.04_odp} are taken when information about the system is confirmed as discoverable."
        }
@@ -150,7 +165,8 @@
      ],
      "alt-identifiers": [
       "ra-5.4_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "RA-05(04)_ODP"
     }
    }
   },

@@ -44,7 +44,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "Security marking refers to the application or use of human-readable security attributes. Digital media includes diskettes, magnetic tapes, external or removable hard disk drives (e.g., solid state, magnetic), flash drives, compact discs, and digital versatile discs. Non-digital media includes paper and microfilm. Controlled unclassified information is defined by the National Archives and Records Administration along with the appropriate safeguarding and dissemination requirements for such information and is codified in 32 CFR 2002 . Security markings are generally not required for media that contains information determined by organizations to be in the public domain or to be publicly releasable. Some organizations may require markings for public information indicating that the information is publicly releasable. System media marking reflects applicable laws, executive orders, directives, policies, regulations, standards, and guidelines."
+     "en": "Security marking refers to the application or use of human-readable security attributes. Digital media includes diskettes, magnetic tapes, external or removable hard disk drives (e.g., solid state, magnetic), flash drives, compact discs, and digital versatile discs. Non-digital media includes paper and microfilm. Controlled unclassified information is defined by the National Archives and Records Administration along with the appropriate safeguarding and dissemination requirements for such information and is codified in [32 CFR 2002](#91f992fb-f668-4c91-a50f-0f05b95ccee3) . Security markings are generally not required for media that contains information determined by organizations to be in the public domain or to be publicly releasable. Some organizations may require markings for public information indicating that the information is publicly releasable. System media marking reflects applicable laws, executive orders, directives, policies, regulations, standards, and guidelines."
     }
    ]
   },
@@ -53,10 +53,20 @@
     {
      "id": "mp-3_obj",
      "label": "MP-03",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "mp-3_obj.a",
        "label": "MP-03a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "system media is marked to indicate distribution limitations, handling caveats, and applicable security markings (if any) of the information;"
        }
@@ -64,6 +74,11 @@
       {
        "id": "mp-3_obj.b",
        "label": "MP-03b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "{param:mp-03_odp.01} remain within {param:mp-03_odp.02}."
        }
@@ -136,7 +151,8 @@
      "alt-identifiers": [
       "mp-3_prm_1"
      ],
-     "alt-label": "types of system media"
+     "alt-label": "types of system media",
+     "sp800-53a-label": "MP-03_ODP[01]"
     },
     "mp-03_odp.02": {
      "guidelines": [
@@ -146,7 +162,8 @@
      ],
      "alt-identifiers": [
       "mp-3_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "MP-03_ODP[02]"
     }
    }
   }

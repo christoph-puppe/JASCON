@@ -31,6 +31,11 @@
     {
      "id": "ma-3.2_obj",
      "label": "MA-03(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "media containing diagnostic and test programs are checked for malicious code before the media are used in the system."
      }

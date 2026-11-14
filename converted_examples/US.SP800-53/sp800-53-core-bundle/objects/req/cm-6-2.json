@@ -43,6 +43,11 @@
     {
      "id": "cm-6.2_obj",
      "label": "CM-06(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:cm-06.02_odp.01} are taken in response to unauthorized changes to {param:cm-06.02_odp.02}."
      }
@@ -133,7 +138,8 @@
      ],
      "alt-identifiers": [
       "cm-6.2_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "CM-06(02)_ODP[01]"
     },
     "cm-06.02_odp.02": {
      "guidelines": [
@@ -143,7 +149,8 @@
      ],
      "alt-identifiers": [
       "cm-6.2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "CM-06(02)_ODP[02]"
     }
    }
   }

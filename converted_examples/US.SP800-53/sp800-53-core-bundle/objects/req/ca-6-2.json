@@ -31,10 +31,20 @@
     {
      "id": "ca-6.2_obj",
      "label": "CA-06(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ca-6.2_obj-1",
        "label": "CA-06(02)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "a joint authorization process is employed for the system;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "ca-6.2_obj-2",
        "label": "CA-06(02)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the joint authorization process employed for the system includes multiple authorizing officials with at least one authorizing official from an organization external to the organization conducting the authorization."
        }

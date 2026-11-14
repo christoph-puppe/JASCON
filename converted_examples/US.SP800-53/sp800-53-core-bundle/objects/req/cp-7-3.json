@@ -31,6 +31,11 @@
     {
      "id": "cp-7.3_obj",
      "label": "CP-07(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "alternate processing site agreements that contain priority-of-service provisions in accordance with availability requirements (including recovery time objectives) are developed."
      }

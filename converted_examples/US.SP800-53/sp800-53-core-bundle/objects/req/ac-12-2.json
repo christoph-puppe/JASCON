@@ -31,6 +31,11 @@
     {
      "id": "ac-12.2_obj",
      "label": "AC-12(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "an explicit logout message is displayed to users indicating the termination of authenticated communication sessions."
      }

@@ -31,6 +31,11 @@
     {
      "id": "ra-5.11_obj",
      "label": "RA-05(11)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "a public reporting channel is established for receiving reports of vulnerabilities in organizational systems and system components."
      }

@@ -31,10 +31,20 @@
     {
      "id": "ca-7.3_obj",
      "label": "CA-07(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ca-7.3_obj-1",
        "label": "CA-07(03)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "trend analysis is employed to determine if control implementations used in the continuous monitoring process need to be modified based on empirical data;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "ca-7.3_obj-2",
        "label": "CA-07(03)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "trend analysis is employed to determine if the frequency of continuous monitoring activities used in the continuous monitoring process needs to be modified based on empirical data;"
        }
@@ -49,6 +64,11 @@
       {
        "id": "ca-7.3_obj-3",
        "label": "CA-07(03)[03]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "trend analysis is employed to determine if the types of activities used in the continuous monitoring process need to be modified based on empirical data."
        }

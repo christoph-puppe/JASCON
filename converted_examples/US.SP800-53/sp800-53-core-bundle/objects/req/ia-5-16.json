@@ -60,6 +60,11 @@
     {
      "id": "ia-5.16_obj",
      "label": "IA-05(16)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the issuance of {param:ia-05.16_odp.01} is required to be conducted {param:ia-05.16_odp.02} before {param:ia-05.16_odp.03} with authorization by {param:ia-05.16_odp.04}."
      }
@@ -135,12 +140,14 @@
      ],
      "alt-identifiers": [
       "ia-5.16_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "IA-05(16)_ODP[01]"
     },
     "ia-05.16_odp.02": {
      "alt-identifiers": [
       "ia-5.16_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "IA-05(16)_ODP[02]"
     },
     "ia-05.16_odp.03": {
      "guidelines": [
@@ -150,7 +157,8 @@
      ],
      "alt-identifiers": [
       "ia-5.16_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "IA-05(16)_ODP[03]"
     },
     "ia-05.16_odp.04": {
      "guidelines": [
@@ -160,7 +168,8 @@
      ],
      "alt-identifiers": [
       "ia-5.16_prm_4"
-     ]
+     ],
+     "sp800-53a-label": "IA-05(16)_ODP[04]"
     }
    }
   }

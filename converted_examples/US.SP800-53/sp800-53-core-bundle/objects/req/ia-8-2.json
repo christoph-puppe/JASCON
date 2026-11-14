@@ -32,7 +32,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "Acceptance of only NIST-compliant external authenticators applies to organizational systems that are accessible to the public (e.g., public-facing websites). External authenticators are issued by nonfederal government entities and are compliant with SP 800-63B . Approved external authenticators meet or exceed the minimum Federal Government-wide technical, security, privacy, and organizational maturity requirements. Meeting or exceeding Federal requirements allows Federal Government relying parties to trust external authenticators in connection with an authentication transaction at a specified authenticator assurance level."
+     "en": "Acceptance of only NIST-compliant external authenticators applies to organizational systems that are accessible to the public (e.g., public-facing websites). External authenticators are issued by nonfederal government entities and are compliant with [SP 800-63B](#e59c5a7c-8b1f-49ca-8de0-6ee0882180ce) . Approved external authenticators meet or exceed the minimum Federal Government-wide technical, security, privacy, and organizational maturity requirements. Meeting or exceeding Federal requirements allows Federal Government relying parties to trust external authenticators in connection with an authentication transaction at a specified authenticator assurance level."
     }
    ]
   },
@@ -41,10 +41,20 @@
     {
      "id": "ia-8.2_obj",
      "label": "IA-08(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ia-8.2_obj.a",
        "label": "IA-08(02)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "only external authenticators that are NIST-compliant are accepted;"
        }
@@ -52,10 +62,20 @@
       {
        "id": "ia-8.2_obj.b",
        "label": "IA-08(02)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "ia-8.2_obj.b-1",
          "label": "IA-08(02)(b)[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "a list of accepted external authenticators is documented;"
          }
@@ -63,6 +83,11 @@
         {
          "id": "ia-8.2_obj.b-2",
          "label": "IA-08(02)(b)[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "a list of accepted external authenticators is maintained."
          }
@@ -165,7 +190,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/IA-8.3",
     "mode": "merged-into",
-    "label": "IA-08(03)",
+    "label": "IA-8(3)",
     "title": "Use of FICAM-approved Products"
    }
   ]

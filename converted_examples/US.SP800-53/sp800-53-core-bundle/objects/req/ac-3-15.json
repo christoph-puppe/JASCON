@@ -75,14 +75,29 @@
     {
      "id": "ac-3.15_obj",
      "label": "AC-03(15)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ac-3.15_obj.a",
        "label": "AC-03(15)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "ac-3.15_obj.a-1",
          "label": "AC-03(15)(a)[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "{param:ac-03.15_odp.01} is enforced over the set of covered subjects specified in the policy;"
          }
@@ -90,6 +105,11 @@
         {
          "id": "ac-3.15_obj.a-2",
          "label": "AC-03(15)(a)[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "{param:ac-03.15_odp.02} is enforced over the set of covered objects specified in the policy;"
          }
@@ -99,10 +119,20 @@
       {
        "id": "ac-3.15_obj.b",
        "label": "AC-03(15)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "ac-3.15_obj.b-1",
          "label": "AC-03(15)(b)[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "{param:ac-03.15_odp.03} is enforced over the set of covered subjects specified in the policy;"
          }
@@ -110,6 +140,11 @@
         {
          "id": "ac-3.15_obj.b-2",
          "label": "AC-03(15)(b)[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "{param:ac-03.15_odp.04} is enforced over the set of covered objects specified in the policy."
          }
@@ -201,28 +236,32 @@
       {
        "en": "a mandatory access control policy enforced over the set of covered subjects specified in the policy is defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-03(15)_ODP[01]"
     },
     "ac-03.15_odp.02": {
      "guidelines": [
       {
        "en": "a mandatory access control policy enforced over the set of covered objects specified in the policy is defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-03(15)_ODP[02]"
     },
     "ac-03.15_odp.03": {
      "guidelines": [
       {
        "en": "a discretionary access control policy enforced over the set of covered subjects specified in the policy is defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-03(15)_ODP[03]"
     },
     "ac-03.15_odp.04": {
      "guidelines": [
       {
        "en": "a discretionary access control policy enforced over the set of covered objects specified in the policy is defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-03(15)_ODP[04]"
     }
    }
   }

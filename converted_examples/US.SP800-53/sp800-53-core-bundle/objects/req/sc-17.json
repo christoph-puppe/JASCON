@@ -50,10 +50,20 @@
     {
      "id": "sc-17_obj",
      "label": "SC-17",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sc-17_obj.a",
        "label": "SC-17a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "public key certificates are issued under {param:sc-17_odp} , or public key certificates are obtained from an approved service provider;"
        }
@@ -61,6 +71,11 @@
       {
        "id": "sc-17_obj.b",
        "label": "SC-17b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "only approved trust anchors are included in trust stores or certificate stores managed by the organization."
        }
@@ -132,7 +147,8 @@
      ],
      "alt-identifiers": [
       "sc-17_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-17_ODP"
     }
    }
   }

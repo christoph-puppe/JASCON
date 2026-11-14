@@ -38,6 +38,11 @@
     {
      "id": "ac-7.3_obj",
      "label": "AC-07(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "unsuccessful biometric logon attempts are limited to {param:ac-07.03_odp}."
      }
@@ -104,7 +109,8 @@
      ],
      "alt-identifiers": [
       "ac-7.3_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AC-07(03)_ODP"
     }
    }
   }

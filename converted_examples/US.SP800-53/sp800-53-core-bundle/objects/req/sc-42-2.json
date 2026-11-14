@@ -43,6 +43,11 @@
     {
      "id": "sc-42.2_obj",
      "label": "SC-42(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:sc-42.02_odp} are employed so that data or information collected by {param:sc-42.01_odp} is only used for authorized purposes."
      }
@@ -133,7 +138,8 @@
      ],
      "alt-identifiers": [
       "sc-42.2_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SC-42(02)_ODP"
     }
    }
   }

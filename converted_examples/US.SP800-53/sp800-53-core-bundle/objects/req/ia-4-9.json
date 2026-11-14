@@ -30,7 +30,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "For each of the entities covered in IA-2, IA-3, IA-8 , and IA-9 , it is important to maintain the attributes for each authenticated entity on an ongoing basis in a central (protected) store."
+     "en": "For each of the entities covered in [IA-2](#ia-2), [IA-3](#ia-3), [IA-8](#ia-8) , and [IA-9](#ia-9) , it is important to maintain the attributes for each authenticated entity on an ongoing basis in a central (protected) store."
     }
    ]
   },
@@ -39,6 +39,11 @@
     {
      "id": "ia-4.9_obj",
      "label": "IA-04(09)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the attributes for each uniquely identified individual, device, or service are maintained in {param:ia-04.09_odp}."
      }
@@ -108,7 +113,8 @@
      ],
      "alt-identifiers": [
       "ia-4.9_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "IA-04(09)_ODP"
     }
    }
   }

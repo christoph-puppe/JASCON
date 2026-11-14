@@ -38,6 +38,11 @@
     {
      "id": "sa-15.5_obj",
      "label": "SA-15(05)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the developer of the system, system component, or system service is required to reduce attack surfaces to {param:sa-15.05_odp}."
      }
@@ -128,7 +133,8 @@
      ],
      "alt-identifiers": [
       "sa-15.5_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SA-15(05)_ODP"
     }
    }
   },

@@ -31,10 +31,20 @@
     {
      "id": "pe-12_obj",
      "label": "PE-12",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "pe-12_obj-1",
        "label": "PE-12[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "automatic emergency lighting that activates in the event of a power outage or disruption is employed for the system;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "pe-12_obj-2",
        "label": "PE-12[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "automatic emergency lighting that activates in the event of a power outage or disruption is maintained for the system;"
        }
@@ -49,6 +64,11 @@
       {
        "id": "pe-12_obj-3",
        "label": "PE-12[03]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "automatic emergency lighting for the system covers emergency exits within the facility;"
        }
@@ -56,6 +76,11 @@
       {
        "id": "pe-12_obj-4",
        "label": "PE-12[04]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "automatic emergency lighting for the system covers evacuation routes within the facility."
        }

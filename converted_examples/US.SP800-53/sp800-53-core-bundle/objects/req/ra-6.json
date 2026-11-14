@@ -61,6 +61,11 @@
     {
      "id": "ra-6_obj",
      "label": "RA-06",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "a technical surveillance countermeasures survey is employed at {param:ra-06_odp.01} {param:ra-06_odp.02}."
      }
@@ -127,12 +132,14 @@
      ],
      "alt-identifiers": [
       "ra-6_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "RA-06_ODP[01]"
     },
     "ra-06_odp.02": {
      "alt-identifiers": [
       "ra-6_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "RA-06_ODP[02]"
     },
     "ra-06_odp.03": {
      "guidelines": [
@@ -142,7 +149,8 @@
      ],
      "alt-identifiers": [
       "ra-6_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "RA-06_ODP[03]"
     },
     "ra-06_odp.04": {
      "guidelines": [
@@ -152,7 +160,8 @@
      ],
      "alt-identifiers": [
       "ra-6_prm_4"
-     ]
+     ],
+     "sp800-53a-label": "RA-06_ODP[04]"
     }
    }
   },

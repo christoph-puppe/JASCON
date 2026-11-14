@@ -91,10 +91,20 @@
     {
      "id": "au-3_obj",
      "label": "AU-03",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "au-3_obj.a",
        "label": "AU-03a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "audit records contain information that establishes what type of event occurred;"
        }
@@ -102,6 +112,11 @@
       {
        "id": "au-3_obj.b",
        "label": "AU-03b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "audit records contain information that establishes when the event occurred;"
        }
@@ -109,6 +124,11 @@
       {
        "id": "au-3_obj.c",
        "label": "AU-03c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "audit records contain information that establishes where the event occurred;"
        }
@@ -116,6 +136,11 @@
       {
        "id": "au-3_obj.d",
        "label": "AU-03d.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.d"
+        }
+       ],
        "prose": {
         "en": "audit records contain information that establishes the source of the event;"
        }
@@ -123,6 +148,11 @@
       {
        "id": "au-3_obj.e",
        "label": "AU-03e.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.e"
+        }
+       ],
        "prose": {
         "en": "audit records contain information that establishes the outcome of the event;"
        }
@@ -130,6 +160,11 @@
       {
        "id": "au-3_obj.f",
        "label": "AU-03f.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.f"
+        }
+       ],
        "prose": {
         "en": "audit records contain information that establishes the identity of any individuals, subjects, or objects/entities associated with the event."
        }

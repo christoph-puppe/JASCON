@@ -77,14 +77,29 @@
     {
      "id": "sa-11.5_obj",
      "label": "SA-11(05)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sa-11.5_obj.a",
        "label": "SA-11(05)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "sa-11.5_obj.a-1",
          "label": "SA-11(05)(a)[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the developer of the system, system component, or system service is required to perform penetration testing at the following level of rigor: {param:sa-11.05_odp.01};"
          }
@@ -92,6 +107,11 @@
         {
          "id": "sa-11.5_obj.a-2",
          "label": "SA-11(05)(a)[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the developer of the system, system component, or system service is required to perform penetration testing at the following level of rigor: {param:sa-11.05_odp.02};"
          }
@@ -101,6 +121,11 @@
       {
        "id": "sa-11.5_obj.b",
        "label": "SA-11(05)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "the developer of the system, system component, or system service is required to perform penetration testing under {param:sa-11.05_odp.03}."
        }
@@ -202,14 +227,16 @@
       {
        "en": "the breadth of penetration testing is defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "SA-11(05)_ODP[01]"
     },
     "sa-11.05_odp.02": {
      "guidelines": [
       {
        "en": "the depth of penetration testing is defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "SA-11(05)_ODP[02]"
     },
     "sa-11.05_odp.03": {
      "guidelines": [
@@ -219,7 +246,8 @@
      ],
      "alt-identifiers": [
       "sa-11.5_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SA-11(05)_ODP[03]"
     }
    }
   },

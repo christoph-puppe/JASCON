@@ -51,6 +51,11 @@
     {
      "id": "sc-28_obj",
      "label": "SC-28",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the {param:sc-28_odp.01} of {param:sc-28_odp.02} is/are protected."
      }
@@ -118,7 +123,8 @@
     "sc-28_odp.01": {
      "alt-identifiers": [
       "sc-28_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-28_ODP[01]"
     },
     "sc-28_odp.02": {
      "guidelines": [
@@ -128,7 +134,8 @@
      ],
      "alt-identifiers": [
       "sc-28_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SC-28_ODP[02]"
     }
    }
   }
@@ -258,7 +265,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/AC-3.6",
     "mode": "merged-into",
-    "label": "AC-03(06)",
+    "label": "AC-3(6)",
     "title": "Protection of User and System Information"
    }
   ]

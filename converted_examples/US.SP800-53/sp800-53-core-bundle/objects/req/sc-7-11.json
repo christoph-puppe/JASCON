@@ -43,6 +43,11 @@
     {
      "id": "sc-7.11_obj",
      "label": "SC-07(11)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "only incoming communications from {param:sc-07.11_odp.01} are allowed to be routed to {param:sc-07.11_odp.02}."
      }
@@ -115,7 +120,8 @@
      ],
      "alt-identifiers": [
       "sc-7.11_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-07(11)_ODP[01]"
     },
     "sc-07.11_odp.02": {
      "guidelines": [
@@ -125,7 +131,8 @@
      ],
      "alt-identifiers": [
       "sc-7.11_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SC-07(11)_ODP[02]"
     }
    }
   }

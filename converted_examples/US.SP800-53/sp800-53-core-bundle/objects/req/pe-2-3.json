@@ -57,6 +57,11 @@
     {
      "id": "pe-2.3_obj",
      "label": "PE-02(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "unescorted access to the facility where the system resides is restricted to personnel with {param:pe-02.03_odp.01}."
      }
@@ -130,7 +135,8 @@
     "pe-02.03_odp.01": {
      "alt-identifiers": [
       "pe-2.3_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PE-02(03)_ODP[01]"
     },
     "pe-02.03_odp.02": {
      "guidelines": [
@@ -140,7 +146,8 @@
      ],
      "alt-identifiers": [
       "pe-2.3_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "PE-02(03)_ODP[02]"
     }
    }
   }

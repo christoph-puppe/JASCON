@@ -48,6 +48,11 @@
     {
      "id": "si-17_obj",
      "label": "SI-17",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:si-17_odp.01} are implemented when {param:si-17_odp.02} occur."
      }
@@ -132,14 +137,16 @@
       {
        "en": "fail-safe procedures associated with failure conditions are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "SI-17_ODP[01]"
     },
     "si-17_odp.02": {
      "guidelines": [
       {
        "en": "a list of failure conditions requiring fail-safe procedures is defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "SI-17_ODP[02]"
     }
    }
   },

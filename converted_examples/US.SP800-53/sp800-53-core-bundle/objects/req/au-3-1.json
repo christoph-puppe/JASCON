@@ -38,6 +38,11 @@
     {
      "id": "au-3.1_obj",
      "label": "AU-03(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "generated audit records contain the following {param:au-03.01_odp}."
      }
@@ -116,7 +121,8 @@
      ],
      "alt-identifiers": [
       "au-3.1_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AU-03(01)_ODP"
     }
    }
   }

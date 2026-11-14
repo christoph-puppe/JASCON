@@ -48,10 +48,20 @@
     {
      "id": "si-3.6_obj",
      "label": "SI-03(06)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "si-3.6_obj.a",
        "label": "SI-03(06)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "malicious code protection mechanisms are tested {param:si-03.06_odp} by introducing known benign code into the system;"
        }
@@ -59,10 +69,20 @@
       {
        "id": "si-3.6_obj.b",
        "label": "SI-03(06)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "si-3.6_obj.b-1",
          "label": "SI-03(06)(b)[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "the detection of (benign test) code occurs;"
          }
@@ -70,6 +90,11 @@
         {
          "id": "si-3.6_obj.b-2",
          "label": "SI-03(06)(b)[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "the associated incident reporting occurs."
          }
@@ -155,7 +180,8 @@
      ],
      "alt-identifiers": [
       "si-3.6_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SI-03(06)_ODP"
     }
    }
   }

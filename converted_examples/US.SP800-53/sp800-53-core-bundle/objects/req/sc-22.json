@@ -31,10 +31,20 @@
     {
      "id": "sc-22_obj",
      "label": "SC-22",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sc-22_obj-1",
        "label": "SC-22[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the systems that collectively provide name/address resolution services for an organization are fault-tolerant;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "sc-22_obj-2",
        "label": "SC-22[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the systems that collectively provide name/address resolution services for an organization implement internal role separation;"
        }
@@ -49,6 +64,11 @@
       {
        "id": "sc-22_obj-3",
        "label": "SC-22[03]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the systems that collectively provide name/address resolution services for an organization implement external role separation."
        }

@@ -38,6 +38,11 @@
     {
      "id": "pt-4_obj",
      "label": "PT-04",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the {param:pt-04_odp} are implemented for individuals to consent to the processing of their personally identifiable information prior to its collection that facilitate individuals’ informed decision-making."
      }
@@ -110,7 +115,8 @@
      ],
      "alt-identifiers": [
       "pt-4_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PT-04_ODP"
     }
    }
   }

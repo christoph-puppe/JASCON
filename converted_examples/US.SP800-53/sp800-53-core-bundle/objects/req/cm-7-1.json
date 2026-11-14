@@ -82,10 +82,20 @@
     {
      "id": "cm-7.1_obj",
      "label": "CM-07(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "cm-7.1_obj.a",
        "label": "CM-07(01)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "the system is reviewed {param:cm-07.01_odp.01} to identify unnecessary and/or non-secure functions, ports, protocols, software, and services:"
        }
@@ -93,10 +103,20 @@
       {
        "id": "cm-7.1_obj.b",
        "label": "CM-07(01)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "cm-7.1_obj.b-1",
          "label": "CM-07(01)(b)[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "{param:cm-07.01_odp.02} deemed to be unnecessary and/or non-secure are disabled or removed;"
          }
@@ -104,6 +124,11 @@
         {
          "id": "cm-7.1_obj.b-2",
          "label": "CM-07(01)(b)[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "{param:cm-07.01_odp.03} deemed to be unnecessary and/or non-secure are disabled or removed;"
          }
@@ -111,6 +136,11 @@
         {
          "id": "cm-7.1_obj.b-3",
          "label": "CM-07(01)(b)[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "{param:cm-07.01_odp.04} deemed to be unnecessary and/or non-secure are disabled or removed;"
          }
@@ -118,6 +148,11 @@
         {
          "id": "cm-7.1_obj.b-4",
          "label": "CM-07(01)(b)[04]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "{param:cm-07.01_odp.05} deemed to be unnecessary and/or non-secure is disabled or removed;"
          }
@@ -125,6 +160,11 @@
         {
          "id": "cm-7.1_obj.b-5",
          "label": "CM-07(01)(b)[05]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "{param:cm-07.01_odp.06} deemed to be unnecessary and/or non-secure are disabled or removed."
          }
@@ -225,42 +265,48 @@
      ],
      "alt-identifiers": [
       "cm-7.1_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "CM-07(01)_ODP[01]"
     },
     "cm-07.01_odp.02": {
      "guidelines": [
       {
        "en": "functions to be disabled or removed when deemed unnecessary or non-secure are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "CM-07(01)_ODP[02]"
     },
     "cm-07.01_odp.03": {
      "guidelines": [
       {
        "en": "ports to be disabled or removed when deemed unnecessary or non-secure are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "CM-07(01)_ODP[03]"
     },
     "cm-07.01_odp.04": {
      "guidelines": [
       {
        "en": "protocols to be disabled or removed when deemed unnecessary or non-secure are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "CM-07(01)_ODP[04]"
     },
     "cm-07.01_odp.05": {
      "guidelines": [
       {
        "en": "software to be disabled or removed when deemed unnecessary or non-secure is defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "CM-07(01)_ODP[05]"
     },
     "cm-07.01_odp.06": {
      "guidelines": [
       {
        "en": "services to be disabled or removed when deemed unnecessary or non-secure are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "CM-07(01)_ODP[06]"
     }
    }
   }

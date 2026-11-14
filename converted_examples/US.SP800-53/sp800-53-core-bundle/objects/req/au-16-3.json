@@ -38,6 +38,11 @@
     {
      "id": "au-16.3_obj",
      "label": "AU-16(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:au-16.03_odp} are implemented to disassociate individuals from audit information transmitted across organizational boundaries."
      }
@@ -110,7 +115,8 @@
      ],
      "alt-identifiers": [
       "au-16.3_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AU-16(03)_ODP"
     }
    }
   }

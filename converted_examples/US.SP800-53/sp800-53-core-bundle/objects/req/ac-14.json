@@ -48,10 +48,20 @@
     {
      "id": "ac-14_obj",
      "label": "AC-14",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ac-14_obj.a",
        "label": "AC-14a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "{param:ac-14_odp} that can be performed on the system without identification or authentication consistent with organizational mission and business functions are identified;"
        }
@@ -59,10 +69,20 @@
       {
        "id": "ac-14_obj.b",
        "label": "AC-14b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "ac-14_obj.b-1",
          "label": "AC-14b.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "user actions not requiring identification or authentication are documented in the security plan for the system;"
          }
@@ -70,6 +90,11 @@
         {
          "id": "ac-14_obj.b-2",
          "label": "AC-14b.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "a rationale for user actions not requiring identification or authentication is provided in the security plan for the system."
          }
@@ -134,7 +159,8 @@
      ],
      "alt-identifiers": [
       "ac-14_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AC-14_ODP"
     }
    }
   }
@@ -164,7 +190,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/AC-14.1",
     "mode": "merged-into",
-    "label": "AC-14(01)",
+    "label": "AC-14(1)",
     "title": "Necessary Uses"
    }
   ]

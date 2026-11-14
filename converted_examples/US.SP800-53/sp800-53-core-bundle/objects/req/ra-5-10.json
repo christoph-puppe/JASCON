@@ -31,6 +31,11 @@
     {
      "id": "ra-5.10_obj",
      "label": "RA-05(10)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the output from vulnerability scanning tools is correlated to determine the presence of multi-vulnerability and multi-hop attack vectors."
      }

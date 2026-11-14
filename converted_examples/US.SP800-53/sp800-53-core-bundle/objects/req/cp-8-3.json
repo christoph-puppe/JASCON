@@ -31,6 +31,11 @@
     {
      "id": "cp-8.3_obj",
      "label": "CP-08(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "alternate telecommunications services from providers that are separated from primary service providers are obtained to reduce susceptibility to the same threats."
      }

@@ -48,10 +48,20 @@
     {
      "id": "pe-6.2_obj",
      "label": "PE-06(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "pe-6.2_obj-1",
        "label": "PE-06(02)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "{param:pe-06.02_odp.01} are recognized;"
        }
@@ -59,6 +69,11 @@
       {
        "id": "pe-6.2_obj-2",
        "label": "PE-06(02)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "{param:pe-06.02_odp.02} are initiated using {param:pe-06.02_odp.03}."
        }
@@ -139,7 +154,8 @@
      ],
      "alt-identifiers": [
       "pe-6.2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PE-06(02)_ODP[01]"
     },
     "pe-06.02_odp.02": {
      "guidelines": [
@@ -149,17 +165,19 @@
      ],
      "alt-identifiers": [
       "pe-6.2_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "PE-06(02)_ODP[02]"
     },
     "pe-06.02_odp.03": {
      "guidelines": [
       {
-       "en": "automated mechanisms used to recognize classes or types of intrusions and initiate response actions (defined in PE-06(02)_ODP) are defined;"
+       "en": "automated mechanisms used to recognize classes or types of intrusions and initiate response actions (defined in [PE-06(02)_ODP](#pe-06.02_odp.02)) are defined;"
       }
      ],
      "alt-identifiers": [
       "pe-6.2_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "PE-06(02)_ODP[03]"
     }
    }
   },

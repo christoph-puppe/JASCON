@@ -43,6 +43,11 @@
     {
      "id": "si-4.10_obj",
      "label": "SI-04(10)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "provisions are made so that {param:si-04.10_odp.01} is visible to {param:si-04.10_odp.02}."
      }
@@ -130,7 +135,8 @@
      ],
      "alt-identifiers": [
       "si-4.10_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SI-04(10)_ODP[01]"
     },
     "si-04.10_odp.02": {
      "guidelines": [
@@ -140,7 +146,8 @@
      ],
      "alt-identifiers": [
       "si-4.10_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SI-04(10)_ODP[02]"
     }
    }
   },

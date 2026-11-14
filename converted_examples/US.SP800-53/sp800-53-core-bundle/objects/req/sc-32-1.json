@@ -32,6 +32,11 @@
     {
      "id": "sc-32.1_obj",
      "label": "SC-32(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "privileged functions are partitioned into separate physical domains."
      }

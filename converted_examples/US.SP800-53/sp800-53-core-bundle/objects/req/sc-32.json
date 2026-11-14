@@ -56,6 +56,11 @@
     {
      "id": "sc-32_obj",
      "label": "SC-32",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the system is partitioned into {param:sc-32_odp.01} residing in separate {param:sc-32_odp.02} domains or environments based on {param:sc-32_odp.03}."
      }
@@ -137,12 +142,14 @@
      ],
      "alt-identifiers": [
       "sc-32_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-32_ODP[01]"
     },
     "sc-32_odp.02": {
      "alt-identifiers": [
       "sc-32_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SC-32_ODP[02]"
     },
     "sc-32_odp.03": {
      "guidelines": [
@@ -153,7 +160,8 @@
      "alt-identifiers": [
       "sc-32_prm_3"
      ],
-     "alt-label": "circumstances for physical or logical separation of components"
+     "alt-label": "circumstances for physical or logical separation of components",
+     "sp800-53a-label": "SC-32_ODP[03]"
     }
    }
   },

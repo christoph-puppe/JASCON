@@ -31,6 +31,11 @@
     {
      "id": "au-9.7_obj",
      "label": "AU-09(07)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "audit information is stored on a component running a different operating system than the system or component being audited."
      }

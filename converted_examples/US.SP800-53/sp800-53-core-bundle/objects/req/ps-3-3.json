@@ -58,10 +58,20 @@
     {
      "id": "ps-3.3_obj",
      "label": "PS-03(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ps-3.3_obj.a",
        "label": "PS-03(03)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "individuals accessing a system processing, storing, or transmitting information requiring special protection have valid access authorizations that are demonstrated by assigned official government duties;"
        }
@@ -69,6 +79,11 @@
       {
        "id": "ps-3.3_obj.b",
        "label": "PS-03(03)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "individuals accessing a system processing, storing, or transmitting information requiring special protection satisfy {param:ps-03.03_odp}."
        }
@@ -140,7 +155,8 @@
      ],
      "alt-identifiers": [
       "ps-3.3_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PS-03(03)_ODP"
     }
    }
   }

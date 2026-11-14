@@ -31,10 +31,20 @@
     {
      "id": "sa-15.2_obj",
      "label": "SA-15(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sa-15.2_obj-1",
        "label": "SA-15(02)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the developer of the system, system component, or system service is required to select and employ security tracking tools for use during the development process;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "sa-15.2_obj-2",
        "label": "SA-15(02)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the developer of the system, system component, or system service is required to select and employ privacy tracking tools for use during the development process."
        }

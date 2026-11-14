@@ -39,6 +39,11 @@
     {
      "id": "au-9.6_obj",
      "label": "AU-09(06)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "read-only access to audit information is authorized to {param:au-09.06_odp}."
      }
@@ -123,7 +128,8 @@
      ],
      "alt-identifiers": [
       "au-9.6_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AU-09(06)_ODP"
     }
    }
   }

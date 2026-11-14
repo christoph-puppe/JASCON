@@ -38,6 +38,11 @@
     {
      "id": "ir-4.13_obj",
      "label": "IR-04(13)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "anomalous or suspected adversarial behavior in or related to {param:ir-04.13_odp} are analyzed."
      }
@@ -122,7 +127,8 @@
      ],
      "alt-identifiers": [
       "ir-4.13_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "IR-04(13)_ODP"
     }
    }
   }

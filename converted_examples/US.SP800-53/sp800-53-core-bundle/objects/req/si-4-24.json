@@ -43,10 +43,20 @@
     {
      "id": "si-4.24_obj",
      "label": "SI-04(24)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "si-4.24_obj-1",
        "label": "SI-04(24)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "indicators of compromise provided by {param:si-04.24_odp.01} are discovered;"
        }
@@ -54,6 +64,11 @@
       {
        "id": "si-4.24_obj-2",
        "label": "SI-04(24)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "indicators of compromise provided by {param:si-04.24_odp.01} are collected;"
        }
@@ -61,6 +76,11 @@
       {
        "id": "si-4.24_obj-3",
        "label": "SI-04(24)[03]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "indicators of compromise provided by {param:si-04.24_odp.01} are distributed to {param:si-04.24_odp.02}."
        }
@@ -156,7 +176,8 @@
      ],
      "alt-identifiers": [
       "si-4.24_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SI-04(24)_ODP[01]"
     },
     "si-04.24_odp.02": {
      "guidelines": [
@@ -166,7 +187,8 @@
      ],
      "alt-identifiers": [
       "si-4.24_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SI-04(24)_ODP[02]"
     }
    }
   },

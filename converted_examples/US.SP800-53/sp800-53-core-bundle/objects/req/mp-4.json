@@ -83,14 +83,29 @@
     {
      "id": "mp-4_obj",
      "label": "MP-04",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "mp-4_obj.a",
        "label": "MP-04a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "mp-4_obj.a-1",
          "label": "MP-04a.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "{param:mp-04_odp.01} are physically controlled;"
          }
@@ -98,6 +113,11 @@
         {
          "id": "mp-4_obj.a-2",
          "label": "MP-04a.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "{param:mp-04_odp.02} are physically controlled;"
          }
@@ -105,6 +125,11 @@
         {
          "id": "mp-4_obj.a-3",
          "label": "MP-04a.[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "{param:mp-04_odp.03} are securely stored within {param:mp-04_odp.05};"
          }
@@ -112,6 +137,11 @@
         {
          "id": "mp-4_obj.a-4",
          "label": "MP-04a.[04]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "{param:mp-04_odp.04} are securely stored within {param:mp-04_odp.06};"
          }
@@ -121,6 +151,11 @@
       {
        "id": "mp-4_obj.b",
        "label": "MP-04b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "system media types (defined in MP-04_ODP[01], MP-04_ODP[02], MP-04_ODP[03], MP-04_ODP[04]) are protected until the media are destroyed or sanitized using approved equipment, techniques, and procedures."
        }
@@ -206,42 +241,48 @@
       {
        "en": "types of digital media to be physically controlled are defined (if selected);"
       }
-     ]
+     ],
+     "sp800-53a-label": "MP-04_ODP[01]"
     },
     "mp-04_odp.02": {
      "guidelines": [
       {
        "en": "types of non-digital media to be physically controlled are defined (if selected);"
       }
-     ]
+     ],
+     "sp800-53a-label": "MP-04_ODP[02]"
     },
     "mp-04_odp.03": {
      "guidelines": [
       {
        "en": "types of digital media to be securely stored are defined (if selected);"
       }
-     ]
+     ],
+     "sp800-53a-label": "MP-04_ODP[03]"
     },
     "mp-04_odp.04": {
      "guidelines": [
       {
        "en": "types of non-digital media to be securely stored are defined (if selected);"
       }
-     ]
+     ],
+     "sp800-53a-label": "MP-04_ODP[04]"
     },
     "mp-04_odp.05": {
      "guidelines": [
       {
        "en": "controlled areas within which to securely store digital media are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "MP-04_ODP[05]"
     },
     "mp-04_odp.06": {
      "guidelines": [
       {
        "en": "controlled areas within which to securely store non-digital media are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "MP-04_ODP[06]"
     }
    }
   }
@@ -347,7 +388,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/AC-3.6",
     "mode": "merged-into",
-    "label": "AC-03(06)",
+    "label": "AC-3(6)",
     "title": "Protection of User and System Information"
    }
   ]

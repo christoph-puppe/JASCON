@@ -44,6 +44,11 @@
     {
      "id": "cp-13_obj",
      "label": "CP-13",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:cp-13_odp.01} are employed for satisfying {param:cp-13_odp.02} when the primary means of implementing the security function is unavailable or compromised."
      }
@@ -119,7 +124,8 @@
      ],
      "alt-identifiers": [
       "cp-13_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "CP-13_ODP[01]"
     },
     "cp-13_odp.02": {
      "guidelines": [
@@ -129,7 +135,8 @@
      ],
      "alt-identifiers": [
       "cp-13_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "CP-13_ODP[02]"
     }
    }
   }

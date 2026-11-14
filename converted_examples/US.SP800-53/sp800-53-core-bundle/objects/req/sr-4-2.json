@@ -38,10 +38,20 @@
     {
      "id": "sr-4.2_obj",
      "label": "SR-04(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sr-4.2_obj-1",
        "label": "SR-04(02)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the unique identification of {param:sr-04.02_odp} is established for tracking through the supply chain;"
        }
@@ -49,6 +59,11 @@
       {
        "id": "sr-4.2_obj-2",
        "label": "SR-04(02)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the unique identification of {param:sr-04.02_odp} is maintained for tracking through the supply chain."
        }
@@ -129,7 +144,8 @@
      ],
      "alt-identifiers": [
       "sr-4.2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SR-04(02)_ODP"
     }
    }
   },

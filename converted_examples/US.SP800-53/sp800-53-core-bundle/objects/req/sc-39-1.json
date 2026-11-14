@@ -31,6 +31,11 @@
     {
      "id": "sc-39.1_obj",
      "label": "SC-39(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "hardware separation is implemented to facilitate process isolation."
      }

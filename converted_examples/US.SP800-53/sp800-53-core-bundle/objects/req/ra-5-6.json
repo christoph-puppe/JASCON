@@ -38,6 +38,11 @@
     {
      "id": "ra-5.6_obj",
      "label": "RA-05(06)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the results of multiple vulnerability scans are compared using {param:ra-05.06_odp}."
      }
@@ -113,7 +118,8 @@
      ],
      "alt-identifiers": [
       "ra-5.6_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "RA-05(06)_ODP"
     }
    }
   },

@@ -38,6 +38,11 @@
     {
      "id": "au-6.1_obj",
      "label": "AU-06(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "audit record review, analysis, and reporting processes are integrated using {param:au-06.01_odp}."
      }
@@ -110,7 +115,8 @@
      ],
      "alt-identifiers": [
       "au-6.1_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AU-06(01)_ODP"
     }
    }
   },

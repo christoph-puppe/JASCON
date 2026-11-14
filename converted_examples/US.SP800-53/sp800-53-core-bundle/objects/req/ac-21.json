@@ -55,10 +55,20 @@
     {
      "id": "ac-21_obj",
      "label": "AC-21",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ac-21_obj.a",
        "label": "AC-21a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "authorized users are enabled to determine whether access authorizations assigned to a sharing partner match the information’s access and use restrictions for {param:ac-21_odp.01};"
        }
@@ -66,6 +76,11 @@
       {
        "id": "ac-21_obj.b",
        "label": "AC-21b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "{param:ac-21_odp.02} are employed to assist users in making information-sharing and collaboration decisions."
        }
@@ -159,7 +174,8 @@
      "alt-identifiers": [
       "ac-21_prm_1"
      ],
-     "alt-label": "information sharing circumstances where user discretion is required"
+     "alt-label": "information sharing circumstances where user discretion is required",
+     "sp800-53a-label": "AC-21_ODP[01]"
     },
     "ac-21_odp.02": {
      "guidelines": [
@@ -170,7 +186,8 @@
      "alt-identifiers": [
       "ac-21_prm_2"
      ],
-     "alt-label": "automated mechanisms or manual processes"
+     "alt-label": "automated mechanisms or manual processes",
+     "sp800-53a-label": "AC-21_ODP[02]"
     }
    }
   }

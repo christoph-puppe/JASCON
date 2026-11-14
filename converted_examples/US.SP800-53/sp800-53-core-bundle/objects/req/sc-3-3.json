@@ -32,6 +32,11 @@
     {
      "id": "sc-3.3_obj",
      "label": "SC-03(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the number of non-security functions included within the isolation boundary containing security functions is minimized."
      }

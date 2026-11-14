@@ -67,10 +67,20 @@
     {
      "id": "sc-5_obj",
      "label": "SC-05",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sc-5_obj.a",
        "label": "SC-05a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "the effects of {param:sc-05_odp.01} are {param:sc-05_odp.02};"
        }
@@ -78,6 +88,11 @@
       {
        "id": "sc-5_obj.b",
        "label": "SC-05b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "{param:sc-05_odp.03} are employed to achieve the denial-of-service protection objective."
        }
@@ -158,12 +173,14 @@
      ],
      "alt-identifiers": [
       "sc-5_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SC-05_ODP[01]"
     },
     "sc-05_odp.02": {
      "alt-identifiers": [
       "sc-5_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-05_ODP[02]"
     },
     "sc-05_odp.03": {
      "guidelines": [
@@ -173,7 +190,8 @@
      ],
      "alt-identifiers": [
       "sc-5_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "SC-05_ODP[03]"
     }
    }
   }

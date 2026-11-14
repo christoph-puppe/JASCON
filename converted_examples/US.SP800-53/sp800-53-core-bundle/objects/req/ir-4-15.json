@@ -41,10 +41,20 @@
     {
      "id": "ir-4.15_obj",
      "label": "IR-04(15)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ir-4.15_obj.a",
        "label": "IR-04(15)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "public relations associated with an incident are managed;"
        }
@@ -52,6 +62,11 @@
       {
        "id": "ir-4.15_obj.b",
        "label": "IR-04(15)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "measures are employed to repair the reputation of the organization."
        }

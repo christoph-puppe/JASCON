@@ -49,6 +49,11 @@
     {
      "id": "cm-8.4_obj",
      "label": "CM-08(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "individuals responsible and accountable for administering system components are identified by {param:cm-08.04_odp} in the system component inventory."
      }
@@ -116,7 +121,8 @@
     "cm-08.04_odp": {
      "alt-identifiers": [
       "cm-8.4_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "CM-08(04)_ODP"
     }
    }
   },

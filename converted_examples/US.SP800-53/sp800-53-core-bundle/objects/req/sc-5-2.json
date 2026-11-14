@@ -31,6 +31,11 @@
     {
      "id": "sc-5.2_obj",
      "label": "SC-05(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "capacity, bandwidth, or other redundancies to limit the effects of information flooding denial-of-service attacks are managed."
      }

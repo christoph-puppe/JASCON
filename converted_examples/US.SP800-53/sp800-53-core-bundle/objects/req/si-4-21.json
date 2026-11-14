@@ -43,6 +43,11 @@
     {
      "id": "si-4.21_obj",
      "label": "SI-04(21)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:si-04.21_odp.01} of individuals is implemented during {param:si-04.21_odp.02}."
      }
@@ -127,7 +132,8 @@
      ],
      "alt-identifiers": [
       "si-4.21_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SI-04(21)_ODP[01]"
     },
     "si-04.21_odp.02": {
      "guidelines": [
@@ -137,7 +143,8 @@
      ],
      "alt-identifiers": [
       "si-4.21_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SI-04(21)_ODP[02]"
     }
    }
   },

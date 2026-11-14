@@ -43,6 +43,11 @@
     {
      "id": "ac-4.17_obj",
      "label": "AC-04(17)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "source and destination points are uniquely identified and authenticated by {param:ac-04.17_odp} for information transfer."
      }
@@ -119,7 +124,8 @@
     "ac-04.17_odp": {
      "alt-identifiers": [
       "ac-4.17_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AC-04(17)_ODP"
     }
    }
   }

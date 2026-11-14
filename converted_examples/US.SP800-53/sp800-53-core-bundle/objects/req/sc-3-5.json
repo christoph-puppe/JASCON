@@ -32,6 +32,11 @@
     {
      "id": "sc-3.5_obj",
      "label": "SC-03(05)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "security functions are implemented as a layered structure, minimizing interactions between layers of the design and avoiding any dependence by lower layers on the functionality or correctness of higher layers."
      }

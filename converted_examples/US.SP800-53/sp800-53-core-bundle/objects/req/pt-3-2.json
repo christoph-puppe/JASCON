@@ -38,6 +38,11 @@
     {
      "id": "pt-3.2_obj",
      "label": "PT-03(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the processing purposes of personally identifiable information are tracked using {param:pt-03.02_odp}."
      }
@@ -98,7 +103,8 @@
      ],
      "alt-identifiers": [
       "pt-3.2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PT-03(02)_ODP"
     }
    }
   },

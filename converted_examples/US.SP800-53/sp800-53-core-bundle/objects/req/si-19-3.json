@@ -32,6 +32,11 @@
     {
      "id": "si-19.3_obj",
      "label": "SI-19(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "personally identifiable information elements are removed from a dataset prior to its release if those elements in the dataset do not need to be part of the data release."
      }

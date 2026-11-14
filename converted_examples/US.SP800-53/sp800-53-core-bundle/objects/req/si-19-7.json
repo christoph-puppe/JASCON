@@ -31,10 +31,20 @@
     {
      "id": "si-19.7_obj",
      "label": "SI-19(07)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "si-19.7_obj-1",
        "label": "SI-19(07)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "de-identification is performed using validated algorithms;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "si-19.7_obj-2",
        "label": "SI-19(07)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "de-identification is performed using software that is validated to implement the algorithms."
        }

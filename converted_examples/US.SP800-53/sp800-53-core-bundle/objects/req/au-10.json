@@ -38,6 +38,11 @@
     {
      "id": "au-10_obj",
      "label": "AU-10",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "irrefutable evidence is provided that an individual (or process acting on behalf of an individual) has performed {param:au-10_odp}."
      }
@@ -111,7 +116,8 @@
      "alt-identifiers": [
       "au-10_prm_1"
      ],
-     "alt-label": "actions to be covered by non-repudiation"
+     "alt-label": "actions to be covered by non-repudiation",
+     "sp800-53a-label": "AU-10_ODP"
     }
    }
   },

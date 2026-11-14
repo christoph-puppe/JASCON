@@ -38,6 +38,11 @@
     {
      "id": "sr-6_obj",
      "label": "SR-06",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the supply chain-related risks associated with suppliers or contractors and the systems, system components, or system services they provide are assessed and reviewed {param:sr-06_odp}."
      }
@@ -116,7 +121,8 @@
      ],
      "alt-identifiers": [
       "sr-6_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SR-06_ODP"
     }
    }
   },
@@ -197,7 +203,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/SA-12.2",
     "mode": "renamed",
-    "label": "SA-12(02)",
+    "label": "SA-12(2)",
     "title": "Supplier Reviews"
    }
   ]

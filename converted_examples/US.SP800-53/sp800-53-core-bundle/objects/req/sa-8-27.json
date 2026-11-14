@@ -39,6 +39,11 @@
     {
      "id": "sa-8.27_obj",
      "label": "SA-08(27)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:sa-08.27_odp} implement the security design principle of human factored security."
      }
@@ -123,7 +128,8 @@
      ],
      "alt-identifiers": [
       "sa-8.27_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SA-08(27)_ODP"
     }
    }
   },

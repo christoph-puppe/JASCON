@@ -31,6 +31,11 @@
     {
      "id": "ir-3.2_obj",
      "label": "IR-03(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "incident response testing is coordinated with organizational elements responsible for related plans."
      }

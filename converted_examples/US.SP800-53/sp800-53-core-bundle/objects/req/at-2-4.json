@@ -38,6 +38,11 @@
     {
      "id": "at-2.4_obj",
      "label": "AT-02(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "literacy training on recognizing suspicious communications and anomalous behavior in organizational systems using {param:at-02.04_odp} is provided."
      }
@@ -98,7 +103,8 @@
      ],
      "alt-identifiers": [
       "at-2.4_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AT-02(04)_ODP"
     }
    }
   },
@@ -123,7 +129,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/AT-3.4",
     "mode": "renamed",
-    "label": "AT-03(04)",
+    "label": "AT-3(4)",
     "title": "Suspicious Communications and Anomalous System Behavior"
    }
   ]

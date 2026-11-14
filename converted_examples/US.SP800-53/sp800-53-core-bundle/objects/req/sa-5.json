@@ -135,18 +135,38 @@
     {
      "id": "sa-5_obj",
      "label": "SA-05",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sa-5_obj.a",
        "label": "SA-05a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "sa-5_obj.a.1",
          "label": "SA-05a.01",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.1"
+          }
+         ],
          "children": [
           {
            "id": "sa-5_obj.a.1-1",
            "label": "SA-05a.01[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.1"
+            }
+           ],
            "prose": {
             "en": "administrator documentation for the system, system component, or system service that describes the secure configuration of the system, component, or service is obtained or developed;"
            }
@@ -154,6 +174,11 @@
           {
            "id": "sa-5_obj.a.1-2",
            "label": "SA-05a.01[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.1"
+            }
+           ],
            "prose": {
             "en": "administrator documentation for the system, system component, or system service that describes the secure installation of the system, component, or service is obtained or developed;"
            }
@@ -161,6 +186,11 @@
           {
            "id": "sa-5_obj.a.1-3",
            "label": "SA-05a.01[03]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.1"
+            }
+           ],
            "prose": {
             "en": "administrator documentation for the system, system component, or system service that describes the secure operation of the system, component, or service is obtained or developed;"
            }
@@ -170,10 +200,20 @@
         {
          "id": "sa-5_obj.a.2",
          "label": "SA-05a.02",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.2"
+          }
+         ],
          "children": [
           {
            "id": "sa-5_obj.a.2-1",
            "label": "SA-05a.02[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.2"
+            }
+           ],
            "prose": {
             "en": "administrator documentation for the system, system component, or system service that describes the effective use of security functions and mechanisms is obtained or developed;"
            }
@@ -181,6 +221,11 @@
           {
            "id": "sa-5_obj.a.2-2",
            "label": "SA-05a.02[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.2"
+            }
+           ],
            "prose": {
             "en": "administrator documentation for the system, system component, or system service that describes the effective maintenance of security functions and mechanisms is obtained or developed;"
            }
@@ -188,6 +233,11 @@
           {
            "id": "sa-5_obj.a.2-3",
            "label": "SA-05a.02[03]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.2"
+            }
+           ],
            "prose": {
             "en": "administrator documentation for the system, system component, or system service that describes the effective use of privacy functions and mechanisms is obtained or developed;"
            }
@@ -195,6 +245,11 @@
           {
            "id": "sa-5_obj.a.2-4",
            "label": "SA-05a.02[04]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.2"
+            }
+           ],
            "prose": {
             "en": "administrator documentation for the system, system component, or system service that describes the effective maintenance of privacy functions and mechanisms is obtained or developed;"
            }
@@ -204,10 +259,20 @@
         {
          "id": "sa-5_obj.a.3",
          "label": "SA-05a.03",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.3"
+          }
+         ],
          "children": [
           {
            "id": "sa-5_obj.a.3-1",
            "label": "SA-05a.03[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.3"
+            }
+           ],
            "prose": {
             "en": "administrator documentation for the system, system component, or system service that describes known vulnerabilities regarding the configuration of administrative or privileged functions is obtained or developed;"
            }
@@ -215,6 +280,11 @@
           {
            "id": "sa-5_obj.a.3-2",
            "label": "SA-05a.03[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.3"
+            }
+           ],
            "prose": {
             "en": "administrator documentation for the system, system component, or system service that describes known vulnerabilities regarding the use of administrative or privileged functions is obtained or developed;"
            }
@@ -226,14 +296,29 @@
       {
        "id": "sa-5_obj.b",
        "label": "SA-05b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "sa-5_obj.b.1",
          "label": "SA-05b.01",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b.1"
+          }
+         ],
          "children": [
           {
            "id": "sa-5_obj.b.1-1",
            "label": "SA-05b.01[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.b.1"
+            }
+           ],
            "prose": {
             "en": "user documentation for the system, system component, or system service that describes user-accessible security functions and mechanisms is obtained or developed;"
            }
@@ -241,6 +326,11 @@
           {
            "id": "sa-5_obj.b.1-2",
            "label": "SA-05b.01[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.b.1"
+            }
+           ],
            "prose": {
             "en": "user documentation for the system, system component, or system service that describes how to effectively use those (user-accessible security) functions and mechanisms is obtained or developed;"
            }
@@ -248,6 +338,11 @@
           {
            "id": "sa-5_obj.b.1-3",
            "label": "SA-05b.01[03]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.b.1"
+            }
+           ],
            "prose": {
             "en": "user documentation for the system, system component, or system service that describes user-accessible privacy functions and mechanisms is obtained or developed;"
            }
@@ -255,6 +350,11 @@
           {
            "id": "sa-5_obj.b.1-4",
            "label": "SA-05b.01[04]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.b.1"
+            }
+           ],
            "prose": {
             "en": "user documentation for the system, system component, or system service that describes how to effectively use those (user-accessible privacy) functions and mechanisms is obtained or developed;"
            }
@@ -264,10 +364,20 @@
         {
          "id": "sa-5_obj.b.2",
          "label": "SA-05b.02",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b.2"
+          }
+         ],
          "children": [
           {
            "id": "sa-5_obj.b.2-1",
            "label": "SA-05b.02[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.b.2"
+            }
+           ],
            "prose": {
             "en": "user documentation for the system, system component, or system service that describes methods for user interaction, which enable individuals to use the system, component, or service in a more secure manner is obtained or developed;"
            }
@@ -275,6 +385,11 @@
           {
            "id": "sa-5_obj.b.2-2",
            "label": "SA-05b.02[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.b.2"
+            }
+           ],
            "prose": {
             "en": "user documentation for the system, system component, or system service that describes methods for user interaction, which enable individuals to use the system, component, or service to protect individual privacy is obtained or developed;"
            }
@@ -284,10 +399,20 @@
         {
          "id": "sa-5_obj.b.3",
          "label": "SA-05b.03",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b.3"
+          }
+         ],
          "children": [
           {
            "id": "sa-5_obj.b.3-1",
            "label": "SA-05b.03[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.b.3"
+            }
+           ],
            "prose": {
             "en": "user documentation for the system, system component, or system service that describes user responsibilities for maintaining the security of the system, component, or service is obtained or developed;"
            }
@@ -295,6 +420,11 @@
           {
            "id": "sa-5_obj.b.3-2",
            "label": "SA-05b.03[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.b.3"
+            }
+           ],
            "prose": {
             "en": "user documentation for the system, system component, or system service that describes user responsibilities for maintaining the privacy of individuals is obtained or developed;"
            }
@@ -306,10 +436,20 @@
       {
        "id": "sa-5_obj.c",
        "label": "SA-05c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "children": [
         {
          "id": "sa-5_obj.c-1",
          "label": "SA-05c.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c"
+          }
+         ],
          "prose": {
           "en": "attempts to obtain system, system component, or system service documentation when such documentation is either unavailable or nonexistent is documented;"
          }
@@ -317,6 +457,11 @@
         {
          "id": "sa-5_obj.c-2",
          "label": "SA-05c.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c"
+          }
+         ],
          "prose": {
           "en": "after attempts to obtain system, system component, or system service documentation when such documentation is either unavailable or nonexistent, {param:sa-05_odp.01} are taken in response;"
          }
@@ -326,6 +471,11 @@
       {
        "id": "sa-5_obj.d",
        "label": "SA-05d.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.d"
+        }
+       ],
        "prose": {
         "en": "documentation is distributed to {param:sa-05_odp.02}."
        }
@@ -421,7 +571,8 @@
      ],
      "alt-identifiers": [
       "sa-5_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SA-05_ODP[01]"
     },
     "sa-05_odp.02": {
      "guidelines": [
@@ -431,7 +582,8 @@
      ],
      "alt-identifiers": [
       "sa-5_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SA-05_ODP[02]"
     }
    }
   },

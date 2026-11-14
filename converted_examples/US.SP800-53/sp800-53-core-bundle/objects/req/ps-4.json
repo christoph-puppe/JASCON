@@ -95,10 +95,20 @@
     {
      "id": "ps-4_obj",
      "label": "PS-04",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ps-4_obj.a",
        "label": "PS-04a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "upon termination of individual employment, system access is disabled within {param:ps-04_odp.01};"
        }
@@ -106,6 +116,11 @@
       {
        "id": "ps-4_obj.b",
        "label": "PS-04b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "upon termination of individual employment, any authenticators and credentials are terminated or revoked;"
        }
@@ -113,6 +128,11 @@
       {
        "id": "ps-4_obj.c",
        "label": "PS-04c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "upon termination of individual employment, exit interviews that include a discussion of {param:ps-04_odp.02} are conducted;"
        }
@@ -120,6 +140,11 @@
       {
        "id": "ps-4_obj.d",
        "label": "PS-04d.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.d"
+        }
+       ],
        "prose": {
         "en": "upon termination of individual employment, all security-related organizational system-related property is retrieved;"
        }
@@ -127,6 +152,11 @@
       {
        "id": "ps-4_obj.e",
        "label": "PS-04e.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.e"
+        }
+       ],
        "prose": {
         "en": "upon termination of individual employment, access to organizational information and systems formerly controlled by the terminated individual are retained."
        }
@@ -210,7 +240,8 @@
      ],
      "alt-identifiers": [
       "ps-4_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PS-04_ODP[01]"
     },
     "ps-04_odp.02": {
      "guidelines": [
@@ -220,7 +251,8 @@
      ],
      "alt-identifiers": [
       "ps-4_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "PS-04_ODP[02]"
     }
    }
   }

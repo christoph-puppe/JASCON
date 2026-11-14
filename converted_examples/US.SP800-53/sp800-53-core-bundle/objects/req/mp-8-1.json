@@ -31,6 +31,11 @@
     {
      "id": "mp-8.1_obj",
      "label": "MP-08(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "system media downgrading actions are documented."
      }

@@ -55,10 +55,20 @@
     {
      "id": "au-10.4_obj",
      "label": "AU-10(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "au-10.4_obj.a",
        "label": "AU-10(04)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "the binding of the information reviewer identity to the information at the transfer or release points prior to release or transfer between {param:au-10.04_odp.01} is validated;"
        }
@@ -66,6 +76,11 @@
       {
        "id": "au-10.4_obj.b",
        "label": "AU-10(04)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "{param:au-10.04_odp.02} are performed in the event of a validation error."
        }
@@ -143,7 +158,8 @@
      ],
      "alt-identifiers": [
       "au-10.4_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AU-10(04)_ODP[01]"
     },
     "au-10.04_odp.02": {
      "guidelines": [
@@ -153,7 +169,8 @@
      ],
      "alt-identifiers": [
       "au-10.4_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "AU-10(04)_ODP[02]"
     }
    }
   },

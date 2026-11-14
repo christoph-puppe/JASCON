@@ -38,6 +38,11 @@
     {
      "id": "pe-14.1_obj",
      "label": "PE-14(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:pe-14.01_odp} are employed in the facility to prevent fluctuations that are potentially harmful to the system."
      }
@@ -107,7 +112,8 @@
      ],
      "alt-identifiers": [
       "pe-14.1_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PE-14(01)_ODP"
     }
    }
   }

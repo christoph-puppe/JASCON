@@ -31,10 +31,20 @@
     {
      "id": "cp-9.6_obj",
      "label": "CP-09(06)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "cp-9.6_obj-1",
        "label": "CP-09(06)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "system backup is conducted by maintaining a redundant secondary system that is not collocated with the primary system;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "cp-9.6_obj-2",
        "label": "CP-09(06)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "system backup is conducted by maintaining a redundant secondary system that can be activated without loss of information or disruption to operations."
        }

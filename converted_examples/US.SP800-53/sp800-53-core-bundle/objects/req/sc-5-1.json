@@ -38,6 +38,11 @@
     {
      "id": "sc-5.1_obj",
      "label": "SC-05(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the ability of individuals to launch {param:sc-05.01_odp} against other systems is restricted."
      }
@@ -113,7 +118,8 @@
      ],
      "alt-identifiers": [
       "sc-5.1_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-05(01)_ODP"
     }
    }
   }

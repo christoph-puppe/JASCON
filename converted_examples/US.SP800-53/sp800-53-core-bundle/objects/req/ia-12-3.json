@@ -38,6 +38,11 @@
     {
      "id": "ia-12.3_obj",
      "label": "IA-12(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the presented identity evidence is validated and verified through {param:ia-12.03_odp}."
      }
@@ -105,7 +110,8 @@
      "alt-identifiers": [
       "ia-12.3_prm_1"
      ],
-     "alt-label": "organizational defined methods of validation and verification"
+     "alt-label": "organizational defined methods of validation and verification",
+     "sp800-53a-label": "IA-12(03)_ODP"
     }
    }
   }

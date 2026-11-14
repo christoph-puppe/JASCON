@@ -31,6 +31,11 @@
     {
      "id": "cp-10.2_obj",
      "label": "CP-10(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "transaction recovery is implemented for systems that are transaction-based."
      }

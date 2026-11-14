@@ -31,10 +31,20 @@
     {
      "id": "ac-18.4_obj",
      "label": "AC-18(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ac-18.4_obj-1",
        "label": "AC-18(04)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "users allowed to independently configure wireless networking capabilities are identified;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "ac-18.4_obj-2",
        "label": "AC-18(04)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "users allowed to independently configure wireless networking capabilities are explicitly authorized."
        }

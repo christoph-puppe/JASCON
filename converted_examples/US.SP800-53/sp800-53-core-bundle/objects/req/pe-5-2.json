@@ -31,6 +31,11 @@
     {
      "id": "pe-5.2_obj",
      "label": "PE-05(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "individual identity is linked to the receipt of output from output devices."
      }

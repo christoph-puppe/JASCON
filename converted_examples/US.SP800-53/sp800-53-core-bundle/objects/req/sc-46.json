@@ -45,6 +45,11 @@
     {
      "id": "sc-46_obj",
      "label": "SC-46",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "a policy enforcement mechanism is {param:sc-46_odp} implemented between the physical and/or network interfaces for the connecting security domains."
      }
@@ -109,7 +114,8 @@
     "sc-46_odp": {
      "alt-identifiers": [
       "sc-46_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-46_ODP"
     }
    }
   }

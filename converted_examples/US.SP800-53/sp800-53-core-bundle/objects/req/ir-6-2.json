@@ -38,6 +38,11 @@
     {
      "id": "ir-6.2_obj",
      "label": "IR-06(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "system vulnerabilities associated with reported incidents are reported to {param:ir-06.02_odp}."
      }
@@ -113,7 +118,8 @@
      ],
      "alt-identifiers": [
       "ir-6.2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "IR-06(02)_ODP"
     }
    }
   }

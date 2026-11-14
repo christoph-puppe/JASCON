@@ -188,14 +188,29 @@
     {
      "id": "pe-3_obj",
      "label": "PE-03",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "pe-3_obj.a",
        "label": "PE-03a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "pe-3_obj.a.1",
          "label": "PE-03a.01",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.1"
+          }
+         ],
          "prose": {
           "en": "physical access authorizations are enforced at {param:pe-03_odp.01} by verifying individual access authorizations before granting access to the facility;"
          }
@@ -203,6 +218,11 @@
         {
          "id": "pe-3_obj.a.2",
          "label": "PE-03a.02",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.2"
+          }
+         ],
          "prose": {
           "en": "physical access authorizations are enforced at {param:pe-03_odp.01} by controlling ingress and egress to the facility using {param:pe-03_odp.02};"
          }
@@ -212,6 +232,11 @@
       {
        "id": "pe-3_obj.b",
        "label": "PE-03b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "physical access audit logs are maintained for {param:pe-03_odp.04};"
        }
@@ -219,6 +244,11 @@
       {
        "id": "pe-3_obj.c",
        "label": "PE-03c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "access to areas within the facility designated as publicly accessible are maintained by implementing {param:pe-03_odp.05};"
        }
@@ -226,10 +256,20 @@
       {
        "id": "pe-3_obj.d",
        "label": "PE-03d.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.d"
+        }
+       ],
        "children": [
         {
          "id": "pe-3_obj.d-1",
          "label": "PE-03d.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.d"
+          }
+         ],
          "prose": {
           "en": "visitors are escorted;"
          }
@@ -237,6 +277,11 @@
         {
          "id": "pe-3_obj.d-2",
          "label": "PE-03d.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.d"
+          }
+         ],
          "prose": {
           "en": "visitor activity is controlled {param:pe-03_odp.06};"
          }
@@ -246,10 +291,20 @@
       {
        "id": "pe-3_obj.e",
        "label": "PE-03e.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.e"
+        }
+       ],
        "children": [
         {
          "id": "pe-3_obj.e-1",
          "label": "PE-03e.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.e"
+          }
+         ],
          "prose": {
           "en": "keys are secured;"
          }
@@ -257,6 +312,11 @@
         {
          "id": "pe-3_obj.e-2",
          "label": "PE-03e.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.e"
+          }
+         ],
          "prose": {
           "en": "combinations are secured;"
          }
@@ -264,6 +324,11 @@
         {
          "id": "pe-3_obj.e-3",
          "label": "PE-03e.[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.e"
+          }
+         ],
          "prose": {
           "en": "other physical access devices are secured;"
          }
@@ -273,6 +338,11 @@
       {
        "id": "pe-3_obj.f",
        "label": "PE-03f.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.f"
+        }
+       ],
        "prose": {
         "en": "{param:pe-03_odp.07} are inventoried {param:pe-03_odp.08};"
        }
@@ -280,10 +350,20 @@
       {
        "id": "pe-3_obj.g",
        "label": "PE-03g.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.g"
+        }
+       ],
        "children": [
         {
          "id": "pe-3_obj.g-1",
          "label": "PE-03g.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.g"
+          }
+         ],
          "prose": {
           "en": "combinations are changed {param:pe-03_odp.09} , when combinations are compromised, or when individuals possessing the combinations are transferred or terminated;"
          }
@@ -291,6 +371,11 @@
         {
          "id": "pe-3_obj.g-2",
          "label": "PE-03g.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.g"
+          }
+         ],
          "prose": {
           "en": "keys are changed {param:pe-03_odp.10} , when keys are lost, or when individuals possessing the keys are transferred or terminated."
          }
@@ -386,12 +471,14 @@
      "alt-identifiers": [
       "pe-3_prm_1"
      ],
-     "alt-label": "entry and exit points to the facility where the system resides"
+     "alt-label": "entry and exit points to the facility where the system resides",
+     "sp800-53a-label": "PE-03_ODP[01]"
     },
     "pe-03_odp.02": {
      "alt-identifiers": [
       "pe-3_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "PE-03_ODP[02]"
     },
     "pe-03_odp.03": {
      "guidelines": [
@@ -402,7 +489,8 @@
      "alt-identifiers": [
       "pe-3_prm_3"
      ],
-     "alt-label": "physical access control systems or devices"
+     "alt-label": "physical access control systems or devices",
+     "sp800-53a-label": "PE-03_ODP[03]"
     },
     "pe-03_odp.04": {
      "guidelines": [
@@ -412,7 +500,8 @@
      ],
      "alt-identifiers": [
       "pe-3_prm_4"
-     ]
+     ],
+     "sp800-53a-label": "PE-03_ODP[04]"
     },
     "pe-03_odp.05": {
      "guidelines": [
@@ -422,7 +511,8 @@
      ],
      "alt-identifiers": [
       "pe-3_prm_5"
-     ]
+     ],
+     "sp800-53a-label": "PE-03_ODP[05]"
     },
     "pe-03_odp.06": {
      "guidelines": [
@@ -433,7 +523,8 @@
      "alt-identifiers": [
       "pe-3_prm_6"
      ],
-     "alt-label": "circumstances requiring visitor escorts and control of visitor activity"
+     "alt-label": "circumstances requiring visitor escorts and control of visitor activity",
+     "sp800-53a-label": "PE-03_ODP[06]"
     },
     "pe-03_odp.07": {
      "guidelines": [
@@ -443,7 +534,8 @@
      ],
      "alt-identifiers": [
       "pe-3_prm_7"
-     ]
+     ],
+     "sp800-53a-label": "PE-03_ODP[07]"
     },
     "pe-03_odp.08": {
      "guidelines": [
@@ -453,21 +545,24 @@
      ],
      "alt-identifiers": [
       "pe-3_prm_8"
-     ]
+     ],
+     "sp800-53a-label": "PE-03_ODP[08]"
     },
     "pe-03_odp.09": {
      "guidelines": [
       {
        "en": "frequency at which to change combinations is defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "PE-03_ODP[09]"
     },
     "pe-03_odp.10": {
      "guidelines": [
       {
        "en": "frequency at which to change keys is defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "PE-03_ODP[10]"
     }
    }
   }
@@ -597,7 +692,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/PE-7",
     "mode": "merged-into",
-    "label": "PE-07",
+    "label": "PE-7",
     "title": "Visitor Control"
    }
   ]

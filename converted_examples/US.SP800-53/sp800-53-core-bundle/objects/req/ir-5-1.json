@@ -53,10 +53,20 @@
     {
      "id": "ir-5.1_obj",
      "label": "IR-05(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ir-5.1_obj-1",
        "label": "IR-05(01)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "incidents are tracked using {param:ir-05.01_odp.01};"
        }
@@ -64,6 +74,11 @@
       {
        "id": "ir-5.1_obj-2",
        "label": "IR-05(01)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "incident information is collected using {param:ir-05.01_odp.02};"
        }
@@ -71,6 +86,11 @@
       {
        "id": "ir-5.1_obj-3",
        "label": "IR-05(01)[03]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "incident information is analyzed using {param:ir-05.01_odp.03}."
        }
@@ -143,21 +163,24 @@
       {
        "en": "automated mechanisms used to track incidents are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "IR-05(01)_ODP[01]"
     },
     "ir-05.01_odp.02": {
      "guidelines": [
       {
        "en": "automated mechanisms used to collect incident information are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "IR-05(01)_ODP[02]"
     },
     "ir-05.01_odp.03": {
      "guidelines": [
       {
        "en": "automated mechanisms used to analyze incident information are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "IR-05(01)_ODP[03]"
     }
    }
   },

@@ -70,10 +70,20 @@
     {
      "id": "si-14.2_obj",
      "label": "SI-14(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "si-14.2_obj.a",
        "label": "SI-14(02)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "{param:si-14.02_odp.01} is performed;"
        }
@@ -81,6 +91,11 @@
       {
        "id": "si-14.2_obj.b",
        "label": "SI-14(02)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "information is deleted when no longer needed."
        }
@@ -150,7 +165,8 @@
     "si-14.02_odp.01": {
      "alt-identifiers": [
       "si-14.2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SI-14(02)_ODP[01]"
     },
     "si-14.02_odp.02": {
      "guidelines": [
@@ -160,7 +176,8 @@
      ],
      "alt-identifiers": [
       "si-14.2_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SI-14(02)_ODP[02]"
     },
     "si-14.02_odp.03": {
      "guidelines": [
@@ -170,7 +187,8 @@
      ],
      "alt-identifiers": [
       "si-14.2_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "SI-14(02)_ODP[03]"
     },
     "si-14.02_odp.04": {
      "guidelines": [
@@ -180,7 +198,8 @@
      ],
      "alt-identifiers": [
       "si-14.2_prm_4"
-     ]
+     ],
+     "sp800-53a-label": "SI-14(02)_ODP[04]"
     }
    }
   },

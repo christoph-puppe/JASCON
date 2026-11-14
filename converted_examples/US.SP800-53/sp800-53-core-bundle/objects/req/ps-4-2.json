@@ -56,6 +56,11 @@
     {
      "id": "ps-4.2_obj",
      "label": "PS-04(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:ps-04.02_odp.01} are used to {param:ps-04.02_odp.02}."
      }
@@ -128,12 +133,14 @@
      ],
      "alt-identifiers": [
       "ps-4.2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PS-04(02)_ODP[01]"
     },
     "ps-04.02_odp.02": {
      "alt-identifiers": [
       "ps-4.2_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "PS-04(02)_ODP[02]"
     },
     "ps-04.02_odp.03": {
      "guidelines": [
@@ -143,7 +150,8 @@
      ],
      "alt-identifiers": [
       "ps-4.2_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "PS-04(02)_ODP[03]"
     }
    }
   }

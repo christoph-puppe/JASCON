@@ -85,10 +85,20 @@
     {
      "id": "ps-5_obj",
      "label": "PS-05",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ps-5_obj.a",
        "label": "PS-05a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "the ongoing operational need for current logical and physical access authorizations to systems and facilities are reviewed and confirmed when individuals are reassigned or transferred to other positions within the organization;"
        }
@@ -96,6 +106,11 @@
       {
        "id": "ps-5_obj.b",
        "label": "PS-05b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "{param:ps-05_odp.01} are initiated within {param:ps-05_odp.02};"
        }
@@ -103,6 +118,11 @@
       {
        "id": "ps-5_obj.c",
        "label": "PS-05c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "access authorization is modified as needed to correspond with any changes in operational need due to reassignment or transfer;"
        }
@@ -110,6 +130,11 @@
       {
        "id": "ps-5_obj.d",
        "label": "PS-05d.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.d"
+        }
+       ],
        "prose": {
         "en": "{param:ps-05_odp.03} are notified within {param:ps-05_odp.04}."
        }
@@ -187,7 +212,8 @@
      ],
      "alt-identifiers": [
       "ps-5_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PS-05_ODP[01]"
     },
     "ps-05_odp.02": {
      "guidelines": [
@@ -197,7 +223,8 @@
      ],
      "alt-identifiers": [
       "ps-5_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "PS-05_ODP[02]"
     },
     "ps-05_odp.03": {
      "guidelines": [
@@ -207,7 +234,8 @@
      ],
      "alt-identifiers": [
       "ps-5_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "PS-05_ODP[03]"
     },
     "ps-05_odp.04": {
      "guidelines": [
@@ -217,7 +245,8 @@
      ],
      "alt-identifiers": [
       "ps-5_prm_4"
-     ]
+     ],
+     "sp800-53a-label": "PS-05_ODP[04]"
     }
    }
   }

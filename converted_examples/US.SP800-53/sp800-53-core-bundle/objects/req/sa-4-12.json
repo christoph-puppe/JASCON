@@ -48,10 +48,20 @@
     {
      "id": "sa-4.12_obj",
      "label": "SA-04(12)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sa-4.12_obj.a",
        "label": "SA-04(12)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "organizational data ownership requirements are included in the acquisition contract;"
        }
@@ -59,6 +69,11 @@
       {
        "id": "sa-4.12_obj.b",
        "label": "SA-04(12)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "all data to be removed from the contractor’s system and returned to the organization is required within {param:sa-04.12_odp}."
        }
@@ -163,7 +178,8 @@
      ],
      "alt-identifiers": [
       "sa-4.12_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SA-04(12)_ODP"
     }
    }
   },

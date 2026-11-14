@@ -51,10 +51,20 @@
     {
      "id": "sc-7.5_obj",
      "label": "SC-07(05)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sc-7.5_obj-1",
        "label": "SC-07(05)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "network communications traffic is denied by default {param:sc-07.05_odp.01};"
        }
@@ -62,6 +72,11 @@
       {
        "id": "sc-7.5_obj-2",
        "label": "SC-07(05)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "network communications traffic is allowed by exception {param:sc-07.05_odp.01}."
        }
@@ -131,7 +146,8 @@
     "sc-07.05_odp.01": {
      "alt-identifiers": [
       "sc-7.5_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-07(05)_ODP[01]"
     },
     "sc-07.05_odp.02": {
      "guidelines": [
@@ -141,7 +157,8 @@
      ],
      "alt-identifiers": [
       "sc-7.5_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SC-07(05)_ODP[02]"
     }
    }
   }
@@ -163,7 +180,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/CA-3.5",
     "mode": "renamed",
-    "label": "CA-03(05)",
+    "label": "CA-3(5)",
     "title": "Restrictions on External System Connections"
    }
   ]

@@ -39,6 +39,11 @@
     {
      "id": "si-18.1_obj",
      "label": "SI-18(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:si-18.01_odp} are used to correct or delete personally identifiable information that is inaccurate, outdated, incorrectly determined regarding impact, or incorrectly de-identified."
      }
@@ -126,7 +131,8 @@
      ],
      "alt-identifiers": [
       "si-18.1_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SI-18(01)_ODP"
     }
    }
   }

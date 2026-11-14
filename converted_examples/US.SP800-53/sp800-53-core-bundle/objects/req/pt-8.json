@@ -72,7 +72,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "The PRIVACT establishes requirements for federal and non-federal agencies if they engage in a matching program. In general, a matching program is a computerized comparison of records from two or more automated PRIVACT systems of records or an automated system of records and automated records maintained by a non-federal agency (or agent thereof). A matching program either pertains to federal benefit programs or federal personnel or payroll records. A federal benefit match is performed to determine or verify eligibility for payments under federal benefit programs or to recoup payments or delinquent debts under federal benefit programs. A matching program involves not just the matching activity itself but also the investigative follow-up and ultimate action, if any."
+     "en": "The [PRIVACT](#18e71fec-c6fd-475a-925a-5d8495cf8455) establishes requirements for federal and non-federal agencies if they engage in a matching program. In general, a matching program is a computerized comparison of records from two or more automated [PRIVACT](#18e71fec-c6fd-475a-925a-5d8495cf8455) systems of records or an automated system of records and automated records maintained by a non-federal agency (or agent thereof). A matching program either pertains to federal benefit programs or federal personnel or payroll records. A federal benefit match is performed to determine or verify eligibility for payments under federal benefit programs or to recoup payments or delinquent debts under federal benefit programs. A matching program involves not just the matching activity itself but also the investigative follow-up and ultimate action, if any."
     }
    ]
   },
@@ -81,10 +81,20 @@
     {
      "id": "pt-8_obj",
      "label": "PT-08",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "pt-8_obj.a",
        "label": "PT-08a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "approval to conduct the matching program is obtained from the Data Integrity Board when a system or organization processes information for the purpose of conducting a matching program;"
        }
@@ -92,10 +102,20 @@
       {
        "id": "pt-8_obj.b",
        "label": "PT-08b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "pt-8_obj.b-1",
          "label": "PT-08b.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "a computer matching agreement is developed when a system or organization processes information for the purpose of conducting a matching program;"
          }
@@ -103,6 +123,11 @@
         {
          "id": "pt-8_obj.b-2",
          "label": "PT-08b.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "a computer matching agreement is entered into when a system or organization processes information for the purpose of conducting a matching program;"
          }
@@ -112,6 +137,11 @@
       {
        "id": "pt-8_obj.c",
        "label": "PT-08c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "a matching notice is published in the Federal Register when a system or organization processes information for the purpose of conducting a matching program;"
        }
@@ -119,6 +149,11 @@
       {
        "id": "pt-8_obj.d",
        "label": "PT-08d.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.d"
+        }
+       ],
        "prose": {
         "en": "the information produced by the matching program is independently verified before taking adverse action against an individual, if required, when a system or organization processes information for the purpose of conducting a matching program;"
        }
@@ -126,10 +161,20 @@
       {
        "id": "pt-8_obj.e",
        "label": "PT-08e.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.e"
+        }
+       ],
        "children": [
         {
          "id": "pt-8_obj.e-1",
          "label": "PT-08e.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.e"
+          }
+         ],
          "prose": {
           "en": "individuals are provided with notice when a system or organization processes information for the purpose of conducting a matching program;"
          }
@@ -137,6 +182,11 @@
         {
          "id": "pt-8_obj.e-2",
          "label": "PT-08e.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.e"
+          }
+         ],
          "prose": {
           "en": "individuals are provided with an opportunity to contest the findings before adverse action is taken against them when a system or organization processes information for the purpose of conducting a matching program."
          }

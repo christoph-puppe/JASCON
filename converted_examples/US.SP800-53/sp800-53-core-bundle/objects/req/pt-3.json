@@ -78,7 +78,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "Identifying and documenting the purpose for processing provides organizations with a basis for understanding why personally identifiable information may be processed. The term \"process\" includes every step of the information life cycle, including creation, collection, use, processing, storage, maintenance, dissemination, disclosure, and disposal. Identifying and documenting the purpose of processing is a prerequisite to enabling owners and operators of the system and individuals whose information is processed by the system to understand how the information will be processed. This enables individuals to make informed decisions about their engagement with information systems and organizations and to manage their privacy interests. Once the specific processing purpose has been identified, the purpose is described in the organization’s privacy notices, policies, and any related privacy compliance documentation, including privacy impact assessments, system of records notices, PRIVACT statements, computer matching notices, and other applicable Federal Register notices.\n\nOrganizations take steps to help ensure that personally identifiable information is processed only for identified purposes, including training organizational personnel and monitoring and auditing organizational processing of personally identifiable information.\n\nOrganizations monitor for changes in personally identifiable information processing. Organizational personnel consult with the senior agency official for privacy and legal counsel to ensure that any new purposes that arise from changes in processing are compatible with the purpose for which the information was collected, or if the new purpose is not compatible, implement mechanisms in accordance with defined requirements to allow for the new processing, if appropriate. Mechanisms may include obtaining consent from individuals, revising privacy policies, or other measures to manage privacy risks that arise from changes in personally identifiable information processing purposes."
+     "en": "Identifying and documenting the purpose for processing provides organizations with a basis for understanding why personally identifiable information may be processed. The term \"process\" includes every step of the information life cycle, including creation, collection, use, processing, storage, maintenance, dissemination, disclosure, and disposal. Identifying and documenting the purpose of processing is a prerequisite to enabling owners and operators of the system and individuals whose information is processed by the system to understand how the information will be processed. This enables individuals to make informed decisions about their engagement with information systems and organizations and to manage their privacy interests. Once the specific processing purpose has been identified, the purpose is described in the organization’s privacy notices, policies, and any related privacy compliance documentation, including privacy impact assessments, system of records notices, [PRIVACT](#18e71fec-c6fd-475a-925a-5d8495cf8455) statements, computer matching notices, and other applicable Federal Register notices.\n\nOrganizations take steps to help ensure that personally identifiable information is processed only for identified purposes, including training organizational personnel and monitoring and auditing organizational processing of personally identifiable information.\n\nOrganizations monitor for changes in personally identifiable information processing. Organizational personnel consult with the senior agency official for privacy and legal counsel to ensure that any new purposes that arise from changes in processing are compatible with the purpose for which the information was collected, or if the new purpose is not compatible, implement mechanisms in accordance with defined requirements to allow for the new processing, if appropriate. Mechanisms may include obtaining consent from individuals, revising privacy policies, or other measures to manage privacy risks that arise from changes in personally identifiable information processing purposes."
     }
    ]
   },
@@ -87,10 +87,20 @@
     {
      "id": "pt-3_obj",
      "label": "PT-03",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "pt-3_obj.a",
        "label": "PT-03a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "the {param:pt-03_odp.01} for processing personally identifiable information is/are identified and documented;"
        }
@@ -98,10 +108,20 @@
       {
        "id": "pt-3_obj.b",
        "label": "PT-03b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "pt-3_obj.b-1",
          "label": "PT-03b.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "the purpose(s) is/are described in the public privacy notices of the organization;"
          }
@@ -109,6 +129,11 @@
         {
          "id": "pt-3_obj.b-2",
          "label": "PT-03b.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "the purpose(s) is/are described in the policies of the organization;"
          }
@@ -118,6 +143,11 @@
       {
        "id": "pt-3_obj.c",
        "label": "PT-03c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "the {param:pt-03_odp.02} of personally identifiable information are restricted to only that which is compatible with the identified purpose(s);"
        }
@@ -125,10 +155,20 @@
       {
        "id": "pt-3_obj.d",
        "label": "PT-03d.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.d"
+        }
+       ],
        "children": [
         {
          "id": "pt-3_obj.d-1",
          "label": "PT-03d.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.d"
+          }
+         ],
          "prose": {
           "en": "changes in the processing of personally identifiable information are monitored;"
          }
@@ -136,6 +176,11 @@
         {
          "id": "pt-3_obj.d-2",
          "label": "PT-03d.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.d"
+          }
+         ],
          "prose": {
           "en": "{param:pt-03_odp.03} are implemented to ensure that any changes are made in accordance with {param:pt-03_odp.04}."
          }
@@ -221,7 +266,8 @@
      ],
      "alt-identifiers": [
       "pt-3_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PT-03_ODP[01]"
     },
     "pt-03_odp.02": {
      "guidelines": [
@@ -231,7 +277,8 @@
      ],
      "alt-identifiers": [
       "pt-3_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "PT-03_ODP[02]"
     },
     "pt-03_odp.03": {
      "guidelines": [
@@ -241,7 +288,8 @@
      ],
      "alt-identifiers": [
       "pt-3_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "PT-03_ODP[03]"
     },
     "pt-03_odp.04": {
      "guidelines": [
@@ -251,7 +299,8 @@
      ],
      "alt-identifiers": [
       "pt-3_prm_4"
-     ]
+     ],
+     "sp800-53a-label": "PT-03_ODP[04]"
     }
    }
   }

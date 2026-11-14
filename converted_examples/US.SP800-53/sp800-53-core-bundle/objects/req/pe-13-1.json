@@ -43,10 +43,20 @@
     {
      "id": "pe-13.1_obj",
      "label": "PE-13(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "pe-13.1_obj-1",
        "label": "PE-13(01)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "fire detection systems that activate automatically are employed in the event of a fire;"
        }
@@ -54,6 +64,11 @@
       {
        "id": "pe-13.1_obj-2",
        "label": "PE-13(01)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "fire detection systems that notify {param:pe-13.01_odp.01} automatically are employed in the event of a fire;"
        }
@@ -61,6 +76,11 @@
       {
        "id": "pe-13.1_obj-3",
        "label": "PE-13(01)[03]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "fire detection systems that notify {param:pe-13.01_odp.02} automatically are employed in the event of a fire."
        }
@@ -144,7 +164,8 @@
      ],
      "alt-identifiers": [
       "pe-13.1_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PE-13(01)_ODP[01]"
     },
     "pe-13.01_odp.02": {
      "guidelines": [
@@ -154,7 +175,8 @@
      ],
      "alt-identifiers": [
       "pe-13.1_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "PE-13(01)_ODP[02]"
     }
    }
   }

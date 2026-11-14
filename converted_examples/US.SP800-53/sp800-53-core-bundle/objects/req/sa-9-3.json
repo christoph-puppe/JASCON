@@ -48,10 +48,20 @@
     {
      "id": "sa-9.3_obj",
      "label": "SA-09(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sa-9.3_obj-1",
        "label": "SA-09(03)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "trust relationships with external service provides based on {param:sa-09.03_odp.01} are established and documented;"
        }
@@ -59,6 +69,11 @@
       {
        "id": "sa-9.3_obj-2",
        "label": "SA-09(03)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "trust relationships with external service provides based on {param:sa-09.03_odp.01} are maintained;"
        }
@@ -66,6 +81,11 @@
       {
        "id": "sa-9.3_obj-3",
        "label": "SA-09(03)[03]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "trust relationships with external service provides based on {param:sa-09.03_odp.02} are established and documented;"
        }
@@ -73,6 +93,11 @@
       {
        "id": "sa-9.3_obj-4",
        "label": "SA-09(03)[04]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "trust relationships with external service provides based on {param:sa-09.03_odp.02} are maintained."
        }
@@ -162,14 +187,16 @@
       {
        "en": "security requirements, properties, factors, or conditions defining acceptable trust relationships on which a trust relationship is maintained are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "SA-09(03)_ODP[01]"
     },
     "sa-09.03_odp.02": {
      "guidelines": [
       {
        "en": "privacy requirements, properties, factors, or conditions defining acceptable trust relationships on which a trust relationship is maintained are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "SA-09(03)_ODP[02]"
     }
    }
   },

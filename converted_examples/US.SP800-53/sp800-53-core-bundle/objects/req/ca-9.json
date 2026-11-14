@@ -82,10 +82,20 @@
     {
      "id": "ca-9_obj",
      "label": "CA-09",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ca-9_obj.a",
        "label": "CA-09a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "internal connections of {param:ca-09_odp.01} to the system are authorized;"
        }
@@ -93,10 +103,20 @@
       {
        "id": "ca-9_obj.b",
        "label": "CA-09b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "ca-9_obj.b-1",
          "label": "CA-09b.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "for each internal connection, the interface characteristics are documented;"
          }
@@ -104,6 +124,11 @@
         {
          "id": "ca-9_obj.b-2",
          "label": "CA-09b.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "for each internal connection, the security requirements are documented;"
          }
@@ -111,6 +136,11 @@
         {
          "id": "ca-9_obj.b-3",
          "label": "CA-09b.[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "for each internal connection, the privacy requirements are documented;"
          }
@@ -118,6 +148,11 @@
         {
          "id": "ca-9_obj.b-4",
          "label": "CA-09b.[04]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "for each internal connection, the nature of the information communicated is documented;"
          }
@@ -127,6 +162,11 @@
       {
        "id": "ca-9_obj.c",
        "label": "CA-09c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "internal system connections are terminated after {param:ca-09_odp.02};"
        }
@@ -134,6 +174,11 @@
       {
        "id": "ca-9_obj.d",
        "label": "CA-09d.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.d"
+        }
+       ],
        "prose": {
         "en": "the continued need for each internal connection is reviewed {param:ca-09_odp.03}."
        }
@@ -218,7 +263,8 @@
      "alt-identifiers": [
       "ca-9_prm_1"
      ],
-     "alt-label": "system components or classes of components"
+     "alt-label": "system components or classes of components",
+     "sp800-53a-label": "CA-09_ODP[01]"
     },
     "ca-09_odp.02": {
      "guidelines": [
@@ -228,7 +274,8 @@
      ],
      "alt-identifiers": [
       "ca-9_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "CA-09_ODP[02]"
     },
     "ca-09_odp.03": {
      "guidelines": [
@@ -238,7 +285,8 @@
      ],
      "alt-identifiers": [
       "ca-9_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "CA-09_ODP[03]"
     }
    }
   },

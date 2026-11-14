@@ -53,10 +53,20 @@
     {
      "id": "si-12.3_obj",
      "label": "SI-12(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "si-12.3_obj-1",
        "label": "SI-12(03)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "{param:si-12.03_odp.01} are used to dispose of information following the retention period;"
        }
@@ -64,6 +74,11 @@
       {
        "id": "si-12.3_obj-2",
        "label": "SI-12(03)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "{param:si-12.03_odp.02} are used to destroy information following the retention period;"
        }
@@ -71,6 +86,11 @@
       {
        "id": "si-12.3_obj-3",
        "label": "SI-12(03)[03]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "{param:si-12.03_odp.03} are used to erase information following the retention period."
        }
@@ -179,21 +199,24 @@
       {
        "en": "techniques used to dispose of information following the retention period are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "SI-12(03)_ODP[01]"
     },
     "si-12.03_odp.02": {
      "guidelines": [
       {
        "en": "techniques used to destroy information following the retention period are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "SI-12(03)_ODP[02]"
     },
     "si-12.03_odp.03": {
      "guidelines": [
       {
        "en": "techniques used to erase information following the retention period are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "SI-12(03)_ODP[03]"
     }
    }
   }

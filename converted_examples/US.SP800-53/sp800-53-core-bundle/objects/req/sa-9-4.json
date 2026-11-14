@@ -43,6 +43,11 @@
     {
      "id": "sa-9.4_obj",
      "label": "SA-09(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:sa-09.04_odp.02} are taken to verify that the interests of {param:sa-09.04_odp.01} are consistent with and reflect organizational interests."
      }
@@ -133,7 +138,8 @@
      ],
      "alt-identifiers": [
       "sa-9.4_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SA-09(04)_ODP[01]"
     },
     "sa-09.04_odp.02": {
      "guidelines": [
@@ -143,7 +149,8 @@
      ],
      "alt-identifiers": [
       "sa-9.4_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SA-09(04)_ODP[02]"
     }
    }
   },

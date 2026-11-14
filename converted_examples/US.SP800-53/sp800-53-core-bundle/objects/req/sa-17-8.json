@@ -43,6 +43,11 @@
     {
      "id": "sa-17.8_obj",
      "label": "SA-17(08)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:sa-17.08_odp.01} are designed with coordinated behavior to implement {param:sa-17.08_odp.02}."
      }
@@ -131,7 +136,8 @@
      "alt-identifiers": [
       "sa-17.8_prm_1"
      ],
-     "alt-label": "critical systems or system components"
+     "alt-label": "critical systems or system components",
+     "sp800-53a-label": "SA-17(08)_ODP[01]"
     },
     "sa-17.08_odp.02": {
      "guidelines": [
@@ -142,7 +148,8 @@
      "alt-identifiers": [
       "sa-17.8_prm_2"
      ],
-     "alt-label": "capabilities, by system or component"
+     "alt-label": "capabilities, by system or component",
+     "sp800-53a-label": "SA-17(08)_ODP[02]"
     }
    }
   },

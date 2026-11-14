@@ -31,10 +31,20 @@
     {
      "id": "cm-4_obj",
      "label": "CM-04",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "cm-4_obj-1",
        "label": "CM-04[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "changes to the system are analyzed to determine potential security impacts prior to change implementation;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "cm-4_obj-2",
        "label": "CM-04[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "changes to the system are analyzed to determine potential privacy impacts prior to change implementation."
        }
@@ -205,7 +220,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/CM-6.4",
     "mode": "merged-into",
-    "label": "CM-06(04)",
+    "label": "CM-6(4)",
     "title": "Conformance Demonstration"
    }
   ]

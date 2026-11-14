@@ -31,10 +31,20 @@
     {
      "id": "cm-8.1_obj",
      "label": "CM-08(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "cm-8.1_obj-1",
        "label": "CM-08(01)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the inventory of system components is updated as part of component installations;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "cm-8.1_obj-2",
        "label": "CM-08(01)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the inventory of system components is updated as part of component removals;"
        }
@@ -49,6 +64,11 @@
       {
        "id": "cm-8.1_obj-3",
        "label": "CM-08(01)[03]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the inventory of system components is updated as part of system updates."
        }

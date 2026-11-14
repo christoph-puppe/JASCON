@@ -31,6 +31,11 @@
     {
      "id": "ac-17.2_obj",
      "label": "AC-17(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "cryptographic mechanisms are implemented to protect the confidentiality and integrity of remote access sessions."
      }

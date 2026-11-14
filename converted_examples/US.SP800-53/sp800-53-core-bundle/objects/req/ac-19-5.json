@@ -50,6 +50,11 @@
     {
      "id": "ac-19.5_obj",
      "label": "AC-19(05)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:ac-19.05_odp.01} is employed to protect the confidentiality and integrity of information on {param:ac-19.05_odp.02}."
      }
@@ -117,7 +122,8 @@
     "ac-19.05_odp.01": {
      "alt-identifiers": [
       "ac-19.5_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AC-19(05)_ODP[01]"
     },
     "ac-19.05_odp.02": {
      "guidelines": [
@@ -127,7 +133,8 @@
      ],
      "alt-identifiers": [
       "ac-19.5_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "AC-19(05)_ODP[02]"
     }
    }
   }

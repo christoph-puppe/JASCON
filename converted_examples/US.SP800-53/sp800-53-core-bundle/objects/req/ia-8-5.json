@@ -38,10 +38,20 @@
     {
      "id": "ia-8.5_obj",
      "label": "IA-08(05)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ia-8.5_obj-1",
        "label": "IA-08(05)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "federated or PKI credentials that meet {param:ia-08.05_odp} are accepted;"
        }
@@ -49,6 +59,11 @@
       {
        "id": "ia-8.5_obj-2",
        "label": "IA-08(05)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "federated or PKI credentials that meet {param:ia-08.05_odp} are verified."
        }
@@ -138,7 +153,8 @@
      ],
      "alt-identifiers": [
       "ia-8.5_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "IA-08(05)_ODP"
     }
    }
   }

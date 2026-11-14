@@ -31,6 +31,11 @@
     {
      "id": "sc-23_obj",
      "label": "SC-23",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the authenticity of communication sessions is protected."
      }

@@ -38,6 +38,11 @@
     {
      "id": "sc-31.3_obj",
      "label": "SC-31(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the bandwidth of {param:sc-31.03_odp} is measured in the operational environment of the system."
      }
@@ -119,7 +124,8 @@
      ],
      "alt-identifiers": [
       "sc-31.3_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-31(03)_ODP"
     }
    }
   },

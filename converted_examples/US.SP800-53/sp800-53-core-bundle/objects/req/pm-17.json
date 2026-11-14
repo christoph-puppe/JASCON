@@ -51,7 +51,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "Controlled unclassified information is defined by the National Archives and Records Administration along with the safeguarding and dissemination requirements for such information and is codified in 32 CFR 2002 and, specifically for systems external to the federal organization, [32 CFR 2002.14h](https://www.govinfo.gov/content/pkg/CFR-2017-title32-vol6/xml/CFR-2017-title32-vol6-part2002.xml) . The policy prescribes the specific use and conditions to be implemented in accordance with organizational procedures, including via its contracting processes."
+     "en": "Controlled unclassified information is defined by the National Archives and Records Administration along with the safeguarding and dissemination requirements for such information and is codified in [32 CFR 2002](#91f992fb-f668-4c91-a50f-0f05b95ccee3) and, specifically for systems external to the federal organization, [32 CFR 2002.14h](https://www.govinfo.gov/content/pkg/CFR-2017-title32-vol6/xml/CFR-2017-title32-vol6-part2002.xml) . The policy prescribes the specific use and conditions to be implemented in accordance with organizational procedures, including via its contracting processes."
     }
    ]
   },
@@ -60,14 +60,29 @@
     {
      "id": "pm-17_obj",
      "label": "PM-17",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "pm-17_obj.a",
        "label": "PM-17a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "pm-17_obj.a-1",
          "label": "PM-17a.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "policy is established to ensure that requirements for the protection of controlled unclassified information that is processed, stored, or transmitted on external systems are implemented in accordance with applicable laws, executive orders, directives, policies, regulations, and standards;"
          }
@@ -75,6 +90,11 @@
         {
          "id": "pm-17_obj.a-2",
          "label": "PM-17a.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "procedures are established to ensure that requirements for the protection of controlled unclassified information that is processed, stored, or transmitted on external systems are implemented in accordance with applicable laws, executive orders, directives, policies, regulations, and standards;"
          }
@@ -84,10 +104,20 @@
       {
        "id": "pm-17_obj.b",
        "label": "PM-17b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "pm-17_obj.b-1",
          "label": "PM-17b.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "policy is reviewed and updated {param:pm-17_odp.01};"
          }
@@ -95,6 +125,11 @@
         {
          "id": "pm-17_obj.b-2",
          "label": "PM-17b.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "procedures are reviewed and updated {param:pm-17_odp.02} "
          }
@@ -147,14 +182,16 @@
       {
        "en": "the frequency at which to review and update the policy is defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "PM-17_ODP[01]"
     },
     "pm-17_odp.02": {
      "guidelines": [
       {
        "en": "the frequency at which to review and update the procedures is defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "PM-17_ODP[02]"
     }
    }
   },

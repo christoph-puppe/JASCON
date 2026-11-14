@@ -31,10 +31,20 @@
     {
      "id": "au-6.4_obj",
      "label": "AU-06(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "au-6.4_obj-1",
        "label": "AU-06(04)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the capability to centrally review and analyze audit records from multiple components within the system is provided;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "au-6.4_obj-2",
        "label": "AU-06(04)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the capability to centrally review and analyze audit records from multiple components within the system is implemented."
        }

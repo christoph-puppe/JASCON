@@ -31,10 +31,20 @@
     {
      "id": "sa-3.3_obj",
      "label": "SA-03(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sa-3.3_obj-1",
        "label": "SA-03(03)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "a technology refresh schedule is planned for the system throughout the system development life cycle;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "sa-3.3_obj-2",
        "label": "SA-03(03)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "a technology refresh schedule is implemented for the system throughout the system development life cycle."
        }

@@ -128,10 +128,20 @@
     {
      "id": "sa-4.3_obj",
      "label": "SA-04(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sa-4.3_obj.a",
        "label": "SA-04(03)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "the developer of the system, system component, or system service is required to demonstrate the use of a system development life cycle process that includes {param:sa-04.03_odp.01};"
        }
@@ -139,6 +149,11 @@
       {
        "id": "sa-4.3_obj.b",
        "label": "SA-04(03)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "the developer of the system, system component, or system service is required to demonstrate the use of a system development life cycle process that includes {param:sa-04.03_odp.02};"
        }
@@ -146,6 +161,11 @@
       {
        "id": "sa-4.3_obj.c",
        "label": "SA-04(03)(c)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "the developer of the system, system component, or system service is required to demonstrate the use of a system development life cycle process that includes {param:sa-04.03_odp.05}."
        }
@@ -238,54 +258,62 @@
      ],
      "alt-identifiers": [
       "sa-4.3_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SA-04(03)_ODP[01]"
     },
     "sa-04.03_odp.02": {
      "alt-identifiers": [
       "sa-4.3_prm_2"
      ],
-     "alt-label": "[Selection (one or more): systems security; privacy] engineering methods"
+     "alt-label": "[Selection (one or more): systems security; privacy] engineering methods",
+     "sp800-53a-label": "SA-04(03)_ODP[02]"
     },
     "sa-04.03_odp.03": {
      "guidelines": [
       {
        "en": "system security engineering methods are defined (if selected);"
       }
-     ]
+     ],
+     "sp800-53a-label": "SA-04(03)_ODP[03]"
     },
     "sa-04.03_odp.04": {
      "guidelines": [
       {
        "en": "privacy engineering methods are defined (if selected);"
       }
-     ]
+     ],
+     "sp800-53a-label": "SA-04(03)_ODP[04]"
     },
     "sa-04.03_odp.05": {
      "alt-identifiers": [
       "sa-4.3_prm_3"
      ],
-     "alt-label": "software development methods; testing, evaluation, assessment, verification, and validation methods; and quality control processes"
+     "alt-label": "software development methods; testing, evaluation, assessment, verification, and validation methods; and quality control processes",
+     "sp800-53a-label": "SA-04(03)_ODP[05]"
     },
     "sa-04.03_odp.06": {
      "guidelines": [
       {
        "en": "software development methods are defined (if selected);"
       }
-     ]
+     ],
+     "sp800-53a-label": "SA-04(03)_ODP[06]"
     },
     "sa-04.03_odp.07": {
      "guidelines": [
       {
        "en": "testing, evaluation, assessment, verification, and validation methods are defined (if selected);"
       }
-     ]
+     ],
+     "sp800-53a-label": "SA-04(03)_ODP[07]"
     },
     "sa-04.03_odp.08": {
      "guidelines": [
       {
        "en": "quality control processes are defined (if selected);"
       }
-     ]
+     ],
+     "sp800-53a-label": "SA-04(03)_ODP[08]"
     }
    }
   },

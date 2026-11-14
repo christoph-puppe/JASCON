@@ -31,10 +31,20 @@
     {
      "id": "si-4.25_obj",
      "label": "SI-04(25)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "si-4.25_obj-1",
        "label": "SI-04(25)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "visibility into network traffic at external system interfaces is provided to optimize the effectiveness of monitoring devices;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "si-4.25_obj-2",
        "label": "SI-04(25)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "visibility into network traffic at key internal system interfaces is provided to optimize the effectiveness of monitoring devices."
        }

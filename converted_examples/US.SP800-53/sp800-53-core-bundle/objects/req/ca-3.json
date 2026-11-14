@@ -84,7 +84,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "System information exchange requirements apply to information exchanges between two or more systems. System information exchanges include connections via leased lines or virtual private networks, connections to internet service providers, database sharing or exchanges of database transaction information, connections and exchanges with cloud services, exchanges via web-based services, or exchanges of files via file transfer protocols, network protocols (e.g., IPv4, IPv6), email, or other organization-to-organization communications. Organizations consider the risk related to new or increased threats that may be introduced when systems exchange information with other systems that may have different security and privacy requirements and controls. This includes systems within the same organization and systems that are external to the organization. A joint authorization of the systems exchanging information, as described in CA-6(1) or CA-6(2) , may help to communicate and reduce risk.\n\nAuthorizing officials determine the risk associated with system information exchange and the controls needed for appropriate risk mitigation. The types of agreements selected are based on factors such as the impact level of the information being exchanged, the relationship between the organizations exchanging information (e.g., government to government, government to business, business to business, government or business to service provider, government or business to individual), or the level of access to the organizational system by users of the other system. If systems that exchange information have the same authorizing official, organizations need not develop agreements. Instead, the interface characteristics between the systems (e.g., how the information is being exchanged. how the information is protected) are described in the respective security and privacy plans. If the systems that exchange information have different authorizing officials within the same organization, the organizations can develop agreements or provide the same information that would be provided in the appropriate agreement type from CA-3a in the respective security and privacy plans for the systems. Organizations may incorporate agreement information into formal contracts, especially for information exchanges established between federal agencies and nonfederal organizations (including service providers, contractors, system developers, and system integrators). Risk considerations include systems that share the same networks."
+     "en": "System information exchange requirements apply to information exchanges between two or more systems. System information exchanges include connections via leased lines or virtual private networks, connections to internet service providers, database sharing or exchanges of database transaction information, connections and exchanges with cloud services, exchanges via web-based services, or exchanges of files via file transfer protocols, network protocols (e.g., IPv4, IPv6), email, or other organization-to-organization communications. Organizations consider the risk related to new or increased threats that may be introduced when systems exchange information with other systems that may have different security and privacy requirements and controls. This includes systems within the same organization and systems that are external to the organization. A joint authorization of the systems exchanging information, as described in [CA-6(1)](#ca-6.1) or [CA-6(2)](#ca-6.2) , may help to communicate and reduce risk.\n\nAuthorizing officials determine the risk associated with system information exchange and the controls needed for appropriate risk mitigation. The types of agreements selected are based on factors such as the impact level of the information being exchanged, the relationship between the organizations exchanging information (e.g., government to government, government to business, business to business, government or business to service provider, government or business to individual), or the level of access to the organizational system by users of the other system. If systems that exchange information have the same authorizing official, organizations need not develop agreements. Instead, the interface characteristics between the systems (e.g., how the information is being exchanged. how the information is protected) are described in the respective security and privacy plans. If the systems that exchange information have different authorizing officials within the same organization, the organizations can develop agreements or provide the same information that would be provided in the appropriate agreement type from [CA-3a](#ca-3_smt.a) in the respective security and privacy plans for the systems. Organizations may incorporate agreement information into formal contracts, especially for information exchanges established between federal agencies and nonfederal organizations (including service providers, contractors, system developers, and system integrators). Risk considerations include systems that share the same networks."
     }
    ]
   },
@@ -93,10 +93,20 @@
     {
      "id": "ca-3_obj",
      "label": "CA-03",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ca-3_obj.a",
        "label": "CA-03a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "the exchange of information between the system and other systems is approved and managed using {param:ca-03_odp.01};"
        }
@@ -104,10 +114,20 @@
       {
        "id": "ca-3_obj.b",
        "label": "CA-03b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "ca-3_obj.b-1",
          "label": "CA-03b.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "the interface characteristics are documented as part of each exchange agreement;"
          }
@@ -115,6 +135,11 @@
         {
          "id": "ca-3_obj.b-2",
          "label": "CA-03b.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "security requirements are documented as part of each exchange agreement;"
          }
@@ -122,6 +147,11 @@
         {
          "id": "ca-3_obj.b-3",
          "label": "CA-03b.[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "privacy requirements are documented as part of each exchange agreement;"
          }
@@ -129,6 +159,11 @@
         {
          "id": "ca-3_obj.b-4",
          "label": "CA-03b.[04]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "controls are documented as part of each exchange agreement;"
          }
@@ -136,6 +171,11 @@
         {
          "id": "ca-3_obj.b-5",
          "label": "CA-03b.[05]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "responsibilities for each system are documented as part of each exchange agreement;"
          }
@@ -143,6 +183,11 @@
         {
          "id": "ca-3_obj.b-6",
          "label": "CA-03b.[06]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "the impact level of the information communicated is documented as part of each exchange agreement;"
          }
@@ -152,6 +197,11 @@
       {
        "id": "ca-3_obj.c",
        "label": "CA-03c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "agreements are reviewed and updated {param:ca-03_odp.03}."
        }
@@ -233,7 +283,8 @@
     "ca-03_odp.01": {
      "alt-identifiers": [
       "ca-3_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "CA-03_ODP[01]"
     },
     "ca-03_odp.02": {
      "guidelines": [
@@ -243,7 +294,8 @@
      ],
      "alt-identifiers": [
       "ca-3_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "CA-03_ODP[02]"
     },
     "ca-03_odp.03": {
      "guidelines": [
@@ -253,7 +305,8 @@
      ],
      "alt-identifiers": [
       "ca-3_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "CA-03_ODP[03]"
     }
    }
   },

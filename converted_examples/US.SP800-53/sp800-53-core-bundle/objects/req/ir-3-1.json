@@ -38,6 +38,11 @@
     {
      "id": "ir-3.1_obj",
      "label": "IR-03(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the incident response capability is tested using {param:ir-03.01_odp}."
      }
@@ -119,7 +124,8 @@
      ],
      "alt-identifiers": [
       "ir-3.1_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "IR-03(01)_ODP"
     }
    }
   },

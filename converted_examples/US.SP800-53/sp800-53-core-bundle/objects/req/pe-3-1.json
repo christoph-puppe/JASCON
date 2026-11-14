@@ -38,10 +38,20 @@
     {
      "id": "pe-3.1_obj",
      "label": "PE-03(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "pe-3.1_obj-1",
        "label": "PE-03(01)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "physical access authorizations to the system are enforced;"
        }
@@ -49,6 +59,11 @@
       {
        "id": "pe-3.1_obj.2",
        "label": "PE-03(01)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "physical access controls are enforced for the facility at {param:pe-03.01_odp}."
        }
@@ -130,7 +145,8 @@
      "alt-identifiers": [
       "pe-3.1_prm_1"
      ],
-     "alt-label": "physical spaces containing one or more components of the system"
+     "alt-label": "physical spaces containing one or more components of the system",
+     "sp800-53a-label": "PE-03(01)_ODP"
     }
    }
   }

@@ -38,6 +38,11 @@
     {
      "id": "ac-3.2_obj",
      "label": "AC-03(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "dual authorization is enforced for {param:ac-03.02_odp}."
      }
@@ -117,7 +122,8 @@
      "alt-identifiers": [
       "ac-3.2_prm_1"
      ],
-     "alt-label": "privileged commands and/or other organization-defined actions"
+     "alt-label": "privileged commands and/or other organization-defined actions",
+     "sp800-53a-label": "AC-03(02)_ODP"
     }
    }
   }

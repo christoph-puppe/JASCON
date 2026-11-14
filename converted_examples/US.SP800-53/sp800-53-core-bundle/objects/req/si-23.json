@@ -75,10 +75,20 @@
     {
      "id": "si-23_obj",
      "label": "SI-23",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "si-23_obj.a",
        "label": "SI-23a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "under {param:si-23_odp.01}, {param:si-23_odp.02} is fragmented;"
        }
@@ -86,6 +96,11 @@
       {
        "id": "si-23_obj.b",
        "label": "SI-23b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "under {param:si-23_odp.01} , the fragmented information is distributed across {param:si-23_odp.03}."
        }
@@ -184,7 +199,8 @@
      ],
      "alt-identifiers": [
       "si-23_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SI-23_ODP[01]"
     },
     "si-23_odp.02": {
      "guidelines": [
@@ -194,7 +210,8 @@
      ],
      "alt-identifiers": [
       "si-23_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SI-23_ODP[02]"
     },
     "si-23_odp.03": {
      "guidelines": [
@@ -204,7 +221,8 @@
      ],
      "alt-identifiers": [
       "si-23_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "SI-23_ODP[03]"
     }
    }
   },

@@ -38,6 +38,11 @@
     {
      "id": "ir-9.4_obj",
      "label": "IR-09(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:ir-09.04_odp} are employed for personnel exposed to information not within assigned access authorizations."
      }
@@ -107,7 +112,8 @@
      ],
      "alt-identifiers": [
       "ir-9.4_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "IR-09(04)_ODP"
     }
    }
   }

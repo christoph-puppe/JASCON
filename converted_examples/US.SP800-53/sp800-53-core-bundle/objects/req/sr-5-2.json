@@ -22,7 +22,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "Organizational personnel or independent, external entities conduct assessments of systems, components, products, tools, and services to uncover evidence of tampering, unintentional and intentional vulnerabilities, or evidence of non-compliance with supply chain controls. These include malicious code, malicious processes, defective software, backdoors, and counterfeits. Assessments can include evaluations; design proposal reviews; visual or physical inspection; static and dynamic analyses; visual, x-ray, or magnetic particle inspections; simulations; white, gray, or black box testing; fuzz testing; stress testing; and penetration testing (see SR-6(1) ). Evidence generated during assessments is documented for follow-on actions by organizations. The evidence generated during the organizational or independent assessments of supply chain elements may be used to improve supply chain processes and inform the supply chain risk management process. The evidence can be leveraged in follow-on assessments. Evidence and other documentation may be shared in accordance with organizational agreements."
+     "en": "Organizational personnel or independent, external entities conduct assessments of systems, components, products, tools, and services to uncover evidence of tampering, unintentional and intentional vulnerabilities, or evidence of non-compliance with supply chain controls. These include malicious code, malicious processes, defective software, backdoors, and counterfeits. Assessments can include evaluations; design proposal reviews; visual or physical inspection; static and dynamic analyses; visual, x-ray, or magnetic particle inspections; simulations; white, gray, or black box testing; fuzz testing; stress testing; and penetration testing (see [SR-6(1)](#sr-6.1) ). Evidence generated during assessments is documented for follow-on actions by organizations. The evidence generated during the organizational or independent assessments of supply chain elements may be used to improve supply chain processes and inform the supply chain risk management process. The evidence can be leveraged in follow-on assessments. Evidence and other documentation may be shared in accordance with organizational agreements."
     }
    ]
   },
@@ -31,10 +31,20 @@
     {
      "id": "sr-5.2_obj",
      "label": "SR-05(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sr-5.2_obj-1",
        "label": "SR-05(02)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the system, system component, or system service is assessed prior to selection;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "sr-5.2_obj-2",
        "label": "SR-05(02)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the system, system component, or system service is assessed prior to acceptance;"
        }
@@ -49,6 +64,11 @@
       {
        "id": "sr-5.2_obj-3",
        "label": "SR-05(02)[03]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the system, system component, or system service is assessed prior to modification;"
        }
@@ -56,6 +76,11 @@
       {
        "id": "sr-5.2_obj-4",
        "label": "SR-05(02)[04]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the system, system component, or system service is assessed prior to update."
        }
@@ -166,7 +191,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/SA-12.7",
     "mode": "renamed",
-    "label": "SA-12(07)",
+    "label": "SA-12(7)",
     "title": "Assessments Prior to Selection / Acceptance / Update"
    }
   ]

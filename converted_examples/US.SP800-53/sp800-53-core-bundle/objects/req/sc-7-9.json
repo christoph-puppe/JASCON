@@ -41,14 +41,29 @@
     {
      "id": "sc-7.9_obj",
      "label": "SC-07(09)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sc-7.9_obj.a",
        "label": "SC-07(09)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "sc-7.9_obj.a-1",
          "label": "SC-07(09)(a)[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "outgoing communications traffic posing a threat to external systems is detected;"
          }
@@ -56,6 +71,11 @@
         {
          "id": "sc-7.9_obj.a-2",
          "label": "SC-07(09)(a)[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "outgoing communications traffic posing a threat to external systems is denied;"
          }
@@ -65,6 +85,11 @@
       {
        "id": "sc-7.9_obj.b",
        "label": "SC-07(09)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "the identity of internal users associated with denied communications is audited."
        }

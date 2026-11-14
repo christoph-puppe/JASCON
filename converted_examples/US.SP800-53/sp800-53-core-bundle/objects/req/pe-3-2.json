@@ -38,6 +38,11 @@
     {
      "id": "pe-3.2_obj",
      "label": "PE-03(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "security checks are performed {param:pe-03.02_odp} at the physical perimeter of the facility or system for exfiltration of information or removal of system components."
      }
@@ -119,7 +124,8 @@
      ],
      "alt-identifiers": [
       "pe-3.2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PE-03(02)_ODP"
     }
    }
   }

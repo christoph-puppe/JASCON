@@ -54,10 +54,20 @@
     {
      "id": "ac-4.21_obj",
      "label": "AC-04(21)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ac-4.21_obj-1",
        "label": "AC-04(21)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "information flows are separated logically using {param:ac-04.21_odp.01} to accomplish {param:ac-04.21_odp.03};"
        }
@@ -65,6 +75,11 @@
       {
        "id": "ac-4.21_obj-2",
        "label": "AC-04(21)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "information flows are separated physically using {param:ac-04.21_odp.02} to accomplish {param:ac-04.21_odp.03}."
        }
@@ -151,14 +166,16 @@
       {
        "en": "mechanisms and/or techniques used to logically separate information flows are defined (if selected);"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-04(21)_ODP[01]"
     },
     "ac-04.21_odp.02": {
      "guidelines": [
       {
        "en": "mechanisms and/or techniques used to physically separate information flows are defined (if selected);"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-04(21)_ODP[02]"
     },
     "ac-04.21_odp.03": {
      "guidelines": [
@@ -169,7 +186,8 @@
      "alt-identifiers": [
       "ac-4.21_prm_2"
      ],
-     "alt-label": "required separations by types of information"
+     "alt-label": "required separations by types of information",
+     "sp800-53a-label": "AC-04(21)_ODP[03]"
     }
    }
   }

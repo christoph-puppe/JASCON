@@ -31,6 +31,11 @@
     {
      "id": "sc-31.1_obj",
      "label": "SC-31(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "a subset of the identified covert channels is tested to determine the channels that are exploitable."
      }

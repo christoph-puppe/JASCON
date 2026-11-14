@@ -221,14 +221,29 @@
     {
      "id": "ir-8_obj",
      "label": "IR-08",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ir-8_obj.a",
        "label": "IR-08a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "ir-8_obj.a.1",
          "label": "IR-08a.01",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.1"
+          }
+         ],
          "prose": {
           "en": "an incident response plan is developed that provides the organization with a roadmap for implementing its incident response capability;"
          }
@@ -236,6 +251,11 @@
         {
          "id": "ir-8_obj.a.2",
          "label": "IR-08a.02",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.2"
+          }
+         ],
          "prose": {
           "en": "an incident response plan is developed that describes the structure and organization of the incident response capability;"
          }
@@ -243,6 +263,11 @@
         {
          "id": "ir-8_obj.a.3",
          "label": "IR-08a.03",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.3"
+          }
+         ],
          "prose": {
           "en": "an incident response plan is developed that provides a high-level approach for how the incident response capability fits into the overall organization;"
          }
@@ -250,6 +275,11 @@
         {
          "id": "ir-8_obj.a.4",
          "label": "IR-08a.04",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.4"
+          }
+         ],
          "prose": {
           "en": "an incident response plan is developed that meets the unique requirements of the organization with regard to mission, size, structure, and functions;"
          }
@@ -257,6 +287,11 @@
         {
          "id": "ir-8_obj.a.5",
          "label": "IR-08a.05",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.5"
+          }
+         ],
          "prose": {
           "en": "an incident response plan is developed that defines reportable incidents;"
          }
@@ -264,6 +299,11 @@
         {
          "id": "ir-8_obj.a.6",
          "label": "IR-08a.06",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.6"
+          }
+         ],
          "prose": {
           "en": "an incident response plan is developed that provides metrics for measuring the incident response capability within the organization;"
          }
@@ -271,6 +311,11 @@
         {
          "id": "ir-8_obj.a.7",
          "label": "IR-08a.07",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.7"
+          }
+         ],
          "prose": {
           "en": "an incident response plan is developed that defines the resources and management support needed to effectively maintain and mature an incident response capability;"
          }
@@ -278,6 +323,11 @@
         {
          "id": "ir-8_obj.a.8",
          "label": "IR-08a.08",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.8"
+          }
+         ],
          "prose": {
           "en": "an incident response plan is developed that addresses the sharing of incident information;"
          }
@@ -285,6 +335,11 @@
         {
          "id": "ir-8_obj.a.9",
          "label": "IR-08a.09",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.9"
+          }
+         ],
          "prose": {
           "en": "an incident response plan is developed that is reviewed and approved by {param:ir-08_odp.01} {param:ir-08_odp.02};"
          }
@@ -292,6 +347,11 @@
         {
          "id": "ir-8_obj.a.10",
          "label": "IR-08a.10",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.10"
+          }
+         ],
          "prose": {
           "en": "an incident response plan is developed that explicitly designates responsibility for incident response to {param:ir-08_odp.03}."
          }
@@ -301,10 +361,20 @@
       {
        "id": "ir-8_obj.b",
        "label": "IR-08b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "ir-8_obj.b-1",
          "label": "IR-08b.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "copies of the incident response plan are distributed to {param:ir-08_odp.04};"
          }
@@ -312,6 +382,11 @@
         {
          "id": "ir-8_obj.b-2",
          "label": "IR-08b.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "copies of the incident response plan are distributed to {param:ir-08_odp.05};"
          }
@@ -321,6 +396,11 @@
       {
        "id": "ir-8_obj.c",
        "label": "IR-08c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "the incident response plan is updated to address system and organizational changes or problems encountered during plan implementation, execution, or testing;"
        }
@@ -328,10 +408,20 @@
       {
        "id": "ir-8_obj.d",
        "label": "IR-08d.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.d"
+        }
+       ],
        "children": [
         {
          "id": "ir-8_obj.d-1",
          "label": "IR-08d.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.d"
+          }
+         ],
          "prose": {
           "en": "incident response plan changes are communicated to {param:ir-08_odp.06};"
          }
@@ -339,6 +429,11 @@
         {
          "id": "ir-8_obj.d-2",
          "label": "IR-08d.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.d"
+          }
+         ],
          "prose": {
           "en": "incident response plan changes are communicated to {param:ir-08_odp.07};"
          }
@@ -348,10 +443,20 @@
       {
        "id": "ir-8_obj.e",
        "label": "IR-08e.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.e"
+        }
+       ],
        "children": [
         {
          "id": "ir-8_obj.e-1",
          "label": "IR-08e.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.e"
+          }
+         ],
          "prose": {
           "en": "the incident response plan is protected from unauthorized disclosure;"
          }
@@ -359,6 +464,11 @@
         {
          "id": "ir-8_obj.e-2",
          "label": "IR-08e.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.e"
+          }
+         ],
          "prose": {
           "en": "the incident response plan is protected from unauthorized modification."
          }
@@ -436,7 +546,8 @@
      ],
      "alt-identifiers": [
       "ir-8_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "IR-08_ODP[01]"
     },
     "ir-08_odp.02": {
      "guidelines": [
@@ -446,7 +557,8 @@
      ],
      "alt-identifiers": [
       "ir-8_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "IR-08_ODP[02]"
     },
     "ir-08_odp.03": {
      "guidelines": [
@@ -456,7 +568,8 @@
      ],
      "alt-identifiers": [
       "ir-8_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "IR-08_ODP[03]"
     },
     "ir-08_odp.04": {
      "guidelines": [
@@ -467,28 +580,32 @@
      "alt-identifiers": [
       "ir-8_prm_4"
      ],
-     "alt-label": "incident response personnel (identified by name and/or by role) and organizational elements"
+     "alt-label": "incident response personnel (identified by name and/or by role) and organizational elements",
+     "sp800-53a-label": "IR-08_ODP[04]"
     },
     "ir-08_odp.05": {
      "guidelines": [
       {
        "en": "organizational elements to which copies of the incident response plan are to be distributed are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "IR-08_ODP[05]"
     },
     "ir-08_odp.06": {
      "guidelines": [
       {
        "en": "incident response personnel (identified by name and/or by role) to whom changes to the incident response plan is/are communicated are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "IR-08_ODP[06]"
     },
     "ir-08_odp.07": {
      "guidelines": [
       {
        "en": "organizational elements to which changes to the incident response plan are communicated are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "IR-08_ODP[07]"
     }
    }
   }

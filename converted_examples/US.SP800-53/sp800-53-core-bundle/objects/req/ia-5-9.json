@@ -38,6 +38,11 @@
     {
      "id": "ia-5.9_obj",
      "label": "IA-05(09)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:ia-05.09_odp} are used to federate credentials."
      }
@@ -104,7 +109,8 @@
      ],
      "alt-identifiers": [
       "ia-5.9_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "IA-05(09)_ODP"
     }
    }
   }

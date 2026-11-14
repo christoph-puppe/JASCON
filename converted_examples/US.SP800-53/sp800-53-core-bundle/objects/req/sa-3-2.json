@@ -41,14 +41,29 @@
     {
      "id": "sa-3.2_obj",
      "label": "SA-03(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sa-3.2_obj.a",
        "label": "SA-03(02)a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "sa-3.2_obj.a-1",
          "label": "SA-03(02)a.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the use of live data in pre-production environments is approved for the system, system component, or system service;"
          }
@@ -56,6 +71,11 @@
         {
          "id": "sa-3.2_obj.a-2",
          "label": "SA-03(02)a.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the use of live data in pre-production environments is documented for the system, system component, or system service;"
          }
@@ -63,6 +83,11 @@
         {
          "id": "sa-3.2_obj.a-3",
          "label": "SA-03(02)a.[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the use of live data in pre-production environments is controlled for the system, system component, or system service;"
          }
@@ -72,6 +97,11 @@
       {
        "id": "sa-3.2_obj.b",
        "label": "SA-03(02)b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "pre-production environments for the system, system component, or system service are protected at the same impact or classification level as any live data in use within the pre-production environments."
        }
@@ -183,7 +213,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/SA-15.9",
     "mode": "merged-into",
-    "label": "SA-15(09)",
+    "label": "SA-15(9)",
     "title": "Use of Live Data"
    }
   ]

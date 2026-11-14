@@ -39,6 +39,11 @@
     {
      "id": "sa-8.14_obj",
      "label": "SA-08(14)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:sa-08.14_odp} implement the security design principle of least privilege."
      }
@@ -114,7 +119,8 @@
      ],
      "alt-identifiers": [
       "sa-8.14_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SA-08(14)_ODP"
     }
    }
   },

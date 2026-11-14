@@ -61,10 +61,20 @@
     {
      "id": "pl-4.1_obj",
      "label": "PL-04(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "pl-4.1_obj.a",
        "label": "PL-04(01)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "the rules of behavior include restrictions on the use of social media, social networking sites, and external sites/applications;"
        }
@@ -72,6 +82,11 @@
       {
        "id": "pl-4.1_obj.b",
        "label": "PL-04(01)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "the rules of behavior include restrictions on posting organizational information on public websites;"
        }
@@ -79,6 +94,11 @@
       {
        "id": "pl-4.1_obj.c",
        "label": "PL-04(01)(c)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "the rules of behavior include restrictions on the use of organization-provided identifiers (e.g., email addresses) and authentication secrets (e.g., passwords) for creating accounts on external sites/applications."
        }

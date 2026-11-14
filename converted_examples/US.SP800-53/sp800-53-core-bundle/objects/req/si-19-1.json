@@ -32,6 +32,11 @@
     {
      "id": "si-19.1_obj",
      "label": "SI-19(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the dataset is de-identified upon collection by not collecting personally identifiable information."
      }

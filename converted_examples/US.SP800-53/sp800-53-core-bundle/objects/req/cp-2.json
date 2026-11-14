@@ -222,7 +222,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "Contingency planning for systems is part of an overall program for achieving continuity of operations for organizational mission and business functions. Contingency planning addresses system restoration and implementation of alternative mission or business processes when systems are compromised or breached. Contingency planning is considered throughout the system development life cycle and is a fundamental part of the system design. Systems can be designed for redundancy, to provide backup capabilities, and for resilience. Contingency plans reflect the degree of restoration required for organizational systems since not all systems need to fully recover to achieve the level of continuity of operations desired. System recovery objectives reflect applicable laws, executive orders, directives, regulations, policies, standards, guidelines, organizational risk tolerance, and system impact level.\n\nActions addressed in contingency plans include orderly system degradation, system shutdown, fallback to a manual mode, alternate information flows, and operating in modes reserved for when systems are under attack. By coordinating contingency planning with incident handling activities, organizations ensure that the necessary planning activities are in place and activated in the event of an incident. Organizations consider whether continuity of operations during an incident conflicts with the capability to automatically disable the system, as specified in IR-4(5) . Incident response planning is part of contingency planning for organizations and is addressed in the IR (Incident Response) family."
+     "en": "Contingency planning for systems is part of an overall program for achieving continuity of operations for organizational mission and business functions. Contingency planning addresses system restoration and implementation of alternative mission or business processes when systems are compromised or breached. Contingency planning is considered throughout the system development life cycle and is a fundamental part of the system design. Systems can be designed for redundancy, to provide backup capabilities, and for resilience. Contingency plans reflect the degree of restoration required for organizational systems since not all systems need to fully recover to achieve the level of continuity of operations desired. System recovery objectives reflect applicable laws, executive orders, directives, regulations, policies, standards, guidelines, organizational risk tolerance, and system impact level.\n\nActions addressed in contingency plans include orderly system degradation, system shutdown, fallback to a manual mode, alternate information flows, and operating in modes reserved for when systems are under attack. By coordinating contingency planning with incident handling activities, organizations ensure that the necessary planning activities are in place and activated in the event of an incident. Organizations consider whether continuity of operations during an incident conflicts with the capability to automatically disable the system, as specified in [IR-4(5)](#ir-4.5) . Incident response planning is part of contingency planning for organizations and is addressed in the [IR](#ir) (Incident Response) family."
     }
    ]
   },
@@ -231,14 +231,29 @@
     {
      "id": "cp-2_obj",
      "label": "CP-02",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "cp-2_obj.a",
        "label": "CP-02a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "cp-2_obj.a.1",
          "label": "CP-02a.01",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.1"
+          }
+         ],
          "prose": {
           "en": "a contingency plan for the system is developed that identifies essential mission and business functions and associated contingency requirements;"
          }
@@ -246,10 +261,20 @@
         {
          "id": "cp-2_obj.a.2",
          "label": "CP-02a.02",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.2"
+          }
+         ],
          "children": [
           {
            "id": "cp-2_obj.a.2-1",
            "label": "CP-02a.02[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.2"
+            }
+           ],
            "prose": {
             "en": "a contingency plan for the system is developed that provides recovery objectives;"
            }
@@ -257,6 +282,11 @@
           {
            "id": "cp-2_obj.a.2-2",
            "label": "CP-02a.02[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.2"
+            }
+           ],
            "prose": {
             "en": "a contingency plan for the system is developed that provides restoration priorities;"
            }
@@ -264,6 +294,11 @@
           {
            "id": "cp-2_obj.a.2-3",
            "label": "CP-02a.02[03]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.2"
+            }
+           ],
            "prose": {
             "en": "a contingency plan for the system is developed that provides metrics;"
            }
@@ -273,10 +308,20 @@
         {
          "id": "cp-2_obj.a.3",
          "label": "CP-02a.03",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.3"
+          }
+         ],
          "children": [
           {
            "id": "cp-2_obj.a.3-1",
            "label": "CP-02a.03[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.3"
+            }
+           ],
            "prose": {
             "en": "a contingency plan for the system is developed that addresses contingency roles;"
            }
@@ -284,6 +329,11 @@
           {
            "id": "cp-2_obj.a.3-2",
            "label": "CP-02a.03[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.3"
+            }
+           ],
            "prose": {
             "en": "a contingency plan for the system is developed that addresses contingency responsibilities;"
            }
@@ -291,6 +341,11 @@
           {
            "id": "cp-2_obj.a.3-3",
            "label": "CP-02a.03[03]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.3"
+            }
+           ],
            "prose": {
             "en": "a contingency plan for the system is developed that addresses assigned individuals with contact information;"
            }
@@ -300,6 +355,11 @@
         {
          "id": "cp-2_obj.a.4",
          "label": "CP-02a.04",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.4"
+          }
+         ],
          "prose": {
           "en": "a contingency plan for the system is developed that addresses maintaining essential mission and business functions despite a system disruption, compromise, or failure;"
          }
@@ -307,6 +367,11 @@
         {
          "id": "cp-2_obj.a.5",
          "label": "CP-02a.05",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.5"
+          }
+         ],
          "prose": {
           "en": "a contingency plan for the system is developed that addresses eventual, full-system restoration without deterioration of the controls originally planned and implemented;"
          }
@@ -314,6 +379,11 @@
         {
          "id": "cp-2_obj.a.6",
          "label": "CP-02a.06",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.6"
+          }
+         ],
          "prose": {
           "en": "a contingency plan for the system is developed that addresses the sharing of contingency information;"
          }
@@ -321,10 +391,20 @@
         {
          "id": "cp-2_obj.a.7",
          "label": "CP-02a.07",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.7"
+          }
+         ],
          "children": [
           {
            "id": "cp-2_obj.a.7-1",
            "label": "CP-02a.07[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.7"
+            }
+           ],
            "prose": {
             "en": "a contingency plan for the system is developed that is reviewed by {param:cp-02_odp.01};"
            }
@@ -332,6 +412,11 @@
           {
            "id": "cp-2_obj.a.7-2",
            "label": "CP-02a.07[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.7"
+            }
+           ],
            "prose": {
             "en": "a contingency plan for the system is developed that is approved by {param:cp-02_odp.02};"
            }
@@ -343,10 +428,20 @@
       {
        "id": "cp-2_obj.b",
        "label": "CP-02b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "cp-2_obj.b-1",
          "label": "CP-02b.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "copies of the contingency plan are distributed to {param:cp-02_odp.03};"
          }
@@ -354,6 +449,11 @@
         {
          "id": "cp-2_obj.b-2",
          "label": "CP-02b.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "copies of the contingency plan are distributed to {param:cp-02_odp.04};"
          }
@@ -363,6 +463,11 @@
       {
        "id": "cp-2_obj.c",
        "label": "CP-02c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "contingency planning activities are coordinated with incident handling activities;"
        }
@@ -370,6 +475,11 @@
       {
        "id": "cp-2_obj.d",
        "label": "CP-02d.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.d"
+        }
+       ],
        "prose": {
         "en": "the contingency plan for the system is reviewed {param:cp-02_odp.05};"
        }
@@ -377,10 +487,20 @@
       {
        "id": "cp-2_obj.e",
        "label": "CP-02e.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.e"
+        }
+       ],
        "children": [
         {
          "id": "cp-2_obj.e-1",
          "label": "CP-02e.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.e"
+          }
+         ],
          "prose": {
           "en": "the contingency plan is updated to address changes to the organization, system, or environment of operation;"
          }
@@ -388,6 +508,11 @@
         {
          "id": "cp-2_obj.e-2",
          "label": "CP-02e.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.e"
+          }
+         ],
          "prose": {
           "en": "the contingency plan is updated to address problems encountered during contingency plan implementation, execution, or testing;"
          }
@@ -397,10 +522,20 @@
       {
        "id": "cp-2_obj.f",
        "label": "CP-02f.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.f"
+        }
+       ],
        "children": [
         {
          "id": "cp-2_obj.f-1",
          "label": "CP-02f.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.f"
+          }
+         ],
          "prose": {
           "en": "contingency plan changes are communicated to {param:cp-02_odp.06};"
          }
@@ -408,6 +543,11 @@
         {
          "id": "cp-2_obj.f-2",
          "label": "CP-02f.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.f"
+          }
+         ],
          "prose": {
           "en": "contingency plan changes are communicated to {param:cp-02_odp.07};"
          }
@@ -417,10 +557,20 @@
       {
        "id": "cp-2_obj.g",
        "label": "CP-02g.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.g"
+        }
+       ],
        "children": [
         {
          "id": "cp-2_obj.g-1",
          "label": "CP-02g.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.g"
+          }
+         ],
          "prose": {
           "en": "lessons learned from contingency plan testing or actual contingency activities are incorporated into contingency testing;"
          }
@@ -428,6 +578,11 @@
         {
          "id": "cp-2_obj.g-2",
          "label": "CP-02g.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.g"
+          }
+         ],
          "prose": {
           "en": "lessons learned from contingency plan training or actual contingency activities are incorporated into contingency testing and training;"
          }
@@ -437,10 +592,20 @@
       {
        "id": "cp-2_obj.h",
        "label": "CP-02h.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.h"
+        }
+       ],
        "children": [
         {
          "id": "cp-2_obj.h-1",
          "label": "CP-02h.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.h"
+          }
+         ],
          "prose": {
           "en": "the contingency plan is protected from unauthorized disclosure;"
          }
@@ -448,6 +613,11 @@
         {
          "id": "cp-2_obj.h-2",
          "label": "CP-02h.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.h"
+          }
+         ],
          "prose": {
           "en": "the contingency plan is protected from unauthorized modification."
          }
@@ -539,28 +709,32 @@
       {
        "en": "personnel or roles to review a contingency plan is/are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "CP-02_ODP[01]"
     },
     "cp-02_odp.02": {
      "guidelines": [
       {
        "en": "personnel or roles to approve a contingency plan is/are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "CP-02_ODP[02]"
     },
     "cp-02_odp.03": {
      "guidelines": [
       {
        "en": "key contingency personnel (identified by name and/or by role) to whom copies of the contingency plan are distributed are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "CP-02_ODP[03]"
     },
     "cp-02_odp.04": {
      "guidelines": [
       {
        "en": "key contingency organizational elements to which copies of the contingency plan are distributed are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "CP-02_ODP[04]"
     },
     "cp-02_odp.05": {
      "guidelines": [
@@ -570,21 +744,24 @@
      ],
      "alt-identifiers": [
       "cp-2_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "CP-02_ODP[05]"
     },
     "cp-02_odp.06": {
      "guidelines": [
       {
        "en": "key contingency personnel (identified by name and/or by role) to communicate changes to are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "CP-02_ODP[06]"
     },
     "cp-02_odp.07": {
      "guidelines": [
       {
        "en": "key contingency organizational elements to communicate changes to are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "CP-02_ODP[07]"
     }
    }
   }
@@ -710,7 +887,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/CP-5",
     "mode": "merged-into",
-    "label": "CP-05",
+    "label": "CP-5",
     "title": "Contingency Plan Update"
    }
   ]

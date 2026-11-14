@@ -31,6 +31,11 @@
     {
      "id": "sa-11.6_obj",
      "label": "SA-11(06)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the developer of the system, system component, or system service is required to perform attack surface reviews."
      }

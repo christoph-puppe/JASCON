@@ -48,10 +48,20 @@
     {
      "id": "si-11_obj",
      "label": "SI-11",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "si-11_obj.a",
        "label": "SI-11a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "error messages that provide the information necessary for corrective actions are generated without revealing information that could be exploited;"
        }
@@ -59,6 +69,11 @@
       {
        "id": "si-11_obj.b",
        "label": "SI-11b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "error messages are revealed only to {param:si-11_odp}."
        }
@@ -145,7 +160,8 @@
      ],
      "alt-identifiers": [
       "si-11_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SI-11_ODP"
     }
    }
   }

@@ -31,10 +31,20 @@
     {
      "id": "sc-4_obj",
      "label": "SC-04",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sc-4_obj-1",
        "label": "SC-04[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "unauthorized information transfer via shared system resources is prevented;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "sc-4_obj-2",
        "label": "SC-04[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "unintended information transfer via shared system resources is prevented."
        }
@@ -129,7 +144,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/SC-4.1",
     "mode": "merged-into",
-    "label": "SC-04(01)",
+    "label": "SC-4(1)",
     "title": "Security Levels"
    }
   ]

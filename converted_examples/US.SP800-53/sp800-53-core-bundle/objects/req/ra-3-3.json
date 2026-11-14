@@ -38,6 +38,11 @@
     {
      "id": "ra-3.3_obj",
      "label": "RA-03(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the current cyber threat environment is determined on an ongoing basis using {param:ra-03.03_odp}."
      }
@@ -116,7 +121,8 @@
      ],
      "alt-identifiers": [
       "ra-3.3_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "RA-03(03)_ODP"
     }
    }
   },

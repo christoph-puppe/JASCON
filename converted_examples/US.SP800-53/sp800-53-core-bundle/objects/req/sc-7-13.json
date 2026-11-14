@@ -38,6 +38,11 @@
     {
      "id": "sc-7.13_obj",
      "label": "SC-07(13)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:sc-07.13_odp} are isolated from other internal system components by implementing physically separate subnetworks with managed interfaces to other components of the system."
      }
@@ -116,7 +121,8 @@
      ],
      "alt-identifiers": [
       "sc-7.13_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-07(13)_ODP"
     }
    }
   }

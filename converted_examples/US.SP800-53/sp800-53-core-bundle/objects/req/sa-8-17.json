@@ -39,6 +39,11 @@
     {
      "id": "sa-8.17_obj",
      "label": "SA-08(17)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:sa-08.17_odp} implement the security design principle of secure distributed composition."
      }
@@ -114,7 +119,8 @@
      ],
      "alt-identifiers": [
       "sa-8.17_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SA-08(17)_ODP"
     }
    }
   },

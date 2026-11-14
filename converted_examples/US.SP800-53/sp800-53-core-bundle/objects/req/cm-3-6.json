@@ -38,6 +38,11 @@
     {
      "id": "cm-3.6_obj",
      "label": "CM-03(06)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "cryptographic mechanisms used to provide {param:cm-03.06_odp} are under configuration management."
      }
@@ -119,7 +124,8 @@
      ],
      "alt-identifiers": [
       "cm-3.6_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "CM-03(06)_ODP"
     }
    }
   }

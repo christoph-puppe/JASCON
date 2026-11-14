@@ -39,6 +39,11 @@
     {
      "id": "si-2.4_obj",
      "label": "SI-02(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "automated patch management tools are employed to facilitate flaw remediation to {param:si-02.04_odp}."
      }
@@ -130,7 +135,8 @@
      "alt-identifiers": [
       "si-2.4_prm_1"
      ],
-     "alt-label": "system components"
+     "alt-label": "system components",
+     "sp800-53a-label": "SI-02(04)_ODP"
     }
    }
   }

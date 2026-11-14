@@ -34,7 +34,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "Training feedback includes awareness training results and role-based training results. Training results, especially failures of personnel in critical roles, can be indicative of a potentially serious problem. Therefore, it is important that senior managers are made aware of such situations so that they can take appropriate response actions. Training feedback supports the evaluation and update of organizational training described in AT-2b and AT-3b."
+     "en": "Training feedback includes awareness training results and role-based training results. Training results, especially failures of personnel in critical roles, can be indicative of a potentially serious problem. Therefore, it is important that senior managers are made aware of such situations so that they can take appropriate response actions. Training feedback supports the evaluation and update of organizational training described in [AT-2b](#at-2_smt.b) and [AT-3b](#at-3_smt.b)."
     }
    ]
   },
@@ -43,6 +43,11 @@
     {
      "id": "at-6_obj",
      "label": "AT-06",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "feedback on organizational training results is provided {param:at-06_odp.01} to {param:at-06_odp.02}."
      }
@@ -100,7 +105,8 @@
      ],
      "alt-identifiers": [
       "at-6_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AT-06_ODP[01]"
     },
     "at-06_odp.02": {
      "guidelines": [
@@ -110,7 +116,8 @@
      ],
      "alt-identifiers": [
       "at-6_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "AT-06_ODP[02]"
     }
    }
   },

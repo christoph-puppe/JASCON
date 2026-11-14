@@ -43,6 +43,11 @@
     {
      "id": "ps-3.4_obj",
      "label": "PS-03(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "individuals accessing a system processing, storing, or transmitting {param:ps-03.04_odp.01} meet {param:ps-03.04_odp.02}."
      }
@@ -112,7 +117,8 @@
      ],
      "alt-identifiers": [
       "ps-3.4_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PS-03(04)_ODP[01]"
     },
     "ps-03.04_odp.02": {
      "guidelines": [
@@ -122,7 +128,8 @@
      ],
      "alt-identifiers": [
       "ps-3.4_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "PS-03(04)_ODP[02]"
     }
    }
   }

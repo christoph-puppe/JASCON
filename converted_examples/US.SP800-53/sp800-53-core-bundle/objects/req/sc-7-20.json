@@ -38,6 +38,11 @@
     {
      "id": "sc-7.20_obj",
      "label": "SC-07(20)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the capability to dynamically isolate {param:sc-07.20_odp} from other system components is provided."
      }
@@ -119,7 +124,8 @@
      ],
      "alt-identifiers": [
       "sc-7.20_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-07(20)_ODP"
     }
    }
   }

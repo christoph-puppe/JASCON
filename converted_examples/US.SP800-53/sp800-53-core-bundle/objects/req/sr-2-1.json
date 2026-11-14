@@ -43,6 +43,11 @@
     {
      "id": "sr-2.1_obj",
      "label": "SR-02(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "a supply chain risk management team consisting of {param:sr-02.01_odp.01} is established to lead and support {param:sr-02.01_odp.02}."
      }
@@ -119,7 +124,8 @@
      "alt-identifiers": [
       "sr-2.1_prm_1"
      ],
-     "alt-label": "personnel, roles, and responsibilities"
+     "alt-label": "personnel, roles, and responsibilities",
+     "sp800-53a-label": "SR-02(01)_ODP[01]"
     },
     "sr-02.01_odp.02": {
      "guidelines": [
@@ -129,7 +135,8 @@
      ],
      "alt-identifiers": [
       "sr-2.1_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SR-02(01)_ODP[02]"
     }
    }
   },

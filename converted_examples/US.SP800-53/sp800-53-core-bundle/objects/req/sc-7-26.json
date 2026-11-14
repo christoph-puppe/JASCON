@@ -38,6 +38,11 @@
     {
      "id": "sc-7.26_obj",
      "label": "SC-07(26)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the direct connection of classified national security system to an external network without the use of a {param:sc-07.26_odp} is prohibited."
      }
@@ -116,7 +121,8 @@
      ],
      "alt-identifiers": [
       "sc-7.26_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-07(26)_ODP"
     }
    }
   }
@@ -138,7 +144,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/CA-3.2",
     "mode": "renamed",
-    "label": "CA-03(02)",
+    "label": "CA-3(2)",
     "title": "Classified National Security System Connections"
    }
   ]

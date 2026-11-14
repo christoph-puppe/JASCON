@@ -38,6 +38,11 @@
     {
      "id": "pe-9.2_obj",
      "label": "PE-09(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "automatic voltage controls for {param:pe-09.02_odp} are employed."
      }
@@ -104,7 +109,8 @@
      ],
      "alt-identifiers": [
       "pe-9.2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PE-09(02)_ODP"
     }
    }
   }

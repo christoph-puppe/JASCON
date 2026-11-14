@@ -45,6 +45,11 @@
     {
      "id": "pe-11_obj",
      "label": "PE-11",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "an uninterruptible power supply is provided to facilitate {param:pe-11_odp} in the event of a primary power source loss."
      }
@@ -109,7 +114,8 @@
     "pe-11_odp": {
      "alt-identifiers": [
       "pe-11_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PE-11_ODP"
     }
    }
   }

@@ -32,10 +32,20 @@
     {
      "id": "si-4.1_obj",
      "label": "SI-04(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "si-4.1_obj-1",
        "label": "SI-04(01)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "individual intrusion detection tools are connected to a system-wide intrusion detection system;"
        }
@@ -43,6 +53,11 @@
       {
        "id": "si-4.1_obj-2",
        "label": "SI-04(01)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "individual intrusion detection tools are configured into a system-wide intrusion detection system."
        }

@@ -38,6 +38,11 @@
     {
      "id": "ac-21.2_obj",
      "label": "AC-21(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "information search and retrieval services that enforce {param:ac-21.02_odp} are implemented."
      }
@@ -117,7 +122,8 @@
      "alt-identifiers": [
       "ac-21.2_prm_1"
      ],
-     "alt-label": "information sharing restrictions"
+     "alt-label": "information sharing restrictions",
+     "sp800-53a-label": "AC-21(02)_ODP"
     }
    }
   }

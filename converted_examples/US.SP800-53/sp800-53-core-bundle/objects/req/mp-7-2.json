@@ -31,10 +31,20 @@
     {
      "id": "mp-7.2_obj",
      "label": "MP-07(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "mp-7.2_obj-1",
        "label": "MP-07(02)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "sanitization-resistant media is identified;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "mp-7.2_obj-2",
        "label": "MP-07(02)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the use of sanitization-resistant media in organizational systems is prohibited."
        }

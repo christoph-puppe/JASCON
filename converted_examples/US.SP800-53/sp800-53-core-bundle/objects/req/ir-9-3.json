@@ -38,6 +38,11 @@
     {
      "id": "ir-9.3_obj",
      "label": "IR-09(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:ir-09.03_odp} are implemented to ensure that organizational personnel impacted by information spills can continue to carry out assigned tasks while contaminated systems are undergoing corrective actions."
      }
@@ -101,7 +106,8 @@
      ],
      "alt-identifiers": [
       "ir-9.3_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "IR-09(03)_ODP"
     }
    }
   }

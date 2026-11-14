@@ -31,10 +31,20 @@
     {
      "id": "pe-19.1_obj",
      "label": "PE-19(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "pe-19.1_obj-1",
        "label": "PE-19(01)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "system components are protected in accordance with national emissions security policies and procedures based on the security category or classification of the information;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "pe-19.1_obj-2",
        "label": "PE-19(01)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "associated data communications are protected in accordance with national emissions security policies and procedures based on the security category or classification of the information;"
        }
@@ -49,6 +64,11 @@
       {
        "id": "pe-19.1_obj-3",
        "label": "PE-19(01)[03]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "networks are protected in accordance with national emissions security policies and procedures based on the security category or classification of the information."
        }

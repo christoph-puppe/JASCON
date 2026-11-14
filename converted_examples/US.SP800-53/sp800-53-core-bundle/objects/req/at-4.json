@@ -48,14 +48,29 @@
     {
      "id": "at-4_obj",
      "label": "AT-04",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "at-4_obj.a",
        "label": "AT-04a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "at-4_obj.a-1",
          "label": "AT-04a.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "information security and privacy training activities, including security and privacy awareness training and specific role-based security and privacy training, are documented;"
          }
@@ -63,6 +78,11 @@
         {
          "id": "at-4_obj.a-2",
          "label": "AT-04a.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "information security and privacy training activities, including security and privacy awareness training and specific role-based security and privacy training, are monitored;"
          }
@@ -72,6 +92,11 @@
       {
        "id": "at-4_obj.b",
        "label": "AT-04b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "individual training records are retained for {param:at-04_odp}."
        }
@@ -134,7 +159,8 @@
      ],
      "alt-identifiers": [
       "at-4_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AT-04_ODP"
     }
    }
   },

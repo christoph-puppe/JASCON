@@ -58,14 +58,29 @@
     {
      "id": "pm-11_obj",
      "label": "PM-11",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "pm-11_obj.a",
        "label": "PM-11a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "pm-11_obj.a-1",
          "label": "PM-11a.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "organizational mission and business processes are defined with consideration for information security;"
          }
@@ -73,6 +88,11 @@
         {
          "id": "pm-11_obj.a-2",
          "label": "PM-11a.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "organizational mission and business processes are defined with consideration for privacy;"
          }
@@ -80,6 +100,11 @@
         {
          "id": "pm-11_obj.a-3",
          "label": "PM-11a.[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "organizational mission and business processes are defined with consideration for the resulting risk to organizational operations, organizational assets, individuals, other organizations, and the Nation;"
          }
@@ -89,10 +114,20 @@
       {
        "id": "pm-11_obj.b",
        "label": "PM-11b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "pm-11_obj.b-1",
          "label": "PM-11b.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "information protection needs arising from the defined mission and business processes are determined;"
          }
@@ -100,6 +135,11 @@
         {
          "id": "pm-11_obj.b-2",
          "label": "PM-11b.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "personally identifiable information processing needs arising from the defined mission and business processes are determined;"
          }
@@ -109,6 +149,11 @@
       {
        "id": "pm-11_obj.c",
        "label": "PM-11c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "the mission and business processes are reviewed and revised {param:pm-11_odp}."
        }
@@ -186,7 +231,8 @@
      ],
      "alt-identifiers": [
       "pm-11_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PM-11_ODP"
     }
    }
   }

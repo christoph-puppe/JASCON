@@ -32,6 +32,11 @@
     {
      "id": "si-4.16_obj",
      "label": "SI-04(16)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "information from monitoring tools and mechanisms employed throughout the system is correlated."
      }

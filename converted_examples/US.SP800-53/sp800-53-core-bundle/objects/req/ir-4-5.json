@@ -30,7 +30,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "Organizations consider whether the capability to automatically disable the system conflicts with continuity of operations requirements specified as part of CP-2 or IR-4(3) . Security violations include cyber-attacks that have compromised the integrity of the system or exfiltrated organizational information and serious errors in software programs that could adversely impact organizational missions or functions or jeopardize the safety of individuals."
+     "en": "Organizations consider whether the capability to automatically disable the system conflicts with continuity of operations requirements specified as part of [CP-2](#cp-2) or [IR-4(3)](#ir-4.3) . Security violations include cyber-attacks that have compromised the integrity of the system or exfiltrated organizational information and serious errors in software programs that could adversely impact organizational missions or functions or jeopardize the safety of individuals."
     }
    ]
   },
@@ -39,6 +39,11 @@
     {
      "id": "ir-4.5_obj",
      "label": "IR-04(05)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "a configurable capability is implemented to automatically disable the system if {param:ir-04.05_odp} are detected."
      }
@@ -117,7 +122,8 @@
      ],
      "alt-identifiers": [
       "ir-4.5_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "IR-04(05)_ODP"
     }
    }
   }

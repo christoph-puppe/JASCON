@@ -46,10 +46,20 @@
     {
      "id": "au-5.3_obj",
      "label": "AU-05(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "au-5.3_obj-1",
        "label": "AU-05(03)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "configurable network communications traffic volume thresholds reflecting limits on audit log storage capacity are enforced;"
        }
@@ -57,6 +67,11 @@
       {
        "id": "au-5.3_obj-2",
        "label": "AU-05(03)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "network traffic is {param:au-05.03_odp} if network traffic volume is above configured thresholds."
        }
@@ -120,7 +135,8 @@
     "au-05.03_odp": {
      "alt-identifiers": [
       "au-5.3_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AU-05(03)_ODP"
     }
    }
   }

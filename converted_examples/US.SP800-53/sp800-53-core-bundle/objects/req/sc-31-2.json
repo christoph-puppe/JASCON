@@ -51,6 +51,11 @@
     {
      "id": "sc-31.2_obj",
      "label": "SC-31(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the maximum bandwidth for identified covert {param:sc-31.02_odp.01} channels is reduced to {param:sc-31.02_odp.02}."
      }
@@ -133,7 +138,8 @@
     "sc-31.02_odp.01": {
      "alt-identifiers": [
       "sc-31.2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-31(02)_ODP[01]"
     },
     "sc-31.02_odp.02": {
      "guidelines": [
@@ -143,7 +149,8 @@
      ],
      "alt-identifiers": [
       "sc-31.2_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SC-31(02)_ODP[02]"
     }
    }
   },

@@ -31,6 +31,11 @@
     {
      "id": "sa-4.1_obj",
      "label": "SA-04(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the developer of the system, system component, or system service is required to provide a description of the functional properties of the controls to be implemented."
      }
@@ -123,7 +128,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/SA-5.1",
     "mode": "merged-into",
-    "label": "SA-05(01)",
+    "label": "SA-5(1)",
     "title": "Functional Properties of Security Controls"
    }
   ]

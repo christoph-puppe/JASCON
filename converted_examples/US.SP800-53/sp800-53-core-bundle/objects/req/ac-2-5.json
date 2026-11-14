@@ -30,7 +30,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "Inactivity logout is behavior- or policy-based and requires users to take physical action to log out when they are expecting inactivity longer than the defined period. Automatic enforcement of inactivity logout is addressed by AC-11."
+     "en": "Inactivity logout is behavior- or policy-based and requires users to take physical action to log out when they are expecting inactivity longer than the defined period. Automatic enforcement of inactivity logout is addressed by [AC-11](#ac-11)."
     }
    ]
   },
@@ -39,6 +39,11 @@
     {
      "id": "ac-2.5_obj",
      "label": "AC-02(05)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "users are required to log out when {param:ac-02.05_odp}."
      }
@@ -105,7 +110,8 @@
      ],
      "alt-identifiers": [
       "ac-2.5_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AC-02(05)_ODP"
     }
    }
   }

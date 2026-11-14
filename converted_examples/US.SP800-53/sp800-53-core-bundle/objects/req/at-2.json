@@ -127,7 +127,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "Organizations provide basic and advanced levels of literacy training to system users, including measures to test the knowledge level of users. Organizations determine the content of literacy training and awareness based on specific organizational requirements, the systems to which personnel have authorized access, and work environments (e.g., telework). The content includes an understanding of the need for security and privacy as well as actions by users to maintain security and personal privacy and to respond to suspected incidents. The content addresses the need for operations security and the handling of personally identifiable information.\n\nAwareness techniques include displaying posters, offering supplies inscribed with security and privacy reminders, displaying logon screen messages, generating email advisories or notices from organizational officials, and conducting awareness events. Literacy training after the initial training described in AT-2a.1 is conducted at a minimum frequency consistent with applicable laws, directives, regulations, and policies. Subsequent literacy training may be satisfied by one or more short ad hoc sessions and include topical information on recent attack schemes, changes to organizational security and privacy policies, revised security and privacy expectations, or a subset of topics from the initial training. Updating literacy training and awareness content on a regular basis helps to ensure that the content remains relevant. Events that may precipitate an update to literacy training and awareness content include, but are not limited to, assessment or audit findings, security incidents or breaches, or changes in applicable laws, executive orders, directives, regulations, policies, standards, and guidelines."
+     "en": "Organizations provide basic and advanced levels of literacy training to system users, including measures to test the knowledge level of users. Organizations determine the content of literacy training and awareness based on specific organizational requirements, the systems to which personnel have authorized access, and work environments (e.g., telework). The content includes an understanding of the need for security and privacy as well as actions by users to maintain security and personal privacy and to respond to suspected incidents. The content addresses the need for operations security and the handling of personally identifiable information.\n\nAwareness techniques include displaying posters, offering supplies inscribed with security and privacy reminders, displaying logon screen messages, generating email advisories or notices from organizational officials, and conducting awareness events. Literacy training after the initial training described in [AT-2a.1](#at-2_smt.a.1) is conducted at a minimum frequency consistent with applicable laws, directives, regulations, and policies. Subsequent literacy training may be satisfied by one or more short ad hoc sessions and include topical information on recent attack schemes, changes to organizational security and privacy policies, revised security and privacy expectations, or a subset of topics from the initial training. Updating literacy training and awareness content on a regular basis helps to ensure that the content remains relevant. Events that may precipitate an update to literacy training and awareness content include, but are not limited to, assessment or audit findings, security incidents or breaches, or changes in applicable laws, executive orders, directives, regulations, policies, standards, and guidelines."
     }
    ]
   },
@@ -136,18 +136,38 @@
     {
      "id": "at-2_obj",
      "label": "AT-02",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "at-2_obj.a",
        "label": "AT-02a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "at-2_obj.a.1",
          "label": "AT-02a.01",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.1"
+          }
+         ],
          "children": [
           {
            "id": "at-2_obj.a.1-1",
            "label": "AT-02a.01[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.1"
+            }
+           ],
            "prose": {
             "en": "security literacy training is provided to system users (including managers, senior executives, and contractors) as part of initial training for new users;"
            }
@@ -155,6 +175,11 @@
           {
            "id": "at-2_obj.a.1-2",
            "label": "AT-02a.01[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.1"
+            }
+           ],
            "prose": {
             "en": "privacy literacy training is provided to system users (including managers, senior executives, and contractors) as part of initial training for new users;"
            }
@@ -162,6 +187,11 @@
           {
            "id": "at-2_obj.a.1-3",
            "label": "AT-02a.01[03]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.1"
+            }
+           ],
            "prose": {
             "en": "security literacy training is provided to system users (including managers, senior executives, and contractors) {param:at-02_odp.01} thereafter;"
            }
@@ -169,6 +199,11 @@
           {
            "id": "at-2_obj.a.1-4",
            "label": "AT-02a.01[04]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.1"
+            }
+           ],
            "prose": {
             "en": "privacy literacy training is provided to system users (including managers, senior executives, and contractors) {param:at-02_odp.02} thereafter;"
            }
@@ -178,10 +213,20 @@
         {
          "id": "at-2_obj.a.2",
          "label": "AT-02a.02",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.2"
+          }
+         ],
          "children": [
           {
            "id": "at-2_obj.a.2-1",
            "label": "AT-02a.02[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.2"
+            }
+           ],
            "prose": {
             "en": "security literacy training is provided to system users (including managers, senior executives, and contractors) when required by system changes or following {param:at-02_odp.03};"
            }
@@ -189,6 +234,11 @@
           {
            "id": "at-2_obj.a.2-2",
            "label": "AT-02a.02[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.2"
+            }
+           ],
            "prose": {
             "en": "privacy literacy training is provided to system users (including managers, senior executives, and contractors) when required by system changes or following {param:at-02_odp.04};"
            }
@@ -200,6 +250,11 @@
       {
        "id": "at-2_obj.b",
        "label": "AT-02b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "{param:at-02_odp.05} are employed to increase the security and privacy awareness of system users;"
        }
@@ -207,10 +262,20 @@
       {
        "id": "at-2_obj.c",
        "label": "AT-02c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "children": [
         {
          "id": "at-2_obj.c-1",
          "label": "AT-02c.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c"
+          }
+         ],
          "prose": {
           "en": "literacy training and awareness content is updated {param:at-02_odp.06};"
          }
@@ -218,6 +283,11 @@
         {
          "id": "at-2_obj.c-2",
          "label": "AT-02c.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c"
+          }
+         ],
          "prose": {
           "en": "literacy training and awareness content is updated following {param:at-02_odp.07};"
          }
@@ -227,6 +297,11 @@
       {
        "id": "at-2_obj.d",
        "label": "AT-02d.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.d"
+        }
+       ],
        "prose": {
         "en": "lessons learned from internal or external security incidents or breaches are incorporated into literacy training and awareness techniques."
        }
@@ -313,28 +388,32 @@
       {
        "en": "the frequency at which to provide security literacy training to system users (including managers, senior executives, and contractors) after initial training is defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AT-02_ODP[01]"
     },
     "at-02_odp.02": {
      "guidelines": [
       {
        "en": "the frequency at which to provide privacy literacy training to system users (including managers, senior executives, and contractors) after initial training is defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AT-02_ODP[02]"
     },
     "at-02_odp.03": {
      "guidelines": [
       {
        "en": "events that require security literacy training for system users are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AT-02_ODP[03]"
     },
     "at-02_odp.04": {
      "guidelines": [
       {
        "en": "events that require privacy literacy training for system users are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AT-02_ODP[04]"
     },
     "at-02_odp.05": {
      "guidelines": [
@@ -344,7 +423,8 @@
      ],
      "alt-identifiers": [
       "at-2_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "AT-02_ODP[05]"
     },
     "at-02_odp.06": {
      "guidelines": [
@@ -354,7 +434,8 @@
      ],
      "alt-identifiers": [
       "at-2_prm_4"
-     ]
+     ],
+     "sp800-53a-label": "AT-02_ODP[06]"
     },
     "at-02_odp.07": {
      "guidelines": [
@@ -364,7 +445,8 @@
      ],
      "alt-identifiers": [
       "at-2_prm_5"
-     ]
+     ],
+     "sp800-53a-label": "AT-02_ODP[07]"
     }
    }
   },

@@ -31,6 +31,11 @@
     {
      "id": "cm-8.7_obj",
      "label": "CM-08(07)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "a centralized repository for the system component inventory is provided."
      }

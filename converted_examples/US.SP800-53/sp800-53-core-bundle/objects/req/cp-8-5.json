@@ -38,6 +38,11 @@
     {
      "id": "cp-8.5_obj",
      "label": "CP-08(05)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "alternate telecommunications services are tested {param:cp-08.05_odp}."
      }
@@ -107,7 +112,8 @@
      ],
      "alt-identifiers": [
       "cp-8.5_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "CP-08(05)_ODP"
     }
    }
   }

@@ -57,10 +57,20 @@
     {
      "id": "sc-51_obj",
      "label": "SC-51",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sc-51_obj.a",
        "label": "SC-51a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "hardware-based write-protect for {param:sc-51_odp.01} is employed;"
        }
@@ -68,10 +78,20 @@
       {
        "id": "sc-51_obj.b",
        "label": "SC-51b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "sc-51_obj.b-1",
          "label": "SC-51b.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "specific procedures are implemented for {param:sc-51_odp.02} to manually disable hardware write-protect for firmware modifications;"
          }
@@ -79,6 +99,11 @@
         {
          "id": "sc-51_obj.b-2",
          "label": "SC-51b.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "specific procedures are implemented for {param:sc-51_odp.02} to re-enable the write-protect prior to returning to operational mode."
          }
@@ -161,7 +186,8 @@
      ],
      "alt-identifiers": [
       "sc-51_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-51_ODP[01]"
     },
     "sc-51_odp.02": {
      "guidelines": [
@@ -171,7 +197,8 @@
      ],
      "alt-identifiers": [
       "sc-51_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SC-51_ODP[02]"
     }
    }
   },
@@ -190,7 +217,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/SC-34.3",
     "mode": "renamed",
-    "label": "SC-34(03)",
+    "label": "SC-34(3)",
     "title": "Hardware-based Protection"
    }
   ]

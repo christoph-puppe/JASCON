@@ -48,10 +48,20 @@
     {
      "id": "sc-15_obj",
      "label": "SC-15",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sc-15_obj.a",
        "label": "SC-15a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "remote activation of collaborative computing devices and applications is prohibited except {param:sc-15_odp};"
        }
@@ -59,6 +69,11 @@
       {
        "id": "sc-15_obj.b",
        "label": "SC-15b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "an explicit indication of use is provided to users physically present at the devices."
        }
@@ -139,7 +154,8 @@
      ],
      "alt-identifiers": [
       "sc-15_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-15_ODP"
     }
    }
   }

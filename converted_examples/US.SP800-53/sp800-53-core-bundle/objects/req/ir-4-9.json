@@ -38,6 +38,11 @@
     {
      "id": "ir-4.9_obj",
      "label": "IR-04(09)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:ir-04.09_odp} are employed to respond to incidents."
      }
@@ -113,7 +118,8 @@
      ],
      "alt-identifiers": [
       "ir-4.9_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "IR-04(09)_ODP"
     }
    }
   }

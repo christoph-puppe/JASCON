@@ -68,10 +68,20 @@
     {
      "id": "si-4.22_obj",
      "label": "SI-04(22)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "si-4.22_obj.a",
        "label": "SI-04(22)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "network services that have not been authorized or approved by {param:si-04.22_odp.01} are detected;"
        }
@@ -79,6 +89,11 @@
       {
        "id": "si-4.22_obj.b",
        "label": "SI-04(22)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "{param:si-04.22_odp.02} is/are initiated when network services that have not been authorized or approved by authorization or approval processes are detected."
        }
@@ -180,12 +195,14 @@
      ],
      "alt-identifiers": [
       "si-4.22_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SI-04(22)_ODP[01]"
     },
     "si-04.22_odp.02": {
      "alt-identifiers": [
       "si-4.22_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SI-04(22)_ODP[02]"
     },
     "si-04.22_odp.03": {
      "guidelines": [
@@ -195,7 +212,8 @@
      ],
      "alt-identifiers": [
       "si-4.22_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "SI-04(22)_ODP[03]"
     }
    }
   },

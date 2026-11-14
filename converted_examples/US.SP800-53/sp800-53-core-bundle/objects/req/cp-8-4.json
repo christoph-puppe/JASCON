@@ -70,14 +70,29 @@
     {
      "id": "cp-8.4_obj",
      "label": "CP-08(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "cp-8.4_obj.a",
        "label": "CP-08(04)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "cp-8.4_obj.a-1",
          "label": "CP-08(04)(a)[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "primary telecommunications service providers are required to have contingency plans;"
          }
@@ -85,6 +100,11 @@
         {
          "id": "cp-8.4_obj.a-2",
          "label": "CP-08(04)(a)[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "alternate telecommunications service providers are required to have contingency plans;"
          }
@@ -94,6 +114,11 @@
       {
        "id": "cp-8.4_obj.b",
        "label": "CP-08(04)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "provider contingency plans are reviewed to ensure that the plans meet organizational contingency requirements;"
        }
@@ -101,10 +126,20 @@
       {
        "id": "cp-8.4_obj.c",
        "label": "CP-08(04)(c)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "children": [
         {
          "id": "cp-8.4_obj.c-1",
          "label": "CP-08(04)(c)[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c"
+          }
+         ],
          "prose": {
           "en": "evidence of contingency testing by providers is obtained {param:cp-08.04_odp.01}."
          }
@@ -112,6 +147,11 @@
         {
          "id": "cp-8.4_obj.c-2",
          "label": "CP-08(04)(c)[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c"
+          }
+         ],
          "prose": {
           "en": "evidence of contingency training by providers is obtained {param:cp-08.04_odp.02}."
          }
@@ -185,14 +225,16 @@
       {
        "en": "frequency at which to obtain evidence of contingency testing by providers is defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "CP-08(04)_ODP[01]"
     },
     "cp-08.04_odp.02": {
      "guidelines": [
       {
        "en": "frequency at which to obtain evidence of contingency training by providers is defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "CP-08(04)_ODP[02]"
     }
    }
   }

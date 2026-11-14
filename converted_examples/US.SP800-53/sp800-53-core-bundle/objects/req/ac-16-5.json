@@ -43,10 +43,20 @@
     {
      "id": "ac-16.5_obj",
      "label": "AC-16(05)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ac-16.5_obj-1",
        "label": "AC-16(05)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "security attributes are displayed in human-readable form on each object that the system transmits to output devices to identify {param:ac-16.05_odp.01} using {param:ac-16.05_odp.02};"
        }
@@ -54,6 +64,11 @@
       {
        "id": "ac-16.5_obj-2",
        "label": "AC-16(05)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "privacy attributes are displayed in human-readable form on each object that the system transmits to output devices to identify {param:ac-16.05_odp.01} using {param:ac-16.05_odp.02}."
        }
@@ -132,7 +147,8 @@
      "alt-identifiers": [
       "ac-16.5_prm_1"
      ],
-     "alt-label": "special dissemination, handling, or distribution instructions"
+     "alt-label": "special dissemination, handling, or distribution instructions",
+     "sp800-53a-label": "AC-16(05)_ODP[01]"
     },
     "ac-16.05_odp.02": {
      "guidelines": [
@@ -143,7 +159,8 @@
      "alt-identifiers": [
       "ac-16.5_prm_2"
      ],
-     "alt-label": "human-readable, standard naming conventions"
+     "alt-label": "human-readable, standard naming conventions",
+     "sp800-53a-label": "AC-16(05)_ODP[02]"
     }
    }
   }

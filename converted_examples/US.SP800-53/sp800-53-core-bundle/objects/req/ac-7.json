@@ -92,10 +92,20 @@
     {
      "id": "ac-7_obj",
      "label": "AC-07",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ac-7_obj.a",
        "label": "AC-07a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "a limit of {param:ac-07_odp.01} consecutive invalid logon attempts by a user during {param:ac-07_odp.02} is enforced;"
        }
@@ -103,6 +113,11 @@
       {
        "id": "ac-7_obj.b",
        "label": "AC-07b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "automatically {param:ac-07_odp.03} when the maximum number of unsuccessful attempts is exceeded."
        }
@@ -174,7 +189,8 @@
      ],
      "alt-identifiers": [
       "ac-7_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AC-07_ODP[01]"
     },
     "ac-07_odp.02": {
      "guidelines": [
@@ -184,12 +200,14 @@
      ],
      "alt-identifiers": [
       "ac-7_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "AC-07_ODP[02]"
     },
     "ac-07_odp.03": {
      "alt-identifiers": [
       "ac-7_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "AC-07_ODP[03]"
     },
     "ac-07_odp.04": {
      "guidelines": [
@@ -199,7 +217,8 @@
      ],
      "alt-identifiers": [
       "ac-7_prm_4"
-     ]
+     ],
+     "sp800-53a-label": "AC-07_ODP[04]"
     },
     "ac-07_odp.05": {
      "guidelines": [
@@ -209,7 +228,8 @@
      ],
      "alt-identifiers": [
       "ac-7_prm_5"
-     ]
+     ],
+     "sp800-53a-label": "AC-07_ODP[05]"
     },
     "ac-07_odp.06": {
      "guidelines": [
@@ -219,7 +239,8 @@
      ],
      "alt-identifiers": [
       "ac-7_prm_6"
-     ]
+     ],
+     "sp800-53a-label": "AC-07_ODP[06]"
     }
    }
   }
@@ -265,7 +286,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/AC-7.1",
     "mode": "merged-into",
-    "label": "AC-07(01)",
+    "label": "AC-7(1)",
     "title": "Automatic Account Lock"
    }
   ]

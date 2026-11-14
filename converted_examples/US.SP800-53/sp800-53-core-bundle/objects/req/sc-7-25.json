@@ -43,6 +43,11 @@
     {
      "id": "sc-7.25_obj",
      "label": "SC-07(25)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the direct connection of {param:sc-07.25_odp.01} to an external network without the use of {param:sc-07.25_odp.02} is prohibited."
      }
@@ -121,7 +126,8 @@
      ],
      "alt-identifiers": [
       "sc-7.25_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-07(25)_ODP[01]"
     },
     "sc-07.25_odp.02": {
      "guidelines": [
@@ -131,7 +137,8 @@
      ],
      "alt-identifiers": [
       "sc-7.25_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SC-07(25)_ODP[02]"
     }
    }
   }
@@ -153,7 +160,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/CA-3.1",
     "mode": "renamed",
-    "label": "CA-03(01)",
+    "label": "CA-3(1)",
     "title": "Unclassified National Security System Connections"
    }
   ]

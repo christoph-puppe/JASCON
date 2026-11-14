@@ -43,6 +43,11 @@
     {
      "id": "ac-2.11_obj",
      "label": "AC-02(11)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:ac-02.11_odp.01} for {param:ac-02.11_odp.02} are enforced."
      }
@@ -118,7 +123,8 @@
      ],
      "alt-identifiers": [
       "ac-2.11_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AC-02(11)_ODP[01]"
     },
     "ac-02.11_odp.02": {
      "guidelines": [
@@ -128,7 +134,8 @@
      ],
      "alt-identifiers": [
       "ac-2.11_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "AC-02(11)_ODP[02]"
     }
    }
   }

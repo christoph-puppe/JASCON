@@ -31,10 +31,20 @@
     {
      "id": "ac-18.5_obj",
      "label": "AC-18(05)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ac-18.5_obj-1",
        "label": "AC-18(05)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "radio antennas are selected to reduce the probability that signals from wireless access points can be received outside of organization-controlled boundaries;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "ac-18.5_obj-2",
        "label": "AC-18(05)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "transmission power levels are calibrated to reduce the probability that signals from wireless access points can be received outside of organization-controlled boundaries."
        }

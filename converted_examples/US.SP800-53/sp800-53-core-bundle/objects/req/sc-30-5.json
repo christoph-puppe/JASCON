@@ -43,6 +43,11 @@
     {
      "id": "sc-30.5_obj",
      "label": "SC-30(05)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:sc-30.05_odp.01} are employed to hide or conceal {param:sc-30.05_odp.02}."
      }
@@ -118,7 +123,8 @@
      ],
      "alt-identifiers": [
       "sc-30.5_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SC-30(05)_ODP[01]"
     },
     "sc-30.05_odp.02": {
      "guidelines": [
@@ -128,7 +134,8 @@
      ],
      "alt-identifiers": [
       "sc-30.5_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-30(05)_ODP[02]"
     }
    }
   },

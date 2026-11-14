@@ -38,6 +38,11 @@
     {
      "id": "ac-4.12_obj",
      "label": "AC-04(12)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "when transferring information between different security domains, {param:ac-04.12_odp} are used to validate data essential for information flow decisions."
      }
@@ -113,7 +118,8 @@
      ],
      "alt-identifiers": [
       "ac-4.12_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AC-04(12)_ODP"
     }
    }
   }

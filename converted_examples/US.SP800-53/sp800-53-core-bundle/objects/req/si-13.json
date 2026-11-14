@@ -55,10 +55,20 @@
     {
      "id": "si-13_obj",
      "label": "SI-13",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "si-13_obj.a",
        "label": "SI-13a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "mean time to failure (MTTF) is determined for {param:si-13_odp.01} in specific environments of operation;"
        }
@@ -66,6 +76,11 @@
       {
        "id": "si-13_obj.b",
        "label": "SI-13b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "substitute system components and a means to exchange active and standby components are provided in accordance with {param:si-13_odp.02}."
        }
@@ -146,7 +161,8 @@
      ],
      "alt-identifiers": [
       "si-13_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SI-13_ODP[01]"
     },
     "si-13_odp.02": {
      "guidelines": [
@@ -157,7 +173,8 @@
      "alt-identifiers": [
       "si-13_prm_2"
      ],
-     "alt-label": "MTTF substitution criteria"
+     "alt-label": "MTTF substitution criteria",
+     "sp800-53a-label": "SI-13_ODP[02]"
     }
    }
   },
@@ -206,7 +223,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/CP-10.5",
     "mode": "merged-into",
-    "label": "CP-10(05)",
+    "label": "CP-10(5)",
     "title": "Failover Capability"
    }
   ]

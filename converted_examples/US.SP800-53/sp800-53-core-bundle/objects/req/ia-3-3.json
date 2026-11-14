@@ -58,14 +58,29 @@
     {
      "id": "ia-3.3_obj",
      "label": "IA-03(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ia-3.3_obj.a",
        "label": "IA-03(03)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "ia-3.3_obj.a-1",
          "label": "IA-03(03)(a)[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "dynamic address allocation lease information assigned to devices where addresses are allocated dynamically are standardized in accordance with {param:ia-03.03_odp.01};"
          }
@@ -73,6 +88,11 @@
         {
          "id": "ia-3.3_obj.a-2",
          "label": "IA-03(03)(a)[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "dynamic address allocation lease duration assigned to devices where addresses are allocated dynamically are standardized in accordance with {param:ia-03.03_odp.02};"
          }
@@ -82,6 +102,11 @@
       {
        "id": "ia-3.3_obj.b",
        "label": "IA-03(03)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "lease information is audited when assigned to a device."
        }
@@ -171,14 +196,16 @@
       {
        "en": "lease information to be employed to standardize dynamic address allocation for devices is defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "IA-03(03)_ODP[01]"
     },
     "ia-03.03_odp.02": {
      "guidelines": [
       {
        "en": "lease duration to be employed to standardize dynamic address allocation for devices is defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "IA-03(03)_ODP[02]"
     }
    }
   }

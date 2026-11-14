@@ -70,14 +70,29 @@
     {
      "id": "sa-17.1_obj",
      "label": "SA-17(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sa-17.1_obj.a",
        "label": "SA-17(01)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "sa-17.1_obj.a-1",
          "label": "SA-17(01)(a)[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "as an integral part of the development process, the developer of the system, system component, or system service is required to produce a formal policy model describing the {param:sa-17.01_odp.01} to be enforced;"
          }
@@ -85,6 +100,11 @@
         {
          "id": "sa-17.1_obj.a-2",
          "label": "SA-17(01)(a)[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "as an integral part of the development process, the developer of the system, system component, or system service is required to produce a formal policy model describing the {param:sa-17.01_odp.02} to be enforced;"
          }
@@ -94,10 +114,20 @@
       {
        "id": "sa-17.1_obj.b",
        "label": "SA-17(01)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "sa-17.1_obj.b-1",
          "label": "SA-17(01)(b)[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "the developer of the system, system component, or system service is required to prove that the formal policy model is internally consistent and sufficient to enforce the defined elements of the organizational security policy when implemented;"
          }
@@ -105,6 +135,11 @@
         {
          "id": "sa-17.1_obj.b-2",
          "label": "SA-17(01)(b)[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "the developer of the system, system component, or system service is required to prove that the formal policy model is internally consistent and sufficient to enforce the defined elements of the organizational privacy policy when implemented."
          }
@@ -193,14 +228,16 @@
       {
        "en": "organizational security policy to be enforced is defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "SA-17(01)_ODP[01]"
     },
     "sa-17.01_odp.02": {
      "guidelines": [
       {
        "en": "organizational privacy policy to be enforced is defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "SA-17(01)_ODP[02]"
     }
    }
   },

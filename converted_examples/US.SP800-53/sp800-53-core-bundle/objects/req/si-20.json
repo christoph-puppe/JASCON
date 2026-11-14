@@ -39,6 +39,11 @@
     {
      "id": "si-20_obj",
      "label": "SI-20",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "data or capabilities are embedded in {param:si-20_odp} to determine if organizational data has been exfiltrated or improperly removed from the organization."
      }
@@ -123,7 +128,8 @@
      ],
      "alt-identifiers": [
       "si-20_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SI-20_ODP"
     }
    }
   },

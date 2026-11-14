@@ -105,18 +105,38 @@
     {
      "id": "sa-15_obj",
      "label": "SA-15",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sa-15_obj.a",
        "label": "SA-15a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "sa-15_obj.a.1",
          "label": "SA-15a.01",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.1"
+          }
+         ],
          "children": [
           {
            "id": "sa-15_obj.a.1-1",
            "label": "SA-15a.01[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.1"
+            }
+           ],
            "prose": {
             "en": "the developer of the system, system component, or system service is required to follow a documented development process that explicitly addresses security requirements;"
            }
@@ -124,6 +144,11 @@
           {
            "id": "sa-15_obj.a.1-2",
            "label": "SA-15a.01[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.1"
+            }
+           ],
            "prose": {
             "en": "the developer of the system, system component, or system service is required to follow a documented development process that explicitly addresses privacy requirements;"
            }
@@ -133,10 +158,20 @@
         {
          "id": "sa-15_obj.a.2",
          "label": "SA-15a.02",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.2"
+          }
+         ],
          "children": [
           {
            "id": "sa-15_obj.a.2-1",
            "label": "SA-15a.02[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.2"
+            }
+           ],
            "prose": {
             "en": "the developer of the system, system component, or system service is required to follow a documented development process that identifies the standards used in the development process;"
            }
@@ -144,6 +179,11 @@
           {
            "id": "sa-15_obj.a.2-2",
            "label": "SA-15a.02[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.2"
+            }
+           ],
            "prose": {
             "en": "the developer of the system, system component, or system service is required to follow a documented development process that identifies the tools used in the development process;"
            }
@@ -153,10 +193,20 @@
         {
          "id": "sa-15_obj.a.3",
          "label": "SA-15a.03",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.3"
+          }
+         ],
          "children": [
           {
            "id": "sa-15_obj.a.3-1",
            "label": "SA-15a.03[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.3"
+            }
+           ],
            "prose": {
             "en": "the developer of the system, system component, or system service is required to follow a documented development process that documents the specific tool used in the development process;"
            }
@@ -164,6 +214,11 @@
           {
            "id": "sa-15_obj.a.3-2",
            "label": "SA-15a.03[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.3"
+            }
+           ],
            "prose": {
             "en": "the developer of the system, system component, or system service is required to follow a documented development process that documents the specific tool configurations used in the development process;"
            }
@@ -173,6 +228,11 @@
         {
          "id": "sa-15_obj.a.4",
          "label": "SA-15a.04",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.4"
+          }
+         ],
          "prose": {
           "en": "the developer of the system, system component, or system service is required to follow a documented development process that documents, manages, and ensures the integrity of changes to the process and/or tools used in development;"
          }
@@ -182,10 +242,20 @@
       {
        "id": "sa-15_obj.b",
        "label": "SA-15b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "sa-15_obj.b-1",
          "label": "SA-15b.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "the developer of the system, system component, or system service is required to follow a documented development process in which the development process, standards, tools, tool options, and tool configurations are reviewed {param:sa-15_odp.01} to determine that the process, standards, tools, tool options, and tool configurations selected and employed satisfy {param:sa-15_odp.02};"
          }
@@ -193,6 +263,11 @@
         {
          "id": "sa-15_obj.b-2",
          "label": "SA-15b.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "the developer of the system, system component, or system service is required to follow a documented development process in which the development process, standards, tools, tool options, and tool configurations are reviewed {param:sa-15_odp.01} to determine that the process, standards, tools, tool options, and tool configurations selected and employed satisfy {param:sa-15_odp.03}."
          }
@@ -305,21 +380,24 @@
      ],
      "alt-identifiers": [
       "sa-15_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SA-15_ODP[01]"
     },
     "sa-15_odp.02": {
      "guidelines": [
       {
        "en": "security requirements to be satisfied by the process, standards, tools, tool options, and tool configurations are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "SA-15_ODP[02]"
     },
     "sa-15_odp.03": {
      "guidelines": [
       {
        "en": "privacy requirements to be satisfied by the process, standards, tools, tool options, and tool configurations are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "SA-15_ODP[03]"
     }
    }
   },

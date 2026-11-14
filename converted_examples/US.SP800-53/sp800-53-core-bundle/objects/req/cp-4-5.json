@@ -44,6 +44,11 @@
     {
      "id": "cp-4.5_obj",
      "label": "CP-04(05)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:cp-04.05_odp.01} are employed to disrupt and adversely affect the {param:cp-04.05_odp.02}."
      }
@@ -116,7 +121,8 @@
      ],
      "alt-identifiers": [
       "cp-4.5_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "CP-04(05)_ODP[01]"
     },
     "cp-04.05_odp.02": {
      "guidelines": [
@@ -126,7 +132,8 @@
      ],
      "alt-identifiers": [
       "cp-4.5_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "CP-04(05)_ODP[02]"
     }
    }
   },

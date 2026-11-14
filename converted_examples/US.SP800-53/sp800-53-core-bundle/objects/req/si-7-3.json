@@ -31,6 +31,11 @@
     {
      "id": "si-7.3_obj",
      "label": "SI-07(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "centrally managed integrity verification tools are employed."
      }

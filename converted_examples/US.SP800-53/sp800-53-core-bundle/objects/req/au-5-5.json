@@ -38,6 +38,11 @@
     {
      "id": "au-5.5_obj",
      "label": "AU-05(05)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "an alternate audit logging capability is provided in the event of a failure in primary audit logging capability that implements {param:au-05.05_odp}."
      }
@@ -113,7 +118,8 @@
      ],
      "alt-identifiers": [
       "au-5.5_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AU-05(05)_ODP"
     }
    }
   }

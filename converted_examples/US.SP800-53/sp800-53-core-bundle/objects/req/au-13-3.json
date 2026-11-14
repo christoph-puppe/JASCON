@@ -32,6 +32,11 @@
     {
      "id": "au-13.3_obj",
      "label": "AU-13(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "discovery techniques, processes, and tools are employed to determine if external entities are replicating organizational information in an unauthorized manner."
      }

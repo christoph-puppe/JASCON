@@ -38,10 +38,20 @@
     {
      "id": "ir-4.7_obj",
      "label": "IR-04(07)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ir-4.7_obj-1",
        "label": "IR-04(07)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "an incident handling capability is coordinated for insider threats;"
        }
@@ -49,6 +59,11 @@
       {
        "id": "ir-4.7_obj-2",
        "label": "IR-04(07)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the coordinated incident handling capability includes {param:ir-04.07_odp}."
        }
@@ -123,7 +138,8 @@
      ],
      "alt-identifiers": [
       "ir-4.7_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "IR-04(07)_ODP"
     }
    }
   }

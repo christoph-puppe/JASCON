@@ -31,6 +31,11 @@
     {
      "id": "sc-2.1_obj",
      "label": "SC-02(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the presentation of system management functionality is prevented at interfaces to non-privileged users."
      }

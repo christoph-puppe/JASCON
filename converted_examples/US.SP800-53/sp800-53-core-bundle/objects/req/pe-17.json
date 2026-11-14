@@ -75,10 +75,20 @@
     {
      "id": "pe-17_obj",
      "label": "PE-17",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "pe-17_obj.a",
        "label": "PE-17a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "{param:pe-17_odp.01} are determined and documented;"
        }
@@ -86,6 +96,11 @@
       {
        "id": "pe-17_obj.b",
        "label": "PE-17b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "{param:pe-17_odp.02} are employed at alternate work sites;"
        }
@@ -93,6 +108,11 @@
       {
        "id": "pe-17_obj.c",
        "label": "PE-17c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "the effectiveness of controls at alternate work sites is assessed;"
        }
@@ -100,6 +120,11 @@
       {
        "id": "pe-17_obj.d",
        "label": "PE-17d.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.d"
+        }
+       ],
        "prose": {
         "en": "a means for employees to communicate with information security and privacy personnel in case of incidents is provided."
        }
@@ -183,7 +208,8 @@
      ],
      "alt-identifiers": [
       "pe-17_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PE-17_ODP[01]"
     },
     "pe-17_odp.02": {
      "guidelines": [
@@ -193,7 +219,8 @@
      ],
      "alt-identifiers": [
       "pe-17_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "PE-17_ODP[02]"
     }
    }
   }

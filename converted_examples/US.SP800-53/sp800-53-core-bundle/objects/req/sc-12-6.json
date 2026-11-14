@@ -32,6 +32,11 @@
     {
      "id": "sc-12.6_obj",
      "label": "SC-12(06)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "physical control of cryptographic keys is maintained when stored information is encrypted by external service providers."
      }

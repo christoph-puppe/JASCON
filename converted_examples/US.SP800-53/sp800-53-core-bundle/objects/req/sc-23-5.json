@@ -38,6 +38,11 @@
     {
      "id": "sc-23.5_obj",
      "label": "SC-23(05)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "only the use of {param:sc-23.05_odp} for verification of the establishment of protected sessions is allowed."
      }
@@ -108,7 +113,8 @@
      "alt-identifiers": [
       "sc-23.5_prm_1"
      ],
-     "alt-label": "certificate authorities"
+     "alt-label": "certificate authorities",
+     "sp800-53a-label": "SC-23(05)_ODP"
     }
    }
   }

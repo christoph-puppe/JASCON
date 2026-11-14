@@ -43,6 +43,11 @@
     {
      "id": "si-4.23_obj",
      "label": "SI-04(23)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:si-04.23_odp.01} are implemented on {param:si-04.23_odp.02}."
      }
@@ -133,7 +138,8 @@
      ],
      "alt-identifiers": [
       "si-4.23_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SI-04(23)_ODP[01]"
     },
     "si-04.23_odp.02": {
      "guidelines": [
@@ -143,7 +149,8 @@
      ],
      "alt-identifiers": [
       "si-4.23_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SI-04(23)_ODP[02]"
     }
    }
   },

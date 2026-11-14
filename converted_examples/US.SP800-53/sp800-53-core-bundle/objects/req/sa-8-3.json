@@ -49,10 +49,20 @@
     {
      "id": "sa-8.3_obj",
      "label": "SA-08(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sa-8.3_obj-1",
        "label": "SA-08(03)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "{param:sa-08.03_odp.01} implement the security design principle of modularity;"
        }
@@ -60,6 +70,11 @@
       {
        "id": "sa-8.3_obj-2",
        "label": "SA-08(03)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "{param:sa-08.03_odp.02} implement the security design principle of layering."
        }
@@ -143,14 +158,16 @@
       {
        "en": "systems or system components that implement the security design principle of modularity are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "SA-08(03)_ODP[01]"
     },
     "sa-08.03_odp.02": {
      "guidelines": [
       {
        "en": "systems or system components that implement the security design principle of layering are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "SA-08(03)_ODP[02]"
     }
    }
   },

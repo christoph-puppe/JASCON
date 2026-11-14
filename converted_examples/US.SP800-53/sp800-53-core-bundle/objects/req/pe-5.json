@@ -38,6 +38,11 @@
     {
      "id": "pe-5_obj",
      "label": "PE-05",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "physical access to output from {param:pe-05_odp} is controlled to prevent unauthorized individuals from obtaining the output."
      }
@@ -110,7 +115,8 @@
      ],
      "alt-identifiers": [
       "pe-5_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PE-05_ODP"
     }
    }
   }
@@ -148,7 +154,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/PE-5.1",
     "mode": "merged-into",
-    "label": "PE-05(01)",
+    "label": "PE-5(1)",
     "title": "Access to Output by Authorized Individuals"
    }
   ]

@@ -43,6 +43,11 @@
     {
      "id": "ia-2.13_obj",
      "label": "IA-02(13)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:ia-02.13_odp.01} mechanisms are implemented under {param:ia-02.13_odp.02}."
      }
@@ -121,7 +126,8 @@
      ],
      "alt-identifiers": [
       "ia-2.13_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "IA-02(13)_ODP[01]"
     },
     "ia-02.13_odp.02": {
      "guidelines": [
@@ -131,7 +137,8 @@
      ],
      "alt-identifiers": [
       "ia-2.13_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "IA-02(13)_ODP[02]"
     }
    }
   }

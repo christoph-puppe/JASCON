@@ -38,6 +38,11 @@
     {
      "id": "si-4.9_obj",
      "label": "SI-04(09)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "intrusion-monitoring tools and mechanisms are tested {param:si-04.09_odp}."
      }
@@ -116,7 +121,8 @@
      ],
      "alt-identifiers": [
       "si-4.9_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SI-04(09)_ODP"
     }
    }
   },

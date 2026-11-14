@@ -32,6 +32,11 @@
     {
      "id": "si-18.4_obj",
      "label": "SI-18(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "personally identifiable information is corrected or deleted upon request by individuals or their designated representatives."
      }

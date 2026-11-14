@@ -46,10 +46,20 @@
     {
      "id": "ac-18.1_obj",
      "label": "AC-18(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ac-18.1_obj-1",
        "label": "AC-18(01)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "wireless access to the system is protected using authentication of {param:ac-18.01_odp};"
        }
@@ -57,6 +67,11 @@
       {
        "id": "ac-18.1_obj-2",
        "label": "AC-18(01)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "wireless access to the system is protected using encryption."
        }
@@ -123,7 +138,8 @@
     "ac-18.01_odp": {
      "alt-identifiers": [
       "ac-18.1_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AC-18(01)_ODP"
     }
    }
   }

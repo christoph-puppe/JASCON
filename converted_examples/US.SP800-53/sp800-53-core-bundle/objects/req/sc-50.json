@@ -39,6 +39,11 @@
     {
      "id": "sc-50_obj",
      "label": "SC-50",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "software-enforced separation and policy enforcement mechanisms are implemented between {param:sc-50_odp}."
      }
@@ -108,7 +113,8 @@
      ],
      "alt-identifiers": [
       "sc-50_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-50_ODP"
     }
    }
   },
