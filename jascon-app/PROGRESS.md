@@ -30,7 +30,10 @@ and in `readme.md`; this file says only what is done and what is next.
   preset gives all 813 objects the semantic digest of the shipped DE.BSI
   bundle; the NIST MODERATE profile selects the 287 members of the shipped
   baseline. Driven in headless Chromium; `validate_core.py`: BSI import 814
-  pass, NIST generic with profile 1220 pass, 0 fail each.
+  pass, NIST generic with profile 1220 pass, 0 fail each. (The 813 objects
+  are those of `convert_bsi.py` v0.2, in which a nested control was a
+  clause of its parent; since build 0.9.14 the preset writes the 1,287 of
+  v0.3, see below.)
 
 - Step 3: the per-object checks, facet payloads, the operation law per tier,
   the attestation verdict and `jscCheckGraph` (a whole set) in
@@ -332,7 +335,8 @@ and in `readme.md`; this file says only what is done and what is next.
   file of an import, taken before the change: 811 objects and 651
   statements for the BSI catalog under `converted_examples`, 1,035 and
   1,918 for the NIST catalog there, 17 and 5 for a catalog of a CIS
-  Benchmark's shape. With another party every statement binds it and
+  Benchmark's shape. (For BSI the digest was taken anew with build 0.9.14,
+  when the preset and that catalog changed; see below.) With another party every statement binds it and
   nothing else differs in any file. Empty, blank, a short name, a URN and a
   URI with a blank are each refused. A level that an SP 800-53 control
   states stays, on a catalog written for the test. The Import page was
@@ -403,6 +407,62 @@ and in `readme.md`; this file says only what is done and what is next.
   branch (28 of 30 pass); both export a set and hand it to the reference.
   The reader and its tests are not touched by this build, and the tests
   were not run on the branch without it.
+
+- The Grundschutz++ preset follows `convert_bsi.py` v0.3 (build 0.9.14;
+  the author's decision of 2026-11-14, "A. Bring both presets in line with
+  the Python converters"; the SP 800-53 preset follows in a task of its
+  own):
+  - `jscImportBsi` in `jascon-oscal.js`: every control at every depth is a
+    Requirement of its own, with one statement `smt`, its alias, its own
+    parameters and its own links as relations. A control with nested
+    controls also gives a Set that groups it with them (its own Requirement
+    first, then what stands for each nested control in source order); no
+    relation is made from the nesting. One sequence counter for the run, as
+    the converter takes it. A baseline lists the controls of its level in
+    document order, a nested control in the baseline of its own level.
+  - A prop is read only in its BSI namespace (`JSC_BSI.PROP_NS`). What the
+    rules do not read is carried as the source holds it in the compat facet
+    (`metadata`, `back-matter`, `catalog`, `param-extras`, `props`,
+    `parts`, `links`, `control`, `group`, in that order, and the pinned
+    stub names all nine); a fraction is written as a decimal string.
+  - The source entry of the provenance names the author and the day, as the
+    converter's manifest does; a German name is written in ASCII before the
+    slug. One function mints a party URI from a name (`jscOscalPartyUri`).
+  - The report counts the controls with nested controls and what is
+    carried, by member; the Import page shows both, in English and German.
+
+  Measured on the Anwenderkatalog of 2026-07-16: 1,287 of 1,287 objects
+  (999 Requirements, 288 Sets) have the semantic digest of the committed
+  bundle, and its bytes but for the line ends (the converter writes CRLF);
+  the six pinned schemas and the source entry of the provenance are the
+  converter's. 266 relations, one for each link, none naming no object;
+  build 0.9.13 wrote 813 objects and 191 relations, 34 of them naming no
+  object (`ERRATA.md`). On a catalogue written for the tests,
+  `convert_bsi.py` run in a tree of its own gives the same 9 objects, by
+  digest and by bytes. On the OSCAL export the repository carries (the
+  input of the party tests, regenerated from the new bundle) the preset
+  writes 1,360 objects and 999 statements; the SHA-256 recorded with build
+  0.9.11 (811 and 651) gives way to the one of this build, by the author's
+  decision. In Chromium, in English and in German, the Import page guesses
+  the preset for the pinned catalogue, shows 999 requirements, 288 sets and
+  the two new rows, and writes 1,287 objects and 6 schemas without a script
+  error. 32 deliberate defects were run against the final code: 31 turned a
+  test red, among them the five of the brief (nested controls not
+  converted, a nested control's links not carried, a relation made between
+  a nested control and its parent, the grouping Set's members in another
+  order, a nested control in its parent's baseline). One stayed green: a
+  link whose `rel` is empty typed `related` (the converter keeps the empty
+  type); no catalogue of the tests has such a link. Two flaws of the
+  unfinished draft this build started from, both for a modal verb that is
+  the name of a member every JavaScript object has (`constructor`): it was
+  taken for a verb of the table (found by reading), and it was counted in
+  the report as text (found by the test written for the first). Both are
+  fixed, and each is one of the defects that turn a test red. The app's
+  tests: 184, of which 181 pass and 3 are skipped for the NIST source
+  files; with those files present the 22 tests of `oscal.test.mjs` pass.
+  `pages.test.mjs` with the tests under `one-page-apps/`: 53 of 53. Read
+  and not measured: the set imported on the page, exported and handed to
+  `validate_core.py`.
 
 ## Next
 
@@ -507,6 +567,26 @@ and in `readme.md`; this file says only what is done and what is next.
     The pages say so, and an Attestation that named it then fails as any
     changed subject does. The app does not look for such an Attestation
     before it rewrites.
+- Found with build 0.9.14:
+  - `convert_bsi.py` carries an empty parameter label in compat
+    `param-extras`, as the preset does, but its path map names no place
+    there for `params[].label`, so on a catalogue with such a label the
+    converter writes its bundle and ends with exit code 1 (one wiring
+    check). Measured on the catalogue of the tests; the pinned catalogue has
+    none. The converter is not this build's to change; the test that runs it
+    accepts that one failure and no other.
+  - A number the source writes with a zero after the point (`1.0`) reaches
+    the preset as the integer 1, because `JSON.parse` has read it; the
+    converter writes the string "1.0". The same for a float without a
+    fraction such as `1e16`. Read, not measured: no catalogue at hand has
+    such a number, and the kernel spells a fraction as a decimal string.
+  - The OSCAL export of the Grundschutz++ bundle, read by the preset, gives
+    1,360 objects and modality `unspecified` on every statement: the export
+    writes the modality and the obligated party in props of its own names
+    (`modality`, `obligated-party`) and the facets as JSON in a prop of
+    JASCON's namespace, none of which the preset reads; it carries them in
+    the compat facet. The preset is for the BSI's catalogue; that export is
+    only the input of the party tests.
 - Found with build 0.9.12:
   - `node one-page-apps/tools/sync-inlined.mjs --check` reports the pack
     builder's inlined copy of the rules as out of date, because the rules

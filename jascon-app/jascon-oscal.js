@@ -6,12 +6,16 @@
 
    Four ways to read a catalog, chosen by `preset`:
 
-   bsi-gspp   The rules of jascon/scripts/convert_bsi.py for the BSI
-              Anwenderkatalog Grundschutz++: a nested control is a clause of
-              its parent, the modal verb becomes the modality, the BSI props
-              go to stdlib and BSI facets, sec_level becomes baseline Sets.
+   bsi-gspp   The rules of jascon/scripts/convert_bsi.py v0.3 for the BSI
+              Anwenderkatalog Grundschutz++: every control, nested ones
+              included, is a Requirement of its own with one statement, and
+              a control with nested controls also gives a Set that groups it
+              with them (BSI nests for grouping only); the modal verb becomes
+              the modality, the BSI props go to stdlib and BSI facets,
+              sec_level becomes baseline Sets, and what the mapping does not
+              read is carried in the compat facet as the source holds it.
               tests/oscal.test.mjs compares every object this preset makes
-              with the shipped bundle converted_examples/DE.BSI.
+              with the committed bundle converted_examples/DE.BSI.
    generic    For any other catalog. Every control, nested ones included, is
               a Requirement; every part of the statement that carries prose
               is a clause; the modality is `unspecified`, because OSCAL has
@@ -95,7 +99,10 @@ function jscBackMatter(doc) {
    (`<ns>/party/cis`, `<ns>/party/institution`): `<ns>/party/<slug of the
    party's name>`, under the namespace of the import and with the
    converters' slug. convert_ifa.py names the parties of a role assignment
-   the same way. A name is a string that is not empty. */
+   the same way. A name is a string that is not empty. The BSI preset first
+   writes a German name in ASCII as a German reader does (ü -> ue), as
+   convert_bsi.py does (party_uri); without that the slug drops the
+   letter. */
 function jscOscalAuthorParty(metadata) {
   const meta = metadata && typeof metadata === "object" ? metadata : {};
   const parties = (Array.isArray(meta.parties) ? meta.parties : []).filter(p => p && typeof p === "object" && typeof p.uuid === "string");
@@ -117,10 +124,14 @@ function jscOscalAuthorParty(metadata) {
   if (organizations.length === 1) return land(organizations[0]);
   return null;
 }
+/* a party's name -> its URI under `ns`, with the converters' slug */
+function jscOscalPartyUri(ns, name) {
+  return `${String(ns).replace(/\/+$/, "")}/party/${jscOscalSlug(name)}`;
+}
 /* -> the author as a party URI under `ns`, or null */
 function jscOscalAuthorRef(metadata, ns) {
   const party = jscOscalAuthorParty(metadata);
-  return party ? `${String(ns).replace(/\/+$/, "")}/party/${jscOscalSlug(party.name)}` : null;
+  return party ? jscOscalPartyUri(ns, party.name) : null;
 }
 /* -> the day of the document's last change, YYYY-MM-DD, or null */
 function jscOscalDate(metadata) {
@@ -234,8 +245,29 @@ function jscStdlibPin(shortName) {
 }
 
 /* ====================================================================
-   BSI Grundschutz++ (after convert_bsi.py v0.2)
-   ==================================================================== */
+   BSI Grundschutz++ (after convert_bsi.py v0.3)
+   ====================================================================
+   Every control is a Requirement of its own, at every depth. BSI nests
+   controls for grouping only (the author, 2026-11-14), so a nested control
+   is a full control with its own statement, parameters, props and links,
+   and a control that has nested controls gives a Set as well, which stands
+   for the grouping: its members are the control's own Requirement and then,
+   in the order of the source, what stands for each nested control. No
+   relation is written between a control and the controls nested in it.
+   Before build 0.9.14 a nested control became a second statement of its
+   parent's Requirement; its links were not read, and a link that named it
+   pointed at an id that was no object (ERRATA.md).
+
+   Content is not dropped (the author, 2026-11-14). A prop is read only in
+   the namespace this mapping is written for (JSC_BSI.PROP_NS; a label and
+   an alt-identifier are read without one). What the mapping does not read
+   is carried as the source holds it, in the compat facet: a prop of another
+   name or namespace, an earlier prop of a name that repeats, a part of
+   another name, a member of a link, a control, a group or a parameter that
+   the mapping has no place for, and on the root Set whatever the document
+   says of itself. One difference to "as the source holds it": a number that
+   is no integer is written as a decimal string (NUMBER-1). */
+const JSC_BSI_CSV = "https://github.com/BSI-Bund/Stand-der-Technik-Bibliothek/tree/main/Dokumentation/namespaces/";
 const JSC_BSI = {
   ns: "https://ns.bsi.bund.de/gspp", key: "gspp", lang: "de",
   F_GRAM: "https://ns.jascon.net/stdlib/facet/statement-grammar@1", F_SECO: "https://ns.jascon.net/stdlib/facet/security-objectives@1",
@@ -243,17 +275,108 @@ const JSC_BSI = {
   F_NARR: "https://ns.bsi.bund.de/facet/gspp-narrative@1", F_COMPAT: "https://ns.jascon.net/compat/oscal-1x@1",
   MODAL: { "MUSS": "must", "SOLLTE": "should", "KANN": "may", "DARF NICHT": "must-not", "SOLLTE NICHT": "should-not", "DARF NUR": "may-only",
     "MÜSSEN": "must", "SOLLTEN": "should", "KÖNNEN": "may", "DÜRFEN NICHT": "must-not", "DÜRFEN NUR": "may-only" },
+  /* the namespace each prop is read in: BSI gives a prop the address of the CSV list its values come from */
+  PROP_NS: { modal_verb: JSC_BSI_CSV + "modal_verbs.csv", action_word: JSC_BSI_CSV + "action_words.csv", result: JSC_BSI_CSV + "result.csv",
+    result_specification: JSC_BSI_CSV + "result.csv", target_object_categories: JSC_BSI_CSV + "target_object_categories.csv",
+    documentation: JSC_BSI_CSV + "documentation_guidelines.csv",
+    confidentiality: JSC_BSI_CSV + "security_targets.csv", integrity: JSC_BSI_CSV + "security_targets.csv",
+    availability: JSC_BSI_CSV + "security_targets.csv", authenticity: JSC_BSI_CSV + "security_targets.csv",
+    threats: JSC_BSI_CSV + "basethreats.csv", sec_level: JSC_BSI_CSV + "security_level.csv",
+    effort_level: JSC_BSI_CSV + "effort_level.csv", tags: JSC_BSI_CSV + "tags.csv" },
+  /* the props this mapping reads, by the element that carries them, and the members of an element it reads */
+  CONTROL_PROPS: ["alt-identifier", "label", "sec_level", "effort_level", "tags", "confidentiality", "integrity", "availability", "authenticity", "threats"],
+  PART_PROPS: ["modal_verb", "action_word", "result", "result_specification", "target_object_categories", "documentation"],
+  GROUP_PROPS: ["label", "alt-identifier"], PARAM_PROPS: ["alt-identifier"],
+  CONTROL_MEMBERS: ["id", "class", "title", "params", "props", "parts", "links", "controls"], GROUP_MEMBERS: ["id", "title", "props", "groups", "controls"],
+  PARAM_MEMBERS: ["id", "label", "values", "props"], CATALOG_MEMBERS: ["uuid", "metadata", "groups", "controls", "back-matter"],
+  /* the members of the compat facet, in the order they are written */
+  COMPAT_MEMBERS: ["metadata", "back-matter", "catalog", "param-extras", "props", "parts", "links", "control", "group"],
 };
+/* -> {name: prop} of the props of `node` this mapping reads: a name among
+   `names`, in the namespace of JSC_BSI.PROP_NS (none for a name that is not
+   in it). Every other prop goes to `unread` as the source holds it, and so
+   does a prop that is read and holds a member besides name, ns and value,
+   and every earlier prop of a name that repeats: the last one is read. */
+function jscBsiReadProps(node, names, unread) {
+  const props = (node && node.props) || [], last = new Map(), rest = new Set();
+  props.forEach((p, i) => {
+    const wanted = JSC_BSI.PROP_NS[p.name] === undefined ? null : JSC_BSI.PROP_NS[p.name];
+    if (names.includes(p.name) && (p.ns === undefined ? null : p.ns) === wanted) {
+      if (last.has(p.name)) rest.add(last.get(p.name));
+      last.set(p.name, i);
+      if (Object.keys(p).some(k => !["name", "ns", "value"].includes(k))) rest.add(i);
+    } else rest.add(i);
+  });
+  unread.push(...[...rest].sort((a, b) => a - b).map(i => props[i]));
+  return Object.fromEntries([...last].map(([name, i]) => [name, props[i]]));
+}
+/* A piece of the source as the compat facet carries it: as the source holds
+   it, except that a number that is no integer becomes a decimal string. A
+   fraction the source writes with a zero after the point (1.0) reaches this
+   code as the integer 1, because JSON.parse has already read it; the
+   converter writes "1.0" there. The pinned catalogue holds no fraction. */
+function jscBsiHeld(x) {
+  if (Array.isArray(x)) return x.map(jscBsiHeld);
+  if (x && typeof x === "object") return Object.fromEntries(Object.entries(x).map(([k, v]) => [k, jscBsiHeld(v)]));
+  if (typeof x === "number" && !Number.isInteger(x)) {
+    const s = String(x), m = /^(-?)(\d+)(?:\.(\d+))?e([+-]\d+)$/.exec(s);
+    if (!m) return s;
+    const digits = m[2] + (m[3] || ""), point = m[2].length + Number(m[4]);
+    return m[1] + (point <= 0 ? "0." + "0".repeat(-point) + digits : point >= digits.length ? digits + "0".repeat(point - digits.length) : digits.slice(0, point) + "." + digits.slice(point));
+  }
+  return x;
+}
+/* does this piece hold a value of the source? */
+const jscBsiAnyLeaf = x => (Array.isArray(x) ? x.some(jscBsiAnyLeaf) : x && typeof x === "object" ? Object.values(x).some(jscBsiAnyLeaf) : x !== undefined && x !== null);
+/* What the mapping does not read of a part it reads, in the part's own
+   shape: its name, to say which part, and every member that is left. null
+   where nothing is left. read: the members that were read; unreadProps: the
+   props of the part that were not. */
+function jscBsiPartRest(part, read, unreadProps) {
+  const left = {};
+  for (const [k, v] of Object.entries(part)) {
+    if (k === "name" || !read.includes(k) || (k === "props" && unreadProps && unreadProps.length)) left[k] = k === "props" && read.includes("props") ? unreadProps : v;
+  }
+  return Object.keys(left).some(k => k !== "name") ? left : null;
+}
+/* A German name in ASCII as a German reader writes it (ue for ü), before the
+   slug, which keeps a-z and 0-9 only (party_uri of convert_bsi.py): without
+   this the BSI's own name gave `bundesamt-f-r-sicherheit-...`. */
+const JSC_BSI_ASCII = { "ä": "ae", "ö": "oe", "ü": "ue", "Ä": "Ae", "Ö": "Oe", "Ü": "Ue", "ß": "ss" };
+const jscBsiAscii = name => String(name).replace(/[äöüÄÖÜß]/g, ch => JSC_BSI_ASCII[ch]);
+
 function jscImportBsi(cat, party) {
   const B = JSC_BSI, ns = B.ns, version = cat.metadata.version, lang = B.lang;
-  const objects = [], bm = jscBackMatter(cat), secValues = new Set(), baseline = new Map();
-  const report = { preset: "bsi-gspp", controls: 0, statements: 0, "packed-list-values": [], "parameter-slots": 0, "parameter-slots-not-at-insert": [], "unknown-modal-verbs": {}, "parameters-unreferenced": 0 };
+  const objects = [], bm = jscBackMatter(cat), secValues = new Set(), baseline = new Map(), resourcesNamed = new Set(), taken = new Set();
+  const report = { preset: "bsi-gspp", controls: 0, statements: 0, "controls-with-nested-controls": 0, "packed-list-values": [], "parameter-slots": 0,
+    "parameter-slots-not-at-insert": [], "unknown-modal-verbs": {}, "parameters-unreferenced": 0,
+    /* how many objects carry something in the compat facet as the source holds it, by member */
+    "carried-as-the-source-holds-it": {} };
+  const asHeld = k => { report["carried-as-the-source-holds-it"][k] = (report["carried-as-the-source-holds-it"][k] || 0) + 1; };
+  /* counted in a Map: a verb of the source is any text, `constructor` too, which a plain object already has */
+  const unknownModal = new Map();
+  /* two controls, or a control and a group, whose ids give one file name would overwrite each other */
+  const add = (path, obj) => { if (taken.has(path)) throw new Error(`two objects would be written to ${path}: their ids give the same file name`); taken.add(path); objects.push({ path, obj }); };
+  const compat = found => Object.fromEntries(B.COMPAT_MEMBERS.filter(k => k in found).map(k => [k, jscBsiHeld(found[k])]));
   let seq = 0;
   const nseq = () => (seq += 10);
-  /* one statement, and its facet payloads keyed by the statement id, from control c */
-  const statement = (c, sid, isChild, req) => {
-    const parts = c.parts || [], smt = parts.find(p => p.name === "statement") || {}, guid = parts.find(p => p.name === "guidance");
-    const text = jscOscalProse(smt.prose), pp = jscPropMap(smt.props), cp = jscPropMap(c.props);
+  /* the one statement of control c, and the facet payloads keyed by it. cp: the props of the control that are read;
+     cunread: those that are not; found: what goes into the compat facet */
+  const statement = (c, cp, cunread, req, found) => {
+    const sid = "smt", parts = c.parts || [], smt = parts.find(p => p.name === "statement") || {};
+    let guid = parts.find(p => p.name === "guidance") || null;
+    if (guid && !guid.prose) guid = null;                       // a guidance without a prose is not read: carried whole
+    const text = jscOscalProse(smt.prose), punread = [], pp = jscBsiReadProps(smt, B.PART_PROPS, punread);
+    /* a verb outside MODAL is counted, `unspecified` is written, and the prop is carried as the source holds it
+       (a key of the table itself, not one an object inherits: `toString` is no modal verb) */
+    if ("modal_verb" in pp && !Object.prototype.hasOwnProperty.call(B.MODAL, pp.modal_verb.value)) {
+      const v = pp.modal_verb.value;
+      unknownModal.set(v, (unknownModal.get(v) || 0) + 1);
+      punread.push(pp.modal_verb); delete pp.modal_verb;
+    }
+    /* a list prop whose value holds no term gives an empty list; the value is carried as the source holds it */
+    for (const name of ["target_object_categories", "documentation"]) if (name in pp && !jscSplitList(pp[name].value).length) punread.push(pp[name]);
+    for (const name of ["tags", "threats"]) if (name in cp && !jscSplitList(cp[name].value).length) cunread.push(cp[name]);
     /* {{Label}} in a sentence-template prop marks a parameter: it must stand
        where the prose inserts one (convert_bsi.py, slot_at_insert) */
     for (const part of parts) for (const p of part.props || []) {
@@ -268,16 +391,25 @@ function jscImportBsi(cat, party) {
       if (JSC_BSI_LIST_PROPS.includes(p.name) && jscSplitList(p.value).length > 1) report["packed-list-values"].push({ control: c.id, prop: p.name, value: p.value });
     }
     const mv = pp.modal_verb;
-    if (mv !== undefined && !(mv in B.MODAL)) report["unknown-modal-verbs"][mv] = (report["unknown-modal-verbs"][mv] || 0) + 1;
-    const st = { id: sid, modality: B.MODAL[mv] || "unspecified", "obligated-parties": [party], prose: { [lang]: text } };
+    const st = { id: sid, modality: mv ? B.MODAL[mv.value] : "unspecified", "obligated-parties": [party], prose: { [lang]: text } };
     for (const pm of c.params || []) {
-      const prm = { name: pm.id, type: "string" };
+      const prm = { name: pm.id, type: "string" }, vals = pm.values || [];
       if (pm.label) prm.label = pm.label;
-      if ((pm.values || []).length) prm.default = pm.values[0];
+      if (vals.length) prm.default = vals[0];
       (st.parameters = st.parameters || []).push(prm);
       if (!text.includes(`{param:${pm.id}}`)) report["parameters-unreferenced"]++;
-      const alt = (pm.props || []).find(x => x.name === "alt-identifier");
-      if (alt) (req._compat = req._compat || {})[pm.id] = { "alt-identifier": alt.value };
+      /* what the kernel's parameter has no member for: the alt-identifier, every value where there is more than one
+         (`default` holds the first), an empty label, and whatever else the source says of the parameter */
+      const extras = {}, xunread = [], xp = jscBsiReadProps(pm, B.PARAM_PROPS, xunread);
+      if ("alt-identifier" in xp) extras["alt-identifier"] = xp["alt-identifier"].value;
+      if (vals.length > 1) extras.values = vals;
+      if ("label" in pm && !pm.label) extras.label = pm.label;
+      if (xunread.length) extras.props = xunread;
+      for (const [k, v] of Object.entries(pm)) if (!B.PARAM_MEMBERS.includes(k)) extras[k] = v;
+      if (Object.keys(extras).length) {
+        (found["param-extras"] = found["param-extras"] || {})[pm.id] = extras;
+        if (Object.keys(extras).some(k => k !== "alt-identifier")) asHeld("param-extras beyond the alt-identifier");
+      }
     }
     /* the payload of facet f for this statement, created on first use; the
        converter creates the grammar and taxonomy payloads for every
@@ -288,46 +420,78 @@ function jscImportBsi(cat, party) {
       return (perStatement[sid] = perStatement[sid] || {});
     };
     const g = by(B.F_GRAM);
-    for (const [src, dst] of [["action_word", "action"], ["result", "result"], ["result_specification", "result-specification"]]) if (src in pp) g[dst] = pp[src];
-    if ("target_object_categories" in pp) g["target-object-categories"] = jscSplitList(pp.target_object_categories);
-    if ("documentation" in pp) by(B.F_ACRIT)["required-documentation"] = jscSplitList(pp.documentation);
+    for (const [src, dst] of [["action_word", "action"], ["result", "result"], ["result_specification", "result-specification"]]) if (src in pp) g[dst] = pp[src].value;
+    if ("target_object_categories" in pp) g["target-object-categories"] = jscSplitList(pp.target_object_categories.value);
+    if ("documentation" in pp) by(B.F_ACRIT)["required-documentation"] = jscSplitList(pp.documentation.value);
     const so = {};
-    for (const k of ["confidentiality", "integrity", "availability", "authenticity"]) if (k in cp) so[k] = cp[k];
-    if ("threats" in cp) so["threat-refs"] = jscSplitList(cp.threats).map(t => `${ns}/threat/${t.replace(/ /g, "-")}`);
+    for (const k of ["confidentiality", "integrity", "availability", "authenticity"]) if (k in cp) so[k] = cp[k].value;
+    if ("threats" in cp) so["threat-refs"] = jscSplitList(cp.threats.value).map(t => `${ns}/threat/${t.replace(/ /g, "-")}`);
     if (Object.keys(so).length) Object.assign(by(B.F_SECO), so);
     const tx = by(B.F_TAX);
     tx.class = c.class === undefined ? null : c.class;
-    if ("sec_level" in cp) { tx["sec-level"] = cp.sec_level; secValues.add(cp.sec_level); }
-    if ("effort_level" in cp) tx.effort = parseInt(cp.effort_level, 10);
-    if ("tags" in cp) tx.tags = jscSplitList(cp.tags);
-    if ("practice" in pp) tx.practice = pp.practice;
-    if (isChild) {
-      tx.title = c.title === undefined ? null : c.title;
-      if ("alt-identifier" in cp) tx["alt-identifier"] = cp["alt-identifier"];
-      if ("label" in cp) tx.label = cp.label;
+    if ("sec_level" in cp) { tx["sec-level"] = cp.sec_level.value; secValues.add(cp.sec_level.value); }
+    if ("effort_level" in cp) tx.effort = parseInt(cp.effort_level.value, 10);
+    if ("tags" in cp) tx.tags = jscSplitList(cp.tags.value);
+    if (guid) by(B.F_NARR)[guid.name] = { [lang]: guid.prose };
+    /* The parts. Of the statement part and the guidance part the prose is read (and the statement's props); the id
+       is no content where it is the control's id and the suffix. Whatever else a part holds, and every other part,
+       is carried as the source holds it. */
+    const prest = [];
+    for (const part of parts) {
+      let left = part;
+      if (part === smt && jscBsiAnyLeaf([part.prose, part.props])) {
+        left = jscBsiPartRest(part, ["name", "prose", "props", ...(part.id === c.id + "_stm" ? ["id"] : [])], punread);
+      } else if (part === guid) {
+        left = jscBsiPartRest(part, ["name", "prose", ...(part.id === c.id + "_gdn" ? ["id"] : [])], null);
+      }
+      if (left) prest.push(left);
     }
-    if (guid && guid.prose) by(B.F_NARR).guidance = { [lang]: guid.prose };
+    if (prest.length) found.parts = prest;
     report.statements++;
     return st;
   };
+  /* the Requirement of one control: of a top-level control and of a nested one alike */
   const requirement = c => {
-    const cp = jscPropMap(c.props);
-    const req = { id: `${ns}/req/${c.id}`, version, label: cp.label !== undefined ? cp.label : c.id, lifecycle: "active", title: { [lang]: c.title }, statements: [], facets: {} };
-    if ("alt-identifier" in cp) req.aliases = [{ scheme: "bsi-uuid", value: cp["alt-identifier"] }];
-    req.statements.push(statement(c, "smt", false, req));
-    const descend = node => { for (const ch of node.controls || []) { req.statements.push(statement(ch, ch.id, true, req)); descend(ch); } };
-    descend(c);
-    const rels = (c.links || []).map(l => {
-      const href = l.href || "", type = l.rel || "related";
-      if (href.startsWith("#") && bm.has(href.slice(1))) return { type, ref: bm.get(href.slice(1)) };
-      return { type, ref: href.startsWith("#") ? `${ns}/req/${href.slice(1)}` : href };
-    });
+    const cunread = [], cp = jscBsiReadProps(c, B.CONTROL_PROPS, cunread), found = {};
+    const req = { id: `${ns}/req/${c.id}`, version, label: "label" in cp ? cp.label.value : c.id, lifecycle: "active", title: { [lang]: c.title }, statements: [], facets: {} };
+    if ("alt-identifier" in cp) req.aliases = [{ scheme: "bsi-uuid", value: cp["alt-identifier"].value }];
+    req.statements.push(statement(c, cp, cunread, req, found));
+    /* the control's own links: a relation has a type and a ref; a link that says more is carried whole beside it */
+    const rels = [], lrest = [];
+    for (const l of c.links || []) {
+      const href = l.href || "", type = l.rel === undefined ? "related" : l.rel;     // a link without a rel is `related`, as l.get("rel","related")
+      if (href.startsWith("#") && bm.has(href.slice(1))) { rels.push({ type, ref: bm.get(href.slice(1)) }); resourcesNamed.add(href.slice(1)); }
+      else rels.push({ type, ref: href.startsWith("#") ? `${ns}/req/${href.slice(1)}` : href });
+      if (Object.keys(l).some(k => k !== "href" && k !== "rel")) lrest.push(l);
+    }
     if (rels.length) req.relations = rels;
-    if (req._compat) req.facets[B.F_COMPAT] = { "param-extras": req._compat };
-    delete req._compat;
+    if (cunread.length) found.props = cunread;
+    if (lrest.length) found.links = lrest;
+    const crest = Object.fromEntries(Object.entries(c).filter(([k]) => !B.CONTROL_MEMBERS.includes(k)));
+    if (Object.keys(crest).length) found.control = crest;
+    for (const k of Object.keys(found)) if (k !== "param-extras") asHeld(k);
+    if (Object.keys(found).length) req.facets[B.F_COMPAT] = compat(found);
     if (!Object.keys(req.facets).length) delete req.facets;
     report.controls++;
-    return req;
+    return { req, cp };
+  };
+  /* -> the id of what stands for control c in the Set of its group or of its parent control: its Requirement, or,
+     where it has nested controls, the Set that groups it with them. The baseline of its sec_level lists the
+     control itself, before the controls nested in it. */
+  const control = c => {
+    const { req, cp } = requirement(c);
+    add(`objects/${B.key}/req-${jscOscalSlug(c.id)}.json`, req);
+    if ("sec_level" in cp) baseline.set(cp.sec_level.value, [...(baseline.get(cp.sec_level.value) || []), req.id]);
+    const nested = c.controls || [];
+    if (!nested.length) return req.id;
+    /* the grouping: the control's own Requirement first, then what stands for each nested control, each numbered
+       when it is appended; the Set's own place in its parent is numbered after its members */
+    const members = [{ ref: req.id, sequence: nseq() }];
+    for (const ch of nested) { const ref = control(ch); members.push({ ref, sequence: nseq() }); }
+    const id = `${ns}/set/tax/${jscOscalSlug(c.id)}`;
+    add(`objects/${B.key}/set-tax-${jscOscalSlug(c.id)}.json`, { id, version, lifecycle: "active", title: { [lang]: c.title }, members });
+    report["controls-with-nested-controls"]++;
+    return id;
   };
   /* the order of the nseq() calls is the converter's: a subgroup's whole
      subtree is numbered before the subgroup itself gets its place */
@@ -335,45 +499,66 @@ function jscImportBsi(cat, party) {
     const entries = [];
     for (const sub of g.groups || []) {
       const u = group(sub, [...pathIds, jscOscalSlug(sub.id || sub.title)]);
-      if (u) entries.push({ ref: u, sequence: nseq() });
+      entries.push({ ref: u, sequence: nseq() });
     }
-    for (const c of g.controls || []) {
-      const req = requirement(c), cp = jscPropMap(c.props);
-      objects.push({ path: `objects/${B.key}/req-${jscOscalSlug(c.id)}.json`, obj: req });
-      if ("sec_level" in cp) baseline.set(cp.sec_level, [...(baseline.get(cp.sec_level) || []), req.id]);
-      entries.push({ ref: req.id, sequence: nseq() });
-    }
-    if (!entries.length) return null;
+    for (const c of g.controls || []) { const ref = control(c); entries.push({ ref, sequence: nseq() }); }
+    /* a group that holds nothing gives a Set without members: its id, its title and its props are content all the same */
     const sid = g.id || pathIds.join("-"), id = `${ns}/set/tax/${jscOscalSlug(sid)}`;
     const set = { id, version, lifecycle: "active", title: { [lang]: g.title !== undefined ? g.title : sid }, members: entries };
-    for (const gp of g.props || []) {
-      if (gp.name === "label") {
-        set.label = gp.value;
-        if (gp.remarks) ((set.facets = set.facets || {})[B.F_NARR] = set.facets[B.F_NARR] || {}).description = { [lang]: gp.remarks };
-      } else if (gp.name === "alt-identifier") (set.aliases = set.aliases || []).push({ scheme: "bsi-uuid", value: gp.value });
+    /* The props of a group: its label (with the description of the practice in `remarks`) and its alt-identifier,
+       both without a namespace; of a label that repeats the last is read. Every other prop, and one that holds a
+       member the mapping does not read, is carried as the source holds it. */
+    const gprops = g.props || [], labels = gprops.filter(p => p.name === "label" && !("ns" in p)), gfound = {};
+    for (const gp of gprops) {
+      const mine = B.GROUP_PROPS.includes(gp.name) && !("ns" in gp);
+      let read = [];
+      if (mine && gp.name === "label" && gp === labels[labels.length - 1]) {
+        set.label = gp.value; read = ["name", "value"];
+        if (gp.remarks) { ((set.facets = set.facets || {})[B.F_NARR] = set.facets[B.F_NARR] || {}).description = { [lang]: gp.remarks }; read.push("remarks"); }
+      } else if (mine && gp.name === "alt-identifier") { (set.aliases = set.aliases || []).push({ scheme: "bsi-uuid", value: gp.value }); read = ["name", "value"]; }
+      if (Object.keys(gp).some(k => !read.includes(k))) (gfound.props = gfound.props || []).push(gp);
     }
-    objects.push({ path: `objects/${B.key}/set-tax-${jscOscalSlug(sid)}.json`, obj: set });
+    const grest = Object.fromEntries(Object.entries(g).filter(([k]) => !B.GROUP_MEMBERS.includes(k)));
+    if (Object.keys(grest).length) gfound.group = grest;
+    if (Object.keys(gfound).length) { (set.facets = set.facets || {})[B.F_COMPAT] = compat(gfound); Object.keys(gfound).forEach(asHeld); }
+    add(`objects/${B.key}/set-tax-${jscOscalSlug(sid)}.json`, set);
     return id;
   };
   const top = [];
-  for (const g of cat.groups || []) {
-    const u = group(g, [jscOscalSlug(g.id || g.title)]);
-    if (u) top.push({ ref: u, sequence: nseq() });
-  }
-  objects.push({ path: `objects/${B.key}/set-tax-root.json`, obj: { id: `${ns}/set/tax/root`, version, lifecycle: "active", title: { [lang]: cat.metadata.title }, members: top } });
+  for (const g of cat.groups || []) { const u = group(g, [jscOscalSlug(g.id || g.title)]); top.push({ ref: u, sequence: nseq() }); }
+  for (const c of cat.controls || []) { const ref = control(c); top.push({ ref, sequence: nseq() }); }   // a control that stands in no group
+  /* The root Set stands for the document. Its title and the version are kernel members. Everything else the document
+     says of itself has no member in the kernel and stands under the compat facet's `metadata`, in the source's own
+     shape. A back-matter resource that a link of a control names is carried whole beside it. */
+  const root = { id: `${ns}/set/tax/root`, version, lifecycle: "active", title: { [lang]: cat.metadata.title }, members: top }, rfound = {};
+  const mrest = Object.fromEntries(Object.entries(cat.metadata).filter(([k]) => k !== "title" && k !== "version"));
+  if (Object.keys(mrest).length) rfound.metadata = mrest;
+  const named = (((cat["back-matter"] || {}).resources) || []).filter(r => resourcesNamed.has(r.uuid));
+  if (named.length) rfound["back-matter"] = { resources: named };
+  const catRest = Object.fromEntries(Object.entries(cat).filter(([k]) => !B.CATALOG_MEMBERS.includes(k)));
+  if (Object.keys(catRest).length) rfound.catalog = catRest;
+  if (Object.keys(rfound).length) { root.facets = { [B.F_COMPAT]: compat(rfound) }; Object.keys(rfound).forEach(asHeld); }
+  add(`objects/${B.key}/set-tax-root.json`, root);
   for (const lvl of [...baseline.keys()].sort()) {
-    objects.push({ path: `objects/${B.key}/set-baseline-${jscOscalSlug(lvl)}.json`, obj: { id: `${ns}/set/baseline/${jscOscalSlug(lvl)}`, version, lifecycle: "active",
-      title: { [lang]: `Baseline sec_level: ${lvl}` }, members: baseline.get(lvl).map((ref, i) => ({ ref, sequence: (i + 1) * 10 })) } });
+    add(`objects/${B.key}/set-baseline-${jscOscalSlug(lvl)}.json`, { id: `${ns}/set/baseline/${jscOscalSlug(lvl)}`, version, lifecycle: "active",
+      title: { [lang]: `Baseline sec_level: ${lvl}` }, members: baseline.get(lvl).map((ref, i) => ({ ref, sequence: (i + 1) * 10 })) });
   }
   const facetSchemas = [
     jscFacetStub("gspp-taxonomy-1.0.0-stub.json", "https://ns.bsi.bund.de/facet/gspp-taxonomy", ["selection"],
       { "by-statement": { type: "object" }, "observed-sec-levels": { enum: [...secValues].sort() } }),
     jscStdlibPin("statement-grammar"), jscStdlibPin("security-objectives"), jscStdlibPin("assessment-criteria"),
     jscFacetStub("gspp-narrative-1.0.0-stub.json", "https://ns.bsi.bund.de/facet/gspp-narrative", [], { "by-statement": { type: "object" }, description: { type: "object" } }),
-    jscFacetStub("oscal-1x-compat-1.0.0-stub.json", "https://ns.jascon.net/compat/oscal-1x", [], { "param-extras": { type: "object" } }),
+    /* the compat facet: what OSCAL says and neither the kernel nor a standard facet has a member for */
+    jscFacetStub("oscal-1x-compat-1.0.0-stub.json", "https://ns.jascon.net/compat/oscal-1x", [], { metadata: { type: "object" }, "back-matter": { type: "object" },
+      catalog: { type: "object" }, "param-extras": { type: "object" }, props: { type: "array" }, parts: { type: "array" }, links: { type: "array" },
+      control: { type: "object" }, group: { type: "object" } }),
   ];
-  const provenance = { sources: [{ key: B.key, title: cat.metadata.title, version, "oscal-version": cat.metadata["oscal-version"] }],
-    converter: "JASCON-App OSCAL import, preset bsi-gspp (the rules of convert_bsi.py v0.2)" };
+  report["unknown-modal-verbs"] = Object.fromEntries(unknownModal);
+  /* who wrote the document and when, by the rule of backlog #69; nothing is made up where the source names nobody or no day */
+  const author = jscOscalAuthorParty(cat.metadata), day = jscOscalDate(cat.metadata);
+  const provenance = { sources: [{ key: B.key, title: cat.metadata.title, version, "oscal-version": cat.metadata["oscal-version"],
+    ...(author ? { "author-ref": jscOscalPartyUri(ns, jscBsiAscii(author.name)) } : {}), ...(day ? { date: day } : {}) }],
+    converter: "JASCON-App OSCAL import, preset bsi-gspp (the rules of convert_bsi.py v0.3)" };
   return { objects, facetSchemas, provenance, report };
 }
 

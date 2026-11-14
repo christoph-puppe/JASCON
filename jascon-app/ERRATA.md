@@ -461,3 +461,47 @@ surprise, blunder.
   assertion on the method in "Assess: an empty performer …"; the three
   tests that were red export their sets to the reference as before.
 
+## 2026-11-14 · build 0.9.14 · the Grundschutz++ preset turned a nested control into a statement of its parent and lost its links
+
+- **Symptom.** Measured with build 0.9.13 on the Anwenderkatalog of
+  2026-07-16: 813 objects (651 Requirements, 162 Sets) for 999 controls.
+  Each of the 348 nested controls became a second statement of the
+  Requirement of its top-level control, with its title, label and
+  alt-identifier in that statement's taxonomy payload. Its own links were
+  not read: 75 links on 60 nested controls were lost, so the import wrote
+  191 relations for the 266 links of the catalogue. A link that named a
+  nested control became a relation to `…/req/<id>`, an id that was no
+  object: 34 of the 191 relations (32 ids). What the preset did not read was
+  dropped without a line: of the pinned catalogue, everything its metadata
+  says beside the title and the version (last-modified, the OSCAL version,
+  props, links, roles, parties, responsible parties, remarks); of any other
+  catalogue, a prop or a part of a name it did not know, and a prop of a
+  known name in another namespace was read as if it were BSI's.
+- **Cause.** The preset is a port of `convert_bsi.py`, and v0.2 of the
+  converter read the nesting as clauses of the parent. BSI nests controls
+  for grouping only (the author, 2026-11-14): a nested control is a full
+  control. The rule that content is never dropped was not yet written into
+  either.
+- **Class.** Algorithm: the mapping read the structure of the source as
+  something it does not mean, and lost content on the way.
+- **Why it was not caught.** The preset was held to the converter's bundle
+  by semantic digest, and the converter made the same reading, so the test
+  showed that the two agreed and not that either was right. No test counted
+  the links of the source against the relations written, or asked whether a
+  relation names an object.
+- **Fix.** The preset follows `convert_bsi.py` v0.3: every control at every
+  depth is a Requirement of its own with its own statement, parameters,
+  props and links; a control with nested controls also gives a Set that
+  groups it with them, and no relation is made from the nesting. A prop is
+  read only in its BSI namespace, and what the rules do not read is carried
+  in the compat facet as the source holds it. Measured: 1,287 objects (999
+  Requirements, 288 Sets), each with the semantic digest of the committed
+  bundle; 266 relations, none of which names no object.
+- **Test.** `tests/oscal.test.mjs`, "BSI preset: a nested control is a
+  Requirement of its own with its own links; …": reads the source itself
+  and holds every Requirement's relations to its control's own links, one
+  for one, besides the grouping Sets, their order and the baselines. "BSI
+  preset: every object has the semantic digest of the committed DE.BSI
+  bundle, 1,287 of 1,287", and two tests on a catalogue written for the
+  tests, one of them against `convert_bsi.py` run on it.
+
