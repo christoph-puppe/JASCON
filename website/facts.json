@@ -1,7 +1,7 @@
 {
  "measured": {
   "date": "2026-11-14",
-  "commit": "244861f2",
+  "commit": "a66d64f7",
   "by": "jascon/scripts/validate_core.py"
  },
  "vectors": {
@@ -95,11 +95,11 @@
   {
    "corpus": "DE.BSI",
    "path": "converted_examples/DE.BSI/bsi-core-bundle",
-   "objects": 1287,
+   "objects": 1289,
    "attestations": 0,
    "types": {
-    "requirement": 999,
-    "requirementSet": 288
+    "requirement": 1000,
+    "requirementSet": 289
    }
   },
   {
