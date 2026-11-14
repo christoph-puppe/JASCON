@@ -111,7 +111,7 @@ const P = (() => {
   assert.ok(a >= 0 && b > a, "jascon-reader.html carries the READER-PURE markers");
   return new Function(`"use strict";\n${HTML.slice(a, b)}\nreturn { inferType, kernelNeeded, kernelPinErrors, whoDecided, authorRecord, authorTailoring, partyUri, requiredParty,
     canonical, sha256Fallback, semanticDigest, attestationBinds, bindsLine, envelopeState, listedAttestationErrors,
-    STDLIB_FACETS, facetHome, methodKeyErrors, manualMethod, isEarlierWorkbenchMethod };`)();
+    STDLIB_FACETS, facetHome, methodKeyErrors, facetKeyErrors, closureNeedErrors, manualMethod, isEarlierWorkbenchMethod };`)();
 })();
 
 /* ---------- 1. the pin vectors ---------- */
@@ -1543,7 +1543,7 @@ test("an export never lists an Attestation: it is written beside the manifest, a
     /* the manifest is new, so what bound another one with unchanged subjects is a Semantic Match: the page says so when it writes, and the reference says the same of the export */
     const SEMANTIC = `binds: ${att.id} = SEMANTIC MATCH [3 subject(s) of this bundle; another manifest: the content is proven, the packaging was altered]`;
     assert.ok(x.log.includes("in this export — " + SEMANTIC + "\n"), x.log.slice(-900));
-    assert.match(x.log, /workspace bundle exported: 3 objects \+ content-manifest with both digests \+ 1 Attestation\(s\) beside the manifest, not listed \(D3\.1\) \([\d.]+ kB zip\) — loads back into this reader and passes validate_core\.py$/m);
+    assert.match(x.log, /workspace bundle exported: 3 objects \+ content-manifest with both digests \+ 1 Attestation\(s\) beside the manifest, not listed \(D3\.1\) \([\d.]+ kB zip\) — loads back into this reader and nothing fails in what this page checks \(closure-required references, facet and method keys, Attestations\); it runs no kernel schema and checks no facet payload$/m);
     await R.load(x.dir);
     shown = await R.attested();
     assert.deepEqual(shown.map(a => [a.verdict, a.fails, a.manifest, a.line]), [["semantic-match", "false", "other", SEMANTIC]]);
@@ -2001,7 +2001,7 @@ test("the method on the page: the Assess workbench states a manual assessment un
     assert.deepEqual(Object.keys(written).sort(), ["id", "lifecycle", "method", "performer-ref", "result", "subject-refs", "time", "title", "version"], "and nothing on it names the tool");
     assert.equal(wm.provenance.converter, "jascon-reader.html " + (await page.locator("#pill-version").innerText()).split(" · ")[0], "the manifest does");
     assert.doesNotMatch(await R.log(), /in this export — .* method '/);
-    assert.match(await R.log(), /workspace bundle exported: 3 objects .* — loads back into this reader and passes validate_core\.py$/m);
+    assert.match(await R.log(), /workspace bundle exported: 3 objects .* — loads back into this reader and nothing fails in what this page checks \(closure-required references, facet and method keys, Attestations\); it runs no kernel schema and checks no facet payload$/m);
     if (REFERENCE) { const ref = referenceMethods(workbench); assert.deepEqual([ref.ok, ref.unregistered, ref.violated, ref.others], [true, [], [], []], ref.line); }
 
     /* 2. The folders as they lie. The example folder's three Assessments state their method under the standard facet;
@@ -2112,4 +2112,125 @@ test("the method on the page: the Assess workbench states a manual assessment un
     assert.deepEqual([await methodSaid(d), await R.text(d.locator("[data-method-empty]"))], [[], "it states no method: the object is empty. The kernel schema accepts that, and the rule about facets has no key to hold."]);
     d = await paste({ ...OLD, id: `${NS}/asmt/pasted`, method: EARLIER });
     assert.deepEqual([(await methodSaid(d)).map(m => m[1]), await d.locator("[data-method-restate]").count(), await R.text(d.locator("[data-method-todo]"))], [["none", "none"], 0, TODO]);
+  }));
+
+/* ---------- 14. closure-required references in an export, and the keys of `facets` (v1.16.0) ---------- */
+/* closure_errors of the reference, run by Python on the same objects, typed as the page types them. -> [message] */
+function referenceClosure(objs) {
+  const py = `
+import ast, json, sys
+src = open(sys.argv[1], encoding="utf-8").read()
+ns = {"content_digest": lambda o: None}
+for node in ast.parse(src).body:
+    if isinstance(node, ast.FunctionDef) and node.name == "closure_errors":
+        exec(compile(ast.Module([node], []), sys.argv[1], "exec"), ns)
+objs = json.loads(sys.stdin.buffer.read().decode("utf-8"))
+print(json.dumps(ns["closure_errors"]({o["id"]: (t, o) for t, o in objs})))`;
+  const run = spawnSync("python3", ["-c", py, VALIDATE], { input: JSON.stringify(objs.map(o => [P.inferType(o), o])), encoding: "utf8" });
+  assert.equal(run.status, 0, run.stderr.slice(-1500));
+  return JSON.parse(run.stdout);
+}
+/* the failures the reference lists for one bundle folder */
+const referenceFailures = dir => { const ref = reference(dir, "--as-of", "2026-11-14"); return { ok: ref.ok, line: ref.line, failures: ref.out.split("\n").map(l => /^  - \[[^\]]*\] (.*)$/.exec(l)).filter(Boolean).map(m => m[1]) }; };
+/* the lines an export wrote as failing it, after "in this export — " */
+const exportFails = log => [...log.matchAll(/in this export — (.*)$/gm)].map(m => m[1]);
+
+test("closure-required references: every reference need() asks for in closure_errors, resolved or not, gets the reference's sentence from the page's own function, and nothing of the typed checks",
+  { skip: !PYTHON && "python3 is not installed" }, () => {
+    const E = "https://ex.org", R1 = { id: `${E}/req/1`, version: "1", lifecycle: "active", statements: [{ id: "s1" }] };
+    const S = { id: `${E}/set/1`, version: "1", lifecycle: "active", members: [{ ref: R1.id }, { ref: `${E}/req/gone-member` }] };
+    const T = { id: `${E}/tailoring/1`, version: "1", selects: [{ "set-ref": S.id }, { "set-ref": `${E}/set/gone` }, { all: true }], excludes: [{ ref: R1.id }, { ref: `${E}/req/gone-exclude` }],
+      operations: [{ "requirement-ref": `${E}/req/gone-op`, "statement-id": "s1" }, { "requirement-ref": R1.id }] };
+    const I = { id: `${E}/impl/1`, "component-ref": `${E}/comp/gone`, "requirement-ref": `${E}/req/gone-impl`, responsibility: "provider" };
+    const F = { id: `${E}/finding/1`, "assessment-ref": `${E}/asmt/gone`, "requirement-ref": R1.id, state: "open", "risk-refs": [`${E}/risk/elsewhere`] };
+    const K = { id: `${E}/risk/1`, scenario: "x", "owner-ref": `${E}/party/o`, treatments: [{ "requirement-ref": `${E}/req/gone-treat` }, { "requirement-ref": R1.id }],
+      "component-refs": [`${E}/comp/gone-risk`], "tailoring-refs": [T.id, `${E}/tailoring/gone`] };
+    const objs = [R1, S, T, I, F, K], ref = referenceClosure(objs), page = P.closureNeedErrors(objs);
+    assert.deepEqual(page, ref.filter(e => / closure-required .* does not resolve in-bundle: /.test(e)));
+    assert.deepEqual(page.map(e => / closure-required (.*) does not resolve/.exec(e)[1]), ["member ref", "selects set-ref", "excludes ref", "operation requirement-ref",
+      "component-ref", "requirement-ref", "assessment-ref", "treatments requirement-ref (RISK-7)", "component-refs (RISK-7)", "tailoring-refs (RISK-7)"], "one of every kind");
+    assert.deepEqual(P.closureNeedErrors([R1, { ...S, members: [{ ref: R1.id }] }, { ...F, "assessment-ref": R1.id }]), [], "what resolves is not said; a Finding's risk-refs are a landmark, not closure-required");
+  });
+
+test("an export whose Finding names a requirement of the loaded bundle: the page fails it with the reference's closure-required line, and where it finds nothing it says what it checked",
+  OPTS, () => withReader(async R => {
+    const { page } = R;
+    await R.load(EXAMPLES);
+    await R.view("stage:assess");
+    await page.fill("#wb-a-perf", "Lead Assessor");
+    await page.locator("#wb-a-perf").dispatchEvent("change");
+    await page.locator('[data-az$="|not-satisfied"]').first().click();
+    await page.click("#wb-a-gen");
+    const out = unzipTo(await R.download("#btn-export-ws"), path.join(R.tmp, "closure"));
+    const log = await R.log(), fails = exportFails(log), closure = fails.filter(e => / closure-required /.test(e));
+    assert.equal(closure.length, 1, log.slice(-1500));
+    assert.match(closure[0], /\/finding\/.*: closure-required requirement-ref does not resolve in-bundle: https:\/\//);
+    assert.match(log, new RegExp(`validate_core\\.py fails it: ${fails.length} line\\(s\\) above say why$`, "m"));
+    assert.doesNotMatch(log, /passes validate_core\.py/);
+    if (REFERENCE) {
+      const ref = referenceFailures(out);
+      assert.equal(ref.ok, false, ref.line);
+      assert.deepEqual(ref.failures.filter(e => / closure-required /.test(e)), closure, "the reference's line, word for word");
+      assert.deepEqual(ref.failures, fails, "and the reference fails it for nothing else");
+    }
+  }));
+
+/* What the facet vectors say of the keys of `facets` against what the page decides. */
+test("the keys of facets: the page names the keys the reference's facet_errors names as unregistered, in the same words; a payload against its schema stays undecided, as for a method",
+  { skip: !REFERENCE && "python3 with jsonschema is not installed" }, () => {
+    const v = json("jascon/conformance/facet-vectors.json"), cases = [...v.vectors, ...v["method-vectors"]], ref = referenceFacetErrors(cases);
+    const decided = [], undecided = [];
+    cases.forEach((c, i) => {
+      const keys = ref[i].filter(e => /: unregistered facet '/.test(e)), payloads = ref[i].filter(e => /: facet '.*' payload violates its schema: /.test(e));
+      assert.deepEqual(P.facetKeyErrors(c.object, new Set(Object.keys(c.pinned || {})), c.name), keys, c.name);
+      if (payloads.length) undecided.push(c.name);
+      else if (c.object.facets && !("expected-errors" in c)) { assert.equal(keys.length ? "invalid" : "valid", c.expected, c.name); decided.push(c.name); }
+    });
+    assert.deepEqual(decided, ["stdlib-payload-valid", "unregistered-facet-fails-closed", "pinned-framework-facet-valid", "private-facet-ignored-by-definition"]);
+    assert.deepEqual(undecided, ["stdlib-payload-corrupt-wrong-types", "stdlib-payload-missing-required", "pinned-framework-facet-corrupt"]);
+    assert.deepEqual(P.facetKeyErrors({ id: "x", facets: { "private:a": 1, "https://no.example/f@1": 1 } }, new Set()), ["x: unregistered facet 'https://no.example/f@1' — not stdlib, not pinned in the manifest, not private: (dangerous-by-default, D10)"]);
+  });
+
+test("the keys of facets on the page: each key says where its facet is registered; a key no facet registers fails in the reference's words in the detail, the overview, the console and an export",
+  OPTS, () => withReader(async R => {
+    const { page } = R;
+    const KONF = "https://ns.bsi.bund.de/gspp/req/KONF.14.1", PINNED = "https://ns.bsi.bund.de/facet/gspp-taxonomy@1", BAD = "https://ns.bsi.bund.de/facet/not-pinned@1";
+    const said = d => d.locator(".facetbox[data-facet-key]").evaluateAll(l => l.map(x => [x.dataset.facetKey, x.dataset.facetHome,
+      x.querySelector("[data-facet-error]")?.textContent ?? null, x.querySelector("[data-facet-unchecked]") ? "unchecked" : null]));
+    const heading = d => d.locator(".sectionlabel").evaluateAll(l => l.map(x => x.textContent).filter(t => /^Facets/.test(t)));
+    const err = (id, key) => `${id}: unregistered facet '${key}' — not stdlib, not pinned in the manifest, not private: (dangerous-by-default, D10)`;
+    await R.load(EXAMPLES);
+    let d = await R.detail(KONF);
+    assert.deepEqual(await said(d), [[PINNED, "pinned", null, "unchecked"]]);
+    assert.deepEqual(await heading(d), ["Facets — extensions (D10): each key names a facet, and where it is registered is said per key"]);
+    /* a copy whose requirement names a facet nobody pins, with both digests anew */
+    const copy = path.join(R.tmp, "facets", "examples");
+    fs.cpSync(EXAMPLES, copy, { recursive: true });
+    const mp = path.join(copy, "content-manifest.json"), manifest = JSON.parse(fs.readFileSync(mp, "utf8")), entry = manifest.objects.find(e => e.id === KONF);
+    const obj = JSON.parse(fs.readFileSync(path.join(copy, entry.path), "utf8"));
+    obj.facets = { [BAD]: obj.facets[PINNED] };
+    const bytes = Buffer.from(JSON.stringify(obj, null, 1) + "\n");
+    fs.writeFileSync(path.join(copy, entry.path), bytes);
+    Object.assign(entry, { "package-digest": sha256(bytes), "semantic-digest": await P.semanticDigest(obj) });
+    fs.writeFileSync(mp, JSON.stringify(manifest, null, 1) + "\n");
+    await R.load(copy);
+    const e = err(KONF, BAD);
+    await R.view("overview");
+    assert.deepEqual(await page.locator("#ov-kv [data-facet-error]").evaluateAll(l => l.map(x => x.textContent)), ["✗ " + e]);
+    assert.ok((await page.locator("#log > div.l-err").evaluateAll(l => l.map(x => x.textContent))).some(t => t.endsWith(e)), "the console says it as an error");
+    d = await R.detail(KONF);
+    assert.deepEqual(await said(d), [[BAD, "none", e, null]]);
+    assert.doesNotMatch((await heading(d)).join(), /registered extensions/i, "the heading calls no key registered");
+    if (REFERENCE) { const ref = referenceFailures(copy); assert.deepEqual([ref.ok, ref.failures], [false, [e]], ref.line); }
+    /* an export: a requirement of the workspace under that key */
+    const NS = "https://example.org/my", REQ = { id: `${NS}/req/x`, version: "1", lifecycle: "active",
+      statements: [{ id: "s1", modality: "must", "obligated-parties": [`${NS}/party/ops`], prose: { en: "X." } }], facets: { [BAD]: obj.facets[BAD] } };
+    await page.evaluate(w => localStorage.setItem("scr-work", JSON.stringify(w)), { v: 2, ns: NS, tailor: { label: "t", selects: [], excludes: [], operations: [] },
+      system: { title: "S", components: [], implementations: [] }, assess: { scopeKey: "", performer: "", results: {} }, created: [REQ] });
+    await page.reload();
+    const out = unzipTo(await R.download("#btn-export-ws"), path.join(R.tmp, "facets-export"));
+    const log = await R.log();
+    assert.deepEqual(exportFails(log), [err(REQ.id, BAD)]);
+    assert.match(log, /validate_core\.py fails it: 1 line\(s\) above say why$/m);
+    if (REFERENCE) { const ref = referenceFailures(out); assert.deepEqual([ref.ok, ref.failures], [false, [err(REQ.id, BAD)]], ref.line); }
   }));
