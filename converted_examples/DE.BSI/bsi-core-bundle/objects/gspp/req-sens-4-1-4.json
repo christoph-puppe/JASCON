@@ -1,0 +1,85 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/SENS.4.1.4",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "SENS.4.1.4",
+ "lifecycle": "active",
+ "title": {
+  "de": "Passwörter nur im Passwortmanager"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Sensibilisierung für Nutzende SOLLTE das Speichern oder Aufschreiben von Passwörtern außerhalb von Passwort-Managern untersagen."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "untersagen",
+     "result": "das Speichern oder Aufschreiben von Passwörtern außerhalb von Passwort-Managern",
+     "target-object-categories": [
+      "Nutzende"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Arbeitsanweisung"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "2",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.30",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.36",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.23"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 3,
+     "tags": [
+      "Password Policy"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Weil Passwörter komplex sind und an vielen Stellen verwendet werden kommt es immer wieder dazu, dass sie unbedacht auf Zetteln oder in unverschlüsselten Tabellen notiert werden. Werden Passwörter etwa in Office-Listen, im Browser oder auf programmierbaren Tastaturen und Mäusen gespeichert, so könnten Angreifer diese auslesen und zur Ausbreitung auf Systemen und im Netz verwenden. In einem verschlüsselten Passwort-Manager, der nur mit einem Master-Passwort oder Hardwaretoken entsperrt werden kann, können Zugangsdaten dagegen sicher gespeichert werden. Ein Passwortmanager erleichtert es zudem Passwörter zu erzeugen und den richtigen Webseiten und Anwendungen zuzuordnen."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "7734048a-d797-49f0-87e6-f9c08ce5f5e7"
+  }
+ ]
+}

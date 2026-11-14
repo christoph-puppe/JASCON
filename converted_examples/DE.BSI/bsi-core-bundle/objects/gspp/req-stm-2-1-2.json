@@ -1,0 +1,64 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/STM.2.1.2",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "STM.2.1.2",
+ "lifecycle": "active",
+ "title": {
+  "de": "Erfassung relevanter Assets"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "must",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Strukturmodellierung MUSS alle relevanten Assets für die betrachteten Geschäftsprozesse festlegen."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "festlegen",
+     "result": "alle relevanten Assets für die betrachteten Geschäftsprozesse"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Anforderungspaket"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Methodik-Grundschutz-plus-plus",
+     "sec-level": "normal-SdT",
+     "effort": 0
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Die Asset-Modellierung ist der zentrale Schritt, um den zuvor festgelegten Informationsverbund strukturiert und nachvollziehbar in sicherheitsrelevante Bestandteile zu zerlegen. Im ersten Durchgang des PDCA-Zyklus ist es ausreichend, die Assets zu erfassen, die für den wichtigsten Geschäftsprozess erforderlich sind. Weitere Geschäftsprozesse und zugehörige Assets können iterativ in nachfolgenden Zyklen oder parallel ergänzt werden. Relevante Assets können insbesondere Informationen, Systeme und Anwendungen (System Assets), Netz- und Kommunikationskomponenten, Infrastrukturelle und physische Assets, Personelle und organisatorische Assets. Für jedes Asset wird eine eindeutige Bezeichnung/ID, eine kurze Beschreibung und ihr Zweck sowie eine Zuordnung zu Geschäftsprozess(en) festgehalten. Zuletzt wird jedem Asset eine verantwortliche Rolle bzw. ein Asset-Owner zugewiesen. Ggfs. ist ebenfalls der Standort bzw. die logische Einordnung (Netz, Anwendungskontext etc.) des Assets festzuhalten. Abhängigkeiten zwischen Assets werden ebenfalls notiert."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "10e75c93-320b-4d4d-baaa-ed7392b274cf"
+  }
+ ]
+}

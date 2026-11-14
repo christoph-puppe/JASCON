@@ -16,26 +16,6 @@
    "prose": {
     "de": "Konfiguration für Anwendungen SOLLTE Zugriffe auf schützenswerte Daten im Einklang mit den zugehörigen Anforderungen zum Identitäts- und Berechtigungsmanagement authentifizieren."
    }
-  },
-  {
-   "id": "KONF.11.1.1",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Konfiguration für TK-Anwendungen SOLLTE den Zugriff auf geplante Konversationen im Einklang mit den zugehörigen Anforderungen zum Identitäts- und Berechtigungsmanagement authentifizieren."
-   }
-  },
-  {
-   "id": "KONF.11.1.2",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Konfiguration für Anwendungen SOLLTE die Gegenstelle vor dem Datenaustausch im Einklang mit den zugehörigen Anforderungen zum Identitäts- und Berechtigungsmanagement authentifizieren."
-   }
   }
  ],
  "facets": {
@@ -48,38 +28,12 @@
      "target-object-categories": [
       "Anwendungen"
      ]
-    },
-    "KONF.11.1.1": {
-     "action": "authentifizieren",
-     "result": "den Zugriff auf geplante Konversationen",
-     "result-specification": "im Einklang mit den zugehörigen Anforderungen zum Identitäts- und Berechtigungsmanagement",
-     "target-object-categories": [
-      "TK-Anwendungen"
-     ]
-    },
-    "KONF.11.1.2": {
-     "action": "authentifizieren",
-     "result": "die Gegenstelle vor dem Datenaustausch",
-     "result-specification": "im Einklang mit den zugehörigen Anforderungen zum Identitäts- und Berechtigungsmanagement",
-     "target-object-categories": [
-      "Anwendungen"
-     ]
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "by-statement": {
     "smt": {
-     "required-documentation": [
-      "Konfigurationshistorie"
-     ]
-    },
-    "KONF.11.1.1": {
-     "required-documentation": [
-      "Konfigurationshistorie"
-     ]
-    },
-    "KONF.11.1.2": {
      "required-documentation": [
       "Konfigurationshistorie"
      ]
@@ -97,26 +51,6 @@
       "https://ns.bsi.bund.de/gspp/threat/G-0.19",
       "https://ns.bsi.bund.de/gspp/threat/G-0.30"
      ]
-    },
-    "KONF.11.1.1": {
-     "confidentiality": "2",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "1",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.19",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.30"
-     ]
-    },
-    "KONF.11.1.2": {
-     "confidentiality": "2",
-     "integrity": "2",
-     "availability": "1",
-     "authenticity": "1",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.43",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.36"
-     ]
     }
    }
   },
@@ -129,26 +63,6 @@
      "tags": [
       "Produktbeschreibung"
      ]
-    },
-    "KONF.11.1.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 1,
-     "tags": [
-      "Produktbeschreibung"
-     ],
-     "title": "Authentifizierung von geplanten Konversationen",
-     "alt-identifier": "07493cf7-5071-4749-b58a-586016679f1e"
-    },
-    "KONF.11.1.2": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 2,
-     "tags": [
-      "Produktbeschreibung"
-     ],
-     "title": "Authentifizierung von Netzverbindungen - clientseitig",
-     "alt-identifier": "7bf1392f-5c43-43da-bb36-498b8a678e28"
     }
    }
   },
@@ -157,16 +71,6 @@
     "smt": {
      "guidance": {
       "de": "Ziel ist es, vertrauliche Daten vor dem Zugriff von Unbefugten zu schützen. Relevant sind hierbei sowohl Frontend-Zugänge wie Webportale, als auch Backend-Datenschnittstellen wie Datenbank-API. Dies kann durch eine anwendungsspezifische Authentifizierung, oder durch Nutzung eines zentralen Identity Providers (Single-Sign-On) erfüllt werden. Für die Authentifizierung kommen z.B. Passwörter, X.509-Zertifikate, OTP-Token in Frage. Zweckmäßig ist hierfür der Einsatz von Standardkomponenten wie OAuth 2.0 und die Verbindung mit einem zentralen Berechtigungsmanagement der Anwendung. Im Einklang mit den Anforderungen des Identitäts- und Berechtigungsmanagements bedeutet, dass für die Anwendung die Anforderungen aus der Praktik Identitäts- und Berechtigungsmanagement erfüllt sind, die dort festgelegt wurden. Hierzu gehört die Art der Authentifizierung (z.B. Passwort, Biometrie, Mehr-Faktor-Authentifizierung) ebenso wie die relevanten Parameter (Passwortkomplexität, etc.). Auf Daten die nicht vertraulich (z.B. öffentlich) sind kann auch ohne Authentifizierung Zugriff erlaubt sein. Die Formulierung \"im Einklang mit den zugehörigen Anforderungen zum Identitäts- und Berechtigungsmanagement\" bedeutet, dass die Authentifizierung so erfolgt, wie in der Praktik Berechtigung (BER) festgelegt. Hierzu gehört insbesondere die Verwendung aktueller kryptographischer Verfahren, wie sie im Thema Kryptographie zu finden ist. Verarbeitet die Anwendung gar keine vertraulichen Daten, dann ist die Anforderung entbehrlich."
-     }
-    },
-    "KONF.11.1.1": {
-     "guidance": {
-      "de": "Viele TK-Anwendungen bieten geplante Konversationen, z.B. in virtuellen Meeting-Räumen oder über Telefonkonferenzen, die über eine Rufnummer erreichbar sind. Wird der Zugriff hierauf nicht authentifiziert, so könnten unbemerkt Unberechtigte teilnehmen und Informationen abhören oder auf Meta-Informationen wie Teilnehmer oder Uhrzeiten zugreifen. Der Schutz kann z.B. durch Passwörter/PINs oder über die Anmeldung per Zertifikat oder Single-Sign-On geschehen. Die Formulierung \"im Einklang mit den zugehörigen Anforderungen zum Identitäts- und Berechtigungsmanagement\" bedeutet, dass die Authentifizierung so erfolgt, wie in der Praktik Berechtigung (BER) festgelegt. Hierzu gehört insbesondere die Verwendung aktueller kryptographischer Verfahren, wie sie im Thema Kryptographie zu finden ist."
-     }
-    },
-    "KONF.11.1.2": {
-     "guidance": {
-      "de": "Stellt eine Anwendung Anfragen über das Netz oder nimmt eine Anwendung Anfragen über das Netz entgegen, so gewährleistet eine gegenseitige Authentifizierung der Kommunikationspartner (mutual authentication), dass diese autorisiert ist Anfragen zu stellen oder zu beantworten. Eine gängige Lösung ist die Prüfung von X.509-Zertifikaten beim Verbindungaufbau mit TLS. Für die Umsetzung ist es nicht unbedingt erforderlich, dass sich die Gegenstelle bei jeder Anfrage/Abruf erneut authentifiziert, wenn bei der Authentifizierung eine sichere Verbindung per TLS aufgebaut wird. Mit Anfragen sind alle Zugriffe gemeint, sei es über eine Web-URL oder eigene API. Die Formulierung \"im Einklang mit den zugehörigen Anforderungen zum Identitäts- und Berechtigungsmanagement\" bedeutet, dass die Authentifizierung so erfolgt, wie in der Praktik Berechtigung (BER) festgelegt. Hierzu gehört insbesondere die Verwendung aktueller kryptographischer Verfahren, wie sie im Thema Kryptographie zu finden ist. Hierzu gehört insbesondere die Verwendung aktueller kryptographischer Verfahren, wie sie im Thema Kryptographie zu finden ist. Für lesende Zugriffe auf unkritische, öffentliche Daten ist die Authentifizierung der lesenden Anwendung entbehrlich."
      }
     }
    }

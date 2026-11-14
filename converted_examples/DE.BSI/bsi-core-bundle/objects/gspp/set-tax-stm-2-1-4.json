@@ -1,0 +1,22 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/stm-2-1-4",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Modellierung der Anforderungen mit Zielobjektkategorie"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/STM.2.1.4",
+   "sequence": 630
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/STM.2.1.4.1",
+   "sequence": 640
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/STM.2.1.4.2",
+   "sequence": 650
+  }
+ ]
+}

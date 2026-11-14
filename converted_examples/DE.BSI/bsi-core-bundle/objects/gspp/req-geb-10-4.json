@@ -23,23 +23,6 @@
      "label": "einem anerkannten Standard"
     }
    ]
-  },
-  {
-   "id": "GEB.10.4.1",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Gebäudemanagement für Standorte KANN Blitzschutzeinrichtungen {param:geb.10.4.1-prm1}  auf Niederohmigkeit überprüfen."
-   },
-   "parameters": [
-    {
-     "name": "geb.10.4.1-prm1",
-     "type": "string",
-     "label": "regelmäßig"
-    }
-   ]
   }
  ],
  "facets": {
@@ -52,14 +35,6 @@
      "target-object-categories": [
       "Standorte"
      ]
-    },
-    "GEB.10.4.1": {
-     "action": "überprüfen",
-     "result": "Blitzschutzeinrichtungen",
-     "result-specification": "{{regelmäßig}}  auf Niederohmigkeit",
-     "target-object-categories": [
-      "Standorte"
-     ]
     }
    }
   },
@@ -69,26 +44,12 @@
      "required-documentation": [
       "Gebäudedokumentation"
      ]
-    },
-    "GEB.10.4.1": {
-     "required-documentation": [
-      "Übungs- und Prüfplan"
-     ]
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
    "by-statement": {
     "smt": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "2",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
-     ]
-    },
-    "GEB.10.4.1": {
      "confidentiality": "1",
      "integrity": "1",
      "availability": "2",
@@ -105,16 +66,6 @@
      "class": "BSI-Stand-der-Technik-Kernel-G0",
      "sec-level": "normal-SdT",
      "effort": 3
-    },
-    "GEB.10.4.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5,
-     "tags": [
-      "Inspektion"
-     ],
-     "title": "Niederohmigkeit",
-     "alt-identifier": "a70149a9-75af-4784-8011-e1433c72dcfc"
     }
    }
   },
@@ -124,11 +75,6 @@
      "guidance": {
       "de": "Blitzschutzeinrichtungen sind bauliche oder technische Maßnahmen, die Gebäude, Anlagen und darin befindliche Systeme vor den direkten und indirekten Auswirkungen eines Blitzeinschlags schützen. Der Zweck dieser Regelung liegt darin, Risiken durch Blitzeinschläge zu reduzieren: Ein direkter Einschlag könnte Gebäudestrukturen beschädigen, Brände verursachen oder elektrische Systeme zerstören. Indirekte Einschläge könnten durch Überspannungen Datenverluste oder den Ausfall kritischer Systeme hervorrufen. Die Installation nach anerkannten Standards kann hier Schäden an Bausubstanz, Stromversorgung und Informationssystemen verhindern und die Verfügbarkeit sensibler Infrastruktur sichern. Ein anerkannter Standard ist hier die DIN EN 62305, die Anforderungen an Planung, Errichtung und Prüfung von Einrichtungen wie Fangstangen oder Erdungsanlagen definiert. Sie kennt verschiedene Schutzklassen. Für Standorte mit normalem Schutzbedarf wird Schutzklasse II oder besser gemäß DIN EN 62305 empfohlen. Für Räume für technische Infrastruktur oder Rechenzentren ist mindestens die Blitzschutzzone 2 (LPZ 2) sinnvoll."
      }
-    },
-    "GEB.10.4.1": {
-     "guidance": {
-      "de": "Eine niedrige Ohmzahl in Erdungs- und Potentialausgleichseinrichtungen gewährleistet, dass Blitzströme schnell und wirksam abgeleitet werden. Siehe DIN VDE 0100-443 u. -534. Beachten Sie dabei auch die Prüfpflicht aus der Betriebssicherheitsverordnung (BetrSichV)."
-     }
     }
    }
   },
@@ -136,9 +82,6 @@
    "param-extras": {
     "geb.10.4-prm1": {
      "alt-identifier": "3a8c199a-408d-4ac6-9355-b850d4f5188a"
-    },
-    "geb.10.4.1-prm1": {
-     "alt-identifier": "a70149a9-75af-4784-8011-e1433c72dcfc"
     }
    }
   }

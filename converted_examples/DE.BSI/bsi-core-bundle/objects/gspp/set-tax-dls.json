@@ -8,19 +8,19 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/dls-1",
-   "sequence": 2430
+   "sequence": 4150
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/dls-2",
-   "sequence": 2470
+   "sequence": 4190
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/dls-3",
-   "sequence": 2540
+   "sequence": 4280
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/dls-4",
-   "sequence": 2560
+   "sequence": 4330
   }
  ],
  "label": "DLS",

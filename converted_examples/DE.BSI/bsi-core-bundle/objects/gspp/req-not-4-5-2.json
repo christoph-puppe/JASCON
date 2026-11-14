@@ -1,0 +1,98 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/NOT.4.5.2",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "NOT.4.5.2",
+ "lifecycle": "active",
+ "title": {
+  "de": "Zum Archiv gehörende Dokumentation"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Notfallplanung für Daten SOLLTE die Archivierung von Dokumentationen, die zur Verwendung von archivierten Daten erforderlich sind, {param:not.4.5.2-prm1} ausführen."
+   },
+   "parameters": [
+    {
+     "name": "not.4.5.2-prm1",
+     "type": "string",
+     "label": "regelmäßig"
+    }
+   ]
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "ausführen",
+     "result": "die Archivierung von Dokumentationen, die zur Verwendung von archivierten Daten erforderlich sind,",
+     "result-specification": "{{regelmäßig}}",
+     "target-object-categories": [
+      "Daten"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Datensicherungskonzept"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "2",
+     "authenticity": "1",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.45",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.39",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.37"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 4
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Hierbei geht es darum, nicht nur die Daten selbst, sondern auch alle begleitenden Informationen („metadata“ oder „supporting documentation“) regelmäßig zu sichern, um deren spätere Nutzbarkeit zu gewährleisten. Dokumentationen sind in diesem Zusammenhang beispielsweise Bedienungsanleitungen, technische Spezifikationen, Konfigurationsdateien oder Verfahrensanweisungen, die notwendig sind, um archivierte Daten auch nach Jahren noch korrekt zu interpretieren oder wiederherzustellen. Die Frequenz ist dabei abhängig von der Kritikalität der Daten und der Änderungsfrequenz der begleitenden Dokumente. Ohne solche begleitenden Unterlagen könnte ein Datenbestand zwar vorliegen, aber praktisch unbrauchbar sein, da die nötigen Kontexte oder technischen Details fehlen."
+     }
+    }
+   }
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "param-extras": {
+    "not.4.5.2-prm1": {
+     "alt-identifier": "c8feda1f-4d2c-4831-9822-04be256e9e51"
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "c8feda1f-4d2c-4831-9822-04be256e9e51"
+  }
+ ]
+}

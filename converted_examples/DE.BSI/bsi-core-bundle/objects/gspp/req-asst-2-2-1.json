@@ -1,0 +1,92 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/ASST.2.2.1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "ASST.2.2.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "Aufdecken unautorisierter IT-Systeme"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Informationen und Assets für Netze SOLLTE das Aufdecken unautorisierter IT-Systeme verankern."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "verankern",
+     "result": "das Aufdecken unautorisierter IT-Systeme",
+     "target-object-categories": [
+      "Netze"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Konfigurationshistorie"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "2",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.16",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.17",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.45"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 4,
+     "tags": [
+      "Rogue Access Point"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Ziel ist sicherzustellen, dass keine unautorisierten Assets im Informationsverbund betrieben werden. Hierzu können z.B. aktive Netzscans (z.B. mit Nmap), passive Analysen des Netzwerkverkehrs oder spezielle Werkzeuge zur Erkennung von unbekannten WLAN-Access-Points (z.B. Kismet) genutzt werden. Zur Behandlung können die gefundenen IT-Systeme beispielsweise aus dem Netz entfernt, in eine Quarantäne verschoben oder nach Überprüfung autorisiert werden."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "02a49908-868b-45de-9ce5-56cb230ab8ee"
+  }
+ ],
+ "relations": [
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.4.19"
+  }
+ ]
+}

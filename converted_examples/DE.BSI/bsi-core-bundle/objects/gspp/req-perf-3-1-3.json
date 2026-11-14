@@ -1,0 +1,56 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/PERF.3.1.3",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "PERF.3.1.3",
+ "lifecycle": "active",
+ "title": {
+  "de": "Auswahl des Auditteams"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "must",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Monitoring-Evaluation MUSS fachlich geeignete und unabhängige Auditoren zur Gewährleistung der Objektivität und Qualität der Audits anweisen."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "anweisen",
+     "result": "fachlich geeignete und unabhängige Auditoren",
+     "result-specification": "zur Gewährleistung der Objektivität und Qualität der Audits"
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Methodik-Grundschutz-plus-plus",
+     "sec-level": "normal-SdT",
+     "effort": 0
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Bei der Auswahl von Auditoren ist zu empfehlen insbesondere Fachkompetenz, Unabhängigkeit und Erfahrung zu berücksichtigen. Das Team muss über technisches und organisatorisches Wissen, Kenntnisse relevanter Normen und gesetzliche Anforderungen sowie die Fähigkeit zur objektiven, methodischen Bewertung verfügen, ohne in die zu prüfenden Prozesse direkt involviert zu sein."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "9c848e6f-ba7e-49de-9655-e95c57acafa3"
+  }
+ ]
+}

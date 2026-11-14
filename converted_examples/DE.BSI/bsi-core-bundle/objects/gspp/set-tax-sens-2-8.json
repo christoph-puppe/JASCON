@@ -1,0 +1,18 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/sens-2-8",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Melden von Ereignissen"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.2.8",
+   "sequence": 5950
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.2.8.1",
+   "sequence": 5960
+  }
+ ]
+}

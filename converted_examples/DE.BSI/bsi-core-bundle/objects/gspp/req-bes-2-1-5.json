@@ -1,0 +1,83 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/BES.2.1.5",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "BES.2.1.5",
+ "lifecycle": "active",
+ "title": {
+  "de": "Lizenzierung"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Beschaffungsmanagement für IT-Produkte SOLLTE für den geplanten Einsatzzeitraum erforderliche Lizenzen dokumentieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "dokumentieren",
+     "result": "für den geplanten Einsatzzeitraum erforderliche Lizenzen",
+     "target-object-categories": [
+      "IT-Produkte"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Beschaffungskriterien"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 3,
+     "tags": [
+      "Lieferketten"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Lizenzen sind erforderlich, wenn sie für den Einsatz des geplanten IT-Produktes benötigt werden. Hierbei können sowohl Softwarelizenzen selbst als auch begleitende Lizenzen, z.B. für Protokollierungssysteme oder Cloud-Schnittstellen gehören. Die Lizenzierung ist ausreichend, wenn voraussichtlich für alle anfallenden Arbeiten genug Zugänge und aktivierte IT-Produkte über den geplanten Einsatzzeittraum verfügbar sind. Denken Sie auch daran, welche Funktionen unter welcher Lizenz vom Anbieter freigeschaltet und erlaubt sind."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "44fc68cb-5ee8-44aa-83ff-be56342c99dc"
+  }
+ ]
+}

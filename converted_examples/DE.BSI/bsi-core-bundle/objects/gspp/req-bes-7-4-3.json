@@ -1,0 +1,96 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/BES.7.4.3",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "BES.7.4.3",
+ "lifecycle": "active",
+ "title": {
+  "de": "Empfohlene Konfiguration"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Beschaffungsmanagement für IT-Produkte SOLLTE eine vom Hersteller oder Lieferanten für den sicheren Betrieb empfohlene Konfiguration dokumentieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "dokumentieren",
+     "result": "eine vom Hersteller oder Lieferanten für den sicheren Betrieb empfohlene Konfiguration",
+     "target-object-categories": [
+      "IT-Produkte"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Betriebshandbuch"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.28",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.31",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.26",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 3,
+     "tags": [
+      "Lieferketten"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Eine vom Hersteller oder Lieferanten empfohlene Konfiguration ist eine dokumentierte Vorgabe, welche Einstellungen, Dienste und Sicherheitsparameter für den sicheren Betrieb vorgesehen sind. Diese Empfehlung ist im Fachkontext oft als Secure Baseline Configuration bekannt und kann z. B. Angaben zu Benutzerrechten, Netzwerkschnittstellen oder Update-Mechanismen enthalten. Der Sinn und Zweck dieser Anforderung liegt darin, dass IT-Produkte nicht im unsicheren Auslieferungszustand betrieben werden, sondern in einer geprüften und abgestimmten Form. Ohne solche Empfehlungen könnte ein System mit unnötig offenen Ports betrieben werden oder ein Administratorkonto ohne Passwortschutz bestehen, was Angreifern leichtes Spiel böte. Eine dokumentierte und nachvollziehbar empfohlene Konfiguration kann hingegen dafür sorgen, dass Schwachstellen von Beginn an reduziert werden und ein sicherer Ausgangszustand für den weiteren Betrieb geschaffen wird. Konkret kann dies durch (1) die Ablage der Herstellerempfehlungen in einer zentralen Wissensdatenbank, (2) die Überführung dieser Vorgaben in technische Checklisten für Systemadministratoren oder (3) die Nutzung von Skripten oder Vorlagen zur automatischen Einrichtung von Betriebssystemen, Netzwerkgeräten oder Anwendungen erfolgen. Zusätzlich kann es hilfreich sein, Abweichungen zur Empfehlung zu dokumentieren, um spätere Prüfungen oder Audits nachvollziehbar zu gestalten."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "17260753-9f50-4480-bfbc-226a362b0ab6"
+  }
+ ],
+ "relations": [
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.2.1"
+  },
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.10.1"
+  }
+ ]
+}

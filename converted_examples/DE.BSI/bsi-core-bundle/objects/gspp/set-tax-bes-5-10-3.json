@@ -1,0 +1,18 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/bes-5-10-3",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Schwachstellenbehebung"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.10.3",
+   "sequence": 3570
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.10.3.1",
+   "sequence": 3580
+  }
+ ]
+}

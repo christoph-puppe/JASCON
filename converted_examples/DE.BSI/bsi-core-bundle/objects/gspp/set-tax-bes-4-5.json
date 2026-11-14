@@ -1,0 +1,22 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/bes-4-5",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Security by Design"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.4.5",
+   "sequence": 3180
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.4.5.1",
+   "sequence": 3190
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.4.5.2",
+   "sequence": 3200
+  }
+ ]
+}

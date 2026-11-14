@@ -1,0 +1,78 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/DET.5.9.1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "DET.5.9.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "Bonusprogramm"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "may",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Detektion KANN ein Bonusprogramm für externe Schwachstellenmeldungen verankern."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "verankern",
+     "result": "ein Bonusprogramm für externe Schwachstellenmeldungen"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Detektions-Konzept"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "2",
+     "integrity": "2",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.28",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.23"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "erhöht",
+     "effort": 5
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Ein Bonusprogramm für externe Schwachstellenmeldungen (englisch häufig Bug Bounty Program) bezeichnet ein strukturiertes Verfahren, bei dem eine Institution freiwilligen Sicherheitsforschenden oder interessierten Dritten eine Belohnung für das Melden bislang unbekannter Sicherheitslücken anbietet. Dabei geht es nicht nur um finanzielle Prämien, sondern auch um nicht-monetäre Anerkennungen wie öffentliche Danksagungen oder Zertifikate. Sinn und Zweck liegt darin, externen Sicherheitsforschern oder -expertenen einen Anreiz zu geben, um Schwachstellen frühzeitig zu finden und zu melden. Zur Umsetzung kann eine Institution (1) transparente Regeln definieren, welche Systeme oder Anwendungen einbezogen sind (in scope) und welche nicht, (2) einen abgestuften Belohnungsrahmen anbieten, der den Schweregrad einer Schwachstelle berücksichtigt, sowie (3) die rechtlichen Rahmenbedingungen durch eine sogenannte „Safe-Harbor-Policy“ festlegen, die den Meldenden Schutz vor rechtlichen Schritten zusichert, solange diese verantwortungsvoll handeln. Ergänzend kann die Institution durch einfache organisatorische Hilfsmittel wie Ticketnummern, automatische Eingangsbestätigungen und zeitnahe Rückmeldungen Vertrauen schaffen und den weiteren Ablauf für externe Meldende nachvollziehbar gestalten."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "aeb9f98e-0aad-44c1-8ab1-2f7276e387de"
+  }
+ ]
+}

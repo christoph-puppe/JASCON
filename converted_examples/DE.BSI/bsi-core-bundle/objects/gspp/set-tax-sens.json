@@ -8,51 +8,51 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/sens-1",
-   "sequence": 3390
+   "sequence": 5850
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/sens-2",
-   "sequence": 3480
+   "sequence": 5980
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/sens-3",
-   "sequence": 3520
+   "sequence": 6020
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/sens-4",
-   "sequence": 3560
+   "sequence": 6130
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/sens-5",
-   "sequence": 3630
+   "sequence": 6200
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/sens-6",
-   "sequence": 3660
+   "sequence": 6230
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/sens-7",
-   "sequence": 3920
+   "sequence": 6490
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/sens-8",
-   "sequence": 4050
+   "sequence": 6620
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/sens-9",
-   "sequence": 4130
+   "sequence": 6700
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/sens-10",
-   "sequence": 4190
+   "sequence": 6760
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/sens-11",
-   "sequence": 4230
+   "sequence": 6800
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/sens-12",
-   "sequence": 4250
+   "sequence": 6820
   }
  ],
  "label": "SENS",

@@ -23,43 +23,6 @@
      "label": "bestimmte Kriterien"
     }
    ]
-  },
-  {
-   "id": "REA.2.5.1",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Sicherheitsvorfallsbehandlung SOLLTE rechtlich relevante Beweise rechtssicher dokumentieren."
-   }
-  },
-  {
-   "id": "REA.2.5.2",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Sicherheitsvorfallsbehandlung KANN zur Forensik ein Vier-Augen-Prinzip verankern."
-   }
-  },
-  {
-   "id": "REA.2.5.3",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Sicherheitsvorfallsbehandlung KANN die Bereitschaft eines Forensik-Dienstleisters binnen {param:rea.2.5.3-prm1} vereinbaren."
-   },
-   "parameters": [
-    {
-     "name": "rea.2.5.3-prm1",
-     "type": "string",
-     "label": "einer Frist"
-    }
-   ]
   }
  ],
  "facets": {
@@ -69,20 +32,6 @@
      "action": "ausführen",
      "result": "eine forensische Analyse",
      "result-specification": "bei Vorfällen, die {{bestimmte Kriterien}} erfüllen,"
-    },
-    "REA.2.5.1": {
-     "action": "dokumentieren",
-     "result": "rechtlich relevante Beweise",
-     "result-specification": "rechtssicher"
-    },
-    "REA.2.5.2": {
-     "action": "verankern",
-     "result": "zur Forensik ein Vier-Augen-Prinzip"
-    },
-    "REA.2.5.3": {
-     "action": "vereinbaren",
-     "result": "die Bereitschaft eines Forensik-Dienstleisters",
-     "result-specification": "binnen {{einer Frist}}"
     }
    }
   },
@@ -91,21 +40,6 @@
     "smt": {
      "required-documentation": [
       "Behandlung von Sicherheitsvorfällen"
-     ]
-    },
-    "REA.2.5.1": {
-     "required-documentation": [
-      "Behandlung von Sicherheitsvorfällen"
-     ]
-    },
-    "REA.2.5.2": {
-     "required-documentation": [
-      "Behandlung von Sicherheitsvorfällen"
-     ]
-    },
-    "REA.2.5.3": {
-     "required-documentation": [
-      "Liste der Hersteller und Dienstleister"
      ]
     }
    }
@@ -122,36 +56,6 @@
       "https://ns.bsi.bund.de/gspp/threat/G-0.47",
       "https://ns.bsi.bund.de/gspp/threat/G-0.18"
      ]
-    },
-    "REA.2.5.1": {
-     "confidentiality": "1",
-     "integrity": "2",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.39",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.47"
-     ]
-    },
-    "REA.2.5.2": {
-     "confidentiality": "1",
-     "integrity": "2",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.39",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.47"
-     ]
-    },
-    "REA.2.5.3": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.39",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.47"
-     ]
     }
    }
   },
@@ -164,27 +68,6 @@
      "tags": [
       "Advanced Persistent Threats (APT)"
      ]
-    },
-    "REA.2.5.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 3,
-     "title": "Rechtssichere Beweissicherung",
-     "alt-identifier": "73f6c601-3d1c-464f-9728-2e58b819dd3e"
-    },
-    "REA.2.5.2": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5,
-     "title": "Vier-Augen-Prinzip",
-     "alt-identifier": "6ff56f07-8d72-4f04-9fe9-8f48c89b2e78"
-    },
-    "REA.2.5.3": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5,
-     "title": "Forensik-Dienstleister",
-     "alt-identifier": "ef31b4b8-5e5d-46fc-9baa-237808678a6d"
     }
    }
   },
@@ -194,21 +77,6 @@
      "guidance": {
       "de": "Bei einer forensischen Analyse werden Beweise gesichert und Erkenntnisse zur Verbesserung von Schutzmaßnahmen gegen künftige Vorfälle gewonnen. Die Kriterien richten sich nach dem Schutzbedarf der betroffenen Informationen, Compliance-Verpflichtungen und dem Risikoprofil der Institution als Ganzes. Kriterien können, z.B. Anzeichen für einen (auch teilweise) erfolgreichen, gezielten Angriff, eine Straftat im Zusammenhang mit der Informationsverarbeitung oder eine Kompromittierung schützenswerter Informationen sein. Die Forensik kann durch eigenes qualifiziertes Personal oder durch einen im Vorfeld festgelegten, im Ernstfall zu beauftragenden Dienstleister geschehen. Zur Vorgehensweise können sowohl technische Werkzeuge, als auch rechtliche Rahmenbedingungen und Dokumentationsvorgaben gehören. Für Details siehe BSI-Leitfaden „IT-Forensik“."
      }
-    },
-    "REA.2.5.1": {
-     "guidance": {
-      "de": "Rechtlich relevant sind Beweise, wenn Anzeichen dafür vorliegen, dass bei einem Sicherheitsvorfall gegen Compliance-Verpflichtungen oder interne Arbeitsanweisungen verstoßen wurde. Beispiele sind Vorfälle wie z.B. unberechtigten Zugriffen oder Manipulationen von Daten.  Beweise sind rechtssicher dokumentiert, wenn nachvollziehbar ist, wie sie erhoben wurden und sie außerdem sowohl gegen unautorisierte Einsicht als auch Veränderung geschützt aufbewahrt werden. Die Nachvollziehbarkeit von Veränderungen kann z.B. durch eine kryptografische Signatur oder getrennt aufbewahrte Checksummen sichergestellt werden. Außerdem ist es sinnvoll, die Originaldaten aufzubewahren, z.B. als Originaldatenträger oder Sicherungskopie. Für Details siehe BSI-Leitfaden „IT-Forensik“."
-     }
-    },
-    "REA.2.5.2": {
-     "guidance": {
-      "de": "Wenn IT-Forensische Untersuchungen alleine vorgenommen werden, könnte das dokumentierte Vorgehen und damit die Stichhaltigkeit der Beweise bei einer gerichtlichen Überprüfung angezweifelt werden. Besser ist es, solche Untersuchungen gemeinsam mit einem Zeugen vorzunehmen, der qualifiziert ist zu beurteilen, welche Arbeitsschritte dabei vorgenommen wurden. Der Zeuge beglaubigt insbesondere die Prüfsummen der Dokumentation. Allerdings ist es auch ohne Vier-Augen-Prinzip möglich Belege für ein korrektes Vorgehen zu erbringen, beispielsweise durch Vorlage der unveränderten originalen Speichermedien."
-     }
-    },
-    "REA.2.5.3": {
-     "guidance": {
-      "de": "Um im Ernstfall eine schnelle Untersuchung von Sicherheitsvorfällen zu ermöglichen, kann die Institution bereits unabhängig von einem Vorfall einen Vertrag mit einem qualifizierten Forensik-Dienstleister abschließen. Die Anforderung ist erst umgesetzt, wenn der Dienstleister für den Ernstfall eine Erstreaktion innerhalb einer bestimmten Frist garantiert. Die Untersuchung aller Ergebnisse kann die Frist überschreiten."
-     }
     }
    }
   },
@@ -216,9 +84,6 @@
    "param-extras": {
     "rea.2.5-prm1": {
      "alt-identifier": "6de9ac83-2280-4fbd-ac54-f570faa7b211"
-    },
-    "rea.2.5.3-prm1": {
-     "alt-identifier": "ef31b4b8-5e5d-46fc-9baa-237808678a6d"
     }
    }
   }

@@ -1,0 +1,84 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/KONF.6.6.1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "KONF.6.6.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "Mandantenfähigkeit"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Konfiguration für Anwendungen SOLLTE wenn die Anwendung mehrere Mandaten bedient, für jeden Mandanten eine eigene Berechtigungskonfiguration aktivieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "aktivieren",
+     "result": "wenn die Anwendung mehrere Mandaten bedient, für jeden Mandanten eine eigene Berechtigungskonfiguration",
+     "target-object-categories": [
+      "Anwendungen"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Konfigurationshistorie"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "0",
+     "authenticity": "1",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.19",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.22"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 4,
+     "tags": [
+      "Produktbeschreibung"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Der Ausdruck \"mehrere Mandanten\" (im Englischen auch multi-tenancy genannt) bezieht sich auf eine Softwarearchitektur, bei der eine einzige Instanz einer Anwendung gleichzeitig die Bedürfnisse mehrerer, voneinander unabhängiger Kundengruppen (Mandanten) bedient. Eine eigene Berechtigungskonfiguration bedeutet, dass jeder Mandant eine separate, von den anderen getrennte Sammlung von Zugriffsregeln und -rechten erhält. Dies dient dem Schutz vor Datenlecks, da ein Angreifer, der sich unrechtmäßig Zugang zu einem Mandanten verschafft, dadurch nicht automatisch die Berechtigungen für andere Mandanten übernimmt. Eine separate Konfiguration kann verhindern, dass ein Fehlverhalten oder eine Fehlkonfiguration bei einem Mandanten die Sicherheit aller anderen beeinträchtigt. Technische Möglichkeiten hierfür sind die Verwendung von mandantenspezifischen Datenbank-Schemata oder die logische Trennung von Daten innerhalb einer gemeinsamen Datenbank durch Mandanten-IDs. Darüber hinaus kann die Institution sicherstellen, dass die Authentifizierung und Autorisierung für jeden Mandanten streng getrennt sind, zum Beispiel durch die Nutzung unterschiedlicher API-Schlüssel oder Single-Sign-On-Konfigurationen pro Mandant."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "2f0d27ba-6f8f-4f1e-9f5b-29cd79d7b08d"
+  }
+ ]
+}

@@ -23,55 +23,6 @@
      "label": "kryptografisches löschen, überschreiben oder vernichten des Speichermediums"
     }
    ]
-  },
-  {
-   "id": "ASST.7.3.1",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Informationen und Assets für Daten SOLLTE ein standardisiertes Verfahren zur Vernichtung bei Veräußerung nach {param:asst.7.3.1-prm1} gemäß {param:asst.7.3.1-prm2} verankern."
-   },
-   "parameters": [
-    {
-     "name": "asst.7.3.1-prm1",
-     "type": "string",
-     "label": "einem anerkannten Standard"
-    },
-    {
-     "name": "asst.7.3.1-prm2",
-     "type": "string",
-     "label": "einer Sicherheitsstufe"
-    }
-   ]
-  },
-  {
-   "id": "ASST.7.3.2",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Informationen und Assets für Daten SOLLTE ein Verfahren zur endgültigen Löschung verankern."
-   }
-  },
-  {
-   "id": "ASST.7.3.3",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Informationen und Assets für Daten KANN die Daten durch {param:asst.7.3.3-prm1} löschen."
-   },
-   "parameters": [
-    {
-     "name": "asst.7.3.3-prm1",
-     "type": "string",
-     "label": "eine vom BSI zugelassene Löschanwendung"
-    }
-   ]
   }
  ],
  "facets": {
@@ -84,28 +35,6 @@
      "target-object-categories": [
       "Daten"
      ]
-    },
-    "ASST.7.3.1": {
-     "action": "verankern",
-     "result": "ein standardisiertes Verfahren zur Vernichtung bei Veräußerung",
-     "result-specification": "nach {{einem anerkannten Standard}} gemäß {{einer Sicherheitsstufe}}",
-     "target-object-categories": [
-      "Daten"
-     ]
-    },
-    "ASST.7.3.2": {
-     "action": "verankern",
-     "result": "ein Verfahren zur endgültigen Löschung",
-     "target-object-categories": [
-      "Daten"
-     ]
-    },
-    "ASST.7.3.3": {
-     "action": "löschen",
-     "result": "die Daten durch {{eine vom BSI zugelassene Löschanwendung}}",
-     "target-object-categories": [
-      "Daten"
-     ]
     }
    }
   },
@@ -114,21 +43,6 @@
     "smt": {
      "required-documentation": [
       "Arbeitsanweisung"
-     ]
-    },
-    "ASST.7.3.1": {
-     "required-documentation": [
-      "IT-Betriebskonzept"
-     ]
-    },
-    "ASST.7.3.2": {
-     "required-documentation": [
-      "IT-Betriebskonzept"
-     ]
-    },
-    "ASST.7.3.3": {
-     "required-documentation": [
-      "IT-Betriebskonzept"
      ]
     }
    }
@@ -146,42 +60,6 @@
       "https://ns.bsi.bund.de/gspp/threat/G-0.45",
       "https://ns.bsi.bund.de/gspp/threat/G-0.38"
      ]
-    },
-    "ASST.7.3.1": {
-     "confidentiality": "2",
-     "integrity": "0",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.19",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.45",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.16",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.38"
-     ]
-    },
-    "ASST.7.3.2": {
-     "confidentiality": "2",
-     "integrity": "0",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.45",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.19",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.16",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.38"
-     ]
-    },
-    "ASST.7.3.3": {
-     "confidentiality": "1",
-     "integrity": "0",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.19",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.45",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.16",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.38"
-     ]
     }
    }
   },
@@ -191,27 +69,6 @@
      "class": "BSI-Stand-der-Technik-Kernel-G0",
      "sec-level": "normal-SdT",
      "effort": 2
-    },
-    "ASST.7.3.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 3,
-     "title": "Standardisierte Vernichtung",
-     "alt-identifier": "93178616-6931-48e6-aee7-d51742868d4f"
-    },
-    "ASST.7.3.2": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 3,
-     "title": "Löschverfahren",
-     "alt-identifier": "aeea856c-cbc3-47a2-bc60-56515be30f12"
-    },
-    "ASST.7.3.3": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5,
-     "title": "Zugelassene Löschanwendungen",
-     "alt-identifier": "2fe24be6-1c6b-4a72-8f40-263e1cffc815"
     }
    }
   },
@@ -221,21 +78,6 @@
      "guidance": {
       "de": "Ereignisse können z.B. der Ablauf der festgelegten Löschfrist, die Veräußerung von Assets oder deren Weitergabe an einen Dienstleister sein. Relevant sind hierbei neben physischen und virtuellen Medien auch die Datenträger in IT-Systemen wie Notebooks und Fahrzeugen. Sicheres Löschen bedeutet, Daten so zu entfernen, dass sie mit vertretbarem Aufwand (auch forensisch) nicht mehr rekonstruierbar sind. Je nach Medium geschieht das z. B. durch verifizierbares Überschreiben, kryptografisches Löschen (Schlüsselvernichtung) oder physische Zerstörung (inklusive zugehöriger Metadaten, Caches und Datensicherungen). Die Anforderung ist auch erfüllt, wenn sie durch einen Dienstleister durchgeführt wird, der hierzu verpflichtet ist."
      }
-    },
-    "ASST.7.3.1": {
-     "guidance": {
-      "de": "Anerkannte Standards für die Vernichtung sind DIN 66399 sowie ISO/IEC 21964; die Sicherheitsstufe beschreibt die Intensität der Vernichtung, wobei eine möglichst kleinteilige Zerkleinerung die Wahrscheinlichkeit einer Rekonstruktion aus Fragmenten minimiert. Die konkrete Vorgehensweise richtet sich nach der Art des Speichermediums: Papier wird nach Sicherheitsstufe P-3 gemäß ISO/IEC 21964-2 vernichtet, optische Speichermedien nach Sicherheitsstufe O-3 gemäß ISO/IEC 21964-2 und sonstige Speichermedien nach Sicherheitsstufe E-3 oder H-3 gemäß ISO/IEC 21964-2. Für Speichermedien, die vor der Nutzung vollständig verschlüsselt waren und deren kryptografische Schlüssel unwiederbringlich gelöscht wurden, ist eine physische Vernichtung nicht erforderlich."
-     }
-    },
-    "ASST.7.3.2": {
-     "guidance": {
-      "de": "Hierunter ist ein nachvollziehbarer, dokumentierter technischer und prozessualer Ablauf zur endgültigen Entfernung oder Unkenntlichmachung von Informationen zu verstehen; „Endgültig“ bedeutet, dass Daten mit vertretbarem Aufwand nicht wiederhergestellt werden können. Ohne klare Verfahren könnte Alt- oder Schattendatenbestand bei Geräteweitergabe, in Backups oder Cloud-Objektspeichern verbleiben, was zu Datenschutzverletzungen, Erpressungsversuchen oder regulatorischen Sanktionen führen könnte. Hierzu gehören sowohl Nutzdaten von IT-Systemen und Anwendungen, als auch Konfigurationsdateien oder Daten, die in begleitenden Dokumenten wie Betriebshandbüchern oder Informationswikis abgelegt sind."
-     }
-    },
-    "ASST.7.3.3": {
-     "guidance": {
-      "de": "Für eine aktuelle Liste der zugelassenen Löschanwendungen siehe BSI-Schrift 7164: Liste der zugelassenen IT-Sicherheitsprodukte und -systeme. Sicheres Löschen bedeutet, Daten so zu entfernen, dass sie mit vertretbarem Aufwand (auch forensisch) nicht mehr rekonstruierbar sind. Je nach Medium geschieht das z. B. durch verifizierbares Überschreiben, kryptografisches Löschen (Schlüsselvernichtung) oder physische Zerstörung (inklusive zugehöriger Metadaten, Caches und Datensicherungen)."
-     }
     }
    }
   },
@@ -243,15 +85,6 @@
    "param-extras": {
     "asst.7.3-prm1": {
      "alt-identifier": "7dc77e01-b62b-4e7f-bb4c-d9c67551d8fa"
-    },
-    "asst.7.3.1-prm1": {
-     "alt-identifier": "93178616-6931-48e6-aee7-d51742868d4f"
-    },
-    "asst.7.3.1-prm2": {
-     "alt-identifier": "93178616-6931-48e6-aee7-d51742868d4f"
-    },
-    "asst.7.3.3-prm1": {
-     "alt-identifier": "2fe24be6-1c6b-4a72-8f40-263e1cffc815"
     }
    }
   }

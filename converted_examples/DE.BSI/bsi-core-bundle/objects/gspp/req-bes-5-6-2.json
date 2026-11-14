@@ -1,0 +1,83 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/BES.5.6.2",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "BES.5.6.2",
+ "lifecycle": "active",
+ "title": {
+  "de": "Autorisierung von Unterauftragnehmern"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "may",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Beschaffungsmanagement für Einkäufe KANN die Autorisierung von Unterauftragnehmern durch den Auftraggeber vereinbaren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "vereinbaren",
+     "result": "die Autorisierung von Unterauftragnehmern durch den Auftraggeber",
+     "target-object-categories": [
+      "Einkäufe"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Beschaffungskriterien"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "1",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.20"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "erhöht",
+     "effort": 5,
+     "tags": [
+      "Lieferketten"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Unterauftragnehmer sind in diesem Zusammenhang Dritte, die vom beauftragten Hauptdienstleister zur Erfüllung vertraglicher Leistungen hinzugezogen werden. Die Autorisierung von Unterauftragnehmern durch den Auftraggeber kann sicherstellen, dass keine unkontrollierten oder ungeprüften Dritten in die Leistungserbringung eingebunden werden. Ohne eine solche Regelung könnte ein Hauptauftragnehmer eigenmächtig Subunternehmen einsetzen, die unzureichende Sicherheitsstandards einhalten, intransparent agieren oder in kritische Abhängigkeiten geraten. Durch die vorherige Zustimmung des Auftraggebers kann das Risiko unzureichender Qualifikation oder fehlender Vertrauenswürdigkeit reduziert werden und es kann eine gezielte Steuerung erfolgen, wer Zugang zu vertraulichen Informationen oder kritischen Prozessen erhält."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "4b719eae-3c29-4579-ad77-653ab02ee880"
+  }
+ ]
+}

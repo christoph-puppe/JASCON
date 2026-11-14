@@ -1,0 +1,80 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/DET.3.1.12",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "DET.3.1.12",
+ "lifecycle": "active",
+ "title": {
+  "de": "Datenverarbeitungen"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "may",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Detektion für Daten KANN die Verarbeitung von Daten protokollieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "protokollieren",
+     "result": "die Verarbeitung von Daten",
+     "target-object-categories": [
+      "Daten"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Audit Log"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "0",
+     "authenticity": "1",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.37"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "erhöht",
+     "effort": 5
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Bei Daten mit hohem Schutzbedarf kann es sinnvoll sein, bestimmte Verarbeitungen (z.B. Zugriffe, Veränderungen, Löschung, Datenexporte) zu protokollieren. Änderungen können mit Versionsverwaltungssystemen automatisch protokolliert werden. Beispiele sind Zugriffe auf Dateifreigaben, Webportale oder Datenbank-Abfragen durch eine Anwendung, der Export von Verbindungsdaten auf dem TK-Server, oder der Versand von Nachrichten mit bestimmten Schlüsselnwörtern."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "ca3be46d-c9ce-45b0-8da9-e4f83f123e6d"
+  }
+ ]
+}

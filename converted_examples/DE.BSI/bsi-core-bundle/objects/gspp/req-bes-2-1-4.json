@@ -1,0 +1,83 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/BES.2.1.4",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "BES.2.1.4",
+ "lifecycle": "active",
+ "title": {
+  "de": "Kompatibilität"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Beschaffungsmanagement für Einkäufe SOLLTE den Bedarf für die Kompatibilität mit der bestehenden Infrastruktur dokumentieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "dokumentieren",
+     "result": "den Bedarf für die Kompatibilität mit der bestehenden Infrastruktur",
+     "target-object-categories": [
+      "Einkäufe"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Beschaffungskriterien"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 3,
+     "tags": [
+      "Lieferketten"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Werden Beschaffungen ohne Betrachtung der Kompatibilität zur angebundenen Infrastruktur vorgenommen, kann es zu unvorhergesehenen Wechselwirkungen zwischen Komponenten kommen. Durch die steigende Komplexität von Infrastrukturen wächst auch das Risiko solcher Inkompatibilitäten oder Fehlerbilder. Zur relevanten Infrastruktur können je nach Einsatzzweck z.B. der Verzeichnisdienst, die Protokollierung von Ereignissen, das Monitoring oder der Datenspeicher gehören. Soweit möglich, ist es sinnvoll, zur Anbindung anerkannte Standards zu nutzen, z.B. REST-API und HTTPS für die Schnittstellen, TCP/IP und Ethernet (IEEE 802.3) für die Netzanbindung, SSH für die Administration,sowie SQL oder JSON für das Datenmanagement."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "4625c5ac-57d7-404c-9ab3-620b724b36b8"
+  }
+ ]
+}

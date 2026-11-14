@@ -1,0 +1,83 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/GEB.3.1.2",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "GEB.3.1.2",
+ "lifecycle": "active",
+ "title": {
+  "de": "Überprüfung mitgeführter Gegenstände"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "may",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Gebäudemanagement für Standorte KANN das Mitführen von Gegenständen überwachen."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "überwachen",
+     "result": "das Mitführen von Gegenständen",
+     "target-object-categories": [
+      "Standorte"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Prozess Gebäudemanagement"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.44",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.16",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.24",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.19"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "erhöht",
+     "effort": 5
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Die Überwachung des Mitführens von Gegenständen (z.B. am Empfang) kann an Standorten mit besonderen Sicherheitsrisiken dazu beitragen, unerlaubtes Einschleusen von Diebstahlwerkzeugen, schädlichen Datenträgern oder gefährlichen Gegenständen zu verhindern. Durch eine stichprobenartige Kontrolle von Taschen, Rucksäcken oder Paketlieferungen kann erkannt werden, ob unbeaufsichtigt Materialien wie USB‑Sticks, externe Festplatten oder andere Speichermedien ins Gebäude gelangen, die vertrauliche Informationen unbemerkt abziehen könnten. Ebenso kann das Verfahren auf Metallgegenstände oder Flüssigkeiten ausgeweitet werden, um das Risiko von Diebstahl, Sabotage oder physischen Angriffen zu reduzieren. Beispielsweise könnte ein nicht registrierter Besucher eine Videokamera einschleusen und damit sensible Produktionsprozesse filmen, oder ein unbeaufsichtigter Paketbote könnte Malware‑belastete Hardware mitliefern – durch die Kontrolle am Empfang kann solchen Szenarien vorgebeugt werden.  Die Umsetzung kann stichprobenartig oder durchgehend erfolgen: Einmal täglich kann eine Auswahl von Taschen stichprobenartig geöffnet und mit einer Liste erlaubter Gegenstände abgeglichen werden; hierbei kann ein einfaches Check‑in‑Formular eingesetzt werden, in das Besucherinnen und Besucher freiwillig ihre mitgeführten Gegenstände eintragen können. Ergänzend kann ein abschließender Scan mit einem Metalldetektor oder ein kurzer Blick in unverschlossene Fächer erfolgen, was den Aufwand gering hält und den Durchfluss am Empfang weniger beeinträchtigt. Hier besteht ein enger Bezug zu den Persönlichkeitsrechten der Betroffenen. Eine klar kommunizierte Hausordnung oder ein Informationsblatt kann helfen die Maßnahmen zu erläutern, sodass Besucher erkennen, dass die Kontrollen dem Schutz aller Beteiligten dienen. Gegenstände, die vorübergehend nicht mitgeführt werden dürfen, können gegen Quittung sicher deponiert werden. Auf diese Weise entsteht eine nachvollziehbare Historie, die im Fall eines Vorfalls als Nachweis dienen kann."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "012da5ef-7ee9-4bf2-bb39-eebd2ae7b17b"
+  }
+ ]
+}

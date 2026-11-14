@@ -1,0 +1,55 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/PERF.3.1.1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "PERF.3.1.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "Erstellen eines Auditsplans"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Monitoring-Evaluation SOLLTE für jedes durchzuführende Audit einen Auditplan festlegen."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "festlegen",
+     "result": "für jedes durchzuführende Audit einen Auditplan"
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Methodik-Grundschutz-plus-plus",
+     "sec-level": "normal-SdT",
+     "effort": 3
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Der Auditplan (audit plan) legt vorab die Ziele, den Umfang (Geltungsbereich, Zielobjekte), die Methoden (Auditkriterien), Rollen und Zuständigkeiten, sowie den genauen Ablauf dieser Überprüfung fest. Auditmethoden sind die spezifischen Vorgehensweisen und Techniken, die ein Auditor zur Sammlung und Bewertung von Prüfungsnachweisen (audit evidence) einsetzt. Die Auswahl der Methode hängt vom jeweiligen Prüfziel ab und umfasst häufig eine Kombination aus mehreren Ansätzen, wie zum Beispiel: (1) die Befragung von Mitarbeitern (Interviews), um Prozessabläufe und Verantwortlichkeiten zu verstehen, (2) die (automatisierte und manuelle) Durchsicht von Dokumenten wie Richtlinien, Konzepten und Protokollen zur Überprüfung der Vorgabenkonformität, (3) die direkte Beobachtung von Prozessen, um die tatsächliche Umsetzung einer Kontrolle zu verifizieren, sowie (4) technische Analysen, welche die Überprüfung von Systemkonfigurationen, die Auswertung von Logdateien oder die Durchführung von Stichproben bei Berechtigungen beinhalten können. Der Zweck dieser Anforderung ist es, eine strukturierte und nachvollziehbare Vorgehensweise bei jeder Prüfung zu gewährleisten. Ohne einen solchen Plan könnte eine Überprüfung chaotisch verlaufen, wichtige Bereiche übersehen oder Ressourcen ineffizient eingesetzt werden, was unentdeckte Schwachstellen zur Folge haben kann. Ein detaillierter Auditplan kann hingegen sicherstellen, dass alle relevanten Aspekte systematisch abgedeckt werden und schafft eine klare Erwartungshaltung sowie Verbindlichkeit für die Auditoren und die geprüften Stellen der Institution. Bewährt hat sich dabei eine chancen- und risikenorientierte Ressourcenverteilung, d.h. die Betrachtung genau jener Anforderungen, bei denen voraussichtlich ein hoher Mehrwert für die Risikobetrachtung durch das Audit zu erwarten ist. Für Details siehe ISO/IEC 19011-Reihe. Der Plan muss dokumentiert werden."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "e81de2b1-c4fd-47b7-86a6-f858db31306e"
+  }
+ ]
+}

@@ -1,0 +1,83 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/BES.5.6.1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "BES.5.6.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "Weitergabe der Beschaffungskriterien"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Beschaffungsmanagement für Einkäufe SOLLTE die Weitergabe der Beschaffungskriterien an Unterauftragnehmer vereinbaren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "vereinbaren",
+     "result": "die Weitergabe der Beschaffungskriterien an Unterauftragnehmer",
+     "target-object-categories": [
+      "Einkäufe"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Beschaffungskriterien"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "1",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.20"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 4,
+     "tags": [
+      "Lieferketten"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Dient dazu, sicherzustellen, dass die bei der Auswahl von Produkten, Dienstleistungen oder Lieferanten berücksichtigten Anforderungen entlang der gesamten Lieferkette eingehalten werden. Werden diese Kriterien nicht weitergegeben, kann es dazu kommen, dass sicherheitsrelevante Eigenschaften verloren gehen, etwa wenn ein Unterauftragnehmer günstigere, aber unsichere oder nicht konforme Komponenten beschafft. So könnte beispielsweise ein IT-Dienstleister ohne Kenntnis der geforderten Verschlüsselungsstandards Speichermedien einsetzen, die keine wirksame Datenverschlüsselung bieten, oder ein Bauunternehmen minderwertige Zutrittskontrollsysteme verbauen, weil die eigentlichen Sicherheitsvorgaben nicht bekannt waren. Auch Lieferverzögerungen, rechtliche Probleme durch fehlende Zertifizierungen oder das Einschleusen von Schadsoftware über ungesicherte Lieferungen können die Folge sein. Um die Weitergabe zu vereinfachen, können die Kriterien in einem maschinell verarbeitbaren Format (z.B. OSCAL Catalog oder Profile) ausgetauscht werden."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "58f15c9a-d587-4971-8239-d99a01478dca"
+  }
+ ]
+}

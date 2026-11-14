@@ -16,36 +16,6 @@
    "prose": {
     "de": "Änderungen und Tests für Administrierende SOLLTE zu einer strukturierten Folgenabschätzung vor wesentlichen Änderungen anweisen."
    }
-  },
-  {
-   "id": "TEST.2.2.1",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Änderungen und Tests SOLLTE Änderungsvorhaben einer Kategorie zuweisen."
-   }
-  },
-  {
-   "id": "TEST.2.2.2",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Änderungen und Tests SOLLTE die geplanten Änderungen dokumentieren."
-   }
-  },
-  {
-   "id": "TEST.2.2.3",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Änderungen und Tests SOLLTE von der Änderung betroffene Abhängigkeiten dokumentieren."
-   }
   }
  ],
  "facets": {
@@ -58,18 +28,6 @@
      "target-object-categories": [
       "Administrierende"
      ]
-    },
-    "TEST.2.2.1": {
-     "action": "zuweisen",
-     "result": "Änderungsvorhaben einer Kategorie"
-    },
-    "TEST.2.2.2": {
-     "action": "dokumentieren",
-     "result": "die geplanten Änderungen"
-    },
-    "TEST.2.2.3": {
-     "action": "dokumentieren",
-     "result": "von der Änderung betroffene Abhängigkeiten"
     }
    }
   },
@@ -78,21 +36,6 @@
     "smt": {
      "required-documentation": [
       "IT-Betriebskonzept"
-     ]
-    },
-    "TEST.2.2.1": {
-     "required-documentation": [
-      "IT-Betriebskonzept"
-     ]
-    },
-    "TEST.2.2.2": {
-     "required-documentation": [
-      "Ergebnisprotokoll"
-     ]
-    },
-    "TEST.2.2.3": {
-     "required-documentation": [
-      "Systemdokumentation"
      ]
     }
    }
@@ -107,35 +50,6 @@
      "threat-refs": [
       "https://ns.bsi.bund.de/gspp/threat/G-0.18"
      ]
-    },
-    "TEST.2.2.1": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
-     ]
-    },
-    "TEST.2.2.2": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
-     ]
-    },
-    "TEST.2.2.3": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "2",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.28",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.25"
-     ]
     }
    }
   },
@@ -145,27 +59,6 @@
      "class": "BSI-Stand-der-Technik-Kernel-G0",
      "sec-level": "normal-SdT",
      "effort": 2
-    },
-    "TEST.2.2.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 3,
-     "title": "Kategorisierung von Änderungen",
-     "alt-identifier": "fc6014c5-d95d-428b-96bd-9f5ef9fba660"
-    },
-    "TEST.2.2.2": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 2,
-     "title": "Anpassung der Dokumentation",
-     "alt-identifier": "474497ca-0e99-4f0a-8f84-abdea042aa80"
-    },
-    "TEST.2.2.3": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 4,
-     "title": "Dokumentation der Abhängigkeiten",
-     "alt-identifier": "e3dfaa37-9789-4b95-8cbb-32e70addab94"
     }
    }
   },
@@ -174,21 +67,6 @@
     "smt": {
      "guidance": {
       "de": "Sinnvoll ist es die Ausführlichkeit der Folgenabschätzung an Umfang und Reichweite der Änderungen, sowie dem Risikoprofil betroffener Assets zu orientieren: Empfehlenswert ist es die Änderungen je nach Abschätzung der Folgen in Klassen einzusortieren (z.B. Geringe Auswirkungen, Mittlere Auswirkungen, Hohe Auswirkungen) und die weitere Prüftiefe nach dieser Einstufung auszurichten."
-     }
-    },
-    "TEST.2.2.1": {
-     "guidance": {
-      "de": "Dabei werden Änderungen je nach Abschätzung der Folgen in Kategorien einsortiert, die im Verhältnis zu den möglichen Auswirkungen stehen (z.B. Geringe Auswirkungen, Mittlere Auswirkungen, Hohe Auswirkungen). Umfang und Tiefe der weiterer Prüfungen kann dann nach dieser Einstufung ausgerichtet werden."
-     }
-    },
-    "TEST.2.2.2": {
-     "guidance": {
-      "de": "Je nach Inhalt der Änderung können hierzu Konfigurationsdateien, Sicherheitsrichtlinien, oder begleitende Dokumente wie ein IT-Betriebshandbuch oder für Nutzende gedachte Anwenderhandbücher oder Wikis gehören."
-     }
-    },
-    "TEST.2.2.3": {
-     "guidance": {
-      "de": "Betroffene Abhängigkeiten sind sowohl alle Systeme und Anwendungen, die durch die geplanten Änderungen beeinflusst werden könnten, als auch die Abhängigkeiten der zu ändernden Systeme oder Anwendungen selbst (Up- and Downstream Dependency Management). Hierzu können z.B. Programmquellbibliotheken, angebundene Systeme, Netzanbindungen oder Anwendungen zählen."
      }
     }
    }

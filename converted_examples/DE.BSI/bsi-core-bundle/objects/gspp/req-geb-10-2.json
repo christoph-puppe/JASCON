@@ -16,90 +16,6 @@
    "prose": {
     "de": "Gebäudemanagement für Standorte SOLLTE Brandschutz nach den entsprechenden Normen verankern."
    }
-  },
-  {
-   "id": "GEB.10.2.1",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Gebäudemanagement für Räume SOLLTE bauliche Brandschutzeinrichtungen nach den entsprechenden Normen installieren."
-   }
-  },
-  {
-   "id": "GEB.10.2.2",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Gebäudemanagement für Räume SOLLTE Brandabschnitte nach den entsprechenden Normen installieren."
-   }
-  },
-  {
-   "id": "GEB.10.2.3",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Gebäudemanagement für Räume KANN alle raumbildende Teile rauchdicht installieren."
-   }
-  },
-  {
-   "id": "GEB.10.2.4",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Gebäudemanagement für Räume KANN feuerfeste Materialen für alle raumbildenden Teile , sodass sie Feuern für {param:geb.10.2.4-prm1} standhalten, installieren."
-   },
-   "parameters": [
-    {
-     "name": "geb.10.2.4-prm1",
-     "type": "string",
-     "label": "eine bestimmte Frist"
-    }
-   ]
-  },
-  {
-   "id": "GEB.10.2.5",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Gebäudemanagement für Standorte SOLLTE das Entstehen von Bränden überwachen."
-   }
-  },
-  {
-   "id": "GEB.10.2.6",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Gebäudemanagement für Serverräume KANN Brandunterdrückungssysteme installieren."
-   }
-  },
-  {
-   "id": "GEB.10.2.7",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Gebäudemanagement für Standorte SOLLTE die Wirksamkeit der Brandschutzmaßnahmen {param:geb.10.2.7-prm1} überprüfen."
-   },
-   "parameters": [
-    {
-     "name": "geb.10.2.7-prm1",
-     "type": "string",
-     "label": "regelmäßig"
-    }
-   ]
   }
  ],
  "facets": {
@@ -112,59 +28,6 @@
      "target-object-categories": [
       "Standorte"
      ]
-    },
-    "GEB.10.2.1": {
-     "action": "installieren",
-     "result": "bauliche Brandschutzeinrichtungen",
-     "result-specification": "nach den entsprechenden Normen",
-     "target-object-categories": [
-      "Räume"
-     ]
-    },
-    "GEB.10.2.2": {
-     "action": "installieren",
-     "result": "Brandabschnitte",
-     "result-specification": "nach den entsprechenden Normen",
-     "target-object-categories": [
-      "Räume"
-     ]
-    },
-    "GEB.10.2.3": {
-     "action": "installieren",
-     "result": "alle raumbildende Teile rauchdicht",
-     "target-object-categories": [
-      "Räume"
-     ]
-    },
-    "GEB.10.2.4": {
-     "action": "installieren",
-     "result": "feuerfeste Materialen für alle raumbildenden Teile",
-     "result-specification": ", sodass sie Feuern für {{eine bestimmte Frist}} standhalten,",
-     "target-object-categories": [
-      "Räume"
-     ]
-    },
-    "GEB.10.2.5": {
-     "action": "überwachen",
-     "result": "das Entstehen von Bränden",
-     "target-object-categories": [
-      "Standorte"
-     ]
-    },
-    "GEB.10.2.6": {
-     "action": "installieren",
-     "result": "Brandunterdrückungssysteme",
-     "target-object-categories": [
-      "Serverräume"
-     ]
-    },
-    "GEB.10.2.7": {
-     "action": "überprüfen",
-     "result": "die Wirksamkeit der Brandschutzmaßnahmen",
-     "result-specification": "{{regelmäßig}}",
-     "target-object-categories": [
-      "Standorte"
-     ]
     }
    }
   },
@@ -173,41 +36,6 @@
     "smt": {
      "required-documentation": [
       "Gebäudedokumentation"
-     ]
-    },
-    "GEB.10.2.1": {
-     "required-documentation": [
-      "Gebäudedokumentation"
-     ]
-    },
-    "GEB.10.2.2": {
-     "required-documentation": [
-      "Gebäudedokumentation"
-     ]
-    },
-    "GEB.10.2.3": {
-     "required-documentation": [
-      "Gebäudedokumentation"
-     ]
-    },
-    "GEB.10.2.4": {
-     "required-documentation": [
-      "Gebäudedokumentation"
-     ]
-    },
-    "GEB.10.2.5": {
-     "required-documentation": [
-      "Gebäudedokumentation"
-     ]
-    },
-    "GEB.10.2.6": {
-     "required-documentation": [
-      "Gebäudedokumentation"
-     ]
-    },
-    "GEB.10.2.7": {
-     "required-documentation": [
-      "Übungs- und Prüfplan"
      ]
     }
    }
@@ -223,69 +51,6 @@
       "https://ns.bsi.bund.de/gspp/threat/G-0.18",
       "https://ns.bsi.bund.de/gspp/threat/G-0.29"
      ]
-    },
-    "GEB.10.2.1": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
-     ]
-    },
-    "GEB.10.2.2": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "2",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
-     ]
-    },
-    "GEB.10.2.3": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "2",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
-     ]
-    },
-    "GEB.10.2.4": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "2",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.1"
-     ]
-    },
-    "GEB.10.2.5": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "2",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
-     ]
-    },
-    "GEB.10.2.6": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "2",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
-     ]
-    },
-    "GEB.10.2.7": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
-     ]
     }
    }
   },
@@ -295,58 +60,6 @@
      "class": "BSI-Stand-der-Technik-Kernel-G0",
      "sec-level": "normal-SdT",
      "effort": 2
-    },
-    "GEB.10.2.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 3,
-     "title": "Baulicher Brandschutz",
-     "alt-identifier": "d2545c9e-2476-4841-a9a6-dafa9b471f1b"
-    },
-    "GEB.10.2.2": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 4,
-     "title": "Brandabschnitte",
-     "alt-identifier": "9bba280a-5874-46eb-bbc5-4696d3ee5ed6"
-    },
-    "GEB.10.2.3": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5,
-     "title": "Rauchdichtheit",
-     "alt-identifier": "1cccb05d-47e6-431e-8668-c70be6ec17c6"
-    },
-    "GEB.10.2.4": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5,
-     "title": "Brandwiderstandsklassen",
-     "alt-identifier": "4411c989-a51f-4aa9-8d79-e0b3fd492fb9"
-    },
-    "GEB.10.2.5": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 3,
-     "title": "Brandmeldeanlagen",
-     "alt-identifier": "92dfd98d-40ed-4854-a3d8-00a84fe77cec"
-    },
-    "GEB.10.2.6": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5,
-     "title": "Brandunterdrückung",
-     "alt-identifier": "7520aa89-9296-4ae3-a60d-5c781dd06732"
-    },
-    "GEB.10.2.7": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 3,
-     "tags": [
-      "Inspektion"
-     ],
-     "title": "Brandschutzprüfung",
-     "alt-identifier": "3b904a6b-c440-4360-ab4a-37b76fc639a7"
     }
    }
   },
@@ -356,51 +69,6 @@
      "guidance": {
       "de": "Maßnahmen können z.B. die Verwendung nicht brennbarer Baumaterialien (u.a. DIN 4102, DIN EN 13501), brandsichere Elektroinstallation, Feuerlöscher (DIN 14406), Rauchabzugsanlagen (DIN 18232) sowie Brandmelde- (DIN EN 54) und Löschanlagen (DIN EN 671) sein. Bei der Planung kann die örtliche Feuerwehr hinzugezogen werden. Gesetzliche Anforderungen hierzu sind in der Praktik Compliance zu berücksichtigen."
      }
-    },
-    "GEB.10.2.1": {
-     "guidance": {
-      "de": "Relevant ist für das Brandverhalten von Bauprodukten und Bauarten die europäische Normenreihe DIN EN 13501 mit ihren sieben Klassen (A1, A2, B, C, D, E, F)."
-     }
-    },
-    "GEB.10.2.2": {
-     "guidance": {
-      "de": "Brandabschnitte sind baulich abgegrenzte Bereiche in Gebäuden, die im Brandfall verhindern sollen, dass das Feuer auf andere Bereiche übergreift. Sie werden durch feuerfeste Wände, Decken und andere raumabschließende Bauteile voneinander getrennt. Hier besteht ein enger Zusammenhang zu Compliance-Anforderungen: Größe und Anzahl von Brandabschnitten werden auch durch die Bauordnung und andere Vorschriften festgelegt, abhängig von der Nutzung und Größe des Gebäudes. Für die Informationssicherheit relevant ist darüber hinaus, ob die Auswahl der Brandabschnitte den darin befindlichen Informationen und damit verbundenen Assets ausreichenden Schutz gewährt, um deren Verfügbarkeit aufrechtzuerhalten."
-     }
-    },
-    "GEB.10.2.3": {
-     "guidance": {
-      "de": "Hierunter ist zu verstehen, dass alle raumbildenden Teile (Wände, Türen und falls benötigt Fenster) rauchdicht sind."
-     }
-    },
-    "GEB.10.2.4": {
-     "guidance": {
-      "de": "Der Einsatz feuerfester Materialien für raumbildende Teile – also Wände, Decken, Türen und gegebenenfalls auch Bodenaufbauten – kann das Risiko erheblich reduzieren, dass sich ein Brand innerhalb eines Gebäudes schnell ausbreitet oder sicherheitsrelevante Bereiche in kurzer Zeit unbenutzbar werden könnten. Ohne geeignete Materialien könnte ein kleiner Kabelbrand beispielsweise binnen Minuten auf benachbarte Räume mit Servern, Schaltanlagen oder Dokumenten übergreifen und kritische Infrastruktur unbrauchbar machen. Mit feuerfesten Materialien kann eine Institution die Zeitspanne verlängern, in der Personen evakuiert, Brandbekämpfungsmaßnahmen eingeleitet oder Systeme geordnet heruntergefahren werden können. Der Begriff „feuerfest“ bedeutet im baulichen Kontext nicht absolute Unzerstörbarkeit, sondern eine definierte Widerstandsfähigkeit gegen Feuer über eine bestimmte Frist (z. B. 30, 60 oder 90 Minuten), die durch Normen wie die europäische Klassifizierung REI angegeben wird. Diese Frist beschreibt, wie lange ein Bauteil seine tragende Funktion (R), Dichtheit (E) und Wärmedämmung (I) im Brandfall aufrechterhalten kann. Zur praktischen Umsetzung können im Gebäudemanagement verschiedene Maßnahmen berücksichtigt werden: Wände und Decken können aus nicht brennbaren Baustoffen wie Beton oder speziellen Gipsfaserplatten ausgeführt werden, Türen können durch Brandschutztüren mit entsprechender Klassifizierung ersetzt werden, und Kabel- sowie Rohrdurchführungen können mit geprüften Brandschutzmanschetten oder -schotts ausgestattet werden. Auch abgehängte Decken oder Zwischenwände in Leichtbauweise können mit feuerhemmenden Platten verkleidet werden, um die Widerstandsdauer zu erhöhen. Eine Institution kann bei Umbauten oder Neubauten frühzeitig auf geprüfte Baustoffe achten und im Bestand gezielt besonders gefährdete Räume wie Serverräume, Archive oder Batterieräume nachrüsten."
-     }
-    },
-    "GEB.10.2.5": {
-     "guidance": {
-      "de": "Die Umsetzung kann durch Brandmeldezentralen oder dezentrale Brandmeldealarmierung erfolgen, siehe DIN EN 54 und DIN VDE 0833-2."
-     }
-    },
-    "GEB.10.2.6": {
-     "guidance": {
-      "de": "Kann z.B. durch eine Anlage zur Sauerstoffreduktion unter 15 Volumenprozent umgesetzt werden, da Feuer sich so kaum entzünden kann. Siehe ISO 20338. Denken Sie dabei auch an den Schutz des Personals, siehe Arbeitstättenverordnung (ArbStättV)."
-     }
-    },
-    "GEB.10.2.7": {
-     "guidance": {
-      "de": "Eine regelmäßige Überprüfung von Brandmeldeanlagen, Rauchmeldern und organisatorische Maßnahmen stellt sicher, dass diese weiterhin funktionieren.  Hier besteht ein enger Zusammenhang zu Compliance-Verpflichtungen, die Brandschutzprüfungen fordern."
-     }
-    }
-   }
-  },
-  "https://ns.jascon.net/compat/oscal-1x@1": {
-   "param-extras": {
-    "geb.10.2.4-prm1": {
-     "alt-identifier": "4411c989-a51f-4aa9-8d79-e0b3fd492fb9"
-    },
-    "geb.10.2.7-prm1": {
-     "alt-identifier": "3b904a6b-c440-4360-ab4a-37b76fc639a7"
     }
    }
   }

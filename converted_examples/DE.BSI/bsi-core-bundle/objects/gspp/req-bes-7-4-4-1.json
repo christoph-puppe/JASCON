@@ -1,0 +1,110 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/BES.7.4.4.1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "BES.7.4.4.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "Software Bill of Materials (SBOM)"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "may",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Beschaffungsmanagement für IT-Produkte KANN für jede gelieferte Software die entsprechende Software Bill of Materials (SBOM) nach {param:bes.7.4.4.1-prm1} dokumentieren."
+   },
+   "parameters": [
+    {
+     "name": "bes.7.4.4.1-prm1",
+     "type": "string",
+     "label": "einem anerkannten Standard"
+    }
+   ]
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "dokumentieren",
+     "result": "für jede gelieferte Software die entsprechende Software Bill of Materials (SBOM)",
+     "result-specification": "nach {{einem anerkannten Standard}}",
+     "target-object-categories": [
+      "IT-Produkte"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Betriebshandbuch"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.26",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.28"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "erhöht",
+     "effort": 5,
+     "tags": [
+      "Lieferketten"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Je nach Produkt können hierzu auch die Firmware, das Betriebssystem oder mehrere Softwarebestandteile einer Anwendung gehören. Ein anerkannter Standard für SBOM ist die BSI TR-03183-2."
+     }
+    }
+   }
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "param-extras": {
+    "bes.7.4.4.1-prm1": {
+     "alt-identifier": "f89b0154-ccb8-401f-b352-9135e685a4e7"
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "f89b0154-ccb8-401f-b352-9135e685a4e7"
+  }
+ ],
+ "relations": [
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.3"
+  },
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.3.1.8"
+  }
+ ]
+}

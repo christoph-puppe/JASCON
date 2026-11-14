@@ -1,0 +1,86 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/BES.7.4.5",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "BES.7.4.5",
+ "lifecycle": "active",
+ "title": {
+  "de": "Netzverbindungen ab Werk"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Beschaffungsmanagement für IT-Produkte SOLLTE eine Liste der Internetserver, mit denen das IT-Produkt von sich aus Verbindung aufnimmt, mit Zweck der Verbindung, Zieladresse(n), Port-Nummern dokumentieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "dokumentieren",
+     "result": "eine Liste der Internetserver, mit denen das IT-Produkt von sich aus Verbindung aufnimmt,",
+     "result-specification": "mit Zweck der Verbindung, Zieladresse(n), Port-Nummern",
+     "target-object-categories": [
+      "IT-Produkte"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Betriebshandbuch"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.26",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.28"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 4,
+     "tags": [
+      "Lieferketten"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Geräte und Software verbinden sich oft schon im Auslieferungszustand oder bei der normalen Nutzung über das Internet mit Diensten, z.B. zur Übermittlung von Telemetrie- und Diagnosedaten oder zur Bereitstellung von Cloud-Funktionen. Eine Liste der Verbindungen hilft, die Übersicht zu behalten, welche Kommunikationsbeziehungen zu welchem Zweck das IT-Produkt aufnimmt. Die Liste kann vom Lieferanten gestellt werden oder durch Untersuchung des Produktes selbst ermittelt werden. Eine eigene Untersuchung ist jedoch deutlich aufwändiger, da sichergestellt werden muss, dass auch Verbindungen erfasst werden, die z.B. nur bei einem Absturz der Anwendung aufgebaut werden."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "f901b96c-6a92-46aa-834d-0b398d46482e"
+  }
+ ]
+}

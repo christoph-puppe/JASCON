@@ -8,19 +8,19 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/KONF.15.1",
-   "sequence": 7680
+   "sequence": 12350
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/KONF.15.2",
-   "sequence": 7690
+   "sequence": 12360
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/KONF.15.3",
-   "sequence": 7700
+   "sequence": 12370
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/KONF.15.4",
-   "sequence": 7710
+   "sequence": 12380
   }
  ],
  "label": "15",

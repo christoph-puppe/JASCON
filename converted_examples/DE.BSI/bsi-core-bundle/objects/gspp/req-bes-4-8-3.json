@@ -1,0 +1,83 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/BES.4.8.3",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "BES.4.8.3",
+ "lifecycle": "active",
+ "title": {
+  "de": "IT-Grundschutz-Analyse der Infrastruktur"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "may",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Beschaffungsmanagement für Outsourcing KANN eine IT-Grundschutz-Analyse der potenziell zu nutzenden Infrastruktur des Dienstleisters vereinbaren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "vereinbaren",
+     "result": "eine IT-Grundschutz-Analyse der potenziell zu nutzenden Infrastruktur des Dienstleisters",
+     "target-object-categories": [
+      "Outsourcing"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Beschaffungskriterien"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "1",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.20"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "erhöht",
+     "effort": 5,
+     "tags": [
+      "Lieferketten"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Bei einer IT-Grundschutz-Analyse im Rahmen des Outsourcings wird an der potenziell zu nutzenden Infrastruktur des Dienstleisters eine IT-Grundschutz-Analyse (Strukturanalyse, Schutzbedarfsfeststellung, …) durchgeführt. Anschließend werden die sich daraus ergebenden Sicherheitsanforderungen als Beschaffungskriterien an den Dienstleister gestellt. Dies bietet sich an, wenn entweder ein besonders hohes Sicherheitsniveau angestrebt wird, oder der Dienstleister bislang über kein ISMS verfügt, obwohl die Institution umfangreiche Prozesse auslagern möchte."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "989d9e29-9064-4366-a887-bc17c1440e35"
+  }
+ ]
+}

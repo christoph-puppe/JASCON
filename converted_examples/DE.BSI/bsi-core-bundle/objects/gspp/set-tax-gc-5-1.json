@@ -1,0 +1,30 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/gc-5-1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Festlegung von Zielen für die Informationssicherheit"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/GC.5.1",
+   "sequence": 170
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/GC.5.1.1",
+   "sequence": 180
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/GC.5.1.2",
+   "sequence": 190
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/GC.5.1.3",
+   "sequence": 200
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/GC.5.1.4",
+   "sequence": 210
+  }
+ ]
+}

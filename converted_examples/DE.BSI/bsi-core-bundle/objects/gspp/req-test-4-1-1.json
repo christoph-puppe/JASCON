@@ -1,0 +1,78 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/TEST.4.1.1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "TEST.4.1.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "Unabhängigkeit der Autorisierung"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "may",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Änderungen und Tests KANN kritische Änderungen auch durch eine von der Implementierung unabhängige Person autorisieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "autorisieren",
+     "result": "kritische Änderungen",
+     "result-specification": "auch durch eine von der Implementierung unabhängige Person"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "IT-Betriebskonzept"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "erhöht",
+     "effort": 4
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Eine Freigabe durch eine unabhängige Person ist die nachweisliche Bestätigung der Testergebnisse durch eine fachlich qualifizierte, aber nicht an der Entwicklung, Durchführung oder unmittelbaren Implementierung der getesteten Änderung beteiligte Person. Ziel ist es, Objektivität und Unvoreingenommenheit sicherzustellen und das Vier-Augen-Prinzip für kritische Änderungen zu wahren. Hierbei genügt es, wenn neben beteiligten Personen auch eine unabhängige Person die Änderung autorisiert hat, wie z.B. bei einem Change Advisory Board, an dem mehrere Personen beteiligt sind. Die geltenden Anforderungen sind alle für das Zielobjekt ausgewählten Sicherheitsanforderungen, z.B. Verifikation korrekter TLS-Konfiguration oder Fertigstellung einer Datensicherung mit korrektem Umfang zu geforderter Zeit gemäß Konzept. Empfehlenswert ist es den Prozess in einem Versionkontrollsystem abzubilden, sodass die Dokumentation der Änderungen und der Freigabe weitestgehend automatisiert stattfindet."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "a0cd7536-0e8f-4658-99d4-c04f93dad878"
+  }
+ ]
+}

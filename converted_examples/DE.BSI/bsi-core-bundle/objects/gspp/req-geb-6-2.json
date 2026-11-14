@@ -16,16 +16,6 @@
    "prose": {
     "de": "Gebäudemanagement für IT-Systeme SOLLTE diese geschützt vor dem Zugriff von Unbefugten platzieren."
    }
-  },
-  {
-   "id": "GEB.6.2.1",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Gebäudemanagement für Hostsysteme SOLLTE diese ausschließlich in Serverräumen platzieren."
-   }
   }
  ],
  "facets": {
@@ -37,24 +27,12 @@
      "target-object-categories": [
       "IT-Systeme"
      ]
-    },
-    "GEB.6.2.1": {
-     "action": "platzieren",
-     "result": "diese ausschließlich in Serverräumen",
-     "target-object-categories": [
-      "Hostsysteme"
-     ]
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "by-statement": {
     "smt": {
-     "required-documentation": [
-      "Gebäudedokumentation"
-     ]
-    },
-    "GEB.6.2.1": {
      "required-documentation": [
       "Gebäudedokumentation"
      ]
@@ -71,15 +49,6 @@
      "threat-refs": [
       "https://ns.bsi.bund.de/gspp/threat/G-0.18"
      ]
-    },
-    "GEB.6.2.1": {
-     "confidentiality": "1",
-     "integrity": "2",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
-     ]
     }
    }
   },
@@ -89,13 +58,6 @@
      "class": "BSI-Stand-der-Technik-Kernel-G0",
      "sec-level": "normal-SdT",
      "effort": 3
-    },
-    "GEB.6.2.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 3,
-     "title": "Hostsysteme",
-     "alt-identifier": "25dfb04d-3274-446e-9bb0-f2fb1a2e511a"
     }
    }
   },
@@ -104,11 +66,6 @@
     "smt": {
      "guidance": {
       "de": "„Unbefugter Zugriff“ bedeutet in diesem Kontext jeder physische Zutritt oder jede Manipulation durch Personen, die keine rechtmäßige Berechtigung für die Nutzung, Wartung oder Überwachung dieser Systeme besitzen. Der Sinn und Zweck dieser Vorgabe liegt im Schutz vor Verlust, Manipulation oder Unterbrechung des Betriebs durch unkontrollierte physische Einwirkungen. Ohne geeignete Schutzmaßnahmen könnte ein unbefugter Dritter Systeme entwenden, manipulieren oder absichtlich beschädigen; ebenso könnte durch unkontrollierten Zutritt das Risiko von Stromausfällen oder Fehlbedienungen entstehen. Eine angemessene bauliche Platzierung kann hingegen sicherstellen, dass nur autorisierte Personen Zugang erhalten und die Verfügbarkeit sowie Integrität der Systeme langfristig gewährleistet bleibt. Eine Umsetzung kann durch baulich-technische Maßnahmen wie verschließbare Serverschränke mit dokumentierter Schlüsselverwaltung oder den Einsatz von Zugangskontrollen mit elektronischen Schließsystemen erfolgen."
-     }
-    },
-    "GEB.6.2.1": {
-     "guidance": {
-      "de": "Sinn und Zweck dieser Anforderung liegt darin, die Risiken durch unkontrollierten physischen Zugriff oder Umwelteinflüsse zu reduzieren: Ohne räumliche Trennung könnte ein Mitarbeiter versehentlich gegen ein frei im Büro aufgestelltes Hostsystem stoßen und es beschädigen, oder ein Besucher könnte unbemerkt Manipulationen vornehmen. Durch Platzierung in einem Serverraum kann hingegen erreicht werden, dass Geräte vor unbefugtem Zugriff geschützt sind und kontrollierte Umgebungsbedingungen wie Temperatur oder Luftfeuchtigkeit den zuverlässigen Betrieb fördern. Praktisch kann es hilfreich sein, Hostsysteme in standardisierten Serverschränken unterzubringen, die zusätzlich verschließbar sind, und regelmäßig zu prüfen, ob keine Fremdgeräte unautorisiert im Serverraum abgestellt wurden. Auf diese Weise kann die Institution sicherstellen, dass Hostsysteme physisch geschützt und unter stabilen Betriebsbedingungen betrieben werden."
      }
     }
    }

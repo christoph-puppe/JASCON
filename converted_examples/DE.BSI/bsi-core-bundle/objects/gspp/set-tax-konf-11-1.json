@@ -1,0 +1,22 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/konf-11-1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Authentifizierung vor dem Zugriff"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.11.1",
+   "sequence": 11620
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.11.1.1",
+   "sequence": 11630
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.11.1.2",
+   "sequence": 11640
+  }
+ ]
+}

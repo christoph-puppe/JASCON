@@ -8,35 +8,35 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/bes-1",
-   "sequence": 1850
+   "sequence": 2870
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/bes-2",
-   "sequence": 1920
+   "sequence": 3060
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/bes-3",
-   "sequence": 1960
+   "sequence": 3130
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/bes-4",
-   "sequence": 2060
+   "sequence": 3350
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/bes-5",
-   "sequence": 2210
+   "sequence": 3690
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/bes-6",
-   "sequence": 2280
+   "sequence": 3780
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/bes-7",
-   "sequence": 2330
+   "sequence": 4010
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/bes-8",
-   "sequence": 2390
+   "sequence": 4070
   }
  ],
  "label": "BES",

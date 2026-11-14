@@ -1,0 +1,83 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/BES.5.10.1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "BES.5.10.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "Erreichbarkeit über Meldewege"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Beschaffungsmanagement für Einkäufe SOLLTE die Erreichbarkeit des Lieferanten über bestimmte Meldewege vereinbaren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "vereinbaren",
+     "result": "die Erreichbarkeit des Lieferanten über bestimmte Meldewege",
+     "target-object-categories": [
+      "Einkäufe"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Beschaffungskriterien"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "1",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.20"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 3,
+     "tags": [
+      "Lieferketten"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Die Meldewege bezeichnen in diesem Zusammenhang klar definierte Kommunikationskanäle, über die ein Lieferant zuverlässig erreichbar ist. Das kann beispielsweise eine dedizierte E-Mail-Adresse für Sicherheitsvorfälle, ein 24/7-Telefonkontakt, ein Ticket-System oder ein abgesicherter Webzugang sein. Der Sinn dieser Vereinbarung liegt darin, dass kritische Ereignisse, wie etwa ein entdeckter Datenabfluss oder technische Störungen in ausgelagerten Systemen, nicht ins Leere laufen. Ohne abgestimmte Erreichbarkeit könnte eine Meldung verzögert oder gar nicht ankommen, wodurch Schaden an vertraulichen Informationen unbemerkt bleiben könnte. Mit verbindlich vereinbarten Kanälen kann die Institution hingegen sicherstellen, dass relevante Informationen zeitnah und nachweisbar beim Lieferanten ankommen und bearbeitet werden. Die Umsetzung dieser Anforderung kann durch mehrere Maßnahmen unterstützt werden: (1) Eine Institution kann im Vertrag mit dem Lieferanten eine feste Ansprechstelle und Eskalationsstufen für bestimmte Ereignisse benennen lassen. (2) Es kann ein technischer Meldeweg wie ein verschlüsseltes E-Mail-Postfach oder ein Ticketportal vorgesehen werden, das eindeutig den Zweck \"Sicherheitsvorfälle\" trägt und regelmäßig überwacht wird."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "f2e723f5-6a1a-4358-bce2-458523049346"
+  }
+ ]
+}

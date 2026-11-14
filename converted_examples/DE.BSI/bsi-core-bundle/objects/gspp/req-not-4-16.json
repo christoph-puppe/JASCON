@@ -23,23 +23,6 @@
      "label": "regelmäßig"
     }
    ]
-  },
-  {
-   "id": "NOT.4.16.1",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Notfallplanung für Daten SOLLTE die Wiederherstellung mindestens anhand von repräsentativen Stichproben {param:not.4.16.1-prm1} überprüfen."
-   },
-   "parameters": [
-    {
-     "name": "not.4.16.1-prm1",
-     "type": "string",
-     "label": "regelmäßig"
-    }
-   ]
   }
  ],
  "facets": {
@@ -52,25 +35,12 @@
      "target-object-categories": [
       "Daten"
      ]
-    },
-    "NOT.4.16.1": {
-     "action": "überprüfen",
-     "result": "die Wiederherstellung",
-     "result-specification": "mindestens anhand von repräsentativen Stichproben {{regelmäßig}}",
-     "target-object-categories": [
-      "Daten"
-     ]
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "by-statement": {
     "smt": {
-     "required-documentation": [
-      "Datensicherungskonzept"
-     ]
-    },
-    "NOT.4.16.1": {
      "required-documentation": [
       "Datensicherungskonzept"
      ]
@@ -88,17 +58,6 @@
       "https://ns.bsi.bund.de/gspp/threat/G-0.45",
       "https://ns.bsi.bund.de/gspp/threat/G-0.39"
      ]
-    },
-    "NOT.4.16.1": {
-     "confidentiality": "1",
-     "integrity": "2",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.45",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.39",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.25"
-     ]
     }
    }
   },
@@ -108,13 +67,6 @@
      "class": "BSI-Stand-der-Technik-Kernel-G0",
      "sec-level": "normal-SdT",
      "effort": 3
-    },
-    "NOT.4.16.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 3,
-     "title": "Test der Wiederherstellung",
-     "alt-identifier": "77286239-41b4-49e0-86f7-1b64364d9759"
     }
    }
   },
@@ -124,11 +76,6 @@
      "guidance": {
       "de": "Die Überprüfung der Vollständigkeit kann durch Statistiken des Datenumfangs plus Stichproben der Daten durchgeführt werden.  Ein Integritätstest prüft, ob die gesicherten Daten ohne Änderungen im Vergleich zum Original vorliegen. Hierzu können je nach Daten auch Berechtigungen und Metadaten gehören, wenn diese für die Rücksicherung erforderlich sind (z.B. Wiederherstellung eines Laufwerks mit Ordnern die verschiedene Zugriffsberechtigungen haben)."
      }
-    },
-    "NOT.4.16.1": {
-     "guidance": {
-      "de": "Unter „Erfolg der Datensicherung“ ist hier die Vollständigkeit („completeness“) und Integrität („integrity“) der erstellten Backups zu verstehen. Eine fehlerhafte oder unvollständige Sicherung könnte unbemerkt bleiben, wenn nicht aktiv geprüft wird, während eine gezielte Validierung die Sicherheit bietet, dass sich die Daten bei Bedarf in unveränderter Form vorfinden lassen. Damit kann ein gravierender Datenverlust, etwa durch korrupte Sicherungsdateien oder abgebrochene Backup-Jobs, rechtzeitig erkannt und behoben werden. Die Anforderung zielt darauf ab, Risiken durch Scheinsicherheit zu reduzieren – etwa wenn Backup-Prozesse zwar automatisiert laufen, aber unbemerkt leere, fehlerhafte oder inkonsistente Datenbestände erzeugen könnten. Durch eine regelmäßige Überprüfung kann die Institution sicherstellen, dass die gesicherten Daten tatsächlich verwendbar bleiben, und damit das Risiko von Ausfallzeiten oder irreversiblen Informationsverlusten verringern. Konkret umgesetzt werden kann dies z. B., indem (1) Backup-Logs automatisch auf Fehlermeldungen oder Warnungen geprüft werden, (2) Prüfsummenverfahren wie Hashes (z. B. SHA-256) zur Integritätskontrolle eingesetzt werden und (3) stichprobenartige Vergleiche zwischen gesicherten und Originaldateien durchgeführt werden. Die Stichprobe kann sich dabei entweder auf die Wiederherstellung selber (= Wiederherstellung nur einiger Daten) als auch auf den deren Überprüfung (= Öffnen nur einiger Daten) beziehen. Stichproben sind repräsentativ, wenn die Zusammensetzung der Stichprobe von Test zu Test geändert wird und die Wahrscheinlichkeit der Stichprobenauswahl auch der Bedeutung der Daten entspricht. Zweckmäßig ist es dazu, bei der Stichprobenauswahl den Schutzbedarf der Daten zu berücksichtigen: Für besonders wichtige Systeme wie Verzeichnisdienste und für den Geschäftsbetrieb unerlässliche Daten ist eine häufigere Überprüfung erforderlich als für Daten und Systeme, auf die im Notfall auch verzichtet werden kann. Die Anforderung ist auch erfüllt, wenn statt einer Stichprobe eine vollständige Wiederherstellung vorgenommen und geprüft wird. Die Anforderung ist auch dann erfüllt, wenn die Überprüfung durch aktive Verwendung der Daten nach einer Wiederherstellung erfolgt (z.B. durch Inbetriebnahme neuer Server-Container, die aus einer versionierten Datensicherung automatisch angelegt werden)."
-     }
     }
    }
   },
@@ -136,9 +83,6 @@
    "param-extras": {
     "not.4.16-prm1": {
      "alt-identifier": "09fe99af-64b5-478f-80c0-c4ea6f6d4561"
-    },
-    "not.4.16.1-prm1": {
-     "alt-identifier": "77286239-41b4-49e0-86f7-1b64364d9759"
     }
    }
   }

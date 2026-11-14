@@ -16,73 +16,6 @@
    "prose": {
     "de": "Berechtigung SOLLTE Vorgaben für die Schlüsselbeglaubigung verankern."
    }
-  },
-  {
-   "id": "BER.6.16.1",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Berechtigung SOLLTE die Beglaubigung von Schlüsseln {param:ber.6.16.1-prm1} zuweisen."
-   },
-   "parameters": [
-    {
-     "name": "ber.6.16.1-prm1",
-     "type": "string",
-     "label": "einer zuständigen Person oder Rolle"
-    }
-   ]
-  },
-  {
-   "id": "BER.6.16.2",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Berechtigung SOLLTE den Schlüssel anhand der Vorgaben für die Schlüsselbeglaubigung bei Beantragung einer Beglaubigung testen."
-   }
-  },
-  {
-   "id": "BER.6.16.3",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Berechtigung SOLLTE den Schlüssel anhand der Vorgaben für die Schlüsselbeglaubigung bei Erneuerung einer Beglaubigung testen."
-   }
-  },
-  {
-   "id": "BER.6.16.4",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Berechtigung SOLLTE den Schlüssel anhand der Vorgaben für die Schlüsselbeglaubigung bei Revocation einer Beglaubigung testen."
-   }
-  },
-  {
-   "id": "BER.6.16.5",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Berechtigung SOLLTE den Beglaubigungsstatus des Schlüssels im Verzeichnis öffentlicher Schlüssel dokumentieren."
-   }
-  },
-  {
-   "id": "BER.6.16.6",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Berechtigung SOLLTE den Revocationstatus des Schlüssels im Verzeichnis öffentlicher Schlüssel dokumentieren."
-   }
   }
  ],
  "facets": {
@@ -91,34 +24,6 @@
     "smt": {
      "action": "verankern",
      "result": "Vorgaben für die Schlüsselbeglaubigung"
-    },
-    "BER.6.16.1": {
-     "action": "zuweisen",
-     "result": "die Beglaubigung von Schlüsseln",
-     "result-specification": "{{einer zuständigen Person oder Rolle}}"
-    },
-    "BER.6.16.2": {
-     "action": "testen",
-     "result": "den Schlüssel anhand der Vorgaben für die Schlüsselbeglaubigung",
-     "result-specification": "bei Beantragung einer Beglaubigung"
-    },
-    "BER.6.16.3": {
-     "action": "testen",
-     "result": "den Schlüssel anhand der Vorgaben für die Schlüsselbeglaubigung",
-     "result-specification": "bei Erneuerung einer Beglaubigung"
-    },
-    "BER.6.16.4": {
-     "action": "testen",
-     "result": "den Schlüssel anhand der Vorgaben für die Schlüsselbeglaubigung",
-     "result-specification": "bei Revocation einer Beglaubigung"
-    },
-    "BER.6.16.5": {
-     "action": "dokumentieren",
-     "result": "den Beglaubigungsstatus des Schlüssels im Verzeichnis öffentlicher Schlüssel"
-    },
-    "BER.6.16.6": {
-     "action": "dokumentieren",
-     "result": "den Revocationstatus des Schlüssels im Verzeichnis öffentlicher Schlüssel"
     }
    }
   },
@@ -128,100 +33,12 @@
      "required-documentation": [
       "IT-Betriebskonzept"
      ]
-    },
-    "BER.6.16.1": {
-     "required-documentation": [
-      "IT-Betriebskonzept"
-     ]
-    },
-    "BER.6.16.2": {
-     "required-documentation": [
-      "IT-Betriebskonzept"
-     ]
-    },
-    "BER.6.16.3": {
-     "required-documentation": [
-      "IT-Betriebskonzept"
-     ]
-    },
-    "BER.6.16.4": {
-     "required-documentation": [
-      "IT-Betriebskonzept"
-     ]
-    },
-    "BER.6.16.5": {
-     "required-documentation": [
-      "Verzeichnis öffentlicher Schlüssel"
-     ]
-    },
-    "BER.6.16.6": {
-     "required-documentation": [
-      "Verzeichnis öffentlicher Schlüssel"
-     ]
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
    "by-statement": {
     "smt": {
-     "confidentiality": "2",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.36"
-     ]
-    },
-    "BER.6.16.1": {
-     "confidentiality": "2",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.36"
-     ]
-    },
-    "BER.6.16.2": {
-     "confidentiality": "2",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "1",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.36",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.19",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.22"
-     ]
-    },
-    "BER.6.16.3": {
-     "confidentiality": "2",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.36"
-     ]
-    },
-    "BER.6.16.4": {
-     "confidentiality": "2",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "1",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.19",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.22",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.36"
-     ]
-    },
-    "BER.6.16.5": {
-     "confidentiality": "2",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.36"
-     ]
-    },
-    "BER.6.16.6": {
      "confidentiality": "2",
      "integrity": "1",
      "availability": "1",
@@ -241,66 +58,6 @@
      "tags": [
       "Cryptography"
      ]
-    },
-    "BER.6.16.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 4,
-     "tags": [
-      "Cryptography"
-     ],
-     "title": "Zertifizierungsstelle",
-     "alt-identifier": "7b80290b-5c6d-4e39-857c-0a63a8e2543a"
-    },
-    "BER.6.16.2": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 4,
-     "tags": [
-      "Cryptography"
-     ],
-     "title": "Beglaubigung",
-     "alt-identifier": "921cdb15-bf12-4a04-98f0-3bb7af3628d6"
-    },
-    "BER.6.16.3": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 4,
-     "tags": [
-      "Cryptography"
-     ],
-     "title": "Erneuerung",
-     "alt-identifier": "40d229bb-6fab-4a1a-a96a-a2a119acef5f"
-    },
-    "BER.6.16.4": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 4,
-     "tags": [
-      "Cryptography"
-     ],
-     "title": "Revocation",
-     "alt-identifier": "0e70f6df-b9c4-4046-871a-5e4d1263fb9f"
-    },
-    "BER.6.16.5": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 3,
-     "tags": [
-      "Cryptography"
-     ],
-     "title": "Beglaubigungsstatus",
-     "alt-identifier": "3f4e22f4-f99f-46fc-91c8-d9faad3cedcc"
-    },
-    "BER.6.16.6": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 3,
-     "tags": [
-      "Cryptography"
-     ],
-     "title": "Revocationstatus",
-     "alt-identifier": "7d843f5e-e393-4f0b-a72c-0c3de4936859"
     }
    }
   },
@@ -310,43 +67,6 @@
      "guidance": {
       "de": "Je nach Umfang der Beglaubigungstätigkeit gehören hierzu z.B. Algorithmen, Zweckbindung, Nutzungsdauer, sowie prozessuale Vorgaben für Speicherung, Beantragung, Revocation, Erneuerung und Verfügbarkeit. Für Details siehe IETF RFC 3647."
      }
-    },
-    "BER.6.16.1": {
-     "guidance": {
-      "de": "Die Beglaubigung von Schlüsseln ist technisch komplex. Gleichzeitig hängt von ihr die Vertrauensstellung von Systemen und Anwendungen im Informationsverbund ab. Daher ist es sinnvoll diese Aufgabe konkret bestimmten Personen oder Rollen zuzuweisen."
-     }
-    },
-    "BER.6.16.2": {
-     "guidance": {
-      "de": "Schlüsselbeglaubigung (engl. key certification) ist der kryptographische Nachweis, dass ein kryptographischer Schlüssel echt, unverändert und einer berechtigten Identität eindeutig zugeordnet ist. Der Schlüsseltest vor der Beglaubigung dient dazu, sicherzustellen, dass der einzureichende Schlüssel die festgelegten technischen und organisatorischen Vorgaben für die Genehmigung der Beglaubigung erfüllt – etwa hinsichtlich Schlüssellänge, Algorithmuskompatibilität oder Integrität der Schlüsseldaten. Solche Prüfungen können die korrekte Formatierung, die Funktionsfähigkeit innerhalb der vorgesehenen Kryptosysteme sowie den Abgleich mit vertrauenswürdigen Referenzen umfassen. Ziel ist die Gewährleistung, dass keine fehlerhaften, kompromittierten oder absichtlich manipulierten Schlüssel in eine Vertrauenskette eingebracht werden.  Diese Vorgabe kann das Risiko reduzieren, dass fehlerhafte oder bösartig erzeugte Schlüssel zu einer Täuschung über die Identität oder zu unbemerkten Datenmanipulationen führen könnte. Ebenso kann sie verhindern, dass ein unzureichend geprüfter Schlüssel später als gültig angesehen wird, obwohl er kompromittiert ist. Eine konsequente Umsetzung kann die Integrität kryptographischer Infrastrukturen stärken und die Vertrauenswürdigkeit digitaler Signaturen, Authentifizierungen und Verschlüsselungsprozesse sichern. In der Praxis kann dies etwa durch automatisierte Validierungsroutinen in einer Public-Key-Infrastruktur (PKI), durch den Einsatz spezialisierter HSM-Testwerkzeuge oder durch manuelle Prüfung anhand festgelegter Zertifizierungsrichtlinien erfolgen."
-     }
-    },
-    "BER.6.16.3": {
-     "guidance": {
-      "de": "Die Erneuerung einer Beglaubigung beschreibt den Vorgang, bei dem ein ablaufendes oder gefährdetes Zertifikat durch ein neues ersetzt wird, wobei die Vertrauenskette erhalten bleibt. Dazu wird geprüft, ob die Vorgaben für die Erneuerung der Beglaubigung erfüllt sind. Das Testen des Schlüssels im Rahmen der Erneuerung dient dazu, die fortgesetzte Vertrauenswürdigkeit und Funktionsfähigkeit des Schlüssels sicherzustellen, etwa durch Verifikation der Signatur, Abgleich der Fingerprints oder Validierung gegen Sperrlisten.  Der Zweck dieser Anforderung liegt in der Sicherstellung, dass bei der Erneuerung eines Zertifikats keine kompromittierten, fehlerhaften oder unautorisierten Schlüssel weiterverwendet werden. Wird die Schlüsselprüfung unterlassen, könnte ein Angreifer manipulierte oder gefälschte Schlüssel einschleusen, was zu unbemerktem Datenabgriff, Identitätsmissbrauch oder Integritätsverlust führen könnte. Eine wirksame Prüfung kann dagegen sicherstellen, dass nur überprüfte und gültige Schlüssel erneut beglaubigt werden, wodurch das Vertrauensniveau der gesamten kryptographischen Infrastruktur stabil bleibt. Sinnvolle Umsetzungsvarianten können z. B. die Nutzung automatisierter Schlüsselvalidierungen in Public-Key-Infrastrukturen (PKI), der Einsatz von Hardware-Sicherheitsmodulen (HSM) für die Signaturprüfung oder der Abgleich über Transparenzregister wie Certificate Transparency Logs sein."
-     }
-    },
-    "BER.6.16.4": {
-     "guidance": {
-      "de": "Die Revocation einer Beglaubigung (engl. revocation of attestation) ist die nachträgliche Ungültigerklärung einer solchen Bestätigung, beispielsweise durch Sperrung eines Zertifikats mittels Certificate Revocation List (CRL) oder Online Certificate Status Protocol (OCSP). Das Testen des Schlüssels anhand der Vorgaben für die Schlüsselbeglaubigung bedeutet hier, dass geprüft wird, ob die festgelegten Vorgaben für die Revocation erfüllt sind. Damit wird sichergestellt, dass der Widerruf einer Beglaubigung nur bei Vorliegen der Voraussetzungen angestoßen wird und dann technisch und organisatorisch korrekt umgesetzt und im Systemverhalten nachvollziehbar berücksichtigt wird, etwa durch sofortige Ungültigkeitserklärung oder Sperrung des betreffenden Schlüssels.  Der Zweck dieser Vorgabe liegt darin, unzulässige oder verfrühte Revocations ebenso zu vermeiden wie verspätete oder unvollständige Umsetzungen, die zu Sicherheitslücken führen könnten. Wird die Prüfung der Revocation-Vorgaben fehlerhaft oder unvollständig durchgeführt, könnte ein gültiger Schlüssel fälschlich gesperrt werden oder ein tatsächlich kompromittierter Schlüssel weiter im Einsatz bleiben. Eine konsequente Umsetzung kann dagegen gewährleisten, dass der Widerruf von Beglaubigungen nur im vorgesehenen Rahmen erfolgt, die Integrität des Vertrauensmodells erhalten bleibt und alle abhängigen Systeme den neuen Status korrekt übernehmen. Praktisch kann dies durch automatisierte Regelprüfungen in Zertifikatsverwaltungsdiensten, durch Ereignisprotokollierung in Key Management Services (KMS) oder durch Hardware-Sicherheitsmodule (HSM) umgesetzt werden, die Revocation-Bedingungen strikt validieren, bevor Änderungen am Schlüsselstatus ausgeführt werden."
-     }
-    },
-    "BER.6.16.5": {
-     "guidance": {
-      "de": "Der Beglaubigungsstatus erfasst, ob der Schlüssel von der Beglaubigungs- oder Zertifizierungsstelle der Institution beglaubigt wurde."
-     }
-    },
-    "BER.6.16.6": {
-     "guidance": {
-      "de": "Der Revocationsstatus des Schlüsseln erfasst, ob der Schlüssel zurückgezogen wurde, etwa weil er aufgrund einer Kompromittierung nicht mehr sicher verwendet werden kann."
-     }
-    }
-   }
-  },
-  "https://ns.jascon.net/compat/oscal-1x@1": {
-   "param-extras": {
-    "ber.6.16.1-prm1": {
-     "alt-identifier": "7b80290b-5c6d-4e39-857c-0a63a8e2543a"
     }
    }
   }

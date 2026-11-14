@@ -16,16 +16,6 @@
    "prose": {
     "de": "Personal SOLLTE die Vertrauenswürdigkeit von Bewerbenden vor der Besetzung von Stellen testen."
    }
-  },
-  {
-   "id": "PERS.3.6.1",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Personal KANN eine Sicherheitsüberprüfung vor der Besetzung von sicherheitsrelevanten Stellen ausführen."
-   }
   }
  ],
  "facets": {
@@ -35,11 +25,6 @@
      "action": "testen",
      "result": "die Vertrauenswürdigkeit von Bewerbenden",
      "result-specification": "vor der Besetzung von Stellen"
-    },
-    "PERS.3.6.1": {
-     "action": "ausführen",
-     "result": "eine Sicherheitsüberprüfung",
-     "result-specification": "vor der Besetzung von sicherheitsrelevanten Stellen"
     }
    }
   },
@@ -49,29 +34,12 @@
      "required-documentation": [
       "Prozess Personalmanagement"
      ]
-    },
-    "PERS.3.6.1": {
-     "required-documentation": [
-      "Prozess Personalmanagement"
-     ]
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
    "by-statement": {
     "smt": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.31",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.33",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.32",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.35"
-     ]
-    },
-    "PERS.3.6.1": {
      "confidentiality": "1",
      "integrity": "1",
      "availability": "1",
@@ -94,16 +62,6 @@
      "tags": [
       "Insider Threat"
      ]
-    },
-    "PERS.3.6.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5,
-     "tags": [
-      "Insider Threat"
-     ],
-     "title": "Sicherheitsüberprüfung (intern)",
-     "alt-identifier": "a0b61264-fa20-481e-8d7a-3b0e37cc0a80"
     }
    }
   },
@@ -112,11 +70,6 @@
     "smt": {
      "guidance": {
       "de": "Hierbei sind sowohl die Identität der Person, als auch ihre Qualifikation anhand von Nachweisen zu verifizieren. Insbesondere ist zu prüfen, ob der vorgelegte Lebenslauf korrekt, plausibel und vollständig ist. Bei Unklarheiten oder Widersprüchen können die Angaben durch Rückfragen bei der Quelle der Qualifikationsnachweise verifiziert werden."
-     }
-    },
-    "PERS.3.6.1": {
-     "guidance": {
-      "de": "Eine Sicherheitsüberprüfung meint die Verifikation von Identität, beruflicher Qualifikation und Verlässlichkeit von allen Personen mit Zugriff auf schützenswerte Informationen, hier konkret der Mitarbeitenden. Bei einer Sicherheitsüberprüfung kann je nach Art der Tätigkeit ein Polizeiliches Führungszeugnis, eine finanzielle Hintergrundprüfung, ein Sicherheitsinterview, eine psychologische Eignungsprüfung, sowie eine Überprüfung von sozialen Beziehungen und Netzwerken sinnvoll sein. Hierbei besteht ein enger Bezug zum Persönlichkeits- und Datenschutzrecht der Betroffenen. Eine sicherheitsrelevante Stelle ist eine Funktion oder Rolle innerhalb einer Institution, die direkt Zugang zu sicherheitskritischen Informationen, IT-Systemen oder Konfigurationen hat und deren Handlungen die Vertraulichkeit, Integrität oder Verfügbarkeit dieser Systeme maßgeblich beeinflussen könnten. Dazu zählen insbesondere (1) der bzw. die Informationssicherheitsbeauftragte, (2) System-, Netzwerk- und Serveradministratoren sowie (3) weitere Administrator*innen mit erhöhten Rechten wie Domain-Admins, Datenbank-Admins oder Security-Engineers, ebenso wie (4) Personen mit Zugriff auf sicherheitskritische Schlüsselmaterialien etwa im Kryptografie- oder Identitätsmanagement. Nicht darunter fallen hingegen Tätigkeiten ohne sicherheitskritischen Systemzugang oder ohne Einfluss auf Sicherheitsfunktionen, etwa Reinigungs- oder Empfangstätigkeiten."
      }
     }
    }

@@ -7,12 +7,12 @@
  },
  "members": [
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/GC.7.1",
-   "sequence": 160
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/gc-7-1",
+   "sequence": 290
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/GC.7.2",
-   "sequence": 170
+   "sequence": 300
   }
  ],
  "label": "7",

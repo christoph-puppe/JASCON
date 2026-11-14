@@ -1,0 +1,22 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/pers-6-1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Vorgehensweise für den Weggang"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.6.1",
+   "sequence": 2660
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.6.1.1",
+   "sequence": 2670
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.6.1.2",
+   "sequence": 2680
+  }
+ ]
+}

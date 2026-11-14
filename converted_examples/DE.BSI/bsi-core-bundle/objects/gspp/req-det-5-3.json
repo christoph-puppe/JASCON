@@ -16,43 +16,6 @@
    "prose": {
     "de": "Detektion SOLLTE eine Vorgehensweise zum Scan nach Schwachstellen einschließlich deren Auswertung und Behandlung verankern."
    }
-  },
-  {
-   "id": "DET.5.3.1",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Detektion SOLLTE kritische Scans durch {param:det.5.3.1-prm1} autorisieren."
-   },
-   "parameters": [
-    {
-     "name": "det.5.3.1-prm1",
-     "type": "string",
-     "label": "zuständige Personen oder Rollen"
-    }
-   ]
-  },
-  {
-   "id": "DET.5.3.2",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Detektion KANN Schwachstellen anhand eines Abgleichs mehrerer Scans miteinander überprüfen."
-   }
-  },
-  {
-   "id": "DET.5.3.3",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Detektion KANN Schwachstellen in öffentlich erreichbaren Systemen oder Anwendungen anhand bekannter Anzeichen im Audit Log testen."
-   }
   }
  ],
  "facets": {
@@ -62,41 +25,12 @@
      "action": "verankern",
      "result": "eine Vorgehensweise zum Scan nach Schwachstellen",
      "result-specification": "einschließlich deren Auswertung und Behandlung"
-    },
-    "DET.5.3.1": {
-     "action": "autorisieren",
-     "result": "kritische Scans",
-     "result-specification": "durch {{zuständige Personen oder Rollen}}"
-    },
-    "DET.5.3.2": {
-     "action": "überprüfen",
-     "result": "Schwachstellen anhand eines Abgleichs mehrerer Scans miteinander"
-    },
-    "DET.5.3.3": {
-     "action": "testen",
-     "result": "Schwachstellen in öffentlich erreichbaren Systemen oder Anwendungen",
-     "result-specification": "anhand bekannter Anzeichen im Audit Log"
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "by-statement": {
     "smt": {
-     "required-documentation": [
-      "Detektions-Konzept"
-     ]
-    },
-    "DET.5.3.1": {
-     "required-documentation": [
-      "Detektions-Konzept"
-     ]
-    },
-    "DET.5.3.2": {
-     "required-documentation": [
-      "Detektions-Konzept"
-     ]
-    },
-    "DET.5.3.3": {
      "required-documentation": [
       "Detektions-Konzept"
      ]
@@ -115,37 +49,6 @@
       "https://ns.bsi.bund.de/gspp/threat/G-0.23",
       "https://ns.bsi.bund.de/gspp/threat/G-0.18"
      ]
-    },
-    "DET.5.3.1": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.39",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
-     ]
-    },
-    "DET.5.3.2": {
-     "confidentiality": "2",
-     "integrity": "2",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.28",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.23"
-     ]
-    },
-    "DET.5.3.3": {
-     "confidentiality": "2",
-     "integrity": "2",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.28",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.23"
-     ]
     }
    }
   },
@@ -155,27 +58,6 @@
      "class": "BSI-Stand-der-Technik-Kernel-G0",
      "sec-level": "normal-SdT",
      "effort": 3
-    },
-    "DET.5.3.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 4,
-     "title": "Autorisierung kritischer Scans",
-     "alt-identifier": "d19ef635-5438-4b4e-b75b-479764f39069"
-    },
-    "DET.5.3.2": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 3,
-     "title": "Korrelation komplexer Angriffswege",
-     "alt-identifier": "1221903d-e402-49b0-a7ac-763a11683a4b"
-    },
-    "DET.5.3.3": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 3,
-     "title": "Historische Analyse",
-     "alt-identifier": "f64131d9-e0cd-4c01-937a-ea93d7a92371"
     }
    }
   },
@@ -185,28 +67,6 @@
      "guidance": {
       "de": "Über das Netz erreichbare Schwachstellen bergen das Risiko, dass hierüber Angriffe in IT-Systeme und Anwendungen eindringen, Daten auslesen oder sich über das Netz verbreiten. Schwachstellenscans finden solche Lücken, indem sie Anfragen zu bekannten Schwachstellen im Netz stellen und die Antworten auswerten. Regelmäßige Scans tragen dazu bei, dass Sicherheitslücken entdeckt werden, bevor sie ausgenutzt werden."
      }
-    },
-    "DET.5.3.1": {
-     "guidance": {
-      "de": "Schwachstellenscans könnten aufgrund ihres Umfangs oder der breiten Abdeckung ihrer Aktivitäten selbst Fehlerzustände provozieren oder Schwachstellen auslösen. Wenn Scans besondere Berechtigungen benötigen - z.B. lokale Administrationsrechte oder Zugriff auf ein abgeschottetes Netz sensibler, betriebskritischer Systeme, so kann eine Autorisierung solcher Scans, vor der eine Abwägung der damit verbundenen Risiken vorgenommen wird, angezeigt sein."
-     }
-    },
-    "DET.5.3.2": {
-     "guidance": {
-      "de": "Fortschrittliche Angreifer könnten mehrere, scheinbar unkritische Schwachstellen nacheinander ausnutzen, die erst in Kombination einen gefährlichen Angriff, etwa die Ausführung von Code aus der Ferne, erlauben. Um solche komplexen Angriffe zu erkennen, können Messergebnisse verschiedener Schwachstellenscanner miteinander abgeglichen werden. Komplexe Angriffswege können mit Methoden wie Attack Trees erkannt und bewertet werden."
-     }
-    },
-    "DET.5.3.3": {
-     "guidance": {
-      "de": "Die historische Analyse von Logdateien ermöglicht es, vergangene Systemaktivitäten systematisch zu untersuchen, um potenzielle Sicherheitsvorfälle zu identifizieren, die zum Zeitpunkt ihres Auftretens unbemerkt blieben. Nach der Entdeckung einer Schwachstelle kann so rückwirkend festgestellt werden, ob und wie diese bereits ausgenutzt wurde. Die Umsetzung kann durch Etablierung eines zentralisierten Log-Managements mit langer Aufbewahrungsdauer, Implementierung automatisierter Such- und Korrelationsalgorithmen zur Erkennung bekannter Angriffsmuster und Anomalien in den Logdaten, sowie durch forensische Analyse der Zeitstempel, Quell-IPs, Benutzeraktivitäten und Zugriffsversuche erfolgen. Bei der Feststellung von Schwachstellen in öffentlich zugänglichen Systemen ist es sinnvoll die Audit-Logs gezielt nach Indikatoren zu durchsuchen, die auf entsprechende Angriffsmuster hindeuten - darunter ungewöhnliche Zugriffszeiten, auffällige Authentifizierungsversuche, verdächtige Datenbankabfragen oder charakteristische Command-Injection-Versuche, wodurch potenzielle Kompromittierungen retrospektiv aufgedeckt und in ihrem vollen Umfang bewertet werden können."
-     }
-    }
-   }
-  },
-  "https://ns.jascon.net/compat/oscal-1x@1": {
-   "param-extras": {
-    "det.5.3.1-prm1": {
-     "alt-identifier": "d19ef635-5438-4b4e-b75b-479764f39069"
     }
    }
   }

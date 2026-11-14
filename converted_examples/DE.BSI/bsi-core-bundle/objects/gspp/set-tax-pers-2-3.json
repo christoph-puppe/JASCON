@@ -1,0 +1,30 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/pers-2-3",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Rollentrennung"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.2.3",
+   "sequence": 2390
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.2.3.1",
+   "sequence": 2400
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.2.3.2",
+   "sequence": 2410
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.2.3.3",
+   "sequence": 2420
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.2.3.4",
+   "sequence": 2430
+  }
+ ]
+}

@@ -7,16 +7,16 @@
  },
  "members": [
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/REA.1.1",
-   "sequence": 6310
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/rea-1-1",
+   "sequence": 10170
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/REA.1.2",
-   "sequence": 6320
+   "sequence": 10180
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/REA.1.3",
-   "sequence": 6330
+   "sequence": 10190
   }
  ],
  "label": "1",

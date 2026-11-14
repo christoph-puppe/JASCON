@@ -1,0 +1,22 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/bes-5-5",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Nutzungsregelungen"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.5",
+   "sequence": 3400
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.5.1",
+   "sequence": 3410
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.5.2",
+   "sequence": 3420
+  }
+ ]
+}

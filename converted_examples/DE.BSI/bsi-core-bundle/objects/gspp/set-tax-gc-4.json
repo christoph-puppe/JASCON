@@ -8,11 +8,11 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/GC.4.1",
-   "sequence": 90
+   "sequence": 140
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/GC.4.2",
-   "sequence": 100
+   "sequence": 150
   }
  ],
  "label": "4",

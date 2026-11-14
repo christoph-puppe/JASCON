@@ -7,8 +7,8 @@
  },
  "members": [
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DLS.4.1",
-   "sequence": 2550
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/dls-4-1",
+   "sequence": 4320
   }
  ],
  "label": "4",

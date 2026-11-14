@@ -1,0 +1,58 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/test-3-1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Sicherheitstest"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.3.1",
+   "sequence": 4500
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.3.1.1",
+   "sequence": 4510
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.3.1.2",
+   "sequence": 4520
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.3.1.3",
+   "sequence": 4530
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.3.1.4",
+   "sequence": 4540
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.3.1.5",
+   "sequence": 4550
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.3.1.6",
+   "sequence": 4560
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.3.1.7",
+   "sequence": 4570
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.3.1.8",
+   "sequence": 4580
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.3.1.9",
+   "sequence": 4590
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.3.1.10",
+   "sequence": 4600
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.3.1.11",
+   "sequence": 4610
+  }
+ ]
+}

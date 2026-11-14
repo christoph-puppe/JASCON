@@ -1,0 +1,98 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/ASST.2.1.1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "ASST.2.1.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "Informationsverantwortung"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Informationen und Assets für Daten SOLLTE die Zuständigkeit für deren Verarbeitung {param:asst.2.1.1-prm1} zuweisen."
+   },
+   "parameters": [
+    {
+     "name": "asst.2.1.1-prm1",
+     "type": "string",
+     "label": "einer zuständigen Person oder Rolle"
+    }
+   ]
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "zuweisen",
+     "result": "die Zuständigkeit für deren Verarbeitung",
+     "result-specification": "{{einer zuständigen Person oder Rolle}}",
+     "target-object-categories": [
+      "Daten"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Inventar Informationen"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "2",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.16",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.17",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.45"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 3
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Hiermit ist das Eigentum oder die institutionsinterne Zuständigkeit für die Nutzung und den damit einhergehenden Schutz der jeweiligen Informationen und Assets (Asset Ownership) gemeint. Klare Zuweisungen stellen sicher, dass den Beteiligten nicht nur ihre prozessualen Aufgaben, sondern auch ihre Zuständigkeit für die konkreten Informationen bewusst und die damit verbundenen Pflichten bewusst sind. Dies kann durch dezentrales Nachhalten der Verantwortung nachgehalten werden. Alternativ kann auch eine Gruppierung der Informationen nach Assets wie Anwendungen oder Diensten umgesetzt werden, so dass die Zuständigen für das Asset dadurch auch die Zuständigkeit für die Informationen enthalten, die dort verarbeitet werden."
+     }
+    }
+   }
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "param-extras": {
+    "asst.2.1.1-prm1": {
+     "alt-identifier": "eae7145a-228e-47ca-9a09-7a4a3b74ac55"
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "eae7145a-228e-47ca-9a09-7a4a3b74ac55"
+  }
+ ]
+}

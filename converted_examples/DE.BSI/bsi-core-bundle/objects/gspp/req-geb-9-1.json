@@ -16,67 +16,6 @@
    "prose": {
     "de": "Gebäudemanagement für Standorte SOLLTE eine norm- und bedarfsgerechte Stromversorgung und -verkabelung installieren."
    }
-  },
-  {
-   "id": "GEB.9.1.1",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Gebäudemanagement für Standorte KANN die bedarfsgerechte Stromversorgung {param:geb.9.1.1-prm1} vorausschauend überprüfen."
-   },
-   "parameters": [
-    {
-     "name": "geb.9.1.1-prm1",
-     "type": "string",
-     "label": "regelmäßig"
-    }
-   ]
-  },
-  {
-   "id": "GEB.9.1.2",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Gebäudemanagement für Standorte KANN eine ausschließlich für diesen Standort bestimmte Elektrounterverteilung die direkt von der Niederspannungshauptverteilung (NSHV) versorgt wird installieren."
-   }
-  },
-  {
-   "id": "GEB.9.1.3",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Gebäudemanagement für Standorte KANN eine redundante Stromversorgung für {param:geb.9.1.3-prm1} installieren."
-   },
-   "parameters": [
-    {
-     "name": "geb.9.1.3-prm1",
-     "type": "string",
-     "label": "eine Stützzeit"
-    }
-   ]
-  },
-  {
-   "id": "GEB.9.1.4",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Gebäudemanagement für Standorte KANN eine redundante Stromversorgung für {param:geb.9.1.4-prm1} installieren."
-   },
-   "parameters": [
-    {
-     "name": "geb.9.1.4-prm1",
-     "type": "string",
-     "label": "eine längere Stützzeit"
-    }
-   ]
   }
  ],
  "facets": {
@@ -88,38 +27,6 @@
      "target-object-categories": [
       "Standorte"
      ]
-    },
-    "GEB.9.1.1": {
-     "action": "überprüfen",
-     "result": "die bedarfsgerechte Stromversorgung",
-     "result-specification": "{{regelmäßig}} vorausschauend",
-     "target-object-categories": [
-      "Standorte"
-     ]
-    },
-    "GEB.9.1.2": {
-     "action": "installieren",
-     "result": "eine ausschließlich für diesen Standort bestimmte Elektrounterverteilung",
-     "result-specification": "die direkt von der Niederspannungshauptverteilung (NSHV) versorgt wird",
-     "target-object-categories": [
-      "Standorte"
-     ]
-    },
-    "GEB.9.1.3": {
-     "action": "installieren",
-     "result": "eine redundante Stromversorgung",
-     "result-specification": "für {{eine Stützzeit}}",
-     "target-object-categories": [
-      "Standorte"
-     ]
-    },
-    "GEB.9.1.4": {
-     "action": "installieren",
-     "result": "eine redundante Stromversorgung",
-     "result-specification": "für {{eine längere Stützzeit}}",
-     "target-object-categories": [
-      "Standorte"
-     ]
     }
    }
   },
@@ -128,26 +35,6 @@
     "smt": {
      "required-documentation": [
       "Gebäudedokumentation"
-     ]
-    },
-    "GEB.9.1.1": {
-     "required-documentation": [
-      "Übungs- und Prüfplan"
-     ]
-    },
-    "GEB.9.1.2": {
-     "required-documentation": [
-      "Gebäudedokumentation"
-     ]
-    },
-    "GEB.9.1.3": {
-     "required-documentation": [
-      "IT-Betriebskonzept"
-     ]
-    },
-    "GEB.9.1.4": {
-     "required-documentation": [
-      "IT-Betriebskonzept"
      ]
     }
    }
@@ -164,44 +51,6 @@
       "https://ns.bsi.bund.de/gspp/threat/G-0.8",
       "https://ns.bsi.bund.de/gspp/threat/G-0.10"
      ]
-    },
-    "GEB.9.1.1": {
-     "confidentiality": "0",
-     "integrity": "0",
-     "availability": "2",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.25"
-     ]
-    },
-    "GEB.9.1.2": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "2",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
-     ]
-    },
-    "GEB.9.1.3": {
-     "confidentiality": "0",
-     "integrity": "1",
-     "availability": "2",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.8",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.25",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.10"
-     ]
-    },
-    "GEB.9.1.4": {
-     "confidentiality": "0",
-     "integrity": "0",
-     "availability": "2",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.25"
-     ]
     }
    }
   },
@@ -211,43 +60,6 @@
      "class": "BSI-Stand-der-Technik-Kernel-G0",
      "sec-level": "normal-SdT",
      "effort": 3
-    },
-    "GEB.9.1.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5,
-     "title": "Vorausschauende Lastanalyse",
-     "alt-identifier": "a73bc9c8-bd58-4816-9e18-d41e94c20341"
-    },
-    "GEB.9.1.2": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5,
-     "tags": [
-      "Hochverfügbarkeit"
-     ],
-     "title": "Dedizierte Elektrounterverteilung",
-     "alt-identifier": "59df8c81-694d-4612-a439-63deaee5c4d9"
-    },
-    "GEB.9.1.3": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5,
-     "tags": [
-      "Hochverfügbarkeit"
-     ],
-     "title": "Redundante Stromversorgung",
-     "alt-identifier": "eeaa8977-05e5-4eaa-a5b7-ea490eb543cd"
-    },
-    "GEB.9.1.4": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5,
-     "tags": [
-      "Hochverfügbarkeit"
-     ],
-     "title": "Langanhaltende Sekundärversorgung",
-     "alt-identifier": "9de758ff-88f1-4350-b937-354a5e4e5fc5"
     }
    }
   },
@@ -257,39 +69,6 @@
      "guidance": {
       "de": "Eine Stromversorgung ist normgerecht, wenn Normen zur Bereitstellung und Verkabelung wie DIN VDE 0100 eingehalten werden. Bedarfsgerecht ist eine Stromversorgung, wenn sie den Strombedarf der IT-Systeme und anderen Geräte im Gebäude deckt und Reserven für Erweiterungen oder Notfälle bietet. Das betrifft sowohl zentrale Versorgungsanschlüsse, Unterverteilungen als auch die Zuleitung in die einzelnen Räume. Die Anforderung ist auch dann erfüllt, wenn eine den Compliance-Vorschriften für Strom entsprechende Versorgung bereits im Gebäude vorhanden ist. Im Fall von Rechenzentren ist auch auf die Möglichkeit der Notabschaltung der Stromversorgung (für einzelne elektrische Verbraucher) zu achten. Hier ist eine sinnvolle Parzellierung und Zielgerichtetheit bei der Notabschaltung von Bedeutung."
      }
-    },
-    "GEB.9.1.1": {
-     "guidance": {
-      "de": "Die prädiktive Lastanalyse in Stromversorgungssystemen bezieht sich auf die ausgefeilte Analyse von elektrischen Lastmustern, einschließlich Oberschwingungen der Stromqualität, um den zukünftigen Stromverbrauch und Qualitätsprobleme vorherzusagen, bevor sie auftreten. Sie kann in Bereichen, in denen die Stromversorgung von höchster Bedeutung ist, helfen, die kontinuierliche Verfügbarkeit der IT-Infrastruktur durch Überwachung und Vorhersage potenzieller Stromanomalien sicherzustellen, die die Systemintegrität gefährden könnten. Im Gegensatz zu reaktiven Ansätzen, die Probleme erst nach ihrem Auftreten angehen, werden bei der vorausschauenden Lastanalyse fortschrittliche Algorithmen zur Analyse historischer Stromverbrauchsdaten, harmonischer Verzerrungen und Spannungsschwankungen eingesetzt, um Muster zu erkennen, die auf bevorstehende Stromversorgungsprobleme hinweisen.  Die Implementierung kann mit Netzqualitätsanalysatoren an kritischen Infrastrukturpunkten, Integration mit SCADA-Systemen und durch Analyse mit Algorithmen des maschinellen Lernens, die Netzanomalien mit bestimmten Betriebsbedingungen korrelieren, geschehen. Eine regelmäßige Validierung der Vorhersagemodelle anhand tatsächlicher Vorfälle hilft die Analyse zu verbessern, während die Integration mit automatisierten Energieverwaltungssystemen einen dynamischen Lastausgleich während vorhergesagter Stressperioden ermöglichen kann, wodurch sowohl die Stromqualität, als auch die Systemverfügbarkeit ohne menschliches Eingreifen aufrechterhalten werden."
-     }
-    },
-    "GEB.9.1.2": {
-     "guidance": {
-      "de": "Eine eigene, direkt aus der NSHV gespeiste Unterverteilung trennt kritische Abgänge (IT/USV/Kälte), stellt Selektivität und eindeutige Kennzeichnung sicher, ermöglicht Zustandsüberwachung und hält Ausbaureserven vor."
-     }
-    },
-    "GEB.9.1.3": {
-     "guidance": {
-      "de": "Wenn die Stromzufuhr ausfällt, könnten geschäftskritische Anwendungen unerwartet ausfallen oder Daten verlorengehen.   Die Redundanz der Stromquelle kann z.B. durch einen im System integrierten Akku, durch eine eigenständige unterbrechungsfreie Stromversorgung (USV) oder durch die Anbindung an ein sekundäres Stromnetz gewährleistet werden. Bei Bedarf kann sie auch die Übergangszeit bis zum Anlauf einer längerfristigen Netzersatzanlage überbrücken. Beim Betrieb einer USV ist auf die Einhaltung eines akzeptablen Temperaturbereichs der Batterie zu achten. Bei relevanten Änderungen an den Verbrauchern könnte es vorkommen, dass die USV-Systeme nicht mehr ausreichend dimensioniert sind. Da der Leistungsbedarf von Klimaanlagen oft zu hoch für eine USV ist, empfiehlt es sich zumindest die Steuerung der Anlagen an die unterbrechungsfreie Stromversorgung anzuschließen. Eine regelmäßige Wartung (u.U. nach Vorgabe des Herstellers) der USV und eine Trennung der Leistungselektronik von der Batterie ist empfohlen. Bei sehr hohem Schutzbedarf empfiehlt sich eine redundante Auslegung der USV.  Die minimale Stützzeit (Autonomiezeit) ergibt sich als Stützzeit = Wartezeit auf mögliche Wiederkehr der Stromversorung + 2 * Zeit zum Herunterfahren der Komponenten. Bei sehr hohem Schutzbedarf empfiehlt sich eine redundante Auslegung der USV.  Die Verkabelungswege sind redundant, wenn die Leitungen über verschiedene Wege geführt sind, sodass z.B. eine versehentliche Trennung nicht beide Leitungen betrifft."
-     }
-    },
-    "GEB.9.1.4": {
-     "guidance": {
-      "de": "Eine längere Stützzeit bezeichnet im Kontext der Stromversorgung die Fähigkeit, elektrische Energie über einen Zeitraum von mehreren Stunden oder sogar Tagen aufrechtzuerhalten, typischerweise durch den Einsatz einer Netzersatzanlage (NEA) oder vergleichbarer Infrastruktur. Während eine kurzzeitige Überbrückung durch unterbrechungsfreie Stromversorgungen (USV) lediglich Sekunden bis Minuten abdeckt, kann eine NEA längere Stromausfälle abfangen und die Betriebsfähigkeit kritischer Systeme dauerhaft sicherstellen. Risiken bestehen darin, dass ein Standort bei einem längerfristigen Netzausfall ohne redundante Stromversorgung seine sicherheitskritischen Prozesse nicht mehr betreiben könnte, was etwa zu Datenverlusten, Produktionsstillständen oder Ausfällen der Zutrittskontrolle führen könnte. Eine redundante Stromversorgung kann dem entgegenwirken, indem sie kritische Infrastrukturen wie Rechenzentren, Kommunikationssysteme oder Zutrittssysteme auch bei großflächigen Netzstörungen handlungsfähig hält. Zur Betriebsfähigkeit gehört auch die regelmäßige Wartung und Überprüfung des Betriebsmittelvorrats. Eine Institution kann die Anforderung umsetzen, indem sie geeignete technische Maßnahmen einplant: (1) Installation einer Netzersatzanlage mit automatischer Umschaltung auf Diesel- oder Gasgeneratoren, (2) Bereitstellung von Kraftstoffvorräten für eine definierte Stützzeit von beispielsweise 24, 48 oder 72 Stunden, (3) regelmäßige Lasttests, um sicherzustellen, dass die Anlage die notwendige Kapazität unter Realbedingungen liefern kann. Ergänzend kann eine Institution durch redundante Einspeisungen vom Energieversorger oder die Kombination mehrerer NEA-Module eine Ausfallsicherheit erhöhen. Prozessual kann sie Wartungspläne etablieren, die auch die Prüfung von Kraftstoffqualität, Starterbatterien und Umschalteinrichtungen umfassen. Praktische Umsetzungstipps sind etwa, NEA-Anlagen in geschützten Gebäudebereichen mit ausreichender Belüftung und Brandschutz vorzusehen, die Abgasführung nach außen zu gewährleisten und einen sicheren, vor Manipulation geschützten Tankstandort zu wählen."
-     }
-    }
-   }
-  },
-  "https://ns.jascon.net/compat/oscal-1x@1": {
-   "param-extras": {
-    "geb.9.1.1-prm1": {
-     "alt-identifier": "a73bc9c8-bd58-4816-9e18-d41e94c20341"
-    },
-    "geb.9.1.3-prm1": {
-     "alt-identifier": "eeaa8977-05e5-4eaa-a5b7-ea490eb543cd"
-    },
-    "geb.9.1.4-prm1": {
-     "alt-identifier": "9de758ff-88f1-4350-b937-354a5e4e5fc5"
     }
    }
   }

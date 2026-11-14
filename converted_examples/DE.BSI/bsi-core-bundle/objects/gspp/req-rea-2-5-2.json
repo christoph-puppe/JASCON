@@ -1,0 +1,78 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/REA.2.5.2",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "REA.2.5.2",
+ "lifecycle": "active",
+ "title": {
+  "de": "Vier-Augen-Prinzip"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "may",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Sicherheitsvorfallsbehandlung KANN zur Forensik ein Vier-Augen-Prinzip verankern."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "verankern",
+     "result": "zur Forensik ein Vier-Augen-Prinzip"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Behandlung von Sicherheitsvorfällen"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "2",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.39",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.47"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "erhöht",
+     "effort": 5
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Wenn IT-Forensische Untersuchungen alleine vorgenommen werden, könnte das dokumentierte Vorgehen und damit die Stichhaltigkeit der Beweise bei einer gerichtlichen Überprüfung angezweifelt werden. Besser ist es, solche Untersuchungen gemeinsam mit einem Zeugen vorzunehmen, der qualifiziert ist zu beurteilen, welche Arbeitsschritte dabei vorgenommen wurden. Der Zeuge beglaubigt insbesondere die Prüfsummen der Dokumentation. Allerdings ist es auch ohne Vier-Augen-Prinzip möglich Belege für ein korrektes Vorgehen zu erbringen, beispielsweise durch Vorlage der unveränderten originalen Speichermedien."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "6ff56f07-8d72-4f04-9fe9-8f48c89b2e78"
+  }
+ ]
+}

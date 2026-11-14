@@ -1,0 +1,88 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/TEST.3.1.3",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "TEST.3.1.3",
+ "lifecycle": "active",
+ "title": {
+  "de": "Integritätstest"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Änderungen und Tests SOLLTE die Integrität von Softwareartefakten testen."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "testen",
+     "result": "die Integrität von Softwareartefakten"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Freigabeplan"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "2",
+     "integrity": "2",
+     "availability": "1",
+     "authenticity": "1",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.28",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.20",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.23"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 3,
+     "tags": [
+      "Lieferketten"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Softwareartefakte sind in diesem Kontext Anwendungen oder ihre Bestandteile wie Bibliotheken, Frameworks, Container-Images, Plug-ins, Packages, Binärdateien, Skripte, Modelle, Templates oder Build-Abhängigkeiten (sog. Third-Party Components, Dependencies), die durch die Änderung installiert oder aktualisiert werden. Dies kann z.B. durch Vergleich von Prüfsummen geschehen. Wenn möglich ist der Einsatz automatisierter Prüfungen empfehlenswert, es kann aber auch ein manueller Abgleich z.B. mit der Herstellerwebseite erfolgen."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "3c9043c9-8700-4fb4-92b1-68d9cf48602c"
+  }
+ ],
+ "relations": [
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.5.10.4"
+  }
+ ]
+}

@@ -8,27 +8,27 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/ber-1",
-   "sequence": 4710
+   "sequence": 7700
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/ber-2",
-   "sequence": 4780
+   "sequence": 7770
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/ber-3",
-   "sequence": 5110
+   "sequence": 8120
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/ber-4",
-   "sequence": 5210
+   "sequence": 8270
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/ber-5",
-   "sequence": 5320
+   "sequence": 8380
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/ber-6",
-   "sequence": 5490
+   "sequence": 8620
   }
  ],
  "label": "BER",

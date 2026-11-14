@@ -13,10 +13,14 @@
   "coverage-pct": 100.0
  },
  "objects": {
-  "requirements": 651,
+  "requirements": 999,
   "statements": 999,
-  "sets": 162,
-  "total": 813
+  "sets": 288,
+  "total": 1287,
+  "sets-of-a-group": 159,
+  "sets-of-a-control-with-nested-controls": 126,
+  "baseline-sets": 2,
+  "root-sets": 1
  },
  "modality": {
   "must": 149,
@@ -3219,8 +3223,8 @@
  },
  "mstls": "dropped by decision 2026-07-21 (reported to BSI; twin-catalog finding stays in census/handbook)",
  "baselines": {
-  "gspp:erhöht": 134,
-  "gspp:normal-SdT": 517
+  "gspp:erhöht": 227,
+  "gspp:normal-SdT": 772
  },
  "tag-value-inconsistencies": {
   "Compliance Management": 6
@@ -3229,29 +3233,30 @@
   "file": "bsi-conversion-ledger.json",
   "leaf-values": 49431,
   "totals": {
-   "copied": 22879,
-   "transformed": 11372,
-   "intentionally-dropped": 13020,
-   "unaccounted": 2160
+   "copied": 22626,
+   "transformed": 11795,
+   "not-content": 15004,
+   "intentionally-dropped": 6,
+   "unaccounted": 0
   },
   "verification-failures": 0,
-  "files-read-back": 820,
+  "files-read-back": 1294,
   "names-that-select-a-field": {
-   "copied-as-a-key-only": 6793,
-   "transformed-to-a-field-name-or-scheme": 7751
+   "copied-as-a-key-only": 6445,
+   "transformed-to-a-field-name-or-scheme": 8099
   },
   "rules": [
    {
     "rule": "requirement URI from the control id",
-    "source-values": 651
+    "source-values": 999
    },
    {
     "rule": "file path of a Requirement from the control id",
-    "source-values": 651
+    "source-values": 999
    },
    {
     "rule": "requirement URI from a link to a control (#id)",
-    "source-values": 191
+    "source-values": 266
    },
    {
     "rule": "a link that names a back-matter resource (#uuid): the address the resource gives",
@@ -3266,16 +3271,24 @@
     "source-values": 159
    },
    {
-    "rule": "baseline Set URI from the sec_level of a top-level control",
-    "source-values": 651
+    "rule": "URI of the Set that stands for a control with nested controls, from the control id",
+    "source-values": 126
    },
    {
-    "rule": "baseline Set title from the sec_level of a top-level control",
-    "source-values": 651
+    "rule": "file path of the Set that stands for a control with nested controls, from the control id",
+    "source-values": 126
    },
    {
-    "rule": "file path of a baseline Set from the sec_level of a top-level control",
-    "source-values": 651
+    "rule": "baseline Set URI from the sec_level of a control",
+    "source-values": 999
+   },
+   {
+    "rule": "baseline Set title from the sec_level of a control",
+    "source-values": 999
+   },
+   {
+    "rule": "file path of a baseline Set from the sec_level of a control",
+    "source-values": 999
    },
    {
     "rule": "a sec_level value as an entry of the enum of observed values in the pinned taxonomy schema",
@@ -3307,111 +3320,142 @@
    },
    {
     "rule": "alias scheme from the prop name (ALIAS_SCHEME)",
-    "source-values": 810
+    "source-values": 1158
+   },
+   {
+    "rule": "author of the document: the one party its metadata names for it (as creator, else as prepared-by, else the one party it names), as a landmark URI from the party's name",
+    "source-values": 1
+   },
+   {
+    "rule": "date of the document: the day of its last-modified",
+    "source-values": 1
+   },
+   {
+    "rule": "a number that is no integer, written as a decimal string (the kernel's spelling of a fraction, NUMBER-1)",
+    "source-values": 0
    }
   ],
-  "declared-drops": {
-   "path-map": {
-    "case": "the path map of this converter already said that the path is not carried",
-    "count": 12009,
-    "reasons": [
-     {
-      "reason": "the path map of this converter says so (absorbed): the namespace of a prop is the address of the CSV list its value is taken from; the pinned facet schema stands in its place, the address is not carried",
-      "count": 12009
-     }
-    ]
+  "not-content": [
+   {
+    "kind": "rebuilt-id",
+    "rule": "the id of a statement part is its control's id and `_stm`",
+    "source-values": 999
    },
-   "ifa": {
-    "case": "a class the author decided for the IFA corpus on 2026-11-13",
-    "count": 1011,
-    "reasons": [
-     {
-      "reason": "as decided for IFA on 2026-11-13: the source's directory of parties and roles: a party is a landmark URI and there is no party object (register, backlog #16)",
-      "count": 6
-     },
-     {
-      "reason": "as decided for IFA on 2026-11-13: a back-matter resource that no link of a control names. A link that names a resource is written with the address the resource gives, and that address then has a destination",
-      "count": 5
-     },
-     {
-      "reason": "as decided for IFA on 2026-11-13: a type tag of a structural element: the part named `statement` is an entry of `statements[]`, and the bundle says by its shape what kind of thing it is",
-      "count": 999
-     },
-     {
-      "reason": "as decided for IFA on 2026-11-13: the uuid of a source element, here of the catalogue document itself: JASCON objects get URIs minted from ids and titles, the uuid is not carried",
-      "count": 1
-     }
-    ]
+   {
+    "kind": "rebuilt-id",
+    "rule": "the id of a guidance part is its control's id and `_gdn`",
+    "source-values": 997
+   },
+   {
+    "kind": "selector",
+    "rule": "the name `statement` of a part selects the part whose prose and props become the statement",
+    "source-values": 999
+   },
+   {
+    "kind": "namespace",
+    "rule": "the namespace of a prop is the one this mapping is written for (PROP_NS)",
+    "source-values": 12009
    }
+  ],
+  "declared-drops": [
+   {
+    "path": "gspp.catalog.back-matter.resources[].rlinks[].hashes[].algorithm",
+    "count": 1,
+    "reason": "as decided for IFA on 2026-11-13: a back-matter resource that no link of a control names. A link that names a resource is written with the address the resource gives, and that address then has a destination",
+    "example": "gspp#/catalog/back-matter/resources/0/rlinks/0/hashes/0/algorithm",
+    "example-value": "MD5",
+    "reading": "content: a reference of the catalogue to another document, with its title, address and digest. The root Set now carries the metadata link that names this resource by `#uuid`, and without the resource that link names nothing"
+   },
+   {
+    "path": "gspp.catalog.back-matter.resources[].rlinks[].hashes[].value",
+    "count": 1,
+    "reason": "as decided for IFA on 2026-11-13: a back-matter resource that no link of a control names. A link that names a resource is written with the address the resource gives, and that address then has a destination",
+    "example": "gspp#/catalog/back-matter/resources/0/rlinks/0/hashes/0/value",
+    "example-value": "c91280d3504b9c81c5ceaf5bdaee5c7f",
+    "reading": "content: a reference of the catalogue to another document, with its title, address and digest. The root Set now carries the metadata link that names this resource by `#uuid`, and without the resource that link names nothing"
+   },
+   {
+    "path": "gspp.catalog.back-matter.resources[].rlinks[].href",
+    "count": 1,
+    "reason": "as decided for IFA on 2026-11-13: a back-matter resource that no link of a control names. A link that names a resource is written with the address the resource gives, and that address then has a destination",
+    "example": "gspp#/catalog/back-matter/resources/0/rlinks/0/href",
+    "example-value": "https://www.bsi.bund.de/DE/Themen/Unternehmen-und-Organisationen/Standards-und-Zertifizierung/IT-Grundschutz/it-grundschutz_node.html",
+    "reading": "content: a reference of the catalogue to another document, with its title, address and digest. The root Set now carries the metadata link that names this resource by `#uuid`, and without the resource that link names nothing"
+   },
+   {
+    "path": "gspp.catalog.back-matter.resources[].title",
+    "count": 1,
+    "reason": "as decided for IFA on 2026-11-13: a back-matter resource that no link of a control names. A link that names a resource is written with the address the resource gives, and that address then has a destination",
+    "example": "gspp#/catalog/back-matter/resources/0/title",
+    "example-value": "BSI IT-Grundschutz Edition 2023",
+    "reading": "content: a reference of the catalogue to another document, with its title, address and digest. The root Set now carries the metadata link that names this resource by `#uuid`, and without the resource that link names nothing"
+   },
+   {
+    "path": "gspp.catalog.back-matter.resources[].uuid",
+    "count": 1,
+    "reason": "as decided for IFA on 2026-11-13: a back-matter resource that no link of a control names. A link that names a resource is written with the address the resource gives, and that address then has a destination",
+    "example": "gspp#/catalog/back-matter/resources/0/uuid",
+    "example-value": "bf7510ca-fb0f-4182-af9f-b3c61db3187a",
+    "reading": "content: a reference of the catalogue to another document, with its title, address and digest. The root Set now carries the metadata link that names this resource by `#uuid`, and without the resource that link names nothing"
+   },
+   {
+    "path": "gspp.catalog.uuid",
+    "count": 1,
+    "reason": "as decided for IFA on 2026-11-13: the uuid of a source element, here of the catalogue document itself: JASCON objects get URIs minted from ids and titles, the uuid is not carried",
+    "example": "gspp#/catalog/uuid",
+    "example-value": "73f2d8f6-5a98-4e81-b600-b709e372e9cf",
+    "reading": "content: it identifies this document, and nothing in the bundle lets a reader rebuild it, so it is no id that is rebuilt exactly"
+   }
+  ],
+  "carried-as-the-source-holds-it": {
+   "metadata": 1
   },
-  "path-map-corrected": [
-   {
-    "paths": "catalog.uuid, catalog.metadata.*",
-    "said": "bundle manifest / L0 provenance",
-    "found": "only title, version and oscal-version reach the manifest",
-    "values-not-in-the-bundle": 21
-   },
-   {
-    "paths": "catalog.back-matter.*",
-    "said": "resolution key for #uuid links -> external URL; resolved into relations / dropped-declared",
-    "found": "a resource that no link of a control names is not resolved, and nothing of it is carried",
-    "values-not-in-the-bundle": 5
-   },
-   {
-    "paths": "links[] of a nested control",
-    "said": "relations[] {type=rel, ref}",
-    "found": "only the links of a top-level control are read; those of a nested control are lost",
-    "values-not-in-the-bundle": 150
-   },
-   {
-    "paths": "parts[].id, parts[].name",
-    "said": "statement/guidance part identity -> statement id / narrative key",
-    "found": "the id of a part is written nowhere; of the names, `guidance` becomes a key and `statement` does not",
-    "values-not-in-the-bundle": 2995
-   }
-  ],
+  "bundle-read-back": {
+   "controls": 999,
+   "controls-top-level": 651,
+   "controls-nested": 348,
+   "deepest-nesting": 3,
+   "controls-with-nested-controls": 126,
+   "requirements": 999,
+   "requirements-of-a-control": 999,
+   "requirements-with-one-statement": 999,
+   "sets": 288,
+   "sets-that-group-a-control-with-its-nested-controls": 126,
+   "links": 266,
+   "links-of-nested-controls": 75,
+   "links-that-are-a-relation-of-their-own-requirement": 266,
+   "relations": 266,
+   "relations-that-name-no-object": 0,
+   "set-members": 2283,
+   "set-members-that-name-no-object": 0
+  },
+  "links-to-a-control-the-catalogue-does-not-define": 0,
   "path-map-against-ledger": {
-   "values-that-disagree": 0,
-   "rows": []
-  },
-  "lost": {
-   "links-of-nested-controls": {
-    "links": 75,
-    "controls": 60,
-    "source-values": 150,
-    "first": "gspp#/catalog/groups/1/groups/1/controls/0/controls/3/controls/0/links/0/href"
-   }
-  },
-  "links-to-a-nested-control": {
-   "links": 34,
-   "of": 191,
-   "first": [
-    "GC.7.2",
-    "required",
-    "GC.7.1.2"
-   ],
-   "links-to-no-control": 0
+   "values-whose-outcome-the-map-does-not-allow": 0,
+   "rows": [],
+   "values-at-a-place-the-map-does-not-name": 0,
+   "places": []
   },
   "written-without-a-source-value": {
    "objects": {
-    "leaf-values": 28845,
-    "without-a-source-value": 4146,
+    "leaf-values": 32904,
+    "without-a-source-value": 5790,
     "by-place": {
      "/id": 1,
-     "/lifecycle": 813,
-     "/members/[]/sequence": 1461,
-     "/statements/[]/id": 651,
+     "/lifecycle": 1287,
+     "/members/[]/sequence": 2283,
+     "/statements/[]/id": 999,
      "/statements/[]/obligated-parties/[]": 999,
      "/statements/[]/parameters/[]/type": 221
     }
    },
    "schemas": {
-    "leaf-values": 86,
-    "without-a-source-value": 84
+    "leaf-values": 94,
+    "without-a-source-value": 92
    },
    "manifest": {
-    "leaf-values": 4095,
-    "without-a-source-value": 1655,
+    "leaf-values": 6467,
+    "without-a-source-value": 2603,
     "by-place": {
      "/facet-schemas/[]/digest": 6,
      "/facet-schemas/[]/exact-version": 6,
@@ -3419,14 +3463,15 @@
      "/facet-schemas/[]/path": 6,
      "/manifest-version": 1,
      "/objects/[]/id": 1,
-     "/objects/[]/package-digest": 813,
+     "/objects/[]/package-digest": 1287,
      "/objects/[]/path": 1,
-     "/objects/[]/semantic-digest": 813,
+     "/objects/[]/semantic-digest": 1287,
      "/provenance/converter": 1,
      "/provenance/sources/[]/key": 1
     }
    }
-  }
+  },
+  "wiring-checks-failed": []
  },
  "unmapped-paths": [],
  "path-map": [
@@ -3434,31 +3479,31 @@
    "path": "catalog.back-matter.resources[].rlinks[].hashes[].algorithm",
    "count": 1,
    "level": "-",
-   "destination": "a resource that a link of a control names by #uuid gives that link its address (relations[].ref); a resource no link of a control names is not carried (declared drop in the ledger)"
+   "destination": "a resource that a link of a control names by #uuid gives that link its address (relations[].ref) and is carried whole on the root Set (compat `back-matter`); a resource no link of a control names is not carried: a declared drop, listed in the report for the author's decision"
   },
   {
    "path": "catalog.back-matter.resources[].rlinks[].hashes[].value",
    "count": 1,
    "level": "-",
-   "destination": "a resource that a link of a control names by #uuid gives that link its address (relations[].ref); a resource no link of a control names is not carried (declared drop in the ledger)"
+   "destination": "a resource that a link of a control names by #uuid gives that link its address (relations[].ref) and is carried whole on the root Set (compat `back-matter`); a resource no link of a control names is not carried: a declared drop, listed in the report for the author's decision"
   },
   {
    "path": "catalog.back-matter.resources[].rlinks[].href",
    "count": 1,
    "level": "-",
-   "destination": "a resource that a link of a control names by #uuid gives that link its address (relations[].ref); a resource no link of a control names is not carried (declared drop in the ledger)"
+   "destination": "a resource that a link of a control names by #uuid gives that link its address (relations[].ref) and is carried whole on the root Set (compat `back-matter`); a resource no link of a control names is not carried: a declared drop, listed in the report for the author's decision"
   },
   {
    "path": "catalog.back-matter.resources[].title",
    "count": 1,
    "level": "-",
-   "destination": "a resource that a link of a control names by #uuid gives that link its address (relations[].ref); a resource no link of a control names is not carried (declared drop in the ledger)"
+   "destination": "a resource that a link of a control names by #uuid gives that link its address (relations[].ref) and is carried whole on the root Set (compat `back-matter`); a resource no link of a control names is not carried: a declared drop, listed in the report for the author's decision"
   },
   {
    "path": "catalog.back-matter.resources[].uuid",
    "count": 1,
    "level": "-",
-   "destination": "a resource that a link of a control names by #uuid gives that link its address (relations[].ref); a resource no link of a control names is not carried (declared drop in the ledger)"
+   "destination": "a resource that a link of a control names by #uuid gives that link its address (relations[].ref) and is carried whole on the root Set (compat `back-matter`); a resource no link of a control names is not carried: a declared drop, listed in the report for the author's decision"
   },
   {
    "path": "catalog.groups[].groups[].controls[].class",
@@ -3488,37 +3533,37 @@
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].controls[].id",
    "count": 2,
    "level": "L1",
-   "destination": "Requirement id (top) / statement id (nested)"
+   "destination": "Requirement id, label and file of the control, at every depth, and where it is listed; a control with nested controls: also the id and the file of the Set that groups it with them"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].controls[].parts[].id",
    "count": 4,
    "level": "-",
-   "destination": "not carried and not decided: the id of a part (the control id with `_stm` or `_gdn`) is written nowhere; the statement id is `smt` or the id of the nested control (unaccounted in the ledger)"
+   "destination": "no content: rebuilt exactly, the control's id and `_stm` or `_gdn`, a rule the ledger checks. An id the rule does not give is carried (compat `parts`)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].controls[].parts[].name",
    "count": 4,
    "level": "L1",
-   "destination": "`guidance` -> the key of the gspp-narrative payload; `statement` -> not carried, the part is an entry of statements[] (declared drop in the ledger)"
+   "destination": "`guidance` -> the key of the gspp-narrative payload; `statement` -> no content: it selects the part whose prose and props become the statement, a rule the ledger checks. A part of another name is carried whole (compat `parts`)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].controls[].parts[].props[].name",
    "count": 7,
    "level": "L1",
-   "destination": "dispatch by part-prop name (grammar/objectives/criteria; packed lists reported)"
+   "destination": "dispatch by part-prop name (grammar/objectives/criteria; packed lists reported); a prop the mapping does not read: compat `parts`"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].controls[].parts[].props[].ns",
    "count": 7,
    "level": "-",
-   "destination": "not carried (absorbed): CSV-link namespaces replaced by pinned facet schemas (declared drop in the ledger)"
+   "destination": "no content: the namespace this mapping is written for (PROP_NS), a rule the ledger checks. A prop in another namespace is not read and is carried whole (compat `parts`)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].controls[].parts[].props[].value",
    "count": 7,
    "level": "L1",
-   "destination": "dispatch by part-prop name (grammar/objectives/criteria; packed lists reported)"
+   "destination": "dispatch by part-prop name (grammar/objectives/criteria; packed lists reported); a prop the mapping does not read: compat `parts`"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].controls[].parts[].prose",
@@ -3530,55 +3575,55 @@
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].controls[].props[].name",
    "count": 6,
    "level": "L1",
-   "destination": "dispatch by prop name (see per-prop table)"
+   "destination": "dispatch by prop name (see per-prop table); a prop the mapping does not read: compat `props`"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].controls[].props[].ns",
    "count": 4,
    "level": "-",
-   "destination": "not carried (absorbed): CSV-link namespaces replaced by pinned facet schemas (declared drop in the ledger)"
+   "destination": "no content: the namespace this mapping is written for (PROP_NS), a rule the ledger checks. A prop in another namespace is not read and is carried whole (compat `props`)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].controls[].props[].value",
    "count": 6,
    "level": "L1",
-   "destination": "dispatch by prop name (see per-prop table)"
+   "destination": "dispatch by prop name (see per-prop table); a prop the mapping does not read: compat `props`"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].controls[].title",
    "count": 2,
    "level": "L1",
-   "destination": "Requirement title (top) / kept in taxonomy by-statement (nested)"
+   "destination": "Requirement title; a control with nested controls: also the title of its grouping Set"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].id",
    "count": 19,
    "level": "L1",
-   "destination": "Requirement id (top) / statement id (nested)"
+   "destination": "Requirement id, label and file of the control, at every depth, and where it is listed; a control with nested controls: also the id and the file of the Set that groups it with them"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].links[].href",
    "count": 8,
-   "level": "-",
-   "destination": "NOT CARRIED: the links of a nested control are not read (found by the ledger; unaccounted)"
+   "level": "L1",
+   "destination": "relations[] {type=rel, ref} of the control's own Requirement, at every depth (#control -> req URI; #uuid -> back-matter URL)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].links[].rel",
    "count": 8,
-   "level": "-",
-   "destination": "NOT CARRIED: the links of a nested control are not read (found by the ledger; unaccounted)"
+   "level": "L1",
+   "destination": "relations[] {type=rel, ref} of the control's own Requirement, at every depth (#control -> req URI; #uuid -> back-matter URL)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].params[].id",
    "count": 4,
    "level": "L1",
-   "destination": "statement parameter name (type string)"
+   "destination": "statement parameter name (type string); key of compat param-extras"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].params[].label",
    "count": 4,
    "level": "L1",
-   "destination": "parameter label / default - first-class since the D9 rev (backlog #1); residue drained"
+   "destination": "parameter label / default - first-class since the D9 rev (backlog #1); more than one value: all of them in compat param-extras"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].params[].props[].name",
@@ -3596,31 +3641,31 @@
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].parts[].id",
    "count": 37,
    "level": "-",
-   "destination": "not carried and not decided: the id of a part (the control id with `_stm` or `_gdn`) is written nowhere; the statement id is `smt` or the id of the nested control (unaccounted in the ledger)"
+   "destination": "no content: rebuilt exactly, the control's id and `_stm` or `_gdn`, a rule the ledger checks. An id the rule does not give is carried (compat `parts`)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].parts[].name",
    "count": 37,
    "level": "L1",
-   "destination": "`guidance` -> the key of the gspp-narrative payload; `statement` -> not carried, the part is an entry of statements[] (declared drop in the ledger)"
+   "destination": "`guidance` -> the key of the gspp-narrative payload; `statement` -> no content: it selects the part whose prose and props become the statement, a rule the ledger checks. A part of another name is carried whole (compat `parts`)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].parts[].props[].name",
    "count": 95,
    "level": "L1",
-   "destination": "dispatch by part-prop name (grammar/objectives/criteria; packed lists reported)"
+   "destination": "dispatch by part-prop name (grammar/objectives/criteria; packed lists reported); a prop the mapping does not read: compat `parts`"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].parts[].props[].ns",
    "count": 95,
    "level": "-",
-   "destination": "not carried (absorbed): CSV-link namespaces replaced by pinned facet schemas (declared drop in the ledger)"
+   "destination": "no content: the namespace this mapping is written for (PROP_NS), a rule the ledger checks. A prop in another namespace is not read and is carried whole (compat `parts`)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].parts[].props[].value",
    "count": 95,
    "level": "L1",
-   "destination": "dispatch by part-prop name (grammar/objectives/criteria; packed lists reported)"
+   "destination": "dispatch by part-prop name (grammar/objectives/criteria; packed lists reported); a prop the mapping does not read: compat `parts`"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].parts[].prose",
@@ -3632,55 +3677,55 @@
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].props[].name",
    "count": 131,
    "level": "L1",
-   "destination": "dispatch by prop name (see per-prop table)"
+   "destination": "dispatch by prop name (see per-prop table); a prop the mapping does not read: compat `props`"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].props[].ns",
    "count": 112,
    "level": "-",
-   "destination": "not carried (absorbed): CSV-link namespaces replaced by pinned facet schemas (declared drop in the ledger)"
+   "destination": "no content: the namespace this mapping is written for (PROP_NS), a rule the ledger checks. A prop in another namespace is not read and is carried whole (compat `props`)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].props[].value",
    "count": 131,
    "level": "L1",
-   "destination": "dispatch by prop name (see per-prop table)"
+   "destination": "dispatch by prop name (see per-prop table); a prop the mapping does not read: compat `props`"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].title",
    "count": 19,
    "level": "L1",
-   "destination": "Requirement title (top) / kept in taxonomy by-statement (nested)"
+   "destination": "Requirement title; a control with nested controls: also the title of its grouping Set"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].id",
    "count": 327,
    "level": "L1",
-   "destination": "Requirement id (top) / statement id (nested)"
+   "destination": "Requirement id, label and file of the control, at every depth, and where it is listed; a control with nested controls: also the id and the file of the Set that groups it with them"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].links[].href",
    "count": 67,
-   "level": "-",
-   "destination": "NOT CARRIED: the links of a nested control are not read (found by the ledger; unaccounted)"
+   "level": "L1",
+   "destination": "relations[] {type=rel, ref} of the control's own Requirement, at every depth (#control -> req URI; #uuid -> back-matter URL)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].links[].rel",
    "count": 67,
-   "level": "-",
-   "destination": "NOT CARRIED: the links of a nested control are not read (found by the ledger; unaccounted)"
+   "level": "L1",
+   "destination": "relations[] {type=rel, ref} of the control's own Requirement, at every depth (#control -> req URI; #uuid -> back-matter URL)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].params[].id",
    "count": 73,
    "level": "L1",
-   "destination": "statement parameter name (type string)"
+   "destination": "statement parameter name (type string); key of compat param-extras"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].params[].label",
    "count": 73,
    "level": "L1",
-   "destination": "parameter label / default - first-class since the D9 rev (backlog #1); residue drained"
+   "destination": "parameter label / default - first-class since the D9 rev (backlog #1); more than one value: all of them in compat param-extras"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].params[].props[].name",
@@ -3698,37 +3743,37 @@
    "path": "catalog.groups[].groups[].controls[].controls[].params[].values[]",
    "count": 1,
    "level": "L1",
-   "destination": "parameter label / default - first-class since the D9 rev (backlog #1); residue drained"
+   "destination": "parameter label / default - first-class since the D9 rev (backlog #1); more than one value: all of them in compat param-extras"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].parts[].id",
    "count": 653,
    "level": "-",
-   "destination": "not carried and not decided: the id of a part (the control id with `_stm` or `_gdn`) is written nowhere; the statement id is `smt` or the id of the nested control (unaccounted in the ledger)"
+   "destination": "no content: rebuilt exactly, the control's id and `_stm` or `_gdn`, a rule the ledger checks. An id the rule does not give is carried (compat `parts`)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].parts[].name",
    "count": 653,
    "level": "L1",
-   "destination": "`guidance` -> the key of the gspp-narrative payload; `statement` -> not carried, the part is an entry of statements[] (declared drop in the ledger)"
+   "destination": "`guidance` -> the key of the gspp-narrative payload; `statement` -> no content: it selects the part whose prose and props become the statement, a rule the ledger checks. A part of another name is carried whole (compat `parts`)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].parts[].props[].name",
    "count": 1632,
    "level": "L1",
-   "destination": "dispatch by part-prop name (grammar/objectives/criteria; packed lists reported)"
+   "destination": "dispatch by part-prop name (grammar/objectives/criteria; packed lists reported); a prop the mapping does not read: compat `parts`"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].parts[].props[].ns",
    "count": 1632,
    "level": "-",
-   "destination": "not carried (absorbed): CSV-link namespaces replaced by pinned facet schemas (declared drop in the ledger)"
+   "destination": "no content: the namespace this mapping is written for (PROP_NS), a rule the ledger checks. A prop in another namespace is not read and is carried whole (compat `parts`)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].parts[].props[].value",
    "count": 1632,
    "level": "L1",
-   "destination": "dispatch by part-prop name (grammar/objectives/criteria; packed lists reported)"
+   "destination": "dispatch by part-prop name (grammar/objectives/criteria; packed lists reported); a prop the mapping does not read: compat `parts`"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].parts[].prose",
@@ -3740,55 +3785,55 @@
    "path": "catalog.groups[].groups[].controls[].controls[].props[].name",
    "count": 2589,
    "level": "L1",
-   "destination": "dispatch by prop name (see per-prop table)"
+   "destination": "dispatch by prop name (see per-prop table); a prop the mapping does not read: compat `props`"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].props[].ns",
    "count": 2262,
    "level": "-",
-   "destination": "not carried (absorbed): CSV-link namespaces replaced by pinned facet schemas (declared drop in the ledger)"
+   "destination": "no content: the namespace this mapping is written for (PROP_NS), a rule the ledger checks. A prop in another namespace is not read and is carried whole (compat `props`)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].props[].value",
    "count": 2589,
    "level": "L1",
-   "destination": "dispatch by prop name (see per-prop table)"
+   "destination": "dispatch by prop name (see per-prop table); a prop the mapping does not read: compat `props`"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].title",
    "count": 327,
    "level": "L1",
-   "destination": "Requirement title (top) / kept in taxonomy by-statement (nested)"
+   "destination": "Requirement title; a control with nested controls: also the title of its grouping Set"
   },
   {
    "path": "catalog.groups[].groups[].controls[].id",
    "count": 651,
    "level": "L1",
-   "destination": "Requirement id (top) / statement id (nested)"
+   "destination": "Requirement id, label and file of the control, at every depth, and where it is listed; a control with nested controls: also the id and the file of the Set that groups it with them"
   },
   {
    "path": "catalog.groups[].groups[].controls[].links[].href",
    "count": 191,
    "level": "L1",
-   "destination": "relations[] {type=rel, ref} (#control -> req URI; #uuid -> back-matter URL)"
+   "destination": "relations[] {type=rel, ref} of the control's own Requirement, at every depth (#control -> req URI; #uuid -> back-matter URL)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].links[].rel",
    "count": 191,
    "level": "L1",
-   "destination": "relations[] {type=rel, ref} (#control -> req URI; #uuid -> back-matter URL)"
+   "destination": "relations[] {type=rel, ref} of the control's own Requirement, at every depth (#control -> req URI; #uuid -> back-matter URL)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].params[].id",
    "count": 144,
    "level": "L1",
-   "destination": "statement parameter name (type string)"
+   "destination": "statement parameter name (type string); key of compat param-extras"
   },
   {
    "path": "catalog.groups[].groups[].controls[].params[].label",
    "count": 144,
    "level": "L1",
-   "destination": "parameter label / default - first-class since the D9 rev (backlog #1); residue drained"
+   "destination": "parameter label / default - first-class since the D9 rev (backlog #1); more than one value: all of them in compat param-extras"
   },
   {
    "path": "catalog.groups[].groups[].controls[].params[].props[].name",
@@ -3806,37 +3851,37 @@
    "path": "catalog.groups[].groups[].controls[].params[].values[]",
    "count": 1,
    "level": "L1",
-   "destination": "parameter label / default - first-class since the D9 rev (backlog #1); residue drained"
+   "destination": "parameter label / default - first-class since the D9 rev (backlog #1); more than one value: all of them in compat param-extras"
   },
   {
    "path": "catalog.groups[].groups[].controls[].parts[].id",
    "count": 1302,
    "level": "-",
-   "destination": "not carried and not decided: the id of a part (the control id with `_stm` or `_gdn`) is written nowhere; the statement id is `smt` or the id of the nested control (unaccounted in the ledger)"
+   "destination": "no content: rebuilt exactly, the control's id and `_stm` or `_gdn`, a rule the ledger checks. An id the rule does not give is carried (compat `parts`)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].parts[].name",
    "count": 1302,
    "level": "L1",
-   "destination": "`guidance` -> the key of the gspp-narrative payload; `statement` -> not carried, the part is an entry of statements[] (declared drop in the ledger)"
+   "destination": "`guidance` -> the key of the gspp-narrative payload; `statement` -> no content: it selects the part whose prose and props become the statement, a rule the ledger checks. A part of another name is carried whole (compat `parts`)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].parts[].props[].name",
    "count": 3308,
    "level": "L1",
-   "destination": "dispatch by part-prop name (grammar/objectives/criteria; packed lists reported)"
+   "destination": "dispatch by part-prop name (grammar/objectives/criteria; packed lists reported); a prop the mapping does not read: compat `parts`"
   },
   {
    "path": "catalog.groups[].groups[].controls[].parts[].props[].ns",
    "count": 3308,
    "level": "-",
-   "destination": "not carried (absorbed): CSV-link namespaces replaced by pinned facet schemas (declared drop in the ledger)"
+   "destination": "no content: the namespace this mapping is written for (PROP_NS), a rule the ledger checks. A prop in another namespace is not read and is carried whole (compat `parts`)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].parts[].props[].value",
    "count": 3308,
    "level": "L1",
-   "destination": "dispatch by part-prop name (grammar/objectives/criteria; packed lists reported)"
+   "destination": "dispatch by part-prop name (grammar/objectives/criteria; packed lists reported); a prop the mapping does not read: compat `parts`"
   },
   {
    "path": "catalog.groups[].groups[].controls[].parts[].prose",
@@ -3848,31 +3893,31 @@
    "path": "catalog.groups[].groups[].controls[].props[].name",
    "count": 5240,
    "level": "L1",
-   "destination": "dispatch by prop name (see per-prop table)"
+   "destination": "dispatch by prop name (see per-prop table); a prop the mapping does not read: compat `props`"
   },
   {
    "path": "catalog.groups[].groups[].controls[].props[].ns",
    "count": 4589,
    "level": "-",
-   "destination": "not carried (absorbed): CSV-link namespaces replaced by pinned facet schemas (declared drop in the ledger)"
+   "destination": "no content: the namespace this mapping is written for (PROP_NS), a rule the ledger checks. A prop in another namespace is not read and is carried whole (compat `props`)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].props[].value",
    "count": 5240,
    "level": "L1",
-   "destination": "dispatch by prop name (see per-prop table)"
+   "destination": "dispatch by prop name (see per-prop table); a prop the mapping does not read: compat `props`"
   },
   {
    "path": "catalog.groups[].groups[].controls[].title",
    "count": 651,
    "level": "L1",
-   "destination": "Requirement title (top) / kept in taxonomy by-statement (nested)"
+   "destination": "Requirement title; a control with nested controls: also the title of its grouping Set"
   },
   {
    "path": "catalog.groups[].groups[].id",
    "count": 139,
    "level": "L1",
-   "destination": "taxonomy Set id/title (per-catalog subtree)"
+   "destination": "taxonomy Set of the group: its id, its file, and where it is listed"
   },
   {
    "path": "catalog.groups[].groups[].props[].name",
@@ -3890,13 +3935,13 @@
    "path": "catalog.groups[].groups[].title",
    "count": 139,
    "level": "L1",
-   "destination": "taxonomy Set id/title (per-catalog subtree)"
+   "destination": "taxonomy Set of the group: its title"
   },
   {
    "path": "catalog.groups[].id",
    "count": 20,
    "level": "L1",
-   "destination": "taxonomy Set id/title (per-catalog subtree)"
+   "destination": "taxonomy Set of the group: its id, its file, and where it is listed"
   },
   {
    "path": "catalog.groups[].props[].name",
@@ -3920,127 +3965,127 @@
    "path": "catalog.groups[].title",
    "count": 20,
    "level": "L1",
-   "destination": "taxonomy Set id/title (per-catalog subtree)"
+   "destination": "taxonomy Set of the group: its title"
   },
   {
    "path": "catalog.metadata.last-modified",
    "count": 1,
-   "level": "-",
-   "destination": "not carried and not decided: last-modified, props, links, remarks, responsible-parties (unaccounted in the ledger)"
+   "level": "L2",
+   "destination": "root Set, compat oscal-1x `metadata`, as the source holds it; its day -> manifest provenance.sources[].date"
   },
   {
    "path": "catalog.metadata.links[].href",
    "count": 1,
-   "level": "-",
-   "destination": "not carried and not decided: last-modified, props, links, remarks, responsible-parties (unaccounted in the ledger)"
+   "level": "L2",
+   "destination": "root Set, compat oscal-1x `metadata`: the member as the source holds it"
   },
   {
    "path": "catalog.metadata.links[].rel",
    "count": 1,
-   "level": "-",
-   "destination": "not carried and not decided: last-modified, props, links, remarks, responsible-parties (unaccounted in the ledger)"
+   "level": "L2",
+   "destination": "root Set, compat oscal-1x `metadata`: the member as the source holds it"
   },
   {
    "path": "catalog.metadata.links[].text",
    "count": 1,
-   "level": "-",
-   "destination": "not carried and not decided: last-modified, props, links, remarks, responsible-parties (unaccounted in the ledger)"
+   "level": "L2",
+   "destination": "root Set, compat oscal-1x `metadata`: the member as the source holds it"
   },
   {
    "path": "catalog.metadata.oscal-version",
    "count": 1,
-   "level": "L1",
-   "destination": "manifest provenance.sources[] (title, version, oscal-version); version -> `version` of every object; title -> title of the root Set"
+   "level": "L2",
+   "destination": "root Set, compat oscal-1x `metadata`, as the source holds it; manifest provenance.sources[].oscal-version"
   },
   {
    "path": "catalog.metadata.parties[].email-addresses[]",
    "count": 1,
-   "level": "-",
-   "destination": "not carried: the source's directory of parties and roles (declared drop in the ledger)"
+   "level": "L2",
+   "destination": "root Set, compat oscal-1x `metadata`: the member as the source holds it"
   },
   {
    "path": "catalog.metadata.parties[].name",
    "count": 1,
-   "level": "-",
-   "destination": "not carried: the source's directory of parties and roles (declared drop in the ledger)"
+   "level": "L2",
+   "destination": "root Set, compat oscal-1x `metadata`, as the source holds it; the name of the party the metadata names as author -> manifest provenance.sources[].author-ref (a landmark URI)"
   },
   {
    "path": "catalog.metadata.parties[].type",
    "count": 1,
-   "level": "-",
-   "destination": "not carried: the source's directory of parties and roles (declared drop in the ledger)"
+   "level": "L2",
+   "destination": "root Set, compat oscal-1x `metadata`: the member as the source holds it"
   },
   {
    "path": "catalog.metadata.parties[].uuid",
    "count": 1,
-   "level": "-",
-   "destination": "not carried: the source's directory of parties and roles (declared drop in the ledger)"
+   "level": "L2",
+   "destination": "root Set, compat oscal-1x `metadata`: the member as the source holds it"
   },
   {
    "path": "catalog.metadata.props[].name",
    "count": 3,
-   "level": "-",
-   "destination": "not carried and not decided: last-modified, props, links, remarks, responsible-parties (unaccounted in the ledger)"
+   "level": "L2",
+   "destination": "root Set, compat oscal-1x `metadata`: the member as the source holds it"
   },
   {
    "path": "catalog.metadata.props[].ns",
    "count": 1,
-   "level": "-",
-   "destination": "not carried and not decided: last-modified, props, links, remarks, responsible-parties (unaccounted in the ledger)"
+   "level": "L2",
+   "destination": "root Set, compat oscal-1x `metadata`: the member as the source holds it"
   },
   {
    "path": "catalog.metadata.props[].value",
    "count": 3,
-   "level": "-",
-   "destination": "not carried and not decided: last-modified, props, links, remarks, responsible-parties (unaccounted in the ledger)"
+   "level": "L2",
+   "destination": "root Set, compat oscal-1x `metadata`: the member as the source holds it"
   },
   {
    "path": "catalog.metadata.remarks",
    "count": 1,
-   "level": "-",
-   "destination": "not carried and not decided: last-modified, props, links, remarks, responsible-parties (unaccounted in the ledger)"
+   "level": "L2",
+   "destination": "root Set, compat oscal-1x `metadata`: the member as the source holds it"
   },
   {
    "path": "catalog.metadata.responsible-parties[].party-uuids[]",
    "count": 1,
-   "level": "-",
-   "destination": "not carried and not decided: last-modified, props, links, remarks, responsible-parties (unaccounted in the ledger)"
+   "level": "L2",
+   "destination": "root Set, compat oscal-1x `metadata`: the member as the source holds it"
   },
   {
    "path": "catalog.metadata.responsible-parties[].role-id",
    "count": 1,
-   "level": "-",
-   "destination": "not carried and not decided: last-modified, props, links, remarks, responsible-parties (unaccounted in the ledger)"
+   "level": "L2",
+   "destination": "root Set, compat oscal-1x `metadata`: the member as the source holds it"
   },
   {
    "path": "catalog.metadata.roles[].id",
    "count": 1,
-   "level": "-",
-   "destination": "not carried: the source's directory of parties and roles (declared drop in the ledger)"
+   "level": "L2",
+   "destination": "root Set, compat oscal-1x `metadata`: the member as the source holds it"
   },
   {
    "path": "catalog.metadata.roles[].title",
    "count": 1,
-   "level": "-",
-   "destination": "not carried: the source's directory of parties and roles (declared drop in the ledger)"
+   "level": "L2",
+   "destination": "root Set, compat oscal-1x `metadata`: the member as the source holds it"
   },
   {
    "path": "catalog.metadata.title",
    "count": 1,
    "level": "L1",
-   "destination": "manifest provenance.sources[] (title, version, oscal-version); version -> `version` of every object; title -> title of the root Set"
+   "destination": "title of the root Set; manifest provenance.sources[].title"
   },
   {
    "path": "catalog.metadata.version",
    "count": 1,
    "level": "L1",
-   "destination": "manifest provenance.sources[] (title, version, oscal-version); version -> `version` of every object; title -> title of the root Set"
+   "destination": "`version` of every object, and of its entry in the manifest; manifest provenance.sources[].version"
   },
   {
    "path": "catalog.uuid",
    "count": 1,
    "level": "-",
-   "destination": "not carried: the uuid of the source document (declared drop in the ledger)"
+   "destination": "not carried: a declared drop, listed in the report for the author's decision"
   }
  ]
 }

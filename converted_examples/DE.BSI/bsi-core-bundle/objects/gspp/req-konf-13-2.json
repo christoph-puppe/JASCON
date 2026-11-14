@@ -16,26 +16,6 @@
    "prose": {
     "de": "Konfiguration für Interpersonelle Kommunikation SOLLTE eine automatische Verifikation der Authentizität von Nachrichten aktivieren."
    }
-  },
-  {
-   "id": "KONF.13.2.1",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Konfiguration für E-Mail SOLLTE eine automatische Verifikation der Sendeberechtigung aktivieren."
-   }
-  },
-  {
-   "id": "KONF.13.2.2",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Konfiguration für E-Mail SOLLTE die Serversignatur eingehender E-Mails automatisch authentifizieren."
-   }
   }
  ],
  "facets": {
@@ -47,37 +27,12 @@
      "target-object-categories": [
       "Interpersonelle Kommunikation"
      ]
-    },
-    "KONF.13.2.1": {
-     "action": "aktivieren",
-     "result": "eine automatische Verifikation der Sendeberechtigung",
-     "target-object-categories": [
-      "E-Mail"
-     ]
-    },
-    "KONF.13.2.2": {
-     "action": "authentifizieren",
-     "result": "die Serversignatur eingehender E-Mails",
-     "result-specification": "automatisch",
-     "target-object-categories": [
-      "E-Mail"
-     ]
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "by-statement": {
     "smt": {
-     "required-documentation": [
-      "Konfigurationshistorie"
-     ]
-    },
-    "KONF.13.2.1": {
-     "required-documentation": [
-      "Konfigurationshistorie"
-     ]
-    },
-    "KONF.13.2.2": {
      "required-documentation": [
       "Konfigurationshistorie"
      ]
@@ -95,26 +50,6 @@
       "https://ns.bsi.bund.de/gspp/threat/G-0.36",
       "https://ns.bsi.bund.de/gspp/threat/G-0.22"
      ]
-    },
-    "KONF.13.2.1": {
-     "confidentiality": "2",
-     "integrity": "2",
-     "availability": "1",
-     "authenticity": "1",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.43",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.36"
-     ]
-    },
-    "KONF.13.2.2": {
-     "confidentiality": "1",
-     "integrity": "2",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.36",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.46"
-     ]
     }
    }
   },
@@ -127,26 +62,6 @@
      "tags": [
       "Produktbeschreibung"
      ]
-    },
-    "KONF.13.2.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 2,
-     "tags": [
-      "Produktbeschreibung"
-     ],
-     "title": "Verifikation der Sendeberechtigung",
-     "alt-identifier": "c163be1f-8236-439c-a1d1-34fa7472c06a"
-    },
-    "KONF.13.2.2": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 2,
-     "tags": [
-      "Produktbeschreibung"
-     ],
-     "title": "Verifikation der Serversignatur",
-     "alt-identifier": "2e782128-57ea-4573-a44e-5538d0dd1240"
     }
    }
   },
@@ -155,16 +70,6 @@
     "smt": {
      "guidance": {
       "de": "Die Authentizität von Nachrichten bezeichnet in diesem Zusammenhang die nachweisbare Echtheit und Unverfälschtheit einer digitalen Mitteilung im Rahmen der interpersonellen Kommunikation, also die Sicherheit, dass eine Nachricht tatsächlich von der angegebenen Quelle stammt und auf dem Übertragungsweg nicht manipuliert wurde. Im Fachjargon wird hier häufig von Message Authenticity oder auch von Origin Authentication gesprochen, wobei beide Begriffe eng mit kryptographischen Verfahren wie Digital Signatures oder Message Authentication Codes (MACs) verbunden sind. Der Sinn dieser Anforderung liegt darin, sicherzustellen, dass Angreifer keine falschen Identitäten vortäuschen oder den Inhalt von Nachrichten unbemerkt verändern können. Andernfalls könnte etwa eine gefälschte Anweisung in einem Chat zu Fehlhandlungen führen oder ein manipuliertes Dokument im E-Mail-Verkehr falsche Entscheidungen auslösen. Eine automatische Verifikation kann hingegen das Vertrauen in die Integrität und Herkunft der Kommunikation gewährleisten. Zur Umsetzung kann eine Institution beispielsweise digitale Signaturen einsetzen, die durch etablierte Standards wie S/MIME oder OpenPGP realisiert werden können, sodass E-Mail-Programme die Echtheit automatisch überprüfen. Auch der Einsatz von Ende-zu-Ende-Verschlüsselung mit eingebauter Authentizitätsprüfung, etwa bei Protokollen wie Signal Protocol oder TLS mit Client-Zertifikaten, kann eine geeignete Maßnahme sein. Darüber hinaus kann die Integration einer zentralen Public Key Infrastructure (PKI) oder die Nutzung verteilter Vertrauensmodelle (z. B. Web of Trust) sicherstellen, dass Schlüsselpaare zuverlässig verwaltet werden und Anwender ohne manuelle Prüfungen von Zertifikaten auskommen."
-     }
-    },
-    "KONF.13.2.1": {
-     "guidance": {
-      "de": "Mit dem Sender Policy Framework (SPF) kann geprüft werden, ob der Sender zum Versand von E-Mails für diese Mailadresse berechtigt war. E-Mails ohne SPF-Header sind unzureichend authentifiziert, so dass sie leicht für Spoofing oder Phishing missbraucht werden können. Allerdings werden noch immer E-Mails ohne SPF verschickt, so dass eine Blockierung zu funktionalen Einschränkungen führen könnte. Kompromissmaßnahmen können z.B. die Markierung der E-Mail mit einem Warnhinweis , Allowlisting, Greylisting, Quarantäne oder eine Filterung durch Anomalieerkennung sein."
-     }
-    },
-    "KONF.13.2.2": {
-     "guidance": {
-      "de": "Die DKIM-Signatur ist zu unterscheiden von einer PGP-Signatur, die in der Regel nicht automatisch vergeben wird.  E-Mails ohne DKIM sind unzureichend authentifiziert, so dass sie leicht für Spoofing oder Phishing missbraucht werden können. Allerdings werden noch immer E-Mails ohne DKIM verschickt, so dass eine Blockierung zu funktionalen Einschränkungen führen könnte. Kompromissmaßnahmen können z.B. die Markierung der E-Mail mit einem Warnhinweis , Allowlisting, Greylisting, Quarantäne oder eine Filterung durch Anomalieerkennung sein. Die Formulierung \"im Einklang mit den Festlegungen des Identitäts- und Berechtigungsmanagements\" bedeutet, dass die Authentifizierung so erfolgt, wie in der Praktik IDM festgelegt. Hierzu gehört insbesondere die Verwendung aktueller kryptographischer Verfahren, wie sie im Thema Kryptographie zu finden ist."
      }
     }
    }

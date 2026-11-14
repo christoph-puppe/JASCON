@@ -16,33 +16,6 @@
    "prose": {
     "de": "Beschaffungsmanagement für Dienstleistungen SOLLTE Regelungen zur Nutzung der Daten und damit verbundenen Assets vereinbaren."
    }
-  },
-  {
-   "id": "BES.5.5.1",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Beschaffungsmanagement für Dienstleistungen KANN die Verarbeitung von Daten ausschließlich an von der Institution erlaubten Datenlokationen vereinbaren."
-   }
-  },
-  {
-   "id": "BES.5.5.2",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Beschaffungsmanagement für Dienstleistungen SOLLTE Regelungen zur Autorisierung der Zugriffsberechtigung für Personal des Lieferanten anhand von {param:bes.5.5.2-prm1} vereinbaren."
-   },
-   "parameters": [
-    {
-     "name": "bes.5.5.2-prm1",
-     "type": "string",
-     "label": "Kriterien"
-    }
-   ]
   }
  ],
  "facets": {
@@ -51,21 +24,6 @@
     "smt": {
      "action": "vereinbaren",
      "result": "Regelungen zur Nutzung der Daten und damit verbundenen Assets",
-     "target-object-categories": [
-      "Dienstleistungen"
-     ]
-    },
-    "BES.5.5.1": {
-     "action": "vereinbaren",
-     "result": "die Verarbeitung von Daten ausschließlich an von der Institution erlaubten Datenlokationen",
-     "target-object-categories": [
-      "Dienstleistungen"
-     ]
-    },
-    "BES.5.5.2": {
-     "action": "vereinbaren",
-     "result": "Regelungen zur Autorisierung der Zugriffsberechtigung für Personal des Lieferanten",
-     "result-specification": "anhand von {{Kriterien}}",
      "target-object-categories": [
       "Dienstleistungen"
      ]
@@ -78,40 +36,12 @@
      "required-documentation": [
       "Beschaffungskriterien"
      ]
-    },
-    "BES.5.5.1": {
-     "required-documentation": [
-      "Beschaffungskriterien"
-     ]
-    },
-    "BES.5.5.2": {
-     "required-documentation": [
-      "Beschaffungskriterien"
-     ]
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
    "by-statement": {
     "smt": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "1",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.20"
-     ]
-    },
-    "BES.5.5.1": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "1",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.20"
-     ]
-    },
-    "BES.5.5.2": {
      "confidentiality": "1",
      "integrity": "1",
      "availability": "1",
@@ -131,26 +61,6 @@
      "tags": [
       "Lieferketten"
      ]
-    },
-    "BES.5.5.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 4,
-     "tags": [
-      "Lieferketten"
-     ],
-     "title": "Datenlokationen",
-     "alt-identifier": "5fc9434d-4d26-4383-ba5a-d921563f01ce"
-    },
-    "BES.5.5.2": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 4,
-     "tags": [
-      "Lieferketten"
-     ],
-     "title": "Autorisierung der Zugriffsberechtigung",
-     "alt-identifier": "adb32e38-f59a-42fa-b1a0-67abd118c585"
     }
    }
   },
@@ -160,23 +70,6 @@
      "guidance": {
       "de": "Hierzu zählen z.B. Zugriffsregelungen und Regelungen darüber unter welchen Bedingungen (Ort, Zeit, etc.) Daten genutzt werden dürfen. Darüber hinaus gehören auch Regelungen dazu, wann eine Nutzung aus Sicht der Institution explizit nicht akzeptabel ist."
      }
-    },
-    "BES.5.5.1": {
-     "guidance": {
-      "de": "Ziel ist es zu verhindern, dass vertrauliche Informationen in Staaten mit schwachem Datenschutz oder unter fremder Rechtsaufsicht verarbeitet werden. Ohne diese Festlegung könnte ein Dienstleister Daten an Subunternehmer in Drittländern weitergeben, wo staatliche Zugriffe oder unzureichende Sicherheitsmaßnahmen die Vertraulichkeit und Integrität der Daten gefährden könnten. Durch eine konsequente Beschränkung der Datenlokationen kann die Institution hingegen nachvollziehbare Sicherheits- und Rechtsrahmen schaffen, die Transparenz gegenüber Betroffenen erhöhen und das Risiko unkontrollierter Datenabflüsse verringern. Unter „Datenlokation“ ist in diesem Kontext der physische oder virtuelle Standort gemeint, an dem Daten gespeichert, verarbeitet oder übertragen werden – also Rechenzentren, Cloud-Regionen oder spezifische Länderzonen. Eine „erlaubte Datenlokation“ kann eine innerhalb der EU liegende Cloud-Region, ein zertifiziertes Rechenzentrum im eigenen Land oder ein dedizierter Bereich innerhalb eines Cloud-Anbieters sein. Die Institution kann dies umsetzen, indem sie (1) in Dienstleistungsverträgen präzise Angaben zu zulässigen Ländern oder Regionen vereinbart, (2) von Dienstleistern Nachweise wie technische Standortkontrollen oder Auditberichte einfordert und (3) bei Cloud-Diensten gezielt Konfigurationen wie „Data Residency“-Optionen, Geofencing oder restriktive Auswahl von Regionen einsetzt."
-     }
-    },
-    "BES.5.5.2": {
-     "guidance": {
-      "de": "Dies kann beispielsweise durch eine explizite Liste der Personen oder Rollen des Zulieferers, welche berechtigt sind, die Informationen der Institution und andere zugehörige Vermögenswerte zu nutzen, umgesetzt werden."
-     }
-    }
-   }
-  },
-  "https://ns.jascon.net/compat/oscal-1x@1": {
-   "param-extras": {
-    "bes.5.5.2-prm1": {
-     "alt-identifier": "adb32e38-f59a-42fa-b1a0-67abd118c585"
     }
    }
   }

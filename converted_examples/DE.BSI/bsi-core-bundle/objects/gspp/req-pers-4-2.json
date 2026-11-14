@@ -23,16 +23,6 @@
      "label": "regelmäßig"
     }
    ]
-  },
-  {
-   "id": "PERS.4.2.1",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Personal für Administrierende SOLLTE produktspezifische Schulungen zum Umgang mit administrativen Werkzeugen bei Neuzugang und dem Einsatz neuer IT-Produkte ausführen."
-   }
   }
  ],
  "facets": {
@@ -45,25 +35,12 @@
      "target-object-categories": [
       "Nutzende"
      ]
-    },
-    "PERS.4.2.1": {
-     "action": "ausführen",
-     "result": "produktspezifische Schulungen zum Umgang mit administrativen Werkzeugen",
-     "result-specification": "bei Neuzugang und dem Einsatz neuer IT-Produkte",
-     "target-object-categories": [
-      "Administrierende"
-     ]
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "by-statement": {
     "smt": {
-     "required-documentation": [
-      "Schulungsplan"
-     ]
-    },
-    "PERS.4.2.1": {
      "required-documentation": [
       "Schulungsplan"
      ]
@@ -80,15 +57,6 @@
      "threat-refs": [
       "https://ns.bsi.bund.de/gspp/threat/G-0.42"
      ]
-    },
-    "PERS.4.2.1": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
-     ]
     }
    }
   },
@@ -101,13 +69,6 @@
      "tags": [
       "Kompetenzmanagement"
      ]
-    },
-    "PERS.4.2.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 2,
-     "title": "Produktspezifische Schulungen und Sensibilisierungen",
-     "alt-identifier": "5fa63606-a580-4995-a17e-41f05197ee2c"
     }
    }
   },
@@ -116,11 +77,6 @@
     "smt": {
      "guidance": {
       "de": "Neue Mitarbeitende könnten ohne gezielte Einführung unbewusst vertrauliche Informationen preisgeben, unsichere Passwörter wählen oder Phishing-Mails öffnen, da ihnen relevante Schutzprinzipien oder Gefährdungen im Kontext ihrer Tätigkeit nicht bekannt sind. Ebenso könnte es bei länger Beschäftigten zu einer „Routineblindheit“ kommen, sodass beispielsweise ungewöhnliche Systemmeldungen nicht mehr ernst genommen oder sensible Daten versehentlich an unberechtigte Personen weitergegeben werden. „Rollenspezifisch“ bedeutet in diesem Zusammenhang, dass die Inhalte der Schulung auf die jeweilige Tätigkeit zugeschnitten werden – eine Person im IT-Bereich benötigt z. B. andere Sicherheitskenntnisse als jemand im Vertrieb oder in der Verwaltung. Beispiele für rollenspezifische Schulungen sind Kurse zum sicheren IT-Betrieb für Administrierende, OWASP® Top 10 Training für Webentwickler und Social Engineering Abwehrtraining für die Institutionsleitung. Eine Institution kann diese Anforderung etwa umsetzen, indem sie standardisierte E-Learning-Module bereitstellt, die durch kurze Praxisszenarien ergänzt werden. Hilfreich ist, die Dauer der Formate überschaubar zu halten, um die Akzeptanz hoch zu halten, und die Wirksamkeit regelmäßig durch Feedback oder kleine Tests zu prüfen. Ebenso kann es sinnvoll sein, Fachbereiche in die Ausgestaltung einzubinden, damit Beispiele und Szenarien aus dem tatsächlichen Arbeitsalltag stammen. Mitarbeitende, die bereits eine passende Qualifikation erworben haben, können von der Schulung ausgenommen werden."
-     }
-    },
-    "PERS.4.2.1": {
-     "guidance": {
-      "de": "Ziel ist es, den sicheren Umgang mit den in der Institution genutzten administrativen Werkzeugen zu erlernen (z.B. dem genutzten Verzeichnisdienst, Kommandozeilenbefehlen der genutzten Betriebssysteme, Wireshark oder Netzmanagement-Software). Hierzu gehört die Bedienung der jeweiligen Werkzeuge, Aspekte der sicheren Nutzung wie Verschlüsselung und Authentifizierung, die Vermeidung typischer Fehler, sowie der Umgang mit typischen Problemstellungen (Bugfixing). Verfügt die jeweilige Person bereits nachweislich über die Kenntnisse (z.B. passendes Zertifikat) so ist die Schulung für diese Person entbehrlich."
      }
     }
    }

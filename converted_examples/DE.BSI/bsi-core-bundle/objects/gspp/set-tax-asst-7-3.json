@@ -1,0 +1,26 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/asst-7-3",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Geregeltes Löschen oder Vernichten"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.7.3",
+   "sequence": 2190
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.7.3.1",
+   "sequence": 2200
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.7.3.2",
+   "sequence": 2210
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.7.3.3",
+   "sequence": 2220
+  }
+ ]
+}

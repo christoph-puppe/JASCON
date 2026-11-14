@@ -1,0 +1,65 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/PERF.4.1.8",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "PERF.4.1.8",
+ "lifecycle": "active",
+ "title": {
+  "de": "Verbesserungen"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Monitoring-Evaluation SOLLTE die aufgrund der Überprüfung abgeleitete Verbesserungen des ISMS als Ergebnis der Überprüfung in einem Managementbericht dokumentieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "dokumentieren",
+     "result": "die aufgrund der Überprüfung abgeleitete Verbesserungen des ISMS",
+     "result-specification": "als Ergebnis der Überprüfung in einem Managementbericht"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Managementbericht"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Methodik-Grundschutz-plus-plus",
+     "sec-level": "normal-SdT",
+     "effort": 1
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Hier ist zu dokumentieren, 1. ob identifizierte Verbesserungsmaßnahmen tatsächlich umgesetzt wurden (z.B. Änderungen an Prozessen, technische Anpassungen, Schulungen). 2. in welcher Form diese Maßnahmen ins ISMS eingeflossen sind, also ob sie dokumentiert, in der Risikobetrachtung berücksichtigt und in den Steuerungsprozessen verankert wurden. 3. ob die Verbesserungen die angestrebte Wirkung zeigen, also zur Reduzierung von Risiken oder zur Erreichung der Sicherheitsziele beitragen. 4. ob die Maßnahmen dauerhaft aufrechterhalten und kontinuierlich überwacht werden, um nachhaltige Verbesserungen sicherzustellen. Die Ergebnisse dieser Evaluierung sind nachvollziehbar zu dokumentieren und bilden die Grundlage für weitere Entscheidungen im Rahmen des kontinuierlichen Verbesserungsprozesses und basieren auf den vorab erstellten Auditberichten sowie der geforderten Eignungsprüfung."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "f591a6d1-19bc-4b0d-8d4d-48f9afa67e40"
+  }
+ ]
+}

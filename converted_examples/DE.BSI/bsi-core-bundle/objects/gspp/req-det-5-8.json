@@ -23,38 +23,6 @@
      "label": "regelmäßig"
     }
    ]
-  },
-  {
-   "id": "DET.5.8.1",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Detektion KANN öffentliche Quellen auf Hinweise zu eigenen Schwachstellen anhand von {param:det.5.8.1-prm1} {param:det.5.8.1-prm2} überprüfen."
-   },
-   "parameters": [
-    {
-     "name": "det.5.8.1-prm1",
-     "type": "string",
-     "label": "Kriterien zur Suche"
-    },
-    {
-     "name": "det.5.8.1-prm2",
-     "type": "string",
-     "label": "regelmäßig"
-    }
-   ]
-  },
-  {
-   "id": "DET.5.8.1.1",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Detektion KANN öffentliche Quellen automatisiert auf Hinweise zur unautorisierten Veröffentlichung vertraulicher Daten überwachen."
-   }
   }
  ],
  "facets": {
@@ -64,31 +32,12 @@
      "action": "überprüfen",
      "result": "verfügbare Informationen zu Bedrohungen, die für den Informationsverbund relevant sind,",
      "result-specification": "{{regelmäßig}}"
-    },
-    "DET.5.8.1": {
-     "action": "überprüfen",
-     "result": "öffentliche Quellen auf Hinweise zu eigenen Schwachstellen",
-     "result-specification": "anhand von {{Kriterien zur Suche}} {{regelmäßig}}"
-    },
-    "DET.5.8.1.1": {
-     "action": "überwachen",
-     "result": "öffentliche Quellen automatisiert auf Hinweise zur unautorisierten Veröffentlichung vertraulicher Daten"
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "by-statement": {
     "smt": {
-     "required-documentation": [
-      "Detektions-Konzept"
-     ]
-    },
-    "DET.5.8.1": {
-     "required-documentation": [
-      "Detektions-Konzept"
-     ]
-    },
-    "DET.5.8.1.1": {
      "required-documentation": [
       "Detektions-Konzept"
      ]
@@ -106,27 +55,6 @@
       "https://ns.bsi.bund.de/gspp/threat/G-0.29",
       "https://ns.bsi.bund.de/gspp/threat/G-0.18"
      ]
-    },
-    "DET.5.8.1": {
-     "confidentiality": "2",
-     "integrity": "2",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.29",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.28",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.23"
-     ]
-    },
-    "DET.5.8.1.1": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.29"
-     ]
     }
    }
   },
@@ -136,26 +64,6 @@
      "class": "BSI-Stand-der-Technik-Kernel-G0",
      "sec-level": "normal-SdT",
      "effort": 5
-    },
-    "DET.5.8.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5,
-     "tags": [
-      "Data Leak"
-     ],
-     "title": "Auswertung öffentlicher Quellen",
-     "alt-identifier": "42bf3e91-d270-4a79-8ae9-a22918f94ad7"
-    },
-    "DET.5.8.1.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5,
-     "tags": [
-      "Data Leak"
-     ],
-     "title": "Unautorisierte Publikation",
-     "alt-identifier": "c179bae3-7990-4308-b42b-53297a581402"
     }
    }
   },
@@ -165,16 +73,6 @@
      "guidance": {
       "de": "Bedrohungsaufklärung (Threat Intelligence) dient dem Sammeln und Analysieren von Informationen über bestehende oder aufkommende Bedrohungen, um fundierte Maßnahmen zur Verhinderung von Schäden zu ermöglichen und die Auswirkungen solcher Bedrohungen zu reduzieren. Sie kann in drei Schichten unterteilt werden: strategische Bedrohungsaufklärung (Austausch von Informationen auf hoher Ebene über die sich verändernde Bedrohungslandschaft), taktische Bedrohungsaufklärung (Informationen über Angreifermethoden, beteiligte Werkzeuge und Technologien) und operative Bedrohungsaufklärung (Details zu spezifischen Angriffen, einschließlich technischer Indikatoren). Die gesammelten Bedrohungsinformationen können analysiert und später genutzt werden, indem Prozesse implementiert werden können, um die aus Bedrohungsaufklärungsquellen gesammelten Informationen in die Risikomanagementprozesse einzubeziehen. Sie können als zusätzlicher Input für technische Präventiv- und Erkennungskontrollen wie Firewalls, Intrusion-Detection-Systeme oder Anti-Malware-Lösungen dienen sowie als Eingabe für die Testprozesse und -techniken der Informationssicherheit verwendet werden. Die Institution kann Bedrohungsinformationen auf gegenseitiger Basis mit anderen teilen, um die allgemeine Bedrohungsaufklärung zu verbessern. Dies kann einen kooperativen Ansatz zur Stärkung der gemeinsamen Sicherheitslage fördern."
      }
-    },
-    "DET.5.8.1": {
-     "guidance": {
-      "de": "Öffentliche Quellen können Hinweise zu aktuellen Schwachstellen geben oder sogar auf die Vorbereitung von Angriffen geben, beispielsweise auf die Nachahmung von Webseiten oder Marken, sowie Typosquatting. Auch Datenleaks wie API-Keys oder falsch konfigurierte Cloud-Systeme können hierüber aufgedeckt werden.  Relevante öffentliche Quellen können z.B. Schwachstellendatenbanken, Fachmedien, Security Mailing Listen, Dark Web Foren, Code Repositories, Suchmaschinen oder Soziale Medien sein. Als Kriterien zur Auswahl können verschiedene Suchbegriffe oder Suchmuster herangezogen werden, z.B. Bezeichnungen verwendeter Betriebssysteme oder Komponenten, eigene DNS-Domains, E-Mailadressen, API-Schnittstellen, Markennamen.  Die Umsetzung kann durch eigenes Personal oder Threat Intelligence Dienstleister erfolgen."
-     }
-    },
-    "DET.5.8.1.1": {
-     "guidance": {
-      "de": "Unautorisierte Veröffentlichungen liegen vor, wenn vertrauliche Daten ohne Autorisierung der Institution öffentlich gemacht wurden, z.B. personenbezogene Kundendaten oder Geschäftsgeheimnisse. Typische Quellen sind Soziale Netzwerke und Code-Sharing-Plattformen. Kann z.B. durch die automatisierte Suche nach unkritischen, aber in den Quelldaten vorhandenen Begriffen umgesetzt werden."
-     }
     }
    }
   },
@@ -182,12 +80,6 @@
    "param-extras": {
     "det.5.8-prm1": {
      "alt-identifier": "2134a13a-50a6-44b7-8df1-3ce041ef376a"
-    },
-    "det.5.8.1-prm1": {
-     "alt-identifier": "42bf3e91-d270-4a79-8ae9-a22918f94ad7"
-    },
-    "det.5.8.1-prm2": {
-     "alt-identifier": "42bf3e91-d270-4a79-8ae9-a22918f94ad7"
     }
    }
   }

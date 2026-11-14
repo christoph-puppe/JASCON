@@ -8,43 +8,43 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/geb-1",
-   "sequence": 2850
+   "sequence": 4920
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/geb-2",
-   "sequence": 2900
+   "sequence": 4970
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/geb-3",
-   "sequence": 2980
+   "sequence": 5120
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/geb-4",
-   "sequence": 3030
+   "sequence": 5170
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/geb-5",
-   "sequence": 3070
+   "sequence": 5210
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/geb-6",
-   "sequence": 3120
+   "sequence": 5280
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/geb-7",
-   "sequence": 3160
+   "sequence": 5320
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/geb-8",
-   "sequence": 3210
+   "sequence": 5390
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/geb-9",
-   "sequence": 3290
+   "sequence": 5540
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/geb-10",
-   "sequence": 3350
+   "sequence": 5770
   }
  ],
  "label": "GEB",

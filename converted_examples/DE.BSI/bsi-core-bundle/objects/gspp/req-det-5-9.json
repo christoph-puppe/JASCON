@@ -16,16 +16,6 @@
    "prose": {
     "de": "Detektion SOLLTE eine Vorgehensweise zur Entgegennahme und Behandlung von externen Schwachstellenmeldungen verankern."
    }
-  },
-  {
-   "id": "DET.5.9.1",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Detektion KANN ein Bonusprogramm für externe Schwachstellenmeldungen verankern."
-   }
   }
  ],
  "facets": {
@@ -34,21 +24,12 @@
     "smt": {
      "action": "verankern",
      "result": "eine Vorgehensweise zur Entgegennahme und Behandlung von externen Schwachstellenmeldungen"
-    },
-    "DET.5.9.1": {
-     "action": "verankern",
-     "result": "ein Bonusprogramm für externe Schwachstellenmeldungen"
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "by-statement": {
     "smt": {
-     "required-documentation": [
-      "Detektions-Konzept"
-     ]
-    },
-    "DET.5.9.1": {
      "required-documentation": [
       "Detektions-Konzept"
      ]
@@ -66,16 +47,6 @@
       "https://ns.bsi.bund.de/gspp/threat/G-0.28",
       "https://ns.bsi.bund.de/gspp/threat/G-0.23"
      ]
-    },
-    "DET.5.9.1": {
-     "confidentiality": "2",
-     "integrity": "2",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.28",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.23"
-     ]
     }
    }
   },
@@ -85,13 +56,6 @@
      "class": "BSI-Stand-der-Technik-Kernel-G0",
      "sec-level": "normal-SdT",
      "effort": 4
-    },
-    "DET.5.9.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5,
-     "title": "Bonusprogramm",
-     "alt-identifier": "aeb9f98e-0aad-44c1-8ab1-2f7276e387de"
     }
    }
   },
@@ -100,11 +64,6 @@
     "smt": {
      "guidance": {
       "de": "Ohne klar geregelten Umgang könnte eine Institution wertvolle Hinweise übersehen oder verzögert reagieren, was die Wahrscheinlichkeit eines Angriffs auf ungepatchte Ziele erhöht. Denkbar sind etwa Szenarien, in denen eine unbekannte Schwachstelle in einer öffentlich erreichbaren Webanwendung durch Dritte entdeckt wird und die Institution zwar kontaktiert wird, aber ohne geregelten Prozess keine Reaktion erfolgt – was einen erfolgreichen Angriff begünstigen könnte. Eine Institution kann diese Anforderung umsetzen, indem sie z. B. eine leicht auffindbare Kontaktmöglichkeit für Schwachstellenmeldungen bereitstellt – etwa eine dedizierte E-Mail-Adresse wie security@…, ein webbasiertes Formular oder die Eintragung eines „Security.txt“-Hinweises im Webauftritt (nach IETF RFC 9116). Sinnvoll kann es sein, klare Erwartungshaltungen zu kommunizieren, etwa welche Informationen eine Meldung enthalten sollte oder wie Rückmeldungen an Hinweisgeber erfolgen können. Auch ein internes Verfahren zur Kategorisierung und Priorisierung der eingehenden Hinweise kann helfen, Meldungen effizient zu bearbeiten. Eine Institution kann zudem in Erwägung ziehen, standardisierte Rückmeldungen vorzubereiten, um zeitnah bestätigen zu können, dass eine Meldung eingegangen ist, selbst wenn die inhaltliche Analyse noch aussteht. Sinnvoll ist auch ein freiwilliger Verhaltenskodex (z. B. ein „Responsible Disclosure Policy“-Hinweis) auf der eigenen Website, um Hinweisgebern einen rechtlich sicheren Rahmen für ihre Meldungen zu verdeutlichen. So entsteht ein klarer, reproduzierbarer Prozess, der externe Informationen in die eigene Sicherheitsarbeit einbindet und das Risiko minimiert, dass relevante Hinweise verloren gehen oder ungenutzt bleiben. Für Details siehe ISO/IEC 29147."
-     }
-    },
-    "DET.5.9.1": {
-     "guidance": {
-      "de": "Ein Bonusprogramm für externe Schwachstellenmeldungen (englisch häufig Bug Bounty Program) bezeichnet ein strukturiertes Verfahren, bei dem eine Institution freiwilligen Sicherheitsforschenden oder interessierten Dritten eine Belohnung für das Melden bislang unbekannter Sicherheitslücken anbietet. Dabei geht es nicht nur um finanzielle Prämien, sondern auch um nicht-monetäre Anerkennungen wie öffentliche Danksagungen oder Zertifikate. Sinn und Zweck liegt darin, externen Sicherheitsforschern oder -expertenen einen Anreiz zu geben, um Schwachstellen frühzeitig zu finden und zu melden. Zur Umsetzung kann eine Institution (1) transparente Regeln definieren, welche Systeme oder Anwendungen einbezogen sind (in scope) und welche nicht, (2) einen abgestuften Belohnungsrahmen anbieten, der den Schweregrad einer Schwachstelle berücksichtigt, sowie (3) die rechtlichen Rahmenbedingungen durch eine sogenannte „Safe-Harbor-Policy“ festlegen, die den Meldenden Schutz vor rechtlichen Schritten zusichert, solange diese verantwortungsvoll handeln. Ergänzend kann die Institution durch einfache organisatorische Hilfsmittel wie Ticketnummern, automatische Eingangsbestätigungen und zeitnahe Rückmeldungen Vertrauen schaffen und den weiteren Ablauf für externe Meldende nachvollziehbar gestalten."
      }
     }
    }

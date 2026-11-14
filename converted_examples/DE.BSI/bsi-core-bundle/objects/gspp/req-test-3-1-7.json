@@ -1,0 +1,78 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/TEST.3.1.7",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "TEST.3.1.7",
+ "lifecycle": "active",
+ "title": {
+  "de": "Chaos Engineering"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "may",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Änderungen und Tests KANN die Resilienz bei Simulation verschiedenartiger Störungen testen."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "testen",
+     "result": "die Resilienz bei Simulation verschiedenartiger Störungen"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Freigabeplan"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.28",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.26"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "erhöht",
+     "effort": 5
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Chaos Engineering kann helfen, die Zuverlässigkeit von Systemen oder Anwendungen zu erhöhen, indem es die Resilienz, also die Fähigkeit bei störenden Einflüssen den Betrieb fortzusetzen oder wiederherzustellen, durch simulierte Ausfälle oder Störungen testet. Dabei ist jedoch zu beachten, dass dabei keine geschäftskritischen, im Betrieb befindlichen Dienste gestört werden. Daher ist der Ansatz nur nach einer Analyse und Abwägung der Risiken sinnvoll. Zweckmäßig ist es dabei, geschäftskritische Systeme und Anwendungen mit hohen Auswirkungen zu priorisieren, häufige Ausfallmodi zu testen, kritische Abhängigkeiten unter Stress zu setzen, vergangene Vorfälle nachzubilden und Systemannahmen durch methodische Prozesse zu hinterfragen. Hierzu kann eine Karte der Abhängigkeiten verwendet werden oder eine Analyse kritischer Pfade. Wertvolle Experimente können Netzwerkbeeinträchtigungen, Dienstausfälle, Abhängigkeitsunterbrechungen, Ressourcenerschöpfung, Multiregionsausfälle und Zeitsynchronisationsprobleme umfassen. Geschäftskritische Dienste können dabei z.B. durch eine Begrenzung auf bestimmte Systeme, oder Durchführung solcher Tests nur außerhalb der Betriebszeiten geschützt werden."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "32a4ff7c-ee41-4d31-8a1e-f15ea1373181"
+  }
+ ]
+}

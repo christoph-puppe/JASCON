@@ -1,0 +1,90 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/PERS.3.6.1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "PERS.3.6.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "Sicherheitsüberprüfung (intern)"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "may",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Personal KANN eine Sicherheitsüberprüfung vor der Besetzung von sicherheitsrelevanten Stellen ausführen."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "ausführen",
+     "result": "eine Sicherheitsüberprüfung",
+     "result-specification": "vor der Besetzung von sicherheitsrelevanten Stellen"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Prozess Personalmanagement"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.31",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.33",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.32",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.35"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "erhöht",
+     "effort": 5,
+     "tags": [
+      "Insider Threat"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Eine Sicherheitsüberprüfung meint die Verifikation von Identität, beruflicher Qualifikation und Verlässlichkeit von allen Personen mit Zugriff auf schützenswerte Informationen, hier konkret der Mitarbeitenden. Bei einer Sicherheitsüberprüfung kann je nach Art der Tätigkeit ein Polizeiliches Führungszeugnis, eine finanzielle Hintergrundprüfung, ein Sicherheitsinterview, eine psychologische Eignungsprüfung, sowie eine Überprüfung von sozialen Beziehungen und Netzwerken sinnvoll sein. Hierbei besteht ein enger Bezug zum Persönlichkeits- und Datenschutzrecht der Betroffenen. Eine sicherheitsrelevante Stelle ist eine Funktion oder Rolle innerhalb einer Institution, die direkt Zugang zu sicherheitskritischen Informationen, IT-Systemen oder Konfigurationen hat und deren Handlungen die Vertraulichkeit, Integrität oder Verfügbarkeit dieser Systeme maßgeblich beeinflussen könnten. Dazu zählen insbesondere (1) der bzw. die Informationssicherheitsbeauftragte, (2) System-, Netzwerk- und Serveradministratoren sowie (3) weitere Administrator*innen mit erhöhten Rechten wie Domain-Admins, Datenbank-Admins oder Security-Engineers, ebenso wie (4) Personen mit Zugriff auf sicherheitskritische Schlüsselmaterialien etwa im Kryptografie- oder Identitätsmanagement. Nicht darunter fallen hingegen Tätigkeiten ohne sicherheitskritischen Systemzugang oder ohne Einfluss auf Sicherheitsfunktionen, etwa Reinigungs- oder Empfangstätigkeiten."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "a0b61264-fa20-481e-8d7a-3b0e37cc0a80"
+  }
+ ],
+ "relations": [
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.4.9"
+  }
+ ]
+}

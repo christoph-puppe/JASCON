@@ -1,0 +1,90 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/TEST.3.1.11",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "TEST.3.1.11",
+ "lifecycle": "active",
+ "title": {
+  "de": "Penetrationstest bei Änderungen"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "may",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Änderungen und Tests KANN bekannte Schwachstellen bei kritischen Änderungen testen."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "testen",
+     "result": "bekannte Schwachstellen",
+     "result-specification": "bei kritischen Änderungen"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Freigabeplan"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "2",
+     "integrity": "2",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.28",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.23"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "erhöht",
+     "effort": 5
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Bei einem Penetrationstest führen qualifizierte Sicherheitsexperten kontrollierte Angriffe auf Systeme, Anwendungen oder Netzwerke durch. Der primäre Zweck besteht darin, die tatsächliche Angriffsfläche aus der Perspektive eines potenziellen Angreifers zu bewerten, reale Ausnutzungsmöglichkeiten zu demonstrieren und die Wirksamkeit implementierter Sicherheitsmaßnahmen unter realistischen Bedingungen zu verifizieren. Praktische Umsetzungsbeispiele umfassen Black-Box-Tests ohne Vorkenntnisse des Systems, Grey-Box-Tests mit begrenztem Zugang und Wissen sowie White-Box-Tests mit vollständigem Quellcode-Zugriff, wobei Tools zur Automatisierung und Strukturierung der Tests eingesetzt werden können. Für ein effektives Pentesting empfiehlt es sich, den Testumfang klar zu definieren und zu dokumentieren, realistische Angriffsziele und Erfolgsmetriken festzulegen, ausreichend Zeit für die Behebung identifizierter Schwachstellen im Release-Plan einzuplanen, ein erfahrenes, unabhängiges Testteam einzusetzen, das nicht an der Entwicklung beteiligt war, sowie Re-Tests nach der Behebung von Schwachstellen durchzuführen, um sicherzustellen, dass alle identifizierten Risiken vor dem Produktivgang angemessen adressiert wurden."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "d994f7fa-1271-4563-9fc5-e3189fb362b7"
+  }
+ ],
+ "relations": [
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.5.4"
+  },
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.5.2"
+  }
+ ]
+}

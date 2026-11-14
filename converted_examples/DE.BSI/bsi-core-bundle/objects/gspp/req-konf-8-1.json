@@ -16,16 +16,6 @@
    "prose": {
     "de": "Konfiguration für IT-Systeme SOLLTE das Vorliegen von Sicherheitsupdates überwachen."
    }
-  },
-  {
-   "id": "KONF.8.1.1",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Konfiguration für IT-Systeme SOLLTE Sicherheitsupdates automatisch installieren."
-   }
   }
  ],
  "facets": {
@@ -34,14 +24,6 @@
     "smt": {
      "action": "überwachen",
      "result": "das Vorliegen von Sicherheitsupdates",
-     "target-object-categories": [
-      "IT-Systeme"
-     ]
-    },
-    "KONF.8.1.1": {
-     "action": "installieren",
-     "result": "Sicherheitsupdates",
-     "result-specification": "automatisch",
      "target-object-categories": [
       "IT-Systeme"
      ]
@@ -54,27 +36,12 @@
      "required-documentation": [
       "Konfigurationshistorie"
      ]
-    },
-    "KONF.8.1.1": {
-     "required-documentation": [
-      "Konfigurationshistorie"
-     ]
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
    "by-statement": {
     "smt": {
-     "confidentiality": "2",
-     "integrity": "2",
-     "availability": "2",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.28"
-     ]
-    },
-    "KONF.8.1.1": {
      "confidentiality": "2",
      "integrity": "2",
      "availability": "2",
@@ -95,16 +62,6 @@
      "tags": [
       "Produktbeschreibung"
      ]
-    },
-    "KONF.8.1.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 4,
-     "tags": [
-      "Produktbeschreibung"
-     ],
-     "title": "Automatische Sicherheitsupdates",
-     "alt-identifier": "9a9b1174-5e40-49a5-8c4b-599c394a8de7"
     }
    }
   },
@@ -113,11 +70,6 @@
     "smt": {
      "guidance": {
       "de": "Eine Überwachung von Sicherheitsupdates bedeutet, dass die IT-Systeme selbsttätig nach neuen Aktualisierungen suchen, die Schwachstellen in der Software beheben. Technisch können Systeme so konfiguriert werden, dass sie über zentrale Update-Server regelmäßig auf neue Patches prüfen. Es ist ratsam, einen automatisierten Prozess einzurichten, der bei Vorliegen von Updates diese automatisiert ausrollt oder eine Meldung an die zuständigen IT-Administratoren und ggf. die betroffenen Nutzer sendet. Diese Benachrichtigung kann über E-Mail, ein internes Ticketsystem oder ein Dashboard erfolgen. Ein guter Tipp ist die priorisierte Behandlung von Updates, bei der kritische Sicherheits-Patches vor Routine-Updates installiert werden."
-     }
-    },
-    "KONF.8.1.1": {
-     "guidance": {
-      "de": "Dies kann durch direkten Download vom Hersteller oder einen eigenen Verteilerserver umgesetzt werden, so lange dieser ebenfalls automatisch aktuell gehalten wird. Damit Sicherheitsupdates des Betriebssystems auch tatsächlich wirken und Fehlerzustände vermieden werden ist typischerweise ein Neustart erforderlich, damit die Betriebssystemfunktionen und damit verbundene Anwendungen aus dem installierten Update neu geladen und in einen definierten Zustand versetzt werden. Manche Systeme unterstützen alternativ auch Live-Patching des Betriebssystems im laufenden Betrieb."
      }
     }
    }

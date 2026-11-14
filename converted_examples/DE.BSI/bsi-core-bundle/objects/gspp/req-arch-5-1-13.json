@@ -1,0 +1,85 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/ARCH.5.1.13",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "ARCH.5.1.13",
+ "lifecycle": "active",
+ "title": {
+  "de": "Produktdiversität"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "may",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Architektur für Externe Netzanschlüsse KANN für die Filterung diverse Produkte unterschiedlicher Hersteller für eingehende und ausgehende Verbindungen installieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "installieren",
+     "result": "für die Filterung diverse Produkte unterschiedlicher Hersteller",
+     "result-specification": "für eingehende und ausgehende Verbindungen",
+     "target-object-categories": [
+      "Externe Netzanschlüsse"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "IT-Betriebskonzept"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "2",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "1",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.19",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.30"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "erhöht",
+     "effort": 5,
+     "tags": [
+      "Advanced Persistent Threats (APT)"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Wenn nur gleichartige Filtersysteme verwendet werden, könnten Angreifer eine Schwachstelle zweimal hintereinander ausnutzen, um Netzzugang zu erhalten. Der Einsatz verschiedener, voneinander unabhängiger Hersteller hintereinander verringert die Wahrscheinlichkeit, dass beide Systeme gleichzeitig anfällig sind."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "32682181-5136-4d4b-8466-3fd3a1d3b03c"
+  }
+ ]
+}

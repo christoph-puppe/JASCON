@@ -1,0 +1,104 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/GEB.10.4.1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "GEB.10.4.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "Niederohmigkeit"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "may",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Gebäudemanagement für Standorte KANN Blitzschutzeinrichtungen {param:geb.10.4.1-prm1}  auf Niederohmigkeit überprüfen."
+   },
+   "parameters": [
+    {
+     "name": "geb.10.4.1-prm1",
+     "type": "string",
+     "label": "regelmäßig"
+    }
+   ]
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "überprüfen",
+     "result": "Blitzschutzeinrichtungen",
+     "result-specification": "{{regelmäßig}}  auf Niederohmigkeit",
+     "target-object-categories": [
+      "Standorte"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Übungs- und Prüfplan"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "2",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "erhöht",
+     "effort": 5,
+     "tags": [
+      "Inspektion"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Eine niedrige Ohmzahl in Erdungs- und Potentialausgleichseinrichtungen gewährleistet, dass Blitzströme schnell und wirksam abgeleitet werden. Siehe DIN VDE 0100-443 u. -534. Beachten Sie dabei auch die Prüfpflicht aus der Betriebssicherheitsverordnung (BetrSichV)."
+     }
+    }
+   }
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "param-extras": {
+    "geb.10.4.1-prm1": {
+     "alt-identifier": "a70149a9-75af-4784-8011-e1433c72dcfc"
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "a70149a9-75af-4784-8011-e1433c72dcfc"
+  }
+ ],
+ "relations": [
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.9.4"
+  }
+ ]
+}

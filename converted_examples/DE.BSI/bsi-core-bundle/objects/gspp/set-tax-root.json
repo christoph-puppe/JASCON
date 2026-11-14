@@ -8,83 +8,138 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/gc",
-   "sequence": 290
+   "sequence": 550
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/stm",
-   "sequence": 410
-  },
-  {
-   "ref": "https://ns.bsi.bund.de/gspp/set/tax/ums",
-   "sequence": 600
-  },
-  {
-   "ref": "https://ns.bsi.bund.de/gspp/set/tax/vrb",
    "sequence": 780
   },
   {
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/ums",
+   "sequence": 970
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/vrb",
+   "sequence": 1150
+  },
+  {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/perf",
-   "sequence": 930
+   "sequence": 1480
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/risk",
-   "sequence": 990
+   "sequence": 1540
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/asst",
-   "sequence": 1510
+   "sequence": 2290
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/pers",
-   "sequence": 1770
+   "sequence": 2710
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/bes",
-   "sequence": 2400
+   "sequence": 4080
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/dls",
-   "sequence": 2570
+   "sequence": 4340
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/test",
-   "sequence": 2790
+   "sequence": 4800
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/geb",
-   "sequence": 3360
+   "sequence": 5780
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/sens",
-   "sequence": 4260
+   "sequence": 6830
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/arch",
-   "sequence": 4660
+   "sequence": 7610
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/ber",
-   "sequence": 5500
+   "sequence": 8630
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/not",
-   "sequence": 5810
+   "sequence": 9090
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/det",
-   "sequence": 6300
+   "sequence": 10120
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/rea",
-   "sequence": 6440
+   "sequence": 10440
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/konf",
-   "sequence": 7730
+   "sequence": 12400
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/dev",
-   "sequence": 8100
+   "sequence": 12840
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "metadata": {
+    "last-modified": "2026-07-16T05:12:00.550662665Z",
+    "oscal-version": "1.1.3",
+    "props": [
+     {
+      "name": "resolution-tool",
+      "value": "libOSCAL-Java"
+     },
+     {
+      "name": "scope_implements_norm",
+      "ns": "http://csrc.nist.gov/ns/oscal/1.0",
+      "value": "§ 44 Abs. 1 BSIG"
+     },
+     {
+      "name": "keywords",
+      "value": "Information Security Management System"
+     }
+    ],
+    "links": [
+     {
+      "href": "#bf7510ca-fb0f-4182-af9f-b3c61db3187a",
+      "rel": "reference",
+      "text": "BSI IT-Grundschutz Edition 2023"
+     }
+    ],
+    "roles": [
+     {
+      "id": "creator",
+      "title": "Creator"
+     }
+    ],
+    "parties": [
+     {
+      "uuid": "52300f5f-7957-470a-bb63-4e50a82d1bed",
+      "type": "person",
+      "name": "Bundesamt für Sicherheit in der Informationstechnik",
+      "email-addresses": [
+       "service-center@bsi.bund.de"
+      ]
+     }
+    ],
+    "responsible-parties": [
+     {
+      "role-id": "creator",
+      "party-uuids": [
+       "52300f5f-7957-470a-bb63-4e50a82d1bed"
+      ]
+     }
+    ],
+    "remarks": "Der Grundschutz++ ist eine vom Bundesamt für Sicherheit in der Informationstechnik (BSI) entwickelte und frei verfügbare Vorgehensweise um ein ganzheitliches Informationssicherheits-Managementsystem (ISMS) in Institutionen zu errichten und erhalten. Dieser Katalog enthält sowohl die Anforderungen zur Umsetzung der Grundschutz-Methodik als auch die konkreten technisch-organisatorischen Anforderungen die zur Absicherung erforderlich sind."
+   }
+  }
+ }
 }

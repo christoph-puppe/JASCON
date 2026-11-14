@@ -1,0 +1,82 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/REA.2.6.2",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "REA.2.6.2",
+ "lifecycle": "active",
+ "title": {
+  "de": "Kommunikation bei Vorfällen"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Sicherheitsvorfallsbehandlung SOLLTE eine Vorgehensweise zur Kommunikation bei Vorfällen unter Berücksichtigung von Compliance-Verpflichtungen, Bedürfnissen der interessierten Parteien und der Geschäftsziele verankern."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "verankern",
+     "result": "eine Vorgehensweise zur Kommunikation bei Vorfällen",
+     "result-specification": "unter Berücksichtigung von Compliance-Verpflichtungen, Bedürfnissen der interessierten Parteien und der Geschäftsziele"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Behandlung von Sicherheitsvorfällen"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.39",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.47"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 3,
+     "tags": [
+      "Kontakt mit Behörden"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Hierzu gehören beispielsweise Meldepflichten gegenüber Aufsichts- oder Ermittlungsbehörden oder die Information Betroffener. Für personenbezogene Daten siehe auch Art. 34 DSGVO. Für weitere Details siehe ISO/IEC 27035.  Bei den Compliance-Verpflichtungen sind einerseits Verpflichtungen zu beachten, die eine Meldung oder einen bestimmten Umfang für Meldungen fordern (z.B. Art. 33 DSGVO), andererseits aber auch Verpflichtungen zur Wahrung der Vertraulichkeit, z.B. aus dem Datenschutz, vertraglicher Pflichten zur Wahrung fremder Geschäftsgeheimnisse oder der staatlichen Geheimhaltung. Im Zweifelsfall ist hier die Inanspruchnahme interner oder externer Rechtsberatung hier empfehlenswert."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "5af2ba47-33f4-4623-a519-e0f727596890"
+  }
+ ]
+}

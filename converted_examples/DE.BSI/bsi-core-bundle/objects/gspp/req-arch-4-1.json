@@ -16,33 +16,6 @@
    "prose": {
     "de": "Architektur für Interne Netzsegmente SOLLTE den Zugriff von IT-Systemen auf das Netzsegment im Einklang mit den zugehörigen Anforderungen des Identitäts- und Berechtigungsmanagements authentifizieren."
    }
-  },
-  {
-   "id": "ARCH.4.1.1",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Architektur für Interne Netzsegmente SOLLTE den Zugriff von IT-Systemen auf das Netzsegment anhand {param:arch.4.1.1-prm1} im Einklang mit den zugehörigen Anforderungen des Identitäts- und Berechtigungsmanagements authentifizieren."
-   },
-   "parameters": [
-    {
-     "name": "arch.4.1.1-prm1",
-     "type": "string",
-     "label": "dynamischer Kriterien"
-    }
-   ]
-  },
-  {
-   "id": "ARCH.4.1.2",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Architektur für Interne Netzsegmente KANN ein Quarantänenetz für nicht authentifizierte IT-Systeme installieren."
-   }
   }
  ],
  "facets": {
@@ -55,38 +28,12 @@
      "target-object-categories": [
       "Interne Netzsegmente"
      ]
-    },
-    "ARCH.4.1.1": {
-     "action": "authentifizieren",
-     "result": "den Zugriff von IT-Systemen auf das Netzsegment",
-     "result-specification": "anhand {{dynamischer Kriterien}} im Einklang mit den zugehörigen Anforderungen des Identitäts- und Berechtigungsmanagements",
-     "target-object-categories": [
-      "Interne Netzsegmente"
-     ]
-    },
-    "ARCH.4.1.2": {
-     "action": "installieren",
-     "result": "ein Quarantänenetz",
-     "result-specification": "für nicht authentifizierte IT-Systeme",
-     "target-object-categories": [
-      "Interne Netzsegmente"
-     ]
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "by-statement": {
     "smt": {
-     "required-documentation": [
-      "Konfigurationshistorie"
-     ]
-    },
-    "ARCH.4.1.1": {
-     "required-documentation": [
-      "Konfigurationshistorie"
-     ]
-    },
-    "ARCH.4.1.2": {
      "required-documentation": [
       "Konfigurationshistorie"
      ]
@@ -104,25 +51,6 @@
       "https://ns.bsi.bund.de/gspp/threat/G-0.18",
       "https://ns.bsi.bund.de/gspp/threat/G-0.23"
      ]
-    },
-    "ARCH.4.1.1": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.36"
-     ]
-    },
-    "ARCH.4.1.2": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
-     ]
     }
    }
   },
@@ -136,28 +64,6 @@
       "Network Access Control",
       "Rogue Access Point"
      ]
-    },
-    "ARCH.4.1.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 4,
-     "tags": [
-      "Network Access Control",
-      "Rogue Access Point"
-     ],
-     "title": "Dynamische Netzzugangskontrolle",
-     "alt-identifier": "fec4fcdf-13e7-4a32-a3e1-52dce90ea1d7"
-    },
-    "ARCH.4.1.2": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5,
-     "tags": [
-      "Network Access Control",
-      "Rogue Access Point"
-     ],
-     "title": "Quarantäne",
-     "alt-identifier": "5f97efff-4db1-4b26-8ab9-4521108e5c0c"
     }
    }
   },
@@ -167,23 +73,6 @@
      "guidance": {
       "de": "Unautorisierte Systeme könnten Ausgangspunkt von Angriffen sein oder zu unbeabsichtigten Störungen im Netz führen. Netzwerkzugangskontrolle (Network Access Control, NAC) bietet eine wirksame Möglichkeit, den Zugriff auf Netzwerke kontrolliert zu steuern, insbesondere in schützenswerten Bereichen wie Management-Netzen, Produktionssystemen oder Forschungsumgebungen. Die Auswahl der Netzbereiche für die Netzzugangskontrolle richtet sich nach dem Schutzbedarf oder Risikoprofil. Dabei empfiehlt sich zu dokumentieren, welche Zonen mit NAC abgesichert werden und warum andere bewusst nicht berücksichtigt werden (z.B. aufgrund technischer Einschränkungen oder fehlender Relevanz). Die Umsetzung kann (1) auf Zertifikaten basieren (X.509, EAP‑TLS or mTLS), (2) auf Zugangskonten basieren (IEEE 802.1X, RADIUS), (3) auf dynamischen Prüfungen basieren (z.B. Sicherheitspatches). Eine Authentifizierung, die nur auf MAC-Adressen basiert, gilt dagegen nicht mehr als zeitgemäß, da MAC-Adressen sehr leicht ausgelesen und auf Systemen eingestellt werden könnten und so unberechtigte IT-Systeme zu leicht auch Zugang erhalten. Wenn Systeme die Netzzugangskontrolle nicht oder nur unzureichend unterstützen, ist für solche Systeme anstelle einer Netzzugangskontrolle die Nutzung eines eigenen Netzsegmentes empfehlenswert. Für die Verbindung zwischen RADIUS-Servern, Switches und Verzeichnisdiensten kommen Protokolle wie RadSec, IPsec oder LDAPS in Betracht. Die Verwendung nur einer einzigen Serverkonfigurationen (z.B. ein gemeinsamer RADIUS-Server für NAC und VPN) führt zu Komplexität und Angriffspunkten. Daher werden getrennte Systeme empfohlen. Dies gilt insbesondere bei unterschiedlichen Schutzklassen im LAN/WLAN oder Büro-/Produktionsnetz. Bei WLANs kann die Umsetzung in größeren Umgebungen mittels 802.1X (WPA3-Enterprise) und an kleineren Zugangspunkten oder Gastnetzen durch SAE (WPA3-Personal) erfolgen. Da es sich um eine automatisierte Sicherheitsrichtlinie handelt, ist hier auch die Anforderung zur Überwachung solcher Richtlinien anwendbar. Überwachungskriterien sind hier z.B. die Erreichbarkeit des RADIUS-Servers, die Antwortzeiten, die Last auf Access-Switches und andere Metriken. Für die Überwachung der Integrität ist insbesondere die Authentifizierung oder deren Fehlschlag relevant, z.B. viele abgelehnte Authentisierungen, plötzliche Deaktivierung eines Supplicants. Durch synthetische Anfragen an Testkonten kann die gesamte Authentisierungskette regelmäßig geprüft werden. Die Formulierung \"im Einklang mit den Festlegungen des Identitäts- und Berechtigungsmanagements\" bedeutet, dass die Authentifizierung so erfolgt, wie in der Praktik IDM festgelegt. Hierzu gehört insbesondere die Verwendung aktueller kryptographischer Verfahren, wie sie im Thema Kryptographie zu finden ist."
      }
-    },
-    "ARCH.4.1.1": {
-     "guidance": {
-      "de": "Bei der dynamischen Netzzugangskontrolle (Posturing oder Dynamic NAC) wird vor dem Netzzugang auch der Zustand des IT-Systems geprüft, z.B. der aktuelle Patchlevel des Systems oder von Erkennungssignaturen. Hierzu gehört auch die softwaredefinierte Netzzugangskontrolle, die dynamisch auf Aktivitäten des Systems oder aktuelle Threat Intelligence reagieren kann. Empfehlenswert ist es hierbei, die Konfiguration der Systeme automatisiert vorzunehmen, z.B. über eine automatische Supplicant-Konfiguration beim Rollout und die Zuweisung von Zertifikaten über Enrollment-Dienste. Die Formulierung \"im Einklang mit den Festlegungen des Identitäts- und Berechtigungsmanagements\" bedeutet, dass die Authentifizierung so erfolgt, wie in der Praktik IDM festgelegt. Hierzu gehört insbesondere die Verwendung aktueller kryptographischer Verfahren, wie sie im Thema Kryptographie zu finden ist."
-     }
-    },
-    "ARCH.4.1.2": {
-     "guidance": {
-      "de": "Wenn Systeme aufgrund bestimmter Voraussetzungen sich nicht authentifizieren (z.B. installierte Sicherheitsupdates oder weil sie keine 802.1X-Anmeldung unterstützen), kann ein vollständiges blockieren aller Netzverbindungen die Verfügbarkeit erforderlicher Geschäftsprozesse unmöglich machen. Um IT-Systemen einen eingeschränkten Zugang zu Netzressourcen zu ermöglichen – etwa damit diese die Voraussetzungen durch den Download von Updates erfüllen können – kann ein Quarantänenetz eingerichtet werden, das z.B. Zugang zu bestimmten Downloadservern oder eine Meldung des Problems ermöglicht."
-     }
-    }
-   }
-  },
-  "https://ns.jascon.net/compat/oscal-1x@1": {
-   "param-extras": {
-    "arch.4.1.1-prm1": {
-     "alt-identifier": "fec4fcdf-13e7-4a32-a3e1-52dce90ea1d7"
     }
    }
   }

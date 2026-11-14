@@ -23,40 +23,6 @@
      "label": "regelmäßig"
     }
    ]
-  },
-  {
-   "id": "NOT.4.5.1",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Notfallplanung für Daten SOLLTE die Archivierung von Assets, die zur Verwendung von archivierten Daten erforderlich sind, {param:not.4.5.1-prm1} ausführen."
-   },
-   "parameters": [
-    {
-     "name": "not.4.5.1-prm1",
-     "type": "string",
-     "label": "regelmäßig"
-    }
-   ]
-  },
-  {
-   "id": "NOT.4.5.2",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Notfallplanung für Daten SOLLTE die Archivierung von Dokumentationen, die zur Verwendung von archivierten Daten erforderlich sind, {param:not.4.5.2-prm1} ausführen."
-   },
-   "parameters": [
-    {
-     "name": "not.4.5.2-prm1",
-     "type": "string",
-     "label": "regelmäßig"
-    }
-   ]
   }
  ],
  "facets": {
@@ -69,38 +35,12 @@
      "target-object-categories": [
       "Daten"
      ]
-    },
-    "NOT.4.5.1": {
-     "action": "ausführen",
-     "result": "die Archivierung von Assets, die zur Verwendung von archivierten Daten erforderlich sind,",
-     "result-specification": "{{regelmäßig}}",
-     "target-object-categories": [
-      "Daten"
-     ]
-    },
-    "NOT.4.5.2": {
-     "action": "ausführen",
-     "result": "die Archivierung von Dokumentationen, die zur Verwendung von archivierten Daten erforderlich sind,",
-     "result-specification": "{{regelmäßig}}",
-     "target-object-categories": [
-      "Daten"
-     ]
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "by-statement": {
     "smt": {
-     "required-documentation": [
-      "Datensicherungskonzept"
-     ]
-    },
-    "NOT.4.5.1": {
-     "required-documentation": [
-      "Datensicherungskonzept"
-     ]
-    },
-    "NOT.4.5.2": {
      "required-documentation": [
       "Datensicherungskonzept"
      ]
@@ -118,29 +58,6 @@
       "https://ns.bsi.bund.de/gspp/threat/G-0.45",
       "https://ns.bsi.bund.de/gspp/threat/G-0.39"
      ]
-    },
-    "NOT.4.5.1": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "2",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.45",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.39",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.25"
-     ]
-    },
-    "NOT.4.5.2": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "2",
-     "authenticity": "1",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.45",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.39",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.37"
-     ]
     }
    }
   },
@@ -150,20 +67,6 @@
      "class": "BSI-Stand-der-Technik-Kernel-G0",
      "sec-level": "normal-SdT",
      "effort": 4
-    },
-    "NOT.4.5.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 4,
-     "title": "Zum Archiv gehörende Assets",
-     "alt-identifier": "5fda3188-8ad6-4981-953c-975696be1bfc"
-    },
-    "NOT.4.5.2": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 4,
-     "title": "Zum Archiv gehörende Dokumentation",
-     "alt-identifier": "c8feda1f-4d2c-4831-9822-04be256e9e51"
     }
    }
   },
@@ -173,16 +76,6 @@
      "guidance": {
       "de": "Archivierung meint hier die langfristige Aufbewahrung derjenigen Daten, die über längere Zeit benötigt werden, z.B. als Nachweis der Einhaltung rechtlicher Verpflichtungen oder zur Geltendmachung von Ansprüchen. Dabei kann es sich sowohl um analoge Dokumente als auch um digitale Daten handeln. Die meisten Institutionen verarbeiten Daten, die aufgrund von Compliance-Verpflichtungen langfristig gespeichert werden, z.B. handels- und steuerrechtlich relevante Dokumente oder Eigentumsurkunden. Langfristige Daten könnten durch technische Änderungen oder Vorfälle verloren gehen. Zur Umsetzung siehe BSI TR-03125. Sind keine Daten langfristig (z.B. über mehr als 10 Jahre) erforderlich, so ist die Anforderung entbehrlich. Es empfiehlt sich darüber hinaus ein verlustfreies Bildkompressionsverfahren zu nutzen, um eine beweis- und revisionssichere Archivierung zu gewährleisten."
      }
-    },
-    "NOT.4.5.1": {
-     "guidance": {
-      "de": "Je nach Art der Daten können zu deren Nutzung z.B. bestimmte (physische oder virtuelle) Assets wie Systeme oder Anwendungen erforderlich sein, z.B. bestimmte Datenbankversionen, kompatible Betriebssysteme und Lizenzen, Anwendungen zur kryptographischen Entschlüsselung der Daten, Konfigurationsdateien oder Betriebsparameter. Wenn Daten für eine lange Zeit aufbewahrt werden, könnte es vorkommen, dass sie nicht mehr lesbar und reproduzierbar sind, weil diese Assets nicht mehr existieren und auch nicht mehr beschafft werden können."
-     }
-    },
-    "NOT.4.5.2": {
-     "guidance": {
-      "de": "Hierbei geht es darum, nicht nur die Daten selbst, sondern auch alle begleitenden Informationen („metadata“ oder „supporting documentation“) regelmäßig zu sichern, um deren spätere Nutzbarkeit zu gewährleisten. Dokumentationen sind in diesem Zusammenhang beispielsweise Bedienungsanleitungen, technische Spezifikationen, Konfigurationsdateien oder Verfahrensanweisungen, die notwendig sind, um archivierte Daten auch nach Jahren noch korrekt zu interpretieren oder wiederherzustellen. Die Frequenz ist dabei abhängig von der Kritikalität der Daten und der Änderungsfrequenz der begleitenden Dokumente. Ohne solche begleitenden Unterlagen könnte ein Datenbestand zwar vorliegen, aber praktisch unbrauchbar sein, da die nötigen Kontexte oder technischen Details fehlen."
-     }
     }
    }
   },
@@ -190,12 +83,6 @@
    "param-extras": {
     "not.4.5-prm1": {
      "alt-identifier": "90012325-5827-4ad9-bee7-6877a37cecfe"
-    },
-    "not.4.5.1-prm1": {
-     "alt-identifier": "5fda3188-8ad6-4981-953c-975696be1bfc"
-    },
-    "not.4.5.2-prm1": {
-     "alt-identifier": "c8feda1f-4d2c-4831-9822-04be256e9e51"
     }
    }
   }

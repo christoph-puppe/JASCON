@@ -8,23 +8,23 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/perf-1",
-   "sequence": 820
+   "sequence": 1190
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/perf-2",
-   "sequence": 840
+   "sequence": 1210
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/perf-3",
-   "sequence": 870
+   "sequence": 1320
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/perf-4",
-   "sequence": 900
+   "sequence": 1450
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/perf-5",
-   "sequence": 920
+   "sequence": 1470
   }
  ],
  "label": "PERF",

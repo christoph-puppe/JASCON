@@ -1,0 +1,92 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/SENS.4.1.3",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "SENS.4.1.3",
+ "lifecycle": "active",
+ "title": {
+  "de": "Wahl von Passwörtern"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Sensibilisierung für Nutzende SOLLTE zur Wahl ausreichend komplexer Passwörter sensibilisieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "sensibilisieren",
+     "result": "zur Wahl ausreichend komplexer Passwörter",
+     "target-object-categories": [
+      "Nutzende"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Schulungsplan"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "2",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.30",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.36",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.23"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 3,
+     "tags": [
+      "Authentication and Authorization",
+      "Password Policy"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Ein Passwort ist ein geheimes Zeichenfolgenkürzel, das als Authentisierungsmerkmal dient und typischerweise aus Buchstaben, Ziffern und Sonderzeichen bestehen kann. Komplexität bedeutet hierbei, dass die Passwortstruktur hinreichend schwer zu Erraten oder durch automatisierte Verfahren zu berechnen ist, etwa durch eine gewisse Länge und die Verwendung unterschiedlicher Zeichenarten. Die Komplexität ist ausreichend, wenn sie den festgelegten Qualitätskriterien für Passwörter entspricht. Einfache oder mehrfach genutzte Passwörter könnten durch erraten, Wörterbuchangriffe oder Datenleaks kompromittiert werden und so zu unautorisierten Zugriffen, Datenverlusten oder Identitätsdiebstahl führen. Die bewusste Wahl starker und einzigartiger Passwörter kann hingegen die Widerstandsfähigkeit gegen Angriffe deutlich erhöhen und so einen wesentlichen Beitrag zum Schutz von Daten und IT-Systemen leisten. Zur Umsetzung kann eine Institution verschiedene Maßnahmen einsetzen: (1) praxisnahe Schulungen und E-Learnings, die anschaulich erläutern, warum Passwörter wie „Sommer2023“ leicht angreifbar sein könnten und wie kreative Passphrasen gebildet werden können, (2) begleitende Tipps in Anmeldemasken, die Hinweise zur Passwortgestaltung geben, ohne konkrete Vorgaben zu erzwingen, (3) die Empfehlung von Passwortmanagern, die den Umgang mit langen und individuellen Kennwörtern erleichtern, (4) prozessuale Begleitung durch Erinnerungen oder kurze Awareness-Kampagnen, etwa durch Plakate, Newsletter oder interaktive Quizformate. Für mehr Details siehe auch Thema Passwortgebrauch in der Praktik Berechtigung."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "48c3a712-943d-403e-8e04-cfc11d92a387"
+  }
+ ],
+ "relations": [
+  {
+   "type": "required",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.8"
+  }
+ ]
+}

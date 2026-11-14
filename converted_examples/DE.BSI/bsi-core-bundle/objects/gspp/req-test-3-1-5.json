@@ -1,0 +1,88 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/TEST.3.1.5",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "TEST.3.1.5",
+ "lifecycle": "active",
+ "title": {
+  "de": "Testumgebung"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Änderungen und Tests SOLLTE eine dedizierte Testumgebung installieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "installieren",
+     "result": "eine dedizierte Testumgebung"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "IT-Betriebskonzept"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.28",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 4
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Eine dedizierte Testumgebung (auch Entwicklungsumgebung oder Laborumgebung genannt) ist hier eine von der Produktionsumgebung unabhängige Infrastruktur, die speziell für die Durchführung von Änderungen, Prüfungen und Qualitätssicherungsmaßnahmen vorgesehen ist. Sie dient dazu, geplante Anpassungen, Updates oder Neuentwicklungen realistisch nachzustellen, ohne die Verfügbarkeit oder Integrität der produktiven Systeme und Daten zu gefährden. Zur Produktivumgebung zählen dabei auch Betriebssysteme, verwendete Datenbanken und Netzschnittstellen. Dediziert bedeutet in diesem Zusammenhang, dass Ressourcen – beispielsweise Server, Datenbanken, Netzsegmente oder virtuelle Umgebungen – ausschließlich für Testzwecke bereitgestellt werden und nicht gleichzeitig produktiven Aufgaben dienen. Der Zweck dieser Vorgabe liegt darin, unbeabsichtigte Auswirkungen von Änderungen auf laufende Systeme zu vermeiden. Ohne eine solche Testumgebung könnte ein fehlerhaftes Update unmittelbar zu Produktionsausfällen führen oder sensible Daten unbeabsichtigt preisgeben. Eine Trennung kann dagegen sicherstellen, dass Schwachstellen oder Inkompatibilitäten frühzeitig erkannt werden, wodurch die Stabilität und Sicherheit der produktiven Systeme erhalten bleiben. Zur Umsetzung kann eine Institution verschiedene Maßnahmen einsetzen: (1) Sie kann separate physische oder virtuelle Serverlandschaften bereitstellen, die die Produktionsumgebung realitätsnah abbilden. (2) Sie kann Testdatenbanken mit anonymisierten oder synthetisch generierten Daten nutzen, um Datenschutzrisiken zu vermeiden. (3) Sie kann durch ein definiertes Deployment-Verfahren sicherstellen, dass Änderungen zunächst automatisiert in die Testumgebung ausgerollt und dort validiert werden, bevor eine Freigabe für die Produktion erfolgt."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "9c86f2de-9a7a-4fff-b833-7e596fdb32a8"
+  }
+ ],
+ "relations": [
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.7.3"
+  },
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.2.2.8"
+  }
+ ]
+}

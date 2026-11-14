@@ -1,0 +1,80 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/GEB.6.2.1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "GEB.6.2.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "Hostsysteme"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Gebäudemanagement für Hostsysteme SOLLTE diese ausschließlich in Serverräumen platzieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "platzieren",
+     "result": "diese ausschließlich in Serverräumen",
+     "target-object-categories": [
+      "Hostsysteme"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Gebäudedokumentation"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "2",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 3
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Sinn und Zweck dieser Anforderung liegt darin, die Risiken durch unkontrollierten physischen Zugriff oder Umwelteinflüsse zu reduzieren: Ohne räumliche Trennung könnte ein Mitarbeiter versehentlich gegen ein frei im Büro aufgestelltes Hostsystem stoßen und es beschädigen, oder ein Besucher könnte unbemerkt Manipulationen vornehmen. Durch Platzierung in einem Serverraum kann hingegen erreicht werden, dass Geräte vor unbefugtem Zugriff geschützt sind und kontrollierte Umgebungsbedingungen wie Temperatur oder Luftfeuchtigkeit den zuverlässigen Betrieb fördern. Praktisch kann es hilfreich sein, Hostsysteme in standardisierten Serverschränken unterzubringen, die zusätzlich verschließbar sind, und regelmäßig zu prüfen, ob keine Fremdgeräte unautorisiert im Serverraum abgestellt wurden. Auf diese Weise kann die Institution sicherstellen, dass Hostsysteme physisch geschützt und unter stabilen Betriebsbedingungen betrieben werden."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "25dfb04d-3274-446e-9bb0-f2fb1a2e511a"
+  }
+ ]
+}

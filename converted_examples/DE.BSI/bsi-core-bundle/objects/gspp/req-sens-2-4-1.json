@@ -1,0 +1,85 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/SENS.2.4.1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "SENS.2.4.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "Verbindung unautorisierter IT-Systeme"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Sensibilisierung für Nutzende SOLLTE die Verbindung unautorisierter IT-Systeme mit internen Netzen oder Schnittstellen untersagen."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "untersagen",
+     "result": "die Verbindung unautorisierter IT-Systeme mit internen Netzen oder Schnittstellen",
+     "target-object-categories": [
+      "Nutzende"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Arbeitsanweisung"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "2",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.31",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.42"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 3,
+     "tags": [
+      "Bring Your Own Device",
+      "Insider Threat"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Unautorisierte IT-Systeme sind solche, die von der Institution nicht für den Einsatz in den Netzen der Institution vorgesehen sind. Werden solche Geräte mit internen Netzen verbunden, so besteht das Risiko, dass sich hierüber Schadcode verbreitet oder unerwünschte Netzverbindungen aufgebaut werden. Das betrifft sowohl kabelgebundene Verbindungen als auch Funkverbindungen wie WLAN oder Bluetooth."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "06cf0eba-817a-4dfb-8e8b-b51044cb5a90"
+  }
+ ]
+}

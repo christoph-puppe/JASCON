@@ -1,0 +1,77 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/BER.3.1.1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "BER.3.1.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "Initiale Ausgabe"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Berechtigung SOLLTE vor der Verteilung von Authentifizierungsmitteln die Identität authentifizieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "authentifizieren",
+     "result": "vor der Verteilung von Authentifizierungsmitteln die Identität"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "IT-Betriebskonzept"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "0",
+     "authenticity": "2",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.36"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 2
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Identität meint hier die natürliche Person, Gruppe, Rolle, Anwendung oder das IT-System, welches das Authentifizierungsmittel erhält. Verteilung meint hier die initiale Ausgabe, Weiterleitung oder Speicherung des Authentifizierungsfaktors, z.B. die Ausgabe eines initialen Passwortes an Nutzende oder die Speicherung eines X.509-Zertifikates zu einem neuen Hostsystem als vertrauenswürdig in einem Trust Store."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "46f20b63-b07f-4c25-bdcc-b58239432290"
+  }
+ ]
+}

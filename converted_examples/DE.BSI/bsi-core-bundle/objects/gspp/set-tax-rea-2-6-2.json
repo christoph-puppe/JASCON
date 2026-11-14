@@ -1,0 +1,18 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/rea-2-6-2",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Kommunikation bei Vorfällen"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/REA.2.6.2",
+   "sequence": 10320
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/REA.2.6.2.1",
+   "sequence": 10330
+  }
+ ]
+}

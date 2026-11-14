@@ -1,0 +1,42 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/geb-10-2",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Brandschutz"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.10.2",
+   "sequence": 5600
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.10.2.1",
+   "sequence": 5610
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.10.2.2",
+   "sequence": 5620
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.10.2.3",
+   "sequence": 5630
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.10.2.4",
+   "sequence": 5640
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.10.2.5",
+   "sequence": 5650
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.10.2.6",
+   "sequence": 5660
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.10.2.7",
+   "sequence": 5670
+  }
+ ]
+}

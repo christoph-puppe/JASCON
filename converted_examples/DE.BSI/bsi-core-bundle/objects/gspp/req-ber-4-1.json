@@ -16,33 +16,6 @@
    "prose": {
     "de": "Berechtigung SOLLTE die Vergabe von Berechtigungen nach dem Prinzip der geringsten Berechtigungen einschränken."
    }
-  },
-  {
-   "id": "BER.4.1.1",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Berechtigung SOLLTE Berechtigungen rollenbasiert zuweisen."
-   }
-  },
-  {
-   "id": "BER.4.1.2",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Berechtigung KANN die Berechtigung zum Zeitpunkt des Zugriffs für {param:ber.4.1.2-prm1} aktivieren."
-   },
-   "parameters": [
-    {
-     "name": "ber.4.1.2-prm1",
-     "type": "string",
-     "label": "besonders kritische Ressourcen oder Zugänge"
-    }
-   ]
   }
  ],
  "facets": {
@@ -51,31 +24,12 @@
     "smt": {
      "action": "einschränken",
      "result": "die Vergabe von Berechtigungen nach dem Prinzip der geringsten Berechtigungen"
-    },
-    "BER.4.1.1": {
-     "action": "zuweisen",
-     "result": "Berechtigungen rollenbasiert"
-    },
-    "BER.4.1.2": {
-     "action": "aktivieren",
-     "result": "die Berechtigung zum Zeitpunkt des Zugriffs",
-     "result-specification": "für {{besonders kritische Ressourcen oder Zugänge}}"
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "by-statement": {
     "smt": {
-     "required-documentation": [
-      "Inventar Berechtigungen"
-     ]
-    },
-    "BER.4.1.1": {
-     "required-documentation": [
-      "Inventar Berechtigungen"
-     ]
-    },
-    "BER.4.1.2": {
      "required-documentation": [
       "Inventar Berechtigungen"
      ]
@@ -95,28 +49,6 @@
       "https://ns.bsi.bund.de/gspp/threat/G-0.32",
       "https://ns.bsi.bund.de/gspp/threat/G-0.18"
      ]
-    },
-    "BER.4.1.1": {
-     "confidentiality": "2",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "1",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.36",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.30",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.32"
-     ]
-    },
-    "BER.4.1.2": {
-     "confidentiality": "2",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "1",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.32",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.30",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.36"
-     ]
     }
    }
   },
@@ -130,20 +62,6 @@
       "Security by Default",
       "Privilegierte Rechte"
      ]
-    },
-    "BER.4.1.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 3,
-     "title": "Rollenbasierte Berechtigung",
-     "alt-identifier": "a9aa521b-e610-40ae-80d0-f1dd3b4ec47f"
-    },
-    "BER.4.1.2": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5,
-     "title": "JIT‑/JEA‑Berechtigungen",
-     "alt-identifier": "e549f464-b2fb-42a1-83b9-21bd3bb0f3cf"
     }
    }
   },
@@ -153,23 +71,6 @@
      "guidance": {
       "de": "Das Prinzip der geringsten Berechtigungen, im Englischen als Principle of Least Privilege (PoLP) bekannt, besagt, dass Nutzende, Prozesse oder Systeme nur die minimal notwendigen Zugriffsrechte erhalten dürfen, um die ihnen jeweils zugewiesenen Aufgaben zu erfüllen. Dies dient primär der Minimierung der Angriffsfläche und der Begrenzung potenzieller Schäden. Sollte beispielsweise ein Zugangskonto durch Phishing kompromittiert werden, könnte ein Angreifer ohne dieses Prinzip weitreichenden Zugriff auf kritische Daten oder Systeme erlangen und diese manipulieren, exfiltrieren oder verschlüsseln. Die konsequente Anwendung dieses Grundsatzes kann die Ausbreitung von Schadsoftware nach einem ersten Eindringen erheblich erschweren und sicherstellen, dass Mitarbeitende nur jene Informationen einsehen, die für ihre Tätigkeit unmittelbar relevant sind. Hierdurch wird auch das Risiko von Datendiebstahl durch Innentäter reduziert. Es empfiehlt sich als Ergänzung hier auch das \"Need to know\"-Prinzip zu betrachten, da sich beide Prinzipien ergänzen. Während das \"Least Privilege\"-Prinzip auf Systremrechte, Rollen und Berechtigungen fokussiert, liegt der Fokus des \"Need to know\"-Prinzips mehr auf Informationen und Datenzugriff. Zur sinnvollen Umsetzung kann die Institution ein rollenbasiertes Berechtigungskonzept (Role-Based Access Control, RBAC) etablieren, bei dem Berechtigungen nicht an einzelne Personen, sondern an vordefinierte Rollen (z.B. \"Finanzbuchhaltung\" oder \"Netzwerkadministrator\") gebunden werden. Für die Einführung in eine bestehende Umgebung kann ein gestuftes Vorgehen gewählt werden: (1) Zunächst wird ein Überwachungsmodus (\"Audit-Only\") aktiviert, der protokolliert, welche Zugriffe durch eine strengere Richtlinie verweigert würden, ohne sie tatsächlich zu blockieren. (2) Anschließend werden diese Protokolle analysiert, um legitime, für den Geschäftsbetrieb notwendige Zugriffe zu identifizieren und diese gezielt in die jeweiligen Rollen und Berechtigungsgruppen aufzunehmen. (3) Erst wenn keine legitimen Zugriffe mehr in den Protokollen als \"verweigert\" auftauchen, wird die Richtlinie scharf geschaltet und blockiert aktiv alle nicht explizit erlaubten Zugriffe. Alle relevanten Anforderungen zur Vergabe von Berechtigungen können mit den Handlungsworten \"authentifizieren\", \"autorisieren\" und \"einschränken\" gefunden werden."
      }
-    },
-    "BER.4.1.1": {
-     "guidance": {
-      "de": "Aus Gründen der Nachvollziehbarkeit und des administrativen Aufwands wird die direkte Vergabe von Berechtigungen an Einzelkonten vermieden. Berechtigungen werden gemäß dem Least-Privilege-Prinzip in Rollen gebündelt, wobei die Zuweisung und der Entzug ausschließlich über diese Rollen erfolgt. Etwaige Ausnahmen, beispielsweise für temporäre Spezialrechte, werden restriktiv gehandhabt, nachvollziehbar dokumentiert und zeitlich befristet."
-     }
-    },
-    "BER.4.1.2": {
-     "guidance": {
-      "de": "„JIT‑/JEA‑Berechtigungen“ (Just‑In‑Time/Just‑Enough‑Access) ist die zeitlich und inhaltlich begrenzte Vergabe von Rechten zum Zeitpunkt eines Zugriffs auf eine Ressource. Dies kann insbesondere für privilegierte Zugangskonten und Administrationszugänge sinnvoll sein, um erhöhte Rechte nur genau dann zu ermöglichen, wenn sie wirklich erforderlich sind."
-     }
-    }
-   }
-  },
-  "https://ns.jascon.net/compat/oscal-1x@1": {
-   "param-extras": {
-    "ber.4.1.2-prm1": {
-     "alt-identifier": "e549f464-b2fb-42a1-83b9-21bd3bb0f3cf"
     }
    }
   }

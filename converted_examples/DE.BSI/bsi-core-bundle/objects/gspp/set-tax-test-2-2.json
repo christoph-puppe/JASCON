@@ -1,0 +1,26 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/test-2-2",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Folgenabschätzung"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.2.2",
+   "sequence": 4440
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.2.2.1",
+   "sequence": 4450
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.2.2.2",
+   "sequence": 4460
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.2.2.3",
+   "sequence": 4470
+  }
+ ]
+}

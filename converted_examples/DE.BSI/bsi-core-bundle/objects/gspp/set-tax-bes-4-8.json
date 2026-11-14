@@ -1,0 +1,30 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/bes-4-8",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Konformitätsnachweise"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.4.8",
+   "sequence": 3280
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.4.8.1",
+   "sequence": 3290
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.4.8.2",
+   "sequence": 3300
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.4.8.3",
+   "sequence": 3310
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.4.8.4",
+   "sequence": 3320
+  }
+ ]
+}

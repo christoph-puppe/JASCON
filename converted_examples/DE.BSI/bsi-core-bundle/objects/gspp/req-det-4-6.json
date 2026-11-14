@@ -16,16 +16,6 @@
    "prose": {
     "de": "Detektion für Anwendungen KANN die Nutzung der Anwendung auf Anomalien überwachen."
    }
-  },
-  {
-   "id": "DET.4.6.1",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Detektion für Verzeichnisdienste KANN das Verhalten von Zugangskonten überwachen."
-   }
   }
  ],
  "facets": {
@@ -37,24 +27,12 @@
      "target-object-categories": [
       "Anwendungen"
      ]
-    },
-    "DET.4.6.1": {
-     "action": "überwachen",
-     "result": "das Verhalten von Zugangskonten",
-     "target-object-categories": [
-      "Verzeichnisdienste"
-     ]
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "by-statement": {
     "smt": {
-     "required-documentation": [
-      "Detektions-Konzept"
-     ]
-    },
-    "DET.4.6.1": {
      "required-documentation": [
       "Detektions-Konzept"
      ]
@@ -73,17 +51,6 @@
       "https://ns.bsi.bund.de/gspp/threat/G-0.28",
       "https://ns.bsi.bund.de/gspp/threat/G-0.23"
      ]
-    },
-    "DET.4.6.1": {
-     "confidentiality": "2",
-     "integrity": "2",
-     "availability": "1",
-     "authenticity": "1",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.32",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.39",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.37"
-     ]
     }
    }
   },
@@ -93,20 +60,6 @@
      "class": "BSI-Stand-der-Technik-Kernel-G0",
      "sec-level": "erhöht",
      "effort": 3
-    },
-    "DET.4.6.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5,
-     "tags": [
-      "Advanced Persistent Threats (APT)",
-      "Command & Control",
-      "Data Exfiltration",
-      "Insider Threat",
-      "Living off the land"
-     ],
-     "title": "Verhaltensanalyse von Zugangskonten",
-     "alt-identifier": "cd3e1fde-3095-4518-b906-ca18824839b8"
     }
    }
   },
@@ -115,11 +68,6 @@
     "smt": {
      "guidance": {
       "de": "Beispiele sind massenhafte Downloads von Dateiservern oder Cloud-Diensten, Datenbankabfragen die eine ungewöhnlich hohe Menge von Daten oder Einträgen, die unerreichbar sein sollen, zurückliefern, oder automatische E-Mail-Weiterleitungen an externe Domains."
-     }
-    },
-    "DET.4.6.1": {
-     "guidance": {
-      "de": "User and Entity Behaviour Analytics (UEBA) nutzt moderne Verfahren einschließlich KI, um Anomalien im Verhalten von Zugangskonten oder Systemen zu erkennen, z.B. Anmeldungen zu ungewöhnlichen Zeiten, von ungewöhnlichen Orten, durch Verwendung veralteter Authentifzierungsverfahren wie NTLMv1 oder die Ausführung ungewöhnlicher Anwendungen. Ungewöhnliches Verhalten kann Anzeichen für netzbasierte Angriffe oder Innentäter sein. Allerdings gilt es hierbei auch rechtliche Vorgaben zum Datenschutz und betriebliche Mitbestimmungsrechte zu beachten. Ein sinnvoller Maßstab für die Ausgestaltung von Umfang und Detailltiefe der Überwachung können die Geschäfts- und Sicherheitsziele sein. Sinnvoll ist es hierbei begleitende Maßnahmen zur Compliance einzuführen, beispielsweise das manuelle Analysen nur unter bestimmten Voraussetzungen oder Beteiligungen vorgenommen werden."
      }
     }
    }

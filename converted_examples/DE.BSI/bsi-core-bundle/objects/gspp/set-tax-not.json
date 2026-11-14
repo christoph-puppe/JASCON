@@ -8,19 +8,19 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/not-1",
-   "sequence": 5530
+   "sequence": 8710
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/not-2",
-   "sequence": 5550
+   "sequence": 8780
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/not-3",
-   "sequence": 5620
+   "sequence": 8850
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/not-4",
-   "sequence": 5800
+   "sequence": 9080
   }
  ],
  "label": "NOT",

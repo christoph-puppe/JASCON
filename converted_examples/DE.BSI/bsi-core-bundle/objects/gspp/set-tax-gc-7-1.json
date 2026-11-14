@@ -1,0 +1,22 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/gc-7-1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Vorgehen bei der Infomationssicherheitseinstufung"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/GC.7.1",
+   "sequence": 260
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/GC.7.1.1",
+   "sequence": 270
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/GC.7.1.2",
+   "sequence": 280
+  }
+ ]
+}

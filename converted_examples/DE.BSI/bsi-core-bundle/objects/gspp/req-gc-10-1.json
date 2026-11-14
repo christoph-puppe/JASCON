@@ -16,33 +16,6 @@
    "prose": {
     "de": "Governance und Compliance MUSS ein Verfahren zum Kommunikationsmanagement hinsichtlich der internen und externen Kommunikation verankern."
    }
-  },
-  {
-   "id": "GC.10.1.1",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Governance und Compliance SOLLTE einen externen Austausch zur Informationssicherheit verankern."
-   }
-  },
-  {
-   "id": "GC.10.1.2",
-   "modality": "must",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Governance und Compliance MUSS bei sicherheitsrelevanten Projekten die Beteiligung {param:gc.10.1.2-prm1} zu festgelegten Zeitpunkten im Projektverlauf verankern."
-   },
-   "parameters": [
-    {
-     "name": "gc.10.1.2-prm1",
-     "type": "string",
-     "label": "der relevanten Sicherheitsorgane"
-    }
-   ]
   }
  ],
  "facets": {
@@ -52,15 +25,6 @@
      "action": "verankern",
      "result": "ein Verfahren zum Kommunikationsmanagement",
      "result-specification": "hinsichtlich der internen und externen Kommunikation"
-    },
-    "GC.10.1.1": {
-     "action": "verankern",
-     "result": "einen externen Austausch zur Informationssicherheit"
-    },
-    "GC.10.1.2": {
-     "action": "verankern",
-     "result": "bei sicherheitsrelevanten Projekten die Beteiligung {{der relevanten Sicherheitsorgane}}",
-     "result-specification": "zu festgelegten Zeitpunkten im Projektverlauf"
     }
    }
   },
@@ -79,20 +43,6 @@
      "class": "BSI-Methodik-Grundschutz-plus-plus",
      "sec-level": "normal-SdT",
      "effort": 0
-    },
-    "GC.10.1.1": {
-     "class": "BSI-Methodik-Grundschutz-plus-plus",
-     "sec-level": "normal-SdT",
-     "effort": 4,
-     "title": "Externer Austausch zur Informationssicherheit",
-     "alt-identifier": "4fb02efc-1b80-497d-af10-77433319be96"
-    },
-    "GC.10.1.2": {
-     "class": "BSI-Methodik-Grundschutz-plus-plus",
-     "sec-level": "normal-SdT",
-     "effort": 0,
-     "title": "Kommunikation im Projektmanagement",
-     "alt-identifier": "6ccbc3f1-0984-4b12-86f2-708d40e9b635"
     }
    }
   },
@@ -102,23 +52,6 @@
      "guidance": {
       "de": "Für die relevante Kommunikation im Rahmen eines ISMS werden die Eckpunkte (wer, wann, mit wem, wie) festgelegt. Dies beinhaltet ebenfalls die Identifikation der relevanten (Aufsichts-)Behörden und der relevanten Kontakte sowie die Festlegung von Zuständigkeiten für die Kommunikation."
      }
-    },
-    "GC.10.1.1": {
-     "guidance": {
-      "de": "Um auch andere Perspektiven wahrzunehmen und Eindrücke zu erhalten, findet ein externer Austausch statt. Hierzu können beispielsweise Branchenverbände, Fachforen oder andere Einrichtungen genutzt werden."
-     }
-    },
-    "GC.10.1.2": {
-     "guidance": {
-      "de": "Bei allen Projekten, die Auswirkungen auf die Informationsverarbeitung haben erfolgt eine frühzeitige Beteiligung des ISB und ggfs. weiterer sicherheitsrelevanter Organe. Beispiele für sicherheitsrelevante Projekte sind die Einführung eines neuen IT-Systems oder einer neuen Software. Beispiele für geeignete Zeitpunkte der Beteiligung sind etwa während der Beschaffung und/ oder vor der Produktivsetzung."
-     }
-    }
-   }
-  },
-  "https://ns.jascon.net/compat/oscal-1x@1": {
-   "param-extras": {
-    "gc.10.1.2-prm1": {
-     "alt-identifier": "6ccbc3f1-0984-4b12-86f2-708d40e9b635"
     }
    }
   }

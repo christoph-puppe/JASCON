@@ -1,0 +1,87 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/ASST.3.1.1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "ASST.3.1.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "Weitergabe nur bei Erforderlichkeit"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Informationen und Assets für Nutzende SOLLTE zur Weitergabe von Informationen nur bei Erforderlichkeit anweisen."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "anweisen",
+     "result": "zur Weitergabe von Informationen nur bei Erforderlichkeit",
+     "target-object-categories": [
+      "Nutzende"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Arbeitsanweisung"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.29"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 2
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Das Need-to-Know-Prinzip ist ein Sicherheitskonzept, das den Zugriff auf Informationen auf das absolut notwendige Maß beschränkt. Es besagt, dass Personen nur dann Zugang zu bestimmten Daten enthalten, wenn diese Informationen für die Erfüllung ihrer konkreten Aufgaben erforderlich sind. Ziel ist es, das Risiko von Datenmissbrauch, -verlust oder unbefugtem Zugriff zu minimieren."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "32afe7a4-d3d4-43d2-a37b-8ecd45ea69f5"
+  }
+ ],
+ "relations": [
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.5.2"
+  }
+ ]
+}

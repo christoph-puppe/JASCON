@@ -1,0 +1,38 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/bes-2-1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Erfassung des Bedarfes"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.2.1",
+   "sequence": 2880
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.2.1.1",
+   "sequence": 2890
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.2.1.2",
+   "sequence": 2900
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.2.1.3",
+   "sequence": 2910
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/bes-2-1-4",
+   "sequence": 2970
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.2.1.5",
+   "sequence": 2980
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.2.1.6",
+   "sequence": 2990
+  }
+ ]
+}

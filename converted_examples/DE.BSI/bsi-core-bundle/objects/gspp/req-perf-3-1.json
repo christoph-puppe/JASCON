@@ -16,46 +16,6 @@
    "prose": {
     "de": "Monitoring-Evaluation MUSS ein Verfahren zum Aufbau und zur Pflege eines oder mehrerer Auditprogramme verankern."
    }
-  },
-  {
-   "id": "PERF.3.1.1",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Monitoring-Evaluation SOLLTE für jedes durchzuführende Audit einen Auditplan festlegen."
-   }
-  },
-  {
-   "id": "PERF.3.1.2",
-   "modality": "must",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Monitoring-Evaluation MUSS die Planung der internen Audits im Auditprogramm risikoorientiert ausführen."
-   }
-  },
-  {
-   "id": "PERF.3.1.3",
-   "modality": "must",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Monitoring-Evaluation MUSS fachlich geeignete und unabhängige Auditoren zur Gewährleistung der Objektivität und Qualität der Audits anweisen."
-   }
-  },
-  {
-   "id": "PERF.3.1.4",
-   "modality": "must",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Monitoring-Evaluation MUSS in angemessenem Umfang Audits ausführen."
-   }
   }
  ],
  "facets": {
@@ -64,24 +24,6 @@
     "smt": {
      "action": "verankern",
      "result": "ein Verfahren zum Aufbau und zur Pflege eines oder mehrerer Auditprogramme"
-    },
-    "PERF.3.1.1": {
-     "action": "festlegen",
-     "result": "für jedes durchzuführende Audit einen Auditplan"
-    },
-    "PERF.3.1.2": {
-     "action": "ausführen",
-     "result": "die Planung der internen Audits im Auditprogramm",
-     "result-specification": "risikoorientiert"
-    },
-    "PERF.3.1.3": {
-     "action": "anweisen",
-     "result": "fachlich geeignete und unabhängige Auditoren",
-     "result-specification": "zur Gewährleistung der Objektivität und Qualität der Audits"
-    },
-    "PERF.3.1.4": {
-     "action": "ausführen",
-     "result": "in angemessenem Umfang Audits"
     }
    }
   },
@@ -91,34 +33,6 @@
      "class": "BSI-Methodik-Grundschutz-plus-plus",
      "sec-level": "normal-SdT",
      "effort": 0
-    },
-    "PERF.3.1.1": {
-     "class": "BSI-Methodik-Grundschutz-plus-plus",
-     "sec-level": "normal-SdT",
-     "effort": 3,
-     "title": "Erstellen eines Auditsplans",
-     "alt-identifier": "e81de2b1-c4fd-47b7-86a6-f858db31306e"
-    },
-    "PERF.3.1.2": {
-     "class": "BSI-Methodik-Grundschutz-plus-plus",
-     "sec-level": "normal-SdT",
-     "effort": 0,
-     "title": "Planen von internen Audits",
-     "alt-identifier": "6f76ca8f-aadb-44b2-89ce-c35ac8a16d69"
-    },
-    "PERF.3.1.3": {
-     "class": "BSI-Methodik-Grundschutz-plus-plus",
-     "sec-level": "normal-SdT",
-     "effort": 0,
-     "title": "Auswahl des Auditteams",
-     "alt-identifier": "9c848e6f-ba7e-49de-9655-e95c57acafa3"
-    },
-    "PERF.3.1.4": {
-     "class": "BSI-Methodik-Grundschutz-plus-plus",
-     "sec-level": "normal-SdT",
-     "effort": 0,
-     "title": "Umfang von Audits",
-     "alt-identifier": "dd98f0ad-e27d-44dd-8a44-1fee1657b714"
     }
    }
   },
@@ -127,26 +41,6 @@
     "smt": {
      "guidance": {
       "de": "Ein Audit kann in unterschiedlichen Formen durchgeführt werden – beispielsweise als internes Audit durch eigene Mitarbeitende, als externes Audit durch unabhängige Dritte (z. B. für Zertifizierungen), als Überwachungs- oder Wiederholungsaudit, oder als Sonderaudit bei Sicherheitsvorfällen. Ziel ist es, die Einhaltung von Sicherheitsanforderungen, die Wirksamkeit von Maßnahmen sowie mögliche Schwachstellen zu prüfen."
-     }
-    },
-    "PERF.3.1.1": {
-     "guidance": {
-      "de": "Der Auditplan (audit plan) legt vorab die Ziele, den Umfang (Geltungsbereich, Zielobjekte), die Methoden (Auditkriterien), Rollen und Zuständigkeiten, sowie den genauen Ablauf dieser Überprüfung fest. Auditmethoden sind die spezifischen Vorgehensweisen und Techniken, die ein Auditor zur Sammlung und Bewertung von Prüfungsnachweisen (audit evidence) einsetzt. Die Auswahl der Methode hängt vom jeweiligen Prüfziel ab und umfasst häufig eine Kombination aus mehreren Ansätzen, wie zum Beispiel: (1) die Befragung von Mitarbeitern (Interviews), um Prozessabläufe und Verantwortlichkeiten zu verstehen, (2) die (automatisierte und manuelle) Durchsicht von Dokumenten wie Richtlinien, Konzepten und Protokollen zur Überprüfung der Vorgabenkonformität, (3) die direkte Beobachtung von Prozessen, um die tatsächliche Umsetzung einer Kontrolle zu verifizieren, sowie (4) technische Analysen, welche die Überprüfung von Systemkonfigurationen, die Auswertung von Logdateien oder die Durchführung von Stichproben bei Berechtigungen beinhalten können. Der Zweck dieser Anforderung ist es, eine strukturierte und nachvollziehbare Vorgehensweise bei jeder Prüfung zu gewährleisten. Ohne einen solchen Plan könnte eine Überprüfung chaotisch verlaufen, wichtige Bereiche übersehen oder Ressourcen ineffizient eingesetzt werden, was unentdeckte Schwachstellen zur Folge haben kann. Ein detaillierter Auditplan kann hingegen sicherstellen, dass alle relevanten Aspekte systematisch abgedeckt werden und schafft eine klare Erwartungshaltung sowie Verbindlichkeit für die Auditoren und die geprüften Stellen der Institution. Bewährt hat sich dabei eine chancen- und risikenorientierte Ressourcenverteilung, d.h. die Betrachtung genau jener Anforderungen, bei denen voraussichtlich ein hoher Mehrwert für die Risikobetrachtung durch das Audit zu erwarten ist. Für Details siehe ISO/IEC 19011-Reihe. Der Plan muss dokumentiert werden."
-     }
-    },
-    "PERF.3.1.2": {
-     "guidance": {
-      "de": "Ziel ist es, die Einhaltung von Sicherheitsanforderungen, die Wirksamkeit von Maßnahmen sowie mögliche Schwachstellen zu prüfen. Dabei wird die Effektivität und Effizienz aller angewandten Anforderungen sinnvoll geprüft. Risikoorientiert bedeutet hierbei, dass die Auswahl von Prüfobjekten sowie die Prüftiefe sich nach einer Risikobetrachtung richtet, also besonders risikorelevante Fragen vertieft betrachtet werden. Beispielsweise ist es sinnvoll bei automatisierten Richtlinien (Policies) nicht nur deren tatsächliche Aktivierung, sondern vor allem die erlaubten Ausnahmeregelungen auf Begründung, Befristung und Umfang zu prüfen, damit vermeintliche effektive Maßnahmen nicht durch zu weite Ausnahmeregelungen ausgehölt werden. Die Planung muss dokumentiert werden."
-     }
-    },
-    "PERF.3.1.3": {
-     "guidance": {
-      "de": "Bei der Auswahl von Auditoren ist zu empfehlen insbesondere Fachkompetenz, Unabhängigkeit und Erfahrung zu berücksichtigen. Das Team muss über technisches und organisatorisches Wissen, Kenntnisse relevanter Normen und gesetzliche Anforderungen sowie die Fähigkeit zur objektiven, methodischen Bewertung verfügen, ohne in die zu prüfenden Prozesse direkt involviert zu sein."
-     }
-    },
-    "PERF.3.1.4": {
-     "guidance": {
-      "de": "Der Umfang eines Audits beschreibt, was, wie und in welchem Rahmen geprüft wird. Dazu gehören der organisatorische und technische Geltungsbereich (z. B. Standorte, Abteilungen, IT-Systeme), der Prüfzeitraum,  sowie die eingesetzten Prüfmethoden wie Interviews, Dokumentensichtung oder Systemtests. Der Auditumfang wird vor Beginn des Audits klar definiert, um den Ablauf gezielt zu planen und die Ergebnisse nachvollziehbar zu dokumentieren."
      }
     }
    }

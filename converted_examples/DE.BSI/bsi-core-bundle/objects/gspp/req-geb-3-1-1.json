@@ -1,0 +1,83 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/GEB.3.1.1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "GEB.3.1.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "Videoüberwachung"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "may",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Gebäudemanagement für Standorte KANN Zutritte per Video überwachen."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "überwachen",
+     "result": "Zutritte",
+     "result-specification": "per Video",
+     "target-object-categories": [
+      "Standorte"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Prozess Gebäudemanagement"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.44",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.16",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.24"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "erhöht",
+     "effort": 4
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Die Auswertung der Videoaufzeichnungen kann je nach Risikoprofil und Geschäftsprozessen anlassbezogen und stichpunktartig, kontinuierlich durch Wachpersonal oder durch Verwendung von KI-Videoanalyse, z.B. zur Erkennung von „tail-gating“ oder zurückgelassenen Gegenständen, erfolgen. Hier besteht ein enger Zusammenhang zu Compliance-Verpflichtungen zum Datenschutz (z.B. Informationspflichten), insbesondere im öffentlichen Raum."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "842a359b-f8fe-4c81-82e3-50d949dc4bbd"
+  }
+ ]
+}

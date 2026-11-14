@@ -1,0 +1,83 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/ARCH.5.1.8",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "ARCH.5.1.8",
+ "lifecycle": "active",
+ "title": {
+  "de": "Inspektion verschlüsselter Verbindungen"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Architektur für Externe Netzanschlüsse SOLLTE den Inhalt unverschlüsselter und verschlüsselter Verbindungen basierend auf der Art des Inhalts einschränken."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "einschränken",
+     "result": "den Inhalt unverschlüsselter und verschlüsselter Verbindungen",
+     "result-specification": "basierend auf der Art des Inhalts",
+     "target-object-categories": [
+      "Externe Netzanschlüsse"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Firewallregeln"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "2",
+     "integrity": "2",
+     "availability": "1",
+     "authenticity": "1",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.23",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.39",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.30"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 4
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Verschlüsselte Verbindungen wie VoIP über TLS oder HTTPS-Anfragen können über Sicherheitsproxies oder die Inspektion auf den Endstellen der Verbindungen inspiziert werden. Ein Proxy bzw. Proxy-Server ist ein Vermittler im Netz, der zwischen dem Client und einer Netzressource, wie einer Webseite, fungiert. Er dient als Brücke zwischen dem Client und dem Server, wobei Anfragen und Antworten stellvertretend abgewickelt werden. Proxys können Datenverkehr filtern, blockieren, oder auch speichern, um die Netzwerkleistung zu optimieren. Systeme zur Filterung von Webinhalten gehören zu den häufigsten Arten von Proxyservern, die zur Vermittlung des Internetzugangs eingesetzt werden. Diese Server können TCP-Sitzungen protokollieren und die Zugriffskontrolle durch Blockieren bestimmter URLs, IP-Adressen oder Domänennamen erzwingen. Institutionen können Web-Proxys mit benutzerdefinierten Erlaubnis- und Sperrlisten konfigurieren, um den Zugriff auf der Grundlage von Richtlinien zu regeln. Es ist jedoch zu beachten, dass Proxyserver die Nutzung virtueller privater Netzwerke (VPN) beeinträchtigen und je nach Implementierung Risiken wie Man-in-the-Middle-Angriffe (MitM) mit sich bringen können. Beispiel-Implementierungen sind Squid, Nginx, Privoxy."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "657f0690-9aaf-42fb-8474-3986a22277c8"
+  }
+ ]
+}

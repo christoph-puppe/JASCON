@@ -8,15 +8,15 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/GEB.5.1",
-   "sequence": 3040
+   "sequence": 5180
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/GEB.5.2",
-   "sequence": 3050
+   "sequence": 5190
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/GEB.5.3",
-   "sequence": 3060
+   "sequence": 5200
   }
  ],
  "label": "5",

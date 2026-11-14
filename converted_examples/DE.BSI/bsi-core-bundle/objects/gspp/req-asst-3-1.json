@@ -16,16 +16,6 @@
    "prose": {
     "de": "Informationen und Assets für Nutzende SOLLTE diese zu den Regelungen der Nutzung von Informationen und anderen Assets anweisen."
    }
-  },
-  {
-   "id": "ASST.3.1.1",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Informationen und Assets für Nutzende SOLLTE zur Weitergabe von Informationen nur bei Erforderlichkeit anweisen."
-   }
   }
  ],
  "facets": {
@@ -37,24 +27,12 @@
      "target-object-categories": [
       "Nutzende"
      ]
-    },
-    "ASST.3.1.1": {
-     "action": "anweisen",
-     "result": "zur Weitergabe von Informationen nur bei Erforderlichkeit",
-     "target-object-categories": [
-      "Nutzende"
-     ]
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "by-statement": {
     "smt": {
-     "required-documentation": [
-      "Arbeitsanweisung"
-     ]
-    },
-    "ASST.3.1.1": {
      "required-documentation": [
       "Arbeitsanweisung"
      ]
@@ -71,16 +49,6 @@
      "threat-refs": [
       "https://ns.bsi.bund.de/gspp/threat/G-0.18"
      ]
-    },
-    "ASST.3.1.1": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.29"
-     ]
     }
    }
   },
@@ -90,13 +58,6 @@
      "class": "BSI-Stand-der-Technik-Kernel-G0",
      "sec-level": "normal-SdT",
      "effort": 2
-    },
-    "ASST.3.1.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 2,
-     "title": "Weitergabe nur bei Erforderlichkeit",
-     "alt-identifier": "32afe7a4-d3d4-43d2-a37b-8ecd45ea69f5"
     }
    }
   },
@@ -105,11 +66,6 @@
     "smt": {
      "guidance": {
       "de": "Wenn Nutzende nicht angewiesen werden bestimmte Nutzungsregelungen einzuhalten, dann könnte es zu ungewollten Verstößen gegen die Sicherheitsverfahren kommen. Auch Maßregelungen bei Verstößen werden erschwert, wenn unklar ist, ob Verstöße für die Nutzenden vorher als solche erkennbar waren. Dies gilt insbesondere für externe Personen, die nur durch die Nutzung von Assets mit den Regelungen in Berührung kommen könnten, z.B. Kunden oder Drittunternehmen. Die konkreten Regelungen ergeben sich aus den Maßnahmen zur Umsetzung der anderen Anforderungen dieser Praktik und den Anforderungen zur Sensibilisierung."
-     }
-    },
-    "ASST.3.1.1": {
-     "guidance": {
-      "de": "Das Need-to-Know-Prinzip ist ein Sicherheitskonzept, das den Zugriff auf Informationen auf das absolut notwendige Maß beschränkt. Es besagt, dass Personen nur dann Zugang zu bestimmten Daten enthalten, wenn diese Informationen für die Erfüllung ihrer konkreten Aufgaben erforderlich sind. Ziel ist es, das Risiko von Datenmissbrauch, -verlust oder unbefugtem Zugriff zu minimieren."
      }
     }
    }

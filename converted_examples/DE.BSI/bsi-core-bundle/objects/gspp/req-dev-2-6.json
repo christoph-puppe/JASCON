@@ -16,26 +16,6 @@
    "prose": {
     "de": "Entwicklung für Anwendungen SOLLTE Schutzfunktionen gegen gängige Angriffsmuster installieren."
    }
-  },
-  {
-   "id": "DEV.2.6.1",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Entwicklung für Anwendungen SOLLTE Eingabedaten auf eingeschleuste Befehle testen."
-   }
-  },
-  {
-   "id": "DEV.2.6.2",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Entwicklung für Anwendungen SOLLTE eine Ausgabekodierung ausführen."
-   }
   }
  ],
  "facets": {
@@ -47,37 +27,12 @@
      "target-object-categories": [
       "Anwendungen"
      ]
-    },
-    "DEV.2.6.1": {
-     "action": "testen",
-     "result": "Eingabedaten",
-     "result-specification": "auf eingeschleuste Befehle",
-     "target-object-categories": [
-      "Anwendungen"
-     ]
-    },
-    "DEV.2.6.2": {
-     "action": "ausführen",
-     "result": "eine Ausgabekodierung",
-     "target-object-categories": [
-      "Anwendungen"
-     ]
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "by-statement": {
     "smt": {
-     "required-documentation": [
-      "Freigabeplan"
-     ]
-    },
-    "DEV.2.6.1": {
-     "required-documentation": [
-      "Freigabeplan"
-     ]
-    },
-    "DEV.2.6.2": {
      "required-documentation": [
       "Freigabeplan"
      ]
@@ -97,24 +52,6 @@
       "https://ns.bsi.bund.de/gspp/threat/G-0.22",
       "https://ns.bsi.bund.de/gspp/threat/G-0.46"
      ]
-    },
-    "DEV.2.6.1": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.28"
-     ]
-    },
-    "DEV.2.6.2": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.28"
-     ]
     }
    }
   },
@@ -127,28 +64,6 @@
      "tags": [
       "Security by Design"
      ]
-    },
-    "DEV.2.6.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 3,
-     "tags": [
-      "Security by Design",
-      "Produktbeschreibung"
-     ],
-     "title": "Eingabevalidierung",
-     "alt-identifier": "467ae9d3-922b-44eb-9527-d617416e5330"
-    },
-    "DEV.2.6.2": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 3,
-     "tags": [
-      "Security by Design",
-      "Produktbeschreibung"
-     ],
-     "title": "Ausgabekodierung",
-     "alt-identifier": "dee85b12-b7f9-445e-802a-bbe13d67538e"
     }
    }
   },
@@ -157,16 +72,6 @@
     "smt": {
      "guidance": {
       "de": "Gängige Angriffsmuster sind wiederkehrende Vorgehensweisen von Angreifenden, die in der Praxis häufig auftreten, z. B. SQL-Injection, Cross-Site-Scripting (XSS) oder Pufferüberläufe. Welche Angriffsmuster für die konkrete Anwendung gängig sind, hängt von Funktionalität und Architektur der Anwendung ab, z.B. Prompt Injection bei generativer KI. Die Vorschrift zielt darauf ab, dass Produkte bereits in der Entstehung so gestaltet werden, dass typische Schwachstellen systematisch erschwert werden. Ohne entsprechende Vorkehrungen könnte ein Angreifer etwa durch manipulierte Eingaben vertrauliche Daten auslesen oder unautorisiert Funktionen steuern. Werden Schutzfunktionen frühzeitig eingebaut, kann die Stabilität des Produkts erhöht, die Angriffsfläche reduziert und das Vertrauen der Nutzenden gestärkt werden. Zur Umsetzung können etablierte Programmierpraktiken wie das Verwenden sicherer Standardbibliotheken, das Einschränken von Nutzerrechten im Code oder das Einführen von Fallback-Mechanismen bei fehlerhaften Eingaben verwendet werden. Ergänzend kann die Institution Secure Coding Guidelines nutzen, die häufige Angriffsmuster adressieren und Entwickelnden praxisnahe Hilfen bieten."
-     }
-    },
-    "DEV.2.6.1": {
-     "guidance": {
-      "de": "Bei der Eingabevalidierung (Input Validation) wird getestet, ob die Eingabedaten eingeschleuste Befehle enthalten, z.B. SQL-Injection, Kommandozeilenbefehle oder Prompt Injection bei generativer KI.   Welche Eingaben betroffen sein könnten, kann durch eine Taint Analyse herausgefunden werden. Alternativ können auch alle Eingabedaten validiert werden (Server Side Validation)."
-     }
-    },
-    "DEV.2.6.2": {
-     "guidance": {
-      "de": "Ausgabekodierung (Output Encoding) ist wichtig, da sie spezielle Zeichen neutralisiert und so Angriffe wie Cross-Site Scripting (XSS) oder HTML-Injektionen verhindert, die ansonsten Schadcode ausführen könnten. Empfehlenswert ist kontextabhängiges Encoding und Escaping, basierend auf standardisierten Frameworks wie OWASP ESAPI."
      }
     }
    }

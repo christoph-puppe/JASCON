@@ -7,44 +7,44 @@
  },
  "members": [
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DET.5.1",
-   "sequence": 6160
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/det-5-1",
+   "sequence": 9750
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DET.5.2",
-   "sequence": 6170
+   "sequence": 9760
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DET.5.3",
-   "sequence": 6180
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/det-5-3",
+   "sequence": 9810
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DET.5.4",
-   "sequence": 6190
+   "sequence": 9820
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DET.5.5",
-   "sequence": 6200
+   "sequence": 9830
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DET.5.6",
-   "sequence": 6210
+   "sequence": 9840
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DET.5.7",
-   "sequence": 6220
+   "sequence": 9850
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DET.5.8",
-   "sequence": 6230
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/det-5-8",
+   "sequence": 9900
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DET.5.9",
-   "sequence": 6240
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/det-5-9",
+   "sequence": 9930
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DET.5.10",
-   "sequence": 6250
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/det-5-10",
+   "sequence": 10000
   }
  ],
  "label": "5",

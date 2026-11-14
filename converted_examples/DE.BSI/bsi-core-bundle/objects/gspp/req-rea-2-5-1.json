@@ -1,0 +1,79 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/REA.2.5.1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "REA.2.5.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "Rechtssichere Beweissicherung"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Sicherheitsvorfallsbehandlung SOLLTE rechtlich relevante Beweise rechtssicher dokumentieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "dokumentieren",
+     "result": "rechtlich relevante Beweise",
+     "result-specification": "rechtssicher"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Behandlung von Sicherheitsvorfällen"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "2",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.39",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.47"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 3
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Rechtlich relevant sind Beweise, wenn Anzeichen dafür vorliegen, dass bei einem Sicherheitsvorfall gegen Compliance-Verpflichtungen oder interne Arbeitsanweisungen verstoßen wurde. Beispiele sind Vorfälle wie z.B. unberechtigten Zugriffen oder Manipulationen von Daten.  Beweise sind rechtssicher dokumentiert, wenn nachvollziehbar ist, wie sie erhoben wurden und sie außerdem sowohl gegen unautorisierte Einsicht als auch Veränderung geschützt aufbewahrt werden. Die Nachvollziehbarkeit von Veränderungen kann z.B. durch eine kryptografische Signatur oder getrennt aufbewahrte Checksummen sichergestellt werden. Außerdem ist es sinnvoll, die Originaldaten aufzubewahren, z.B. als Originaldatenträger oder Sicherungskopie. Für Details siehe BSI-Leitfaden „IT-Forensik“."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "73f6c601-3d1c-464f-9728-2e58b819dd3e"
+  }
+ ]
+}

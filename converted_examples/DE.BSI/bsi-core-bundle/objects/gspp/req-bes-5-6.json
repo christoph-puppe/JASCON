@@ -16,43 +16,6 @@
    "prose": {
     "de": "Beschaffungsmanagement für Einkäufe SOLLTE Regelungen für die Vergabe von Unteraufträgen vereinbaren."
    }
-  },
-  {
-   "id": "BES.5.6.1",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Beschaffungsmanagement für Einkäufe SOLLTE die Weitergabe der Beschaffungskriterien an Unterauftragnehmer vereinbaren."
-   }
-  },
-  {
-   "id": "BES.5.6.2",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Beschaffungsmanagement für Einkäufe KANN die Autorisierung von Unterauftragnehmern durch den Auftraggeber vereinbaren."
-   }
-  },
-  {
-   "id": "BES.5.6.3",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Beschaffungsmanagement für IT-Produkte KANN die Nachverfolgbarkeit der gesamten Lieferkette bis zum Hersteller für {param:bes.5.6.3-prm1} vereinbaren."
-   },
-   "parameters": [
-    {
-     "name": "bes.5.6.3-prm1",
-     "type": "string",
-     "label": "kritische Komponenten"
-    }
-   ]
   }
  ],
  "facets": {
@@ -64,28 +27,6 @@
      "target-object-categories": [
       "Einkäufe"
      ]
-    },
-    "BES.5.6.1": {
-     "action": "vereinbaren",
-     "result": "die Weitergabe der Beschaffungskriterien an Unterauftragnehmer",
-     "target-object-categories": [
-      "Einkäufe"
-     ]
-    },
-    "BES.5.6.2": {
-     "action": "vereinbaren",
-     "result": "die Autorisierung von Unterauftragnehmern durch den Auftraggeber",
-     "target-object-categories": [
-      "Einkäufe"
-     ]
-    },
-    "BES.5.6.3": {
-     "action": "vereinbaren",
-     "result": "die Nachverfolgbarkeit der gesamten Lieferkette bis zum Hersteller",
-     "result-specification": "für {{kritische Komponenten}}",
-     "target-object-categories": [
-      "IT-Produkte"
-     ]
     }
    }
   },
@@ -95,54 +36,12 @@
      "required-documentation": [
       "Beschaffungskriterien"
      ]
-    },
-    "BES.5.6.1": {
-     "required-documentation": [
-      "Beschaffungskriterien"
-     ]
-    },
-    "BES.5.6.2": {
-     "required-documentation": [
-      "Beschaffungskriterien"
-     ]
-    },
-    "BES.5.6.3": {
-     "required-documentation": [
-      "Beschaffungskriterien"
-     ]
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
    "by-statement": {
     "smt": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "1",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.20"
-     ]
-    },
-    "BES.5.6.1": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "1",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.20"
-     ]
-    },
-    "BES.5.6.2": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "1",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.20"
-     ]
-    },
-    "BES.5.6.3": {
      "confidentiality": "1",
      "integrity": "1",
      "availability": "1",
@@ -162,36 +61,6 @@
      "tags": [
       "Lieferketten"
      ]
-    },
-    "BES.5.6.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 4,
-     "tags": [
-      "Lieferketten"
-     ],
-     "title": "Weitergabe der Beschaffungskriterien",
-     "alt-identifier": "58f15c9a-d587-4971-8239-d99a01478dca"
-    },
-    "BES.5.6.2": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5,
-     "tags": [
-      "Lieferketten"
-     ],
-     "title": "Autorisierung von Unterauftragnehmern",
-     "alt-identifier": "4b719eae-3c29-4579-ad77-653ab02ee880"
-    },
-    "BES.5.6.3": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5,
-     "tags": [
-      "Lieferketten"
-     ],
-     "title": "Nachverfolgbarkeit der Lieferkette",
-     "alt-identifier": "95512f8d-eca6-4928-a56f-1a58e5fcf3f0"
     }
    }
   },
@@ -201,28 +70,6 @@
      "guidance": {
       "de": "Unter einem „Unterauftrag“ versteht man in diesem Kontext die vollständige oder teilweise Weitergabe vertraglich geschuldeter Leistungen an Dritte, z.B. einem Subunternehmer (Subcontractor). Relevant ist, dass die Institution nicht nur mit dem direkten Vertragspartner in einer vertraglichen Beziehung steht, sondern durch Unteraufträge auch indirekt Abhängigkeiten und Risiken entstehen könnten. Ohne klare Vereinbarungen könnte es dazu kommen, dass Unterauftragnehmer geringere Sicherheitsstandards einhalten, vertrauliche Informationen unzureichend schützen oder den vereinbarten Leistungsumfang nicht vollständig erfüllen. Beispielsweise könnte ein IT-Dienstleister einen Teil der Softwareentwicklung an ein externes Team in einem Land mit niedrigeren Datenschutzstandards auslagern, was zu Datenabfluss, Urheberrechtsverletzungen oder unkontrollierten Zugriffswegen führt. Auch Lieferkettenmanipulationen, etwa durch den Austausch von Hardware-Komponenten gegen kompromittierte Bauteile, können so unbemerkt ihren Weg in kritische Systeme finden. Umgesetzt werden kann die Anforderung beispielsweise dadurch, dass (1) die Institution in Verträgen festhält, ob und in welchem Rahmen Unteraufträge zulässig sind. Eine weitere praxisnahe Maßnahme kann sein, (2) Subunternehmer nur nach vorheriger schriftlicher Zustimmung der Institution zuzulassen und dabei (3) bestimmte Kategorien wie kritische IT-Dienstleistungen oder Datenverarbeitung ausdrücklich zu kennzeichnen. Technisch kann vertraglich vereinbart werden, dass Subunternehmer mindestens gleichwertige Sicherheitsstandards nachweislich erfüllen und dies regelmäßig auditiert werden kann."
      }
-    },
-    "BES.5.6.1": {
-     "guidance": {
-      "de": "Dient dazu, sicherzustellen, dass die bei der Auswahl von Produkten, Dienstleistungen oder Lieferanten berücksichtigten Anforderungen entlang der gesamten Lieferkette eingehalten werden. Werden diese Kriterien nicht weitergegeben, kann es dazu kommen, dass sicherheitsrelevante Eigenschaften verloren gehen, etwa wenn ein Unterauftragnehmer günstigere, aber unsichere oder nicht konforme Komponenten beschafft. So könnte beispielsweise ein IT-Dienstleister ohne Kenntnis der geforderten Verschlüsselungsstandards Speichermedien einsetzen, die keine wirksame Datenverschlüsselung bieten, oder ein Bauunternehmen minderwertige Zutrittskontrollsysteme verbauen, weil die eigentlichen Sicherheitsvorgaben nicht bekannt waren. Auch Lieferverzögerungen, rechtliche Probleme durch fehlende Zertifizierungen oder das Einschleusen von Schadsoftware über ungesicherte Lieferungen können die Folge sein. Um die Weitergabe zu vereinfachen, können die Kriterien in einem maschinell verarbeitbaren Format (z.B. OSCAL Catalog oder Profile) ausgetauscht werden."
-     }
-    },
-    "BES.5.6.2": {
-     "guidance": {
-      "de": "Unterauftragnehmer sind in diesem Zusammenhang Dritte, die vom beauftragten Hauptdienstleister zur Erfüllung vertraglicher Leistungen hinzugezogen werden. Die Autorisierung von Unterauftragnehmern durch den Auftraggeber kann sicherstellen, dass keine unkontrollierten oder ungeprüften Dritten in die Leistungserbringung eingebunden werden. Ohne eine solche Regelung könnte ein Hauptauftragnehmer eigenmächtig Subunternehmen einsetzen, die unzureichende Sicherheitsstandards einhalten, intransparent agieren oder in kritische Abhängigkeiten geraten. Durch die vorherige Zustimmung des Auftraggebers kann das Risiko unzureichender Qualifikation oder fehlender Vertrauenswürdigkeit reduziert werden und es kann eine gezielte Steuerung erfolgen, wer Zugang zu vertraulichen Informationen oder kritischen Prozessen erhält."
-     }
-    },
-    "BES.5.6.3": {
-     "guidance": {
-      "de": "Kritische Komponenten sind in diesem Kontext Bauteile oder Softwareelemente, deren Kompromittierung erhebliche Auswirkungen auf Sicherheit, Verfügbarkeit oder Integrität der eingesetzten Systeme haben könnte, z. B. kryptographische Module, Firmware von Netzwerkgeräten oder sicherheitsrelevante Steuerungseinheiten. Ohne nachvollziehbare Herkunft könnten Komponenten aus unsicheren Produktionsumgebungen stammen, in denen Hintertüren eingebaut oder Schadcode eingeschleust wurde; ebenso könnten gefälschte Ersatzteile eingesetzt werden, deren Qualität und Funktionssicherheit unzureichend ist. „Nachverfolgbarkeit“ (Traceability) bedeutet in diesem Zusammenhang die Möglichkeit, Herkunft, Transport- und Verarbeitungsschritte einer Komponente lückenlos und verifizierbar zu dokumentieren. Geeignete Maßnahmen können z. B. die Anforderung eines „Chain of Custody“-Protokolls, die Nutzung digital signierter Herkunftszertifikate oder die Einbindung seriöser, auditierter Distributoren sein. Auch der Einsatz von Datenbanken anerkannter Prüfinstanzen, in denen verifizierte Hersteller gelistet sind, kann eine Möglichkeit sein, die Nachverfolgbarkeit zu unterstützen."
-     }
-    }
-   }
-  },
-  "https://ns.jascon.net/compat/oscal-1x@1": {
-   "param-extras": {
-    "bes.5.6.3-prm1": {
-     "alt-identifier": "95512f8d-eca6-4928-a56f-1a58e5fcf3f0"
     }
    }
   }

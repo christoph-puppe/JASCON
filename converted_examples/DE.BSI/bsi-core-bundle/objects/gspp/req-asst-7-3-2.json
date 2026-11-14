@@ -1,0 +1,83 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/ASST.7.3.2",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "ASST.7.3.2",
+ "lifecycle": "active",
+ "title": {
+  "de": "Löschverfahren"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Informationen und Assets für Daten SOLLTE ein Verfahren zur endgültigen Löschung verankern."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "verankern",
+     "result": "ein Verfahren zur endgültigen Löschung",
+     "target-object-categories": [
+      "Daten"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "IT-Betriebskonzept"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "2",
+     "integrity": "0",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.45",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.19",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.16",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.38"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 3
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Hierunter ist ein nachvollziehbarer, dokumentierter technischer und prozessualer Ablauf zur endgültigen Entfernung oder Unkenntlichmachung von Informationen zu verstehen; „Endgültig“ bedeutet, dass Daten mit vertretbarem Aufwand nicht wiederhergestellt werden können. Ohne klare Verfahren könnte Alt- oder Schattendatenbestand bei Geräteweitergabe, in Backups oder Cloud-Objektspeichern verbleiben, was zu Datenschutzverletzungen, Erpressungsversuchen oder regulatorischen Sanktionen führen könnte. Hierzu gehören sowohl Nutzdaten von IT-Systemen und Anwendungen, als auch Konfigurationsdateien oder Daten, die in begleitenden Dokumenten wie Betriebshandbüchern oder Informationswikis abgelegt sind."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "aeea856c-cbc3-47a2-bc60-56515be30f12"
+  }
+ ]
+}

@@ -16,16 +16,6 @@
    "prose": {
     "de": "Konfiguration für IT-Systeme SOLLTE privilegierte Funktionen einschränken."
    }
-  },
-  {
-   "id": "KONF.6.4.1",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Konfiguration für IT-Systeme KANN rollenbasiertes Berechtigungsmanagement aktivieren."
-   }
   }
  ],
  "facets": {
@@ -37,24 +27,12 @@
      "target-object-categories": [
       "IT-Systeme"
      ]
-    },
-    "KONF.6.4.1": {
-     "action": "aktivieren",
-     "result": "rollenbasiertes Berechtigungsmanagement",
-     "target-object-categories": [
-      "IT-Systeme"
-     ]
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "by-statement": {
     "smt": {
-     "required-documentation": [
-      "Konfigurationshistorie"
-     ]
-    },
-    "KONF.6.4.1": {
      "required-documentation": [
       "Konfigurationshistorie"
      ]
@@ -72,16 +50,6 @@
       "https://ns.bsi.bund.de/gspp/threat/G-0.32",
       "https://ns.bsi.bund.de/gspp/threat/G-0.30"
      ]
-    },
-    "KONF.6.4.1": {
-     "confidentiality": "2",
-     "integrity": "2",
-     "availability": "2",
-     "authenticity": "1",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.30",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.32"
-     ]
     }
    }
   },
@@ -95,16 +63,6 @@
       "Produktbeschreibung",
       "Living off the land"
      ]
-    },
-    "KONF.6.4.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5,
-     "tags": [
-      "Produktbeschreibung"
-     ],
-     "title": "Rollenbasierte Privilegierung",
-     "alt-identifier": "b20ab43c-96f3-4bc4-8a4c-1dca837bb41f"
     }
    }
   },
@@ -113,11 +71,6 @@
     "smt": {
      "guidance": {
       "de": "Sind privilegierte Funktionen nicht eingeschränkt, so könnten Innentäter oder Angreifer über das Netz unbefugte Manipulationen vornehmen, Fehlkonfigurationen ausgelöst werden oder sich Schadcode automatisch einnisten. Privilegierte Funktionen können z.B. ein lokales Berechtigungsmanagement, die Installation von Anwendungen, der Schreibzugriff auf Systemverzeichnisse oder die Änderung der Systemkonfiguration sein."
-     }
-    },
-    "KONF.6.4.1": {
-     "guidance": {
-      "de": "Rollenbasierte Administration schränkt die Berechtigungen administrativer Zugangskonten anhand von Rollen so ein, dass nur die jeweils erforderlichen Funktionen freigeschaltet sind. Dies kann z.B. mit Windows PowerShell Just Enough Administration (JEA) oder SELinux, AppArmor oder Sudoers umgesetzt werden."
      }
     }
    }

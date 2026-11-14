@@ -16,70 +16,6 @@
    "prose": {
     "de": "Detektion SOLLTE ein zeitnahes Patchmanagement verankern."
    }
-  },
-  {
-   "id": "DET.5.10.1",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Detektion SOLLTE zuverlässige Bezugsquellen für Patches autorisieren."
-   }
-  },
-  {
-   "id": "DET.5.10.2",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Detektion für IT-Systeme SOLLTE den Patchstatus durch {param:det.5.10.2-prm1} überwachen."
-   },
-   "parameters": [
-    {
-     "name": "det.5.10.2-prm1",
-     "type": "string",
-     "label": "einen automatisierten Mechanismus"
-    }
-   ]
-  },
-  {
-   "id": "DET.5.10.3",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Detektion für Anwendungen KANN den Patchstatus durch {param:det.5.10.3-prm1} überwachen."
-   },
-   "parameters": [
-    {
-     "name": "det.5.10.3-prm1",
-     "type": "string",
-     "label": "einen automatisierten Mechanismus"
-    }
-   ]
-  },
-  {
-   "id": "DET.5.10.4",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Detektion SOLLTE Patches vor der Installation auf Integrität testen."
-   }
-  },
-  {
-   "id": "DET.5.10.5",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Detektion KANN Patches entsprechend der Anforderungen der Praktik „Änderungen und Tests“ ausführen."
-   }
   }
  ],
  "facets": {
@@ -88,65 +24,12 @@
     "smt": {
      "action": "verankern",
      "result": "ein zeitnahes Patchmanagement"
-    },
-    "DET.5.10.1": {
-     "action": "autorisieren",
-     "result": "zuverlässige Bezugsquellen für Patches"
-    },
-    "DET.5.10.2": {
-     "action": "überwachen",
-     "result": "den Patchstatus",
-     "result-specification": "durch {{einen automatisierten Mechanismus}}",
-     "target-object-categories": [
-      "IT-Systeme"
-     ]
-    },
-    "DET.5.10.3": {
-     "action": "überwachen",
-     "result": "den Patchstatus",
-     "result-specification": "durch {{einen automatisierten Mechanismus}}",
-     "target-object-categories": [
-      "Anwendungen"
-     ]
-    },
-    "DET.5.10.4": {
-     "action": "testen",
-     "result": "Patches vor der Installation auf Integrität"
-    },
-    "DET.5.10.5": {
-     "action": "ausführen",
-     "result": "Patches entsprechend der Anforderungen der Praktik „Änderungen und Tests“"
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "by-statement": {
     "smt": {
-     "required-documentation": [
-      "Detektions-Konzept"
-     ]
-    },
-    "DET.5.10.1": {
-     "required-documentation": [
-      "Detektions-Konzept"
-     ]
-    },
-    "DET.5.10.2": {
-     "required-documentation": [
-      "Detektions-Konzept"
-     ]
-    },
-    "DET.5.10.3": {
-     "required-documentation": [
-      "Detektions-Konzept"
-     ]
-    },
-    "DET.5.10.4": {
-     "required-documentation": [
-      "Detektions-Konzept"
-     ]
-    },
-    "DET.5.10.5": {
      "required-documentation": [
       "Detektions-Konzept"
      ]
@@ -164,62 +47,6 @@
       "https://ns.bsi.bund.de/gspp/threat/G-0.28",
       "https://ns.bsi.bund.de/gspp/threat/G-0.23"
      ]
-    },
-    "DET.5.10.1": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "1",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.28",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.20"
-     ]
-    },
-    "DET.5.10.2": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "1",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.30",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.21",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.23",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.39"
-     ]
-    },
-    "DET.5.10.3": {
-     "confidentiality": "2",
-     "integrity": "2",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.28",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.23",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.39"
-     ]
-    },
-    "DET.5.10.4": {
-     "confidentiality": "2",
-     "integrity": "2",
-     "availability": "1",
-     "authenticity": "1",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.28",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.23",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.39",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.20"
-     ]
-    },
-    "DET.5.10.5": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.39",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.28",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
-     ]
     }
    }
   },
@@ -229,41 +56,6 @@
      "class": "BSI-Stand-der-Technik-Kernel-G0",
      "sec-level": "normal-SdT",
      "effort": 3
-    },
-    "DET.5.10.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 5,
-     "title": "Autorisierte Bezugsquellen",
-     "alt-identifier": "681afb8d-1864-4d86-9e69-3ecd9c14fbb8"
-    },
-    "DET.5.10.2": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 3,
-     "title": "Automatisierte Überwachung von Systemupdates",
-     "alt-identifier": "d652bc78-8f87-42ef-a52a-7bdd9a43212f"
-    },
-    "DET.5.10.3": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 4,
-     "title": "Automatisierte Überwachung von Anwendungsupdates",
-     "alt-identifier": "1aec3d83-b204-4999-88f5-abf1e140a925"
-    },
-    "DET.5.10.4": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 4,
-     "title": "Integritätsprüfung von Patches",
-     "alt-identifier": "8eb6cebe-6ea5-4f78-a9b3-ce5a29f3bcc7"
-    },
-    "DET.5.10.5": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5,
-     "title": "Test gemäß Änderungsmanagement",
-     "alt-identifier": "7f1d3645-70d4-4c0d-a3c6-ecb497e3f45b"
     }
    }
   },
@@ -273,41 +65,6 @@
      "guidance": {
       "de": "Patches (Updates oder Sicherheitsaktualisierungen) sind neue Versionen, die Sicherheitslücken schließen. Je nach Aufbau der betroffenen Assets kann es bei der Aktualisierung auch erforderlich sein, Abhängigkeiten (Bibliotheken, Upstream Software) ebenfalls zu aktualisieren. Dies kann durch automatisierte Installation oder nach einem Test umgesetzt werden. Die Umsetzung kann auch den schrittweisen Rollout von Patches vorsehen, sodass bei Fehlern im Patch nicht alle Systeme gleichzeitig betroffen sind und auch komplexe Fehlerbilder durch Rückmeldungen frühzeitig erkannt werden können. Dies kann zum Beispiel nach dem One-Many-All-Prinzip oder Blue-Green-Deployment erfolgen. Zur Beurteilung der Kritikalität von Patches kann die Krititikalität der mit dem Patch verbundenen Schwachstellen, das Risikoprofil der zu patchenden Assets oder eine Korrelation komplexer Angriffswege herangezogen werden."
      }
-    },
-    "DET.5.10.1": {
-     "guidance": {
-      "de": "Eine Quelle ist unzuverlässig, wenn zukünftig mit Verstößen gegen die Schutzziele Vertraulichkeit, Verfügbarkeit oder Integrität durch die Entität zu rechnen ist (d.h. eine Prognose der Vertrauenswürdigkeit). Dies ist insbesondere der Fall, wenn erhebliche Verstöße gegen die Schutzziele durch die Entität begangen worden sind oder Anzeichen dafür vorliegen, dass bei einer Verwendung mit solchen Verstößen zu rechnen ist."
-     }
-    },
-    "DET.5.10.2": {
-     "guidance": {
-      "de": "Der Patchsstatus des Informationsverbundes kann dabei durch Kennzahlen bestimmt werden, z.B. durchschnittliche Zeit bis zum Patch (Mean Time To Patch), Prozentsatz aktuell gepatchter Assets, Anzahl offener/geschlossener Ausnahmen."
-     }
-    },
-    "DET.5.10.3": {
-     "guidance": {
-      "de": "Eine nicht gepatchte Anwendung könnte als Einfallstor für Angreifer dienen, die bekannte Schwachstellen ausnutzen, um sich Zugang zu Systemen oder Daten zu verschaffen. Die Umsetzung kann beispielsweise auf einem Patch Management System (PMS) oder einem Vulnerability Management System (VMS) basieren. Ein Patch-Managementsystem kann beispielsweise so konfiguriert werden, dass es kontinuierlich die Versionen der installierten Software mit einer zentralen Datenbank für verfügbare Updates abgleicht. Auch die Nutzung eines Schwachstellen-Scanners, der im Netzwerk nach ungepatchten Anwendungen sucht, ist eine wirksame Maßnahme. Ein solcher Scanner könnte beispielsweise wöchentlich oder sogar täglich einen Scan durchführen und die Ergebnisse in einem Dashboard visualisieren. Wichtige prozessuale Tipps sind die Einrichtung von Benachrichtigungsworkflows, die sicherstellen, dass kritische Patch-Status-Änderungen sofort an die richtigen Personen eskaliert werden, sowie die Integration der Überwachungsergebnisse in ein zentrales Incident Response System. Dies kann helfen, die Reaktionszeit zu verkürzen, sodass die Anwendungen schnellstmöglich aktualisiert werden."
-     }
-    },
-    "DET.5.10.4": {
-     "guidance": {
-      "de": "Wenn Patches durch Fehler bei der Übertragung oder sogar bewusst von Angreifern verändert wurden, kann dies nach der Installation zu nicht behebbaren Fehlerzuständen oder zur Verbreitung von Schadcode führen.  Kann durch einen Abgleich von Prüfsummen umgesetzt werden, z.B. durch automatisierte Installationsroutinen oder einen manuellen Abgleich mit der Herstellerwebseite."
-     }
-    },
-    "DET.5.10.5": {
-     "guidance": {
-      "de": "Stellt sicher, dass Patches zusammen mit anderen Änderungen geprüft werden und trennt zwischen „Routine“- und „Notfall“-Änderungen."
-     }
-    }
-   }
-  },
-  "https://ns.jascon.net/compat/oscal-1x@1": {
-   "param-extras": {
-    "det.5.10.2-prm1": {
-     "alt-identifier": "d652bc78-8f87-42ef-a52a-7bdd9a43212f"
-    },
-    "det.5.10.3-prm1": {
-     "alt-identifier": "1aec3d83-b204-4999-88f5-abf1e140a925"
     }
    }
   }

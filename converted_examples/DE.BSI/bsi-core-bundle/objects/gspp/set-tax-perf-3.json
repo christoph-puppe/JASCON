@@ -7,12 +7,12 @@
  },
  "members": [
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/PERF.3.1",
-   "sequence": 850
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/perf-3-1",
+   "sequence": 1270
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/PERF.3.2",
-   "sequence": 860
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/perf-3-2",
+   "sequence": 1310
   }
  ],
  "label": "3",

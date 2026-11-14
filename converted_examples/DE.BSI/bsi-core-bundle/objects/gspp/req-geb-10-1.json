@@ -23,50 +23,6 @@
      "label": "Schwellwerten"
     }
    ]
-  },
-  {
-   "id": "GEB.10.1.1",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Gebäudemanagement für Serverräume KANN den Klimatisierungsbedarf anhand einer Luftstrom-Analyse {param:geb.10.1.1-prm1} überprüfen."
-   },
-   "parameters": [
-    {
-     "name": "geb.10.1.1-prm1",
-     "type": "string",
-     "label": "regelmäßig"
-    }
-   ]
-  },
-  {
-   "id": "GEB.10.1.2",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Gebäudemanagement für Serverräume SOLLTE Lufttemperatur und Luftfeuchtigkeit anhand von {param:geb.10.1.2-prm1} überwachen."
-   },
-   "parameters": [
-    {
-     "name": "geb.10.1.2-prm1",
-     "type": "string",
-     "label": "Schwellwerten"
-    }
-   ]
-  },
-  {
-   "id": "GEB.10.1.3",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Gebäudemanagement für Standorte KANN redundante Klimasysteme installieren."
-   }
   }
  ],
  "facets": {
@@ -79,29 +35,6 @@
      "target-object-categories": [
       "Standorte"
      ]
-    },
-    "GEB.10.1.1": {
-     "action": "überprüfen",
-     "result": "den Klimatisierungsbedarf anhand einer Luftstrom-Analyse",
-     "result-specification": "{{regelmäßig}}",
-     "target-object-categories": [
-      "Serverräume"
-     ]
-    },
-    "GEB.10.1.2": {
-     "action": "überwachen",
-     "result": "Lufttemperatur und Luftfeuchtigkeit",
-     "result-specification": "anhand von {{Schwellwerten}}",
-     "target-object-categories": [
-      "Serverräume"
-     ]
-    },
-    "GEB.10.1.3": {
-     "action": "installieren",
-     "result": "redundante Klimasysteme",
-     "target-object-categories": [
-      "Standorte"
-     ]
     }
    }
   },
@@ -110,21 +43,6 @@
     "smt": {
      "required-documentation": [
       "Gebäudedokumentation"
-     ]
-    },
-    "GEB.10.1.1": {
-     "required-documentation": [
-      "Übungs- und Prüfplan"
-     ]
-    },
-    "GEB.10.1.2": {
-     "required-documentation": [
-      "IT-Betriebskonzept"
-     ]
-    },
-    "GEB.10.1.3": {
-     "required-documentation": [
-      "IT-Betriebskonzept"
      ]
     }
    }
@@ -139,33 +57,6 @@
      "threat-refs": [
       "https://ns.bsi.bund.de/gspp/threat/G-0.2"
      ]
-    },
-    "GEB.10.1.1": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
-     ]
-    },
-    "GEB.10.1.2": {
-     "confidentiality": "0",
-     "integrity": "1",
-     "availability": "2",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.2"
-     ]
-    },
-    "GEB.10.1.3": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "2",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
-     ]
     }
    }
   },
@@ -175,27 +66,6 @@
      "class": "BSI-Stand-der-Technik-Kernel-G0",
      "sec-level": "normal-SdT",
      "effort": 3
-    },
-    "GEB.10.1.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 4,
-     "title": "Luftstrom-Analyse",
-     "alt-identifier": "0abf44e0-ee1c-46fc-a106-fa58b1f5f245"
-    },
-    "GEB.10.1.2": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 3,
-     "title": "Klimamessung",
-     "alt-identifier": "338031dd-f3c6-4245-b411-7c46852edfcb"
-    },
-    "GEB.10.1.3": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5,
-     "title": "Redundante Klimatisierung",
-     "alt-identifier": "ab66de05-230a-46cf-9beb-29368a3768e2"
     }
    }
   },
@@ -205,21 +75,6 @@
      "guidance": {
       "de": "Klimatisierung meint das Erzeugen und Aufrechterhalten von Temperatur und Luftfeuchtigkeit innerhalb bestimmter Schwellwerte.   Zur Bestimmung der Schwellwerte können verschiedene Angaben herangezogen werden, u.a. Herstellerangaben für die am Standort betriebenen Systeme, Compliance-Vorgaben zur Arbeitsplatzsicherheit, branchenspezifische Normen und Standards (z.B. DIN EN ISO 7730), Energieeffizienzrichtlinien und Umweltvorschriften, sowie wissenschaftliche Erkenntnisse zu optimalen Arbeitsbedingungen.  Die Implementierung kann umfassen: Die Gestaltung von Räumen mit klarer Trennung von Zu- und Abluftwegen, um Innenzirkulation zu vermeiden; Beseitigung von Hindernissen in kritischen Luftstromwegen; Implementierung geeigneter Einschlusslösungen für bestimmte Anwendungsfälle (z. B. heiße/kalte Servergänge oder Reinräume in der Fertigung); Optimierung der Geräteplatzierung zur Maximierung einer effizienten Luftverteilung; regelmäßige Wartung der Belüftungssysteme, einschließlich Filteraustausch und Kanalreinigung; strategische Platzierung von Ablenkblechen oder Deflektoren zur Lenkung des Luftstroms; saisonale Anpassung der HLK-Einstellungen an sich ändernde äußere Bedingungen; Einsatz drehzahlvariabler Ventilatoren und intelligenter Steuerungen, um dynamisch auf sich ändernde Lasten zu reagieren; regelmäßige Wärmebildaufnahmen, um entstehende Probleme zu erkennen. Den größen Nutzen bringt es in der Regel zunächst die größten Hindernisse zu beseitigen, sowie die Abdichtung unerwünschter Luftwege und die Optimierung der wichtigsten lufttechnischen Anlagen zu beachten. In Serverräumen empfiehlt sich oft eine gedrehte Rack-Ausrichtung, sodass die Luftzufuhr der Geräte aus kalten Gängen erfolgt, während die Abluft direkt in warmen Gänge geleitet wird, wodurch eine Rezirkulation verhindert und die Kühlung aufrechterhalten wird. Gleichzeitig verbessert diese Konfiguration die Betriebspraktikabilität durch die Positionierung der Kabelanschlüsse für einen bequemen Zugang der Techniker, ohne die Luftstrommuster zu unterbrechen."
      }
-    },
-    "GEB.10.1.1": {
-     "guidance": {
-      "de": "Luftstromanalyse ist die systematische Bewertung von Luftbewegungsmustern zur Optimierung der Kühleffizienz und zur Vermeidung von Geräteausfällen. Dabei wird untersucht, wie die kalte Luft in der Einrichtung verteilt wird, es werden potenzielle Hotspots oder Bereiche mit Stagnation identifiziert, und es wird ein ordnungsgemäßer Wärmeaustausch durch die Überwachung der Einlass- und Auslasstemperaturen in den Serverracks sichergestellt. Zu den möglichen Methoden gehören CFD-Modelle (Computational Fluid Dynamics) zur Simulation von Luftströmungsmustern vor der Implementierung, der Einsatz von Temperatur- und Luftströmungssensoren an strategischen Stellen, Rauchtests zur visuellen Verfolgung der Luftbewegungspfade und Druckdifferenzmessungen zur Überprüfung der Integrität des Containments. Ein gut ausgeführtes Luftstrommanagement steht außerdem in direktem Zusammenhang mit geringeren Kühlkosten (oft 20-30 % Einsparungen), einer längeren Lebensdauer der Geräte und einer höheren Rechendichte pro Quadratmeter. Zu den bewährten Lösungen zur besseren Zirkulation gehören die Eingrenzung von Warm- und Kaltgängen, um eine Vermischung der Luftströme zu verhindern, die Aufrechterhaltung optimaler Rack-Einlasstemperaturen, die Sicherstellung einer angemessenen Perforation der Bodenfliesen in Doppelbodenumgebungen, die Optimierung der Serverplatzierung, um einen Bypass-Luftstrom zu vermeiden, und die Durchführung regelmäßiger Wärmebilduntersuchungen, um sich entwickelnde Probleme zu erkennen. Besonderer Aufmerksamkeit bedarf das Kabelmanagement, da eine ungeordnete Verkabelung den Luftstrom um bis zu 60 % behindern kann; ebenso ist es sinnvoll Abdeckplatten aller ungenutzten Rack-Räume abzudichten, um eine innere Zirkulation heißer Luft zu verhindern."
-     }
-    },
-    "GEB.10.1.2": {
-     "guidance": {
-      "de": "IT-Infrastruktur benötigt typischerweise eine Umwelttemperatur von nicht viel mehr als 25°C und eine Luftfeuchtigkeit von nicht über 60%. Bei höheren Werten altern Komponenten schneller und das Risiko von Ausfällen durch Abwärme oder Spannungsüberschläge steigt. Ermitteln Sie Grenzwerte anhand der Herstellerangaben der im Raum eingesetzten Komponenten. Die Überwachung kann mit klimatechnischen Sensoren in den Geräten selbst oder im Raum realisiert werden. Eine saisonale Anpassung der Lüftungsanlagen kann erforderlich sein, insbesondere in Einrichtungen, die mit Eco-Modus arbeiten."
-     }
-    },
-    "GEB.10.1.3": {
-     "guidance": {
-      "de": "Redundant ist eine Klimatisierung, wenn alle zu ihrer Funktionsfähigkeit erforderlichen Komponenten und Anbindungen redundant sind, d.h. kein einzelner Fehlerpunkt zu einem Ausfall führen würde (Single Point of Failure)."
-     }
     }
    }
   },
@@ -227,12 +82,6 @@
    "param-extras": {
     "geb.10.1-prm1": {
      "alt-identifier": "dfdda615-4afc-4889-b7a0-95c91240add7"
-    },
-    "geb.10.1.1-prm1": {
-     "alt-identifier": "0abf44e0-ee1c-46fc-a106-fa58b1f5f245"
-    },
-    "geb.10.1.2-prm1": {
-     "alt-identifier": "338031dd-f3c6-4245-b411-7c46852edfcb"
     }
    }
   }

@@ -16,26 +16,6 @@
    "prose": {
     "de": "Konfiguration für Interpersonelle Kommunikation SOLLTE eine Filterung schädlicher Nachrichteninhalte aktivieren."
    }
-  },
-  {
-   "id": "KONF.13.1.1",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Konfiguration für Interpersonelle Kommunikation SOLLTE die Zustellung unerwünschter Nachrichten blockieren."
-   }
-  },
-  {
-   "id": "KONF.13.1.2",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Konfiguration für Interpersonelle Kommunikation SOLLTE die automatische Interpretation aktiver Inhalte deaktivieren."
-   }
   }
  ],
  "facets": {
@@ -44,20 +24,6 @@
     "smt": {
      "action": "aktivieren",
      "result": "eine Filterung schädlicher Nachrichteninhalte",
-     "target-object-categories": [
-      "Interpersonelle Kommunikation"
-     ]
-    },
-    "KONF.13.1.1": {
-     "action": "blockieren",
-     "result": "die Zustellung unerwünschter Nachrichten",
-     "target-object-categories": [
-      "Interpersonelle Kommunikation"
-     ]
-    },
-    "KONF.13.1.2": {
-     "action": "deaktivieren",
-     "result": "die automatische Interpretation aktiver Inhalte",
      "target-object-categories": [
       "Interpersonelle Kommunikation"
      ]
@@ -70,42 +36,12 @@
      "required-documentation": [
       "Konfigurationshistorie"
      ]
-    },
-    "KONF.13.1.1": {
-     "required-documentation": [
-      "Konfigurationshistorie"
-     ]
-    },
-    "KONF.13.1.2": {
-     "required-documentation": [
-      "Konfigurationshistorie"
-     ]
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
    "by-statement": {
     "smt": {
-     "confidentiality": "2",
-     "integrity": "2",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.39",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.23"
-     ]
-    },
-    "KONF.13.1.1": {
-     "confidentiality": "2",
-     "integrity": "2",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.39",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.42"
-     ]
-    },
-    "KONF.13.1.2": {
      "confidentiality": "2",
      "integrity": "2",
      "availability": "1",
@@ -127,26 +63,6 @@
       "Produktbeschreibung",
       "Phishing"
      ]
-    },
-    "KONF.13.1.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 3,
-     "tags": [
-      "Produktbeschreibung"
-     ],
-     "title": "SPAM-Filter",
-     "alt-identifier": "ee57e250-bed1-484e-9ff7-8b7750562877"
-    },
-    "KONF.13.1.2": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 4,
-     "tags": [
-      "Produktbeschreibung"
-     ],
-     "title": "Interpretation aktiver Inhalte",
-     "alt-identifier": "ecc5b98d-eb77-4902-a01a-a5348ecba8f0"
     }
    }
   },
@@ -155,16 +71,6 @@
     "smt": {
      "guidance": {
       "de": "Unter Filterung schädlicher Nachrichteninhalte versteht man Verfahren, die Inhalte automatisch prüfen und unerwünschte, gefährliche oder manipulative Bestandteile erkennen, blockieren oder kennzeichnen können. Der Sinn dieser Vorgabe liegt darin, potenziell gefährliche Inhalte wie Phishing-Versuche, schadhaften Code oder gezielte Desinformation frühzeitig abzufangen. Ohne eine solche Filterung könnte Schadsoftware über Anhänge eingeschleust werden oder Mitarbeitende könnten durch manipulierte Links zu vertraulichen Datenabgaben verleitet werden. Mit einer wirksamen Filterung kann die Angriffsfläche reduziert, das Vertrauen in die Kommunikationskanäle erhöht und die Produktivität geschützt werden. Zur Umsetzung kann eine Institution technische Maßnahmen kombinieren: (1) E-Mail-Gateways oder Chat-Schnittstellen können mit Inhaltsfiltern ausgestattet werden, die bekannte Malware-Signaturen, verdächtige Links oder gefährliche Dateitypen erkennen. (2) Ergänzend kann heuristische Analyse und maschinelles Lernen eingesetzt werden, um Muster verdächtiger Inhalte zu identifizieren, auch wenn diese noch nicht in Signaturdatenbanken enthalten sind. (3) Regeln zur Blockierung bestimmter Dateianhänge (z. B. ausführbare Dateien) können eingerichtet werden, während sichere Alternativen für den Austausch bereitgestellt werden. (4) Schließlich kann ein klarer Prozess vorgesehen werden, um falsch-positive Erkennungen manuell zu prüfen und legitime Kommunikation wieder freizugeben."
-     }
-    },
-    "KONF.13.1.1": {
-     "guidance": {
-      "de": "Unter Zustellung unerwünschter Nachrichten ist das Blockieren oder Filtern von Spam, Phishing-Versuchen, Social-Engineering-Nachrichten oder belästigender Kommunikation zu verstehen. Diese Anforderung zielt darauf ab, die Integrität der Kommunikationskanäle zu wahren und das Risiko von Sicherheits- oder Vertrauensbrüchen zu reduzieren. Ohne geeignete Filtermechanismen könnte Schadsoftware per Anhang eingeschleust werden, sensible Informationen könnten durch täuschend echte Phishing-Nachrichten abgegriffen werden oder Mitarbeitende könnten durch gezielte Belästigungen in ihrer Arbeitsfähigkeit eingeschränkt werden. Zur Umsetzung kann eine Institution verschiedene Ansätze kombinieren: (1) Der Einsatz serverseitiger Filtermechanismen auf Mail-Gateways oder Collaboration-Plattformen kann zentral die meisten unerwünschten Nachrichten aussortieren. (2) Ergänzend können clientseitige Filterregeln aktiviert werden, die Benutzern zusätzliche Möglichkeiten zur Sortierung bieten, etwa über Whitelists und Blacklists. Praktisch kann es auch hilfreich sein, Quarantäneordner einzurichten, damit Anwender verdächtige Nachrichten selbständig einsehen und fälschlich blockierte Nachrichten zurückholen können."
-     }
-    },
-    "KONF.13.1.2": {
-     "guidance": {
-      "de": "Unter aktiven Inhalten sind hier Elemente zu verstehen, die beim Empfang automatisch ausgeführt oder interpretiert werden könnten, wie z. B. eingebettete Skripte in E-Mails, dynamische Makros in Dokumenten oder der automatische Download von externen Bildern in Chat-Nachrichten. Hintergrund ist, dass eine empfangene Nachricht nicht nur reinen Text oder statische Informationen enthalten könnte, sondern zusätzliche versteckte Anweisungen, die beim Anzeigen sofort wirken. Ein typischer Vorfall könnte etwa sein, dass eine Mitarbeiterin eine HTML-E-Mail öffnet, die ein eingebettetes JavaScript enthält und dadurch unbemerkt Zugangsdaten abgegriffen werden. Durch Deaktivieren solcher Inhalte wird verhindert, dass Schadcode automatisch ausgeführt wird. Dies betrifft sowohl Inhalte in Freitext-Datenfeldern als auch an die Nachricht angehängte Dateien. Beispielsweise kann in Mail-Clients die Ausführung von Makros deaktiviert, die Darstellung externer Inhalte blockiert oder das Rendern von Skripten untersagt werden. Ebenso kann bei Messaging-Diensten die Anzeige von aktiven Inhalten durch Filter eingeschränkt werden, sodass nur reiner Text oder geprüfte Anhänge angezeigt werden. Ergänzend kann es hilfreich sein, benutzerseitige Tipps wie das standardmäßige Verwenden einer Nur-Text-Ansicht oder die klare Kennzeichnung von blockierten Inhalten zu etablieren. Institutionen können durch regelmäßige Konfigurationsprüfungen sicherstellen, dass Änderungen durch Updates oder neue Versionen die Deaktivierung nicht unbemerkt wieder aufheben."
      }
     }
    }

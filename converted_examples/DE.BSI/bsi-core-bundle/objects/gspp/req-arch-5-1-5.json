@@ -1,0 +1,84 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/ARCH.5.1.5",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "ARCH.5.1.5",
+ "lifecycle": "active",
+ "title": {
+  "de": "Deaktivierung von Split Tunneling"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Architektur für Externe Netzanschlüsse SOLLTE Split Tunneling blockieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "blockieren",
+     "result": "Split Tunneling",
+     "target-object-categories": [
+      "Externe Netzanschlüsse"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Firewallregeln"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "2",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.23",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.14"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 3,
+     "tags": [
+      "Internet Exposure"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Um eine durchgehende Kontrolle und Absicherung des Netzverkehrs zu gewährleisten, muss verhindert werden, dass IT-Clients während einer aktiven Verbindung zum internen Netz gleichzeitig ungeschützten Zugriff auf das öffentliche Internet oder andere Netzwerke haben. Dies schließt sogenannte „Split Tunneling“-Konfigurationen aus, bei denen nur ausgewählter Datenverkehr über das VPN geleitet wird, während anderer Datenverkehr (z. B. Webzugriffe) über das lokale Netzwerk oder die Internetverbindung des Clients erfolgt."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "7ff5e3bc-64e8-4487-a77a-c4897f97431d"
+  }
+ ]
+}

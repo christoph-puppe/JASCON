@@ -1,0 +1,82 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/STM.2.1.4",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "STM.2.1.4",
+ "lifecycle": "active",
+ "title": {
+  "de": "Modellierung der Anforderungen mit Zielobjektkategorie"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "must",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Strukturmodellierung MUSS die den Zielobjektkategorien zugehörigen Anforderungen auf die zugewiesenen Assets modellieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "modellieren",
+     "result": "die den Zielobjektkategorien zugehörigen Anforderungen auf die zugewiesenen Assets"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Anforderungspaket"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Methodik-Grundschutz-plus-plus",
+     "sec-level": "normal-SdT",
+     "effort": 0
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Nun werden die Anforderungen aus dem GS++ auf die identifizierten Zielobjektkategorien modelliert. Die modellierten Anforderungen bilden das individuelle Anforderungspaket des festgelegten Informationsverbunds in Bezug auf den ausgewählten Geschäftsprozess."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "11fe535b-f1f3-49d2-ab01-65fc651281b5"
+  }
+ ],
+ "relations": [
+  {
+   "type": "required",
+   "ref": "https://ns.bsi.bund.de/gspp/req/STM.2.1.3"
+  },
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/STM.2.1.4.1"
+  },
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/STM.2.1.4.2"
+  },
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/STM.2.1.5"
+  }
+ ]
+}

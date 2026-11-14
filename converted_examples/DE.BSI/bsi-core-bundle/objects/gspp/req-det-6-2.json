@@ -16,26 +16,6 @@
    "prose": {
     "de": "Detektion SOLLTE ein Verfahren zur Beurteilung  von Datei-Eingängen verankern."
    }
-  },
-  {
-   "id": "DET.6.2.1",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Detektion KANN verdächtige Dateien in einer isolierten Umgebung mindestens anhand von aufgebauten Netzverbindungen, Systemaufrufen und Dateizugriffen testen."
-   }
-  },
-  {
-   "id": "DET.6.2.2",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Detektion KANN Datenträgerschleusen installieren."
-   }
   }
  ],
  "facets": {
@@ -44,15 +24,6 @@
     "smt": {
      "action": "verankern",
      "result": "ein Verfahren zur Beurteilung  von Datei-Eingängen"
-    },
-    "DET.6.2.1": {
-     "action": "testen",
-     "result": "verdächtige Dateien in einer isolierten Umgebung",
-     "result-specification": "mindestens anhand von aufgebauten Netzverbindungen, Systemaufrufen und Dateizugriffen"
-    },
-    "DET.6.2.2": {
-     "action": "installieren",
-     "result": "Datenträgerschleusen"
     }
    }
   },
@@ -61,16 +32,6 @@
     "smt": {
      "required-documentation": [
       "Detektions-Konzept"
-     ]
-    },
-    "DET.6.2.1": {
-     "required-documentation": [
-      "Detektions-Konzept"
-     ]
-    },
-    "DET.6.2.2": {
-     "required-documentation": [
-      "Arbeitsanweisung"
      ]
     }
    }
@@ -87,30 +48,6 @@
       "https://ns.bsi.bund.de/gspp/threat/G-0.39",
       "https://ns.bsi.bund.de/gspp/threat/G-0.23"
      ]
-    },
-    "DET.6.2.1": {
-     "confidentiality": "2",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.23",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.39",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.22",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.19"
-     ]
-    },
-    "DET.6.2.2": {
-     "confidentiality": "2",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "1",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.39",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.23",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.21",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.14"
-     ]
     }
    }
   },
@@ -120,20 +57,6 @@
      "class": "BSI-Stand-der-Technik-Kernel-G0",
      "sec-level": "normal-SdT",
      "effort": 4
-    },
-    "DET.6.2.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 4,
-     "title": "Dynamische Sandbox-Analyse",
-     "alt-identifier": "5e302b5d-0a5b-4821-8d46-1e2f7fc40c3f"
-    },
-    "DET.6.2.2": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5,
-     "title": "Datenträgerschleuse",
-     "alt-identifier": "51911fce-93f1-455a-b690-d5ddc90c9129"
     }
    }
   },
@@ -142,16 +65,6 @@
     "smt": {
      "guidance": {
       "de": "Kann beispielsweise ein Virenscanner eine Datei nicht überprüfen, weil sie mit einem Passwort geschützt ist, erhalten Nutzende die Datei erst, wenn sie durch das für Detektion zuständige Personal freigegeben wurde. Dazu muss die Datei aus einer vertrauenswürdigen Quelle stammen und keine Anzeichen für einen Angriff vorliegen."
-     }
-    },
-    "DET.6.2.1": {
-     "guidance": {
-      "de": "Eine dynamische Sandbox Analyse ist die Ausführung des verdächtigen Codes in einer isolierten Umgebung, aus der eine Anwendung nicht durch Ausführung von Systembefehlen ausbrechen kann (Sandbox Detonation). Sie ermöglicht die sichere Untersuchung potenziell schädlicher Dateien in einer isolierten Umgebung, um deren tatsächliches Verhalten zu beobachten. Eine dynamische Analyse kann verschiedene verdächtige Aktivitäten erfassen: Dateisystemoperationen wie das Erstellen, Ändern oder Löschen von Dateien; Registry-Modifikationen, besonders in Autostart-Bereichen; Netzwerkverhalten einschließlich externer Verbindungsversuche und Datenexfiltration; Prozessverhalten wie Injektionstechniken oder unerwartete Kindprozesse; Speichermanipulationen; Persistenzmechanismen wie Dienste oder geplante Aufgaben; Anti-Analyse-Techniken zur Erkennung virtueller Umgebungen; sowie ungewöhnliche API-Aufrufe wie kryptografische Funktionen oder Sicherheitsumgehungen. Die Sandbox kann dabei mit ausreichender Laufzeit, Netzwerksimulation und Snapshot-Funktionen ausgestattet werden, um auch verzögerte oder umgebungsspezifische Schadfunktionen zu erkennen."
-     }
-    },
-    "DET.6.2.2": {
-     "guidance": {
-      "de": "Eine Datenträgerschleuse ist ein vom restlichen Netz der Institution getrenntes IT-System, das speziell zur Erkennung von Schadprogrammen dient. Der Begriff Datenträger umfasst hierbei insbesondere USB-Speichergeräte, externe Festplatten, Speicherkarten sowie optische Datenträger. Der Einsatz einer Datenträgerschleuse kann das Risiko reduzieren, dass Schadsoftware, manipulierte Dateien oder unzulässig übertragene Informationen über mobile Speichermedien in Systeme eingebracht oder aus ihnen heraus transportiert werden. Ohne entsprechende Kontrollmechanismen könnte beispielsweise Malware über USB-Datenträger eingeschleust oder eine unbemerkte Datenabgabe über Wechselspeicher erfolgen; eine Datenträgerschleuse kann solche Vorgänge sichtbar machen und zusätzliche Prüfungen ermöglichen."
      }
     }
    }

@@ -1,0 +1,82 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/ARCH.5.1.12",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "ARCH.5.1.12",
+ "lifecycle": "active",
+ "title": {
+  "de": "Software-definierte Verbindungen"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "may",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Architektur für Netze KANN Verbindungen zwischen IT-Systemen anhand dynamischer Kriterien einschränken."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "einschränken",
+     "result": "Verbindungen zwischen IT-Systemen",
+     "result-specification": "anhand dynamischer Kriterien",
+     "target-object-categories": [
+      "Netze"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "IT-Betriebskonzept"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "2",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "1",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.19",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.30"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "erhöht",
+     "effort": 5
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Software-definierte Verbindungen sind logisch kontrollierte Netzwerkpfade, deren Zugriffsbedingungen nicht statisch hinterlegt, sondern anhand aktueller Merkmale bewertet werden; dynamische Kriterien meint dabei festgelegte Filterregeln, deren Werte situativ ermittelt werden, etwa über „context attributes“ oder „dynamic policies“. Solche Merkmale können als contextual signals wie momentane Auslastung, Gerätezustand („device posture“) oder zeitliche Rahmenbedingungen interpretiert werden, während die zugrunde liegenden Regeln unverändert bleiben und nur ihre Bewertung variiert. Dies kann helfen, laterale Bewegungen einzudämmen und kann gleichzeitig unerwartete Zugriffe in veränderten Betriebszuständen abblocken; ein Angriff, der unentdeckt Systeme durchqueren könnte, oder ein kompromittierter Client, der außerhalb definierter Parameter agiert, könnte dadurch abgewehrt werden. Praktisch kann dies über segmentierende „Software-Defined Networking“-Mechanismen, kontextabhängige Firewall-Policies oder adaptive Access-Control-Engines erfolgen. Eine angemessene Absicherung ist hier zu verstehen als ein Bündel verlässlicher Signale, die den Zustand eines Endpunkts oder Dienstes authentisch widerspiegeln. Als Varianten kommen etwa kontextabhängige SDN-Flows, regelbasierte Mikrosegmentierung über Identity-Tags oder der Einsatz von Policy-Engines infrage, die ihre Entscheidungen anhand dynamisch erfasster Werte wie Geräteintegrität, Standort oder Risikobewertung fällen."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "e1e4bec9-8dc4-4062-a025-6ea70eedb9c9"
+  }
+ ]
+}

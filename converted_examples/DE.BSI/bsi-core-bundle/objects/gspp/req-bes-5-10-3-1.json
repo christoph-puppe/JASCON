@@ -1,0 +1,98 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/BES.5.10.3.1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "BES.5.10.3.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "Schwachstellenmeldeprozess"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "may",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Beschaffungsmanagement für IT-Produkte KANN einen Schwachstellenmeldeprozess nach {param:bes.5.10.3.1-prm1} vereinbaren."
+   },
+   "parameters": [
+    {
+     "name": "bes.5.10.3.1-prm1",
+     "type": "string",
+     "label": "einem anerkannten Standard"
+    }
+   ]
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "vereinbaren",
+     "result": "einen Schwachstellenmeldeprozess",
+     "result-specification": "nach {{einem anerkannten Standard}}",
+     "target-object-categories": [
+      "IT-Produkte"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Beschaffungskriterien"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "1",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.20"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "erhöht",
+     "effort": 5,
+     "tags": [
+      "Lieferketten"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Die Anforderung ist erfüllt, wenn der Prozess zur Meldung und Behandlung von Schwachstellen für das zu beschaffende Produkt vertraglich zugesichert ist, unabhängig von der Frage durch wen die Klausel in den Vertrag eingebracht wurde. Der Schwachstellenmeldeprozess kann direkt durch den Lieferanten oder durch Weitergabe der Verpflichtung an den Hersteller gewährleistet sein. Für Details siehe BSI TR-03183-3."
+     }
+    }
+   }
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "param-extras": {
+    "bes.5.10.3.1-prm1": {
+     "alt-identifier": "ebc08e41-e728-4447-93fa-233fbad7f2fa"
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "ebc08e41-e728-4447-93fa-233fbad7f2fa"
+  }
+ ]
+}

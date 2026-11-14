@@ -8,71 +8,71 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.1",
-   "sequence": 5630
+   "sequence": 8860
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.2",
-   "sequence": 5640
+   "sequence": 8870
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.3",
-   "sequence": 5650
+   "sequence": 8880
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.4",
-   "sequence": 5660
+   "sequence": 8890
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.5",
-   "sequence": 5670
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/not-4-5",
+   "sequence": 8930
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.6",
-   "sequence": 5680
+   "sequence": 8940
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.7",
-   "sequence": 5690
+   "sequence": 8950
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.8",
-   "sequence": 5700
+   "sequence": 8960
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.9",
-   "sequence": 5710
+   "sequence": 8970
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.10",
-   "sequence": 5720
+   "sequence": 8980
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.11",
-   "sequence": 5730
+   "sequence": 8990
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.12",
-   "sequence": 5740
+   "sequence": 9000
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.13",
-   "sequence": 5750
+   "sequence": 9010
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.14",
-   "sequence": 5760
+   "sequence": 9020
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.15",
-   "sequence": 5770
+   "sequence": 9030
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.16",
-   "sequence": 5780
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/not-4-16",
+   "sequence": 9060
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.17",
-   "sequence": 5790
+   "sequence": 9070
   }
  ],
  "label": "4",

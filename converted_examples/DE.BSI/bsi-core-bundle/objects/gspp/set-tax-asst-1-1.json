@@ -1,0 +1,26 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/asst-1-1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Verfahren und Regelungen"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.1.1",
+   "sequence": 1550
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.1.1.1",
+   "sequence": 1560
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.1.1.2",
+   "sequence": 1570
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.1.1.3",
+   "sequence": 1580
+  }
+ ]
+}

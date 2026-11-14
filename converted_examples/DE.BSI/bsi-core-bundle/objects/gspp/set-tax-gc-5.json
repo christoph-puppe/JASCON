@@ -7,8 +7,8 @@
  },
  "members": [
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/GC.5.1",
-   "sequence": 120
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/gc-5-1",
+   "sequence": 220
   }
  ],
  "label": "5",

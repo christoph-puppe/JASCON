@@ -1,0 +1,84 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/BES.1.3.1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "BES.1.3.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "Gesamte Lieferkette"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "may",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Beschaffungsmanagement für Einkäufe KANN die gesamte Lieferkette inklusive der jeweiligen Unterauftragnehmer und deren Kontaktdaten dokumentieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "dokumentieren",
+     "result": "die gesamte Lieferkette",
+     "result-specification": "inklusive der jeweiligen Unterauftragnehmer und deren Kontaktdaten",
+     "target-object-categories": [
+      "Einkäufe"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Liste der Hersteller und Dienstleister"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "erhöht",
+     "effort": 5,
+     "tags": [
+      "Lieferketten"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Sicherheitsvorfälle können nicht nur auf direkter Ebene entstehen, sondern werden häufig durch nachgelagerte Dienstleister oder Unterlieferanten verursacht – etwa wenn ein Unterauftragnehmer unzureichende Sicherheitsmaßnahmen umsetzt, kritische Softwarekomponenten fehlerhaft bezieht oder sensible Daten bei einem Subdienstleister unkontrolliert verarbeitet werden. Ein solches Ereignis könnte sich durch Lieferausfälle, den Einschleusung kompromittierter Hard- oder Software oder auch durch den Verlust von Betriebsgeheimnissen bemerkbar machen. Nur wenn eine Institution die gesamte Kette kennt, kann sie Schwachstellen lückenlos erkennen, Abhängigkeiten bewerten und im Bedarfsfall schneller reagieren, etwa indem bei Störungen alternative Bezugsquellen aktiviert werden. Die (ja fortlaufend zu gewährleistende) Dokumentation der gesamten Lieferkette ist allerdings auch mit großem Aufwand verbunden und setzt auch die Bereitschaft zur Mitwirkung in der gesamten Lieferkette voraus."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "4aa61c74-cb3e-42ee-8217-ed9cabe74c3b"
+  }
+ ]
+}

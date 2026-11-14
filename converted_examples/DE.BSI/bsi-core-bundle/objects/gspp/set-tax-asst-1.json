@@ -7,12 +7,12 @@
  },
  "members": [
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.1.1",
-   "sequence": 1000
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/asst-1-1",
+   "sequence": 1590
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ASST.1.2",
-   "sequence": 1010
+   "sequence": 1600
   }
  ],
  "label": "1",

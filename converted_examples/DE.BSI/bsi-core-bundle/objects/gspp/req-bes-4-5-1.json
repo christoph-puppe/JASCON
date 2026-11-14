@@ -1,0 +1,83 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/BES.4.5.1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "BES.4.5.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "Entwicklung nach einem Sicherheitslebenszyklus"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "may",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Beschaffungsmanagement für IT-Produkte KANN Nachweise zur Entwicklung nach einem Sicherheitslebenszyklus vereinbaren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "vereinbaren",
+     "result": "Nachweise zur Entwicklung nach einem Sicherheitslebenszyklus",
+     "target-object-categories": [
+      "IT-Produkte"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Beschaffungskriterien"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "1",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.20"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "erhöht",
+     "effort": 4,
+     "tags": [
+      "Lieferketten"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Ein Sicherheitslebenszyklus (engl. security development lifecycle, kurz SDL) besteht aus strukturierten Entwicklungsphasen, in denen Sicherheitsaspekte systematisch in Planung, Design, Implementierung, Test und Wartung eines IT-Produkts integriert werden. Solche Nachweise können etwa BSI-Zertifizierungen oder Dokumentationen einer vom Lieferanten unabhängigen Auditierung von Bedrohungsanalysen (threat modeling), sicheren Programmierpraktiken (secure coding guidelines), oder Ergebnissen von Penetrationstests umfassen. Ziel ist, nachprüfbar zu belegen, dass das Produkt nicht nur funktional, sondern auch sicherheitsseitig kontrolliert entwickelt wurde. Fehlt ein solcher Nachweis, könnte ein Produkt Schwachstellen enthalten, die später zu unbemerkten Manipulationen oder Datenabflüssen führen. Ein dokumentierter Sicherheitslebenszyklus kann dagegen Vertrauen in die Integrität, Belastbarkeit und Wartbarkeit eines Produkts schaffen. Die Vereinbarung entsprechender Nachweise kann beispielsweise über standardisierte Sicherheitsanforderungen in Ausschreibungsunterlagen, die Vorlage von Entwicklungsrichtlinien nach ISO/IEC 27034 oder NIST SP 800-218, oder die Anerkennung von Zertifikaten wie Common Criteria erfolgen. Alternativ kann die Institution bei kleineren Anbietern auch stichprobenartige Sicherheitsreviews, Entwicklerbefragungen oder Auditberichte als geeignete Nachweisvarianten akzeptieren."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "e6a52543-165f-4465-a59f-1928482a96c5"
+  }
+ ]
+}

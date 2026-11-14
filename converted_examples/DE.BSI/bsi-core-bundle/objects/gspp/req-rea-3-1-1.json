@@ -1,0 +1,78 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/REA.3.1.1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "REA.3.1.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "Quantitative Analyse"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Sicherheitsvorfallsbehandlung SOLLTE Erkenntnisse einschließlich Art, Umfang und Schäden des Vorfalls dokumentieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "dokumentieren",
+     "result": "Erkenntnisse",
+     "result-specification": "einschließlich Art, Umfang und Schäden des Vorfalls"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Behandlung von Sicherheitsvorfällen"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 4
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Die Erkenntnisse (findings) umfassen hier eine systematisch strukturierte Auswertung eines Informationssicherheitsvorfalls (security incident), wobei Art die konkrete Typisierung des Ereignisses meint (z.B. unbefugter Zugriff, Fehlkonfiguration, Manipulation), Umfang die tatsächlich betroffenen IT-Systeme, Daten oder Prozesse beschreibt (impact scope) und Schäden sowohl technische als auch betriebswirtschaftliche Beeinträchtigungen bezeichnet (damage bzw. loss). Solch strukturierte Informationen können helfen, wiederkehrende Angriffsmuster oder Probleme zu erkennen und so die Eintrittswahrscheinlichkeit oder das Schadensausmaß zukünftiger Vorfälle zu verringern, während unzureichend dokumentierte Erkenntnisse dazu führen könnte, dass Ursachen im Dunkeln bleiben oder Gegenmaßnahmen nicht auch auf zukünftige Vorfälle wirken können. In der praktischen Umsetzungbietet bietet es sich dazu an Incident-Reports zu erstellen, die sowohl eine quantiative Einordnung anhand von Klassifikationsschemata, als auch eine qualitative Beschreibung von Ursache und Gegenmaßnamen erfasst wird. Diese Berichte können beispielsweise in ein zentrales, revisionssicheres Register für Vorfallsdokumentationen oder herstellerneutralen Ticket- oder IR-Tools abgelegt werden."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "b2a6adf2-ffe3-4b9d-9678-e938e425cb58"
+  }
+ ]
+}

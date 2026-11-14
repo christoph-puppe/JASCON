@@ -16,43 +16,6 @@
    "prose": {
     "de": "Beschaffungsmanagement MUSS Verfahren und Regelungen zur Beschaffung von IT-Produkten und Dienstleistungen verankern."
    }
-  },
-  {
-   "id": "BES.1.1.1",
-   "modality": "must",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Beschaffungsmanagement MUSS die Verfahren und Regelungen dokumentieren."
-   }
-  },
-  {
-   "id": "BES.1.1.2",
-   "modality": "must",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Beschaffungsmanagement MUSS die mit den Verfahren und Regelungen verbundenen Aufgaben {param:bes.1.1.2-prm1} zuweisen."
-   },
-   "parameters": [
-    {
-     "name": "bes.1.1.2-prm1",
-     "type": "string",
-     "label": "zuständigen Personen oder Rollen"
-    }
-   ]
-  },
-  {
-   "id": "BES.1.1.3",
-   "modality": "must",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Beschaffungsmanagement MUSS die zuständigen Personen oder Rollen über die Verfahren und Regelungen informieren."
-   }
   }
  ],
  "facets": {
@@ -61,19 +24,6 @@
     "smt": {
      "action": "verankern",
      "result": "Verfahren und Regelungen zur Beschaffung von IT-Produkten und Dienstleistungen"
-    },
-    "BES.1.1.1": {
-     "action": "dokumentieren",
-     "result": "die Verfahren und Regelungen"
-    },
-    "BES.1.1.2": {
-     "action": "zuweisen",
-     "result": "die mit den Verfahren und Regelungen verbundenen Aufgaben",
-     "result-specification": "{{zuständigen Personen oder Rollen}}"
-    },
-    "BES.1.1.3": {
-     "action": "informieren",
-     "result": "die zuständigen Personen oder Rollen über die Verfahren und Regelungen"
     }
    }
   },
@@ -82,21 +32,6 @@
     "smt": {
      "required-documentation": [
       "Prozess Beschaffung"
-     ]
-    },
-    "BES.1.1.1": {
-     "required-documentation": [
-      "IT-Betriebskonzept"
-     ]
-    },
-    "BES.1.1.2": {
-     "required-documentation": [
-      "Geschäftsverteilungsplan"
-     ]
-    },
-    "BES.1.1.3": {
-     "required-documentation": [
-      "IT-Betriebskonzept"
      ]
     }
    }
@@ -111,36 +46,6 @@
      "threat-refs": [
       "https://ns.bsi.bund.de/gspp/threat/G-0.18"
      ]
-    },
-    "BES.1.1.1": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "1",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.37"
-     ]
-    },
-    "BES.1.1.2": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.31"
-     ]
-    },
-    "BES.1.1.3": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.31"
-     ]
     }
    }
   },
@@ -153,27 +58,6 @@
      "tags": [
       "Lieferketten"
      ]
-    },
-    "BES.1.1.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 0,
-     "title": "Dokumentation",
-     "alt-identifier": "8eb5586d-0d76-4ed4-b300-9ca657839eac"
-    },
-    "BES.1.1.2": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 0,
-     "title": "Zuweisung der Aufgaben",
-     "alt-identifier": "6412af95-f83a-4b0c-ba66-edcecfaafd85"
-    },
-    "BES.1.1.3": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 0,
-     "title": "Bekanntgabe",
-     "alt-identifier": "d94fc3e4-589a-4395-97e3-fd9152540248"
     }
    }
   },
@@ -183,28 +67,6 @@
      "guidance": {
       "de": "Relevant sind hierbei sowohl Beschaffungen von Produkten und Dienstleistungen für den internen Betrieb als auch Verträge bei denen Informationen für die Institution extern verarbeitet werden, z.B. Cloud-Dienstleistungen. Die bei der Festlegung des Verfahrens im Einzelnen zu berücksichtigenden Inhalte ergeben sich aus den Anforderungen dieser Praktik."
      }
-    },
-    "BES.1.1.1": {
-     "guidance": {
-      "de": "Ohne eine Dokumentation könnte die Einhaltung der Verfahren und Regelungen von der Tagesform oder dem individuellen Wissen einzelner Mitarbeiter abhängen, was zu inkonsistenten Entscheidungen und Fehlern führen könnte; insbesondere beim Ausscheiden eines langjährigen Administrators könnte wertvolles prozessuales Wissen verloren gehen. Eine klare Dokumentation sichert die Verbindlichkeit und Wiederholbarkeit und dient als unverzichtbare Grundlage für die Einarbeitung neuer Kollegen, für die Durchführung von Audits und zur einheitlichen Anwendung der Regeln in der gesamten Institution. Die Dokumentation kann in einem eigenständigen Dokument als Richtlinie erfolgen, aber auch als Abschnitt in einem bereits bestehenden Dokument oder über die digital strukturiere Erfassung von Maßnahmen zur Umsetzung der Anforderungen, etwa über eine Software zum Management der Informationssicherheit. Sinnvoll ist es Ort und Struktur der Dokumentation an der jeweiligen Zielgruppe, d.h. den für das Management und die Umsetzung verantwortlichen Personen oder Rollen, auszurichten."
-     }
-    },
-    "BES.1.1.2": {
-     "guidance": {
-      "de": "Die Zuweisung von Aufgaben bezeichnet die eindeutige und verbindliche Übertragung von konkreten Tätigkeiten und Verantwortlichkeiten des Änderungsprozesses, wie etwa die Risikobewertung, die technische Umsetzung oder die finale Freigabe, an definierte Stellen in der Institution. Der Sinn dieser Vorschrift ist es, die Verantwortlichkeit (\"Accountability\") für jeden einzelnen Schritt im Prozess klarzustellen. Ohne eine solche Zuweisung könnten kritische Prüfungen unterbleiben, weil sich niemand explizit zuständig fühlt, was wiederum die Wahrscheinlichkeit fehlgeschlagener Änderungen erhöht. Eine klare Regelung kann sicherstellen, dass keine Aufgaben übersehen werden und jede Tätigkeit von einer dafür qualifizierten und befugten Stelle ausgeführt wird, was die Prozesssicherheit signifikant erhöht. Eine bewährte Methode zur Umsetzung ist die Erstellung einer RACI-Matrix (Responsible, Accountable, Consulted, Informed), die tabellarisch für jeden Prozessschritt darstellt, wer für die Durchführung verantwortlich ist, wer die Gesamtverantwortung trägt, wer zu konsultieren und wer zu informieren ist. Diese Zuständigkeiten können auch direkt in einem Workflow- oder Ticketsystem abgebildet werden, sodass Aufgaben, wie beispielsweise Genehmigungsschritte, automatisch an die richtige Gruppe oder Person weitergeleitet werden. Sinnvoll ist es die Zuweisung anhand von Rollen (z.B. \"Anwendungsverantwortlicher\", \"Netzwerkadministrator\", \"Change Manager\") vorzunehmen, statt an konkrete Personen. Dieser Ansatz stellt sicher, dass die Prozesse auch bei Personalwechseln stabil weiterlaufen, da die Zuständigkeit an die Funktion und nicht an das Individuum gebunden ist."
-     }
-    },
-    "BES.1.1.3": {
-     "guidance": {
-      "de": "Wenn die Zuständigen die etablierten Verfahren nicht kennen, besteht die Gefahr, dass diese – sei es aus Unwissenheit oder Bequemlichkeit – umgangen werden, was die Schutzwirkung des gesamten Managementsystems untergräbt. So könnte ein neuer Systemadministrator eine weitreichende Konfigurationsänderung vornehmen, ohne den vorgeschriebenen Genehmigungsprozess zu durchlaufen, was zu einem unbemerkten Sicherheitsrisiko führen könnte. Eine gezielte Information kann hingegen die Akzeptanz der Regelungen fördern und sicherstellen, dass alle Beteiligten ihre Rolle im Prozess verstehen und die Abläufe korrekt anwenden. Zur Umsetzung ist es sinnvoll die Dokumentation im Rahmen eines Onboarding-Prozesses bekanntzugeben und bei allen Änderungen eine automatische Benachrichtigung aller zuständigen Personen oder Rollen anzustoßen."
-     }
-    }
-   }
-  },
-  "https://ns.jascon.net/compat/oscal-1x@1": {
-   "param-extras": {
-    "bes.1.1.2-prm1": {
-     "alt-identifier": "6412af95-f83a-4b0c-ba66-edcecfaafd85"
     }
    }
   }

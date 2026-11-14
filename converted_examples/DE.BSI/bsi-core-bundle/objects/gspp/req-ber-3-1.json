@@ -16,16 +16,6 @@
    "prose": {
     "de": "Berechtigung SOLLTE eine Vorgehensweise zur initialen Ausgabe von Authentifizierungsmitteln verankern."
    }
-  },
-  {
-   "id": "BER.3.1.1",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Berechtigung SOLLTE vor der Verteilung von Authentifizierungsmitteln die Identität authentifizieren."
-   }
   }
  ],
  "facets": {
@@ -34,21 +24,12 @@
     "smt": {
      "action": "verankern",
      "result": "eine Vorgehensweise zur initialen Ausgabe von Authentifizierungsmitteln"
-    },
-    "BER.3.1.1": {
-     "action": "authentifizieren",
-     "result": "vor der Verteilung von Authentifizierungsmitteln die Identität"
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "by-statement": {
     "smt": {
-     "required-documentation": [
-      "IT-Betriebskonzept"
-     ]
-    },
-    "BER.3.1.1": {
      "required-documentation": [
       "IT-Betriebskonzept"
      ]
@@ -65,15 +46,6 @@
      "threat-refs": [
       "https://ns.bsi.bund.de/gspp/threat/G-0.36"
      ]
-    },
-    "BER.3.1.1": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "0",
-     "authenticity": "2",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.36"
-     ]
     }
    }
   },
@@ -83,13 +55,6 @@
      "class": "BSI-Stand-der-Technik-Kernel-G0",
      "sec-level": "normal-SdT",
      "effort": 2
-    },
-    "BER.3.1.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 2,
-     "title": "Initiale Ausgabe",
-     "alt-identifier": "46f20b63-b07f-4c25-bdcc-b58239432290"
     }
    }
   },
@@ -98,11 +63,6 @@
     "smt": {
      "guidance": {
       "de": "Die initiale Ausgabe von Authentifizierungsmitteln ist die erstmalige, kontrollierte Bereitstellung von Mitteln, mit denen eine natürliche Person oder ein technischer Dienst seine Identität nachweisen kann; hierzu zählen beispielsweise Passwörter oder Einmalpasswörter, Hardware- oder Software-Token, Smartcards, Zertifikate, kryptografische Schlüssel, Passkeys, initiale MFA-Faktoren sowie Aktivierungs- oder Registrierungsinformationen (engl. authentication credentials, authentication factors, authenticators). Die Vorgehensweise zur initialen Ausgabe umfasst dabei insbesondere die nachvollziehbare Feststellung der berechtigten empfangenden Person oder Instanz, die Zuordnung zum vorgesehenen Zugangskonto oder Berechtigungsumfang, einen geschützten Übergabeweg, die Vermeidung unkontrollierter Mehrfachausgaben sowie eine dokumentierbare Bestätigung, dass das Authentifizierungsmittel nur der vorgesehenen empfangenden Stelle zugänglich gemacht wurde.  Sinn und Zweck der Vorschrift ist, bereits beim ersten Zugang zu verhindern, dass Authentifizierungsmittel an falsche, nicht hinreichend identifizierte oder nicht mehr berechtigte Empfänger gelangen; andernfalls könnte ein Konto von Beginn an kompromittiert, ein Initialpasswort abgefangen, ein Token an eine falsche Person ausgegeben oder ein Zertifikat missbräuchlich zur Anmeldung verwendet werden."
-     }
-    },
-    "BER.3.1.1": {
-     "guidance": {
-      "de": "Identität meint hier die natürliche Person, Gruppe, Rolle, Anwendung oder das IT-System, welches das Authentifizierungsmittel erhält. Verteilung meint hier die initiale Ausgabe, Weiterleitung oder Speicherung des Authentifizierungsfaktors, z.B. die Ausgabe eines initialen Passwortes an Nutzende oder die Speicherung eines X.509-Zertifikates zu einem neuen Hostsystem als vertrauenswürdig in einem Trust Store."
      }
     }
    }

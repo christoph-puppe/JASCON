@@ -16,26 +16,6 @@
    "prose": {
     "de": "Beschaffungsmanagement für Einkäufe SOLLTE die Auswahl von Lieferanten anhand von Kriterien zu ihrer Verlässlichkeit verankern."
    }
-  },
-  {
-   "id": "BES.3.2.1",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Beschaffungsmanagement für Einkäufe KANN die Auswahl von Lieferanten anhand von Zertifikaten, Testaten oder Vergleichbarem verankern."
-   }
-  },
-  {
-   "id": "BES.3.2.2",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Beschaffungsmanagement für Einkäufe KANN die Auswahl von Lieferanten anhand ihrer Fähigkeit, ihre Bezugsquellen zu diversifizieren und die Bindung an bestimmte Lieferanten zu begrenzen, verankern."
-   }
   }
  ],
  "facets": {
@@ -48,38 +28,12 @@
      "target-object-categories": [
       "Einkäufe"
      ]
-    },
-    "BES.3.2.1": {
-     "action": "verankern",
-     "result": "die Auswahl von Lieferanten",
-     "result-specification": "anhand von Zertifikaten, Testaten oder Vergleichbarem",
-     "target-object-categories": [
-      "Einkäufe"
-     ]
-    },
-    "BES.3.2.2": {
-     "action": "verankern",
-     "result": "die Auswahl von Lieferanten",
-     "result-specification": "anhand ihrer Fähigkeit, ihre Bezugsquellen zu diversifizieren und die Bindung an bestimmte Lieferanten zu begrenzen,",
-     "target-object-categories": [
-      "Einkäufe"
-     ]
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "by-statement": {
     "smt": {
-     "required-documentation": [
-      "Beschaffungskriterien"
-     ]
-    },
-    "BES.3.2.1": {
-     "required-documentation": [
-      "Beschaffungskriterien"
-     ]
-    },
-    "BES.3.2.2": {
      "required-documentation": [
       "Beschaffungskriterien"
      ]
@@ -96,24 +50,6 @@
      "threat-refs": [
       "https://ns.bsi.bund.de/gspp/threat/G-0.18"
      ]
-    },
-    "BES.3.2.1": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
-     ]
-    },
-    "BES.3.2.2": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.11"
-     ]
     }
    }
   },
@@ -127,26 +63,6 @@
       "Lieferketten",
       "Advanced Persistent Threats (APT)"
      ]
-    },
-    "BES.3.2.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5,
-     "tags": [
-      "Lieferketten"
-     ],
-     "title": "Zertifizierte Lieferanten",
-     "alt-identifier": "66e8a313-c8cf-48e2-b04e-98013c2c9243"
-    },
-    "BES.3.2.2": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5,
-     "tags": [
-      "Lieferketten"
-     ],
-     "title": "Quellendiversifikation",
-     "alt-identifier": "6d1954f0-d3b8-4c4b-84bc-b0586d0d6476"
     }
    }
   },
@@ -155,16 +71,6 @@
     "smt": {
      "guidance": {
       "de": "Beispielsweise durch Marktanalysen, Kundenreferenzen, Zertifizierungen, Begutachtungen oder Audits. Hierzu können z.B. Entwicklungsprozesse, Verschlüsselung oder Anonymisierung vertraulicher Daten, Schlüsselmanagement, Authentifizierung von Zugriffen, Wiederherstellung nach Vorfällen oder die Evaluation der sicheren Verarbeitung gehören. Auch die Prüfung auf finanzielle Stabilität des Lieferanten ist zu empfehlen. Ein finanziell instabiler Lieferant stellt ein erhebliches Risiko für die Geschäftskontinuität dar, da er möglicherweise den Betrieb einstellt, Supportleistungen nicht mehr erbringen kann oder von einem Unternehmen mit unklaren Sicherheitsstandards übernommen wird."
-     }
-    },
-    "BES.3.2.1": {
-     "guidance": {
-      "de": "Ein „Zertifikat“ ist in diesem Kontext ein formaler Nachweis durch eine akkreditierte, unabhängige Stelle, dass bestimmte Anforderungen oder Standards erfüllt werden (z. B. ISO/IEC-Normen). Ein „Testat“ kann die schriftliche Bestätigung einer fachkundigen Prüfstelle darstellen, dass ein Prozess oder System in definierten Punkten geprüft und als konform bewertet wurde. Vergleichbare Nachweise können Berichte von Audits, externe Gutachten oder auch dokumentierte Ergebnisse standardisierter Sicherheitstests sein. Eine Institution kann die Anforderung konkret umsetzen, indem sie in Ausschreibungen eine Liste akzeptierter Zertifikate (z. B. ISO 27001, ISO 9001, SOC 2), Testate (z. B. C5 für Cloud-Dienste) oder vergleichbarer Nachweise (z. B. Penetrationstest-Reports durch Dritte) benennt. Hilfreich kann es sein, Mindestgültigkeitszeiträume für Nachweise zu definieren, stichprobenartige Plausibilitätsprüfungen der Dokumente vorzunehmen oder in Bewertungsmatrizen höhere Gewichtungspunkte für aktuelle und unabhängige Nachweise zu vergeben. Zusätzlich kann ein einfacher Maßnahmenkatalog etabliert werden, der (1) überprüft, ob Nachweise aktuell und gültig sind, (2) die Relevanz für den konkreten Leistungsumfang bewertet und (3) die Ergebnisse nachvollziehbar dokumentiert, um Entscheidungen transparent und revisionssicher zu halten."
-     }
-    },
-    "BES.3.2.2": {
-     "guidance": {
-      "de": "Die Fähigkeit zur Diversifizierung von Bezugsquellen bedeutet in diesem Kontext, dass ein Lieferant nicht ausschließlich auf einzelne Hersteller, Produzenten oder Märkte angewiesen ist, sondern alternative Beschaffungswege vorweisen kann. Die Bindung an bestimmte Lieferanten beschreibt eine Abhängigkeit, bei der zentrale Produkte oder Dienstleistungen faktisch nur von wenigen oder gar einem Anbieter bezogen werden können. Der Sinn dieser Anforderung liegt darin, die Risiken eines Vendor lock-in auf Seiten des Lieferanten zu begrenzen: Könnte ein Lieferant aufgrund geopolitischer Spannungen, wirtschaftlicher Probleme oder technischer Abkündigungen sich nicht mehr auf seine Zulieferer verlassen, so könnt er möglicherweise seine Leistungen nicht mehr erbringen, wodurch die Institution ohne Alternativen möglicherweise gravierende Ausfälle erleiden würde. Eine bewusste Auswahl nach Diversifizierungsfähigkeit kann die Versorgungssicherheit erhöhen und kritische Engpässe vermeiden."
      }
     }
    }

@@ -7,12 +7,12 @@
  },
  "members": [
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.1.1",
-   "sequence": 5510
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/not-1-1",
+   "sequence": 8690
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/NOT.1.2",
-   "sequence": 5520
+   "sequence": 8700
   }
  ],
  "label": "1",

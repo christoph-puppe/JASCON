@@ -1,0 +1,106 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/ASST.7.3.1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "ASST.7.3.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "Standardisierte Vernichtung"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Informationen und Assets für Daten SOLLTE ein standardisiertes Verfahren zur Vernichtung bei Veräußerung nach {param:asst.7.3.1-prm1} gemäß {param:asst.7.3.1-prm2} verankern."
+   },
+   "parameters": [
+    {
+     "name": "asst.7.3.1-prm1",
+     "type": "string",
+     "label": "einem anerkannten Standard"
+    },
+    {
+     "name": "asst.7.3.1-prm2",
+     "type": "string",
+     "label": "einer Sicherheitsstufe"
+    }
+   ]
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "verankern",
+     "result": "ein standardisiertes Verfahren zur Vernichtung bei Veräußerung",
+     "result-specification": "nach {{einem anerkannten Standard}} gemäß {{einer Sicherheitsstufe}}",
+     "target-object-categories": [
+      "Daten"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "IT-Betriebskonzept"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "2",
+     "integrity": "0",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.19",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.45",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.16",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.38"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 3
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Anerkannte Standards für die Vernichtung sind DIN 66399 sowie ISO/IEC 21964; die Sicherheitsstufe beschreibt die Intensität der Vernichtung, wobei eine möglichst kleinteilige Zerkleinerung die Wahrscheinlichkeit einer Rekonstruktion aus Fragmenten minimiert. Die konkrete Vorgehensweise richtet sich nach der Art des Speichermediums: Papier wird nach Sicherheitsstufe P-3 gemäß ISO/IEC 21964-2 vernichtet, optische Speichermedien nach Sicherheitsstufe O-3 gemäß ISO/IEC 21964-2 und sonstige Speichermedien nach Sicherheitsstufe E-3 oder H-3 gemäß ISO/IEC 21964-2. Für Speichermedien, die vor der Nutzung vollständig verschlüsselt waren und deren kryptografische Schlüssel unwiederbringlich gelöscht wurden, ist eine physische Vernichtung nicht erforderlich."
+     }
+    }
+   }
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "param-extras": {
+    "asst.7.3.1-prm1": {
+     "alt-identifier": "93178616-6931-48e6-aee7-d51742868d4f"
+    },
+    "asst.7.3.1-prm2": {
+     "alt-identifier": "93178616-6931-48e6-aee7-d51742868d4f"
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "93178616-6931-48e6-aee7-d51742868d4f"
+  }
+ ]
+}

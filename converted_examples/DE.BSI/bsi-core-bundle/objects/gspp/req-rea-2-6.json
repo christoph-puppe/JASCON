@@ -16,66 +16,6 @@
    "prose": {
     "de": "Sicherheitsvorfallsbehandlung SOLLTE eine Vorgehensweise zur Ursachenanalyse und Behandlung verankern."
    }
-  },
-  {
-   "id": "REA.2.6.1",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Sicherheitsvorfallsbehandlung SOLLTE die zur Behandlung durchgeführten Tätigkeiten dokumentieren."
-   }
-  },
-  {
-   "id": "REA.2.6.2",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Sicherheitsvorfallsbehandlung SOLLTE eine Vorgehensweise zur Kommunikation bei Vorfällen unter Berücksichtigung von Compliance-Verpflichtungen, Bedürfnissen der interessierten Parteien und der Geschäftsziele verankern."
-   }
-  },
-  {
-   "id": "REA.2.6.2.1",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Sicherheitsvorfallsbehandlung SOLLTE bei Vorfällen die zuständigen Behörden im Einklang mit den Compliance-Verpflichtungen informieren."
-   }
-  },
-  {
-   "id": "REA.2.6.3",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Sicherheitsvorfallsbehandlung SOLLTE die Koordinierung bei Vorfällen verankern."
-   }
-  },
-  {
-   "id": "REA.2.6.4",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Sicherheitsvorfallsbehandlung KANN Service Level verankern."
-   }
-  },
-  {
-   "id": "REA.2.6.5",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Sicherheitsvorfallsbehandlung SOLLTE eine Eskalationsleiter verankern."
-   }
   }
  ],
  "facets": {
@@ -84,32 +24,6 @@
     "smt": {
      "action": "verankern",
      "result": "eine Vorgehensweise zur Ursachenanalyse und Behandlung"
-    },
-    "REA.2.6.1": {
-     "action": "dokumentieren",
-     "result": "die zur Behandlung durchgeführten Tätigkeiten"
-    },
-    "REA.2.6.2": {
-     "action": "verankern",
-     "result": "eine Vorgehensweise zur Kommunikation bei Vorfällen",
-     "result-specification": "unter Berücksichtigung von Compliance-Verpflichtungen, Bedürfnissen der interessierten Parteien und der Geschäftsziele"
-    },
-    "REA.2.6.2.1": {
-     "action": "informieren",
-     "result": "bei Vorfällen die zuständigen Behörden",
-     "result-specification": "im Einklang mit den Compliance-Verpflichtungen"
-    },
-    "REA.2.6.3": {
-     "action": "verankern",
-     "result": "die Koordinierung bei Vorfällen"
-    },
-    "REA.2.6.4": {
-     "action": "verankern",
-     "result": "Service Level"
-    },
-    "REA.2.6.5": {
-     "action": "verankern",
-     "result": "eine Eskalationsleiter"
     }
    }
   },
@@ -119,108 +33,12 @@
      "required-documentation": [
       "Arbeitsanweisung"
      ]
-    },
-    "REA.2.6.1": {
-     "required-documentation": [
-      "Behandlung von Sicherheitsvorfällen"
-     ]
-    },
-    "REA.2.6.2": {
-     "required-documentation": [
-      "Behandlung von Sicherheitsvorfällen"
-     ]
-    },
-    "REA.2.6.2.1": {
-     "required-documentation": [
-      "Behandlung von Sicherheitsvorfällen"
-     ]
-    },
-    "REA.2.6.3": {
-     "required-documentation": [
-      "Behandlung von Sicherheitsvorfällen"
-     ]
-    },
-    "REA.2.6.4": {
-     "required-documentation": [
-      "Behandlung von Sicherheitsvorfällen"
-     ]
-    },
-    "REA.2.6.5": {
-     "required-documentation": [
-      "Behandlung von Sicherheitsvorfällen"
-     ]
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
    "by-statement": {
     "smt": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.39",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.47",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.23",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.40"
-     ]
-    },
-    "REA.2.6.1": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.39",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.47",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.37"
-     ]
-    },
-    "REA.2.6.2": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.39",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.47"
-     ]
-    },
-    "REA.2.6.2.1": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.39",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.47"
-     ]
-    },
-    "REA.2.6.3": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.39",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.47",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.23",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.40"
-     ]
-    },
-    "REA.2.6.4": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.39",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.47"
-     ]
-    },
-    "REA.2.6.5": {
      "confidentiality": "1",
      "integrity": "1",
      "availability": "1",
@@ -240,54 +58,6 @@
      "class": "BSI-Stand-der-Technik-Kernel-G0",
      "sec-level": "normal-SdT",
      "effort": 2
-    },
-    "REA.2.6.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 3,
-     "title": "Dokumentation des Vorgehens",
-     "alt-identifier": "0dec7e28-dd82-46b2-9128-f520d7d24c3c"
-    },
-    "REA.2.6.2": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 3,
-     "tags": [
-      "Kontakt mit Behörden"
-     ],
-     "title": "Kommunikation bei Vorfällen",
-     "alt-identifier": "5af2ba47-33f4-4623-a519-e0f727596890"
-    },
-    "REA.2.6.2.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 3,
-     "tags": [
-      "Kontakt mit Behörden"
-     ],
-     "title": "Information zuständiger Behörden",
-     "alt-identifier": "d0c11aa7-cae9-48ca-b4a6-734b0adf336f"
-    },
-    "REA.2.6.3": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 3,
-     "title": "Koordinierung",
-     "alt-identifier": "4d71c3c6-52f6-44bc-97db-3df446665918"
-    },
-    "REA.2.6.4": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5,
-     "title": "Service Level",
-     "alt-identifier": "21a311d8-46eb-4844-b6ae-7ec7597fb124"
-    },
-    "REA.2.6.5": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 4,
-     "title": "Eskalation",
-     "alt-identifier": "5e9084e2-adb6-417d-b4fb-59735ac5aae9"
     }
    }
   },
@@ -296,26 +66,6 @@
     "smt": {
      "guidance": {
       "de": "Um einen Vorfall vollständig beheben zu können, ist es zweckmäßig, zunächst zu analysieren, wie der Vorfall zustande kam (Root Cause Analysis): Welche Personen und Systeme sind betroffen? Welche systematischen Schwachstellen haben zu dem Vorfall geführt? Die Behebung des Vorfalls orientiert sich dann an diesen Erkenntnissen, z.B. durch Schließen der Sicherheitslücken und Wiederherstellung von Daten und Anwendungen.  Je nach Vorfall kann die Behandlung durch das Schließen ausgenutzter Sicherheitslücken, einem Test anderer IT-Systeme auf vergleichbare Schwachstellen oder dem Austausch betroffener IT-Systeme, Anwendungen oder Datenbestände umgesetzt werden. Sind die Originaldaten oder -Systeme nicht mehr zu retten, so kann die Neuinstallation betroffener Systeme und die Wiederherstellung von Daten aus Backups eine Möglichkeit der Behandlung sein."
-     }
-    },
-    "REA.2.6.2": {
-     "guidance": {
-      "de": "Hierzu gehören beispielsweise Meldepflichten gegenüber Aufsichts- oder Ermittlungsbehörden oder die Information Betroffener. Für personenbezogene Daten siehe auch Art. 34 DSGVO. Für weitere Details siehe ISO/IEC 27035.  Bei den Compliance-Verpflichtungen sind einerseits Verpflichtungen zu beachten, die eine Meldung oder einen bestimmten Umfang für Meldungen fordern (z.B. Art. 33 DSGVO), andererseits aber auch Verpflichtungen zur Wahrung der Vertraulichkeit, z.B. aus dem Datenschutz, vertraglicher Pflichten zur Wahrung fremder Geschäftsgeheimnisse oder der staatlichen Geheimhaltung. Im Zweifelsfall ist hier die Inanspruchnahme interner oder externer Rechtsberatung hier empfehlenswert."
-     }
-    },
-    "REA.2.6.3": {
-     "guidance": {
-      "de": "Die Koordinierung der Behandlung von Sicherheitsvorfällen dient dazu, die Auswirkungen auf Daten, Systeme oder Personen zu minimieren, Compliance-Verpflichtungen zu erfüllen und die Wirksamkeit von Gegenmaßnahmen zu verstärken.  Hierzu gehören interessierte Parteien wie Aufsichts- und Ermittlungsbehörden, Lieferanten oder Kunden. Für weitere Details siehe ISO/IEC 27035."
-     }
-    },
-    "REA.2.6.4": {
-     "guidance": {
-      "de": "Service Level bei der Sicherheitsvorfallsbehandlung legen verbindliche Zielvorgaben für Reaktions- und Bearbeitungszeiten fest, z. B. wie schnell ein Sicherheitsvorfall erkannt, bestätigt, eingestuft und gelöst werden muss. Damit wird sichergestellt, dass alle Beteiligten klare Erwartungen an Schnelligkeit und Qualität der Reaktion haben."
-     }
-    },
-    "REA.2.6.5": {
-     "guidance": {
-      "de": "Eine Eskalationsleiter (engl. escalation matrix oder escalation path) bezeichnet in diesem Kontext eine festgelegte Reihenfolge von Melde- und Entscheidungsstufen, die im Falle eines Sicherheitsvorfalls eingehalten wird, um eine zeitgerechte und angemessene Reaktion sicherzustellen. Sie definiert, welche Rollen oder Funktionen bei bestimmten Schweregraden eines Vorfalls informiert, einbezogen oder zur Entscheidung befugt sind. Der Begriff ist hier prozessual zu verstehen, also nicht als hierarchische Personalstruktur, sondern als abgestufter Kommunikations- und Entscheidungsmechanismus innerhalb des Sicherheitsvorfallsprozesses. Der Zweck einer solchen Eskalationsleiter liegt darin, dass sicherheitsrelevante Ereignisse nicht auf operativer Ebene „steckenbleiben“, sondern in ihrer Kritikalität und potenziellen Auswirkung auf höhere Entscheidungsebenen eskaliert werden können. Dadurch kann verhindert werden, dass etwa ein anhaltender Systemausfall, ein möglicher Datenabfluss oder ein Angriff auf kritische Systeme unbemerkt bleibt oder verspätet adressiert wird. Eine wirksam verankerte Eskalationsleiter kann somit sicherstellen, dass die Reaktionszeit kurz, die Zuständigkeiten eindeutig und die Kommunikation nachvollziehbar bleiben. Hier empfiehlt es sich die Anforderung im Zusammenhang mit Notfallplänen, Krisenmanagement und Business Continuity Management zu betrachten – siehe auch Praktik Notfallplanung. Beispiele für Eskalationsstufen: (1) Ereignis, (2) sicherheitsrelevantes Ereignis, (3) sicherheitskritisches Ereignis, (4) Sicherheitsvorfall, (5) Notfall (siehe Notfallplanung), (6) Krise. Die Einstufung erfolgt entsprechend der Definition, die jede Institution für sich festlegt."
      }
     }
    }

@@ -1,0 +1,98 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/GEB.10.2.7",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "GEB.10.2.7",
+ "lifecycle": "active",
+ "title": {
+  "de": "Brandschutzprüfung"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Gebäudemanagement für Standorte SOLLTE die Wirksamkeit der Brandschutzmaßnahmen {param:geb.10.2.7-prm1} überprüfen."
+   },
+   "parameters": [
+    {
+     "name": "geb.10.2.7-prm1",
+     "type": "string",
+     "label": "regelmäßig"
+    }
+   ]
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "überprüfen",
+     "result": "die Wirksamkeit der Brandschutzmaßnahmen",
+     "result-specification": "{{regelmäßig}}",
+     "target-object-categories": [
+      "Standorte"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Übungs- und Prüfplan"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 3,
+     "tags": [
+      "Inspektion"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Eine regelmäßige Überprüfung von Brandmeldeanlagen, Rauchmeldern und organisatorische Maßnahmen stellt sicher, dass diese weiterhin funktionieren.  Hier besteht ein enger Zusammenhang zu Compliance-Verpflichtungen, die Brandschutzprüfungen fordern."
+     }
+    }
+   }
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "param-extras": {
+    "geb.10.2.7-prm1": {
+     "alt-identifier": "3b904a6b-c440-4360-ab4a-37b76fc639a7"
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "3b904a6b-c440-4360-ab4a-37b76fc639a7"
+  }
+ ]
+}

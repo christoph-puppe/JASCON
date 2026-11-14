@@ -1,0 +1,34 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/rea-2-6",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Ursachenanalyse und Behandlung"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/REA.2.6",
+   "sequence": 10300
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/REA.2.6.1",
+   "sequence": 10310
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/rea-2-6-2",
+   "sequence": 10340
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/REA.2.6.3",
+   "sequence": 10350
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/REA.2.6.4",
+   "sequence": 10360
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/REA.2.6.5",
+   "sequence": 10370
+  }
+ ]
+}

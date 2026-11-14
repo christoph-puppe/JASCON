@@ -8,31 +8,31 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/vrb-1",
-   "sequence": 620
+   "sequence": 990
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/vrb-2",
-   "sequence": 650
+   "sequence": 1020
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/vrb-3",
-   "sequence": 670
+   "sequence": 1040
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/vrb-4",
-   "sequence": 700
+   "sequence": 1070
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/vrb-5",
-   "sequence": 720
+   "sequence": 1090
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/vrb-6",
-   "sequence": 750
+   "sequence": 1120
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/vrb-7",
-   "sequence": 770
+   "sequence": 1140
   }
  ],
  "label": "VRB",

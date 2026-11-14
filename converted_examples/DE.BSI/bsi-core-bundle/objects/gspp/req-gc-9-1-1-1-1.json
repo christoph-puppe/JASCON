@@ -1,0 +1,55 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/GC.9.1.1.1.1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "GC.9.1.1.1.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "Ressourcen für den Informationssicherheitsbeauftragten"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "must",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Governance und Compliance MUSS dem Informationssicherheitsbeauftragten hinreichende Ressourcen zuweisen."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "zuweisen",
+     "result": "dem Informationssicherheitsbeauftragten hinreichende Ressourcen"
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Methodik-Grundschutz-plus-plus",
+     "sec-level": "normal-SdT",
+     "effort": 0
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Zu den Aufgaben des ISB gehören beispielsweise die Beratung der Institutionsleitung zur Informationssicherheit, die Koordinierung der Erstellung von Richtlinien und Sicherheitskonzepten und die Untersuchung von Sicherheitsvorfällen. Ohne ausreichende Ressourcen, können diese Aufgaben nicht wirksam und nachhaltig wahrgenommen werden, was zu Sicherheitsrisiken führen kann. In kleinen Institutionen kann die Funktion des ISB auch von einem qualifizierten Mitarbeiter neben anderen Aufgaben wahrgenommen werden. Maßgeblich ist, dass dem ISB ausreichend Zeit für seine Aufgaben zugebilligt wird und er in keinem Interessenskonflikt mit anderen Aufgaben steht. In größeren Instituionen kann ein höherer Bedarf an Personal- und Sachkosten erforderlich sein."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "b04f2734-0b3f-400f-92cb-08a49fb2960f"
+  }
+ ]
+}

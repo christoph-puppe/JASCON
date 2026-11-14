@@ -1,0 +1,83 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/ASST.2.3.2",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "ASST.2.3.2",
+ "lifecycle": "active",
+ "title": {
+  "de": "Software Bill of Materials (SBOM)"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Informationen und Assets für Anwendungen SOLLTE die Software Bill of Materials (SBOM) dokumentieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "dokumentieren",
+     "result": "die Software Bill of Materials (SBOM)",
+     "target-object-categories": [
+      "Anwendungen"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Inventar Anwendungen"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "2",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.16",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.17",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.45"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 4
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Eine Software Bill of Materials (SBOM) ist in diesem Zusammenhang eine strukturierte Liste aller Komponenten, Bibliotheken und Abhängigkeiten, die in einer Anwendung enthalten sind, einschließlich ihrer Versionen und Herkunft. Sie kann dabei sowohl Open-Source- als auch proprietäre Bestandteile erfassen und in maschinenlesbaren Formaten (z. B. SPDX, CycloneDX) vorliegen. Der Zweck dieser Dokumentation liegt darin, Transparenz über die eingesetzten Softwarebestandteile zu schaffen, sodass Abhängigkeiten, potenzielle Schwachstellen oder veraltete Komponenten nachvollziehbar bleiben. Ohne diese Transparenz könnte es bei Sicherheitsvorfällen, Lizenzkonflikten oder fehlender Wartbarkeit zu erheblichen Problemen kommen, während eine gepflegte SBOM die schnelle Identifikation von Risiken, die Minimierung von Vendor Lock-in und die Nachvollziehbarkeit der Software-Lieferkette unterstützen kann. Hierzu kann die BSI TR-03183-2 verwendet werden."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "ddd9f433-8d27-4ed5-9061-e77fc9564dbc"
+  }
+ ]
+}

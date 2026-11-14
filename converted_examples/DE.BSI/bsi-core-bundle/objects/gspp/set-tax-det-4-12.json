@@ -1,0 +1,18 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/det-4-12",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Monitoring der Netzverfügbarkeit"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.4.12",
+   "sequence": 9620
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.4.12.1",
+   "sequence": 9630
+  }
+ ]
+}

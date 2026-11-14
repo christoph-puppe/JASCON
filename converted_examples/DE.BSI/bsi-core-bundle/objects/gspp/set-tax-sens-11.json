@@ -8,15 +8,15 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/SENS.11.1",
-   "sequence": 4200
+   "sequence": 6770
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/SENS.11.2",
-   "sequence": 4210
+   "sequence": 6780
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/SENS.11.3",
-   "sequence": 4220
+   "sequence": 6790
   }
  ],
  "label": "11",

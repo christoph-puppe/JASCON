@@ -7,12 +7,12 @@
  },
  "members": [
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.5.1",
-   "sequence": 4460
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/arch-5-1",
+   "sequence": 7410
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.5.2",
-   "sequence": 4470
+   "sequence": 7420
   }
  ],
  "label": "5",

@@ -8,15 +8,15 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DLS.2.1",
-   "sequence": 2440
+   "sequence": 4160
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DLS.2.2",
-   "sequence": 2450
+   "sequence": 4170
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DLS.2.3",
-   "sequence": 2460
+   "sequence": 4180
   }
  ],
  "label": "2",

@@ -1,0 +1,22 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/konf-2-4",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Deaktivierung nicht benötigter Systemfunktionen"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.2.4",
+   "sequence": 10600
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.2.4.1",
+   "sequence": 10610
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.2.4.2",
+   "sequence": 10620
+  }
+ ]
+}

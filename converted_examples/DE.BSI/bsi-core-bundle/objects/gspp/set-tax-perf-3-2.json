@@ -1,0 +1,22 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/perf-3-2",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Dokumentation von Auditergebnissen"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERF.3.2",
+   "sequence": 1280
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERF.3.2.1",
+   "sequence": 1290
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERF.3.2.2",
+   "sequence": 1300
+  }
+ ]
+}

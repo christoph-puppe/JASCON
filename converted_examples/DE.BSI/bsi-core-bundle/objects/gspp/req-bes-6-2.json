@@ -16,16 +16,6 @@
    "prose": {
     "de": "Beschaffungsmanagement für Dienstleistungen SOLLTE die Löschung aller beim Dienstleister vorhandenen Daten für den Fall einer Kündigung vereinbaren."
    }
-  },
-  {
-   "id": "BES.6.2.1",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Beschaffungsmanagement für Dienstleistungen KANN ein Verfahren zur nicht wiederherstellbaren Löschung für den Fall einer Kündigung vereinbaren."
-   }
   }
  ],
  "facets": {
@@ -38,25 +28,12 @@
      "target-object-categories": [
       "Dienstleistungen"
      ]
-    },
-    "BES.6.2.1": {
-     "action": "vereinbaren",
-     "result": "ein Verfahren zur nicht wiederherstellbaren Löschung",
-     "result-specification": "für den Fall einer Kündigung",
-     "target-object-categories": [
-      "Dienstleistungen"
-     ]
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "by-statement": {
     "smt": {
-     "required-documentation": [
-      "Beschaffungskriterien"
-     ]
-    },
-    "BES.6.2.1": {
      "required-documentation": [
       "Beschaffungskriterien"
      ]
@@ -73,16 +50,6 @@
      "threat-refs": [
       "https://ns.bsi.bund.de/gspp/threat/G-0.20"
      ]
-    },
-    "BES.6.2.1": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "1",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.20",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
-     ]
     }
    }
   },
@@ -96,17 +63,6 @@
       "Lieferketten",
       "Exit-Strategie"
      ]
-    },
-    "BES.6.2.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5,
-     "tags": [
-      "Lieferketten",
-      "Exit-Strategie"
-     ],
-     "title": "Löschverfahren",
-     "alt-identifier": "d0ba4d21-940d-4b06-b446-aeccfdb2b53a"
     }
    }
   },
@@ -115,11 +71,6 @@
     "smt": {
      "guidance": {
       "de": "Kündigung meint hier sowohl ordentliche als auch außerordentliche Kündigungen. Hierzu können z.B. die Rückgabe von Authentifizierungstoken oder Löschung aller Auftraggeberdaten nach Ablauf der gesetzlichen Aufbewahrungsfristen gehören. Relevant sind dabei neben Inhaltsdaten auch Metadaten, Lizenzen und weitere Zugriffsrechte."
-     }
-    },
-    "BES.6.2.1": {
-     "guidance": {
-      "de": "Ein Verfahren zur nicht wiederherstellbaren Löschung bedeutet in diesem Kontext, dass Daten nach Beendigung einer Dienstleistungsbeziehung so entfernt werden, dass auch mit spezialisierten forensischen Methoden keine Rekonstruktion mehr möglich ist. Typische Verfahren reichen von mehrfachen Überschreibungen mit Zufallswerten über kryptographisches Löschen (Zerstörung der Schlüssel, die zur Entschlüsselung notwendig wären) bis hin zur physikalischen Zerstörung der Speichermedien. Die Regelung zielt darauf ab, das Risiko zu mindern, dass vertrauliche Daten nach einer Vertragskündigung bei einem Dienstleister verbleiben und unbefugt genutzt oder versehentlich offengelegt werden könnten. Ein Datenleck nach einem Providerwechsel könnte beispielsweise zu Identitätsdiebstahl, Industriespionage oder Reputationsschäden führen. Die Vereinbarung einer sicheren, nicht wiederherstellbaren Löschung kann sicherstellen, dass Informationen tatsächlich entfernt sind und keine Restkopien unkontrolliert in Umlauf geraten."
      }
     }
    }

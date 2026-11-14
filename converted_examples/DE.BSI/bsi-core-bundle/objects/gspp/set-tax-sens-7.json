@@ -8,103 +8,103 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.1",
-   "sequence": 3670
+   "sequence": 6240
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.2",
-   "sequence": 3680
+   "sequence": 6250
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.3",
-   "sequence": 3690
+   "sequence": 6260
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.4",
-   "sequence": 3700
+   "sequence": 6270
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.5",
-   "sequence": 3710
+   "sequence": 6280
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.6",
-   "sequence": 3720
+   "sequence": 6290
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.7",
-   "sequence": 3730
+   "sequence": 6300
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.8",
-   "sequence": 3740
+   "sequence": 6310
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.9",
-   "sequence": 3750
+   "sequence": 6320
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.10",
-   "sequence": 3760
+   "sequence": 6330
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.11",
-   "sequence": 3770
+   "sequence": 6340
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.12",
-   "sequence": 3780
+   "sequence": 6350
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.13",
-   "sequence": 3790
+   "sequence": 6360
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.14",
-   "sequence": 3800
+   "sequence": 6370
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.15",
-   "sequence": 3810
+   "sequence": 6380
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.16",
-   "sequence": 3820
+   "sequence": 6390
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.17",
-   "sequence": 3830
+   "sequence": 6400
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.18",
-   "sequence": 3840
+   "sequence": 6410
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.19",
-   "sequence": 3850
+   "sequence": 6420
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.20",
-   "sequence": 3860
+   "sequence": 6430
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.21",
-   "sequence": 3870
+   "sequence": 6440
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.22",
-   "sequence": 3880
+   "sequence": 6450
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.23",
-   "sequence": 3890
+   "sequence": 6460
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.24",
-   "sequence": 3900
+   "sequence": 6470
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.25",
-   "sequence": 3910
+   "sequence": 6480
   }
  ],
  "label": "7",

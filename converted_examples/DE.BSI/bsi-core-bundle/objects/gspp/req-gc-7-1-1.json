@@ -1,0 +1,71 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/GC.7.1.1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "GC.7.1.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "Festlegung der Geschäftsprozesse"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "must",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Governance und Compliance MUSS die Geschäftsprozesse oder Informationen die für den Geltungsbereich relevant sind festlegen."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "festlegen",
+     "result": "die Geschäftsprozesse oder Informationen",
+     "result-specification": "die für den Geltungsbereich relevant sind"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Geschäftsprozesse"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Methodik-Grundschutz-plus-plus",
+     "sec-level": "normal-SdT",
+     "effort": 0
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Hierbei kann oft auf bestehende Prozesslandkarten und Managementsysteme zurückgegriffen werden. Besteht noch keine Prozessübersicht in der Institution, so können die technischen und organisatorischen Praktiken als  Ausgangsvorschlag für relevante Prozesse herangezogen werden (siehe Prozessschritt 2 - Anforderungsanalyse)."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "b75cea5b-dc1e-4b96-b34a-5053242dabc1"
+  }
+ ],
+ "relations": [
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GC.6.1"
+  }
+ ]
+}

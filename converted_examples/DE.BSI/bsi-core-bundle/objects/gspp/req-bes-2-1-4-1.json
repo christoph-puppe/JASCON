@@ -1,0 +1,84 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/BES.2.1.4.1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "BES.2.1.4.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "Kompatibilität der Schnittstellen"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Beschaffungsmanagement für Einkäufe SOLLTE den Bedarf für die Kompatibilität im Hinblick auf Schnittstellen dokumentieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "dokumentieren",
+     "result": "den Bedarf für die Kompatibilität",
+     "result-specification": "im Hinblick auf Schnittstellen",
+     "target-object-categories": [
+      "Einkäufe"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Beschaffungskriterien"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 4,
+     "tags": [
+      "Lieferketten"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Kompatibilität im Hinblick auf Schnittstellen meint die Fähigkeit eines zu beschaffenden IT-Systems, einer Anwendung oder Komponente, mit bestehenden oder vorgesehenen IT- und OT-Umgebungen interoperabel zu sein; hierzu zählen technische Schnittstellen wie APIs (Application Programming Interfaces), Protokolle, Authentifizierungsmechanismen sowie physische oder virtuelle Netzanschlüsse. Eine Schnittstelle ist dabei jede definierte Übergabestelle, an der Daten, Signale oder Steuerinformationen zwischen Systemen ausgetauscht werden, einschließlich logischer (z. B. Webservices, REST, SOAP), datenbezogener (z. B. XML, JSON, CSV, authentifizierender (z.B. SAML oder OAuth 2.0) und infrastruktureller Anbindungen (z. B. VPN, TLS-gesicherte Verbindungen). Die Dokumentation des Bedarfs umfasst eine nachvollziehbare Beschreibung, welche bestehenden Infrastrukturen angebunden werden, welche Kommunikationsprotokolle und Sicherheitsmechanismen unterstützt werden und welche Abhängigkeiten oder Einschränkungen bestehen. Die Regelung zielt darauf ab, Integrationsrisiken frühzeitig zu erkennen und Fehlbeschaffungen zu vermeiden; ohne dokumentierten Kompatibilitätsbedarf könnte es zu Medienbrüchen, unsicheren Ad-hoc-Anbindungen oder kostenintensiven Nachrüstungen kommen, wodurch Sicherheitslücken entstehen könnten. Eine systematische Erfassung der Schnittstellenanforderungen kann hingegen sicherstellen, dass nur Lösungen ausgewählt werden, die sich kontrolliert und sicher in die bestehende Architektur einfügen lassen."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "c6743b13-6c1b-4706-94ba-c185e4839d35"
+  }
+ ]
+}

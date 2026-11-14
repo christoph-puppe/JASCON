@@ -1,0 +1,79 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/STM.2.1.5",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "STM.2.1.5",
+ "lifecycle": "active",
+ "title": {
+  "de": "Modellierung der Anforderungen ohne Zielobjektkategorie"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "must",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Strukturmodellierung MUSS alle weiteren Anforderungen denen keine Zielobjektkategorie zugeordnet ist modellieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "modellieren",
+     "result": "alle weiteren Anforderungen",
+     "result-specification": "denen keine Zielobjektkategorie zugeordnet ist"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Anforderungspaket"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Methodik-Grundschutz-plus-plus",
+     "sec-level": "normal-SdT",
+     "effort": 0
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Für jede zielobjektkategorielose Anforderung in den vorliegenden Geschäftsprozessen ist eine Relevanzentscheidung vorzunehmen. Für jede Anforderung ohne Zielobjektkategorie wird entschieden, ob sie für den Geschäftsprozess bzw. die zugehörigen Assets erforderlich ist. Maßstab ist hier wiederum das Sicherheitsniveau sowie die konkrete Nutzung für den Geschäftsprozess. Daraufhin erfolgt eine Zuordnung auf die betroffenenen Geschäftsprozesse: Hierbei werden diese Anforderungen auch federführend zuständigen Personen oder Rollen (sog. Prozess-Owner) zugewiesen.  Für die vorliegenden Geschäftsprozesse nicht relevante Anforderungen werden aus dem Anforderungspaket gestrichen, was mit einer Begründung zu dokumentieren ist, um Nachvollziehbarkeit bei einem späteren Audit bzw. Zertifizierung zu sichern."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "6fa942b2-8081-4a68-8b37-60ae5e4dc081"
+  }
+ ],
+ "relations": [
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/STM.2.1.4"
+  },
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/STM.2.1.4.1"
+  },
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/STM.2.1.4.2"
+  }
+ ]
+}

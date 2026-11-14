@@ -16,53 +16,6 @@
    "prose": {
     "de": "Beschaffungsmanagement für Einkäufe SOLLTE Nachweise des Lieferanten zur Erfüllung der Sicherheitskriterien vereinbaren."
    }
-  },
-  {
-   "id": "BES.4.8.1",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Beschaffungsmanagement für Einkäufe KANN ein Zertifikat oder Testat nach {param:bes.4.8.1-prm1} vereinbaren."
-   },
-   "parameters": [
-    {
-     "name": "bes.4.8.1-prm1",
-     "type": "string",
-     "label": "einem passenden Sicherheitsstandard"
-    }
-   ]
-  },
-  {
-   "id": "BES.4.8.2",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Beschaffungsmanagement für Cloud-Dienste SOLLTE einen Konformitätsnachweis durch Dritte vereinbaren."
-   }
-  },
-  {
-   "id": "BES.4.8.3",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Beschaffungsmanagement für Outsourcing KANN eine IT-Grundschutz-Analyse der potenziell zu nutzenden Infrastruktur des Dienstleisters vereinbaren."
-   }
-  },
-  {
-   "id": "BES.4.8.4",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Beschaffungsmanagement für Outsourcing KANN eine Offenlegung der Risikoanalyse aus dem ISMS des Dienstleisters, soweit eine Risikoanalyse nach IT-Grundschutz-Vorgehensweise notwendig ist, vereinbaren."
-   }
   }
  ],
  "facets": {
@@ -74,35 +27,6 @@
      "target-object-categories": [
       "Einkäufe"
      ]
-    },
-    "BES.4.8.1": {
-     "action": "vereinbaren",
-     "result": "ein Zertifikat oder Testat",
-     "result-specification": "nach {{einem passenden Sicherheitsstandard}}",
-     "target-object-categories": [
-      "Einkäufe"
-     ]
-    },
-    "BES.4.8.2": {
-     "action": "vereinbaren",
-     "result": "einen Konformitätsnachweis durch Dritte",
-     "target-object-categories": [
-      "Cloud-Dienste"
-     ]
-    },
-    "BES.4.8.3": {
-     "action": "vereinbaren",
-     "result": "eine IT-Grundschutz-Analyse der potenziell zu nutzenden Infrastruktur des Dienstleisters",
-     "target-object-categories": [
-      "Outsourcing"
-     ]
-    },
-    "BES.4.8.4": {
-     "action": "vereinbaren",
-     "result": "eine Offenlegung der Risikoanalyse aus dem ISMS des Dienstleisters, soweit eine Risikoanalyse nach IT-Grundschutz-Vorgehensweise notwendig ist,",
-     "target-object-categories": [
-      "Outsourcing"
-     ]
     }
    }
   },
@@ -112,69 +36,12 @@
      "required-documentation": [
       "Beschaffungskriterien"
      ]
-    },
-    "BES.4.8.1": {
-     "required-documentation": [
-      "Beschaffungskriterien"
-     ]
-    },
-    "BES.4.8.2": {
-     "required-documentation": [
-      "Beschaffungskriterien"
-     ]
-    },
-    "BES.4.8.3": {
-     "required-documentation": [
-      "Beschaffungskriterien"
-     ]
-    },
-    "BES.4.8.4": {
-     "required-documentation": [
-      "Beschaffungskriterien"
-     ]
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
    "by-statement": {
     "smt": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "1",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.20"
-     ]
-    },
-    "BES.4.8.1": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "1",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.20"
-     ]
-    },
-    "BES.4.8.2": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "1",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.20",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
-     ]
-    },
-    "BES.4.8.3": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "1",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.20"
-     ]
-    },
-    "BES.4.8.4": {
      "confidentiality": "1",
      "integrity": "1",
      "availability": "1",
@@ -195,46 +62,6 @@
       "Lieferketten",
       "Advanced Persistent Threats (APT)"
      ]
-    },
-    "BES.4.8.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5,
-     "tags": [
-      "Lieferketten"
-     ],
-     "title": "Zertifizierung",
-     "alt-identifier": "6cecab39-d08d-49a1-922e-b3f9ea7d5af4"
-    },
-    "BES.4.8.2": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 4,
-     "tags": [
-      "Lieferketten"
-     ],
-     "title": "Cloud-Konformität",
-     "alt-identifier": "ccb6ba42-3bb5-4ef8-b089-70a6e383f96c"
-    },
-    "BES.4.8.3": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5,
-     "tags": [
-      "Lieferketten"
-     ],
-     "title": "IT-Grundschutz-Analyse der Infrastruktur",
-     "alt-identifier": "989d9e29-9064-4366-a887-bc17c1440e35"
-    },
-    "BES.4.8.4": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5,
-     "tags": [
-      "Lieferketten"
-     ],
-     "title": "Offenlegung der Risikoanalyse",
-     "alt-identifier": "ff58fdb4-bc6e-42fc-9e28-eb89a32bc656"
     }
    }
   },
@@ -244,33 +71,6 @@
      "guidance": {
       "de": "Nachweise können z.B. durch eine passende Zertifizierung (etwa nach IT-Grundschutz bei Dienstleistern oder CCRA bei IT-Produkten), ein Testat (z.B. C5-Testat für Cloud-Anbieter), oder durch die Vorlage von Sicherheitskonzepten, Risikoanalysen und Pentesting-Ergebnissen erbracht werden."
      }
-    },
-    "BES.4.8.1": {
-     "guidance": {
-      "de": "Ein Zertifikat ist eine unabhängige Bestätigung der Konformität, die von einer akkreditierten Konformitätsbewertungsstelle (wie z.B. einer Zertifizierungsstelle) ausgestellt wird, nachdem diese die Konformität eines Produkts, einer Dienstleistung, eines Prozesses oder eines Managementsystems mit bestimmten Normen oder Anforderungen bestätigt hat. Die Art des Zertifikates richtet sich dabei nach der Art der geplanten Beschaffung. IT-Produkte können z.B. nach Common Criteria zertifiziert werden. Bei Dienstleistungen kann ein zertifiziertes Managementsystem für Informationssicherheit (nach IT-Grundschutz oder ISO/IEC 27001) vereinbart werden. Ein Testat wäre z.B. C5."
-     }
-    },
-    "BES.4.8.2": {
-     "guidance": {
-      "de": "Beispielsweise durch ein C5 Testat. Hierbei ist zu prüfen, ob der Geltungsbereich und der Schutzbedarf die genutzten Clouddienste erfasst (Auswertung des Nachweises). Dies gilt auch für Subdienstleister."
-     }
-    },
-    "BES.4.8.3": {
-     "guidance": {
-      "de": "Bei einer IT-Grundschutz-Analyse im Rahmen des Outsourcings wird an der potenziell zu nutzenden Infrastruktur des Dienstleisters eine IT-Grundschutz-Analyse (Strukturanalyse, Schutzbedarfsfeststellung, …) durchgeführt. Anschließend werden die sich daraus ergebenden Sicherheitsanforderungen als Beschaffungskriterien an den Dienstleister gestellt. Dies bietet sich an, wenn entweder ein besonders hohes Sicherheitsniveau angestrebt wird, oder der Dienstleister bislang über kein ISMS verfügt, obwohl die Institution umfangreiche Prozesse auslagern möchte."
-     }
-    },
-    "BES.4.8.4": {
-     "guidance": {
-      "de": "Eine Offenlegung ist hierzu nur erforderlich, soweit die Informationen für die Risikoanalyse des Auftraggebers erforderlich sind."
-     }
-    }
-   }
-  },
-  "https://ns.jascon.net/compat/oscal-1x@1": {
-   "param-extras": {
-    "bes.4.8.1-prm1": {
-     "alt-identifier": "6cecab39-d08d-49a1-922e-b3f9ea7d5af4"
     }
    }
   }

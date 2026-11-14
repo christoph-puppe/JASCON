@@ -1,0 +1,67 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/GC.3.1.4",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "GC.3.1.4",
+ "lifecycle": "active",
+ "title": {
+  "de": "Prävention von Verstößen"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Governance und Compliance SOLLTE Verfahren zur Prävention gegen Verstöße verankern."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "verankern",
+     "result": "Verfahren zur Prävention gegen Verstöße"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Arbeitsanweisung"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Methodik-Grundschutz-plus-plus",
+     "sec-level": "normal-SdT",
+     "effort": 3,
+     "tags": [
+      "Compliance Management"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Verfahren können z. B. zielgruppengerechte Schulungen der für die Umsetzung und Einhaltung zuständigen Personen, die Berücksichtigung der Compliance-Verpflichtungen bei Freigabe- und Testprozessen sowie die Förderung einer konstruktiven Fehlerkultur sein."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "6874056a-4f01-497d-8ef4-0411a55671e7"
+  }
+ ]
+}

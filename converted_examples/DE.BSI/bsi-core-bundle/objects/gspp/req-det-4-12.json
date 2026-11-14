@@ -23,23 +23,6 @@
      "label": "Schwellwerten"
     }
    ]
-  },
-  {
-   "id": "DET.4.12.1",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Detektion für Netze SOLLTE die Auslastung des Netzes anhand von {param:det.4.12.1-prm1} überwachen."
-   },
-   "parameters": [
-    {
-     "name": "det.4.12.1-prm1",
-     "type": "string",
-     "label": "Schwellwerten"
-    }
-   ]
   }
  ],
  "facets": {
@@ -52,25 +35,12 @@
      "target-object-categories": [
       "Netze"
      ]
-    },
-    "DET.4.12.1": {
-     "action": "überwachen",
-     "result": "die Auslastung des Netzes",
-     "result-specification": "anhand von {{Schwellwerten}}",
-     "target-object-categories": [
-      "Netze"
-     ]
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "by-statement": {
     "smt": {
-     "required-documentation": [
-      "Detektions-Konzept"
-     ]
-    },
-    "DET.4.12.1": {
      "required-documentation": [
       "Detektions-Konzept"
      ]
@@ -90,18 +60,6 @@
       "https://ns.bsi.bund.de/gspp/threat/G-0.26",
       "https://ns.bsi.bund.de/gspp/threat/G-0.27"
      ]
-    },
-    "DET.4.12.1": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "2",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.25",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.26",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.27",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
-     ]
     }
    }
   },
@@ -111,13 +69,6 @@
      "class": "BSI-Stand-der-Technik-Kernel-G0",
      "sec-level": "normal-SdT",
      "effort": 3
-    },
-    "DET.4.12.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 4,
-     "title": "Auslastung des Netzes",
-     "alt-identifier": "c17dd877-0922-4ca8-a38b-1d2f9ae04f0d"
     }
    }
   },
@@ -127,11 +78,6 @@
      "guidance": {
       "de": "Die Verfügbarkeit von Netzen, insbesondere des Internetanschlusses, sowie im Kern- und Verteilernetz, ist von zentraler Bedeutung für die Verfügbarkeit von IT-Infrastrukturen. Ein Monitoring ermöglicht es dem Betriebspersonal, bei Netzproblemen reagieren zu können, bevor Beschwerden von Nutzenden aufkommen. Kann durch Hello-Packete von Netzkomponenten oder die Erreichbarkeit von Diensten über das Netz umgesetzt werden."
      }
-    },
-    "DET.4.12.1": {
-     "guidance": {
-      "de": "Die Überwachung der Netzauslastung ermöglicht eine schnelle Reaktion bei Verfügbarkeitsproblemen. Wichtige Indikatoren sind Auslastung der verfügbaren Bandbreite, Netzlatenz und Packverluste. Unerwartet hoher Datenverkehr kann auch ein Indiz für einen unautorisierten Zugriff auf große Datenmengen sein. Zur Umsetzung ist es zweckmäßig zunächst Normwerte zu ermitteln (Baselining)."
-     }
     }
    }
   },
@@ -139,9 +85,6 @@
    "param-extras": {
     "det.4.12-prm1": {
      "alt-identifier": "3757d23d-e17e-4bae-857e-c045505d579a"
-    },
-    "det.4.12.1-prm1": {
-     "alt-identifier": "c17dd877-0922-4ca8-a38b-1d2f9ae04f0d"
     }
    }
   }

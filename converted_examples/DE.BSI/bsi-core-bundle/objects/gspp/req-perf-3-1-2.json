@@ -1,0 +1,56 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/PERF.3.1.2",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "PERF.3.1.2",
+ "lifecycle": "active",
+ "title": {
+  "de": "Planen von internen Audits"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "must",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Monitoring-Evaluation MUSS die Planung der internen Audits im Auditprogramm risikoorientiert ausführen."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "ausführen",
+     "result": "die Planung der internen Audits im Auditprogramm",
+     "result-specification": "risikoorientiert"
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Methodik-Grundschutz-plus-plus",
+     "sec-level": "normal-SdT",
+     "effort": 0
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Ziel ist es, die Einhaltung von Sicherheitsanforderungen, die Wirksamkeit von Maßnahmen sowie mögliche Schwachstellen zu prüfen. Dabei wird die Effektivität und Effizienz aller angewandten Anforderungen sinnvoll geprüft. Risikoorientiert bedeutet hierbei, dass die Auswahl von Prüfobjekten sowie die Prüftiefe sich nach einer Risikobetrachtung richtet, also besonders risikorelevante Fragen vertieft betrachtet werden. Beispielsweise ist es sinnvoll bei automatisierten Richtlinien (Policies) nicht nur deren tatsächliche Aktivierung, sondern vor allem die erlaubten Ausnahmeregelungen auf Begründung, Befristung und Umfang zu prüfen, damit vermeintliche effektive Maßnahmen nicht durch zu weite Ausnahmeregelungen ausgehölt werden. Die Planung muss dokumentiert werden."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "6f76ca8f-aadb-44b2-89ce-c35ac8a16d69"
+  }
+ ]
+}

@@ -1,0 +1,18 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/ber-4-4",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Überprüfung von Berechtigungen"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.4.4",
+   "sequence": 8190
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.4.4.1",
+   "sequence": 8200
+  }
+ ]
+}

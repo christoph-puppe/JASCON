@@ -1,0 +1,108 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/DET.6.1.2",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "DET.6.1.2",
+ "lifecycle": "active",
+ "title": {
+  "de": "Automatische Alarmierung"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Detektion SOLLTE bei sicherheitskritischen Ereignissen eine Alarmierung von {param:det.6.1.2-prm1} durch {param:det.6.1.2-prm2} ausführen."
+   },
+   "parameters": [
+    {
+     "name": "det.6.1.2-prm1",
+     "type": "string",
+     "label": "für die Vorfallsbehandlung zuständigen Personen oder Rollen"
+    },
+    {
+     "name": "det.6.1.2-prm2",
+     "type": "string",
+     "label": "einen automatisierten Mechanismus"
+    }
+   ]
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "ausführen",
+     "result": "bei sicherheitskritischen Ereignissen eine Alarmierung von {{für die Vorfallsbehandlung zuständigen Personen oder Rollen}}",
+     "result-specification": "durch {{einen automatisierten Mechanismus}}"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Detektions-Konzept"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "2",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.25",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.29",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.27"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 3
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Für die Definition eines sicherheitskritischen Ereignisses, siehe Glossar (Namensräume des Grundschutz++). Bewährt hat sich hierzu der Einsatz eines Security Information and Event Management Systems (SIEM), das die Audit Logs verschiedener Hersteller auf Ereignisse überprüfen und diese korrelieren kann. Passen Sie Schwellwerte und Kriterien so an, dass keine Alarmmüdigkeit (alert fatigue) beim Personal aufkommt."
+     }
+    }
+   }
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "param-extras": {
+    "det.6.1.2-prm1": {
+     "alt-identifier": "f45e08b7-8f42-469a-aa22-63b93daba60e"
+    },
+    "det.6.1.2-prm2": {
+     "alt-identifier": "f45e08b7-8f42-469a-aa22-63b93daba60e"
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "f45e08b7-8f42-469a-aa22-63b93daba60e"
+  }
+ ],
+ "relations": [
+  {
+   "type": "required",
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.6.1.1"
+  }
+ ]
+}

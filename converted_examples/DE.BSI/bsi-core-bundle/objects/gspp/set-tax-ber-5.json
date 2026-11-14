@@ -8,43 +8,43 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.1",
-   "sequence": 5220
+   "sequence": 8280
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.2",
-   "sequence": 5230
+   "sequence": 8290
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.3",
-   "sequence": 5240
+   "sequence": 8300
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.4",
-   "sequence": 5250
+   "sequence": 8310
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.5",
-   "sequence": 5260
+   "sequence": 8320
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.6",
-   "sequence": 5270
+   "sequence": 8330
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.7",
-   "sequence": 5280
+   "sequence": 8340
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.8",
-   "sequence": 5290
+   "sequence": 8350
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.9",
-   "sequence": 5300
+   "sequence": 8360
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.10",
-   "sequence": 5310
+   "sequence": 8370
   }
  ],
  "label": "5",

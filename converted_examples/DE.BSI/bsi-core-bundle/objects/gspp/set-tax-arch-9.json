@@ -8,23 +8,23 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.9.1",
-   "sequence": 4600
+   "sequence": 7550
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.9.2",
-   "sequence": 4610
+   "sequence": 7560
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.9.3",
-   "sequence": 4620
+   "sequence": 7570
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.9.4",
-   "sequence": 4630
+   "sequence": 7580
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.9.5",
-   "sequence": 4640
+   "sequence": 7590
   }
  ],
  "label": "9",

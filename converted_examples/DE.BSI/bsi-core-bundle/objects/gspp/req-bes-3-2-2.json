@@ -1,0 +1,84 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/BES.3.2.2",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "BES.3.2.2",
+ "lifecycle": "active",
+ "title": {
+  "de": "Quellendiversifikation"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "may",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Beschaffungsmanagement für Einkäufe KANN die Auswahl von Lieferanten anhand ihrer Fähigkeit, ihre Bezugsquellen zu diversifizieren und die Bindung an bestimmte Lieferanten zu begrenzen, verankern."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "verankern",
+     "result": "die Auswahl von Lieferanten",
+     "result-specification": "anhand ihrer Fähigkeit, ihre Bezugsquellen zu diversifizieren und die Bindung an bestimmte Lieferanten zu begrenzen,",
+     "target-object-categories": [
+      "Einkäufe"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Beschaffungskriterien"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.11"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "erhöht",
+     "effort": 5,
+     "tags": [
+      "Lieferketten"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Die Fähigkeit zur Diversifizierung von Bezugsquellen bedeutet in diesem Kontext, dass ein Lieferant nicht ausschließlich auf einzelne Hersteller, Produzenten oder Märkte angewiesen ist, sondern alternative Beschaffungswege vorweisen kann. Die Bindung an bestimmte Lieferanten beschreibt eine Abhängigkeit, bei der zentrale Produkte oder Dienstleistungen faktisch nur von wenigen oder gar einem Anbieter bezogen werden können. Der Sinn dieser Anforderung liegt darin, die Risiken eines Vendor lock-in auf Seiten des Lieferanten zu begrenzen: Könnte ein Lieferant aufgrund geopolitischer Spannungen, wirtschaftlicher Probleme oder technischer Abkündigungen sich nicht mehr auf seine Zulieferer verlassen, so könnt er möglicherweise seine Leistungen nicht mehr erbringen, wodurch die Institution ohne Alternativen möglicherweise gravierende Ausfälle erleiden würde. Eine bewusste Auswahl nach Diversifizierungsfähigkeit kann die Versorgungssicherheit erhöhen und kritische Engpässe vermeiden."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "6d1954f0-d3b8-4c4b-84bc-b0586d0d6476"
+  }
+ ]
+}

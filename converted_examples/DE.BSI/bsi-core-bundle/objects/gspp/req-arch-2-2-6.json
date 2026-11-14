@@ -1,0 +1,84 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/ARCH.2.2.6",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "ARCH.2.2.6",
+ "lifecycle": "active",
+ "title": {
+  "de": "Demilitarisierte Zone"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Architektur für Netze SOLLTE eine demilitarisierte Zone installieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "installieren",
+     "result": "eine demilitarisierte Zone",
+     "target-object-categories": [
+      "Netze"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Netzplan"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "2",
+     "integrity": "2",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.23",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.47"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 3,
+     "tags": [
+      "Lateral Movement"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Unter einer Demilitarisierten Zone versteht man in diesem Kontext ein logisch oder physisch getrenntes Teilnetz, in dem Systeme mit exponierten Diensten – wie Webserver, Mail-Gateways oder VPN-Endpunkte – betrieben werden. Systeme der Institution, die sowohl aus dem öffentlichen Netz als auch aus dem internen Netz erreichbar sind, werden in einer demilitarisierten Zone (DMZ) so betrieben, dass (1) der Netzverkehr zwischen dem System und dem öffentlichen Netz gefiltert wird und (2) der Netzverkehr zwischen dem System und anderen internen Netzen gefiltert wird. Eine DMZ kann sowohl durch dedizierte Hardware-Firewalls als auch durch virtuelle Netzwerksegmente umgesetzt werden. Ohne eine solche Trennung könnte ein kompromittierter Webserver direkt als Sprungbrett ins interne Netz dienen oder Schadsoftware könnte sich ungehindert auf sensible Systeme ausbreiten. Mit einer DMZ kann eine Institution hingegen erreichen, dass kompromittierte Systeme isoliert bleiben und sicherheitskritische interne Netze weiterhin geschützt sind."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "f9e8c80d-0043-42ac-a71b-73ff1e6cad50"
+  }
+ ]
+}

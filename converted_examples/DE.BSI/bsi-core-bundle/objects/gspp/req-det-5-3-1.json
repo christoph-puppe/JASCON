@@ -1,0 +1,93 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/DET.5.3.1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "DET.5.3.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "Autorisierung kritischer Scans"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Detektion SOLLTE kritische Scans durch {param:det.5.3.1-prm1} autorisieren."
+   },
+   "parameters": [
+    {
+     "name": "det.5.3.1-prm1",
+     "type": "string",
+     "label": "zuständige Personen oder Rollen"
+    }
+   ]
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "autorisieren",
+     "result": "kritische Scans",
+     "result-specification": "durch {{zuständige Personen oder Rollen}}"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Detektions-Konzept"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.39",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 4
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Schwachstellenscans könnten aufgrund ihres Umfangs oder der breiten Abdeckung ihrer Aktivitäten selbst Fehlerzustände provozieren oder Schwachstellen auslösen. Wenn Scans besondere Berechtigungen benötigen - z.B. lokale Administrationsrechte oder Zugriff auf ein abgeschottetes Netz sensibler, betriebskritischer Systeme, so kann eine Autorisierung solcher Scans, vor der eine Abwägung der damit verbundenen Risiken vorgenommen wird, angezeigt sein."
+     }
+    }
+   }
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "param-extras": {
+    "det.5.3.1-prm1": {
+     "alt-identifier": "d19ef635-5438-4b4e-b75b-479764f39069"
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "d19ef635-5438-4b4e-b75b-479764f39069"
+  }
+ ]
+}

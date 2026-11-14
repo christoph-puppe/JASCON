@@ -7,20 +7,20 @@
  },
  "members": [
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.7.1",
-   "sequence": 2290
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/bes-7-1",
+   "sequence": 3820
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BES.7.2",
-   "sequence": 2300
+   "sequence": 3830
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BES.7.3",
-   "sequence": 2310
+   "sequence": 3840
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.7.4",
-   "sequence": 2320
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/bes-7-4",
+   "sequence": 4000
   }
  ],
  "label": "7",

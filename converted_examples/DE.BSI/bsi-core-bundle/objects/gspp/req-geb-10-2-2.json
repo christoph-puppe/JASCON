@@ -1,0 +1,81 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/GEB.10.2.2",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "GEB.10.2.2",
+ "lifecycle": "active",
+ "title": {
+  "de": "Brandabschnitte"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Gebäudemanagement für Räume SOLLTE Brandabschnitte nach den entsprechenden Normen installieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "installieren",
+     "result": "Brandabschnitte",
+     "result-specification": "nach den entsprechenden Normen",
+     "target-object-categories": [
+      "Räume"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Gebäudedokumentation"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "2",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 4
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Brandabschnitte sind baulich abgegrenzte Bereiche in Gebäuden, die im Brandfall verhindern sollen, dass das Feuer auf andere Bereiche übergreift. Sie werden durch feuerfeste Wände, Decken und andere raumabschließende Bauteile voneinander getrennt. Hier besteht ein enger Zusammenhang zu Compliance-Anforderungen: Größe und Anzahl von Brandabschnitten werden auch durch die Bauordnung und andere Vorschriften festgelegt, abhängig von der Nutzung und Größe des Gebäudes. Für die Informationssicherheit relevant ist darüber hinaus, ob die Auswahl der Brandabschnitte den darin befindlichen Informationen und damit verbundenen Assets ausreichenden Schutz gewährt, um deren Verfügbarkeit aufrechtzuerhalten."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "9bba280a-5874-46eb-bbc5-4696d3ee5ed6"
+  }
+ ]
+}

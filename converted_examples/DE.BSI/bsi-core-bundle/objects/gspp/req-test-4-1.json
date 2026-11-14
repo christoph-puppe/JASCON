@@ -16,36 +16,6 @@
    "prose": {
     "de": "Änderungen und Tests SOLLTE kritische Änderungen anhand von Kriterien einschließlich der Sicherheitsanforderungen autorisieren."
    }
-  },
-  {
-   "id": "TEST.4.1.1",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Änderungen und Tests KANN kritische Änderungen auch durch eine von der Implementierung unabhängige Person autorisieren."
-   }
-  },
-  {
-   "id": "TEST.4.1.2",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Änderungen und Tests SOLLTE die freizugebenden Änderungen in einer von der Produktumgebung getrennten Staging-Umgebung, deren Komponenten so weit wie möglich der Produktivumgebung entsprechen, testen."
-   }
-  },
-  {
-   "id": "TEST.4.1.3",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Änderungen und Tests SOLLTE die Freigabe einschließlich Zeitpunkt, Vorhaben, Freigabekriterien und freigebender Personen dokumentieren."
-   }
   }
  ],
  "facets": {
@@ -55,42 +25,12 @@
      "action": "autorisieren",
      "result": "kritische Änderungen",
      "result-specification": "anhand von Kriterien einschließlich der Sicherheitsanforderungen"
-    },
-    "TEST.4.1.1": {
-     "action": "autorisieren",
-     "result": "kritische Änderungen",
-     "result-specification": "auch durch eine von der Implementierung unabhängige Person"
-    },
-    "TEST.4.1.2": {
-     "action": "testen",
-     "result": "die freizugebenden Änderungen",
-     "result-specification": "in einer von der Produktumgebung getrennten Staging-Umgebung, deren Komponenten so weit wie möglich der Produktivumgebung entsprechen,"
-    },
-    "TEST.4.1.3": {
-     "action": "dokumentieren",
-     "result": "die Freigabe",
-     "result-specification": "einschließlich Zeitpunkt, Vorhaben, Freigabekriterien und freigebender Personen"
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "by-statement": {
     "smt": {
-     "required-documentation": [
-      "IT-Betriebskonzept"
-     ]
-    },
-    "TEST.4.1.1": {
-     "required-documentation": [
-      "IT-Betriebskonzept"
-     ]
-    },
-    "TEST.4.1.2": {
-     "required-documentation": [
-      "IT-Betriebskonzept"
-     ]
-    },
-    "TEST.4.1.3": {
      "required-documentation": [
       "IT-Betriebskonzept"
      ]
@@ -107,36 +47,6 @@
      "threat-refs": [
       "https://ns.bsi.bund.de/gspp/threat/G-0.18"
      ]
-    },
-    "TEST.4.1.1": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
-     ]
-    },
-    "TEST.4.1.2": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "2",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.25",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.26",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
-     ]
-    },
-    "TEST.4.1.3": {
-     "confidentiality": "2",
-     "integrity": "2",
-     "availability": "1",
-     "authenticity": "1",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.37"
-     ]
     }
    }
   },
@@ -146,27 +56,6 @@
      "class": "BSI-Stand-der-Technik-Kernel-G0",
      "sec-level": "normal-SdT",
      "effort": 3
-    },
-    "TEST.4.1.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 4,
-     "title": "Unabhängigkeit der Autorisierung",
-     "alt-identifier": "a0cd7536-0e8f-4658-99d4-c04f93dad878"
-    },
-    "TEST.4.1.2": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 4,
-     "title": "Staging",
-     "alt-identifier": "27cb8300-6019-432f-a688-82544667aca0"
-    },
-    "TEST.4.1.3": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 4,
-     "title": "Dokumentation der Freigabe",
-     "alt-identifier": "97bc7db7-ea9d-47ea-9402-163af7470f4b"
     }
    }
   },
@@ -175,21 +64,6 @@
     "smt": {
      "guidance": {
       "de": "Änderungen gelten als kritisch, wenn sie breite Auswirkungen auf Geschäftsprozesse haben, beispielsweise die Aktivierung der Zwei-Faktor-Authentifizierung am zentralen Verzeichnisdienst. Die Kritikalität ergibt sich zudem aus Art und Umfang der Änderung, etwa bei umfangreichen Migrationen oder sicherheitsrelevanten Fehlerbehebungen. Kritische Änderungen betreffen häufig die Bereitstellung für eine große Zahl interner oder externer Nutzender oder Eingriffe in hochverfügbare Systeme. Zu den maßgeblichen Kriterien für die Freigabe zählen das fehlerfreie Durchlaufen definierter Tests, eine ausreichende Nutzerakzeptanz in einem Beta-Test und das erfolgreiche Bestehen von Penetrationstests. Zweckmäßig ist eine mehrstufige Autorisierung, in der Änderungen anhand der prognostizierten Auswirkungen den Kategorien niedrig, mittel oder hoch zugeordnet und mit abgestuften Genehmigungsanforderungen verknüpft werden. Während bei geringfügigen Änderungen an unkritischen Systemen eine konzentrierte Prüfung grundlegender Sicherheitsanforderungen wie Authentifizierung, Verschlüsselung und Härtung ausreichen kann, erfordern umfangreiche Vorhaben mit hohem Risikoprofil in der Regel automatisierte Prüfmechanismen, ergänzt durch Checklisten für manuelle Tätigkeiten, um die Auswirkungen verlässlich beherrschbar zu halten."
-     }
-    },
-    "TEST.4.1.1": {
-     "guidance": {
-      "de": "Eine Freigabe durch eine unabhängige Person ist die nachweisliche Bestätigung der Testergebnisse durch eine fachlich qualifizierte, aber nicht an der Entwicklung, Durchführung oder unmittelbaren Implementierung der getesteten Änderung beteiligte Person. Ziel ist es, Objektivität und Unvoreingenommenheit sicherzustellen und das Vier-Augen-Prinzip für kritische Änderungen zu wahren. Hierbei genügt es, wenn neben beteiligten Personen auch eine unabhängige Person die Änderung autorisiert hat, wie z.B. bei einem Change Advisory Board, an dem mehrere Personen beteiligt sind. Die geltenden Anforderungen sind alle für das Zielobjekt ausgewählten Sicherheitsanforderungen, z.B. Verifikation korrekter TLS-Konfiguration oder Fertigstellung einer Datensicherung mit korrektem Umfang zu geforderter Zeit gemäß Konzept. Empfehlenswert ist es den Prozess in einem Versionkontrollsystem abzubilden, sodass die Dokumentation der Änderungen und der Freigabe weitestgehend automatisiert stattfindet."
-     }
-    },
-    "TEST.4.1.2": {
-     "guidance": {
-      "de": "Eine Staging-Umgebung ist von der Produktivumgebung getrennt, wenn sie keine IT-Systeme, Anwendungen oder Datenquellen der Produktivumgebung verwendet. Sie entspricht so weit wie möglich der Produktivumgebung, damit zwischen Freigabe und Produktivbetrieb möglichst wenige Abweichungen vorkommen, z.B. hinsichtlich der Schwachstellen eingesetzter Softwareversionen oder der Verfügbarkeit von Ressourcen in verschiedenen Rechenzentren."
-     }
-    },
-    "TEST.4.1.3": {
-     "guidance": {
-      "de": "Je nach Organisationstruktur kann es sinnvoll sein, weitere Angaben aufzuführen, z.B. in der Freigabe durchgeführte Prüfschritte oder weitere beteiligte Personen. Allerdings kann sich die Freigabe auch auf eine Dokumentation der zuvor durchgeführten Tests stützen. In jedem Fall handelt es sich nur dann um eine Freigabe, wenn die entscheidenden Personen oder Rollen eine eigenständige Entscheidung getroffen haben, die auf einer eigenen Untersuchung des Änderungsvorhabens basiert."
      }
     }
    }

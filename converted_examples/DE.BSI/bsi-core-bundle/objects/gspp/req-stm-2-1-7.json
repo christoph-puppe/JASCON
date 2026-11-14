@@ -1,0 +1,75 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/STM.2.1.7",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "STM.2.1.7",
+ "lifecycle": "active",
+ "title": {
+  "de": "Aufgrund externer Verpflichtungen"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "must",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Strukturmodellierung MUSS für das individuelle Compliance-Umfeld der Institution zusätzliche Anforderungen dem Anforderungspaket zuweisen."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "zuweisen",
+     "result": "für das individuelle Compliance-Umfeld der Institution zusätzliche Anforderungen",
+     "result-specification": "dem Anforderungspaket"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Anforderungspaket"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Methodik-Grundschutz-plus-plus",
+     "sec-level": "normal-SdT",
+     "effort": 0
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Dieser Schritt ergänzt das Anforderungspaket, um Anforderungen, die sich aus dem individuellen Compliance-Umfeld der Institution ergeben. Die Integration von externen Compliance-Verpflichtungen stellt sicher, dass alle relevanten gesetzlichen und vertraglichen Pflichten berücksichtigt werden, die erfasst wurden. Hierzu zählen z.B. gesetzliche Verpflichtungen, welche die Verarbeitung von Informationen durch die Institution betreffen oder auch vertragliche Verpflichtungen mit Relevanz für die Informationsverarbeitung. Vor eigener Erstellung von Anforderungen empfiehlt sich ein Blick in die SdT-Bibliothek."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "b620ab56-c91f-47bc-a8fa-a7a594b7d14b"
+  }
+ ],
+ "relations": [
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GC.3.1.1"
+  },
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GC.3.1.3"
+  }
+ ]
+}

@@ -1,0 +1,80 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/DET.6.2.2",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "DET.6.2.2",
+ "lifecycle": "active",
+ "title": {
+  "de": "Datenträgerschleuse"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "may",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Detektion KANN Datenträgerschleusen installieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "installieren",
+     "result": "Datenträgerschleusen"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Arbeitsanweisung"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "2",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "1",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.39",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.23",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.21",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.14"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "erhöht",
+     "effort": 5
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Eine Datenträgerschleuse ist ein vom restlichen Netz der Institution getrenntes IT-System, das speziell zur Erkennung von Schadprogrammen dient. Der Begriff Datenträger umfasst hierbei insbesondere USB-Speichergeräte, externe Festplatten, Speicherkarten sowie optische Datenträger. Der Einsatz einer Datenträgerschleuse kann das Risiko reduzieren, dass Schadsoftware, manipulierte Dateien oder unzulässig übertragene Informationen über mobile Speichermedien in Systeme eingebracht oder aus ihnen heraus transportiert werden. Ohne entsprechende Kontrollmechanismen könnte beispielsweise Malware über USB-Datenträger eingeschleust oder eine unbemerkte Datenabgabe über Wechselspeicher erfolgen; eine Datenträgerschleuse kann solche Vorgänge sichtbar machen und zusätzliche Prüfungen ermöglichen."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "51911fce-93f1-455a-b690-d5ddc90c9129"
+  }
+ ]
+}

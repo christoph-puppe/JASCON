@@ -1,0 +1,82 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/PERS.2.3.2",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "PERS.2.3.2",
+ "lifecycle": "active",
+ "title": {
+  "de": "Rollentrennung - Virtualisierung"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Personal SOLLTE zwischen Administration von virtuellen Systemen und Virtualisierungslösungen eine Rollentrennung verankern."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "verankern",
+     "result": "zwischen Administration von virtuellen Systemen und Virtualisierungslösungen eine Rollentrennung"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Geschäftsverteilungsplan"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "2",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.33",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.31"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 4,
+     "tags": [
+      "Insider Threat"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Die Administration von virtuellen Systemen bezeichnet im hier relevanten Kontext die operative Verwaltung einzelner virtueller Gastsysteme (VMs, Container, etc.), einschließlich ihrer Bereitstellung, Konfiguration, Wartung und Zugriffskontrolle. Die Virtualisierungslösung hingegen ist hier die übergeordnete Plattform oder Hypervisor-Ebene, welche physische Ressourcen virtualisiert und mehreren virtuellen Gastsystemen bereitstellt. Diese Differenzierung entspricht dem Prinzip der Rollen- bzw. Funktionstrennung (separation of duties bzw. role separation), bei dem Aufgabenbereiche so abgegrenzt werden, dass keine Person gleichzeitig über kritische Systemebenen hinweg vollumfängliche Kontrolle besitzt. Damit wird ein wesentliches Sicherheitsprinzip technischer Infrastruktur auf die Virtualisierungsschichten übertragen.  Der Zweck dieser Trennung liegt in der Begrenzung von Fehlerrisiken und der Prävention von Missbrauch – sowohl vorsätzlich als auch unbeabsichtigt. Eine Person, die zugleich die Virtualisierungsebene und virtuelle Systeme verwaltet, könnte durch Fehlkonfiguration, Nachlässigkeit oder Manipulation unbeabsichtigt erhebliche Auswirkungen auf eine Vielzahl von Systemen haben oder deren Nachvollziehbarkeit beeinträchtigen. Eine klare Rollentrennung kann dem vorbeugen, indem sie Kontrollmechanismen stärkt, die Integrität der Umgebung wahrt und Fehler früher erkennen lässt."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "e26fc4a9-c6cf-41f8-bfd7-e01cc950de47"
+  }
+ ]
+}

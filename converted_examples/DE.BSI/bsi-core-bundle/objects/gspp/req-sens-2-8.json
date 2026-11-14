@@ -16,16 +16,6 @@
    "prose": {
     "de": "Sensibilisierung für Nutzende SOLLTE zum Melden von sicherheitsrelevanten Ereignissen anweisen."
    }
-  },
-  {
-   "id": "SENS.2.8.1",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Sensibilisierung für Nutzende SOLLTE zum Melden von Fehler- und Warnmeldungen sensibilisieren."
-   }
   }
  ],
  "facets": {
@@ -34,13 +24,6 @@
     "smt": {
      "action": "anweisen",
      "result": "zum Melden von sicherheitsrelevanten Ereignissen",
-     "target-object-categories": [
-      "Nutzende"
-     ]
-    },
-    "SENS.2.8.1": {
-     "action": "sensibilisieren",
-     "result": "zum Melden von Fehler- und Warnmeldungen",
      "target-object-categories": [
       "Nutzende"
      ]
@@ -53,27 +36,12 @@
      "required-documentation": [
       "Arbeitsanweisung"
      ]
-    },
-    "SENS.2.8.1": {
-     "required-documentation": [
-      "Schulungsplan"
-     ]
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
    "by-statement": {
     "smt": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.31",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.42"
-     ]
-    },
-    "SENS.2.8.1": {
      "confidentiality": "1",
      "integrity": "1",
      "availability": "1",
@@ -94,16 +62,6 @@
      "tags": [
       "Insider Threat"
      ]
-    },
-    "SENS.2.8.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 2,
-     "tags": [
-      "Error Handling"
-     ],
-     "title": "Melden von Fehler- und Warnmeldungen",
-     "alt-identifier": "143c39e7-3bee-42e6-9876-dc55973f2ed4"
     }
    }
   },
@@ -112,11 +70,6 @@
     "smt": {
      "guidance": {
       "de": "Ohne ein Bewusstsein für die Bedeutung solcher Meldungen könnte ein Vorfall wie ein Phishing-Versuch, ein auffälliges Verhalten in einem IT-System oder der Verlust eines mobilen Endgeräts unbemerkt bleiben und gravierende Auswirkungen nach sich ziehen. Umgekehrt kann eine geschulte Aufmerksamkeit verhindern, dass Schwachstellen unentdeckt bleiben, und kann so die Widerstandsfähigkeit der Institution stärken. Sicherheitsrelevante Ereignisse sind hier Beobachtungen oder Abweichungen, die auf eine mögliche Beeinträchtigung der Informationssicherheit hinweisen – beispielsweise technische Probleme wie Systemausfälle und Virenfunde, aber auch verdächtige Aktivitäten von Personen wie z.B. unbefugte Zugriffe auf Systeme oder Daten oder unbekannte Personen in Sicherheitsbereichen. Eine geeignete Umsetzung kann durch unterschiedliche Maßnahmen unterstützt werden: (1) einfache und klar sichtbare Meldewege, z. B. eine zentrale Funktionsmailadresse oder eine Notfallhotline, (2) kurze Schulungen oder Awareness-Kampagnen mit praxisnahen Beispielen, die verdeutlichen, welche Vorfälle gemeldet werden können, (3) niedrigschwellige Hilfsmittel wie Poster, Bildschirm-Hinweise oder Quick-Reference-Karten, die den Meldeprozess in Erinnerung rufen. Für eine Umsetzung kann die BSI IT-Notfallkarte „Verhalten bei IT-Notfällen“ genutzt werden."
-     }
-    },
-    "SENS.2.8.1": {
-     "guidance": {
-      "de": "Unerwartete Fehler- oder Warnmeldungen könnten ein Indiz für weitreichendere Störungen oder sogar einen Angriff sein. Das Melden von Fehler- oder Warnmeldungen ist daher im Zweifel eine gute Idee nicht nur um den Betrieb aufrechtzuerhalten, sondern auch um die Informationssicherheit zu gewährleisten."
      }
     }
    }

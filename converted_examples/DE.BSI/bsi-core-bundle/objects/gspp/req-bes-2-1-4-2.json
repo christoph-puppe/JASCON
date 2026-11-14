@@ -1,0 +1,84 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/BES.2.1.4.2",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "BES.2.1.4.2",
+ "lifecycle": "active",
+ "title": {
+  "de": "Kompatibilität der Netzanbindung"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Beschaffungsmanagement für Einkäufe SOLLTE den Bedarf für die Kompatibilität im Hinblick auf die Netzanbindung dokumentieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "dokumentieren",
+     "result": "den Bedarf für die Kompatibilität",
+     "result-specification": "im Hinblick auf die Netzanbindung",
+     "target-object-categories": [
+      "Einkäufe"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Beschaffungskriterien"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 4,
+     "tags": [
+      "Lieferketten"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Kompatibilität im Hinblick auf die Netzanbindung ist hier die technische und logische Anschlussfähigkeit einer zu beschaffenden Komponente an die bestehende Netzwerkinfrastruktur der Institution zu verstehen, einschließlich physischer Schnittstellen (z.B. Ethernet, Glasfaser), unterstützter Übertragungsprotokolle (z.B. TCP/IP, HTTP, TLS), Authentisierungs- und Autorisierungsverfahren (z.B. IEEE 802.1X, RADIUS), Adressierungskonzepte (IPv4/IPv6, erforderlicher Netzbandbreite und Laufzeiten, sowie Segmentierungs- und Sicherheitsarchitekturen (z.B. VLAN, Network Access Control – NAC). Netzanbindung meint dabei jede Form der Integration in interne Netze, Perimeternetze oder dedizierte Verbindungen zu externen Netzen, einschließlich drahtloser Anbindungen (WLAN) oder standortübergreifender Kopplungen (WAN). Der dokumentierte Bedarf beschreibt die konkret erforderlichen technischen, sicherheitsrelevanten und betrieblichen Eigenschaften der Netzschnittstelle, sodass bereits im Beschaffungsprozess transparent wird, welche Integrationsvoraussetzungen notwendig sind und welche Abweichungen nicht akzeptabel sind. Die Dokumentation dieses Bedarfs kann verhindern, dass Lösungen beschafft werden, die sich nur mit unsicheren Protokollen anbinden lassen oder bestehende Segmentierungs- und Schutzmechanismen umgehen, was zu ungewollten Netzöffnungen, erhöhten Angriffsflächen oder Integrationsproblemen führen könnte. Sie kann zudem Transparenz schaffen, sodass spätere Notlösungen wie unkontrollierte Gateways oder Protokollkonverter vermieden werden, die zusätzliche Schwachstellen einführen könnten."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "004ebc71-2ee1-4b26-993e-9bc3f5088bfc"
+  }
+ ]
+}

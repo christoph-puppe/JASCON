@@ -23,16 +23,6 @@
      "label": "regelmäßig"
     }
    ]
-  },
-  {
-   "id": "REA.3.1.1",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Sicherheitsvorfallsbehandlung SOLLTE Erkenntnisse einschließlich Art, Umfang und Schäden des Vorfalls dokumentieren."
-   }
   }
  ],
  "facets": {
@@ -42,11 +32,6 @@
      "action": "überprüfen",
      "result": "bisherige Maßnahmen anhand von Erkenntnissen aus Informationssicherheitsvorfällen",
      "result-specification": "{{regelmäßig}}"
-    },
-    "REA.3.1.1": {
-     "action": "dokumentieren",
-     "result": "Erkenntnisse",
-     "result-specification": "einschließlich Art, Umfang und Schäden des Vorfalls"
     }
    }
   },
@@ -56,26 +41,12 @@
      "required-documentation": [
       "Behandlung von Sicherheitsvorfällen"
      ]
-    },
-    "REA.3.1.1": {
-     "required-documentation": [
-      "Behandlung von Sicherheitsvorfällen"
-     ]
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
    "by-statement": {
     "smt": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
-     ]
-    },
-    "REA.3.1.1": {
      "confidentiality": "1",
      "integrity": "1",
      "availability": "1",
@@ -95,13 +66,6 @@
      "tags": [
       "Kompetenzmanagement"
      ]
-    },
-    "REA.3.1.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 4,
-     "title": "Quantitative Analyse",
-     "alt-identifier": "b2a6adf2-ffe3-4b9d-9678-e938e425cb58"
     }
    }
   },
@@ -110,11 +74,6 @@
     "smt": {
      "guidance": {
       "de": "Erkenntnisse meint hier sowohl technische Aspekte („technical findings“), organisatorische Schwachstellen („process deficiencies“) als auch menschliche Faktoren („human factors“). Dabei ist es zielführend, sich nicht nur auf die unmittelbaren Ursachen zu beschränken (z.B. „Administrierende haben vergessen eine abhängige Komponente zu aktualisieren“), sondern nach den tieferen prozessualen oder technischen Ursachen zu suchen (sog. Root Cause Analyse), z.B. „Abhängigkeiten wurden bislang nicht dokumentiert“. Dabei kann es helfen, wenn alle Beteiligten verstehen, dass es nicht um Schuldzuweisungen geht, sondern um kontinuierliche Verbesserung der Informationssicherheit. Neben technischen Verbesserungen sind dabei auch organisatorische Maßnahmen sinnvoll. Beispielsweise können reale Beispiele in Schulungen verwendet werden, was die Bedeutung für die tägliche Arbeit der Teilnehmenden verdeutlicht und ähnliche Vorfälle in Zukunft vermeiden hilft. Ein regelmäßiger Überprüfungsrhythmus – regelmäßig kann hier je nach Kritikalität der Systeme etwa quartalsweise, halbjährlich oder nach jedem relevanten Vorfall bedeuten – dient dazu, bestehende sicherheitsrelevante Maßnahmen anhand der aus Vorfällen gewonnenen Erkenntnisse neu zu bewerten. Die regelmäßige Überprüfung kann verhindern, dass sich Schwachstellen verfestigen, die sonst unentdeckt bleiben könnten, beispielsweise unerkannte Fehlkonfigurationen oder wiederkehrende Bedienfehler, die bei zukünftigen Angriffen ausgenutzt werden könnten. Gleichzeitig kann sie dazu beitragen, dass eingeführte Verbesserungen nachhaltig wirken und im Alltag nicht wieder verwässern, was die Resilienz der Institution erhöhen kann. Mögliche Optionen reichen von strukturierten Lessons-Learned-Sitzungen über die Pflege eines Katalogs wiederkehrender Ursachen bis hin zur Integration von Anpassungen in technische Härtungsmaßnahmen oder Arbeitsanweisungen."
-     }
-    },
-    "REA.3.1.1": {
-     "guidance": {
-      "de": "Die Erkenntnisse (findings) umfassen hier eine systematisch strukturierte Auswertung eines Informationssicherheitsvorfalls (security incident), wobei Art die konkrete Typisierung des Ereignisses meint (z.B. unbefugter Zugriff, Fehlkonfiguration, Manipulation), Umfang die tatsächlich betroffenen IT-Systeme, Daten oder Prozesse beschreibt (impact scope) und Schäden sowohl technische als auch betriebswirtschaftliche Beeinträchtigungen bezeichnet (damage bzw. loss). Solch strukturierte Informationen können helfen, wiederkehrende Angriffsmuster oder Probleme zu erkennen und so die Eintrittswahrscheinlichkeit oder das Schadensausmaß zukünftiger Vorfälle zu verringern, während unzureichend dokumentierte Erkenntnisse dazu führen könnte, dass Ursachen im Dunkeln bleiben oder Gegenmaßnahmen nicht auch auf zukünftige Vorfälle wirken können. In der praktischen Umsetzungbietet bietet es sich dazu an Incident-Reports zu erstellen, die sowohl eine quantiative Einordnung anhand von Klassifikationsschemata, als auch eine qualitative Beschreibung von Ursache und Gegenmaßnamen erfasst wird. Diese Berichte können beispielsweise in ein zentrales, revisionssicheres Register für Vorfallsdokumentationen oder herstellerneutralen Ticket- oder IR-Tools abgelegt werden."
      }
     }
    }

@@ -16,16 +16,6 @@
    "prose": {
     "de": "Informationen und Assets SOLLTE ein Inventar der IT-Systeme einschließlich Identifikationsbezeichnung und letztem bekannten Verbleib dokumentieren."
    }
-  },
-  {
-   "id": "ASST.2.2.1",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Informationen und Assets für Netze SOLLTE das Aufdecken unautorisierter IT-Systeme verankern."
-   }
   }
  ],
  "facets": {
@@ -35,13 +25,6 @@
      "action": "dokumentieren",
      "result": "ein Inventar der IT-Systeme",
      "result-specification": "einschließlich Identifikationsbezeichnung und letztem bekannten Verbleib"
-    },
-    "ASST.2.2.1": {
-     "action": "verankern",
-     "result": "das Aufdecken unautorisierter IT-Systeme",
-     "target-object-categories": [
-      "Netze"
-     ]
     }
    }
   },
@@ -51,29 +34,12 @@
      "required-documentation": [
       "Inventar IT-Systeme"
      ]
-    },
-    "ASST.2.2.1": {
-     "required-documentation": [
-      "Konfigurationshistorie"
-     ]
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
    "by-statement": {
     "smt": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "2",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.16",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.17",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.45"
-     ]
-    },
-    "ASST.2.2.1": {
      "confidentiality": "1",
      "integrity": "1",
      "availability": "2",
@@ -96,16 +62,6 @@
      "tags": [
       "Inventories"
      ]
-    },
-    "ASST.2.2.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 4,
-     "tags": [
-      "Rogue Access Point"
-     ],
-     "title": "Aufdecken unautorisierter IT-Systeme",
-     "alt-identifier": "02a49908-868b-45de-9ce5-56cb230ab8ee"
     }
    }
   },
@@ -114,11 +70,6 @@
     "smt": {
      "guidance": {
       "de": "Hierbei sind neben physischen Endgeräten auch Hostsysteme, virtuelle Systeme, IoT-Geräte, Funkgeräte und Fahrzeuge relevant, wenn diese für die Verarbeitung von Daten aus dem Informationsverbund bestimmt sind. Als Identifikationsbezeichnung ist z.B. die Identifikationsnummer gemeint. Hierzu können z.B. eine Gerätenummer, Hardware-MAC-Adresse oder ein DNS-Name zählen, anhand derer das System eindeutig und nachvollziehbar identifiziert wird. Mit Verbleib ist hier z.B. der physische Standort, die Person, das Virtualisierungssystem oder die Netzadresse gemeint, wo das IT-System zu finden ist. Kann durch Integration in das Inventar der Informationen umgesetzt werden. Ein Asset-Inventar kann im einfachsten Fall händisch gepflegt werden. Empfehlenswert ist jedoch, auch automatisierte Systeme zum Erfassen von Asset-Inventar (z.B. Verzeichnisdienste, CMDB, DHCP-Logging, Passive Asset Discovery Tools, EDR oder MDM) einzusetzen."
-     }
-    },
-    "ASST.2.2.1": {
-     "guidance": {
-      "de": "Ziel ist sicherzustellen, dass keine unautorisierten Assets im Informationsverbund betrieben werden. Hierzu können z.B. aktive Netzscans (z.B. mit Nmap), passive Analysen des Netzwerkverkehrs oder spezielle Werkzeuge zur Erkennung von unbekannten WLAN-Access-Points (z.B. Kismet) genutzt werden. Zur Behandlung können die gefundenen IT-Systeme beispielsweise aus dem Netz entfernt, in eine Quarantäne verschoben oder nach Überprüfung autorisiert werden."
      }
     }
    }

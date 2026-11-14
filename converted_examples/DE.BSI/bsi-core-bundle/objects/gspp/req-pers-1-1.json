@@ -16,43 +16,6 @@
    "prose": {
     "de": "Personal MUSS Verfahren und Regelungen zum Personalmanagement verankern."
    }
-  },
-  {
-   "id": "PERS.1.1.1",
-   "modality": "must",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Personal MUSS die Verfahren und Regelungen dokumentieren."
-   }
-  },
-  {
-   "id": "PERS.1.1.2",
-   "modality": "must",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Personal MUSS die mit den Verfahren und Regelungen verbundenen Aufgaben {param:pers.1.1.2-prm1} zuweisen."
-   },
-   "parameters": [
-    {
-     "name": "pers.1.1.2-prm1",
-     "type": "string",
-     "label": "zuständigen Personen oder Rollen"
-    }
-   ]
-  },
-  {
-   "id": "PERS.1.1.3",
-   "modality": "must",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Personal MUSS die zuständigen Personen oder Rollen über die Verfahren und Regelungen informieren."
-   }
   }
  ],
  "facets": {
@@ -61,19 +24,6 @@
     "smt": {
      "action": "verankern",
      "result": "Verfahren und Regelungen zum Personalmanagement"
-    },
-    "PERS.1.1.1": {
-     "action": "dokumentieren",
-     "result": "die Verfahren und Regelungen"
-    },
-    "PERS.1.1.2": {
-     "action": "zuweisen",
-     "result": "die mit den Verfahren und Regelungen verbundenen Aufgaben",
-     "result-specification": "{{zuständigen Personen oder Rollen}}"
-    },
-    "PERS.1.1.3": {
-     "action": "informieren",
-     "result": "die zuständigen Personen oder Rollen über die Verfahren und Regelungen"
     }
    }
   },
@@ -82,21 +32,6 @@
     "smt": {
      "required-documentation": [
       "Prozess Personalmanagement"
-     ]
-    },
-    "PERS.1.1.1": {
-     "required-documentation": [
-      "IT-Betriebskonzept"
-     ]
-    },
-    "PERS.1.1.2": {
-     "required-documentation": [
-      "Geschäftsverteilungsplan"
-     ]
-    },
-    "PERS.1.1.3": {
-     "required-documentation": [
-      "IT-Betriebskonzept"
      ]
     }
    }
@@ -111,36 +46,6 @@
      "threat-refs": [
       "https://ns.bsi.bund.de/gspp/threat/G-0.18"
      ]
-    },
-    "PERS.1.1.1": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "1",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.37"
-     ]
-    },
-    "PERS.1.1.2": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.31"
-     ]
-    },
-    "PERS.1.1.3": {
-     "confidentiality": "1",
-     "integrity": "2",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.31"
-     ]
     }
    }
   },
@@ -153,27 +58,6 @@
      "tags": [
       "Kompetenzmanagement"
      ]
-    },
-    "PERS.1.1.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 0,
-     "title": "Dokumentation",
-     "alt-identifier": "d7b763ba-c8c0-4c8d-8995-5192df0cce35"
-    },
-    "PERS.1.1.2": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 0,
-     "title": "Zuweisung der Aufgaben",
-     "alt-identifier": "e72ceb25-e617-43c9-b40f-e9f908580d6b"
-    },
-    "PERS.1.1.3": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 0,
-     "title": "Bekanntgabe",
-     "alt-identifier": "47787c01-426d-4e26-967e-9df678143ac0"
     }
    }
   },
@@ -183,28 +67,6 @@
      "guidance": {
       "de": "Der Prozess stellt sicher, dass qualifiziertes und zuverlässiges Personal für alle Aufgaben zur Verfügung steht und allen Beteiligten ihre Aufgaben und Zuständigkeiten bekannt sind. Hierbei sind Einstellung, Einarbeitung, Weiterbildung und Austritt von Mitarbeitenden zu berücksichtigen. Die bei der Festlegung des Verfahrens im Einzelnen zu berücksichtigenden Inhalte ergeben sich aus den Anforderungen dieser Praktik."
      }
-    },
-    "PERS.1.1.1": {
-     "guidance": {
-      "de": "Ohne eine Dokumentation könnte die Einhaltung der Verfahren und Regelungen von der Tagesform oder dem individuellen Wissen einzelner Mitarbeiter abhängen, was zu inkonsistenten Entscheidungen und Fehlern führen könnte; insbesondere beim Ausscheiden eines langjährigen Administrators könnte wertvolles prozessuales Wissen verloren gehen. Eine klare Dokumentation sichert die Verbindlichkeit und Wiederholbarkeit und dient als unverzichtbare Grundlage für die Einarbeitung neuer Kollegen, für die Durchführung von Audits und zur einheitlichen Anwendung der Regeln in der gesamten Institution. Die Dokumentation kann in einem eigenständigen Dokument als Richtlinie erfolgen, aber auch als Abschnitt in einem bereits bestehenden Dokument oder über die digital strukturiere Erfassung von Maßnahmen zur Umsetzung der Anforderungen, etwa über eine Software zum Management der Informationssicherheit. Sinnvoll ist es Ort und Struktur der Dokumentation an der jeweiligen Zielgruppe, d.h. den für das Management und die Umsetzung verantwortlichen Personen oder Rollen, auszurichten."
-     }
-    },
-    "PERS.1.1.2": {
-     "guidance": {
-      "de": "Die Zuweisung von Aufgaben bezeichnet die eindeutige und verbindliche Übertragung von konkreten Tätigkeiten und Verantwortlichkeiten des Änderungsprozesses, wie etwa die Risikobewertung, die technische Umsetzung oder die finale Freigabe, an definierte Stellen in der Institution. Der Sinn dieser Vorschrift ist es, die Verantwortlichkeit (\"Accountability\") für jeden einzelnen Schritt im Prozess klarzustellen. Ohne eine solche Zuweisung könnten kritische Prüfungen unterbleiben, weil sich niemand explizit zuständig fühlt, was wiederum die Wahrscheinlichkeit fehlgeschlagener Änderungen erhöht. Eine klare Regelung kann sicherstellen, dass keine Aufgaben übersehen werden und jede Tätigkeit von einer dafür qualifizierten und befugten Stelle ausgeführt wird, was die Prozesssicherheit signifikant erhöht. Eine bewährte Methode zur Umsetzung ist die Erstellung einer RACI-Matrix (Responsible, Accountable, Consulted, Informed), die tabellarisch für jeden Prozessschritt darstellt, wer für die Durchführung verantwortlich ist, wer die Gesamtverantwortung trägt, wer zu konsultieren und wer zu informieren ist. Diese Zuständigkeiten können auch direkt in einem Workflow- oder Ticketsystem abgebildet werden, sodass Aufgaben, wie beispielsweise Genehmigungsschritte, automatisch an die richtige Gruppe oder Person weitergeleitet werden. Sinnvoll ist es die Zuweisung anhand von Rollen (z.B. \"Anwendungsverantwortlicher\", \"Netzwerkadministrator\", \"Change Manager\") vorzunehmen, statt an konkrete Personen. Dieser Ansatz stellt sicher, dass die Prozesse auch bei Personalwechseln stabil weiterlaufen, da die Zuständigkeit an die Funktion und nicht an das Individuum gebunden ist."
-     }
-    },
-    "PERS.1.1.3": {
-     "guidance": {
-      "de": "Wenn die Zuständigen die etablierten Verfahren nicht kennen, besteht die Gefahr, dass diese – sei es aus Unwissenheit oder Bequemlichkeit – umgangen werden, was die Schutzwirkung des gesamten Managementsystems untergräbt. So könnte ein neuer Systemadministrator eine weitreichende Konfigurationsänderung vornehmen, ohne den vorgeschriebenen Genehmigungsprozess zu durchlaufen, was zu einem unbemerkten Sicherheitsrisiko führen könnte. Eine gezielte Information kann hingegen die Akzeptanz der Regelungen fördern und sicherstellen, dass alle Beteiligten ihre Rolle im Prozess verstehen und die Abläufe korrekt anwenden. Zur Umsetzung ist es sinnvoll die Dokumentation im Rahmen eines Onboarding-Prozesses bekanntzugeben und bei allen Änderungen eine automtatische Benachrichtigung aller zuständigen Personen oder Rollen anzustoßen."
-     }
-    }
-   }
-  },
-  "https://ns.jascon.net/compat/oscal-1x@1": {
-   "param-extras": {
-    "pers.1.1.2-prm1": {
-     "alt-identifier": "e72ceb25-e617-43c9-b40f-e9f908580d6b"
     }
    }
   }

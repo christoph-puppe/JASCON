@@ -8,19 +8,19 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/GEB.6.1",
-   "sequence": 3080
+   "sequence": 5220
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.6.2",
-   "sequence": 3090
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/geb-6-2",
+   "sequence": 5250
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/GEB.6.3",
-   "sequence": 3100
+   "sequence": 5260
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/GEB.6.4",
-   "sequence": 3110
+   "sequence": 5270
   }
  ],
  "label": "6",

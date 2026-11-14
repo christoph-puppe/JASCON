@@ -7,28 +7,28 @@
  },
  "members": [
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.2.1",
-   "sequence": 1860
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/bes-2-1",
+   "sequence": 3000
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BES.2.2",
-   "sequence": 1870
+   "sequence": 3010
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BES.2.3",
-   "sequence": 1880
+   "sequence": 3020
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BES.2.4",
-   "sequence": 1890
+   "sequence": 3030
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BES.2.5",
-   "sequence": 1900
+   "sequence": 3040
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BES.2.6",
-   "sequence": 1910
+   "sequence": 3050
   }
  ],
  "label": "2",

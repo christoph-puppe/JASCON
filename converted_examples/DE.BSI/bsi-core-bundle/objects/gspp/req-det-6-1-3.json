@@ -1,0 +1,79 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/DET.6.1.3",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "DET.6.1.3",
+ "lifecycle": "active",
+ "title": {
+  "de": "Dokumentation von Ergebnissen"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "may",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Detektion KANN Analyseergebnisse dokumentieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "dokumentieren",
+     "result": "Analyseergebnisse"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Detektions-Konzept"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "1",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.39",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.37"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "erhöht",
+     "effort": 4
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Die Aufzeichnung von Beurteilungsergebnissen und Entscheidungen bei Sicherheitsvorfällen dient als rechtssichere Nachweisführung und ermöglicht retrospektive Analysen zur kontinuierlichen Prozessverbesserung. Sie stellt außerdem sicher, dass die Vorfälle während und nach der Behandlung strukturiert aufgearbeitet werden können. Zweckmäßig ist es dabei, möglichst viele hilfreiche Informationen automatisch mitzuerfassen, z.B. welche Fehlermeldung genau aufgetreten ist oder welche Schwellwerte bis zu welchem Wert genau überschritten worden sind. Kann auch durch ein SIEM umgesetzt werden, welches Informationen zu kritischen Ereignissen abspeichert.  Die Umsetzung kann mit einem standardisierten Dokumentationssystem erfolgen, das alle relevanten Metadaten erfasst: Zeitstempel, beteiligte Personen, Begründungen für Entscheidungen sowie konkrete Maßnahmen."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "02e94d9c-cd23-4cb4-a6ef-7ccd7efb0869"
+  }
+ ]
+}

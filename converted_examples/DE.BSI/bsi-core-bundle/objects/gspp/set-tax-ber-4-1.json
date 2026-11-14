@@ -1,0 +1,22 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/ber-4-1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Prinzip der geringsten Berechtigungen"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.4.1",
+   "sequence": 8130
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.4.1.1",
+   "sequence": 8140
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.4.1.2",
+   "sequence": 8150
+  }
+ ]
+}

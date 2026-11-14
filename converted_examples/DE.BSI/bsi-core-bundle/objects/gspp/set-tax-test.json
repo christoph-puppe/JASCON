@@ -8,23 +8,23 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/test-1",
-   "sequence": 2610
+   "sequence": 4420
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/test-2",
-   "sequence": 2640
+   "sequence": 4490
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/test-3",
-   "sequence": 2670
+   "sequence": 4640
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/test-4",
-   "sequence": 2720
+   "sequence": 4730
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/test-5",
-   "sequence": 2780
+   "sequence": 4790
   }
  ],
  "label": "TEST",

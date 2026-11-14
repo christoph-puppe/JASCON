@@ -16,50 +16,6 @@
    "prose": {
     "de": "Detektion für Netze SOLLTE den Netzwerkverkehr auf Anomalien überwachen."
    }
-  },
-  {
-   "id": "DET.4.11.1",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Detektion für Externe Netzanschlüsse KANN Authentifizierungsversuche auf unauthorisierte Verbindungen {param:det.4.11.1-prm1} überprüfen."
-   },
-   "parameters": [
-    {
-     "name": "det.4.11.1-prm1",
-     "type": "string",
-     "label": "regelmäßig"
-    }
-   ]
-  },
-  {
-   "id": "DET.4.11.2",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Detektion für Netze KANN Netzwerk-Honeypots installieren."
-   }
-  },
-  {
-   "id": "DET.4.11.3",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Detektion für Netze KANN auf kritische Netzverkehrsflüsse anhand von {param:det.4.11.3-prm1} überwachen."
-   },
-   "parameters": [
-    {
-     "name": "det.4.11.3-prm1",
-     "type": "string",
-     "label": "Kriterien"
-    }
-   ]
   }
  ],
  "facets": {
@@ -71,29 +27,6 @@
      "target-object-categories": [
       "Netze"
      ]
-    },
-    "DET.4.11.1": {
-     "action": "überprüfen",
-     "result": "Authentifizierungsversuche auf unauthorisierte Verbindungen",
-     "result-specification": "{{regelmäßig}}",
-     "target-object-categories": [
-      "Externe Netzanschlüsse"
-     ]
-    },
-    "DET.4.11.2": {
-     "action": "installieren",
-     "result": "Netzwerk-Honeypots",
-     "target-object-categories": [
-      "Netze"
-     ]
-    },
-    "DET.4.11.3": {
-     "action": "überwachen",
-     "result": "auf kritische Netzverkehrsflüsse",
-     "result-specification": "anhand von {{Kriterien}}",
-     "target-object-categories": [
-      "Netze"
-     ]
     }
    }
   },
@@ -102,21 +35,6 @@
     "smt": {
      "required-documentation": [
       "Detektions-Konzept"
-     ]
-    },
-    "DET.4.11.1": {
-     "required-documentation": [
-      "Detektions-Konzept"
-     ]
-    },
-    "DET.4.11.2": {
-     "required-documentation": [
-      "Detektions-Konzept"
-     ]
-    },
-    "DET.4.11.3": {
-     "required-documentation": [
-      "Audit Log"
      ]
     }
    }
@@ -133,37 +51,6 @@
       "https://ns.bsi.bund.de/gspp/threat/G-0.39",
       "https://ns.bsi.bund.de/gspp/threat/G-0.32"
      ]
-    },
-    "DET.4.11.1": {
-     "confidentiality": "2",
-     "integrity": "2",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.23",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.32"
-     ]
-    },
-    "DET.4.11.2": {
-     "confidentiality": "2",
-     "integrity": "2",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.23",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.39"
-     ]
-    },
-    "DET.4.11.3": {
-     "confidentiality": "2",
-     "integrity": "2",
-     "availability": "1",
-     "authenticity": "1",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.23",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.39",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.37"
-     ]
     }
    }
   },
@@ -178,38 +65,6 @@
       "Lateral Movement",
       "Data Exfiltration"
      ]
-    },
-    "DET.4.11.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5,
-     "tags": [
-      "Advanced Persistent Threats (APT)",
-      "Command & Control"
-     ],
-     "title": "Authentifizierungsversuche an externen Schnittstellen",
-     "alt-identifier": "1fc84b56-0931-439d-9b5a-4642926e0d04"
-    },
-    "DET.4.11.2": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5,
-     "tags": [
-      "Advanced Persistent Threats (APT)",
-      "Honeypot"
-     ],
-     "title": "Netzwerk-Honeypots",
-     "alt-identifier": "7715c6ec-8cf9-446c-807a-783d61ebd539"
-    },
-    "DET.4.11.3": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5,
-     "tags": [
-      "Lateral Movement"
-     ],
-     "title": "Netzverkehrsfluss",
-     "alt-identifier": "80109af2-9ed7-4aca-807e-aae712dc8e18"
     }
    }
   },
@@ -219,31 +74,6 @@
      "guidance": {
       "de": "Beispiele sind ausgehende Netzverbindungen zu als bösartig bekannten oder gänzlich unbekannten DNS-Domains oder IP-Adressen, Anzeichen für DNS-Tunneling (ungewöhnlich lange Subdomains oder Spitzenwerte für TXT-Mengen), ungewöhnlich hohes Datenvolumen zu Cloud-Speicherlösungen, sowie unautorisierte Portscans oder Brute Force Angriffe auf Fernwartungsschnittstellen wie RDP oder SSH sein. Hierdurch können Verbindungen zu Angreiferservern (C2 Beacons), die Ausbreitung von Angriffen über das Netz, oder Datenabflüsse erkannt werden."
      }
-    },
-    "DET.4.11.1": {
-     "guidance": {
-      "de": "Ohne solche Überprüfungen könnte ein Angreifer unbemerkt wiederholt Zugangsdaten erraten (Brute-Force- oder Wörterbuchangriffe) oder unautorisierte Geräte an Schnittstellen wie VPN-Gateways, Firewalls oder externen Modems anbinden. Auch ein unbemerktes Einschleusen von Schadsoftware über offene Remote-Desktop- oder SSH-Verbindungen könnte langfristig unentdeckt bleiben. Eine kontinuierliche Auswertung von Anmeldeversuchen kann dagegen Auffälligkeiten wie ungewöhnlich viele Fehlversuche, Anmeldungen aus geografisch atypischen Regionen oder Verbindungsaufbau außerhalb üblicher Betriebszeiten aufzeigen und so eine wirksame Schutzwirkung entfalten. Als Frist können Intervalle wie \"täglich\", \"wöchentlich\" oder \"in Echtzeit\" je nach Kritikalität des Anschlusses angemessen sein. Verbindungen sind hier unautorisiert, wenn Anzeichen vorliegen, dass sie von unautorisierten Personen oder von unautorisierten Systemen stammen. Die Überprüfung kann manuell oder durch automatische Analyse von Logdateien erfolgen. Empfehlenswert ist eine kontinuierliche Überwachung. Dabei kann z.B. nach ungewöhnlichen vielen fehlgeschlagenen Anmeldungen, veralteten Berechtigungen, Einwahlen von Adminaccounts, ungewöhnlichen Einwahlorten/IP-Adressbereichen/User Agents oder Uhrzeiten gesucht werden. Als Reaktion kommen z.B. Sperren betroffener Adressbereiche, die Abschaltung angegriffener Schnittstellen oder stärkere Authentifizierungsmechanismen wie Mehr-Faktor-Authentifizierung in Betracht."
-     }
-    },
-    "DET.4.11.2": {
-     "guidance": {
-      "de": "Honeypots sind Systeme, die das Verhalten eines Betriebsservers simulieren, um bei netzbasierten Angriffen Informationen über den Angriff zu erhalten. Geeignet sind z.B. vermeintliche Rechnungsbearbeitungssysteme oder Datenbank-Server. Alarmierungsereignisse können hier z.B. Login-Versuche oder unerwartete API-Abfragen sein. Allerdings kann es hierbei zu falsch-positiv Vorfallsmeldungen kommen, insbesondere wenn die Honeypots dort platziert werden, wo sie für legitime Nutzende leicht zugänglich sind, oder wenn legitime Netzwerkscans bereits eine Alarmierung auslösen. Daher ist es sinnvoll, die konkreten Einsatzgegebenheiten in einer Risikoanalyse zu betrachten und den möglichen Detektionsmehrwert mit den potenziellen Risiken solcher falsch-positiv Meldungen abzuwägen."
-     }
-    },
-    "DET.4.11.3": {
-     "guidance": {
-      "de": "Ein Netzverkehrsfluss ist eine Aufzeichnung von Verkehrsdaten einer Netzwerkverbindung (wie Quell-/Ziel-IP, Ports, Protokoll, übertragene Datenmenge und Zeitdauer). Die Aufzeichnung des gesamten Verkehrs (Packet Capture) des vollständigen Inhalts aller Datenpakete ist hierzu nicht erforderlich, sodass die zu untersuchende Datenmenge überschaubar bleibt. Allerdings sind hier Compliance-Anforderungen zur Datenspeicherung relevant. Für datenschutzrechtliche Fragen zu Verkehrsdaten kann der BfDI Leitfaden Speicherung Verkehrsdaten als Grundlage genutzt werden. Beispiele für Kriterien sind die Aufzeichnung an wichtigen Netzgrenzen (DMS-Internet), in kritischen Netzen, zwischen Serversystemen oder bei Leistungsproblemen."
-     }
-    }
-   }
-  },
-  "https://ns.jascon.net/compat/oscal-1x@1": {
-   "param-extras": {
-    "det.4.11.1-prm1": {
-     "alt-identifier": "1fc84b56-0931-439d-9b5a-4642926e0d04"
-    },
-    "det.4.11.3-prm1": {
-     "alt-identifier": "80109af2-9ed7-4aca-807e-aae712dc8e18"
     }
    }
   }

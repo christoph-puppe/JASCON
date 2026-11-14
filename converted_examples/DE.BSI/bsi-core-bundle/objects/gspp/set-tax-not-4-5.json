@@ -1,0 +1,22 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/not-4-5",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Archivierung langfristig benötigter Daten"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.5",
+   "sequence": 8900
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.5.1",
+   "sequence": 8910
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.5.2",
+   "sequence": 8920
+  }
+ ]
+}
