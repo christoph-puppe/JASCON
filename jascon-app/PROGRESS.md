@@ -61,7 +61,9 @@ and in `readme.md`; this file says only what is done and what is next.
   `convert_nist.py`, without the baseline Sets). On the local source file all
   1,035 objects equal the output of the Python converter run on the same
   file. Driven in headless Chromium with the MODERATE profile on top;
-  `validate_core.py` on the export: 1038 pass, 0 fail.
+  `validate_core.py` on the export: 1038 pass, 0 fail. (That was
+  `convert_nist.py` v0.1; since build 0.9.15 the preset writes the 1,037
+  objects of v0.2, see below.)
 
 - The proposed Check type (CP-CHECK-1, merged from the branch that drafts
   it): type recognised at load, `kernel-version` 2.0.0 written when a Check,
@@ -336,7 +338,8 @@ and in `readme.md`; this file says only what is done and what is next.
   statements for the BSI catalog under `converted_examples`, 1,035 and
   1,918 for the NIST catalog there, 17 and 5 for a catalog of a CIS
   Benchmark's shape. (For BSI the digest was taken anew with build 0.9.14,
-  when the preset and that catalog changed; see below.) With another party every statement binds it and
+  for NIST with build 0.9.15, each when the preset and its catalog changed;
+  see below.) With another party every statement binds it and
   nothing else differs in any file. Empty, blank, a short name, a URN and a
   URI with a blank are each refused. A level that an SP 800-53 control
   states stays, on a catalog written for the test. The Import page was
@@ -464,6 +467,77 @@ and in `readme.md`; this file says only what is done and what is next.
   and not measured: the set imported on the page, exported and handed to
   `validate_core.py`.
 
+- The SP 800-53 preset follows `convert_nist.py` v0.2, and the profile
+  import carries a profile's metadata and merge directive (build 0.9.15;
+  the second half of the author's decision of 2026-11-14, "A. Bring both
+  presets in line with the Python converters"):
+  - `jscImportNist` in `jascon-oscal.js`: a withdrawn control that names
+    no successor is a Requirement with lifecycle `withdrawn` and an
+    `unspecified` statement that binds the preset's party; every objective
+    names the statement it assesses (`assessment-for`, with
+    `requirement-ref` for another control's); the formal SP 800-53A labels
+    of the parameters in odp@1; the lineage annotation carries the label a
+    reader sees; markdown links stay; the back-matter resources as the
+    source writes them, in its order, on the root Set (references@1), and
+    the catalogue's metadata there in the compat facet; the PM family's
+    overview with its title; a `related` link to a withdrawn control is a
+    relation; `contributes-to-assurance` false is written. A prop is read
+    in exactly the class and namespace the converter reads, and every
+    other prop is counted in the report (`props-not-read`), where the
+    converter's ledger fails its run. A status other than `withdrawn` is
+    refused, as by the converter. The source entry of the provenance names
+    the author and the day.
+  - `jscOscalImportProfile`: the profile's metadata (beside title and
+    version) and its merge directive stand on the profile's Set in the
+    compat facet, as on the converter's baseline Set. A set that pins no
+    schema for that facet gets the one `convert_nist.py` pins
+    (`jscSet.saveFacetSchemas`, new); one that pins it without `merge`
+    keeps the metadata, and the report says why the merge is not carried.
+  - The Import page: rows for the withdrawn controls without successor,
+    the links that become no relation, the props not read, and what a
+    profile's Set carries; the texts of the NIST preset and of the profile
+    import in English and German.
+
+  Measured on the pinned catalogue (`SOURCES.sha256`): 1,037 of 1,037
+  objects have the semantic digest and the bytes (line ends aside) of the
+  committed bundle, which has 1,041 with its four baseline Sets; the six
+  pinned schemas and the author and day are the converter's; 3,707
+  `assessment-for` links, 1,458 formal labels, 1,920 statements, every link
+  and every prop read. Build 0.9.14 wrote 1,035 objects and lost what
+  `ERRATA.md` lists. The MODERATE profile, imported into the committed
+  bundle, selects the 287 members of its baseline Set in their order, and
+  its Set carries the same compat facet; no schema is brought. On a
+  catalogue and four profiles written for the tests, `convert_nist.py` run
+  in a tree of its own gives the same 6 objects by digest and bytes, and
+  the profile import the same members and compat facet as its four
+  baseline Sets; the converter exits 1 there for one reference to a
+  resource without a link (see Found). On the OSCAL export the repository
+  carries the preset writes 1,037 objects and 1,920 statements, and the
+  SHA-256 of build 0.9.11 (1,035 and 1,918) gives way to the one of this
+  build, by the author's decision. In Chromium, in English and in German:
+  the catalogue imported with the preset (1,016 requirements, 21 sets,
+  1,920 clauses, 6 schemas, the new rows), the MODERATE profile on top
+  (287 included, metadata and merge carried, no seventh schema), the set
+  exported through the hub: `validate_core.py` 1040 pass, 0 fail, ALL
+  GREEN.
+
+  29 deliberate defects were run against the final code, among them the
+  four of the brief (`assessment-for` links not written, a withdrawn
+  control without successor not written, the zero-padded label in the
+  annotation, a formal ODP label not carried): 28 turned a test red at
+  once. The one that stayed green (a classless prop of a name the rules
+  read only with a class, counted as read) is red since the test holds
+  such a prop; the four defects on reading props were run again then, and
+  all four were red. In a first round two defects had stayed green (a prop
+  read whatever its class, whatever its namespace), because no catalogue
+  of the tests had such a prop; that is why the preset now counts every
+  prop it does not read, and the test holds two of them. The app's tests:
+  185, all pass, with the NIST source files present (3 of them are skipped
+  without); `pages.test.mjs` with the tests under `one-page-apps/`: 53 of
+  53. Read and not measured: the page test that imports a profile into the
+  example folder now brings the compat schema with it (its profile has
+  metadata), and the reference finds that export green as before.
+
 ## Next
 
 - An OSCAL component definition as a third kind on the Import page, written
@@ -501,6 +575,9 @@ and in `readme.md`; this file says only what is done and what is next.
 - The shipped `converted_examples/US.SP800-53` bundle was converted from an
   earlier revision of NIST's 5.2.0 file. In it SA-15(13) "Logging Syntax"
   carries the statement of SA-15(12); NIST's current file has it right.
+  Settled on 2026-11-14: the bundle is converted from the pinned file
+  (`SOURCES.sha256`), and the preset's 1,037 objects all equal it
+  (measured with build 0.9.15).
 - Found with build 0.9.9, each older than it:
   - A click that follows typing is lost. Where a field redraws its form
     when it changes (the Tailor workbench, the Risk form), the first click
@@ -587,6 +664,25 @@ and in `readme.md`; this file says only what is done and what is next.
     JASCON's namespace, none of which the preset reads; it carries them in
     the compat facet. The preset is for the BSI's catalogue; that export is
     only the input of the party tests.
+- Found with build 0.9.15:
+  - `convert_nist.py` writes no relation for a `reference` link to a
+    back-matter resource that gives no link, and its ledger then finds the
+    link's two values unaccounted and ends the run with exit code 1, after
+    the bundle is written. Measured on the catalogue of the tests; the
+    pinned catalogue has none. The preset counts such a link in
+    `links-not-written`. The converter is not this build's to change.
+  - Three bundles pin a schema under one id and version,
+    `https://ns.jascon.net/compat/oscal-1x` 1.0.0, each with other members:
+    DE.BSI nine (`metadata`, `back-matter`, `catalog`, `param-extras`,
+    `props`, `parts`, `links`, `control`, `group`), US.SP800-53 three
+    (`metadata`, `merge`, `class`), AU.ISM four (`group-parts`, `props`,
+    `nested-in`, `metadata`). Measured on the committed files. A profile
+    imported into a BSI set therefore keeps its metadata and not its merge
+    directive. Which schema that facet has is the converters' to settle.
+  - On the OSCAL export of the SP 800-53 bundle the preset reads none of
+    JASCON's own props (11,793) and none of the 5,065 links of its
+    controls: the export writes them in a shape of its own. The report
+    counts both; that export is only the input of the party tests.
 - Found with build 0.9.12:
   - `node one-page-apps/tools/sync-inlined.mjs --check` reports the pack
     builder's inlined copy of the rules as out of date, because the rules
