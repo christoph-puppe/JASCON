@@ -102,7 +102,7 @@ Levels: L1 - written as it is in a kernel field; L2 - written as it is in a face
 | `catalog.metadata.responsible-parties[].role-id` | 1 | L2 | compat facet oscal-1x@1 on the root Set: metadata, in the source's own shape | 1 copied |
 | `catalog.metadata.roles[].id` | 1 | L2 | compat facet oscal-1x@1 on the root Set: metadata, in the source's own shape | 1 copied |
 | `catalog.metadata.roles[].title` | 1 | L2 | compat facet oscal-1x@1 on the root Set: metadata, in the source's own shape | 1 copied |
-| `catalog.metadata.title` | 1 | L1 | title of the root Set (set/tax/ism) | 1 copied |
+| `catalog.metadata.title` | 1 | L1 | title of the root Set (set/tax/ism); manifest provenance.sources[0].title | 1 copied |
 | `catalog.metadata.version` | 1 | L1 | `version` of every Set and of a Requirement whose control states no revision; manifest provenance.sources[0].version | 1 copied |
 | `catalog.uuid` | 1 | L2 | manifest provenance.sources[0].uuid (the uuid of the source document) | 1 copied |
 

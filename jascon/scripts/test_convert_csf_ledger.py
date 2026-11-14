@@ -417,7 +417,7 @@ class PhaseEWhatTheMappingDoesNotKnow(Converted):
 
 
 class PhaseEDeliberateDefects(Converted):
-    """Thirteen changes to a copy of the converter. Each must end the run
+    """Fourteen changes to a copy of the converter. Each must end the run
     with a non-zero exit: a value that is lost is unaccounted, a rule that
     does not hold is a failed check, and a drop cannot stand in for either."""
     FIRST_ONLY = ('values, remarks = props_by_name(t["risk"], led), props_by_name(t["risk"], field="remarks")',
@@ -513,6 +513,19 @@ class PhaseEDeliberateDefects(Converted):
                        'succ_replaces["AA.ON-05" if href == "AA.ON-02" else href].append((e, l)); lineage_links[id(e)].append(l)')])
         self.assertIn("rule lineage inverted", r["done"].stderr)
         self.assertFalse(os.path.exists(r["out"]), "the rule gives no value, and the run stops before it writes")
+
+    def test_defect_14_a_value_that_stands_where_the_path_map_does_not_say(self):
+        """backlog #89: the ledger holds a rule to what it wrote; the table beside the path map says where"""
+        # the table names another place for a title than the converter writes
+        r = self.red([(' (CTL + r"title$", CARRIED, (r"/title/en",)),', ' (CTL + r"title$", CARRIED, (r"/title/de",)),')])
+        self.assertIn("stand at /title/en, a place the path map does not name for that path", r["done"].stderr)
+        self.assertEqual(r["ledger"]["totals"]["unaccounted"], 0, "the ledger alone lets it through")
+        # a sentence that says "no content" of a value that is carried
+        r = self.red([(' (CTL + r"title$", CARRIED, (r"/title/en",)),', ' (CTL + r"title$", NO_CONTENT, (r"/title/en",)),')])
+        self.assertIn("are copied, and the path map allows not-content there", r["done"].stderr)
+        # a row of the table taken out
+        r = self.red([(' (CTL + r"title$", CARRIED, (r"/title/en",)),\n', '')])
+        self.assertIn("the table of outcomes and places (HELD) has 24 row(s) and the path map 25; they differ first at row 13", r["done"].stderr)
 
     def test_defect_13_a_record_on_disk_that_is_not_the_record_of_the_run(self):
         not_written = ('with open(os.path.join(OUTDIR, LEDGER_FILE), "w", encoding="utf-8") as f:\n    json.dump(BY_PATH',

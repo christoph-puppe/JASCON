@@ -62,6 +62,7 @@ import json, os, re, sys, time, collections
 from oscal_conv_lib import make_T, slug, Bundle, inventory, coverage, report, walk_controls
 from oscal_conv_lib import known_arguments, out_dir, obligated_party, obligated_party_line, obligated_party_record
 from oscal_conv_lib import Ledger, ledger_by_path, ledger_gate, document_author, document_day
+from oscal_conv_lib import path_map_check, held_row, held_rows_match
 from oscal_conv_lib import COMPAT, COMPAT_PROPERTIES, lifecycle_default_record, lifecycle_default_line
 from oscal_conv_lib import REFERENCES, REFERENCES_FILE, ASSESSMENT_CRITERIA, ASSESSMENT_CRITERIA_FILE, resource_entry
 
@@ -1001,6 +1002,111 @@ RULES = [
   "the standard facet references@1 on the baseline Set (#82), in the source's own shape with the uuid as `id`: the "
   "resource its import names (E4)", {C}),
 ]
+# Where the values of each row stand in the written bundle (backlog #89): one
+# entry per row of RULES, in its order - the row's pattern, None (what
+# becomes of a value is held by the fourth member of the row, below), and the
+# places as the record writes them: a JSON Pointer into the object, array
+# positions as `[]`, the payload of a parameter under `{parameter id}`. After
+# the account the record is held against this table, and a value that stands
+# anywhere else ends the run (path_map_check). The places are those the
+# record of the pinned sources measured, and those the tests' catalogues
+# reach beyond them.
+_ACRIT = r"/facets/https:~1~1ns\.jascon\.net~1stdlib~1facet~1assessment-criteria@1"
+_COMPAT = r"/facets/https:~1~1ns\.jascon\.net~1compat~1oscal-1x@1"
+_NARR = r"/facets/https:~1~1ns\.nist\.gov~1sp800-53~1facet~1narrative@1"
+_ODP = r"/facets/https:~1~1ns\.nist\.gov~1sp800-53~1facet~1odp@1/params/\{parameter id\}"
+_REFS = r"/facets/https:~1~1ns\.jascon\.net~1stdlib~1facet~1references@1"
+_RMF = r"/facets/https:~1~1ns\.nist\.gov~1sp800-53~1facet~1rmf@1"
+_SOURCE = r"/provenance/sources/\[\]"
+HELD = [
+ (r"^nist\.catalog\.metadata\.title$", None, (_SOURCE + r"/title", r"/title/en")),
+ (r"^nist\.catalog\.metadata\.version$", None, (r"/objects/\[\]/version", _SOURCE + r"/version", r"/version")),
+ (r"^nist\.catalog\.metadata\.", None, (_COMPAT + r"/metadata(/.*)?", _SOURCE + r"/author-ref", _SOURCE + r"/date", _SOURCE + r"/format-version")),
+ (r"^nist\.catalog\.uuid$", None, (_SOURCE + r"/uuid",)),
+ (r"^nist\.catalog\.back-matter\.resources\[\]\.", None, (_REFS + r"/resources(/.*)?", r"/relations/\[\]/ref")),
+ (r"^nist\.catalog\.groups\[\]\.id$", None, (r"/id", r"/members/\[\]/ref", r"/objects/\[\]/id", r"/replaces/\[\]/ref")),
+ (r"^nist\.catalog\.groups\[\]\.title$", None, (r"/title/en",)),
+ (r"^nist\.catalog\.groups\[\]\.class$", None, ()),
+ (r"^nist\.catalog\.groups\[\]\.props\[\]\.value$", None, (r"/label",)),
+ (r"^nist\.catalog\.groups\[\]\.props\[\]\.name$", None, ()),
+ (r"^nist\.catalog\.groups\[\]\.parts\[\]\.(prose|title)$", None, (_NARR + r"/overview/\[\]/prose/en", _NARR + r"/overview/\[\]/title/en")),
+ (r"^nist\.catalog\.groups\[\]\.parts\[\]\.name$", None, ()),
+ (r"^nist\.catalog\.groups\[\]\.parts\[\]\.id$", None, ()),
+ (r"^nist\.catalog\.groups\[\]\.controls\[\]\.id$", None,
+  (r"/id",
+   r"/members/\[\]/ref",
+   r"/objects/\[\]/id",
+   r"/replaces/\[\]/ref",
+   r"/statements/\[\]/id")),
+ (r"^nist\.catalog\.groups\[\]\.controls\[\]\.title$", None, (r"/title/en",)),
+ (r"^nist\.catalog\.groups\[\]\.controls\[\]\.class$", None, (_COMPAT + r"/class",)),     # a class the rule does not give
+ (r"^nist\.catalog\.groups\[\]\.controls\[\]\.props\[\]\.value$", None,
+  (_RMF + r"/contributes-to-assurance",
+   r"/label",
+   r"/lifecycle",
+   r"/members/\[\]/sequence",
+   r"/statements/\[\]/obligated-parties/\[\]")),
+ (r"^nist\.catalog\.groups\[\]\.controls\[\]\.props\[\]\.(name|ns|class)$", None, ()),
+ (r"^nist\.catalog\.groups\[\]\.controls\[\]\.links\[\]\.href$", None,
+  (r"/relations/\[\]/ref", r"/replaces/\[\]/ref", r"/statements/\[\]/prose/en",
+   _COMPAT + r"/links/\[\]/href")),                 # a link to a resource that gives no address (E14), as it stands
+ (r"^nist\.catalog\.groups\[\]\.controls\[\]\.links\[\]\.rel$", None,
+  (r"/relations/\[\]/type",
+   r"/replaces/\[\]/mode",
+   r"/statements/\[\]/prose/en",
+   _COMPAT + r"/links/\[\]/rel")),
+ (r"^nist\.catalog\.groups\[\]\.controls\[\]\.params\[\]\.(id|label)$", None,
+  (_ODP,
+   r"/statements/\[\]/parameters/\[\]/label",
+   r"/statements/\[\]/parameters/\[\]/name")),
+ (r"^nist\.catalog\.groups\[\]\.controls\[\]\.params\[\]\.select\.choice\[\]$", None, (r"/statements/\[\]/parameters/\[\]/choices/\[\]/value",)),
+ (r"^nist\.catalog\.groups\[\]\.controls\[\]\.params\[\]\.select\.how-many$", None, (r"/statements/\[\]/parameters/\[\]/cardinality",)),
+ (r"^nist\.catalog\.groups\[\]\.controls\[\]\.params\[\]\.guidelines\[\]\.prose$", None, (_ODP + r"/guidelines/\[\]/en",)),
+ (r"^nist\.catalog\.groups\[\]\.controls\[\]\.params\[\]\.props\[\]\.value$", None,
+  (_ODP + r"/aggregates/\[\]",
+   _ODP + r"/alt-identifiers/\[\]",
+   _ODP + r"/alt-label",
+   _ODP + r"/sp800-53a-label")),
+ (r"^nist\.catalog\.groups\[\]\.controls\[\]\.params\[\]\.props\[\]\.(name|ns|class)$", None, ()),
+ (r"^nist\.catalog\.groups\[\]\.controls\[\]\.parts\[\]\.id$", None, (_ACRIT + r"/objectives(/.*)?", r"/statements/\[\]/id")),
+ (r"^nist\.catalog\.groups\[\]\.controls\[\]\.parts\[\]\.name$", None, ()),
+ (r"^nist\.catalog\.groups\[\]\.controls\[\]\.parts\[\]\.prose$", None,
+  (_ACRIT + r"/methods/\[\]/objects/\[\]/en",
+   _ACRIT + r"/objectives(/.*)?",
+   _NARR + r"/guidance/\[\]/en",
+   r"/statements/\[\]/prose/en")),
+ (r"^nist\.catalog\.groups\[\]\.controls\[\]\.parts\[\]\.props\[\]\.value$", None,
+  (_ACRIT + r"/methods/\[\]/label",
+   _ACRIT + r"/methods/\[\]/method",
+   _ACRIT + r"/objectives(/.*)?",
+   r"/statements/\[\]/label")),
+ (r"^nist\.catalog\.groups\[\]\.controls\[\]\.parts\[\]\.props\[\]\.(name|ns|class)$", None, ()),
+ (r"^nist\.catalog\.groups\[\]\.controls\[\]\.parts\[\]\.links\[\]\.href$", None, (_ACRIT + r"/objectives(/.*)?",)),
+ (r"^nist\.catalog\.groups\[\]\.controls\[\]\.parts\[\]\.links\[\]\.rel$", None, ()),
+ (r"^(low|moderate|high|privacy)\.profile\.imports\[\]\.include-controls\[\]\.with-ids\[\]$", None, (r"/members/\[\]/ref",)),
+ (r"^(low|moderate|high|privacy)\.profile\.metadata\.title$", None, (_SOURCE + r"/title", r"/title/en")),
+ (r"^(low|moderate|high|privacy)\.profile\.metadata\.version$", None, (r"/objects/\[\]/version", _SOURCE + r"/version", r"/version")),
+ (r"^(low|moderate|high|privacy)\.profile\.metadata\.", None,
+  (_COMPAT + r"/metadata(/.*)?",
+   _SOURCE + r"/author-ref",
+   _SOURCE + r"/date",
+   _SOURCE + r"/format-version")),
+ (r"^(low|moderate|high|privacy)\.profile\.merge\.", None, (_COMPAT + r"/merge/as-is",)),
+ (r"^(low|moderate|high|privacy)\.profile\.uuid$", None, (_SOURCE + r"/uuid",)),
+ (r"^(low|moderate|high|privacy)\.profile\.imports\[\]\.href$", None, (_COMPAT + r"/imports/\[\]/href",)),
+ (r"^(low|moderate|high|privacy)\.profile\.back-matter\.", None,
+  (_REFS + r"/resources/\[\]/description",
+   _REFS + r"/resources/\[\]/id",
+   _REFS + r"/resources/\[\]/rlinks/\[\]/href",
+   _REFS + r"/resources/\[\]/rlinks/\[\]/media-type")),
+]
+_misaligned = held_rows_match(HELD, [r[0] for r in RULES])
+if _misaligned: wiring.append(_misaligned)
+else:
+    def _held_row(path):
+        q = norm(path)
+        return held_row(HELD, next((i for i, r in enumerate(RULES) if re.search(r[0], q)), None))
+    wiring += path_map_check(RECORD["paths"], _held_row)["sentences"]
 rows, unmapped = coverage(paths, [(rx, level, text) for rx, level, text, _ in RULES])
 
 # The path map against the ledger: an outcome the ledger measured on a path and the row's sentence does not speak

@@ -761,7 +761,7 @@
    "path": "catalog.metadata.title",
    "count": 1,
    "level": "L1",
-   "destination": "title of the root Set (set/tax/ism)",
+   "destination": "title of the root Set (set/tax/ism); manifest provenance.sources[0].title",
    "ledger": {
     "copied": 1
    }

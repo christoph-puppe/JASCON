@@ -42,6 +42,7 @@ import json, hashlib, os, re, copy, sys, collections
 from oscal_conv_lib import BUNDLE_NEWLINE   # one byte spelling on every OS (D3.1)
 from oscal_conv_lib import known_arguments, out_dir, obligated_party, obligated_party_line, obligated_party_record
 from oscal_conv_lib import Ledger, ledger_by_path, ledger_gate, LEDGER_OUTCOMES, document_author, document_day
+from oscal_conv_lib import path_map_check, held_row, held_rows_match
 from oscal_conv_lib import COMPAT, COMPAT_FILE, compat_schema, lifecycle_default_record, lifecycle_default_line
 from oscal_conv_lib import REFERENCES, REFERENCES_FILE, resource_entry, needs_kernel_2
 
@@ -172,7 +173,7 @@ C = G + r"(\.controls\[\])+"                  # a control of a group, also one n
 COMPAT_WORD = "compat facet oscal-1x@1"
 RULES = [
     (r"^catalog\.uuid$", "L2", "manifest provenance.sources[0].uuid (the uuid of the source document)"),
-    (r"^catalog\.metadata\.title$", "L1", "title of the root Set (set/tax/ism)"),
+    (r"^catalog\.metadata\.title$", "L1", "title of the root Set (set/tax/ism); manifest provenance.sources[0].title"),
     (r"^catalog\.metadata\.version$", "L1", "`version` of every Set and of a Requirement whose control states no revision; "
                                             "manifest provenance.sources[0].version"),
     (r"^catalog\.metadata\.oscal-version$", "L2", f"{COMPAT_WORD} on the root Set: metadata; manifest provenance.sources[0].format-version"),
@@ -198,6 +199,45 @@ RULES = [
                                                       "shape, the uuid as `id`, which a `(#uuid)` link in a text names"),
 ]
 RULES = [(re.compile(rx), level, target) for rx, level, target in RULES]
+# Where the values of each row stand in the written bundle (backlog #89): one
+# entry per row of RULES, in its order - the row's pattern, None (what
+# becomes of a value is held by the levels, AGREE below), and the places as
+# the record writes them, a JSON Pointer into the object with array positions
+# as `[]`. After the account the record is held against this table: a value
+# that stands anywhere else ends the run (path_map_check). The places are
+# those the record of the pinned catalogue measured, each read against its
+# row's sentence; that reading found the sentence of the title silent about
+# the manifest. Three more are written from this script's code, for what the
+# pinned catalogue does not hold and the tests do: a prop the mapping has no
+# member for (compat `props`, on a control and on a group) and the parent of
+# a nested control (compat `nested-in`). The row of a group's id is written
+# from its sentence: no group of the pinned catalogue has an id.
+_OBJECT = (r"/id", r"/members/\[\]/ref", r"/objects/\[\]/id", r"/objects/\[\]/path")      # an object's id, where it is listed, its file
+_COMPAT = r"/facets/https:~1~1ns\.jascon\.net~1compat~1oscal-1x@1"
+_SOURCE = r"/provenance/sources/\[\]"
+HELD = [
+ (r"^catalog\.uuid$", None, (_SOURCE + r"/uuid",)),
+ (r"^catalog\.metadata\.title$", None, (_SOURCE + r"/title", r"/title/en")),
+ (r"^catalog\.metadata\.version$", None, (r"/objects/\[\]/version", _SOURCE + r"/version", r"/version")),
+ (r"^catalog\.metadata\.oscal-version$", None, (_COMPAT + r"/metadata/oscal-version", _SOURCE + r"/format-version")),
+ (r"^catalog\.metadata\.last-modified$", None, (_COMPAT + r"/metadata/last-modified", _SOURCE + r"/date")),
+ (r"^catalog\.metadata\.parties\[\]\.name$", None, (_COMPAT + r"/metadata/parties/\[\]/name", _SOURCE + r"/author-ref")),
+ (r"^catalog\.metadata\.", None, (_COMPAT + r"/metadata(/.*)?",)),
+ (G + r"\.id$", None, _OBJECT),
+ (G + r"\.title$", None, _OBJECT + (_COMPAT + r"/group-parts/\[\]/group", r"/title/en")),
+ (G + r"\.props\[\]\.(name|ns|value)$", None, (_COMPAT + r"/props/.*",)),
+ (G + r"\.parts\[\]\.name$", None, (_COMPAT + r"/group-parts/\[\]/name",)),
+ (G + r"\.parts\[\]\.prose$", None, (_COMPAT + r"/group-parts/\[\]/prose/en",)),
+ (C + r"\.id$", None, _OBJECT + (r"/label", _COMPAT + r"/nested-in")),
+ (C + r"\.class$", None, _OBJECT + (r"/title/en",)),
+ (C + r"\.title$", None, (r"/title/en",)),
+ (C + r"\.parts\[\]\.id$", None, (r"/statements/\[\]/id",)),
+ (C + r"\.parts\[\]\.name$", None, ()),
+ (C + r"\.parts\[\]\.prose$", None, (r"/statements/\[\]/modality", r"/statements/\[\]/prose/en")),
+ (C + r"\.props\[\]\.(name|ns|value)$", None, _OBJECT + (r"/history/\[\]/date", r"/label", r"/objects/\[\]/version", r"/title/en", r"/version",
+                                                         _COMPAT + r"/props/.*")),
+ (r"^catalog\.back-matter\.resources\[\]\.", None, (r"/facets/https:~1~1ns\.jascon\.net~1stdlib~1facet~1references@1/resources(/.*)?",)),
+]
 def map_rule(path):
     return next(((level, target) for rx, level, target in RULES if rx.search(path)), (None, None))
 
@@ -942,6 +982,14 @@ if sum(d["values"] for d in DROPS) != LT["intentionally-dropped"]:
 for x in DISAGREE:
     wiring.append(f"the path map calls {x['path']} {x['level']}, and the ledger found {x['values']} value(s) "
                   f"{x['ledger']} there (first: {x['first']})")
+# the places: a value that stands where its row of the path map does not say (backlog #89)
+_misaligned = held_rows_match(HELD, [rx.pattern for rx, _, _ in RULES])
+if _misaligned: wiring.append(_misaligned)
+else:
+    def _row(path):
+        q = path[len(TAG) + 1:]
+        return next((i for i, (rx, _, _) in enumerate(RULES) if rx.search(q)), None)
+    wiring += path_map_check(LEDGER["paths"], lambda path: held_row(HELD, _row(path)))["sentences"]
 if total != LEDGER["leaf-values"]:
     wiring.append(f"the path map counts {total} source leaf values and the ledger {LEDGER['leaf-values']}")
 if READ_BACK["sort-ids-rebuilt-from-the-bundle"] != READ_BACK["sort-ids-in-the-source"]:

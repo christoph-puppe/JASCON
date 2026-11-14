@@ -551,6 +551,18 @@ class Backlog41TheLedgerOfSP80053(unittest.TestCase):
 
     GATE = "convert_nist.py: the conversion ledger has {} claim(s) that do not hold and {} source value(s) unaccounted"
 
+    def test_backlog_89_a_value_that_stands_where_the_path_map_does_not_say_ends_the_run_with_1(self):
+        """The ledger holds a rule to what it wrote. The table beside the path map (HELD) says where the values
+        of a row stand; path_map_check of the library holds the record against it."""
+        TITLE = ' (r"^nist\\.catalog\\.groups\\[\\]\\.controls\\[\\]\\.title$", None, (r"/title/en",)),\n'
+        # the table names another place for a control's title than the converter writes
+        done, _, record = self.tree.changed("place", TITLE, TITLE.replace("/title/en", "/title/de"))
+        self.fails("place", done, "nist.catalog.groups[].controls[].title stand at /title/en, a place the path map does not name for that path")
+        self.assertEqual(record["totals"]["unaccounted"], 0, "the ledger alone lets it through: the value is carried")
+        # a row of the table taken out: the rows below it would be held to the places of another row
+        done, _, _ = self.tree.changed("row", TITLE, "")
+        self.fails("row", done, "the table of outcomes and places (HELD) has 40 row(s) and the path map 41; they differ first at row 14")
+
     def test_backlog_41_a_value_that_is_lost_ends_the_run_with_1(self):
         for name, old, new, path, lost in (
                 # a Requirement takes the zero-padded label: the label the source gives for a reader is in no object

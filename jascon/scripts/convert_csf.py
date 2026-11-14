@@ -40,6 +40,7 @@ import json, os, re, sys, collections
 from oscal_conv_lib import make_T, slug, Bundle, inventory, coverage, report
 from oscal_conv_lib import known_arguments, out_dir, obligated_party, obligated_party_line, obligated_party_record
 from oscal_conv_lib import Ledger, ledger_by_path, ledger_gate, props_by_name, LEDGER_OUTCOMES
+from oscal_conv_lib import path_map_check, held_row, held_rows_match
 from oscal_conv_lib import COMPAT, referred_to, lifecycle_default_record, lifecycle_default_line
 from oscal_conv_lib import REFERENCES, REFERENCES_FILE, resource_entry, document_author, document_day
 
@@ -570,12 +571,15 @@ RULES = [
  (r"^csf\.catalog\.uuid$", "L1", "bundle manifest, `provenance.sources[0].uuid`"),
  (r"^csf\.catalog\.metadata\.", "L2",
   "compat facet on the root Set, member `metadata`, in the source's own shape and with its own values "
-  "(`last-modified`, revisions, props, links, roles, parties, responsible-parties)"),
+  "(`last-modified`, revisions, props, links, roles, parties, responsible-parties); the name of the party the "
+  "document names as its author makes the manifest's `provenance.sources[0].author-ref`, and the day of "
+  "`last-modified` its `date`"),
  (r"^csf\.catalog\.back-matter\.", "L1",
   "standard facet references@1 on the root Set: a resource that something in the document refers to, as the source "
   "writes it (its uuid as `id`, title, links with their media type); a resource nothing refers to is an orphan and is not carried "
   "(a rule the ledger checks)"),
- (r"^csf\.catalog\.groups\[\]\.id$", "L1", "function Set id (URI mint)"),
+ (r"^csf\.catalog\.groups\[\]\.id$", "L1", "function Set id (URI mint); for a function a withdrawn item was moved into, "
+  "also an input of the rule that writes that item's entry in the function's replaces[]"),
  (r"^csf\.catalog\.groups\[\]\.title$", "L1", "function Set title"),
  (r"^csf\.catalog\.groups\[\]\.class$", "L1",
   "no content: `function` says on which level the element stands, and the Set says it by its URI (a rule the "
@@ -592,7 +596,8 @@ RULES = [
   "no content: rebuilt exactly, the id of the function and `_overview` (a rule the ledger checks)" + ELSE),
  (CTL + r"id$", "L1",
   "category Set / subcategory Requirement id (URI mint); withdrawn with a successor: also the `ref` of the entry "
-  "in the replaces[] of each successor"),
+  "in the replaces[] of each successor; an input of the rule that writes a subcategory's statement id without "
+  "the control prefix"),
  (CTL + r"title$", "L1",
   "category Set / subcategory Requirement title"),
  (CTL + r"class$", "L1",
@@ -627,6 +632,59 @@ RULES = [
  (CTL + r"parts\[\]\.ns$", "L1",
   "no content: the CSF's own namespace of the `example` part name (a rule the ledger checks)" + ELSE),
 ]
+# What the ledger may find for the values of each row (backlog #89): one
+# entry per row of RULES, in its order - the row's pattern, the outcomes its
+# sentence allows, and the places its values stand at, as the record writes
+# them (a JSON Pointer into the object, array positions as `[]`). After the
+# account the record is held against this table, and a value with another
+# outcome or at another place ends the run (path_map_check). The entries are
+# what the record of the pinned catalogue measured, each read against its
+# row's sentence; three sentences were silent about a place and say it now.
+# A row whose sentence ends with ELSE also allows a value that is carried in
+# the compat facet's `unmapped`.
+CARRIED = ("copied", "transformed"); NO_CONTENT = ("not-content",)
+_OBJECT = (r"/id", r"/members/\[\]/ref", r"/objects/\[\]/id", r"/objects/\[\]/path")      # an object's id, where it is listed, its file
+_SOURCE = r"/provenance/sources/\[\]"
+_COMPAT = r"/facets/https:~1~1ns\.jascon\.net~1compat~1oscal-1x@1"
+_CSF = r"/facets/https:~1~1ns\.nist\.gov~1csf~1facet~1"
+_ELSE = (_COMPAT + r"/unmapped(/.*)?",)
+HELD = [
+ (r"^csf\.catalog\.metadata\.(title|version|oscal-version|published)$", CARRIED,
+  (_SOURCE + r"/(title|version|format-version|published)", r"/title/en")),
+ (r"^csf\.catalog\.uuid$", CARRIED, (_SOURCE + r"/uuid",)),
+ (r"^csf\.catalog\.metadata\.", CARRIED, (_COMPAT + r"/metadata(/.*)?", _SOURCE + r"/(author-ref|date)")),
+ (r"^csf\.catalog\.back-matter\.", CARRIED + NO_CONTENT, (r"/facets/https:~1~1ns\.jascon\.net~1stdlib~1facet~1references@1/resources(/.*)?",)),
+ (r"^csf\.catalog\.groups\[\]\.id$", CARRIED, _OBJECT + (r"/replaces/\[\]/ref",)),
+ (r"^csf\.catalog\.groups\[\]\.title$", CARRIED, (r"/title/en",)),
+ (r"^csf\.catalog\.groups\[\]\.class$", NO_CONTENT + CARRIED, _ELSE),
+ (r"^csf\.catalog\.groups\[\]\.props\[\]\.value$", CARRIED, (r"/label", r"/members/\[\]/sequence") + _ELSE),
+ (r"^csf\.catalog\.groups\[\]\.props\[\]\.name$", NO_CONTENT + CARRIED, _ELSE),
+ (r"^csf\.catalog\.groups\[\]\.parts\[\]\.prose$", CARRIED, (_CSF + r"narrative@1/guidance/\[\]/en",) + _ELSE),
+ (r"^csf\.catalog\.groups\[\]\.parts\[\]\.name$", NO_CONTENT + CARRIED, _ELSE),
+ (r"^csf\.catalog\.groups\[\]\.parts\[\]\.id$", NO_CONTENT + CARRIED, _ELSE),
+ (CTL + r"id$", CARRIED, _OBJECT + (r"/replaces/\[\]/ref", r"/statements/\[\]/id")),
+ (CTL + r"title$", CARRIED, (r"/title/en",)),
+ (CTL + r"class$", NO_CONTENT + CARRIED, _ELSE),
+ (CTL + r"props\[\]\.value$", CARRIED,
+  (r"/label", r"/lifecycle", r"/members/\[\]/sequence", r"/replaces/\[\]/ref", _CSF + r"csf@1/risk-party/value(/\[\])?") + _ELSE),
+ (CTL + r"props\[\]\.name$", CARRIED + NO_CONTENT, (_CSF + r"csf@1/risk-party",) + _ELSE),
+ (CTL + r"props\[\]\.ns$", NO_CONTENT + CARRIED, _ELSE),
+ (CTL + r"props\[\]\.remarks$", CARRIED, (_CSF + r"csf@1/risk-party/remark(/\[\])?",) + _ELSE),
+ (CTL + r"links\[\]\.rel$", CARRIED, (r"/replaces/\[\]/mode",) + _ELSE),
+ (CTL + r"links\[\]\.href$", CARRIED, (r"/replaces/\[\]/ref",) + _ELSE),
+ (CTL + r"parts\[\]\.prose$", CARRIED,
+  (r"/statements/\[\]/prose/en", _CSF + r"narrative@1/guidance/\[\]/en", _CSF + r"examples@1/examples/\[\]/prose/en") + _ELSE),
+ (CTL + r"parts\[\]\.id$", CARRIED + NO_CONTENT, (r"/statements/\[\]/id", _CSF + r"examples@1/examples/\[\]/id") + _ELSE),
+ (CTL + r"parts\[\]\.name$", NO_CONTENT + CARRIED, _ELSE),
+ (CTL + r"parts\[\]\.ns$", NO_CONTENT + CARRIED, _ELSE),
+]
+_misaligned = held_rows_match(HELD, [r[0] for r in RULES])
+if _misaligned: wiring.append(_misaligned)
+else:
+    def _row(path):
+        q = norm(path)
+        return next((i for i, r in enumerate(RULES) if re.search(r[0], q)), None)
+    wiring += path_map_check(BY_PATH["paths"], lambda path: held_row(HELD, _row(path)))["sentences"]
 rows, unmapped = coverage(paths, RULES)
 WORDS = {"copied": "copied", "transformed": "transformed", "not-content": "no content", "intentionally-dropped": "dropped",
          "unaccounted": "UNACCOUNTED"}
