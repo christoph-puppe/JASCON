@@ -14,7 +14,7 @@ contact with real catalogs before it may stay.**
 
 This repository is a working design study, not a slide deck. It contains a
 draft specification with a public decision register, an **executable kernel
-schema** with a **157-vector conformance corpus** (684 in 18 families in the 2.0.0 candidate) and *two* reference
+schema** with a **157-vector conformance corpus** (692 in 18 families in the 2.0.0 candidate) and *two* reference
 validators — Python, and a **zero-dependency PowerShell 5.1 twin that runs
 on a stock Windows box** (the weekend-validator claim, measured,
 crypto engines included) —
@@ -114,15 +114,21 @@ backlog #71.)*
 >   subject by subject and against the manifest it binds: Full Match,
 >   Semantic Match, or it fails the bundle while it is `active`. The
 >   reference, the PowerShell twin, the app (0.9.11) and the reader
->   (1.13.0) do it, each held to the same 19 vectors (684 in all), and
+>   (1.13.0) do it, each held to the same 19 vectors, and
 >   the example Attestation is real and signed with the public fixture
 >   key. A signed Attestation cannot be withdrawn by editing it: its
 >   envelope signs the canonical form, lifecycle included. Three
 >   readings are this project's and not the primitive's text — a subject
 >   the bundle does not hold fails, a pack manifest the bundle keeps
->   counts as delivered, a withdrawn Attestation fails nothing — and no
->   validator yet refuses an Attestation that an ordinary bundle's
->   manifest lists (backlog #75, open).
+>   counts as delivered, a withdrawn Attestation fails nothing.
+> - **No manifest lists an Attestation** (backlog #75, decided by the
+>   author on 2026-11-14: "refusal in all"): the specification excluded
+>   Attestations from the content manifest "by definition", and the
+>   validators refused a listed one in a pack only. A copy of a shipped
+>   bundle that listed its own passed in both. Rule MANIFEST-1
+>   (specification D3, item 11) now refuses it in every bundle, with
+>   eight vectors. A bundle that listed its Attestation and passed
+>   fails; the reader wrote such bundles until 1.12.0.
 > - **One value, one spelling, once more** (backlog #68, 2026-11-13): a
 >   date, a digest or a decimal that ends in a line break was accepted
 >   by two of the three implementations, because Python and .NET read
@@ -138,7 +144,7 @@ backlog #71.)*
 > tailoring or an assessment, and the vendor's manifest stays in the set
 > as the import record. No new type.
 >
-> - **Measured:** 74 advice vectors (537 in all on 2026-11-12, 684 in 18 families since 2026-11-14) pass in the
+> - **Measured:** 74 advice vectors (537 in all on 2026-11-12, 692 in 18 families since 2026-11-14) pass in the
 >   Python reference; 28 deliberate breaks of the reference each turn a
 >   vector red. A worked pack, signed with the public fixture key, and
 >   the example folder after importing it validate. Run over the shipped
