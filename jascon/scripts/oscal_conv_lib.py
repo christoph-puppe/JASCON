@@ -601,9 +601,15 @@ def document_author(metadata):
       5. else nobody.
     "The one" is exact: two candidates are no answer, and the next step is
     asked. A uuid the document does not define names nobody. A party without
-    a name cannot be named by a landmark URI, so it is nobody too."""
-    plist = [x for x in metadata.get("parties", []) or [] if isinstance(x, dict)]
-    def defined(uuid): return next((x for x in plist if x.get("uuid") == uuid), None)
+    a name cannot be named by a landmark URI, so it is nobody too. A party is
+    an entry of `parties` with a uuid; where a uuid is defined twice, the
+    first definition is the party (the two rules agreed on everything but
+    this when 4,000 generated documents were put to both, 2026-11-14)."""
+    plist = []
+    for x in metadata.get("parties", []) or []:
+        if isinstance(x, dict) and isinstance(x.get("uuid"), str) and all(x["uuid"] != y["uuid"] for y in plist):
+            plist.append(x)
+    def defined(uuid): return next((x for x in plist if x["uuid"] == uuid), None)
     def named(role=None):
         seen = []
         for rp in metadata.get("responsible-parties", []) or []:

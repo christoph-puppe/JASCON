@@ -129,6 +129,165 @@ test("profile: excludes, parameters inside and outside their declared space, and
   assert.deepEqual(rules.jscMatchTypes(t), ["tailoring"]);
 });
 
+/* ---------- who wrote an OSCAL document, and when (backlog #69) ----------
+   The rule is stated once, in jascon-oscal.js above jscOscalAuthorParty, and
+   the Python converters are written to the same text. The table below is
+   the rule's own; a change here is a change of the rule. A and B are
+   persons, O and P organisations, all with names; N is defined without a
+   name; X is not defined. */
+const PARTY = { A: { uuid: "uuid-a", type: "person", name: "Alice Example" }, B: { uuid: "uuid-b", type: "person", name: "Bob Example" },
+  O: { uuid: "uuid-o", type: "organization", name: "Example Agency" }, P: { uuid: "uuid-p", type: "organization", name: "Example Provider Inc." },
+  N: { uuid: "uuid-n", type: "person" }, X: { uuid: "uuid-x", type: "person", name: "Not Defined" } };
+const metaOf = (rp, parties) => ({ title: "t", "last-modified": "2026-11-05T14:30:00+01:00",
+  ...(rp ? { "responsible-parties": rp.map(([role, who]) => ({ "role-id": role, "party-uuids": who.map(k => PARTY[k].uuid) })) } : {}),
+  ...(parties ? { parties: parties.map(k => PARTY[k]) } : {}) });
+const AUTHOR_TABLE = [
+  ["creator names A, a contact is B", [["creator", ["A"]], ["contact", ["B"]]], ["A", "B"], "A"],
+  ["prepared-by names A, the owner is B", [["prepared-by", ["A"]], ["owner", ["B"]]], ["A", "B"], "A"],
+  ["two creators, one prepared-by", [["creator", ["A", "B"]], ["prepared-by", ["B"]]], ["A", "B"], "B"],
+  ["no creator, no prepared-by, one party in all roles", [["assessor", ["A"]]], ["A", "B"], "A"],
+  ["two parties in roles, one organisation defined", [["owner", ["A"]], ["developer", ["B"]]], ["A", "B", "O"], "O"],
+  ["two parties in roles, no organisation", [["owner", ["A"]], ["developer", ["B"]]], ["A", "B"], null],
+  ["two parties in roles, two organisations", [["owner", ["A"]], ["developer", ["B"]]], ["A", "B", "O", "P"], null],
+  ["no responsible parties, one party", null, ["A"], "A"],
+  ["no responsible parties, two persons", null, ["A", "B"], null],
+  ["no responsible parties, two persons and one organisation", null, ["A", "B", "O"], "O"],
+  ["no parties at all", [["creator", ["A"]]], null, null],
+  ["the creator is not defined, one party is", [["creator", ["X"]]], ["A"], "A"],
+  ["the one party in a role has no name", [["assessor", ["N"]]], ["N"], null],
+];
+test("the author of an OSCAL document: the rule's own table", () => {
+  for (const [name, rp, parties, want] of AUTHOR_TABLE) {
+    const got = oscal.jscOscalAuthorParty(metaOf(rp, parties));
+    assert.equal(got ? got.uuid : null, want ? PARTY[want].uuid : null, name);
+  }
+  assert.equal(AUTHOR_TABLE.length, 13);
+});
+test("the author of an OSCAL document: what the table does not say", () => {
+  const A = PARTY.A, B = PARTY.B, O = PARTY.O, N = PARTY.N;
+  const who = meta => { const p = oscal.jscOscalAuthorParty(meta); return p ? p.uuid : null; };
+  /* several entries of one role are united, and a uuid named twice counts once */
+  assert.equal(who({ parties: [A, B], "responsible-parties": [{ "role-id": "creator", "party-uuids": [A.uuid] }, { "role-id": "creator", "party-uuids": [A.uuid] }] }), A.uuid);
+  assert.equal(who({ parties: [A, B], "responsible-parties": [{ "role-id": "creator", "party-uuids": [A.uuid] }, { "role-id": "creator", "party-uuids": [B.uuid] }] }), null, "two creators, and all roles together name two");
+  /* creator comes before prepared-by */
+  assert.equal(who({ parties: [A, B], "responsible-parties": [{ "role-id": "prepared-by", "party-uuids": [B.uuid] }, { "role-id": "creator", "party-uuids": [A.uuid] }] }), A.uuid);
+  /* an undefined uuid is dropped before the count, in every step */
+  assert.equal(who({ parties: [A, B], "responsible-parties": [{ "role-id": "creator", "party-uuids": [A.uuid, PARTY.X.uuid] }] }), A.uuid);
+  assert.equal(who({ parties: [A, B], "responsible-parties": [{ "role-id": "owner", "party-uuids": [B.uuid] }, { "role-id": "contact", "party-uuids": [PARTY.X.uuid] }] }), B.uuid);
+  /* a party without a name ends the rule where it lands: no later step is tried */
+  assert.equal(who({ parties: [N, O], "responsible-parties": [{ "role-id": "creator", "party-uuids": [N.uuid] }] }), null, "step 1 lands on a nameless party; the organisation of step 4 is not taken");
+  assert.equal(who({ parties: [N, A], "responsible-parties": [{ "role-id": "creator", "party-uuids": [N.uuid] }, { "role-id": "prepared-by", "party-uuids": [A.uuid] }] }), null, "a nameless creator ends the rule: prepared-by is not asked");
+  assert.equal(who({ parties: [N, O], "responsible-parties": [{ "role-id": "owner", "party-uuids": [N.uuid] }] }), null, "step 2 lands on it; the organisation of step 4 is not taken");
+  assert.equal(who({ parties: [N] }), null, "step 3 lands on it");
+  assert.equal(who({ parties: [A, B, { uuid: "uuid-q", type: "organization" }] }), null, "step 4 lands on it");
+  /* a uuid defined twice is one party, and its first definition is the party: oscal_conv_lib.py and this file gave
+     different answers here when 4,000 generated documents were put to both (2026-11-14) */
+  assert.equal(who({ parties: [A, { ...A }] }), A.uuid, "the same party twice is the one party the document defines");
+  assert.equal(who({ parties: [A, { uuid: A.uuid, type: "person" }] }), A.uuid, "of two definitions the first counts");
+  assert.equal(who({ parties: [{ uuid: A.uuid, type: "person" }, A] }), null, "the first counts also when it has no name");
+  assert.equal(who({ parties: [{ type: "organization", name: "Nameless Ltd" }, A] }), A.uuid, "an entry without a uuid is no party");
+  assert.equal(who({ parties: [{ ...A, name: "" }] }), null, "an empty name is no name");
+  /* what is not there is not there */
+  for (const meta of [undefined, null, {}, { parties: [] }, { parties: "x" }, { parties: [A], "responsible-parties": "x" }]) assert.doesNotThrow(() => who(meta), JSON.stringify(meta));
+  assert.equal(who({ parties: [A], "responsible-parties": [{ "role-id": "creator" }] }), A.uuid, "an entry without party-uuids names nobody; step 3 finds the one party");
+});
+test("the author of an OSCAL document as a URI, and the day: the party's name under the namespace of the import; the first ten characters of last-modified", () => {
+  const meta = metaOf([["creator", ["A"]]], ["A", "B"]);
+  assert.equal(oscal.jscOscalAuthorRef(meta, "https://org.example"), "https://org.example/party/alice-example");
+  assert.equal(oscal.jscOscalAuthorRef(meta, "https://org.example/"), "https://org.example/party/alice-example", "a namespace is used without its closing slash");
+  assert.equal(oscal.jscOscalAuthorRef(metaOf(null, ["A", "B", "P"]), "https://org.example"), "https://org.example/party/example-provider-inc");
+  assert.equal(oscal.jscOscalAuthorRef(metaOf(null, ["A", "B"]), "https://org.example"), null);
+  assert.equal(oscal.jscOscalDate(meta), "2026-11-05");
+  assert.equal(oscal.jscOscalDate({ "last-modified": "2026-11-05T00:30:00+02:00" }), "2026-11-05", "the day as the document writes it: the offset is not applied, although in UTC this is the 4th");
+  assert.equal(oscal.jscOscalDate({ "last-modified": "2026-11-05T23:30:00-05:00" }), "2026-11-05", "nor here, where in UTC it is the 6th");
+  assert.equal(oscal.jscOscalDate({ "last-modified": "2026-11-05" }), "2026-11-05");
+  for (const bad of [undefined, null, "", "2026-13-05T00:00:00Z", "05.11.2026", "2026-11-5T00:00:00Z", 20261105, "yesterday"]) assert.equal(oscal.jscOscalDate({ "last-modified": bad }), null, JSON.stringify(bad));
+  assert.equal(oscal.jscOscalDate(undefined), null);
+});
+
+/* a set of three requirements and their root Set, and a profile over it */
+function profileFixture(metadata) {
+  const P = "https://a.example";
+  const req = id => ({ id: `${P}/req/${id}`, version: "1", lifecycle: "active", statements: [{ id: "s1", modality: "must", "obligated-parties": [P + "/p"],
+    prose: { en: "X {param:" + id.toLowerCase() + "_prm_1}." }, parameters: [{ name: id.toLowerCase() + "_prm_1", type: "string" }] }] });
+  const list = [req("AC-1"), req("AC-2"), req("AC-3")];
+  const root = { id: P + "/set/tax/root", version: "1", lifecycle: "active", members: list.map(r => ({ ref: r.id })) };
+  const objs = new Map([...list, root].map(o => [o.id, { type: core.jscInferType(o), obj: o }]));
+  const profile = { profile: { uuid: "x", metadata: { title: "My Profile", version: "2", ...metadata },
+    imports: [{ href: "#cat", "include-controls": [{ "with-ids": ["ac-1", "ac-2"] }], "exclude-controls": [{ "with-ids": ["ac-3"] }] }],
+    modify: { "set-parameters": [{ "param-id": "ac-1_prm_1", values: ["90 days"] }] } } };
+  return { profile, objs, opts: { ns: "https://org.example", lang: "en", objs, catalogSet: null } };
+}
+test("profile: the Tailoring names the document's author and day; the caller's author and day replace them field by field; none without both", () => {
+  const meta = metaOf([["creator", ["A"]], ["contact", ["B"]]], ["A", "B"]);
+  const ALICE = "https://org.example/party/alice-example", ME = "https://org.example/party/me";
+  const run = (metadata, extra) => { const f = profileFixture(metadata); const out = oscal.jscOscalImportProfile(f.profile, { ...f.opts, ...extra }); return { out, t: out.objects.find(o => o.obj.selects).obj }; };
+  const plain = run(meta, {});
+  assert.deepEqual(plain.t.provenance, { "author-ref": ALICE, date: "2026-11-05" });
+  assert.deepEqual(plain.out.report.provenance, { stated: { "author-ref": ALICE, date: "2026-11-05" }, given: {}, records: { "from-source": 1, "from-caller": 0, none: 0 } });
+  assert.deepEqual(rules.jscMatchTypes(plain.t), ["tailoring"]);
+  /* the author stands once on the Tailoring; its entries inherit it and carry none of their own */
+  for (const e of [...plain.t.selects, ...(plain.t.excludes || []), ...plain.t.operations]) assert.equal("provenance" in e, false);
+  assert.ok(plain.t.operations.length === 1 && plain.t.excludes.length === 1);
+  /* the Set of the profile is a RequirementSet: the kernel has no provenance on it, and none is written */
+  assert.ok(plain.out.objects.filter(o => o.obj.members).every(o => !("provenance" in o.obj)));
+  /* what the page shows before the import is what the import writes when nothing is typed over it */
+  const f = profileFixture(meta);
+  assert.deepEqual(oscal.jscOscalStated(f.profile, f.opts), { applies: true, "author-ref": ALICE, date: "2026-11-05", party: "Alice Example" });
+  /* field by field */
+  assert.deepEqual(run(meta, { authorRef: ME }).t.provenance, { "author-ref": ME, date: "2026-11-05" });
+  assert.deepEqual(run(meta, { date: "2026-11-13" }).t.provenance, { "author-ref": ALICE, date: "2026-11-13" });
+  const both = run(meta, { authorRef: ME, date: "2026-11-13" });
+  assert.deepEqual(both.t.provenance, { "author-ref": ME, date: "2026-11-13" });
+  assert.deepEqual(both.out.report.provenance, { stated: { "author-ref": ALICE, date: "2026-11-05" }, given: { "author-ref": ME, date: "2026-11-13" }, records: { "from-source": 0, "from-caller": 1, none: 0 } });
+  /* no provenance without both: the source names nobody, or no day, or the caller says nobody */
+  const anonymous = run(metaOf(null, ["A", "B"]), {});
+  assert.equal("provenance" in anonymous.t, false);
+  assert.deepEqual(anonymous.out.report.provenance, { stated: { "author-ref": null, date: "2026-11-05" }, given: {}, records: { "from-source": 0, "from-caller": 0, none: 1 } });
+  assert.deepEqual(rules.jscMatchTypes(anonymous.t), ["tailoring"], "a Tailoring without an author is a Tailoring");
+  assert.equal("provenance" in run({ ...meta, "last-modified": "last week" }, {}).t, false, "an author without a day");
+  assert.equal("provenance" in run(meta, { authorRef: "" }).t, false, "the caller says nobody");
+  assert.equal("provenance" in run(metaOf(null, ["A", "B"]), { authorRef: ME }).t, true, "the caller names the author the source does not");
+  assert.equal("provenance" in run({ title: "t" }, { authorRef: ME }).t, false, "an author and no day, from anywhere");
+  assert.deepEqual(run({ title: "t" }, { authorRef: ME, date: "2026-11-13" }).t.provenance, { "author-ref": ME, date: "2026-11-13" });
+  assert.throws(() => run(meta, { date: "13.11.2026" }), /is not a date, YYYY-MM-DD/);
+  /* at consumer tier the report line appears exactly where the import wrote no author */
+  const line = async t => (await rules.jscAuthorReport(new Map([...profileFixture(meta).objs, [t.id, { type: "tailoring", obj: t }]]))).map(e => e.rule);
+  return Promise.all([line(plain.t), line(anonymous.t)]).then(([a, b]) => { assert.deepEqual(a, []); assert.deepEqual(b, ["AUTHOR-1"]); });
+});
+
+test("CIS preset: a Mapping keeps the author and day it had; the caller may replace either; a Mapping is never written without both", () => {
+  const src = cisSynthetic(), NS = "https://ns.cisecurity.org/benchmark/ubuntu-24.04-lts", ME = "https://org.example/party/me";
+  const maps = out => out.objects.filter(o => o.path.startsWith("objects/map/")).map(o => o.obj.provenance);
+  const plain = oscal.jscOscalImportCatalog(src, { preset: "cis-benchmark" });
+  assert.deepEqual(maps(plain), Array(4).fill({ "author-ref": NS + "/party/cis", date: "2026-11-11" }));
+  assert.deepEqual(plain.report.provenance, { stated: { "author-ref": NS + "/party/cis", date: "2026-11-11" }, given: {}, records: { "from-source": 4, "from-caller": 0, none: 0 } });
+  assert.deepEqual(oscal.jscOscalStated(src, { preset: "cis-benchmark" }), { applies: true, "author-ref": NS + "/party/cis", date: "2026-11-11", party: null });
+  /* the document-author rule is not asked here: a party of the catalog's metadata does not become the author of CIS's cross-references */
+  const withParty = cisSynthetic();
+  withParty.catalog.metadata.parties = [PARTY.A];
+  assert.deepEqual(maps(oscal.jscOscalImportCatalog(withParty, { preset: "cis-benchmark" }))[0], { "author-ref": NS + "/party/cis", date: "2026-11-11" });
+  /* field by field */
+  assert.deepEqual(maps(oscal.jscOscalImportCatalog(src, { preset: "cis-benchmark", authorRef: ME })), Array(4).fill({ "author-ref": ME, date: "2026-11-11" }));
+  const dated = oscal.jscOscalImportCatalog(src, { preset: "cis-benchmark", date: "2026-11-13" });
+  assert.deepEqual(maps(dated), Array(4).fill({ "author-ref": NS + "/party/cis", date: "2026-11-13" }));
+  assert.deepEqual(dated.report.provenance.records, { "from-source": 0, "from-caller": 4, none: 0 });
+  assert.equal(rules.jscTypedObjects(dated.objects.map(o => o.obj)).size, dated.objects.length, "every object is one kernel type");
+  /* a catalog without a day: the caller's day lets the import go ahead; without one it is refused as before */
+  const undated = cisSynthetic();
+  delete undated.catalog.metadata["last-modified"];
+  assert.deepEqual(maps(oscal.jscOscalImportCatalog(undated, { preset: "cis-benchmark", date: "2026-11-13" })), Array(4).fill({ "author-ref": NS + "/party/cis", date: "2026-11-13" }));
+  assert.throws(() => oscal.jscOscalImportCatalog(undated, { preset: "cis-benchmark" }), /last-modified does not begin with a date.*DATE-3/);
+  /* the kernel requires provenance on a Mapping, so "nobody" cannot be written: refused with the reason */
+  assert.throws(() => oscal.jscOscalImportCatalog(src, { preset: "cis-benchmark", authorRef: "" }), /a Mapping needs its author/);
+  assert.throws(() => oscal.jscOscalImportCatalog(src, { preset: "cis-benchmark", date: "" }), /last-modified does not begin with a date|a Mapping needs its author/);
+  /* the other catalog rules write no record that can carry provenance, and say so */
+  const generic = oscal.jscOscalImportCatalog(src, { preset: "generic", ns: "https://org.example/fw/x", lang: "en", key: "x", authorRef: ME, date: "2026-11-13" });
+  assert.deepEqual(generic.report.provenance.records, { "from-source": 0, "from-caller": 0, none: 0 });
+  assert.ok(generic.objects.every(o => !("provenance" in o.obj)));
+  assert.equal(oscal.jscOscalStated(src, { preset: "generic", ns: "https://org.example/fw/x" }).applies, false);
+});
+
 test("the converters' slug: a long name is cut with a hash, never bare", () => {
   assert.equal(oscal.jscOscalSlug("AC-2 (1)"), "ac-2-1");
   const long = "x".repeat(70), s = oscal.jscOscalSlug(long);

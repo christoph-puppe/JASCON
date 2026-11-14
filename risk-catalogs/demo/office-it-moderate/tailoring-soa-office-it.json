@@ -2,6 +2,10 @@
  "id": "https://org.example/tailoring/soa-office-it",
  "version": "1",
  "lifecycle": "active",
+ "provenance": {
+  "author-ref": "https://org.example/party/ciso",
+  "date": "2026-11-10"
+ },
  "title": {
   "en": "Statement of Applicability - office IT",
   "de": "Erklärung zur Anwendbarkeit - Büro-IT"

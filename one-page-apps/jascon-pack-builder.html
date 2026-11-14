@@ -160,7 +160,7 @@ details[open]>summary{margin-bottom:6px}
 /* ==INLINE core== */
 /* ==JSC-PURE-START== */
 
-const JSC_BUILD = "0.9.8";
+const JSC_BUILD = "0.9.9";
 const JSC_TOOL = "JASCON-App " + JSC_BUILD;
 /* The kernel this app writes, and the kernels it reads (KERNEL-2: a tool
    stops at a pin it does not implement and names both). */
@@ -196,6 +196,8 @@ const JSC_CFG = [
     label: N("Namespace for new objects"), help: N("The URI under which this app mints ids, for example https://your.example. Use a name you control.") },
   { key: "org:owner", def: "", choices: null,
     label: N("Default risk owner"), help: N("A party URI, for example https://your.example/party/ciso. Prefilled when a risk is created.") },
+  { key: "org:me", def: "", choices: null,
+    label: N("Who am I"), help: N("Your own party URI, for example https://your.example/party/jane-doe. Prefilled as the author of what you write: a Tailoring, a Risk, an Implementation, a Finding, a Mapping, a Check. Each form shows it and lets you change it. Empty: a page names no author unless you type one, and saves all the same.") },
   /* Model access (jascon-ai.js). The key of a service is not a setting: it
      is typed on the page that calls the model and held in memory only. */
   { key: "ai:backend", def: "gemini", choices: ["gemini", "openrouter", "openai"],
@@ -728,11 +730,15 @@ if (typeof module !== "undefined" && module.exports) module.exports = { JSC_SCHE
    check-verdict and CHECK-1..15 with the evidence chain, and the
    seventeenth of advice packs (CP-ADVICE-1): ADVICE-1..11 with the
    publisher verdict and the import plan, and the eighteenth of who decided
-   and when (CP-AUTHOR-1): AUTHOR-1..4 and REVIEW-1, two reports that fail
-   nothing. Those two are not part of jscCheckGraph: no page shows them
-   yet. The
+   and when (CP-AUTHOR-1): AUTHOR-1..4 and REVIEW-1, two reports.
+   jscCheckGraph runs them with the rest: a missing author fails a set only
+   when the caller asks for that, an overdue review never. The
    conditional-apply engine is run by nothing but its vectors, here as in
    the reference: no bundle has a place to carry an instance yet.
+
+   Not a port: the section "what the pages and the imports write" holds the
+   functions that put an author, a decision date and a review date into an
+   object, so that every page does it the same way.
 
    Not ported: the reading of a bundle from disk with its end-of-line and
    file checks (jascon-core.js reads sets from the browser's store instead),
@@ -1639,6 +1645,164 @@ function jscReviewReport(objs, asOf) {
     }
   }
   return { dated, overdue, "not-evaluable": blind };
+}
+/* The two reports as the lines the reference prints for one bundle
+   (report_authors_and_reviews of validate_core.py), in its order and its
+   words: the AUTHOR lines, then a summary of REVIEW-1 where a review date
+   was asked, the overdue ones and those that cannot be evaluated.
+   -> [{ kind, rule, object, text }]. `kind` of an AUTHOR line is "note", or
+   "error" when the caller requires authors (the reference's
+   --require-authors); a REVIEW line is "summary" or "note" and never an
+   error, with any switch. `text` is the line without its prefix; the
+   reference prints `note: ` before a note and lists an error as a failure. */
+function jscAuthorReviewLines(authors, review, asOf, requireAuthors) {
+  const lines = authors.map(e => ({ kind: requireAuthors ? "error" : "note", rule: e.rule, object: e.id, text: e.message }));
+  if (review.dated) {
+    lines.push({ kind: "summary", rule: "REVIEW-1", object: null,
+      text: `review: ${review.dated} review date(s) asked as of ${asOf}: ${review.overdue.length} overdue, ${review["not-evaluable"].length} not evaluable (REVIEW-1)` });
+  }
+  for (const e of review.overdue) lines.push({ kind: "note", rule: "REVIEW-1", object: e.id, text: `${e.id}: ${e.where} was due on ${e.day} (REVIEW-1: overdue; it still holds until someone acts)` });
+  for (const e of review["not-evaluable"]) lines.push({ kind: "note", rule: "REVIEW-1", object: e.id, text: `${e.id}: ${e.where} is not evaluated: ${e.why} (REVIEW-1)` });
+  return lines;
+}
+
+/* ====================================================================
+   Who decided, and when: what the pages and the imports write
+   ====================================================================
+   Not a port: the reference validator reads these fields and writes none.
+   This is the one place where the app decides what it puts into
+   `provenance`, `decided` and `review-due`, so that every page does it the
+   same way (backlog #69). Three things hold throughout:
+
+   - Nobody is invented. Without an author, or without a date, nothing is
+     written, and the save goes ahead: a missing author is a line of the
+     report (AUTHOR-1..4), never a refusal (author decision, 2026-11-13).
+   - `provenance` on a record names who wrote this version. A version saved
+     by somebody else, or by nobody the page knows, does not keep the name
+     of whoever wrote the version before.
+   - A decision inside a record that has no `provenance` of its own has its
+     record's (D26). When the record's changes, such a decision would change
+     hands without anybody having decided it again. So before the record
+     gets its new author, the old one is written onto every such decision
+     that is unchanged. */
+const JSC_DATE_PATTERN = jscRegex(jscRulesSchema.JSC_SCHEMA.$defs.date.pattern);   // the kernel's own: YYYY-MM-DD
+const jscIsDate = v => typeof v === "string" && JSC_DATE_PATTERN.test(v);
+/* -> {author-ref, date}, or null when either is not known */
+function jscProvenance(author, date) {
+  const who = typeof author === "string" ? author.trim() : "";
+  return who && jscIsDate(date) ? { "author-ref": who, date } : null;
+}
+/* What an import writes as `provenance`. `stated` is what the source says,
+   {author-ref, date}, each a string or null; `given` is what the caller
+   says, with only the fields the caller gave. A field the caller gives
+   replaces the source's, also with nothing: an empty string says "nobody",
+   or "no day". Not given are undefined and null.
+   -> { provenance: {author-ref, date} | null, from: "source" | "caller" | "none" }
+   A source date that is no date counts as not stated. A date the caller
+   gives that is no date is an error: somebody typed it. */
+function jscImportProvenance(stated, given) {
+  const isGiven = k => !!given && given[k] !== undefined && given[k] !== null;
+  const pick = k => (isGiven(k) ? String(given[k]).trim() : typeof (stated || {})[k] === "string" ? stated[k].trim() : "");
+  const author = pick("author-ref"), date = pick("date");
+  if (isGiven("date") && date && !jscIsDate(date)) throw new Error(`the date given for the import, ${JSON.stringify(date)}, is not a date, YYYY-MM-DD`);
+  const provenance = jscProvenance(author, date);
+  return { provenance, from: !provenance ? "none" : isGiven("author-ref") || isGiven("date") ? "caller" : "source" };
+}
+const jscAuthorCopy = v => JSON.parse(JSON.stringify(v));
+/* one decision, compared: key order does not count, and neither does who is said to have made it */
+function jscAuthorKey(entry, skip) {
+  const sort = v => (Array.isArray(v) ? v.map(sort) : jscIsPlainObject(v) ? Object.fromEntries(Object.keys(v).sort().map(k => [k, sort(v[k])])) : v);
+  return JSON.stringify(sort(Object.fromEntries(Object.entries(entry).filter(([k]) => !skip.includes(k)))));
+}
+const jscSameProvenance = (a, b) => !!a && !!b && a["author-ref"] === b["author-ref"] && a.date === b.date;
+const jscSetProvenance = (obj, prov) => { if (prov) obj.provenance = { ...prov }; else delete obj.provenance; return obj; };
+/* A record without decisions of its own inside it (an Implementation, a
+   Finding): `prov` is who writes this version, or null. `prev` is the
+   stored record of the same id, where the page has one. A page that saves
+   many records at once (the system workbench, a check that is run again)
+   writes also those it did not change. Such a record is the version it
+   was: it keeps the author it names. One that names nobody gets `prov`.
+   -> a copy with the provenance of this save, or with none */
+function jscAuthorRecord(obj, prov, prev) {
+  const out = jscAuthorCopy(obj);
+  if (jscIsPlainObject(prev) && jscIsPlainObject(prev.provenance) && jscAuthorKey(prev, ["provenance"]) === jscAuthorKey(out, ["provenance"])) return jscSetProvenance(out, prev.provenance);
+  return jscSetProvenance(out, prov);
+}
+/* A Tailoring about to be saved. `next` is what the page built, `prev` the
+   stored version of the same id or null, `prov` who saves it or null.
+   An entry (select, exclude, operation) of `next` is unchanged when `prev`
+   holds the same one. The inline Deviation of an operation is not part of
+   that comparison: who approved it and when stands on the Deviation, and
+   deciding it does not make the operation somebody else's.
+   An unchanged entry keeps the provenance it had; where it had none and the
+   Tailoring's changes, the old Tailoring's is written onto it. A new or
+   changed entry stays as the page built it and so inherits `prov`.
+   Where the old Tailoring named nobody there is nothing to write, and the
+   entries nobody signed become the new author's with the Tailoring: the
+   kernel has no way to say "unknown" on an entry of a signed Tailoring.
+   A decision recorded on the stored Deviation of an unchanged operation is
+   not undone either: where `next` still holds that Deviation in an earlier
+   state (a form that was filled before the decision), the stored one
+   stands, with its state, its day and its review date.
+   -> a copy of `next` with the provenance of this save */
+function jscAuthorTailoring(next, prev, prov) {
+  const out = jscAuthorCopy(next), old = prev && jscIsPlainObject(prev.provenance) ? prev.provenance : null;
+  for (const [list, skip] of [["selects", ["provenance"]], ["excludes", ["provenance"]], ["operations", ["provenance", "deviation"]]]) {
+    const was = new Map((prev && Array.isArray(prev[list]) ? prev[list] : []).filter(jscIsPlainObject).map(e => [jscAuthorKey(e, skip), e]));
+    for (const e of (Array.isArray(out[list]) ? out[list] : []).filter(jscIsPlainObject)) {
+      const before = was.get(jscAuthorKey(e, skip));
+      if (!before) continue;                                         // new or changed: as the page built it
+      if (jscDeviationMovedOn(e.deviation, before.deviation)) e.deviation = jscAuthorCopy(before.deviation);
+      if (jscIsPlainObject(e.provenance)) continue;                  // the page states its author
+      if (jscIsPlainObject(before.provenance)) e.provenance = { ...before.provenance };
+      else if (old && !jscSameProvenance(old, prov)) e.provenance = { ...old };
+    }
+  }
+  return jscSetProvenance(out, prov);
+}
+/* Is `stored` the Deviation `held`, further along? The same request (type,
+   rationale, approver, the day it was opened, what it refers to) in a state
+   the kernel's state machine reaches from the state `held` is in. */
+function jscDeviationMovedOn(held, stored) {
+  if (!jscIsPlainObject(held) || !jscIsPlainObject(stored) || held.state === stored.state) return false;
+  const request = d => jscAuthorKey(d, ["state", "decided", "review-due"]);
+  const reaches = (from, to, seen = new Set()) => from === to || (!seen.has(from) && (JSC_NEXT.deviation[from] || []).some(n => reaches(n, to, seen.add(from))));
+  return request(held) === request(stored) && reaches(held.state, stored.state);
+}
+/* A Risk about to be saved; arguments as for a Tailoring. A rating that is
+   set or changed is the decision of who saves: it gets `prov`, or none, and
+   never keeps the author of the level it replaces. An unchanged rating
+   keeps what it had: its own provenance, or, where it had none and the
+   Risk's changes, the old Risk's written onto it.
+   -> a copy of `next` with the provenance of this save */
+function jscAuthorRisk(next, prev, prov) {
+  const out = jscAuthorCopy(next), old = prev && jscIsPlainObject(prev.provenance) ? prev.provenance : null;
+  for (const key of ["rating", "residual-rating"]) {
+    const r = out[key], before = prev && prev[key];
+    if (!jscIsPlainObject(r)) continue;
+    if (jscIsPlainObject(before) && jscAuthorKey(before, ["provenance"]) === jscAuthorKey(r, ["provenance"])) {
+      jscSetProvenance(r, jscIsPlainObject(before.provenance) ? before.provenance : old && !jscSameProvenance(old, prov) ? old : null);
+    } else jscSetProvenance(r, prov);
+  }
+  return jscSetProvenance(out, prov);
+}
+/* A Deviation after a decision. `to` is the state it moves to, by the
+   kernel's state machine; `to` equal to its state changes nothing but the
+   dates, which is how a decided Deviation that states no day gets one.
+   `decided` is written when the Deviation is, or becomes, approved or
+   withdrawn, and only where it is a date: the form offers today, and an
+   empty field leaves the day unsaid (AUTHOR-3 reports it). `reviewDue` is
+   a `review-due` or null; it is kept on an approved Deviation only, because
+   nothing reviews a Deviation that licenses nothing.
+   -> a copy; throws on a move the state machine does not have */
+function jscDecideDeviation(dev, to, decided, reviewDue) {
+  if (to !== dev.state && !jscCanMove("deviation", dev.state, to)) throw new Error(`a Deviation in state ${dev.state} may not move to ${to}`);
+  const out = jscAuthorCopy(dev);
+  out.state = to;
+  if ((to === "approved" || to === "withdrawn") && jscIsDate(decided)) out.decided = decided;
+  if (to === "approved" && jscIsPlainObject(reviewDue)) out["review-due"] = jscAuthorCopy(reviewDue);
+  else if (to !== "approved" || reviewDue === null) delete out["review-due"];
+  return out;
 }
 
 /* ====================================================================
@@ -3468,7 +3632,12 @@ function jscAdviceEdge(objs, ownId, productId, capability, opts) {
    opts.trusted, a map of signer URI to public key in hex, puts the check in
    verification mode: an envelope is then judged against the signer's key,
    and a Tailoring is authority-proven only through a verifying envelope.
+   opts.asOf, a day YYYY-MM-DD, is the day REVIEW-1 is asked about; without
+   it no review date is asked. opts.requireAuthors turns the AUTHOR lines
+   into errors, as the reference's --require-authors does.
    -> { findings: [{ kind: "error"|"note", area, object: id or null, message }],
+        report: { as-of, require-authors, authors: jscAuthorReport, review: jscReviewReport or null,
+                  lines: jscAuthorReviewLines, the two reports in the reference's words },
         types: {type: count}, tiers: {tailoring id: tier}, coverage: report,
         signatures: {attestation id: "verified"|"unverified"|"error"|"missing"|"unsigned"},
         packs: [{ where, name: the kept file's name or null, id, version, title, publisher,
@@ -3612,7 +3781,15 @@ async function jscCheckGraph(g, verified, opts) {
     why.forEach(m => add("note", "tailoring", id, "not proven by " + m));
     if (tiers[id] === "authority-proven" && !trusted) add("note", "tailoring", id, "authority-proven by a digest match; the signature is UNVERIFIED without trusted keys");
   }
-  return { findings, types, tiers, coverage: cov.report, signatures, packs };
+  /* CP-AUTHOR-1: who is not named, and which review date has passed. An AUTHOR line is a note, or an error
+     when the caller requires authors; a REVIEW line is never an error. The review is asked only when the
+     caller names the day: nothing in this file reads a clock. */
+  const asOf = (opts && opts.asOf) || null, requireAuthors = !!(opts && opts.requireAuthors);
+  const authors = await jscAuthorReport(objs, verify), review = asOf ? jscReviewReport(objs, asOf) : null;
+  const lines = jscAuthorReviewLines(authors, review || { dated: 0, overdue: [], "not-evaluable": [] }, asOf, requireAuthors);
+  for (const l of lines) add(l.kind === "error" ? "error" : "note", l.rule === "REVIEW-1" ? "review" : "author", l.object, l.object ? strip(l.text) : l.text);
+  return { findings, types, tiers, coverage: cov.report, signatures, packs,
+    report: { "as-of": asOf, "require-authors": requireAuthors, authors, review, lines } };
 }
 const jscRulesBeside = r => r.type === "attestation" && !r.entry;
 const jscRulesKeptPacks = jscRulesCore ? jscRulesCore.jscKeptPacks : g => jscKeptPacks(g);
@@ -3625,7 +3802,8 @@ if (typeof module !== "undefined" && module.exports) {
     jscResolveTailoring, jscTextify, JSC_NEXT, jscCanMove, jscComposeRelationship,
     jscSchemaCheck, jscShapeErrors, jscMatchTypes, jscTypeOf, jscTypedObjects, JSC_KERNEL_TYPES, JSC_RISK_RULES, jscClosureErrors,
     jscDeviationsOf, jscKernelNeeded, jscKernelPinErrors, jscRiskRuleViolations, jscRiskIsLive, jscRiskJustifies, JSC_NO_TAILORING, jscRiskCoverage,
-    jscRiskLinkNotes, JSC_AUTHOR_RULES, jscAuthorReport, jscUtcDay, jscReviewReport, jscScaleDefinitionErrors, jscMatrixErrors, jscRiskLevels, jscMatrixCell, jscScaleErrors, jscCheckScales,
+    jscRiskLinkNotes, JSC_AUTHOR_RULES, jscAuthorReport, jscUtcDay, jscReviewReport, jscAuthorReviewLines,
+    jscIsDate, jscProvenance, jscImportProvenance, jscAuthorRecord, jscAuthorTailoring, jscAuthorRisk, jscDecideDeviation, jscScaleDefinitionErrors, jscMatrixErrors, jscRiskLevels, jscMatrixCell, jscScaleErrors, jscCheckScales,
     jscOptionalEmptyViolations, JSC_NUMBER_RULES, jscNumberSpellingViolations, jscNumberViolations, jscInNumberDomain, jscNumberError, jscObjectErrors, jscFacetErrors, jscTailoringDutyErrors, jscAttestationVerdict, jscCheckGraph,
     JSC_DSSE_PAYLOAD_TYPE, jscEd25519Verify, jscVerifyEnvelope, jscSemver, jscCompose, jscComposeSide, jscPathGet, jscEvalPredicate, jscConditionalApply,
     JSC_CHECK_RULES, JSC_CHECK_OPS, JscIRegexpError, jscIreCompile, jscIreFullMatch, jscCheckVerdict, jscCheckEach, jscCheckEachSummary, jscPercentShare, jscCheckAggregate, jscCheckParamDecls,

@@ -61,6 +61,106 @@ const jscPropMap = list => Object.fromEntries((list || []).map(p => [p.name, p.v
 function jscBackMatter(doc) {
   return new Map((((doc["back-matter"] || {}).resources) || []).map(r => [r.uuid, ((r.rlinks || [{}])[0] || {}).href || r.title || ""]));
 }
+/* ====================================================================
+   Who wrote an OSCAL document, and when
+   ====================================================================
+   An import pre-fills who decided and when from the source (author
+   decision, 2026-11-13), and the caller may overwrite either. OSCAL states
+   both per document: parties with their roles, and a time of last change.
+   The rule below says which party is the document's author. The Python
+   converters are written to the same text and must give the same answer,
+   so it is implemented as stated and not improved here.
+
+   The author of an OSCAL document, from its `metadata`:
+   1. For the role `creator`, then for `prepared-by`: unite the
+      `party-uuids` of all `responsible-parties` entries with that
+      `role-id` and drop the uuids that `parties` does not define. If
+      exactly one uuid remains, that party.
+   2. Otherwise unite the `party-uuids` of all `responsible-parties`
+      entries the same way. If exactly one remains, that party.
+   3. Otherwise, if `parties` defines exactly one party, that party.
+   4. Otherwise, if exactly one of the defined parties has the type
+      `organization`, that organization.
+   5. Otherwise nobody.
+   A party without a `name` cannot be named by a URI: where the rule lands
+   on such a party the answer is nobody, and no later step is tried.
+
+   The day is the first ten characters of `last-modified`, if they are a
+   date by the kernel's date pattern, else none. It is the day as the
+   document writes it; an offset is not applied.
+
+   The party becomes a URI the way this file mints every party
+   (`<ns>/party/cis`, `<ns>/party/organization`): `<ns>/party/<slug of the
+   party's name>`, under the namespace of the import and with the
+   converters' slug. convert_ifa.py names the parties of a role assignment
+   the same way. A name is a string that is not empty. */
+function jscOscalAuthorParty(metadata) {
+  const meta = metadata && typeof metadata === "object" ? metadata : {};
+  const parties = (Array.isArray(meta.parties) ? meta.parties : []).filter(p => p && typeof p === "object" && typeof p.uuid === "string");
+  /* a uuid defined twice: the first definition is the party, as in oscal_conv_lib.py (a Map built from pairs keeps the last) */
+  const defined = new Map();
+  for (const p of parties) if (!defined.has(p.uuid)) defined.set(p.uuid, p);
+  const roles = (Array.isArray(meta["responsible-parties"]) ? meta["responsible-parties"] : []).filter(r => r && typeof r === "object");
+  /* the defined parties the given entries name, each once */
+  const named = entries => [...new Set(entries.flatMap(r => (Array.isArray(r["party-uuids"]) ? r["party-uuids"] : [])))].filter(u => defined.has(u));
+  const land = party => (typeof party.name === "string" && party.name ? party : null);
+  for (const role of ["creator", "prepared-by"]) {
+    const hit = named(roles.filter(r => r["role-id"] === role));
+    if (hit.length === 1) return land(defined.get(hit[0]));
+  }
+  const any = named(roles);
+  if (any.length === 1) return land(defined.get(any[0]));
+  if (defined.size === 1) return land([...defined.values()][0]);
+  const organizations = [...defined.values()].filter(p => p.type === "organization");
+  if (organizations.length === 1) return land(organizations[0]);
+  return null;
+}
+/* -> the author as a party URI under `ns`, or null */
+function jscOscalAuthorRef(metadata, ns) {
+  const party = jscOscalAuthorParty(metadata);
+  return party ? `${String(ns).replace(/\/+$/, "")}/party/${jscOscalSlug(party.name)}` : null;
+}
+/* -> the day of the document's last change, YYYY-MM-DD, or null */
+function jscOscalDate(metadata) {
+  const day = String((metadata && metadata["last-modified"]) || "").slice(0, 10);
+  return jscOscalRules.jscIsDate(day) ? day : null;
+}
+/* What an import of `doc` writes as `provenance` when the caller gives
+   nothing: the page shows it before the import, in two fields the user may
+   type over. `applies` says whether the import makes any record the kernel
+   lets carry `provenance`: the Tailoring of a profile, the Mappings of a
+   CIS Benchmark. A catalog's Requirements and Sets carry none; their
+   publisher is the origin of their ids.
+   A CIS Mapping keeps the author it always had, CIS (`<ns>/party/cis`): the
+   cross-references are CIS's claim, whoever prepared the OSCAL file.
+   -> { applies, author-ref, date, party: the name of the party the rule found, or null } */
+function jscOscalStated(doc, opts) {
+  const o = opts || {};
+  if (doc && doc.profile) {
+    const meta = doc.profile.metadata, party = jscOscalAuthorParty(meta);
+    return { applies: true, "author-ref": jscOscalAuthorRef(meta, o.ns), date: jscOscalDate(meta), party: party ? party.name : null };
+  }
+  const cat = doc && doc.catalog;
+  if (cat && o.preset === "cis-benchmark") {
+    return { applies: true, "author-ref": `${o.ns || jscCisNamespace(cat)}/party/cis`, date: jscOscalDate(cat.metadata), party: null };
+  }
+  return { applies: false, "author-ref": null, date: null, party: null };
+}
+/* The caller's two fields as jscImportProvenance takes them, and the part of
+   an import report that says where `provenance` came from: what the source
+   stated, what the caller gave, and of the `n` records that can carry it
+   how many got it from which. */
+function jscOscalGiven(opts) {
+  const given = {};
+  if (opts && opts.authorRef !== undefined && opts.authorRef !== null) given["author-ref"] = opts.authorRef;
+  if (opts && opts.date !== undefined && opts.date !== null) given.date = opts.date;
+  return given;
+}
+function jscOscalProvenanceReport(stated, given, from, n) {
+  const count = f => (from === f ? n : 0);
+  return { stated: { "author-ref": stated["author-ref"], date: stated.date }, given, records: { "from-source": count("source"), "from-caller": count("caller"), none: count("none") } };
+}
+
 /* A pinned facet schema with a closed shape, as the converters write it. */
 function jscFacetStub(name, id, modifies, properties) {
   return { path: `schemas/${name}`, def: { id, version: "1.0.0", "modifies-semantics": modifies,
@@ -569,8 +669,12 @@ function jscImportCis(cat, opts) {
     return "document";
   };
   const profileMembers = new Map();
-  /* the day CIS stated its cross-references: the release's last-modified, a date-time, cut to its date */
-  const released = String(cat.metadata["last-modified"] || "").slice(0, 10);
+  /* Who states the cross-references, and when: CIS, on the day of the release (its last-modified, a
+     date-time, cut to its date). The caller may give another author or day. A Mapping cannot be written
+     without both: the kernel requires its provenance. */
+  const stated = { "author-ref": `${ns}/party/cis`, date: jscOscalDate(cat.metadata) }, given = jscOscalGiven(opts);
+  const who = jscOscalRules.jscImportProvenance(stated, given);
+  let mapped = 0;
   let seq = 0;
   const nseq = () => (seq += 10);
   function control(c) {
@@ -606,14 +710,16 @@ function jscImportCis(cat, opts) {
             target = `${C.cisc8}/req/cisc-${String(Number(pp[0])).padStart(3, "0")}${pp.length > 1 ? "." + String(Number(pp[1])).padStart(3, "0") : ""}`;
             report.mappings.v8++;
           } else { target = `${C.cisc7}/req/${num}`; report.mappings.v7++; }
-          if (!/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/.test(released)) {
+          if (!who.provenance && !stated.date && !("date" in given)) {
             throw new Error("the catalog's metadata.last-modified does not begin with a date, so its CIS Controls cross-references cannot be dated (a Mapping's provenance.date is a date, DATE-3)");
           }
+          if (!who.provenance) throw new Error("a Mapping needs its author and its day: the kernel requires provenance on a Mapping, so the CIS Controls cross-references cannot be written without both");
+          mapped++;
           const tail = `${jscOscalSlug(c.id)}--v${ver}-${jscOscalSlug(num)}`;
           objects.push({ path: `objects/map/${tail}.json`, obj: { id: `${ns}/map/${tail}`, version, lifecycle: "active",
             "source-ref": rid, "target-ref": target, relationship: "supports", direction: "source-to-target", confidence: "draft",
             rationale: L("Imported from the CIS Benchmark's CIS Controls cross-reference; the source carried no typed relationship (handbook 8.6)."),
-            provenance: { "author-ref": `${ns}/party/cis`, date: released } } });
+            provenance: { ...who.provenance } } });
         }
       } else if (p.name === "guidance" && p.class === "References") {
         xrefs.push(...(p.props || []).filter(x => x.name === "marking" && x.class === "Reference").map(x => x.value));
@@ -688,6 +794,7 @@ function jscImportCis(cat, opts) {
   const provenance = { sources: [{ key: C.key, title: cat.metadata.title, version, "oscal-version": cat.metadata["oscal-version"] }],
     converter: "JASCON-App OSCAL import, preset cis-benchmark (the rules of convert_cis_benchmark.py v0.1)",
     "namespace-note": "authority namespace minted by converter pending a CIS-published URI" };
+  report.provenance = jscOscalProvenanceReport(stated, given, who.from, mapped);
   return { objects, facetSchemas, provenance, report };
 }
 
@@ -695,8 +802,11 @@ function jscImportCis(cat, opts) {
 function jscOscalImportCatalog(doc, opts) {
   const cat = doc && doc.catalog;
   if (!cat || !cat.metadata) throw new Error("this is not an OSCAL catalog: no catalog.metadata");
-  return opts.preset === "bsi-gspp" ? jscImportBsi(cat) : opts.preset === "nist-sp800-53" ? jscImportNist(cat)
-    : opts.preset === "cis-benchmark" ? jscImportCis(cat, opts) : jscImportGeneric(cat, opts);
+  if (opts.preset === "cis-benchmark") return jscImportCis(cat, opts);
+  const out = opts.preset === "bsi-gspp" ? jscImportBsi(cat) : opts.preset === "nist-sp800-53" ? jscImportNist(cat) : jscImportGeneric(cat, opts);
+  /* Requirements and Sets: no record of these imports can carry `provenance`, so none is counted, whatever the caller gave */
+  out.report.provenance = jscOscalProvenanceReport({ "author-ref": null, date: null }, jscOscalGiven(opts), "none", 0);
+  return out;
 }
 /* A guess at the preset from the catalog itself; the user decides. */
 function jscOscalGuessPreset(doc) {
@@ -718,6 +828,12 @@ function jscOscalGuessPreset(doc) {
    with-child-controls, alters, merge - the kernel has no place for a merge
    directive, and an alter is a change of text that somebody has to decide
    is editorial or substantive.
+   The Tailoring names who wrote the profile and when (`provenance`), by the
+   rule above jscOscalAuthorParty; opts.authorRef and opts.date replace what
+   the document states, field by field, and without both nothing is written.
+   The author stands on the Tailoring; its selects, excludes and operations
+   inherit it. The Set of the profile carries none: the kernel has no
+   provenance on a RequirementSet.
    -> { objects: [{path, obj}], report } */
 function jscOscalImportProfile(doc, opts) {
   const p = doc && doc.profile;
@@ -784,15 +900,19 @@ function jscOscalImportProfile(doc, opts) {
   report["parameters-set"] = operations.length;
   for (const a of (p.modify || {}).alters || []) note((a.adds ? "alters with adds" : "") + (a.adds && a.removes ? " and " : "") + (a.removes ? "alters with removes" : "") || "alters");
   if (p.merge) note("merge (" + Object.keys(p.merge).join(", ") + ")");
+  const stated = { "author-ref": jscOscalAuthorRef(p.metadata, ns), date: jscOscalDate(p.metadata) }, given = jscOscalGiven(opts);
+  const who = jscOscalRules.jscImportProvenance(stated, given);
   if (selects.length) {
     const t = { id: `${ns}/tailoring/${name}`, version, label: name, lifecycle: "draft", title: { [lang]: title }, selects };
+    if (who.provenance) t.provenance = { ...who.provenance };
     if (excludes.length) t.excludes = excludes.map(ref => ({ ref }));
     t.operations = operations;
     out.push({ path: `objects/tailoring/${name}.json`, obj: t });
   }
+  report.provenance = jscOscalProvenanceReport(stated, given, who.from, selects.length ? 1 : 0);
   return { objects: out, report };
 }
-const jscOscalRules = (typeof module !== "undefined" && module.exports) ? require("./jascon-rules.js") : { jscExpandRefs, jscParamCheck };
+const jscOscalRules = (typeof module !== "undefined" && module.exports) ? require("./jascon-rules.js") : { jscExpandRefs, jscParamCheck, jscIsDate, jscImportProvenance };
 
 /* What kind of OSCAL document a parsed file is: its single root key. */
 function jscOscalKind(doc) {
@@ -802,5 +922,5 @@ function jscOscalKind(doc) {
 
 if (typeof module !== "undefined" && module.exports) {
   module.exports = { jscOscalSlug, jscOscalProse, jscOscalImportCatalog, jscOscalGuessPreset, jscOscalImportProfile, jscOscalKind, JSC_BSI, JSC_NIST,
-    JSC_CIS, jscCisNamespace };
+    JSC_CIS, jscCisNamespace, jscOscalAuthorParty, jscOscalAuthorRef, jscOscalDate, jscOscalStated };
 }

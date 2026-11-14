@@ -12,7 +12,13 @@ acceptance). IMPORT copies entries into kernel Risk objects:
     requirement - through the named Tailoring, or, in a bundle without any
     Tailoring, because every requirement is in play;
   - the Risk points back at the entry through `relations` and records the
-    catalogue version in `annotations`.
+    catalogue version in `annotations`;
+  - the Risk says who wrote it and when (`provenance`, kernel 2.0.0): the
+    catalogue's `publisher-ref` and the day the catalogue says this version
+    was `released`. `--author-ref` and `--date` replace what the catalogue
+    states, field by field, also with nothing (`--author-ref ""`). A Risk
+    gets `provenance` only when both an author and a day are known; nothing
+    is made up for a missing one, and the report names the Risks without.
 
 Import is a copy. Nothing references an entry at run time, so a new
 catalogue version cannot change a risk the organisation already owns.
@@ -27,15 +33,17 @@ Commands:
   validate     <catalog-dir> [--bundle DIR]
   import       <catalog-dir> --bundle DIR --org PREFIX --owner URI --out DIR
                [--tailoring ID] [--not-applicable FILE]
+               [--author-ref URI] [--date YYYY-MM-DD]
   completeness <catalog-dir> --risks DIR [--not-applicable FILE]
 
 Needs: Python 3.8+, jsonschema. Outside the kernel on purpose: the entry
 shape is `schema/risk-catalog.draft.schema.json` and the record of entries
 that do not apply is `schema/not-applicable.draft.schema.json`, both drafts.
 """
-import argparse, json, os, sys
+import argparse, json, os, re, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+DATE = re.compile(r"[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])")     # the kernel's date, matched whole
 SCHEMA_PATH = os.path.join(HERE, "..", "schema", "risk-catalog.draft.schema.json")
 NA_SCHEMA_PATH = os.path.join(HERE, "..", "schema", "not-applicable.draft.schema.json")
 INSTANTIATES = "https://github.com/christoph-puppe/JASCON/risk-catalogs/relation/instantiates"
@@ -157,6 +165,26 @@ def load_not_applicable(path):
     return rows
 
 
+def import_provenance(stated, given):
+    """What an import writes as a Risk's `provenance`.
+    `stated` is what the catalogue says, {author-ref, date}, each a string
+    or None. `given` is what the caller says, with only the fields the
+    caller gave. A field that is given replaces the catalogue's, also with
+    nothing: an empty string says "nobody", or "no day".
+    -> (provenance or None, "source" | "caller" | "none").
+    Without an author or without a day there is no provenance. A day the
+    catalogue states that is no date counts as not stated; a day the caller
+    gives that is no date stops the import, because somebody typed it."""
+    def pick(k):
+        if given.get(k) is not None: return given[k].strip()
+        return stated[k].strip() if isinstance(stated.get(k), str) else ""
+    author, date = pick("author-ref"), pick("date")
+    if given.get("date") is not None and date and not DATE.fullmatch(date):
+        sys.exit(f"the date given for the import, {json.dumps(date)}, is not a date, YYYY-MM-DD")
+    if not author or not DATE.fullmatch(date): return None, "none"
+    return {"author-ref": author, "date": date}, "caller" if given else "source"
+
+
 def one_language(text):
     """A text in English, else in the first language it has."""
     return text.get("en") or next(iter(text.values()))
@@ -190,6 +218,12 @@ def cmd_import(a):
     objs = load_bundle(a.bundle)
     selected, tid, how = selection(objs, a.tailoring)
     na = load_not_applicable(a.not_applicable)
+    # who and when: what the catalogue states, replaced by what the command
+    # line gives. Decided before anything is written, so that a refused
+    # import leaves no folder behind.
+    stated = {"author-ref": cat.get("publisher-ref"), "date": cat.get("released")}
+    given = {k: v for k, v in (("author-ref", getattr(a, "author_ref", None)), ("date", getattr(a, "date", None))) if v is not None}
+    provenance, origin = import_provenance(stated, given)
     os.makedirs(a.out, exist_ok=True)
     report = {"catalog": cat["id"], "catalog-version": cat["version"],
               "selection": how, "selected-requirements": len(selected),
@@ -206,6 +240,7 @@ def cmd_import(a):
         suggested_in_scope |= {st["requirement-ref"] for st in keep}
         risk = {"id": f"{a.org.rstrip('/')}/risk/{label}", "version": "1", "lifecycle": "draft", "label": label,
                 "title": e["title"], "scenario": e["scenario"], "owner-ref": a.owner, "state": "identified"}
+        if provenance: risk["provenance"] = dict(provenance)
         if tid: risk["tailoring-refs"] = [tid]
         if keep: risk["treatments"] = keep
         else: report["without-treatment"].append(risk["id"])
@@ -218,6 +253,11 @@ def cmd_import(a):
             f.write(json.dumps(risk, indent=1, ensure_ascii=False) + "\n")
         report["imported"].append(risk["id"])
     report["selected-requirements-no-entry-suggests"] = len(selected - suggested_in_scope)
+    n = len(report["imported"])
+    records = {"from-source": n if origin == "source" else 0, "from-caller": n if origin == "caller" else 0,
+               "none": n if origin == "none" else 0}
+    report["provenance"] = {"stated": stated, "given": given, "records": records}
+    report["without-provenance"] = [] if provenance else list(report["imported"])
     with open(os.path.join(a.out, "import-report.json"), "w", encoding="utf-8", newline="\n") as f:
         f.write(json.dumps(report, indent=1, ensure_ascii=False) + "\n")
     n_drop = sum(len(v) for v in report["suggestions-out-of-scope"].values())
@@ -227,6 +267,8 @@ def cmd_import(a):
     print(f"skipped     {len(report['not-applicable'])} recorded as not applicable")
     print(f"dropped     {n_drop} suggested treatment(s) the bundle does not select, on {len(report['suggestions-out-of-scope'])} risk(s)")
     print(f"bare        {len(report['without-treatment'])} imported risk(s) left without any treatment")
+    print(f"authors     {records['from-source']} as the catalogue states, {records['from-caller']} as given, "
+          f"{records['none']} imported risk(s) name no author")
     print(f"untouched   {report['selected-requirements-no-entry-suggests']} selected requirement(s) no imported entry suggests")
     return 0
 
@@ -275,6 +317,8 @@ def main():
     i.add_argument("--bundle", required=True); i.add_argument("--org", required=True)
     i.add_argument("--owner", required=True); i.add_argument("--out", required=True)
     i.add_argument("--tailoring"); i.add_argument("--not-applicable")
+    i.add_argument("--author-ref", help="the author written on every imported Risk, in place of the catalogue's publisher-ref")
+    i.add_argument("--date", help="the day written with it, YYYY-MM-DD, in place of the day the catalogue was released")
     c = sub.add_parser("completeness"); c.add_argument("catalog")
     c.add_argument("--risks", required=True); c.add_argument("--not-applicable")
     a = p.parse_args()

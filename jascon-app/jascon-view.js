@@ -77,6 +77,15 @@ jscI18n.add("de", {
   "Authorizations": "Autorisierungen", "from an advice pack": "aus einem Advice Pack",
 });
 
+jscI18n.add("de", {
+  "Author (party URI)": "Autor (Party-URI)", "written as the author, dated {date}": "wird als Autor geschrieben, mit Datum {date}",
+  "empty: no author is written, and saving works all the same. The setting “Who am I” prefills this field.":
+    "leer: Es wird kein Autor geschrieben, und das Speichern funktioniert trotzdem. Die Einstellung „Wer bin ich“ belegt dieses Feld vor.",
+  "Deviation": "Deviation", "decided on {date}": "entschieden am {date}", "decided on": "entschieden am", "move to": "verschieben nach",
+  "(leave as it is)": "(so lassen)", "no date": "kein Termin", "on a date": "an einem Datum", "every": "alle", "Calendar (URI)": "Kalender (URI)",
+  "Record the decision": "Entscheidung festhalten", "who decided": "wer entschieden hat",
+});
+
 const esc = jscEsc;
 const TYPE_VIEW = {
   requirement:    { glyph: "◇", color: "var(--accent)", what: N("One requirement of a framework with its clauses: statements, each with a binding force (modality), the parties it binds, typed parameters and prose in several languages.") },
@@ -171,15 +180,17 @@ function setBody(o) {
   return section(T("Members ({n})", { n: mem.length }) + (mem.length > cap ? " · " + T("first {n} shown", { n: cap }) : ""),
     rows || `<div class="hint">${esc(T("empty"))}</div>`);
 }
+/* who decided and when, as one short line; "" where nothing is stated */
+const whoHtml = p => (p && typeof p === "object" ? `<span class="hint" data-who>${esc(last(p["author-ref"] || ""))} · ${esc(p.date || "")}</span>` : "");
 function tailoringBody(o) {
-  const sel = (o.selects || []).map(s => s["set-ref"] ? refLink(s["set-ref"]) : `<span class="mono">${esc(JSON.stringify(s.predicate))}</span>`).join("<br>");
+  const sel = (o.selects || []).map(s => (s["set-ref"] ? refLink(s["set-ref"]) : `<span class="mono">${esc(JSON.stringify(s.predicate))}</span>`) + " " + whoHtml(s.provenance)).join("<br>");
   const ops = (o.operations || []).map(op => `<div class="stmt">
     <span class="badge" style="border-color:var(--amber);color:var(--amber)">${esc(op.op)}</span>
     ${op["statement-id"] ? badge(T("statement {id}", { id: op["statement-id"] })) : ""}${op.modality ? modBadge(op.modality) : ""}
     ${op.parameter ? badge(`⚙ ${op.parameter} = ${JSON.stringify(op.value)}`) : ""}
     ${op.deviation || op["deviation-ref"] ? `<span class="badge" style="border-color:var(--red);color:var(--red)">${esc(T("carries a Deviation"))}</span>` : ""}
-    <div style="margin-top:5px">${refLink(op["requirement-ref"])}</div></div>`).join("");
-  return section(T("Selects"), `<div>${sel || "—"}</div>`) +
+    <div style="margin-top:5px">${refLink(op["requirement-ref"])} ${whoHtml(op.provenance)}</div></div>`).join("");
+  return (o.provenance ? `<div class="kv">${kv(T("who decided"), whoHtml(o.provenance))}</div>` : "") + section(T("Selects"), `<div>${sel || "—"}</div>`) +
     section(T("Excludes"), o.excludes ? prettyVal(o.excludes.map(e => ({ ...e }))) : "") +
     section(T("Operations ({n})", { n: (o.operations || []).length }), ops || `<div class="hint">—</div>`) +
     section(T("Deviations"), o.deviations ? prettyVal(o.deviations) : "");
@@ -200,7 +211,8 @@ function ratingHtml(r) {
   const lv = x => `${badge(x.level)} <span class="hint mono">${esc(last(x["scale-ref"]))}</span>`;
   return `<div class="kv">${kv(T("level"), lv(r))}
     ${r.likelihood ? kv(T("likelihood"), lv(r.likelihood)) : ""}${r.impact ? kv(T("impact"), lv(r.impact)) : ""}
-    ${r["override-rationale"] ? kv(T("override rationale"), prettyVal(r["override-rationale"])) : ""}</div>`;
+    ${r["override-rationale"] ? kv(T("override rationale"), prettyVal(r["override-rationale"])) : ""}
+    ${r.provenance ? kv(T("who decided"), whoHtml(r.provenance)) : ""}</div>`;
 }
 function riskBody(o) {
   const refs = list => (list || []).map(u => `<div>${refLink(u)}</div>`).join("");
@@ -208,7 +220,8 @@ function riskBody(o) {
   return `<div class="kv">${kv(T("state"), badge(o.state))}${kv(T("owner"), esc(o["owner-ref"]))}
       ${o.treatment ? kv(T("treatment"), badge(o.treatment)) : ""}
       ${o["shared-with-ref"] ? kv(T("shared with"), esc(o["shared-with-ref"])) : ""}
-      ${o["review-due"] ? kv(T("review due"), prettyVal(o["review-due"], 1)) : ""}</div>` +
+      ${o["review-due"] ? kv(T("review due"), prettyVal(o["review-due"], 1)) : ""}
+      ${o.provenance ? kv(T("who decided"), whoHtml(o.provenance)) : ""}</div>` +
     section(T("Scenario"), `<div class="stmt">${langBlocks(o.scenario, "prose")}</div>`) +
     section(T("Rating"), ratingHtml(o.rating)) + section(T("Residual rating"), ratingHtml(o["residual-rating"])) +
     section(T("Treated by"), (o.treatments || []).map(t => `<div>${refLink(t["requirement-ref"])} ${(t["statement-ids"] || []).map(s => badge(T("statement {id}", { id: s }))).join("")}</div>`).join("")) +
@@ -458,11 +471,109 @@ function draft(tool, initial) {
   };
 }
 
+/* ---------- who decides: the author a page writes ----------
+   Every form that writes a Tailoring, a Risk, an Implementation or a
+   Finding shows the party it will name as the author (`provenance`, D26).
+   The field starts from the setting "Who am I" (jscWhoAmI) and can be
+   changed; what is typed holds for this page while it is open and is not
+   stored, so the next visit starts from the setting again. An empty field
+   is allowed: then no author is written and the save goes ahead, because a
+   missing author is a line of the report on the Validate page and never a
+   refusal. The date written is today's, in UTC (jscToday).
+   A page with more than one form shows the same author in each. */
+let authorTyped = null;
+const author = () => (authorTyped === null ? jscWhoAmI() : authorTyped);
+/* what a save writes now: {author-ref, date}, or null when no author is known */
+const provenance = () => jscProvenance(author(), jscToday());
+const authorHint = () => (author() ? T("written as the author, dated {date}", { date: jscToday() })
+  : T("empty: no author is written, and saving works all the same. The setting “Who am I” prefills this field."));
+const authorLabel = id => `<label for="${id}">${esc(T("Author (party URI)"))}</label>`;
+const authorInput = id => `<input type="url" id="${id}" data-author value="${esc(author())}" placeholder="https://your.example/party/…" style="min-width:260px;max-width:420px">
+  <span class="hint" data-author-hint>${esc(authorHint())}</span>`;
+function wireAuthor(root, onChange) {
+  root.querySelectorAll("[data-author]").forEach(n => n.addEventListener("change", () => {
+    authorTyped = n.value.trim();
+    document.querySelectorAll("[data-author]").forEach(m => { if (m !== n) m.value = authorTyped; });
+    document.querySelectorAll("[data-author-hint]").forEach(h => { h.textContent = authorHint(); });
+    if (onChange) onChange();
+  }));
+}
+
+/* ---------- a Deviation and its decision ----------
+   Shows one Deviation and, where the kernel's state machine has a next
+   state, lets it be moved. When it becomes approved or withdrawn the form
+   offers today as the day it was decided (`decided`); the day can be
+   changed, and emptied. An approved Deviation may get a review date
+   (`review-due`), in the two forms the Risk page offers: on a date, or
+   every so many units of a named calendar. A Deviation that is decided and
+   states no day can be given one; no day is suggested for it, because the
+   page does not know when that was.
+   `key` names the Deviation on the page. What is typed is kept per key
+   while the page is open. wireDeviations calls onSave(key, deviation, show)
+   with the Deviation after the decision (jscDecideDeviation); the page
+   writes the object that carries it and calls show(message) to refuse. */
+const devTyped = new Map();
+const DECIDED = ["approved", "withdrawn"];
+function devForm(dev, key) {
+  if (!devTyped.has(key)) devTyped.set(key, { to: "", decided: null, due: undefined });
+  const f = devTyped.get(key), to = f.to || dev.state, becomes = to !== dev.state;
+  /* the day offered: what was typed, else the stored one, else today when the decision is made here */
+  const decided = f.decided !== null ? f.decided : dev.decided || (becomes && DECIDED.includes(to) ? jscToday() : "");
+  const due = f.due !== undefined ? f.due : dev["review-due"] || null;
+  return { f, to, becomes, decided, due };
+}
+function dueText(due) {
+  if (!due) return "";
+  return due.type === "date" || due.type === "datetime" ? due.value : `${due.num} ${due.unit}${due["calendar-ref"] ? " · " + last(due["calendar-ref"]) : ""}`;
+}
+function deviationHtml(dev, key) {
+  const { to, becomes, decided, due } = devForm(dev, key), next = JSC_NEXT.deviation[dev.state] || [];
+  const opt = (value, text, current) => `<option value="${esc(value)}" ${value === current ? "selected" : ""}>${esc(text)}</option>`;
+  const head = `⚑ ${esc(T("Deviation"))}: ${esc(dev.type)} · ${badge(dev.state)}${dev.decided ? ` <span class="hint">${esc(T("decided on {date}", { date: dev.decided }))}</span>` : ""}
+    ${dev["review-due"] ? ` <span class="hint">${esc(T("review due"))} ${esc(dueText(dev["review-due"]))}</span>` : ""}`;
+  const isDecided = DECIDED.includes(to), kind = due ? due.type : "";
+  if (!next.length && !DECIDED.includes(dev.state)) return `<div class="hint verdict-warn" data-dev="${esc(key)}">${head}</div>`;
+  return `<div class="verdict-warn" data-dev="${esc(key)}" style="margin:4px 0">${head}
+    <div class="wbrow" style="margin:4px 0 0">
+      ${next.length ? `<label>${esc(T("move to"))} <select data-dev-to>${opt("", T("(leave as it is)"), becomes ? to : "")}${next.map(s => opt(s, s, becomes ? to : "")).join("")}</select></label>` : ""}
+      ${isDecided ? `<label>${esc(T("decided on"))} <input type="date" data-dev-decided value="${esc(decided)}" ${dev.decided && !becomes ? "disabled" : ""}></label>` : ""}
+      ${to === "approved" ? `<label>${esc(T("review due"))} <select data-dev-due>${opt("", T("no date"), kind)}${opt("date", T("on a date"), kind)}${opt("calendar-period", T("every"), kind)}</select></label>
+        ${kind === "date" ? `<input type="date" data-dev-duedate value="${esc(due.value || "")}" aria-label="${esc(T("review due"))}">` : ""}
+        ${kind === "calendar-period" ? `<input type="number" data-dev-duenum min="1" value="${esc(due.num || 12)}" style="width:76px;min-width:76px" aria-label="num">
+          <select data-dev-dueunit aria-label="unit">${JSC_CALENDAR_UNITS.map(u => opt(u, u, due.unit || "months")).join("")}</select>
+          <input type="url" data-dev-duecal placeholder="${esc(T("Calendar (URI)"))}" aria-label="${esc(T("Calendar (URI)"))}" value="${esc(due["calendar-ref"] || "")}" style="min-width:220px">` : ""}` : ""}
+      ${becomes || isDecided ? `<button type="button" class="small primary" data-dev-save>${esc(T("Record the decision"))}</button>` : ""}
+      <span class="verdict-bad" data-dev-err role="alert"></span></div></div>`;
+}
+/* devOf(key) -> the Deviation as stored; again() draws the page's view again */
+function wireDeviations(root, devOf, again, onSave) {
+  root.querySelectorAll("[data-dev]").forEach(box => {
+    const key = box.dataset.dev, dev = devOf(key);
+    if (!dev) return;
+    const on = (selector, fn, redraw) => box.querySelectorAll(selector).forEach(n => n.addEventListener("change", () => { fn(devForm(dev, key), n); if (redraw) again(); }));
+    on("[data-dev-to]", (s, n) => { s.f.to = n.value; s.f.decided = null; }, true);
+    on("[data-dev-decided]", (s, n) => { s.f.decided = n.value; });
+    on("[data-dev-due]", (s, n) => { s.f.due = n.value === "date" ? { type: "date", value: "" } : n.value ? { type: "calendar-period", num: 12, unit: "months", "calendar-ref": "" } : null; }, true);
+    on("[data-dev-duedate]", (s, n) => { s.f.due = { ...s.due, value: n.value }; });
+    on("[data-dev-duenum]", (s, n) => { s.f.due = { ...s.due, num: Number(n.value) || 0 }; });
+    on("[data-dev-dueunit]", (s, n) => { s.f.due = { ...s.due, unit: n.value }; });
+    on("[data-dev-duecal]", (s, n) => { s.f.due = { ...s.due, "calendar-ref": n.value.trim() }; });
+    const save = box.querySelector("[data-dev-save]");
+    if (save) save.addEventListener("click", async () => {
+      const s = devForm(dev, key), show = msg => { box.querySelector("[data-dev-err]").textContent = msg; };
+      let decided;
+      try { decided = jscDecideDeviation(dev, s.to, s.decided, s.to === "approved" ? s.due : undefined); } catch (e) { show(e.message); return; }
+      if (await onSave(key, decided, show) !== false) devTyped.delete(key);
+    });
+  });
+}
+
 window.jscView = {
   TYPE_VIEW, MODALITY_COLOR, VERDICT_CLASS, onOpen: null,
   open(id) { (this.onOpen || openDrawer)(id); },
   last, labelOf, titleOf, typeGlyph, typeBadge, badge, modBadge, refLink, wireRefs, prose, langBlocks, kv, prettyVal, section,
   objectHtml, capabilityHtml, pickerHtml, wirePicker, donut, hbars, dimIndex, dimOptLabel, reqMatches, draft,
+  author, provenance, authorLabel, authorInput, wireAuthor, deviationHtml, wireDeviations,
 };
 
 })();

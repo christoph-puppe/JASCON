@@ -30,6 +30,9 @@
         <p class="hint" style="max-width:86ch" data-i18n>An attestation may name an envelope with a signature (DSSE, Ed25519). Whose key to trust is yours to say and never comes from the bundle: a JSON map of signer URI to public key in hex. With a map here the check runs in verification mode: an envelope is judged against the signer's key, and a Tailoring counts as authority-proven only through an envelope that verifies. Without one, an envelope is checked for what it binds and reported as unverified. Public keys are no secret; the map is kept in this browser.</p>
         <textarea id="keys" spellcheck="false" style="min-height:70px;font-family:var(--mono);font-size:12px" placeholder='{"https://authority.example/party/signer": "bb10…2e65"}' data-i18n-attr="aria-label" aria-label="Trusted keys for signatures"></textarea>
         <div id="keys-state" class="hint" role="status"></div></details>
+      <div class="wbrow"><label for="asof" data-i18n>Review dates as of</label><input type="date" id="asof" style="max-width:170px">
+        <label><input type="checkbox" id="require-authors"> <span data-i18n>Require authors: a record that does not name its author is a failure</span></label></div>
+      <p class="hint" style="max-width:86ch" data-i18n>Two reports say who decided and when. The first lists where an author, the day of a decision or the day of an authorization is not stated (AUTHOR-1 to AUTHOR-4). Whether that is a failure is your programme's policy: with the switch on, each of its lines is an error; with it off, a note. The second lists every review date that has passed on the day asked about (REVIEW-1). An empty day means today, in UTC. An overdue review is never an error: the Deviation or Risk still holds until someone acts.</p>
       <div class="progress-track"><div class="progress-fill" id="bar"></div></div>
       <div id="out" style="margin-top:12px"></div>
     </section>
@@ -50,6 +53,7 @@
         <p data-i18n>Risks and scales: RISK-1 to RISK-14 with the coverage of the selected requirements, SCALE-1 to SCALE-4 with the matrix.</p>
         <p data-i18n>Signatures: the envelope an attestation names is checked for what it binds, and against the signer's key when you supply trusted keys. The reference validator looks only at attestations the manifest lists; this check looks at every attestation of the set and reports a missing envelope of an unlisted one as a note.</p>
         <p data-i18n>Advice packs: what a pack may hold (ADVICE-1 to ADVICE-3), capabilities and the edges that cite them (ADVICE-4 to ADVICE-7), and the pack manifests the set keeps under packs/sha256/ against their names and against the objects of the set (ADVICE-8 to ADVICE-10). For every pack the check says how far its publisher is established: proven only with a signature that verifies under a trusted key, attested and not verified without keys, claimed otherwise. ADVICE-11 is asked when a pack is imported, on the Home page.</p>
+        <p data-i18n>Who decided, and when: where a consumer's Tailoring, a Risk, a Finding or an Implementation names no author, where a decided Deviation states no day and an authorization no date (AUTHOR-1 to AUTHOR-4), and which review date of an approved Deviation or a managed Risk has passed (REVIEW-1). The lines are the reference validator's for the same set and day; its --require-authors is the switch of the first view, its --as-of the day.</p>
         <p data-i18n>The composition of two sets has a view of its own.</p>
         <p class="verdict-warn" data-i18n>Not checked: conditional-apply instances. The engine is ported and passes its vectors, but no bundle has a place to carry an instance, here as in the reference validator. The bytes of a bundle on disk (line ends, files the manifest does not list) are judged by the Python validator only. In every case of doubt run jascon/scripts/validate_core.py on the exported bundle; it is the reference.</p>
       </div>
@@ -67,7 +71,15 @@
    The page adds no rule of its own; a finding is a sentence of
    jascon-rules.js, which keeps the reference validator's wording. The scope
    of the check, and what it leaves to the Python validator, is stated on the
-   page's second view and repeated above every result. */
+   page's second view and repeated above every result.
+
+   Who decided, and when (CP-AUTHOR-1): the check carries two reports, and
+   the page shows each line in the reference validator's words
+   (jscAuthorReviewLines). The day REVIEW-1 is asked about comes from the
+   field "Review dates as of", today in UTC when it is empty; the rules read
+   no clock. The switch "Require authors" is the reference's
+   --require-authors: it turns the AUTHOR lines into errors. A REVIEW line
+   is never an error. */
 jscI18n.add("de", {
   "Validate": "Validieren", "Check the set": "Set prüfen", "What is checked, and what is not": "Was geprüft wird, und was nicht",
   "The check runs the kernel rules this app has ported from the reference validator, each against its conformance vectors. The Python validator stays the reference.":
@@ -114,16 +126,32 @@ jscI18n.add("de", {
   "error": "Fehler", "note": "Hinweis", "and {n} more; narrow the filter": "und {n} weitere; Filter eingrenzen", "Tier of the Tailorings": "Stufe der Tailorings",
   "checked set \"{set}\": {e} error(s), {n} note(s) in {ms} ms": "Set „{set}“ geprüft: {e} Fehler, {n} Hinweis(e) in {ms} ms",
   "manifest": "Manifest", "files": "Dateien", "object": "Objekt", "digest": "Digest", "reference": "Verweis", "tailoring": "Tailoring", "scale": "Skala", "risk": "Risiko", "facet": "Facet",
+  "Review dates as of": "Überprüfungstermine zum Stichtag",
+  "Require authors: a record that does not name its author is a failure": "Autoren verlangen: Ein Eintrag, der seinen Autor nicht nennt, ist ein Fehler",
+  "Two reports say who decided and when. The first lists where an author, the day of a decision or the day of an authorization is not stated (AUTHOR-1 to AUTHOR-4). Whether that is a failure is your programme's policy: with the switch on, each of its lines is an error; with it off, a note. The second lists every review date that has passed on the day asked about (REVIEW-1). An empty day means today, in UTC. An overdue review is never an error: the Deviation or Risk still holds until someone acts.":
+    "Zwei Berichte sagen, wer entschieden hat und wann. Der erste listet, wo ein Autor, der Tag einer Entscheidung oder der Tag einer Autorisierung nicht genannt ist (AUTHOR-1 bis AUTHOR-4). Ob das ein Fehler ist, ist Sache Ihres Programms: Mit dem Schalter ist jede seiner Zeilen ein Fehler, ohne ihn ein Hinweis. Der zweite listet jeden Überprüfungstermin, der am gefragten Tag verstrichen ist (REVIEW-1). Ein leerer Tag bedeutet heute, in UTC. Eine überfällige Überprüfung ist nie ein Fehler: Die Deviation oder das Risiko gilt weiter, bis jemand handelt.",
+  "Who decided, and when: where a consumer's Tailoring, a Risk, a Finding or an Implementation names no author, where a decided Deviation states no day and an authorization no date (AUTHOR-1 to AUTHOR-4), and which review date of an approved Deviation or a managed Risk has passed (REVIEW-1). The lines are the reference validator's for the same set and day; its --require-authors is the switch of the first view, its --as-of the day.":
+    "Wer entschieden hat, und wann: wo ein Tailoring auf Consumer-Stufe, ein Risiko, eine Feststellung oder eine Implementation keinen Autor nennt, wo eine entschiedene Deviation keinen Tag und eine Autorisierung kein Datum nennt (AUTHOR-1 bis AUTHOR-4), und welcher Überprüfungstermin einer genehmigten Deviation oder eines verwalteten Risikos verstrichen ist (REVIEW-1). Die Zeilen sind die des Referenzvalidators für dasselbe Set und denselben Tag; sein --require-authors ist der Schalter der ersten Ansicht, sein --as-of der Tag.",
+  "Who decided, and when": "Wer entschieden hat, und wann", "author": "Autor", "review": "Überprüfung",
+  "Authors: {n} line(s)": "Autoren: {n} Zeile(n)", "Review dates as of {day}: {n} line(s)": "Überprüfungstermine zum {day}: {n} Zeile(n)",
+  "Nothing is missing: every record the rules ask about names its author and its day.": "Nichts fehlt: Jeder Eintrag, nach dem die Regeln fragen, nennt seinen Autor und seinen Tag.",
+  "No review date is asked: no approved Deviation and no managed Risk of this set carries one.": "Kein Überprüfungstermin wird gefragt: Keine genehmigte Deviation und kein verwaltetes Risiko dieses Sets trägt einen.",
+  "required: a line is an error": "verlangt: Eine Zeile ist ein Fehler", "not required: a line is a note": "nicht verlangt: Eine Zeile ist ein Hinweis",
+  "never an error": "nie ein Fehler",
 });
 
 const $ = id => document.getElementById(id);
 const V = jscView, esc = jscEsc;
 const AREAS = { manifest: N("manifest"), files: N("files"), object: N("object"), digest: N("digest"), reference: N("reference"),
-  tailoring: N("tailoring"), scale: N("scale"), risk: N("risk"), facet: N("facet"), signature: N("signature"), advice: N("advice") };
+  tailoring: N("tailoring"), scale: N("scale"), risk: N("risk"), facet: N("facet"), signature: N("signature"), advice: N("advice"),
+  author: N("author"), review: N("review") };
 /* the word shown for a pack's publisher (jscPublisherLabel): proven only with a signature that verified under a trusted key */
 const PUBLISHER = { proven: N("proven"), attested: N("attested, not verified"), claimed: N("claimed") };
 let G = jscSet.graph, last = null, filter = { area: "", kind: "", q: "" };
-const ui = V.draft("validate", () => ({ keys: "", other: "" }));
+const ui = V.draft("validate", () => ({ keys: "", other: "", requireAuthors: false }));
+/* The day REVIEW-1 is asked about: what the field holds, else today (UTC).
+   It is not kept: a stored day would go stale and nobody would see it. */
+const asOf = () => $("asof").value || jscToday();
 
 /* The trusted keys as typed: null when the field is empty, the map when it
    is one, and an error otherwise. A map that cannot be read stops the check;
@@ -150,7 +178,7 @@ async function run() {
   const bar = $("bar"), t0 = performance.now();
   bar.classList.remove("done"); bar.style.width = "0%";
   const verified = await jscVerify(G, (done, total) => { bar.style.width = Math.round(70 * done / total) + "%"; });
-  const res = await jscCheckGraph(G, G.manifest ? verified : null, { trusted: trustedKeys().trusted });
+  const res = await jscCheckGraph(G, G.manifest ? verified : null, { trusted: trustedKeys().trusted, asOf: asOf(), requireAuthors: !!ui.data.requireAuthors });
   bar.style.width = "100%"; bar.classList.add("done");
   last = { set: jscSet.name, tool: JSC_TOOL, "not-checked": ["conditional-apply instances", "bytes on disk"], "verification-mode": !!trustedKeys().trusted, ...res };
   const e = res.findings.filter(f => f.kind === "error").length, n = res.findings.length - e;
@@ -167,10 +195,20 @@ function render() {
     (!q || f.message.toLowerCase().includes(q) || (f.object || "").toLowerCase().includes(q)));
   const byArea = {}; all.forEach(f => { byArea[f.area] = (byArea[f.area] || 0) + 1; });
   const chip = (n, label, cls) => `<span class="chip"><b class="${cls || ""}">${esc(n)}</b>${esc(T(label))}</span>`;
+  /* The two reports of CP-AUTHOR-1, each line in the reference validator's words (jscAuthorReviewLines).
+     A note carries the reference's prefix; an AUTHOR line the user requires is shown as the error it is. */
+  const rep = last.report, isReview = l => l.rule === "REVIEW-1";
+  const line = l => `<div class="mono ${l.kind === "error" ? "verdict-bad" : l.kind === "summary" ? "" : "hint"}" style="font-size:11.5px;margin:2px 0" data-line="${l.kind}" data-rule="${esc(l.rule)}">${esc((l.kind === "note" ? "note: " : l.kind === "error" ? "error: " : "") + l.text)}</div>`;
+  const authorLines = rep.lines.filter(l => !isReview(l)), reviewLines = rep.lines.filter(isReview);
+  const reports = `<div id="report-author"><div><b>${esc(T("Authors: {n} line(s)", { n: authorLines.length }))}</b> <span class="hint">${esc(T(rep["require-authors"] ? "required: a line is an error" : "not required: a line is a note"))}</span></div>
+      ${authorLines.map(line).join("") || `<div class="hint">${esc(T("Nothing is missing: every record the rules ask about names its author and its day."))}</div>`}</div>
+    <div id="report-review" style="margin-top:8px"><div><b>${esc(T("Review dates as of {day}: {n} line(s)", { day: rep["as-of"], n: reviewLines.length }))}</b> <span class="hint">${esc(T("never an error"))}</span></div>
+      ${reviewLines.map(line).join("") || `<div class="hint">${esc(T("No review date is asked: no approved Deviation and no managed Risk of this set carries one."))}</div>`}</div>`;
   $("out").innerHTML = `<div>${chip(G.objects.size, "objects")}${chip(typed, "typed", typed === G.objects.size ? "verdict-ok" : "verdict-bad")}
       ${chip(errors, "errors", errors ? "verdict-bad" : "verdict-ok")}${chip(all.length - errors, "notes")}
       ${JSC_TYPES.filter(t => last.types[t]).map(t => `<span class="chip"><b>${last.types[t]}</b>${esc(t)}</span>`).join("")}</div>
     ${errors ? "" : `<p class="verdict-ok" style="margin:6px 0">✓ ${esc(T("No error from the rules this app has ported."))}</p>`}
+    ${V.section(T("Who decided, and when"), reports)}
     ${Object.keys(last.tiers).length ? V.section(T("Tier of the Tailorings"), Object.entries(last.tiers).map(([id, tier]) => `<div>${V.refLink(id, V.last(id))} ${V.badge(tier)}</div>`).join("")) : ""}
     ${Object.keys(last.signatures).length ? V.section(T("Signatures"), Object.entries(last.signatures).map(([id, st]) => `<div>${V.refLink(id, V.last(id))} <span class="${st === "verified" ? "verdict-ok" : st === "error" ? "verdict-bad" : "hint"}">${esc(st)}</span></div>`).join("")) : ""}
     ${(last.packs || []).length ? V.section(T("Advice packs"), last.packs.map(p => `<div id="pack-${esc(p.name || "own")}"><span class="mono">${esc(p.id)}</span> ${V.badge(T("release") + " " + p.version)}
@@ -215,6 +253,11 @@ $("compose-run").addEventListener("click", compose);
 $("keys").value = ui.data.keys;
 $("keys").addEventListener("input", e => { ui.data.keys = e.target.value; ui.save(); showKeys(); });
 showKeys();
+/* The day and the switch belong to a result: changing either one asks again, if a result is shown. */
+$("asof").value = jscToday();
+$("require-authors").checked = !!ui.data.requireAuthors;
+$("asof").addEventListener("change", () => { if (last) run(); });
+$("require-authors").addEventListener("change", e => { ui.data.requireAuthors = e.target.checked; ui.save(); if (last) run(); });
 $("run").addEventListener("click", run);
 $("download").addEventListener("click", () => jscDownload(jscSlug(last.set) + "-check.json", jscSerialize(last), "application/json"));
 

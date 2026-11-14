@@ -12,6 +12,11 @@ Builds a complete JASCON bundle that the reference validator accepts:
   4. plays the organisation for two of the imported risks - assesses them
      and chooses a treatment option - so that the coverage report shows
      covered, pending and uncovered requirements side by side;
+     who decided what (`provenance`): an imported Risk names the catalogue's
+     publisher and the day the catalogue was released, as the import writes
+     it; the Tailoring and the two assessed Risks are the organisation's
+     and name its CISO. The organisation, its CISO and the two days are the
+     demo's own: nobody assessed anything;
   5. pins the three starting scales of risk-catalogs/scales/ so that the
      validator checks every level the two risks state;
   6. writes the content manifest, pinned to kernel 2.0.0.
@@ -32,6 +37,12 @@ CATALOG = os.path.join(ROOT, "risk-catalogs", "office-it")
 DEMO = os.path.join(ROOT, "risk-catalogs", "demo", "office-it-moderate")
 SCALES = os.path.join(ROOT, "risk-catalogs", "scales")
 ORG = "https://org.example"
+# The organisation is played. Its decisions carry these two days, fixed so
+# that the demo is the same on every run: the day of the Statement of
+# Applicability and of the import (the day demo/.../not-applicable.json
+# carries), and the day the two risks were assessed.
+CISO = f"{ORG}/party/ciso"
+SOA_DAY, ASSESSED_DAY = "2026-11-10", "2026-11-12"
 
 
 def load_module(name, path):
@@ -71,6 +82,7 @@ def main():
     component = {"id": f"{ORG}/component/office-it", "version": "1", "lifecycle": "active", "kind": "system",
                  "title": {"en": "Office IT", "de": "Büro-IT"}}
     tailoring = {"id": f"{ORG}/tailoring/soa-office-it", "version": "1", "lifecycle": "active",
+                 "provenance": {"author-ref": CISO, "date": SOA_DAY},
                  "title": {"en": "Statement of Applicability - office IT", "de": "Erklärung zur Anwendbarkeit - Büro-IT"},
                  "selects": [{"set-ref": "https://ns.nist.gov/sp800-53/set/baseline/moderate"}]}
     add("objects/component/office-it.json", component)
@@ -79,8 +91,10 @@ def main():
 
     risks_dir = os.path.join(out, "_imported")
     na_path = os.path.join(DEMO, "not-applicable.json")
-    rc.cmd_import(types.SimpleNamespace(catalog=CATALOG, bundle=out, org=ORG, owner=f"{ORG}/party/ciso",
-                                        out=risks_dir, tailoring=tailoring["id"], not_applicable=na_path))
+    # no author and no day are given: the import writes what the catalogue states
+    rc.cmd_import(types.SimpleNamespace(catalog=CATALOG, bundle=out, org=ORG, owner=CISO,
+                                        out=risks_dir, tailoring=tailoring["id"], not_applicable=na_path,
+                                        author_ref=None, date=None))
 
     # the organisation's own work, played here for two risks so that the
     # report has something in every column
@@ -99,10 +113,14 @@ def main():
         with open(os.path.join(out, "scales", fn), "wb") as f: f.write(raw)
         manifest["scales"].append({"id": sd["id"], "exact-version": sd["version"],
                                    "digest": "sha256:" + hashlib.sha256(raw).hexdigest(), "path": f"scales/{fn}"})
+    # an assessed risk is the organisation's version of it: the Risk and each
+    # rating it sets name who decided and when, as the app's Risk page writes them
+    assessed_by = {"author-ref": CISO, "date": ASSESSED_DAY}
     def rated(level, likelihood, impact):
         return {"level": level, "scale-ref": scale,
                 "likelihood": {"level": likelihood, "scale-ref": s_like},
-                "impact": {"level": impact, "scale-ref": s_imp}}
+                "impact": {"level": impact, "scale-ref": s_imp},
+                "provenance": dict(assessed_by)}
     committed = os.path.join(DEMO, "risks")
     if os.path.exists(committed): shutil.rmtree(committed)
     os.makedirs(committed)
@@ -114,6 +132,7 @@ def main():
         if risk["label"] in decided:
             before, after = decided[risk["label"]]
             risk.update({"lifecycle": "active", "state": "assessed", "treatment": "modify",
+                         "provenance": dict(assessed_by),
                          "rating": rated(*before), "residual-rating": rated(*after)})
         add(f"objects/risk/{fn}", risk)
         with open(os.path.join(committed, fn), "w", encoding="utf-8", newline="\n") as f:

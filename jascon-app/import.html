@@ -47,6 +47,7 @@
         <p data-i18n>The preset for a CIS Benchmark follows the converter of this repository: every rule is a Requirement with one clause, whose text is the rule's title because the export leaves the statement empty; the audit and remediation text and the marking automated or manual go to the facet assessment-criteria; the profiles become baseline Sets and the CIS Controls cross-references Mappings. The Checks tool drafts machine checks from the audit text.</p>
         <p data-i18n>A profile. The controls it includes become a Set, and a Tailoring selects that Set. Excluded controls become excludes. A set-parameter becomes an operation on every clause that declares the parameter, if the value lies in the declared space; a value outside it needs a Deviation and is listed, not written.</p>
         <p data-i18n>Not carried, and counted in the report: alters, the merge directive, pattern matching, the inclusion of child controls. An alter changes text, and somebody has to decide whether that is editorial or substantive; use the Tailor tool for it.</p>
+        <p data-i18n>A profile's Tailoring names who wrote the profile and when, as the source states it: the party its metadata names as creator or as prepared-by, else the one party that holds any role, else its one party, else its one organisation; and the day of its last change. The two fields above the import show both and can be typed over. Without an author or without a day nothing is written about who decided, and the import goes ahead. A CIS Benchmark's cross-references keep CIS as their author.</p>
         <p data-i18n>Imported content stays under its publisher's terms. State them in the field for the licence; they are written into the provenance of the bundle.</p>
       </div>
     </section>
@@ -70,6 +71,12 @@
    added to the active set, because it refers to requirements that have to be
    there. Writing the same import twice gives the same set: ids and paths
    follow from the source, not from the clock.
+
+   Who decided, and when (D26): an import pre-fills both from the source and
+   the user may type over either. The two fields show what jscOscalStated
+   reads from the document; a field the user leaves alone is not handed to
+   the import, so the report can say how many records got their author from
+   the source, from the user, or not at all.
 
    The rules are jascon-oscal.js; this page only collects the options and
    shows the report. */
@@ -140,6 +147,17 @@ jscI18n.add("de", {
   "wrote {n} object(s) and {s} pinned schema(s) to set \"{set}\"; it is now the active set": "{n} Objekt(e) und {s} gepinnte(s) Schema(s) in Set „{set}“ geschrieben; es ist jetzt das aktive Set",
   "import failed: {msg}": "Import fehlgeschlagen: {msg}", "and {n} more": "und {n} weitere", "A namespace is an http(s) URI.": "Ein Namensraum ist eine http(s)-URI.",
   "{n} of {total} objects are not valid; nothing was written.": "{n} von {total} Objekten sind nicht gültig; nichts wurde geschrieben.",
+  "Author (party URI)": "Autor (Party-URI)", "Day": "Tag", "Who decided, and when": "Wer entschieden hat, und wann",
+  "From the source: the cross-references are CIS's own, dated with the day the catalog was last changed. Type over either field to overwrite it. A Mapping cannot be written without both.":
+    "Aus der Quelle: Die Querverweise stammen von CIS selbst, datiert mit dem Tag der letzten Änderung des Katalogs. Jedes der beiden Felder lässt sich überschreiben. Ohne beide kann ein Mapping nicht geschrieben werden.",
+  "From the source: {party} is the author by the roles and parties of the document's metadata; the day is that of its last change. Type over either field to overwrite it. With one of them empty the Tailoring names no author.":
+    "Aus der Quelle: {party} ist nach den Rollen und Parteien der Metadaten des Dokuments der Autor; der Tag ist der seiner letzten Änderung. Jedes der beiden Felder lässt sich überschreiben. Ist eines leer, nennt das Tailoring keinen Autor.",
+  "The source does not say who wrote it: its metadata names no single party as creator or prepared-by, in any role, or as its one party or one organisation. Enter an author, or the Tailoring names none and is written all the same.":
+    "Die Quelle sagt nicht, wer sie geschrieben hat: Ihre Metadaten nennen keine einzelne Partei als creator oder prepared-by, in irgendeiner Rolle, oder als einzige Partei oder einzige Organisation. Einen Autor eintragen, sonst nennt das Tailoring keinen und wird trotzdem geschrieben.",
+  "of {n} record(s) that can name an author: {s} as the source states it, {c} as entered here, {x} not stated":
+    "von {n} Eintrag/Einträgen, die einen Autor nennen können: {s} wie die Quelle es nennt, {c} wie hier eingetragen, {x} nicht genannt",
+  "A profile's Tailoring names who wrote the profile and when, as the source states it: the party its metadata names as creator or as prepared-by, else the one party that holds any role, else its one party, else its one organisation; and the day of its last change. The two fields above the import show both and can be typed over. Without an author or without a day nothing is written about who decided, and the import goes ahead. A CIS Benchmark's cross-references keep CIS as their author.":
+    "Das Tailoring eines Profils nennt, wer das Profil geschrieben hat und wann, so wie die Quelle es sagt: die Partei, die seine Metadaten als creator oder als prepared-by nennen, sonst die eine Partei, die irgendeine Rolle hält, sonst seine eine Partei, sonst seine eine Organisation; und den Tag seiner letzten Änderung. Die beiden Felder über dem Import zeigen beides und lassen sich überschreiben. Ohne Autor oder ohne Tag wird nichts darüber geschrieben, wer entschieden hat, und der Import läuft trotzdem. Die Querverweise eines CIS Benchmarks behalten CIS als Autor.",
 });
 
 const $ = id => document.getElementById(id);
@@ -223,7 +241,11 @@ function reportHtml() {
         ${row("Parameters not found", r["parameters-not-found"].length ? capped(r["parameters-not-found"]) : "")}
         ${row("Values outside the declared space (need a Deviation; not written)", r["parameters-outside-declared-space"].length ? capped(r["parameters-outside-declared-space"].map(x => `${x.parameter} = ${JSON.stringify(x.value)}`)) : "")}
         ${row("Not carried", Object.keys(r["not-carried"]).length ? counts(r["not-carried"]) : "")}</div>`;
-  return `<div class="nano sectionlabel">${esc(T("Report"))}</div>${body}
+  /* who decided and when, on the records of this import that can carry it: where it came from */
+  const who = r.provenance.records, carrying = who["from-source"] + who["from-caller"] + who.none;
+  const whoRow = carrying ? `<div class="kv" id="report-provenance">${row("Who decided, and when", esc(T("of {n} record(s) that can name an author: {s} as the source states it, {c} as entered here, {x} not stated",
+    { n: carrying, s: who["from-source"], c: who["from-caller"], x: who.none })))}</div>` : "";
+  return `<div class="nano sectionlabel">${esc(T("Report"))}</div>${body}${whoRow}
     ${bad.length ? `<div class="nano sectionlabel verdict-bad">${esc(T("Objects that are not valid kernel objects"))} (${bad.length})</div>${bad.slice(0, 8).map(m => `<div class="verdict-bad">✗ ${esc(m)}</div>`).join("")}` : ""}
     <div class="wbrow" style="margin-top:10px"><button type="button" class="primary" id="write" ${objs.length && !bad.length ? "" : "disabled"}>${esc(T("Write to the set"))}</button><span class="verdict-bad" id="write-err" role="alert"></span></div>`;
 }
@@ -255,6 +277,16 @@ function render() {
       <label for="o-lang">${esc(T("Language of the text"))}</label><div><input type="text" id="o-lang" value="${esc(opts.lang)}" style="max-width:90px"></div>
       <label for="o-catset">${esc(T("The catalogue Set an include-all stands for"))}</label><div><select id="o-catset">${opt("", T("(none)"), opts.catalogSet)}${roots.map(r => opt(r.obj.id, V.titleOf(r), opts.catalogSet)).join("")}</select></div>`;
   }
+  /* Who decided, and when: what the source states, in two fields that can be typed over. Shown where the
+     import makes a record that can carry it (the Tailoring of a profile, the Mappings of a CIS Benchmark). */
+  const stated = jscOscalStated(doc, opts), shown = (given, from) => (given !== undefined ? given : from || "");
+  if (stated.applies) {
+    const hint = kind === "catalog" ? T("From the source: the cross-references are CIS's own, dated with the day the catalog was last changed. Type over either field to overwrite it. A Mapping cannot be written without both.")
+      : stated["author-ref"] ? T("From the source: {party} is the author by the roles and parties of the document's metadata; the day is that of its last change. Type over either field to overwrite it. With one of them empty the Tailoring names no author.", { party: stated.party })
+      : T("The source does not say who wrote it: its metadata names no single party as creator or prepared-by, in any role, or as its one party or one organisation. Enter an author, or the Tailoring names none and is written all the same.");
+    form += `<label for="o-author">${esc(T("Author (party URI)"))}</label><div><input type="url" id="o-author" value="${esc(shown(opts.authorRef, stated["author-ref"]))}"><div class="hint">${esc(hint)}</div></div>
+      <label for="o-date">${esc(T("Day"))}</label><div><input type="date" id="o-date" value="${esc(shown(opts.date, stated.date))}" style="max-width:190px"></div>`;
+  }
   el.innerHTML = `<div class="nano sectionlabel" style="margin-top:0">${esc(T(KIND_LABEL[kind]))} · <span class="mono">${esc(fileName)}</span></div>
     <div class="kv" style="margin-bottom:12px">${head}</div>
     <div class="form">${form}<div class="wide wbrow"><button type="button" class="primary" id="run">${esc(T("Run the import"))}</button><span class="verdict-bad" id="run-err" role="alert"></span></div></div>
@@ -269,6 +301,11 @@ function render() {
       else if (key === "preset" && before === "cis-benchmark") opts.ns = jscCfg.get("org:ns").replace(/\/+$/, "") + "/fw/" + jscOscalSlug(doc.catalog.metadata.title || "catalog");
       render();
     });
+  }
+  /* a field left as the source states it is not given; one that was changed is, also when it is now empty */
+  for (const [id, key, from] of [["o-author", "authorRef", stated["author-ref"]], ["o-date", "date", stated.date]]) {
+    const n = $(id);
+    if (n) n.addEventListener("change", () => { const v = n.value.trim(); if (v === (from || "")) delete opts[key]; else opts[key] = v; result = null; render(); });
   }
   if ($("o-checks")) $("o-checks").addEventListener("change", e => { opts.checks = e.target.checked; });
   $("run").addEventListener("click", run);

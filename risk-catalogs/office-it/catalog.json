@@ -1,6 +1,7 @@
 {
  "id": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it",
  "version": "0.1.0",
+ "released": "2026-11-10",
  "lifecycle": "draft",
  "title": {
   "en": "Typical risks of an office IT environment",

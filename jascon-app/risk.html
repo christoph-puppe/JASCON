@@ -87,6 +87,14 @@
    Suggestions from a language model are the last view and the only part of
    the page that sends anything anywhere; see the comment above renderModel.
 
+   Who decided (D26): the form shows the author a save will write, from the
+   setting "Who am I". A save writes him on the Risk, and on a rating when
+   that rating is set or changed; an unchanged rating keeps the author it
+   had (jscAuthorRisk). Without an author the Risk is saved all the same and
+   names none. A catalogue import writes the author and the day the
+   catalogue states (its publisher, the day it was released); the two fields
+   of the catalogue view show them and let them be overwritten.
+
    Not here: catalogues other than the two the repository ships, impact per
    dimension, and any method other than a likelihood-impact matrix. */
 jscI18n.add("de", {
@@ -183,6 +191,16 @@ jscI18n.add("de", {
   "{n} key(s) the model returned were not among those sent and were dropped": "{n} vom Modell genannte(r) Schlüssel war(en) nicht unter den gesendeten und wurde(n) verworfen",
   "The model named no requirement that is not on the risk already.": "Das Modell hat keine Anforderung genannt, die nicht schon am Risiko steht.",
   "Add the ticked to the risk": "Angekreuzte zum Risiko hinzufügen", "tick all": "alle ankreuzen",
+  "Who decided": "Wer entschieden hat",
+  "Written on the risk, and on a rating that is set or changed with this save. A rating you leave as it is keeps the author it had.":
+    "Wird am Risiko geschrieben und an einer Bewertung, die mit diesem Speichern gesetzt oder geändert wird. Eine Bewertung, die Sie lassen, wie sie ist, behält den Autor, den sie hatte.",
+  "Author of the imported risks (party URI)": "Autor der importierten Risiken (Party-URI)", "Day": "Tag",
+  "From the catalogue: its publisher and the day this version was released. Change either field to overwrite it. With one of them empty an imported risk names no author.":
+    "Aus dem Katalog: sein Herausgeber und der Tag, an dem diese Version veröffentlicht wurde. Jedes der beiden Felder lässt sich überschreiben. Ist eines leer, nennt ein importiertes Risiko keinen Autor.",
+  "This catalogue does not state the day it was released. Enter an author and a day, or the imported risks name no author.":
+    "Dieser Katalog nennt den Tag seiner Veröffentlichung nicht. Autor und Tag eintragen, sonst nennen die importierten Risiken keinen Autor.",
+  "who decided, of {n} imported risk(s): {s} as the catalogue states it, {c} as entered here, {x} not stated":
+    "wer entschieden hat, von {n} importierten Risiko/Risiken: {s} wie der Katalog es nennt, {c} wie hier eingetragen, {x} nicht genannt",
 });
 
 const $ = id => document.getElementById(id);
@@ -192,6 +210,8 @@ const LIFECYCLES = ["draft", "active", "deprecated", "withdrawn"], STATES = ["id
 const TREATMENTS = ["modify", "retain", "avoid", "share"];
 const ui = V.draft("risk", () => ({ requireBasis: false, heatScale: "", heatWhich: "rating", catalog: "", catTailoring: "", owner: "" }));
 let G = jscSet.graph, SCALES = new Map(), E = null, editingExisting = false, editScale = null, cellFilter = null, listFilter = { state: "", q: "" }, naWhy = {};
+/* what the user typed over the author and the day a catalogue states, per catalogue: only the fields that were changed */
+const catGiven = {};
 const risks = () => [...G.objects.values()].filter(r => r.type === "risk");
 const scaleTitle = sd => TT(sd.title) || V.last(sd.id);
 const levelLabel = (sd, code) => { const l = sd && sd.levels.find(x => x.level === code); return l ? (TT(l.label) || l.level) : code; };
@@ -321,7 +341,9 @@ function built() {
   if (o.acceptance && !o.acceptance["approver-ref"] && !o.acceptance.date && emptyText(o.acceptance.rationale)) delete o.acceptance;
   if (o["review-due"] && !o["review-due"].type) delete o["review-due"];
   if (o["review-due"] && o["review-due"].type === "calendar-period") o["review-due"].num = Number(o["review-due"].num) || 0;
-  return o;
+  /* who decided: the author of this save on the Risk, and on a rating that was set or changed */
+  const before = editingExisting && G.objects.get(o.id);
+  return jscAuthorRisk(o, before && before.type === "risk" ? before.obj : null, V.provenance());
 }
 async function problemsOf(o) {
   const out = [], push = (kind, msg) => out.push({ kind, msg });
@@ -409,11 +431,15 @@ async function renderEdit() {
       ${due.type === "date" ? `<input type="date" id="r-duedate" value="${esc(due.value || "")}" aria-label="${esc(T("Date"))}">` : ""}
       ${due.type === "calendar-period" ? `<input type="number" id="r-duenum" min="1" value="${esc(due.num || 12)}" style="width:80px" aria-label="num"><select id="r-dueunit" aria-label="unit">${JSC_CALENDAR_UNITS.map(u => opt(u, u, due.unit || "months")).join("")}</select>
         <input type="url" id="r-duecal" placeholder="${esc(T("Calendar (URI)"))}" aria-label="${esc(T("Calendar (URI)"))}" value="${esc(due["calendar-ref"] || "")}" style="min-width:240px;flex:1">` : ""}</div>
+    <div class="nano wide sectionlabel">${esc(T("Who decided"))}</div>
+    ${V.authorLabel("r-author")}<div>${V.authorInput("r-author")}
+      <div class="hint">${esc(T("Written on the risk, and on a rating that is set or changed with this save. A rating you leave as it is keeps the author it had."))}</div></div>
     <div class="nano wide sectionlabel">${esc(T("What the rules say"))}</div>
     <div class="wide problems" role="status">${probs.map(p => `<div class="${p.kind === "error" ? "verdict-bad" : "hint"}">${p.kind === "error" ? "✗" : "·"} ${esc(T(p.kind))}: ${esc(p.msg)}</div>`).join("") || `<div class="verdict-ok">✓ ${esc(T("nothing to object"))}</div>`}</div>
     <div class="wide wbrow"><button type="button" class="primary" id="r-save" ${errors ? "disabled" : ""}>${esc(T("Save the risk"))}</button>
       <button type="button" id="r-discard">${esc(T("Discard"))}</button>${editingExisting ? `<button type="button" class="danger" id="r-delete">${esc(T("Delete the risk"))}</button>` : ""}</div></div>`;
   V.wireRefs(el);
+  V.wireAuthor(el);
   const again = () => renderEdit();
   const on = (selector, event, fn) => el.querySelectorAll(selector).forEach(n => n.addEventListener(event, () => { fn(n); again(); }));
   const text = (k, v) => { E[k] = { ...(E[k] || {}), [L]: v }; };
@@ -649,6 +675,9 @@ function renderCatalogue() {
   const tailorings = [...G.objects.values()].filter(r => r.type === "tailoring" && r.obj.lifecycle !== "withdrawn");
   const tid = tailorings.some(t => t.obj.id === d.catTailoring) ? d.catTailoring : (tailorings[0] ? tailorings[0].obj.id : "");
   const owner = d.owner || jscCfg.get("org:owner"), na = notApplicable();
+  /* who and when, as the catalogue states it; a field the user changed replaces it (also with nothing) */
+  const stated = { "author-ref": cat.catalog["publisher-ref"] || "", date: jscIsDate(cat.catalog.released) ? cat.catalog.released : "" };
+  const given = (catGiven[cat.catalog.id] = catGiven[cat.catalog.id] || {}), shown = k => (k in given ? given[k] : stated[k]);
   const sel = jscCatalogSelection(G.objects, tid || null), rows = jscCatalogCompleteness(cat.entries, G.objects, na);
   const count = s => rows.filter(r => r.status === s).length;
   const STATUS = { instantiated: [N("imported"), "verdict-ok"], "not-applicable": [N("not applicable"), "hint"], gap: [N("gap"), "verdict-warn"] };
@@ -656,6 +685,10 @@ function renderCatalogue() {
     <div class="wbrow"><label for="c-cat">${esc(T("Catalogue"))}</label><select id="c-cat">${JSC_PRESETS.catalogs.map(c => opt(c.catalog.id, `${TT(c.catalog.title)} (${c.catalog.version})`, cat.catalog.id)).join("")}</select>
       ${tailorings.length ? `<label for="c-tail">${esc(T("Tailoring the imported risks belong to"))}</label><select id="c-tail">${tailorings.map(t => opt(t.obj.id, V.labelOf(t), tid)).join("")}</select>` : ""}
       <label for="c-owner">${esc(T("Owner (party URI)"))}</label><input type="url" id="c-owner" value="${esc(owner)}" style="min-width:280px"></div>
+    <div class="wbrow"><label for="c-author">${esc(T("Author of the imported risks (party URI)"))}</label><input type="url" id="c-author" value="${esc(shown("author-ref"))}" style="min-width:280px">
+      <label for="c-date">${esc(T("Day"))}</label><input type="date" id="c-date" value="${esc(shown("date"))}"></div>
+    <p class="hint">${esc(stated.date ? T("From the catalogue: its publisher and the day this version was released. Change either field to overwrite it. With one of them empty an imported risk names no author.")
+      : T("This catalogue does not state the day it was released. Enter an author and a day, or the imported risks name no author."))}</p>
     <p class="hint">${esc(T("The suggestions of this catalogue name requirements of: {source}. Suggestions the selection does not contain are dropped.", { source: (cat.catalog["suggestion-source"] || {}).title || "?" }))}
       ${sel.error ? `<span class="verdict-bad">${esc(sel.error)}</span>` : esc(sel.how + " (" + sel.selected.size + ")")}</p>
     <div class="wbrow">${chip(rows.length, "entries")}${chip(count("instantiated"), "imported", "verdict-ok")}${chip(count("not-applicable"), "not applicable")}${chip(count("gap"), "gaps", count("gap") ? "verdict-warn" : "")}
@@ -675,15 +708,19 @@ function renderCatalogue() {
   on("#c-cat", "change", n => { d.catalog = n.value; ui.save(); renderCatalogue(); });
   on("#c-tail", "change", n => { d.catTailoring = n.value; ui.save(); renderCatalogue(); });
   on("#c-owner", "change", n => { d.owner = n.value.trim(); ui.save(); });
+  for (const [id, k] of [["c-author", "author-ref"], ["c-date", "date"]]) on("#" + id, "change", n => { const v = n.value.trim(); if (v === stated[k]) delete given[k]; else given[k] = v; });
   on("[data-why]", "change", n => { naWhy[n.dataset.why] = n.value; });
   const doImport = async only => {
     const ownerNow = $("c-owner").value.trim();
     if (!/^https?:\/\/./.test(ownerNow)) { $("c-err").textContent = T("Set a default risk owner in the settings, or enter one here."); return; }
-    const res = jscCatalogImport(cat.catalog, cat.entries, G.objects, { org: jscCfg.get("org:ns"), owner: ownerNow, tailoring: tid || null, notApplicable: na, only });
+    const res = jscCatalogImport(cat.catalog, cat.entries, G.objects, { org: jscCfg.get("org:ns"), owner: ownerNow, tailoring: tid || null, notApplicable: na, only,
+      authorRef: given["author-ref"], date: given.date });
     if (res.error) { jscLog.err(T("import failed: {msg}", { msg: res.error })); return; }
     if (res.risks.length) await jscSet.saveObjects(res.risks);
     jscLog.info(T("imported {n} risk(s); {d} suggested treatment(s) dropped; {b} risk(s) without any treatment", { n: res.risks.length,
       d: Object.values(res.report["suggestions-out-of-scope"]).reduce((s, x) => s + x.length, 0), b: res.report["without-treatment"].length }));
+    const who = res.report.provenance.records;
+    jscLog.info(T("who decided, of {n} imported risk(s): {s} as the catalogue states it, {c} as entered here, {x} not stated", { n: res.risks.length, s: who["from-source"], c: who["from-caller"], x: who.none }));
     await jscPage.refresh();
   };
   on("[data-import]", "click", n => doImport(new Set([n.dataset.import])));
@@ -808,7 +845,8 @@ function renderA() {
       <label for="ai-count">${esc(T("At most"))}</label><div class="wbrow" style="margin:0"><input type="number" id="ai-count" min="1" max="30" value="${esc(clampInt(d.count, 1, 30, 8))}" style="width:80px;min-width:80px"> <span class="hint">${esc(T("risks"))}</span>
         ${inp.withMatrix.length ? `<label for="ai-scale">${esc(T("rated on"))}</label><select id="ai-scale">${inp.withMatrix.map(x => opt(x.id, scaleTitle(x), inp.sd.id)).join("")}</select>`
           : `<span class="hint">${esc(T("No level scale with a matrix is pinned; the drafts carry no rating."))}</span>`}
-        <label for="ai-owner">${esc(T("Owner (party URI)"))}</label><input type="url" id="ai-owner" value="${esc(d.owner || jscCfg.get("org:owner"))}" style="min-width:260px"></div></div>
+        <label for="ai-owner">${esc(T("Owner (party URI)"))}</label><input type="url" id="ai-owner" value="${esc(d.owner || jscCfg.get("org:owner"))}" style="min-width:260px"></div>
+      ${V.authorLabel("ai-author")}<div>${V.authorInput("ai-author")}</div></div>
     ${runRow("a", est, why)}${sentBox("a")}
     ${run && run.error ? `<p class="verdict-bad" role="alert">✗ ${esc(run.error)}</p>` : ""}
     ${run && run.risks.length ? `<p class="hint">${esc(T("Drafts from {service}, {date}. A draft is not in the set until you take it.", { service: run.by, date: run.at.slice(0, 10) }))}</p>` : ""}
@@ -822,6 +860,7 @@ function renderA() {
              <button type="button" class="small" data-ai-drop="${i}">${esc(T("Dismiss"))}</button>`}</div></div>`).join("") : ""}
     ${run && run.dropped.length ? `<p class="hint">${esc(T("Not shown: {list}", { list: run.dropped.map(x => x.title).join("; ") }))}</p>` : ""}`;
   V.wireRefs($("ai-a"));
+  V.wireAuthor($("ai-a"));
   const on = (selector, event, fn) => $("ai-a").querySelectorAll(selector).forEach(n => n.addEventListener(event, () => fn(n)));
   on("#ai-context", "input", n => { d.context = n.value; ui.save(); });
   on("#ai-context", "change", () => renderA());
@@ -835,8 +874,9 @@ function renderA() {
     renderEdit(); jscPage.show("edit");
   });
   on("[data-ai-save]", "click", async n => {
-    const dr = run.risks[+n.dataset.aiSave], o = riskFromDraft(dr, run);
-    o.id = jscSet.mintId("risk", o.label);
+    const dr = run.risks[+n.dataset.aiSave], draftRisk = riskFromDraft(dr, run);
+    draftRisk.id = jscSet.mintId("risk", draftRisk.label);
+    const o = jscAuthorRisk(draftRisk, null, V.provenance());   // whoever takes a draft is its author; the model is named in the annotations
     dr.errors = await errorsOf(o);
     if (!dr.errors.length) { await jscSet.saveObjects([o]); dr.taken = o.id; }
     ui.save();
@@ -928,11 +968,12 @@ function renderB() {
   on("[data-ai-add]", "click", async n => {
     const id = idOf(n), row = d.b[id], picked = row.items.filter(x => x.pick).map(x => x.id);
     if (!picked.length) return;
-    const before = G.objects.get(id).obj, o = JSON.parse(JSON.stringify(before));
-    o.treatments = [...(o.treatments || []), ...picked.filter(q => !(o.treatments || []).some(t => t["requirement-ref"] === q)).map(q => ({ "requirement-ref": q }))];
-    const app = { ...((o.annotations || {})["jascon-app"] || {}) }, earlier = (app["treatments-suggested"] || {}).refs || [];
+    const before = G.objects.get(id).obj, changed = JSON.parse(JSON.stringify(before));
+    changed.treatments = [...(changed.treatments || []), ...picked.filter(q => !(changed.treatments || []).some(t => t["requirement-ref"] === q)).map(q => ({ "requirement-ref": q }))];
+    const app = { ...((changed.annotations || {})["jascon-app"] || {}) }, earlier = (app["treatments-suggested"] || {}).refs || [];
     app["treatments-suggested"] = { by: row.by, on: row.at.slice(0, 10), refs: [...new Set([...earlier, ...picked])] };
-    o.annotations = { ...(o.annotations || {}), "jascon-app": app };
+    changed.annotations = { ...(changed.annotations || {}), "jascon-app": app };
+    const o = jscAuthorRisk(changed, before, V.provenance());   // a new version of the Risk by whoever adds the treatments; its ratings stay whose they were
     /* a fault the risk had before is not this change's; only a new one stops it */
     const had = new Set(await errorsOf(before));
     row.saveErrors = (await errorsOf(o)).filter(m => !had.has(m));

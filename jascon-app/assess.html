@@ -56,7 +56,15 @@
    manifest is byte for byte the one that was signed), Semantic Match (the
    meaning of every subject is intact, the package was repackaged), Tamper (a
    subject's meaning changed). Signatures are not verified in this app.
-   Derives from the assess stage of the bundle reader. */
+   Derives from the assess stage of the bundle reader.
+
+   Who decided (D26): a Finding the page writes or moves names the author
+   the form shows, from the setting "Who am I", with today's date; without
+   an author it is saved all the same and names none. A Deviation of a
+   Finding is decided on the board: when it becomes approved or withdrawn
+   the day is written with it (`decided`, today unless changed), and an
+   approved one may get a review date (`review-due`). An Assessment has its
+   own two fields for who and when (`performer-ref`, `time`). */
 jscI18n.add("de", {
   "Assess": "Prüfen", "Results and findings": "Ergebnisse und Feststellungen", "Run a check": "Prüfung durchführen",
   "An assessment records what was checked, how, by whom and with what result. A finding is raised against a requirement. A closed finding stays closed; a recurrence is a new finding.":
@@ -87,6 +95,8 @@ jscI18n.add("de", {
   "assessment {id}: {result}, {n} finding(s)": "Assessment {id}: {result}, {n} Feststellung(en)",
   "kept {n} finding(s) of an earlier run that were already moved on": "{n} Feststellung(en) eines früheren Laufs behalten, die schon weiterbearbeitet wurden",
   "Remediate: {title}": "Beheben: {title}",
+  "Written on a Finding you move or whose Deviation you decide here: that is a new version of the Finding, and it is yours.":
+    "Wird an einer Feststellung geschrieben, die Sie hier verschieben oder deren Deviation Sie hier entscheiden: Das ist eine neue Version der Feststellung, und sie ist Ihre.",
 });
 
 const $ = id => document.getElementById(id);
@@ -112,19 +122,32 @@ function renderBoard() {
     ${list.slice(0, 150).map(f => `<div class="stmt" style="margin:6px 0"><b>${V.refLink(f.obj.id, V.labelOf(f))}</b>
       <div class="hint">${esc(T("against"))} ${V.refLink(f.obj["requirement-ref"], name(f.obj["requirement-ref"]))} ${f.obj["statement-ref"] ? V.badge(f.obj["statement-ref"]) : ""}</div>
       ${(f.obj.actions || []).map(ac => `<div class="hint">▸ ${esc(TT(ac.description))} ${ac.due ? V.badge(T("due") + " " + (ac.due.value || `${ac.due.num} ${ac.due.unit}`)) : ""} ${V.badge(ac.status)}</div>`).join("")}
-      ${(f.obj.deviations || []).map(d => `<div class="hint verdict-warn">⚑ ${esc(T("Deviation"))}: ${esc(d.type)} · ${esc(d.state)}</div>`).join("")}
+      ${(f.obj.deviations || []).map((d, i) => V.deviationHtml(d, f.obj.id + "|" + i)).join("")}
       ${(f.obj["risk-refs"] || []).length ? `<div class="hint">△ ${esc(T("names risks"))}: ${f.obj["risk-refs"].map(r => V.refLink(r, name(r))).join(", ")}</div>` : ""}
       <div style="margin-top:6px">${JSC_NEXT.finding[f.obj.state].map(to => `<button type="button" class="small" data-move="${esc(f.obj.id)}" data-to="${to}">${esc(T("move to {state}", { state: to }))}</button>`).join(" ")}</div></div>`).join("")}</div>`).join("")}</div>`;
   const attCards = atts.map(a => `<div class="stmt">${V.typeBadge("attestation")} <b>${V.refLink(a.obj.id, V.titleOf(a))}</b>
     <span class="hint">${esc(T("signer {who}", { who: V.last(a.obj.signer || "") }))} · ${esc(a.obj.timestamp || "")}</span>
     <div style="margin-top:6px" data-att-out="${esc(a.obj.id)}"><button type="button" class="primary" data-att="${esc(a.obj.id)}">${esc(T("Verify"))}</button></div></div>`).join("");
+  const who = `<div class="wbrow">${V.authorLabel("b-author")}${V.authorInput("b-author")}</div>
+    <p class="hint">${esc(T("Written on a Finding you move or whose Deviation you decide here: that is a new version of the Finding, and it is yours."))}</p>`;
   $("board").innerHTML = (asmts.length ? V.section(T("Assessments ({n})", { n: asmts.length }), aCards) : "") +
-    (finds.length ? V.section(T("Findings ({n})", { n: finds.length }), kanban) : "") + (atts.length ? V.section(T("Attestations ({n})", { n: atts.length }), attCards) : "");
+    (finds.length ? V.section(T("Findings ({n})", { n: finds.length }), who + kanban) : "") + (atts.length ? V.section(T("Attestations ({n})", { n: atts.length }), attCards) : "");
   V.wireRefs($("board"));
+  V.wireAuthor($("board"));
+  /* a Deviation of a Finding, named on the page by the Finding's id and its place in the list */
+  const place = key => { const at = key.lastIndexOf("|"); return [G.objects.get(key.slice(0, at)), +key.slice(at + 1)]; };
+  V.wireDeviations($("board"), key => { const [f, i] = place(key); return f && (f.obj.deviations || [])[i]; }, renderBoard, async (key, deviation, show) => {
+    const [f, i] = place(key), next = JSON.parse(JSON.stringify(f.obj));
+    next.deviations[i] = deviation;
+    const saved = jscAuthorRecord(next, V.provenance()), wrong = jscShapeErrors("finding", saved);
+    if (wrong.length) { show(wrong[0]); return false; }
+    await jscSet.saveObjects([saved]);
+    await jscPage.refresh();
+  });
   $("board").querySelectorAll("[data-move]").forEach(b => b.addEventListener("click", async () => {
     const f = G.objects.get(b.dataset.move);
     if (!jscCanMove("finding", f.obj.state, b.dataset.to)) return;
-    await jscSet.saveObjects([{ ...f.obj, state: b.dataset.to }]);
+    await jscSet.saveObjects([jscAuthorRecord({ ...f.obj, state: b.dataset.to }, V.provenance())]);   // the moved Finding is a new version, by whoever moved it
     await jscPage.refresh();
   }));
   $("board").querySelectorAll("[data-att]").forEach(b => b.addEventListener("click", () => verifyAttestation(b.dataset.att)));
@@ -189,6 +212,7 @@ function renderCheck() {
       <label for="a-scope">${esc(T("Scope"))}</label><select id="a-scope" style="max-width:380px">${all.map(s => `<option value="${esc(s.key)}" ${s.key === cur.key ? "selected" : ""}>${esc(s.label)}</option>`).join("")}</select>
       <label for="a-perf">${esc(T("Performer"))}</label><input type="text" id="a-perf" value="${esc(d.performer)}" style="width:130px">
       <input type="search" id="a-q" placeholder="${esc(T("filter"))}" aria-label="${esc(T("filter"))}" value="${esc(d.q)}" style="width:150px"></div>
+    <div class="wbrow">${V.authorLabel("a-author")}${V.authorInput("a-author")}</div>
     <div class="wbrow"><span class="chip"><b>${answered}/${reqs.length}</b>${esc(T("checked"))}</span>
       ${RESULTS.map(x => `<span class="chip" style="color:${RESULT_COLOR[x]}"><b>${c[x]}</b>${esc(T(RESULT_LABEL[x]))}</span>`).join("")}
       <button type="button" id="a-rest">${esc(T("Mark the rest satisfied"))}</button><button type="button" id="a-reset">${esc(T("Reset the answers"))}</button></div>
@@ -198,6 +222,7 @@ function renderCheck() {
       <span class="verdict-bad" id="a-err" role="alert"></span></div>
     <p class="hint">${esc(T("One finding per requirement that is not satisfied. The result of the assessment is not-satisfied if any requirement is, inconclusive if any is inconclusive or unanswered, satisfied otherwise."))}</p></div>`;
   V.wireRefs(el);
+  V.wireAuthor(el);
   const again = () => { draft.save(); renderCheck(); };
   el.querySelector("#a-label").addEventListener("change", e => { d.label = e.target.value.trim() || d.label; draft.save(); });
   el.querySelector("#a-scope").addEventListener("change", e => { d.scope = e.target.value; again(); });
@@ -226,10 +251,13 @@ async function writeCheck(scope, reqs) {
   const findingId = rid => jscSet.mintId("finding", d.label + "-" + V.last(rid));
   /* a Finding of this check that somebody already moved on is not rewritten */
   const untouched = rid => { const old = G.objects.get(findingId(rid)); return !old || old.obj.state === "open"; };
+  /* Who raised the Findings and when; null when the author field is empty, and then none is written. A check that is
+     run again writes its open Findings again; one that comes out as it is stored keeps the author it names. */
+  const who = V.provenance(), was = id => { const old = G.objects.get(id); return old && old.type === "finding" ? old.obj : null; };
   const findings = failed.filter(untouched).map(rid => {
     const r = G.objects.get(rid), note = (d.results[rid] || {}).note;
-    return { id: findingId(rid), version: "1", label: "F-" + V.labelOf(r), lifecycle: "draft", "assessment-ref": asmtId, "requirement-ref": rid, state: "open",
-      actions: [{ description: { [lang]: T("Remediate: {title}", { title: V.titleOf(r) }) + (note ? " (" + note + ")" : "") }, status: "planned" }] };
+    return jscAuthorRecord({ id: findingId(rid), version: "1", label: "F-" + V.labelOf(r), lifecycle: "draft", "assessment-ref": asmtId, "requirement-ref": rid, state: "open",
+      actions: [{ description: { [lang]: T("Remediate: {title}", { title: V.titleOf(r) }) + (note ? " (" + note + ")" : "") }, status: "planned" }] }, who, was(findingId(rid)));
   });
   const keep = new Set(failed.map(findingId));
   const stale = ofType("finding").filter(f => f.obj["assessment-ref"] === asmtId && !keep.has(f.obj.id) && f.obj.state === "open").map(f => f.obj.id);

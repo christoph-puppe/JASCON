@@ -317,6 +317,10 @@ class Backlog69WhoWroteItAndWhen(unittest.TestCase):
             ("a creator the document does not define is nobody; the one party stands", [("creator", ["x"])], [A], "a"),
             ("a party without a name cannot be named by a URI", [("assessor", ["n"])], [N, O], None),
             ("a uuid the document does not define is not counted", [("assessor", ["x", "a"])], [A, B], "a"),
+            ("a party defined twice is one party", [], [A, dict(A)], "a"),
+            ("of two definitions of one uuid the first is the party", [], [A, {"uuid": "a", "type": "person"}], "a"),
+            ("of two definitions of one uuid the first is the party, also when it has no name", [], [{"uuid": "a", "type": "person"}, A], None),
+            ("an entry without a uuid is no party", [], [{"type": "organization", "name": "Nameless Ltd"}, A], "a"),
         ]
         for what, rps, parties, want in table:
             self.assertEqual(self.who(rps, parties), want, what)

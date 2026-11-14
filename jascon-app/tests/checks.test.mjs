@@ -182,8 +182,11 @@ test("checks page: from a CIS import to saved checks, with a simulated model", {
     await f.locator("#pick").setInputFiles({ name: "cis-synthetic.json", mimeType: "application/json", buffer: Buffer.from(JSON.stringify(cisSynthetic())) });
     assert.equal(await f.locator("#o-preset").inputValue(), "cis-benchmark", "the preset is guessed from the title");
     assert.equal(await f.locator("#o-ns").inputValue(), "https://ns.cisecurity.org/benchmark/ubuntu-24.04-lts");
+    /* who states the cross-references and when, as the source has it: CIS, on the day the catalog was last changed; two fields that can be typed over */
+    assert.deepEqual([await f.locator("#o-author").inputValue(), await f.locator("#o-date").inputValue()], ["https://ns.cisecurity.org/benchmark/ubuntu-24.04-lts/party/cis", "2026-11-11"]);
     await f.locator("#o-checks").check();
     await f.locator("#run").click();
+    assert.match(await f.locator("#report-provenance").innerText(), /of 4 record\(s\) that can name an author: 4 as the source states it, 0 as entered here, 0 not stated/);
     await f.locator("#write").click();
     /* 2. the hub hands over to the Checks tool, on its drafting view, and nothing has been sent */
     await f.locator("#d-body .stmt .verdict-warn").waitFor({ timeout: 30000 });
