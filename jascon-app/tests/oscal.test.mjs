@@ -23,6 +23,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
+import crypto from "node:crypto";
 import { cisSynthetic } from "./cis-synthetic.mjs";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
@@ -106,9 +107,12 @@ test("generic rules: the party the statements bind is the caller's; without one 
   }
   /* the word the rules used to supply is gone: it appears only when the caller types it */
   assert.equal(JSON.stringify(named.objects).includes("/party/organization"), false);
-  /* the presets for a publisher's corpus follow their converters and take no party from the caller */
+  /* The presets for a publisher's corpus follow their converters. Until build 0.9.12 that meant they took no party from
+     the caller; since the converters have `--obligated-party` (backlog #74) the caller's party stands in the default's
+     place, and the default stands where the caller gives none. The tests at the end of this file hold the rest. */
   const cis = oscal.jscOscalImportCatalog(src, { preset: "cis-benchmark", party: "https://publisher.example/party/operator" });
-  assert.deepEqual(parties(cis), ["https://ns.cisecurity.org/benchmark/ubuntu-24.04-lts/party/system-administrator"]);
+  assert.deepEqual(parties(cis), ["https://publisher.example/party/operator"]);
+  assert.deepEqual(parties(oscal.jscOscalImportCatalog(src, { preset: "cis-benchmark" })), ["https://ns.cisecurity.org/benchmark/ubuntu-24.04-lts/party/system-administrator"]);
 });
 
 test("profile: NIST MODERATE selects the members of the shipped MODERATE baseline", { skip: missing(NIST_MOD) }, () => {
@@ -464,4 +468,80 @@ test("CIS preset: the namespace is the converter's for its benchmark and derived
   assert.equal(oscal.jscCisNamespace({ metadata: { title: "CIS Red Hat Enterprise Linux 9 Benchmark v2.0.0" } }), "https://ns.cisecurity.org/benchmark/red-hat-enterprise-linux-9");
   const own = oscal.jscOscalImportCatalog(cisSynthetic(), { preset: "cis-benchmark", ns: "https://example.org/cis" });
   assert.ok(own.objects.every(o => o.obj.id.startsWith("https://example.org/cis/")), "a namespace chosen on the page is used");
+});
+
+/* ====================================================================
+   Whom a statement binds where the source does not say (backlog #74)
+   ====================================================================
+   A preset for a publisher's corpus writes one party of its own where the
+   source names none, as its converter does. Since build 0.9.12 that party
+   is an argument with a named default: left alone, the import writes what
+   it wrote before; the caller's party takes its place; without a party
+   nothing is imported; and the report says who chose. */
+const PARTY_INPUTS = [
+  ["bsi-gspp", () => JSON.parse(fs.readFileSync(path.join(ROOT, "converted_examples/DE.BSI/oscal-export/de.bsi-catalog.json"), "utf8")), "https://ns.bsi.bund.de/gspp/party/institution", 811, 651,
+    "a297e3f6769410686f4357717f36a4b2d3c16985259e425ab5292a82a37516b8"],
+  ["nist-sp800-53", () => JSON.parse(fs.readFileSync(path.join(ROOT, "converted_examples/US.SP800-53/oscal-export/us.sp800-53-catalog.json"), "utf8")), "https://ns.nist.gov/sp800-53/party/organization", 1035, 1918,
+    "59cfc430e75edff3e99a28c8644e2b0b1361e5dd07163ee37209b3eee26ee83a"],
+  ["cis-benchmark", cisSynthetic, "https://ns.cisecurity.org/benchmark/ubuntu-24.04-lts/party/system-administrator", 17, 5,
+    "5fd5ccda73af5232c225b0e9fb62e5cecc71c4f4948745dba13798f08280db92"],
+];
+/* every file an import would write: its path, a line break, the serialized object */
+const filesOf = out => out.objects.map(o => o.path + "\n" + core.jscSerialize(o.obj)).join("\n");
+const bound = out => { const n = {}; for (const o of out.objects) for (const st of o.obj.statements || []) for (const p of st["obligated-parties"]) n[p] = (n[p] || 0) + 1; return n; };
+
+test("the obligated party of a preset: with the default left as it is, an import writes byte for byte what build 0.9.11 wrote", () => {
+  /* The digests were taken with build 0.9.11, before the presets knew the argument: one SHA-256 over every file the
+     import writes. The BSI and NIST inputs are the catalogs the repository carries; the CIS one is written for the tests. */
+  for (const [preset, doc, def, objects, statements, digest] of PARTY_INPUTS) {
+    const out = oscal.jscOscalImportCatalog(doc(), { preset });
+    assert.equal(out.objects.length, objects, preset);
+    assert.deepEqual(bound(out), { [def]: statements }, preset + ": every statement binds the preset's default");
+    assert.equal(crypto.createHash("sha256").update(filesOf(out)).digest("hex"), digest, preset + ": the bytes of build 0.9.11");
+    assert.equal(filesOf(oscal.jscOscalImportCatalog(doc(), { preset, party: null })), filesOf(out), preset + ": null is not given");
+    assert.deepEqual(out.report["obligated-party"], { value: def, origin: "converter-default", "converter-default": def,
+      ...(preset === "nist-sp800-53" ? { "source-states": "as the implementation level of a control" } : {}) }, preset + ": the report says that nobody chose");
+  }
+});
+
+test("the obligated party of a preset: the caller's party takes the default's place and nothing else changes; the report says who chose; without a party, or with one that is no http(s) URI, nothing is imported", () => {
+  const MINE = "https://org.example/party/operator";
+  for (const [preset, doc, def, , statements] of PARTY_INPUTS) {
+    assert.deepEqual(oscal.jscOscalPartyDefault(doc(), { preset }).default, def, preset + ": the default can be asked for before anything is imported");
+    const before = oscal.jscOscalImportCatalog(doc(), { preset }), mine = oscal.jscOscalImportCatalog(doc(), { preset, party: MINE });
+    assert.deepEqual(bound(mine), { [MINE]: statements }, preset);
+    assert.equal(filesOf(mine), filesOf(before).split(JSON.stringify(def)).join(JSON.stringify(MINE)), preset + ": only the party differs, in every file");
+    assert.deepEqual([mine.report["obligated-party"].value, mine.report["obligated-party"].origin, mine.report["obligated-party"]["converter-default"]], [MINE, "caller", def]);
+    /* typed with blanks around it: the URI as typed, trimmed */
+    assert.deepEqual(bound(oscal.jscOscalImportCatalog(doc(), { preset, party: `  ${MINE} ` })), { [MINE]: statements });
+    /* the default typed out is the caller's choice of the same party: the same bytes, and the report says who chose */
+    const typed = oscal.jscOscalImportCatalog(doc(), { preset, party: def });
+    assert.deepEqual([filesOf(typed) === filesOf(before), typed.report["obligated-party"].origin], [true, "caller"]);
+    /* no party, and a party that is none: the import does not run, and the default does not come back by itself */
+    assert.throws(() => oscal.jscOscalImportCatalog(doc(), { preset, party: "" }), new RegExp("^Error: no party is named that the statements bind: the kernel requires obligated-parties on every statement\\. The preset's default is " + def.replace(/[.]/g, "\\.") + "$"), preset);
+    assert.throws(() => oscal.jscOscalImportCatalog(doc(), { preset, party: "   " }), /no party is named that the statements bind/, preset);
+    for (const bad of ["operator", "urn:example:operator", "https://org.example/party/the operator", "org.example/party/operator"]) {
+      assert.throws(() => oscal.jscOscalImportCatalog(doc(), { preset, party: bad }), /is not an http\(s\) URI of a party\. The preset's default is /, `${preset}: ${bad}`);
+    }
+  }
+  assert.equal(oscal.jscOscalPartyDefault(cisSynthetic(), { preset: "generic" }), null, "the generic rules have no default");
+  assert.equal(oscal.jscOscalPartyDefault(cisSynthetic(), { preset: "cis-benchmark", ns: "https://example.org/cis" }).default, "https://example.org/cis/party/system-administrator", "a CIS namespace chosen on the page carries the default");
+  /* the generic rules: the party is always the caller's, and the report says so in the same record */
+  const generic = oscal.jscOscalImportCatalog(cisSynthetic(), { preset: "generic", ns: "https://org.example/fw/x", lang: "en", key: "x", party: "all staff" });
+  assert.deepEqual(generic.report["obligated-party"], { value: "https://org.example/fw/x/party/all-staff", origin: "caller", "converter-default": null });
+});
+
+test("the obligated party of the NIST preset: a level the control states is the source's and stays, whatever the caller gives", () => {
+  const rmf = "http://csrc.nist.gov/ns/rmf", NS = "https://ns.nist.gov/sp800-53", MINE = "https://org.example/party/operator";
+  const control = (id, label, props) => ({ id, title: label, props: [{ name: "label", value: label }, { name: "sort-id", value: id }, ...props], parts: [{ id: id + "_smt", name: "statement", prose: "Do it." }] });
+  const cat = () => ({ catalog: { metadata: { title: "Electronic (OSCAL) Version of NIST SP 800-53 Rev 5 test", version: "9.9", "oscal-version": "1.1.2" },
+    groups: [{ id: "ac", title: "Access Control", controls: [
+      control("ac-1", "AC-1", [{ name: "implementation-level", ns: rmf, value: "system" }, { name: "implementation-level", ns: rmf, value: "organization" }]),
+      control("ac-2", "AC-2", [])] }] } });
+  const parties = out => Object.fromEntries(out.objects.filter(o => o.obj.statements).map(o => [o.obj.id.split("/").pop(), o.obj.statements[0]["obligated-parties"]]));
+  const byDefault = oscal.jscOscalImportCatalog(cat(), { preset: "nist-sp800-53" }), mine = oscal.jscOscalImportCatalog(cat(), { preset: "nist-sp800-53", party: MINE });
+  assert.deepEqual(parties(byDefault), { "AC-1": [NS + "/party/system", NS + "/party/organization"], "AC-2": [NS + "/party/organization"] });
+  assert.deepEqual(parties(mine), { "AC-1": [NS + "/party/system", NS + "/party/organization"], "AC-2": [MINE] }, "the caller's party stands only where the source names none");
+  assert.deepEqual([byDefault.report["controls-without-a-stated-party"], mine.report["controls-without-a-stated-party"]], [1, 1]);
+  assert.deepEqual(mine.report["obligated-party"], { value: MINE, origin: "caller", "converter-default": NS + "/party/organization", "source-states": "as the implementation level of a control" });
 });

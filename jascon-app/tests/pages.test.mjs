@@ -21,6 +21,7 @@ import { spawnSync } from "node:child_process";
 import crypto from "node:crypto";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
+import { cisSynthetic } from "./cis-synthetic.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const APP = path.join(ROOT, "jascon-app");
@@ -1525,4 +1526,99 @@ test("Risk: an empty owner refuses the risk and the catalogue import; the approv
     for (const d of tmp) fs.rmSync(d, { recursive: true, force: true });
     await s.close();
   }
+});
+
+/* ====================================================================
+   Whom a statement binds where the source does not say (backlog #74)
+   ====================================================================
+   A preset names one party for its corpus. The Import page shows it before
+   anything is written and calls it what it is, the preset's default; the
+   user may put another in its place; without a party nothing is imported;
+   and what the page shows and what the set keeps say who chose. */
+test("Import: a preset's party is shown as its default before anything is written; left alone it is written and named as the default; another party takes its place and is named as entered; emptied or no URI, nothing is imported", { skip: needs }, async t => {
+  const DEF = "https://ns.cisecurity.org/benchmark/ubuntu-24.04-lts/party/system-administrator", MINE = "https://org.example/party/operator";
+  const bound = async s => [...new Set((await stored(s, "requirement")).flatMap(r => r.statements.flatMap(st => st["obligated-parties"])))];
+  const manifestProvenance = s => s.page.evaluate(async () => JSON.parse((await jscStore.files(jscStore.activeSet())).find(r => r.kind === "manifest").text).provenance);
+  const pickCatalog = async (s, file) => { await s.page.goto(s.base + "import.html"); await s.page.locator("#pick").setInputFiles(file); await s.page.locator("#run").waitFor(); };
+  const tmp = [];
+  t.after(() => { for (const d of tmp) fs.rmSync(d, { recursive: true, force: true }); });
+
+  /* --- the default, left alone --- */
+  let s = await session(), p = s.page;
+  try {
+    await pickCatalog(s, jsonFile("cis.json", cisSynthetic()));
+    assert.equal(await p.locator("#o-preset").inputValue(), "cis-benchmark");
+    assert.deepEqual([await p.locator("#o-party").inputValue(), await p.locator("#o-party").getAttribute("data-party"), await p.locator("#o-party-default").count()], [DEF, "default", 0]);
+    assert.match(await p.locator("#o-party-hint").innerText(), new RegExp("^This is the preset's default and not a value of the source: " + DEF.replace(/[.]/g, "\\.") + "\\. A catalog seldom says whom it binds"));
+    await p.locator("#run").click();
+    await p.locator("#write").waitFor();
+    assert.deepEqual([await p.locator("[data-party-value]").innerText(), await p.locator("[data-party-origin]").getAttribute("data-party-origin"), await p.locator("[data-party-origin]").innerText()],
+      [DEF, "converter-default", "the preset's default, not a value of the source"]);
+    await p.locator("#write").click();
+    await p.locator("#log .l-ok", { hasText: "wrote" }).first().waitFor();
+    assert.equal(await p.locator("#log .l-info", { hasText: "the statements bind" }).first().innerText().then(x => x.replace(/^[\d:.]+/, "")), `the statements bind ${DEF}, the preset's default and not a value of the source`);
+    assert.deepEqual(await bound(s), [DEF]);
+    assert.equal("obligated-party" in await manifestProvenance(s), false, "with the default left alone the manifest says nothing about it, as before this build");
+    assert.deepEqual(s.errors, []);
+  } finally { await s.close(); }
+
+  /* --- emptied, no URI, the default put back, another party --- */
+  s = await session(); p = s.page;
+  try {
+    await pickCatalog(s, jsonFile("cis.json", cisSynthetic()));
+    await type(p.locator("#o-party"), "");
+    assert.deepEqual([await p.locator("#o-party").inputValue(), await p.locator("#o-party").getAttribute("data-party"), await p.locator("#o-party-default").count()], ["", "entered", 1], "an emptied field stays empty; the default does not come back by itself");
+    await p.locator("#run").click();
+    assert.equal(await p.locator("#run-err").innerText(), "No party is named that the statements bind. The kernel requires obligated-parties on every statement, so the import did not run. " +
+      `The field “Who the statements bind” is empty. Name a party, an http(s) URI, or use the preset's default, ${DEF}.`);
+    assert.equal(await p.locator("#write").count(), 0, "nothing was imported");
+    await type(p.locator("#o-party"), "operator");
+    await p.locator("#run").click();
+    assert.match(await p.locator("#run-err").innerText(), /^“operator” is not an http\(s\) URI of a party, so the import did not run\. A preset writes under its publisher's namespace and does not make a party from a short name\./);
+    assert.equal(await p.locator("#write").count(), 0);
+    assert.equal(await p.locator("#o-party").inputValue(), "operator", "what was typed is not turned into something else");
+    await p.locator("#o-party-default").click();
+    assert.deepEqual([await p.locator("#o-party").inputValue(), await p.locator("#o-party").getAttribute("data-party")], [DEF, "default"]);
+    /* the party of one set of rules is not the party of another: the generic rules start empty, a preset from its default */
+    await type(p.locator("#o-party"), MINE);
+    await p.locator("#o-preset").selectOption("generic");
+    assert.equal(await p.locator("#o-party").inputValue(), "", "the generic rules have no default, and a preset's party is not theirs");
+    await p.locator("#o-preset").selectOption("cis-benchmark");
+    assert.deepEqual([await p.locator("#o-party").inputValue(), await p.locator("#o-party").getAttribute("data-party")], [DEF, "default"]);
+    await type(p.locator("#o-party"), MINE);
+    assert.match(await p.locator("#o-party-hint").innerText(), new RegExp("^Entered here, in the place of the preset's default " + DEF.replace(/[.]/g, "\\.") + "\\."));
+    await p.locator("#run").click();
+    await p.locator("#write").waitFor();
+    assert.deepEqual([await p.locator("[data-party-value]").innerText(), await p.locator("[data-party-origin]").getAttribute("data-party-origin"), await p.locator("[data-party-origin]").innerText()],
+      [MINE, "caller", `entered here, in the place of the preset's default ${DEF}`]);
+    await p.locator("#write").click();
+    await p.locator("#log .l-ok", { hasText: "wrote" }).first().waitFor();
+    assert.equal(await p.locator("#log .l-info", { hasText: "the statements bind" }).first().innerText().then(x => x.replace(/^[\d:.]+/, "")), `the statements bind ${MINE}, entered here`);
+    assert.deepEqual(await bound(s), [MINE], "every statement binds the party that was entered");
+    assert.deepEqual((await manifestProvenance(s))["obligated-party"], { value: MINE, origin: "caller", "converter-default": DEF }, "the set keeps who named the party");
+    const x = await exported(s); tmp.push(x.out);
+    const ref = reference(x.dir, ["--as-of", AS_OF_46], t, "a CIS-shaped catalog imported with a party entered on the page");
+    assert.ok(ref.green, ref.stdout.slice(-1200));
+    assert.deepEqual(s.errors, []);
+  } finally { await s.close(); }
+
+  /* --- a source that names parties itself for some statements: said before the import and in the report --- */
+  s = await session(); p = s.page;
+  try {
+    const rmf = "http://csrc.nist.gov/ns/rmf", NS = "https://ns.nist.gov/sp800-53";
+    const control = (id, label, props) => ({ id, title: label, props: [{ name: "label", value: label }, { name: "sort-id", value: id }, ...props], parts: [{ id: id + "_smt", name: "statement", prose: "Do it." }] });
+    await pickCatalog(s, jsonFile("nist.json", { catalog: { uuid: "n-1", metadata: { title: "Electronic (OSCAL) Version of NIST SP 800-53 Rev 5 test", version: "9.9", "oscal-version": "1.1.2", "last-modified": "2026-11-14T00:00:00Z" },
+      groups: [{ id: "ac", title: "Access Control", controls: [control("ac-1", "AC-1", [{ name: "implementation-level", ns: rmf, value: "system" }]), control("ac-2", "AC-2", [])] }] } }));
+    assert.equal(await p.locator("#o-preset").inputValue(), "nist-sp800-53");
+    assert.equal(await p.locator("#o-party").inputValue(), NS + "/party/organization");
+    assert.match(await p.locator("#o-party-hint").innerText(), /Where a control states an implementation level, the source names the party itself and that one is written, whatever stands here\.$/);
+    await type(p.locator("#o-party"), MINE);
+    await p.locator("#run").click();
+    await p.locator("#write").waitFor();
+    assert.equal(await p.locator("[data-party-origin]").innerText(), `entered here, in the place of the preset's default ${NS}/party/organization · 1 control(s) state no implementation level and bind this party; the others bind the level they state`);
+    await p.locator("#write").click();
+    await p.locator("#log .l-ok", { hasText: "wrote" }).first().waitFor();
+    assert.deepEqual(Object.fromEntries((await stored(s, "requirement")).map(r => [r.label, r.statements[0]["obligated-parties"]])), { "AC-1": [NS + "/party/system"], "AC-2": [MINE] }, "the level a control states stays the source's");
+    assert.deepEqual(s.errors, []);
+  } finally { await s.close(); }
 });
