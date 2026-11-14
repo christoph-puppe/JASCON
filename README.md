@@ -74,9 +74,24 @@ requirements and mints real objects.*
 > - **Measured:** 40 vectors for the two reports and 29 for the pin and
 >   the shapes; nineteen deliberate defects in the reference each turn
 >   one red. The example folder names its authors.
-> - **Not there:** the tools do not write the fields yet. The app and the
->   converters name no author, so the converted NIST example shows ten
->   report lines. A version's author is not a log of every change.
+> - **Written by the tools** (backlog #69, 2026-11-14): the app has one
+>   setting, *Who am I*; its Tailor, Risk, Implement and Assess pages
+>   write `provenance` with it, and its Validate page shows both reports.
+>   Converters and imports pre-fill who and when from the source, and
+>   whoever imports may overwrite both. A source gives little: OSCAL
+>   names who is responsible for a document, not who wrote one of its
+>   statements, so one of seven records in the converted NIST example
+>   gets an author and seven report lines remain.
+> - **Not there:** a version's author is not a log of every change. An
+>   author taken from a source is the document's, under the document's
+>   date. Where the kernel requires an author (a Mapping, a Check) and
+>   the user named none, the app writes a placeholder party (backlog
+>   #70).
+> - **One value, one spelling, once more** (backlog #68, 2026-11-13): a
+>   date, a digest or a decimal that ends in a line break was accepted
+>   by two of the three implementations, because Python and .NET read
+>   `$` in a pattern as "the end, or before a final line break". All
+>   three refuse it now (specification D3.10; 22 vectors).
 >
 > **Advice packs** ([CP-ADVICE-1](drafts/CP-ADVICE-1.md), accepted by the
 > author on 2026-11-12): a vendor's recommendations as one published
