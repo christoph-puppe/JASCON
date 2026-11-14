@@ -45,10 +45,11 @@ const python = spawnSync("python3", ["--version"]).status === 0;
 
 /* Every control of the catalogue is a Requirement of its own, at every depth (the author, 2026-11-14; convert_bsi.py
    v0.3). The committed bundle decides: every object the preset writes for the pinned source has the semantic
-   digest its manifest records. Since build 0.9.14: 1,287 objects, 999 Requirements and 288 Sets. Until then the
+   digest its manifest records. Since build 0.9.21 (convert_bsi.py v0.6, the catalogue of 2026-10-29): 1,289 objects,
+   1,000 Requirements and 289 Sets. From build 0.9.14: 1,287 objects, 999 Requirements and 288 Sets. Until then the
    preset wrote 813 (651 Requirements, 162 Sets), the bundle of convert_bsi.py v0.2, in which a nested control was a
    statement of its parent; that bundle was replaced on 2026-11-14 and is no expectation of this test any more. */
-test("BSI preset: every object has the semantic digest of the committed DE.BSI bundle, 1,287 of 1,287", { skip: missing(BSI_SRC) }, async () => {
+test("BSI preset: every object has the semantic digest of the committed DE.BSI bundle, 1,289 of 1,289", { skip: missing(BSI_SRC) }, async () => {
   const dir = path.join(ROOT, "converted_examples/DE.BSI/bsi-core-bundle"), manifest = json(path.join(dir, "content-manifest.json"));
   const src = json(BSI_SRC);
   assert.equal(src.catalog.metadata.version, manifest.provenance.sources[0].version, "the source file is the version the committed bundle was converted from");
@@ -61,8 +62,8 @@ test("BSI preset: every object has the semantic digest of the committed DE.BSI b
     const e = want.get(o.path);
     if (o.obj.id === e.id && await core.jscSemanticDigest(o.obj) === e["semantic-digest"]) same++; else first = first || o.path;
   }
-  assert.deepEqual([same, out.objects.length, manifest.objects.length], [1287, 1287, 1287], `objects whose meaning is the committed bundle's (the first that differs: ${first})`);
-  assert.deepEqual([out.objects.filter(o => o.obj.statements).length, out.objects.filter(o => o.obj.members).length], [999, 288], "999 Requirements and 288 Sets");
+  assert.deepEqual([same, out.objects.length, manifest.objects.length], [1289, 1289, 1289], `objects whose meaning is the committed bundle's (the first that differs: ${first})`);
+  assert.deepEqual([out.objects.filter(o => o.obj.statements).length, out.objects.filter(o => o.obj.members).length], [1000, 289], "1,000 Requirements and 289 Sets");
   /* and the files the Import page would write are the converter's, byte for byte, but for the line ends (the
      converter writes CRLF, BUNDLE_NEWLINE): the order of the keys is the converter's too */
   const lf = f => fs.readFileSync(path.join(dir, f), "utf8").replace(/\r\n/g, "\n");
@@ -76,10 +77,10 @@ test("BSI preset: every object has the semantic digest of the committed DE.BSI b
   // slots of the sentence template are parameters, every one where the prose inserts a parameter
   const packed = {};
   for (const d of out.report["packed-list-values"]) packed[d.prop] = (packed[d.prop] || 0) + 1;
-  assert.deepEqual(packed, { tags: 125, threats: 616, target_object_categories: 40 });
-  assert.equal(out.report["parameter-slots"], 221);
+  assert.deepEqual(packed, { tags: 125, threats: 635, target_object_categories: 39 });
+  assert.equal(out.report["parameter-slots"], 224);
   assert.deepEqual(out.report["parameter-slots-not-at-insert"], []);
-  assert.deepEqual([out.report.controls, out.report.statements, out.report["controls-with-nested-controls"]], [999, 999, 126]);
+  assert.deepEqual([out.report.controls, out.report.statements, out.report["controls-with-nested-controls"]], [1000, 1000, 126]);
 });
 
 /* ERRATA 2026-11-14: before build 0.9.14 the preset turned a nested control into a second statement of its parent's
@@ -96,7 +97,7 @@ test("BSI preset: a nested control is a Requirement of its own with its own link
   const groups = g => { for (const sub of g.groups || []) groups(sub); for (const c of g.controls || []) walk(c, 0, null); };
   for (const g of src.catalog.groups) groups(g);
   const nested = controls.filter(x => x.depth > 0), parents = controls.filter(x => (x.c.controls || []).length);
-  assert.deepEqual([controls.length, nested.length, parents.length, Math.max(...controls.map(x => x.depth))], [999, 348, 126, 3]);
+  assert.deepEqual([controls.length, nested.length, parents.length, Math.max(...controls.map(x => x.depth))], [1000, 348, 126, 3]);
   /* every control, at every depth, is one Requirement with one statement, `smt`, under its own id */
   for (const { c } of controls) {
     const r = req(c.id);
@@ -106,9 +107,9 @@ test("BSI preset: a nested control is a Requirement of its own with its own link
     assert.deepEqual((r.relations || []).map(x => [x.type, x.ref]), (c.links || []).map(l => [l.rel, `${NS}/req/${l.href.slice(1)}`]), c.id + ": the relations are the control's own links");
   }
   const links = controls.reduce((n, x) => n + (x.c.links || []).length, 0), onNested = nested.filter(x => (x.c.links || []).length);
-  assert.deepEqual([links, onNested.length, onNested.reduce((n, x) => n + x.c.links.length, 0)], [266, 60, 75], "266 links, 75 of them on 60 nested controls");
+  assert.deepEqual([links, onNested.length, onNested.reduce((n, x) => n + x.c.links.length, 0)], [277, 64, 79], "277 links, 79 of them on 64 nested controls");
   const relations = out.objects.flatMap(o => (o.obj.relations || []).map(x => x.ref));
-  assert.equal(relations.length, 266);
+  assert.equal(relations.length, 277);
   assert.deepEqual(relations.filter(ref => !byId.has(ref)), [], "no relation points at an id that is no object");
   assert.deepEqual(req("GC.5.1.4").relations, [{ type: "required", ref: `${NS}/req/GC.5.1.3` }], "a link of a nested control, which the preset used to lose");
   /* nesting is grouping and nothing else: a control with nested controls gives a Set, whose members are its own
@@ -158,7 +159,7 @@ test("BSI preset: a nested control is a Requirement of its own with its own link
    that says more than rel and href, a back-matter resource, a group without controls, a control outside any group,
    a fraction, a modal verb outside the table, an author with umlauts. The rule is that content is not dropped: what
    the mapping does not read is carried as the source holds it, in the compat facet. */
-const BSI_CSV = "https://github.com/BSI-Bund/Stand-der-Technik-Bibliothek/tree/main/Dokumentation/namespaces/", BSI_RES = "11111111-2222-4333-8444-555555555555";
+const BSI_CSV = "https://github.com/BSI-Bund/Stand-der-Technik-Bibliothek/tree/main/documentation/namespaces/", BSI_RES = "11111111-2222-4333-8444-555555555555";
 const bsiSynthetic = () => {
   const CSV = BSI_CSV, RES = BSI_RES;
   return { catalog: { uuid: "c-1", remarks: "a note on the catalogue",
@@ -279,6 +280,45 @@ test("BSI preset: on a catalogue of the Grundschutz++ shape with what the pinned
     for (const f of out.facetSchemas) assert.equal(core.jscSerialize(f.def), fs.readFileSync(path.join(dir, f.path), "utf8").replace(/\r\n/g, "\n"), f.path);
     assert.deepEqual(out.provenance.sources, manifest.provenance.sources, "who wrote the document and when, as the converter writes it");
   } finally { fs.rmSync(tmp, { recursive: true, force: true }); }
+});
+
+/* Two cases end the run of convert_bsi.py v0.6 before a bundle is used, and the preset refuses the import with the
+   converter's sentence (since build 0.9.21). A small catalogue of two controls; `props` gives the props of the first. */
+const bsiSmall = props => ({ catalog: { uuid: "c-2", metadata: { title: "Probe", version: "1", "oscal-version": "1.1.3", "last-modified": "2026-11-14T10:00:00Z" },
+  groups: [{ id: "G", title: "A practice", controls: [
+    { id: "G.1", class: "x", title: "One", props, parts: [{ id: "G.1_stm", name: "statement", prose: "G MUSS.", props: [{ name: "modal_verb", ns: BSI_CSV + "modal_verbs.csv", value: "MUSS" }] }] },
+    { id: "G.2", class: "x", title: "Two", props: [{ name: "sec_level", ns: BSI_CSV + "security_level.csv", value: "erhöht" }, { name: "effort_level", ns: BSI_CSV + "effort_level.csv", value: "5" }],
+      parts: [{ id: "G.2_stm", name: "statement", prose: "G SOLLTE.", props: [{ name: "modal_verb", ns: BSI_CSV + "modal_verbs.csv", value: "SOLLTE" }] }] }] }] } });
+const OLD_CSV = "https://github.com/BSI-Bund/Stand-der-Technik-Bibliothek/tree/main/Dokumentation/namespaces/";
+
+test("BSI preset: where every prop of a name the mapping reads stands in another namespace, nothing is imported; one stray prop among props that are read is carried", () => {
+  /* the publisher moved its lists: every effort_level of the catalogue stands at the old address */
+  const moved = bsiSmall([{ name: "effort_level", ns: OLD_CSV + "effort_level.csv", value: "2" }]);
+  moved.catalog.groups[0].controls[1].props[1].ns = OLD_CSV + "effort_level.csv";
+  assert.throws(() => oscal.jscOscalImportCatalog(moved, { preset: "bsi-gspp" }), {
+    message: "2 prop(s) named `effort_level` stand in a namespace this mapping is not written for, and none in the one it reads ("
+      + BSI_CSV + "effort_level.csv): the publisher has moved its list, and every such value is carried unread" }, "nothing is imported");
+  /* one stray prop, while the other control's effort_level is read: carried as the source holds it, and no failure */
+  const stray = bsiSmall([{ name: "effort_level", ns: OLD_CSV + "effort_level.csv", value: "2" }]), out = oscal.jscOscalImportCatalog(stray, { preset: "bsi-gspp" });
+  assert.deepEqual(out.objects.find(o => o.obj.id === "https://ns.bsi.bund.de/gspp/req/G.1").obj.facets["https://ns.jascon.net/compat/oscal-1x@1"].props,
+    [{ name: "effort_level", ns: OLD_CSV + "effort_level.csv", value: "2" }]);
+});
+
+test("BSI preset: a sec_level or effort_level outside the publisher's lists refuses the import, and nothing is imported", () => {
+  const sentence = n => `${n} value(s) of sec_level or effort_level are outside the publisher's lists (SEC_LEVELS, EFFORT_LEVELS). Nothing is written: `
+    + `read the lists under ${BSI_CSV} again, and where the publisher has added a level, the taxonomy schema gets a new version with it.`;
+  const lvl = (v, e) => [{ name: "sec_level", ns: BSI_CSV + "security_level.csv", value: v }, { name: "effort_level", ns: BSI_CSV + "effort_level.csv", value: e }];
+  assert.throws(() => oscal.jscOscalImportCatalog(bsiSmall(lvl("geheim", "3")), { preset: "bsi-gspp" }), { message: sentence(1) }, "a sec_level the list does not hold");
+  for (const e of ["6", "-1", "2.0", " 2", "zwei", "٣"]) {
+    assert.throws(() => oscal.jscOscalImportCatalog(bsiSmall(lvl("normal-SdT", e)), { preset: "bsi-gspp" }), { message: sentence(1) }, `effort_level ${JSON.stringify(e)}`);
+  }
+  assert.throws(() => oscal.jscOscalImportCatalog(bsiSmall(lvl("Normal-SdT", "9")), { preset: "bsi-gspp" }), { message: sentence(2) }, "both");
+  /* the decimal spelling of a level of the list is read as the integer; both levels of the list are taken */
+  const out = oscal.jscOscalImportCatalog(bsiSmall(lvl("normal-SdT", "05")), { preset: "bsi-gspp" });
+  assert.deepEqual(out.objects.find(o => o.obj.id === "https://ns.bsi.bund.de/gspp/req/G.1").obj.facets["https://ns.bsi.bund.de/facet/gspp-taxonomy@1"]["by-statement"].smt,
+    { class: "x", "sec-level": "normal-SdT", effort: 5 });
+  const pinned = new Map(out.facetSchemas.map(f => [f.def.id, f.def.schema]));
+  assert.deepEqual(rules.jscFacetErrors(out.objects.map(o => [o.obj.id, o.obj]), pinned), [], "the typed taxonomy schema accepts what is imported");
 });
 
 test("generic rules: NIST SP 800-53 becomes valid kernel objects whose references close", { skip: missing(NIST_SRC) }, () => {
@@ -870,8 +910,8 @@ test("CIS preset: the namespace is the converter's for its benchmark and derived
    it wrote before; the caller's party takes its place; without a party
    nothing is imported; and the report says who chose. */
 const PARTY_INPUTS = [
-  ["bsi-gspp", () => JSON.parse(fs.readFileSync(path.join(ROOT, "converted_examples/DE.BSI/oscal-export/de.bsi-catalog.json"), "utf8")), "https://ns.bsi.bund.de/gspp/party/institution", 1360, 999,
-    "6fa9820008ef7426c46d08c2163266ec463f649a6821a279a773b6fe5bd2a03e"],
+  ["bsi-gspp", () => JSON.parse(fs.readFileSync(path.join(ROOT, "converted_examples/DE.BSI/oscal-export/de.bsi-catalog.json"), "utf8")), "https://ns.bsi.bund.de/gspp/party/institution", 1362, 1000,
+    "82ad153d38e7d3cab3590262f79b134a7c49738271c6a9fd24776739b14c5e6a"],
   ["nist-sp800-53", () => JSON.parse(fs.readFileSync(path.join(ROOT, "converted_examples/US.SP800-53/oscal-export/us.sp800-53-catalog.json"), "utf8")), "https://ns.nist.gov/sp800-53/party/organization", 1217, 2100,
     "f42e2f55a4aa28b1d689d59628a67cf46a1089266a9380a3695111279cfa64f8"],
   ["cis-benchmark", cisSynthetic, "https://ns.cisecurity.org/benchmark/ubuntu-24.04-lts/party/system-administrator", 17, 5,
@@ -881,9 +921,13 @@ const PARTY_INPUTS = [
 const filesOf = out => out.objects.map(o => o.path + "\n" + core.jscSerialize(o.obj)).join("\n");
 const bound = out => { const n = {}; for (const o of out.objects) for (const st of o.obj.statements || []) for (const p of st["obligated-parties"]) n[p] = (n[p] || 0) + 1; return n; };
 
-test("the obligated party of a preset: with the default left as it is, an import writes the bytes recorded for it (CIS: those of build 0.9.11; Grundschutz++ and SP 800-53: those of build 0.9.19)", () => {
+test("the obligated party of a preset: with the default left as it is, an import writes the bytes recorded for it (CIS: those of build 0.9.11; SP 800-53: those of build 0.9.19; Grundschutz++: those of build 0.9.21)", () => {
   /* One SHA-256 over every file an import writes. For CIS the digest was taken with build 0.9.11, before the presets
-     knew the argument, and holds that the argument changed nothing. For Grundschutz++ and SP 800-53 the digests are
+     knew the argument, and holds that the argument changed nothing. For Grundschutz++ the digest is that of build
+     0.9.21, taken anew because the preset follows convert_bsi.py v0.6 (the catalogue of 2026-10-29, the namespace
+     `documentation/namespaces/`, the typed taxonomy schema 1.1.0) and its input here, the OSCAL export, was
+     regenerated from the new bundle: 1,362 objects and 1,000 statements, SHA-256 6fa98200…a03e before (1,360 objects
+     and 999 statements, build 0.9.19). The history: for Grundschutz++ and SP 800-53 the digests are
      those of build 0.9.19, taken anew because both changed: the presets follow convert_bsi.py v0.5 and convert_nist.py
      v0.3 (backlog #80 to #84: the resources in references@1, the document's uuid in the manifest, compat schema 1.2.0,
      for SP 800-53 the statement's label and assessment-criteria@1), and both OSCAL exports, the input here, were

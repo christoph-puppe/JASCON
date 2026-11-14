@@ -6,7 +6,7 @@
 
    Four ways to read a catalog, chosen by `preset`:
 
-   bsi-gspp   The rules of jascon/scripts/convert_bsi.py v0.5 for the BSI
+   bsi-gspp   The rules of jascon/scripts/convert_bsi.py v0.6 for the BSI
               Anwenderkatalog Grundschutz++: every control, nested ones
               included, is a Requirement of its own with one statement, and
               a control with nested controls also gives a Set that groups it
@@ -242,8 +242,8 @@ function jscOscalProvenanceReport(stated, given, from, n) {
 }
 
 /* A pinned facet schema with a closed shape, as the converters write it. */
-function jscFacetStub(name, id, modifies, properties, note) {
-  return { path: `schemas/${name}`, def: { id, version: "1.0.0", "modifies-semantics": modifies,
+function jscFacetStub(name, id, modifies, properties, note, version) {
+  return { path: `schemas/${name}`, def: { id, version: version || "1.0.0", "modifies-semantics": modifies,
     note: note || "NORMATIVE pinned payload schema (backlog #26): closed shape - unknown keys are rejected, never smuggled",
     schema: { $schema: "https://json-schema.org/draft/2020-12/schema", type: "object", properties, additionalProperties: false } } };
 }
@@ -310,7 +310,7 @@ function jscStdlibPin(shortName, version) {
 }
 
 /* ====================================================================
-   BSI Grundschutz++ (after convert_bsi.py v0.5)
+   BSI Grundschutz++ (after convert_bsi.py v0.6)
    ====================================================================
    Every control is a Requirement of its own, at every depth. BSI nests
    controls for grouping only (the author, 2026-11-14), so a nested control
@@ -333,8 +333,19 @@ function jscStdlibPin(shortName, version) {
    says of itself. One difference to "as the source holds it": a number that
    is no integer is written as a decimal string (NUMBER-1). The resources
    the document refers to stand in references@1 on the root Set, the
-   document's uuid in the manifest's entry for it (since build 0.9.19). */
-const JSC_BSI_CSV = "https://github.com/BSI-Bund/Stand-der-Technik-Bibliothek/tree/main/Dokumentation/namespaces/";
+   document's uuid in the manifest's entry for it (since build 0.9.19).
+
+   Since build 0.9.21 (convert_bsi.py v0.6) the namespace is the one of the
+   catalogue of 2026-10-29: the publisher moved its lists from
+   `Dokumentation/namespaces/` to `documentation/namespaces/`. With the old
+   address the preset read none of the props of the new catalogue and
+   carried every one unread. Two cases refuse the import, as they end the
+   converter's run, and nothing is imported: every prop of a name the
+   mapping reads stands in another namespace (the publisher has moved its
+   list), and a sec_level or effort_level is outside the publisher's lists
+   (SEC_LEVELS, EFFORT_LEVELS). The taxonomy schema is typed (version
+   1.1.0) and lists exactly those levels. */
+const JSC_BSI_CSV = "https://github.com/BSI-Bund/Stand-der-Technik-Bibliothek/tree/main/documentation/namespaces/";
 const JSC_BSI = {
   ns: "https://ns.bsi.bund.de/gspp", key: "gspp", lang: "de",
   F_GRAM: "https://ns.jascon.net/stdlib/facet/statement-grammar@1", F_SECO: "https://ns.jascon.net/stdlib/facet/security-objectives@1",
@@ -358,13 +369,27 @@ const JSC_BSI = {
   PARAM_MEMBERS: ["id", "label", "values", "props"], CATALOG_MEMBERS: ["uuid", "metadata", "groups", "controls", "back-matter"],
   /* the members of the compat facet, in the order they are written */
   COMPAT_MEMBERS: ["metadata", "catalog", "param-extras", "props", "parts", "links", "control", "group"],
+  /* the values the publisher's lists hold (security_level.csv and effort_level.csv), as in convert_bsi.py */
+  SEC_LEVELS: ["normal-SdT", "erhöht"], EFFORT_LEVELS: [0, 1, 2, 3, 4, 5],
+  TAXONOMY_FILE: "gspp-taxonomy-1.1.0.json", TAXONOMY_VERSION: "1.1.0",
 };
+/* the pinned taxonomy schema's properties (TAXONOMY_PROPS of convert_bsi.py): one closed entry per statement */
+JSC_BSI.TAXONOMY_PROPS = { "by-statement": { type: "object", additionalProperties: {
+  type: "object", additionalProperties: false,
+  properties: { class: { type: "string", minLength: 1 },
+    "sec-level": { enum: [...JSC_BSI.SEC_LEVELS] },
+    effort: { type: "integer", minimum: JSC_BSI.EFFORT_LEVELS[0], maximum: JSC_BSI.EFFORT_LEVELS[JSC_BSI.EFFORT_LEVELS.length - 1] },
+    tags: { type: "array", minItems: 1, items: { type: "string", minLength: 1 } } } } } };
 /* -> {name: prop} of the props of `node` this mapping reads: a name among
    `names`, in the namespace of JSC_BSI.PROP_NS (none for a name that is not
    in it). Every other prop goes to `unread` as the source holds it, and so
    does a prop that is read and holds a member besides name, ns and value,
-   and every earlier prop of a name that repeats: the last one is read. */
-function jscBsiReadProps(node, names, unread) {
+   and every earlier prop of a name that repeats: the last one is read.
+   count (optional): {read, elsewhere}, two Maps from a prop name to the
+   props of that name read, and those in another namespace of PROP_NS,
+   which the wiring check of convert_bsi.py (props_elsewhere) reads. */
+function jscBsiReadProps(node, names, unread, count) {
+  const tally = (m, name) => { if (count) m.set(name, (m.get(name) || 0) + 1); };
   const props = (node && node.props) || [], last = new Map(), rest = new Set();
   props.forEach((p, i) => {
     const wanted = JSC_BSI.PROP_NS[p.name] === undefined ? null : JSC_BSI.PROP_NS[p.name];
@@ -372,7 +397,11 @@ function jscBsiReadProps(node, names, unread) {
       if (last.has(p.name)) rest.add(last.get(p.name));
       last.set(p.name, i);
       if (Object.keys(p).some(k => !["name", "ns", "value"].includes(k))) rest.add(i);
-    } else rest.add(i);
+      if (count) tally(count.read, p.name);
+    } else {
+      rest.add(i);
+      if (count && names.includes(p.name) && Object.prototype.hasOwnProperty.call(JSC_BSI.PROP_NS, p.name)) tally(count.elsewhere, p.name);
+    }
   });
   unread.push(...[...rest].sort((a, b) => a - b).map(i => props[i]));
   return Object.fromEntries([...last].map(([name, i]) => [name, props[i]]));
@@ -414,11 +443,13 @@ const jscBsiAscii = name => String(name).replace(/[äöüÄÖÜß]/g, ch => JSC_
 
 function jscImportBsi(cat, party) {
   const B = JSC_BSI, ns = B.ns, version = cat.metadata.version, lang = B.lang;
-  const objects = [], bm = jscBackMatter(cat), secValues = new Set(), baseline = new Map(), resourcesNamed = new Set(), taken = new Set();
+  const objects = [], bm = jscBackMatter(cat), baseline = new Map(), resourcesNamed = new Set(), taken = new Set();
   const report = { preset: "bsi-gspp", controls: 0, statements: 0, "controls-with-nested-controls": 0, "packed-list-values": [], "parameter-slots": 0,
     "parameter-slots-not-at-insert": [], "unknown-modal-verbs": {}, "parameters-unreferenced": 0,
     /* how many objects carry something in the compat facet as the source holds it, by member */
     "carried-as-the-source-holds-it": {} };
+  /* the props read and those of the same name in another namespace (the wiring check), and the levels outside the publisher's lists */
+  const propCount = { read: new Map(), elsewhere: new Map() }, offList = [];
   const asHeld = k => { report["carried-as-the-source-holds-it"][k] = (report["carried-as-the-source-holds-it"][k] || 0) + 1; };
   /* counted in a Map: a verb of the source is any text, `constructor` too, which a plain object already has */
   const unknownModal = new Map();
@@ -433,7 +464,7 @@ function jscImportBsi(cat, party) {
     const sid = "smt", parts = c.parts || [], smt = parts.find(p => p.name === "statement") || {};
     let guid = parts.find(p => p.name === "guidance") || null;
     if (guid && !guid.prose) guid = null;                       // a guidance without a prose is not read: carried whole
-    const text = jscOscalProse(smt.prose), punread = [], pp = jscBsiReadProps(smt, B.PART_PROPS, punread);
+    const text = jscOscalProse(smt.prose), punread = [], pp = jscBsiReadProps(smt, B.PART_PROPS, punread, propCount);
     /* a verb outside MODAL is counted, `unspecified` is written, and the prop is carried as the source holds it
        (a key of the table itself, not one an object inherits: `toString` is no modal verb) */
     if ("modal_verb" in pp && !Object.prototype.hasOwnProperty.call(B.MODAL, pp.modal_verb.value)) {
@@ -495,9 +526,18 @@ function jscImportBsi(cat, party) {
     if ("threats" in cp) so["threat-refs"] = jscSplitList(cp.threats.value).map(t => `${ns}/threat/${t.replace(/ /g, "-")}`);
     if (Object.keys(so).length) Object.assign(by(B.F_SECO), so);
     const tx = by(B.F_TAX);
-    tx.class = c.class === undefined ? null : c.class;
-    if ("sec_level" in cp) { tx["sec-level"] = cp.sec_level.value; secValues.add(cp.sec_level.value); }
-    if ("effort_level" in cp) tx.effort = parseInt(cp.effort_level.value, 10);
+    if (c.class !== undefined && c.class !== null) tx.class = c.class;
+    if ("sec_level" in cp) {
+      const lv = cp.sec_level.value;
+      tx["sec-level"] = lv;
+      if (!B.SEC_LEVELS.includes(lv)) offList.push({ control: c.id, prop: "sec_level", value: lv });
+    }
+    if ("effort_level" in cp) {
+      /* the decimal spelling of an integer of the list; another value is written as it is, and the import is refused below */
+      const ev = cp.effort_level.value, digits = typeof ev === "string" && /^[0-9]+$/.test(ev);
+      if (!(digits && B.EFFORT_LEVELS.includes(Number(ev)))) offList.push({ control: c.id, prop: "effort_level", value: ev });
+      tx.effort = digits ? parseInt(ev, 10) : ev;
+    }
     if ("tags" in cp) tx.tags = jscSplitList(cp.tags.value);
     if (guid) by(B.F_NARR)[guid.name] = { [lang]: guid.prose };
     /* The parts. Of the statement part and the guidance part the prose is read (and the statement's props); the id
@@ -519,7 +559,7 @@ function jscImportBsi(cat, party) {
   };
   /* the Requirement of one control: of a top-level control and of a nested one alike */
   const requirement = c => {
-    const cunread = [], cp = jscBsiReadProps(c, B.CONTROL_PROPS, cunread), found = {};
+    const cunread = [], cp = jscBsiReadProps(c, B.CONTROL_PROPS, cunread, propCount), found = {};
     const req = { id: `${ns}/req/${c.id}`, version, label: "label" in cp ? cp.label.value : c.id, lifecycle: "active", title: { [lang]: c.title }, statements: [], facets: {} };
     if ("alt-identifier" in cp) req.aliases = [{ scheme: "bsi-uuid", value: cp["alt-identifier"].value }];
     req.statements.push(statement(c, cp, cunread, req, found));
@@ -613,9 +653,21 @@ function jscImportBsi(cat, party) {
     add(`objects/${B.key}/set-baseline-${jscOscalSlug(lvl)}.json`, { id: `${ns}/set/baseline/${jscOscalSlug(lvl)}`, version, lifecycle: "active",
       title: { [lang]: `Baseline sec_level: ${lvl}` }, members: baseline.get(lvl).map((ref, i) => ({ ref, sequence: (i + 1) * 10 })) });
   }
+  /* A level outside the publisher's lists refuses the import, as it ends the converter's run before anything is
+     written: the pinned schema would refuse the payload. Then the wiring check on the namespaces: where every prop
+     of a name the mapping reads stands in another namespace, the publisher has moved its list. One stray prop among
+     props that are read is carried and is no failure. */
+  if (offList.length) {
+    throw new Error(`${offList.length.toLocaleString("en-US")} value(s) of sec_level or effort_level are outside the publisher's lists `
+      + `(SEC_LEVELS, EFFORT_LEVELS). Nothing is written: read the lists under ${JSC_BSI_CSV} again, and where `
+      + `the publisher has added a level, the taxonomy schema gets a new version with it.`);
+  }
+  const moved = [...propCount.elsewhere.keys()].sort().filter(name => !propCount.read.get(name))
+    .map(name => `${propCount.elsewhere.get(name).toLocaleString("en-US")} prop(s) named \`${name}\` stand in a namespace this mapping is not written `
+      + `for, and none in the one it reads (${B.PROP_NS[name]}): the publisher has moved its list, and every such value is carried unread`);
+  if (moved.length) throw new Error(moved.join("; "));
   const facetSchemas = [
-    jscFacetStub("gspp-taxonomy-1.0.0-stub.json", "https://ns.bsi.bund.de/facet/gspp-taxonomy", ["selection"],
-      { "by-statement": { type: "object" }, "observed-sec-levels": { enum: [...secValues].sort() } }),
+    jscFacetStub(B.TAXONOMY_FILE, "https://ns.bsi.bund.de/facet/gspp-taxonomy", ["selection"], B.TAXONOMY_PROPS, undefined, B.TAXONOMY_VERSION),
     jscStdlibPin("statement-grammar"), jscStdlibPin("security-objectives"), jscStdlibPin("assessment-criteria"),
     ...(named.length ? [jscStdlibPin("references")] : []),
     jscFacetStub("gspp-narrative-1.0.0-stub.json", "https://ns.bsi.bund.de/facet/gspp-narrative", [], { "by-statement": { type: "object" }, description: { type: "object" } }),
@@ -628,7 +680,7 @@ function jscImportBsi(cat, party) {
   const provenance = { sources: [{ title: cat.metadata.title, version, ...(cat.uuid !== undefined && cat.uuid !== null ? { uuid: cat.uuid } : {}),
     ...(author ? { "author-ref": jscOscalPartyUri(ns, jscBsiAscii(author.name)) } : {}), ...(day ? { date: day } : {}),
     format: "OSCAL", "format-version": cat.metadata["oscal-version"] }],
-    converter: "JASCON-App OSCAL import, preset bsi-gspp (the rules of convert_bsi.py v0.5)" };
+    converter: "JASCON-App OSCAL import, preset bsi-gspp (the rules of convert_bsi.py v0.6)" };
   return { objects, facetSchemas, provenance, report };
 }
 
