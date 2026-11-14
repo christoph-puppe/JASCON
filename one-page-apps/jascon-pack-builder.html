@@ -160,7 +160,7 @@ details[open]>summary{margin-bottom:6px}
 /* ==INLINE core== */
 /* ==JSC-PURE-START== */
 
-const JSC_BUILD = "0.9.16";
+const JSC_BUILD = "0.9.17";
 const JSC_TOOL = "JASCON-App " + JSC_BUILD;
 /* The kernel this app writes, and the kernels it reads (KERNEL-2: a tool
    stops at a pin it does not implement and names both). */
@@ -776,7 +776,8 @@ if (typeof module !== "undefined" && module.exports) module.exports = { JSC_SCHE
    check-verdict and CHECK-1..15 with the evidence chain, and the
    seventeenth of advice packs (CP-ADVICE-1): ADVICE-1..11 with the
    publisher verdict and the import plan, and the eighteenth of who decided
-   and when (CP-AUTHOR-1): AUTHOR-1..4 and REVIEW-1, two reports.
+   and when (CP-AUTHOR-1): AUTHOR-1..4 and REVIEW-1, two reports. DRAFT-1
+   (backlog #86), a third report, has its vectors in the family `lifecycle`.
    jscCheckGraph runs them with the rest: a missing author fails a set only
    when the caller asks for that, an overdue review never. The
    conditional-apply engine is run by nothing but its vectors, here as in
@@ -1711,6 +1712,30 @@ function jscAuthorReviewLines(authors, review, asOf, requireAuthors) {
   for (const e of review["not-evaluable"]) lines.push({ kind: "note", rule: "REVIEW-1", object: e.id, text: `${e.id}: ${e.where} is not evaluated: ${e.why} (REVIEW-1)` });
   return lines;
 }
+
+/* ---------- DRAFT-1: a draft among the members of an active Set (backlog #86) ----------
+   A draft may be used, voluntarily (the author, 2026-11-14), so nothing
+   fails: that a Set in force lists one is said, one line per Set. An entry
+   of `members` counts when the set holds the object it names and that
+   object's lifecycle is `draft`, whether it is a Requirement or a Set.
+   -> [{ id, count }], the Sets in the order of their ids. */
+const JSC_DRAFT_RULES = {
+  "DRAFT-1": "an active Set that lists draft members is reported, with their number - a draft may be used, and a reader of the Set is told that it holds one",
+};
+function jscDraftMemberReport(objs) {
+  const out = [];
+  for (const id of [...objs.keys()].sort()) {
+    const { type, obj } = objs.get(id);
+    if (type !== "requirementSet" || obj.lifecycle !== "active") continue;
+    const count = (Array.isArray(obj.members) ? obj.members : [])
+      .filter(m => jscIsPlainObject(m) && objs.has(m.ref) && objs.get(m.ref).obj.lifecycle === "draft").length;
+    if (count) out.push({ id, count });
+  }
+  return out;
+}
+/* The DRAFT lines as the reference prints them, after the two reports. */
+const jscDraftLines = drafts => drafts.map(e => ({ kind: "note", rule: "DRAFT-1", object: e.id,
+  text: `${e.id}: an active Set lists ${e.count} draft member(s) (DRAFT-1: a draft may be used; nothing fails)` }));
 
 /* ====================================================================
    Who decided, and when: what the pages and the imports write
@@ -3951,7 +3976,8 @@ function jscAdviceEdge(objs, ownId, productId, capability, opts) {
    into errors, as the reference's --require-authors does.
    -> { findings: [{ kind: "error"|"note", area, object: id or null, message }],
         report: { as-of, require-authors, authors: jscAuthorReport, review: jscReviewReport or null,
-                  lines: jscAuthorReviewLines, the two reports in the reference's words },
+                  drafts: jscDraftMemberReport,
+                  lines: jscAuthorReviewLines and jscDraftLines, the reports in the reference's words },
         types: {type: count}, tiers: {tailoring id: tier}, coverage: report,
         signatures: {attestation id: "verified"|"unverified"|"error"|"missing"|"unsigned"},
         binds: jscSetBinds, what every Attestation of the set binds and against which bundle that was asked,
@@ -4118,10 +4144,13 @@ async function jscCheckGraph(g, verified, opts) {
      caller names the day: nothing in this file reads a clock. */
   const asOf = (opts && opts.asOf) || null, requireAuthors = !!(opts && opts.requireAuthors);
   const authors = await jscAuthorReport(objs, verify), review = asOf ? jscReviewReport(objs, asOf) : null;
-  const lines = jscAuthorReviewLines(authors, review || { dated: 0, overdue: [], "not-evaluable": [] }, asOf, requireAuthors);
-  for (const l of lines) add(l.kind === "error" ? "error" : "note", l.rule === "REVIEW-1" ? "review" : "author", l.object, l.object ? strip(l.text) : l.text);
+  /* DRAFT-1 (backlog #86): an active Set that lists draft members. A note, with any switch. */
+  const drafts = jscDraftMemberReport(objs);
+  const lines = [...jscAuthorReviewLines(authors, review || { dated: 0, overdue: [], "not-evaluable": [] }, asOf, requireAuthors), ...jscDraftLines(drafts)];
+  const areaOf = { "REVIEW-1": "review", "DRAFT-1": "lifecycle" };
+  for (const l of lines) add(l.kind === "error" ? "error" : "note", areaOf[l.rule] || "author", l.object, l.object ? strip(l.text) : l.text);
   return { findings, types, tiers, coverage: cov.report, signatures, packs, binds,
-    report: { "as-of": asOf, "require-authors": requireAuthors, authors, review, lines } };
+    report: { "as-of": asOf, "require-authors": requireAuthors, authors, review, drafts, lines } };
 }
 const jscRulesBeside = r => r.type === "attestation" && !r.entry;
 const jscRulesKeptPacks = jscRulesCore ? jscRulesCore.jscKeptPacks : g => jscKeptPacks(g);
@@ -4136,6 +4165,7 @@ if (typeof module !== "undefined" && module.exports) {
     jscSchemaCheck, jscShapeErrors, jscMatchTypes, jscTypeOf, jscTypedObjects, JSC_KERNEL_TYPES, JSC_RISK_RULES, jscClosureErrors,
     jscDeviationsOf, jscKernelNeeded, jscKernelPinErrors, jscRiskRuleViolations, jscRiskIsLive, jscRiskJustifies, JSC_NO_TAILORING, jscRiskCoverage,
     jscRiskLinkNotes, JSC_AUTHOR_RULES, jscAuthorReport, jscUtcDay, jscReviewReport, jscAuthorReviewLines,
+    JSC_DRAFT_RULES, jscDraftMemberReport, jscDraftLines,
     jscPartyRef, jscIsDate, jscProvenance, jscImportProvenance, jscAuthorRecord, jscAuthorTailoring, jscAuthorRisk, jscDecideDeviation, jscScaleDefinitionErrors, jscMatrixErrors, jscRiskLevels, jscMatrixCell, jscScaleErrors, jscCheckScales,
     jscOptionalEmptyViolations, JSC_NUMBER_RULES, jscNumberSpellingViolations, jscNumberViolations, jscInNumberDomain, jscNumberError, jscObjectErrors, jscFacetErrors, JSC_ASSESSMENT_CRITERIA, jscManualMethod, jscIsAppMethodBefore0913, jscRewriteAppMethod, jscTailoringDutyErrors, jscAttestationVerdict,
     jscAttestationBinds, jscSemanticDigests, JSC_BINDS_MANIFEST, jscBindsReport, JSC_MANIFEST_RULES, jscListedAttestationErrors, jscSetBinds, jscCheckGraph,

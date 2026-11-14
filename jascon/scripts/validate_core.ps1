@@ -217,6 +217,11 @@ the five bundles, the worked pack and the example folder, ALL GREEN in
 design, in 87 s. Again at commit 7450c627 (run 43623597359), after the
 bundles of four catalogues and of the IFA example had changed (phase E):
 the job passed, the end-to-end test in 38 s.
+CHANGED 2026-11-14 (backlog #86): DRAFT-1 (Draft-Member-Report) reports an
+active Set that lists draft members, one line per Set in the order of the
+ids, and fails nothing: a draft may be used. Four `draft-members` vectors
+in the family `lifecycle` (42; 709 in all). Run under PowerShell 7.4 on
+Linux; the workflow runs it on Windows PowerShell 5.1.
 NOT EXERCISED by a vector, a bundle of the repository or that test: an
 Attestation without a subject (the schema asks for one, so only the vector
 runner could meet it, and no vector has one); a case of the binds-vectors
@@ -1961,8 +1966,34 @@ if (-not (Str-Eq $AsOf '')) {
     $AS_OF = Parse-Day $AsOf
     if ($null -eq $AS_OF) { throw "-AsOf '$AsOf' is not a date, YYYY-MM-DD" }
 }
-# Prints the two reports for one bundle. AUTHOR lines are notes, or
-# failures under -RequireAuthors; REVIEW lines are always notes.
+# DRAFT-1 (backlog #86) -> @{id; n}, one per ACTIVE Set that lists draft
+# members, in the ordinal order of the ids. An entry of `members` counts
+# when the bundle holds the object it names and that object's lifecycle is
+# `draft`, whether it is a Requirement or a Set. A draft may be used (the
+# author, 2026-11-14): this is a report, and nothing fails by it.
+function Draft-Member-Report($objs) {
+    $out = New-Object System.Collections.ArrayList
+    $ids = New-Object System.Collections.ArrayList
+    foreach ($oid in $objs.Keys) { [void]$ids.Add([string]$oid) }
+    foreach ($sid in (Sorted-Ordinal $ids)) {
+        $t = $objs[$sid].t; $o = $objs[$sid].o
+        if (-not [string]::Equals($t, 'requirementSet', $ORD)) { continue }
+        if (-not (Str-Eq $o['lifecycle'] 'active')) { continue }
+        $n = 0
+        if (Is-List $o['members']) {
+            foreach ($m in $o['members']) {
+                if (-not (Is-Map $m)) { continue }
+                $ref = $m['ref']
+                if (-not ($ref -is [string])) { continue }
+                if ($objs.Contains($ref) -and (Str-Eq $objs[$ref].o['lifecycle'] 'draft')) { $n++ }
+            }
+        }
+        if ($n -gt 0) { [void]$out.Add(@{id = $sid; n = $n}) }
+    }
+    return ,$out
+}
+# Prints the reports for one bundle. AUTHOR lines are notes, or failures
+# under -RequireAuthors; REVIEW and DRAFT lines are always notes.
 function Report-Authors-And-Reviews([string]$section, $objs, $envelopes) {
     foreach ($a in (Author-Report $objs $envelopes $TRUSTED)) {
         if ($RequireAuthors) { FAIL $section $a.msg } else { Write-Host "    note: $($a.msg)" }
@@ -1972,6 +2003,7 @@ function Report-Authors-And-Reviews([string]$section, $objs, $envelopes) {
         Write-Host "    review: $($r.dated) review date(s) asked as of $($AS_OF.ToString('yyyy-MM-dd', $INV)): $($r.overdue.Count) overdue, $($r.blind.Count) not evaluable (REVIEW-1)" }
     foreach ($x in $r.overdue) { Write-Host "    note: $($x.id): $($x.w) was due on $($x.day) (REVIEW-1: overdue; it still holds until someone acts)" }
     foreach ($x in $r.blind) { Write-Host "    note: $($x.id): $($x.w) is not evaluated: $($x.why) (REVIEW-1)" }
+    foreach ($x in (Draft-Member-Report $objs)) { Write-Host "    note: $($x.id): an active Set lists $($x.n) draft member(s) (DRAFT-1: a draft may be used; nothing fails)" }
 }
 
 $COUNTS = (New-Map)
@@ -2191,6 +2223,20 @@ function Run-Lifecycle {
         $okv = (Str-Eq $got $case['composed'])
         if (-not $okv -and [string]::Equals($case['composed'], 'supports', $ORD) -and ([string]::Equals($got, 'supports', $ORD) -or [string]::Equals($got, 'intersects', $ORD))) { $okv = $true }
         if ($okv) { OK 'lifecycle' } else { FAIL 'lifecycle' "compose($a,$b): expected $($case['composed']), got $got" }
+    }
+    # DRAFT-1 (backlog #86): a report, never a failure. The lists are
+    # compared in their canonical form, as the author vectors are.
+    foreach ($case in $v['draft-members']) {
+        $objs = To-Objs $case['objects']
+        $got = $null
+        if ($objs.Count -eq @($case['objects']).Count) {
+            $got = New-Object System.Collections.ArrayList
+            foreach ($x in (Draft-Member-Report $objs)) { [void]$got.Add(@($x.id, $x.n)) }
+        }
+        $gotText = Format-Canonical $got
+        $wantText = Format-Canonical $case['expected']
+        if (Str-Eq $gotText $wantText) { OK 'lifecycle' }
+        else { FAIL 'lifecycle' "draft-members $($case['name']): expected $wantText, got $gotText" }
     }
     # shape disjointness over the eleven minimal objects
     $P = 'https://ex.org'

@@ -294,6 +294,24 @@ test("author: what is missing, one entry per object and rule (AUTHOR-1 to AUTHOR
     for (const e of report) assert.ok(e.rule in rules.JSC_AUTHOR_RULES && e.message.startsWith(e.id + ": ") && e.message.endsWith(`(${e.rule})`), `${c.name}: ${e.message}`);
   }
 });
+test("lifecycle: an active Set that lists draft members is reported, and nothing fails (DRAFT-1)", async () => {
+  const v = vectors("lifecycle")["draft-members"];
+  assert.equal(v.length, 4);
+  for (const c of v) {
+    const objs = authorTyped(c), report = rules.jscDraftMemberReport(objs);
+    assert.deepEqual(report.map(e => [e.id, e.count]), c.expected, c.name);
+    const lines = rules.jscDraftLines(report);
+    for (const l of lines) assert.ok(l.kind === "note" && l.rule in rules.JSC_DRAFT_RULES && l.text.startsWith(l.object + ": an active Set lists "), `${c.name}: ${l.text}`);
+  }
+  /* as part of the check of a whole set: a note of the area `lifecycle`, and no error, with any switch */
+  const file = obj => ({ path: "objects/" + obj.id.split("/").slice(-2).join("-") + ".json", text: core.jscSerialize(obj), kind: "object", type: core.jscInferType(obj), id: obj.id, origin: "imported" });
+  const g = core.jscGraphFrom(v[0].objects.map(file));
+  const res = await rules.jscCheckGraph(g, await core.jscVerify(g), { requireAuthors: true });
+  assert.deepEqual(res.report.drafts, [{ id: v[0].expected[0][0], count: 1 }]);
+  assert.deepEqual(res.findings.filter(f => f.area === "lifecycle").map(f => [f.kind, f.object, f.message]),
+    [["note", v[0].expected[0][0], "an active Set lists 1 draft member(s) (DRAFT-1: a draft may be used; nothing fails)"]]);
+  assert.deepEqual(res.report.lines.filter(l => l.rule === "DRAFT-1"), rules.jscDraftLines(res.report.drafts));
+});
 test("author: a review-due that has passed on the day asked about (REVIEW-1)", () => {
   const v = vectors("author")["review-vectors"];
   assert.equal(v.length, 22);

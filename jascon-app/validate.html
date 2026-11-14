@@ -139,7 +139,7 @@ jscI18n.add("de", {
     "Zwei Berichte sagen, wer entschieden hat und wann. Der erste listet, wo ein Autor, der Tag einer Entscheidung oder der Tag einer Autorisierung nicht genannt ist (AUTHOR-1 bis AUTHOR-4). Ob das ein Fehler ist, ist Sache Ihres Programms: Mit dem Schalter ist jede seiner Zeilen ein Fehler, ohne ihn ein Hinweis. Der zweite listet jeden Überprüfungstermin, der am gefragten Tag verstrichen ist (REVIEW-1). Ein leerer Tag bedeutet heute, in UTC. Eine überfällige Überprüfung ist nie ein Fehler: Die Deviation oder das Risiko gilt weiter, bis jemand handelt.",
   "Who decided, and when: where a consumer's Tailoring, a Risk, a Finding or an Implementation names no author, where a decided Deviation states no day and an authorization no date (AUTHOR-1 to AUTHOR-4), and which review date of an approved Deviation or a managed Risk has passed (REVIEW-1). The lines are the reference validator's for the same set and day; its --require-authors is the switch of the first view, its --as-of the day.":
     "Wer entschieden hat, und wann: wo ein Tailoring auf Consumer-Stufe, ein Risiko, eine Feststellung oder eine Implementation keinen Autor nennt, wo eine entschiedene Deviation keinen Tag und eine Autorisierung kein Datum nennt (AUTHOR-1 bis AUTHOR-4), und welcher Überprüfungstermin einer genehmigten Deviation oder eines verwalteten Risikos verstrichen ist (REVIEW-1). Die Zeilen sind die des Referenzvalidators für dasselbe Set und denselben Tag; sein --require-authors ist der Schalter der ersten Ansicht, sein --as-of der Tag.",
-  "Who decided, and when": "Wer entschieden hat, und wann", "author": "Autor", "review": "Überprüfung",
+  "Who decided, and when": "Wer entschieden hat, und wann", "author": "Autor", "review": "Überprüfung", "lifecycle": "Lebenszyklus",
   "Authors: {n} line(s)": "Autoren: {n} Zeile(n)", "Review dates as of {day}: {n} line(s)": "Überprüfungstermine zum {day}: {n} Zeile(n)",
   "Nothing is missing: every record the rules ask about names its author and its day.": "Nichts fehlt: Jeder Eintrag, nach dem die Regeln fragen, nennt seinen Autor und seinen Tag.",
   "No review date is asked: no approved Deviation and no managed Risk of this set carries one.": "Kein Überprüfungstermin wird gefragt: Keine genehmigte Deviation und kein verwaltetes Risiko dieses Sets trägt einen.",
@@ -151,7 +151,7 @@ const $ = id => document.getElementById(id);
 const V = jscView, esc = jscEsc;
 const AREAS = { manifest: N("manifest"), files: N("files"), object: N("object"), digest: N("digest"), reference: N("reference"),
   tailoring: N("tailoring"), scale: N("scale"), risk: N("risk"), facet: N("facet"), signature: N("signature"), attestation: N("attestation"), advice: N("advice"),
-  author: N("author"), review: N("review") };
+  author: N("author"), review: N("review"), lifecycle: N("lifecycle") };
 /* the word shown for a pack's publisher (jscPublisherLabel): proven only with a signature that verified under a trusted key */
 const PUBLISHER = { proven: N("proven"), attested: N("attested, not verified"), claimed: N("claimed") };
 let G = jscSet.graph, last = null, filter = { area: "", kind: "", q: "" };

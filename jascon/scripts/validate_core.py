@@ -47,6 +47,9 @@ Runs, in order:
    approved Deviation and on a Risk still managed. It reads the date of
    the run (UTC); `--as-of YYYY-MM-DD` sets the date instead. This is the
    one place where the file reads a clock, and nothing fails by it.
+   DRAFT-1 (backlog #86) reports an active Set that lists draft members,
+   one line per Set. A draft may be used (the author, 2026-11-14), so
+   nothing fails by it either.
 7. ATTESTATION-BINDS ON A BUNDLE (Appendix B.1.7; backlog #46): every
    Attestation read with a bundle - beside its manifest, where D3.1 puts
    it, and any a manifest lists - is held to its subjects and to the
@@ -1752,9 +1755,33 @@ def review_report(objs, as_of):
             elif day < as_of: overdue.append((oid, where, day.isoformat()))
     return {"dated": dated, "overdue": overdue, "not-evaluable": blind}
 
+# A draft among the members of an active Set (backlog #86). A draft may be
+# used, voluntarily (the author, 2026-11-14), so nothing fails: that a Set
+# in force lists one is said, one line per Set. CR26 is the measured case:
+# its family AGU is a placeholder of the publisher, draft in the bundle,
+# and seven active Sets list AGU's draft Sets.
+DRAFT_RULES = {
+    "DRAFT-1": "an active Set that lists draft members is reported, with their number - a draft may be used, and a reader of the Set is told that it holds one",
+}
+
+def draft_member_report(objs):
+    """DRAFT-1 -> [(Set id, number of draft members)], in the order of the
+    ids. An entry of `members` counts when the bundle holds the object it
+    names and that object's lifecycle is `draft`, whether it is a
+    Requirement or a Set."""
+    out = []
+    for sid in by_code_unit(objs):
+        t, o = objs[sid]
+        if t != "requirementSet" or o.get("lifecycle") != "active": continue
+        n = sum(1 for m in o.get("members", [])
+                if m.get("ref") in objs and objs[m["ref"]][1].get("lifecycle") == "draft")
+        if n: out.append((sid, n))
+    return out
+
 def report_authors_and_reviews(section, objs, envelopes=None):
-    """Prints the two reports for one bundle. AUTHOR lines are notes, or
-    failures under --require-authors; REVIEW lines are always notes."""
+    """Prints the reports for one bundle. AUTHOR lines are notes, or
+    failures under --require-authors; REVIEW and DRAFT lines are always
+    notes."""
     for rule, _, _, msg in author_report(objs, envelopes=envelopes, trusted=TRUSTED):
         if REQUIRE_AUTHORS: fail(section, msg)
         else: print(f"    note: {msg}")
@@ -1766,6 +1793,8 @@ def report_authors_and_reviews(section, objs, envelopes=None):
         print(f"    note: {oid}: {where} was due on {day} (REVIEW-1: overdue; it still holds until someone acts)")
     for oid, where, why in r["not-evaluable"]:
         print(f"    note: {oid}: {where} is not evaluated: {why} (REVIEW-1)")
+    for sid, n in draft_member_report(objs):
+        print(f"    note: {sid}: an active Set lists {n} draft member(s) (DRAFT-1: a draft may be used; nothing fails)")
 
 def run_author():
     v = json.load(open(os.path.join(CONF, "author-vectors.json"), encoding="utf-8"))
@@ -2650,6 +2679,14 @@ def run_lifecycle():
         okv = got == case["composed"] or (case["composed"] == "supports" and got in ("supports", "intersects"))
         if okv: ok("lifecycle")
         else: fail("lifecycle", f"compose({case['a']},{case['b']}): expected {case['composed']}, got {got}")
+    for case in v["draft-members"]:                     # DRAFT-1 (backlog #86): a report, never a failure
+        objs = {}
+        for o in case["objects"]:
+            ty = inferType_single(o)
+            if ty: objs[o["id"]] = (ty, o)
+        got = None if len(objs) != len(case["objects"]) else [[sid, n] for sid, n in draft_member_report(objs)]
+        if got == case["expected"]: ok("lifecycle")
+        else: fail("lifecycle", f"draft-members {case['name']}: expected {case['expected']}, got {got}")
     # shape disjointness: eleven canonical minimal objects -> exactly one match each; garbage -> zero
     P = "https://ex.org"
     MINIMAL = {

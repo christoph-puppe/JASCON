@@ -560,6 +560,18 @@ and in `readme.md`; this file says only what is done and what is next.
   at once; the eighth (a resource counted as referred to by its own text)
   is red since the orphan of the test catalogue names itself.
 
+- An active Set that lists draft members is reported (build 0.9.17; backlog
+  #86, rule DRAFT-1 of `validate_core.py`). `jscDraftMemberReport` gives one
+  entry per active Set with the number of its members whose lifecycle is
+  `draft`; `jscCheckGraph` adds a note of the area `lifecycle` for each and
+  returns them as `report.drafts`. Nothing fails by it, with any switch: a
+  draft may be used (the author, 2026-11-14). The Validate page shows the
+  notes with the others.
+
+  Measured: the four `draft-members` vectors of the family `lifecycle`
+  give what they expect, and a whole set made of the first vector gets one
+  note and no error with authors required.
+
 ## Next
 
 - An OSCAL component definition as a third kind on the Import page, written
