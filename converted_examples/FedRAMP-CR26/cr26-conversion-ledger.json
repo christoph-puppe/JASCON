@@ -1,0 +1,5887 @@
+{
+ "measures": "one row per source path and outcome; every source leaf value was traced and checked against the written files in the run that wrote this record, and is counted in one row",
+ "leaf-values": 7532,
+ "totals": {
+  "copied": 4467,
+  "transformed": 1984,
+  "intentionally-dropped": 992,
+  "unaccounted": 89
+ },
+ "verification-failures": [],
+ "unaccounted-paths": [
+  {
+   "path": "cr26.FRD.data.all.*.do_not_link",
+   "count": 9,
+   "pointers": [
+    "cr26#/FRD/data/all/FRD-ADV/do_not_link",
+    "cr26#/FRD/data/all/FRD-AGY/do_not_link",
+    "cr26#/FRD/data/all/FRD-ASR/do_not_link"
+   ]
+  },
+  {
+   "path": "cr26.FRD.data.all.*.ignore_in_terms",
+   "count": 9,
+   "pointers": [
+    "cr26#/FRD/data/all/FRD-ADV/ignore_in_terms",
+    "cr26#/FRD/data/all/FRD-AGY/ignore_in_terms",
+    "cr26#/FRD/data/all/FRD-ASR/ignore_in_terms"
+   ]
+  },
+  {
+   "path": "cr26.FRD.info.effective.date.grace.until_next_assessment",
+   "count": 1,
+   "pointers": [
+    "cr26#/FRD/info/effective/date/grace/until_next_assessment"
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.notification[].optional",
+   "count": 3,
+   "pointers": [
+    "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/notification/2/optional",
+    "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-OIR/notification/2/optional",
+    "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-FIR/notification/2/optional"
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.3.iir.timeframe_num",
+   "count": 1,
+   "pointers": [
+    "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/varies_by_class/d/pain_timeframes/3/iir/timeframe_num"
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.4.iir.timeframe_num",
+   "count": 1,
+   "pointers": [
+    "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/varies_by_class/d/pain_timeframes/4/iir/timeframe_num"
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.5.iir.timeframe_num",
+   "count": 1,
+   "pointers": [
+    "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/varies_by_class/d/pain_timeframes/5/iir/timeframe_num"
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.info.20x.effective.date.grace.until_next_assessment",
+   "count": 10,
+   "pointers": [
+    "cr26#/FRR/CCM/info/20x/effective/date/grace/until_next_assessment",
+    "cr26#/FRR/CDS/info/20x/effective/date/grace/until_next_assessment",
+    "cr26#/FRR/CMU/info/20x/effective/date/grace/until_next_assessment"
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.info.effective.date.grace.until_next_assessment",
+   "count": 7,
+   "pointers": [
+    "cr26#/FRR/AFC/info/effective/date/grace/until_next_assessment",
+    "cr26#/FRR/AGU/info/effective/date/grace/until_next_assessment",
+    "cr26#/FRR/MKT/info/effective/date/grace/until_next_assessment"
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.info.rev5.effective.date.grace.until_next_assessment",
+   "count": 10,
+   "pointers": [
+    "cr26#/FRR/CCM/info/rev5/effective/date/grace/until_next_assessment",
+    "cr26#/FRR/CDS/info/rev5/effective/date/grace/until_next_assessment",
+    "cr26#/FRR/CMU/info/rev5/effective/date/grace/until_next_assessment"
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.info.status",
+   "count": 17,
+   "pointers": [
+    "cr26#/FRR/AFC/info/status",
+    "cr26#/FRR/AGU/info/status",
+    "cr26#/FRR/CCM/info/status"
+   ]
+  },
+  {
+   "path": "cr26.KSI.*.id",
+   "count": 10,
+   "pointers": [
+    "cr26#/KSI/CED/id",
+    "cr26#/KSI/CMT/id",
+    "cr26#/KSI/CNA/id"
+   ]
+  },
+  {
+   "path": "cr26.KSI.*.status",
+   "count": 10,
+   "pointers": [
+    "cr26#/KSI/CED/status",
+    "cr26#/KSI/CMT/status",
+    "cr26#/KSI/CNA/status"
+   ]
+  }
+ ],
+ "paths": [
+  {
+   "path": "cr26.CTL.*.*.guidance[]",
+   "outcome": "copied",
+   "count": 67,
+   "example": "cr26#/CTL/AC/AC-20/guidance/0",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/AC/AC-20/guidance/en/[]",
+     "count": 4
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/AU/AU-06-05/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/AU/AU-06/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/CA/CA-07/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/CA/CA-08/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/CM/CM-01/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/CM/CM-08/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/CM/CM-12-01/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/CM/CM-12/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/CM/CM-14/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/CP/CP-07-01/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/IA/IA-02-01/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/IA/IA-02-02/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/IA/IA-02/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/IR/IR-01/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/IR/IR-02-01/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/IR/IR-02-02/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/IR/IR-02/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/IR/IR-03-02/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/IR/IR-03/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/IR/IR-04-01/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/IR/IR-04-02/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/IR/IR-04-04/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/IR/IR-04-06/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/IR/IR-04-11/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/IR/IR-04/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/IR/IR-05-01/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/IR/IR-05/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/IR/IR-06-01/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/IR/IR-06-03/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/IR/IR-06/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/IR/IR-07-01/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/IR/IR-07/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/IR/IR-08/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/IR/IR-09-02/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/IR/IR-09-03/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/IR/IR-09-04/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/IR/IR-09/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/MA/MA-05-01/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/MA/MA-05/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/PS/PS-07/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/RA/RA-05-02/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/RA/RA-05-03/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/RA/RA-05-04/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/RA/RA-05-05/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/RA/RA-05-08/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/RA/RA-05-11/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/RA/RA-05/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/RA/RA-07/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/SA/SA-05/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/SC/SC-07/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/SC/SC-13/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/SI/SI-02-02/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/SI/SI-02/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/SI/SI-04-01/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/SI/SI-04-02/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/SI/SI-04-04/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/SI/SI-04-05/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/SI/SI-04/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/SI/SI-05/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/SI/SI-08/guidance/en/[]",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/SR/SR-03/guidance/en/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/SR/SR-08/guidance/en/[]",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.CTL.*.*.parameters[].parameterId",
+   "outcome": "copied",
+   "count": 16,
+   "example": "cr26#/CTL/AC/AC-06-01/parameters/0/parameterId",
+   "to": [
+    {
+     "pointer": "/operations/[]/parameter",
+     "count": 16
+    }
+   ]
+  },
+  {
+   "path": "cr26.CTL.*.*.parameters[].value",
+   "outcome": "copied",
+   "count": 13,
+   "example": "cr26#/CTL/AC/AC-06-01/parameters/0/value",
+   "to": [
+    {
+     "pointer": "/operations/[]/value",
+     "count": 13
+    }
+   ]
+  },
+  {
+   "path": "cr26.CTL.*.*.parameters[].value",
+   "outcome": "transformed",
+   "count": 3,
+   "example": "cr26#/CTL/IA/IA-02-08/parameters/0/value",
+   "to": [
+    {
+     "pointer": "/operations/[]/value/[]",
+     "count": 7,
+     "rule": "one selection of a multi-select that the source writes as one string"
+    }
+   ]
+  },
+  {
+   "path": "cr26.CTL.*.*.updated[].comment",
+   "outcome": "copied",
+   "count": 1,
+   "example": "cr26#/CTL/IA/IA-05/updated/0/comment",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/IA/IA-05/updated/[]/comment",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.CTL.*.*.updated[].date",
+   "outcome": "copied",
+   "count": 1,
+   "example": "cr26#/CTL/IA/IA-05/updated/0/date",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/IA/IA-05/updated/[]/date",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.CTL.*.*.varies_by_class.*.guidance[]",
+   "outcome": "copied",
+   "count": 6,
+   "example": "cr26#/CTL/IA/IA-05/varies_by_class/b/guidance/0",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/IA/IA-05/varies_by_class/b/guidance/en/[]",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/IA/IA-05/varies_by_class/c/guidance/en/[]",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/IA/IA-05/varies_by_class/d/guidance/en/[]",
+     "count": 2
+    }
+   ]
+  },
+  {
+   "path": "cr26.CTL.*.*.varies_by_class.*.parameters[].parameterId",
+   "outcome": "copied",
+   "count": 5,
+   "example": "cr26#/CTL/SA/SA-09-05/varies_by_class/c/parameters/0/parameterId",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/SA/SA-09-05/varies_by_class/c/parameters/[]/parameterId",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/SA/SA-09-05/varies_by_class/d/parameters/[]/parameterId",
+     "count": 3
+    }
+   ]
+  },
+  {
+   "path": "cr26.CTL.*.*.varies_by_class.*.parameters[].value",
+   "outcome": "copied",
+   "count": 5,
+   "example": "cr26#/CTL/SA/SA-09-05/varies_by_class/c/parameters/0/value",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/SA/SA-09-05/varies_by_class/c/parameters/[]/value",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/SA/SA-09-05/varies_by_class/d/parameters/[]/value",
+     "count": 3
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRD.data.all.*.alts[]",
+   "outcome": "copied",
+   "count": 190,
+   "example": "cr26#/FRD/data/all/FRD-ACV/alts/0",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-AAP/aliases/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-ACV/aliases/[]",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-ADP/aliases/[]",
+     "count": 3
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-ADV/aliases/[]",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-AGY/aliases/[]",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-ANA/aliases/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-ANP/aliases/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-ART/aliases/[]",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-ASR/aliases/[]",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-CCC/aliases/[]",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-CCL/aliases/[]",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-CPF/aliases/[]",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-CPH/aliases/[]",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-CRD/aliases/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-CRP/aliases/[]",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-CSO/aliases/[]",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-CTY/aliases/[]",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-DCE/aliases/[]",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-DCF/aliases/[]",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-DFT/aliases/[]",
+     "count": 3
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-DTM/aliases/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-FCD/aliases/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-FCR/aliases/[]",
+     "count": 3
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-FCT/aliases/[]",
+     "count": 6
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-FIN/aliases/[]",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-FIR/aliases/[]",
+     "count": 4
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-FMV/aliases/[]",
+     "count": 3
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-FPR/aliases/[]",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-FPV/aliases/[]",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-FRA/aliases/[]",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-FRI/aliases/[]",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-FSI/aliases/[]",
+     "count": 3
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-HAN/aliases/[]",
+     "count": 4
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-IFA/aliases/[]",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-IIR/aliases/[]",
+     "count": 4
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-INC/aliases/[]",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-INT/aliases/[]",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-IRS/aliases/[]",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-IRV/aliases/[]",
+     "count": 6
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-KEV/aliases/[]",
+     "count": 4
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-LEV/aliases/[]",
+     "count": 6
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-LKY/aliases/[]",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-MAS/aliases/[]",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-MBI/aliases/[]",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-MCE/aliases/[]",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-MGN/aliases/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-MRD/aliases/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-NCE/aliases/[]",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-OCR/aliases/[]",
+     "count": 3
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-ODV/aliases/[]",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-OIR/aliases/[]",
+     "count": 4
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-ONC/aliases/[]",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-PAC/aliases/[]",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-PAI/aliases/[]",
+     "count": 4
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-PER/aliases/[]",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-PFA/aliases/[]",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-PMV/aliases/[]",
+     "count": 3
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-PRO/aliases/[]",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-PRV/aliases/[]",
+     "count": 4
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-QTR/aliases/[]",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-RGL/aliases/[]",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-RMV/aliases/[]",
+     "count": 3
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-RSP/aliases/[]",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-RTR/aliases/[]",
+     "count": 3
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-SCT/aliases/[]",
+     "count": 4
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-SDR/aliases/[]",
+     "count": 3
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-SGC/aliases/[]",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-TLA/aliases/[]",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-TPR/aliases/[]",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-TRC/aliases/[]",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-TRF/aliases/[]",
+     "count": 3
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-VLD/aliases/[]",
+     "count": 5
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-VLN/aliases/[]",
+     "count": 3
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-VLR/aliases/[]",
+     "count": 5
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-VRF/aliases/[]",
+     "count": 3
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-VUL/aliases/[]",
+     "count": 2
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRD.data.all.*.definition",
+   "outcome": "copied",
+   "count": 81,
+   "example": "cr26#/FRD/data/all/FRD-ACV/definition",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-AAP/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-ACV/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-ADP/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-ADV/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-AGY/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-ANA/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-ANP/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-ART/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-ASR/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-CCC/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-CCL/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-CPF/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-CPH/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-CRD/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-CRP/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-CSO/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-CTY/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-DCE/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-DCF/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-DFT/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-DTM/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-FCD/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-FCR/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-FCT/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-FIN/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-FIR/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-FMV/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-FPR/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-FPV/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-FRA/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-FRI/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-FSI/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-HAN/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-IFA/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-IIR/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-INC/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-INT/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-IRS/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-IRV/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-KEV/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-LEV/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-LKY/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-MAS/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-MAY/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-MBI/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-MCE/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-MGN/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-MNT/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-MRD/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-MST/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-NCE/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-OCR/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-ODV/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-OIR/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-ONC/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-PAC/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-PAI/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-PER/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-PFA/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-PMV/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-PRO/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-PRV/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-QTR/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-RGL/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-RMV/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-RSP/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-RTR/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-SCT/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-SDR/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-SGC/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-SHD/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-SNT/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-TLA/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-TPR/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-TRC/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-TRF/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-VLD/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-VLN/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-VLR/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-VRF/definition/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-VUL/definition/en",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRD.data.all.*.do_not_link",
+   "outcome": "unaccounted",
+   "count": 9,
+   "example": "cr26#/FRD/data/all/FRD-ADV/do_not_link"
+  },
+  {
+   "path": "cr26.FRD.data.all.*.ignore_in_terms",
+   "outcome": "unaccounted",
+   "count": 9,
+   "example": "cr26#/FRD/data/all/FRD-ADV/ignore_in_terms"
+  },
+  {
+   "path": "cr26.FRD.data.all.*.note",
+   "outcome": "copied",
+   "count": 29,
+   "example": "cr26#/FRD/data/all/FRD-ADP/note",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-ADP/note/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-ASR/note/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-CRD/note/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-CRP/note/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-CSO/note/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-DTM/note/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-FCD/note/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-FCT/note/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-IRS/note/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-MAS/note/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-MAY/note/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-MBI/note/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-MNT/note/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-MST/note/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-PAC/note/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-PAI/note/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-PER/note/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-PRO/note/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-PRV/note/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-RSP/note/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-SHD/note/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-SNT/note/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-TLA/note/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-TRC/note/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-TRF/note/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-VLD/note/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-VLN/note/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-VLR/note/en",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-VRF/note/en",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRD.data.all.*.notes[]",
+   "outcome": "copied",
+   "count": 7,
+   "example": "cr26#/FRD/data/all/FRD-FPV/notes/0",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-FPV/notes/en/[]",
+     "count": 2
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-IRV/notes/en/[]",
+     "count": 3
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-LEV/notes/en/[]",
+     "count": 2
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRD.data.all.*.reference",
+   "outcome": "copied",
+   "count": 9,
+   "example": "cr26#/FRD/data/all/FRD-AGY/reference",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-AGY/reference",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-CRP/reference",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-INT/reference",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-IRS/reference",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-KEV/reference",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-MRD/reference",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-SCT/reference",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-SGC/reference",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-VUL/reference",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRD.data.all.*.reference_url",
+   "outcome": "copied",
+   "count": 9,
+   "example": "cr26#/FRD/data/all/FRD-AGY/reference_url",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-AGY/reference-url",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-CRP/reference-url",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-INT/reference-url",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-IRS/reference-url",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-KEV/reference-url",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-MRD/reference-url",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-SCT/reference-url",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-SGC/reference-url",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-VUL/reference-url",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRD.data.all.*.tag",
+   "outcome": "copied",
+   "count": 57,
+   "example": "cr26#/FRD/data/all/FRD-ACV/tag",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-AAP/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-ACV/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-ADP/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-ADV/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-AGY/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-ANA/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-ANP/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-ART/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-ASR/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-CCC/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-CCL/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-CPF/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-CPH/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-CRD/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-CRP/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-CTY/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-DCE/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-DCF/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-FCR/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-FCT/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-FIR/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-FMV/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-FPV/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-FRI/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-IFA/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-IIR/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-INC/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-INT/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-IRS/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-IRV/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-KEV/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-LEV/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-MAY/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-MBI/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-MCE/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-MNT/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-MST/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-NCE/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-ODV/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-OIR/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-ONC/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-PAC/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-PFA/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-PMV/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-PRV/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-QTR/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-RMV/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-RTR/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-SGC/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-SHD/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-SNT/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-TLA/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-TPR/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-TRF/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-VLD/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-VLR/tag",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-VUL/tag",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRD.data.all.*.term",
+   "outcome": "copied",
+   "count": 81,
+   "example": "cr26#/FRD/data/all/FRD-ACV/term",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-AAP/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-ACV/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-ADP/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-ADV/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-AGY/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-ANA/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-ANP/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-ART/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-ASR/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-CCC/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-CCL/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-CPF/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-CPH/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-CRD/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-CRP/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-CSO/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-CTY/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-DCE/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-DCF/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-DFT/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-DTM/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-FCD/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-FCR/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-FCT/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-FIN/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-FIR/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-FMV/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-FPR/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-FPV/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-FRA/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-FRI/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-FSI/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-HAN/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-IFA/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-IIR/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-INC/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-INT/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-IRS/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-IRV/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-KEV/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-LEV/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-LKY/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-MAS/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-MAY/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-MBI/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-MCE/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-MGN/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-MNT/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-MRD/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-MST/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-NCE/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-OCR/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-ODV/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-OIR/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-ONC/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-PAC/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-PAI/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-PER/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-PFA/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-PMV/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-PRO/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-PRV/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-QTR/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-RGL/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-RMV/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-RSP/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-RTR/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-SCT/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-SDR/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-SGC/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-SHD/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-SNT/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-TLA/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-TPR/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-TRC/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-TRF/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-VLD/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-VLN/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-VLR/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-VRF/term",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/FRD-VUL/term",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRD.data.all.*.updated[].comment",
+   "outcome": "intentionally-dropped",
+   "count": 85,
+   "example": "cr26#/FRD/data/all/FRD-ACV/updated/0/comment",
+   "reasons": [
+    {
+     "reason": "update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read \"history -> L0\" until 2026-11-14)",
+     "count": 85
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRD.data.all.*.updated[].date",
+   "outcome": "intentionally-dropped",
+   "count": 85,
+   "example": "cr26#/FRD/data/all/FRD-ACV/updated/0/date",
+   "reasons": [
+    {
+     "reason": "update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read \"history -> L0\" until 2026-11-14)",
+     "count": 85
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRD.data.all.*.updated[].issue",
+   "outcome": "intentionally-dropped",
+   "count": 1,
+   "example": "cr26#/FRD/data/all/FRD-MAS/updated/0/issue",
+   "reasons": [
+    {
+     "reason": "update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read \"history -> L0\" until 2026-11-14)",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRD.info.effective.current_status",
+   "outcome": "copied",
+   "count": 1,
+   "example": "cr26#/FRD/info/effective/current_status",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/glossary-info/effective/current_status",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRD.info.effective.date.grace.default",
+   "outcome": "copied",
+   "count": 1,
+   "example": "cr26#/FRD/info/effective/date/grace/default",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/glossary-info/effective/date/grace/default",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRD.info.effective.date.grace.until_next_assessment",
+   "outcome": "unaccounted",
+   "count": 1,
+   "example": "cr26#/FRD/info/effective/date/grace/until_next_assessment"
+  },
+  {
+   "path": "cr26.FRD.info.effective.date.maintain",
+   "outcome": "copied",
+   "count": 1,
+   "example": "cr26#/FRD/info/effective/date/maintain",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/glossary-info/effective/date/maintain",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRD.info.effective.date.obtain",
+   "outcome": "copied",
+   "count": 1,
+   "example": "cr26#/FRD/info/effective/date/obtain",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/glossary-info/effective/date/obtain",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRD.info.effective.date.optional_adoption",
+   "outcome": "copied",
+   "count": 1,
+   "example": "cr26#/FRD/info/effective/date/optional_adoption",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/glossary-info/effective/date/optional_adoption",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRD.info.effective.is",
+   "outcome": "copied",
+   "count": 1,
+   "example": "cr26#/FRD/info/effective/is",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/glossary-info/effective/is",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRD.info.name",
+   "outcome": "copied",
+   "count": 1,
+   "example": "cr26#/FRD/info/name",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/glossary-info/name",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRD.info.purpose",
+   "outcome": "copied",
+   "count": 1,
+   "example": "cr26#/FRD/info/purpose",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/glossary-info/purpose",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRD.info.short_name",
+   "outcome": "copied",
+   "count": 1,
+   "example": "cr26#/FRD/info/short_name",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/glossary-info/short_name",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRD.info.status",
+   "outcome": "copied",
+   "count": 1,
+   "example": "cr26#/FRD/info/status",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/glossary-info/status",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRD.info.web_name",
+   "outcome": "copied",
+   "count": 1,
+   "example": "cr26#/FRD/info/web_name",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/glossary-info/web_name",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.affects[]",
+   "outcome": "transformed",
+   "count": 245,
+   "example": "cr26#/FRR/AFC/data/all/FRP/AFC-FRP-VRE/affects/0",
+   "to": [
+    {
+     "pointer": "/statements/[]/obligated-parties/[]",
+     "count": 245,
+     "rule": "party URI from a name in affects"
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.artifacts.all[]",
+   "outcome": "copied",
+   "count": 79,
+   "example": "cr26#/FRR/AFC/data/all/CSO/AFC-CSO-INB/artifacts/all/0",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1assessment-criteria@1/required-artifacts/[]",
+     "count": 79
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.controls[]",
+   "outcome": "transformed",
+   "count": 94,
+   "example": "cr26#/FRR/AFC/data/all/CSO/AFC-CSO-INB/controls/0",
+   "to": [
+    {
+     "pointer": "/id",
+     "count": 94,
+     "rule": "Mapping id from its owner's id and the control id"
+    },
+    {
+     "pointer": "/objects/[]/id",
+     "count": 94,
+     "rule": "Mapping id from its owner's id and the control id"
+    },
+    {
+     "pointer": "/target-ref",
+     "count": 94,
+     "rule": "SP 800-53 Requirement URI from the control id"
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.corrective_actions[]",
+   "outcome": "copied",
+   "count": 12,
+   "example": "cr26#/FRR/IEC/data/all/FRP/IEC-FRP-ORV/corrective_actions/0",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/corrective-actions/en/[]",
+     "count": 12
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.danger",
+   "outcome": "copied",
+   "count": 3,
+   "example": "cr26#/FRR/AFC/data/all/CSO/AFC-CSO-INB/danger",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/danger/en",
+     "count": 3
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.examples[].examples[]",
+   "outcome": "copied",
+   "count": 24,
+   "example": "cr26#/FRR/CDS/data/all/CSO/CDS-CSO-RIS/examples/0/examples/0",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1assessment-criteria@1/examples/[]/examples/[]",
+     "count": 24
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.examples[].id",
+   "outcome": "copied",
+   "count": 5,
+   "example": "cr26#/FRR/CDS/data/all/CSO/CDS-CSO-RIS/examples/0/id",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1assessment-criteria@1/examples/[]/id",
+     "count": 5
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.examples[].key_tests[]",
+   "outcome": "copied",
+   "count": 15,
+   "example": "cr26#/FRR/CDS/data/all/CSO/CDS-CSO-RIS/examples/0/key_tests/0",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1assessment-criteria@1/examples/[]/key-tests/[]",
+     "count": 15
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.following_information[]",
+   "outcome": "copied",
+   "count": 208,
+   "example": "cr26#/FRR/AFC/data/all/FRP/AFC-FRP-CDS/following_information/0",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1reporting-obligation@1/following-information/[]",
+     "count": 208
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.following_information_bullets[]",
+   "outcome": "copied",
+   "count": 11,
+   "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-EFI/following_information_bullets/0",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1reporting-obligation@1/following-information-bullets/[]",
+     "count": 11
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.force",
+   "outcome": "transformed",
+   "count": 217,
+   "example": "cr26#/FRR/AFC/data/all/FRP/AFC-FRP-VRE/force",
+   "to": [
+    {
+     "pointer": "/statements/[]/modality",
+     "count": 217,
+     "rule": "modality from the force word (code map)"
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.name",
+   "outcome": "copied",
+   "count": 245,
+   "example": "cr26#/FRR/AFC/data/all/FRP/AFC-FRP-VRE/name",
+   "to": [
+    {
+     "pointer": "/statements/[]/prose/en",
+     "count": 28,
+     "rule": "base prose of a rule that states its text by class only, from its name"
+    },
+    {
+     "pointer": "/title/en",
+     "count": 245
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.note",
+   "outcome": "copied",
+   "count": 57,
+   "example": "cr26#/FRR/AFC/data/all/FRP/AFC-FRP-VRE/note",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/note/en",
+     "count": 57
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.notes[]",
+   "outcome": "copied",
+   "count": 62,
+   "example": "cr26#/FRR/AFC/data/all/FRP/AFC-FRP-PNT/notes/0",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/notes/en/[]",
+     "count": 62
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.notification[].method",
+   "outcome": "copied",
+   "count": 31,
+   "example": "cr26#/FRR/AFC/data/all/FRP/AFC-FRP-PNT/notification/0/method",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/optional-notification/[]/method",
+     "count": 3
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1reporting-obligation@1/notification/[]/method",
+     "count": 28
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.notification[].name",
+   "outcome": "copied",
+   "count": 31,
+   "example": "cr26#/FRR/AFC/data/all/FRP/AFC-FRP-PNT/notification/0/name",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/optional-notification/[]/name/en",
+     "count": 3
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1reporting-obligation@1/notification/[]/name/en",
+     "count": 28
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.notification[].optional",
+   "outcome": "unaccounted",
+   "count": 3,
+   "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/notification/2/optional"
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.notification[].party",
+   "outcome": "copied",
+   "count": 31,
+   "example": "cr26#/FRR/AFC/data/all/FRP/AFC-FRP-PNT/notification/0/party",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/optional-notification/[]/party",
+     "count": 3
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1reporting-obligation@1/notification/[]/party",
+     "count": 28
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.notification[].target",
+   "outcome": "copied",
+   "count": 31,
+   "example": "cr26#/FRR/AFC/data/all/FRP/AFC-FRP-PNT/notification/0/target",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/optional-notification/[]/target",
+     "count": 3
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1reporting-obligation@1/notification/[]/target",
+     "count": 28
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.reference",
+   "outcome": "copied",
+   "count": 6,
+   "example": "cr26#/FRR/AGU/data/all/AGC/AGU-AGC-LIA/reference",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/reference",
+     "count": 6
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.reference_url",
+   "outcome": "copied",
+   "count": 6,
+   "example": "cr26#/FRR/AGU/data/all/AGC/AGU-AGC-LIA/reference_url",
+   "to": [
+    {
+     "pointer": "/relations/[]/ref",
+     "count": 6
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.related[]",
+   "outcome": "transformed",
+   "count": 78,
+   "example": "cr26#/FRR/AFC/data/all/CSO/AFC-CSO-INB/related/0",
+   "to": [
+    {
+     "pointer": "/relations/[]/ref",
+     "count": 78,
+     "rule": "Requirement URI from the id of a related rule"
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.schema.name",
+   "outcome": "copied",
+   "count": 24,
+   "example": "cr26#/FRR/CCM/data/all/OCR/CCM-OCR-AVL/schema/name",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/schema-name",
+     "count": 24
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.schema.url",
+   "outcome": "copied",
+   "count": 24,
+   "example": "cr26#/FRR/CCM/data/all/OCR/CCM-OCR-AVL/schema/url",
+   "to": [
+    {
+     "pointer": "/relations/[]/ref",
+     "count": 24
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.statement",
+   "outcome": "copied",
+   "count": 217,
+   "example": "cr26#/FRR/AFC/data/all/FRP/AFC-FRP-VRE/statement",
+   "to": [
+    {
+     "pointer": "/statements/[]/prose/en",
+     "count": 217
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.terms[]",
+   "outcome": "transformed",
+   "count": 704,
+   "example": "cr26#/FRR/AFC/data/all/FRP/AFC-FRP-CDS/terms/0",
+   "to": [
+    {
+     "pointer": "/relations/[]/ref",
+     "count": 704,
+     "rule": "term URI from the term's name, by the glossary's headwords and alternatives"
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.timeframe_num",
+   "outcome": "copied",
+   "count": 22,
+   "example": "cr26#/FRR/AFC/data/all/FRP/AFC-FRP-PNT/timeframe_num",
+   "to": [
+    {
+     "pointer": "/statements/[]/parameters/[]/num",
+     "count": 22
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.timeframe_num_max",
+   "outcome": "copied",
+   "count": 1,
+   "example": "cr26#/FRR/CCM/data/all/QTR/CCM-QTR-SAR/timeframe_num_max",
+   "to": [
+    {
+     "pointer": "/statements/[]/parameters/[]/num",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.timeframe_num_min",
+   "outcome": "copied",
+   "count": 1,
+   "example": "cr26#/FRR/CCM/data/all/QTR/CCM-QTR-SAR/timeframe_num_min",
+   "to": [
+    {
+     "pointer": "/statements/[]/parameters/[]/num",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.timeframe_type",
+   "outcome": "copied",
+   "count": 23,
+   "example": "cr26#/FRR/AFC/data/all/FRP/AFC-FRP-PNT/timeframe_type",
+   "to": [
+    {
+     "pointer": "/statements/[]/parameters/[]/type",
+     "count": 24,
+     "rule": "duration type from the unit of the timeframe"
+    },
+    {
+     "pointer": "/statements/[]/parameters/[]/unit",
+     "count": 24
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.updated[].comment",
+   "outcome": "intentionally-dropped",
+   "count": 303,
+   "example": "cr26#/FRR/AFC/data/all/FRP/AFC-FRP-VRE/updated/0/comment",
+   "reasons": [
+    {
+     "reason": "update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read \"history -> L0\" until 2026-11-14)",
+     "count": 303
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.updated[].date",
+   "outcome": "intentionally-dropped",
+   "count": 303,
+   "example": "cr26#/FRR/AFC/data/all/FRP/AFC-FRP-VRE/updated/0/date",
+   "reasons": [
+    {
+     "reason": "update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read \"history -> L0\" until 2026-11-14)",
+     "count": 303
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.updated[].issue",
+   "outcome": "intentionally-dropped",
+   "count": 5,
+   "example": "cr26#/FRR/FRC/data/all/CLA/FRC-CLA-MFR/updated/0/issue",
+   "reasons": [
+    {
+     "reason": "update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read \"history -> L0\" until 2026-11-14)",
+     "count": 5
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.artifacts.all[]",
+   "outcome": "copied",
+   "count": 31,
+   "example": "cr26#/FRR/CCM/data/all/QTR/CCM-QTR-MTG/varies_by_class/a/artifacts/all/0",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/artifacts/all/[]",
+     "count": 7
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/artifacts/all/[]",
+     "count": 8
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/artifacts/all/[]",
+     "count": 8
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/artifacts/all/[]",
+     "count": 8
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.following_information[]",
+   "outcome": "copied",
+   "count": 57,
+   "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/varies_by_class/a/following_information/0",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/following_information/[]",
+     "count": 13
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/following_information/[]",
+     "count": 15
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/following_information/[]",
+     "count": 16
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/following_information/[]",
+     "count": 13
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.force",
+   "outcome": "copied",
+   "count": 107,
+   "example": "cr26#/FRR/CCM/data/all/QTR/CCM-QTR-MTG/varies_by_class/a/force",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/force",
+     "count": 24
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/force",
+     "count": 28
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/force",
+     "count": 28
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/force",
+     "count": 27
+    },
+    {
+     "pointer": "/operations/[]/modality",
+     "count": 107,
+     "rule": "modality from the force word (code map)"
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.note",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/CDS/data/all/CSO/CDS-CSO-AVR/varies_by_class/a/note",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/note",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/note",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/note",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/note",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.1.fir.description",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-FIR/varies_by_class/a/pain_timeframes/1/fir/description",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/fir/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/fir/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/fir/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/fir/description",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.1.fir.timeframe_num",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-FIR/varies_by_class/a/pain_timeframes/1/fir/timeframe_num",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/fir/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/fir/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/fir/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/fir/timeframe_num",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.1.fir.timeframe_type",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-FIR/varies_by_class/a/pain_timeframes/1/fir/timeframe_type",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/fir/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/fir/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/fir/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/fir/timeframe_type",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.1.iir.description",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/varies_by_class/a/pain_timeframes/1/iir/description",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/iir/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/iir/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/iir/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/iir/description",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.1.iir.timeframe_num",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/varies_by_class/a/pain_timeframes/1/iir/timeframe_num",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/iir/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/iir/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/iir/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/iir/timeframe_num",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.1.iir.timeframe_type",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/varies_by_class/a/pain_timeframes/1/iir/timeframe_type",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/iir/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/iir/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/iir/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/iir/timeframe_type",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.1.oir.description",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-OIR/varies_by_class/a/pain_timeframes/1/oir/description",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/oir/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/oir/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/oir/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/oir/description",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.1.oir.timeframe_num",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-OIR/varies_by_class/a/pain_timeframes/1/oir/timeframe_num",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/oir/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/oir/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/oir/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/oir/timeframe_num",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.1.oir.timeframe_type",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-OIR/varies_by_class/a/pain_timeframes/1/oir/timeframe_type",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/oir/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/oir/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/oir/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/oir/timeframe_type",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.2.fir.description",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-FIR/varies_by_class/a/pain_timeframes/2/fir/description",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/fir/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/fir/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/fir/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/fir/description",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.2.fir.timeframe_num",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-FIR/varies_by_class/a/pain_timeframes/2/fir/timeframe_num",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/fir/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/fir/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/fir/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/fir/timeframe_num",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.2.fir.timeframe_type",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-FIR/varies_by_class/a/pain_timeframes/2/fir/timeframe_type",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/fir/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/fir/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/fir/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/fir/timeframe_type",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.2.iir.description",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/varies_by_class/a/pain_timeframes/2/iir/description",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/iir/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/iir/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/iir/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/iir/description",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.2.iir.timeframe_num",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/varies_by_class/a/pain_timeframes/2/iir/timeframe_num",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/iir/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/iir/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/iir/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/iir/timeframe_num",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.2.iir.timeframe_type",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/varies_by_class/a/pain_timeframes/2/iir/timeframe_type",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/iir/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/iir/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/iir/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/iir/timeframe_type",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.2.irv_lev.description",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/2/irv_lev/description",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/irv_lev/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/irv_lev/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/irv_lev/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/irv_lev/description",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.2.irv_lev.timeframe_num",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/2/irv_lev/timeframe_num",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/irv_lev/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/irv_lev/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/irv_lev/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/irv_lev/timeframe_num",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.2.irv_lev.timeframe_type",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/2/irv_lev/timeframe_type",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/irv_lev/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/irv_lev/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/irv_lev/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/irv_lev/timeframe_type",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.2.nirv_lev.description",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/2/nirv_lev/description",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/nirv_lev/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/nirv_lev/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/nirv_lev/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/nirv_lev/description",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.2.nirv_lev.timeframe_num",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/2/nirv_lev/timeframe_num",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/nirv_lev/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/nirv_lev/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/nirv_lev/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/nirv_lev/timeframe_num",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.2.nirv_lev.timeframe_type",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/2/nirv_lev/timeframe_type",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/nirv_lev/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/nirv_lev/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/nirv_lev/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/nirv_lev/timeframe_type",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.2.nlev.description",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/2/nlev/description",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/nlev/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/nlev/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/nlev/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/nlev/description",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.2.nlev.timeframe_num",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/2/nlev/timeframe_num",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/nlev/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/nlev/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/nlev/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/nlev/timeframe_num",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.2.nlev.timeframe_type",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/2/nlev/timeframe_type",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/nlev/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/nlev/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/nlev/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/nlev/timeframe_type",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.2.oir.description",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-OIR/varies_by_class/a/pain_timeframes/2/oir/description",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/oir/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/oir/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/oir/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/oir/description",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.2.oir.timeframe_num",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-OIR/varies_by_class/a/pain_timeframes/2/oir/timeframe_num",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/oir/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/oir/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/oir/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/oir/timeframe_num",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.2.oir.timeframe_type",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-OIR/varies_by_class/a/pain_timeframes/2/oir/timeframe_type",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/oir/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/oir/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/oir/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/oir/timeframe_type",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.3.fir.description",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-FIR/varies_by_class/a/pain_timeframes/3/fir/description",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/fir/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/fir/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/fir/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/fir/description",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.3.fir.timeframe_num",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-FIR/varies_by_class/a/pain_timeframes/3/fir/timeframe_num",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/fir/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/fir/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/fir/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/fir/timeframe_num",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.3.fir.timeframe_type",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-FIR/varies_by_class/a/pain_timeframes/3/fir/timeframe_type",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/fir/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/fir/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/fir/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/fir/timeframe_type",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.3.iir.description",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/varies_by_class/a/pain_timeframes/3/iir/description",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/iir/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/iir/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/iir/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/iir/description",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.3.iir.timeframe_num",
+   "outcome": "copied",
+   "count": 3,
+   "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/varies_by_class/a/pain_timeframes/3/iir/timeframe_num",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/iir/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/iir/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/iir/timeframe_num",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.3.iir.timeframe_num",
+   "outcome": "unaccounted",
+   "count": 1,
+   "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/varies_by_class/d/pain_timeframes/3/iir/timeframe_num"
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.3.iir.timeframe_type",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/varies_by_class/a/pain_timeframes/3/iir/timeframe_type",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/iir/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/iir/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/iir/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/iir/timeframe_type",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.3.irv_lev.description",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/3/irv_lev/description",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/irv_lev/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/irv_lev/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/irv_lev/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/irv_lev/description",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.3.irv_lev.timeframe_num",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/3/irv_lev/timeframe_num",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/irv_lev/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/irv_lev/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/irv_lev/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/irv_lev/timeframe_num",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.3.irv_lev.timeframe_type",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/3/irv_lev/timeframe_type",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/irv_lev/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/irv_lev/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/irv_lev/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/irv_lev/timeframe_type",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.3.nirv_lev.description",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/3/nirv_lev/description",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/nirv_lev/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/nirv_lev/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/nirv_lev/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/nirv_lev/description",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.3.nirv_lev.timeframe_num",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/3/nirv_lev/timeframe_num",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/nirv_lev/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/nirv_lev/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/nirv_lev/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/nirv_lev/timeframe_num",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.3.nirv_lev.timeframe_type",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/3/nirv_lev/timeframe_type",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/nirv_lev/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/nirv_lev/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/nirv_lev/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/nirv_lev/timeframe_type",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.3.nlev.description",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/3/nlev/description",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/nlev/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/nlev/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/nlev/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/nlev/description",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.3.nlev.timeframe_num",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/3/nlev/timeframe_num",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/nlev/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/nlev/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/nlev/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/nlev/timeframe_num",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.3.nlev.timeframe_type",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/3/nlev/timeframe_type",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/nlev/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/nlev/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/nlev/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/nlev/timeframe_type",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.3.oir.description",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-OIR/varies_by_class/a/pain_timeframes/3/oir/description",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/oir/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/oir/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/oir/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/oir/description",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.3.oir.timeframe_num",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-OIR/varies_by_class/a/pain_timeframes/3/oir/timeframe_num",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/oir/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/oir/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/oir/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/oir/timeframe_num",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.3.oir.timeframe_type",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-OIR/varies_by_class/a/pain_timeframes/3/oir/timeframe_type",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/oir/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/oir/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/oir/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/oir/timeframe_type",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.4.fir.description",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-FIR/varies_by_class/a/pain_timeframes/4/fir/description",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/fir/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/fir/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/fir/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/fir/description",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.4.fir.timeframe_num",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-FIR/varies_by_class/a/pain_timeframes/4/fir/timeframe_num",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/fir/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/fir/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/fir/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/fir/timeframe_num",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.4.fir.timeframe_type",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-FIR/varies_by_class/a/pain_timeframes/4/fir/timeframe_type",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/fir/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/fir/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/fir/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/fir/timeframe_type",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.4.iir.description",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/varies_by_class/a/pain_timeframes/4/iir/description",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/iir/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/iir/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/iir/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/iir/description",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.4.iir.timeframe_num",
+   "outcome": "copied",
+   "count": 3,
+   "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/varies_by_class/a/pain_timeframes/4/iir/timeframe_num",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/iir/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/iir/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/iir/timeframe_num",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.4.iir.timeframe_num",
+   "outcome": "unaccounted",
+   "count": 1,
+   "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/varies_by_class/d/pain_timeframes/4/iir/timeframe_num"
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.4.iir.timeframe_type",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/varies_by_class/a/pain_timeframes/4/iir/timeframe_type",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/iir/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/iir/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/iir/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/iir/timeframe_type",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.4.irv_lev.description",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/4/irv_lev/description",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/irv_lev/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/irv_lev/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/irv_lev/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/irv_lev/description",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.4.irv_lev.timeframe_num",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/4/irv_lev/timeframe_num",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/irv_lev/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/irv_lev/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/irv_lev/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/irv_lev/timeframe_num",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.4.irv_lev.timeframe_type",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/4/irv_lev/timeframe_type",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/irv_lev/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/irv_lev/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/irv_lev/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/irv_lev/timeframe_type",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.4.nirv_lev.description",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/4/nirv_lev/description",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/nirv_lev/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/nirv_lev/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/nirv_lev/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/nirv_lev/description",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.4.nirv_lev.timeframe_num",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/4/nirv_lev/timeframe_num",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/nirv_lev/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/nirv_lev/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/nirv_lev/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/nirv_lev/timeframe_num",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.4.nirv_lev.timeframe_type",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/4/nirv_lev/timeframe_type",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/nirv_lev/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/nirv_lev/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/nirv_lev/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/nirv_lev/timeframe_type",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.4.nlev.description",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/4/nlev/description",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/nlev/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/nlev/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/nlev/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/nlev/description",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.4.nlev.timeframe_num",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/4/nlev/timeframe_num",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/nlev/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/nlev/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/nlev/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/nlev/timeframe_num",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.4.nlev.timeframe_type",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/4/nlev/timeframe_type",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/nlev/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/nlev/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/nlev/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/nlev/timeframe_type",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.4.oir.description",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-OIR/varies_by_class/a/pain_timeframes/4/oir/description",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/oir/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/oir/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/oir/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/oir/description",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.4.oir.timeframe_num",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-OIR/varies_by_class/a/pain_timeframes/4/oir/timeframe_num",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/oir/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/oir/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/oir/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/oir/timeframe_num",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.4.oir.timeframe_type",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-OIR/varies_by_class/a/pain_timeframes/4/oir/timeframe_type",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/oir/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/oir/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/oir/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/oir/timeframe_type",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.5.fir.description",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-FIR/varies_by_class/a/pain_timeframes/5/fir/description",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/fir/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/fir/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/fir/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/fir/description",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.5.fir.timeframe_num",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-FIR/varies_by_class/a/pain_timeframes/5/fir/timeframe_num",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/fir/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/fir/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/fir/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/fir/timeframe_num",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.5.fir.timeframe_type",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-FIR/varies_by_class/a/pain_timeframes/5/fir/timeframe_type",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/fir/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/fir/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/fir/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/fir/timeframe_type",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.5.iir.description",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/varies_by_class/a/pain_timeframes/5/iir/description",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/iir/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/iir/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/iir/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/iir/description",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.5.iir.timeframe_num",
+   "outcome": "copied",
+   "count": 3,
+   "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/varies_by_class/a/pain_timeframes/5/iir/timeframe_num",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/iir/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/iir/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/iir/timeframe_num",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.5.iir.timeframe_num",
+   "outcome": "unaccounted",
+   "count": 1,
+   "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/varies_by_class/d/pain_timeframes/5/iir/timeframe_num"
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.5.iir.timeframe_type",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/varies_by_class/a/pain_timeframes/5/iir/timeframe_type",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/iir/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/iir/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/iir/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/iir/timeframe_type",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.5.irv_lev.description",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/5/irv_lev/description",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/irv_lev/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/irv_lev/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/irv_lev/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/irv_lev/description",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.5.irv_lev.timeframe_num",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/5/irv_lev/timeframe_num",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/irv_lev/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/irv_lev/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/irv_lev/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/irv_lev/timeframe_num",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.5.irv_lev.timeframe_type",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/5/irv_lev/timeframe_type",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/irv_lev/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/irv_lev/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/irv_lev/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/irv_lev/timeframe_type",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.5.nirv_lev.description",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/5/nirv_lev/description",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/nirv_lev/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/nirv_lev/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/nirv_lev/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/nirv_lev/description",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.5.nirv_lev.timeframe_num",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/5/nirv_lev/timeframe_num",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/nirv_lev/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/nirv_lev/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/nirv_lev/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/nirv_lev/timeframe_num",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.5.nirv_lev.timeframe_type",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/5/nirv_lev/timeframe_type",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/nirv_lev/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/nirv_lev/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/nirv_lev/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/nirv_lev/timeframe_type",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.5.nlev.description",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/5/nlev/description",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/nlev/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/nlev/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/nlev/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/nlev/description",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.5.nlev.timeframe_num",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/5/nlev/timeframe_num",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/nlev/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/nlev/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/nlev/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/nlev/timeframe_num",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.5.nlev.timeframe_type",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/5/nlev/timeframe_type",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/nlev/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/nlev/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/nlev/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/nlev/timeframe_type",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.5.oir.description",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-OIR/varies_by_class/a/pain_timeframes/5/oir/description",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/oir/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/oir/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/oir/description",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/oir/description",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.5.oir.timeframe_num",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-OIR/varies_by_class/a/pain_timeframes/5/oir/timeframe_num",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/oir/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/oir/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/oir/timeframe_num",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/oir/timeframe_num",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.5.oir.timeframe_type",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-OIR/varies_by_class/a/pain_timeframes/5/oir/timeframe_type",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/pain_timeframes/[]/oir/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/pain_timeframes/[]/oir/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/pain_timeframes/[]/oir/timeframe_type",
+     "count": 1
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/pain_timeframes/[]/oir/timeframe_type",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.rev5_controls_list.AC[]",
+   "outcome": "copied",
+   "count": 141,
+   "example": "cr26#/FRR/FRC/data/rev5/CSF/FRC-CSF-BSL/varies_by_class/b/rev5_controls_list/AC/0",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/rev5_controls_list/AC/[]",
+     "count": 13
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/rev5_controls_list/AC/[]",
+     "count": 59
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/rev5_controls_list/AC/[]",
+     "count": 69
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.rev5_controls_list.AT[]",
+   "outcome": "copied",
+   "count": 17,
+   "example": "cr26#/FRR/FRC/data/rev5/CSF/FRC-CSF-BSL/varies_by_class/b/rev5_controls_list/AT/0",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/rev5_controls_list/AT/[]",
+     "count": 5
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/rev5_controls_list/AT/[]",
+     "count": 6
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/rev5_controls_list/AT/[]",
+     "count": 6
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.rev5_controls_list.AU[]",
+   "outcome": "copied",
+   "count": 92,
+   "example": "cr26#/FRR/FRC/data/rev5/CSF/FRC-CSF-BSL/varies_by_class/b/rev5_controls_list/AU/0",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/rev5_controls_list/AU/[]",
+     "count": 18
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/rev5_controls_list/AU/[]",
+     "count": 27
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/rev5_controls_list/AU/[]",
+     "count": 47
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.rev5_controls_list.CA[]",
+   "outcome": "copied",
+   "count": 42,
+   "example": "cr26#/FRR/FRC/data/rev5/CSF/FRC-CSF-BSL/varies_by_class/b/rev5_controls_list/CA/0",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/rev5_controls_list/CA/[]",
+     "count": 10
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/rev5_controls_list/CA/[]",
+     "count": 15
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/rev5_controls_list/CA/[]",
+     "count": 17
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.rev5_controls_list.CM[]",
+   "outcome": "copied",
+   "count": 91,
+   "example": "cr26#/FRR/FRC/data/rev5/CSF/FRC-CSF-BSL/varies_by_class/b/rev5_controls_list/CM/0",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/rev5_controls_list/CM/[]",
+     "count": 13
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/rev5_controls_list/CM/[]",
+     "count": 35
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/rev5_controls_list/CM/[]",
+     "count": 43
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.rev5_controls_list.CP[]",
+   "outcome": "copied",
+   "count": 67,
+   "example": "cr26#/FRR/FRC/data/rev5/CSF/FRC-CSF-BSL/varies_by_class/b/rev5_controls_list/CP/0",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/rev5_controls_list/CP/[]",
+     "count": 7
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/rev5_controls_list/CP/[]",
+     "count": 24
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/rev5_controls_list/CP/[]",
+     "count": 36
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.rev5_controls_list.IA[]",
+   "outcome": "copied",
+   "count": 98,
+   "example": "cr26#/FRR/FRC/data/rev5/CSF/FRC-CSF-BSL/varies_by_class/b/rev5_controls_list/IA/0",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/rev5_controls_list/IA/[]",
+     "count": 23
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/rev5_controls_list/IA/[]",
+     "count": 36
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/rev5_controls_list/IA/[]",
+     "count": 39
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.rev5_controls_list.IR[]",
+   "outcome": "copied",
+   "count": 58,
+   "example": "cr26#/FRR/FRC/data/rev5/CSF/FRC-CSF-BSL/varies_by_class/b/rev5_controls_list/IR/0",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/rev5_controls_list/IR/[]",
+     "count": 8
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/rev5_controls_list/IR/[]",
+     "count": 20
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/rev5_controls_list/IR/[]",
+     "count": 30
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.rev5_controls_list.MA[]",
+   "outcome": "copied",
+   "count": 28,
+   "example": "cr26#/FRR/FRC/data/rev5/CSF/FRC-CSF-BSL/varies_by_class/b/rev5_controls_list/MA/0",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/rev5_controls_list/MA/[]",
+     "count": 4
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/rev5_controls_list/MA/[]",
+     "count": 11
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/rev5_controls_list/MA/[]",
+     "count": 13
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.rev5_controls_list.MP[]",
+   "outcome": "copied",
+   "count": 21,
+   "example": "cr26#/FRR/FRC/data/rev5/CSF/FRC-CSF-BSL/varies_by_class/b/rev5_controls_list/MP/0",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/rev5_controls_list/MP/[]",
+     "count": 4
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/rev5_controls_list/MP/[]",
+     "count": 7
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/rev5_controls_list/MP/[]",
+     "count": 10
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.rev5_controls_list.PE[]",
+   "outcome": "copied",
+   "count": 58,
+   "example": "cr26#/FRR/FRC/data/rev5/CSF/FRC-CSF-BSL/varies_by_class/b/rev5_controls_list/PE/0",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/rev5_controls_list/PE/[]",
+     "count": 11
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/rev5_controls_list/PE/[]",
+     "count": 20
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/rev5_controls_list/PE/[]",
+     "count": 27
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.rev5_controls_list.PL[]",
+   "outcome": "copied",
+   "count": 21,
+   "example": "cr26#/FRR/FRC/data/rev5/CSF/FRC-CSF-BSL/varies_by_class/b/rev5_controls_list/PL/0",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/rev5_controls_list/PL/[]",
+     "count": 7
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/rev5_controls_list/PL/[]",
+     "count": 7
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/rev5_controls_list/PL/[]",
+     "count": 7
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.rev5_controls_list.PS[]",
+   "outcome": "copied",
+   "count": 30,
+   "example": "cr26#/FRR/FRC/data/rev5/CSF/FRC-CSF-BSL/varies_by_class/b/rev5_controls_list/PS/0",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/rev5_controls_list/PS/[]",
+     "count": 9
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/rev5_controls_list/PS/[]",
+     "count": 10
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/rev5_controls_list/PS/[]",
+     "count": 11
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.rev5_controls_list.RA[]",
+   "outcome": "copied",
+   "count": 40,
+   "example": "cr26#/FRR/FRC/data/rev5/CSF/FRC-CSF-BSL/varies_by_class/b/rev5_controls_list/RA/0",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/rev5_controls_list/RA/[]",
+     "count": 10
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/rev5_controls_list/RA/[]",
+     "count": 14
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/rev5_controls_list/RA/[]",
+     "count": 16
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.rev5_controls_list.SA[]",
+   "outcome": "copied",
+   "count": 60,
+   "example": "cr26#/FRR/FRC/data/rev5/CSF/FRC-CSF-BSL/varies_by_class/b/rev5_controls_list/SA/0",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/rev5_controls_list/SA/[]",
+     "count": 10
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/rev5_controls_list/SA/[]",
+     "count": 23
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/rev5_controls_list/SA/[]",
+     "count": 27
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.rev5_controls_list.SC[]",
+   "outcome": "copied",
+   "count": 114,
+   "example": "cr26#/FRR/FRC/data/rev5/CSF/FRC-CSF-BSL/varies_by_class/b/rev5_controls_list/SC/0",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/rev5_controls_list/SC/[]",
+     "count": 20
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/rev5_controls_list/SC/[]",
+     "count": 43
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/rev5_controls_list/SC/[]",
+     "count": 51
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.rev5_controls_list.SI[]",
+   "outcome": "copied",
+   "count": 87,
+   "example": "cr26#/FRR/FRC/data/rev5/CSF/FRC-CSF-BSL/varies_by_class/b/rev5_controls_list/SI/0",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/rev5_controls_list/SI/[]",
+     "count": 7
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/rev5_controls_list/SI/[]",
+     "count": 33
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/rev5_controls_list/SI/[]",
+     "count": 47
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.rev5_controls_list.SR[]",
+   "outcome": "copied",
+   "count": 37,
+   "example": "cr26#/FRR/FRC/data/rev5/CSF/FRC-CSF-BSL/varies_by_class/b/rev5_controls_list/SR/0",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/rev5_controls_list/SR/[]",
+     "count": 11
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/rev5_controls_list/SR/[]",
+     "count": 12
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/rev5_controls_list/SR/[]",
+     "count": 14
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.statement",
+   "outcome": "copied",
+   "count": 107,
+   "example": "cr26#/FRR/CCM/data/all/QTR/CCM-QTR-MTG/varies_by_class/a/statement",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/statement",
+     "count": 24
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/statement",
+     "count": 28
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/statement",
+     "count": 28
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/statement",
+     "count": 27
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.timeframe_num",
+   "outcome": "copied",
+   "count": 51,
+   "example": "cr26#/FRR/CCM/data/all/QTR/CCM-QTR-MTG/varies_by_class/a/timeframe_num",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/timeframe_num",
+     "count": 10
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/timeframe_num",
+     "count": 14
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/timeframe_num",
+     "count": 14
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/timeframe_num",
+     "count": 13
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.timeframe_type",
+   "outcome": "copied",
+   "count": 51,
+   "example": "cr26#/FRR/CCM/data/all/QTR/CCM-QTR-MTG/varies_by_class/a/timeframe_type",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/a/timeframe_type",
+     "count": 10
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/timeframe_type",
+     "count": 14
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/timeframe_type",
+     "count": 14
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/d/timeframe_type",
+     "count": 13
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.info.20x.effective.current_status",
+   "outcome": "copied",
+   "count": 10,
+   "example": "cr26#/FRR/CCM/info/20x/effective/current_status",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1effectivity@1/20x/current_status",
+     "count": 10
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.info.20x.effective.date.grace.default",
+   "outcome": "copied",
+   "count": 10,
+   "example": "cr26#/FRR/CCM/info/20x/effective/date/grace/default",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1effectivity@1/20x/date/grace/default",
+     "count": 10
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.info.20x.effective.date.grace.until_next_assessment",
+   "outcome": "unaccounted",
+   "count": 10,
+   "example": "cr26#/FRR/CCM/info/20x/effective/date/grace/until_next_assessment"
+  },
+  {
+   "path": "cr26.FRR.*.info.20x.effective.date.maintain",
+   "outcome": "copied",
+   "count": 10,
+   "example": "cr26#/FRR/CCM/info/20x/effective/date/maintain",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1effectivity@1/20x/date/maintain",
+     "count": 10
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.info.20x.effective.date.obtain",
+   "outcome": "copied",
+   "count": 10,
+   "example": "cr26#/FRR/CCM/info/20x/effective/date/obtain",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1effectivity@1/20x/date/obtain",
+     "count": 10
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.info.20x.effective.date.optional_adoption",
+   "outcome": "copied",
+   "count": 10,
+   "example": "cr26#/FRR/CCM/info/20x/effective/date/optional_adoption",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1effectivity@1/20x/date/optional_adoption",
+     "count": 10
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.info.20x.effective.is",
+   "outcome": "copied",
+   "count": 10,
+   "example": "cr26#/FRR/CCM/info/20x/effective/is",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1effectivity@1/20x/is",
+     "count": 10
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.info.20x.subsets.*.applicability.affects[]",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/CPO/info/20x/subsets/CSX/applicability/affects/0",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1scope@1/affects/[]",
+     "count": 4
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.info.20x.subsets.*.applicability.classes[]",
+   "outcome": "copied",
+   "count": 13,
+   "example": "cr26#/FRR/CPO/info/20x/subsets/CSX/applicability/classes/0",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1scope@1/classes/[]",
+     "count": 13
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.info.20x.subsets.*.applicability.paths[]",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/CPO/info/20x/subsets/CSX/applicability/paths/0",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1scope@1/paths/[]",
+     "count": 4
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.info.20x.subsets.*.applicability.types[]",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/CPO/info/20x/subsets/CSX/applicability/types/0",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1scope@1/types/[]",
+     "count": 4
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.info.20x.subsets.*.description",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/CPO/info/20x/subsets/CSX/description",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/description/en",
+     "count": 4
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.info.20x.subsets.*.name",
+   "outcome": "copied",
+   "count": 4,
+   "example": "cr26#/FRR/CPO/info/20x/subsets/CSX/name",
+   "to": [
+    {
+     "pointer": "/title/en",
+     "count": 4
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.info.effective.current_status",
+   "outcome": "copied",
+   "count": 7,
+   "example": "cr26#/FRR/AFC/info/effective/current_status",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1effectivity@1/default/current_status",
+     "count": 7
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.info.effective.date.grace.default",
+   "outcome": "copied",
+   "count": 7,
+   "example": "cr26#/FRR/AFC/info/effective/date/grace/default",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1effectivity@1/default/date/grace/default",
+     "count": 7
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.info.effective.date.grace.until_next_assessment",
+   "outcome": "unaccounted",
+   "count": 7,
+   "example": "cr26#/FRR/AFC/info/effective/date/grace/until_next_assessment"
+  },
+  {
+   "path": "cr26.FRR.*.info.effective.date.maintain",
+   "outcome": "copied",
+   "count": 7,
+   "example": "cr26#/FRR/AFC/info/effective/date/maintain",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1effectivity@1/default/date/maintain",
+     "count": 7
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.info.effective.date.obtain",
+   "outcome": "copied",
+   "count": 7,
+   "example": "cr26#/FRR/AFC/info/effective/date/obtain",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1effectivity@1/default/date/obtain",
+     "count": 7
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.info.effective.date.optional_adoption",
+   "outcome": "copied",
+   "count": 5,
+   "example": "cr26#/FRR/AGU/info/effective/date/optional_adoption",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1effectivity@1/default/date/optional_adoption",
+     "count": 5
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.info.effective.is",
+   "outcome": "copied",
+   "count": 7,
+   "example": "cr26#/FRR/AFC/info/effective/is",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1effectivity@1/default/is",
+     "count": 7
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.info.flows[].activity",
+   "outcome": "intentionally-dropped",
+   "count": 1,
+   "example": "cr26#/FRR/IEC/info/flows/0/activity",
+   "reasons": [
+    {
+     "reason": "process-flow diagrams: linked resources, not requirement data (D17)",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.info.flows[].description",
+   "outcome": "intentionally-dropped",
+   "count": 1,
+   "example": "cr26#/FRR/IEC/info/flows/0/description",
+   "reasons": [
+    {
+     "reason": "process-flow diagrams: linked resources, not requirement data (D17)",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.info.flows[].nodes.*",
+   "outcome": "intentionally-dropped",
+   "count": 8,
+   "example": "cr26#/FRR/IEC/info/flows/0/nodes/*",
+   "reasons": [
+    {
+     "reason": "process-flow diagrams: linked resources, not requirement data (D17)",
+     "count": 8
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.info.flows[].steps[].description",
+   "outcome": "intentionally-dropped",
+   "count": 7,
+   "example": "cr26#/FRR/IEC/info/flows/0/steps/1/description",
+   "reasons": [
+    {
+     "reason": "process-flow diagrams: linked resources, not requirement data (D17)",
+     "count": 7
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.info.flows[].steps[].from",
+   "outcome": "intentionally-dropped",
+   "count": 9,
+   "example": "cr26#/FRR/IEC/info/flows/0/steps/0/from",
+   "reasons": [
+    {
+     "reason": "process-flow diagrams: linked resources, not requirement data (D17)",
+     "count": 9
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.info.flows[].steps[].to",
+   "outcome": "intentionally-dropped",
+   "count": 9,
+   "example": "cr26#/FRR/IEC/info/flows/0/steps/0/to",
+   "reasons": [
+    {
+     "reason": "process-flow diagrams: linked resources, not requirement data (D17)",
+     "count": 9
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.info.name",
+   "outcome": "copied",
+   "count": 17,
+   "example": "cr26#/FRR/AFC/info/name",
+   "to": [
+    {
+     "pointer": "/title/en",
+     "count": 17
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.info.purpose",
+   "outcome": "copied",
+   "count": 17,
+   "example": "cr26#/FRR/AFC/info/purpose",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/description/en",
+     "count": 17
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.info.rev5.effective.current_status",
+   "outcome": "copied",
+   "count": 10,
+   "example": "cr26#/FRR/CCM/info/rev5/effective/current_status",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1effectivity@1/rev5/current_status",
+     "count": 10
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.info.rev5.effective.date.grace.default",
+   "outcome": "copied",
+   "count": 10,
+   "example": "cr26#/FRR/CCM/info/rev5/effective/date/grace/default",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1effectivity@1/rev5/date/grace/default",
+     "count": 10
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.info.rev5.effective.date.grace.until_next_assessment",
+   "outcome": "unaccounted",
+   "count": 10,
+   "example": "cr26#/FRR/CCM/info/rev5/effective/date/grace/until_next_assessment"
+  },
+  {
+   "path": "cr26.FRR.*.info.rev5.effective.date.maintain",
+   "outcome": "copied",
+   "count": 10,
+   "example": "cr26#/FRR/CCM/info/rev5/effective/date/maintain",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1effectivity@1/rev5/date/maintain",
+     "count": 10
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.info.rev5.effective.date.obtain",
+   "outcome": "copied",
+   "count": 10,
+   "example": "cr26#/FRR/CCM/info/rev5/effective/date/obtain",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1effectivity@1/rev5/date/obtain",
+     "count": 10
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.info.rev5.effective.date.optional_adoption",
+   "outcome": "copied",
+   "count": 10,
+   "example": "cr26#/FRR/CCM/info/rev5/effective/date/optional_adoption",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1effectivity@1/rev5/date/optional_adoption",
+     "count": 10
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.info.rev5.effective.is",
+   "outcome": "copied",
+   "count": 10,
+   "example": "cr26#/FRR/CCM/info/rev5/effective/is",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1effectivity@1/rev5/is",
+     "count": 10
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.info.rev5.subsets.*.applicability.affects[]",
+   "outcome": "copied",
+   "count": 5,
+   "example": "cr26#/FRR/CDS/info/rev5/subsets/CSF/applicability/affects/0",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1scope@1/affects/[]",
+     "count": 5
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.info.rev5.subsets.*.applicability.classes[]",
+   "outcome": "copied",
+   "count": 15,
+   "example": "cr26#/FRR/CDS/info/rev5/subsets/CSF/applicability/classes/0",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1scope@1/classes/[]",
+     "count": 15
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.info.rev5.subsets.*.applicability.paths[]",
+   "outcome": "copied",
+   "count": 10,
+   "example": "cr26#/FRR/CDS/info/rev5/subsets/CSF/applicability/paths/0",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1scope@1/paths/[]",
+     "count": 10
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.info.rev5.subsets.*.applicability.types[]",
+   "outcome": "copied",
+   "count": 5,
+   "example": "cr26#/FRR/CDS/info/rev5/subsets/CSF/applicability/types/0",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1scope@1/types/[]",
+     "count": 5
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.info.rev5.subsets.*.description",
+   "outcome": "copied",
+   "count": 5,
+   "example": "cr26#/FRR/CDS/info/rev5/subsets/CSF/description",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/description/en",
+     "count": 5
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.info.rev5.subsets.*.name",
+   "outcome": "copied",
+   "count": 5,
+   "example": "cr26#/FRR/CDS/info/rev5/subsets/CSF/name",
+   "to": [
+    {
+     "pointer": "/title/en",
+     "count": 5
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.info.short_name",
+   "outcome": "copied",
+   "count": 17,
+   "example": "cr26#/FRR/AFC/info/short_name",
+   "to": [
+    {
+     "pointer": "/label",
+     "count": 17
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.info.status",
+   "outcome": "unaccounted",
+   "count": 17,
+   "example": "cr26#/FRR/AFC/info/status"
+  },
+  {
+   "path": "cr26.FRR.*.info.subsets.*.applicability.affects[]",
+   "outcome": "copied",
+   "count": 45,
+   "example": "cr26#/FRR/AFC/info/subsets/FRP/applicability/affects/0",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1scope@1/affects/[]",
+     "count": 45
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.info.subsets.*.applicability.classes[]",
+   "outcome": "copied",
+   "count": 124,
+   "example": "cr26#/FRR/AFC/info/subsets/FRP/applicability/classes/0",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1scope@1/classes/[]",
+     "count": 124
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.info.subsets.*.applicability.paths[]",
+   "outcome": "copied",
+   "count": 78,
+   "example": "cr26#/FRR/AFC/info/subsets/FRP/applicability/paths/0",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1scope@1/paths/[]",
+     "count": 78
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.info.subsets.*.applicability.types[]",
+   "outcome": "copied",
+   "count": 78,
+   "example": "cr26#/FRR/AFC/info/subsets/FRP/applicability/types/0",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1scope@1/types/[]",
+     "count": 78
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.info.subsets.*.description",
+   "outcome": "copied",
+   "count": 45,
+   "example": "cr26#/FRR/AFC/info/subsets/FRP/description",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/description/en",
+     "count": 45
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.info.subsets.*.name",
+   "outcome": "copied",
+   "count": 45,
+   "example": "cr26#/FRR/AFC/info/subsets/FRP/name",
+   "to": [
+    {
+     "pointer": "/title/en",
+     "count": 45
+    },
+    {
+     "pointer": "/title/en",
+     "count": 2,
+     "rule": "title of one track's share of a subset, from the subset's name"
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.info.tag",
+   "outcome": "copied",
+   "count": 17,
+   "example": "cr26#/FRR/AFC/info/tag",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1scope@1/tag",
+     "count": 17
+    }
+   ]
+  },
+  {
+   "path": "cr26.FRR.*.info.web_name",
+   "outcome": "copied",
+   "count": 17,
+   "example": "cr26#/FRR/AFC/info/web_name",
+   "to": [
+    {
+     "pointer": "/annotations/web_name",
+     "count": 17
+    }
+   ]
+  },
+  {
+   "path": "cr26.KSI.*.id",
+   "outcome": "unaccounted",
+   "count": 10,
+   "example": "cr26#/KSI/CED/id"
+  },
+  {
+   "path": "cr26.KSI.*.indicators.*.controls[]",
+   "outcome": "transformed",
+   "count": 558,
+   "example": "cr26#/KSI/CED/indicators/KSI-CED-RAT/controls/0",
+   "to": [
+    {
+     "pointer": "/id",
+     "count": 558,
+     "rule": "Mapping id from its owner's id and the control id"
+    },
+    {
+     "pointer": "/objects/[]/id",
+     "count": 558,
+     "rule": "Mapping id from its owner's id and the control id"
+    },
+    {
+     "pointer": "/target-ref",
+     "count": 558,
+     "rule": "SP 800-53 Requirement URI from the control id"
+    }
+   ]
+  },
+  {
+   "path": "cr26.KSI.*.indicators.*.name",
+   "outcome": "copied",
+   "count": 46,
+   "example": "cr26#/KSI/CED/indicators/KSI-CED-RAT/name",
+   "to": [
+    {
+     "pointer": "/statements/[]/prose/en",
+     "count": 5,
+     "rule": "base prose of an indicator that states its text by class only, from its name"
+    },
+    {
+     "pointer": "/title/en",
+     "count": 46
+    }
+   ]
+  },
+  {
+   "path": "cr26.KSI.*.indicators.*.statement",
+   "outcome": "copied",
+   "count": 41,
+   "example": "cr26#/KSI/CED/indicators/KSI-CED-RAT/statement",
+   "to": [
+    {
+     "pointer": "/statements/[]/prose/en",
+     "count": 41
+    }
+   ]
+  },
+  {
+   "path": "cr26.KSI.*.indicators.*.terms[]",
+   "outcome": "transformed",
+   "count": 85,
+   "example": "cr26#/KSI/CED/indicators/KSI-CED-RAT/terms/0",
+   "to": [
+    {
+     "pointer": "/relations/[]/ref",
+     "count": 85,
+     "rule": "term URI from the term's name, by the glossary's headwords and alternatives"
+    }
+   ]
+  },
+  {
+   "path": "cr26.KSI.*.indicators.*.updated[].comment",
+   "outcome": "intentionally-dropped",
+   "count": 87,
+   "example": "cr26#/KSI/CED/indicators/KSI-CED-RAT/updated/0/comment",
+   "reasons": [
+    {
+     "reason": "update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read \"history -> L0\" until 2026-11-14)",
+     "count": 87
+    }
+   ]
+  },
+  {
+   "path": "cr26.KSI.*.indicators.*.updated[].date",
+   "outcome": "intentionally-dropped",
+   "count": 87,
+   "example": "cr26#/KSI/CED/indicators/KSI-CED-RAT/updated/0/date",
+   "reasons": [
+    {
+     "reason": "update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read \"history -> L0\" until 2026-11-14)",
+     "count": 87
+    }
+   ]
+  },
+  {
+   "path": "cr26.KSI.*.indicators.*.updated[].issue",
+   "outcome": "intentionally-dropped",
+   "count": 1,
+   "example": "cr26#/KSI/SCR/indicators/KSI-SCR-MIT/updated/0/issue",
+   "reasons": [
+    {
+     "reason": "update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read \"history -> L0\" until 2026-11-14)",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.KSI.*.indicators.*.varies_by_class.*.statement",
+   "outcome": "copied",
+   "count": 10,
+   "example": "cr26#/KSI/CNA/indicators/KSI-CNA-EIS/varies_by_class/b/statement",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/b/statement",
+     "count": 5
+    },
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/c/statement",
+     "count": 5
+    }
+   ]
+  },
+  {
+   "path": "cr26.KSI.*.name",
+   "outcome": "copied",
+   "count": 10,
+   "example": "cr26#/KSI/CED/name",
+   "to": [
+    {
+     "pointer": "/title/en",
+     "count": 10
+    }
+   ]
+  },
+  {
+   "path": "cr26.KSI.*.short_name",
+   "outcome": "copied",
+   "count": 10,
+   "example": "cr26#/KSI/CED/short_name",
+   "to": [
+    {
+     "pointer": "/label",
+     "count": 10
+    }
+   ]
+  },
+  {
+   "path": "cr26.KSI.*.status",
+   "outcome": "unaccounted",
+   "count": 10,
+   "example": "cr26#/KSI/CED/status"
+  },
+  {
+   "path": "cr26.KSI.*.web_name",
+   "outcome": "copied",
+   "count": 10,
+   "example": "cr26#/KSI/CED/web_name",
+   "to": [
+    {
+     "pointer": "/annotations/web_name",
+     "count": 10
+    }
+   ]
+  },
+  {
+   "path": "cr26.info.default_artifacts.FRR[]",
+   "outcome": "copied",
+   "count": 5,
+   "example": "cr26#/info/default_artifacts/FRR/0",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1assessment-criteria@1/default-artifacts/FRR/[]",
+     "count": 5
+    }
+   ]
+  },
+  {
+   "path": "cr26.info.default_artifacts.KSI[]",
+   "outcome": "copied",
+   "count": 5,
+   "example": "cr26#/info/default_artifacts/KSI/0",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1assessment-criteria@1/default-artifacts/KSI/[]",
+     "count": 5
+    }
+   ]
+  },
+  {
+   "path": "cr26.info.description",
+   "outcome": "copied",
+   "count": 1,
+   "example": "cr26#/info/description",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/description/en",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.info.last_updated",
+   "outcome": "copied",
+   "count": 1,
+   "example": "cr26#/info/last_updated",
+   "to": [
+    {
+     "pointer": "/provenance/date",
+     "count": 652
+    },
+    {
+     "pointer": "/provenance/last_updated",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.info.title",
+   "outcome": "copied",
+   "count": 1,
+   "example": "cr26#/info/title",
+   "to": [
+    {
+     "pointer": "/provenance/source",
+     "count": 1
+    },
+    {
+     "pointer": "/title/en",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "cr26.info.version",
+   "outcome": "copied",
+   "count": 1,
+   "example": "cr26#/info/version",
+   "to": [
+    {
+     "pointer": "/objects/[]/version",
+     "count": 1040
+    },
+    {
+     "pointer": "/provenance/source-version",
+     "count": 1
+    },
+    {
+     "pointer": "/version",
+     "count": 1040
+    }
+   ]
+  }
+ ]
+}
