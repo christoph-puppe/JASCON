@@ -4486,3 +4486,133 @@ and a link in a text resolves inside the bundle. *Cost:* one rule of
 mine doubled the work, and the author had to stop it to see where it
 stood. *Kept:* nothing was hidden to make a number round; each zero in
 the table above was counted from the files.
+
+## After phase E — six findings about the kernel decided and built; seven work items (2026-11-14)
+
+Phase E had ended with thirteen items filed and none started: six
+findings about what the kernel and the standard facets have no place for
+(backlog #80 to #85), each with numbers and a proposal, and seven work
+items (#86 to #92). This entry is the record of what became of them on
+the same day.
+
+### What the author asked and decided
+
+"zeig mir #80 bis #85 mit Vorschlag und pro-con / und 86 bis 92 kannst Du
+alleine machen, oder?" Each of the six was put with its numbers, the
+proposal of the backlog, pro, con and a recommendation of mine. The
+answers, in the author's words:
+
+- "alle wie empfohlen, bis auf 81: Versionierung ist wichtig und gehört
+  in den Kernel, die Validatoren müssen dann angepasst werden"
+- "91: ja" (`author` is a role from which a converter reads the
+  document's author)
+- to the shape of #81, put with the sentence of D26 it reverses: "81: ja,
+  so wie vorgeschlagen!"
+
+My recommendation for #81 had been a facet. The author's decision is the
+better reading of the kernel's own text: handbook 3.3 said that a change
+is a new addressable version, and the converters had written the
+catalogue's release into `version` on every object and the source's own
+revision into a facet. The reference already computed on `version` (one
+id, one version, two digests is an error when two bundles are composed).
+
+### The four work items that hung on no decision
+
+- **#90.** The workflow fetches NIST's catalogue schema at a pinned
+  digest, runs `export_oscal.py` after the conversions and fails when a
+  committed export differs. Until then nothing ran the export.
+- **#86.** DRAFT-1, a report beside AUTHOR-1 to 4 and REVIEW-1: an active
+  Set that lists draft members, one line per Set. In the reference, the
+  twin and the app; four vectors.
+- **#87.** The reader (1.17.0) and the app's Browse page (0.9.18) leave
+  an object whose lifecycle is `withdrawn` out of their lists until a
+  switch shows it. The backlog had named the app's hub, which lists no
+  objects.
+- **#92.** The reader's closure check runs on a loaded bundle too, with
+  the typed checks of `closure_errors`, its lines in the reference's
+  order. The app's part was measured and not changed: NIST's schema of
+  the catalogue model types no number, so a catalogue that is OSCAL
+  holds none and preset and converter cannot differ in one.
+
+### The kernel round: what is built
+
+| Decision | Built |
+|---|---|
+| #80 | `provenance.sources[]` of a manifest is typed; six converters write it; a document's uuid stands there |
+| #81 | `version` is the object's own; `history[]` on every object; HISTORY-1 and DATE-6 in the reference, the twin and the app |
+| #82 | the standard facet `references@1`; four converters write it. The rule for `#id` is not built (below) |
+| #83 | `assessment-criteria` 1.1.0 with typed objectives and addresses; a `statement-id` inside a facet payload is held (D10) |
+| #84 | `label` on a statement; SP 800-53 writes 1,122 |
+| #85 | nothing: no kernel member |
+
+Specification: D27, with D26's sentence on a log inside an object
+withdrawn. 44 vectors, 753 in all. Six converters reworked once each;
+every ledger reads 0 dropped and 0 unaccounted.
+
+### What I settled while building, and the author has not seen
+
+Each of these is in `entscheidungen-phase-e.md`, "Was beim Bauen anders
+kam als vorgelegt".
+
+1. **The rule for `#id` is not built.** It was to be an error or a line
+   of the report, by a count. The count answered another question: in
+   SP 800-53, 422 of 540 references of that form name a control, a
+   statement or a parameter, not a resource. The decision is put back to
+   the author with the numbers (backlog #82).
+2. **The standard library holds versions.** Nobody asked for it. A
+   descriptor could not change without failing every bundle that pins
+   it, so 1.0.0 stays beside 1.1.0, a pin is held to the version it
+   states and an unpinned payload to the latest.
+3. **A term of CR26 has no kernel history.** A term is an entry of a
+   facet, not an object; its history stays where it was.
+4. **The order of CR26's entries is changed.** The source lists the
+   newest first; HISTORY-1 wants the oldest first.
+5. **Small shapes:** a history comment is a text with a language key, a
+   `ref` a URI; two entries may carry one date; a month stands before
+   its days; "the control as a whole" is `requirement-ref` alone; a
+   reference into nothing is `href`.
+6. **The compat schema is 1.2.0**: without `back-matter` and `history`,
+   with typed items for `props` and `group-parts`.
+7. **#89 is not built.**
+
+### What the round found
+
+- **The PowerShell twin did not enforce a facet schema with `$defs`.**
+  Its schema reader looked a `$ref` up in the kernel schema only, found
+  nothing and counted the reference as satisfied. Three of the new facet
+  vectors found it. No facet schema of the repository had definitions of
+  its own until `assessment-criteria` 1.1.0, so no bundle was wrongly
+  passed; a publisher's schema with `$defs` would have been.
+- **One facet id and version, two schemas, twice.** The first run of
+  the check of #88 found that the IFA bundle pinned a narrative schema of
+  its own under the id and version of the SP 800-53 bundle's (corrected:
+  it pins that bundle's files), and that the example folder and the
+  Grundschutz++ converter pin two different schemas as
+  `gspp-taxonomy` 1.0.0 (filed, #94).
+- **Handbook 3.6 states a rule no validator has**: that new references
+  to a withdrawn object fail validation (filed, #93).
+- **The committed SP 800-53 bundle addressed "the control as a whole" as
+  the statement `smt`** on 217 objectives of controls that have several
+  statements and no statement of that id. No rule read those addresses.
+
+### Errors of mine in this round
+
+- D26 stood in the middle of Part III of the specification, between two
+  worked examples, since I wrote it. It stands in Part II now.
+- I regenerated the OSCAL exports before the export script read the
+  manifest's new `sources`: for some minutes three exports carried the
+  bundle's folder name as their title. Found by the SP 800-53 agent's
+  report, corrected before anything was pushed.
+- I ran the CR26 converter without `--out`, which writes the bundle into
+  the checkout, where it is neither ignored nor to be committed. Removed.
+- My first proposal for #82 assumed that a `#id` which names no resource
+  dangles. I had not counted what `#id` names.
+
+### What it cost
+
+Two agents on Opus, each on one isolated task with a brief of under a
+hundred lines, a budget and a report of at most fifty: the SP 800-53
+converter (250,000 tokens, eleven minutes) and the app's presets. The
+kernel schema, the three validators, the vectors, the library, five
+converters, the reader and the texts were done in the main session, one
+after the other.

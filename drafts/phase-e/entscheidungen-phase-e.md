@@ -413,3 +413,57 @@ Validatoren), #87 (Schalter für Zurückgezogene, App 0.9.18 und Reader
 1.17.0), #92 (Reader 1.17.0; der App-Teil gemessen und nicht geändert).
 Kernel, Standard-Facets und Konverter (#80 bis #84, mit #88, #89, #91)
 warten auf die Antwort zu #81, damit jedes Bundle nur einmal neu entsteht.
+
+### #81: die Antwort des Autors (2026-11-14)
+
+„81: ja, so wie vorgeschlagen!“
+
+Damit gilt: `version` ist die eigene Version des Objekts, wo die Quelle
+eine nennt; `history[]` ist ein optionales Kernel-Feld an jedem Objekt;
+die Validatoren halten Form und Reihenfolge. Der Satz in D26 fällt.
+
+### Was beim Bauen anders kam als vorgelegt (alle am 2026-11-14)
+
+Jeder Punkt ist eine Festlegung von mir, die der Autor so nicht gesehen
+hat, oder ein Befund, der eine vorgelegte Annahme widerlegt.
+
+1. **#82, die Regel für `#id`: nicht gebaut.** Vorgelegt war: erst
+   zählen, bei 0 Verweisen ins Leere ein Fehler, sonst eine
+   Berichtszeile. Die Zählung ergab etwas Drittes: `#id` meint in
+   SP 800-53 in 422 von 540 Fällen keine Ressource, sondern ein Control,
+   ein Statement oder einen Parameter. Eine Zeile „422 nennen keine
+   Ressource“ wäre wahr und würde keinen Defekt benennen. Das Facet
+   `references@1` ist gebaut, die Regel wartet auf eine Entscheidung
+   (Backlog #82, mit Vorschlag).
+2. **#81, Begriffe von CR26.** Ein Begriff ist dort kein Objekt, sondern
+   ein Eintrag von terminology@1 auf dem Wurzel-Set. `history` gilt je
+   Objekt. Die Historie der Begriffe bleibt im Facet des Konverters; die
+   von 291 Regeln und Indikatoren (390 Einträge) steht im Kernel.
+3. **#81, Reihenfolge.** CR26 führt den neuesten Eintrag zuerst (alle 94
+   Objekte mit mehreren Einträgen). Der Konverter ordnet nach Datum,
+   älteste zuerst, wie HISTORY-1 es verlangt.
+4. **#81, Einzelheiten der Form.** `comment` ist ein Text mit
+   Sprachschlüssel wie jede Prosa des Kernels; `ref` ist eine URI; zwei
+   Einträge dürfen dasselbe Datum tragen; ein Monat steht vor seinen
+   Tagen. Ein Datum, das weder Tag noch Monat ist, heißt DATE-6.
+5. **#81, ISM.** Die Monatsregel liest `Mon-YY` (so drucken es alle
+   1.101 Controls). Eine andere Form beendet den Lauf, statt einen Monat
+   zu erfinden.
+6. **#83, Standardbibliothek mit Versionen.** Nicht vorgelegt, aber
+   nötig: Ein Deskriptor der Bibliothek ließ sich nicht ändern, ohne
+   jedes Bundle durchfallen zu lassen, das ihn pinnt. Jetzt hält die
+   Bibliothek Versionen (1.0.0 bleibt neben 1.1.0), ein Pin wird an der
+   Version gemessen, die er nennt, ein ungepinnter Payload an der
+   neuesten.
+7. **#83, Adressformen.** „Das Control als Ganzes“ ist `requirement-ref`
+   allein; der eine Verweis ins Leere steht als `href`, wie die Quelle
+   ihn schreibt.
+8. **#80, IFA.** IFA hat kein Set je Dokument. Seine Ressourcen und der
+   Rest der Dokument-Metadaten bleiben in den sieben Einträgen von
+   `provenance.sources`.
+9. **compat-Schema 1.2.0.** `back-matter` und `history` sind keine
+   Mitglieder mehr; die Einträge von `props` und `group-parts` sind
+   typisiert (#91, 4).
+10. **#89 nicht gebaut.** Die Prüfung der Bibliothek, dass die Pfadkarte
+    den Ort nennt, den der Ledger fand, hätte drei Konverter umgebaut,
+    die eine eigene haben, und drei bekommen, die keine haben. Offen.

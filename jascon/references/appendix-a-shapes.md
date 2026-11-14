@@ -17,7 +17,8 @@ prose here is explanatory, the conformance corpus is definitive.
 | Field | | Type | Meaning & evidence |
 |---|---|---|---|
 | `id` | ● | URI string | Globally unique, authority-minted, never resolved by tools (string comparison only, D2). Evidence: the twin-catalog collision — 11 shared id strings across two BSI publications, only 1 prose-identical. |
-| `version` | ● | string | Object-level version; format is the authority's (dates, semver, timestamps all observed). In a converted bundle it is the catalogue's release, on every object. It does not absorb a source's own per-object revision or change history: the ISM's `revision`/`updated` (×2,202) and CR26's `updated[]` (475 entries) are carried in facets, as the source writes them (corrected 2026-11-14; backlog #81). |
+| `version` | ● | string | The object's own version; format is the authority's (dates, semver, timestamps, counters all observed). Where a source states a version for the single object, that is it (the ISM's `revision`, ×1,101); where it states none, the object carries the release it was published in (decided 2026-11-14, D27; until then a converted bundle carried the release on every object). |
+| `history` | ○ | [{date ●, comment, ref}] | *(2026-11-14, D27; 2.0.0 content, KERNEL-1.)* The publisher's record of the object's changes, one entry per change, **oldest first** (HISTORY-1). `date` is a day `YYYY-MM-DD` or a month `YYYY-MM` (DATE-6); `comment` is a text; `ref` is a URI. Part of the semantic digest. A validator holds shape and order; it cannot know whether an entry is true. Evidence: ISM `updated` ×1,101 (a month each), CR26 `updated[]` on 291 rules and indicators, 390 entries. |
 | `label` | ○ | string | Human display handle. Evidence: ISM `label` ×49 + 1,101 id-derived; BSI group labels ×162; CR26 rule ids as labels. |
 | `aliases` | ○ | [{scheme, value}] | Other names, with provenance. Absorbs `alt-identifier` (BSI ×1,219 incl. params), FRD `alts` (×188, in-payload). |
 | `lifecycle` | ● | code (A → C.2) | draft · active · deprecated · withdrawn. |
@@ -45,6 +46,7 @@ registry-rot corpse; ISM's own OCR→ISM renumbering history.
 | Field | | Type | Meaning & evidence |
 |---|---|---|---|
 | `id` | ● | string | Unique within the Requirement; stable and citable (tailoring ops, findings, mapping scopes, statement-refs all address it). Converters mint `smt` for the own-clause, child-control ids for flattened clauses. |
+| `label` | ○ | string | *(2026-11-14, D27; 2.0.0 content, KERNEL-1.)* What is printed beside the statement (`a.`, `1.`, `(a)`). No rule computes on it; it is there so that a tool can show what the publication prints without a rule its converter knew. Evidence: SP 800-53 ×1,122. |
 | `modality` | ● | code (C.1 lattice) | unspecified · may · should · must · should-not · must-not · may-only. Evidence: BSI `modal_verb` ×1,006 (should 626 / may 225 / must 155); CR26 `force` 246 layered; ISM structurally modal-free → honest `unspecified` ×1,149. |
 | `obligated-parties` | ● | [code/ref] | Who the clause binds. Evidence: CR26 `affects[]` (Providers 159 / Agencies 24 / Assessors 23 / FedRAMP 16 / Advisors 3); BSI/ISM: documented single-party defaults. |
 | `parameters` | ○ | [Parameter] | Declared insertion points; prose references them as `{param:name}` — an unbound token is a validation error (`prose-params-resolve`). |
@@ -288,12 +290,17 @@ it.
 content was written against; absent means 1.0.0; **required** once the
 bundle carries content a 1.0.0 tool cannot type — a Risk, a Finding with
 `risk-refs`, a Check, an Assessment with `check-results` or
-`tailoring-ref`, a Finding with `check-ref` — KERNEL-1; a tool that does not implement the pinned kernel
+`tailoring-ref`, a Finding with `check-ref`, and since 2026-11-14 an
+object with `history` or a statement with `label` — KERNEL-1; a tool that does not implement the pinned kernel
 stops and names both versions — KERNEL-2) · `objects[]`
 {id, version, **package-digest**, **semantic-digest**, path} ● ·
 `facet-schemas[]` {id, **exact-version**, digest, path} ● (exact pins,
 never ranges — D3) · `scales[]` ○ {id, **exact-version**, digest, path}
-(2.0.0 — pinned scale definitions, below) · `renderings[]` ○ · provenance ○ ·
+(2.0.0 — pinned scale definitions, below) · `renderings[]` ○ · provenance ○
+(open; *2026-11-14, D27:* `sources[]` ○ is typed, one entry per source
+document: `title`, `version`, `uuid`, `author-ref`, `date` (a day),
+`format`, `format-version`, each optional, and an entry may hold more.
+Evidence: six converters' manifests, five shapes until that day) ·
 `pack` ○ (2.0.0, CP-ADVICE-1 — the pack header, below). The manifest is
 the sealed resolver: every reference lands here or validation fails
 with a rationale.

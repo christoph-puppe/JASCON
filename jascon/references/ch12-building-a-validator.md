@@ -321,6 +321,42 @@ Assessment's `time` (DATE-4), an Attestation's `timestamp` (DATE-5);
 DATE-1 covers a Deviation's `decided` too. `kernel-vectors.json` now
 has 18 cases for the pin and 36 `shape-vectors`.
 
+*(2026-11-14, specification D27.)* Two more members need the pin: an
+object's `history` and a statement's `label`. A manifest's
+`provenance.sources` needs none: the 1.0.0 schema took any object
+there. `history` brings one shape rule and one rule of your own. The
+date of an entry is a day or a month, `YYYY-MM-DD` or `YYYY-MM`; the
+schema refuses anything else and you name **DATE-6**. **HISTORY-1**: the
+entries stand oldest first. Compare the dates as the strings they are,
+so that a month stands before its days and two entries may carry one
+date, and report the first entry that stands after a later one. That is
+all a validator can hold about a history: whether an entry is true it
+cannot know. `kernel-vectors.json` has 25 cases for the pin, 64
+`shape-vectors` and 8 `history-vectors`.
+
+*(The same day, D10 as amended.)* **A `statement-id` inside a facet
+payload.** You already hold the keys of `by-statement`. Walk every
+facet payload of a Requirement as well, skip a `private:` facet, and
+for every object in it that has a string member `statement-id`: if no
+`requirement-ref` stands beside it, the id must name a statement of the
+host; if one does and the bundle holds that Requirement, the id must
+name a statement of it, and a `requirement-ref` that resolves to
+anything but a Requirement is an error; if the bundle does not hold it,
+say nothing, it is a landmark. This needs no knowledge of the facet.
+`reference-vectors.json` has nine cases for it.
+
+**The standard library has versions.** A facet of the library may have
+more than one descriptor (`assessment-criteria` 1.0.0 and 1.1.0). Load
+them all. Hold an unpinned payload to the latest version. Hold a pin of
+a library facet to the descriptor of the version it states, verbatim,
+and then hold the bundle's payloads to that pin: a bundle that pinned
+1.0.0 yesterday must pass tomorrow. A pin that states a version the
+library does not hold fails. And resolve a `$ref` of a facet schema in
+that schema's own `$defs`: the 1.1.0 descriptor defines an objective
+that holds objectives. The PowerShell twin looked such a reference up
+in the kernel schema, found nothing and let the payload pass; three of
+the nine new cases of `facet-vectors.json` found it.
+
 Two reports come with those fields, and neither is a verdict.
 `author-vectors.json` holds 18 cases for the first: one line per object
 and rule where an author or a date is missing (AUTHOR-1 to AUTHOR-4),

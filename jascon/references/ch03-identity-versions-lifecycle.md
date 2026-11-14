@@ -127,16 +127,47 @@ instances** — with the dates encoded as strings like `"Jun-26"`: no day,
 no timezone, no machine meaning, hand-maintained beside the very
 `version` metadata that should own the job. The American corpus does the
 richer version of the same thing, an `updated[]{date, comment}` array on
-every object. In JASCON, both patterns collapse into the
-identity layer: each change is a new addressable version; the bundle's
-content manifest carries the release-notes narrative; `replaces` records
-(§3.5) carry structural lineage. Your authoring pipeline generates all of
-it — nobody hand-edits a month-string ever again.
+every object.
+
+The kernel has two members for this, and they do different jobs
+*(the author's decision of 2026-11-14, specification D27; until then
+this section said that the manifest carries the history, and a
+converter had nowhere to put what its source said)*:
+
+- **`version` is the object's own version.** If you count revisions per
+  requirement, as the ISM does, that count is the `version` of the
+  requirement: an object that did not change between two releases keeps
+  its version, and its digest with it. If you version only the
+  publication, every object carries the release. A Set that stands for
+  the publication carries the release either way.
+- **`history` is your record of the object's changes**: one entry per
+  change, oldest first, each with a `date`, and where you have them a
+  `comment` and a `ref` (an issue, a change request). The date is a day,
+  `2026-03-12`, or a month, `2025-06`, if a month is all you state. It is
+  part of the object, so it is part of the semantic digest: what you say
+  about a change is signed with the rest.
+
+```json
+"version": "4",
+"history": [ {"date": "2025-06"},
+             {"date": "2026-03-12", "comment": {"en": "Reworded."},
+              "ref": "https://github.com/example/rules/issues/41"} ]
+```
+
+A validator checks the shape and the order (HISTORY-1) and nothing more:
+it cannot know whether an entry is true. What it does check across
+releases is the promise of the identity layer: when two bundles are put
+together, one id with one version and two different semantic digests is
+an error. `replaces` records (§3.5) carry structural lineage, as before.
+Measured on the converted corpora: 1,101 ISM Requirements carry their
+revision as `version` and the month of their last change as one history
+entry; 291 rules and indicators of CR26 carry 390 entries, which the
+source lists newest first and the converter puts in the order of their
+dates.
 
 > **Don't** encode change history as object annotations. Measured cost:
 > 2,202 prop instances in one national catalog, with dates a machine
-> cannot even parse — duplicating information the identity layer holds
-> natively.
+> cannot even parse — where the kernel has `version` and `history`.
 
 Publication at the Authority tier also means shipping **two digests per
 object** in your content manifest: the `package-digest` over the

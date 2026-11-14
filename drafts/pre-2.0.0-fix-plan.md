@@ -664,3 +664,33 @@ with their proposals.
 
 Open after this: #62, #71, #72, #79, #80 to #92. #80 to #85 need the
 author. The clean-up the author named (E16) is a task of its own.
+
+## 15. After phase E as built: backlog #80 to #94 (2026-11-14)
+
+The author decided the six findings about the kernel and the standard
+facets and released the seven work items. The record is the register,
+"After phase E"; the decisions stand in
+`drafts/phase-e/entscheidungen-phase-e.md`.
+
+| # | What | State |
+|---|---|---|
+| #80 | `provenance.sources[]` typed in the kernel schema; six converters write it | built |
+| #81 | `version` is the object's own; `history[]` on every object, HISTORY-1, DATE-6 | built |
+| #82 | `references@1`, a ninth standard facet | built; the rule for `#id` is open and needs the author |
+| #83 | `assessment-criteria` 1.1.0, addresses, the D10 rule; the standard library holds versions | built |
+| #84 | `label` on a statement | built; no `aliases` on a parameter |
+| #85 | what a Set stands for | decided: no kernel member |
+| #86 | DRAFT-1, a report in three validators | built |
+| #87 | withdrawn objects left out until asked for, reader and app | built |
+| #88 | one id and version is one schema: a record and its check in the workflow | built |
+| #89 | the library's check of a path map against the ledger's places | not built |
+| #90 | the workflow runs the OSCAL export | built |
+| #91 | converter residue | three of six built |
+| #92 | reader and app residue | built; the app's part measured and not changed |
+| #93 | the handbook on references to a withdrawn object | needs the author |
+| #94 | one facet id and version, two schemas (example folder, Grundschutz++ converter) | needs the author |
+
+Measured at the end: 753 vectors in 18 families in the reference, the
+twin and the app; six ledgers, 214,365 values, 71,212 copied, 51,605 made
+by a rule, 91,548 no content, 0 dropped, 0 unaccounted; four OSCAL exports
+round-trip 4,465 objects.

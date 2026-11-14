@@ -146,6 +146,52 @@ example bundle carries a language map there (`{"en": "…"}`).
 the corpus default-artifacts block. **Status:** high; exercised
 across all three corpora.
 
+**Version 1.1.0** *(2026-11-14, the author's decision on backlog #83;
+specification D27)* types `objectives[]` and adds `methods[]`. An
+objective: `{id?, label?, prose?, assessment-for[]?, methods[]?,
+children[]?}`, the objectives under it in `children`. `assessment-for`
+says what the objective assesses, as a list of **addresses**:
+`{"statement-id": "smt.a"}` a statement of the host Requirement;
+`{"requirement-ref": …, "statement-id": …}` a statement of another
+Requirement; `{"requirement-ref": …}` alone a Requirement as a whole;
+`{"href": …}` a reference of the source that names nothing, carried as
+it stands. A `statement-id` in an address is held by every validator as
+a `by-statement` key is (D10). `methods[]`: `{method ●, label?,
+objects[]?}`, the assessment methods a source states (SP 800-53A:
+EXAMINE, INTERVIEW, TEST, each with its objects); `method`, singular,
+is unchanged. *Measured on SP 800-53A:* 3,707 addresses on 1,014
+Requirements: 3,484 a statement of the host, 5 a statement of another
+control, 217 the control as a whole, 1 nothing the catalogue defines.
+Until that day the converter kept all of this in a facet of its own,
+where no rule read the addresses.
+**1.0.0 stays in the library.** A bundle that pins it is held to it; an
+unpinned payload is held to 1.1.0. The example folder of this handbook
+pins 1.0.0.
+
+## D.6a `references@1` *(2026-11-14 — backlog #82)*
+
+**Purpose:** the documents a catalogue's texts and links refer to, on
+the Set that stands for the catalogue. **Declares:** `[]`: a resource
+changes no selection, tailoring, assessment or rendering rule.
+**Payload:** `{resources[] ●}`, each entry as its source writes it, with
+one member the facet names: `id` ●. A text of the bundle refers to a
+resource as `#id`.
+```json
+{"resources": [ {"id": "36766a6f-e174-4292-a03e-fcb3b4b09201",
+   "title": "Strategies to mitigate cybersecurity incidents",
+   "rlinks": [{"href": "https://…", "media-type": "text/html"}]} ]}
+```
+**Absorbs:** the back-matter of an OSCAL catalogue, which three
+converters had carried in three places (a facet of their own, the compat
+facet, the manifest). *Measured:* ISM 246 resources, named by 486
+references; SP 800-53 178 on the root Set and one on each of its four
+baseline Sets; CSF 3; Grundschutz++ 1. A resource nothing refers to is
+not carried (the author's decision of 2026-11-14, a rule the ledger
+checks). **Not decided:** what a validator does with `#id`. In SP 800-53
+the same form names a control, a statement or a parameter in 422 of 540
+places, so "names no resource" is no defect there (specification D27,
+backlog #82).
+
 ## D.6b `collector@1` *(2.0.0 — CP-CHECK-1)*
 
 **For:** the code that observes what a Check declares. It sits on the
@@ -239,6 +285,25 @@ Requirements, `flows` on one family Set, `class-variants` on 28 rules
 and 5 indicators. Of the CTL overlay, the ODP assignments left the facet
 at gate 3 (they are operations of a Tailoring); its guidance is still
 here. The exits are filed as backlog #80 to #85.
+
+**After the author's decisions on those six (2026-11-14, later the same
+day; specification D27).** Four kinds of value left the facet: an
+object's change record (the kernel's `version` and `history`), the print
+label of a statement (the kernel's `label`), the resources texts refer
+to (`references@1`), and the uuid of a source document (the manifest's
+`provenance.sources`). Its schema is version 1.2.0: `back-matter` and
+`history` are no members any more, and the items of `props` and
+`group-parts` are typed and closed. Objects that carry it now, read
+from the committed bundles: ISM 540 (`group-parts` on 539 Sets, the
+document's `metadata` on the root); Grundschutz++ 209 (`param-extras` on
+208 Requirements, `metadata` on the root); CSF 1; SP 800-53 5 (`metadata`
+on the root and the four baseline Sets, `imports` and `merge` on the
+four); IFA 13 (`uuid` of the source element an object is made from).
+CR26, on a bundle converted here: 35 (`class-variants` on 33, `flows` on
+one family Set, `ctl` on the overlay Set). What is left is what the
+author decided stays: a document's metadata beyond title, version, uuid,
+author, day and format; a parameter's second identifier; a profile's
+import and merge directives; and what CR26 writes that nothing else has.
 
 Every row has a named exit: a spec decision, a facet graduation, or a
 gate-3 dependency. A row without an exit would be a prop with a

@@ -14,14 +14,14 @@ contact with real catalogs before it may stay.**
 
 This repository is a working design study, not a slide deck. It contains a
 draft specification with a public decision register, an **executable kernel
-schema** with a **157-vector conformance corpus** (709 in 18 families in the 2.0.0 candidate) and *two* reference
+schema** with a **157-vector conformance corpus** (753 in 18 families in the 2.0.0 candidate) and *two* reference
 validators — Python, and a **zero-dependency PowerShell 5.1 twin that runs
 on a stock Windows box** (the weekend-validator claim, measured,
 crypto engines included) —
 **eleven framework and lifecycle corpora converted at 100 % declared path
 coverage** (251,591 source leaf values, every source path with a computed
 destination; where every *value* went is traced by a ledger on six of
-them: of 214,365 source values, 126,105 are carried and 88,260 are no
+them: of 214,365 source values, 122,817 are carried and 91,548 are no
 content by a rule the ledger checks, none is dropped and none
 unaccounted — including NIST
 SP 800-53 Rev 5, its 800-53B baselines, and CSF 2.0), a **bidirectional
@@ -49,7 +49,7 @@ semantic digest of each of its three subjects and the digest of the
 manifest's bytes, and says what the reference validator says: FULL MATCH.
 The Attestation is unsigned (the converter models it from the
 authorization date of the SSP), and the page says that too; it takes no
-key and has no word for a signature that holds. (Reader 1.17.0,
+key and has no word for a signature that holds. (Reader 1.18.0,
 2026-11-14, loaded from `python -m http.server`, which lists the folder.
 The bundle's manifest lists 16 objects. The stage names Risk in its
 heading and lists none; the two Risk objects are in the object browser —
@@ -166,7 +166,7 @@ backlog #71.)*
 > tailoring or an assessment, and the vendor's manifest stays in the set
 > as the import record. No new type.
 >
-> - **Measured:** 74 advice vectors (537 in all on 2026-11-12, 709 in 18 families since 2026-11-14) pass in the
+> - **Measured:** 74 advice vectors (537 in all on 2026-11-12, 753 in 18 families since 2026-11-14) pass in the
 >   Python reference; 28 deliberate breaks of the reference each turn a
 >   vector red. A worked pack, signed with the public fixture key, and
 >   the example folder after importing it validate. Run over the shipped
@@ -277,8 +277,8 @@ backlog #71.)*
 >   leave the `identified` state; and the coverage reports count source
 >   *paths*, not values that arrive. Since 2026-11-14 a ledger follows
 >   every source value on six corpora (IFA, ISM, Grundschutz++, CSF,
->   SP 800-53, CR26): of 214,365 values, 75,603 are copied, 50,502 made
->   by a named rule that is applied again and compared, and 88,260 are
+>   SP 800-53, CR26): of 214,365 values, 71,212 are copied, 51,605 made
+>   by a named rule that is applied again and compared, and 91,548 are
 >   no content by a rule the ledger checks (a name that only selects a
 >   field, a namespace, an id that can be rebuilt exactly, a back-matter
 >   resource nothing refers to). None is dropped and none unaccounted,
@@ -290,6 +290,20 @@ backlog #71.)*
 >   in the repository have no ledger (backlog #41, closed for the six).
 >   The workflow reproduces the six conversions from their pinned
 >   sources on every change.
+> - **Decided on 2026-11-14, after those ledgers (specification D27):**
+>   six findings about what the kernel had no place for. Every object
+>   may carry `history`, its publisher's record of its changes, and
+>   `version` is the object's own; a statement may carry the `label`
+>   printed beside it; a manifest names what it was made from
+>   (`provenance.sources`); the resources texts refer to stand in a
+>   ninth standard facet, `references@1`; assessment objectives say
+>   which statement they assess in `assessment-criteria` 1.1.0, and
+>   every validator holds those addresses. Measured: 1,101 ISM
+>   Requirements carry their revision as `version` and one history
+>   entry; 291 rules and indicators of CR26 carry 390; SP 800-53 has
+>   1,122 statement labels and 3,707 addresses, of which the bundle of
+>   the morning wrote 218 that named no statement. 44 vectors. Not
+>   decided: what `#id` in a text may name besides a resource.
 > - **Licences:** the repository is Apache-2.0; the converted corpora were
 >   checked against their publishers' terms and six bundles were removed
 >   ("What ships here", below).
@@ -489,7 +503,7 @@ The census corpora (gate 1 — the evidence base the architecture was derived fr
 
 | Corpus | Source | Emitted | Coverage |
 |---|---|---|---|
-| [AU.ISM](converted_examples/AU.ISM/ism-coverage-report.md) | ACSC ISM, OSCAL 1.1.2 catalog, 1,150 controls | 1,150 Requirements · 581 Sets (every group of the source is a Set since 2026-11-14; P10 fix pass recovered 239 taxonomy sets a slug collision had silently merged) | 36,161 / 36,161 leaf values |
+| [AU.ISM](converted_examples/AU.ISM/ism-coverage-report.md) | ACSC ISM, OSCAL 1.1.2 catalog, 1,150 controls | 1,150 Requirements (1,101 with the control's own revision as `version` and the month of its last change as `history`) · 581 Sets (every group of the source is a Set since 2026-11-14; P10 fix pass recovered 239 taxonomy sets a slug collision had silently merged) | 36,161 / 36,161 leaf values |
 | [DE.BSI](converted_examples/DE.BSI/bsi-coverage-report.md) | Grundschutz++ v2026-07-16, OSCAL 1.1.3 (MS-TLS dropped by decision — defects reported to BSI) | 999 Requirements, one for every control at every depth (since 2026-11-14; until then a nested control was a statement of its parent, and its links were lost) · 221 params with label/default · 288 Sets (159 groups, 126 groupings of a control with the controls nested in it, 2 baselines, the root) | 49,431 / 49,431 |
 | † [FedRAMP-CR26](converted_examples/FedRAMP-CR26/cr26-coverage-report.md) | CR26 bespoke JSON, v2026.11.02.01 (measured again on 2026-11-14; the census of July was of v2026.07.14.01: 292 Requirements · 373 Mappings · 4 Tailorings, 7,294 / 7,294) | 291 Requirements · 652 Mappings · 92 Sets · 5 Tailorings | 7,532 / 7,532 |
 
@@ -512,7 +526,7 @@ changes forced):
 
 | Corpus | Source | Emitted | Coverage |
 |---|---|---|---|
-| [US.SP800-53](converted_examples/US.SP800-53/sp800-53-coverage-report.md) | NIST SP 800-53 Rev 5.2.0 catalog + four 800-53B baseline profiles, OSCAL 1.2.2 | 1,196 Requirements (1,600 statement-scoped ODP params, SP 800-53A layer as facet with its 3,707 assessment-for links) · 25 Sets (20 families + 4 baselines + root); the 182 withdrawn controls are Requirements with lifecycle `withdrawn` since 2026-11-14, and the 180 that name a successor stand in its `replaces[]` | 115,680 / 115,680 |
+| [US.SP800-53](converted_examples/US.SP800-53/sp800-53-coverage-report.md) | NIST SP 800-53 Rev 5.2.0 catalog + four 800-53B baseline profiles, OSCAL 1.2.2 | 1,196 Requirements (1,600 statement-scoped ODP params; 1,122 statements with the label the catalogue prints beside them; the SP 800-53A objectives in the standard facet `assessment-criteria@1`, their 3,707 assessment-for links as addresses a validator holds) · 25 Sets (20 families + 4 baselines + root); the 182 withdrawn controls are Requirements with lifecycle `withdrawn` since 2026-11-14, and the 180 that name a successor stand in its `replaces[]` | 115,680 / 115,680 |
 | [US.CSF](converted_examples/US.CSF/csf-coverage-report.md) | NIST CSF 2.0, OSCAL 1.2.2 | 185 Requirements · 41 Sets (functions → categories → subcategories, 3-level nesting); the 91 withdrawn items (12 categories + 79 subcategories) are objects with lifecycle `withdrawn` since 2026-11-14, and the 87 that name a successor stand in its `replaces[]` | 4,726 / 4,726 |
 | [US.IFA-GoodRead](converted_examples/US.IFA-GoodRead/ifa-coverage-report.md) | OSCAL IFA GoodRead example set (SSP + AP + AR + POA&M) + leveraged/leveraging SSP pair + component-definition | 6 Components · 3 Implementations (D5 `inherited-from` with basis-ref) · 1 Assessment · 2 Findings (one approved risk-adjustment Deviation) · 2 Risks · 1 Attestation (the ATO) · 2 carried Requirements | 835 / 835 |
 

@@ -52,12 +52,15 @@ corpus contains two catalogs whose controls share ID strings, and under
 the old instance-scoped identity there was literally no safe way to
 combine them. Here the question cannot arise.
 
-**`version`** plus (in the shipping bundle) two digests per object replace
-an entire category of annotation: the Australians hand-maintain `revision`
-and `updated` props — 2,202 instances, with dates encoded as strings like
-"Jun-26" — and the Americans put an `updated[]` array on every object.
-Change history is an identity concern, so it lives at the identity layer,
-once.
+**`version`** plus (in the shipping bundle) two digests per object, and
+**`history`** beside it, replace an entire category of annotation: the
+Australians hand-maintain `revision` and `updated` props — 2,202
+instances, with dates encoded as strings like "Jun-26" — and the
+Americans put an `updated[]` array on every object. The revision is the
+object's `version`. What the publisher says about its changes is the
+object's `history`: one entry per change, a date a machine can read, a
+comment, a link (Chapter 3). Both are kernel members, once, and not
+props that every tool has to learn to find.
 
 **`label`** exists because all three authorities, independently, maintain
 human display identifiers beside their canonical ones — and two of them
@@ -81,6 +84,8 @@ compliance actually works.
 > **Don't** encode ordering, membership, or history as annotations.
 > Measured cost: `sort-id` ×1,150, `applicability` ×5,301, revision props
 > ×2,202 — every one of them a kernel mechanism, hand-imitated.
+> *(2026-11-14: for history the mechanism is `version` and `history`,
+> kernel members since that day; Chapter 3.)*
 
 That object is finished. No props. No facets. No document tree. The
 sharpest single finding of the census is that the *entire* Australian

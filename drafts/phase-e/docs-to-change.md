@@ -56,3 +56,21 @@ converters change with it.
 Left: handbook §3.6 says that new references to a withdrawn object fail
 validation; no validator has that rule (backlog #93, needs the author).
 The texts for #80 to #84 are written when those are built.
+
+## The kernel round (2026-11-14: backlog #80 to #84, #88, #91; specification D27)
+
+| Where | What | State |
+|---|---|---|
+| Specification | D27 new; D26 moved into Part II and its sentence on a log inside an object withdrawn; pointers in D9, D10, D12; the banner; IV.5b (753 vectors), IV.6 (one row), IV.9 | done |
+| Handbook | chapter 2 (version and history), 3.3 rewritten, 12 (HISTORY-1, DATE-6, the statement-id rule, library versions), 14.2 and 14.4, appendix A (`history`, a statement's `label`, `provenance.sources`), D.6 (1.1.0), D.6a (`references@1`), D.10 (compat 1.2.0), E.3, F | done |
+| README | 753 vectors; the ledger sums (71,212 copied, 51,605 by rule, 91,548 no content); a note on the round; the ISM and SP 800-53 rows; the reader's version and screenshot | done |
+| `jascon/SKILL.md` | counts; requirements 2, 3 and 13 | done |
+| App `readme.md`, `PROGRESS.md` | build 0.9.19 | done |
+| Website `facts.json` | measured after the commits of the round | with the last commit |
+| Register, backlog, plan, decisions, twin header | "After phase E"; #80 to #94; section 15; the author's answers and what was built otherwise | done |
+
+Left: handbook 3.6 on references to a withdrawn object (#93) and the
+example folder's `gspp-taxonomy` schema (#94), both for the author; the
+website's pages say nothing of `history`, labels or sources beyond the
+numbers they print (`model.html` says that `version` and the two digests
+carry the history, which is half of it now).

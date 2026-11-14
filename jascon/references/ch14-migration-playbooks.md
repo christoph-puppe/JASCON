@@ -166,10 +166,13 @@ Facet where those conventions now live; framework-own narrative
 becomes prose-only statements with `modality: "unspecified"` — 
 first-class at Core, losing nothing it had.
 
-**The identity block.** `label` props → kernel `label`;
-`alt-identifier` (×1,219 in the German corpus alone) → `aliases[]`
-with schemes; `sort-id` (×1,150 Australian) → `sequence`; groups →
-nested Sets. This whole row is Level 1 and mechanical — Chapter 5's
+**The identity block.** `label` props → kernel `label`, on the object
+and, for the label printed beside a statement part, on the statement
+(SP 800-53: ×1,122); `alt-identifier` (×1,219 in the German corpus
+alone) → `aliases[]` with schemes; `sort-id` (×1,150 Australian) →
+`sequence`; a per-control revision → the Requirement's `version`, and
+the date of its last change → its `history` (ISM: ×1,101 each, the month
+`Jun-25` written `2025-06`); groups → nested Sets. This whole row is Level 1 and mechanical — Chapter 5's
 §5.3 pipeline *is* the worked playbook, twenty lines of code and a
 funeral.
 
@@ -181,6 +184,24 @@ objectives, taxonomy — Chapters 4 and 7 carry the worked German
 cases). What resists adjudication goes Level 2 into the compatibility
 facet — *visibly*, with §14.6's clock ticking. Level 3 is rarely
 needed for props; it exists for structures, not values.
+
+**The document, its resources, its assessment objectives** *(the
+author's decisions of 2026-11-14, specification D27)*. What the
+catalogue says of itself goes to the manifest: one entry of
+`provenance.sources` with title, version, uuid, the author the
+metadata names, the day of `last-modified`, and `OSCAL` with its
+`oscal-version` as format. The rest of `metadata` (roles, parties,
+links, revisions) stays in the compat facet on the root Set.
+Back-matter resources that something in the document refers to go to
+`references@1` on the root Set, each as written, its `uuid` as `id`; a
+resource nothing refers to is an orphan and is not carried. SP 800-53A
+objectives go to `assessment-criteria@1` (1.1.0), each `assessment-for`
+link as an address: a statement, a statement of another control, the
+control as a whole, or the source's `href` where it names nothing.
+Do not write `{"statement-id": "smt"}` for "the control as a whole"
+when the control has several statements: it names no statement, and
+since that day a validator says so (the SP 800-53 converter did, 217
+times).
 
 **Profiles.** `import` + selection becomes a Tailoring's `selects`
 and `excludes`; `set-parameters` becomes `set-parameter` operations;
@@ -326,10 +347,10 @@ publication duty); `varies_by_class` and the `pain_timeframes`
 matrices → one base Set plus four class Tailorings, by the matrix rule
 (*rows become parameters, columns become Tailorings*); `subsets` and
 per-class baseline lists → Sets; `updated[]`, the update history of an
-entry → the compat facet's `history` on the rule or indicator, and for a
-term the converter's own narrative facet (the kernel has an object's
-version and no member for its change record, backlog #81); the FRD
-glossary → `terminology@1`;
+entry → the kernel's `history` of the rule or indicator, the entries put
+oldest first where the source lists the newest first, and for a term,
+which is an entry of the glossary and no object, the converter's own
+narrative facet (specification D27); the FRD glossary → `terminology@1`;
 notifications and required-information → `reporting-obligation@1`;
 artifacts, key tests, examples, and the KSI shape →
 `assessment-criteria@1`; `effective` windows → `effectivity@1`;

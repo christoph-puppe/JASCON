@@ -26,6 +26,15 @@
 > Attestation, in any bundle (D3.11, MANIFEST-1, backlog #75), and the
 > party a converter writes where its source names none is an argument
 > with a named default (backlog #74).
+> Later that day the author decided six findings of phase E about the
+> kernel and the standard facets (backlog #80 to #85): **D27** is new.
+> Every object may carry `history`, a statement a `label`, a manifest's
+> provenance its `sources`; `references@1` is a ninth standard facet,
+> `assessment-criteria` has a version 1.1.0 beside 1.0.0, and a
+> `statement-id` inside a facet payload is held (D10). These are shapes
+> added to released types and a rule that can fail a bundle that passed.
+> No new candidate was cut: the file keeps its name until the author
+> names the next one.
 
 > **What changed since rc.2 (2026-11-12, the same day).** One decision is
 > new — **D25**, advice packs: a vendor's recommendations as one published
@@ -640,6 +649,10 @@ rev. P10 #37: `text` keys are **lowercase BCP-47** — one tag, one
 spelling, the D3.4 discipline — and values are non-empty), completed
 where the passes proved it unevaluatable:
 
+*(2026-11-14, D27.)* A statement MAY carry `label`, what is printed
+beside it. A text may refer to a resource the bundle carries as `#id`
+(`references@1`); what else `#id` names is open.
+
 **Modality partial order (normative — the lattice `modality-monotonic`
 evaluates against):**
 
@@ -725,6 +738,16 @@ required). Converter-established across 1,015 statements' payloads in six
 facets; normative so that a second independent producer cannot legally
 invent a divergent keying and fracture per-clause alignment.
 
+**A `statement-id` inside a payload *(2026-11-14, backlog #83; D27)*.**
+The keying rule above reads the keys of `by-statement`. A payload may
+also address a statement from inside a structure of its own (an
+assessment objective that says which statement it assesses). Such a
+`statement-id`, anywhere inside a facet payload of a Requirement, is
+held the same way: it names a statement of the host, or of the
+Requirement that a `requirement-ref` beside it names where the bundle
+holds that Requirement. Measured before the rule: 3,707 such addresses
+in one facet of SP 800-53, which the keying rule did not read.
+
 **An Assessment's `method` is a facet payload *(2.0.0 — backlog #55,
 2026-11-14)*.** The kernel schema says of `method` only that it is an
 object; what it holds is the method of the assessment under the contract
@@ -751,6 +774,8 @@ Unchanged. The stdlib now also carries the **IR 8477 / OLIR relationship
 code system** for D20 and the calendar code systems for D9.
 
 ## D12 — The extension surface, complete.
+*(2026-11-14, D27: nine standard facets with `references@1`;
+`assessment-criteria` in two versions.)*
 Unchanged in structure (eight stdlib facets high/medium confidence;
 `privacy-assessment@1` parked pending Rev5-era verification; framework
 facets as an open sanctioned category; annotations; ISM = zero facets). One
@@ -1795,18 +1820,6 @@ file as a second form*. *A list of product versions, or a product
 block* (D5). *Keeping the manifests of earlier releases in the set*.
 *Leaving membership (ADVICE-7) to what a tool shows*.
 
----
-
-# Part III — Worked examples
-
-III.1 (BSI KONF.14.1), III.2 (CR26 IEC rule + class Tailoring), III.3
-(ISM, zero facets) carry over from v0.4 unchanged in substance, with two
-corrections: III.2's effectivity dates differentiated
-(`optional-adoption: 2025-11-01`, `must-obtain-by: 2026-07-04`,
-`grace-until: 2027-01-01` — illustrative), and the class Tailoring now
-demonstrates the parameter-bounds rule (setting `iir-deadline` to a value
-outside a declared range would fail without a Deviation). New:
-
 ## D26 — **Who decided, and when: one `provenance`; a decision date and a review date on a Deviation.** *(new, 2.0.0-rc.4 — CP-AUTHOR-1; author decisions 2026-11-13; backlog #65 and #66)*
 
 Through rc.3 the kernel recorded a weakening, a selection, a risk level,
@@ -1835,9 +1848,14 @@ and a Check already carried.
 **Two levels.** On a record, `provenance` names who wrote this version
 and when. On a decision inside a record (an entry of a Tailoring, a
 rating of a Risk) it names who decided that entry; an entry without one
-has its record's. A change is a new version. The kernel keeps no log
-inside an object, because a second history inside each version can
-contradict the first.
+has its record's. A change is a new version. *(Amended on 2026-11-14 by
+D27: until then this paragraph ended "The kernel keeps no log inside an
+object, because a second history inside each version can contradict the
+first." The author decided that the publisher's own record of an
+object's changes is carried, in the kernel, as `history`. It is the
+publisher's statement about its object and not a second `provenance`:
+`provenance` stays the one spelling for who wrote this version and
+when.)*
 
 **A claim, bound by the digest.** `provenance` is part of the semantic
 digest, so an Attestation over a Tailoring binds what the Tailoring says
@@ -1892,6 +1910,124 @@ CISO Assistant carries an expiry on a security exception and logs each
 change. No corpus of consumer Tailorings with authors exists. Measured:
 40 vectors for the two reports and 29 for the pin and the shapes;
 nineteen deliberate defects in the reference each turn one red.
+
+## D27 — **Versions and the record of changes; a statement's label; what a manifest was made from; references; addresses inside a facet payload.** *(new, after rc.4 — the author's decisions of 2026-11-14 on backlog #80 to #85)*
+
+Six findings of phase E were about the kernel and the standard facets:
+what the converters had put into the compat facet, or into facets of
+their own, because nothing else had a place for it. The author decided
+each on 2026-11-14 ("2.0.0 ist alles zur Veränderung freigegeben, gut
+begründet").
+
+**1. Version and history (#81; the author: "Versionierung ist wichtig
+und gehört in den Kernel, die Validatoren müssen dann angepasst
+werden").** `version` is the object's own version. Where a source states
+a version for the single object, that is it (the ISM's `revision` of a
+control); where it states none, the object carries the release it was
+published in, as a Set that stands for the publication does. Every
+object MAY carry `history`: the publisher's record of how the object came
+to be what it is, one entry per change, `{date, comment?, ref?}`. `date`
+is a day (`YYYY-MM-DD`) or a month (`YYYY-MM`): a publisher that states
+only the month of a change states a month. `comment` is a text; `ref` is
+a URI, what the publisher points to for the change. The entries stand
+oldest first (**HISTORY-1**); a day and a month are compared as written,
+so a month stands before its days, and two entries may carry one date.
+`history` is part of the semantic digest and is 2.0.0 content (KERNEL-1).
+A validator holds the shape (DATE-6 names a date that is neither a day
+nor a month) and the order, and nothing else: whether an entry is true
+it cannot know. What it held before stays: when two bundles are
+composed, one id with one version and two semantic digests is an error
+(D3.5).
+*Measured:* the ISM states a revision and a month on 1,101 of its 1,150
+controls; each such Requirement carries the revision as `version` and
+one entry of `history`. CR26 states an update history on 291 rules and
+indicators, 390 entries, the newest first; the converter puts them in
+the order of their dates. A term of CR26 is an entry of `terminology@1`
+and no object, so the history of a term stays in a facet.
+
+**2. A statement's label (#84).** A statement MAY carry `label`, a
+string: what is printed beside it (`a.`, `1.`, `(a)`). An object and a
+parameter had one; a statement did not, so a tool could show the label
+only by a rule its converter knew. No rule computes on it. It is 2.0.0
+content (KERNEL-1). *Measured:* 1,122 statements of SP 800-53. A
+parameter gets no `aliases`: one corpus states them (221 uuids of
+Grundschutz++), nothing resolves them, and they stay in the compat
+facet.
+
+**3. What a manifest was made from (#80).** A manifest's `provenance`
+MAY carry `sources`, one entry per source document, with typed members:
+`title`, `version`, `uuid`, `author-ref`, `date` (a day), `format`,
+`format-version`. An entry may hold more, and `provenance` stays open
+otherwise. It is 1.0.0 content: the 1.0.0 schema took any object there.
+The rest of a document's metadata (roles, parties, links, revisions)
+stays in the compat facet on the Set that stands for the document; no
+standard facet is made for it. *Measured:* until that day five manifests
+carried five shapes; six converters write one now (ISM, Grundschutz++,
+CSF and CR26 one source each, SP 800-53 five, IFA seven).
+
+**4. The resources texts refer to (#82).** The standard facet
+`references@1` carries them: `{resources: [...]}`, each entry as its
+source writes it, with one member the facet names, `id`. A text of the
+bundle refers to a resource as `#id`, and the resource is found in the
+`references@1` facet of the object itself or of a Set it is a member
+of, directly or through nested Sets. **No validator holds this yet.**
+The count that was to decide between an error and a line of the report
+showed that `#id` is the source's form for more than resources:
+*measured* on SP 800-53, of 540 such references in texts 118 name a
+resource, 348 another control by its label, and 74 a statement or a
+parameter; in the ISM all 486 name a resource. A rule that reports the
+422 as naming nothing would be wrong about them. What `#id` may name,
+and how each kind resolves, is open (backlog #82).
+
+**5. Addresses inside a facet payload (#83; D10 amended).** A
+`statement-id` anywhere inside a facet payload of a Requirement is held
+as a `by-statement` key is held: alone it names a statement of the host;
+beside a `requirement-ref` it names a statement of that Requirement,
+which is a landmark and binds where the bundle holds it. A `private:`
+facet is not read. `assessment-criteria` 1.1.0 types `objectives`: an
+objective has an id, a label, prose, the objectives under it and
+`assessment-for`, a list of addresses. An address names a statement
+(`statement-id`), a statement of another Requirement (`requirement-ref`
+with `statement-id`), a Requirement as a whole (`requirement-ref` alone),
+or carries a reference of the source that names nothing (`href`).
+*Measured* on SP 800-53A: 3,707 addresses: 3,484, 5, 217 and 1.
+**The standard library holds versions.** 1.0.0 of
+`assessment-criteria` stays beside 1.1.0. A bundle that pins a version
+is held to that version, verbatim; an unpinned payload is held to the
+latest. Until that day a library facet had one descriptor, and a new
+version would have failed every bundle that pinned the old one.
+
+**6. What a Set stands for (#85).** No kernel member: the proposed
+`kind` was free text in a closed kernel, and four words would have made
+alike what the corpora tell apart. A facet, if a tool needs it.
+
+**D22.** `history` and a statement's `label` are entered on the
+author's decision. For `history`, test 1 holds (two of the three census
+corpora state it) and test 2 does not: no tool computes on the entries
+beyond their order. For the label neither holds. The typed `sources`
+tighten a member the kernel had; the rest is facet space.
+
+**Evidence tier.** Measured: 44 vectors (26 `kernel`, 9 `reference`, 9
+`facet`), 753 in all; five deliberate defects in the reference, each
+caught (four turn a vector red, one stops the run). The PowerShell
+twin's schema reader resolved a `$ref` in the kernel schema only, so a
+facet schema with definitions of its own was not enforced by it; three
+of the new vectors found that, and it is corrected. Six converters
+reworked; each ledger reads 0 dropped and 0 unaccounted. Read, not
+measured: that a second producer's history, labels or sources fit these
+shapes.
+
+---
+
+# Part III — Worked examples
+
+III.1 (BSI KONF.14.1), III.2 (CR26 IEC rule + class Tailoring), III.3
+(ISM, zero facets) carry over from v0.4 unchanged in substance, with two
+corrections: III.2's effectivity dates differentiated
+(`optional-adoption: 2025-11-01`, `must-obtain-by: 2026-07-04`,
+`grace-until: 2027-01-01` — illustrative), and the class Tailoring now
+demonstrates the parameter-bounds rule (setting `iir-deadline` to a value
+outside a declared range would fail without a Deviation). New:
 
 ## III.4 — A cross-framework mapping (SCF-shaped)
 
@@ -2223,6 +2359,14 @@ of Check and of advice packs:
    draft members of an active Set — `lifecycle` 38 → 42: **709
    vectors**. Three deliberate defects in the reference and one in the
    twin each turn vectors red.)*
+   *(2026-11-14, D27: 44 vectors for `history` and HISTORY-1, a
+   statement's `label`, a manifest's `sources`, a `statement-id` inside
+   a facet payload, `assessment-criteria` 1.1.0 beside 1.0.0 and
+   `references` — `kernel` 71 → 97, `reference` 18 → 27, `facet` 20 →
+   29: **753 vectors**. Five deliberate defects in the reference, each
+   caught. The reference, the twin (PowerShell 7.4 on Linux; the
+   workflow runs Windows PowerShell 5.1) and the app's rules give what
+   every vector expects.)*
 2. **First implementation.** ✓ `validate_core.py`: 537 / 537, the five
    shipped bundles (3,715 objects, both digests each), the worked advice
    pack and the example folder — ALL GREEN on 2026-11-12.
@@ -2375,6 +2519,7 @@ history. The compact line:
 | An Assessment's method is held to its facet | 2026-11-14 | Backlog #55, phase E. The kernel schema says of `method` only that it is an object, and the facet check read `facets` only: no implementation held a method to anything. D10 amended: the keys of `method` are facet ids, resolved as the keys of `facets` are, and each payload is held to its schema. `facet` 7 → 20 vectors, 705 in all. No shape changes and no shipped payload had to change; a bundle whose Assessment states its method under a key no facet registers, or with a payload its facet refuses, fails where it passed | "Phase E" |
 | Real content is never dropped | 2026-11-14 | Phase E, the author's corrections and decisions (`drafts/phase-e/entscheidungen-phase-e.md`). No shape of the kernel changes. Converters: every source value is carried or is no content by a rule the ledger checks; a nested control is a Requirement of its own; every withdrawn item is an object with lifecycle `withdrawn`, with a statement where it is a Requirement; `active` where a source states no status is a converter's named default; one compat schema (`oscal-1x@1` 1.1.0) for every converter. D17 amended (a flow a source writes out is carried). The convergence table's row on clause granularity corrected. A draft may be used voluntarily (handbook 3.6). The app's two presets and the reader follow. Six findings about the kernel and the standard facets are candidates for 2.0.0, backlog #80 to #85 | "Phase E" |
 | An active Set that lists a draft says so | 2026-11-14 | Backlog #86, after the author's decision that a draft may be used voluntarily. No shape changes and nothing fails. DRAFT-1, a report beside AUTHOR-1 to AUTHOR-4 and REVIEW-1: for every Set whose lifecycle is `active`, the number of its members that the bundle holds with lifecycle `draft`, one line per Set in the order of the ids. In the reference, the twin and the app; four vectors (`draft-members` in the family `lifecycle`). The measured case is CR26, where seven active Sets list the draft Sets of a family its publisher marks as a placeholder. | handbook §3.6, chapter 12 |
+| Versions and history, a statement's label, a manifest's sources, references, addresses in a payload | 2026-11-14 | The author's decisions on backlog #80 to #85 (D27). Kernel schema: `history` on every object (HISTORY-1, DATE-6), `label` on a statement, typed `sources` in a manifest's provenance. Standard library: `references` 1.0.0, `assessment-criteria` 1.1.0 beside 1.0.0, and a pin held to the version it states. D10: a `statement-id` inside a facet payload is held as a `by-statement` key is. D26: the sentence that the kernel keeps no log inside an object is withdrawn. A bundle that passed can fail: one whose facet payload holds a `statement-id` that names no statement (the committed SP 800-53 bundle did, 218 times, and is converted anew). The compat facet's schema is 1.2.0 (no `back-matter`, no `history`; typed items). Six converters reworked; `.github/pinned-schemas.json` holds one id and version to one schema (#88). Open: what `#id` in a text may name (#82). | D27; handbook 3.3, 12, 14, appendices A and D |
 | **2.0.0-rc.4** | 2026-11-13 | This text: D26 new (who decided, and when); D8, D13 and D23 amended in place. `provenance` optional on a Tailoring and its entries, a Risk and its ratings, an Implementation and a Finding; `decided` and `review-due` on a Deviation; `date` on an authorization; AUTHOR-1 to 4 and REVIEW-1 as reports; three times typed (DATE-3 to 5). A new vector family, `author` (40), and `kernel` 25 → 54; 643 in all, 18 families. Backlog #65 and #66 | D26 · "CP-AUTHOR-1 landed" |
 
 ## IV.7 Release artifacts (what this candidate ships with)
@@ -2597,3 +2742,11 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
 8. **Tag `v2.0.0`** — on the author's go. Nothing in this list blocks it.
    *(2026-11-14, phase E: the six candidates of item 5, backlog #80 to
    #85, are the author's to decide before it.)*
+   *(The same day: decided and built, D27. Open and the author's: what
+   `#id` in a text may name besides a resource (#82, measured: three
+   more kinds in SP 800-53); the handbook's sentence that new references
+   to a withdrawn object fail validation, which no validator holds
+   (#93); a facet id and version that the example folder and the
+   Grundschutz++ converter pin with two schemas (#94). Not built: the
+   library's check that a path map names the place the ledger found
+   (#89).)*

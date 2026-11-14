@@ -170,8 +170,8 @@ clauses that say MUSS without a `modal_verb` were found *because*
 grammar is data). Without: ISM's
 1,149 declarative statements convert at Core tier with no facet that
 says what a statement asks, and with no value lost (the ledger reads 0
-dropped and 0 unaccounted of 36,161; the compat facet on 1,101 controls
-carries their own revision and month of change). Mandatory grammar would have made the second corpus a
+dropped and 0 unaccounted of 36,161; a control's own revision is the
+`version` of its Requirement and the month of its change its `history`). Mandatory grammar would have made the second corpus a
 second-class citizen — R2 accepts the bifurcation because the
 alternative excludes half the world's authoring cultures.
 

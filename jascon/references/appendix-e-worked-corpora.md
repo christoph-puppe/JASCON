@@ -139,10 +139,12 @@ membership props, dead and buried in `members[]`. **The pattern this
 example carries:** `unspecified` is not a defect here. ISM prose is
 declarative present tense; modal verbs are structurally absent
 (1,149/1,150); binding force *is* baseline membership. A Core-tier
-framework: no facet is needed to say what the requirement asks. The one
-facet the converter writes on it since 2026-11-14 is the compat facet,
-which carries the control's own `revision` and month of last change
-(`1`, `Dec-25`), for which the kernel has no member (backlog #81). The
+framework: no facet is needed to say what the requirement asks. The
+control's own `revision` is the `version` of its Requirement, and the
+month of its last change is the one entry of its `history` (`"version":
+"1"`, `"history": [{"date": "2025-12"}]`; kernel members since the
+author's decision of 2026-11-14, specification D27; in the compat facet
+for some hours before that). The
 architecture's promise that narrative frameworks are first-class, kept
 on a real corpus.
 
