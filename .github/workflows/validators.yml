@@ -1,8 +1,9 @@
 # Runs the reference validators on every change to what they read.
 #
 # Four jobs, one per implementation and one for the pages:
-#   python      validate_core.py, the reference (Ubuntu, Python 3.12), and the
-#               tests of the converter library (test_oscal_conv_lib.py)
+#   python      validate_core.py, the reference (Ubuntu, Python 3.12), the
+#               tests of the converter library (test_oscal_conv_lib.py), the
+#               attestation check end to end (test_attestation_binds.py)
 #               and a re-run of the IFA conversion from its pinned sources,
 #               which must reproduce what is committed
 #   powershell  validate_core.ps1, the twin, on WINDOWS POWERSHELL 5.1
@@ -65,6 +66,15 @@ jobs:
           python jascon/scripts/validate_core.py | tee run.log
       - name: Converter library (the value-level measurement of the coverage reports)
         run: python jascon/scripts/test_oscal_conv_lib.py
+      - name: attestation-binds on a bundle, end to end
+        # The vectors hold the primitive. This holds what a vector cannot: that
+        # the Attestation beside a manifest is found, typed and counted, and
+        # that a bundle fails when a claimed Attestation does not bind.
+        run: python jascon/scripts/test_attestation_binds.py
+      - name: The example Attestation is what its folder says
+        # It binds the digest of the example manifest and three example objects;
+        # a change to any of them needs it issued again.
+        run: python drafts/phase-d/attest_example.py --check
       - name: The IFA conversion is reproducible from its pinned sources
         # The bundle, the coverage reports and the ledger under
         # converted_examples/US.IFA-GoodRead are a record of one conversion.

@@ -1,13 +1,25 @@
 {
   "id": "https://agency-x.example/attestation/acme-2026",
-  "version": "1",
+  "version": "2",
   "lifecycle": "active",
+  "title": {
+    "en": "Authorization of Acme SaaS, 2026"
+  },
   "subject-semantic-digests": [
-    "sha256:7aaf60aac02185ae45e9f5891adb1f1151991bfd162ce2f21ede1db1cd7d11d0",
-    "sha256:c26d65937908fa2fb3019f6255cd355ce64b54b87cbcc31488e183ebe48471d9",
-    "sha256:09de9745b1ce8d137b9fd8131cafbb79c12c4209487d37de012ce8bbcf052b10"
+    {
+      "id": "https://cso.example/component/acme-saas",
+      "semantic-digest": "sha256:86b98185aa0eef19e6d1fde05853a401b34b1d08dab67756fb05e103f9db19df"
+    },
+    {
+      "id": "https://cso.example/impl/acme--konf-14-1",
+      "semantic-digest": "sha256:d588f8ee6750921d5f615a1c7e575ad56791042158d430e7ad8eaab15daf7e0c"
+    },
+    {
+      "id": "https://assessor.example/assessment/2026-q3-acme",
+      "semantic-digest": "sha256:46d87c840d567e8fb43cf7b649e199afcde8662967762840d72145d3cfdeb899"
+    }
   ],
-  "content-manifest-digest": "sha256:692f86e9b5df786d76ebe0e639449e9d2af1bcb089e55d9f8ee46e19fb9b21a5",
+  "content-manifest-digest": "sha256:10ff89bd3c321070518a07566c55e2663c20200500de5ff7c1936f692098b809",
   "rendering": {
     "artifact-digest": "sha256:36405fcbe4e19ba3305b56c129e70925a27f4a16a10216a2ba3e0a13c625857e",
     "media-type": "text/markdown",
@@ -19,6 +31,6 @@
     "renderer": "https://tools.example/render-engine@0.1"
   },
   "signer": "https://agency-x.example/party/ao",
-  "timestamp": "2026-07-18T14:00:00Z",
-  "envelope-ref": "attestation-envelope.dsse"
+  "timestamp": "2026-11-14T09:00:00Z",
+  "envelope-ref": "attestation-acme-2026.dsse"
 }

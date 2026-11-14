@@ -36,7 +36,7 @@ and not tagged. Its rows are marked (2.0.0) below.*
 | 6b *(2.0.0)* | Implementation (adopts advice) | `implementation-acme-konf-14-1-s2.json` | `capability-ref` in the form `<component-id>#<capability-id>`: Acme's edge, on Acme's component, cites the vendor's recommendation. `component-acme-saas.json` lists the product as a member, which ADVICE-7 requires |
 | 9b *(2.0.0)* | Attestation (the vendor's) | `attestation-dbvendor-server-7-advice.json` + `.dsse` | binds the digest of the kept manifest; the validator reports the pack's publisher **proven** (with `--trusted-keys`: signature verified). Signed with the corpus FIXTURE key, whose seed is public - the mechanism, not a vendor |
 | — *(2.0.0)* | The published pack | `../example-packs/dbvendor-server-7-advice/` | the file a vendor publishes: a bundle whose manifest carries the pack header and lists Components only. `validate_core.py --import-advice jascon/examples jascon/example-packs/dbvendor-server-7-advice` answers *already-imported* |
-| 9 | Attestation | `attestation-acme-2026.json` | subject **semantic** digests, content-manifest binding, rendering block — *beside* the manifest, never inside |
+| 9 | Attestation | `attestation-acme-2026.json` + `.dsse` | *beside* the manifest, never inside. Three subjects by id and **semantic** digest (the Acme SaaS Component, its Implementation of KONF.14.1, the 2026 Q3 Assessment), the digest of `content-manifest.json`, the rendering block, and a DSSE envelope. The validator reports **FULL MATCH**, and with `--trusted-keys jascon/conformance/fixture-trusted-keys.json` the signature verified. Signed with the corpus FIXTURE key, whose seed is public - the mechanism, not an agency. Issued by `drafts/phase-d/attest_example.py`; run it again after any change to this folder |
 | — | Content manifest | `content-manifest.json` | both digests per object, exact-pinned facet schemas, rendering digest |
 | — | Facet descriptors | `gspp-taxonomy-1.0.0.json`, `assessment-criteria-1.0.0.json` | a custom facet descriptor, and a stdlib descriptor pinned **verbatim** (D26) |
 | — | Rendering (L4) | `authorization-summary.md` | the "document as view", digest-bound by the attestation |
@@ -96,14 +96,16 @@ and not tagged. Its rows are marked (2.0.0) below.*
    only the pin's digest. Both now load pins with one function. The
    assessment's `summary` became a language map with it: the normative
    schema types `summary` as an object, the stub had typed it as a string.
-6. **The attestation is illustrative end to end.** Its
-   `template-ref.digest` is a marked placeholder, the DSSE **envelope is
-   out of scope** (`envelope-ref` points at a path not included), and —
-   not marked until 2026-11-10 — its three `subject-semantic-digests` and
-   its `content-manifest-digest` **match no object and no manifest in this
-   folder** (they predate the `text` primitive re-run). It shows the
-   *shape* of an attestation; it binds nothing here. Making it real, and
-   having the validator hold it to that, is backlog #46.
+6. **The attestation is real since 2026-11-14, except for one field.**
+   It binds the digest of this folder's manifest and the semantic digests
+   of three of its objects, and its envelope is signed with the corpus
+   fixture key. The validator holds it to that with every run
+   (`attestation-binds`, Appendix B.1.7): change one of the three objects
+   or the manifest and the run says what no longer binds. Still a marked
+   placeholder: `template-ref.digest`. From before 1.0.0 until that day
+   the three subject digests and the manifest digest matched no object
+   and no manifest in this folder, the `envelope-ref` named a file that
+   was not there, and nothing checked any of it (backlog #46).
 7. One rendering stands in for real deliverables; real bundles list
    as many as they ship.
 8. **The check runs assessed no real host.** No runner exists yet

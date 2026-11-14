@@ -47,6 +47,14 @@ Runs, in order:
    approved Deviation and on a Risk still managed. It reads the date of
    the run (UTC); `--as-of YYYY-MM-DD` sets the date instead. This is the
    one place where the file reads a clock, and nothing fails by it.
+7. ATTESTATION-BINDS ON A BUNDLE (Appendix B.1.7; backlog #46): every
+   Attestation read with a bundle - beside its manifest, where D3.1 puts
+   it, and any a manifest lists - is held to its subjects and to the
+   manifest it binds: Full Match, Semantic Match (another manifest, every
+   subject matches: reported) or fail. A fail fails the bundle when the
+   Attestation is still claimed (lifecycle active). The example folder is
+   read the same way; conformance/fixture-trusted-keys.json holds the
+   public key of the corpus fixture for a run in verification mode.
 
 Exit 0 = all green. Usage: uv run --with jsonschema validate_core.py [bundle-dir ...]
 """
@@ -962,6 +970,18 @@ def run_attestation():
         else: got = "semantic-match"
         if got == case["expected"]: ok("attestation")
         else: fail("attestation", f"{case['name']}: expected {case['expected']}, got {got}")
+    # the primitive applied to a bundle (backlog #46): the verdict, which
+    # manifest is bound, and what became of every subject
+    for case in v.get("binds-vectors", []):
+        objs = {}
+        for o in case["objects"]:
+            t = inferType_single(o)
+            if t: objs[o["id"]] = (t, o)
+        r = attestation_binds(case["attestation"], case["manifest-digest"], objs, case.get("kept-packs") or [])
+        got = (r["verdict"], r["manifest"], [st for st, *_ in r["subjects"]], r["fails"])
+        want = (case["expected"], case["expected-manifest"], case["expected-subjects"], case["expected-failure"])
+        if got == want and len(objs) == len(case["objects"]): ok("attestation")
+        else: fail("attestation", f"binds {case['name']}: expected {want}, got {got}")
 
 def run_facets():
     v = json.load(open(os.path.join(CONF, "facet-vectors.json"), encoding="utf-8"))
@@ -3045,19 +3065,105 @@ def load_facet_pins(bdir, manifest, section):
             fail(section, f"{fe['path']}: pinned facet schema unreadable: {e}")
     return pinned, pinned_decl
 
-def beside_attestations(bdir, listed_paths):
-    """Attestations BESIDE the manifest (D3.1): JSON files in the manifest's
-    own folder that it does not list and that type as an Attestation. A pack
-    lists Components only (ADVICE-1), so its vendor's Attestation is here."""
-    out = {}
+def beside_attestation_files(bdir, listed_paths):
+    """-> [(file name, bytes, object)]: the Attestations BESIDE the manifest
+    (D3.1) - JSON files in the manifest's own folder that it does not list
+    and that type as an Attestation, in the order of their names. An
+    Attestation binds the digest of the manifest's bytes, so the manifest
+    cannot list it; this is where every bundle keeps one."""
+    out = []
     for fn in sorted(os.listdir(bdir)):
         if not fn.endswith(".json") or fn == "content-manifest.json" or fn in listed_paths: continue
         try:
-            o = json.load(open(os.path.join(bdir, fn), encoding="utf-8"))
+            raw = open(os.path.join(bdir, fn), "rb").read()
+            o = json.loads(raw.decode("utf-8"))
         except Exception:
             continue
-        if isinstance(o, dict) and inferType_single(o) == "attestation": out[o["id"]] = ("attestation", o)
+        if isinstance(o, dict) and inferType_single(o) == "attestation": out.append((fn, raw, o))
     return out
+
+def beside_attestations(bdir, listed_paths):
+    """The same as {id: ("attestation", object)}."""
+    return {o["id"]: ("attestation", o) for _, _, o in beside_attestation_files(bdir, listed_paths)}
+
+# ---------------- attestation-binds, applied to a bundle (Appendix B.1.7; backlog #46) ----------------
+# The primitive is (attestation, bundle) -> Full Match | Semantic Match |
+# fail. Until 2026-11-14 no tool applied it to a bundle. The vectors
+# exercised the two digests of one object; a bundle's Attestation was read
+# for its envelope, for a Tailoring's tier and for a pack's publisher, and
+# never held to its subjects. So the example folder shipped, from before
+# 1.0.0, an Attestation whose three subject digests matched no object and
+# whose manifest digest matched no manifest, and the IFA bundle one whose
+# digest of the system Component matched nothing - and every run was green.
+#
+# Each subject is judged against the objects the manifest lists:
+#   match    an object carries the signed semantic digest - the object of
+#            that id where the subject names one, any object where it is a
+#            bare digest;
+#   differs  the object of that id carries another digest: its normative
+#            content changed after signing;
+#   absent   no object of that id, or no object with that digest: what is
+#            not delivered cannot be recomputed.
+# The manifest the Attestation binds is `this` one (the digest of its bytes
+# as delivered), a `kept-pack` (a vendor's manifest the bundle keeps under
+# packs/sha256/, D25) or an`other`.
+#   Full Match      every subject matches, and the manifest is this one or a
+#                   kept pack's;
+#   Semantic Match  every subject matches, and the manifest is another: the
+#                   content is proven, the packaging was altered (D7) -
+#                   reported, never a failure and never Full;
+#   fail            anything else.
+# The verdict is about digests. Whether the signature is valid is the
+# envelope's matter and is reported beside it, as before.
+#
+# A `fail` verdict fails the bundle when the Attestation is still claimed:
+# lifecycle `active`. A draft is not issued yet, and a deprecated or
+# withdrawn one is kept for the record; each is reported with its verdict
+# and fails nothing. Otherwise a bundle whose attested object was changed
+# could never validate again, however openly the Attestation was withdrawn
+# (argued, 2026-11-14; the primitive does not speak of lifecycle).
+def attestation_binds(att, manifest_digest, objs, kept_packs=()):
+    """-> {"verdict", "manifest", "subjects": [(status, id or None, signed
+    digest, delivered digest or None)], "fails"}. objs: id -> (type,
+    object), the objects the manifest lists."""
+    delivered = {oid: sdig(o) for oid, (_, o) in objs.items()}
+    carried = set(delivered.values())
+    subjects = []
+    for sj in att.get("subject-semantic-digests") or []:
+        if isinstance(sj, dict):
+            sid, signed = sj.get("id"), sj.get("semantic-digest")
+            have = delivered.get(sid)
+            subjects.append(("absent" if have is None else "match" if have == signed else "differs", sid, signed, have))
+        else:
+            subjects.append(("match", None, sj, sj) if sj in carried else ("absent", None, sj, None))
+    bound = att.get("content-manifest-digest")
+    manifest = "this" if bound == manifest_digest else "kept-pack" if bound in set(kept_packs) else "other"
+    if not subjects or any(st != "match" for st, *_ in subjects): verdict = "fail"
+    else: verdict = "semantic-match" if manifest == "other" else "full-match"
+    return {"verdict": verdict, "manifest": manifest, "subjects": subjects,
+            "fails": verdict == "fail" and att.get("lifecycle") == "active"}
+
+BINDS_MANIFEST = {"this": "this manifest", "kept-pack": "a pack manifest this bundle keeps", "other": "another manifest"}
+def binds_report(section, atts, manifest_digest, objs, kept):
+    """One line per Attestation read with a bundle; a `fail` verdict fails
+    the bundle, in the words of Appendix B.1.7. atts: {id: object}."""
+    packs = ["sha256:" + name for name, _ in kept]
+    for aid in by_code_unit(atts):
+        r = attestation_binds(atts[aid], manifest_digest, objs, packs)
+        n, what = len(r["subjects"]), BINDS_MANIFEST[r["manifest"]]
+        if r["verdict"] == "full-match":
+            print(f"    binds: {aid} = FULL MATCH [{n} subject(s) of this bundle; {what}]")
+        elif r["verdict"] == "semantic-match":
+            print(f"    binds: {aid} = SEMANTIC MATCH [{n} subject(s) of this bundle; {what}: the content is proven, the packaging was altered]")
+        else:
+            lines = [f"subject {sid or signed}: " + ("recomputed semantic digest " + have + ", signed " + signed if st == "differs"
+                                                     else "not an object of this bundle" if sid else "no object of this bundle carries it")
+                     for st, sid, signed, have in r["subjects"] if st != "match"] or ["it names no subject"]
+            if r["fails"]:
+                fail(section, f"[attestation-binds] {aid}: {'; '.join(lines)} - {what} "
+                              f"(B.1.7: an Attestation binds what is delivered, or it fails; a changed subject is normative content changed after signing)")
+            else:
+                print(f"    binds: {aid} = DOES NOT BIND [lifecycle {atts[aid].get('lifecycle')}: reported, not a failure] {'; '.join(lines)} - {what}")
 
 def advice_report(section, bdir, manifest, raw_manifest, objs, pinned_decl, envelopes):
     """CP-ADVICE-1 for one bundle: ADVICE-1..10, and who published what."""
@@ -3125,11 +3231,28 @@ def validate_bundle(bdir):
         seen_ids[obj.get("id")] = rel
         if t: bundle_objs[obj["id"]] = (t, obj)
     pinned, pinned_decl = load_facet_pins(bdir, manifest, section)
+    # Attestations BESIDE the manifest (D3.1) are read with every bundle
+    # (backlog #46). Until 2026-11-14 they were read for a pack only, so a
+    # bundle's own Attestation - which cannot be listed, because it binds the
+    # manifest's digest - was not typed, not held to its envelope and never
+    # seen by the tier derivation. They are objects the run validates and
+    # counts; they are not objects of the manifest, so `bundle_objs` stays
+    # what the manifest lists and `with_atts` adds them where a rule asks
+    # who attested what.
+    beside = {}
+    for fn, raw, o in beside_attestation_files(bdir, set(listed)):
+        number_failures(section, fn, raw)
+        if validate_object(section, fn, o) != "attestation": continue
+        typec["attestation"] += 1
+        if o["id"] in seen_ids: fail(section, f"{fn}: object id already used by {seen_ids[o['id']]}")
+        seen_ids[o["id"]] = fn
+        beside[o["id"]] = ("attestation", o)
+    with_atts = {**bundle_objs, **beside}
     # DSSE envelopes (#24): envelope-ref resolves to a file BESIDE the
     # manifest (nothing signed contains its own signature, D3); with
     # --trusted-keys the run is in verification mode.
     envelopes = {}
-    for oid, (t2, o2) in bundle_objs.items():
+    for oid, (t2, o2) in with_atts.items():
         if t2 != "attestation" or not o2.get("envelope-ref"): continue
         ep = os.path.join(bdir, o2["envelope-ref"])
         if os.path.exists(ep):
@@ -3139,7 +3262,7 @@ def validate_bundle(bdir):
                 fail(section, f"{o2['envelope-ref']}: envelope unreadable: {e}")
         else:
             fail(section, f"{oid}: envelope-ref '{o2['envelope-ref']}' does not resolve beside the manifest")
-    for oid, (t2, o2) in sorted(bundle_objs.items()):
+    for oid, (t2, o2) in sorted(with_atts.items()):
         if t2 != "attestation": continue
         if o2.get("envelope-ref"):
             env = envelopes.get(o2["envelope-ref"])
@@ -3151,10 +3274,13 @@ def validate_bundle(bdir):
                 print(f"    dsse: {oid} = {tag}")
         else:
             print(f"    dsse: {oid} = no envelope (unsigned attestation)")
+    # attestation-binds (B.1.7): every Attestation read with the bundle is held to its subjects and its manifest
+    binds_report(section, {i: o for i, (t2, o) in with_atts.items() if t2 == "attestation"},
+                 pkg_digest(raw_manifest), bundle_objs, read_kept_packs(bdir))
     # reference taxonomy (#16) + facet payloads (#17) + tier duties (#19/#24)
     for e in closure_errors(bundle_objs):
         fail(section, e)
-    for e in tailoring_duty_errors(bundle_objs, pinned_decl=pinned_decl,
+    for e in tailoring_duty_errors(with_atts, pinned_decl=pinned_decl,
                                    envelopes=envelopes, trusted=TRUSTED):
         fail(section, e)
     for e in kernel_pin_errors(manifest, bundle_objs): fail(section, e)
@@ -3162,10 +3288,10 @@ def validate_bundle(bdir):
     for e in s_errs: fail(section, e)
     for n in s_notes: print(f"    note: {n}")
     # CP-RISK-1: B.1.9 risk-coverage report (+ RISK-11 errors), RISK-9/10 notes
-    cov, cerrs, cnotes = risk_coverage(bundle_objs, envelopes=envelopes, trusted=TRUSTED)
+    cov, cerrs, cnotes = risk_coverage(with_atts, envelopes=envelopes, trusted=TRUSTED)
     for e in cerrs: fail(section, e)
     for n in cnotes + risk_link_notes(bundle_objs): print(f"    note: {n}")
-    report_authors_and_reviews(section, bundle_objs, envelopes)
+    report_authors_and_reviews(section, with_atts, envelopes)
     # the report is printed where there is a register to report on; the
     # policy switch applies regardless - a bundle with a Tailoring and NO
     # Risk at all is the limiting case of "justified by no Risk", not an
@@ -3193,7 +3319,7 @@ def validate_bundle(bdir):
     for tid, (tt, tobj2) in sorted(bundle_objs.items()):
         if tt == "tailoring":
             tnotes = []
-            tr = derive_tier(tobj2, bundle_objs, sdig, envelopes=envelopes, trusted=TRUSTED, notes=tnotes)
+            tr = derive_tier(tobj2, with_atts, sdig, envelopes=envelopes, trusted=TRUSTED, notes=tnotes)
             note = {"authority-claimed": " [prefix claim - UNPROVEN]",
                     "authority-proven": (" [attestation digest-matched + signature VERIFIED]"
                                          if TRUSTED is not None else
@@ -3214,7 +3340,7 @@ def validate_examples():
     exdir = os.path.join(SKILL, "examples")
     section = "skill-examples"
     typec = collections.Counter()
-    exobjs = {}
+    exobjs, listed_objs = {}, {}        # every object of the folder; those the manifest lists
     # The example manifest is checked like any other (it was not, and at
     # 1.0.0 its package digests were a mix of CRLF and LF spellings - 8 of
     # 12 failed on an LF tree, the other 4 on a CRLF tree, unnoticed).
@@ -3245,12 +3371,35 @@ def validate_examples():
             if t != "attestation":
                 fail(section, f"{fn}: on disk but not in manifest")
             continue
+        if t: listed_objs[obj["id"]] = (t, obj)
         if pkg_digest(raw) != entry["package-digest"]:
             fail(section, f"{fn}: package-digest mismatch{eol_hint(raw, entry['package-digest'])}")
         if sdig(obj) != entry["semantic-digest"]:
             fail(section, f"{fn}: semantic-digest mismatch")
         if obj.get("id") != entry["id"]:
             fail(section, f"{fn}: manifest id != object id")
+    # The folder's Attestations are held to their envelopes and to what they
+    # bind, as a bundle's are (backlog #46). Until 2026-11-14 this pass read
+    # no envelope and compared no digest: the example Attestation named an
+    # envelope that did not exist and three subjects that matched nothing.
+    envelopes = {}
+    for oid in by_code_unit([i for i, (t, _) in exobjs.items() if t == "attestation"]):
+        att = exobjs[oid][1]
+        ref = att.get("envelope-ref")
+        if not ref:
+            print(f"    dsse: {oid} = no envelope (unsigned attestation)"); continue
+        ep = os.path.join(exdir, ref)
+        if not os.path.exists(ep):
+            fail(section, f"{oid}: envelope-ref '{ref}' does not resolve beside the manifest"); continue
+        try: envelopes[ref] = json.load(open(ep, encoding="utf-8"))
+        except Exception as e:
+            fail(section, f"{ref}: envelope unreadable: {e}"); continue
+        st, why = verify_envelope(envelopes[ref], att, TRUSTED)
+        if st == "error": fail(section, f"{oid}: dsse: {why}")
+        print(f"    dsse: {oid} = " + {"verified": "signature VERIFIED (Ed25519)",
+                                        "unverified": f"signature UNVERIFIED - {why}"}.get(st, f"FAIL - {why}"))
+    binds_report(section, {i: o for i, (t, o) in exobjs.items() if t == "attestation"},
+                 pkg_digest(raw_manifest), listed_objs, read_kept_packs(exdir))
     for e in closure_errors(exobjs): fail(section, e)
     # facet payloads against stdlib / the pins just loaded (#17) - the
     # example pass loaded the pins and never applied them
@@ -3262,11 +3411,11 @@ def validate_examples():
     c_errs, c_notes = check_errors(exobjs, read=store_reader(exdir))
     for _, e in c_errs: fail(section, e)
     for n in c_notes: print(f"    note: {n}")
-    advice_report(section, exdir, manifest, raw_manifest, exobjs, pinned_decl, None)
-    cov, cerrs, cnotes = risk_coverage(exobjs)
+    advice_report(section, exdir, manifest, raw_manifest, exobjs, pinned_decl, envelopes)
+    cov, cerrs, cnotes = risk_coverage(exobjs, envelopes=envelopes, trusted=TRUSTED)
     for e in cerrs: fail(section, e)
     for n in cnotes + risk_link_notes(exobjs): print(f"    note: {n}")
-    report_authors_and_reviews(section, exobjs)
+    report_authors_and_reviews(section, exobjs, envelopes)
     for tid, r in cov["tailorings"].items():
         print(f"    risk-coverage: {tid} [{r['tier']}] selected={r['selected']}"
               f"{'+ (open: predicate select)' if r['open-selection'] else ''} "
