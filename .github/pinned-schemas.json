@@ -11,6 +11,7 @@
   "https://ifa.gov/goodread/facet/system 1.0.0": "sha256:510cbc690db8c5c812e5bdf9cabfa6ccfd8885a504cc3e7caa9d9913d2d39e84",
   "https://ns.bsi.bund.de/facet/gspp-narrative 1.0.0": "sha256:8ce600a52b2257ee414db1fdc23ec6a4abd78fc4cd215e1aa44122cd5c063ecd",
   "https://ns.bsi.bund.de/facet/gspp-taxonomy 1.0.0": "sha256:e202b1655b2164c36b18d2428512a56b0b34b4347e8e3224ec77359e20956a15",
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy 1.1.0": "sha256:76fd3249094a337198ad16ab2f235c1cbb1a2512926505fab1fb4ec6645fc365",
   "https://ns.fedramp.gov/cr26/facet/narrative 1.1.0": "sha256:447c2f8fe6187c687c66e0ffa50f7b54a6ab503f3838b6054d9e591f6e617e37",
   "https://ns.fedramp.gov/cr26/facet/scope 1.0.0": "sha256:629269e9966f72c178ea3ffc17f7e6c16f73a3419d4006b1e9363b3448b777a3",
   "https://ns.jascon.net/compat/oscal-1x 1.2.0": "sha256:748d84b03cdb5dac325810f43ca19eddff3456d2fd055ac72c69b9bce08f4013",
