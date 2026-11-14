@@ -16,7 +16,8 @@ from oscal_conv_lib import global_occurrence, Ledger, props_by_name, slug, RESPO
 from oscal_conv_lib import document_author, document_day, provenance, provenance_override, needs_kernel_2
 from oscal_conv_lib import known_arguments, out_dir
 from oscal_conv_lib import obligated_party, obligated_party_line, obligated_party_record
-from oscal_conv_lib import ledger_by_path, ledger_gate
+from oscal_conv_lib import ledger_by_path, ledger_gate, Bundle, COMPAT, COMPAT_ID, COMPAT_FILE
+from oscal_conv_lib import lifecycle_default_record, lifecycle_default_line
 
 
 def measure(source, output):
@@ -808,6 +809,87 @@ class PhaseEKeysThatAreSourceValues(unittest.TestCase):
         rows = {(r["path"], r["outcome"]): r for r in short["paths"]}
         self.assertEqual(rows[("cat.params[].label", "copied")]["to"], [{"pointer": "/facets/odp/{param id}/label", "count": 2}])
         self.assertEqual(rows[("cat.params[].id", "copied")]["to"], [{"pointer": "/facets/odp/{param id}", "count": 2, "as": "key"}])
+
+
+class PhaseEOrphans(unittest.TestCase):
+    """The author's fourth class of what may stay out of a bundle
+    (2026-11-14): "orphaned elemente braucht niemand" - a back-matter
+    resource nothing in its document refers to. The ledger checks that
+    nothing does."""
+
+    SOURCE = {"uuid": "00000000-0000-4000-8000-00000000000a",
+              "metadata": {"links": [{"href": "#00000000-0000-4000-8000-000000000002", "rel": "latest-version"}]},
+              "controls": [{"id": "c-1", "prose": "See [the guide](#00000000-0000-4000-8000-000000000001)."}],
+              "back-matter": {"resources": [
+                  {"uuid": "00000000-0000-4000-8000-000000000001", "title": "The guide", "rlinks": [{"href": "https://example.org/guide"}]},
+                  {"uuid": "00000000-0000-4000-8000-000000000002", "title": "The latest version"},
+                  {"uuid": "00000000-0000-4000-8000-000000000003", "title": "Nobody names this", "rlinks": [{"href": "https://example.org/x"}],
+                   "remarks": "Listed as #00000000-0000-4000-8000-000000000003 in the printed edition."},
+                  {"uuid": "00000000-0000-4000-8000-00000000000a", "title": "Has the document's own uuid"}]}}
+
+    def run_ledger(self, orphans, carry=(0, 1), source=None):
+        def convert(src, led):
+            res = src["back-matter"]["resources"]
+            for i in orphans: led.orphan(res[i]["uuid"], "a back-matter resource nothing in the document refers to")
+            return {"o/root.json": {"id": "https://ex.org/root", "uuid": src["uuid"], "links": src["metadata"]["links"],
+                                    "prose": src["controls"][0]["prose"], "ctl": src["controls"][0]["id"],
+                                    "resources": [res[i] for i in carry]}}
+        return PhaseEWhatIsNoContent.run_ledger(self, convert, source=source or self.SOURCE)
+
+    def test_a_resource_nothing_refers_to_stays_out_by_a_checked_rule(self):
+        r = self.run_ledger(orphans=(2, 3))
+        self.assertEqual((r["totals"]["unaccounted"], r["verification-failures"]), (0, []))
+        e = PhaseEWhatIsNoContent.by_source(r)
+        self.assertEqual({k: e["src#/back-matter/resources/2/title"][k] for k in ("outcome", "kind")}, {"outcome": "not-content", "kind": "orphan"})
+        self.assertEqual(e["src#/back-matter/resources/2/rlinks/0/href"]["kind"], "orphan", "every leaf of the element")
+        self.assertEqual(e["src#/back-matter/resources/2/remarks"]["outcome"], "not-content", "its own text naming itself is no reference from outside")
+        self.assertEqual(r["totals"]["not-content"], 6)
+        self.assertEqual(e["src#/back-matter/resources/3/uuid"]["outcome"], "not-content",
+                         "equal to the document's own uuid, which is no reference to it")
+
+    def test_a_resource_a_text_or_a_metadata_link_names_is_no_orphan(self):
+        for i, source in ((0, "src#/back-matter/resources/0/title"), (1, "src#/back-matter/resources/1/title")):
+            r = self.run_ledger(orphans=(i, 2, 3), carry=tuple({0, 1} - {i}))
+            e = PhaseEWhatIsNoContent.by_source(r)
+            self.assertEqual(e[source]["outcome"], "unaccounted")
+            self.assertEqual({f["claim"] for f in r["verification-failures"]}, {"orphan"})
+            self.assertEqual(e["src#/back-matter/resources/2/title"]["outcome"], "not-content", "the true orphan is not touched")
+
+    def test_an_orphan_that_is_carried_all_the_same_reads_as_carried(self):
+        r = self.run_ledger(orphans=(2, 3), carry=(0, 1, 2))
+        self.assertEqual(PhaseEWhatIsNoContent.by_source(r)["src#/back-matter/resources/2/title"]["outcome"], "copied")
+
+    def test_an_undeclared_resource_that_is_not_carried_is_unaccounted(self):
+        r = self.run_ledger(orphans=(3,))
+        self.assertEqual(r["totals"]["unaccounted"], 4)
+
+    def test_the_rule_is_stated_about_an_elements_own_uuid(self):
+        led = Ledger(); src = led.source("src", copy.deepcopy(self.SOURCE))
+        with self.assertRaises(TypeError): led.orphan("00000000-0000-4000-8000-000000000003", "a plain string")
+        with self.assertRaises(ValueError): led.orphan(src["uuid"], "the document itself")
+
+
+class PhaseEOneCompatSchemaAndTheLifecycleDefault(unittest.TestCase):
+    def test_every_bundle_pins_the_same_compat_schema(self):
+        a, b = Bundle(tempfile.mkdtemp(), "a"), Bundle(tempfile.mkdtemp(), "b")
+        a.pin_compat(); b.pin_compat()
+        self.assertEqual(json.dumps(a.schemas), json.dumps(b.schemas))
+        pin = a.schemas["schemas/" + COMPAT_FILE]
+        self.assertEqual((pin["id"], pin["version"], pin["schema"]["additionalProperties"]), (COMPAT_ID, "1.1.0", False))
+        self.assertEqual(COMPAT, COMPAT_ID + "@1")
+        # every member a converter wrote under 1.0.0 (ISM, Grundschutz++, CSF, SP 800-53, CR26) is a member of it
+        for member in ("group-parts", "props", "nested-in", "metadata", "back-matter", "catalog", "param-extras", "parts", "links",
+                       "control", "group", "unmapped", "merge", "class", "class-variants", "ctl"):
+            self.assertIn(member, pin["schema"]["properties"])
+
+    def test_the_lifecycle_a_converter_writes_on_its_own_is_counted_and_named(self):
+        objs = {"a": {"id": "x/a", "lifecycle": "active"}, "b": {"id": "x/b", "lifecycle": "withdrawn"}, "c": {"id": "x/c", "lifecycle": "active"},
+                "m": {"objects": []}}
+        r = lifecycle_default_record(objs, stated=["x/b"])
+        self.assertEqual(r, {"value": "active", "origin": "converter-default", "objects": 2, "source-states": 1})
+        self.assertIn("`active` on 2 object(s) is the converter's default", lifecycle_default_line(r))
+        self.assertIn("On 1 object(s) the lifecycle is the source's own status", lifecycle_default_line(r))
+        with self.assertRaises(SystemExit): lifecycle_default_record(objs, stated=[])     # `withdrawn` by nobody's word
 
 
 if __name__ == "__main__":

@@ -342,3 +342,19 @@ verschiedene Modalitäten je Statement einer Anforderung. Das
 Handbuch-Beispiel `req-konf-14-1.json` nutzt das (Betreiber `may`, Kunde
 `should`), dazu 37 Fixtures in den Vektoren (risk 8, advice 29). In den
 konvertierten Korpora mischt keine Anforderung Modalität oder Partei.
+
+### Antworten auf die Rückfragen (Autor, 2026-11-14)
+
+„R1 ja, R2 statement bleibt pflicht, R3 merhere modalitäten und mehrere
+parteien, das bleibt , Plan go“
+
+- **R1:** Verwaist ist, worauf im Dokument nichts verweist. Das wird
+  nicht getragen, per geprüfter Regel „orphan“; alles andere wird in der
+  Form der Quelle getragen.
+- **R2:** Das Statement bleibt Pflicht. Für die 180 zurückgezogenen
+  SP-800-53-Controls ohne eigene Prosa entsteht die Prosa per benannter
+  Regel aus den Links der Quelle; Modalität `unspecified`, Partei der
+  Konverter-Default.
+- **R3:** Mehrere Modalitäten und mehrere Parteien je Anforderung
+  bleiben, wie der Kernel sie heute erlaubt. Kein Backlog-Punkt dazu.
+- **Plan:** freigegeben.

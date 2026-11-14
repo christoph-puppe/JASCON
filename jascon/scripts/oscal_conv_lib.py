@@ -83,6 +83,41 @@ def textify(obj, lang):
         if isinstance(op.get("deviation"), dict): wrap(op["deviation"], "rationale")
     return n
 
+# The compat facet: what a source holds and neither the kernel nor a standard
+# facet has a member for. Until 2026-11-14 five converters each pinned
+# `https://ns.jascon.net/compat/oscal-1x` 1.0.0 with a schema of their own;
+# one id and version is one schema (author, 2026-11-14), so it is written
+# here once, as 1.1.0, with every member any of them uses. The order of the
+# members is part of the pinned file.
+COMPAT_ID = "https://ns.jascon.net/compat/oscal-1x"
+COMPAT = COMPAT_ID + "@1"
+COMPAT_VERSION = "1.1.0"
+COMPAT_FILE = "oscal-1x-compat-1.1.0.json"
+COMPAT_NOTE = ("NORMATIVE pinned payload schema (backlog #26), one for every converter of this repository since "
+               "2026-11-14: closed shape - unknown keys are rejected, never smuggled")
+COMPAT_PROPERTIES = {
+    "metadata": {"type": "object"},        # the source document's metadata, in the source's shape
+    "uuid": {"type": "string"},            # the uuid the source gives the element this object is made from
+    "back-matter": {"type": "object"},     # resources something in the document refers to, in the source's shape
+    "catalog": {"type": "object"},
+    "imports": {"type": "array"},          # a profile's imports, as the source writes them
+    "merge": {"type": "object"},           # a profile's merge directive
+    "class": {"type": "string"},
+    "group-parts": {"type": "array"},
+    "param-extras": {"type": "object"},
+    "props": {"type": "array"},
+    "parts": {"type": "array"},
+    "links": {"type": "array"},
+    "control": {"type": "object"},
+    "group": {"type": "object"},
+    "nested-in": {"type": "string"},
+    "unmapped": {"type": "object"},
+    "history": {"type": "array"},          # the update history of an entry (CR26)
+    "flows": {"type": "array"},            # process flows written out in the source (CR26)
+    "class-variants": {"type": "object"},  # CR26
+    "ctl": {"type": "object"},             # CR26
+}
+
 def slug(s):
     s = re.sub(r"[^a-z0-9]+", "-", (s or "").lower()).strip("-")
     if len(s) <= 60:
@@ -156,14 +191,18 @@ class Bundle:
                              f"write it beside the manifest, after the manifest is written")
         self.objects[relpath] = obj
     def stub(self, name, fid, mods, props,
-             note="NORMATIVE pinned payload schema (backlog #26): closed shape - unknown keys are rejected, never smuggled"):
+             note="NORMATIVE pinned payload schema (backlog #26): closed shape - unknown keys are rejected, never smuggled",
+             version="1.0.0"):
         # #26 delivered: pins are the normative payload contract, fail-closed.
         # (method name kept for call-site stability; these are no longer stubs)
         self.schemas[f"schemas/{name}"] = {
-            "id": fid, "version": "1.0.0", "modifies-semantics": mods, "note": note,
+            "id": fid, "version": version, "modifies-semantics": mods, "note": note,
             "schema": {"$schema": "https://json-schema.org/draft/2020-12/schema",
                        "type": "object", "properties": props,
                        "additionalProperties": False}}
+    def pin_compat(self):
+        """Pins the one compat schema (COMPAT_PROPERTIES below)."""
+        self.stub(COMPAT_FILE, COMPAT_ID, [], COMPAT_PROPERTIES, note=COMPAT_NOTE, version=COMPAT_VERSION)
     def pin_stdlib(self, filename):
         """#26: stdlib facets are pinned VERBATIM from the normative
         descriptor - the pin and the descriptor cannot diverge."""
@@ -432,9 +471,10 @@ def _at(doc, parts):
     for x in parts: doc = doc[x]
     return doc
 
-# What becomes of a source leaf value. `not-content` (2026-11-14): a name
-# that only selects a field, a namespace, an id that is rebuilt exactly -
-# by a rule that account() checked.
+# What becomes of a source leaf value. `not-content` (2026-11-14): what may
+# stay out of a bundle by a rule that account() checked - a name that only
+# selects a field, a namespace, an id that is rebuilt exactly, and (the
+# author's fourth class of the same day) an element nothing refers to.
 LEDGER_OUTCOMES = ("copied", "transformed", "not-content", "intentionally-dropped", "unaccounted")
 
 def ledger_gate(result, converter):
@@ -458,6 +498,7 @@ class Ledger:
         self._same = []         # (dropped tracked value, kept tracked value, rule)
         self._placed = []       # (tracked boolean, destination) noted by resolve()
         self._not_content = {}  # (tag, parts) -> (kind, rule, check, origins it depends on)
+        self._refs = {}         # (tag, uuid, prefix) -> is the element referred to from outside itself
 
     def source(self, tag, doc, typed=False):
         """-> a copy of `doc` whose string and integer leaves carry their origin.
@@ -587,6 +628,40 @@ class Ledger:
         does not give is not covered, and the claim is reported as one that
         does not hold. The inputs are single values, a source's or plain."""
         self._declare(value, "rebuilt-id", rule, (fn, tuple(inputs)), self._leaf_origins(inputs), needs=False)
+
+    def orphan(self, uuid, rule, reference="#{}"):
+        """The element that holds `uuid` (a back-matter resource) is orphaned:
+        nothing else in its document refers to it, so nobody can reach it
+        and it is not carried (author, 2026-11-14: "orphaned elemente
+        braucht niemand"). `uuid`: the element's own uuid, as source() gave
+        it; every leaf of the element is covered. `reference`: how the
+        document refers to such an element, with {} for the uuid (OSCAL
+        writes a link to a back-matter resource as `#uuid`). Checked by
+        account(): no string of the same document outside the element
+        contains that reference. Where one does, the claim does not hold and
+        the leaves are unaccounted. A leaf that has a destination is carried
+        all the same."""
+        if not isinstance(uuid, _Tracked) or uuid._rule is not None or len(uuid._origins) != 1:
+            raise TypeError(f"orphan ({rule}): the uuid must be one leaf of a source, as source() gave it")
+        tag, parts = uuid._origins[0]
+        prefix, value = parts[:-1], reference.format(_plain(uuid))
+        if not prefix: raise ValueError(f"orphan ({rule}): the uuid of the document itself is no element of it")
+        check = lambda _v, tag=tag, prefix=prefix, value=value: not self._referred_to(tag, value, prefix)
+        for t, leaf in self.leaves:
+            if t == tag and leaf[:len(prefix)] == prefix:
+                self._not_content.setdefault((t, leaf), ("orphan", rule, check, ()))
+
+    def _referred_to(self, tag, value, prefix):
+        """Does a string of document `tag` outside the element at `prefix` contain `value`?"""
+        key = (tag, value, prefix)
+        if key not in self._refs:
+            def walk(n, parts):
+                if parts[:len(prefix)] == prefix and len(parts) >= len(prefix): return False
+                if isinstance(n, dict): return any(walk(v, parts + (k,)) for k, v in n.items())
+                if isinstance(n, list): return any(walk(v, parts + (i,)) for i, v in enumerate(n))
+                return isinstance(n, str) and value in n
+            self._refs[key] = walk(self.docs[tag], ())
+        return self._refs[key]
 
     def same(self, dropped, kept, rule):
         """Deduplication: `dropped` and `kept` are two structures the converter
@@ -968,6 +1043,29 @@ def obligated_party(argv, default):
     v = argv[given[0] + 1]
     if not re.match(r"https?://[^\s]+\Z", v): raise SystemExit(f"--obligated-party {v!r} is not an http(s) URI of a party")
     return v, "caller"
+
+def lifecycle_default_record(objects, stated):
+    """What a coverage report's JSON says under `lifecycle-default`: the
+    kernel requires a lifecycle on every object, and where the source states
+    no status the converter writes `active` as its own, named default
+    (author, 2026-11-14). objects: {relpath: object} of the bundle; stated:
+    the ids of the objects whose lifecycle is the source's word (a status
+    mapped by a rule)."""
+    stated = set(stated)
+    own = [o for o in objects.values() if isinstance(o, dict) and "lifecycle" in o and o.get("id") not in stated]
+    other = sorted({o["lifecycle"] for o in own} - {"active"})
+    if other: raise SystemExit(f"lifecycle {other} is written on an object whose status the source does not state: "
+                               f"the converter's default is `active` and nothing else")
+    return {"value": "active", "origin": "converter-default", "objects": len(own),
+            "source-states": sum(1 for o in objects.values() if isinstance(o, dict) and o.get("id") in stated)}
+
+def lifecycle_default_line(record):
+    """The line of a coverage report (markdown) for lifecycle_default_record()."""
+    n, m = record["objects"], record["source-states"]
+    tail = (f" On {m:,} object(s) the lifecycle is the source's own status, mapped by a rule." if m
+            else " The source states no status on any object.")
+    return (f"- **Lifecycle**: `active` on {n:,} object(s) is the converter's default and not a value of the source: "
+            f"the kernel requires a lifecycle on every object, and a published catalogue is taken to be in force." + tail)
 
 def obligated_party_record(party, origin, default, source_states=None):
     """What a coverage report's JSON says about it, under `obligated-party`:
