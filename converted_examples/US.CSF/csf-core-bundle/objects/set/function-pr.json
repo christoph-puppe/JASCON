@@ -12,28 +12,36 @@
    "sequence": 10
   },
   {
-   "ref": "https://ns.nist.gov/csf/set/category/pr-at",
+   "ref": "https://ns.nist.gov/csf/set/category/pr-ac",
    "sequence": 20
   },
   {
-   "ref": "https://ns.nist.gov/csf/set/category/pr-ds",
+   "ref": "https://ns.nist.gov/csf/set/category/pr-at",
    "sequence": 30
   },
   {
-   "ref": "https://ns.nist.gov/csf/set/category/pr-ip",
+   "ref": "https://ns.nist.gov/csf/set/category/pr-ds",
    "sequence": 40
   },
   {
-   "ref": "https://ns.nist.gov/csf/set/category/pr-pt",
+   "ref": "https://ns.nist.gov/csf/set/category/pr-ip",
    "sequence": 50
   },
   {
-   "ref": "https://ns.nist.gov/csf/set/category/pr-ps",
+   "ref": "https://ns.nist.gov/csf/set/category/pr-ma",
    "sequence": 60
   },
   {
-   "ref": "https://ns.nist.gov/csf/set/category/pr-ir",
+   "ref": "https://ns.nist.gov/csf/set/category/pr-pt",
    "sequence": 70
+  },
+  {
+   "ref": "https://ns.nist.gov/csf/set/category/pr-ps",
+   "sequence": 80
+  },
+  {
+   "ref": "https://ns.nist.gov/csf/set/category/pr-ir",
+   "sequence": 90
   }
  ],
  "facets": {

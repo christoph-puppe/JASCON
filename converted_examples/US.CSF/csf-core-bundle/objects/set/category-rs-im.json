@@ -1,0 +1,19 @@
+{
+ "id": "https://ns.nist.gov/csf/set/category/rs-im",
+ "version": "2.0",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Improvements"
+ },
+ "label": "Improvements (RS.IM)",
+ "members": [
+  {
+   "ref": "https://ns.nist.gov/csf/req/RS.IM-01",
+   "sequence": 10
+  },
+  {
+   "ref": "https://ns.nist.gov/csf/req/RS.IM-02",
+   "sequence": 20
+  }
+ ]
+}

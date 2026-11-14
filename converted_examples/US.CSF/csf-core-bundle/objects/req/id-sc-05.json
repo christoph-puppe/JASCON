@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/csf/req/ID.SC-05",
+ "version": "2.0",
+ "label": "ID.SC-05",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "ID.SC-05"
+ },
+ "statements": [
+  {
+   "id": "statement",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/csf/party/organization"
+   ],
+   "prose": {
+    "en": "Response and recovery planning and testing are conducted with suppliers and third-party providers"
+   }
+  }
+ ]
+}

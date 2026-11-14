@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/csf/req/PR.DS-03",
+ "version": "2.0",
+ "label": "PR.DS-03",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "PR.DS-03"
+ },
+ "statements": [
+  {
+   "id": "statement",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/csf/party/organization"
+   ],
+   "prose": {
+    "en": "Assets are formally managed throughout removal, transfers, and disposition"
+   }
+  }
+ ]
+}

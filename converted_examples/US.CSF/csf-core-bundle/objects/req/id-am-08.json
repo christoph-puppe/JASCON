@@ -115,50 +115,5 @@
    "ref": "https://ns.nist.gov/csf/req/PR.MA-02",
    "mode": "renamed"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/csf/req/PR.DS-03",
-    "mode": "merged-into",
-    "label": "PR.DS-03",
-    "title": "PR.DS-03",
-    "prose": "Assets are formally managed throughout removal, transfers, and disposition"
-   },
-   {
-    "ref": "https://ns.nist.gov/csf/req/PR.IP-02",
-    "mode": "merged-into",
-    "label": "PR.IP-02",
-    "title": "PR.IP-02",
-    "prose": "A System Development Life Cycle to manage systems is implemented"
-   },
-   {
-    "ref": "https://ns.nist.gov/csf/req/PR.IP-06",
-    "mode": "merged-into",
-    "label": "PR.IP-06",
-    "title": "PR.IP-06",
-    "prose": "Data is destroyed according to policy"
-   },
-   {
-    "ref": "https://ns.nist.gov/csf/set/category/pr-ma",
-    "mode": "merged-into",
-    "label": "Maintenance (PR.MA)",
-    "title": "Maintenance"
-   },
-   {
-    "ref": "https://ns.nist.gov/csf/req/PR.MA-01",
-    "mode": "renamed",
-    "label": "PR.MA-01",
-    "title": "PR.MA-01",
-    "prose": "Maintenance and repair of organizational assets are performed and logged, with approved and controlled tools"
-   },
-   {
-    "ref": "https://ns.nist.gov/csf/req/PR.MA-02",
-    "mode": "renamed",
-    "label": "PR.MA-02",
-    "title": "PR.MA-02",
-    "prose": "Remote maintenance of organizational assets is approved, logged, and performed in a manner that prevents unauthorized access"
-   }
-  ]
- }
+ ]
 }

@@ -63,23 +63,5 @@
    "ref": "https://ns.nist.gov/csf/req/PR.PT-04",
    "mode": "merged-into"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/csf/req/PR.AC-02",
-    "mode": "renamed",
-    "label": "PR.AC-02",
-    "title": "PR.AC-02",
-    "prose": "Physical access to assets is managed and protected"
-   },
-   {
-    "ref": "https://ns.nist.gov/csf/req/PR.PT-04",
-    "mode": "merged-into",
-    "label": "PR.PT-04",
-    "title": "PR.PT-04",
-    "prose": "Communications and control networks are protected"
-   }
-  ]
- }
+ ]
 }

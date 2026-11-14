@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/csf/req/PR.AC-05",
+ "version": "2.0",
+ "label": "PR.AC-05",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "PR.AC-05"
+ },
+ "statements": [
+  {
+   "id": "statement",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/csf/party/organization"
+   ],
+   "prose": {
+    "en": "Network integrity is protected (e.g., network segregation, network segmentation)"
+   }
+  }
+ ]
+}

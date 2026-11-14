@@ -53,16 +53,5 @@
    "ref": "https://ns.nist.gov/csf/req/PR.IP-05",
    "mode": "merged-into"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/csf/req/PR.IP-05",
-    "mode": "merged-into",
-    "label": "PR.IP-05",
-    "title": "PR.IP-05",
-    "prose": "Policy and regulations regarding the physical operating environment for organizational assets are met"
-   }
-  ]
- }
+ ]
 }

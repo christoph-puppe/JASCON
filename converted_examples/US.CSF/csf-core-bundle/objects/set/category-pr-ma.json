@@ -1,0 +1,19 @@
+{
+ "id": "https://ns.nist.gov/csf/set/category/pr-ma",
+ "version": "2.0",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Maintenance"
+ },
+ "label": "Maintenance (PR.MA)",
+ "members": [
+  {
+   "ref": "https://ns.nist.gov/csf/req/PR.MA-01",
+   "sequence": 10
+  },
+  {
+   "ref": "https://ns.nist.gov/csf/req/PR.MA-02",
+   "sequence": 20
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/csf/req/PR.DS-05",
+ "version": "2.0",
+ "label": "PR.DS-05",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "PR.DS-05"
+ },
+ "statements": [
+  {
+   "id": "statement",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/csf/party/organization"
+   ],
+   "prose": {
+    "en": "Protections against data leaks are implemented"
+   }
+  }
+ ]
+}

@@ -53,16 +53,5 @@
    "ref": "https://ns.nist.gov/csf/req/ID.SC-01",
    "mode": "merged-into"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/csf/req/ID.SC-01",
-    "mode": "merged-into",
-    "label": "ID.SC-01",
-    "title": "ID.SC-01",
-    "prose": "Cyber supply chain risk management processes are identified, established, assessed, managed, and agreed to by organizational stakeholders"
-   }
-  ]
- }
+ ]
 }

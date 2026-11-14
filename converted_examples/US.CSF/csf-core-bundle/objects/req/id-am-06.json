@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/csf/req/ID.AM-06",
+ "version": "2.0",
+ "label": "ID.AM-06",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "ID.AM-06"
+ },
+ "statements": [
+  {
+   "id": "statement",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/csf/party/organization"
+   ],
+   "prose": {
+    "en": "Cybersecurity roles and responsibilities for the entire workforce and third-party stakeholders (e.g., suppliers, customers, partners) are established"
+   }
+  }
+ ]
+}

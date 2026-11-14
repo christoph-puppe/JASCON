@@ -57,23 +57,5 @@
    "ref": "https://ns.nist.gov/csf/req/RS.AN-04",
    "mode": "renamed"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/csf/req/RS.AN-02",
-    "mode": "merged-into",
-    "label": "RS.AN-02",
-    "title": "RS.AN-02",
-    "prose": "The impact of the incident is understood"
-   },
-   {
-    "ref": "https://ns.nist.gov/csf/req/RS.AN-04",
-    "mode": "renamed",
-    "label": "RS.AN-04",
-    "title": "RS.AN-04",
-    "prose": "Incidents are categorized consistent with response plans"
-   }
-  ]
- }
+ ]
 }

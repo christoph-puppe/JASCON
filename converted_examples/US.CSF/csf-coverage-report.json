@@ -11,25 +11,25 @@
    "path": "csf.catalog.back-matter.resources[].rlinks[].href",
    "count": 4,
    "level": "L1",
-   "destination": "references@1 facet on the root Set (title; the address of the first link as url) [ledger: 4 copied]"
+   "destination": "references@1 facet on the root Set: a resource that something in the document refers to, as the source writes it (uuid, title, links with their media type); a resource nothing refers to is an orphan and is not carried (a rule the ledger checks) [ledger: 3 copied, 1 no content]"
   },
   {
    "path": "csf.catalog.back-matter.resources[].rlinks[].media-type",
    "count": 3,
    "level": "L1",
-   "destination": "declared drops, not decided: the uuid of a resource and the media type of its link [ledger: 3 dropped]"
+   "destination": "references@1 facet on the root Set: a resource that something in the document refers to, as the source writes it (uuid, title, links with their media type); a resource nothing refers to is an orphan and is not carried (a rule the ledger checks) [ledger: 3 copied]"
   },
   {
    "path": "csf.catalog.back-matter.resources[].title",
    "count": 4,
    "level": "L1",
-   "destination": "references@1 facet on the root Set (title; the address of the first link as url) [ledger: 4 copied]"
+   "destination": "references@1 facet on the root Set: a resource that something in the document refers to, as the source writes it (uuid, title, links with their media type); a resource nothing refers to is an orphan and is not carried (a rule the ledger checks) [ledger: 3 copied, 1 no content]"
   },
   {
    "path": "csf.catalog.back-matter.resources[].uuid",
    "count": 4,
    "level": "L1",
-   "destination": "declared drops, not decided: the uuid of a resource and the media type of its link [ledger: 4 dropped]"
+   "destination": "references@1 facet on the root Set: a resource that something in the document refers to, as the source writes it (uuid, title, links with their media type); a resource nothing refers to is an orphan and is not carried (a rule the ledger checks) [ledger: 3 copied, 1 no content]"
   },
   {
    "path": "csf.catalog.groups[].class",
@@ -47,7 +47,7 @@
    "path": "csf.catalog.groups[].controls[].id",
    "count": 219,
    "level": "L1",
-   "destination": "category Set / subcategory Requirement id (URI mint); withdrawn with a successor: the `ref` of the entry in the replaces[] and the nist-withdrawal annotation of each successor; withdrawn without one: the id of a Set or Requirement with lifecycle `withdrawn` [ledger: 219 transformed]"
+   "destination": "category Set / subcategory Requirement id (URI mint); withdrawn with a successor: also the `ref` of the entry in the replaces[] of each successor [ledger: 219 transformed]"
   },
   {
    "path": "csf.catalog.groups[].controls[].links[].href",
@@ -59,13 +59,13 @@
    "path": "csf.catalog.groups[].controls[].links[].rel",
    "count": 135,
    "level": "L1",
-   "destination": "incorporated_into/moved_to (UNDERSCORE spelling - source finding) -> `mode` (merged-into/renamed) of the entry in the successor's replaces[] + nist-withdrawal annotation; what the mapping does not know is carried as it is in the compat facet (`unmapped`) [ledger: 135 transformed]"
+   "destination": "incorporated_into/moved_to (UNDERSCORE spelling - source finding) -> `mode` (merged-into/renamed) of the entry in the successor's replaces[]; what the mapping does not know is carried as it is in the compat facet (`unmapped`) [ledger: 135 transformed]"
   },
   {
    "path": "csf.catalog.groups[].controls[].parts[].id",
    "count": 582,
    "level": "L1",
-   "destination": "subcategory statement id -> statements[0].id, without the control prefix; example id -> examples@1; the id of a category's statement part and of the statement part of a withdrawn item with a successor: no content, rebuilt exactly, the id of the item and `_statement` (a rule the ledger checks); what the mapping does not know is carried as it is in the compat facet (`unmapped`) [ledger: 363 copied, 106 transformed, 113 no content]"
+   "destination": "subcategory statement id -> statements[0].id, without the control prefix; example id -> examples@1; the id of a category's statement part and of the statement part of a withdrawn item with a successor: no content, rebuilt exactly, the id of the item and `_statement` (a rule the ledger checks); what the mapping does not know is carried as it is in the compat facet (`unmapped`) [ledger: 363 copied, 185 transformed, 34 no content]"
   },
   {
    "path": "csf.catalog.groups[].controls[].parts[].name",
@@ -83,13 +83,13 @@
    "path": "csf.catalog.groups[].controls[].parts[].prose",
    "count": 570,
    "level": "L1",
-   "destination": "subcategory statement -> statements[0] (modality unspecified); category statement -> narrative@1 on the Set; example parts -> examples@1 (language-tagged); withdrawn with a successor: statement prose -> `prose` in the nist-withdrawal annotation of each successor; what the mapping does not know is carried as it is in the compat facet (`unmapped`) [ledger: 570 copied]"
+   "destination": "subcategory statement -> statements[0] (modality unspecified); category statement -> narrative@1 on the Set; example parts -> examples@1 (language-tagged); what the mapping does not know is carried as it is in the compat facet (`unmapped`) [ledger: 570 copied]"
   },
   {
    "path": "csf.catalog.groups[].controls[].props[].name",
    "count": 654,
    "level": "L1",
-   "destination": "risk-party: the key under which csf@1 holds the value; label, sort-id, status: no content, the name selects the field its value is written to (a rule the ledger checks); the name of a sort-id that is dropped is dropped with it; what the mapping does not know is carried as it is in the compat facet (`unmapped`) [ledger: 125 copied, 442 no content, 87 dropped]"
+   "destination": "risk-party: the key under which csf@1 holds the value; label, sort-id, status: no content, the name selects the field its value is written to (a rule the ledger checks); what the mapping does not know is carried as it is in the compat facet (`unmapped`) [ledger: 125 copied, 529 no content]"
   },
   {
    "path": "csf.catalog.groups[].controls[].props[].ns",
@@ -107,13 +107,13 @@
    "path": "csf.catalog.groups[].controls[].props[].value",
    "count": 654,
    "level": "L1",
-   "destination": "label->label (withdrawn with a successor: `label` in the successor's annotation); sort-id->Set sequence (withdrawn with a successor: a declared drop, not decided); risk-party->csf@1, every value, a list where an item has two; status `withdrawn`->lifecycle `withdrawn` of the object, and for an item with a successor an input of the rule that writes its entry on the successor; what the mapping does not know is carried as it is in the compat facet (`unmapped`) [ledger: 348 copied, 219 transformed, 87 dropped]"
+   "destination": "label->label; sort-id->Set sequence; risk-party->csf@1, every value, a list where an item has two; status `withdrawn`->lifecycle `withdrawn` of the object, and for an item with a successor an input of the rule that writes its entry on the successor; what the mapping does not know is carried as it is in the compat facet (`unmapped`) [ledger: 435 copied, 219 transformed]"
   },
   {
    "path": "csf.catalog.groups[].controls[].title",
    "count": 219,
    "level": "L1",
-   "destination": "category Set / subcategory Requirement title; withdrawn with a successor: `title` in the nist-withdrawal annotation of each successor [ledger: 219 copied]"
+   "destination": "category Set / subcategory Requirement title [ledger: 219 copied]"
   },
   {
    "path": "csf.catalog.groups[].id",
@@ -340,14 +340,14 @@
   {
    "path": "csf.catalog.uuid",
    "count": 1,
-   "level": "L1",
-   "destination": "declared drop, not decided: the uuid of the source document [ledger: 1 dropped]"
+   "level": "L2",
+   "destination": "compat facet on the root Set, member `uuid` [ledger: 1 copied]"
   }
  ],
  "source-version": "2.0",
  "objects-emitted": {
-  "requirements": 106,
-  "sets": 33
+  "requirements": 185,
+  "sets": 41
  },
  "withdrawn": {
   "count": 91,
@@ -372,14 +372,101 @@
   "chains": [],
   "dangling": [],
   "objects-with-lifecycle-withdrawn": [
+   "ID.AM-06",
+   "ID.BE",
+   "ID.BE-01",
+   "ID.BE-02",
+   "ID.BE-03",
+   "ID.BE-04",
+   "ID.BE-05",
+   "ID.GV",
+   "ID.GV-01",
+   "ID.GV-02",
+   "ID.GV-03",
+   "ID.GV-04",
+   "ID.RM",
+   "ID.RM-01",
+   "ID.RM-02",
+   "ID.RM-03",
+   "ID.SC",
+   "ID.SC-01",
+   "ID.SC-02",
+   "ID.SC-03",
+   "ID.SC-04",
+   "ID.SC-05",
+   "PR.AC",
+   "PR.AC-01",
+   "PR.AC-02",
+   "PR.AC-03",
+   "PR.AC-04",
+   "PR.AC-05",
+   "PR.AC-06",
+   "PR.AC-07",
+   "PR.AT-03",
+   "PR.AT-04",
+   "PR.AT-05",
+   "PR.DS-03",
+   "PR.DS-04",
+   "PR.DS-05",
+   "PR.DS-06",
+   "PR.DS-07",
+   "PR.DS-08",
    "PR.IP",
+   "PR.IP-01",
+   "PR.IP-02",
+   "PR.IP-03",
+   "PR.IP-04",
+   "PR.IP-05",
+   "PR.IP-06",
+   "PR.IP-07",
+   "PR.IP-08",
+   "PR.IP-09",
+   "PR.IP-10",
+   "PR.IP-11",
+   "PR.IP-12",
+   "PR.MA",
+   "PR.MA-01",
+   "PR.MA-02",
    "PR.PT",
+   "PR.PT-01",
+   "PR.PT-02",
+   "PR.PT-03",
+   "PR.PT-04",
+   "PR.PT-05",
+   "DE.AE-01",
+   "DE.AE-05",
+   "DE.CM-04",
+   "DE.CM-05",
+   "DE.CM-07",
+   "DE.CM-08",
    "DE.DP",
-   "RS.RP"
+   "DE.DP-01",
+   "DE.DP-02",
+   "DE.DP-03",
+   "DE.DP-04",
+   "DE.DP-05",
+   "RS.AN-01",
+   "RS.AN-02",
+   "RS.AN-04",
+   "RS.AN-05",
+   "RS.CO-01",
+   "RS.CO-04",
+   "RS.CO-05",
+   "RS.IM",
+   "RS.IM-01",
+   "RS.IM-02",
+   "RS.MI-03",
+   "RS.RP",
+   "RS.RP-01",
+   "RC.CO-01",
+   "RC.CO-02",
+   "RC.IM",
+   "RC.IM-01",
+   "RC.IM-02"
   ]
  },
  "modality": {
-  "unspecified": 106
+  "unspecified": 185
  },
  "examples": 363,
  "risk-party": 103,
@@ -388,6 +475,12 @@
   "value": "https://ns.nist.gov/csf/party/organization",
   "origin": "converter-default",
   "converter-default": "https://ns.nist.gov/csf/party/organization"
+ },
+ "lifecycle-default": {
+  "value": "active",
+  "origin": "converter-default",
+  "objects": 135,
+  "source-states": 91
  },
  "lang-wraps": {
   "example": 363,
@@ -398,23 +491,23 @@
   "file": "csf-conversion-ledger.json",
   "leaf-values": 4726,
   "totals": {
-   "copied": 1844,
-   "transformed": 826,
-   "not-content": 1874,
-   "intentionally-dropped": 182,
+   "copied": 1936,
+   "transformed": 905,
+   "not-content": 1885,
+   "intentionally-dropped": 0,
    "unaccounted": 0
   },
   "verification-failures": 0,
   "rules": {
-   "Requirement URI from the subcategory id": 318,
-   "category Set URI from the category id": 78,
-   "file path of the object in the bundle, from the id": 138,
+   "Requirement URI from the subcategory id": 555,
+   "category Set URI from the category id": 102,
+   "file path of the object in the bundle, from the id": 225,
    "function Set URI from the function id": 18,
-   "lineage inverted: the URI of a withdrawn item, written on the successor that its link names": 270,
-   "lineage mode from the link relation (incorporated_into -> merged-into, moved_to -> renamed)": 270,
-   "member sequence of a subcategory: ten times its place among all subcategories of its category, withdrawn ones counted, in the order of the sort-ids": 106,
-   "member sequence: ten times the place of the member among the members of its Set, in the order of the sort-ids": 32,
-   "statement id: the id of the statement part without the control prefix": 106
+   "lineage inverted: the URI of a withdrawn item, written on the successor that its link names": 135,
+   "lineage mode from the link relation (incorporated_into -> merged-into, moved_to -> renamed)": 135,
+   "member sequence of a subcategory: ten times its place among all subcategories of its category, withdrawn ones counted, in the order of the sort-ids": 185,
+   "member sequence: ten times the place of the member among the members of its Set, in the order of the sort-ids": 40,
+   "statement id: the id of the statement part without the control prefix": 185
   },
   "not-content": [
    {
@@ -423,9 +516,14 @@
     "count": 488
    },
    {
+    "kind": "orphan",
+    "rule": "a back-matter resource that nothing in the document refers to: nobody can reach it, and it is not carried",
+    "count": 3
+   },
+   {
     "kind": "rebuilt-id",
     "rule": "the id of a statement part is the id of its item and `_statement`",
-    "count": 113
+    "count": 34
    },
    {
     "kind": "rebuilt-id",
@@ -445,55 +543,19 @@
    {
     "kind": "selector",
     "rule": "the name of a prop selects the field its value is written to (label, sort-id, status)",
-    "count": 454
+    "count": 541
    }
   ],
-  "declared-drops": [
-   {
-    "path": "csf.catalog.uuid",
-    "count": 1,
-    "reason": "as decided for IFA on 2026-11-13: the uuid of a source element identifies it inside the source document only; JASCON objects get URIs minted from the ids of the source, and the uuid itself is not carried",
-    "example": "720a010b-253c-4a94-bb65-cb58400966f5",
-    "reading": "content: it identifies the source document, and nothing in the bundle lets a reader rebuild it"
-   },
-   {
-    "path": "csf.catalog.groups[].controls[].props[].name",
-    "count": 87,
-    "reason": "the name of a prop selects the field its value is written to (label, sort-id, status) - of a value that is dropped: a withdrawn item that names a successor is not emitted; the bundle carries its lineage on the successor - id, label, title, statement prose and each link. Its sort-id, the place among its siblings, is none of those: a withdrawn item of this kind is a member of no Set",
-    "example": "sort-id",
-    "reading": "not content, because the name `sort-id` only selects the value beside it; it shares the fate of that value"
-   },
-   {
-    "path": "csf.catalog.groups[].controls[].props[].value",
-    "count": 87,
-    "reason": "a withdrawn item that names a successor is not emitted; the bundle carries its lineage on the successor - id, label, title, statement prose and each link. Its sort-id, the place among its siblings, is none of those: a withdrawn item of this kind is a member of no Set",
-    "example": "00002.00001.00006",
-    "reading": "content: the order of the withdrawn items among their siblings. Where the siblings are members of a Set the place stays empty in their sequence; of a withdrawn item under a withdrawn category nothing in the bundle shows it"
-   },
-   {
-    "path": "csf.catalog.back-matter.resources[].uuid",
-    "count": 4,
-    "reason": "as decided for IFA on 2026-11-13: the uuid of a source element identifies it inside the source document only; JASCON objects get URIs minted from the ids of the source, and the uuid itself is not carried",
-    "example": "3ab41d8a-66e3-4732-ae28-07405dad5127",
-    "reading": "content: the links of the document metadata, carried in the compat facet, name a resource by this uuid; without it a reader cannot tell which resource is the canonical and which an alternate one"
-   },
-   {
-    "path": "csf.catalog.back-matter.resources[].rlinks[].media-type",
-    "count": 3,
-    "reason": "as decided for IFA on 2026-11-13: a back-matter resource is a link to another rendition of the source; its title and address are carried in references@1, the media type of the link is not",
-    "example": "application/pdf",
-    "reading": "content: it says what the address leads to (a PDF, a web page)"
-   }
-  ],
+  "declared-drops": [],
   "written-without-a-source": {
-   "object-leaf-values": 3407,
-   "count": 487,
+   "object-leaf-values": 3670,
+   "count": 732,
    "by-pointer": {
     "/id": 1,
     "/lifecycle": 135,
-    "/statements/[]/modality": 106,
-    "/statements/[]/obligated-parties/[]": 106,
-    "/version": 139
+    "/statements/[]/modality": 185,
+    "/statements/[]/obligated-parties/[]": 185,
+    "/version": 226
    }
   }
  }

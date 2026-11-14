@@ -2,10 +2,10 @@
  "measures": "one row per source path and outcome; every source leaf value was traced and checked against the written files in the run that wrote this record, and is counted in one row",
  "leaf-values": 4726,
  "totals": {
-  "copied": 1844,
-  "transformed": 826,
-  "not-content": 1874,
-  "intentionally-dropped": 182,
+  "copied": 1936,
+  "transformed": 905,
+  "not-content": 1885,
+  "intentionally-dropped": 0,
   "unaccounted": 0
  },
  "verification-failures": [],
@@ -14,23 +14,36 @@
   {
    "path": "csf.catalog.back-matter.resources[].rlinks[].href",
    "outcome": "copied",
-   "count": 4,
+   "count": 3,
    "example": "csf#/catalog/back-matter/resources/0/rlinks/0/href",
    "to": [
     {
-     "pointer": "/facets/https:~1~1ns.nist.gov~1csf~1facet~1references@1/resources/[]/url",
-     "count": 4
+     "pointer": "/facets/https:~1~1ns.nist.gov~1csf~1facet~1references@1/resources/[]/rlinks/[]/href",
+     "count": 3
+    }
+   ]
+  },
+  {
+   "path": "csf.catalog.back-matter.resources[].rlinks[].href",
+   "outcome": "not-content",
+   "count": 1,
+   "example": "csf#/catalog/back-matter/resources/3/rlinks/0/href",
+   "rules": [
+    {
+     "kind": "orphan",
+     "rule": "a back-matter resource that nothing in the document refers to: nobody can reach it, and it is not carried",
+     "count": 1
     }
    ]
   },
   {
    "path": "csf.catalog.back-matter.resources[].rlinks[].media-type",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 3,
    "example": "csf#/catalog/back-matter/resources/0/rlinks/0/media-type",
-   "reasons": [
+   "to": [
     {
-     "reason": "as decided for IFA on 2026-11-13: a back-matter resource is a link to another rendition of the source; its title and address are carried in references@1, the media type of the link is not",
+     "pointer": "/facets/https:~1~1ns.nist.gov~1csf~1facet~1references@1/resources/[]/rlinks/[]/media-type",
      "count": 3
     }
    ]
@@ -38,24 +51,50 @@
   {
    "path": "csf.catalog.back-matter.resources[].title",
    "outcome": "copied",
-   "count": 4,
+   "count": 3,
    "example": "csf#/catalog/back-matter/resources/0/title",
    "to": [
     {
      "pointer": "/facets/https:~1~1ns.nist.gov~1csf~1facet~1references@1/resources/[]/title",
-     "count": 4
+     "count": 3
+    }
+   ]
+  },
+  {
+   "path": "csf.catalog.back-matter.resources[].title",
+   "outcome": "not-content",
+   "count": 1,
+   "example": "csf#/catalog/back-matter/resources/3/title",
+   "rules": [
+    {
+     "kind": "orphan",
+     "rule": "a back-matter resource that nothing in the document refers to: nobody can reach it, and it is not carried",
+     "count": 1
     }
    ]
   },
   {
    "path": "csf.catalog.back-matter.resources[].uuid",
-   "outcome": "intentionally-dropped",
-   "count": 4,
+   "outcome": "copied",
+   "count": 3,
    "example": "csf#/catalog/back-matter/resources/0/uuid",
-   "reasons": [
+   "to": [
     {
-     "reason": "as decided for IFA on 2026-11-13: the uuid of a source element identifies it inside the source document only; JASCON objects get URIs minted from the ids of the source, and the uuid itself is not carried",
-     "count": 4
+     "pointer": "/facets/https:~1~1ns.nist.gov~1csf~1facet~1references@1/resources/[]/uuid",
+     "count": 3
+    }
+   ]
+  },
+  {
+   "path": "csf.catalog.back-matter.resources[].uuid",
+   "outcome": "not-content",
+   "count": 1,
+   "example": "csf#/catalog/back-matter/resources/3/uuid",
+   "rules": [
+    {
+     "kind": "orphan",
+     "rule": "a back-matter resource that nothing in the document refers to: nobody can reach it, and it is not carried",
+     "count": 1
     }
    ]
   },
@@ -105,28 +144,23 @@
    "example": "csf#/catalog/groups/0/controls/0/controls/0/id",
    "to": [
     {
-     "pointer": "/annotations/nist-withdrawal/[]/ref",
-     "count": 250,
-     "rule": "lineage inverted: the URI of a withdrawn item, written on the successor that its link names"
-    },
-    {
      "pointer": "/id",
-     "count": 106,
+     "count": 185,
      "rule": "Requirement URI from the subcategory id"
     },
     {
      "pointer": "/members/[]/ref",
-     "count": 106,
+     "count": 185,
      "rule": "Requirement URI from the subcategory id"
     },
     {
      "pointer": "/objects/[]/id",
-     "count": 106,
+     "count": 185,
      "rule": "Requirement URI from the subcategory id"
     },
     {
      "pointer": "/objects/[]/path",
-     "count": 106,
+     "count": 185,
      "rule": "file path of the object in the bundle, from the id"
     },
     {
@@ -136,7 +170,7 @@
     },
     {
      "pointer": "/statements/[]/id",
-     "count": 106,
+     "count": 185,
      "rule": "statement id: the id of the statement part without the control prefix"
     }
    ]
@@ -147,11 +181,6 @@
    "count": 127,
    "example": "csf#/catalog/groups/1/controls/0/controls/5/links/0/href",
    "to": [
-    {
-     "pointer": "/annotations/nist-withdrawal/[]/ref",
-     "count": 127,
-     "rule": "lineage inverted: the URI of a withdrawn item, written on the successor that its link names"
-    },
     {
      "pointer": "/replaces/[]/ref",
      "count": 127,
@@ -165,11 +194,6 @@
    "count": 127,
    "example": "csf#/catalog/groups/1/controls/0/controls/5/links/0/rel",
    "to": [
-    {
-     "pointer": "/annotations/nist-withdrawal/[]/mode",
-     "count": 127,
-     "rule": "lineage mode from the link relation (incorporated_into -> merged-into, moved_to -> renamed)"
-    },
     {
      "pointer": "/replaces/[]/mode",
      "count": 127,
@@ -191,26 +215,13 @@
   },
   {
    "path": "csf.catalog.groups[].controls[].controls[].parts[].id",
-   "outcome": "not-content",
-   "count": 79,
-   "example": "csf#/catalog/groups/1/controls/0/controls/5/parts/0/id",
-   "rules": [
-    {
-     "kind": "rebuilt-id",
-     "rule": "the id of a statement part is the id of its item and `_statement`",
-     "count": 79
-    }
-   ]
-  },
-  {
-   "path": "csf.catalog.groups[].controls[].controls[].parts[].id",
    "outcome": "transformed",
-   "count": 106,
+   "count": 185,
    "example": "csf#/catalog/groups/0/controls/0/controls/0/parts/0/id",
    "to": [
     {
      "pointer": "/statements/[]/id",
-     "count": 106,
+     "count": 185,
      "rule": "statement id: the id of the statement part without the control prefix"
     }
    ]
@@ -248,16 +259,12 @@
    "example": "csf#/catalog/groups/0/controls/0/controls/0/parts/0/prose",
    "to": [
     {
-     "pointer": "/annotations/nist-withdrawal/[]/prose",
-     "count": 127
-    },
-    {
      "pointer": "/facets/https:~1~1ns.nist.gov~1csf~1facet~1examples@1/examples/[]/prose/en",
      "count": 363
     },
     {
      "pointer": "/statements/[]/prose/en",
-     "count": 106
+     "count": 185
     }
    ]
   },
@@ -282,26 +289,14 @@
   },
   {
    "path": "csf.catalog.groups[].controls[].controls[].props[].name",
-   "outcome": "intentionally-dropped",
-   "count": 79,
-   "example": "csf#/catalog/groups/1/controls/0/controls/5/props/0/name",
-   "reasons": [
-    {
-     "reason": "the name of a prop selects the field its value is written to (label, sort-id, status) - of a value that is dropped: a withdrawn item that names a successor is not emitted; the bundle carries its lineage on the successor - id, label, title, statement prose and each link. Its sort-id, the place among its siblings, is none of those: a withdrawn item of this kind is a member of no Set",
-     "count": 79
-    }
-   ]
-  },
-  {
-   "path": "csf.catalog.groups[].controls[].controls[].props[].name",
    "outcome": "not-content",
-   "count": 370,
+   "count": 449,
    "example": "csf#/catalog/groups/0/controls/0/controls/0/props/1/name",
    "rules": [
     {
      "kind": "selector",
      "rule": "the name of a prop selects the field its value is written to (label, sort-id, status)",
-     "count": 370
+     "count": 449
     }
    ]
   },
@@ -337,13 +332,9 @@
   {
    "path": "csf.catalog.groups[].controls[].controls[].props[].value",
    "outcome": "copied",
-   "count": 310,
+   "count": 389,
    "example": "csf#/catalog/groups/0/controls/0/controls/0/props/0/value",
    "to": [
-    {
-     "pointer": "/annotations/nist-withdrawal/[]/label",
-     "count": 127
-    },
     {
      "pointer": "/facets/https:~1~1ns.nist.gov~1csf~1facet~1csf@1/risk-party/value",
      "count": 81
@@ -354,19 +345,16 @@
     },
     {
      "pointer": "/label",
-     "count": 106
-    }
-   ]
-  },
-  {
-   "path": "csf.catalog.groups[].controls[].controls[].props[].value",
-   "outcome": "intentionally-dropped",
-   "count": 79,
-   "example": "csf#/catalog/groups/1/controls/0/controls/5/props/0/value",
-   "reasons": [
+     "count": 185
+    },
     {
-     "reason": "a withdrawn item that names a successor is not emitted; the bundle carries its lineage on the successor - id, label, title, statement prose and each link. Its sort-id, the place among its siblings, is none of those: a withdrawn item of this kind is a member of no Set",
+     "pointer": "/lifecycle",
      "count": 79
+    },
+    {
+     "pointer": "/replaces/[]/ref",
+     "count": 127,
+     "rule": "lineage inverted: the URI of a withdrawn item, written on the successor that its link names"
     }
    ]
   },
@@ -377,19 +365,9 @@
    "example": "csf#/catalog/groups/0/controls/0/controls/0/props/1/value",
    "to": [
     {
-     "pointer": "/annotations/nist-withdrawal/[]/ref",
-     "count": 127,
-     "rule": "lineage inverted: the URI of a withdrawn item, written on the successor that its link names"
-    },
-    {
      "pointer": "/members/[]/sequence",
-     "count": 106,
+     "count": 185,
      "rule": "member sequence of a subcategory: ten times its place among all subcategories of its category, withdrawn ones counted, in the order of the sort-ids"
-    },
-    {
-     "pointer": "/replaces/[]/ref",
-     "count": 127,
-     "rule": "lineage inverted: the URI of a withdrawn item, written on the successor that its link names"
     }
    ]
   },
@@ -400,12 +378,8 @@
    "example": "csf#/catalog/groups/0/controls/0/controls/0/title",
    "to": [
     {
-     "pointer": "/annotations/nist-withdrawal/[]/title",
-     "count": 127
-    },
-    {
      "pointer": "/title/en",
-     "count": 106
+     "count": 185
     }
    ]
   },
@@ -416,28 +390,23 @@
    "example": "csf#/catalog/groups/0/controls/0/id",
    "to": [
     {
-     "pointer": "/annotations/nist-withdrawal/[]/ref",
-     "count": 19,
-     "rule": "lineage inverted: the URI of a withdrawn item, written on the successor that its link names"
-    },
-    {
      "pointer": "/id",
-     "count": 26,
+     "count": 34,
      "rule": "category Set URI from the category id"
     },
     {
      "pointer": "/members/[]/ref",
-     "count": 26,
+     "count": 34,
      "rule": "category Set URI from the category id"
     },
     {
      "pointer": "/objects/[]/id",
-     "count": 26,
+     "count": 34,
      "rule": "category Set URI from the category id"
     },
     {
      "pointer": "/objects/[]/path",
-     "count": 26,
+     "count": 34,
      "rule": "file path of the object in the bundle, from the id"
     },
     {
@@ -454,11 +423,6 @@
    "example": "csf#/catalog/groups/1/controls/1/links/0/href",
    "to": [
     {
-     "pointer": "/annotations/nist-withdrawal/[]/ref",
-     "count": 8,
-     "rule": "lineage inverted: the URI of a withdrawn item, written on the successor that its link names"
-    },
-    {
      "pointer": "/replaces/[]/ref",
      "count": 8,
      "rule": "lineage inverted: the URI of a withdrawn item, written on the successor that its link names"
@@ -471,11 +435,6 @@
    "count": 8,
    "example": "csf#/catalog/groups/1/controls/1/links/0/rel",
    "to": [
-    {
-     "pointer": "/annotations/nist-withdrawal/[]/mode",
-     "count": 8,
-     "rule": "lineage mode from the link relation (incorporated_into -> merged-into, moved_to -> renamed)"
-    },
     {
      "pointer": "/replaces/[]/mode",
      "count": 8,
@@ -523,58 +482,35 @@
   },
   {
    "path": "csf.catalog.groups[].controls[].props[].name",
-   "outcome": "intentionally-dropped",
-   "count": 8,
-   "example": "csf#/catalog/groups/1/controls/1/props/0/name",
-   "reasons": [
-    {
-     "reason": "the name of a prop selects the field its value is written to (label, sort-id, status) - of a value that is dropped: a withdrawn item that names a successor is not emitted; the bundle carries its lineage on the successor - id, label, title, statement prose and each link. Its sort-id, the place among its siblings, is none of those: a withdrawn item of this kind is a member of no Set",
-     "count": 8
-    }
-   ]
-  },
-  {
-   "path": "csf.catalog.groups[].controls[].props[].name",
    "outcome": "not-content",
-   "count": 72,
+   "count": 80,
    "example": "csf#/catalog/groups/0/controls/0/props/0/name",
    "rules": [
     {
      "kind": "selector",
      "rule": "the name of a prop selects the field its value is written to (label, sort-id, status)",
-     "count": 72
+     "count": 80
     }
    ]
   },
   {
    "path": "csf.catalog.groups[].controls[].props[].value",
    "outcome": "copied",
-   "count": 38,
+   "count": 46,
    "example": "csf#/catalog/groups/0/controls/0/props/1/value",
    "to": [
     {
-     "pointer": "/annotations/nist-withdrawal/[]/label",
-     "count": 8
-    },
-    {
      "pointer": "/label",
-     "count": 26
+     "count": 34
     },
     {
      "pointer": "/lifecycle",
-     "count": 4
-    }
-   ]
-  },
-  {
-   "path": "csf.catalog.groups[].controls[].props[].value",
-   "outcome": "intentionally-dropped",
-   "count": 8,
-   "example": "csf#/catalog/groups/1/controls/1/props/0/value",
-   "reasons": [
+     "count": 12
+    },
     {
-     "reason": "a withdrawn item that names a successor is not emitted; the bundle carries its lineage on the successor - id, label, title, statement prose and each link. Its sort-id, the place among its siblings, is none of those: a withdrawn item of this kind is a member of no Set",
-     "count": 8
+     "pointer": "/replaces/[]/ref",
+     "count": 8,
+     "rule": "lineage inverted: the URI of a withdrawn item, written on the successor that its link names"
     }
    ]
   },
@@ -585,19 +521,9 @@
    "example": "csf#/catalog/groups/0/controls/0/props/0/value",
    "to": [
     {
-     "pointer": "/annotations/nist-withdrawal/[]/ref",
-     "count": 8,
-     "rule": "lineage inverted: the URI of a withdrawn item, written on the successor that its link names"
-    },
-    {
      "pointer": "/members/[]/sequence",
-     "count": 26,
+     "count": 34,
      "rule": "member sequence: ten times the place of the member among the members of its Set, in the order of the sort-ids"
-    },
-    {
-     "pointer": "/replaces/[]/ref",
-     "count": 8,
-     "rule": "lineage inverted: the URI of a withdrawn item, written on the successor that its link names"
     }
    ]
   },
@@ -608,12 +534,8 @@
    "example": "csf#/catalog/groups/0/controls/0/title",
    "to": [
     {
-     "pointer": "/annotations/nist-withdrawal/[]/title",
-     "count": 8
-    },
-    {
      "pointer": "/title/en",
-     "count": 26
+     "count": 34
     }
    ]
   },
@@ -623,11 +545,6 @@
    "count": 6,
    "example": "csf#/catalog/groups/0/id",
    "to": [
-    {
-     "pointer": "/annotations/nist-withdrawal/[]/ref",
-     "count": 1,
-     "rule": "lineage inverted: the URI of a withdrawn item, written on the successor that its link names"
-    },
     {
      "pointer": "/id",
      "count": 6,
@@ -1109,12 +1026,12 @@
   },
   {
    "path": "csf.catalog.uuid",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 1,
    "example": "csf#/catalog/uuid",
-   "reasons": [
+   "to": [
     {
-     "reason": "as decided for IFA on 2026-11-13: the uuid of a source element identifies it inside the source document only; JASCON objects get URIs minted from the ids of the source, and the uuid itself is not carried",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/uuid",
      "count": 1
     }
    ]

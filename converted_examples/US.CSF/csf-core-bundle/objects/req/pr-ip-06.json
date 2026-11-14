@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/csf/req/PR.IP-06",
+ "version": "2.0",
+ "label": "PR.IP-06",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "PR.IP-06"
+ },
+ "statements": [
+  {
+   "id": "statement",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/csf/party/organization"
+   ],
+   "prose": {
+    "en": "Data is destroyed according to policy"
+   }
+  }
+ ]
+}

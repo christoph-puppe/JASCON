@@ -67,30 +67,5 @@
    "ref": "https://ns.nist.gov/csf/req/PR.AC-04",
    "mode": "renamed"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/csf/req/PR.AC-01",
-    "mode": "merged-into",
-    "label": "PR.AC-01",
-    "title": "PR.AC-01",
-    "prose": "Identities and credentials are issued, managed, verified, revoked, and audited for authorized devices, users and processes"
-   },
-   {
-    "ref": "https://ns.nist.gov/csf/req/PR.AC-03",
-    "mode": "merged-into",
-    "label": "PR.AC-03",
-    "title": "PR.AC-03",
-    "prose": "Remote access is managed"
-   },
-   {
-    "ref": "https://ns.nist.gov/csf/req/PR.AC-04",
-    "mode": "renamed",
-    "label": "PR.AC-04",
-    "title": "PR.AC-04",
-    "prose": "Access permissions and authorizations are managed, incorporating the principles of least privilege and separation of duties"
-   }
-  ]
- }
+ ]
 }

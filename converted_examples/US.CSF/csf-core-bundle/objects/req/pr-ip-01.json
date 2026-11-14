@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/csf/req/PR.IP-01",
+ "version": "2.0",
+ "label": "PR.IP-01",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "PR.IP-01"
+ },
+ "statements": [
+  {
+   "id": "statement",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/csf/party/organization"
+   ],
+   "prose": {
+    "en": "A baseline configuration of information technology/industrial control systems is created and maintained incorporating security principles (e.g. concept of least functionality)"
+   }
+  }
+ ]
+}

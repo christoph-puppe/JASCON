@@ -63,23 +63,5 @@
    "ref": "https://ns.nist.gov/csf/req/ID.BE-05",
    "mode": "merged-into"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/csf/req/ID.BE-04",
-    "mode": "merged-into",
-    "label": "ID.BE-04",
-    "title": "ID.BE-04",
-    "prose": "Dependencies and critical functions for delivery of critical services are established"
-   },
-   {
-    "ref": "https://ns.nist.gov/csf/req/ID.BE-05",
-    "mode": "merged-into",
-    "label": "ID.BE-05",
-    "title": "ID.BE-05",
-    "prose": "Resilience requirements to support delivery of critical services are established for all operating states (e.g. under duress/attack, during recovery, normal operations)"
-   }
-  ]
- }
+ ]
 }

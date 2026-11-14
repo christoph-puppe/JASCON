@@ -6,5 +6,10 @@
   "en": "Response Planning"
  },
  "label": "Response Planning (RS.RP)",
- "members": []
+ "members": [
+  {
+   "ref": "https://ns.nist.gov/csf/req/RS.RP-01",
+   "sequence": 10
+  }
+ ]
 }

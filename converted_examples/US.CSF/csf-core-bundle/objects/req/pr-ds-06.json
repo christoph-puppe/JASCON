@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/csf/req/PR.DS-06",
+ "version": "2.0",
+ "label": "PR.DS-06",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "PR.DS-06"
+ },
+ "statements": [
+  {
+   "id": "statement",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/csf/party/organization"
+   ],
+   "prose": {
+    "en": "Integrity checking mechanisms are used to verify software, firmware, and information integrity"
+   }
+  }
+ ]
+}

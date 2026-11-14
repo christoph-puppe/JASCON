@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/csf/req/PR.PT-03",
+ "version": "2.0",
+ "label": "PR.PT-03",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "PR.PT-03"
+ },
+ "statements": [
+  {
+   "id": "statement",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/csf/party/organization"
+   ],
+   "prose": {
+    "en": "The principle of least functionality is incorporated by configuring systems to provide only essential capabilities"
+   }
+  }
+ ]
+}

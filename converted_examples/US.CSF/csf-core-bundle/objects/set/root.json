@@ -35,20 +35,34 @@
   "https://ns.nist.gov/csf/facet/references@1": {
    "resources": [
     {
+     "uuid": "3ab41d8a-66e3-4732-ae28-07405dad5127",
      "title": "The NIST Cybersecurity Framework 2.0 (PDF)",
-     "url": "https://nvlpubs.nist.gov/nistpubs/CSWP/NIST.CSWP.29.ipd.pdf"
+     "rlinks": [
+      {
+       "href": "https://nvlpubs.nist.gov/nistpubs/CSWP/NIST.CSWP.29.ipd.pdf",
+       "media-type": "application/pdf"
+      }
+     ]
     },
     {
+     "uuid": "0451580b-8ef9-4f52-9182-bc887d6cf369",
      "title": "The NIST Cybersecurity Framework 2.0 (DOI link)",
-     "url": "https://doi.org/10.6028/NIST.CSWP.29.ipd"
+     "rlinks": [
+      {
+       "href": "https://doi.org/10.6028/NIST.CSWP.29.ipd",
+       "media-type": "application/pdf"
+      }
+     ]
     },
     {
+     "uuid": "a7f54afa-16cf-4200-a043-85aa554b93e4",
      "title": "The NIST Cybersecurity Framework",
-     "url": "https://www.nist.gov/cyberframework"
-    },
-    {
-     "title": "NIST CSF v2.0 content in OSCAL 1.1.3",
-     "url": "https://github.com/usnistgov/oscal-content/releases/tag/v1.4.0"
+     "rlinks": [
+      {
+       "href": "https://www.nist.gov/cyberframework",
+       "media-type": "application/html"
+      }
+     ]
     }
    ]
   },
@@ -190,7 +204,8 @@
       ]
      }
     ]
-   }
+   },
+   "uuid": "720a010b-253c-4a94-bb65-cb58400966f5"
   }
  }
 }

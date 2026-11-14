@@ -1,0 +1,31 @@
+{
+ "id": "https://ns.nist.gov/csf/set/category/id-be",
+ "version": "2.0",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Business Environment"
+ },
+ "label": "Business Environment (ID.BE)",
+ "members": [
+  {
+   "ref": "https://ns.nist.gov/csf/req/ID.BE-01",
+   "sequence": 10
+  },
+  {
+   "ref": "https://ns.nist.gov/csf/req/ID.BE-02",
+   "sequence": 20
+  },
+  {
+   "ref": "https://ns.nist.gov/csf/req/ID.BE-03",
+   "sequence": 30
+  },
+  {
+   "ref": "https://ns.nist.gov/csf/req/ID.BE-04",
+   "sequence": 40
+  },
+  {
+   "ref": "https://ns.nist.gov/csf/req/ID.BE-05",
+   "sequence": 50
+  }
+ ]
+}

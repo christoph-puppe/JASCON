@@ -215,20 +215,28 @@ class PhaseEEveryValueIsCarriedOrIsNoContent(Converted):
         self.assertEqual(names["count"], 4)
         self.assertEqual(sorted((d["count"], d["as"], "via" in d) for d in names["to"]), [(1, "key", True), (3, "key", False)])
 
-    def test_phase_e_a_withdrawn_item_without_a_successor_is_an_object_with_lifecycle_withdrawn(self):
+    def test_phase_e_every_withdrawn_item_is_an_object_with_lifecycle_withdrawn(self):
+        # the author's decision of 2026-11-14; until then a withdrawn item that names a successor was no object
         objs = self.plain["objects"]
         gone = objs[f"{NS}/set/category/aa-go"]
-        self.assertEqual((gone["lifecycle"], gone["title"], gone["label"], gone["members"]), ("withdrawn", {"en": "Gone"}, "Gone (AA.GO)", []))
-        old = objs[f"{NS}/req/AA.ON-04"]
-        self.assertEqual((old["lifecycle"], old["label"], old["statements"][0]["prose"]), ("withdrawn", "AA.ON-04", {"en": "What AA.ON-04 states."}))
+        self.assertEqual((gone["lifecycle"], gone["title"], gone["label"]), ("withdrawn", {"en": "Gone"}, "Gone (AA.GO)"))
+        self.assertEqual(gone["members"], [{"ref": f"{NS}/req/AA.GO-01", "sequence": 10}], "its withdrawn subcategory is its member")
+        for rid in ("AA.ON-03", "AA.ON-04", "AA.OF-01", "AA.GO-01"):      # with a successor or without
+            old = objs[f"{NS}/req/{rid}"]
+            self.assertEqual((old["lifecycle"], old["label"], old["title"], old["statements"][0]["prose"]),
+                             ("withdrawn", rid, {"en": rid}, {"en": f"What {rid} states."}))
         # each is a member of the Set of its parent, at the place its sort-id gives
         self.assertEqual(objs[f"{NS}/set/function/aa"]["members"],
-                         [{"ref": f"{NS}/set/category/aa-on", "sequence": 10}, {"ref": f"{NS}/set/category/aa-go", "sequence": 20}])
+                         [{"ref": f"{NS}/set/category/aa-of", "sequence": 10}, {"ref": f"{NS}/set/category/aa-on", "sequence": 20},
+                          {"ref": f"{NS}/set/category/aa-go", "sequence": 30}])
         self.assertEqual([(m["ref"].rsplit("/", 1)[1], m["sequence"]) for m in objs[f"{NS}/set/category/aa-on"]["members"]],
-                         [("AA.ON-01", 10), ("AA.ON-02", 20), ("AA.ON-04", 40), ("AA.ON-05", 50)], "the place of AA.ON-03 stays empty")
+                         [("AA.ON-01", 10), ("AA.ON-02", 20), ("AA.ON-03", 30), ("AA.ON-04", 40), ("AA.ON-05", 50)])
         # `withdrawn` is the source's word: the status prop's value stands as the lifecycle
         self.assertEqual([d["pointer"] for d in self.rows(self.plain)[f"{C}.props[].value", "copied"]["to"]].count("/lifecycle"), 1)
-        self.assertEqual({o["lifecycle"] for i, o in objs.items() if i not in (gone["id"], old["id"])}, {"active"})
+        withdrawn = {i.rsplit("/", 1)[1] for i, o in objs.items() if o["lifecycle"] == "withdrawn"}
+        self.assertEqual(withdrawn, {"aa-of", "aa-go", "AA.ON-03", "AA.ON-04", "AA.OF-01", "AA.GO-01"})
+        self.assertEqual(self.plain["report"]["lifecycle-default"],
+                         {"value": "active", "origin": "converter-default", "objects": len(objs) - 6, "source-states": 6})
 
     def test_phase_e_every_withdrawn_item_of_the_source_is_in_the_bundle(self):
         objs = self.plain["objects"]
@@ -243,18 +251,21 @@ class PhaseEEveryValueIsCarriedOrIsNoContent(Converted):
                 found[level]["lineage"] += uri(e["id"]) in entries
                 self.assertEqual(entries[uri(e["id"])], len(e.get("links", [])), f"{e['id']}: one entry for each link")
         self.assertEqual({k: dict(v) for k, v in found.items()},
-                         {"category": {"source": 2, "object": 1, "lineage": 1}, "subcategory": {"source": 4, "object": 1, "lineage": 3}})
+                         {"category": {"source": 2, "object": 2, "lineage": 1}, "subcategory": {"source": 4, "object": 4, "lineage": 3}})
         # a withdrawn category is named as a category Set is, a withdrawn subcategory as a Requirement is
         self.assertEqual(objs[f"{NS}/set/function/bb"]["replaces"], [{"ref": f"{NS}/set/category/aa-of", "mode": "merged-into"}])
         self.assertEqual(objs[f"{NS}/req/AA.ON-02"]["replaces"], [{"ref": f"{NS}/req/AA.ON-03", "mode": "renamed"}])
-        self.assertEqual(objs[f"{NS}/req/AA.ON-01"]["annotations"]["nist-withdrawal"][0],
-                         {"ref": f"{NS}/req/AA.ON-03", "mode": "merged-into", "label": "AA.ON-03", "title": "AA.ON-03", "prose": "What AA.ON-03 states."})
+        # every entry names an object of the bundle; label, title and prose of the withdrawn item stand in that object
+        # and no longer in an annotation beside the entry
+        self.assertEqual([r["ref"] in objs for o in objs.values() for r in o.get("replaces", [])], [True] * 5)
+        self.assertEqual([i for i, o in objs.items() if "annotations" in o], [])
 
     def test_phase_e_the_document_metadata_stands_on_the_root_set_as_the_source_has_it(self):
         meta = catalogue()["catalog"]["metadata"]
         root = self.plain["objects"][f"{NS}/set/root"]
         elsewhere = ("title", "version", "oscal-version", "published")
-        self.assertEqual(root["facets"][COMPAT], {"metadata": {k: v for k, v in meta.items() if k not in elsewhere}})
+        self.assertEqual(root["facets"][COMPAT], {"metadata": {k: v for k, v in meta.items() if k not in elsewhere},
+                                                  "uuid": catalogue()["catalog"]["uuid"]})
         with open(os.path.join(self.plain["out"], "csf-core-bundle", "content-manifest.json"), encoding="utf-8") as f: prov = json.load(f)["provenance"]
         self.assertEqual((root["title"], prov["source"], prov["source-doc-version"], prov["source-oscal-version"], prov["published"]),
                          ({"en": meta["title"]}, meta["title"], meta["version"], meta["oscal-version"], meta["published"]))
@@ -269,39 +280,31 @@ class PhaseEEveryValueIsCarriedOrIsNoContent(Converted):
         kinds = lambda path: {(x["kind"], x["count"]) for x in self.rows(r)[path, "not-content"]["rules"]}
         self.assertEqual((n(f"{G}.class"), n(f"{C}.class"), n(f"{S}.class")), (2, 4, 8), "the class says the level the element stands on")
         self.assertEqual(kinds(f"{S}.class"), {("selector", 8)})
-        # the names label, sort-id and status select a field; the name of the sort-id of a withdrawn item with a
-        # successor goes with its value (below)
-        self.assertEqual((n(f"{G}.props[].name"), n(f"{C}.props[].name"), n(f"{S}.props[].name")), (4, 4 * 2 + 2 - 1, 8 * 2 + 4 - 3))
+        # the names label, sort-id and status select a field
+        self.assertEqual((n(f"{G}.props[].name"), n(f"{C}.props[].name"), n(f"{S}.props[].name")), (4, 4 * 2 + 2, 8 * 2 + 4))
         self.assertEqual((n(f"{G}.parts[].name"), n(f"{C}.parts[].name"), n(f"{S}.parts[].name")), (2, 4, 8 + 3))
         self.assertEqual((n(f"{S}.parts[].ns"), n(f"{S}.props[].ns")), (3, 4))
         self.assertEqual(kinds(f"{S}.props[].ns"), {("namespace", 4)})
-        # an id that is rebuilt: the overview parts, the statement parts of the categories and of the three
-        # withdrawn subcategories that are no objects
-        self.assertEqual((n(f"{G}.parts[].id"), n(f"{C}.parts[].id"), n(f"{S}.parts[].id")), (2, 4, 3))
+        # an id that is rebuilt: the overview parts and the statement parts of the categories (the statement id of a
+        # subcategory is written, on its Requirement)
+        self.assertEqual((n(f"{G}.parts[].id"), n(f"{C}.parts[].id"), n(f"{S}.parts[].id")), (2, 4, 0))
         self.assertEqual(kinds(f"{C}.parts[].id"), {("rebuilt-id", 4)})
         listed = {(x["kind"], x["rule"]): x["count"] for x in r["report"]["ledger"]["not-content"]}
         self.assertEqual(sum(listed.values()), r["ledger"]["totals"]["not-content"])
         self.assertEqual(sorted(k for k, _ in listed), ["namespace", "rebuilt-id", "rebuilt-id", "selector", "selector", "selector"])
 
-    def test_phase_e_the_drops_that_remain_are_listed_with_a_reading_and_none_is_added(self):
+    def test_phase_e_no_drop_is_declared_and_a_resource_something_refers_to_is_carried_whole(self):
+        # until 2026-11-14 five drops were declared; the author decided each of them
         r = self.plain
-        drops = r["report"]["ledger"]["declared-drops"]
-        self.assertEqual(sum(d["count"] for d in drops), r["ledger"]["totals"]["intentionally-dropped"])
-        self.assertEqual({(d["path"], d["count"], d["example"]) for d in drops},
-                         {("csf.catalog.uuid", 1, "00000000-0000-4000-8000-000000000001"),
-                          ("csf.catalog.back-matter.resources[].uuid", 1, RES),
-                          ("csf.catalog.back-matter.resources[].rlinks[].media-type", 1, "application/pdf"),
-                          # the sort-id of the four withdrawn items that name a successor (the first in the document is
-                          # AA.ON-03), and the name that selects it; the path is the path map's, one for both levels
-                          (f"{C}.props[].value", 4, "00001.00002.00003"), (f"{C}.props[].name", 4, "sort-id")})
-        for d in drops:
-            self.assertTrue(d["reading"].startswith("content: ") or d["reading"].startswith("not content, because "), d)
-            self.assertTrue(d["reason"])
+        self.assertEqual((r["report"]["ledger"]["declared-drops"], r["ledger"]["totals"]["intentionally-dropped"]), ([], 0))
+        root = r["objects"][f"{NS}/set/root"]
+        self.assertEqual(root["facets"][f"{NS}/facet/references@1"], {"resources": catalogue()["catalog"]["back-matter"]["resources"]},
+                         "the metadata link names it: carried as the source writes it, with its uuid and the media type")
         with open(os.path.join(r["out"], "csf-coverage-report.md"), encoding="utf-8") as f: text = f.read()
         for heading in ("## What is no content (conversion ledger)", "## Declared drops that remain (conversion ledger)",
                         "## Unaccounted source values (conversion ledger)"):
             self.assertIn(heading, text)
-        self.assertIn("| source path | count | declared reason | example | reading |", text)
+        self.assertIn("*(none)*", text.split("## Declared drops that remain (conversion ledger)")[1].split("## ")[0])
 
     def test_phase_e_the_path_map_says_of_every_row_what_the_ledger_found(self):
         r = self.plain
@@ -380,14 +383,26 @@ class PhaseEWhatTheMappingDoesNotKnow(Converted):
         self.assertEqual(r["report"]["ledger"]["totals"]["unaccounted"], r["ledger"]["totals"]["unaccounted"], "the reports are written before the run ends")
         return r
 
-    def test_phase_e_a_withdrawn_item_with_a_successor_is_no_object_and_what_its_entry_cannot_hold_ends_the_run(self):
+    def test_phase_e_an_example_of_a_withdrawn_item_is_carried_on_its_object(self):
+        # until 2026-11-14 such an item was no object, its lineage entry could not hold the example, and the run ended with 1
         def change(doc): online(doc)[2]["parts"].append({"id": "AA.ON-03.001", "name": "example", "ns": CSF, "prose": "An example of a withdrawn item."})
-        r = self.gate(change, f"{S}.parts[].prose")
-        self.assertEqual(r["ledger"]["totals"]["unaccounted"], 4, "id, name, namespace and prose of the example")
+        r = self.changed(change)
+        self.assertEqual((r["done"].returncode, r["ledger"]["totals"]["unaccounted"]), (0, 0))
+        self.assertEqual(r["objects"][f"{NS}/req/AA.ON-03"]["facets"][f"{NS}/facet/examples@1"]["examples"][0]["id"], "AA.ON-03.001")
 
-    def test_phase_e_a_second_address_of_a_resource_ends_the_run(self):
+    def test_phase_e_a_second_address_of_a_resource_is_carried(self):
+        # until 2026-11-14 the references facet held the first address only, and a second one ended the run with 1
         def change(doc): doc["catalog"]["back-matter"]["resources"][0]["rlinks"].append({"href": "https://example.org/framework.html"})
-        self.gate(change, "csf.catalog.back-matter.resources[].rlinks[].href")
+        r = self.changed(change)
+        self.assertEqual((r["done"].returncode, r["ledger"]["totals"]["unaccounted"]), (0, 0))
+        self.assertEqual(self.count(r, "csf.catalog.back-matter.resources[].rlinks[].href", "copied"), 2)
+
+    def test_phase_e_a_resource_nothing_refers_to_is_an_orphan_and_stays_out(self):
+        def change(doc): doc["catalog"]["back-matter"]["resources"].append({"uuid": "00000000-0000-4000-8000-0000000000ff", "title": "Nobody names this"})
+        r = self.changed(change)
+        self.assertEqual((r["done"].returncode, r["ledger"]["totals"]["unaccounted"]), (0, 0))
+        self.assertEqual(len(r["objects"][f"{NS}/set/root"]["facets"][f"{NS}/facet/references@1"]["resources"]), 1)
+        self.assertEqual({x["kind"] for x in self.rows(r)["csf.catalog.back-matter.resources[].title", "not-content"]["rules"]}, {"orphan"})
 
     def test_phase_e_a_third_level_of_controls_ends_the_run(self):
         def change(doc): online(doc)[0]["controls"] = [{"id": "AA.ON-01.a", "title": "Deeper"}]
@@ -421,15 +436,15 @@ class PhaseEDeliberateDefects(Converted):
         r = self.red([('led.rebuilt(p["id"], N_PART_ID[name], PART_ID[name], eid)', 'led.rebuilt(p["id"], N_PART_ID[name], overview_part_id, eid)')])
         failed = [f for f in r["ledger"]["verification-failures"]]
         self.assertEqual({f["claim"] for f in failed}, {"rebuilt-id"})
-        self.assertEqual(len(failed), 4 + 3, "the statement parts of the categories and of the withdrawn subcategories with a successor")
-        self.assertIn("7 claim(s) that do not hold", r["done"].stderr)
+        self.assertEqual(len(failed), 4, "the statement parts of the categories")
+        self.assertIn("4 claim(s) that do not hold", r["done"].stderr)
         self.assertEqual(self.count(r, f"{G}.parts[].id", "not-content"), 2, "the overview ids are what the rule gives")
 
     def test_defect_03_a_name_that_selects_a_value_that_is_not_written(self):
         r = self.red([('req = {"id": rid, "version": VER, "label": t["label"]["value"] if t["label"] else c["id"],',
                        'req = {"id": rid, "version": VER, "label": c["id"],')])
-        # the labels of the five Requirements are written nowhere: the values are unaccounted, and so are the names that select them
-        self.assertEqual((self.count(r, f"{S}.props[].value", "unaccounted"), self.count(r, f"{S}.props[].name", "unaccounted")), (5, 5))
+        # the labels of the eight Requirements are written nowhere: the values are unaccounted, and so are the names that select them
+        self.assertEqual((self.count(r, f"{S}.props[].value", "unaccounted"), self.count(r, f"{S}.props[].name", "unaccounted")), (8, 8))
         self.assertEqual(r["ledger"]["verification-failures"], [], "no claim was false; the values are missing")
 
     def test_defect_04_a_namespace_the_mapping_is_not_written_for(self):
@@ -452,25 +467,25 @@ class PhaseEDeliberateDefects(Converted):
 
     def test_defect_07_a_declared_drop_widened_over_a_path_on_which_values_are_carried(self):
         # the same loss, hidden behind a reason the converter does list
-        wide = "".join(f' ("{S}.props[].{k}", DROP_UUID, "content: x"),\n' for k in ("value", "remarks", "name"))
-        head = "PATH_DROPS = [          # (the source path, the reason, the reading)\n"
-        r = self.red([self.FIRST_ONLY, (head, head + wide)])
+        wide = "".join(f' ("{S}.props[].{k}", "said to be dropped on purpose", "content: x"),\n' for k in ("value", "remarks", "name"))
+        head = "PATH_DROPS = []         # (the source path, the reason, the reading)\n"
+        r = self.red([self.FIRST_ONLY, (head, "PATH_DROPS = [\n" + wide + "]\n")])
         self.assertEqual(r["ledger"]["totals"]["unaccounted"], 0, "the gate alone would let it pass")
         for k in ("value", "remarks", "name"):
             self.assertIn(f"a drop declared by path covers {S}.props[].{k}, on which other values are carried", r["done"].stderr)
 
-    def test_defect_08_a_withdrawn_item_without_a_successor_is_not_written(self):
-        r = self.red([('    return e["id"] not in withdrawn or id(e) not in lineage_links', '    return e["id"] not in withdrawn')])
-        self.assertNotIn(f"{NS}/set/category/aa-go", r["objects"])
-        self.assertNotIn(f"{NS}/req/AA.ON-04", r["objects"])
-        # id, title, label and status of the category; id, title, label, status and statement prose of the subcategory
-        self.assertEqual(r["ledger"]["totals"]["unaccounted"], 4 + 5 + 2 * 2 + 2 + 2 + 2,
-                         "and what rests on them, for each of the two: the names of label and status, the class, the name "
-                         "and the id of the statement part")
+    def test_defect_08_a_withdrawn_item_is_not_written(self):
+        r = self.red([('    return True\nwd_objects', '    return e["id"] not in withdrawn\nwd_objects')])
+        for gone in ("set/category/aa-go", "set/category/aa-of", "req/AA.ON-03", "req/AA.ON-04"):
+            self.assertNotIn(f"{NS}/{gone}", r["objects"])
+        self.assertGreater(r["ledger"]["totals"]["unaccounted"], 20, "ids, titles, labels, prose, sort-ids and what rests on them")
+        self.assertGreater(self.count(r, f"{S}.title", "unaccounted"), 0)
 
     def test_defect_09_the_document_metadata_is_not_written(self):
-        r = self.red([('if metadata_rest: root_facets[COMPAT] = {"metadata": metadata_rest}', 'if False: root_facets[COMPAT] = {"metadata": metadata_rest}')])
+        r = self.red([('root_facets[COMPAT] = {**({"metadata": metadata_rest} if metadata_rest else {}), "uuid": cat["uuid"]}',
+                       'root_facets[COMPAT] = {"uuid": cat["uuid"]}')])
         meta = catalogue()["catalog"]["metadata"]
+        # the metadata link is what names the resource; the resource is carried all the same, so nothing but the metadata is lost
         self.assertEqual(r["ledger"]["totals"]["unaccounted"], sum(1 for _ in leaves(meta)) - 4)
 
     def test_defect_10_a_written_file_is_not_what_the_object_says(self):
@@ -483,7 +498,7 @@ class PhaseEDeliberateDefects(Converted):
     def test_defect_11_a_rule_that_gives_another_value_when_it_is_applied_again(self):
         r = self.red([(self.DROPS, 'MODE["moved_to"] = "moved"\n' + self.DROPS)])
         self.assertEqual({f["rule"][:12] for f in r["ledger"]["verification-failures"]}, {"lineage mode"})
-        self.assertEqual(len(r["ledger"]["verification-failures"]), 2 * 2, "two links say moved_to; each mode stands twice")
+        self.assertEqual(len(r["ledger"]["verification-failures"]), 2, "two links say moved_to")
 
     def test_defect_12_a_lineage_entry_on_an_object_its_link_does_not_name(self):
         r = self.red([('succ_replaces[href].append((e, l)); lineage_links[id(e)].append(l)',
@@ -539,9 +554,10 @@ class PhaseETheCommittedConversion(unittest.TestCase):
 
     def test_phase_e_the_bundle_holds_every_withdrawn_item(self):
         withdrawn = {i: o for i, o in self.objects.items() if o["lifecycle"] == "withdrawn"}
-        self.assertEqual(sorted(i.rsplit("/", 1)[1] for i in withdrawn), ["de-dp", "pr-ip", "pr-pt", "rs-rp"])
+        self.assertEqual(collections.Counter("Set" if "members" in o else "Requirement" for o in withdrawn.values()),
+                         {"Set": 12, "Requirement": 79}, "every withdrawn item is an object (since 2026-11-14)")
         entries = {r["ref"] for o in self.objects.values() for r in o.get("replaces", [])}
-        self.assertEqual((len(entries), len(entries & set(withdrawn))), (87, 0), "an item is an object or a lineage entry, not both")
+        self.assertEqual((len(entries), len(entries & set(withdrawn))), (87, 87), "every lineage entry names a withdrawn object of the bundle")
         doc = self.source()
         gone = [(level, e["id"]) for level, items in (("category", doc_categories(doc)), ("subcategory", [s for c in doc_categories(doc) for s in c.get("controls", [])]))
                 for e in items if any(p["name"] == "status" and p["value"] == "withdrawn" for p in e.get("props", []))]

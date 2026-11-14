@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/csf/req/DE.DP-04",
+ "version": "2.0",
+ "label": "DE.DP-04",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "DE.DP-04"
+ },
+ "statements": [
+  {
+   "id": "statement",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/csf/party/organization"
+   ],
+   "prose": {
+    "en": "Event detection information is communicated"
+   }
+  }
+ ]
+}

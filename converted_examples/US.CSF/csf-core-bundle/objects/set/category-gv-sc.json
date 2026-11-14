@@ -62,15 +62,5 @@
    "ref": "https://ns.nist.gov/csf/set/category/id-sc",
    "mode": "merged-into"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/csf/set/category/id-sc",
-    "mode": "merged-into",
-    "label": "Supply Chain Risk Management (ID.SC)",
-    "title": "Supply Chain Risk Management"
-   }
-  ]
- }
+ ]
 }

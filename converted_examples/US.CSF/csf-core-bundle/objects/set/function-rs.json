@@ -26,6 +26,10 @@
   {
    "ref": "https://ns.nist.gov/csf/set/category/rs-mi",
    "sequence": 50
+  },
+  {
+   "ref": "https://ns.nist.gov/csf/set/category/rs-im",
+   "sequence": 60
   }
  ],
  "facets": {

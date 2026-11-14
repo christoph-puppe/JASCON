@@ -14,6 +14,10 @@
   {
    "ref": "https://ns.nist.gov/csf/set/category/rc-co",
    "sequence": 20
+  },
+  {
+   "ref": "https://ns.nist.gov/csf/set/category/rc-im",
+   "sequence": 30
   }
  ],
  "facets": {

@@ -124,6 +124,17 @@ def compat_schema():
             "schema": {"$schema": "https://json-schema.org/draft/2020-12/schema", "type": "object",
                        "properties": copy.deepcopy(COMPAT_PROPERTIES), "additionalProperties": False}}
 
+def referred_to(doc, element, reference="#{}"):
+    """Does a string of `doc` outside `element` (a dict of it that has a `uuid`) hold a reference to the element?
+    The converter's side of Ledger.orphan(): what is referred to is carried, what is not is declared an orphan."""
+    needle = reference.format(element["uuid"])
+    def walk(n):
+        if n is element: return False
+        if isinstance(n, dict): return any(walk(v) for v in n.values())
+        if isinstance(n, list): return any(walk(v) for v in n)
+        return isinstance(n, str) and needle in n
+    return walk(doc)
+
 def slug(s):
     s = re.sub(r"[^a-z0-9]+", "-", (s or "").lower()).strip("-")
     if len(s) <= 60:

@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/csf/req/ID.GV-02",
+ "version": "2.0",
+ "label": "ID.GV-02",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "ID.GV-02"
+ },
+ "statements": [
+  {
+   "id": "statement",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/csf/party/organization"
+   ],
+   "prose": {
+    "en": "Cybersecurity roles and responsibilities are coordinated and aligned with internal roles and external partners"
+   }
+  }
+ ]
+}
