@@ -36,7 +36,7 @@
 
 /* ==JSC-PURE-START== */
 
-const JSC_BUILD = "0.9.18";
+const JSC_BUILD = "0.9.19";
 const JSC_TOOL = "JASCON-App " + JSC_BUILD;
 /* The kernel this app writes, and the kernels it reads (KERNEL-2: a tool
    stops at a pin it does not implement and names both). */
@@ -387,6 +387,9 @@ function jscNeedsKernel2(g) {
   const entries = v => (Array.isArray(v) ? v : []).filter(x => x && typeof x === "object" && !Array.isArray(x));
   for (const r of g.objects.values()) {
     if (r.type === "risk" || r.type === "check") return true;
+    /* decided on 2026-11-14 (backlog #81 and #84): `history` on any object, `label` on a statement */
+    if ("history" in r.obj) return true;
+    if (r.type === "requirement" && entries(r.obj.statements).some(s => "label" in s)) return true;
     if (r.type === "finding" && ((Array.isArray(r.obj["risk-refs"]) && r.obj["risk-refs"].length) || r.obj["check-ref"])) return true;
     if (r.type === "assessment" && (r.obj["check-results"] || r.obj["tailoring-ref"])) return true;
     /* CP-ADVICE-1 and the author decision of 2026-11-12: clauses on a capability, the product version */

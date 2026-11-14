@@ -1495,6 +1495,49 @@ test("Browse: withdrawn objects are left out of the list and the tree until they
   } finally { await s.close(); }
 });
 
+/* Kernel 2.0.0 (the author's decisions of 2026-11-14 on backlog #81 and #84): a statement may carry the label a reader
+   of the source sees (`a.`, `(1)`), and any object a `history`. The object view of the Browse page shows the label
+   beside the statement's id, and the history as a short list: the date, the comment, the reference as a link (to the
+   object where it is in the set, else to the address in a new tab). */
+test("Browse: a statement's label stands beside its id; an object's history is a list of date, comment and reference, in English and in German", { skip: needs }, async () => {
+  const P = "https://org.example", OLD = `${P}/req/OLD-1`, NEW = `${P}/req/NEW-1`, NOTE = "https://org.example/changes/2026-11";
+  const req = (id, label, extra) => ({ id, version: "2", label, lifecycle: "active", title: { en: label }, statements: [
+    { id: "smt.a", label: "a.", modality: "must", "obligated-parties": [`${P}/party/ops`], prose: { en: "Do the first thing." } },
+    { id: "smt.b", modality: "must", "obligated-parties": [`${P}/party/ops`], prose: { en: "Do the second thing." } }], ...extra });
+  const files = [jsonFile("old.json", req(OLD, "OLD-1", {})), jsonFile("new.json", req(NEW, "NEW-1", { history: [
+    { date: "2026-10", comment: { en: "Split from OLD-1.", de: "Aus OLD-1 herausgelöst." }, ref: OLD },
+    { date: "2026-11-14", ref: NOTE }] }))];
+  const s = await session(), p = s.page;
+  try {
+    await load(s, files);
+    for (const lang of ["en", "de"]) {
+      await p.evaluate(l => localStorage.setItem("jsc:cfg:ui:lang", l), lang);
+      await open(s, "browse.html", "objects");
+      await p.locator(`#objlist .objrow[data-id="${NEW}"]`).click();
+      const detail = p.locator("#detail");
+      await detail.locator("[data-history]").waitFor();
+      /* the label stands in the line of its statement, after the id; a statement without one shows none */
+      const lines = await detail.locator(".stmt > div:first-child").evaluateAll(els => els.map(e => [...e.querySelectorAll(".badge")].slice(0, 2).map(b => b.textContent.trim())));
+      assert.deepEqual(lines.map(l => l[0]), lang === "de" ? ["Statement smt.a", "Statement smt.b"] : ["statement smt.a", "statement smt.b"], lang);
+      assert.deepEqual(await detail.locator("[data-stmt-label]").allTextContents(), ["a."], lang);
+      assert.equal(lines[0][1], "a.", lang + ": beside the id");
+      assert.equal(await detail.locator("[data-stmt-label]").getAttribute("title"), lang === "de" ? "Bezeichnung des Statements in der Quelle" : "label of the statement in the source");
+      /* the history: one line per entry, in the order of the object */
+      assert.match(await detail.innerText(), lang === "de" ? /ÄNDERUNGSVERLAUF|Änderungsverlauf/ : /HISTORY|History/);
+      const entries = await detail.locator("[data-history-entry]").allInnerTexts();
+      assert.deepEqual(entries.map(e => e.replace(/\s+/g, " ").trim()),
+        [`2026-10 · ${lang === "de" ? "Aus OLD-1 herausgelöst." : "Split from OLD-1."} · ${OLD}`, `2026-11-14 · ${NOTE}`], lang);
+      /* a reference to an object of the set opens it; any other address is a link that leaves the page in a new tab */
+      const [inSet, outside] = [detail.locator("[data-history-entry]").nth(0).locator("a"), detail.locator("[data-history-entry]").nth(1).locator("a")];
+      assert.equal(await inSet.getAttribute("data-ref"), OLD);
+      assert.deepEqual([await outside.getAttribute("href"), await outside.getAttribute("target")], [NOTE, "_blank"]);
+      await inSet.click();
+      await p.waitForFunction(id => document.querySelector("#detail .mono") && document.querySelector("#detail").textContent.includes(id) && !document.querySelector("#detail [data-history]"), OLD);
+    }
+    assert.deepEqual(s.errors, []);
+  } finally { await s.close(); }
+});
+
 test("Risk: an empty owner refuses the risk and the catalogue import; the approver of an acceptance starts empty, also with \"Who am I\" and a default owner set; named, both are written as named", { skip: needs }, async t => {
   const s = await session(), tmp = [], p = s.page, CISO = "https://org.example/party/ciso";
   try {

@@ -171,19 +171,32 @@ test("a schema keyword this checker does not implement is refused, not skipped",
 
 test("reference: the number of closure errors of every vector", () => {
   const v = vectors("reference").vectors;
-  assert.equal(v.length, 18);
+  assert.equal(v.length, 27);   // 9 more on 2026-11-14: a statement-id inside a facet payload (D10, backlog #83)
   for (const c of v) assert.equal(rules.jscClosureErrors(rules.jscTypedObjects(c.objects)).length, c["expected-errors"], c.name);
 });
 
 test("kernel: the pin rules of every vector", () => {
   const v = vectors("kernel").vectors;
-  assert.equal(v.length, 19);   // was 11: seven more with CP-AUTHOR-1 (provenance, a Deviation's decided and review-due, an authorization's date); the 19th is a pin that ends in a line break (#68)
+  assert.equal(v.length, 25);   // 6 more on 2026-11-14: history and a statement's label need the pin, the sources of a manifest do not (backlog #80, #81, #84); was 11: seven more with CP-AUTHOR-1 (provenance, a Deviation's decided and review-due, an authorization's date); the 19th is a pin that ends in a line break (#68)
   for (const c of v) {
     const objs = rules.jscTypedObjects(c.objects);
     const errs = rules.jscShapeErrors("contentManifest", c.manifest).length ? ["manifest schema violation"] : rules.jscKernelPinErrors(c.manifest, objs);
     assert.equal(errs.length, c["expected-fails"] || 0, c.name + ": " + errs.join(" | "));
     assert.equal(objs.size, c.objects.length, c.name + ": every object is typed");
     for (const frag of c["expected-frags"] || []) assert.ok(errs.some(e => e.includes(frag)), `${c.name}: ${frag}`);
+  }
+});
+
+/* HISTORY-1 (backlog #81): the entries of `history` stand oldest first. */
+test("kernel: the history vectors, HISTORY-1 named on refusal; a whole object says it too", () => {
+  const v = vectors("kernel")["history-vectors"];
+  assert.equal(v.length, 8);
+  for (const c of v) {
+    assert.equal(rules.jscMatchTypes(c.object).length, 1, c.name + ": the object has one type");
+    const errs = rules.jscHistoryErrors(c.object);
+    assert.equal(errs.length ? "invalid" : "valid", c.expected, `${c.name}: ${errs[0] || ""}`);
+    for (const e of errs) assert.ok(e.includes(c["expected-rule"]) && e.includes(rules.JSC_HISTORY_RULES["HISTORY-1"]), e);
+    assert.deepEqual(rules.jscObjectErrors(c.object).errors, errs, c.name + ": the check of one object carries the same lines");
   }
 });
 
@@ -194,10 +207,10 @@ test("kernel: the pin rules of every vector", () => {
    The schema says valid or invalid; an invalid one names exactly the rules
    of its `expected-rules`, DATE-1 to DATE-5, as the Python runner
    (run_kernel) asserts it - and no rule where the vector names none. */
-test("kernel: the shape vectors of the typed fields, with DATE-1 to DATE-5 named on refusal", () => {
+test("kernel: the shape vectors of the typed fields, with DATE-1 to DATE-6 named on refusal", () => {
   const v = vectors("kernel")["shape-vectors"];
-  assert.equal(v.length, 52);   // 16 more with #68: values that end in a line break, a relation type with a line terminator, and their valid twins
-  assert.deepEqual([...new Set(v.flatMap(c => c["expected-rules"] || []))].sort(), ["DATE-1", "DATE-2", "DATE-3", "DATE-4", "DATE-5"], "every DATE rule has a vector that names it");
+  assert.equal(v.length, 64);   // 12 more on 2026-11-14: `history` and a statement's `label` (backlog #81, #84); 16 more with #68: values that end in a line break, a relation type with a line terminator, and their valid twins
+  assert.deepEqual([...new Set(v.flatMap(c => c["expected-rules"] || []))].sort(), ["DATE-1", "DATE-2", "DATE-3", "DATE-4", "DATE-5", "DATE-6"], "every DATE rule has a vector that names it");
   for (const c of v) {
     const matched = rules.jscMatchTypes(c.document);
     assert.equal(matched.length === 1 && matched[0] === c.kind ? "valid" : "invalid", c.expected, c.name);
@@ -525,7 +538,7 @@ test("NUMBER-1 (errata 2026-11-13): JSON.parse alone would let every spelling an
 
 test("facet: every vector (stdlib, pinned, private, unregistered)", () => {
   const v = vectors("facet").vectors;
-  assert.equal(v.length, 7);
+  assert.equal(v.length, 16);   // 9 more on 2026-11-14: assessment-criteria 1.1.0 beside 1.0.0, and references (backlog #82, #83)
   for (const c of v) {
     const errs = rules.jscFacetErrors([[c.name, c.object]], new Map(Object.entries(c.pinned || {})));
     assert.equal(errs.length ? "invalid" : "valid", c.expected, `${c.name}: ${errs[0] || ""}`);

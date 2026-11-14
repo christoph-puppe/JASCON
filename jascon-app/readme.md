@@ -7,7 +7,7 @@ have to switch on yourself: the suggestions of the Risk page and the drafts
 of the Checks page send text to a model service once you type a key (see
 "Suggestions from a model").
 
-State: build 0.9.18. This build has the frame (the hub, the settings page and
+State: build 0.9.19. This build has the frame (the hub, the settings page and
 the shared core) and nine tool pages, in the order of the work: Import,
 Browse, Risk, Tailor, Map, Implement, Checks, Assess and Validate. One view of the Risk page and
 the drafting of the Checks page can ask a language model; nothing else in
@@ -32,7 +32,13 @@ profile's Set carries the profile's metadata and merge directive. Since
 0.9.16 both presets follow the author's decisions of phase E: every
 withdrawn SP 800-53 control is a Requirement, the document's uuid stands
 on the root Set, a back-matter resource nothing refers to is not carried,
-and the compat facet has one schema (`oscal-1x-compat-1.1.0.json`).
+and the compat facet has one schema. Since 0.9.19 both presets follow
+`convert_bsi.py` v0.5 and `convert_nist.py` v0.3: the resources a text
+refers to stand in the standard facet references@1, the document's uuid in
+the manifest's `provenance.sources`, the compat schema is 1.2.0, and in SP
+800-53 a statement carries its print label and the assessment objectives
+stand in assessment-criteria@1. The object view shows a statement's label
+and an object's history.
 
 ## Start
 
@@ -86,7 +92,7 @@ is saved to the set at once; the other open tools reload.
 | Tool | Shows | Writes |
 |---|---|---|
 | Import | An OSCAL catalog or profile and the report of its import | Requirements and Sets from a catalog, as a set of its own; a Set and a Tailoring from a profile |
-| Browse | The catalogue as a tree of Sets, every object with type filters and with the filters found in the loaded requirements, statistics. An object whose lifecycle is `withdrawn` is left out of the tree and the list until the switch "withdrawn" shows it; it stays in the set (build 0.9.18) | A Requirement (every `{param:}` token is declared as a parameter), a Set |
+| Browse | The catalogue as a tree of Sets, every object with type filters and with the filters found in the loaded requirements, statistics. An object whose lifecycle is `withdrawn` is left out of the tree and the list until the switch "withdrawn" shows it; it stays in the set (build 0.9.18). The object view shows a statement's `label` beside its id and an object's `history` as a list of date, comment and reference (build 0.9.19) | A Requirement (every `{param:}` token is declared as a parameter), a Set |
 | Risk | The register with a heat map, the scales and their matrix, the coverage of the selected requirements, the risk catalogues | A Risk; a scale; the record of catalogue entries that do not apply |
 | Tailor | Each Tailoring resolved: selection, operations with before and after, lattice verdict, derived tier | A Tailoring; the decision on a Deviation it carries; the resolved requirements as a package of their own |
 | Map | The mappings as a table, with targets outside the set marked | A Mapping, also to a target outside the set |
@@ -349,7 +355,7 @@ written until you choose *Write to the set*.
 into a set you name, with a manifest whose provenance names the source file
 and the licence you state. Three sets of rules:
 
-- *BSI Grundschutz++* follows `jascon/scripts/convert_bsi.py` v0.3. Every
+- *BSI Grundschutz++* follows `jascon/scripts/convert_bsi.py` v0.5. Every
   control, at every depth, is a Requirement of its own, with one statement,
   its own parameters, props and links. BSI nests controls for grouping only
   (the author, 2026-11-14), so a control that has nested controls also gives
@@ -361,11 +367,13 @@ and the licence you state. Three sets of rules:
   What the rules do not read (a prop of another name or namespace, a part of
   another name, a member they have no place for, what the document says of
   itself) is carried as the source holds it, in the compat facet
-  `oscal-1x@1`. Every object it makes from the Anwenderkatalog of
+  `oscal-1x@1`. The one resource the document refers to stands in the
+  standard facet references@1 on the root Set, and the document's uuid in
+  the manifest's source entry (since build 0.9.19, `convert_bsi.py` v0.5).
+  Every object it makes from the Anwenderkatalog of
   2026-07-16, 1,287 of them (999 Requirements, 288 Sets), has the semantic
   digest of the bundle under `converted_examples/DE.BSI`, and the source
-  entry of the manifest names the author and the day as the converter's
-  does. Until build 0.9.13 a nested control was a clause of its parent, and
+  entry of the manifest is the converter's. Until build 0.9.13 a nested control was a clause of its parent, and
   its links were lost (`ERRATA.md`).
 - *generic*, for any other catalog: every control, nested ones included, is a
   Requirement; every part of the statement that carries prose is a clause;
@@ -384,15 +392,18 @@ and the licence you state. Three sets of rules:
   family Set, whose statement is `unspecified`; a successor it names names
   it in `replaces`, and where the source gives it no statement, its one
   statement is made from its links ("Incorporated into AC-2k.").
-  Every statement item with prose is a clause with modality `must`. SP
-  800-53A objectives, each with the statement it assesses
-  (`assessment-for`), and methods, the administrative data of parameters
-  with their formal SP 800-53A labels, and the guidance go to facets under
-  the NIST namespace; a markdown link in a text stays as NIST wrote it. The
-  root Set carries the back-matter resources something in the catalog
-  refers to, as the source writes them (178 of 201; an orphan is not
-  carried) and, in the compat facet, the catalog's uuid and what it says of
-  itself. A prop is read in
+  Every statement item with prose is a clause with modality `must`, and
+  carries its print label (`a.`, `(1)`) as its `label` (1,122 statements in
+  5.2.0). The SP 800-53A objectives, each with the address of what it
+  assesses (`assessment-for`), and methods stand in the standard facet
+  assessment-criteria@1; the administrative data of parameters with their
+  formal SP 800-53A labels and the guidance go to facets under the NIST
+  namespace; a markdown link in a text stays as NIST wrote it. The root Set
+  carries the back-matter resources something in the catalog refers to, as
+  the source writes them with the uuid as `id`, in the standard facet
+  references@1 (178 of 201; an orphan is not carried), and, in the compat
+  facet, what the catalog says of itself. Its uuid stands in the manifest's
+  entry for it (`provenance.sources`). A prop is read in
   exactly the class and namespace the converter reads; any other prop is
   not carried, as by the converter, whose ledger then fails its run, and
   the report counts it. On the pinned source
@@ -484,13 +495,16 @@ the control's id, without regard to case.
 | a value outside the declared space | listed in the report, not written: it needs a Deviation |
 | `alters`, pattern matching, child controls | counted in the report, not carried |
 | `metadata`: parties, their roles, `last-modified` | `provenance` on the Tailoring: who wrote the profile and when |
-| `metadata` beside the title and version, the `uuid`, the `href` of each import, the back-matter resources, and `merge` | on the profile's Set, in the compat facet `oscal-1x@1`, as the source holds them, as `convert_nist.py` writes them on a baseline Set (metadata and merge since 0.9.15, the rest since 0.9.16). A set that pins no compat schema 1.1.0 gets it. A profile without a Set of its own (an `include-all` only) carries none of them, and the report says so |
+| `metadata` beside the title and version, the `href` of each import, and `merge` | on the profile's Set, in the compat facet `oscal-1x@1`, as the source holds them, as `convert_nist.py` writes them on a baseline Set (metadata and merge since 0.9.15, imports since 0.9.16). A set that pins no compat schema 1.2.0 gets it. A profile without a Set of its own (an `include-all` only) carries none of them, and the report says so |
+| the back-matter resources | on the profile's Set, in the standard facet references@1, each as the source writes it with its uuid as `id` (since 0.9.19). A set that pins no schema for that facet gets it |
+| the `uuid`, with title, version, author, day and OSCAL version | the manifest's entry for the profile (`provenance.sources[]`), returned in the import's report as `provenance-source`: the set keeps the provenance of the manifest it came with, and the app has no place to add the entry to it (build 0.9.19) |
 
 **Who wrote an OSCAL document, and when.** The page shows both before the
 import, in two fields you can type over. The author is one party of the
 document's `metadata`, found by this rule:
 
-1. the one party named as `creator`, else the one named as `prepared-by`
+1. the one party named as `creator`, else the one named as `prepared-by`,
+   else the one named as `author` (since build 0.9.19, backlog #91)
    (the `party-uuids` of all `responsible-parties` entries of that role
    together, without those `parties` does not define);
 2. else the one party that holds any role at all;

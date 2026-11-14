@@ -528,6 +528,9 @@ function kernelNeeded(objs, manifest) {
   const typed = (objs || []).filter(isRecord).map(o => [String(o.id), inferType(o), o])
     .sort((a, b) => a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0);
   for (const [oid, t, o] of typed) {
+    /* decided on 2026-11-14 (backlog #81 and #84; v1.18.0): `history` on any object, `label` on a statement */
+    if ("history" in o) return ["2.0.0", `${oid} carries the record of its changes (history)`];
+    if (t === "requirement" && records(o.statements).some(s => "label" in s)) return ["2.0.0", `${oid} labels a statement (label)`];
     if (t === "risk") return ["2.0.0", `${oid} is a Risk`];
     if (t === "finding" && given(o["risk-refs"])) return ["2.0.0", `${oid} carries risk-refs`];
     if (t === "check") return ["2.0.0", `${oid} is a Check`];
@@ -828,7 +831,7 @@ function listedAttestationErrors(objs) {
    STDLIB_FACETS are the ids of the descriptors in jascon/schemas/stdlib; the test counts them against
    that folder. The workbench of this page writes a manual assessment under the first of them. */
 const STDLIB = "https://ns.jascon.net/stdlib/facet/";
-const STDLIB_FACETS = ["assessment-criteria", "collector", "dsse-envelope", "effectivity", "reporting-obligation", "security-objectives", "statement-grammar", "terminology"].map(n => STDLIB + n);
+const STDLIB_FACETS = ["assessment-criteria", "collector", "dsse-envelope", "effectivity", "references", "reporting-obligation", "security-objectives", "statement-grammar", "terminology"].map(n => STDLIB + n);
 const ASSESSMENT_CRITERIA = STDLIB + "assessment-criteria@1";
 /* Where the facet a key names is registered: "stdlib" | "pinned" | "private" | null. `pinned`: the ids
    of the facet schemas the bundle pins. As in the reference, the version after the last "@" is not
@@ -941,7 +944,7 @@ const isEarlierWorkbenchMethod = m => isRecord(m) && Object.keys(m).sort().join(
 /* The version is stated once. Until 1.10.0 it stood in three places - the pill of the top bar, the
    `converter` line of every manifest written here, and the first line of the console - and they had
    come apart: 1.9.1, 1.9.1 and 1.10.0. */
-const READER_VERSION = "1.17.0", READER_BUILD = "2026-11-14";
+const READER_VERSION = "1.18.0", READER_BUILD = "2026-11-14";
 const READER_ID = "jascon-reader.html v" + READER_VERSION;
 $("pill-version").textContent = `v${READER_VERSION} · build ${READER_BUILD}`;
 /* URL loading — works when this page and the bundle are served over http(s)
@@ -1289,7 +1292,7 @@ function indexBundle() {
     ? `${tally.listed} object${tally.listed === 1 ? "" : "s"} · ` + (tally.beside ? `${tally.beside} attestation${tally.beside > 1 ? "s" : ""} beside the manifest`
         : state.beside?.how === "no-listing" ? "attestations beside the manifest not looked for" : "no attestation beside the manifest") +
       (state.listedErrors.length ? ` · ✗ ${state.listedErrors.length} attestation${state.listedErrors.length > 1 ? "s" : ""} listed (MANIFEST-1)` : "") + (tally.other ? ` · ${tally.other} not listed` : "")
-    : parsed + " objects") + " · " + (prov.source || prov.sources?.[0]?.title || "bundle");
+    : parsed + " objects") + " · " + sourcesName(prov);
   $("pill-bundle").title = $("pill-bundle").textContent;
   $("pill-bundle").classList.add("on"); $("pill-bundle").style.color = "";
   $("btn-verify").disabled = !state.manifest || !state.objects.size;
@@ -1397,7 +1400,9 @@ function renderOverview() {
   const p = state.manifest?.provenance || {};
   const rows = [];
   const add = (k, v) => v && rows.push(`<div class="k">${esc(k)}</div><div class="v">${esc(v)}</div>`);
-  if (p.sources) p.sources.forEach(s => add("source", `${s.title} · v${s.version} (OSCAL ${s["oscal-version"] || "—"})`));
+  /* what the bundle was made from: `provenance.sources`, one entry per source document (kernel-typed since
+     2026-11-14, backlog #80), else the one line `source` an older converter wrote */
+  if (Array.isArray(p.sources)) p.sources.filter(isRecord).forEach(s => add("source", sourceLine(s)));
   else add("source", p.source);
   add("source version", p["source-version"]);
   add("source oscal", p["source-oscal-version"]);
@@ -1732,6 +1737,25 @@ function relationsHtml(o) {
   return `<div class="nano sectionlabel">Relations</div><div class="kv">` +
     o.relations.map(rel => kvRow(rel.type, refLink(rel.ref))).join("") + `</div>`;
 }
+/* The record of an object's changes (v1.18.0; kernel member `history` since 2026-11-14, backlog #81): one line
+   per entry as the publisher states it, oldest first - the date (a day or a month), the comment, and what it
+   refers to as a link where that is an address. The page shows the order it finds; a validator holds it (HISTORY-1). */
+/* One source document of a manifest in one line: its title and version, its format, its day, as far as stated. */
+const sourceLine = s => [s.title ?? "(no title)", given(s.version) ? "v" + s.version : null,
+  given(s.format) || given(s["format-version"]) ? [s.format, s["format-version"]].filter(given).join(" ") : null, given(s.date) ? s.date : null].filter(x => x !== null).join(" · ");
+/* The name of a bundle for the top bar: the title of its first source, and how many more there are. */
+const sourcesName = prov => {
+  const list = Array.isArray(prov.sources) ? prov.sources.filter(isRecord) : [];
+  if (!list.length) return prov.source || "bundle";
+  return (list[0].title ?? "bundle") + (list.length > 1 ? ` + ${list.length - 1} more source${list.length > 2 ? "s" : ""}` : "");
+};
+function historyHtml(o) {
+  if (!Array.isArray(o.history) || !o.history.length) return "";
+  return `<div class="nano sectionlabel">History — the publisher's record of this object's changes (${o.history.length})</div>` +
+    o.history.filter(isRecord).map(e => `<div data-history-entry style="margin:3px 0"><span class="mono">${esc(e.date ?? "?")}</span>` +
+      (isRecord(e.comment) ? ` ${esc(tt(e.comment) || "")}` : "") +
+      (given(e.ref) ? ` <span class="hint">· ${/^https?:\/\//.test(e.ref) ? `<a href="${esc(e.ref)}" target="_blank" rel="noopener noreferrer">${esc(e.ref)}</a>` : esc(e.ref)}</span>` : "") + `</div>`).join("");
+}
 function aliasesHtml(o) {
   if (!o.aliases) return "";
   return `<div class="nano sectionlabel">Aliases</div><div>` +
@@ -1750,7 +1774,7 @@ function renderRequirement(r) {
       return `<span class="badge" title="${esc(bits.join(" · "))}">⚙ ${esc(p.name)}</span>`;
     }).join(" ");
     return `<div class="stmt">
-      <div><span class="badge">stmt ${esc(s.id)}</span>${modBadge(s.modality)}
+      <div>${given(s.label) ? `<span class="badge" data-stmt-label title="label: what is printed beside this statement">${esc(s.label)}</span>` : ""}<span class="badge">stmt ${esc(s.id)}</span>${modBadge(s.modality)}
         ${(s["obligated-parties"] || []).map(p => `<span class="badge" title="obligated party">◈ ${esc(p.split("/").pop())}</span>`).join("")}
         ${params}</div>
       ${langBlocks(s.prose, "prose")}
@@ -1829,7 +1853,7 @@ function renderComponent(r) {
 }
 /* the fields no renderer of its own shows; a `deviations` list is shown as Deviations, on any type */
 function renderGeneric(r, omit = []) {
-  const skip = new Set(["id","version","label","title","lifecycle","aliases","relations","facets","annotations","statements","members", ...omit]);
+  const skip = new Set(["id","version","label","title","lifecycle","history","aliases","relations","facets","annotations","statements","members", ...omit]);
   const list = Array.isArray(r.obj.deviations) && r.obj.deviations.length;
   const rest = Object.fromEntries(Object.entries(r.obj).filter(([k]) => !skip.has(k) && !(list && k === "deviations")));
   return (Object.keys(rest).length ? `<div class="nano sectionlabel">Fields</div>${prettyVal(rest)}` : "") + deviationsHtml(r.obj);
@@ -2068,7 +2092,7 @@ function showDetail(id) {
   else if (r.type === "implementation") body += renderImplementation(r);
   else if (r.type === "attestation") body += renderAttestation(r);
   else body += renderGeneric(r);
-  body += aliasesHtml(r.obj) + relationsHtml(r.obj) + facetsHtml(r.obj) + annotationsHtml(r.obj) + digestRow(r);
+  body += historyHtml(r.obj) + aliasesHtml(r.obj) + relationsHtml(r.obj) + facetsHtml(r.obj) + annotationsHtml(r.obj) + digestRow(r);
   body += `<details style="margin-top:12px"><summary>raw JSON</summary><pre class="raw">${esc(JSON.stringify(r.obj, null, 1))}</pre></details>`;
   $("detail").innerHTML = body;
   wireRefs($("detail"));

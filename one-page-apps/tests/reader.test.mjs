@@ -115,12 +115,16 @@ const P = (() => {
 })();
 
 /* ---------- 1. the pin vectors ---------- */
-test("the pin: each of the 19 kernel vectors gets the reference's number of failures from the page's own test", () => {
+test("the pin: each of the 25 kernel vectors gets the reference's number of failures from the page's own test, but for two that fail on a shape", () => {
   const v = json("jascon/conformance/kernel-vectors.json").vectors;
-  assert.equal(v.length, 19);   // a vector added to the family is looked at here before this number moves (18 until #68 added the pin that ends in a line break)
+  assert.equal(v.length, 25);   // 6 more on 2026-11-14 (history, a statement's label, the sources of a manifest); a vector added to the family is looked at here before this number moves (18 until #68 added the pin that ends in a line break)
+  /* two vectors fail on the shape of `provenance.sources`, not on the pin; the page runs no kernel schema and says nothing about them */
+  const SHAPE_ONLY = ["a-source-with-a-date-that-is-no-date", "sources-that-are-no-list-and-a-source-that-says-nothing"];
+  assert.deepEqual(v.filter(c => SHAPE_ONLY.includes(c.name)).map(c => c["expected-frags"]), [["manifest schema violation"], ["manifest schema violation"]]);
   for (const c of v) {
     for (const o of c.objects) assert.ok(![null, "manifest"].includes(P.inferType(o)), `${c.name}: ${o.id} is typed`);
     const errs = P.kernelPinErrors(c.manifest, c.objects);
+    if (SHAPE_ONLY.includes(c.name)) { assert.deepEqual(errs, [], c.name); continue; }
     assert.equal(errs.length, c["expected-fails"] || 0, `${c.name}: ${errs.join(" | ")}`);
     for (const frag of c["expected-frags"] || []) assert.ok(errs.some(e => e.includes(frag)), `${c.name}: the message names '${frag}': ${errs.join(" | ")}`);
   }
@@ -152,26 +156,29 @@ const OP = { op: "set-modality", "requirement-ref": REQ.id, "statement-id": "s1"
 const CASES = [
   [1, "a manifest that pins a scale definition", [REQ], { "manifest-version": "1", scales: [{ id: `${EX}/scale/s`, "exact-version": "1", digest: "sha256:" + "0".repeat(64), path: "scale.json" }] }],
   [2, "a manifest with a pack header", [COMPONENT], { "manifest-version": "1", pack: { id: `${EX}/pack/p`, version: "1", publisher: { ref: `${EX}/party/vendor` } } }],
-  [3, "a Risk", [RISK]],
-  [4, "a Finding with risk-refs", [{ ...FINDING, "risk-refs": [RISK.id] }]],
-  [5, "a Check", [CHECK]],
-  [6, "an Assessment with check-results", [{ ...ASSESSMENT, "check-results": [ROW] }]],
-  [6, "an Assessment with a tailoring-ref", [{ ...ASSESSMENT, "tailoring-ref": TAILORING.id }]],
-  [7, "a Finding with a check-ref", [{ ...FINDING, "check-ref": CHECK.id }]],
-  [8, "a Component whose capability names clauses (statement-ids)", [{ ...COMPONENT, capabilities: [{ id: "cap", "requirement-ref": REQ.id, "statement-ids": ["s1"] }] }]],
-  [9, "a Component with a product-version", [{ ...COMPONENT, "product-version": "7.2" }]],
-  [9, "a Component with an empty product-version: the field is there", [{ ...COMPONENT, "product-version": "" }]],
-  [10, "a Tailoring with provenance", [{ ...TAILORING, provenance: WHO }]],
-  [10, "an Implementation with provenance", [{ ...IMPLEMENTATION, provenance: WHO }]],
-  [10, "a Finding with provenance", [{ ...FINDING, provenance: WHO }]],
-  [11, "a select with provenance", [{ ...TAILORING, selects: [{ "set-ref": SET.id, provenance: WHO }] }]],
-  [11, "an exclude with provenance", [{ ...TAILORING, excludes: [{ ref: REQ.id, provenance: WHO }] }]],
-  [11, "an operation with provenance", [{ ...TAILORING, operations: [{ ...OP, provenance: WHO }] }]],
-  [12, "a Deviation with `decided` in the list of a Requirement", [{ ...REQ, deviations: [{ ...DEVIATION, decided: "2026-11-03" }] }]],
-  [12, "a Deviation with `review-due` in the list of a Finding", [{ ...FINDING, deviations: [{ ...DEVIATION, "review-due": REVIEW }] }]],
-  [12, "a Deviation with `decided` inline on an operation", [{ ...TAILORING, operations: [{ ...OP, modality: "may", deviation: { ...DEVIATION, decided: "2026-11-03" } }] }]],
-  [12, "a Deviation with `review-due` inline on an operation", [{ ...TAILORING, operations: [{ ...OP, modality: "may", deviation: { ...DEVIATION, "review-due": REVIEW } }] }]],
-  [13, "a Component with a dated authorization", [{ ...COMPONENT, authorizations: [{ id: "ato-1", "authority-ref": `${EX}/party/ao`, date: "2026-06-30" }] }]],
+  [3, "an object with a history (the record of its changes; kernel member since 2026-11-14)", [{ ...REQ, history: [{ date: "2025-06" }] }]],
+  [3, "a Set with a history", [REQ, { ...SET, history: [{ date: "2026-03-12" }] }]],
+  [4, "a Requirement that labels a statement", [{ ...REQ, statements: [{ ...REQ.statements[0], label: "a." }] }]],
+  [5, "a Risk", [RISK]],
+  [6, "a Finding with risk-refs", [{ ...FINDING, "risk-refs": [RISK.id] }]],
+  [7, "a Check", [CHECK]],
+  [8, "an Assessment with check-results", [{ ...ASSESSMENT, "check-results": [ROW] }]],
+  [8, "an Assessment with a tailoring-ref", [{ ...ASSESSMENT, "tailoring-ref": TAILORING.id }]],
+  [9, "a Finding with a check-ref", [{ ...FINDING, "check-ref": CHECK.id }]],
+  [10, "a Component whose capability names clauses (statement-ids)", [{ ...COMPONENT, capabilities: [{ id: "cap", "requirement-ref": REQ.id, "statement-ids": ["s1"] }] }]],
+  [11, "a Component with a product-version", [{ ...COMPONENT, "product-version": "7.2" }]],
+  [11, "a Component with an empty product-version: the field is there", [{ ...COMPONENT, "product-version": "" }]],
+  [12, "a Tailoring with provenance", [{ ...TAILORING, provenance: WHO }]],
+  [12, "an Implementation with provenance", [{ ...IMPLEMENTATION, provenance: WHO }]],
+  [12, "a Finding with provenance", [{ ...FINDING, provenance: WHO }]],
+  [13, "a select with provenance", [{ ...TAILORING, selects: [{ "set-ref": SET.id, provenance: WHO }] }]],
+  [13, "an exclude with provenance", [{ ...TAILORING, excludes: [{ ref: REQ.id, provenance: WHO }] }]],
+  [13, "an operation with provenance", [{ ...TAILORING, operations: [{ ...OP, provenance: WHO }] }]],
+  [14, "a Deviation with `decided` in the list of a Requirement", [{ ...REQ, deviations: [{ ...DEVIATION, decided: "2026-11-03" }] }]],
+  [14, "a Deviation with `review-due` in the list of a Finding", [{ ...FINDING, deviations: [{ ...DEVIATION, "review-due": REVIEW }] }]],
+  [14, "a Deviation with `decided` inline on an operation", [{ ...TAILORING, operations: [{ ...OP, modality: "may", deviation: { ...DEVIATION, decided: "2026-11-03" } }] }]],
+  [14, "a Deviation with `review-due` inline on an operation", [{ ...TAILORING, operations: [{ ...OP, modality: "may", deviation: { ...DEVIATION, "review-due": REVIEW } }] }]],
+  [15, "a Component with a dated authorization", [{ ...COMPONENT, authorizations: [{ id: "ato-1", "authority-ref": `${EX}/party/ao`, date: "2026-06-30" }] }]],
   [0, "one of each type the 1.0.0 kernel has, a Mapping with its provenance among them",
     [REQ, SET, TAILORING, MAPPING, { ...COMPONENT, authorizations: [{ id: "ato-1", "authority-ref": `${EX}/party/ao` }], capabilities: [{ id: "cap", "requirement-ref": REQ.id }] },
       IMPLEMENTATION, ASSESSMENT, FINDING, ATTESTATION]],
@@ -1841,8 +1848,8 @@ test("an Assessment's method: of the 13 method vectors the page decides the ten 
     assert.equal(METHODS.length, 13);   // a vector added to the family is looked at here before this number moves (12 until the app's port added the object called `method` inside a payload)
     /* the standard library the page knows is the folder of its descriptors */
     const stdlib = fs.readdirSync(path.join(ROOT, "jascon/schemas/stdlib")).filter(n => n.endsWith(".json")).map(n => json("jascon/schemas/stdlib/" + n).id);
-    assert.equal(stdlib.length, 8);
-    assert.deepEqual([...P.STDLIB_FACETS].sort(), [...stdlib].sort());
+    assert.equal(stdlib.length, 10);   // ten descriptors of nine facets: assessment-criteria has two versions, references is new (2026-11-14)
+    assert.deepEqual([...P.STDLIB_FACETS].sort(), [...new Set(stdlib)].sort());
     assert.deepEqual(P.manualMethod(), MANUAL);
     assert.ok(stdlib.includes(CRITERIA.replace(/@1$/, "")) && json("jascon/schemas/stdlib/assessment-criteria-1.0.0.json").schema.properties.method.enum.includes("manual"), "what the workbench writes is a value the descriptor knows");
     const homes = new Set(), decided = [];
@@ -2255,6 +2262,36 @@ test("an export that fails for two rules lists its failures in the reference's o
     if (REFERENCE) { const ref = referenceFailures(out); assert.equal(ref.ok, false, ref.line); assert.deepEqual(ref.failures, fails, "the reference's failures, in its order"); }
   }));
 
+/* ---------- 17. a statement's label, an object's history, a manifest's sources (v1.18.0; backlog #80, #81, #84) ---------- */
+test("a statement's label and an object's history are shown as the bundle states them, and the bundle is named after the sources its manifest lists",
+  OPTS, () => withReader(async R => {
+    const { page } = R;
+    const NS = "https://ns.auth.gov/fw", REQ = { id: `${NS}/req/1`, version: "4", label: "R-1", lifecycle: "active",
+      statements: [{ id: "smt.a", label: "a.", modality: "must", "obligated-parties": [`${NS}/p/o`], prose: { en: "Lock the door." } },
+                   { id: "smt.b", modality: "should", "obligated-parties": [`${NS}/p/o`], prose: { en: "Log who locked it." } }],
+      history: [{ date: "2025-06" }, { date: "2026-03-12", comment: { en: "Reworded." }, ref: "https://github.com/example/rules/issues/41" }] };
+    const dir = path.join(R.tmp, "labelled"); fs.mkdirSync(path.join(dir, "objects"), { recursive: true });
+    const bytes = Buffer.from(JSON.stringify(REQ, null, 1) + "\n");
+    fs.writeFileSync(path.join(dir, "objects", "req-1.json"), bytes);
+    const manifest = { "manifest-version": "1", "kernel-version": "2.0.0",
+      provenance: { sources: [{ title: "House rules", version: "2026.03", uuid: "36766a6f-e174-4292-a03e-fcb3b4b09201", date: "2026-03-12", format: "OSCAL", "format-version": "1.1.2" },
+                              { title: "House rules, annex" }], converter: "by hand" },
+      objects: [{ id: REQ.id, version: REQ.version, "package-digest": sha256(bytes), "semantic-digest": await P.semanticDigest(REQ), path: "objects/req-1.json" }] };
+    fs.writeFileSync(path.join(dir, "content-manifest.json"), JSON.stringify(manifest, null, 1) + "\n");
+    await R.load(dir);
+    assert.match(await R.text(page.locator("#pill-bundle")), /House rules \+ 1 more source$/);
+    await R.view("overview");
+    assert.match(await R.text(page.locator("#ov-kv")), /House rules · v2026\.03 · OSCAL 1\.1\.2 · 2026-03-12/);
+    assert.match(await R.text(page.locator("#ov-kv")), /House rules, annex/);
+    const d = await R.detail(REQ.id);
+    assert.deepEqual(await d.locator("[data-stmt-label]").evaluateAll(l => l.map(x => x.textContent)), ["a."], "the label where the statement has one, and none made up for the other");
+    assert.deepEqual(await d.locator("[data-history-entry]").evaluateAll(l => l.map(x => x.textContent.replace(/\s+/g, " ").trim())),
+      ["2025-06", "2026-03-12 Reworded. · https://github.com/example/rules/issues/41"]);
+    assert.equal(await d.locator('[data-history-entry] a[href="https://github.com/example/rules/issues/41"]').count(), 1, "what an entry refers to is a link where it is an address");
+    assert.doesNotMatch(await R.text(d), /Fields/, "the history is not shown a second time among the other fields");
+    if (REFERENCE) { const ref = reference(dir, "--as-of", "2026-11-14"); assert.equal(ref.ok, true, ref.line + "\n" + ref.out.slice(-800)); }
+  }));
+
 /* ---------- 16. what was withdrawn (v1.17.0; backlog #87) ---------- */
 test("withdrawn objects are left out of the list and of a Set's members until the switch shows them; a link opens one all the same",
   OPTS, () => withReader(async R => {
@@ -2309,8 +2346,14 @@ test("the keys of facets: the page names the keys the reference's facet_errors n
       if (payloads.length) undecided.push(c.name);
       else if (c.object.facets && !("expected-errors" in c)) { assert.equal(keys.length ? "invalid" : "valid", c.expected, c.name); decided.push(c.name); }
     });
-    assert.deepEqual(decided, ["stdlib-payload-valid", "unregistered-facet-fails-closed", "pinned-framework-facet-valid", "private-facet-ignored-by-definition"]);
-    assert.deepEqual(undecided, ["stdlib-payload-corrupt-wrong-types", "stdlib-payload-missing-required", "pinned-framework-facet-corrupt"]);
+    /* the nine vectors of 2026-11-14 (assessment-criteria 1.1.0 beside 1.0.0, references) turn on a payload and its schema but
+       for three whose payload is valid: the page says of their keys that they are registered, and nothing of their payloads */
+    assert.deepEqual(decided, ["stdlib-payload-valid", "unregistered-facet-fails-closed", "pinned-framework-facet-valid", "private-facet-ignored-by-definition",
+      "assessment-criteria-1.1.0-typed-objectives", "assessment-criteria-pinned-at-1.0.0-is-held-to-1.0.0", "references-resources-in-the-source-s-shape"]);
+    assert.deepEqual(undecided, ["stdlib-payload-corrupt-wrong-types", "stdlib-payload-missing-required", "pinned-framework-facet-corrupt",
+      "assessment-criteria-1.1.0-an-address-that-names-nothing", "assessment-criteria-1.1.0-an-address-with-a-member-the-facet-does-not-know",
+      "assessment-criteria-1.1.0-assessment-for-as-one-string", "assessment-criteria-pinned-at-1.0.0-still-refuses-what-1.0.0-refuses",
+      "references-a-resource-without-an-id", "references-no-resource"]);
     assert.deepEqual(P.facetKeyErrors({ id: "x", facets: { "private:a": 1, "https://no.example/f@1": 1 } }, new Set()), ["x: unregistered facet 'https://no.example/f@1' — not stdlib, not pinned in the manifest, not private: (dangerous-by-default, D10)"]);
   });
 

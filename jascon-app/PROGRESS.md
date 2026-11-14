@@ -601,6 +601,49 @@ and in `readme.md`; this file says only what is done and what is next.
   therefore not an OSCAL catalogue, and for one that is, the preset and the
   converter cannot differ in this. The comment at `jscBsiHeld` stands.
 
+- The presets follow the kernel round of 2026-11-14 (build 0.9.19; the
+  author's decisions on backlog #80 to #84), `convert_bsi.py` v0.5 and
+  `convert_nist.py` v0.3. Compat schema 1.2.0, the library's bytes (no
+  `back-matter`, no `history`, `props` and `group-parts` typed and closed).
+  A standard facet is pinned at the latest version `JSC_STDLIB` holds
+  (assessment-criteria 1.1.0; the CIS preset names 1.0.0, as its converter
+  does). The resources a document refers to stand in references@1 with
+  their uuid as `id`: on the root Set of both presets, and on a profile's
+  Set. The document's uuid is no longer on a Set: a catalogue import writes
+  the converters' entry of `provenance.sources[]` (title, version, uuid,
+  author, day, `OSCAL`, OSCAL version) into the manifest of the new set; a
+  profile is imported into a set whose manifest keeps its provenance as it
+  came (`jscBuildBundle`), so its entry is returned in the report as
+  `provenance-source` and written nowhere. SP 800-53: a statement carries
+  the print label of its part as `label`; the objectives and methods stand
+  in assessment-criteria@1, and `assessment-for` is an address
+  (`statement-id`; with `requirement-ref` for another control;
+  `requirement-ref` alone for the statement part as a whole; `href` for a
+  link that names nothing).
+
+  Measured: Grundschutz++ 1,287 of 1,287 objects and SP 800-53 1,217 of
+  1,217 by semantic digest and by bytes, the pinned schemas byte for byte,
+  the manifest's source entries equal; 1,122 statements with a label; on
+  the catalogues written for the tests every object and schema equals what
+  the two converters write, and each test profile's entry equals the
+  converter's. The recorded digests of the party test were taken anew for
+  Grundschutz++ and SP 800-53 (presets and OSCAL exports both changed;
+  counts unchanged); CIS unchanged.
+
+  The object view (Browse) shows a statement's `label` beside its id and an
+  object's `history` as a list: date, comment, reference (a link to the
+  object where it is in the set, else to an http(s) address in a new tab).
+  A browser test reads both from a rendered object, in English and German.
+
+  Added when the build was merged (2026-11-14): `jscOscalAuthorParty` reads
+  the role `author` after `creator` and `prepared-by`, as
+  `oscal_conv_lib.document_author` does since backlog #91 (the CSF names
+  its author under that role). Two rows of the rule's table, 15 in all.
+  Not built, and reported: a profile imported into a set that exists has
+  no place for its entry of `provenance.sources`; the entry is returned in
+  the import's report (`provenance-source`) and the manifest of the set
+  keeps the provenance it came with.
+
 ## Next
 
 - An OSCAL component definition as a third kind on the Import page, written

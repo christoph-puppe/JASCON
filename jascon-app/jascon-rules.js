@@ -464,12 +464,44 @@ function jscContentCanonical(obj) {
   return jscRulesCanonical(x);
 }
 const jscRulesCanonical = jscRulesCore ? jscRulesCore.jscCanonical : o => jscCanonical(o);
+/* -> [[statement-id, requirement-ref or null]] for every object inside a facet
+   payload that has a member `statement-id`, in the order met */
+function jscFacetStatementAddresses(payload) {
+  const out = [];
+  const walk = x => {
+    if (Array.isArray(x)) x.forEach(walk);
+    else if (jscIsPlainObject(x)) {
+      if (typeof x["statement-id"] === "string") out.push([x["statement-id"], typeof x["requirement-ref"] === "string" ? x["requirement-ref"] : null]);
+      Object.values(x).forEach(walk);
+    }
+  };
+  walk(payload);
+  return out;
+}
 function jscClosureErrors(objs) {
   const errs = [];
   const need = (oid, ref, what) => { if (!objs.has(ref)) errs.push(`${oid}: closure-required ${what} does not resolve in-bundle: ${ref}`); };
   const typeOf = ref => (objs.get(ref) || {}).type;
   const statementIds = ref => new Set(objs.get(ref).obj.statements.map(s => s.id));
   for (const [oid, { type: t, obj: o }] of objs) {
+    /* D10 (2026-11-14, backlog #83): a `statement-id` anywhere inside a facet
+       payload of a Requirement is held as a `by-statement` key is held. Alone
+       it names a statement of the host; beside a `requirement-ref` it names a
+       statement of that Requirement, which binds where the set holds it.
+       `private:` facets are not read. */
+    if (t === "requirement") {
+      const own = statementIds(oid);
+      for (const [fid, payload] of Object.entries(o.facets || {})) {
+        if (fid.startsWith("private:")) continue;
+        for (const [sid, rref] of jscFacetStatementAddresses(payload)) {
+          const said = "(D10: a statement-id inside a facet payload is held as a by-statement key is)";
+          if (rref === null) { if (!own.has(sid)) errs.push(`${oid}: facet ${fid} statement-id '${sid}' names no statement of its Requirement ${said}`); continue; }
+          if (!objs.has(rref)) continue;
+          if (typeOf(rref) !== "requirement") errs.push(`${oid}: facet ${fid} requirement-ref beside a statement-id resolves to a ${typeOf(rref)}, not a Requirement: ${rref} (D10)`);
+          else if (!statementIds(rref).has(sid)) errs.push(`${oid}: facet ${fid} statement-id '${sid}' names no statement of ${rref} ${said}`);
+        }
+      }
+    }
     for (const ca of o["canonical-alias"] || []) {
       const tgt = objs.get(ca.of);
       if (tgt && jscContentCanonical(o) !== jscContentCanonical(tgt.obj)) {
@@ -620,6 +652,9 @@ function jscKernelNeeded(objs, manifest) {
   if (manifest && manifest.pack) return ["2.0.0", "the manifest carries a pack header"];
   for (const oid of [...objs.keys()].sort()) {
     const { type, obj } = objs.get(oid);
+    /* decided on 2026-11-14 (backlog #81 and #84): `history` on any object, `label` on a statement */
+    if ("history" in obj) return ["2.0.0", `${oid} carries the record of its changes (history)`];
+    if (type === "requirement" && entries(obj.statements).some(s => "label" in s)) return ["2.0.0", `${oid} labels a statement (label)`];
     if (type === "risk") return ["2.0.0", `${oid} is a Risk`];
     if (type === "finding" && (obj["risk-refs"] || []).length) return ["2.0.0", `${oid} carries risk-refs`];
     if (type === "check") return ["2.0.0", `${oid} is a Check`];
@@ -1374,6 +1409,7 @@ const JSC_DATE_RULES = {
   "DATE-3": "the `date` of a Mapping's provenance is a date, YYYY-MM-DD",
   "DATE-4": "the `time` of an Assessment is a date or an RFC 3339 date-time with an offset",
   "DATE-5": "the `timestamp` of an Attestation is a date or an RFC 3339 date-time with an offset",
+  "DATE-6": "the `date` of an entry of `history` is a day or a month, YYYY-MM-DD or YYYY-MM - a publisher that states only the month of a change states a month",
 };
 /* a value as Python's repr prints it, for the messages of the DATE rules */
 function jscPyRepr(v) {
@@ -1411,7 +1447,30 @@ function jscDateRuleViolations(o) {
   if ("relationship" in o && jscIsPlainObject(prov) && "date" in prov && !valid("date", prov.date)) out.push(["DATE-3", `provenance.date is ${jscPyRepr(prov.date)}`]);
   if ("performer-ref" in o && "time" in o && !isWhen(o.time)) out.push(["DATE-4", `time is ${jscPyRepr(o.time)}`]);
   if ("signer" in o && "timestamp" in o && !isWhen(o.timestamp)) out.push(["DATE-5", `timestamp is ${jscPyRepr(o.timestamp)}`]);
+  (Array.isArray(o.history) ? o.history : []).forEach((e, i) => {
+    if (jscIsPlainObject(e) && "date" in e && !valid("dayOrMonth", e.date)) out.push(["DATE-6", `history[${i}].date is ${jscPyRepr(e.date)}`]);
+  });
   return out;
+}
+/* ---------- HISTORY-1: the record of an object's changes (backlog #81) ----------
+   `version` is the object's own version; `history` is what its publisher
+   says about how it came to be what it is, one entry per change, oldest
+   first. A day and a month are compared as they are written: a month
+   stands before its days, and two entries may carry one date. The order is
+   all a validator can hold: whether an entry is true it cannot know.
+   -> [message] for one object of valid shape. */
+const JSC_HISTORY_RULES = {
+  "HISTORY-1": "the entries of `history` stand in the order of their dates, oldest first - a record that a reader has to sort is read in two ways",
+};
+function jscHistoryErrors(o) {
+  const h = jscIsPlainObject(o) && Array.isArray(o.history) ? o.history : [];
+  const dates = h.filter(jscIsPlainObject).map(e => e.date);
+  for (let i = 1; i < dates.length; i++) {
+    if (typeof dates[i - 1] === "string" && typeof dates[i] === "string" && dates[i] < dates[i - 1]) {
+      return [`history[${i}].date ${dates[i]} stands after ${dates[i - 1]} (HISTORY-1: ${JSC_HISTORY_RULES["HISTORY-1"]})`];
+    }
+  }
+  return [];
 }
 /* What is wrong with one object, without looking at any other.
    -> { type: its one kernel type or null, errors: [string] } */
@@ -1434,6 +1493,7 @@ function jscObjectErrors(obj) {
   }
   const empty = jscOptionalEmptyViolations(obj);
   if (empty.length) errors.push(`optional empty containers present: ${empty.join(", ")}`);
+  errors.push(...jscHistoryErrors(obj));
   if (matches[0] === "requirement") {
     const sids = new Set(obj.statements.map(s => s.id));
     if (sids.size !== obj.statements.length) errors.push("duplicate statement ids (unique-within, B.1.3) — identity addressing becomes ambiguous");
@@ -1458,8 +1518,20 @@ function jscObjectErrors(obj) {
    ==================================================================== */
 const jscFacetBase = key => String(key).replace(/@[^@]*$/, "");
 const jscIsPrivateFacet = key => String(key).startsWith("private:");
-/* stdlib facet id -> its descriptor */
-const JSC_STDLIB_BY_ID = new Map(jscRulesSchema.JSC_STDLIB.map(d => [d.id, d]));
+/* The standard library may hold several versions of a facet (2026-11-14,
+   backlog #83: assessment-criteria 1.1.0 beside 1.0.0). One id and version
+   is one schema, and a version once published stays: a bundle that pins
+   1.0.0 is held to 1.0.0.
+   JSC_STDLIB_VERSIONS: stdlib facet id -> version -> descriptor.
+   JSC_STDLIB_BY_ID: stdlib facet id -> the descriptor of its latest
+   version, which is what an unpinned payload is held to. */
+const JSC_STDLIB_VERSIONS = new Map();
+for (const d of jscRulesSchema.JSC_STDLIB) {
+  if (!JSC_STDLIB_VERSIONS.has(d.id)) JSC_STDLIB_VERSIONS.set(d.id, new Map());
+  JSC_STDLIB_VERSIONS.get(d.id).set(d.version, d);
+}
+const jscVersionOrder = (a, b) => { const x = a.split(".").map(Number), y = b.split(".").map(Number); return x[0] - y[0] || x[1] - y[1] || x[2] - y[2]; };
+const JSC_STDLIB_BY_ID = new Map([...JSC_STDLIB_VERSIONS].map(([id, versions]) => [id, versions.get([...versions.keys()].sort(jscVersionOrder).pop())]));
 /* A facet payload is checked against the stdlib descriptor of its id, or
    against the schema the bundle pins for it. A `private:` facet is not
    checked by definition. Anything else is unregistered and fails closed.
@@ -1481,7 +1553,8 @@ function jscFacetErrors(items, pinned) {
   const held = (label, what, key, payload) => {
     const base = jscFacetBase(key);
     if (jscIsPrivateFacet(key)) return;
-    const schema = JSC_STDLIB_BY_ID.has(base) ? JSC_STDLIB_BY_ID.get(base).schema : pinned.get(base);
+    /* a pin of a library facet is one of its versions, verbatim (D26; jscCheckGraph holds it to that) */
+    const schema = pinned.has(base) ? pinned.get(base) : JSC_STDLIB_BY_ID.has(base) ? JSC_STDLIB_BY_ID.get(base).schema : undefined;
     if (schema === undefined) {
       errs.push(what === "facet" ? `${label}: unregistered facet '${key}' — not stdlib, not pinned in the manifest, not private: (dangerous-by-default, D10)`
         : `${label}: method '${key}' is no registered facet - not stdlib, not pinned in the manifest, not private: (an Assessment's method is a facet payload and fails closed, D10)`);
@@ -3336,8 +3409,13 @@ async function jscCheckGraph(g, verified, opts) {
     if (!f.def || !f.def.id) continue;
     pinnedSchemas.set(f.def.id, f.def.schema || { type: "object" });
     pinnedDecl.set(f.def.id, f.def["modifies-semantics"] || ["assessment", "tailoring", "selection", "rendering"]);   // a pin that omits it is dangerous by default
-    const std = JSC_STDLIB_BY_ID.get(f.def.id);
-    if (std && jscRulesCanonical(f.def.schema || {}) !== jscRulesCanonical(std.schema)) add("error", "facet", null, `${f.path}: pin of stdlib facet ${f.def.id} DIVERGES from the normative descriptor (D26)`);
+    /* the library may hold several versions of a facet: the pin is held to the one it states */
+    const versions = JSC_STDLIB_VERSIONS.get(f.def.id);
+    if (versions) {
+      const std = versions.get(f.def.version);
+      if (!std) add("error", "facet", null, `${f.path}: pin of stdlib facet ${f.def.id} states version ${jscPyRepr(f.def.version)}, which the standard library does not hold (it holds ${[...versions.keys()].sort().join(", ")})`);
+      else if (jscRulesCanonical(f.def.schema || {}) !== jscRulesCanonical(std.schema)) add("error", "facet", null, `${f.path}: pin of stdlib facet ${f.def.id} DIVERGES from the normative descriptor (D26)`);
+    }
   }
   pass("tailoring", "error")(await jscTailoringDutyErrors(objs, pinnedDecl, verify));
   const pins = new Map([...g.scales.values()].filter(x => x.pin).map(x => [x.def.id, x.pin]));
@@ -3421,6 +3499,7 @@ if (typeof module !== "undefined" && module.exports) {
     jscDeviationsOf, jscKernelNeeded, jscKernelPinErrors, jscRiskRuleViolations, jscRiskIsLive, jscRiskJustifies, JSC_NO_TAILORING, jscRiskCoverage,
     jscRiskLinkNotes, JSC_AUTHOR_RULES, jscAuthorReport, jscUtcDay, jscReviewReport, jscAuthorReviewLines,
     JSC_DRAFT_RULES, jscDraftMemberReport, jscDraftLines,
+    JSC_HISTORY_RULES, jscHistoryErrors, jscFacetStatementAddresses, JSC_STDLIB_VERSIONS,
     jscPartyRef, jscIsDate, jscProvenance, jscImportProvenance, jscAuthorRecord, jscAuthorTailoring, jscAuthorRisk, jscDecideDeviation, jscScaleDefinitionErrors, jscMatrixErrors, jscRiskLevels, jscMatrixCell, jscScaleErrors, jscCheckScales,
     jscOptionalEmptyViolations, JSC_NUMBER_RULES, jscNumberSpellingViolations, jscNumberViolations, jscInNumberDomain, jscNumberError, jscObjectErrors, jscFacetErrors, JSC_ASSESSMENT_CRITERIA, jscManualMethod, jscIsAppMethodBefore0913, jscRewriteAppMethod, jscTailoringDutyErrors, jscAttestationVerdict,
     jscAttestationBinds, jscSemanticDigests, JSC_BINDS_MANIFEST, jscBindsReport, JSC_MANIFEST_RULES, jscListedAttestationErrors, jscSetBinds, jscCheckGraph,

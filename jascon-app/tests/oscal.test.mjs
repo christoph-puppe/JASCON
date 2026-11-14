@@ -144,10 +144,13 @@ test("BSI preset: a nested control is a Requirement of its own with its own link
   /* the taxonomy payload holds what classifies the control, and no longer its title, label or alt-identifier */
   const TAX = "https://ns.bsi.bund.de/facet/gspp-taxonomy@1", keys = new Set(out.objects.flatMap(o => Object.keys((((o.obj.facets || {})[TAX] || {})["by-statement"] || {}).smt || {})));
   assert.deepEqual([...keys].sort(), ["class", "effort", "sec-level", "tags"]);
-  /* what the document says of itself stands on the root Set, as the source holds it; since build 0.9.16 (convert_bsi.py
-     v0.4) also its uuid and the one back-matter resource, which a link of the metadata names */
-  const { title, version, ...rest } = src.catalog.metadata;
-  assert.deepEqual(byId.get(`${NS}/set/tax/root`).facets, { "https://ns.jascon.net/compat/oscal-1x@1": { metadata: rest, uuid: src.catalog.uuid, "back-matter": src.catalog["back-matter"] } });
+  /* what the document says of itself stands on the root Set, as the source holds it; the one back-matter resource, which
+     a link of the metadata names, in the standard facet references@1 with its uuid as `id`; the document's uuid in the
+     manifest's entry for the source (since build 0.9.19, convert_bsi.py v0.5) */
+  const { title, version, ...rest } = src.catalog.metadata, [{ uuid, ...resource }] = src.catalog["back-matter"].resources;
+  assert.deepEqual(byId.get(`${NS}/set/tax/root`).facets, { "https://ns.jascon.net/stdlib/facet/references@1": { resources: [{ id: uuid, ...resource }] },
+    "https://ns.jascon.net/compat/oscal-1x@1": { metadata: rest } });
+  assert.equal(out.provenance.sources[0].uuid, src.catalog.uuid);
 });
 
 /* What the pinned catalogue does not hold, in a catalogue of the Grundschutz++ shape written for the tests: a prop
@@ -223,17 +226,20 @@ test("BSI preset: what the mapping does not read is carried as the source holds 
      Requirement, its nested control, the grouping Set after its members, the next control, the group, the loose control */
   assert.deepEqual(set("x-1").members, [{ ref: `${NS}/req/X.1`, sequence: 20 }, { ref: `${NS}/req/X.1.1`, sequence: 30 }]);
   assert.deepEqual(set("x").members, [{ ref: `${NS}/set/tax/x-1`, sequence: 40 }, { ref: `${NS}/req/X.2`, sequence: 50 }], "the grouping Set stands where the control stood, numbered after its members");
-  /* the root: the groups, then a control that stands in no group; what the document says of itself and its uuid; a
-     resource that something refers to (a link of a control, a link of the metadata), whole; the orphan, which nothing
-     refers to, not at all (convert_bsi.py v0.4, since build 0.9.16) */
+  /* the root: the groups, then a control that stands in no group; what the document says of itself; a resource that
+     something refers to (a link of a control, a link of the metadata), whole, in references@1 with its uuid as `id`;
+     the orphan, which nothing refers to, not at all (convert_bsi.py v0.5, since build 0.9.19) */
   const root = set("root");
   assert.deepEqual(root.members, [{ ref: `${NS}/set/tax/empty`, sequence: 10 }, { ref: `${NS}/set/tax/x`, sequence: 60 }, { ref: `${NS}/req/LOOSE.1`, sequence: 70 }]);
   const { title, version, ...meta } = cat.catalog.metadata, [named, , metaNamed] = cat.catalog["back-matter"].resources;
-  assert.deepEqual(root.facets[COMPAT], { metadata: meta, uuid: "c-1", "back-matter": { resources: [named, metaNamed] }, catalog: { remarks: "a note on the catalogue" } });
-  /* who wrote the document: the party's name in ASCII as a German reader writes it, then the slug */
-  assert.deepEqual(out.provenance.sources, [{ key: "gspp", title: "Anwenderkatalog Grundschutz++ (Probe)", version: "9", "oscal-version": "1.1.3",
-    "author-ref": `${NS}/party/bundesamt-fuer-groesse-und-mass`, date: "2026-11-14" }]);
-  assert.deepEqual(out.report["carried-as-the-source-holds-it"], { "param-extras beyond the alt-identifier": 1, props: 4, parts: 4, links: 1, control: 1, group: 1, metadata: 1, uuid: 1, "back-matter": 1, catalog: 1 });
+  const asEntry = ({ uuid, ...r }) => ({ id: uuid, ...r });
+  assert.deepEqual(root.facets, { "https://ns.jascon.net/stdlib/facet/references@1": { resources: [asEntry(named), asEntry(metaNamed)] },
+    [COMPAT]: { metadata: meta, catalog: { remarks: "a note on the catalogue" } } });
+  /* the manifest's entry for the document (backlog #80): its uuid, and who wrote it: the party's name in ASCII as a
+     German reader writes it, then the slug */
+  assert.deepEqual(out.provenance.sources, [{ title: "Anwenderkatalog Grundschutz++ (Probe)", version: "9", uuid: "c-1",
+    "author-ref": `${NS}/party/bundesamt-fuer-groesse-und-mass`, date: "2026-11-14", format: "OSCAL", "format-version": "1.1.3" }]);
+  assert.deepEqual(out.report["carried-as-the-source-holds-it"], { "param-extras beyond the alt-identifier": 1, props: 4, parts: 4, links: 1, control: 1, group: 1, metadata: 1, catalog: 1 });
   /* Every object is a valid kernel object but one, and the pinned compat schema accepts every compat payload. The one:
      a control without a statement prose gives a statement with an empty prose, here as in the converter, and the kernel
      refuses an empty text. Nothing is dropped and nothing is made up; the Import page then writes nothing and says how
@@ -341,8 +347,13 @@ test("profile: NIST MODERATE selects the members of the shipped MODERATE baselin
   assert.equal(set.members.length, 287);
   assert.deepEqual(out.report["not-found"], []);
   assert.deepEqual(tailoring.selects, [{ "set-ref": set.id }]);
-  assert.deepEqual(set.facets, shipped.facets, "the profile's metadata, uuid, import, resource and merge directive, as the converter carries them");
-  assert.deepEqual([out.report["held-in-compat"], out.report["not-carried"], out.facetSchemas], [["metadata", "uuid", "back-matter", "imports", "merge"], {}, []], "the bundle pins the schema; none is brought");
+  assert.deepEqual(set.facets, shipped.facets, "the profile's metadata, import, resource and merge directive, as the converter carries them");
+  assert.deepEqual([out.report["held-in-compat"], out.report["not-carried"], out.facetSchemas], [["metadata", "imports", "merge"], {}, []], "the bundle pins both schemas; none is brought");
+  /* the profile's entry for the manifest (backlog #80): the converter's, but for the namespace the author is minted under,
+     which is the one of the import. The app has no place to add it to the manifest of the set: the report returns it. */
+  const { "author-ref": authorRef, ...entry } = out.report["provenance-source"];
+  const { "author-ref": shippedAuthor, ...shippedEntry } = manifest.provenance.sources.find(s => s.uuid === json(NIST_MOD).profile.uuid);
+  assert.deepEqual([entry, authorRef, shippedAuthor], [shippedEntry, "https://org.example/party/oscal-program", "https://ns.nist.gov/sp800-53/party/oscal-program"]);
   assert.deepEqual(rules.jscFacetErrors([[set.id, set]], new Map(pins.map(d => [d.id, d.schema]))), []);
   for (const o of out.objects) assert.equal(rules.jscMatchTypes(o.obj).length, 1, o.path);
   objs.set(set.id, { type: "requirementSet", obj: set }); objs.set(tailoring.id, { type: "tailoring", obj: tailoring });
@@ -374,21 +385,26 @@ test("profile: excludes, parameters inside and outside their declared space, and
   /* an include-all makes no Set of the profile, so what it says of itself has no place (a profile with a Set of its own
      carries it there, below) */
   assert.deepEqual(Object.keys(out.report["not-carried"]).sort(), ["alters with adds", "imports: the profile makes no Set of its own to carry it",
-    "merge (as-is): the profile makes no Set of its own to carry it", "uuid: the profile makes no Set of its own to carry it"]);
+    "merge (as-is): the profile makes no Set of its own to carry it"]);
+  assert.equal(out.report["provenance-source"].uuid, "x", "the profile's uuid stands in its entry for the manifest, not on a Set");
   assert.deepEqual(rules.jscMatchTypes(t), ["tailoring"]);
 
   /* with a Set of its own: what the profile says of itself stand on it, in the compat facet, in the order of the one
-     schema. A set that pins no compat schema gets the one every converter pins (1.1.0); since all of them pin that one,
-     no member is ever left out for want of a place (until build 0.9.16 a set with convert_bsi.py's own schema kept the
-     merge directive out). */
+     schema. A set that pins no compat schema gets the one every converter pins (1.2.0 since build 0.9.19); since all of
+     them pin that one, no member is ever left out for want of a place (until build 0.9.16 a set with convert_bsi.py's
+     own schema kept the merge directive out). Its back-matter resources stand in references@1, whose schema comes
+     along where the set pins none. */
   const named = { profile: { uuid: "y", metadata: { title: "Picked", version: "3", "last-modified": "2026-11-01T00:00:00Z", remarks: "a few" },
-    imports: [{ href: "#cat", "include-controls": [{ "with-ids": ["ac-1", "ac-2"] }] }], merge: { "as-is": true } } };
-  const COMPAT = "https://ns.jascon.net/compat/oscal-1x";
+    imports: [{ href: "#cat", "include-controls": [{ "with-ids": ["ac-1", "ac-2"] }] }], merge: { "as-is": true },
+    "back-matter": { resources: [{ uuid: "r-1", title: "The catalogue", rlinks: [{ href: "cat.json" }] }] } } };
+  const COMPAT = "https://ns.jascon.net/compat/oscal-1x", REFS = "https://ns.jascon.net/stdlib/facet/references";
   const plain = oscal.jscOscalImportProfile(named, { ns: "https://org.example", lang: "en", objs });
   const set = plain.objects.find(o => o.obj.members).obj;
-  assert.deepEqual(set.facets, { [COMPAT + "@1"]: { metadata: { "last-modified": "2026-11-01T00:00:00Z", remarks: "a few" }, uuid: "y", imports: [{ href: "#cat" }], merge: { "as-is": true } } });
+  assert.deepEqual(set.facets, { [REFS + "@1"]: { resources: [{ id: "r-1", title: "The catalogue", rlinks: [{ href: "cat.json" }] }] },
+    [COMPAT + "@1"]: { metadata: { "last-modified": "2026-11-01T00:00:00Z", remarks: "a few" }, imports: [{ href: "#cat" }], merge: { "as-is": true } } });
   assert.deepEqual([plain.facetSchemas.map(f => [f.path, f.def.id, f.def.version]), plain.report["held-in-compat"], plain.report["not-carried"]],
-    [[["schemas/oscal-1x-compat-1.1.0.json", COMPAT, "1.1.0"]], ["metadata", "uuid", "imports", "merge"], {}]);
+    [[["schemas/references-1.0.0.json", REFS, "1.0.0"], ["schemas/oscal-1x-compat-1.2.0.json", COMPAT, "1.2.0"]], ["metadata", "imports", "merge"], {}]);
+  assert.deepEqual(plain.report["provenance-source"], { title: "Picked", version: "3", uuid: "y", date: "2026-11-01", format: "OSCAL" });
   assert.deepEqual(rules.jscFacetErrors([[set.id, set]], new Map(plain.facetSchemas.map(f => [f.def.id, f.def.schema]))), []);
   assert.deepEqual(oscal.jscOscalImportProfile(named, { ns: "https://org.example", lang: "en", objs, facetSchemas: plain.facetSchemas.map(f => f.def) }).facetSchemas, [], "a set that pins it gets none");
 });
@@ -409,6 +425,8 @@ const AUTHOR_TABLE = [
   ["creator names A, a contact is B", [["creator", ["A"]], ["contact", ["B"]]], ["A", "B"], "A"],
   ["prepared-by names A, the owner is B", [["prepared-by", ["A"]], ["owner", ["B"]]], ["A", "B"], "A"],
   ["two creators, one prepared-by", [["creator", ["A", "B"]], ["prepared-by", ["B"]]], ["A", "B"], "B"],
+  ["author names A, the publisher is B (backlog #91: the CSF's own shape)", [["publisher", ["B"]], ["author", ["A"]]], ["A", "B"], "A"],
+  ["prepared-by comes before author", [["author", ["A"]], ["prepared-by", ["B"]]], ["A", "B"], "B"],
   ["no creator, no prepared-by, one party in all roles", [["assessor", ["A"]]], ["A", "B"], "A"],
   ["two parties in roles, one organisation defined", [["owner", ["A"]], ["developer", ["B"]]], ["A", "B", "O"], "O"],
   ["two parties in roles, no organisation", [["owner", ["A"]], ["developer", ["B"]]], ["A", "B"], null],
@@ -425,7 +443,7 @@ test("the author of an OSCAL document: the rule's own table", () => {
     const got = oscal.jscOscalAuthorParty(metaOf(rp, parties));
     assert.equal(got ? got.uuid : null, want ? PARTY[want].uuid : null, name);
   }
-  assert.equal(AUTHOR_TABLE.length, 13);
+  assert.equal(AUTHOR_TABLE.length, 15);   // two rows for the role `author` (backlog #91, build 0.9.19)
 });
 test("the author of an OSCAL document: what the table does not say", () => {
   const A = PARTY.A, B = PARTY.B, O = PARTY.O, N = PARTY.N;
@@ -571,7 +589,7 @@ test("the converters' slug: a long name is cut with a hash, never bare", () => {
 test("NIST preset: the objects of the committed SP 800-53 bundle, 1,217 of 1,217 by semantic digest and by bytes", { skip: missing(NIST_SRC) }, async () => {
   const dir = path.join(ROOT, "converted_examples/US.SP800-53/sp800-53-core-bundle"), manifest = json(path.join(dir, "content-manifest.json"));
   const src = json(NIST_SRC);
-  assert.equal(src.catalog.metadata.version, manifest.provenance["source-version"], "the source file is the version the committed bundle was converted from");
+  assert.equal(src.catalog.metadata.version, manifest.provenance.sources[0].version, "the source file is the version the committed bundle was converted from");
   assert.equal(oscal.jscOscalGuessPreset(src), "nist-sp800-53");
   const out = oscal.jscOscalImportCatalog(src, { preset: "nist-sp800-53" });
   const want = new Map(manifest.objects.map(e => [e.path, e]));
@@ -587,8 +605,12 @@ test("NIST preset: the objects of the committed SP 800-53 bundle, 1,217 of 1,217
   assert.deepEqual(out.objects.filter(o => core.jscSerialize(o.obj) !== lf(o.path)).map(o => o.path), [], "objects whose bytes differ from the committed file");
   assert.deepEqual(out.facetSchemas.map(f => f.path).sort(), manifest["facet-schemas"].map(e => e.path).sort());
   for (const f of out.facetSchemas) assert.equal(core.jscSerialize(f.def), lf(f.path), f.path);
-  /* who wrote the catalogue and when, as the converter's manifest names them */
-  assert.deepEqual([out.provenance.sources[0]["author-ref"], out.provenance.sources[0].date], [manifest.provenance["author-ref"], manifest.provenance.date]);
+  /* the catalogue's entry of the manifest (backlog #80): title, version, uuid, author, day and OSCAL version, as the
+     converter writes it; the converter's other four entries are those of the baseline profiles, which this preset does
+     not read */
+  assert.deepEqual(out.provenance.sources, manifest.provenance.sources.slice(0, 1));
+  /* the print label of a statement item is the statement's `label` (#84), as the converter counts it */
+  assert.equal(out.objects.flatMap(o => o.obj.statements || []).filter(s => "label" in s).length, 1122);
   /* the converter's own counts (sp800-53-coverage-report.json) */
   assert.deepEqual([out.report.controls, out.report.statements, out.report["withdrawn-without-successor"]], [1196, 2100, ["cp-10.3", "sc-19"]]);
   assert.deepEqual([out.report["assessment-for"], out.report["formal-odp-labels"], out.report["controls-without-a-stated-party"], out.report["parameters-without-insertion"]], [3707, 1458, 182, 399]);
@@ -623,7 +645,7 @@ const nistSynthetic = () => {
             { id: "ac-1_smt.b", name: "item", props: [label("b.")], prose: "Use {{ insert: param, ac-2_prm_1 }}." }] },
           { id: "ac-1_gdn", name: "guidance", prose: "See [AC-2](#ac-2)." },
           { id: "ac-1_obj", name: "assessment-objective", props: [label("AC-01", "sp800-53a")], links: [{ href: "#ac-1_smt", rel: "assessment-for" }], parts: [
-            { id: "ac-1_obj.a", name: "assessment-objective", props: [label("AC-01a.", "sp800-53a")], links: [{ href: "#ac-1_smt.a", rel: "assessment-for" }], prose: "the review happens;" },
+            { id: "ac-1_obj.a", name: "assessment-objective", props: [label("AC-01a.", "sp800-53a")], links: [{ href: "#ac-1_smt.a", rel: "assessment-for" }, { href: "#ac-99_smt.z", rel: "assessment-for" }], prose: "the review happens;" },
             { id: "ac-1_obj.b", name: "assessment-objective", props: [label("AC-01b.", "sp800-53a")], links: [{ href: "#ac-2_smt", rel: "assessment-for" }], prose: "the accounts are used;" }] },
           { id: "ac-1_asm-examine", name: "assessment-method", props: [{ name: "method", ns: rmf, value: "EXAMINE" }, label("AC-01-Examine", "sp800-53a")],
             parts: [{ name: "assessment-objects", prose: "Policy\n\nProcedures for {{ insert: param, ac-1_prm_3 }}" }] }],
@@ -644,7 +666,7 @@ const nistProfiles = () => Object.fromEntries(["LOW", "MODERATE", "HIGH", "PRIVA
   imports: [{ href: "#cat", "include-controls": [{ "with-ids": b === "PRIVACY" ? ["ac-2"] : ["ac-1", "ac-1.1", "ac-2"] }] }],
   merge: { "as-is": true } } }]));
 
-/* The expectations were written from the code of convert_nist.py v0.2, and the next test holds every object to what the
+/* The expectations were written from the code of convert_nist.py v0.3, and the next test holds every object to what the
    converter itself writes for this catalogue. */
 test("NIST preset: the rules on a small catalog", () => {
   const P = "https://ns.nist.gov/sp800-53", src = nistSynthetic(), before = JSON.stringify(src);
@@ -655,6 +677,8 @@ test("NIST preset: the rules on a small catalog", () => {
     "every withdrawn control is a Requirement (since build 0.9.16)");
   const ac1 = by.get(`${P}/req/AC-1`), ac2 = by.get(`${P}/req/AC-2`), ac7 = by.get(`${P}/req/AC-7`), fam = by.get(`${P}/set/family/ac`), root = by.get(`${P}/set/root`);
   assert.deepEqual(ac1.statements.map(s => s.id), ["smt.a", "smt.b"], "items with prose are the clauses, ids without the control prefix");
+  assert.deepEqual(ac1.statements.map(s => s.label), ["a.", "b."], "the print label of an item is the statement's label (#84)");
+  assert.deepEqual(Object.keys(ac1.statements[0]).slice(0, 3), ["id", "label", "modality"], "in the converter's order");
   assert.equal(ac1.statements[0].prose.en, "Review every {param:ac-1_prm_1} as [SP 800-12](#u1) says.", "inserts become tokens; a markdown link stays as the source wrote it");
   assert.deepEqual(ac1.statements[0]["obligated-parties"], [`${P}/party/system`]);
   assert.ok(ac1.statements.every(s => s.modality === "must"));
@@ -680,12 +704,14 @@ test("NIST preset: the rules on a small catalog", () => {
   assert.deepEqual(ac1.relations, [{ type: "related", ref: `${P}/req/AC-2` }, { type: "related", ref: `${P}/req/AC-9` }, { type: "reference", ref: "https://example.org/zeta" }]);
   assert.deepEqual([ac1.facets["https://ns.jascon.net/compat/oscal-1x@1"], out.report["links-not-written"]], [{ links: [{ rel: "reference", href: "#u2" }] }, {}]);
   assert.deepEqual(ac1.facets[`${P}/facet/narrative@1`], { guidance: [{ en: "See [AC-2](#ac-2)." }] });
-  /* every objective names the statement it assesses: of its own control, the statement part as a whole, another control's */
-  assert.deepEqual(ac1.facets[`${P}/facet/sp800-53a@1`], { objectives: [{ id: "ac-1_obj", label: "AC-01", "assessment-for": [{ "statement-id": "smt" }], children: [
-      { id: "ac-1_obj.a", label: "AC-01a.", "assessment-for": [{ "statement-id": "smt.a" }], prose: { en: "the review happens;" } },
+  /* every objective names what it assesses, as an address of the standard facet assessment-criteria@1 (#83): the
+     statement part as a whole, which has no text of its own, by its Requirement; a statement of its own control by its
+     id; another control's with that Requirement */
+  assert.deepEqual(ac1.facets["https://ns.jascon.net/stdlib/facet/assessment-criteria@1"], { objectives: [{ id: "ac-1_obj", label: "AC-01", "assessment-for": [{ "requirement-ref": `${P}/req/AC-1` }], children: [
+      { id: "ac-1_obj.a", label: "AC-01a.", "assessment-for": [{ "statement-id": "smt.a" }, { href: "#ac-99_smt.z" }], prose: { en: "the review happens;" } },
       { id: "ac-1_obj.b", label: "AC-01b.", "assessment-for": [{ "requirement-ref": `${P}/req/AC-2`, "statement-id": "smt" }], prose: { en: "the accounts are used;" } }] }],
     methods: [{ method: "EXAMINE", label: "AC-01-Examine", objects: [{ en: "Policy" }, { en: "Procedures for {param:ac-1_prm_3}" }] }] });
-  assert.equal(out.report["assessment-for"], 3);
+  assert.equal(out.report["assessment-for"], 4, "a link that names nothing the catalogue defines is written by its href");
   /* the formal ODP label as the source gives it; a prop is read in its own class only */
   assert.deepEqual(ac1.facets[`${P}/facet/odp@1`], { params: { "ac-1_prm_1": { "sp800-53a-label": "AC-01_ODP[01]" }, "ac-1_prm_3": { "alt-identifiers": ["old-3"], "alt-label": "the third" } } });
   assert.deepEqual([ac1.facets[`${P}/facet/rmf@1`], by.get(`${P}/req/AC-1.1`).facets[`${P}/facet/rmf@1`]], [{ "contributes-to-assurance": false }, { "contributes-to-assurance": true }]);
@@ -695,12 +721,13 @@ test("NIST preset: the rules on a small catalog", () => {
   assert.deepEqual(fam.members.map(m => [m.ref, m.sequence]), [[`${P}/req/AC-1`, 10], [`${P}/req/AC-1.1`, 20], [`${P}/req/AC-2`, 30], [`${P}/req/AC-7`, 40], [`${P}/req/AC-8`, 50], [`${P}/req/AC-9`, 60]],
     "members in the order of sort-id, the withdrawn ones too");
   assert.deepEqual(fam.facets[`${P}/facet/narrative@1`], { overview: [{ title: { en: "Access Control Overview" }, prose: { en: "About access, see [Zeta](#u1)." } }] });
-  /* the root: the resources something refers to, as the source writes them, in its order, and not the orphan (u3); what
-     the document says of itself, and its uuid */
-  assert.deepEqual(root.facets[`${P}/facet/references@1`].resources, src.catalog["back-matter"].resources.slice(0, 2));
+  /* the root: the resources something refers to, as the source writes them, their uuid as `id`, in its order, and not
+     the orphan (u3), in the standard facet references@1 (#82); what the document says of itself; its uuid in the
+     manifest's entry (#80) */
+  assert.deepEqual(root.facets["https://ns.jascon.net/stdlib/facet/references@1"].resources, src.catalog["back-matter"].resources.slice(0, 2).map(({ uuid, ...r }) => ({ id: uuid, ...r })));
   const { title, version, ...meta } = src.catalog.metadata;
-  assert.deepEqual(root.facets["https://ns.jascon.net/compat/oscal-1x@1"], { metadata: meta, uuid: "c-1" });
-  assert.deepEqual([out.provenance.sources[0]["author-ref"], out.provenance.sources[0].date], [`${P}/party/oscal-program`, "2026-05-11"]);
+  assert.deepEqual(root.facets["https://ns.jascon.net/compat/oscal-1x@1"], { metadata: meta });
+  assert.deepEqual(out.provenance.sources, [{ title, version, uuid: "c-1", "author-ref": `${P}/party/oscal-program`, date: "2026-05-11", format: "OSCAL", "format-version": "1.1.2" }]);
   /* what comes out is valid kernel content: every object one type, references closed, facets under the pinned schemas */
   const objs = new Map();
   for (const o of out.objects) { const type = rules.jscTypeOf(o.obj); assert.ok(type, `${o.path}: ${rules.jscObjectErrors(o.obj).errors.join("; ")}`); objs.set(o.obj.id, { type, obj: o.obj }); }
@@ -751,15 +778,19 @@ test("NIST preset and profile import: on a catalogue of the SP 800-53 shape with
     }
     assert.deepEqual(out.facetSchemas.map(f => f.path).sort(), manifest["facet-schemas"].map(e => e.path).sort());
     for (const f of out.facetSchemas) assert.equal(core.jscSerialize(f.def), lf(f.path), f.path);
-    assert.deepEqual([out.provenance.sources[0]["author-ref"], out.provenance.sources[0].date], [manifest.provenance["author-ref"], manifest.provenance.date]);
+    /* the manifest's entries (backlog #80): the catalogue's from the preset, each profile's from the profile import's
+       report (these profiles name no author, so the namespace of the import makes no difference) */
+    assert.deepEqual(out.provenance.sources, manifest.provenance.sources.slice(0, 1));
     /* a profile imported into the converter's bundle: its Set holds the members of the converter's baseline Set, in their
-       order, and the same compat facet (the profile's metadata and merge); the bundle pins the schema, so none is brought */
+       order, and the same facets (its resource in references@1; its metadata, import and merge in the compat facet); the
+       bundle pins both schemas, so none is brought */
     const objs = new Map(manifest.objects.map(e => { const o = json(path.join(dir, e.path)); return [o.id, { type: core.jscInferType(o), obj: o }]; }));
     const pins = manifest["facet-schemas"].map(e => json(path.join(dir, e.path)));
     for (const [b, prof] of Object.entries(profiles)) {
       const res = oscal.jscOscalImportProfile(prof, { ns: "https://org.example", lang: "en", objs, facetSchemas: pins });
       const set = res.objects.find(o => o.obj.members).obj, baseline = objs.get(`https://ns.nist.gov/sp800-53/set/baseline/${b.toLowerCase()}`).obj;
       assert.deepEqual([set.members.map(m => m.ref), set.facets, res.facetSchemas, res.report["not-carried"]], [baseline.members.map(m => m.ref), baseline.facets, [], {}], b);
+      assert.deepEqual(res.report["provenance-source"], manifest.provenance.sources.find(s => s.uuid === prof.profile.uuid), b + ": the profile's entry for the manifest");
     }
   } finally { fs.rmSync(tmp, { recursive: true, force: true }); }
 });
@@ -840,9 +871,9 @@ test("CIS preset: the namespace is the converter's for its benchmark and derived
    nothing is imported; and the report says who chose. */
 const PARTY_INPUTS = [
   ["bsi-gspp", () => JSON.parse(fs.readFileSync(path.join(ROOT, "converted_examples/DE.BSI/oscal-export/de.bsi-catalog.json"), "utf8")), "https://ns.bsi.bund.de/gspp/party/institution", 1360, 999,
-    "b2beb14ae65a30545082edc2b16d387179fcf7816dba8fbb5442618dbad58b3a"],
+    "6fa9820008ef7426c46d08c2163266ec463f649a6821a279a773b6fe5bd2a03e"],
   ["nist-sp800-53", () => JSON.parse(fs.readFileSync(path.join(ROOT, "converted_examples/US.SP800-53/oscal-export/us.sp800-53-catalog.json"), "utf8")), "https://ns.nist.gov/sp800-53/party/organization", 1217, 2100,
-    "97921f3269daa9fe0265a63d294067bca2e1a5558bd25f1d7b964ed18bc4a36f"],
+    "f42e2f55a4aa28b1d689d59628a67cf46a1089266a9380a3695111279cfa64f8"],
   ["cis-benchmark", cisSynthetic, "https://ns.cisecurity.org/benchmark/ubuntu-24.04-lts/party/system-administrator", 17, 5,
     "5fd5ccda73af5232c225b0e9fb62e5cecc71c4f4948745dba13798f08280db92"],
 ];
@@ -850,10 +881,15 @@ const PARTY_INPUTS = [
 const filesOf = out => out.objects.map(o => o.path + "\n" + core.jscSerialize(o.obj)).join("\n");
 const bound = out => { const n = {}; for (const o of out.objects) for (const st of o.obj.statements || []) for (const p of st["obligated-parties"]) n[p] = (n[p] || 0) + 1; return n; };
 
-test("the obligated party of a preset: with the default left as it is, an import writes the bytes recorded for it (CIS: those of build 0.9.11; Grundschutz++ and SP 800-53: those of build 0.9.16)", () => {
+test("the obligated party of a preset: with the default left as it is, an import writes the bytes recorded for it (CIS: those of build 0.9.11; Grundschutz++ and SP 800-53: those of build 0.9.19)", () => {
   /* One SHA-256 over every file an import writes. For CIS the digest was taken with build 0.9.11, before the presets
      knew the argument, and holds that the argument changed nothing. For Grundschutz++ and SP 800-53 the digests are
-     those of build 0.9.16, since 2026-11-14, by the author's decision that the frozen digests give way to the new
+     those of build 0.9.19, taken anew because both changed: the presets follow convert_bsi.py v0.5 and convert_nist.py
+     v0.3 (backlog #80 to #84: the resources in references@1, the document's uuid in the manifest, compat schema 1.2.0,
+     for SP 800-53 the statement's label and assessment-criteria@1), and both OSCAL exports, the input here, were
+     regenerated in the kernel round of 2026-11-14. The counts did not change: Grundschutz++ 1,360 objects and 999
+     statements, SHA-256 b2beb14a…8b3a before; SP 800-53 1,217 objects and 2,100 statements, SHA-256 97921f32…a36f
+     before (both build 0.9.16). The history: those of build 0.9.16, since 2026-11-14, by the author's decision that the frozen digests give way to the new
      state: the presets follow convert_bsi.py v0.4 and the converter round of the author's decisions of phase E (every
      withdrawn SP 800-53 control an object, the document's uuid on the root Set, no orphaned resource, one compat
      schema), and both OSCAL exports the repository carries, the input here, were regenerated from the new bundles.

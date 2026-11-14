@@ -6,7 +6,7 @@
 
    Four ways to read a catalog, chosen by `preset`:
 
-   bsi-gspp   The rules of jascon/scripts/convert_bsi.py v0.4 for the BSI
+   bsi-gspp   The rules of jascon/scripts/convert_bsi.py v0.5 for the BSI
               Anwenderkatalog Grundschutz++: every control, nested ones
               included, is a Requirement of its own with one statement, and
               a control with nested controls also gives a Set that groups it
@@ -23,14 +23,15 @@
               a holding facet, verbatim, so nothing is dropped silently.
               Who the statements bind is the caller's to name (opts.party);
               without a party the import is refused (backlog #70).
-   nist-sp800-53  The rules of convert_nist.py v0.2 for NIST SP 800-53 Rev 5:
+   nist-sp800-53  The rules of convert_nist.py v0.3 for NIST SP 800-53 Rev 5:
               every withdrawn control a Requirement with lifecycle
               `withdrawn`, named in the `replaces` of a successor it
-              names; statement items as clauses; SP 800-53A objectives
-              (each with the statement it assesses) and methods, parameter
+              names; statement items as clauses, each with its print
+              label; SP 800-53A objectives (each with the address of what
+              it assesses) and methods in assessment-criteria@1, parameter
               data with the formal labels, and guidance in facets; the
-              back-matter resources and the document's metadata on the root
-              Set. On the pinned source file its objects equal the committed
+              back-matter resources (references@1) and the document's
+              metadata on the root Set. On the pinned source file its objects equal the committed
               bundle's. It makes no baseline Sets; a baseline is a profile
               and is imported as one, and the profile's metadata and merge
               directive stand on its Set as on the converter's baseline Set.
@@ -83,7 +84,9 @@ function jscBackMatter(doc) {
    so it is implemented as stated and not improved here.
 
    The author of an OSCAL document, from its `metadata`:
-   1. For the role `creator`, then for `prepared-by`: unite the
+   1. For the role `creator`, then for `prepared-by`, then for `author`
+      (the last since build 0.9.19: oscal_conv_lib.py reads it since
+      2026-11-14, backlog #91): unite the
       `party-uuids` of all `responsible-parties` entries with that
       `role-id` and drop the uuids that `parties` does not define. If
       exactly one uuid remains, that party.
@@ -118,7 +121,8 @@ function jscOscalAuthorParty(metadata) {
   /* the defined parties the given entries name, each once */
   const named = entries => [...new Set(entries.flatMap(r => (Array.isArray(r["party-uuids"]) ? r["party-uuids"] : [])))].filter(u => defined.has(u));
   const land = party => (typeof party.name === "string" && party.name ? party : null);
-  for (const role of ["creator", "prepared-by"]) {
+  /* `author` since 2026-11-14 (backlog #91, the author's decision): the CSF names its author under that role */
+  for (const role of ["creator", "prepared-by", "author"]) {
     const hit = named(roles.filter(r => r["role-id"] === role));
     if (hit.length === 1) return land(defined.get(hit[0]));
   }
@@ -244,19 +248,46 @@ function jscFacetStub(name, id, modifies, properties, note) {
     schema: { $schema: "https://json-schema.org/draft/2020-12/schema", type: "object", properties, additionalProperties: false } } };
 }
 /* The compat facet: what of an OSCAL document the kernel has no member for, in the source's own shape. Since
-   2026-11-14 every converter of the repository pins one schema for it, `schemas/oscal-1x-compat-1.1.0.json`, the same
-   bytes in every bundle (oscal_conv_lib.compat_schema(), its members in the order of COMPAT_PROPERTIES). The BSI and
+   2026-11-14 every converter of the repository pins one schema for it, the same bytes in every bundle
+   (oscal_conv_lib.compat_schema(), its members in the order of COMPAT_PROPERTIES). Version 1.2.0 of that schema has
+   no `back-matter` and no `history`, and the items of `props` and `group-parts` are typed and closed. The BSI and
    NIST presets pin it, and so does a profile import into a set that pins none; a payload lists its members in the
    schema's order. */
-const JSC_OSCAL_COMPAT = "https://ns.jascon.net/compat/oscal-1x";
-const JSC_OSCAL_COMPAT_MEMBERS = [["metadata", "object"], ["uuid", "string"], ["back-matter", "object"], ["catalog", "object"], ["imports", "array"],
-  ["merge", "object"], ["class", "string"], ["group-parts", "array"], ["param-extras", "object"], ["props", "array"], ["parts", "array"], ["links", "array"],
-  ["control", "object"], ["group", "object"], ["nested-in", "string"], ["unmapped", "object"], ["history", "array"], ["flows", "array"],
-  ["class-variants", "object"], ["ctl", "object"]];
-const jscOscalCompatSchema = () => ({ path: "schemas/oscal-1x-compat-1.1.0.json", def: { id: JSC_OSCAL_COMPAT, version: "1.1.0", "modifies-semantics": [],
+const JSC_OSCAL_COMPAT = "https://ns.jascon.net/compat/oscal-1x", JSC_OSCAL_COMPAT_VERSION = "1.2.0";
+const JSC_OSCAL_STR = { type: "string" };
+const JSC_OSCAL_COMPAT_MEMBERS = [["metadata", { type: "object" }], ["uuid", { type: "string" }], ["catalog", { type: "object" }], ["imports", { type: "array" }],
+  ["merge", { type: "object" }], ["class", { type: "string" }],
+  ["group-parts", { type: "array", items: { type: "object", additionalProperties: false, properties: {
+    group: JSC_OSCAL_STR, name: JSC_OSCAL_STR, prose: { type: "object", additionalProperties: JSC_OSCAL_STR } } } }],
+  ["param-extras", { type: "object" }],
+  ["props", { type: "array", items: { type: "object", additionalProperties: false, required: ["name", "value"], properties: {
+    name: JSC_OSCAL_STR, uuid: JSC_OSCAL_STR, ns: JSC_OSCAL_STR, value: JSC_OSCAL_STR, class: JSC_OSCAL_STR, group: JSC_OSCAL_STR, remarks: JSC_OSCAL_STR } } }],
+  ["parts", { type: "array" }], ["links", { type: "array" }],
+  ["control", { type: "object" }], ["group", { type: "object" }], ["nested-in", { type: "string" }], ["unmapped", { type: "object" }], ["flows", { type: "array" }],
+  ["class-variants", { type: "object" }], ["ctl", { type: "object" }]];
+const jscOscalCompatSchema = () => ({ path: `schemas/oscal-1x-compat-${JSC_OSCAL_COMPAT_VERSION}.json`, def: { id: JSC_OSCAL_COMPAT, version: JSC_OSCAL_COMPAT_VERSION, "modifies-semantics": [],
   note: "NORMATIVE pinned payload schema (backlog #26), one for every converter of this repository since 2026-11-14: closed shape - unknown keys are rejected, never smuggled",
   schema: { $schema: "https://json-schema.org/draft/2020-12/schema", type: "object",
-    properties: Object.fromEntries(JSC_OSCAL_COMPAT_MEMBERS.map(([k, type]) => [k, { type }])), additionalProperties: false } } });
+    properties: JSON.parse(JSON.stringify(Object.fromEntries(JSC_OSCAL_COMPAT_MEMBERS))), additionalProperties: false } } });
+/* The standard facet for the resources a document's texts and links refer to (backlog #82): each resource as the
+   source writes it, its uuid under `id` (oscal_conv_lib.resource_entry). Grundschutz++ and SP 800-53 write it on the
+   root Set, a profile on its own Set. */
+const JSC_OSCAL_REFERENCES = "https://ns.jascon.net/stdlib/facet/references@1";
+const jscOscalResourceEntry = r => ({ id: r.uuid, ...Object.fromEntries(Object.entries(r).filter(([k]) => k !== "uuid")) });
+/* The manifest's entry for a source document (backlog #80), in the order the converters write it: title, version,
+   uuid, author, day, format and its version; a member the document does not state is left out. The document's uuid
+   stands here, and no longer in the compat facet. authorRef: the author as a URI, or null. */
+function jscOscalSourceEntry(doc, authorRef) {
+  const md = doc.metadata || {}, e = {};
+  for (const k of ["title", "version"]) if (md[k]) e[k] = md[k];
+  if (doc.uuid) e.uuid = doc.uuid;
+  if (authorRef) e["author-ref"] = authorRef;
+  const day = jscOscalDate(md);
+  if (day) e.date = day;
+  e.format = "OSCAL";
+  if (md["oscal-version"]) e["format-version"] = md["oscal-version"];
+  return e;
+}
 /* a compat payload with its members in the order of the one schema */
 const jscOscalCompatOrdered = compat => Object.fromEntries(JSC_OSCAL_COMPAT_MEMBERS.map(([k]) => k).filter(k => k in compat).map(k => [k, compat[k]]));
 /* Does a string of `doc` outside `element` (a back-matter resource) refer to it by `#uuid`? A resource nothing refers to
@@ -266,14 +297,20 @@ function jscOscalReferredTo(doc, element) {
   const walk = n => (n === element ? false : Array.isArray(n) ? n.some(walk) : n && typeof n === "object" ? Object.values(n).some(walk) : typeof n === "string" && n.includes(needle));
   return walk(doc);
 }
-function jscStdlibPin(shortName) {
-  const def = jscOscalSchema.JSC_STDLIB.find(d => d.id.endsWith("/" + shortName));
-  if (!def) throw new Error(`stdlib facet ${shortName} is not in jascon-schema.js`);
+/* A standard facet's descriptor, pinned verbatim: the version named, or else the latest the library holds, as the
+   converters pin it since 2026-11-14 (oscal_conv_lib.ASSESSMENT_CRITERIA_FILE). JSC_STDLIB holds several versions of
+   one facet; until build 0.9.19 the first of them was taken. */
+const jscSemverKey = v => String(v).split(".").map(n => Number(n));
+const jscSemverCmp = (a, b) => { const x = jscSemverKey(a), y = jscSemverKey(b); for (let i = 0; i < 3; i++) if (x[i] !== y[i]) return x[i] - y[i]; return 0; };
+function jscStdlibPin(shortName, version) {
+  const all = jscOscalSchema.JSC_STDLIB.filter(d => d.id.endsWith("/" + shortName) && (version === undefined || d.version === version));
+  const def = all.sort((a, b) => jscSemverCmp(b.version, a.version))[0];
+  if (!def) throw new Error(`stdlib facet ${shortName}${version ? " " + version : ""} is not in jascon-schema.js`);
   return { path: `schemas/${shortName}-${def.version}.json`, def };
 }
 
 /* ====================================================================
-   BSI Grundschutz++ (after convert_bsi.py v0.4)
+   BSI Grundschutz++ (after convert_bsi.py v0.5)
    ====================================================================
    Every control is a Requirement of its own, at every depth. BSI nests
    controls for grouping only (the author, 2026-11-14), so a nested control
@@ -294,7 +331,9 @@ function jscStdlibPin(shortName) {
    another name, a member of a link, a control, a group or a parameter that
    the mapping has no place for, and on the root Set whatever the document
    says of itself. One difference to "as the source holds it": a number that
-   is no integer is written as a decimal string (NUMBER-1). */
+   is no integer is written as a decimal string (NUMBER-1). The resources
+   the document refers to stand in references@1 on the root Set, the
+   document's uuid in the manifest's entry for it (since build 0.9.19). */
 const JSC_BSI_CSV = "https://github.com/BSI-Bund/Stand-der-Technik-Bibliothek/tree/main/Dokumentation/namespaces/";
 const JSC_BSI = {
   ns: "https://ns.bsi.bund.de/gspp", key: "gspp", lang: "de",
@@ -318,7 +357,7 @@ const JSC_BSI = {
   CONTROL_MEMBERS: ["id", "class", "title", "params", "props", "parts", "links", "controls"], GROUP_MEMBERS: ["id", "title", "props", "groups", "controls"],
   PARAM_MEMBERS: ["id", "label", "values", "props"], CATALOG_MEMBERS: ["uuid", "metadata", "groups", "controls", "back-matter"],
   /* the members of the compat facet, in the order they are written */
-  COMPAT_MEMBERS: ["metadata", "uuid", "back-matter", "catalog", "param-extras", "props", "parts", "links", "control", "group"],
+  COMPAT_MEMBERS: ["metadata", "catalog", "param-extras", "props", "parts", "links", "control", "group"],
 };
 /* -> {name: prop} of the props of `node` this mapping reads: a name among
    `names`, in the namespace of JSC_BSI.PROP_NS (none for a name that is not
@@ -557,17 +596,18 @@ function jscImportBsi(cat, party) {
   for (const c of cat.controls || []) { const ref = control(c); top.push({ ref, sequence: nseq() }); }   // a control that stands in no group
   /* The root Set stands for the document. Its title and the version are kernel members. Everything else the document
      says of itself has no member in the kernel and stands under the compat facet's `metadata`, in the source's own
-     shape, and the document's uuid under `uuid`. A back-matter resource that something in the document refers to (a
-     link of a control or of the metadata) is carried whole beside it; one nothing refers to is an orphan and is not. */
-  const root = { id: `${ns}/set/tax/root`, version, lifecycle: "active", title: { [lang]: cat.metadata.title }, members: top }, rfound = {};
+     shape. The document's uuid stands in the manifest's entry for it (backlog #80). A back-matter resource that
+     something in the document refers to (a link of a control or of the metadata) stands in the standard facet
+     references@1, as the source writes it, its uuid as `id` (#82); one nothing refers to is an orphan and is not. */
+  const root = { id: `${ns}/set/tax/root`, version, lifecycle: "active", title: { [lang]: cat.metadata.title }, members: top }, rfound = {}, rfacets = {};
   const mrest = Object.fromEntries(Object.entries(cat.metadata).filter(([k]) => k !== "title" && k !== "version"));
   if (Object.keys(mrest).length) rfound.metadata = mrest;
-  if ("uuid" in cat) rfound.uuid = cat.uuid;
   const named = (((cat["back-matter"] || {}).resources) || []).filter(r => resourcesNamed.has(r.uuid) || jscOscalReferredTo(cat, r));
-  if (named.length) rfound["back-matter"] = { resources: named };
+  if (named.length) rfacets[JSC_OSCAL_REFERENCES] = { resources: named.map(r => jscBsiHeld(jscOscalResourceEntry(r))) };
   const catRest = Object.fromEntries(Object.entries(cat).filter(([k]) => !B.CATALOG_MEMBERS.includes(k)));
   if (Object.keys(catRest).length) rfound.catalog = catRest;
-  if (Object.keys(rfound).length) { root.facets = { [B.F_COMPAT]: compat(rfound) }; Object.keys(rfound).forEach(asHeld); }
+  if (Object.keys(rfound).length) { rfacets[B.F_COMPAT] = compat(rfound); Object.keys(rfound).forEach(asHeld); }
+  if (Object.keys(rfacets).length) root.facets = rfacets;
   add(`objects/${B.key}/set-tax-root.json`, root);
   for (const lvl of [...baseline.keys()].sort()) {
     add(`objects/${B.key}/set-baseline-${jscOscalSlug(lvl)}.json`, { id: `${ns}/set/baseline/${jscOscalSlug(lvl)}`, version, lifecycle: "active",
@@ -577,31 +617,39 @@ function jscImportBsi(cat, party) {
     jscFacetStub("gspp-taxonomy-1.0.0-stub.json", "https://ns.bsi.bund.de/facet/gspp-taxonomy", ["selection"],
       { "by-statement": { type: "object" }, "observed-sec-levels": { enum: [...secValues].sort() } }),
     jscStdlibPin("statement-grammar"), jscStdlibPin("security-objectives"), jscStdlibPin("assessment-criteria"),
+    ...(named.length ? [jscStdlibPin("references")] : []),
     jscFacetStub("gspp-narrative-1.0.0-stub.json", "https://ns.bsi.bund.de/facet/gspp-narrative", [], { "by-statement": { type: "object" }, description: { type: "object" } }),
     jscOscalCompatSchema(),
   ];
   report["unknown-modal-verbs"] = Object.fromEntries(unknownModal);
   /* who wrote the document and when, by the rule of backlog #69; nothing is made up where the source names nobody or no day */
   const author = jscOscalAuthorParty(cat.metadata), day = jscOscalDate(cat.metadata);
-  const provenance = { sources: [{ key: B.key, title: cat.metadata.title, version, "oscal-version": cat.metadata["oscal-version"],
-    ...(author ? { "author-ref": jscOscalPartyUri(ns, jscBsiAscii(author.name)) } : {}), ...(day ? { date: day } : {}) }],
-    converter: "JASCON-App OSCAL import, preset bsi-gspp (the rules of convert_bsi.py v0.4)" };
+  /* the manifest's entry for the document (backlog #80), in the order convert_bsi.py writes it */
+  const provenance = { sources: [{ title: cat.metadata.title, version, ...(cat.uuid !== undefined && cat.uuid !== null ? { uuid: cat.uuid } : {}),
+    ...(author ? { "author-ref": jscOscalPartyUri(ns, jscBsiAscii(author.name)) } : {}), ...(day ? { date: day } : {}),
+    format: "OSCAL", "format-version": cat.metadata["oscal-version"] }],
+    converter: "JASCON-App OSCAL import, preset bsi-gspp (the rules of convert_bsi.py v0.5)" };
   return { objects, facetSchemas, provenance, report };
 }
 
 /* ====================================================================
-   NIST SP 800-53 Rev 5 (after convert_nist.py v0.2)
+   NIST SP 800-53 Rev 5 (after convert_nist.py v0.3)
    ====================================================================
    Families become Sets under one root Set. A control or enhancement in
    force becomes a Requirement: its statement and every item below it that
    has prose becomes one statement, modality `must` by the corpus rule, bound
    to the parties its implementation-level props name. A parameter is
    declared on the statement whose prose inserts it; one that no statement
-   inserts is declared on the first. Guidance, the SP 800-53A objectives and
-   methods, the administrative data of parameters (the formal SP 800-53A
-   label among them) and the RMF marker go into facets; each objective names
-   the statement it assesses (`assessment-for`, with the Requirement where
-   the statement is another control's).
+   inserts is declared on the first. A statement carries the print label of
+   its part (`a.`, `(1)`) as its kernel `label` (#84). Guidance, the SP
+   800-53A objectives and methods (the standard facet assessment-criteria@1,
+   #83), the administrative data of parameters (the formal SP 800-53A label
+   among them) and the RMF marker go into facets; each objective names what
+   it assesses (`assessment-for`) as an address: `statement-id` for a
+   statement of its control, with `requirement-ref` for one of another
+   control, `requirement-ref` alone for the statement part as a whole, and
+   `href` as the source writes it for a link that names nothing the
+   catalogue defines.
    Every withdrawn control is a Requirement with lifecycle `withdrawn`, the
    source's own word, in its family Set, with its own links; its statement
    says why it was withdrawn and states no obligation, so its modality is
@@ -611,13 +659,13 @@ function jscImportBsi(cat, party) {
    links: "Incorporated into AC-2k.", "Moved to AU-5(5).", the targets by
    the label a reader sees, joined "X and Y" or "X, Y, and Z".
    The root Set carries the back-matter resources something in the
-   catalogue refers to, as the source writes them (references@1; an
-   orphaned one is not carried), and the document's uuid and what it says
-   of itself beside its title and version (the compat facet). A markdown
-   link in a text stays as the source wrote it; `(#uuid)` names a resource
-   of references@1. A print label of a statement item that the rule does
-   not rebuild from the item id, and a `reference` link to a resource
-   without a link, stand in the compat facet as the source writes them.
+   catalogue refers to, as the source writes them with the uuid as `id`
+   (the standard facet references@1, #82; an orphaned one is not carried),
+   and what the document says of itself beside its title and version (the
+   compat facet). The document's uuid stands in the manifest's entry for it
+   (#80). A markdown link in a text stays as the source wrote it; `(#uuid)`
+   names a resource of references@1. A `reference` link to a resource
+   without a link stands in the compat facet as the source writes it.
    A prop is read where its name, its class and its namespace are exactly
    those the converter reads (no class and no namespace where it names
    none), as convert_nist.py does; every other prop is counted in the
@@ -630,8 +678,8 @@ function jscImportBsi(cat, party) {
 const JSC_NIST = { ns: "https://ns.nist.gov/sp800-53", key: "sp800-53", lang: "en", rmf: "http://csrc.nist.gov/ns/rmf" };
 function jscImportNist(cat, party) {
   const NS = JSC_NIST.ns, RMF = JSC_NIST.rmf, version = cat.metadata.version;
-  const F = { narr: `${NS}/facet/narrative@1`, a: `${NS}/facet/sp800-53a@1`, odp: `${NS}/facet/odp@1`, rmf: `${NS}/facet/rmf@1`, ref: `${NS}/facet/references@1`,
-    compat: JSC_OSCAL_COMPAT + "@1" };
+  const F = { narr: `${NS}/facet/narrative@1`, a: "https://ns.jascon.net/stdlib/facet/assessment-criteria@1", odp: `${NS}/facet/odp@1`, rmf: `${NS}/facet/rmf@1`,
+    ref: JSC_OSCAL_REFERENCES, compat: JSC_OSCAL_COMPAT + "@1" };
   const T = v => ({ en: v });
   const text = v => (typeof v === "string" ? T(v) : v);               // a title: text where it is a string, as the converters' textify
   const none = v => (v === undefined ? null : v);
@@ -706,14 +754,6 @@ function jscImportNist(cat, party) {
     const joined = names.length === 1 ? names[0] : names.length === 2 ? names.join(" and ") : names.slice(0, -1).join(", ") + ", and " + names[names.length - 1];
     return `${VERB[lineageLinks[0].rel]} ${joined}.`;
   };
-  /* the print label of a statement item, where the rule rebuilds it from the item id: its last segment, `x.` on the first
-     two levels of a control, `(x)` on its third level and in an enhancement */
-  const ITEM_FORMS = { false: ["{}.", "{}.", "({})"], true: ["({})", "({})"] };
-  const itemLabel = (itemId, cid) => {
-    if (!String(itemId || "").startsWith(cid + "_smt.")) return null;
-    const tail = itemId.slice(cid.length + "_smt.".length).split("."), forms = ITEM_FORMS[String(cid).includes(".")];
-    return tail.length <= forms.length ? forms[tail.length - 1].replace("{}", tail[tail.length - 1]) : null;
-  };
   /* The props these rules read, by where they stand: [name, class, namespace], none where omitted. convert_nist.py reads
      exactly these; a prop of another name, class or namespace it does not carry, and its ledger ends the run on it
      (measured on a catalogue written for the tests). The preset writes what the converter writes and counts every other
@@ -739,13 +779,19 @@ function jscImportNist(cat, party) {
     if (pm.label) d.label = pm.label;
     return d;
   };
-  /* the statement an assessment objective assesses, as its link states it: the statement id, and the Requirement where it is another control's */
+  /* part id -> whether the part has a text of its own, over every part of every control (convert_nist.py part_text) */
+  const partText = new Map([...itemsById].map(([id, pt]) => [id, !!pt.prose]));
+  /* What an assessment objective assesses, as its link states it, as an address of assessment-criteria@1 (#83): a
+     statement of the same control by its statement id; a statement of another control with that Requirement; the
+     statement part as a whole, which has no text of its own, by its Requirement alone; a link that names nothing the
+     catalogue defines by its href, as the source writes it. */
   const assessed = (l, cid) => {
     const target = unhash(l.href);
     if (!target.includes("_smt")) return null;
-    const a = {};
-    if (target.split("_smt")[0] !== cid) a["requirement-ref"] = mint(target.split("_smt")[0]);
-    a["statement-id"] = "smt" + target.split("_smt")[1];
+    if (!partText.has(target)) return { href: l.href };
+    const owner = target.split("_smt")[0], other = owner !== cid, whole = !partText.get(target), a = {};
+    if (other || whole) a["requirement-ref"] = mint(owner);
+    if (!whole) a["statement-id"] = "smt" + target.split("_smt")[1];
     return a;
   };
   const objTree = (pt, used, cid) => {
@@ -767,14 +813,10 @@ function jscImportNist(cat, party) {
     if (objs.length) m.objects = paragraphs(objs[0].prose).map(x => T(rewrite(x, used)));
     return Object.fromEntries(Object.entries(m).filter(([, v]) => (Array.isArray(v) ? v.length : v)));
   });
-  /* the statement part and every part below it that has prose, in document order; `kept` collects the print labels of
-     items that the rule does not rebuild, as the source writes them */
-  const flatStatements = (c, kept) => {
+  /* the statement part and every part below it that has prose, in document order */
+  const flatStatements = c => {
     const out = [], walk = pt => {
       if (pt.prose) out.push(pt);
-      if (pt.name === "item") for (const p of (pt.props || []).filter(x => x.name === "label" && none(x.class) === null && none(x.ns) === null)) {
-        if (p.value !== null && p.value !== undefined && itemLabel(pt.id, c.id) !== p.value) kept.push({ id: pt.id, props: [p] });
-      }
       for (const s of pt.parts || []) walk(s);
     };
     for (const pt of c.parts || []) if (pt.name === "statement") walk(pt);
@@ -790,15 +832,17 @@ function jscImportNist(cat, party) {
     /* a level the control states is the source's and stays; where it states none, the party of the import (the preset's
        default, <ns>/party/organization, unless the caller named another) */
     const levels = props(c, "implementation-level", null, RMF);
-    const parties = levels.length ? levels.map(v => `${NS}/party/${v}`) : [party], stmts = [], declared = new Set(), kept = [];
+    const parties = levels.length ? levels.map(v => `${NS}/party/${v}`) : [party], stmts = [], declared = new Set();
     if (!levels.length) report["controls-without-a-stated-party"]++;
     /* a control in force is read as `must` (the corpus rule); the statement of a withdrawn one states no obligation */
     const modality = status === null ? "must" : "unspecified";
-    for (const pt of flatStatements(c, kept)) {
+    for (const pt of flatStatements(c)) {
       const used = new Set(), prose = rewrite(pt.prose, used);
       let sid = pt.id === undefined ? `${cid}_smt` : pt.id;
       if (sid.startsWith(cid + "_")) sid = sid.slice(cid.length + 1);
-      const s = { id: sid, modality, "obligated-parties": parties, prose: { en: prose } }, decls = [];
+      /* the print label of the part (`a.`, `1.`, `(a)`) is the statement's kernel `label`, as the source gives it (#84) */
+      const printLabel = prop(pt, "label");
+      const s = { id: sid, ...(printLabel !== null ? { label: printLabel } : {}), modality, "obligated-parties": parties, prose: { en: prose } }, decls = [];
       for (const u of [...used].sort(byCode)) {
         if (params.has(u)) decls.push(paramDecl(params.get(u)));
         else if (paramsGlobal.has(u)) { decls.push(paramDecl(paramsGlobal.get(u))); report["parameters-from-another-control"].push([cid, u]); }   // the source inserts another control's parameter
@@ -839,7 +883,6 @@ function jscImportNist(cat, party) {
     for (const v of props(c, "contributes-to-assurance", null, RMF)) if (v === "true" || v === "false") facets[F.rmf] = { "contributes-to-assurance": v === "true" };
     const compat = {};                                               // what the kernel has no member for, as the source writes it
     if (!classGiven(c)) compat.class = c.class;                      // a class the rule does not give
-    if (kept.length) compat.parts = kept;
     req.facets = facets;                                             // here, for the order of the members; filled up below
     /* a link to a control (a withdrawn one too: its URI names it in the successor's `replaces`) is a relation of its own rel;
        a reference link, the first link of the resource it names; a relation the control states twice is written once */
@@ -878,33 +921,25 @@ function jscImportNist(cat, party) {
   /* the root Set stands for the document: its title and version are kernel members; the back-matter resources as the source
      writes them, and everything else the document says of itself, in facets */
   const root = { id: `${NS}/set/root`, version, lifecycle: "active", title: text(cat.metadata.title), members: rootMembers }, rootFacets = {};
-  if (referred.length) rootFacets[F.ref] = { resources: clone(referred) };
+  if (referred.length) rootFacets[F.ref] = { resources: referred.map(r => clone(jscOscalResourceEntry(r))) };
   const meta = Object.fromEntries(Object.entries(cat.metadata).filter(([k]) => k !== "title" && k !== "version"));
-  const rootCompat = { ...("uuid" in cat ? { uuid: cat.uuid } : {}), ...(Object.keys(meta).length ? { metadata: clone(meta) } : {}) };
-  if (Object.keys(rootCompat).length) rootFacets[F.compat] = jscOscalCompatOrdered(rootCompat);
+  if (Object.keys(meta).length) rootFacets[F.compat] = { metadata: clone(meta) };
   if (Object.keys(rootFacets).length) root.facets = rootFacets;
   objects.push({ path: "objects/set/root.json", obj: root });
 
   const base = f => f.replace(/@1$/, "");
-  const strings = (...names) => Object.fromEntries(names.map(n => [n, { type: "string" }]));
-  const resource = { type: "object", additionalProperties: false, required: ["uuid"], properties: { ...strings("uuid", "title", "description", "remarks"),
-    props: { type: "array", items: { type: "object", additionalProperties: false, required: ["name", "value"], properties: strings("name", "uuid", "ns", "value", "class", "group", "remarks") } },
-    citation: { type: "object" },
-    rlinks: { type: "array", items: { type: "object", additionalProperties: false, required: ["href"], properties: strings("href", "media-type") } } } };
   const facetSchemas = [
     jscFacetStub("sp800-53-narrative-stub.json", base(F.narr), [], { guidance: { type: "array" }, overview: { type: "array" } }),
-    jscFacetStub("sp800-53a-stub.json", base(F.a), [], { objectives: { type: "array" }, methods: { type: "array" } }),
     jscFacetStub("sp800-53-odp-stub.json", base(F.odp), [], { params: { type: "object" } }),
     jscFacetStub("sp800-53-rmf-stub.json", base(F.rmf), [], { "contributes-to-assurance": { type: "boolean" } }),
-    jscFacetStub("sp800-53-references-stub.json", base(F.ref), [], { resources: { type: "array", items: resource } },
-      "NORMATIVE pinned payload schema (backlog #26): the back-matter resources of the catalogue, as the source writes them; a link `(#uuid)` in a text of the bundle names the resource with that uuid"),
+    jscStdlibPin("assessment-criteria"), jscStdlibPin("references"),
     jscOscalCompatSchema(),
   ];
-  /* who wrote the document and when, by the rule of backlog #69, as the converter's manifest names them; nothing is made up */
-  const author = jscOscalAuthorRef(cat.metadata, NS), day = jscOscalDate(cat.metadata);
-  const provenance = { sources: [{ key: JSC_NIST.key, title: cat.metadata.title, version, "oscal-version": cat.metadata["oscal-version"],
-    ...(author ? { "author-ref": author } : {}), ...(day ? { date: day } : {}) }],
-    converter: "JASCON-App OSCAL import, preset nist-sp800-53 (the rules of convert_nist.py v0.2, without the baseline Sets)",
+  /* the manifest's entry for the catalogue (backlog #80): who wrote it and when by the rule of backlog #69, its uuid and
+   its OSCAL version; nothing is made up. The converter writes one entry for each baseline profile as well; this preset
+   reads no profile, and a profile import returns its entry in its report. */
+  const provenance = { sources: [jscOscalSourceEntry(cat, jscOscalAuthorRef(cat.metadata, NS))],
+    converter: "JASCON-App OSCAL import, preset nist-sp800-53 (the rules of convert_nist.py v0.3, without the baseline Sets)",
     "namespace-note": "https://ns.nist.gov/sp800-53 is minted to match the mapping endpoints of the corpus; pending a URI published by NIST" };
   return { objects, facetSchemas, provenance, report };
 }
@@ -1195,7 +1230,7 @@ function jscImportCis(cat, opts, party) {
     note: note || "NORMATIVE pinned payload schema (backlog #26): closed shape - unknown keys are rejected, never smuggled",
     schema: { $schema: "https://json-schema.org/draft/2020-12/schema", type: "object", properties: props, additionalProperties: false } } });
   const facetSchemas = [
-    jscStdlibPin("assessment-criteria"),
+    jscStdlibPin("assessment-criteria", "1.0.0"),        // convert_cis_benchmark.py pins 1.0.0
     stub("cisb-narrative-stub.json", F_NARR.split("@")[0], { description: { type: "object" }, rationale: { type: "object" } }),
     stub("cisb-external-references-stub.json", F_XREF.split("@")[0], { references: { type: "array", items: { type: "string" } } }),
     stub("oscal-1x-compat-stub.json", "https://ns.jascon.net/compat/oscal-1x", { "group-parts": { type: "array" } },
@@ -1242,14 +1277,19 @@ function jscOscalGuessPreset(doc) {
    with-child-controls, alters - an alter is a change of text that somebody
    has to decide is editorial or substantive.
    What the profile says of itself beside its title and version (its
-   `metadata`), its uuid, its imports (their `href`), its back-matter
-   resources and how it merges what it selects (`merge`) stand on the Set
-   of the profile, in the compat facet and in the source's own shape, as
-   convert_nist.py writes them on a baseline Set (metadata and merge since
-   build 0.9.15, the rest since 0.9.16). opts.facetSchemas are the defs the
-   set pins; where it pins no compat schema 1.1.0, the import brings it
+   `metadata`), its imports (their `href`) and how it merges what it
+   selects (`merge`) stand on the Set of the profile, in the compat facet
+   and in the source's own shape, and its back-matter resources in the
+   standard facet references@1, as convert_nist.py v0.3 writes them on a
+   baseline Set. opts.facetSchemas are the defs the set pins; where it pins
+   no compat schema 1.2.0, or no references schema, the import brings it
    (`facetSchemas` of the result). A profile that makes no Set of its own
    (an include-all only) has no place for them, and the report says so.
+   The profile's uuid, with its title, version, author, day and OSCAL
+   version, is the manifest's entry for it (backlog #80). The set it is
+   imported into keeps the provenance of its manifest as it came, so the
+   entry is returned in the report (`provenance-source`) and written
+   nowhere.
    The Tailoring names who wrote the profile and when (`provenance`), by the
    rule above jscOscalAuthorParty; opts.authorRef and opts.date replace what
    the document states, field by field, and without both nothing is written.
@@ -1294,12 +1334,11 @@ function jscOscalImportProfile(doc, opts) {
   report.included = members.length; report.excluded = excludes.length;
   /* what the profile says of itself: on the Set, in the compat facet, in the order of the one schema */
   const held = {}, meta = Object.fromEntries(Object.entries(p.metadata).filter(([k]) => k !== "title" && k !== "version"));
-  if ("uuid" in p) held.uuid = p.uuid;
   if (Object.keys(meta).length) held.metadata = meta;
   if (Array.isArray(p.imports)) held.imports = p.imports.map(imp => ({ href: imp.href }));
-  if (((p["back-matter"] || {}).resources || []).length) held["back-matter"] = { resources: p["back-matter"].resources };
   if ("merge" in p) held.merge = p.merge;
-  const pinned = (opts.facetSchemas || []).some(d => d && d.id === JSC_OSCAL_COMPAT && d.version === "1.1.0");
+  const resources = ((p["back-matter"] || {}).resources) || [];
+  const pins = opts.facetSchemas || [], pinned = id => pins.some(d => d && d.id === id);
   const compat = {}, facetSchemas = [];
   report["held-in-compat"] = [];
   for (const [k, v] of Object.entries(jscOscalCompatOrdered(held))) {
@@ -1307,14 +1346,28 @@ function jscOscalImportProfile(doc, opts) {
     if (!members.length) note(`${what}: the profile makes no Set of its own to carry it`);
     else { compat[k] = JSON.parse(JSON.stringify(v)); report["held-in-compat"].push(k); }
   }
-  if (Object.keys(compat).length && !pinned) facetSchemas.push(jscOscalCompatSchema());
+  /* its back-matter resources: in the standard facet references@1 on its Set, as convert_nist.py writes them (#82) */
+  const facets = {};
+  if (resources.length && !members.length) note("back-matter: the profile makes no Set of its own to carry it");
+  if (resources.length && members.length) {
+    facets[JSC_OSCAL_REFERENCES] = { resources: resources.map(r => JSON.parse(JSON.stringify(jscOscalResourceEntry(r)))) };
+    if (!pinned(JSC_OSCAL_REFERENCES.replace(/@1$/, ""))) facetSchemas.push(jscStdlibPin("references"));
+  }
+  if (Object.keys(compat).length) {
+    facets[JSC_OSCAL_COMPAT + "@1"] = compat;
+    if (!pins.some(d => d && d.id === JSC_OSCAL_COMPAT && d.version === JSC_OSCAL_COMPAT_VERSION)) facetSchemas.push(jscOscalCompatSchema());
+  }
   const out = [];
   if (members.length) {
     const setId = `${ns}/set/profile/${name}`;
     out.push({ path: `objects/set/profile-${name}.json`, obj: { id: setId, version, lifecycle: "active", title: { [lang]: title },
-      members: members.map((ref, i) => ({ ref, sequence: (i + 1) * 10 })), ...(Object.keys(compat).length ? { facets: { [JSC_OSCAL_COMPAT + "@1"]: compat } } : {}) } });
+      members: members.map((ref, i) => ({ ref, sequence: (i + 1) * 10 })), ...(Object.keys(facets).length ? { facets } : {}) } });
     selects.unshift({ "set-ref": setId });
   }
+  /* The manifest's entry for the profile (backlog #80): title, version, uuid, author, day, OSCAL version. A profile is
+     imported into a set that has a manifest of its own, and the app keeps that manifest's provenance as the set came
+     (jscBuildBundle); it has no place to add an entry to it. So the entry is returned here, in the report. */
+  report["provenance-source"] = jscOscalSourceEntry(p, jscOscalAuthorRef(p.metadata, ns));
   /* set-parameters: one operation for every clause that declares the parameter */
   const inScope = new Set(members);
   for (const s of selects) if (objs.has(s["set-ref"])) for (const id of jscOscalRules.jscExpandRefs([s["set-ref"]], objs)) inScope.add(id);

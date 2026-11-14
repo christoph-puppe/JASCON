@@ -72,6 +72,11 @@ jscI18n.add("de", {
 });
 
 jscI18n.add("de", {
+  "label of the statement in the source": "Bezeichnung des Statements in der Quelle",
+  "History": "Änderungsverlauf",
+});
+
+jscI18n.add("de", {
   "names no requirement": "nennt keine Anforderung", "suggested values": "vorgeschlagene Werte", "kind": "Art",
   "product version": "Produktversion", "describes": "beschreibt", "Capabilities ({n})": "Fähigkeiten ({n})",
   "Authorizations": "Autorisierungen", "from an advice pack": "aus einem Advice Pack",
@@ -186,7 +191,9 @@ function requirementBody(o) {
         p.choices && p.choices.map(c => c.value).join(" | ")].filter(Boolean);
       return badge("⚙ " + p.name, bits.join(" · "));
     }).join(" ");
-    return `<div class="stmt"><div>${badge(T("statement {id}", { id: s.id }))}${modBadge(s.modality)}
+    /* the statement's label (kernel 2.0.0, backlog #84), the print label a reader of the source sees, beside its id */
+    const label = typeof s.label === "string" && s.label ? `<span class="badge" data-stmt-label title="${esc(T("label of the statement in the source"))}">${esc(s.label)}</span>` : "";
+    return `<div class="stmt"><div>${badge(T("statement {id}", { id: s.id }))}${label}${modBadge(s.modality)}
       ${(s["obligated-parties"] || []).map(p => badge("◈ " + last(p), T("obligated party") + ": " + p)).join("")}${params}</div>
       ${langBlocks(s.prose, "prose")}</div>`;
   }).join("") + section(T("Deviations"), o.deviations ? prettyVal(o.deviations) : "");
@@ -292,7 +299,17 @@ function componentBody(o) {
     section(T("Capabilities ({n})", { n: (o.capabilities || []).length }), (o.capabilities || []).map(c => capabilityHtml(c)).join("")) +
     section(T("Authorizations"), o.authorizations ? prettyVal(o.authorizations) : "");
 }
-const GENERIC_SKIP = new Set(["id", "version", "label", "title", "lifecycle", "aliases", "relations", "facets", "annotations"]);
+/* An object's history (kernel 2.0.0, backlog #81): one line per entry, its date, its comment and its reference. A
+   reference to an object of the set opens it; any other http(s) URI is a link that opens in a new tab; anything else
+   is shown as text and is no link. */
+function historyHtml(list) {
+  if (!Array.isArray(list) || !list.length) return "";
+  const ref = u => (typeof u !== "string" || !u ? "" : objs().has(u) ? refLink(u)
+    : /^https?:\/\//i.test(u) ? `<a class="reflink" href="${esc(u)}" target="_blank" rel="noopener noreferrer">${esc(u)}</a>` : `<span class="mono">${esc(u)}</span>`);
+  return `<ul data-history style="margin-left:18px">` + list.filter(h => h && typeof h === "object").map(h => `<li data-history-entry>
+      <span class="mono">${esc(h.date || "")}</span>${h.comment ? ` · ${esc(TT(h.comment))}` : ""}${h.ref ? ` · ${ref(h.ref)}` : ""}</li>`).join("") + `</ul>`;
+}
+const GENERIC_SKIP = new Set(["id", "version", "label", "title", "lifecycle", "aliases", "relations", "facets", "annotations", "history"]);
 function genericBody(o) {
   const rest = Object.fromEntries(Object.entries(o).filter(([k]) => !GENERIC_SKIP.has(k)));
   return Object.keys(rest).length ? section(T("Fields"), prettyVal(rest)) : "";
@@ -319,7 +336,7 @@ function objectHtml(r, verified) {
   const digests = r.entry ? section(T("Integrity (from the manifest)"), `<div class="kv">
       ${kv("package-digest", `<span class="mono" style="font-size:10.5px">${esc(r.entry["package-digest"])}</span>${mark(verified && verified.pkg)}`)}
       ${kv("semantic-digest", `<span class="mono" style="font-size:10.5px">${esc(r.entry["semantic-digest"])}</span>${mark(verified && verified.sem)}`)}</div>`) : "";
-  return head + (BODY[r.type] || genericBody)(o) +
+  return head + (BODY[r.type] || genericBody)(o) + section(T("History"), historyHtml(o.history)) +
     section(T("Aliases"), o.aliases ? o.aliases.map(a => badge(`${a.scheme}: ${a.value}`)).join(" ") : "") +
     section(T("Relations"), o.relations ? `<div class="kv">${o.relations.map(rel => kv(rel.type, refLink(rel.ref))).join("")}</div>` : "") +
     facets + section(T("Annotations (not part of the signed meaning)"), o.annotations ? `<div class="annbox">${prettyVal(o.annotations, 1)}</div>` : "") +
