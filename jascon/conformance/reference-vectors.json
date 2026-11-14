@@ -1,5 +1,5 @@
 {
- "description": "Reference taxonomy (B.1.1 as amended; backlog #16 - run 2's Blocker P9b-1). CLOSURE-REQUIRED references must land in-bundle: Set members[].ref, Tailoring selects/excludes/operation targets (+ statement-id existence), Implementation component-ref/requirement-ref (+ basis-ref against the component's authorizations, D5), Finding assessment-ref/requirement-ref, Mapping source/target-scope statement ids WHEN the endpoint is in-bundle. LANDMARK references resolve outside the bundle by design: Mapping endpoints, party/authority URIs, evidence refs, external schema/reference URLs, attestation subjects (self-verifying via digest). Each vector is a mini-bundle; expected-errors 0 = closes. Decided on 2026-11-14 (backlog #83, D10): a `statement-id` anywhere inside a facet payload of a Requirement is held as a `by-statement` key is held. Alone it names a statement of the host; beside a `requirement-ref` it names a statement of that Requirement, which binds where the bundle holds it; a `requirement-ref` alone names a Requirement as a whole. A `private:` facet is not read.",
+ "description": "Reference taxonomy (B.1.1 as amended; backlog #16 - run 2's Blocker P9b-1). CLOSURE-REQUIRED references must land in-bundle: Set members[].ref, Tailoring selects/excludes/operation targets (+ statement-id existence), Implementation component-ref/requirement-ref (+ basis-ref against the component's authorizations, D5), Finding assessment-ref/requirement-ref, Mapping source/target-scope statement ids WHEN the endpoint is in-bundle. LANDMARK references resolve outside the bundle by design: Mapping endpoints, party/authority URIs, evidence refs, external schema/reference URLs, attestation subjects (self-verifying via digest). Each vector is a mini-bundle; expected-errors 0 = closes. Decided on 2026-11-14 (backlog #83, D10): a `statement-id` anywhere inside a facet payload of a Requirement is held as a `by-statement` key is held. Alone it names a statement of the host; beside a `requirement-ref` it names a statement of that Requirement, which binds where the bundle holds it; a `requirement-ref` alone names a Requirement as a whole. A `private:` facet is not read. Fragment references (backlog #82, FRAGMENT-1; D9): `fragment-references` - each case is a mini-bundle, with the part of a manifest it needs under `manifest` where it needs one. An object refers to something as `#id` in two forms: `(#id)` in a string at any depth, the id being at least one character and none of space, tab, CR, LF and `)`; and the whole of a string that begins with `#` and is longer than that, under a member named `href`. A `private:` facet is not read, under `facets` or under an Assessment's `method`. `expected` gives the number of such references (`total`) and how many name each kind, the first kind that fits being counted, in this order: `resource` - an entry of `resources` with that `id` in the references@1 facet of the object itself or of a Set that lists it as a member, directly or through nested Sets; `object` - an object of the bundle whose id ends, after its last `/`, in that id, A to Z compared as a to z; `statement` - `<object>_<statement id>`, split at one of its `_`, the object found as before and the statement one of its own; `parameter` - the `name` of a parameter of a statement in the bundle; `source` - the `uuid` of an entry of the manifest's `provenance.sources`. `nothing` lists [object id, id] for the rest, in the order of the object ids, then of the ids named. It is a report: nothing fails by it.",
  "vectors": [
   {
    "name": "set-member-closes",
@@ -1208,6 +1208,722 @@
     }
    ],
    "expected-errors": 1
+  }
+ ],
+ "fragment-references": [
+  {
+   "name": "a-text-names-a-resource-of-its-objects-own-facet",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Follow [the guide](#res-1)."
+       }
+      }
+     ],
+     "facets": {
+      "https://ns.jascon.net/stdlib/facet/references@1": {
+       "resources": [
+        {
+         "id": "res-1",
+         "title": "Document res-1"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "expected": {
+    "total": 1,
+    "nothing": [],
+    "resource": 1,
+    "object": 0,
+    "statement": 0,
+    "parameter": 0,
+    "source": 0
+   }
+  },
+  {
+   "name": "a-resource-of-a-set-that-lists-the-object-through-a-nested-set-and-none-of-a-set-that-does-not",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "See [A](#res-a) and [B](#res-b)."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/inner",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/outer",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/set/inner",
+       "sequence": 10
+      }
+     ],
+     "facets": {
+      "https://ns.jascon.net/stdlib/facet/references@1": {
+       "resources": [
+        {
+         "id": "res-a",
+         "title": "Document res-a"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/other",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/2",
+       "sequence": 10
+      }
+     ],
+     "facets": {
+      "https://ns.jascon.net/stdlib/facet/references@1": {
+       "resources": [
+        {
+         "id": "res-b",
+         "title": "Document res-b"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "expected": {
+    "total": 2,
+    "nothing": [
+     [
+      "https://ns.auth.gov/fw/req/1",
+      "res-b"
+     ]
+    ],
+    "resource": 1,
+    "object": 0,
+    "statement": 0,
+    "parameter": 0,
+    "source": 0
+   }
+  },
+  {
+   "name": "the-whole-value-of-a-member-named-href-and-no-other-member",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "X."
+       }
+      }
+     ],
+     "facets": {
+      "https://ns.jascon.net/stdlib/facet/references@1": {
+       "resources": [
+        {
+         "id": "res-1",
+         "title": "Document res-1"
+        }
+       ]
+      },
+      "https://ns.auth.gov/facet/own@1": {
+       "links": [
+        {
+         "href": "#res-1",
+         "rel": "reference"
+        },
+        {
+         "href": "https://example.org/page#res-1"
+        },
+        {
+         "href": "#"
+        }
+       ],
+       "heading": "# Not a reference",
+       "note": "#res-1"
+      }
+     }
+    }
+   ],
+   "expected": {
+    "total": 1,
+    "nothing": [],
+    "resource": 1,
+    "object": 0,
+    "statement": 0,
+    "parameter": 0,
+    "source": 0
+   }
+  },
+  {
+   "name": "an-object-by-the-last-segment-of-its-id-a-to-z-as-a-to-z",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/AC-2",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "X."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/req/AC-2.1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Extends [AC-2](#ac-2); see also [the family](#AC)."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/ac",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/AC-2",
+       "sequence": 10
+      },
+      {
+       "ref": "https://ns.auth.gov/fw/req/AC-2.1",
+       "sequence": 20
+      }
+     ]
+    }
+   ],
+   "expected": {
+    "total": 2,
+    "nothing": [],
+    "resource": 0,
+    "object": 2,
+    "statement": 0,
+    "parameter": 0,
+    "source": 0
+   }
+  },
+  {
+   "name": "a-statement-as-object-underscore-statement-id-and-one-the-object-does-not-have",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/AC-2",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "smt.a",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "X."
+       }
+      },
+      {
+       "id": "smt.b",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "As in [a.](#ac-2_smt.a) and in [z.](#ac-2_smt.z)."
+       }
+      }
+     ]
+    }
+   ],
+   "expected": {
+    "total": 2,
+    "nothing": [
+     [
+      "https://ns.auth.gov/fw/req/AC-2",
+      "ac-2_smt.z"
+     ]
+    ],
+    "resource": 0,
+    "object": 0,
+    "statement": 1,
+    "parameter": 0,
+    "source": 0
+   }
+  },
+  {
+   "name": "a-statement-where-the-objects-name-holds-an-underscore-itself",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/net_seg-1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "smt_1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "See [above](#net_seg-1_smt_1)."
+       }
+      }
+     ]
+    }
+   ],
+   "expected": {
+    "total": 1,
+    "nothing": [],
+    "resource": 0,
+    "object": 0,
+    "statement": 1,
+    "parameter": 0,
+    "source": 0
+   }
+  },
+  {
+   "name": "a-parameter-by-its-name",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/AC-2",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Within {param:ac-02_odp.01}."
+       },
+       "parameters": [
+        {
+         "name": "ac-02_odp.01",
+         "type": "string"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/req/AC-3",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "As chosen in [AC-2](#ac-02_odp.01), not [here](#ac-02_odp.02)."
+       }
+      }
+     ]
+    }
+   ],
+   "expected": {
+    "total": 2,
+    "nothing": [
+     [
+      "https://ns.auth.gov/fw/req/AC-3",
+      "ac-02_odp.02"
+     ]
+    ],
+    "resource": 0,
+    "object": 0,
+    "statement": 0,
+    "parameter": 1,
+    "source": 0
+   }
+  },
+  {
+   "name": "a-source-document-of-the-manifest-by-its-uuid",
+   "objects": [
+    {
+     "id": "https://ns.org.example/isms/component/app",
+     "version": "1",
+     "lifecycle": "active",
+     "kind": "service",
+     "title": {
+      "en": "Runs on [the platform](#11111111-2222-4333-8444-555555555555)"
+     }
+    }
+   ],
+   "manifest": {
+    "provenance": {
+     "sources": [
+      {
+       "title": "Platform plan",
+       "uuid": "11111111-2222-4333-8444-555555555555"
+      }
+     ]
+    }
+   },
+   "expected": {
+    "total": 1,
+    "nothing": [],
+    "resource": 0,
+    "object": 0,
+    "statement": 0,
+    "parameter": 0,
+    "source": 1
+   }
+  },
+  {
+   "name": "without-a-manifest-the-same-reference-names-nothing",
+   "objects": [
+    {
+     "id": "https://ns.org.example/isms/component/app",
+     "version": "1",
+     "lifecycle": "active",
+     "kind": "service",
+     "title": {
+      "en": "Runs on [the platform](#11111111-2222-4333-8444-555555555555)"
+     }
+    }
+   ],
+   "expected": {
+    "total": 1,
+    "nothing": [
+     [
+      "https://ns.org.example/isms/component/app",
+      "11111111-2222-4333-8444-555555555555"
+     ]
+    ],
+    "resource": 0,
+    "object": 0,
+    "statement": 0,
+    "parameter": 0,
+    "source": 0
+   }
+  },
+  {
+   "name": "the-first-kind-that-fits-is-counted-a-resource-before-an-object",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/AC-2",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "See [it](#ac-2)."
+       }
+      }
+     ],
+     "facets": {
+      "https://ns.jascon.net/stdlib/facet/references@1": {
+       "resources": [
+        {
+         "id": "ac-2",
+         "title": "Document ac-2"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "expected": {
+    "total": 1,
+    "nothing": [],
+    "resource": 1,
+    "object": 0,
+    "statement": 0,
+    "parameter": 0,
+    "source": 0
+   }
+  },
+  {
+   "name": "every-occurrence-counts-and-an-empty-or-a-spaced-target-is-none",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "See [a](#res-1), [b](#res-1), [c](#) and (# not one)."
+       }
+      }
+     ],
+     "facets": {
+      "https://ns.jascon.net/stdlib/facet/references@1": {
+       "resources": [
+        {
+         "id": "res-1",
+         "title": "Document res-1"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "expected": {
+    "total": 2,
+    "nothing": [],
+    "resource": 2,
+    "object": 0,
+    "statement": 0,
+    "parameter": 0,
+    "source": 0
+   }
+  },
+  {
+   "name": "a-private-facet-is-not-read-under-facets-or-under-a-method",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "X."
+       }
+      }
+     ],
+     "facets": {
+      "private:notes@1": {
+       "text": "See [x](#nowhere).",
+       "href": "#nowhere"
+      }
+     }
+    },
+    {
+     "id": "https://ns.org.example/isms/assessment/a1",
+     "version": "1",
+     "lifecycle": "active",
+     "subject-refs": [
+      "https://ns.auth.gov/fw/req/1"
+     ],
+     "method": {
+      "private:tool@1": {
+       "note": "See [x](#nowhere)."
+      },
+      "https://ns.auth.gov/facet/own@1": {
+       "procedure": "As in [the plan](#plan)."
+      }
+     },
+     "performer-ref": "https://ns.org.example/isms/party/auditor",
+     "time": "2026-11-14",
+     "result": "satisfied"
+    }
+   ],
+   "expected": {
+    "total": 1,
+    "nothing": [
+     [
+      "https://ns.org.example/isms/assessment/a1",
+      "plan"
+     ]
+    ],
+    "resource": 0,
+    "object": 0,
+    "statement": 0,
+    "parameter": 0,
+    "source": 0
+   }
+  },
+  {
+   "name": "texts-of-every-member-are-read-titles-labels-and-payloads-alike",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "X."
+       },
+       "parameters": [
+        {
+         "name": "p1",
+         "type": "string",
+         "label": "see [list](#list)"
+        }
+       ]
+      }
+     ],
+     "title": {
+      "en": "As in [the annex](#annex)"
+     },
+     "facets": {
+      "https://ns.auth.gov/facet/own@1": {
+       "guidance": [
+        {
+         "en": "More in [the note](#note)."
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "expected": {
+    "total": 3,
+    "nothing": [
+     [
+      "https://ns.auth.gov/fw/req/1",
+      "annex"
+     ],
+     [
+      "https://ns.auth.gov/fw/req/1",
+      "list"
+     ],
+     [
+      "https://ns.auth.gov/fw/req/1",
+      "note"
+     ]
+    ],
+    "resource": 0,
+    "object": 0,
+    "statement": 0,
+    "parameter": 0,
+    "source": 0
+   }
+  },
+  {
+   "name": "what-names-nothing-in-the-order-of-the-object-ids-then-of-the-ids-named",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/2",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "See [b](#b) and [a](#a)."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "See [z](#z)."
+       }
+      }
+     ]
+    }
+   ],
+   "expected": {
+    "total": 3,
+    "nothing": [
+     [
+      "https://ns.auth.gov/fw/req/1",
+      "z"
+     ],
+     [
+      "https://ns.auth.gov/fw/req/2",
+      "a"
+     ],
+     [
+      "https://ns.auth.gov/fw/req/2",
+      "b"
+     ]
+    ],
+    "resource": 0,
+    "object": 0,
+    "statement": 0,
+    "parameter": 0,
+    "source": 0
+   }
   }
  ]
 }

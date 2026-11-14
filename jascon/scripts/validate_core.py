@@ -70,6 +70,17 @@ Runs, in order:
    standard library, the schemas the bundle pins, `private:`, else an
    error), and each payload is held to its schema. Until 2026-11-14
    `method` was not read.
+10. WITHDRAWN-1 (backlog #93, author 2026-11-14: "Regel bauen"): in a
+   bundle that holds an object as withdrawn, a Tailoring, a Mapping, a
+   Component, an Implementation, a Check or a live Risk that is not
+   withdrawn itself does not name it by one of twelve edges
+   (WITHDRAWN_EDGES). Lineage, relations, the members of a Set and the
+   records of an act (Assessment, Finding, Attestation) are not held.
+   The handbook had stated the rule since 1.0.0; nothing held it.
+11. FRAGMENT-1 (backlog #82; D9): a report of what the references of the
+   form `#id` name - a resource of references@1, an object, a statement,
+   a parameter, a source document of the manifest - and of those that
+   name nothing. Nothing fails by it.
 
 Exit 0 = all green. Usage: uv run --with jsonschema validate_core.py [bundle-dir ...]
 """
@@ -1108,6 +1119,14 @@ def run_references():
         errs = closure_errors(objs)
         if len(errs) == case["expected-errors"]: ok("reference")
         else: fail("reference", f"{case['name']}: expected {case['expected-errors']} errors, got {len(errs)} ({errs[:2]})")
+    for case in v["fragment-references"]:               # FRAGMENT-1 (backlog #82): a report, never a failure
+        objs = {}
+        for o in case["objects"]:
+            t = inferType_single(o)
+            if t: objs[o["id"]] = (t, o)
+        got = None if len(objs) != len(case["objects"]) else fragment_report(objs, case.get("manifest"))
+        if got == case["expected"]: ok("reference")
+        else: fail("reference", f"fragment-references {case['name']}: expected {case['expected']}, got {got}")
 
 def inferType_single(o):
     m = [t for t in TYPES if VALIDATORS[t].is_valid(o)]
@@ -1859,6 +1878,174 @@ def draft_member_report(objs):
                 if m.get("ref") in objs and objs[m["ref"]][1].get("lifecycle") == "draft")
         if n: out.append((sid, n))
     return out
+
+# WITHDRAWN-1 (2026-11-14, backlog #93). The handbook has said since 1.0.0
+# that new references to a withdrawn object fail validation, and no
+# validator held it. A validator reads one bundle and takes the state of an
+# object as the bundle holds it: a bundle put together before the withdrawal
+# holds the object as it was and stays valid. In a bundle that holds it as
+# withdrawn, an object that says what is in force does not lean on it.
+# Held: the edges below, on an object whose own lifecycle is not `withdrawn`
+# (a Risk: on a live one). Not held, each for its reason: `replaces`,
+# `canonical-alias` and `relations` keep the record of what went and point
+# at it; a Set lists what its catalogue withdrew (the author's decision E1;
+# measured: 220 such members in the CSF and SP 800-53 bundles); an
+# Assessment, a Finding and an Attestation record what was found or signed
+# at a time and stay true when their subject is withdrawn later; a Risk's
+# `treatments` are RISK-11's; facet payloads are not read.
+WITHDRAWN_RULES = {
+    "WITHDRAWN-1": "an object in force does not lean on a withdrawn one - what a Tailoring selects, excludes or changes, "
+                   "what a Mapping joins, what a Component claims or contains, what an Implementation answers, what a "
+                   "Check tests and what a live Risk is about is not withdrawn in the bundle that holds both",
+}
+WITHDRAWN_EDGES = {     # type -> [(the array the entries are in, or None; the member; the edge's name in a message)]
+    "tailoring":      [("selects", "set-ref", "selects set-ref"), ("excludes", "ref", "excludes ref"),
+                       ("operations", "requirement-ref", "operation requirement-ref")],
+    "mapping":        [(None, "source-ref", "source-ref"), (None, "target-ref", "target-ref")],
+    "component":      [("capabilities", "requirement-ref", "capability requirement-ref"),
+                       ("members", "component-ref", "member component-ref")],
+    "implementation": [(None, "component-ref", "component-ref"), (None, "requirement-ref", "requirement-ref"),
+                       ("satisfied-by", "inherited-from/component-ref", "inherited-from component-ref")],
+    "check":          [(None, "requirement-ref", "requirement-ref")],
+    "risk":           [(None, "component-refs", "component-refs"), (None, "tailoring-refs", "tailoring-refs")],
+}
+
+def withdrawn_references(objs):
+    """WITHDRAWN-1 -> [(object id, edge name, id of the withdrawn object)],
+    the objects in the order of their ids, the edges in the order of the
+    table, the entries in the order of the document."""
+    gone = {i for i, (t, o) in objs.items() if o.get("lifecycle") == "withdrawn"}
+    out = []
+    if not gone: return out
+    for oid in by_code_unit(objs):
+        t, o = objs[oid]
+        if t not in WITHDRAWN_EDGES or o.get("lifecycle") == "withdrawn": continue
+        if t == "risk" and not risk_is_live(o): continue
+        for arr, member, name in WITHDRAWN_EDGES[t]:
+            for entry in ([o] if arr is None else (o.get(arr) or [])):
+                v = entry
+                for part in member.split("/"):
+                    v = v.get(part) if isinstance(v, dict) else None
+                for ref in (v if isinstance(v, list) else [v]):
+                    if isinstance(ref, str) and ref in gone: out.append((oid, name, ref))
+    return out
+
+def withdrawn_reference_errors(objs):
+    return [f"{oid}: {name} names {ref}, which is withdrawn (WITHDRAWN-1: {WITHDRAWN_RULES['WITHDRAWN-1']})"
+            for oid, name, ref in withdrawn_references(objs)]
+
+# FRAGMENT-1 (2026-11-14, backlog #82; D9). A text of a bundle refers to
+# something as `#id`: as the target of a link in a text, `(#id)`, or as the
+# whole value of a member named `href`. The form comes from the sources,
+# which use it for more than one kind of target. Measured on the SP 800-53
+# bundle: 541 such references, of which 118 name a resource, 348 another
+# control, 73 a statement, one a parameter and one nothing (the source's
+# own defect, an objective that names a statement AC-2 does not have); in
+# the ISM all 486 name a resource. The report says, per bundle, how many
+# name each kind and which name nothing. Nothing fails by it.
+REFERENCES_FACET = "https://ns.jascon.net/stdlib/facet/references@1"
+FRAGMENT_RULES = {
+    "FRAGMENT-1": "a reference of the form #id names a resource the bundle carries, an object, a statement, a parameter "
+                  "or a source document of the manifest; the ones that name nothing are reported",
+}
+FRAGMENT_KINDS = ("resource", "object", "statement", "parameter", "source")
+_FRAGMENT_IN_TEXT = re.compile(r"\(#([^) \t\r\n]+)\)")
+
+def ascii_lower(s):
+    """A to Z as a to z, and no other character changed - the same in every
+    language a validator is written in, which a locale's lower case is not."""
+    return "".join(chr(ord(c) + 32) if "A" <= c <= "Z" else c for c in s)
+
+def fragments_of(o):
+    """-> every `id` an object refers to as `#id`: each `(#id)` in a string
+    at any depth, and the whole of a string that begins with `#` under a
+    member named `href`. A `private:` facet is not read, under `facets` or
+    under an Assessment's `method`, whose keys are facet ids too (D10)."""
+    out = []
+    def walk(x, key):
+        if isinstance(x, dict):
+            for k, v in x.items(): walk(v, k)
+        elif isinstance(x, list):
+            for v in x: walk(v, key)
+        elif isinstance(x, str):
+            if key == "href" and x.startswith("#") and len(x) > 1: out.append(x[1:])
+            out.extend(_FRAGMENT_IN_TEXT.findall(x))
+    for k, v in o.items():
+        if k in ("facets", "method") and isinstance(v, dict):
+            for fid, payload in v.items():
+                if not fid.startswith("private:"): walk(payload, fid)
+        else:
+            walk(v, k)
+    return out
+
+def fragment_report(objs, manifest=None):
+    """FRAGMENT-1 -> {"total", "resource", "object", "statement",
+    "parameter", "source": numbers; "nothing": [[object id, id]]}. The first
+    kind that fits is counted, in this order:
+    resource   an entry of `resources` with that `id`, in the references@1
+               facet of the object itself or of a Set that lists it as a
+               member, directly or through nested Sets;
+    object     an object of the bundle whose id ends, after its last `/`,
+               in that id - A to Z compared as a to z;
+    statement  `<object>_<statement id>`, split at one of its `_`: the
+               object found as above, the statement one of its own;
+    parameter  the `name` of a parameter of a statement in the bundle;
+    source     the `uuid` of an entry of the manifest's provenance.sources.
+    `nothing` is in the order of the object ids, then of the ids named."""
+    parents, own, tail, stmts, params = {}, {}, {}, {}, set()
+    for oid, (t, o) in objs.items():
+        if t == "requirementSet":
+            for m in o.get("members", []):
+                parents.setdefault(m.get("ref"), []).append(oid)
+        payload = (o.get("facets") or {}).get(REFERENCES_FACET)
+        res = payload.get("resources") if isinstance(payload, dict) else None
+        own[oid] = {r["id"] for r in res if isinstance(r, dict) and isinstance(r.get("id"), str)} if isinstance(res, list) else set()
+        seg = oid.rsplit("/", 1)[-1]
+        if seg: tail.setdefault(ascii_lower(seg), []).append(oid)
+        if t == "requirement":
+            stmts[oid] = {s["id"] for s in o["statements"]}
+            params.update(p["name"] for s in o["statements"] for p in s.get("parameters", []) or [])
+    sources = {e["uuid"] for e in ((manifest or {}).get("provenance") or {}).get("sources", []) or []
+               if isinstance(e, dict) and isinstance(e.get("uuid"), str)}
+    def resources_in_reach(oid):
+        seen, todo, found = {oid}, [oid], set()
+        while todo:
+            cur = todo.pop()
+            found |= own.get(cur, set())
+            for p in parents.get(cur, []):
+                if p not in seen: seen.add(p); todo.append(p)
+        return found
+    def names_statement(x):
+        for k, c in enumerate(x):
+            if c != "_": continue
+            if any(x[k + 1:] in stmts.get(cand, ()) for cand in tail.get(ascii_lower(x[:k]), [])): return True
+        return False
+    r = {"total": 0, "nothing": []}
+    for k in FRAGMENT_KINDS: r[k] = 0
+    for oid in by_code_unit(objs):
+        named = fragments_of(objs[oid][1])
+        if not named: continue
+        reach = resources_in_reach(oid)
+        missing = []
+        for x in named:
+            r["total"] += 1
+            if x in reach: r["resource"] += 1
+            elif ascii_lower(x) in tail: r["object"] += 1
+            elif names_statement(x): r["statement"] += 1
+            elif x in params: r["parameter"] += 1
+            elif x in sources: r["source"] += 1
+            else: missing.append(x)
+        r["nothing"] += [[oid, x] for x in by_code_unit(missing)]
+    return r
+
+def report_fragments(objs, manifest=None):
+    r = fragment_report(objs, manifest)
+    if not r["total"]: return
+    print(f"    fragments: {r['total']} reference(s) of the form #id: {r['resource']} to a resource, {r['object']} to an object, "
+          f"{r['statement']} to a statement, {r['parameter']} to a parameter, {r['source']} to a source document, "
+          f"{len(r['nothing'])} to nothing (FRAGMENT-1)")
+    for oid, x in r["nothing"]:
+        print(f"    note: {oid}: #{x} names nothing the bundle carries (FRAGMENT-1: reported; nothing fails)")
 
 def report_authors_and_reviews(section, objs, envelopes=None):
     """Prints the reports for one bundle. AUTHOR lines are notes, or
@@ -2769,6 +2956,14 @@ def run_lifecycle():
         got = None if len(objs) != len(case["objects"]) else [[sid, n] for sid, n in draft_member_report(objs)]
         if got == case["expected"]: ok("lifecycle")
         else: fail("lifecycle", f"draft-members {case['name']}: expected {case['expected']}, got {got}")
+    for case in v["withdrawn-references"]:              # WITHDRAWN-1 (backlog #93)
+        objs = {}
+        for o in case["objects"]:
+            ty = inferType_single(o)
+            if ty: objs[o["id"]] = (ty, o)
+        got = None if len(objs) != len(case["objects"]) else [list(x) for x in withdrawn_references(objs)]
+        if got == case["expected"]: ok("lifecycle")
+        else: fail("lifecycle", f"withdrawn-references {case['name']}: expected {case['expected']}, got {got}")
     # shape disjointness: eleven canonical minimal objects -> exactly one match each; garbage -> zero
     P = "https://ex.org"
     MINIMAL = {
@@ -3483,6 +3678,7 @@ def validate_bundle(bdir):
     # reference taxonomy (#16) + facet payloads (#17) + tier duties (#19/#24)
     for e in closure_errors(bundle_objs):
         fail(section, e)
+    for e in withdrawn_reference_errors(bundle_objs): fail(section, e)      # WITHDRAWN-1
     for e in tailoring_duty_errors(with_atts, pinned_decl=pinned_decl,
                                    envelopes=envelopes, trusted=TRUSTED):
         fail(section, e)
@@ -3496,6 +3692,7 @@ def validate_bundle(bdir):
     for e in cerrs: fail(section, e)
     for n in cnotes + risk_link_notes(bundle_objs): print(f"    note: {n}")
     report_authors_and_reviews(section, with_atts, envelopes)
+    report_fragments(bundle_objs, manifest)                                 # FRAGMENT-1
     # the report is printed where there is a register to report on; the
     # policy switch applies regardless - a bundle with a Tailoring and NO
     # Risk at all is the limiting case of "justified by no Risk", not an
@@ -3605,6 +3802,7 @@ def validate_examples():
     binds_report(section, {i: o for i, (t, o) in exobjs.items() if t == "attestation"},
                  pkg_digest(raw_manifest), listed_objs, read_kept_packs(exdir))
     for e in closure_errors(exobjs): fail(section, e)
+    for e in withdrawn_reference_errors(exobjs): fail(section, e)           # WITHDRAWN-1
     # facet payloads against stdlib / the pins just loaded (#17) - the
     # example pass loaded the pins and never applied them
     for e in facet_errors([(oid, o) for oid, (t, o) in exobjs.items()], pinned): fail(section, e)
@@ -3621,6 +3819,7 @@ def validate_examples():
     for e in cerrs: fail(section, e)
     for n in cnotes + risk_link_notes(exobjs): print(f"    note: {n}")
     report_authors_and_reviews(section, exobjs, envelopes)
+    report_fragments(exobjs, manifest)                                      # FRAGMENT-1
     for tid, r in cov["tailorings"].items():
         print(f"    risk-coverage: {tid} [{r['tier']}] selected={r['selected']}"
               f"{'+ (open: predicate select)' if r['open-selection'] else ''} "

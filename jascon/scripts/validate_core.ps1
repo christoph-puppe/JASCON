@@ -243,6 +243,22 @@ defines an objective that holds objectives). 753 vectors in 18 families
 over the vectors, the five bundles, the worked pack and the example
 folder: ALL GREEN in 83.5 s; the workflow runs it on Windows PowerShell
 5.1.
+CHANGED 2026-11-14 (backlog #93 and #82, decided by the author later that
+day): WITHDRAWN-1 (Withdrawn-References) fails a bundle in which an object
+in force leans on an object the bundle holds as withdrawn, by one of
+twelve named edges of a Tailoring, a Mapping, a Component, an
+Implementation, a Check and a live Risk; lineage, relations, the members
+of a Set, and an Assessment, a Finding and an Attestation are not held.
+FRAGMENT-1 (Fragment-Report) reports what the references of the form #id
+name (a resource of references@1, an object, a statement, a parameter, a
+source document of the manifest) and which name nothing, and fails
+nothing. A to Z is folded to a to z by Ascii-Lower and by nothing else.
+16 `withdrawn-references` vectors in the family `lifecycle` (58) and 14
+`fragment-references` vectors in the family `reference` (41); 783 in all.
+Run under PowerShell 7.4 on Linux over the vectors, the five bundles, the
+worked pack and the example folder: ALL GREEN in 103.6 s, and the
+FRAGMENT lines of the five bundles are the reference's, character for
+character; the workflow runs it on Windows PowerShell 5.1.
 NOT EXERCISED by a vector, a bundle of the repository or that test: an
 Attestation without a subject (the schema asks for one, so only the vector
 runner could meet it, and no vector has one); a case of the binds-vectors
@@ -2085,6 +2101,201 @@ function Draft-Member-Report($objs) {
     }
     return ,$out
 }
+# WITHDRAWN-1 (backlog #93) -> @{id; edge; ref}, one per edge by which an
+# object in force leans on an object the bundle holds as withdrawn: the
+# objects in the ordinal order of their ids, the edges in the order of the
+# table, the entries in the order of the document. A validator reads one
+# bundle and takes the state of an object as the bundle holds it. Held: the
+# edges below, on an object whose own lifecycle is not `withdrawn` (a Risk:
+# on a live one). Not held: `replaces`, `canonical-alias` and `relations`,
+# which keep the record; the members of a Set, which lists what its
+# catalogue withdrew; an Assessment, a Finding and an Attestation, which
+# record what was found or signed at a time; a Risk's treatments, which are
+# RISK-11's; facet payloads. An edge is "array|member|name in a message",
+# the array empty where the member is on the object itself.
+$WITHDRAWN_RULE = 'an object in force does not lean on a withdrawn one - what a Tailoring selects, excludes or changes, what a Mapping joins, what a Component claims or contains, what an Implementation answers, what a Check tests and what a live Risk is about is not withdrawn in the bundle that holds both'
+$WITHDRAWN_EDGES = Ord-Table @{
+    tailoring      = @('selects|set-ref|selects set-ref', 'excludes|ref|excludes ref', 'operations|requirement-ref|operation requirement-ref')
+    mapping        = @('|source-ref|source-ref', '|target-ref|target-ref')
+    component      = @('capabilities|requirement-ref|capability requirement-ref', 'members|component-ref|member component-ref')
+    implementation = @('|component-ref|component-ref', '|requirement-ref|requirement-ref', 'satisfied-by|inherited-from/component-ref|inherited-from component-ref')
+    check          = @('|requirement-ref|requirement-ref')
+    risk           = @('|component-refs|component-refs', '|tailoring-refs|tailoring-refs')
+}
+function Withdrawn-References($objs) {
+    $out = New-Object System.Collections.ArrayList
+    $gone = New-Object 'System.Collections.Generic.HashSet[string]' ([System.StringComparer]::Ordinal)
+    $ids = New-Object System.Collections.ArrayList
+    foreach ($oid in $objs.Keys) {
+        [void]$ids.Add([string]$oid)
+        if (Str-Eq $objs[$oid].o['lifecycle'] 'withdrawn') { [void]$gone.Add([string]$oid) }
+    }
+    if ($gone.Count -eq 0) { return ,$out }
+    foreach ($oid in (Sorted-Ordinal $ids)) {
+        $t = [string]$objs[$oid].t; $o = $objs[$oid].o
+        if (-not $WITHDRAWN_EDGES.ContainsKey($t)) { continue }
+        if (Str-Eq $o['lifecycle'] 'withdrawn') { continue }
+        if ([string]::Equals($t, 'risk', $ORD) -and -not (Risk-Is-Live $o)) { continue }
+        foreach ($edge in $WITHDRAWN_EDGES[$t]) {
+            $parts = $edge.Split('|')
+            $entries = New-Object System.Collections.ArrayList
+            if ($parts[0].Length -eq 0) { [void]$entries.Add($o) }
+            elseif (Is-List $o[$parts[0]]) { foreach ($e in $o[$parts[0]]) { [void]$entries.Add($e) } }
+            foreach ($entry in $entries) {
+                $v = $entry
+                foreach ($step in $parts[1].Split('/')) { if (Is-Map $v) { $v = $v[$step] } else { $v = $null } }
+                $vals = New-Object System.Collections.ArrayList
+                if (Is-List $v) { foreach ($x in $v) { [void]$vals.Add($x) } } elseif ($v -is [string]) { [void]$vals.Add($v) }
+                foreach ($ref in $vals) {
+                    if (($ref -is [string]) -and $gone.Contains($ref)) { [void]$out.Add(@{id = $oid; edge = $parts[2]; ref = $ref}) }
+                }
+            }
+        }
+    }
+    return ,$out
+}
+function Withdrawn-Reference-Errors($objs) {
+    $errs = New-Object System.Collections.ArrayList
+    foreach ($x in (Withdrawn-References $objs)) {
+        [void]$errs.Add("$($x.id): $($x.edge) names $($x.ref), which is withdrawn (WITHDRAWN-1: $WITHDRAWN_RULE)")
+    }
+    return ,$errs
+}
+# FRAGMENT-1 (backlog #82; D9). An object refers to something as `#id` in
+# two forms: `(#id)` in a string at any depth, and the whole of a string
+# that begins with `#` under a member named `href`. A `private:` facet is
+# not read, under `facets` or under an Assessment's `method`. The report counts the first kind that fits, in this order:
+# resource (an entry of `resources` with that id in the references@1 facet
+# of the object itself or of a Set that lists it, directly or through
+# nested Sets), object (an object whose id ends, after its last `/`, in
+# that id, A to Z compared as a to z), statement (`<object>_<statement
+# id>`, split at one of its `_`), parameter (the name of a parameter of a
+# statement in the bundle), source (the uuid of an entry of the manifest's
+# provenance.sources). What names nothing is listed, in the ordinal order
+# of the object ids and then of the ids named. Nothing fails by it.
+$REFERENCES_FACET = 'https://ns.jascon.net/stdlib/facet/references@1'
+$FRAGMENT_IN_TEXT = New-Object System.Text.RegularExpressions.Regex ('\(#([^) \t\r\n]+)\)', [System.Text.RegularExpressions.RegexOptions]::CultureInvariant)
+function Ascii-Lower([string]$s) {
+    $sb = New-Object System.Text.StringBuilder
+    foreach ($c in $s.ToCharArray()) {
+        $n = [int]$c
+        if (($n -ge 65) -and ($n -le 90)) { [void]$sb.Append([char]($n + 32)) } else { [void]$sb.Append($c) }
+    }
+    return $sb.ToString()
+}
+function Fragment-Walk($x, [string]$key, $out) {
+    if (Is-Map $x) {
+        foreach ($k in @($x.Keys)) { Fragment-Walk $x[$k] ([string]$k) $out }
+    } elseif (Is-List $x) {
+        foreach ($v in $x) { Fragment-Walk $v $key $out }
+    } elseif ($x -is [string]) {
+        if ([string]::Equals($key, 'href', $ORD) -and $x.StartsWith('#', $ORD) -and ($x.Length -gt 1)) { [void]$out.Add($x.Substring(1)) }
+        foreach ($m in $FRAGMENT_IN_TEXT.Matches($x)) { [void]$out.Add($m.Groups[1].Value) }
+    }
+}
+function Fragments-Of($o) {
+    $out = New-Object System.Collections.ArrayList
+    foreach ($k in @($o.Keys)) {
+        if (([string]::Equals([string]$k, 'facets', $ORD) -or [string]::Equals([string]$k, 'method', $ORD)) -and (Is-Map $o[$k])) {
+            foreach ($fid in @($o[$k].Keys)) {
+                if (-not ([string]$fid).StartsWith('private:', $ORD)) { Fragment-Walk $o[$k][$fid] ([string]$fid) $out }
+            }
+        } else { Fragment-Walk $o[$k] ([string]$k) $out }
+    }
+    return ,$out
+}
+function Fragment-Report($objs, $manifest) {
+    $parents = (New-Map); $own = (New-Map); $tail = (New-Map); $stmts = (New-Map)
+    $params = New-Object 'System.Collections.Generic.HashSet[string]' ([System.StringComparer]::Ordinal)
+    $sources = New-Object 'System.Collections.Generic.HashSet[string]' ([System.StringComparer]::Ordinal)
+    $ids = New-Object System.Collections.ArrayList
+    foreach ($oidRaw in $objs.Keys) {
+        $oid = [string]$oidRaw; [void]$ids.Add($oid)
+        $t = [string]$objs[$oid].t; $o = $objs[$oid].o
+        if ([string]::Equals($t, 'requirementSet', $ORD) -and (Is-List $o['members'])) {
+            foreach ($m in $o['members']) {
+                if ((Is-Map $m) -and ($m['ref'] -is [string])) {
+                    if (-not $parents.ContainsKey($m['ref'])) { $parents[$m['ref']] = New-Object System.Collections.ArrayList }
+                    [void]$parents[$m['ref']].Add($oid)
+                }
+            }
+        }
+        $res = New-Object 'System.Collections.Generic.HashSet[string]' ([System.StringComparer]::Ordinal)
+        if ((Is-Map $o['facets']) -and (Is-Map $o['facets'][$REFERENCES_FACET]) -and (Is-List $o['facets'][$REFERENCES_FACET]['resources'])) {
+            foreach ($r in $o['facets'][$REFERENCES_FACET]['resources']) {
+                if ((Is-Map $r) -and ($r['id'] -is [string])) { [void]$res.Add($r['id']) }
+            }
+        }
+        $own[$oid] = $res
+        $seg = $oid.Substring($oid.LastIndexOf([char]'/') + 1)
+        if ($seg.Length -gt 0) {
+            $k = Ascii-Lower $seg
+            if (-not $tail.ContainsKey($k)) { $tail[$k] = New-Object System.Collections.ArrayList }
+            [void]$tail[$k].Add($oid)
+        }
+        if ([string]::Equals($t, 'requirement', $ORD)) {
+            $ss = New-Object 'System.Collections.Generic.HashSet[string]' ([System.StringComparer]::Ordinal)
+            foreach ($st in @($o['statements'])) {
+                if (-not (Is-Map $st)) { continue }
+                if ($st['id'] -is [string]) { [void]$ss.Add($st['id']) }
+                if (Is-List $st['parameters']) {
+                    foreach ($pd in $st['parameters']) { if ((Is-Map $pd) -and ($pd['name'] -is [string])) { [void]$params.Add($pd['name']) } }
+                }
+            }
+            $stmts[$oid] = $ss
+        }
+    }
+    if ((Is-Map $manifest) -and (Is-Map $manifest['provenance']) -and (Is-List $manifest['provenance']['sources'])) {
+        foreach ($e in $manifest['provenance']['sources']) {
+            if ((Is-Map $e) -and ($e['uuid'] -is [string])) { [void]$sources.Add($e['uuid']) }
+        }
+    }
+    $r = @{total = 0; resource = 0; object = 0; statement = 0; parameter = 0; source = 0; nothing = (New-Object System.Collections.ArrayList)}
+    foreach ($oid in (Sorted-Ordinal $ids)) {
+        $named = Fragments-Of $objs[$oid].o
+        if ($named.Count -eq 0) { continue }
+        # the resources in reach: the object's own, and those of every Set above it
+        $reach = New-Object 'System.Collections.Generic.HashSet[string]' ([System.StringComparer]::Ordinal)
+        $seen = New-Object 'System.Collections.Generic.HashSet[string]' ([System.StringComparer]::Ordinal)
+        $todo = New-Object System.Collections.Stack
+        [void]$seen.Add($oid); $todo.Push($oid)
+        while ($todo.Count -gt 0) {
+            $cur = [string]$todo.Pop()
+            if ($own.ContainsKey($cur)) { foreach ($x in $own[$cur]) { [void]$reach.Add($x) } }
+            if ($parents.ContainsKey($cur)) {
+                foreach ($p in $parents[$cur]) { if ($seen.Add([string]$p)) { $todo.Push([string]$p) } }
+            }
+        }
+        $missing = New-Object System.Collections.ArrayList
+        foreach ($xRaw in $named) {
+            $x = [string]$xRaw
+            $r.total++
+            if ($reach.Contains($x)) { $r.resource++; continue }
+            if ($tail.ContainsKey((Ascii-Lower $x))) { $r.object++; continue }
+            $isStatement = $false
+            for ($k = 0; $k -lt $x.Length -and -not $isStatement; $k++) {
+                if ([int]$x[$k] -ne 95) { continue }
+                $head = Ascii-Lower $x.Substring(0, $k); $rest = $x.Substring($k + 1)
+                if (-not $tail.ContainsKey($head)) { continue }
+                foreach ($cand in $tail[$head]) {
+                    if ($stmts.ContainsKey($cand) -and $stmts[$cand].Contains($rest)) { $isStatement = $true; break }
+                }
+            }
+            if ($isStatement) { $r.statement++; continue }
+            if ($params.Contains($x)) { $r.parameter++; continue }
+            if ($sources.Contains($x)) { $r.source++; continue }
+            [void]$missing.Add($x)
+        }
+        if ($missing.Count -gt 0) { foreach ($x in (Sorted-Ordinal $missing)) { [void]$r.nothing.Add(@($oid, $x)) } }
+    }
+    return $r
+}
+function Report-Fragments($objs, $manifest) {
+    $r = Fragment-Report $objs $manifest
+    if ($r.total -eq 0) { return }
+    Write-Host "    fragments: $($r.total) reference(s) of the form #id: $($r.resource) to a resource, $($r.object) to an object, $($r.statement) to a statement, $($r.parameter) to a parameter, $($r.source) to a source document, $($r.nothing.Count) to nothing (FRAGMENT-1)"
+    foreach ($x in $r.nothing) { Write-Host "    note: $($x[0]): #$($x[1]) names nothing the bundle carries (FRAGMENT-1: reported; nothing fails)" }
+}
 # Prints the reports for one bundle. AUTHOR lines are notes, or failures
 # under -RequireAuthors; REVIEW and DRAFT lines are always notes.
 function Report-Authors-And-Reviews([string]$section, $objs, $envelopes) {
@@ -2288,6 +2499,22 @@ function Run-References {
         if (@($errs).Count -eq $case['expected-errors']) { OK 'reference' }
         else { FAIL 'reference' "$($case['name']): expected $($case['expected-errors']), got $(@($errs).Count): $(@($errs) -join ' | ')" }
     }
+    # FRAGMENT-1 (backlog #82): a report, never a failure. The two sides are
+    # compared in their canonical form.
+    foreach ($case in (Load-Vectors 'reference-vectors.json')['fragment-references']) {
+        $objs = To-Objs $case['objects']
+        $got = $null
+        if ($objs.Count -eq @($case['objects']).Count) {
+            $r = Fragment-Report $objs $case['manifest']
+            $got = (New-OMap)
+            foreach ($k in @('total', 'resource', 'object', 'statement', 'parameter', 'source')) { $got[$k] = $r[$k] }
+            $got['nothing'] = $r.nothing
+        }
+        $gotText = Format-Canonical $got
+        $wantText = Format-Canonical $case['expected']
+        if (Str-Eq $gotText $wantText) { OK 'reference' }
+        else { FAIL 'reference' "fragment-references $($case['name']): expected $wantText, got $gotText" }
+    }
 }
 $DEV_NEXT = Ord-Table @{investigating = @('pending', 'withdrawn'); pending = @('approved', 'withdrawn'); approved = @(); withdrawn = @()}
 $FIND_NEXT = Ord-Table @{open = @('in-remediation', 'closed'); 'in-remediation' = @('closed'); closed = @()}
@@ -2330,6 +2557,19 @@ function Run-Lifecycle {
         $wantText = Format-Canonical $case['expected']
         if (Str-Eq $gotText $wantText) { OK 'lifecycle' }
         else { FAIL 'lifecycle' "draft-members $($case['name']): expected $wantText, got $gotText" }
+    }
+    # WITHDRAWN-1 (backlog #93): each entry is an error of the bundle
+    foreach ($case in $v['withdrawn-references']) {
+        $objs = To-Objs $case['objects']
+        $got = $null
+        if ($objs.Count -eq @($case['objects']).Count) {
+            $got = New-Object System.Collections.ArrayList
+            foreach ($x in (Withdrawn-References $objs)) { [void]$got.Add(@($x.id, $x.edge, $x.ref)) }
+        }
+        $gotText = Format-Canonical $got
+        $wantText = Format-Canonical $case['expected']
+        if (Str-Eq $gotText $wantText) { OK 'lifecycle' }
+        else { FAIL 'lifecycle' "withdrawn-references $($case['name']): expected $wantText, got $gotText" }
     }
     # shape disjointness over the eleven minimal objects
     $P = 'https://ex.org'
@@ -4906,6 +5146,7 @@ function Validate-Bundle([string]$bdir, [switch]$Flat) {
     foreach ($oid in $attIds) { $atts[$oid] = $withAtts[$oid].o }
     Binds-Report $section $atts (Sha256-Hex $rawManifest) $listedObjs (Read-Kept-Packs $bdir)
     foreach ($e in (Closure-Errors $bundleObjs)) { FAIL $section $e }
+    foreach ($e in (Withdrawn-Reference-Errors $bundleObjs)) { FAIL $section $e }     # WITHDRAWN-1
     foreach ($e in (Duty-Errors $withAtts $pinnedDecl $envelopes $TRUSTED)) { FAIL $section $e }
     foreach ($e in (Kernel-Pin-Errors $manifest $bundleObjs)) { FAIL $section $e }
     foreach ($e in (Listed-Attestation-Errors $listedObjs)) { FAIL $section $e }      # MANIFEST-1
@@ -4934,6 +5175,7 @@ function Validate-Bundle([string]$bdir, [switch]$Flat) {
     foreach ($n in (Risk-Link-Notes $bundleObjs)) { Write-Host "    note: $n" }
     # CP-AUTHOR-1: AUTHOR-1..4 (notes, or failures under -RequireAuthors) and REVIEW-1 (always notes)
     Report-Authors-And-Reviews $section $withAtts $envelopes
+    Report-Fragments $bundleObjs $manifest                                            # FRAGMENT-1
     # the policy switch applies even where the bundle carries no Risk at all
     if ($rc.risks -gt 0 -or $RequireRiskBasis) {
         foreach ($tid in @($rc.report.Keys)) {
