@@ -68,7 +68,17 @@
       what it binds; what the page says can be done is done on the copy and
       holds in the reference.
 
-   Needs Playwright with Chromium for 4 to 12 and python3 with jsonschema for
+  13. An Assessment's method is a facet payload (backlog #55; specification
+      D10 as amended). In node: of the thirteen method vectors the page
+      decides the ten that turn on where a key is registered, in the
+      reference's words, and names the three it cannot decide (a payload
+      against its schema: the page carries no schema validator); the
+      reference's own facet_errors on the same objects. In Chromium: what
+      the Assess workbench writes and its export in the reference; bundles
+      and a stored workspace that hold the method an earlier version wrote,
+      shown as stored and not rewritten, and what the page says can be done.
+
+   Needs Playwright with Chromium for 4 to 13 and python3 with jsonschema for
    the runs of the reference; where one is missing, that part is skipped and
    says so. Needs no network: the one thing the page asks the web for, its
    font stylesheet, is answered here with an empty one. */
@@ -100,7 +110,8 @@ const P = (() => {
   const a = HTML.indexOf("/* ==READER-PURE-START== */"), b = HTML.indexOf("/* ==READER-PURE-END== */");
   assert.ok(a >= 0 && b > a, "jascon-reader.html carries the READER-PURE markers");
   return new Function(`"use strict";\n${HTML.slice(a, b)}\nreturn { inferType, kernelNeeded, kernelPinErrors, whoDecided, authorRecord, authorTailoring, partyUri, requiredParty,
-    canonical, sha256Fallback, semanticDigest, attestationBinds, bindsLine, envelopeState, listedAttestationErrors };`)();
+    canonical, sha256Fallback, semanticDigest, attestationBinds, bindsLine, envelopeState, listedAttestationErrors,
+    STDLIB_FACETS, facetHome, methodKeyErrors, manualMethod, isEarlierWorkbenchMethod };`)();
 })();
 
 /* ---------- 1. the pin vectors ---------- */
@@ -125,7 +136,7 @@ const MAPPING = { id: `${EX}/map/m`, version: "1", lifecycle: "active", "source-
 const COMPONENT = { id: `${EX}/component/c`, version: "1", lifecycle: "active", kind: "system" };
 const IMPLEMENTATION = { id: `${EX}/impl/i`, version: "1", lifecycle: "active", "component-ref": COMPONENT.id, "requirement-ref": REQ.id, responsibility: "customer",
   "satisfied-by": [{ "capability-ref": "cap" }], status: "implemented" };
-const ASSESSMENT = { id: `${EX}/assessment/a`, version: "1", lifecycle: "active", "subject-refs": [REQ.id], method: { kind: "interview" }, "performer-ref": `${EX}/party/assessor`,
+const ASSESSMENT = { id: `${EX}/assessment/a`, version: "1", lifecycle: "active", "subject-refs": [REQ.id], method: { "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": { method: "manual" } }, "performer-ref": `${EX}/party/assessor`,
   time: "2026-11-05", result: "satisfied" };
 const FINDING = { id: `${EX}/finding/f`, version: "1", lifecycle: "active", "assessment-ref": ASSESSMENT.id, "requirement-ref": REQ.id, state: "open" };
 const ATTESTATION = json("jascon/examples/attestation-acme-2026.json");
@@ -1808,4 +1819,297 @@ test("MANIFEST-1 on the page: a manifest that lists an Attestation fails in the 
       assert.deepEqual([ref.ok, ref.listed, ref.binds], [false, [], []]);
       assert.deepEqual(ref.others.map(e => e.replace(/ \(closest .*$/, "")), ["objects/attestation/attestation-ifa-ato.json: matches NO type"]);
     }
+  }));
+
+/* ---------- 13. an Assessment's method is a facet payload (backlog #55; specification D10 as amended) ---------- */
+const METHODS = json("jascon/conformance/facet-vectors.json")["method-vectors"];
+const CRITERIA = "https://ns.jascon.net/stdlib/facet/assessment-criteria@1";
+const MANUAL = { [CRITERIA]: { method: "manual" } };
+/* what the Assess workbench wrote until 1.14.0 */
+const EARLIER = { kind: "manual-check", note: "authored in JASCON Bundle Reader workbench" };
+const unregistered = (path, key) => `${path}: method '${key}' is no registered facet - not stdlib, not pinned in the manifest, not private: (an Assessment's method is a facet payload and fails closed, D10)`;
+const UNCHECKED = "; this page carries no schema validator and does not check it.";
+const SAID = { stdlib: "a facet of the standard library. A validator holds this payload to the facet's descriptor" + UNCHECKED,
+  pinned: file => `a facet this bundle pins (${file}). A validator holds this payload to that schema` + UNCHECKED,
+  private: "private: kept, and ignored by every validator by definition. Nothing checks this payload." };
+/* The vectors this page cannot decide. In each, every key of the method names a registered facet, and the payload is
+   one that facet's schema refuses: the page carries no schema and no schema validator, so it has nothing to say. */
+const UNDECIDED = ["method-stdlib-payload-violates-its-schema", "method-stdlib-payload-with-a-member-the-facet-does-not-know", "method-pinned-payload-violates-the-pin"];
+
+test("an Assessment's method: of the 13 method vectors the page decides the ten that turn on where a key is registered, in the reference's words; three turn on a payload and its schema, which this page does not hold",
+  () => {
+    assert.equal(METHODS.length, 13);   // a vector added to the family is looked at here before this number moves (12 until the app's port added the object called `method` inside a payload)
+    /* the standard library the page knows is the folder of its descriptors */
+    const stdlib = fs.readdirSync(path.join(ROOT, "jascon/schemas/stdlib")).filter(n => n.endsWith(".json")).map(n => json("jascon/schemas/stdlib/" + n).id);
+    assert.equal(stdlib.length, 8);
+    assert.deepEqual([...P.STDLIB_FACETS].sort(), [...stdlib].sort());
+    assert.deepEqual(P.manualMethod(), MANUAL);
+    assert.ok(stdlib.includes(CRITERIA.replace(/@1$/, "")) && json("jascon/schemas/stdlib/assessment-criteria-1.0.0.json").schema.properties.method.enum.includes("manual"), "what the workbench writes is a value the descriptor knows");
+    const homes = new Set(), decided = [];
+    for (const c of METHODS) {
+      const pinned = new Set(Object.keys(c.pinned || {})), keyOf = frag => /^method '(.*)'$/.exec(frag)[1];
+      const errs = P.methodKeyErrors(c.object, pinned, c.name);
+      const ofMethod = c["expected-frags"].filter(f => f.startsWith("method '")), ofFacets = c["expected-frags"].filter(f => f.startsWith("facet '"));
+      assert.equal(ofMethod.length + ofFacets.length, c["expected-frags"].length, `${c.name}: every fragment names a method or a facet`);
+      for (const key of Object.keys(c.object.method || {})) homes.add(String(P.facetHome(key, pinned)));
+      if (UNDECIDED.includes(c.name)) {
+        assert.deepEqual(errs, [], `${c.name}: every key is registered, and the page has nothing to say`);
+        assert.deepEqual([c.expected, c["expected-errors"], ofMethod.length], ["invalid", 1, 1], c.name);
+        assert.ok(["stdlib", "pinned"].includes(P.facetHome(keyOf(ofMethod[0]), pinned)), `${c.name}: the error is about the payload of a registered facet`);
+        continue;
+      }
+      /* one message per key no facet registers, each the reference's sentence. What a vector expects of `facets`
+         (one does) is another rule, to which this page holds no object. */
+      assert.deepEqual(errs, ofMethod.map(f => unregistered(c.name, keyOf(f))), c.name);
+      assert.equal(errs.length, c["expected-errors"] - ofFacets.length, c.name);
+      if (!ofFacets.length) assert.equal(errs.length ? "invalid" : "valid", c.expected, c.name);
+      decided.push(c.name);
+    }
+    assert.equal(decided.length, 10);
+    assert.deepEqual([...homes].sort(), ["null", "pinned", "private", "stdlib"], "the vectors hold a key of every kind");
+    /* where a key is registered, case by case */
+    const pins = new Set(["https://assessor.example/facet/review"]);
+    for (const [key, home] of [[CRITERIA, "stdlib"], ["https://ns.jascon.net/stdlib/facet/assessment-criteria", "stdlib"], ["https://ns.jascon.net/stdlib/facet/assessment-criteria@9", "stdlib"],
+      ["https://ns.jascon.net/stdlib/facet/collector@1", "stdlib"], ["https://ns.jascon.net/stdlib/facet/no-such-facet@1", null], ["https://ns.jascon.net/stdlib/facet/", null],
+      ["https://assessor.example/facet/review@1", "pinned"], ["https://assessor.example/facet/review", "pinned"], ["https://assessor.example/facet/review@1@2", null],
+      ["https://assessor.example/facet/other@1", null], ["private:lab-notes@1", "private"], ["private:", "private"], ["Private:lab-notes@1", null], ["kind", null], ["note", null], ["", null], ["@1", null]])
+      assert.equal(P.facetHome(key, pins), home, JSON.stringify(key));
+    assert.equal(P.facetHome("https://assessor.example/facet/review@1", new Set()), null, "pinned by another bundle is pinned nowhere here");
+    /* the form the workbench wrote until 1.14.0 is known as that, and nothing else is */
+    assert.equal(P.isEarlierWorkbenchMethod(EARLIER), true);
+    for (const other of [MANUAL, {}, { kind: "manual-check" }, { ...EARLIER, note: "another note" }, { ...EARLIER, more: 1 }, { kind: "review", note: EARLIER.note }, null, "manual-check"])
+      assert.equal(P.isEarlierWorkbenchMethod(other), false, JSON.stringify(other));
+    assert.deepEqual(P.methodKeyErrors({ id: "https://a.example/asmt/1", method: EARLIER }, new Set()), ["kind", "note"].map(k => unregistered("https://a.example/asmt/1", k)), "one message per key, in the order of the keys, under the object's id");
+    for (const none of [{ id: "x" }, { id: "x", method: "manual" }, { id: "x", method: [EARLIER] }, { id: "x", method: null }, null]) assert.deepEqual(P.methodKeyErrors(none, new Set()), []);
+  });
+
+/* facet_errors of the reference, run by Python on the same objects. Its source is taken out of validate_core.py by
+   name; the validators it asks for are built here from the descriptors of the standard library and from the schemas
+   a case pins, as the reference builds them. -> per case [message] */
+function referenceFacetErrors(cases) {
+  const py = `
+import ast, json, os, sys
+import jsonschema
+src = open(sys.argv[1], encoding="utf-8").read()
+make = jsonschema.validators.Draft202012Validator
+stdlib = {}
+for fn in sorted(os.listdir(sys.argv[2])):
+    if fn.endswith(".json"):
+        d = json.load(open(os.path.join(sys.argv[2], fn), encoding="utf-8"))
+        stdlib[d["id"]] = make(d["schema"])
+ns = {"STDLIB": stdlib}
+for node in ast.parse(src).body:
+    if isinstance(node, ast.FunctionDef) and node.name == "facet_errors":
+        exec(compile(ast.Module([node], []), sys.argv[1], "exec"), ns)
+cases = json.loads(sys.stdin.buffer.read().decode("utf-8"))
+print(json.dumps([ns["facet_errors"](c["object"], {k: make(s) for k, s in (c.get("pinned") or {}).items()}, c["name"]) for c in cases]))`;
+  const run = spawnSync("python3", ["-c", py, VALIDATE, path.join(ROOT, "jascon/schemas/stdlib")], { input: JSON.stringify(cases), encoding: "utf8" });
+  assert.equal(run.status, 0, run.stderr.slice(-1500));
+  return JSON.parse(run.stdout);
+}
+
+test("an Assessment's method: the reference's own facet_errors names the keys the page names, in the same words; what it says beyond that is about a payload and its schema, or about `facets`",
+  { skip: !REFERENCE && "python3 with jsonschema is not installed" }, () => {
+    const a = METHODS[0].object, withMethod = (name, method, pinned) => ({ name, object: { ...a, method }, pinned });
+    const cases = [...METHODS,
+      withMethod("the form the workbench wrote until 1.14.0", EARLIER),
+      withMethod("what the workbench writes now", MANUAL),
+      withMethod("the version after the @ is not part of the id", { "https://ns.jascon.net/stdlib/facet/assessment-criteria@9": { method: "automated" } }),
+      withMethod("no version at all", { "https://ns.jascon.net/stdlib/facet/assessment-criteria": { method: "automated" } }),
+      withMethod("private: is asked before the standard library and is case-sensitive", { "private:x": 1, "Private:x": 1 }),
+      withMethod("a second @ belongs to the id", { "https://assessor.example/facet/review@1@2": {} }, { "https://assessor.example/facet/review": { type: "object" } }),
+      withMethod("a facet of the standard library that does not exist", { "https://ns.jascon.net/stdlib/facet/no-such-facet@1": {} })];
+    const ref = referenceFacetErrors(cases), undecided = [], ofFacets = [];
+    cases.forEach((c, i) => {
+      const keys = ref[i].filter(e => / method '.*' is no registered facet /.test(e)), payloads = ref[i].filter(e => / method '.*' payload violates its schema: /.test(e));
+      const facets = ref[i].filter(e => !keys.includes(e) && !payloads.includes(e));
+      assert.deepEqual(P.methodKeyErrors(c.object, new Set(Object.keys(c.pinned || {})), c.name), keys, c.name);
+      if (payloads.length) undecided.push(c.name);
+      if (facets.length) { ofFacets.push(c.name); for (const e of facets) assert.match(e, /: unregistered facet '/, c.name); }
+    });
+    assert.deepEqual(undecided, UNDECIDED, "the vectors the page cannot decide are those in which the reference refuses a payload");
+    assert.deepEqual(ofFacets, ["method-and-facets-are-both-held"]);
+    assert.deepEqual(ref[METHODS.length], ["kind", "note"].map(k => unregistered("the form the workbench wrote until 1.14.0", k)));
+    assert.deepEqual(ref.slice(METHODS.length + 1, METHODS.length + 4), [[], [], []], "what the workbench writes passes, and so does the same facet under another version or none");
+  });
+
+/* What the reference says about the methods of one bundle folder: -> { ok, line, unregistered: [message], violated: [message], others: [message] } */
+function referenceMethods(dir) {
+  const ref = reference(dir, "--as-of", "2026-11-14");
+  const failures = ref.out.split("\n").map(l => /^  - \[[^\]]*\] (.*)$/.exec(l)).filter(Boolean).map(m => m[1]);
+  const unregisteredKeys = failures.filter(e => / method '.*' is no registered facet /.test(e)), violated = failures.filter(e => / method '.*' payload violates its schema: /.test(e));
+  return { ok: ref.ok, line: ref.line, unregistered: unregisteredKeys, violated, others: failures.filter(e => !unregisteredKeys.includes(e) && !violated.includes(e)) };
+}
+
+test("the method on the page: the Assess workbench states a manual assessment under the standard facet and its export passes the reference; every key of a method is shown with where its facet is registered, a key no facet registers in the reference's words, and the payload as not checked here",
+  OPTS, () => withReader(async R => {
+    const { page } = R;
+    const set = async (sel, value) => { await page.fill(sel, value); await page.locator(sel).dispatchEvent("change"); };
+    const NS = "https://example.org/my", day = await page.evaluate(() => new Date().toISOString().slice(0, 10)), WB = `${NS}/asmt/check-${day}`;
+    /* what the detail that is up says about a method: per key [key, where it is registered, the error, the word about checking] */
+    const methodSaid = d => d.locator(".facetbox[data-method-key]").evaluateAll(l => l.map(x => [x.dataset.methodKey, x.dataset.methodHome,
+      x.querySelector("[data-method-error]")?.textContent ?? null, x.querySelector("[data-method-unchecked]")?.textContent ?? null]));
+    const cardLine = id => R.text(page.locator("#view-stagefn .stmt", { has: page.locator(`[data-ref="${id}"]`) }).locator("[data-method-line]"));
+    const errorsShown = async () => { await R.view("overview"); return page.locator("#ov-kv [data-method-error]").evaluateAll(l => l.map(e => e.textContent)); };
+    const consoleErrors = () => page.locator("#log > div.l-err").evaluateAll(l => l.map(e => e.textContent.replace(/^[\d:.]+/, "")));
+    /* an object of a bundle written anew, and the manifest's two digests of it with it: nothing else is wrong with the bundle */
+    const rewritten = async (dir, id, change) => {
+      const mp = path.join(dir, "content-manifest.json"), manifest = JSON.parse(fs.readFileSync(mp, "utf8")), entry = manifest.objects.find(e => e.id === id);
+      const obj = JSON.parse(fs.readFileSync(path.join(dir, entry.path), "utf8"));
+      change(obj);
+      const bytes = Buffer.from(JSON.stringify(obj, null, 1) + "\n");
+      fs.writeFileSync(path.join(dir, entry.path), bytes);
+      Object.assign(entry, { "package-digest": sha256(bytes), "semantic-digest": await P.semanticDigest(obj) });
+      fs.writeFileSync(mp, JSON.stringify(manifest, null, 1) + "\n");
+      return obj;
+    };
+    const held = async (dir, what, also = []) => {   // the page's errors are the reference's, and it fails the bundle for nothing else but what a test names
+      const shown = await errorsShown();
+      if (REFERENCE) {
+        const ref = referenceMethods(dir);
+        assert.deepEqual(shown, ref.unregistered.map(e => "✗ " + e), `${what}: the keys no facet registers, in the reference's words and order`);
+        assert.deepEqual([ref.violated, ref.others.filter(e => !also.some(re => re.test(e)))], [[], []], `${what}: nothing else fails in the reference — ${ref.line}`);
+        for (const re of also) assert.ok(ref.others.some(e => re.test(e)), `${what}: the reference states ${re}`);
+        assert.equal(ref.ok, !shown.length && !also.length, `${what}: ${ref.line}`);
+      }
+      return shown;
+    };
+
+    /* 1. The Assess workbench, on a requirement written in the workbench (so that the export holds what its Finding
+       names). A person answers the form, which is a manual assessment. The object that is downloaded and the one that
+       goes into the graph state it under the standard facet, and carry no note that names this tool: the manifest of
+       the export names it. */
+    await R.view("stage:author");
+    await page.fill("#wb-au-title", "Encrypt backups");
+    await page.fill("#wb-au-prose", "Backups are encrypted.");
+    await page.fill("#wb-au-party", "Operations Team");
+    await page.click("#wb-au-addreq");
+    await R.view("stage:assess");
+    await set("#wb-a-perf", "Lead Assessor");
+    await page.locator('[data-az$="|not-satisfied"]').first().click();
+    const downloaded = JSON.parse(fs.readFileSync(await R.download("#wb-a-dl"), "utf8"));
+    assert.deepEqual([downloaded.id, downloaded.method], [WB, MANUAL], "the Assessment that is downloaded");
+    await page.waitForTimeout(600);   // the Finding that is downloaded after it
+    await page.click("#wb-a-gen");
+    assert.equal(await cardLine(WB), "method: manual · assessment-criteria@1 (standard library)");
+    let d = await R.detail(WB);
+    assert.deepEqual(await methodSaid(d), [[CRITERIA, "stdlib", null, SAID.stdlib]]);
+    const workbench = unzipTo(await R.download("#btn-export-ws"), path.join(R.tmp, "workbench"));
+    const wm = JSON.parse(fs.readFileSync(path.join(workbench, "content-manifest.json"), "utf8")), entry = wm.objects.find(e => e.id === WB);
+    const written = JSON.parse(fs.readFileSync(path.join(workbench, entry.path), "utf8"));
+    assert.deepEqual(written.method, MANUAL, "the Assessment that is exported");
+    assert.deepEqual(Object.keys(written).sort(), ["id", "lifecycle", "method", "performer-ref", "result", "subject-refs", "time", "title", "version"], "and nothing on it names the tool");
+    assert.equal(wm.provenance.converter, "jascon-reader.html " + (await page.locator("#pill-version").innerText()).split(" · ")[0], "the manifest does");
+    assert.doesNotMatch(await R.log(), /in this export — .* method '/);
+    assert.match(await R.log(), /workspace bundle exported: 3 objects .* — loads back into this reader and passes validate_core\.py$/m);
+    if (REFERENCE) { const ref = referenceMethods(workbench); assert.deepEqual([ref.ok, ref.unregistered, ref.violated, ref.others], [true, [], [], []], ref.line); }
+
+    /* 2. The folders as they lie. The example folder's three Assessments state their method under the standard facet;
+       the IFA bundle's under a facet the bundle pins. Nothing fails, and nothing is said to have been checked. */
+    await R.load(EXAMPLES);
+    assert.deepEqual(await held(EXAMPLES, "jascon/examples"), []);
+    await R.view("stage:assess");
+    assert.equal(await cardLine("https://assessor.example/assessment/2026-q3-acme"), "method: assessment-criteria@1 (standard library)");
+    assert.deepEqual(await page.locator("#view-stagefn [data-method-line]").evaluateAll(l => l.map(e => e.textContent.replace(/\s+/g, " ").trim()).sort()),
+      ["method: assessment-criteria@1 (standard library)", "method: automated · assessment-criteria@1 (standard library)", "method: automated · assessment-criteria@1 (standard library)"]);
+    d = await R.detail("https://assessor.example/assessment/2026-q3-acme");
+    assert.deepEqual(await methodSaid(d), [[CRITERIA, "stdlib", null, SAID.stdlib]]);
+    assert.match(await R.text(d), /Method — a facet payload \(D10\): each key names the facet the method is stated under .*Document review of KONF\.14\.1 evidence duties/i, "the payload stands under its key, as recorded");
+    assert.equal(await d.locator("[data-method-todo]").count(), 0);
+
+    /* 3. A bundle an earlier version exported: the same export with the method as the workbench wrote it until 1.14.0.
+       It is shown as loaded - nothing is rewritten - and fails, on the page as in the reference, once for each key. */
+    const earlier = path.join(R.tmp, "earlier", "bundle");
+    fs.cpSync(workbench, earlier, { recursive: true });
+    await rewritten(earlier, WB, o => { o.method = EARLIER; });
+    await R.load(earlier);
+    const both = ["kind", "note"].map(k => unregistered(WB, k));
+    assert.deepEqual(await held(earlier, "an export of 1.14.0"), both.map(e => "✗ " + e));
+    assert.deepEqual(await consoleErrors(), both, "the console says it as errors, in the reference's words");
+    await R.view("stage:assess");
+    assert.equal(await cardLine(WB), "method: ✗ kind (no facet registers this key) · ✗ note (no facet registers this key) — a validator refuses it (D10)");
+    d = await R.detail(WB);
+    assert.deepEqual(await methodSaid(d), [["kind", "none", both[0], null], ["note", "none", both[1], null]]);
+    assert.equal(await d.locator("[data-method-restate]").count(), 0, "an object of a loaded bundle is not the page's to state anew");
+    const TODO = `What can be done: state the method under a facet that is registered — the standard ${CRITERIA} for a manual or an automated assessment, a facet whose schema the bundle pins, or a private: key, which every validator keeps and ignores. The object is then another: the manifest's two digests of it are written anew.`;
+    assert.equal(await R.text(d.locator("[data-method-todo]")), TODO);
+    assert.deepEqual(JSON.parse(fs.readFileSync(path.join(earlier, entry.path), "utf8")).method, EARLIER, "the file is as it was");
+    /* ... and what the page says can be done, done on the copy: the standard facet, and the digests anew */
+    await rewritten(earlier, WB, o => { o.method = MANUAL; });
+    await R.load(earlier);
+    assert.deepEqual(await held(earlier, "... its method stated under the standard facet"), []);
+
+    /* 4. The IFA bundle. Its Assessment states its method under a facet the bundle pins; a key beside it that no facet
+       registers fails for that key alone (the reference's own copy c12); under private: the same key is kept and ignored;
+       and with the pinned schema's file taken away the pin registers nothing, as the reference has it. */
+    const IA = "https://ifa.gov/goodread/assessment/conmon-2023-06", PLAN = "https://ifa.gov/goodread/facet/assessment-plan@1";
+    const planFile = json("converted_examples/US.IFA-GoodRead/ifa-core-bundle/content-manifest.json")["facet-schemas"].find(f => f.id === PLAN.replace(/@1$/, "")).path;
+    await R.load(IFA);
+    assert.deepEqual(await held(IFA, "the IFA bundle"), []);
+    d = await R.detail(IA);
+    assert.deepEqual(await methodSaid(d), [[PLAN, "pinned", null, SAID.pinned(planFile)]]);
+    const ifa = n => { const dir = path.join(R.tmp, "ifa-" + n, "bundle"); fs.cpSync(IFA, dir, { recursive: true }); return dir; };
+    let copy = ifa(1);
+    await rewritten(copy, IA, o => { o.method.kind = "review"; });
+    await R.load(copy);
+    assert.deepEqual(await held(copy, "the IFA bundle, a key nobody registered beside the pinned one"), ["✗ " + unregistered(IA, "kind")]);
+    await R.view("stage:assess");
+    assert.equal(await cardLine(IA), "method: assessment-plan@1 (pinned by this bundle) · ✗ kind (no facet registers this key) — a validator refuses it (D10)");
+    d = await R.detail(IA);
+    assert.deepEqual(await methodSaid(d), [[PLAN, "pinned", null, SAID.pinned(planFile)], ["kind", "none", unregistered(IA, "kind"), null]]);
+    assert.equal(await R.text(d.locator("[data-method-todo]")), TODO);
+    await rewritten(copy, IA, o => { o.method["private:kind@1"] = o.method.kind; delete o.method.kind; });
+    await R.load(copy);
+    assert.deepEqual(await held(copy, "... the key under private:"), []);
+    d = await R.detail(IA);
+    assert.deepEqual((await methodSaid(d)).map(m => m.slice(0, 2).concat(m[3])), [[PLAN, "pinned", SAID.pinned(planFile)], ["private:kind@1", "private", SAID.private]]);
+    copy = ifa(2);
+    fs.rmSync(path.join(copy, planFile));
+    await R.load(copy);
+    assert.deepEqual(await held(copy, "the IFA bundle without the schema file of the method's facet", [/^schemas\/goodread-ap-stub\.json: pinned facet schema listed but missing$/]), ["✗ " + unregistered(IA, PLAN)]);
+    d = await R.detail(IA);
+    assert.deepEqual(await methodSaid(d), [[PLAN, "none", unregistered(IA, PLAN), null]]);
+    assert.equal(await R.text(d.locator("[data-method-pin-missing]")), `The manifest pins this facet, and its schema file ${planFile} was not read: a pin without its file registers nothing.`);
+
+    /* 5. A workspace an earlier version stored. Its Assessment is restored as it was stored and said to fail; an export
+       that holds it says so and fails the reference; on a person's word the page states the method anew, and then
+       the export passes. */
+    const req = BINDS[0].objects[0], OLD = { id: `${NS}/asmt/check-2026-11-10`, version: "1", lifecycle: "draft", title: "Check 2026-11-10 — a set", "subject-refs": [req.id], method: EARLIER,
+      "performer-ref": `${NS}/party/lead-assessor`, time: "2026-11-10T09:00:00.000Z", result: "satisfied" };
+    const stored = { v: 2, ns: NS, tailor: { label: "my-tailoring", selects: [], excludes: [], operations: [] }, system: { title: "My System", components: [], implementations: [] },
+      assess: { scopeKey: "", performer: "", results: {} }, created: [req, OLD] };
+    await page.evaluate(w => localStorage.setItem("scr-work", JSON.stringify(w)), stored);
+    await page.reload();
+    const inStore = () => page.evaluate(id => JSON.parse(localStorage.getItem("scr-work")).created.find(o => o.id === id).method, OLD.id);
+    assert.deepEqual(await inStore(), EARLIER, "restored, the stored object is as it was");
+    assert.match(await R.log(), new RegExp(`1 Assessment\\(s\\) of the workspace state their method under a key no facet registers, as the Assess workbench wrote it until 1\\.14\\.0: an export that holds one fails a validator \\(D10\\)\\. Each is kept as stored; its detail in the object browser says what can be done — ${OLD.id.replace(/[.]/g, "\\.")}$`, "m"));
+    d = await R.detail(OLD.id);
+    const old = ["kind", "note"].map(k => unregistered(OLD.id, k));
+    assert.deepEqual(await methodSaid(d), [["kind", "none", old[0], null], ["note", "none", old[1], null]]);
+    assert.match(await R.text(d.locator("[data-method-todo]")), /^This is how the Assess workbench of this page stated a manual check until 1\.14\.0\. It is kept as it was stored, and an export that holds it fails a validator\. State it under the standard facet: manual writes \{"https:\/\/ns\.jascon\.net\/stdlib\/facet\/assessment-criteria@1":\{"method":"manual"\}\} in its place, in the workspace\.$/);
+    let out = unzipTo(await R.download("#btn-export-ws"), path.join(R.tmp, "stored"));
+    for (const e of old) assert.ok((await R.log()).includes("in this export — " + e + "\n"), e);
+    assert.match(await R.log(), /workspace bundle exported: 2 objects .* — loads back into this reader and validate_core\.py fails it: 2 line\(s\) above say why$/m);
+    if (REFERENCE) { const ref = referenceMethods(out); assert.deepEqual([ref.ok, ref.unregistered, ref.violated, ref.others], [false, old, [], []], ref.line); }
+    assert.deepEqual(await inStore(), EARLIER, "an export rewrites nothing either");
+    await d.locator("[data-method-restate]").click();
+    assert.deepEqual(await methodSaid(page.locator("#detail")), [[CRITERIA, "stdlib", null, SAID.stdlib]], "stated anew, on a person's word, and shown at once");
+    assert.equal(await page.locator("#detail [data-method-todo]").count(), 0);
+    assert.deepEqual(await inStore(), MANUAL, "in the workspace too");
+    assert.ok((await R.log()).includes(`${OLD.id}: its method is stated anew in the workspace — ${JSON.stringify(MANUAL)} in place of ${JSON.stringify(EARLIER)}, which no facet registers`));
+    await R.view("stage:assess");
+    assert.equal(await cardLine(OLD.id), "method: manual · assessment-criteria@1 (standard library)");
+    out = unzipTo(await R.download("#btn-export-ws"), path.join(R.tmp, "restated"));
+    assert.deepEqual(JSON.parse(fs.readFileSync(path.join(out, "objects/asmt", fs.readdirSync(path.join(out, "objects/asmt"))[0]), "utf8")), { ...OLD, title: { en: OLD.title }, method: MANUAL }, "nothing but the method changed (and the title leaves as a language map, as every export writes it)");
+    if (REFERENCE) { const ref = referenceMethods(out); assert.deepEqual([ref.ok, ref.unregistered, ref.violated, ref.others], [true, [], [], []], ref.line); }
+
+    /* 6. Pasted: a private key is kept and said to be checked by nobody; an empty method states none; a method of the
+       earlier form on an object that is not the workspace's gets no button. */
+    const paste = async obj => { R.answers.push(JSON.stringify(obj)); await page.click("#btn-paste"); return page.locator("#detail"); };
+    d = await paste({ ...OLD, id: `${NS}/asmt/private`, method: { "private:lab-notes@1": { whatever: [1, 2, 3] } } });
+    assert.deepEqual(await methodSaid(d), [["private:lab-notes@1", "private", null, SAID.private]]);
+    d = await paste({ ...OLD, id: `${NS}/asmt/empty`, method: {} });
+    assert.deepEqual([await methodSaid(d), await R.text(d.locator("[data-method-empty]"))], [[], "it states no method: the object is empty. The kernel schema accepts that, and the rule about facets has no key to hold."]);
+    d = await paste({ ...OLD, id: `${NS}/asmt/pasted`, method: EARLIER });
+    assert.deepEqual([(await methodSaid(d)).map(m => m[1]), await d.locator("[data-method-restate]").count(), await R.text(d.locator("[data-method-todo]"))], [["none", "none"], 0, TODO]);
   }));
