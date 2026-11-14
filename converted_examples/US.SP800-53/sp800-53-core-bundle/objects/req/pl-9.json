@@ -153,33 +153,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/SI-8.1",
    "mode": "merged-into"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/AU-3.2",
-    "mode": "merged-into",
-    "label": "AU-3(2)",
-    "title": "Centralized Management of Planned Audit Record Content"
-   },
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/SI-2.1",
-    "mode": "merged-into",
-    "label": "SI-2(1)",
-    "title": "Central Management"
-   },
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/SI-3.1",
-    "mode": "merged-into",
-    "label": "SI-3(1)",
-    "title": "Central Management"
-   },
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/SI-8.1",
-    "mode": "merged-into",
-    "label": "SI-8(1)",
-    "title": "Central Management"
-   }
-  ]
- }
+ ]
 }

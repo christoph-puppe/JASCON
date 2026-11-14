@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/sp800-53/req/IR-10",
+ "version": "5.2.0",
+ "label": "IR-10",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Integrated Information Security Analysis Team"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/sp800-53/party/organization"
+   ],
+   "prose": {
+    "en": "Moved to IR-4(11)."
+   }
+  }
+ ]
+}

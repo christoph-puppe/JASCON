@@ -628,15 +628,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/AC-4.18",
    "mode": "merged-into"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/AC-4.18",
-    "mode": "merged-into",
-    "label": "AC-4(18)",
-    "title": "Security Attribute Binding"
-   }
-  ]
- }
+ ]
 }

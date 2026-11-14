@@ -699,6 +699,34 @@
      }
     ]
    },
+   "uuid": "201765f8-6d45-4941-8789-9eef2effd7d0",
+   "back-matter": {
+    "resources": [
+     {
+      "uuid": "84cbf061-eb87-4ec1-8112-1f529232e907",
+      "description": "NIST Special Publication 800-53 Revision 5: Security and Privacy Controls for Federal Information Systems and Organizations",
+      "rlinks": [
+       {
+        "href": "../../../../nist.gov/SP800-53/rev5/xml/NIST_SP-800-53_rev5_catalog.xml",
+        "media-type": "application/oscal.catalog+xml"
+       },
+       {
+        "href": "../../../../nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json",
+        "media-type": "application/oscal.catalog+json"
+       },
+       {
+        "href": "../../../../nist.gov/SP800-53/rev5/yaml/NIST_SP-800-53_rev5_catalog.yaml",
+        "media-type": "application/oscal.catalog+yaml"
+       }
+      ]
+     }
+    ]
+   },
+   "imports": [
+    {
+     "href": "#84cbf061-eb87-4ec1-8112-1f529232e907"
+    }
+   ],
    "merge": {
     "as-is": true
    }

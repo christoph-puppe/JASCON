@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/sp800-53/req/PE-5.3",
+ "version": "5.2.0",
+ "label": "PE-5(3)",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Marking Output Devices"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/sp800-53/party/organization"
+   ],
+   "prose": {
+    "en": "Incorporated into PE-22."
+   }
+  }
+ ]
+}

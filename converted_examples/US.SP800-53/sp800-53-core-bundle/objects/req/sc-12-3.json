@@ -192,21 +192,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/SC-12.5",
    "mode": "merged-into"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/SC-12.4",
-    "mode": "merged-into",
-    "label": "SC-12(4)",
-    "title": "PKI Certificates"
-   },
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/SC-12.5",
-    "mode": "merged-into",
-    "label": "SC-12(5)",
-    "title": "PKI Certificates / Hardware Tokens"
-   }
-  ]
- }
+ ]
 }

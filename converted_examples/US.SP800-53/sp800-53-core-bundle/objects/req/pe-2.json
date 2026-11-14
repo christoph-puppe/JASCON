@@ -319,21 +319,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/PE-8.2",
    "mode": "merged-into"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/PE-7",
-    "mode": "merged-into",
-    "label": "PE-7",
-    "title": "Visitor Control"
-   },
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/PE-8.2",
-    "mode": "merged-into",
-    "label": "PE-8(2)",
-    "title": "Physical Access Records"
-   }
-  ]
- }
+ ]
 }

@@ -398,21 +398,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/RA-5.7",
    "mode": "merged-into"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/CM-8.5",
-    "mode": "merged-into",
-    "label": "CM-8(5)",
-    "title": "No Duplicate Accounting of Components"
-   },
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/RA-5.7",
-    "mode": "merged-into",
-    "label": "RA-5(7)",
-    "title": "Automated Detection and Notification of Unauthorized Components"
-   }
-  ]
- }
+ ]
 }

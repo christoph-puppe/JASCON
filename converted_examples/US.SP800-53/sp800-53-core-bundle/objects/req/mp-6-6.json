@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/sp800-53/req/MP-6.6",
+ "version": "5.2.0",
+ "label": "MP-6(6)",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Media Destruction"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/sp800-53/party/organization"
+   ],
+   "prose": {
+    "en": "Incorporated into MP-6."
+   }
+  }
+ ]
+}

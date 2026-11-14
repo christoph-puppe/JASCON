@@ -119,15 +119,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/SA-12.8",
    "mode": "merged-into"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/SA-12.8",
-    "mode": "merged-into",
-    "label": "SA-12(8)",
-    "title": "Use of All-source Intelligence"
-   }
-  ]
- }
+ ]
 }

@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/sp800-53/req/CM-8.5",
+ "version": "5.2.0",
+ "label": "CM-8(5)",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "No Duplicate Accounting of Components"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/sp800-53/party/organization"
+   ],
+   "prose": {
+    "en": "Incorporated into CM-8."
+   }
+  }
+ ]
+}

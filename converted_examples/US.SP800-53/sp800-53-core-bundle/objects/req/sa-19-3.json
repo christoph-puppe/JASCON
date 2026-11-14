@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/sp800-53/req/SA-19.3",
+ "version": "5.2.0",
+ "label": "SA-19(3)",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Component Disposal"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/sp800-53/party/organization"
+   ],
+   "prose": {
+    "en": "Moved to SR-12."
+   }
+  }
+ ]
+}

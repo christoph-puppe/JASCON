@@ -191,27 +191,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/MP-5.4",
    "mode": "merged-into"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/MP-2.2",
-    "mode": "merged-into",
-    "label": "MP-2(2)",
-    "title": "Cryptographic Protection"
-   },
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/MP-4.1",
-    "mode": "merged-into",
-    "label": "MP-4(1)",
-    "title": "Cryptographic Protection"
-   },
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/MP-5.4",
-    "mode": "merged-into",
-    "label": "MP-5(4)",
-    "title": "Cryptographic Protection"
-   }
-  ]
- }
+ ]
 }

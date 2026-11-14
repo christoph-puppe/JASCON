@@ -104,15 +104,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/IA-4.3",
    "mode": "merged-into"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/IA-4.3",
-    "mode": "merged-into",
-    "label": "IA-4(3)",
-    "title": "Multiple Forms of Certification"
-   }
-  ]
- }
+ ]
 }

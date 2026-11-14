@@ -192,6 +192,37 @@
      ]
     }
    ]
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "parts": [
+    {
+     "id": "si-2.7_smt.a",
+     "props": [
+      {
+       "name": "label",
+       "value": "a."
+      }
+     ]
+    },
+    {
+     "id": "si-2.7_smt.b",
+     "props": [
+      {
+       "name": "label",
+       "value": "b."
+      }
+     ]
+    },
+    {
+     "id": "si-2.7_smt.c",
+     "props": [
+      {
+       "name": "label",
+       "value": "c."
+      }
+     ]
+    }
+   ]
   }
  },
  "relations": [

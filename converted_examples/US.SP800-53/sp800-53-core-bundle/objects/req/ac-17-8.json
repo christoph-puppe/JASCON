@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/sp800-53/req/AC-17.8",
+ "version": "5.2.0",
+ "label": "AC-17(8)",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Disable Nonsecure Network Protocols"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/sp800-53/party/organization"
+   ],
+   "prose": {
+    "en": "Incorporated into CM-7."
+   }
+  }
+ ]
+}

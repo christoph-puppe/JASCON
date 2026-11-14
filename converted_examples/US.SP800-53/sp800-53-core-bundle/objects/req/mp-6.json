@@ -396,27 +396,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/MP-6.6",
    "mode": "merged-into"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/MP-6.4",
-    "mode": "merged-into",
-    "label": "MP-6(4)",
-    "title": "Controlled Unclassified Information"
-   },
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/MP-6.5",
-    "mode": "merged-into",
-    "label": "MP-6(5)",
-    "title": "Classified Information"
-   },
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/MP-6.6",
-    "mode": "merged-into",
-    "label": "MP-6(6)",
-    "title": "Media Destruction"
-   }
-  ]
- }
+ ]
 }

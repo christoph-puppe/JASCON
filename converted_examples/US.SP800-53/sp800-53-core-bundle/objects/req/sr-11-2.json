@@ -180,15 +180,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/SA-19.2",
    "mode": "renamed"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/SA-19.2",
-    "mode": "renamed",
-    "label": "SA-19(2)",
-    "title": "Configuration Control for Component Service and Repair"
-   }
-  ]
- }
+ ]
 }

@@ -358,21 +358,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/MP-5.2",
    "mode": "merged-into"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/MP-5.1",
-    "mode": "merged-into",
-    "label": "MP-5(1)",
-    "title": "Protection Outside of Controlled Areas"
-   },
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/MP-5.2",
-    "mode": "merged-into",
-    "label": "MP-5(2)",
-    "title": "Documentation of Activities"
-   }
-  ]
- }
+ ]
 }

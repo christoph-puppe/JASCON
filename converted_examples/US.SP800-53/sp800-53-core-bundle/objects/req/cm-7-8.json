@@ -200,15 +200,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/SI-7.14",
    "mode": "renamed"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/SI-7.14",
-    "mode": "renamed",
-    "label": "SI-7(14)",
-    "title": "Binary or Machine Executable Code"
-   }
-  ]
- }
+ ]
 }

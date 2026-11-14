@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/sp800-53/req/AC-19.2",
+ "version": "5.2.0",
+ "label": "AC-19(2)",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Use of Personally Owned Portable Storage Devices"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/sp800-53/party/organization"
+   ],
+   "prose": {
+    "en": "Incorporated into MP-7."
+   }
+  }
+ ]
+}

@@ -211,15 +211,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/CM-5.3",
    "mode": "renamed"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/CM-5.3",
-    "mode": "renamed",
-    "label": "CM-5(3)",
-    "title": "Signed Components"
-   }
-  ]
- }
+ ]
 }

@@ -164,15 +164,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/AU-7.2",
    "mode": "merged-into"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/AU-7.2",
-    "mode": "merged-into",
-    "label": "AU-7(2)",
-    "title": "Automatic Sort and Search"
-   }
-  ]
- }
+ ]
 }

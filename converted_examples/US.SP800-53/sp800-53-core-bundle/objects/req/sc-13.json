@@ -318,33 +318,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/SC-13.4",
    "mode": "merged-into"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/SC-13.1",
-    "mode": "merged-into",
-    "label": "SC-13(1)",
-    "title": "FIPS-validated Cryptography"
-   },
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/SC-13.2",
-    "mode": "merged-into",
-    "label": "SC-13(2)",
-    "title": "NSA-approved Cryptography"
-   },
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/SC-13.3",
-    "mode": "merged-into",
-    "label": "SC-13(3)",
-    "title": "Individuals Without Formal Access Approvals"
-   },
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/SC-13.4",
-    "mode": "merged-into",
-    "label": "SC-13(4)",
-    "title": "Digital Signatures"
-   }
-  ]
- }
+ ]
 }

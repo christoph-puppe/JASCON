@@ -230,21 +230,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/SI-9",
    "mode": "merged-into"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/SC-14",
-    "mode": "merged-into",
-    "label": "SC-14",
-    "title": "Public Access Protections"
-   },
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/SI-9",
-    "mode": "merged-into",
-    "label": "SI-9",
-    "title": "Information Input Restrictions"
-   }
-  ]
- }
+ ]
 }

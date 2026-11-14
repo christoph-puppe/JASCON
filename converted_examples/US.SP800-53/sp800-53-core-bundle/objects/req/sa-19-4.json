@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/sp800-53/req/SA-19.4",
+ "version": "5.2.0",
+ "label": "SA-19(4)",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Anti-counterfeit Scanning"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/sp800-53/party/organization"
+   ],
+   "prose": {
+    "en": "Moved to SR-11(3)."
+   }
+  }
+ ]
+}

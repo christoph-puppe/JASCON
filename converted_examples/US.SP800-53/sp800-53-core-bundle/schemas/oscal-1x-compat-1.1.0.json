@@ -1,0 +1,73 @@
+{
+ "id": "https://ns.jascon.net/compat/oscal-1x",
+ "version": "1.1.0",
+ "modifies-semantics": [],
+ "note": "NORMATIVE pinned payload schema (backlog #26), one for every converter of this repository since 2026-11-14: closed shape - unknown keys are rejected, never smuggled",
+ "schema": {
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+   "metadata": {
+    "type": "object"
+   },
+   "uuid": {
+    "type": "string"
+   },
+   "back-matter": {
+    "type": "object"
+   },
+   "catalog": {
+    "type": "object"
+   },
+   "imports": {
+    "type": "array"
+   },
+   "merge": {
+    "type": "object"
+   },
+   "class": {
+    "type": "string"
+   },
+   "group-parts": {
+    "type": "array"
+   },
+   "param-extras": {
+    "type": "object"
+   },
+   "props": {
+    "type": "array"
+   },
+   "parts": {
+    "type": "array"
+   },
+   "links": {
+    "type": "array"
+   },
+   "control": {
+    "type": "object"
+   },
+   "group": {
+    "type": "object"
+   },
+   "nested-in": {
+    "type": "string"
+   },
+   "unmapped": {
+    "type": "object"
+   },
+   "history": {
+    "type": "array"
+   },
+   "flows": {
+    "type": "array"
+   },
+   "class-variants": {
+    "type": "object"
+   },
+   "ctl": {
+    "type": "object"
+   }
+  },
+  "additionalProperties": false
+ }
+}

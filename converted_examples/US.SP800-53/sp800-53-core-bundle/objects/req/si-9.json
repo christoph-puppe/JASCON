@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/sp800-53/req/SI-9",
+ "version": "5.2.0",
+ "label": "SI-9",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Information Input Restrictions"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/sp800-53/party/organization"
+   ],
+   "prose": {
+    "en": "Incorporated into AC-2, AC-3, AC-5, and AC-6."
+   }
+  }
+ ]
+}

@@ -172,15 +172,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/IA-3.2",
    "mode": "merged-into"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/IA-3.2",
-    "mode": "merged-into",
-    "label": "IA-3(2)",
-    "title": "Cryptographic Bidirectional Network Authentication"
-   }
-  ]
- }
+ ]
 }

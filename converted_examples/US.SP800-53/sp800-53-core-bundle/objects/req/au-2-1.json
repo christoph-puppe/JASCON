@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/sp800-53/req/AU-2.1",
+ "version": "5.2.0",
+ "label": "AU-2(1)",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Compilation of Audit Records from Multiple Sources"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/sp800-53/party/organization"
+   ],
+   "prose": {
+    "en": "Incorporated into AU-12."
+   }
+  }
+ ]
+}

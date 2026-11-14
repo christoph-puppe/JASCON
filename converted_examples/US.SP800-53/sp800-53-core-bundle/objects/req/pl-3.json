@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/sp800-53/req/PL-3",
+ "version": "5.2.0",
+ "label": "PL-3",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "System Security Plan Update"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/sp800-53/party/organization"
+   ],
+   "prose": {
+    "en": "Incorporated into PL-2."
+   }
+  }
+ ]
+}

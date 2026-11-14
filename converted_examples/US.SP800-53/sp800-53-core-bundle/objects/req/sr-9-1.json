@@ -147,15 +147,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/SA-18.1",
    "mode": "renamed"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/SA-18.1",
-    "mode": "renamed",
-    "label": "SA-18(1)",
-    "title": "Multiple Phases of System Development Life Cycle"
-   }
-  ]
- }
+ ]
 }
