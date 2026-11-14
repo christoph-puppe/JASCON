@@ -928,8 +928,10 @@ def path_map_check(paths, row_of):
     into the object, array positions as `[]`).
     row_of(path) -> None where the map has no row for the path, else
     (outcomes, places): the outcomes the row allows (names of
-    LEDGER_OUTCOMES) and a pattern over the places, read with re.search, or
-    None for a row whose values stand nowhere.
+    LEDGER_OUTCOMES), or None where the converter holds the outcomes of its
+    rows by a check of its own and only the places are asked here; and a
+    pattern over the places, read with re.search, or None for a row whose
+    values stand nowhere.
 
     -> {"disagree": [{path, outcome, count, example, allowed}],
         "elsewhere": [{path, pointer, count}],
@@ -945,7 +947,7 @@ def path_map_check(paths, row_of):
         mapped_to = row_of(row["path"])
         if mapped_to is None: continue
         allowed, places = mapped_to
-        if row["outcome"] != "unaccounted" and row["outcome"] not in allowed:
+        if allowed is not None and row["outcome"] != "unaccounted" and row["outcome"] not in allowed:
             disagree.append({"path": row["path"], "outcome": row["outcome"], "count": row["count"],
                              "example": row["example"], "allowed": list(allowed)})
         for t in row.get("to", []):
@@ -956,6 +958,27 @@ def path_map_check(paths, row_of):
                           f"{' or '.join(d['allowed'])} there (first {d['example']})" for d in disagree]
                        + [f"{e['count']:,} value(s) of {e['path']} stand at {e['pointer']}, "
                           f"a place the path map does not name for that path" for e in elsewhere]}
+
+def held_row(held, index):
+    """(outcomes, places) for path_map_check from a converter's table HELD,
+    whose entries are (the row's pattern, outcomes or None, places): the
+    places a tuple of patterns, each for one whole pointer. -> None for a
+    path without a row (index None)."""
+    if index is None: return None
+    _, outcomes, places = held[index]
+    return outcomes, ("^(" + "|".join(places) + ")$" if places else None)
+
+def held_rows_match(held, patterns):
+    """A converter's table HELD stands beside its path map, row for row:
+    the first member of each entry is the pattern of the row it speaks for.
+    -> a sentence for a wiring check where the two lists differ, else None.
+    Without this a row put into the map, taken out of it or moved would be
+    held to the outcomes and places of another row."""
+    mine = [h[0] for h in held]
+    if mine == list(patterns): return None
+    at = next((i for i, (a, b) in enumerate(zip(mine, patterns)) if a != b), min(len(mine), len(patterns)))
+    return (f"the table of outcomes and places (HELD) has {len(mine)} row(s) and the path map {len(patterns)}; they "
+            f"differ first at row {at}: a row of the path map was added, removed or moved without its entry")
 
 def path_map_measured(paths, row_key):
     """What the record of a run measured for each row of a path map: the

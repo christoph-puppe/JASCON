@@ -18,7 +18,7 @@ from oscal_conv_lib import known_arguments, out_dir
 from oscal_conv_lib import obligated_party, obligated_party_line, obligated_party_record
 from oscal_conv_lib import ledger_by_path, ledger_gate, Bundle, COMPAT, COMPAT_ID, COMPAT_FILE
 from oscal_conv_lib import lifecycle_default_record, lifecycle_default_line
-from oscal_conv_lib import path_map_check, path_map_measured
+from oscal_conv_lib import path_map_check, path_map_measured, held_row, held_rows_match
 
 
 def measure(source, output):
@@ -957,6 +957,21 @@ class Backlog89ThePathMapHeldAgainstTheRecord(unittest.TestCase):
                                                         "src.catalog.controls[].id": (("not-content",), r"^/id$")}))
         self.assertEqual([s.split(" value(s) of ")[1].split(" ")[0] + (" at" if " stand at " in s else " is") for s in held["sentences"]],
                          ["src.catalog.title is", "src.catalog.controls[].id is", "src.catalog.title at", "src.catalog.controls[].id at"])
+
+    def test_a_converter_that_holds_its_outcomes_itself_asks_for_the_places_only(self):
+        held = path_map_check(self.RECORD, self.rows(**{"src.catalog.controls[].class": (None, None), "src.catalog.title": (None, r"^/title$")}))
+        self.assertEqual(held["disagree"], [])
+        self.assertEqual([e["pointer"] for e in held["elsewhere"]], ["/title/en"])
+
+    def test_a_table_beside_the_path_map_row_for_row(self):
+        HELD = [(r"^a$", ("copied",), (r"/x", r"/y/\[\]/z")), (r"^b$", None, ()), (r"^c$", ("not-content",), ())]
+        self.assertEqual(held_row(HELD, 0), (("copied",), r"^(/x|/y/\[\]/z)$"))
+        self.assertEqual(held_row(HELD, 1), (None, None))
+        self.assertIsNone(held_row(HELD, None))
+        self.assertIsNone(held_rows_match(HELD, [r"^a$", r"^b$", r"^c$"]))
+        self.assertIn("differ first at row 1", held_rows_match(HELD, [r"^a$", r"^new$", r"^b$", r"^c$"]))
+        self.assertIn("has 3 row(s) and the path map 2", held_rows_match(HELD, [r"^a$", r"^b$"]))
+        self.assertIn("differ first at row 0", held_rows_match(HELD, [r"^b$", r"^a$", r"^c$"]))
 
     def test_what_a_record_measured_for_each_row(self):
         got = path_map_measured(self.RECORD, lambda p: None if p.endswith("unmapped") else p.rsplit(".", 1)[1])
