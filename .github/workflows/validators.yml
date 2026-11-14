@@ -3,9 +3,15 @@
 # Four jobs, one per implementation and one for the pages:
 #   python      validate_core.py, the reference (Ubuntu, Python 3.12), the
 #               tests of the converter library (test_oscal_conv_lib.py), the
-#               attestation check end to end (test_attestation_binds.py)
-#               and a re-run of the IFA conversion from its pinned sources,
-#               which must reproduce what is committed
+#               attestation check end to end (test_attestation_binds.py),
+#               a re-run of the IFA conversion and of the four shipped
+#               catalogue conversions (AU.ISM, DE.BSI, US.CSF, US.SP800-53)
+#               from their pinned sources, each of which must reproduce
+#               what is committed, the nine catalogue converters on an
+#               invented catalogue (test_convert_obligated_party.py), and a
+#               run of the CR26 conversion on its pinned source, which is
+#               downloaded and not committed: the bundle must validate and
+#               the two coverage reports must be the committed ones
 #   powershell  validate_core.ps1, the twin, on WINDOWS POWERSHELL 5.1
 #               (windows-latest; `shell: powershell` is 5.1, `pwsh` would be 7),
 #               after .github/scripts/lint-twin.ps1 has read its source: no
@@ -139,6 +145,49 @@ jobs:
           US.CSF convert_csf.py
           US.SP800-53 convert_nist.py
           EOF
+      - name: The CR26 conversion runs on its pinned source and reproduces its coverage reports
+        # FedRAMP's rules file is not redistributed (converted_examples/
+        # FedRAMP-CR26/NOT-REDISTRIBUTED.md): neither the source nor the
+        # bundle is in the repository, and the two coverage reports are the
+        # record of the conversion. The source is fetched at the publisher's
+        # tag, checked against SOURCES.sha256 and converted into a temporary
+        # directory. The converter must exit 0, which it does only when
+        # every source leaf has a declared destination; the reference
+        # validator must pass the bundle; and the two reports must be byte
+        # for byte what is committed. They state the digest of the bundle's
+        # manifest, so a bundle that differs in one byte fails here too.
+        # The step writes the downloaded file under the git-ignored sources/
+        # and a log beside run.log, nothing into the conversion's folder,
+        # and it commits nothing. Last, the converter's own test.
+        run: |
+          set -euo pipefail
+          dir=converted_examples/FedRAMP-CR26
+          list=$dir/SOURCES.sha256
+          base=$(sed -n 's/^# base: //p' "$list")
+          path=$(sed -n 's/^# path: //p' "$list")
+          name=$(awk '!/^#/ && NF == 2 { print $2 }' "$list")
+          mkdir -p sources
+          curl -sSfL --retry 3 -o "sources/$name" "$base$path"
+          (cd sources && sha256sum -c "$GITHUB_WORKSPACE/$list")
+          out=$(mktemp -d)
+          python jascon/scripts/convert_cr26.py --out "$out"
+          python jascon/scripts/validate_core.py "$out/cr26-core-bundle" | tee cr26.log
+          for f in cr26-coverage-report.md cr26-coverage-report.json; do
+            if ! cmp "$out/$f" "$dir/$f"; then
+              echo "convert_cr26.py no longer reproduces the committed $f:"
+              diff "$dir/$f" "$out/$f" | head -40 || true
+              exit 1
+            fi
+          done
+          if [ -n "$(git status --porcelain -- "$dir")" ]; then
+            echo "the run wrote into the checkout:"
+            git status --porcelain -- "$dir"
+            exit 1
+          fi
+          # What the checks above cannot show: that the values stand where
+          # the report declares them, what each argument does, and that the
+          # run fails on a source it does not cover.
+          python jascon/scripts/test_convert_cr26.py
       - name: Summary
         if: always()
         run: |
@@ -147,6 +196,12 @@ jobs:
             echo '```'
             grep -E '^  [a-z-]+: [0-9]+ pass|: [0-9]+ pass, [0-9]+ fail|^ALL GREEN|FAILURES' run.log | cut -c1-160
             echo '```'
+            if [ -f cr26.log ]; then
+              echo '### validate_core.py on the CR26 bundle, converted from the pinned source'
+              echo '```'
+              grep -E 'cr26-core-bundle: [0-9]+ pass, [0-9]+ fail|^ALL GREEN|FAILURES' cr26.log | sed 's#^.*/cr26-core-bundle:#  cr26-core-bundle:#' | cut -c1-160
+              echo '```'
+            fi
           } >> "$GITHUB_STEP_SUMMARY"
 
   powershell:

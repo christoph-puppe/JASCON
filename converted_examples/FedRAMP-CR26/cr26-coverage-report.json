@@ -1,18 +1,23 @@
 {
  "source": "FedRAMP Consolidated Rules for 2026",
- "version": "2026.07.14.01",
+ "version": "2026.11.02.01",
  "totals": {
-  "leaf-values": 7294,
-  "mapped": 7294,
+  "leaf-values": 7532,
+  "mapped": 7532,
   "unmapped": 0,
   "coverage-pct": 100.0
  },
  "objects": {
-  "requirements(rules+ksi)": 292,
-  "mappings": 373,
+  "requirements(rules+ksi)": 291,
+  "mappings": 652,
   "sets": 92,
   "tailorings": 5,
-  "total": 776
+  "total": 1054
+ },
+ "bundle": {
+  "content-manifest-digest": "sha256:9cdf86017d4e42f17d6edf507d53d30eb44d11f309ab8f0d8e28df13c1a545bd",
+  "objects": 1054,
+  "facet-schemas": 11
  },
  "modality(rule-level)": {
   "must": 136,
@@ -20,39 +25,65 @@
   "should": 45,
   "must-not": 11,
   "should-not": 5,
-  "unspecified": 29
+  "unspecified": 28
  },
  "tailoring-ops": {
-  "set-modality": 111
+  "set-modality": 107
  },
  "converter-deviations(easings)": 0,
  "counters": {
-  "updated-entries": 377,
-  "class-variant-rules": 29,
+  "statements-party-from-affects": 245,
+  "updated-entries": 475,
+  "rule-control-mappings": 94,
+  "class-variant-rules": 28,
   "timeframe-variant-only": 51,
+  "timeframe-range-bounds": 2,
   "track-declared-subsets": 9,
   "track-rules-rev5": 12,
-  "track-rules-20x": 9,
+  "track-rules-20x": 8,
+  "optional-notifications": 3,
   "flows-dropped": 1,
+  "statements-party-fallback": 46,
+  "ksi-control-mappings": 558,
   "ksi-class-variant": 5,
-  "term-alts": 188,
+  "term-alts": 190,
   "ctl-multiselect-normalized": 3,
   "ctl-odp-ops": 16,
   "ctl-carried-reqs": 14,
   "ctl-overlays": 79
  },
  "lang-wraps": {
-  "note": 81,
+  "note": 86,
   "notification-name": 31,
-  "notes": 27,
+  "notes": 29,
   "description": 72,
   "danger": 3,
   "corrective-actions": 8,
-  "definition": 75,
+  "definition": 81,
   "guidance": 66
  },
- "synthesized-prose(variant-only-rules)": 29,
+ "synthesized-prose(variant-only-rules)": 28,
  "dangling-related": 0,
+ "obligated-party": {
+  "value": "https://ns.fedramp.gov/cr26/party/provider",
+  "origin": "converter-default",
+  "converter-default": "https://ns.fedramp.gov/cr26/party/provider",
+  "source-states": "in `affects` of a rule"
+ },
+ "fractions-as-decimal-strings": [
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.3.iir.timeframe_num",
+   "count": 1
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.4.iir.timeframe_num",
+   "count": 1
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.5.iir.timeframe_num",
+   "count": 1
+  }
+ ],
  "unmapped": [],
  "path-map": [
   {
@@ -105,25 +136,31 @@
   },
   {
    "path": "cr26.FRD.data.all.*.alts[]",
-   "count": 188,
+   "count": 190,
    "level": "L1",
    "destination": "terminology@1 payload per term (alts, links, chrome flags inside payload)"
   },
   {
    "path": "cr26.FRD.data.all.*.definition",
-   "count": 75,
+   "count": 81,
    "level": "L1",
    "destination": "terminology@1 payload per term (alts, links, chrome flags inside payload)"
   },
   {
    "path": "cr26.FRD.data.all.*.do_not_link",
-   "count": 4,
+   "count": 9,
    "level": "L1",
    "destination": "terminology@1 payload per term (alts, links, chrome flags inside payload)"
   },
   {
+   "path": "cr26.FRD.data.all.*.ignore_in_terms",
+   "count": 9,
+   "level": "L1",
+   "destination": "narrative@1 on the corpus root Set: ignore-in-terms {term id: flag} (terminology@1 has do-not-link and no member for this one)"
+  },
+  {
    "path": "cr26.FRD.data.all.*.note",
-   "count": 23,
+   "count": 29,
    "level": "L1",
    "destination": "terminology@1 payload per term (alts, links, chrome flags inside payload)"
   },
@@ -135,37 +172,43 @@
   },
   {
    "path": "cr26.FRD.data.all.*.reference",
-   "count": 13,
+   "count": 9,
    "level": "L1",
    "destination": "terminology@1 payload per term (alts, links, chrome flags inside payload)"
   },
   {
    "path": "cr26.FRD.data.all.*.reference_url",
-   "count": 13,
+   "count": 9,
    "level": "L1",
    "destination": "terminology@1 payload per term (alts, links, chrome flags inside payload)"
   },
   {
    "path": "cr26.FRD.data.all.*.tag",
-   "count": 52,
+   "count": 57,
    "level": "L1",
    "destination": "terminology@1 payload per term (alts, links, chrome flags inside payload)"
   },
   {
    "path": "cr26.FRD.data.all.*.term",
-   "count": 75,
+   "count": 81,
    "level": "L1",
    "destination": "terminology@1 payload per term (alts, links, chrome flags inside payload)"
   },
   {
    "path": "cr26.FRD.data.all.*.updated[].comment",
-   "count": 78,
+   "count": 85,
    "level": "L1",
    "destination": "history -> L0 (values not object-carried; counted)"
   },
   {
    "path": "cr26.FRD.data.all.*.updated[].date",
-   "count": 78,
+   "count": 85,
+   "level": "L1",
+   "destination": "history -> L0 (values not object-carried; counted)"
+  },
+  {
+   "path": "cr26.FRD.data.all.*.updated[].issue",
+   "count": 1,
    "level": "L1",
    "destination": "history -> L0 (values not object-carried; counted)"
   },
@@ -243,7 +286,7 @@
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.affects[]",
-   "count": 246,
+   "count": 245,
    "level": "L1",
    "destination": "statements[0].obligated-parties[]"
   },
@@ -252,6 +295,12 @@
    "count": 79,
    "level": "L1",
    "destination": "assessment-criteria@1: required-artifacts"
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.controls[]",
+   "count": 94,
+   "level": "L1",
+   "destination": "Mapping objects (relationship supports; 8.6 untyped-import rule), as for a KSI"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.corrective_actions[]",
@@ -285,13 +334,13 @@
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.following_information[]",
-   "count": 206,
+   "count": 208,
    "level": "L1",
    "destination": "narrative@1 / reporting-obligation@1 payload fields"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.following_information_bullets[]",
-   "count": 10,
+   "count": 11,
    "level": "L1",
    "destination": "narrative@1 / reporting-obligation@1 payload fields"
   },
@@ -303,19 +352,19 @@
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.name",
-   "count": 246,
+   "count": 245,
    "level": "L1",
    "destination": "Requirement.title"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.note",
-   "count": 58,
+   "count": 57,
    "level": "L1",
    "destination": "narrative@1 / reporting-obligation@1 payload fields"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.notes[]",
-   "count": 56,
+   "count": 62,
    "level": "L1",
    "destination": "narrative@1 / reporting-obligation@1 payload fields"
   },
@@ -323,25 +372,31 @@
    "path": "cr26.FRR.*.data.*.*.*.notification[].method",
    "count": 31,
    "level": "L1",
-   "destination": "reporting-obligation@1: notification[]"
+   "destination": "reporting-obligation@1: notification[]; of an entry the source marks optional: narrative@1 optional-notification[]"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.notification[].name",
    "count": 31,
    "level": "L1",
-   "destination": "reporting-obligation@1: notification[]"
+   "destination": "reporting-obligation@1: notification[]; of an entry the source marks optional: narrative@1 optional-notification[]"
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.notification[].optional",
+   "count": 3,
+   "level": "L1",
+   "destination": "narrative@1: optional-notification[] - the entry goes there whole, with its flag (reporting-obligation@1 lists duties and has no member for an optional one)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.notification[].party",
    "count": 31,
    "level": "L1",
-   "destination": "reporting-obligation@1: notification[]"
+   "destination": "reporting-obligation@1: notification[]; of an entry the source marks optional: narrative@1 optional-notification[]"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.notification[].target",
    "count": 31,
    "level": "L1",
-   "destination": "reporting-obligation@1: notification[]"
+   "destination": "reporting-obligation@1: notification[]; of an entry the source marks optional: narrative@1 optional-notification[]"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.reference",
@@ -381,31 +436,49 @@
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.terms[]",
-   "count": 985,
+   "count": 704,
    "level": "L1",
    "destination": "relations uses-term -> /cr26/term/<id>"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.timeframe_num",
-   "count": 17,
+   "count": 22,
    "level": "L1",
-   "destination": "statement parameter 'timeframe' (elapsed-duration | calendar-period by unit)"
+   "destination": "statement parameter 'timeframe' (elapsed-duration or calendar-period, by unit); timeframe_type is the unit of every timeframe parameter of the rule"
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.timeframe_num_max",
+   "count": 1,
+   "level": "L1",
+   "destination": "statement parameters 'timeframe-min' / 'timeframe-max': a range is its two bounds, each a duration of the kernel (unit from timeframe_type)"
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.timeframe_num_min",
+   "count": 1,
+   "level": "L1",
+   "destination": "statement parameters 'timeframe-min' / 'timeframe-max': a range is its two bounds, each a duration of the kernel (unit from timeframe_type)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.timeframe_type",
-   "count": 17,
+   "count": 23,
    "level": "L1",
-   "destination": "statement parameter 'timeframe' (elapsed-duration | calendar-period by unit)"
+   "destination": "statement parameter 'timeframe' (elapsed-duration or calendar-period, by unit); timeframe_type is the unit of every timeframe parameter of the rule"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.updated[].comment",
-   "count": 253,
+   "count": 303,
    "level": "L1",
    "destination": "history -> L0 (counted)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.updated[].date",
-   "count": 253,
+   "count": 303,
+   "level": "L1",
+   "destination": "history -> L0 (counted)"
+  },
+  {
+   "path": "cr26.FRR.*.data.*.*.*.updated[].issue",
+   "count": 5,
    "level": "L1",
    "destination": "history -> L0 (counted)"
   },
@@ -413,17 +486,17 @@
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.artifacts.all[]",
    "count": 31,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.following_information[]",
    "count": 57,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.force",
-   "count": 111,
+   "count": 107,
    "level": "L1",
    "destination": "class Tailoring op set-modality (monotone) OR + converter Deviation when easing (counted)"
   },
@@ -431,607 +504,607 @@
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.note",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.1.fir.description",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.1.fir.timeframe_num",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.1.fir.timeframe_type",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.1.iir.description",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.1.iir.timeframe_num",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.1.iir.timeframe_type",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.1.oir.description",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.1.oir.timeframe_num",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.1.oir.timeframe_type",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.2.fir.description",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.2.fir.timeframe_num",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.2.fir.timeframe_type",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.2.iir.description",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.2.iir.timeframe_num",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.2.iir.timeframe_type",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.2.irv_lev.description",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.2.irv_lev.timeframe_num",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.2.irv_lev.timeframe_type",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.2.nirv_lev.description",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.2.nirv_lev.timeframe_num",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.2.nirv_lev.timeframe_type",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.2.nlev.description",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.2.nlev.timeframe_num",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.2.nlev.timeframe_type",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.2.oir.description",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.2.oir.timeframe_num",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.2.oir.timeframe_type",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.3.fir.description",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.3.fir.timeframe_num",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.3.fir.timeframe_type",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.3.iir.description",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.3.iir.timeframe_num",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.3.iir.timeframe_type",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.3.irv_lev.description",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.3.irv_lev.timeframe_num",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.3.irv_lev.timeframe_type",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.3.nirv_lev.description",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.3.nirv_lev.timeframe_num",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.3.nirv_lev.timeframe_type",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.3.nlev.description",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.3.nlev.timeframe_num",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.3.nlev.timeframe_type",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.3.oir.description",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.3.oir.timeframe_num",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.3.oir.timeframe_type",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.4.fir.description",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.4.fir.timeframe_num",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.4.fir.timeframe_type",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.4.iir.description",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.4.iir.timeframe_num",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.4.iir.timeframe_type",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.4.irv_lev.description",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.4.irv_lev.timeframe_num",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.4.irv_lev.timeframe_type",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.4.nirv_lev.description",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.4.nirv_lev.timeframe_num",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.4.nirv_lev.timeframe_type",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.4.nlev.description",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.4.nlev.timeframe_num",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.4.nlev.timeframe_type",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.4.oir.description",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.4.oir.timeframe_num",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.4.oir.timeframe_type",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.5.fir.description",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.5.fir.timeframe_num",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.5.fir.timeframe_type",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.5.iir.description",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.5.iir.timeframe_num",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.5.iir.timeframe_type",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.5.irv_lev.description",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.5.irv_lev.timeframe_num",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.5.irv_lev.timeframe_type",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.5.nirv_lev.description",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.5.nirv_lev.timeframe_num",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.5.nirv_lev.timeframe_type",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.5.nlev.description",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.5.nlev.timeframe_num",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.5.nlev.timeframe_type",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.5.oir.description",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.5.oir.timeframe_num",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.5.oir.timeframe_type",
    "count": 4,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.rev5_controls_list.AC[]",
    "count": 141,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.rev5_controls_list.AT[]",
    "count": 17,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.rev5_controls_list.AU[]",
    "count": 92,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.rev5_controls_list.CA[]",
    "count": 42,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.rev5_controls_list.CM[]",
    "count": 91,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.rev5_controls_list.CP[]",
    "count": 67,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.rev5_controls_list.IA[]",
    "count": 98,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.rev5_controls_list.IR[]",
    "count": 58,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.rev5_controls_list.MA[]",
    "count": 28,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.rev5_controls_list.MP[]",
    "count": 21,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.rev5_controls_list.PE[]",
    "count": 58,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.rev5_controls_list.PL[]",
    "count": 21,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.rev5_controls_list.PS[]",
    "count": 30,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.rev5_controls_list.RA[]",
    "count": 40,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.rev5_controls_list.SA[]",
    "count": 60,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.rev5_controls_list.SC[]",
    "count": 114,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.rev5_controls_list.SI[]",
    "count": 87,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.rev5_controls_list.SR[]",
    "count": 37,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.statement",
-   "count": 111,
+   "count": 107,
    "level": "L2",
-   "destination": "class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"
+   "destination": "class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.timeframe_num",
@@ -1305,7 +1378,7 @@
   },
   {
    "path": "cr26.FRR.*.info.rev5.subsets.*.applicability.classes[]",
-   "count": 16,
+   "count": 15,
    "level": "L1",
    "destination": "framework-specific subset declarations -> track subset Sets (title/description/scope) [corrected per FedRAMP #153]"
   },
@@ -1353,7 +1426,7 @@
   },
   {
    "path": "cr26.FRR.*.info.subsets.*.applicability.classes[]",
-   "count": 125,
+   "count": 124,
    "level": "L1",
    "destination": "scope@1 on subset Set (types/paths/classes/affects) + class & type Set composition"
   },
@@ -1401,7 +1474,7 @@
   },
   {
    "path": "cr26.KSI.*.indicators.*.controls[]",
-   "count": 373,
+   "count": 558,
    "level": "L1",
    "destination": "Mapping objects (relationship supports; 8.6 untyped-import rule)"
   },
@@ -1419,19 +1492,25 @@
   },
   {
    "path": "cr26.KSI.*.indicators.*.terms[]",
-   "count": 91,
+   "count": 85,
    "level": "L1",
    "destination": "relations uses-term"
   },
   {
    "path": "cr26.KSI.*.indicators.*.updated[].comment",
-   "count": 46,
+   "count": 87,
    "level": "L1",
    "destination": "history -> L0 (counted)"
   },
   {
    "path": "cr26.KSI.*.indicators.*.updated[].date",
-   "count": 46,
+   "count": 87,
+   "level": "L1",
+   "destination": "history -> L0 (counted)"
+  },
+  {
+   "path": "cr26.KSI.*.indicators.*.updated[].issue",
+   "count": 1,
    "level": "L1",
    "destination": "history -> L0 (counted)"
   },

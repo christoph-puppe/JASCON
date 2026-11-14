@@ -1,25 +1,76 @@
 #!/usr/bin/env python3
 """FedRAMP CR26 (bespoke JSON) -> Semantic Core bundle. Gate item 1, authority 3.
-225 FRR rules + 46 KSIs -> Requirements; KSI control links -> Mapping objects;
-subsets/classes/types -> nested Sets; class variance -> Tailorings (computable
-deltas) + L2 class-variants payloads (full fidelity); FRD -> terminology;
-CTL Rev5 overlay -> parked L2 (resolves at gate item 3). Coverage target: 0."""
-import json, hashlib, os, re, sys, copy, collections, shutil
+FRR rules + KSIs -> Requirements; the control links of a KSI and of a rule ->
+Mapping objects; subsets/classes/types -> nested Sets; class variance ->
+Tailorings (computable deltas) + L2 class-variants payloads (full fidelity);
+FRD -> terminology; CTL Rev5 overlay -> a set-parameter Tailoring over the
+carried Rev 5 Requirements, its guidance parked L2. Coverage target: 0.
+Depends on: convert_nist.py output (the US.SP800-53 bundle).
+
+    convert_cr26.py [--author-ref URI] [--date YYYY-MM-DD]
+                    [--obligated-party URI] [--out DIR]
+
+The source is not in the repository and neither is the bundle: the
+publisher states no licence (converted_examples/FedRAMP-CR26/
+NOT-REDISTRIBUTED.md). The file is read from
+sources/cr_fedramp-consolidated-rules.json; where to get it and what its
+digest is stands in converted_examples/FedRAMP-CR26/SOURCES.sha256. The
+Validators workflow downloads it, converts with --out, runs the reference
+validator on the bundle and compares the two coverage reports with the
+committed ones. The reports are the record of the conversion.
+
+--out DIR writes the bundle (DIR/cr26-core-bundle) and the two reports to
+DIR, so that a run need not touch the repository.
+
+Exit code: 0 only when every source leaf has a declared destination. A run
+with UNMAPPED > 0 still writes the bundle and the reports, which list the
+paths, and exits 1 (backlog #73: until 2026-11-14 it printed the count and
+exited 0, and nothing noticed that a new publication had outgrown the
+converter)."""
+import json, hashlib, os, re, sys, copy, collections, shutil, decimal
 from oscal_conv_lib import BUNDLE_NEWLINE   # one byte spelling on every OS (D3.1)
 from oscal_conv_lib import provenance, provenance_override
+from oscal_conv_lib import obligated_party, obligated_party_line, obligated_party_record
+
+NS="https://ns.fedramp.gov/cr26"; NIST="https://ns.nist.gov/sp800-53/req"
+ARGV=sys.argv[1:]
+# Every argument takes a value. One the converter does not know stops the
+# run: a misspelled --out would otherwise write into the repository, and a
+# misspelled overwrite would be dropped without a word.
+_i=0
+while _i<len(ARGV):
+    if ARGV[_i] not in ("--author-ref","--date","--obligated-party","--out"):
+        raise SystemExit(f"unknown argument {ARGV[_i]!r} (known: --author-ref URI, --date YYYY-MM-DD, "
+                         f"--obligated-party URI, --out DIR)")
+    _i+=2
 
 # A Mapping's `provenance` is pre-filled from the source (FedRAMP, the day of
 # info.last_updated); --author-ref URI and --date YYYY-MM-DD overwrite either
-# on every Mapping (backlog #69). Not run since the change: the source file
-# is not in the repository.
-OVERRIDE=provenance_override(sys.argv[1:])
+# on every Mapping (backlog #69).
+OVERRIDE=provenance_override(ARGV)
+
+# Whom a statement binds where the source names nobody (backlog #74). A rule
+# names its parties in `affects`, and those are written as the source has
+# them. A KSI has no `affects`; its statement gets this party, and so would
+# a rule whose `affects` is absent or empty. --obligated-party URI writes
+# the caller's party in the default's place.
+PARTY_DEFAULT=f"{NS}/party/provider"
+PARTY,PARTY_ORIGIN=obligated_party(ARGV,PARTY_DEFAULT)
+PARTY_SOURCE_STATES="in `affects` of a rule"
 
 ROOT=os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)),"..",".."))
 SRC=os.path.join(ROOT,"sources","cr_fedramp-consolidated-rules.json")
-OUT=os.path.join(ROOT,"converted_examples","FedRAMP-CR26","cr26-core-bundle")
-RMD=os.path.join(ROOT,"converted_examples","FedRAMP-CR26","cr26-coverage-report.md")
-RJS=os.path.join(ROOT,"converted_examples","FedRAMP-CR26","cr26-coverage-report.json")
-NS="https://ns.fedramp.gov/cr26"; NIST="https://ns.nist.gov/sp800-53/req"
+OUTDIR=os.path.join(ROOT,"converted_examples","FedRAMP-CR26")
+if "--out" in ARGV:
+    if ARGV.count("--out")>1: raise SystemExit("--out is given more than once")
+    if ARGV.index("--out")+1>=len(ARGV): raise SystemExit("--out needs a directory")
+    OUTDIR=os.path.abspath(ARGV[ARGV.index("--out")+1])
+OUT=os.path.join(OUTDIR,"cr26-core-bundle")
+RMD=os.path.join(OUTDIR,"cr26-coverage-report.md")
+RJS=os.path.join(OUTDIR,"cr26-coverage-report.json")
+if not os.path.isfile(SRC):
+    raise SystemExit(f"missing {SRC} - the source is not in the repository; "
+                     f"converted_examples/FedRAMP-CR26/SOURCES.sha256 says where to get it")
 F_TERM="https://ns.jascon.net/stdlib/facet/terminology@1"
 F_REP="https://ns.jascon.net/stdlib/facet/reporting-obligation@1"
 F_EFF="https://ns.jascon.net/stdlib/facet/effectivity@1"
@@ -60,8 +111,37 @@ def T(v,field=None):
     lang_wraps[field or "?"]+=1
     return {LANG:v}
 
-d=json.load(open(SRC,encoding="utf-8"))
+# A number of the source that is no integer is read as the digits the source
+# wrote (a Decimal), never as a float: the kernel has no such JSON number
+# (NUMBER-1, D3.9), and a float would not give the digits back.
+with open(SRC,encoding="utf-8") as _f: d=json.load(_f,parse_float=decimal.Decimal)
 VER=d["info"]["version"]
+
+DECIMAL=re.compile(r"(-?[1-9][0-9]*(\.[0-9]+)?|0(\.[0-9]+)?|-0\.[0-9]*[1-9][0-9]*)\Z")   # the kernel's decimalString
+fraction_paths=collections.Counter()
+def park(n,path):
+    """A payload parked as the source has it (L2), with one difference: a
+    number that is no integer is written as a decimal string, the kernel's
+    spelling of a fraction (D3.9). Counted by source path. -> a new structure."""
+    if isinstance(n,dict): return {k:park(v,f"{path}.{k}") for k,v in n.items()}
+    if isinstance(n,list): return [park(v,f"{path}[]") for v in n]
+    if isinstance(n,decimal.Decimal):
+        s=format(n,"f")
+        if not DECIMAL.match(s): raise SystemExit(f"{path}: the number {n} has no decimal spelling of the kernel (D3.9)")
+        fraction_paths[normalize(path)]+=1
+        return s
+    return n
+def no_fraction(n,where):
+    """Stops the run at a number that is no integer anywhere but in a parked
+    payload: a kernel number is an integer (NUMBER-1), and no destination
+    is declared for a fraction there."""
+    if isinstance(n,dict):
+        for k,v in n.items(): no_fraction(v,f"{where}/{k}")
+    elif isinstance(n,list):
+        for i,v in enumerate(n): no_fraction(v,f"{where}/{i}")
+    elif isinstance(n,(decimal.Decimal,float)):
+        raise SystemExit(f"{where}: the number {n} is no integer and this place has no decimal spelling "
+                         f"(NUMBER-1, D3.9); the converter declares no destination for it")
 
 # ---------------- coverage inventory with path normalization ----------------
 def normalize(p):
@@ -93,6 +173,7 @@ RULES=[
  (r"^cr26\.info\.default_artifacts\.","L1","assessment-criteria on corpus root: default-artifacts"),
  (r"^cr26\.FRD\.info\.","L1","terminology@1 glossary-info on the corpus root Set"),
  (r"^cr26\.FRD\.data\.all\.\*\.(term|definition|tag|alts\[\]|note|notes\[\]|do_not_link|reference|reference_url)$","L1","terminology@1 payload per term (alts, links, chrome flags inside payload)"),
+ (r"^cr26\.FRD\.data\.all\.\*\.ignore_in_terms$","L1","narrative@1 on the corpus root Set: ignore-in-terms {term id: flag} (terminology@1 has do-not-link and no member for this one)"),
  (r"^cr26\.FRD\.data\.all\.\*\.updated\[\]\.","L1","history -> L0 (values not object-carried; counted)"),
  (r"^cr26\.FRR\.\*\.info\.(name|short_name|status)$","L1","family Set: title/label/lifecycle"),
  (r"^cr26\.FRR\.\*\.info\.web_name$","L1","family Set annotations.web_name (chrome)"),
@@ -107,19 +188,22 @@ RULES=[
  (re.escape(RULE)+r"\.force$","L1","statements[0].modality (code map)"),
  (re.escape(RULE)+r"\.affects\[\]$","L1","statements[0].obligated-parties[]"),
  (re.escape(RULE)+r"\.terms\[\]$","L1","relations uses-term -> /cr26/term/<id>"),
- (re.escape(RULE)+r"\.(timeframe_num|timeframe_type)$","L1","statement parameter 'timeframe' (elapsed-duration | calendar-period by unit)"),
+ (re.escape(RULE)+r"\.(timeframe_num|timeframe_type)$","L1","statement parameter 'timeframe' (elapsed-duration or calendar-period, by unit); timeframe_type is the unit of every timeframe parameter of the rule"),
+ (re.escape(RULE)+r"\.timeframe_num_(min|max)$","L1","statement parameters 'timeframe-min' / 'timeframe-max': a range is its two bounds, each a duration of the kernel (unit from timeframe_type)"),
+ (re.escape(RULE)+r"\.controls\[\]$","L1","Mapping objects (relationship supports; 8.6 untyped-import rule), as for a KSI"),
  (re.escape(RULE)+r"\.updated\[\]\.","L1","history -> L0 (counted)"),
  (re.escape(RULE)+r"\.(note|notes\[\]|danger|corrective_actions\[\]|following_information\[\]|following_information_bullets\[\])$","L1","narrative@1 / reporting-obligation@1 payload fields"),
  (re.escape(RULE)+r"\.examples\[\]\.(id|examples\[\]|key_tests\[\])$","L1","assessment-criteria@1: examples[] {id, examples, key-tests} - the KSI-shaped test data"),
  (re.escape(RULE)+r"\.schema\.(name|url)$","L1","relations schema -> url; name kept in narrative@1"),
- (re.escape(RULE)+r"\.notification\[\]\.(party|method|target|name)$","L1","reporting-obligation@1: notification[]"),
+ (re.escape(RULE)+r"\.notification\[\]\.(party|method|target|name)$","L1","reporting-obligation@1: notification[]; of an entry the source marks optional: narrative@1 optional-notification[]"),
+ (re.escape(RULE)+r"\.notification\[\]\.optional$","L1","narrative@1: optional-notification[] - the entry goes there whole, with its flag (reporting-obligation@1 lists duties and has no member for an optional one)"),
  (re.escape(RULE)+r"\.artifacts\.all\[\]$","L1","assessment-criteria@1: required-artifacts"),
  (re.escape(RULE)+r"\.artifacts\.[a-d]\[\]$","L2","class-variants payload (per-class artifacts)"),
  (re.escape(RULE)+r"\.related\[\]$","L1","relations related -> /cr26/req/<id> (dangling counted)"),
  (re.escape(RULE)+r"\.(schema|reference|reference_url)$","L1","relations schema/reference -> external URL"),
  (re.escape(VAR)+r"\.force$","L1","class Tailoring op set-modality (monotone) OR + converter Deviation when easing (counted)"),
  (re.escape(VAR)+r"\.(timeframe_num|timeframe_type)$","L1","class Tailoring op set-parameter when unit-class matches base; else L2 (counted)"),
- (re.escape(VAR)+r"\.","L2","class-variants payload (full variant preserved; prose/artifact variance = open D13 ceremony question)"),
+ (re.escape(VAR)+r"\.","L2","class-variants payload (full variant preserved, a fraction as a decimal string; prose/artifact variance = open D13 ceremony question)"),
  (re.escape(KSI)+r"\.name$","L1","KSI Requirement.title"),
  (re.escape(KSI)+r"\.statement$","L1","KSI statements[0].prose.en (modality unspecified: indicator language)"),
  (re.escape(KSI)+r"\.controls\[\]$","L1","Mapping objects (relationship supports; 8.6 untyped-import rule)"),
@@ -138,11 +222,33 @@ def dest(p):
 # ---------------- conversion ----------------
 objects={}; counters=collections.Counter(); dev_records=0; ops_emitted=collections.Counter()
 mod_hist=collections.Counter(); synth_prose=0; dangling_related=0; mappings=0
-def tf_param(num,typ):
+def tf_param(num,typ,name="timeframe",tightening="lower"):
     t="elapsed-duration" if typ in ELAPSED else "calendar-period"
-    p={"name":"timeframe","type":t,"num":num,"unit":typ,"tightening":"lower"}
+    p={"name":name,"type":t,"num":num,"unit":typ,"tightening":tightening}
     if t=="calendar-period": p["calendar-ref"]=f"{NS}/calendar/us-federal"
     return p,t
+# A rule states either one timeframe (timeframe_num) or a range
+# (timeframe_num_min and timeframe_num_max, both in timeframe_type). The
+# kernel's durations have one `num`, and its `range` is a container of
+# scalars, which a duration is not (D9). A range is therefore written as its
+# two bounds, each a duration with its unit and calendar. The window narrows
+# when its floor rises or its ceiling falls: that is the tightening declared.
+TF_BOUNDS=(("timeframe_num_min","timeframe-min","higher"),("timeframe_num_max","timeframe-max","lower"))
+
+def control_mappings(owner,uri,controls,rationale):
+    """The control links of a KSI or of a rule -> one Mapping each. The source
+    types both lists alike (an array of control ids) and states no
+    relationship, so the untyped-import rule applies to both."""
+    global mappings
+    for ctl in controls or []:
+        rel=f"objects/map/{slug(owner)}--{slug(ctl)}.json"
+        if rel in objects: raise SystemExit(f"{owner}: the control link {ctl!r} is written twice; two links would become one Mapping")
+        objects[rel]={"id":f"{NS}/map/{slug(owner)}--{slug(ctl)}","version":VER,"lifecycle":"active",
+           "source-ref":uri,"target-ref":f"{NIST}/{ctl.upper()}",
+           "relationship":"supports","direction":"source-to-target","confidence":"draft",
+           "rationale":rationale,
+           "provenance":provenance(f"{NS}/party/fedramp",d["info"]["last_updated"],OVERRIDE)}
+        mappings+=1
 
 TERMIDX={}
 for _tid,_t in d["FRD"]["data"]["all"].items():
@@ -161,7 +267,7 @@ class_tailorings={c:{"id":f"{NS}/tailoring/class-{c}","version":VER,"lifecycle":
 def add_narr(req,key,val):
     req.setdefault("facets",{}).setdefault(F_NARR,{})[key]=val
 
-def convert_rule(fam,subk,rid,r):
+def convert_rule(fam,trk,subk,rid,r):
     global synth_prose,dangling_related,dev_records
     uri=f"{NS}/req/{rid}"
     req={"id":uri,"version":VER,"label":rid,"lifecycle":"active",
@@ -171,13 +277,20 @@ def convert_rule(fam,subk,rid,r):
     if prose is None:
         prose=f"{r.get('name',rid)} (requirement varies by certification class; see class tailorings and the class-variants payload)."
         synth_prose+=1
+    stated=[f"{NS}/party/{slug(a)}" for a in r.get("affects") or []]
+    counters["statements-party-from-affects" if stated else "statements-party-fallback"]+=1
     st={"id":"s1","modality":mod,
-        "obligated-parties":[f"{NS}/party/{slug(a)}" for a in r.get("affects",[])] or [f"{NS}/party/provider"],
+        "obligated-parties":stated or [PARTY],
         "prose":{"en":prose}}
     mod_hist[mod]+=1
-    base_tf=None
+    base_tf=None; params=[]
     if "timeframe_num" in r:
-        p,base_tf=tf_param(r["timeframe_num"],r["timeframe_type"]); st["parameters"]=[p]
+        p,base_tf=tf_param(r["timeframe_num"],r["timeframe_type"]); params.append(p)
+    for key,name,tightening in TF_BOUNDS:
+        if key in r:
+            params.append(tf_param(r[key],r["timeframe_type"],name,tightening)[0])
+            counters["timeframe-range-bounds"]+=1
+    if params: st["parameters"]=params
     req["statements"].append(st)
     rels=[{"type":"uses-term","ref":term_ref(t)} for t in r.get("terms",[])]
     for rl in r.get("related",[]) or []:
@@ -191,10 +304,21 @@ def convert_rule(fam,subk,rid,r):
     elif r.get("schema"): rels.append({"type":"schema","ref":r["schema"]})
     if r.get("reference_url"): rels.append({"type":"reference","ref":r["reference_url"]})
     if rels: req["relations"]=rels
-    rep={}
-    if r.get("notification"):
-        rep["notification"]=[{**n,**({"name":T(n["name"],"notification-name")} if n.get("name") else {})}
-                             for n in copy.deepcopy(r["notification"])]
+    # reporting-obligation@1 lists notification duties (it declares that it
+    # alters what passing means) and its entries have no member `optional`.
+    # An entry the source marks optional is no duty. It goes whole, with its
+    # flag, to the converter's narrative@1, so that the standard facet states
+    # the duties and nothing else. The source writes the flag only as `true`;
+    # any other value has no declared destination and stops the run.
+    rep={}; duties=[]; optional=[]
+    for n in copy.deepcopy(r.get("notification") or []):
+        if n.get("name"): n["name"]=T(n["name"],"notification-name")
+        if "optional" not in n: duties.append(n)
+        elif n["optional"] is True: optional.append(n)
+        else: raise SystemExit(f"{rid}: notification.optional is {n['optional']!r}; the converter knows only `true`")
+    if duties: rep["notification"]=duties
+    if optional:
+        add_narr(req,"optional-notification",optional); counters["optional-notifications"]+=len(optional)
     if r.get("following_information"): rep["following-information"]=r["following_information"]
     if r.get("following_information_bullets"): rep["following-information-bullets"]=r["following_information_bullets"]
     if rep: req.setdefault("facets",{})[F_REP]=rep
@@ -213,7 +337,8 @@ def convert_rule(fam,subk,rid,r):
     # class variance
     var=r.get("varies_by_class")
     if var:
-        req.setdefault("facets",{})[F_COMPAT]={"class-variants":var}
+        req.setdefault("facets",{})[F_COMPAT]={"class-variants":
+            park(var,f"cr26.FRR.{fam}.data.{trk}.{subk}.{rid}.varies_by_class")}
         counters["class-variant-rules"]+=1
         for cls,v in var.items():
             OPS=class_tailorings[cls]["operations"]
@@ -240,6 +365,10 @@ def convert_rule(fam,subk,rid,r):
                 else:
                     counters["timeframe-unitclass-crossings"]+=1
     objects[f"objects/req/{slug(rid)}.json"]=req
+    n=mappings
+    control_mappings(rid,uri,r.get("controls"),
+        "Imported from the control list of a CR26 rule; the source carried no typed relationship (handbook 8.6).")
+    counters["rule-control-mappings"]+=mappings-n
     return uri
 
 def convert_ksi(catid,cat,iid,ind):
@@ -251,22 +380,20 @@ def convert_ksi(catid,cat,iid,ind):
     req={"id":uri,"version":VER,"label":iid,"lifecycle":"active",
          "title":ind.get("name",iid),
          "statements":[{"id":"s1","modality":"unspecified",
-             "obligated-parties":[f"{NS}/party/provider"],"prose":{"en":prose}}]}
+             "obligated-parties":[PARTY],"prose":{"en":prose}}]}
+    counters["statements-party-fallback"]+=1
     rels=[{"type":"uses-term","ref":term_ref(t)} for t in ind.get("terms",[])]
     if rels: req["relations"]=rels
     if ind.get("varies_by_class"):
-        req["facets"]={F_COMPAT:{"class-variants":ind["varies_by_class"]}}
+        req["facets"]={F_COMPAT:{"class-variants":
+            park(ind["varies_by_class"],f"cr26.KSI.{catid}.indicators.{iid}.varies_by_class")}}
         counters["ksi-class-variant"]+=1
     counters["updated-entries"]+=len(ind.get("updated",[]) or [])
     objects[f"objects/ksi/{slug(iid)}.json"]=req
-    for ctl in ind.get("controls",[]) or []:
-        tid=ctl.upper()
-        m={"id":f"{NS}/map/{slug(iid)}--{slug(ctl)}","version":VER,"lifecycle":"active",
-           "source-ref":uri,"target-ref":f"{NIST}/{tid}",
-           "relationship":"supports","direction":"source-to-target","confidence":"draft",
-           "rationale":"Imported from CR26 KSI control list; the source carried no typed relationship (handbook 8.6).",
-           "provenance":provenance(f"{NS}/party/fedramp",d["info"]["last_updated"],OVERRIDE)}
-        objects[f"objects/map/{slug(iid)}--{slug(ctl)}.json"]=m; mappings+=1
+    n=mappings
+    control_mappings(iid,uri,ind.get("controls"),
+        "Imported from CR26 KSI control list; the source carried no typed relationship (handbook 8.6).")
+    counters["ksi-control-mappings"]+=mappings-n
     return uri
 
 # in-place overwrite; stale-file cleanup happens after the write set is known
@@ -292,14 +419,14 @@ for fk,f in d["FRR"].items():
             counters["track-declared-subsets"]+=len(t_infos)
         members=[]
         for rid,r in f["data"].get("all",{}).get(sk,{}).items():
-            members.append({"ref":convert_rule(fk,sk,rid,r),"sequence":nseq()})
+            members.append({"ref":convert_rule(fk,"all",sk,rid,r),"sequence":nseq()})
         track_set_uris=[]
         for trk in ("20x","rev5"):
             tr_rules=f["data"].get(trk,{}).get(sk,{})
             if not tr_rules: continue
             tinfo=t_infos.get(trk,{})
             turi=f"{NS}/set/subset/{slug(fk)}-{slug(sk)}-{trk}"
-            tmem=[{"ref":convert_rule(fk,sk,rid,r),"sequence":(i+1)*10}
+            tmem=[{"ref":convert_rule(fk,trk,sk,rid,r),"sequence":(i+1)*10}
                   for i,(rid,r) in enumerate(tr_rules.items())]
             tset={"id":turi,"version":VER,"lifecycle":"active",
                 "title":tinfo.get("name", f"{(sinfo or {}).get('name',sk)} ({trk}-specific)"),
@@ -366,15 +493,23 @@ for ck,cat in d["KSI"].items():
         "annotations":{"web_name":cat.get("web_name","")},"members":entries}
     ksi_cat_entries.append({"ref":curi,"sequence":nseq()})
 # terminology container
-terms_payload={}
+terms_payload={}; ignore_in_terms={}
 for tid,t in d["FRD"]["data"]["all"].items():
     e={"term":t["term"],"definition":T(t["definition"],"definition")}
     for k,dk in [("tag","tag"),("alts","aliases"),
                  ("do_not_link","do-not-link"),("reference","reference"),
                  ("reference_url","reference-url")]:
-        if t.get(k) is not None: e[dk]=t[k]
+        # an empty container is left out (the kernel has one spelling of "nothing": absent)
+        if t.get(k) is not None and t[k]!=[]: e[dk]=t[k]
     for k,dk in [("note","note"),("notes","notes")]:
         if t.get(k) is not None: e[dk]=T(t[k],dk)
+    # terminology@1 has `do-not-link` and no member for the source's second
+    # flag. It is carried beside the glossary, in the converter's own facet
+    # on the same Set, keyed by the term's id, with the value the source wrote.
+    if "ignore_in_terms" in t:
+        if not isinstance(t["ignore_in_terms"],bool):
+            raise SystemExit(f"{tid}: ignore_in_terms is {t['ignore_in_terms']!r}; the converter knows a boolean")
+        ignore_in_terms[tid]=t["ignore_in_terms"]
     counters["updated-entries"]+=len(t.get("updated",[]) or [])
     counters["term-alts"]+=len(t.get("alts",[]) or [])
     terms_payload[tid]=e
@@ -382,7 +517,7 @@ frd_i=d["FRD"]["info"]
 glossary={"terms":terms_payload,
     "glossary-info":{k:frd_i[k] for k in ("name","short_name","web_name","purpose","status","effective") if frd_i.get(k) is not None}}
 # CTL parked (guidance free text language-tagged; structure otherwise verbatim)
-ctl_payload=copy.deepcopy(d["CTL"])
+ctl_payload=park(d["CTL"],"cr26.CTL")
 def _wrap_ctl_guidance(n):
     if isinstance(n,dict):
         for k,v in list(n.items()):
@@ -459,11 +594,24 @@ objects["objects/set/root.json"]={"id":f"{NS}/set/root","version":VER,"lifecycle
     "title":d["info"]["title"],
     "members":fam_entries+ksi_cat_entries+[
         {"ref":f"{NS}/set/ctl-overlay","sequence":nseq()}],
-    "facets":{F_NARR:{"description":T(d["info"]["description"],"description")},
+    "facets":{F_NARR:{"description":T(d["info"]["description"],"description"),
+                      **({"ignore-in-terms":ignore_in_terms} if ignore_in_terms else {})},
               F_ACRIT:{"default-artifacts":d["info"]["default_artifacts"]},
               F_TERM:glossary}}
 for c,t in class_tailorings.items():
     if t["operations"]: objects[f"objects/tailoring/class-{c}.json"]=t
+
+# ---- checks on what is about to be written; nothing is on disk yet ----
+for rel,o in objects.items(): no_fraction(o,rel)
+# The census of the report is counted on the source, the objects on what was
+# built. An id that occurs twice would overwrite its first object, and the
+# two counts would differ.
+n_rules={trk:sum(len(sv) for f in d["FRR"].values() for sv in f["data"].get(trk,{}).values()) for trk in ("all","rev5","20x")}
+n_ksi=sum(len(cat["indicators"]) for cat in d["KSI"].values())
+n_built=sum(1 for o in objects.values() if o["id"].startswith((f"{NS}/req/",f"{NS}/ksi/")))
+if n_built!=sum(n_rules.values())+n_ksi:
+    raise SystemExit(f"the source has {sum(n_rules.values())} rules and {n_ksi} KSIs, the conversion built {n_built} "
+                     f"Requirements for them: an id occurs twice")
 
 def stub(path,fid,mods,props):
     # 26 delivered: pins are the normative payload contract, fail-closed
@@ -484,7 +632,15 @@ stub("schemas/cr26-scope-stub.json",F_SCOPE.split("@")[0],["selection"],
 stub("schemas/cr26-narrative-stub.json",F_NARR.split("@")[0],[],
      {"description":{"type":"object"},"note":{"type":"object"},"notes":{"type":"object"},
       "schema-name":{"type":"string"},"reference":{"type":"string"},"danger":{"type":"object"},
-      "corrective-actions":{"type":"object"}})
+      "corrective-actions":{"type":"object"},
+      # a notification the source marks optional: the entry of reporting-obligation@1, and its flag
+      "optional-notification":{"type":"array","minItems":1,"items":{"type":"object","additionalProperties":False,
+          "required":["optional"],
+          "properties":{"party":{"type":"string"},"method":{"type":"string"},"target":{"type":"string"},
+                        "name":{"type":"object","additionalProperties":{"type":"string"}},
+                        "optional":{"const":True}}}},
+      # the glossary's second flag, by term id (on the Set that hosts terminology@1)
+      "ignore-in-terms":{"type":"object","minProperties":1,"additionalProperties":{"type":"boolean"}}})
 stub("schemas/oscal-1x-compat-stub.json",F_COMPAT.split("@")[0],[],{"class-variants":{"type":"object"},"ctl":{"type":"object"}})
 # carried Rev 5 Requirements bring their facet pins (#17 fail-closed)
 stub("schemas/sp800-53-narrative-stub.json","https://ns.nist.gov/sp800-53/facet/narrative",[],{"guidance":{"type":"array"}})
@@ -524,6 +680,12 @@ for s in sorted(os.listdir(os.path.join(OUT,"schemas"))):
     manifest["facet-schemas"].append({"id":sd["id"],"exact-version":sd["version"],
         "digest":shaf(f"schemas/{s}"),"path":f"schemas/{s}"})
 w("content-manifest.json",manifest)
+# The bundle is not committed, the coverage reports are. The manifest lists
+# both digests of every object and the digest of every pinned schema, so its
+# own digest stands for every byte of the bundle. The reports state it: a
+# run that reproduces the committed reports has reproduced the bundle, and a
+# change that alters one object alters the reports.
+MANIFEST_DIGEST=shaf("content-manifest.json")
 
 # ---------------- coverage ----------------
 rows=[];unmapped=[]
@@ -534,19 +696,32 @@ total=sum(paths.values()); mapped=sum(n for _,n,_,_ in rows)
 nreq=sum(1 for o in objects.values() if o["id"].startswith(f"{NS}/req/") or o["id"].startswith(f"{NS}/ksi/"))
 nset=sum(1 for o in objects.values() if "/set/" in o["id"])
 ntail=sum(1 for o in objects.values() if "/tailoring/" in o["id"])
+nclass=sum(1 for t in class_tailorings.values() if t["operations"])
+# the Sets by what they are, read from the file names the converter gives them
+set_kinds=collections.Counter(re.match(r"objects/set/([a-z0-9]+)",rel).group(1)
+                              for rel in objects if rel.startswith("objects/set/"))
+n_force=paths[RULE+".force"]; n_vforce=paths[VAR+".force"]
+fractions=[{"path":p,"count":n} for p,n in sorted(fraction_paths.items())]
 j={"source":d["info"]["title"],"version":VER,
    "totals":{"leaf-values":total,"mapped":mapped,"unmapped":total-mapped,
              "coverage-pct":round(100*mapped/total,3)},
    "objects":{"requirements(rules+ksi)":nreq,"mappings":mappings,"sets":nset,
               "tailorings":ntail,"total":len(objects)},
+   "bundle":{"content-manifest-digest":MANIFEST_DIGEST,"objects":len(manifest["objects"]),
+             "facet-schemas":len(manifest["facet-schemas"])},
    "modality(rule-level)":dict(mod_hist),
    "tailoring-ops":dict(ops_emitted),"converter-deviations(easings)":dev_records,
    "counters":dict(counters),"lang-wraps":dict(lang_wraps),
    "synthesized-prose(variant-only-rules)":synth_prose,
    "dangling-related":dangling_related,
+   "obligated-party":obligated_party_record(PARTY,PARTY_ORIGIN,PARTY_DEFAULT,PARTY_SOURCE_STATES),
+   "fractions-as-decimal-strings":fractions,
    "unmapped":[{"path":p,"count":n} for p,n in unmapped],
    "path-map":[{"path":p,"count":n,"level":l,"destination":t} for p,n,l,t in rows]}
-json.dump(j,open(RJS,"w",encoding="utf-8"),ensure_ascii=False,indent=1)
+# The reports are compared byte for byte with the committed ones (Validators
+# workflow), so their line ending is stated and not left to the platform.
+os.makedirs(OUTDIR,exist_ok=True)
+with open(RJS,"w",encoding="utf-8",newline="\n") as f: json.dump(j,f,ensure_ascii=False,indent=1)
 
 md=[f"# CR26 -> Semantic Core: Coverage Report (computed)\n",
  f"Source: **{d['info']['title']}** v{VER} (bespoke JSON; not OSCAL).\n",
@@ -554,24 +729,58 @@ md=[f"# CR26 -> Semantic Core: Coverage Report (computed)\n",
  f"- Source leaf values inventoried (id-normalized paths): **{total:,}**",
  f"- Mapped: **{mapped:,}** -> **UNMAPPED: {total-mapped}** -> coverage **{j['totals']['coverage-pct']} %**",
  f"- Emitted: **{nreq} Requirements** (FRR rules + KSIs), **{mappings} Mapping objects**, "
- f"**{nset} Sets** (families, subsets, classes, types, KSI categories, terms, root), "
- f"**{ntail} class Tailorings**, manifest with both digests, {len(manifest['facet-schemas'])} pinned stubs.\n",
+ f"**{nset} Sets** ({set_kinds['tax']} families, {set_kinds['subset']} subsets, {set_kinds['class']} classes, "
+ f"{set_kinds['type']} tracks, {set_kinds['ksi']} KSI categories, and "
+ f"{nset-sum(set_kinds[k] for k in ('tax','subset','class','type','ksi'))}: the root, the CTL overlay, the Set of the "
+ f"carried Rev 5 Requirements), "
+ f"**{ntail} Tailorings** ({nclass} class variants and the Rev 5 ODP overlay), manifest with both digests, "
+ f"{len(manifest['facet-schemas'])} pinned stubs.",
+ f"- The bundle as written: `content-manifest.json` is `{MANIFEST_DIGEST}`. The manifest lists both digests of "
+ f"each of its {len(manifest['objects']):,} objects ({nreq} Requirements of the publication, "
+ f"{counters.get('ctl-carried-reqs',0)} carried Rev 5 Requirements, the Mappings, Sets and Tailorings) and the digest "
+ f"of each pinned schema, so this value stands for every byte of the bundle. The bundle is not in the repository; "
+ f"a run that reproduces this report has reproduced the bundle.\n",
  "## Conversion rules (declared, counted)\n",
  f"- **force -> modality** (rule level): "+", ".join(f"{k} x{v}" for k,v in sorted(mod_hist.items(),key=lambda x:-x[1]))
  +f". Class-variant forces become **Tailoring ops**: {dict(ops_emitted)}; easings auto-carry a converter Deviation "
  f"(approver: FedRAMP, rationale: published class variant) x{dev_records}.",
  f"- **affects[] -> obligated-parties[]** (parties minted as codes); subset applicability -> scope@1 on subset Sets "
  f"and composed **class Sets (a-d)** and **type Sets (20x/Rev5)** - sets-of-sets (D21).",
+ obligated_party_line(PARTY,PARTY_ORIGIN,PARTY_DEFAULT,
+     why="a KSI has no `affects` and its statement names no actor; the converter reads an indicator as a "
+         "statement about the cloud service offering, which is its provider's to meet",
+     source_states=PARTY_SOURCE_STATES)
+ +f" Statements with a party from `affects`: x{counters.get('statements-party-from-affects',0)}; with this party: "
+  f"x{counters.get('statements-party-fallback',0)} (every KSI, and a rule only if it names nobody).",
  f"- **timeframe_num/type -> statement parameter** 'timeframe' (elapsed vs calendar split; calendar-ref minted; "
  f"tightening: lower). Class variants: set-parameter when unit-class matches; "
  f"**true unit-class crossings x{counters.get('timeframe-unitclass-crossings',0)}** (base-absent variant timeframes x{counters.get('timeframe-variant-only',0)} counted separately) stay in the L2 class-variants payload "
  f"- spec-feedback: candidate D9 duration-union question.",
+ f"- **timeframe_num_min / timeframe_num_max -> statement parameters** 'timeframe-min' and 'timeframe-max' "
+ f"(bounds written: x{counters.get('timeframe-range-bounds',0)}). A rule states one timeframe or a range. The kernel's "
+ f"durations have one `num`, and its `range` is a container of scalars, which a duration is not (D9); a range is "
+ f"therefore its two bounds, each a duration with the unit of timeframe_type and, for a calendar unit, the "
+ f"calendar. Tightening is declared `higher` for the floor and `lower` for the ceiling: a window narrows when its "
+ f"floor rises or its ceiling falls. The two directions are the converter's reading, as `lower` is for a single "
+ f"timeframe; the source states none.",
+ f"- **A number that is no integer** (x{sum(fraction_paths.values())}) is written as a decimal string, the kernel's "
+ f"spelling of a fraction (NUMBER-1, D3.9): "
+ +("; ".join(f"`{p}` x{n}" for p,n in sorted(fraction_paths.items())) or "none in this publication")
+ +". It is done in the parked L2 payloads, which are otherwise as the source has them. Anywhere else a fraction "
+ f"stops the run: a duration's `num` is a kernel number, and a kernel number is an integer.",
  f"- **varies_by_class** preserved in full as L2 `class-variants` payloads on {counters.get('class-variant-rules',0)} rules "
  f"(+{counters.get('ksi-class-variant',0)} KSIs); computable deltas additionally emitted as ops. "
  f"Variant-only rules (no base statement): synthesized base prose x{synth_prose} (flagged).",
- f"- **KSI control lists -> {mappings} Mapping objects** (relationship `supports`, confidence `draft`, "
- f"rationale per handbook 8.6 untyped-import rule; targets minted under {NIST}/).",
- f"- **FRD -> terminology@1** hosted on the corpus root Set (glossary-info carries the FRD block metadata): 75 terms, {counters.get('term-alts',0)} aliases, links and chrome flags in-payload.",
+ f"- **Control lists -> {mappings} Mapping objects**: x{counters.get('ksi-control-mappings',0)} from KSIs, "
+ f"x{counters.get('rule-control-mappings',0)} from rules (relationship `supports`, confidence `draft`, "
+ f"rationale per handbook 8.6 untyped-import rule; targets minted under {NIST}/). A rule's `controls` are converted "
+ f"by the rule for a KSI's: the publisher's schema types the two lists alike, as an array of control ids, and "
+ f"states no relationship for either (read 2026-11-14 at the publication's tag).",
+ f"- **FRD -> terminology@1** hosted on the corpus root Set (glossary-info carries the FRD block metadata): "
+ f"{len(terms_payload)} terms, {counters.get('term-alts',0)} aliases, links and chrome flags in-payload; a term "
+ f"without alternatives gets no `aliases` (an empty container is left out). **ignore_in_terms** "
+ f"(x{len(ignore_in_terms)}) has no member in terminology@1, which knows `do-not-link` only; it is carried in "
+ f"narrative@1 on the same Set as `ignore-in-terms`, by term id, with the value the source wrote.",
  f"- **CTL ODP assignments DRAINED (backlog #10, gate 3)**: {counters.get('ctl-odp-ops',0)} set-parameter ops on the "
  f"`rev5-odp-overlay` Tailoring, each addressed (requirement-ref, statement-id, parameter) via the DECLARING "
  f"statement of the Rev 5.2.0 ODP (measured: no ODP is declared in two statements); {counters.get('ctl-carried-reqs',0)} "
@@ -580,8 +789,11 @@ md=[f"# CR26 -> Semantic Core: Coverage Report (computed)\n",
  f"territory, not ODP addressing. Multi-select serialization normalized x{counters.get('ctl-multiselect-normalized',0)} "
  f"(FedRAMP flattens many-cardinality selections into prose strings 'a; b' / 'a, b and c'; every part matches a "
  f"declared NIST choice -> list value; REPORTED upstream). Residual choice conflicts: {ctl_choice_conflicts or 'none'}.",
- f"- **notification/following_information -> reporting-obligation@1**; artifacts.all -> assessment-criteria@1; "
- f"note/notes/danger/examples/corrective_actions -> narrative@1.",
+ f"- **notification/following_information -> reporting-obligation@1**; artifacts.all and examples -> "
+ f"assessment-criteria@1; note/notes/danger/corrective_actions -> narrative@1. **A notification the source marks "
+ f"`optional`** (x{counters.get('optional-notifications',0)}) is no duty, and reporting-obligation@1 lists duties "
+ f"(it declares that it alters what passing means) and has no member for the flag. The entry goes whole, with its "
+ f"flag, to narrative@1 as `optional-notification`; reporting-obligation@1 keeps the other entries of the rule.",
  f"- **rule/KSI term names resolved to FRD ids** via the term+alias index (unresolved x{counters.get('unresolved-terms',0)} kept as slugs, counted).",
  f"- **updated[] -> L0** (entries counted: {counters.get('updated-entries',0)}; values not object-carried).",
  f"- **CTL Rev5 overlay ({counters.get('ctl-overlays',0)} entries) parked L2** on /set/ctl-overlay: external-catalog "
@@ -596,14 +808,18 @@ md=[f"# CR26 -> Semantic Core: Coverage Report (computed)\n",
  f"not authored payload (report, never repair); they drain with the payloads themselves. "
  f"Stub-file `note` annotations are schema metadata, not corpus content.\n",
  "## Findings (computed)\n",
- f"- **Census, layered:** rules = **246** = 225 track-independent (data.all) + 12 rev5-only + 9 20x-only. "
- f"Rule-level force totals {dict(mod_hist)}; the census's 328 merged rule-level and class-variant forces.",
+ f"- **Census, layered:** rules = **{sum(n_rules.values())}** = {n_rules['all']} track-independent (data.all) + "
+ f"{n_rules['rev5']} rev5-only + {n_rules['20x']} 20x-only. "
+ f"Rule-level force totals {dict(mod_hist)}; the {n_force} forces stated at rule level and the {n_vforce} stated "
+ f"in class variants are {n_force+n_vforce} force values, the number a census gets that counts the two together.",
  f"- **Framework-specific subsets x{counters.get('track-declared-subsets',0)}** (CSX/CSF) read from info.20x.subsets / "
  f"info.rev5.subsets per FedRAMP's layering (global by default, specific when needed). CORRECTION: an earlier "
  f"version of this report misreported these as undeclared - a checker bug on our side, fixed after review in "
  f"FedRAMP community discussion #153.",
- f"- **Zero easings across {sum(ops_emitted.values())} class-variant modality ops**: every published class delta tightens "
- f"or specifies - the Deviation channel stayed empty by measurement, not by assumption.",
+ (f"- **Zero easings across {sum(ops_emitted.values())} class-variant modality ops**: every published class delta tightens "
+  f"or specifies - the Deviation channel stayed empty by measurement, not by assumption." if dev_records==0 else
+  f"- **{dev_records} easings among {sum(ops_emitted.values())} class-variant ops**: each carries a converter "
+  f"Deviation (approver: FedRAMP, rationale: published class variant)."),
  f"- Rules without base statements exist (x{synth_prose}) - CR26 itself models some obligations *only* as class "
  f"variants; the Set+Tailoring decomposition makes that explicit.",
  f"- **Deviation ceremony question (spec feedback):** authority-published prose variants would require "
@@ -616,10 +832,16 @@ if unmapped:
     md.append("| path | count |\n|---|---:|")
     for p,n in unmapped: md.append(f"| `{p}` | {n} |")
 else: md.append("*(none)*")
-open(RMD,"w",encoding="utf-8").write("\n".join(md)+"\n")
+with open(RMD,"w",encoding="utf-8",newline="\n") as f: f.write("\n".join(md)+"\n")
 print(f"reqs(rules+ksi): {nreq}  mappings: {mappings}  sets: {nset}  tailorings: {ntail}  objects: {len(objects)}")
 print(f"leaves: {total:,}  mapped: {mapped:,}  UNMAPPED: {total-mapped}")
 print("modality:",dict(mod_hist)," ops:",dict(ops_emitted)," conv-deviations:",dev_records)
 print("counters:",dict(counters)," synth:",synth_prose)
+print("written:",OUTDIR)
+# The gate is UNMAPPED = 0, and the exit code says what the gate says. The
+# bundle and the reports are on disk either way: the reports list the paths.
 if unmapped:
-    print("UNMAPPED:"); [print("  ",p,"x",n) for p,n in unmapped[:30]]
+    print("UNMAPPED:"); [print("  ",p,"x",n) for p,n in unmapped]
+    sys.stdout.flush()
+    raise SystemExit(f"convert_cr26.py: {total-mapped} source leaf value(s) on {len(unmapped)} path(s) have no declared "
+                     f"destination (gate: UNMAPPED = 0). The bundle is not a complete conversion of this source.")
