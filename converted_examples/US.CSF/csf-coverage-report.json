@@ -47,7 +47,7 @@
    "path": "csf.catalog.groups[].controls[].id",
    "count": 219,
    "level": "L1",
-   "destination": "category Set / subcategory Requirement id (URI mint); withdrawn with a successor: also the `ref` of the entry in the replaces[] of each successor; an input of the rule that writes a subcategory's statement id without the control prefix [ledger: 219 transformed]"
+   "destination": "category Set / subcategory Requirement id (URI mint); withdrawn with a successor: also the `ref` of the entry in the replaces[] of each successor; an input of the rule that writes a subcategory's statement id without the control prefix; where the item has no label, title or sort-id, its id stands for it [ledger: 219 transformed]"
   },
   {
    "path": "csf.catalog.groups[].controls[].links[].href",
@@ -119,7 +119,7 @@
    "path": "csf.catalog.groups[].id",
    "count": 6,
    "level": "L1",
-   "destination": "function Set id (URI mint); for a function a withdrawn item was moved into, also an input of the rule that writes that item's entry in the function's replaces[] [ledger: 6 transformed]"
+   "destination": "function Set id (URI mint); for a function a withdrawn item was moved into, also an input of the rule that writes that item's entry in the function's replaces[]; where the function has no label, title or sort-id, its id stands for it [ledger: 6 transformed]"
   },
   {
    "path": "csf.catalog.groups[].parts[].id",

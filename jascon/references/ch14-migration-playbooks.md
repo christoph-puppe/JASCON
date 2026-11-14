@@ -125,7 +125,7 @@ and linked to them, because a role per statement, task and capability
 multiplies entries without adding a fact. The ledger of that conversion
 now reads 762 copied, 62 transformed, 11 no content by a checked rule,
 none dropped, none unaccounted and no failed check; the ledgers of the
-five other corpora that have one read the same two zeros (214,365 source
+five other corpora that have one read the same two zeros (214,455 source
 values in all, 2026-11-14).
 
 > **Don't** read "none unaccounted" as "right". It says that every

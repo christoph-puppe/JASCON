@@ -1037,7 +1037,8 @@ HELD = [
    r"/members/\[\]/ref",
    r"/objects/\[\]/id",
    r"/replaces/\[\]/ref",
-   r"/statements/\[\]/id")),
+   r"/statements/\[\]/id",
+   r"/members/\[\]/sequence")),                     # a control without a sort-id: its id is what it is ordered by
  (r"^nist\.catalog\.groups\[\]\.controls\[\]\.title$", None, (r"/title/en",)),
  (r"^nist\.catalog\.groups\[\]\.controls\[\]\.class$", None, (_COMPAT + r"/class",)),     # a class the rule does not give
  (r"^nist\.catalog\.groups\[\]\.controls\[\]\.props\[\]\.value$", None,

@@ -19,9 +19,9 @@ validators — Python, and a **zero-dependency PowerShell 5.1 twin that runs
 on a stock Windows box** (the weekend-validator claim, measured,
 crypto engines included) —
 **eleven framework and lifecycle corpora converted at 100 % declared path
-coverage** (251,591 source leaf values, every source path with a computed
+coverage** (251,681 source leaf values, every source path with a computed
 destination; where every *value* went is traced by a ledger on six of
-them: of 214,365 source values, 122,817 are carried and 91,548 are no
+them: of 214,455 source values, 122,891 are carried and 91,564 are no
 content by a rule the ledger checks, none is dropped and none
 unaccounted — including NIST
 SP 800-53 Rev 5, its 800-53B baselines, and CSF 2.0), a **bidirectional
@@ -277,8 +277,8 @@ backlog #71.)*
 >   leave the `identified` state; and the coverage reports count source
 >   *paths*, not values that arrive. Since 2026-11-14 a ledger follows
 >   every source value on six corpora (IFA, ISM, Grundschutz++, CSF,
->   SP 800-53, CR26): of 214,365 values, 71,212 are copied, 51,605 made
->   by a named rule that is applied again and compared, and 91,548 are
+>   SP 800-53, CR26): of 214,455 values, 71,259 are copied, 51,632 made
+>   by a named rule that is applied again and compared, and 91,564 are
 >   no content by a rule the ledger checks (a name that only selects a
 >   field, a namespace, an id that can be rebuilt exactly, a back-matter
 >   resource nothing refers to). None is dropped and none unaccounted,
@@ -517,7 +517,7 @@ The census corpora (gate 1 — the evidence base the architecture was derived fr
 | Corpus | Source | Emitted | Coverage |
 |---|---|---|---|
 | [AU.ISM](converted_examples/AU.ISM/ism-coverage-report.md) | ACSC ISM, OSCAL 1.1.2 catalog, 1,150 controls | 1,150 Requirements (1,101 with the control's own revision as `version` and the month of its last change as `history`) · 581 Sets (every group of the source is a Set since 2026-11-14; P10 fix pass recovered 239 taxonomy sets a slug collision had silently merged) | 36,161 / 36,161 leaf values |
-| [DE.BSI](converted_examples/DE.BSI/bsi-coverage-report.md) | Grundschutz++ v2026-07-16, OSCAL 1.1.3 (MS-TLS dropped by decision — defects reported to BSI) | 999 Requirements, one for every control at every depth (since 2026-11-14; until then a nested control was a statement of its parent, and its links were lost) · 221 params with label/default · 288 Sets (159 groups, 126 groupings of a control with the controls nested in it, 2 baselines, the root) | 49,431 / 49,431 |
+| [DE.BSI](converted_examples/DE.BSI/bsi-coverage-report.md) | Grundschutz++ v2026-10-29, OSCAL 1.1.3 (MS-TLS dropped by decision — defects reported to BSI) | 1,000 Requirements, one for every control at every depth (since 2026-11-14; until then a nested control was a statement of its parent, and its links were lost) · 224 params with label/default · 289 Sets (160 groups, 126 groupings of a control with the controls nested in it, 2 baselines, the root) | 49,521 / 49,521 |
 | † [FedRAMP-CR26](converted_examples/FedRAMP-CR26/cr26-coverage-report.md) | CR26 bespoke JSON, v2026.11.02.01 (measured again on 2026-11-14; the census of July was of v2026.07.14.01: 292 Requirements · 373 Mappings · 4 Tailorings, 7,294 / 7,294) | 291 Requirements · 652 Mappings · 92 Sets · 5 Tailorings | 7,532 / 7,532 |
 
 Validation corpora (converted 2026-07-21; the model held without kernel

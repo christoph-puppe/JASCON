@@ -579,7 +579,8 @@ RULES = [
   "writes it (its uuid as `id`, title, links with their media type); a resource nothing refers to is an orphan and is not carried "
   "(a rule the ledger checks)"),
  (r"^csf\.catalog\.groups\[\]\.id$", "L1", "function Set id (URI mint); for a function a withdrawn item was moved into, "
-  "also an input of the rule that writes that item's entry in the function's replaces[]"),
+  "also an input of the rule that writes that item's entry in the function's replaces[]; where the function has no "
+  "label, title or sort-id, its id stands for it"),
  (r"^csf\.catalog\.groups\[\]\.title$", "L1", "function Set title"),
  (r"^csf\.catalog\.groups\[\]\.class$", "L1",
   "no content: `function` says on which level the element stands, and the Set says it by its URI (a rule the "
@@ -597,7 +598,7 @@ RULES = [
  (CTL + r"id$", "L1",
   "category Set / subcategory Requirement id (URI mint); withdrawn with a successor: also the `ref` of the entry "
   "in the replaces[] of each successor; an input of the rule that writes a subcategory's statement id without "
-  "the control prefix"),
+  "the control prefix; where the item has no label, title or sort-id, its id stands for it"),
  (CTL + r"title$", "L1",
   "category Set / subcategory Requirement title"),
  (CTL + r"class$", "L1",
@@ -640,6 +641,8 @@ RULES = [
 # outcome or at another place ends the run (path_map_check). The entries are
 # what the record of the pinned catalogue measured, each read against its
 # row's sentence; three sentences were silent about a place and say it now.
+# One more is written from this script's code and held by the test on an
+# invented catalogue: an element without a label, a title or a sort-id.
 # A row whose sentence ends with ELSE also allows a value that is carried in
 # the compat facet's `unmapped`.
 CARRIED = ("copied", "transformed"); NO_CONTENT = ("not-content",)
@@ -648,13 +651,14 @@ _SOURCE = r"/provenance/sources/\[\]"
 _COMPAT = r"/facets/https:~1~1ns\.jascon\.net~1compat~1oscal-1x@1"
 _CSF = r"/facets/https:~1~1ns\.nist\.gov~1csf~1facet~1"
 _ELSE = (_COMPAT + r"/unmapped(/.*)?",)
+_ID_FOR = (r"/label", r"/title/en", r"/members/\[\]/sequence")     # where an element has no label, title or sort-id, its id stands for it
 HELD = [
  (r"^csf\.catalog\.metadata\.(title|version|oscal-version|published)$", CARRIED,
   (_SOURCE + r"/(title|version|format-version|published)", r"/title/en")),
  (r"^csf\.catalog\.uuid$", CARRIED, (_SOURCE + r"/uuid",)),
  (r"^csf\.catalog\.metadata\.", CARRIED, (_COMPAT + r"/metadata(/.*)?", _SOURCE + r"/(author-ref|date)")),
  (r"^csf\.catalog\.back-matter\.", CARRIED + NO_CONTENT, (r"/facets/https:~1~1ns\.jascon\.net~1stdlib~1facet~1references@1/resources(/.*)?",)),
- (r"^csf\.catalog\.groups\[\]\.id$", CARRIED, _OBJECT + (r"/replaces/\[\]/ref",)),
+ (r"^csf\.catalog\.groups\[\]\.id$", CARRIED, _OBJECT + (r"/replaces/\[\]/ref",) + _ID_FOR),
  (r"^csf\.catalog\.groups\[\]\.title$", CARRIED, (r"/title/en",)),
  (r"^csf\.catalog\.groups\[\]\.class$", NO_CONTENT + CARRIED, _ELSE),
  (r"^csf\.catalog\.groups\[\]\.props\[\]\.value$", CARRIED, (r"/label", r"/members/\[\]/sequence") + _ELSE),
@@ -662,7 +666,7 @@ HELD = [
  (r"^csf\.catalog\.groups\[\]\.parts\[\]\.prose$", CARRIED, (_CSF + r"narrative@1/guidance/\[\]/en",) + _ELSE),
  (r"^csf\.catalog\.groups\[\]\.parts\[\]\.name$", NO_CONTENT + CARRIED, _ELSE),
  (r"^csf\.catalog\.groups\[\]\.parts\[\]\.id$", NO_CONTENT + CARRIED, _ELSE),
- (CTL + r"id$", CARRIED, _OBJECT + (r"/replaces/\[\]/ref", r"/statements/\[\]/id")),
+ (CTL + r"id$", CARRIED, _OBJECT + (r"/replaces/\[\]/ref", r"/statements/\[\]/id") + _ID_FOR),
  (CTL + r"title$", CARRIED, (r"/title/en",)),
  (CTL + r"class$", NO_CONTENT + CARRIED, _ELSE),
  (CTL + r"props\[\]\.value$", CARRIED,

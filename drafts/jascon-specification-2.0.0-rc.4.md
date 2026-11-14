@@ -126,7 +126,7 @@ check corpora, and no runner and no converted check corpus (D24); advice
 packs have one worked pack and no pack a vendor published, and two of
 their fields entered against D22 on the author's decision (D25); and the coverage figures inherited from 1.0.0 count
 source *paths* with a declared destination, not values verified to
-arrive (IV.2, R16). Eleven corpora were converted and measured (251,591
+arrive (IV.2, R16). Eleven corpora were converted and measured (251,681
 source leaf values at path level, UNMAPPED = 0); **five of the bundles
 ship** with the repository, six were removed on licence grounds and are
 reproducible with the converters (§2). Comparison baseline throughout:
@@ -2280,7 +2280,8 @@ are references that name nothing their source defines.)* *(rev.
 2026-11-14, phase E: the author's rule of that day is "real content is
 never dropped", not by a bug, not by a sentence of a path map, not by a
 declared drop. Six converters follow every source value with a ledger
-now (IFA, ISM, Grundschutz++, CSF, SP 800-53, CR26; 214,365 values).
+now (IFA, ISM, Grundschutz++, CSF, SP 800-53, CR26; 214,455 values
+since the Grundschutz++ catalogue of 2026-10-29, 214,365 before).
 Their first ledgers had found values that were lost behind path maps of
 100 %: one of two risk-party values on 22 CSF subcategories, the links
 of 348 nested Grundschutz++ controls, all 3,707 assessment-for links of
@@ -2551,7 +2552,9 @@ the four catalogue bundles changed, and the suite was run again with the
 schema of the OSCAL 1.2.2 release, SHA-256 `fdc559f5…9d0c`: all four
 exports are schema-valid, and 4,465 of 4,465 objects come back equal by
 semantic digest (ISM 1,731, Grundschutz++ 1,287, CSF 226, SP 800-53
-1,221). No workflow step runs it; backlog #90.)* Risk, Check and advice
+1,221). No workflow step runs it; backlog #90.)* *(Later that day the
+workflow runs it, and with the Grundschutz++ catalogue of 2026-10-29 it
+is 4,467 of 4,467, Grundschutz++ 1,289.)* Risk, Check and advice
 have no place in a 1.x *catalog* export; a POA&M-side, an
 assessment-results and a component-definition export belong to the
 pending lifecycle-export work.
@@ -2642,7 +2645,8 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
   out, generic re-import, 5,886/5,886 round-trip measured on the ten
   catalog bundles then present); not re-run. *(2026-11-14: run again on
   the four catalogue bundles in the repository after phase E, 4,465 of
-  4,465 objects; IV.5b.)*
+  4,465 objects; IV.5b. 4,467 with the Grundschutz++ catalogue of
+  2026-10-29.)*
 - **Converters for all eleven corpora** under `jascon/scripts/`, writing
   one byte spelling on every OS; `oscal_conv_lib.global_occurrence()` for
   the value-level check (wired into the IFA report so far). *(rev.
@@ -2662,7 +2666,8 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
   it — backlog #74.)*
 - **Five corpus bundles** under `converted_examples/` — AU.ISM, DE.BSI,
   US.SP800-53, US.CSF, US.IFA-GoodRead: 4,481 manifest-listed objects
-  since phase E (2026-11-14: ISM 1,731, Grundschutz++ 1,287, SP 800-53
+  since phase E (2026-11-14: ISM 1,731, Grundschutz++ 1,287 and, with
+  the publisher's catalogue of 2026-10-29, 1,289, SP 800-53
   1,221, CSF 226, IFA 16; 3,714 before, and 3,715 until 2026-11-13, when
   the IFA Attestation left the manifest that had listed it), both
   SHA-256 digests re-verified per object,
