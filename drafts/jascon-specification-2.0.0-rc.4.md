@@ -724,6 +724,24 @@ validation error (checkable by every Portable tool, no facet knowledge
 required). Converter-established across 1,015 statements' payloads in six
 facets; normative so that a second independent producer cannot legally
 invent a divergent keying and fracture per-clause alignment.
+
+**An Assessment's `method` is a facet payload *(2.0.0 — backlog #55,
+2026-11-14)*.** The kernel schema says of `method` only that it is an
+object; what it holds is the method of the assessment under the contract
+of a facet. Its keys are facet ids and are resolved as the keys of
+`facets` are: a facet of the standard library is held to its normative
+descriptor, any other to the schema the bundle pins, a `private:` key is
+kept and ignored, and anything else is a validation error. Until that
+day no implementation read `method`: a method under a key that no facet
+registers passed, and so did a payload that its own facet refuses, and a
+tool that reads an Assessment's `result` without knowing by what method
+it was reached is the half-understanding this decision exists to stop.
+No payload shipped in the repository had to change (measured: all three
+passed their schemas). Two tools of the repository wrote a method under
+plain keys from their own forms; they write the standard
+`assessment-criteria@1` now. A bundle that passed can fail: one whose
+Assessment states its method under a key no facet registers, or with a
+payload its facet refuses. Twelve vectors (`method-vectors`).
 **Rejected.** Uniform fail-closed including `private:` (kills the valve);
 uniform trust-the-publisher default (props with extra steps).
 

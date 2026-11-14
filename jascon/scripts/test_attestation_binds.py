@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""attestation-binds on a bundle, end to end (backlog #46), and MANIFEST-1
-(backlog #75): a validator is run on copies of two shipped bundles whose
-Attestation, beside the manifest, was changed in one place each, or was
-entered in the manifest.
+"""attestation-binds on a bundle, end to end (backlog #46), MANIFEST-1
+(backlog #75) and an Assessment's method (backlog #55): a validator is run
+on copies of two shipped bundles whose Attestation, beside the manifest,
+was changed in one place each, or was entered in the manifest, and on one
+whose Assessment states its method under a key no facet registers.
 
     python3 jascon/scripts/test_attestation_binds.py          the Python reference
     JASCON_TWIN="powershell -NoLogo -NoProfile -ExecutionPolicy Bypass -File jascon\\scripts\\validate_core.ps1" \\
@@ -81,6 +82,22 @@ def listed_in_the_manifest(att_file):
         return "removed"                # no longer beside the manifest: nothing to write back there
     return change
 
+def method_nobody_registered(att, bundle):
+    # backlog #55: the Assessment's method gains a key that is no facet id, and the manifest is re-pinned, so that
+    # nothing but the method is wrong with the bundle. The Attestation does not name the Assessment.
+    sys.path.insert(0, HERE)
+    from oscal_conv_lib import semantic_digest
+    rel = "objects/assessment/conmon-2023-06.json"
+    p = os.path.join(bundle, *rel.split("/"))
+    o = read_json(p); o["method"]["kind"] = "review"
+    raw = (json.dumps(o, indent=1, ensure_ascii=False) + "\n").encode("utf-8")
+    with open(p, "wb") as f: f.write(raw)
+    mp = os.path.join(bundle, "content-manifest.json")
+    m = read_json(mp)
+    e = next(x for x in m["objects"] if x["path"] == rel)
+    e["package-digest"] = "sha256:" + hashlib.sha256(raw).hexdigest(); e["semantic-digest"] = semantic_digest(o)
+    write_json(mp, m)
+
 COPIES = {
     "c01-as-shipped": (IFA, IFA_ATT, None),
     "c02-other-digest": (IFA, IFA_ATT, other_digest),
@@ -93,6 +110,7 @@ COPIES = {
     "c09-unsigned-withdrawn": (PACK, PACK_ATT, withdrawn_and_unsigned),
     "c10-listed": (IFA, IFA_ATT, listed_in_the_manifest(IFA_ATT)),
     "c11-pack-listed": (PACK, PACK_ATT, listed_in_the_manifest(PACK_ATT)),
+    "c12-method-nobody-registered": (IFA, IFA_ATT, method_nobody_registered),
 }
 
 def validator(dirs, *more):
@@ -233,10 +251,18 @@ class AttestationBesideTheManifest(unittest.TestCase):
         self.assertIn(f"binds: {VID} = FULL MATCH [1 subject(s) of this bundle; a pack manifest this bundle keeps]", out)
         self.assertRegex(out, r"(?m)^2 FAILURES:$")          # these two and no other: the copied bundle beside it is clean
 
+    def test_backlog_55_a_method_no_facet_registers_fails_the_bundle(self):
+        # An Assessment's method is a facet payload. Until 2026-11-14 no validator read it, and this copy passed.
+        self.assertEqual(self.counts["c12-method-nobody-registered"], (18, 1))
+        self.assertIn("https://ifa.gov/goodread/assessment/conmon-2023-06: method 'kind' is no registered facet - not stdlib, "
+                      "not pinned in the manifest, not private:", self.rest)
+        # the method the bundle pins a schema for is still held to it, and passes: one failure, not two
+        self.assertEqual(self.rest.count("https://ifa.gov/goodread/assessment/conmon-2023-06: method "), 1)
+
     def test_backlog_46_the_failures_are_these_and_no_others(self):
         failed = {name for name, (_, bad) in self.counts.items() if bad}
         self.assertEqual(failed, {"c02-other-digest", "c04-not-delivered", "c06-object-changed", "c08-signed-withdrawn",
-                                  "c10-listed", "c11-pack-listed"})
+                                  "c10-listed", "c11-pack-listed", "c12-method-nobody-registered"})
 
     @unittest.skipIf(TWIN, "with a bundle named, the twin does not read the example folder; its default run does")
     def test_backlog_46_the_example_folder_is_held_to_its_two_attestations(self):

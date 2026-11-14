@@ -1,5 +1,5 @@
 {
- "description": "Facet-payload validation and fail-closed rules (D10; backlog #17 - run 1's Blocker P9-1). A stdlib facet payload MUST validate against the normative descriptor schema; a non-stdlib facet MUST be pinned in the bundle manifest (its stub schema then governs) or carry the private: prefix (ignored by definition); anything else is unregistered - dangerous-by-default, a validation error. The adversarial cases below are the P9-1 probes, now permanent.",
+ "description": "Facet-payload validation and fail-closed rules (D10; backlog #17 - run 1's Blocker P9-1). A stdlib facet payload MUST validate against the normative descriptor schema; a non-stdlib facet MUST be pinned in the bundle manifest (its stub schema then governs) or carry the private: prefix (ignored by definition); anything else is unregistered - dangerous-by-default, a validation error. The adversarial cases below are the P9-1 probes, now permanent. method-vectors (backlog #55, 2026-11-14): an Assessment's `method` is a facet payload. Its keys are facet ids, resolved as the keys of `facets` are - the standard library, then the schemas the bundle pins, then `private:`, else an error - and each payload is held to its schema. `expected-errors` is the number of errors for the object. Each of `expected-frags` must occur in some error: an error about a method names it as method '<key>', one about a facet as facet '<key>'. The name of a vector is no part of an error.",
  "vectors": [
   {
    "name": "stdlib-payload-valid",
@@ -211,6 +211,345 @@
    },
    "expected": "valid",
    "reason": "private: carries modifies-semantics [] by definition - preserved, never validated, ignored by compliance computation"
+  }
+ ],
+ "method-vectors": [
+  {
+   "name": "method-stdlib-valid",
+   "note": "The standard assessment-criteria facet, a payload its descriptor accepts.",
+   "object": {
+    "id": "https://assessor.example/assessment/a1",
+    "version": "1",
+    "lifecycle": "active",
+    "subject-refs": [
+     "https://org.example/component/app"
+    ],
+    "method": {
+     "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+      "method": "manual",
+      "summary": {
+       "en": "Document review of the rotation records."
+      }
+     }
+    },
+    "performer-ref": "https://assessor.example/party/lead",
+    "time": "2026-11-14",
+    "result": "satisfied"
+   },
+   "expected": "valid",
+   "expected-errors": 0,
+   "expected-frags": []
+  },
+  {
+   "name": "method-stdlib-payload-violates-its-schema",
+   "note": "`method` inside the payload is `automated` or `manual`. The descriptor refuses anything else, under `method` as under `facets`.",
+   "object": {
+    "id": "https://assessor.example/assessment/a1",
+    "version": "1",
+    "lifecycle": "active",
+    "subject-refs": [
+     "https://org.example/component/app"
+    ],
+    "method": {
+     "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+      "method": "by-ear"
+     }
+    },
+    "performer-ref": "https://assessor.example/party/lead",
+    "time": "2026-11-14",
+    "result": "satisfied"
+   },
+   "expected": "invalid",
+   "expected-errors": 1,
+   "expected-frags": [
+    "method 'https://ns.jascon.net/stdlib/facet/assessment-criteria@1'"
+   ]
+  },
+  {
+   "name": "method-stdlib-payload-with-a-member-the-facet-does-not-know",
+   "note": "The descriptor is closed.",
+   "object": {
+    "id": "https://assessor.example/assessment/a1",
+    "version": "1",
+    "lifecycle": "active",
+    "subject-refs": [
+     "https://org.example/component/app"
+    ],
+    "method": {
+     "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+      "kind": "review"
+     }
+    },
+    "performer-ref": "https://assessor.example/party/lead",
+    "time": "2026-11-14",
+    "result": "satisfied"
+   },
+   "expected": "invalid",
+   "expected-errors": 1,
+   "expected-frags": [
+    "method 'https://ns.jascon.net/stdlib/facet/assessment-criteria@1'"
+   ]
+  },
+  {
+   "name": "method-plain-key-is-no-facet",
+   "note": "The spelling older fixtures of this corpus used. `kind` is no facet id: not of the standard library, not pinned, not private. A tool that does not know what a method means must not guess at the verdict it produced (handbook 10.1).",
+   "object": {
+    "id": "https://assessor.example/assessment/a1",
+    "version": "1",
+    "lifecycle": "active",
+    "subject-refs": [
+     "https://org.example/component/app"
+    ],
+    "method": {
+     "kind": "review"
+    },
+    "performer-ref": "https://assessor.example/party/lead",
+    "time": "2026-11-14",
+    "result": "satisfied"
+   },
+   "expected": "invalid",
+   "expected-errors": 1,
+   "expected-frags": [
+    "method 'kind'"
+   ]
+  },
+  {
+   "name": "method-unregistered-facet-uri",
+   "note": "A facet id nobody registered: the bundle pins no schema for it.",
+   "object": {
+    "id": "https://assessor.example/assessment/a1",
+    "version": "1",
+    "lifecycle": "active",
+    "subject-refs": [
+     "https://org.example/component/app"
+    ],
+    "method": {
+     "https://example.org/facet/our-method@1": {
+      "steps": 3
+     }
+    },
+    "performer-ref": "https://assessor.example/party/lead",
+    "time": "2026-11-14",
+    "result": "satisfied"
+   },
+   "expected": "invalid",
+   "expected-errors": 1,
+   "expected-frags": [
+    "method 'https://example.org/facet/our-method@1'"
+   ]
+  },
+  {
+   "name": "method-pinned-valid",
+   "note": "The assessor's own facet, pinned by the bundle; the payload is what the pin says.",
+   "object": {
+    "id": "https://assessor.example/assessment/a1",
+    "version": "1",
+    "lifecycle": "active",
+    "subject-refs": [
+     "https://org.example/component/app"
+    ],
+    "method": {
+     "https://assessor.example/facet/review@1": {
+      "standard": "ISAE 3402",
+      "sample-size": 25
+     }
+    },
+    "performer-ref": "https://assessor.example/party/lead",
+    "time": "2026-11-14",
+    "result": "satisfied"
+   },
+   "pinned": {
+    "https://assessor.example/facet/review": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "standard"
+     ],
+     "properties": {
+      "standard": {
+       "type": "string"
+      },
+      "sample-size": {
+       "type": "integer"
+      }
+     }
+    }
+   },
+   "expected": "valid",
+   "expected-errors": 0,
+   "expected-frags": []
+  },
+  {
+   "name": "method-pinned-payload-violates-the-pin",
+   "note": "The pinned schema requires `standard` and types `sample-size`.",
+   "object": {
+    "id": "https://assessor.example/assessment/a1",
+    "version": "1",
+    "lifecycle": "active",
+    "subject-refs": [
+     "https://org.example/component/app"
+    ],
+    "method": {
+     "https://assessor.example/facet/review@1": {
+      "sample-size": "twenty-five"
+     }
+    },
+    "performer-ref": "https://assessor.example/party/lead",
+    "time": "2026-11-14",
+    "result": "satisfied"
+   },
+   "pinned": {
+    "https://assessor.example/facet/review": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "standard"
+     ],
+     "properties": {
+      "standard": {
+       "type": "string"
+      },
+      "sample-size": {
+       "type": "integer"
+      }
+     }
+    }
+   },
+   "expected": "invalid",
+   "expected-errors": 1,
+   "expected-frags": [
+    "method 'https://assessor.example/facet/review@1'"
+   ]
+  },
+  {
+   "name": "method-private-is-ignored-by-definition",
+   "note": "`private:` declares that it changes no semantics; it is kept and never validated, under `method` as under `facets`.",
+   "object": {
+    "id": "https://assessor.example/assessment/a1",
+    "version": "1",
+    "lifecycle": "active",
+    "subject-refs": [
+     "https://org.example/component/app"
+    ],
+    "method": {
+     "private:lab-notes@1": {
+      "whatever": [
+       1,
+       2,
+       3
+      ]
+     }
+    },
+    "performer-ref": "https://assessor.example/party/lead",
+    "time": "2026-11-14",
+    "result": "satisfied"
+   },
+   "expected": "valid",
+   "expected-errors": 0,
+   "expected-frags": []
+  },
+  {
+   "name": "method-two-facets-one-wrong",
+   "note": "Every key is held, and one error is reported for the one that is wrong.",
+   "object": {
+    "id": "https://assessor.example/assessment/a1",
+    "version": "1",
+    "lifecycle": "active",
+    "subject-refs": [
+     "https://org.example/component/app"
+    ],
+    "method": {
+     "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+      "method": "automated"
+     },
+     "kind": "review"
+    },
+    "performer-ref": "https://assessor.example/party/lead",
+    "time": "2026-11-14",
+    "result": "satisfied"
+   },
+   "expected": "invalid",
+   "expected-errors": 1,
+   "expected-frags": [
+    "method 'kind'"
+   ]
+  },
+  {
+   "name": "method-and-facets-are-both-held",
+   "note": "An Assessment whose method and whose facets are both unregistered has two errors: the check of the one does not stand in for the other.",
+   "object": {
+    "id": "https://assessor.example/assessment/a1",
+    "version": "1",
+    "lifecycle": "active",
+    "subject-refs": [
+     "https://org.example/component/app"
+    ],
+    "method": {
+     "kind": "review"
+    },
+    "performer-ref": "https://assessor.example/party/lead",
+    "time": "2026-11-14",
+    "result": "satisfied",
+    "facets": {
+     "https://example.org/unregistered-facet@9": {
+      "x": 1
+     }
+    }
+   },
+   "expected": "invalid",
+   "expected-errors": 2,
+   "expected-frags": [
+    "method 'kind'",
+    "facet 'https://example.org/unregistered-facet@9'"
+   ]
+  },
+  {
+   "name": "a-member-called-method-inside-a-payload-is-no-assessments-method",
+   "note": "A Requirement that carries assessment criteria. The `method` inside that payload is a member of the facet, not the method of an Assessment.",
+   "object": {
+    "id": "https://ex.org/req/1",
+    "version": "1",
+    "lifecycle": "active",
+    "statements": [
+     {
+      "id": "s1",
+      "modality": "must",
+      "obligated-parties": [
+       "https://ex.org/party/org"
+      ],
+      "prose": {
+       "en": "X."
+      }
+     }
+    ],
+    "facets": {
+     "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+      "method": "automated"
+     }
+    }
+   },
+   "expected": "valid",
+   "expected-errors": 0,
+   "expected-frags": []
+  },
+  {
+   "name": "an-empty-method-names-no-facet",
+   "note": "The rule holds the keys there are. Whether an Assessment may state no method at all is not this rule's question: the kernel schema asks for an object and accepts an empty one.",
+   "object": {
+    "id": "https://assessor.example/assessment/a1",
+    "version": "1",
+    "lifecycle": "active",
+    "subject-refs": [
+     "https://org.example/component/app"
+    ],
+    "method": {},
+    "performer-ref": "https://assessor.example/party/lead",
+    "time": "2026-11-14",
+    "result": "satisfied"
+   },
+   "expected": "valid",
+   "expected-errors": 0,
+   "expected-frags": []
   }
  ]
 }
