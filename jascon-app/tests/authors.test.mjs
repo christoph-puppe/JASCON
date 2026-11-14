@@ -106,6 +106,9 @@ test("no page mints a party from a word of its own (backlog #70)", () => {
   for (const [f, word] of [["assess.html", /performer:\s*"[a-z]/], ["browse.html", /party:\s*"[a-z]/], ["map.html", /author:\s*"[a-z]/], ["tailor.html", /devApprover\s*\|\|\s*"/]]) {
     assert.equal(word.test(fs.readFileSync(path.join(APP, f), "utf8")), false, `${f} starts a party field from a word`);
   }
+  /* 5. the advice pack builder is a page of its own with the same duty: an origin typed does not make a publisher */
+  const builder = code(fs.readFileSync(path.join(ROOT, "one-page-apps/jascon-pack-builder.html"), "utf8"));
+  assert.deepEqual([...builder.matchAll(/["'`]\/party\/([a-z][a-z-]*)["'`]/g)].map(m => m[1]), [], "the pack builder writes a party from a word");
 });
 
 test("an import: what the caller gives replaces what the source states, field by field; no provenance without both", () => {

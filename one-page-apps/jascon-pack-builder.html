@@ -3900,7 +3900,7 @@ if (typeof module !== "undefined" && module.exports) {
    as they are), and anything a customer does with a pack. */
 "use strict";
 (() => {
-const PB_VERSION = "1.2.0";
+const PB_VERSION = "1.2.1";
 const PB_TOOL = "JASCON Advice Pack Builder";
 const STORE_KEY = "jascon-pack-builder:draft:v1";
 const KINDS = JSC_SCHEMA.$defs.componentKind.enum;
@@ -4213,13 +4213,19 @@ function onEdit(el, committed) {
   changed();
 }
 /* A new origin moves every identifier that started with the old one and
-   fills in the ones still empty. */
+   fills in the ids of the pack and of the components that are still empty.
+   The publisher is not filled in: it is a party, and a party is named by
+   whoever fills in the form. Until 1.2.1 an empty publisher id became
+   <origin>/party/vendor here, a party made from a word of this page that
+   nobody had named, and it went into the header and into the signature
+   (backlog #70). A publisher id that was typed still moves with the origin;
+   an empty one stays empty, and the pack is not built without it. */
 function setOrigin(origin) {
   const old = draft.origin;
   draft.origin = origin;
   if (!origin) return;                    // cleared: the ids keep what they have
   const move = id => old && id.startsWith(old + "/") ? origin + id.slice(old.length) : id;
-  draft.publisher.ref = move(draft.publisher.ref) || (origin ? origin + "/party/vendor" : "");
+  draft.publisher.ref = move(draft.publisher.ref);
   draft.pack.id = move(draft.pack.id) || (origin ? `${origin}/pack/${jscSlug(firstText(textOf(draft.pack.title))) || "advice"}` : "");
   for (const c of draft.components) c.id = move(c.id) || (origin && c.label.trim() ? `${origin}/component/${jscSlug(c.label)}` : c.id);
 }
@@ -4279,7 +4285,7 @@ async function assemble() {
   if (!/^https?:\/\/[^/\s?#]+$/.test(origin)) err("FORM", "Origin: write the scheme and host only, for example https://vendor.example.");
   if (!d.pack.id.trim()) err("FORM", "Pack id is empty.");
   if (!d.pack.version.trim()) err("FORM", "Release is empty.");
-  if (!d.publisher.ref.trim()) err("FORM", "Publisher id is empty.");
+  if (!d.publisher.ref.trim()) err("FORM", "Publisher id is empty. A pack names the party that publishes it, under your origin (ADVICE-2); this page does not supply one.");
   if (!d.components.length) err("FORM", "A pack holds at least one Component.");
   d.components.forEach((c, i) => {
     if (!c.id.trim()) err("FORM", `Component ${i + 1}: the id is empty.`);
