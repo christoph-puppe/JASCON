@@ -145,8 +145,11 @@ whole.
                          "items": {"type": "string", "minLength": 1} } } } } } } }
 ```
 
-This is the file the Grundschutz++ converter pins and the example
-folder pins, byte for byte. The two levels and the range of the effort
+This is the descriptor the Grundschutz++ converter pins and the example
+folder pins: one schema under one id and version, which a check of the
+repository holds (`.github/pinned-schemas.json`). The two files differ
+in their line ends and so in their digests, as their folders do. The two
+levels and the range of the effort
 are the publisher's: BSI keeps one list per property beside its
 catalogue, and `security_level.csv` holds `normal-SdT` and `erhöht`,
 `effort_level.csv` 0 to 5. A lesson stands behind the version number.

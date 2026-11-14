@@ -175,7 +175,7 @@
   {
    "id": "https://ns.bsi.bund.de/facet/gspp-taxonomy",
    "exact-version": "1.1.0",
-   "digest": "sha256:dec55b90827a9a5b5f1d7906c09183387db1127aa5908ba4fab93b12b77c8aab",
+   "digest": "sha256:9a442296337ea79913941f49a7bcb12d442f3745299206b63ed58615d5321643",
    "path": "gspp-taxonomy-1.1.0.json"
   },
   {

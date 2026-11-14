@@ -19,7 +19,7 @@
       "semantic-digest": "sha256:46d87c840d567e8fb43cf7b649e199afcde8662967762840d72145d3cfdeb899"
     }
   ],
-  "content-manifest-digest": "sha256:6811caf4a82819607a3be71b434006d724efb1f1ce038e59443032a35d048650",
+  "content-manifest-digest": "sha256:7a586acece80d683b321691053148aaf2ebc6c1e87f8b55b2c10d8b2aefaae05",
   "rendering": {
     "artifact-digest": "sha256:36405fcbe4e19ba3305b56c129e70925a27f4a16a10216a2ba3e0a13c625857e",
     "media-type": "text/markdown",
