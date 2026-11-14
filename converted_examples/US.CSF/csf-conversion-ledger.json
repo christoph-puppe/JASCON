@@ -18,7 +18,7 @@
    "example": "csf#/catalog/back-matter/resources/0/rlinks/0/href",
    "to": [
     {
-     "pointer": "/facets/https:~1~1ns.nist.gov~1csf~1facet~1references@1/resources/[]/rlinks/[]/href",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1references@1/resources/[]/rlinks/[]/href",
      "count": 3
     }
    ]
@@ -43,7 +43,7 @@
    "example": "csf#/catalog/back-matter/resources/0/rlinks/0/media-type",
    "to": [
     {
-     "pointer": "/facets/https:~1~1ns.nist.gov~1csf~1facet~1references@1/resources/[]/rlinks/[]/media-type",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1references@1/resources/[]/rlinks/[]/media-type",
      "count": 3
     }
    ]
@@ -55,7 +55,7 @@
    "example": "csf#/catalog/back-matter/resources/0/title",
    "to": [
     {
-     "pointer": "/facets/https:~1~1ns.nist.gov~1csf~1facet~1references@1/resources/[]/title",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1references@1/resources/[]/title",
      "count": 3
     }
    ]
@@ -80,7 +80,7 @@
    "example": "csf#/catalog/back-matter/resources/0/uuid",
    "to": [
     {
-     "pointer": "/facets/https:~1~1ns.nist.gov~1csf~1facet~1references@1/resources/[]/uuid",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1references@1/resources/[]/id",
      "count": 3
     }
    ]
@@ -669,6 +669,11 @@
     {
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/last-modified",
      "count": 1
+    },
+    {
+     "pointer": "/provenance/sources/[]/date",
+     "count": 1,
+     "rule": "date of the source: the day of the document's last-modified"
     }
    ]
   },
@@ -703,7 +708,7 @@
    "example": "csf#/catalog/metadata/oscal-version",
    "to": [
     {
-     "pointer": "/provenance/source-oscal-version",
+     "pointer": "/provenance/sources/[]/format-version",
      "count": 1
     }
    ]
@@ -777,6 +782,11 @@
     {
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/parties/[]/name",
      "count": 2
+    },
+    {
+     "pointer": "/provenance/sources/[]/author-ref",
+     "count": 1,
+     "rule": "author of the source: the party its document names as its author, as a party URI under the namespace"
     }
    ]
   },
@@ -859,7 +869,7 @@
    "example": "csf#/catalog/metadata/published",
    "to": [
     {
-     "pointer": "/provenance/published",
+     "pointer": "/provenance/sources/[]/published",
      "count": 1
     }
    ]
@@ -1003,7 +1013,7 @@
    "example": "csf#/catalog/metadata/title",
    "to": [
     {
-     "pointer": "/provenance/source",
+     "pointer": "/provenance/sources/[]/title",
      "count": 1
     },
     {
@@ -1019,7 +1029,7 @@
    "example": "csf#/catalog/metadata/version",
    "to": [
     {
-     "pointer": "/provenance/source-doc-version",
+     "pointer": "/provenance/sources/[]/version",
      "count": 1
     }
    ]
@@ -1031,7 +1041,7 @@
    "example": "csf#/catalog/uuid",
    "to": [
     {
-     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/uuid",
+     "pointer": "/provenance/sources/[]/uuid",
      "count": 1
     }
    ]

@@ -2,9 +2,9 @@
  "measures": "one row per source path and outcome; every source leaf value was traced and checked against the written files in the run that wrote this record, and is counted in one row",
  "leaf-values": 36161,
  "totals": {
-  "copied": 11401,
-  "transformed": 14564,
-  "not-content": 10196,
+  "copied": 5896,
+  "transformed": 15665,
+  "not-content": 14600,
   "intentionally-dropped": 0,
   "unaccounted": 0
  },
@@ -18,7 +18,7 @@
    "example": "ism#/catalog/back-matter/resources/236/props/0/name",
    "to": [
     {
-     "pointer": "/facets/https:~1~1ns.cyber.gov.au~1ism~1facet~1references@1/resources/[]/props/[]/name",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1references@1/resources/[]/props/[]/name",
      "count": 2
     }
    ]
@@ -30,7 +30,7 @@
    "example": "ism#/catalog/back-matter/resources/236/props/0/value",
    "to": [
     {
-     "pointer": "/facets/https:~1~1ns.cyber.gov.au~1ism~1facet~1references@1/resources/[]/props/[]/value",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1references@1/resources/[]/props/[]/value",
      "count": 2
     }
    ]
@@ -42,7 +42,7 @@
    "example": "ism#/catalog/back-matter/resources/0/rlinks/0/href",
    "to": [
     {
-     "pointer": "/facets/https:~1~1ns.cyber.gov.au~1ism~1facet~1references@1/resources/[]/rlinks/[]/href",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1references@1/resources/[]/rlinks/[]/href",
      "count": 254
     }
    ]
@@ -54,7 +54,7 @@
    "example": "ism#/catalog/back-matter/resources/25/rlinks/0/media-type",
    "to": [
     {
-     "pointer": "/facets/https:~1~1ns.cyber.gov.au~1ism~1facet~1references@1/resources/[]/rlinks/[]/media-type",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1references@1/resources/[]/rlinks/[]/media-type",
      "count": 13
     }
    ]
@@ -66,7 +66,7 @@
    "example": "ism#/catalog/back-matter/resources/0/title",
    "to": [
     {
-     "pointer": "/facets/https:~1~1ns.cyber.gov.au~1ism~1facet~1references@1/resources/[]/title",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1references@1/resources/[]/title",
      "count": 246
     }
    ]
@@ -78,7 +78,7 @@
    "example": "ism#/catalog/back-matter/resources/0/uuid",
    "to": [
     {
-     "pointer": "/facets/https:~1~1ns.cyber.gov.au~1ism~1facet~1references@1/resources/[]/uuid",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1references@1/resources/[]/id",
      "count": 246
     }
    ]
@@ -228,26 +228,14 @@
   },
   {
    "path": "ism.catalog.groups[].groups[].groups[].controls[].props[].name",
-   "outcome": "copied",
-   "count": 2202,
-   "example": "ism#/catalog/groups/2/groups/0/groups/0/controls/0/props/1/name",
-   "to": [
-    {
-     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/props/[]/name",
-     "count": 2202
-    }
-   ]
-  },
-  {
-   "path": "ism.catalog.groups[].groups[].groups[].controls[].props[].name",
    "outcome": "not-content",
-   "count": 1199,
+   "count": 3401,
    "example": "ism#/catalog/groups/1/groups/0/groups/0/controls/0/props/0/name",
    "rules": [
     {
      "kind": "selector",
      "rule": "the name of a prop selects the member its value is written to, or the rule that reads it",
-     "count": 1199
+     "count": 3401
     }
    ]
   },
@@ -310,42 +298,34 @@
   },
   {
    "path": "ism.catalog.groups[].groups[].groups[].controls[].props[].ns",
-   "outcome": "copied",
-   "count": 2202,
-   "example": "ism#/catalog/groups/2/groups/0/groups/0/controls/0/props/1/ns",
-   "to": [
-    {
-     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/props/[]/ns",
-     "count": 2202
-    }
-   ]
-  },
-  {
-   "path": "ism.catalog.groups[].groups[].groups[].controls[].props[].ns",
    "outcome": "not-content",
-   "count": 5557,
+   "count": 7759,
    "example": "ism#/catalog/groups/1/groups/0/groups/0/controls/0/props/2/ns",
    "rules": [
     {
      "kind": "namespace",
      "rule": "the namespace of a prop: the one this mapping reads the prop's name in",
-     "count": 5557
+     "count": 7759
     }
    ]
   },
   {
    "path": "ism.catalog.groups[].groups[].groups[].controls[].props[].value",
    "outcome": "copied",
-   "count": 2251,
+   "count": 1150,
    "example": "ism#/catalog/groups/1/groups/0/groups/0/controls/0/props/1/value",
    "to": [
     {
-     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/props/[]/value",
-     "count": 2202
-    },
-    {
      "pointer": "/label",
      "count": 49
+    },
+    {
+     "pointer": "/objects/[]/version",
+     "count": 1101
+    },
+    {
+     "pointer": "/version",
+     "count": 1101
     }
    ]
   },
@@ -365,9 +345,14 @@
   {
    "path": "ism.catalog.groups[].groups[].groups[].controls[].props[].value",
    "outcome": "transformed",
-   "count": 5557,
+   "count": 6658,
    "example": "ism#/catalog/groups/1/groups/0/groups/0/controls/0/props/2/value",
    "to": [
+    {
+     "pointer": "/history/[]/date",
+     "count": 1101,
+     "rule": "month of a control's last change: Mon-YY as the source prints it, written YYYY-MM (the century is 20)"
+    },
     {
      "pointer": "/id",
      "count": 8,
@@ -672,7 +657,7 @@
      "count": 1
     },
     {
-     "pointer": "/provenance/date",
+     "pointer": "/provenance/sources/[]/date",
      "count": 1,
      "rule": "date of the source: the day of the document's last-modified"
     }
@@ -713,7 +698,7 @@
      "count": 1
     },
     {
-     "pointer": "/provenance/source-oscal-version",
+     "pointer": "/provenance/sources/[]/format-version",
      "count": 1
     }
    ]
@@ -837,7 +822,7 @@
      "count": 1
     },
     {
-     "pointer": "/provenance/author-ref",
+     "pointer": "/provenance/sources/[]/author-ref",
      "count": 1,
      "rule": "author of the source: the party its document names as its author (the role `creator`, else `prepared-by`, else the one party it names); a landmark URI from the party's name"
     }
@@ -946,6 +931,10 @@
    "example": "ism#/catalog/metadata/title",
    "to": [
     {
+     "pointer": "/provenance/sources/[]/title",
+     "count": 1
+    },
+    {
      "pointer": "/title/en",
      "count": 1
     }
@@ -959,15 +948,15 @@
    "to": [
     {
      "pointer": "/objects/[]/version",
-     "count": 1731
+     "count": 630
     },
     {
-     "pointer": "/provenance/source-version",
+     "pointer": "/provenance/sources/[]/version",
      "count": 1
     },
     {
      "pointer": "/version",
-     "count": 1731
+     "count": 630
     }
    ]
   },
@@ -978,7 +967,7 @@
    "example": "ism#/catalog/uuid",
    "to": [
     {
-     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/uuid",
+     "pointer": "/provenance/sources/[]/uuid",
      "count": 1
     }
    ]

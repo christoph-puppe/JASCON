@@ -152,6 +152,8 @@ class Converted(unittest.TestCase):
         os.makedirs(os.path.join(tree, "sources", "nist"))
         with open(os.path.join(tree, "sources", "nist", "NIST_CSF_v2.0_catalog.json"), "w", encoding="utf-8") as f: json.dump(source, f)
         shutil.copy(os.path.join(HERE, "oscal_conv_lib.py"), scripts)
+        # the standard facets' descriptors, which the converter pins verbatim (references@1 since 2026-11-14)
+        shutil.copytree(os.path.join(HERE, "..", "schemas", "stdlib"), os.path.join(tree, "jascon", "schemas", "stdlib"))
         with open(os.path.join(HERE, "convert_csf.py"), encoding="utf-8") as f: code = f.read()
         for old, new in changes:
             if code.count(old) != 1:
@@ -264,11 +266,15 @@ class PhaseEEveryValueIsCarriedOrIsNoContent(Converted):
         meta = catalogue()["catalog"]["metadata"]
         root = self.plain["objects"][f"{NS}/set/root"]
         elsewhere = ("title", "version", "oscal-version", "published")
-        self.assertEqual(root["facets"][COMPAT], {"metadata": {k: v for k, v in meta.items() if k not in elsewhere},
-                                                  "uuid": catalogue()["catalog"]["uuid"]})
+        self.assertEqual(root["facets"][COMPAT], {"metadata": {k: v for k, v in meta.items() if k not in elsewhere}})
+        # the document is the one entry of the manifest's provenance.sources (backlog #80): its uuid stands there
         with open(os.path.join(self.plain["out"], "csf-core-bundle", "content-manifest.json"), encoding="utf-8") as f: prov = json.load(f)["provenance"]
-        self.assertEqual((root["title"], prov["source"], prov["source-doc-version"], prov["source-oscal-version"], prov["published"]),
-                         ({"en": meta["title"]}, meta["title"], meta["version"], meta["oscal-version"], meta["published"]))
+        self.assertEqual(sorted(prov), ["converter", "namespace-note", "sources"])
+        (source,) = prov["sources"]
+        self.assertEqual(root["title"], {"en": meta["title"]})
+        self.assertEqual({k: source[k] for k in ("title", "version", "uuid", "format", "format-version", "published")},
+                         {"title": meta["title"], "version": meta["version"], "uuid": catalogue()["catalog"]["uuid"],
+                          "format": "OSCAL", "format-version": meta["oscal-version"], "published": meta["published"]})
         rows = self.rows(self.plain)
         in_metadata = [r for (path, _), r in rows.items() if path.startswith("csf.catalog.metadata.")]
         self.assertEqual({r["outcome"] for r in in_metadata}, {"copied"})
@@ -298,8 +304,9 @@ class PhaseEEveryValueIsCarriedOrIsNoContent(Converted):
         r = self.plain
         self.assertEqual((r["report"]["ledger"]["declared-drops"], r["ledger"]["totals"]["intentionally-dropped"]), ([], 0))
         root = r["objects"][f"{NS}/set/root"]
-        self.assertEqual(root["facets"][f"{NS}/facet/references@1"], {"resources": catalogue()["catalog"]["back-matter"]["resources"]},
-                         "the metadata link names it: carried as the source writes it, with its uuid and the media type")
+        self.assertEqual(root["facets"]["https://ns.jascon.net/stdlib/facet/references@1"],
+                         {"resources": [{"id": x["uuid"], **{k: v for k, v in x.items() if k != "uuid"}} for x in catalogue()["catalog"]["back-matter"]["resources"]]},
+                         "the metadata link names it: carried as the source writes it, in the standard facet (backlog #82), its uuid as `id`")
         with open(os.path.join(r["out"], "csf-coverage-report.md"), encoding="utf-8") as f: text = f.read()
         for heading in ("## What is no content (conversion ledger)", "## Declared drops that remain (conversion ledger)",
                         "## Unaccounted source values (conversion ledger)"):
@@ -401,7 +408,7 @@ class PhaseEWhatTheMappingDoesNotKnow(Converted):
         def change(doc): doc["catalog"]["back-matter"]["resources"].append({"uuid": "00000000-0000-4000-8000-0000000000ff", "title": "Nobody names this"})
         r = self.changed(change)
         self.assertEqual((r["done"].returncode, r["ledger"]["totals"]["unaccounted"]), (0, 0))
-        self.assertEqual(len(r["objects"][f"{NS}/set/root"]["facets"][f"{NS}/facet/references@1"]["resources"]), 1)
+        self.assertEqual(len(r["objects"][f"{NS}/set/root"]["facets"]["https://ns.jascon.net/stdlib/facet/references@1"]["resources"]), 1)
         self.assertEqual({x["kind"] for x in self.rows(r)["csf.catalog.back-matter.resources[].title", "not-content"]["rules"]}, {"orphan"})
 
     def test_phase_e_a_third_level_of_controls_ends_the_run(self):
@@ -482,11 +489,12 @@ class PhaseEDeliberateDefects(Converted):
         self.assertGreater(self.count(r, f"{S}.title", "unaccounted"), 0)
 
     def test_defect_09_the_document_metadata_is_not_written(self):
-        r = self.red([('root_facets[COMPAT] = {**({"metadata": metadata_rest} if metadata_rest else {}), "uuid": cat["uuid"]}',
-                       'root_facets[COMPAT] = {"uuid": cat["uuid"]}')])
+        r = self.red([('if metadata_rest: root_facets[COMPAT] = {"metadata": metadata_rest}\n', '')])
         meta = catalogue()["catalog"]["metadata"]
         # the metadata link is what names the resource; the resource is carried all the same, so nothing but the metadata is lost
-        self.assertEqual(r["ledger"]["totals"]["unaccounted"], sum(1 for _ in leaves(meta)) - 4)
+        # four members stand in the manifest as they are (title, version, oscal-version, published), and two more are
+        # what the manifest's author-ref and date are made from (the author's name, last-modified): six are not lost
+        self.assertEqual(r["ledger"]["totals"]["unaccounted"], sum(1 for _ in leaves(meta)) - 6)
 
     def test_defect_10_a_written_file_is_not_what_the_object_says(self):
         r = self.red([(self.DROPS, '_p = os.path.join(bundle.out, "objects", "req", "aa-on-01.json")\n'

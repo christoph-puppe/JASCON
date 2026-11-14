@@ -58,9 +58,9 @@
   "file": "ism-conversion-ledger.json",
   "leaf-values": 36161,
   "totals": {
-   "copied": 11401,
-   "transformed": 14564,
-   "not-content": 10196,
+   "copied": 5896,
+   "transformed": 15665,
+   "not-content": 14600,
    "intentionally-dropped": 0,
    "unaccounted": 0
   },
@@ -142,6 +142,11 @@
     "destinations": 1150
    },
    {
+    "rule": "month of a control's last change: Mon-YY as the source prints it, written YYYY-MM (the century is 20)",
+    "source-values": 1101,
+    "destinations": 1101
+   },
+   {
     "rule": "statement id: the part id after its last underscore",
     "source-values": 1150,
     "destinations": 1150
@@ -156,7 +161,7 @@
    {
     "kind": "namespace",
     "rule": "the namespace of a prop: the one this mapping reads the prop's name in",
-    "values": 5557
+    "values": 7759
    },
    {
     "kind": "rebuilt-id",
@@ -171,7 +176,7 @@
    {
     "kind": "selector",
     "rule": "the name of a prop selects the member its value is written to, or the rule that reads it",
-    "values": 1769
+    "values": 3971
    }
   ],
   "declared-drops": [],
@@ -182,6 +187,7 @@
    "sets-with-no-member": 16,
    "requirements-with-revision": 1101,
    "requirements-with-updated": 1101,
+   "requirements-with-revision-or-updated-in-compat": 0,
    "resources": 246,
    "links-in-texts": 481,
    "links-that-name-a-resource-of-the-bundle": 481,
@@ -226,25 +232,31 @@
     "in": "manifest",
     "pointer": "/facet-schemas/[]/digest",
     "count": 2,
-    "example": "sha256:f233c492c958532e40caad8f9e8010d0a224ad556ec5a27a16f3cc5bd9793c09"
+    "example": "sha256:0a7ed521490142ab833530eccf31f6708ea93f1837522e6cd434c75065b20ce8"
    },
    {
     "in": "manifest",
     "pointer": "/facet-schemas/[]/exact-version",
     "count": 2,
-    "example": "1.0.0"
+    "example": "1.2.0"
    },
    {
     "in": "manifest",
     "pointer": "/facet-schemas/[]/id",
     "count": 2,
-    "example": "https://ns.cyber.gov.au/ism/facet/references"
+    "example": "https://ns.jascon.net/compat/oscal-1x"
    },
    {
     "in": "manifest",
     "pointer": "/facet-schemas/[]/path",
     "count": 2,
-    "example": "schemas/ism-references-1.0.0-stub.json"
+    "example": "schemas/oscal-1x-compat-1.2.0.json"
+   },
+   {
+    "in": "manifest",
+    "pointer": "/kernel-version",
+    "count": 1,
+    "example": "2.0.0"
    },
    {
     "in": "manifest",
@@ -262,7 +274,7 @@
     "in": "manifest",
     "pointer": "/objects/[]/package-digest",
     "count": 1731,
-    "example": "sha256:9a179baec6f33f5d4b40194d9ea6ae799601c2a9dc561748ebac1f678b76b2ad"
+    "example": "sha256:fa10ee1c4e3d2ee297d453e384bcead0d14225ea438e90c1d4468de6454a7301"
    },
    {
     "in": "manifest",
@@ -274,19 +286,19 @@
     "in": "manifest",
     "pointer": "/objects/[]/semantic-digest",
     "count": 1731,
-    "example": "sha256:cd9473584bf6bc05c3606cb5124af788e8e8213fe95341bcfbe9419bbd1d00d3"
+    "example": "sha256:96d8a55cf7e5547857f8d3b81c9eac4ff739d0920d696802aee36431518b18e4"
    },
    {
     "in": "manifest",
     "pointer": "/provenance/converter",
     "count": 1,
-    "example": "convert_ism.py v0.4"
+    "example": "convert_ism.py v0.5"
    },
    {
     "in": "manifest",
-    "pointer": "/provenance/source",
+    "pointer": "/provenance/sources/[]/format",
     "count": 1,
-    "example": "ACSC ISM OSCAL catalog"
+    "example": "OSCAL"
    }
   ]
  },
@@ -296,7 +308,7 @@
    "path": "catalog.back-matter.resources[].props[].name",
    "count": 2,
    "level": "L2",
-   "destination": "references facet on the root Set: resources[], in the source's own shape, with the uuid that a `(#uuid)` link in a text names",
+   "destination": "standard facet references@1 on the root Set: resources[], in the source's own shape, the uuid as `id`, which a `(#uuid)` link in a text names",
    "ledger": {
     "copied": 2
    }
@@ -305,7 +317,7 @@
    "path": "catalog.back-matter.resources[].props[].value",
    "count": 2,
    "level": "L2",
-   "destination": "references facet on the root Set: resources[], in the source's own shape, with the uuid that a `(#uuid)` link in a text names",
+   "destination": "standard facet references@1 on the root Set: resources[], in the source's own shape, the uuid as `id`, which a `(#uuid)` link in a text names",
    "ledger": {
     "copied": 2
    }
@@ -314,7 +326,7 @@
    "path": "catalog.back-matter.resources[].rlinks[].href",
    "count": 254,
    "level": "L2",
-   "destination": "references facet on the root Set: resources[], in the source's own shape, with the uuid that a `(#uuid)` link in a text names",
+   "destination": "standard facet references@1 on the root Set: resources[], in the source's own shape, the uuid as `id`, which a `(#uuid)` link in a text names",
    "ledger": {
     "copied": 254
    }
@@ -323,7 +335,7 @@
    "path": "catalog.back-matter.resources[].rlinks[].media-type",
    "count": 13,
    "level": "L2",
-   "destination": "references facet on the root Set: resources[], in the source's own shape, with the uuid that a `(#uuid)` link in a text names",
+   "destination": "standard facet references@1 on the root Set: resources[], in the source's own shape, the uuid as `id`, which a `(#uuid)` link in a text names",
    "ledger": {
     "copied": 13
    }
@@ -332,7 +344,7 @@
    "path": "catalog.back-matter.resources[].title",
    "count": 246,
    "level": "L2",
-   "destination": "references facet on the root Set: resources[], in the source's own shape, with the uuid that a `(#uuid)` link in a text names",
+   "destination": "standard facet references@1 on the root Set: resources[], in the source's own shape, the uuid as `id`, which a `(#uuid)` link in a text names",
    "ledger": {
     "copied": 246
    }
@@ -341,7 +353,7 @@
    "path": "catalog.back-matter.resources[].uuid",
    "count": 246,
    "level": "L2",
-   "destination": "references facet on the root Set: resources[], in the source's own shape, with the uuid that a `(#uuid)` link in a text names",
+   "destination": "standard facet references@1 on the root Set: resources[], in the source's own shape, the uuid as `id`, which a `(#uuid)` link in a text names",
    "ledger": {
     "copied": 246
    }
@@ -397,9 +409,8 @@
    "level": "dispatch",
    "destination": "see per-prop rows",
    "ledger": {
-    "copied": 2202,
     "transformed": 5557,
-    "not-content": 1199
+    "not-content": 3401
    }
   },
   {
@@ -408,8 +419,7 @@
    "level": "dispatch",
    "destination": "see per-prop rows",
    "ledger": {
-    "copied": 2202,
-    "not-content": 5557
+    "not-content": 7759
    }
   },
   {
@@ -418,8 +428,8 @@
    "level": "dispatch",
    "destination": "see per-prop rows",
    "ledger": {
-    "copied": 2251,
-    "transformed": 5557,
+    "copied": 1150,
+    "transformed": 6658,
     "not-content": 1150
    }
   },
@@ -553,7 +563,7 @@
    "path": "catalog.metadata.last-modified",
    "count": 1,
    "level": "L2",
-   "destination": "compat facet oscal-1x@1 on the root Set: metadata; its day is the manifest's provenance.date",
+   "destination": "compat facet oscal-1x@1 on the root Set: metadata; its day is the manifest's provenance.sources[0].date",
    "ledger": {
     "copied": 1
    }
@@ -580,7 +590,7 @@
    "path": "catalog.metadata.oscal-version",
    "count": 1,
    "level": "L2",
-   "destination": "compat facet oscal-1x@1 on the root Set: metadata; manifest provenance.source-oscal-version",
+   "destination": "compat facet oscal-1x@1 on the root Set: metadata; manifest provenance.sources[0].format-version",
    "ledger": {
     "copied": 1
    }
@@ -670,7 +680,7 @@
    "path": "catalog.metadata.parties[].name",
    "count": 1,
    "level": "L2",
-   "destination": "compat facet oscal-1x@1 on the root Set: metadata; the name of the party the document names as its author makes the manifest's provenance.author-ref",
+   "destination": "compat facet oscal-1x@1 on the root Set: metadata; the name of the party the document names as its author makes the manifest's provenance.sources[0].author-ref",
    "ledger": {
     "copied": 1
    }
@@ -760,7 +770,7 @@
    "path": "catalog.metadata.version",
    "count": 1,
    "level": "L1",
-   "destination": "`version` of every object; manifest provenance.source-version",
+   "destination": "`version` of every Set and of a Requirement whose control states no revision; manifest provenance.sources[0].version",
    "ledger": {
     "copied": 1
    }
@@ -769,7 +779,7 @@
    "path": "catalog.uuid",
    "count": 1,
    "level": "L2",
-   "destination": "compat facet oscal-1x@1 on the root Set: uuid (the uuid of the source document)",
+   "destination": "manifest provenance.sources[0].uuid (the uuid of the source document)",
    "ledger": {
     "copied": 1
    }

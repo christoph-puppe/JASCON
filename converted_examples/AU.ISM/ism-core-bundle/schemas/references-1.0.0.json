@@ -1,0 +1,32 @@
+{
+ "id": "https://ns.jascon.net/stdlib/facet/references",
+ "version": "1.0.0",
+ "modifies-semantics": [],
+ "note": "NORMATIVE (2026-11-14, backlog #82, the author's decision). The documents a catalogue's texts and links refer to, on the Set that stands for the catalogue (or on any Set whose members refer to them). One entry per resource, in the shape the source writes it, with one member this facet names: `id`, by which a text of the bundle refers to the resource (`#id`). Until this facet the converters carried such resources in three places: a facet of their own, the compat facet, the manifest. Measured on the committed bundles: ISM 246 resources named by 486 references, SP 800-53 178 and one on each baseline Set, CSF 3, Grundschutz++ 1. Declaration []: a resource changes no selection, tailoring, assessment or rendering rule; a tool that does not know the facet loses the titles and addresses behind the references and nothing else.",
+ "schema": {
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+   "resources"
+  ],
+  "properties": {
+   "resources": {
+    "type": "array",
+    "minItems": 1,
+    "items": {
+     "type": "object",
+     "required": [
+      "id"
+     ],
+     "properties": {
+      "id": {
+       "type": "string",
+       "minLength": 1
+      }
+     }
+    }
+   }
+  }
+ }
+}

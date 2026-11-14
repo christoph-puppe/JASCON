@@ -17,7 +17,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/uuid"
+     "pointer": "/provenance/sources/0/uuid"
     },
     {
      "object": "https://ifa.gov/goodread/impl/system1234-ac-6.1",
@@ -33,7 +33,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/title"
+     "pointer": "/provenance/sources/0/title"
     }
    ],
    "outcome": "copied"
@@ -44,7 +44,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/published"
+     "pointer": "/provenance/sources/0/published"
     }
    ],
    "outcome": "copied"
@@ -55,7 +55,12 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/last-modified"
+     "pointer": "/provenance/sources/0/date",
+     "rule": "date of a source document: the day of its last-modified"
+    },
+    {
+     "object": "content-manifest.json",
+     "pointer": "/provenance/sources/0/last-modified"
     },
     {
      "object": "https://ifa.gov/goodread/impl/system1234-ac-6.1",
@@ -79,7 +84,7 @@
     },
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/version"
+     "pointer": "/provenance/sources/0/version"
     },
     {
      "object": "https://ifa.gov/goodread/attestation/ifa-ato",
@@ -102,11 +107,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/oscal-version"
-    },
-    {
-     "object": "content-manifest.json",
-     "pointer": "/provenance/source-oscal-version"
+     "pointer": "/provenance/sources/0/format-version"
     }
    ],
    "outcome": "copied"
@@ -117,7 +118,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/metadata/revisions/0/title"
+     "pointer": "/provenance/sources/0/metadata/revisions/0/title"
     }
    ],
    "outcome": "copied"
@@ -128,7 +129,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/metadata/revisions/0/published"
+     "pointer": "/provenance/sources/0/metadata/revisions/0/published"
     }
    ],
    "outcome": "copied"
@@ -139,7 +140,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/metadata/revisions/0/last-modified"
+     "pointer": "/provenance/sources/0/metadata/revisions/0/last-modified"
     }
    ],
    "outcome": "copied"
@@ -150,7 +151,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/metadata/revisions/0/version"
+     "pointer": "/provenance/sources/0/metadata/revisions/0/version"
     }
    ],
    "outcome": "copied"
@@ -161,7 +162,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/metadata/revisions/0/oscal-version"
+     "pointer": "/provenance/sources/0/metadata/revisions/0/oscal-version"
     }
    ],
    "outcome": "copied"
@@ -172,7 +173,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/metadata/revisions/0/links/0/href"
+     "pointer": "/provenance/sources/0/metadata/revisions/0/links/0/href"
     }
    ],
    "outcome": "copied"
@@ -183,7 +184,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/metadata/revisions/0/links/0/rel"
+     "pointer": "/provenance/sources/0/metadata/revisions/0/links/0/rel"
     }
    ],
    "outcome": "copied"
@@ -194,7 +195,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/metadata/revisions/1/title"
+     "pointer": "/provenance/sources/0/metadata/revisions/1/title"
     }
    ],
    "outcome": "copied"
@@ -205,7 +206,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/metadata/revisions/1/published"
+     "pointer": "/provenance/sources/0/metadata/revisions/1/published"
     }
    ],
    "outcome": "copied"
@@ -216,7 +217,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/metadata/revisions/1/last-modified"
+     "pointer": "/provenance/sources/0/metadata/revisions/1/last-modified"
     }
    ],
    "outcome": "copied"
@@ -227,7 +228,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/metadata/revisions/1/version"
+     "pointer": "/provenance/sources/0/metadata/revisions/1/version"
     }
    ],
    "outcome": "copied"
@@ -238,7 +239,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/metadata/revisions/1/oscal-version"
+     "pointer": "/provenance/sources/0/metadata/revisions/1/oscal-version"
     }
    ],
    "outcome": "copied"
@@ -249,7 +250,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/metadata/revisions/1/links/0/href"
+     "pointer": "/provenance/sources/0/metadata/revisions/1/links/0/href"
     }
    ],
    "outcome": "copied"
@@ -260,7 +261,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/metadata/revisions/1/links/0/rel"
+     "pointer": "/provenance/sources/0/metadata/revisions/1/links/0/rel"
     }
    ],
    "outcome": "copied"
@@ -271,7 +272,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/metadata/roles/0/id"
+     "pointer": "/provenance/sources/0/metadata/roles/0/id"
     }
    ],
    "outcome": "copied"
@@ -282,7 +283,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/metadata/roles/0/title"
+     "pointer": "/provenance/sources/0/metadata/roles/0/title"
     }
    ],
    "outcome": "copied"
@@ -293,7 +294,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/metadata/roles/1/id"
+     "pointer": "/provenance/sources/0/metadata/roles/1/id"
     }
    ],
    "outcome": "copied"
@@ -304,7 +305,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/metadata/roles/1/title"
+     "pointer": "/provenance/sources/0/metadata/roles/1/title"
     }
    ],
    "outcome": "copied"
@@ -315,7 +316,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/metadata/roles/2/id"
+     "pointer": "/provenance/sources/0/metadata/roles/2/id"
     }
    ],
    "outcome": "copied"
@@ -326,7 +327,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/metadata/roles/2/title"
+     "pointer": "/provenance/sources/0/metadata/roles/2/title"
     }
    ],
    "outcome": "copied"
@@ -337,7 +338,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/metadata/roles/3/id"
+     "pointer": "/provenance/sources/0/metadata/roles/3/id"
     }
    ],
    "outcome": "copied"
@@ -348,7 +349,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/metadata/roles/3/title"
+     "pointer": "/provenance/sources/0/metadata/roles/3/title"
     }
    ],
    "outcome": "copied"
@@ -359,7 +360,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/metadata/parties/0/uuid"
+     "pointer": "/provenance/sources/0/metadata/parties/0/uuid"
     },
     {
      "object": "https://ifa.gov/goodread/component/system1234",
@@ -385,7 +386,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/metadata/parties/0/type"
+     "pointer": "/provenance/sources/0/metadata/parties/0/type"
     }
    ],
    "outcome": "copied"
@@ -396,7 +397,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/metadata/parties/0/name"
+     "pointer": "/provenance/sources/0/metadata/parties/0/name"
     },
     {
      "object": "https://ifa.gov/goodread/component/system1234",
@@ -422,7 +423,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/metadata/parties/0/member-of-organizations/0"
+     "pointer": "/provenance/sources/0/metadata/parties/0/member-of-organizations/0"
     }
    ],
    "outcome": "copied"
@@ -433,7 +434,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/metadata/parties/1/uuid"
+     "pointer": "/provenance/sources/0/metadata/parties/1/uuid"
     },
     {
      "object": "https://ifa.gov/goodread/component/system1234",
@@ -454,7 +455,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/metadata/parties/1/type"
+     "pointer": "/provenance/sources/0/metadata/parties/1/type"
     }
    ],
    "outcome": "copied"
@@ -465,7 +466,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/metadata/parties/1/name"
+     "pointer": "/provenance/sources/0/metadata/parties/1/name"
     },
     {
      "object": "https://ifa.gov/goodread/component/system1234",
@@ -486,7 +487,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/metadata/parties/1/member-of-organizations/0"
+     "pointer": "/provenance/sources/0/metadata/parties/1/member-of-organizations/0"
     }
    ],
    "outcome": "copied"
@@ -497,7 +498,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/metadata/parties/2/uuid"
+     "pointer": "/provenance/sources/0/metadata/parties/2/uuid"
     },
     {
      "object": "https://ifa.gov/goodread/component/system1234",
@@ -518,7 +519,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/metadata/parties/2/type"
+     "pointer": "/provenance/sources/0/metadata/parties/2/type"
     }
    ],
    "outcome": "copied"
@@ -529,7 +530,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/metadata/parties/2/name"
+     "pointer": "/provenance/sources/0/metadata/parties/2/name"
     },
     {
      "object": "https://ifa.gov/goodread/component/system1234",
@@ -550,7 +551,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/metadata/parties/2/member-of-organizations/0"
+     "pointer": "/provenance/sources/0/metadata/parties/2/member-of-organizations/0"
     }
    ],
    "outcome": "copied"
@@ -561,7 +562,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/metadata/parties/3/uuid"
+     "pointer": "/provenance/sources/0/metadata/parties/3/uuid"
     }
    ],
    "outcome": "copied"
@@ -572,7 +573,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/metadata/parties/3/type"
+     "pointer": "/provenance/sources/0/metadata/parties/3/type"
     }
    ],
    "outcome": "copied"
@@ -583,7 +584,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/metadata/parties/3/name"
+     "pointer": "/provenance/sources/0/metadata/parties/3/name"
     },
     {
      "object": "https://ifa.gov/goodread/impl/system1234-ac-6.1",
@@ -599,7 +600,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/metadata/parties/3/short-name"
+     "pointer": "/provenance/sources/0/metadata/parties/3/short-name"
     }
    ],
    "outcome": "copied"
@@ -610,7 +611,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/metadata/parties/3/links/0/href"
+     "pointer": "/provenance/sources/0/metadata/parties/3/links/0/href"
     }
    ],
    "outcome": "copied"
@@ -621,7 +622,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/metadata/parties/3/links/0/rel"
+     "pointer": "/provenance/sources/0/metadata/parties/3/links/0/rel"
     }
    ],
    "outcome": "copied"
@@ -632,7 +633,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/metadata/responsible-parties/0/role-id"
+     "pointer": "/provenance/sources/0/metadata/responsible-parties/0/role-id"
     },
     {
      "object": "https://ifa.gov/goodread/component/system1234",
@@ -647,7 +648,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/metadata/responsible-parties/0/party-uuids/0"
+     "pointer": "/provenance/sources/0/metadata/responsible-parties/0/party-uuids/0"
     },
     {
      "object": "https://ifa.gov/goodread/component/system1234",
@@ -673,7 +674,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/metadata/responsible-parties/1/role-id"
+     "pointer": "/provenance/sources/0/metadata/responsible-parties/1/role-id"
     },
     {
      "object": "https://ifa.gov/goodread/component/system1234",
@@ -688,7 +689,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/metadata/responsible-parties/1/party-uuids/0"
+     "pointer": "/provenance/sources/0/metadata/responsible-parties/1/party-uuids/0"
     },
     {
      "object": "https://ifa.gov/goodread/component/system1234",
@@ -704,7 +705,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/metadata/responsible-parties/2/role-id"
+     "pointer": "/provenance/sources/0/metadata/responsible-parties/2/role-id"
     },
     {
      "object": "https://ifa.gov/goodread/component/system1234",
@@ -719,7 +720,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/metadata/responsible-parties/2/party-uuids/0"
+     "pointer": "/provenance/sources/0/metadata/responsible-parties/2/party-uuids/0"
     },
     {
      "object": "https://ifa.gov/goodread/component/system1234",
@@ -735,7 +736,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/import-profile/href"
+     "pointer": "/provenance/sources/0/import-profile/href"
     }
    ],
    "outcome": "copied"
@@ -2739,7 +2740,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/back-matter/resources/0/uuid"
+     "pointer": "/provenance/sources/0/back-matter/resources/0/uuid"
     }
    ],
    "outcome": "copied"
@@ -2750,7 +2751,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/back-matter/resources/0/title"
+     "pointer": "/provenance/sources/0/back-matter/resources/0/title"
     }
    ],
    "outcome": "copied"
@@ -2761,7 +2762,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/back-matter/resources/0/rlinks/0/href"
+     "pointer": "/provenance/sources/0/back-matter/resources/0/rlinks/0/href"
     }
    ],
    "outcome": "copied"
@@ -2772,7 +2773,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/back-matter/resources/0/rlinks/0/media-type"
+     "pointer": "/provenance/sources/0/back-matter/resources/0/rlinks/0/media-type"
     }
    ],
    "outcome": "copied"
@@ -2783,7 +2784,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/back-matter/resources/1/uuid"
+     "pointer": "/provenance/sources/0/back-matter/resources/1/uuid"
     }
    ],
    "outcome": "copied"
@@ -2794,7 +2795,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/back-matter/resources/1/title"
+     "pointer": "/provenance/sources/0/back-matter/resources/1/title"
     }
    ],
    "outcome": "copied"
@@ -2805,7 +2806,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/back-matter/resources/1/rlinks/0/href"
+     "pointer": "/provenance/sources/0/back-matter/resources/1/rlinks/0/href"
     }
    ],
    "outcome": "copied"
@@ -2816,7 +2817,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/back-matter/resources/1/rlinks/0/media-type"
+     "pointer": "/provenance/sources/0/back-matter/resources/1/rlinks/0/media-type"
     }
    ],
    "outcome": "copied"
@@ -2827,7 +2828,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/back-matter/resources/2/uuid"
+     "pointer": "/provenance/sources/0/back-matter/resources/2/uuid"
     }
    ],
    "outcome": "copied"
@@ -2838,7 +2839,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/back-matter/resources/2/description"
+     "pointer": "/provenance/sources/0/back-matter/resources/2/description"
     }
    ],
    "outcome": "copied"
@@ -2849,7 +2850,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/back-matter/resources/2/rlinks/0/href"
+     "pointer": "/provenance/sources/0/back-matter/resources/2/rlinks/0/href"
     }
    ],
    "outcome": "copied"
@@ -2860,7 +2861,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/0/back-matter/resources/2/rlinks/0/media-type"
+     "pointer": "/provenance/sources/0/back-matter/resources/2/rlinks/0/media-type"
     }
    ],
    "outcome": "copied"
@@ -2871,7 +2872,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/1/uuid"
+     "pointer": "/provenance/sources/1/uuid"
     }
    ],
    "outcome": "copied"
@@ -2882,7 +2883,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/1/title"
+     "pointer": "/provenance/sources/1/title"
     }
    ],
    "outcome": "copied"
@@ -2893,7 +2894,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/1/published"
+     "pointer": "/provenance/sources/1/published"
     }
    ],
    "outcome": "copied"
@@ -2904,7 +2905,12 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/1/last-modified"
+     "pointer": "/provenance/sources/1/date",
+     "rule": "date of a source document: the day of its last-modified"
+    },
+    {
+     "object": "content-manifest.json",
+     "pointer": "/provenance/sources/1/last-modified"
     }
    ],
    "outcome": "copied"
@@ -2915,7 +2921,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/1/version"
+     "pointer": "/provenance/sources/1/version"
     }
    ],
    "outcome": "copied"
@@ -2926,7 +2932,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/1/oscal-version"
+     "pointer": "/provenance/sources/1/format-version"
     }
    ],
    "outcome": "copied"
@@ -2937,7 +2943,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/1/metadata/revisions/0/title"
+     "pointer": "/provenance/sources/1/metadata/revisions/0/title"
     }
    ],
    "outcome": "copied"
@@ -2948,7 +2954,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/1/metadata/revisions/0/last-modified"
+     "pointer": "/provenance/sources/1/metadata/revisions/0/last-modified"
     }
    ],
    "outcome": "copied"
@@ -2959,7 +2965,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/1/metadata/revisions/0/version"
+     "pointer": "/provenance/sources/1/metadata/revisions/0/version"
     }
    ],
    "outcome": "copied"
@@ -2970,7 +2976,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/1/metadata/revisions/0/oscal-version"
+     "pointer": "/provenance/sources/1/metadata/revisions/0/oscal-version"
     }
    ],
    "outcome": "copied"
@@ -2981,7 +2987,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/1/metadata/revisions/0/links/0/href"
+     "pointer": "/provenance/sources/1/metadata/revisions/0/links/0/href"
     }
    ],
    "outcome": "copied"
@@ -2992,7 +2998,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/1/metadata/revisions/0/links/0/rel"
+     "pointer": "/provenance/sources/1/metadata/revisions/0/links/0/rel"
     }
    ],
    "outcome": "copied"
@@ -3003,7 +3009,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/1/metadata/revisions/0/remarks"
+     "pointer": "/provenance/sources/1/metadata/revisions/0/remarks"
     }
    ],
    "outcome": "copied"
@@ -3014,7 +3020,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/1/metadata/revisions/1/title"
+     "pointer": "/provenance/sources/1/metadata/revisions/1/title"
     }
    ],
    "outcome": "copied"
@@ -3025,7 +3031,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/1/metadata/revisions/1/last-modified"
+     "pointer": "/provenance/sources/1/metadata/revisions/1/last-modified"
     }
    ],
    "outcome": "copied"
@@ -3036,7 +3042,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/1/metadata/revisions/1/version"
+     "pointer": "/provenance/sources/1/metadata/revisions/1/version"
     }
    ],
    "outcome": "copied"
@@ -3047,7 +3053,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/1/metadata/revisions/1/oscal-version"
+     "pointer": "/provenance/sources/1/metadata/revisions/1/oscal-version"
     }
    ],
    "outcome": "copied"
@@ -3058,7 +3064,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/1/metadata/revisions/1/links/0/href"
+     "pointer": "/provenance/sources/1/metadata/revisions/1/links/0/href"
     }
    ],
    "outcome": "copied"
@@ -3069,7 +3075,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/1/metadata/revisions/1/links/0/rel"
+     "pointer": "/provenance/sources/1/metadata/revisions/1/links/0/rel"
     }
    ],
    "outcome": "copied"
@@ -3080,7 +3086,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/1/metadata/revisions/1/remarks"
+     "pointer": "/provenance/sources/1/metadata/revisions/1/remarks"
     }
    ],
    "outcome": "copied"
@@ -3091,7 +3097,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/1/metadata/roles/0/id"
+     "pointer": "/provenance/sources/1/metadata/roles/0/id"
     }
    ],
    "outcome": "copied"
@@ -3102,7 +3108,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/1/metadata/roles/0/title"
+     "pointer": "/provenance/sources/1/metadata/roles/0/title"
     }
    ],
    "outcome": "copied"
@@ -3113,7 +3119,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/1/metadata/parties/0/uuid"
+     "pointer": "/provenance/sources/1/metadata/parties/0/uuid"
     },
     {
      "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
@@ -3135,7 +3141,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/1/metadata/parties/0/type"
+     "pointer": "/provenance/sources/1/metadata/parties/0/type"
     }
    ],
    "outcome": "copied"
@@ -3146,7 +3152,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/1/metadata/parties/0/name"
+     "pointer": "/provenance/sources/1/metadata/parties/0/name"
     },
     {
      "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
@@ -3168,7 +3174,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/1/metadata/parties/0/member-of-organizations/0"
+     "pointer": "/provenance/sources/1/metadata/parties/0/member-of-organizations/0"
     }
    ],
    "outcome": "copied"
@@ -3179,7 +3185,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/1/metadata/parties/1/uuid"
+     "pointer": "/provenance/sources/1/metadata/parties/1/uuid"
     }
    ],
    "outcome": "copied"
@@ -3190,7 +3196,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/1/metadata/parties/1/type"
+     "pointer": "/provenance/sources/1/metadata/parties/1/type"
     }
    ],
    "outcome": "copied"
@@ -3201,7 +3207,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/1/metadata/parties/1/name"
+     "pointer": "/provenance/sources/1/metadata/parties/1/name"
     }
    ],
    "outcome": "copied"
@@ -3212,7 +3218,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/1/metadata/parties/1/short-name"
+     "pointer": "/provenance/sources/1/metadata/parties/1/short-name"
     }
    ],
    "outcome": "copied"
@@ -3223,7 +3229,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/1/metadata/parties/1/links/0/href"
+     "pointer": "/provenance/sources/1/metadata/parties/1/links/0/href"
     }
    ],
    "outcome": "copied"
@@ -3234,7 +3240,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/1/metadata/parties/1/links/0/rel"
+     "pointer": "/provenance/sources/1/metadata/parties/1/links/0/rel"
     }
    ],
    "outcome": "copied"
@@ -3245,7 +3251,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/1/metadata/responsible-parties/0/role-id"
+     "pointer": "/provenance/sources/1/metadata/responsible-parties/0/role-id"
     },
     {
      "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
@@ -3260,7 +3266,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/1/metadata/responsible-parties/0/party-uuids/0"
+     "pointer": "/provenance/sources/1/metadata/responsible-parties/0/party-uuids/0"
     },
     {
      "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
@@ -3276,7 +3282,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/1/remarks"
+     "pointer": "/provenance/sources/1/remarks"
     }
    ],
    "outcome": "copied"
@@ -3287,7 +3293,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/1/import-ssp/href"
+     "pointer": "/provenance/sources/1/import-ssp/href"
     }
    ],
    "outcome": "copied"
@@ -3563,7 +3569,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/1/metadata/responsible-parties/0/role-id",
+     "pointer": "/provenance/sources/1/metadata/responsible-parties/0/role-id",
      "via": "a role assigned at an activity, carried once per Component or scope"
     },
     {
@@ -3681,7 +3687,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/1/metadata/responsible-parties/0/role-id",
+     "pointer": "/provenance/sources/1/metadata/responsible-parties/0/role-id",
      "via": "a role assigned at a task, carried once per Component or scope"
     },
     {
@@ -3709,7 +3715,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/1/back-matter/resources/0/uuid"
+     "pointer": "/provenance/sources/1/back-matter/resources/0/uuid"
     }
    ],
    "outcome": "copied"
@@ -3720,7 +3726,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/1/back-matter/resources/0/title"
+     "pointer": "/provenance/sources/1/back-matter/resources/0/title"
     }
    ],
    "outcome": "copied"
@@ -3731,7 +3737,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/1/back-matter/resources/0/rlinks/0/href"
+     "pointer": "/provenance/sources/1/back-matter/resources/0/rlinks/0/href"
     }
    ],
    "outcome": "copied"
@@ -3742,7 +3748,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/1/back-matter/resources/0/rlinks/0/media-type"
+     "pointer": "/provenance/sources/1/back-matter/resources/0/rlinks/0/media-type"
     }
    ],
    "outcome": "copied"
@@ -3753,7 +3759,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/1/back-matter/resources/0/remarks"
+     "pointer": "/provenance/sources/1/back-matter/resources/0/remarks"
     }
    ],
    "outcome": "copied"
@@ -3764,7 +3770,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/1/back-matter/resources/1/uuid"
+     "pointer": "/provenance/sources/1/back-matter/resources/1/uuid"
     }
    ],
    "outcome": "copied"
@@ -3775,7 +3781,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/1/back-matter/resources/1/title"
+     "pointer": "/provenance/sources/1/back-matter/resources/1/title"
     }
    ],
    "outcome": "copied"
@@ -3786,7 +3792,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/1/back-matter/resources/1/rlinks/0/href"
+     "pointer": "/provenance/sources/1/back-matter/resources/1/rlinks/0/href"
     }
    ],
    "outcome": "copied"
@@ -3797,7 +3803,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/1/back-matter/resources/1/rlinks/0/media-type"
+     "pointer": "/provenance/sources/1/back-matter/resources/1/rlinks/0/media-type"
     }
    ],
    "outcome": "copied"
@@ -3808,7 +3814,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/1/back-matter/resources/1/remarks"
+     "pointer": "/provenance/sources/1/back-matter/resources/1/remarks"
     }
    ],
    "outcome": "copied"
@@ -3819,7 +3825,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/2/uuid"
+     "pointer": "/provenance/sources/2/uuid"
     }
    ],
    "outcome": "copied"
@@ -3830,7 +3836,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/2/title"
+     "pointer": "/provenance/sources/2/title"
     }
    ],
    "outcome": "copied"
@@ -3841,7 +3847,12 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/2/last-modified"
+     "pointer": "/provenance/sources/2/date",
+     "rule": "date of a source document: the day of its last-modified"
+    },
+    {
+     "object": "content-manifest.json",
+     "pointer": "/provenance/sources/2/last-modified"
     }
    ],
    "outcome": "copied"
@@ -3856,7 +3867,7 @@
     },
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/2/version"
+     "pointer": "/provenance/sources/2/version"
     },
     {
      "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
@@ -3871,7 +3882,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/2/oscal-version"
+     "pointer": "/provenance/sources/2/format-version"
     }
    ],
    "outcome": "copied"
@@ -3882,7 +3893,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/2/metadata/revisions/0/title"
+     "pointer": "/provenance/sources/2/metadata/revisions/0/title"
     }
    ],
    "outcome": "copied"
@@ -3893,7 +3904,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/2/metadata/revisions/0/last-modified"
+     "pointer": "/provenance/sources/2/metadata/revisions/0/last-modified"
     }
    ],
    "outcome": "copied"
@@ -3904,7 +3915,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/2/metadata/revisions/0/version"
+     "pointer": "/provenance/sources/2/metadata/revisions/0/version"
     }
    ],
    "outcome": "copied"
@@ -3915,7 +3926,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/2/metadata/revisions/0/oscal-version"
+     "pointer": "/provenance/sources/2/metadata/revisions/0/oscal-version"
     }
    ],
    "outcome": "copied"
@@ -3926,7 +3937,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/2/metadata/revisions/0/links/0/href"
+     "pointer": "/provenance/sources/2/metadata/revisions/0/links/0/href"
     }
    ],
    "outcome": "copied"
@@ -3937,7 +3948,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/2/metadata/revisions/0/links/0/rel"
+     "pointer": "/provenance/sources/2/metadata/revisions/0/links/0/rel"
     }
    ],
    "outcome": "copied"
@@ -3948,7 +3959,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/2/metadata/revisions/0/remarks"
+     "pointer": "/provenance/sources/2/metadata/revisions/0/remarks"
     }
    ],
    "outcome": "copied"
@@ -3959,7 +3970,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/2/metadata/revisions/1/title"
+     "pointer": "/provenance/sources/2/metadata/revisions/1/title"
     }
    ],
    "outcome": "copied"
@@ -3970,7 +3981,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/2/metadata/revisions/1/last-modified"
+     "pointer": "/provenance/sources/2/metadata/revisions/1/last-modified"
     }
    ],
    "outcome": "copied"
@@ -3981,7 +3992,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/2/metadata/revisions/1/version"
+     "pointer": "/provenance/sources/2/metadata/revisions/1/version"
     }
    ],
    "outcome": "copied"
@@ -3992,7 +4003,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/2/metadata/revisions/1/oscal-version"
+     "pointer": "/provenance/sources/2/metadata/revisions/1/oscal-version"
     }
    ],
    "outcome": "copied"
@@ -4003,7 +4014,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/2/metadata/revisions/1/links/0/href"
+     "pointer": "/provenance/sources/2/metadata/revisions/1/links/0/href"
     }
    ],
    "outcome": "copied"
@@ -4014,7 +4025,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/2/metadata/revisions/1/links/0/rel"
+     "pointer": "/provenance/sources/2/metadata/revisions/1/links/0/rel"
     }
    ],
    "outcome": "copied"
@@ -4025,7 +4036,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/2/metadata/revisions/1/remarks"
+     "pointer": "/provenance/sources/2/metadata/revisions/1/remarks"
     }
    ],
    "outcome": "copied"
@@ -4036,7 +4047,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/2/metadata/roles/0/id"
+     "pointer": "/provenance/sources/2/metadata/roles/0/id"
     }
    ],
    "outcome": "copied"
@@ -4047,7 +4058,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/2/metadata/roles/0/title"
+     "pointer": "/provenance/sources/2/metadata/roles/0/title"
     }
    ],
    "outcome": "copied"
@@ -4058,7 +4069,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/2/metadata/parties/0/uuid"
+     "pointer": "/provenance/sources/2/metadata/parties/0/uuid"
     },
     {
      "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
@@ -4086,7 +4097,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/2/metadata/parties/0/type"
+     "pointer": "/provenance/sources/2/metadata/parties/0/type"
     }
    ],
    "outcome": "copied"
@@ -4097,7 +4108,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/2/metadata/parties/0/name"
+     "pointer": "/provenance/sources/2/metadata/parties/0/name"
     },
     {
      "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
@@ -4125,7 +4136,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/2/metadata/parties/0/member-of-organizations/0"
+     "pointer": "/provenance/sources/2/metadata/parties/0/member-of-organizations/0"
     }
    ],
    "outcome": "copied"
@@ -4136,7 +4147,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/2/metadata/parties/1/uuid"
+     "pointer": "/provenance/sources/2/metadata/parties/1/uuid"
     }
    ],
    "outcome": "copied"
@@ -4147,7 +4158,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/2/metadata/parties/1/type"
+     "pointer": "/provenance/sources/2/metadata/parties/1/type"
     }
    ],
    "outcome": "copied"
@@ -4158,7 +4169,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/2/metadata/parties/1/name"
+     "pointer": "/provenance/sources/2/metadata/parties/1/name"
     }
    ],
    "outcome": "copied"
@@ -4169,7 +4180,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/2/metadata/parties/1/short-name"
+     "pointer": "/provenance/sources/2/metadata/parties/1/short-name"
     }
    ],
    "outcome": "copied"
@@ -4180,7 +4191,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/2/metadata/parties/1/links/0/href"
+     "pointer": "/provenance/sources/2/metadata/parties/1/links/0/href"
     }
    ],
    "outcome": "copied"
@@ -4191,7 +4202,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/2/metadata/parties/1/links/0/rel"
+     "pointer": "/provenance/sources/2/metadata/parties/1/links/0/rel"
     }
    ],
    "outcome": "copied"
@@ -4202,12 +4213,12 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/1/metadata/responsible-parties/0/role-id",
+     "pointer": "/provenance/sources/1/metadata/responsible-parties/0/role-id",
      "via": "a role assigned at the assessment results, carried once per Component or scope"
     },
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/2/metadata/responsible-parties/0/role-id"
+     "pointer": "/provenance/sources/2/metadata/responsible-parties/0/role-id"
     },
     {
      "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
@@ -4223,7 +4234,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/2/metadata/responsible-parties/0/party-uuids/0"
+     "pointer": "/provenance/sources/2/metadata/responsible-parties/0/party-uuids/0"
     },
     {
      "object": "https://ifa.gov/goodread/assessment/conmon-2023-06",
@@ -4245,7 +4256,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/2/remarks"
+     "pointer": "/provenance/sources/2/remarks"
     }
    ],
    "outcome": "copied"
@@ -4256,7 +4267,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/2/import-ap/href"
+     "pointer": "/provenance/sources/2/import-ap/href"
     }
    ],
    "outcome": "copied"
@@ -4465,7 +4476,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/1/metadata/responsible-parties/0/role-id",
+     "pointer": "/provenance/sources/1/metadata/responsible-parties/0/role-id",
      "via": "a role assigned at an activity, carried once per Component or scope"
     },
     {
@@ -5035,7 +5046,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/2/back-matter/resources/0/uuid"
+     "pointer": "/provenance/sources/2/back-matter/resources/0/uuid"
     }
    ],
    "outcome": "copied"
@@ -5046,7 +5057,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/2/back-matter/resources/0/title"
+     "pointer": "/provenance/sources/2/back-matter/resources/0/title"
     }
    ],
    "outcome": "copied"
@@ -5057,7 +5068,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/2/back-matter/resources/0/rlinks/0/href"
+     "pointer": "/provenance/sources/2/back-matter/resources/0/rlinks/0/href"
     }
    ],
    "outcome": "copied"
@@ -5068,7 +5079,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/2/back-matter/resources/0/rlinks/0/media-type"
+     "pointer": "/provenance/sources/2/back-matter/resources/0/rlinks/0/media-type"
     }
    ],
    "outcome": "copied"
@@ -5079,7 +5090,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/2/back-matter/resources/1/uuid"
+     "pointer": "/provenance/sources/2/back-matter/resources/1/uuid"
     }
    ],
    "outcome": "copied"
@@ -5090,7 +5101,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/2/back-matter/resources/1/title"
+     "pointer": "/provenance/sources/2/back-matter/resources/1/title"
     }
    ],
    "outcome": "copied"
@@ -5101,7 +5112,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/2/back-matter/resources/1/rlinks/0/href"
+     "pointer": "/provenance/sources/2/back-matter/resources/1/rlinks/0/href"
     }
    ],
    "outcome": "copied"
@@ -5112,7 +5123,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/2/back-matter/resources/1/rlinks/0/media-type"
+     "pointer": "/provenance/sources/2/back-matter/resources/1/rlinks/0/media-type"
     }
    ],
    "outcome": "copied"
@@ -5123,7 +5134,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/3/uuid"
+     "pointer": "/provenance/sources/3/uuid"
     }
    ],
    "outcome": "copied"
@@ -5134,7 +5145,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/3/title"
+     "pointer": "/provenance/sources/3/title"
     }
    ],
    "outcome": "copied"
@@ -5145,7 +5156,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/3/published"
+     "pointer": "/provenance/sources/3/published"
     }
    ],
    "outcome": "copied"
@@ -5156,7 +5167,12 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/3/last-modified"
+     "pointer": "/provenance/sources/3/date",
+     "rule": "date of a source document: the day of its last-modified"
+    },
+    {
+     "object": "content-manifest.json",
+     "pointer": "/provenance/sources/3/last-modified"
     }
    ],
    "outcome": "copied"
@@ -5183,7 +5199,7 @@
     },
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/3/version"
+     "pointer": "/provenance/sources/3/version"
     },
     {
      "object": "https://ifa.gov/goodread/finding/goodread-risk-1",
@@ -5210,7 +5226,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/3/oscal-version"
+     "pointer": "/provenance/sources/3/format-version"
     }
    ],
    "outcome": "copied"
@@ -5221,7 +5237,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/3/metadata/revisions/0/title"
+     "pointer": "/provenance/sources/3/metadata/revisions/0/title"
     }
    ],
    "outcome": "copied"
@@ -5232,7 +5248,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/3/metadata/revisions/0/last-modified"
+     "pointer": "/provenance/sources/3/metadata/revisions/0/last-modified"
     }
    ],
    "outcome": "copied"
@@ -5243,7 +5259,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/3/metadata/revisions/0/version"
+     "pointer": "/provenance/sources/3/metadata/revisions/0/version"
     }
    ],
    "outcome": "copied"
@@ -5254,7 +5270,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/3/metadata/revisions/0/oscal-version"
+     "pointer": "/provenance/sources/3/metadata/revisions/0/oscal-version"
     }
    ],
    "outcome": "copied"
@@ -5265,7 +5281,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/3/metadata/revisions/0/links/0/href"
+     "pointer": "/provenance/sources/3/metadata/revisions/0/links/0/href"
     }
    ],
    "outcome": "copied"
@@ -5276,7 +5292,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/3/metadata/revisions/0/links/0/rel"
+     "pointer": "/provenance/sources/3/metadata/revisions/0/links/0/rel"
     }
    ],
    "outcome": "copied"
@@ -5287,7 +5303,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/3/metadata/revisions/0/remarks"
+     "pointer": "/provenance/sources/3/metadata/revisions/0/remarks"
     }
    ],
    "outcome": "copied"
@@ -5298,7 +5314,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/3/metadata/revisions/1/title"
+     "pointer": "/provenance/sources/3/metadata/revisions/1/title"
     }
    ],
    "outcome": "copied"
@@ -5309,7 +5325,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/3/metadata/revisions/1/last-modified"
+     "pointer": "/provenance/sources/3/metadata/revisions/1/last-modified"
     }
    ],
    "outcome": "copied"
@@ -5320,7 +5336,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/3/metadata/revisions/1/version"
+     "pointer": "/provenance/sources/3/metadata/revisions/1/version"
     }
    ],
    "outcome": "copied"
@@ -5331,7 +5347,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/3/metadata/revisions/1/oscal-version"
+     "pointer": "/provenance/sources/3/metadata/revisions/1/oscal-version"
     }
    ],
    "outcome": "copied"
@@ -5342,7 +5358,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/3/metadata/revisions/1/links/0/href"
+     "pointer": "/provenance/sources/3/metadata/revisions/1/links/0/href"
     }
    ],
    "outcome": "copied"
@@ -5353,7 +5369,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/3/metadata/revisions/1/links/0/rel"
+     "pointer": "/provenance/sources/3/metadata/revisions/1/links/0/rel"
     }
    ],
    "outcome": "copied"
@@ -5364,7 +5380,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/3/metadata/revisions/1/remarks"
+     "pointer": "/provenance/sources/3/metadata/revisions/1/remarks"
     }
    ],
    "outcome": "copied"
@@ -5375,7 +5391,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/3/import-ssp/href"
+     "pointer": "/provenance/sources/3/import-ssp/href"
     }
    ],
    "outcome": "copied"
@@ -6465,7 +6481,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/3/back-matter/resources/0/uuid"
+     "pointer": "/provenance/sources/3/back-matter/resources/0/uuid"
     }
    ],
    "outcome": "copied"
@@ -6476,7 +6492,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/3/back-matter/resources/0/title"
+     "pointer": "/provenance/sources/3/back-matter/resources/0/title"
     }
    ],
    "outcome": "copied"
@@ -6487,7 +6503,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/3/back-matter/resources/0/rlinks/0/href"
+     "pointer": "/provenance/sources/3/back-matter/resources/0/rlinks/0/href"
     }
    ],
    "outcome": "copied"
@@ -6498,7 +6514,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/3/back-matter/resources/0/rlinks/0/media-type"
+     "pointer": "/provenance/sources/3/back-matter/resources/0/rlinks/0/media-type"
     }
    ],
    "outcome": "copied"
@@ -6509,7 +6525,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/3/back-matter/resources/1/uuid"
+     "pointer": "/provenance/sources/3/back-matter/resources/1/uuid"
     }
    ],
    "outcome": "copied"
@@ -6520,7 +6536,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/3/back-matter/resources/1/title"
+     "pointer": "/provenance/sources/3/back-matter/resources/1/title"
     }
    ],
    "outcome": "copied"
@@ -6531,7 +6547,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/3/back-matter/resources/1/rlinks/0/href"
+     "pointer": "/provenance/sources/3/back-matter/resources/1/rlinks/0/href"
     }
    ],
    "outcome": "copied"
@@ -6542,7 +6558,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/4/uuid"
+     "pointer": "/provenance/sources/4/uuid"
     },
     {
      "object": "https://ifa.gov/goodread/impl/csp-iaas-ac-2",
@@ -6558,7 +6574,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/4/title"
+     "pointer": "/provenance/sources/4/title"
     },
     {
      "object": "https://ifa.gov/goodread/component/csp-iaas",
@@ -6573,7 +6589,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/4/published"
+     "pointer": "/provenance/sources/4/published"
     }
    ],
    "outcome": "copied"
@@ -6584,7 +6600,12 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/4/last-modified"
+     "pointer": "/provenance/sources/4/date",
+     "rule": "date of a source document: the day of its last-modified"
+    },
+    {
+     "object": "content-manifest.json",
+     "pointer": "/provenance/sources/4/last-modified"
     }
    ],
    "outcome": "copied"
@@ -6607,7 +6628,7 @@
     },
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/4/version"
+     "pointer": "/provenance/sources/4/version"
     },
     {
      "object": "https://ifa.gov/goodread/component/csp-application",
@@ -6630,7 +6651,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/4/oscal-version"
+     "pointer": "/provenance/sources/4/format-version"
     }
    ],
    "outcome": "copied"
@@ -6641,7 +6662,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/4/metadata/roles/0/id"
+     "pointer": "/provenance/sources/4/metadata/roles/0/id"
     }
    ],
    "outcome": "copied"
@@ -6652,7 +6673,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/4/metadata/roles/0/title"
+     "pointer": "/provenance/sources/4/metadata/roles/0/title"
     }
    ],
    "outcome": "copied"
@@ -6663,7 +6684,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/4/metadata/roles/1/id"
+     "pointer": "/provenance/sources/4/metadata/roles/1/id"
     }
    ],
    "outcome": "copied"
@@ -6674,7 +6695,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/4/metadata/roles/1/title"
+     "pointer": "/provenance/sources/4/metadata/roles/1/title"
     }
    ],
    "outcome": "copied"
@@ -6685,7 +6706,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/4/metadata/roles/2/id"
+     "pointer": "/provenance/sources/4/metadata/roles/2/id"
     }
    ],
    "outcome": "copied"
@@ -6696,7 +6717,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/4/metadata/roles/2/title"
+     "pointer": "/provenance/sources/4/metadata/roles/2/title"
     }
    ],
    "outcome": "copied"
@@ -6707,7 +6728,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/4/metadata/parties/0/uuid"
+     "pointer": "/provenance/sources/4/metadata/parties/0/uuid"
     }
    ],
    "outcome": "copied"
@@ -6718,7 +6739,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/4/metadata/parties/0/type"
+     "pointer": "/provenance/sources/4/metadata/parties/0/type"
     }
    ],
    "outcome": "copied"
@@ -6729,7 +6750,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/4/metadata/parties/0/remarks"
+     "pointer": "/provenance/sources/4/metadata/parties/0/remarks"
     }
    ],
    "outcome": "copied"
@@ -6740,7 +6761,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/4/metadata/parties/1/uuid"
+     "pointer": "/provenance/sources/4/metadata/parties/1/uuid"
     }
    ],
    "outcome": "copied"
@@ -6751,7 +6772,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/4/metadata/parties/1/type"
+     "pointer": "/provenance/sources/4/metadata/parties/1/type"
     }
    ],
    "outcome": "copied"
@@ -6762,7 +6783,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/4/import-profile/href"
+     "pointer": "/provenance/sources/4/import-profile/href"
     }
    ],
    "outcome": "copied"
@@ -7700,7 +7721,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/4/back-matter/resources/0/uuid"
+     "pointer": "/provenance/sources/4/back-matter/resources/0/uuid"
     }
    ],
    "outcome": "copied"
@@ -7711,7 +7732,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/4/back-matter/resources/0/description"
+     "pointer": "/provenance/sources/4/back-matter/resources/0/description"
     }
    ],
    "outcome": "copied"
@@ -7722,7 +7743,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/4/back-matter/resources/0/rlinks/0/href"
+     "pointer": "/provenance/sources/4/back-matter/resources/0/rlinks/0/href"
     }
    ],
    "outcome": "copied"
@@ -7733,7 +7754,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/4/back-matter/resources/0/rlinks/0/media-type"
+     "pointer": "/provenance/sources/4/back-matter/resources/0/rlinks/0/media-type"
     }
    ],
    "outcome": "copied"
@@ -7744,7 +7765,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/5/uuid"
+     "pointer": "/provenance/sources/5/uuid"
     },
     {
      "object": "https://ifa.gov/goodread/impl/saas-ac-2",
@@ -7760,7 +7781,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/5/title"
+     "pointer": "/provenance/sources/5/title"
     },
     {
      "object": "https://ifa.gov/goodread/component/saas",
@@ -7775,7 +7796,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/5/published"
+     "pointer": "/provenance/sources/5/published"
     }
    ],
    "outcome": "copied"
@@ -7786,7 +7807,12 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/5/last-modified"
+     "pointer": "/provenance/sources/5/date",
+     "rule": "date of a source document: the day of its last-modified"
+    },
+    {
+     "object": "content-manifest.json",
+     "pointer": "/provenance/sources/5/last-modified"
     }
    ],
    "outcome": "copied"
@@ -7809,7 +7835,7 @@
     },
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/5/version"
+     "pointer": "/provenance/sources/5/version"
     },
     {
      "object": "https://ifa.gov/goodread/component/access-control-appliance",
@@ -7832,7 +7858,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/5/oscal-version"
+     "pointer": "/provenance/sources/5/format-version"
     }
    ],
    "outcome": "copied"
@@ -7843,7 +7869,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/5/metadata/roles/0/id"
+     "pointer": "/provenance/sources/5/metadata/roles/0/id"
     }
    ],
    "outcome": "copied"
@@ -7854,7 +7880,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/5/metadata/roles/0/title"
+     "pointer": "/provenance/sources/5/metadata/roles/0/title"
     }
    ],
    "outcome": "copied"
@@ -7865,7 +7891,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/5/metadata/parties/0/uuid"
+     "pointer": "/provenance/sources/5/metadata/parties/0/uuid"
     }
    ],
    "outcome": "copied"
@@ -7876,7 +7902,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/5/metadata/parties/0/type"
+     "pointer": "/provenance/sources/5/metadata/parties/0/type"
     }
    ],
    "outcome": "copied"
@@ -7887,7 +7913,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/5/metadata/parties/0/remarks"
+     "pointer": "/provenance/sources/5/metadata/parties/0/remarks"
     }
    ],
    "outcome": "copied"
@@ -7898,7 +7924,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/5/metadata/parties/1/uuid"
+     "pointer": "/provenance/sources/5/metadata/parties/1/uuid"
     }
    ],
    "outcome": "copied"
@@ -7909,7 +7935,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/5/metadata/parties/1/type"
+     "pointer": "/provenance/sources/5/metadata/parties/1/type"
     }
    ],
    "outcome": "copied"
@@ -7920,7 +7946,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/5/metadata/parties/1/remarks"
+     "pointer": "/provenance/sources/5/metadata/parties/1/remarks"
     }
    ],
    "outcome": "copied"
@@ -7931,7 +7957,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/5/import-profile/href"
+     "pointer": "/provenance/sources/5/import-profile/href"
     }
    ],
    "outcome": "copied"
@@ -9135,7 +9161,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/5/back-matter/resources/0/uuid"
+     "pointer": "/provenance/sources/5/back-matter/resources/0/uuid"
     }
    ],
    "outcome": "copied"
@@ -9146,7 +9172,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/5/back-matter/resources/0/description"
+     "pointer": "/provenance/sources/5/back-matter/resources/0/description"
     }
    ],
    "outcome": "copied"
@@ -9157,7 +9183,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/5/back-matter/resources/0/rlinks/0/href"
+     "pointer": "/provenance/sources/5/back-matter/resources/0/rlinks/0/href"
     }
    ],
    "outcome": "copied"
@@ -9168,7 +9194,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/5/back-matter/resources/0/rlinks/0/media-type"
+     "pointer": "/provenance/sources/5/back-matter/resources/0/rlinks/0/media-type"
     }
    ],
    "outcome": "copied"
@@ -9179,7 +9205,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/5/back-matter/resources/1/uuid"
+     "pointer": "/provenance/sources/5/back-matter/resources/1/uuid"
     }
    ],
    "outcome": "copied"
@@ -9190,7 +9216,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/5/back-matter/resources/1/description"
+     "pointer": "/provenance/sources/5/back-matter/resources/1/description"
     }
    ],
    "outcome": "copied"
@@ -9201,7 +9227,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/5/back-matter/resources/1/rlinks/0/href"
+     "pointer": "/provenance/sources/5/back-matter/resources/1/rlinks/0/href"
     }
    ],
    "outcome": "copied"
@@ -9212,7 +9238,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/5/back-matter/resources/1/rlinks/0/media-type"
+     "pointer": "/provenance/sources/5/back-matter/resources/1/rlinks/0/media-type"
     }
    ],
    "outcome": "copied"
@@ -9223,7 +9249,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/5/back-matter/resources/1/rlinks/1/href"
+     "pointer": "/provenance/sources/5/back-matter/resources/1/rlinks/1/href"
     }
    ],
    "outcome": "copied"
@@ -9234,7 +9260,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/5/back-matter/resources/1/rlinks/1/media-type"
+     "pointer": "/provenance/sources/5/back-matter/resources/1/rlinks/1/media-type"
     }
    ],
    "outcome": "copied"
@@ -9245,7 +9271,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/5/back-matter/resources/1/rlinks/2/href"
+     "pointer": "/provenance/sources/5/back-matter/resources/1/rlinks/2/href"
     }
    ],
    "outcome": "copied"
@@ -9256,7 +9282,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/5/back-matter/resources/1/rlinks/2/media-type"
+     "pointer": "/provenance/sources/5/back-matter/resources/1/rlinks/2/media-type"
     }
    ],
    "outcome": "copied"
@@ -9267,7 +9293,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/6/uuid"
+     "pointer": "/provenance/sources/6/uuid"
     }
    ],
    "outcome": "copied"
@@ -9278,7 +9304,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/6/title"
+     "pointer": "/provenance/sources/6/title"
     }
    ],
    "outcome": "copied"
@@ -9289,7 +9315,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/6/published"
+     "pointer": "/provenance/sources/6/published"
     }
    ],
    "outcome": "copied"
@@ -9300,7 +9326,12 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/6/last-modified"
+     "pointer": "/provenance/sources/6/date",
+     "rule": "date of a source document: the day of its last-modified"
+    },
+    {
+     "object": "content-manifest.json",
+     "pointer": "/provenance/sources/6/last-modified"
     }
    ],
    "outcome": "copied"
@@ -9315,7 +9346,7 @@
     },
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/6/version"
+     "pointer": "/provenance/sources/6/version"
     },
     {
      "object": "https://ifa.gov/goodread/component/mongodb",
@@ -9330,7 +9361,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/6/oscal-version"
+     "pointer": "/provenance/sources/6/format-version"
     }
    ],
    "outcome": "copied"
@@ -9341,7 +9372,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/6/metadata/roles/0/id"
+     "pointer": "/provenance/sources/6/metadata/roles/0/id"
     }
    ],
    "outcome": "copied"
@@ -9352,7 +9383,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/6/metadata/roles/0/title"
+     "pointer": "/provenance/sources/6/metadata/roles/0/title"
     }
    ],
    "outcome": "copied"
@@ -9363,7 +9394,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/6/metadata/parties/0/uuid"
+     "pointer": "/provenance/sources/6/metadata/parties/0/uuid"
     },
     {
      "object": "https://ifa.gov/goodread/component/mongodb",
@@ -9379,7 +9410,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/6/metadata/parties/0/type"
+     "pointer": "/provenance/sources/6/metadata/parties/0/type"
     }
    ],
    "outcome": "copied"
@@ -9390,7 +9421,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/6/metadata/parties/0/name"
+     "pointer": "/provenance/sources/6/metadata/parties/0/name"
     },
     {
      "object": "https://ifa.gov/goodread/component/mongodb",
@@ -9406,7 +9437,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/6/metadata/parties/0/links/0/href"
+     "pointer": "/provenance/sources/6/metadata/parties/0/links/0/href"
     }
    ],
    "outcome": "copied"
@@ -9417,7 +9448,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/6/metadata/parties/0/links/0/rel"
+     "pointer": "/provenance/sources/6/metadata/parties/0/links/0/rel"
     }
    ],
    "outcome": "copied"
@@ -10078,7 +10109,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/6/back-matter/resources/0/uuid"
+     "pointer": "/provenance/sources/6/back-matter/resources/0/uuid"
     },
     {
      "object": "https://ifa.gov/goodread/component/mongodb",
@@ -10094,7 +10125,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/6/back-matter/resources/0/description"
+     "pointer": "/provenance/sources/6/back-matter/resources/0/description"
     }
    ],
    "outcome": "copied"
@@ -10105,7 +10136,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/6/back-matter/resources/0/rlinks/0/href"
+     "pointer": "/provenance/sources/6/back-matter/resources/0/rlinks/0/href"
     }
    ],
    "outcome": "copied"
@@ -10116,7 +10147,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/6/back-matter/resources/0/rlinks/0/media-type"
+     "pointer": "/provenance/sources/6/back-matter/resources/0/rlinks/0/media-type"
     }
    ],
    "outcome": "copied"
@@ -10127,7 +10158,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/6/back-matter/resources/0/rlinks/1/href"
+     "pointer": "/provenance/sources/6/back-matter/resources/0/rlinks/1/href"
     },
     {
      "object": "https://ifa.gov/goodread/component/mongodb",
@@ -10143,7 +10174,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/6/back-matter/resources/0/rlinks/1/media-type"
+     "pointer": "/provenance/sources/6/back-matter/resources/0/rlinks/1/media-type"
     }
    ],
    "outcome": "copied"
@@ -10154,7 +10185,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/6/back-matter/resources/0/rlinks/2/href"
+     "pointer": "/provenance/sources/6/back-matter/resources/0/rlinks/2/href"
     }
    ],
    "outcome": "copied"
@@ -10165,7 +10196,7 @@
    "destinations": [
     {
      "object": "content-manifest.json",
-     "pointer": "/provenance/source-documents/6/back-matter/resources/0/rlinks/2/media-type"
+     "pointer": "/provenance/sources/6/back-matter/resources/0/rlinks/2/media-type"
     }
    ],
    "outcome": "copied"

@@ -1,12 +1,19 @@
 {
  "manifest-version": "1",
  "provenance": {
-  "source": "Electronic Version of NIST Cybersecurity Framework 2.0",
-  "source-version": "2.0",
-  "source-doc-version": "1.2.0",
-  "source-oscal-version": "v1.2.2",
-  "published": "2026-05-13T12:30:00-00:00",
-  "converter": "convert_csf.py v0.3",
+  "sources": [
+   {
+    "title": "Electronic Version of NIST Cybersecurity Framework 2.0",
+    "version": "1.2.0",
+    "uuid": "720a010b-253c-4a94-bb65-cb58400966f5",
+    "author-ref": "https://ns.nist.gov/csf/party/national-institute-of-standards-and-technology",
+    "date": "2026-05-11",
+    "format": "OSCAL",
+    "format-version": "v1.2.2",
+    "published": "2026-05-13T12:30:00-00:00"
+   }
+  ],
+  "converter": "convert_csf.py v0.4",
   "namespace-note": "https://ns.nist.gov/csf minted by converter (no version in the URI; lineage is D2's job) pending a NIST-published URI"
  },
  "objects": [
@@ -1588,8 +1595,8 @@
   {
    "id": "https://ns.nist.gov/csf/set/root",
    "version": "2.0",
-   "package-digest": "sha256:e89b5822001fe234adb3e8eae10e415b40015707997243af7034b50644c5516c",
-   "semantic-digest": "sha256:c4987a83df7b11e01e7353ac08c35da9daa1db42a799c17612ec9260ee746eb5",
+   "package-digest": "sha256:7dda33b1cd365f06f7e00407bd886217e845e8047e7ded1298c0977f1753d109",
+   "semantic-digest": "sha256:f6c63b821fb4688e9310b8edb9de1f8a4fb08c653a3445443d52588cd32c2349",
    "path": "objects/set/root.json"
   }
  ],
@@ -1607,12 +1614,6 @@
    "path": "schemas/csf-narrative-stub.json"
   },
   {
-   "id": "https://ns.nist.gov/csf/facet/references",
-   "exact-version": "1.0.0",
-   "digest": "sha256:38b3440bf6ce27a86621a4f83c7fc2c5c66547239465b3139379cca44aa5478e",
-   "path": "schemas/csf-references-stub.json"
-  },
-  {
    "id": "https://ns.nist.gov/csf/facet/csf",
    "exact-version": "1.0.0",
    "digest": "sha256:95dac233654adac91878a890dcc19eab9ef59af883e77e648c004071e6e2b567",
@@ -1620,9 +1621,15 @@
   },
   {
    "id": "https://ns.jascon.net/compat/oscal-1x",
-   "exact-version": "1.1.0",
-   "digest": "sha256:a40334b73fd7ac9e70359d4784f94c5c03c48e9baea7a40ad37717238323f9cb",
-   "path": "schemas/oscal-1x-compat-1.1.0.json"
+   "exact-version": "1.2.0",
+   "digest": "sha256:0a7ed521490142ab833530eccf31f6708ea93f1837522e6cd434c75065b20ce8",
+   "path": "schemas/oscal-1x-compat-1.2.0.json"
+  },
+  {
+   "id": "https://ns.jascon.net/stdlib/facet/references",
+   "exact-version": "1.0.0",
+   "digest": "sha256:f05f3f75602e72e0f5740c9638f3ad2304a7f62197c6d4b288f96d85ed5700ad",
+   "path": "schemas/references-1.0.0.json"
   }
  ]
 }

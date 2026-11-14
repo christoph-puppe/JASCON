@@ -3246,7 +3246,7 @@
    "unaccounted": 0
   },
   "verification-failures": 0,
-  "files-read-back": 1294,
+  "files-read-back": 1295,
   "names-that-select-a-field": {
    "copied-as-a-key-only": 6445,
    "transformed-to-a-field-name-or-scheme": 8099
@@ -3370,9 +3370,7 @@
   ],
   "declared-drops": [],
   "carried-as-the-source-holds-it": {
-   "back-matter": 1,
-   "metadata": 1,
-   "uuid": 1
+   "metadata": 1
   },
   "bundle-read-back": {
    "controls": 999,
@@ -3402,7 +3400,7 @@
   },
   "written-without-a-source-value": {
    "objects": {
-    "leaf-values": 32910,
+    "leaf-values": 32909,
     "without-a-source-value": 5790,
     "by-place": {
      "/id": 1,
@@ -3414,24 +3412,24 @@
     }
    },
    "schemas": {
-    "leaf-values": 105,
-    "without-a-source-value": 103
+    "leaf-values": 168,
+    "without-a-source-value": 166
    },
    "manifest": {
-    "leaf-values": 6467,
-    "without-a-source-value": 2603,
+    "leaf-values": 6472,
+    "without-a-source-value": 2607,
     "by-place": {
-     "/facet-schemas/[]/digest": 6,
-     "/facet-schemas/[]/exact-version": 6,
-     "/facet-schemas/[]/id": 6,
-     "/facet-schemas/[]/path": 6,
+     "/facet-schemas/[]/digest": 7,
+     "/facet-schemas/[]/exact-version": 7,
+     "/facet-schemas/[]/id": 7,
+     "/facet-schemas/[]/path": 7,
      "/manifest-version": 1,
      "/objects/[]/id": 1,
      "/objects/[]/package-digest": 1287,
      "/objects/[]/path": 1,
      "/objects/[]/semantic-digest": 1287,
      "/provenance/converter": 1,
-     "/provenance/sources/[]/key": 1
+     "/provenance/sources/[]/format": 1
     }
    }
   },
@@ -3443,31 +3441,31 @@
    "path": "catalog.back-matter.resources[].rlinks[].hashes[].algorithm",
    "count": 1,
    "level": "L2",
-   "destination": "a resource that something in the document refers to by #uuid (a link of a control, which also takes its address from it as relations[].ref, or a link of the metadata) is carried whole on the root Set (compat `back-matter`); a resource nothing refers to is an orphan and is not carried (a rule the ledger checks)"
+   "destination": "a resource that something in the document refers to by #uuid (a link of a control, which also takes its address from it as relations[].ref, or a link of the metadata) is carried whole on the root Set, in the standard facet references@1 (its uuid as `id`); a resource nothing refers to is an orphan and is not carried (a rule the ledger checks)"
   },
   {
    "path": "catalog.back-matter.resources[].rlinks[].hashes[].value",
    "count": 1,
    "level": "L2",
-   "destination": "a resource that something in the document refers to by #uuid (a link of a control, which also takes its address from it as relations[].ref, or a link of the metadata) is carried whole on the root Set (compat `back-matter`); a resource nothing refers to is an orphan and is not carried (a rule the ledger checks)"
+   "destination": "a resource that something in the document refers to by #uuid (a link of a control, which also takes its address from it as relations[].ref, or a link of the metadata) is carried whole on the root Set, in the standard facet references@1 (its uuid as `id`); a resource nothing refers to is an orphan and is not carried (a rule the ledger checks)"
   },
   {
    "path": "catalog.back-matter.resources[].rlinks[].href",
    "count": 1,
    "level": "L2",
-   "destination": "a resource that something in the document refers to by #uuid (a link of a control, which also takes its address from it as relations[].ref, or a link of the metadata) is carried whole on the root Set (compat `back-matter`); a resource nothing refers to is an orphan and is not carried (a rule the ledger checks)"
+   "destination": "a resource that something in the document refers to by #uuid (a link of a control, which also takes its address from it as relations[].ref, or a link of the metadata) is carried whole on the root Set, in the standard facet references@1 (its uuid as `id`); a resource nothing refers to is an orphan and is not carried (a rule the ledger checks)"
   },
   {
    "path": "catalog.back-matter.resources[].title",
    "count": 1,
    "level": "L2",
-   "destination": "a resource that something in the document refers to by #uuid (a link of a control, which also takes its address from it as relations[].ref, or a link of the metadata) is carried whole on the root Set (compat `back-matter`); a resource nothing refers to is an orphan and is not carried (a rule the ledger checks)"
+   "destination": "a resource that something in the document refers to by #uuid (a link of a control, which also takes its address from it as relations[].ref, or a link of the metadata) is carried whole on the root Set, in the standard facet references@1 (its uuid as `id`); a resource nothing refers to is an orphan and is not carried (a rule the ledger checks)"
   },
   {
    "path": "catalog.back-matter.resources[].uuid",
    "count": 1,
    "level": "L2",
-   "destination": "a resource that something in the document refers to by #uuid (a link of a control, which also takes its address from it as relations[].ref, or a link of the metadata) is carried whole on the root Set (compat `back-matter`); a resource nothing refers to is an orphan and is not carried (a rule the ledger checks)"
+   "destination": "a resource that something in the document refers to by #uuid (a link of a control, which also takes its address from it as relations[].ref, or a link of the metadata) is carried whole on the root Set, in the standard facet references@1 (its uuid as `id`); a resource nothing refers to is an orphan and is not carried (a rule the ledger checks)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].class",
@@ -3959,7 +3957,7 @@
    "path": "catalog.metadata.oscal-version",
    "count": 1,
    "level": "L2",
-   "destination": "root Set, compat oscal-1x `metadata`, as the source holds it; manifest provenance.sources[].oscal-version"
+   "destination": "root Set, compat oscal-1x `metadata`, as the source holds it; manifest provenance.sources[].format-version"
   },
   {
    "path": "catalog.metadata.parties[].email-addresses[]",
@@ -4048,8 +4046,8 @@
   {
    "path": "catalog.uuid",
    "count": 1,
-   "level": "L2",
-   "destination": "root Set, compat oscal-1x `uuid`: the uuid of the source document"
+   "level": "L1",
+   "destination": "manifest provenance.sources[].uuid: the uuid of the source document"
   }
  ]
 }

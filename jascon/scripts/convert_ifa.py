@@ -44,6 +44,7 @@ from oscal_conv_lib import ledger_gate
 from oscal_conv_lib import document_author, document_day, is_day, provenance, provenance_override, textify
 from oscal_conv_lib import known_arguments, out_dir
 from oscal_conv_lib import COMPAT, referred_to, lifecycle_default_record, lifecycle_default_line
+from oscal_conv_lib import ASSESSMENT_CRITERIA_FILE
 
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 SRCDIR = os.path.join(ROOT, "sources", "nist")
@@ -1123,13 +1124,14 @@ for gap, n in sorted(party_gaps.items()):
 
 # ---------- stubs + write ----------
 # carried Requirements bring their facet pins along (#17 fail-closed:
-# a bundle pins every facet schema its objects use)
-bundle.stub("sp800-53-narrative-stub.json", "https://ns.nist.gov/sp800-53/facet/narrative", [],
-            {"guidance": {"type": "array"}})
-bundle.stub("sp800-53a-stub.json", "https://ns.nist.gov/sp800-53/facet/sp800-53a", [],
-            {"objectives": {"type": "array"}, "methods": {"type": "array"}})
-bundle.stub("sp800-53-odp-stub.json", "https://ns.nist.gov/sp800-53/facet/odp", [],
-            {"params": {"type": "object"}})
+# a bundle pins every facet schema its objects use). The pins are the files
+# their own bundle pins, verbatim: one id and version is one schema (backlog
+# #88). Until 2026-11-14 this converter wrote stubs of its own for them, and
+# its narrative stub lacked the member `overview` that the SP 800-53 bundle
+# pins under the same id and version.
+for _fn in ("sp800-53-narrative-stub.json", "sp800-53-odp-stub.json"):
+    with open(os.path.join(NISTB, "schemas", _fn), encoding="utf-8") as _f: bundle.schemas[f"schemas/{_fn}"] = json.load(_f)
+bundle.pin_stdlib(ASSESSMENT_CRITERIA_FILE)   # their assessment objectives stand in the standard facet since 2026-11-14 (backlog #83)
 bundle.stub("goodread-system-stub.json", F_SYS.split("@")[0], [],
             {"system-ids": {"type": "array"}, "description": {"type": "object"},
              "status": {"type": "string"}, "sensitivity": {"type": "string"},
@@ -1144,12 +1146,14 @@ bundle.stub("goodread-risk-analysis-stub.json", F_RISKA.split("@")[0], [],
             {"risk-status": {"type": "string"}, "description": {"type": "object"},
              "characterizations": {"type": "array"}, "responses": {"type": "array"},
              "mitigating-factors": {"type": "array"}, "observations": {"type": "array"},
-             "assessment-results-state": {"type": "object"}})
+             "assessment-results-state": {"type": "object"}},
+            version="1.1.0")   # backlog #88: members came on 2026-11-14, under the 1.0.0 it had carried without them
 bundle.stub("goodread-finding-target-stub.json", F_FTGT.split("@")[0], [],
             {"target-objective-id": {"type": "string"}, "target-type": {"type": "string"},
              "implementation-statement-uuid": {"type": "string"},
              "description": {"type": "object"}, "target-description": {"type": "object"},
-             "observations": {"type": "array"}, "poam-item": {"type": "object"}})
+             "observations": {"type": "array"}, "poam-item": {"type": "object"}},
+            version="1.1.0")   # backlog #88: members came on 2026-11-14, under the 1.0.0 it had carried without them
 # The schema of the Assessment's method payload (backlog #55). `tasks` and
 # `reviewed-controls` were written since 1.0.0 and missing from this pin
 # until 2026-11-13; since then it named the five members and said of each
@@ -1180,7 +1184,8 @@ bundle.stub("goodread-ap-stub.json", F_AP.split("@")[0], [],
                               "remarks": _TEXT, "source-doc": _FROM}),
              "subjects": _entry(["description"], {"type": _STR, "description": _TEXT}),
              "reviewed-controls": {"type": "array", "items": _STR},
-             "responsible-roles": _entry(["role"], {"role": _STR, "parties": {"type": "array", "items": _STR}})})
+             "responsible-roles": _entry(["role"], {"role": _STR, "parties": {"type": "array", "items": _STR}})},
+            version="1.1.0")   # backlog #88: members came on 2026-11-14, under the 1.0.0 it had carried without them
 bundle.stub("goodread-protocols-stub.json", F_PROTO.split("@")[0], [], {"protocols": {"type": "array"}})
 bundle.stub("goodread-implementation-stub.json", F_IMPL.split("@")[0], [],
             {"description": {"type": "object"}, "remarks": {"type": "object"}, "statements": {"type": "array"}})
@@ -1190,7 +1195,8 @@ bundle.stub("goodread-component-stub.json", F_COMP.split("@")[0], [],
              "control-implementations": {"type": "array"},
              "capabilities": {"type": "array"},                # the uuids of what each capability is made from
              "authorizations": {"type": "array"},              # what the kernel's authorization entry has no member for
-             "listed-by-leveraging-plan": {"type": "object"}})   # the leveraging plan's own entry, where it differs
+             "listed-by-leveraging-plan": {"type": "object"}}   # the leveraging plan's own entry, where it differs
+            ,version="1.1.0")   # backlog #88: members came on 2026-11-14, under the 1.0.0 it had carried without them
 bundle.pin_compat()      # `uuid` of the source element an object is made from: the one compat schema (1.1.0)
 # what each source document says about itself, handed on as it stands: the
 # bundle's objects come from seven documents, and the manifest names them.
@@ -1202,10 +1208,18 @@ bundle.pin_compat()      # `uuid` of the source element an object is made from: 
 # nothing refers to is an orphan and stays out by the ledger's rule (R1).
 DOC_META = ("title", "version", "oscal-version", "last-modified", "published", "remarks")
 R_ORPHAN = "a back-matter resource that nothing in its document refers to: nobody can reach it, and it is not carried"
+R_DOC_DAY = "date of a source document: the day of its last-modified"
 ORPHANS = []
 def source_document(tag, fn, wrapped):
     (key, doc), = wrapped.items()
-    entry = {"file": fn, **{k: doc["metadata"][k] for k in DOC_META if k in doc["metadata"]}, "uuid": doc["uuid"]}
+    # The members the kernel types of a source (backlog #80): title, version, uuid, date, format, format-version.
+    # What else the document says of itself stands beside them, as before.
+    meta = doc["metadata"]
+    entry = {"file": fn, "title": meta["title"], "version": meta["version"], "uuid": doc["uuid"]}
+    if document_day(meta): entry["date"] = D(R_DOC_DAY, lambda lm: lm[:10], meta["last-modified"])
+    entry["format"] = "OSCAL"
+    entry["format-version"] = meta["oscal-version"]
+    entry.update({k: meta[k] for k in DOC_META if k in meta and k not in ("title", "version", "oscal-version")})
     rest = {k: v for k, v in doc["metadata"].items() if k not in DOC_META}
     if rest: entry["metadata"] = rest
     for k in ("import-profile", "import-ssp", "import-ap"):
@@ -1219,13 +1233,12 @@ def source_document(tag, fn, wrapped):
 source_documents = [source_document(tag, fn, doc) for tag, fn, doc in SOURCE_FILES]
 STATED = []          # no object's lifecycle is a status of the source mapped by a rule: `active` is the converter's
 LIFECYCLE_DEFAULT = lifecycle_default_record(bundle.objects, STATED)
-manifest = bundle.write({"source": "OSCAL IFA GoodRead example set (SSP 1.1.1, AP, AR, POA&M) + leveraged/"
-                        "leveraging SSP pair + component-definition example (usnistgov/oscal-content)",
-              "source-note": "FICTIONAL example content by NIST; converted as the gate-3 lifecycle corpus",
-              "source-oscal-version": SSP["metadata"]["oscal-version"],
+manifest = bundle.write({"sources": source_documents,
+              "source-note": "OSCAL IFA GoodRead example set (SSP 1.1.1, AP, AR, POA&M) + leveraged/leveraging SSP "
+                             "pair + component-definition example (usnistgov/oscal-content). FICTIONAL example "
+                             "content by NIST; converted as the gate-3 lifecycle corpus",
               "source-commit": "usnistgov/oscal-content@9402f031 (2026-07-14; the state fetched 2026-07-22)",
-              "source-documents": source_documents,
-              "converter": "convert_ifa.py v0.4 (provenance pre-filled from the source documents; "
+              "converter": "convert_ifa.py v0.5 (provenance pre-filled from the source documents; "
                            "the Attestation beside the manifest; conversion ledger)",
               "carried-requirements": carried,
               "attestation-note": "the Attestation of the ATO is the file attestation-ifa-ato.json beside this "
@@ -1303,8 +1316,9 @@ note("**Authorization dates x2**: `date-authorized` of the system and of the lev
 # ---------- coverage ----------
 RULES = [
  (r"^(ssp|ap|ar|poam|lev|lvg|cdef)\.[a-z-]+\.(uuid$|metadata\.|import-profile|import-ssp|import-ap|back-matter\.)", "L1",
-  "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, "
-  "last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible "
+  "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its "
+  "last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, "
+  "remarks, the rest of its metadata - revisions, roles, parties, responsible "
   "parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> "
   "landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"),
  (r"^ssp\.system-security-plan\.system-characteristics\.", "L1",

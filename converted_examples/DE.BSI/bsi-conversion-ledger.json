@@ -18,7 +18,7 @@
    "example": "gspp#/catalog/back-matter/resources/0/rlinks/0/hashes/0/algorithm",
    "to": [
     {
-     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/back-matter/resources/[]/rlinks/[]/hashes/[]/algorithm",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1references@1/resources/[]/rlinks/[]/hashes/[]/algorithm",
      "count": 1
     }
    ]
@@ -30,7 +30,7 @@
    "example": "gspp#/catalog/back-matter/resources/0/rlinks/0/hashes/0/value",
    "to": [
     {
-     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/back-matter/resources/[]/rlinks/[]/hashes/[]/value",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1references@1/resources/[]/rlinks/[]/hashes/[]/value",
      "count": 1
     }
    ]
@@ -42,7 +42,7 @@
    "example": "gspp#/catalog/back-matter/resources/0/rlinks/0/href",
    "to": [
     {
-     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/back-matter/resources/[]/rlinks/[]/href",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1references@1/resources/[]/rlinks/[]/href",
      "count": 1
     }
    ]
@@ -54,7 +54,7 @@
    "example": "gspp#/catalog/back-matter/resources/0/title",
    "to": [
     {
-     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/back-matter/resources/[]/title",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1references@1/resources/[]/title",
      "count": 1
     }
    ]
@@ -66,7 +66,7 @@
    "example": "gspp#/catalog/back-matter/resources/0/uuid",
    "to": [
     {
-     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/back-matter/resources/[]/uuid",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1references@1/resources/[]/id",
      "count": 1
     }
    ]
@@ -2185,7 +2185,7 @@
      "count": 1
     },
     {
-     "pointer": "/provenance/sources/[]/oscal-version",
+     "pointer": "/provenance/sources/[]/format-version",
      "count": 1
     }
    ]
@@ -2382,7 +2382,7 @@
    "example": "gspp#/catalog/uuid",
    "to": [
     {
-     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/uuid",
+     "pointer": "/provenance/sources/[]/uuid",
      "count": 1
     }
    ]

@@ -41,6 +41,7 @@ from oscal_conv_lib import make_T, slug, Bundle, inventory, coverage, report
 from oscal_conv_lib import known_arguments, out_dir, obligated_party, obligated_party_line, obligated_party_record
 from oscal_conv_lib import Ledger, ledger_by_path, ledger_gate, props_by_name, LEDGER_OUTCOMES
 from oscal_conv_lib import COMPAT, referred_to, lifecycle_default_record, lifecycle_default_line
+from oscal_conv_lib import REFERENCES, REFERENCES_FILE, resource_entry, document_author, document_day
 
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 SRC = os.path.join(ROOT, "sources", "nist", "NIST_CSF_v2.0_catalog.json")
@@ -55,7 +56,7 @@ PARTY_WHY = "CSF binds the adopting organization"
 F_NARR = f"{NS}/facet/narrative@1"
 F_EX = f"{NS}/facet/examples@1"
 F_CSF = f"{NS}/facet/csf@1"
-F_REF = f"{NS}/facet/references@1"
+F_REF = REFERENCES            # the standard facet (backlog #82); until 2026-11-14 a facet of this converter's own
 # What the kernel and the standard facets have no place for is carried here,
 # as the source has it: `metadata` (the document metadata, on the root Set)
 # and `unmapped` (what this mapping does not know of an element, on the
@@ -417,45 +418,58 @@ for gi, g in groups_in_order:
     bundle.add(D(R_PATH, lambda i: f"objects/set/function-{slug(i)}.json", g["id"]), fobj)
     root_members.append({"ref": furi, "sequence": D(R_SEQ, place, sortkey(g), group_keys, gi)})
 
-# The root Set stands for the document. Its title is the document's; version,
-# OSCAL version and the date of publication are written to the manifest's
-# provenance. Every other member of the document metadata has no kernel
-# member and no standard facet: it stands in the compat facet, under
-# `metadata`, in the source's own shape and with the source's own values.
+# The root Set stands for the document. Its title is the document's; title,
+# version, uuid, OSCAL version and the date of publication are written to the
+# manifest, as the one entry of `provenance.sources` (backlog #80), with the
+# author the document names and the day of its last change. Every other
+# member of the document metadata has no kernel member and no standard
+# facet: it stands in the compat facet, under `metadata`, in the source's
+# own shape and with the source's own values.
 METADATA_ELSEWHERE = ("title", "version", "oscal-version", "published")
 metadata_rest = {k: v for k, v in cat["metadata"].items() if k not in METADATA_ELSEWHERE}
 # The back-matter (the author's decisions of 2026-11-14): a resource that something in the document refers to
 # is carried as the source writes it, with its uuid, so that the link resolves inside the bundle; a resource
-# nothing refers to is an orphan and stays out, by a rule the ledger checks. The uuid of the document itself
-# stands beside its metadata.
+# nothing refers to is an orphan and stays out, by a rule the ledger checks. The resources stand in the standard
+# facet references@1 (backlog #82), the uuid under its member `id`.
 R_ORPHAN = "a back-matter resource that nothing in the document refers to: nobody can reach it, and it is not carried"
 RES, ORPHANS = [], []
 for r in cat.get("back-matter", {}).get("resources", []) or []:
     if "uuid" in r and not referred_to(cat, r): led.orphan(r["uuid"], R_ORPHAN); ORPHANS.append(r)
-    else: RES.append(r)
-root_facets = {F_REF: {"resources": RES}}
-root_facets[COMPAT] = {**({"metadata": metadata_rest} if metadata_rest else {}), "uuid": cat["uuid"]}
+    else: RES.append(resource_entry(r) if "uuid" in r else r)
+root_facets = {}
+if RES: root_facets[F_REF] = {"resources": RES}
+if metadata_rest: root_facets[COMPAT] = {"metadata": metadata_rest}
 bundle.add("objects/set/root.json",
            {"id": f"{NS}/set/root", "version": VER, "lifecycle": "active",
             "title": cat["metadata"]["title"], "members": root_members,
-            "facets": root_facets})
+            **({"facets": root_facets} if root_facets else {})})
 
 bundle.stub("csf-narrative-stub.json", F_NARR.split("@")[0], [], {"guidance": {"type": "array"}})
 bundle.stub("csf-examples-stub.json", F_EX.split("@")[0], [], {"examples": {"type": "array"}})
 bundle.stub("csf-stub.json", F_CSF.split("@")[0], [], {"risk-party": {"type": "object"}})
-bundle.stub("csf-references-stub.json", F_REF.split("@")[0], [], {"resources": {"type": "array"}})
-bundle.pin_compat()                  # the one compat schema of every converter (1.1.0), not one of this converter's own
+if RES: bundle.pin_stdlib(REFERENCES_FILE)           # the standard facet's descriptor, verbatim
+if metadata_rest or n_unmapped: bundle.pin_compat()  # the one compat schema of every converter, not one of this converter's own
 led.resolve(bundle.objects)          # a boolean of the source is written as the plain boolean, and its place is kept
 # `active` where the source states no status is this converter's default, counted for the report; the ids of the
 # objects whose lifecycle is the source's own word are those of the elements with a status prop
 _uri_of = {"function": function_uri, "category": category_uri, "subcategory": mint}
 LIFECYCLE_DEFAULT = lifecycle_default_record(bundle.objects, [_uri_of[level](e["id"]) for e, level, _ in ELEMENTS
                                                               if taken(e)["status"] is not None])
-manifest = bundle.write({"source": cat["metadata"]["title"], "source-version": VER,
-                         "source-doc-version": cat["metadata"]["version"],
-                         "source-oscal-version": cat["metadata"]["oscal-version"],
-                         "published": cat["metadata"].get("published"),
-                         "converter": "convert_csf.py v0.3",
+# What the bundle was made from (backlog #80): the one source document. Its author is the party the document
+# names for the role `creator`, `prepared-by` or `author` (the last since backlog #91: this document uses it).
+R_AUTHOR = "author of the source: the party its document names as its author, as a party URI under the namespace"
+R_DAY = "date of the source: the day of the document's last-modified"
+PARTIES = PARTY_DEFAULT.rsplit("/", 1)[0] + "/"          # where the landmark URI of a party stands (as in convert_ism.py)
+def _author_uri(name): return PARTIES + slug(name)       # the author of the document: no statement is bound to it
+SOURCE = {"title": cat["metadata"]["title"], "version": cat["metadata"]["version"], "uuid": cat["uuid"]}
+_author = document_author(cat["metadata"])
+if _author: SOURCE["author-ref"] = D(R_AUTHOR, _author_uri, _author["name"])
+if document_day(cat["metadata"]): SOURCE["date"] = D(R_DAY, lambda lm: lm[:10], cat["metadata"]["last-modified"])
+SOURCE["format"] = "OSCAL"
+SOURCE["format-version"] = cat["metadata"]["oscal-version"]
+if cat["metadata"].get("published") is not None: SOURCE["published"] = cat["metadata"]["published"]
+manifest = bundle.write({"sources": [SOURCE],
+                         "converter": "convert_csf.py v0.4",
                          "namespace-note": "https://ns.nist.gov/csf minted by converter (no version in the URI; "
                                            "lineage is D2's job) pending a NIST-published URI"})
 
@@ -551,15 +565,15 @@ CTL = r"^csf\.catalog\.groups\[\]\.controls\[\]\."
 ELSE = "; what the mapping does not know is carried as it is in the compat facet (`unmapped`)"
 RULES = [
  (r"^csf\.catalog\.metadata\.(title|version|oscal-version|published)$", "L1",
-  "bundle manifest provenance (`source`, `source-doc-version`, `source-oscal-version`, `published`); the title "
-  "is the title of the root Set as well"),
- (r"^csf\.catalog\.uuid$", "L2", "compat facet on the root Set, member `uuid`"),
+  "bundle manifest, the one entry of `provenance.sources` (`title`, `version`, `format-version`, `published`); the "
+  "title is the title of the root Set as well"),
+ (r"^csf\.catalog\.uuid$", "L1", "bundle manifest, `provenance.sources[0].uuid`"),
  (r"^csf\.catalog\.metadata\.", "L2",
   "compat facet on the root Set, member `metadata`, in the source's own shape and with its own values "
   "(`last-modified`, revisions, props, links, roles, parties, responsible-parties)"),
  (r"^csf\.catalog\.back-matter\.", "L1",
-  "references@1 facet on the root Set: a resource that something in the document refers to, as the source writes "
-  "it (uuid, title, links with their media type); a resource nothing refers to is an orphan and is not carried "
+  "standard facet references@1 on the root Set: a resource that something in the document refers to, as the source "
+  "writes it (its uuid as `id`, title, links with their media type); a resource nothing refers to is an orphan and is not carried "
   "(a rule the ledger checks)"),
  (r"^csf\.catalog\.groups\[\]\.id$", "L1", "function Set id (URI mint)"),
  (r"^csf\.catalog\.groups\[\]\.title$", "L1", "function Set title"),

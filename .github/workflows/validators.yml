@@ -181,6 +181,18 @@ jobs:
             git status --porcelain -- converted_examples
             exit 1
           fi
+      - name: One id and version is one schema (the pinned facet schemas of the bundles and the standard library)
+        # Backlog #88. A converter that changes a schema it pins must change
+        # the schema's version: the author decided it for the compat facet,
+        # and the converters' own facets had done the same thing in small.
+        # .github/pinned-schemas.json records, for every id and version a
+        # committed bundle or the standard library holds, the digest of what
+        # the schema says. The step fails when two files give one id and
+        # version two schemas, when a schema changed and kept its version,
+        # and when a schema or a version is not in the record. The CR26
+        # bundle is not committed; its step below holds its pins to the same
+        # record.
+        run: python .github/scripts/pinned-schemas.py
       - name: The OSCAL exports of the four catalogue bundles are what export_oscal.py writes
         # Backlog #90. export_oscal.py projects each catalogue bundle under
         # converted_examples/ to an OSCAL 1.2.2 catalogue, validates it
@@ -237,6 +249,8 @@ jobs:
           out=$(mktemp -d)
           python jascon/scripts/convert_cr26.py --out "$out"
           python jascon/scripts/validate_core.py "$out/cr26-core-bundle" | tee cr26.log
+          # one id and version is one schema: the bundle's pins against the record (backlog #88)
+          python .github/scripts/pinned-schemas.py "$out/cr26-core-bundle"
           for f in cr26-coverage-report.md cr26-coverage-report.json cr26-conversion-ledger.json; do
             if ! cmp "$out/$f" "$dir/$f"; then
               echo "convert_cr26.py no longer reproduces the committed $f:"

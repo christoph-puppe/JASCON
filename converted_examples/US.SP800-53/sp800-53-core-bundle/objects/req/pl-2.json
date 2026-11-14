@@ -9,6 +9,7 @@
  "statements": [
   {
    "id": "smt.a",
+   "label": "a.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -19,6 +20,7 @@
   },
   {
    "id": "smt.a.1",
+   "label": "1.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -29,6 +31,7 @@
   },
   {
    "id": "smt.a.2",
+   "label": "2.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -39,6 +42,7 @@
   },
   {
    "id": "smt.a.3",
+   "label": "3.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -49,6 +53,7 @@
   },
   {
    "id": "smt.a.4",
+   "label": "4.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -59,6 +64,7 @@
   },
   {
    "id": "smt.a.5",
+   "label": "5.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -69,6 +75,7 @@
   },
   {
    "id": "smt.a.6",
+   "label": "6.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -79,6 +86,7 @@
   },
   {
    "id": "smt.a.7",
+   "label": "7.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -89,6 +97,7 @@
   },
   {
    "id": "smt.a.8",
+   "label": "8.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -99,6 +108,7 @@
   },
   {
    "id": "smt.a.9",
+   "label": "9.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -109,6 +119,7 @@
   },
   {
    "id": "smt.a.10",
+   "label": "10.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -119,6 +130,7 @@
   },
   {
    "id": "smt.a.11",
+   "label": "11.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -129,6 +141,7 @@
   },
   {
    "id": "smt.a.12",
+   "label": "12.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -139,6 +152,7 @@
   },
   {
    "id": "smt.a.13",
+   "label": "13.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -149,6 +163,7 @@
   },
   {
    "id": "smt.a.14",
+   "label": "14.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -166,6 +181,7 @@
   },
   {
    "id": "smt.a.15",
+   "label": "15.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -176,6 +192,7 @@
   },
   {
    "id": "smt.b",
+   "label": "b.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -193,6 +210,7 @@
   },
   {
    "id": "smt.c",
+   "label": "c.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -210,6 +228,7 @@
   },
   {
    "id": "smt.d",
+   "label": "d.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -220,6 +239,7 @@
   },
   {
    "id": "smt.e",
+   "label": "e.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -237,14 +257,14 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "pl-2_obj",
      "label": "PL-02",
      "assessment-for": [
       {
-       "statement-id": "smt"
+       "requirement-ref": "https://ns.nist.gov/sp800-53/req/PL-2"
       }
      ],
      "children": [

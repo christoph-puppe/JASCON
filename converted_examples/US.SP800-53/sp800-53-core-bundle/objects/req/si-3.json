@@ -9,6 +9,7 @@
  "statements": [
   {
    "id": "smt.a",
+   "label": "a.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization",
@@ -40,6 +41,7 @@
   },
   {
    "id": "smt.b",
+   "label": "b.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization",
@@ -51,6 +53,7 @@
   },
   {
    "id": "smt.c",
+   "label": "c.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization",
@@ -62,6 +65,7 @@
   },
   {
    "id": "smt.c.1",
+   "label": "1.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization",
@@ -93,6 +97,7 @@
   },
   {
    "id": "smt.c.2",
+   "label": "2.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization",
@@ -127,6 +132,7 @@
   },
   {
    "id": "smt.d",
+   "label": "d.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization",
@@ -145,14 +151,14 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "si-3_obj",
      "label": "SI-03",
      "assessment-for": [
       {
-       "statement-id": "smt"
+       "requirement-ref": "https://ns.nist.gov/sp800-53/req/SI-3"
       }
      ],
      "children": [

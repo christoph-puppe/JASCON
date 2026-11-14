@@ -48,6 +48,7 @@ from oscal_conv_lib import provenance, provenance_override
 from oscal_conv_lib import obligated_party, obligated_party_line, obligated_party_record
 from oscal_conv_lib import Ledger, ledger_by_path, ledger_gate, needs_kernel_2
 from oscal_conv_lib import COMPAT_FILE, compat_schema, lifecycle_default_record, lifecycle_default_line
+from oscal_conv_lib import ASSESSMENT_CRITERIA_FILE
 
 NS="https://ns.fedramp.gov/cr26"; NIST="https://ns.nist.gov/sp800-53/req"
 ARGV=sys.argv[1:]
@@ -246,14 +247,24 @@ KSI="cr26.KSI.*.indicators.*"; KVAR=KSI+".varies_by_class.*"
 DROP="declared-drop"
 DROP_READING={}
 def add_history(obj,entries):
-    """The update history of a rule or an indicator (date, comment, issue), as the source writes it: the kernel
-    has the version of an object and no member for what changed when, so it stands in the compat facet."""
-    if entries: obj.setdefault("facets",{}).setdefault(F_COMPAT,{})["history"]=entries
+    """The update history of a rule or an indicator (date, comment, issue) is the kernel's `history` of its
+    Requirement (the author, 2026-11-14, backlog #81; in the compat facet until then). The kernel wants the
+    entries oldest first; the source lists the newest first (measured on the pinned file: all 94 objects with
+    several entries), so they are put in the order of their dates, equal dates in the source's order. The date
+    as the source writes it, the comment as a text, the issue as `ref`. An entry with a member this rule does
+    not know stops the run."""
+    if not entries: return
+    for e in entries:
+        if set(e)-{"date","comment","issue"}:
+            raise SystemExit(f"an update entry has a member the converter has no place for: {sorted(set(e)-{'date','comment','issue'})}")
+    obj["history"]=[{"date":e["date"],**({"comment":{"en":e["comment"]}} if "comment" in e else {}),
+                     **({"ref":e["issue"]} if "issue" in e else {})}
+                    for e in sorted(entries,key=lambda e:str(e["date"]))]
 RULES=[
- (r"^cr26\.info\.title$","L1","the manifest's provenance (source) and the title of the corpus root Set"),
+ (r"^cr26\.info\.title$","L1","the manifest's provenance (sources[0].title) and the title of the corpus root Set"),
  (r"^cr26\.info\.description$","L1","narrative@1 on the corpus root Set: description"),
- (r"^cr26\.info\.version$","L1","the manifest's provenance (source-version) and `version` of every object made from the publication"),
- (r"^cr26\.info\.last_updated$","L1","the manifest's provenance (last_updated) and the date of every Mapping's provenance"),
+ (r"^cr26\.info\.version$","L1","the manifest's provenance (sources[0].version) and `version` of every object made from the publication"),
+ (r"^cr26\.info\.last_updated$","L1","the manifest's provenance (sources[0].date) and the date of every Mapping's provenance"),
  (r"^cr26\.info\.default_artifacts\.","L1","assessment-criteria on corpus root: default-artifacts"),
  (r"^cr26\.FRD\.info\.","L1","terminology@1 glossary-info on the corpus root Set"),
  (r"^cr26\.FRD\.data\.all\.\*\.(term|definition|tag|alts\[\]|note|notes\[\]|do_not_link|reference|reference_url)$","L1","terminology@1 payload per term (alts, links, chrome flags inside payload)"),
@@ -276,7 +287,7 @@ RULES=[
  (re.escape(RULE)+r"\.(timeframe_num|timeframe_type)$","L1","statement parameter 'timeframe' (elapsed-duration or calendar-period, by unit); timeframe_type is the unit of every timeframe parameter of the rule"),
  (re.escape(RULE)+r"\.timeframe_num_(min|max)$","L1","statement parameters 'timeframe-min' / 'timeframe-max': a range is its two bounds, each a duration of the kernel (unit from timeframe_type)"),
  (re.escape(RULE)+r"\.controls\[\]$","L1","Mapping objects (relationship supports; 8.6 untyped-import rule), as for a KSI"),
- (re.escape(RULE)+r"\.updated\[\]\.","L2","compat facet on the rule's Requirement: history, the entries as the source writes them"),
+ (re.escape(RULE)+r"\.updated\[\]\.","L1","`history` of the rule's Requirement: the entries oldest first, date as written, comment as a text, issue as `ref`"),
  (re.escape(RULE)+r"\.(note|notes\[\]|danger|corrective_actions\[\])$","L1","narrative@1: note / notes / danger / corrective-actions"),
  (re.escape(RULE)+r"\.(following_information\[\]|following_information_bullets\[\])$","L1","reporting-obligation@1: following-information / following-information-bullets"),
  (re.escape(RULE)+r"\.examples\[\]\.(id|examples\[\]|key_tests\[\])$","L1","assessment-criteria@1: examples[] {id, examples, key-tests} - the KSI-shaped test data"),
@@ -295,7 +306,7 @@ RULES=[
  (re.escape(KSI)+r"\.statement$","L1","KSI statements[0].prose.en (modality unspecified: indicator language)"),
  (re.escape(KSI)+r"\.controls\[\]$","L1","Mapping objects (relationship supports; 8.6 untyped-import rule)"),
  (re.escape(KSI)+r"\.terms\[\]$","L1","relations uses-term"),
- (re.escape(KSI)+r"\.updated\[\]\.","L2","compat facet on the indicator's Requirement: history, the entries as the source writes them"),
+ (re.escape(KSI)+r"\.updated\[\]\.","L1","`history` of the indicator's Requirement: the entries oldest first, date as written, comment as a text, issue as `ref`"),
  (re.escape(KVAR)+r"\.","L2","class-variants payload on the KSI Requirement"),
  (r"^cr26\.KSI\.\*\.(name|web_name|short_name)$","L1","KSI category Set: title / annotations.web_name / label"),
  (r"^cr26\.KSI\.\*\.id$","L1","KSI category Set: aliases[] (the theme's own id; the Set's URI is minted from the key the theme stands under)"),
@@ -812,7 +823,7 @@ for _cid,_robj in sorted(ctl_carried.items()):
         with open(os.path.join(NISTB,*_nist_pins[_fid]["path"].split("/")),encoding="utf-8") as _f: carried_pins[_fid]=(_nist_pins[_fid]["path"],json.load(_f))
 
 pinned=[]              # the schema files this run writes, for the manifest and the cleanup
-def stub(path,fid,mods,props):
+def stub(path,fid,mods,props,version="1.0.0"):
     # 26 delivered: pins are the normative payload contract, fail-closed
     if fid in carried_pins:
         # a facet this converter writes itself and a carried Requirement uses too: one schema that knows both shapes
@@ -820,7 +831,7 @@ def stub(path,fid,mods,props):
         for k,v in _theirs.items():
             if props.setdefault(k,v)!=v:
                 raise SystemExit(f"the facet {fid}: this converter and the SP 800-53 bundle type the member {k!r} differently")
-    w(path,{"id":fid,"version":"1.0.0","modifies-semantics":mods,
+    w(path,{"id":fid,"version":version,"modifies-semantics":mods,
         "note":"NORMATIVE pinned payload schema (backlog 26): closed shape - unknown keys are rejected, never smuggled",
         "schema":{"$schema":"https://json-schema.org/draft/2020-12/schema","type":"object","properties":props,
                   "additionalProperties":False}})
@@ -834,7 +845,7 @@ def pin_stdlib(fn):
 pin_stdlib("terminology-1.0.0.json")   # 26: stdlib pins are VERBATIM
 pin_stdlib("reporting-obligation-1.0.0.json")
 pin_stdlib("effectivity-1.0.0.json")
-pin_stdlib("assessment-criteria-1.0.0.json")
+pin_stdlib(ASSESSMENT_CRITERIA_FILE)   # the latest version of the library (1.1.0): a carried Requirement states its objectives in it
 stub("schemas/cr26-scope-stub.json",F_SCOPE.split("@")[0],["selection"],
      {"classes":{"type":"array"},"types":{"type":"array"},"paths":{"type":"array"},"affects":{"type":"array"},"tag":{"type":"string"}})
 stub("schemas/cr26-narrative-stub.json",F_NARR.split("@")[0],[],
@@ -852,12 +863,15 @@ stub("schemas/cr26-narrative-stub.json",F_NARR.split("@")[0],[],
       # the glossary's second flag, by term id (on the Set that hosts terminology@1)
       "ignore-in-terms":{"type":"object","minProperties":1,"additionalProperties":{"type":"boolean"}},
       # the update history of a term, by term id, the entries as the source writes them
-      "term-updated":{"type":"object","minProperties":1,"additionalProperties":{"type":"array"}}})
-# the one compat schema of every converter (1.1.0); until 2026-11-14 this converter pinned one of its own
+      "term-updated":{"type":"object","minProperties":1,"additionalProperties":{"type":"array"}}},
+     # 1.1.0 (backlog #88: a schema that changes changes its version): `status` and `term-updated` came on
+     # 2026-11-14, under the version 1.0.0 the schema had carried without them
+     version="1.1.0")
+# the one compat schema of every converter; until 2026-11-14 this converter pinned one of its own
 _theirs=carried_pins.pop(F_COMPAT.split("@")[0],None)     # a carried Requirement that uses the compat facet brings its pin
 if _theirs is not None and _theirs[1]!=compat_schema():
     raise SystemExit("the SP 800-53 bundle pins a compat schema that is not the one schema of this repository's converters "
-                     "(oscal_conv_lib.compat_schema, 1.1.0): a carried Requirement would be held to two schemas of one id")
+                     "(oscal_conv_lib.compat_schema): a carried Requirement would be held to two schemas of one id")
 w("schemas/"+COMPAT_FILE,compat_schema()); pinned.append("schemas/"+COMPAT_FILE)
 # the pins the carried Rev 5 Requirements bring, as the SP 800-53 bundle holds them
 for _fid,(_path,_desc) in sorted(carried_pins.items()):
@@ -883,11 +897,13 @@ for rel,o in objects.items(): w(rel,o)
 manifest={"manifest-version":"1"}
 # A carried Requirement may hold what the 1.0.0 kernel cannot type; the
 # manifest then names the kernel it needs (KERNEL-1), as the library's own
-# writer does. The objects this converter makes itself need none.
+# writer does. Since 2026-11-14 the objects this converter makes need it too:
+# the `history` of a rule or an indicator is 2.0.0 content.
 if needs_kernel_2(objects.values()): manifest["kernel-version"]="2.0.0"
 manifest.update({
- "provenance":{"source":d["info"]["title"],"source-version":VER,
-               "last_updated":d["info"]["last_updated"],"converter":"convert_cr26.py v0.2"},
+ # what the bundle was made from (backlog #80): the one publication, as it names itself
+ "provenance":{"sources":[{"title":d["info"]["title"],"version":VER,"date":d["info"]["last_updated"]}],
+               "converter":"convert_cr26.py v0.3"},
  "objects":[{"id":o["id"],"version":o["version"],"package-digest":shaf(rel),
              "semantic-digest":sdig(o),"path":rel} for rel,o in sorted(objects.items())],
  "facet-schemas":[]})
@@ -1196,9 +1212,11 @@ md=[f"# CR26 -> Semantic Core: Coverage Report (computed)\n",
  f"flag, to narrative@1 as `optional-notification`; reporting-obligation@1 keeps the other entries of the rule.",
  f"- **rule/KSI term names resolved to FRD ids** via the term+alias index (unresolved x{counters.get('unresolved-terms',0)} kept as slugs, counted).",
  f"- **updated[]** (entries counted: {counters.get('updated-entries',0)}): the update history of a rule or an indicator "
- f"stands on its Requirement, in the compat facet under `history`; that of a term on the corpus root Set, in "
- f"narrative@1 under `term-updated`, by term id; each entry as the source writes it. Until 2026-11-14 it was a "
- f"declared drop; the author decided that it is carried.",
+ f"is the kernel's `history` of its Requirement (backlog #81): the entries oldest first where the source lists the "
+ f"newest first, the date as written, the comment as a text, the issue as `ref`. A term is no object of the bundle "
+ f"but an entry of terminology@1 on the corpus root Set, and `history` is a member of an object: the history of a "
+ f"term stands there in narrative@1 under `term-updated`, by term id, each entry as the source writes it. Until "
+ f"2026-11-14 the update history was a declared drop; the author decided that it is carried.",
  f"- **CTL Rev5 overlay ({counters.get('ctl-overlays',0)} entries)**: the guidance and the update history of an entry "
  f"are parked L2 on /set/ctl-overlay. Its ODP assignments are not parked: they are the operations of the "
  f"`rev5-odp-overlay` Tailoring (the line on the drained assignments above). Until 2026-11-14 this line read as if "

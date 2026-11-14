@@ -9,6 +9,7 @@
  "statements": [
   {
    "id": "smt.a",
+   "label": "(a)",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization",
@@ -27,6 +28,7 @@
   },
   {
    "id": "smt.b",
+   "label": "(b)",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization",
@@ -57,14 +59,14 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "ac-7.4_obj",
      "label": "AC-07(04)",
      "assessment-for": [
       {
-       "statement-id": "smt"
+       "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-7.4"
       }
      ],
      "children": [

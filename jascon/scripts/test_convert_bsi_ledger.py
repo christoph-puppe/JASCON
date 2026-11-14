@@ -36,6 +36,10 @@ ROOT = os.path.normpath(os.path.join(HERE, "..", ".."))
 NS = "https://ns.bsi.bund.de/gspp"
 CSV = "https://github.com/BSI-Bund/Stand-der-Technik-Bibliothek/tree/main/Dokumentation/namespaces/"
 COMPAT = "https://ns.jascon.net/compat/oscal-1x@1"
+REFERENCES = "https://ns.jascon.net/stdlib/facet/references@1"   # the standard facet for resources (backlog #82)
+def as_resources(back_matter):
+    """the resources of a back-matter as references@1 carries them: as the source writes them, the uuid as `id`"""
+    return {"resources": [{"id": r["uuid"], **{k: v for k, v in r.items() if k != "uuid"}} for r in back_matter["resources"]]}
 TAX = "https://ns.bsi.bund.de/facet/gspp-taxonomy@1"
 NARR = "https://ns.bsi.bund.de/facet/gspp-narrative@1"
 RES_A, RES_B = "aaaaaaaa-0000-4000-8000-000000000001", "bbbbbbbb-0000-4000-8000-000000000002"
@@ -239,7 +243,9 @@ class TheGrundschutzConverter(unittest.TestCase):
     def test_no_drop_is_declared_and_the_documents_uuid_is_carried(self):
         # until 2026-11-14 two drops were declared (the uuid of the document, a resource no control names); the author decided both
         self.assertEqual((self.plain["report"]["ledger"]["declared-drops"], self.plain["ledger"]["totals"]["intentionally-dropped"]), ([], 0))
-        self.assertEqual(self.plain["objects"][f"{NS}/set/tax/root"]["facets"][COMPAT]["uuid"], catalogue()["catalog"]["uuid"])
+        self.assertEqual(self.plain["manifest"]["provenance"]["sources"][0]["uuid"], catalogue()["catalog"]["uuid"],
+                         "in the manifest's entry for the document since 2026-11-14 (backlog #80); on the root Set until then")
+        self.assertNotIn("uuid", self.plain["objects"][f"{NS}/set/tax/root"]["facets"][COMPAT])
         self.assertEqual(self.plain["report"]["lifecycle-default"]["origin"], "converter-default")
         with open(os.path.join(HERE, "convert_bsi.py"), encoding="utf-8") as f: code = f.read()
         self.assertEqual((code.count("led.drop("), code.count("led.drop_value(")), (1, 0), "the one call left declares the drops of DROPS, which is empty")
@@ -326,10 +332,11 @@ class TheGrundschutzConverter(unittest.TestCase):
         root = run["objects"][f"{NS}/set/tax/root"]
         self.assertEqual(root["title"], {"de": meta["title"]}); self.assertEqual(root["version"], meta["version"])
         self.assertEqual(root["facets"][COMPAT]["metadata"], {k: v for k, v in meta.items() if k not in ("title", "version")})
-        self.assertEqual(list(root["facets"][COMPAT]), ["metadata", "uuid", "back-matter"])
+        self.assertEqual(list(root["facets"][COMPAT]), ["metadata"])
+        # the document is the one entry of the manifest's provenance.sources, in the shape the kernel types (backlog #80)
         source = run["manifest"]["provenance"]["sources"][0]
-        self.assertEqual(source, {"key": "gspp", "title": meta["title"], "version": meta["version"], "oscal-version": "1.1.3",
-                                  "author-ref": f"{NS}/party/niemand-e-v", "date": "2026-11-14"})
+        self.assertEqual(source, {"title": meta["title"], "version": meta["version"], "uuid": catalogue()["catalog"]["uuid"],
+                                  "author-ref": f"{NS}/party/niemand-e-v", "date": "2026-11-14", "format": "OSCAL", "format-version": "1.1.3"})
         rows = self.rows(run)
         for (path, outcome), r in rows.items():
             if ".catalog.metadata." in path: self.assertEqual(outcome, "copied", path)
@@ -341,7 +348,7 @@ class TheGrundschutzConverter(unittest.TestCase):
         doc["catalog"]["metadata"]["last-modified"] = "irgendwann"
         run = self.convert(doc)
         self.assertEqual(run["done"].returncode, 0, run["done"].stderr[-600:])
-        self.assertEqual(sorted(run["manifest"]["provenance"]["sources"][0]), ["key", "oscal-version", "title", "version"],
+        self.assertEqual(sorted(run["manifest"]["provenance"]["sources"][0]), ["format", "format-version", "title", "uuid", "version"],
                          "a missing value is a line of the report at most, never a refusal, and nothing is made up")
         self.assertEqual(run["objects"][f"{NS}/set/tax/root"]["facets"][COMPAT]["metadata"]["last-modified"], "irgendwann")
 
@@ -349,12 +356,13 @@ class TheGrundschutzConverter(unittest.TestCase):
         run = self.plain
         root = run["objects"][f"{NS}/set/tax/root"]
         # one is named by a link of a control, the other by a link of the metadata: both are carried as the source holds them
-        self.assertEqual(root["facets"][COMPAT]["back-matter"], catalogue()["catalog"]["back-matter"])
+        self.assertEqual(root["facets"][REFERENCES], as_resources(catalogue()["catalog"]["back-matter"]))
+        self.assertNotIn("back-matter", root["facets"][COMPAT], "in the standard facet since 2026-11-14, in the compat facet until then")
         self.assertEqual(self.req(run, "PR.1.2")["relations"][0], {"type": "reference", "ref": "https://example.org/benannt"})
         doc = catalogue(); doc["catalog"]["back-matter"]["resources"].append({"uuid": "cccccccc-0000-4000-8000-000000000003", "title": "Niemand nennt es"})
         run = self.convert(doc)
         self.assertEqual((run["done"].returncode, run["ledger"]["totals"]["unaccounted"]), (0, 0), run["done"].stderr[-400:])
-        self.assertEqual(len(run["objects"][f"{NS}/set/tax/root"]["facets"][COMPAT]["back-matter"]["resources"]), 2)
+        self.assertEqual(len(run["objects"][f"{NS}/set/tax/root"]["facets"][REFERENCES]["resources"]), 2)
         self.assertEqual({x["kind"] for x in self.rows(run)[("gspp.catalog.back-matter.resources[].title", "not-content")]["rules"]}, {"orphan"})
 
     # ---------------- what the mapping does not read is carried ----------------
@@ -400,8 +408,8 @@ class TheGrundschutzConverter(unittest.TestCase):
                          ["a number that is no integer, written as a de"])
         self.assertEqual(rows[(C + ".parts[].id", "copied")]["count"], 2, "the id the rule does not give, and the id of the part it does not read")
         self.assertEqual(run["report"]["ledger"]["carried-as-the-source-holds-it"],
-                         {"catalog": 1, "back-matter": 1, "control": 1, "group": 1, "links": 1, "metadata": 1,
-                          "param-extras beyond the alt-identifier": 1, "parts": 1, "props": 2, "uuid": 1})
+                         {"catalog": 1, "control": 1, "group": 1, "links": 1, "metadata": 1,
+                          "param-extras beyond the alt-identifier": 1, "parts": 1, "props": 2})
 
     # ---------------- deliberate defects: each ends the run with a non-zero exit code ----------------
     def refused(self, changes, *words, source=None, before=None):

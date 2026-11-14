@@ -393,6 +393,28 @@
   }
  ],
  "facets": {
+  "https://ns.jascon.net/stdlib/facet/references@1": {
+   "resources": [
+    {
+     "id": "84cbf061-eb87-4ec1-8112-1f529232e907",
+     "description": "NIST Special Publication 800-53 Revision 5: Security and Privacy Controls for Federal Information Systems and Organizations",
+     "rlinks": [
+      {
+       "href": "../../../../nist.gov/SP800-53/rev5/xml/NIST_SP-800-53_rev5_catalog.xml",
+       "media-type": "application/oscal.catalog+xml"
+      },
+      {
+       "href": "../../../../nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json",
+       "media-type": "application/oscal.catalog+json"
+      },
+      {
+       "href": "../../../../nist.gov/SP800-53/rev5/yaml/NIST_SP-800-53_rev5_catalog.yaml",
+       "media-type": "application/oscal.catalog+yaml"
+      }
+     ]
+    }
+   ]
+  },
   "https://ns.jascon.net/compat/oscal-1x@1": {
    "metadata": {
     "last-modified": "2026-05-11T16:10:16.00000-00:00",
@@ -483,29 +505,6 @@
       "role-id": "contact-creator",
       "party-uuids": [
        "98c78f9b-5d50-4b01-b47f-d16801e8d0ab"
-      ]
-     }
-    ]
-   },
-   "uuid": "fed9f8ca-dcc2-492c-8a13-f9d979973e24",
-   "back-matter": {
-    "resources": [
-     {
-      "uuid": "84cbf061-eb87-4ec1-8112-1f529232e907",
-      "description": "NIST Special Publication 800-53 Revision 5: Security and Privacy Controls for Federal Information Systems and Organizations",
-      "rlinks": [
-       {
-        "href": "../../../../nist.gov/SP800-53/rev5/xml/NIST_SP-800-53_rev5_catalog.xml",
-        "media-type": "application/oscal.catalog+xml"
-       },
-       {
-        "href": "../../../../nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json",
-        "media-type": "application/oscal.catalog+json"
-       },
-       {
-        "href": "../../../../nist.gov/SP800-53/rev5/yaml/NIST_SP-800-53_rev5_catalog.yaml",
-        "media-type": "application/oscal.catalog+yaml"
-       }
       ]
      }
     ]

@@ -875,12 +875,20 @@ class PhaseEOneCompatSchemaAndTheLifecycleDefault(unittest.TestCase):
         a.pin_compat(); b.pin_compat()
         self.assertEqual(json.dumps(a.schemas), json.dumps(b.schemas))
         pin = a.schemas["schemas/" + COMPAT_FILE]
-        self.assertEqual((pin["id"], pin["version"], pin["schema"]["additionalProperties"]), (COMPAT_ID, "1.1.0", False))
+        self.assertEqual((pin["id"], pin["version"], pin["schema"]["additionalProperties"]), (COMPAT_ID, "1.2.0", False))
         self.assertEqual(COMPAT, COMPAT_ID + "@1")
-        # every member a converter wrote under 1.0.0 (ISM, Grundschutz++, CSF, SP 800-53, CR26) is a member of it
-        for member in ("group-parts", "props", "nested-in", "metadata", "back-matter", "catalog", "param-extras", "parts", "links",
-                       "control", "group", "unmapped", "merge", "class", "class-variants", "ctl"):
-            self.assertIn(member, pin["schema"]["properties"])
+        # every member a converter writes (ISM, Grundschutz++, CSF, SP 800-53, CR26, IFA) is a member of it
+        props = pin["schema"]["properties"]
+        for member in ("group-parts", "props", "nested-in", "metadata", "uuid", "catalog", "param-extras", "parts", "links",
+                       "control", "group", "unmapped", "imports", "merge", "class", "flows", "class-variants", "ctl"):
+            self.assertIn(member, props)
+        # 1.2.0 (2026-11-14): what has a place of its own since the author's decisions is no member any more - the
+        # resources a text refers to (references@1) and the record of an object's changes (the kernel's `history`)
+        for gone in ("back-matter", "history"): self.assertNotIn(gone, props)
+        # ... and the items of `props` and `group-parts` are closed, as the ISM's own schema had them (backlog #91)
+        self.assertEqual((props["props"]["items"]["additionalProperties"], props["props"]["items"]["required"]), (False, ["name", "value"]))
+        self.assertEqual((props["group-parts"]["items"]["additionalProperties"], sorted(props["group-parts"]["items"]["properties"])),
+                         (False, ["group", "name", "prose"]))
 
     def test_the_lifecycle_a_converter_writes_on_its_own_is_counted_and_named(self):
         objs = {"a": {"id": "x/a", "lifecycle": "active"}, "b": {"id": "x/b", "lifecycle": "withdrawn"}, "c": {"id": "x/c", "lifecycle": "active"},

@@ -108,6 +108,8 @@ def export_requirement(o, counters):
         pt.setdefault("props", []).append(prop("modality", s["modality"]))
         for op_ in s["obligated-parties"]:
             pt["props"].append(prop("obligated-party", op_))
+        # what is printed beside the statement (kernel member since 2026-11-14): OSCAL's own `label` prop of a part
+        if s.get("label"): pt["props"].append({"name": "label", "value": s["label"]})
         parts.append(pt)
         for d in s.get("parameters", []) or []:
             pm = {"id": d["name"], "props": [prop("statement", s["id"])]}
@@ -143,7 +145,8 @@ def export_requirement(o, counters):
     else:
         links = [{"href": r["ref"], "rel": r["type"]} for r in rels]
         if links: c["links"] = links
-    for k in ("facets", "annotations", "replaces", "aliases", "canonical-alias"):
+    # `history`, the record of an object's changes (kernel member since 2026-11-14), rides the same channel
+    for k in ("facets", "annotations", "replaces", "aliases", "canonical-alias", "history"):
         if o.get(k) is not None:
             c["props"].append(prop(k, cjson(o[k])))
     return c
@@ -214,10 +217,13 @@ def export_bundle(bdir, out_path, counters):
     stray = [export_requirement(reqs[i], counters) for i in sorted(reqs) if i not in placed]
     counters["stray-controls"] += len(stray)
     top_controls += stray
+    # the title and the version of the catalogue: those of the first source the manifest names (provenance.sources,
+    # kernel-typed since 2026-11-14; `source` and `source-version` are the keys the converters wrote until then)
+    _src = (manifest["provenance"].get("sources") or [{}])[0]
     cat = {"uuid": str(uuid.uuid5(uuid.NAMESPACE_URL, primary or bdir)),
-           "metadata": {"title": manifest["provenance"].get("source", os.path.basename(bdir)),
+           "metadata": {"title": _src.get("title") or manifest["provenance"].get("source", os.path.basename(bdir)),
                         "last-modified": "2026-07-22T00:00:00Z",
-                        "version": str(manifest["provenance"].get("source-version", "1")),
+                        "version": str(_src.get("version") or manifest["provenance"].get("source-version", "1")),
                         "oscal-version": "1.2.2",
                         "props": [prop("exporter", "export_oscal.py v0.1")]},
            "groups": groups}
@@ -277,6 +283,8 @@ def import_requirement(c):
             lang = pget(pp, "lang") or "en"
             s["prose"] = {lang: INSERT_IN.sub(r"{param:\1}", pt.get("prose", ""))}
         if by_stmt.get(sid): s["parameters"] = by_stmt[sid]
+        slab = next((p["value"] for p in pp if p.get("name") == "label" and "ns" not in p), None)
+        if slab: s["label"] = slab
         stmts.append(s)
     o["statements"] = stmts
     rj = pget(props, "relations-json")
@@ -285,7 +293,7 @@ def import_requirement(c):
     else:
         links = c.get("links", [])
         if links: o["relations"] = [{"type": l["rel"], "ref": l["href"]} for l in links]
-    for k in ("facets", "annotations", "replaces", "aliases", "canonical-alias"):
+    for k in ("facets", "annotations", "replaces", "aliases", "canonical-alias", "history"):
         v = pget(props, k)
         if v is not None: o[k] = json.loads(v)
     return {k: v for k, v in o.items() if v is not None}

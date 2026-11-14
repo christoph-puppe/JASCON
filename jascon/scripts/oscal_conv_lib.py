@@ -87,32 +87,44 @@ def textify(obj, lang):
 # facet has a member for. Until 2026-11-14 five converters each pinned
 # `https://ns.jascon.net/compat/oscal-1x` 1.0.0 with a schema of their own;
 # one id and version is one schema (author, 2026-11-14), so it is written
-# here once, as 1.1.0, with every member any of them uses. The order of the
-# members is part of the pinned file.
+# here once, with every member any of them uses. The order of the members
+# is part of the pinned file.
+#
+# 1.2.0 (2026-11-14, after the author's decisions on backlog #80 to #84 and
+# #91): `back-matter` and `history` are gone, because the resources a text
+# refers to stand in the standard facet `references@1` and the record of an
+# object's changes in the kernel's `history`; the items of `props` and of
+# `group-parts` are typed and closed, as the ISM's own schema had them
+# until the schemas were made one (#91). `uuid` stays for an element of
+# the source that became an object; the uuid of a source document stands in
+# the manifest's `provenance.sources[]`.
 COMPAT_ID = "https://ns.jascon.net/compat/oscal-1x"
 COMPAT = COMPAT_ID + "@1"
-COMPAT_VERSION = "1.1.0"
-COMPAT_FILE = "oscal-1x-compat-1.1.0.json"
+COMPAT_VERSION = "1.2.0"
+COMPAT_FILE = "oscal-1x-compat-1.2.0.json"
 COMPAT_NOTE = ("NORMATIVE pinned payload schema (backlog #26), one for every converter of this repository since "
                "2026-11-14: closed shape - unknown keys are rejected, never smuggled")
 COMPAT_PROPERTIES = {
     "metadata": {"type": "object"},        # the source document's metadata, in the source's shape
     "uuid": {"type": "string"},            # the uuid the source gives the element this object is made from
-    "back-matter": {"type": "object"},     # resources something in the document refers to, in the source's shape
     "catalog": {"type": "object"},
     "imports": {"type": "array"},          # a profile's imports, as the source writes them
     "merge": {"type": "object"},           # a profile's merge directive
     "class": {"type": "string"},
-    "group-parts": {"type": "array"},
+    "group-parts": {"type": "array", "items": {"type": "object", "additionalProperties": False, "properties": {
+        "group": {"type": "string"}, "name": {"type": "string"},
+        "prose": {"type": "object", "additionalProperties": {"type": "string"}}}}},
     "param-extras": {"type": "object"},
-    "props": {"type": "array"},
+    "props": {"type": "array", "items": {"type": "object", "additionalProperties": False, "required": ["name", "value"],
+              "properties": {"name": {"type": "string"}, "uuid": {"type": "string"}, "ns": {"type": "string"},
+                             "value": {"type": "string"}, "class": {"type": "string"}, "group": {"type": "string"},
+                             "remarks": {"type": "string"}}}},
     "parts": {"type": "array"},
     "links": {"type": "array"},
     "control": {"type": "object"},
     "group": {"type": "object"},
     "nested-in": {"type": "string"},
     "unmapped": {"type": "object"},
-    "history": {"type": "array"},          # the update history of an entry (CR26)
     "flows": {"type": "array"},            # process flows written out in the source (CR26)
     "class-variants": {"type": "object"},  # CR26
     "ctl": {"type": "object"},             # CR26
@@ -123,6 +135,20 @@ def compat_schema():
     return {"id": COMPAT_ID, "version": COMPAT_VERSION, "modifies-semantics": [], "note": COMPAT_NOTE,
             "schema": {"$schema": "https://json-schema.org/draft/2020-12/schema", "type": "object",
                        "properties": copy.deepcopy(COMPAT_PROPERTIES), "additionalProperties": False}}
+
+# The standard facets a converter of this repository writes besides the
+# compat facet (the author's decisions of 2026-11-14 on backlog #82 and #83).
+# A bundle pins the descriptor verbatim: Bundle.pin_stdlib(<file>).
+REFERENCES = "https://ns.jascon.net/stdlib/facet/references@1"
+REFERENCES_FILE = "references-1.0.0.json"
+ASSESSMENT_CRITERIA = "https://ns.jascon.net/stdlib/facet/assessment-criteria@1"
+ASSESSMENT_CRITERIA_FILE = "assessment-criteria-1.1.0.json"
+
+def resource_entry(resource):
+    """A back-matter resource of an OSCAL document as `references@1` carries
+    it: as the source writes it, with its uuid under the member the facet
+    names, `id` - which is what a text of the bundle refers to (`#id`)."""
+    return {"id": resource["uuid"], **{k: v for k, v in resource.items() if k != "uuid"}}
 
 def referred_to(doc, element, reference="#{}"):
     """Does a string of `doc` outside `element` (a dict of it that has a `uuid`) hold a reference to the element?
@@ -176,6 +202,8 @@ def needs_kernel_2(objects):
                     if isinstance(op, dict) and isinstance(op.get("deviation"), dict)]
         return out
     for o in objects:
+        if "history" in o: return True                                            # the record of an object's changes (2026-11-14, #81)
+        if any(isinstance(s, dict) and "label" in s for s in o.get("statements") or []): return True   # a statement's label (#84)
         if "scenario" in o and "owner-ref" in o: return True                      # a Risk
         if o.get("risk-refs") or o.get("check-ref"): return True                  # a Finding that names one, or a Check
         if "criteria" in o and "observes" in o: return True                       # a Check
@@ -963,7 +991,9 @@ _DAY = re.compile(r"[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])\Z")
 def document_author(metadata):
     """-> the party (the entry of `metadata.parties`) an OSCAL document names
     as its author, or None.
-      1. the one party named for the role `creator`, else for `prepared-by`;
+      1. the one party named for the role `creator`, else for `prepared-by`,
+         else for `author` (the author, 2026-11-14, backlog #91: the CSF
+         names its author under that role; OSCAL lists it among its roles);
       2. else the one party that the responsible-parties name at all;
       3. else the one party the document defines;
       4. else the one organization among the parties it defines;
@@ -987,7 +1017,7 @@ def document_author(metadata):
                     if defined(u) is not None and u not in seen: seen.append(u)
         return seen
     pick = None
-    for got in (named("creator"), named("prepared-by"), named()):
+    for got in (named("creator"), named("prepared-by"), named("author"), named()):
         if len(got) == 1: pick = defined(got[0]); break
     if pick is None and len(plist) == 1: pick = plist[0]
     if pick is None:

@@ -7,8 +7,8 @@
   "unmapped": 0,
   "coverage-pct": 100.0,
   "mapped-by-level": {
-   "L1": 4718,
-   "L2": 2814
+   "L1": 5504,
+   "L2": 2028
   }
  },
  "ledger": {
@@ -113,13 +113,13 @@
    },
    {
     "written-as": "carried Rev 5 Requirement",
-    "leaf-values": 1004,
-    "no-source-value": 1004
+    "leaf-values": 1023,
+    "no-source-value": 1023
    },
    {
     "written-as": "manifest",
-    "leaf-values": 5319,
-    "no-source-value": 3624
+    "leaf-values": 5316,
+    "no-source-value": 3621
    }
   ]
  },
@@ -183,9 +183,9 @@
   ]
  },
  "bundle": {
-  "content-manifest-digest": "sha256:3ec1a52ed4971738ed621ca01a3df59ce13553702a1d3c01184bd867df7a4798",
+  "content-manifest-digest": "sha256:0e2f976ed9323083d438cb6f9758159309a55df0933ab7c2f64e54455809b6dc",
   "objects": 1054,
-  "facet-schemas": 11
+  "facet-schemas": 10
  },
  "modality(rule-level)": {
   "must": 136,
@@ -635,20 +635,20 @@
   {
    "path": "cr26.FRR.*.data.*.*.*.updated[].comment",
    "count": 303,
-   "level": "L2",
-   "destination": "compat facet on the rule's Requirement: history, the entries as the source writes them"
+   "level": "L1",
+   "destination": "`history` of the rule's Requirement: the entries oldest first, date as written, comment as a text, issue as `ref`"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.updated[].date",
    "count": 303,
-   "level": "L2",
-   "destination": "compat facet on the rule's Requirement: history, the entries as the source writes them"
+   "level": "L1",
+   "destination": "`history` of the rule's Requirement: the entries oldest first, date as written, comment as a text, issue as `ref`"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.updated[].issue",
    "count": 5,
-   "level": "L2",
-   "destination": "compat facet on the rule's Requirement: history, the entries as the source writes them"
+   "level": "L1",
+   "destination": "`history` of the rule's Requirement: the entries oldest first, date as written, comment as a text, issue as `ref`"
   },
   {
    "path": "cr26.FRR.*.data.*.*.*.varies_by_class.*.artifacts.all[]",
@@ -1625,20 +1625,20 @@
   {
    "path": "cr26.KSI.*.indicators.*.updated[].comment",
    "count": 87,
-   "level": "L2",
-   "destination": "compat facet on the indicator's Requirement: history, the entries as the source writes them"
+   "level": "L1",
+   "destination": "`history` of the indicator's Requirement: the entries oldest first, date as written, comment as a text, issue as `ref`"
   },
   {
    "path": "cr26.KSI.*.indicators.*.updated[].date",
    "count": 87,
-   "level": "L2",
-   "destination": "compat facet on the indicator's Requirement: history, the entries as the source writes them"
+   "level": "L1",
+   "destination": "`history` of the indicator's Requirement: the entries oldest first, date as written, comment as a text, issue as `ref`"
   },
   {
    "path": "cr26.KSI.*.indicators.*.updated[].issue",
    "count": 1,
-   "level": "L2",
-   "destination": "compat facet on the indicator's Requirement: history, the entries as the source writes them"
+   "level": "L1",
+   "destination": "`history` of the indicator's Requirement: the entries oldest first, date as written, comment as a text, issue as `ref`"
   },
   {
    "path": "cr26.KSI.*.indicators.*.varies_by_class.*.statement",
@@ -1692,19 +1692,19 @@
    "path": "cr26.info.last_updated",
    "count": 1,
    "level": "L1",
-   "destination": "the manifest's provenance (last_updated) and the date of every Mapping's provenance"
+   "destination": "the manifest's provenance (sources[0].date) and the date of every Mapping's provenance"
   },
   {
    "path": "cr26.info.title",
    "count": 1,
    "level": "L1",
-   "destination": "the manifest's provenance (source) and the title of the corpus root Set"
+   "destination": "the manifest's provenance (sources[0].title) and the title of the corpus root Set"
   },
   {
    "path": "cr26.info.version",
    "count": 1,
    "level": "L1",
-   "destination": "the manifest's provenance (source-version) and `version` of every object made from the publication"
+   "destination": "the manifest's provenance (sources[0].version) and `version` of every object made from the publication"
   }
  ]
 }

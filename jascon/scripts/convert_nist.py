@@ -5,15 +5,19 @@ controls and enhancements in force -> Requirements (statement items
 flattened, modality `must` corpus rule); every withdrawn control -> a
 Requirement with lifecycle `withdrawn` (E1, 2026-11-14), and where it names a
 successor, the successor's kernel `replaces[]` names it and its one
-statement is made from its links (R2); SP 800-53A layer -> sp800-53a@1 facet; two-layer ODP
-params -> statement-scoped kernel parameters (declared where inserted, the
-per-statement parameter rule) + odp@1 admin facet; baselines -> 4 membership
-Sets; the metadata of the catalogue and of each profile -> the compat facet
-on the Set that stands for the document, with the document's uuid (E3), a
-profile's import and the resource it names (E4); the catalogue's author and
-day -> the manifest's provenance; the back-matter resources something refers
-to, as the source writes them -> references@1 on the root Set, an orphaned
-one not at all (E4, checked). Coverage target: 0.
+statement is made from its links (R2); the print label of a statement item
+-> the statement's kernel `label` (#84); SP 800-53A layer -> the standard
+facet assessment-criteria@1, each `assessment-for` link as an address (#83);
+two-layer ODP params -> statement-scoped kernel parameters (declared where
+inserted, the per-statement parameter rule) + odp@1 admin facet; baselines
+-> 4 membership Sets; the metadata of the catalogue and of each profile ->
+the compat facet on the Set that stands for the document, with a profile's
+import (E4); title, version, uuid, author, day and OSCAL version of each of
+the five documents -> one entry of the manifest's `provenance.sources[]`
+(#80); the back-matter resources something refers to, as the source writes
+them -> the standard facet references@1 on the root Set, a profile's on its
+baseline Set (#82), an orphaned one not at all (E4, checked). Coverage
+target: 0.
 
     convert_nist.py [--obligated-party URI] [--out DIR]
 
@@ -59,6 +63,7 @@ from oscal_conv_lib import make_T, slug, Bundle, inventory, coverage, report, wa
 from oscal_conv_lib import known_arguments, out_dir, obligated_party, obligated_party_line, obligated_party_record
 from oscal_conv_lib import Ledger, ledger_by_path, ledger_gate, document_author, document_day
 from oscal_conv_lib import COMPAT, COMPAT_PROPERTIES, lifecycle_default_record, lifecycle_default_line
+from oscal_conv_lib import REFERENCES, REFERENCES_FILE, ASSESSMENT_CRITERIA, ASSESSMENT_CRITERIA_FILE, resource_entry
 
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 SRCDIR = os.path.join(ROOT, "sources", "nist")
@@ -71,10 +76,8 @@ PARTY_DEFAULT = f"{NS}/party/organization"
 PARTY, PARTY_ORIGIN = obligated_party(ARGV, PARTY_DEFAULT)      # (party, "converter-default" | "caller")
 PARTY_SOURCE_STATES = "as the implementation level of a control"
 F_NARR = f"{NS}/facet/narrative@1"
-F_53A = f"{NS}/facet/sp800-53a@1"
 F_ODP = f"{NS}/facet/odp@1"
 F_RMF = f"{NS}/facet/rmf@1"
-F_REF = f"{NS}/facet/references@1"
 F_COMPAT = COMPAT                                       # what of an OSCAL document the kernel has no member for
 RMF = "http://csrc.nist.gov/ns/rmf"                      # the one prop namespace this mapping is written for
 
@@ -111,10 +114,11 @@ BASELINES = {b: load(b.lower(), f"NIST_SP-800-53_rev5_{b}-baseline_profile.json"
 # ---------- no declared drop (the author's decisions of 2026-11-14) ----------
 # What was declared as a drop until then is carried now: the status of a
 # withdrawn control is its lifecycle (E1), the uuid of a document stands in
-# its compat facet (E3), a profile's import and the resource it names on its
-# baseline Set (E4), the three print labels the rule does not give in the
-# compat facet of their Requirement (E7). A back-matter resource that nothing
-# in the catalogue refers to is an orphan (E4/R1), a claim the ledger checks.
+# the manifest's `provenance.sources[]` (E3, #80), a profile's import in the
+# compat facet and the resource it names in references@1 on its baseline Set
+# (E4, #82), the print label of a statement item is the statement's `label`
+# (E7, #84). A back-matter resource that nothing in the catalogue refers to is
+# an orphan (E4/R1), a claim the ledger checks.
 
 def norm(p):
     p = re.sub(r"(\.controls\[\])+", ".controls[]", p)
@@ -145,8 +149,6 @@ N_ID_METHOD = "the id of an assessment method, rebuilt from the control id and t
 N_ID_OVERVIEW = "the id of a family's overview part, rebuilt from the group id: <group id>_ovw"
 N_ORPHAN = ("a back-matter resource that nothing in the catalogue refers to (no `#uuid` outside it) is orphaned and "
             "not carried (author, 2026-11-14)")
-N_ITEM_LABEL = ("the print label of a statement item, rebuilt from the item id: its last segment, written `x.` on the "
-                "first two levels of a control, `(x)` on its third level and in an enhancement")
 PROP_NAMES = ("label", "sort-id", "status", "implementation-level", "contributes-to-assurance",
               "alt-identifier", "alt-label", "aggregates", "method")          # the prop names this mapping reads
 PART_NAMES = ("statement", "item", "guidance", "assessment-objective", "assessment-method", "assessment-objects",
@@ -213,10 +215,12 @@ R_SEQUENCE = "member sequence: ten times the control's place in its family, orde
 R_SAME_RELATION = "a relation the control states twice is written once"
 R_ASSURANCE = "the prop value `true` or `false`, written as a JSON boolean"
 R_ASSESSED = "the statement part an `assessment-for` link names, as a statement id (the part id without the control prefix)"
-R_ASSESSED_REQ = "requirement URI from the control whose part an `assessment-for` link names, where that is another control"
-R_AUTHOR = ("author of the catalogue: the party its metadata names as its author (the role `creator`, else `prepared-by`, "
-            "else the one party it names; oscal_conv_lib.document_author), as a URI of its name under the namespace")
-R_DAY = "date of the catalogue: the day of its last-modified"
+R_ASSESSED_REQ = ("requirement URI from the control whose part an `assessment-for` link names, where that is another "
+                  "control or the statement part as a whole")
+R_AUTHOR = ("author of a source document: the party its metadata names as its author (the role `creator`, else "
+            "`prepared-by`, else the one party it names; oscal_conv_lib.document_author), as a URI of its name under "
+            "the namespace")
+R_DAY = "date of a source document: the day of its last-modified"
 
 def req_uri(cid): return D(R_REQ, mint, cid)
 def _link_ref(href): return mint(href.lstrip("#"))
@@ -253,12 +257,6 @@ def _gdn_id(cid): return cid + "_gdn"
 def _smt_id(cid): return cid + "_smt"
 def _asm_id(cid, method): return f"{cid}_asm-{method.lower()}"
 def _ovw_id(gid): return gid + "_ovw"
-ITEM_FORMS = {False: ("{}.", "{}.", "({})"), True: ("({})", "({})")}      # by level, of a control / of an enhancement
-def _item_label(item_id, cid):
-    if not (item_id or "").startswith(cid + "_smt."): return None
-    tail = item_id[len(cid) + len("_smt."):].split(".")
-    forms = ITEM_FORMS["." in cid]
-    return forms[len(tail) - 1].format(tail[-1]) if len(tail) <= len(forms) else None
 
 # The ledger applies a rule again, so a rule that discards a part of a value agrees with itself and passes. The
 # two rules that rewrite a text are therefore held to what they say they do: with the insertion syntax put back,
@@ -284,8 +282,8 @@ def strings(node):
         for v in node: yield from strings(v)
     elif isinstance(node, str): yield node
 
-# back-matter: the resources as the source writes them, each with its uuid, stand on the root Set (references@1;
-# the convention of the ISM converter). A markdown link `(#uuid)` in a text of the bundle, and a link of the
+# back-matter: the resources as the source writes them, each with its uuid as `id`, stand on the root Set (the
+# standard facet references@1, #82; oscal_conv_lib.resource_entry). A markdown link `(#uuid)` in a text of the bundle, and a link of the
 # document metadata, names one by that uuid; a `reference` link of a control is resolved to its first link.
 MD_LINKS = [t for s in strings(cat) for t in MDTARGET.findall(s)]       # the target of every markdown #-link
 RESOURCES = (cat.get("back-matter") or {}).get("resources") or []
@@ -408,21 +406,29 @@ def placed(part):
     if tracked(part.get("name")): led.selector(part["name"], N_PART_NAME, own or part, among=PART_NAMES)
 
 assessed_kind = collections.Counter()   # what an `assessment-for` link names -> links
+AF_NOTHING = "nothing the catalogue defines"
+AF_WHOLE = "the statement part as a whole, which has no text of its own"
+AF_OTHER = "a statement of another control"
+AF_SAME = "a statement of the same control"
+assessed_nothing = []                   # (control id, href) of the links that name nothing: defects of the source
 def assessed(link, cid):
-    """The statement an assessment objective assesses, as the source's link states it: the id of the statement
-    part by the rule for statement ids, and the Requirement where the part is another control's. A link that
-    names no statement part is not written here and stays unaccounted."""
+    """What an assessment objective assesses, as the source's link states it, as an address of assessment-criteria@1
+    (#83): a statement of this control by its statement id; a statement of another control with that Requirement;
+    the statement part as a whole, which is no statement where its text is in its items, by its Requirement alone;
+    a link that names nothing the catalogue defines by its href, as the source writes it. A link that names no
+    statement part is not written here and stays unaccounted."""
     href = link["href"]
     target = href.lstrip("#")
     if "_smt" not in target: return None
     led.selector(link["rel"], N_LINK_REL, href, among=("assessment-for",))
+    if target not in part_text:
+        assessed_kind[AF_NOTHING] += 1; assessed_nothing.append((cid, str(href)))
+        return {"href": href}
+    other, whole = target.split("_smt")[0] != cid, not part_text[target]
     a = {}
-    if target.split("_smt")[0] != cid: a["requirement-ref"] = D(R_ASSESSED_REQ, _part_req, href)
-    a["statement-id"] = D(R_ASSESSED, _into, href)
-    assessed_kind[("nothing the catalogue defines" if target not in part_text
-                   else "a statement of another control" if "requirement-ref" in a
-                   else "a statement of the same control" if part_text[target]
-                   else "the statement part of the same control as a whole, which has no text of its own")] += 1
+    if other or whole: a["requirement-ref"] = D(R_ASSESSED_REQ, _part_req, href)
+    if not whole: a["statement-id"] = D(R_ASSESSED, _into, href)
+    assessed_kind[AF_WHOLE if whole else AF_OTHER if other else AF_SAME] += 1
     return a
 
 assessed_apart = [0]                    # objectives that name another statement than the objective above them
@@ -461,15 +467,8 @@ def methods_of(c, used):
     return out
 
 # ---------- statements: flatten prose-bearing statement/item nodes ----------
-labels_kept = collections.defaultdict(list)    # control id -> the items whose print label the rule does not give
-def item_label(pt, cid):
-    """the print label of a statement item (`a.`, `1.`, `(a)`): rebuilt from the item id where the rule gives it
-    exactly. Where it does not (E7), the item's id and its label prop are carried in the compat facet `parts` of the
-    Requirement, in the source's own shape."""
-    for p in picked(pt, "label"):
-        if given_by(p["value"], N_ITEM_LABEL, _item_label, pt.get("id"), cid): continue
-        labels_kept[cid].append({"id": pt["id"], "props": [p]})
-
+# The print label of a statement item (`a.`, `1.`, `(a)`) is the statement's kernel `label`, as the source gives it
+# (#84). A label of a part that becomes no statement has no place and stays unaccounted.
 def flat_statements(c):
     out = []
     def walk(pt):
@@ -478,7 +477,6 @@ def flat_statements(c):
             out.append(pt)
         elif pt.get("name") == "statement":      # it only groups its items: the bundle has no statement for it
             rebuilt(pt.get("id"), N_ID_STATEMENT, _smt_id, c["id"])
-        if pt.get("name") == "item": item_label(pt, c["id"])
         for s in pt.get("parts", []) or []:
             walk(s)
     for pt in c.get("parts", []) or []:
@@ -527,9 +525,12 @@ for c, parents, gchain in written:
     # A control in force is read as `must` (the corpus rule). The statement of a withdrawn control says why it
     # was withdrawn and states no obligation: `unspecified`.
     modality = "must" if status is None else "unspecified"
-    def statement(sid, prose):
+    def statement(sid, prose, label=None):
         """the one place that writes whom a statement binds (backlog #74)"""
-        return {"id": sid, "modality": modality, "obligated-parties": parties, "prose": {"en": prose}}
+        s = {"id": sid}
+        if label is not None: s["label"] = label
+        s.update({"modality": modality, "obligated-parties": parties, "prose": {"en": prose}})
+        return s
     # statements + per-statement param declaration
     params = {pm["id"]: pm for pm in c.get("params", []) or []}
     stmts, declared_any = [], set()
@@ -538,7 +539,7 @@ for c, parents, gchain in written:
         prose = rewrite(pt["prose"], used)
         n_inserted += len(INSERT.findall(pt["prose"]))
         sid = carried(R_STATEMENT, _statement_id, pt.get("id", f"{cid}_smt"), cid)
-        s = statement(sid, prose)
+        s = statement(sid, prose, prop(pt, "label"))
         decls = []
         for u in sorted(used):
             if u in params:
@@ -589,7 +590,7 @@ for c, parents, gchain in written:
         f = {}
         if objectives: f["objectives"] = objectives
         if methods: f["methods"] = methods
-        facets[F_53A] = f; n_53a += 1
+        facets[ASSESSMENT_CRITERIA] = f; n_53a += 1
     odp_admin = {}
     for pid, pm in params.items():
         a = {}
@@ -610,7 +611,6 @@ for c, parents, gchain in written:
     compat = {}                          # what the kernel has no member for, in the source's own shape
     if not class_given(c):               # a class the rule does not give is written as the source gives it
         compat["class"] = c["class"]; class_written[0] += 1
-    if labels_kept.get(cid): compat["parts"] = labels_kept[cid]
     req["facets"] = facets               # here, so that a Requirement's members keep their order; filled up below
     # relations
     rels = []
@@ -691,11 +691,9 @@ for g in cat.get("groups", []):
 root = {"id": f"{NS}/set/root", "version": VER, "lifecycle": "active",
         "title": cat["metadata"]["title"], "members": root_members}
 root_facets = {}
-if RESOURCES_KEPT: root_facets[F_REF] = {"resources": RESOURCES_KEPT}
-root_compat = {"uuid": cat["uuid"]}                                       # E3
-if document_metadata(cat["metadata"]): root_compat["metadata"] = document_metadata(cat["metadata"])
-root_facets[F_COMPAT] = ordered(root_compat)
-root["facets"] = root_facets
+if RESOURCES_KEPT: root_facets[REFERENCES] = {"resources": [resource_entry(r) for r in RESOURCES_KEPT]}   # #82
+if document_metadata(cat["metadata"]): root_facets[F_COMPAT] = {"metadata": document_metadata(cat["metadata"])}
+if root_facets: root["facets"] = root_facets
 bundle.add("objects/set/root.json", root)
 
 # ---------- baseline Sets ----------
@@ -709,13 +707,15 @@ for b, prof in BASELINES.items():
         members.append({"ref": req_uri(cid), "sequence": (i + 1) * 10})
     bset = {"id": f"{NS}/set/baseline/{b.lower()}", "version": prof["metadata"].get("version") or VER,
             "lifecycle": "active", "title": prof["metadata"]["title"], "label": b, "members": members}
-    compat = {"uuid": prof["uuid"]}                               # E3
+    compat = {}
     if document_metadata(prof["metadata"]): compat["metadata"] = document_metadata(prof["metadata"])
-    # E4: the import, as the source writes it (its include list is the Set's members), and the resource it names
+    # E4: the import, as the source writes it (its include list is the Set's members), and the resource it names (#82)
     compat["imports"] = [{"href": imp["href"]} for imp in prof["imports"]]
-    if (prof.get("back-matter") or {}).get("resources"): compat["back-matter"] = {"resources": prof["back-matter"]["resources"]}
     if "merge" in prof: compat["merge"] = prof["merge"]          # how the profile merges what it selects (a boolean)
-    bset["facets"] = {F_COMPAT: ordered(compat)}
+    bset["facets"] = {}
+    if (prof.get("back-matter") or {}).get("resources"):
+        bset["facets"][REFERENCES] = {"resources": [resource_entry(r) for r in prof["back-matter"]["resources"]]}
+    bset["facets"][F_COMPAT] = ordered(compat)
     bundle.add(f"objects/set/baseline-{b.lower()}.json", bset)
 
 # What the ledger cannot see. It follows source values into the bundle; a value the converter writes on its own has
@@ -734,34 +734,28 @@ for rel in sorted(bundle.objects): not_from_the_source(bundle.objects[rel], "")
 # ---------- facet stubs ----------
 bundle.stub("sp800-53-narrative-stub.json", F_NARR.split("@")[0], [],
             {"guidance": {"type": "array"}, "overview": {"type": "array"}})
-bundle.stub("sp800-53a-stub.json", F_53A.split("@")[0], [],
-            {"objectives": {"type": "array"}, "methods": {"type": "array"}})
 bundle.stub("sp800-53-odp-stub.json", F_ODP.split("@")[0], [], {"params": {"type": "object"}})
 bundle.stub("sp800-53-rmf-stub.json", F_RMF.split("@")[0], [],
             {"contributes-to-assurance": {"type": "boolean"}})
-_STRINGS = lambda *names: {n: {"type": "string"} for n in names}
-_RESOURCE = {"type": "object", "additionalProperties": False, "required": ["uuid"],           # an OSCAL back-matter resource
-             "properties": {**_STRINGS("uuid", "title", "description", "remarks"),
-                            "props": {"type": "array", "items": {
-                                "type": "object", "additionalProperties": False, "required": ["name", "value"],
-                                "properties": _STRINGS("name", "uuid", "ns", "value", "class", "group", "remarks")}},
-                            "citation": {"type": "object"},
-                            "rlinks": {"type": "array", "items": {
-                                "type": "object", "additionalProperties": False, "required": ["href"],
-                                "properties": _STRINGS("href", "media-type")}}}}
-bundle.stub("sp800-53-references-stub.json", F_REF.split("@")[0], [], {"resources": {"type": "array", "items": _RESOURCE}},
-            note="NORMATIVE pinned payload schema (backlog #26): the back-matter resources of the catalogue, as the "
-                 "source writes them; a link `(#uuid)` in a text of the bundle names the resource with that uuid")
-bundle.pin_compat()                          # E10: the one compat schema of the repository, 1.1.0
-# The manifest's provenance names the catalogue: its title, version and OSCAL version, and - by the library's rule
-# for the author of an OSCAL document, as every converter pre-fills it (backlog #69) - its author and its day.
-PROVENANCE = {"source": cat["metadata"]["title"], "source-version": VER,
-              "source-oscal-version": cat["metadata"]["oscal-version"]}
-AUTHOR = document_author(cat["metadata"])
-if AUTHOR: PROVENANCE["author-ref"] = D(R_AUTHOR, _author_uri, AUTHOR["name"])
-if document_day(cat["metadata"]): PROVENANCE["date"] = D(R_DAY, _day, cat["metadata"]["last-modified"])
-PROVENANCE.update({"baselines": {b: p["metadata"]["version"] for b, p in BASELINES.items()},
-                   "converter": "convert_nist.py v0.2",
+bundle.pin_stdlib(ASSESSMENT_CRITERIA_FILE)  # #83: the objectives and methods of SP 800-53A
+bundle.pin_stdlib(REFERENCES_FILE)           # #82: the back-matter resources of the catalogue and of the profiles
+bundle.pin_compat()                          # E10: the one compat schema of the repository
+# The manifest's provenance names its five source documents (#80): title, version, uuid and OSCAL version as each
+# document states them, its author and its day by the library's rule for an OSCAL document (backlog #69). A member
+# the document does not state is left out.
+def source_entry(doc):
+    md = doc["metadata"]
+    e = {k: md[k] for k in ("title", "version") if md.get(k)}
+    if doc.get("uuid"): e["uuid"] = doc["uuid"]
+    author = document_author(md)
+    if author: e["author-ref"] = D(R_AUTHOR, _author_uri, author["name"])
+    if document_day(md): e["date"] = D(R_DAY, _day, md["last-modified"])
+    e["format"] = "OSCAL"
+    if md.get("oscal-version"): e["format-version"] = md["oscal-version"]
+    return e
+SOURCE_DOCUMENTS = [cat] + list(BASELINES.values())
+PROVENANCE = {"sources": [source_entry(d) for d in SOURCE_DOCUMENTS]}
+PROVENANCE.update({"converter": "convert_nist.py v0.3",
                    "namespace-note": "https://ns.nist.gov/sp800-53 minted to match the corpus's "
                                      "pre-existing mapping-endpoint URIs; pending a NIST-published URI"})
 led.resolve(bundle.objects)      # a boolean that carries its origin becomes the plain one, and its place is noted
@@ -912,19 +906,19 @@ DROPPED, NOT_CONTENT = "dropped", "not content"
 C, X, N, DR = "copied", "transformed", "not-content", "intentionally-dropped"
 SEE = "see the table of declared drops"
 RULES = [
- (r"^nist\.catalog\.metadata\.title$", "L1", "root Set `title`; manifest `provenance.source`", {C}),
+ (r"^nist\.catalog\.metadata\.title$", "L1", "root Set `title`; manifest `provenance.sources[]` `title`", {C}),
  (r"^nist\.catalog\.metadata\.version$", "L1",
-  "`version` of the root Set, of every family Set and of every Requirement; manifest `provenance.source-version`", {C}),
+  "`version` of the root Set, of every family Set and of every Requirement; manifest `provenance.sources[]` `version`", {C}),
  (r"^nist\.catalog\.metadata\.", "L2",
   "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, "
   "oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document "
-  "states; oscal-version also manifest `provenance.source-oscal-version`; the name of the party the metadata names "
-  "as the author -> manifest `provenance.author-ref` (a landmark URI), the day of last-modified -> manifest "
-  "`provenance.date`", {C}),
- (r"^nist\.catalog\.uuid$", "L2", "compat facet oscal-1x@1 on the root Set, member `uuid` (E3)", {C}),
+  "states; oscal-version also manifest `provenance.sources[]` `format-version`; the name of the party the metadata "
+  "names as the author -> `provenance.sources[]` `author-ref` (a landmark URI), the day of last-modified -> "
+  "`provenance.sources[]` `date`", {C}),
+ (r"^nist\.catalog\.uuid$", "L1", "manifest `provenance.sources[]` `uuid` (E3, #80)", {C}),
  (r"^nist\.catalog\.back-matter\.resources\[\]\.", "L2",
-  "references@1 on the root Set: the resources something in the catalogue refers to, in the source's own shape "
-  "(uuid, title, citation, rlinks with href and media-type); a markdown link `(#uuid)` in a text names one by its "
+  "the standard facet references@1 on the root Set (#82): the resources something in the catalogue refers to, in "
+  "the source's own shape (the uuid as `id`, title, citation, rlinks with href and media-type); a markdown link `(#uuid)` in a text names one by its "
   "uuid, and a control's `reference` link is resolved to its first link (the uuid and the link are then also inputs "
   "of that rule); a resource nothing refers to -> not content, an orphan (E4)", {C, N}),
  (r"^nist\.catalog\.groups\[\]\.id$", "L1", "family Set URI (D21 nesting under root)", {X}),
@@ -973,36 +967,39 @@ RULES = [
  (CTL + r"\.params\[\]\.props\[\]\.(name|ns|class)$", NOT_CONTENT, "select the rule for the prop's value", {N}),
  (CTL + r"\.parts\[\]\.id$", "L1",
   "statement or item with text -> statement id (control prefix removed); assessment-objective -> its id in "
-  "sp800-53a@1; guidance, assessment-method and a statement part without text of its own -> not content, rebuilt "
+  "assessment-criteria@1; guidance, assessment-method and a statement part without text of its own -> not content, rebuilt "
   "from the control id", {C, X, N}),
  (CTL + r"\.parts\[\]\.name$", NOT_CONTENT,
   "selects where the part is written (statement, item -> statements[]; guidance -> narrative@1; assessment-* -> "
-  "sp800-53a@1)", {N}),
+  "assessment-criteria@1)", {N}),
  (CTL + r"\.parts\[\]\.prose$", "L1",
   "statement prose (insertions -> {param:} tokens); guidance, objectives, assessment objects -> facets "
   "(language-tagged); a markdown link stays as the source wrote it", {C, X}),
  (CTL + r"\.parts\[\]\.props\[\]\.value$", "L2",
-  "sp800-53a label of an objective or a method -> sp800-53a@1 `label`; method -> sp800-53a@1 `method`; print label "
-  "of a statement item -> not content, rebuilt from the item id; where the rule does not give it: compat facet "
-  "`parts` of the Requirement, the item's id with its label prop as the source writes them (E7)", {C, N}),
- (CTL + r"\.parts\[\]\.props\[\]\.(name|ns|class)$", "L2",
-  "select the rule for the prop's value; the name of an item label the rule does not give is carried with it (E7)", {C, N}),
+  "sp800-53a label of an objective or a method -> assessment-criteria@1 `label`; method -> assessment-criteria@1 "
+  "`method`; print label of a statement item -> the statement's kernel `label` (#84)", {C}),
+ (CTL + r"\.parts\[\]\.props\[\]\.(name|ns|class)$", NOT_CONTENT, "select the rule for the prop's value", {N}),
  (CTL + r"\.parts\[\]\.links\[\]\.href$", "L2",
-  "`assessment-for` of an assessment objective -> sp800-53a@1 objective `assessment-for[]`: `statement-id` (the "
-  "statement part by the statement-id rule) and, where the part is another control's, `requirement-ref`", {X}),
+  "`assessment-for` of an assessment objective -> assessment-criteria@1 objective `assessment-for[]`, an address "
+  "(#83): `statement-id` (the statement part by the statement-id rule), with `requirement-ref` where the part is "
+  "another control's; the statement part as a whole, which has no text of its own -> `requirement-ref` alone; a link "
+  "that names nothing the catalogue defines -> `href`, as the source writes it (a defect of the source)",
+  {X} | ({C} if assessed_nothing else set())),
  (CTL + r"\.parts\[\]\.links\[\]\.rel$", NOT_CONTENT, "`assessment-for`: selects the member of that name", {N}),
  (PROF + r"\.imports\[\]\.include-controls\[\]\.with-ids\[\]$", "L1", "baseline Set members (minted URIs, in the profile's order)", {X}),
  (PROF + r"\.metadata\.title$", "L1", "baseline Set title", {C}),
- (PROF + r"\.metadata\.version$", "L1", "baseline Set `version`; manifest `provenance.baselines`", {C}),
+ (PROF + r"\.metadata\.version$", "L1", "baseline Set `version`; manifest `provenance.sources[]` `version`", {C}),
  (PROF + r"\.metadata\.", "L2",
   "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, "
-  "oscal-version, roles, parties, responsible-parties and whatever else the document states", {C}),
+  "oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also "
+  "manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> "
+  "`provenance.sources[]` `author-ref` and `date`, by the rules for a source document", {C}),
  (PROF + r"\.merge\.", "L2", "compat facet oscal-1x@1 on the baseline Set, member `merge` (`as-is`, a JSON boolean)", {C}),
- (PROF + r"\.uuid$", "L2", "compat facet oscal-1x@1 on the baseline Set, member `uuid` (E3)", {C}),
+ (PROF + r"\.uuid$", "L1", "manifest `provenance.sources[]` `uuid` (E3, #80)", {C}),
  (PROF + r"\.imports\[\]\.href$", "L2", "compat facet oscal-1x@1 on the baseline Set, member `imports` (E4)", {C}),
  (PROF + r"\.back-matter\.", "L2",
-  "compat facet oscal-1x@1 on the baseline Set, member `back-matter`, in the source's own shape: the resource its "
-  "import names (E4)", {C}),
+  "the standard facet references@1 on the baseline Set (#82), in the source's own shape with the uuid as `id`: the "
+  "resource its import names (E4)", {C}),
 ]
 rows, unmapped = coverage(paths, [(rx, level, text) for rx, level, text, _ in RULES])
 
@@ -1038,6 +1035,7 @@ nset = sum(1 for rel in bundle.objects if "/set/" in rel)
 n_wd_objects = sum(1 for cid in req_ids if cid in withdrawn)
 lineage_uris = {e["ref"] for entries in list(succ_replaces.values()) + list(fam_replaces.values()) for e in entries}
 af_total = sum(assessed_kind.values())
+n_labels = sum(1 for _, _, r in req_ids.values() for s in r["statements"] if "label" in s)
 j = report(
     os.path.join(OUTDIR, "sp800-53-coverage-report.md"),
     os.path.join(OUTDIR, "sp800-53-coverage-report.json"),
@@ -1083,18 +1081,23 @@ j = report(
      f"statement insertion site x{sum(no_site.values())} declared on the first statement "
      f"({len(facet_only)} bind only in the 53A objectives, {len(nowhere)} nowhere). The formal ODP label of a "
      f"parameter (prop `label`, class sp800-53a) is written as the source gives it: odp@1 `sp800-53a-label` x{n_formal}.",
-     f"- **SP 800-53A layer -> sp800-53a@1** on {n_53a} Requirements: objective trees (53a labels kept - "
-     f"the #10 addressing surface) + EXAMINE/INTERVIEW/TEST methods with object lists (language-tagged). The "
-     f"`assessment-for` link of an objective is written on the objective, x{af_total}: "
-     + ("; ".join(f"x{n} name {k}" for k, n in sorted(assessed_kind.items(), key=lambda x: -x[1])) or "none") + ".",
+     f"- **SP 800-53A layer -> the standard facet assessment-criteria@1** (#83) on {n_53a} Requirements: objective "
+     f"trees (53a labels kept - the #10 addressing surface) + EXAMINE/INTERVIEW/TEST methods with object lists "
+     f"(language-tagged). The `assessment-for` link of an objective is written on the objective as an address, "
+     f"x{af_total}: "
+     + ("; ".join(f"x{n} name {k}" for k, n in sorted(assessed_kind.items(), key=lambda x: -x[1])) or "none") +
+     f". A statement of the same control is addressed by `statement-id`, one of another control by `requirement-ref` "
+     f"with `statement-id`, the statement part as a whole by `requirement-ref` alone (its Requirement), a link that "
+     f"names nothing by `href`, as the source writes it.",
      f"- **Relations**: " + ", ".join(f"{k} x{v}" for k, v in sorted(rel_count.items(), key=lambda x: -x[1])) +
      f"; reference targets resolved to publication URLs (landmark); the back-matter resources, as the source writes "
      f"them, -> references@1 on the root Set.",
-     f"- **Back-matter -> references@1 on the root Set** x{len(RESOURCES_KEPT)} of {len(RESOURCES)} resources in the "
-     f"source's own shape, each with its uuid (the convention of the ISM converter): uuid, title, citation, rlinks "
-     f"with href and media-type. x{len(ORPHANS)} are orphans, which nothing in the catalogue refers to (no `#uuid` "
-     f"outside them): not carried, a claim the ledger checks (E4). A profile's one resource, which its import names, "
-     f"stands with the import in the compat facet of its baseline Set.",
+     f"- **Back-matter -> the standard facet references@1 on the root Set** (#82) x{len(RESOURCES_KEPT)} of "
+     f"{len(RESOURCES)} resources in the source's own shape, each with its uuid as `id` (oscal_conv_lib.resource_entry): "
+     f"title, citation, rlinks with href and media-type. x{len(ORPHANS)} are orphans, which nothing in the catalogue "
+     f"refers to (no `#uuid` outside them): not carried, a claim the ledger checks (E4). A profile's resources, which "
+     f"its import names, stand in references@1 on its baseline Set (x"
+     + ", x".join(str(len((p.get("back-matter") or {}).get("resources") or [])) for p in BASELINES.values()) + ").",
      f"- **Markdown links in the texts stay as the source wrote them** x{len(MD_LINKS)}; the target of a link is an "
      f"id of the source. x{md_targets['a back-matter resource']} name a back-matter resource by its uuid "
      f"(x{len({t for t in MD_LINKS if t in RES})} distinct resources), which references@1 carries; "
@@ -1106,14 +1109,13 @@ j = report(
      f"- **Document metadata -> compat facet oscal-1x@1, member `metadata`**, on the Set that stands for the "
      f"document, in the source's own shape: x{F_CATALOG_META} values of the catalogue on the root Set, "
      f"x{F_PROFILE_META} values of the four profiles on their baseline Sets. `title` and `version` are the Set's own "
-     f"members; the document's `uuid` stands beside it (E3). A profile's `merge` directive and its `imports` stand "
-     f"there too (x{F_MERGE}, a JSON boolean). The manifest's "
-     f"`provenance` names the catalogue's author and day by the library's rule for an OSCAL document (backlog #69): "
-     f"`author-ref` {PROVENANCE.get('author-ref', 'none: the metadata names no author')}, `date` "
-     f"{PROVENANCE.get('date', 'none: last-modified does not begin with a day')}. The manifest has one provenance; "
-     f"the author and the day of a profile stand in its metadata on its baseline Set ("
-     + ", ".join(f"{b}: {(document_author(p['metadata']) or {}).get('name', 'no author')}, "
-                 f"{document_day(p['metadata']) or 'no day'}" for b, p in BASELINES.items()) + ").",
+     f"members. A profile's `merge` directive and its `imports` stand there too (x{F_MERGE}, a JSON boolean). The "
+     f"manifest's `provenance.sources[]` names the {len(PROVENANCE['sources'])} documents (#80), each by its title, "
+     f"version, uuid (E3), OSCAL version (`format-version`) and, by the library's rule for an OSCAL document (backlog "
+     f"#69), its author and its day: "
+     + "; ".join(f"{e.get('title', 'no title')}: `author-ref` {e.get('author-ref', 'none: the metadata names no author')}, "
+                 f"`date` {e.get('date', 'none: last-modified does not begin with a day')}" for e in PROVENANCE["sources"])
+     + ". A member the document does not state is left out.",
      f"- **Conversion ledger (measured per source value)**: each of the {LEDGER['leaf-values']:,} leaf values of the "
      f"catalogue and the four profiles was followed into the written files. **{LT['copied']:,} copied** (the value "
      f"stands, with its type, at the destination, read back from the written file), **{LT['transformed']:,} "
@@ -1146,34 +1148,22 @@ j = report(
      f"nor 53A objectives insert) - declarations without any insertion site.",
      f"- **Kernel and standard facets: where the source has a value and they have no place** (carried all the same; "
      f"each is a finding for the author). "
-     f"(1) `assessment-for` x{af_total}: the standard facet assessment-criteria@1 keys `by-statement` by a statement "
-     f"of the Requirement, and cannot hold these links as the source states them: "
-     f"x{assessed_kind['the statement part of the same control as a whole, which has no text of its own']} name the "
-     f"statement part as a whole, which is no statement where its text is in its items; "
-     f"x{assessed_kind['a statement of another control'] + assessed_kind['nothing the catalogue defines']} leave "
-     f"the control (x{assessed_kind['nothing the catalogue defines']} of them name nothing the catalogue defines); "
-     f"and x{assessed_apart[0]} objectives name another statement than the objective above them, so a tree cut by "
-     f"statement is no tree. Its `objectives` is an array of untyped objects and has no member for the methods of "
-     f"the same layer. D10 (per-clause keying, rev. v0.6) asks a payload that addresses single statements to key "
-     f"them `by-statement`; a tree whose nodes name statements at different depths, of the same Requirement or of "
-     f"another, has no keyed form. Written in the pinned facet sp800-53a@1, on the objective, as a list of "
-     f"{{statement-id}} with `requirement-ref` where the statement is another control's: the address the source "
-     f"gives, without the keying D10 asks for. "
-     f"(2) Document metadata x{F_CATALOG_META + F_PROFILE_META}: a Set has `title` and `version` and no member for "
+     f"(1) Document metadata x{F_CATALOG_META + F_PROFILE_META}: a Set has `title` and `version` and no member for "
      f"dates, the OSCAL version, revisions, keywords, links, roles, parties and who is responsible. Written in the "
-     f"compat facet, member `metadata`. (3) A profile's `merge` x{F_MERGE}: a Set does not say how a selection is "
+     f"compat facet, member `metadata`. (2) A profile's `merge` x{F_MERGE}: a Set does not say how a selection is "
      f"merged. Compat facet, member `merge`. "
-     f"(4) A withdrawn control x{n_wd_objects}: the kernel requires a statement with a modality and an obligated "
+     f"(3) A withdrawn control x{n_wd_objects}: the kernel requires a statement with a modality and an obligated "
      f"party on every Requirement (R2: the statement stays). The source gives x{len(wd_no_successor)} of them one "
      f"sentence on why they were withdrawn and the other x{len(tombstones)} only links; theirs is made from the links. "
      f"Written with modality `unspecified` and the party of a control without an implementation level. "
-     f"(5) The print label of a statement item x{rebuilt_by[N_ITEM_LABEL] + sum(len(v) for v in labels_kept.values())}: "
-     f"a statement has an id and no label. x{rebuilt_by[N_ITEM_LABEL]} are rebuilt from the item id; "
-     f"x{sum(len(v) for v in labels_kept.values())} the rule does not give stand in the compat facet `parts` of their "
-     f"Requirement, the item's id with its label prop (E7)"
-     + (f" ({', '.join(e['id'] for v in labels_kept.values() for e in v)})" if labels_kept else "") + ". "
-     f"(6) The formal ODP label x{n_formal}: a kernel parameter has one `label`, which holds the parameter's own. "
+     f"(4) The formal ODP label x{n_formal}: a kernel parameter has one `label`, which holds the parameter's own. "
      f"Written in odp@1.",
+     f"- **Defects of the source: an `assessment-for` link that names nothing the catalogue defines** "
+     f"x{len(assessed_nothing)}"
+     + (" (" + ", ".join(f"{c}: `{h}`" for c, h in assessed_nothing) + ")" if assessed_nothing else "") +
+     ". Written as `href` of its address, as the source writes it; it names no statement and no Requirement.",
+     f"- **The print label of a statement item -> the statement's kernel `label`** (#84) x{n_labels}, as the source "
+     f"gives it; the bundle pins kernel {MANIFEST.get('kernel-version', '1.0.0')} (KERNEL-1).",
      f"- **Path map and ledger**: every outcome the ledger measured on a path is one the sentence of its row speaks "
      f"of (a sentence that says something else ends the run). Outcomes a sentence speaks of and this source does "
      f"not show: " + ("; ".join(f"`{m['paths']}` {m['sentence-speaks-of']}" for m in map_not_confirmed) or "none") + "."],
@@ -1201,9 +1191,10 @@ j = report(
      "baseline-missing": dict(bl_missing),
      "lang-wraps": dict(lang_wraps),
      "assessment-for": {"links": af_total, "names": dict(assessed_kind),
+                        "names-nothing": [{"control": c, "href": h} for c, h in assessed_nothing],
                         "objectives-that-name-another-statement-than-the-one-above": assessed_apart[0]},
      "formal-odp-labels": n_formal,
-     "item-labels": {"rebuilt": rebuilt_by[N_ITEM_LABEL], "compat-parts": [e["id"] for v in labels_kept.values() for e in v]},
+     "statement-labels": n_labels,
      "lifecycle-default": LIFECYCLE_DEFAULT,
      "class-written": class_written[0],
      "document-metadata": {"catalogue": F_CATALOG_META, "profiles": F_PROFILE_META, "merge": F_MERGE},

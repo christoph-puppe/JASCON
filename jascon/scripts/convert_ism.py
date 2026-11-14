@@ -23,7 +23,16 @@ ledger checks: a name that only selects a field, a namespace, an id that is
 rebuilt exactly. Where the kernel has no member for a value it stands in a
 facet, in the source's own shape: the props of a control this mapping has
 no member for and the document's metadata in the compat facet oscal-1x@1,
-the back-matter resources in a references facet on the root Set.
+the back-matter resources in the standard facet references@1 on the root
+Set.
+
+Versions (the author, 2026-11-14, backlog #81: "Versionierung ist wichtig
+und gehört in den Kernel"). The ISM states a revision and the month of the
+last change on each control. The revision is the Requirement's `version`,
+and the month is the one entry of its `history`, written YYYY-MM. A Set,
+and a control the source gives no revision, carry the catalogue's release.
+The document itself - title, version, uuid, author, day, format - is an
+entry of the manifest's `provenance.sources` (backlog #80).
 
 Exit code: 1 when a claim of the ledger does not hold in the written files,
 when a source value is unaccounted, or when a wiring check of this script
@@ -34,6 +43,7 @@ from oscal_conv_lib import BUNDLE_NEWLINE   # one byte spelling on every OS (D3.
 from oscal_conv_lib import known_arguments, out_dir, obligated_party, obligated_party_line, obligated_party_record
 from oscal_conv_lib import Ledger, ledger_by_path, ledger_gate, LEDGER_OUTCOMES, document_author, document_day
 from oscal_conv_lib import COMPAT, COMPAT_FILE, compat_schema, lifecycle_default_record, lifecycle_default_line
+from oscal_conv_lib import REFERENCES, REFERENCES_FILE, resource_entry, needs_kernel_2
 
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 SRC = os.path.join(ROOT, "sources", "ism.json")
@@ -128,7 +138,8 @@ cat = led.source(TAG, {"catalog": cat}, typed=True)["catalog"]
 # facet of its object.
 OSCAL_NS = "http://csrc.nist.gov/ns/oscal"                  # what OSCAL means where a prop names no namespace
 ISM_NS = "https://cyber.gov.au/ns/ism/oscal/3.0"
-PROP_NS = {"sort-id": OSCAL_NS, "label": OSCAL_NS, "applicability": ISM_NS, "essential-eight-applicability": ISM_NS}
+PROP_NS = {"sort-id": OSCAL_NS, "label": OSCAL_NS, "applicability": ISM_NS, "essential-eight-applicability": ISM_NS,
+           "revision": ISM_NS, "updated": ISM_NS}
 def reads(p):
     """-> the name under which this mapping reads the prop, or None"""
     n = p.get("name")
@@ -160,13 +171,14 @@ G = r"^catalog(\.groups\[\])+"                # a group, at any depth
 C = G + r"(\.controls\[\])+"                  # a control of a group, also one nested in a control
 COMPAT_WORD = "compat facet oscal-1x@1"
 RULES = [
-    (r"^catalog\.uuid$", "L2", f"{COMPAT_WORD} on the root Set: uuid (the uuid of the source document)"),
+    (r"^catalog\.uuid$", "L2", "manifest provenance.sources[0].uuid (the uuid of the source document)"),
     (r"^catalog\.metadata\.title$", "L1", "title of the root Set (set/tax/ism)"),
-    (r"^catalog\.metadata\.version$", "L1", "`version` of every object; manifest provenance.source-version"),
-    (r"^catalog\.metadata\.oscal-version$", "L2", f"{COMPAT_WORD} on the root Set: metadata; manifest provenance.source-oscal-version"),
-    (r"^catalog\.metadata\.last-modified$", "L2", f"{COMPAT_WORD} on the root Set: metadata; its day is the manifest's provenance.date"),
+    (r"^catalog\.metadata\.version$", "L1", "`version` of every Set and of a Requirement whose control states no revision; "
+                                            "manifest provenance.sources[0].version"),
+    (r"^catalog\.metadata\.oscal-version$", "L2", f"{COMPAT_WORD} on the root Set: metadata; manifest provenance.sources[0].format-version"),
+    (r"^catalog\.metadata\.last-modified$", "L2", f"{COMPAT_WORD} on the root Set: metadata; its day is the manifest's provenance.sources[0].date"),
     (r"^catalog\.metadata\.parties\[\]\.name$", "L2", f"{COMPAT_WORD} on the root Set: metadata; the name of the party the document "
-                                                      f"names as its author makes the manifest's provenance.author-ref"),
+                                                      f"names as its author makes the manifest's provenance.sources[0].author-ref"),
     (r"^catalog\.metadata\.", "L2", f"{COMPAT_WORD} on the root Set: metadata, in the source's own shape"),
     (G + r"\.id$", "L1 by rule", "Set id and file name"),
     (G + r"\.title$", "L1", "Set title; with the titles of the groups above it, the Set id and file name; `group` of its "
@@ -182,8 +194,8 @@ RULES = [
     (C + r"\.parts\[\]\.name$", "not-content", "the name `statement` selects the member `statements` for the part's prose"),
     (C + r"\.parts\[\]\.prose$", "L1", "statements[].prose.en (+ modality word-rule, documented)"),
     (C + r"\.props\[\]\.(name|ns|value)$", "dispatch", "see per-prop rows"),
-    (r"^catalog\.back-matter\.resources\[\]\.", "L2", "references facet on the root Set: resources[], in the source's own shape, "
-                                                      "with the uuid that a `(#uuid)` link in a text names"),
+    (r"^catalog\.back-matter\.resources\[\]\.", "L2", "standard facet references@1 on the root Set: resources[], in the source's own "
+                                                      "shape, the uuid as `id`, which a `(#uuid)` link in a text names"),
 ]
 RULES = [(re.compile(rx), level, target) for rx, level, target in RULES]
 def map_rule(path):
@@ -195,6 +207,10 @@ PROP_ROWS = {
                  "no content: the parent's sort-id and the position among the siblings give it exactly; the bundle keeps "
                  "both as the hierarchy of the Sets and members[].sequence"),
     "label":    ("not-content", "L1", "not-content", "Requirement.label; the name selects that member"),
+    "revision": ("not-content", "L1", "not-content", "Requirement.version: the control's own version (backlog #81); the name selects that member"),
+    "updated":  ("not-content", "L1 by rule", "not-content",
+                 "Requirement.history[0].date: the month of the control's last change, written YYYY-MM where the source "
+                 "prints Mon-YY; the name selects that member"),
     "applicability": ("L1 by rule", "L1 by rule", "not-content",
                       "membership -> set/baseline/class-<marker>; the name gives the kind `class`"),
     "essential-eight-applicability": ("L1 by rule", "L1 by rule", "not-content",
@@ -269,6 +285,12 @@ def _day(last_modified): return last_modified[:10]
 
 # What is no content, and the rule that says so.
 R_PROP_NAME = "the name of a prop selects the member its value is written to, or the rule that reads it"
+R_MONTH = "month of a control's last change: Mon-YY as the source prints it, written YYYY-MM (the century is 20)"
+_MONTHS = {m: i for i, m in enumerate("Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec".split(), 1)}
+_MONTH_FORM = re.compile(r"(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)-([0-9]{2})\Z")
+def _month(printed):
+    m = _MONTH_FORM.match(printed)
+    return f"20{m.group(2)}-{_MONTHS[m.group(1)]:02d}"
 R_PART_NAME = "the name `statement` of a control's part selects the member `statements` for its prose"
 R_NS = "the namespace of a prop: the one this mapping reads the prop's name in"
 # A sort-id says where the element stands: its parent's sort-id, its kind,
@@ -306,7 +328,7 @@ def sort_id(x, object_id, parent_sort_id, kind, pos, n):
 def mint_req(c, parent=None):
     global label_from_prop
     rid = D(R_REQ_ID, _req_uri, c["id"])
-    label, kept = None, []
+    label, kept, own_version, history = None, [], None, None
     for p in c.get("props", []) or []:
         n = reads(p)
         if n is None: kept.append(p); continue             # no member for it: carried as it is, below
@@ -314,6 +336,15 @@ def mint_req(c, parent=None):
         if "ns" in p: led.namespace(p["ns"], R_NS, (PROP_NS[n],), p["name"])
         if n == "label":
             label = p["value"]; label_from_prop += 1
+            led.selector(p["name"], R_PROP_NAME, p["value"], among=PROP_NS)
+        elif n == "revision":                              # the control's own version (backlog #81)
+            own_version = p["value"]
+            led.selector(p["name"], R_PROP_NAME, p["value"], among=PROP_NS)
+        elif n == "updated":                               # the month of its last change, the one entry of its history
+            if not _MONTH_FORM.match(p["value"]):          # a form of the source this converter was not written for ends the run
+                raise SystemExit(f"convert_ism.py: {c['id']} prints the month of its last change as {str(p['value'])!r}; the rule reads "
+                                 f"Mon-YY (as the 1,101 controls of the pinned source print it) and invents no month for another form")
+            history = [{"date": D(R_MONTH, _month, p["value"])}]
             led.selector(p["name"], R_PROP_NAME, p["value"], among=PROP_NS)
         elif n == "applicability": baseline_members[p["value"]].append((D(R_BASE_MEMBER, _member, c["id"], p["name"], p["value"]), (p["name"], p["value"])))
         elif n == "essential-eight-applicability": e8_members[p["value"]].append((D(R_BASE_MEMBER, _member, c["id"], p["name"], p["value"]), (p["name"], p["value"])))
@@ -326,11 +357,12 @@ def mint_req(c, parent=None):
     prose = part.get("prose", "")
     mod = D(R_MODALITY, modality_of, prose)
     modality_count[mod] += 1
-    req = {"id": rid, "version": version, "label": label,
+    req = {"id": rid, "version": own_version if own_version is not None else version, "label": label,
            "lifecycle": "active", "title": c["title"],
            "statements": [{"id": sid, "modality": mod,
                            "obligated-parties": [PARTY],
                            "prose": {"en": prose}}]}
+    if history: req["history"] = history
     compat = {}
     if kept: compat["props"] = kept
     if parent is not None: compat["nested-in"] = parent["id"]
@@ -342,7 +374,7 @@ def mint_req(c, parent=None):
 def next_seq():
     global seq_counter; seq_counter += 10; return seq_counter
 
-F_REF = f"{NS}/facet/references@1"
+F_REF = REFERENCES            # the standard facet (backlog #82); until 2026-11-14 a facet of this converter's own
 no_members = collections.Counter()      # groups whose Set has no member, by whether they have an overview part
 
 def own_parts(g):
@@ -404,15 +436,16 @@ for i, g in enumerate(top, 1):
 # The root Set stands for the document. Its title and its version are kernel
 # members. Everything else of the document's metadata stands in the compat
 # facet under `metadata`, in the source's own shape; the back-matter
-# resources stand in a references facet, each with its uuid, so that a link
-# `(#uuid)` in a text of the bundle names something the bundle holds.
+# resources stand in the standard facet references@1, each with its uuid as
+# `id`, so that a link `(#uuid)` in a text of the bundle names something the
+# bundle holds. The document's uuid stands in the manifest (provenance.sources).
 root = {"id": ROOT_ID, "version": version, "lifecycle": "active",
         "title": cat["metadata"]["title"], "members": top_entries}
 metadata_rest = {k: v for k, v in cat["metadata"].items() if k not in ("title", "version")}
 resources = (cat.get("back-matter") or {}).get("resources") or []
 root_facets = {}
-root_facets[COMPAT] = {**({"metadata": metadata_rest} if metadata_rest else {}), "uuid": cat["uuid"]}
-if resources: root_facets[F_REF] = {"resources": resources}
+if metadata_rest: root_facets[COMPAT] = {"metadata": metadata_rest}
+if resources: root_facets[F_REF] = {"resources": [resource_entry(r) for r in resources]}
 if root_facets: root["facets"] = root_facets
 objects["objects/set-tax-root.json"] = root
 
@@ -454,39 +487,27 @@ for _base, _, _files in os.walk(os.path.join(OUT, "objects")):
 # is nested in, and the document's metadata on the root Set.
 _STRINGS = lambda *names: {n: {"type": "string"} for n in names}
 # Since 2026-11-14 the compat schema is the one every converter of the
-# repository pins (oscal_conv_lib.compat_schema, version 1.1.0); until then
+# repository pins (oscal_conv_lib.compat_schema, version 1.2.0 now); until then
 # this converter pinned one of its own under the same id and version 1.0.0.
 SCHEMAS = {"schemas/" + COMPAT_FILE: compat_schema()}
-if resources:
-    SCHEMAS["schemas/ism-references-1.0.0-stub.json"] = {
-        "id": F_REF.rsplit("@", 1)[0], "version": "1.0.0",
-        "note": "NORMATIVE pinned payload schema (backlog 26): the back-matter resources of the source, as the source writes "
-                "them; a link `(#uuid)` in a text of the bundle names the resource with that uuid",
-        "modifies-semantics": [],
-        "schema": {"$schema": "https://json-schema.org/draft/2020-12/schema",
-                   "type": "object", "additionalProperties": False, "required": ["resources"],
-                   "properties": {"resources": {"type": "array", "items": {
-                       "type": "object", "additionalProperties": False, "required": ["uuid"],
-                       "properties": {**_STRINGS("uuid", "title", "description", "remarks"),
-                                      "props": {"type": "array", "items": {
-                                          "type": "object", "additionalProperties": False, "required": ["name", "value"],
-                                          "properties": _STRINGS("name", "uuid", "ns", "value", "class", "group", "remarks")}},
-                                      "citation": {"type": "object"},
-                                      "rlinks": {"type": "array", "items": {
-                                          "type": "object", "additionalProperties": False, "required": ["href"],
-                                          "properties": _STRINGS("href", "media-type")}}}}}}}}
+if resources:                 # the standard facet's descriptor, pinned verbatim
+    with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "schemas", "stdlib", REFERENCES_FILE), encoding="utf-8") as _f:
+        SCHEMAS["schemas/" + REFERENCES_FILE] = json.load(_f)
 for _rel, _schema in SCHEMAS.items(): w(_rel, _schema)
 # a pin of an earlier run that this run no longer writes (the compat schema of 1.0.0) leaves the folder, file by file
 for _fn in sorted(os.listdir(os.path.join(OUT, "schemas"))):
     if _fn.endswith(".json") and f"schemas/{_fn}" not in SCHEMAS: os.remove(os.path.join(OUT, "schemas", _fn))
-provenance = {"source": "ACSC ISM OSCAL catalog",
-              "source-version": version,
-              "source-oscal-version": cat["metadata"]["oscal-version"]}
+# What the bundle was made from (backlog #80): one entry of provenance.sources for the one source document
+source = {"title": cat["metadata"]["title"], "version": version, "uuid": cat["uuid"]}
 author = document_author(cat["metadata"])
-if author: provenance["author-ref"] = D(R_AUTHOR, _party_uri, author["name"])
-if document_day(cat["metadata"]): provenance["date"] = D(R_DAY, _day, cat["metadata"]["last-modified"])
-provenance["converter"] = "convert_ism.py v0.4"
+if author: source["author-ref"] = D(R_AUTHOR, _party_uri, author["name"])
+if document_day(cat["metadata"]): source["date"] = D(R_DAY, _day, cat["metadata"]["last-modified"])
+source["format"] = "OSCAL"
+source["format-version"] = cat["metadata"]["oscal-version"]
+provenance = {"sources": [source], "converter": "convert_ism.py v0.5"}
 manifest = {"manifest-version": "1",
+            # a history, or a statement's label, is 2.0.0 content and names its kernel (KERNEL-1)
+            **({"kernel-version": "2.0.0"} if needs_kernel_2(objects.values()) else {}),
             "provenance": provenance,
             "objects": [{"id": o["id"], "version": o["version"],
                          "package-digest": sha_file(rel),
@@ -578,12 +599,15 @@ def strings(n):
 def compat_props(o, name):
     return [p for p in ((o.get("facets") or {}).get(COMPAT) or {}).get("props", []) if p.get("name") == name]
 _root = WRITTEN[ROOT_ID]
-_held = {r.get("uuid") for r in ((_root.get("facets") or {}).get(F_REF) or {}).get("resources", [])}
+_release = _root["version"]
+_held = {r.get("id") for r in ((_root.get("facets") or {}).get(F_REF) or {}).get("resources", [])}
 READ_BACK = {"requirements": sum(1 for o in WRITTEN.values() if "statements" in o),
              "sets": sum(1 for o in WRITTEN.values() if "members" in o),
              "sets-with-no-member": sum(1 for o in WRITTEN.values() if "members" in o and not o["members"]),
-             "requirements-with-revision": sum(1 for o in WRITTEN.values() if compat_props(o, "revision")),
-             "requirements-with-updated": sum(1 for o in WRITTEN.values() if compat_props(o, "updated")),
+             "requirements-with-revision": sum(1 for o in WRITTEN.values() if "statements" in o and o["version"] != _release),
+             "requirements-with-updated": sum(1 for o in WRITTEN.values() if "statements" in o and o.get("history")),
+             "requirements-with-revision-or-updated-in-compat": sum(1 for o in WRITTEN.values()
+                                                                    if compat_props(o, "revision") or compat_props(o, "updated")),
              "resources": len(_held),
              "links-in-texts": 0, "links-that-name-a-resource-of-the-bundle": 0, "texts-with-a-link": 0,
              "objects-with-a-link": 0, "resources-a-link-names": 0}
@@ -750,17 +774,22 @@ md.append(f"- **applicability** -> baseline Sets: "
 _others = sorted(k for k in props_seen if k not in PROP_ROWS)
 md.append(f"- **Props the kernel has no member for** ("
           + (", ".join(f"`{k}` x{props_seen[k]:,}" for k in _others) or "none") + f"): carried as the source writes "
-          f"them (name, namespace, value) in the {COMPAT_WORD} of their object, under `props`. A control's own "
-          f"revision number is not the `version` of its Requirement: that is the catalogue's, on every object.")
+          f"them (name, namespace, value) in the {COMPAT_WORD} of their object, under `props`.")
+md.append(f"- **Versions** (backlog #81): a control's `revision` is the `version` of its Requirement "
+          f"({READ_BACK['requirements-with-revision']:,} Requirements), and the month of its last change (`updated`, "
+          f"printed Mon-YY) is the one entry of its `history`, written YYYY-MM ({READ_BACK['requirements-with-updated']:,}). "
+          f"A Set, and a Requirement whose control states no revision, carry the catalogue's release, `{_release}`.")
 md.append(f"- **Guideline narrative** (`overview` parts on groups, x{n_overview}): "
           f"**Level 2** {COMPAT_WORD} on the Set of the group - the declared waiting room with a clock (handbook 14.6).")
-_author_word = f"`{provenance['author-ref']}`" if "author-ref" in provenance else "not written (the document names no author)"
-_date_word = f"`{provenance['date']}`" if "date" in provenance else "not written (no last-modified that is a date)"
+_author_word = f"`{source['author-ref']}`" if "author-ref" in source else "not written (the document names no author)"
+_date_word = f"`{source['date']}`" if "date" in source else "not written (no last-modified that is a date)"
 md.append(f"- **Document metadata**: title and version are the root Set's; the rest of `metadata` "
           f"({n_metadata_rest} values) stands in the {COMPAT_WORD} of the root Set under `metadata`, in the "
-          f"source's own shape. Manifest provenance: author-ref {_author_word}, date {_date_word}.")
-md.append(f"- **Back-matter**: {len(resources):,} resources in the references facet of the root Set, each with its "
-          f"uuid. Read back from the written files: {READ_BACK['links-in-texts']:,} links `(#uuid)` stand in "
+          f"source's own shape. The manifest names the document as the one entry of `provenance.sources` (backlog #80): "
+          f"title, version, uuid, author-ref {_author_word}, date {_date_word}, format OSCAL "
+          f"{source['format-version']}.")
+md.append(f"- **Back-matter**: {len(resources):,} resources in the standard facet references@1 of the root Set "
+          f"(backlog #82), each with its uuid as `id`. Read back from the written files: {READ_BACK['links-in-texts']:,} links `(#uuid)` stand in "
           f"{READ_BACK['texts-with-a-link']:,} texts of {READ_BACK['objects-with-a-link']:,} objects; "
           f"{READ_BACK['links-that-name-a-resource-of-the-bundle']:,} of them name a resource the bundle holds "
           f"({READ_BACK['resources-a-link-names']:,} of its {READ_BACK['resources']:,} resources).")
@@ -820,7 +849,8 @@ for x in NO_CONTENT:
 if not NO_CONTENT: md.append("| - | 0 | - |")
 md.append("\n### Declared drops that remain\n")
 md.append("A value that reached no destination, for a declared reason. Since the author's decisions of 2026-11-14 "
-          "none is left: the uuid of the source document, the last one, is carried on the root Set.\n")
+          "none is left: the uuid of the source document, the last one, is carried (in the manifest's "
+          "`provenance.sources` since backlog #80).\n")
 if DROPS:
     md.append("| source path | values | declared reason | example | reading under the author's rule |\n|---|---:|---|---|---|")
     for d in DROPS:
@@ -846,14 +876,11 @@ for k, v in READ_BACK.items():
 md.append("\n### What the kernel has no member for\n")
 md.append(f"Carried all the same, in a facet, in the source's own shape; each is a finding about the kernel or the "
           f"standard facets.\n")
-md.append(f"- A control's own revision number and the month of its last change (props `revision` and `updated`): "
-          f"{props_seen['revision']:,} and {props_seen['updated']:,}. `version` is the catalogue's on every object. "
-          f"In the {COMPAT_WORD} of the Requirement, `props`.")
 md.append(f"- The document's metadata beyond title and version (dates, OSCAL version, links, roles, parties, "
           f"responsible parties): {n_metadata_rest} values. In the {COMPAT_WORD} of the root Set, `metadata`.")
 md.append(f"- The resources a text refers to (back-matter): {len(resources):,} resources, {n_back_matter:,} values. "
-          f"In a references facet this converter pins, on the root Set; a link in a text names its target by the "
-          f"resource's uuid.")
+          f"In the standard facet references@1 on the root Set (since 2026-11-14; a facet of this converter's own "
+          f"until then); a link in a text names its target by the resource's uuid, which stands there as `id`.")
 md.append(f"- The overview text of a group: {n_overview:,} texts. In the {COMPAT_WORD} of the group's Set, "
           f"`group-parts`.")
 md.append("\n### What the ledger cannot see\n")

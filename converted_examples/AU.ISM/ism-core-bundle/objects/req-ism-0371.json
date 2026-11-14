@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0371",
- "version": "2026.06.18",
+ "version": "4",
  "label": "ISM-0371",
  "lifecycle": "active",
  "title": {
@@ -18,20 +18,9 @@
    }
   }
  ],
- "facets": {
-  "https://ns.jascon.net/compat/oscal-1x@1": {
-   "props": [
-    {
-     "name": "revision",
-     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
-     "value": "4"
-    },
-    {
-     "name": "updated",
-     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
-     "value": "Dec-21"
-    }
-   ]
+ "history": [
+  {
+   "date": "2021-12"
   }
- }
+ ]
 }

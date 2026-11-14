@@ -26,7 +26,7 @@ Held here, for each converter:
   - the header of the file names the two arguments.
 
 Standard library only."""
-import ast, collections, json, os, shutil, subprocess, sys, tempfile, unittest
+import re, ast, collections, json, os, shutil, subprocess, sys, tempfile, unittest
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.normpath(os.path.join(HERE, "..", ".."))
@@ -221,6 +221,18 @@ class Backlog74TheNineConverters(unittest.TestCase):
                              f"{conv}: a party is minted where the argument does not reach")
             self.assertIn("PARTY,PARTY_ORIGIN=obligated_party(ARGV,PARTY_DEFAULT)", code, conv)
             self.assertEqual(code.count("\nPARTY="), 0, f"{conv}: the party is what obligated_party() returned")
+        # The author of the source document (backlog #91, 1): four converters make a party URI from the name of the party
+        # the document names as its author, through a helper the pattern above does not see. Each defines the helper
+        # once, and every use of it writes an `author-ref`: the party it mints binds no statement.
+        author_helper = {"convert_ism.py": "_party_uri", "convert_csf.py": "_author_uri", "convert_bsi.py": "party_uri",
+                         "convert_nist.py": "_author_uri"}
+        for conv, helper in author_helper.items():
+            with open(os.path.join(HERE, conv), encoding="utf-8") as f: lines = f.read().splitlines()
+            defined = [l for l in lines if l.startswith(f"def {helper}(")]
+            used = [l for l in lines if re.search(rf"\b{helper}\b", l) and not l.startswith(f"def {helper}(")]
+            self.assertEqual(len(defined), 1, f"{conv}: the helper that makes the author's party is defined once")
+            self.assertTrue(used, f"{conv}: the helper is used")
+            for l in used: self.assertIn('"author-ref"', l, f"{conv}: {helper} mints a party where no author-ref is written: {l.strip()}")
         with open(os.path.join(HERE, "convert_nist.py"), encoding="utf-8") as f: code = f.read().replace(" ", "")
         # the level, else the argument; since the conversion ledger (#41) the party of a level is a stated rule
         self.assertIn('iflvls:\nparties=[D(R_PARTY,_party,v)forvinlvls]\nelse:\nparties=[PARTY]', code)

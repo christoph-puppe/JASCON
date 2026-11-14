@@ -37,7 +37,7 @@ source's word beside it on the Set; no object of a document the source does
 not call stable is written active; the id of a KSI category is carried.
 
 Standard library only. Every run writes into a temporary directory."""
-import copy, decimal, hashlib, json, os, re, shutil, subprocess, sys, tempfile, unittest
+import collections, copy, decimal, hashlib, json, os, re, shutil, subprocess, sys, tempfile, unittest
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.normpath(os.path.join(HERE, "..", ".."))
@@ -236,6 +236,44 @@ class Glossary(Converted):
             else:
                 self.assertNotIn("aliases", written[tid], tid); empty += 1
         self.assertGreater(empty, 0, "the source has no term without alternatives: nothing was tested")
+
+
+class History(Converted):
+    """The update history of an entry (the author, 2026-11-14, backlog #81: versioning belongs in the kernel)."""
+    def test_the_history_of_a_rule_or_an_indicator_is_the_kernels_oldest_first(self):
+        want = collections.Counter()
+        def walk(x):                                    # every `updated` list under FRR and KSI
+            if isinstance(x, dict):
+                for e in x.get("updated") or []: want[(e["date"], e.get("comment"), e.get("issue"))] += 1
+                for k, v in x.items():
+                    if k != "updated": walk(v)
+            elif isinstance(x, list):
+                for v in x: walk(v)
+        walk(self.src["FRR"]); walk(self.src["KSI"])
+        got, several = collections.Counter(), 0
+        for o in self.objs.values():
+            h = o.get("history")
+            if h is None: continue
+            self.assertIn("statements", o, f"{o['id']}: only a rule or an indicator carries a history")
+            dates = [e["date"] for e in h]
+            self.assertEqual(dates, sorted(dates), f"{o['id']}: oldest first (HISTORY-1); the source lists the newest first")
+            several += len(h) > 1
+            for e in h:
+                self.assertLessEqual(set(e), {"date", "comment", "ref"}, o["id"])
+                got[(e["date"], (e.get("comment") or {}).get("en"), e.get("ref"))] += 1
+        self.assertEqual(got, want, "every entry of the source, with its date, its comment and its issue")
+        self.assertGreater(several, 0, "the source has no entry with several updates: the order was not tested")
+        self.assertGreater(sum(1 for k in want if k[2]), 0, "the source names no issue: `ref` was not tested")
+        self.assertFalse([o["id"] for o in self.objs.values() if "history" in ((o.get("facets") or {}).get(COMPAT) or {})],
+                         "in the compat facet until 2026-11-14")
+        self.assertEqual(read_json(os.path.join(self.bundle, "content-manifest.json"))["kernel-version"], "2.0.0",
+                         "a history is 2.0.0 content (KERNEL-1)")
+
+    def test_the_history_of_a_term_stays_with_the_glossary(self):
+        # a term is an entry of terminology@1 and no object: the kernel's `history` is a member of an object
+        want = {tid: t["updated"] for tid, t in self.src["FRD"]["data"]["all"].items() if t.get("updated")}
+        self.assertGreater(len(want), 0)
+        self.assertEqual(self.objs[f"{NS}/set/root"]["facets"][NARR].get("term-updated"), want)
 
 
 class Fractions(Converted):
@@ -823,12 +861,12 @@ class ChangedSource(unittest.TestCase):
         self.assertEqual(code, 0, err)
         bundle = os.path.join(d, "cr26-core-bundle")
         pins = [x for x in read_json(os.path.join(bundle, "content-manifest.json"))["facet-schemas"] if x["id"] == COMPAT.rsplit("@", 1)[0]]
-        self.assertEqual([(x["exact-version"], x["path"]) for x in pins], [("1.1.0", "schemas/oscal-1x-compat-1.1.0.json")], "one facet, one pin")
+        self.assertEqual([(x["exact-version"], x["path"]) for x in pins], [("1.2.0", "schemas/oscal-1x-compat-1.2.0.json")], "one facet, one pin")
         self.assertEqual(objects(bundle)[f"{NIST}/{self.CARRIED}"]["facets"][COMPAT], {"uuid": "x"})
 
     def test_a_compat_schema_of_another_kind_in_the_sp800_53_bundle_stops_the_run(self):
         def change(nist):
-            self.rewrite(os.path.join(nist, "schemas", "oscal-1x-compat-1.1.0.json"),
+            self.rewrite(os.path.join(nist, "schemas", "oscal-1x-compat-1.2.0.json"),
                          lambda sc: sc["schema"]["properties"].update({"labels": {"type": "object"}}))
             self.rewrite(os.path.join(nist, *self.CARRIED_FILE), lambda o: o["facets"].update({COMPAT: {"labels": {"formal": "x"}}}))
         code, out, err, d = self.run_on_changed_sp800_53(change)

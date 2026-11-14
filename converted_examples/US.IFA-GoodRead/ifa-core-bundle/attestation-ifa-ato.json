@@ -16,10 +16,10 @@
   },
   {
    "id": "https://ns.nist.gov/sp800-53/req/AC-6.1",
-   "semantic-digest": "sha256:b14be76d67446e77ab0ccf4de964b4bee7b31dd5716d866487a921eaa3518da2"
+   "semantic-digest": "sha256:854639ea435c95b095445b6ca68f9ce6226b391816d9a078040532b82c294a67"
   }
  ],
- "content-manifest-digest": "sha256:30a4cd1926b3ec3fa21b88444c5a5a92212cb2f5514c3e7150b4eb2ce7817683",
+ "content-manifest-digest": "sha256:90c6c62f81ef0ba4350adcd2223ca628561e23238a4306cc1436553404de4faf",
  "signer": "https://ifa.gov/goodread/party/authorizing-official",
  "timestamp": "2025-05-19T00:00:00Z"
 }

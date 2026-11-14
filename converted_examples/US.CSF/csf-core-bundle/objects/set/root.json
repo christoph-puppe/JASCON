@@ -32,10 +32,10 @@
   }
  ],
  "facets": {
-  "https://ns.nist.gov/csf/facet/references@1": {
+  "https://ns.jascon.net/stdlib/facet/references@1": {
    "resources": [
     {
-     "uuid": "3ab41d8a-66e3-4732-ae28-07405dad5127",
+     "id": "3ab41d8a-66e3-4732-ae28-07405dad5127",
      "title": "The NIST Cybersecurity Framework 2.0 (PDF)",
      "rlinks": [
       {
@@ -45,7 +45,7 @@
      ]
     },
     {
-     "uuid": "0451580b-8ef9-4f52-9182-bc887d6cf369",
+     "id": "0451580b-8ef9-4f52-9182-bc887d6cf369",
      "title": "The NIST Cybersecurity Framework 2.0 (DOI link)",
      "rlinks": [
       {
@@ -55,7 +55,7 @@
      ]
     },
     {
-     "uuid": "a7f54afa-16cf-4200-a043-85aa554b93e4",
+     "id": "a7f54afa-16cf-4200-a043-85aa554b93e4",
      "title": "The NIST Cybersecurity Framework",
      "rlinks": [
       {
@@ -204,8 +204,7 @@
       ]
      }
     ]
-   },
-   "uuid": "720a010b-253c-4a94-bb65-cb58400966f5"
+   }
   }
  }
 }

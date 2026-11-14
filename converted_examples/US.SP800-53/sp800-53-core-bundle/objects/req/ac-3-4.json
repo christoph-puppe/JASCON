@@ -36,6 +36,7 @@
   },
   {
    "id": "smt.a",
+   "label": "(a)",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/system"
@@ -46,6 +47,7 @@
   },
   {
    "id": "smt.b",
+   "label": "(b)",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/system"
@@ -56,6 +58,7 @@
   },
   {
    "id": "smt.c",
+   "label": "(c)",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/system"
@@ -66,6 +69,7 @@
   },
   {
    "id": "smt.d",
+   "label": "(d)",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/system"
@@ -76,6 +80,7 @@
   },
   {
    "id": "smt.e",
+   "label": "(e)",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/system"
@@ -93,7 +98,7 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "ac-3.4_obj",

@@ -180,13 +180,12 @@
       ]
      }
     ]
-   },
-   "uuid": "36766a6f-e174-4292-a03e-fcb3b4b09201"
+   }
   },
-  "https://ns.cyber.gov.au/ism/facet/references@1": {
+  "https://ns.jascon.net/stdlib/facet/references@1": {
    "resources": [
     {
-     "uuid": "014064b7-5b77-4a79-af6c-79a16f4d0cb2",
+     "id": "014064b7-5b77-4a79-af6c-79a16f4d0cb2",
      "title": "ICT Supply Chain Resource Library",
      "rlinks": [
       {
@@ -195,7 +194,7 @@
      ]
     },
     {
-     "uuid": "022fcd70-df8b-45ee-ae19-fb9cfe7b6cb6",
+     "id": "022fcd70-df8b-45ee-ae19-fb9cfe7b6cb6",
      "title": "Events to monitor",
      "rlinks": [
       {
@@ -204,7 +203,7 @@
      ]
     },
     {
-     "uuid": "0248ace8-2e08-40f8-b19e-117c76909cf1",
+     "id": "0248ace8-2e08-40f8-b19e-117c76909cf1",
      "title": "Engaging with artificial intelligence",
      "rlinks": [
       {
@@ -213,7 +212,7 @@
      ]
     },
     {
-     "uuid": "02fb4cb5-e4c4-4097-97a2-f1b6aa04131a",
+     "id": "02fb4cb5-e4c4-4097-97a2-f1b6aa04131a",
      "title": "Patching applications and operating systems",
      "rlinks": [
       {
@@ -222,7 +221,7 @@
      ]
     },
     {
-     "uuid": "03f761fa-7014-459c-aa16-02c303d50abb",
+     "id": "03f761fa-7014-459c-aa16-02c303d50abb",
      "title": "reporting vulnerabilities",
      "rlinks": [
       {
@@ -231,7 +230,7 @@
      ]
     },
     {
-     "uuid": "041bce05-55ad-4a2a-93e3-c582d39fce94",
+     "id": "041bce05-55ad-4a2a-93e3-c582d39fce94",
      "title": "Cyber security incident response planning: Practitioner guidance",
      "rlinks": [
       {
@@ -240,7 +239,7 @@
      ]
     },
     {
-     "uuid": "0508be6f-cb97-44da-b212-42416a0048b0",
+     "id": "0508be6f-cb97-44da-b212-42416a0048b0",
      "title": "random dice roller",
      "rlinks": [
       {
@@ -249,7 +248,7 @@
      ]
     },
     {
-     "uuid": "065263a6-4634-4a52-bd3f-48b83bf437d8",
+     "id": "065263a6-4634-4a52-bd3f-48b83bf437d8",
      "title": "Managing the risks of legacy IT: Executive guidance",
      "rlinks": [
       {
@@ -258,7 +257,7 @@
      ]
     },
     {
-     "uuid": "089badd3-ed47-4597-8b1f-bce3e42f4ac4",
+     "id": "089badd3-ed47-4597-8b1f-bce3e42f4ac4",
      "title": "Managing the risks of legacy IT: Practitioner guidance",
      "rlinks": [
       {
@@ -267,7 +266,7 @@
      ]
     },
     {
-     "uuid": "0a1508c0-b062-4d85-8ded-a95316e17a3a",
+     "id": "0a1508c0-b062-4d85-8ded-a95316e17a3a",
      "title": "command line process logging",
      "rlinks": [
       {
@@ -276,7 +275,7 @@
      ]
     },
     {
-     "uuid": "0b1a477d-b08a-4491-9cfc-c9d435b28dc8",
+     "id": "0b1a477d-b08a-4491-9cfc-c9d435b28dc8",
      "title": "Planning for post-quantum cryptography",
      "rlinks": [
       {
@@ -285,7 +284,7 @@
      ]
     },
     {
-     "uuid": "0bf3a1ef-031a-419b-80c3-08a08b1cee9d",
+     "id": "0bf3a1ef-031a-419b-80c3-08a08b1cee9d",
      "title": "Microsoft Security Baselines Blog",
      "rlinks": [
       {
@@ -294,7 +293,7 @@
      ]
     },
     {
-     "uuid": "0cae2aee-3762-482f-8ffe-850e98d7d605",
+     "id": "0cae2aee-3762-482f-8ffe-850e98d7d605",
      "title": "Mitigation strategies for edge devices: Practitioner guidance",
      "rlinks": [
       {
@@ -303,7 +302,7 @@
      ]
     },
     {
-     "uuid": "0d7243fc-65f0-4b4e-9358-bf4f6e0e34d7",
+     "id": "0d7243fc-65f0-4b4e-9358-bf4f6e0e34d7",
      "title": "Cybersecurity Supply Chain Risk Management Practices for Systems and Organizations",
      "rlinks": [
       {
@@ -312,7 +311,7 @@
      ]
     },
     {
-     "uuid": "0d9d5f12-3519-4585-82d9-bc0f42abcd3c",
+     "id": "0d9d5f12-3519-4585-82d9-bc0f42abcd3c",
      "title": "IoT Secure by Design guidance for manufacturers",
      "rlinks": [
       {
@@ -321,7 +320,7 @@
      ]
     },
     {
-     "uuid": "0e982561-93dc-4cf7-9a98-e91411e99ca6",
+     "id": "0e982561-93dc-4cf7-9a98-e91411e99ca6",
      "title": "Bring Your Own Device for executives",
      "rlinks": [
       {
@@ -330,7 +329,7 @@
      ]
     },
     {
-     "uuid": "11372646-3106-42c6-b3e1-444b3f630462",
+     "id": "11372646-3106-42c6-b3e1-444b3f630462",
      "title": "Australian Government Email Protective Marking Standard",
      "rlinks": [
       {
@@ -339,7 +338,7 @@
      ]
     },
     {
-     "uuid": "1258a1ce-774a-4701-8d47-80940b988a2d",
+     "id": "1258a1ce-774a-4701-8d47-80940b988a2d",
      "title": "Adversarial Threat Landscape for Artificial-Intelligence Systems",
      "rlinks": [
       {
@@ -348,7 +347,7 @@
      ]
     },
     {
-     "uuid": "131048c7-a2e7-4da3-9257-7a058b06c1f8",
+     "id": "131048c7-a2e7-4da3-9257-7a058b06c1f8",
      "title": "Secure administration",
      "rlinks": [
       {
@@ -357,7 +356,7 @@
      ]
     },
     {
-     "uuid": "18203e18-2aca-492e-be44-770b2f47242f",
+     "id": "18203e18-2aca-492e-be44-770b2f47242f",
      "title": "AV-TEST",
      "rlinks": [
       {
@@ -366,7 +365,7 @@
      ]
     },
     {
-     "uuid": "18274424-7086-419e-9fae-a6ba64870459",
+     "id": "18274424-7086-419e-9fae-a6ba64870459",
      "title": "OWASP Top 10 Proactive Controls 2024",
      "rlinks": [
       {
@@ -375,7 +374,7 @@
      ]
     },
     {
-     "uuid": "188466f6-be12-49ce-b99a-981e54b1663e",
+     "id": "188466f6-be12-49ce-b99a-981e54b1663e",
      "title": "reporting cybercrime incidents",
      "rlinks": [
       {
@@ -384,7 +383,7 @@
      ]
     },
     {
-     "uuid": "195abe87-bb1e-4006-8b42-eaecca4d51f1",
+     "id": "195abe87-bb1e-4006-8b42-eaecca4d51f1",
      "title": "Guidelines for cryptography",
      "rlinks": [
       {
@@ -393,7 +392,7 @@
      ]
     },
     {
-     "uuid": "197db872-c6a9-4b29-9888-1552e908252c",
+     "id": "197db872-c6a9-4b29-9888-1552e908252c",
      "title": "FIPS 140-3 Derived Test Requirements (DTR): CMVP Validation Authority Updates to ISO/IEC 24759",
      "rlinks": [
       {
@@ -402,7 +401,7 @@
      ]
     },
     {
-     "uuid": "19947ae5-678c-4dc0-a35e-283e4af1284c",
+     "id": "19947ae5-678c-4dc0-a35e-283e4af1284c",
      "title": "Supply chain security guidance",
      "rlinks": [
       {
@@ -411,7 +410,7 @@
      ]
     },
     {
-     "uuid": "1a6900be-4bac-4f16-b37d-dc35a7b25e30",
+     "id": "1a6900be-4bac-4f16-b37d-dc35a7b25e30",
      "title": "Information security manual OSCAL catalog",
      "rlinks": [
       {
@@ -429,7 +428,7 @@
      ]
     },
     {
-     "uuid": "1ba81b1c-8e4b-4d7c-85b4-6175ea5fc9bf",
+     "id": "1ba81b1c-8e4b-4d7c-85b4-6175ea5fc9bf",
      "title": "Prerequisites for Microsoft Entra Connect",
      "rlinks": [
       {
@@ -438,7 +437,7 @@
      ]
     },
     {
-     "uuid": "1dbda98a-4e8b-4a52-b4f7-9d1a895fd324",
+     "id": "1dbda98a-4e8b-4a52-b4f7-9d1a895fd324",
      "title": "Priority logs for SIEM ingestion: Practitioner guidance",
      "rlinks": [
       {
@@ -447,7 +446,7 @@
      ]
     },
     {
-     "uuid": "1e4a57a2-2832-441d-8ea4-12a98d2be417",
+     "id": "1e4a57a2-2832-441d-8ea4-12a98d2be417",
      "title": "Australian Privacy Principles guidelines",
      "rlinks": [
       {
@@ -456,7 +455,7 @@
      ]
     },
     {
-     "uuid": "1ecfc41e-f6a8-4c96-ac41-1587718ca459",
+     "id": "1ecfc41e-f6a8-4c96-ac41-1587718ca459",
      "title": "Network Infrastructure Security Guide",
      "rlinks": [
       {
@@ -465,7 +464,7 @@
      ]
     },
     {
-     "uuid": "1eefdaf7-3991-4ba2-9439-79565f508c44",
+     "id": "1eefdaf7-3991-4ba2-9439-79565f508c44",
      "title": "Guidelines for data transfers",
      "rlinks": [
       {
@@ -474,7 +473,7 @@
      ]
     },
     {
-     "uuid": "219fa690-b9c0-4e76-9333-d5136a5582d1",
+     "id": "219fa690-b9c0-4e76-9333-d5136a5582d1",
      "title": "Information security manual OSCAL catalog - latest version",
      "rlinks": [
       {
@@ -492,7 +491,7 @@
      ]
     },
     {
-     "uuid": "233c7982-dc01-496e-b761-b24ac06ded49",
+     "id": "233c7982-dc01-496e-b761-b24ac06ded49",
      "title": "Artificial intelligence and machine learning: Supply chain risks and mitigations",
      "rlinks": [
       {
@@ -501,7 +500,7 @@
      ]
     },
     {
-     "uuid": "23d977b2-e64e-4ebc-a59f-cd95212045c5",
+     "id": "23d977b2-e64e-4ebc-a59f-cd95212045c5",
      "title": "Implementing network segmentation and segregation",
      "rlinks": [
       {
@@ -510,7 +509,7 @@
      ]
     },
     {
-     "uuid": "24eb9af8-fb43-4772-a461-2c36dd0f6d7e",
+     "id": "24eb9af8-fb43-4772-a461-2c36dd0f6d7e",
      "title": "recommended contents for a ‘security.txt’ file",
      "rlinks": [
       {
@@ -519,7 +518,7 @@
      ]
     },
     {
-     "uuid": "26137381-dc34-485c-8331-3bc9876ed48c",
+     "id": "26137381-dc34-485c-8331-3bc9876ed48c",
      "title": "Software Memory Safety",
      "rlinks": [
       {
@@ -528,7 +527,7 @@
      ]
     },
     {
-     "uuid": "2667c626-d3e8-4ee5-9044-2ada9f133df2",
+     "id": "2667c626-d3e8-4ee5-9044-2ada9f133df2",
      "title": "Practical cyber security tips for business leaders",
      "rlinks": [
       {
@@ -537,7 +536,7 @@
      ]
     },
     {
-     "uuid": "28cd91d2-e5cb-4896-bcfc-abb32e05e61d",
+     "id": "28cd91d2-e5cb-4896-bcfc-abb32e05e61d",
      "title": "Cryptographic Module Validation Program",
      "rlinks": [
       {
@@ -546,7 +545,7 @@
      ]
     },
     {
-     "uuid": "29b04eaf-5f57-4ea1-a453-8047826dccf5",
+     "id": "29b04eaf-5f57-4ea1-a453-8047826dccf5",
      "title": "Certified Products List",
      "rlinks": [
       {
@@ -555,7 +554,7 @@
      ]
     },
     {
-     "uuid": "2d003129-793e-4263-92ee-f6d02d016023",
+     "id": "2d003129-793e-4263-92ee-f6d02d016023",
      "title": "Australian Government Gateway Security Standard",
      "rlinks": [
       {
@@ -564,7 +563,7 @@
      ]
     },
     {
-     "uuid": "2d78eb83-ba21-4fe3-8466-e6d1cd8ee6dc",
+     "id": "2d78eb83-ba21-4fe3-8466-e6d1cd8ee6dc",
      "title": "Cloud shared responsibility model: Executive guidance",
      "rlinks": [
       {
@@ -573,7 +572,7 @@
      ]
     },
     {
-     "uuid": "315744ea-3523-4c93-838d-fe2848ac4181",
+     "id": "315744ea-3523-4c93-838d-fe2848ac4181",
      "title": "Guide to Bluetooth Security",
      "rlinks": [
       {
@@ -582,7 +581,7 @@
      ]
     },
     {
-     "uuid": "32c8fa3a-45bb-4f88-baee-73a7696aa2ad",
+     "id": "32c8fa3a-45bb-4f88-baee-73a7696aa2ad",
      "title": "Security Requirements for Cryptographic Modules",
      "rlinks": [
       {
@@ -591,7 +590,7 @@
      ]
     },
     {
-     "uuid": "331263bc-3314-496b-9d35-76788eb0f403",
+     "id": "331263bc-3314-496b-9d35-76788eb0f403",
      "title": "Detecting and mitigating Active Directory compromises",
      "rlinks": [
       {
@@ -600,7 +599,7 @@
      ]
     },
     {
-     "uuid": "33d26cdd-51fc-45d3-a026-0814d51a4c7e",
+     "id": "33d26cdd-51fc-45d3-a026-0814d51a4c7e",
      "title": "Security Recommendations for Server-based Hypervisor Platforms",
      "rlinks": [
       {
@@ -609,7 +608,7 @@
      ]
     },
     {
-     "uuid": "347eee88-cb61-44b9-81ce-ab97dd08387c",
+     "id": "347eee88-cb61-44b9-81ce-ab97dd08387c",
      "title": "Cloud computing security for cloud service providers",
      "rlinks": [
       {
@@ -618,7 +617,7 @@
      ]
     },
     {
-     "uuid": "348be728-4459-4447-990e-1dfb3049c71f",
+     "id": "348be728-4459-4447-990e-1dfb3049c71f",
      "title": "data retention",
      "rlinks": [
       {
@@ -627,7 +626,7 @@
      ]
     },
     {
-     "uuid": "353dcc1a-23e6-48d5-8047-950cc614bf0b",
+     "id": "353dcc1a-23e6-48d5-8047-950cc614bf0b",
      "title": "Guidelines for secure AI system development",
      "rlinks": [
       {
@@ -636,7 +635,7 @@
      ]
     },
     {
-     "uuid": "355b47b5-6253-4be5-ba7c-274833d84b75",
+     "id": "355b47b5-6253-4be5-ba7c-274833d84b75",
      "title": "ROA records",
      "rlinks": [
       {
@@ -645,7 +644,7 @@
      ]
     },
     {
-     "uuid": "37f65b5b-ce8c-4137-9c84-41678af1e70e",
+     "id": "37f65b5b-ce8c-4137-9c84-41678af1e70e",
      "title": "Cyber supply chain risk management",
      "rlinks": [
       {
@@ -654,7 +653,7 @@
      ]
     },
     {
-     "uuid": "388c3570-58ed-40be-be5e-bdfba9cfee1d",
+     "id": "388c3570-58ed-40be-be5e-bdfba9cfee1d",
      "title": "Careful adoption of agentic AI services",
      "rlinks": [
       {
@@ -663,7 +662,7 @@
      ]
     },
     {
-     "uuid": "39e186f3-d175-4eed-afe6-2b9a7a936a91",
+     "id": "39e186f3-d175-4eed-afe6-2b9a7a936a91",
      "title": "MemtestG80",
      "rlinks": [
       {
@@ -672,7 +671,7 @@
      ]
     },
     {
-     "uuid": "3a1a00f6-2f56-4d04-b99d-6f1682b95a98",
+     "id": "3a1a00f6-2f56-4d04-b99d-6f1682b95a98",
      "title": "detect or prevent various stages of network intrusions",
      "rlinks": [
       {
@@ -681,7 +680,7 @@
      ]
     },
     {
-     "uuid": "3a7b903b-ed0d-450d-9123-60f6f8fd5dd2",
+     "id": "3a7b903b-ed0d-450d-9123-60f6f8fd5dd2",
      "title": "Guidelines for communications systems",
      "rlinks": [
       {
@@ -690,7 +689,7 @@
      ]
     },
     {
-     "uuid": "3ccea9a8-a728-4f5b-a0a8-43f2f206f76b",
+     "id": "3ccea9a8-a728-4f5b-a0a8-43f2f206f76b",
      "title": "Restricting administrative privileges",
      "rlinks": [
       {
@@ -699,7 +698,7 @@
      ]
     },
     {
-     "uuid": "3df21b72-0559-4bbf-a990-5ee509f70747",
+     "id": "3df21b72-0559-4bbf-a990-5ee509f70747",
      "title": "Gateway security guidance package",
      "rlinks": [
       {
@@ -708,7 +707,7 @@
      ]
     },
     {
-     "uuid": "3e5a98e5-9219-46c8-81c2-e3a4d13407ce",
+     "id": "3e5a98e5-9219-46c8-81c2-e3a4d13407ce",
      "title": "Active Directory Forest Recovery - Reset the krbtgt password",
      "rlinks": [
       {
@@ -717,7 +716,7 @@
      ]
     },
     {
-     "uuid": "3f349d16-11a1-459a-a299-c9446aea7597",
+     "id": "3f349d16-11a1-459a-a299-c9446aea7597",
      "title": "Guidelines for database systems",
      "rlinks": [
       {
@@ -726,7 +725,7 @@
      ]
     },
     {
-     "uuid": "3f43c8d2-8a8c-4e2f-af80-48a607bce643",
+     "id": "3f43c8d2-8a8c-4e2f-af80-48a607bce643",
      "title": "Local Security Authority protection functionality",
      "rlinks": [
       {
@@ -735,7 +734,7 @@
      ]
     },
     {
-     "uuid": "401ed034-e2bd-43b4-9fde-05d07618039a",
+     "id": "401ed034-e2bd-43b4-9fde-05d07618039a",
      "title": "Center for Memory and Recording Research",
      "rlinks": [
       {
@@ -744,7 +743,7 @@
      ]
     },
     {
-     "uuid": "403f72c6-3e85-4185-8df3-130b2a6b25b3",
+     "id": "403f72c6-3e85-4185-8df3-130b2a6b25b3",
      "title": "Cyber security incident response planning: Executive guidance",
      "rlinks": [
       {
@@ -753,7 +752,7 @@
      ]
     },
     {
-     "uuid": "42e7d99d-9709-4355-a54d-98959c552aa1",
+     "id": "42e7d99d-9709-4355-a54d-98959c552aa1",
      "title": "Cryptographic Algorithm Validation Program",
      "rlinks": [
       {
@@ -762,7 +761,7 @@
      ]
     },
     {
-     "uuid": "43fbcaf9-03a3-493a-83be-9340a37778fa",
+     "id": "43fbcaf9-03a3-493a-83be-9340a37778fa",
      "title": "Hardening Microsoft Windows 11 workstations",
      "rlinks": [
       {
@@ -771,7 +770,7 @@
      ]
     },
     {
-     "uuid": "45899752-c83f-4976-bc99-03f6824a0793",
+     "id": "45899752-c83f-4976-bc99-03f6824a0793",
      "title": "How to manage your security when engaging a managed service provider",
      "rlinks": [
       {
@@ -780,7 +779,7 @@
      ]
     },
     {
-     "uuid": "490f4622-8562-4333-a263-b64f660620e8",
+     "id": "490f4622-8562-4333-a263-b64f660620e8",
      "title": "Cyber Security Toolkit for Boards",
      "rlinks": [
       {
@@ -789,7 +788,7 @@
      ]
     },
     {
-     "uuid": "4974639a-f41a-4280-ae06-33d1f13d6083",
+     "id": "4974639a-f41a-4280-ae06-33d1f13d6083",
      "title": "Secure by Design Pledge",
      "rlinks": [
       {
@@ -798,7 +797,7 @@
      ]
     },
     {
-     "uuid": "4a3a265f-7772-433b-9906-7f784052f28b",
+     "id": "4a3a265f-7772-433b-9906-7f784052f28b",
      "title": "vulnerable driver blocklist",
      "rlinks": [
       {
@@ -807,7 +806,7 @@
      ]
     },
     {
-     "uuid": "4b0f2fa7-f9d6-48d8-b14c-527939808882",
+     "id": "4b0f2fa7-f9d6-48d8-b14c-527939808882",
      "title": "Trustworthy Email",
      "rlinks": [
       {
@@ -816,7 +815,7 @@
      ]
     },
     {
-     "uuid": "4bebe303-7a91-4ffa-90d8-8df9f80a6318",
+     "id": "4bebe303-7a91-4ffa-90d8-8df9f80a6318",
      "title": "Implementing SIEM and SOAR platforms: Executive guidance",
      "rlinks": [
       {
@@ -825,7 +824,7 @@
      ]
     },
     {
-     "uuid": "4deea7ea-18a2-4fd7-8b25-0b3603215df2",
+     "id": "4deea7ea-18a2-4fd7-8b25-0b3603215df2",
      "title": "Guidelines for physical security",
      "rlinks": [
       {
@@ -834,7 +833,7 @@
      ]
     },
     {
-     "uuid": "4defa9a8-c5f5-4b39-8b0a-537f14d9d14d",
+     "id": "4defa9a8-c5f5-4b39-8b0a-537f14d9d14d",
      "title": "Guidelines for communications infrastructure",
      "rlinks": [
       {
@@ -843,7 +842,7 @@
      ]
     },
     {
-     "uuid": "4e01708d-9c2d-4a84-a08a-cb98077235a6",
+     "id": "4e01708d-9c2d-4a84-a08a-cb98077235a6",
      "title": "Implementing SIEM and SOAR platforms: Practitioner guidance",
      "rlinks": [
       {
@@ -852,7 +851,7 @@
      ]
     },
     {
-     "uuid": "4ea4e1e9-09f5-46c2-b003-352bc862d5ed",
+     "id": "4ea4e1e9-09f5-46c2-b003-352bc862d5ed",
      "title": "Risk Management Framework for Information Systems and Organizations: A System Life Cycle Approach for Security and Privacy",
      "rlinks": [
       {
@@ -861,7 +860,7 @@
      ]
     },
     {
-     "uuid": "4eeff329-cea0-4baf-a80b-8b0b76436075",
+     "id": "4eeff329-cea0-4baf-a80b-8b0b76436075",
      "title": "Implementing application control",
      "rlinks": [
       {
@@ -870,7 +869,7 @@
      ]
     },
     {
-     "uuid": "506198a8-7ae8-4c95-8b7b-2a4833cfab4b",
+     "id": "506198a8-7ae8-4c95-8b7b-2a4833cfab4b",
      "title": "Guidelines for software development",
      "rlinks": [
       {
@@ -879,7 +878,7 @@
      ]
     },
     {
-     "uuid": "53d281fa-1f25-4d33-9d6b-a5831851df50",
+     "id": "53d281fa-1f25-4d33-9d6b-a5831851df50",
      "title": "Guidance on digital forensics and protective monitoring specifications for producers of network devices and appliances",
      "rlinks": [
       {
@@ -888,7 +887,7 @@
      ]
     },
     {
-     "uuid": "53da8dba-961e-4222-94e0-68cb9510384d",
+     "id": "53da8dba-961e-4222-94e0-68cb9510384d",
      "title": "digital preservation planning",
      "rlinks": [
       {
@@ -897,7 +896,7 @@
      ]
     },
     {
-     "uuid": "55038d94-7587-4234-a18c-fb459fcdb295",
+     "id": "55038d94-7587-4234-a18c-fb459fcdb295",
      "title": "Domain Name System-Based Electronic Mail Security",
      "rlinks": [
       {
@@ -906,7 +905,7 @@
      ]
     },
     {
-     "uuid": "5516125f-d0eb-4196-8dc4-f8db55fca032",
+     "id": "5516125f-d0eb-4196-8dc4-f8db55fca032",
      "title": "DevSecOps Guidelines",
      "rlinks": [
       {
@@ -915,7 +914,7 @@
      ]
     },
     {
-     "uuid": "55852ef6-7f16-4559-8235-5014c3c3fa14",
+     "id": "55852ef6-7f16-4559-8235-5014c3c3fa14",
      "title": "Therapeutic Goods (Medical Devices) Regulations 2002",
      "rlinks": [
       {
@@ -924,7 +923,7 @@
      ]
     },
     {
-     "uuid": "578d0434-6b3f-46f3-aad8-c7ac75c2ebcc",
+     "id": "578d0434-6b3f-46f3-aad8-c7ac75c2ebcc",
      "title": "Guidelines for cyber security documentation",
      "rlinks": [
       {
@@ -933,7 +932,7 @@
      ]
     },
     {
-     "uuid": "57c58870-2ebb-4fce-b995-0c86cb64002f",
+     "id": "57c58870-2ebb-4fce-b995-0c86cb64002f",
      "title": "AISEP",
      "rlinks": [
       {
@@ -942,7 +941,7 @@
      ]
     },
     {
-     "uuid": "58282062-5c17-476a-98b1-105a627cd28d",
+     "id": "58282062-5c17-476a-98b1-105a627cd28d",
      "title": "randomly generating passphrases",
      "rlinks": [
       {
@@ -951,7 +950,7 @@
      ]
     },
     {
-     "uuid": "58589044-8b34-4d46-bf70-103ee8d10bc9",
+     "id": "58589044-8b34-4d46-bf70-103ee8d10bc9",
      "title": "Managing cryptographic keys and secrets",
      "rlinks": [
       {
@@ -960,7 +959,7 @@
      ]
     },
     {
-     "uuid": "585f4feb-d589-4a8e-868a-9ae60cf822ea",
+     "id": "585f4feb-d589-4a8e-868a-9ae60cf822ea",
      "title": "ASD Cyber Security Network Partners",
      "rlinks": [
       {
@@ -969,7 +968,7 @@
      ]
     },
     {
-     "uuid": "58c9abfb-58fe-416e-a279-dfbfe123c99f",
+     "id": "58c9abfb-58fe-416e-a279-dfbfe123c99f",
      "title": "Hardening Microsoft 365, Office 2021, Office 2019 and Office 2016",
      "rlinks": [
       {
@@ -978,7 +977,7 @@
      ]
     },
     {
-     "uuid": "5935bbd2-883f-45e1-861e-e33a1e279063",
+     "id": "5935bbd2-883f-45e1-861e-e33a1e279063",
      "title": "OWASP Mobile Application Security Verification Standard version 2.1.0",
      "rlinks": [
       {
@@ -987,7 +986,7 @@
      ]
     },
     {
-     "uuid": "5a2ed3ef-afcc-485e-8014-5107e9ed97e3",
+     "id": "5a2ed3ef-afcc-485e-8014-5107e9ed97e3",
      "title": "recommended application blocklist",
      "rlinks": [
       {
@@ -996,7 +995,7 @@
      ]
     },
     {
-     "uuid": "5d217b62-2aa7-4d9c-93cc-da3916279802",
+     "id": "5d217b62-2aa7-4d9c-93cc-da3916279802",
      "title": "Risk management – Guidelines",
      "rlinks": [
       {
@@ -1005,7 +1004,7 @@
      ]
     },
     {
-     "uuid": "6136b137-0cc9-4d21-94ee-0abfac2b4e18",
+     "id": "6136b137-0cc9-4d21-94ee-0abfac2b4e18",
      "title": "Malicious email mitigation strategies",
      "rlinks": [
       {
@@ -1014,7 +1013,7 @@
      ]
     },
     {
-     "uuid": "616fce77-495b-472a-a552-7593ab64f188",
+     "id": "616fce77-495b-472a-a552-7593ab64f188",
      "title": "Security configuration guide: Samsung Galaxy S10, S20 and Note 20 devices",
      "rlinks": [
       {
@@ -1023,7 +1022,7 @@
      ]
     },
     {
-     "uuid": "626d3582-3caf-49d6-89d5-4b8fdbbf1f31",
+     "id": "626d3582-3caf-49d6-89d5-4b8fdbbf1f31",
      "title": "reporting cyber security incidents",
      "rlinks": [
       {
@@ -1032,7 +1031,7 @@
      ]
     },
     {
-     "uuid": "626dab35-81ab-45fe-8c12-0faff1c23c07",
+     "id": "626dab35-81ab-45fe-8c12-0faff1c23c07",
      "title": "Guidelines for cyber security roles",
      "rlinks": [
       {
@@ -1041,7 +1040,7 @@
      ]
     },
     {
-     "uuid": "629818d8-430c-4125-8fd2-5e3f988fce21",
+     "id": "629818d8-430c-4125-8fd2-5e3f988fce21",
      "title": "MemTest86",
      "rlinks": [
       {
@@ -1050,7 +1049,7 @@
      ]
     },
     {
-     "uuid": "63ac47db-bbe3-4e35-9493-f7b6f695dd71",
+     "id": "63ac47db-bbe3-4e35-9493-f7b6f695dd71",
      "title": "Information security manual OSCAL catalog - successor version",
      "rlinks": [
       {
@@ -1068,7 +1067,7 @@
      ]
     },
     {
-     "uuid": "63b0d043-b6b3-4e2b-bca8-99b42cfd9904",
+     "id": "63b0d043-b6b3-4e2b-bca8-99b42cfd9904",
      "title": "Selecting a Protective DNS Service",
      "rlinks": [
       {
@@ -1077,7 +1076,7 @@
      ]
     },
     {
-     "uuid": "63bba9d2-127e-41d5-b735-e0cf3fe4b9aa",
+     "id": "63bba9d2-127e-41d5-b735-e0cf3fe4b9aa",
      "title": "Windows 11 Security Book",
      "rlinks": [
       {
@@ -1086,7 +1085,7 @@
      ]
     },
     {
-     "uuid": "6494bba4-bdb5-4b19-8f6c-8d5506a8bb09",
+     "id": "6494bba4-bdb5-4b19-8f6c-8d5506a8bb09",
      "title": "Secure by Design foundations",
      "rlinks": [
       {
@@ -1095,7 +1094,7 @@
      ]
     },
     {
-     "uuid": "672e85cc-2d40-46ba-9e94-c604b9731c75",
+     "id": "672e85cc-2d40-46ba-9e94-c604b9731c75",
      "title": "secure programming practices",
      "rlinks": [
       {
@@ -1104,7 +1103,7 @@
      ]
     },
     {
-     "uuid": "69c67e26-82cf-426a-8358-0e486b5a9287",
+     "id": "69c67e26-82cf-426a-8358-0e486b5a9287",
      "title": "Risk management – Risk assessment techniques",
      "rlinks": [
       {
@@ -1113,7 +1112,7 @@
      ]
     },
     {
-     "uuid": "6b4353e0-7281-49f4-a520-f35a4cceec71",
+     "id": "6b4353e0-7281-49f4-a520-f35a4cceec71",
      "title": "examples of client-side JavaScript controls",
      "rlinks": [
       {
@@ -1122,7 +1121,7 @@
      ]
     },
     {
-     "uuid": "6e17dd11-a1c5-4f2b-87df-c5edde5fc8bd",
+     "id": "6e17dd11-a1c5-4f2b-87df-c5edde5fc8bd",
      "title": "AI Data Security: Best Practices for Securing Data Used to Train \\& Operate AI Systems",
      "rlinks": [
       {
@@ -1131,7 +1130,7 @@
      ]
     },
     {
-     "uuid": "6e609b19-d3ef-466b-a3fc-104bf7573693",
+     "id": "6e609b19-d3ef-466b-a3fc-104bf7573693",
      "title": "Information security manual OSCAL catalog - predecessor version",
      "rlinks": [
       {
@@ -1149,7 +1148,7 @@
      ]
     },
     {
-     "uuid": "6f1f2f2b-abe6-46e4-9c9d-8339f1d9dab7",
+     "id": "6f1f2f2b-abe6-46e4-9c9d-8339f1d9dab7",
      "title": "Secure Software Development Framework (SSDF) Version 1.1: Recommendations for Mitigating the Risk of Software Vulnerabilities",
      "rlinks": [
       {
@@ -1158,7 +1157,7 @@
      ]
     },
     {
-     "uuid": "6fac5a84-b86e-405f-b2b3-8c13ecee4a02",
+     "id": "6fac5a84-b86e-405f-b2b3-8c13ecee4a02",
      "title": "Privacy Act 1988",
      "rlinks": [
       {
@@ -1167,7 +1166,7 @@
      ]
     },
     {
-     "uuid": "70371e26-f3fb-4b05-85ea-7f6e1f2ee184",
+     "id": "70371e26-f3fb-4b05-85ea-7f6e1f2ee184",
      "title": "The Minimum Elements For a Software Bill of Materials (SBOM)",
      "rlinks": [
       {
@@ -1176,7 +1175,7 @@
      ]
     },
     {
-     "uuid": "741ab440-5759-4571-894d-e499dea3a54c",
+     "id": "741ab440-5759-4571-894d-e499dea3a54c",
      "title": "Chrome Browser Enterprise Security Configuration Guide (Windows)",
      "rlinks": [
       {
@@ -1185,7 +1184,7 @@
      ]
     },
     {
-     "uuid": "76068c96-8d89-4c37-9eef-03488d5e1b1d",
+     "id": "76068c96-8d89-4c37-9eef-03488d5e1b1d",
      "title": "Questions to ask managed service providers",
      "rlinks": [
       {
@@ -1194,7 +1193,7 @@
      ]
     },
     {
-     "uuid": "76087ab6-88d4-4610-9a98-6ddc5f7bd7e6",
+     "id": "76087ab6-88d4-4610-9a98-6ddc5f7bd7e6",
      "title": "OWASP API Security Top 10 2023",
      "rlinks": [
       {
@@ -1203,7 +1202,7 @@
      ]
     },
     {
-     "uuid": "78a48231-9963-4f78-962a-861c96c58ead",
+     "id": "78a48231-9963-4f78-962a-861c96c58ead",
      "title": "Starting a Vulnerability Disclosure Program",
      "rlinks": [
       {
@@ -1212,7 +1211,7 @@
      ]
     },
     {
-     "uuid": "7a40de61-7e8c-4b58-bba0-446899b22b9e",
+     "id": "7a40de61-7e8c-4b58-bba0-446899b22b9e",
      "title": "OWASP Top 10 for Large Language Model Applications version 2025",
      "rlinks": [
       {
@@ -1221,7 +1220,7 @@
      ]
     },
     {
-     "uuid": "7d16ae67-87a7-4861-b939-e13ec279b5a2",
+     "id": "7d16ae67-87a7-4861-b939-e13ec279b5a2",
      "title": "Guidelines for personnel security",
      "rlinks": [
       {
@@ -1230,7 +1229,7 @@
      ]
     },
     {
-     "uuid": "7d22400c-ddef-4cbb-90f1-7502dc569e5b",
+     "id": "7d22400c-ddef-4cbb-90f1-7502dc569e5b",
      "title": "the use of PowerShell by blue teams",
      "rlinks": [
       {
@@ -1239,7 +1238,7 @@
      ]
     },
     {
-     "uuid": "7da35efd-7196-4aba-bd79-30c19e8ef48b",
+     "id": "7da35efd-7196-4aba-bd79-30c19e8ef48b",
      "title": "RPKI",
      "rlinks": [
       {
@@ -1248,7 +1247,7 @@
      ]
     },
     {
-     "uuid": "7ffd20ed-4f40-43be-a37b-97e7a1b31e2f",
+     "id": "7ffd20ed-4f40-43be-a37b-97e7a1b31e2f",
      "title": "The CERT Guide to Coordinated Vulnerability Disclosure",
      "rlinks": [
       {
@@ -1257,7 +1256,7 @@
      ]
     },
     {
-     "uuid": "8132c47e-a2dc-4dd9-81d6-38db96e5cec6",
+     "id": "8132c47e-a2dc-4dd9-81d6-38db96e5cec6",
      "title": "Hardening Linux workstations and servers",
      "rlinks": [
       {
@@ -1266,7 +1265,7 @@
      ]
     },
     {
-     "uuid": "81401de7-184d-4535-a3f7-4de1c336630f",
+     "id": "81401de7-184d-4535-a3f7-4de1c336630f",
      "title": "Guide for Conducting Risk Assessments",
      "rlinks": [
       {
@@ -1275,7 +1274,7 @@
      ]
     },
     {
-     "uuid": "82ae76a4-ed9e-4a7b-8bad-f1950c41eab7",
+     "id": "82ae76a4-ed9e-4a7b-8bad-f1950c41eab7",
      "title": "attack surface reduction rules overview",
      "rlinks": [
       {
@@ -1284,7 +1283,7 @@
      ]
     },
     {
-     "uuid": "83e3a9b1-5057-4531-91dd-03c8d92634b0",
+     "id": "83e3a9b1-5057-4531-91dd-03c8d92634b0",
      "title": "Implementing multi-factor authentication",
      "rlinks": [
       {
@@ -1293,7 +1292,7 @@
      ]
     },
     {
-     "uuid": "84d3cbab-ab84-4981-a4f7-2bd469c8deaf",
+     "id": "84d3cbab-ab84-4981-a4f7-2bd469c8deaf",
      "title": "the purpose of IRAP",
      "rlinks": [
       {
@@ -1302,7 +1301,7 @@
      ]
     },
     {
-     "uuid": "85c9b592-8734-4860-8243-ac0821f78854",
+     "id": "85c9b592-8734-4860-8243-ac0821f78854",
      "title": "Australian cabling standards",
      "rlinks": [
       {
@@ -1311,7 +1310,7 @@
      ]
     },
     {
-     "uuid": "85ee803a-b711-443b-98bf-b279de8fbed0",
+     "id": "85ee803a-b711-443b-98bf-b279de8fbed0",
      "title": "Identifying cyber supply chain risks",
      "rlinks": [
       {
@@ -1320,7 +1319,7 @@
      ]
     },
     {
-     "uuid": "86814651-26b5-43f5-807d-0040c2d71169",
+     "id": "86814651-26b5-43f5-807d-0040c2d71169",
      "title": "Planning for critical vulnerabilities: What the board of directors needs to know",
      "rlinks": [
       {
@@ -1329,7 +1328,7 @@
      ]
     },
     {
-     "uuid": "86847be4-3a06-4d2f-9952-447158593e0d",
+     "id": "86847be4-3a06-4d2f-9952-447158593e0d",
      "title": "Introduction to Cross Domain Solutions",
      "rlinks": [
       {
@@ -1338,7 +1337,7 @@
      ]
     },
     {
-     "uuid": "887c65c3-c853-41c6-89d5-3f297108889e",
+     "id": "887c65c3-c853-41c6-89d5-3f297108889e",
      "title": "Application Container Security Guide",
      "rlinks": [
       {
@@ -1347,7 +1346,7 @@
      ]
     },
     {
-     "uuid": "89a4e4d7-0075-40f1-ae05-dff0a19183f9",
+     "id": "89a4e4d7-0075-40f1-ae05-dff0a19183f9",
      "title": "Secure by Design Principles",
      "rlinks": [
       {
@@ -1356,7 +1355,7 @@
      ]
     },
     {
-     "uuid": "8a0daed2-8840-443f-a83e-68252d2dcdc5",
+     "id": "8a0daed2-8840-443f-a83e-68252d2dcdc5",
      "title": "Supply Chain Cyber Security: In Safe Hands",
      "rlinks": [
       {
@@ -1365,7 +1364,7 @@
      ]
     },
     {
-     "uuid": "8a67ffd7-61a4-4773-a1e7-e6b146f51d62",
+     "id": "8a67ffd7-61a4-4773-a1e7-e6b146f51d62",
      "title": "Foundations for modern defensible architecture",
      "rlinks": [
       {
@@ -1374,7 +1373,7 @@
      ]
     },
     {
-     "uuid": "8a965432-7e2e-4020-86e4-b38837f9be60",
+     "id": "8a965432-7e2e-4020-86e4-b38837f9be60",
      "title": "Using the Information security manual",
      "rlinks": [
       {
@@ -1383,7 +1382,7 @@
      ]
     },
     {
-     "uuid": "8d53ee7f-54c2-4380-8408-f7403db30ba1",
+     "id": "8d53ee7f-54c2-4380-8408-f7403db30ba1",
      "title": "Credential Guard functionality",
      "rlinks": [
       {
@@ -1392,7 +1391,7 @@
      ]
     },
     {
-     "uuid": "8edb7798-5d97-4811-a8ba-add3d5a123cf",
+     "id": "8edb7798-5d97-4811-a8ba-add3d5a123cf",
      "title": "Australian Register of Therapeutic Goods",
      "rlinks": [
       {
@@ -1401,7 +1400,7 @@
      ]
     },
     {
-     "uuid": "8f1965a9-a6a1-4342-bfb8-797ea358db30",
+     "id": "8f1965a9-a6a1-4342-bfb8-797ea358db30",
      "title": "Information technology – Security techniques – Vulnerability disclosure",
      "rlinks": [
       {
@@ -1410,7 +1409,7 @@
      ]
     },
     {
-     "uuid": "8ffea524-0974-4b53-a8f5-41166073ede5",
+     "id": "8ffea524-0974-4b53-a8f5-41166073ede5",
      "title": "Securing PowerShell in the enterprise",
      "rlinks": [
       {
@@ -1419,7 +1418,7 @@
      ]
     },
     {
-     "uuid": "91b92563-d991-40fa-9adc-548df9f6c496",
+     "id": "91b92563-d991-40fa-9adc-548df9f6c496",
      "title": "secure group Managed Service Accounts",
      "rlinks": [
       {
@@ -1428,7 +1427,7 @@
      ]
     },
     {
-     "uuid": "9209d9cd-86c1-486f-890e-1edfa4545093",
+     "id": "9209d9cd-86c1-486f-890e-1edfa4545093",
      "title": "Hardening Microsoft Windows 10 workstations",
      "rlinks": [
       {
@@ -1437,7 +1436,7 @@
      ]
     },
     {
-     "uuid": "92679127-f61d-486a-a93e-df2a26dfb07a",
+     "id": "92679127-f61d-486a-a93e-df2a26dfb07a",
      "title": "Protective Security Policy Framework",
      "rlinks": [
       {
@@ -1446,7 +1445,7 @@
      ]
     },
     {
-     "uuid": "92975dff-58e0-4813-842b-f27c0533ca56",
+     "id": "92975dff-58e0-4813-842b-f27c0533ca56",
      "title": "Remote Credential Guard functionality",
      "rlinks": [
       {
@@ -1455,7 +1454,7 @@
      ]
     },
     {
-     "uuid": "941626b7-cfcc-4ab2-83a0-f9a91b2e453e",
+     "id": "941626b7-cfcc-4ab2-83a0-f9a91b2e453e",
      "title": "Information security, cybersecurity and privacy protection – Guidance on managing information security risks",
      "rlinks": [
       {
@@ -1464,7 +1463,7 @@
      ]
     },
     {
-     "uuid": "94d9fbcb-e8d1-4ef2-b543-5938f4387fee",
+     "id": "94d9fbcb-e8d1-4ef2-b543-5938f4387fee",
      "title": "Safe Software Deployment: How Software Manufacturers Can Ensure Reliability for Customers",
      "rlinks": [
       {
@@ -1473,7 +1472,7 @@
      ]
     },
     {
-     "uuid": "971c6452-6e97-4b4f-b5e4-64e457cb8320",
+     "id": "971c6452-6e97-4b4f-b5e4-64e457cb8320",
      "title": "Cyber supply chain: An approach to assessing risk",
      "rlinks": [
       {
@@ -1482,7 +1481,7 @@
      ]
     },
     {
-     "uuid": "98951624-a06e-4d9a-96a3-f89ac944bcaa",
+     "id": "98951624-a06e-4d9a-96a3-f89ac944bcaa",
      "title": "Protecting against business email compromise",
      "rlinks": [
       {
@@ -1491,7 +1490,7 @@
      ]
     },
     {
-     "uuid": "9898653e-fc87-4b42-a1fa-f7e323902841",
+     "id": "9898653e-fc87-4b42-a1fa-f7e323902841",
      "title": "Secure by Design Activities",
      "rlinks": [
       {
@@ -1500,7 +1499,7 @@
      ]
     },
     {
-     "uuid": "99c117f0-78e0-4196-adc8-705405d996bc",
+     "id": "99c117f0-78e0-4196-adc8-705405d996bc",
      "title": "Information technology – Security techniques – Vulnerability handling processes",
      "rlinks": [
       {
@@ -1509,7 +1508,7 @@
      ]
     },
     {
-     "uuid": "9a8f5a63-bcd5-45a8-9f9c-974fc796ac95",
+     "id": "9a8f5a63-bcd5-45a8-9f9c-974fc796ac95",
      "title": "Guidelines for enterprise mobility",
      "rlinks": [
       {
@@ -1518,7 +1517,7 @@
      ]
     },
     {
-     "uuid": "9ad09461-7b3d-4faf-bdcd-61df9952cf49",
+     "id": "9ad09461-7b3d-4faf-bdcd-61df9952cf49",
      "title": "Security Configuration Guide for Acrobat",
      "rlinks": [
       {
@@ -1527,7 +1526,7 @@
      ]
     },
     {
-     "uuid": "9af7c141-51de-43f0-97bc-547e24e96545",
+     "id": "9af7c141-51de-43f0-97bc-547e24e96545",
      "title": "Adversarial Machine Learning: A Taxonomy and Terminology of Attacks and Mitigations",
      "rlinks": [
       {
@@ -1536,7 +1535,7 @@
      ]
     },
     {
-     "uuid": "9d38f42d-eeff-4124-93db-4b29abaafb67",
+     "id": "9d38f42d-eeff-4124-93db-4b29abaafb67",
      "title": "MemtestCL",
      "rlinks": [
       {
@@ -1545,7 +1544,7 @@
      ]
     },
     {
-     "uuid": "a07c439d-b2f4-4ee2-b56e-f17000f3722f",
+     "id": "a07c439d-b2f4-4ee2-b56e-f17000f3722f",
      "title": "Information security, cybersecurity and privacy protection – Security requirements for cryptographic modules",
      "rlinks": [
       {
@@ -1554,7 +1553,7 @@
      ]
     },
     {
-     "uuid": "a699a3aa-828d-479b-b50b-98127bb19437",
+     "id": "a699a3aa-828d-479b-b50b-98127bb19437",
      "title": "Guidelines for evaluated products",
      "rlinks": [
       {
@@ -1563,7 +1562,7 @@
      ]
     },
     {
-     "uuid": "a75de67b-9502-47e9-b48b-5e2a45d528e1",
+     "id": "a75de67b-9502-47e9-b48b-5e2a45d528e1",
      "title": "Recommendation for Key-Derivation Methods in Key-Establishment Schemes",
      "rlinks": [
       {
@@ -1572,7 +1571,7 @@
      ]
     },
     {
-     "uuid": "a9307fb2-8003-4e6e-9d64-2c00ea8b0ec8",
+     "id": "a9307fb2-8003-4e6e-9d64-2c00ea8b0ec8",
      "title": "Exploring Memory Safety in Critical Open Source Projects",
      "rlinks": [
       {
@@ -1581,7 +1580,7 @@
      ]
     },
     {
-     "uuid": "a9b6660b-fc4c-4a08-8db6-1130370b6b09",
+     "id": "a9b6660b-fc4c-4a08-8db6-1130370b6b09",
      "title": "Wi-Fi technologies and associated testing and certification programs",
      "rlinks": [
       {
@@ -1590,7 +1589,7 @@
      ]
     },
     {
-     "uuid": "aab0523a-513e-48c9-978e-32d5b9adeea6",
+     "id": "aab0523a-513e-48c9-978e-32d5b9adeea6",
      "title": "developing a vulnerability disclosure policy",
      "rlinks": [
       {
@@ -1599,7 +1598,7 @@
      ]
     },
     {
-     "uuid": "aaf83df2-02e3-4f9f-bdf5-33fbff42842d",
+     "id": "aaf83df2-02e3-4f9f-bdf5-33fbff42842d",
      "title": "Information security, cybersecurity and privacy protection – Test requirements for cryptographic modules",
      "rlinks": [
       {
@@ -1608,7 +1607,7 @@
      ]
     },
     {
-     "uuid": "ab5852b2-0004-4565-8e81-e769ca47ea81",
+     "id": "ab5852b2-0004-4565-8e81-e769ca47ea81",
      "title": "Secure by Demand: Priority Considerations for Operational Technology Owners and Operators when Selecting Digital Products",
      "rlinks": [
       {
@@ -1617,7 +1616,7 @@
      ]
     },
     {
-     "uuid": "ab73fa95-f213-4041-915e-a8ccbdf74331",
+     "id": "ab73fa95-f213-4041-915e-a8ccbdf74331",
      "title": "Guidelines for email",
      "rlinks": [
       {
@@ -1626,7 +1625,7 @@
      ]
     },
     {
-     "uuid": "adc62d2d-87b9-43a0-ae76-6e6828ff3bbb",
+     "id": "adc62d2d-87b9-43a0-ae76-6e6828ff3bbb",
      "title": "Choosing secure and verifiable technologies",
      "rlinks": [
       {
@@ -1635,7 +1634,7 @@
      ]
     },
     {
-     "uuid": "ae426d0a-adb6-43b8-a463-faa33e83b679",
+     "id": "ae426d0a-adb6-43b8-a463-faa33e83b679",
      "title": "Active Directory accounts",
      "rlinks": [
       {
@@ -1644,7 +1643,7 @@
      ]
     },
     {
-     "uuid": "aeba0a2d-b48a-42f0-b047-622b9fea9a91",
+     "id": "aeba0a2d-b48a-42f0-b047-622b9fea9a91",
      "title": "Guidance for Implementing M-21-31: Improving the Federal Government's Investigative and Remediation Capabilities",
      "rlinks": [
       {
@@ -1653,7 +1652,7 @@
      ]
     },
     {
-     "uuid": "af0810aa-3486-4ca6-a48a-fad8ce9ac193",
+     "id": "af0810aa-3486-4ca6-a48a-fad8ce9ac193",
      "title": "greater visibility through PowerShell logging",
      "rlinks": [
       {
@@ -1662,7 +1661,7 @@
      ]
     },
     {
-     "uuid": "afe3656f-2a78-488f-9eae-3cb9af69b018",
+     "id": "afe3656f-2a78-488f-9eae-3cb9af69b018",
      "title": "Memory Safe Languages: Reducing Vulnerabilities in Modern Software Development",
      "rlinks": [
       {
@@ -1671,7 +1670,7 @@
      ]
     },
     {
-     "uuid": "aff92212-4cd2-459a-9ba1-d4dd1815ebec",
+     "id": "aff92212-4cd2-459a-9ba1-d4dd1815ebec",
      "title": "Opportunities for AI in cyber defence",
      "rlinks": [
       {
@@ -1680,7 +1679,7 @@
      ]
     },
     {
-     "uuid": "b0a56885-8484-42d6-af79-4c87237ede30",
+     "id": "b0a56885-8484-42d6-af79-4c87237ede30",
      "title": "NSA/CSS Evaluated Products List for Magnetic Degaussers",
      "rlinks": [
       {
@@ -1689,7 +1688,7 @@
      ]
     },
     {
-     "uuid": "b105f0d3-3354-498a-88fe-a05a7362b4b4",
+     "id": "b105f0d3-3354-498a-88fe-a05a7362b4b4",
      "title": "Cyber Threat Intelligence Sharing service",
      "rlinks": [
       {
@@ -1698,7 +1697,7 @@
      ]
     },
     {
-     "uuid": "b13cb68a-a94a-4a69-b094-b1b68d10239e",
+     "id": "b13cb68a-a94a-4a69-b094-b1b68d10239e",
      "title": "Domain Name System security for domain resolvers",
      "rlinks": [
       {
@@ -1707,7 +1706,7 @@
      ]
     },
     {
-     "uuid": "b151e338-c42f-41ef-9f99-2cb98f368637",
+     "id": "b151e338-c42f-41ef-9f99-2cb98f368637",
      "title": "Best practices for securing Active Directory",
      "rlinks": [
       {
@@ -1716,7 +1715,7 @@
      ]
     },
     {
-     "uuid": "b383a647-7627-4450-99b6-640ae554c2f1",
+     "id": "b383a647-7627-4450-99b6-640ae554c2f1",
      "title": "Guidelines on Electronic Mail Security",
      "rlinks": [
       {
@@ -1725,7 +1724,7 @@
      ]
     },
     {
-     "uuid": "b43b0377-c2e4-4cdc-acec-a9ece7371e36",
+     "id": "b43b0377-c2e4-4cdc-acec-a9ece7371e36",
      "title": "Baseline security requirements for network security zones (version 2.0)",
      "rlinks": [
       {
@@ -1734,7 +1733,7 @@
      ]
     },
     {
-     "uuid": "b54cf0d1-d275-426e-98aa-9c678b9d55a5",
+     "id": "b54cf0d1-d275-426e-98aa-9c678b9d55a5",
      "title": "Next steps in preparing for post-quantum cryptography",
      "rlinks": [
       {
@@ -1743,7 +1742,7 @@
      ]
     },
     {
-     "uuid": "b594c9c0-b42f-4f06-b643-38023275a5c7",
+     "id": "b594c9c0-b42f-4f06-b643-38023275a5c7",
      "title": "Guidelines for media",
      "rlinks": [
       {
@@ -1752,7 +1751,7 @@
      ]
     },
     {
-     "uuid": "b5b7b7fc-d3c7-4861-a036-a037593c575b",
+     "id": "b5b7b7fc-d3c7-4861-a036-a037593c575b",
      "title": "OWASP Top 10:2025",
      "rlinks": [
       {
@@ -1761,7 +1760,7 @@
      ]
     },
     {
-     "uuid": "b6479d9a-43c9-41f2-9dbc-2bb689c8e6d8",
+     "id": "b6479d9a-43c9-41f2-9dbc-2bb689c8e6d8",
      "title": "Cloud assessment and authorisation",
      "rlinks": [
       {
@@ -1770,7 +1769,7 @@
      ]
     },
     {
-     "uuid": "b66f8d23-4209-4775-a1fd-bd4dc299a027",
+     "id": "b66f8d23-4209-4775-a1fd-bd4dc299a027",
      "title": "Domain Name System security for domain owners",
      "rlinks": [
       {
@@ -1779,7 +1778,7 @@
      ]
     },
     {
-     "uuid": "b794a062-2339-48ed-89ac-14aa4c3a61db",
+     "id": "b794a062-2339-48ed-89ac-14aa4c3a61db",
      "title": "Shifting the Balance of Cybersecurity Risk: Principles and Approaches for Secure by Design Software",
      "rlinks": [
       {
@@ -1788,7 +1787,7 @@
      ]
     },
     {
-     "uuid": "b79c4fe8-4541-401f-a32e-87fd83021c98",
+     "id": "b79c4fe8-4541-401f-a32e-87fd83021c98",
      "title": "Mitigation strategies for edge devices: Executive guidance",
      "rlinks": [
       {
@@ -1797,7 +1796,7 @@
      ]
     },
     {
-     "uuid": "b8cdbf18-31cb-4e10-bb43-e8488ee8c2f6",
+     "id": "b8cdbf18-31cb-4e10-bb43-e8488ee8c2f6",
      "title": "Implementing certificates, TLS, HTTPS and opportunistic TLS",
      "rlinks": [
       {
@@ -1806,7 +1805,7 @@
      ]
     },
     {
-     "uuid": "b959caf4-8b60-4b82-9552-963754841bb7",
+     "id": "b959caf4-8b60-4b82-9552-963754841bb7",
      "title": "Cloud computing security for tenants",
      "rlinks": [
       {
@@ -1815,7 +1814,7 @@
      ]
     },
     {
-     "uuid": "b95c4745-572a-4121-b4e1-d0baa90a84fc",
+     "id": "b95c4745-572a-4121-b4e1-d0baa90a84fc",
      "title": "Best practices for event logging and threat detection",
      "rlinks": [
       {
@@ -1824,7 +1823,7 @@
      ]
     },
     {
-     "uuid": "bac2c6f2-9356-46d2-b7c4-9af7393008df",
+     "id": "bac2c6f2-9356-46d2-b7c4-9af7393008df",
      "title": "Australian Privacy Principles",
      "rlinks": [
       {
@@ -1833,7 +1832,7 @@
      ]
     },
     {
-     "uuid": "bdb9d443-a877-4197-b9ad-ec5853f081c7",
+     "id": "bdb9d443-a877-4197-b9ad-ec5853f081c7",
      "title": "The Case for Memory Safe Roadmaps: Why Both C-Suite Executives and Technical Experts Need to Take Memory Safe Coding Seriously",
      "rlinks": [
       {
@@ -1842,7 +1841,7 @@
      ]
     },
     {
-     "uuid": "bf76a2ec-3cf5-4a02-839a-7b2ea11cb3fc",
+     "id": "bf76a2ec-3cf5-4a02-839a-7b2ea11cb3fc",
      "title": "Intelligence Services Act 2001",
      "rlinks": [
       {
@@ -1851,7 +1850,7 @@
      ]
     },
     {
-     "uuid": "c0558477-3987-493c-99de-eeceff99847d",
+     "id": "c0558477-3987-493c-99de-eeceff99847d",
      "title": "Security of Critical Infrastructure Act 2018",
      "rlinks": [
       {
@@ -1860,7 +1859,7 @@
      ]
     },
     {
-     "uuid": "c17600e6-8b13-4d6e-a380-035b51a71b73",
+     "id": "c17600e6-8b13-4d6e-a380-035b51a71b73",
      "title": "The NIST Definition of Cloud Computing",
      "rlinks": [
       {
@@ -1869,7 +1868,7 @@
      ]
     },
     {
-     "uuid": "c2a2f934-c5d6-46a7-86db-7fec1565058e",
+     "id": "c2a2f934-c5d6-46a7-86db-7fec1565058e",
      "title": "Insider Risk Guidance",
      "rlinks": [
       {
@@ -1878,7 +1877,7 @@
      ]
     },
     {
-     "uuid": "c322926a-13b3-4efe-8573-06624418e8f5",
+     "id": "c322926a-13b3-4efe-8573-06624418e8f5",
      "title": "Insider Threat Mitigation Guide",
      "rlinks": [
       {
@@ -1887,7 +1886,7 @@
      ]
     },
     {
-     "uuid": "c47ab307-e25d-43e7-9700-7b26d9c229c3",
+     "id": "c47ab307-e25d-43e7-9700-7b26d9c229c3",
      "title": "Security considerations for edge devices",
      "rlinks": [
       {
@@ -1896,7 +1895,7 @@
      ]
     },
     {
-     "uuid": "c4f9eb1b-753e-4d16-a05e-55e6dca1dd3f",
+     "id": "c4f9eb1b-753e-4d16-a05e-55e6dca1dd3f",
      "title": "retention of records created using artificial intelligence",
      "rlinks": [
       {
@@ -1905,7 +1904,7 @@
      ]
     },
     {
-     "uuid": "c54cc4db-22f4-4d10-8977-2ce62b647bd2",
+     "id": "c54cc4db-22f4-4d10-8977-2ce62b647bd2",
      "title": "Preparing for and responding to denial-of-service attacks",
      "rlinks": [
       {
@@ -1914,7 +1913,7 @@
      ]
     },
     {
-     "uuid": "c5ca2027-161e-4322-9367-7ec736b4846f",
+     "id": "c5ca2027-161e-4322-9367-7ec736b4846f",
      "title": "Deploying AI Systems Securely: Best Practices for Deploying Secure and Resilient AI Systems",
      "rlinks": [
       {
@@ -1923,7 +1922,7 @@
      ]
     },
     {
-     "uuid": "c6ca6620-ccd5-4c5d-b97c-9d92f1162948",
+     "id": "c6ca6620-ccd5-4c5d-b97c-9d92f1162948",
      "title": "Guidelines for system management",
      "rlinks": [
       {
@@ -1932,7 +1931,7 @@
      ]
     },
     {
-     "uuid": "c74c6e7a-2209-4337-bb3a-715ce6e792a4",
+     "id": "c74c6e7a-2209-4337-bb3a-715ce6e792a4",
      "title": "Secure development and deployment guidance",
      "rlinks": [
       {
@@ -1941,7 +1940,7 @@
      ]
     },
     {
-     "uuid": "c78caaed-9931-4197-b21e-bc4e9979a51a",
+     "id": "c78caaed-9931-4197-b21e-bc4e9979a51a",
      "title": "Security tips for social media and messaging apps",
      "rlinks": [
       {
@@ -1950,7 +1949,7 @@
      ]
     },
     {
-     "uuid": "c81898f4-ae8b-486f-b175-ae8e4dd5e60f",
+     "id": "c81898f4-ae8b-486f-b175-ae8e4dd5e60f",
      "title": "CyberGym",
      "rlinks": [
       {
@@ -1959,7 +1958,7 @@
      ]
     },
     {
-     "uuid": "c852e735-4920-4616-8e34-2fddfb49eea8",
+     "id": "c852e735-4920-4616-8e34-2fddfb49eea8",
      "title": "AV-Comparatives",
      "rlinks": [
       {
@@ -1968,7 +1967,7 @@
      ]
     },
     {
-     "uuid": "c8ee37e4-fb81-4fa7-8f14-132c850974bc",
+     "id": "c8ee37e4-fb81-4fa7-8f14-132c850974bc",
      "title": "Cloud computing security for executives",
      "rlinks": [
       {
@@ -1977,7 +1976,7 @@
      ]
     },
     {
-     "uuid": "cad720b4-e47a-437d-b272-6958e738131d",
+     "id": "cad720b4-e47a-437d-b272-6958e738131d",
      "title": "Common Sense Guide to Mitigating Insider Threats, Seventh Edition",
      "rlinks": [
       {
@@ -1986,7 +1985,7 @@
      ]
     },
     {
-     "uuid": "cae0ac6b-e69b-4359-bfd7-5ee5eff1049d",
+     "id": "cae0ac6b-e69b-4359-bfd7-5ee5eff1049d",
      "title": "limited use obligation",
      "rlinks": [
       {
@@ -1995,7 +1994,7 @@
      ]
     },
     {
-     "uuid": "cc1a55cb-34ab-4418-b660-53571b3af899",
+     "id": "cc1a55cb-34ab-4418-b660-53571b3af899",
      "title": "AFDA Express Version 2 – Technology \\& Information Management",
      "rlinks": [
       {
@@ -2004,7 +2003,7 @@
      ]
     },
     {
-     "uuid": "cc618df8-757e-4d6c-9ad2-405554cb487d",
+     "id": "cc618df8-757e-4d6c-9ad2-405554cb487d",
      "title": "Source Code Analysis Tools",
      "rlinks": [
       {
@@ -2013,7 +2012,7 @@
      ]
     },
     {
-     "uuid": "d0ace151-3c21-49af-bde7-eda58ab18a82",
+     "id": "d0ace151-3c21-49af-bde7-eda58ab18a82",
      "title": "cyber supply chain transparency",
      "rlinks": [
       {
@@ -2022,7 +2021,7 @@
      ]
     },
     {
-     "uuid": "d0df96bb-7236-4784-8f54-2cb6335ad228",
+     "id": "d0df96bb-7236-4784-8f54-2cb6335ad228",
      "title": "exploit protection functionality",
      "rlinks": [
       {
@@ -2031,7 +2030,7 @@
      ]
     },
     {
-     "uuid": "d2910e61-da88-4d29-b860-83c25161fd18",
+     "id": "d2910e61-da88-4d29-b860-83c25161fd18",
      "title": "Security configuration guide: Apple iOS 14 devices",
      "rlinks": [
       {
@@ -2040,7 +2039,7 @@
      ]
     },
     {
-     "uuid": "d2f005c5-2ad3-4b5e-9eb1-d0642f3560f4",
+     "id": "d2f005c5-2ad3-4b5e-9eb1-d0642f3560f4",
      "title": "OWASP Application Security Verification Standard 5.0.0",
      "rlinks": [
       {
@@ -2049,7 +2048,7 @@
      ]
     },
     {
-     "uuid": "d3572f80-d9d6-4023-b6e6-23720bb0d618",
+     "id": "d3572f80-d9d6-4023-b6e6-23720bb0d618",
      "title": "How to combat fake emails",
      "rlinks": [
       {
@@ -2058,7 +2057,7 @@
      ]
     },
     {
-     "uuid": "d36ce452-ec21-4b05-89c1-f29a444a3dca",
+     "id": "d36ce452-ec21-4b05-89c1-f29a444a3dca",
      "title": "End of support for Microsoft Windows and Microsoft Windows Server",
      "rlinks": [
       {
@@ -2067,7 +2066,7 @@
      ]
     },
     {
-     "uuid": "d446dea3-c36d-45af-9623-05b686624af0",
+     "id": "d446dea3-c36d-45af-9623-05b686624af0",
      "title": "memory integrity functionality",
      "rlinks": [
       {
@@ -2076,7 +2075,7 @@
      ]
     },
     {
-     "uuid": "daae37ef-262f-4b20-bfb7-a27901f3c2db",
+     "id": "daae37ef-262f-4b20-bfb7-a27901f3c2db",
      "title": "Security configuration guide: Viasat Mobile Dynamic Defense",
      "rlinks": [
       {
@@ -2085,7 +2084,7 @@
      ]
     },
     {
-     "uuid": "db2e237c-2dbc-4a1f-bae7-9cb63a1f1dc3",
+     "id": "db2e237c-2dbc-4a1f-bae7-9cb63a1f1dc3",
      "title": "Guidelines for information technology equipment",
      "rlinks": [
       {
@@ -2094,7 +2093,7 @@
      ]
     },
     {
-     "uuid": "dc0469b3-3901-4d2c-8b22-7c6b6627ab97",
+     "id": "dc0469b3-3901-4d2c-8b22-7c6b6627ab97",
      "title": "Ten things to know about data security",
      "rlinks": [
       {
@@ -2103,7 +2102,7 @@
      ]
     },
     {
-     "uuid": "dda788b6-183b-4e89-8254-8c4b5d0540a0",
+     "id": "dda788b6-183b-4e89-8254-8c4b5d0540a0",
      "title": "Cloud assessment and authorisation FAQ",
      "rlinks": [
       {
@@ -2112,7 +2111,7 @@
      ]
     },
     {
-     "uuid": "de239dae-d1e8-4969-9680-ef3444d32a83",
+     "id": "de239dae-d1e8-4969-9680-ef3444d32a83",
      "title": "Windows event logging and forwarding",
      "rlinks": [
       {
@@ -2121,7 +2120,7 @@
      ]
     },
     {
-     "uuid": "de7525f3-a466-40a5-abdd-3ae24a6d1b44",
+     "id": "de7525f3-a466-40a5-abdd-3ae24a6d1b44",
      "title": "Guidelines for system hardening",
      "rlinks": [
       {
@@ -2130,7 +2129,7 @@
      ]
     },
     {
-     "uuid": "ded13757-3c76-40cb-b46e-f84e46a1c1c7",
+     "id": "ded13757-3c76-40cb-b46e-f84e46a1c1c7",
      "title": "Defending against the malicious use of the Tor network",
      "rlinks": [
       {
@@ -2139,7 +2138,7 @@
      ]
     },
     {
-     "uuid": "dfb52998-0e7e-420d-97e1-d1313c8f919a",
+     "id": "dfb52998-0e7e-420d-97e1-d1313c8f919a",
      "title": "Restricting Microsoft Office macros",
      "rlinks": [
       {
@@ -2148,7 +2147,7 @@
      ]
     },
     {
-     "uuid": "e0d3b5ea-6a5a-400c-8daa-8a8059816a06",
+     "id": "e0d3b5ea-6a5a-400c-8daa-8a8059816a06",
      "title": "Archives Act 1983",
      "rlinks": [
       {
@@ -2157,7 +2156,7 @@
      ]
     },
     {
-     "uuid": "e19a0c40-0a68-4fba-aea1-142fdd57dc75",
+     "id": "e19a0c40-0a68-4fba-aea1-142fdd57dc75",
      "title": "Web conferencing security",
      "rlinks": [
       {
@@ -2166,7 +2165,7 @@
      ]
     },
     {
-     "uuid": "e2205e57-2bf0-4696-8bd8-94a5a5d5c4f2",
+     "id": "e2205e57-2bf0-4696-8bd8-94a5a5d5c4f2",
      "title": "Adopting Encrypted DNS in Enterprise Environments",
      "rlinks": [
       {
@@ -2175,7 +2174,7 @@
      ]
     },
     {
-     "uuid": "e4c07309-9ca8-40b7-9571-4f6c032180a1",
+     "id": "e4c07309-9ca8-40b7-9571-4f6c032180a1",
      "title": "Telecommunications (Interception and Access) Act 1979",
      "rlinks": [
       {
@@ -2184,7 +2183,7 @@
      ]
     },
     {
-     "uuid": "e4eee462-f6e5-4921-a8fe-26f3de6c6f45",
+     "id": "e4eee462-f6e5-4921-a8fe-26f3de6c6f45",
      "title": "Marketing and filtering email service providers",
      "rlinks": [
       {
@@ -2193,7 +2192,7 @@
      ]
     },
     {
-     "uuid": "e4ef23da-2683-4356-93c4-a2412c9d52ee",
+     "id": "e4ef23da-2683-4356-93c4-a2412c9d52ee",
      "title": "High Assurance Evaluation Program",
      "rlinks": [
       {
@@ -2202,7 +2201,7 @@
      ]
     },
     {
-     "uuid": "e513ac6b-09fa-4d53-951a-a5142208cf12",
+     "id": "e513ac6b-09fa-4d53-951a-a5142208cf12",
      "title": "An introduction to artificial intelligence",
      "rlinks": [
       {
@@ -2211,7 +2210,7 @@
      ]
     },
     {
-     "uuid": "e7ce6e23-4bbb-45c1-a657-7e563c0837ed",
+     "id": "e7ce6e23-4bbb-45c1-a657-7e563c0837ed",
      "title": "Information security manual",
      "rlinks": [
       {
@@ -2220,7 +2219,7 @@
      ]
     },
     {
-     "uuid": "e8a28fa5-4ea1-4ef5-a870-4d59e40fab37",
+     "id": "e8a28fa5-4ea1-4ef5-a870-4d59e40fab37",
      "title": "Commercial National Security Algorithm Suite 2.0",
      "rlinks": [
       {
@@ -2229,7 +2228,7 @@
      ]
     },
     {
-     "uuid": "e8bde527-526c-4a6a-b66f-05228f09dd7b",
+     "id": "e8bde527-526c-4a6a-b66f-05228f09dd7b",
      "title": "Guidelines for gateways",
      "rlinks": [
       {
@@ -2238,7 +2237,7 @@
      ]
     },
     {
-     "uuid": "e8ec7a1f-775d-4b79-a164-0752278177fa",
+     "id": "e8ec7a1f-775d-4b79-a164-0752278177fa",
      "title": "Risk management of enterprise mobility (including Bring Your Own Device)",
      "rlinks": [
       {
@@ -2247,7 +2246,7 @@
      ]
     },
     {
-     "uuid": "ea6f8148-55ea-4540-8b39-f35cc3411eb2",
+     "id": "ea6f8148-55ea-4540-8b39-f35cc3411eb2",
      "title": "A Shared Vision of Software Bill of Materials (SBOM) for Cybersecurity",
      "rlinks": [
       {
@@ -2256,7 +2255,7 @@
      ]
     },
     {
-     "uuid": "ed6aa6ab-545d-48eb-92bc-9ad763d4b868",
+     "id": "ed6aa6ab-545d-48eb-92bc-9ad763d4b868",
      "title": "Protection Profile for Mobile Device Management Version 4.0",
      "rlinks": [
       {
@@ -2265,7 +2264,7 @@
      ]
     },
     {
-     "uuid": "edd67903-94ef-4edd-9789-73e0141cd77c",
+     "id": "edd67903-94ef-4edd-9789-73e0141cd77c",
      "title": "General requirements for the competence of testing and calibration laboratories",
      "rlinks": [
       {
@@ -2274,7 +2273,7 @@
      ]
     },
     {
-     "uuid": "ef60c0e4-acfb-4a8b-b5ed-25675c6e117c",
+     "id": "ef60c0e4-acfb-4a8b-b5ed-25675c6e117c",
      "title": "Guidelines for security assurance",
      "rlinks": [
       {
@@ -2283,7 +2282,7 @@
      ]
     },
     {
-     "uuid": "efddc783-51dc-48ac-a53e-a5dd56c17fd0",
+     "id": "efddc783-51dc-48ac-a53e-a5dd56c17fd0",
      "title": "Detecting socially engineered messages",
      "rlinks": [
       {
@@ -2292,7 +2291,7 @@
      ]
     },
     {
-     "uuid": "f145ff5b-d396-4248-8f48-621349d6f0ed",
+     "id": "f145ff5b-d396-4248-8f48-621349d6f0ed",
      "title": "Guidelines for networking",
      "rlinks": [
       {
@@ -2301,7 +2300,7 @@
      ]
     },
     {
-     "uuid": "f160b04e-1a32-4dd5-816e-1cba8c97982c",
+     "id": "f160b04e-1a32-4dd5-816e-1cba8c97982c",
      "title": "Protection Profile for Mobile Device Fundamentals Version 3.3",
      "rlinks": [
       {
@@ -2310,7 +2309,7 @@
      ]
     },
     {
-     "uuid": "f32020e9-4cb3-486b-bcbb-6fb6719f58a5",
+     "id": "f32020e9-4cb3-486b-bcbb-6fb6719f58a5",
      "title": "Fundamentals of Cross Domain Solutions",
      "rlinks": [
       {
@@ -2319,7 +2318,7 @@
      ]
     },
     {
-     "uuid": "f37a4848-0791-4870-b316-5536c2681c28",
+     "id": "f37a4848-0791-4870-b316-5536c2681c28",
      "title": "Guidelines for procurement and outsourcing",
      "rlinks": [
       {
@@ -2328,7 +2327,7 @@
      ]
     },
     {
-     "uuid": "f41c5403-9070-41ab-968e-cf69ac8bf34a",
+     "id": "f41c5403-9070-41ab-968e-cf69ac8bf34a",
      "title": "Choosing secure and verifiable technologies: Executive guidance",
      "rlinks": [
       {
@@ -2337,7 +2336,7 @@
      ]
     },
     {
-     "uuid": "f48c0d05-5173-4c8e-8748-e5591518c1fb",
+     "id": "f48c0d05-5173-4c8e-8748-e5591518c1fb",
      "title": "Incident Response Recommendations and Considerations for Cybersecurity Risk Management: A CSF 2.0 Community Profile",
      "rlinks": [
       {
@@ -2346,7 +2345,7 @@
      ]
     },
     {
-     "uuid": "f5b39afd-29f3-4721-894f-322300e47421",
+     "id": "f5b39afd-29f3-4721-894f-322300e47421",
      "title": "Information security manual",
      "props": [
       {
@@ -2366,7 +2365,7 @@
      ]
     },
     {
-     "uuid": "f6813648-fe24-4d45-9e45-c97b4021506e",
+     "id": "f6813648-fe24-4d45-9e45-c97b4021506e",
      "title": "Countering the insider threat: A security manager’s guide",
      "rlinks": [
       {
@@ -2375,7 +2374,7 @@
      ]
     },
     {
-     "uuid": "f74ba095-a7f7-4b8c-9e60-5fe84f2a2d0b",
+     "id": "f74ba095-a7f7-4b8c-9e60-5fe84f2a2d0b",
      "title": "changing credentials for this service account",
      "rlinks": [
       {
@@ -2384,7 +2383,7 @@
      ]
     },
     {
-     "uuid": "f7e13f7b-eb48-4294-bd01-9c22c756d96b",
+     "id": "f7e13f7b-eb48-4294-bd01-9c22c756d96b",
      "title": "Security Equipment Evaluated Products List",
      "rlinks": [
       {
@@ -2393,7 +2392,7 @@
      ]
     },
     {
-     "uuid": "f832363c-d81e-4908-afd9-cf45047dd19c",
+     "id": "f832363c-d81e-4908-afd9-cf45047dd19c",
      "title": "configuring OpenSSH",
      "rlinks": [
       {
@@ -2402,7 +2401,7 @@
      ]
     },
     {
-     "uuid": "fb60e251-ed4c-4781-96db-58a0225bca89",
+     "id": "fb60e251-ed4c-4781-96db-58a0225bca89",
      "title": "Countering the Insider Threat: A guide for Australian Government",
      "rlinks": [
       {
@@ -2411,7 +2410,7 @@
      ]
     },
     {
-     "uuid": "fba4bdb9-82be-47a4-8198-3d47d5786932",
+     "id": "fba4bdb9-82be-47a4-8198-3d47d5786932",
      "title": "Encrypted DNS Implementation Guidance",
      "rlinks": [
       {
@@ -2420,7 +2419,7 @@
      ]
     },
     {
-     "uuid": "fd4e2255-74ca-4b20-811c-a64a93282f57",
+     "id": "fd4e2255-74ca-4b20-811c-a64a93282f57",
      "title": "Mergers, acquisitions and Machinery of Government changes",
      "rlinks": [
       {
@@ -2429,7 +2428,7 @@
      ]
     },
     {
-     "uuid": "fe0138db-e83b-4a23-85d3-d84e1c22816f",
+     "id": "fe0138db-e83b-4a23-85d3-d84e1c22816f",
      "title": "Guidelines for cyber security incidents",
      "rlinks": [
       {
@@ -2438,7 +2437,7 @@
      ]
     },
     {
-     "uuid": "ffc8a1f6-f4e3-4ff5-a7f9-f41f766274eb",
+     "id": "ffc8a1f6-f4e3-4ff5-a7f9-f41f766274eb",
      "title": "Recommendation for Key Management: Part 1 – General",
      "rlinks": [
       {

@@ -23,37 +23,37 @@
    "path": "ap.assessment-plan.back-matter.resources[].remarks",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ap.assessment-plan.back-matter.resources[].rlinks[].href",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ap.assessment-plan.back-matter.resources[].rlinks[].media-type",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ap.assessment-plan.back-matter.resources[].title",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ap.assessment-plan.back-matter.resources[].uuid",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ap.assessment-plan.import-ssp.href",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ap.assessment-plan.local-definitions.activities[].description",
@@ -125,145 +125,145 @@
    "path": "ap.assessment-plan.metadata.last-modified",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ap.assessment-plan.metadata.oscal-version",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ap.assessment-plan.metadata.parties[].links[].href",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ap.assessment-plan.metadata.parties[].links[].rel",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ap.assessment-plan.metadata.parties[].member-of-organizations[]",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ap.assessment-plan.metadata.parties[].name",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ap.assessment-plan.metadata.parties[].short-name",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ap.assessment-plan.metadata.parties[].type",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ap.assessment-plan.metadata.parties[].uuid",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ap.assessment-plan.metadata.published",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ap.assessment-plan.metadata.remarks",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ap.assessment-plan.metadata.responsible-parties[].party-uuids[]",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ap.assessment-plan.metadata.responsible-parties[].role-id",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ap.assessment-plan.metadata.revisions[].last-modified",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ap.assessment-plan.metadata.revisions[].links[].href",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ap.assessment-plan.metadata.revisions[].links[].rel",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ap.assessment-plan.metadata.revisions[].oscal-version",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ap.assessment-plan.metadata.revisions[].remarks",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ap.assessment-plan.metadata.revisions[].title",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ap.assessment-plan.metadata.revisions[].version",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ap.assessment-plan.metadata.roles[].id",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ap.assessment-plan.metadata.roles[].title",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ap.assessment-plan.metadata.title",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ap.assessment-plan.metadata.version",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ap.assessment-plan.reviewed-controls.control-selections[].include-controls[].control-id",
@@ -317,37 +317,37 @@
    "path": "ap.assessment-plan.uuid",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ar.assessment-results.back-matter.resources[].rlinks[].href",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ar.assessment-results.back-matter.resources[].rlinks[].media-type",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ar.assessment-results.back-matter.resources[].title",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ar.assessment-results.back-matter.resources[].uuid",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ar.assessment-results.import-ap.href",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ar.assessment-results.local-definitions.activities[].description",
@@ -425,139 +425,139 @@
    "path": "ar.assessment-results.metadata.last-modified",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ar.assessment-results.metadata.oscal-version",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ar.assessment-results.metadata.parties[].links[].href",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ar.assessment-results.metadata.parties[].links[].rel",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ar.assessment-results.metadata.parties[].member-of-organizations[]",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ar.assessment-results.metadata.parties[].name",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ar.assessment-results.metadata.parties[].short-name",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ar.assessment-results.metadata.parties[].type",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ar.assessment-results.metadata.parties[].uuid",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ar.assessment-results.metadata.remarks",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ar.assessment-results.metadata.responsible-parties[].party-uuids[]",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ar.assessment-results.metadata.responsible-parties[].role-id",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ar.assessment-results.metadata.revisions[].last-modified",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ar.assessment-results.metadata.revisions[].links[].href",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ar.assessment-results.metadata.revisions[].links[].rel",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ar.assessment-results.metadata.revisions[].oscal-version",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ar.assessment-results.metadata.revisions[].remarks",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ar.assessment-results.metadata.revisions[].title",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ar.assessment-results.metadata.revisions[].version",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ar.assessment-results.metadata.roles[].id",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ar.assessment-results.metadata.roles[].title",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ar.assessment-results.metadata.title",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ar.assessment-results.metadata.version",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ar.assessment-results.results[].description",
@@ -785,31 +785,31 @@
    "path": "ar.assessment-results.uuid",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "cdef.component-definition.back-matter.resources[].description",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "cdef.component-definition.back-matter.resources[].rlinks[].href",
    "count": 3,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "cdef.component-definition.back-matter.resources[].rlinks[].media-type",
    "count": 3,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "cdef.component-definition.back-matter.resources[].uuid",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "cdef.component-definition.components[].control-implementations[].description",
@@ -965,103 +965,103 @@
    "path": "cdef.component-definition.metadata.last-modified",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "cdef.component-definition.metadata.oscal-version",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "cdef.component-definition.metadata.parties[].links[].href",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "cdef.component-definition.metadata.parties[].links[].rel",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "cdef.component-definition.metadata.parties[].name",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "cdef.component-definition.metadata.parties[].type",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "cdef.component-definition.metadata.parties[].uuid",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "cdef.component-definition.metadata.published",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "cdef.component-definition.metadata.roles[].id",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "cdef.component-definition.metadata.roles[].title",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "cdef.component-definition.metadata.title",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "cdef.component-definition.metadata.version",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "cdef.component-definition.uuid",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "lev.system-security-plan.back-matter.resources[].description",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "lev.system-security-plan.back-matter.resources[].rlinks[].href",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "lev.system-security-plan.back-matter.resources[].rlinks[].media-type",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "lev.system-security-plan.back-matter.resources[].uuid",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "lev.system-security-plan.control-implementation.description",
@@ -1199,67 +1199,67 @@
    "path": "lev.system-security-plan.import-profile.href",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "lev.system-security-plan.metadata.last-modified",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "lev.system-security-plan.metadata.oscal-version",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "lev.system-security-plan.metadata.parties[].remarks",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "lev.system-security-plan.metadata.parties[].type",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "lev.system-security-plan.metadata.parties[].uuid",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "lev.system-security-plan.metadata.published",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "lev.system-security-plan.metadata.roles[].id",
    "count": 3,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "lev.system-security-plan.metadata.roles[].title",
    "count": 3,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "lev.system-security-plan.metadata.title",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "lev.system-security-plan.metadata.version",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "lev.system-security-plan.system-characteristics.authorization-boundary.description",
@@ -1487,31 +1487,31 @@
    "path": "lev.system-security-plan.uuid",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "lvg.system-security-plan.back-matter.resources[].description",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "lvg.system-security-plan.back-matter.resources[].rlinks[].href",
    "count": 5,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "lvg.system-security-plan.back-matter.resources[].rlinks[].media-type",
    "count": 4,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "lvg.system-security-plan.back-matter.resources[].uuid",
    "count": 3,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "lvg.system-security-plan.control-implementation.description",
@@ -1649,67 +1649,67 @@
    "path": "lvg.system-security-plan.import-profile.href",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "lvg.system-security-plan.metadata.last-modified",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "lvg.system-security-plan.metadata.oscal-version",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "lvg.system-security-plan.metadata.parties[].remarks",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "lvg.system-security-plan.metadata.parties[].type",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "lvg.system-security-plan.metadata.parties[].uuid",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "lvg.system-security-plan.metadata.published",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "lvg.system-security-plan.metadata.roles[].id",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "lvg.system-security-plan.metadata.roles[].title",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "lvg.system-security-plan.metadata.title",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "lvg.system-security-plan.metadata.version",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "lvg.system-security-plan.system-characteristics.authorization-boundary.description",
@@ -1961,109 +1961,109 @@
    "path": "lvg.system-security-plan.uuid",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.back-matter.resources[].rlinks[].href",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.back-matter.resources[].rlinks[].media-type",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.back-matter.resources[].title",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.back-matter.resources[].uuid",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.import-ssp.href",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.metadata.last-modified",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.metadata.oscal-version",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.metadata.published",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.metadata.revisions[].last-modified",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.metadata.revisions[].links[].href",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.metadata.revisions[].links[].rel",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.metadata.revisions[].oscal-version",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.metadata.revisions[].remarks",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.metadata.revisions[].title",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.metadata.revisions[].version",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.metadata.title",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.metadata.version",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.observations[].collected",
@@ -2327,37 +2327,37 @@
    "path": "poam.plan-of-action-and-milestones.uuid",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ssp.system-security-plan.back-matter.resources[].description",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ssp.system-security-plan.back-matter.resources[].rlinks[].href",
    "count": 3,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ssp.system-security-plan.back-matter.resources[].rlinks[].media-type",
    "count": 3,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ssp.system-security-plan.back-matter.resources[].title",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ssp.system-security-plan.back-matter.resources[].uuid",
    "count": 3,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ssp.system-security-plan.control-implementation.description",
@@ -2417,145 +2417,145 @@
    "path": "ssp.system-security-plan.import-profile.href",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ssp.system-security-plan.metadata.last-modified",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ssp.system-security-plan.metadata.oscal-version",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ssp.system-security-plan.metadata.parties[].links[].href",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ssp.system-security-plan.metadata.parties[].links[].rel",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ssp.system-security-plan.metadata.parties[].member-of-organizations[]",
    "count": 3,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ssp.system-security-plan.metadata.parties[].name",
    "count": 4,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ssp.system-security-plan.metadata.parties[].short-name",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ssp.system-security-plan.metadata.parties[].type",
    "count": 4,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ssp.system-security-plan.metadata.parties[].uuid",
    "count": 4,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ssp.system-security-plan.metadata.published",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ssp.system-security-plan.metadata.responsible-parties[].party-uuids[]",
    "count": 3,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ssp.system-security-plan.metadata.responsible-parties[].role-id",
    "count": 3,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ssp.system-security-plan.metadata.revisions[].last-modified",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ssp.system-security-plan.metadata.revisions[].links[].href",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ssp.system-security-plan.metadata.revisions[].links[].rel",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ssp.system-security-plan.metadata.revisions[].oscal-version",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ssp.system-security-plan.metadata.revisions[].published",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ssp.system-security-plan.metadata.revisions[].title",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ssp.system-security-plan.metadata.revisions[].version",
    "count": 2,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ssp.system-security-plan.metadata.roles[].id",
    "count": 4,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ssp.system-security-plan.metadata.roles[].title",
    "count": 4,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ssp.system-security-plan.metadata.title",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ssp.system-security-plan.metadata.version",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   },
   {
    "path": "ssp.system-security-plan.system-characteristics.authorization-boundary.description",
@@ -2825,7 +2825,7 @@
    "path": "ssp.system-security-plan.uuid",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
+   "destination": "bundle manifest provenance: sources, one entry per document (title, version, its uuid, the day of its last-modified as date, OSCAL and its oscal-version as format and format-version, last-modified, published, remarks, the rest of its metadata - revisions, roles, parties, responsible parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"
   }
  ],
  "objects-emitted": {

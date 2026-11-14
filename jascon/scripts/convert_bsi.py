@@ -44,6 +44,7 @@ import json, hashlib, os, re, sys, copy, collections, decimal
 from oscal_conv_lib import Bundle, BUNDLE_NEWLINE, Ledger, ledger_by_path, ledger_gate
 from oscal_conv_lib import document_author, document_day
 from oscal_conv_lib import referred_to, lifecycle_default_record, lifecycle_default_line
+from oscal_conv_lib import REFERENCES, REFERENCES_FILE, ASSESSMENT_CRITERIA_FILE, resource_entry
 from oscal_conv_lib import known_arguments, out_dir, obligated_party, obligated_party_line, obligated_party_record
 
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
@@ -189,7 +190,7 @@ GROUP_MEMBERS = ("id","title","props","groups","controls")
 PARAM_MEMBERS = ("id","label","values","props")
 CATALOG_MEMBERS = ("uuid","metadata","groups","controls","back-matter")
 # the members of the compat facet, in the order they are written
-COMPAT_MEMBERS = ("metadata","uuid","back-matter","catalog","param-extras","props","parts","links","control","group")
+COMPAT_MEMBERS = ("metadata","catalog","param-extras","props","parts","links","control","group")
 
 def field(prop):
     """the key a prop's value is written under: the name itself where the
@@ -295,6 +296,7 @@ _F=r"/facets/[^/]*"
 TAX_AT=_F+r"gspp-taxonomy@1/by-statement/smt"; GRAM_AT=_F+r"statement-grammar@1/by-statement/smt"
 SECO_AT=_F+r"security-objectives@1/by-statement/smt"; ACRIT_AT=_F+r"assessment-criteria@1/by-statement/smt"
 NARR_AT=_F+r"gspp-narrative@1"; COMPAT_AT=_F+r"oscal-1x@1"
+REF_AT=_F+r"references@1"                                     # the standard facet for the resources texts and links refer to
 SOURCES_AT=r"/provenance/sources/\[\]"                        # the manifest's entry for the source document
 OBJECT_AT=(r"/id",r"/members/\[\]/ref",r"/objects/\[\]/id",r"/objects/\[\]/path")   # an object's id, where it is listed, its file
 C = r"(catalog(\.groups\[\])*\.controls\[\](\.controls\[\])*)"   # a control: in a group at any depth, nested at any depth, or under the catalogue itself
@@ -305,8 +307,8 @@ RULES = [       # (source path, level, sentence, outcomes, places)
   "`version` of every object, and of its entry in the manifest; manifest provenance.sources[].version", CARRIED,
   at(r"/version",r"/objects/\[\]/version",SOURCES_AT+r"/version")),
  (r"^catalog\.metadata\.oscal-version$", "L2",
-  "root Set, compat oscal-1x `metadata`, as the source holds it; manifest provenance.sources[].oscal-version", CARRIED,
-  at(COMPAT_AT+r"/metadata/oscal-version",SOURCES_AT+r"/oscal-version")),
+  "root Set, compat oscal-1x `metadata`, as the source holds it; manifest provenance.sources[].format-version", CARRIED,
+  at(COMPAT_AT+r"/metadata/oscal-version",SOURCES_AT+r"/format-version")),
  (r"^catalog\.metadata\.last-modified$", "L2",
   "root Set, compat oscal-1x `metadata`, as the source holds it; its day -> manifest provenance.sources[].date", CARRIED,
   at(COMPAT_AT+r"/metadata/last-modified",SOURCES_AT+r"/date")),
@@ -316,12 +318,13 @@ RULES = [       # (source path, level, sentence, outcomes, places)
   at(COMPAT_AT+r"/metadata/parties/\[\]/name",SOURCES_AT+r"/author-ref")),
  (r"^catalog\.metadata\.", "L2", "root Set, compat oscal-1x `metadata`: the member as the source holds it", CARRIED,
   at(COMPAT_AT+r"/metadata/.*")),
- (r"^catalog\.uuid$", "L2", "root Set, compat oscal-1x `uuid`: the uuid of the source document", CARRIED, at(COMPAT_AT+r"/uuid")),
+ (r"^catalog\.uuid$", "L1", "manifest provenance.sources[].uuid: the uuid of the source document", CARRIED, at(SOURCES_AT+r"/uuid")),
  (r"^catalog\.back-matter\.", "L2",
   "a resource that something in the document refers to by #uuid (a link of a control, which also takes its "
-  "address from it as relations[].ref, or a link of the metadata) is carried whole on the root Set (compat "
-  "`back-matter`); a resource nothing refers to is an orphan and is not carried (a rule the ledger checks)",
-  CARRIED+NOT_CONTENT, at(r"/relations/\[\]/ref",COMPAT_AT+r"/back-matter/.*")),
+  "address from it as relations[].ref, or a link of the metadata) is carried whole on the root Set, in the "
+  "standard facet references@1 (its uuid as `id`); a resource nothing refers to is an orphan and is not carried "
+  "(a rule the ledger checks)",
+  CARRIED+NOT_CONTENT, at(r"/relations/\[\]/ref",REF_AT+r"/resources/.*")),
  (r"^catalog(\.groups\[\])+\.id$", "L1", "taxonomy Set of the group: its id, its file, and where it is listed", CARRIED,
   at(*OBJECT_AT)),
  (r"^catalog(\.groups\[\])+\.title$", "L1", "taxonomy Set of the group: its title", CARRIED, at(r"/title/de")),
@@ -437,6 +440,8 @@ tag_values=collections.Counter(); sec_values=collections.Counter()
 
 sec_enum={}        # sec_level value -> its entry in the enum of the pinned taxonomy schema
 resources_named=set()   # uuids of the back-matter resources that a link of a control names
+resources_carried=[0]   # resources written into references@1
+document_uuid={}        # source key -> the uuid of its document
 link_targets=[]    # (control, rel, id the link names) of every link written as a Requirement URI
 as_held=collections.Counter()   # member of the compat facet -> the objects that carry something there as the source holds it
 made=collections.Counter()      # kind of Set -> how many were made
@@ -648,6 +653,7 @@ for key,fn,ns in SOURCES:
     meta=cat["metadata"]
     version=meta["version"]
     catalogs_meta.append((key,meta["title"],version,meta["oscal-version"]))
+    document_uuid[key]=cat.get("uuid")
     # who wrote the document and when, by the rule of backlog #69: the party the metadata names as creator,
     # and the day of last-modified. Nothing is made up where the source names nobody or no day.
     provenance_of[key]={}
@@ -746,21 +752,26 @@ for key,fn,ns in SOURCES:
     # itself (dates, the OSCAL version, props, links, roles, parties,
     # responsible parties, remarks) has no member in the kernel and stands
     # under the compat facet's `metadata`, in the source's own shape, the
-    # source's values as they are. The uuid of the document stands beside
-    # it, and so does every back-matter resource that something in the
-    # document refers to (a link of a control or of the metadata).
+    # source's values as they are. The uuid of the document stands in the
+    # manifest's entry for it (provenance.sources, backlog #80). Every
+    # back-matter resource that something in the document refers to (a
+    # link of a control or of the metadata) stands in the standard facet
+    # references@1, as the source writes it, its uuid as `id` (backlog #82).
     root={"id":f"{ns}/set/tax/root","version":version,"lifecycle":"active","title":meta["title"],"members":top}
     rfound={}
     mrest={k:v for k,v in meta.items() if k not in ("title","version")}
     if mrest: rfound["metadata"]=mrest
-    if "uuid" in cat: rfound["uuid"]=cat["uuid"]
     named=[r for r in resources if r["uuid"] in resources_named or referred_to(cat,r)]
-    if named: rfound["back-matter"]={"resources":named}
     crest={k:v for k,v in cat.items() if k not in CATALOG_MEMBERS}
     if crest: rfound["catalog"]=crest
+    rfacets={}
+    if named:
+        rfacets[REFERENCES]={"resources":[held(resource_entry(r)) for r in named]}
+        resources_carried[0]+=len(named)
     if rfound:
-        root["facets"]={F_COMPAT:{k:held(rfound[k]) for k in COMPAT_MEMBERS if k in rfound}}
+        rfacets[F_COMPAT]={k:held(rfound[k]) for k in COMPAT_MEMBERS if k in rfound}
         for k in rfound: as_held[k]+=1
+    if rfacets: root["facets"]=rfacets
     add_object(f"objects/{key}/set-tax-root.json",root)
     all_ids[key]=ids
     # a back-matter resource nothing refers to: an orphan, by the ledger's rule
@@ -779,17 +790,20 @@ bundle.stub("gspp-taxonomy-1.0.0-stub.json","https://ns.bsi.bund.de/facet/gspp-t
      {"by-statement":{"type":"object"},"observed-sec-levels":{"enum":sorted(sec_enum.values())}})
 bundle.pin_stdlib("statement-grammar-1.0.0.json")   # 26: stdlib pins are VERBATIM
 bundle.pin_stdlib("security-objectives-1.0.0.json")
-bundle.pin_stdlib("assessment-criteria-1.0.0.json")
+bundle.pin_stdlib(ASSESSMENT_CRITERIA_FILE)          # the latest version of the library (1.1.0 since 2026-11-14)
+if resources_carried[0]: bundle.pin_stdlib(REFERENCES_FILE)
 bundle.stub("gspp-narrative-1.0.0-stub.json","https://ns.bsi.bund.de/facet/gspp-narrative",[],
      {"by-statement":{"type":"object"},"description":{"type":"object"}})
 # the compat facet: what OSCAL says and neither the kernel nor a standard facet has a member for
-bundle.pin_compat()     # the one schema of every converter (1.1.0); until 2026-11-14 this converter pinned one of its own
+bundle.pin_compat()     # the one schema of every converter; until 2026-11-14 this converter pinned one of its own
 
 led.resolve(objects)        # a boolean of the source is written as a plain boolean, and the ledger knows where
 for rel,o in objects.items(): bundle.add(rel,o)
-manifest=bundle.write({"sources":[{"key":k,"title":t,"version":v,"oscal-version":o,**provenance_of[k]}
+# What the bundle was made from (backlog #80): one entry per source document, in the shape the kernel types
+manifest=bundle.write({"sources":[{"title":t,"version":v,**({"uuid":document_uuid[k]} if document_uuid[k] is not None else {}),
+                                   **provenance_of[k],"format":"OSCAL","format-version":o}
                for k,t,v,o in catalogs_meta],
-               "converter":"convert_bsi.py v0.4 (single-catalog: MS-TLS dropped by decision 2026-07-21; "
+               "converter":"convert_bsi.py v0.5 (single-catalog: MS-TLS dropped by decision 2026-07-21; "
                            "every control is a Requirement of its own since 2026-11-14)"})
 
 # ---------- the ledger's account ----------
@@ -1142,7 +1156,8 @@ md.append(f"- **Carried as the source holds it** (compat facet `oscal-1x@1`), be
              if set(as_held)-{"metadata"} else "; in this catalogue nothing else: the mapping reads every prop, "
              "part and member the controls and groups hold") + ".")
 md.append(f"- **Declared drops: {LT['intentionally-dropped']:,}.** The author decided the two that were left on "
-          f"2026-11-14: the uuid of the document and a back-matter resource something refers to are carried; a "
+          f"2026-11-14: the uuid of the document and a back-matter resource something refers to are carried (the "
+          f"uuid in the manifest's `provenance.sources`, the resource in the standard facet references@1); a "
           f"resource nothing refers to stays out as an orphan, by a rule the ledger checks.")
 md.append(f"- **The written bundle, read back and held against the source** (counted from the files on disk and "
           f"from the source as loaded): {BACK['controls']:,} controls at all depths -> {BACK['requirements']:,} "

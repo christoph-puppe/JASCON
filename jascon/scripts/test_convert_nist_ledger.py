@@ -20,8 +20,13 @@ an unaccounted value ends with 1. Held here:
     from the files: the `assessment-for` links, every withdrawn control as an
     object with the label the source gives it for a reader (E1) and, where it
     names a successor, a statement made from its links (R2), the formal ODP
-    labels, the document metadata and uuid, `merge.as-is`, a profile's import
-    and the resource it names (E3, E4);
+    labels, the document metadata, `merge.as-is`, a profile's import and the
+    resource it names (E3, E4);
+  - the author's decisions of 2026-11-14 on #80, #82, #83, #84: the
+    assessment objectives in assessment-criteria@1, each `assessment-for`
+    link as an address; the print label of a statement item as the
+    statement's `label`; the resources in references@1; the five documents,
+    with their uuids, in the manifest's `provenance.sources[]`;
   - what is not in the bundle is no content by a checked rule: a name that
     selects, a namespace, an id that is rebuilt, an orphaned resource (E4);
     no drop is declared (the author's decisions of 2026-11-14);
@@ -42,8 +47,9 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.normpath(os.path.join(HERE, "..", ".."))
 RMF = "http://csrc.nist.gov/ns/rmf"
 NS = "https://ns.nist.gov/sp800-53"
-F_53A, F_ODP, F_NARR = f"{NS}/facet/sp800-53a@1", f"{NS}/facet/odp@1", f"{NS}/facet/narrative@1"
-F_REF, F_RMF = f"{NS}/facet/references@1", f"{NS}/facet/rmf@1"
+F_ODP, F_NARR, F_RMF = f"{NS}/facet/odp@1", f"{NS}/facet/narrative@1", f"{NS}/facet/rmf@1"
+F_AC = "https://ns.jascon.net/stdlib/facet/assessment-criteria@1"       # #83: the SP 800-53A layer
+F_REF = "https://ns.jascon.net/stdlib/facet/references@1"               # #82: the back-matter resources
 F_COMPAT = "https://ns.jascon.net/compat/oscal-1x@1"
 PROFILES = ("LOW", "MODERATE", "HIGH", "PRIVACY")
 LEDGER = "sp800-53-conversion-ledger.json"
@@ -103,7 +109,9 @@ def invented_catalogue():
                           "prose": "somebody is named;", "links": [{"href": "#c-1_smt.a", "rel": "assessment-for"}]},
                          {"id": "c-1_obj.b", "name": "assessment-objective",
                           "props": [{"name": "label", "class": "sp800-53a", "value": "C-01b."}],
-                          "prose": "it is kept;", "links": [{"href": "#c-2_smt", "rel": "assessment-for"}]}]},
+                          "prose": "it is kept;", "links": [{"href": "#c-2_smt", "rel": "assessment-for"},
+                                                            # names nothing the catalogue defines, as SA-24 does in 5.2.0
+                                                            {"href": "#c-2_smt.z", "rel": "assessment-for"}]}]},
               {"id": "c-1_asm-examine", "name": "assessment-method",
                "props": [{"name": "method", "ns": RMF, "value": "EXAMINE"}, {"name": "label", "class": "sp800-53a", "value": "C-01-Examine"}],
                "parts": [{"name": "assessment-objects", "prose": "The policy\n\nthe list of names"}]}],
@@ -155,6 +163,10 @@ def invented_profile(name):
         "back-matter": {"resources": [{"uuid": "00000000-0000-4000-8000-00000000000d", "description": "the catalogue",
                                         "rlinks": [{"href": "catalogue.json", "media-type": "application/oscal.catalog+json"}]}]}}}
 
+
+def entry(resource):
+    """a back-matter resource as references@1 carries it: its uuid as `id` (#82)"""
+    return {"id": resource["uuid"], **{k: v for k, v in resource.items() if k != "uuid"}}
 
 def norm(path):
     """nested controls and parts under one path, as the converter's path map counts them"""
@@ -211,7 +223,7 @@ def what_the_authors_list_names(catalogue, objects):
     }
     written = {
         "assessment-for links": sum(len(o.get("assessment-for", [])) for r in reqs.values()
-                                    for o in objectives((r.get("facets") or {}).get(F_53A, {}))),
+                                    for o in objectives((r.get("facets") or {}).get(F_AC, {}))),
         "withdrawn controls": sorted(r["id"] for r in gone),
         "labels of withdrawn controls": sorted(r["label"] for r in gone),
         # a successor's `replaces` names an object with lifecycle `withdrawn`
@@ -231,6 +243,10 @@ class Tree:
         self.scripts = os.path.join(self.tmp, "jascon", "scripts")
         os.makedirs(self.scripts)
         for fn in ("convert_nist.py", "oscal_conv_lib.py"): shutil.copy(os.path.join(HERE, fn), self.scripts)
+        stdlib = os.path.join(self.tmp, "jascon", "schemas", "stdlib")     # the two standard facets it pins (#82, #83)
+        os.makedirs(stdlib)
+        for fn in ("assessment-criteria-1.1.0.json", "references-1.0.0.json"):
+            shutil.copy(os.path.join(HERE, "..", "schemas", "stdlib", fn), stdlib)
         os.makedirs(os.path.join(self.tmp, "sources", "nist"))
         self.write("NIST_SP-800-53_rev5_catalog.json", catalogue or invented_catalogue())
         for b in PROFILES: self.write(f"NIST_SP-800-53_rev5_{b}-baseline_profile.json", invented_profile(b))
@@ -296,6 +312,15 @@ class Backlog41TheLedgerOfSP80053(unittest.TestCase):
     def req(self, cid):
         return self.objects[f"objects/req/{cid.replace('.', '-')}.json"]
 
+    @staticmethod
+    def d10(objects):
+        """-> the addresses of assessment-criteria@1 that name no statement (D10): a `statement-id` names a statement
+        of the host, or of the Requirement its sibling `requirement-ref` names"""
+        reqs = {o["id"]: o for o in objects.values() if "statements" in o}
+        return [(r["id"], a) for r in reqs.values() for o in objectives((r.get("facets") or {}).get(F_AC, {}))
+                for a in o.get("assessment-for", []) if "statement-id" in a
+                and a["statement-id"] not in {s["id"] for s in reqs.get(a.get("requirement-ref", r["id"]), {"statements": []})["statements"]}]
+
     # ---------- the state the author asked for ----------
     def test_backlog_41_every_source_value_has_one_of_five_outcomes_none_is_unaccounted_and_the_run_ends_with_0(self):
         self.assertEqual(self.done.returncode, 0, self.done.stderr[-600:])
@@ -322,17 +347,21 @@ class Backlog41TheLedgerOfSP80053(unittest.TestCase):
     def test_backlog_41_what_the_authors_list_names_is_in_the_written_bundle(self):
         source, written = what_the_authors_list_names(invented_catalogue()["catalog"], self.objects)
         self.assertEqual(source, written)
-        self.assertEqual(source["assessment-for links"], 3)
+        self.assertEqual(source["assessment-for links"], 4)
         self.assertEqual(source["withdrawn controls"], [f"{NS}/req/W-{i}" for i in (1, 2, 3)])
         # the label of a withdrawn control is the one the source gives for a reader, not the zero-padded one
         self.assertEqual(source["labels of withdrawn controls"], ["W-1", "W-2", "W-3"])
         self.assertEqual(source["formal ODP labels"], ["C-01(01)_ODP", "C-01_ODP"])
-        # the links as the source states them: a statement, the statement part as a whole, a statement of another control
-        seen = {o["id"]: o.get("assessment-for") for o in objectives(self.req("c-1")["facets"][F_53A])}
-        self.assertEqual(seen, {"c-1_obj": [{"statement-id": "smt"}], "c-1_obj.a": [{"statement-id": "smt.a"}],
-                                "c-1_obj.b": [{"requirement-ref": f"{NS}/req/C-2", "statement-id": "smt"}]})
-        self.assertEqual(self.report["assessment-for"]["links"], 3)
-        self.assertEqual(sorted(self.report["assessment-for"]["names"].values()), [1, 1, 1])
+        # the links as the source states them, as addresses (#83): the statement part as a whole (its Requirement), a
+        # statement, a statement of another control, and a link that names nothing (its href, as the source writes it)
+        seen = {o["id"]: o.get("assessment-for") for o in objectives(self.req("c-1")["facets"][F_AC])}
+        self.assertEqual(seen, {"c-1_obj": [{"requirement-ref": f"{NS}/req/C-1"}], "c-1_obj.a": [{"statement-id": "smt.a"}],
+                                "c-1_obj.b": [{"requirement-ref": f"{NS}/req/C-2", "statement-id": "smt"}, {"href": "#c-2_smt.z"}]})
+        self.assertEqual(self.d10(self.objects), [])
+        self.assertEqual(self.report["assessment-for"]["links"], 4)
+        self.assertEqual(sorted(self.report["assessment-for"]["names"].values()), [1, 1, 1, 1])
+        self.assertEqual(self.report["assessment-for"]["names-nothing"], [{"control": "c-1", "href": "#c-2_smt.z"}])
+        self.assertNotIn(f"{NS}/facet/sp800-53a", json.dumps(self.objects), "the converter's own facet is gone")
 
     def test_backlog_41_E1_R2_every_withdrawn_control_is_an_object_and_its_statement_is_made_from_its_links(self):
         party = [f"{NS}/party/organization"]
@@ -366,25 +395,27 @@ class Backlog41TheLedgerOfSP80053(unittest.TestCase):
     def test_backlog_41_E4_what_is_referred_to_is_carried_and_an_orphan_stays_out(self):
         cat, root = invented_catalogue()["catalog"], self.objects["objects/set/root.json"]
         # RES_C: nothing refers to it (no `#uuid` outside it); RES_D: a reference link names it and it gives no link
-        self.assertEqual(root["facets"][F_REF], {"resources": [r for r in cat["back-matter"]["resources"] if r["uuid"] != RES_C]})
+        self.assertEqual(root["facets"][F_REF], {"resources": [entry(r) for r in cat["back-matter"]["resources"] if r["uuid"] != RES_C]})
         self.assertEqual({(x["kind"], x["count"]) for x in self.report["ledger"]["not-content"] if x["kind"] == "orphan"},
                          {("orphan", 3)})                           # its uuid, title and link
         self.assertEqual(self.req("c-2")["facets"][F_COMPAT], {"links": [{"href": f"#{RES_D}", "rel": "reference"}]})
         for b in PROFILES:
             prof, compat = invented_profile(b)["profile"], self.objects[f"objects/set/baseline-{b.lower()}.json"]["facets"][F_COMPAT]
-            self.assertEqual((compat["back-matter"], compat["imports"]),
-                             (prof["back-matter"], [{"href": prof["imports"][0]["href"]}]))
+            refs = self.objects[f"objects/set/baseline-{b.lower()}.json"]["facets"][F_REF]
+            self.assertEqual((refs, compat["imports"]),
+                             ({"resources": [entry(r) for r in prof["back-matter"]["resources"]]}, [{"href": prof["imports"][0]["href"]}]))
+            self.assertNotIn("back-matter", compat)
 
     def test_backlog_41_the_document_metadata_stands_on_the_set_of_the_document_in_the_sources_shape(self):
         cat, root = invented_catalogue()["catalog"], self.objects["objects/set/root.json"]
         want = {k: v for k, v in cat["metadata"].items() if k not in ("title", "version")}
-        self.assertEqual(root["facets"][F_COMPAT], {"metadata": want, "uuid": cat["uuid"]})
+        self.assertEqual(root["facets"][F_COMPAT], {"metadata": want})
         self.assertEqual((root["title"], root["version"]), ({"en": cat["metadata"]["title"]}, cat["metadata"]["version"]))
         for b in PROFILES:
             prof, bset = invented_profile(b)["profile"], self.objects[f"objects/set/baseline-{b.lower()}.json"]
             want = {k: v for k, v in prof["metadata"].items() if k not in ("title", "version")}
             self.assertEqual({k: v for k, v in bset["facets"][F_COMPAT].items() if k not in ("back-matter", "imports")},
-                             {"metadata": want, "uuid": prof["uuid"], "merge": {"as-is": True}})
+                             {"metadata": want, "merge": {"as-is": True}})
             self.assertIs(bset["facets"][F_COMPAT]["merge"]["as-is"], True, "a JSON boolean, not the number 1")
             self.assertEqual((bset["title"], bset["version"]), ({"en": prof["metadata"]["title"]}, "1.1"))
         # every value of a document's metadata is a copy; none is dropped, none is unaccounted
@@ -394,10 +425,21 @@ class Backlog41TheLedgerOfSP80053(unittest.TestCase):
         self.assertEqual(meta, {"copied": 18 + 4 * 6})
         self.assertEqual(collections.Counter(r["outcome"] for r in self.record["paths"] if r["path"].endswith(".merge.as-is")),
                          {"copied": 4})
-        # the manifest names the author and the day of the catalogue, by the library's rule (the one party it defines)
+        # the manifest names its five source documents (#80): the author by the library's rule (the one party the
+        # catalogue defines; a profile defines none), the day of last-modified, the uuid of each, the OSCAL version
         with open(os.path.join(self.out, "sp800-53-core-bundle", "content-manifest.json"), encoding="utf-8") as f:
-            provenance = json.load(f)["provenance"]
-        self.assertEqual((provenance["author-ref"], provenance["date"]), (f"{NS}/party/nobody", "2026-11-14"))
+            manifest = json.load(f)
+        profile = {"version": "1.1", "uuid": "00000000-0000-4000-8000-000000000002", "date": "2026-11-14",
+                   "format": "OSCAL", "format-version": "1.2.2"}
+        self.assertEqual(manifest["provenance"]["sources"],
+                         [{"title": "An invented catalogue", "version": "1.0", "uuid": cat["uuid"], "author-ref": f"{NS}/party/nobody",
+                           "date": "2026-11-14", "format": "OSCAL", "format-version": "1.2.2"}]
+                         + [{"title": f"An invented baseline, {b}", **profile} for b in PROFILES])
+        self.assertEqual(sorted(manifest["provenance"]), ["converter", "namespace-note", "sources"])
+        self.assertEqual(manifest["kernel-version"], "2.0.0", "a statement with a label needs kernel 2.0.0 (#84)")
+        self.assertEqual(sorted(f["path"] for f in manifest["facet-schemas"]),
+                         ["schemas/assessment-criteria-1.1.0.json", "schemas/oscal-1x-compat-1.2.0.json", "schemas/references-1.0.0.json",
+                          "schemas/sp800-53-narrative-stub.json", "schemas/sp800-53-odp-stub.json", "schemas/sp800-53-rmf-stub.json"])
         self.assertEqual(self.req("c-1")["facets"][F_NARR]["guidance"], [{"en": f"See [The paper](#{RES_A}) and [C-2](#c-2)."}])
         self.assertEqual(self.objects["objects/set/family-g.json"]["facets"][F_NARR],
                          {"overview": [{"title": {"en": "About the group"}, "prose": {"en": "The group in a sentence."}}]})
@@ -420,7 +462,7 @@ class Backlog41TheLedgerOfSP80053(unittest.TestCase):
         self.assertEqual(o("groups[].controls[].parts[].prose"), {"copied": 12, "transformed": 3})
         self.assertEqual(o("groups[].controls[].links[].rel"), {"copied": 5, "transformed": 2})
         self.assertEqual(o("groups[].controls[].links[].href"), {"copied": 1, "transformed": 6})
-        self.assertEqual(o("groups[].controls[].parts[].links[].href"), {"transformed": 3})
+        self.assertEqual(o("groups[].controls[].parts[].links[].href"), {"transformed": 3, "copied": 1})   # the one that names nothing
         self.assertEqual(o("groups[].parts[].title"), {"copied": 1})
         rules = self.rules()
         for rule, destinations in (
@@ -436,12 +478,13 @@ class Backlog41TheLedgerOfSP80053(unittest.TestCase):
                 ("family Set URI from the group id", 3),
                 ("member sequence: ten times the control's place in its family, ordered by sort-id", 6),
                 ("the prop value `true` or `false`, written as a JSON boolean", 1),
-                ("the statement part an `assessment-for` link names, as a statement id (the part id without the control prefix)", 3),
-                ("requirement URI from the control whose part an `assessment-for` link names, where that is another control", 1),
-                ("date of the catalogue: the day of its last-modified", 1)):
+                ("the statement part an `assessment-for` link names, as a statement id (the part id without the control prefix)", 2),
+                ("requirement URI from the control whose part an `assessment-for` link names, where that is another control "
+                 "or the statement part as a whole", 2),
+                ("date of a source document: the day of its last-modified", 5)):
             self.assertEqual(rules[rule], destinations, rule)
         self.assertEqual(sum(n for r, n in rules.items() if r.startswith("assessment objects: one entry per paragraph")), 2)
-        self.assertEqual(sum(n for r, n in rules.items() if r.startswith("author of the catalogue")), 1)
+        self.assertEqual(sum(n for r, n in rules.items() if r.startswith("author of a source document")), 1)
         self.assertEqual(sum(n for r, n in rules.items() if "parameter insertion" in r), 2)
         self.assertIs(self.req("c-1")["facets"][F_RMF]["contributes-to-assurance"], True)
 
@@ -449,7 +492,7 @@ class Backlog41TheLedgerOfSP80053(unittest.TestCase):
         o = self.outcomes
         # a name that selects: of a prop, of a part, of a link, the class of a prop and of a group
         self.assertEqual(o("groups[].controls[].parts[].name"), {"not-content": 18})
-        self.assertEqual(o("groups[].controls[].parts[].links[].rel"), {"not-content": 3})
+        self.assertEqual(o("groups[].controls[].parts[].links[].rel"), {"not-content": 4})
         self.assertEqual(o("groups[].class"), {"not-content": 1})
         self.assertEqual(o("groups[].props[].name"), {"not-content": 1})
         self.assertEqual(o("groups[].parts[].name"), {"not-content": 1})
@@ -460,19 +503,19 @@ class Backlog41TheLedgerOfSP80053(unittest.TestCase):
         self.assertEqual(o("groups[].controls[].params[].props[].ns"), {"not-content": 1})
         self.assertEqual(o("groups[].controls[].parts[].props[].ns"), {"not-content": 1})
         # ... an id or a label that a rule rebuilds: class, zero-padded and SP 800-53A label of every control;
-        # guidance x2, method, the statement part of c-1; the item labels
+        # guidance x2, method, the statement part of c-1
         self.assertEqual(o("groups[].controls[].class"), {"not-content": 6})
         # labels x6; levels x4, statuses x3, sort-ids x6, the boolean; padded and 53A labels x12
         self.assertEqual(o("groups[].controls[].props[].value"), {"copied": 6, "transformed": 4 + 3 + 6 + 1, "not-content": 12})
-        self.assertEqual(o("groups[].controls[].parts[].id"), {"copied": 4, "transformed": 9, "not-content": 4})
-        # the print label of an item on each level of a control (`a.`, `1.`, `(a)`, `b.`) and of an enhancement
-        # (`(a)`, `(1)`) is rebuilt; `b.` on an item of the enhancement is a form the rule does not give: the item's id
-        # and its label prop stand in the compat facet of the Requirement (E7)
-        self.assertEqual(o("groups[].controls[].parts[].props[].value"), {"copied": 5 + 1, "not-content": 6})
-        self.assertEqual(o("groups[].controls[].parts[].props[].name"), {"copied": 1, "not-content": 11})
-        self.assertEqual(self.report["item-labels"], {"rebuilt": 6, "compat-parts": ["c-1.1_smt.b"]})
-        self.assertEqual(self.req("c-1.1")["facets"][F_COMPAT],
-                         {"parts": [{"id": "c-1.1_smt.b", "props": [{"name": "label", "value": "b."}]}]})
+        self.assertEqual(o("groups[].controls[].parts[].id"), {"copied": 3, "transformed": 10, "not-content": 4})
+        # the print label of a statement item is the statement's `label`, as the source gives it, on every level of a
+        # control and of an enhancement, `b.` on an item of the enhancement too (#84): copied, its name selects
+        self.assertEqual(o("groups[].controls[].parts[].props[].value"), {"copied": 5 + 7})
+        self.assertEqual(o("groups[].controls[].parts[].props[].name"), {"not-content": 12})
+        self.assertEqual(self.report["statement-labels"], 7)
+        self.assertEqual({cid: [s.get("label") for s in self.req(cid)["statements"]] for cid in ("c-1", "c-1.1")},
+                         {"c-1": ["a.", "1.", "(a)", "b."], "c-1.1": [None, "(a)", "(1)", "b."]})
+        self.assertNotIn(F_COMPAT, self.req("c-1.1")["facets"], "the compat `parts` of the item labels is gone")
         self.assertEqual(o("groups[].parts[].id"), {"not-content": 1})
         # three labels and a sort-id on each of six controls, four levels, three statuses, one boolean
         self.assertEqual(o("groups[].controls[].props[].name"), {"not-content": 6 * 4 + 4 + 3 + 1})
@@ -515,15 +558,16 @@ class Backlog41TheLedgerOfSP80053(unittest.TestCase):
                  "groups[].controls[].props[].value", 6),
                 # the `assessment-for` links are built and not written
                 ("links-lost", '    if links: node["assessment-for"] = links\n', "    pass\n",
-                 "groups[].controls[].parts[].links[].href", 3),
+                 "groups[].controls[].parts[].links[].href", 4),
 
-                # the metadata of the profiles is not written
+                # the metadata of the profiles is not written (last-modified and oscal-version are still in the
+                # manifest's sources; the roles are lost)
                 ("profile-metadata", '    if document_metadata(prof["metadata"]): compat["metadata"] = document_metadata(prof["metadata"])\n', "",
-                 None, 4 * 4),
+                 None, 4 * 2),
                 # the back-matter resources are not written: their titles are in no object. The uuid and the link of
                 # the resource a `reference` link names are still inputs of a rule, so the path map's sentence
                 # (`copied`) no longer holds either, and that wiring check stops the run before the gate
-                ("resources-lost", 'if RESOURCES_KEPT: root_facets[F_REF] = {"resources": RESOURCES_KEPT}\n', "",
+                ("resources-lost", 'if RESOURCES_KEPT: root_facets[REFERENCES] = {"resources": [resource_entry(r) for r in RESOURCES_KEPT]}   # #82\n', "",
                  "back-matter.resources[].title", 3)):
             done, _, record = self.tree.changed(name, old, new)
             self.fails(name, done)
@@ -531,6 +575,9 @@ class Backlog41TheLedgerOfSP80053(unittest.TestCase):
             if name == "resources-lost":
                 self.assertEqual(record["totals"]["unaccounted"], 8, name)      # 3 titles, 1 citation, 1 link, 1 media type, 2 uuids
                 self.assertIn("the path map does not say `transformed` of nist.catalog.back-matter.resources[].uuid", done.stderr)
+            elif name == "profile-metadata":         # last-modified is then only the `date` of a source: the path map's sentence fails
+                self.assertEqual(record["totals"]["unaccounted"], 8, name)
+                self.assertIn("the path map does not say `transformed` of low.profile.metadata.last-modified", done.stderr)
             else:
                 self.assertIn(self.GATE.format(0, record["totals"]["unaccounted"]), done.stderr, name)
             if path: self.assertEqual(by_path(record)[(path, "unaccounted")], lost, name)
@@ -644,8 +691,8 @@ class Backlog41TheLedgerOfSP80053(unittest.TestCase):
                 ("orphan-everything", '    if referred_to(i, r["uuid"]): RESOURCES_KEPT.append(r)', "    if False: RESOURCES_KEPT.append(r)", None, 1),
                 # E4: a profile's import, or the resource it names, is not written
                 ("imports-lost", '    compat["imports"] = [{"href": imp["href"]} for imp in prof["imports"]]\n', "", 4, 0),
-                ("profile-resource-lost", '    if (prof.get("back-matter") or {}).get("resources"): compat["back-matter"] = '
-                                          '{"resources": prof["back-matter"]["resources"]}\n', "", 16, 0),
+                ("profile-resource-lost", '        bset["facets"][REFERENCES] = {"resources": [resource_entry(r) for r in prof["back-matter"]["resources"]]}\n',
+                 "        pass\n", 16, 0),
                 # E4/E14: a reference link to a resource without a link is not carried
                 ("reference-without-link", '            compat.setdefault("links", []).append(l); rel_count[REF_NO_LINK] += 1',
                  "            pass", 2, 0)):
@@ -661,6 +708,29 @@ class Backlog41TheLedgerOfSP80053(unittest.TestCase):
                  for cid in self.PROSE}
         self.assertNotEqual(prose, self.PROSE)
         self.assertEqual(prose["w-1"], "Incorporated into C-1a..")
+
+    def test_backlog_80_82_83_84_deliberate_defects_of_the_new_logic(self):
+        """Each defect of what the author's decisions of 2026-11-14 on #80, #83 and #84 brought ends the run with 1
+        - or, where the ledger agrees with a rule that is wrong, turns the test's own D10 check red. (#82: the two
+        defects `resources-lost` and `profile-resource-lost` above.)"""
+        for name, old, new, unaccounted in (
+                # #83: the link that names nothing is not written: its href, its rel and the objective's name are lost
+                ("nothing-not-written", '        return {"href": href}\n', "        return None\n", 3),
+                # #84: the print label is not written: the label, its name, and the name of the item beside them
+                ("label-lost", '        s = statement(sid, prose, prop(pt, "label"))\n', "        s = statement(sid, prose)\n", 7 * 3),
+                # #80: the uuid of a document is not named in the manifest: the five uuids are lost
+                ("uuid-not-named", '    if doc.get("uuid"): e["uuid"] = doc["uuid"]\n', "", 5),
+                # #80: the manifest names the catalogue alone: the uuids of the four profiles are lost
+                ("profiles-not-named", "SOURCE_DOCUMENTS = [cat] + list(BASELINES.values())", "SOURCE_DOCUMENTS = [cat]", 4)):
+            done, _, record = self.tree.changed(name, old, new)
+            self.fails(name, done, self.GATE.format(0, unaccounted))
+        # #83: the statement part as a whole is addressed by `statement-id` `smt` again. The ledger applies the same
+        # rule and agrees; the address names no statement of C-1, and the test's own D10 check turns red
+        done, out, _ = self.tree.changed("whole-as-statement", '    if not whole: a["statement-id"] = D(R_ASSESSED, _into, href)',
+                                         '    a["statement-id"] = D(R_ASSESSED, _into, href)')
+        self.assertEqual(done.returncode, 0, done.stderr[-300:])
+        self.assertEqual(self.d10(read_bundle(os.path.join(out, "sp800-53-core-bundle"))),
+                         [(f"{NS}/req/C-1", {"requirement-ref": f"{NS}/req/C-1", "statement-id": "smt"})])
 
     TITLE_LOST = ('"title": c.get("title", cid), "statements": stmts}', '"title": "", "statements": stmts}')
 
@@ -715,8 +785,8 @@ class Backlog41TheCommittedConversion(unittest.TestCase):
         self.assertEqual(report["ledger"]["totals"], record["totals"])
         self.assertEqual(report["ledger"]["path-map-not-confirmed"], [], "a sentence of the path map names an outcome this source does not show")
         self.assertEqual(sum(r["count"] for r in report["ledger"]["declared-drops"]), record["totals"]["intentionally-dropped"])
-        # 5.2.0 has three item labels the rule does not give (carried, E7), and no control whose class it does not give
-        self.assertEqual(report["item-labels"], {"rebuilt": 1119, "compat-parts": ["si-2.7_smt.a", "si-2.7_smt.b", "si-2.7_smt.c"]})
+        # 5.2.0: the print labels of its statement items are the statements' labels (#84); no control whose class the rule does not give
+        self.assertEqual(report["statement-labels"], 1122)
         self.assertEqual(report["class-written"], 0)
         self.assertEqual((record["totals"]["intentionally-dropped"], report["ledger"]["declared-drops"]), (0, []))
         self.assertEqual(report["lifecycle-default"], {"value": "active", "origin": "converter-default", "objects": 1039,
@@ -728,7 +798,7 @@ class Backlog41TheCommittedConversion(unittest.TestCase):
         objects = read_bundle(os.path.join(self.CORPUS, "sp800-53-core-bundle"))
         reqs = {o["id"]: o for o in objects.values() if "statements" in o}
         self.assertEqual(sum(len(o.get("assessment-for", [])) for r in reqs.values()
-                             for o in objectives((r.get("facets") or {}).get(F_53A, {}))), 3707)
+                             for o in objectives((r.get("facets") or {}).get(F_AC, {}))), 3707)
         gone = [r for r in reqs.values() if r["lifecycle"] != "active"]
         self.assertEqual((len(gone), {r["lifecycle"] for r in gone}), (182, {"withdrawn"}))
         self.assertEqual({s["modality"] for r in gone for s in r["statements"]}, {"unspecified"})
@@ -751,11 +821,21 @@ class Backlog41TheCommittedConversion(unittest.TestCase):
             self.assertIs(compat["merge"]["as-is"], True)
         # the back-matter on the root Set, every resource something refers to, with its uuid (E4); the document's uuid (E3)
         self.assertEqual(len(root["facets"][F_REF]["resources"]), 178)
-        self.assertIn("uuid", root["facets"][F_COMPAT])
-        self.assertTrue(all("uuid" in r for r in root["facets"][F_REF]["resources"]))
+        self.assertNotIn("uuid", root["facets"][F_COMPAT])
+        self.assertTrue(all("id" in r and "uuid" not in r for r in root["facets"][F_REF]["resources"]))
+        for b in PROFILES:
+            self.assertEqual(len(objects[f"objects/set/baseline-{b.lower()}.json"]["facets"][F_REF]["resources"]), 1)
+        # #83: the 3,707 links as addresses; #84: the 1,122 print labels as statement labels
+        kinds = collections.Counter(tuple(sorted(a)) for r in reqs.values() for o in objectives((r.get("facets") or {}).get(F_AC, {}))
+                                    for a in o.get("assessment-for", []))
+        self.assertEqual(kinds, {("statement-id",): 3484, ("requirement-ref",): 217, ("requirement-ref", "statement-id"): 5, ("href",): 1})
+        self.assertEqual(Backlog41TheLedgerOfSP80053.d10(objects), [])
+        self.assertEqual(sum(1 for r in reqs.values() for s in r["statements"] if "label" in s), 1122)
         with open(os.path.join(self.CORPUS, "sp800-53-core-bundle", "content-manifest.json"), encoding="utf-8") as f:
-            provenance = json.load(f)["provenance"]
-        self.assertEqual((provenance["author-ref"], provenance["date"]), (f"{NS}/party/oscal-program", "2026-05-11"))
+            manifest = json.load(f)
+        sources = manifest["provenance"]["sources"]
+        self.assertEqual((len(sources), manifest["kernel-version"]), (5, "2.0.0"))
+        self.assertEqual({(s["author-ref"], s["date"]) for s in sources}, {(f"{NS}/party/oscal-program", "2026-05-11")})
 
     def test_backlog_41_the_committed_bundle_against_the_pinned_source(self):
         if not os.path.isfile(self.SOURCE): self.skipTest("the pinned source is not in sources/nist (it is fetched, not committed)")
@@ -772,9 +852,13 @@ class Backlog41TheCommittedConversion(unittest.TestCase):
         self.assertEqual(len(source["withdrawn controls a successor names"]), 180)
         root = read_bundle(os.path.join(self.CORPUS, "sp800-53-core-bundle"))["objects/set/root.json"]
         self.assertEqual(root["facets"][F_COMPAT]["metadata"], {k: v for k, v in catalogue["metadata"].items() if k not in ("title", "version")})
-        self.assertEqual(root["facets"][F_COMPAT]["uuid"], catalogue["uuid"])
+        with open(os.path.join(self.CORPUS, "sp800-53-core-bundle", "content-manifest.json"), encoding="utf-8") as f:
+            sources = json.load(f)["provenance"]["sources"]
+        profiles = [json.load(open(os.path.join(os.path.dirname(self.SOURCE), f"NIST_SP-800-53_rev5_{b}-baseline_profile.json"),
+                                   encoding="utf-8"))["profile"] for b in PROFILES]
+        self.assertEqual([s["uuid"] for s in sources], [catalogue["uuid"]] + [p["uuid"] for p in profiles])
         kept = root["facets"][F_REF]["resources"]
-        self.assertEqual(kept, [r for r in catalogue["back-matter"]["resources"] if r in kept])
+        self.assertEqual(kept, [entry(r) for r in catalogue["back-matter"]["resources"] if entry(r) in kept])
         self.assertEqual(len(catalogue["back-matter"]["resources"]) - len(kept), 23)
 
 

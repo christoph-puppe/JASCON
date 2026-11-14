@@ -2,19 +2,17 @@
  "manifest-version": "1",
  "kernel-version": "2.0.0",
  "provenance": {
-  "source": "OSCAL IFA GoodRead example set (SSP 1.1.1, AP, AR, POA&M) + leveraged/leveraging SSP pair + component-definition example (usnistgov/oscal-content)",
-  "source-note": "FICTIONAL example content by NIST; converted as the gate-3 lifecycle corpus",
-  "source-oscal-version": "1.1.3",
-  "source-commit": "usnistgov/oscal-content@9402f031 (2026-07-14; the state fetched 2026-07-22)",
-  "source-documents": [
+  "sources": [
    {
     "file": "ifa_ssp.json",
     "title": "IFA SYSTEM1234 System Security Plan",
     "version": "1.1.1",
-    "oscal-version": "1.1.3",
+    "uuid": "cef90dc9-2745-4c59-90b6-f82f6a96dad7",
+    "date": "2026-05-12",
+    "format": "OSCAL",
+    "format-version": "1.1.3",
     "last-modified": "2026-05-12T10:26:16.00000-00:00",
     "published": "2026-05-13T12:30:10.00000-00:00",
-    "uuid": "cef90dc9-2745-4c59-90b6-f82f6a96dad7",
     "metadata": {
      "revisions": [
       {
@@ -163,11 +161,13 @@
     "file": "ifa_assessment-plan.json",
     "title": "IFA SYSTEM1234 Assessment Plan",
     "version": "1.1.0",
-    "oscal-version": "1.2.2",
+    "uuid": "74c1f5ed-7b04-49e4-a89b-f8b0120715fd",
+    "date": "2026-05-12",
+    "format": "OSCAL",
+    "format-version": "1.2.2",
     "last-modified": "2026-05-12T02:36:09.00000-00:00",
     "published": "2026-05-13T12:30:00.00000-00:00",
     "remarks": "In this version of the artifact, the content was updated to OSCAL v1.2.2.",
-    "uuid": "74c1f5ed-7b04-49e4-a89b-f8b0120715fd",
     "metadata": {
      "revisions": [
       {
@@ -268,10 +268,12 @@
     "file": "ifa_assessment-results.json",
     "title": "IFA SYSTEM1234 Assessment Results",
     "version": "1.0.0",
-    "oscal-version": "1.2.2",
+    "uuid": "f90f8cd3-8b97-4f6e-a79c-86076723ac49",
+    "date": "2026-05-12",
+    "format": "OSCAL",
+    "format-version": "1.2.2",
     "last-modified": "2026-05-12T02:46:09.00000-00:00",
     "remarks": "In this version of the artifact, the content was updated to OSCAL v1.1.3 and the system name was changed. Imported Assessment Plan was corrected. Other enhancements were implemented.",
-    "uuid": "f90f8cd3-8b97-4f6e-a79c-86076723ac49",
     "metadata": {
      "revisions": [
       {
@@ -370,10 +372,12 @@
     "file": "ifa_plan-of-action-and-milestones.json",
     "title": "IFA SYSTEM1234 Plan of Action and Milestones (POAM)",
     "version": "1.2.1",
-    "oscal-version": "1.2.2",
+    "uuid": "4a202b62-38e0-40ac-9bf0-d595d5df7c28",
+    "date": "2026-05-12",
+    "format": "OSCAL",
+    "format-version": "1.2.2",
     "last-modified": "2026-05-12T02:46:09.00000-00:00",
     "published": "2026-05-13T12:30:10.00000-00:00",
-    "uuid": "4a202b62-38e0-40ac-9bf0-d595d5df7c28",
     "metadata": {
      "revisions": [
       {
@@ -435,10 +439,12 @@
     "file": "oscal_leveraged-example_ssp.json",
     "title": "CSP IaaS System Security Plan",
     "version": "1.0.0",
-    "oscal-version": "1.2.2",
+    "uuid": "c2c2f46c-3b36-4abe-84b8-139c00d8a8ec",
+    "date": "2026-05-12",
+    "format": "OSCAL",
+    "format-version": "1.2.2",
     "last-modified": "2026-05-12T10:16:01.00000-00:00",
     "published": "2026-05-13T12:30:10.00000-00:00",
-    "uuid": "c2c2f46c-3b36-4abe-84b8-139c00d8a8ec",
     "metadata": {
      "roles": [
       {
@@ -488,10 +494,12 @@
     "file": "oscal_leveraging-example_ssp.json",
     "title": "Leveraging SaaS System Security Plan",
     "version": "1.0.0",
-    "oscal-version": "1.2.2",
+    "uuid": "0e6c0e99-0dac-458d-b82f-bf85d6ccc521",
+    "date": "2026-05-12",
+    "format": "OSCAL",
+    "format-version": "1.2.2",
     "last-modified": "2026-05-12T10:16:01.00000-00:00",
     "published": "2026-05-13T12:30:10.00000-00:00",
-    "uuid": "0e6c0e99-0dac-458d-b82f-bf85d6ccc521",
     "metadata": {
      "roles": [
       {
@@ -552,10 +560,12 @@
     "file": "example-component-definition.json",
     "title": "MongoDB Component Definition Example",
     "version": "20231012",
-    "oscal-version": "1.1.2",
+    "uuid": "bedec39a-6f8c-4d24-8b12-34458f387800",
+    "date": "2026-05-12",
+    "format": "OSCAL",
+    "format-version": "1.1.2",
     "last-modified": "2026-05-12T09:16:10.00000-00:00",
     "published": "2026-05-13T12:30:10.00000-00:00",
-    "uuid": "bedec39a-6f8c-4d24-8b12-34458f387800",
     "metadata": {
      "roles": [
       {
@@ -601,7 +611,9 @@
     }
    }
   ],
-  "converter": "convert_ifa.py v0.4 (provenance pre-filled from the source documents; the Attestation beside the manifest; conversion ledger)",
+  "source-note": "OSCAL IFA GoodRead example set (SSP 1.1.1, AP, AR, POA&M) + leveraged/leveraging SSP pair + component-definition example (usnistgov/oscal-content). FICTIONAL example content by NIST; converted as the gate-3 lifecycle corpus",
+  "source-commit": "usnistgov/oscal-content@9402f031 (2026-07-14; the state fetched 2026-07-22)",
+  "converter": "convert_ifa.py v0.5 (provenance pre-filled from the source documents; the Attestation beside the manifest; conversion ledger)",
   "carried-requirements": [
    "https://ns.nist.gov/sp800-53/req/AC-6.1",
    "https://ns.nist.gov/sp800-53/req/AC-2"
@@ -696,15 +708,15 @@
   {
    "id": "https://ns.nist.gov/sp800-53/req/AC-2",
    "version": "5.2.0",
-   "package-digest": "sha256:9390dffc3f6e2158ed6d4079adf46151ee20ad3c7f535fd982fcffb5ab330cb8",
-   "semantic-digest": "sha256:656877d154e5686739f653203511fcdd9d6572568a25d409e44b950ace9623de",
+   "package-digest": "sha256:0c79e54966f19301ac15a9234af3d922b7d06a073d659d923388da3b0bd8da07",
+   "semantic-digest": "sha256:2a5ace6db88d489fa9e12d817dec45f95dd5f3d500bd751cfca1369c23560775",
    "path": "objects/req/ac-2.json"
   },
   {
    "id": "https://ns.nist.gov/sp800-53/req/AC-6.1",
    "version": "5.2.0",
-   "package-digest": "sha256:cc0d251ea97324ae66ee2e5ea0ac5968af0f4256e1d60b3a80930494f29e7603",
-   "semantic-digest": "sha256:b14be76d67446e77ab0ccf4de964b4bee7b31dd5716d866487a921eaa3518da2",
+   "package-digest": "sha256:225450d02d9782e050e03e096797730983073578544af1b8c8c170f02b538876",
+   "semantic-digest": "sha256:854639ea435c95b095445b6ca68f9ce6226b391816d9a078040532b82c294a67",
    "path": "objects/req/ac-6-1.json"
   },
   {
@@ -724,21 +736,27 @@
  ],
  "facet-schemas": [
   {
+   "id": "https://ns.jascon.net/stdlib/facet/assessment-criteria",
+   "exact-version": "1.1.0",
+   "digest": "sha256:eb2ff77fc4b846deafae177ac568771d3c32dca1215a53d80b65f7709f04e792",
+   "path": "schemas/assessment-criteria-1.1.0.json"
+  },
+  {
    "id": "https://ifa.gov/goodread/facet/assessment-plan",
-   "exact-version": "1.0.0",
-   "digest": "sha256:9ce74bfd150051561ae1fe09a2d1c1a6d656083e68ac7d56bc13809ffcf69624",
+   "exact-version": "1.1.0",
+   "digest": "sha256:aa8c22f0619cc348984a730d76f70bb1aafbff9d81b208c905f68f1dfe24a2d2",
    "path": "schemas/goodread-ap-stub.json"
   },
   {
    "id": "https://ifa.gov/goodread/facet/component",
-   "exact-version": "1.0.0",
-   "digest": "sha256:fc867c8466c2fd46cd0bf4b318dbfad1eb1a99d0659b57d2632ff982e88399f7",
+   "exact-version": "1.1.0",
+   "digest": "sha256:155e486a045334c68707a861dc105af84a5b6293345c1f6c543d7ca3648f135a",
    "path": "schemas/goodread-component-stub.json"
   },
   {
    "id": "https://ifa.gov/goodread/facet/finding-target",
-   "exact-version": "1.0.0",
-   "digest": "sha256:0ad73b0509452864ee35216071b904d0ef4966a202f0bd3f3ffc1db637d9a107",
+   "exact-version": "1.1.0",
+   "digest": "sha256:4dd02a9e58c2271004af5a6acf1e64bbf54988a41cd91bcdf47eeb53750a4f74",
    "path": "schemas/goodread-finding-target-stub.json"
   },
   {
@@ -761,8 +779,8 @@
   },
   {
    "id": "https://ifa.gov/goodread/facet/risk-analysis",
-   "exact-version": "1.0.0",
-   "digest": "sha256:c961fa23ae939516d43a1cb37631ebdc1d4f4221533d1b9c26275f59f2133041",
+   "exact-version": "1.1.0",
+   "digest": "sha256:ca270977ec65ca29c126006d4a399f8860bc0a6de7706df44342432effc2023d",
    "path": "schemas/goodread-risk-analysis-stub.json"
   },
   {
@@ -773,14 +791,14 @@
   },
   {
    "id": "https://ns.jascon.net/compat/oscal-1x",
-   "exact-version": "1.1.0",
-   "digest": "sha256:a40334b73fd7ac9e70359d4784f94c5c03c48e9baea7a40ad37717238323f9cb",
-   "path": "schemas/oscal-1x-compat-1.1.0.json"
+   "exact-version": "1.2.0",
+   "digest": "sha256:0a7ed521490142ab833530eccf31f6708ea93f1837522e6cd434c75065b20ce8",
+   "path": "schemas/oscal-1x-compat-1.2.0.json"
   },
   {
    "id": "https://ns.nist.gov/sp800-53/facet/narrative",
    "exact-version": "1.0.0",
-   "digest": "sha256:067956e6667da855e2cf03358f0eea3bd87d5ac6143aef4244b40438274fbf7f",
+   "digest": "sha256:d378ed7bef2371cfc89501cf520e67625af3fa152edf63976acf5f648fba36b4",
    "path": "schemas/sp800-53-narrative-stub.json"
   },
   {
@@ -788,12 +806,6 @@
    "exact-version": "1.0.0",
    "digest": "sha256:338ffa125a3ffd156bf1b8268fd6a92c5458d95abb688b2096b45d3b9f7dd2c3",
    "path": "schemas/sp800-53-odp-stub.json"
-  },
-  {
-   "id": "https://ns.nist.gov/sp800-53/facet/sp800-53a",
-   "exact-version": "1.0.0",
-   "digest": "sha256:067ea82658d11e7b2af569b00f5385afdc49afdcc511e5352a034b287faf6cd3",
-   "path": "schemas/sp800-53a-stub.json"
   }
  ]
 }

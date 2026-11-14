@@ -1,6 +1,6 @@
 {
  "id": "https://ns.jascon.net/compat/oscal-1x",
- "version": "1.1.0",
+ "version": "1.2.0",
  "modifies-semantics": [],
  "note": "NORMATIVE pinned payload schema (backlog #26), one for every converter of this repository since 2026-11-14: closed shape - unknown keys are rejected, never smuggled",
  "schema": {
@@ -12,9 +12,6 @@
    },
    "uuid": {
     "type": "string"
-   },
-   "back-matter": {
-    "type": "object"
    },
    "catalog": {
     "type": "object"
@@ -29,13 +26,62 @@
     "type": "string"
    },
    "group-parts": {
-    "type": "array"
+    "type": "array",
+    "items": {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "group": {
+       "type": "string"
+      },
+      "name": {
+       "type": "string"
+      },
+      "prose": {
+       "type": "object",
+       "additionalProperties": {
+        "type": "string"
+       }
+      }
+     }
+    }
    },
    "param-extras": {
     "type": "object"
    },
    "props": {
-    "type": "array"
+    "type": "array",
+    "items": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "name",
+      "value"
+     ],
+     "properties": {
+      "name": {
+       "type": "string"
+      },
+      "uuid": {
+       "type": "string"
+      },
+      "ns": {
+       "type": "string"
+      },
+      "value": {
+       "type": "string"
+      },
+      "class": {
+       "type": "string"
+      },
+      "group": {
+       "type": "string"
+      },
+      "remarks": {
+       "type": "string"
+      }
+     }
+    }
    },
    "parts": {
     "type": "array"
@@ -54,9 +100,6 @@
    },
    "unmapped": {
     "type": "object"
-   },
-   "history": {
-    "type": "array"
    },
    "flows": {
     "type": "array"

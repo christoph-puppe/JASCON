@@ -11,25 +11,25 @@
    "path": "csf.catalog.back-matter.resources[].rlinks[].href",
    "count": 4,
    "level": "L1",
-   "destination": "references@1 facet on the root Set: a resource that something in the document refers to, as the source writes it (uuid, title, links with their media type); a resource nothing refers to is an orphan and is not carried (a rule the ledger checks) [ledger: 3 copied, 1 no content]"
+   "destination": "standard facet references@1 on the root Set: a resource that something in the document refers to, as the source writes it (its uuid as `id`, title, links with their media type); a resource nothing refers to is an orphan and is not carried (a rule the ledger checks) [ledger: 3 copied, 1 no content]"
   },
   {
    "path": "csf.catalog.back-matter.resources[].rlinks[].media-type",
    "count": 3,
    "level": "L1",
-   "destination": "references@1 facet on the root Set: a resource that something in the document refers to, as the source writes it (uuid, title, links with their media type); a resource nothing refers to is an orphan and is not carried (a rule the ledger checks) [ledger: 3 copied]"
+   "destination": "standard facet references@1 on the root Set: a resource that something in the document refers to, as the source writes it (its uuid as `id`, title, links with their media type); a resource nothing refers to is an orphan and is not carried (a rule the ledger checks) [ledger: 3 copied]"
   },
   {
    "path": "csf.catalog.back-matter.resources[].title",
    "count": 4,
    "level": "L1",
-   "destination": "references@1 facet on the root Set: a resource that something in the document refers to, as the source writes it (uuid, title, links with their media type); a resource nothing refers to is an orphan and is not carried (a rule the ledger checks) [ledger: 3 copied, 1 no content]"
+   "destination": "standard facet references@1 on the root Set: a resource that something in the document refers to, as the source writes it (its uuid as `id`, title, links with their media type); a resource nothing refers to is an orphan and is not carried (a rule the ledger checks) [ledger: 3 copied, 1 no content]"
   },
   {
    "path": "csf.catalog.back-matter.resources[].uuid",
    "count": 4,
    "level": "L1",
-   "destination": "references@1 facet on the root Set: a resource that something in the document refers to, as the source writes it (uuid, title, links with their media type); a resource nothing refers to is an orphan and is not carried (a rule the ledger checks) [ledger: 3 copied, 1 no content]"
+   "destination": "standard facet references@1 on the root Set: a resource that something in the document refers to, as the source writes it (its uuid as `id`, title, links with their media type); a resource nothing refers to is an orphan and is not carried (a rule the ledger checks) [ledger: 3 copied, 1 no content]"
   },
   {
    "path": "csf.catalog.groups[].class",
@@ -179,7 +179,7 @@
    "path": "csf.catalog.metadata.oscal-version",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance (`source`, `source-doc-version`, `source-oscal-version`, `published`); the title is the title of the root Set as well [ledger: 1 copied]"
+   "destination": "bundle manifest, the one entry of `provenance.sources` (`title`, `version`, `format-version`, `published`); the title is the title of the root Set as well [ledger: 1 copied]"
   },
   {
    "path": "csf.catalog.metadata.parties[].addresses[].addr-lines[]",
@@ -257,7 +257,7 @@
    "path": "csf.catalog.metadata.published",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance (`source`, `source-doc-version`, `source-oscal-version`, `published`); the title is the title of the root Set as well [ledger: 1 copied]"
+   "destination": "bundle manifest, the one entry of `provenance.sources` (`title`, `version`, `format-version`, `published`); the title is the title of the root Set as well [ledger: 1 copied]"
   },
   {
    "path": "csf.catalog.metadata.responsible-parties[].party-uuids[]",
@@ -329,19 +329,19 @@
    "path": "csf.catalog.metadata.title",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance (`source`, `source-doc-version`, `source-oscal-version`, `published`); the title is the title of the root Set as well [ledger: 1 copied]"
+   "destination": "bundle manifest, the one entry of `provenance.sources` (`title`, `version`, `format-version`, `published`); the title is the title of the root Set as well [ledger: 1 copied]"
   },
   {
    "path": "csf.catalog.metadata.version",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest provenance (`source`, `source-doc-version`, `source-oscal-version`, `published`); the title is the title of the root Set as well [ledger: 1 copied]"
+   "destination": "bundle manifest, the one entry of `provenance.sources` (`title`, `version`, `format-version`, `published`); the title is the title of the root Set as well [ledger: 1 copied]"
   },
   {
    "path": "csf.catalog.uuid",
    "count": 1,
-   "level": "L2",
-   "destination": "compat facet on the root Set, member `uuid` [ledger: 1 copied]"
+   "level": "L1",
+   "destination": "bundle manifest, `provenance.sources[0].uuid` [ledger: 1 copied]"
   }
  ],
  "source-version": "2.0",
@@ -500,7 +500,9 @@
   "verification-failures": 0,
   "rules": {
    "Requirement URI from the subcategory id": 555,
+   "author of the source: the party its document names as its author, as a party URI under the namespace": 1,
    "category Set URI from the category id": 102,
+   "date of the source: the day of the document's last-modified": 1,
    "file path of the object in the bundle, from the id": 225,
    "function Set URI from the function id": 18,
    "lineage inverted: the URI of a withdrawn item, written on the successor that its link names": 135,
@@ -548,7 +550,7 @@
   ],
   "declared-drops": [],
   "written-without-a-source": {
-   "object-leaf-values": 3670,
+   "object-leaf-values": 3669,
    "count": 732,
    "by-pointer": {
     "/id": 1,

@@ -30,7 +30,7 @@ import json, os, shutil, subprocess, sys, tempfile, unittest
 HERE = os.path.dirname(os.path.abspath(__file__))
 NS = "https://ns.cyber.gov.au/ism"
 COMPAT = "https://ns.jascon.net/compat/oscal-1x@1"
-REFERENCES = NS + "/facet/references@1"
+REFERENCES = "https://ns.jascon.net/stdlib/facet/references@1"   # the standard facet since 2026-11-14 (backlog #82)
 ISM_NS = "https://cyber.gov.au/ns/ism/oscal/3.0"
 IFA = "as decided for IFA on 2026-11-13: "
 RES = "11111111-2222-4333-8444-555555555555"
@@ -101,6 +101,8 @@ class Backlog41TheLedgerOfTheIsmConverter(unittest.TestCase):
         os.makedirs(os.path.join(tree, "sources"))
         with open(os.path.join(tree, "sources", "ism.json"), "w", encoding="utf-8") as f: json.dump(source, f)
         shutil.copy(os.path.join(HERE, "oscal_conv_lib.py"), scripts)
+        # the standard facets' descriptors, which the converter pins verbatim (references@1 since 2026-11-14)
+        os.symlink(os.path.join(HERE, "..", "schemas"), os.path.join(tree, "jascon", "schemas"))
         with open(os.path.join(HERE, "convert_ism.py"), encoding="utf-8") as f: code = f.read()
         for old, new in changes:
             if code.count(old) != 1:
@@ -146,18 +148,18 @@ class Backlog41TheLedgerOfTheIsmConverter(unittest.TestCase):
         self.assertEqual(self.count(r, f"{C}.title", "copied"), 2)
         self.assertEqual(self.count(r, f"{C}.parts[].prose", "copied"), 2)
         self.assertEqual(self.count(r, f"{C}.id", "transformed"), 2)
-        # the values of the props: label, revision and updated as they are; four markers by a rule; two sort-ids rebuilt
+        # the values of the props: label and revision as they are; four markers and the month by a rule; two sort-ids rebuilt
         self.assertEqual({o: self.count(r, f"{C}.props[].value", o) for o in ("copied", "transformed", "not-content")},
-                         {"copied": 3, "transformed": 4, "not-content": 2})
-        # their names: revision and updated are written; a marker's name gives the kind of its Set; label and sort-id select
+                         {"copied": 2, "transformed": 5, "not-content": 2})
+        # their names: a marker's name gives the kind of its Set; label, sort-id, revision and updated select a member
         self.assertEqual({o: self.count(r, f"{C}.props[].name", o) for o in ("copied", "transformed", "not-content")},
-                         {"copied": 2, "transformed": 4, "not-content": 3})
-        # their namespaces: written with revision and updated; the one the mapping reads the markers in is no content
-        self.assertEqual({o: self.count(r, f"{C}.props[].ns", o) for o in ("copied", "not-content")}, {"copied": 2, "not-content": 4})
+                         {"copied": 0, "transformed": 4, "not-content": 5})
+        # their namespaces: the one the mapping reads each of these names in is no content
+        self.assertEqual({o: self.count(r, f"{C}.props[].ns", o) for o in ("copied", "not-content")}, {"copied": 0, "not-content": 6})
         self.assertEqual(self.count(r, f"{C}.parts[].name", "not-content"), 2)
         rules = {(x["kind"], x["rule"][:22]): x["values"] for x in r["report"]["ledger"]["not-content"]}
-        self.assertEqual(rules, {("namespace", "the namespace of a pro"): 4, ("rebuilt-id", "a sort-id is its paren"): 7,
-                                 ("selector", "the name `statement` o"): 2, ("selector", "the name of a prop sel"): 8})
+        self.assertEqual(rules, {("namespace", "the namespace of a pro"): 6, ("rebuilt-id", "a sort-id is its paren"): 7,
+                                 ("selector", "the name `statement` o"): 2, ("selector", "the name of a prop sel"): 10})
         self.assertEqual(sum(rules.values()), r["ledger"]["totals"]["not-content"])
         self.assertEqual(self.rows(r)[f"{C}.props[].value", "not-content"]["rules"][0]["kind"], "rebuilt-id")
         # every title of a group is the title of a Set, the heading's too
@@ -173,10 +175,14 @@ class Backlog41TheLedgerOfTheIsmConverter(unittest.TestCase):
         o, src = self.plain["objects"], catalogue()["catalog"]
         self.assertEqual(sum(1 for x in o.values() if "statements" in x), 2)
         self.assertEqual(sum(1 for x in o.values() if "members" in x), 11, "5 groups, the root, 3 markers, 2 classes")
-        # a control's revision and the month of its change, as the source writes the props
-        props = o[NS + "/req/ism-0001"]["facets"][COMPAT]["props"]
-        self.assertEqual(props, [{"name": "revision", "ns": ISM_NS, "value": "3"}, {"name": "updated", "ns": ISM_NS, "value": "Dec-23"}])
-        self.assertEqual(o[NS + "/req/ism-0001"]["version"], "1.0", "the version is the catalogue's; the revision is not put in its place")
+        # a control's revision is the version of its Requirement, and the month of its last change the one entry of
+        # its history, written YYYY-MM (the author, 2026-11-14, backlog #81); until then both stood as props in compat
+        one = o[NS + "/req/ism-0001"]
+        self.assertEqual((one["version"], one["history"]), ("3", [{"date": "2023-12"}]))
+        self.assertNotIn("facets", one)
+        # a control the source gives no revision carries the catalogue's release, and no history
+        self.assertEqual(o[NS + "/req/ism-principle-gov-01"]["version"], "1.0")
+        self.assertNotIn("history", o[NS + "/req/ism-principle-gov-01"])
         self.assertNotIn("facets", o[NS + "/req/ism-principle-gov-01"])
         self.assertEqual(o[NS + "/req/ism-principle-gov-01"]["label"], "GOV-01")
         # the chapter that holds no control is a Set in its place, and the group below it a Set with no member
@@ -189,13 +195,20 @@ class Backlog41TheLedgerOfTheIsmConverter(unittest.TestCase):
         self.assertEqual(purpose["facets"][COMPAT]["group-parts"], [{"group": "Purpose", "name": "overview", "prose": {"en": f"See [the manual](#{RES})."}}])
         self.assertNotIn("group-parts", root["facets"][COMPAT], "an overview text stands on the Set of its own group")
         # the resource the link names, and the document's metadata
-        self.assertEqual(root["facets"][REFERENCES]["resources"], src["back-matter"]["resources"])
+        self.assertEqual(root["facets"][REFERENCES]["resources"],
+                         [{"id": x["uuid"], **{k: v for k, v in x.items() if k != "uuid"}} for x in src["back-matter"]["resources"]],
+                         "as the source writes them, the uuid under the member the standard facet names")
         self.assertEqual(root["facets"][COMPAT]["metadata"], {k: v for k, v in src["metadata"].items() if k not in ("title", "version")})
         self.assertEqual((root["title"], root["version"]), ({"en": "An invented manual"}, "1.0"))
-        self.assertEqual({k: self.plain["manifest"]["provenance"].get(k) for k in ("source-version", "source-oscal-version", "author-ref", "date")},
-                         {"source-version": "1.0", "source-oscal-version": "1.1.2", "author-ref": NS + "/party/nobody", "date": "2026-11-14"})
+        # the document is the one entry of the manifest's provenance.sources (backlog #80); its uuid stands there
+        self.assertNotIn("uuid", root["facets"][COMPAT])
+        self.assertEqual(self.plain["manifest"]["provenance"]["sources"],
+                         [{"title": "An invented manual", "version": "1.0", "uuid": src["uuid"], "author-ref": NS + "/party/nobody",
+                           "date": "2026-11-14", "format": "OSCAL", "format-version": "1.1.2"}])
+        self.assertEqual(sorted(self.plain["manifest"]["provenance"]), ["converter", "sources"])
         self.assertEqual(sorted(s["id"] for s in self.plain["manifest"]["facet-schemas"]),
-                         [NS + "/facet/references", "https://ns.jascon.net/compat/oscal-1x"])
+                         ["https://ns.jascon.net/compat/oscal-1x", "https://ns.jascon.net/stdlib/facet/references"])
+        self.assertEqual(self.plain["manifest"]["kernel-version"], "2.0.0", "a history is 2.0.0 content (KERNEL-1)")
         back = self.plain["report"]["ledger"]["read-back-from-the-written-bundle"]
         self.assertEqual({k: back[k] for k in ("sets-with-no-member", "requirements-with-revision", "resources", "links-in-texts",
                                                "links-that-name-a-resource-of-the-bundle", "sort-ids-in-the-source",
@@ -209,7 +222,8 @@ class Backlog41TheLedgerOfTheIsmConverter(unittest.TestCase):
         self.assertEqual(self.plain["ledger"]["totals"]["intentionally-dropped"], 0)
         uuid = [r for r in self.plain["ledger"]["paths"] if r["path"] == "ism.catalog.uuid"]
         self.assertEqual([(r["outcome"], r["count"], r["to"]) for r in uuid],
-                         [("copied", 1, [{"pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/uuid", "count": 1}])])
+                         [("copied", 1, [{"pointer": "/provenance/sources/[]/uuid", "count": 1}])],
+                         "in the manifest's provenance.sources since 2026-11-14 (backlog #80); on the root Set until then")
         self.assertEqual(self.plain["report"]["lifecycle-default"]["origin"], "converter-default")
         with open(os.path.join(self.plain["out"], "ism-coverage-report.md"), encoding="utf-8") as f: text = f.read()
         self.assertIn("### Declared drops that remain", text)
@@ -238,6 +252,15 @@ class Backlog41TheLedgerOfTheIsmConverter(unittest.TestCase):
         self.assertEqual(r["objects"][NS + "/req/ism-principle-gov-01"]["facets"][COMPAT]["props"], [other, foreign])
         members = [m["ref"] for m in r["objects"][NS + "/set/baseline/class-nc"]["members"]]
         self.assertEqual(members.count(NS + "/req/ism-principle-gov-01"), 1, "a name in another namespace is another meaning: no second entry")
+
+    def test_backlog_81_a_month_in_a_form_the_rule_does_not_read_ends_the_run(self):
+        # the rule reads Mon-YY and invents no month for another form: a source of another shape stops the converter
+        doc = catalogue()
+        for p in controls(doc)[0]["props"]:
+            if p["name"] == "updated": p["value"] = "December 2023"
+        r = self.convert(doc)
+        self.assertEqual(r["done"].returncode, 1)
+        self.assertIn("ism-0001 prints the month of its last change as 'December 2023'; the rule reads Mon-YY", r["done"].stderr)
 
     def test_backlog_41_a_control_nested_in_a_control_is_a_requirement_of_its_own(self):
         def change(doc):
@@ -299,12 +322,16 @@ class Backlog41TheLedgerOfTheIsmConverter(unittest.TestCase):
         return r
 
     def test_backlog_41_a_value_that_is_no_longer_written_ends_the_run(self):
-        # the props the kernel has no member for are not put on the Requirement
-        r = self.broken([('    if kept: compat["props"] = kept\n    if parent is not None', '    if parent is not None')],
-                        "6 source value(s) unaccounted")
-        self.assertEqual({u["path"].rsplit(".", 1)[1]: u["count"] for u in r["ledger"]["unaccounted-paths"]}, {"name": 2, "ns": 2, "value": 2})
+        # the control's revision is not written as the version of its Requirement: the value, and the name and the
+        # namespace that rest on it
+        r = self.broken([('"version": own_version if own_version is not None else version, "label": label,', '"version": version, "label": label,')],
+                        "3 source value(s) unaccounted")
+        self.assertEqual({u["path"].rsplit(".", 1)[1]: u["count"] for u in r["ledger"]["unaccounted-paths"]}, {"name": 1, "ns": 1, "value": 1})
+        # the month of its last change is not written as its history
+        r = self.broken([('    if history: req["history"] = history\n', '')], "3 source value(s) unaccounted")
+        self.assertEqual({u["path"].rsplit(".", 1)[1]: u["count"] for u in r["ledger"]["unaccounted-paths"]}, {"name": 1, "ns": 1, "value": 1})
         # the resources of the back-matter are not written: three values are lost, and the link in the text names nothing
-        r = self.broken([('if resources: root_facets[F_REF] = {"resources": resources}\n', '')], "3 source value(s) unaccounted")
+        r = self.broken([('if resources: root_facets[F_REF] = {"resources": [resource_entry(r) for r in resources]}\n', '')], "3 source value(s) unaccounted")
         self.assertIn("1 link(s) `(#uuid)` in a text of the bundle name no resource the bundle holds", r["done"].stderr)
         # the Set of the chapter that holds no control is not written. Its title is still a part of the id of the Set
         # below it, so the ledger calls it transformed and nothing is unaccounted; the path map says the title is

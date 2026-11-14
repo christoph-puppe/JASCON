@@ -27,6 +27,7 @@
   },
   {
    "id": "smt.a",
+   "label": "(a)",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization",
@@ -38,6 +39,7 @@
   },
   {
    "id": "smt.b",
+   "label": "(b)",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization",
@@ -49,6 +51,7 @@
   },
   {
    "id": "smt.c",
+   "label": "(c)",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization",
@@ -60,6 +63,7 @@
   },
   {
    "id": "smt.d",
+   "label": "(d)",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization",
@@ -71,6 +75,7 @@
   },
   {
    "id": "smt.e",
+   "label": "(e)",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization",
@@ -82,6 +87,7 @@
   },
   {
    "id": "smt.f",
+   "label": "(f)",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization",
@@ -100,7 +106,7 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "ia-13.3_obj",

@@ -1484,7 +1484,7 @@
    "example": "cr26#/FRR/AFC/data/all/FRP/AFC-FRP-VRE/updated/0/comment",
    "to": [
     {
-     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/history/[]/comment",
+     "pointer": "/history/[]/comment/en",
      "count": 303
     }
    ]
@@ -1496,7 +1496,7 @@
    "example": "cr26#/FRR/AFC/data/all/FRP/AFC-FRP-VRE/updated/0/date",
    "to": [
     {
-     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/history/[]/date",
+     "pointer": "/history/[]/date",
      "count": 303
     }
    ]
@@ -1508,7 +1508,7 @@
    "example": "cr26#/FRR/FRC/data/all/CLA/FRC-CLA-MFR/updated/0/issue",
    "to": [
     {
-     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/history/[]/issue",
+     "pointer": "/history/[]/ref",
      "count": 5
     }
    ]
@@ -3568,7 +3568,7 @@
    "example": "cr26#/KSI/CED/indicators/KSI-CED-RAT/updated/0/comment",
    "to": [
     {
-     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/history/[]/comment",
+     "pointer": "/history/[]/comment/en",
      "count": 87
     }
    ]
@@ -3580,7 +3580,7 @@
    "example": "cr26#/KSI/CED/indicators/KSI-CED-RAT/updated/0/date",
    "to": [
     {
-     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/history/[]/date",
+     "pointer": "/history/[]/date",
      "count": 87
     }
    ]
@@ -3592,7 +3592,7 @@
    "example": "cr26#/KSI/SCR/indicators/KSI-SCR-MIT/updated/0/issue",
    "to": [
     {
-     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/history/[]/issue",
+     "pointer": "/history/[]/ref",
      "count": 1
     }
    ]
@@ -3714,7 +3714,7 @@
      "count": 652
     },
     {
-     "pointer": "/provenance/last_updated",
+     "pointer": "/provenance/sources/[]/date",
      "count": 1
     }
    ]
@@ -3726,7 +3726,7 @@
    "example": "cr26#/info/title",
    "to": [
     {
-     "pointer": "/provenance/source",
+     "pointer": "/provenance/sources/[]/title",
      "count": 1
     },
     {
@@ -3746,7 +3746,7 @@
      "count": 1040
     },
     {
-     "pointer": "/provenance/source-version",
+     "pointer": "/provenance/sources/[]/version",
      "count": 1
     },
     {
