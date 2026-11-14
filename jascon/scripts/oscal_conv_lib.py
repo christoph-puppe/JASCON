@@ -118,6 +118,12 @@ COMPAT_PROPERTIES = {
     "ctl": {"type": "object"},             # CR26
 }
 
+def compat_schema():
+    """The pinned file of the compat facet, the same in every bundle: write it to `schemas/` + COMPAT_FILE."""
+    return {"id": COMPAT_ID, "version": COMPAT_VERSION, "modifies-semantics": [], "note": COMPAT_NOTE,
+            "schema": {"$schema": "https://json-schema.org/draft/2020-12/schema", "type": "object",
+                       "properties": copy.deepcopy(COMPAT_PROPERTIES), "additionalProperties": False}}
+
 def slug(s):
     s = re.sub(r"[^a-z0-9]+", "-", (s or "").lower()).strip("-")
     if len(s) <= 60:
@@ -201,8 +207,8 @@ class Bundle:
                        "type": "object", "properties": props,
                        "additionalProperties": False}}
     def pin_compat(self):
-        """Pins the one compat schema (COMPAT_PROPERTIES below)."""
-        self.stub(COMPAT_FILE, COMPAT_ID, [], COMPAT_PROPERTIES, note=COMPAT_NOTE, version=COMPAT_VERSION)
+        """Pins the one compat schema (compat_schema() below)."""
+        self.schemas[f"schemas/{COMPAT_FILE}"] = compat_schema()
     def pin_stdlib(self, filename):
         """#26: stdlib facets are pinned VERBATIM from the normative
         descriptor - the pin and the descriptor cannot diverge."""

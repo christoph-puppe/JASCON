@@ -2,10 +2,10 @@
  "measures": "one row per source path and outcome; every source leaf value was traced and checked against the written files in the run that wrote this record, and is counted in one row",
  "leaf-values": 36161,
  "totals": {
-  "copied": 11400,
+  "copied": 11401,
   "transformed": 14564,
   "not-content": 10196,
-  "intentionally-dropped": 1,
+  "intentionally-dropped": 0,
   "unaccounted": 0
  },
  "verification-failures": [],
@@ -973,12 +973,12 @@
   },
   {
    "path": "ism.catalog.uuid",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 1,
    "example": "ism#/catalog/uuid",
-   "reasons": [
+   "to": [
     {
-     "reason": "as decided for IFA on 2026-11-13: the uuid of a source element identifies it inside the source document; JASCON objects get URIs minted from names and titles, the uuid itself is not carried",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/uuid",
      "count": 1
     }
    ]

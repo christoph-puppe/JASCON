@@ -10,12 +10,13 @@ Source: ACSC ISM OSCAL catalog v2026.06.18 (oscal-version 1.1.2) - 1,150 control
 
 - Objects emitted: **1,150 Requirements**, **581 Sets**, manifest with both digests per object.
 
-- **Conversion ledger (measured per source value; the figures above are a DECLARATION)**: the path map says for every source path where its values are meant to go. The ledger follows each of the 36,161 source leaf values through the converter into the written files. **11,400 copied** (the value stands, with its type, at the destination named, read back from the written file), **14,564 transformed** (a named rule made the destination from it; the rule was applied to the source again and compared), **10,196 no content** (a name that only selects a field, a namespace, an id that is rebuilt exactly - each by a rule the ledger checked), **1 dropped for a reason declared earlier** (listed below for the author to decide), **0 unaccounted**. Claims that do not hold: 0. An equal value elsewhere in the bundle does not count: a value is traced by what the converter did with it. A run with an unaccounted value or a claim that does not hold ends with 1. `ism-conversion-ledger.json` is the record, one row per source path and outcome (58 rows; the entry of each single value is made and checked in the run and not written).
+- **Conversion ledger (measured per source value; the figures above are a DECLARATION)**: the path map says for every source path where its values are meant to go. The ledger follows each of the 36,161 source leaf values through the converter into the written files. **11,401 copied** (the value stands, with its type, at the destination named, read back from the written file), **14,564 transformed** (a named rule made the destination from it; the rule was applied to the source again and compared), **10,196 no content** (a name that only selects a field, a namespace, an id that is rebuilt exactly - each by a rule the ledger checked), **0 dropped for a reason declared earlier** (listed below for the author to decide), **0 unaccounted**. Claims that do not hold: 0. An equal value elsewhere in the bundle does not count: a value is traced by what the converter did with it. A run with an unaccounted value or a claim that does not hold ends with 1. `ism-conversion-ledger.json` is the record, one row per source path and outcome (58 rows; the entry of each single value is made and checked in the run and not written).
 
 ## Conversion rules (declared, counted)
 
 - **Modality word-rule** over statement prose (first match of must not > should not > must > should > may, else unspecified): unspecified x1149, may x1.
 - **Obligated party**: `https://ns.cyber.gov.au/ism/party/organisation` on every statement. This is the converter's default and not a value of the source; `--obligated-party URI` writes another. Why this default: ISM binds the organisation implicitly; no per-control party data in source.
+- **Lifecycle**: `active` on 1,731 object(s) is the converter's default and not a value of the source: the kernel requires a lifecycle on every object, and a published catalogue is taken to be in force. The source states no status on any object.
 - **Labels**: 49 from `label` props; 1101 derived from control id (`ism-1234` -> `ISM-1234`).
 - **Groups -> Sets**: every group is a Set, in its place in the hierarchy (570 groups). Its members are the Sets of its groups and the Requirements of its controls. 16 groups hold neither and are Sets with no member: 16 with an overview part, 0 a heading only.
 - **sequence**: document order (steps of 10). The source's `sort-id` (1,720 on controls and groups) is no content: a sort-id is its parent's sort-id, the kind of the element and its position among its siblings, written with as many digits as their number has. The ledger checked that for every value. Read back from the written files, a reader rebuilds 1,720 of 1,720.
@@ -102,7 +103,7 @@ Levels: L1 - written as it is in a kernel field; L2 - written as it is in a face
 | `catalog.metadata.roles[].title` | 1 | L2 | compat facet oscal-1x@1 on the root Set: metadata, in the source's own shape | 1 copied |
 | `catalog.metadata.title` | 1 | L1 | title of the root Set (set/tax/ism) | 1 copied |
 | `catalog.metadata.version` | 1 | L1 | `version` of every object; manifest provenance.source-version | 1 copied |
-| `catalog.uuid` | 1 | declared-drop | the uuid of the source document: not carried (a drop declared on 2026-11-13; see the table of declared drops) | 1 intentionally dropped |
+| `catalog.uuid` | 1 | L2 | compat facet oscal-1x@1 on the root Set: uuid (the uuid of the source document) | 1 copied |
 
 ## UNMAPPED (gate target: zero)
 
@@ -149,11 +150,9 @@ A value that is not written and is no content, by one of three rules. The ledger
 
 ### Declared drops that remain
 
-Declared before the author's rule of 2026-11-14 ("real content is never dropped") and not one of the three classes above. They stay declared until the author decides; the reading is the converter's and decides nothing.
+A value that reached no destination, for a declared reason. Since the author's decisions of 2026-11-14 none is left: the uuid of the source document, the last one, is carried on the root Set.
 
-| source path | values | declared reason | example | reading under the author's rule |
-|---|---:|---|---|---|
-| `^ism\.catalog\.uuid$` | 1 | as decided for IFA on 2026-11-13: the uuid of a source element identifies it inside the source document; JASCON objects get URIs minted from names and titles, the uuid itself is not carried | `ism#/catalog/uuid` = `36766a6f-e174-4292-a03e-fcb3b4b09201` | content: the uuid is the identity of this version of the source document, and nothing in the bundle lets a reader rebuild it. It would stand beside the document's metadata on the root Set. |
+*(none)*
 
 ### Where the path map and the ledger disagree
 
@@ -210,7 +209,7 @@ The ledger follows source values into the bundle, not the other way round. A val
 | manifest | `/objects/[]/package-digest` | 1,731 | `sha256:9a179baec6f33f5d4b40194d9ea6ae799601c2a9dc561748ebac1f678b76b2ad` |
 | manifest | `/objects/[]/path` | 1 | `objects/set-tax-root.json` |
 | manifest | `/objects/[]/semantic-digest` | 1,731 | `sha256:cd9473584bf6bc05c3606cb5124af788e8e8213fe95341bcfbe9419bbd1d00d3` |
-| manifest | `/provenance/converter` | 1 | `convert_ism.py v0.3` |
+| manifest | `/provenance/converter` | 1 | `convert_ism.py v0.4` |
 | manifest | `/provenance/source` | 1 | `ACSC ISM OSCAL catalog` |
 
 Two more limits. A value that stands at one destination is accounted for, also where another destination of it is lost: a control whose entry in a taxonomy Set was lost would still be counted, by its Requirement. The number of destinations of each rule, in the table above, is where such a loss shows. And a rule is held to what is written, not to what is right: a rule that is wrong and applied the same way twice passes.

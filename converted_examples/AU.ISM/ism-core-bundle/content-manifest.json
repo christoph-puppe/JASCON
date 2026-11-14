@@ -6,7 +6,7 @@
   "source-oscal-version": "1.1.2",
   "author-ref": "https://ns.cyber.gov.au/ism/party/australian-cyber-security-centre",
   "date": "2026-06-18",
-  "converter": "convert_ism.py v0.3"
+  "converter": "convert_ism.py v0.4"
  },
  "objects": [
   {
@@ -12003,8 +12003,8 @@
   {
    "id": "https://ns.cyber.gov.au/ism/set/tax/ism",
    "version": "2026.06.18",
-   "package-digest": "sha256:cb2c9245d504cf4427993cf0750bfb98e1c1ade24bc19a6686951ef3d4f31192",
-   "semantic-digest": "sha256:27a7202f428a8a3d2cf1176201f96f68300a754f324772565a3c380382ca287f",
+   "package-digest": "sha256:74a7f39c3c77966300e447e1f6beee5eb9c281134cd1ae19351d3166a1ff1363",
+   "semantic-digest": "sha256:4bd45f4d52004eea66d3a3e282640b5e1c7f9ed04b6a41b263380c8950eaa8ef",
    "path": "objects/set-tax-root.json"
   },
   {
@@ -12136,9 +12136,9 @@
   },
   {
    "id": "https://ns.jascon.net/compat/oscal-1x",
-   "exact-version": "1.0.0",
-   "digest": "sha256:4559566e3df56942cbf33a8d538d1e0ab2e0e5beec2cf2cea643fca1c0912503",
-   "path": "schemas/oscal-1x-compat-1.0.0-stub.json"
+   "exact-version": "1.1.0",
+   "digest": "sha256:a40334b73fd7ac9e70359d4784f94c5c03c48e9baea7a40ad37717238323f9cb",
+   "path": "schemas/oscal-1x-compat-1.1.0.json"
   }
  ]
 }

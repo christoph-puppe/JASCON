@@ -203,13 +203,14 @@ class Backlog41TheLedgerOfTheIsmConverter(unittest.TestCase):
                          {"sets-with-no-member": 1, "requirements-with-revision": 1, "resources": 1, "links-in-texts": 1,
                           "links-that-name-a-resource-of-the-bundle": 1, "sort-ids-in-the-source": 7, "sort-ids-rebuilt-from-the-bundle": 7})
 
-    def test_backlog_41_the_one_drop_that_is_still_declared_is_listed_for_the_author(self):
-        drops = self.plain["report"]["ledger"]["declared-drops"]
-        self.assertEqual([(d["path"], d["values"], d["example"], d["example-value"]) for d in drops],
-                         [(r"^ism\.catalog\.uuid$", 1, "ism#/catalog/uuid", "00000000-0000-4000-8000-000000000001")])
-        self.assertTrue(drops[0]["reason"].startswith(IFA))
-        self.assertTrue(drops[0]["reading"].startswith("content: "))
-        self.assertEqual(self.plain["ledger"]["totals"]["intentionally-dropped"], 1)
+    def test_backlog_41_no_drop_is_declared_and_the_documents_uuid_is_carried(self):
+        # until 2026-11-14 one drop was declared, the uuid of the source document; the author decided that it is carried
+        self.assertEqual(self.plain["report"]["ledger"]["declared-drops"], [])
+        self.assertEqual(self.plain["ledger"]["totals"]["intentionally-dropped"], 0)
+        uuid = [r for r in self.plain["ledger"]["paths"] if r["path"] == "ism.catalog.uuid"]
+        self.assertEqual([(r["outcome"], r["count"], r["to"]) for r in uuid],
+                         [("copied", 1, [{"pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/uuid", "count": 1}])])
+        self.assertEqual(self.plain["report"]["lifecycle-default"]["origin"], "converter-default")
         with open(os.path.join(self.plain["out"], "ism-coverage-report.md"), encoding="utf-8") as f: text = f.read()
         self.assertIn("### Declared drops that remain", text)
         self.assertIn("### What is no content", text)

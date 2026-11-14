@@ -33,6 +33,7 @@ import json, hashlib, os, re, copy, sys, collections
 from oscal_conv_lib import BUNDLE_NEWLINE   # one byte spelling on every OS (D3.1)
 from oscal_conv_lib import known_arguments, out_dir, obligated_party, obligated_party_line, obligated_party_record
 from oscal_conv_lib import Ledger, ledger_by_path, ledger_gate, LEDGER_OUTCOMES, document_author, document_day
+from oscal_conv_lib import COMPAT, COMPAT_FILE, compat_schema, lifecycle_default_record, lifecycle_default_line
 
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 SRC = os.path.join(ROOT, "sources", "ism.json")
@@ -152,17 +153,14 @@ DROP_UUID = (IFA + "the uuid of a source element identifies it inside the source
 # The drops that are still declared, for the table of the report: (pattern
 # over the ledger's path, the declared reason, a reading under the author's
 # rule). The reading is this script's and decides nothing.
-DECLARED_DROPS = [
-    (r"^ism\.catalog\.uuid$", DROP_UUID,
-     "content: the uuid is the identity of this version of the source document, and nothing in the bundle lets a reader "
-     "rebuild it. It would stand beside the document's metadata on the root Set."),
-]
+# None since 2026-11-14: the author decided that the uuid of the source
+# document, the one drop left, is carried (it stands on the root Set).
+DECLARED_DROPS = []
 G = r"^catalog(\.groups\[\])+"                # a group, at any depth
 C = G + r"(\.controls\[\])+"                  # a control of a group, also one nested in a control
 COMPAT_WORD = "compat facet oscal-1x@1"
 RULES = [
-    (r"^catalog\.uuid$", "declared-drop", "the uuid of the source document: not carried (a drop declared on 2026-11-13; "
-                                          "see the table of declared drops)"),
+    (r"^catalog\.uuid$", "L2", f"{COMPAT_WORD} on the root Set: uuid (the uuid of the source document)"),
     (r"^catalog\.metadata\.title$", "L1", "title of the root Set (set/tax/ism)"),
     (r"^catalog\.metadata\.version$", "L1", "`version` of every object; manifest provenance.source-version"),
     (r"^catalog\.metadata\.oscal-version$", "L2", f"{COMPAT_WORD} on the root Set: metadata; manifest provenance.source-oscal-version"),
@@ -344,7 +342,6 @@ def mint_req(c, parent=None):
 def next_seq():
     global seq_counter; seq_counter += 10; return seq_counter
 
-COMPAT = "https://ns.jascon.net/compat/oscal-1x@1"
 F_REF = f"{NS}/facet/references@1"
 no_members = collections.Counter()      # groups whose Set has no member, by whether they have an overview part
 
@@ -414,7 +411,7 @@ root = {"id": ROOT_ID, "version": version, "lifecycle": "active",
 metadata_rest = {k: v for k, v in cat["metadata"].items() if k not in ("title", "version")}
 resources = (cat.get("back-matter") or {}).get("resources") or []
 root_facets = {}
-if metadata_rest: root_facets[COMPAT] = {"metadata": metadata_rest}
+root_facets[COMPAT] = {**({"metadata": metadata_rest} if metadata_rest else {}), "uuid": cat["uuid"]}
 if resources: root_facets[F_REF] = {"resources": resources}
 if root_facets: root["facets"] = root_facets
 objects["objects/set-tax-root.json"] = root
@@ -456,23 +453,10 @@ for _base, _, _files in os.walk(os.path.join(OUT, "objects")):
 # props of an object this mapping has no member for, the control a control
 # is nested in, and the document's metadata on the root Set.
 _STRINGS = lambda *names: {n: {"type": "string"} for n in names}
-SCHEMAS = {"schemas/oscal-1x-compat-1.0.0-stub.json": {
-    "id": "https://ns.jascon.net/compat/oscal-1x", "version": "1.0.0",
-    "note": "NORMATIVE pinned payload schema (backlog 26); Level-2 waiting room (intended deprecation; see D16/handbook 14.6)",
-    "modifies-semantics": [],
-    "schema": {"$schema": "https://json-schema.org/draft/2020-12/schema",
-               "type": "object", "additionalProperties": False,
-               "properties": {"group-parts": {"type": "array", "items": {
-                                  "type": "object", "additionalProperties": False,
-                                  "properties": {"group": {"type": "string"},
-                                                 "name": {"type": "string"},
-                                                 "prose": {"type": "object",
-                                                           "additionalProperties": {"type": "string"}}}}},
-                              "props": {"type": "array", "items": {
-                                  "type": "object", "additionalProperties": False, "required": ["name", "value"],
-                                  "properties": _STRINGS("name", "uuid", "ns", "value", "class", "group", "remarks")}},
-                              "nested-in": {"type": "string"},
-                              "metadata": {"type": "object"}}}}}
+# Since 2026-11-14 the compat schema is the one every converter of the
+# repository pins (oscal_conv_lib.compat_schema, version 1.1.0); until then
+# this converter pinned one of its own under the same id and version 1.0.0.
+SCHEMAS = {"schemas/" + COMPAT_FILE: compat_schema()}
 if resources:
     SCHEMAS["schemas/ism-references-1.0.0-stub.json"] = {
         "id": F_REF.rsplit("@", 1)[0], "version": "1.0.0",
@@ -492,13 +476,16 @@ if resources:
                                           "type": "object", "additionalProperties": False, "required": ["href"],
                                           "properties": _STRINGS("href", "media-type")}}}}}}}}
 for _rel, _schema in SCHEMAS.items(): w(_rel, _schema)
+# a pin of an earlier run that this run no longer writes (the compat schema of 1.0.0) leaves the folder, file by file
+for _fn in sorted(os.listdir(os.path.join(OUT, "schemas"))):
+    if _fn.endswith(".json") and f"schemas/{_fn}" not in SCHEMAS: os.remove(os.path.join(OUT, "schemas", _fn))
 provenance = {"source": "ACSC ISM OSCAL catalog",
               "source-version": version,
               "source-oscal-version": cat["metadata"]["oscal-version"]}
 author = document_author(cat["metadata"])
 if author: provenance["author-ref"] = D(R_AUTHOR, _party_uri, author["name"])
 if document_day(cat["metadata"]): provenance["date"] = D(R_DAY, _day, cat["metadata"]["last-modified"])
-provenance["converter"] = "convert_ism.py v0.3"
+provenance["converter"] = "convert_ism.py v0.4"
 manifest = {"manifest-version": "1",
             "provenance": provenance,
             "objects": [{"id": o["id"], "version": o["version"],
@@ -690,6 +677,7 @@ j = {"source": os.path.relpath(SRC, ROOT).replace(os.sep, "/"), "source-version"
      "objects-emitted": {"requirements": len(req_index), "sets": n_sets, "total-objects": len(objects)},
      "modality-word-rule": dict(modality_count),
      "obligated-party": obligated_party_record(PARTY, PARTY_ORIGIN, PARTY_DEFAULT),
+     "lifecycle-default": lifecycle_default_record(objects, ()),      # the ISM states no status on anything
      "labels": {"from-label-prop": label_from_prop,
                 "derived-from-id": len(req_index) - label_from_prop},
      "baseline-sets": {k: len(v) for k, v in sorted(baseline_members.items())},
@@ -742,6 +730,7 @@ md.append(f"- **Modality word-rule** over statement prose (first match of "
           f"must not > should not > must > should > may, else unspecified): "
           + ", ".join(f"{k} x{v}" for k, v in sorted(modality_count.items(), key=lambda x:-x[1])) + ".")
 md.append(obligated_party_line(PARTY, PARTY_ORIGIN, PARTY_DEFAULT, PARTY_WHY))
+md.append(lifecycle_default_line(lifecycle_default_record(objects, ())))
 md.append(f"- **Labels**: {label_from_prop} from `label` props; "
           f"{len(req_index)-label_from_prop} derived from control id (`ism-1234` -> `ISM-1234`).")
 md.append(f"- **Groups -> Sets**: every group is a Set, in its place in the hierarchy ({n_groups:,} groups). Its "
@@ -830,9 +819,8 @@ for x in NO_CONTENT:
     md.append(f"| {x['kind']} | {x['values']:,} | {x['rule']} |")
 if not NO_CONTENT: md.append("| - | 0 | - |")
 md.append("\n### Declared drops that remain\n")
-md.append("Declared before the author's rule of 2026-11-14 (\"real content is never dropped\") and not one of the "
-          "three classes above. They stay declared until the author decides; the reading is the converter's and "
-          "decides nothing.\n")
+md.append("A value that reached no destination, for a declared reason. Since the author's decisions of 2026-11-14 "
+          "none is left: the uuid of the source document, the last one, is carried on the root Set.\n")
 if DROPS:
     md.append("| source path | values | declared reason | example | reading under the author's rule |\n|---|---:|---|---|---|")
     for d in DROPS:

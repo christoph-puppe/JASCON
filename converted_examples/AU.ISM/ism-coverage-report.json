@@ -21,6 +21,12 @@
   "origin": "converter-default",
   "converter-default": "https://ns.cyber.gov.au/ism/party/organisation"
  },
+ "lifecycle-default": {
+  "value": "active",
+  "origin": "converter-default",
+  "objects": 1731,
+  "source-states": 0
+ },
  "labels": {
   "from-label-prop": 49,
   "derived-from-id": 1101
@@ -52,10 +58,10 @@
   "file": "ism-conversion-ledger.json",
   "leaf-values": 36161,
   "totals": {
-   "copied": 11400,
+   "copied": 11401,
    "transformed": 14564,
    "not-content": 10196,
-   "intentionally-dropped": 1,
+   "intentionally-dropped": 0,
    "unaccounted": 0
   },
   "verification-failures": 0,
@@ -168,16 +174,7 @@
     "values": 1769
    }
   ],
-  "declared-drops": [
-   {
-    "path": "^ism\\.catalog\\.uuid$",
-    "values": 1,
-    "reason": "as decided for IFA on 2026-11-13: the uuid of a source element identifies it inside the source document; JASCON objects get URIs minted from names and titles, the uuid itself is not carried",
-    "example": "ism#/catalog/uuid",
-    "example-value": "36766a6f-e174-4292-a03e-fcb3b4b09201",
-    "reading": "content: the uuid is the identity of this version of the source document, and nothing in the bundle lets a reader rebuild it. It would stand beside the document's metadata on the root Set."
-   }
-  ],
+  "declared-drops": [],
   "path-map-and-ledger-disagree": [],
   "read-back-from-the-written-bundle": {
    "requirements": 1150,
@@ -283,7 +280,7 @@
     "in": "manifest",
     "pointer": "/provenance/converter",
     "count": 1,
-    "example": "convert_ism.py v0.3"
+    "example": "convert_ism.py v0.4"
    },
    {
     "in": "manifest",
@@ -771,10 +768,10 @@
   {
    "path": "catalog.uuid",
    "count": 1,
-   "level": "declared-drop",
-   "destination": "the uuid of the source document: not carried (a drop declared on 2026-11-13; see the table of declared drops)",
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the root Set: uuid (the uuid of the source document)",
    "ledger": {
-    "intentionally-dropped": 1
+    "copied": 1
    }
   }
  ]
