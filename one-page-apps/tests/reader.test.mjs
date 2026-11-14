@@ -35,7 +35,19 @@
       shape, a Risk whose ratings differ in who decided them, authorizations
       with and without a day. Each is written out as recorded.
 
-   Needs Playwright with Chromium for 4 to 8 and python3 with jsonschema for
+   9. A party the kernel requires (backlog #70, "refuse if no party is
+      named"): whom a statement binds, the author of a Mapping, the performer
+      of an Assessment, the approver of a Deviation. For each, an empty field
+      writes nothing and says which field the kernel requires, and a named
+      party is written as named. An approver field starts empty for every
+      Deviation; a Mapping does not take another form's performer.
+  10. The performer starts from the author and from no word, stays once it
+      is typed, and is empty once somebody emptied it; the word an earlier
+      version stored as performer is no party.
+   In node as well: a name becomes a party, an empty field names nobody, and
+   the page mints a party in one place only.
+
+   Needs Playwright with Chromium for 4 to 10 and python3 with jsonschema for
    the runs of the reference; where one is missing, that part is skipped and
    says so. Needs no network: the one thing the page asks the web for, its
    font stylesheet, is answered here with an empty one. */
@@ -65,7 +77,7 @@ const HTML = fs.readFileSync(READER, "utf8");
 const P = (() => {
   const a = HTML.indexOf("/* ==READER-PURE-START== */"), b = HTML.indexOf("/* ==READER-PURE-END== */");
   assert.ok(a >= 0 && b > a, "jascon-reader.html carries the READER-PURE markers");
-  return new Function(`"use strict";\n${HTML.slice(a, b)}\nreturn { inferType, kernelNeeded, kernelPinErrors, whoDecided, authorRecord, authorTailoring };`)();
+  return new Function(`"use strict";\n${HTML.slice(a, b)}\nreturn { inferType, kernelNeeded, kernelPinErrors, whoDecided, authorRecord, authorTailoring, partyUri, requiredParty };`)();
 })();
 
 /* ---------- 1. the pin vectors ---------- */
@@ -232,6 +244,34 @@ test("what a save writes: an unchanged record keeps its author and day; an uncha
   const unsigned = P.authorTailoring({ ...TAILORING, operations: [OP] }, undefined, null);
   assert.equal(JSON.stringify(unsigned).includes("provenance"), false);
   assert.equal(JSON.stringify(P.authorTailoring({ ...TAILORING, operations: [OP] }, unsigned, A).operations).includes("provenance"), false);
+});
+
+/* The sentences a workbench shows where the kernel requires a party and nobody named one (backlog #70). */
+const REFUSED = {
+  mapping: "author is empty — the kernel requires a Mapping to name its author (provenance.author-ref); no Mapping was written",
+  assessment: "performer is empty — the kernel requires an Assessment to name who performed it (performer-ref); no Assessment and no Finding was written",
+  deviation: "approver is empty — the kernel requires a Deviation to name who approves it (approver-ref); the operation was not added",
+  statement: "party is empty — the kernel requires a statement to name whom it binds (obligated-parties); no Requirement was written",
+};
+
+test("a party a person named: a URI as typed, a name under the namespace; an empty field names nobody, and the refusal says which field the kernel requires", () => {
+  const NS = "https://example.org/my";
+  assert.equal(P.partyUri("https://cso.example/party/ciso", NS), "https://cso.example/party/ciso", "a URI is taken as typed");
+  assert.equal(P.partyUri("urn:example:party:ciso", NS), "urn:example:party:ciso");
+  assert.equal(P.partyUri("  Head of Security ", NS + "/"), NS + "/party/head-of-security", "a name the person typed is a party the person named");
+  for (const nobody of ["", "   ", null, undefined, "?!", "—"]) assert.equal(P.partyUri(nobody, NS), "", JSON.stringify(nobody) + " names nobody");
+  for (const [kind, sentence] of Object.entries(REFUSED)) {
+    assert.deepEqual(P.requiredParty(kind, "Head of Security", NS), { ref: NS + "/party/head-of-security" }, kind);
+    for (const empty of ["", "  ", null, undefined]) assert.deepEqual(P.requiredParty(kind, empty, NS), { refused: sentence }, kind);
+    assert.match(P.requiredParty(kind, "?!", NS).refused, /"\?!" names no party \(a URI, or a name with a letter a-z or a digit, does\) — the kernel requires /, kind);
+    /* none of the words the page once wrote for an empty field comes back, in the party or in its place */
+    for (const typed of ["", "?!"]) assert.equal("ref" in P.requiredParty(kind, typed, NS), false, kind);
+  }
+  /* The page mints a party in one place, partyUri, from what a field holds. A default word that becomes a party
+     would need a second place or a fallback beside a field, and neither is in the page's script. */
+  const script = HTML.slice(HTML.indexOf("<script>"));
+  assert.equal(script.split('"/party/"').length - 1, 1, 'the string "/party/" stands once in the script, in partyUri');
+  assert.deepEqual(script.match(/\|\|\s*"(assessor|ciso|approver|author|organisation)"/g), null, "no fixed word stands in for an empty field");
 });
 
 /* ---------- the page in a browser ---------- */
@@ -497,6 +537,7 @@ test("the workbenches: no author refuses nothing and writes none; with an author
     for (const [title, prose] of [["Encrypt backups", "Backups are encrypted."], ["Rotate keys", "Keys are rotated."]]) {
       await page.fill("#wb-au-title", title);
       await page.fill("#wb-au-prose", prose);
+      await page.fill("#wb-au-party", "Operations");
       await page.click("#wb-au-addreq");
     }
     await page.fill("#wb-au-settitle", "My baseline");
@@ -512,7 +553,7 @@ test("the workbenches: no author refuses nothing and writes none; with an author
         await pick("wb-t-reqpick", "encrypt");
         await page.selectOption("#wb-t-mod", "should");
         await set("#wb-t-devrat", "The legacy tape library cannot encrypt.");
-        assert.equal(await page.inputValue("#wb-t-devappr"), "ciso", "the approver the form shows, left as it is");
+        await set("#wb-t-devappr", "Head of Security");
         await page.click("#wb-t-add");
       }
       await page.click("#wb-t-graph");
@@ -525,6 +566,7 @@ test("the workbenches: no author refuses nothing and writes none; with an author
       await page.click("#wb-i-graph");
       await R.view("stage:assess");
       await page.selectOption("#wb-a-scope", "system");
+      if (!await page.inputValue("#wb-a-perf")) await set("#wb-a-perf", "Lead Assessor");
       if (!await page.locator(".seg .on-not").count()) await page.locator('[data-az$="|not-satisfied"]').first().click();
       await page.click("#wb-a-gen");
     };
@@ -555,7 +597,8 @@ test("the workbenches: no author refuses nothing and writes none; with an author
     assert.deepEqual(A.objs.filter(o => JSON.stringify(o).includes("provenance")), [], "no provenance anywhere");
     assert.equal("kernel-version" in A.manifest, false, "1.0.0 content: the manifest pins no kernel");
     assert.deepEqual([A.of("tailoring").length, A.of("implementation").length, A.of("finding").length], [1, 1, 1]);
-    assert.equal(A.of("tailoring")[0].operations[0].deviation["approver-ref"], `${NS}/party/ciso`, "the approver the form showed is the approver written");
+    assert.equal(A.of("tailoring")[0].operations[0].deviation["approver-ref"], `${NS}/party/head-of-security`, "the approver typed is the approver written");
+    assert.deepEqual(A.of("assessment").map(o => o["performer-ref"]), [`${NS}/party/lead-assessor`]);
     assert.match(await R.log(), /manifest: no kernel-version is pinned — the content is 1\.0\.0 content/);
     /* the page states its version once: on the top bar, in the manifest it writes, on the first line of its console */
     const version = await page.locator("#pill-version").innerText();
@@ -570,7 +613,7 @@ test("the workbenches: no author refuses nothing and writes none; with an author
       assert.equal(reference(A.dir, "--require-authors").ok, false, "and a failure only where the caller asks for authors");
     }
 
-    /* the same with an author: a URI as typed, on all three workbenches at once */
+    /* the same with an author: a URI as typed, on every workbench at once */
     const CISO = `${NS}/party/ciso`;
     await R.view("stage:tailor");
     await set("#wb-t-who", CISO);
@@ -600,7 +643,7 @@ test("the workbenches: no author refuses nothing and writes none; with an author
     assert.equal(B.manifest["kernel-version"], "2.0.0", "provenance is 2.0.0 content: the manifest pins the kernel");
     assert.match(await R.log(), /manifest: pins kernel-version 2\.0\.0 — .* names its author \(provenance\)/);
     if (REFERENCE) {
-      const ref = reference(B.dir, "--require-authors");
+      const ref = reference(B.dir, "--require-authors", "--as-of", "2026-11-14");
       assert.ok(ref.ok, ref.out.slice(-2500));
       assert.match(ref.line, / pass, 0 fail/);
       assert.deepEqual(ref.notes.filter(l => /\(AUTHOR-/.test(l)), [], "nothing is reported as missing");
@@ -633,7 +676,7 @@ test("the workbenches: no author refuses nothing and writes none; with an author
     assert.deepEqual(await R.who(d, "operations[1]"), ["record", `${OPS} · ${day} inherited from the Tailoring`]);
     const C = await exported("second");
     assert.deepEqual(C.of("tailoring")[0].operations.map(op => op.provenance), [WROTE, undefined]);
-    if (REFERENCE) { const ref = reference(C.dir, "--require-authors"); assert.ok(ref.ok, ref.out.slice(-2500)); }
+    if (REFERENCE) { const ref = reference(C.dir, "--require-authors", "--as-of", "2026-11-14"); assert.ok(ref.ok, ref.out.slice(-2500)); }
 
     /* what the page wrote, read back: pinned and needed, every digest verified */
     await R.load(B.dir);
@@ -702,6 +745,220 @@ test("the workbenches: no author refuses nothing and writes none; with an author
       assert.match(await R.text(web.locator("#ov-stop")), /manifest pins kernel-version 3\.0\.0; this reader implements 2\.0\.0/);
     } finally { server.close(); }
   }));
+
+test("a party the kernel requires: an empty field writes nothing and says why; a named party is written as named; an approver is never pre-filled", OPTS, () => withReader(async R => {
+  const { page } = R;
+  const pick = async (id, q) => { await page.fill("#" + id, q); await page.locator(`#${id}-sugg [data-pick]`).first().click(); };
+  const set = async (sel, value) => { await page.fill(sel, value); await page.locator(sel).dispatchEvent("change"); };
+  const NS = "https://example.org/my", day = await page.evaluate(() => new Date().toISOString().slice(0, 10));
+  /* what a workbench says beside its button when it refuses: [that it is a refusal for want of a party, the sentence] */
+  const refused = async id => { const e = page.locator("#" + id); return [await e.getAttribute("data-refused"), await R.text(e)]; };
+  /* what the graph holds, by type, as the object browser counts it */
+  const held = async () => Object.fromEntries(await page.locator("#typefilters .fpill[data-t]").evaluateAll(l => l.map(x => [x.dataset.t, Number(x.textContent.split("·").pop())])));
+  const downloads = [];
+  page.on("download", d => downloads.push(d.suggestedFilename()));
+
+  /* 1. whom a statement binds */
+  await R.view("stage:author");
+  assert.equal(await page.inputValue("#wb-au-party"), "", "the party field starts empty");
+  await page.fill("#wb-au-title", "Encrypt backups");
+  await page.fill("#wb-au-prose", "Backups are encrypted.");
+  await page.click("#wb-au-addreq");
+  assert.deepEqual(await refused("wb-au-err"), ["party", REFUSED.statement]);
+  assert.deepEqual(await held(), {}, "nothing was written");
+  assert.deepEqual([await page.inputValue("#wb-au-title"), await page.inputValue("#wb-au-prose")], ["Encrypt backups", "Backups are encrypted."], "and nothing was changed: the form holds what was typed");
+  await page.fill("#wb-au-party", "?!");
+  await page.click("#wb-au-addreq");
+  assert.match((await refused("wb-au-err"))[1], /^party "\?!" names no party \(a URI, or a name with a letter a-z or a digit, does\) — the kernel requires a statement to name whom it binds/);
+  assert.deepEqual(await held(), {});
+  await page.fill("#wb-au-party", "Operations Team");
+  await page.click("#wb-au-addreq");                       // typed and pressed at once
+  assert.deepEqual(await held(), { requirement: 1 });
+  assert.equal(await R.text(page.locator("#wb-au-err")), "");
+  await page.fill("#wb-au-title", "Rotate keys");
+  await page.fill("#wb-au-prose", "Keys are rotated.");
+  await page.fill("#wb-au-party", "https://cso.example/party/key-custodian");
+  await page.click("#wb-au-addreq");
+  await page.fill("#wb-au-settitle", "My baseline");
+  await pick("wb-au-mempick", "encrypt");
+  await pick("wb-au-mempick", "rotate");
+  await page.click("#wb-au-addset");
+  const before = { requirement: 2, requirementSet: 1 };
+  assert.deepEqual(await held(), before);
+
+  /* 2. who performed an Assessment: no performer is typed and there is no author to start from */
+  await R.view("stage:assess");
+  assert.equal(await page.inputValue("#wb-a-perf"), "", "the performer field starts empty");
+  assert.equal(await R.text(page.locator("[data-performer-note]")), "required — the kernel requires an Assessment to name who performed it; without a performer nothing is generated");
+  assert.match(await R.text(page.locator("#wb-a-who + [data-who-note]")), /^optional — without an author a Finding is written without provenance/, "the author beside it stays optional");
+  await page.locator('[data-az$="|not-satisfied"]').first().click();
+  await page.click("#wb-a-gen");
+  assert.deepEqual(await refused("wb-a-err"), ["party", REFUSED.assessment]);
+  await page.click("#wb-a-dl");
+  assert.deepEqual(await refused("wb-a-err"), ["party", REFUSED.assessment]);
+  await page.waitForTimeout(700);                          // a download would have begun by now
+  assert.deepEqual(downloads, [], "nothing was downloaded either");
+  assert.deepEqual(await held(), before, "no Assessment and no Finding");
+
+  /* 3. whose claim a Mapping is. The performer is named now, in the other form - and a Mapping does not take it. */
+  await set("#wb-a-perf", "Lead Assessor");
+  await R.view("stage:map");
+  assert.equal(await page.inputValue("#wb-m-who"), "");
+  assert.equal(await R.text(page.locator("#wb-m-who + [data-who-note]")), "required — the kernel requires a Mapping to name its author; without one no Mapping is written");
+  await pick("wb-m-srcpick", "encrypt");
+  await pick("wb-m-tgtpick", "rotate");
+  await page.click("#wb-m-add");
+  assert.deepEqual(await refused("wb-m-err"), ["party", REFUSED.mapping]);
+  assert.deepEqual(await held(), before, "no Mapping: not under the performer's name, and not under a word");
+  /* The author is typed and the button pressed at once, as a person does. The field loses the focus to the button
+     while the pointer is down, and nothing under the pointer may move then, or the click is lost: the note beside
+     the field, which can grow by a line and push the button down, waits until the pointer is up. */
+  await page.fill("#wb-m-who", "Compliance Office");
+  const button = await page.locator("#wb-m-add").boundingBox();
+  await page.mouse.move(button.x + button.width / 2, button.y + button.height / 2);
+  await page.mouse.down();
+  assert.match(await R.text(page.locator("#wb-m-who + [data-who-note]")), /^required — /, "while the pointer is down the note is not rewritten");
+  await page.mouse.up();
+  assert.deepEqual(await held(), { ...before, mapping: 1 });
+  assert.equal(await R.text(page.locator("#wb-m-who + [data-who-note]")), `a Mapping written here names ${NS}/party/compliance-office · ${day} as its provenance`);
+  /* A Mapping is one claim, added by one press: added again, it names who adds it now, and not who it named
+     before. That is how a Mapping an earlier version wrote under a word comes to a named author. */
+  const claimedBy = async () => ((await R.text(await R.detail(`${NS}/map/encrypt-backups-rotate-keys`))).match(/provenance (\S+) · /) || [])[1];
+  assert.equal(await claimedBy(), `${NS}/party/compliance-office`);
+  await R.view("stage:map");
+  await set("#wb-m-who", "Somebody Else");
+  await page.click("#wb-m-add");
+  assert.equal(await claimedBy(), `${NS}/party/somebody-else`);
+  await R.view("stage:map");
+  await set("#wb-m-who", "Compliance Office");
+  await page.click("#wb-m-add");
+  assert.equal(await claimedBy(), `${NS}/party/compliance-office`);
+  await R.view("stage:map");
+
+  /* 4. the Assessment, its performer named */
+  await R.view("stage:assess");
+  assert.equal(await R.text(page.locator("[data-performer-note]")), `the Assessment names ${NS}/party/lead-assessor as its performer`);
+  await page.click("#wb-a-gen");
+  assert.deepEqual(await held(), { ...before, mapping: 1, assessment: 1, finding: 1 });
+
+  /* 5. who approves a Deviation: the field starts empty for every Deviation, also now that an author is named */
+  await R.view("stage:tailor");
+  assert.equal(await page.inputValue("#wb-t-who"), "Compliance Office");
+  await pick("wb-t-selpick", "my baseline");
+  await pick("wb-t-reqpick", "encrypt");
+  await page.selectOption("#wb-t-mod", "should");
+  assert.equal(await page.inputValue("#wb-t-devappr"), "", "no approver by default, and none taken from the author");
+  await set("#wb-t-devrat", "The legacy tape library cannot encrypt.");
+  await page.click("#wb-t-add");
+  assert.deepEqual(await refused("wb-t-err"), ["party", REFUSED.deviation]);
+  assert.equal(await page.locator("[data-delop]").count(), 0, "the operation was not added");
+  assert.equal(await page.inputValue("#wb-t-devrat"), "The legacy tape library cannot encrypt.", "what was typed stays");
+  await page.fill("#wb-t-devappr", "Head of Security");
+  await page.click("#wb-t-add");                           // typed and pressed at once
+  assert.equal(await page.locator("[data-delop]").count(), 1);
+  assert.equal(await page.inputValue("#wb-t-devappr"), "", "the approver of the Deviation just written does not stay in the field");
+  /* the next Deviation: empty again. An approver typed for an operation that is then begun anew does not stay either. */
+  await pick("wb-t-reqpick", "rotate");
+  await page.selectOption("#wb-t-mod", "may");
+  assert.equal(await page.inputValue("#wb-t-devappr"), "", "the approver of the Deviation before is not the approver of this one");
+  await set("#wb-t-devappr", "Somebody Else");
+  await pick("wb-t-reqpick", "rotate");
+  assert.equal(await page.inputValue("#wb-t-devappr"), "");
+  await set("#wb-t-devrat", "Rotation is manual until the HSM arrives.");
+  await set("#wb-t-devappr", "https://cso.example/party/ciso");
+  await page.click("#wb-t-add");
+  assert.equal(await page.locator("[data-delop]").count(), 2);
+  await page.click("#wb-t-graph");
+
+  /* 6. what was written names the parties as they were named, and no other */
+  const dir = unzipTo(await R.download("#btn-export-ws"), path.join(R.tmp, "named"));
+  const manifest = JSON.parse(fs.readFileSync(path.join(dir, "content-manifest.json"), "utf8"));
+  const objs = manifest.objects.map(e => JSON.parse(fs.readFileSync(path.join(dir, e.path), "utf8"))), of = type => objs.filter(o => P.inferType(o) === type);
+  const OFFICE = `${NS}/party/compliance-office`;
+  assert.deepEqual(of("requirement").map(o => o.statements[0]["obligated-parties"]), [[`${NS}/party/operations-team`], ["https://cso.example/party/key-custodian"]]);
+  assert.deepEqual(of("mapping").map(o => o.provenance), [{ "author-ref": OFFICE, date: day }]);
+  assert.deepEqual(of("assessment").map(o => o["performer-ref"]), [`${NS}/party/lead-assessor`]);
+  assert.deepEqual(of("tailoring")[0].operations.map(op => op.deviation["approver-ref"]), [`${NS}/party/head-of-security`, "https://cso.example/party/ciso"]);
+  assert.deepEqual([...new Set(JSON.stringify(objs).match(/https:[^"]*\/party\/[^"]*/g))].sort(),
+    [OFFICE, `${NS}/party/head-of-security`, `${NS}/party/lead-assessor`, `${NS}/party/operations-team`, "https://cso.example/party/ciso", "https://cso.example/party/key-custodian"].sort(),
+    "every party in the bundle is one somebody typed");
+  /* the optional authors of the same bundle: the Tailoring and the Finding name the author, because one was given */
+  assert.deepEqual([of("tailoring")[0].provenance, of("finding")[0].provenance], [{ "author-ref": OFFICE, date: day }, { "author-ref": OFFICE, date: day }]);
+  if (REFERENCE) {
+    const ref = reference(dir, "--require-authors", "--as-of", "2026-11-14");
+    assert.ok(ref.ok, ref.out.slice(-2500));
+    assert.match(ref.line, / pass, 0 fail/);
+    assert.deepEqual(ref.notes.filter(l => /\(AUTHOR-/.test(l)), []);
+  }
+}));
+
+test("the performer of an Assessment starts from the author and from no word; typed, it stays; emptied, it is empty; the word an earlier version stored is no party", OPTS, () => withReader(async R => {
+  const { page } = R;
+  const set = async (sel, value) => { await page.fill(sel, value); await page.locator(sel).dispatchEvent("change"); };
+  const NS = "https://example.org/my", day = await page.evaluate(() => new Date().toISOString().slice(0, 10)), ASSESSMENT_ID = `${NS}/asmt/check-${day}`;
+  const refused = async id => { const e = page.locator("#" + id); return [await e.getAttribute("data-refused"), await R.text(e)]; };
+  /* the performer the generated Assessment names, read where the object browser shows it */
+  const performer = async () => { const t = await R.text(await R.detail(ASSESSMENT_ID)); return (t.match(/performer-ref (\S+)/) || [])[1]; };
+  await R.load(EXAMPLES);
+  await R.view("stage:assess");
+  assert.equal(await page.inputValue("#wb-a-perf"), "");
+
+  /* The author is typed, and the pointer pressed somewhere beside the field. While it is down the notes and the
+     performer field stay as they are; once it is up they say what will be written. */
+  await page.fill("#wb-a-who", "https://cso.example/party/secops");
+  const beside = await page.locator("#view-stagefn .wb > .nano").first().boundingBox();
+  await page.mouse.move(beside.x + 4, beside.y + 4);
+  await page.mouse.down();
+  assert.match(await R.text(page.locator("#wb-a-who + [data-who-note]")), /^optional — /, "while the pointer is down nothing is rewritten");
+  assert.equal(await page.inputValue("#wb-a-perf"), "");
+  await page.mouse.up();
+  await page.waitForFunction(() => document.querySelector("#wb-a-perf").value !== "");
+  assert.equal(await R.text(page.locator("#wb-a-who + [data-who-note]")), `a Finding written here names https://cso.example/party/secops · ${day} as its provenance; one that is unchanged keeps what it names`);
+  /* the performer field has taken the author, and says where it has it from */
+  assert.equal(await page.inputValue("#wb-a-perf"), "https://cso.example/party/secops");
+  assert.equal(await R.text(page.locator("[data-performer-note]")), "the Assessment names https://cso.example/party/secops as its performer — the author, until a performer is typed");
+  await set("#wb-a-who", "Platform Ops");
+  assert.equal(await page.inputValue("#wb-a-perf"), "Platform Ops", "and follows the author while nobody has typed a performer");
+  await page.click("#wb-a-gen");
+  assert.equal(await performer(), `${NS}/party/platform-ops`);
+
+  /* a performer somebody typed stays, whoever the author becomes */
+  await R.view("stage:assess");
+  await set("#wb-a-perf", "Lead Assessor");
+  assert.equal(await R.text(page.locator("[data-performer-note]")), `the Assessment names ${NS}/party/lead-assessor as its performer`);
+  await set("#wb-a-who", "https://cso.example/party/secops");
+  assert.equal(await page.inputValue("#wb-a-perf"), "Lead Assessor");
+  await page.click("#wb-a-gen");
+  assert.equal(await performer(), `${NS}/party/lead-assessor`);
+
+  /* a field somebody emptied is empty: the author does not come back into it, and nothing is written */
+  await R.view("stage:assess");
+  await set("#wb-a-perf", "");
+  await page.click("#wb-a-gen");
+  assert.deepEqual(await refused("wb-a-err"), ["party", REFUSED.assessment]);
+  assert.equal(await performer(), `${NS}/party/lead-assessor`, "the Assessment in the graph is the one written before");
+  await R.view("stage:assess");
+  assert.equal(await page.inputValue("#wb-a-perf"), "", "also after the workbench is drawn again");
+
+  /* The state an earlier version stored. It began with the performer "assessor", which nobody had typed: that
+     word is no party, and nothing is generated under it. A performer somebody did type is kept. */
+  const earlier = performerStored => ({ ns: NS, tailor: { label: "my-tailoring", selects: [], excludes: [], operations: [] },
+    system: { title: "My System", components: [], implementations: [] }, assess: { scopeKey: "", performer: performerStored, results: {} } });
+  for (const [storedWord, shown, written] of [["assessor", "", undefined], ["Jane Roe", "Jane Roe", `${NS}/party/jane-roe`]]) {
+    await page.evaluate(w => localStorage.setItem("scr-work", JSON.stringify(w)), earlier(storedWord));
+    await page.reload();
+    await R.load(EXAMPLES);
+    await R.view("stage:assess");
+    assert.equal(await page.inputValue("#wb-a-perf"), shown, `stored as ${storedWord}`);
+    await page.click("#wb-a-gen");
+    if (written) assert.equal(await performer(), written);
+    else {
+      assert.deepEqual(await refused("wb-a-err"), ["party", REFUSED.assessment]);
+      await R.view("browser");
+      assert.equal(await page.locator(`.objrow[data-id="${ASSESSMENT_ID}"]`).count(), 0, "no Assessment was written");
+    }
+  }
+}));
 
 test("pasted objects: Deviations in every state with review dates of every shape, a Risk's ratings, authorizations with and without a day - written out as recorded", OPTS, () => withReader(async R => {
   const { page } = R;

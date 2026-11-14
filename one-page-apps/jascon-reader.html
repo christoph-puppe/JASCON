@@ -356,7 +356,6 @@ svg text{font-family:'JetBrains Mono',monospace}
 "use strict";
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const slug = s => String(s || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 60) || "x";
 
 /* ---------- log ---------- */
 const l = (() => {
@@ -440,11 +439,15 @@ const state = {
 
 /* ==READER-PURE-START== */
 /* The part of this page that touches neither the document nor its state: type
-   inference, the kernel pin, who decided an entry, and what a workbench writes
-   about that. It stands between two markers so that
-   one-page-apps/tests/reader.test.mjs can read it out of this file and run it
-   in node against jascon/conformance/kernel-vectors.json. Nothing here is
-   generated, and the page needs no build step. */
+   inference, the kernel pin, who decided an entry, what a workbench writes
+   about that, and the parties the kernel requires. It stands between two
+   markers so that one-page-apps/tests/reader.test.mjs can read it out of this
+   file and run it in node against jascon/conformance/kernel-vectors.json.
+   Nothing here is generated, and the page needs no build step. */
+
+/* a path segment from a text: lower case, a-z and 0-9, everything else a hyphen; "x" where nothing is left (an id needs a segment) */
+const slugOrNone = s => String(s || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 60);
+const slug = s => slugOrNone(s) || "x";
 
 /* ---------- type inference (mirrors validate_core.py) ---------- */
 function inferType(o) {
@@ -605,6 +608,49 @@ function authorTailoring(next, prev, prov) {
   }
   return setProvenance(out, prov);
 }
+
+/* ---------- a party the kernel requires (v1.12.0; backlog #70) ----------
+   Author decision 2026-11-14: "refuse if no party is named". The kernel
+   requires a party in four places this page writes: the author of a Mapping
+   (provenance.author-ref), the performer of an Assessment (performer-ref),
+   the approver of a Deviation (approver-ref) and whom a statement binds
+   (obligated-parties). Until 1.11.0 an empty field became a party made from
+   a word - .../party/author, .../party/assessor, .../party/ciso,
+   .../party/organisation. The object validated, and it named somebody nobody
+   had named. Now a workbench writes such an object only once a person has
+   named the party, says which field is empty and that the kernel requires
+   it, and changes nothing until then.
+
+   This is the opposite of the rule for the OPTIONAL `provenance` of a
+   Tailoring, an Implementation and a Finding (above; backlog #69), and the
+   two are kept apart on purpose. There the kernel asks for nothing: an empty
+   author writes no `provenance`, nothing is refused, and a validator reports
+   the gap as a line. Here the kernel asks: an object without the party is no
+   object, so the gap cannot be written down - and the page does not answer
+   in a person's place. In both, nobody is invented.
+
+   A name a person typed is a party that person named. A URI is taken as
+   typed; a plain name becomes <namespace>/party/<slug>. A text that leaves
+   no letter and no digit for a slug names nobody. */
+function partyUri(name, ns) {
+  const v = String(name ?? "").trim();
+  if (!v) return "";
+  if (/^[a-z][a-z0-9+.-]*:/i.test(v)) return v;
+  return slugOrNone(v) ? String(ns ?? "").replace(/\/$/, "") + "/party/" + slugOrNone(v) : "";
+}
+const PARTY_REQUIRED = {
+  mapping:    { field: "author",    of: "a Mapping",     names: "its author (provenance.author-ref)", unwritten: "no Mapping was written" },
+  assessment: { field: "performer", of: "an Assessment", names: "who performed it (performer-ref)",   unwritten: "no Assessment and no Finding was written" },
+  deviation:  { field: "approver",  of: "a Deviation",   names: "who approves it (approver-ref)",     unwritten: "the operation was not added" },
+  statement:  { field: "party",     of: "a statement",   names: "whom it binds (obligated-parties)",  unwritten: "no Requirement was written" },
+};
+/* -> { ref } where a party is named; { refused } where none is: the sentence the workbench shows */
+function requiredParty(kind, name, ns) {
+  const ref = partyUri(name, ns), r = PARTY_REQUIRED[kind], typed = String(name ?? "").trim();
+  if (ref) return { ref };
+  return { refused: (typed ? `${r.field} "${typed}" names no party (a URI, or a name with a letter a-z or a digit, does)` : `${r.field} is empty`) +
+    ` — the kernel requires ${r.of} to name ${r.names}; ${r.unwritten}` };
+}
 /* ==READER-PURE-END== */
 
 /* ---------- canonical form + sha256 ---------- */
@@ -665,7 +711,7 @@ function sha256Fallback(bytes) {
 /* The version is stated once. Until 1.10.0 it stood in three places - the pill of the top bar, the
    `converter` line of every manifest written here, and the first line of the console - and they had
    come apart: 1.9.1, 1.9.1 and 1.10.0. */
-const READER_VERSION = "1.11.0", READER_BUILD = "2026-11-14";
+const READER_VERSION = "1.12.0", READER_BUILD = "2026-11-14";
 const READER_ID = "jascon-reader.html v" + READER_VERSION;
 $("pill-version").textContent = `v${READER_VERSION} · build ${READER_BUILD}`;
 /* URL loading — works when this page and the bundle are served over http(s)
@@ -2010,46 +2056,83 @@ function buildZip(files) {   // files: [{name, bytes}] -> Uint8Array
 /* ---------- workbench: author your own objects ---------- */
 const work = (() => {
   try { return JSON.parse(localStorage.getItem("scr-work")) || null; } catch {} return null;
-})() || { ns: "https://example.org/my", tailor: { label: "my-tailoring", selects: [], excludes: [], operations: [] },
+})() || { v: 2, ns: "https://example.org/my", tailor: { label: "my-tailoring", selects: [], excludes: [], operations: [] },
           system: { title: "My System", components: [], implementations: [] },
-          assess: { scopeKey: "", performer: "assessor", results: {} }, _draft: {} };
+          assess: { scopeKey: "", performer: "", results: {} }, _draft: {} };
 work._draft = work._draft || {};
+/* Stored state of an earlier version (v1.12.0; backlog #70). Until 1.11.0 the state began with the
+   performer "assessor", which nobody had typed, and it was stored with everything else. Such a stored
+   word is dropped once: this page cannot tell it from a performer somebody typed, and a person who did
+   type "assessor" types it again. `performerTyped` says whether the performer field was ever touched;
+   until it is, the field starts from the author (below). */
+if ((work.v || 1) < 2) {
+  if (work.assess && work.assess.performer === "assessor") work.assess.performer = "";
+  if (work.assess) work.assess.performerTyped = !!work.assess.performer;
+  work.v = 2;
+}
 function saveWork() { const d = work._draft; work._draft = {}; localStorage.setItem("scr-work", JSON.stringify(work)); work._draft = d; }
 function mintId(kind, name) { return work.ns.replace(/\/$/, "") + "/" + kind + "/" + slug(name); }
 function today() { return new Date().toISOString().slice(0, 10); }
-/* The author of what the workbenches write (v1.11.0; D26, CP-AUTHOR-1): one optional setting, shown
-   in the Tailor, the Implement and the Assess workbench. A party URI is taken as typed; a plain name
-   becomes a party under the namespace, as the approver and the performer do. With an author, a
-   Tailoring, an Implementation and a Finding written here carry `provenance`: that author and
-   today's date (UTC). Without one they are written without it, and nothing is refused: a validator
-   reports a missing author as a line (AUTHOR-1, AUTHOR-2) and fails only where its caller asks for
-   that. What a save leaves unchanged keeps who decided it (authorRecord and authorTailoring, in the
-   pure part above). `stored` is the object of that id in the graph, which is what a save replaces. */
-function authorRef() {
-  const v = String(work.who || "").trim();
-  if (!v) return "";
-  return /^[a-z][a-z0-9+.-]*:/i.test(v) ? v : work.ns.replace(/\/$/, "") + "/party/" + slug(v);
-}
+/* The author of what the workbenches write (v1.11.0; D26, CP-AUTHOR-1): one setting, shown in the
+   Tailor, the Implement, the Assess and, since 1.12.0, the Map workbench. A party URI is taken as
+   typed; a plain name becomes a party under the namespace (partyUri, in the pure part above).
+
+   OPTIONAL for a Tailoring, an Implementation and a Finding: with an author they carry `provenance`,
+   that author and today's date (UTC); without one they are written without it, and nothing is
+   refused. A validator reports a missing author as a line (AUTHOR-1, AUTHOR-2) and fails only where
+   its caller asks for that. What a save leaves unchanged keeps who decided it (authorRecord and
+   authorTailoring, above).
+
+   REQUIRED for a Mapping, whose `provenance` the kernel requires: without an author no Mapping is
+   written (requiredParty, above, where the reason for the difference stands). Until 1.11.0 a
+   Mapping named the performer of the Assess workbench as its author, or the word "author".
+
+   `stored` is the object of that id in the graph, which is what a save replaces. */
+function authorRef() { return partyUri(work.who, work.ns); }
 function provenanceNow() { const a = authorRef(); return a ? { "author-ref": a, date: today() } : null; }
 const stored = id => state.objects.get(id)?.obj;
-const AUTHOR_KEPT = { "a Tailoring": "an entry it held before keeps who decided it",
-  "an Implementation": "one that is unchanged keeps what it names", "a Finding": "one that is unchanged keeps what it names" };
+const AUTHOR_REQUIRED = new Set(["a Mapping"]);
+const AUTHOR_KEPT = { "a Tailoring": "; an entry it held before keeps who decided it", "a Mapping": "",
+  "an Implementation": "; one that is unchanged keeps what it names", "a Finding": "; one that is unchanged keeps what it names" };
 function authorNoteHtml(what) {
-  const a = authorRef();
-  return a ? `${esc(what)} written here names <span class="mono">${esc(a)}</span> · ${today()} as its provenance; ${esc(AUTHOR_KEPT[what])}`
-    : `optional — without an author ${esc(what)} is written without provenance; a validator reports that as a line, it is not a failure`;
+  const a = authorRef(), typed = String(work.who || "").trim();
+  if (a) return `${esc(what)} written here names <span class="mono">${esc(a)}</span> · ${today()} as its provenance${esc(AUTHOR_KEPT[what])}`;
+  const nobody = typed ? `"${esc(typed)}" names no party (a URI, or a name with a letter a-z or a digit, does) — ` : "";
+  return nobody + (AUTHOR_REQUIRED.has(what)
+    ? `required — the kernel requires ${esc(what)} to name its author; without one no Mapping is written`
+    : `optional — without an author ${esc(what)} is written without provenance; a validator reports that as a line, it is not a failure`);
 }
 function authorFieldHtml(id, what) {
-  return `<div class="wbrow"><label>author</label><input type="text" id="${id}" data-what="${esc(what)}" placeholder="party URI — optional" value="${esc(work.who || "")}" style="min-width:250px">
+  return `<div class="wbrow"><label>author</label><input type="text" id="${id}" data-what="${esc(what)}" placeholder="party URI — ${AUTHOR_REQUIRED.has(what) ? "required" : "optional"}" value="${esc(work.who || "")}" style="min-width:250px">
     <span class="hint" data-who-note>${authorNoteHtml(what)}</span></div>`;
 }
-/* The note beside the field is rewritten in place. A re-render of the workbench on `change` would
-   replace the button a person is pressing at that moment - the field loses the focus to it - and the
-   click would be lost. */
-function wireAuthorField(el, id) {
+/* A field loses the focus to the button a person presses next, and its `change` arrives while the
+   pointer is still down. Whatever then moves the button from under the pointer costs the click: a
+   re-render of the workbench replaces it (so the note beside the field is rewritten in place), and a
+   note that grows by a line pushes it down (so the note is rewritten only once the pointer is up;
+   1.12.0 - the Map workbench has the author field above its button, and the click was lost there).
+   The value itself is taken at once: the click that follows must find it. */
+let pointerDown = false;
+const onceReleased = [];
+document.addEventListener("mousedown", () => { pointerDown = true; }, true);
+const released = () => { pointerDown = false; const due = onceReleased.splice(0); setTimeout(() => due.forEach(f => f()), 0); };
+document.addEventListener("mouseup", released, true);
+window.addEventListener("blur", released);   // a pointer let go outside the window sends no mouseup here
+const whenReleased = f => { if (pointerDown) onceReleased.push(f); else f(); };
+/* `after` is what else follows the author in that workbench */
+function wireAuthorField(el, id, after) {
   const x = el.querySelector("#" + id);
-  if (x) x.onchange = () => { work.who = x.value.trim(); saveWork(); x.parentElement.querySelector("[data-who-note]").innerHTML = authorNoteHtml(x.dataset.what); };
+  if (x) x.onchange = () => {
+    work.who = x.value.trim(); saveWork();
+    whenReleased(() => { x.parentElement.querySelector("[data-who-note]").innerHTML = authorNoteHtml(x.dataset.what); if (after) after(); });
+  };
 }
+/* A workbench that refuses says why beside its button and in the console, and writes nothing. */
+function refuse(err, message) {
+  if (err) { err.textContent = message; err.style.color = "var(--red)"; err.dataset.refused = "party"; }
+  l.warn("not written: " + message);
+}
+function accept(err) { if (err) { err.textContent = ""; err.style.color = ""; delete err.dataset.refused; } }
 function download(name, obj) {
   /* textifyJs (v1.11.0): one object leaves as the bundle export writes it, its texts language-tagged.
      Until 1.10.0 a downloaded object kept its title as plain text, which the kernel refuses. */
@@ -2140,12 +2223,14 @@ async function exportWorkspaceBundle() {
   setTimeout(() => URL.revokeObjectURL(a.href), 5000);
   l.ok(`workspace bundle exported: ${objs.length} objects + content-manifest with both digests (${(zip.length / 1024).toFixed(1)} kB zip) — loads back into this reader and passes validate_core.py`);
 }
-/* The approver the form shows is the approver written (v1.11.0). Until 1.10.0 the field showed "ciso"
-   and, left as it was, the Deviation named the party "approver". */
-const DEV_APPROVER = "ciso";
-function deviationFromDraft(d) {
+/* The approver of a Deviation (v1.12.0; backlog #70): required by the kernel, and named by a person.
+   The field starts empty, for every Deviation anew, and not from the author either: a pre-filled
+   approver would record that somebody approves their own weakening, by default. Until 1.11.0 the
+   field showed "ciso" (and until 1.10.0 wrote the party "approver" where it was left as it was).
+   `approver` is the party requiredParty returned for what was typed. */
+function deviationFromDraft(d, approver) {
   return { type: d.devType || "risk-adjustment", state: "pending", rationale: d.devRationale,
-           "approver-ref": work.ns.replace(/\/$/, "") + "/party/" + slug(d.devApprover || DEV_APPROVER), opened: today() };
+           "approver-ref": approver, opened: today() };
 }
 function buildTailoringObject() {
   const t = work.tailor;
@@ -2248,8 +2333,9 @@ function wbTailorHtml() {
   }
   const devUi = needDev ? `<div class="devbox"><span class="nano" style="color:var(--amber)">Deviation required — the audited weakening channel</span>
       <div class="wbrow"><label>type</label><select id="wb-t-devtype">${["risk-adjustment","operational-requirement","false-positive","vendor-dependency","derogation"].map(x => `<option ${d.devType === x ? "selected" : ""}>${x}</option>`).join("")}</select>
-      <label>approver</label><input type="text" id="wb-t-devappr" value="${esc(d.devApprover || DEV_APPROVER)}" style="width:110px">
-      <input type="text" id="wb-t-devrat" placeholder="rationale (required)" value="${esc(d.devRationale || "")}" style="flex:1;min-width:200px"></div></div>` : "";
+      <label>approver</label><input type="text" id="wb-t-devappr" placeholder="party URI — required" value="${esc(d.devApprover || "")}" style="width:190px">
+      <input type="text" id="wb-t-devrat" placeholder="rationale (required)" value="${esc(d.devRationale || "")}" style="flex:1;min-width:200px"></div>
+      <div class="hint">the kernel requires a Deviation to name who approves it; the field starts empty, so that nobody approves by default</div></div>` : "";
   const opsList = t.operations.map((o, i) => `<div class="wbchip">
       <span class="badge" style="border-color:var(--amber);color:var(--amber)">${esc(o.op)}</span>
       ${esc((state.objects.get(o["requirement-ref"])?.obj.label) || o["requirement-ref"].split("/").pop())}${o["statement-id"] ? " · " + esc(o["statement-id"]) : ""}
@@ -2287,7 +2373,7 @@ function wireTailorWb(el) {
   wireAuthorField(el, "wb-t-who");
   wirePicker(el, "wb-t-selpick", ["requirementSet"], id => { if (!work.tailor.selects.includes(id)) work.tailor.selects.push(id); rerender(); });
   wirePicker(el, "wb-t-expick", ["requirement"], id => { if (!work.tailor.excludes.includes(id)) work.tailor.excludes.push(id); rerender(); });
-  wirePicker(el, "wb-t-reqpick", ["requirement"], id => { d.opReq = id; d.opStmt = null; rerender(); });
+  wirePicker(el, "wb-t-reqpick", ["requirement"], id => { d.opReq = id; d.opStmt = null; d.devApprover = ""; rerender(); });   // another operation: its Deviation, if it needs one, starts without an approver
   el.querySelectorAll("[data-delsel]").forEach(x => x.onclick = () => { work.tailor.selects = work.tailor.selects.filter(s => s !== x.dataset.delsel); rerender(); });
   el.querySelectorAll("[data-delex]").forEach(x => x.onclick = () => { work.tailor.excludes = work.tailor.excludes.filter(s => s !== x.dataset.delex); rerender(); });
   el.querySelectorAll("[data-delop]").forEach(x => x.onclick = () => { work.tailor.operations.splice(+x.dataset.delop, 1); rerender(); });
@@ -2332,10 +2418,12 @@ function wireTailorWb(el) {
     }
     if (needDev) {
       if (!d.devRationale) { err.textContent = "this is a weakening — Deviation rationale required (or it stays blocked at consumer tier)"; return; }
-      op.deviation = deviationFromDraft(d);
+      const approver = requiredParty("deviation", d.devApprover, work.ns);
+      if (approver.refused) { refuse(err, approver.refused); return; }
+      op.deviation = deviationFromDraft(d, approver.ref);
     }
     work.tailor.operations.push(op);
-    d.devRationale = ""; err.textContent = "";
+    d.devRationale = ""; d.devApprover = ""; accept(err);
     l.ok(`op added: ${op.op} on ${op["requirement-ref"].split("/").pop()}/${sid}${op.deviation ? " (with Deviation)" : ""}`);
     rerender();
   };
@@ -2666,9 +2754,10 @@ function wbAssessHtml() {
   }).join("");
   return `<div class="wb"><div class="nano" style="margin-bottom:8px">Workbench — run a check</div>
     <div class="wbrow"><label>scope</label><select id="wb-a-scope" style="max-width:420px">${scopes.map(s => `<option value="${esc(s.key)}" ${s.key === cur.key ? "selected" : ""}>${esc(s.label)}</option>`).join("")}</select>
-      <label>performer</label><input type="text" id="wb-a-perf" value="${esc(a.performer)}" style="width:120px">
       <input type="text" id="wb-a-q" placeholder="filter…" value="${esc(d.azq || "")}" style="width:140px"></div>
     ${authorFieldHtml("wb-a-who", "a Finding")}
+    <div class="wbrow"><label>performer</label><input type="text" id="wb-a-perf" placeholder="party URI — required" value="${esc(performerText())}" style="min-width:250px">
+      <span class="hint" data-performer-note>${performerNoteHtml()}</span></div>
     <div class="wbrow">
       <span class="chip"><b>${answered}</b>/<b>${reqs.length}</b> checked</span>
       <span class="chip" style="color:var(--green)"><b>${counts.satisfied}</b> satisfied</span>
@@ -2681,9 +2770,22 @@ function wbAssessHtml() {
     <div class="wbrow" style="border-top:1px solid var(--border-1);padding-top:10px">
       <button class="primary" id="wb-a-gen">◉ Generate Assessment + Findings → graph</button>
       <button id="wb-a-dl">⤓ Download objects</button>
+      <span class="hint" id="wb-a-err"></span>
       <span class="hint">one Finding per “not satisfied” (state open, action planned); aggregate result: any-not-satisfied → not-satisfied, else any-inconclusive → inconclusive, else satisfied</span></div></div>`;
 }
-function buildAssessObjects() {
+/* The performer of an Assessment (v1.12.0; backlog #70): required by the kernel, so nothing is
+   generated or downloaded without one. The field starts from the author of this workbench - who writes
+   the Findings has, as a rule, run the check - and stops following the author once somebody touches
+   it: a field somebody emptied is empty. Until 1.11.0 it started as "assessor", a party nobody named.
+   The author stays optional and the performer required; the two notes say which is which. */
+const performerText = () => work.assess.performerTyped ? String(work.assess.performer || "") : String(work.who || "");
+function performerNoteHtml() {
+  const p = requiredParty("assessment", performerText(), work.ns);
+  return p.ref ? `the Assessment names <span class="mono">${esc(p.ref)}</span> as its performer` + (work.assess.performerTyped ? "" : " — the author, until a performer is typed")
+    : `required — the kernel requires an Assessment to name who performed it; without a performer nothing is generated`;
+}
+/* `performer` is the party requiredParty returned for the field */
+function buildAssessObjects(performer) {
   const a = work.assess;
   const scopes = assessScopes();
   const cur = scopes.find(s => s.key === a.scopeKey) || scopes[scopes.length - 1];
@@ -2694,7 +2796,7 @@ function buildAssessObjects() {
   const asmtId = mintId("asmt", "check-" + today());
   const asmt = { id: asmtId, version: "1", lifecycle: "draft", title: `Check ${today()} — ${cur.label}`,
     "subject-refs": reqs, method: { kind: "manual-check", note: "authored in JASCON Bundle Reader workbench" },
-    "performer-ref": work.ns.replace(/\/$/, "") + "/party/" + slug(a.performer || "assessor"),
+    "performer-ref": performer,
     time: new Date().toISOString(), result: agg };
   const findings = reqs.filter(id => a.results[id]?.result === "not-satisfied").map((id, i) => {
     const fid = mintId("finding", "f-" + today() + "-" + (i + 1));
@@ -2709,8 +2811,17 @@ function wireAssessWb(el) {
   const d = work._draft;
   const rerender = () => { saveWork(); renderStageFn("assess"); };
   const sc = el.querySelector("#wb-a-scope"); if (sc) sc.onchange = () => { work.assess.scopeKey = sc.value; rerender(); };
-  const pf = el.querySelector("#wb-a-perf"); if (pf) pf.onchange = () => { work.assess.performer = pf.value; saveWork(); };
-  wireAuthorField(el, "wb-a-who");
+  /* the performer follows the author until somebody touches the performer field; both notes are rewritten in place */
+  const pf = el.querySelector("#wb-a-perf");
+  const performerNote = () => { const n = el.querySelector("[data-performer-note]"); if (n) n.innerHTML = performerNoteHtml(); };
+  if (pf) pf.onchange = () => { work.assess.performer = pf.value.trim(); work.assess.performerTyped = true; saveWork(); whenReleased(performerNote); };
+  wireAuthorField(el, "wb-a-who", () => { if (pf && !work.assess.performerTyped) pf.value = performerText(); performerNote(); });
+  /* -> the performer, or nothing after saying why nothing is written */
+  const performer = () => {
+    const p = requiredParty("assessment", performerText(), work.ns), err = el.querySelector("#wb-a-err");
+    if (p.refused) refuse(err, p.refused); else accept(err);
+    return p.ref;
+  };
   const qq = el.querySelector("#wb-a-q"); if (qq) qq.oninput = () => { d.azq = qq.value; clearTimeout(state._azT); state._azT = setTimeout(rerender, 300); };
   el.querySelectorAll("[data-az]").forEach(b => b.onclick = () => {
     const [id, res] = b.dataset.az.split("|");
@@ -2729,9 +2840,10 @@ function wireAssessWb(el) {
   };
   const rs = el.querySelector("#wb-a-reset"); if (rs) rs.onclick = () => { work.assess.results = {}; rerender(); };
   const g = el.querySelector("#wb-a-gen");
-  if (g) g.onclick = () => { const objs = buildAssessObjects(); addToGraph(objs); renderStageFn("assess");
+  if (g) g.onclick = () => { const who = performer(); if (!who) return;
+    const objs = buildAssessObjects(who); addToGraph(objs); renderStageFn("assess");
     l.info(`assessment ${objs[0].result.toUpperCase()} with ${objs.length - 1} finding(s) — now on the board below`); };
-  const dl = el.querySelector("#wb-a-dl"); if (dl) dl.onclick = () => downloadMany(buildAssessObjects());
+  const dl = el.querySelector("#wb-a-dl"); if (dl) dl.onclick = () => { const who = performer(); if (who) downloadMany(buildAssessObjects(who)); };
 }
 
 /* Author workbench: mint Requirements and Sets */
@@ -2743,7 +2855,7 @@ function wbAuthorHtml() {
       <label>new requirement</label><input type="text" id="wb-au-title" placeholder="title, e.g. 'Encrypt backups'…" value="${esc(d.auTitle || "")}" style="min-width:220px">
       <label>modality</label><select id="wb-au-mod">${Object.keys(MODALITY_COLORS).map(m => `<option ${(d.auMod || "must") === m ? "selected" : ""}>${m}</option>`).join("")}</select>
       <label>lang</label><input type="text" id="wb-au-lang" value="${esc(d.auLang || "en")}" style="width:48px">
-      <label>party</label><input type="text" id="wb-au-party" value="${esc(d.auParty || "organisation")}" style="width:120px"></div>
+      <label>party</label><input type="text" id="wb-au-party" placeholder="whom it binds — required" value="${esc(d.auParty || "")}" style="width:190px"></div>
     <div class="wbrow"><textarea id="wb-au-prose" placeholder="statement prose — the normative sentence; reference parameters as {param:name}…" style="min-height:64px;flex-basis:100%">${esc(d.auProse || "")}</textarea></div>
     <div class="wbrow"><button class="primary" id="wb-au-addreq">＋ Add requirement to graph</button><span class="hint" id="wb-au-err"></span></div>
     <div class="wbrow" style="border-top:1px solid var(--border-1);padding-top:8px">
@@ -2770,16 +2882,20 @@ function wireAuthorWb(el) {
     const title = (el.querySelector("#wb-au-title").value || "").trim();
     const prose = (el.querySelector("#wb-au-prose").value || "").trim();
     if (!title || !prose) { err.textContent = "title and prose are both required"; return; }
+    /* whom the statement binds (v1.12.0; backlog #70): required by the kernel, and named by a person.
+       Until 1.11.0 the field showed "organisation" and an empty one wrote that party all the same. */
+    const party = requiredParty("statement", el.querySelector("#wb-au-party").value, work.ns);
+    if (party.refused) { refuse(err, party.refused); return; }
     const tokens = [...prose.matchAll(/\{param:([^}]+)\}/g)].map(m => m[1]);
     const st = { id: "s1", modality: el.querySelector("#wb-au-mod").value,
-      "obligated-parties": [work.ns.replace(/\/$/, "") + "/party/" + slug(el.querySelector("#wb-au-party").value || "organisation")],
+      "obligated-parties": [party.ref],
       prose: { [el.querySelector("#wb-au-lang").value || "en"]: prose } };
     if (tokens.length) st.parameters = [...new Set(tokens)].map(n => ({ name: n, type: "string" }));
     const req = { id: mintId("req", title), version: "1", label: slug(title).toUpperCase().slice(0, 24),
       lifecycle: "draft", title, statements: [st] };
     addToGraph([req]);
     if (tokens.length) l.info(`declared ${new Set(tokens).size} parameter(s) from {param:} tokens — prose-params-resolve works both ways`);
-    d.auTitle = ""; d.auProse = ""; err.textContent = ""; rerender();
+    d.auTitle = ""; d.auProse = ""; d.auParty = el.querySelector("#wb-au-party").value; accept(err); rerender();
   };
   const as = el.querySelector("#wb-au-addset");
   if (as) as.onclick = () => {
@@ -2798,6 +2914,7 @@ function wbMapHtml() {
   const src = d.mapSrc ? state.objects.get(d.mapSrc) : null;
   const REL = ["supports", "equal", "subset-of", "superset-of", "intersects", "conflicts", "supplements"];
   return `<div class="wb"><div class="nano" style="margin-bottom:8px">Workbench — author a Mapping (a claim with provenance)</div>
+    ${authorFieldHtml("wb-m-who", "a Mapping")}
     <div class="wbrow"><label>source</label>${pickerHtml("wb-m-srcpick", "type to pick the source requirement…")}
       ${src ? `<span class="wbchip">◇ ${esc(src.obj.label || src.obj.id)}</span>
         <label>scope</label><select id="wb-m-scope"><option value="">whole requirement</option>${src.obj.statements.map(s => `<option ${d.mapScope === s.id ? "selected" : ""} value="${esc(s.id)}">statement ${esc(s.id)}</option>`).join("")}</select>` : ""}</div>
@@ -2812,6 +2929,7 @@ function wbMapHtml() {
 function wireMapWb(el) {
   const d = work._draft;
   const rerender = () => { saveWork(); renderStageFn("map"); };
+  wireAuthorField(el, "wb-m-who");
   wirePicker(el, "wb-m-srcpick", ["requirement"], id => { d.mapSrc = id; d.mapScope = ""; rerender(); });
   wirePicker(el, "wb-m-tgtpick", ["requirement"], id => { d.mapTgt = id; rerender(); });
   const ti = el.querySelector("#wb-m-tgtpick");
@@ -2826,15 +2944,24 @@ function wireMapWb(el) {
     const err = el.querySelector("#wb-m-err");
     if (!d.mapSrc) { err.textContent = "pick a source requirement"; return; }
     if (!d.mapTgt) { err.textContent = "pick a target — or paste an external URI and press Enter"; return; }
+    /* whose claim it is (v1.12.0; backlog #70): the kernel requires a Mapping's provenance, so without an
+       author no Mapping is written. The author is the one of this page's author field and of no other
+       form: until 1.11.0 it was the performer of the Assess workbench, or the word "author".
+       A Mapping is one claim, added by one press of this button: it names who adds it, today, also where
+       a Mapping of that id is in the graph already - and so a Mapping an earlier version wrote under a
+       word gets a named author when somebody adds it again. (An Implementation or a Finding written
+       again unchanged keeps what it names, because those workbenches rewrite every record at once.) */
+    const who = requiredParty("mapping", work.who, work.ns);
+    if (who.refused) { refuse(err, who.refused); return; }
     const m = { id: mintId("map", (d.mapSrc.split("/").pop()) + "--" + (d.mapTgt.split("/").pop() || "ext")),
       version: "1", lifecycle: "draft",
       "source-ref": d.mapSrc, "target-ref": d.mapTgt,
       relationship: d.mapRel || "supports", direction: "source-to-target",
       confidence: d.mapConf || "draft",
       ...(d.mapRat ? { rationale: d.mapRat } : {}),
-      provenance: { "author-ref": work.ns.replace(/\/$/, "") + "/party/" + slug(work.assess?.performer || "author"), date: today() } };
+      provenance: { "author-ref": who.ref, date: today() } };
     if (d.mapScope) m["source-scope"] = ["statement:" + d.mapScope];
-    addToGraph([m]); err.textContent = ""; rerender();
+    addToGraph([m]); accept(err); rerender();
   };
 }
 
