@@ -9,7 +9,9 @@
 #               from their pinned sources, each of which must reproduce
 #               what is committed, the nine catalogue converters on an
 #               invented catalogue (test_convert_obligated_party.py), the
-#               conversion ledger of two of them on invented catalogues, and a
+#               conversion ledgers of the IFA converter and of the four
+#               catalogue converters, where a lost value must end a run
+#               with 1 (test_convert_*_ledger.py), and a
 #               run of the CR26 conversion on its pinned source, which is
 #               downloaded and not committed: the bundle must validate and
 #               the two coverage reports must be the committed ones
@@ -121,16 +123,6 @@ jobs:
         # its default, with it the caller's, and a party the source states
         # stays the source's. Needs no source file.
         run: python jascon/scripts/test_convert_obligated_party.py
-      - name: The conversion ledger of the ISM and the SP 800-53 converter (invented catalogues)
-        # Backlog #41. Each converter follows every source value into the
-        # bundle it writes. On a small catalogue nobody published: the record
-        # is this run's, a claim that does not hold on disk ends the run with
-        # 1, and a value that is lost shows as unaccounted. The reproduction
-        # below holds the records of the real corpora; it cannot hold the
-        # exit code, because the committed conversions have no failed check.
-        run: |
-          python jascon/scripts/test_convert_ism_ledger.py
-          python jascon/scripts/test_convert_nist_ledger.py
       - name: The four catalogue conversions are reproducible from their pinned sources
         # AU.ISM, DE.BSI, US.CSF and US.SP800-53, held as the IFA conversion is
         # held above: each source is fetched at its pinned tag or commit and
@@ -166,6 +158,29 @@ jobs:
           US.CSF convert_csf.py
           US.SP800-53 convert_nist.py
           EOF
+      - name: The conversion ledgers of the four catalogue converters (a lost value ends a run with 1)
+        # Backlog #41 and the author's rule of 2026-11-14: real content is
+        # never dropped, what stays out of a bundle is no content by a rule
+        # the ledger checks, and a run with an unaccounted value exits
+        # non-zero. Each test runs copies of its converter on catalogues
+        # nobody published and changes one thing at a time: a value that is
+        # lost, a rule that does not hold, a name that selects a value which
+        # is not written, a record that is not this run's. The reproduction
+        # above holds the records of the real corpora; it cannot hold the
+        # exit code, because the committed conversions have no unaccounted
+        # value. The step stands after it because the CSF test also counts
+        # the committed bundle against the pinned source, which the step
+        # above has fetched.
+        run: |
+          python jascon/scripts/test_convert_ism_ledger.py
+          python jascon/scripts/test_convert_bsi_ledger.py
+          python jascon/scripts/test_convert_csf_ledger.py
+          python jascon/scripts/test_convert_nist_ledger.py
+          if [ -n "$(git status --porcelain -- converted_examples)" ]; then
+            echo "a ledger test wrote into converted_examples/:"
+            git status --porcelain -- converted_examples
+            exit 1
+          fi
       - name: The CR26 conversion runs on its pinned source and reproduces its coverage reports and its ledger
         # FedRAMP's rules file is not redistributed (converted_examples/
         # FedRAMP-CR26/NOT-REDISTRIBUTED.md): neither the source nor the
