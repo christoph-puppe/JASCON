@@ -105,6 +105,16 @@ jobs:
             git --no-pager diff --stat -- converted_examples/US.IFA-GoodRead
             exit 1
           fi
+      - name: The IFA converter ends with 1 on a source value that is unaccounted
+        # The author's rule of 2026-11-14: real content is never dropped, what
+        # stays out of a bundle is no content by a rule the ledger checks, and
+        # a run with an unaccounted value exits non-zero. The reproduction
+        # above cannot hold that exit code, because the committed conversion
+        # has no unaccounted value: this changes one place of a copy of the
+        # converter at a time (a rule not stated, a rule that does not hold,
+        # a value not written, a declared reason taken away) and reads the
+        # exit code. It uses the sources the step above fetched.
+        run: python jascon/scripts/test_convert_ifa_ledger.py
       - name: The nine catalogue converters and whom their statements bind (invented catalogue)
         # Backlog #74. Each converter is run on a catalogue nobody published:
         # without --obligated-party it writes its own party and reports it as

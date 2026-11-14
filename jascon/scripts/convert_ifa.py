@@ -40,6 +40,7 @@ place of the manifest."""
 import json, os, re, sys, collections, hashlib
 import jsonschema
 from oscal_conv_lib import make_T, slug, Bundle, inventory, coverage, report, semantic_digest, global_occurrence, Ledger, props_by_name, response_treatment
+from oscal_conv_lib import ledger_gate
 from oscal_conv_lib import document_author, document_day, is_day, provenance, provenance_override, textify
 from oscal_conv_lib import known_arguments, out_dir
 
@@ -854,6 +855,13 @@ def risk_analysis(rk):
     """Everything App. F Q14 keeps out of the kernel: how the level would be
     computed (likelihood, impact, their scale system, who rated), plus the
     source's own status and response narrative, verbatim."""
+    for rm in rk.get("remediations", []) or []:
+        for p in rm.get("props", []) or []:
+            # no content, by a rule the ledger checks (author, 2026-11-14): the name says which field the
+            # value belongs in. A prop of another name is not covered and ends the run as unaccounted.
+            if p.get("name") == "type":
+                led.selector(p["name"], "the name of a remediation's prop `type` selects the field its value is "
+                                        "written to (`responses[].type`)", p["value"], among=("type",))
     f = {"risk-status": rk.get("status"),
          "description": T(pua_scan(rk.get("description", "")), "risk"),
          "characterizations": [{"facets": [{"name": x["name"], "value": x["value"], "system": x["system"]}
@@ -1320,9 +1328,8 @@ led.drop(r"\.back-matter\.|\.import-(ap|ssp|profile)\.href$|\.leveraged-authoriz
          "carries the Requirements themselves and its objects refer to one another by id")
 led.drop(r"(\.subjects\[\]\.type|\.assessment-subjects\[\]\.type|\.actors\[\]\.type|\.target\.type|\.identifier-type)$",
          "a type tag of a structural element: the bundle says by its shape what kind of thing the element is")
-led.drop(r"\.risks\[\]\.remediations\[\]\.props\[\]\.name$",
-         "the prop name `type` is the selector by which the response type is found; the value is carried, "
-         "under the field the converter names `type`")
+# (the name of a remediation's prop `type` was a declared drop until 2026-11-14; it is no content by a
+#  rule the ledger checks now - see risk_analysis)
 led.drop(r"^ar\.assessment-results\.results\[\]\.risks\[\]\.",
          "the assessment results hold the earlier state of a risk the POA&M carries in its later state; "
          "text equal to the POA&M's is linked to it above, the rest is superseded")
@@ -1405,10 +1412,14 @@ j = report(
      f"has one entry in `ifa-conversion-ledger.json` saying where it went. **{LT['copied']} copied** (the value "
      f"stands, with its type, at the destination named, read back from the written file), "
      f"**{LT['transformed']} transformed** (a named rule made the destination from it; the rule was applied to the "
-     f"source again and compared), **{LT['intentionally-dropped']} intentionally dropped** (a stated reason), "
+     f"source again and compared), **{LT['not-content']} no content** (a name that only selects a field, a "
+     f"namespace, an id that is rebuilt exactly - each by a rule the ledger checked), "
+     f"**{LT['intentionally-dropped']} dropped for a declared reason**, "
      f"**{LT['unaccounted']} unaccounted**. Unlike the global figure above, an equal value elsewhere does not count: "
      f"a value is traced by what the converter did with it. Checks that failed: {len(LEDGER['verification-failures'])}. "
-     f"The unaccounted values are listed by path at the end of this report; they are the work queue of backlog #41.",
+     f"A run with an unaccounted value or a failed check ends with exit code 1. The declared drops are listed by "
+     f"reason at the end of this report: whether one of them is content is the author's decision, not the "
+     f"converter's (2026-11-14: \"real content is never dropped\").",
      f"- **What OSCAL cannot give the Risk shape** (model findings, REPORTED; nothing is invented - the one derived value is the owner): " +
      "; ".join(f"{k} x{v}" for k, v in sorted(risk_gaps.items())) +
      f". Owner source: the SSP `owner` role -> {RISK_OWNER}.",
@@ -1422,10 +1433,32 @@ j = report(
      "global-occurrence": VA,
      "ledger": {"file": "ifa-conversion-ledger.json", "leaf-values": LEDGER["leaf-values"], "totals": LT,
                 "verification-failures": len(LEDGER["verification-failures"])}})
+_by_reason, _by_rule = collections.defaultdict(list), collections.Counter()
+for _e in LEDGER["entries"]:
+    if _e["outcome"] == "intentionally-dropped": _by_reason[_e["reason"]].append(_e)
+    if _e["outcome"] == "not-content": _by_rule[(_e["kind"], _e["rule"])] += 1
+def _source_value(entry):
+    tag, pointer = entry["source"].split("#", 1)
+    node = led.docs[tag]
+    for part in pointer.split("/")[1:]:
+        part = part.replace("~1", "/").replace("~0", "~")
+        node = node[int(part)] if isinstance(node, list) else node[part]
+    text = json.dumps(node, ensure_ascii=False)
+    return (text[:57] + "...") if len(text) > 60 else text
 with open(os.path.join(OUTDIR, "ifa-coverage-report.md"), "a", encoding="utf-8") as f:
+    f.write("\n## No content, by a rule the ledger checked (conversion ledger)\n\n"
+            "| kind | rule | values |\n|---|---|---:|\n" +
+            "".join(f"| {kind} | {rule} | {n} |\n" for (kind, rule), n in sorted(_by_rule.items())))
+    f.write("\n## Declared drops (conversion ledger)\n\n"
+            "A value that reached no destination and for which the converter states a reason. Whether a value "
+            "of these is content, and must then be carried, is decided by the author; the converter only lists "
+            "them. Pointers to every single value are in `ifa-conversion-ledger.json`.\n\n"
+            "| values | paths | reason | first value |\n|---:|---:|---|---|\n" +
+            "".join(f"| {len(es)} | {len({e['path'] for e in es})} | {why} | `{es[0]['source']}` = `{_source_value(es[0]).replace('|', '/')}` |\n"
+                    for why, es in sorted(_by_reason.items(), key=lambda kv: (-len(kv[1]), kv[0]))))
     f.write("\n## Unaccounted source values (conversion ledger)\n\n"
-            "No destination and no declared reason. Each is either carried by a rule the converter does not state "
-            "yet, or dropped without a decision. Pointers to every single value are in `ifa-conversion-ledger.json`.\n\n"
+            "No destination, no rule and no declared reason. A run that lists a value here ends with exit code 1. "
+            "Pointers to every single value are in `ifa-conversion-ledger.json`.\n\n"
             "| path | count | first value |\n|---|---:|---|\n" +
             "".join(f"| `{u['path']}` | {u['count']} | `{u['pointers'][0]}` |\n" for u in LEDGER["unaccounted-paths"]))
 print(f"objects: {sum(types.values())} {dict(types)}")
@@ -1433,9 +1466,13 @@ print(f"leaves: {j['totals']['leaf-values']:,}  mapped: {j['totals']['mapped']:,
       f"UNMAPPED: {j['totals']['unmapped']}")
 print(f"global occurrence: {VA['exact']}/{VA['leaf-values']} exact (upper bound); key-only {VA['key-only']}, "
       f"embedded {VA['embedded']}; absent content values: {VA['absent']['content']} ({VA['absent-content-prose']} prose)")
-print(f"ledger: copied {LT['copied']}, transformed {LT['transformed']}, intentionally dropped "
-      f"{LT['intentionally-dropped']}, unaccounted {LT['unaccounted']}; failed checks {len(LEDGER['verification-failures'])}")
+print(f"ledger: copied {LT['copied']}, transformed {LT['transformed']}, no content {LT['not-content']}, dropped for a "
+      f"declared reason {LT['intentionally-dropped']}, unaccounted {LT['unaccounted']}; "
+      f"failed checks {len(LEDGER['verification-failures'])}")
 print(f"respell: {n_stmt_respell}  pua: {n_pua}  placeholder-uuids: {uuid_placeholder}  "
       f"unresolved-bindings: {unresolved_bind}")
 if unmapped:
     for p, n in unmapped[:40]: print("  UNMAPPED", p, "x", n)
+# last: a run whose ledger has a claim that does not hold or an unaccounted value ends with 1. Everything
+# above is written by then, so that the folder says why.
+ledger_gate(LEDGER, "convert_ifa.py")

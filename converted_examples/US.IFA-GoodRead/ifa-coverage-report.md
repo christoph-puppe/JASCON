@@ -30,7 +30,7 @@ Source: **OSCAL IFA GoodRead example set** (SSP v1.1.1 + AP + AR + POA&M) + leve
 - **Unresolved parameter bindings**: ['ac-2_prm_1'] - `ac-2_prm_1` is a Rev-5.1-era param id; Rev 5.2.0 declares the _odp layer instead (the binding is carried verbatim; a resolver follows the odp@1 aggregates map).
 - **Kind mapping**: appliance->hardware x1 (OSCAL free-text component types vs. the kernel's closed componentKind).
 - **Global occurrence (measured; path coverage above is a DECLARATION)**: 425 of 835 source leaf values have an equal value of the same type somewhere in the emitted objects. This is an **upper bound** on what was carried: all sources and all objects share one search space, so one output value satisfies every equal source value, and a value dropped in one place is hidden by an equal value in another. It does not trace an occurrence to its destination. Not counted: 41 values that equal only an output key and 38 that occur only inside a longer output text (candidates, to be argued per path). No equal value anywhere: 182 identity values (uuids/hrefs - re-minted as URIs by design), 125 document-metadata values, and **24 content values (4 of them prose of 40+ characters)** - each either transformed on purpose (a mapped code, a respelled id) or DROPPED. That list is a **lower bound** on the losses, not the complete work queue. `UNMAPPED: 0` sees none of this; the per-path lists, with the indexed pointer of every value, are in the JSON report (`global-occurrence`; backlog #41).
-- **Conversion ledger (measured per source value)**: each of the 835 source leaf values has one entry in `ifa-conversion-ledger.json` saying where it went. **442 copied** (the value stands, with its type, at the destination named, read back from the written file), **95 transformed** (a named rule made the destination from it; the rule was applied to the source again and compared), **298 intentionally dropped** (a stated reason), **0 unaccounted**. Unlike the global figure above, an equal value elsewhere does not count: a value is traced by what the converter did with it. Checks that failed: 0. The unaccounted values are listed by path at the end of this report; they are the work queue of backlog #41.
+- **Conversion ledger (measured per source value)**: each of the 835 source leaf values has one entry in `ifa-conversion-ledger.json` saying where it went. **442 copied** (the value stands, with its type, at the destination named, read back from the written file), **95 transformed** (a named rule made the destination from it; the rule was applied to the source again and compared), **2 no content** (a name that only selects a field, a namespace, an id that is rebuilt exactly - each by a rule the ledger checked), **296 dropped for a declared reason**, **0 unaccounted**. Unlike the global figure above, an equal value elsewhere does not count: a value is traced by what the converter did with it. Checks that failed: 0. A run with an unaccounted value or a failed check ends with exit code 1. The declared drops are listed by reason at the end of this report: whether one of them is content is the author's decision, not the converter's (2026-11-14: "real content is never dropped").
 - **What OSCAL cannot give the Risk shape** (model findings, REPORTED; nothing is invented - the one derived value is the owner): analysed in source (likelihood + impact) but no level: `assessed` unreachable (RISK-2) x2; owner absent in source (derived from the SSP `owner` role) x2; response `accept` without a dated acceptance: `retain` unreachable (RISK-6) x1. Owner source: the SSP `owner` role -> https://ifa.gov/goodread/party/owen-pearson.
 - observation carried in both AR and POA&M (deduped): AwesomeCloud IAM Roles Test - SYSTEM1234 System Engineer Role
 - **The two copies of one observation differ** (source finding): `AwesomeCloud IAM Roles Test - SYSTEM1234 System Engineer Role` has the same uuid in the assessment results and in the POA&M, and its `remarks` differs between them. Both are carried.
@@ -521,9 +521,33 @@ Source: **OSCAL IFA GoodRead example set** (SSP v1.1.1 + AP + AR + POA&M) + leve
 
 *(none)*
 
+## No content, by a rule the ledger checked (conversion ledger)
+
+| kind | rule | values |
+|---|---|---:|
+| selector | the name of a remediation's prop `type` selects the field its value is written to (`responses[].type`) | 2 |
+
+## Declared drops (conversion ledger)
+
+A value that reached no destination and for which the converter states a reason. Whether a value of these is content, and must then be carried, is decided by the author; the converter only lists them. Pointers to every single value are in `ifa-conversion-ledger.json`.
+
+| values | paths | reason | first value |
+|---:|---:|---|---|
+| 84 | 48 | the uuid of a source element: JASCON objects get URIs minted from names and titles, the uuid itself is not carried (uuids that ARE carried or resolved have a destination above) | `ssp#/system-security-plan/metadata/parties/3/uuid` = `"3a675986-b4ff-4030-b178-e953c2e55d64"` |
+| 57 | 31 | a link to another serialisation of the source, to an imported document or to the catalogue: the bundle carries the Requirements themselves and its objects refer to one another by id | `ssp#/system-security-plan/import-profile/href` = `"#84cbf061-eb87-4ec1-8112-1f529232e907"` |
+| 56 | 28 | revision history of the source document: bookkeeping of the source, which the manifest pins by commit | `ssp#/system-security-plan/metadata/revisions/0/title` = `"IFA SYSTEM1234 System Security Plan"` |
+| 56 | 36 | the source's directory of parties and roles: a party is a landmark URI and there is no party object (register, backlog #16); the name of a party the bundle refers to has a destination above | `ssp#/system-security-plan/metadata/roles/0/id` = `"owner"` |
+| 18 | 6 | the leveraging plan's own entry for a component of the leveraged system; the provider's Component, converted from the leveraged plan, stands for it | `lvg#/system-security-plan/system-implementation/components/1/type` = `"system"` |
+| 11 | 8 | a type tag of a structural element: the bundle says by its shape what kind of thing the element is | `ap#/assessment-plan/assessment-subjects/0/type` = `"component"` |
+| 8 | 6 | a reference to a party the source defines without a name: no landmark URI can name it, so its role is carried without a party | `lev#/system-security-plan/system-implementation/components/1/responsible-roles/0/party-uuids/0` = `"11111111-0000-4000-9000-100000000001"` |
+| 3 | 3 | the assessment results hold the earlier state of a risk the POA&M carries in its later state; text equal to the POA&M's is linked to it above, the rest is superseded | `ar#/assessment-results/results/0/risks/0/title` = `"SYSTEM1234 System Engineers Have Over-Privileged Access ...` |
+| 1 | 1 | a defect of the source: a POA&M item names a risk the POA&M does not define; no edge can be derived from it and none is invented | `poam#/plan-of-action-and-milestones/poam-items/0/related-risks/0/risk-uuid` = `"401c15c9-ad6b-4d4a-a591-7d53a3abb3b6"` |
+| 1 | 1 | a defect of the source: a satisfied entry names a responsibility the leveraged plan does not define (the uuid is an exported capability's); no edge can be derived from it and none is invented | `lvg#/system-security-plan/control-implementation/implemented-requirements/0/statements/0/by-components/1/satisfied/0/responsibility-uuid` = `"11111111-0000-4000-9009-002001001001"` |
+| 1 | 1 | a defect of the source: a task names an activity its document does not define; no edge can be derived from it and none is invented | `ap#/assessment-plan/tasks/0/associated-activities/0/activity-uuid` = `"0d243b23-a889-478f-9716-6d4870e56209"` |
+
 ## Unaccounted source values (conversion ledger)
 
-No destination and no declared reason. Each is either carried by a rule the converter does not state yet, or dropped without a decision. Pointers to every single value are in `ifa-conversion-ledger.json`.
+No destination, no rule and no declared reason. A run that lists a value here ends with exit code 1. Pointers to every single value are in `ifa-conversion-ledger.json`.
 
 | path | count | first value |
 |---|---:|---|

@@ -4,7 +4,8 @@
  "totals": {
   "copied": 442,
   "transformed": 95,
-  "intentionally-dropped": 298,
+  "not-content": 2,
+  "intentionally-dropped": 296,
   "unaccounted": 0
  },
  "verification-failures": [],
@@ -4940,8 +4941,9 @@
   {
    "source": "poam#/plan-of-action-and-milestones/risks/0/remediations/0/props/0/name",
    "path": "poam.plan-of-action-and-milestones.risks[].remediations[].props[].name",
-   "reason": "the prop name `type` is the selector by which the response type is found; the value is carried, under the field the converter names `type`",
-   "outcome": "intentionally-dropped"
+   "kind": "selector",
+   "rule": "the name of a remediation's prop `type` selects the field its value is written to (`responses[].type`)",
+   "outcome": "not-content"
   },
   {
    "source": "poam#/plan-of-action-and-milestones/risks/0/remediations/0/props/0/value",
@@ -5252,8 +5254,9 @@
   {
    "source": "poam#/plan-of-action-and-milestones/risks/1/remediations/0/props/0/name",
    "path": "poam.plan-of-action-and-milestones.risks[].remediations[].props[].name",
-   "reason": "the prop name `type` is the selector by which the response type is found; the value is carried, under the field the converter names `type`",
-   "outcome": "intentionally-dropped"
+   "kind": "selector",
+   "rule": "the name of a remediation's prop `type` selects the field its value is written to (`responses[].type`)",
+   "outcome": "not-content"
   },
   {
    "source": "poam#/plan-of-action-and-milestones/risks/1/remediations/0/props/0/value",
