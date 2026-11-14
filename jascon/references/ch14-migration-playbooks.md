@@ -291,8 +291,9 @@ one of its three subject digests had matched no object since the text
 of the bundle was language-tagged at the write. The converter now
 checks, before it ends, that the Attestation binds the manifest as
 written and that every payload passes the schema the bundle pins for
-it. No validator reads an Attestation beside the manifest of a bundle
-that is not a pack yet — backlog #46.)*
+it. Since 2026-11-14 the validator reads the Attestation beside every
+bundle's manifest and holds it to the same two things (`attestation-binds`,
+Appendix B.1.7): the IFA bundle's reads FULL MATCH.)*
 
 ## 14.4 Playbook: CR26 and other bespoke JSON
 

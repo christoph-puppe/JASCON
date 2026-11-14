@@ -1160,8 +1160,10 @@ textify(attestation, bundle.lang)
 bundle._w(ATTESTATION_FILE, attestation)
 
 # ---------- what was written is held to what it claims ----------
-# Three things no validator checks for this bundle today, checked here so
-# that the conversion cannot be committed without them:
+# Checked here, so that a conversion that does not hold them is never
+# written out as finished. The validator has held an Attestation to what it
+# binds since 2026-11-14 (attestation-binds on a bundle, backlog #46); it
+# does not hold a method payload to its schema yet (#55).
 #   - every facet payload and the method payload pass the schema the bundle pins for them;
 #   - every subject of the Attestation is an object of the bundle, with that semantic digest;
 #   - the Attestation binds the digest of the manifest as it lies on disk.
@@ -1347,8 +1349,8 @@ j = report(
      f"- **date-authorized -> Component.authorizations (with its `date`) + Attestation**: the ATO modeled as an "
      f"Attestation beside the manifest (`{ATTESTATION_FILE}`, not listed in it: D3.1). It binds the digest of the "
      f"manifest and the semantic digests of {{system Component, Implementation, AC-6.1}}; this script checks both "
-     f"against what it wrote. Unsigned (no envelope). No validator reads an Attestation beside the manifest of a "
-     f"bundle that is not a pack yet (backlog #46).",
+     f"against what it wrote. Unsigned (no envelope). The validator reads it there and holds it to both "
+     f"(`attestation-binds`, Appendix B.1.7; backlog #46).",
      f"- **Leveraged/leveraging pair -> D5 inheritance**: consumer Implementation satisfied-by "
      f"inherited-from{{csp-iaas, {AUTH_CSP}}} - basis-ref names the provider Component's authorization "
      f"(edge-local closure enforced by the validator); provider export.provided -> capabilities, "
