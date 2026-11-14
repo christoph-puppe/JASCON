@@ -533,6 +533,54 @@
    "expected-frags": []
   },
   {
+   "name": "an-object-called-method-inside-a-payload-is-no-assessments-method",
+   "note": "As the vector before, with an object where that one has a string: a pinned facet whose payload has a member `method` that is itself an object with a plain key. An implementation that looks for an object called `method` anywhere below an object, and not for the member of an Assessment, takes this for a method under the key `kind`. Found by a deliberate defect in the app's port, which the vector before this one did not catch.",
+   "object": {
+    "id": "https://ex.org/req/2",
+    "version": "1",
+    "lifecycle": "active",
+    "statements": [
+     {
+      "id": "s1",
+      "modality": "must",
+      "obligated-parties": [
+       "https://ex.org/party/org"
+      ],
+      "prose": {
+       "en": "Y."
+      }
+     }
+    ],
+    "facets": {
+     "https://assessor.example/facet/review@1": {
+      "standard": "ISAE 3402",
+      "method": {
+       "kind": "review"
+      }
+     }
+    }
+   },
+   "pinned": {
+    "https://assessor.example/facet/review": {
+     "type": "object",
+     "required": [
+      "standard"
+     ],
+     "properties": {
+      "standard": {
+       "type": "string"
+      },
+      "method": {
+       "type": "object"
+      }
+     }
+    }
+   },
+   "expected": "valid",
+   "expected-errors": 0,
+   "expected-frags": []
+  },
+  {
    "name": "an-empty-method-names-no-facet",
    "note": "The rule holds the keys there are. Whether an Assessment may state no method at all is not this rule's question: the kernel schema asks for an object and accepts an empty one.",
    "object": {

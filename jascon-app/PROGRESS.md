@@ -353,6 +353,57 @@ and in `readme.md`; this file says only what is done and what is next.
   build, so the failure does not come from it; that was read, the test was
   not run on the branch without this build.
 
+- An Assessment's method is held to its facet (build 0.9.13; backlog #55,
+  phase E, on the author's word of 2026-11-14):
+  - `jscFacetErrors` in `jascon-rules.js` reads the keys of a `method` as
+    it reads the keys of `facets`: the standard library, then the schemas
+    the bundle pins, then `private:`, else an error; each payload is held
+    to its schema. The two sentences are the reference's.
+  - The Assess page, the one place where the app writes an Assessment,
+    writes the standard facet `assessment-criteria@1` with `method:
+    "manual"` (`jscManualMethod`). The name of the tool is no longer in the
+    object; the manifest of an export names it.
+  - An Assessment with the method the app wrote before (`{kind, tool}`) is
+    recognised (`jscIsAppMethodBefore0913`) and never rewritten by itself.
+    The Validate page fails it and adds a line on what can be done; the
+    Assess page shows the errors at the Assessment and rewrites the method
+    when asked (`jscRewriteAppMethod`). A failing method of another making
+    is reported and left alone.
+  - Read, for every other place: no import writes an Assessment (OSCAL
+    catalog and profile, the three presets, risk catalogues, advice packs),
+    and the Checks page writes Checks only.
+
+  Measured: the rule passes the 13 `method-vectors` (8 errors among
+  them; twelve when this build was made, and a thirteenth added at the
+  merge for the defect below that the twelve did not catch), each by the number of errors and a fragment of each error, with
+  the object labelled by its id so that no vector's name can stand in for
+  a fragment. The three tests that were red against the reference of
+  2026-11-14 pass again; each hands a set with a check from the Assess
+  page to `validate_core.py`, and one of them now asserts the method the
+  page wrote. For Assessments that exist already, in headless Chromium: a
+  set with one Assessment of the app's old method and one whose method and
+  one of whose facets name a facet nobody registered was exported, and the
+  reference lists four failures for the folder (two for `kind` and `tool`,
+  two for the other Assessment). Loaded again in another browser, the
+  Validate page shows those four and no other error, and a line on what
+  can be done for the first Assessment only. The stored text of that
+  Assessment is the same after loading, checking and opening the Assess
+  page. After the rewrite was asked for on the Assess page the Assessment
+  differs in its method and in nothing else, and page and reference agree
+  on the two failures that are left. 26 deliberate defects were each
+  tried: 24 turned a test red at once. Two were caught by nothing at
+  first, a `method` inside a facet payload that is itself an object taken
+  for an Assessment's method (the vector for it has a string there), and
+  the Assess page showing a facet's error under the method (no test had an
+  Assessment with both); each is red since one assertion was added. A
+  change that breaks nothing stayed green. The app's tests: 181, of which
+  177 pass and 4 are skipped for the BSI and NIST source files. Read and
+  not measured: that no import writes an Assessment; any browser but
+  Chromium. Two tests of the reader under `one-page-apps/` fail on this
+  branch (28 of 30 pass); both export a set and hand it to the reference.
+  The reader and its tests are not touched by this build, and the tests
+  were not run on the branch without it.
+
 ## Next
 
 - An OSCAL component definition as a third kind on the Import page, written
@@ -448,6 +499,14 @@ and in `readme.md`; this file says only what is done and what is next.
     or out of one by this; the missing object is an error of its own.
   - *Verify* on the Assess page types every object of the set by schema
     before it answers. Not measured on a set of a thousand objects.
+- Found with build 0.9.13:
+  - `sync-inlined --check` is out of date again, for the same reason as
+    with build 0.9.12: the rules changed, and `one-page-apps/` is
+    regenerated at the merge.
+  - The rewrite of an old method changes the Assessment's semantic digest.
+    The pages say so, and an Attestation that named it then fails as any
+    changed subject does. The app does not look for such an Attestation
+    before it rewrites.
 - Found with build 0.9.12:
   - `node one-page-apps/tools/sync-inlined.mjs --check` reports the pack
     builder's inlined copy of the rules as out of date, because the rules

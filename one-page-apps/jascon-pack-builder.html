@@ -160,7 +160,7 @@ details[open]>summary{margin-bottom:6px}
 /* ==INLINE core== */
 /* ==JSC-PURE-START== */
 
-const JSC_BUILD = "0.9.12";
+const JSC_BUILD = "0.9.13";
 const JSC_TOOL = "JASCON-App " + JSC_BUILD;
 /* The kernel this app writes, and the kernels it reads (KERNEL-2: a tool
    stops at a pin it does not implement and names both). */
@@ -2183,23 +2183,66 @@ const JSC_STDLIB_BY_ID = new Map(jscRulesSchema.JSC_STDLIB.map(d => [d.id, d]));
 /* A facet payload is checked against the stdlib descriptor of its id, or
    against the schema the bundle pins for it. A `private:` facet is not
    checked by definition. Anything else is unregistered and fails closed.
+
+   An Assessment's `method` is a facet payload too (handbook 10.1, appendix
+   A.7; backlog #55, in the reference since 2026-11-14): its keys are facet
+   ids, resolved as the keys of `facets` are, and each payload is held to
+   its schema. Until build 0.9.13 `method` was not read at all here, as in
+   the reference: the kernel schema says only that it is an object, so a
+   method under a key nobody registered passed. This app wrote one itself
+   (`{kind, tool}`; ERRATA.md). Of the kernel types only the Assessment has
+   a member `method`; a `method` inside a facet payload is that facet's
+   business and is not looked at.
    items: [[label, object]]; pinned: Map(facet id without version -> schema). */
 function jscFacetErrors(items, pinned) {
   const errs = [];
-  for (const [label, obj] of items) {
-    for (const [key, payload] of Object.entries((obj && obj.facets) || {})) {
-      const base = jscFacetBase(key);
-      if (jscIsPrivateFacet(key)) continue;
-      const schema = JSC_STDLIB_BY_ID.has(base) ? JSC_STDLIB_BY_ID.get(base).schema : pinned.get(base);
-      if (schema === undefined) { errs.push(`${label}: unregistered facet '${key}' — not stdlib, not pinned in the manifest, not private: (dangerous-by-default, D10)`); continue; }
-      let found;
-      try { found = jscSchemaCheck(schema, payload, schema).errors; }
-      catch (e) { errs.push(`${label}: facet '${key}' cannot be checked: ${e.message}`); continue; }
-      if (found.length) errs.push(`${label}: facet '${key}' payload violates its schema: ${found[0].message} @ ${found[0].path.replace(/^\//, "")}`);
+  /* what: "facet" for a key of `facets`, "method" for a key of an Assessment's `method`; the two sentences for a key
+     nobody registered are the reference's, each its own */
+  const held = (label, what, key, payload) => {
+    const base = jscFacetBase(key);
+    if (jscIsPrivateFacet(key)) return;
+    const schema = JSC_STDLIB_BY_ID.has(base) ? JSC_STDLIB_BY_ID.get(base).schema : pinned.get(base);
+    if (schema === undefined) {
+      errs.push(what === "facet" ? `${label}: unregistered facet '${key}' — not stdlib, not pinned in the manifest, not private: (dangerous-by-default, D10)`
+        : `${label}: method '${key}' is no registered facet - not stdlib, not pinned in the manifest, not private: (an Assessment's method is a facet payload and fails closed, D10)`);
+      return;
     }
+    let found;
+    try { found = jscSchemaCheck(schema, payload, schema).errors; }
+    catch (e) { errs.push(`${label}: ${what} '${key}' cannot be checked: ${e.message}`); return; }
+    if (found.length) errs.push(`${label}: ${what} '${key}' payload violates its schema: ${found[0].message} @ ${found[0].path.replace(/^\//, "")}`);
+  };
+  for (const [label, obj] of items) {
+    for (const [key, payload] of Object.entries((obj && obj.facets) || {})) held(label, "facet", key, payload);
+    if (obj && jscIsPlainObject(obj.method)) for (const [key, payload] of Object.entries(obj.method)) held(label, "method", key, payload);
   }
   return errs;
 }
+/* What a page writes as the `method` of an Assessment a person performed:
+   the standard facet assessment-criteria@1 with `method: "manual"`, which is
+   the member that facet has for exactly this. Nothing else is said: which
+   requirements were looked at is `subject-refs`, who looked is
+   `performer-ref`.
+   The name of this tool is no part of a method and is not written into the
+   Assessment at all. Until build 0.9.13 it stood there as `tool`, beside
+   `kind: "manual-check"`. A method says how something was assessed; which
+   program recorded the answer says nothing about that. The manifest of an
+   exported bundle names the tool that wrote it (`written-with`,
+   `edited-with`), which is where a reader looks for it. A `private:` key
+   under `method` would be kept and ignored by every validator, and would
+   still put under "method" what is none. */
+const JSC_ASSESSMENT_CRITERIA = "https://ns.jascon.net/stdlib/facet/assessment-criteria@1";
+const jscManualMethod = () => ({ [JSC_ASSESSMENT_CRITERIA]: { method: "manual" } });
+/* Is this the method this app wrote before build 0.9.13: exactly `kind:
+   "manual-check"` and a `tool` that names the app? Only then does the app
+   know what was meant, a check a person did, and may offer to write it as
+   the standard facet. It never does so by itself: an Assessment that came
+   with a set stays as it came until the user asks (jscRewriteAppMethod),
+   and a method of any other shape is somebody else's and is only reported. */
+const jscIsAppMethodBefore0913 = m => jscIsPlainObject(m) && Object.keys(m).sort().join() === "kind,tool" && m.kind === "manual-check" &&
+  typeof m.tool === "string" && m.tool.startsWith("JASCON-App ");
+/* -> the Assessment with its method written as the standard facet, or null where the method is not the app's own */
+const jscRewriteAppMethod = asmt => (jscIsPlainObject(asmt) && jscIsAppMethodBefore0913(asmt.method) ? { ...asmt, method: jscManualMethod() } : null);
 /* What an operation owes, by the tier of its Tailoring (D13, B.1.6). A
    weakening needs a Deviation at consumer tier: a non-monotone change of
    modality, a substantive change of prose, a parameter value outside its
@@ -4022,6 +4065,14 @@ async function jscCheckGraph(g, verified, opts) {
   const cov = await jscRiskCoverage(objs, verify);
   pass("risk", "error")(cov.errors); pass("risk", "note")([...cov.notes, ...jscRiskLinkNotes(objs)]);
   pass("facet", "error")(jscFacetErrors([...objs].map(([id, r]) => [id, r.obj]), pinnedSchemas));
+  /* An Assessment this app wrote before build 0.9.13 fails with the two errors above (`kind`, `tool`). Nothing rewrites
+     it when a set is loaded; what a user can do about it is said beside the errors. */
+  for (const [id, r] of objs) {
+    if (r.type === "assessment" && jscIsAppMethodBefore0913(r.obj.method)) {
+      add("note", "facet", id, "this Assessment was written by this app before build 0.9.13, with a method that names no facet (kind, tool). It is kept as it came. " +
+        "The Assess page can write its method as the standard facet for a manual check; that changes the object, so an Attestation that names it no longer binds");
+    }
+  }
   /* CP-CHECK-1: check shapes, recomputed verdicts, the evidence store beside the manifest */
   const store = new Map(g.aux.map(a => [a.path, a.text]));
   const checks = await jscCheckErrors(objs, ref => (store.has(ref) ? store.get(ref) : null));
@@ -4086,7 +4137,7 @@ if (typeof module !== "undefined" && module.exports) {
     jscDeviationsOf, jscKernelNeeded, jscKernelPinErrors, jscRiskRuleViolations, jscRiskIsLive, jscRiskJustifies, JSC_NO_TAILORING, jscRiskCoverage,
     jscRiskLinkNotes, JSC_AUTHOR_RULES, jscAuthorReport, jscUtcDay, jscReviewReport, jscAuthorReviewLines,
     jscPartyRef, jscIsDate, jscProvenance, jscImportProvenance, jscAuthorRecord, jscAuthorTailoring, jscAuthorRisk, jscDecideDeviation, jscScaleDefinitionErrors, jscMatrixErrors, jscRiskLevels, jscMatrixCell, jscScaleErrors, jscCheckScales,
-    jscOptionalEmptyViolations, JSC_NUMBER_RULES, jscNumberSpellingViolations, jscNumberViolations, jscInNumberDomain, jscNumberError, jscObjectErrors, jscFacetErrors, jscTailoringDutyErrors, jscAttestationVerdict,
+    jscOptionalEmptyViolations, JSC_NUMBER_RULES, jscNumberSpellingViolations, jscNumberViolations, jscInNumberDomain, jscNumberError, jscObjectErrors, jscFacetErrors, JSC_ASSESSMENT_CRITERIA, jscManualMethod, jscIsAppMethodBefore0913, jscRewriteAppMethod, jscTailoringDutyErrors, jscAttestationVerdict,
     jscAttestationBinds, jscSemanticDigests, JSC_BINDS_MANIFEST, jscBindsReport, JSC_MANIFEST_RULES, jscListedAttestationErrors, jscSetBinds, jscCheckGraph,
     JSC_DSSE_PAYLOAD_TYPE, jscEd25519Verify, jscVerifyEnvelope, jscSemver, jscCompose, jscComposeSide, jscPathGet, jscEvalPredicate, jscConditionalApply,
     JSC_CHECK_RULES, JSC_CHECK_OPS, JscIRegexpError, jscIreCompile, jscIreFullMatch, jscCheckVerdict, jscCheckEach, jscCheckEachSummary, jscPercentShare, jscCheckAggregate, jscCheckParamDecls,

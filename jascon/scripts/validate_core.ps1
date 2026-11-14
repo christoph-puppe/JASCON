@@ -203,8 +203,8 @@ CHANGED 2026-11-14 (backlog #55, phase E): an Assessment's `method` is a
 facet payload. Its keys are facet ids, resolved as the keys of `facets` are
 (the standard library, the schemas the bundle pins, `private:`, else an
 error), and each payload is held to its schema (Facet-Errors). Until that
-day `method` was not read here or in validate_core.py. Twelve
-`method-vectors` came with it: facet: 19, 704 in all; seven of them failed
+day `method` was not read here or in validate_core.py. Thirteen
+`method-vectors` came with it: facet: 20, 705 in all; seven of them failed
 in validate_core.py before the change. A key of `method` may lack the '@'
 that the schema requires of a key of `facets`; Facet-Base reads both. Run
 under PowerShell 7.4 on Linux; the workflow runs it on Windows PowerShell

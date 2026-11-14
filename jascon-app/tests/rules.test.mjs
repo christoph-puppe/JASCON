@@ -514,6 +514,47 @@ test("facet: every vector (stdlib, pinned, private, unregistered)", () => {
   }
 });
 
+/* An Assessment's `method` is a facet payload (backlog #55). The reference runner holds an implementation to the number
+   of errors for the object and to a fragment of each: an error about a method names it as method '<key>', one about a
+   facet as facet '<key>'. The name of a vector is no part of an error, so the object is labelled with its own id here. */
+test("facets: an Assessment's method is held to its facet, all 13 vectors by the number of errors and a fragment of each", () => {
+  const v = vectors("facet")["method-vectors"];
+  assert.equal(v.length, 13);
+  let errors = 0;
+  for (const c of v) {
+    const errs = rules.jscFacetErrors([[c.object.id || "object", c.object]], new Map(Object.entries(c.pinned || {})));
+    assert.equal(errs.length, c["expected-errors"], `${c.name}: ${errs.join(" | ")}`);
+    assert.equal(errs.length ? "invalid" : "valid", c.expected, c.name);
+    for (const frag of c["expected-frags"]) assert.ok(errs.some(e => e.includes(frag)), `${c.name}: no error says ${frag}: ${errs.join(" | ")}`);
+    assert.ok(errs.every(e => !e.includes(c.name)), c.name + ": the name of the vector is in no error");
+    errors += errs.length;
+  }
+  assert.equal(errors, 8, "eight errors in the thirteen cases");
+  /* the two sentences of the reference, written out once */
+  const asmt = method => ({ id: "https://a.example/assessment/x", version: "1", lifecycle: "active", "subject-refs": ["https://a.example/req/1"], method, "performer-ref": "https://a.example/p", time: "2026-11-14T09:00:00Z", result: "satisfied" });
+  const said = method => rules.jscFacetErrors([["https://a.example/assessment/x", asmt(method)]], new Map());
+  assert.deepEqual(said({ kind: "manual-check", tool: "JASCON-App 0.9.12" }), ["kind", "tool"].map(k =>
+    `https://a.example/assessment/x: method '${k}' is no registered facet - not stdlib, not pinned in the manifest, not private: (an Assessment's method is a facet payload and fails closed, D10)`));
+  assert.match(said({ [rules.JSC_ASSESSMENT_CRITERIA]: { method: "by hand" } })[0], /^https:\/\/a\.example\/assessment\/x: method 'https:\/\/ns\.jascon\.net\/stdlib\/facet\/assessment-criteria@1' payload violates its schema: /);
+  assert.deepEqual(said("manual"), [], "a method that is no object is the kernel schema's matter and not this rule's");
+  /* a member called `method` inside a facet payload is that facet's business, also where it is an object with keys of its own */
+  assert.deepEqual(rules.jscFacetErrors([["x", { ...asmt(rules.jscManualMethod()), facets: { "https://assessor.example/facet/review@1": { method: { kind: "sampled" } } } }]],
+    new Map([["https://assessor.example/facet/review", { type: "object" }]])), []);
+  assert.equal(rules.jscFacetErrors([["x", { id: "x", method: { kind: "y" } }]], new Map()).length, 1, "the member is read at the top of any object, as the reference reads it");
+  /* what the Assess page writes is the standard facet for a manual check, and the reference's rule accepts it */
+  assert.deepEqual(rules.jscManualMethod(), { "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": { method: "manual" } });
+  assert.deepEqual(said(rules.jscManualMethod()), []);
+  assert.deepEqual(rules.jscObjectErrors(asmt(rules.jscManualMethod())).errors, []);
+  /* the method this app wrote before build 0.9.13 is recognised as its own, and nothing else is */
+  const own = { kind: "manual-check", tool: "JASCON-App 0.9.12" };
+  assert.equal(rules.jscIsAppMethodBefore0913(own), true);
+  for (const other of [{ kind: "manual-check" }, { kind: "manual-check", tool: "Another Tool 1.0" }, { kind: "scan", tool: "JASCON-App 0.9.12" }, { ...own, note: "x" }, rules.jscManualMethod(), {}, null, "manual"]) {
+    assert.equal(rules.jscIsAppMethodBefore0913(other), false, JSON.stringify(other));
+    assert.equal(rules.jscRewriteAppMethod(asmt(other)), null, "a method of another shape is somebody else's and is not rewritten: " + JSON.stringify(other));
+  }
+  assert.deepEqual(rules.jscRewriteAppMethod(asmt(own)), asmt(rules.jscManualMethod()), "only the method changes");
+});
+
 test("tailoring: the operation law of every vector, through the function the app uses", async () => {
   const v = vectors("tailoring").vectors;
   assert.equal(v.length, 19);

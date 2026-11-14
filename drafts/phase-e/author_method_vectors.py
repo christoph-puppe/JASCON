@@ -68,6 +68,15 @@ vec("a-member-called-method-inside-a-payload-is-no-assessments-method",
      "statements": [{"id": "s1", "modality": "must", "obligated-parties": ["https://ex.org/party/org"], "prose": {"en": "X."}}],
      "facets": {CRITERIA: {"method": "automated"}}}, 0, [],
     "A Requirement that carries assessment criteria. The `method` inside that payload is a member of the facet, not the method of an Assessment.")
+vec("an-object-called-method-inside-a-payload-is-no-assessments-method",
+    {"id": "https://ex.org/req/2", "version": "1", "lifecycle": "active",
+     "statements": [{"id": "s1", "modality": "must", "obligated-parties": ["https://ex.org/party/org"], "prose": {"en": "Y."}}],
+     "facets": {OWN + "@1": {"standard": "ISAE 3402", "method": {"kind": "review"}}}}, 0, [],
+    "As the vector before, with an object where that one has a string: a pinned facet whose payload has a member `method` that is itself "
+    "an object with a plain key. An implementation that looks for an object called `method` anywhere below an object, and not for the "
+    "member of an Assessment, takes this for a method under the key `kind`. Found by a deliberate defect in the app's port, which the "
+    "vector before this one did not catch.",
+    pinned={OWN: {"type": "object", "required": ["standard"], "properties": {"standard": {"type": "string"}, "method": {"type": "object"}}}})
 vec("an-empty-method-names-no-facet", assessment({}), 0, [],
     "The rule holds the keys there are. Whether an Assessment may state no method at all is not this rule's question: the kernel schema asks for "
     "an object and accepts an empty one.")

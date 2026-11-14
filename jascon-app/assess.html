@@ -77,6 +77,12 @@ jscI18n.add("de", {
     "Dieses Objekt hat nicht die Form einer Attestation und wird deshalb nicht an dem gemessen, was es bindet. Die Seite Validieren sagt, was daran falsch ist.",
   "Whether the signature is valid is the envelope's matter; the Validate page checks it.": "Ob die Signatur gültig ist, ist Sache des Umschlags; die Seite Validieren prüft sie.",
   "Take it out of this set": "Aus diesem Set nehmen", "Set it to withdrawn": "Auf withdrawn setzen",
+  "This app wrote this method before build 0.9.13: it names the kind of check and the tool, and neither is a facet. The Assessment is kept as it came. You can have its method written as the standard facet for a check a person did. That changes the object: an Attestation that names it no longer binds.":
+    "Diese App hat diese Methode vor Build 0.9.13 geschrieben: Sie nennt die Art der Prüfung und das Werkzeug, und beides ist kein Facet. Das Assessment bleibt, wie es kam. Sie können seine Methode als das Standard-Facet für eine von einer Person durchgeführte Prüfung schreiben lassen. Das ändert das Objekt: Eine Attestation, die es nennt, bindet dann nicht mehr.",
+  "This method is not one this app wrote, so the app does not know what was meant and changes nothing. It is put right where the Assessment comes from: every key of a method is a facet of the standard library, a facet the bundle pins, or private.":
+    "Diese Methode hat nicht diese App geschrieben; die App weiß also nicht, was gemeint war, und ändert nichts. Sie wird dort berichtigt, wo das Assessment herkommt: Jeder Schlüssel einer Methode ist ein Facet der Standardbibliothek, ein Facet, das das Bundle pinnt, oder privat.",
+  "Write its method as the standard facet (manual)": "Methode als Standard-Facet schreiben (manuell)",
+  "{id}: the method is now the standard facet for a manual check; the object changed": "{id}: Die Methode ist jetzt das Standard-Facet für eine manuelle Prüfung; das Objekt hat sich geändert",
   "Label of the check": "Bezeichnung der Prüfung", "Scope": "Umfang", "Performer": "Prüfer", "filter": "Filter",
   "every requirement with an implementation ({n})": "jede Anforderung mit einer Implementation ({n})",
   "Tailoring {name} ({n} selected)": "Tailoring {name} ({n} ausgewählt)", "Set {name}": "Set {name}", "all {n} requirements": "alle {n} Anforderungen",
@@ -127,8 +133,21 @@ function renderBoard() {
   const asmts = ofType("assessment"), finds = ofType("finding"), atts = ofType("attestation");
   $("nc-findings").textContent = finds.length || "";
   if (!asmts.length && !finds.length && !atts.length) { $("board").innerHTML = `<div class="empty">${esc(T("This set holds no assessment, finding or attestation. Run a check in the other view."))}</div>`; return; }
+  /* The method of an Assessment is a facet payload and is held to its facet (backlog #55). One that fails is shown
+     with the reference's sentence. Where it is the method this app wrote before build 0.9.13, the app knows what was
+     meant and offers to write it as the standard facet; it does not do that by itself, here or when a set is loaded. */
+  const pinned = new Map(G.facetSchemas.filter(f => f.def && f.def.id).map(f => [f.def.id, f.def.schema || { type: "object" }]));
+  const methodHtml = a => {
+    const errs = jscFacetErrors([[a.obj.id, a.obj]], pinned).filter(m => m.startsWith(`${a.obj.id}: method '`));
+    if (!errs.length) return "";
+    const own = jscIsAppMethodBefore0913(a.obj.method);
+    return `<div data-method-errors="${esc(a.obj.id)}">${errs.map(m => `<div class="mono verdict-bad" style="font-size:11.5px;margin:2px 0;overflow-wrap:anywhere">${esc("error: " + m)}</div>`).join("")}
+      <div class="hint">${esc(T(own ? "This app wrote this method before build 0.9.13: it names the kind of check and the tool, and neither is a facet. The Assessment is kept as it came. You can have its method written as the standard facet for a check a person did. That changes the object: an Attestation that names it no longer binds."
+        : "This method is not one this app wrote, so the app does not know what was meant and changes nothing. It is put right where the Assessment comes from: every key of a method is a facet of the standard library, a facet the bundle pins, or private."))}</div>
+      ${own ? `<button type="button" class="small" data-method-rewrite="${esc(a.obj.id)}">${esc(T("Write its method as the standard facet (manual)"))}</button>` : ""}</div>`;
+  };
   const aCards = asmts.map(a => `<div class="stmt"><span class="badge" style="border-color:${RESULT_COLOR[a.obj.result] || "var(--border-2)"};color:${RESULT_COLOR[a.obj.result] || "inherit"}">${esc(a.obj.result)}</span>
-    <b>${V.refLink(a.obj.id, V.titleOf(a))}</b> <span class="hint">${esc(T("by {who}", { who: V.last(a.obj["performer-ref"] || "") }))} · ${esc(a.obj.time || "")} · ${esc(T("{n} subjects", { n: (a.obj["subject-refs"] || []).length }))}</span></div>`).join("");
+    <b>${V.refLink(a.obj.id, V.titleOf(a))}</b> <span class="hint">${esc(T("by {who}", { who: V.last(a.obj["performer-ref"] || "") }))} · ${esc(a.obj.time || "")} · ${esc(T("{n} subjects", { n: (a.obj["subject-refs"] || []).length }))}</span>${methodHtml(a)}</div>`).join("");
   const cols = { open: [], "in-remediation": [], closed: [] };
   finds.forEach(f => (cols[f.obj.state] || (cols[f.obj.state] = [])).push(f));
   const kanban = `<div class="kanban">${Object.entries(cols).map(([st, list]) => `<div class="col"><div class="nano" style="margin-bottom:6px">${esc(st)} · ${list.length}</div>
@@ -164,6 +183,13 @@ function renderBoard() {
     await jscPage.refresh();
   }));
   $("board").querySelectorAll("[data-att]").forEach(b => b.addEventListener("click", () => verifyAttestation(b.dataset.att)));
+  $("board").querySelectorAll("[data-method-rewrite]").forEach(b => b.addEventListener("click", async () => {
+    const next = jscRewriteAppMethod(G.objects.get(b.dataset.methodRewrite).obj);
+    if (!next) return;
+    await jscSet.saveObjects([next]);
+    jscLog.info(T("{id}: the method is now the standard facet for a manual check; the object changed", { id: next.id }));
+    await jscPage.refresh();
+  }));
 }
 /* What one Attestation binds: the rule of the Validate page (jscSetBinds), shown through the same function
    (jscView.bindsHtml), so that the two pages cannot differ. Until build 0.9.11 this page had a judgement of its
@@ -272,7 +298,7 @@ async function writeCheck(scope, reqs) {
   const result = c["not-satisfied"] ? "not-satisfied" : (c.inconclusive || c.satisfied < reqs.length) ? "inconclusive" : "satisfied";
   const asmtId = jscSet.mintId("asmt", d.label);
   const asmt = { id: asmtId, version: "1", lifecycle: "draft", title: { [lang]: `${d.label}: ${scope.label}` }, "subject-refs": reqs,
-    method: { kind: "manual-check", tool: JSC_TOOL }, "performer-ref": performer,
+    method: jscManualMethod(), "performer-ref": performer,   // the standard facet for a check a person did; the tool is no part of a method (jascon-rules.js)
     time: new Date().toISOString(), result };
   const failed = reqs.filter(id => (d.results[id] || {}).result === "not-satisfied");
   const findingId = rid => jscSet.mintId("finding", d.label + "-" + V.last(rid));
