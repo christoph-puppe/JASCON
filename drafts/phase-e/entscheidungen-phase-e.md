@@ -290,3 +290,55 @@ Konverter-Änderungen aus E1–E7, E10 und E14: ein Durchgang je Konverter,
 jeweils mit seinem Preset. Danach IFA- und CR26-Läufe neu. Dann einmal
 alle Texte nach `docs-to-change.md`, in allen Sprachen. Zuletzt Register,
 Backlog und Archiv.
+
+---
+
+## Entscheidungen des Autors (2026-11-14)
+
+Wörtlich, und wie ich sie lese. Was noch eine Rückfrage braucht, steht
+darunter.
+
+| | Antwort des Autors | Gelesen als |
+|---|---|---|
+| E1 | „ja, tools müssten dann sehr alte irgndwann entfernen, weil es sonst unübersichtlich wird“ | Jedes zurückgezogene Element wird ein Objekt mit `lifecycle: withdrawn`. Dazu ein Backlog-Punkt: Werkzeuge brauchen einen Weg, sehr alte zurückgezogene Objekte auszublenden oder zu entfernen. |
+| E2 | „statement bleibt“ | B: keine Kernel-Änderung; eine zurückgezogene Anforderung trägt ein Statement. Folge siehe Rückfrage R2. |
+| E3 | „übernehmen“ | Die UUID des Quelldokuments wird getragen. |
+| E4 | „orphaned elemente braucht niemand“ | Verwaiste Back-Matter-Ressourcen werden nicht getragen. Was „verwaist“ genau heißt: Rückfrage R1. |
+| E5 | „zustimmung“ | Die IFA-Tabelle wie vorgeschlagen; die Zeile „Links … (nach E4)“ folgt R1. |
+| E6 | „zustimmung“ | CR26: Änderungshistorie und Ablaufdiagramm werden getragen; D17 wird geändert. |
+| E7 | „zustimmung“ | Die drei Drucklabels von SI-2(7) werden getragen. |
+| E8 | „zustimmung“ | `active` ohne Quellwort ist ein benannter Konverter-Default mit Berichtszeile. |
+| E9 | „zustimmung, aber auch draft darf ausgefüllt werden, freiwilliug geht alles -> handbuch anpassen“ | `placeholder` bleibt `draft`. Das Handbuch (ch03 §3.6: ein Entwurf „must not be cited by anything claiming conformance“) wird geändert: Auch ein Entwurf darf freiwillig umgesetzt und bewertet werden. Gemessen: Kein Validator verbietet das heute; es ist nur ein Satz im Handbuch. |
+| E10 | „zustimmung“ | Ein gemeinsames compat-Schema, Version 1.1.0. |
+| E11 | „Doch 2.0.09 ist alles zur Veränderung freigegeben, gut begründet. Daher alle befinde ins backlog“ | Für 2.0.0 darf sich auch der Kernel ändern, wenn es gut begründet ist. Jeder Befund wird ein Backlog-Punkt mit Zahlen und begründetem Vorschlag; gebaut wird ein Punkt erst nach Entscheidung. |
+| E12 | „zustimmung“ | A: Die Ledger-Mechanik bleibt; große Korpora werden nur gegen die gepinnte Quelle getestet. |
+| E13 | „stimmt, eine anforderung mit mehreren parteien sollte gehen, aber immer nur eine modalität“ | Das Argument wird mit Adressierbarkeit neu begründet. Zur Modalität: Rückfrage R3. |
+| E14 | „zustimmung“ | Die zwei Konverter-Fehler werden behoben, die Ausnahmen in den App-Tests entfernt. |
+| E15 | „1: fixen; 2 fixen“ | Beide Reader-Befunde werden behoben. |
+| E16 | „ja, aufräumen wird ein großer Task“ | Aufräumen ist eine eigene, große Aufgabe nach Phase E; ihren Umfang schlage ich dann vor. |
+
+### Rückfragen, mit Messung (alle gemessen am 2026-11-14)
+
+**R1. Was heißt „verwaist“?** Gezählt in den Quelldateien, wer auf eine
+Back-Matter-Ressource verweist:
+
+| Quelle | Ressourcen | verwiesen aus Text / Link / Metadaten / Import | nichts verweist |
+|---|---:|---|---:|
+| ISM | 246 | Text 241, Metadaten 5 | 0 |
+| CSF | 4 | Metadaten 3 | 1 |
+| Grundschutz++ | 1 | Metadaten 1 | 0 |
+| SP 800-53, Katalog | 201 | Link oder Text 169, Metadaten 9 | 23 |
+| SP 800-53, vier Profile | je 1 | Import 1 | 0 |
+| IFA, sieben Dokumente | 15 | Metadaten 8, Import 3, Link 2 | 2 |
+
+**R2. Was sagt das Statement eines zurückgezogenen Controls?** Die 180
+zurückgezogenen SP-800-53-Controls mit Nachfolger haben in der Quelle
+keine Prosa, nur Links (`incorporated-into` 166, `moved-to` 34). Bei CSF
+haben 79 der 87 eigene Prosa; die 8 ohne sind Kategorien und werden
+Sets.
+
+**R3. „Immer nur eine Modalität“.** Heute erlaubt der Kernel
+verschiedene Modalitäten je Statement einer Anforderung. Das
+Handbuch-Beispiel `req-konf-14-1.json` nutzt das (Betreiber `may`, Kunde
+`should`), dazu 37 Fixtures in den Vektoren (risk 8, advice 29). In den
+konvertierten Korpora mischt keine Anforderung Modalität oder Partei.
