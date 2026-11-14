@@ -100,10 +100,11 @@ test("no page mints a party from a word of its own (backlog #70)", () => {
   const CONVERTERS = ["jascon-oscal.js: /party/cis", "jascon-oscal.js: /party/cis"];
   assert.deepEqual(found.sort(), CONVERTERS.sort(), "a party written from a word in the code");
   /* 3. a party made through a template: jscPartyRef, from the name that was typed, is the one place for the pages. The
-     OSCAL import has three more: the document's author, from the name of a party the document defines; the NIST
+     OSCAL import has three more: the document's author, from the name of a party the document defines
+     (jscOscalPartyUri, since build 0.9.14 also for the BSI preset, which writes a German name in ASCII first); the NIST
      preset's implementation levels, which the source states; and the named default of a preset. */
   const templates = sources.flatMap(f => [...code(fs.readFileSync(path.join(APP, f), "utf8")).matchAll(/\/party\/\$\{([^}]*)\}/g)].map(m => `${f}: ${m[1]}`));
-  assert.deepEqual(templates, ["jascon-oscal.js: jscOscalSlug(party.name)", "jascon-oscal.js: known.word", "jascon-oscal.js: v", "jascon-rules.js: slug"]);
+  assert.deepEqual(templates, ["jascon-oscal.js: jscOscalSlug(name)", "jascon-oscal.js: known.word", "jascon-oscal.js: v", "jascon-rules.js: slug"]);
   const oscalRules = require("../jascon-oscal.js");
   assert.deepEqual(Object.fromEntries(Object.entries(oscalRules.JSC_OSCAL_PARTY).map(([preset, d]) => [preset, d.word])),
     { "bsi-gspp": "institution", "nist-sp800-53": "organization", "cis-benchmark": "system-administrator" }, "the defaults of the presets, each named and replaceable");

@@ -6,12 +6,16 @@
 
    Four ways to read a catalog, chosen by `preset`:
 
-   bsi-gspp   The rules of jascon/scripts/convert_bsi.py for the BSI
-              Anwenderkatalog Grundschutz++: a nested control is a clause of
-              its parent, the modal verb becomes the modality, the BSI props
-              go to stdlib and BSI facets, sec_level becomes baseline Sets.
+   bsi-gspp   The rules of jascon/scripts/convert_bsi.py v0.3 for the BSI
+              Anwenderkatalog Grundschutz++: every control, nested ones
+              included, is a Requirement of its own with one statement, and
+              a control with nested controls also gives a Set that groups it
+              with them (BSI nests for grouping only); the modal verb becomes
+              the modality, the BSI props go to stdlib and BSI facets,
+              sec_level becomes baseline Sets, and what the mapping does not
+              read is carried in the compat facet as the source holds it.
               tests/oscal.test.mjs compares every object this preset makes
-              with the shipped bundle converted_examples/DE.BSI.
+              with the committed bundle converted_examples/DE.BSI.
    generic    For any other catalog. Every control, nested ones included, is
               a Requirement; every part of the statement that carries prose
               is a clause; the modality is `unspecified`, because OSCAL has
@@ -95,7 +99,10 @@ function jscBackMatter(doc) {
    (`<ns>/party/cis`, `<ns>/party/institution`): `<ns>/party/<slug of the
    party's name>`, under the namespace of the import and with the
    converters' slug. convert_ifa.py names the parties of a role assignment
-   the same way. A name is a string that is not empty. */
+   the same way. A name is a string that is not empty. The BSI preset first
+   writes a German name in ASCII as a German reader does (ü -> ue), as
+   convert_bsi.py does (party_uri); without that the slug drops the
+   letter. */
 function jscOscalAuthorParty(metadata) {
   const meta = metadata && typeof metadata === "object" ? metadata : {};
   const parties = (Array.isArray(meta.parties) ? meta.parties : []).filter(p => p && typeof p === "object" && typeof p.uuid === "string");
@@ -117,10 +124,14 @@ function jscOscalAuthorParty(metadata) {
   if (organizations.length === 1) return land(organizations[0]);
   return null;
 }
+/* a party's name -> its URI under `ns`, with the converters' slug */
+function jscOscalPartyUri(ns, name) {
+  return `${String(ns).replace(/\/+$/, "")}/party/${jscOscalSlug(name)}`;
+}
 /* -> the author as a party URI under `ns`, or null */
 function jscOscalAuthorRef(metadata, ns) {
   const party = jscOscalAuthorParty(metadata);
-  return party ? `${String(ns).replace(/\/+$/, "")}/party/${jscOscalSlug(party.name)}` : null;
+  return party ? jscOscalPartyUri(ns, party.name) : null;
 }
 /* -> the day of the document's last change, YYYY-MM-DD, or null */
 function jscOscalDate(metadata) {
@@ -243,12 +254,12 @@ function jscStdlibPin(shortName) {
    for the grouping: its members are the control's own Requirement and then,
    in the order of the source, what stands for each nested control. No
    relation is written between a control and the controls nested in it.
-   Until build 0.9.14 a nested control became a second statement of its
+   Before build 0.9.14 a nested control became a second statement of its
    parent's Requirement; its links were not read, and a link that named it
    pointed at an id that was no object (ERRATA.md).
 
    Content is not dropped (the author, 2026-11-14). A prop is read only in
-   the namespace this mapping is written for (JSC_BSI_PROP_NS; a label and
+   the namespace this mapping is written for (JSC_BSI.PROP_NS; a label and
    an alt-identifier are read without one). What the mapping does not read
    is carried as the source holds it, in the compat facet: a prop of another
    name or namespace, an earlier prop of a name that repeats, a part of
@@ -329,9 +340,10 @@ function jscBsiPartRest(part, read, unreadProps) {
   return Object.keys(left).some(k => k !== "name") ? left : null;
 }
 /* A German name in ASCII as a German reader writes it (ue for ü), before the
-   slug, which keeps a-z and 0-9 only (party_uri of convert_bsi.py). */
+   slug, which keeps a-z and 0-9 only (party_uri of convert_bsi.py): without
+   this the BSI's own name gave `bundesamt-f-r-sicherheit-...`. */
 const JSC_BSI_ASCII = { "ä": "ae", "ö": "oe", "ü": "ue", "Ä": "Ae", "Ö": "Oe", "Ü": "Ue", "ß": "ss" };
-const jscBsiPartyUri = (ns, name) => `${ns}/party/${jscOscalSlug(String(name).replace(/[äöüÄÖÜß]/g, ch => JSC_BSI_ASCII[ch]))}`;
+const jscBsiAscii = name => String(name).replace(/[äöüÄÖÜß]/g, ch => JSC_BSI_ASCII[ch]);
 
 function jscImportBsi(cat, party) {
   const B = JSC_BSI, ns = B.ns, version = cat.metadata.version, lang = B.lang;
@@ -341,6 +353,8 @@ function jscImportBsi(cat, party) {
     /* how many objects carry something in the compat facet as the source holds it, by member */
     "carried-as-the-source-holds-it": {} };
   const asHeld = k => { report["carried-as-the-source-holds-it"][k] = (report["carried-as-the-source-holds-it"][k] || 0) + 1; };
+  /* counted in a Map: a verb of the source is any text, `constructor` too, which a plain object already has */
+  const unknownModal = new Map();
   /* two controls, or a control and a group, whose ids give one file name would overwrite each other */
   const add = (path, obj) => { if (taken.has(path)) throw new Error(`two objects would be written to ${path}: their ids give the same file name`); taken.add(path); objects.push({ path, obj }); };
   const compat = found => Object.fromEntries(B.COMPAT_MEMBERS.filter(k => k in found).map(k => [k, jscBsiHeld(found[k])]));
@@ -353,10 +367,11 @@ function jscImportBsi(cat, party) {
     let guid = parts.find(p => p.name === "guidance") || null;
     if (guid && !guid.prose) guid = null;                       // a guidance without a prose is not read: carried whole
     const text = jscOscalProse(smt.prose), punread = [], pp = jscBsiReadProps(smt, B.PART_PROPS, punread);
-    /* a verb outside MODAL is counted, `unspecified` is written, and the prop is carried as the source holds it */
-    if ("modal_verb" in pp && !(pp.modal_verb.value in B.MODAL)) {
+    /* a verb outside MODAL is counted, `unspecified` is written, and the prop is carried as the source holds it
+       (a key of the table itself, not one an object inherits: `toString` is no modal verb) */
+    if ("modal_verb" in pp && !Object.prototype.hasOwnProperty.call(B.MODAL, pp.modal_verb.value)) {
       const v = pp.modal_verb.value;
-      report["unknown-modal-verbs"][v] = (report["unknown-modal-verbs"][v] || 0) + 1;
+      unknownModal.set(v, (unknownModal.get(v) || 0) + 1);
       punread.push(pp.modal_verb); delete pp.modal_verb;
     }
     /* a list prop whose value holds no term gives an empty list; the value is carried as the source holds it */
@@ -444,7 +459,7 @@ function jscImportBsi(cat, party) {
     /* the control's own links: a relation has a type and a ref; a link that says more is carried whole beside it */
     const rels = [], lrest = [];
     for (const l of c.links || []) {
-      const href = l.href || "", type = l.rel || "related";
+      const href = l.href || "", type = l.rel === undefined ? "related" : l.rel;     // a link without a rel is `related`, as l.get("rel","related")
       if (href.startsWith("#") && bm.has(href.slice(1))) { rels.push({ type, ref: bm.get(href.slice(1)) }); resourcesNamed.add(href.slice(1)); }
       else rels.push({ type, ref: href.startsWith("#") ? `${ns}/req/${href.slice(1)}` : href });
       if (Object.keys(l).some(k => k !== "href" && k !== "rel")) lrest.push(l);
@@ -538,10 +553,11 @@ function jscImportBsi(cat, party) {
       catalog: { type: "object" }, "param-extras": { type: "object" }, props: { type: "array" }, parts: { type: "array" }, links: { type: "array" },
       control: { type: "object" }, group: { type: "object" } }),
   ];
+  report["unknown-modal-verbs"] = Object.fromEntries(unknownModal);
   /* who wrote the document and when, by the rule of backlog #69; nothing is made up where the source names nobody or no day */
   const author = jscOscalAuthorParty(cat.metadata), day = jscOscalDate(cat.metadata);
   const provenance = { sources: [{ key: B.key, title: cat.metadata.title, version, "oscal-version": cat.metadata["oscal-version"],
-    ...(author ? { "author-ref": jscBsiPartyUri(ns, author.name) } : {}), ...(day ? { date: day } : {}) }],
+    ...(author ? { "author-ref": jscOscalPartyUri(ns, jscBsiAscii(author.name)) } : {}), ...(day ? { date: day } : {}) }],
     converter: "JASCON-App OSCAL import, preset bsi-gspp (the rules of convert_bsi.py v0.3)" };
   return { objects, facetSchemas, provenance, report };
 }

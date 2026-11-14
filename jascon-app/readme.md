@@ -7,7 +7,7 @@ have to switch on yourself: the suggestions of the Risk page and the drafts
 of the Checks page send text to a model service once you type a key (see
 "Suggestions from a model").
 
-State: build 0.9.13. This build has the frame (the hub, the settings page and
+State: build 0.9.14. This build has the frame (the hub, the settings page and
 the shared core) and nine tool pages, in the order of the work: Import,
 Browse, Risk, Tailor, Map, Implement, Checks, Assess and Validate. One view of the Risk page and
 the drafting of the Checks page can ask a language model; nothing else in
@@ -23,7 +23,10 @@ a manifest that lists an Attestation is refused (MANIFEST-1), and the party
 a preset writes where its source names none is shown as the preset's
 default and can be replaced (see "Importing OSCAL"). Since 0.9.13 the method
 of an Assessment is held to its facet, and the Assess page writes one that
-is (see "The method of an Assessment").
+is (see "The method of an Assessment"). Since 0.9.14 the Grundschutz++
+preset makes every control, a nested one too, a Requirement of its own with
+its own links, and carries what it does not read as the source holds it
+(see "Importing OSCAL").
 
 ## Start
 
@@ -340,12 +343,24 @@ written until you choose *Write to the set*.
 into a set you name, with a manifest whose provenance names the source file
 and the licence you state. Three sets of rules:
 
-- *BSI Grundschutz++* follows `jascon/scripts/convert_bsi.py`: a nested
-  control is a clause of its parent, the modal verb becomes the modality, the
-  BSI props go to the standard facets and two BSI facets, the security level
-  becomes baseline Sets. Every object it makes from the Anwenderkatalog of
-  2026-07-16 has the semantic digest of the bundle under
-  `converted_examples/DE.BSI`.
+- *BSI Grundschutz++* follows `jascon/scripts/convert_bsi.py` v0.3. Every
+  control, at every depth, is a Requirement of its own, with one statement,
+  its own parameters, props and links. BSI nests controls for grouping only
+  (the author, 2026-11-14), so a control that has nested controls also gives
+  a Set that groups it with them: its own Requirement first, then what
+  stands for each nested control, in the order of the source; no relation is
+  made from the nesting. The modal verb becomes the modality, the BSI props
+  (each read in its BSI namespace) go to the standard facets and two BSI
+  facets, and the security level of each control becomes baseline Sets.
+  What the rules do not read (a prop of another name or namespace, a part of
+  another name, a member they have no place for, what the document says of
+  itself) is carried as the source holds it, in the compat facet
+  `oscal-1x@1`. Every object it makes from the Anwenderkatalog of
+  2026-07-16, 1,287 of them (999 Requirements, 288 Sets), has the semantic
+  digest of the bundle under `converted_examples/DE.BSI`, and the source
+  entry of the manifest names the author and the day as the converter's
+  does. Until build 0.9.13 a nested control was a clause of its parent, and
+  its links were lost (`ERRATA.md`).
 - *generic*, for any other catalog: every control, nested ones included, is a
   Requirement; every part of the statement that carries prose is a clause;
   the modality is `unspecified`, because OSCAL has no field for it. Props and
@@ -422,10 +437,12 @@ got `--obligated-party` for the same):
 
 With the default left as it is, an import writes the objects it wrote
 before, byte for byte. Measured: one SHA-256 over every file of an import,
-taken with build 0.9.11 and held by a test since, for the BSI catalog the
-repository carries (811 objects, 651 statements), the NIST catalog (1,035
-objects, 1,918 statements) and a catalog of a CIS Benchmark's shape written
-for the tests (17 objects). The manifest of the new set differs from an
+held by a test, taken with build 0.9.11 for the NIST catalog the repository
+carries (1,035 objects, 1,918 statements) and a catalog of a CIS
+Benchmark's shape written for the tests (17 objects), and with build 0.9.14
+for the BSI catalog the repository carries (1,360 objects, 999
+statements). The BSI digest was taken anew because the preset and that
+catalog both changed on 2026-11-14 (811 objects and 651 statements before). The manifest of the new set differs from an
 earlier build's in the line that names the tool and its build, as with
 every build. CIS as the author of its Mappings (`…/party/cis`) is another
 matter: the source states it, and the author fields above overwrite it.
@@ -1027,7 +1044,7 @@ above, `jascon-schema.js`, `jascon-presets.js`) matches its source. The second l
 strings without a German text. The third rewrites the settings table from
 `JSC_CFG` in `jascon-core.js`.
 
-Three tests of the OSCAL import compare with the publishers' source files,
+Five tests of the OSCAL import compare with the publishers' source files,
 which the repository does not carry (`sources/` is ignored); without the
 files they are skipped. The files are the Anwenderkatalog Grundschutz++ of
 2026-07-16 from `BSI-Bund/Stand-der-Technik-Bibliothek` (commit `39a1193`,
