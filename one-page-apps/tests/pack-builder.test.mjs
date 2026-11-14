@@ -288,7 +288,7 @@ test("with the SP 800-53 catalogue loaded, the import places every value under t
   const { page, set } = B;
   await page.setInputFiles("#pick-cat-folder", path.join(ROOT, "converted_examples/US.SP800-53/sp800-53-core-bundle"));
   await B.settle();
-  assert.match(await page.locator("#cat-state").innerText(), /^1014 requirement\(s\)/);
+  assert.match(await page.locator("#cat-state").innerText(), /^1016 requirement\(s\)/);   // 1,014 until 2026-11-14: cp-10.3 and sc-19, withdrawn without a successor, are objects since the SP 800-53 rework
   await set('[data-bind="origin"]', "https://dbvendor.example");
   await set('[data-bind="publisher.ref"]', VENDOR);   // named here: the page supplies no publisher
   B.answers.push("");                    // the backup standard stays unresolved: its recommendation is set by hand
