@@ -56,7 +56,14 @@ Chapter 1 (one framework's conventions enforced on everyone). So the
 method is **facet-typed**: whatever methodology you use, it arrives
 under a registered contract that declares itself assessment-modifying —
 which means, via Chapter 7's fail-closed rule, that no tool can
-half-understand your method and *guess* at your verdicts. Subjects
+half-understand your method and *guess* at your verdicts. A validator
+holds you to it: the keys of `method` are facet ids, a facet of the
+standard library is held to its descriptor and any other to the schema
+your bundle pins, a `private:` key is kept and ignored, and a key that
+no facet registers is an error (specification D10). That check is of
+2026-11-14. Until then the sentence above was a promise nothing kept:
+no validator read `method`, and two tools of this repository wrote
+`{"kind": "manual-check"}` there from their own forms. Subjects
 point at components and implementation edges (Chapter 9's chain is
 literally what gets tested, basis-refs and all); the performer is a
 party reference, with accreditation context living where party context
