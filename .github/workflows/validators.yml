@@ -98,6 +98,47 @@ jobs:
             git --no-pager diff --stat -- converted_examples/US.IFA-GoodRead
             exit 1
           fi
+      - name: The nine catalogue converters and whom their statements bind (invented catalogue)
+        # Backlog #74. Each converter is run on a catalogue nobody published:
+        # without --obligated-party it writes its own party and reports it as
+        # its default, with it the caller's, and a party the source states
+        # stays the source's. Needs no source file.
+        run: python jascon/scripts/test_convert_obligated_party.py
+      - name: The four catalogue conversions are reproducible from their pinned sources
+        # AU.ISM, DE.BSI, US.CSF and US.SP800-53, held as the IFA conversion is
+        # held above: each source is fetched at its pinned tag or commit and
+        # checked against the SOURCES.sha256 of its folder, converted again,
+        # and the bundle and the two coverage reports must be byte for byte
+        # what is committed. This is where "without an argument a converter
+        # writes what it wrote before" is held (backlog #74).
+        #
+        # The SP 800-53 report counts the citations of its controls in every
+        # corpus under converted_examples/. The count is the committed one only
+        # while that folder holds what is committed and nothing else, so the
+        # step says so first, in its own words, if another step has left a
+        # bundle there.
+        run: |
+          set -euo pipefail
+          if [ -n "$(git status --porcelain -- converted_examples)" ]; then
+            echo "converted_examples/ is not as committed before the conversions are run again:"
+            git status --porcelain -- converted_examples
+            exit 1
+          fi
+          while read -r corpus converter; do
+            bash .github/scripts/fetch-pinned-sources.sh "converted_examples/$corpus/SOURCES.sha256"
+            python "jascon/scripts/$converter"
+            if [ -n "$(git status --porcelain -- "converted_examples/$corpus")" ]; then
+              echo "$converter no longer reproduces the committed conversion:"
+              git --no-pager diff --stat -- "converted_examples/$corpus"
+              git status --porcelain -- "converted_examples/$corpus"
+              exit 1
+            fi
+          done <<'EOF'
+          AU.ISM convert_ism.py
+          DE.BSI convert_bsi.py
+          US.CSF convert_csf.py
+          US.SP800-53 convert_nist.py
+          EOF
       - name: Summary
         if: always()
         run: |
