@@ -61,7 +61,9 @@ all of them without flattery.
 
 `draft · active · deprecated · withdrawn` — on every object (A.0).
 Deprecation is a state *with a successor pointer* (`replaces` on the
-new object carries the mode); withdrawal is terminal. Identity events
+new object carries the mode); withdrawal is terminal, and in a bundle
+that holds an object as withdrawn nothing in force leans on it
+(WITHDRAWN-1, Chapter 12; the record may still name it). Identity events
 (rebrand, split, merge, rename) are **not** lifecycle codes — they
 are `canonical-alias`/`replaces` records (Chapter 3), because a state
 field cannot carry a forwarding address.

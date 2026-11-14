@@ -676,7 +676,7 @@ facets and released the seven work items. The record is the register,
 |---|---|---|
 | #80 | `provenance.sources[]` typed in the kernel schema; six converters write it | built |
 | #81 | `version` is the object's own; `history[]` on every object, HISTORY-1, DATE-6 | built |
-| #82 | `references@1`, a ninth standard facet | built; the rule for `#id` is open and needs the author |
+| #82 | `references@1`, a ninth standard facet; what `#id` names (D9), FRAGMENT-1, a report in three validators | built (the facet with the round; the report later that day, on the author's "agreed") |
 | #83 | `assessment-criteria` 1.1.0, addresses, the D10 rule; the standard library holds versions | built |
 | #84 | `label` on a statement | built; no `aliases` on a parameter |
 | #85 | what a Set stands for | decided: no kernel member |
@@ -687,10 +687,11 @@ facets and released the seven work items. The record is the register,
 | #90 | the workflow runs the OSCAL export | built |
 | #91 | converter residue | three of six built |
 | #92 | reader and app residue | built; the app's part measured and not changed |
-| #93 | the handbook on references to a withdrawn object | needs the author |
-| #94 | one facet id and version, two schemas (example folder, Grundschutz++ converter) | needs the author |
+| #93 | WITHDRAWN-1: an object in force does not lean on one the bundle holds as withdrawn; an error in three validators and the reader | built later that day (the author: "Regel bauen") |
+| #94 | one facet id and version, two schemas (example folder, Grundschutz++ converter) | measured against the publisher's repository: the converter's values are the publisher's; a proposal is with the author |
 
-Measured at the end: 753 vectors in 18 families in the reference, the
-twin and the app; six ledgers, 214,365 values, 71,212 copied, 51,605 made
+Measured at the end of the round: 753 vectors in 18 families in the
+reference, the twin and the app; with FRAGMENT-1 and WITHDRAWN-1 later
+that day, 783. Six ledgers, 214,365 values, 71,212 copied, 51,605 made
 by a rule, 91,548 no content, 0 dropped, 0 unaccounted; four OSCAL exports
 round-trip 4,465 objects.

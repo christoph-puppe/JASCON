@@ -14,7 +14,7 @@ contact with real catalogs before it may stay.**
 
 This repository is a working design study, not a slide deck. It contains a
 draft specification with a public decision register, an **executable kernel
-schema** with a **157-vector conformance corpus** (753 in 18 families in the 2.0.0 candidate) and *two* reference
+schema** with a **157-vector conformance corpus** (783 in 18 families in the 2.0.0 candidate) and *two* reference
 validators — Python, and a **zero-dependency PowerShell 5.1 twin that runs
 on a stock Windows box** (the weekend-validator claim, measured,
 crypto engines included) —
@@ -49,7 +49,7 @@ semantic digest of each of its three subjects and the digest of the
 manifest's bytes, and says what the reference validator says: FULL MATCH.
 The Attestation is unsigned (the converter models it from the
 authorization date of the SSP), and the page says that too; it takes no
-key and has no word for a signature that holds. (Reader 1.18.0,
+key and has no word for a signature that holds. (Reader 1.19.0,
 2026-11-14, loaded from `python -m http.server`, which lists the folder.
 The bundle's manifest lists 16 objects. The stage names Risk in its
 heading and lists none; the two Risk objects are in the object browser —
@@ -166,7 +166,7 @@ backlog #71.)*
 > tailoring or an assessment, and the vendor's manifest stays in the set
 > as the import record. No new type.
 >
-> - **Measured:** 74 advice vectors (537 in all on 2026-11-12, 753 in 18 families since 2026-11-14) pass in the
+> - **Measured:** 74 advice vectors (537 in all on 2026-11-12, 783 in 18 families since 2026-11-14) pass in the
 >   Python reference; 28 deliberate breaks of the reference each turn a
 >   vector red. A worked pack, signed with the public fixture key, and
 >   the example folder after importing it validate. Run over the shipped
@@ -302,8 +302,21 @@ backlog #71.)*
 >   Requirements carry their revision as `version` and one history
 >   entry; 291 rules and indicators of CR26 carry 390; SP 800-53 has
 >   1,122 statement labels and 3,707 addresses, of which the bundle of
->   the morning wrote 218 that named no statement. 44 vectors. Not
->   decided: what `#id` in a text may name besides a resource.
+>   the morning wrote 218 that named no statement. 44 vectors.
+> - **Decided later that day:** what `#id` in a text names, and what may
+>   lean on a withdrawn object. A reference of the form `#id` names a
+>   resource the bundle carries, an object, a statement, a parameter or a
+>   source document of the manifest, and a validator reports the number
+>   of each and which name nothing (FRAGMENT-1; nothing fails). Measured:
+>   SP 800-53 has 541 such references, 118 to a resource, 348 to another
+>   control, 73 to a statement, one to a parameter and one to nothing, a
+>   defect of the source; the ISM's 486 all name a resource. And in a
+>   bundle that holds an object as withdrawn, an Implementation, a
+>   Tailoring, a Mapping, a Component, a Check or a live Risk that is in
+>   force may not lean on it (WITHDRAWN-1, an error); lineage, the
+>   members of a Set and the records of an assessment still name it.
+>   The handbook had said so since 1.0.0 and no validator held it. No
+>   committed bundle fails. 30 vectors.
 > - **Licences:** the repository is Apache-2.0; the converted corpora were
 >   checked against their publishers' terms and six bundles were removed
 >   ("What ships here", below).

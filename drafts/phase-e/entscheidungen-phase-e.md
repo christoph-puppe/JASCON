@@ -467,3 +467,106 @@ hat, oder ein Befund, der eine vorgelegte Annahme widerlegt.
 10. **#89 nicht gebaut.** Die Prüfung der Bibliothek, dass die Pfadkarte
     den Ort nennt, den der Ledger fand, hätte drei Konverter umgebaut,
     die eine eigene haben, und drei bekommen, die keine haben. Offen.
+
+## Vier Antworten des Autors nach der Kernel-Runde (2026-11-14, später am Tag)
+
+Vorgelegt waren die vier offenen Punkte #82, #93, #94 und #89. Die
+Antworten des Autors, wörtlich:
+
+> #82 agreed
+> #93 regel bauen
+> #94 die alten daten sind egal, welches von beiden ist die aktuelle gemäß BSI  repo?
+> #89 was ist das?
+
+### #82: was `#id` benennt (FRAGMENT-1, ein Bericht)
+
+Gebaut wie vorgeschlagen: D9 sagt, was `#id` benennen darf, und ein
+Validator berichtet je Bundle, wie viele Verweise welche Art benennen
+und welche nichts. Nichts schlägt dadurch fehl. Gemessen: SP 800-53 hat
+541 solche Verweise, 118 auf eine Ressource, 348 auf ein Control, 73 auf
+ein Statement, 1 auf einen Parameter und 1 ins Leere (`#ac-2_smt.a.5`
+in SA-24, ein Fehler der Quelle); ISM 486, CSF 3, Grundschutz++ 1, alle
+auf eine Ressource; IFA 1, auf das Quelldokument, aus dem ein Link kam.
+
+### #93: Verweise auf ein zurückgezogenes Objekt (WITHDRAWN-1, ein Fehler)
+
+Gebaut. Ein Validator sieht ein Bundle und kann einen Verweis nicht
+datieren. „Neu“ sagt deshalb das Bundle: Eines, das vor dem Rückzug
+gepackt wurde, führt das Objekt, wie es war, und bleibt gültig. In
+einem, das es als zurückgezogen führt, darf sich nichts darauf stützen,
+was selbst in Kraft ist.
+
+### #94: welche Fassung von `gspp-taxonomy` 1.0.0 ist die des BSI
+
+Das BSI veröffentlicht kein Facet-Schema. Es veröffentlicht den Katalog
+und unter `documentation/namespaces/` je Eigenschaft eine Datei mit den
+erlaubten Werten. Gemessen am Stand von `main`
+(`control_layer/Grundschutz++/Grundschutz++-resolved_catalog.json`,
+Katalogversion 2026-10-29, 1.000 Anforderungen): `security_level.csv`
+nennt zwei Werte, `normal-SdT` und `erhöht` (773 und 227 im Katalog);
+`effort_level.csv` sechs, 0 bis 5 (148 Anforderungen mit 0).
+`sec_level`, `effort_level` und `tags` stehen an der Anforderung,
+`documentation` an ihrem Statement.
+
+Die Fassung des Konverters trägt die beiden Werte des BSI. Die des
+Beispielordners trägt keinen davon (`normal-sdt`, `erhoeht-sdt`) und
+lässt mit `effort` 1 bis 5 die 148 Anforderungen mit 0 nicht zu. Die
+aktuelle ist also die des Konverters.
+
+Nebenbefund: Das BSI hat sein Repository umgebaut und einen neueren
+Katalog veröffentlicht als den, aus dem das Bundle konvertiert ist
+(2026-07-16, 999 Anforderungen, festgehalten am Commit 39a1193). Eine
+Anforderung ist dazugekommen, und der `ns` jeder Eigenschaft lautet
+jetzt `documentation/namespaces/` statt `Dokumentation/namespaces/`.
+Nichts davon ist umgestellt; das ist eine Entscheidung des Autors.
+
+### #89: nicht gebaut, dem Autor erklärt
+
+Der Ledger prüft, dass jeder Quellwert eine Regel hat und dass die Regel,
+noch einmal angewandt, den Wert ergibt, der im Bundle steht. Er prüft
+nicht, ob die Regel richtig ist, und nicht, ob der Wert an dem Ort
+steht, den die Pfadkarte des Konverters nennt. Drei Konverter prüfen das
+Zweite selbst. #89 wäre, diese Prüfung in die Bibliothek zu legen, damit
+alle sechs sie haben. Kein Bundle ändert sich dadurch.
+
+### Was beim Bauen anders kam als vorgelegt
+
+1. **#82, „über Label oder Alias“.** Vorgeschlagen war, dass `#id` ein
+   Objekt über sein Label oder einen Alias benennt. Gemessen trägt das
+   Label nur 232 der 348 Verweise auf Controls (`#ac-11.1` gegen das
+   Label `AC-11(1)`). Was alle 348 trägt, ist das Ende der Objekt-id
+   nach dem letzten `/`, mit A bis Z wie a bis z. So ist es gebaut. Über
+   einen Alias verweist kein Text der fünf Bundles; das ist nicht gebaut.
+2. **#82, eine fünfte Art.** Im IFA-Bundle nennt ein Link die uuid
+   seines Quelldokuments. Sie steht in `provenance.sources` des
+   Manifests. Ohne diese Art hätte der Bericht einen auflösbaren Verweis
+   als „ins Leere“ gezählt.
+3. **#82, Statement-Form.** `#ac-2_smt.a` ist Objekt, Unterstrich,
+   Statement-id. Das ist die Form der Quelle (NIST), nicht eine des
+   Kernels; D9 schreibt sie als das fest, was ein Validator auflöst.
+4. **#93, welche Kanten.** Der Autor hat „Regel bauen“ gesagt, nicht,
+   welche Verweise sie trifft. Festgelegt von mir, aus den Messungen und
+   aus früheren Entscheidungen:
+   - Gehalten werden zwölf benannte Kanten an Tailoring, Mapping,
+     Component, Implementation, Check und lebendem Risk.
+   - Nicht gehalten: `replaces`, `canonical-alias`, `relations` (sie
+     führen das Protokoll; 337 Fälle in CSF und SP 800-53); die
+     Mitglieder eines Sets (Entscheidung E1: Ein Katalog listet, was er
+     zurückgezogen hat; 220 Fälle).
+   - Nicht gehalten: Assessment, Finding und Attestation. Sie halten
+     fest, was zu einem Zeitpunkt gefunden oder unterschrieben wurde, und
+     bleiben wahr. Ein Assessment über mehrere Subjekte lässt sich nicht
+     für eines davon zurückziehen.
+   - Die `treatments` eines Risk bleiben bei RISK-11, das diesen Fall
+     schon als Fehler führt; sonst gäbe es zwei Fehler für einen Mangel.
+   - Ein Objekt im Zustand `draft` oder `deprecated`, das sich stützt,
+     wird gehalten wie ein aktives; ein Ziel im Zustand `deprecated` ist
+     kein Fehler.
+   Das ist in jedem Validator eine Tabelle und lässt sich ändern.
+5. **Reader.** WITHDRAWN-1 steht auch im Reader (1.19.0), weil er
+   Bundles schreibt. FRAGMENT-1 steht dort nicht: Der Reader führt keinen
+   der Berichte.
+6. **Validate-Seite der App.** Der Block „Autoren“ zeigte seit 0.9.17
+   auch DRAFT-1-Zeilen und zählte sie als Autorenzeilen. Seit 0.9.20
+   stehen dort nur AUTHOR-Zeilen; DRAFT-1 und FRAGMENT-1 stehen als
+   Hinweise ihres Bereichs in der Liste darunter.

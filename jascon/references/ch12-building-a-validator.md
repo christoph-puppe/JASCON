@@ -386,6 +386,62 @@ its own affair. Nothing fails by DRAFT-1, with any switch. The measured
 case is CR26, whose publisher marks one family as a placeholder: seven
 active Sets list its draft Sets.
 
+The lifecycle has one rule that fails, since 2026-11-14. **WITHDRAWN-1**:
+collect the ids of the objects whose lifecycle is `withdrawn`; if there
+are none you are done. Then go through the objects in the order of their
+ids and skip every one that is withdrawn itself, and every Risk that is
+not live. For the rest, read these edges and no others, in this order,
+and report each that names a withdrawn object as one error:
+
+| object | edge | name in the message |
+|---|---|---|
+| Tailoring | `selects[].set-ref` | `selects set-ref` |
+| | `excludes[].ref` | `excludes ref` |
+| | `operations[].requirement-ref` | `operation requirement-ref` |
+| Mapping | `source-ref`, `target-ref` | the member's name |
+| Component | `capabilities[].requirement-ref` | `capability requirement-ref` |
+| | `members[].component-ref` | `member component-ref` |
+| Implementation | `component-ref`, `requirement-ref` | the member's name |
+| | `satisfied-by[].inherited-from.component-ref` | `inherited-from component-ref` |
+| Check | `requirement-ref` | `requirement-ref` |
+| Risk | `component-refs`, `tailoring-refs` | the member's name |
+
+Do not widen the list by walking every member that ends in `-ref`. A
+Set lists what its catalogue withdrew, and the CSF and SP 800-53
+bundles do so 220 times; `replaces`, `canonical-alias` and `relations`
+exist to point at what went; an Assessment and a Finding record what
+was found at a time and stay true; a Risk's `treatments` already fail
+by RISK-11. A `deprecated` target is no failure, and a `draft` or
+`deprecated` object that leans is held as an active one is.
+`lifecycle-vectors.json` holds sixteen cases under
+`withdrawn-references`; each expects the list of `[object, edge,
+withdrawn object]`, in the order above.
+
+A fourth report is about references of the form `#id`, which sources
+use in texts and links. **FRAGMENT-1**: in every object, take each
+`(#id)` inside a string at any depth, the id being at least one
+character and none of space, tab, CR, LF and `)`, and the whole of a
+string that begins with `#` under a member named `href`; do not read a
+`private:` facet, under `facets` or under an Assessment's `method`. For
+each, count the first kind that fits: a
+*resource*, an entry of `resources` with that `id` in the `references@1`
+facet of the object itself or of a Set that lists it, directly or
+through nested Sets, so walk the membership upwards with a seen-set; an
+*object* of the bundle whose id ends in it after the last `/`, with A
+to Z compared as a to z and nothing else folded (write that fold
+yourself: your language's lower-case function knows about Turkish and
+German, and the next implementation's knows something else); a
+*statement*, `<object>_<statement id>`, tried at every `_` of the id; a
+*parameter*, by its `name`, anywhere in the bundle; a *source*, the
+`uuid` of an entry of the manifest's `provenance.sources`. Print the
+total and the five counts on one line, where the total is above zero,
+and one note for each reference that names nothing, in the order of the
+object ids and then of the ids named. `reference-vectors.json` holds
+fourteen cases under `fragment-references`. Nothing fails by
+FRAGMENT-1. The measured case is SP 800-53: 541 references, 118 to a
+resource, 348 to another control, 73 to a statement, one to a parameter,
+and one that names nothing, which is a defect of the source.
+
 **Third, close and type the edges.** Four references on a Risk are
 closure-required and typed: `treatments[].requirement-ref` names a
 Requirement, `component-refs` name Components, `tailoring-refs` name

@@ -78,3 +78,21 @@ Left: handbook 3.6 on references to a withdrawn object (#93) and the
 example folder's `gspp-taxonomy` schema (#94), both for the author. The
 website's other pages say nothing of labels or sources beyond the
 numbers they print.
+
+## What `#id` names, and what may lean on a withdrawn object (2026-11-14, later: backlog #82 and #93)
+
+| Where | What | State |
+|---|---|---|
+| Specification | D9 (what `#id` names); D27 point 4 rewritten and point 7 new, its heading and evidence tier; the banner; IV.5b (783 vectors), IV.6 (one row), IV.9 | done |
+| Handbook | 3.6 (what "new" means for a validator, what is held and what keeps the record), chapter 12 (WITHDRAWN-1 with its table of edges, FRAGMENT-1), appendix A (`lifecycle`), C.2 | done |
+| README | 783 vectors; a note on the two rules; the reader's version and screenshot | done |
+| `jascon/SKILL.md` | 783 vectors; the two rules named in the families | done |
+| App `readme.md`, `PROGRESS.md` | build 0.9.20 | done |
+| Website `facts.json` | measured after the commits | with the last commit |
+| Register, backlog, plan, decisions, twin header | the author's four answers; #82 and #93 closed; #94 measured; what was built otherwise | done |
+
+The website's pages name neither rule; they print the numbers of
+`facts.json`.
+
+Left: the example folder's `gspp-taxonomy` schema (#94), with a
+proposal, and #89, both for the author.

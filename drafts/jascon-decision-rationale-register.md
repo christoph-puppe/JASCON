@@ -4616,3 +4616,109 @@ converter (250,000 tokens, eleven minutes) and the app's presets. The
 kernel schema, the three validators, the vectors, the library, five
 converters, the reader and the texts were done in the main session, one
 after the other.
+
+## After the kernel round — what `#id` names is reported; an object in force does not lean on a withdrawn one *(2026-11-14, later; closes #82 and #93; measures #94; no new candidate)*
+
+The kernel round had left four items for the author: the rule for `#id`
+(#82), the handbook's sentence on references to a withdrawn object
+(#93), one facet id and version with two schemas (#94), and the
+library's check of a path map (#89), which was work and not built.
+
+### What the author answered
+
+In the author's words: "#82 agreed", "#93 regel bauen", "#94 die alten
+daten sind egal, welches von beiden ist die aktuelle gemäß BSI repo?",
+"#89 was ist das?". Two decisions, one question to measure, one to
+explain.
+
+### #82 — FRAGMENT-1, a report
+
+The proposal the author agreed to: D9 says what `#id` may name, and a
+validator reports per bundle how many references name each kind and how
+many name nothing. Built so, in the reference, the twin and the app. A
+reference is `(#id)` in a string at any depth of an object, or the whole
+of a string that begins with `#` under a member named `href`. The first
+kind that fits is counted: a resource of `references@1` (of the object,
+or of a Set that lists it, through nested Sets), an object, a statement,
+a parameter, a source document of the manifest.
+
+*Measured* on the committed bundles: SP 800-53 541 references, 118 to a
+resource, 348 to an object, 73 to a statement, one to a parameter, one
+to nothing; ISM 486, CSF 3, Grundschutz++ 1, each to a resource; IFA 1,
+to a source document. The one that names nothing is `#ac-2_smt.a.5` in
+SA-24, which the source writes and AC-2 does not have: the report finds
+the reference that dangles and calls nothing else a defect, which was
+the point of asking what `#id` names before counting what it misses.
+
+Three things came out otherwise than proposed. "By its label or alias":
+by its label 232 of the 348 are found, by the end of its id all of
+them, so the rule is the end of the id, A to Z compared as a to z; by
+an alias no text of the five bundles refers, and none is built. A fifth
+kind, the source document, came from the one reference of the IFA
+bundle. And the fold is of A to Z only and written out in each
+validator: a language's own lower case is not the same function in
+Python, .NET and JavaScript.
+
+### #93 — WITHDRAWN-1, an error
+
+The author's word was to build the rule the handbook states: new
+references to a withdrawn object fail validation. A validator reads one
+bundle and cannot date a reference. What it can read is the state the
+bundle holds an object in, and that is what "new" was made to mean: a
+bundle put together before the withdrawal holds the object as it was
+and stays valid; in one that holds it as withdrawn, an object that says
+what is in force does not lean on it.
+
+Which edges that covers was mine to settle, and the author has not seen
+it. *Measured* first: in the CSF and SP 800-53 bundles active objects
+name withdrawn ones 557 times, 335 by `replaces`, 220 as members of a
+Set and 2 by `relations`. A rule over every reference would have failed
+both catalogues for keeping their record, against the author's decision
+E1 that every withdrawn item is an object its Sets list. So the rule
+holds twelve named edges: of a Tailoring, a Mapping, a Component, an
+Implementation, a Check, and a live Risk. It does not hold lineage and
+relations, the members of a Set, or the records of an act: an
+Assessment, a Finding and an Attestation say what was found or signed
+at a time. *Argued*, not measured: an Assessment of three subjects, one
+of which is withdrawn a year later, could only be made to pass by
+withdrawing the whole record or by editing a past one, and both falsify
+it. A Risk's `treatments` stay with RISK-11, which fails that case
+already; one defect, one failure.
+
+No committed bundle fails. In the reference, the twin, the app, and the
+reader, which writes bundles.
+
+### #94 — measured, not built
+
+The publisher's repository publishes no facet schema. It publishes the
+catalogue and one file per property with its values. *Measured* on
+`main` on 2026-11-14 (catalogue version 2026-10-29, 1,000 controls):
+two security levels, `normal-SdT` and `erhöht`; six effort levels, 0 to
+5. The converter's schema holds the publisher's two values; the
+example's holds neither and refuses the 148 controls with effort 0. The
+converter's is the current one. *Found on the way:* the bundle is
+converted from the catalogue of 2026-07-16 (999 controls); the
+publisher has since rearranged the repository, added one control and
+changed the `ns` of every property. Nothing is reconverted.
+
+### What it is measured by
+
+783 vectors in 18 families (`reference` 27 → 41, `lifecycle` 42 → 58),
+green in the reference, in the twin under PowerShell 7.4 on Linux
+(vectors, five bundles, the pack and the example folder: 103.6 s) and
+in the app's rules; the twin prints the reference's FRAGMENT lines for
+the five bundles, character for character. Thirteen deliberate defects
+in the reference, five in WITHDRAWN-1 and eight in FRAGMENT-1, each turn
+a vector red. The reader's function gives what the sixteen
+`withdrawn-references` vectors expect, and on a copy of the example
+folder with one Requirement withdrawn the page shows the reference's
+lines.
+
+### Errors of mine
+
+- The proposal for #82 named label and alias without a count behind
+  either. The count changed the rule.
+- The Validate page of the app had shown DRAFT-1 lines in the block
+  headed "Authors" and counted them there since build 0.9.17, my work of
+  the same day. A test failed on it only now, when a second report
+  joined the first. The block holds AUTHOR lines only since 0.9.20.

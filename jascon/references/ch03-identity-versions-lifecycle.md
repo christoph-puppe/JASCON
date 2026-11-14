@@ -264,7 +264,18 @@ nothing by it (DRAFT-1, Chapter 12). **active** is the promise in force;
 **deprecated** remains fully consumable — implementations against it stay
 valid — but tools surface the warning and the `replaces` trail to
 successors; **withdrawn** exists for historical reference only, and new
-references to it fail validation. Deprecation windows are policy you owe
+references to it fail validation. A validator reads one bundle and
+cannot date a reference, so "new" is said by the bundle: one put
+together before the withdrawal holds the object as it was and stays
+valid, and in one that holds it as withdrawn nothing that is itself in
+force may lean on it. An Implementation that answers it, a Tailoring
+that selects, excludes or changes it, a Mapping that joins it, a
+Component that claims a capability for it, a Check that tests it and a
+live Risk about it fail the bundle until they are withdrawn too or
+point elsewhere (WITHDRAWN-1, Chapter 12). What keeps the record may
+name it for ever: `replaces`, `canonical-alias` and `relations`, the Set
+that lists what its catalogue withdrew, and the Assessments and Findings
+made while it was in force. Deprecation windows are policy you owe
 your ecosystem (put the default in the prefix constitution); the state
 machine is how a thousand downstream organizations learn about your
 changes from their tooling instead of from your newsletter.

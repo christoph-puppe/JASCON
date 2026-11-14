@@ -33,6 +33,10 @@
 > `assessment-criteria` has a version 1.1.0 beside 1.0.0, and a
 > `statement-id` inside a facet payload is held (D10). These are shapes
 > added to released types and a rule that can fail a bundle that passed.
+> Later still, on the author's word: what `#id` may name is said and a
+> validator reports it (D9, FRAGMENT-1, backlog #82), and an object in
+> force that leans on a withdrawn one fails its bundle (D27 point 7,
+> WITHDRAWN-1, backlog #93). The second can fail a bundle that passed.
 > No new candidate was cut: the file keeps its name until the author
 > names the next one.
 
@@ -650,8 +654,16 @@ spelling, the D3.4 discipline — and values are non-empty), completed
 where the passes proved it unevaluatable:
 
 *(2026-11-14, D27.)* A statement MAY carry `label`, what is printed
-beside it. A text may refer to a resource the bundle carries as `#id`
-(`references@1`); what else `#id` names is open.
+beside it. A text may refer to something as `#id`: as the target of a
+link, `(#id)`, or as the whole value of a member named `href`. What it
+names is the first of these that fits: a resource the bundle carries
+(`references@1`, of the object itself or of a Set that lists it,
+directly or through nested Sets); an object of the bundle, by what its
+id ends in after the last `/`, A to Z compared as a to z; a statement,
+as `<object>_<statement id>`; a parameter, by its `name`; a source
+document of the manifest, by its `uuid`. A validator reports how many
+references name each kind and which name nothing, and fails nothing by
+it (FRAGMENT-1; D27 point 4).
 
 **Modality partial order (normative — the lattice `modality-monotonic`
 evaluates against):**
@@ -1911,7 +1923,7 @@ change. No corpus of consumer Tailorings with authors exists. Measured:
 40 vectors for the two reports and 29 for the pin and the shapes;
 nineteen deliberate defects in the reference each turn one red.
 
-## D27 — **Versions and the record of changes; a statement's label; what a manifest was made from; references; addresses inside a facet payload.** *(new, after rc.4 — the author's decisions of 2026-11-14 on backlog #80 to #85)*
+## D27 — **Versions and the record of changes; a statement's label; what a manifest was made from; references; addresses inside a facet payload; what may lean on a withdrawn object.** *(new, after rc.4 — the author's decisions of 2026-11-14 on backlog #80 to #85, and on #82 and #93 later that day)*
 
 Six findings of phase E were about the kernel and the standard facets:
 what the converters had put into the compat facet, or into facets of
@@ -1970,14 +1982,40 @@ CSF and CR26 one source each, SP 800-53 five, IFA seven).
 source writes it, with one member the facet names, `id`. A text of the
 bundle refers to a resource as `#id`, and the resource is found in the
 `references@1` facet of the object itself or of a Set it is a member
-of, directly or through nested Sets. **No validator holds this yet.**
-The count that was to decide between an error and a line of the report
-showed that `#id` is the source's form for more than resources:
-*measured* on SP 800-53, of 540 such references in texts 118 name a
-resource, 348 another control by its label, and 74 a statement or a
-parameter; in the ISM all 486 name a resource. A rule that reports the
-422 as naming nothing would be wrong about them. What `#id` may name,
-and how each kind resolves, is open (backlog #82).
+of, directly or through nested Sets.
+**What `#id` names (decided later that day, the author: "agreed";
+FRAGMENT-1).** The count that was to decide between an error and a line
+of the report showed that `#id` is the source's form for more than
+resources, so the rule became a report of kinds. A reference has one of
+two forms: `(#id)` in a string at any depth of an object, the id being
+at least one character and none of space, tab, CR, LF and `)`; or the
+whole of a string that begins with `#`, under a member named `href`. A
+`private:` facet is not read, under `facets` or under an Assessment's
+`method`. The first kind that fits is counted:
+
+| kind | `id` is |
+|---|---|
+| resource | the `id` of an entry of `resources` in the `references@1` facet of the object itself or of a Set that lists it as a member, directly or through nested Sets |
+| object | what the id of an object of the bundle ends in after its last `/`, A to Z compared as a to z |
+| statement | `<object>_<statement id>`, split at one of its `_`: the object found as before, the statement one of its own |
+| parameter | the `name` of a parameter of a statement in the bundle |
+| source | the `uuid` of an entry of the manifest's `provenance.sources` |
+
+A validator prints, for a bundle that holds such references, their
+number, the number of each kind, and one line for each that names
+nothing, in the order of the object ids and then of the ids named.
+Nothing fails by it. *Measured* on the committed bundles: SP 800-53 541
+references, of which 118 name a resource, 348 an object, 73 a statement,
+one a parameter and one nothing (`#ac-2_smt.a.5` in SA-24, an objective
+of the source that names a statement AC-2 does not have); the ISM 486,
+the CSF 3 and Grundschutz++ 1, each a resource; IFA 1, the source
+document a link came from. The proposal had said "an object by its
+label or alias". *Measured:* by its label only 232 of the 348 are found
+(`#ac-11.1` against the label `AC-11(1)`), by the end of its id all of
+them; no text of the five bundles refers by an alias, and none is
+built. A to Z is folded and nothing else, so that three validators in
+three languages give one answer. Read, not measured: that a second
+producer's sources use `#id` for these five kinds and no sixth.
 
 **5. Addresses inside a facet payload (#83; D10 amended).** A
 `statement-id` anywhere inside a facet payload of a Requirement is held
@@ -2001,6 +2039,44 @@ version would have failed every bundle that pinned the old one.
 `kind` was free text in a closed kernel, and four words would have made
 alike what the corpora tell apart. A facet, if a tool needs it.
 
+**7. What may lean on a withdrawn object (#93; the author: "Regel
+bauen"; WITHDRAWN-1).** The handbook has said since 1.0.0 that new
+references to a withdrawn object fail validation, and no validator held
+it. A validator reads one bundle and cannot tell a new reference from
+an old one by a date; what it can read is the state the bundle holds an
+object in. A bundle put together before the withdrawal holds the object
+as it was, and stays valid. In a bundle that holds it as `withdrawn`,
+an object that says what is in force MUST NOT lean on it. Held, on an
+object whose own lifecycle is not `withdrawn`, and on a Risk that is
+live (D23):
+
+| object | the edges that are held |
+|---|---|
+| Tailoring | `selects[].set-ref`, `excludes[].ref`, `operations[].requirement-ref` |
+| Mapping | `source-ref`, `target-ref` |
+| Component | `capabilities[].requirement-ref`, `members[].component-ref` |
+| Implementation | `component-ref`, `requirement-ref`, `satisfied-by[].inherited-from.component-ref` |
+| Check | `requirement-ref` |
+| Risk | `component-refs`, `tailoring-refs` |
+
+Each such edge is an error of the bundle. A `deprecated` target stays
+fully usable; a `draft` or `deprecated` object that leans is held as an
+active one is. Not held, each for its reason: `replaces`,
+`canonical-alias` and `relations` keep the record of what went and
+point at it; a Set lists what its catalogue withdrew (the author's
+decision E1); an Assessment, a Finding and an Attestation record what
+was found or signed at a time and stay true when their subject is
+withdrawn later, and an Assessment of several subjects cannot be taken
+back for one of them; a Risk's `treatments` are RISK-11's, which fails
+a live Risk that names a withdrawn Requirement already; facet payloads
+are not read. *Measured* on the committed bundles: active objects name
+withdrawn ones 557 times, 335 by `replaces`, 220 as members of a Set
+(38 in the CSF, 182 in SP 800-53) and 2 by `relations`; none by a held
+edge, so no committed bundle fails. Read, not measured: that a
+consumer's bundle, after its catalogue withdrew a Requirement, is put
+right by withdrawing the Implementation that answered it; no such
+bundle has been published.
+
 **D22.** `history` and a statement's `label` are entered on the
 author's decision. For `history`, test 1 holds (two of the three census
 corpora state it) and test 2 does not: no tool computes on the entries
@@ -2015,7 +2091,10 @@ facet schema with definitions of its own was not enforced by it; three
 of the new vectors found that, and it is corrected. Six converters
 reworked; each ledger reads 0 dropped and 0 unaccounted. Read, not
 measured: that a second producer's history, labels or sources fit these
-shapes.
+shapes. For points 4 and 7 as decided later that day: 30 vectors (14
+`fragment-references` in `reference`, 16 `withdrawn-references` in
+`lifecycle`), 783 in all; thirteen deliberate defects in the reference,
+each turning a vector red.
 
 ---
 
@@ -2367,6 +2446,13 @@ of Check and of advice packs:
    caught. The reference, the twin (PowerShell 7.4 on Linux; the
    workflow runs Windows PowerShell 5.1) and the app's rules give what
    every vector expects.)*
+   *(2026-11-14, D9 and D27 points 4 and 7: 14 vectors for FRAGMENT-1,
+   what a reference of the form `#id` names, and 16 for WITHDRAWN-1, an
+   object in force that leans on a withdrawn one — `reference` 27 → 41,
+   `lifecycle` 42 → 58: **783 vectors**. Thirteen deliberate defects in
+   the reference, each caught. The reference, the twin and the app's
+   rules give what every vector expects, and print the same FRAGMENT
+   lines for the five committed bundles.)*
 2. **First implementation.** ✓ `validate_core.py`: 537 / 537, the five
    shipped bundles (3,715 objects, both digests each), the worked advice
    pack and the example folder — ALL GREEN on 2026-11-12.
@@ -2520,6 +2606,7 @@ history. The compact line:
 | Real content is never dropped | 2026-11-14 | Phase E, the author's corrections and decisions (`drafts/phase-e/entscheidungen-phase-e.md`). No shape of the kernel changes. Converters: every source value is carried or is no content by a rule the ledger checks; a nested control is a Requirement of its own; every withdrawn item is an object with lifecycle `withdrawn`, with a statement where it is a Requirement; `active` where a source states no status is a converter's named default; one compat schema (`oscal-1x@1` 1.1.0) for every converter. D17 amended (a flow a source writes out is carried). The convergence table's row on clause granularity corrected. A draft may be used voluntarily (handbook 3.6). The app's two presets and the reader follow. Six findings about the kernel and the standard facets are candidates for 2.0.0, backlog #80 to #85 | "Phase E" |
 | An active Set that lists a draft says so | 2026-11-14 | Backlog #86, after the author's decision that a draft may be used voluntarily. No shape changes and nothing fails. DRAFT-1, a report beside AUTHOR-1 to AUTHOR-4 and REVIEW-1: for every Set whose lifecycle is `active`, the number of its members that the bundle holds with lifecycle `draft`, one line per Set in the order of the ids. In the reference, the twin and the app; four vectors (`draft-members` in the family `lifecycle`). The measured case is CR26, where seven active Sets list the draft Sets of a family its publisher marks as a placeholder. | handbook §3.6, chapter 12 |
 | Versions and history, a statement's label, a manifest's sources, references, addresses in a payload | 2026-11-14 | The author's decisions on backlog #80 to #85 (D27). Kernel schema: `history` on every object (HISTORY-1, DATE-6), `label` on a statement, typed `sources` in a manifest's provenance. Standard library: `references` 1.0.0, `assessment-criteria` 1.1.0 beside 1.0.0, and a pin held to the version it states. D10: a `statement-id` inside a facet payload is held as a `by-statement` key is. D26: the sentence that the kernel keeps no log inside an object is withdrawn. A bundle that passed can fail: one whose facet payload holds a `statement-id` that names no statement (the committed SP 800-53 bundle did, 218 times, and is converted anew). The compat facet's schema is 1.2.0 (no `back-matter`, no `history`; typed items). Six converters reworked; `.github/pinned-schemas.json` holds one id and version to one schema (#88). Open: what `#id` in a text may name (#82). | D27; handbook 3.3, 12, 14, appendices A and D |
+| What `#id` names is reported; an object in force does not lean on a withdrawn one | 2026-11-14 | The author's decisions on backlog #82 ("agreed") and #93 ("Regel bauen"). D9 says what a reference of the form `#id` may name: a resource of `references@1`, an object, a statement, a parameter, a source document of the manifest. FRAGMENT-1 is a report: per bundle the number of such references, of each kind, and which name nothing; nothing fails. WITHDRAWN-1 is an error: in a bundle that holds an object as withdrawn, a Tailoring, a Mapping, a Component, an Implementation, a Check or a live Risk that is not withdrawn itself does not name it by one of twelve edges (D27 point 7). Lineage, relations, the members of a Set, and the records of an act (Assessment, Finding, Attestation) are not held. No shape changes. A bundle that passed can fail; none of the committed ones does. `reference` 27 → 41 and `lifecycle` 42 → 58 vectors, 783 in all. In the reference, the twin and the app; WITHDRAWN-1 in the reader as well | D9 · D27 points 4 and 7 · handbook §3.6, chapter 12 |
 | **2.0.0-rc.4** | 2026-11-13 | This text: D26 new (who decided, and when); D8, D13 and D23 amended in place. `provenance` optional on a Tailoring and its entries, a Risk and its ratings, an Implementation and a Finding; `decided` and `review-due` on a Deviation; `date` on an authorization; AUTHOR-1 to 4 and REVIEW-1 as reports; three times typed (DATE-3 to 5). A new vector family, `author` (40), and `kernel` 25 → 54; 643 in all, 18 families. Backlog #65 and #66 | D26 · "CP-AUTHOR-1 landed" |
 
 ## IV.7 Release artifacts (what this candidate ships with)
@@ -2742,11 +2829,12 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
 8. **Tag `v2.0.0`** — on the author's go. Nothing in this list blocks it.
    *(2026-11-14, phase E: the six candidates of item 5, backlog #80 to
    #85, are the author's to decide before it.)*
-   *(The same day: decided and built, D27. Open and the author's: what
-   `#id` in a text may name besides a resource (#82, measured: three
-   more kinds in SP 800-53); the handbook's sentence that new references
-   to a withdrawn object fail validation, which no validator holds
-   (#93); a facet id and version that the example folder and the
-   Grundschutz++ converter pin with two schemas (#94). Not built: the
-   library's check that a path map names the place the ledger found
-   (#89).)*
+   *(The same day: decided and built, D27. Later that day the author
+   decided two of the three that were open, and both are built: what
+   `#id` names (#82, FRAGMENT-1) and the rule on references to a
+   withdrawn object (#93, WITHDRAWN-1). Open and the author's: a facet
+   id and version that the example folder and the Grundschutz++
+   converter pin with two schemas (#94; *measured* against the
+   publisher's repository on 2026-11-14, the converter's values are the
+   publisher's and the example's are not). Not built: the library's
+   check that a path map names the place the ledger found (#89).)*
