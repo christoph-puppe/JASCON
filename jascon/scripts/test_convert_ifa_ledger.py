@@ -16,8 +16,12 @@ ledger record the run wrote. The copies stand in a mirror of the
 repository, so the converter under test finds the sources and the
 SP 800-53 bundle where it looks for them. Needs the pinned NIST sources
 in sources/nist (.github/scripts/fetch-pinned-sources.sh); without them
-the tests are skipped and say so. Standard library only."""
-import json, os, shutil, subprocess, sys, tempfile, unittest
+the tests are skipped and say so. Standard library only.
+
+Since the author's decisions of 2026-11-14 the converter declares no drop.
+The last six tests each take away, or state wrongly, one rule that carries a
+former drop, and read that the run ends with 1 and what the record names."""
+import collections, json, os, shutil, subprocess, sys, tempfile, unittest
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.normpath(os.path.join(HERE, "..", ".."))
@@ -70,7 +74,7 @@ class PhaseETheIfaGate(unittest.TestCase):
         record = self.baseline[2]
         names = [e for e in record["entries"] if e["path"].endswith(".risks[].remediations[].props[].name")]
         self.assertEqual([(e["outcome"], e["kind"]) for e in names], [("not-content", "selector")] * 2)
-        self.assertEqual(record["totals"]["not-content"], 2)
+        self.assertEqual(sum(1 for e in record["entries"] if e.get("kind") == "selector"), 2)
 
     def test_a_name_without_its_rule_is_unaccounted_and_ends_the_run(self):
         code, err, record = self.run_converter("no-rule", SELECTOR, SELECTOR.replace('if p.get("name") == "type":', "if False:"))
@@ -87,19 +91,54 @@ class PhaseETheIfaGate(unittest.TestCase):
     def test_a_value_that_is_not_written_takes_its_name_with_it(self):
         code, err, record = self.run_converter(
             "lost-value",
-            '"responses": [{"type": next((p.get("value") for p in rm.get("props", []) or [] if p.get("name") == "type"), None),',
-            '"responses": [{"type": None,')
+            '"type": next((p.get("value") for p in rm.get("props", []) or [] if p.get("name") == "type"), None),',
+            '"type": None,')
         self.assertEqual(code, 1)
         self.assertEqual(record["totals"]["unaccounted"], 4, "two values, and the two names that select them")
         self.assertEqual(record["totals"]["copied"], self.baseline[2]["totals"]["copied"] - 2)
 
-    def test_a_value_whose_declared_reason_is_taken_away_ends_the_run(self):
-        code, err, record = self.run_converter(
-            "no-reason",
-            r'''led.drop(r"(\.subjects\[\]\.type|\.assessment-subjects\[\]\.type|\.actors\[\]\.type|\.target\.type|\.identifier-type)$",''',
-            r'''led.drop(r"(\.subjects\[\]\.type-of-nothing)$",''')
+    def test_nothing_is_dropped_for_a_declared_reason(self):
+        record = self.baseline[2]
+        self.assertEqual(record["totals"]["intentionally-dropped"], 0)
+        kinds = collections.Counter(e["kind"] for e in record["entries"] if e["outcome"] == "not-content")
+        self.assertEqual(kinds, {"selector": 2, "rebuilt-id": 5, "orphan": 4})
+
+    # ---- one rule each that carries a former drop, taken away or stated wrongly (2026-11-14) ----
+    def test_a_resource_something_refers_to_is_no_orphan(self):
+        code, err, record = self.run_converter("all-orphans", "if referred_to(wrapped, r): kept.append(r)",
+                                               "if False: kept.append(r)")
         self.assertEqual(code, 1)
-        self.assertEqual(record["totals"]["unaccounted"], 11)
+        self.assertEqual({f["claim"] for f in record["verification-failures"]}, {"orphan"})
+
+    def test_an_orphan_without_its_rule_is_unaccounted(self):
+        code, err, record = self.run_converter("no-orphan-rule", 'else: led.orphan(r["uuid"], R_ORPHAN);', "else:")
+        self.assertEqual(code, 1)
+        self.assertEqual(record["totals"]["unaccounted"], 4)
+
+    def test_a_type_tag_rebuilt_by_a_wrong_function_ends_the_run(self):
+        code, err, record = self.run_converter("wrong-kind", 'lambda r, cu: "component" if r == cu else None, sj',
+                                               'lambda r, cu: "party" if r == cu else None, sj')
+        self.assertEqual(code, 1)
+        self.assertEqual([f["claim"] for f in record["verification-failures"]], ["rebuilt-id"] * 4)
+
+    def test_a_party_without_a_name_is_carried_by_its_uuid(self):
+        code, err, record = self.run_converter("no-party-uuid",
+                                               'if kept is None: entry.setdefault("party-uuids", []).append(ref)',
+                                               "if kept is None: pass")
+        self.assertEqual(code, 1)
+        self.assertEqual(record["totals"]["unaccounted"], 7, "the eighth, the leveraged authorization's, stands elsewhere")
+
+    def test_what_the_leveraging_plan_says_otherwise_is_carried(self):
+        code, err, record = self.run_converter("no-stand-in", "else: own[k] = v", "else: pass")
+        self.assertEqual(code, 1)
+        self.assertEqual(record["totals"]["unaccounted"], 18)
+
+    def test_a_reference_into_nothing_is_carried_verbatim(self):
+        code, err, record = self.run_converter(
+            "no-defect", '**({"unresolved-risk-uuids": unresolved} if unresolved else {}),', "")
+        self.assertEqual(code, 1)
+        self.assertEqual([u["path"] for u in record["unaccounted-paths"]],
+                         ["poam.plan-of-action-and-milestones.poam-items[].related-risks[].risk-uuid"])
 
     def test_without_the_gate_the_same_loss_ends_with_0(self):
         # what the gate is for: the converter of 2026-11-13 wrote the loss into its report and ended with 0

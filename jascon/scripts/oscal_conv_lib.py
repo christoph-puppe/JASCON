@@ -1076,13 +1076,17 @@ def lifecycle_default_record(objects, stated):
     return {"value": "active", "origin": "converter-default", "objects": len(own),
             "source-states": sum(1 for o in objects.values() if isinstance(o, dict) and o.get("id") in stated)}
 
-def lifecycle_default_line(record):
-    """The line of a coverage report (markdown) for lifecycle_default_record()."""
+def lifecycle_default_line(record, why="a published catalogue is taken to be in force", tail=None):
+    """The line of a coverage report (markdown) for lifecycle_default_record().
+    `why`: the converter's reason for the default, as a clause. `tail`: what
+    the source says of status, where neither of the two sentences below fits
+    (a source that states a status no rule maps to a lifecycle)."""
     n, m = record["objects"], record["source-states"]
-    tail = (f" On {m:,} object(s) the lifecycle is the source's own status, mapped by a rule." if m
-            else " The source states no status on any object.")
+    if tail is None:
+        tail = (f" On {m:,} object(s) the lifecycle is the source's own status, mapped by a rule." if m
+                else " The source states no status on any object.")
     return (f"- **Lifecycle**: `active` on {n:,} object(s) is the converter's default and not a value of the source: "
-            f"the kernel requires a lifecycle on every object, and a published catalogue is taken to be in force." + tail)
+            f"the kernel requires a lifecycle on every object, and {why}." + tail)
 
 def obligated_party_record(party, origin, default, source_states=None):
     """What a coverage report's JSON says about it, under `obligated-party`:

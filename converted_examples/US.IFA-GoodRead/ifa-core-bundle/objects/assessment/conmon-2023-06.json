@@ -13,42 +13,49 @@
   "https://ifa.gov/goodread/facet/assessment-plan@1": {
    "activities": [
     {
+     "uuid": "52277182-1ba3-4cb6-8d96-b1b97aaf9d6b",
      "title": "Examine System Elements for Least Privilege Design and Implementation",
      "description": {
       "en": "The activity and it steps will be performed by the assessor and facilitated by owner, ISSO, and product team for the IFA SYSTEM1234 system with necessary information and access about least privilege design and implementation of the system's elements: the application, web framework, server, and cloud account infrastructure."
      },
      "steps": [
       {
+       "uuid": "733e3cbf-e398-46b6-9c02-a2cb534c341e",
        "title": "Obtain Network Access via VPN to IFA SYSTEM1234 Environment",
        "description": {
         "en": "The assessor will obtain network access with appropriately configured VPN account to see admin frontend to the application for PAO staff, which is only accessible via VPN with an appropriately configured role for PAO staff accounts."
        }
       },
       {
+       "uuid": "4ce7e0b4-d69e-4b80-a700-8600b4d4d933",
        "title": "Obtain Credentials and Access to AWSomeCloud Account for IFA SYSTEM1234 System",
        "description": {
         "en": "The assessor will obtain access to the SYSTEM1234 Product Team's AWSomeCloud account with their single sign-on credentials to a read-only assessor role."
        }
       },
       {
+       "uuid": "3d0297de-e47b-4360-b9c3-cf5c425f86cd",
        "title": "Obtain Application Access Provided by Product Team",
        "description": {
         "en": "The assessor will obtain non-privileged account credentials with the PAO staff role to test this role in the application does not permit excessive administrative operations."
        }
       },
       {
+       "uuid": "64ca1ef6-3ad4-4747-97c6-40890222463f",
        "title": "Confirm Load Balancer Blocks Access to Admin Frontend from Internet",
        "description": {
         "en": "The assessor will confirm that the load balancer for public access does not allow access to Admin Frontend of the application from the Internet."
        }
       },
       {
+       "uuid": "715f0592-166f-44f6-bb66-d99623e035dc",
        "title": "Confirm SYSTEM1234's PAO Role Cannot Manage Users",
        "description": {
         "en": "The assessor will confirm that user's logged into the SYSTEM1234 Application with the PAO staff role cannot add, modify, or disable users from the system."
        }
       },
       {
+       "uuid": "4641957b-a0fa-4c61-af1a-d3e9101efe40",
        "title": "Confirm Django Admin Panel Not Available",
        "description": {
         "en": "The assessor will confirm with web-based interface and API methods users with the PAO Staff role cannot access the Django admin panel functions and interactively change application's database records."
@@ -64,12 +71,14 @@
      "source-doc": "ap"
     },
     {
+     "uuid": "cf5d53fe-6043-4c68-9ed6-6b258909febf",
      "title": "Test System Elements for Least Privilege Design and Implementation",
      "description": {
       "en": "The activity and it steps will be performed by the assessor via their security automation platform to test least privilege design and implementation of the system's elements, specifically the cloud account infrastructure, as part of continuous monitoring."
      },
      "steps": [
       {
+       "uuid": "57f8cfb8-fc3f-41d3-b938-6ab421c92574",
        "title": "Configure Cross-Account IAM Role Trust for SYSTEM1234 and Assessor AwesomeCloud Accounts",
        "description": {
         "en": "The IFA SYSTEM1234 system engineer will coordinate with the assessor's engineering support staff to configure an IAM role trust. A service account for automation with its own role with the assessor's AwesomeCloud account can assume the role for read-only assessor operations within the SYSTEM1234 Product Team's AwesomeCloud account for continuous monitoring of least privilege."
@@ -79,6 +88,7 @@
        }
       },
       {
+       "uuid": "976aadad-b1ce-475b-aa6c-e082537e7902",
        "title": "Automate Cross-Account Login to SYSTEM1234 AwesomeCloud Account",
        "description": {
         "en": "The assessor's security automation platform will create a session from their dedicated will obtain access to the SYSTEM1234 Product Team's AwesomeCloud account with their single sign-on credentials to a read-only assessor role."
@@ -88,6 +98,7 @@
        }
       },
       {
+       "uuid": "18ce4e19-7432-4484-8e75-2dd8f05668cf",
        "title": "Analyze SYSTEM1234 Developer and System Engineer Roles for Least Privilege",
        "description": {
         "en": "Once authenticated and authorized with a cross-account session, the security automation pipeline will execute scripts developed and maintained by the assessor's engineering support staff. It will analyze the permitted actions for the developer and system engineer roles in the SYSTEM1234 Product Team's AwesomeCloud account to confirm they are designed and implement to facilitate only least privilege operation. Examples are included below.\n\n* For the SYSTEM1234 developer role in their AwesomeCloud account, the developer role may only permit the user with this role to check the IP addresses and status of the Awesome Compute Service server instances. This role will not permit the user to create, change, or delete the instances. Similarly, the developer will permit a user to perform actions to see IP addresses of an Awesome Load Balancer instance, but not add, change, or delete the instances.\n* For the SYSTEM1234 system engineer role in their AwesomeCloud account, the system engineer role may only permit actions where the user can add, change, or delete instances for approved services (i.e. Awesome Compute Service, Awesome Load Balancer, et cetera). The role may not permit actions by the user for any other service.\n"
@@ -105,14 +116,25 @@
    ],
    "tasks": [
     {
+     "uuid": "b3504d22-0e75-4dd7-9247-618661beba4e",
      "title": "Examine Least Privilege Design and Implementation",
      "type": "action",
+     "unresolved-activity-uuids": [
+      "0d243b23-a889-478f-9716-6d4870e56209"
+     ],
+     "subjects": [
+      {
+       "type": "component",
+       "include-all": {}
+      }
+     ],
      "remarks": {
       "en": "Per IFA's use of NIST SP-800 53A, the assessor, with the support of the owner, information system security officer, and product team for the IFA SYSTEM1234 project, will examine least privilege design and implementation with the following:\n\n* list of security functions (deployed in hardware, software, and firmware) and security-relevant information for which access must be explicitly authorized;\n* system configuration settings and associated documentation;\n"
      },
      "source-doc": "ap"
     },
     {
+     "uuid": "35876484-aa4b-494d-95a2-0d1cc04eb47e",
      "title": "Test System Elements for Least Privilege Design and Implementation",
      "type": "action",
      "description": {
@@ -121,11 +143,18 @@
      "activities": [
       "Test System Elements for Least Privilege Design and Implementation"
      ],
+     "subjects": [
+      {
+       "type": "component",
+       "include-all": {}
+      }
+     ],
      "source-doc": "ar"
     }
    ],
    "subjects": [
     {
+     "type": "component",
      "description": {
       "en": "The assessor for the IFA SYSTEM1234 Project, including the application and infrastructure for this information system, are within scope of this assessment."
      }
@@ -233,6 +262,9 @@
      "source-doc": "poam"
     }
    ]
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "uuid": "a1d20136-37e0-42aa-9834-4e9d8c36d798"
   }
  }
 }

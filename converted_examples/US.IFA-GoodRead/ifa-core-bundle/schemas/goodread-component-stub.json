@@ -27,6 +27,15 @@
    },
    "control-implementations": {
     "type": "array"
+   },
+   "capabilities": {
+    "type": "array"
+   },
+   "authorizations": {
+    "type": "array"
+   },
+   "listed-by-leveraging-plan": {
+    "type": "object"
    }
   },
   "additionalProperties": false

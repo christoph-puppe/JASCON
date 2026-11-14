@@ -26,6 +26,9 @@
    "description": {
     "en": "This is the control implementation for the application and infrastructure that compose to the IFA SYSTEM1234 Project's system."
    }
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "uuid": "d5f9b263-965d-440b-99e7-77f5df670a11"
   }
  },
  "provenance": {

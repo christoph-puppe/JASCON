@@ -34,11 +34,13 @@
    "statements": [
     {
      "statement": "smt.a",
+     "uuid": "11111111-0000-4000-9009-002001000000",
      "remarks": {
       "en": "a. Identifies and selects the following types of information system accounts to support organizational missions/business functions: [Assignment: privileged and non-privileged];"
      },
      "responses": [
       {
+       "uuid": "11111111-0000-4000-9009-002001001000",
        "component": "https://ifa.gov/goodread/component/csp-iaas",
        "description": {
         "en": "Response for the \\\"This System\\\" component.\n\nOverall description of how \\\"This System\\\" satisfies AC-2, Part a.\n\nResponse for the \\\"This System\\\" component.\n\nOverall description of how \\\"This System\\\" satisfies AC-2, Part a.\n\nResponse for the \\\"This System\\\" component.\n\nOverall description of how \\\"This System\\\" satisfies AC-2, Part a.\n\nResponse for the \\\"This System\\\" component.\n\nOverall description of how \\\"This System\\\" satisfies AC-2, Part a."
@@ -48,6 +50,7 @@
        }
       },
       {
+       "uuid": "11111111-0000-4000-9009-002001002000",
        "component": "https://ifa.gov/goodread/component/csp-application",
        "description": {
         "en": "Describes how the application satisfies AC-2, Part a."
@@ -59,6 +62,9 @@
      ]
     }
    ]
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "uuid": "11111111-0000-4000-9009-002000000000"
   }
  }
 }

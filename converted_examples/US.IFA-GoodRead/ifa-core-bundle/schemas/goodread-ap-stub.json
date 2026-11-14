@@ -20,6 +20,9 @@
       "source-doc"
      ],
      "properties": {
+      "uuid": {
+       "type": "string"
+      },
       "title": {
        "type": "string"
       },
@@ -40,6 +43,9 @@
          "description"
         ],
         "properties": {
+         "uuid": {
+          "type": "string"
+         },
          "title": {
           "type": "string"
          },
@@ -102,6 +108,9 @@
       "source-doc"
      ],
      "properties": {
+      "uuid": {
+       "type": "string"
+      },
       "title": {
        "type": "string"
       },
@@ -119,6 +128,18 @@
        "type": "array",
        "items": {
         "type": "string"
+       }
+      },
+      "unresolved-activity-uuids": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "subjects": {
+       "type": "array",
+       "items": {
+        "type": "object"
        }
       },
       "remarks": {
@@ -146,6 +167,9 @@
       "description"
      ],
      "properties": {
+      "type": {
+       "type": "string"
+      },
       "description": {
        "type": "object",
        "minProperties": 1,
