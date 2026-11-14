@@ -1,5 +1,5 @@
 {
- "description": "Reference taxonomy (B.1.1 as amended; backlog #16 - run 2's Blocker P9b-1). CLOSURE-REQUIRED references must land in-bundle: Set members[].ref, Tailoring selects/excludes/operation targets (+ statement-id existence), Implementation component-ref/requirement-ref (+ basis-ref against the component's authorizations, D5), Finding assessment-ref/requirement-ref, Mapping source/target-scope statement ids WHEN the endpoint is in-bundle. LANDMARK references resolve outside the bundle by design: Mapping endpoints, party/authority URIs, evidence refs, external schema/reference URLs, attestation subjects (self-verifying via digest). Each vector is a mini-bundle; expected-errors 0 = closes.",
+ "description": "Reference taxonomy (B.1.1 as amended; backlog #16 - run 2's Blocker P9b-1). CLOSURE-REQUIRED references must land in-bundle: Set members[].ref, Tailoring selects/excludes/operation targets (+ statement-id existence), Implementation component-ref/requirement-ref (+ basis-ref against the component's authorizations, D5), Finding assessment-ref/requirement-ref, Mapping source/target-scope statement ids WHEN the endpoint is in-bundle. LANDMARK references resolve outside the bundle by design: Mapping endpoints, party/authority URIs, evidence refs, external schema/reference URLs, attestation subjects (self-verifying via digest). Each vector is a mini-bundle; expected-errors 0 = closes. Decided on 2026-11-14 (backlog #83, D10): a `statement-id` anywhere inside a facet payload of a Requirement is held as a `by-statement` key is held. Alone it names a statement of the host; beside a `requirement-ref` it names a statement of that Requirement, which binds where the bundle holds it; a `requirement-ref` alone names a Requirement as a whole. A `private:` facet is not read.",
  "vectors": [
   {
    "name": "set-member-closes",
@@ -726,6 +726,488 @@
    ],
    "expected-errors": 1,
    "reason": "the Requirement's statement id ends in U+00E9; the operation's ends in e followed by U+0301 COMBINING ACUTE ACCENT. The two look the same and are canonically equivalent; they are not the same string, and nothing here normalizes (D3.4; backlog #58)"
+  },
+  {
+   "name": "a-statement-id-inside-a-facet-payload-names-a-statement-of-the-host",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "smt.a",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "X."
+       }
+      },
+      {
+       "id": "smt.b",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "X."
+       }
+      }
+     ],
+     "facets": {
+      "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+       "objectives": [
+        {
+         "id": "o1",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
+         "children": [
+          {
+           "id": "o1.1",
+           "assessment-for": [
+            {
+             "statement-id": "smt.b"
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "expected-errors": 0
+  },
+  {
+   "name": "a-statement-id-deep-inside-a-facet-payload-names-no-statement-of-the-host",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "smt.a",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "X."
+       }
+      },
+      {
+       "id": "smt.b",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "X."
+       }
+      }
+     ],
+     "facets": {
+      "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+       "objectives": [
+        {
+         "id": "o1",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
+         "children": [
+          {
+           "id": "o1.1",
+           "assessment-for": [
+            {
+             "statement-id": "smt"
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "expected-errors": 1
+  },
+  {
+   "name": "a-statement-id-beside-a-requirement-ref-names-a-statement-of-that-requirement",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "smt.a",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "X."
+       }
+      },
+      {
+       "id": "smt.b",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "X."
+       }
+      }
+     ],
+     "facets": {
+      "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+       "objectives": [
+        {
+         "id": "o1",
+         "assessment-for": [
+          {
+           "requirement-ref": "https://ns.auth.gov/fw/req/2",
+           "statement-id": "smt.a"
+          }
+         ]
+        }
+       ]
+      }
+     }
+    },
+    {
+     "id": "https://ns.auth.gov/fw/req/2",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "smt.a",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "X."
+       }
+      }
+     ]
+    }
+   ],
+   "expected-errors": 0
+  },
+  {
+   "name": "a-statement-id-beside-a-requirement-ref-names-no-statement-of-that-requirement",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "smt.a",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "X."
+       }
+      },
+      {
+       "id": "smt.b",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "X."
+       }
+      }
+     ],
+     "facets": {
+      "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+       "objectives": [
+        {
+         "id": "o1",
+         "assessment-for": [
+          {
+           "requirement-ref": "https://ns.auth.gov/fw/req/2",
+           "statement-id": "smt.b"
+          }
+         ]
+        }
+       ]
+      }
+     }
+    },
+    {
+     "id": "https://ns.auth.gov/fw/req/2",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "smt.a",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "X."
+       }
+      }
+     ]
+    }
+   ],
+   "expected-errors": 1
+  },
+  {
+   "name": "a-requirement-ref-the-bundle-does-not-hold-is-a-landmark",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "smt.a",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "X."
+       }
+      },
+      {
+       "id": "smt.b",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "X."
+       }
+      }
+     ],
+     "facets": {
+      "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+       "objectives": [
+        {
+         "id": "o1",
+         "assessment-for": [
+          {
+           "requirement-ref": "https://elsewhere.example/req/9",
+           "statement-id": "s9"
+          }
+         ]
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "expected-errors": 0
+  },
+  {
+   "name": "a-requirement-ref-beside-a-statement-id-that-resolves-to-a-set",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "smt.a",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "X."
+       }
+      },
+      {
+       "id": "smt.b",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "X."
+       }
+      }
+     ],
+     "facets": {
+      "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+       "objectives": [
+        {
+         "id": "o1",
+         "assessment-for": [
+          {
+           "requirement-ref": "https://ns.auth.gov/fw/set/base",
+           "statement-id": "smt.a"
+          }
+         ]
+        }
+       ]
+      }
+     }
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/base",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      }
+     ]
+    }
+   ],
+   "expected-errors": 1
+  },
+  {
+   "name": "a-requirement-ref-alone-names-the-requirement-as-a-whole",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "smt.a",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "X."
+       }
+      },
+      {
+       "id": "smt.b",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "X."
+       }
+      }
+     ],
+     "facets": {
+      "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+       "objectives": [
+        {
+         "id": "o1",
+         "assessment-for": [
+          {
+           "requirement-ref": "https://ns.auth.gov/fw/req/1"
+          }
+         ]
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "expected-errors": 0
+  },
+  {
+   "name": "a-private-facet-is-not-read",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "smt.a",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "X."
+       }
+      },
+      {
+       "id": "smt.b",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "X."
+       }
+      }
+     ],
+     "facets": {
+      "private:notes@1": {
+       "anything": [
+        {
+         "statement-id": "no-such"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "expected-errors": 0
+  },
+  {
+   "name": "the-rule-reads-every-facet-not-only-the-standard-one",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "smt.a",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "X."
+       }
+      },
+      {
+       "id": "smt.b",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "X."
+       }
+      }
+     ],
+     "facets": {
+      "https://ns.auth.gov/facet/own@1": {
+       "by-control": {
+        "x": {
+         "statement-id": "no-such"
+        }
+       }
+      }
+     }
+    }
+   ],
+   "expected-errors": 1
   }
  ]
 }

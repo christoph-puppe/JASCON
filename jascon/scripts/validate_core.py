@@ -134,22 +134,45 @@ VALIDATORS["scale"] = REGISTRY({"$ref": "#/$defs/scale", "$defs": SCHEMA["$defs"
 VALIDATORS["due"] = REGISTRY({"$ref": "#/$defs/due", "$defs": SCHEMA["$defs"]})
 VALIDATORS["date"] = REGISTRY({"$ref": "#/$defs/date", "$defs": SCHEMA["$defs"]})
 VALIDATORS["dateTime"] = REGISTRY({"$ref": "#/$defs/dateTime", "$defs": SCHEMA["$defs"]})
+VALIDATORS["dayOrMonth"] = REGISTRY({"$ref": "#/$defs/dayOrMonth", "$defs": SCHEMA["$defs"]})
 # CP-CHECK-1: file shapes beside the bundle, not object types
 VALIDATORS["evidenceRecord"] = REGISTRY({"$ref": "#/$defs/evidenceRecord", "$defs": SCHEMA["$defs"]})
 VALIDATORS["checkObservation"] = REGISTRY({"$ref": "#/$defs/checkObservation", "$defs": SCHEMA["$defs"]})
 
 # normative stdlib facet descriptors (gate 2); payload validation per backlog #17
-STDLIB, STDLIB_RAW = {}, {}
+# A facet of the library may have several versions (2026-11-14, backlog #83:
+# assessment-criteria 1.1.0 beside 1.0.0). One id and version is one schema,
+# and a version once published stays: a bundle that pins 1.0.0 is held to
+# 1.0.0. STDLIB and STDLIB_RAW hold the latest version of each facet, which
+# is what an unpinned payload is held to; STDLIB_VERSIONS holds them all.
+STDLIB, STDLIB_RAW, STDLIB_VERSIONS = {}, {}, {}
 for _fn in sorted(os.listdir(os.path.join(SKILL, "schemas", "stdlib"))):
     if _fn.endswith(".json"):
         _d = json.load(open(os.path.join(SKILL, "schemas", "stdlib", _fn), encoding="utf-8"))
-        STDLIB[_d["id"]] = REGISTRY(_d["schema"])
-        STDLIB_RAW[_d["id"]] = _d["schema"]
+        STDLIB_VERSIONS.setdefault(_d["id"], {})[_d["version"]] = _d["schema"]
+for _id, _vs in STDLIB_VERSIONS.items():
+    _latest = max(_vs, key=lambda v: tuple(int(x) for x in v.split(".")))
+    STDLIB[_id] = REGISTRY(_vs[_latest])
+    STDLIB_RAW[_id] = _vs[_latest]
 
 # reference taxonomy (backlog #16): closure-required refs MUST land in-bundle;
 # landmark refs (Mapping endpoints, party/authority URIs, evidence, external
 # schema/reference URLs, attestation subjects — self-verifying via digest)
 # resolve outside the bundle by design.
+def facet_statement_addresses(payload):
+    """-> [(statement-id, requirement-ref or None)] for every object inside a
+    facet payload that has a member `statement-id`, in the order met."""
+    out = []
+    def walk(x):
+        if isinstance(x, dict):
+            if isinstance(x.get("statement-id"), str):
+                out.append((x["statement-id"], x.get("requirement-ref") if isinstance(x.get("requirement-ref"), str) else None))
+            for v in x.values(): walk(v)
+        elif isinstance(x, list):
+            for v in x: walk(v)
+    walk(payload)
+    return out
+
 def closure_errors(objs):
     """objs: id -> (type, obj). Returns list of error strings."""
     errs = []
@@ -157,6 +180,31 @@ def closure_errors(objs):
         if ref not in objs:
             errs.append(f"{oid}: closure-required {what} does not resolve in-bundle: {ref}")
     for oid, (t, o) in objs.items():
+        # D10 (2026-11-14, backlog #83): a `statement-id` anywhere inside a
+        # facet payload of a Requirement is held as a `by-statement` key is
+        # held. Alone it names a statement of the host; beside a
+        # `requirement-ref` it names a statement of that Requirement, which
+        # is a landmark and binds where the bundle holds it. `private:`
+        # facets are not read (D10). Measured on SP 800-53A: 3,707
+        # objectives say which statement they assess, inside a tree, where
+        # the rule for `by-statement` keys did not look.
+        if t == "requirement":
+            own = {s["id"] for s in o["statements"]}
+            for fid, payload in (o.get("facets") or {}).items():
+                if fid.startswith("private:"): continue
+                for sid, rref in facet_statement_addresses(payload):
+                    if rref is None:
+                        if sid not in own:
+                            errs.append(f"{oid}: facet {fid} statement-id '{sid}' names no statement of its Requirement "
+                                        f"(D10: a statement-id inside a facet payload is held as a by-statement key is)")
+                        continue
+                    tgt = objs.get(rref)
+                    if tgt and tgt[0] != "requirement":
+                        errs.append(f"{oid}: facet {fid} requirement-ref beside a statement-id resolves to a {tgt[0]}, "
+                                    f"not a Requirement: {rref} (D10)")
+                    elif tgt and sid not in {s["id"] for s in tgt[1]["statements"]}:
+                        errs.append(f"{oid}: facet {fid} statement-id '{sid}' names no statement of {rref} "
+                                    f"(D10: a statement-id inside a facet payload is held as a by-statement key is)")
         for ca in o.get("canonical-alias", []) or []:   # backlog #14: same-content is checkable
             tgt = objs.get(ca.get("of"))
             if tgt and content_digest(o) != content_digest(tgt[1]):
@@ -314,7 +362,7 @@ def facet_errors(objs_or_obj, pinned, path="?"):
             base = key.rsplit("@", 1)[0]
             if key.startswith("private:") or base.startswith("private:"):
                 continue   # modifies-semantics [] by definition (D10)
-            v = STDLIB.get(base) or pinned.get(base)
+            v = pinned.get(base) or STDLIB.get(base)   # a pin of a library facet is one of its versions, verbatim (D26)
             if v is None:
                 errs.append(f"{pth}: unregistered facet '{key}' — not stdlib, not pinned in the manifest, not private: (dangerous-by-default, D10)")
                 continue
@@ -326,7 +374,7 @@ def facet_errors(objs_or_obj, pinned, path="?"):
             base = key.rsplit("@", 1)[0]
             if key.startswith("private:") or base.startswith("private:"):
                 continue
-            v = STDLIB.get(base) or pinned.get(base)
+            v = pinned.get(base) or STDLIB.get(base)
             if v is None:
                 errs.append(f"{pth}: method '{key}' is no registered facet - not stdlib, not pinned in the manifest, not private: "
                             f"(an Assessment's method is a facet payload and fails closed, D10)")
@@ -1142,11 +1190,15 @@ def kernel_needed(objs, manifest=None):
     statement-ids on a capability (CP-ADVICE-1), product-version on a
     Component (author decision 2026-11-12), and the fields of CP-AUTHOR-1:
     `provenance` where 1.0.0 had none, `decided` and `review-due` on a
-    Deviation, `date` on an authorization."""
+    Deviation, `date` on an authorization. Decided on 2026-11-14 (backlog
+    #81 and #84): `history` on any object and `label` on a statement."""
     if manifest and manifest.get("scales"): return "2.0.0", "the manifest pins scale definitions"
     if manifest and manifest.get("pack"): return "2.0.0", "the manifest carries a pack header"
     for oid in sorted(objs):
         t, o = objs[oid]
+        if "history" in o: return "2.0.0", f"{oid} carries the record of its changes (history)"
+        if t == "requirement" and any(isinstance(s, dict) and "label" in s for s in o.get("statements", []) or []):
+            return "2.0.0", f"{oid} labels a statement (label)"
         if t == "risk": return "2.0.0", f"{oid} is a Risk"
         if t == "finding" and o.get("risk-refs"): return "2.0.0", f"{oid} carries risk-refs"
         if t == "check": return "2.0.0", f"{oid} is a Check"
@@ -1226,6 +1278,12 @@ def run_kernel():
         named = sorted({r for r, _ in date_rule_violations(case["document"])})
         if got == case["expected"] and named == sorted(case.get("expected-rules", [])): ok("kernel")
         else: fail("kernel", f"shape {case['name']}: expected {case['expected']} {case.get('expected-rules', [])}, got {got} {named}")
+    for case in v.get("history-vectors", []):           # HISTORY-1 (backlog #81): one object of valid shape each
+        o = case["object"]
+        errs = history_errors(o) if inferType_single(o) else ["the object has no single type"]
+        got = "invalid" if errs else "valid"
+        if got == case["expected"] and all(case.get("expected-rule", "") in e for e in errs): ok("kernel")
+        else: fail("kernel", f"history {case['name']}: expected {case['expected']} {case.get('expected-rule', '')}, got {got} {errs}")
 
 # ---------------- pinned scale definitions (SCALE-1..3) ----------------
 # A scale is the organisation's own: how many levels, and what they are
@@ -1413,6 +1471,7 @@ DATE_RULES = {
     "DATE-3": "the `date` of a Mapping's provenance is a date, YYYY-MM-DD",
     "DATE-4": "the `time` of an Assessment is a date or an RFC 3339 date-time with an offset",
     "DATE-5": "the `timestamp` of an Attestation is a date or an RFC 3339 date-time with an offset",
+    "DATE-6": "the `date` of an entry of `history` is a day or a month, YYYY-MM-DD or YYYY-MM - a publisher that states only the month of a change states a month",
 }
 def is_when(v):
     """a date, or an RFC 3339 date-time with an offset"""
@@ -1445,7 +1504,30 @@ def date_rule_violations(o):
         out.append(("DATE-4", f"time is {o['time']!r}"))
     if "signer" in o and "timestamp" in o and not is_when(o["timestamp"]):
         out.append(("DATE-5", f"timestamp is {o['timestamp']!r}"))
+    for i, e in enumerate(o.get("history") or [] if isinstance(o.get("history"), list) else []):
+        if isinstance(e, dict) and "date" in e and not VALIDATORS["dayOrMonth"].is_valid(e["date"]):
+            out.append(("DATE-6", f"history[{i}].date is {e['date']!r}"))
     return out
+
+# The record of an object's changes (2026-11-14, backlog #81, the author:
+# "Versionierung ist wichtig und gehört in den Kernel"). `version` is the
+# object's own version; `history` is what its publisher says about how it
+# came to be what it is, one entry per change, oldest first. A day and a
+# month are compared as they are written: a month stands before its days,
+# and two entries may carry one date. The kernel checks the order and
+# nothing else: whether an entry is true no validator can know.
+HISTORY_RULES = {
+    "HISTORY-1": "the entries of `history` stand in the order of their dates, oldest first - a record that a reader has to sort is read in two ways",
+}
+def history_errors(o):
+    """HISTORY-1 -> [message] for one object whose shape is valid."""
+    h = o.get("history") if isinstance(o, dict) else None
+    if not isinstance(h, list): return []
+    dates = [e.get("date") for e in h if isinstance(e, dict)]
+    for i in range(1, len(dates)):
+        if isinstance(dates[i - 1], str) and isinstance(dates[i], str) and dates[i] < dates[i - 1]:
+            return [f"history[{i}].date {dates[i]} stands after {dates[i - 1]} (HISTORY-1: {HISTORY_RULES['HISTORY-1']})"]
+    return []
 
 def risk_rule_violations(o):
     """-> [(rule id, what is wrong)] for an object carrying the Risk
@@ -3128,6 +3210,7 @@ def validate_object(section, path, obj):
     t = matches[0]
     viol = optional_empty_violations(obj)
     if viol: fail(section, f"{path}: optional empty containers present: {viol}")
+    for e in history_errors(obj): fail(section, f"{path}: {e}")
     if t == "requirement":
         sids = {s["id"] for s in obj["statements"]}
         if len(sids) != len(obj["statements"]):
@@ -3172,8 +3255,15 @@ def load_facet_pins(bdir, manifest, section):
                                            ["assessment", "tailoring", "selection", "rendering"])
             # #26 (D26 final): a pin of a STDLIB id must be the descriptor
             # VERBATIM - the pin and the normative schema cannot diverge
-            if sd["id"] in STDLIB_RAW and canonical(sd.get("schema")) != canonical(STDLIB_RAW[sd["id"]]):
-                fail(section, f"{fe['path']}: pin of stdlib facet {sd['id']} DIVERGES from the normative descriptor (D26)")
+            # The library may hold several versions of a facet: the pin is
+            # held to the one it states.
+            if sd["id"] in STDLIB_VERSIONS:
+                held = STDLIB_VERSIONS[sd["id"]].get(sd.get("version"))
+                if held is None:
+                    fail(section, f"{fe['path']}: pin of stdlib facet {sd['id']} states version {sd.get('version')!r}, "
+                                  f"which the standard library does not hold (it holds {', '.join(sorted(STDLIB_VERSIONS[sd['id']]))})")
+                elif canonical(sd.get("schema")) != canonical(held):
+                    fail(section, f"{fe['path']}: pin of stdlib facet {sd['id']} DIVERGES from the normative descriptor (D26)")
         except Exception as e:
             fail(section, f"{fe['path']}: pinned facet schema unreadable: {e}")
     return pinned, pinned_decl

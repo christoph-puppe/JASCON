@@ -222,6 +222,27 @@ active Set that lists draft members, one line per Set in the order of the
 ids, and fails nothing: a draft may be used. Four `draft-members` vectors
 in the family `lifecycle` (42; 709 in all). Run under PowerShell 7.4 on
 Linux; the workflow runs it on Windows PowerShell 5.1.
+CHANGED 2026-11-14 (specification D27; backlog #80, #81, #83, #84): the
+kernel schema this file reads has `history` on every object, `label` on a
+statement and typed `sources` in a manifest's provenance, which need no
+code here. Ported: KERNEL-1 for `history` and a statement's `label`; DATE-6
+(the date of a history entry is a day or a month); HISTORY-1
+(History-Errors: the entries stand oldest first, compared by ordinal); the
+D10 rule that a `statement-id` inside a facet payload of a Requirement
+names a statement of the host or of the Requirement a `requirement-ref`
+beside it names (Facet-Statement-Addresses, in Closure-Errors). The
+standard library may hold several versions of a facet ($STDLIB_VERSIONS):
+an unpinned payload is held to the latest, a pin to the version it states,
+and a payload to the pin of its bundle. CORRECTED the same day: a `$ref`
+of a facet schema was looked up in the kernel schema only, found nothing
+and counted as satisfied, so a facet schema with `$defs` of its own was
+not enforced; Test-Facet-Schema reads the schema's own definitions first.
+Three of the nine new facet vectors found it (assessment-criteria 1.1.0
+defines an objective that holds objectives). 753 vectors in 18 families
+(kernel: 97, reference: 27, facet: 29). Run under PowerShell 7.4 on Linux
+over the vectors, the five bundles, the worked pack and the example
+folder: ALL GREEN in 83.5 s; the workflow runs it on Windows PowerShell
+5.1.
 NOT EXERCISED by a vector, a bundle of the repository or that test: an
 Attestation without a subject (the schema asks for one, so only the vector
 runner could meet it, and no vector has one); a case of the binds-vectors
@@ -488,9 +509,24 @@ function Ecma-Pattern([string]$p) {
     }
     return $sb.ToString()
 }
+# A `$ref` names a definition of the schema it stands in. For the kernel
+# schema that is $DEFS. A facet schema may carry `$defs` of its own
+# (assessment-criteria 1.1.0: an objective holds objectives); while such a
+# schema is tested (Test-Facet-Schema) its own definitions are read first.
+# Until 2026-11-14 a `$ref` of a facet schema was looked up in the kernel
+# only, found nothing, and counted as satisfied.
+$script:TsLocalDefs = $null
 function Resolve-Ref([string]$ref) {
     if (-not $ref.StartsWith('#/$defs/')) { throw "unsupported `$ref: $ref" }
-    return $DEFS[$ref.Substring(8)]
+    $name = $ref.Substring(8)
+    if (($null -ne $script:TsLocalDefs) -and $script:TsLocalDefs.Contains($name)) { return $script:TsLocalDefs[$name] }
+    return $DEFS[$name]
+}
+function Test-Facet-Schema($sch, $v) {
+    $before = $script:TsLocalDefs
+    $script:TsLocalDefs = $null
+    if (($sch -is [System.Collections.IDictionary]) -and ($sch['$defs'] -is [System.Collections.IDictionary])) { $script:TsLocalDefs = $sch['$defs'] }
+    try { return (Test-Schema $sch $v) } finally { $script:TsLocalDefs = $before }
 }
 function Collect-Props($sch, $acc) {
     if ($null -eq $sch) { return }
@@ -673,11 +709,24 @@ function Infer-Single($obj) {
 }
 
 # stdlib facet descriptors (fail-closed registry)
-$STDLIB = (New-Map); $STDLIB_DECL = (New-Map)
+# A facet of the library may have several versions (2026-11-14, backlog
+# #83: assessment-criteria 1.1.0 beside 1.0.0). One id and version is one
+# schema, and a version once published stays: a bundle that pins 1.0.0 is
+# held to 1.0.0. $STDLIB holds the latest version of each facet, which is
+# what an unpinned payload is held to; $STDLIB_VERSIONS holds them all.
+$STDLIB = (New-Map); $STDLIB_DECL = (New-Map); $STDLIB_VERSIONS = (New-Map)
 foreach ($f in (Get-ChildItem (Join-Path $SKILL "schemas\stdlib") -Filter *.json | Sort-Object Name)) {
     $d = Read-Json $f.FullName
-    $STDLIB[$d['id']] = $d['schema']
+    if (-not $STDLIB_VERSIONS.ContainsKey($d['id'])) { $STDLIB_VERSIONS[$d['id']] = (New-Map) }
+    $STDLIB_VERSIONS[$d['id']][[string]$d['version']] = $d['schema']
     $STDLIB_DECL[$d['id']] = $d['modifies-semantics']
+}
+foreach ($id in @($STDLIB_VERSIONS.Keys)) {
+    $latest = $null
+    foreach ($v in @($STDLIB_VERSIONS[$id].Keys)) {
+        if (($null -eq $latest) -or (([version]$v).CompareTo([version]$latest) -gt 0)) { $latest = $v }
+    }
+    $STDLIB[$id] = $STDLIB_VERSIONS[$id][$latest]
 }
 
 # ---------------- optional-empty rule (D3.3) ----------------
@@ -885,6 +934,20 @@ function Param-Check($decl, $value) {
 }
 
 # ---------------- reference closure (#16) ----------------
+# -> a list of @(statement-id, requirement-ref or $null) for every map
+# inside a facet payload that has a member `statement-id`, in the order met.
+function Facet-Statement-Addresses($payload, $out) {
+    if (Is-Map $payload) {
+        if ($payload['statement-id'] -is [string]) {
+            $rref = $null
+            if ($payload['requirement-ref'] -is [string]) { $rref = $payload['requirement-ref'] }
+            [void]$out.Add(@($payload['statement-id'], $rref))
+        }
+        foreach ($k in @($payload.Keys)) { Facet-Statement-Addresses $payload[$k] $out }
+    } elseif (Is-List $payload) {
+        foreach ($v in $payload) { Facet-Statement-Addresses $v $out }
+    }
+}
 function Closure-Errors($objs) {
     $errs = New-Object System.Collections.ArrayList
     function Need([string]$oid, [string]$ref, [string]$what) {
@@ -892,6 +955,35 @@ function Closure-Errors($objs) {
     }
     foreach ($oid in $objs.Keys) {
         $t = $objs[$oid].t; $o = $objs[$oid].o
+        # D10 (2026-11-14, backlog #83): a `statement-id` anywhere inside a
+        # facet payload of a Requirement is held as a `by-statement` key is
+        # held. Alone it names a statement of the host; beside a
+        # `requirement-ref` it names a statement of that Requirement, which
+        # binds where the bundle holds it. `private:` facets are not read.
+        if ([string]::Equals($t, 'requirement', $ORD) -and (Is-Map $o['facets'])) {
+            $own = @(); foreach ($s in @($o['statements'])) { if ($null -ne $s) { $own += $s['id'] } }
+            foreach ($fid in @($o['facets'].Keys)) {
+                if (([string]$fid).StartsWith('private:', $ORD)) { continue }
+                $addrs = New-Object System.Collections.ArrayList
+                Facet-Statement-Addresses $o['facets'][$fid] $addrs
+                foreach ($a in $addrs) {
+                    $sid = $a[0]; $rref = $a[1]
+                    if ($null -eq $rref) {
+                        if (-not (Str-In $own $sid)) {
+                            [void]$errs.Add("${oid}: facet $fid statement-id '$sid' names no statement of its Requirement (D10: a statement-id inside a facet payload is held as a by-statement key is)") }
+                        continue
+                    }
+                    if (-not $objs.Contains($rref)) { continue }
+                    if (-not [string]::Equals($objs[$rref].t, 'requirement', $ORD)) {
+                        [void]$errs.Add("${oid}: facet $fid requirement-ref beside a statement-id resolves to a $($objs[$rref].t), not a Requirement: $rref (D10)")
+                        continue
+                    }
+                    $theirs = @(); foreach ($s in @($objs[$rref].o['statements'])) { if ($null -ne $s) { $theirs += $s['id'] } }
+                    if (-not (Str-In $theirs $sid)) {
+                        [void]$errs.Add("${oid}: facet $fid statement-id '$sid' names no statement of $rref (D10: a statement-id inside a facet payload is held as a by-statement key is)") }
+                }
+            }
+        }
         foreach ($ca in @($o['canonical-alias'])) {
             if ($null -eq $ca) { continue }
             if ($objs.Contains($ca['of'])) {
@@ -1064,13 +1156,14 @@ function Facet-Errors($pairs, $pinned) {
             foreach ($key in $facets.Keys) {
                 $base = Facet-Base $key
                 if ($key.StartsWith('private:', $ORD) -or $base.StartsWith('private:', $ORD)) { continue }
-                $sch = $STDLIB[$base]
-                if ($null -eq $sch) { $sch = $pinned[$base] }
+                # a pin of a library facet is one of its versions, verbatim (D26)
+                $sch = $pinned[$base]
+                if ($null -eq $sch) { $sch = $STDLIB[$base] }
                 if ($null -eq $sch) {
                     [void]$errs.Add("${pth}: unregistered facet '$key' - not stdlib, not pinned in the manifest, not private: (dangerous-by-default, D10)")
                     continue
                 }
-                if (-not (Test-Schema $sch $facets[$key])) {
+                if (-not (Test-Facet-Schema $sch $facets[$key])) {
                     [void]$errs.Add("${pth}: facet '$key' payload violates its schema") }
             }
         }
@@ -1079,13 +1172,13 @@ function Facet-Errors($pairs, $pinned) {
             foreach ($key in $method.Keys) {
                 $base = Facet-Base $key
                 if ($key.StartsWith('private:', $ORD) -or $base.StartsWith('private:', $ORD)) { continue }
-                $sch = $STDLIB[$base]
-                if ($null -eq $sch) { $sch = $pinned[$base] }
+                $sch = $pinned[$base]
+                if ($null -eq $sch) { $sch = $STDLIB[$base] }
                 if ($null -eq $sch) {
                     [void]$errs.Add("${pth}: method '$key' is no registered facet - not stdlib, not pinned in the manifest, not private: (an Assessment's method is a facet payload and fails closed, D10)")
                     continue
                 }
-                if (-not (Test-Schema $sch $method[$key])) {
+                if (-not (Test-Facet-Schema $sch $method[$key])) {
                     [void]$errs.Add("${pth}: method '$key' payload violates its schema") }
             }
         }
@@ -1372,7 +1465,7 @@ function Compose($aObjs, $aPins, $bObjs, $bPins) {
                     foreach ($key in $o['facets'].Keys) {
                         $base = Facet-Base $key
                         if (-not (Str-Eq $base $fid)) { continue }
-                        if (-not (Test-Schema $sch $o['facets'][$key])) {
+                        if (-not (Test-Facet-Schema $sch $o['facets'][$key])) {
                             [void]$errors.Add("${fid}: $($side[0]) $($pair[0]): payload fails re-validation under the resolved $($win['version'])") } } } }
         } else {
             $win = $pa; if ($null -eq $win) { $win = $pb }
@@ -2398,6 +2491,13 @@ function Kernel-Pin-Errors($manifest, $objs) {
     foreach ($oid in (Sorted-Ordinal $ids)) {
         if ($null -ne $why) { break }
         $t = $objs[$oid].t; $o = $objs[$oid].o
+        # decided on 2026-11-14 (backlog #81 and #84): `history` on any object, `label` on a statement
+        if ($o.Contains('history')) { $why = "$oid carries the record of its changes (history)"; break }
+        if ([string]::Equals($t, 'requirement', $ORD)) {
+            $labelled = $false
+            foreach ($s in @($o['statements'])) { if ((Is-Map $s) -and $s.Contains('label')) { $labelled = $true } }
+            if ($labelled) { $why = "$oid labels a statement (label)"; break }
+        }
         if ([string]::Equals($t, 'risk', $ORD)) { $why = "$oid is a Risk"; break }
         $hasRefs = $false
         foreach ($x in @($o['risk-refs'])) { if ($null -ne $x) { $hasRefs = $true } }
@@ -2491,7 +2591,35 @@ function Date-Rule-Violations($o) {
         [void]$out.Add('DATE-3') }
     if ($o.Contains('performer-ref') -and $o.Contains('time') -and -not (Is-When $o['time'])) { [void]$out.Add('DATE-4') }
     if ($o.Contains('signer') -and $o.Contains('timestamp') -and -not (Is-When $o['timestamp'])) { [void]$out.Add('DATE-5') }
+    # DATE-6: the date of an entry of `history` is a day or a month
+    if ($o.Contains('history') -and (Is-List $o['history'])) {
+        foreach ($e in $o['history']) {
+            if ((Is-Map $e) -and $e.Contains('date') -and -not (Test-Schema $DEFS['dayOrMonth'] $e['date'])) {
+                if (-not $out.Contains('DATE-6')) { [void]$out.Add('DATE-6') } }
+        }
+    }
     return ,$out
+}
+# HISTORY-1 (2026-11-14, backlog #81): the entries of `history` stand in the
+# order of their dates, oldest first. A day and a month are compared as
+# they are written, by ordinal: a month stands before its days, and two
+# entries may carry one date. -> the messages for one object of valid shape.
+function History-Errors($o) {
+    $errs = New-Object System.Collections.ArrayList
+    if (-not (Is-Map $o) -or -not (Is-List $o['history'])) { return ,$errs }
+    $prev = $null; $i = 0
+    foreach ($e in $o['history']) {
+        if (Is-Map $e) {
+            $d = $e['date']
+            if (($d -is [string]) -and ($prev -is [string]) -and ([string]::CompareOrdinal($d, $prev) -lt 0)) {
+                [void]$errs.Add("history[$i].date $d stands after $prev (HISTORY-1: the entries of ``history`` stand in the order of their dates, oldest first - a record that a reader has to sort is read in two ways)")
+                return ,$errs
+            }
+            $prev = $d
+        }
+        $i++
+    }
+    return ,$errs
 }
 function Run-Kernel {
     foreach ($case in (Load-Vectors 'kernel-vectors.json')['vectors']) {
@@ -2521,6 +2649,19 @@ function Run-Kernel {
             if ($case.Contains('expected-rules')) { $want = (@($case['expected-rules']) | Sort-Object) -join ',' }
             if ((Str-Eq $got ([string]$case['expected'])) -and (Str-Eq $named $want)) { OK 'kernel' }
             else { FAIL 'kernel' "shape $($case['name']): expected $($case['expected']) [$want], got $got [$named]" }
+        }
+    }
+    # HISTORY-1 (backlog #81): one object of valid shape each
+    if ($all.Contains('history-vectors')) {
+        foreach ($case in $all['history-vectors']) {
+            $errs = New-Object System.Collections.ArrayList
+            if ($null -eq (Infer-Single $case['object'])) { [void]$errs.Add('the object has no single type') }
+            else { foreach ($e in (History-Errors $case['object'])) { [void]$errs.Add($e) } }
+            $got = 'valid'; if ($errs.Count -gt 0) { $got = 'invalid' }
+            $named = $true
+            if ($case.Contains('expected-rule')) { foreach ($e in $errs) { if (-not $e.Contains([string]$case['expected-rule'])) { $named = $false } } }
+            if ((Str-Eq $got ([string]$case['expected'])) -and $named) { OK 'kernel' }
+            else { FAIL 'kernel' "history $($case['name']): expected $($case['expected']), got $got $(@($errs) -join ' ~ ')" }
         }
     }
 }
@@ -3531,7 +3672,7 @@ function Check-Object-Errors([string]$oid, $o, $objs) {
     $col = $null
     if ((Is-Map $o['facets']) -and $o['facets'].Contains("$COLLECTOR_FACET@1")) { $col = $o['facets']["$COLLECTOR_FACET@1"] }
     if ($null -ne $col) {
-        if ($STDLIB.ContainsKey($COLLECTOR_FACET) -and -not (Test-Schema $STDLIB[$COLLECTOR_FACET] $col)) {
+        if ($STDLIB.ContainsKey($COLLECTOR_FACET) -and -not (Test-Facet-Schema $STDLIB[$COLLECTOR_FACET] $col)) {
             Ck-Bad $errList 'CHECK-7' $oid 'collector@1 payload violates its schema'
         } elseif (Is-Map $col) {
             $cc = (New-Map)
@@ -4575,6 +4716,7 @@ function Validate-Object([string]$section, [string]$path, $obj) {
     $t = $m[0]
     $viol = Optional-Empty-Violations $obj
     if (@($viol).Count -gt 0) { FAIL $section "${path}: optional empty containers present: $(@($viol) -join ',')" }
+    foreach ($e in (History-Errors $obj)) { FAIL $section "${path}: $e" }
     if ([string]::Equals($t, 'requirement', $ORD)) {
         $sids = New-Object System.Collections.ArrayList
         foreach ($s in $obj['statements']) {
@@ -4695,8 +4837,13 @@ function Validate-Bundle([string]$bdir, [switch]$Flat) {
         if ($null -eq $md) { $md = @('assessment', 'tailoring', 'selection', 'rendering') }
         $pinnedDecl[$sd['id']] = $md
         # #26 (D26 final): stdlib pins must equal the descriptor VERBATIM
-        if ($STDLIB.ContainsKey($sd['id'])) {
-            if (-not (Str-Eq (Format-Canonical $sch) (Format-Canonical $STDLIB[$sd['id']]))) {
+        # The library may hold several versions of a facet: the pin is held
+        # to the one it states.
+        if ($STDLIB_VERSIONS.ContainsKey($sd['id'])) {
+            $held = $STDLIB_VERSIONS[$sd['id']][[string]$sd['version']]
+            if ($null -eq $held) {
+                FAIL $section "$($fe['path']): pin of stdlib facet $($sd['id']) states version '$($sd['version'])', which the standard library does not hold (it holds $((Sorted-Ordinal @($STDLIB_VERSIONS[$sd['id']].Keys)) -join ', '))" }
+            elseif (-not (Str-Eq (Format-Canonical $sch) (Format-Canonical $held))) {
                 FAIL $section "$($fe['path']): pin of stdlib facet $($sd['id']) DIVERGES from the normative descriptor (D26)" } }
     }
     # Attestations BESIDE the manifest (D3.1) are read with every bundle

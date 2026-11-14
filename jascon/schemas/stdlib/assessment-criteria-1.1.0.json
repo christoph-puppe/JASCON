@@ -1,0 +1,54 @@
+{
+  "id": "https://ns.jascon.net/stdlib/facet/assessment-criteria",
+  "version": "1.1.0",
+  "modifies-semantics": ["assessment"],
+  "note": "NORMATIVE (gate item 2). Declaration [assessment] confirmed by use (D.12 audit): tools that assess must understand or halt. Payload may be flat (per-object) or by-statement keyed where per-clause (D10 rev keying rule applies to the by-statement form). Absorbs documentation duties x966 (BSI/ISM), CR26 artifacts/examples/key-tests, CIS assessment-objectives, and the benchmark audit/remediation/method shape. 1.1.0 (2026-11-14, backlog #83, the author's decision): `objectives` is typed. An objective has an id, a label, prose, the objectives under it (`children`) and `assessment-for`: what it assesses, as a list of addresses. An address names a statement of the host Requirement (`statement-id`), a statement of another Requirement (`requirement-ref` with `statement-id`), or a Requirement as a whole (`requirement-ref` alone); a reference of the source that names nothing is carried as `href`. A `statement-id` in an address is held as a `by-statement` key is held (D10). `methods` lists the assessment methods a source states for the Requirement or for one objective (SP 800-53A: EXAMINE, INTERVIEW, TEST, each with its objects). `method`, singular, is unchanged: how an Assessment or a Check was carried out. Measured on SP 800-53A: 3,707 objectives name what they assess. 1.0.0 stays in the library: a bundle that pins it is held to it.",
+  "schema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$defs": {
+      "objective": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "label": { "type": "string", "minLength": 1 },
+          "prose": { "type": "object", "minProperties": 1 },
+          "assessment-for": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/address" } },
+          "methods": { "type": "array", "items": { "$ref": "#/$defs/method" } },
+          "children": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/objective" } }
+        }
+      },
+      "address": {
+        "type": "object", "additionalProperties": false, "minProperties": 1,
+        "properties": {
+          "statement-id": { "type": "string", "minLength": 1 },
+          "requirement-ref": { "type": "string", "minLength": 1 },
+          "href": { "type": "string", "minLength": 1 }
+        }
+      },
+      "method": {
+        "type": "object", "required": ["method"],
+        "properties": {
+          "method": { "type": "string", "minLength": 1 },
+          "label": { "type": "string", "minLength": 1 },
+          "objects": { "type": "array", "items": { "type": "object", "minProperties": 1 } }
+        }
+      }
+    },
+    "type": "object", "additionalProperties": false,
+    "properties": {
+      "by-statement": { "type": "object", "minProperties": 1,
+        "additionalProperties": { "type": "object" } },
+      "required-documentation": { "type": "array", "items": { "type": "string" } },
+      "required-artifacts": { "type": "array", "items": { "type": "string" } },
+      "default-artifacts": { "type": "object" },
+      "examples": { "type": "array", "items": { "type": "object" } },
+      "objectives": { "type": "array", "items": { "$ref": "#/$defs/objective" } },
+      "methods": { "type": "array", "items": { "$ref": "#/$defs/method" } },
+      "audit": { "type": "object" },
+      "remediation": { "type": "object" },
+      "method": { "enum": ["automated", "manual"] },
+      "frequency": { "type": "string" },
+      "summary": { "type": "object" }
+    }
+  }
+}

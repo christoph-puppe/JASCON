@@ -1,5 +1,5 @@
 {
- "description": "Kernel-version pin (backlog #44, kernel 2.0.0). A content manifest MAY carry `kernel-version`; absent means 1.0.0 content. KERNEL-1: a bundle whose content needs a later kernel (a Risk object, Finding.risk-refs) MUST pin that kernel. KERNEL-2: a tool that meets a pin it does not implement fails closed and names the pinned version and its own. Each vector: a manifest (objects list left empty - the vector's objects are given beside it), the objects, and the expected number of failures. shape-vectors (2.0.0-rc.3): fields that 2.0.0 typed or added on released shapes - Finding.actions[].due and Deviation.opened, free text in 1.0.0 (DATE-2, DATE-1: an invalid vector names its rule in expected-rules), and Component.product-version, an opaque string; `kind` is the type the document must match exactly, or none. CP-AUTHOR-1 (2026-11-13): the pin vectors hold `provenance` on a Tailoring, an entry of it and an Implementation, `decided` and `review-due` on a Deviation and `date` on an authorization to KERNEL-1; the shape vectors hold the closed `provenance`, the new fields and the three times that any string satisfied until then (DATE-3 a Mapping's provenance date, DATE-4 an Assessment's time, DATE-5 an Attestation's timestamp; DATE-1 now names `decided` too). Backlog #68 (2026-11-13): a `pattern` of this schema is an ECMA-262 regular expression, as JSON Schema says - `$` is the end of the value and `.` matches no line terminator (U+000A, U+000D, U+2028, U+2029). The shape vectors hold a date, a date-time, a digest, a language tag, a facet id, a fact name and a decimal default that end in a line break to `invalid`, and a relation type with a line terminator after `https://`; one pin vector holds a `kernel-version` that ends in a line break to a manifest that is refused. Python's `re` and .NET's `Regex` accept each of them when a pattern is handed over unchanged.",
+ "description": "Kernel-version pin (backlog #44, kernel 2.0.0). A content manifest MAY carry `kernel-version`; absent means 1.0.0 content. KERNEL-1: a bundle whose content needs a later kernel (a Risk object, Finding.risk-refs) MUST pin that kernel. KERNEL-2: a tool that meets a pin it does not implement fails closed and names the pinned version and its own. Each vector: a manifest (objects list left empty - the vector's objects are given beside it), the objects, and the expected number of failures. shape-vectors (2.0.0-rc.3): fields that 2.0.0 typed or added on released shapes - Finding.actions[].due and Deviation.opened, free text in 1.0.0 (DATE-2, DATE-1: an invalid vector names its rule in expected-rules), and Component.product-version, an opaque string; `kind` is the type the document must match exactly, or none. CP-AUTHOR-1 (2026-11-13): the pin vectors hold `provenance` on a Tailoring, an entry of it and an Implementation, `decided` and `review-due` on a Deviation and `date` on an authorization to KERNEL-1; the shape vectors hold the closed `provenance`, the new fields and the three times that any string satisfied until then (DATE-3 a Mapping's provenance date, DATE-4 an Assessment's time, DATE-5 an Attestation's timestamp; DATE-1 now names `decided` too). Backlog #68 (2026-11-13): a `pattern` of this schema is an ECMA-262 regular expression, as JSON Schema says - `$` is the end of the value and `.` matches no line terminator (U+000A, U+000D, U+2028, U+2029). The shape vectors hold a date, a date-time, a digest, a language tag, a facet id, a fact name and a decimal default that end in a line break to `invalid`, and a relation type with a line terminator after `https://`; one pin vector holds a `kernel-version` that ends in a line break to a manifest that is refused. Python's `re` and .NET's `Regex` accept each of them when a pattern is handed over unchanged. Decided on 2026-11-14 (backlog #80, #81, #84): `history` on any object (entries {date, comment, ref}; a date is a day or a month, DATE-6) and `label` on a statement are 2.0.0 content and need the pin; the `sources` of a manifest's provenance are typed and need none. `history-vectors`: each case is one object of valid shape; `expected` says whether its history stands oldest first (HISTORY-1). A day and a month are compared as written, so a month stands before its days, and two entries may carry one date.",
  "vectors": [
   {
    "name": "unpinned-1.0.0-content",
@@ -804,6 +804,248 @@
    "expected-fails": 1,
    "expected-frags": [
     "manifest schema"
+   ]
+  },
+  {
+   "name": "history-is-2.0.0-content-and-needs-the-pin",
+   "manifest": {
+    "manifest-version": "1",
+    "objects": []
+   },
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "X."
+       }
+      }
+     ],
+     "history": [
+      {
+       "date": "2025-06"
+      }
+     ]
+    }
+   ],
+   "expected-fails": 1,
+   "expected-frags": [
+    "history"
+   ]
+  },
+  {
+   "name": "a-statement-label-is-2.0.0-content-and-needs-the-pin",
+   "manifest": {
+    "manifest-version": "1",
+    "objects": []
+   },
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "X."
+       },
+       "label": "a."
+      }
+     ]
+    }
+   ],
+   "expected-fails": 1,
+   "expected-frags": [
+    "label"
+   ]
+  },
+  {
+   "name": "history-and-a-statement-label-under-the-pin",
+   "manifest": {
+    "manifest-version": "1",
+    "objects": [],
+    "kernel-version": "2.0.0"
+   },
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "X."
+       },
+       "label": "a."
+      }
+     ],
+     "history": [
+      {
+       "date": "2025-06"
+      },
+      {
+       "date": "2026-03-12",
+       "comment": {
+        "en": "Reworded."
+       },
+       "ref": "https://github.com/example/rules/issues/41"
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/base",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      }
+     ],
+     "history": [
+      {
+       "date": "2026-03-12"
+      }
+     ]
+    }
+   ],
+   "expected-fails": 0
+  },
+  {
+   "name": "the-sources-of-a-manifest-are-1.0.0-content",
+   "manifest": {
+    "manifest-version": "1",
+    "objects": [],
+    "provenance": {
+     "converter": "x v1",
+     "sources": [
+      {
+       "title": "Catalogue",
+       "version": "2026.06",
+       "uuid": "36766a6f-e174-4292-a03e-fcb3b4b09201",
+       "author-ref": "https://ns.auth.gov/fw/party/authority",
+       "date": "2026-06-18",
+       "format": "OSCAL",
+       "format-version": "1.1.2",
+       "revisions": [
+        {
+         "version": "2026.03"
+        }
+       ]
+      }
+     ]
+    }
+   },
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "X."
+       }
+      }
+     ]
+    }
+   ],
+   "expected-fails": 0
+  },
+  {
+   "name": "a-source-with-a-date-that-is-no-date",
+   "manifest": {
+    "manifest-version": "1",
+    "objects": [],
+    "provenance": {
+     "sources": [
+      {
+       "title": "Catalogue",
+       "date": "Jun-26"
+      }
+     ]
+    }
+   },
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "X."
+       }
+      }
+     ]
+    }
+   ],
+   "expected-fails": 1,
+   "expected-frags": [
+    "manifest schema violation"
+   ]
+  },
+  {
+   "name": "sources-that-are-no-list-and-a-source-that-says-nothing",
+   "manifest": {
+    "manifest-version": "1",
+    "objects": [],
+    "provenance": {
+     "sources": [
+      {}
+     ]
+    }
+   },
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "X."
+       }
+      }
+     ]
+    }
+   ],
+   "expected-fails": 1,
+   "expected-frags": [
+    "manifest schema violation"
    ]
   }
  ],
@@ -2044,6 +2286,582 @@
      }
     ]
    }
+  },
+  {
+   "name": "history-a-month-then-a-day-with-comment-and-ref",
+   "kind": "requirement",
+   "expected": "valid",
+   "document": {
+    "id": "https://ns.auth.gov/fw/req/1",
+    "version": "1",
+    "lifecycle": "active",
+    "statements": [
+     {
+      "id": "s1",
+      "modality": "must",
+      "obligated-parties": [
+       "https://ns.auth.gov/fw/p/o"
+      ],
+      "prose": {
+       "en": "X."
+      }
+     }
+    ],
+    "history": [
+     {
+      "date": "2025-06"
+     },
+     {
+      "date": "2026-03-12",
+      "comment": {
+       "en": "Reworded."
+      },
+      "ref": "https://github.com/example/rules/issues/41"
+     }
+    ]
+   }
+  },
+  {
+   "name": "history-on-a-set",
+   "kind": "requirementSet",
+   "expected": "valid",
+   "document": {
+    "id": "https://ns.auth.gov/fw/set/base",
+    "version": "1",
+    "lifecycle": "active",
+    "members": [
+     {
+      "ref": "https://ns.auth.gov/fw/req/1",
+      "sequence": 10
+     }
+    ],
+    "history": [
+     {
+      "date": "2026-03-12"
+     }
+    ]
+   }
+  },
+  {
+   "name": "history-date-as-the-source-prints-it",
+   "kind": "requirement",
+   "expected": "invalid",
+   "document": {
+    "id": "https://ns.auth.gov/fw/req/1",
+    "version": "1",
+    "lifecycle": "active",
+    "statements": [
+     {
+      "id": "s1",
+      "modality": "must",
+      "obligated-parties": [
+       "https://ns.auth.gov/fw/p/o"
+      ],
+      "prose": {
+       "en": "X."
+      }
+     }
+    ],
+    "history": [
+     {
+      "date": "Jun-26"
+     }
+    ]
+   },
+   "expected-rules": [
+    "DATE-6"
+   ]
+  },
+  {
+   "name": "history-month-thirteen",
+   "kind": "requirement",
+   "expected": "invalid",
+   "document": {
+    "id": "https://ns.auth.gov/fw/req/1",
+    "version": "1",
+    "lifecycle": "active",
+    "statements": [
+     {
+      "id": "s1",
+      "modality": "must",
+      "obligated-parties": [
+       "https://ns.auth.gov/fw/p/o"
+      ],
+      "prose": {
+       "en": "X."
+      }
+     }
+    ],
+    "history": [
+     {
+      "date": "2026-13"
+     }
+    ]
+   },
+   "expected-rules": [
+    "DATE-6"
+   ]
+  },
+  {
+   "name": "history-a-day-that-ends-in-a-line-break",
+   "kind": "requirement",
+   "expected": "invalid",
+   "document": {
+    "id": "https://ns.auth.gov/fw/req/1",
+    "version": "1",
+    "lifecycle": "active",
+    "statements": [
+     {
+      "id": "s1",
+      "modality": "must",
+      "obligated-parties": [
+       "https://ns.auth.gov/fw/p/o"
+      ],
+      "prose": {
+       "en": "X."
+      }
+     }
+    ],
+    "history": [
+     {
+      "date": "2026-03-12\n"
+     }
+    ]
+   },
+   "expected-rules": [
+    "DATE-6"
+   ]
+  },
+  {
+   "name": "history-entry-without-a-date",
+   "kind": "requirement",
+   "expected": "invalid",
+   "document": {
+    "id": "https://ns.auth.gov/fw/req/1",
+    "version": "1",
+    "lifecycle": "active",
+    "statements": [
+     {
+      "id": "s1",
+      "modality": "must",
+      "obligated-parties": [
+       "https://ns.auth.gov/fw/p/o"
+      ],
+      "prose": {
+       "en": "X."
+      }
+     }
+    ],
+    "history": [
+     {
+      "comment": {
+       "en": "Reworded."
+      }
+     }
+    ]
+   }
+  },
+  {
+   "name": "history-entry-with-a-member-the-kernel-does-not-know",
+   "kind": "requirement",
+   "expected": "invalid",
+   "document": {
+    "id": "https://ns.auth.gov/fw/req/1",
+    "version": "1",
+    "lifecycle": "active",
+    "statements": [
+     {
+      "id": "s1",
+      "modality": "must",
+      "obligated-parties": [
+       "https://ns.auth.gov/fw/p/o"
+      ],
+      "prose": {
+       "en": "X."
+      }
+     }
+    ],
+    "history": [
+     {
+      "date": "2026-03-12",
+      "version": "4"
+     }
+    ]
+   }
+  },
+  {
+   "name": "history-comment-as-a-plain-string",
+   "kind": "requirement",
+   "expected": "invalid",
+   "document": {
+    "id": "https://ns.auth.gov/fw/req/1",
+    "version": "1",
+    "lifecycle": "active",
+    "statements": [
+     {
+      "id": "s1",
+      "modality": "must",
+      "obligated-parties": [
+       "https://ns.auth.gov/fw/p/o"
+      ],
+      "prose": {
+       "en": "X."
+      }
+     }
+    ],
+    "history": [
+     {
+      "date": "2026-03-12",
+      "comment": "Reworded."
+     }
+    ]
+   }
+  },
+  {
+   "name": "history-empty",
+   "kind": "requirement",
+   "expected": "invalid",
+   "document": {
+    "id": "https://ns.auth.gov/fw/req/1",
+    "version": "1",
+    "lifecycle": "active",
+    "statements": [
+     {
+      "id": "s1",
+      "modality": "must",
+      "obligated-parties": [
+       "https://ns.auth.gov/fw/p/o"
+      ],
+      "prose": {
+       "en": "X."
+      }
+     }
+    ],
+    "history": []
+   }
+  },
+  {
+   "name": "statement-label",
+   "kind": "requirement",
+   "expected": "valid",
+   "document": {
+    "id": "https://ns.auth.gov/fw/req/1",
+    "version": "1",
+    "lifecycle": "active",
+    "statements": [
+     {
+      "id": "smt.a",
+      "modality": "must",
+      "obligated-parties": [
+       "https://ns.auth.gov/fw/p/o"
+      ],
+      "prose": {
+       "en": "X."
+      },
+      "label": "a."
+     },
+     {
+      "id": "smt.b",
+      "modality": "must",
+      "obligated-parties": [
+       "https://ns.auth.gov/fw/p/o"
+      ],
+      "prose": {
+       "en": "X."
+      },
+      "label": "b."
+     }
+    ]
+   }
+  },
+  {
+   "name": "statement-label-empty",
+   "kind": "requirement",
+   "expected": "invalid",
+   "document": {
+    "id": "https://ns.auth.gov/fw/req/1",
+    "version": "1",
+    "lifecycle": "active",
+    "statements": [
+     {
+      "id": "s1",
+      "modality": "must",
+      "obligated-parties": [
+       "https://ns.auth.gov/fw/p/o"
+      ],
+      "prose": {
+       "en": "X."
+      },
+      "label": ""
+     }
+    ]
+   }
+  },
+  {
+   "name": "statement-label-that-is-no-string",
+   "kind": "requirement",
+   "expected": "invalid",
+   "document": {
+    "id": "https://ns.auth.gov/fw/req/1",
+    "version": "1",
+    "lifecycle": "active",
+    "statements": [
+     {
+      "id": "s1",
+      "modality": "must",
+      "obligated-parties": [
+       "https://ns.auth.gov/fw/p/o"
+      ],
+      "prose": {
+       "en": "X."
+      },
+      "label": {
+       "en": "a."
+      }
+     }
+    ]
+   }
+  }
+ ],
+ "history-vectors": [
+  {
+   "name": "oldest-first",
+   "object": {
+    "id": "https://ns.auth.gov/fw/req/1",
+    "version": "1",
+    "lifecycle": "active",
+    "statements": [
+     {
+      "id": "s1",
+      "modality": "must",
+      "obligated-parties": [
+       "https://ns.auth.gov/fw/p/o"
+      ],
+      "prose": {
+       "en": "X."
+      }
+     }
+    ],
+    "history": [
+     {
+      "date": "2024-01-15"
+     },
+     {
+      "date": "2025-06-01"
+     },
+     {
+      "date": "2026-03-12"
+     }
+    ]
+   },
+   "expected": "valid"
+  },
+  {
+   "name": "one-entry",
+   "object": {
+    "id": "https://ns.auth.gov/fw/req/1",
+    "version": "1",
+    "lifecycle": "active",
+    "statements": [
+     {
+      "id": "s1",
+      "modality": "must",
+      "obligated-parties": [
+       "https://ns.auth.gov/fw/p/o"
+      ],
+      "prose": {
+       "en": "X."
+      }
+     }
+    ],
+    "history": [
+     {
+      "date": "2025-06"
+     }
+    ]
+   },
+   "expected": "valid"
+  },
+  {
+   "name": "two-entries-of-one-day",
+   "object": {
+    "id": "https://ns.auth.gov/fw/req/1",
+    "version": "1",
+    "lifecycle": "active",
+    "statements": [
+     {
+      "id": "s1",
+      "modality": "must",
+      "obligated-parties": [
+       "https://ns.auth.gov/fw/p/o"
+      ],
+      "prose": {
+       "en": "X."
+      }
+     }
+    ],
+    "history": [
+     {
+      "date": "2026-03-12",
+      "comment": {
+       "en": "A."
+      }
+     },
+     {
+      "date": "2026-03-12",
+      "comment": {
+       "en": "B."
+      }
+     }
+    ]
+   },
+   "expected": "valid"
+  },
+  {
+   "name": "a-month-stands-before-its-days",
+   "object": {
+    "id": "https://ns.auth.gov/fw/req/1",
+    "version": "1",
+    "lifecycle": "active",
+    "statements": [
+     {
+      "id": "s1",
+      "modality": "must",
+      "obligated-parties": [
+       "https://ns.auth.gov/fw/p/o"
+      ],
+      "prose": {
+       "en": "X."
+      }
+     }
+    ],
+    "history": [
+     {
+      "date": "2025-06"
+     },
+     {
+      "date": "2025-06-01"
+     },
+     {
+      "date": "2025-07"
+     }
+    ]
+   },
+   "expected": "valid"
+  },
+  {
+   "name": "newest-first-as-a-changelog-prints-it",
+   "object": {
+    "id": "https://ns.auth.gov/fw/req/1",
+    "version": "1",
+    "lifecycle": "active",
+    "statements": [
+     {
+      "id": "s1",
+      "modality": "must",
+      "obligated-parties": [
+       "https://ns.auth.gov/fw/p/o"
+      ],
+      "prose": {
+       "en": "X."
+      }
+     }
+    ],
+    "history": [
+     {
+      "date": "2026-03-12"
+     },
+     {
+      "date": "2025-06-01"
+     }
+    ]
+   },
+   "expected": "invalid",
+   "expected-rule": "HISTORY-1"
+  },
+  {
+   "name": "a-day-before-its-month",
+   "object": {
+    "id": "https://ns.auth.gov/fw/req/1",
+    "version": "1",
+    "lifecycle": "active",
+    "statements": [
+     {
+      "id": "s1",
+      "modality": "must",
+      "obligated-parties": [
+       "https://ns.auth.gov/fw/p/o"
+      ],
+      "prose": {
+       "en": "X."
+      }
+     }
+    ],
+    "history": [
+     {
+      "date": "2025-06-30"
+     },
+     {
+      "date": "2025-06"
+     }
+    ]
+   },
+   "expected": "invalid",
+   "expected-rule": "HISTORY-1"
+  },
+  {
+   "name": "the-last-entry-out-of-place",
+   "object": {
+    "id": "https://ns.auth.gov/fw/req/1",
+    "version": "1",
+    "lifecycle": "active",
+    "statements": [
+     {
+      "id": "s1",
+      "modality": "must",
+      "obligated-parties": [
+       "https://ns.auth.gov/fw/p/o"
+      ],
+      "prose": {
+       "en": "X."
+      }
+     }
+    ],
+    "history": [
+     {
+      "date": "2024-01-15"
+     },
+     {
+      "date": "2026-03-12"
+     },
+     {
+      "date": "2025-12-31"
+     }
+    ]
+   },
+   "expected": "invalid",
+   "expected-rule": "HISTORY-1"
+  },
+  {
+   "name": "no-history",
+   "object": {
+    "id": "https://ns.auth.gov/fw/req/1",
+    "version": "1",
+    "lifecycle": "active",
+    "statements": [
+     {
+      "id": "s1",
+      "modality": "must",
+      "obligated-parties": [
+       "https://ns.auth.gov/fw/p/o"
+      ],
+      "prose": {
+       "en": "X."
+      }
+     }
+    ]
+   },
+   "expected": "valid"
   }
  ]
 }
