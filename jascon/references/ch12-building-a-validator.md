@@ -337,6 +337,19 @@ duration from `decided`, else `opened`, or from a Risk's
 `acceptance.date`; and report a calendar period as not evaluable rather
 than guess at a calendar you do not have. Nothing fails by REVIEW-1.
 
+A third report is about the lifecycle. A draft may be implemented and
+assessed, voluntarily (§3.6), so a Set in force may list one; what a
+reader of the Set is owed is that it is said. **DRAFT-1**: for every Set
+whose lifecycle is `active`, count the entries of `members` that name an
+object of the bundle whose lifecycle is `draft`, a Requirement or a Set,
+and print one line per Set with a count above zero, the Sets in the
+order of their ids. `lifecycle-vectors.json` holds four cases under
+`draft-members`: a member the bundle does not hold is not counted, a
+withdrawn or deprecated one is no draft, and what a draft Set lists is
+its own affair. Nothing fails by DRAFT-1, with any switch. The measured
+case is CR26, whose publisher marks one family as a placeholder: seven
+active Sets list its draft Sets.
+
 **Third, close and type the edges.** Four references on a Risk are
 closure-required and typed: `treatments[].requirement-ref` names a
 Requirement, `component-refs` name Components, `tailoring-refs` name

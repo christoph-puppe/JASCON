@@ -30,8 +30,7 @@ the history of this file.
 | Specification, older versions (`jascon-specification-1.0.0.md`, `jascon-v0.5-specification.md`) | The clause-granularity row with "347 nested pseudo-controls" | Released or superseded texts; not rewritten |
 | `drafts/gate-3-census.md`, `drafts/gate-4-measurement.md`, `DEEP_RESEARCH_REVIEW.md` | "tombstone inversion", "ISM round-trips 1,711/1,711", nested controls as statements | Records of their day |
 | `website/src/start.html:108` | "what OSCAL cannot hold returns on import" | Wrong before phase E if it means the app's Import page (reported by the app's agent); not checked by me |
-| `converted_examples/DE.BSI/SOURCE-LICENSE.md:24`, `oscal-export/geman.bsi-catalog.json` | describes the export of an earlier day; an older file the export script does not write | Backlog #90 |
-| `.github/workflows/validators.yml` | no step runs the OSCAL export | Backlog #90 |
+| `converted_examples/DE.BSI/oscal-export/geman.bsi-catalog.json`, `.github/workflows/validators.yml` | an older file the export script does not write; no step ran the OSCAL export | Done on 2026-11-14 (f54df1aa, backlog #90): the file is removed and a step runs the export. `SOURCE-LICENSE.md:24` says "`oscal-export/` is a re-export of the converted bundle to OSCAL 1.2.2", which holds |
 
 ## Decisions the texts wait for
 
@@ -41,3 +40,19 @@ change record; the resources texts refer to; `assessment-for`; labels of
 statements and parameters; what a Set stands for. When one is decided,
 the specification's kernel text, the handbook's appendix A and the
 converters change with it.
+
+## The round after phase E (2026-11-14: backlog #86, #87, #90, #92)
+
+| Where | What | Commit |
+|---|---|---|
+| README | 709 vectors in 18 families (twice); the reader's version in the caption (1.17.0) and its screenshot; what the reader checks of an export and of a loaded bundle | 1d276fe5, and the commit of this file |
+| `jascon/SKILL.md` | 709 vectors; the lifecycle family names the report of draft members | the commit of this file |
+| Handbook §3.6 and chapter 12 | DRAFT-1: a validator says where a Set in force lists a draft, and fails nothing | the commit of this file |
+| Specification IV.5 (the record of the vectors), IV.6 (one row) | 709 vectors; DRAFT-1 | the commit of this file |
+| App `readme.md`, `PROGRESS.md` | builds 0.9.17 and 0.9.18 | fa7a7b8f, 4a30d80b |
+| Website `facts.json` and the five languages | measured again after the commit of this file | the commit after it |
+| `SKILL_jascon.zip` | rebuilt from the committed `jascon/` tree | with the website's commit |
+
+Left: handbook §3.6 says that new references to a withdrawn object fail
+validation; no validator has that rule (backlog #93, needs the author).
+The texts for #80 to #84 are written when those are built.

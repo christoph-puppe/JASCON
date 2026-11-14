@@ -358,3 +358,58 @@ parteien, das bleibt , Plan go“
 - **R3:** Mehrere Modalitäten und mehrere Parteien je Anforderung
   bleiben, wie der Kernel sie heute erlaubt. Kein Backlog-Punkt dazu.
 - **Plan:** freigegeben.
+
+## Nach Phase E: Backlog #80 bis #92 (Autor, 2026-11-14)
+
+Vorgelegt wurden #80 bis #85 je mit Vorschlag, Pro, Contra und meiner
+Empfehlung (die Texte stehen in den Backlog-Zeilen). Zu #86 bis #92 die
+Frage des Autors: „86 bis 92 kannst Du alleine machen, oder?“ Meine
+Antwort: ja, bis auf eine Entscheidung in #91.
+
+Die Worte des Autors:
+
+„alle wie empfohlen, bis auf 81: Versionierung ist wichtig und gehört in
+den Kernel, die Validatoren müssen dann angepasst werden“
+
+„91: ja“
+
+| Nr. | Entscheidung |
+|---|---|
+| 80 | Wie empfohlen. `provenance.sources[]` wird im Kernel-Schema typisiert, ein Eintrag je Quelldokument; `provenance` bleibt sonst offen. Der Rest der Dokument-Metadaten bleibt im compat-Facet `metadata`; kein neues Standard-Facet. |
+| 81 | Nicht als Facet: Versionierung gehört in den Kernel, die Validatoren werden angepasst. Die Form ist offen (siehe unten). |
+| 82 | Wie empfohlen. Ein Standard-Facet `references@1`. Für die Auflösungsregel (`#id` im Text) wird zuerst gezählt, ob ein Bundle Verweise ins Leere hat: bei 0 Fehler des Bundles, sonst Berichtszeile. |
+| 83 | Wie empfohlen. `assessment-criteria` bekommt typisierte `objectives[]` mit `assessment-for` (Version 1.1.0); D10 hält ein `statement-id` in einem Payload wie einen `by-statement`-Schlüssel. |
+| 84 | Wie empfohlen. `label` am Statement kommt in den Kernel (Entscheidung gegen D22, Tests 1 und 2). `aliases` am Parameter nicht; die 221 Parameter-uuids bleiben in compat. |
+| 85 | Wie empfohlen. Kein Kernel-Feld `kind` am Set für 2.0.0. |
+| 91 (2) | `author` ist eine Rolle, aus der der Konverter den Autor des Dokuments liest. |
+
+### #81: was vor dem Bauen noch offen ist
+
+Vorgelegt am selben Tag, noch ohne Antwort. Befund: Der Kernel hat
+`version` an jedem Objekt, und das Handbuch (§3.3) sagt, jede Änderung
+sei eine neue adressierbare Version. Die Konverter nutzen das nicht: alle
+1.731 ISM-Objekte tragen die Ausgabe `2026.06.18` (gemessen), die eigene
+Revision des Controls steht in compat (1.101 Controls, 14 verschiedene
+Werte). Die Referenz rechnet schon auf `version`: beim Zusammensetzen
+zweier Bundles ist gleiche id mit gleicher Version und anderem Digest ein
+Fehler. D26, Entscheidung vom 2026-11-13, sagt: „The kernel keeps no log
+inside an object, because a second history inside each version can
+contradict the first.“
+
+Vorschlag: (1) `version` ist die eigene Version des Objekts, wo die
+Quelle eine nennt, sonst die Ausgabe; keine Schemaänderung. (2) Ein neues
+optionales Kernel-Feld `history[]` an jedem Objekt, Einträge
+`{date, comment?, ref?}`, `date` als Tag oder Monat, Teil des
+semantischen Digests. (3) Schema und eine Regel „Einträge aufsteigend
+nach Datum“ in allen drei Validatoren, mit Vektoren. Der Satz in D26 und
+§3.3 des Handbuchs würden umgeschrieben; dafür braucht es das Ja des
+Autors. Kleinere Alternative: nur (1), Monat und Historie in ein Facet.
+
+### Was davon schon gebaut ist (2026-11-14)
+
+Die vier Punkte, die an keiner dieser Entscheidungen hängen: #90 (der
+Workflow führt den OSCAL-Export aus), #86 (DRAFT-1 in allen drei
+Validatoren), #87 (Schalter für Zurückgezogene, App 0.9.18 und Reader
+1.17.0), #92 (Reader 1.17.0; der App-Teil gemessen und nicht geändert).
+Kernel, Standard-Facets und Konverter (#80 bis #84, mit #88, #89, #91)
+warten auf die Antwort zu #81, damit jedes Bundle nur einmal neu entsteht.

@@ -228,7 +228,8 @@ The heuristic, suitable for printing above the release manager's desk:
 be implemented and assessed all the same, voluntarily: whoever does so
 answers a text that may still change (CR26 publishes one family as a
 placeholder; its rules convert as `draft` and can be answered like any
-other). **active** is the promise in force;
+other). A validator says where a Set in force lists a draft, and fails
+nothing by it (DRAFT-1, Chapter 12). **active** is the promise in force;
 **deprecated** remains fully consumable — implementations against it stay
 valid — but tools surface the warning and the `replaces` trail to
 successors; **withdrawn** exists for historical reference only, and new
