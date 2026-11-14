@@ -14,6 +14,7 @@ import copy, json, os, sys, tempfile, unittest
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from oscal_conv_lib import global_occurrence, Ledger, props_by_name, slug, RESPONSE_TREATMENT, response_treatment
 from oscal_conv_lib import document_author, document_day, provenance, provenance_override, needs_kernel_2
+from oscal_conv_lib import known_arguments, out_dir
 from oscal_conv_lib import obligated_party, obligated_party_line, obligated_party_record
 
 
@@ -412,6 +413,35 @@ class Backlog69ThePinAWriterSets(unittest.TestCase):
         }
         for what, o in reasons.items():
             self.assertTrue(needs_kernel_2([req, o]), what)
+
+
+class Backlog74WhatAConverterIsTold(unittest.TestCase):
+    """Two readers of a converter's command line that came with #74: where
+    the conversion is written, and that no argument goes unread. The nine
+    converters that use them are run in test_convert_obligated_party.py."""
+
+    def test_backlog_74_out_names_the_folder_and_without_it_the_corpus_folder_stands(self):
+        self.assertEqual(out_dir([], "/repo/converted_examples/X"), "/repo/converted_examples/X")
+        self.assertEqual(out_dir(["--obligated-party", "https://a.example/p"], "d"), "d")
+        self.assertEqual(out_dir(["--obligated-party", "https://a.example/p", "--out", os.path.join("some", "where")], "d"),
+                         os.path.abspath(os.path.join("some", "where")))
+        for argv, word in ((["--out"], "needs a directory"), (["--out", ""], "needs a directory"),
+                           (["--out", "a", "--out", "b"], "more than once")):
+            with self.assertRaises(SystemExit, msg=argv) as c: out_dir(argv, "d")
+            self.assertIn(word, str(c.exception))
+
+    def test_backlog_74_an_argument_nobody_reads_stops_the_run(self):
+        takes = ("--obligated-party", "--out")
+        for ok in ([], ["--out", "x"], ["--obligated-party", "https://a.example/p", "--out", "x"]):
+            self.assertIsNone(known_arguments(ok, takes), ok)
+        for argv, word in ((["--obligated-partie", "https://a.example/p"], "unknown argument '--obligated-partie'"),   # the default would be written, silently
+                           (["https://a.example/p"], "unknown argument"),
+                           (["--out", "x", "stray"], "unknown argument 'stray'"),
+                           (["--date", "2026-11-14"], "unknown argument '--date'"),       # another converter's argument is not this one's
+                           (["--out"], "--out needs a value"),
+                           (["--out", "--obligated-party", "https://a.example/p"], "--out needs a value")):
+            with self.assertRaises(SystemExit, msg=argv) as c: known_arguments(argv, takes)
+            self.assertIn(word, str(c.exception))
 
 
 class Backlog74WhomAStatementBinds(unittest.TestCase):
