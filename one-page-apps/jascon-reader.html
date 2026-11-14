@@ -441,6 +441,7 @@ const state = {
   verify: null,            // id -> {pkg:bool, sem:bool}
   stopped: null,           // the message of a kernel pin this page does not read (KERNEL-2): nothing of that bundle is shown
   pinErrors: [],           // the loaded manifest's pin against the content it lists (KERNEL-1)
+  listedErrors: [],        // one message per Attestation the loaded manifest lists (MANIFEST-1)
   envelopes: new Map(),    // relpath -> {text, bytes} — the files Attestations name in `envelope-ref`, beside the manifest; never objects
   binds: new Map(),        // attestation id -> what it binds of the loaded bundle (attestationBinds), with its line and its envelope's state
   bindsRun: 0,             // which run of judgeAttestations the verdicts in `binds` are from
@@ -452,8 +453,9 @@ const state = {
 /* ==READER-PURE-START== */
 /* The part of this page that touches neither the document nor its state: type
    inference, the kernel pin, who decided an entry, what a workbench writes
-   about that, the parties the kernel requires, and what an Attestation binds
-   of a bundle (with the canonical form and the digest). It stands between two
+   about that, the parties the kernel requires, what an Attestation binds of a
+   bundle (with the canonical form and the digest), and that no manifest lists
+   one. It stands between two
    markers so that one-page-apps/tests/reader.test.mjs can read it out of this
    file and run it in node against the vectors of jascon/conformance (kernel
    and attestation).
@@ -790,13 +792,31 @@ function envelopeState(att, envelopeText) {
   if (got.length !== want.length || want.some((b, i) => got.charCodeAt(i) !== b)) return fail("payload != the Attestation's canonical form (attestation-binds)");
   return { state: "unverified", detail: "signature UNVERIFIED - this page takes no key and verifies no signature" };
 }
+
+/* ---------- MANIFEST-1 (v1.14.0; specification D3.11, backlog #75) ----------
+   No content manifest lists an Attestation, in any bundle. D3.1 excludes Attestations from the
+   manifest by definition: an Attestation binds the digest of the manifest's bytes, so a manifest that
+   lists one cannot be the manifest it binds. Until 2026-11-14 only a pack's manifest was held to that
+   (ADVICE-1), and this page wrote such manifests itself until 1.12.0.
+   The port of listed_attestation_errors in validate_core.py: one message per Attestation among the
+   objects a manifest lists, in the order of their ids by UTF-16 code unit, in the reference's words.
+   The rule asks where an Attestation lies and nothing else: what it binds, whether it names an
+   envelope and what its lifecycle is change nothing. A listed Attestation is still held to what it
+   binds (attestationBinds, above).
+   `objs`: the objects the manifest lists. -> [message] */
+function listedAttestationErrors(objs) {
+  const listed = new Map((objs || []).filter(isRecord).map(o => [String(o.id), o]));
+  return [...listed.keys()].sort().filter(id => inferType(listed.get(id)) === "attestation")
+    .map(id => `${id}: an Attestation is listed in the content manifest (MANIFEST-1: Attestations are excluded from the content manifest by definition, ` +
+      `D3.1 - an Attestation lies beside the manifest it binds, and a manifest that lists one cannot be that manifest)`);
+}
 /* ==READER-PURE-END== */
 
 /* ---------- loading ---------- */
 /* The version is stated once. Until 1.10.0 it stood in three places - the pill of the top bar, the
    `converter` line of every manifest written here, and the first line of the console - and they had
    come apart: 1.9.1, 1.9.1 and 1.10.0. */
-const READER_VERSION = "1.13.0", READER_BUILD = "2026-11-14";
+const READER_VERSION = "1.14.0", READER_BUILD = "2026-11-14";
 const READER_ID = "jascon-reader.html v" + READER_VERSION;
 $("pill-version").textContent = `v${READER_VERSION} · build ${READER_BUILD}`;
 /* URL loading — works when this page and the bundle are served over http(s)
@@ -1022,11 +1042,15 @@ async function loadFileList(fileList) {
   }
   indexBundle();
 }
+const DETAIL_EMPTY = $("detail").innerHTML;   // what the detail pane says before an object is opened
 function indexBundle() {
   state.objects.clear(); state.order = []; state.manifest = null;
   state.manifestByPath.clear(); state.verify = null; state.selected = null;
-  state.browserDims = {}; state.stopped = null; state.pinErrors = [];
+  state.browserDims = {}; state.stopped = null; state.pinErrors = []; state.listedErrors = [];
   state.binds = new Map(); state.missingEntries = 0;
+  /* The detail that is up belongs to the bundle before (v1.14.0): it is taken down with it. Until 1.13.0 it stayed,
+     and since 1.13.0 the detail of an Attestation says what it binds of a bundle - of one no longer loaded. */
+  $("detail").innerHTML = DETAIL_EMPTY;
   const manifestPath = manifestPathOf(state.files.keys());
   const prefix = manifestPath ? manifestPath.slice(0, -"content-manifest.json".length) : "";
   state.prefix = prefix;
@@ -1096,6 +1120,12 @@ function indexBundle() {
   if (state.manifest) {
     state.pinErrors = kernelPinErrors(state.manifest, [...state.objects.values()].filter(r => r.entry).map(r => r.obj));
     for (const e of state.pinErrors) l.err(e);
+    /* MANIFEST-1 (v1.14.0): no manifest lists an Attestation. Reported in the reference's words, and the
+       bundle is shown all the same; a listed Attestation is still held to what it binds. It stays counted
+       among the objects the manifest lists, because that is what the manifest does and what a validator
+       counts: the page says that one of them must not be there. */
+    state.listedErrors = listedAttestationErrors([...state.objects.values()].filter(r => r.entry).map(r => r.obj));
+    for (const e of state.listedErrors) l.err(e);
   }
   for (const p of [...state.evidence.keys()]) if (!p.startsWith(prefix + "evidence/sha256/")) state.evidence.delete(p);   // only the store beside THIS manifest
   if (state.evidence.size) l.info(`evidence store: ${state.evidence.size} file(s) beside the manifest — content-addressed (evidence/sha256/<hex>), not manifest entries`);
@@ -1116,7 +1146,8 @@ function indexBundle() {
   /* how many of each, then the name: the name is as long as its source says, and it is the name that gives way */
   $("pill-bundle").textContent = (state.manifest
     ? `${tally.listed} object${tally.listed === 1 ? "" : "s"} · ` + (tally.beside ? `${tally.beside} attestation${tally.beside > 1 ? "s" : ""} beside the manifest`
-        : state.beside?.how === "no-listing" ? "attestations beside the manifest not looked for" : "no attestation beside the manifest") + (tally.other ? ` · ${tally.other} not listed` : "")
+        : state.beside?.how === "no-listing" ? "attestations beside the manifest not looked for" : "no attestation beside the manifest") +
+      (state.listedErrors.length ? ` · ✗ ${state.listedErrors.length} attestation${state.listedErrors.length > 1 ? "s" : ""} listed (MANIFEST-1)` : "") + (tally.other ? ` · ${tally.other} not listed` : "")
     : parsed + " objects") + " · " + (prov.source || prov.sources?.[0]?.title || "bundle");
   $("pill-bundle").title = $("pill-bundle").textContent;
   $("pill-bundle").classList.add("on"); $("pill-bundle").style.color = "";
@@ -1139,7 +1170,8 @@ function bundleTally() {
    a bare digest, of every object the manifest lists.
    An Attestation is READ WITH THE BUNDLE when it lies beside the manifest or the manifest lists it:
    for these the reference validator prints the line shown here, and an active one that does not bind
-   fails the bundle. A pasted or an authored Attestation is held to the bundle all the same and fails
+   fails the bundle. One the manifest lists fails the bundle for that as well, whatever it binds
+   (MANIFEST-1, v1.14.0). A pasted or an authored Attestation is held to the bundle all the same and fails
    nothing: it did not come with it. Without a manifest there is no bundle to hold anything to. */
 const envelopeTextOf = att => { const at = besideName(att["envelope-ref"]) ? (state.prefix || "") + att["envelope-ref"] : null;
   return at ? (state.envelopes.get(at) || state.files.get(at) || {}).text : undefined; };
@@ -1225,7 +1257,8 @@ function renderOverview() {
   const tally = bundleTally();
   if (state.manifest) {
     rows.push(kvRow("objects the manifest lists", `<span id="ov-listed">${tally.listed}</span> <span class="hint">of ${state.manifest.objects?.length ?? 0} manifest entries</span>` +
-      (state.missingEntries > 0 ? ` <span class="verdict-warn">— ${state.missingEntries} not loaded</span>` : "")));
+      (state.missingEntries > 0 ? ` <span class="verdict-warn">— ${state.missingEntries} not loaded</span>` : "") +
+      state.listedErrors.map(e => `<div class="verdict-bad" data-listed-error>✗ ${esc(e)}</div>`).join("")));
     rows.push(kvRow("attestations beside the manifest", besideSummaryHtml(tally)));
     if (tally.other) rows.push(kvRow("other objects", `<span id="ov-other">${tally.other}</span> <span class="hint">— not listed by the manifest: pasted, written in a workbench, or a file that lies elsewhere</span>`));
   } else add("objects", `${state.objects.size} — no manifest is loaded, so nothing is listed and no Attestation is held to anything`);
@@ -1331,7 +1364,8 @@ function renderList() {
 function attestationMark(r) {
   const b = state.binds.get(r.obj.id), fails = b && b.fails && b.withBundle;
   return `<div class="s" data-list-binds="${b ? b.verdict : state.manifestBytes ? "pending" : "not-judged"}"><span class="${!b ? "" : b.verdict === "full-match" ? "verdict-ok" : fails ? "verdict-bad" : "verdict-warn"}">` +
-    `${r.beside ? "beside the manifest · " : ""}${b ? BINDS_WORD[b.verdict] : state.manifestBytes ? "…" : "not held to a bundle"}</span></div>`;
+    `${r.beside ? "beside the manifest · " : ""}${b ? BINDS_WORD[b.verdict] : state.manifestBytes ? "…" : "not held to a bundle"}</span>` +
+    (r.entry ? ` <span class="verdict-bad" data-list-listed>· ✗ listed by the manifest (MANIFEST-1)</span>` : "") + `</div>`;
 }
 function renderBrowser() { renderFilters(); renderList(); }
 
@@ -2191,13 +2225,16 @@ function renderStageImplement() {
    A signature nobody verified is never called valid. This page takes no key, so the best an envelope
    gets here is UNVERIFIED; what it can say without a key is whether the envelope is this
    Attestation's at all (its payload is the Attestation's canonical form).
+   An Attestation the manifest lists fails the bundle (MANIFEST-1; v1.14.0): the reference's sentence
+   stands on its card, in the overview and in the console, beside the verdict of what it binds.
    The data-* attributes are what the tests read. */
 const BINDS_WORD = { "full-match": "FULL MATCH", "semantic-match": "SEMANTIC MATCH", fail: "DOES NOT BIND" };
 const SUBJECT_C = { match: "var(--green)", differs: "var(--red)", absent: "var(--red)" };
 function attestationWhere(r) {
   const name = r.path.slice((state.prefix || "").length);
   if (r.beside) return `beside the manifest, as <span class="mono">${esc(name)}</span> — not listed, as D3.1 requires: it binds the digest of the manifest's bytes`;
-  if (r.entry) return `listed by the manifest, as <span class="mono">${esc(r.entry.path)}</span> — D3.1 puts an Attestation beside the manifest; it is held to what it binds all the same`;
+  if (r.entry) return `<span class="verdict-bad" data-where-listed>listed by the manifest</span>, as <span class="mono">${esc(r.entry.path)}</span> — D3.1 excludes that: ` +
+    `an Attestation lies beside the manifest it binds, and a manifest that lists one cannot be that manifest (MANIFEST-1). It is held to what it binds all the same`;
   if (r.path === "(pasted)") return "pasted — it did not come with the loaded bundle";
   if (r.path === "(workspace)") return "from the workspace — it did not come with the loaded bundle";
   return `a file the manifest does not list and that does not lie beside it (<span class="mono">${esc(name)}</span>) — not read with the bundle`;
@@ -2219,8 +2256,10 @@ function bindsHtml(r, head = "") {
   if (!b) return `<div class="stmt" data-attestation="${esc(a.id)}" data-binds="pending">${head}<span class="hint">being held to the bundle…</span></div>`;
   const fails = b.fails && b.withBundle;
   const cls = b.verdict === "full-match" ? "verdict-ok" : fails ? "verdict-bad" : "verdict-warn";
+  const listed = state.listedErrors.find(e => e.startsWith(a.id + ": "));   // the reference's sentence, where the manifest lists this Attestation
   const says = b.verdict === "full-match" ? `every subject is an object of this bundle with the signed digest, and the Attestation binds ${BINDS_MANIFEST[b.manifest]}`
-    : b.verdict === "semantic-match" ? "every subject matches and the Attestation binds another manifest: the content is proven, the packaging was altered. Reported; not a failure, and not a Full Match"
+    : b.verdict === "semantic-match" ? "every subject matches and the Attestation binds another manifest: the content is proven, the packaging was altered. Reported; not a failure, and not a Full Match" +
+        (listed ? ". The manifest that lists it is never the one it binds; the failure here is the listing" : "")
     : fails ? "a failure: the Attestation is active, and validate_core.py fails the bundle for it — provided the kernel schema accepts the file as an Attestation, which this page does not check"
     : b.fails ? "the Attestation is active; it was not read with this bundle, so it fails none"
     : `reported, not a failure: lifecycle ${a.lifecycle}`;
@@ -2229,11 +2268,25 @@ function bindsHtml(r, head = "") {
       <td>${sj.id ? refOrOutside(sj.id) : `<span class="hint">a bare digest: any object the manifest lists may carry it</span>`}</td>
       <td class="mono" style="font-size:10.5px;word-break:break-all" data-signed>${esc(sj.signed)}</td>
       <td class="mono" style="font-size:10.5px;word-break:break-all" data-delivered>${sj.delivered ? esc(sj.delivered) : `<span class="hint">${sj.id ? "not an object the manifest lists" : "no listed object carries it"}</span>`}</td></tr>`).join("");
-  const todo = fails ? `<div class="hint" style="margin-top:8px" data-binds-todo>What can be done: the signer issues the Attestation again (a new version, signed again), or it is taken out of the bundle. ` +
+  /* What can be done, said only as far as it was measured with the reference (2026-11-14, on copies of the IFA
+     bundle). About a listing: with the entry taken out and the file put beside the manifest, the bundle passed
+     where the Attestation's subjects matched - a Full Match where the manifest's bytes were those it binds, a
+     Semantic Match where the manifest had been written anew - and where it did not bind and was withdrawn. An
+     active one that does not bind fails there as it fails here. About a binding that fails: as in 1.13.0. */
+  const move = "take its entry out of the manifest and put the file beside the manifest.";
+  const todoFails = fails ? "the signer issues the Attestation again (a new version, signed again), or it is taken out of the bundle. " +
     (given(a["envelope-ref"]) ? "Setting its lifecycle to withdrawn is no way out for this one: it names an envelope, and an Attestation that was edited no longer matches its envelope."
-      : "This one names no envelope, so setting its lifecycle to withdrawn is a way out as well: it is then reported and fails nothing.") + `</div>` : "";
-  return `<div class="stmt" data-attestation="${esc(a.id)}" data-binds="${b.verdict}" data-binds-manifest="${b.manifest}" data-binds-fails="${fails}">
-    ${head}<b class="${cls}" data-binds-word>${BINDS_WORD[b.verdict]}</b>${b.envelope.state === "fail" || b.envelope.state === "missing" ? ` <b class="verdict-bad" data-binds-envelope>· ✗ and its envelope fails (below)</b>` : ""} <span class="hint">— ${esc(says)}</span>
+      : "This one names no envelope, so setting its lifecycle to withdrawn is a way out as well: it is then reported and fails nothing.") : "";
+  const todoText = !listed ? todoFails
+    : fails ? `about the listing, ${move} That does not make it bind: ${todoFails} The listing fails the bundle whatever the lifecycle is.`
+    : b.verdict === "fail" ? `${move} That it does not bind is then reported and fails nothing: its lifecycle is ${a.lifecycle}.`
+    : b.manifest === "kept-pack" ? `${move} It binds a pack manifest this bundle keeps, which that does not change: it stays a Full Match.`
+    : `${move} The manifest is then another file: where its bytes are exactly those the Attestation binds, the Attestation is a Full Match; ` +
+      `otherwise it is a Semantic Match, which fails nothing, until the signer issues it again.`;
+  const todo = todoText ? `<div class="hint" style="margin-top:8px" data-binds-todo>What can be done: ${esc(todoText)}</div>` : "";
+  return `<div class="stmt" data-attestation="${esc(a.id)}" data-binds="${b.verdict}" data-binds-manifest="${b.manifest}" data-binds-fails="${fails}" data-listed="${!!listed}">
+    ${head}<b class="${cls}" data-binds-word>${BINDS_WORD[b.verdict]}</b>${b.envelope.state === "fail" || b.envelope.state === "missing" ? ` <b class="verdict-bad" data-binds-envelope>· ✗ and its envelope fails (below)</b>` : ""}${listed ? ` <b class="verdict-bad" data-binds-listed>· ✗ and the manifest lists it: the bundle fails (MANIFEST-1)</b>` : ""} <span class="hint">— ${esc(says)}</span>
+    ${listed ? `<div class="mono verdict-bad" style="font-size:10.5px;margin-top:4px;word-break:break-all" data-listed-error title="the failure validate_core.py records for this Attestation">${esc(listed)}</div>` : ""}
     <div class="mono" style="font-size:10.5px;color:var(--text-quiet);margin-top:4px;word-break:break-all" data-binds-line title="the line validate_core.py prints for this Attestation">${esc(b.line)}</div>
     ${b.subjects.length ? `<table class="flat" style="margin-top:8px"><tr><th>subject</th><th>object</th><th>signed semantic digest</th><th>delivered</th></tr>${subjects}</table>` : `<div class="verdict-bad" style="margin-top:8px">it names no subject</div>`}
     ${state.missingEntries > 0 ? `<div class="hint verdict-warn">${state.missingEntries} object(s) the manifest lists were not loaded: a subject shown as absent may be one of them</div>` : ""}
@@ -2261,7 +2314,7 @@ function besideSummaryHtml(tally) {
       const b = state.binds.get(r.obj.id), fails = b && b.fails, unsigned = b && (b.envelope.state === "fail" || b.envelope.state === "missing");
       return `<div data-ov-binds="${b ? b.verdict : "pending"}" class="${!b ? "hint" : b.verdict === "full-match" ? "verdict-ok" : fails ? "verdict-bad" : "verdict-warn"}">` +
         `${b ? (fails ? "✗ " : "") + BINDS_WORD[b.verdict] + (b.verdict === "fail" ? (fails ? " — a failure" : " — reported, not a failure") : ` (${BINDS_MANIFEST[b.manifest]})`) : "…"} · ` +
-        `<a class="reflink" data-ref="${esc(r.obj.id)}">${esc(r.obj.id)}</a>${r.beside ? "" : ` <span class="hint">(listed by the manifest)</span>`}` +
+        `<a class="reflink" data-ref="${esc(r.obj.id)}">${esc(r.obj.id)}</a>${r.beside ? "" : ` <span class="verdict-bad" data-ov-listed>✗ listed by the manifest (MANIFEST-1)</span>`}` +
         (unsigned ? ` <span class="verdict-bad" data-ov-envelope>✗ its envelope: FAIL - ${esc(b.envelope.detail)}</span>` : "") + `</div>`;
     }).join("");
 }
