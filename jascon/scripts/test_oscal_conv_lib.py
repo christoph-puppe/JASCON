@@ -16,7 +16,7 @@ from oscal_conv_lib import global_occurrence, Ledger, props_by_name, slug, RESPO
 from oscal_conv_lib import document_author, document_day, provenance, provenance_override, needs_kernel_2
 from oscal_conv_lib import known_arguments, out_dir
 from oscal_conv_lib import obligated_party, obligated_party_line, obligated_party_record
-from oscal_conv_lib import ledger_by_path
+from oscal_conv_lib import ledger_by_path, ledger_gate
 
 
 def measure(source, output):
@@ -138,7 +138,7 @@ class Issue33Ledger(unittest.TestCase):
                                             "src#/controls/1/id": "copied", "src#/controls/1/description": "unaccounted"})
         self.assertEqual(r["unaccounted-paths"],
                          [{"path": "src.controls[].description", "count": 1, "pointers": ["src#/controls/1/description"]}])
-        self.assertEqual(r["totals"], {"copied": 3, "transformed": 0, "intentionally-dropped": 0, "unaccounted": 1})
+        self.assertEqual(r["totals"], {"copied": 3, "transformed": 0, "not-content": 0, "intentionally-dropped": 0, "unaccounted": 1})
         # the global check, on the same data, sees nothing wrong
         self.assertEqual(global_occurrence([("src", self.SOURCE)], [{"id": "a", "description": "Same text"}, {"id": "b"}])["exact"], 4)
 
@@ -220,7 +220,7 @@ class Issue33Ledger(unittest.TestCase):
         def convert(src, led):
             return {"o/a.json": {"id": "https://ex.org/a", "props": props_by_name(src["props"], led)}}
         r = self.run_ledger(source, convert)
-        self.assertEqual(r["totals"], {"copied": 8, "transformed": 0, "intentionally-dropped": 0, "unaccounted": 0})
+        self.assertEqual(r["totals"], {"copied": 8, "transformed": 0, "not-content": 0, "intentionally-dropped": 0, "unaccounted": 0})
         e = {x["source"]: x for x in r["entries"]}
         self.assertEqual(e["src#/props/1/value"]["destinations"], [{"object": "https://ex.org/a", "pointer": "/props/ipv4-address/0"}])
         self.assertEqual(e["src#/props/3/value"]["destinations"], [{"object": "https://ex.org/a", "pointer": "/props/ipv4-address/2"}])
@@ -531,7 +531,7 @@ class Backlog41TheLedgerOfALargeCorpus(unittest.TestCase):
         self.assertEqual(json.dumps(full, sort_keys=True), before)                  # the per-leaf ledger is not touched
         self.assertEqual(short["leaf-values"], 14)
         self.assertEqual(short["totals"], full["totals"])
-        self.assertEqual(short["totals"], {"copied": 6, "transformed": 3, "intentionally-dropped": 3, "unaccounted": 2})
+        self.assertEqual(short["totals"], {"copied": 6, "transformed": 3, "not-content": 0, "intentionally-dropped": 3, "unaccounted": 2})
         self.assertEqual(sum(r["count"] for r in short["paths"]), 14)
         rows = {(r["path"], r["outcome"]): r for r in short["paths"]}
         self.assertEqual(len(rows), len(short["paths"]))                            # one row per path and outcome
@@ -545,6 +545,270 @@ class Backlog41TheLedgerOfALargeCorpus(unittest.TestCase):
         self.assertNotIn("to", rows[("cat.controls[].note", "unaccounted")])
         self.assertEqual(short["unaccounted-paths"], [{"path": "cat.controls[].note", "count": 2, "pointers": ["cat#/controls/0/note"]}])
         self.assertNotIn("entries", short)
+
+class PhaseEWhatIsNoContent(unittest.TestCase):
+    """The author's rule of 2026-11-14: "Real content is never dropped. What
+    may stay out of a bundle is only what is not content: a name that merely
+    selects a field, a namespace, an id that is rebuilt exactly from another
+    value. Each such class needs a stated rule that the ledger checks, not an
+    'unaccounted' line." Each test plays a converter that states such a rule
+    and looks at what the ledger makes of it."""
+
+    SOURCE = {"controls": [{"id": "ac-1", "props": [{"name": "label", "ns": "https://ns.example/a", "value": "AC-1"},
+                                                    {"name": "sort-id", "ns": "https://ns.example/a", "value": "ac-01"}],
+                            "parts": [{"id": "ac-1_smt", "name": "statement", "prose": "Develop a policy."}]}]}
+    NAMES = {"label": "label", "sort-id": "sort"}
+
+    def run_ledger(self, convert, source=None, typed=False, tamper=None, resolve=True):
+        led = Ledger()
+        objects = convert(led.source("src", copy.deepcopy(source or self.SOURCE), typed=typed), led)
+        if resolve: led.resolve(objects)
+        with tempfile.TemporaryDirectory() as out:
+            for rel, obj in objects.items():
+                os.makedirs(os.path.dirname(os.path.join(out, rel)), exist_ok=True)
+                written = tamper(json.loads(json.dumps(obj))) if tamper else obj
+                with open(os.path.join(out, rel), "w", encoding="utf-8") as f: json.dump(written, f)
+            return led.account(out, objects)
+
+    @staticmethod
+    def by_source(result):
+        return {e["source"]: e for e in result["entries"]}
+
+    def convert(self, carry=("label", "sort-id"), among=NAMES, allowed=("https://ns.example/a",), part_id=None, drop=None):
+        """a converter that writes a prop's value into the field its name selects"""
+        def run(src, led):
+            c = src["controls"][0]; part = c["parts"][0]
+            obj = {"id": led.derive("id from the control id", lambda i: "https://ex.org/" + i, c["id"]),
+                   "statements": [{"prose": part["prose"]}]}
+            for p in c["props"]:
+                if p["name"] in carry: obj[self.NAMES.get(p["name"], "other")] = p["value"]
+                led.selector(p["name"], "a prop's name selects the field its value is written to", p["value"], among=among)
+                led.namespace(p["ns"], "the namespace of a prop this mapping is written for", allowed, p["name"])
+            led.selector(part["name"], "a part's name selects the member its prose is written to", part["prose"])
+            led.rebuilt(part["id"], "a statement part's id is its control's id and _smt",
+                        part_id or (lambda i: i + "_smt"), c["id"])
+            if drop: led.drop(drop, "declared by this test")
+            return {"o/ac-1.json": obj}
+        return run
+
+    def test_a_name_a_namespace_and_a_rebuilt_id_are_no_content_when_the_rule_holds(self):
+        r = self.run_ledger(self.convert())
+        self.assertEqual(r["totals"], {"copied": 3, "transformed": 1, "not-content": 6, "intentionally-dropped": 0, "unaccounted": 0})
+        self.assertEqual(r["verification-failures"], [])
+        e = self.by_source(r)
+        name = e["src#/controls/0/props/0/name"]
+        self.assertEqual({k: name[k] for k in ("kind", "rule", "outcome")},
+                         {"kind": "selector", "rule": "a prop's name selects the field its value is written to", "outcome": "not-content"})
+        self.assertEqual(e["src#/controls/0/props/1/ns"]["kind"], "namespace")
+        self.assertEqual(e["src#/controls/0/parts/0/id"]["kind"], "rebuilt-id")
+        self.assertNotIn("destinations", e["src#/controls/0/parts/0/id"])
+
+    def test_a_name_that_selects_a_lost_value_is_not_covered(self):
+        # the value of sort-id is written nowhere: its name selected nothing, and its namespace qualifies that name
+        r = self.run_ledger(self.convert(carry=("label",)))
+        e = self.by_source(r)
+        self.assertEqual([e[f"src#/controls/0/props/1/{k}"]["outcome"] for k in ("value", "name", "ns")], ["unaccounted"] * 3)
+        self.assertEqual([e[f"src#/controls/0/props/0/{k}"]["outcome"] for k in ("value", "name", "ns")],
+                         ["copied", "not-content", "not-content"])
+        self.assertEqual(r["totals"]["unaccounted"], 3)
+        self.assertEqual(r["verification-failures"], [], "a lost value is unaccounted; no claim about it was false")
+
+    def test_a_name_goes_with_a_value_that_is_dropped_for_a_declared_reason(self):
+        r = self.run_ledger(self.convert(carry=("label",), drop=r"props\[\]\.value$"))
+        e = self.by_source(r)
+        self.assertEqual(e["src#/controls/0/props/0/value"]["outcome"], "copied", "a drop never overrides a destination")
+        self.assertEqual(e["src#/controls/0/props/1/value"]["outcome"], "intentionally-dropped")
+        name = e["src#/controls/0/props/1/name"]
+        self.assertEqual(name["outcome"], "intentionally-dropped")
+        self.assertEqual(name["reason"], "a prop's name selects the field its value is written to - of a value that is dropped: declared by this test")
+        self.assertEqual(r["totals"]["not-content"], 4)
+
+    def test_a_name_the_mapping_does_not_know_is_a_claim_that_does_not_hold(self):
+        r = self.run_ledger(self.convert(among={"label": "label"}))
+        e = self.by_source(r)
+        self.assertEqual(e["src#/controls/0/props/1/name"]["outcome"], "unaccounted")
+        self.assertEqual(r["verification-failures"], [{"source": "src#/controls/0/props/1/name", "claim": "selector",
+                                                       "rule": "a prop's name selects the field its value is written to"}])
+
+    def test_another_namespace_is_another_meaning_and_is_not_covered(self):
+        src = copy.deepcopy(self.SOURCE); src["controls"][0]["props"][1]["ns"] = "https://ns.example/b"
+        r = self.run_ledger(self.convert(), source=src)
+        e = self.by_source(r)
+        self.assertEqual((e["src#/controls/0/props/0/ns"]["outcome"], e["src#/controls/0/props/1/ns"]["outcome"]), ("not-content", "unaccounted"))
+        self.assertEqual([(f["source"], f["claim"]) for f in r["verification-failures"]], [("src#/controls/0/props/1/ns", "namespace")])
+
+    def test_an_id_the_rule_does_not_give_is_not_rebuilt(self):
+        r = self.run_ledger(self.convert(part_id=lambda i: i + ".smt"))
+        self.assertEqual(self.by_source(r)["src#/controls/0/parts/0/id"]["outcome"], "unaccounted")
+        self.assertEqual([(f["source"], f["claim"]) for f in r["verification-failures"]], [("src#/controls/0/parts/0/id", "rebuilt-id")])
+
+    def test_an_id_is_rebuilt_only_from_what_the_bundle_holds(self):
+        def convert(src, led):                       # the control id is written nowhere
+            c = src["controls"][0]; part = c["parts"][0]
+            led.rebuilt(part["id"], "id plus _smt", lambda i: i + "_smt", c["id"])
+            return {"o/x.json": {"id": "https://ex.org/x", "prose": part["prose"]}}
+        e = self.by_source(self.run_ledger(convert))
+        self.assertEqual((e["src#/controls/0/id"]["outcome"], e["src#/controls/0/parts/0/id"]["outcome"]), ("unaccounted", "unaccounted"))
+        def dropped(src, led):
+            led.drop(r"controls\[\]\.id$", "declared by this test")
+            return convert(src, led)
+        e = self.by_source(self.run_ledger(dropped))
+        self.assertEqual(e["src#/controls/0/parts/0/id"]["outcome"], "intentionally-dropped", "it goes with what it is rebuilt from")
+
+    def test_a_value_that_has_a_destination_is_carried_whatever_is_declared_for_it(self):
+        def convert(src, led):
+            p = src["controls"][0]["props"][0]
+            led.selector(p["name"], "a prop's name", p["value"])
+            return {"o/x.json": {"id": "https://ex.org/x", "props": {p["name"]: p["value"]}}}
+        e = self.by_source(self.run_ledger(convert))
+        self.assertEqual(e["src#/controls/0/props/0/name"]["outcome"], "copied")
+        self.assertNotIn("kind", e["src#/controls/0/props/0/name"])
+
+    def test_a_rule_is_stated_about_a_source_leaf_and_about_something(self):
+        led = Ledger(); src = led.source("src", copy.deepcopy(self.SOURCE)); p = src["controls"][0]["props"][0]
+        with self.assertRaises(TypeError): led.selector("label", "a plain string", p["value"])
+        with self.assertRaises(TypeError): led.selector(led.derive("made", lambda v: v + "x", p["name"]), "a derived value", p["value"])
+        with self.assertRaises(ValueError): led.selector(p["name"], "selects nothing", "a plain string")
+        with self.assertRaises(ValueError): led.selector(p["name"], "selects itself only", {"name": p["name"]})
+        with self.assertRaises(ValueError): led.namespace(p["ns"], "qualifies nothing", ["https://ns.example/a"], None)
+        led.selector(p["name"], "the prop handed over whole", p)     # its own name is left out of what it rests on
+
+    def test_two_rules_that_rest_on_each_other_cover_nothing(self):
+        def convert(src, led):
+            p = src["controls"][0]["props"][0]
+            led.selector(p["name"], "the name selects the namespace", p["ns"])
+            led.namespace(p["ns"], "the namespace qualifies the name", ["https://ns.example/a"], p["name"])
+            return {"o/x.json": {"id": "https://ex.org/x"}}
+        e = self.by_source(self.run_ledger(convert))
+        self.assertEqual((e["src#/controls/0/props/0/name"]["outcome"], e["src#/controls/0/props/0/ns"]["outcome"]),
+                         ("unaccounted", "unaccounted"))
+
+    def test_the_record_of_a_large_corpus_names_the_rules(self):
+        short = ledger_by_path(self.run_ledger(self.convert()))
+        rows = {(r["path"], r["outcome"]): r for r in short["paths"]}
+        self.assertEqual(rows[("src.controls[].props[].name", "not-content")]["rules"],
+                         [{"kind": "selector", "rule": "a prop's name selects the field its value is written to", "count": 2}])
+        self.assertEqual(rows[("src.controls[].parts[].id", "not-content")]["rules"],
+                         [{"kind": "rebuilt-id", "rule": "a statement part's id is its control's id and _smt", "count": 1}])
+        self.assertEqual(short["totals"]["not-content"], 6)
+        self.assertEqual(sum(r["count"] for r in short["paths"]), short["leaf-values"])
+
+
+class PhaseETypedValues(unittest.TestCase):
+    """A boolean and a fraction are content like a string. Until 2026-11-14
+    the ledger could not follow them: the CR26 source has 49 booleans and 3
+    fractions, the converter carried them, and its ledger read them as
+    unaccounted."""
+
+    SOURCE = {"rule": {"id": "r1", "required": True, "optional": False, "weight": 0.75, "count": 3}}
+
+    def run_ledger(self, convert, typed=True, resolve=True, tamper=None):
+        return PhaseEWhatIsNoContent.run_ledger(self, convert, source=self.SOURCE, typed=typed, tamper=tamper, resolve=resolve)
+
+    @staticmethod
+    def convert(src, led):
+        r = src["rule"]
+        return {"o/r1.json": {"id": led.derive("id", lambda i: "https://ex.org/" + i, r["id"]),
+                              "required": r["required"], "optional": r["optional"], "weight": r["weight"], "count": r["count"]}}
+
+    def test_a_boolean_and_a_fraction_are_followed_to_where_they_stand(self):
+        r = self.run_ledger(self.convert)
+        self.assertEqual(r["totals"], {"copied": 4, "transformed": 1, "not-content": 0, "intentionally-dropped": 0, "unaccounted": 0})
+        e = PhaseEWhatIsNoContent.by_source(r)
+        self.assertEqual(e["src#/rule/optional"]["destinations"], [{"object": "https://ex.org/r1", "pointer": "/optional"}])
+        self.assertEqual(e["src#/rule/weight"]["destinations"], [{"object": "https://ex.org/r1", "pointer": "/weight"}])
+
+    def test_without_the_argument_they_are_plain_as_before(self):
+        r = self.run_ledger(self.convert, typed=False)
+        e = PhaseEWhatIsNoContent.by_source(r)
+        self.assertEqual([e[f"src#/rule/{k}"]["outcome"] for k in ("required", "optional", "weight", "count")],
+                         ["unaccounted", "unaccounted", "unaccounted", "copied"])
+
+    def test_what_is_written_is_a_plain_boolean_and_the_same_bytes(self):
+        led = Ledger(); src = led.source("src", copy.deepcopy(self.SOURCE), typed=True)
+        objects = self.convert(src, led)
+        with self.assertRaises(TypeError): json.dumps(objects)       # a converter that forgets resolve() writes nothing
+        led.resolve(objects)
+        obj = objects["o/r1.json"]
+        self.assertIs(obj["required"], True); self.assertIs(obj["optional"], False)
+        self.assertEqual(json.dumps(obj), '{"id": "https://ex.org/r1", "required": true, "optional": false, "weight": 0.75, "count": 3}')
+
+    def test_a_tracked_boolean_is_true_and_false_as_its_value_is(self):
+        led = Ledger(); r = led.source("src", copy.deepcopy(self.SOURCE), typed=True)["rule"]
+        self.assertTrue(r["required"]); self.assertFalse(r["optional"])
+        self.assertEqual((r["required"] == True, r["optional"] == False, r["optional"] != True), (True, True, True))
+        self.assertEqual("yes" if r["optional"] else "no", "no")
+        self.assertIs(copy.deepcopy(r["optional"]), r["optional"], "a copy keeps the trace")
+
+    def test_a_boolean_is_checked_against_the_written_file_with_its_type(self):
+        def flipped(o): o["optional"] = True; return o
+        r = self.run_ledger(self.convert, tamper=flipped)
+        self.assertEqual([f["source"] for f in r["verification-failures"]], ["src#/rule/optional"])
+        def as_number(o): o["required"] = 1; o["weight"] = "0.75"; return o
+        r = self.run_ledger(self.convert, tamper=as_number)
+        self.assertEqual(sorted(f["source"] for f in r["verification-failures"]), ["src#/rule/required", "src#/rule/weight"])
+
+    def test_a_boolean_in_a_list_and_one_made_by_a_rule(self):
+        def convert(src, led):
+            r = src["rule"]
+            return {"o/r1.json": {"id": "https://ex.org/r1", "flags": [r["required"], r["optional"]],
+                                  "free": led.derive("optional or not required", lambda a, b: bool(a) or not b, r["optional"], r["required"]),
+                                  "share": led.derive("the weight in percent", lambda w: w * 100, r["weight"])}}
+        r = self.run_ledger(convert)
+        e = PhaseEWhatIsNoContent.by_source(r)
+        self.assertEqual(r["verification-failures"], [])
+        self.assertEqual(e["src#/rule/optional"]["destinations"],
+                         [{"object": "https://ex.org/r1", "pointer": "/flags/1"},
+                          {"object": "https://ex.org/r1", "pointer": "/free", "rule": "optional or not required"}])
+        self.assertEqual(e["src#/rule/weight"]["destinations"], [{"object": "https://ex.org/r1", "pointer": "/share", "rule": "the weight in percent"}])
+        def wrong(o): o["free"] = True; return o
+        self.assertEqual(len(self.run_ledger(convert, tamper=wrong)["verification-failures"]), 2, "both inputs of the rule")
+
+
+class PhaseETheGate(unittest.TestCase):
+    """"A converter run with an unaccounted value exits non-zero" (author,
+    2026-11-14)."""
+    def result(self, unaccounted=0, failures=0):
+        return {"totals": {"copied": 5, "transformed": 0, "not-content": 0, "intentionally-dropped": 0, "unaccounted": unaccounted},
+                "verification-failures": [{}] * failures}
+
+    def test_a_run_with_nothing_unaccounted_goes_on(self):
+        self.assertIsNone(ledger_gate(self.result(), "convert_x.py"))
+
+    def test_one_unaccounted_value_ends_the_run_with_a_message(self):
+        with self.assertRaises(SystemExit) as c: ledger_gate(self.result(unaccounted=1), "convert_x.py")
+        self.assertIn("convert_x.py", str(c.exception)); self.assertIn("1 source value(s) unaccounted", str(c.exception))
+        self.assertNotEqual(c.exception.code, 0)
+
+    def test_a_claim_that_does_not_hold_ends_the_run_too(self):
+        with self.assertRaises(SystemExit) as c: ledger_gate(self.result(failures=2), "convert_x.py")
+        self.assertIn("2 claim(s) that do not hold", str(c.exception))
+
+    def test_the_exit_code_of_a_process_is_one(self):
+        import subprocess
+        code = ("import sys; sys.path.insert(0, %r)\nfrom oscal_conv_lib import ledger_gate\n"
+                "ledger_gate({'totals': {'unaccounted': 3}, 'verification-failures': []}, 'convert_x.py')\n") % os.path.dirname(os.path.abspath(__file__))
+        p = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True)
+        self.assertEqual(p.returncode, 1); self.assertIn("3 source value(s) unaccounted", p.stderr)
+
+
+class PhaseEKeysThatAreSourceValues(unittest.TestCase):
+    """ledger_by_path(collapse=...): a payload keyed by a source value gives
+    one row per key unless the key is collapsed (SP 800-53: 741 kB)."""
+    def test_a_key_made_of_a_source_value_is_one_row(self):
+        src = {"params": [{"id": "ac-01_odp.01", "label": "frequency"}, {"id": "ac-01_odp.02", "label": "personnel"}]}
+        led = Ledger(); doc = led.source("cat", copy.deepcopy(src))
+        obj = {"id": "https://ex.org/ac-1", "facets": {"odp": {p["id"]: {"label": p["label"]} for p in doc["params"]}}}
+        out = tempfile.mkdtemp()
+        with open(os.path.join(out, "o.json"), "w", encoding="utf-8") as f: json.dump(obj, f)
+        full = led.account(out, {"o.json": obj})
+        rows = {(r["path"], r["outcome"]): r for r in ledger_by_path(full)["paths"]}
+        self.assertEqual(len(rows[("cat.params[].label", "copied")]["to"]), 2)
+        short = ledger_by_path(full, collapse=[(r"^(/facets/odp)/[^/]+", r"\1/{param id}")])
+        rows = {(r["path"], r["outcome"]): r for r in short["paths"]}
+        self.assertEqual(rows[("cat.params[].label", "copied")]["to"], [{"pointer": "/facets/odp/{param id}/label", "count": 2}])
+        self.assertEqual(rows[("cat.params[].id", "copied")]["to"], [{"pointer": "/facets/odp/{param id}", "count": 2, "as": "key"}])
+
 
 if __name__ == "__main__":
     unittest.main()

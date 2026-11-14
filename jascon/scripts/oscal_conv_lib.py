@@ -386,21 +386,68 @@ class _TInt(_Tracked, int):
         self._origins, self._rule, self._fn, self._inputs = tuple(origins), rule, fn, tuple(inputs)
         return self
 
-def _track(value, origins, rule=None, fn=None, inputs=()):
-    if isinstance(value, bool) or value is None: return value      # cannot carry an origin
+class _TFloat(_Tracked, float):
+    def __new__(cls, value, origins=(), rule=None, fn=None, inputs=()):
+        self = float.__new__(cls, value)
+        self._origins, self._rule, self._fn, self._inputs = tuple(origins), rule, fn, tuple(inputs)
+        return self
+
+class _TBool(_Tracked):
+    """A boolean that knows where it came from. `bool` cannot be subclassed,
+    and json writes `true` and `false` for the two singletons only, so this
+    stands in the objects a converter builds until Ledger.resolve() puts the
+    plain boolean in its place and remembers where it stood. It is true or
+    false as its value is, equal to the plain boolean, and json cannot write
+    it: a converter that forgets resolve() stops instead of writing a wrong
+    file."""
+    __slots__ = ("_value", "_origins", "_rule", "_fn", "_inputs")
+    def __init__(self, value, origins=(), rule=None, fn=None, inputs=()):
+        self._value = bool(value)
+        self._origins, self._rule, self._fn, self._inputs = tuple(origins), rule, fn, tuple(inputs)
+    def __bool__(self): return self._value
+    def __eq__(self, other): return self._value == (other._value if isinstance(other, _TBool) else other)
+    def __ne__(self, other): return not self.__eq__(other)
+    def __hash__(self): return hash(self._value)
+    def __repr__(self): return repr(self._value)
+
+def _track(value, origins, rule=None, fn=None, inputs=(), typed=True):
+    """`typed`: also a boolean and a fraction carry their origin (a _TBool
+    needs Ledger.resolve() before the objects are written)."""
+    if value is None: return value                                  # states nothing
+    if isinstance(value, bool): return _TBool(value, origins, rule, fn, inputs) if typed else value
     if isinstance(value, str): return _TStr(value, origins, rule, fn, inputs)
     if isinstance(value, int): return _TInt(value, origins, rule, fn, inputs)
+    if isinstance(value, float): return _TFloat(value, origins, rule, fn, inputs) if typed else value
     return value
 
 def _plain(v):
     """A tracked value as the plain scalar it is (for typed comparison)."""
     if isinstance(v, _TStr): return str.__str__(v)
+    if isinstance(v, _TBool): return v._value
     if isinstance(v, _TInt): return int(v)
+    if isinstance(v, _TFloat): return float(v)
     return v
 
 def _at(doc, parts):
     for x in parts: doc = doc[x]
     return doc
+
+# What becomes of a source leaf value. `not-content` (2026-11-14): a name
+# that only selects a field, a namespace, an id that is rebuilt exactly -
+# by a rule that account() checked.
+LEDGER_OUTCOMES = ("copied", "transformed", "not-content", "intentionally-dropped", "unaccounted")
+
+def ledger_gate(result, converter):
+    """Ends a converter's run with 1 when its ledger has a claim that does not
+    hold or a source value that is unaccounted (author, 2026-11-14: "a
+    converter run with an unaccounted value exits non-zero"). Call it last,
+    after the bundle, the reports and the record are written: the run fails,
+    and what it wrote says why."""
+    bad = len(result["verification-failures"]), result["totals"]["unaccounted"]
+    if any(bad):
+        raise SystemExit(f"{converter}: the conversion ledger has {bad[0]} claim(s) that do not hold and {bad[1]} source "
+                         f"value(s) unaccounted - content is never dropped, and what is no content is so by a rule "
+                         f"the ledger checks (see the record and the report this run wrote)")
 
 class Ledger:
     def __init__(self):
@@ -409,27 +456,54 @@ class Ledger:
         self._drops = []        # (compiled regex over the collapsed path, reason)
         self._value_drops = {}  # (tag, parts) -> reason, for a single source leaf
         self._same = []         # (dropped tracked value, kept tracked value, rule)
+        self._placed = []       # (tracked boolean, destination) noted by resolve()
+        self._not_content = {}  # (tag, parts) -> (kind, rule, check, origins it depends on)
 
-    def source(self, tag, doc):
-        """-> a copy of `doc` whose string and integer leaves carry their origin."""
+    def source(self, tag, doc, typed=False):
+        """-> a copy of `doc` whose string and integer leaves carry their origin.
+        `typed=True`: its booleans and fractions carry theirs too. A converter
+        that asks for it calls resolve() on its objects before it writes them;
+        without it a boolean and a fraction stay plain, as they were until
+        2026-11-14, and a value the converter carries reads as unaccounted."""
         assert tag not in self.docs, f"source tag {tag} used twice"
         self.docs[tag] = doc
         def walk(n, parts):
             if isinstance(n, dict): return {k: walk(v, parts + (k,)) for k, v in n.items()}
             if isinstance(n, list): return [walk(v, parts + (i,)) for i, v in enumerate(n)]
             self.leaves.append((tag, parts))
-            return _track(n, [(tag, parts)])
+            return _track(n, [(tag, parts)], typed=typed)
         return walk(doc, ())
+
+    def resolve(self, objects):
+        """objects: {relpath: object}, as account() takes them, BEFORE they are
+        written and before a digest is taken of them. Puts the plain boolean in
+        the place of every tracked one and remembers where it stood, so that
+        account() can hold the claim against the file. A tracked boolean that
+        is left in an object makes json refuse to write it."""
+        def note(v, rel, oid, parts):
+            self._placed.append((v, {"object": oid, "file": rel, "pointer": _pointer(parts), "as": "value"}))
+            return v._value
+        def walk(n, rel, oid, parts):
+            if isinstance(n, dict):
+                for k in list(n):
+                    if isinstance(n[k], _TBool): n[k] = note(n[k], rel, oid, parts + [k])
+                    else: walk(n[k], rel, oid, parts + [k])
+            elif isinstance(n, list):
+                for i, v in enumerate(n):
+                    if isinstance(v, _TBool): n[i] = note(v, rel, oid, parts + [i])
+                    else: walk(v, rel, oid, parts + [i])
+        for rel, obj in sorted(objects.items()):
+            walk(obj, rel, (obj.get("id") if isinstance(obj, dict) else None) or rel, [])
 
     def derive(self, rule, fn, *inputs):
         """-> fn(*inputs), carrying the origins of every tracked input. The
         function is kept: account() calls it again on the source's own values."""
         value = fn(*inputs)
-        if isinstance(value, bool) or not isinstance(value, (str, int)):
-            raise TypeError(f"rule {rule}: a derived value must be a string or an integer to carry its origin, "
-                            f"got {type(value).__name__}")
+        if not isinstance(value, (str, int, float, _TBool)):        # bool is an int
+            raise TypeError(f"rule {rule}: a derived value must be a string, a number or a boolean to carry its "
+                            f"origin, got {type(value).__name__}")
         origins = [o for x in inputs if isinstance(x, _Tracked) for o in x._origins]
-        return _track(_plain(value), origins, rule, fn, inputs)
+        return _track(_plain(value), origins, rule, fn, inputs)       # a boolean result needs resolve() before the write
 
     def drop(self, pattern, reason):
         """Declare that source leaves whose collapsed path matches `pattern`
@@ -448,6 +522,71 @@ class Ledger:
             for v in value: self.drop_value(v, reason)
         elif isinstance(value, _Tracked) and value._rule is None:
             for origin in value._origins: self._value_drops.setdefault(origin, reason)
+
+    # ---- what is no content (author, 2026-11-14) -------------------------
+    # "Real content is never dropped. What may stay out of a bundle is only
+    # what is not content: a name that merely selects a field, a namespace,
+    # an id that is rebuilt exactly from another value. Each such class
+    # needs a stated rule that the ledger checks." The three methods below
+    # are those three classes. Each claim is checked by account(): against
+    # the source's own values, and against what became of the values the
+    # claim rests on. A name that selects a value which is not in the bundle
+    # selects nothing, and an id rebuilt from a value the bundle does not
+    # hold cannot be rebuilt from the bundle; such a leaf is not "no
+    # content", it is unaccounted (or dropped, where what it rests on is a
+    # declared drop). A leaf that has a destination is carried, whatever is
+    # declared for it here.
+    @staticmethod
+    def _leaf_origins(x):
+        out = []
+        def walk(n):
+            if isinstance(n, dict):
+                for k, v in n.items(): walk(k); walk(v)
+            elif isinstance(n, (list, tuple)):
+                for v in n: walk(v)
+            elif isinstance(n, _Tracked): out.extend(n._origins)
+        walk(x)
+        return out
+
+    def _declare(self, value, kind, rule, check, rests_on, needs=True):
+        if not isinstance(value, _Tracked) or value._rule is not None or len(value._origins) != 1:
+            raise TypeError(f"{kind} ({rule}): the value must be one leaf of a source, as source() gave it")
+        me = value._origins[0]
+        rests = tuple(o for o in rests_on if o != me)                # a prop handed over whole holds its own name
+        if needs and not rests: raise ValueError(f"{kind} ({rule}): it stands beside no other source value")
+        self._not_content.setdefault(me, (kind, rule, check, rests))
+
+    def selector(self, name, rule, selects, among=None):
+        """`name` (the name of a prop or of a part, a class) is no content: it
+        only says which field the value beside it belongs in. `selects`: that
+        value, or the structure of values it selects; there must be one.
+        `among`: the names this converter's mapping knows, if the claim is to
+        be held to them. It shares the fate of what it selects: unaccounted
+        while one of those values is, dropped when all of them are dropped,
+        and no content otherwise."""
+        check = (lambda v: v in among) if among is not None else (lambda v: True)
+        self._declare(name, "selector", rule, check, self._leaf_origins(selects))
+
+    def namespace(self, ns, rule, allowed, of):
+        """`ns` is the namespace that qualifies the name `of` (or a structure
+        of names): no content when its value is one of `allowed` - the
+        namespaces this converter's mapping is written for - and what it
+        qualifies is accounted for (as for a selector). Another namespace is
+        another meaning of the name, and is not covered: the claim is
+        reported as one that does not hold."""
+        allowed = frozenset(allowed)
+        self._declare(ns, "namespace", rule, lambda v: v in allowed, self._leaf_origins(of))
+
+    def rebuilt(self, value, rule, fn, *inputs):
+        """`value` is an id (or a label made from one) that fn(*inputs) gives
+        exactly: no content, because nothing is lost without it. Checked: the
+        function, applied to the source's own values, gives the source value;
+        and every source value among the inputs is accounted for, so that the
+        bundle still holds what the id is rebuilt from (one input that is
+        dropped, and the id is dropped with it). A value that the function
+        does not give is not covered, and the claim is reported as one that
+        does not hold. The inputs are single values, a source's or plain."""
+        self._declare(value, "rebuilt-id", rule, (fn, tuple(inputs)), self._leaf_origins(inputs), needs=False)
 
     def same(self, dropped, kept, rule):
         """Deduplication: `dropped` and `kept` are two structures the converter
@@ -488,6 +627,8 @@ class Ledger:
         for rel, obj in sorted(objects.items()):
             with open(os.path.join(out_dir, rel), encoding="utf-8") as f: written[rel] = json.load(f)
             walk(obj, rel, obj.get("id") or rel, [])       # the manifest has no id: it is named by its path
+        for value, dest in self._placed:                   # the booleans resolve() took out of the objects
+            if dest["file"] in written: found[id(value)].append((value, dest))
         # 2. per source leaf: the tracked values that stand for it, directly or through same()
         by_origin = collections.defaultdict(list)   # (tag, parts) -> [(tracked value, destination, via)]
         for hits in found.values():
@@ -520,40 +661,74 @@ class Ledger:
             if not isinstance(x, _Tracked): return x
             if x._rule is None: return _at(self.docs[x._origins[0][0]], x._origins[0][1])
             return x._fn(*[fresh(i) for i in x._inputs])
-        entries, totals = [], collections.Counter()
-        unaccounted = collections.defaultdict(list)
+        # 3a. every leaf with a destination that holds is carried
+        carried = {}                                # origin -> [destination]
         for tag, parts in self.leaves:
-            origin, path = (tag, parts), self.collapsed(tag, parts)
-            entry = {"source": f"{tag}#{_pointer(parts)}", "path": path}
-            dests, outcome = [], None
+            origin, dests = (tag, parts), []
             for value, dest, via in by_origin.get(origin, []):
                 d = {"object": dest["object"], "pointer": dest["pointer"]}
                 if dest["as"] == "key": d["as"] = "key"
                 if value._rule: d["rule"] = value._rule
                 if via: d["via"] = via
                 if not holds(value, origin, dest):
-                    failures.append({"source": entry["source"], **d}); continue
+                    failures.append({"source": f"{tag}#{_pointer(parts)}", **d}); continue
                 dests.append(d)
-            if dests:
+            if dests: carried[origin] = dests
+        # 3b. what became of a leaf: carried, no content by a rule that holds, dropped for a declared reason, or
+        #     unaccounted. A leaf declared no content rests on other leaves and shares their fate.
+        def declared_drop(origin):
+            reason = self._value_drops.get(origin)
+            if reason is None:
+                path = self.collapsed(*origin)
+                reason = next((why for rx, why in self._drops if rx.search(path)), None)
+            return reason
+        state = {}                                  # origin -> (outcome, detail)
+        def fate(origin, seen=()):
+            if origin in state: return state[origin]
+            if origin in carried: r = ("carried", None)
+            elif origin in self._not_content and origin not in seen:
+                kind, rule, check, rests = self._not_content[origin]
+                here = _at(self.docs[origin[0]], origin[1])
+                if isinstance(check, tuple): ok = _token(check[0](*[fresh(i) for i in check[1]])) == _token(here)
+                else: ok = bool(check(here))
+                if not ok:
+                    failures.append({"source": f"{origin[0]}#{_pointer(origin[1])}", "claim": kind, "rule": rule})
+                    r = ("unaccounted", None)
+                else:
+                    below = [fate(o, seen + (origin,)) for o in rests]
+                    gone = [b[1] for b in below if b[0] == "intentionally-dropped"]
+                    if any(b[0] == "unaccounted" for b in below): r = ("unaccounted", None)
+                    elif gone and (kind == "rebuilt-id" or len(gone) == len(below)):
+                        r = ("intentionally-dropped", f"{rule} - of a value that is dropped: {gone[0]}")
+                    else: r = ("not-content", {"kind": kind, "rule": rule})
+            else:
+                reason = declared_drop(origin)
+                r = ("intentionally-dropped", reason) if reason is not None else ("unaccounted", None)
+            state[origin] = r
+            return r
+        entries, totals = [], collections.Counter()
+        unaccounted = collections.defaultdict(list)
+        for tag, parts in self.leaves:
+            origin, path = (tag, parts), self.collapsed(tag, parts)
+            entry = {"source": f"{tag}#{_pointer(parts)}", "path": path}
+            outcome, detail = fate(origin)
+            if outcome == "carried":
+                dests = carried[origin]
                 outcome = "copied" if any("rule" not in d for d in dests) else "transformed"
                 entry["destinations"] = sorted(dests, key=lambda d: (d["object"] or "", d["pointer"]))
-            else:
-                reason = self._value_drops.get(origin)
-                if reason is None: reason = next((why for rx, why in self._drops if rx.search(path)), None)
-                if reason is not None:
-                    outcome, entry["reason"] = "intentionally-dropped", reason
-                else:
-                    outcome = "unaccounted"; unaccounted[path].append(entry["source"])
+            elif outcome == "not-content": entry.update(detail)
+            elif outcome == "intentionally-dropped": entry["reason"] = detail
+            else: unaccounted[path].append(entry["source"])
             entry["outcome"] = outcome; totals[outcome] += 1
             entries.append(entry)
         return {"measures": "one entry per source leaf value: where it went, checked against the written files",
                 "leaf-values": len(self.leaves),
-                "totals": {k: totals[k] for k in ("copied", "transformed", "intentionally-dropped", "unaccounted")},
+                "totals": {k: totals[k] for k in LEDGER_OUTCOMES},
                 "verification-failures": failures,
                 "unaccounted-paths": [{"path": p, "count": len(w), "pointers": w} for p, w in sorted(unaccounted.items())],
                 "entries": entries}
 
-def ledger_by_path(result, examples=3):
+def ledger_by_path(result, examples=3, collapse=()):
     """The ledger of a large corpus in the size of its path map: one row per
     source path and outcome, where Ledger.account() gives one entry per
     source leaf value (backlog #41, phase E).
@@ -571,19 +746,26 @@ def ledger_by_path(result, examples=3):
 
     `unaccounted-paths` keeps the first `examples` pointers of each path and
     the count; the per-leaf list is in the run that wrote it, not in the
-    record. -> a JSON-able dict."""
+    record. `collapse`: (pattern, replacement) pairs applied to a destination
+    pointer before its array indices are collapsed, for a payload that is
+    keyed by a source value (a statement id, a parameter name) and would
+    otherwise give one row per key. -> a JSON-able dict."""
+    collapse = [(re.compile(p), r) for p, r in collapse]
     rows, order = {}, []
     for e in result["entries"]:
         key = (e["path"], e["outcome"])
         r = rows.get(key)
         if r is None:
             r = rows[key] = {"path": e["path"], "outcome": e["outcome"], "count": 0, "example": e["source"],
-                             "_to": collections.Counter(), "_why": collections.Counter()}
+                             "_to": collections.Counter(), "_why": collections.Counter(), "_rule": collections.Counter()}
             order.append(key)
         r["count"] += 1
         if "reason" in e: r["_why"][e["reason"]] += 1
+        if e["outcome"] == "not-content": r["_rule"][(e["kind"], e["rule"])] += 1
         for d in e.get("destinations", []):
-            where = re.sub(r"/[0-9]+(?=/|$)", "/[]", d["pointer"])
+            where = d["pointer"]
+            for rx, to in collapse: where = rx.sub(to, where)
+            where = re.sub(r"/[0-9]+(?=/|$)", "/[]", where)
             r["_to"][(where, d.get("as", "value"), d.get("rule", ""), d.get("via", ""))] += 1
     paths = []
     for key in sorted(order):
@@ -599,6 +781,8 @@ def ledger_by_path(result, examples=3):
                 row["to"].append(d)
         if r["_why"]:
             row["reasons"] = [{"reason": why, "count": n} for why, n in sorted(r["_why"].items())]
+        if r["_rule"]:
+            row["rules"] = [{"kind": kind, "rule": rule, "count": n} for (kind, rule), n in sorted(r["_rule"].items())]
         paths.append(row)
     assert sum(r["count"] for r in paths) == result["leaf-values"]
     return {"measures": "one row per source path and outcome; every source leaf value was traced and checked "
