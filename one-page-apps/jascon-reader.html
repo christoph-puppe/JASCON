@@ -442,6 +442,8 @@ const state = {
   stopped: null,           // the message of a kernel pin this page does not read (KERNEL-2): nothing of that bundle is shown
   pinErrors: [],           // the loaded manifest's pin against the content it lists (KERNEL-1)
   listedErrors: [],        // one message per Attestation the loaded manifest lists (MANIFEST-1)
+  pinnedFacets: new Map(), // id -> path of the facet schemas the loaded manifest pins
+  methodErrors: [],        // one message per key of a listed object's `method` that no facet registers (D10)
   envelopes: new Map(),    // relpath -> {text, bytes} — the files Attestations name in `envelope-ref`, beside the manifest; never objects
   binds: new Map(),        // attestation id -> what it binds of the loaded bundle (attestationBinds), with its line and its envelope's state
   bindsRun: 0,             // which run of judgeAttestations the verdicts in `binds` are from
@@ -454,8 +456,8 @@ const state = {
 /* The part of this page that touches neither the document nor its state: type
    inference, the kernel pin, who decided an entry, what a workbench writes
    about that, the parties the kernel requires, what an Attestation binds of a
-   bundle (with the canonical form and the digest), and that no manifest lists
-   one. It stands between two
+   bundle (with the canonical form and the digest), that no manifest lists one,
+   and under which facet an Assessment states its method. It stands between two
    markers so that one-page-apps/tests/reader.test.mjs can read it out of this
    file and run it in node against the vectors of jascon/conformance (kernel
    and attestation).
@@ -810,13 +812,58 @@ function listedAttestationErrors(objs) {
     .map(id => `${id}: an Attestation is listed in the content manifest (MANIFEST-1: Attestations are excluded from the content manifest by definition, ` +
       `D3.1 - an Attestation lies beside a manifest and is never an entry of one)`);
 }
+
+/* ---------- an Assessment's method is a facet payload (v1.15.0; specification D10 as amended, backlog #55) ----------
+   The kernel schema says of `method` only that it is an object. Its keys are facet ids, resolved as
+   the keys of `facets` are: the standard library, then the schemas the bundle pins, then `private:`
+   (kept, and ignored by every validator), else an error - a tool that does not know what a method
+   means must not guess at the verdict it produced. Since 2026-11-14 the validators hold a bundle to
+   that (facet_errors in validate_core.py), and a payload to the schema of its facet.
+   This page carries no schema and no schema validator. What it can decide is the first half: under
+   which facet a method is stated and where that facet is registered. Whether the payload is one its
+   facet accepts it cannot decide, and says so where a method is shown.
+   STDLIB_FACETS are the ids of the descriptors in jascon/schemas/stdlib; the test counts them against
+   that folder. The workbench of this page writes a manual assessment under the first of them. */
+const STDLIB = "https://ns.jascon.net/stdlib/facet/";
+const STDLIB_FACETS = ["assessment-criteria", "collector", "dsse-envelope", "effectivity", "reporting-obligation", "security-objectives", "statement-grammar", "terminology"].map(n => STDLIB + n);
+const ASSESSMENT_CRITERIA = STDLIB + "assessment-criteria@1";
+/* Where the facet a key names is registered: "stdlib" | "pinned" | "private" | null. `pinned`: the ids
+   of the facet schemas the bundle pins. As in the reference, the version after the last "@" is not
+   part of the id, and `private:` is asked first. */
+const facetBase = key => { const at = key.lastIndexOf("@"); return at < 0 ? key : key.slice(0, at); };
+function facetHome(key, pinned) {
+  const base = facetBase(key);
+  if (key.startsWith("private:") || base.startsWith("private:")) return "private";
+  return STDLIB_FACETS.includes(base) ? "stdlib" : pinned && pinned.has(base) ? "pinned" : null;
+}
+/* -> [message], one per key of `obj.method` that no facet registers, in the reference's words and in
+   the order of the keys. `path` is what the message names: the id of the object, as a validator of a
+   bundle names it. The other error a validator knows for a method - a payload that violates its
+   facet's schema - is not found here. */
+function methodKeyErrors(obj, pinned, path) {
+  const method = isRecord(obj) ? obj.method : null;
+  return !isRecord(method) ? [] : Object.keys(method).filter(key => facetHome(key, pinned) === null)
+    .map(key => `${path ?? obj.id}: method '${key}' is no registered facet - not stdlib, not pinned in the manifest, not private: (an Assessment's method is a facet payload and fails closed, D10)`);
+}
+/* What the Assess workbench states as its method: a person answers each requirement in a form, which
+   is a manual assessment under the standard assessment-criteria facet (its descriptor knows `method`:
+   manual or automated). Until 1.14.0 it wrote { kind: "manual-check", note: "authored in JASCON
+   Bundle Reader workbench" }: two keys no facet registers, which a validator refuses since 2026-11-14.
+   The note that named this tool was no method and is written nowhere on the object now: the manifest
+   of every bundle this page writes names the tool and its version (provenance.converter), as it does
+   for every other object a workbench writes. A `private:` key under `method` would be kept and ignored
+   by every validator, and would still state as part of a method what is none. */
+const manualMethod = () => ({ [ASSESSMENT_CRITERIA]: { method: "manual" } });
+/* Is this the method an earlier version of the workbench wrote? Only that one can be stated anew by
+   this page, on a person's word: it knows what it meant by it. */
+const isEarlierWorkbenchMethod = m => isRecord(m) && Object.keys(m).sort().join() === "kind,note" && m.kind === "manual-check" && m.note === "authored in JASCON Bundle Reader workbench";
 /* ==READER-PURE-END== */
 
 /* ---------- loading ---------- */
 /* The version is stated once. Until 1.10.0 it stood in three places - the pill of the top bar, the
    `converter` line of every manifest written here, and the first line of the console - and they had
    come apart: 1.9.1, 1.9.1 and 1.10.0. */
-const READER_VERSION = "1.14.0", READER_BUILD = "2026-11-14";
+const READER_VERSION = "1.15.0", READER_BUILD = "2026-11-14";
 const READER_ID = "jascon-reader.html v" + READER_VERSION;
 $("pill-version").textContent = `v${READER_VERSION} · build ${READER_BUILD}`;
 /* URL loading — works when this page and the bundle are served over http(s)
@@ -1047,6 +1094,7 @@ function indexBundle() {
   state.objects.clear(); state.order = []; state.manifest = null;
   state.manifestByPath.clear(); state.verify = null; state.selected = null;
   state.browserDims = {}; state.stopped = null; state.pinErrors = []; state.listedErrors = [];
+  state.pinnedFacets = new Map(); state.methodErrors = [];
   state.binds = new Map(); state.missingEntries = 0;
   /* The detail that is up belongs to the bundle before (v1.14.0): it is taken down with it. Until 1.13.0 it stayed,
      and since 1.13.0 the detail of an Attestation says what it binds of a bundle - of one no longer loaded. */
@@ -1126,6 +1174,12 @@ function indexBundle() {
        counts: the page says that one of them must not be there. */
     state.listedErrors = listedAttestationErrors([...state.objects.values()].filter(r => r.entry).map(r => r.obj));
     for (const e of state.listedErrors) l.err(e);
+    /* An Assessment's method (v1.15.0; D10, backlog #55): the keys of `method` of every object the manifest
+       lists, in the manifest's order, against the standard library and the facet schemas this manifest pins.
+       A key no facet registers is reported in the reference's words. The payloads are not checked here. */
+    state.pinnedFacets = pinnedFacets(state.manifest, path => state.files.get(prefix + path)?.text);
+    state.methodErrors = state.order.map(id => state.objects.get(id)).filter(r => r && r.entry).flatMap(r => methodKeyErrors(r.obj, state.pinnedFacets));
+    for (const e of state.methodErrors) l.err(e);
   }
   for (const p of [...state.evidence.keys()]) if (!p.startsWith(prefix + "evidence/sha256/")) state.evidence.delete(p);   // only the store beside THIS manifest
   if (state.evidence.size) l.info(`evidence store: ${state.evidence.size} file(s) beside the manifest — content-addressed (evidence/sha256/<hex>), not manifest entries`);
@@ -1155,6 +1209,20 @@ function indexBundle() {
   renderAll();
   setView("stages");
   judgeAttestations();
+}
+/* The facet schemas a manifest pins and that were read: id -> path. As a validator does, a pin is registered
+   under the id its file states, and a pin whose file is not there registers nothing: a method or a facet under
+   it is then under no registered facet. Those pins are kept apart (`missing`: the id the manifest's entry gives
+   -> path), so that the page can say why. `read`: path -> text, or nothing. */
+function pinnedFacets(manifest, read) {
+  const pins = new Map();
+  pins.missing = new Map();
+  for (const pin of (isRecord(manifest) && Array.isArray(manifest["facet-schemas"]) ? manifest["facet-schemas"] : []).filter(isRecord)) {
+    let id = null;
+    try { id = JSON.parse(read(pin.path)).id; } catch { /* not loaded, or no JSON */ }
+    if (typeof id === "string") pins.set(id, pin.path); else pins.missing.set(pin.id, pin.path);
+  }
+  return pins;
 }
 /* How many of the loaded objects the manifest lists, how many are Attestations beside it, and how
    many are neither (a file the manifest does not list, a pasted or an authored object). */
@@ -1260,6 +1328,8 @@ function renderOverview() {
       (state.missingEntries > 0 ? ` <span class="verdict-warn">— ${state.missingEntries} not loaded</span>` : "") +
       state.listedErrors.map(e => `<div class="verdict-bad" data-listed-error>✗ ${esc(e)}</div>`).join("")));
     rows.push(kvRow("attestations beside the manifest", besideSummaryHtml(tally)));
+    if (state.methodErrors.length) rows.push(kvRow("methods of assessments", state.methodErrors.map(e => `<div class="verdict-bad" data-method-error>✗ ${esc(e)}</div>`).join("") +
+      `<div class="hint">an Assessment's method is a facet payload (D10): a key no facet registers fails the bundle in a validator</div>`));
     if (tally.other) rows.push(kvRow("other objects", `<span id="ov-other">${tally.other}</span> <span class="hint">— not listed by the manifest: pasted, written in a workbench, or a file that lies elsewhere</span>`));
   } else add("objects", `${state.objects.size} — no manifest is loaded, so nothing is listed and no Attestation is held to anything`);
   add("evidence store", state.evidence.size ? `${state.evidence.size} file(s) beside the manifest (not manifest entries)` : "");
@@ -1377,6 +1447,7 @@ function refLink(uri) {
 }
 function wireRefs(root) {
   root.querySelectorAll("[data-ref]").forEach(a => a.onclick = () => openObject(a.dataset.ref));
+  root.querySelectorAll("[data-method-restate]").forEach(b => b.onclick = () => restateMethod(b.dataset.methodRestate));
 }
 function proseHtml(txt) {
   return esc(txt).replace(/\{param:([^}]+)\}/g, (_, p) => `<span class="paramtok">{param:${esc(p)}}</span>`);
@@ -1783,9 +1854,62 @@ function checkResultsHtml(o) {
         </div></div>`;
     }).join("");
 }
+/* An Assessment's method, as it can be read without a schema (v1.15.0; D10 as amended, backlog #55): for every
+   key the facet it names and where that facet is registered - the standard library, a schema this bundle
+   pins, `private:`, or nowhere, which a validator refuses - then the payload as it stands, and that this page
+   does not check it. Until 1.14.0 the method stood among the generic fields, with no word about its keys.
+   An Assessment of the workspace that states its method as the workbench did until 1.14.0 is not rewritten
+   when it is restored: it is shown as what a validator makes of it, with a button that states it anew. */
+const METHOD_HOME = { stdlib: "standard library", pinned: "pinned by this bundle", private: "private", none: "no facet registers this key" };
+const methodHomes = o => isRecord(o.method) ? Object.keys(o.method).map(key => [key, facetHome(key, state.pinnedFacets) || "none"]) : [];
+function methodHtml(r) {
+  const o = r.obj;
+  if (!isRecord(o.method)) return "";
+  const homes = methodHomes(o), errors = methodKeyErrors(o, state.pinnedFacets), earlier = r.path === "(workspace)" && isEarlierWorkbenchMethod(o.method);
+  const said = {
+    stdlib: "a facet of the standard library. A validator holds this payload to the facet's descriptor",
+    pinned: key => `a facet this bundle pins (${state.pinnedFacets.get(facetBase(key))}). A validator holds this payload to that schema`,
+    private: "private: kept, and ignored by every validator by definition. Nothing checks this payload",
+  };
+  const boxes = homes.map(([key, home]) => `<div class="facetbox" data-method-key="${esc(key)}" data-method-home="${home}">
+      <div style="margin-bottom:6px"><span class="mono" style="font-size:10.5px;color:var(--accent)">${esc(key)}</span>
+        <span class="badge" ${home === "none" ? `style="border-color:var(--red);color:var(--red)"` : ""}>${home === "none" ? "✗ " : ""}${METHOD_HOME[home]}</span></div>
+      ${home === "none" ? `<div class="verdict-bad mono" style="font-size:10.5px;word-break:break-all;margin-bottom:6px" data-method-error>${esc(errors.find(e => e.includes(`: method '${key}' is no registered facet`)))}</div>` : ""}
+      ${home === "none" && state.pinnedFacets.missing?.has(facetBase(key)) ? `<div class="hint verdict-warn" style="margin-bottom:6px" data-method-pin-missing>The manifest pins this facet, and its schema file ${esc(state.pinnedFacets.missing.get(facetBase(key)))} was not read: a pin without its file registers nothing.</div>` : ""}
+      ${prettyVal(o.method[key], 1)}
+      ${home === "none" ? "" : `<div class="hint" style="margin-top:6px" data-method-unchecked>${esc(typeof said[home] === "function" ? said[home](key) : said[home])}${home === "private" ? "." : "; this page carries no schema validator and does not check it."}</div>`}
+    </div>`).join("");
+  const todo = !errors.length ? "" : earlier
+    ? `<div class="hint" style="margin-top:8px" data-method-todo>This is how the Assess workbench of this page stated a manual check until 1.14.0. It is kept as it was stored, and an export that holds it fails a validator.
+        <button data-method-restate="${esc(o.id)}">State it under the standard facet: manual</button>
+        <span>writes <span class="mono">${esc(JSON.stringify(manualMethod()))}</span> in its place, in the workspace.</span></div>`
+    : `<div class="hint" style="margin-top:8px" data-method-todo>What can be done: state the method under a facet that is registered — the standard <span class="mono">${esc(ASSESSMENT_CRITERIA)}</span> for a manual or an automated assessment, a facet whose schema the bundle pins, or a <span class="mono">private:</span> key, which every validator keeps and ignores. The object is then another: the manifest's two digests of it are written anew.</div>`;
+  return `<div class="nano sectionlabel">Method — a facet payload (D10): each key names the facet the method is stated under</div>` +
+    (homes.length ? boxes : `<div class="hint" data-method-empty>it states no method: the object is empty. The kernel schema accepts that, and the rule about facets has no key to hold.</div>`) + todo;
+}
+/* the same in a line, for the card of stage 5 */
+function methodLineHtml(o) {
+  const homes = methodHomes(o);
+  if (!isRecord(o.method)) return "";
+  const short = key => key.split("/").pop();
+  return `<div class="hint" style="margin-top:4px" data-method-line>method: ` + (homes.length ? homes.map(([key, home]) =>
+    `<span data-method-key="${esc(key)}" data-method-home="${home}" class="${home === "none" ? "verdict-bad" : ""}">${home === "none" ? "✗ " : ""}` +
+    `${key === ASSESSMENT_CRITERIA && typeof o.method[key]?.method === "string" ? esc(o.method[key].method) + " · " : ""}${esc(short(key))} (${METHOD_HOME[home]})</span>`).join(" · ") : "none stated") +
+    (homes.some(([, home]) => home === "none") ? ` <span class="verdict-bad">— a validator refuses it (D10)</span>` : "") + `</div>`;
+}
+/* A person's word: the method of a workspace Assessment that the workbench wrote until 1.14.0 is stated anew. */
+function restateMethod(id) {
+  const r = state.objects.get(id);
+  if (!r || r.path !== "(workspace)" || !isEarlierWorkbenchMethod(r.obj.method)) return;
+  const was = JSON.stringify(r.obj.method);
+  addToGraph([{ ...r.obj, method: manualMethod() }], { silent: true });
+  l.ok(`${id}: its method is stated anew in the workspace — ${JSON.stringify(manualMethod())} in place of ${was}, which no facet registers`);
+  if (state.view === "stage:assess") renderStageFn("assess");
+  if (state.view === "browser" && state.selected === id) showDetail(id);
+}
 function renderAssessment(r) {
   const o = r.obj;
-  return renderGeneric(r, ["check-results", "tailoring-ref"]) +
+  return methodHtml(r) + renderGeneric(r, ["check-results", "tailoring-ref", ...(isRecord(o.method) ? ["method"] : [])]) +
     (o["tailoring-ref"] ? `<div class="nano sectionlabel">Tailoring — whose bound parameter values the run used</div><div class="v">${refOrOutside(o["tailoring-ref"])}</div>` : "") +
     checkResultsHtml(o);
 }
@@ -2345,6 +2469,7 @@ function renderStageAssess() {
     <a class="reflink" data-ref="${esc(a.obj.id)}"><b>${esc(tt(a.obj.title) || a.obj.label || a.obj.id.split("/").pop())}</b></a>
     <span class="hint">by ${esc((a.obj["performer-ref"] || "").split("/").pop())} · ${esc(a.obj.time || "")}</span>
     <div style="margin-top:4px">${(a.obj["subject-refs"] || []).map(s => refLink(s)).join(" · ")}</div>
+    ${methodLineHtml(a.obj)}
     ${a.obj["check-results"] ? `<div class="hint" style="margin-top:4px">${TYPES.check.glyph} ${a.obj["check-results"].length} check results, as recorded: ${a.obj["check-results"].map(row => outcomeBadge(row.outcome)).join("")}</div>` : ""}</div>`).join("");
   const cols = { open: [], "in-remediation": [], closed: [] };
   finds.forEach(f => (cols[f.obj.state] = cols[f.obj.state] || []).push(f));
@@ -2519,6 +2644,11 @@ function restoreWorkspaceObjects() {
   if (work.created?.length) {
     addToGraph(work.created, { ephemeral: true, silent: true });
     l.info(`workspace restored: ${work.created.length} authored object(s) back in the graph`);
+    /* an object is restored as it was stored (v1.15.0): a method no facet registers is said, not rewritten */
+    const unregistered = work.created.filter(o => methodKeyErrors(o, new Map()).length);
+    if (unregistered.length) l.warn(`${unregistered.length} Assessment(s) of the workspace state their method under a key no facet registers` +
+      (unregistered.some(o => isEarlierWorkbenchMethod(o.method)) ? ", as the Assess workbench wrote it until 1.14.0" : "") +
+      `: an export that holds one fails a validator (D10). Each is kept as stored; its detail in the object browser says what can be done — ${unregistered.map(o => o.id).join(", ")}`);
   }
 }
 function workspaceObjects() {
@@ -2580,6 +2710,10 @@ async function buildWorkspaceBundleFiles(objs, provenance) {
   const manifestBytes = enc.encode(JSON.stringify(manifest, null, 1) + "\n");
   files.push({ name: "content-manifest.json", bytes: manifestBytes });
   files.listed = manifest.objects.length; files.attestations = attestations.length; files.fails = [];
+  /* a method under a key no facet registers (v1.15.0; D10): written as it is held, and said - against the standard
+     library and the facet schemas THIS export pins */
+  const pins = pinnedFacets(manifest, path => { const f = files.find(x => x.name === path); return f && new TextDecoder().decode(f.bytes); });
+  for (const e of objs.flatMap(o => methodKeyErrors(o, pins))) { l.err("in this export — " + e); files.fails.push(e); }
   if (attestations.length) {
     const manifestDigest = "sha256:" + await sha256hex(manifestBytes);
     for (const a of attestations.sort((x, y) => (x.id < y.id ? -1 : x.id > y.id ? 1 : 0))) {
@@ -3185,7 +3319,7 @@ function buildAssessObjects(performer) {
   const agg = counts["not-satisfied"] ? "not-satisfied" : (counts.inconclusive || counts.satisfied < reqs.length) ? "inconclusive" : "satisfied";
   const asmtId = mintId("asmt", "check-" + today());
   const asmt = { id: asmtId, version: "1", lifecycle: "draft", title: `Check ${today()} — ${cur.label}`,
-    "subject-refs": reqs, method: { kind: "manual-check", note: "authored in JASCON Bundle Reader workbench" },
+    "subject-refs": reqs, method: manualMethod(),   // a person answers the form: a manual assessment, under the standard facet (v1.15.0)
     "performer-ref": performer,
     time: new Date().toISOString(), result: agg };
   const findings = reqs.filter(id => a.results[id]?.result === "not-satisfied").map((id, i) => {
