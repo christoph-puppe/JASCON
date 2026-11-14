@@ -88,6 +88,24 @@ class PhaseETheIfaGate(unittest.TestCase):
         self.assertIn("2 claim(s) that do not hold", err)
         self.assertEqual([f["claim"] for f in record["verification-failures"]], ["selector", "selector"])
 
+    def test_a_value_that_stands_where_the_path_map_does_not_say_ends_the_run(self):
+        """backlog #89: the table beside the path map (HELD) says where the values of a row stand"""
+        ROW = ' (r"^ssp\\.system-security-plan\\.system-implementation\\.inventory-items\\[\\]\\.", CARRIED, (_SYS + r"/inventory-items(/.*)?",)),\n'
+        # the table names another place for the inventory items than the converter writes
+        code, err, record = self.run_converter("place", ROW, ROW.replace("/inventory-items(/.*)?", "/inventory(/.*)?"))
+        self.assertEqual(code, 1)
+        self.assertIn("a place the path map does not name for that path", err)
+        self.assertIn("ssp.system-security-plan.system-implementation.inventory-items[]", err)
+        self.assertEqual(record["totals"]["unaccounted"], 0, "the ledger alone lets it through")
+        # a row that allows another outcome than the record measured
+        code, err, record = self.run_converter("outcome", ROW, ROW.replace("CARRIED", "NO_CONTENT"))
+        self.assertEqual(code, 1)
+        self.assertIn("are copied, and the path map allows not-content there", err)
+        # a row of the table taken out
+        code, err, record = self.run_converter("row", ROW, "")
+        self.assertEqual(code, 1)
+        self.assertIn("the table of outcomes and places (HELD) has 33 row(s) and the path map 34", err)
+
     def test_a_value_that_is_not_written_takes_its_name_with_it(self):
         code, err, record = self.run_converter(
             "lost-value",

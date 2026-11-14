@@ -40,7 +40,7 @@ place of the manifest."""
 import json, os, re, sys, collections, hashlib
 import jsonschema
 from oscal_conv_lib import make_T, slug, Bundle, inventory, coverage, report, semantic_digest, global_occurrence, Ledger, props_by_name, response_treatment
-from oscal_conv_lib import ledger_gate
+from oscal_conv_lib import ledger_gate, ledger_by_path, path_map_check, held_row, held_rows_match
 from oscal_conv_lib import document_author, document_day, is_day, provenance, provenance_override, textify
 from oscal_conv_lib import known_arguments, out_dir
 from oscal_conv_lib import COMPAT, referred_to, lifecycle_default_record, lifecycle_default_line
@@ -1407,6 +1407,238 @@ RULES = [
  (r"^cdef\.component-definition\.components\[\]\.(uuid|type|title|description|purpose)$", "L1",
   "Component (kind mapped) id/title + component@1 facet (description, purpose)"),
 ]
+# What the ledger may find for the values of each row (backlog #89): one
+# entry per row of RULES, in its order - the row's pattern, the outcomes the
+# record measured for it, and the places its values stand at, as the record
+# by path writes them (a JSON Pointer into the object, array positions as
+# `[]`). After the account the record is held against this table, and a value
+# with another outcome or at another place ends the run (path_map_check). The
+# rows of this map are wide, a subtree of a document each, and so are their
+# entries: they are what the record of the pinned documents measured, a
+# member that holds four places or more written as the member and all below
+# it.
+CARRIED = ("copied", "transformed"); NO_CONTENT = ("not-content",)
+_COMP = r"/facets/https:~1~1ifa\.gov~1goodread~1facet~1component@1"
+_COMPAT = r"/facets/https:~1~1ns\.jascon\.net~1compat~1oscal-1x@1"
+_IMPL = r"/facets/https:~1~1ifa\.gov~1goodread~1facet~1implementation@1"
+_OBS = r"/facets/https:~1~1ifa\.gov~1goodread~1facet~1observations@1"
+_PROT = r"/facets/https:~1~1ifa\.gov~1goodread~1facet~1protocols@1"
+_RISKA = r"/facets/https:~1~1ifa\.gov~1goodread~1facet~1risk-analysis@1"
+_SYS = r"/facets/https:~1~1ifa\.gov~1goodread~1facet~1system@1"
+_TARGET = r"/facets/https:~1~1ifa\.gov~1goodread~1facet~1finding-target@1"
+HELD = [
+ (r"^(ssp|ap|ar|poam|lev|lvg|cdef)\.[a-z-]+\.(uuid$|metadata\.|import-profile|import-ssp|import-ap|back-matter\.)", CARRIED + NO_CONTENT,
+  (r"/evidence-refs/\[\]",
+   _COMP + r"/control-implementations/\[\]/source",
+   _COMP + r"/responsible-roles/\[\]/parties/\[\]",
+   _SYS + r"/responsible-roles/\[\]/parties/\[\]",
+   _SYS + r"/responsible-roles/\[\]/role",
+   r"/method/https:~1~1ifa\.gov~1goodread~1facet~1assessment-plan@1/responsible-roles/\[\]/parties/\[\]",
+   r"/method/https:~1~1ifa\.gov~1goodread~1facet~1assessment-plan@1/responsible-roles/\[\]/role",
+   r"/objects/\[\]/version",
+   r"/owner-ref",
+   r"/performer-ref",
+   r"/provenance(/.*)?",
+   r"/title/en",
+   r"/version")),
+ (r"^ssp\.system-security-plan\.system-characteristics\.", CARRIED,
+  (r"/authorizations/\[\]/date",
+   r"/authorizations/\[\]/scope-label",
+   _SYS + r"/boundary/en",
+   _SYS + r"/data-flow/en",
+   _SYS + r"/date-authorized",
+   _SYS + r"/description/en",
+   _SYS + r"/impact(/.*)?",
+   _SYS + r"/network-architecture/en",
+   _SYS + r"/sensitivity",
+   _SYS + r"/status",
+   _SYS + r"/system-ids/\[\]/id",
+   _SYS + r"/system-ids/\[\]/identifier-type",
+   r"/label",
+   r"/timestamp",
+   r"/title/en")),
+ (r"^ssp\.system-security-plan\.system-implementation\.users\[\]\.", CARRIED, (_COMP + r"/responsible-roles/\[\]/role", _SYS + r"/users(/.*)?")),
+ (r"^ssp\.system-security-plan\.system-implementation\.inventory-items\[\]\.", CARRIED, (_SYS + r"/inventory-items(/.*)?",)),
+ (r"^ssp\.system-security-plan\.system-implementation\.components\[\]\.", CARRIED,
+  (r"/component-ref",
+   _COMP + r"/description/en",
+   _COMP + r"/responsible-roles/\[\]/parties/\[\]",
+   _COMP + r"/responsible-roles/\[\]/role",
+   _COMP + r"/status",
+   _OBS + r"/observations/\[\]/subjects/\[\]",
+   _COMPAT + r"/uuid",
+   r"/kind",
+   r"/title/en")),
+ (r"^ssp\.system-security-plan\.control-implementation\.", CARRIED,
+  (r"/capabilities/\[\]/description/en",
+   r"/capabilities/\[\]/requirement-ref",
+   r"/component-ref",
+   _COMP + r"/capabilities/\[\]/uuid",
+   _IMPL + r"/description/en",
+   _COMPAT + r"/uuid",
+   r"/parameter-bindings(/.*)?",
+   r"/requirement-ref",
+   r"/status")),
+ (r"^ap\.assessment-plan\.(local-definitions|tasks|assessment-subjects|reviewed-controls)", CARRIED,
+  (r"/method(/.*)?",
+   r"/provenance/sources/\[\]/metadata/responsible-parties/\[\]/role-id")),
+ (r"^ar\.assessment-results\.results\[\]\.(uuid|title|description|start|end)$", CARRIED,
+  (_OBS + r"/description/en",
+   _OBS + r"/end",
+   _COMPAT + r"/uuid",
+   r"/time",
+   r"/title/en")),
+ (r"^ar\.assessment-results\.results\[\]\.reviewed-controls\.", CARRIED, (r"/subject-refs/\[\]",)),
+ (r"^ar\.assessment-results\.results\[\]\.observations\[\]\.", CARRIED + NO_CONTENT,
+  (r"/evidence-refs/\[\]",
+   _TARGET + r"/observations/\[\]",
+   _OBS + r"/observations(/.*)?")),
+ (r"^ar\.assessment-results\.results\[\]\.findings\[\]\.", CARRIED,
+  (_TARGET + r"/description/en",
+   _TARGET + r"/implementation-statement-uuid",
+   _TARGET + r"/observations/\[\]",
+   _TARGET + r"/target-description/en",
+   _TARGET + r"/target-objective-id",
+   _TARGET + r"/target-type",
+   _COMPAT + r"/uuid",
+   r"/result",
+   r"/risk-refs/\[\]",
+   r"/title/en")),
+ (r"^ar\.assessment-results\.results\[\]\.(risks|local-definitions)", CARRIED,
+  (_RISKA + r"/assessment-results-state/statement",
+   _RISKA + r"/assessment-results-state/status",
+   _RISKA + r"/assessment-results-state/title",
+   _RISKA + r"/description/en",
+   r"/method(/.*)?",
+   r"/risk-refs/\[\]")),
+ (r"^ar\.assessment-results\.local-definitions\.", CARRIED,
+  (r"/method(/.*)?",
+   r"/provenance/sources/\[\]/metadata/responsible-parties/\[\]/role-id")),
+ (r"^poam\.plan-of-action-and-milestones\.(uuid$|system-id)", CARRIED + NO_CONTENT, (r"/component-refs/\[\]",)),
+ (r"^poam\.plan-of-action-and-milestones\.observations\[\]\.", CARRIED + NO_CONTENT,
+  (r"/deviations/\[\]/opened",
+   r"/deviations/\[\]/refs/\[\]",
+   r"/evidence-refs/\[\]",
+   _TARGET + r"/poam-item/observations/\[\]",
+   _OBS + r"/observations(/.*)?",
+   _RISKA + r"/observations/\[\]")),
+ (r"^poam\.plan-of-action-and-milestones\.risks\[\]\.(uuid|title|statement|status|deadline)$", CARRIED,
+  (_TARGET + r"/poam-item/risks/\[\]",
+   _RISKA + r"/risk-status",
+   _COMPAT + r"/uuid",
+   r"/review-due/value",
+   r"/scenario/en",
+   r"/state",
+   r"/title/en")),
+ (r"^poam\.plan-of-action-and-milestones\.risks\[\]\.description$", CARRIED, (_RISKA + r"/description/en", r"/risk-refs/\[\]")),
+ (r"^poam\.plan-of-action-and-milestones\.risks\[\]\.characterizations\[\]\.", CARRIED,
+  (r"/deviations/\[\]/approver-ref",
+   _RISKA + r"/characterizations(/.*)?")),
+ (r"^poam\.plan-of-action-and-milestones\.risks\[\]\.remediations\[\]\.props\[\]\.", CARRIED + NO_CONTENT,
+  (_RISKA + r"/responses/\[\]/type",
+   r"/treatment")),
+ (r"^poam\.plan-of-action-and-milestones\.risks\[\]\.remediations\[\]\.(lifecycle|title|description)$", CARRIED,
+  (r"/actions/\[\]/description/en",
+   r"/actions/\[\]/status",
+   _RISKA + r"/responses/\[\]/description/en",
+   _RISKA + r"/responses/\[\]/lifecycle",
+   _RISKA + r"/responses/\[\]/title")),
+ (r"^poam\.plan-of-action-and-milestones\.risks\[\]\.remediations\[\]\.", CARRIED,
+  (r"/actions/\[\]/description/en",
+   r"/actions/\[\]/due/value",
+   _RISKA + r"/responses(/.*)?")),
+ (r"^poam\.plan-of-action-and-milestones\.risks\[\]\.(mitigating-factors|related-observations)\[?\]?\.", CARRIED,
+  (r"/deviations/\[\]/rationale/en",
+   r"/deviations/\[\]/refs/\[\]",
+   _RISKA + r"/mitigating-factors/\[\]/description/en",
+   _RISKA + r"/mitigating-factors/\[\]/uuid",
+   _RISKA + r"/observations/\[\]")),
+ (r"^poam\.plan-of-action-and-milestones\.poam-items\[\]\.", CARRIED, (_TARGET + r"/poam-item(/.*)?",)),
+ (r"^(lev|lvg)\.system-security-plan\.system-characteristics\.", CARRIED,
+  (_SYS + r"/boundary/en",
+   _SYS + r"/description/en",
+   _SYS + r"/impact(/.*)?",
+   _SYS + r"/remarks/en",
+   _SYS + r"/sensitivity",
+   _SYS + r"/status",
+   _SYS + r"/system-ids/\[\]/id",
+   r"/label")),
+ (r"^(lev|lvg)\.system-security-plan\.system-implementation\.components\[\]\.", CARRIED,
+  (_COMP + r"/description/en",
+   _COMP + r"/listed-by-leveraging-plan(/.*)?",
+   _COMP + r"/props/implementation-point",
+   _COMP + r"/props/virtual",
+   _COMP + r"/responsible-roles/\[\]/party-uuids/\[\]",
+   _COMP + r"/responsible-roles/\[\]/role",
+   _COMP + r"/status",
+   _COMP + r"/title",
+   _IMPL + r"/statements/\[\]/responses/\[\]/component",
+   _COMPAT + r"/uuid",
+   r"/kind",
+   r"/label",
+   r"/title/en")),
+ (r"^lvg\.system-security-plan\.system-implementation\.(users|leveraged-authorizations)\[\]\.", CARRIED,
+  (r"/authorizations/\[\]/date",
+   r"/authorizations/\[\]/scope-label",
+   _COMP + r"/authorizations(/.*)?",
+   _COMP + r"/responsible-roles/\[\]/role",
+   _SYS + r"/users/\[\]/privileges/\[\]/functions/\[\]",
+   _SYS + r"/users/\[\]/privileges/\[\]/title",
+   _SYS + r"/users/\[\]/uuid")),
+ (r"^lev\.system-security-plan\.system-implementation\.users\[\]\.", CARRIED,
+  (_COMP + r"/responsible-roles/\[\]/role",
+   _SYS + r"/users/\[\]/privileges/\[\]/functions/\[\]",
+   _SYS + r"/users/\[\]/privileges/\[\]/title",
+   _SYS + r"/users/\[\]/uuid")),
+ (r"^lev\.system-security-plan\.control-implementation\.", CARRIED,
+  (r"/capabilities/\[\]/description/en",
+   _COMP + r"/responsible-roles/\[\]/party-uuids/\[\]",
+   _COMP + r"/responsible-roles/\[\]/role",
+   _IMPL + r"/description/en",
+   _IMPL + r"/remarks/en",
+   _IMPL + r"/statements(/.*)?",
+   _SYS + r"/customer-responsibilities/\[\]/capability",
+   _SYS + r"/customer-responsibilities/\[\]/description",
+   _SYS + r"/customer-responsibilities/\[\]/uuid",
+   _COMPAT + r"/uuid",
+   r"/parameter-bindings/ac-2_prm_1",
+   r"/satisfied-by/\[\]/inherited-from/component-ref",
+   r"/statement-refs/\[\]")),
+ (r"^lvg\.system-security-plan\.control-implementation\.", CARRIED,
+  (r"/capabilities/\[\]/description/en",
+   _COMP + r"/responsible-roles/\[\]/party-uuids/\[\]",
+   _COMP + r"/responsible-roles/\[\]/role",
+   _IMPL + r"/description/en",
+   _IMPL + r"/remarks/en",
+   _IMPL + r"/statements(/.*)?",
+   _COMPAT + r"/uuid",
+   r"/parameter-bindings/ac-2_prm_1",
+   r"/satisfied-by/\[\]/inherited-from/component-ref",
+   r"/statement-refs/\[\]")),
+ (r"^cdef\.component-definition\.(uuid$|metadata\.)", CARRIED, (r"/provenance(/.*)?",)),   # no value reaches this row: the first row of the map takes these paths
+ (r"^cdef\.component-definition\.components\[\]\.protocols\[\]\.", CARRIED, (_PROT + r"/protocols(/.*)?",)),
+ (r"^cdef\.component-definition\.components\[\]\.responsible-roles\[\]\.", CARRIED,
+  (_COMP + r"/responsible-roles/\[\]/parties/\[\]",
+   _COMP + r"/responsible-roles/\[\]/role")),
+ (r"^cdef\.component-definition\.components\[\]\.control-implementations\[\]\.", CARRIED,
+  (r"/capabilities(/.*)?",
+   _COMP + r"/capabilities(/.*)?",
+   _COMP + r"/control-implementations/\[\]/description/en",
+   _COMP + r"/control-implementations/\[\]/source",
+   _COMP + r"/control-implementations/\[\]/uuid",
+   _COMP + r"/responsible-roles/\[\]/role")),
+ (r"^cdef\.component-definition\.components\[\]\.(uuid|type|title|description|purpose)$", CARRIED,
+  (_COMP + r"/description/en",
+   _COMP + r"/purpose/en",
+   _COMPAT + r"/uuid",
+   r"/id",
+   r"/kind",
+   r"/label",
+   r"/objects/\[\]/id",
+   r"/title/en")),
+]
+_misaligned = held_rows_match(HELD, [r[0] for r in RULES])
+def _held_row(path): return held_row(HELD, next((i for i, r in enumerate(RULES) if re.search(r[0], path)), None))
 rows, unmapped = coverage(paths, RULES)
 # global occurrence (measured, not declared): the path map above says where
 # each source path is MEANT to go; this counts the source values that have an
@@ -1424,6 +1656,8 @@ LEDGER = led.account(bundle.out, {**bundle.objects, "content-manifest.json": man
 with open(os.path.join(OUTDIR, "ifa-conversion-ledger.json"), "w", encoding="utf-8") as f:
     json.dump(LEDGER, f, indent=1, ensure_ascii=False); f.write("\n")
 LT = LEDGER["totals"]
+# the path map held against the record by path, which is made for this check and not written
+MAP_NOT_HELD = [_misaligned] if _misaligned else path_map_check(ledger_by_path(LEDGER)["paths"], _held_row)["sentences"]
 
 types = collections.Counter(rel.split("/")[1] for rel in bundle.objects)
 j = report(
@@ -1572,4 +1806,9 @@ if unmapped:
     for p, n in unmapped[:40]: print("  UNMAPPED", p, "x", n)
 # last: a run whose ledger has a claim that does not hold or an unaccounted value ends with 1. Everything
 # above is written by then, so that the folder says why.
+if MAP_NOT_HELD:
+    for x in MAP_NOT_HELD: print("  PATH MAP NOT HELD", x, file=sys.stderr)
+    sys.stdout.flush()
+    raise SystemExit(f"convert_ifa.py: {len(MAP_NOT_HELD)} disagreement(s) between the path map and the record of this run: "
+                     f"a value has an outcome its row does not allow, or stands at a place its row does not name")
 ledger_gate(LEDGER, "convert_ifa.py")
