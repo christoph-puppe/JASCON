@@ -7,14 +7,17 @@ have to switch on yourself: the suggestions of the Risk page and the drafts
 of the Checks page send text to a model service once you type a key (see
 "Suggestions from a model").
 
-State: build 0.9.9. This build has the frame (the hub, the settings page and
+State: build 0.9.10. This build has the frame (the hub, the settings page and
 the shared core) and nine tool pages, in the order of the work: Import,
 Browse, Risk, Tailor, Map, Implement, Checks, Assess and Validate. One view of the Risk page and
 the drafting of the Checks page can ask a language model; nothing else in
 the app does, and nothing needs one. Since 0.9.3 the app reads advice packs:
 a vendor's recommendations as one published bundle (see "Advice packs").
 Since 0.9.9 the pages write who decided and when, and the Validate page
-shows where that is missing (see "Who decided, and when").
+shows where that is missing (see "Who decided, and when"). Since 0.9.10 no
+page writes a party that nobody named: where the kernel requires a party
+and the field is empty, the page refuses the save and says which field it
+is.
 
 ## Start
 
@@ -105,14 +108,46 @@ It is empty until you set it. Every form that writes one of these objects
 shows the author it will write, taken from the setting, and you can change
 it there for the page you are on. The date written is today's, in UTC.
 
-**A missing author is never a refusal.** With the field empty a page writes
-no `provenance` and saves all the same. No page makes up an author. What is
-missing shows as a line on the Validate page (below). Two types are the
-exception, by the kernel and not by the app: a Mapping and a Check are not
-valid without `provenance`. Where the setting is empty the Map and Checks
-pages fall back to a party under your namespace (`…/party/author`,
-`…/party/check-author`), as they did before this build; the field shows it
-before anything is saved.
+**A missing author is never a refusal** where the kernel leaves the author
+optional: on a Tailoring, a Risk, an Implementation and a Finding. With the
+field empty a page writes no `provenance` and saves all the same. What is
+missing shows as a line on the Validate page (below).
+
+**A party the kernel requires is never made up.** Some parties are not
+optional: an object without them is not valid. For these the rule is the
+other way round. While the field is empty the page refuses the save, says
+which field is empty and that the kernel requires it, and changes nothing
+in the set. No page fills such a field with a party of its own. Until build
+0.9.10 five places did: they wrote a party made from a fixed word under
+your namespace (`…/party/author`, `…/party/check-author`,
+`…/party/assessor`, `…/party/ciso`, `…/party/organisation`), and the
+generic OSCAL import wrote `…/party/organization` on every clause. The
+objects were valid and named somebody nobody had named (author decision of
+2026-11-14, backlog #70).
+
+| Party the kernel requires | Page | The field starts from | Empty |
+|---|---|---|---|
+| `provenance.author-ref` of a Mapping | Map | *Who am I* | the mapping is not added |
+| `provenance.author-ref` of a Check | Checks | *Who am I*; for a check of the set that names an author, that author when the setting is empty | the check cannot be saved; no draft is asked of a model, and none is taken |
+| `performer-ref` of an Assessment | Assess | *Who am I* | the check is not written, and no Finding is |
+| `approver-ref` of a Deviation | Tailor | nothing, always | the operation is not added |
+| `obligated-parties` of a statement | Browse, and Import with the generic rules | nothing | the requirement is not added; the import does not run |
+| `owner-ref` of a Risk | Risk | *Default risk owner* | the risk cannot be saved; nothing is imported from a catalogue; a model's draft is not taken |
+| `approver-ref` of a Risk's acceptance | Risk | nothing, always | the risk cannot be saved once an acceptance is begun |
+
+An approver field starts empty also when *Who am I* is set: who approves an
+exception or accepts a risk is not whoever types it, and a field filled in
+advance would record self-approval by default. A field you empty stays
+empty; the setting does not come back into it while the page is open.
+
+**A name you type.** Every party field reads what you type in the same way,
+the optional author field too. A URI (a scheme, a colon, no blank) is
+written as it is. A short name is your word for a party of your own and
+becomes a party under your namespace: `Jane Roe` is written as
+`<namespace>/party/jane-roe`, and the field shows that URI as soon as you
+leave it. In the Import page the namespace is the one of the import. A
+name you typed is a party you named; a word a page supplies is not, and no
+page supplies one.
 
 **What each page writes.**
 
@@ -122,7 +157,7 @@ before anything is saved.
 | Risk | `provenance` on the Risk, and on `rating` or `residual-rating` when that rating is set or changed |
 | Implement | `provenance` on every Implementation of the workbench and on an edge that adopts a recommendation |
 | Assess | `provenance` on a Finding it raises or moves; `decided` and `review-due` on a Deviation of a Finding |
-| Map, Checks | `provenance` on the Mapping or Check, as before, starting from the setting |
+| Map, Checks | `provenance` on the Mapping or Check, which the kernel requires: starting from the setting, and refused while the field is empty. A draft check a model wrote is saved under the author named when it is taken, with that day |
 
 **Nobody's decision changes hands.** `provenance` on a record names who
 wrote this version. An entry of a Tailoring that has none of its own has
@@ -176,11 +211,14 @@ reference validator:
   is the field *Review dates as of*, today in UTC when you leave it alone;
   it is the reference's `--as-of`. An overdue review is never an error.
 
-Measured for this build: on the example folder and on the IFA bundle the
-page shows the lines `validate_core.py` prints, for 2026-11-13 and for
-2023-06-24, with the switch off and on (the example folder: no AUTHOR line,
-and one review date that cannot be evaluated; the IFA bundle: 10 AUTHOR
-lines, 2 overdue reviews on the first day and 1 on the second).
+Measured: on the example folder and on the IFA bundle the page shows the
+lines `validate_core.py` prints, for 2026-11-13 and for 2023-06-24, with
+the switch off and on; a test compares the two on every run. For build
+0.9.9 that was no AUTHOR line and one review date that cannot be evaluated
+on the example folder, and 10 AUTHOR lines on the IFA bundle with 2 overdue
+reviews on the first day and 1 on the second. The IFA bundle was converted
+again since; on 2026-11-14 the reference prints 7 AUTHOR lines for it and
+the same review dates.
 
 ## Advice packs
 
@@ -306,7 +344,12 @@ and the licence you state. Three sets of rules:
   the modality is `unspecified`, because OSCAL has no field for it. Props and
   other parts are held verbatim in a facet under your namespace, with a
   pinned schema. A control without statement prose is carried with its title
-  and listed in the report.
+  and listed in the report. The kernel requires on every clause who it binds
+  (`obligated-parties`), and OSCAL has no field for that, so the form asks:
+  *Who the statements bind*, a URI or a short name, which becomes a party
+  under the namespace of the import. The field starts empty, and the import
+  does not run without it. Until build 0.9.10 these rules wrote
+  `<namespace>/party/organization` on every clause without asking.
 
 - *NIST SP 800-53 Rev 5*, the rules of `convert_nist.py`: a withdrawn control
   is not converted, and its successor names it in `replaces`; every statement
@@ -337,6 +380,15 @@ and the licence you state. Three sets of rules:
 The generic rules read the NIST catalog too (1,196 requirements, valid for
 the reference validator), with a different result: withdrawn controls are
 kept as requirements, and assessment objectives stay in the holding facet.
+
+The three presets for a publisher's corpus write the party the Python
+converter of that corpus writes, because their result is held equal to the
+converter's: BSI binds `…/party/institution`, a CIS Benchmark
+`…/party/system-administrator` with CIS (`…/party/cis`) as the author of
+its Mappings, and NIST the implementation levels a control states, or
+`…/party/organization` where it states none. These are the converters'
+readings of the source and not a user's choice; the forms have no field for
+them.
 
 Choose the namespace with care. Ids under your own domain make you the
 claimed authority of the catalog in the tier rule, and a Tailoring of yours
@@ -672,6 +724,15 @@ text in that language, the English text is shown, then whatever is there.
   anything but a Tailoring's operation or a Finding, are shown and not
   edited. A review date is offered on a date or as a calendar period, not as
   an elapsed duration.
+- A party the kernel requires: the pages refuse an empty field; they do not
+  look for the parties an earlier build made up. A set that was written
+  with build 0.9.9 or older may hold `…/party/author`, `…/party/check-author`,
+  `…/party/assessor`, `…/party/ciso`, `…/party/organisation` or
+  `…/party/organization`; nothing in the object tells such a party from one
+  a user named, so the app neither marks nor rewrites it. A form's draft
+  that an earlier build stored with one of these words is not read any
+  more. The record of catalogue entries that do not apply still writes the
+  owner field of the catalogue view as who decided, and asks for it.
 - Signatures: Ed25519 over a DSSE envelope, verification only. A key is
   trusted because you say so on the Validate page, never because a bundle
   carries it. The app cannot sign. The reference validator looks at the
