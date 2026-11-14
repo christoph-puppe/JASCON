@@ -3880,14 +3880,17 @@ difference is the runner's.
 
 ### Found and not fixed
 
-#71 (two items added) and #72, as before. #73, #74 and #75 (above). The
+#71 (three items added) and #72, as before. #73, #74 and #75 (above). The
 app's presets write what their converters write. The reader does not
 show Risks on stage 5. `template-ref.digest` of the example Attestation
 is still a marked placeholder. The deliberate defects of the twin's and
 the app's agents were not repeated here; of the reader's, nine of my
 own were run. The reader's time on a large bundle whose Attestation
 names bare digests, where every listed object is digested, was not
-measured.
+measured. The website's home and model pages still call the failing
+outcome "Tamper" and show neither the absent subject nor the lifecycle
+clause (#71, item 10): five languages, three of which this session
+cannot check.
 
 **Scored.** *Customer:* an auditor who is handed a bundle with an
 Attestation is told by the validator, without keys, whether it binds
