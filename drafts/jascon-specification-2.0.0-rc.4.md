@@ -237,7 +237,7 @@ self-containment.)
 | Concept | ISM | BSI | FedRAMP CR26 | v0.5 home |
 |---|---|---|---|---|
 | Modality | prose (style-guide) | `modal_verb` ×1,006 | `force` ×328 (MUST 189/SHOULD 84/MAY 39/MUST NOT 11/SHOULD NOT 5) | Kernel `statements[].modality` + **normative partial order** (D9) |
-| Clause granularity | 1 statement/control | **347 nested pseudo-controls** | class variants + info bullets | Kernel `statements[]` (D9) |
+| Clause granularity | 1 statement/control | 1 statement/control *(corrected 2026-11-14: until then "347 nested pseudo-controls". BSI nests controls to group them; a nested control is a full control and converts as a Requirement of its own — the author)* | class variants + info bullets | Kernel `statements[]` (D9) — census **1-of-3** since that correction. Evidence outside the census: SP 800-53, where 284 of 1,196 Requirements carry several statements and implementations and 3,707 assessment objectives address them one at a time. No converted corpus varies modality or party between the statements of one Requirement; that both sit on the statement was kept by the author on 2026-11-14 as a decision of the design |
 | Obligated party | implicit | `target_object_categories` (distinct concept → grammar facet) | `affects[]` (array) | Kernel `obligated-parties[]` (D9) |
 | Membership / baselines | `applicability` ×5,301 + E8 ×256 | twin catalogs | `subsets` + per-class lists | dead → RequirementSet (D13, D21) |
 | Secondary identifiers | labels + legacy nos. | `alt-identifier` ×1,219 | `alts[]` ×188 | Kernel `label` + `aliases[]` (D2) |
@@ -251,7 +251,7 @@ self-containment.)
 | Effectivity | — | — | `info.effective` | stdlib `effectivity@1` |
 | Deviations | — | audit practice | `corrective_actions`; hist. 4× state machine | Kernel `Deviation` (D8) |
 | **Cross-framework mappings** *(new row)* | — | — | KSI→800-53 ×263 | **Kernel `Mapping`** (D20) — external evidence: SCF ×200+ frameworks, CIS/CSA mapping products, NIST OLIR, and NIST's own Mapping Model (OSCAL 1.2.0) |
-| **Ex-ante risk record** *(new row, 2.0.0)* | — | threat linkage only (authority side: threat references on 595 of 651 requirements, in `security-objectives@1`) | — | **Kernel `Risk`** (D23) — census **0-of-3**: admitted as an author-decided exception to D22 test 1. Evidence outside the census: three standards prescribing the record (ISO/IEC 27001 with 27005, BSI 200-3, SP 800-30) and one lifecycle corpus (OSCAL POA&M risks ×2) |
+| **Ex-ante risk record** *(new row, 2.0.0)* | — | threat linkage only (authority side: threat references on 900 of 999 requirements, in `security-objectives@1`; 595 of 651 until 2026-11-14, when every nested control became a Requirement of its own) | — | **Kernel `Risk`** (D23) — census **0-of-3**: admitted as an author-decided exception to D22 test 1. Evidence outside the census: three standards prescribing the record (ISO/IEC 27001 with 27005, BSI 200-3, SP 800-30) and one lifecycle corpus (OSCAL POA&M risks ×2) |
 | Rendering hints | — | — | `do_not_link`, `web_name` | Annotations (D10) |
 | Process flows | — | — | `info.flows[]` | out of scope (D17) |
 
@@ -938,6 +938,12 @@ source/target for D20 objects (mapping/profile-model exports are the
 next expansion).
 
 ## D17 — Declared non-goals.
+*(Amended 2026-11-14, the author: real content is never dropped. The
+format defines no process model, and that stays a non-goal. But a flow
+that a source writes out is content of that source and is carried as the
+source writes it: CR26's one flow, an activity with its nodes and steps,
+stands on its family's Set. Only a flow that a source merely links to
+stays a linked resource.)*
 Unchanged (flows as linked resources; template accreditation open (R6);
 narrative grammar optional; executable proof deferred to the gate) — plus:
 **PCI's customized approach and ISO's management-system clauses are named
@@ -2055,8 +2061,26 @@ implementations and of the assessment, in facets; roles at two levels,
 the Component and the whole scope. References by uuid are resolved to
 the objects they name, which showed two edges the converter had wired
 against its source; both follow the source now. The three values left
-are references that name nothing their source defines.)* "Converted
-losslessly" is established at path level only (backlog #41). **R17** —
+are references that name nothing their source defines.)* *(rev.
+2026-11-14, phase E: the author's rule of that day is "real content is
+never dropped", not by a bug, not by a sentence of a path map, not by a
+declared drop. Six converters follow every source value with a ledger
+now (IFA, ISM, Grundschutz++, CSF, SP 800-53, CR26; 214,365 values).
+Their first ledgers had found values that were lost behind path maps of
+100 %: one of two risk-party values on 22 CSF subcategories, the links
+of 348 nested Grundschutz++ controls, all 3,707 assessment-for links of
+SP 800-53, the back-matter that 481 links in the ISM's texts name. Each
+is carried now, and every drop that had been declared was decided by the
+author and built. The six ledgers read 75,603 copied, 50,502 made by a
+named rule, 88,260 no content by a rule the ledger checks (a name that
+only selects a field, a namespace, an id that can be rebuilt exactly, a
+back-matter resource nothing refers to), 0 dropped and 0 unaccounted,
+and a run with an unaccounted value ends with 1. A ledger holds a rule
+to what the rule wrote, not to whether the rule is right, and it does
+not see what a converter writes on its own.)* "Converted losslessly" is
+held at value level on these six corpora in the sense just stated, and
+at path level only on the corpora whose sources are not in the
+repository (backlog #41, closed for the six). **R17** —
 redistribution: six of the eleven measured bundles cannot be shipped
 (§2); the shipped evidence base no longer exercises Tailoring or Mapping
 at scale, and the removed bundles remain in the repository's history
@@ -2288,7 +2312,12 @@ of Check and of advice packs:
 
 Not re-run for this candidate: the OSCAL export suite (its inputs among
 the shipped bundles are byte-identical to 1.0.0; the NIST release schema
-it validates against is not in the repository). Risk, Check and advice
+it validates against is not in the repository). *(2026-11-14, phase E:
+the four catalogue bundles changed, and the suite was run again with the
+schema of the OSCAL 1.2.2 release, SHA-256 `fdc559f5…9d0c`: all four
+exports are schema-valid, and 4,465 of 4,465 objects come back equal by
+semantic digest (ISM 1,731, Grundschutz++ 1,287, CSF 226, SP 800-53
+1,221). No workflow step runs it; backlog #90.)* Risk, Check and advice
 have no place in a 1.x *catalog* export; a POA&M-side, an
 assessment-results and a component-definition export belong to the
 pending lifecycle-export work.
@@ -2340,6 +2369,7 @@ history. The compact line:
 | No manifest lists an Attestation | 2026-11-14 | Backlog #75, decided by the author: "refusal in all". D3.1 excluded Attestations from the content manifest "by definition", and a tool refused a listed one in a pack only (ADVICE-1); an ordinary bundle that listed its own passed in both validators. D3 item 11: **MANIFEST-1**, one failure per Attestation among the objects a manifest lists, in every bundle, whatever it binds and whatever its lifecycle. `attestation` 24 → 32 vectors, 692 in all. Applied by `validate_core.py`, by `validate_core.ps1`, by the app (0.9.12) and by the reader (1.14.0). A listed Attestation is still held to what it binds: never a Full Match of the manifest that lists it, and for one that binds a kept pack manifest a Full Match of that. No shape changes; a bundle whose manifest lists an Attestation fails where it passed | "After phase D — a listed Attestation is refused; the party a converter writes is an argument" |
 | Whom a converted statement binds is an argument | 2026-11-14 | Backlog #74, decided by the author (the recommended option). The kernel requires `obligated-parties`; a catalogue seldom names whom it binds, so a converter writes one party of its own. `--obligated-party URI` on the ten converters replaces that default, and each coverage report says who chose the party; the app's import presets do the same. With it, the five shipped conversions are held to pinned sources by the workflow, and the CR26 converter covers its publisher's current publication again (#73). No kernel shape and no rule changes | same section |
 | An Assessment's method is held to its facet | 2026-11-14 | Backlog #55, phase E. The kernel schema says of `method` only that it is an object, and the facet check read `facets` only: no implementation held a method to anything. D10 amended: the keys of `method` are facet ids, resolved as the keys of `facets` are, and each payload is held to its schema. `facet` 7 → 20 vectors, 705 in all. No shape changes and no shipped payload had to change; a bundle whose Assessment states its method under a key no facet registers, or with a payload its facet refuses, fails where it passed | "Phase E" |
+| Real content is never dropped | 2026-11-14 | Phase E, the author's corrections and decisions (`drafts/phase-e/entscheidungen-phase-e.md`). No shape of the kernel changes. Converters: every source value is carried or is no content by a rule the ledger checks; a nested control is a Requirement of its own; every withdrawn item is an object with lifecycle `withdrawn`, with a statement where it is a Requirement; `active` where a source states no status is a converter's named default; one compat schema (`oscal-1x@1` 1.1.0) for every converter. D17 amended (a flow a source writes out is carried). The convergence table's row on clause granularity corrected. A draft may be used voluntarily (handbook 3.6). The app's two presets and the reader follow. Six findings about the kernel and the standard facets are candidates for 2.0.0, backlog #80 to #85 | "Phase E" |
 | **2.0.0-rc.4** | 2026-11-13 | This text: D26 new (who decided, and when); D8, D13 and D23 amended in place. `provenance` optional on a Tailoring and its entries, a Risk and its ratings, an Implementation and a Finding; `decided` and `review-due` on a Deviation; `date` on an authorization; AUTHOR-1 to 4 and REVIEW-1 as reports; three times typed (DATE-3 to 5). A new vector family, `author` (40), and `kernel` 25 → 54; 643 in all, 18 families. Backlog #65 and #66 | D26 · "CP-AUTHOR-1 landed" |
 
 ## IV.7 Release artifacts (what this candidate ships with)
@@ -2373,7 +2403,9 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
   port, on every change (`.github/workflows/validators.yml`).
 - **Bidirectional export**: `export_oscal.py` — as at 1.0.0 (OSCAL 1.2.2
   out, generic re-import, 5,886/5,886 round-trip measured on the ten
-  catalog bundles then present); not re-run.
+  catalog bundles then present); not re-run. *(2026-11-14: run again on
+  the four catalogue bundles in the repository after phase E, 4,465 of
+  4,465 objects; IV.5b.)*
 - **Converters for all eleven corpora** under `jascon/scripts/`, writing
   one byte spelling on every OS; `oscal_conv_lib.global_occurrence()` for
   the value-level check (wired into the IFA report so far). *(rev.
@@ -2382,14 +2414,21 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
   was carried, not a trace of each value — backlog #41. `Ledger` in the
   same file traces each source value to its destination; wired into the
   IFA converter, which writes `ifa-conversion-ledger.json`.)*
+  *(2026-11-14, phase E: `Ledger` is wired into six converters, IFA, ISM,
+  Grundschutz++, CSF, SP 800-53 and CR26, each of which ends its run
+  with 1 on an unaccounted value; the workflow runs their ledger tests
+  and reproduces the six conversions from pinned sources. The other
+  five converters have no source in the repository and no ledger.)*
   *(2026-11-14: the party a converter writes where its source names
   none is an argument, `--obligated-party URI`, with the converter's
   former value as its named default; the coverage report says who chose
   it — backlog #74.)*
 - **Five corpus bundles** under `converted_examples/` — AU.ISM, DE.BSI,
-  US.SP800-53, US.CSF, US.IFA-GoodRead: 3,714 manifest-listed objects
-  (3,715 until 2026-11-13, when the IFA Attestation left the manifest
-  that had listed it), both SHA-256 digests re-verified per object,
+  US.SP800-53, US.CSF, US.IFA-GoodRead: 4,481 manifest-listed objects
+  since phase E (2026-11-14: ISM 1,731, Grundschutz++ 1,287, SP 800-53
+  1,221, CSF 226, IFA 16; 3,714 before, and 3,715 until 2026-11-13, when
+  the IFA Attestation left the manifest that had listed it), both
+  SHA-256 digests re-verified per object,
   stored as the digested bytes, each with its publisher's terms in
   `SOURCE-LICENSE.md`. *(2026-11-14: each of the five is reproducible.
   Its folder names the publisher's files at a tag or a commit with
@@ -2399,8 +2438,9 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
   CIS.Controls, CIS.Ubuntu2404, DE.C5, DE.C3A, BE.CyFun, FedRAMP-CR26:
   coverage report and `NOT-REDISTRIBUTED.md` only. *(2026-11-14: the
   CR26 conversion is run by the workflow on a pinned download and its
-  two reports must be the committed ones; nothing converted is kept —
-  backlog #73. The other five were not run again.)*
+  two reports must be the committed ones (and, since phase E, its ledger
+  record); nothing converted is kept — backlog #73. The other five were
+  not run again.)*
 - **The normative appendices** — A (shapes, with A.9b Risk) · B
   (primitives incl. B.1.9 and B.1.10, operations, predicates) · C (code
   systems, with C.3c, the treatment options and C.12 to C.15 for Check) — at
@@ -2515,20 +2555,33 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
    readings of a duration range, an optional notification and a rule's
    control links are kept (#78). Nothing is left to decide before the
    tag.)*
+   *(2026-11-14, phase E: that sentence held for some hours. The author
+   corrected the first round of phase E, decided sixteen open points and
+   three follow-up questions, and opened the kernel for change before
+   the tag where a change is well founded. Six findings about the kernel
+   and the standard facets are filed as candidates, each with its
+   numbers and a proposal, and need the author: a source document's
+   metadata and the manifest's provenance (#80), an object's own change
+   record (#81), the resources that texts refer to (#82),
+   `assessment-for` (#83), labels of statements and parameters (#84),
+   what a Set stands for (#85).)*
 6. **Work, not decisions** — ✓ the implemented I-Regexp grammar was
    compared with the published text of RFC 9485 on 2026-11-12 (#61,
-   closed); ☐ a ledger of source occurrences per converter, and the
-   re-wording of "converted losslessly" that follows from it (#41,
+   closed); ✓ a ledger of source occurrences in the six converters whose
+   sources are in the repository, and the re-wording of "converted
+   losslessly" that follows from it (#41, closed 2026-11-14; R16;
+   the history of the item:
    re-planned on 2026-11-13: the global check that was to be rolled out
    cannot show that a single value arrived; ✓ the ledger exists and the
    IFA converter is wired; ✓ its unaccounted values were decided class by
    class on 2026-11-13, none of its 835 source values is unaccounted,
    and the three references that name nothing their source defines are
-   declared as defects of the source; ☐ the other ten converters); ✓ a real
+   declared as defects of the source; ✓ five more converters on 2026-11-14, and every declared drop decided and built; the five converters without a source in the repository have none); ✓ a real
    attestation in the example bundle, and every Attestation read with a
    bundle held to what it binds by both validators, the app and the
-   reader (#46, closed 2026-11-14; D7 as amended); ☐ `Assessment.method`
-   payloads held to their pinned schema (#55); ☐ a second Risk corpus
+   reader (#46, closed 2026-11-14; D7 as amended); ✓ `Assessment.method`
+   payloads held to their pinned schema (#55, closed 2026-11-14; D10 as
+   amended); ☐ a second Risk corpus
    (IV.5b item 4).
 7. **Not part of this candidate, named so that nobody reads it as more
    than it is** — a runner that executes collectors and writes evidence;
@@ -2537,3 +2590,5 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
    component definitions vendors published (NIST's own examples are
    counted, `drafts/cp-advice-1-census/`).
 8. **Tag `v2.0.0`** — on the author's go. Nothing in this list blocks it.
+   *(2026-11-14, phase E: the six candidates of item 5, backlog #80 to
+   #85, are the author's to decide before it.)*
