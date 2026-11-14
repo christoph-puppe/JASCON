@@ -85,7 +85,9 @@ SP 800-53 and CR26 land, so totals are written only at the end.
     are not closure-required, so the validator passes;
   - the compat facet `https://ns.jascon.net/compat/oscal-1x`, version
     1.0.0, is pinned with four different closed schemas (ISM,
-    Grundschutz++, CSF, SP 800-53);
+    Grundschutz++, CSF, SP 800-53); in the app, a profile imported into
+    a Grundschutz++ set keeps its metadata but not its merge directive,
+    because that set's schema has no `merge`;
   - a manifest has one provenance: the four SP 800-53 profiles' author
     and day stand only in their compat metadata;
   - the ledger has no checked class for "a value that decides the
@@ -176,6 +178,9 @@ SP 800-53 and CR26 land, so totals are written only at the end.
 | drafts/jascon-decision-rationale-register.md:144; backlog row #41 | nested controls as statements; the BSI figures | reported |
 | DEEP_RESEARCH_REVIEW.md:90, 97 | nested controls as statements | reported |
 | jascon-app/readme.md:361-367, 426-427 | withdrawn controls not converted; "1,035 objects equal"; 1,035 objects, 1,918 statements (the SP 800-53 preset) | reported |
-| jascon-app (Grundschutz++ preset) | done in build 0.9.14 (merged): the preset, its texts, ERRATA and tests. The SP 800-53 preset follows | read |
+| jascon-app (both presets) | done: Grundschutz++ in build 0.9.14, SP 800-53 in build 0.9.15 (merged), with their texts, ERRATA and tests | read |
+| README.md:600-601 | "the NIST SP 800-53 rules give what `convert_nist.py` gives": right again since build 0.9.15 (baseline Sets aside: the preset makes none) | reported |
+| README.md:117-118 | counts of the bundles' statements (SP 800-53 has 1,920 statements now) | reported |
+| jascon/scripts/convert_nist.py | a converter defect, found by the app's agent: on a catalogue where a `reference` link names a back-matter resource that has no link (not the pinned one), it writes no relation and its ledger ends the run with 1 on the two values | reported |
 | website/src/start.html:108 | "what OSCAL cannot hold returns on import": if it means the app's Import page, it was wrong before phase E too (the presets carry those props in the compat facet, they do not read them back) | reported |
 | jascon/scripts/convert_bsi.py | a converter defect, found by the app's agent: on a catalogue with an empty parameter label (not the pinned one) it writes the bundle and then ends with 1 on a wiring check, because the path map does not name `param-extras/{param}/label` for `params[].label`; the app's comparison test accepts that one failure | reported |
