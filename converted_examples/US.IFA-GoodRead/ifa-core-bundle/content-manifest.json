@@ -160,15 +160,15 @@
   {
    "id": "https://ns.nist.gov/sp800-53/req/AC-2",
    "version": "5.2.0",
-   "package-digest": "sha256:345873682102b0b4b3fa53562985851a3d3e45293c579325e9a1af98ca5c39cb",
-   "semantic-digest": "sha256:f19cafb0c67a8e734cbce725ccd7e2c28fc8703b07ac55232efb1ebbb8d9321e",
+   "package-digest": "sha256:bc7a512bbdee79631b4eb4c86ddb05ee6b6c1982134ecd92a39a3936baeb5acb",
+   "semantic-digest": "sha256:656877d154e5686739f653203511fcdd9d6572568a25d409e44b950ace9623de",
    "path": "objects/req/ac-2.json"
   },
   {
    "id": "https://ns.nist.gov/sp800-53/req/AC-6.1",
    "version": "5.2.0",
-   "package-digest": "sha256:d51ae9565482ce9aea132e81bd7e8263b740e8b5f55b939271c98c94d5414a01",
-   "semantic-digest": "sha256:21637d8ecfe2f6255b6d385528772eac9ca7605d64c72d3d7666e1428c67ca3b",
+   "package-digest": "sha256:cc0d251ea97324ae66ee2e5ea0ac5968af0f4256e1d60b3a80930494f29e7603",
+   "semantic-digest": "sha256:b14be76d67446e77ab0ccf4de964b4bee7b31dd5716d866487a921eaa3518da2",
    "path": "objects/req/ac-6-1.json"
   },
   {
