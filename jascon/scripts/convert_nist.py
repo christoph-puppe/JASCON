@@ -9,7 +9,9 @@ lifecycle `withdrawn`; SP 800-53A layer -> sp800-53a@1 facet; two-layer ODP
 params -> statement-scoped kernel parameters (declared where inserted, the
 per-statement parameter rule) + odp@1 admin facet; baselines -> 4 membership
 Sets; the metadata of the catalogue and of each profile -> the compat facet
-on the Set that stands for the document. Coverage target: 0.
+on the Set that stands for the document, the catalogue's author and day ->
+the manifest's provenance; the back-matter resources, as the source writes
+them -> references@1 on the root Set. Coverage target: 0.
 
     convert_nist.py [--obligated-party URI] [--out DIR]
 
@@ -53,7 +55,7 @@ the reports and the record are written first, so a failed run says why."""
 import json, os, re, sys, time, collections
 from oscal_conv_lib import make_T, slug, Bundle, inventory, coverage, report, walk_controls
 from oscal_conv_lib import known_arguments, out_dir, obligated_party, obligated_party_line, obligated_party_record
-from oscal_conv_lib import Ledger, ledger_by_path, ledger_gate
+from oscal_conv_lib import Ledger, ledger_by_path, ledger_gate, document_author, document_day
 
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 SRCDIR = os.path.join(ROOT, "sources", "nist")
@@ -108,16 +110,15 @@ BASELINES = {b: load(b.lower(), f"NIST_SP-800-53_rev5_{b}-baseline_profile.json"
 # the three classes of that rule; the report lists them with a reading and
 # the author decides. The reasons are worded as they were declared. What
 # else was declared until then is carried now (the revision history, the
-# directory of parties and roles, the formal ODP labels, `merge.as-is`) or
-# is no content by a checked rule (the name of a part, the class of a group
-# or of a control, a label or an id that a rule rebuilds).
+# directory of parties and roles, the formal ODP labels, `merge.as-is`, the
+# uuid and the media type of a back-matter resource of the catalogue) or is
+# no content by a checked rule (the name of a part, the class of a group or
+# of a control, a label or an id that a rule rebuilds).
 IFA = "as decided for IFA on 2026-11-13: "
 B_BACKMATTER = IFA + ("a back-matter resource or an import link: a link to another serialisation of the source or to "
                       "an imported document; the bundle carries the Requirements themselves")
 B_UUID = IFA + ("the uuid of a source document, which identifies it among source documents only: JASCON objects get "
                 "URIs minted from ids")
-B_RESOURCE_UUID = IFA + ("the uuid of a back-matter resource that no reference link of a control names; it identifies "
-                         "the resource inside the catalogue only, and the resource's title and link are on the root Set")
 A_TOMBSTONE = ("path map: a withdrawn control is dropped as a tombstone; its lineage is inverted onto the successor "
                "its link names, which carries its URI, a label and its title")
 A_ITEM_LABEL = ("path map: the print label of a statement item is derivable: its letter or number is the last "
@@ -217,6 +218,9 @@ R_SAME_RELATION = "a relation the control states twice is written once"
 R_ASSURANCE = "the prop value `true` or `false`, written as a JSON boolean"
 R_ASSESSED = "the statement part an `assessment-for` link names, as a statement id (the part id without the control prefix)"
 R_ASSESSED_REQ = "requirement URI from the control whose part an `assessment-for` link names, where that is another control"
+R_AUTHOR = ("author of the catalogue: the party its metadata names as its author (the role `creator`, else `prepared-by`, "
+            "else the one party it names; oscal_conv_lib.document_author), as a URI of its name under the namespace")
+R_DAY = "date of the catalogue: the day of its last-modified"
 
 def req_uri(cid): return D(R_REQ, mint, cid)
 def _link_ref(href): return mint(href.lstrip("#"))
@@ -237,6 +241,9 @@ def _mode(rel): return MODE[rel]
 def _into(href): return "smt" + href.lstrip("#").split("_smt")[1]
 def _part_req(href): return mint(href.lstrip("#").split("_smt")[0])
 def _family_uri(gid): return f"{NS}/set/family/{gid}"
+PARTIES = PARTY_DEFAULT.rsplit("/", 1)[0] + "/"          # where the landmark URI of a party stands (as in convert_ism.py)
+def _author_uri(name): return PARTIES + slug(name)       # the author of the document: no statement is bound to it
+def _day(last_modified): return last_modified[:10]
 BOOLEAN = {"true": True, "false": False}
 def _boolean(value): return BOOLEAN[value]
 # ... and the functions of the rules that rebuild an id or a label
@@ -279,26 +286,15 @@ def strings(node):
         for v in node: yield from strings(v)
     elif isinstance(node, str): yield node
 
-def hrefs(node):
-    if isinstance(node, dict):
-        if isinstance(node.get("href"), str): yield node["href"]
-        for v in node.values(): yield from hrefs(v)
-    elif isinstance(node, list):
-        for v in node: yield from hrefs(v)
-
-# back-matter: uuid -> title, citation, url. The uuid of a resource is written where a link that the bundle
-# carries as the source wrote it names the resource by that uuid: a markdown link in a text, a link of the
-# document metadata. A `reference` link of a control is resolved to the resource's own link instead.
+# back-matter: the resources as the source writes them, each with its uuid, stand on the root Set (references@1;
+# the convention of the ISM converter). A markdown link `(#uuid)` in a text of the bundle, and a link of the
+# document metadata, names one by that uuid; a `reference` link of a control is resolved to its first link.
 MD_LINKS = [t for s in strings(cat) for t in MDTARGET.findall(s)]       # the target of every markdown #-link
-LINKED = set(MD_LINKS) | {h.lstrip("#") for h in hrefs(cat.get("metadata", {})) if h.startswith("#")}
-RES, RES_UUID = {}, {}
-for r in cat.get("back-matter", {}).get("resources", []) or []:
-    RES[r["uuid"]] = {"title": r.get("title", ""),
-                      "citation": (r.get("citation") or {}).get("text", ""),
-                      "url": (r.get("rlinks") or [{}])[0].get("href", "")}
-    if r["uuid"] in LINKED: RES[r["uuid"]]["uuid"] = r["uuid"]
-    RES_UUID[r["uuid"]] = r["uuid"]          # the uuid as the source wrote it, for the rule that resolves a link
-    led.drop_value(r["uuid"], B_RESOURCE_UUID)   # applies where no link names the resource: it has no destination then
+RESOURCES = (cat.get("back-matter") or {}).get("resources") or []
+RES = {r["uuid"]: r for r in RESOURCES}                                  # uuid -> the resource as the source writes it
+def res_url(uuid):
+    """the first link of a resource, as the source writes it ("" where it gives none)"""
+    return ((RES[uuid].get("rlinks") or [{}])[0]).get("href", "")
 
 controls = list(walk_controls(cat))
 by_id = {c["id"]: c for c, _, _ in controls}
@@ -600,8 +596,8 @@ for c, parents, gchain in written:
         if rel in ("related", "required") and href in by_id:
             rels.append({"type": rel, "ref": D(R_LINK, _link_ref, l["href"])}); rel_count[rel] += 1
             if href in tombstones: rel_count[f"of which {rel} to a withdrawn control that is no object"] += 1
-        elif rel == "reference" and href in RES and RES[href]["url"]:
-            rels.append({"type": rel, "ref": D(R_REFERENCE, _resolved, l["href"], RES_UUID[href], RES[href]["url"])})
+        elif rel == "reference" and href in RES and res_url(href):
+            rels.append({"type": rel, "ref": D(R_REFERENCE, _resolved, l["href"], RES[href]["uuid"], res_url(href))})
             rel_count["reference"] += 1
         else:
             rel_count[f"not written ({rel})"] += 1
@@ -671,10 +667,11 @@ for g in cat.get("groups", []):
     root_members.append({"ref": suri, "sequence": len(root_members) * 10 + 10})
     fam_sets += 1
 root = {"id": f"{NS}/set/root", "version": VER, "lifecycle": "active",
-        "title": cat["metadata"]["title"], "members": root_members,
-        "facets": {F_REF: {"resources": [
-            {k: v for k, v in r.items() if v} for _, r in sorted(RES.items(), key=lambda kv: kv[1]["title"])]}}}
-if document_metadata(cat["metadata"]): root["facets"][F_COMPAT] = {"metadata": document_metadata(cat["metadata"])}
+        "title": cat["metadata"]["title"], "members": root_members}
+root_facets = {}
+if RESOURCES: root_facets[F_REF] = {"resources": RESOURCES}
+if document_metadata(cat["metadata"]): root_facets[F_COMPAT] = {"metadata": document_metadata(cat["metadata"])}
+if root_facets: root["facets"] = root_facets
 bundle.add("objects/set/root.json", root)
 
 # ---------- baseline Sets ----------
@@ -715,19 +712,37 @@ bundle.stub("sp800-53a-stub.json", F_53A.split("@")[0], [],
 bundle.stub("sp800-53-odp-stub.json", F_ODP.split("@")[0], [], {"params": {"type": "object"}})
 bundle.stub("sp800-53-rmf-stub.json", F_RMF.split("@")[0], [],
             {"contributes-to-assurance": {"type": "boolean"}})
-bundle.stub("sp800-53-references-stub.json", F_REF.split("@")[0], [], {"resources": {"type": "array"}})
+_STRINGS = lambda *names: {n: {"type": "string"} for n in names}
+_RESOURCE = {"type": "object", "additionalProperties": False, "required": ["uuid"],           # an OSCAL back-matter resource
+             "properties": {**_STRINGS("uuid", "title", "description", "remarks"),
+                            "props": {"type": "array", "items": {
+                                "type": "object", "additionalProperties": False, "required": ["name", "value"],
+                                "properties": _STRINGS("name", "uuid", "ns", "value", "class", "group", "remarks")}},
+                            "citation": {"type": "object"},
+                            "rlinks": {"type": "array", "items": {
+                                "type": "object", "additionalProperties": False, "required": ["href"],
+                                "properties": _STRINGS("href", "media-type")}}}}
+bundle.stub("sp800-53-references-stub.json", F_REF.split("@")[0], [], {"resources": {"type": "array", "items": _RESOURCE}},
+            note="NORMATIVE pinned payload schema (backlog #26): the back-matter resources of the catalogue, as the "
+                 "source writes them; a link `(#uuid)` in a text of the bundle names the resource with that uuid")
 bundle.stub("oscal-1x-compat-1.0.0-stub.json", F_COMPAT.split("@")[0], [],
             {"metadata": {"type": "object"}, "merge": {"type": "object"}, "class": {"type": "string"}},
             note="NORMATIVE pinned payload schema (backlog #26): what of an OSCAL document the kernel has no member "
                  "for, in the source's own shape - the document `metadata` and a profile's `merge` on the Set that "
                  "stands for the document, the `class` of a control where no rule gives it")
+# The manifest's provenance names the catalogue: its title, version and OSCAL version, and - by the library's rule
+# for the author of an OSCAL document, as every converter pre-fills it (backlog #69) - its author and its day.
+PROVENANCE = {"source": cat["metadata"]["title"], "source-version": VER,
+              "source-oscal-version": cat["metadata"]["oscal-version"]}
+AUTHOR = document_author(cat["metadata"])
+if AUTHOR: PROVENANCE["author-ref"] = D(R_AUTHOR, _author_uri, AUTHOR["name"])
+if document_day(cat["metadata"]): PROVENANCE["date"] = D(R_DAY, _day, cat["metadata"]["last-modified"])
+PROVENANCE.update({"baselines": {b: p["metadata"]["version"] for b, p in BASELINES.items()},
+                   "converter": "convert_nist.py v0.2",
+                   "namespace-note": "https://ns.nist.gov/sp800-53 minted to match the corpus's "
+                                     "pre-existing mapping-endpoint URIs; pending a NIST-published URI"})
 led.resolve(bundle.objects)      # a boolean that carries its origin becomes the plain one, and its place is noted
-MANIFEST = bundle.write({"source": cat["metadata"]["title"], "source-version": VER,
-              "source-oscal-version": cat["metadata"]["oscal-version"],
-              "baselines": {b: p["metadata"]["version"] for b, p in BASELINES.items()},
-              "converter": "convert_nist.py v0.2",
-              "namespace-note": "https://ns.nist.gov/sp800-53 minted to match the corpus's "
-                                "pre-existing mapping-endpoint URIs; pending a NIST-published URI"})
+MANIFEST = bundle.write(PROVENANCE)
 
 # ---------- corpus cross-check: mapping endpoints vs minted ids ----------
 cited = collections.Counter()
@@ -756,9 +771,9 @@ miss = {k: v for k, v in cited.items() if k not in minted_names and k not in wd_
 # read as dropped on purpose; the run checks that below. Where values of one
 # path are carried and others are not, the drop is declared value by value at
 # the place the script decides it (the status of a tombstone, an item label
-# the rule does not give, the uuid of a resource no link names).
+# the rule does not give).
 PATH_DROPS = [
- (r"\.profile\.back-matter\.|^nist\.catalog\.back-matter\.resources\[\]\.rlinks\[\]\.media-type$", B_BACKMATTER),
+ (r"\.profile\.back-matter\.", B_BACKMATTER),
  (r"\.profile\.imports\[\]\.href$", A_PROFILE),
  (r"^(nist\.catalog|[a-z]+\.profile)\.uuid$", B_UUID),
 ]
@@ -770,8 +785,7 @@ DROP_REACH = {
  A_ITEM_LABEL: r"\.parts\[\]\.props\[\]\.value$",
  A_PROFILE: r"\.profile\.imports\[\]\.href$",
  B_UUID: r"^(nist\.catalog|[a-z]+\.profile)\.uuid$",
- B_RESOURCE_UUID: r"^nist\.catalog\.back-matter\.resources\[\]\.uuid$",
- B_BACKMATTER: r"(\.profile\.back-matter\.|\.back-matter\.resources\[\]\.rlinks\[\]\.media-type$)",
+ B_BACKMATTER: r"\.profile\.back-matter\.",
 }
 # A selector beside a value that is a declared drop is dropped with it; the ledger words its reason with this
 WITH = " - of a value that is dropped: "
@@ -792,11 +806,6 @@ READINGS = [
  (r"\.profile\.back-matter\.", B_BACKMATTER,
   "content: the resource of the profile that names the imported catalogue in three serialisations (uuid, "
   "description, links, media types); it goes with the import link"),
- (r"^nist\.catalog\.back-matter\.resources\[\]\.rlinks\[\]\.media-type$", B_BACKMATTER,
-  "content: the media type the source gives for the link of a resource"),
- (r"^nist\.catalog\.back-matter\.resources\[\]\.uuid$", B_RESOURCE_UUID,
-  "not content, because no link in the bundle names these resources by uuid and their title, citation and link "
-  "are on the root Set; but nothing rebuilds a uuid, so none of the three classes names it"),
  (r"\.uuid$", B_UUID, "content: the identifier of the source document; nothing in the bundle gives it"),
 ]
 READING_WITH = "not content, because it is the name that selects a value which is a declared drop, and shares its fate"
@@ -908,15 +917,14 @@ RULES = [
  (r"^nist\.catalog\.metadata\.", "L2",
   "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, "
   "oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document "
-  "states; oscal-version also manifest `provenance.source-oscal-version`", {C}),
+  "states; oscal-version also manifest `provenance.source-oscal-version`; the name of the party the metadata names "
+  "as the author -> manifest `provenance.author-ref` (a landmark URI), the day of last-modified -> manifest "
+  "`provenance.date`", {C}),
  (r"^nist\.catalog\.uuid$", DROPPED, f"not carried: a declared drop, {SEE}", {DR}),
- (r"^nist\.catalog\.back-matter\.resources\[\]\.(title|citation\.text|rlinks\[\]\.href)$", "L2",
-  "references@1 on the root Set (title, citation, url); the link is also the target of a control's `reference` relation", {C}),
- (r"^nist\.catalog\.back-matter\.resources\[\]\.uuid$", "L2",
-  "references@1 `uuid` where a link the bundle carries as the source wrote it names the resource (a markdown link "
-  "in a text, a link of the document metadata); the key by which a control's `reference` link is resolved to the "
-  f"resource's link (transformed); where no link names the resource: a declared drop, {SEE}", {C, X, DR}),
- (r"^nist\.catalog\.back-matter\.resources\[\]\.rlinks\[\]\.media-type$", DROPPED, f"not carried: a declared drop, {SEE}", {DR}),
+ (r"^nist\.catalog\.back-matter\.resources\[\]\.", "L2",
+  "references@1 on the root Set: the resources in the source's own shape (uuid, title, citation, rlinks with href "
+  "and media-type); a markdown link `(#uuid)` in a text names one by its uuid, and a control's `reference` link is "
+  "resolved to its first link (the uuid and the link are then also inputs of that rule)", {C}),
  (r"^nist\.catalog\.groups\[\]\.id$", "L1", "family Set URI (D21 nesting under root)", {X}),
  (r"^nist\.catalog\.groups\[\]\.title$", "L1", "family Set title", {C}),
  (r"^nist\.catalog\.groups\[\]\.class$", NOT_CONTENT, "`family`: selects that the group is written as a family Set", {N}),
@@ -1078,11 +1086,14 @@ j = report(
      f"`assessment-for` link of an objective is written on the objective, x{af_total}: "
      + ("; ".join(f"x{n} name {k}" for k, n in sorted(assessed_kind.items(), key=lambda x: -x[1])) or "none") + ".",
      f"- **Relations**: " + ", ".join(f"{k} x{v}" for k, v in sorted(rel_count.items(), key=lambda x: -x[1])) +
-     f"; reference targets resolved to publication URLs (landmark); title/citation table -> references@1 on the root Set.",
+     f"; reference targets resolved to publication URLs (landmark); the back-matter resources, as the source writes "
+     f"them, -> references@1 on the root Set.",
+     f"- **Back-matter -> references@1 on the root Set** x{len(RESOURCES)} resources in the source's own shape, each "
+     f"with its uuid (the convention of the ISM converter): uuid, title, citation, rlinks with href and media-type.",
      f"- **Markdown links in the texts stay as the source wrote them** x{len(MD_LINKS)}; the target of a link is an "
-     f"id of the source. x{md_targets['a back-matter resource']} name a back-matter resource by its uuid, which "
-     f"references@1 carries for a resource that a link names (x{sum(1 for r in RES.values() if 'uuid' in r)} of "
-     f"{len(RES)} resources, the links of the document metadata included); x{md_targets['another control']} name "
+     f"id of the source. x{md_targets['a back-matter resource']} name a back-matter resource by its uuid "
+     f"(x{len({t for t in MD_LINKS if t in RES})} distinct resources), which references@1 carries with every resource; "
+     f"x{md_targets['another control']} name "
      f"another control and x{md_targets['a withdrawn control']} a withdrawn one (the Requirement URI ends in the id "
      f"in upper case), x{md_targets['a statement of a control']} a statement of a control (control id, `_`, "
      f"statement id), x{md_targets['a family']} a family, x{md_targets['a parameter']} a parameter, "
@@ -1090,7 +1101,13 @@ j = report(
      f"- **Document metadata -> compat facet oscal-1x@1, member `metadata`**, on the Set that stands for the "
      f"document, in the source's own shape: x{F_CATALOG_META} values of the catalogue on the root Set, "
      f"x{F_PROFILE_META} values of the four profiles on their baseline Sets. `title` and `version` are the Set's own "
-     f"members. A profile's `merge` directive stands beside it (x{F_MERGE}, a JSON boolean).",
+     f"members. A profile's `merge` directive stands beside it (x{F_MERGE}, a JSON boolean). The manifest's "
+     f"`provenance` names the catalogue's author and day by the library's rule for an OSCAL document (backlog #69): "
+     f"`author-ref` {PROVENANCE.get('author-ref', 'none: the metadata names no author')}, `date` "
+     f"{PROVENANCE.get('date', 'none: last-modified does not begin with a day')}. The manifest has one provenance; "
+     f"the author and the day of a profile stand in its metadata on its baseline Set ("
+     + ", ".join(f"{b}: {(document_author(p['metadata']) or {}).get('name', 'no author')}, "
+                 f"{document_day(p['metadata']) or 'no day'}" for b, p in BASELINES.items()) + ").",
      f"- **Conversion ledger (measured per source value)**: each of the {LEDGER['leaf-values']:,} leaf values of the "
      f"catalogue and the four profiles was followed into the written files. **{LT['copied']:,} copied** (the value "
      f"stands, with its type, at the destination, read back from the written file), **{LT['transformed']:,} "
@@ -1133,8 +1150,11 @@ j = report(
      f"the control (x{assessed_kind['nothing the catalogue defines']} of them name nothing the catalogue defines); "
      f"and x{assessed_apart[0]} objectives name another statement than the objective above them, so a tree cut by "
      f"statement is no tree. Its `objectives` is an array of untyped objects and has no member for the methods of "
-     f"the same layer. "
-     f"Written in the pinned facet sp800-53a@1, on the objective. "
+     f"the same layer. D10 (per-clause keying, rev. v0.6) asks a payload that addresses single statements to key "
+     f"them `by-statement`; a tree whose nodes name statements at different depths, of the same Requirement or of "
+     f"another, has no keyed form. Written in the pinned facet sp800-53a@1, on the objective, as a list of "
+     f"{{statement-id}} with `requirement-ref` where the statement is another control's: the address the source "
+     f"gives, without the keying D10 asks for. "
      f"(2) Document metadata x{F_CATALOG_META + F_PROFILE_META}: a Set has `title` and `version` and no member for "
      f"dates, the OSCAL version, revisions, keywords, links, roles, parties and who is responsible. Written in the "
      f"compat facet, member `metadata`. (3) A profile's `merge` x{F_MERGE}: a Set does not say how a selection is "
@@ -1183,7 +1203,7 @@ j = report(
      "class-written": class_written[0],
      "document-metadata": {"catalogue": F_CATALOG_META, "profiles": F_PROFILE_META, "merge": F_MERGE},
      "markdown-links": {"links": len(MD_LINKS), "names": dict(md_targets),
-                        "resources-with-uuid": sum(1 for r in RES.values() if "uuid" in r), "resources": len(RES)},
+                        "resources-named": len({t for t in MD_LINKS if t in RES}), "resources": len(RES)},
      "ledger": {"file": LEDGER_FILE, "leaf-values": LEDGER["leaf-values"], "totals": LT,
                 "verification-failures": len(LEDGER["verification-failures"]),
                 "rules": [{"rule": r, "source-values": rule_values[r], "destinations": rule_destinations[r]}

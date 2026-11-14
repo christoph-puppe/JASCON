@@ -51,8 +51,7 @@ DECLARED_BEFORE = ("path map: a withdrawn control is dropped as a tombstone",
                    "path map: the print label of a statement item is derivable",
                    "path map: profile resolution mechanics",
                    "as decided for IFA on 2026-11-13: a back-matter resource or an import link",
-                   "as decided for IFA on 2026-11-13: the uuid of a source document",
-                   "as decided for IFA on 2026-11-13: the uuid of a back-matter resource that no reference link")
+                   "as decided for IFA on 2026-11-13: the uuid of a source document")
 WITH = " - of a value that is dropped: "
 RES_A, RES_B, RES_C = (f"00000000-0000-4000-8000-00000000000{x}" for x in "abc")
 
@@ -377,10 +376,14 @@ class Backlog41TheLedgerOfSP80053(unittest.TestCase):
         self.assertEqual(meta, {"copied": 18 + 4 * 6})
         self.assertEqual(collections.Counter(r["outcome"] for r in self.record["paths"] if r["path"].endswith(".merge.as-is")),
                          {"copied": 4})
-        # a resource that a link names by its uuid carries the uuid: the guidance of c-1 names the first, the
-        # document metadata the second, nothing the third
-        resources = {r["title"]: r.get("uuid") for r in root["facets"][F_REF]["resources"]}
-        self.assertEqual(resources, {"The paper": RES_A, "The catalogue as a document": RES_B, "A paper nobody cites": None})
+        # the back-matter resources stand on the root Set as the source writes them, each with its uuid: the guidance
+        # of c-1 names the first, the document metadata the second, nothing the third
+        self.assertEqual(root["facets"][F_REF], {"resources": cat["back-matter"]["resources"]})
+        self.assertEqual([r["uuid"] for r in root["facets"][F_REF]["resources"]], [RES_A, RES_B, RES_C])
+        # the manifest names the author and the day of the catalogue, by the library's rule (the one party it defines)
+        with open(os.path.join(self.out, "sp800-53-core-bundle", "content-manifest.json"), encoding="utf-8") as f:
+            provenance = json.load(f)["provenance"]
+        self.assertEqual((provenance["author-ref"], provenance["date"]), (f"{NS}/party/nobody", "2026-11-14"))
         self.assertEqual(self.req("c-1")["facets"][F_NARR]["guidance"], [{"en": f"See [The paper](#{RES_A}) and [C-2](#c-2)."}])
         self.assertEqual(self.objects["objects/set/family-g.json"]["facets"][F_NARR],
                          {"overview": [{"title": {"en": "About the group"}, "prose": {"en": "The group in a sentence."}}]})
@@ -394,8 +397,10 @@ class Backlog41TheLedgerOfSP80053(unittest.TestCase):
         self.assertEqual(o("groups[].controls[].params[].select.choice[]"), {"copied": 2})
         self.assertEqual(o("groups[].controls[].params[].select.how-many"), {"transformed": 1})
         self.assertEqual(o("back-matter.resources[].title"), {"copied": 3})
-        # the uuid of a resource: written where a link names it by uuid (two), a declared drop where none does
-        self.assertEqual(o("back-matter.resources[].uuid"), {"copied": 2, "intentionally-dropped": 1})
+        # every value of a resource is a copy, its uuid and the media type of its link too
+        self.assertEqual(o("back-matter.resources[].uuid"), {"copied": 3})
+        self.assertEqual(o("back-matter.resources[].rlinks[].media-type"), {"copied": 1})
+        self.assertEqual(o("back-matter.resources[].citation.text"), {"copied": 1})
         # prose: an insertion (item a, the statement of the enhancement) or two paragraphs (the assessment objects)
         # make it a transformation; a markdown link does not, it stays as the source wrote it
         self.assertEqual(o("groups[].controls[].parts[].prose"), {"copied": 12, "transformed": 3})
@@ -418,9 +423,11 @@ class Backlog41TheLedgerOfSP80053(unittest.TestCase):
                 ("member sequence: ten times the control's place in its family, ordered by sort-id", 4),
                 ("the prop value `true` or `false`, written as a JSON boolean", 1),
                 ("the statement part an `assessment-for` link names, as a statement id (the part id without the control prefix)", 3),
-                ("requirement URI from the control whose part an `assessment-for` link names, where that is another control", 1)):
+                ("requirement URI from the control whose part an `assessment-for` link names, where that is another control", 1),
+                ("date of the catalogue: the day of its last-modified", 1)):
             self.assertEqual(rules[rule], destinations, rule)
         self.assertEqual(sum(n for r, n in rules.items() if r.startswith("assessment objects: one entry per paragraph")), 2)
+        self.assertEqual(sum(n for r, n in rules.items() if r.startswith("author of the catalogue")), 1)
         self.assertEqual(sum(n for r, n in rules.items() if "parameter insertion" in r), 2)
         self.assertIs(self.req("c-1")["facets"][F_RMF]["contributes-to-assurance"], True)
 
@@ -483,13 +490,11 @@ class Backlog41TheLedgerOfSP80053(unittest.TestCase):
             ("*.profile.back-matter.resources[].uuid", "as decided for IFA on 2026-11-13: a back", False): 4,
             ("*.profile.back-matter.resources[].description", "as decided for IFA on 2026-11-13: a back", False): 4,
             ("*.profile.back-matter.resources[].rlinks[].href", "as decided for IFA on 2026-11-13: a back", False): 4,
-            ("*.profile.back-matter.resources[].rlinks[].media-type", "as decided for IFA on 2026-11-13: a back", False): 4,
-            ("nist.catalog.back-matter.resources[].rlinks[].media-type", "as decided for IFA on 2026-11-13: a back", False): 1,
-            ("nist.catalog.back-matter.resources[].uuid", "as decided for IFA on 2026-11-13: the uu", False): 1})
-        # the converter declares no drop of its own: every call is one of the six reasons, by name
+            ("*.profile.back-matter.resources[].rlinks[].media-type", "as decided for IFA on 2026-11-13: a back", False): 4})
+        # the converter declares no drop of its own: every call is one of the five reasons, by name
         with open(os.path.join(HERE, "convert_nist.py"), encoding="utf-8") as f: code = f.read()
         reasons = re.findall(r"led\.drop(?:_value)?\(.*?, ([A-Za-z_]+)\)", code)
-        self.assertEqual(sorted(reasons), ["A_ITEM_LABEL", "A_TOMBSTONE", "B_RESOURCE_UUID", "reason"])
+        self.assertEqual(sorted(reasons), ["A_ITEM_LABEL", "A_TOMBSTONE", "reason"])
 
     def test_backlog_41_the_path_map_says_what_the_ledger_measured(self):
         self.assertEqual(self.report["unmapped-paths"], [])
@@ -521,11 +526,20 @@ class Backlog41TheLedgerOfSP80053(unittest.TestCase):
                  "groups[].controls[].title", 1),
                 # the metadata of the profiles is not written
                 ("profile-metadata", '    if document_metadata(prof["metadata"]): compat["metadata"] = document_metadata(prof["metadata"])\n', "",
-                 None, 4 * 4)):
+                 None, 4 * 4),
+                # the back-matter resources are not written: their titles are in no object. The uuid and the link of
+                # the resource a `reference` link names are still inputs of a rule, so the path map's sentence
+                # (`copied`) no longer holds either, and that wiring check stops the run before the gate
+                ("resources-lost", 'if RESOURCES: root_facets[F_REF] = {"resources": RESOURCES}\n', "",
+                 "back-matter.resources[].title", 3)):
             done, _, record = self.tree.changed(name, old, new)
             self.fails(name, done)
             self.assertEqual(record["totals"]["unaccounted"] >= lost, True, name)
-            self.assertIn(self.GATE.format(0, record["totals"]["unaccounted"]), done.stderr, name)
+            if name == "resources-lost":
+                self.assertEqual(record["totals"]["unaccounted"], 9, name)      # 3 titles, 1 citation, 2 links, 1 media type, 2 uuids
+                self.assertIn("the path map does not say `transformed` of nist.catalog.back-matter.resources[].uuid", done.stderr)
+            else:
+                self.assertIn(self.GATE.format(0, record["totals"]["unaccounted"]), done.stderr, name)
             if path: self.assertEqual(by_path(record)[(path, "unaccounted")], lost, name)
 
     def test_backlog_41_a_name_that_selects_a_value_which_is_not_written_is_unaccounted_with_it(self):
@@ -692,7 +706,7 @@ class Backlog41TheCommittedConversion(unittest.TestCase):
         # labels the rule does not give, and no control whose class it does not give
         self.assertEqual(report["item-labels"], {"rebuilt": 1119, "declared-drop": ["si-2.7_smt.a", "si-2.7_smt.b", "si-2.7_smt.c"]})
         self.assertEqual(report["class-written"], 0)
-        self.assertEqual(record["totals"]["intentionally-dropped"], 432)
+        self.assertEqual(record["totals"]["intentionally-dropped"], 407)
 
     def test_backlog_41_the_committed_bundle_holds_what_the_authors_list_names(self):
         """Counted from the committed files alone (measured on SP 800-53
@@ -720,6 +734,12 @@ class Backlog41TheCommittedConversion(unittest.TestCase):
             compat = objects[f"objects/set/baseline-{b.lower()}.json"]["facets"][F_COMPAT]
             self.assertEqual(sorted(compat["metadata"]), ["last-modified", "oscal-version", "parties", "responsible-parties", "roles"])
             self.assertIs(compat["merge"]["as-is"], True)
+        # the back-matter on the root Set, every resource with its uuid; the catalogue's author and day in the manifest
+        self.assertEqual(len(root["facets"][F_REF]["resources"]), 201)
+        self.assertTrue(all("uuid" in r for r in root["facets"][F_REF]["resources"]))
+        with open(os.path.join(self.CORPUS, "sp800-53-core-bundle", "content-manifest.json"), encoding="utf-8") as f:
+            provenance = json.load(f)["provenance"]
+        self.assertEqual((provenance["author-ref"], provenance["date"]), (f"{NS}/party/oscal-program", "2026-05-11"))
 
     def test_backlog_41_the_committed_bundle_against_the_pinned_source(self):
         if not os.path.isfile(self.SOURCE): self.skipTest("the pinned source is not in sources/nist (it is fetched, not committed)")
@@ -736,6 +756,8 @@ class Backlog41TheCommittedConversion(unittest.TestCase):
         self.assertEqual(len(source["labels of withdrawn controls that name a successor"]), 180)
         root = read_bundle(os.path.join(self.CORPUS, "sp800-53-core-bundle"))["objects/set/root.json"]
         self.assertEqual(root["facets"][F_COMPAT]["metadata"], {k: v for k, v in catalogue["metadata"].items() if k not in ("title", "version")})
+        self.assertEqual(root["facets"][F_REF], {"resources": catalogue["back-matter"]["resources"]})
+        self.assertEqual(len(root["facets"][F_REF]["resources"]), 201)
 
 
 if __name__ == "__main__":

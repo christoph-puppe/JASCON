@@ -4,6 +4,8 @@
   "source": "Electronic (OSCAL) Version of NIST SP 800-53 Rev 5.2.0 Controls and SP 800-53A Rev 5.2.0 Assessment Procedures",
   "source-version": "5.2.0",
   "source-oscal-version": "1.2.2",
+  "author-ref": "https://ns.nist.gov/sp800-53/party/oscal-program",
+  "date": "2026-05-11",
   "baselines": {
    "LOW": "5.2.0",
    "MODERATE": "5.2.0",
@@ -7297,8 +7299,8 @@
   {
    "id": "https://ns.nist.gov/sp800-53/set/root",
    "version": "5.2.0",
-   "package-digest": "sha256:c72971dc7357f36382bf384836a5cda9d26636d02e053f1e4a04ebfbcb9e0769",
-   "semantic-digest": "sha256:1719816d2afcd62bd64b083ae20fdf97dceba35bb0edf04d898c16c3cfa3d361",
+   "package-digest": "sha256:54fb104b8a9428c583479889b057299486774795a9e503f819de4db076529a71",
+   "semantic-digest": "sha256:463de734b238257eed9973f49d4ef86a4d2c60a2b0a283f143d65f3dae57ab05",
    "path": "objects/set/root.json"
   }
  ],
@@ -7324,7 +7326,7 @@
   {
    "id": "https://ns.nist.gov/sp800-53/facet/references",
    "exact-version": "1.0.0",
-   "digest": "sha256:f9c79f8829886391eb971c9c0cf4a989cb51b65b7afb7c6ce7b1593892460e74",
+   "digest": "sha256:3eabd4a763927423e491e2ae07553cdc3299f91a6f2ac077cdfb0750b0ccfbd6",
    "path": "schemas/sp800-53-references-stub.json"
   },
   {

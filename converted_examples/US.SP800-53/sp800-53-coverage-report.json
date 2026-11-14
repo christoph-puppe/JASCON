@@ -461,31 +461,31 @@
    "path": "nist.catalog.back-matter.resources[].citation.text",
    "count": 192,
    "level": "L2",
-   "destination": "references@1 on the root Set (title, citation, url); the link is also the target of a control's `reference` relation [ledger: copied 192]"
+   "destination": "references@1 on the root Set: the resources in the source's own shape (uuid, title, citation, rlinks with href and media-type); a markdown link `(#uuid)` in a text names one by its uuid, and a control's `reference` link is resolved to its first link (the uuid and the link are then also inputs of that rule) [ledger: copied 192]"
   },
   {
    "path": "nist.catalog.back-matter.resources[].rlinks[].href",
    "count": 201,
    "level": "L2",
-   "destination": "references@1 on the root Set (title, citation, url); the link is also the target of a control's `reference` relation [ledger: copied 201]"
+   "destination": "references@1 on the root Set: the resources in the source's own shape (uuid, title, citation, rlinks with href and media-type); a markdown link `(#uuid)` in a text names one by its uuid, and a control's `reference` link is resolved to its first link (the uuid and the link are then also inputs of that rule) [ledger: copied 201]"
   },
   {
    "path": "nist.catalog.back-matter.resources[].rlinks[].media-type",
    "count": 2,
-   "level": "dropped",
-   "destination": "not carried: a declared drop, see the table of declared drops [ledger: intentionally-dropped 2]"
+   "level": "L2",
+   "destination": "references@1 on the root Set: the resources in the source's own shape (uuid, title, citation, rlinks with href and media-type); a markdown link `(#uuid)` in a text names one by its uuid, and a control's `reference` link is resolved to its first link (the uuid and the link are then also inputs of that rule) [ledger: copied 2]"
   },
   {
    "path": "nist.catalog.back-matter.resources[].title",
    "count": 201,
    "level": "L2",
-   "destination": "references@1 on the root Set (title, citation, url); the link is also the target of a control's `reference` relation [ledger: copied 201]"
+   "destination": "references@1 on the root Set: the resources in the source's own shape (uuid, title, citation, rlinks with href and media-type); a markdown link `(#uuid)` in a text names one by its uuid, and a control's `reference` link is resolved to its first link (the uuid and the link are then also inputs of that rule) [ledger: copied 201]"
   },
   {
    "path": "nist.catalog.back-matter.resources[].uuid",
    "count": 201,
    "level": "L2",
-   "destination": "references@1 `uuid` where a link the bundle carries as the source wrote it names the resource (a markdown link in a text, a link of the document metadata); the key by which a control's `reference` link is resolved to the resource's link (transformed); where no link names the resource: a declared drop, see the table of declared drops [ledger: copied 53, transformed 125, intentionally-dropped 23]"
+   "destination": "references@1 on the root Set: the resources in the source's own shape (uuid, title, citation, rlinks with href and media-type); a markdown link `(#uuid)` in a text names one by its uuid, and a control's `reference` link is resolved to its first link (the uuid and the link are then also inputs of that rule) [ledger: copied 201]"
   },
   {
    "path": "nist.catalog.groups[].class",
@@ -707,157 +707,157 @@
    "path": "nist.catalog.metadata.last-modified",
    "count": 1,
    "level": "L2",
-   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version` [ledger: copied 1]"
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version`; the name of the party the metadata names as the author -> manifest `provenance.author-ref` (a landmark URI), the day of last-modified -> manifest `provenance.date` [ledger: copied 1]"
   },
   {
    "path": "nist.catalog.metadata.links[].href",
    "count": 3,
    "level": "L2",
-   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version` [ledger: copied 3]"
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version`; the name of the party the metadata names as the author -> manifest `provenance.author-ref` (a landmark URI), the day of last-modified -> manifest `provenance.date` [ledger: copied 3]"
   },
   {
    "path": "nist.catalog.metadata.links[].rel",
    "count": 3,
    "level": "L2",
-   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version` [ledger: copied 3]"
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version`; the name of the party the metadata names as the author -> manifest `provenance.author-ref` (a landmark URI), the day of last-modified -> manifest `provenance.date` [ledger: copied 3]"
   },
   {
    "path": "nist.catalog.metadata.oscal-version",
    "count": 1,
    "level": "L2",
-   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version` [ledger: copied 1]"
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version`; the name of the party the metadata names as the author -> manifest `provenance.author-ref` (a landmark URI), the day of last-modified -> manifest `provenance.date` [ledger: copied 1]"
   },
   {
    "path": "nist.catalog.metadata.parties[].addresses[].addr-lines[]",
    "count": 8,
    "level": "L2",
-   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version` [ledger: copied 8]"
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version`; the name of the party the metadata names as the author -> manifest `provenance.author-ref` (a landmark URI), the day of last-modified -> manifest `provenance.date` [ledger: copied 8]"
   },
   {
    "path": "nist.catalog.metadata.parties[].addresses[].city",
    "count": 2,
    "level": "L2",
-   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version` [ledger: copied 2]"
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version`; the name of the party the metadata names as the author -> manifest `provenance.author-ref` (a landmark URI), the day of last-modified -> manifest `provenance.date` [ledger: copied 2]"
   },
   {
    "path": "nist.catalog.metadata.parties[].addresses[].postal-code",
    "count": 2,
    "level": "L2",
-   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version` [ledger: copied 2]"
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version`; the name of the party the metadata names as the author -> manifest `provenance.author-ref` (a landmark URI), the day of last-modified -> manifest `provenance.date` [ledger: copied 2]"
   },
   {
    "path": "nist.catalog.metadata.parties[].addresses[].state",
    "count": 2,
    "level": "L2",
-   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version` [ledger: copied 2]"
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version`; the name of the party the metadata names as the author -> manifest `provenance.author-ref` (a landmark URI), the day of last-modified -> manifest `provenance.date` [ledger: copied 2]"
   },
   {
    "path": "nist.catalog.metadata.parties[].email-addresses[]",
    "count": 2,
    "level": "L2",
-   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version` [ledger: copied 2]"
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version`; the name of the party the metadata names as the author -> manifest `provenance.author-ref` (a landmark URI), the day of last-modified -> manifest `provenance.date` [ledger: copied 2]"
   },
   {
    "path": "nist.catalog.metadata.parties[].name",
    "count": 2,
    "level": "L2",
-   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version` [ledger: copied 2]"
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version`; the name of the party the metadata names as the author -> manifest `provenance.author-ref` (a landmark URI), the day of last-modified -> manifest `provenance.date` [ledger: copied 2]"
   },
   {
    "path": "nist.catalog.metadata.parties[].short-name",
    "count": 1,
    "level": "L2",
-   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version` [ledger: copied 1]"
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version`; the name of the party the metadata names as the author -> manifest `provenance.author-ref` (a landmark URI), the day of last-modified -> manifest `provenance.date` [ledger: copied 1]"
   },
   {
    "path": "nist.catalog.metadata.parties[].type",
    "count": 2,
    "level": "L2",
-   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version` [ledger: copied 2]"
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version`; the name of the party the metadata names as the author -> manifest `provenance.author-ref` (a landmark URI), the day of last-modified -> manifest `provenance.date` [ledger: copied 2]"
   },
   {
    "path": "nist.catalog.metadata.parties[].uuid",
    "count": 2,
    "level": "L2",
-   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version` [ledger: copied 2]"
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version`; the name of the party the metadata names as the author -> manifest `provenance.author-ref` (a landmark URI), the day of last-modified -> manifest `provenance.date` [ledger: copied 2]"
   },
   {
    "path": "nist.catalog.metadata.props[].name",
    "count": 1,
    "level": "L2",
-   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version` [ledger: copied 1]"
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version`; the name of the party the metadata names as the author -> manifest `provenance.author-ref` (a landmark URI), the day of last-modified -> manifest `provenance.date` [ledger: copied 1]"
   },
   {
    "path": "nist.catalog.metadata.props[].value",
    "count": 1,
    "level": "L2",
-   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version` [ledger: copied 1]"
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version`; the name of the party the metadata names as the author -> manifest `provenance.author-ref` (a landmark URI), the day of last-modified -> manifest `provenance.date` [ledger: copied 1]"
   },
   {
    "path": "nist.catalog.metadata.responsible-parties[].party-uuids[]",
    "count": 4,
    "level": "L2",
-   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version` [ledger: copied 4]"
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version`; the name of the party the metadata names as the author -> manifest `provenance.author-ref` (a landmark URI), the day of last-modified -> manifest `provenance.date` [ledger: copied 4]"
   },
   {
    "path": "nist.catalog.metadata.responsible-parties[].role-id",
    "count": 4,
    "level": "L2",
-   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version` [ledger: copied 4]"
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version`; the name of the party the metadata names as the author -> manifest `provenance.author-ref` (a landmark URI), the day of last-modified -> manifest `provenance.date` [ledger: copied 4]"
   },
   {
    "path": "nist.catalog.metadata.revisions[].last-modified",
    "count": 7,
    "level": "L2",
-   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version` [ledger: copied 7]"
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version`; the name of the party the metadata names as the author -> manifest `provenance.author-ref` (a landmark URI), the day of last-modified -> manifest `provenance.date` [ledger: copied 7]"
   },
   {
    "path": "nist.catalog.metadata.revisions[].links[].href",
    "count": 7,
    "level": "L2",
-   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version` [ledger: copied 7]"
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version`; the name of the party the metadata names as the author -> manifest `provenance.author-ref` (a landmark URI), the day of last-modified -> manifest `provenance.date` [ledger: copied 7]"
   },
   {
    "path": "nist.catalog.metadata.revisions[].links[].rel",
    "count": 7,
    "level": "L2",
-   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version` [ledger: copied 7]"
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version`; the name of the party the metadata names as the author -> manifest `provenance.author-ref` (a landmark URI), the day of last-modified -> manifest `provenance.date` [ledger: copied 7]"
   },
   {
    "path": "nist.catalog.metadata.revisions[].oscal-version",
    "count": 7,
    "level": "L2",
-   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version` [ledger: copied 7]"
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version`; the name of the party the metadata names as the author -> manifest `provenance.author-ref` (a landmark URI), the day of last-modified -> manifest `provenance.date` [ledger: copied 7]"
   },
   {
    "path": "nist.catalog.metadata.revisions[].remarks",
    "count": 7,
    "level": "L2",
-   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version` [ledger: copied 7]"
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version`; the name of the party the metadata names as the author -> manifest `provenance.author-ref` (a landmark URI), the day of last-modified -> manifest `provenance.date` [ledger: copied 7]"
   },
   {
    "path": "nist.catalog.metadata.revisions[].title",
    "count": 7,
    "level": "L2",
-   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version` [ledger: copied 7]"
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version`; the name of the party the metadata names as the author -> manifest `provenance.author-ref` (a landmark URI), the day of last-modified -> manifest `provenance.date` [ledger: copied 7]"
   },
   {
    "path": "nist.catalog.metadata.revisions[].version",
    "count": 7,
    "level": "L2",
-   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version` [ledger: copied 7]"
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version`; the name of the party the metadata names as the author -> manifest `provenance.author-ref` (a landmark URI), the day of last-modified -> manifest `provenance.date` [ledger: copied 7]"
   },
   {
    "path": "nist.catalog.metadata.roles[].id",
    "count": 4,
    "level": "L2",
-   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version` [ledger: copied 4]"
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version`; the name of the party the metadata names as the author -> manifest `provenance.author-ref` (a landmark URI), the day of last-modified -> manifest `provenance.date` [ledger: copied 4]"
   },
   {
    "path": "nist.catalog.metadata.roles[].title",
    "count": 4,
    "level": "L2",
-   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version` [ledger: copied 4]"
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.source-oscal-version`; the name of the party the metadata names as the author -> manifest `provenance.author-ref` (a landmark URI), the day of last-modified -> manifest `provenance.date` [ledger: copied 4]"
   },
   {
    "path": "nist.catalog.metadata.title",
@@ -1150,17 +1150,17 @@
    "a withdrawn control": 5,
    "a parameter": 1
   },
-  "resources-with-uuid": 53,
+  "resources-named": 45,
   "resources": 201
  },
  "ledger": {
   "file": "sp800-53-conversion-ledger.json",
   "leaf-values": 115680,
   "totals": {
-   "copied": 33221,
-   "transformed": 20955,
+   "copied": 33371,
+   "transformed": 20830,
    "not-content": 61072,
-   "intentionally-dropped": 432,
+   "intentionally-dropped": 407,
    "unaccounted": 0
   },
   "verification-failures": 0,
@@ -1239,6 +1239,16 @@
     "rule": "requirement URI from the control whose part an `assessment-for` link names, where that is another control",
     "source-values": 6,
     "destinations": 6
+   },
+   {
+    "rule": "author of the catalogue: the party its metadata names as its author (the role `creator`, else `prepared-by`, else the one party it names; oscal_conv_lib.document_author), as a URI of its name under the namespace",
+    "source-values": 1,
+    "destinations": 1
+   },
+   {
+    "rule": "date of the catalogue: the day of its last-modified",
+    "source-values": 1,
+    "destinations": 1
    },
    {
     "rule": "the statement a lineage link names, as a statement id",
@@ -1333,14 +1343,6 @@
     "reading": "not content, because the value `withdrawn` of a control that names a successor only decides where the control is written (as a lineage entry on its successor, under `replaces` and the annotation `nist-withdrawal`, which say the same by their names); it is a value and not a name, so none of the three classes names it"
    },
    {
-    "path": "nist.catalog.back-matter.resources[].uuid",
-    "count": 23,
-    "reason": "as decided for IFA on 2026-11-13: the uuid of a back-matter resource that no reference link of a control names; it identifies the resource inside the catalogue only, and the resource's title and link are on the root Set",
-    "example": "nist#/catalog/back-matter/resources/3/uuid",
-    "example-value": "d3b71d4d-27c1-40f7-ad7f-1c1fe6d8bde8",
-    "reading": "not content, because no link in the bundle names these resources by uuid and their title, citation and link are on the root Set; but nothing rebuilds a uuid, so none of the three classes names it"
-   },
-   {
     "path": "*.profile.back-matter.resources[].rlinks[].href",
     "count": 12,
     "reason": "as decided for IFA on 2026-11-13: a back-matter resource or an import link: a link to another serialisation of the source or to an imported document; the bundle carries the Requirements themselves",
@@ -1395,14 +1397,6 @@
     "example": "nist#/catalog/groups/18/controls/1/controls/6/parts/0/parts/0/props/0/value",
     "example-value": "a.",
     "reading": "content: the source writes another form here than the rule gives that rebuilds the other item labels from the item id, and a statement has no member for a label"
-   },
-   {
-    "path": "nist.catalog.back-matter.resources[].rlinks[].media-type",
-    "count": 2,
-    "reason": "as decided for IFA on 2026-11-13: a back-matter resource or an import link: a link to another serialisation of the source or to an imported document; the bundle carries the Requirements themselves",
-    "example": "nist#/catalog/back-matter/resources/193/rlinks/0/media-type",
-    "example-value": "application/pdf",
-    "reading": "content: the media type the source gives for the link of a resource"
    },
    {
     "path": "nist.catalog.uuid",

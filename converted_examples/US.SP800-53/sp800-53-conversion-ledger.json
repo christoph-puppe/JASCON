@@ -2,10 +2,10 @@
  "measures": "one row per source path and outcome; every source leaf value was traced and checked against the written files in the run that wrote this record, and is counted in one row",
  "leaf-values": 115680,
  "totals": {
-  "copied": 33221,
-  "transformed": 20955,
+  "copied": 33371,
+  "transformed": 20830,
   "not-content": 61072,
-  "intentionally-dropped": 432,
+  "intentionally-dropped": 407,
   "unaccounted": 0
  },
  "verification-failures": [],
@@ -945,7 +945,7 @@
    "example": "nist#/catalog/back-matter/resources/0/citation/text",
    "to": [
     {
-     "pointer": "/facets/https:~1~1ns.nist.gov~1sp800-53~1facet~1references@1/resources/[]/citation",
+     "pointer": "/facets/https:~1~1ns.nist.gov~1sp800-53~1facet~1references@1/resources/[]/citation/text",
      "count": 192
     }
    ]
@@ -957,7 +957,7 @@
    "example": "nist#/catalog/back-matter/resources/0/rlinks/0/href",
    "to": [
     {
-     "pointer": "/facets/https:~1~1ns.nist.gov~1sp800-53~1facet~1references@1/resources/[]/url",
+     "pointer": "/facets/https:~1~1ns.nist.gov~1sp800-53~1facet~1references@1/resources/[]/rlinks/[]/href",
      "count": 201
     },
     {
@@ -969,12 +969,12 @@
   },
   {
    "path": "nist.catalog.back-matter.resources[].rlinks[].media-type",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 2,
    "example": "nist#/catalog/back-matter/resources/193/rlinks/0/media-type",
-   "reasons": [
+   "to": [
     {
-     "reason": "as decided for IFA on 2026-11-13: a back-matter resource or an import link: a link to another serialisation of the source or to an imported document; the bundle carries the Requirements themselves",
+     "pointer": "/facets/https:~1~1ns.nist.gov~1sp800-53~1facet~1references@1/resources/[]/rlinks/[]/media-type",
      "count": 2
     }
    ]
@@ -994,41 +994,16 @@
   {
    "path": "nist.catalog.back-matter.resources[].uuid",
    "outcome": "copied",
-   "count": 53,
+   "count": 201,
    "example": "nist#/catalog/back-matter/resources/0/uuid",
    "to": [
     {
      "pointer": "/facets/https:~1~1ns.nist.gov~1sp800-53~1facet~1references@1/resources/[]/uuid",
-     "count": 53
+     "count": 201
     },
     {
      "pointer": "/relations/[]/ref",
-     "count": 285,
-     "rule": "a reference link resolved by uuid: the first link of the back-matter resource it names"
-    }
-   ]
-  },
-  {
-   "path": "nist.catalog.back-matter.resources[].uuid",
-   "outcome": "intentionally-dropped",
-   "count": 23,
-   "example": "nist#/catalog/back-matter/resources/3/uuid",
-   "reasons": [
-    {
-     "reason": "as decided for IFA on 2026-11-13: the uuid of a back-matter resource that no reference link of a control names; it identifies the resource inside the catalogue only, and the resource's title and link are on the root Set",
-     "count": 23
-    }
-   ]
-  },
-  {
-   "path": "nist.catalog.back-matter.resources[].uuid",
-   "outcome": "transformed",
-   "count": 125,
-   "example": "nist#/catalog/back-matter/resources/1/uuid",
-   "to": [
-    {
-     "pointer": "/relations/[]/ref",
-     "count": 553,
+     "count": 838,
      "rule": "a reference link resolved by uuid: the first link of the back-matter resource it names"
     }
    ]
@@ -3369,6 +3344,11 @@
     {
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/last-modified",
      "count": 1
+    },
+    {
+     "pointer": "/provenance/date",
+     "count": 1,
+     "rule": "date of the catalogue: the day of its last-modified"
     }
    ]
   },
@@ -3481,6 +3461,11 @@
     {
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/parties/[]/name",
      "count": 2
+    },
+    {
+     "pointer": "/provenance/author-ref",
+     "count": 1,
+     "rule": "author of the catalogue: the party its metadata names as its author (the role `creator`, else `prepared-by`, else the one party it names; oscal_conv_lib.document_author), as a URI of its name under the namespace"
     }
    ]
   },
