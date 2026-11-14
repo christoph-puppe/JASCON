@@ -191,6 +191,14 @@ one in a pack only (ADVICE-1), and a copy of the IFA bundle that listed its
 own passed here as in validate_core.py, 18 pass, 0 fail. One failure per
 listed Attestation, in a bundle and in the example folder. Eight
 `listed-vectors` came with it: attestation: 32, 692 in all.
+EXECUTED 2026-11-14 on Windows PowerShell 5.1 (the workflow, commit
+7d176fb7, run 43585154996): the lint, 692 vectors in 18 families
+(attestation: 32), the five bundles, the worked pack and the example
+folder, ALL GREEN in 133 s; then test_attestation_binds.py drove this file
+over eleven copies, two of which list their Attestation: 14 tests, two
+skipped by design, in 54 s. Not exercised on Windows PowerShell 5.1: the
+example folder with an Attestation entered in its manifest (run under
+PowerShell 7.4 on Linux: 27 pass, 1 fail, as validate_core.py).
 NOT EXERCISED by a vector, a bundle of the repository or that test: an
 Attestation without a subject (the schema asks for one, so only the vector
 runner could meet it, and no vector has one); a case of the binds-vectors

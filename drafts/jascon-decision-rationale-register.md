@@ -3901,3 +3901,328 @@ that was filled is left empty. *Complexity:* a bundle that passed can
 fail (an active Attestation that does not bind), every implementation
 reads files beside the manifest that it used to ignore, and the
 lifecycle clause is a judgement that somebody may want made otherwise.
+
+
+## After phase D — a listed Attestation is refused; the party a converter writes is an argument; the CR26 converter runs again *(2026-11-14; closes #73, #74 and #75; no new candidate)*
+
+**Author decisions, in the author's words.** On the three questions the
+report of phase D left: "1 refusal in all", "2 yes, recommend named
+default", "3 yes".
+
+**What was decided by them.** #75: a content manifest that lists an
+Attestation is refused in every bundle. #74: the party a converter
+writes on a statement whose source names none is an argument of the
+converter with a named default (the option recommended; the two others
+were to leave it and to change the kernel). #73: the CR26 converter is
+brought to its publication, its exit code says what its gate says, and
+the workflow runs it against a pinned download.
+
+### #75 — MANIFEST-1
+
+**What was there.** D3.1: "Attestations and signature envelopes are
+excluded from the content manifest by definition". The validators
+refused a listed Attestation where the manifest carried a pack header
+(ADVICE-1) and nowhere else. **Measured before the change:** a copy of
+the IFA bundle with its Attestation moved under `objects/` and entered
+in the manifest with both digests: 18 pass, 0 fail, in the reference
+and in the twin. The one trace was the verdict of phase D, a Semantic
+Match.
+
+**The rule.** An object a content manifest lists is not an Attestation
+(specification D3, item 11). One failure per listed Attestation, in the
+order of the ids, in a bundle and in the example folder. What the
+Attestation binds, whether it names an envelope and what its lifecycle
+is change nothing: the rule asks where the Attestation lies. Its
+binding is still computed and reported. In a pack both rules speak.
+
+**Two things about the rule that are this session's and not the
+author's words.** The name, MANIFEST-1: there was no family for a rule
+about what a manifest lists (KERNEL-1 and 2 are about its pin), and the
+author may rename it. And its reach: it names Attestations and not the
+signature envelopes D3.1 names beside them. An envelope entered under
+`objects` matches no kernel type and fails for that (**measured**: the
+worked pack with its envelope entered, "matches NO type"); `renderings`
+is an untyped list that no validator reads (**read**: the word does not
+occur in the three implementations). A rule about envelopes would need
+a place in the manifest where a tool looks for one.
+
+| What | Measured |
+|---|---|
+| Vectors | eight `listed-vectors`, written before the rule: `attestation` 24 → 32, 692 in 18 families |
+| Reference | ALL GREEN; the copy of the IFA bundle that lists its Attestation: 18 pass, 1 fail, MANIFEST-1, and still `SEMANTIC MATCH` |
+| End-to-end test | 14 tests: a copy of the IFA bundle and one of the worked pack that list their Attestation (the pack: 3 pass, 2 fail, ADVICE-1 and MANIFEST-1), and for the reference the example folder with its own Attestation entered in its manifest (27 pass, 1 fail) |
+| Twin under PowerShell 7.4, here | the lint; 692 vectors; every bundle's count and the reference's 21 attestation, author and review lines; the end-to-end test; an example folder that lists its Attestation: 27 pass, 1 fail |
+| Twin on Windows PowerShell 5.1 | run 43585154996 at `7d176fb7`: the lint, 692 vectors in 18 families (`attestation: 32`), the five bundles, the pack and the example folder, ALL GREEN in 133 s; the end-to-end test with the twin, 14 tests, two skipped by design, in 54 s (**read** from the log). The run at `152308e9`, with the rule and before the sentence was reworded, was green in the same job |
+| Deliberate defects | 10 in the reference, all red. 6 in the twin, 5 red; the sixth, a vector runner that passes whatever it is given, cannot be caught by the run it breaks, which is why the end-to-end test reads the twin's output for a bundle |
+| The library | `Bundle.add` takes no Attestation, since what it is given it lists; a test holds it |
+
+**The app** (build 0.9.12), by an agent, merged and run here. The rule
+in `jascon-rules.js`, held to the eight vectors. A set as it was loaded
+is held to the manifest it came with, so a listed Attestation is the
+reference's failure on the Validate page and beside the verdict on the
+Assess page. **Nothing is repaired in silence**, which was the part of
+the brief that needed a decision: the hub says so when such a bundle
+arrives; an unchanged set leaves with the manifest it came with, and the
+reference refuses the export as it refuses the folder; once the set is
+changed, the export writes a manifest without the Attestation, puts its
+file beside the manifest and says that it did. Found on the way: the
+export compared manifests as `JSON.stringify` writes them, so the order
+of keys within an entry counted (`jascon-app/ERRATA.md`).
+**Measured here:** 179 tests (175 pass, 4 skipped for sources the
+repository does not carry); four deliberate defects of my own in the
+rule, each red. **Reported by the agent, not repeated here:** the app's
+errors equal the reference's failures on a copy of the IFA bundle and of
+the worked pack that list their Attestation; 20 deliberate defects, all
+red.
+
+**The reader** (1.14.0), by an agent, merged and run here. The rule in
+the page's pure part, held to the eight vectors and, where python is
+present, to the reference's own function. The reference's sentence
+stands on the Attestation's card, in its detail, in the overview and in
+the console; the Attestation is still held to what it binds, and it
+stays counted among the objects the manifest lists, as the reference
+counts it. "What can be done" says what the agent measured on copies:
+take the entry out and put the file beside the manifest, and the
+binding is a Full Match only if the manifest's bytes are then those the
+Attestation binds. **Measured here:** 49 of 49 browser tests (19 for the
+app's pages, 7 for the pack builder, 23 for the reader); the reader
+against the reference on twelve folders, the two listed copies among
+them: binds lines, failures, envelope statements and MANIFEST-1
+sentences the same for each; five deliberate defects of my own, each
+red. **Reported by the agent, not repeated here:** seven changed copies
+against the reference; 42 deliberate defects, all red, one (ids ordered
+by code point where the reference orders by code unit) only after a
+case was added; the 208 defects of #46, #69 and #70 still red.
+
+
+**What it costs.** A bundle whose manifest lists an Attestation passed
+until today and fails now. Known to exist: every bundle the reader
+exported with an Attestation before 1.13.0, and the IFA bundle as it was
+shipped before 2026-11-13. Nobody can repair such a bundle by moving the
+file: the manifest changes with the move, so the Attestation then binds
+another manifest, and a signed one needs its signer.
+
+### #74 — whom a statement binds is an argument
+
+`obligated_party(argv, default)` in `oscal_conv_lib.py`: the caller's
+party where `--obligated-party URI` is among a converter's arguments,
+the converter's default otherwise, and which of the two it was. A value
+that is no http(s) URI, the argument without a value or given twice, and
+a default that is no URI stop the run. There is no way to ask for no
+party: the kernel requires one. The coverage report says who chose the
+party (`obligated_party_line`, `obligated_party_record`), also where a
+source names parties for some statements itself.
+
+**The nine catalogue converters**, by an agent in a worktree, merged
+and run here. The default each had is the default it has; the report of
+each says who chose the party. `--out DIR` on all nine, and an argument
+a converter does not know stops the run.
+
+**What made the change checkable: the four shipped catalogue bundles
+are reproducible now.** Until today only the IFA conversion was held to
+its sources. The agent found, for each of the four, the publisher's file
+at a tag or a commit from which the converter as it was reproduces the
+committed bundle byte for byte: the ISM at the publisher's tag
+`v2026.06.18`, Grundschutz++ at a commit of BSI's repository, CSF and
+SP 800-53 at the commit of `usnistgov/oscal-content` that the IFA
+sources are pinned at. Each folder has a `SOURCES.sha256`, and one
+workflow step converts the four again and fails when a folder differs
+from what is committed. "Without the argument a converter writes what it
+wrote before" is held there.
+
+| What | Measured |
+|---|---|
+| The four reproductions, here | from a clean tree: the pinned files fetched, their digests right, the four conversions byte for byte what is committed, bundles and reports |
+| The merge | changes no file of a bundle (0 of 3,714 objects); eight coverage reports and four `SOURCES.sha256` |
+| The argument, here | `convert_ism.py --out DIR --obligated-party URI`: all 1,150 statements carry the caller's party, the report says "given by the caller", the reference passes the bundle |
+| Tests | 42 library tests; 8 tests that run the nine scripts on an invented catalogue |
+| Reported by the agent, not repeated here | the unchanged converters reproduce the committed bundles from the same files; with the argument BSI 999, CSF 106 and CIS Controls 171 statements carry the caller's party; 33 deliberate defects, all red, 13 of them red only in the new test file, because a reproduction runs only the path without the argument |
+| Not run | C3A, C5, CyFun and the CIS Benchmark: no source without a login was found. Their change was **read**, and run on the invented catalogue; their reports keep the old line |
+
+**What the count of #74 is (measured by the agent on the committed
+bundles).** The row said "not counted". The four shipped catalogue
+bundles hold 2,921 requirements with 4,173 statements. 2,255 statements
+carry a converter's party: ISM 1,150, Grundschutz++ 999, CSF 106. 1,918
+carry what the source states: every one of the 1,014 live controls of
+SP 800-53 5.2.0 gives an implementation level. So the argument changes
+no statement of SP 800-53 today, and the row's "ten converters" was nine
+in effect for this publication.
+
+**One count in a report changed for a reason that has nothing to do
+with the party.** The SP 800-53 report counts the citations of its
+controls in the other corpora of the repository: 437 as committed, 21
+now. 417 of the 437 came from the CR26 bundle, which left the
+repository on 2026-11-10; no run on today's tree can give 437
+(**measured** by the agent on the tree before the removal: 438, one
+more than committed, not investigated). The report was stale since that
+day and nothing noticed, for the reason #73 gives. The step now refuses
+to run when `converted_examples/` holds anything that is not committed.
+
+**Not merged: the CIS Controls step.** The agent found the publisher's
+file at a stable address without a login, ran converter and validator
+on it (206 pass, 0 fail) and added a step that does so on every push
+and discards the result. It also read the repository's own notice:
+the publisher's terms say a user may not "create any derivative work",
+and `NOT-REDISTRIBUTED.md` calls a converted catalogue one. The agent
+flagged the contradiction and kept the step in a commit of its own
+(`55343068` on its branch). It is not merged. Whether a conversion that
+is discarded at once is what those terms forbid is not a question a
+converter or this session answers (#76).
+
+
+**The app's presets** (build 0.9.12), by an agent, merged and run here.
+Where a preset writes a party the source does not state, the Import page
+shows it before the import, names it "the preset's default and not a
+value of the source", takes another (an http(s) URI as typed) and
+refuses an empty or malformed field; the default does not come back by
+itself. A level an SP 800-53 control states stays the source's. The
+import's report carries the converters' record. **Reported by the agent
+and not repeated here:** with the default left alone an import writes
+the objects it wrote with build 0.9.11 (one SHA-256 over every object of
+a BSI import of 811 objects, an SP 800-53 import of 1,035 and a
+CIS-shaped one of 17); 24 deliberate defects, all red, one only after a
+test step was added (a preset's party carried over when the rules are
+switched on the page).
+
+
+### #73 — the CR26 converter
+
+By an agent in a worktree, merged and run here. FedRAMP tags its
+publications, so the source is pinned by the publisher's tag
+`2026.11.02.01` and by its digest. Attaching the publisher's repository
+to this session was refused by the session's permissions; the agents
+fetched public raw files and read public pages, and nothing else.
+
+| What | Before | After |
+|---|---|---|
+| Source leaves without a destination | 108 of 7,532, in five path kinds | 0 |
+| Converter's exit code with a leaf unmapped | 0 | 1, with the reason |
+| Objects | 960 | 1,054 (291 Requirements of the publication, 14 carried Rev 5 Requirements, 652 Mappings, 92 Sets, 5 Tailorings) |
+| Reference | 961 pass, 6 fail | 1,055 pass, 0 fail |
+| Run by anything | no, since 2026-11-10 | a workflow step: fetch at the pin, check the digest, convert into a temporary directory, validate, compare the two reports with the committed ones, commit nothing |
+
+**Measured here on the merged tree:** the step's commands from a clean
+tree, as above, and the converter's 26 tests; a copy of the source with
+one member nobody declared: exit 1, "UNMAPPED: 1"; the PowerShell twin
+under PowerShell 7.4 on the bundle: 1,055 pass, 0 fail and the
+reference's one AUTHOR-1 line, which the agent had not run.
+**Reported by the agent and not repeated here:** with the default party
+the bundle is byte for byte what it was before the argument existed;
+the overwrite of #69 still reaches all 652 Mappings; bundle and reports
+are the same under three Python versions.
+
+**Where the five path kinds went, and what is argued in it.**
+
+1. A rule's `controls` (94) become Mappings by the rule for a KSI's
+   links. **Read** by the agent at the tag: the publisher's schema types
+   both lists alike and states no relationship for either. That a rule's
+   link means what a KSI's means is **argued**.
+2. The one range of days becomes two parameters, a minimum and a
+   maximum. The kernel has no duration with two ends (D9). That the two
+   tighten in opposite directions is the converter's reading; the source
+   states none (#78).
+3. `optional` on three notifications: the entry leaves
+   `reporting-obligation@1` and is carried whole in the converter's own
+   narrative facet. Carrying only the flag there was rejected by the
+   agent with an argument that holds: a facet that declares no change of
+   semantics cannot take back a duty that a semantic facet still lists.
+   The price is that the standard facet of those three rules no longer
+   shows the optional notification at all (#78).
+4. `ignore_in_terms` on nine terms: in the converter's own facet on the
+   Set that hosts the glossary.
+5. The fraction 0.25 stands in three parked class variants and is a
+   decimal string there. A fraction anywhere else stops the run.
+
+**What the agent's own defects showed.** Of its first 24 deliberate
+defects, 13 were caught by nothing. Nine changed the bundle and left
+the report as it was: the report was the only thing compared, and the
+bundle is not committed. The reports now carry the digest of the
+bundle's manifest, and the converter has a test that derives from the
+source what must stand where. The final 33 are all caught, ten of them
+only by that test. This is #41 in small: a report of paths says where a
+value should go, not that it arrived.
+
+**An incident, reported by the agent itself.** It ran `rm -rf
+/tmp/tmp.*` six times between 09:44 and 09:46 UTC to clean up after its
+own runs. That pattern removes the temporary directories of every
+process on the machine. No run of this session or of another agent is
+known to have failed by it; it cannot be ruled out.
+
+
+### Sentences that were wrong
+
+**"A Semantic Match at best."** The reference's docstring, the twin's
+comment, D3.11 and the handbook said that of a listed Attestation, and
+the briefs for the two ports repeated it. The reader's agent measured
+the case that refutes it: the example folder with the vendor's
+Attestation entered in its manifest. That Attestation binds the pack
+manifest the folder keeps, which the listing does not touch, and the
+reference prints FULL MATCH beside the MANIFEST-1 failure. What holds is
+narrower: a listed Attestation is never a Full Match of the manifest
+that lists it. The failure sentence itself had the same fault in a
+weaker form ("an Attestation lies beside the manifest it binds": not in
+a consumer's bundle, for the vendor's). It ends now with what always
+holds, "an Attestation lies beside a manifest and is never an entry of
+one", in all four implementations, and the end-to-end test lists both
+Attestations of the example folder: 27 pass, 2 fail, one Semantic Match
+and one Full Match. The reason given for the rule changed with it. For
+an Attestation that binds its own manifest the reason is arithmetic; for
+one that binds another there is no cycle, and the rule holds because the
+author decided it for all, and because a tool should know where an
+Attestation lies before it asks what it binds (the second half is
+**argued**).
+
+`25049b13` says in its message that no tool uses the word "Tamper"
+since reader 1.13.0. No tool shows it to a user; the five oldest vectors
+of the `attestation` family expect `tamper` as a value, and the three
+implementations compute it for them. Corrected in #71, item 10.
+
+`632df5b5` first gave the split of the browser tests wrongly and was
+amended before it was pushed. Both this and the "at best" sentence were
+written before the thing was measured.
+
+### The whole state, run by the workflow
+
+At commit `7d176fb7` (run 43585154996, **read** from its logs and its
+list of steps), all four jobs green. The reference: 692 vectors, its
+end-to-end test, the check of the example Attestation, the IFA
+conversion and the four catalogue conversions converted again from
+their pinned sources and byte for byte what is committed, the nine
+catalogue converters on an invented catalogue, and the CR26 conversion
+on its pinned download, validated, its two reports as committed. The
+app's tests and its generated files. 49 of 49 browser tests. The twin on
+Windows PowerShell 5.1 as in the table above. It was the first run in
+which the two converter steps and the reader's port met on GitHub. Of
+the runs before it on this work, the three whose jobs were read (at
+`152308e9`, `05bb538e` and `03d505e0`) were red in the browser job
+alone, by the one reader test that held the old behaviour until the
+reader had the rule; the reference, the twin and the app were green in
+each, and the converter steps in the two that had them.
+
+### Found and not fixed
+
+#76 and #77 need the author. #78 and #79 are recorded. In #71: an
+unchanged set that lists an Attestation has no repair inside the app;
+the reader does not implement ADVICE-1 to ADVICE-3. The deliberate
+defects of the four agents were not repeated here beyond the nine of my
+own in the app's and the reader's rule; the converters' were not
+repeated at all. C3A, C5, CyFun and the CIS Benchmark were changed by
+reading and run on an invented catalogue only. The app and the twin
+were not run on a bundle of any removed corpus but CR26 (the twin), and
+the app on none. The handbook still quotes the CR26 publication of July
+in its evidence lines.
+
+**Scored.** *Customer:* a bundle that lists its Attestation is refused
+by every tool with one sentence, where it used to pass with a verdict
+nobody read as a defect; whoever converts a catalogue for an
+organisation other than the one a converter assumed can say whom the
+statements bind, and the report says who chose; and a published source
+that moves is noticed by the next push, not by the next reader.
+*Simplicity:* one rule with one line of code per implementation, one
+argument, one pattern for a pinned source used six times.
+*Complexity:* bundles that passed fail; the workflow depends on the
+files of four publishers staying where they are (a moved tag or a
+deleted commit turns it red for a reason that is not the repository's);
+and two
+converters now carry choices about a publication that its publisher did
+not make.

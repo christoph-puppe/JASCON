@@ -196,7 +196,9 @@ backlog #71.)*
 >   ([run](https://github.com/christoph-puppe/JASCON/actions/runs/43538983821)),
 >   and on the 684 after phase D the same day, where a test also drives
 >   it over changed copies of a bundle
->   ([run](https://github.com/christoph-puppe/JASCON/actions/runs/43556089767)). A
+>   ([run](https://github.com/christoph-puppe/JASCON/actions/runs/43556089767)),
+>   and on the 692 with MANIFEST-1 later that day
+>   ([run](https://github.com/christoph-puppe/JASCON/actions/runs/43585154996)). A
 >   [workflow](.github/workflows/validators.yml) now runs both validators
 >   and the app's port on every change.
 > - **Not there:** a pack published by a vendor; a converter from OSCAL

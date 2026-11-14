@@ -2237,6 +2237,19 @@ of Check and of advice packs:
    Attestation and the IFA conversion reproduced from its pinned
    sources, the app's port and the browser tests of the pages, the pack
    builder and the reader green in the same run (`https://github.com/christoph-puppe/JASCON/actions/runs/43556089767`).)*
+   *(2026-11-14, MANIFEST-1 and the converters: at commit `7d176fb7`,
+   with D3.11 in both validators, the app 0.9.12 and the reader 1.14.0,
+   the twin ran on Windows PowerShell 5.1 on 692 / 692
+   (`attestation: 32`), the five bundles, the worked pack and the
+   example folder, ALL GREEN in 133 s, and the end-to-end test with the
+   twin, eleven copies of which two list their Attestation, 14 tests,
+   two skipped by design, in 54 s. In the same run the reference job:
+   692 / 692, its end-to-end test, the five shipped conversions
+   converted again from their pinned sources and byte for byte what is
+   committed, the nine catalogue converters on an invented catalogue,
+   and the CR26 conversion on its pinned download, validated and its
+   two reports as committed; the app's port; and 49 of 49 browser tests
+   (`https://github.com/christoph-puppe/JASCON/actions/runs/43585154996`).)*
 4. **Corpus.** ◐ Risk: one, IFA, two Risk objects — enough to exercise
    the record's sourced half and to measure what the source lacks; not
    enough to exercise `rating`, `acceptance`, the later states, or
