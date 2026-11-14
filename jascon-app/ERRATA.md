@@ -218,3 +218,29 @@ surprise, blunder.
   never with its version". The comparison with the converter in the same
   file holds every object to the converter's semantic digest, as before.
   `tests/checks.test.mjs` runs the reference validator on the exported set.
+
+## 2026-11-13 · build 0.9.9 · an edited check was saved under its first author's name with today's date
+
+- **Symptom.** A Check that one party wrote, opened on the Checks page and
+  saved by somebody else, kept `provenance.author-ref` and got today's
+  date. The object then said that its first author wrote this version
+  today. Read from the code while the pages were given the setting "Who am
+  I". Measured for the case that remains, a browser without the setting:
+  the example folder's check by `…/party/secops`, dated 2026-11-11, saved
+  without a change, is stored as secops with the day of the save.
+- **Cause.** The editor took the author from the stored check and the date
+  from the clock (`jscToday()`), one field from each version. The app had
+  no notion of who uses it, so there was nobody else to offer.
+- **Class.** Mismatch: two fields that state one fact together, who and
+  when, were filled from two sources.
+- **Why it was not caught.** The tests of the editor write new checks.
+  None opened a check that another party had written.
+- **Fix.** A check opened for editing offers the party of the setting "Who
+  am I" as the author. The field is shown and can be changed, as before.
+  Not fixed where the setting is empty: the form then shows the author the
+  check names, and a save still writes today's date beside it. The page
+  cannot know better; the field is there to be corrected.
+- **Test.** `tests/pages.test.mjs`, "Import, Map and Checks: …", the part
+  marked ERRATA 2026-11-13: with the setting, the example check by secops
+  opens with the setting's party and is saved under it with today's date;
+  without the setting it opens with secops.

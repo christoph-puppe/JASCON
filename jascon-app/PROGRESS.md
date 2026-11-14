@@ -107,11 +107,59 @@ and in `readme.md`; this file says only what is done and what is next.
   20,000 generated bundles (scripts outside the repository). No page shows
   the reports yet. The CIS preset dates its Mappings (see `ERRATA.md`).
 
+- Who decided, written (build 0.9.9; backlog #69, the app's half; author
+  decisions of 2026-11-13: a missing author is a report line and never a
+  refusal; an import pre-fills who and when from its source and the user
+  may overwrite it):
+  - One setting, *Who am I* (`org:me`), and one accessor, `jscWhoAmI`.
+    `jascon-view.js` has the author field every writing form shows and the
+    control that decides a Deviation.
+  - What is written is decided in one place, the section "what the pages
+    and the imports write" of `jascon-rules.js`: `jscProvenance` (both
+    fields or nothing), `jscImportProvenance` (the caller's fields replace
+    the source's one by one), `jscAuthorRecord`, `jscAuthorTailoring`,
+    `jscAuthorRisk`, `jscDecideDeviation`.
+  - Tailor, Risk, Implement and Assess write `provenance`; Tailor and Assess
+    decide a Deviation with `decided` and an optional `review-due`. Map and
+    Checks start from the setting. No page edits the authorizations of a
+    Component, so no page writes the date of one.
+  - The Validate page shows the two reports with a day (*Review dates as
+    of*) and the switch *Require authors*; `jscCheckGraph` runs them.
+  - `jascon-oscal.js` has the rule for the author of an OSCAL document
+    (five steps, stated above `jscOscalAuthorParty`; the Python converters
+    are written to the same text). A profile's Tailoring gets `provenance`
+    from it; the CIS Mappings keep CIS. `import.html` shows both values in
+    two fields before the import.
+  - Risk catalogues: the header has an optional `released`; both shipped
+    catalogues state 2026-11-10. `risk_catalog.py import` writes
+    `provenance` and takes `--author-ref` and `--date`; `jascon-riskcat.js`
+    is its port; the demo was rebuilt.
+
+  Measured: the Tailor, Risk, Implement, Assess, Import, Map and Checks
+  pages were driven in headless Chromium. Five sets exported with every
+  author named give `validate_core.py --require-authors --as-of 2026-11-13`
+  ALL GREEN without an AUTHOR line (26, 12, 29, 33 and 28 pass, 0 fail).
+  One of them is three requirements of kernel 1.0.0 and what three pages
+  wrote: its export pins no kernel while nobody is named and 2.0.0 once an
+  author is. Three sets with one record left without its author give
+  exactly that one AUTHOR line, on the Validate page and from the
+  reference, which fails them only with `--require-authors`. The Validate
+  page shows the reference's lines for the example folder and the IFA
+  bundle, for 2026-11-13 and 2023-06-24, with the switch off and on, and
+  for a review date decided on the page on the day it is due and the day
+  after. The demo bundle gives 1,065 pass, 0 fail with `--require-authors`.
+  The port of the catalogue import writes the same 24 Risks and the same
+  report as `risk_catalog.py` for six combinations of `--author-ref` and
+  `--date`. 67 deliberate defects in the new code were each tried once: 66
+  turned a test red at once, one did not (a nameless party that falls
+  through from the first step of the document-author rule), and does since
+  two cases were added. Read and not measured: nothing was tried in a
+  browser other than Chromium, and no real OSCAL profile with parties was
+  at hand (the tests write their own). The Python converters' side of the
+  document-author rule is somebody else's work and was not compared.
+
 ## Next
 
-- The two reports of CP-AUTHOR-1 on the Validate page (the day asked about
-  defaults to `jscToday()`, which is the UTC date), and the fields on the
-  pages that write the objects (CP-AUTHOR-1 §9 step 4).
 - An OSCAL component definition as a third kind on the Import page, written
   as a pack (CP-ADVICE-1 §9 item 7); the converter it would follow
   (`convert_cdef.py`) does not exist yet.
@@ -147,6 +195,31 @@ and in `readme.md`; this file says only what is done and what is next.
 - The shipped `converted_examples/US.SP800-53` bundle was converted from an
   earlier revision of NIST's 5.2.0 file. In it SA-15(13) "Logging Syntax"
   carries the statement of SA-15(12); NIST's current file has it right.
+- Found with build 0.9.9, each older than it:
+  - A click that follows typing is lost. Where a field redraws its form
+    when it changes (the Tailor workbench, the Risk form), the first click
+    on a button after typing into such a field lands on a button that is
+    being replaced. Measured on the Tailor page in Chromium: type a
+    parameter value, click *Add the operation*: no operation; click again:
+    one. Read from the code for the Risk form, not tried there.
+  - Saving an edit of a Check that an Assessment of the set has run makes
+    that Assessment fail CHECK-8, because its result names the digest of
+    the check as it was. The Checks page says nothing about it. Measured:
+    the reference validator listed two CHECK-8 failures for the example
+    folder after one of its checks was saved again. The rule is the
+    kernel's (a changed check is a different check); what is missing is a
+    word on the page, or a new version of the check.
+  - Four parties are made up by pages where the kernel requires a party
+    and the user gave none, each from a short name the form shows:
+    `…/party/author` on a Mapping, `…/party/check-author` on a Check,
+    `…/party/assessor` as the performer of an Assessment, `…/party/ciso` as
+    the approver of a Deviation. The first two are now used only where the
+    setting *Who am I* is empty. Whether a required party may be a
+    placeholder is the author's to decide; decision 1 of 2026-11-13 speaks
+    of the optional fields.
+  - The record of catalogue entries that do not apply names the party of
+    the Owner field as the one who decided, not the party of *Who am I*.
+    Left as it was.
 
 ## Open
 
