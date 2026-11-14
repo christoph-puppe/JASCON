@@ -3532,6 +3532,19 @@ object by object. The pack builder was run and not edited: the worked
 pack gives no AUTHOR line, because a pack holds Components only and its
 form writes no authorizations.
 
+**What the workflow found that this machine did not.** The first run on
+the merged state was green in three jobs and red in the fourth: one of
+the reader's nine tests saw the other Tailoring shown first. A folder's
+files arrive in the order the operating system lists them, the reader
+indexed them in that order, and the runner lists the example folder
+otherwise than the machine the test was written on. All 25 browser tests
+had passed here, twice. It was reproduced here by handing the page the
+same files in reverse order. The reader indexes by path now, compared by
+code unit, and the test hands the files over in both orders. A page
+whose first screen depends on the file system is a small defect; a test
+that passes on one machine only is the larger one, and only the second
+machine showed it.
+
 ### What the decision costs, said plainly
 
 - **A pre-filled author is the document's, not the record's.** The
