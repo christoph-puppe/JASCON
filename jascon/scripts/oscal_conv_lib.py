@@ -663,6 +663,64 @@ def provenance_override(argv):
             date = v
     return author, date
 
+def obligated_party(argv, default):
+    """Whom a statement binds where the source does not say (backlog #74)
+    -> (party URI, "converter-default" | "caller").
+
+    The kernel requires `obligated-parties` on every statement. A catalogue
+    seldom says whom its controls bind, so each converter names one party
+    for its corpus. That party is the converter's reading of the framework
+    and not a value of the source; the author decided on 2026-11-14 that it
+    is an argument with a named default. `--obligated-party URI` among a
+    converter's arguments puts the caller's party in the default's place.
+
+    Where a source does name a party for a statement (an implementation
+    level in SP 800-53, `affects` in CR26), a converter writes what the
+    source says and uses this party only where the source is silent.
+
+    A value that is no http(s) URI stops the run, and so does the argument
+    given twice: an overwrite the caller asked for is never dropped or
+    guessed. There is no way to ask for no party at all: the kernel requires
+    one, and no tool writes a party nobody named (#70)."""
+    if not re.match(r"https?://[^\s]+\Z", default or ""):
+        raise SystemExit(f"the converter's default obligated party {default!r} is not an http(s) URI")
+    given = [i for i, a in enumerate(argv) if a == "--obligated-party"]
+    if not given: return default, "converter-default"
+    if len(given) > 1: raise SystemExit("--obligated-party is given more than once")
+    if given[0] + 1 >= len(argv): raise SystemExit("--obligated-party needs a value")
+    v = argv[given[0] + 1]
+    if not re.match(r"https?://[^\s]+\Z", v): raise SystemExit(f"--obligated-party {v!r} is not an http(s) URI of a party")
+    return v, "caller"
+
+def obligated_party_record(party, origin, default, source_states=None):
+    """What a coverage report's JSON says about it, under `obligated-party`:
+    the party written, who chose it, the converter's default, and - where a
+    source names parties itself - how (`source_states`: a phrase that
+    completes "the source names a party ...", e.g. "as the implementation
+    level of a control")."""
+    r = {"value": party, "origin": origin, "converter-default": default}
+    if source_states: r["source-states"] = source_states
+    return r
+
+def obligated_party_line(party, origin, default, why="", source_states=None):
+    """The line of a coverage report (markdown) that says whom the statements
+    bind and who said so. `why`: the converter's reason for its default, as a
+    sentence without a full stop. `source_states`: see obligated_party_record."""
+    where = (f"on every statement for which the source names no party; where it names one ({source_states}), "
+             f"that one is written. `{party}` is" if source_states else "on every statement")
+    reason = f" Why this default: {why}." if why else ""
+    if source_states:
+        if origin == "caller":
+            return (f"- **Obligated party**: `{party}` {where} given by the caller with `--obligated-party`; "
+                    f"the converter's own default is `{default}`.{reason}")
+        return (f"- **Obligated party**: `{party}` {where} the converter's default and not a value of the "
+                f"source; `--obligated-party URI` writes another.{reason}")
+    if origin == "caller":
+        return (f"- **Obligated party**: `{party}` {where}, given by the caller with `--obligated-party`. "
+                f"The converter's own default is `{default}`.{reason}")
+    return (f"- **Obligated party**: `{party}` {where}. This is the converter's default and not a value of "
+            f"the source; `--obligated-party URI` writes another.{reason}")
+
 def coverage(paths, rules):
     """rules: list of (regex, level, target). Returns (rows, unmapped)."""
     rows, unmapped = [], []

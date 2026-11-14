@@ -14,6 +14,7 @@ import copy, json, os, sys, tempfile, unittest
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from oscal_conv_lib import global_occurrence, Ledger, props_by_name, slug, RESPONSE_TREATMENT, response_treatment
 from oscal_conv_lib import document_author, document_day, provenance, provenance_override, needs_kernel_2
+from oscal_conv_lib import obligated_party, obligated_party_line, obligated_party_record
 
 
 def measure(source, output):
@@ -412,6 +413,49 @@ class Backlog69ThePinAWriterSets(unittest.TestCase):
         for what, o in reasons.items():
             self.assertTrue(needs_kernel_2([req, o]), what)
 
+
+class Backlog74WhomAStatementBinds(unittest.TestCase):
+    """The obligated party of a converted statement is the converter's default
+    unless the caller names another (author, 2026-11-14). The report says
+    which of the two it was."""
+    D = "https://ns.example/fw/party/organisation"
+
+    def test_backlog_74_without_the_argument_the_default_is_written_and_named_as_the_converters(self):
+        self.assertEqual(obligated_party([], self.D), (self.D, "converter-default"))
+        self.assertEqual(obligated_party(["--author-ref", "https://a.example/p", "--date", "2026-01-01"], self.D), (self.D, "converter-default"))
+
+    def test_backlog_74_the_callers_party_takes_the_defaults_place(self):
+        mine = "https://acme.example/party/it-operations"
+        for argv in (["--obligated-party", mine], ["--date", "2026-01-01", "--obligated-party", mine, "--out", "x"]):
+            self.assertEqual(obligated_party(argv, self.D), (mine, "caller"))
+
+    def test_backlog_74_a_value_that_is_no_party_stops_the_run(self):
+        for argv, word in ((["--obligated-party"], "needs a value"), (["--obligated-party", ""], "not an http(s) URI"),
+                           (["--obligated-party", "organisation"], "not an http(s) URI"),
+                           (["--obligated-party", "https://a.example/p\n"], "not an http(s) URI"),      # #68: a line break ends no value
+                           (["--obligated-party", "https://a.example/p q"], "not an http(s) URI"),
+                           (["--obligated-party", "https://a.example/p", "--obligated-party", "https://b.example/p"], "more than once")):
+            with self.assertRaises(SystemExit, msg=argv) as c: obligated_party(argv, self.D)
+            self.assertIn(word, str(c.exception))
+        with self.assertRaises(SystemExit) as c: obligated_party([], "organisation")       # a converter's own default is held to the same
+        self.assertIn("default", str(c.exception))
+
+    def test_backlog_74_the_report_says_who_chose_the_party(self):
+        mine = "https://acme.example/party/it"
+        d = obligated_party_line(self.D, "converter-default", self.D, "the framework binds the organisation implicitly")
+        self.assertIn(f"`{self.D}` on every statement.", d)
+        self.assertIn("the converter's default and not a value of the source", d)
+        self.assertIn("--obligated-party URI", d)
+        self.assertIn("Why this default: the framework binds the organisation implicitly.", d)
+        c = obligated_party_line(mine, "caller", self.D)
+        self.assertIn(f"`{mine}` on every statement, given by the caller", c)
+        self.assertIn(f"The converter's own default is `{self.D}`.", c)
+        self.assertNotIn("not a value of the source", c)
+        s = obligated_party_line(self.D, "converter-default", self.D, source_states="as the implementation level of a control")
+        self.assertIn("for which the source names no party; where it names one (as the implementation level of a control), that one is written", s)
+        self.assertEqual(obligated_party_record(self.D, "converter-default", self.D), {"value": self.D, "origin": "converter-default", "converter-default": self.D})
+        self.assertEqual(obligated_party_record(mine, "caller", self.D, "in `affects` of a rule"),
+                         {"value": mine, "origin": "caller", "converter-default": self.D, "source-states": "in `affects` of a rule"})
 
 if __name__ == "__main__":
     unittest.main()
