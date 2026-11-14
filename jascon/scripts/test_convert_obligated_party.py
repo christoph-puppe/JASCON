@@ -222,7 +222,9 @@ class Backlog74TheNineConverters(unittest.TestCase):
             self.assertIn("PARTY,PARTY_ORIGIN=obligated_party(ARGV,PARTY_DEFAULT)", code, conv)
             self.assertEqual(code.count("\nPARTY="), 0, f"{conv}: the party is what obligated_party() returned")
         with open(os.path.join(HERE, "convert_nist.py"), encoding="utf-8") as f: code = f.read().replace(" ", "")
-        self.assertIn('iflvls:\nparties=[f"{NS}/party/{v}"forvinlvls]\nelse:\nparties=[PARTY]', code)   # the level, else the argument
+        # the level, else the argument; since the conversion ledger (#41) the party of a level is a stated rule
+        self.assertIn('iflvls:\nparties=[D(R_PARTY,_party,v)forvinlvls]\nelse:\nparties=[PARTY]', code)
+        self.assertIn('def_party(level):returnf"{NS}/party/{level}"', code)
         self.assertEqual(code.count("\nparties="), 2)
         # convert_cr26.py writes parties too (`affects`, else its own); it takes the argument in a change of its own
         elsewhere = {"convert_cr26.py"}
