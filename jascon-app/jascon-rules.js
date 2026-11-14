@@ -1607,6 +1607,25 @@ function jscBindsReport(atts, manifestDigest, delivered, keptPacks) {
   }
   return out;
 }
+/* MANIFEST-1 (D3.11; backlog #75, author decision of 2026-11-14: "refusal
+   in all"). Port of listed_attestation_errors of validate_core.py, held to
+   the `listed-vectors` of attestation-vectors.json.
+   An object a content manifest lists is no Attestation. D3.1 excludes
+   Attestations from the manifest by definition: an Attestation binds the
+   digest of the manifest's bytes, so a manifest that lists one cannot be
+   the manifest it binds. Until that day only a pack's manifest was held to
+   it (ADVICE-1), and an ordinary bundle that listed its own Attestation
+   passed. The rule is about where an Attestation lies and asks nothing else
+   of it: what it binds, whether it names an envelope and what its lifecycle
+   is change nothing. Its binding is still computed and reported.
+   objs: Map(id -> {type, obj}), the objects a manifest lists.
+   -> [error], one per listed Attestation, in the order of the ids */
+const JSC_MANIFEST_RULES = {
+  "MANIFEST-1": "Attestations are excluded from the content manifest by definition, D3.1 - an Attestation lies beside the manifest it binds, and a manifest that lists one cannot be that manifest",
+};
+const jscListedAttestationErrors = objs => [...objs.keys()].sort().filter(id => objs.get(id).type === "attestation")
+  .map(id => `${id}: an Attestation is listed in the content manifest (MANIFEST-1: ${JSC_MANIFEST_RULES["MANIFEST-1"]})`);
+
 /* What the Attestations of a set bind: the primitive applied to the set a
    page holds (jscCheckGraph, and the Assess page for one Attestation).
 
@@ -1643,9 +1662,19 @@ function jscBindsReport(atts, manifestDigest, delivered, keptPacks) {
    trace in the set, so such a set is read as loaded as well; the missing
    object is an error of its own.
 
+   MANIFEST-1 follows the same two bases. As loaded, the manifest is the one
+   the set came with, and an Attestation it lists is the reference's failure
+   (`listed: "refused"` on its line, the failure in `manifest-1`). The
+   manifest an export writes never lists an Attestation (jscBuildBundle), so
+   on "export" there is no such failure; an Attestation the earlier manifest
+   listed is marked `listed: "left-out"`, so that a page can say that the
+   export leaves it out of the manifest and puts the file beside it. A set
+   is never repaired without that being said.
+
    g: the graph; objs: Map(id -> {type, obj}), the typed objects of the set.
    -> { basis, "manifest-digest", "loaded-manifest-digest" (or null),
-        "kept-packs": [digest], lines: jscBindsReport }
+        "kept-packs": [digest], lines: jscBindsReport, each with `listed`
+        (null | "refused" | "left-out") and `manifest-1` (the failure or null) }
       A set without an Attestation has basis null and no line: nothing was
       compared, and nothing is said. */
 async function jscSetBinds(g, objs) {
@@ -1659,12 +1688,17 @@ async function jscSetBinds(g, objs) {
   const written = [...g.objects.values()].some(r => jscRulesAdded(r) && !jscRulesBeside(r)) || [...g.scales.values(), ...g.facetSchemas].some(jscRulesAdded);
   const basis = g.manifest && (built.verbatim || !written) ? "loaded" : "export";
   const digest = basis === "loaded" ? loaded : await jscRulesPackageDigest(built.files[0].text);
-  /* the objects the manifest lists: on "loaded" those with a line in it, on "export" all but the Attestations beside it */
-  const isListed = r => !!r && (basis === "loaded" ? !!r.entry : !jscRulesBeside(r));
-  const listed = new Map([...objs].filter(([id]) => isListed(g.objects.get(id))));
+  /* the objects the manifest lists: on "loaded" those with a line in it; on "export" every object but the Attestations,
+     because a manifest written here lists none of them, wherever the manifest the set came with had them */
+  const isListed = (r, type) => !!r && (basis === "loaded" ? !!r.entry : type !== "attestation");
+  const listed = new Map([...objs].filter(([id, x]) => isListed(g.objects.get(id), x.type)));
   const kept = jscRulesKeptPacks(g).map(([name]) => "sha256:" + name);
-  return { basis, "manifest-digest": digest, "loaded-manifest-digest": loaded, "kept-packs": kept,
-    lines: jscBindsReport(atts, digest, await jscSemanticDigests(listed), kept) };
+  const refused = new Map(jscListedAttestationErrors(listed).map(m => [[...atts.keys()].find(id => m.startsWith(id + ": ")), m]));
+  const lines = jscBindsReport(atts, digest, await jscSemanticDigests(listed), kept).map(l => {
+    const cameListed = !!(g.objects.get(l.id) || {}).entry;
+    return { ...l, listed: refused.has(l.id) ? "refused" : cameListed && basis === "export" ? "left-out" : null, "manifest-1": refused.get(l.id) || null };
+  });
+  return { basis, "manifest-digest": digest, "loaded-manifest-digest": loaded, "kept-packs": kept, lines };
 }
 
 /* ====================================================================
@@ -3220,6 +3254,12 @@ async function jscCheckGraph(g, verified, opts) {
      manifest it binds. A line of the reference is a note; what the reference lists as a failure is an error. */
   const binds = await jscSetBinds(g, objs);
   for (const l of binds.lines) add(l.kind === "failure" ? "error" : "note", "attestation", l.id, l.kind === "failure" ? l.text : l.text.slice(`binds: ${l.id} = `.length));
+  /* MANIFEST-1: an Attestation the manifest lists, in the reference's words; where the set was written to since,
+     the manifest in question is the export's, which lists none, and that is said instead */
+  for (const l of binds.lines) {
+    if (l.listed === "refused") add("error", "manifest", l.id, strip(l["manifest-1"]));
+    else if (l.listed === "left-out") add("note", "manifest", l.id, "the manifest this set came with lists this Attestation, which MANIFEST-1 refuses; the manifest an export writes now does not list it, and the file leaves beside the manifest");
+  }
   const verify = trusted ? { envelopes, trusted } : null;
   pass("reference", "error")(jscClosureErrors(objs));
   const pinnedSchemas = new Map(), pinnedDecl = new Map();
@@ -3302,7 +3342,7 @@ if (typeof module !== "undefined" && module.exports) {
     jscRiskLinkNotes, JSC_AUTHOR_RULES, jscAuthorReport, jscUtcDay, jscReviewReport, jscAuthorReviewLines,
     jscPartyRef, jscIsDate, jscProvenance, jscImportProvenance, jscAuthorRecord, jscAuthorTailoring, jscAuthorRisk, jscDecideDeviation, jscScaleDefinitionErrors, jscMatrixErrors, jscRiskLevels, jscMatrixCell, jscScaleErrors, jscCheckScales,
     jscOptionalEmptyViolations, JSC_NUMBER_RULES, jscNumberSpellingViolations, jscNumberViolations, jscInNumberDomain, jscNumberError, jscObjectErrors, jscFacetErrors, jscTailoringDutyErrors, jscAttestationVerdict,
-    jscAttestationBinds, jscSemanticDigests, JSC_BINDS_MANIFEST, jscBindsReport, jscSetBinds, jscCheckGraph,
+    jscAttestationBinds, jscSemanticDigests, JSC_BINDS_MANIFEST, jscBindsReport, JSC_MANIFEST_RULES, jscListedAttestationErrors, jscSetBinds, jscCheckGraph,
     JSC_DSSE_PAYLOAD_TYPE, jscEd25519Verify, jscVerifyEnvelope, jscSemver, jscCompose, jscComposeSide, jscPathGet, jscEvalPredicate, jscConditionalApply,
     JSC_CHECK_RULES, JSC_CHECK_OPS, JscIRegexpError, jscIreCompile, jscIreFullMatch, jscCheckVerdict, jscCheckEach, jscCheckEachSummary, jscPercentShare, jscCheckAggregate, jscCheckParamDecls,
     jscCheckObjectErrors, jscCheckErrors,

@@ -94,6 +94,10 @@ jscI18n.add("de", {
     "Was sich tun lässt: Der Signierer stellt die Attestation für den Inhalt, wie er jetzt ist, neu aus, oder die Attestation wird aus dem Set genommen (Seite Prüfen). Sie nennt einen Umschlag, ist also signiert: Sie hier zu ändern, auch ihren Lifecycle, bräche die Signatur, und sie zurückzuziehen ist Sache des Signierers.",
   "What can be done: the Attestation is issued again for the content as it is now, or it is taken out of the set, or, because it names no envelope and is unsigned, it is set to withdrawn (both on the Assess page). A withdrawn Attestation that does not bind is reported and fails nothing.":
     "Was sich tun lässt: Die Attestation wird für den Inhalt, wie er jetzt ist, neu ausgestellt, oder sie wird aus dem Set genommen, oder sie wird, weil sie keinen Umschlag nennt und unsigniert ist, auf withdrawn gesetzt (beides auf der Seite Prüfen). Eine zurückgezogene Attestation, die nicht bindet, wird gemeldet und lässt nichts durchfallen.",
+  "The manifest this set came with lists this Attestation. The app has not changed that: a set nobody changed leaves as it came, with that manifest. Once something in the set is changed, an export writes a new manifest, which leaves the Attestation out and puts its file beside the manifest.":
+    "Das Manifest, mit dem dieses Set kam, listet diese Attestation. Die App hat daran nichts geändert: Ein Set, das niemand geändert hat, geht hinaus, wie es kam, mit diesem Manifest. Sobald etwas im Set geändert wird, schreibt ein Export ein neues Manifest, das die Attestation auslässt und ihre Datei neben das Manifest legt.",
+  "The manifest this set came with lists this Attestation, which MANIFEST-1 refuses. The set was changed since, and the manifest an export writes now does not list it: the file leaves beside the manifest, and the export says so.":
+    "Das Manifest, mit dem dieses Set kam, listet diese Attestation, was MANIFEST-1 ablehnt. Das Set wurde seither geändert, und das Manifest, das ein Export jetzt schreibt, listet sie nicht: Die Datei liegt dann neben dem Manifest, und der Export sagt es.",
   "Reported and no failure: the Attestation is not active, so nothing is claimed with it.":
     "Gemeldet und kein Fehler: Die Attestation ist nicht aktiv, mit ihr wird also nichts behauptet.",
   "No failure: every subject is as it was signed. Only the manifest is another than the one the Attestation names.":
@@ -649,6 +653,11 @@ const BINDS_ADVICE = {
   reported: N("Reported and no failure: the Attestation is not active, so nothing is claimed with it."),
   semantic: N("No failure: every subject is as it was signed. Only the manifest is another than the one the Attestation names."),
 };
+/* MANIFEST-1 (backlog #75): no content manifest lists an Attestation. The failure is the reference's line. What
+   the app does about a set that came with such a manifest is said beside it, because it does nothing in silence:
+   an unchanged set leaves as it came; a changed one gets a manifest that leaves the Attestation out. */
+const LISTED_REFUSED = N("The manifest this set came with lists this Attestation. The app has not changed that: a set nobody changed leaves as it came, with that manifest. Once something in the set is changed, an export writes a new manifest, which leaves the Attestation out and puts its file beside the manifest.");
+const LISTED_LEFT_OUT = N("The manifest this set came with lists this Attestation, which MANIFEST-1 refuses. The set was changed since, and the manifest an export writes now does not list it: the file leaves beside the manifest, and the export says so.");
 const bindsBasisKey = b => (b.basis === "loaded" ? "loaded" : b["loaded-manifest-digest"] ? "changed" : "none");
 const shortDigest = d => (typeof d === "string" && d.length > 24 ? d.slice(0, 19) + "…" : String(d || ""));
 const bindsBasis = b => T(BINDS_BASIS[bindsBasisKey(b)], { digest: shortDigest(b["manifest-digest"]), loaded: shortDigest(b["loaded-manifest-digest"]) });
@@ -659,7 +668,10 @@ function bindsHtml(binds, only) {
   return `<div class="hint" data-binds-basis="${bindsBasisKey(binds)}" title="${esc(binds["manifest-digest"] || "")}">${esc(bindsBasis(binds))}</div>` +
     lines.map(l => `<div data-binds="${l.kind}" data-verdict="${l.verdict}" data-binds-id="${esc(l.id)}">
       <div class="mono ${l.kind === "failure" ? "verdict-bad" : l.verdict === "full-match" ? "verdict-ok" : "verdict-warn"}" style="font-size:11.5px;margin:2px 0;overflow-wrap:anywhere" data-binds-text>${esc((l.kind === "failure" ? "error: " : "") + l.text)}</div>
-      ${bindsAdvice(l) ? `<div class="hint" data-binds-advice>${esc(bindsAdvice(l))}</div>` : ""}</div>`).join("");
+      ${bindsAdvice(l) ? `<div class="hint" data-binds-advice>${esc(bindsAdvice(l))}</div>` : ""}
+      ${l.listed === "refused" ? `<div class="mono verdict-bad" style="font-size:11.5px;margin:2px 0;overflow-wrap:anywhere" data-manifest-1="refused">${esc("error: " + l["manifest-1"])}</div>
+        <div class="hint" data-manifest-1-advice>${esc(T(LISTED_REFUSED))}</div>` : ""}
+      ${l.listed === "left-out" ? `<div class="hint" data-manifest-1="left-out">${esc(T(LISTED_LEFT_OUT))}</div>` : ""}</div>`).join("");
 }
 
 window.jscView = {
