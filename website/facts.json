@@ -1,11 +1,11 @@
 {
  "measured": {
   "date": "2026-11-14",
-  "commit": "1ee01ec8",
+  "commit": "d9e56477",
   "by": "jascon/scripts/validate_core.py"
  },
  "vectors": {
-  "total": 692,
+  "total": 705,
   "families": [
    {
     "name": "jcs",
@@ -29,7 +29,7 @@
    },
    {
     "name": "facet",
-    "vectors": 7
+    "vectors": 20
    },
    {
     "name": "reference",
@@ -85,31 +85,31 @@
   {
    "corpus": "AU.ISM",
    "path": "converted_examples/AU.ISM/ism-core-bundle",
-   "objects": 1711,
+   "objects": 1731,
    "attestations": 0,
    "types": {
     "requirement": 1150,
-    "requirementSet": 561
+    "requirementSet": 581
    }
   },
   {
    "corpus": "DE.BSI",
    "path": "converted_examples/DE.BSI/bsi-core-bundle",
-   "objects": 813,
+   "objects": 1287,
    "attestations": 0,
    "types": {
-    "requirement": 651,
-    "requirementSet": 162
+    "requirement": 999,
+    "requirementSet": 288
    }
   },
   {
    "corpus": "US.CSF",
    "path": "converted_examples/US.CSF/csf-core-bundle",
-   "objects": 135,
+   "objects": 226,
    "attestations": 0,
    "types": {
-    "requirement": 106,
-    "requirementSet": 29
+    "requirement": 185,
+    "requirementSet": 41
    }
   },
   {
@@ -129,10 +129,10 @@
   {
    "corpus": "US.SP800-53",
    "path": "converted_examples/US.SP800-53/sp800-53-core-bundle",
-   "objects": 1039,
+   "objects": 1221,
    "attestations": 0,
    "types": {
-    "requirement": 1014,
+    "requirement": 1196,
     "requirementSet": 25
    }
   }
@@ -161,7 +161,7 @@
   }
  ],
  "validators": {
-  "python_lines": 3111,
-  "powershell_lines": 4243
+  "python_lines": 3144,
+  "powershell_lines": 4301
  }
 }

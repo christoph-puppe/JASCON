@@ -2,7 +2,7 @@
 title: モデル：11 のオブジェクト型 | JASCON
 description: JASCON のカーネルを 1 ページで説明します。入れ子の浅い 11 のオブジェクト型、法助動詞の順序、型付きパラメータ、契約を伴うファセット、オブジェクトごとの 2 つのダイジェスト、3 つの適合性ティア、そして OSCAL 1.x の各構成要素の移行先です。
 nav: model
-source: 20b1275c2e33
+source: 90c4ad701239
 ---
 <section class="page-hero">
   <div class="wrap">
@@ -24,7 +24,7 @@ source: 20b1275c2e33
         <ul class="ticks">
           <li><b><code>id</code></b> は、発行機関自身のドメイン配下の URI です。文字列として比較され、取得されることはないため、外部から遮断されたネットワークでも検証が機能します。</li>
           <li><b><code>version</code></b> と、マニフェスト内の 2 つのダイジェストが履歴を担います。ISM は同じ目的のために、2,202 個の改訂用 props を手作業で維持しています。</li>
-          <li><b><code>statements</code></b> がリストなのは、条項が実際に存在するからです。Grundschutz++ には、条項を参照可能にするためだけに存在する、入れ子になった 347 個の疑似管理策があります。</li>
+          <li><b><code>statements</code></b> がリストなのは、条項が一つずつ参照されるからです。SP 800-53 は管理策を a.、b.、c. の項目として記述しており、実装はそれぞれに個別に応答し、評価目的はそれぞれを個別に名指しします。</li>
           <li><b><code>modality</code></b> と <b><code>obligated-parties</code></b> はステートメントに置かれます。1 つの要求事項で、運用者を MUST で、顧客を SHOULD で拘束できます。</li>
           <li><b><code>prose</code></b> は、言語タグからテキストへのマップです。</li>
         </ul>

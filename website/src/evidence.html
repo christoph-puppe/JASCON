@@ -150,11 +150,11 @@ nav: evidence
         <p>The Python reference and the PowerShell twin were written by the project author with AI assistance from the same sources. Their independence is limited to language and runtime. The gate measures whether the specification determines an implementation. It does not measure a stranger's weekend.</p>
       </div>
       <div class="limit">
-        <h3>Path coverage is not value arrival <span class="tier tier-open">open, backlog 41</span></h3>
-        <p>The coverage reports count source paths with a declared destination. Whether each value arrives is traced on {{ n.ledger_corpora }} corpora, with a ledger that follows every source value through the converter: of {{ n.ledger_values }} leaf values, {{ n.ledger_carried }} are carried ({{ n.ledger_copied }} copied, {{ n.ledger_transformed }} by a named rule), {{ n.ledger_dropped }} are dropped for a stated reason, and {{ n.ledger_unaccounted }} are unaccounted, with no destination and no stated reason. Every path map of these corpora reads 100 %; the ledgers found values that are lost all the same. Accounted for is not the same as carried: a dropped value is not in the bundle, by a decision that is written down, and the ledger does not trace back what a converter writes on its own. The workflow reproduces these conversions from their pinned source files on every change. The other {{ n.ledger_unmeasured }} corpora are unmeasured.</p>
+        <h3>Path coverage is not value arrival <span class="tier tier-open">open for {{ n.ledger_unmeasured }} corpora</span></h3>
+        <p>The coverage reports count source paths with a declared destination. Whether each value arrives is traced on {{ n.ledger_corpora }} corpora, with a ledger that follows every source value through the converter: of {{ n.ledger_values }} leaf values, {{ n.ledger_carried }} are carried ({{ n.ledger_copied }} copied, {{ n.ledger_transformed }} by a named rule), {{ n.ledger_nocontent }} are no content by a rule the ledger checks (a name that only selects a field, a namespace, an id that can be rebuilt exactly, a resource nothing refers to), {{ n.ledger_dropped }} are dropped and {{ n.ledger_unaccounted }} are unaccounted. A converter run with an unaccounted value fails. Every path map of these corpora had read 100 %, and the first ledgers found values that were lost all the same; they are carried now. A ledger holds a rule to what it wrote, not to whether the rule is right, and it does not trace back what a converter writes on its own. The workflow reproduces these conversions from their pinned source files on every change. The other {{ n.ledger_unmeasured }} corpora are unmeasured.</p>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>Corpus</th><th class="num">Source values</th><th class="num">Copied</th><th class="num">By a named rule</th><th class="num">Dropped, reason stated</th><th class="num">Unaccounted</th></tr></thead>
+            <thead><tr><th>Corpus</th><th class="num">Source values</th><th class="num">Copied</th><th class="num">By a named rule</th><th class="num">No content, by a checked rule</th><th class="num">Dropped</th><th class="num">Unaccounted</th></tr></thead>
             <tbody>
 {{ html.ledger_rows }}
             </tbody>
@@ -180,10 +180,6 @@ nav: evidence
       <div class="limit">
         <h3>Advice packs rest on one example file <span class="tier tier-designed">designed for</span></h3>
         <p>No catalogue authority publishes vendor advice. For such data the promotion rule asks for a standard that requires the record, or for two open implementations whose content was counted. Advice packs have neither. The clause-level field on a capability is backed by a single fictional component definition from NIST's examples, with three recommendations, two clause-level entries and two suggested parameter values; the product-version field is backed by nothing counted. Both entered the kernel on the author's decision against that rule, and the specification records it that way. No vendor has published a pack, the pack builder imports OSCAL component definitions, and NIST's own examples come through without loss of anything a pack can hold, but no component definition a vendor published has been run through it. That census is still owed.</p>
-      </div>
-      <div class="limit">
-        <h3>Known defects in shipped examples <span class="tier tier-open">open, backlog 46 and 55</span></h3>
-        <p>The example attestation is illustrative: its subject digests match no example object. The method payload of an Assessment is not yet validated against its pinned facet schema, and the three in the repository would fail.</p>
       </div>
       <div class="limit">
         <h3>Who decided is recorded, not enforced <span class="tier tier-designed">in rc.4, backlog 65 and 66</span></h3>

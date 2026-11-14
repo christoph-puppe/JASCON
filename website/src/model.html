@@ -23,7 +23,7 @@ nav: model
         <ul class="ticks">
           <li><b><code>id</code></b> is a URI under the authority's own domain. It is compared as a string and never fetched, so validation works on a sealed network.</li>
           <li><b><code>version</code></b> and two digests in the manifest carry the history. The ISM maintains 2,202 revision props by hand for the same purpose.</li>
-          <li><b><code>statements</code></b> is a list because clauses are real: Grundschutz++ contains 347 nested pseudo-controls that exist only to make clauses addressable.</li>
+          <li><b><code>statements</code></b> is a list because clauses are addressed one at a time: SP 800-53 writes a control as items a., b., c., which an implementation answers and an assessment objective names singly.</li>
           <li><b><code>modality</code></b> and <b><code>obligated-parties</code></b> sit on the statement. One requirement can bind the operator with MUST and the customer with SHOULD.</li>
           <li><b><code>prose</code></b> is a map from language tag to text.</li>
         </ul>

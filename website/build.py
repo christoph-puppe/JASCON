@@ -357,10 +357,11 @@ def ledger_counts():
     have one. The pages name these counts and never type them, so a decision
     about an unaccounted value changes no page and no translation."""
     found, without = ledgers()
-    t = {k: sum(l["totals"][k] for _, l in found) for k in ("copied", "transformed", "intentionally-dropped", "unaccounted")}
+    t = {k: sum(l["totals"][k] for _, l in found) for k in ("copied", "transformed", "not-content", "intentionally-dropped", "unaccounted")}
     return {"ledger_corpora": len(found), "ledger_unmeasured": without,
             "ledger_values": sum(l["leaf-values"] for _, l in found), "ledger_copied": t["copied"],
             "ledger_transformed": t["transformed"], "ledger_carried": t["copied"] + t["transformed"],
+            "ledger_nocontent": t["not-content"],
             "ledger_dropped": t["intentionally-dropped"], "ledger_unaccounted": t["unaccounted"]}
 
 
@@ -369,7 +370,7 @@ def ledger_rows(sep):
     rows = []
     for corpus, l in ledgers()[0]:
         t = l["totals"]
-        cells = [l["leaf-values"], t["copied"], t["transformed"], t["intentionally-dropped"], t["unaccounted"]]
+        cells = [l["leaf-values"], t["copied"], t["transformed"], t["not-content"], t["intentionally-dropped"], t["unaccounted"]]
         rows.append('<tr><th scope="row"><span class="corpus-id">' + html.escape(corpus) + "</span></th>"
                     + "".join('<td class="num">' + f"{n:,}".replace(",", sep) + "</td>" for n in cells) + "</tr>")
     return "\n".join(rows)

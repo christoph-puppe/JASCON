@@ -2,7 +2,7 @@
 title: 模型：十一种对象类型 | JASCON
 description: 一页看懂 JASCON 内核：十一种浅层对象类型、情态动词的次序、类型化参数、带契约的分面（facet）、每个对象的两个摘要、三个一致性等级，以及每个 OSCAL 1.x 构造的去向。
 nav: model
-source: 20b1275c2e33
+source: 90c4ad701239
 ---
 <section class="page-hero">
   <div class="wrap">
@@ -24,7 +24,7 @@ source: 20b1275c2e33
         <ul class="ticks">
           <li><b><code>id</code></b> 是权威机构自有域名下的 URI。它按字符串比较，从不联网获取，因此在封闭网络中也能进行校验。</li>
           <li><b><code>version</code></b> 与清单中的两个摘要共同承载历史。ISM 为同一目的手工维护着 2,202 个修订 props。</li>
-          <li><b><code>statements</code></b> 是一个列表，因为条款确实存在：Grundschutz++ 中有 347 个嵌套的伪控制措施，它们存在的唯一目的就是让条款可以被寻址。</li>
+          <li><b><code>statements</code></b> 是一个列表，因为条款是逐条被引用的：SP 800-53 把一项控制措施写成 a.、b.、c. 等条目，实施逐条作答，评估目标逐条指明。</li>
           <li><b><code>modality</code></b> 和 <b><code>obligated-parties</code></b> 位于陈述上。同一个要求可以用 MUST 约束运营方，同时用 SHOULD 约束客户。</li>
           <li><b><code>prose</code></b> 是从语言标签到文本的映射。</li>
         </ul>

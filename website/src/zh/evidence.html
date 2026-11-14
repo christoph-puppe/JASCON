@@ -2,7 +2,7 @@
 title: 依据：哪些经过实测，哪些没有 | JASCON
 description: 一致性测试语料库、两个参考校验器、已转换的目录及其许可证、证据关口、尚未解决的局限以及同类格式。每个数字都标明为实测、已设计或未决。
 nav: evidence
-source: e6a1aec28b4e
+source: 86513c0cd4c8
 ---
 <section class="page-hero">
   <div class="wrap">
@@ -151,11 +151,11 @@ source: e6a1aec28b4e
         <p>Python 参考实现和 PowerShell 孪生实现均由项目作者在 AI 辅助下依据同一批资料编写。二者的独立性仅限于编程语言和运行时。该关口衡量的是规范能否确定一个实现，而不是衡量一个陌生人用一个周末能做出什么。</p>
       </div>
       <div class="limit">
-        <h3>路径覆盖不等于值到达 <span class="tier tier-open">未决，待办 41</span></h3>
-        <p>覆盖报告统计的是具有已声明目标位置的源路径。每个值是否到达，目前在 {{ n.ledger_corpora }} 个语料库上用台账逐值追踪，该台账跟踪每个源值在转换器中的去向：{{ n.ledger_values }} 个叶值中，{{ n.ledger_carried }} 个被携带（{{ n.ledger_copied }} 个原样复制，{{ n.ledger_transformed }} 个经由具名规则转换），{{ n.ledger_dropped }} 个在说明原因后舍弃，{{ n.ledger_unaccounted }} 个去向不明：既没有目标位置，也没有说明原因。这些语料库的路径映射全部显示 100 %；台账仍然发现了丢失的值。去向已说明并不等于已被携带：被舍弃的值不在捆绑包中，这出自一项有书面记录的决定；台账也不会反向追溯转换器自行写入的内容。工作流会在每次变更时，用固定版本的源文件重现这些转换。其余 {{ n.ledger_unmeasured }} 个语料库尚未测量。</p>
+        <h3>路径覆盖不等于值到达 <span class="tier tier-open">{{ n.ledger_unmeasured }} 个语料库未决</span></h3>
+        <p>覆盖报告统计的是具有已声明目标位置的源路径。每个值是否到达，目前在 {{ n.ledger_corpora }} 个语料库上用台账逐值追踪，该台账跟踪每个源值在转换器中的去向：{{ n.ledger_values }} 个叶值中，{{ n.ledger_carried }} 个被携带（{{ n.ledger_copied }} 个原样复制，{{ n.ledger_transformed }} 个经由具名规则转换），{{ n.ledger_nocontent }} 个按台账检查的规则不属于内容（仅用于选择字段的名称、命名空间、可精确重建的标识符、无任何引用指向的资源），{{ n.ledger_dropped }} 个被舍弃，{{ n.ledger_unaccounted }} 个去向不明。只要有一个值去向不明，转换器的运行就会失败。这些语料库的路径映射此前全部显示 100 %，而最初的台账仍然发现了丢失的值；这些值现在已被携带。台账核对的是规则与其写入内容是否一致，而不是规则本身是否正确；台账也不会反向追溯转换器自行写入的内容。工作流会在每次变更时，用固定版本的源文件重现这些转换。其余 {{ n.ledger_unmeasured }} 个语料库尚未测量。</p>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>语料库</th><th class="num">源值</th><th class="num">原样复制</th><th class="num">经由具名规则</th><th class="num">舍弃并说明原因</th><th class="num">去向不明</th></tr></thead>
+            <thead><tr><th>语料库</th><th class="num">源值</th><th class="num">原样复制</th><th class="num">经由具名规则</th><th class="num">按经检查的规则不属于内容</th><th class="num">舍弃</th><th class="num">去向不明</th></tr></thead>
             <tbody>
 {{ html.ledger_rows }}
             </tbody>
@@ -181,10 +181,6 @@ source: e6a1aec28b4e
       <div class="limit">
         <h3>建议包仅以一个示例文件为依据 <span class="tier tier-designed">已设计</span></h3>
         <p>没有任何目录权威机构发布厂商建议。对于此类数据，晋升规则要求：要么有一项标准规定必须具备此记录，要么有两个内容经过统计的开放实现。建议包两者都没有。能力上的条款级字段仅以 NIST 示例中的一个虚构组件定义为依据，其中有三条建议、两个条款级条目和两个建议参数值；产品版本字段则没有任何经过统计的依据。两者均由作者在违背该规则的情况下决定纳入内核，规范也如实记录了这一点。尚无厂商发布过建议包；建议包构建器可以导入 OSCAL 组件定义，NIST 自己的示例在导入时不会丢失建议包能够容纳的任何内容，但还没有任何由厂商发布的组件定义经过它的处理。这项普查仍有待完成。</p>
-      </div>
-      <div class="limit">
-        <h3>随附示例中的已知缺陷 <span class="tier tier-open">未决，待办 46 和 55</span></h3>
-        <p>示例证明仅作说明之用：其主体摘要与任何示例对象都不匹配。Assessment 的方法载荷尚未按其锁定的分面 Schema 进行校验，而仓库中现有的三个都会校验失败。</p>
       </div>
       <div class="limit">
         <h3>由谁决定有记录，但不强制执行 <span class="tier tier-designed">已在 rc.4 中，待办 65 和 66</span></h3>

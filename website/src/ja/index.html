@@ -2,7 +2,7 @@
 title: JASCON：GRC エンジニアリングのためのデータレイヤー
 description: JASCON はコンプライアンスデータのためのオープンな記法です。標準、テーラリング、リスク、実装、評価、証明が、型付きでコンテンツアドレス方式の JSON オブジェクトからなる 1 つのグラフになり、プログラムで検証、差分比較、計算、署名ができるようになります。
 nav: home
-source: e1f019493265
+source: a4961cbeb35b
 ---
 <section class="hero">
   <div class="wrap hero-grid">
@@ -142,7 +142,7 @@ source: e1f019493265
         <span class="tier tier-measured">1.0.0 時点で実測</span>
       </div>
     </div>
-    <p class="stats-note">最初の数値は、このサイトをビルドするたびに再計算されます（コミット <code>{{ facts.measured.commit }}</code>）。「すべてのソースパス」とはパスカバレッジのことです。すべての値が実際に届くかどうかは、これまで {{ n.ledger_corpora }} つのコーパスで台帳により追跡しており、そこでは {{ n.ledger_values }} 件のソース値のうち {{ n.ledger_carried }} 件が引き継がれ、{{ n.ledger_dropped }} 件は理由を明示したうえで引き継がず、{{ n.ledger_unaccounted }} 件は未説明です。この点とその他の未解決事項は、「<a href="evidence.html#limits">実証されていないこと</a>」に挙げています。</p>
+    <p class="stats-note">最初の数値は、このサイトをビルドするたびに再計算されます（コミット <code>{{ facts.measured.commit }}</code>）。「すべてのソースパス」とはパスカバレッジのことです。すべての値が実際に届くかどうかは、これまで {{ n.ledger_corpora }} つのコーパスで台帳により追跡しており、そこでは {{ n.ledger_values }} 件のソース値のうち {{ n.ledger_carried }} 件が引き継がれ、{{ n.ledger_nocontent }} 件は検査済みの規則により内容ではないとされ、{{ n.ledger_dropped }} 件が引き継がれず、{{ n.ledger_unaccounted }} 件が未説明です。この点とその他の未解決事項は、「<a href="evidence.html#limits">実証されていないこと</a>」に挙げています。</p>
   </div>
 </section>
 

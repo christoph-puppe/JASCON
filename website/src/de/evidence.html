@@ -2,7 +2,7 @@
 title: Belege: was gemessen wurde und was nicht | JASCON
 description: Das Konformitätskorpus, die beiden Referenzvalidatoren, die konvertierten Kataloge mit ihren Lizenzen, die Nachweis-Gates, die offenen Grenzen und die Nachbarformate. Jede Zahl ist als gemessen, entworfen oder offen gekennzeichnet.
 nav: evidence
-source: e6a1aec28b4e
+source: 86513c0cd4c8
 ---
 <section class="page-hero">
   <div class="wrap">
@@ -151,11 +151,11 @@ source: e6a1aec28b4e
         <p>Die Python-Referenz und der PowerShell-Zwilling wurden vom Autor des Projekts mit KI-Unterstützung aus denselben Quellen geschrieben. Ihre Unabhängigkeit beschränkt sich auf Sprache und Laufzeitumgebung. Das Gate misst, ob die Spezifikation eine Implementierung festlegt. Es misst nicht, was ein Fremder an einem Wochenende daraus macht.</p>
       </div>
       <div class="limit">
-        <h3>Pfadabdeckung heißt nicht, dass die Werte ankommen <span class="tier tier-open">offen, Backlog 41</span></h3>
-        <p>Die Abdeckungsberichte zählen Quellpfade mit deklariertem Ziel. Ob jeder Wert ankommt, wird an {{ n.ledger_corpora }} Korpora nachverfolgt, mit einem Protokoll, das jeden Quellwert durch den Konverter verfolgt: Von {{ n.ledger_values }} Blattwerten werden {{ n.ledger_carried }} übertragen ({{ n.ledger_copied }} kopiert, {{ n.ledger_transformed }} über eine benannte Regel), {{ n.ledger_dropped }} entfallen mit angegebenem Grund, und {{ n.ledger_unaccounted }} sind ungeklärt: kein Ziel und kein angegebener Grund. Jede Pfadkarte dieser Korpora weist 100 % aus; die Protokolle haben dennoch Werte gefunden, die verloren gehen. Geklärt heißt nicht übertragen: Ein entfallener Wert steht nicht im Bundle, aufgrund einer Entscheidung, die niedergeschrieben ist, und das Protokoll verfolgt nicht zurück, was ein Konverter von sich aus schreibt. Der Workflow reproduziert diese Konvertierungen bei jeder Änderung aus ihren festgeschriebenen Quelldateien. Die übrigen {{ n.ledger_unmeasured }} Korpora sind nicht gemessen.</p>
+        <h3>Pfadabdeckung heißt nicht, dass die Werte ankommen <span class="tier tier-open">offen für {{ n.ledger_unmeasured }} Korpora</span></h3>
+        <p>Die Abdeckungsberichte zählen Quellpfade mit deklariertem Ziel. Ob jeder Wert ankommt, wird an {{ n.ledger_corpora }} Korpora nachverfolgt, mit einem Protokoll, das jeden Quellwert durch den Konverter verfolgt: Von {{ n.ledger_values }} Blattwerten werden {{ n.ledger_carried }} übertragen ({{ n.ledger_copied }} kopiert, {{ n.ledger_transformed }} über eine benannte Regel), {{ n.ledger_nocontent }} sind kein Inhalt nach einer Regel, die das Protokoll prüft (ein Name, der nur ein Feld auswählt, ein Namensraum, eine Kennung, die sich exakt rekonstruieren lässt, eine Ressource, auf die nichts verweist), {{ n.ledger_dropped }} entfallen, und {{ n.ledger_unaccounted }} sind ungeklärt. Ein Konverterlauf mit einem ungeklärten Wert schlägt fehl. Jede Pfadkarte dieser Korpora hatte 100 % ausgewiesen, und die ersten Protokolle fanden dennoch Werte, die verloren gingen; sie werden jetzt übertragen. Ein Protokoll hält eine Regel an das, was sie geschrieben hat, nicht daran, ob die Regel richtig ist, und es verfolgt nicht zurück, was ein Konverter von sich aus schreibt. Der Workflow reproduziert diese Konvertierungen bei jeder Änderung aus ihren festgeschriebenen Quelldateien. Die übrigen {{ n.ledger_unmeasured }} Korpora sind nicht gemessen.</p>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>Korpus</th><th class="num">Quellwerte</th><th class="num">Kopiert</th><th class="num">Über eine benannte Regel</th><th class="num">Entfallen, Grund angegeben</th><th class="num">Ungeklärt</th></tr></thead>
+            <thead><tr><th>Korpus</th><th class="num">Quellwerte</th><th class="num">Kopiert</th><th class="num">Über eine benannte Regel</th><th class="num">Kein Inhalt, nach geprüfter Regel</th><th class="num">Entfallen</th><th class="num">Ungeklärt</th></tr></thead>
             <tbody>
 {{ html.ledger_rows }}
             </tbody>
@@ -181,10 +181,6 @@ source: e6a1aec28b4e
       <div class="limit">
         <h3>Empfehlungspakete stützen sich auf eine einzige Beispieldatei <span class="tier tier-designed">entworfen</span></h3>
         <p>Keine Katalogbehörde veröffentlicht Herstellerempfehlungen. Für solche Daten verlangt die Aufnahmeregel einen Standard, der den Datensatz fordert, oder zwei offene Implementierungen, deren Inhalt gezählt wurde. Empfehlungspakete haben weder das eine noch das andere. Das Feld auf Klauselebene an einer Fähigkeit stützt sich auf eine einzige fiktive Komponentendefinition aus den Beispielen von NIST, mit drei Empfehlungen, zwei Einträgen auf Klauselebene und zwei vorgeschlagenen Parameterwerten; das Feld für die Produktversion stützt sich auf nichts Gezähltes. Beide kamen auf Entscheidung des Autors entgegen dieser Regel in den Kern, und die Spezifikation hält es so fest. Kein Hersteller hat ein Paket veröffentlicht; der Paket-Builder importiert OSCAL-Komponentendefinitionen, und die Beispiele von NIST kommen durch, ohne dass etwas verloren geht, das ein Paket aufnehmen kann, aber keine von einem Hersteller veröffentlichte Komponentendefinition ist bisher durch ihn gelaufen. Diese Erhebung steht noch aus.</p>
-      </div>
-      <div class="limit">
-        <h3>Bekannte Mängel in mitgelieferten Beispielen <span class="tier tier-open">offen, Backlog 46 und 55</span></h3>
-        <p>Die Beispiel-Attestierung dient nur der Veranschaulichung: Ihre Subject-Digests passen zu keinem Beispielobjekt. Der Methoden-Payload eines Assessments wird noch nicht gegen sein fixiertes Facettenschema validiert, und die drei im Repository würden daran scheitern.</p>
       </div>
       <div class="limit">
         <h3>Wer entschieden hat, wird festgehalten, nicht erzwungen <span class="tier tier-designed">in rc.4, Backlog 65 und 66</span></h3>
