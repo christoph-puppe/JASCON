@@ -1,6 +1,6 @@
 # Plan — the open backlog before 2.0.0
 
-### 2026-11-14 · branch `claude/sleepy-planck-g6w3h3` · phases A, B, C and D are built (§8, §10, §11, §12); E is a plan; §9 says what another session's work on main changed in it
+### 2026-11-14 · branch `claude/sleepy-planck-g6w3h3` · phases A, B, C and D are built (§8, §10, §11, §12), and the three rows phase D filed are closed (§13); E is a plan; §9 says what another session's work on main changed in it
 
 Input: the ten open rows of `jascon-v0.6-spec-feedback-backlog.md` and the
 residue of #45, with the author's dispositions of 2026-11-13. Every
@@ -593,3 +593,35 @@ What phase D showed for what is left:
 - **Phase E is unchanged**: #41 and the validator half of #55.
 
 Open after phase D: #41, #55, #62, #71, #72, #73, #74, #75.
+
+## 13. After phase D: #73, #74 and #75 (2026-11-14)
+
+The author, on the three questions phase D left: "1 refusal in all",
+"2 yes, recommend named default", "3 yes". The register entry "After
+phase D — a listed Attestation is refused; the party a converter writes
+is an argument; the CR26 converter runs again" holds the measurements.
+
+| Row | Built |
+|---|---|
+| #75 | MANIFEST-1 (specification D3, item 11): an object a content manifest lists is no Attestation. Reference, twin, app (0.9.12), reader (1.14.0); eight vectors, 692 in all; the converter library's `Bundle` takes no Attestation |
+| #74 | `--obligated-party URI` on the ten converters, the report says who chose the party; the app's presets show the default and take another |
+| #73 | The CR26 converter covers publication 2026.11.02.01, exits 1 when a leaf has no destination, and is run by the workflow on a pinned download |
+| not asked for, and what made #74 checkable | The four shipped catalogue conversions are held to pinned sources by the workflow, as only the IFA conversion was |
+
+What it showed for what is left:
+
+- **A second reader of a rule finds what its author wrote from memory.**
+  The agent that ported MANIFEST-1 to the reader measured the case that
+  refutes a sentence in the reference, in D3.11 and in the handbook ("a
+  Semantic Match at best"). Phase D's #75 was found the same way.
+- **A comparison of reports does not hold a bundle that is not
+  committed.** Thirteen of the CR26 agent's first 24 deliberate defects
+  were caught by nothing. The report now carries the digest of the
+  bundle's manifest. This is #41 again, and phase E starts from it.
+- **Two rows need the author:** #76 (a workflow step that converts the
+  CIS Controls is built and not merged: a question about the
+  publisher's terms) and #77 (Grundschutz++ names a subject in every
+  statement).
+- **Phase E is unchanged:** #41 and the validator half of #55.
+
+Open after this: #41, #55, #62, #71, #72, #76, #77, #78, #79.

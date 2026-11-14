@@ -48,7 +48,7 @@ semantic digest of each of its three subjects and the digest of the
 manifest's bytes, and says what the reference validator says: FULL MATCH.
 The Attestation is unsigned (the converter models it from the
 authorization date of the SSP), and the page says that too; it takes no
-key and has no word for a signature that holds. (Reader 1.13.0,
+key and has no word for a signature that holds. (Reader 1.14.0,
 2026-11-14, loaded from `python -m http.server`, which lists the folder.
 The bundle's manifest lists 16 objects. The stage names Risk in its
 heading and lists none; the two Risk objects are in the object browser —
@@ -60,8 +60,10 @@ backlog #71.)*
 > Everything below this section describes the released **1.0.0**. The
 > candidate adds two kernel types, Risk and Check, and advice packs.
 > Both reference validators are green on it. Two questions wait for the
-> author (backlog #74 and #75, the second cheaper to answer before the
-> tag than after it); the tag is the author's call.
+> author, neither about the kernel (backlog #76: whether the workflow
+> may convert the CIS Controls and discard the result; #77: whether the
+> subject a Grundschutz++ statement names is an obligated party); the
+> tag is the author's call.
 >
 > **Who decided, and when** ([CP-AUTHOR-1](drafts/CP-AUTHOR-1.md),
 > decided by the author on 2026-11-13; release candidate 4): a
@@ -140,9 +142,12 @@ backlog #71.)*
 >   Attestations from the content manifest "by definition", and the
 >   validators refused a listed one in a pack only. A copy of a shipped
 >   bundle that listed its own passed in both. Rule MANIFEST-1
->   (specification D3, item 11) now refuses it in every bundle, with
->   eight vectors. A bundle that listed its Attestation and passed
->   fails; the reader wrote such bundles until 1.12.0.
+>   (specification D3, item 11) now refuses it in every bundle: the
+>   reference, the PowerShell twin, the app (0.9.12) and the reader
+>   (1.14.0), each held to eight vectors. A bundle that listed its
+>   Attestation and passed fails; the reader wrote such bundles until
+>   1.12.0. The Attestation is still held to what it binds, and the
+>   rule asks only where it lies.
 > - **One value, one spelling, once more** (backlog #68, 2026-11-13): a
 >   date, a digest or a decimal that ends in a line break was accepted
 >   by two of the three implementations, because Python and .NET read

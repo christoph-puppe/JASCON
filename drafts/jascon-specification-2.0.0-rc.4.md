@@ -22,6 +22,10 @@
 > write who decided (backlog #69; IV.6). On 2026-11-14: every
 > Attestation read with a bundle is held to what it binds (D7 amended,
 > backlog #46), and no tool writes a party nobody named (backlog #70).
+> The same day, on the author's word: no content manifest lists an
+> Attestation, in any bundle (D3.11, MANIFEST-1, backlog #75), and the
+> party a converter writes where its source names none is an argument
+> with a named default (backlog #74).
 
 > **What changed since rc.2 (2026-11-12, the same day).** One decision is
 > new — **D25**, advice packs: a vendor's recommendations as one published
@@ -2294,7 +2298,8 @@ history. The compact line:
 | The tools write who decided | 2026-11-13 | Author: "all converters should pre-fill that data from the source corpus but import tool should be able to overwrite it." One rule for the author of an OSCAL document, in the converter library and in the app's importer; the day of `last-modified` as the date; an overwrite, field by field. The IFA conversion is regenerated: one of seven records gets an author from its source, the two authorizations their date, and the Attestation of the ATO lies beside the manifest and binds its digest (the IFA half of backlog #46). The app's pages write `provenance`, its Validate page shows the two reports, the reader shows the fields. No kernel shape and no rule changes (backlog #69) | same section |
 | An Attestation is held to what it binds | 2026-11-14 | Backlog #46, phase D. `attestation-binds` (B.1.7) was defined and applied by no tool to a bundle; the example folder's Attestation bound nothing from before 1.0.0. D7 amended: every Attestation read with a bundle is judged subject by subject and against the manifest it binds, and a failing one fails the bundle while it is `active`. Attestations beside a manifest (D3.1) are read with every bundle, not only with a pack. `attestation` 5 → 24 vectors, 684 in all. Applied by `validate_core.py`, by `validate_core.ps1` (run on Windows PowerShell 5.1), by the app (0.9.11) and by the reader (1.13.0), each held to those vectors. The example Attestation is real and signed with the public fixture key. No shape changes; a bundle with an active Attestation that does not bind fails where it passed | "Phase D — an Attestation is held to what it binds; no tool invents a party" |
 | No tool invents a party | 2026-11-14 | Backlog #70, decided by the author: "refuse if no party is named". Where the kernel requires a party (a Mapping's and a Check's author, an Assessment's performer, a Deviation's approver, the obligated party of a statement) and the user named none, the app and the reader wrote one made from a word. They refuse the save now and say which field is missing. No kernel shape and no rule changes | same section |
-| No manifest lists an Attestation | 2026-11-14 | Backlog #75, decided by the author: "refusal in all". D3.1 excluded Attestations from the content manifest "by definition", and a tool refused a listed one in a pack only (ADVICE-1); an ordinary bundle that listed its own passed in both validators. D3 item 11: **MANIFEST-1**, one failure per Attestation among the objects a manifest lists, in every bundle, whatever it binds and whatever its lifecycle. `attestation` 24 → 32 vectors, 692 in all. No shape changes; a bundle whose manifest lists an Attestation fails where it passed | "After phase D — a listed Attestation is refused; the party a converter writes is an argument" |
+| No manifest lists an Attestation | 2026-11-14 | Backlog #75, decided by the author: "refusal in all". D3.1 excluded Attestations from the content manifest "by definition", and a tool refused a listed one in a pack only (ADVICE-1); an ordinary bundle that listed its own passed in both validators. D3 item 11: **MANIFEST-1**, one failure per Attestation among the objects a manifest lists, in every bundle, whatever it binds and whatever its lifecycle. `attestation` 24 → 32 vectors, 692 in all. Applied by `validate_core.py`, by `validate_core.ps1`, by the app (0.9.12) and by the reader (1.14.0). A listed Attestation is still held to what it binds: never a Full Match of the manifest that lists it, and for one that binds a kept pack manifest a Full Match of that. No shape changes; a bundle whose manifest lists an Attestation fails where it passed | "After phase D — a listed Attestation is refused; the party a converter writes is an argument" |
+| Whom a converted statement binds is an argument | 2026-11-14 | Backlog #74, decided by the author (the recommended option). The kernel requires `obligated-parties`; a catalogue seldom names whom it binds, so a converter writes one party of its own. `--obligated-party URI` on the ten converters replaces that default, and each coverage report says who chose the party; the app's import presets do the same. With it, the five shipped conversions are held to pinned sources by the workflow, and the CR26 converter covers its publisher's current publication again (#73). No kernel shape and no rule changes | same section |
 | **2.0.0-rc.4** | 2026-11-13 | This text: D26 new (who decided, and when); D8, D13 and D23 amended in place. `provenance` optional on a Tailoring and its entries, a Risk and its ratings, an Implementation and a Finding; `decided` and `review-due` on a Deviation; `date` on an authorization; AUTHOR-1 to 4 and REVIEW-1 as reports; three times typed (DATE-3 to 5). A new vector family, `author` (40), and `kernel` 25 → 54; 643 in all, 18 families. Backlog #65 and #66 | D26 · "CP-AUTHOR-1 landed" |
 
 ## IV.7 Release artifacts (what this candidate ships with)
@@ -2337,13 +2342,25 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
   was carried, not a trace of each value — backlog #41. `Ledger` in the
   same file traces each source value to its destination; wired into the
   IFA converter, which writes `ifa-conversion-ledger.json`.)*
+  *(2026-11-14: the party a converter writes where its source names
+  none is an argument, `--obligated-party URI`, with the converter's
+  former value as its named default; the coverage report says who chose
+  it — backlog #74.)*
 - **Five corpus bundles** under `converted_examples/` — AU.ISM, DE.BSI,
-  US.SP800-53, US.CSF, US.IFA-GoodRead: 3,715 manifest-listed objects,
-  both SHA-256 digests re-verified per object, stored as the digested
-  bytes, each with its publisher's terms in `SOURCE-LICENSE.md`. **Six
-  measured, not redistributed** — CIS.Controls, CIS.Ubuntu2404, DE.C5,
-  DE.C3A, BE.CyFun, FedRAMP-CR26: coverage report and
-  `NOT-REDISTRIBUTED.md` only.
+  US.SP800-53, US.CSF, US.IFA-GoodRead: 3,714 manifest-listed objects
+  (3,715 until 2026-11-13, when the IFA Attestation left the manifest
+  that had listed it), both SHA-256 digests re-verified per object,
+  stored as the digested bytes, each with its publisher's terms in
+  `SOURCE-LICENSE.md`. *(2026-11-14: each of the five is reproducible.
+  Its folder names the publisher's files at a tag or a commit with
+  their digests (`SOURCES.sha256`), and the workflow fetches them,
+  converts again and fails when the bundle or its report differs from
+  what is committed.)* **Six measured, not redistributed** —
+  CIS.Controls, CIS.Ubuntu2404, DE.C5, DE.C3A, BE.CyFun, FedRAMP-CR26:
+  coverage report and `NOT-REDISTRIBUTED.md` only. *(2026-11-14: the
+  CR26 conversion is run by the workflow on a pinned download and its
+  two reports must be the committed ones; nothing converted is kept —
+  backlog #73. The other five were not run again.)*
 - **The normative appendices** — A (shapes, with A.9b Risk) · B
   (primitives incl. B.1.9 and B.1.10, operations, predicates) · C (code
   systems, with C.3c, the treatment options and C.12 to C.15 for Check) — at
