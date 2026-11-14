@@ -1062,6 +1062,27 @@
  "modality": {
   "must": 1918
  },
+ "obligated-party": {
+  "value": "https://ns.nist.gov/sp800-53/party/organization",
+  "origin": "converter-default",
+  "converter-default": "https://ns.nist.gov/sp800-53/party/organization",
+  "source-states": "as the implementation level of a control"
+ },
+ "obligated-party-use": {
+  "controls": {
+   "source-states": 1014,
+   "not-stated": 0
+  },
+  "statements": {
+   "source-states": 1918,
+   "not-stated": 0
+  },
+  "implementation-levels": {
+   "organization": 613,
+   "system": 250,
+   "organization + system": 151
+  }
+ },
  "backlog-10": {
   "insertion-histogram": {
    "0": 399,
@@ -1070,8 +1091,8 @@
   "multi-declared": []
  },
  "endpoint-crosscheck": {
-  "resolved": 437,
-  "distinct": 217,
+  "resolved": 21,
+  "distinct": 5,
   "withdrawn-hits": {},
   "unknown": {}
  },

@@ -16,6 +16,11 @@
   "unspecified": 1149,
   "may": 1
  },
+ "obligated-party": {
+  "value": "https://ns.cyber.gov.au/ism/party/organisation",
+  "origin": "converter-default",
+  "converter-default": "https://ns.cyber.gov.au/ism/party/organisation"
+ },
  "labels": {
   "from-label-prop": 49,
   "derived-from-id": 1101

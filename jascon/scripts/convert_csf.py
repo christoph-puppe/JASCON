@@ -7,14 +7,32 @@ Requirements (outcome prose, modality `unspecified` - sixth-corpus
 confirmation of the declarative pattern); 91 withdrawn (1.1->2.0
 restructuring) dropped, lineage inverted onto successor `replaces[]`;
 implementation examples -> examples@1; risk-party -> csf@1.
-Coverage target: 0."""
-import json, os, re, collections
+Coverage target: 0.
+
+    convert_csf.py [--obligated-party URI] [--out DIR]
+
+The CSF does not say whom an outcome binds (`risk-party` classes a risk as
+first or third party; it names nobody). The converter writes one party of
+its own on every statement, `<namespace>/party/organization`;
+--obligated-party writes the caller's party in its place, and the coverage
+report says which of the two it was (backlog #74). Without arguments the
+run reproduces the committed conversion byte for byte; the Validators
+workflow holds it to that. --out writes the bundle and the two reports
+somewhere else, which is where a run with another party belongs."""
+import json, os, re, sys, collections
 from oscal_conv_lib import make_T, slug, Bundle, inventory, coverage, report, walk_controls
+from oscal_conv_lib import known_arguments, out_dir, obligated_party, obligated_party_line, obligated_party_record
 
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 SRC = os.path.join(ROOT, "sources", "nist", "NIST_CSF_v2.0_catalog.json")
-OUTDIR = os.path.join(ROOT, "converted_examples", "US.CSF")
+ARGV = sys.argv[1:]
+known_arguments(ARGV, ("--obligated-party", "--out"))
+OUTDIR = out_dir(ARGV, os.path.join(ROOT, "converted_examples", "US.CSF"))
 NS = "https://ns.nist.gov/csf"          # no version in the URI - lineage is D2's job
+# Whom a statement binds is not a value of this source (backlog #74)
+PARTY_DEFAULT = f"{NS}/party/organization"
+PARTY, PARTY_ORIGIN = obligated_party(ARGV, PARTY_DEFAULT)      # (party, "converter-default" | "caller")
+PARTY_WHY = "CSF binds the adopting organization"
 F_NARR = f"{NS}/facet/narrative@1"
 F_EX = f"{NS}/facet/examples@1"
 F_CSF = f"{NS}/facet/csf@1"
@@ -107,7 +125,7 @@ def convert_subcat(c):
            "lifecycle": "active", "title": c.get("title", c["id"]),
            "statements": [{"id": sid[len(c["id"]) + 1:] if sid.startswith(c["id"] + "_") else sid,
                            "modality": "unspecified",
-                           "obligated-parties": [f"{NS}/party/organization"],
+                           "obligated-parties": [PARTY],
                            "prose": {"en": prose}}]}
     mod_count["unspecified"] += 1
     f = facets_of(c)
@@ -244,8 +262,7 @@ j = report(
      f"category (asserted).",
      f"- **Implementation examples -> examples@1** x{n_examples} (ids kept - the CSF example numbering "
      f"is citable); **risk-party -> csf@1** x{n_riskparty} (remarks carried).",
-     f"- **Obligated party**: documented default {NS}/party/organization (CSF binds the adopting "
-     f"organization).",
+     obligated_party_line(PARTY, PARTY_ORIGIN, PARTY_DEFAULT, PARTY_WHY),
      f"- **Payload free text language-tagged**: " + ", ".join(f"{k} x{v}" for k, v in sorted(lang_wraps.items())) + "."],
     [f"- **Rel-code spelling divergence (source finding)**: CSF 2.0 uses `incorporated_into`/`moved_to` "
      f"(underscores) where SP 800-53 Rev 5 uses `incorporated-into`/`moved-to` (hyphens) - same "
@@ -268,6 +285,7 @@ j = report(
                    "hashless-hrefs": n_hashless,
                    "chains": wd_chain, "dangling": wd_dangling},
      "modality": dict(mod_count), "examples": n_examples, "risk-party": n_riskparty,
+     "obligated-party": obligated_party_record(PARTY, PARTY_ORIGIN, PARTY_DEFAULT),
      "lang-wraps": dict(lang_wraps)})
 print(f"reqs: {len(req_ids)}  sets: {nset}  leaves: {j['totals']['leaf-values']:,}  "
       f"mapped: {j['totals']['mapped']:,}  UNMAPPED: {j['totals']['unmapped']}")

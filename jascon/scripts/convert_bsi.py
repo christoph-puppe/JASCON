@@ -12,16 +12,39 @@ Single-catalog mode since 2026-07-21: MS-TLS dropped from the corpus by
 decision (its defects were reported to BSI; the twin-catalog finding - 11
 shared ids, 10 silently diverged, census 2026-07-03 - stays on the record
 in census and handbook). Parameters carry first-class label/default since
-the D9 rev (backlog #1): the param-extras residue drains to alt-ids only."""
-import json, hashlib, os, re, copy, collections
+the D9 rev (backlog #1): the param-extras residue drains to alt-ids only.
+
+    convert_bsi.py [--obligated-party URI] [--out DIR]
+
+The catalogue carries no party on a control. The converter writes one party
+of its own on every statement, `<namespace>/party/institution`;
+--obligated-party writes the caller's party in its place, and the coverage
+report says which of the two it was (backlog #74). Without arguments the
+run reproduces the committed conversion byte for byte; the Validators
+workflow holds it to that. --out writes the bundle and the two reports
+somewhere else, which is where a run with another party belongs."""
+import json, hashlib, os, re, sys, copy, collections
 from oscal_conv_lib import Bundle, BUNDLE_NEWLINE
+from oscal_conv_lib import known_arguments, out_dir, obligated_party, obligated_party_line, obligated_party_record
 
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
-OUT = os.path.join(ROOT, "converted_examples", "DE.BSI", "bsi-core-bundle")
-RMD = os.path.join(ROOT, "converted_examples", "DE.BSI", "bsi-coverage-report.md")
-RJS = os.path.join(ROOT, "converted_examples", "DE.BSI", "bsi-coverage-report.json")
-SOURCES = [("gspp", os.path.join(ROOT, "sources", "Grundschutz++-catalog.json"),
-            "https://ns.bsi.bund.de/gspp")]
+ARGV = sys.argv[1:]
+known_arguments(ARGV, ("--obligated-party", "--out"))
+OUTDIR = out_dir(ARGV, os.path.join(ROOT, "converted_examples", "DE.BSI"))
+OUT = os.path.join(OUTDIR, "bsi-core-bundle")
+RMD = os.path.join(OUTDIR, "bsi-coverage-report.md")
+RJS = os.path.join(OUTDIR, "bsi-coverage-report.json")
+NS = "https://ns.bsi.bund.de/gspp"
+SOURCES = [("gspp", os.path.join(ROOT, "sources", "Grundschutz++-catalog.json"), NS)]
+# Whom a statement binds is not a value of this source (backlog #74). One
+# party is written for the run, minted under the namespace of the one
+# catalogue the converter reads (single-catalog mode).
+PARTY_DEFAULT = f"{NS}/party/institution"
+PARTY, PARTY_ORIGIN = obligated_party(ARGV, PARTY_DEFAULT)      # (party, "converter-default" | "caller")
+PARTY_WHY = ("the catalogue carries no party on a control; `Institution` is the word its prose uses for "
+             "the organisation that applies it")
+if any(ns != NS for _, _, ns in SOURCES):
+    raise SystemExit("one obligated party is written for the run; a catalogue under another namespace needs its own")
 CENSUS = {"version": "2026-07-03", "controls": 998, "packed-tags-gspp": 125,
           "statements": 1015}   # census r2 baseline for the delta report; packed
                                 # tags recounted on that snapshot 2026-11-12
@@ -163,7 +186,7 @@ def collect_stmt(prefix_ns, c, sid, is_child, req):
     else: mod="unspecified"; unknown_modal[mv]+=1
     modality_count[mod]+=1
     st={"id":sid,"modality":mod,
-        "obligated-parties":[f"{prefix_ns}/party/institution"],
+        "obligated-parties":[PARTY],
         "prose":{"de":prose}}
     # params: label/default first-class (D9 rev, backlog #1); attach to the
     # statement of the control that declares them; unreferenced tokens counted
@@ -342,6 +365,7 @@ j={"sources":[{"key":k,"title":t,"version":v} for k,t,v,_ in catalogs_meta],
              "coverage-pct":round(100*mapped/total,3)},
    "objects":{"requirements":reqs,"statements":nstmt,"sets":sets,"total":len(objects)},
    "modality":dict(modality_count),"unknown-modal-verbs":dict(unknown_modal),
+   "obligated-party":obligated_party_record(PARTY,PARTY_ORIGIN,PARTY_DEFAULT),
    "packed-list-values":{n:{"props":list_props[n],"packed":len(packed[n]),"values":packed[n]}
                          for n in LIST_PROPS},
    "parameter-slots":{"slots":len(slots),
@@ -377,6 +401,7 @@ md.append("## Conversion rules (declared, counted)\n")
 md.append(f"- **Modality** from `modal_verb` (code map incl. DARF NUR -> may-only): "
           + ", ".join(f"{k} x{v}" for k,v in sorted(modality_count.items(),key=lambda x:-x[1]))
           + (f"; unknown verbs: {dict(unknown_modal)}" if unknown_modal else "; no unknown verbs") + ".")
+md.append(obligated_party_line(PARTY,PARTY_ORIGIN,PARTY_DEFAULT,PARTY_WHY))
 md.append("- **Nested controls -> statements** of the parent; statement id = child control id "
           "(stable, citable); child-level props keyed `by-statement` in the facets.")
 md.append(f"- **{{{{ insert: param, x }}}}** in prose -> `{{param:x}}` tokens; params typed `string` "

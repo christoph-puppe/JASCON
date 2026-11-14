@@ -13,7 +13,7 @@ Source: ACSC ISM OSCAL catalog v2026.06.18 (oscal-version 1.1.2) - 1,150 control
 ## Conversion rules (declared, counted)
 
 - **Modality word-rule** over statement prose (first match of must not > should not > must > should > may, else unspecified): unspecified x1149, may x1.
-- **Obligated party**: documented default `https://ns.cyber.gov.au/ism/party/organisation` (ISM binds the organisation implicitly; no per-control party data in source).
+- **Obligated party**: `https://ns.cyber.gov.au/ism/party/organisation` on every statement. This is the converter's default and not a value of the source; `--obligated-party URI` writes another. Why this default: ISM binds the organisation implicitly; no per-control party data in source.
 - **Labels**: 49 from `label` props; 1101 derived from control id (`ism-1234` -> `ISM-1234`).
 - **sequence**: document order (steps of 10); source `sort-id` path-strings (1,150 control + 570 group) thereby absorbed as redundant.
 - **class** -> category Sets: ISM-control (1101), ISM-principle (49).

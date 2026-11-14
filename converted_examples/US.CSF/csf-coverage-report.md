@@ -16,7 +16,7 @@ Source: **Electronic Version of NIST Cybersecurity Framework 2.0** framework v2.
 - **Modality `unspecified` x106**: CSF outcomes are declarative ('Outcomes ... are understood and communicated') - sixth-corpus confirmation of the national declarative pattern; force rides adoption, not mood.
 - **Withdrawn tombstones dropped, lineage inverted**: 91 withdrawn (12 categories + 79 subcategories - the 1.1->2.0 restructuring cut at BOTH levels), 134 successor edges on Requirements/Sets + 1 on function Sets (ID.GV 'moved to GV' - the sa-12->SR pattern) (incorporated_into->merged-into, moved_to->renamed); tombstone 1.1 outcome prose carried in the annotation (CSF titles are bare ids - the prose IS the content); chains x0, dangling x0; no live subcategory sits under a withdrawn category (asserted).
 - **Implementation examples -> examples@1** x363 (ids kept - the CSF example numbering is citable); **risk-party -> csf@1** x103 (remarks carried).
-- **Obligated party**: documented default https://ns.nist.gov/csf/party/organization (CSF binds the adopting organization).
+- **Obligated party**: `https://ns.nist.gov/csf/party/organization` on every statement. This is the converter's default and not a value of the source; `--obligated-party URI` writes another. Why this default: CSF binds the adopting organization.
 - **Payload free text language-tagged**: category-statement x22, example x363, overview x6.
 
 ## Findings (computed)

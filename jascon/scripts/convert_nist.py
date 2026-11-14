@@ -6,14 +6,34 @@ modality `must` corpus rule); 182 withdrawn tombstones -> dropped, lineage
 inverted onto the successor's kernel `replaces[]`; SP 800-53A layer ->
 sp800-53a@1 facet; two-layer ODP params -> statement-scoped kernel
 parameters (declared where inserted, the per-statement parameter rule) + odp@1
-admin facet; baselines -> 4 membership Sets. Coverage target: 0."""
-import json, os, re, collections
+admin facet; baselines -> 4 membership Sets. Coverage target: 0.
+
+    convert_nist.py [--obligated-party URI] [--out DIR]
+
+The source gives a control an `implementation-level` (organization, system,
+or both), and the converter writes it as the party the control's statements
+bind: that value is the source's and is written as it stands. For a control
+without one the converter writes a party of its own,
+`<namespace>/party/organization`; --obligated-party writes the caller's
+party in that place and nowhere else, and the coverage report says which of
+the two it was and on how many controls (backlog #74). Without arguments
+the run reproduces the committed conversion byte for byte; the Validators
+workflow holds it to that. --out writes the bundle and the two reports
+somewhere else, which is where a run with another party belongs."""
+import json, os, re, sys, collections
 from oscal_conv_lib import make_T, slug, Bundle, inventory, coverage, report, walk_controls
+from oscal_conv_lib import known_arguments, out_dir, obligated_party, obligated_party_line, obligated_party_record
 
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 SRCDIR = os.path.join(ROOT, "sources", "nist")
-OUTDIR = os.path.join(ROOT, "converted_examples", "US.SP800-53")
+ARGV = sys.argv[1:]
+known_arguments(ARGV, ("--obligated-party", "--out"))
+OUTDIR = out_dir(ARGV, os.path.join(ROOT, "converted_examples", "US.SP800-53"))
 NS = "https://ns.nist.gov/sp800-53"   # matches the corpus's existing mapping-endpoint URIs
+# Whom a statement binds where the source gives no implementation level (backlog #74)
+PARTY_DEFAULT = f"{NS}/party/organization"
+PARTY, PARTY_ORIGIN = obligated_party(ARGV, PARTY_DEFAULT)      # (party, "converter-default" | "caller")
+PARTY_SOURCE_STATES = "as the implementation level of a control"
 F_NARR = f"{NS}/facet/narrative@1"
 F_53A = f"{NS}/facet/sp800-53a@1"
 F_ODP = f"{NS}/facet/odp@1"
@@ -170,7 +190,9 @@ multi_decl = []                        # params inserted in >=2 statements
 no_site = collections.Counter()        # params without a statement insertion site
 facet_only, nowhere = [], []           # ... of those: bound in 53A objectives / bound nowhere
 cross_param = []                       # prose inserts another control's param
-op_default = 0
+op_default = 0                         # controls without an implementation level
+op_default_stmts = 0                   # ... and their statements, which carry PARTY
+lvl_count = collections.Counter()      # implementation levels as the source combines them
 rel_count = collections.Counter()
 req_ids = {}
 n_53a = 0
@@ -185,11 +207,14 @@ for c, parents, gchain in live:
         else: label_div.append(cid)
     plain = next((p["value"] for p in c.get("props", [])
                   if p.get("name") == "label" and not p.get("class")), cid.upper())
-    # obligated parties from implementation-level
+    # obligated parties: the control's implementation level where the source
+    # gives one; where it gives none, the converter's default or the caller's
     lvls = prop(c, "implementation-level", ns="http://csrc.nist.gov/ns/rmf", all_=True)
-    if not lvls:
-        lvls = ["organization"]; op_default += 1
-    parties = [f"{NS}/party/{v}" for v in lvls]
+    if lvls:
+        parties = [f"{NS}/party/{v}" for v in lvls]
+    else:
+        parties = [PARTY]; op_default += 1
+    lvl_count[" + ".join(lvls) or "(none)"] += 1
     # statements + per-statement param declaration
     params = {pm["id"]: pm for pm in c.get("params", []) or []}
     stmts, declared_any = [], set()
@@ -211,6 +236,7 @@ for c, parents, gchain in live:
         declared_any |= used
         stmts.append(s)
         mod_count["must"] += 1
+        if not lvls: op_default_stmts += 1
     # params without a statement insertion site -> declare on first statement (counted)
     rest = [pid for pid in params if pid not in declared_any]
     if rest and stmts:
@@ -441,8 +467,12 @@ j = report(
      f"- **Modality corpus rule `must` x{mod_count['must']}**: Rev 5 statements are uniformly imperative and "
      f"obligation binds on baseline selection - the INVERSE of the declarative national pattern "
      f"(ISM/CIS/CyFun/C5). Force in the mood, selection in the baseline Sets; both confirm D13's split axes.",
-     f"- **Obligated parties from `implementation-level`**: organization/system party URIs; "
-     f"absent -> organization default x{op_default}.",
+     obligated_party_line(PARTY, PARTY_ORIGIN, PARTY_DEFAULT, source_states=PARTY_SOURCE_STATES)
+     + f" The source gives a level on x{len(req_ids) - op_default} controls ("
+     + ", ".join(f"{k} x{v}" for k, v in sorted(lvl_count.items(), key=lambda x: -x[1]) if k != "(none)")
+     + f"), written as `{NS}/party/<level>` on their x{mod_count['must'] - op_default_stmts} statements. It gives "
+     f"none on x{op_default} controls; their x{op_default_stmts} statements are the only ones that carry the "
+     + ("caller's party." if PARTY_ORIGIN == "caller" else "converter's default."),
      f"- **Two-layer ODP params -> statement-scoped decls**: declared on each statement whose prose inserts "
      f"them (per-statement parameter rule); choice x{sum(1 for cid, (rid, _, r) in req_ids.items() for s in r['statements'] for p in s.get('parameters', []) if p['type'] == 'choice')}, "
      f"string else; legacy _prm_ aggregates carried as params + odp@1 `aggregates`; params without a "
@@ -484,6 +514,11 @@ j = report(
      "no-statement-site": {"total": sum(no_site.values()), "facet-only": len(facet_only),
                            "nowhere": len(nowhere)},
      "modality": dict(mod_count),
+     "obligated-party": obligated_party_record(PARTY, PARTY_ORIGIN, PARTY_DEFAULT, PARTY_SOURCE_STATES),
+     "obligated-party-use": {"controls": {"source-states": len(req_ids) - op_default, "not-stated": op_default},
+                             "statements": {"source-states": mod_count["must"] - op_default_stmts,
+                                            "not-stated": op_default_stmts},
+                             "implementation-levels": dict(lvl_count)},
      "backlog-10": {"insertion-histogram": {str(k): v for k, v in sorted(decl_hist.items())},
                     "multi-declared": [{"control": c, "param": p, "statements": n} for c, p, n in multi_decl]},
      "endpoint-crosscheck": {"resolved": sum(hit.values()), "distinct": len(hit),
