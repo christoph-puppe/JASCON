@@ -1,0 +1,17 @@
+# The source file of this conversion, pinned.
+#
+# convert_csf.py reads it from sources/nist/ (git-ignored). The Validators
+# workflow downloads it from the base below, checks it against this list
+# with `sha256sum -c`, runs the converter and fails if the conversion in this
+# folder comes out different. The bundle and the two coverage reports are
+# therefore a reproducible record: a change of the kernel, of
+# oscal_conv_lib.py or of the converter that would alter them is noticed.
+#
+# The base is the publisher's repository at commit 9402f031, the commit the
+# IFA conversion is pinned to as well.
+#
+# base: https://raw.githubusercontent.com/usnistgov/oscal-content/9402f031489092246f2c27391bad452b85604140/
+# into: sources/nist
+# path: nist.gov/CSF/v2.0/json/NIST_CSF_v2.0_catalog.json
+#
+4836943f21d393f2821df85ada4e6f3c0617243b4ddf44263fe68205400210b4  NIST_CSF_v2.0_catalog.json

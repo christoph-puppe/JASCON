@@ -2,16 +2,34 @@
 """ISM (OSCAL 1.1.x catalog) -> Semantic Core bundle converter.
 Gate item 1, authority 1. Emits: bundle + computed coverage report.
 Every source field path is inventoried and must have a declared destination;
-UNMAPPED paths are the gate's failure signal (target: zero)."""
+UNMAPPED paths are the gate's failure signal (target: zero).
+
+    convert_ism.py [--obligated-party URI] [--out DIR]
+
+The catalogue carries no party on a control. The converter writes one party
+of its own on every statement, `<namespace>/party/organisation`;
+--obligated-party writes the caller's party in its place, and the coverage
+report says which of the two it was (backlog #74). Without arguments the
+run reproduces the committed conversion byte for byte; the Validators
+workflow holds it to that. --out writes the bundle and the two reports
+somewhere else, which is where a run with another party belongs."""
 import json, hashlib, os, re, copy, sys, collections
 from oscal_conv_lib import BUNDLE_NEWLINE   # one byte spelling on every OS (D3.1)
+from oscal_conv_lib import known_arguments, out_dir, obligated_party, obligated_party_line, obligated_party_record
 
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 SRC = os.path.join(ROOT, "sources", "ism.json")
-OUT = os.path.join(ROOT, "converted_examples", "AU.ISM", "ism-core-bundle")
-REPORT_MD = os.path.join(ROOT, "converted_examples", "AU.ISM", "ism-coverage-report.md")
-REPORT_JSON = os.path.join(ROOT, "converted_examples", "AU.ISM", "ism-coverage-report.json")
+ARGV = sys.argv[1:]
+known_arguments(ARGV, ("--obligated-party", "--out"))
+OUTDIR = out_dir(ARGV, os.path.join(ROOT, "converted_examples", "AU.ISM"))
+OUT = os.path.join(OUTDIR, "ism-core-bundle")
+REPORT_MD = os.path.join(OUTDIR, "ism-coverage-report.md")
+REPORT_JSON = os.path.join(OUTDIR, "ism-coverage-report.json")
 NS = "https://ns.cyber.gov.au/ism"
+# Whom a statement binds is not a value of this source (backlog #74)
+PARTY_DEFAULT = f"{NS}/party/organisation"
+PARTY, PARTY_ORIGIN = obligated_party(ARGV, PARTY_DEFAULT)      # (party, "converter-default" | "caller")
+PARTY_WHY = "ISM binds the organisation implicitly; no per-control party data in source"
 LANG = "en"   # corpus language: payload free text is language-tagged {LANG: value}
 
 def T(v):
@@ -160,7 +178,7 @@ def mint_req(c):
     req = {"id": rid, "version": version, "label": label,
            "lifecycle": "active", "title": c["title"],
            "statements": [{"id": sid, "modality": mod,
-                           "obligated-parties": [f"{NS}/party/organisation"],
+                           "obligated-parties": [PARTY],
                            "prose": {"en": prose}}]}
     for p in c.get("props", []):
         n, v = p["name"], p["value"]
@@ -293,13 +311,16 @@ prop_rows = [(f"props[].name = {k}", v, PROP_DEST[k][0], PROP_DEST[k][1])
              for k, v in [("sort-id",1150+570),("label",49),("applicability",5301),
                           ("essential-eight-applicability",256),("revision",1101),("updated",1101)]]
 
-j = {"source": SRC, "source-version": version,
+# the source is named by its place in the repository, not by its path on
+# the machine of the run: the report is the same wherever it is written
+j = {"source": os.path.relpath(SRC, ROOT).replace(os.sep, "/"), "source-version": version,
      "totals": {"leaf-values": total, "mapped": mapped, "unmapped": total - mapped,
                 "coverage-pct": round(100 * mapped / total, 3)},
      "objects-emitted": {"requirements": len(req_index),
                          "sets": sum(1 for r in objects if r.startswith("objects/set-")),
                          "total-objects": len(objects)},
      "modality-word-rule": dict(modality_count),
+     "obligated-party": obligated_party_record(PARTY, PARTY_ORIGIN, PARTY_DEFAULT),
      "labels": {"from-label-prop": label_from_prop,
                 "derived-from-id": len(req_index) - label_from_prop},
      "baseline-sets": {k: len(v) for k, v in sorted(baseline_members.items())},
@@ -324,8 +345,7 @@ md.append("## Conversion rules (declared, counted)\n")
 md.append(f"- **Modality word-rule** over statement prose (first match of "
           f"must not > should not > must > should > may, else unspecified): "
           + ", ".join(f"{k} x{v}" for k, v in sorted(modality_count.items(), key=lambda x:-x[1])) + ".")
-md.append(f"- **Obligated party**: documented default `{NS}/party/organisation` "
-          f"(ISM binds the organisation implicitly; no per-control party data in source).")
+md.append(obligated_party_line(PARTY, PARTY_ORIGIN, PARTY_DEFAULT, PARTY_WHY))
 md.append(f"- **Labels**: {label_from_prop} from `label` props; "
           f"{len(req_index)-label_from_prop} derived from control id (`ism-1234` -> `ISM-1234`).")
 md.append(f"- **sequence**: document order (steps of 10); source `sort-id` path-strings "

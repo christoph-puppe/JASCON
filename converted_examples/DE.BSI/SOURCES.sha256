@@ -1,0 +1,18 @@
+# The source file of this conversion, pinned.
+#
+# convert_bsi.py reads it from sources/ (git-ignored). The Validators
+# workflow downloads it from the base below, checks it against this list
+# with `sha256sum -c`, runs the converter and fails if the conversion in this
+# folder comes out different. The bundle and the two coverage reports are
+# therefore a reproducible record: a change of the kernel, of
+# oscal_conv_lib.py or of the converter that would alter them is noticed.
+#
+# The base is the publisher's repository at commit 39a1193 ("Update
+# artifacts"), which holds the catalogue version of 2026-07-16. The
+# repository has since been rearranged; the path below exists at that commit.
+#
+# base: https://raw.githubusercontent.com/BSI-Bund/Stand-der-Technik-Bibliothek/39a1193f3d230828ea6614eb20c94a026c9f7df0/
+# into: sources
+# path: Anwenderkataloge/Grundschutz++/Grundschutz++-catalog.json
+#
+e4c66cbc76fb8b362040fa5579999789279a1587672459d0c609c0920176002d  Grundschutz++-catalog.json

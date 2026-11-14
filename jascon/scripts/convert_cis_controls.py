@@ -4,14 +4,30 @@
 addressable because IG baselines bind at safeguard level); per-control
 taxonomy Sets; IG1/2/3 -> baseline Sets; asset-class / security-function ->
 category Sets; assessment-objectives -> assessment-criteria@1; required
-links -> typed relations; references resolved via back-matter. Target: 0."""
-import json, os, re, collections
+links -> typed relations; references resolved via back-matter. Target: 0.
+
+    convert_cis_controls.py [--obligated-party URI] [--out DIR]
+
+The catalogue carries no party on a control or safeguard. The converter
+writes one of its own on every statement, `<namespace>/party/enterprise`;
+--obligated-party writes the caller's party in its place, and the coverage
+report says which of the two it was (backlog #74). --out writes the bundle
+and the two reports to DIR. The bundle of this corpus is not redistributed
+and must not be committed, so a run belongs in a DIR outside the repository."""
+import json, os, re, sys, collections
 from oscal_conv_lib import make_T, slug, Bundle, inventory, coverage, walk_controls, report
+from oscal_conv_lib import known_arguments, out_dir, obligated_party, obligated_party_line, obligated_party_record
 
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 SRC = os.path.join(ROOT, "sources", "CIS Controls.json")
-OUTDIR = os.path.join(ROOT, "converted_examples", "CIS.Controls")
+ARGV = sys.argv[1:]
+known_arguments(ARGV, ("--obligated-party", "--out"))
+OUTDIR = out_dir(ARGV, os.path.join(ROOT, "converted_examples", "CIS.Controls"))
 NS = "https://ns.cisecurity.org/controls/v8"   # minted by converter; pending a CIS-published URI
+# Whom a statement binds is not a value of this source (backlog #74)
+PARTY_DEFAULT = f"{NS}/party/enterprise"
+PARTY, PARTY_ORIGIN = obligated_party(ARGV, PARTY_DEFAULT)      # (party, "converter-default" | "caller")
+PARTY_WHY = "CIS binds 'the enterprise' implicitly"
 F_ACRIT = "https://ns.jascon.net/stdlib/facet/assessment-criteria@1"
 F_NARR = f"{NS}/facet/narrative@1"
 
@@ -76,7 +92,7 @@ def convert_control(c, is_parent):
     prose = stmt.get("prose", "")
     mod = modality_of(prose); mod_count[mod] += 1
     st = {"id": stmt.get("id", c["id"] + "_stmt").rsplit("_", 1)[-1], "modality": mod,
-          "obligated-parties": [f"{NS}/party/enterprise"], "prose": {"en": prose}}
+          "obligated-parties": [PARTY], "prose": {"en": prose}}
     freq = next((p["value"] for p in props if p["name"] == "frequency"), None)
     if freq: freq_count[freq] += 1
     req = {"id": rid, "version": VER, "label": label, "lifecycle": "active",
@@ -206,7 +222,7 @@ j = report(
      f"unresolved x{unresolved_refs}).",
      f"- **Payload free text language-tagged** ({{en: ...}}): "
      + ", ".join(f"{k} x{v}" for k, v in sorted(lang_wraps.items())) + ". Harmonized from the start (backlog #12).",
-     f"- **Obligated party**: documented default {NS}/party/enterprise (CIS binds 'the enterprise' implicitly)."],
+     obligated_party_line(PARTY, PARTY_ORIGIN, PARTY_DEFAULT, PARTY_WHY)],
     [f"- **Controls carry no implementation-group** (x{len(parents_without_ig)}: all {len(parents)} parents): IG "
      f"membership exists only at safeguard level - a consumer selecting 'IG1' gets safeguards, never the "
      f"parent prose; parent Requirements ride along via the taxonomy Sets. Structural fact, REPORTED.",
@@ -218,6 +234,7 @@ j = report(
     {"source": cat["metadata"]["title"], "source-version": VER,
      "objects-emitted": {"requirements": len(req_ids), "sets": nset},
      "modality-word-rule": dict(mod_count),
+     "obligated-party": obligated_party_record(PARTY, PARTY_ORIGIN, PARTY_DEFAULT),
      "ig-baselines": {k: len(set(v)) for k, v in ig_members.items()},
      "ig-cumulative": cumulative_ok,
      "asset-classes": {k: len(set(v)) for k, v in asset_members.items()},

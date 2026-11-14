@@ -24,6 +24,11 @@
   "may": 224
  },
  "unknown-modal-verbs": {},
+ "obligated-party": {
+  "value": "https://ns.bsi.bund.de/gspp/party/institution",
+  "origin": "converter-default",
+  "converter-default": "https://ns.bsi.bund.de/gspp/party/institution"
+ },
  "packed-list-values": {
   "tags": {
    "props": 470,

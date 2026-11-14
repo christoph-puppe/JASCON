@@ -4,15 +4,31 @@ Reads BOTH resolved catalogs (BASIC + ESSENTIAL) as one corpus: ESSENTIAL is
 the requirement superset; BASIC contributes membership evidence and a
 twin-catalog drift check (shared ids compared part-by-part - the GS++/MS-TLS
 lesson applied preventively). Levels become cumulative baseline Sets;
-key-measures / governance-measures become marker Sets. Coverage target: 0."""
-import json, os, re, collections
+key-measures / governance-measures become marker Sets. Coverage target: 0.
+
+    convert_cyfun.py [--obligated-party URI] [--out DIR]
+
+The converter reads no party from the catalogues: it writes one of its own
+on every statement, `<namespace>/party/organisation`.
+--obligated-party writes the caller's party in its place, and the coverage
+report says which of the two it was (backlog #74). --out writes the bundle
+and the two reports to DIR. The bundle of this corpus is not redistributed
+and must not be committed, so a run belongs in a DIR outside the repository."""
+import json, os, re, sys, collections
 from oscal_conv_lib import make_T, slug, Bundle, inventory, coverage, walk_controls, report
+from oscal_conv_lib import known_arguments, out_dir, obligated_party, obligated_party_line, obligated_party_record
 
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 SRC_B = os.path.join(ROOT, "sources", "CyFun 2025 BASIC Resolved.json")
 SRC_E = os.path.join(ROOT, "sources", "CyFun 2025 ESSENTIAL Resolved.json")
-OUTDIR = os.path.join(ROOT, "converted_examples", "BE.CyFun")
+ARGV = sys.argv[1:]
+known_arguments(ARGV, ("--obligated-party", "--out"))
+OUTDIR = out_dir(ARGV, os.path.join(ROOT, "converted_examples", "BE.CyFun"))
 NS = "https://ns.ccb.belgium.be/cyfun"   # minted by converter; pending an authority URI
+# Whom a statement binds is not a value of this source (backlog #74)
+PARTY_DEFAULT = f"{NS}/party/organisation"
+PARTY, PARTY_ORIGIN = obligated_party(ARGV, PARTY_DEFAULT)      # (party, "converter-default" | "caller")
+PARTY_WHY = "CyFun binds the organisation implicitly"
 COMPAT = "https://ns.jascon.net/compat/oscal-1x@1"
 
 lang_wraps = collections.Counter()
@@ -82,7 +98,7 @@ def convert_control(c):
            "lifecycle": "active", "title": c.get("title", c["id"]),
            "statements": [{"id": part.get("id", c["id"] + "_smt").rsplit("_", 1)[-1],
                            "modality": mod,
-                           "obligated-parties": [f"{NS}/party/organisation"],
+                           "obligated-parties": [PARTY],
                            "prose": {"en": prose}}]}
     for lv in pr.get("assurance-level", []): level_members[lv].append(rid)
     for m in ("key-measures", "governance-measures"):
@@ -186,7 +202,7 @@ j = report(
      f"({len(markers.get('governance-measures', []))}) -> marker Sets.",
      f"- **Group narrative** (overview parts x{compat_payloads}) -> Level 2 compat facet oscal-1x@1 on the "
      f"nearest Set (ISM pattern); residue KPI starts at {compat_payloads}.",
-     f"- **Obligated party**: documented default {NS}/party/organisation (CyFun binds the organisation implicitly).",
+     obligated_party_line(PARTY, PARTY_ORIGIN, PARTY_DEFAULT, PARTY_WHY),
      f"- **Payload free text language-tagged** per corpus language ({{en: ...}}): "
      + ", ".join(f"{k} x{v}" for k, v in sorted(lang_wraps.items())) + ". Harmonized from the start (backlog #12).",
      f"- `sort-id` absorbed by document order -> members[].sequence; `label` props -> kernel labels; "
@@ -207,6 +223,7 @@ j = report(
     {"source": "CyFun 2025 BASIC+ESSENTIAL", "source-version": VER,
      "objects-emitted": {"requirements": len(req_ids), "sets": nset},
      "modality-word-rule": dict(mod_count),
+     "obligated-party": obligated_party_record(PARTY, PARTY_ORIGIN, PARTY_DEFAULT),
      "levels": {k: len(set(v)) for k, v in level_members.items()},
      "markers": {k: len(v) for k, v in markers.items()},
      "twin-check": {"shared": len(shared), "drift": drift, "basic-only": basic_only},

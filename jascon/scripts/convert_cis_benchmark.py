@@ -9,16 +9,31 @@ sibling bundle; v7 targets minted under a v7 namespace). Target: 0.
 
 A Mapping's `provenance` is pre-filled from the source: CIS as the author,
 the day of the catalog's last-modified as the date. `--author-ref URI` and
-`--date YYYY-MM-DD` overwrite either, on every Mapping (backlog #69)."""
+`--date YYYY-MM-DD` overwrite either, on every Mapping (backlog #69).
+
+    convert_cis_benchmark.py [--author-ref URI] [--date YYYY-MM-DD] [--obligated-party URI] [--out DIR]
+
+The converter reads no party from the benchmark: it writes one of its own
+on every statement, `<namespace>/party/system-administrator`.
+--obligated-party writes the caller's party in its place, and the coverage
+report says which of the two it was (backlog #74). --out writes the bundle
+and the two reports to DIR. The bundle of this corpus is not redistributed
+and must not be committed, so a run belongs in a DIR outside the repository."""
 import json, os, re, sys, collections
 from oscal_conv_lib import make_T, slug, Bundle, inventory, coverage, report, document_day, provenance, provenance_override
+from oscal_conv_lib import known_arguments, out_dir, obligated_party, obligated_party_line, obligated_party_record
 
-OVERRIDE = provenance_override(sys.argv[1:])     # (author, date) the caller wants on every Mapping, or (None, None)
+ARGV = sys.argv[1:]
+known_arguments(ARGV, ("--author-ref", "--date", "--obligated-party", "--out"))
+OVERRIDE = provenance_override(ARGV)     # (author, date) the caller wants on every Mapping, or (None, None)
 
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 SRC = os.path.join(ROOT, "sources", "CIS Ubuntu Linux 24.04 LTS Benchmark.json")
-OUTDIR = os.path.join(ROOT, "converted_examples", "CIS.Ubuntu2404")
+OUTDIR = out_dir(ARGV, os.path.join(ROOT, "converted_examples", "CIS.Ubuntu2404"))
 NS = "https://ns.cisecurity.org/benchmark/ubuntu-24.04-lts"
+# Whom a statement binds is not a value of this source (backlog #74)
+PARTY_DEFAULT = f"{NS}/party/system-administrator"
+PARTY, PARTY_ORIGIN = obligated_party(ARGV, PARTY_DEFAULT)      # (party, "converter-default" | "caller")
 CISC8 = "https://ns.cisecurity.org/controls/v8"
 CISC7 = "https://ns.cisecurity.org/controls/v7"
 F_ACRIT = "https://ns.jascon.net/stdlib/facet/assessment-criteria@1"
@@ -111,7 +126,7 @@ def convert_control(c):
     req = {"id": rid, "version": VER, "label": label, "lifecycle": "active",
            "title": c.get("title", c["id"]),
            "statements": [{"id": "s1", "modality": "unspecified",
-                           "obligated-parties": [f"{NS}/party/system-administrator"],
+                           "obligated-parties": [PARTY],
                            "prose": {"en": prose}}]}
     if aliases: req["aliases"] = aliases
     narr = {}; acrit = {}
@@ -256,7 +271,7 @@ j = report(
      f"x{mod_count.get('unspecified', 0)} (imperative corpus; force rides profile membership).",
      f"- **xccdf ids -> aliases** (scheme xccdf) - the benchmark's second identifier scheme, typed.",
      f"- **Section narrative** (overview parts x{compat_payloads}) -> Level 2 compat facet oscal-1x@1.",
-     f"- **Obligated party**: documented default {NS}/party/system-administrator.",
+     obligated_party_line(PARTY, PARTY_ORIGIN, PARTY_DEFAULT),
      f"- **Payload free text language-tagged** ({{en: ...}}): "
      + ", ".join(f"{k} x{v}" for k, v in sorted(lang_wraps.items())) + ". Harmonized from the start (backlog #12)."],
     [f"- **Empty statement prose x{minted_prose} (all rules)**: the CIS OSCAL export carries the norm only "
@@ -270,6 +285,7 @@ j = report(
      "objects-emitted": {"requirements": len(req_ids), "mappings": mappings, "sets": nset},
      "profiles": {re.sub(chr(92) + "+", " ", k): len(set(v)) for k, v in profile_members.items()},
      "mappings": {"v7": map_v7, "v8": map_v8},
+     "obligated-party": obligated_party_record(PARTY, PARTY_ORIGIN, PARTY_DEFAULT),
      "methods": dict(method_count), "minted-prose": minted_prose,
      "unresolved-links": unresolved_refs, "lang-wraps": dict(lang_wraps)})
 print(f"reqs: {len(req_ids)}  mappings: {mappings} (v8 {map_v8} / v7 {map_v7})  sets: {nset}  "

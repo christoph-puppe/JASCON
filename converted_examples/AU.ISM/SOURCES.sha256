@@ -1,0 +1,17 @@
+# The source file of this conversion, pinned.
+#
+# convert_ism.py reads it from sources/ism.json (git-ignored). The Validators
+# workflow downloads it from the base below, checks it against this list
+# with `sha256sum -c`, runs the converter and fails if the conversion in this
+# folder comes out different. The bundle and the two coverage reports are
+# therefore a reproducible record: a change of the kernel, of
+# oscal_conv_lib.py or of the converter that would alter them is noticed.
+#
+# The base is the publisher's mirror at the tag of release 2026.06.18. The
+# file is saved under the name the converter reads.
+#
+# base: https://raw.githubusercontent.com/AustralianCyberSecurityCentre/ism-oscal/v2026.06.18/
+# into: sources
+# path: ISM_catalog.json -> ism.json
+#
+f3e4512bc31eb3157001c4a9312d80840b3a3c485f1e87d6b5519b2b0dcc56cc  ism.json

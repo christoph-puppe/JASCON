@@ -125,7 +125,7 @@ none unaccounted and no failed check.
 > source files by digest and reproduce the conversion on every change of
 > the kernel, the library or the converter: fetch, check the digests,
 > convert, and compare byte for byte with what is committed. This
-> project's workflow does that for the one corpus with a ledger
+> project's workflow does that for every corpus whose bundle it ships
 > (`SOURCES.sha256` beside the bundle). A report nobody reproduces
 > describes a converter that may no longer exist.
 

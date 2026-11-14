@@ -377,6 +377,11 @@
  },
  "examples": 363,
  "risk-party": 103,
+ "obligated-party": {
+  "value": "https://ns.nist.gov/csf/party/organization",
+  "origin": "converter-default",
+  "converter-default": "https://ns.nist.gov/csf/party/organization"
+ },
  "lang-wraps": {
   "example": 363,
   "category-statement": 22,

@@ -25,6 +25,34 @@ def robust_rmtree(path, attempts=5):
             if i == attempts - 1: raise
             time.sleep(0.5 * (i + 1))
 
+def known_arguments(argv, takes_value):
+    """Holds a converter's command line to the arguments it knows. Every
+    token must be one of `takes_value`, followed by its value; anything else
+    stops the run. Without this a misspelled `--obligated-party` is an
+    argument nobody reads: the run writes the default and says nothing. What
+    a value must be is checked by the function that reads it."""
+    i = 0
+    while i < len(argv):
+        a = argv[i]
+        if a not in takes_value:
+            raise SystemExit(f"unknown argument {a!r}; this converter takes " + ", ".join(sorted(takes_value)))
+        if i + 1 >= len(argv) or argv[i + 1] in takes_value:
+            raise SystemExit(f"{a} needs a value")
+        i += 2
+
+def out_dir(argv, default):
+    """Where a converter writes its bundle and its two coverage reports:
+    `--out DIR` among its arguments -> the absolute DIR, else `default`, the
+    corpus folder in the repository. A run that is not meant to change the
+    committed conversion - one with `--obligated-party`, or one on a source
+    whose bundle is not redistributed - belongs in a DIR of its own. The
+    argument given twice, or without a value, stops the run."""
+    given = [i for i, a in enumerate(argv) if a == "--out"]
+    if not given: return default
+    if len(given) > 1: raise SystemExit("--out is given more than once")
+    if given[0] + 1 >= len(argv) or not argv[given[0] + 1]: raise SystemExit("--out needs a directory")
+    return os.path.abspath(argv[given[0] + 1])
+
 def make_T(lang, counter=None):
     """Language-tag payload free text (backlog #12). Never for labels/ids."""
     def T(v, field=None):
