@@ -738,8 +738,9 @@ tool that reads an Assessment's `result` without knowing by what method
 it was reached is the half-understanding this decision exists to stop.
 No payload shipped in the repository had to change (measured: all three
 passed their schemas). Two tools of the repository wrote a method under
-plain keys from their own forms; they write the standard
-`assessment-criteria@1` now. A bundle that passed can fail: one whose
+plain keys from their own forms, the app's Assess page and the reader's
+workbench (measured: their exports fail the reference with this rule).
+A bundle that passed can fail: one whose
 Assessment states its method under a key no facet registers, or with a
 payload its facet refuses. Twelve vectors (`method-vectors`).
 **Rejected.** Uniform fail-closed including `private:` (kills the valve);
