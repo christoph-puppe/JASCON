@@ -104,8 +104,22 @@ backlog #71.)*
 >   statement — and the user named none, the app and the reader wrote
 >   one made from a word. They refuse the save now and say which field
 >   is missing; an approver always starts empty. Objects written before
->   keep the made-up parties, and ten converters still write an
->   obligated party their source does not state (backlog #74, open).
+>   keep the made-up parties.
+> - **Whom a converted statement binds is an argument** (backlog #74,
+>   decided by the author on 2026-11-14): a catalogue seldom says whom
+>   its controls bind, so a converter names one party for its corpus.
+>   That party is the converter's default and not a value of the source,
+>   its coverage report says so, and `--obligated-party URI` writes
+>   another; the app's import presets show the default and take another.
+>   Of the 4,173 statements in the four shipped catalogue bundles, 2,255
+>   carry a converter's party and 1,918 what the source states.
+> - **The shipped conversions are reproducible** (2026-11-14): the
+>   workflow fetches each source at its pinned tag or commit, converts
+>   again and fails when a shipped bundle or its report differs from
+>   what is committed, for all five shipped corpora and no longer for
+>   one. The CR26 converter, which nothing had run since its bundle left
+>   the repository, covers the publisher's current publication again
+>   and is run the same way; its bundle is not committed (backlog #73).
 > - **An Attestation is held to what it binds** (backlog #46, closed
 >   2026-11-14): the primitive `attestation-binds` was defined and
 >   applied by no tool to a bundle, and the example folder's Attestation
@@ -458,7 +472,7 @@ The census corpora (gate 1 — the evidence base the architecture was derived fr
 |---|---|---|---|
 | [AU.ISM](converted_examples/AU.ISM/ism-coverage-report.md) | ACSC ISM, OSCAL 1.1.2 catalog, 1,150 controls | 1,150 Requirements · 561 Sets (P10 fix pass recovered 239 taxonomy sets a slug collision had silently merged) | 36,161 / 36,161 leaf values |
 | [DE.BSI](converted_examples/DE.BSI/bsi-coverage-report.md) | Grundschutz++ v2026-07-16, OSCAL 1.1.3 (MS-TLS dropped by decision — defects reported to BSI) | 651 Requirements carrying 999 statements · 221 params with label/default · 162 Sets | 49,431 / 49,431 |
-| † [FedRAMP-CR26](converted_examples/FedRAMP-CR26/cr26-coverage-report.md) | CR26 bespoke JSON, v2026.07.14.01 | 292 Requirements · 373 Mappings · 91 Sets · 4 Tailorings | 7,294 / 7,294 |
+| † [FedRAMP-CR26](converted_examples/FedRAMP-CR26/cr26-coverage-report.md) | CR26 bespoke JSON, v2026.11.02.01 (measured again on 2026-11-14; the census of July was of v2026.07.14.01: 292 Requirements · 373 Mappings · 4 Tailorings, 7,294 / 7,294) | 291 Requirements · 652 Mappings · 92 Sets · 5 Tailorings | 7,532 / 7,532 |
 
 Validation corpora (converted 2026-07-21; the model held without kernel
 changes beyond the same morning's already-decided D9-rev parameter
