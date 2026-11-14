@@ -6,13 +6,15 @@ Source: **FedRAMP Consolidated Rules for 2026** v2026.11.02.01 (bespoke JSON; no
 
 - Source leaf values inventoried (id-normalized paths): **7,532**
 - Mapped: **7,532** -> **UNMAPPED: 0** -> coverage **100.0 %**
-- "Mapped" means that the path has a row in the path map below, not that its values are in the bundle. Of the 7,532: **6,503** on rows that name a destination (L1 4,681, L2 1,822), **992** on rows that declare the path not carried, **37** on rows that say nothing is written and nothing is decided. What arrived, value by value, is the ledger's to say (below): 4,467 copied, 1,984 transformed, 992 dropped for a declared reason, 89 unaccounted.
+- "Mapped" means that the path has a row in the path map below, not that its values are in the bundle. Of the 7,532: **6,540** on rows that name a destination (L1 4,718, L2 1,822), **992** on rows that declare the path not carried. What arrived, value by value, is the ledger's to say (below): 4,553 copied, 1,987 transformed, 0 no content by a checked rule, 992 dropped for a declared reason, 0 unaccounted.
 - Emitted: **291 Requirements** (FRR rules + KSIs), **652 Mapping objects**, **92 Sets** (17 families, 56 subsets, 4 classes, 2 tracks, 10 KSI categories, and 3: the root, the CTL overlay, the Set of the carried Rev 5 Requirements), **5 Tailorings** (4 class variants and the Rev 5 ODP overlay), manifest with both digests, 11 pinned stubs.
-- The bundle as written: `content-manifest.json` is `sha256:9cdf86017d4e42f17d6edf507d53d30eb44d11f309ab8f0d8e28df13c1a545bd`. The manifest lists both digests of each of its 1,054 objects (291 Requirements of the publication, 14 carried Rev 5 Requirements, the Mappings, Sets and Tailorings) and the digest of each pinned schema, so this value stands for every byte of the bundle. The bundle is not in the repository; a run that reproduces this report has reproduced the bundle.
+- The bundle as written: `content-manifest.json` is `sha256:8cbcbb26eecfe4bef979f5121e10695de55b6210cff6f73d1ac8c2d052caf595`. The manifest lists both digests of each of its 1,054 objects (291 Requirements of the publication, 14 carried Rev 5 Requirements, the Mappings, Sets and Tailorings) and the digest of each pinned schema, so this value stands for every byte of the bundle. The bundle is not in the repository; a run that reproduces this report has reproduced the bundle.
 
 ## Conversion rules (declared, counted)
 
 - **force -> modality** (rule level): must x136, should x45, unspecified x28, may x20, must-not x11, should-not x5. Class-variant forces become **Tailoring ops**: {'set-modality': 107}; easings auto-carry a converter Deviation (approver: FedRAMP, rationale: published class variant) x0.
+- **status -> lifecycle**, by rule. The source gives a family and a KSI category the status of a document, in three words (its schema: stable, placeholder, empty): KSI category `stable` x10; family `placeholder` x1; family `stable` x16. The kernel's lifecycle knows draft, active, deprecated, withdrawn. The converter's mapping: `stable` -> `active`, `placeholder` -> `draft`, `empty` -> `draft`; a word outside the three stops the run. `stable` is the source's word for a document that is settled; `placeholder` and `empty` say that it is not, and `draft` is the only state of the kernel that says so. The source's own word is kept beside the mapped state, in narrative@1 of the Set that stands for the document (`status`): the kernel has no place for it. The status is the document's, and a document of this source is its rules or indicators, none of which has a status of its own; the lifecycle of every object made from a document therefore follows the document's status - its Set, its subset Sets, its rules or indicators and the Mappings of their control links. Objects by lifecycle and where it comes from: `active` x14 as the SP 800-53 bundle has it; `active` x998 from the status of a document; `draft` x28 from the status of a document; `active` x14 the converter's own. Until 2026-11-14 the converter read no status and wrote `active` on every object. The converter's own `active` stands on the objects it makes for the publication as a whole (the root, the class and track Sets, the CTL overlay and the Set of the carried Rev 5 Requirements, the Tailorings), for which the source states no status.
+- **The id of a KSI category** (x10) is carried as an alias of the category's Set (`aliases`, scheme `fedramp-cr26:KSI.id`). The Set's own URI is minted from the key the category stands under, as every id of this bundle is minted from a key of the source.
 - **affects[] -> obligated-parties[]** (parties minted as codes); subset applicability -> scope@1 on subset Sets and composed **class Sets (a-d)** and **type Sets (20x/Rev5)** - sets-of-sets (D21).
 - **Obligated party**: `https://ns.fedramp.gov/cr26/party/provider` on every statement for which the source names no party; where it names one (in `affects` of a rule), that one is written. `https://ns.fedramp.gov/cr26/party/provider` is the converter's default and not a value of the source; `--obligated-party URI` writes another. Why this default: a KSI has no `affects` and its statement names no actor; the converter reads an indicator as a statement about the cloud service offering, which is its provider's to meet. Statements with a party from `affects`: x245; with this party: x46 (every KSI, and a rule only if it names nobody).
 - **timeframe_num/type -> statement parameter** 'timeframe' (elapsed vs calendar split; calendar-ref minted; tightening: lower). Class variants: set-parameter when unit-class matches; **true unit-class crossings x0** (base-absent variant timeframes x51 counted separately) stay in the L2 class-variants payload - spec-feedback: candidate D9 duration-union question.
@@ -39,12 +41,13 @@ Source: **FedRAMP Consolidated Rules for 2026** v2026.11.02.01 (bespoke JSON; no
 
 ## Conversion ledger (measured per source value)
 
-The path map says where a source path is declared to go. The ledger follows each of the 7,532 source leaf values: a value the converter hands on unchanged carries its origin into the bundle, a value it computes is stated as a named rule, and after the bundle is written every claim is read back from the files. `cr26-conversion-ledger.json` holds the result, one row per source path and outcome (backlog #41).
+The path map says where a source path is declared to go. The ledger follows each of the 7,532 source leaf values, flags and fractions among them: a value the converter hands on unchanged carries its origin into the bundle, a value it computes is stated as a named rule, and after the bundle is written every claim is read back from the files. `cr26-conversion-ledger.json` holds the result, one row per source path and outcome (backlog #41). Real content is never dropped (author, 2026-11-14): a value is carried, or it is no content by a rule the ledger checks, and a run with one unaccounted value ends with 1.
 
-- **4,467 copied**: the value stands, with its type, at the destination named.
-- **1,984 transformed** by a named rule; the rule was applied to the source again and the result compared with the file. A value that is copied to one place and transformed for another counts as copied.
-- **992 dropped for a declared reason**: exactly the paths the path map marks `declared-drop`, with the reason it gives.
-- **89 unaccounted**: no destination and no declared reason. 52 of them are values the ledger cannot follow; 37 are written nowhere. Both are listed below.
+- **4,553 copied**: the value stands, with its type, at the destination named.
+- **1,987 transformed** by a named rule; the rule was applied to the source again and the result compared with the file. A value that is copied to one place and transformed for another counts as copied.
+- **0 no content** by a checked rule (a name that only selects a field, a namespace, an id that is rebuilt exactly from another value). This source has no value of the three kinds, and the converter declares none.
+- **992 dropped for a declared reason**: the two classes that were declared before the author's rule, exactly the paths the path map marks `declared-drop`. Neither is one of the three kinds above. Whether they are content is the author's to decide; they are listed below with the converter's reading.
+- **0 unaccounted**: no destination and no declared reason.
 - Claims that did not hold against the written files: **0**.
 - Rows of the path map that the ledger contradicts (a destination named and a value of the path written nowhere; a path declared not carried and written all the same; a row marked L1 whose values stand only in the parked L2 payload): **0**.
 
@@ -59,46 +62,38 @@ Each rule is a function of source values; a rule's count is the number of source
 | SP 800-53 Requirement URI from the control id | 652 |
 | base prose of a rule that states its text by class only, from its name | 28 |
 | base prose of an indicator that states its text by class only, from its name | 5 |
+| decimal string of a number that is no integer (the kernel's spelling of a fraction, D3.9) | 3 |
 | duration type from the unit of the timeframe | 23 |
+| lifecycle of an object made from a document (a subset Set, a rule or an indicator, a Mapping of its control links), from the document's status (stable: active; placeholder, empty: draft) | 27 |
+| lifecycle of the Set that stands for a document, from the document's status (stable: active; placeholder, empty: draft) | 27 |
 | modality from the force word (code map) | 324 |
 | one selection of a multi-select that the source writes as one string | 3 |
 | party URI from a name in affects | 245 |
 | term URI from the term's name, by the glossary's headwords and alternatives | 789 |
 | title of one track's share of a subset, from the subset's name | 1 |
 
-### Declared drops
+### No content, by a checked rule
 
-| reason (the path map's) | source values |
-|---|---:|
-| process-flow diagrams: linked resources, not requirement data (D17) | 35 |
-| update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read "history -> L0" until 2026-11-14) | 957 |
+| kind | rule | source values |
+|---|---|---:|
+| *(none)* | | 0 |
 
-### Values the ledger cannot follow
+### Declared drops, and the converter's reading of each
 
-A value that is no string and no integer cannot carry an origin, so the ledger lists it as unaccounted wherever it went: 49 booleans, 3 numbers that are no integers. The ledger says nothing about them. Where each of them stands in the bundle is read by `test_convert_cr26.py`, value by value, and the workflow runs that test.
+Declared before 2026-11-14 and left declared: the author decides whether a class is content. The reading is the converter's and decides nothing. The example is a value of the class that is no prose (a date, an id), with its pointer.
 
-| path | values |
-|---|---:|
-| `cr26.FRD.data.all.*.do_not_link` | 9 |
-| `cr26.FRD.data.all.*.ignore_in_terms` | 9 |
-| `cr26.FRD.info.effective.date.grace.until_next_assessment` | 1 |
-| `cr26.FRR.*.data.*.*.*.notification[].optional` | 3 |
-| `cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.3.iir.timeframe_num` | 1 |
-| `cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.4.iir.timeframe_num` | 1 |
-| `cr26.FRR.*.data.*.*.*.varies_by_class.*.pain_timeframes.5.iir.timeframe_num` | 1 |
-| `cr26.FRR.*.info.20x.effective.date.grace.until_next_assessment` | 10 |
-| `cr26.FRR.*.info.effective.date.grace.until_next_assessment` | 7 |
-| `cr26.FRR.*.info.rev5.effective.date.grace.until_next_assessment` | 10 |
+| source paths | values | declared reason | example | reading |
+|---|---:|---|---|---|
+| `cr26.FRR.*.info.flows[].activity` x1<br>`cr26.FRR.*.info.flows[].description` x1<br>`cr26.FRR.*.info.flows[].nodes.*` x8<br>`cr26.FRR.*.info.flows[].steps[].description` x7<br>`cr26.FRR.*.info.flows[].steps[].from` x9<br>`cr26.FRR.*.info.flows[].steps[].to` x9 | 35 | process-flow diagrams: linked resources, not requirement data (D17) | `cr26#/FRR/IEC/info/flows/0/steps/0/to` = `IEC-CSO-EFR` | content: the diagram is written out in the source itself (an activity, its description, nodes and steps that name rules in their order and say on which answer one follows the other) and nothing in the bundle holds it |
+| `cr26.FRD.data.all.*.updated[].comment` x85<br>`cr26.FRD.data.all.*.updated[].date` x85<br>`cr26.FRD.data.all.*.updated[].issue` x1<br>`cr26.FRR.*.data.*.*.*.updated[].comment` x303<br>`cr26.FRR.*.data.*.*.*.updated[].date` x303<br>`cr26.FRR.*.data.*.*.*.updated[].issue` x5<br>`cr26.KSI.*.indicators.*.updated[].comment` x87<br>`cr26.KSI.*.indicators.*.updated[].date` x87<br>`cr26.KSI.*.indicators.*.updated[].issue` x1 | 957 | update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read "history -> L0" until 2026-11-14) | `cr26#/FRD/data/all/FRD-ACV/updated/0/date` = `2026-06-24` | content: an entry says on which day a term, a rule or an indicator was changed and why, some with the number of an issue; the bundle holds the day of the publication and nothing of an entry's own history |
 
-### Unaccounted and written nowhere
+### Unaccounted
 
-No destination and no declared reason: carried by no rule, dropped by no decision. Each class is the author's to decide (carry, and where; or drop, and why). The run does not fail on them.
+No destination, no checked rule and no declared reason. A run with one such value ends with 1.
 
 | path | values | first value |
 |---|---:|---|
-| `cr26.FRR.*.info.status` | 17 | `cr26#/FRR/AFC/info/status` |
-| `cr26.KSI.*.id` | 10 | `cr26#/KSI/CED/id` |
-| `cr26.KSI.*.status` | 10 | `cr26#/KSI/CED/status` |
+| *(none)* | 0 | |
 
 ### What the ledger cannot see
 
@@ -106,14 +101,14 @@ The ledger follows source values into the bundle, not the bundle back to the sou
 
 | written as | leaf values | with no source value behind them |
 |---|---:|---:|
-| Mapping | 7,172 | 4,564 |
-| Requirement (KSI) | 594 | 361 |
-| Requirement (rule) | 6,439 | 1,897 |
-| Set | 2,989 | 1,556 |
+| Mapping | 7,172 | 3,912 |
+| Requirement (KSI) | 594 | 315 |
+| Requirement (rule) | 6,439 | 1,646 |
+| Set | 3,036 | 1,437 |
 | Tailoring | 541 | 393 |
-| carried Rev 5 Requirement | 972 | 972 |
+| carried Rev 5 Requirement | 1,040 | 1,040 |
 | manifest | 5,319 | 3,624 |
-| **all** | **24,026** | **13,367** |
+| **all** | **24,141** | **12,367** |
 
 ## Full path map
 | path | count | level | destination |
@@ -332,7 +327,7 @@ The ledger follows source values into the bundle, not the bundle back to the sou
 | `cr26.FRR.*.info.rev5.subsets.*.description` | 5 | L1 | framework-specific subset declarations -> track subset Sets (title/description/scope) [corrected per FedRAMP #153] |
 | `cr26.FRR.*.info.rev5.subsets.*.name` | 5 | L1 | framework-specific subset declarations -> track subset Sets (title/description/scope) [corrected per FedRAMP #153] |
 | `cr26.FRR.*.info.short_name` | 17 | L1 | family Set: title/label |
-| `cr26.FRR.*.info.status` | 17 | undecided | no destination: every family Set is written `lifecycle: active`, whatever the status says (the map read "lifecycle" until 2026-11-14; the ledger found nothing written) |
+| `cr26.FRR.*.info.status` | 17 | L1 | the family Set's `lifecycle` by the rule for a document's status, the lifecycle of every object made from the family (subset Sets, rules, Mappings of their control links), and the word itself in narrative@1 of the family Set: status |
 | `cr26.FRR.*.info.subsets.*.applicability.affects[]` | 45 | L1 | scope@1 on subset Set (types/paths/classes/affects) + class & type Set composition |
 | `cr26.FRR.*.info.subsets.*.applicability.classes[]` | 124 | L1 | scope@1 on subset Set (types/paths/classes/affects) + class & type Set composition |
 | `cr26.FRR.*.info.subsets.*.applicability.paths[]` | 78 | L1 | scope@1 on subset Set (types/paths/classes/affects) + class & type Set composition |
@@ -341,7 +336,7 @@ The ledger follows source values into the bundle, not the bundle back to the sou
 | `cr26.FRR.*.info.subsets.*.name` | 45 | L1 | subset Set: title / narrative description |
 | `cr26.FRR.*.info.tag` | 17 | L1 | family Set: narrative description / scope tag |
 | `cr26.FRR.*.info.web_name` | 17 | L1 | family Set annotations.web_name (chrome) |
-| `cr26.KSI.*.id` | 10 | undecided | no destination: the id of a KSI category Set is minted from the key the category stands under, and the category's own `id` is another string (the map read "id" until 2026-11-14; the ledger found nothing written) |
+| `cr26.KSI.*.id` | 10 | L1 | KSI category Set: aliases[] (the theme's own id; the Set's URI is minted from the key the theme stands under) |
 | `cr26.KSI.*.indicators.*.controls[]` | 558 | L1 | Mapping objects (relationship supports; 8.6 untyped-import rule) |
 | `cr26.KSI.*.indicators.*.name` | 46 | L1 | KSI Requirement.title |
 | `cr26.KSI.*.indicators.*.statement` | 41 | L1 | KSI statements[0].prose.en (modality unspecified: indicator language) |
@@ -350,10 +345,10 @@ The ledger follows source values into the bundle, not the bundle back to the sou
 | `cr26.KSI.*.indicators.*.updated[].date` | 87 | declared-drop | update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read "history -> L0" until 2026-11-14) |
 | `cr26.KSI.*.indicators.*.updated[].issue` | 1 | declared-drop | update history of the entry (date, comment, issue): its entries are counted in the report, the values are carried in no object and not in the manifest (the map read "history -> L0" until 2026-11-14) |
 | `cr26.KSI.*.indicators.*.varies_by_class.*.statement` | 10 | L2 | class-variants payload on the KSI Requirement |
-| `cr26.KSI.*.name` | 10 | L1 | KSI category Set: title/annotations/label |
-| `cr26.KSI.*.short_name` | 10 | L1 | KSI category Set: title/annotations/label |
-| `cr26.KSI.*.status` | 10 | undecided | no destination: every KSI category Set is written `lifecycle: active`, whatever the status says (the map read "lifecycle" until 2026-11-14; the ledger found nothing written) |
-| `cr26.KSI.*.web_name` | 10 | L1 | KSI category Set: title/annotations/label |
+| `cr26.KSI.*.name` | 10 | L1 | KSI category Set: title / annotations.web_name / label |
+| `cr26.KSI.*.short_name` | 10 | L1 | KSI category Set: title / annotations.web_name / label |
+| `cr26.KSI.*.status` | 10 | L1 | the KSI category Set's `lifecycle` by the rule for a document's status, the lifecycle of its indicators and of the Mappings of their control links, and the word itself in narrative@1 of the category Set: status |
+| `cr26.KSI.*.web_name` | 10 | L1 | KSI category Set: title / annotations.web_name / label |
 | `cr26.info.default_artifacts.FRR[]` | 5 | L1 | assessment-criteria on corpus root: default-artifacts |
 | `cr26.info.default_artifacts.KSI[]` | 5 | L1 | assessment-criteria on corpus root: default-artifacts |
 | `cr26.info.description` | 1 | L1 | narrative@1 on the corpus root Set: description |

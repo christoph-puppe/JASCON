@@ -23,29 +23,30 @@ committed ones. The reports are the record of the conversion.
 DIR, so that a run need not touch the repository.
 
 The conversion ledger (backlog #41). The path map above says where a source
-PATH is declared to go. The ledger follows every source VALUE: a value the
-converter hands on unchanged is a copy, a value it computes is stated with
-D(rule, function, inputs...) so that the rule can be applied to the source
-again, and what the path map itself says is not carried is declared as a
-drop. After the bundle is written every claim is checked against the files.
-A source value with no destination and no declared reason is unaccounted.
-The record is cr26-conversion-ledger.json, one row per source path and
-outcome, written beside the two reports. The ledger changes nothing that is
-written into the bundle.
+PATH is declared to go. The ledger follows every source VALUE, a flag and a
+fraction as well as a string: a value the converter hands on unchanged is a
+copy, and a value it computes is stated with D(rule, function, inputs...)
+so that the rule can be applied to the source again. After the bundle is
+written every claim is checked against the files. Real content is never
+dropped (author, 2026-11-14). Two classes were declared as drops before that
+rule, the update history of an entry and the process-flow diagrams; they
+stay declared until the author has decided them, and the report lists them
+with the converter's reading. No other drop is declared: a source value
+with no destination is unaccounted. The record is
+cr26-conversion-ledger.json, one row per source path and outcome, written
+beside the two reports.
 
-Exit code: 0 only when every source leaf has a declared destination and
-every claim of the ledger holds against the written files. A run with
-UNMAPPED > 0, or with a ledger claim that does not hold, still writes the
-bundle and the reports, which say what is wrong, and exits 1 (backlog #73:
-until 2026-11-14 the run printed the count of unmapped leaves and exited 0,
-and nothing noticed that a new publication had outgrown the converter).
-Unaccounted values are printed and listed in the report and do not fail the
-run: what becomes of them is the author's decision, class by class."""
+Exit code: 0 only when every source leaf has a row in the path map, every
+claim of the ledger holds against the written files and no source value is
+unaccounted. Otherwise the run still writes the bundle, the reports and the
+record, which say what is wrong, and exits 1 (backlog #73: until 2026-11-14
+the run printed the count of unmapped leaves and exited 0, and nothing
+noticed that a new publication had outgrown the converter)."""
 import json, hashlib, os, re, sys, copy, collections, shutil, decimal
 from oscal_conv_lib import BUNDLE_NEWLINE   # one byte spelling on every OS (D3.1)
 from oscal_conv_lib import provenance, provenance_override
 from oscal_conv_lib import obligated_party, obligated_party_line, obligated_party_record
-from oscal_conv_lib import Ledger, ledger_by_path
+from oscal_conv_lib import Ledger, ledger_by_path, ledger_gate, needs_kernel_2
 
 NS="https://ns.fedramp.gov/cr26"; NIST="https://ns.nist.gov/sp800-53/req"
 ARGV=sys.argv[1:]
@@ -138,13 +139,45 @@ class _Ledger(Ledger):
     def collapsed(tag,parts): return normalize(Ledger.collapsed(tag,parts))
 led=_Ledger(); D=led.derive
 
-# A number of the source that is no integer is read as the digits the source
-# wrote (a Decimal), never as a float: the kernel has no such JSON number
-# (NUMBER-1, D3.9), and a float would not give the digits back.
-with open(SRC,encoding="utf-8") as _f: d=led.source("cr26",json.load(_f,parse_float=decimal.Decimal))
+# The source is loaded with its flags and its fractions followed too
+# (typed=True): a flag stands in the objects as a value that knows its origin
+# until led.resolve() puts the plain boolean in its place, before anything is
+# written or digested.
+#
+# A number of the source that is no integer is a float here, because a float
+# is what the ledger can follow, and it is written as a decimal string, the
+# kernel's spelling of a fraction (NUMBER-1, D3.9): the shortest one that
+# gives the number back. The same file is read a second time with the digits
+# as the source wrote them, and the run stops if a float does not hold one of
+# its numbers exactly.
+with open(SRC,encoding="utf-8") as _f: _text=_f.read()
+def _exact(a,b,where):
+    if isinstance(a,dict):
+        for k in a: _exact(a[k],b[k],f"{where}/{k}")
+    elif isinstance(a,list):
+        for i,x in enumerate(a): _exact(x,b[i],f"{where}/{i}")
+    elif isinstance(a,decimal.Decimal) and decimal.Decimal(repr(b))!=a:
+        raise SystemExit(f"{where}: the number {a} of the source has more digits than a float holds ({b!r}); "
+                         f"the converter would write another number")
+_loaded=json.loads(_text)
+_exact(json.loads(_text,parse_float=decimal.Decimal),_loaded,"cr26#")
+d=led.source("cr26",_loaded,typed=True)
 VER=d["info"]["version"]
 
+def flag(v):
+    """-> True or False for a boolean of the source, as the ledger hands it on
+    or plain; None for any other value. (A flag that is followed is not the
+    object `True`, so `v is True` does not know it; 1 and "true" are no flags.)"""
+    if isinstance(v,bool): return v
+    if isinstance(v,(int,float,str,decimal.Decimal,dict,list)) or v is None: return None
+    return True if v==True else False if v==False else None
+
 DECIMAL=re.compile(r"(-?[1-9][0-9]*(\.[0-9]+)?|0(\.[0-9]+)?|-0\.[0-9]*[1-9][0-9]*)\Z")   # the kernel's decimalString
+def _decimal_string(number):
+    s=format(decimal.Decimal(repr(float(number))),"f")
+    if not DECIMAL.match(s): raise SystemExit(f"the number {number!r} has no decimal spelling of the kernel (D3.9)")
+    return s
+R_DECIMAL="decimal string of a number that is no integer (the kernel's spelling of a fraction, D3.9)"
 fraction_paths=collections.Counter()
 def park(n,path):
     """A payload parked as the source has it (L2), with one difference: a
@@ -152,11 +185,9 @@ def park(n,path):
     spelling of a fraction (D3.9). Counted by source path. -> a new structure."""
     if isinstance(n,dict): return {k:park(v,f"{path}.{k}") for k,v in n.items()}
     if isinstance(n,list): return [park(v,f"{path}[]") for v in n]
-    if isinstance(n,decimal.Decimal):
-        s=format(n,"f")
-        if not DECIMAL.match(s): raise SystemExit(f"{path}: the number {n} has no decimal spelling of the kernel (D3.9)")
+    if isinstance(n,float):
         fraction_paths[normalize(path)]+=1
-        return s
+        return D(R_DECIMAL,_decimal_string,n)
     return n
 def no_fraction(n,where):
     """Stops the run at a number that is no integer anywhere but in a parked
@@ -203,14 +234,26 @@ KSI="cr26.KSI.*.indicators.*"; KVAR=KSI+".varies_by_class.*"
 # Levels: L1 a kernel field or a facet with a schema; L2 a payload parked as
 # the source has it; DROP the path is not carried, and the destination column
 # says why - the ledger declares exactly these rows as drops, with that
-# reason; UNDECIDED the converter writes nothing for the path and nobody has
-# decided whether it should - the ledger lists its values as unaccounted.
-# Since 2026-11-14 the ledger holds the map to what is written: a row that is
-# L1 or L2 while a value of its path reaches no file is reported as a claim
-# that does not hold (backlog #41).
-DROP="declared-drop"; UNDECIDED="undecided"
+# reason. Since 2026-11-14 the ledger holds the map to what is written: a row
+# that is L1 or L2 while a value of its path reaches no file is reported as a
+# claim that does not hold, and the run ends with 1 on a value that is
+# neither carried nor dropped for a declared reason (backlog #41).
+#
+# The two drops are the ones declared before the author's rule of 2026-11-14
+# ("real content is never dropped"). They are neither a name that selects, nor
+# a namespace, nor an id that is rebuilt, so no checked rule takes their
+# place; whether they are content is the author's to decide, and the report
+# lists them with the converter's reading (DROP_READING).
+DROP="declared-drop"
 HISTORY=("update history of the entry (date, comment, issue): its entries are counted in the report, the values are "
          "carried in no object and not in the manifest (the map read \"history -> L0\" until 2026-11-14)")
+FLOWS="process-flow diagrams: linked resources, not requirement data (D17)"
+DROP_READING={
+ HISTORY:"content: an entry says on which day a term, a rule or an indicator was changed and why, some with the "
+         "number of an issue; the bundle holds the day of the publication and nothing of an entry's own history",
+ FLOWS:"content: the diagram is written out in the source itself (an activity, its description, nodes and steps "
+       "that name rules in their order and say on which answer one follows the other) and nothing in the bundle holds it",
+}
 RULES=[
  (r"^cr26\.info\.title$","L1","the manifest's provenance (source) and the title of the corpus root Set"),
  (r"^cr26\.info\.description$","L1","narrative@1 on the corpus root Set: description"),
@@ -222,12 +265,12 @@ RULES=[
  (r"^cr26\.FRD\.data\.all\.\*\.ignore_in_terms$","L1","narrative@1 on the corpus root Set: ignore-in-terms {term id: flag} (terminology@1 has do-not-link and no member for this one)"),
  (r"^cr26\.FRD\.data\.all\.\*\.updated\[\]\.",DROP,HISTORY),
  (r"^cr26\.FRR\.\*\.info\.(name|short_name)$","L1","family Set: title/label"),
- (r"^cr26\.FRR\.\*\.info\.status$",UNDECIDED,"no destination: every family Set is written `lifecycle: active`, whatever the status says (the map read \"lifecycle\" until 2026-11-14; the ledger found nothing written)"),
+ (r"^cr26\.FRR\.\*\.info\.status$","L1","the family Set's `lifecycle` by the rule for a document's status, the lifecycle of every object made from the family (subset Sets, rules, Mappings of their control links), and the word itself in narrative@1 of the family Set: status"),
  (r"^cr26\.FRR\.\*\.info\.web_name$","L1","family Set annotations.web_name (chrome)"),
  (r"^cr26\.FRR\.\*\.info\.(purpose|tag)$","L1","family Set: narrative description / scope tag"),
  (r"^cr26\.FRR\.\*\.info\.(20x|rev5)\.subsets\.","L1","framework-specific subset declarations -> track subset Sets (title/description/scope) [corrected per FedRAMP #153]"),
  (r"^cr26\.FRR\.\*\.info\.(effective|20x|rev5)\.","L1","effectivity@1 on family Set (default / per-track)"),
- (r"^cr26\.FRR\.\*\.info\.flows\[\]",DROP,"process-flow diagrams: linked resources, not requirement data (D17)"),
+ (r"^cr26\.FRR\.\*\.info\.flows\[\]",DROP,FLOWS),
  (r"^cr26\.FRR\.\*\.info\.subsets\.\*\.(name|description)$","L1","subset Set: title / narrative description"),
  (r"^cr26\.FRR\.\*\.info\.subsets\.\*\.applicability\.","L1","scope@1 on subset Set (types/paths/classes/affects) + class & type Set composition"),
  (re.escape(RULE)+r"\.name$","L1","Requirement.title"),
@@ -259,9 +302,9 @@ RULES=[
  (re.escape(KSI)+r"\.terms\[\]$","L1","relations uses-term"),
  (re.escape(KSI)+r"\.updated\[\]\.",DROP,HISTORY),
  (re.escape(KVAR)+r"\.","L2","class-variants payload on the KSI Requirement"),
- (r"^cr26\.KSI\.\*\.(name|web_name|short_name)$","L1","KSI category Set: title/annotations/label"),
- (r"^cr26\.KSI\.\*\.id$",UNDECIDED,"no destination: the id of a KSI category Set is minted from the key the category stands under, and the category's own `id` is another string (the map read \"id\" until 2026-11-14; the ledger found nothing written)"),
- (r"^cr26\.KSI\.\*\.status$",UNDECIDED,"no destination: every KSI category Set is written `lifecycle: active`, whatever the status says (the map read \"lifecycle\" until 2026-11-14; the ledger found nothing written)"),
+ (r"^cr26\.KSI\.\*\.(name|web_name|short_name)$","L1","KSI category Set: title / annotations.web_name / label"),
+ (r"^cr26\.KSI\.\*\.id$","L1","KSI category Set: aliases[] (the theme's own id; the Set's URI is minted from the key the theme stands under)"),
+ (r"^cr26\.KSI\.\*\.status$","L1","the KSI category Set's `lifecycle` by the rule for a document's status, the lifecycle of its indicators and of the Mappings of their control links, and the word itself in narrative@1 of the category Set: status"),
  (r"^cr26\.CTL\.\*\.\*\.parameters\[\]\.","L1","CTL ODP assignments -> set-parameter ops on the rev5-odp-overlay Tailoring, statement-addressed via the declaring statement; tailored Rev 5 Requirements carried in-bundle (backlog #10 DRAINED, gate 3)"),
  (r"^cr26\.CTL\.\*\.\*\.","L2","CTL guidance/variants: parked payload on /cr26/set/ctl-overlay - FedRAMP supplemental prose on external controls (D20 supplements territory, not ODP addressing)"),
 ]
@@ -299,6 +342,50 @@ R_RULE_PROSE="base prose of a rule that states its text by class only, from its 
 R_KSI_PROSE="base prose of an indicator that states its text by class only, from its name"
 R_TRACK_TITLE="title of one track's share of a subset, from the subset's name"
 
+# The status of a document, and the kernel's lifecycle. The publisher gives a
+# family, the glossary and a KSI theme a status of three words (its schema:
+# `document_status`: stable, placeholder, empty; its AGENTS.md: "FRD and FRR
+# status is under their document info.status; KSI status is
+# KSI.<theme>.status", read 2026-11-14 at the publication's tag). The kernel's
+# lifecycle knows draft, active, deprecated, withdrawn. Until 2026-11-14 the
+# converter read no status and wrote `active` on everything, a family the
+# source marks `placeholder` and its rules among them.
+#
+# The mapping is the converter's and is stated as a rule: `stable` is the
+# source's word for a document that is settled and is written `active`;
+# `placeholder` and `empty` are its words for a document that is not, and
+# `draft` is the only state of the kernel that says so (deprecated and
+# withdrawn say that something has ended). The source's own word is kept
+# beside the mapped state, in narrative@1 of the Set that stands for the
+# document: the kernel has no place for it. A word outside the three stops
+# the run.
+#
+# Whose status it is. The status is the document's, and a document of this
+# source is its `info` and its `data`: the rules, or a theme's indicators.
+# No rule and no indicator has a status of its own. The publisher tells a
+# reader to check the document's status before reading an entry of it. So
+# the lifecycle of every object made from a document follows the document's
+# status: the Set of the family or theme, its subset Sets, its rules or
+# indicators, and the Mappings made of their control links. A rule of a
+# placeholder family is not written `active`: the source does not call it so.
+KSI_ID_SCHEME="fedramp-cr26:KSI.id"        # the alias scheme: the member of the publication the value is read from
+STATUS_LIFECYCLE={"stable":"active","placeholder":"draft","empty":"draft"}
+def _lifecycle(status):
+    if status not in STATUS_LIFECYCLE:
+        raise SystemExit(f"a document has the status {status!r}: the converter maps stable, placeholder and empty to a "
+                         f"lifecycle and guesses at no other word")
+    return STATUS_LIFECYCLE[status]
+R_LIFECYCLE="lifecycle of the Set that stands for a document, from the document's status (stable: active; placeholder, empty: draft)"
+R_MEMBER_LIFECYCLE=("lifecycle of an object made from a document (a subset Set, a rule or an indicator, a Mapping of "
+                    "its control links), from the document's status (stable: active; placeholder, empty: draft)")
+def lifecycle_of(status,rule):
+    """-> the lifecycle for an object of a document with this status. A
+    document that states none is not known to be settled: `draft`, counted."""
+    if status is None:
+        counters["objects-of-a-document-without-status"]+=1
+        return "draft"
+    return D(rule,_lifecycle,status)
+
 def tf_param(num,typ,name="timeframe",tightening="lower"):
     t=D(R_DURATION,_duration_type,typ)
     p={"name":name,"type":t,"num":num,"unit":typ,"tightening":tightening}
@@ -312,15 +399,16 @@ def tf_param(num,typ,name="timeframe",tightening="lower"):
 # when its floor rises or its ceiling falls: that is the tightening declared.
 TF_BOUNDS=(("timeframe_num_min","timeframe-min","higher"),("timeframe_num_max","timeframe-max","lower"))
 
-def control_mappings(owner,uri,controls,rationale):
+def control_mappings(owner,uri,controls,rationale,status):
     """The control links of a KSI or of a rule -> one Mapping each. The source
     types both lists alike (an array of control ids) and states no
-    relationship, so the untyped-import rule applies to both."""
+    relationship, so the untyped-import rule applies to both. `status`: of
+    the document the owner stands in."""
     global mappings
     for ctl in controls or []:
         rel=f"objects/map/{slug(owner)}--{slug(ctl)}.json"
         if rel in objects: raise SystemExit(f"{owner}: the control link {ctl!r} is written twice; two links would become one Mapping")
-        objects[rel]={"id":D(R_MAP_ID,_map_id,owner,ctl),"version":VER,"lifecycle":"active",
+        objects[rel]={"id":D(R_MAP_ID,_map_id,owner,ctl),"version":VER,"lifecycle":lifecycle_of(status,R_MEMBER_LIFECYCLE),
            "source-ref":uri,"target-ref":D(R_CONTROL,_control_uri,ctl),
            "relationship":"supports","direction":"source-to-target","confidence":"draft",
            "rationale":rationale,
@@ -345,10 +433,10 @@ class_tailorings={c:{"id":f"{NS}/tailoring/class-{c}","version":VER,"lifecycle":
 def add_narr(req,key,val):
     req.setdefault("facets",{}).setdefault(F_NARR,{})[key]=val
 
-def convert_rule(fam,trk,subk,rid,r):
+def convert_rule(fam,trk,subk,rid,r,status):
     global synth_prose,dangling_related,dev_records
     uri=f"{NS}/req/{rid}"
-    req={"id":uri,"version":VER,"label":rid,"lifecycle":"active",
+    req={"id":uri,"version":VER,"label":rid,"lifecycle":lifecycle_of(status,R_MEMBER_LIFECYCLE),
          "title":r.get("name",rid),"statements":[]}
     base_force=r.get("force"); mod=D(R_MODALITY,_modality,base_force) if base_force is not None else "unspecified"
     prose=r.get("statement")
@@ -392,7 +480,7 @@ def convert_rule(fam,trk,subk,rid,r):
     for n in copy.deepcopy(r.get("notification") or []):
         if n.get("name"): n["name"]=T(n["name"],"notification-name")
         if "optional" not in n: duties.append(n)
-        elif n["optional"] is True: optional.append(n)
+        elif flag(n["optional"]) is True: optional.append(n)
         else: raise SystemExit(f"{rid}: notification.optional is {n['optional']!r}; the converter knows only `true`")
     if duties: rep["notification"]=duties
     if optional:
@@ -445,7 +533,7 @@ def convert_rule(fam,trk,subk,rid,r):
     objects[f"objects/req/{slug(rid)}.json"]=req
     n=mappings
     control_mappings(rid,uri,r.get("controls"),
-        "Imported from the control list of a CR26 rule; the source carried no typed relationship (handbook 8.6).")
+        "Imported from the control list of a CR26 rule; the source carried no typed relationship (handbook 8.6).",status)
     counters["rule-control-mappings"]+=mappings-n
     return uri
 
@@ -455,7 +543,8 @@ def convert_ksi(catid,cat,iid,ind):
     prose=ind.get("statement")
     if prose is None:
         prose=D(R_KSI_PROSE,_ksi_prose,ind.get("name",iid))
-    req={"id":uri,"version":VER,"label":iid,"lifecycle":"active",
+    status=cat.get("status")
+    req={"id":uri,"version":VER,"label":iid,"lifecycle":lifecycle_of(status,R_MEMBER_LIFECYCLE),
          "title":ind.get("name",iid),
          "statements":[{"id":"s1","modality":"unspecified",
              "obligated-parties":[PARTY],"prose":{"en":prose}}]}
@@ -470,7 +559,7 @@ def convert_ksi(catid,cat,iid,ind):
     objects[f"objects/ksi/{slug(iid)}.json"]=req
     n=mappings
     control_mappings(iid,uri,ind.get("controls"),
-        "Imported from CR26 KSI control list; the source carried no typed relationship (handbook 8.6).")
+        "Imported from CR26 KSI control list; the source carried no typed relationship (handbook 8.6).",status)
     counters["ksi-control-mappings"]+=mappings-n
     return uri
 
@@ -482,6 +571,7 @@ class_members=collections.defaultdict(list); type_members=collections.defaultdic
 fam_entries=[]
 for fk,f in d["FRR"].items():
     fi=f["info"]; sub_entries=[]
+    status=fi.get("status")        # of the family as a document; every object made from it follows it
     common=fi.get("subsets",{})
     # FedRAMP layering (global by default, specific when needed): framework-
     # specific subsets are declared in info.20x.subsets / info.rev5.subsets.
@@ -497,16 +587,16 @@ for fk,f in d["FRR"].items():
             counters["track-declared-subsets"]+=len(t_infos)
         members=[]
         for rid,r in f["data"].get("all",{}).get(sk,{}).items():
-            members.append({"ref":convert_rule(fk,"all",sk,rid,r),"sequence":nseq()})
+            members.append({"ref":convert_rule(fk,"all",sk,rid,r,status),"sequence":nseq()})
         track_set_uris=[]
         for trk in ("20x","rev5"):
             tr_rules=f["data"].get(trk,{}).get(sk,{})
             if not tr_rules: continue
             tinfo=t_infos.get(trk,{})
             turi=f"{NS}/set/subset/{slug(fk)}-{slug(sk)}-{trk}"
-            tmem=[{"ref":convert_rule(fk,trk,sk,rid,r),"sequence":(i+1)*10}
+            tmem=[{"ref":convert_rule(fk,trk,sk,rid,r,status),"sequence":(i+1)*10}
                   for i,(rid,r) in enumerate(tr_rules.items())]
-            tset={"id":turi,"version":VER,"lifecycle":"active",
+            tset={"id":turi,"version":VER,"lifecycle":lifecycle_of(status,R_MEMBER_LIFECYCLE),
                 "title":tinfo["name"] if "name" in tinfo else
                         D(R_TRACK_TITLE,lambda n,t=trk: f"{n} ({t}-specific)",(sinfo or {}).get("name",sk)),
                 "label":sk if tinfo else f"{sk}-{trk}",
@@ -531,7 +621,7 @@ for fk,f in d["FRR"].items():
         if not members: counters["empty-subsets"]+=1; continue
         suri=f"{NS}/set/subset/{slug(fk)}-{slug(sk)}"
         sinfo=sinfo or {}
-        sobj={"id":suri,"version":VER,"lifecycle":"active",
+        sobj={"id":suri,"version":VER,"lifecycle":lifecycle_of(status,R_MEMBER_LIFECYCLE),
               "title":sinfo.get("name",sk),"label":sk,"members":members}
         ap=sinfo.get("applicability",{})
         if sinfo.get("description"): sobj.setdefault("facets",{}).setdefault(F_NARR,{})["description"]=T(sinfo["description"],"description")
@@ -541,10 +631,11 @@ for fk,f in d["FRR"].items():
         for c in ap.get("classes",[]) or []: class_members[c.lower()].append(suri)
         for t in ap.get("types",[]) or []: type_members[slug(t)].append(suri)
     furi=f"{NS}/set/tax/{slug(fk)}"
-    fobj={"id":furi,"version":VER,"lifecycle":"active",
+    fobj={"id":furi,"version":VER,"lifecycle":lifecycle_of(status,R_LIFECYCLE),
           "title":fi.get("name",fk),"label":fi.get("short_name",fk),
           "members":sub_entries,"annotations":{"web_name":fi.get("web_name","")}}
     narr={"description":T(fi.get("purpose",""),"description")}
+    if status is not None: narr["status"]=status        # the source's own word, beside the lifecycle it was mapped to
     fobj["facets"]={F_NARR:narr,F_SCOPE:{"tag":fi.get("tag")}}
     eff={}
     if fi.get("effective"): eff["default"]=fi["effective"]
@@ -567,9 +658,15 @@ for ck,cat in d["KSI"].items():
     entries=[{"ref":convert_ksi(ck,cat,iid,ind),"sequence":nseq()}
              for iid,ind in cat["indicators"].items()]
     curi=f"{NS}/set/ksi/{slug(ck)}"
-    objects[f"objects/set/ksi-{slug(ck)}.json"]={"id":curi,"version":VER,"lifecycle":"active",
+    cobj={"id":curi,"version":VER,"lifecycle":lifecycle_of(cat.get("status"),R_LIFECYCLE),
         "title":cat.get("name",ck),"label":cat.get("short_name",ck),
         "annotations":{"web_name":cat.get("web_name","")},"members":entries}
+    # The theme's own id (KSI-CED for the theme under the key CED). The Set's
+    # URI is minted from the key, as every id of this bundle is; the source's
+    # id is carried as what the kernel has for another name of an object.
+    if cat.get("id") is not None: cobj["aliases"]=[{"scheme":KSI_ID_SCHEME,"value":cat["id"]}]
+    if cat.get("status") is not None: cobj["facets"]={F_NARR:{"status":cat["status"]}}
+    objects[f"objects/set/ksi-{slug(ck)}.json"]=cobj
     ksi_cat_entries.append({"ref":curi,"sequence":nseq()})
 # terminology container
 terms_payload={}; ignore_in_terms={}
@@ -586,7 +683,7 @@ for tid,t in d["FRD"]["data"]["all"].items():
     # flag. It is carried beside the glossary, in the converter's own facet
     # on the same Set, keyed by the term's id, with the value the source wrote.
     if "ignore_in_terms" in t:
-        if not isinstance(t["ignore_in_terms"],bool):
+        if flag(t["ignore_in_terms"]) is None:
             raise SystemExit(f"{tid}: ignore_in_terms is {t['ignore_in_terms']!r}; the converter knows a boolean")
         ignore_in_terms[tid]=t["ignore_in_terms"]
     counters["updated-entries"]+=len(t.get("updated",[]) or [])
@@ -682,6 +779,10 @@ for c,t in class_tailorings.items():
     if t["operations"]: objects[f"objects/tailoring/class-{c}.json"]=t
 
 # ---- checks on what is about to be written; nothing is on disk yet ----
+# The flags of the source stand in the objects as values that know their
+# origin. The plain booleans take their place here, before a file is written
+# or a digest taken; the ledger remembers where each stood.
+led.resolve(objects)
 for rel,o in objects.items(): no_fraction(o,rel)
 # The census of the report is counted on the source, the objects on what was
 # built. An id that occurs twice would overwrite its first object, and the
@@ -693,16 +794,43 @@ if n_built!=sum(n_rules.values())+n_ksi:
     raise SystemExit(f"the source has {sum(n_rules.values())} rules and {n_ksi} KSIs, the conversion built {n_built} "
                      f"Requirements for them: an id occurs twice")
 
+# The carried Rev 5 Requirements bring the pins of their facets (#17
+# fail-closed): each is the pinned schema of the SP 800-53 bundle itself, as
+# that bundle's manifest lists it. Until 2026-11-14 this converter wrote four
+# such schemas from its own text; a change of the SP 800-53 conversion (a new
+# member of a facet, another facet on a control) would have left this bundle
+# with a pin that no longer fits the objects it carries.
+with open(os.path.join(NISTB,"content-manifest.json"),encoding="utf-8") as _f: _nist_pins={s["id"]:s for s in json.load(_f)["facet-schemas"]}
+carried_pins={}        # facet id -> the pinned schema descriptor of the SP 800-53 bundle
+for _cid,_robj in sorted(ctl_carried.items()):
+    for _key in _robj.get("facets",{}):
+        _fid=_key.rsplit("@",1)[0]
+        if _fid in carried_pins: continue
+        if _fid not in _nist_pins:
+            raise SystemExit(f"the carried Requirement {_robj['id']} has the facet {_key}, and the manifest of the SP 800-53 "
+                             f"bundle pins no schema for it")
+        with open(os.path.join(NISTB,*_nist_pins[_fid]["path"].split("/")),encoding="utf-8") as _f: carried_pins[_fid]=(_nist_pins[_fid]["path"],json.load(_f))
+
+pinned=[]              # the schema files this run writes, for the manifest and the cleanup
 def stub(path,fid,mods,props):
     # 26 delivered: pins are the normative payload contract, fail-closed
+    if fid in carried_pins:
+        # a facet this converter writes itself and a carried Requirement uses too: one schema that knows both shapes
+        _theirs=carried_pins.pop(fid)[1]["schema"].get("properties",{})
+        for k,v in _theirs.items():
+            if props.setdefault(k,v)!=v:
+                raise SystemExit(f"the facet {fid}: this converter and the SP 800-53 bundle type the member {k!r} differently")
     w(path,{"id":fid,"version":"1.0.0","modifies-semantics":mods,
         "note":"NORMATIVE pinned payload schema (backlog 26): closed shape - unknown keys are rejected, never smuggled",
         "schema":{"$schema":"https://json-schema.org/draft/2020-12/schema","type":"object","properties":props,
                   "additionalProperties":False}})
+    pinned.append(path)
 def pin_stdlib(fn):
-    import shutil as _sh
     src=os.path.join(ROOT,"jascon","schemas","stdlib",fn)
-    w(f"schemas/{fn}",json.load(open(src,encoding="utf-8")))
+    with open(src,encoding="utf-8") as f: desc=json.load(f)
+    carried_pins.pop(desc["id"],None)        # the standard library's descriptor is the pin, whoever uses the facet
+    w(f"schemas/{fn}",desc)
+    pinned.append(f"schemas/{fn}")
 pin_stdlib("terminology-1.0.0.json")   # 26: stdlib pins are VERBATIM
 pin_stdlib("reporting-obligation-1.0.0.json")
 pin_stdlib("effectivity-1.0.0.json")
@@ -713,6 +841,8 @@ stub("schemas/cr26-narrative-stub.json",F_NARR.split("@")[0],[],
      {"description":{"type":"object"},"note":{"type":"object"},"notes":{"type":"object"},
       "schema-name":{"type":"string"},"reference":{"type":"string"},"danger":{"type":"object"},
       "corrective-actions":{"type":"object"},
+      # the source's own word for the status of a document, beside the kernel's lifecycle it was mapped to
+      "status":{"type":"string"},
       # a notification the source marks optional: the entry of reporting-obligation@1, and its flag
       "optional-notification":{"type":"array","minItems":1,"items":{"type":"object","additionalProperties":False,
           "required":["optional"],
@@ -722,19 +852,13 @@ stub("schemas/cr26-narrative-stub.json",F_NARR.split("@")[0],[],
       # the glossary's second flag, by term id (on the Set that hosts terminology@1)
       "ignore-in-terms":{"type":"object","minProperties":1,"additionalProperties":{"type":"boolean"}}})
 stub("schemas/oscal-1x-compat-stub.json",F_COMPAT.split("@")[0],[],{"class-variants":{"type":"object"},"ctl":{"type":"object"}})
-# carried Rev 5 Requirements bring their facet pins (#17 fail-closed)
-stub("schemas/sp800-53-narrative-stub.json","https://ns.nist.gov/sp800-53/facet/narrative",[],{"guidance":{"type":"array"}})
-stub("schemas/sp800-53a-stub.json","https://ns.nist.gov/sp800-53/facet/sp800-53a",[],{"objectives":{"type":"array"},"methods":{"type":"array"}})
-stub("schemas/sp800-53-odp-stub.json","https://ns.nist.gov/sp800-53/facet/odp",[],{"params":{"type":"object"}})
-stub("schemas/sp800-53-rmf-stub.json","https://ns.nist.gov/sp800-53/facet/rmf",[],{"contributes-to-assurance":{"type":"boolean"}})
+# the pins the carried Rev 5 Requirements bring, as the SP 800-53 bundle holds them
+for _fid,(_path,_desc) in sorted(carried_pins.items()):
+    if _path in pinned: raise SystemExit(f"two pinned schemas would be written to {_path}")
+    w(_path,_desc); pinned.append(_path)
 
 # stale-file cleanup (files only, never rmdir): everything not re-emitted goes
-want={os.path.normpath(r) for r in objects}|{"content-manifest.json"}
-want|={os.path.normpath(f"schemas/{s}") for s in
-       ("terminology-1.0.0.json","reporting-obligation-1.0.0.json","effectivity-1.0.0.json",
-        "assessment-criteria-1.0.0.json","cr26-scope-stub.json","cr26-narrative-stub.json",
-        "oscal-1x-compat-stub.json","sp800-53-narrative-stub.json","sp800-53a-stub.json",
-        "sp800-53-odp-stub.json","sp800-53-rmf-stub.json")}
+want={os.path.normpath(r) for r in objects}|{"content-manifest.json"}|{os.path.normpath(p) for p in pinned}
 if os.path.exists(OUT):
     import time as _t
     for base,_,files in os.walk(OUT):
@@ -749,14 +873,19 @@ if os.path.exists(OUT):
 from oscal_conv_lib import textify
 for o in objects.values(): textify(o,LANG)   # 12 delivery
 for rel,o in objects.items(): w(rel,o)
-manifest={"manifest-version":"1",
+manifest={"manifest-version":"1"}
+# A carried Requirement may hold what the 1.0.0 kernel cannot type; the
+# manifest then names the kernel it needs (KERNEL-1), as the library's own
+# writer does. The objects this converter makes itself need none.
+if needs_kernel_2(objects.values()): manifest["kernel-version"]="2.0.0"
+manifest.update({
  "provenance":{"source":d["info"]["title"],"source-version":VER,
                "last_updated":d["info"]["last_updated"],"converter":"convert_cr26.py v0.1"},
  "objects":[{"id":o["id"],"version":o["version"],"package-digest":shaf(rel),
              "semantic-digest":sdig(o),"path":rel} for rel,o in sorted(objects.items())],
- "facet-schemas":[]}
+ "facet-schemas":[]})
 for s in sorted(os.listdir(os.path.join(OUT,"schemas"))):
-    sd=json.load(open(os.path.join(OUT,"schemas",s)))
+    with open(os.path.join(OUT,"schemas",s),encoding="utf-8") as _f: sd=json.load(_f)
     manifest["facet-schemas"].append({"id":sd["id"],"exact-version":sd["version"],
         "digest":shaf(f"schemas/{s}"),"path":f"schemas/{s}"})
 w("content-manifest.json",manifest)
@@ -769,33 +898,27 @@ MANIFEST_DIGEST=shaf("content-manifest.json")
 
 # ---------------- the ledger: every source value, checked against the files just written ----------------
 # A drop is declared for exactly the paths the path map says are not carried,
-# with the reason the map gives. Nothing else is declared here: what reaches
-# no file and has no such row stays unaccounted until the author decides it.
+# with the reason the map gives: the two classes that were declared before
+# 2026-11-14. No other drop is declared, and none is added: a value that
+# reaches no file is unaccounted, and the run ends with 1 (ledger_gate, the
+# last statement of this script).
 for _pat,_level,_why in RULES:
     if _level==DROP: led.drop(_pat,_why)
 LEDGER=led.account(OUT,{**objects,"content-manifest.json":manifest})
 LT=LEDGER["totals"]; LFAIL=LEDGER["verification-failures"]
 
-# What the ledger cannot follow: a value that is no string and no integer (a
-# flag, a fraction) cannot carry an origin, so the ledger lists it as
-# unaccounted wherever it went. Counted here by path, from the source as it
-# was loaded, so that the report can tell these from values that are not
-# carried. That they stand in the bundle is held by test_convert_cr26.py,
-# which reads each of them at its destination.
-no_origin=collections.Counter(); no_origin_kinds=collections.Counter()
-def _no_origin(n,pref):
-    if isinstance(n,dict):
-        for k,v in n.items(): _no_origin(v,f"{pref}.{k}")
-    elif isinstance(n,list):
-        for v in n: _no_origin(v,f"{pref}[]")
-    elif isinstance(n,bool) or not isinstance(n,(str,int)):
-        no_origin[normalize(pref)]+=1
-        no_origin_kinds["boolean" if isinstance(n,bool) else "null" if n is None else "number that is no integer"]+=1
-_no_origin(led.docs["cr26"],"cr26")
+# The ledger follows strings, numbers and flags. A null of the source states
+# nothing and has no origin to carry; it would read as unaccounted. Counted,
+# so that the report says so if a publication ever has one.
+def _nulls(n):
+    if isinstance(n,dict): return sum(_nulls(v) for v in n.values())
+    if isinstance(n,list): return sum(_nulls(v) for v in n)
+    return 1 if n is None else 0
+n_null=_nulls(led.docs["cr26"])
 
 # The ledger by path, and the path map held to it. For every path: how many
-# of its values were copied, transformed, dropped for a declared reason, or
-# are unaccounted.
+# of its values were copied, transformed, are no content by a checked rule,
+# were dropped for a declared reason, or are unaccounted.
 by_path=collections.defaultdict(collections.Counter)
 for _e in LEDGER["entries"]: by_path[_e["path"]][_e["outcome"]]+=1
 if {p:sum(c.values()) for p,c in by_path.items()}!=dict(paths):
@@ -803,12 +926,12 @@ if {p:sum(c.values()) for p,c in by_path.items()}!=dict(paths):
 rules_used=collections.Counter()        # rule -> source values it accounts for
 for _e in LEDGER["entries"]:
     for _r in {_d["rule"] for _d in _e.get("destinations",[]) if "rule" in _d}: rules_used[_r]+=1
+not_content=collections.Counter((_e["kind"],_e["rule"]) for _e in LEDGER["entries"] if _e["outcome"]=="not-content")
 # Three ways a row of the path map can be contradicted by what was written:
-# it names a destination (L1, L2) and a value of its path that can carry an
-# origin reached no file; it says "not carried" (a declared drop, undecided)
-# and a value of its path was written; it is L1, a kernel field or a facet
-# with a schema, and no value of its path stands anywhere but in the parked
-# payload, which is L2.
+# it names a destination (L1, L2) and a value of its path reached no file;
+# it says "not carried" (a declared drop) and a value of its path was
+# written; it is L1, a kernel field or a facet with a schema, and no value of
+# its path stands anywhere but in the parked payload, which is L2.
 _parked="/facets/"+F_COMPAT.replace("~","~0").replace("/","~1")+"/"
 outside_parked=collections.Counter()        # path -> values with a destination outside the parked payload
 for _e in LEDGER["entries"]:
@@ -816,24 +939,40 @@ for _e in LEDGER["entries"]:
 claims=[]
 for _p,_c in sorted(by_path.items()):
     _level=dest(_p)[0]
-    if _level in ("L1","L2") and _c["unaccounted"]>no_origin.get(_p,0):
+    if _level in ("L1","L2") and _c["unaccounted"]+_c["intentionally-dropped"]+_c["not-content"]:
         claims.append({"path":_p,"level":_level,"values":sum(_c.values()),
-                       "without-a-destination":_c["unaccounted"]-no_origin.get(_p,0)})
-    if _level in (DROP,UNDECIDED) and _c["copied"]+_c["transformed"]:
+                       "without-a-destination":_c["unaccounted"]+_c["intentionally-dropped"]+_c["not-content"]})
+    if _level==DROP and _c["copied"]+_c["transformed"]:
         claims.append({"path":_p,"level":_level,"values":sum(_c.values()),"written-all-the-same":_c["copied"]+_c["transformed"]})
     if _level=="L1" and _c["copied"]+_c["transformed"] and not outside_parked[_p]:
         claims.append({"path":_p,"level":_level,"values":sum(_c.values()),"only-in-the-parked-payload":_c["copied"]+_c["transformed"]})
-# the unaccounted values in the classes the report prints
 def _no_phrase(pointer):
     """A pointer segment with a space in it is a key of the source that is a
     phrase of the publication (two nodes of a flow diagram). The reports and
     the record reproduce no text of it and print `*` for such a segment."""
     return "/".join("*" if " " in seg else seg for seg in pointer.split("/"))
-unacc=[{"path":u["path"],"count":u["count"],"example":_no_phrase(u["pointers"][0]),
-        "class":("no origin" if u["count"]==no_origin.get(u["path"],0) else
-                 "not carried" if not no_origin.get(u["path"]) else "mixed")} for u in LEDGER["unaccounted-paths"]]
-n_no_origin=sum(u["count"] for u in unacc if u["class"]=="no origin")
-n_not_carried=sum(u["count"] for u in unacc if u["class"]!="no origin")
+unacc=[{"path":u["path"],"count":u["count"],"example":_no_phrase(u["pointers"][0])} for u in LEDGER["unaccounted-paths"]]
+
+# The drops that are declared, for the table the author asked for: per
+# reason the source paths, the count, one example and the converter's reading
+# under the rule "real content is never dropped". The example is a value that
+# is no text (a date, an id) where the class has one, with its pointer; a
+# report of this conversion reproduces no prose of the publication.
+def _plain_example(source):
+    node=led.docs["cr26"]
+    for seg in source.split("#",1)[1].split("/")[1:]:
+        seg=seg.replace("~1","/").replace("~0","~")
+        node=node[int(seg)] if isinstance(node,list) else node[seg]
+    return node if not isinstance(node,str) or (" " not in node and len(node)<=40) else None
+declared_drops=[]
+for _why in sorted({_e["reason"] for _e in LEDGER["entries"] if _e["outcome"]=="intentionally-dropped"}):
+    _mine=[_e for _e in LEDGER["entries"] if _e["outcome"]=="intentionally-dropped" and _e["reason"]==_why]
+    _ex=next(((_e["source"],_plain_example(_e["source"])) for _e in _mine if _plain_example(_e["source"]) is not None),
+             (_mine[0]["source"],None))
+    declared_drops.append({"reason":_why,"source-values":len(_mine),
+                           "paths":[{"path":p,"count":n} for p,n in sorted(collections.Counter(_e["path"] for _e in _mine).items())],
+                           "example":{"source":_no_phrase(_ex[0]),**({"value":_ex[1]} if _ex[1] is not None else {})},
+                           "reading":DROP_READING.get(_why,"no reading stated")})
 
 # What the ledger cannot see: it follows source values into the bundle, not
 # the bundle back to the source. A value the converter writes on its own (a
@@ -862,8 +1001,15 @@ _own(manifest,"content-manifest.json","manifest",[])
 
 # The record: one row per source path and outcome, as the library makes it
 # from the per-leaf ledger (which has one entry for each source value and is
-# not written). The one thing done to it here: no pointer prints a phrase.
-LEDGER_RECORD=ledger_by_path(LEDGER)
+# not written). A payload that is keyed by an id of the source (a term, a
+# control of the overlay, a class) is one row and not one per id. The one
+# thing done to the library's result here: no pointer prints a phrase.
+def _facet(f): return "/facets/"+re.escape(f.replace("~","~0").replace("/","~1"))
+LEDGER_RECORD=ledger_by_path(LEDGER,collapse=[
+    (rf"^({_facet(F_TERM)}/terms)/[^/]+",r"\1/{term-id}"),
+    (rf"^({_facet(F_NARR)}/ignore-in-terms)/[^/]+",r"\1/{term-id}"),
+    (rf"^({_facet(F_COMPAT)}/ctl)/[^/]+/[^/]+",r"\1/{control-family}/{control}"),
+    (rf"^({_facet(F_COMPAT)}/class-variants)/[^/]+",r"\1/{class}")])
 for _row in LEDGER_RECORD["paths"]:
     _row["example"]=_no_phrase(_row["example"])
     for _d in _row.get("to",[]): _d["pointer"]=_no_phrase(_d["pointer"])
@@ -889,23 +1035,38 @@ n_force=paths[RULE+".force"]; n_vforce=paths[VAR+".force"]
 fractions=[{"path":p,"count":n} for p,n in sorted(fraction_paths.items())]
 by_level=collections.Counter()
 for _p,_n,_l,_t in rows: by_level[_l]+=_n
-drops_declared=collections.Counter(_e["reason"] for _e in LEDGER["entries"] if _e["outcome"]=="intentionally-dropped")
+# The lifecycle of every object, and where it comes from: a document's status
+# by rule (the ledger names those objects), the SP 800-53 bundle for a carried
+# Requirement, or the converter itself for an object it makes for the
+# publication as a whole, for which the source states no status.
+_from_status={_d["object"] for _e in LEDGER["entries"] for _d in _e.get("destinations",[]) if _d["pointer"]=="/lifecycle"}
+lifecycle_by_origin=collections.Counter()
+for _o in objects.values():
+    _origin=("from the status of a document" if _o["id"] in _from_status else
+             "as the SP 800-53 bundle has it" if _o["id"].startswith(NIST+"/") else "the converter's own")
+    lifecycle_by_origin[(_origin,_o["lifecycle"])]+=1
+status_words=collections.Counter()
+for _f in led.docs["cr26"]["FRR"].values(): status_words[("family",_f["info"].get("status"))]+=1
+for _c in led.docs["cr26"]["KSI"].values(): status_words[("KSI category",_c.get("status"))]+=1
 j={"source":d["info"]["title"],"version":VER,
    "totals":{"leaf-values":total,"mapped":mapped,"unmapped":total-mapped,
              "coverage-pct":round(100*mapped/total,3),
-             "mapped-by-level":{l:by_level[l] for l in ("L1","L2",DROP,UNDECIDED) if by_level[l]}},
+             "mapped-by-level":{l:by_level[l] for l in ("L1","L2",DROP) if by_level[l]}},
    "ledger":{"file":LEDGER_FILE,"leaf-values":LEDGER["leaf-values"],"totals":dict(LT),
              "verification-failures":len(LFAIL),
              "rules":[{"rule":r,"source-values":n} for r,n in sorted(rules_used.items())],
-             "declared-drops":[{"reason":r,"source-values":n} for r,n in sorted(drops_declared.items())],
-             "unaccounted":{"no-origin":n_no_origin,"written-nowhere":n_not_carried,"by-path":unacc},
-             "values-that-cannot-carry-an-origin":{"by-kind":dict(sorted(no_origin_kinds.items())),
-                                                   "by-path":[{"path":p,"count":n} for p,n in sorted(no_origin.items())]},
+             "not-content":[{"kind":k,"rule":r,"source-values":n} for (k,r),n in sorted(not_content.items())],
+             "declared-drops":declared_drops,
+             "unaccounted":unacc,
+             "nulls-in-the-source":n_null,
              "path-map-rows-the-ledger-contradicts":claims,
              "written-values-with-no-source-value":[{"written-as":k,"leaf-values":bundle_leaves[k],
                                                      "no-source-value":own_values[k]} for k in sorted(bundle_leaves)]},
    "objects":{"requirements(rules+ksi)":nreq,"mappings":mappings,"sets":nset,
               "tailorings":ntail,"total":len(objects)},
+   "lifecycle":{"status-of-the-source":[{"document":k,"status":s,"count":n} for (k,s),n in sorted(status_words.items(),key=str)],
+                "rule":dict(STATUS_LIFECYCLE),
+                "objects":[{"lifecycle":l,"origin":o,"count":n} for (o,l),n in sorted(lifecycle_by_origin.items())]},
    "bundle":{"content-manifest-digest":MANIFEST_DIGEST,"objects":len(manifest["objects"]),
              "facet-schemas":len(manifest["facet-schemas"])},
    "modality(rule-level)":dict(mod_hist),
@@ -929,10 +1090,10 @@ md=[f"# CR26 -> Semantic Core: Coverage Report (computed)\n",
  f"- Mapped: **{mapped:,}** -> **UNMAPPED: {total-mapped}** -> coverage **{j['totals']['coverage-pct']} %**",
  f"- \"Mapped\" means that the path has a row in the path map below, not that its values are in the bundle. Of the "
  f"{mapped:,}: **{by_level['L1']+by_level['L2']:,}** on rows that name a destination (L1 {by_level['L1']:,}, L2 "
- f"{by_level['L2']:,}), **{by_level[DROP]:,}** on rows that declare the path not carried, **{by_level[UNDECIDED]:,}** "
- f"on rows that say nothing is written and nothing is decided. What arrived, value by value, is the ledger's to "
- f"say (below): {LT['copied']:,} copied, {LT['transformed']:,} transformed, {LT['intentionally-dropped']:,} dropped "
- f"for a declared reason, {LT['unaccounted']:,} unaccounted.",
+ f"{by_level['L2']:,}), **{by_level[DROP]:,}** on rows that declare the path not carried. What arrived, value by "
+ f"value, is the ledger's to say (below): {LT['copied']:,} copied, {LT['transformed']:,} transformed, "
+ f"{LT['not-content']:,} no content by a checked rule, {LT['intentionally-dropped']:,} dropped for a declared "
+ f"reason, {LT['unaccounted']:,} unaccounted.",
  f"- Emitted: **{nreq} Requirements** (FRR rules + KSIs), **{mappings} Mapping objects**, "
  f"**{nset} Sets** ({set_kinds['tax']} families, {set_kinds['subset']} subsets, {set_kinds['class']} classes, "
  f"{set_kinds['type']} tracks, {set_kinds['ksi']} KSI categories, and "
@@ -949,6 +1110,27 @@ md=[f"# CR26 -> Semantic Core: Coverage Report (computed)\n",
  f"- **force -> modality** (rule level): "+", ".join(f"{k} x{v}" for k,v in sorted(mod_hist.items(),key=lambda x:-x[1]))
  +f". Class-variant forces become **Tailoring ops**: {dict(ops_emitted)}; easings auto-carry a converter Deviation "
  f"(approver: FedRAMP, rationale: published class variant) x{dev_records}.",
+ f"- **status -> lifecycle**, by rule. The source gives a family and a KSI category the status of a document, in "
+ f"three words (its schema: stable, placeholder, empty): "
+ +"; ".join(f"{k} `{s}` x{n}" for (k,s),n in sorted(status_words.items(),key=str))
+ +f". The kernel's lifecycle knows draft, active, deprecated, withdrawn. The converter's mapping: "
+ +", ".join(f"`{s}` -> `{l}`" for s,l in STATUS_LIFECYCLE.items())
+ +f"; a word outside the three stops the run. `stable` is the source's word for a document that is settled; "
+ f"`placeholder` and `empty` say that it is not, and `draft` is the only state of the kernel that says so. The "
+ f"source's own word is kept beside the mapped state, in narrative@1 of the Set that stands for the document "
+ f"(`status`): the kernel has no place for it. The status is the document's, and a document of this source is its "
+ f"rules or indicators, none of which has a status of its own; the lifecycle of every object made from a document "
+ f"therefore follows the document's status - its Set, its subset Sets, its rules or indicators and the Mappings of "
+ f"their control links. Objects by lifecycle and where it comes from: "
+ +"; ".join(f"`{l}` x{n} {o}" for (o,l),n in sorted(lifecycle_by_origin.items()))
+ +f". Until 2026-11-14 the converter read no status and wrote `active` on every object. The converter's own "
+ f"`active` stands on the objects it makes for the publication as a whole (the root, the class and track Sets, the "
+ f"CTL overlay and the Set of the carried Rev 5 Requirements, the Tailorings), for which the source states no status."
+ +(f" Objects of a document that states no status, written `draft`: "
+   f"x{counters['objects-of-a-document-without-status']}." if counters.get("objects-of-a-document-without-status") else ""),
+ f"- **The id of a KSI category** (x{paths['cr26.KSI.*.id']}) is carried as an alias of the category's Set "
+ f"(`aliases`, scheme `{KSI_ID_SCHEME}`). The Set's own URI is minted from the key the category stands under, as "
+ f"every id of this bundle is minted from a key of the source.",
  f"- **affects[] -> obligated-parties[]** (parties minted as codes); subset applicability -> scope@1 on subset Sets "
  f"and composed **class Sets (a-d)** and **type Sets (20x/Rev5)** - sets-of-sets (D21).",
  obligated_party_line(PARTY,PARTY_ORIGIN,PARTY_DEFAULT,
@@ -1034,20 +1216,23 @@ md=[f"# CR26 -> Semantic Core: Coverage Report (computed)\n",
  f"- **Deviation ceremony question (spec feedback):** authority-published prose variants would require "
  f"replace-prose(substantive)+Deviation under D13; converter parks prose variance in L2 instead - "
  f"open design question for v0.6."]
-_plural={"boolean":"booleans","null":"nulls","number that is no integer":"numbers that are no integers"}
-_kinds=", ".join(f"{n} {k if n==1 else _plural[k]}" for k,n in sorted(no_origin_kinds.items()))
 md+=["\n## Conversion ledger (measured per source value)\n",
  f"The path map says where a source path is declared to go. The ledger follows each of the "
- f"{LEDGER['leaf-values']:,} source leaf values: a value the converter hands on unchanged carries its origin into "
- f"the bundle, a value it computes is stated as a named rule, and after the bundle is written every claim is read "
- f"back from the files. `{LEDGER_FILE}` holds the result, one row per source path and outcome (backlog #41).\n",
+ f"{LEDGER['leaf-values']:,} source leaf values, flags and fractions among them: a value the converter hands on "
+ f"unchanged carries its origin into the bundle, a value it computes is stated as a named rule, and after the "
+ f"bundle is written every claim is read back from the files. `{LEDGER_FILE}` holds the result, one row per source "
+ f"path and outcome (backlog #41). Real content is never dropped (author, 2026-11-14): a value is carried, or it is "
+ f"no content by a rule the ledger checks, and a run with one unaccounted value ends with 1.\n",
  f"- **{LT['copied']:,} copied**: the value stands, with its type, at the destination named.",
  f"- **{LT['transformed']:,} transformed** by a named rule; the rule was applied to the source again and the result "
  f"compared with the file. A value that is copied to one place and transformed for another counts as copied.",
- f"- **{LT['intentionally-dropped']:,} dropped for a declared reason**: exactly the paths the path map marks "
- f"`{DROP}`, with the reason it gives.",
- f"- **{LT['unaccounted']:,} unaccounted**: no destination and no declared reason. {n_no_origin} of them are values "
- f"the ledger cannot follow; {n_not_carried} are written nowhere. Both are listed below.",
+ f"- **{LT['not-content']:,} no content** by a checked rule (a name that only selects a field, a namespace, an id "
+ f"that is rebuilt exactly from another value)."
+ +(" This source has no value of the three kinds, and the converter declares none." if not not_content else ""),
+ f"- **{LT['intentionally-dropped']:,} dropped for a declared reason**: the two classes that were declared before "
+ f"the author's rule, exactly the paths the path map marks `{DROP}`. Neither is one of the three kinds above. "
+ f"Whether they are content is the author's to decide; they are listed below with the converter's reading.",
+ f"- **{LT['unaccounted']:,} unaccounted**: no destination and no declared reason.",
  f"- Claims that did not hold against the written files: **{len(LFAIL)}**.",
  f"- Rows of the path map that the ledger contradicts (a destination named and a value of the path written "
  f"nowhere; a path declared not carried and written all the same; a row marked L1 whose values stand only in the "
@@ -1057,19 +1242,21 @@ md+=["\n## Conversion ledger (measured per source value)\n",
  "Each rule is a function of source values; a rule's count is the number of source values it accounts for.\n",
  "| rule | source values |\n|---|---:|"]
 md+=[f"| {r} | {n:,} |" for r,n in sorted(rules_used.items())]
-md+=["\n### Declared drops\n","| reason (the path map's) | source values |\n|---|---:|"]
-md+=[f"| {r} | {n:,} |" for r,n in sorted(drops_declared.items())] or ["| *(none)* | 0 |"]
-md+=["\n### Values the ledger cannot follow\n",
- f"A value that is no string and no integer cannot carry an origin, so the ledger lists it as unaccounted wherever "
- f"it went: {_kinds or 'none in this publication'}. The ledger says nothing about them. Where each of them stands in "
- f"the bundle is read by `test_convert_cr26.py`, value by value, and the workflow runs that test.\n",
- "| path | values |\n|---|---:|"]
-md+=[f"| `{p}` | {n} |" for p,n in sorted(no_origin.items())] or ["| *(none)* | 0 |"]
-md+=["\n### Unaccounted and written nowhere\n",
- "No destination and no declared reason: carried by no rule, dropped by no decision. Each class is the author's to "
- "decide (carry, and where; or drop, and why). The run does not fail on them.\n",
+md+=["\n### No content, by a checked rule\n","| kind | rule | source values |\n|---|---|---:|"]
+md+=[f"| {k} | {r} | {n:,} |" for (k,r),n in sorted(not_content.items())] or ["| *(none)* | | 0 |"]
+md+=["\n### Declared drops, and the converter's reading of each\n",
+ "Declared before 2026-11-14 and left declared: the author decides whether a class is content. The reading is the "
+ "converter's and decides nothing. The example is a value of the class that is no prose (a date, an id), with "
+ "its pointer.\n",
+ "| source paths | values | declared reason | example | reading |\n|---|---:|---|---|---|"]
+md+=[f"| {'<br>'.join('`'+x['path']+'` x'+str(x['count']) for x in dd['paths'])} | {dd['source-values']:,} | {dd['reason']} | "
+     f"`{dd['example']['source']}`"+(f" = `{dd['example']['value']}`" if "value" in dd["example"] else "")
+     +f" | {dd['reading']} |" for dd in declared_drops] or ["| *(none)* | 0 | | | |"]
+md+=["\n### Unaccounted\n",
+ "No destination, no checked rule and no declared reason. A run with one such value ends with 1.\n",
  "| path | values | first value |\n|---|---:|---|"]
-md+=[f"| `{u['path']}` | {u['count']} | `{u['example']}` |" for u in unacc if u["class"]!="no origin"] or ["| *(none)* | 0 | |"]
+md+=[f"| `{u['path']}` | {u['count']} | `{u['example']}` |" for u in unacc] or ["| *(none)* | 0 | |"]
+if n_null: md+=[f"\nThe source has {n_null} null value(s). A null states nothing and carries no origin; the ledger reads it as unaccounted."]
 md+=["\n### What the ledger cannot see\n",
  "The ledger follows source values into the bundle, not the bundle back to the source. A value the converter writes "
  "on its own has no source value behind it and no entry: a constant (a lifecycle, a relationship, a tightening, the "
@@ -1092,28 +1279,28 @@ print(f"reqs(rules+ksi): {nreq}  mappings: {mappings}  sets: {nset}  tailorings:
 print(f"leaves: {total:,}  mapped: {mapped:,}  UNMAPPED: {total-mapped}")
 print("modality:",dict(mod_hist)," ops:",dict(ops_emitted)," conv-deviations:",dev_records)
 print("counters:",dict(counters)," synth:",synth_prose)
-print(f"ledger: copied {LT['copied']:,}, transformed {LT['transformed']:,}, dropped for a declared reason "
-      f"{LT['intentionally-dropped']:,}, unaccounted {LT['unaccounted']:,} (the ledger cannot follow {n_no_origin}, "
-      f"written nowhere {n_not_carried}); failed checks {len(LFAIL)}; path-map rows contradicted {len(claims)}")
+print(f"ledger: copied {LT['copied']:,}, transformed {LT['transformed']:,}, no content {LT['not-content']:,}, dropped for a "
+      f"declared reason {LT['intentionally-dropped']:,}, unaccounted {LT['unaccounted']:,}; failed checks {len(LFAIL)}; "
+      f"path-map rows contradicted {len(claims)}")
 if unacc:
-    print("UNACCOUNTED (listed in the report; the run does not fail on them):")
-    for u in unacc: print("  ",u["path"],"x",u["count"],"-",u["class"])
+    print("UNACCOUNTED:")
+    for u in unacc: print("  ",u["path"],"x",u["count"],"- first:",u["example"])
 for c in claims: print("PATH MAP CONTRADICTED:",c)
-print("written:",OUTDIR)
-# The exit code says what the two gates say. The bundle, the reports and the
-# ledger record are on disk either way: they say what is wrong.
-#   UNMAPPED = 0: every source leaf has a row in the path map.
-#   No claim of the ledger fails: every value the converter says it carried,
-#   by copy or by rule, is what stands in the written file.
-problems=[]
-if unmapped:
-    print("UNMAPPED:"); [print("  ",p,"x",n) for p,n in unmapped]
-    problems.append(f"{total-mapped} source leaf value(s) on {len(unmapped)} path(s) have no declared destination "
-                    f"(gate: UNMAPPED = 0). The bundle is not a complete conversion of this source.")
 if LFAIL:
     print("LEDGER CLAIMS THAT DO NOT HOLD:"); [print("  ",x) for x in LFAIL[:30]]
-    problems.append(f"{len(LFAIL)} claim(s) of the conversion ledger do not hold against the written files: a value "
-                    f"said to be copied, or made by a rule, is not what the file holds.")
-if problems:
+print("written:",OUTDIR)
+# The exit code says what the gates say. The bundle, the reports and the
+# ledger record are on disk either way: they say what is wrong.
+#   UNMAPPED = 0: every source leaf has a row in the path map.
+#   The ledger: no claim fails against the written files, and no source value
+#   is unaccounted (ledger_gate; author, 2026-11-14: "a converter run with an
+#   unaccounted value exits non-zero").
+if unmapped:
+    print("UNMAPPED:"); [print("  ",p,"x",n) for p,n in unmapped]
     sys.stdout.flush()
-    raise SystemExit("convert_cr26.py: "+" Also: ".join(problems))
+    raise SystemExit(f"convert_cr26.py: {total-mapped} source leaf value(s) on {len(unmapped)} path(s) have no declared "
+                     f"destination (gate: UNMAPPED = 0). The bundle is not a complete conversion of this source. The "
+                     f"conversion ledger of this run: {len(LFAIL)} claim(s) that do not hold, {LT['unaccounted']} source "
+                     f"value(s) unaccounted.")
+sys.stdout.flush()
+ledger_gate(LEDGER,"convert_cr26.py")
