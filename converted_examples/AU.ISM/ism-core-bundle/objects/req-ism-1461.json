@@ -17,5 +17,21 @@
     "en": "When using a software-based isolation mechanism that consumes shared physical computing resources for SECRET or TOP SECRET operating environments, the physical server and all operating environments are of the same classification and belong to the same security domain."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "props": [
+    {
+     "name": "revision",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "6"
+    },
+    {
+     "name": "updated",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "Jun-26"
+    }
+   ]
+  }
+ }
 }

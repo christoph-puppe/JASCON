@@ -17,5 +17,21 @@
     "en": "When implementing application control using path rules, only approved users can modify approved files and write to approved folders."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "props": [
+    {
+     "name": "revision",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "4"
+    },
+    {
+     "name": "updated",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "Mar-23"
+    }
+   ]
+  }
+ }
 }

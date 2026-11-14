@@ -17,5 +17,21 @@
     "en": "Evaluated diodes used for controlling the data flow of unidirectional gateways between SECRET or TOP SECRET networks and public network infrastructure complete a high assurance evaluation."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "props": [
+    {
+     "name": "revision",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "7"
+    },
+    {
+     "name": "updated",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "Mar-22"
+    }
+   ]
+  }
+ }
 }

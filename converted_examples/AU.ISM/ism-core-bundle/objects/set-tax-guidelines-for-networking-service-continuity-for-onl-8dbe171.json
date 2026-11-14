@@ -8,19 +8,19 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-service-continuity-for-onl-1df8555",
-   "sequence": 14420
+   "sequence": 14590
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-service-continuity-for-onl-7f60e55",
-   "sequence": 14460
+   "sequence": 14630
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-service-continuity-for-onl-b593a63",
-   "sequence": 14490
+   "sequence": 14660
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-service-continuity-for-onl-d67855b",
-   "sequence": 14530
+   "sequence": 14700
   }
  ],
  "facets": {

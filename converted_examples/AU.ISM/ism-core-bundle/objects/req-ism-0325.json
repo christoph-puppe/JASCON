@@ -17,5 +17,21 @@
     "en": "Any media connected to a system with a higher sensitivity or classification than the media is reclassified to the higher sensitivity or classification, unless the media is read-only or the system has a mechanism through which read-only access can be ensured."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "props": [
+    {
+     "name": "revision",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "6"
+    },
+    {
+     "name": "updated",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "Apr-21"
+    }
+   ]
+  }
+ }
 }

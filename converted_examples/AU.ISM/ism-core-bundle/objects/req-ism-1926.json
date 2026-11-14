@@ -17,5 +17,21 @@
     "en": "Microsoft AD DS domain controllers, Microsoft AD CS CA servers, Microsoft AD FS servers and Microsoft Entra Connect servers are only used for their designed role and no other applications or services are installed, unless they are security related."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "props": [
+    {
+     "name": "revision",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "0"
+    },
+    {
+     "name": "updated",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "Sep-24"
+    }
+   ]
+  }
+ }
 }

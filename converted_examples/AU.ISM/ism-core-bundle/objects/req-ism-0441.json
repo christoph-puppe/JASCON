@@ -17,5 +17,21 @@
     "en": "When personnel are granted temporary access to systems and their resources, effective controls are put in place to restrict their access to only data required for them to undertake their duties."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "props": [
+    {
+     "name": "revision",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "9"
+    },
+    {
+     "name": "updated",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "Jun-25"
+    }
+   ]
+  }
+ }
 }

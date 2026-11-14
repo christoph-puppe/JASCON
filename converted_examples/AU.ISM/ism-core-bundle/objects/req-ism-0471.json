@@ -17,5 +17,21 @@
     "en": "Only AACAs or high assurance cryptographic algorithms are used by cryptographic equipment, applications and libraries."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "props": [
+    {
+     "name": "revision",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "9"
+    },
+    {
+     "name": "updated",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "Sep-25"
+    }
+   ]
+  }
+ }
 }

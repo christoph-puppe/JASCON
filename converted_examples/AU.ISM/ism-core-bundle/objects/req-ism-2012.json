@@ -17,5 +17,21 @@
     "en": "Systems are configured with a screen lock that:\n\n- activates after a maximum of 15 minutes of user inactivity, or when manually activated by users\n- conceals all content on the screen\n- ensures that the screen does not enter a power saving state before the screen lock is activated\n- requires users to re-authenticate using all authentication factors to unlock the system\n- denies users the ability to disable the screen locking mechanism."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "props": [
+    {
+     "name": "revision",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "0"
+    },
+    {
+     "name": "updated",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "Mar-25"
+    }
+   ]
+  }
+ }
 }

@@ -17,5 +17,21 @@
     "en": "Security requirements associated with the confidentiality, integrity and availability of data are documented in contractual arrangements with service providers and regularly reviewed to ensure they remain fit for purpose."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "props": [
+    {
+     "name": "revision",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "10"
+    },
+    {
+     "name": "updated",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "Jun-26"
+    }
+   ]
+  }
+ }
 }

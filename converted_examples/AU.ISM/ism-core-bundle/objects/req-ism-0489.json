@@ -17,5 +17,21 @@
     "en": "When SSH-agent or similar key caching applications are used, it is limited to workstations and servers with screen locks and key caches that are set to expire within four hours of inactivity."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "props": [
+    {
+     "name": "revision",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "6"
+    },
+    {
+     "name": "updated",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "Jun-25"
+    }
+   ]
+  }
+ }
 }

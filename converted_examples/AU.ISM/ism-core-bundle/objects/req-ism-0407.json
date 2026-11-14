@@ -17,5 +17,21 @@
     "en": "A secure record is maintained for the life of systems and their resources that covers the following for each user:\n\n- their user identification\n- their signed agreement to abide by system usage policies\n- who authorised their access\n- when their access was granted\n- the level of access they were granted\n- when their access, and their level of access, was last reviewed\n- when their level of access was changed, and to what extent (if applicable)\n- when their access was withdrawn (if applicable)."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "props": [
+    {
+     "name": "revision",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "6"
+    },
+    {
+     "name": "updated",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "Jun-25"
+    }
+   ]
+  }
+ }
 }

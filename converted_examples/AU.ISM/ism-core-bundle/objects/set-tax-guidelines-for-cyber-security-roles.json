@@ -8,15 +8,15 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cyber-security-roles-board-of-directo-43ce4c6",
-   "sequence": 730
+   "sequence": 900
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cyber-security-roles-chief-informatio-cb17db3",
-   "sequence": 1030
+   "sequence": 1200
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cyber-security-roles-system-owners",
-   "sequence": 1210
+   "sequence": 1380
   }
  ]
 }

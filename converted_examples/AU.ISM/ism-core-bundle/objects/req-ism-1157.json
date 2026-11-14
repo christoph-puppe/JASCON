@@ -17,5 +17,21 @@
     "en": "Evaluated diodes are used for controlling the data flow of unidirectional gateways between networks."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "props": [
+    {
+     "name": "revision",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "5"
+    },
+    {
+     "name": "updated",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "Mar-22"
+    }
+   ]
+  }
+ }
 }

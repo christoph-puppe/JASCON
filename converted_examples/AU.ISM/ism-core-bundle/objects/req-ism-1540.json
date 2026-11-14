@@ -17,5 +17,21 @@
     "en": "DMARC records are configured for an organisation’s domains (including subdomains) such that emails are rejected if they do not pass DMARC checks."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "props": [
+    {
+     "name": "revision",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "3"
+    },
+    {
+     "name": "updated",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "Jun-23"
+    }
+   ]
+  }
+ }
 }

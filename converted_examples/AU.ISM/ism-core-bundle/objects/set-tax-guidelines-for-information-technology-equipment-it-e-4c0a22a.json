@@ -8,35 +8,35 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-information-technology-equipment-it-e-c56e45e",
-   "sequence": 6080
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-information-technology-equipment-it-e-6a91104",
-   "sequence": 6100
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-information-technology-equipment-it-e-f790ae6",
-   "sequence": 6130
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-information-technology-equipment-it-e-39cd26f",
-   "sequence": 6160
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-information-technology-equipment-it-e-ddbf2cf",
-   "sequence": 6180
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-information-technology-equipment-it-e-c4dd5b4",
    "sequence": 6250
   },
   {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-information-technology-equipment-it-e-6a91104",
+   "sequence": 6270
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-information-technology-equipment-it-e-f790ae6",
+   "sequence": 6300
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-information-technology-equipment-it-e-39cd26f",
+   "sequence": 6330
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-information-technology-equipment-it-e-ddbf2cf",
+   "sequence": 6350
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-information-technology-equipment-it-e-c4dd5b4",
+   "sequence": 6420
+  },
+  {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-information-technology-equipment-it-e-3f8d36d",
-   "sequence": 6280
+   "sequence": 6450
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-information-technology-equipment-it-e-ec08b6b",
-   "sequence": 6300
+   "sequence": 6470
   }
  ],
  "facets": {

@@ -8,27 +8,27 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cyber-security-incidents-managing-cyb-050bb3d",
-   "sequence": 1250
+   "sequence": 1420
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cyber-security-incidents-managing-cyb-1dcf602",
-   "sequence": 1280
+   "sequence": 1450
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cyber-security-incidents-managing-cyb-c18c7c3",
-   "sequence": 1310
+   "sequence": 1480
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cyber-security-incidents-managing-cyb-afef613",
-   "sequence": 1330
+   "sequence": 1500
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cyber-security-incidents-managing-cyb-9fc954c",
-   "sequence": 1350
+   "sequence": 1520
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cyber-security-incidents-managing-cyb-8812ffc",
-   "sequence": 1380
+   "sequence": 1550
   }
  ],
  "facets": {

@@ -17,5 +17,21 @@
     "en": "The SSH daemon is configured to:\n\n- only listen on the required interfaces (ListenAddress xxx.xxx.xxx.xxx)\n- have a suitable login banner (Banner x)\n- have a login authentication timeout of no more than 60 seconds (LoginGraceTime 60)\n- disable host-based authentication (HostbasedAuthentication no)\n- disable rhosts-based authentication (IgnoreRhosts yes)\n- disable the ability to log in directly as root (PermitRootLogin no)\n- disable empty passwords (PermitEmptyPasswords no)\n- disable connection forwarding (AllowTCPForwarding no)\n- disable gateway ports (GatewayPorts no)\n- disable X11 forwarding (X11Forwarding no)."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "props": [
+    {
+     "name": "revision",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "7"
+    },
+    {
+     "name": "updated",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "Jun-26"
+    }
+   ]
+  }
+ }
 }

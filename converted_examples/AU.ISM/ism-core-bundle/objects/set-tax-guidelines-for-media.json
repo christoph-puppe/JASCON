@@ -8,19 +8,19 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-media-media-usage",
-   "sequence": 6660
+   "sequence": 6830
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-media-media-sanitisation",
-   "sequence": 6920
+   "sequence": 7090
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-media-media-destruction",
-   "sequence": 7250
+   "sequence": 7420
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-media-media-disposal",
-   "sequence": 7310
+   "sequence": 7480
   }
  ]
 }

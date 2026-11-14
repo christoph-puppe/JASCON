@@ -8,67 +8,67 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-wireless-networks-choosing-8127ba5",
-   "sequence": 14020
+   "sequence": 14190
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-wireless-networks-public-w-8c479d2",
-   "sequence": 14040
+   "sequence": 14210
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-wireless-networks-administ-41088ef",
-   "sequence": 14060
+   "sequence": 14230
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-wireless-networks-default-settings",
-   "sequence": 14110
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-wireless-networks-media-ac-ade1011",
-   "sequence": 14130
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-wireless-networks-static-a-4d64bf7",
-   "sequence": 14150
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-wireless-networks-confiden-bd7fc15",
-   "sequence": 14170
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-wireless-networks-802-1x-a-3375348",
-   "sequence": 14200
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-wireless-networks-evaluati-4526f81",
-   "sequence": 14220
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-wireless-networks-generati-6d9c987",
-   "sequence": 14260
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-wireless-networks-caching-2cc0d8a",
    "sequence": 14280
   },
   {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-wireless-networks-fast-bas-5933a53",
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-wireless-networks-media-ac-ade1011",
    "sequence": 14300
   },
   {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-wireless-networks-remote-a-3b7646a",
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-wireless-networks-static-a-4d64bf7",
    "sequence": 14320
   },
   {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-wireless-networks-interfer-723ada3",
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-wireless-networks-confiden-bd7fc15",
    "sequence": 14340
   },
   {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-wireless-networks-802-1x-a-3375348",
+   "sequence": 14370
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-wireless-networks-evaluati-4526f81",
+   "sequence": 14390
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-wireless-networks-generati-6d9c987",
+   "sequence": 14430
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-wireless-networks-caching-2cc0d8a",
+   "sequence": 14450
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-wireless-networks-fast-bas-5933a53",
+   "sequence": 14470
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-wireless-networks-remote-a-3b7646a",
+   "sequence": 14490
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-wireless-networks-interfer-723ada3",
+   "sequence": 14510
+  },
+  {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-wireless-networks-protecti-272d8c8",
-   "sequence": 14360
+   "sequence": 14530
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-wireless-networks-wireless-5e87b2d",
-   "sequence": 14390
+   "sequence": 14560
   }
  ],
  "facets": {

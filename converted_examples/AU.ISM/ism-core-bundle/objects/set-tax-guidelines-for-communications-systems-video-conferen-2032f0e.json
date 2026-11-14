@@ -8,35 +8,35 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-communications-systems-video-conferen-c3ae164",
-   "sequence": 4510
+   "sequence": 4680
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-communications-systems-video-conferen-f24f6a5",
-   "sequence": 4530
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-communications-systems-video-conferen-4fa72a8",
-   "sequence": 4560
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-communications-systems-video-conferen-48af6d9",
-   "sequence": 4620
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-communications-systems-video-conferen-9867b30",
-   "sequence": 4650
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-communications-systems-video-conferen-9e867c6",
-   "sequence": 4670
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-communications-systems-video-conferen-779c807",
    "sequence": 4700
   },
   {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-communications-systems-video-conferen-6b8cf11",
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-communications-systems-video-conferen-4fa72a8",
    "sequence": 4730
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-communications-systems-video-conferen-48af6d9",
+   "sequence": 4790
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-communications-systems-video-conferen-9867b30",
+   "sequence": 4820
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-communications-systems-video-conferen-9e867c6",
+   "sequence": 4840
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-communications-systems-video-conferen-779c807",
+   "sequence": 4870
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-communications-systems-video-conferen-6b8cf11",
+   "sequence": 4900
   }
  ],
  "facets": {

@@ -17,5 +17,21 @@
     "en": "If using CDNs, disclosing the IP addresses of web servers under an organisation’s control (referred to as origin servers) is avoided and access to the origin servers is restricted to the CDNs and authorised management networks."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "props": [
+    {
+     "name": "revision",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "3"
+    },
+    {
+     "name": "updated",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "Mar-22"
+    }
+   ]
+  }
+ }
 }

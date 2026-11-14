@@ -17,5 +17,21 @@
     "en": "Credentials stored on systems are protected by a password manager; a hardware security module; or by salting, hashing and stretching them before storage within a database."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "props": [
+    {
+     "name": "revision",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "6"
+    },
+    {
+     "name": "updated",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "Mar-22"
+    }
+   ]
+  }
+ }
 }

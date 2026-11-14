@@ -17,5 +17,21 @@
     "en": "System owners, in consultation with each system’s authorising officer, identify any supplementary controls required based upon the unique nature of each system, its operating environment and the organisation’s risk tolerances."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "props": [
+    {
+     "name": "revision",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "4"
+    },
+    {
+     "name": "updated",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "Jun-25"
+    }
+   ]
+  }
+ }
 }

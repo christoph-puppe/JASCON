@@ -17,5 +17,21 @@
     "en": "Network access controls are implemented on networks to prevent the connection of unauthorised network devices and networked IT equipment."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "props": [
+    {
+     "name": "revision",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "9"
+    },
+    {
+     "name": "updated",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "Dec-24"
+    }
+   ]
+  }
+ }
 }

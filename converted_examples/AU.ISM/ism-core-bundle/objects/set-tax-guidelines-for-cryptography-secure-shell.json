@@ -8,19 +8,19 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-secure-shell-configuring-c0360e9",
-   "sequence": 15410
+   "sequence": 15580
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-secure-shell-authenticat-e9b953e",
-   "sequence": 15440
+   "sequence": 15610
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-secure-shell-automated-r-dda9cbf",
-   "sequence": 15470
+   "sequence": 15640
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-secure-shell-ssh-agent",
-   "sequence": 15490
+   "sequence": 15660
   }
  ],
  "facets": {

@@ -17,5 +17,21 @@
     "en": "The use of shared user accounts is strictly controlled, and personnel using such accounts are uniquely identifiable."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "props": [
+    {
+     "name": "revision",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "3"
+    },
+    {
+     "name": "updated",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "Aug-19"
+    }
+   ]
+  }
+ }
 }

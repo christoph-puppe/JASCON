@@ -1,0 +1,22 @@
+{
+ "id": "https://ns.cyber.gov.au/ism/set/tax/using-the-information-security-manual-applying-a-ris-8353614",
+ "version": "2026.06.18",
+ "lifecycle": "active",
+ "title": {
+  "en": "Implement controls"
+ },
+ "members": [],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "group-parts": [
+    {
+     "group": "Implement controls",
+     "name": "overview",
+     "prose": {
+      "en": "**Implement controls for the system and its operating environment.**\n\nOnce suitable controls have been identified for a system, and approved by the authorising officer, they should be implemented. In doing so, the details of their actual implementation, if different from their planned implementation, should be documented in the system’s system security plan annex."
+     }
+    }
+   ]
+  }
+ }
+}

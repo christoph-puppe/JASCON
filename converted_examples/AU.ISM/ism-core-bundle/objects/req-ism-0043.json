@@ -17,5 +17,21 @@
     "en": "Systems have a cyber security incident response plan that covers the following:\n\n- guidelines on what constitutes a cyber security incident\n- the types of cyber security incidents likely to be encountered and the expected response to each type\n- how to report cyber security incidents, internally to an organisation and externally to relevant authorities\n- other parties that need to be informed in the event of a cyber security incident\n- the authority, or authorities, responsible for investigating and responding to cyber security incidents\n- the criteria by which an investigation of a cyber security incident would be requested from a law enforcement agency, the Australian Signals Directorate or other relevant authority\n- the steps necessary to ensure the integrity of evidence relating to a cyber security incident\n- system contingency measures or a reference to such details if they are in a separate document."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "props": [
+    {
+     "name": "revision",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "6"
+    },
+    {
+     "name": "updated",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "Jun-26"
+    }
+   ]
+  }
+ }
 }

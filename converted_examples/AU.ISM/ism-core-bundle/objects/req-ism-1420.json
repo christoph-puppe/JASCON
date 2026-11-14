@@ -17,5 +17,21 @@
     "en": "Data from production environments is not used in non-production environments unless the non-production environment is secured to at least the same level as the production environment."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "props": [
+    {
+     "name": "revision",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "5"
+    },
+    {
+     "name": "updated",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "Mar-25"
+    }
+   ]
+  }
+ }
 }

@@ -17,5 +17,21 @@
     "en": "If travelling overseas with mobile devices to high or extreme risk countries, personnel are:\n\n- issued with newly provisioned user accounts, mobile devices and removable media from a pool of dedicated travel devices which are used solely for work-related activities\n- advised on how to apply and inspect tamper seals to key areas of mobile devices\n- advised to avoid taking any personal mobile devices, especially if rooted or jailbroken."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "props": [
+    {
+     "name": "revision",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "2"
+    },
+    {
+     "name": "updated",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "Dec-24"
+    }
+   ]
+  }
+ }
 }

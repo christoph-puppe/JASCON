@@ -8,11 +8,11 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-1528",
-   "sequence": 16170
+   "sequence": 16340
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-0639",
-   "sequence": 16180
+   "sequence": 16350
   }
  ],
  "facets": {

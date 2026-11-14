@@ -8,23 +8,23 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cyber-security-roles-board-of-directo-f1e16b7",
-   "sequence": 620
+   "sequence": 790
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cyber-security-roles-board-of-directo-772cbba",
-   "sequence": 640
+   "sequence": 810
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cyber-security-roles-board-of-directo-9c96311",
-   "sequence": 680
+   "sequence": 850
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cyber-security-roles-board-of-directo-5c33f48",
-   "sequence": 700
+   "sequence": 870
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cyber-security-roles-board-of-directo-d16cdf0",
-   "sequence": 720
+   "sequence": 890
   }
  ],
  "facets": {

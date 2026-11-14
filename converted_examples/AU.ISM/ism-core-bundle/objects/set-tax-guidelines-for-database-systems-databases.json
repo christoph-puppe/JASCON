@@ -8,23 +8,23 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-database-systems-databases-database-register",
-   "sequence": 12820
+   "sequence": 12990
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-database-systems-databases-protecting-da22977",
-   "sequence": 12840
+   "sequence": 13010
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-database-systems-databases-protecting-527ecb3",
-   "sequence": 12880
+   "sequence": 13050
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-database-systems-databases-segregatio-0a3e5d5",
-   "sequence": 12900
+   "sequence": 13070
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-database-systems-databases-database-e-1c420b8",
-   "sequence": 12920
+   "sequence": 13090
   }
  ],
  "facets": {

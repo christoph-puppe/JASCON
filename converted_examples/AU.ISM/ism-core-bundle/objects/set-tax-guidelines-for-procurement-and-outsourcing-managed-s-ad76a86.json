@@ -8,15 +8,15 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-1637",
-   "sequence": 1840
+   "sequence": 2010
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-1638",
-   "sequence": 1850
+   "sequence": 2020
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-1529",
-   "sequence": 1860
+   "sequence": 2030
   }
  ],
  "facets": {

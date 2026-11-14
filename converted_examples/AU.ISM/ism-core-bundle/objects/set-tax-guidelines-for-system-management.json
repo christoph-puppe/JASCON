@@ -8,15 +8,15 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-management-system-administration",
-   "sequence": 10280
+   "sequence": 10450
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-management-system-maintenance",
-   "sequence": 10600
+   "sequence": 10770
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-management-data-backup-and-restoration",
-   "sequence": 10810
+   "sequence": 10980
   }
  ]
 }

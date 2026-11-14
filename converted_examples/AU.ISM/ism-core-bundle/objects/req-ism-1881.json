@@ -17,5 +17,21 @@
     "en": "Cyber security incidents that do not involve customer data are reported to customers and the public in a timely manner after they occur or are discovered."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "props": [
+    {
+     "name": "revision",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "0"
+    },
+    {
+     "name": "updated",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "Dec-23"
+    }
+   ]
+  }
+ }
 }

@@ -17,5 +17,21 @@
     "en": "Telephone systems used for sensitive or classified conversations encrypt all traffic that passes over external systems."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "props": [
+    {
+     "name": "revision",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "3"
+    },
+    {
+     "name": "updated",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "Sep-18"
+    }
+   ]
+  }
+ }
 }

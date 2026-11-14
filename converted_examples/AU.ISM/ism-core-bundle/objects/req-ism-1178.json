@@ -17,5 +17,21 @@
     "en": "Network documentation provided to a third party, or published in public tender documentation, only contains details necessary for other parties to undertake contractual services."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "props": [
+    {
+     "name": "revision",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "3"
+    },
+    {
+     "name": "updated",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "Sep-18"
+    }
+   ]
+  }
+ }
 }

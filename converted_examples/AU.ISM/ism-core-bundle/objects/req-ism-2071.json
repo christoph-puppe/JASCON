@@ -17,5 +17,21 @@
     "en": "Personnel dealing with user account details are advised of what social engineering attacks are, how to manage such situations and how to report them."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "props": [
+    {
+     "name": "revision",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "0"
+    },
+    {
+     "name": "updated",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "Sep-25"
+    }
+   ]
+  }
+ }
 }

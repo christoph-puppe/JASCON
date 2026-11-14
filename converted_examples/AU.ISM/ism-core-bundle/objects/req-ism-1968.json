@@ -17,5 +17,21 @@
     "en": "System owners obtain an authorisation to operate for each TOP SECRET system, including for each sensitive compartmented information system, from Director-General ASD (or their delegate)."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "props": [
+    {
+     "name": "revision",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "1"
+    },
+    {
+     "name": "updated",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "Mar-26"
+    }
+   ]
+  }
+ }
 }

@@ -8,51 +8,51 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-1395",
-   "sequence": 1910
+   "sequence": 2080
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-0072",
-   "sequence": 1920
+   "sequence": 2090
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-1571",
-   "sequence": 1930
+   "sequence": 2100
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-1738",
-   "sequence": 1940
+   "sequence": 2110
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-1804",
-   "sequence": 1950
+   "sequence": 2120
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-0141",
-   "sequence": 1960
+   "sequence": 2130
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-1794",
-   "sequence": 1970
+   "sequence": 2140
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-1451",
-   "sequence": 1980
+   "sequence": 2150
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-1572",
-   "sequence": 1990
+   "sequence": 2160
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-1573",
-   "sequence": 2000
+   "sequence": 2170
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-1574",
-   "sequence": 2010
+   "sequence": 2180
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-1575",
-   "sequence": 2020
+   "sequence": 2190
   }
  ],
  "facets": {

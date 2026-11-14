@@ -8,23 +8,23 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-software-development-web-application-7dbd5c4",
-   "sequence": 12590
+   "sequence": 12760
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-software-development-web-application-13f4b17",
-   "sequence": 12610
+   "sequence": 12780
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-software-development-web-application-09430e8",
-   "sequence": 12630
+   "sequence": 12800
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-software-development-web-application-a3f4e69",
-   "sequence": 12650
+   "sequence": 12820
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-software-development-web-application-ced0506",
-   "sequence": 12670
+   "sequence": 12840
   }
  ],
  "facets": {

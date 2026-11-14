@@ -17,5 +17,21 @@
     "en": "A denial of service response plan for video conferencing and IP telephony services contains the following:\n\n- how to identify signs of a denial-of-service attack\n- how to identify the source of a denial-of-service attack\n- how capabilities can be maintained during a denial-of-service attack\n- what actions can be taken to respond to a denial-of-service attack."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "props": [
+    {
+     "name": "revision",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "0"
+    },
+    {
+     "name": "updated",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "Dec-22"
+    }
+   ]
+  }
+ }
 }

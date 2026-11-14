@@ -17,5 +17,21 @@
     "en": "Network access controls are implemented to limit the flow of network traffic within and between network segments to only that required for business purposes."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "props": [
+    {
+     "name": "revision",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "5"
+    },
+    {
+     "name": "updated",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "Sep-23"
+    }
+   ]
+  }
+ }
 }

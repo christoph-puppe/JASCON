@@ -17,5 +17,21 @@
     "en": "If an appropriately cleared technician is not used to undertake maintenance or repairs to IT equipment, the technician is escorted by someone who:\n\n- has the authority to direct the technician\n- is appropriately cleared and briefed\n- is sufficiently familiar with the IT equipment to understand the work being undertaken\n- takes all responsible measures to ensure the integrity of the IT equipment\n- takes due care to ensure that data is not disclosed."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "props": [
+    {
+     "name": "revision",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "8"
+    },
+    {
+     "name": "updated",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "Jun-26"
+    }
+   ]
+  }
+ }
 }

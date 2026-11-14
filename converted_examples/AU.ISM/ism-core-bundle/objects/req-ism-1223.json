@@ -17,5 +17,21 @@
     "en": "Memory in network devices is sanitised using the following processes, in order of preference:\n\n- following device-specific guidance provided in evaluation documentation\n- following vendor sanitisation guidance\n- loading a dummy configuration file, performing a factory reset and then reinstalling firmware."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "props": [
+    {
+     "name": "revision",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "6"
+    },
+    {
+     "name": "updated",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "Dec-21"
+    }
+   ]
+  }
+ }
 }

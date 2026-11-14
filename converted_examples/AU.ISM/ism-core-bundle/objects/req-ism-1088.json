@@ -17,5 +17,21 @@
     "en": "Personnel report the potential compromise of mobile devices, removable media or credentials to their organisation as soon as possible, especially if they:\n\n- provide credentials to foreign government officials\n- decrypt mobile devices for foreign government officials\n- have mobile devices taken out of sight by foreign government officials\n- have mobile devices or removable media stolen, including if later returned\n- lose mobile devices or removable media, including if later found\n- observe unusual behaviour of mobile devices."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "props": [
+    {
+     "name": "revision",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "6"
+    },
+    {
+     "name": "updated",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "Sep-23"
+    }
+   ]
+  }
+ }
 }

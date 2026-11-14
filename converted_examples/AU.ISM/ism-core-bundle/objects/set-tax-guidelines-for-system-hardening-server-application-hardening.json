@@ -8,51 +8,51 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-server-application-h-2bbc707",
-   "sequence": 8460
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-server-application-h-387d848",
-   "sequence": 8480
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-server-application-h-3378e00",
-   "sequence": 8550
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-server-application-h-c3b8013",
-   "sequence": 8580
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-server-application-h-3787c78",
    "sequence": 8630
   },
   {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-server-application-h-387d848",
+   "sequence": 8650
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-server-application-h-3378e00",
+   "sequence": 8720
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-server-application-h-c3b8013",
+   "sequence": 8750
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-server-application-h-3787c78",
+   "sequence": 8800
+  },
+  {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-server-application-h-f9dfd13",
-   "sequence": 8700
+   "sequence": 8870
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-server-application-h-c3ed503",
-   "sequence": 8910
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-server-application-h-e0f2f59",
-   "sequence": 8990
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-server-application-h-89a4f8a",
-   "sequence": 9060
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-server-application-h-ea8ba06",
    "sequence": 9080
   },
   {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-server-application-h-e0f2f59",
+   "sequence": 9160
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-server-application-h-89a4f8a",
+   "sequence": 9230
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-server-application-h-ea8ba06",
+   "sequence": 9250
+  },
+  {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-server-application-h-433e161",
-   "sequence": 9120
+   "sequence": 9290
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-server-application-h-4dbaf39",
-   "sequence": 9150
+   "sequence": 9320
   }
  ],
  "facets": {

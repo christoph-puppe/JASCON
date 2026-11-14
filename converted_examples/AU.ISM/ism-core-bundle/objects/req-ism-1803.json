@@ -17,5 +17,21 @@
     "en": "A cyber security incident register contains the following for each cyber security incident:\n\n- the date the cyber security incident occurred\n- the date the cyber security incident was discovered\n- a description of the cyber security incident\n- any actions taken in response to the cyber security incident\n- to whom the cyber security incident was reported."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "props": [
+    {
+     "name": "revision",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "0"
+    },
+    {
+     "name": "updated",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "Dec-22"
+    }
+   ]
+  }
+ }
 }

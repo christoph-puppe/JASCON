@@ -17,5 +17,21 @@
     "en": "Authentication and authorisation is used for all actions on a video conferencing network, including call setup and changing settings."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "props": [
+    {
+     "name": "revision",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "3"
+    },
+    {
+     "name": "updated",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "Sep-18"
+    }
+   ]
+  }
+ }
 }

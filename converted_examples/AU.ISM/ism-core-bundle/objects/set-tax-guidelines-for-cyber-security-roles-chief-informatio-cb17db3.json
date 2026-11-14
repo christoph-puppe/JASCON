@@ -8,47 +8,47 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cyber-security-roles-chief-informatio-559bdb0",
-   "sequence": 750
+   "sequence": 920
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cyber-security-roles-chief-informatio-a3a1f46",
-   "sequence": 800
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cyber-security-roles-chief-informatio-8c512f7",
-   "sequence": 830
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cyber-security-roles-chief-informatio-4ee5393",
-   "sequence": 860
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cyber-security-roles-chief-informatio-b4c29fa",
-   "sequence": 890
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cyber-security-roles-chief-informatio-09bfdf2",
-   "sequence": 910
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cyber-security-roles-chief-informatio-daca04c",
-   "sequence": 930
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cyber-security-roles-chief-informatio-c7f963b",
-   "sequence": 950
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cyber-security-roles-chief-informatio-0591e40",
    "sequence": 970
   },
   {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cyber-security-roles-chief-informatio-e39ff70",
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cyber-security-roles-chief-informatio-8c512f7",
    "sequence": 1000
   },
   {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cyber-security-roles-chief-informatio-4ee5393",
+   "sequence": 1030
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cyber-security-roles-chief-informatio-b4c29fa",
+   "sequence": 1060
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cyber-security-roles-chief-informatio-09bfdf2",
+   "sequence": 1080
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cyber-security-roles-chief-informatio-daca04c",
+   "sequence": 1100
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cyber-security-roles-chief-informatio-c7f963b",
+   "sequence": 1120
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cyber-security-roles-chief-informatio-0591e40",
+   "sequence": 1140
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cyber-security-roles-chief-informatio-e39ff70",
+   "sequence": 1170
+  },
+  {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cyber-security-roles-chief-informatio-d1f643b",
-   "sequence": 1020
+   "sequence": 1190
   }
  ],
  "facets": {

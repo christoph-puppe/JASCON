@@ -17,5 +17,21 @@
     "en": "Network documentation includes device settings for all critical servers, high-value servers, network devices and network security appliances."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "props": [
+    {
+     "name": "revision",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "0"
+    },
+    {
+     "name": "updated",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "Dec-23"
+    }
+   ]
+  }
+ }
 }

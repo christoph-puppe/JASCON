@@ -8,23 +8,23 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-operating-system-hardening",
-   "sequence": 7970
+   "sequence": 8140
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-user-application-hardening",
-   "sequence": 8440
+   "sequence": 8610
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-server-application-hardening",
-   "sequence": 9160
+   "sequence": 9330
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-authentication-hardening",
-   "sequence": 9980
+   "sequence": 10150
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-virtualisation-hardening",
-   "sequence": 10070
+   "sequence": 10240
   }
  ]
 }

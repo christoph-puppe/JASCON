@@ -17,5 +17,21 @@
     "en": "Following sanitisation, destruction or declassification, a formal administrative decision is made to release media, or its waste, into the public domain."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "props": [
+    {
+     "name": "revision",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "6"
+    },
+    {
+     "name": "updated",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "Dec-21"
+    }
+   ]
+  }
+ }
 }

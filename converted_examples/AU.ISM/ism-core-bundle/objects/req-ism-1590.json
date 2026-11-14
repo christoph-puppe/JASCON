@@ -17,5 +17,21 @@
     "en": "Credentials for user accounts are changed if:\n\n- they are compromised\n- they are suspected of being compromised\n- they are discovered stored on networks in the clear\n- they are discovered being transferred across networks in the clear\n- membership of a shared user account changes."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "props": [
+    {
+     "name": "revision",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "4"
+    },
+    {
+     "name": "updated",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "Dec-25"
+    }
+   ]
+  }
+ }
 }

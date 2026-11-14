@@ -17,5 +17,21 @@
     "en": "Security-relevant events for gateways are centrally logged, including:\n\n- data packets and data flows permitted through gateways\n- data packets and data flows attempting to leave gateways\n- real-time alerts for attempted intrusions."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "props": [
+    {
+     "name": "revision",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "11"
+    },
+    {
+     "name": "updated",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "Sep-24"
+    }
+   ]
+  }
+ }
 }

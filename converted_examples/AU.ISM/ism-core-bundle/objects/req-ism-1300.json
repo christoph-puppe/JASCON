@@ -17,5 +17,21 @@
     "en": "Upon returning from travelling overseas with mobile devices, personnel take the following actions:\n\n- sanitise and reset mobile devices, including all removable media\n- decommission any credentials that left their possession during their travel\n- report if significant doubt exists as to the integrity of any mobile devices or removable media."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "props": [
+    {
+     "name": "revision",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "6"
+    },
+    {
+     "name": "updated",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "Dec-22"
+    }
+   ]
+  }
+ }
 }

@@ -17,5 +17,21 @@
     "en": "Where spatial constraints demand non-TOP SECRET patch panels be installed in the same cabinet as a TOP SECRET patch panel:\n\n- a physical barrier in the cabinet is provided to separate patch panels\n- only personnel holding a Positive Vetting security clearance have access to the cabinet\n- approval from the TOP SECRET system’s authorising officer is obtained prior to installation."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "props": [
+    {
+     "name": "revision",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "5"
+    },
+    {
+     "name": "updated",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "Mar-23"
+    }
+   ]
+  }
+ }
 }

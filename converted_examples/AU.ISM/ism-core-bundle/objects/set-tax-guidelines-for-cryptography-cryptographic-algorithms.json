@@ -8,59 +8,59 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-cryptographic-algorithms-b720695",
-   "sequence": 14790
+   "sequence": 14960
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-cryptographic-algorithms-af6ee4b",
-   "sequence": 14810
+   "sequence": 14980
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-cryptographic-algorithms-a5977e2",
-   "sequence": 14850
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-cryptographic-algorithms-adcd87c",
-   "sequence": 14870
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-cryptographic-algorithms-77660ed",
-   "sequence": 14910
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-cryptographic-algorithms-c1e77db",
-   "sequence": 14950
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-cryptographic-algorithms-ff13cc8",
-   "sequence": 14970
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-cryptographic-algorithms-6eb9e14",
    "sequence": 15020
   },
   {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-cryptographic-algorithms-6c60f8e",
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-cryptographic-algorithms-adcd87c",
    "sequence": 15040
   },
   {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-cryptographic-algorithms-57b4cb8",
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-cryptographic-algorithms-77660ed",
    "sequence": 15080
   },
   {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-cryptographic-algorithms-2392842",
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-cryptographic-algorithms-c1e77db",
    "sequence": 15120
   },
   {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-cryptographic-algorithms-2567c33",
-   "sequence": 15160
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-cryptographic-algorithms-ff13cc8",
+   "sequence": 15140
   },
   {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-cryptographic-algorithms-8aad884",
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-cryptographic-algorithms-6eb9e14",
    "sequence": 15190
   },
   {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-cryptographic-algorithms-26cd707",
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-cryptographic-algorithms-6c60f8e",
    "sequence": 15210
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-cryptographic-algorithms-57b4cb8",
+   "sequence": 15250
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-cryptographic-algorithms-2392842",
+   "sequence": 15290
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-cryptographic-algorithms-2567c33",
+   "sequence": 15330
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-cryptographic-algorithms-8aad884",
+   "sequence": 15360
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-cryptographic-algorithms-26cd707",
+   "sequence": 15380
   }
  ],
  "facets": {

@@ -1,0 +1,22 @@
+{
+ "id": "https://ns.cyber.gov.au/ism/set/tax/using-the-information-security-manual-executive-summ-58f5230",
+ "version": "2026.06.18",
+ "lifecycle": "active",
+ "title": {
+  "en": "Purpose"
+ },
+ "members": [],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "group-parts": [
+    {
+     "group": "Purpose",
+     "name": "overview",
+     "prose": {
+      "en": "The purpose of the [Information security manual](#e7ce6e23-4bbb-45c1-a657-7e563c0837ed) (ISM) is to outline a cyber security framework that an organisation can apply, using their risk management framework, to protect their information technology (IT) and operational technology (OT) systems from cyber threats."
+     }
+    }
+   ]
+  }
+ }
+}

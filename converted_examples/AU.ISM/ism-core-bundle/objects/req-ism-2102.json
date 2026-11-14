@@ -17,5 +17,21 @@
     "en": "Existing software artefacts in the authoritative source for software are periodically tested to detect known weaknesses using SAST, DAST or SCA, depending on the software artefact type, throughout the software development life cycle."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "props": [
+    {
+     "name": "revision",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "0"
+    },
+    {
+     "name": "updated",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "Mar-26"
+    }
+   ]
+  }
+ }
 }
