@@ -181,6 +181,30 @@ jobs:
             git status --porcelain -- converted_examples
             exit 1
           fi
+      - name: The OSCAL exports of the four catalogue bundles are what export_oscal.py writes
+        # Backlog #90. export_oscal.py projects each catalogue bundle under
+        # converted_examples/ to an OSCAL 1.2.2 catalogue, validates it
+        # against NIST's schema and compares the re-import with the bundle,
+        # object by object, by semantic digest; it ends with 1 if a catalogue
+        # fails the schema or an object does not come back. Until this step
+        # nothing ran it, so the committed exports went stale with every
+        # change of a converter. The schema is fetched from the publisher's
+        # release and checked against .github/oscal-catalog-schema.sha256.
+        # The step stands after the reproduction, so the bundles it exports
+        # are the committed ones, and it fails if an export is not byte for
+        # byte what is committed. The schema uses Unicode property escapes,
+        # which the standard library's `re` does not compile: hence `regex`.
+        run: |
+          set -euo pipefail
+          bash .github/scripts/fetch-pinned-sources.sh .github/oscal-catalog-schema.sha256
+          pip install regex
+          python jascon/scripts/export_oscal.py | tee export.log
+          if [ -n "$(git status --porcelain -- converted_examples)" ]; then
+            echo "export_oscal.py no longer reproduces the committed exports:"
+            git --no-pager diff --stat -- converted_examples
+            git status --porcelain -- converted_examples
+            exit 1
+          fi
       - name: The CR26 conversion runs on its pinned source and reproduces its coverage reports and its ledger
         # FedRAMP's rules file is not redistributed (converted_examples/
         # FedRAMP-CR26/NOT-REDISTRIBUTED.md): neither the source nor the
@@ -237,6 +261,12 @@ jobs:
             echo '```'
             grep -E '^  [a-z-]+: [0-9]+ pass|: [0-9]+ pass, [0-9]+ fail|^ALL GREEN|FAILURES' run.log | cut -c1-160
             echo '```'
+            if [ -f export.log ]; then
+              echo '### export_oscal.py: bundle to OSCAL 1.2.2 and back, by semantic digest'
+              echo '```'
+              grep -E '^(AU|DE|US)\.|^ALL GREEN|FAILURES' export.log | cut -c1-160
+              echo '```'
+            fi
             if [ -f cr26.log ]; then
               echo '### validate_core.py on the CR26 bundle, converted from the pinned source'
               echo '```'

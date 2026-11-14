@@ -16,12 +16,22 @@ reverse. Sets additionally ride the props channel in full because the
 catalog model cannot represent overlapping membership (baselines!) -
 groups are the 1.x navigation view, the props channel is the exact one.
 
-Supported corpus (declared): the catalog graph - Requirements + Sets
-(4,583 + 1,066 of 6,675 objects). Mapping/Tailoring objects await the
-OSCAL mapping/profile model exports; the lifecycle bundle awaits the
-SSP-family exports. Skipped objects are counted, never silent.
+Supported corpus (declared): the catalog graph - the Requirements and
+Sets of every catalogue bundle under converted_examples/ (measured
+2026-11-14: 4,465 objects in four bundles, each of which comes back).
+Mapping/Tailoring objects await the OSCAL mapping/profile model exports;
+the lifecycle bundle awaits the SSP-family exports. Skipped objects are
+counted, never silent.
 
-Usage: uv run --with jsonschema python export_oscal.py
+Usage: python export_oscal.py
+
+Needs the packages `jsonschema` and `regex`, and NIST's schema of the
+catalogue model in sources/nist/oscal_catalog_schema.json. The schema is
+pinned in .github/oscal-catalog-schema.sha256; from the repository root,
+    bash .github/scripts/fetch-pinned-sources.sh .github/oscal-catalog-schema.sha256
+downloads it and checks its digest. The Validators workflow runs this
+script after the conversions and fails if a committed export differs
+(backlog #90).
 """
 import json, hashlib, os, re, sys, copy, collections, uuid
 import jsonschema
